@@ -176,7 +176,7 @@ class AssetSettingController extends BaseController
                 'maxCoursePrice_GT' => 0,
             ], ['updatedTime' => 'desc'], 0, PHP_INT_MAX);
 
-            return $this->render('admin-v2/system/asset-setting/coin/coin-course-set.html.twig', [
+            return $this->render('admin-v2/system/asset-setting/coin/usage/effective.html.twig', [
                 'set' => $set,
                 'items' => $courseSets,
             ]);
@@ -188,7 +188,7 @@ class AssetSettingController extends BaseController
 
         response :
 
-        return $this->render('admin-v2/system/asset-setting/coin/coin-model.html.twig', [
+        return $this->render('admin-v2/system/asset-setting/coin/usage/select-mode.html.twig', [
             'coinSettings' => $coinSettings,
         ]);
     }
@@ -306,7 +306,7 @@ class AssetSettingController extends BaseController
             $items = $this->getLevelService()->searchLevels(['enable' => 1], ['seq' => 'asc'], 0, PHP_INT_MAX);
         }
 
-        return $this->render('admin-v2/system/asset-setting/coin/coin-table-setting.html.twig', [
+        return $this->render('admin-v2/system/asset-setting/coin/usage/effective-nav.html.twig', [
             'type' => $conditions['type'],
             'items' => $items,
             'set' => $set,
