@@ -96,12 +96,7 @@ class LessonServiceImpl extends BaseService implements LessonService
         $this->publishTasks($lesson['id']);
 
         $this->dispatchEvent('course.lesson.publish', new Event($lesson));
-
-        $infoData = [
-            'courseId' => $lesson['courseId'],
-            'title' => $lesson['title'],
-        ];
-        $this->getLogService()->info('course', 'publish_lesson', "发布了课时《{$lesson['title']}》", $infoData);
+        $this->getLogService()->info('course', 'publish_lesson', '发布课时', $lesson);
 
         if ($updateLessonNum) {
             $this->updateLessonNumbers($courseId);
@@ -138,12 +133,7 @@ class LessonServiceImpl extends BaseService implements LessonService
         $this->unpublishTasks($lesson['id']);
 
         $this->dispatchEvent('course.lesson.unpublish', new Event($lesson));
-
-        $infoData = [
-            'courseId' => $lesson['courseId'],
-            'title' => $lesson['title'],
-        ];
-        $this->getLogService()->info('course', 'unpublish_lesson', "关闭了课时《{$lesson['title']}》", $infoData);
+        $this->getLogService()->info('course', 'unpublish_lesson', '关闭课时', $lesson);
 
         $this->updateLessonNumbers($courseId);
 
