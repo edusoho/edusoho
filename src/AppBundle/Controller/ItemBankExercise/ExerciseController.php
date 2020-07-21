@@ -136,7 +136,7 @@ class ExerciseController extends BaseController
         );
     }
 
-    public function qrcodeAction(Request $request, $id)
+    public function qrcodeAction(Request $request, $id, $tab = 'scan')
     {
         list($url, $userId) = $this->getQrcodeUrl($id);
         $token = $this->getTokenService()->makeToken(
@@ -152,6 +152,10 @@ class ExerciseController extends BaseController
         );
         $url = $this->generateUrl('common_parse_qrcode', ['token' => $token['token']], UrlGeneratorInterface::ABSOLUTE_URL);
 
+        if ($tab != 'scan'){
+            return $this->qrcodeDownload($url);
+        }
+
         $response = [
             'img' => $this->generateUrl('common_qrcode', ['text' => $url], UrlGeneratorInterface::ABSOLUTE_URL),
         ];
@@ -159,9 +163,8 @@ class ExerciseController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    public function qrcodeDownloadAction(Request $request, $id)
+    protected function qrcodeDownload($url)
     {
-        list($url, $userId) = $this->getQrcodeUrl($id);
         $qrCode = new QrCode();
         $qrCode->setText($url);
         $qrCode->setSize(150);

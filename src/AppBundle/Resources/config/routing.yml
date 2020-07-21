@@ -3414,12 +3414,8 @@ facein_inspection_results_detail:
 
 # item-bank-exercise
 item_bank_exercise_qrcode:
-  path: /item_bank_exercise/{id}/qrcode
-  defaults: { _controller: AppBundle:ItemBankExercise/Exercise:qrcodeDownload }
-
-item_bank_exercise_qrcode_scan:
-  path: /item_bank_exercise/{id}/qrcode/scan
-  defaults: { _controller: AppBundle:ItemBankExercise/Exercise:qrcode }
+  path: /item_bank_exercise/{id}/qrcode/{tab}
+  defaults: { _controller: AppBundle:ItemBankExercise/Exercise:qrcode, tab: 'scan' }
 
 item_bank_exercise_member_expired:
   path:  /item_bank_exercise/{id}/member/expired
