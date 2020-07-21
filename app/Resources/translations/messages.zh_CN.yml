@@ -11054,3 +11054,5 @@ exception.review.not_found_review: 评价不存在
 exception.review.post_limit: 回复数量已达5条上限，不能再回复
 
 exception.favorite.forbidden_operate_favorite: 没有权限
+
+exception.s2b2c_product.adopt_failed: 采用失败，内容正在编辑中，请稍后再试

@@ -143,11 +143,17 @@ class ResourcePurchaseController extends BaseController
             if (empty($merchant['status']) || 'active' != $merchant['status'] || 'cooperation' != $merchant['coop_status']) {
                 return $this->createJsonResponse(['status' => false, 'error' => '更新失败']);
             }
-            try{
+            try {
                 $this->getS2B2CProductService()->updateProductVersion($productId);
-            }catch (\Exception $exception) {
-                return $this->createJsonResponse(['status' => false, 'error' => $exception->getMessage()]);
+            } catch (\Exception $exception) {
+                $errorMessage = '';
+                if (S2B2CProductException::ADOPT_PRODUCT_FAILED == $exception->getCode()) {
+                    $errorMessage = $this->get('translator')->trans($exception->getMessage());
+                }
+
+                return $this->createJsonResponse(['status' => false, 'error' => $errorMessage]);
             }
+
             return $this->createJsonResponse(['status' => true]);
         }
 

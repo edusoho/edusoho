@@ -158,6 +158,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
                 $this->syncNewCourse($courseProduct, $newCourseSet);
                 continue;
             }
+
             if (!$this->updateCourseVersionData($courseProduct)) {
                 $this->getLogger()->error('更新失败，productId#'.$courseProduct['id']);
                 $this->createNewException(S2B2CProductException::UPDATE_PRODUCT_VERSION_FAIL());
