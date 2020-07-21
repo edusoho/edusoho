@@ -166,12 +166,6 @@ class LogController extends BaseController
 
             $templateParam = [];
 
-//            echo("<pre>");
-//            print("transConfig");
-//            print_r($transConfigs);
-//            echo("</pre>");
-//            exit;
-
             if (array_key_exists($log['module'], $transConfigs)) {
                 if (array_key_exists($log['action'], $transConfigs[$log['module']])) {
                     $transConfig = $transConfigs[$log['module']][$log['action']];
@@ -184,11 +178,6 @@ class LogController extends BaseController
                     }
                 }
             }
-
-//            echo("<pre>");
-//            print_r($templateParam);
-//            echo("</pre>");
-//            exit;
 
             $templateParam = $this->getDefaultTemplateConfig($templateParam, $getValueDefaultConfig);
 
