@@ -32,7 +32,7 @@ class ChapterExerciseRecordDaoImpl extends GeneralDaoImpl implements ChapterExer
         $builder = $this->createQueryBuilder($conditions)
             ->setFirstResult(0)
             ->setMaxResults(10)
-            ->select("userId, exerciseId, sum(doneQuestionNum)doneQuestionNum")
+            ->select('userId, exerciseId, sum(doneQuestionNum)doneQuestionNum')
             ->groupBy('userId')
             ->orderBy('doneQuestionNum', 'DESC');
 

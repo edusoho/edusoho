@@ -11,6 +11,7 @@ use Biz\ItemBankExercise\Dao\ExerciseMemberDao;
 use Biz\ItemBankExercise\ExpiryMode\ExpiryModeFactory;
 use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\ItemBankExerciseMemberException;
+use Biz\ItemBankExercise\Member\MemberManage;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\ItemBankExercise\Service\MemberOperationRecordService;
@@ -36,51 +37,36 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         return $this->getExerciseMemberDao()->search($conditions, $orderBy, $start, $limit, $columns);
     }
 
-    public function becomeStudent($exerciseId, $userId, $info = [])
+    public function becomeStudent($exerciseId, $userId, $info)
     {
-        $exercise = $this->getExerciseService()->get($exerciseId);
-
-        if (empty($exercise)) {
-            $this->createNewException(ItemBankExerciseException::NOTFOUND_EXERCISE());
-        }
-
-        if (!in_array($exercise['status'], ['published'])) {
-            $this->createNewException(ItemBankExerciseException::UNPUBLISHED_EXERCISE());
-        }
-
-        if ($this->isExerciseMember($exerciseId, $userId)) {
-            $this->createNewException(ItemBankExerciseMemberException::DUPLICATE_MEMBER());
-        }
-
-        $expiryMode = ExpiryModeFactory::create($exercise['expiryMode']);
-        if ($expiryMode->isExpired($exercise)) {
-            $this->createNewException(ItemBankExerciseMemberException::CAN_NOT_BECOME_MEMBER);
-        }
-
         try {
             $this->beginTransaction();
 
-            $info['remark'] = empty($info['remark']) ? '' : $info['remark'];
-            $member = $this->addMember(
-                [
-                    'exerciseId' => $exerciseId,
-                    'questionBankId' => $exercise['questionBankId'],
-                    'userId' => $userId,
-                    'deadline' => ExpiryModeFactory::create($exercise['expiryMode'])->getDeadline($exercise),
-                    'role' => 'student',
-                    'remark' => $info['remark'],
-                    'createdTime' => time(),
-                ],
-                [
-                    'reason' => 'site.join_by_import',
-                    'reasonType' => 'import_join',
-                ]
-            );
+            $manage = new MemberManage($this->biz);
+            $studentMember = $manage->getMemberClass('student');
+            $member = $studentMember->join($exerciseId, $userId, $info);
+            $exercise = $this->getExerciseService()->get($exerciseId);
 
-            $info['type'] = 'add';
-            $info['memberId'] = $member['id'];
-            $this->recordLog($exercise, $userId, $info);
             $this->dispatchEvent('exercise.join', $exercise, ['member' => $member]);
+
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+
+        return $member;
+    }
+
+    public function addTeacher($exerciseId)
+    {
+        try {
+            $this->beginTransaction();
+
+            $userId = $this->getCurrentUser()->getId();
+            $manage = new MemberManage($this->biz);
+            $teacherMember = $manage->getMemberClass('teacher');
+            $member = $teacherMember->join($exerciseId, $userId, ['remark' => '']);
 
             $this->commit();
         } catch (\Exception $e) {
@@ -101,31 +87,6 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
     public function getByExerciseIdAndUserId($exerciseId, $userId)
     {
         return $this->getExerciseMemberDao()->getByExerciseIdAndUserId($exerciseId, $userId);
-    }
-
-    public function addTeacher($exerciseId)
-    {
-        try {
-            $this->beginTransaction();
-            $exercise = $this->getExerciseService()->tryManageExercise($exerciseId, 0);
-            $userId = $this->getCurrentUser()->getId();
-            $teacher = [
-                'exerciseId' => $exerciseId,
-                'questionBankId' => $exercise['questionBankId'],
-                'userId' => $userId,
-                'role' => 'teacher',
-                'remark' => '',
-            ];
-            $member = $this->addMember($teacher);
-            $fields = ['teacherIds' => [$userId]];
-            $this->getExerciseDao()->update($exerciseId, $fields);
-            $this->commit();
-        } catch (\Exception $e) {
-            $this->rollback();
-            throw $e;
-        }
-
-        return $member;
     }
 
     public function lockStudent($exerciseId, $userId)
@@ -307,7 +268,13 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
             $this->beginTransaction();
 
             $this->removeMember($member, []);
-            $this->recordLog($exercise, $userId, ['type' => 'remove', 'memberId' => $member['id'], 'remark' => '']);
+
+            $user = $this->getUserService()->getUser($userId);
+            $this->getLogService()->info(
+                'item_bank_exercise',
+                'remove_student',
+                "《{$exercise['title']}》(#{$exercise['id']})，学员({$user['nickname']})因达到有效期退出教学计划(#{$member['id']})"
+            );
             $this->dispatchEvent('exercise.quit', $exercise, ['member' => $member]);
 
             $this->commit();
@@ -320,23 +287,6 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
     public function findByUserIdAndRole($userId, $role)
     {
         return $this->getExerciseMemberDao()->findByUserIdAndRole($userId, $role);
-    }
-
-    private function addMember($member, $reason = [])
-    {
-        try {
-            $this->beginTransaction();
-            $member = $this->getExerciseMemberDao()->create($member);
-            if (!empty($reason)) {
-                $this->createOperateRecord($member, 'join', $reason);
-            }
-            $this->commit();
-        } catch (\Exception $e) {
-            $this->rollback();
-            throw $e;
-        }
-
-        return $member;
     }
 
     private function removeMember($member, $reason = [])
@@ -376,25 +326,6 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         $record = $this->getMemberOperationRecordService()->create($record);
 
         return $record;
-    }
-
-    protected function recordLog($exercise, $userId, $info)
-    {
-        $user = $this->getUserService()->getUser($userId);
-        $addMessage = "《{$exercise['title']}》(#{$exercise['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$info['remark']}";
-        $removeMessage = "《{$exercise['title']}》(#{$exercise['id']})，学员({$user['nickname']})因达到有效期退出教学计划(#{$info['memberId']})";
-        $this->getLogService()->info(
-            'item_bank_exercise',
-            'add' == $info['type'] ? 'add_student' : 'remove_student',
-            'add' == $info['type'] ? $addMessage : $removeMessage,
-            [
-                'exerciseId' => $exercise['id'],
-                'title' => $exercise['title'],
-                'userId' => $user['id'],
-                'nickname' => $user['nickname'],
-                'remark' => 'add' == $info['type'] ? $info['remark'] : '',
-            ]
-        );
     }
 
     /**

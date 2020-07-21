@@ -13,6 +13,7 @@ use Biz\ItemBankExercise\Dao\ExerciseMemberDao;
 use Biz\ItemBankExercise\Dao\ExerciseModuleDao;
 use Biz\ItemBankExercise\ExpiryMode\ExpiryModeFactory;
 use Biz\ItemBankExercise\ItemBankExerciseException;
+use Biz\ItemBankExercise\OperateReason;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseService;
@@ -422,7 +423,15 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
         $exercise = $this->get($exerciseId);
 
         if ((1 == $exercise['isFree'] || 0 == $exercise['originPrice']) && $exercise['joinEnable']) {
-            return $this->getExerciseMemberService()->becomeStudent($exercise['id'], $this->getCurrentUser()->getId());
+            return $this->getExerciseMemberService()->becomeStudent(
+                $exercise['id'],
+                $this->getCurrentUser()->getId(),
+                [
+                    'remark' => OperateReason::JOIN_BY_FREE,
+                    'reason' => OperateReason::JOIN_BY_FREE,
+                    'reasonType' => OperateReason::JOIN_BY_FREE_TYPE,
+                ]
+            );
         }
     }
 

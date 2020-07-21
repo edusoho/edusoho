@@ -3,6 +3,7 @@
 namespace Biz\OrderFacade\Product;
 
 use Biz\Accessor\AccessorInterface;
+use Biz\ItemBankExercise\OperateReason;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
@@ -48,6 +49,8 @@ class ItemBankExerciseProduct extends Product implements OrderStatusCallback
         $info = [
             'orderId' => $order['id'],
             'remark' => $order['created_reason'],
+            'reason' => OperateReason::JOIN_BY_PURCHASE,
+            'reasonType' => OperateReason::JOIN_BY_PURCHASE_TYPE,
         ];
 
         try {
