@@ -4,7 +4,7 @@
     <div class="learn-info">
       <div class="learn-info-item learn clearfix"  v-for="item in recommendGoods" :key="item.id">
         <div class="learn-img pull-left">
-          <img :src="item.image" alt="">
+          <img :src="item.images.small" alt="">
         </div>
         <div class="learn-text pull-right">
           <p class="learn-text__title">{{ item.title }}</p>
