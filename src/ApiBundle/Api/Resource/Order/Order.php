@@ -39,19 +39,19 @@ class Order extends AbstractResource
             }
             // 优惠卷全额抵扣
             if ($this->getOrderFacadeService()->isOrderPaid($order['id'])) {
-                return array(
+                return [
                     'id' => $order['id'],
                     'sn' => $order['sn'],
-                );
+                ];
             } else {
                 $this->handleParams($params, $order);
-                $apiRequest = new ApiRequest('/api/trades', 'POST', array(), $params);
+                $apiRequest = new ApiRequest('/api/trades', 'POST', [], $params);
                 $trade = $this->invokeResource($apiRequest);
 
-                return array(
+                return [
                     'id' => $trade['tradeSn'],
                     'sn' => $trade['tradeSn'],
-                );
+                ];
             }
         } catch (OrderPayCheckException $payCheckException) {
             throw new BadRequestHttpException($payCheckException->getMessage(), $payCheckException, $payCheckException->getCode());
@@ -100,14 +100,14 @@ class Order extends AbstractResource
             $params['unencryptedPayPassword'] = $params['payPassword'];
         }
         if ('Alipay_LegacyWap' == $params['gateway']) {
-            $params['return_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), UrlGeneratorInterface::ABSOLUTE_URL);
-            $params['show_url'] = $this->generateUrl('cashier_pay_return_for_app', array('payment' => 'alipay'), UrlGeneratorInterface::ABSOLUTE_URL);
+            $params['return_url'] = $this->generateUrl('cashier_pay_return_for_app', ['payment' => 'alipay'], UrlGeneratorInterface::ABSOLUTE_URL);
+            $params['show_url'] = $this->generateUrl('cashier_pay_return_for_app', ['payment' => 'alipay'], UrlGeneratorInterface::ABSOLUTE_URL);
         }
     }
 
     private function addCreateDealers($request)
     {
-        $serviceNames = array('Distributor:DistributorProductDealerService');
+        $serviceNames = ['Distributor:DistributorProductDealerService', 'S2B2C:S2B2CProductDealerService'];
 
         foreach ($serviceNames as $serviceName) {
             $service = $this->getBiz()->service($serviceName);
