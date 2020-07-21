@@ -114,7 +114,7 @@ class StudentMember extends Member
 
     public function validate($exercise, $data)
     {
-        if (!ArrayToolkit::requireds($data, ['remark'])) {
+        if (!isset($data['remark'])) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
