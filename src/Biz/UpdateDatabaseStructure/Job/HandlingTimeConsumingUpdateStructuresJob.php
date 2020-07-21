@@ -159,6 +159,13 @@ class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
          *  Column module, action, createdTime
          */
         $this->createIndex('log_v8', 'module_action_createdTime', 'module, action, createdTime');
+
+        /*
+         *  Table  biz_assessment_section_item
+         *  Index  assessmentId_seq
+         *  Column assessment_id, seq
+         */
+        $this->createIndex('biz_assessment_section_item', 'assessmentId_seq', 'assessment_id, seq');
     }
 
     protected function changeTableFiledType()
