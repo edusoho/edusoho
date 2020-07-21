@@ -50,7 +50,6 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
-            'alterTableAddIndex',
             'addTableIndexJob',
         );
 
@@ -85,15 +84,6 @@ class EduSohoUpgrade extends AbstractUpdater
                 'progress' => 0,
             );
         }
-    }
-
-    public function alterTableAddIndex()
-    {
-        if (!$this->isIndexExist('biz_assessment_section_item', 'assessmentId_seq')) {
-            $this->createIndex('biz_assessment_section_item', 'assessmentId_seq', 'assessment_id, seq');
-        }
-
-        return 1;
     }
 
     public function addTableIndexJob()
