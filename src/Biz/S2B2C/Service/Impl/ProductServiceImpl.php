@@ -417,7 +417,7 @@ class ProductServiceImpl extends BaseService implements ProductService
                     'syncStatus' => 'waiting',
                     'localResourceId' => 0,
                 ];
-            }, $product['detail']);
+            }, $remoteProductDetails);
 
             $this->getS2B2CProductDao()->batchCreate($products);
         }
