@@ -2,6 +2,7 @@
 
 namespace Biz\Course\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\Course\Dao\CourseChapterDao;
@@ -9,9 +10,8 @@ use Biz\Course\LessonException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\LessonService;
 use Biz\Task\Service\TaskService;
-use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
-use AppBundle\Common\ArrayToolkit;
+use Codeages\Biz\Framework\Event\Event;
 
 class LessonServiceImpl extends BaseService implements LessonService
 {
@@ -37,18 +37,18 @@ class LessonServiceImpl extends BaseService implements LessonService
 
     public function createLesson($fields)
     {
-        if (!ArrayToolkit::requireds($fields, array('title', 'fromCourseId'))) {
+        if (!ArrayToolkit::requireds($fields, ['title', 'fromCourseId'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         $this->beginTransaction();
         try {
-            $lesson = array(
+            $lesson = [
                 'courseId' => $fields['fromCourseId'],
                 'title' => $fields['title'],
                 'type' => 'lesson',
                 'status' => 'created',
-            );
+            ];
             $lesson = $this->getCourseChapterDao()->create($lesson);
 
             $taskFields = $this->parseTaskFields($fields);
@@ -64,7 +64,7 @@ class LessonServiceImpl extends BaseService implements LessonService
             throw $exception;
         }
 
-        return array($lesson, $task);
+        return [$lesson, $task];
     }
 
     public function updateLesson($lessonId, $fields)
@@ -76,7 +76,7 @@ class LessonServiceImpl extends BaseService implements LessonService
             $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
-        $fields = ArrayToolkit::parts($fields, array('title', 'number', 'seq', 'parentId'));
+        $fields = ArrayToolkit::parts($fields, ['title', 'number', 'seq', 'parentId']);
 
         $lesson = $this->getCourseChapterDao()->update($chapter['id'], $fields);
         $this->dispatchEvent('course.lesson.update', new Event($lesson));
@@ -92,10 +92,17 @@ class LessonServiceImpl extends BaseService implements LessonService
             $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
-        $lesson = $this->getCourseChapterDao()->update($lessonId, array('status' => 'published'));
+        $lesson = $this->getCourseChapterDao()->update($lessonId, ['status' => 'published']);
         $this->publishTasks($lesson['id']);
 
         $this->dispatchEvent('course.lesson.publish', new Event($lesson));
+
+        $infoData = [
+            'courseId' => $lesson['courseId'],
+            'title' => $lesson['title'],
+        ];
+        $this->getLogService()->info('course', 'publish_lesson', "发布了课时《{$lesson['title']}》", $infoData);
+
         if ($updateLessonNum) {
             $this->updateLessonNumbers($courseId);
         }
@@ -127,10 +134,17 @@ class LessonServiceImpl extends BaseService implements LessonService
             $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
-        $lesson = $this->getCourseChapterDao()->update($lessonId, array('status' => 'unpublished'));
+        $lesson = $this->getCourseChapterDao()->update($lessonId, ['status' => 'unpublished']);
         $this->unpublishTasks($lesson['id']);
 
         $this->dispatchEvent('course.lesson.unpublish', new Event($lesson));
+
+        $infoData = [
+            'courseId' => $lesson['courseId'],
+            'title' => $lesson['title'],
+        ];
+        $this->getLogService()->info('course', 'unpublish_lesson', "关闭了课时《{$lesson['title']}》", $infoData);
+
         $this->updateLessonNumbers($courseId);
 
         return $lesson;
@@ -161,7 +175,7 @@ class LessonServiceImpl extends BaseService implements LessonService
 
     public function isLessonCountEnough($courseId)
     {
-        $lessonCount = $this->countLessons(array('courseId' => $courseId));
+        $lessonCount = $this->countLessons(['courseId' => $courseId]);
 
         if ($lessonCount >= self::LESSON_LIMIT_NUMBER) {
             $this->createNewException(LessonException::LESSON_NUM_LIMIT());
@@ -186,7 +200,7 @@ class LessonServiceImpl extends BaseService implements LessonService
 
         $this->beginTransaction();
         try {
-            $lesson = $this->getCourseChapterDao()->update($lesson['id'], array('isOptional' => 1));
+            $lesson = $this->getCourseChapterDao()->update($lesson['id'], ['isOptional' => 1]);
 
             $this->getTaskService()->updateTasksOptionalByLessonId($lesson['id'], 1);
 
@@ -215,16 +229,16 @@ class LessonServiceImpl extends BaseService implements LessonService
 
         $this->beginTransaction();
         try {
-            $lesson = $this->getCourseChapterDao()->update($lesson['id'], array('isOptional' => 0));
+            $lesson = $this->getCourseChapterDao()->update($lesson['id'], ['isOptional' => 0]);
 
             $this->getTaskService()->updateTasksOptionalByLessonId($lesson['id'], 0);
 
             $this->dispatchEvent('course.lesson.setOptional', new Event($lesson));
 
-            $infoData = array(
+            $infoData = [
                 'courseId' => $lesson['courseId'],
                 'title' => $lesson['title'],
-            );
+            ];
             $this->getLogService()->info('course', 'lesson_unset_optional', "课时设置必修《{$lesson['title']}》", $infoData);
             $this->updateLessonNumbers($courseId);
 
@@ -240,8 +254,8 @@ class LessonServiceImpl extends BaseService implements LessonService
     public function updateLessonNumbers($courseId)
     {
         $lessons = $this->getCourseChapterDao()->search(
-            array('courseId' => $courseId, 'type' => 'lesson'),
-            array(),
+            ['courseId' => $courseId, 'type' => 'lesson'],
+            [],
             0,
             10000
         );
@@ -262,16 +276,16 @@ class LessonServiceImpl extends BaseService implements LessonService
             }
 
             if ('published' == $lesson['status'] && !$lesson['isOptional']) {
-                $batchHelper->add('id', $lesson['id'], array(
+                $batchHelper->add('id', $lesson['id'], [
                     'published_number' => $publishedNum,
                     'number' => $displayedNum,
-                ));
+                ]);
                 ++$publishedNum;
             } else {
-                $batchHelper->add('id', $lesson['id'], array(
+                $batchHelper->add('id', $lesson['id'], [
                     'published_number' => 0,
                     'number' => $displayedNum,
-                ));
+                ]);
             }
         }
 

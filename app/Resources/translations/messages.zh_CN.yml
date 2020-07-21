@@ -8802,6 +8802,8 @@ log.action.course.publish: 发布课程
 log.action.course.close: 关闭课程
 log.action.course.delete: 删除课程
 log.action.course.add_task: 添加学习任务
+log.action.course.publish_lesson: 发布学习任务
+log.action.course.unpublish_lesson: 关闭学习任务
 log.action.course.update_task: 更新学习任务
 log.action.course.delete_task: 删除学习任务
 log.action.course.task_set_optional: 任务设置选修
@@ -9072,6 +9074,8 @@ log.action.template.course.create_lesson: 新建了课时《<a href="%url%" targ
 log.action.template.course.add_task: 新建了任务《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.task_set_optional: 將任务《<a href="%url%" target="_blank">%title%</a>》设置选修
 log.action.template.course.task_unset_optional: 將任务《<a href="%url%" target="_blank">%title%</a>》设置必修
+log.action.template.course.publish_lesson: 发布了课时《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.course.unpublish_lesson: 关闭了课时《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.add_question: 新建了题目《%title%》
 log.action.template.course.delete_question: 删除了题目《%title%》
 log.action.template.course.add_testpaper: 新建了试卷《%title%》
