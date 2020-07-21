@@ -20,7 +20,9 @@ class StudentMember extends Member
     protected function addMember($exercise, $userId, $info)
     {
         if (!empty($info['price']) && $info['price'] > 0) {
-            return $this->createOrder($exercise['id'], $userId, $info);
+            $this->createOrder($exercise['id'], $userId, $info);
+
+            return $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $userId);
         }
 
         $member = [
