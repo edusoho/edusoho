@@ -113,7 +113,7 @@ class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
 
         /*
          *  Table  course_task_result
-         *  UniqueIndex  courseTaskID_userId
+         *  UniqueIndex  courseTaskId_userId
          *  Column courseTaskId, userId
          */
         $this->createUniqueIndex('course_task_result', 'courseTaskId_userId', 'courseTaskId, userId');
@@ -152,6 +152,13 @@ class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
          *  Column is_push
          */
         $this->createIndex('xapi_activity_watch_log', 'is_push', 'is_push');
+
+        /*
+         *  Table  log_v8
+         *  Index  module_action_createdTime
+         *  Column module, action, createdTime
+         */
+        $this->createIndex('log_v8', 'module_action_createdTime', 'module, action, createdTime');
     }
 
     protected function changeTableFiledType()
