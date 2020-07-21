@@ -21,12 +21,13 @@ class AnswerEngineController extends BaseController
         ]);
     }
 
-    public function reportAction(Request $request, $answerRecordId, $restartUrl, $answerShow = 'show')
+    public function reportAction(Request $request, $answerRecordId, $restartUrl, $answerShow = 'show', $collect = true)
     {
         return $this->render('answer-engine/report.html.twig', [
             'answerRecordId' => $answerRecordId,
             'restartUrl' => $restartUrl,
             'answerShow' => $answerShow,
+            'collect' => true === $collect ? 1 : 0,
         ]);
     }
 
@@ -45,7 +46,7 @@ class AnswerEngineController extends BaseController
         return $this->createJsonResponse($reviewReport);
     }
 
-    public function reviewAnswerAction(Request $request, $answerRecordId, $successGotoUrl, $successContinueGotoUrl = '')
+    public function reviewAnswerAction(Request $request, $answerRecordId, $successGotoUrl, $successContinueGotoUrl = '', $role = 'teacher')
     {
         $answerRecord = $this->getAnswerRecordService()->get($answerRecordId);
 
@@ -54,6 +55,7 @@ class AnswerEngineController extends BaseController
             'successGotoUrl' => $successGotoUrl,
             'successContinueGotoUrl' => $successContinueGotoUrl,
             'answerRecordId' => $answerRecordId,
+            'role' => $role,
         ]);
     }
 

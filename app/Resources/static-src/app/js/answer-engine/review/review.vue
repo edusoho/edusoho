@@ -1,6 +1,7 @@
 <template>
   <div id="app" class="ibs-vue">
     <item-review
+      :role="role"
       :assessment="assessment"
       :answerReport="answerReport"
       :answerRecord="answerRecord"
@@ -22,6 +23,7 @@
   export default {
     data() {
       return {
+        role: $('[name=role]').val(),
         showCKEditorData: {
           publicPath: $('[name=ckeditor_path]').val(),
           filebrowserImageUploadUrl: $('[name=ckeditor_image_upload_url]').val(),

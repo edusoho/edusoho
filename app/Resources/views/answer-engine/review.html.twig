@@ -29,6 +29,7 @@
     <input type="hidden" name="answer_record_id" value='{{ answerRecordId }}'>
     <input type="hidden" name="success_goto_url" value='{{ successGotoUrl }}'>
     <input type="hidden" name="success_continue_goto_url" value='{{ successContinueGotoUrl }}'>
+    <input type="hidden" name="role" value='{{ role }}'>
     {% block footer %}
         {% if showHeader|default(1) %}{{ parent() }}{% endif %}
     {% endblock %}

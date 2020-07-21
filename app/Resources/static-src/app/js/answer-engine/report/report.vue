@@ -10,6 +10,7 @@
       :showCKEditorData="showCKEditorData"
       :showAttachment="showAttachment"
       :cdnHost="cdnHost"
+      :collect="collect"
       :previewAttachmentCallback="previewAttachmentCallback"
       :downloadAttachmentCallback="downloadAttachmentCallback"
       @previewAttachment="previewAttachment"
@@ -25,6 +26,7 @@
   export default {
     data() {
       return {
+        collect: $("[name='collect']").val() == 1,
         answerShow: $('[name=answer_show]').val(),
         showCKEditorData: {
           publicPath: $('[name=ckeditor_path]').val(),

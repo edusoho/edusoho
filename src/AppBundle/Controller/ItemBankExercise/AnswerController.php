@@ -28,6 +28,7 @@ class AnswerController extends BaseController
             return $this->forward('AppBundle:AnswerEngine/AnswerEngine:reviewAnswer', [
                 'answerRecordId' => $latestAnswerRecord['answerRecordId'],
                 'successGotoUrl' => $this->generateUrl('my_item_bank_exercise_show', ['id' => $exerciseId, 'moduleId' => $moduleId, 'tab' => 'chapter']),
+                'role' => 'student',
             ]);
         } elseif (AnswerService::ANSWER_RECORD_STATUS_FINISHED == $latestAnswerRecord['status']) {
             return $this->render(
@@ -67,6 +68,7 @@ class AnswerController extends BaseController
             return $this->forward('AppBundle:AnswerEngine/AnswerEngine:reviewAnswer', [
                 'answerRecordId' => $latestAnswerRecord['answerRecordId'],
                 'successGotoUrl' => $this->generateUrl('my_item_bank_exercise_show', ['id' => $exerciseId, 'moduleId' => $moduleId, 'tab' => 'chapter']),
+                'role' => 'student',
             ]);
         } elseif (AnswerService::ANSWER_RECORD_STATUS_FINISHED == $latestAnswerRecord['status']) {
             return $this->render(

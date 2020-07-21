@@ -14,7 +14,7 @@
     {% if showHeader|default(1) %}{{ parent() }}{% endif %}
   {% endblock %}
 
-  {{ render(controller('AppBundle:AnswerEngine/AnswerEngine:report', {answerRecordId: answerRecordId, restartUrl:restartUrl})) }}
+  {{ render(controller('AppBundle:AnswerEngine/AnswerEngine:report', {answerRecordId: answerRecordId, restartUrl:restartUrl, collect:false})) }}
 
   {% block footer %}
     {% if showHeader|default(1) %}{{ parent() }}{% endif %}
