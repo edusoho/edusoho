@@ -12,7 +12,7 @@ class UploadFileDaoImpl extends GeneralDaoImpl implements UploadFileDao
     public function create($file)
     {
         if (!isset($file['id'])) {
-            return array();
+            return [];
         }
 
         parent::create($file);
@@ -22,23 +22,23 @@ class UploadFileDaoImpl extends GeneralDaoImpl implements UploadFileDao
 
     public function getByHashId($hash)
     {
-        return $this->getByFields(array(
+        return $this->getByFields([
             'hashId' => $hash,
-        ));
+        ]);
     }
 
     public function getByGlobalId($globalId)
     {
-        return $this->getByFields(array(
+        return $this->getByFields([
             'globalId' => $globalId,
-        ));
+        ]);
     }
 
     public function getByConvertHash($hash)
     {
-        return $this->getByFields(array(
+        return $this->getByFields([
             'convertHash' => $hash,
-        ));
+        ]);
     }
 
     public function findByIds($ids)
@@ -49,19 +49,19 @@ class UploadFileDaoImpl extends GeneralDaoImpl implements UploadFileDao
     public function findByTargetTypeAndTargetIds($targetType, $targetIds)
     {
         if (empty($targetIds)) {
-            return array();
+            return [];
         }
 
         $marks = str_repeat('?,', count($targetIds) - 1).'?';
         $sql = "SELECT * FROM {$this->table()} WHERE targetType = ? AND targetId IN ({$marks})";
 
-        return $this->db()->fetchAll($sql, array_merge(array($targetType), $targetIds)) ?: array();
+        return $this->db()->fetchAll($sql, array_merge([$targetType], $targetIds)) ?: [];
     }
 
     public function findCloudFilesByIds($ids)
     {
         if (empty($ids)) {
-            return array();
+            return [];
         }
 
         $marks = str_repeat('?,', count($ids) - 1).'?';
@@ -76,41 +76,41 @@ class UploadFileDaoImpl extends GeneralDaoImpl implements UploadFileDao
             return 0;
         }
 
-        return $this->count(array('etag' => $etag));
+        return $this->count(['etag' => $etag]);
     }
 
     public function deleteByGlobalId($globalId)
     {
-        $result = $this->db()->delete($this->table, array('globalId' => $globalId));
+        $result = $this->db()->delete($this->table, ['globalId' => $globalId]);
 
         return $result;
     }
 
     public function waveUsedCount($id, $num)
     {
-        return $this->wave(array($id), array(
+        return $this->wave([$id], [
             'usedCount' => $num,
-        ));
+        ]);
     }
 
     public function getByTargetType($targetType)
     {
-        return $this->getByFields(array(
+        return $this->getByFields([
             'targetType' => $targetType,
-        ));
+        ]);
     }
 
     public function findHeadLeaderFiles()
     {
         $sql = "SELECT * FROM {$this->table()} WHERE targetType = 'headLeader'";
 
-        return $this->db()->fetchAll($sql, array());
+        return $this->db()->fetchAll($sql, []);
     }
 
     public function declares()
     {
-        return array(
-            'conditions' => array(
+        return [
+            'conditions' => [
                 'etag = :etag',
                 'targetType = :targetType',
                 'targetType IN ( :targetTypes )',
@@ -140,17 +140,22 @@ class UploadFileDaoImpl extends GeneralDaoImpl implements UploadFileDao
                 'id IN ( :idsOr )',
                 'audioConvertStatus = :audioConvertStatus',
                 'audioConvertStatus IN ( :inAudioConvertStatus )',
-            ),
-            'serializes' => array(
+                /*S2B2C-CUSTOM*/
+                'syncId = :syncId',
+                'syncId in (:syncIds)',
+                'syncId > :syncIdGT',
+                /*END*/
+            ],
+            'serializes' => [
                 'metas2' => 'json',
                 'metas' => 'json',
                 'convertParams' => 'json',
-            ),
-            'orderbys' => array(
+            ],
+            'orderbys' => [
                 'createdTime',
                 'id',
-            ),
-        );
+            ],
+        ];
     }
 
     protected function createQueryBuilder($conditions)
