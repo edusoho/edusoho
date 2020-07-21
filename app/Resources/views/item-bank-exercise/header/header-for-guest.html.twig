@@ -152,12 +152,10 @@
             {% else %}
               {% if exercise.originPrice == 0 or exercise.isFree %}
                 {% set btnText = 'course.btn.join' %}
-                {% set toUrl = '' %}
               {% else  %}
                 {% set btnText = 'course.btn.buy' %}
-                {% set toUrl = path('item_bank_exercise_buy', {id: exercise.id}) %}
               {% endif %}
-              <a class="cd-btn cd-btn-primary js-buy-btn" href="javascript:" data-url="{{ toUrl }}">
+              <a class="cd-btn cd-btn-primary js-buy-btn" href="javascript:" data-url="{{ path('item_bank_exercise_buy', {id: exercise.id}) }}">
                 {{ btnText|trans }}
               </a>
             {% endif %}
