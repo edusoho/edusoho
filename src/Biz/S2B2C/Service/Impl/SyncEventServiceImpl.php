@@ -25,7 +25,11 @@ class SyncEventServiceImpl extends BaseService implements SyncEventService
             'isConfirm' => 0,
         ], ['createdTime' => 'asc'], 0, PHP_INT_MAX);
 
-        $this->getSyncEventDao()->update(['ids' => ArrayToolkit::column($syncEvents, 'id')], ['isConfirm' => 1]);
+        if (empty($syncEvents)) {
+            return true;
+        }
+
+        $this->getSyncEventDao()->update(['ids' => ArrayToolkit::column($syncEvents, 'id') ?: [0]], ['isConfirm' => 1]);
 
         return ArrayToolkit::index($syncEvents, 'event');
     }

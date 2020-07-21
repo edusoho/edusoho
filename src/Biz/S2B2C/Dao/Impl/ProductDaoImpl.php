@@ -46,6 +46,11 @@ class ProductDaoImpl extends AdvancedDaoImpl implements ProductDao
         return $this->getByFields(['supplierId' => $supplierId, 'localResourceId' => $localResourceId, 'productType' => $type]);
     }
 
+    public function getByRemoteProductIdRemoteResourceIdAndType($productId, $remoteResourceId, $type)
+    {
+        return $this->getByFields(['remoteProductId' => $productId, 'remoteResourceId' => $remoteResourceId, 'productType' => $type]);
+    }
+
     public function getByTypeAndLocalResourceId($type, $localResourceId)
     {
         return $this->getByFields(['productType' => $type, 'localResourceId' => $localResourceId]);
@@ -76,12 +81,25 @@ class ProductDaoImpl extends AdvancedDaoImpl implements ProductDao
         return $this->db()->fetchAll($sql, array_merge([$supplierId], array_values($remoteProductIds)));
     }
 
+    public function findBySupplierIdAndRemoteProductId($supplierId, $remoteProductId)
+    {
+        return $this->findByFields(['supplierId' => $supplierId, 'remoteProductId' => $remoteProductId]);
+    }
+
     public function findBySupplierIdAndRemoteResourceTypeAndIds($supplierId, $productType, $remoteResourceIds)
     {
         $marks = str_repeat('?,', count($remoteResourceIds) - 1).'?';
         $sql = "SELECT * FROM {$this->table} WHERE supplierId= ? AND productType = ? AND remoteResourceId IN ({$marks});";
 
         return $this->db()->fetchAll($sql, array_merge([$supplierId, $productType], array_values($remoteResourceIds)));
+    }
+
+    public function findBySupplierIdAndRemoteResourceTypeAndProductIds($supplierId, $productType, $remoteProductIds)
+    {
+        $marks = str_repeat('?,', count($remoteProductIds) - 1).'?';
+        $sql = "SELECT * FROM {$this->table} WHERE supplierId= ? AND productType = ? AND remoteProductId IN ({$marks});";
+
+        return $this->db()->fetchAll($sql, array_merge([$supplierId, $productType], array_values($remoteProductIds)));
     }
 
     public function findBySupplierIdAndProductTypeAndLocalResourceIds($supplierId, $productType, $localResourceIds)
@@ -98,5 +116,12 @@ class ProductDaoImpl extends AdvancedDaoImpl implements ProductDao
         $sql = "DELETE FROM {$this->table} WHERE id IN ({$marks});";
 
         return $this->db()->executeUpdate($sql, $ids);
+    }
+
+    public function findRemoteVersionGTLocalVersion()
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE remoteVersion > localVersion AND productType = ? ORDER BY ? ?;";
+
+        return $this->db()->fetchAll($sql, ['course_set', 'createdTime', 'desc']);
     }
 }

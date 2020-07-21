@@ -22,22 +22,11 @@ use QiQiuYun\SDK\Service\S2B2CService;
  */
 class SupplierProductNotifyServiceImpl extends BaseService implements SupplierProductNotifyService
 {
-    public function setProductHasNewVersion($params)
-    {
-        if (!ArrayToolkit::requireds($params, ['productId', 'productType'])) {
-            throw CommonException::ERROR_PARAMETER_MISSING();
-        }
-        $result = $this->getCourseProductService()->setProductHasNewVersion($params['productType'], $params['productId']);
-
-        return ['status' => !empty($result['id'])];
-    }
-
     /**
      * @param $params
      *
      * @return bool[]
-     *                业务逻辑： 当网校不合作的时候，需要关闭所有的课程，是合作状态的时候，关闭某个课程
-     * @Todo ？职责不单一奇怪的逻辑，S端必须改造这个逻辑！
+     *                业务逻辑： 当网校不合作的时候，需要关闭所有的课程
      */
     public function refreshProductsStatus($params)
     {
@@ -61,69 +50,6 @@ class SupplierProductNotifyServiceImpl extends BaseService implements SupplierPr
 
             return ['status' => true];
         }
-        //=====================分割线 上面是针对非合作模式的处理，需要关闭所有的课程；否则只关闭单个课程 分割线=================
-        if (!ArrayToolkit::requireds($params, ['productId', 'productType'])) {
-            throw CommonException::ERROR_PARAMETER_MISSING();
-        }
-        if ('course' != $params['productType']) {
-            $this->getLogger()->info('[refreshProductsStatus] 暂不处理非课程的商品类型');
-
-            return ['status' => true];
-        }
-        //既要关闭课程商品还要关闭计划商品。
-        $courseProduct = $this->getProductService()->getProductBySupplierIdAndRemoteResourceIdAndType($params['supplierId'], $params['productId'], $params['productType']);
-        if (!empty($courseProduct)) {
-            $this->getCourseProductService()->closeProducts([$courseProduct]);
-            $course = $this->getCourseService()->getCourse($courseProduct['localResourceId']);
-            $courseSetProduct = $this->getProductService()->getProductBySupplierIdAndLocalResourceIdAndType($params['supplierId'], $course['courseSetId'], 'course_set');
-            $this->getCourseProductService()->closeProducts([$courseSetProduct]);
-            $this->getLogger()->info('[refreshProductsStatus] 处理完毕');
-        }
-        $this->getLogger()->info("[refreshProductsStatus] 对应商品不存在{$params['productId']}");
-
-        return ['status' => true];
-    }
-
-    public function supplierCourseClosed($params)
-    {
-        $courseProduct = $this->getProductService()->getProductBySupplierIdAndRemoteResourceIdAndType($params['supplier_id'], $params['course_id'], 'course');
-        if (empty($courseProduct)) {
-            $this->getLogger()->info('[supplierCloseCourse] course not found in Merchant', $params);
-
-            return ['status' => false];
-        }
-
-        try {
-            $this->getCourseService()->closeCourse($courseProduct['localResourceId']);
-            $this->getLogger()->info('[supplierCloseCourse] success');
-        } catch (\Exception $e) {
-            $this->getLogger()->err('[supplierCloseCourse] failed'.$e->getMessage().$e->getTraceAsString(), $params);
-
-            return ['status' => false];
-        }
-
-        return ['status' => true];
-    }
-
-    public function supplierCourseSetClosed($params)
-    {
-        $courseSetProduct = $this->getProductService()->getProductBySupplierIdAndRemoteResourceIdAndType($params['supplier_id'], $params['course_set_id'], 'course_set');
-        if (empty($courseSetProduct)) {
-            $this->getLogger()->info('[supplierCourseSetClosed] course_set not found in Merchant', $params);
-
-            return ['status' => false];
-        }
-
-        try {
-            $this->getCourseSetService()->closeCourseSet($courseSetProduct['localResourceId']);
-            $this->getLogger()->info('[supplierCourseSetClosed] success');
-        } catch (\Exception $e) {
-            $this->getLogger()->err('[supplierCourseSetClosed] failed'.$e->getMessage().$e->getTraceAsString(), $params);
-
-            return ['status' => false];
-        }
-
-        return ['status' => true];
     }
 
     /**
@@ -137,6 +63,9 @@ class SupplierProductNotifyServiceImpl extends BaseService implements SupplierPr
         $handle = [
             'modifyPrice' => 'modifyPriceEvent',
             'closeTask' => 'closeTaskEvent',
+            'closePlan' => 'closePlanEvent',
+            'closeCourse' => 'closeCourseEvent',
+            'newVersion' => 'newVersionEvent',
         ];
 
         if (!array_key_exists($notifyEvent->getEvent(), $handle)) {
@@ -165,7 +94,11 @@ class SupplierProductNotifyServiceImpl extends BaseService implements SupplierPr
     {
         $changeData = $notifyEvent->getData();
 
-        return $this->getCourseProductService()->syncProductPrice($notifyEvent->getProductId(), ArrayToolkit::parts($changeData['new'], ['suggestionPrice', 'cooperationPrice']));
+        return $this->getCourseProductService()->syncProductPrice(
+            $notifyEvent->getProductId(),
+            $changeData['courseId'],
+            ArrayToolkit::parts($changeData['new'], ['suggestionPrice', 'cooperationPrice'])
+        );
     }
 
     /**
@@ -177,7 +110,47 @@ class SupplierProductNotifyServiceImpl extends BaseService implements SupplierPr
      */
     protected function closeTaskEvent($notifyEvent)
     {
-        return $this->getCourseProductService()->closeTask($notifyEvent->getProductId(), ArrayToolkit::get($notifyEvent->getData(), 'taskId', 0));
+        return $this->getCourseProductService()->closeTask(
+            $notifyEvent->getProductId(),
+            $notifyEvent->getData('courseId'),
+            $notifyEvent->getData('lessonId')
+        );
+    }
+
+    /**
+     * @param \ApiBundle\Api\Resource\SyncProductNotify\NotifyEvent $notifyEvent
+     *
+     * @return bool
+     *
+     * @throws
+     */
+    protected function closePlanEvent($notifyEvent)
+    {
+        return $this->getCourseProductService()->closeCourse($notifyEvent->getProductId(), $notifyEvent->getData('courseId'));
+    }
+
+    /**
+     * @param \ApiBundle\Api\Resource\SyncProductNotify\NotifyEvent $notifyEvent
+     *
+     * @return bool
+     *
+     * @throws
+     */
+    protected function closeCourseEvent($notifyEvent)
+    {
+        return $this->getCourseProductService()->closeCourseSet($notifyEvent->getProductId(), $notifyEvent->getData('courseSetId'));
+    }
+
+    /**
+     * @param \ApiBundle\Api\Resource\SyncProductNotify\NotifyEvent $notifyEvent
+     *
+     * @return bool
+     *
+     * @throws
+     */
+    protected function newVersionEvent($notifyEvent)
+    {
+        return $this->getProductService()->notifyNewVersionProduct($notifyEvent->getProductId(), $notifyEvent->getData('courseId'), $notifyEvent->getData());
     }
 
     /**
