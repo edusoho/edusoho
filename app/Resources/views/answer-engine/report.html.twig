@@ -1,3 +1,5 @@
+{% extends 'layout.html.twig' %}
+
 {% set lang = app.request.getLocale() %}
 
 {% if lang == 'en' %}
@@ -6,7 +8,14 @@
   {% do script(['libs/vue.js','libs/item-bank/lib/itemBank.umd.min.js','app/js/answer-engine/report/index.js']) %}
 {% endif %}
 
-
+{% block body %}
+  <style>
+    html, body {
+      height: 100%;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+    }  
+  </style>
 {% include 'answer-engine/common.html.twig' %}
 {% include 'attachment-upload/upload-data.html.twig' %}
 <input type="hidden" name="assessment" value='{{ assessment|json_encode }}'>
@@ -16,3 +25,4 @@
 <input type="hidden" name="question_favorites" value='{{ questionFavorites|json_encode }}'>
 <input type="hidden" name="restart_url" value='{{ restartUrl }}'>
 <input type="hidden" name="answer_show" value='{{ answerShow }}'>
+{% endblock %}

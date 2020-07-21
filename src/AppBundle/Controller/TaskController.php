@@ -418,6 +418,10 @@ class TaskController extends BaseController
     public function taskFinishedPromptAction($courseId, $id)
     {
         list($course) = $this->getCourseService()->tryTakeCourse($courseId);
+
+        if (!$this->getTaskService()->isFinished($id)) {
+            $this->createNewException(TaskException::CAN_NOT_FINISH());
+        }
         $result = $this->getTaskService()->finishTaskResult($id);
         $task = $this->getTaskService()->getTask($id);
 
