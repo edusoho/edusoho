@@ -63,7 +63,7 @@
               </span>
             {% elseif exercise.expiryMode == 'date' %}
               <span class="gray-dark course-detail-expiry">
-                {{ 'course.expiry_date.date_mode'|trans({'%expiryStartDate%':exercise.expiryStartDate|date('Y-m-d '), '%expiryEndDate%':course.expiryEndDate|date('Y-m-d ')})|raw }}
+                {{ 'course.expiry_date.date_mode'|trans({'%expiryStartDate%':exercise.expiryStartDate|date('Y-m-d '), '%expiryEndDate%':exercise.expiryEndDate|date('Y-m-d ')})|raw }}
               </span>
             {% elseif exercise.expiryMode == 'forever' %}
               <span class="gray-dark course-detail-expiry mrl">{{ 'course.expiry_date.forever_mode'|trans }}</span>
