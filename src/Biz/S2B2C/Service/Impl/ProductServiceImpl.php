@@ -347,6 +347,10 @@ class ProductServiceImpl extends BaseService implements ProductService
 
     public function deleteByIds($ids)
     {
+        if (empty($ids)) {
+            return true;
+        }
+
         return $this->getS2B2CProductDao()->deleteByIds($ids);
     }
 

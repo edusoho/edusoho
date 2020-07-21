@@ -6,6 +6,8 @@ use Biz\BaseService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\S2B2C\Service\SupplierNotifyService;
 use Biz\System\Service\SettingService;
+use Biz\Util\FileUtil;
+use Biz\Util\SystemUtil;
 use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Yaml\Yaml;
@@ -36,6 +38,8 @@ class SupplierNotifyServiceImpl extends BaseService implements SupplierNotifySer
             $this->writeParameters($content);
         }
         $this->getLogger()->info("[onCoopModeChange] 更新渠道商#{$new['name']}合作模式#{$new['coop_mode']}成功");
+        $this->getS2B2CFacadeService()->updateMerchantDisabledPermissions();
+        FileUtil::emptyDir(SystemUtil::getCachePath());
 
         return ['success' => true];
     }

@@ -419,8 +419,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
         } catch (\Exception $e) {
             $this->rollback();
             $this->getLogger()->error(sprintf('[deleteProductsByCourseSetError] %s', $e->getMessage()));
-
-            return false;
+            $this->createNewException(S2B2CProductException::REMOVE_PRODUCT_FAILED());
         }
 
         return true;

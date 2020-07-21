@@ -113,12 +113,6 @@ class CourseSetController extends BaseController
             return $this->createJsonResponse(['code' => 2, 'message' => '请先删除班级课程']);
         }
 
-        $result = $this->getCourseProductService()->deleteProductsByCourseSet($courseSet);
-
-        if (!$result) {
-            return $this->createJsonResponse(['code' => 2, 'message' => '采购关系移除失败']);
-        }
-
         if ('draft' == $courseSet['status']) {
             $this->getCourseSetService()->deleteCourseSet($id);
 
