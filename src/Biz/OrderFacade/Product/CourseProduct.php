@@ -6,22 +6,16 @@ use Biz\Accessor\AccessorInterface;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
-use Biz\Course\Util\CourseTitleUtils;
-use Biz\Goods\Service\GoodsService;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Codeages\Biz\Order\Status\OrderStatusCallback;
 
-class CourseProduct extends Product implements OrderStatusCallback
+class CourseProduct extends BaseGoodsProduct implements OrderStatusCallback
 {
     const TYPE = 'course';
 
     public $showTemplate = 'order/show/course-item.html.twig';
 
     public $targetType = self::TYPE;
-
-    public $courseSet;
-
-    public $courseId;
 
     /**
      * 课程展示价格
@@ -30,35 +24,11 @@ class CourseProduct extends Product implements OrderStatusCallback
      */
     public $price;
 
-    public function init(array $params)
-    {
-        $this->targetId = $params['targetId'];
-
-        $goodsSpecs = $this->getGoodsService()->getGoodsSpecs($params['targetId']);
-        $course = $this->getCourseService()->getCourse($goodsSpecs['targetId']);
-        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
-
-        $this->courseId = $course['id'];
-        $this->backUrl = ['routing' => 'course_show', 'params' => ['id' => $this->courseId]];
-        $this->successUrl = ['my_course_show', ['id' => $this->courseId]];
-        $this->courseSet = $courseSet;
-        $this->productEnable = ('published' === $course['status'] && 'published' === $courseSet['status']) ? true : false;
-        $this->title = CourseTitleUtils::getDisplayedTitle($course);
-        if (empty($this->title) && isset($params['orderItemId'])) {
-            $orderItem = $this->getOrderService()->getOrderItem($params['orderItemId']);
-            $this->title = $orderItem['title'];
-        }
-        $this->price = $course['price'];
-        $this->originPrice = $course['originPrice'];
-        $this->maxRate = $course['maxRate'];
-        $this->cover = $this->courseSet['cover'];
-    }
-
     public function validate()
     {
-        $access = $this->getCourseService()->canJoinCourse($this->courseId);
+        $access = $this->getCourseService()->canJoinCourse($this->goodsSpecs['targetId']);
 
-        $course = $this->getCourseService()->getCourse($this->courseId);
+        $course = $this->getCourseService()->getCourse($this->goodsSpecs['targetId']);
 
         if (!$course['buyable']) {
             throw OrderPayCheckException::UNPURCHASABLE_PRODUCT();
@@ -168,13 +138,5 @@ class CourseProduct extends Product implements OrderStatusCallback
     protected function getCourseSetService()
     {
         return $this->biz->service('Course:CourseSetService');
-    }
-
-    /**
-     * @return GoodsService
-     */
-    protected function getGoodsService()
-    {
-        return $this->biz->service('Goods:GoodsService');
     }
 }

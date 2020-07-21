@@ -4,11 +4,10 @@ namespace Biz\OrderFacade\Product;
 
 use Biz\Accessor\AccessorInterface;
 use Biz\Classroom\Service\ClassroomService;
-use Biz\Goods\Service\GoodsService;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Codeages\Biz\Order\Status\OrderStatusCallback;
 
-class ClassroomProduct extends Product implements OrderStatusCallback
+class ClassroomProduct extends BaseGoodsProduct implements OrderStatusCallback
 {
     const TYPE = 'classroom';
 
@@ -16,35 +15,11 @@ class ClassroomProduct extends Product implements OrderStatusCallback
 
     public $showTemplate = 'order/show/classroom-item.html.twig';
 
-    public $classroomId;
-
-    public function init(array $params)
-    {
-        $this->targetId = $params['targetId'];
-
-        $goodsSpecs = $this->getGoodsService()->getGoodsSpecs($params['targetId']);
-        $classroom = $this->getClassroomService()->getClassroom($goodsSpecs['targetId']);
-
-        $this->classroomId = $classroom['id'];
-        $this->backUrl = ['routing' => 'classroom_show', 'params' => ['id' => $classroom['id']]];
-        $this->successUrl = ['classroom_show', ['id' => $classroom['id']]];
-        $this->title = $classroom['title'];
-        $this->originPrice = $classroom['price'];
-        $this->middlePicture = $classroom['middlePicture'];
-        $this->maxRate = $classroom['maxRate'];
-        $this->productEnable = 'published' === $classroom['status'] ? true : false;
-        $this->cover = [
-            'small' => $classroom['smallPicture'],
-            'middle' => $classroom['middlePicture'],
-            'large' => $classroom['largePicture'],
-        ];
-    }
-
     public function validate()
     {
-        $access = $this->getClassroomService()->canJoinClassroom($this->classroomId);
+        $access = $this->getClassroomService()->canJoinClassroom($this->goodsSpecs['targetId']);
 
-        $classroom = $this->getClassroomService()->getClassroom($this->classroomId);
+        $classroom = $this->getClassroomService()->getClassroom($this->goodsSpecs['targetId']);
 
         if (!$classroom['buyable']) {
             throw OrderPayCheckException::UNPURCHASABLE_PRODUCT();
@@ -130,14 +105,6 @@ class ClassroomProduct extends Product implements OrderStatusCallback
         $goodsSpecs = $this->getGoodsService()->getGoodsSpecs($id);
 
         return $this->getClassroomService()->getClassroom($goodsSpecs['targetId']);
-    }
-
-    /**
-     * @return GoodsService
-     */
-    protected function getGoodsService()
-    {
-        return $this->biz->service('Goods:GoodsService');
     }
 
     protected function getMemberOperationService()

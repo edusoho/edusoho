@@ -2,11 +2,11 @@
 
 namespace Tests\Unit\OrderFacade\Service;
 
+use Biz\Accessor\AccessorInterface;
 use Biz\BaseTestCase;
+use Biz\OrderFacade\Product\ClassroomProduct;
 use Biz\OrderFacade\Product\CourseProduct;
 use Biz\OrderFacade\Service\OrderFacadeService;
-use Biz\OrderFacade\Product\ClassroomProduct;
-use Biz\Accessor\AccessorInterface;
 use Biz\System\Service\LogService;
 
 class OrderFacadeServiceTest extends BaseTestCase
@@ -22,10 +22,10 @@ class OrderFacadeServiceTest extends BaseTestCase
     {
         $biz = $this->getBiz();
 
-        $this->mockBiz('Course:CourseService', array(
-            array(
+        $this->mockBiz('Course:CourseService', [
+            [
                 'functionName' => 'getCourse',
-                'returnValue' => array(
+                'returnValue' => [
                     'id' => 1,
                     'title' => 'course name1',
                     'courseSetTitle' => 'course set',
@@ -35,21 +35,21 @@ class OrderFacadeServiceTest extends BaseTestCase
                     'status' => 'published',
                     'maxRate' => 0,
                     'buyable' => true,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'functionName' => 'canJoinCourse',
-                'returnValue' => array('code' => AccessorInterface::SUCCESS),
-            ),
-        ));
+                'returnValue' => ['code' => AccessorInterface::SUCCESS],
+            ],
+        ]);
         $courseProduct = $biz['order.product.'.CourseProduct::TYPE];
-        $courseProduct->init(array('targetId' => 1));
+        $courseProduct->init(['targetId' => 1]);
 
-        $courseProduct->pickedDeducts = array(
-            array('deduct_id' => 1, 'deduct_type' => 'rewardPoint', 'deduct_amount' => 20),
-            array('deduct_id' => 2, 'deduct_type' => 'discount', 'deduct_amount' => 100),
-            array('deduct_id' => 2, 'deduct_type' => 'seckill', 'deduct_amount' => 20, 'deduct_type_name' => '秒杀'),
-        );
+        $courseProduct->pickedDeducts = [
+            ['deduct_id' => 1, 'deduct_type' => 'rewardPoint', 'deduct_amount' => 20],
+            ['deduct_id' => 2, 'deduct_type' => 'discount', 'deduct_amount' => 100],
+            ['deduct_id' => 2, 'deduct_type' => 'seckill', 'deduct_amount' => 20, 'deduct_type_name' => '秒杀'],
+        ];
 
         $order = $this->getOrderFacadeService()->create($courseProduct);
 
@@ -62,19 +62,19 @@ class OrderFacadeServiceTest extends BaseTestCase
      */
     public function testCheckOrderBeforePay()
     {
-        $this->mockBiz('Order:OrderService', array(
-           array('functionName' => 'getOrderBySn', 'returnValue' => array()),
-        ));
+        $this->mockBiz('Order:OrderService', [
+           ['functionName' => 'getOrderBySn', 'returnValue' => []],
+        ]);
 
-        $this->getOrderFacadeService()->checkOrderBeforePay('12456', array());
+        $this->getOrderFacadeService()->checkOrderBeforePay('12456', []);
     }
 
     public function testCreateCourseImportOrder()
     {
-        $this->mockBiz('Course:CourseService', array(
-            array(
+        $this->mockBiz('Course:CourseService', [
+            [
                 'functionName' => 'getCourse',
-                'returnValue' => array(
+                'returnValue' => [
                     'id' => 1,
                     'title' => 'course name1',
                     'courseSetTitle' => 'course set',
@@ -83,28 +83,28 @@ class OrderFacadeServiceTest extends BaseTestCase
                     'courseSetId' => 1,
                     'status' => 'published',
                     'maxRate' => 0,
-                ),
-            ),
-        ));
+                ],
+            ],
+        ]);
 
-        $this->mockBiz('Course:MemberService', array(
-            array('functionName' => 'becomeStudent', 'returnValue' => array('id' => 1, 'courseId' => 1, 'userId' => 10)),
-            array('functionName' => 'isCourseStudent', 'returnValue' => false),
-        ));
-        $this->mockBiz('Course:CourseSetService', array(
-            array('functionName' => 'getCourseSet', 'returnValue' => array('id' => 1, 'title' => 'course set name1', 'cover' => '', 'status' => 'published')),
-        ));
+        $this->mockBiz('Course:MemberService', [
+            ['functionName' => 'becomeStudent', 'returnValue' => ['id' => 1, 'courseId' => 1, 'userId' => 10]],
+            ['functionName' => 'isCourseStudent', 'returnValue' => false],
+        ]);
+        $this->mockBiz('Course:CourseSetService', [
+            ['functionName' => 'getCourseSet', 'returnValue' => ['id' => 1, 'title' => 'course set name1', 'cover' => '', 'status' => 'published']],
+        ]);
 
         $biz = $this->getBiz();
         $courseProduct = $biz['order.product.'.CourseProduct::TYPE];
 
-        $courseProduct->init(array('targetId' => 1));
+        $courseProduct->init(['targetId' => 1]);
         $courseProduct->price = 10;
 
-        $params = array(
+        $params = [
             'created_reason' => '课程用户导入订单',
             'price_type' => 'CNY',
-        );
+        ];
         $order = $this->getOrderFacadeService()->createSpecialOrder($courseProduct, 10, $params);
 
         $this->assertEquals('paid', $order['status']);
@@ -114,22 +114,22 @@ class OrderFacadeServiceTest extends BaseTestCase
 
     public function testCreateClassroomImportOrder()
     {
-        $this->mockBiz('Classroom:ClassroomService', array(
-            array('functionName' => 'getClassroom', 'returnValue' => array('id' => 1, 'title' => 'classroom name1', 'price' => 10, 'middlePicture' => '', 'status' => 'published', 'maxRate' => 0, 'smallPicture' => '', 'largePicture' => '')),
-            array('functionName' => 'isClassroomStudent', 'returnValue' => false),
-            array('functionName' => 'becomeStudent', 'returnValue' => array()),
-        ));
+        $this->mockBiz('Classroom:ClassroomService', [
+            ['functionName' => 'getClassroom', 'returnValue' => ['id' => 1, 'title' => 'classroom name1', 'price' => 10, 'middlePicture' => '', 'status' => 'published', 'maxRate' => 0, 'smallPicture' => '', 'largePicture' => '']],
+            ['functionName' => 'isClassroomStudent', 'returnValue' => false],
+            ['functionName' => 'becomeStudent', 'returnValue' => []],
+        ]);
 
         $biz = $this->getBiz();
         $product = $biz['order.product.'.ClassroomProduct::TYPE];
 
-        $product->init(array('targetId' => 1));
+        $product->init(['targetId' => 1]);
         $product->price = 10;
 
-        $params = array(
+        $params = [
             'created_reason' => '班级用户导入订单',
             'price_type' => 'CNY',
-        );
+        ];
         $order = $this->getOrderFacadeService()->createSpecialOrder($product, 10, $params);
 
         $this->assertEquals('paid', $order['status']);
@@ -139,39 +139,39 @@ class OrderFacadeServiceTest extends BaseTestCase
 
     public function testAdjustOrderPrice()
     {
-        $mockAdjustDeduct = array(
+        $mockAdjustDeduct = [
             'deduct_amount' => 200,
-            'order' => array(
+            'order' => [
                 'title' => 'order',
-            ),
-        );
-        $this->mockBiz('Order:WorkflowService', array(
-            array('functionName' => 'adjustPrice', 'returnValue' => $mockAdjustDeduct),
-        ));
+            ],
+        ];
+        $this->mockBiz('Order:WorkflowService', [
+            ['functionName' => 'adjustPrice', 'returnValue' => $mockAdjustDeduct],
+        ]);
 
         $result = $this->getOrderFacadeService()->adjustOrderPrice(1, 2000);
 
         $this->assertSame($mockAdjustDeduct, $result);
-        $log = $this->getLogService()->searchLogs(array('module' => 'order', 'action' => OrderFacadeService::DEDUCT_TYPE_ADJUST), array(), 0, 1);
+        $log = $this->getLogService()->searchLogs(['module' => 'order', 'action' => OrderFacadeService::DEDUCT_TYPE_ADJUST], [], 0, 1);
         $this->assertNotNull($log);
     }
 
     public function testGetOrderAdjustInfo()
     {
-        $this->mockBiz('Order:OrderService', array(
-            array('functionName' => 'findOrderItemDeductsByOrderId', 'returnValue' => array(
-                array('deduct_type' => 'discount', 'deduct_amount' => 2000),
-                array('deduct_type' => OrderFacadeService::DEDUCT_TYPE_ADJUST, 'deduct_amount' => 1000),
-            )),
-        ));
+        $this->mockBiz('Order:OrderService', [
+            ['functionName' => 'findOrderItemDeductsByOrderId', 'returnValue' => [
+                ['deduct_type' => 'discount', 'deduct_amount' => 2000],
+                ['deduct_type' => OrderFacadeService::DEDUCT_TYPE_ADJUST, 'deduct_amount' => 1000],
+            ]],
+        ]);
 
-        $order = array('id' => 1, 'price_amount' => 10000, 'pay_amount' => 7000);
+        $order = ['id' => 1, 'price_amount' => 10000, 'pay_amount' => 7000];
         $adjustInfo = $this->getOrderFacadeService()->getOrderAdjustInfo($order);
 
         $this->assertArrayEquals(
             $adjustInfo,
-            array('payAmountExcludeAdjust' => 80, 'adjustPrice' => 10, 'adjustDiscount' => 8.75),
-            array('payAmountExcludeAdjust', 'adjustPrice', 'adjustDiscount')
+            ['payAmountExcludeAdjust' => 80, 'adjustPrice' => 10, 'adjustDiscount' => 8.75],
+            ['payAmountExcludeAdjust', 'adjustPrice', 'adjustDiscount']
         );
     }
 

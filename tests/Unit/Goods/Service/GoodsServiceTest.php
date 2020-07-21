@@ -372,6 +372,19 @@ class GoodsServiceTest extends BaseTestCase
         ], $result);
     }
 
+    public function testFindGoodsSpecsByIds()
+    {
+        $goodsSpecs1 = $this->createGoodsSpecs();
+        $goodsSpecs2 = $this->createGoodsSpecs(['targetId' => 1]);
+        $goodsSpecs3 = $this->createGoodsSpecs(['goodsId' => 1]);
+        $goodsSpecs4 = $this->createGoodsSpecs(['price' => '10.00']);
+
+        $expected = ArrayToolkit::index([$goodsSpecs1, $goodsSpecs4], 'id');
+
+        $result = $this->getGoodsService()->findGoodsSpecsByIds([$goodsSpecs1['id'], $goodsSpecs4['id']]);
+        $this->assertEquals($expected, $result);
+    }
+
     protected function createGoods($goods = [])
     {
         $default = [

@@ -4,5 +4,8 @@
 
 {% block title %}商品页{% endblock %}
 {% block full_content %}
-  <div id="show-product-page" data-current-user-id="{{ app.user.id|default(null) }}"></div>
+  <div id="show-product-page"
+       data-current-user-id="{{ app.user.id|default(null) }}"
+       data-target-id="{{ app.request.query.get('targetId')|default(null) }}"
+  ></div>
 {% endblock %}

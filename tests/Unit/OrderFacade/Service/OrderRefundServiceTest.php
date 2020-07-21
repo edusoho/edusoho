@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\OrderFacade\Service;
 
-use Biz\BaseTestCase;
 use AppBundle\Common\ReflectionUtils;
+use Biz\BaseTestCase;
 use Biz\OrderFacade\Product\CourseProduct;
 
 class OrderRefundServiceTest extends BaseTestCase
@@ -12,31 +12,31 @@ class OrderRefundServiceTest extends BaseTestCase
     {
         $this->mockBiz(
             'Order:OrderRefundService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'searchRefunds',
-                    'returnValue' => array(array('id' => 11, 'order_id' => 111)),
-                    'withParams' => array(array('order_id' => 111), array(), 0, 5),
-                ),
-            )
+                    'returnValue' => [['id' => 11, 'order_id' => 111]],
+                    'withParams' => [['order_id' => 111], [], 0, 5],
+                ],
+            ]
         );
-        $result = $this->getOrderRefundService()->searchRefunds(array('order_id' => 111), array(), 0, 5);
-        $this->assertEquals(array(array('id' => 11, 'order_id' => 111)), $result);
+        $result = $this->getOrderRefundService()->searchRefunds(['order_id' => 111], [], 0, 5);
+        $this->assertEquals([['id' => 11, 'order_id' => 111]], $result);
     }
 
     public function testCountRefunds()
     {
         $this->mockBiz(
             'Order:OrderRefundService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'countRefunds',
                     'returnValue' => 5,
-                    'withParams' => array(array('order_id' => 111)),
-                ),
-            )
+                    'withParams' => [['order_id' => 111]],
+                ],
+            ]
         );
-        $result = $this->getOrderRefundService()->countRefunds(array('order_id' => 111));
+        $result = $this->getOrderRefundService()->countRefunds(['order_id' => 111]);
         $this->assertEquals(5, $result);
     }
 
@@ -44,109 +44,109 @@ class OrderRefundServiceTest extends BaseTestCase
     {
         $this->mockBiz(
             'Order:OrderRefundService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'getOrderRefundById',
-                    'returnValue' => array('id' => 11, 'order_id' => 111),
-                    'withParams' => array(11),
-                ),
-            )
+                    'returnValue' => ['id' => 11, 'order_id' => 111],
+                    'withParams' => [11],
+                ],
+            ]
         );
         $result = $this->getOrderRefundService()->getOrderRefundById(11);
-        $this->assertEquals(array('id' => 11, 'order_id' => 111), $result);
+        $this->assertEquals(['id' => 11, 'order_id' => 111], $result);
     }
 
     public function testApplyOrderRefund()
     {
         $this->mockBiz(
             'Order:OrderService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'getOrder',
-                    'returnValue' => array('id' => 11, 'order_id' => 111, 'created_user_id' => 1, 'pay_amount' => 10, 'refund_deadline' => time() + 1000),
-                    'withParams' => array(11),
-                ),
-                array(
+                    'returnValue' => ['id' => 11, 'order_id' => 111, 'created_user_id' => 1, 'pay_amount' => 10, 'refund_deadline' => time() + 1000],
+                    'withParams' => [11],
+                ],
+                [
                     'functionName' => 'findOrderItemsByOrderId',
-                    'returnValue' => array(array('id' => 11, 'title' => 'title', 'target_id' => 111, 'target_type' => 'course')),
-                    'withParams' => array(11),
-                ),
-                array(
+                    'returnValue' => [['id' => 11, 'title' => 'title', 'target_id' => 111, 'target_type' => 'course']],
+                    'withParams' => [11],
+                ],
+                [
                     'functionName' => 'getOrderItem',
-                    'returnValue' => array('id' => 11, 'title' => 'title', 'target_id' => 111, 'target_type' => 'course'),
-                    'withParams' => array(11),
-                ),
-            )
+                    'returnValue' => ['id' => 11, 'title' => 'title', 'target_id' => 111, 'target_type' => 'course'],
+                    'withParams' => [11],
+                ],
+            ]
         );
         $this->mockBiz(
             'Order:OrderRefundService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'searchRefunds',
-                    'returnValue' => array(),
-                    'withParams' => array(array('order_id' => 11, 'status' => 'auditing'), array(), 0, PHP_INT_MAX),
+                    'returnValue' => [],
+                    'withParams' => [['order_id' => 11, 'status' => 'auditing'], [], 0, PHP_INT_MAX],
                     'runTimes' => 1,
-                ),
-                array(
+                ],
+                [
                     'functionName' => 'searchRefunds',
-                    'returnValue' => array(array('id' => 11, 'order_id' => 11)),
-                    'withParams' => array(array('order_id' => 11, 'status' => 'auditing'), array(), 0, PHP_INT_MAX),
+                    'returnValue' => [['id' => 11, 'order_id' => 11]],
+                    'withParams' => [['order_id' => 11, 'status' => 'auditing'], [], 0, PHP_INT_MAX],
                     'runTimes' => 1,
-                ),
-            )
+                ],
+            ]
         );
         $this->mockBiz(
             'Order:WorkflowService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'applyOrderRefund',
-                    'returnValue' => array('id' => 11, 'order_id' => 111),
-                    'withParams' => array(11, array('reason' => 'test')),
-                ),
-            )
+                    'returnValue' => ['id' => 11, 'order_id' => 111],
+                    'withParams' => [11, ['reason' => 'test']],
+                ],
+            ]
         );
-        $result = $this->getOrderRefundService()->applyOrderRefund(11, array('reason' => 'test'));
-        $this->assertEquals(array('id' => 11, 'order_id' => 111), $result);
+        $result = $this->getOrderRefundService()->applyOrderRefund(11, ['reason' => 'test']);
+        $this->assertEquals(['id' => 11, 'order_id' => 111], $result);
 
-        $result = $this->getOrderRefundService()->applyOrderRefund(11, array('reason' => 'test'));
-        $this->assertEquals(array('id' => 11, 'order_id' => 11), $result);
+        $result = $this->getOrderRefundService()->applyOrderRefund(11, ['reason' => 'test']);
+        $this->assertEquals(['id' => 11, 'order_id' => 11], $result);
     }
 
     public function testRefuseRefund()
     {
         $currentUser = $this->getCurrentUser();
-        $currentUser->setPermissions(array('admin' => 1));
+        $currentUser->setPermissions(['admin' => 1]);
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $this->mockBiz(
             'Order:OrderService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'getOrder',
-                    'returnValue' => array('id' => 11, 'order_id' => 111, 'created_user_id' => 1, 'pay_amount' => 10, 'refund_deadline' => time() + 1000, 'user_id' => 1),
-                    'withParams' => array(11),
-                ),
-                array(
+                    'returnValue' => ['id' => 11, 'order_id' => 111, 'created_user_id' => 1, 'pay_amount' => 10, 'refund_deadline' => time() + 1000, 'user_id' => 1],
+                    'withParams' => [11],
+                ],
+                [
                     'functionName' => 'findOrderItemsByOrderId',
-                    'returnValue' => array(array('id' => 11, 'title' => 'title', 'target_id' => 111, 'target_type' => 'course', 'refund_id' => 11)),
-                    'withParams' => array(11),
-                ),
-                array(
+                    'returnValue' => [['id' => 11, 'title' => 'title', 'target_id' => 111, 'target_type' => 'course', 'refund_id' => 11]],
+                    'withParams' => [11],
+                ],
+                [
                     'functionName' => 'getOrderItem',
-                    'returnValue' => array('id' => 11, 'title' => 'title', 'target_id' => 111, 'target_type' => 'course'),
-                    'withParams' => array(11),
-                ),
-            )
+                    'returnValue' => ['id' => 11, 'title' => 'title', 'target_id' => 111, 'target_type' => 'course'],
+                    'withParams' => [11],
+                ],
+            ]
         );
         $this->mockBiz(
             'Order:WorkflowService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'refuseRefund',
-                    'withParams' => array(11, array()),
-                ),
-            )
+                    'withParams' => [11, []],
+                ],
+            ]
         );
-        $result = $this->getOrderRefundService()->refuseRefund(11, array());
+        $result = $this->getOrderRefundService()->refuseRefund(11, []);
         $this->getWorkflowService()->shouldHaveReceived('refuseRefund');
         $this->assertEquals(111, $result->targetId);
     }
@@ -155,34 +155,34 @@ class OrderRefundServiceTest extends BaseTestCase
     {
         $this->mockBiz(
             'Order:OrderService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'getOrder',
-                    'returnValue' => array('id' => 11, 'order_id' => 111, 'created_user_id' => 1, 'pay_amount' => 10, 'refund_deadline' => time() + 1000, 'user_id' => 1),
-                    'withParams' => array(11),
-                ),
-                array(
+                    'returnValue' => ['id' => 11, 'order_id' => 111, 'created_user_id' => 1, 'pay_amount' => 10, 'refund_deadline' => time() + 1000, 'user_id' => 1],
+                    'withParams' => [11],
+                ],
+                [
                     'functionName' => 'findOrderItemsByOrderId',
-                    'returnValue' => array(array('id' => 11, 'title' => 'title', 'target_id' => 111, 'target_type' => 'course', 'refund_id' => 11)),
-                    'withParams' => array(11),
-                ),
-                array(
+                    'returnValue' => [['id' => 11, 'title' => 'title', 'target_id' => 111, 'target_type' => 'course', 'refund_id' => 11]],
+                    'withParams' => [11],
+                ],
+                [
                     'functionName' => 'getOrderItem',
-                    'returnValue' => array('id' => 11, 'title' => 'title', 'target_id' => 111, 'target_type' => 'course'),
-                    'withParams' => array(11),
-                ),
-            )
+                    'returnValue' => ['id' => 11, 'title' => 'title', 'target_id' => 111, 'target_type' => 'course'],
+                    'withParams' => [11],
+                ],
+            ]
         );
         $this->mockBiz(
             'Order:WorkflowService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'adoptRefund',
-                    'withParams' => array(11, array()),
-                ),
-            )
+                    'withParams' => [11, []],
+                ],
+            ]
         );
-        $result = $this->getOrderRefundService()->adoptRefund(11, array());
+        $result = $this->getOrderRefundService()->adoptRefund(11, []);
         $this->getWorkflowService()->shouldHaveReceived('adoptRefund');
         $this->assertEquals(111, $result->targetId);
     }
@@ -191,32 +191,32 @@ class OrderRefundServiceTest extends BaseTestCase
     {
         $this->mockBiz(
             'Order:OrderService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'getOrder',
-                    'returnValue' => array('id' => 11, 'order_id' => 111, 'created_user_id' => 1, 'pay_amount' => 10, 'refund_deadline' => time() + 1000, 'user_id' => 1),
-                    'withParams' => array(11),
-                ),
-                array(
+                    'returnValue' => ['id' => 11, 'order_id' => 111, 'created_user_id' => 1, 'pay_amount' => 10, 'refund_deadline' => time() + 1000, 'user_id' => 1],
+                    'withParams' => [11],
+                ],
+                [
                     'functionName' => 'findOrderItemsByOrderId',
-                    'returnValue' => array(array('id' => 11, 'title' => 'title', 'target_id' => 111, 'target_type' => 'course', 'refund_id' => 11)),
-                    'withParams' => array(11),
-                ),
-                array(
+                    'returnValue' => [['id' => 11, 'title' => 'title', 'target_id' => 111, 'target_type' => 'course', 'refund_id' => 11]],
+                    'withParams' => [11],
+                ],
+                [
                     'functionName' => 'getOrderItem',
-                    'returnValue' => array('id' => 11, 'title' => 'title', 'target_id' => 111, 'target_type' => 'course'),
-                    'withParams' => array(11),
-                ),
-            )
+                    'returnValue' => ['id' => 11, 'title' => 'title', 'target_id' => 111, 'target_type' => 'course'],
+                    'withParams' => [11],
+                ],
+            ]
         );
         $this->mockBiz(
             'Order:WorkflowService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'cancelRefund',
-                    'withParams' => array(11),
-                ),
-            )
+                    'withParams' => [11],
+                ],
+            ]
         );
         $result = $this->getOrderRefundService()->cancelRefund(11);
         $this->getWorkflowService()->shouldHaveReceived('cancelRefund');
@@ -230,7 +230,7 @@ class OrderRefundServiceTest extends BaseTestCase
     {
         $orderRefundService = $this->getOrderRefundService();
         $currentUser = $this->getCurrentUser();
-        $currentUser->setPermissions(array());
+        $currentUser->setPermissions([]);
         $this->getServiceKernel()->setCurrentUser($currentUser);
         ReflectionUtils::invokeMethod($orderRefundService, 'tryManageOrderRefund');
     }
@@ -240,20 +240,20 @@ class OrderRefundServiceTest extends BaseTestCase
         $orderRefundService = $this->getOrderRefundService();
         $this->mockBiz(
             'Order:OrderService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'findOrderItemsByOrderId',
-                    'returnValue' => array(array('id' => 11, 'title' => 'title', 'target_id' => 111, 'target_type' => 'course', 'refund_id' => 11)),
-                    'withParams' => array(11),
-                ),
-                array(
+                    'returnValue' => [['id' => 11, 'title' => 'title', 'target_id' => 111, 'target_type' => 'course', 'refund_id' => 11]],
+                    'withParams' => [11],
+                ],
+                [
                     'functionName' => 'getOrderItem',
-                    'returnValue' => array('id' => 11, 'title' => 'title', 'target_id' => 111, 'target_type' => 'course'),
-                    'withParams' => array(11),
-                ),
-            )
+                    'returnValue' => ['id' => 11, 'title' => 'title', 'target_id' => 111, 'target_type' => 'course'],
+                    'withParams' => [11],
+                ],
+            ]
         );
-        $result = ReflectionUtils::invokeMethod($orderRefundService, 'getProductAndOrderItem', array(array('id' => 11)));
+        $result = ReflectionUtils::invokeMethod($orderRefundService, 'getProductAndOrderItem', [['id' => 11]]);
         $this->assertEquals(11, $result[1]['id']);
     }
 
@@ -262,45 +262,45 @@ class OrderRefundServiceTest extends BaseTestCase
         $biz = $this->getBiz();
         $orderRefundService = $this->getOrderRefundService();
         $courseProduct = $biz['order.product.'.CourseProduct::TYPE];
-        $courseProduct->init(array('targetId' => 1));
-        $message = array(
+        $courseProduct->init(['targetId' => 1]);
+        $message = [
             'type' => 'apply_create',
             'targetId' => $courseProduct->targetId,
             'targetType' => $courseProduct->targetType,
             'title' => $courseProduct->title,
             'userId' => 1,
             'nickname' => 'admin',
-        );
+        ];
         $this->mockBiz(
             'System:SettingService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'get',
-                    'returnValue' => array(),
-                    'withParams' => array('refund', array()),
+                    'returnValue' => [],
+                    'withParams' => ['refund', []],
                     'runTimes' => 1,
-                ),
-                array(
+                ],
+                [
                     'functionName' => 'get',
-                    'returnValue' => array('applyNotification' => '申请审核'),
-                    'withParams' => array('refund', array()),
+                    'returnValue' => ['applyNotification' => '申请审核'],
+                    'withParams' => ['refund', []],
                     'runTimes' => 1,
-                ),
-            )
+                ],
+            ]
         );
         $this->mockBiz(
             'User:NotificationService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'notify',
-                    'withParams' => array(1, 'order-refund', $message),
-                ),
-            )
+                    'withParams' => [1, 'order-refund', $message],
+                ],
+            ]
         );
-        $result = ReflectionUtils::invokeMethod($orderRefundService, 'notifyStudent', array($courseProduct));
+        $result = ReflectionUtils::invokeMethod($orderRefundService, 'notifyStudent', [$courseProduct]);
         $this->assertNull($result);
 
-        $result = ReflectionUtils::invokeMethod($orderRefundService, 'notifyStudent', array($courseProduct));
+        $result = ReflectionUtils::invokeMethod($orderRefundService, 'notifyStudent', [$courseProduct]);
         $this->getNotificationService()->shouldHaveReceived('notify');
         $this->assertNull($result);
     }
@@ -310,40 +310,40 @@ class OrderRefundServiceTest extends BaseTestCase
         $biz = $this->getBiz();
         $orderRefundService = $this->getOrderRefundService();
         $courseProduct = $biz['order.product.'.CourseProduct::TYPE];
-        $courseProduct->init(array('targetId' => 1));
-        $message = array(
+        $courseProduct->init(['targetId' => 1]);
+        $message = [
             'type' => 'admin_operate',
             'targetId' => $courseProduct->targetId,
             'targetType' => $courseProduct->targetType,
             'title' => $courseProduct->title,
             'userId' => 1,
             'nickname' => 'admin',
-        );
+        ];
         $this->mockBiz(
             'User:UserService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'searchUsers',
-                    'returnValue' => array(array('id' => 11)),
-                    'withParams' => array(
-                        array('roles' => 'ADMIN'),
-                        array('id' => 'DESC'),
+                    'returnValue' => [['id' => 11]],
+                    'withParams' => [
+                        ['roles' => 'ADMIN'],
+                        ['id' => 'DESC'],
                         0,
                         PHP_INT_MAX,
-                    ),
-                ),
-            )
+                    ],
+                ],
+            ]
         );
         $this->mockBiz(
             'User:NotificationService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'notify',
-                    'withParams' => array(11, 'order-refund', $message),
-                ),
-            )
+                    'withParams' => [11, 'order-refund', $message],
+                ],
+            ]
         );
-        $result = ReflectionUtils::invokeMethod($orderRefundService, 'notifyAdmins', array($courseProduct));
+        $result = ReflectionUtils::invokeMethod($orderRefundService, 'notifyAdmins', [$courseProduct]);
         $this->getNotificationService()->shouldHaveReceived('notify');
         $this->assertNull($result);
     }

@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Goods\Dao;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseTestCase;
 use Biz\Goods\Dao\GoodsSpecsDao;
 
@@ -62,6 +63,19 @@ class GoodsSpecsDaoTest extends BaseTestCase
         $this->assertEquals(4, $beforeTotalCount);
         $this->assertEquals(0, $afterCount);
         $this->assertEquals(1, $afterTotalCount);
+    }
+
+    public function testFindByIds()
+    {
+        $goodSpecs1 = $this->createGoodsSpecs();
+        $goodSpecs2 = $this->createGoodsSpecs(['goodsId' => 2]);
+        $goodSpecs3 = $this->createGoodsSpecs(['title' => 'testTitle2']);
+        $goodSpecs4 = $this->createGoodsSpecs(['title' => 'testTitle2']);
+
+        $expected = ArrayToolkit::index([$goodSpecs4, $goodSpecs1], 'id');
+        $result = $this->getDao()->findByIds([$goodSpecs1['id'], $goodSpecs4['id']]);
+        $result = ArrayToolkit::index($result, 'id');
+        $this->assertEquals($expected, $result);
     }
 
     protected function createGoodsSpecs($goodsSpecs = [])

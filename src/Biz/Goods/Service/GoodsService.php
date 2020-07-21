@@ -43,4 +43,6 @@ interface GoodsService
     public function findGoodsByProductIds(array $productIds);
 
     public function refreshGoodsHotSeq();
+
+    public function findGoodsSpecsByIds(array $ids);
 }
