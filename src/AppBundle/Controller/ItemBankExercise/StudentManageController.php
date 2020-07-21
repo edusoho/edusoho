@@ -78,7 +78,7 @@ class StudentManageController extends BaseController
             $data = $request->request->all();
             $user = $this->getUserService()->getUserByLoginField($data['queryfield'], true);
             $data['source'] = 'outside';
-            
+
             $this->getExerciseMemberService()->becomeStudent($exerciseId, $user['id'], $data);
 
             $this->setFlashMessage('success', 'site.add.success');
