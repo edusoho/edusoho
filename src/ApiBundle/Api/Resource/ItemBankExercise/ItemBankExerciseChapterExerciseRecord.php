@@ -12,11 +12,12 @@ class ItemBankExerciseChapterExerciseRecord extends AbstractResource
     {
         $user = $this->getCurrentUser();
 
-        $answerRecord = $this->getItemBankChapterExerciseService()->startAnswer(
+        $chapterExerciseRecord = $this->getItemBankChapterExerciseService()->startAnswer(
             $request->request->get('moduleId', ''),
             $request->request->get('categoryId', ''),
             $user['id']
         );
+        $answerRecord = $this->getAnswerRecordService()->get($chapterExerciseRecord['answerRecordId']);
 
         $assessment = $this->getAssessmentService()->showAssessment($answerRecord['assessment_id']);
         $assessmentFilter = new AssessmentFilter();
@@ -36,6 +37,14 @@ class ItemBankExerciseChapterExerciseRecord extends AbstractResource
     protected function getItemBankChapterExerciseService()
     {
         return $this->service('ItemBankExercise:ChapterExerciseService');
+    }
+
+    /**
+     * @return \Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService
+     */
+    protected function getAnswerRecordService()
+    {
+        return $this->service('ItemBank:Answer:AnswerRecordService');
     }
 
     /**

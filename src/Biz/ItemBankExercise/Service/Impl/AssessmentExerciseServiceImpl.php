@@ -71,7 +71,7 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
             throw $e;
         }
 
-        return $answerRecord;
+        return $assessmentExerciseRecord;
     }
 
     public function addAssessments($exerciseId, $moduleId, $assessments)
