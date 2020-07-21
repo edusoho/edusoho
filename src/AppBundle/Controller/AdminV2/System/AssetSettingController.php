@@ -10,6 +10,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\CloudPlatform\Service\AppService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\System\SettingException;
@@ -297,6 +298,8 @@ class AssetSettingController extends BaseController
         } elseif ('vip' == $type) {
             // todo
             $items = $this->getLevelService()->searchLevels(array('enable' => 1), array('seq' => 'asc'), 0, PHP_INT_MAX);
+        } elseif ('exercise' == $type) {
+            $items = $this->getExerciseService()->search(['price_GT' => '0.00'], ['createdTime' => 'desc'], 0, PHP_INT_MAX);
         }
 
         return $this->render('admin-v2/system/asset-setting/coin/coin-table-setting.html.twig', array(
@@ -371,6 +374,10 @@ class AssetSettingController extends BaseController
             foreach ($data as $key => $value) {
                 $this->getLevelService()->updateLevel($key, array('maxRate' => $value));
             }
+        } elseif ('exercise' == $type) {
+            foreach ($data as $key => $value) {
+                $this->getExerciseService()->update($key, array('maxRate' => $value));
+            }
         }
     }
 
@@ -444,5 +451,13 @@ class AssetSettingController extends BaseController
     protected function getLevelService()
     {
         return $this->createService('VipPlugin:Vip:LevelService');
+    }
+
+    /**
+     * @return ExerciseService
+     */
+    protected function getExerciseService()
+    {
+        return $this->createService('ItemBankExercise:ExerciseService');
     }
 }

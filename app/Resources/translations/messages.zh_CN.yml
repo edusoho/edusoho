@@ -1148,6 +1148,7 @@ course.members_manage.records.join_reason: 加入原因
 course.members_manage.records.join_reason_type: 加入类型
 course.members_manage.join_records.date: 加入日期
 
+item_bank_exercise: 题库
 item_bank_exercise.assessment.exercise.start_btn: 开始测评
 item_bank_exercise.assessment.exercise.continue_btn: 继续测试
 item_bank_exercise.assessment.exercise.view_btn: 查看报告
