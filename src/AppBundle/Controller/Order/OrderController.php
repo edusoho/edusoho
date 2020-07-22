@@ -198,7 +198,7 @@ class OrderController extends BaseController
 
     private function addCreateDealers(Request $request)
     {
-        $serviceNames = ['Distributor:DistributorProductDealerService'];
+        $serviceNames = ['Distributor:DistributorProductDealerService', 'S2B2C:S2B2CProductDealerService'];
 
         foreach ($serviceNames as $serviceName) {
             $service = $this->createService($serviceName);
