@@ -476,11 +476,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     protected function canUpdateMembersDeadline($classroom, $expiryMode)
     {
-        if ($expiryMode == $classroom['expiryMode'] && 'days' != $expiryMode) {
-            return true;
-        }
-
-        return false;
+        return $expiryMode === $classroom['expiryMode'] && 'days' !== $expiryMode;
     }
 
     protected function canUpdateClassroomExpiryDate($fields, $classroom)
@@ -489,11 +485,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             return true;
         }
 
-        if ('draft' == $classroom['status']) {
+        if ('draft' === $classroom['status']) {
             return true;
         }
 
-        if ($fields['expiryMode'] == $classroom['expiryMode']) {
+        if ($fields['expiryMode'] === $classroom['expiryMode']) {
             return true;
         }
 
@@ -540,7 +536,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'tagIds',
         ]);
 
-        if (isset($fields['expiryMode']) && 'date' == $fields['expiryMode']) {
+        if (isset($fields['expiryMode']) && 'date' === $fields['expiryMode']) {
             if ($fields['expiryValue'] < time()) {
                 $this->createNewException(ClassroomException::EXPIRY_VALUE_LIMIT());
             }
@@ -557,11 +553,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         $classroom = $this->getClassroom($classroomId);
 
-        if ('date' == $classroom['expiryMode'] && $classroom['expiryValue'] < time()) {
-            return true;
-        }
-
-        return false;
+        return 'date' === $classroom['expiryMode'] && $classroom['expiryValue'] < time();
     }
 
     public function updateMemberDeadlineByMemberId($memberId, $deadline)
@@ -586,7 +578,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $updateDeadlines = [];
             foreach ($members as $member) {
                 $member['deadline'] = $member['deadline'] > 0 ? $member['deadline'] : time();
-                $deadline = 'plus' == $waveType ? $member['deadline'] + $day * 24 * 60 * 60 : $member['deadline'] - $day * 24 * 60 * 60;
+                $deadline = 'plus' === $waveType ? $member['deadline'] + $day * 24 * 60 * 60 : $member['deadline'] - $day * 24 * 60 * 60;
                 $updateDeadlines[] = ['deadline' => $deadline];
             }
             $this->getClassroomMemberDao()->batchUpdate(array_column($members, 'id'), $updateDeadlines, 'id');
@@ -734,24 +726,37 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $this->deleteClassroomCourses($id, $courseIds);
     }
 
+    /**
+     * @param $id
+     *
+     * @return bool|mixed
+     *
+     * @throws \Exception
+     */
     public function deleteClassroom($id)
     {
-        $classroom = $this->getClassroom($id);
+        try {
+            $this->beginTransaction();
+            $classroom = $this->getClassroom($id);
+            if (empty($classroom)) {
+                $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM());
+            }
 
-        if (empty($classroom)) {
-            $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM());
+            if ('draft' !== $classroom['status']) {
+                $this->createNewException(ClassroomException::FORBIDDEN_DELETE_NOT_DRAFT());
+            }
+
+            $this->tryManageClassroom($id, 'admin_classroom_delete');
+
+            $this->deleteAllCoursesInClass($id);
+            $this->getClassroomDao()->delete($id);
+
+            $this->dispatchEvent('classroom.delete', $classroom);
+            $this->commit();
+        } catch (\Exception $exception) {
+            $this->rollback();
+            throw $exception;
         }
-
-        if ('draft' != $classroom['status']) {
-            $this->createNewException(ClassroomException::FORBIDDEN_DELETE_NOT_DRAFT());
-        }
-
-        $this->tryManageClassroom($id, 'admin_classroom_delete');
-
-        $this->deleteAllCoursesInClass($id);
-        $this->getClassroomDao()->delete($id);
-
-        $this->dispatchEvent('classroom.delete', $classroom);
 
         return true;
     }
@@ -785,7 +790,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         foreach ($addTeacherIds as $userId) {
             if (!empty($addMembers[$userId])) {
-                if ('auditor' == $addMembers[$userId]['role'][0]) {
+                if ('auditor' === $addMembers[$userId]['role'][0]) {
                     $addMembers[$userId]['role'][0] = 'teacher';
                 } else {
                     $addMembers[$userId]['role'][] = 'teacher';
@@ -798,11 +803,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         foreach ($deleteTeacherIds as $userId) {
-            if (1 == count($deleteMembers[$userId]['role'])) {
+            if (1 === count($deleteMembers[$userId]['role'])) {
                 $this->getClassroomMemberDao()->delete($deleteMembers[$userId]['id']);
             } else {
                 foreach ($deleteMembers[$userId]['role'] as $key => $value) {
-                    if ('teacher' == $value) {
+                    if ('teacher' === $value) {
                         unset($deleteMembers[$userId]['role'][$key]);
                     }
                 }

@@ -12,24 +12,24 @@
         <tr>
           <td>
             <div class="chearfix">
-              <img class="pull-left mrl" src="{{ filepath(item.smallPicture, 'classroom.png') }}" style="width:100px;"/>
-              <a class="pull-left" href="{{ path('classroom_show', {id:item.id}) }}" target="_blank" >{{item.title}}
+              <img class="pull-left mrl" src="{{ filepath(item.images.small, 'classroom.png') }}" style="width:100px;"/>
+              <a class="pull-left" href="{{ path('goods_show', {id:item.id}) }}" target="_blank" >{{item.title}}
               </a>
             </div>
           </td>
           <td>
-          <span id="rmb{{item.id}}" class="rmbPrice" data-val="{{ item.price }}">{{ item.price }}</span>
+          <span id="rmb{{item.id}}" class="rmbPrice" data-val="{{ item.minPrice }}">{{ item.minPrice }}</span>
           <td>
             <input id="rate{{item.id}}" type="text" class="form-control rate" style="width:50px;display:inline-block" value="{{ item.maxRate }}" name="item-rate[{{ item.id }}]" data-id="{{ item.id }}"/> <label>%</label>
           </td>
           <td>
             <span id="deRmb{{ item.id }}">
-              {{ (item.maxRate * item.price / 100)|number_format(2,'.') }}
+              {{ (item.maxRate * item.minPrice / 100)|number_format(2,'.') }}
             </span>
           </td>
           <td>
             <span id="cash{{ item.id }}">
-              {{ (item.maxRate / 100 * item.price * set.cash_rate)|number_format(2, '.') }}
+              {{ (item.maxRate / 100 * item.minPrice * set.cash_rate)|number_format(2, '.') }}
             </span>
           </td>
         </tr>
