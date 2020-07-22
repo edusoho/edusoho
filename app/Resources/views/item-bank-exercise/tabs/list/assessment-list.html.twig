@@ -15,12 +15,12 @@
             <div id="assessment-btn" class="col-xs-5">
               {% if record|default(null) %}
                 {% if record.status == 'doing' or record.status == 'paused' %}
-                  <a id="btn-default" class="cd-btn cd-btn-primary" href="{{ path('item_bank_exercise_assessment_answer', {exerciseId:exercise.id, moduleId:moduleId, assessmentId:assessment.id}) }}">{{ 'item_bank_exercise.assessment.exercise.continue_btn'|trans }}</a>
+                  <a id="btn-default" class="cd-btn cd-btn-primary" target="_blank" href="{{ path('item_bank_exercise_assessment_answer', {exerciseId:exercise.id, moduleId:moduleId, assessmentId:assessment.id}) }}">{{ 'item_bank_exercise.assessment.exercise.continue_btn'|trans }}</a>
                 {% elseif record.status == 'reviewing' or record.status == 'finished' %}
-                  <a id="btn-view" class="cd-btn cd-btn-ghost-primary" href="{{ path('item_bank_exercise_assessment_answer', {exerciseId:exercise.id, moduleId:moduleId, assessmentId:assessment.id}) }}">{{ 'item_bank_exercise.assessment.exercise.view_btn'|trans }}</a>
+                  <a id="btn-view" class="cd-btn cd-btn-ghost-primary" target="_blank" href="{{ path('item_bank_exercise_assessment_answer', {exerciseId:exercise.id, moduleId:moduleId, assessmentId:assessment.id}) }}">{{ 'item_bank_exercise.assessment.exercise.view_btn'|trans }}</a>
                 {% endif %}
               {% else %}
-                <a id="btn-default" class="cd-btn cd-btn-ghost-primary" href="{{ path('item_bank_exercise_assessment_answer', {exerciseId:exercise.id, moduleId:moduleId, assessmentId:assessment.id}) }}">{{ 'item_bank_exercise.assessment.exercise.start_btn'|trans }}</a>
+                <a id="btn-default" class="cd-btn cd-btn-ghost-primary" target="_blank" href="{{ path('item_bank_exercise_assessment_answer', {exerciseId:exercise.id, moduleId:moduleId, assessmentId:assessment.id}) }}">{{ 'item_bank_exercise.assessment.exercise.start_btn'|trans }}</a>
               {% endif %}
             </div>
           {% endif %}
