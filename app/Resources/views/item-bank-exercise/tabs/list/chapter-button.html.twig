@@ -1,9 +1,9 @@
 {% if member|default(null) and previewAs|default(null) == 'member' %}
     {% if record %}
-      <div class="col-xs-2 content-right">
+      <div class="col-xs-4 content-right">
         <span>{{ record.doneQuestionNum }}/{{ 'course.testpaper_manage.count'|trans({'%itemCount%': record.questionNum}) }}</span>
       </div>
-      <div class="col-xs-3 content-left">
+      <div class="col-xs-3 content-left hidden-xs">
         <span>{{ 'item_bank_exercise.accuracy'|trans }}{{ record.rightRate }}%</span>
       </div>
       <div class="col-xs-2 content-right">
@@ -15,10 +15,10 @@
       </div>
     {% else %}
       {% if question_num|default(0) %}
-        <div class="col-xs-2 content-right">
+        <div class="col-xs-4 content-right">
           <span>0/{{ 'course.testpaper_manage.count'|trans({'%itemCount%': question_num}) }}</span>
         </div>
-        <div class="col-xs-3 content-left">
+        <div class="col-xs-3 content-left hidden-xs">
           <span>{{ 'item_bank_exercise.accuracy'|trans }}0.0%</span>
         </div>
         <div class="col-xs-2 content-right">
@@ -27,7 +27,7 @@
       {% endif %}
     {% endif %}
 {% else %}
-  <div class="col-xs-7 content-right">
+  <div class="col-xs-8 content-right">
     {% if question_num %}{{'course.testpaper_manage.count'|trans({'%itemCount%': question_num})}}{% endif %}
   </div>
 {% endif %}

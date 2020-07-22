@@ -104,6 +104,10 @@ class ExerciseManageController extends BaseController
     {
         $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
 
+        if (!$exercise['assessmentEnable'] && !$exercise['chapterEnable']){
+            return $this->createJsonResponse(true);
+        }
+
         if ($type == 'chapter') {
             $can = $exercise['assessmentEnable'] == 1? true : false;
         } else {
