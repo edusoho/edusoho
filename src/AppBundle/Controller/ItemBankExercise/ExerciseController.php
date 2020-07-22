@@ -100,7 +100,7 @@ class ExerciseController extends BaseController
 
         $isExerciseTeacher = $this->getExerciseService()->isExerciseTeacher($id, $user['id']);
         $tabs = $this->getTabs($exercise);
-        if (!empty($tabs) && $tab == '') {
+        if (!empty($tabs) && '' == $tab) {
             $tab = $tabs[0]['type'];
             $moduleId = $tabs[0]['id'];
         }
@@ -108,7 +108,7 @@ class ExerciseController extends BaseController
         return $this->render(
             'item-bank-exercise/exercise-show.html.twig',
             [
-                'tab' => $tab == '' ? 'reviews' : $tab,
+                'tab' => '' == $tab ? 'reviews' : $tab,
                 'tabs' => $tabs,
                 'moduleId' => $moduleId,
                 'exercise' => $exercise,
@@ -128,6 +128,7 @@ class ExerciseController extends BaseController
         if ($exercise['assessmentEnable']) {
             $condition['types'][] = 'assessment';
         }
+
         return $this->getExerciseModuleService()->search(
             $condition,
             [],
@@ -176,7 +177,7 @@ class ExerciseController extends BaseController
         );
         $url = $this->generateUrl('common_parse_qrcode', ['token' => $token['token']], UrlGeneratorInterface::ABSOLUTE_URL);
 
-        if ($tab != 'scan') {
+        if ('scan' != $tab) {
             return $this->qrcodeDownload($url);
         }
 
@@ -196,7 +197,7 @@ class ExerciseController extends BaseController
         $img = $qrCode->get('png');
 
         $headers = ['Content-Type' => 'image/png',
-            'Content-Disposition' => 'inline; filename="image.png"',];
+            'Content-Disposition' => 'inline; filename="image.png"', ];
 
         return new Response($img, 200, $headers);
     }
@@ -421,7 +422,7 @@ class ExerciseController extends BaseController
         $matchExpreList = $biz['item_bank_exercise.show_redirect'];
 
         foreach ($matchExpreList as $matchExpre) {
-            $matchExpre = "/{$host}" . $matchExpre;
+            $matchExpre = "/{$host}".$matchExpre;
             if (preg_match($matchExpre, $referer)) {
                 return false;
             }
