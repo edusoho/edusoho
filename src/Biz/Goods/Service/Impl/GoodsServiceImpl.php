@@ -76,19 +76,24 @@ class GoodsServiceImpl extends BaseService implements GoodsService
         return $this->getGoodsDao()->update($id, $goods);
     }
 
-//    public function updatePublishedGoodsMinAndMaxPrice($goodsId)
-//    {
-//        $specs = $this->findPublishedGoodsSpecsByGoodsId($goodsId);
-//
-//        $minPrice = 0;
-//        $maxPrice = 0;
-//        $prices = ArrayToolkit::column($specs, )
-//
-//        return $this->getGoodsDao()->update(
-//            $goodsId,
-//            ['minPrice' => $price['minPrice'], 'maxPrice' => $price['maxPrice']]
-//        );
-//    }
+    public function updateGoodsMinAndMaxPrice($goodsId)
+    {
+        $specs = $this->findPublishedGoodsSpecsByGoodsId($goodsId);
+        if (empty($specs)) {
+            return $this->getGoodsDao()->update(
+                $goodsId,
+                ['minPrice' => 0.00, 'maxPrice' => 0.00]
+            );
+        }
+
+        $prices = ArrayToolkit::column($specs, 'price');
+        asort($prices);
+
+        return $this->getGoodsDao()->update(
+            $goodsId,
+            ['minPrice' => current($prices), 'maxPrice' => end($prices)]
+        );
+    }
 
     public function deleteGoods($id)
     {
@@ -159,12 +164,16 @@ class GoodsServiceImpl extends BaseService implements GoodsService
 
     public function publishGoodsSpecs($id)
     {
-        return $this->getGoodsSpecsDao()->update($id, ['status' => 'published']);
+        $specs = $this->getGoodsSpecsDao()->update($id, ['status' => 'published']);
+
+        return $this->updateGoodsMinAndMaxPrice($specs['goodsId']);
     }
 
     public function unpublishGoodsSpecs($id)
     {
-        return $this->getGoodsSpecsDao()->update($id, ['status' => 'unpublished']);
+        $specs = $this->getGoodsSpecsDao()->update($id, ['status' => 'unpublished']);
+
+        return $this->updateGoodsMinAndMaxPrice($specs['goodsId']);
     }
 
     public function deleteGoodsSpecs($id)
