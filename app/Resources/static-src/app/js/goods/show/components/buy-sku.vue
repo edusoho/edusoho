@@ -8,6 +8,7 @@
 
 <script>
     import axios from 'axios';
+    import qs from 'qs';
 
     axios.interceptors.request.use((config) => {
         config.headers = {
@@ -30,21 +31,46 @@
                 type: Object,
                 default: null
             },
+            isUserLogin: {
+                type: Number,
+                default: 0,
+            }
         },
         methods: {
+            renderModal(template) {
+                axios.get('/goods/buy_flow/modal?' + qs.stringify({template: template}), {}).then(res => {
+                    $('#modal').modal('show').html(res.data);
+                });
+            },
             buySku() {
+                if (!this.isUserLogin) {
+                    axios.get($('#login-modal').data('url')).then(res => {
+                        $('#login-modal').modal('show').html(res.data);
+                    });
+                    return;
+                }
+                ;
+
                 axios({
-                    url: '/api/goods/' + this.sku.id + '/buy',
+                    url: '/api/goods/' + this.sku.goodsId + '/buy',
                     method: "POST",
+                    data: {
+                        'targetId': this.sku.id,
+                    }
                 }).then(res => {
-                    if (typeof res.data === 'object') {
+                    console.log(res.data);
+                    if (res.data.success) {
                         window.location.href = res.data.url;
-                    } else {
-                        $('#modal').modal('show').html(res.data);
+                        return;
                     }
 
-                    if (res.data.error) {
+                    if (res.data.url) {
+                        window.location.href = res.data.url;
                         return;
+                    }
+
+                    if (res.data.noticeTemplate) {
+                        this.renderModal(res.data.noticeTemplate);
                     }
                 });
             }

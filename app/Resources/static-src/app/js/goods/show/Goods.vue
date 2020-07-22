@@ -1,7 +1,7 @@
 <template>
     <div class="cd-container">
         <div class="product-breadcrumb">首页 / {{goods.title}}</div>
-        <detail :goods="goods" :currentSku="currentSku" @changeSku="changeSku">
+        <detail :goods="goods" :currentSku="currentSku" @changeSku="changeSku" :is-user-login="isUserLogin">
         </detail>
 
         <div class="product-info clearfix" v-if="goods.id">
@@ -17,7 +17,7 @@
                             </li>
                         </ul>
                         <div class="buy__btn pull-right">
-                            <buy-sku :sku="currentSku"></buy-sku>
+                            <buy-sku :sku="currentSku" :is-user-login="isUserLogin"></buy-sku>
                         </div>
                     </div>
                 </div>
@@ -104,6 +104,10 @@
             targetId: {
                 type: Number,
                 default: null
+            },
+            isUserLogin: {
+                type: Number,
+                default: 0,
             }
         },
         components: {
@@ -130,7 +134,6 @@
                     this.goods = res.data;
 
                     if (this.goods.type == 'classroom') {
-                        console.log(1)
                         return this.changeSku(this.goods.product.target.id);
                     }
 
@@ -139,7 +142,6 @@
                     }
 
                     if (this.goods.product.target.defaultCourseId) {
-                        console.log(3)
                         return this.changeSku(this.goods.product.target.defaultCourseId);
                     }
 
@@ -164,7 +166,6 @@
                 });
             },
             changeSku(targetId) {
-                console.log(targetId)
                 for (const key in this.goods.specs) {
                     this.$set(this.goods.specs[key], 'active', false);
                     if (targetId == this.goods.specs[key]['targetId']) {

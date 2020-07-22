@@ -4,77 +4,61 @@ namespace ApiBundle\Api\Resource\Good;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use AppBundle\Common\DeviceToolkit;
 use AppBundle\Common\UserToolkit;
 use AppBundle\Util\AvatarAlert;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Goods\Service\GoodsService;
+use Biz\OrderFacade\Exception\OrderPayCheckException;
+use Biz\OrderFacade\Product\Product;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserFieldService;
 use Biz\User\Service\UserService;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class GoodBuy extends AbstractResource
 {
     public function add(ApiRequest $request, $id)
     {
-        $goodsSpecs = $this->getGoodsService()->getGoodsSpecs($id);
-        $goods = $this->getGoodsService()->getGoods($goodsSpecs['goodsId']);
+        $params = $request->request->all();
 
-        if (DeviceToolkit::isMobileClient()) {
-            return $this->forwardOrderInfo($goodsSpecs, $goods);
+        if (empty($params['targetId'])) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
-        return $this->forwardWebOrderShow($goodsSpecs, $goods);
-    }
+        $goods = $this->getGoodsService()->getGoods($id);
+        $goodsSpecs = $this->getGoodsService()->getGoodsSpecs($params['targetId']);
+        $params['targetType'] = $goods['type'];
 
-    protected function forwardOrderInfo($goodsSpecs, $goods)
-    {
-        return $this->invokeResource(new ApiRequest(
-            '/api/order_infos',
-            'POST',
-            [],
-            [
-                'targetType' => $goods['type'],
-                'targetId' => $goodsSpecs['id'],
-            ]
-        ));
-    }
-
-    protected function forwardWebOrderShow($goodsSpecs, $goods)
-    {
         if ($this->needNoStudentNumTip($goods['type'], $goodsSpecs['targetId'])) {
-            return $this->renderView('buy-flow/no-remain-modal.html.twig');
+            return ['success' => false, 'noticeTemplate' => 'no-remain', 'url' => ''];
         }
 
         if ($this->needUploadAvatar()) {
-            return $this->renderView('buy-flow/avatar-alert-modal.html.twig');
+            return ['success' => false, 'noticeTemplate' => 'avatar-alert', 'url' => ''];
         }
 
         if ($this->needFillUserInfo()) {
-            $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
-            $user = $this->getCurrentUser();
-            $userInfo = $this->getUserService()->getUserProfile($user['id']);
-            $userInfo['approvalStatus'] = $user['approvalStatus'];
-
-            return $this->renderView('buy-flow/fill-user-info-modal.html.twig', [
-                'userFields' => $userFields,
-                'user' => $userInfo,
-            ]);
+            return ['success' => false, 'noticeTemplate' => 'fill-user-info', 'url' => ''];
         }
 
         if ($this->needOpenPayment($goodsSpecs)) {
-            return $this->renderView('buy-flow/payments-disabled-modal.html.twig');
+            return ['success' => false, 'noticeTemplate' => 'payments-disabled', 'url' => ''];
         }
 
         $this->tryFreeJoin($goods['type'], $goodsSpecs['targetId']);
 
         if ($this->isJoined($goods['type'], $goodsSpecs['targetId'])) {
-            return $this->getSuccessUrl($goods['type'], $goodsSpecs['targetId']);
+            return ['success' => false, 'noticeTemplate' => '', 'url' => $this->getSuccessUrl($goods['type'], $goodsSpecs['targetId'])];
         }
 
-        return ['url' => $this->generateUrl('order_show', ['targetId' => $goodsSpecs['id'], 'targetType' => $goods['type']])];
+        return [
+            'success' => true,
+            'noticeTemplate' => '',
+            'url' => $this->generateUrl('order_show', $params),
+        ];
     }
 
     protected function needNoStudentNumTip($type, $id)
@@ -155,10 +139,36 @@ class GoodBuy extends AbstractResource
     protected function getSuccessUrl($type, $id)
     {
         if ('course' == $type) {
-            return ['url' => $this->generateUrl('my_course_show', ['id' => $id])];
+            return $this->generateUrl('my_course_show', ['id' => $id]);
         } elseif ('classroom' == $type) {
-            return ['url' => $this->generateUrl('classroom_show', ['id' => $id])];
+            return $this->generateUrl('classroom_show', ['id' => $id]);
         }
+    }
+
+    protected function getProductByParams($params)
+    {
+        try {
+            $product = $this->getProduct($params['targetType'], $params);
+            $product->validate();
+            $product->setAvailableDeduct();
+            $product->setPickedDeduct([]);
+
+            return $product;
+        } catch (OrderPayCheckException $payCheckException) {
+            throw new BadRequestHttpException($payCheckException->getMessage(), $payCheckException, $payCheckException->getCode());
+        }
+    }
+
+    private function getProduct($targetType, $params)
+    {
+        $biz = $this->getBiz();
+
+        /* @var $product Product */
+        $product = $biz['order.product.'.$targetType];
+
+        $product->init($params);
+
+        return $product;
     }
 
     /**
