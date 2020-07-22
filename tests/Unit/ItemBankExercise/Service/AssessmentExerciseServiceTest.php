@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\ItemBankExercise\Service;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseTestCase;
 
 class AssessmentExerciseServiceTest extends BaseTestCase
@@ -162,6 +163,17 @@ class AssessmentExerciseServiceTest extends BaseTestCase
         $this->assertEquals(2, count($res));
     }
 
+    public function testGetAssessmentCountGroupByExerciseId()
+    {
+        $this->mockAssessmentExercises();
+
+        $res = $this->getItemBankAssessmentExerciseService()->getAssessmentCountGroupByExerciseId([1,2]);
+        $res = ArrayToolkit::index($res, 'exerciseId');
+
+        $this->assertEquals(2, $res[1]['assessmentNum']);
+        $this->assertEquals(1, $res[2]['assessmentNum']);
+    }
+
     protected function mockAssessmentExercise()
     {
         $this->getItemBankAssessmentExerciseDao()->create([
@@ -169,6 +181,29 @@ class AssessmentExerciseServiceTest extends BaseTestCase
             'moduleId' => 1,
             'assessmentId' => 1,
         ]);
+    }
+
+    protected function mockAssessmentExercises()
+    {
+        $this->getItemBankAssessmentExerciseDao()->batchCreate(
+            [
+                [
+                    'exerciseId' => 1,
+                    'moduleId' => 1,
+                    'assessmentId' => 1,
+                ],
+                [
+                    'exerciseId' => 1,
+                    'moduleId' => 1,
+                    'assessmentId' => 2,
+                ],
+                [
+                    'exerciseId' => 2,
+                    'moduleId' => 1,
+                    'assessmentId' => 1,
+                ],
+            ]
+        );
     }
 
     protected function mockItemBankExerciseModuleService()

@@ -23,4 +23,6 @@ interface AssessmentExerciseService
     public function deleteAssessmentExercise($id);
 
     public function batchDeleteAssessmentExercise($ids);
+
+    public function getAssessmentCountGroupByExerciseId($ids);
 }

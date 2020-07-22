@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
 use Biz\ItemBankExercise\ItemBankExerciseException;
+use Biz\ItemBankExercise\Service\AssessmentExerciseService;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseModuleService;
 use Biz\ItemBankExercise\Service\ExerciseService;
@@ -42,11 +43,14 @@ class ItemBankExerciseController extends BaseController
                 $paginator->getPerPageCount()
             );
 
+            $exerciseIds = ArrayToolkit::column($itemBankExercises, 'id');
+            $exerciseAssessments = $this->getAssessmentExerciseService()->getAssessmentCountGroupByExerciseId($exerciseIds);
+            $exerciseAssessments = ArrayToolkit::index($exerciseAssessments, 'exerciseId');
             $questionBanks = ArrayToolkit::column($itemBankExercises, 'questionBankId');
             $questionBanks = $this->getQuestionBankService()->findQuestionBanksByIds($questionBanks);
             $questionBanks = ArrayToolkit::index($questionBanks, 'id');
             foreach ($itemBankExercises as &$itemBankExercise) {
-                $itemBankExercise['assessmentNum'] = $questionBanks[$itemBankExercise['questionBankId']]['itemBank']['assessment_num'];
+                $itemBankExercise['assessmentNum'] = isset($exerciseAssessments[$itemBankExercise['id']]) ? $exerciseAssessments[$itemBankExercise['id']]['assessmentNum'] : 0;
                 $itemBankExercise['itemNum'] = $questionBanks[$itemBankExercise['questionBankId']]['itemBank']['item_num'];
             }
         }
@@ -189,5 +193,13 @@ class ItemBankExerciseController extends BaseController
     protected function getExerciseModuleService()
     {
         return $this->createService('ItemBankExercise:ExerciseModuleService');
+    }
+
+    /**
+     * @return AssessmentExerciseService
+     */
+    protected function getAssessmentExerciseService()
+    {
+        return $this->createService('ItemBankExercise:AssessmentExerciseService');
     }
 }
