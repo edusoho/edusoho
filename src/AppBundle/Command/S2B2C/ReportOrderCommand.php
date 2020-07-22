@@ -9,8 +9,8 @@ use Biz\S2B2C\Service\ProductService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\System\Service\LogService;
 use Biz\User\Service\UserService;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ReportOrderCommand extends BaseCommand
@@ -18,9 +18,9 @@ class ReportOrderCommand extends BaseCommand
     protected function configure()
     {
         $this->setName('S2B2C:report-orders')
-            ->addOption('real', null, InputArgument::OPTIONAL, '是否正式执行')
-            ->addOption('startTime', null, InputArgument::OPTIONAL, '订单开始筛选时间：2020-07-20')
-            ->addOption('endTime', null, InputArgument::OPTIONAL, '订单结束筛选时间：2020-07-20')
+            ->addOption('real', null, InputOption::VALUE_REQUIRED, '是否正式执行')
+            ->addOption('startTime', null, InputOption::VALUE_REQUIRED, '订单开始筛选时间：2020-07-20')
+            ->addOption('endTime', null, InputOption::VALUE_REQUIRED, '订单结束筛选时间：2020-07-20')
             ->setDescription('查询出所有的采购订单，重新上报到s2b2c');
     }
 
