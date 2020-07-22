@@ -215,7 +215,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $lastCourse = $this->getLastCourseByCourseSetId($courseSet['id']);
 
-        $course['seq'] = $lastCourse['seq'] + 1;
+        $course['seq'] = empty($lastCourse) ? 1 : $lastCourse['seq'] + 1;
         $course['maxRate'] = $courseSet['maxRate'];
         $course['courseSetTitle'] = empty($courseSet['title']) ? '' : $courseSet['title'];
         $course['title'] = $this->purifyHtml($course['title'], true);

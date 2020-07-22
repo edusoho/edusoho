@@ -5,6 +5,7 @@
 {% set script_controller = "coin/model" %}
 
 {% block main %}
+  {{ web_macro.flash_messages() }}
   <ul class="nav nav-pills mbl small">
     <li>
       <a href="{{ path('admin_v2_coin_settings') }}">{{ 'admin.coin.setting'|trans }}</a>
@@ -13,7 +14,6 @@
       <a href="{{ path('admin_v2_coin_model') }}">{{ 'admin.coin.model'|trans }}</a>
     </li>
   </ul>
-  {{ web_macro.flash_messages() }}
   <form class="form-horizontal" method="post" id="coin-model-form">
 
     <div class="form-group">
@@ -32,7 +32,7 @@
                   class="btn btn-default {% if coinSettings.cash_model|default('none') =="currency" %}btn-primary{% endif %} model"
                   data-modle="currency">{{ 'admin.coin_model.datagrid.currency'|trans }}</button>
         </div>
-        <input type="hidden" value="{{ coinSettings.cash_model|default('none') }}" name="cash_model"/>
+        <input type="hidden" value="{{ coinSettings.cash_model|default('none') }}" name="cash_model">
       </div>
     </div>
 
@@ -70,7 +70,7 @@
   </div>
 
   <div
-      class="alert alert-info deduction {% if coinSettings.cash_model|default('none') !="deduction" %}hidden{% endif %}">
+    class="alert alert-info deduction {% if coinSettings.cash_model|default('none') !="deduction" %}hidden{% endif %}">
     <p><strong>
         {{ 'admin.coin_model.deduction_tips'|trans({'%appCenterUrl%': path('admin_v2_app_center') })|raw }}
       </strong></p>

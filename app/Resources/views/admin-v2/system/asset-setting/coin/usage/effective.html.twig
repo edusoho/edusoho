@@ -6,26 +6,10 @@
 {% block main %}
   {{ web_macro.flash_messages() }}
   <form class="form-horizontal" method="post" id="coin-model-form" action="{{path('admin_v2_coin_model_save')}}">
-  
-    <ul class="breadcrumb">
-      <li><a href="{{path('admin_v2_coin_model')}}">{{'admin.coin.model_setting'|trans}}</a></li>
-      <li class="active">{{'course.price_setting'|trans}}</li>
-    </ul>
-
-    <p>
-      <span>{{'admin.coin.model'|trans}}：</span>
-      <strong class="text-info">
-        {% if set.cash_model =="deduction" %}
-          {{'finance.use_deduction'|trans}}
-        {% else %}
-          {{'finance.user_currency'|trans}}
-        {% endif %}
-      </strong>
-      <span class="mll" data-val="{{ set.cash_rate}}" id="cash-rate">{{'coin.rate'|trans}}：</span>
-      {{ 'admin.coin_course_set.tips'|trans({'%cashRate%':set.cash_rate, '%coinName%': setting('coin.coin_name')})|raw }}
-    </p>
+    {% include 'admin-v2/system/asset-setting/coin/usage/effective-header.html.twig' %}
     <div id="typelist">
-      {% include 'admin-v2/system/asset-setting/coin/coin-table-setting.html.twig' %}
+      {% include 'admin-v2/system/asset-setting/coin/usage/effective-nav.html.twig' %}
+      <div id="help-message" class="alert alert-danger mtl hidden" >{{'admin.coin_setting.price_set_tips'|trans}}</div>
     </div>
     <input type="hidden" name="cash_model" value="{{ set.cash_model }}">
     <input type="hidden" name="cash_rate" value="{{ set.cash_rate }}">

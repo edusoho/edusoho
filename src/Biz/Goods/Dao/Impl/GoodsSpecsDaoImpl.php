@@ -38,6 +38,11 @@ class GoodsSpecsDaoImpl extends GeneralDaoImpl implements GoodsSpecsDao
         return $this->findByFields(['goodsId' => $goodsId]);
     }
 
+    public function findPublishedByGoodsId($goodsId)
+    {
+        return $this->findByFields(['goodsId' => $goodsId, 'status' => 'published']);
+    }
+
     public function deleteByGoodsIdAndTargetId($goodsId, $targetId)
     {
         return $this->db()->delete($this->table, ['goodsId' => $goodsId, 'targetId' => $targetId]);

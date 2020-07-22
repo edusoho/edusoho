@@ -25,6 +25,11 @@ class GoodsDaoImpl extends AdvancedDaoImpl implements GoodsDao
                 'status = :status',
                 'type = :type',
                 'id <> :excludeId',
+                'price > :price_GT',
+                'maxPrice > :maxPrice_GT',
+                'maxPrice < :maxPrice_LT',
+                'minPrice > minPrice_GT',
+                'minPrice < minPrice_LT',
             ],
             'orderbys' => ['id', 'hotSeq', 'publishedTime'],
         ];
