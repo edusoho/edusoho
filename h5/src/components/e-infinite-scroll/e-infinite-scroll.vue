@@ -1,16 +1,13 @@
 <template>
   <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
-    <van-list
-      v-model="loading"
-      :finished="finished"
-      @load="onLoad">
+    <van-list v-model="loading" :finished="finished" @load="onLoad">
       <!-- 公开课 -->
-      <template  v-if="typeList=='open_course_list'">
-        <div v-for="(date,index) in openCourseDate" :key="'date'+index">
-          <div class="open_course_date van-hairline--bottom">{{date}}</div>
-          <opencourseItem 
+      <template v-if="typeList == 'open_course_list'">
+        <div v-for="(date, index) in openCourseDate" :key="'date' + index">
+          <div class="open_course_date van-hairline--bottom">{{ date }}</div>
+          <opencourseItem
             v-for="(course, index) in openCourseList[date]"
-            :key="'opencourse'+index"
+            :key="'opencourse' + index"
             :type="courseItemType"
             :type-list="typeList"
             :is-app-use="isAppUse"
@@ -18,8 +15,8 @@
           />
         </div>
       </template>
-      <!-- 班级和课程 -->
-      <template  v-else>
+      <!-- 班级、课程、题库 -->
+      <template v-else>
         <courseItem
           v-for="(course, index) in courseList"
           :key="index"
@@ -29,10 +26,10 @@
           :type-list="typeList"
           :is-vip="course.vipLevelId"
           :is-app-use="isAppUse"
-          :discountType="typeList === 'course_list' ? course.courseSet.discountType : ''"
-          :discount="typeList === 'course_list' ? course.courseSet.discount : ''"
-          :course-type="typeList === 'course_list' ? course.courseSet.type : ''"
-          :course="course | courseListData(listObj,'appSetting')"
+          :discountType="discountType"
+          :discount="discount"
+          :course-type="courseType"
+          :course="course | courseListData(listObj, 'appSetting')"
         />
       </template>
     </van-list>
@@ -40,95 +37,114 @@
 </template>
 
 <script>
-import courseItem from '../e-row-class/e-row-class.vue'
-import opencourseItem from '../e-openCourse-class/e-openCourse-more.vue'
-import courseListData from '@/utils/filter-course.js'
-import { mapState } from 'vuex'
+import courseItem from '../e-row-class/e-row-class.vue';
+import opencourseItem from '../e-openCourse-class/e-openCourse-more.vue';
+import courseListData from '@/utils/filter-course.js';
+import { mapState } from 'vuex';
 
 export default {
   components: {
     courseItem,
-    opencourseItem
+    opencourseItem,
   },
 
   filters: {
-    courseListData
+    courseListData,
   },
 
   props: {
     courseList: Array,
     isRequestCompile: Boolean,
     isAllData: Boolean,
-    isAppUse:Boolean,
+    isAppUse: Boolean,
     courseItemType: {
       type: String,
-      default: ''
+      default: '',
     },
     typeList: {
       type: String,
-      default: 'course_list'
+      default: 'course_list',
     },
-    openCourseDate:{
+    openCourseDate: {
       type: Array,
-      default: ()=>[]
+      default: () => [],
     },
-    openCourseList:{
+    openCourseList: {
       type: Object,
-      default: ()=>{}
+      default: () => {},
     },
     normalTagShow: {
       type: Boolean,
-      default: true
+      default: true,
     },
     vipTagShow: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
   data() {
     return {
       list: [],
       finished: false,
-      refreshing:false
-    }
+      refreshing: false,
+    };
   },
 
   computed: {
     ...mapState(['courseSettings']),
     loading: {
       get() {
-        return !this.isRequestCompile
+        return !this.isRequestCompile;
       },
       set(v) {
-        console.log(v, 'value')
-      }
+        console.log(v, 'value');
+      },
     },
     listObj() {
       return {
         type: this.courseItemType,
         typeList: this.typeList,
         showStudent: this.courseSettings
-          ? Number(this.courseSettings.show_student_num_enabled) : true
+          ? Number(this.courseSettings.show_student_num_enabled)
+          : true,
+      };
+    },
+    discountType() {
+      if (this.typeList === 'course_list') {
+        return this.course.courseSet.discountType;
       }
-    }
+      return '';
+    },
+    discount() {
+      if (this.typeList === 'course_list') {
+        return this.course.courseSet.discount;
+      }
+      return '';
+    },
+    courseType() {
+      if (this.typeList === 'course_list') {
+        return this.course.courseSet.type;
+      }
+      return '';
+    },
   },
 
   watch: {
     isAllData() {
-      this.loading = false
-      this.finished = this.isAllData
-    }
+      this.loading = false;
+      this.finished = this.isAllData;
+    },
   },
 
   methods: {
     onLoad() {
       if (this.refreshing) {
-          this.$emit('resetData')
-          this.refreshing = false;
-        }
+        this.$emit('resetData');
+        this.refreshing = false;
+      }
       // 通知父组件请求数据并更新courseList
-      if (this.isRequestCompile) this.$emit('needRequest')
+      if (this.isRequestCompile) this.$emit('needRequest');
     },
     onRefresh() {
       // 清空列表数据
@@ -137,7 +153,7 @@ export default {
       // 将 loading 设置为 true，表示处于加载状态
       this.loading = true;
       this.onLoad();
-    }
-  }
-}
+    },
+  },
+};
 </script>

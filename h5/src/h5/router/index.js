@@ -594,6 +594,18 @@ const routes = [
       ),
   },
   {
+    path: '/itemBank/explore/new',
+    name: 'more_item-Bank',
+    meta: {
+      title: '所有题库',
+      hideTitle: true,
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "more" */ '@/containers/webview/itemBank/more.vue'
+      ),
+  },
+  {
     path: '/openCourse/explore/new',
     name: 'more_openCourse',
     meta: {

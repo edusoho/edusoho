@@ -1,117 +1,124 @@
 <template>
-  <div class="e-course-card" v-if="course.target">
+  <div class="e-course-card">
     <div class="live-list__item">
-      <div class="live-item__top" @click="toCourse()">
-        <span>{{course.target.course.displayedTitle}}</span>
-        <i class="iconfont icon-arrow-right"></i>
-      </div>
+      <!-- course -->
+      <div
+        class="live-item__top"
+        @click="toCourse()"
+        v-html="course.top.html"
+      ></div>
+      <!-- task -->
       <div class="live-item__content">
         <div class="live-content__left">
           <div
             class="live-content__subtitle"
-            v-if="canShowSubtitle(course.target)"
-          >课时{{course.target.number}}: {{course.target.title}}</div>
+            v-if="course.content.left.subTitle.isShow"
+            v-html="course.content.left.subTitle.subhtml"
+          />
           <div class="live-content__title">
-            <i :class="['iconfont',iconfont(course.target.task)]"></i>
-            <span v-if="!canShowSubtitle(course.target)">课时{{course.target.number}}:</span>{{course.target.task.title}}
-          </div>
-          <div class="live-content__dec" v-if="canTimeShow(course.target.task)">
-            <span class="live-content__time">{{ course.target | formateTime}}</span>
+            <i :class="['iconfont', iconfont(course.type)]"></i>
+            <span v-html="course.content.left.subTitle.html" />
+            <div
+              class="live-content__dec"
+              v-if="course.content.left.dec.isShow"
+            >
+              <span v-html="course.content.left.dec.html" />
+            </div>
           </div>
         </div>
         <div class="live-content__right">
-          <div class="live-btn live-btn--start" v-if="course.target.task.type !=='flash' " @click="toTask()">继续学习</div>
+          <div
+            class="live-btn live-btn--start"
+            v-if="course.content.right.isShow"
+            @click="toTask()"
+          >
+            继续学习
+          </div>
           <div class="live-btn live-btn--none" v-else>暂不支持</div>
         </div>
       </div>
-      <div class="live-item__bottom van-hairline--top" v-if="course.target.classroom" @click="toClassroom()">
-        <span>{{course.target.classroom.title}}</span>
-        <i class="iconfont icon-arrow-right"></i>
+      <!-- classroom -->
+      <div
+        class="live-item__bottom van-hairline--top"
+        v-if="course.bottom.isShow"
+        @click="toClassroom()"
+      >
+        <span v-html="course.bottom.html" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { formatTimeByNumber } from "@/utils/date-toolkit";
+const itemBank = [
+  'item_bank_chapter_exercise',
+  'item_bank_assessment_exercise',
+];
 export default {
-  name: "e-course-card",
+  name: 'e-course-card',
   props: {
     course: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   methods: {
     // 任务图标(缺少下载)
-    iconfont(task) {
-      const type = task.type;
+    iconfont(type) {
       switch (type) {
-        case "audio":
-          return "icon-yinpin";
-          break;
-        case "doc":
-          return "icon-wendang";
-          break;
-        case "exercise":
-          return "icon-lianxi";
-          break;
-        case "flash":
-          return "icon-flash";
-          break;
-        case "homework":
-          return "icon-zuoye";
-          break;
-        case "live":
-          return "icon-zhibo";
-          break;
-        case "ppt":
-          return "icon-ppt";
-          break;
-        case "discuss":
-          return "icon-taolun";
-          break;
-        case "testpaper":
-          return "icon-kaoshi";
-          break;
-        case "text":
-          return "icon-tuwen";
-          break;
-        case "video":
-          return "icon-shipin";
-          break;
-        case "download":
-          return "icon-xiazai";
-          break;
+        case 'audio':
+          return 'icon-yinpin';
+        case 'doc':
+          return 'icon-wendang';
+        case 'exercise':
+          return 'icon-lianxi';
+        case 'flash':
+          return 'icon-flash';
+        case 'homework':
+          return 'icon-zuoye';
+        case 'live':
+          return 'icon-zhibo';
+        case 'ppt':
+          return 'icon-ppt';
+        case 'discuss':
+          return 'icon-taolun';
+        case 'testpaper':
+          return 'icon-kaoshi';
+        case 'text':
+          return 'icon-tuwen';
+        case 'video':
+          return 'icon-shipin';
+        case 'download':
+          return 'icon-xiazai';
         default:
-          return "";
+          return '';
       }
-    },
-    canTimeShow(task) {
-      const type = task.type;
-      const showList = ["audio", "video", "live"];
-      return showList.includes(type);
-    },
-    canShowSubtitle(target) {
-      return target.task.seq !== target.seq;
     },
     toClassroom() {
-      this.$emit("toClassroom",this.course.target.classroom.id)
+      this.$emit('toClassroom', this.course.link.classroomId);
     },
-    toTask(){
-      const task={
-        id:this.course.target.task.id,
-        type:this.course.target.task.type,
-        courseId:this.course.target.course.id,
+    toTask() {
+      if (itemBank.includes(this.course.type)) {
+        this.$emit('toItemBankTask', this.course.link.target, this.course.type);
+        return;
       }
-      this.$emit("toTask",task)
+      const task = {
+        id: this.course.link.taskId,
+        type: this.course.type,
+        courseId: this.course.link.courseId,
+      };
+      this.$emit('toTask', task);
     },
-    toCourse(){
-      this.$emit("toCourse",this.course.target.course.id)
-    }
-  }
+    toCourse() {
+      if (itemBank.includes(this.course.type)) {
+        this.toItemBank();
+        return;
+      }
+      this.$emit('toCourse', this.course.link.courseId);
+    },
+    toItemBank() {
+      this.$emit('toItemBank', this.course.link.exerciseId);
+    },
+  },
 };
 </script>
-
-<style>
-</style>
