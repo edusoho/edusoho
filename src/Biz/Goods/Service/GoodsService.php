@@ -36,6 +36,8 @@ interface GoodsService
 
     public function findGoodsSpecsByGoodsId($goodsId);
 
+    public function findPublishedGoodsSpecsByGoodsId($goodsId);
+
     public function getGoodsSpecsByProductIdAndTargetId($productId, $targetId);
 
     public function findGoodsByIds($ids);

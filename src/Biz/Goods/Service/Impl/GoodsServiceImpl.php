@@ -76,6 +76,20 @@ class GoodsServiceImpl extends BaseService implements GoodsService
         return $this->getGoodsDao()->update($id, $goods);
     }
 
+//    public function updatePublishedGoodsMinAndMaxPrice($goodsId)
+//    {
+//        $specs = $this->findPublishedGoodsSpecsByGoodsId($goodsId);
+//
+//        $minPrice = 0;
+//        $maxPrice = 0;
+//        $prices = ArrayToolkit::column($specs, )
+//
+//        return $this->getGoodsDao()->update(
+//            $goodsId,
+//            ['minPrice' => $price['minPrice'], 'maxPrice' => $price['maxPrice']]
+//        );
+//    }
+
     public function deleteGoods($id)
     {
         return $this->getGoodsDao()->delete($id);
@@ -166,6 +180,11 @@ class GoodsServiceImpl extends BaseService implements GoodsService
     public function findGoodsSpecsByGoodsId($goodsId)
     {
         return $this->getGoodsSpecsDao()->findByGoodsId($goodsId);
+    }
+
+    public function findPublishedGoodsSpecsByGoodsId($goodsId)
+    {
+        return $this->getGoodsSpecsDao()->findPublishedByGoodsId($goodsId);
     }
 
     public function getGoodsSpecsByProductIdAndTargetId($productId, $targetId)
