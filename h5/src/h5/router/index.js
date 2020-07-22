@@ -616,6 +616,17 @@ const routes = [
         /* webpackChunkName: "brush-exercise" */ '@/containers/brush-exercise/index.vue'
       ),
   },
+  {
+    path: '/brushDo',
+    name: 'brush_do',
+    meta: {
+      title: '刷题',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "brush-exercise" */ '@/containers/brush-exercise/lessonTask/do.vue'
+      ),
+  },
 ];
 
 // 页面刷新，store数据会被清掉，需对token、user重新赋值

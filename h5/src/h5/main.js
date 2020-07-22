@@ -7,9 +7,11 @@ import plugins from '@/plugins';
 import EdusohoUI from '@/components';
 import whiteList from '@/router/config/white-list';
 import '@/assets/styles/main.scss';
+import 'wap-sdk-test/lib/itemBank.css';
 import App from '@/App';
 import Api from '@/api';
 import VueClipboard from 'vue-clipboard2';
+import wapSdk from 'wap-sdk-test';
 import {
   Row,
   Col,
@@ -41,7 +43,7 @@ import {
   Loading,
   PullRefresh,
   Overlay,
-  Search
+  Search,
 } from 'vant';
 // 按需引入组件
 Vue.component('van-nav-bar', NavBar);
@@ -90,11 +92,12 @@ Vue.use(Tab)
   .use(PullRefresh)
   .use(Loading);
 Vue.use(VueClipboard);
+Vue.use(wapSdk);
 Vue.config.productionTip = false;
 Api.getSettings({
   query: {
-    type: 'wap'
-  }
+    type: 'wap',
+  },
 })
   .then(res => {
     const hashStr = location.hash;
@@ -143,7 +146,7 @@ Api.getSettings({
       window.location.href = `${
         location.origin
       }/h5/index.html#/login?redirect=/course/${courseId}&skipUrl=%2F&account=${GetUrlParam(
-        'account'
+        'account',
       )}`;
     }
 
@@ -163,7 +166,7 @@ Api.getSettings({
     new Vue({
       router,
       store,
-      render: h => h(App)
+      render: h => h(App),
     }).$mount('#app');
   })
   .catch(err => {
