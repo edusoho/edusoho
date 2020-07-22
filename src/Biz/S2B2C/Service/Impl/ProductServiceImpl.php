@@ -347,6 +347,10 @@ class ProductServiceImpl extends BaseService implements ProductService
 
     public function deleteByIds($ids)
     {
+        if (empty($ids)) {
+            return true;
+        }
+
         return $this->getS2B2CProductDao()->deleteByIds($ids);
     }
 
@@ -413,7 +417,7 @@ class ProductServiceImpl extends BaseService implements ProductService
                     'syncStatus' => 'waiting',
                     'localResourceId' => 0,
                 ];
-            }, $product['detail']);
+            }, $remoteProductDetails);
 
             $this->getS2B2CProductDao()->batchCreate($products);
         }
@@ -473,10 +477,15 @@ class ProductServiceImpl extends BaseService implements ProductService
         } catch (\Exception $exception) {
             $this->rollback();
             $this->getLogger()->error('[updateProductVersion] 更新失败 '.$exception->getMessage());
-            $this->createNewException(S2B2CProductException::ADOPT_PRODUCT_FAILED());
+            $this->createNewException(S2B2CProductException::UPDATE_PRODUCT_VERSION_FAIL());
         }
 
         return true;
+    }
+
+    protected function getLogger()
+    {
+        return $this->biz->offsetGet('s2b2c.merchant.logger');
     }
 
     /**

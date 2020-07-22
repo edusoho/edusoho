@@ -1359,4 +1359,5 @@ t.add("admin_v2.developer.plumber_operate_success_hint", "Failed", "js", "en");
 t.add("course_manage.positive_currency.message", "Please enter a valid price greater than 0, up to two decimal places, no more than 8 bits!", "js", "en");
 t.add("merchant.resource.product_version.update_success_hint", "Update Success", "js", "en");
 t.add("merchant.resource.product_version.update_failed_hint", "Update Failed", "js", "en");
+t.add("exception.s2b2c_product.adopt_failed", "Adopt fail,Supplier is editing", "js", "en");
 })(Translator);

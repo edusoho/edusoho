@@ -1306,4 +1306,5 @@ t.add("admin_v2.developer.plumber_operate_success_hint", "\u64cd\u4f5c\u6210\u52
 t.add("course_manage.positive_currency.message", "\u8bf7\u8f93\u5165\u5927\u4e8e0\u7684\u6709\u6548\u4ef7\u683c\uff0c\u6700\u591a\u4e24\u4f4d\u5c0f\u6570\uff0c\u6574\u6570\u4f4d\u4e0d\u8d85\u8fc78\u4f4d\uff01", "js", "zh_CN");
 t.add("merchant.resource.product_version.update_success_hint", "\u66f4\u65b0\u6210\u529f", "js", "zh_CN");
 t.add("merchant.resource.product_version.update_failed_hint", "\u66f4\u65b0\u5931\u8d25", "js", "zh_CN");
+t.add("exception.s2b2c_product.adopt_failed", "\u91c7\u7528\u5931\u8d25\uff0c\u5185\u5bb9\u6b63\u5728\u7f16\u8f91\u4e2d\uff0c\u8bf7\u7a0d\u540e\u518d\u8bd5", "js", "zh_CN");
 })(Translator);

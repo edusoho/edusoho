@@ -61,21 +61,30 @@ class CourseProductSubscriber extends EventSubscriber implements EventSubscriber
             $courses = ArrayToolkit::index($this->getCourseService()->findCoursesByIds($courseIds), 'id');
 
             $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
-            $productIds = [];
+            $isS2b2cProduct = false;
             foreach ($context['items'] as &$item) {
                 $itemProduct = $courses[$item['target_id']];
+                if (!empty($item['create_extra']['s2b2cProductDetailId'])) {
+                    $isS2b2cProduct = true;
+                    $item['origin_product_id'] = $item['create_extra']['s2b2cProductDetailId'];
+                    continue;
+                }
                 $product = $this->getS2b2cProductService()->getProductBySupplierIdAndLocalResourceIdAndType($s2b2cConfig['supplierId'], $itemProduct['id'], 'course');
                 if (!empty($product['remoteResourceId'])) {
-                    $productIds[] = $product['remoteResourceId'];
+                    $isS2b2cProduct = true;
+                    $item['origin_product_id'] = $product['s2b2cProductDetailId'];
                 }
-                $item['origin_product_id'] = $product['s2b2cProductDetailId'];
             }
 
-            if (!empty($productIds)) {
-                $this->setUserInfo($context);
-                $this->getS2B2CService()->reportSuccessOrder($context, $context['items']);
-                $this->getLogger()->info('[onOrderSuccess] order report succeed');
+            if (!$isS2b2cProduct) {
+                $this->getLogger()->info('[onOrderSuccess] no need report');
+
+                return true;
             }
+
+            $this->setUserInfo($context);
+            $this->getS2B2CService()->reportSuccessOrder($context, $context['items']);
+            $this->getLogger()->info('[onOrderSuccess] order report succeed');
 
             return true;
         } catch (\Exception $e) {
@@ -100,10 +109,16 @@ class CourseProductSubscriber extends EventSubscriber implements EventSubscriber
             $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
             $courseIds = ArrayToolkit::column($context['items'], 'target_id');
             $productIds = ArrayToolkit::column($this->getS2b2cProductService()->findProductsBySupplierIdAndProductTypeAndLocalResourceIds($s2b2cConfig['supplierId'], 'course', $courseIds), 'remoteResourceId');
+            $s2b2cProductDetailIds = [];
+            foreach ($context['items'] as $item) {
+                if (!empty($item['create_extra']['s2b2cProductDetailId'])) {
+                    $s2b2cProductDetailIds[] = $item['create_extra']['s2b2cProductDetailId'];
+                }
+            }
             $orderRefund = $this->getOrderRefundService()->getOrderRefundById($context['items'][0]['refund_id']);
             $orderItemRefunds = $this->getBaseOrderRefundService()->findOrderItemRefundsByOrderRefundId($orderRefund['id']);
 
-            if (!empty($productIds) && max($productIds) > 0) {
+            if ((!empty($productIds) && max($productIds) > 0) || !empty($s2b2cProductDetailIds)) {
                 $this->setUserInfo($context);
                 $this->getLogger()->info('[onOrderRefunded] order report succeed', [
                     'merchantOrder' => $context,
