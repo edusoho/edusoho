@@ -167,7 +167,7 @@ class AssessmentExerciseServiceTest extends BaseTestCase
     {
         $this->mockAssessmentExercises();
 
-        $res = $this->getItemBankAssessmentExerciseService()->getAssessmentCountGroupByExerciseId([1,2]);
+        $res = $this->getItemBankAssessmentExerciseService()->getAssessmentCountGroupByExerciseId([1, 2]);
         $res = ArrayToolkit::index($res, 'exerciseId');
 
         $this->assertEquals(2, $res[1]['assessmentNum']);

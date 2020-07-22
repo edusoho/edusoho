@@ -51,7 +51,7 @@ class AssessmentExerciseDaoTest extends BaseTestCase
     {
         $this->mockAssessmentExercises();
 
-        $res = $this->getItemBankAssessmentExerciseDao()->getAssessmentCountGroupByExerciseId([1,2]);
+        $res = $this->getItemBankAssessmentExerciseDao()->getAssessmentCountGroupByExerciseId([1, 2]);
         $res = ArrayToolkit::index($res, 'exerciseId');
 
         $this->assertEquals(2, $res[1]['assessmentNum']);
