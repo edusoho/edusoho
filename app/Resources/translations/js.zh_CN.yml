@@ -571,6 +571,7 @@ item_bank_exercise.assessment_module.module_delete.title: 移除模块
 item_bank_exercise.assessment_module.module_delete: 确定要移除当前模块？
 item_bank_exercise.assessment_module.module_delete.has_assessment_hint: 当前模块下有试卷存在，是否继续移除？
 item_bank_exercise.assessment_module.module_delete.least_module_count_hint: 请至少保留一个试卷模块
+item_bank_exercise.module.switch.danger: 题库练习发布时，章节练习或试卷练习至少需要启用一项
 
 classroom.manage.tag_required_hint: 请输入标签
 classroom.manage.delete_course_hint: 是否要从班级移除该课程？

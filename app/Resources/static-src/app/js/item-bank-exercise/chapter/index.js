@@ -8,15 +8,16 @@ class ChapterToogle {
     cd.onoff({
       el: '#switch'
     }).on('change', (value) => {
-      console.log('switch', value);
-      $.ajax({
-        type: 'GET',
-        url: $('#openUrl').val(),
-        contentType: 'application/x-www-form-urlencoded;charset=utf-8',
-        data: {exerciseId:$('#exerciseId').val(),chapterEnable: value},
-        dataType: 'json',
-        success: function(data){
-          location.reload();
+      $.get($('#canOpen').val(), function (data) {
+        if (data){
+          $.post($('#openUrl').val(), {exerciseId:$('#exerciseId').val(),chapterEnable: value}, function () {
+            location.reload();
+          });
+        }else {
+          cd.message({ type: 'danger', message: Translator.trans('item_bank_exercise.module.switch.danger') });
+          setTimeout(function () {
+            window.location.reload();
+          }, 1000);
         }
       });
     });

@@ -42,7 +42,7 @@
         <div class="cd-mb16">
           <span class="course-detail__label vertical-sub">{{'course.price'|trans}}</span>
           <span class="course-detail-price-money vertical-sub mrm">
-            {% if exercise.price == 0 and exercise.isFree == 1 %}
+            {% if exercise.price == 0 or exercise.isFree == 1 %}
               <b class="pirce-num color-success">{{'course.price.free'|trans}}</b>
             {% else %}
               <b class="pirce-num"><span class="cd-text-lg">¥&nbsp;</span>{{ exercise.price }}</b>
@@ -63,7 +63,7 @@
               </span>
             {% elseif exercise.expiryMode == 'date' %}
               <span class="gray-dark course-detail-expiry">
-                {{ 'course.expiry_date.date_mode'|trans({'%expiryStartDate%':exercise.expiryStartDate|date('Y-m-d '), '%expiryEndDate%':course.expiryEndDate|date('Y-m-d ')})|raw }}
+                {{ 'course.expiry_date.date_mode'|trans({'%expiryStartDate%':exercise.expiryStartDate|date('Y-m-d '), '%expiryEndDate%':exercise.expiryEndDate|date('Y-m-d ')})|raw }}
               </span>
             {% elseif exercise.expiryMode == 'forever' %}
               <span class="gray-dark course-detail-expiry mrl">{{ 'course.expiry_date.forever_mode'|trans }}</span>
@@ -73,23 +73,6 @@
 
         <div class="course-detail-section-responsive visible-xs visible-sm clearfix">
           <ul class="clearfix">
-            <!--营销页显示-->
-              <li class="js-unfavorite-btn {% if not isUserFavorite %}hidden{% endif %}" id="unfavorite-btn" data-target-type="course" data-target-id="{{ exercise.id }}">
-                <a class="color-primary" href="javascript:;" data-toggle="tooltip" data-placement="top" title="{{ 'course.status.followed'|trans }}"
-                   data-trigger="hover">
-                  <i class="es-icon es-icon-favorite color-primary"></i>
-                  <br/>
-                  {{ 'course.status.followed'|trans }}
-                </a>
-              </li>
-              <li class="js-favorite-btn {% if isUserFavorite %}hidden{% endif %}" id="favorite-btn" data-target-type="course" data-target-id="{{ exercise.id }}">
-                <a class="" href="javascript:;" data-toggle="tooltip" data-placement="top" title="{{ 'course.status.follow'|trans }}"
-                   data-trigger="hover">
-                  <i class="es-icon es-icon-favoriteoutline"></i>
-                  <br/>
-                  {{ 'course.status.follow'|trans }}
-                </a>
-              </li>
 
             <li class="es-share top js-es-share">
               <a class=" dropdown-toggle" href="" data-toggle="dropdown" title="{{ 'course.share'|trans }}">
@@ -106,10 +89,10 @@
 
       <div class="course-detail-info__btn js-course-header-operation">
         <ul class="course-operation course-operation--market hidden-xs hidden-sm clearfix mb0">
-          <li class="es-qrcode top hidden-xs mrl" data-url="{{ path('item_bank_exercise_qrcode_scan', { id: exercise.id }) }}">
+          <li class="es-qrcode top hidden-xs mrl" data-url="{{ path('item_bank_exercise_qrcode', { id: exercise.id }) }}">
             <a class="cd-link-assist" href="javascript:;"><i class="es-icon es-icon-saoyisao course-operation__icon"></i><span class="cd-text-sm cd-text-medium">{{ 'site.qrcode_tips'|trans }}</span></a>
             <span class="qrcode-popover">
-              <img class="mb0" src="{{ path('item_bank_exercise_qrcode_scan',{'id':exercise.id}) }}" alt="">{{ 'site.tips.scan_qrcode_tips'|trans }}
+              <img class="mb0" src="" alt="">{{ 'site.tips.scan_qrcode_tips'|trans }}
             </span>
           </li>
 
@@ -120,17 +103,6 @@
             </a>
             {% include 'common/share-dropdown.html.twig' with {type:'item_bank_exercise'} %}
           </li>
-          <!--营销页显示-->
-          {# 收藏图标设置 #}
-            <li class="js-unfavorite-btn mrl {% if not isUserFavorite %}hidden {% endif %}" id="unfavorite-btn" data-target-type="course" data-target-id="{{ exercise.id }}">
-              <a class="cd-link-assist" href="javascript:;"><i class="es-icon es-icon-favorite color-danger course-operation__icon"></i><span class="cd-text-sm cd-text-medium">{{ 'course.status.followed'|trans }}</span>
-              </a>
-            </li>
-            <li class="js-favorite-btn mrl {% if isUserFavorite %}hidden{% endif %}" id="favorite-btn" data-target-type="course" data-target-id="{{ exercise.id }}">
-              <a class="cd-link-assist" href="javascript:;"><i class="es-icon es-icon-favoriteoutline course-operation__icon"></i><span class="cd-text-sm cd-text-medium">{{ 'course.status.follow'|trans }}</span>
-              </a>
-            </li>
-
           {% block course_member_exit %}{% endblock %}
         </ul>
         <div class="text-right buy-btn-group course-operation-btn course-classroom-tip">

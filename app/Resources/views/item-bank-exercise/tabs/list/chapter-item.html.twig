@@ -9,12 +9,12 @@
     <div class="item-line"></div>
   {% endif %}
     {% if type == 'chapter' %}
-      <div class="col-md-5 js-toggle-show js-toggle-{{ type }} title">
-        <span class="chapter-title">{{ chapter.name }}</span>
+      <div class="col-xs-3 js-toggle-show js-toggle-{{ type }} title">
+        <span class="chapter-title title-overflow">{{ chapter.name }}</span>
       </div>
     {% else %}
-      <div class="col-md-5">
-        <span class="unit-title">{{ chapter.name }}</span>
+      <div class="col-xs-3">
+        <span class="unit-title title-overflow">{{ chapter.name }}</span>
       </div>
     {% endif %}
   {% include 'item-bank-exercise/tabs/list/chapter-button.html.twig' with {previewAs:previewAs,'question_num': chapter.question_num, 'member':member|default(null), record:record} %}

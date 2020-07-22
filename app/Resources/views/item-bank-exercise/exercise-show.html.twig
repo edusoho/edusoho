@@ -9,10 +9,7 @@
 {% block format_detection %}{{ 'telephone=no' }}{% endblock %}
 {% block full_content %}
 
-  {% if previewAs|default('') %}
-    {% set previewAs = '' %}
-  {% endif %}
-
+  {% set previewAs = 'guest' %}
   {% set route_params = app.request.attributes.get('_route_params') %}
 
   {{ render(controller('AppBundle:ItemBankExercise/Exercise:header',{previewAs:previewAs,exercise: exercise, tab:tab, moduleId:moduleId} )) }}
@@ -23,7 +20,7 @@
 
         <section class="es-section">
           <div class="nav-btn-tab">
-            {% include 'item-bank-exercise/header/nav-tab.html.twig' %}
+            {% include 'item-bank-exercise/header/nav-tab.html.twig' with {previewAs:previewAs,tabs:tabs,moduleId:moduleId} %}
           </div>
           {% block detail_content %}
             {% if tab == 'reviews' %}

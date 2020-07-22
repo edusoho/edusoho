@@ -1,12 +1,12 @@
 <ul class="nav nav-tabs nav-tabs--course" role="tablist">
   {% for tab in tabs %}
       <li role="presentation" id="{{ tab.id }}"
-          class="{% if route_params.moduleId|default('') == tab.id%}active{% endif %}">
+          class="{% if moduleId|default('') == tab.id%}active{% endif %}">
         <a
-          {% if member|default(false) and previewAs|default(null) %}
-            href="{{ path('my_item_bank_exercise_show', {'id': exercise.id, 'tab': tab.type, 'moduleId': tab.id}) }}"
+          {% if member|default(false) and previewAs|default(null) == 'member' %}
+            href="{{ path('my_item_bank_exercise_show', {'id': exercise.id, 'tab': tab.type, 'moduleId': tab.id, 'previewAs':previewAs}) }}"
           {% else %}
-            href="{{ path('item_bank_exercise_show', {'id': exercise.id, 'tab': tab.type, 'moduleId':tab.id}) }}"
+            href="{{ path('item_bank_exercise_show', {'id': exercise.id, 'tab': tab.type, 'moduleId':tab.id, 'previewAs':previewAs}) }}"
           {% endif %}
         >
           {{ tab.title }}
@@ -16,10 +16,10 @@
   <li role="presentation" id="reviews"
       class="{% if route_params.tab|default('') == 'reviews'  or nav|default('') == 'reviews' %}active{% endif %}">
     <a
-      {% if member|default(false) and previewAs|default(null) %}
-        href="{{ path('my_item_bank_exercise_show', {'id': exercise.id, 'tab': 'reviews'}) }}"
+      {% if member|default(false) and previewAs|default(null) == 'member' %}
+        href="{{ path('my_item_bank_exercise_show', {'id': exercise.id, 'tab': 'reviews', 'previewAs':previewAs}) }}"
       {% else %}
-        href="{{ path('item_bank_exercise_show', {'id': exercise.id, 'tab': 'reviews'}) }}"
+        href="{{ path('item_bank_exercise_show', {'id': exercise.id, 'tab': 'reviews', 'previewAs':previewAs}) }}"
       {% endif %}
     >
       {{ 'course.tab.reviews'|trans }}

@@ -19,7 +19,7 @@
         <div class="tip">
           {{ 'site.tips.exercise_qrcode_tips'|trans }}
         </div>
-        <img src="{{ path('item_bank_exercise_qrcode', { id: exercise.id }) }}" alt="">
+        <img src="{{ path('item_bank_exercise_qrcode', { id: exercise.id, tab:'img'}) }}" alt="">
       </div>
     </div>
 {% endblock %}

@@ -105,17 +105,40 @@ class ItemBankExerciseController extends BaseController
             return $this->redirectToRoute('course_show', ['id' => $id]);
         }
 
+        $tabs = $this->getTabs($exercise);
+        if (!empty($tabs) && $tab == ''){
+            $tab = $tabs[0]['type'];
+            $moduleId = $tabs[0]['id'];
+        }
+
         return $this->render(
             'item-bank-exercise/my/my-exercise-show.html.twig',
             [
-                'tab' => $tab,
-                'tabs' => $this->getExerciseModuleService()->findByExerciseId($id),
+                'tab' => $tab == '' ? 'reviews' : $tab,
+                'tabs' => $tabs,
                 'member' => $member,
                 'moduleId' => $moduleId,
                 'isExerciseTeacher' => 'teacher' == $member['role'],
                 'exercise' => $exercise,
                 'previewAs' => 'member',
             ]
+        );
+    }
+
+    protected function getTabs($exercise)
+    {
+        $condition['exerciseId'] = $exercise['id'];
+        if ($exercise['chapterEnable']) {
+            $condition['types'][] = 'chapter';
+        }
+        if ($exercise['assessmentEnable']) {
+            $condition['types'][] = 'assessment';
+        }
+        return $this->getExerciseModuleService()->search(
+            $condition,
+            [],
+            0,
+            6
         );
     }
 

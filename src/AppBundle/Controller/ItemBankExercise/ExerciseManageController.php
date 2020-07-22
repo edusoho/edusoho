@@ -100,6 +100,23 @@ class ExerciseManageController extends BaseController
         return $data;
     }
 
+    public function canOpenAction(Request $request, $exerciseId, $type)
+    {
+        $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
+
+        if (!$exercise['assessmentEnable'] && !$exercise['chapterEnable']){
+            return $this->createJsonResponse(true);
+        }
+
+        if ($type == 'chapter') {
+            $can = $exercise['assessmentEnable'] == 1? true : false;
+        } else {
+            $can = $exercise['chapterEnable'] == 1? true : false;
+        }
+
+        return $this->createJsonResponse($can);
+    }
+
     /**
      * @return ExerciseService
      */

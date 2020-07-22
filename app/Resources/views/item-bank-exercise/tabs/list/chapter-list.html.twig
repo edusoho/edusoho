@@ -1,14 +1,16 @@
-{% do script(['libs/jquery-sortable.js','app/js/item-bank-exercise/exercise/show/index.js']) %}
+{% do script(['libs/jquery-sortable.js']) %}
 {% set record = [] %}
 <div class="course-detail-content js-course-detail-content">
   <ul id="sortable-list" class="task-list">
     {% for key, item in categoryTree %}
       {% if records|default(null) %}{% set record = records[item.id]|default(null)  %}{% endif %}
-      {% if item.depth == 3 %}
-        {% include 'item-bank-exercise/tabs/list/chapter-lesson.html.twig' with {previewAs:previewAs,exercise: exercise, lesson: item, record: record} %}
-      {% else %}
-        {% include 'item-bank-exercise/tabs/list/chapter-item.html.twig' with {previewAs:previewAs,chapter:item, exercise:exercise, record: record} %}
-      {% endif %}
+      <div class="row">
+        {% if item.depth == 3 %}
+          {% include 'item-bank-exercise/tabs/list/chapter-lesson.html.twig' with {previewAs:previewAs,exercise: exercise, lesson: item, record: record} %}
+        {% else %}
+          {% include 'item-bank-exercise/tabs/list/chapter-item.html.twig' with {previewAs:previewAs,chapter:item, exercise:exercise, record: record} %}
+        {% endif %}
+      </div>
     {% endfor %}
   </ul>
 

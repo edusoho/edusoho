@@ -3414,12 +3414,8 @@ facein_inspection_results_detail:
 
 # item-bank-exercise
 item_bank_exercise_qrcode:
-  path: /item_bank_exercise/{id}/qrcode
-  defaults: { _controller: AppBundle:ItemBankExercise/Exercise:qrcodeDownload }
-
-item_bank_exercise_qrcode_scan:
-  path: /item_bank_exercise/{id}/qrcode/scan
-  defaults: { _controller: AppBundle:ItemBankExercise/Exercise:qrcode }
+  path: /item_bank_exercise/{id}/qrcode/{tab}
+  defaults: { _controller: AppBundle:ItemBankExercise/Exercise:qrcode, tab: 'scan' }
 
 item_bank_exercise_member_expired:
   path:  /item_bank_exercise/{id}/member/expired
@@ -3468,6 +3464,10 @@ item_bank_exercise_manage_base:
 item_bank_exercise_manage_cover_crop:
     path: /item_bank_exercise/{exerciseId}/manage/cover_crop
     defaults: {_controller: AppBundle:ItemBankExercise/ExerciseManage:coverCrop}
+
+item_bank_exercise_manage_can_module_open:
+  path: /item_bank_exercise/{exerciseId}/manage/can/{type}/open
+  defaults: {_controller: AppBundle:ItemBankExercise/ExerciseManage:canOpen}
 
 item_bank_exercise_manage_assessment:
     path: /item_bank_exercise/{exerciseId}/manage/assessment/{moduleId}
@@ -3539,12 +3539,12 @@ item_bank_exercise_explore:
 
 item_bank_exercise_show:
   path: /item_bank_exercise/{id}/{tab}/{moduleId}
-  defaults: { _controller: AppBundle:ItemBankExercise/Exercise:show, tab: 'reviews',moduleId: 0 }
+  defaults: { _controller: AppBundle:ItemBankExercise/Exercise:show, tab: '',moduleId: 0 }
   h5: true
 
 my_item_bank_exercise_show:
   path:  /my/item_bank_exercise/{id}/{tab}/{moduleId}
-  defaults: { _controller: AppBundle:My/ItemBankExercise:show, tab: 'reviews',moduleId: 0 }
+  defaults: { _controller: AppBundle:My/ItemBankExercise:show, tab: '',moduleId: 0 }
   h5: true
 
 item_bank_exercise_assessment_answer:
