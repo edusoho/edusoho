@@ -2,12 +2,12 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Util\UploaderToken;
 use Biz\File\Service\UploadFileService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use AppBundle\Common\ArrayToolkit;
-use AppBundle\Util\UploaderToken;
 
 class UploaderController extends BaseController
 {
@@ -16,7 +16,7 @@ class UploaderController extends BaseController
         $params = $this->parseToken($request);
 
         if (!$params) {
-            return $this->createJsonResponse(array('error' => '上传授权码不正确，请重试！'));
+            return $this->createJsonResponse(['error' => '上传授权码不正确，请重试！']);
         }
 
         $callback = $request->query->get('callback');
@@ -28,13 +28,13 @@ class UploaderController extends BaseController
             $params = array_merge($request->request->all(), $params);
         }
 
-        $params['uploadCallback'] = $this->generateUrl('uploader_upload_callback', array(), UrlGeneratorInterface::ABSOLUTE_URL);
-        $params['processCallback'] = $this->generateUrl('uploader_process_callback', array(), UrlGeneratorInterface::ABSOLUTE_URL);
+        $params['uploadCallback'] = $this->generateUrl('uploader_upload_callback', [], UrlGeneratorInterface::ABSOLUTE_URL);
+        $params['processCallback'] = $this->generateUrl('uploader_process_callback', [], UrlGeneratorInterface::ABSOLUTE_URL);
 
         $result = $this->getUploadFileService()->initUpload($params);
 
-        $result['uploadProxyUrl'] = $this->generateUrl('uploader_entry', array(), UrlGeneratorInterface::ABSOLUTE_URL);
-        $result['authUrl'] = $this->generateUrl('uploader_auth', array(), UrlGeneratorInterface::ABSOLUTE_URL);
+        $result['uploadProxyUrl'] = $this->generateUrl('uploader_entry', [], UrlGeneratorInterface::ABSOLUTE_URL);
+        $result['authUrl'] = $this->generateUrl('uploader_auth', [], UrlGeneratorInterface::ABSOLUTE_URL);
 
         if ($isJsonp) {
             return $this->createJsonpResponse($result, $callback);
@@ -68,7 +68,7 @@ class UploaderController extends BaseController
         $params = $this->parseToken($request);
 
         if (!$params) {
-            return $this->createJsonResponse(array('error' => '授权码不正确，请重试！'));
+            return $this->createJsonResponse(['error' => '授权码不正确，请重试！']);
         }
 
         $callback = $request->query->get('callback');
@@ -79,12 +79,12 @@ class UploaderController extends BaseController
             $params = array_merge($request->request->all(), $params);
         }
 
-        $params = ArrayToolkit::parts($params, array(
+        $params = ArrayToolkit::parts($params, [
             'id', 'length', 'filename', 'size',
-        ));
+        ]);
 
 //        try {
-            $file = $this->getUploadFileService()->finishedUpload($params);
+        $file = $this->getUploadFileService()->finishedUpload($params);
 //        } catch (\Exception $e) {
 //            if ($isJsonp) {
 //                return $this->createJsonpResponse(array('error' => $e->getMessage()), $callback, method_exists($e, 'getStatusCode') ? $e->getStatusCode() : 500);
@@ -123,13 +123,13 @@ class UploaderController extends BaseController
         $params = $parser->parse($token);
 
         if (!$params) {
-            return $this->createJsonResponse(array('error' => '上传授权码不正确，请重试！'));
+            return $this->createJsonResponse(['error' => '上传授权码不正确，请重试！']);
         }
 
-        return $this->render('uploader/batch-upload-modal.html.twig', array(
+        return $this->render('uploader/batch-upload-modal.html.twig', [
             'token' => $token,
             'targetType' => $params['targetType'],
-        ));
+        ]);
     }
 
     public function entryAction(Request $request)
@@ -139,9 +139,9 @@ class UploaderController extends BaseController
 
     public function chunksStartAction(Request $request)
     {
-        $headers = array(
+        $headers = [
             'Upload-Token: '.$request->headers->get('Upload-Token'),
-        );
+        ];
 
         $params = $request->request->all();
 
@@ -154,9 +154,9 @@ class UploaderController extends BaseController
 
     public function chunksFinishAction(Request $request)
     {
-        $headers = array(
+        $headers = [
             'Upload-Token: '.$request->headers->get('Upload-Token'),
-        );
+        ];
 
         $params = $request->request->all();
 
@@ -203,11 +203,11 @@ class UploaderController extends BaseController
 
         curl_close($curl);
 
-        $context = array(
+        $context = [
             'CURLINFO' => $curlinfo,
             'HEADER' => $header,
             'BODY' => $body,
-        );
+        ];
 
         return $body;
     }
