@@ -14,6 +14,10 @@ class CourseSetGoodsMediatorTest extends BaseTestCase
         $courseSetMediator->onCreate($this->mockCourseSetData());
     }
 
+    public function testOnUpdateNormalFields()
+    {
+    }
+
     protected function mockCourseSetData($customFields = [])
     {
         return array_merge([

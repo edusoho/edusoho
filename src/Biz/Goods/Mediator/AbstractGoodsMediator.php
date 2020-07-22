@@ -23,8 +23,6 @@ abstract class AbstractGoodsMediator
 
     abstract public function onUpdateNormalData($target);
 
-    abstract public function onPriceUpdate($target);
-
     abstract public function onClose($target);
 
     abstract public function onPublish($target);

@@ -6,7 +6,6 @@ class ClassroomSpecsMediator extends AbstractSpecsMediator
 {
     public function onCreate($classroom)
     {
-        // TODO: Implement onCreate() method.
     }
 
     public function onUpdateNormalData($classroom)
@@ -33,4 +32,6 @@ class ClassroomSpecsMediator extends AbstractSpecsMediator
     {
         // TODO: Implement onDelete() method.
     }
+
+    protected function
 }
