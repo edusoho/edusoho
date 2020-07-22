@@ -251,6 +251,7 @@ class EduSohoUpgrade extends AbstractUpdater
                   `income` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '总收入',
                   `price` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '售价',
                   `originPrice` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '原价',
+                  `maxRate` tinyint(3) unsigned NOT NULL DEFAULT '100' COMMENT '最大抵扣百分比',
                   `ratingNum` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '评论数',
                   `rating` float unsigned NOT NULL DEFAULT '0' COMMENT '评分',
                   `recommended` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否推荐',
