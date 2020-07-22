@@ -106,7 +106,7 @@ class ItemBankExerciseController extends BaseController
         }
 
         $tabs = $this->getTabs($exercise);
-        if (!empty($tabs) && $tab == ''){
+        if (!empty($tabs) && '' == $tab) {
             $tab = $tabs[0]['type'];
             $moduleId = $tabs[0]['id'];
         }
@@ -114,7 +114,7 @@ class ItemBankExerciseController extends BaseController
         return $this->render(
             'item-bank-exercise/my/my-exercise-show.html.twig',
             [
-                'tab' => $tab == '' ? 'reviews' : $tab,
+                'tab' => '' == $tab ? 'reviews' : $tab,
                 'tabs' => $tabs,
                 'member' => $member,
                 'moduleId' => $moduleId,
@@ -134,6 +134,7 @@ class ItemBankExerciseController extends BaseController
         if ($exercise['assessmentEnable']) {
             $condition['types'][] = 'assessment';
         }
+
         return $this->getExerciseModuleService()->search(
             $condition,
             [],
