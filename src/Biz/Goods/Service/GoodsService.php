@@ -10,6 +10,8 @@ interface GoodsService
 
     public function updateGoods($id, $goods);
 
+    public function updateGoodsMinAndMaxPrice($goodsId);
+
     public function deleteGoods($id);
 
     public function publishGoods($id);
