@@ -8,23 +8,23 @@
     <tr>
       <td>
         <div class="clearfix">
-          <img class="pull-left mrl" src="{{ filepath(item.conver.small|default(''),'course.png') }}" style="width:100px;"/>
-          <a class="pull-left" href="{{ path('course_show', {id: item.defaultCourseId}) }}" target="_blank" >{{item.title}}
+          <img class="pull-left mrl" src="{{ filepath(item.images.small|default(''),'course.png') }}" style="width:100px;"/>
+          <a class="pull-left" href="{{ path('goods_show', {id: item.id}) }}" target="_blank" >{{item.title}}
           </a>
         </div>
       </td>
       <td>
-        {% if item.minCoursePrice == item.maxCoursePrice %}
-          {{item.minCoursePrice}}
+        {% if item.minPrice == item.maxPrice %}
+          {{item.minPrice}}
         {% else %}
-          {{item.minCoursePrice}} ~ {{item.maxCoursePrice}}
+          {{item.minPrice}} ~ {{item.maxPrice}}
         {% endif %}
       </td>
       <td>
-        {% if item.minCoursePrice == item.maxCoursePrice %}
-          {{item.minCoursePrice * set.cash_rate}}
+        {% if item.minPrice == item.maxPrice %}
+          {{item.minPrice * set.cash_rate}}
         {% else %}
-          {{item.minCoursePrice * set.cash_rate}} ~ {{item.maxCoursePrice * set.cash_rate}}
+          {{item.minPrice * set.cash_rate}} ~ {{item.maxPrice * set.cash_rate}}
         {% endif %}
       </td>
     </tr>

@@ -64,6 +64,7 @@ class GoodsServiceImpl extends BaseService implements GoodsService
             'orgCode',
             'minPrice',
             'maxPrice',
+            'maxRate',
             'ratingNum',
             'rating',
             'hitNum',

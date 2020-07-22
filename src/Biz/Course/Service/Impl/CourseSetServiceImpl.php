@@ -453,6 +453,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             'images' => $courseSet['cover'],
             'orgId' => $courseSet['orgId'],
             'orgCode' => $courseSet['orgCode'],
+            'maxRate' => $courseSet['maxRate'],
         ]);
 
         return [$product, $goods];
@@ -910,6 +911,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             'courseSet.maxRate.update',
             new Event(['courseSet' => $courseSet, 'maxRate' => $maxRate])
         );
+
+        $this->syncProductsAndGoods($courseSet);
 
         return $courseSet;
     }

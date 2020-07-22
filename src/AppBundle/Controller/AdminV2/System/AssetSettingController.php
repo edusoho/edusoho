@@ -11,6 +11,7 @@ use Biz\CloudPlatform\Service\AppService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Goods\Service\GoodsService;
+use Biz\S2B2C\Service\ProductService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\System\SettingException;
@@ -168,17 +169,18 @@ class AssetSettingController extends BaseController
                 goto response;
             }
             $goods = $this->getGoodsService()->searchGoods([
+                'type' => 'course',
                 'maxPrice_GT' => 0,
             ], ['publishedTime' => 'desc'], 0, PHP_INT_MAX);
 
-            $courseSets = $this->getCourseSetService()->searchCourseSets([
-                'parentId' => 0,
-                'maxCoursePrice_GT' => 0,
-            ], ['updatedTime' => 'desc'], 0, PHP_INT_MAX);
+//            $courseSets = $this->getCourseSetService()->searchCourseSets([
+//                'parentId' => 0,
+//                'maxCoursePrice_GT' => 0,
+//            ], ['updatedTime' => 'desc'], 0, PHP_INT_MAX);
 
             return $this->render('admin-v2/system/asset-setting/coin/usage/effective.html.twig', [
                 'set' => $set,
-                'items' => $courseSets,
+                'items' => $goods,
             ]);
         }
 
@@ -290,17 +292,15 @@ class AssetSettingController extends BaseController
         $set = $conditions['set'];
 
         if ('course' == $type) {
-            $items = $this->getCourseSetService()->searchCourseSets([
-                'maxCoursePrice_GT' => '0.00',
-                'parentId' => 0,
-            ], ['updatedTime' => 'desc'], 0, PHP_INT_MAX);
+            $items = $this->getGoodsService()->searchGoods([
+                'type' => 'course',
+                'maxPrice_GT' => 0,
+            ], ['publishedTime' => 'desc'], 0, PHP_INT_MAX);
         } elseif ('classroom' == $type) {
-            $items = $this->getClassroomService()->searchClassrooms(
-                ['private' => 0, 'price_GT' => '0.00'],
-                ['createdTime' => 'DESC'],
-                0,
-                PHP_INT_MAX
-            );
+            $items = $this->getGoodsService()->searchGoods([
+                'type' => 'classroom',
+                'maxPrice_GT' => 0,
+            ], ['publishedTime' => 'desc'], 0, PHP_INT_MAX);
         } elseif ('vip' == $type) {
             // todo
             $items = $this->getLevelService()->searchLevels(['enable' => 1], ['seq' => 'asc'], 0, PHP_INT_MAX);
@@ -368,11 +368,13 @@ class AssetSettingController extends BaseController
 
         if ('course' == $type) {
             foreach ($data as $key => $value) {
-                $this->getCourseSetService()->updateMaxRate($key, $value);
+//                $this->getCourseSetService()->updateMaxRate($key, $value);
+                $this->getGoodsService()->updateGoods($key, ['maxRate' => $value]);
             }
         } elseif ('classroom' == $type) {
             foreach ($data as $key => $value) {
-                $this->getClassroomService()->updateClassroom($key, ['maxRate' => $value]);
+//                $this->getClassroomService()->updateClassroom($key, ['maxRate' => $value]);
+                $this->getGoodsService()->updateGoods($key, ['maxRate' => $value]);
             }
         } elseif ('vip' == $type) {
             foreach ($data as $key => $value) {
@@ -459,5 +461,13 @@ class AssetSettingController extends BaseController
     protected function getGoodsService()
     {
         return $this->createService('Goods:GoodsService');
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getProductService()
+    {
+        return $this->createService('Product:ProductService');
     }
 }

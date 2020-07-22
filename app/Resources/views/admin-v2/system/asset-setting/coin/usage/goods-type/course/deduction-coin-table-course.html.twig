@@ -10,17 +10,17 @@
         <tr>
             <td>
                 <div class="clearfix">
-                    <img class="pull-left mrl" src="{{ filepath(item.cover.small|default(''),'course.png') }}" style="width:100px;"/>
-                    <a class="pull-left" href="{{ path('course_show',{id: item.defaultCourseId}) }}" target="_blank" >{{item.title}}
+                    <img class="pull-left mrl" src="{{ filepath(item.images.small|default(''),'course.png') }}" style="width:100px;"/>
+                    <a class="pull-left" href="{{ path('goods_show',{id: item.id}) }}" target="_blank" >{{item.title}}
                     </a>
                 </div>
             </td>
             <td>
-                <span id="rmb{{item.id}}" class="rmbPrice" data-val="{{ item.maxCoursePrice }}">
-                    {% if item.minCoursePrice == item.maxCoursePrice %}
-                        {{ item.minCoursePrice }}
+                <span id="rmb{{item.id}}" class="rmbPrice" data-val="{{ item.maxPrice }}">
+                    {% if item.minPrice == item.minPrice %}
+                        {{ item.minPrice }}
                     {% else %}
-                        {{ item.minCoursePrice }} ~ {{ item.maxCoursePrice }}
+                        {{ item.minPrice }} ~ {{ item.maxPrice }}
                     {% endif %}
                 </span>
             </td>
@@ -28,10 +28,10 @@
                 <input id="rate{{item.id}}" type="text" class="form-control rate" style="width:50px;display:inline-block" value="{{ item.maxRate }}" name="item-rate[{{item.id}}]" data-id="{{item.id}}"/> <label>%</label>
             </td>
             <td>
-                <span id="deRmb{{item.id}}"> {{ (item.maxRate * item.maxCoursePrice / 100)|number_format(2, '.') }}</span>
+                <span id="deRmb{{item.id}}"> {{ (item.maxRate * item.maxPrice / 100)|number_format(2, '.') }}</span>
             </td>
             <td>
-                <span id="cash{{item.id}}">{{ (item.maxRate / 100 * item.maxCoursePrice * set.cash_rate)|number_format(2, '.', ',') }}</span>
+                <span id="cash{{item.id}}">{{ (item.maxRate / 100 * item.maxPrice * set.cash_rate)|number_format(2, '.', ',') }}</span>
             </td>
         </tr>
     {% endfor %}
