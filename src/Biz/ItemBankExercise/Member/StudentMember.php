@@ -8,6 +8,7 @@ use Biz\ItemBankExercise\ExpiryMode\ExpiryModeFactory;
 use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\ItemBankExerciseMemberException;
 use Biz\ItemBankExercise\Service\MemberOperationRecordService;
+use Biz\OrderFacade\Product\ItemBankExerciseProduct;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Biz\System\Service\LogService;
 use Biz\User\Service\UserService;
@@ -19,7 +20,9 @@ class StudentMember extends Member
     protected function addMember($exercise, $userId, $info)
     {
         if (!empty($info['price']) && $info['price'] > 0) {
-            return $this->createOrder($exercise['id'], $userId, $info);
+            $this->createOrder($exercise['id'], $userId, $info);
+
+            return $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $userId);
         }
 
         $member = [
@@ -114,7 +117,7 @@ class StudentMember extends Member
 
     public function validate($exercise, $data)
     {
-        if (!ArrayToolkit::requireds($data, ['remark'])) {
+        if (!isset($data['remark'])) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
@@ -125,7 +128,7 @@ class StudentMember extends Member
 
     protected function createOrder($exerciseId, $userId, $data)
     {
-        $courseProduct = $this->getOrderFacadeService()->getOrderProduct('itemBankExercise', ['targetId' => $exerciseId]);
+        $courseProduct = $this->getOrderFacadeService()->getOrderProduct(ItemBankExerciseProduct::TYPE, ['targetId' => $exerciseId]);
 
         $params = [
             'created_reason' => $data['remark'],

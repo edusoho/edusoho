@@ -77,6 +77,7 @@ class StudentManageController extends BaseController
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
             $user = $this->getUserService()->getUserByLoginField($data['queryfield'], true);
+            $data['source'] = 'outside';
 
             $this->getExerciseMemberService()->becomeStudent($exerciseId, $user['id'], $data);
 
