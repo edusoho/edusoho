@@ -59,7 +59,7 @@
         </div>
 
         <!-- 立即购买 -->
-        <buy-sku :sku="currentSku" :btn-class="'product-detail__btn'"></buy-sku>
+        <buy-sku :sku="currentSku" :btn-class="'product-detail__btn'" :is-user-login="isUserLogin"></buy-sku>
     </div>
 </template>
 
@@ -84,6 +84,10 @@
                 default: () => {
                 }
             },
+            isUserLogin: {
+                type: Number,
+                default: 0,
+            }
         },
         methods: {
             handleClick(sku) {
