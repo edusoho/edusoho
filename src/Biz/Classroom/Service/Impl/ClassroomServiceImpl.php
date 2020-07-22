@@ -1232,7 +1232,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
             if ($params['price'] > 0) {
                 //支付完成后会自动加入课程
-                $order = $this->createOrder($classroom['id'], $user['id'], $params, 'outside');
+                $product = $this->getProductService()->getProductByTargetIdAndType($classroom['id'], 'classroom');
+                $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByProductIdAndTargetId($product['id'], $classroom['id']);
+
+                $order = $this->createOrder($goodsSpecs['id'], $user['id'], $params, 'outside');
             } else {
                 $info = [
                     'orderId' => 0,
@@ -2257,9 +2260,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
     }
 
-    protected function createOrder($classroomId, $userId, $params, $source)
+    protected function createOrder($goodsSpecsId, $userId, $params, $source)
     {
-        $classroomProduct = $this->getOrderFacadeService()->getOrderProduct('classroom', ['targetId' => $classroomId]);
+        $classroomProduct = $this->getOrderFacadeService()->getOrderProduct('classroom', ['targetId' => $goodsSpecsId]);
 
         $params = [
             'created_reason' => $params['remark'],

@@ -141,10 +141,14 @@ class MarketingServiceTest extends BaseTestCase
 //        $this->assertEquals('CourseSet', $order['title']);
 //    }
 
+    protected function createGoods($goods, $goodsSpecs)
+    {
+    }
+
     public function testAddUserToClassroom()
     {
         TimeMachine::setMockedTime(1517401609);
-        $postData = array(
+        $postData = [
             'mobile' => '13675641112',
             'user_id' => 12,
             'nickname' => 'test_user',
@@ -154,7 +158,7 @@ class MarketingServiceTest extends BaseTestCase
             'order_pay_amount' => 1,
             'activity_id' => 81,
             'activity_name' => '营销活动A',
-            'deduct' => array(
+            'deduct' => [
                 'id' => '2863',
                 'order_id' => '2874',
                 'detail' => '订单A',
@@ -165,30 +169,30 @@ class MarketingServiceTest extends BaseTestCase
                 'status' => 'paid',
                 'user_id' => '10000',
                 'seller_id' => '1',
-                'snapshot' => array(),
+                'snapshot' => [],
                 'created_time' => '1511948304',
                 'updated_time' => '1511948322',
-            ),
+            ],
             'target_type' => 'classroom',
             'target_id' => 12,
             'order_pay_time' => TimeMachine::time(),
-        );
+        ];
 
         $user = $this->getUserDao()->create(
-            array(
+            [
                 'nickname' => 'defaultUser',
                 'type' => 'system',
                 'email' => 'defaultUser@howzhi.com',
                 'password' => 'kaifazhe',
                 'salt' => 'salt1',
-                'roles' => array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN'),
-            )
+                'roles' => ['ROLE_USER', 'ROLE_TEACHER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN'],
+            ]
         );
 
-        $this->getSettingService()->set('refund', array('maxRefundDays' => 2));
+        $this->getSettingService()->set('refund', ['maxRefundDays' => 2]);
 
-        $this->mockBiz('Classroom:ClassroomService', array(
-            array('functionName' => 'getClassroom', 'returnValue' => array(
+        $this->mockBiz('Classroom:ClassroomService', [
+            ['functionName' => 'getClassroom', 'returnValue' => [
                 'id' => 12,
                 'title' => 'test classroom',
                 'price' => '10.00',
@@ -197,8 +201,8 @@ class MarketingServiceTest extends BaseTestCase
                 'smallPicture' => '',
                 'largePicture' => '',
                 'status' => 'published',
-            )),
-        ));
+            ]],
+        ]);
 
         $biz = $this->getBiz();
         $biz['@Marketing:MarketingClassroomMemberService'] = new MockedClassroomMemberServiceImpl($this->getBiz());
@@ -210,38 +214,38 @@ class MarketingServiceTest extends BaseTestCase
         $order = $this->getClassroomMemberService()->getOrder();
 
         $this->assertArrayEquals(
-            array(
+            [
                 'marketingOrderId' => 111,
                 'marketingOrderPriceAmount' => 110,
                 'marketingOrderPayAmount' => 0.01,
                 'marketingActivityId' => 81,
                 'marketingActivityName' => '营销活动A',
-                'deducts' => array(
-                    array(
+                'deducts' => [
+                    [
                         'detail' => '订单A',
                         'deduct_type' => 'cut',
                         'deduct_amount' => 10999,
                         'user_id' => '3',
-                    ),
-                ),
+                    ],
+                ],
                 'originPrice' => 110,
                 'price' => 0.01,
                 'source' => 'marketing',
                 'remark' => '来自微营销',
                 'orderTitleRemark' => '(来自微营销)',
-            ),
+            ],
             $this->getClassroomMemberService()->getData()
         );
 
         $this->assertArrayEquals(
-            array(
+            [
                 'is_new' => true,
                 'user_id' => '3',
                 'code' => 'success',
                 'msg' => '把用户,3添加到班级成功,班级ID：12,memberId:12222,订单Id:'.$order['id'],
-            ),
+            ],
             $result,
-            array('is_new', 'user_id', 'code', 'msg')
+            ['is_new', 'user_id', 'code', 'msg']
         );
 
         $this->assertEquals('11000', $order['price_amount']);

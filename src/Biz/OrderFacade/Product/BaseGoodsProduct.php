@@ -5,7 +5,7 @@ namespace Biz\OrderFacade\Product;
 use Biz\Goods\Service\GoodsService;
 use Codeages\Biz\Order\Status\OrderStatusCallback;
 
-class BaseGoodsProduct extends Product implements OrderStatusCallback
+abstract class BaseGoodsProduct extends Product implements OrderStatusCallback
 {
     public $showTemplate;
 
@@ -24,11 +24,10 @@ class BaseGoodsProduct extends Product implements OrderStatusCallback
 
     public function init(array $params)
     {
-        $this->targetId = $params['targetId'];
-
         $goodsSpecs = $this->getGoodsService()->getGoodsSpecs($params['targetId']);
         $goods = $this->getGoodsService()->getGoods($goodsSpecs['goodsId']);
 
+        $this->targetId = $params['targetId'];
         $this->goods = $goods;
         $this->goodsSpecs = $goodsSpecs;
 
@@ -45,10 +44,6 @@ class BaseGoodsProduct extends Product implements OrderStatusCallback
         $this->productEnable = ('published' === $goods['status'] && 'published' === $goodsSpecs['status']) ? true : false;
         $this->originPrice = $goodsSpecs['price'];
         $this->cover = empty($goodsSpecs['images']) ? $goods['images'] : $goodsSpecs['images'];
-    }
-
-    public function validate()
-    {
     }
 
     /**
