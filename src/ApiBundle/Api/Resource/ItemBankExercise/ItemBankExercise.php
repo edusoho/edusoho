@@ -37,6 +37,7 @@ class ItemBankExercise extends AbstractResource
     {
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $conditions = $request->query->all();
+        $conditions['status'] = 'published';
 
         $sort = $this->getSort($request);
         if (array_key_exists('recommendedSeq', $sort)) {
