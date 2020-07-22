@@ -42,10 +42,10 @@
             <directory>../tests/Unit/P*</directory>
         </testsuite>
         <testsuite name="UnitQ2T">
-<!--            <directory>../tests/Unit/Q*</directory>-->
-<!--            <directory>../tests/Unit/R*</directory>-->
+            <directory>../tests/Unit/Q*</directory>
+            <directory>../tests/Unit/R*</directory>
             <directory>../tests/Unit/S*</directory>
-<!--            <directory>../tests/Unit/T*</directory>-->
+            <directory>../tests/Unit/T*</directory>
         </testsuite>
         <testsuite name="UnitU2Z">
             <directory>../tests/Unit/U*</directory>
