@@ -190,7 +190,7 @@ class Logger
             return $allModules[$module];
         }
 
-        return array();
+        return [];
     }
 
     /**
@@ -198,8 +198,8 @@ class Logger
      */
     public static function systemModuleConfig()
     {
-        return array(
-            self::COURSE => array(
+        return [
+            self::COURSE => [
                 'create' => '创建课程',
                 'update' => '修改课程',
                 'update_picture' => '更新课程图片',
@@ -207,6 +207,8 @@ class Logger
                 'close' => '关闭课程',
                 'delete' => '删除课程',
                 'add_task' => '添加学习任务',
+                'publish_lesson' => '发布学习任务',
+                'unpublish_lesson' => '关闭学习任务',
                 'update_task' => '更新学习任务',
                 'delete_task' => '删除学习任务',
                 'add_student' => '添加课程学员',
@@ -236,9 +238,9 @@ class Logger
                 self::ACTION_SYNC_WHEN_TASK_UPDATE => '同步更新任务',
                 self::ACTION_SYNC_WHEN_TASK_DELETE => '同步删除任务',
                 self::ACTION_CLONE_COURSE_SET => '复制课程',
-            ),
+            ],
 
-            self::USER => array(
+            self::USER => [
                 'exportCsv' => '导出',
                 'add' => '新增',
                 'edit' => '修改',
@@ -257,8 +259,8 @@ class Logger
                 'cancel_recommend' => '取消推荐用户',
                 'approved' => '实名认证成功',
                 'approval_fail' => '实名认证失败',
-                'password-reset' => '重置密码', ),
-            self::SYSTEM => array(
+                'password-reset' => '重置密码', ],
+            self::SYSTEM => [
                 'email_send_check' => '邮件自检',
                 'setting_email_change' => '更变邮箱',
                 'setting_email-verify' => '邮箱验证',
@@ -267,8 +269,8 @@ class Logger
                 'customerServiceSetting' => '客服管理',
                 'setting_userCenter' => '用户中心设置',
                 'update_block' => '更新编辑区',
-                'update_app_version' => '更新版本', ),
-            self::CLASSROOM => array(
+                'update_app_version' => '更新版本', ],
+            self::CLASSROOM => [
                 'create' => '新增班级',
                 'delete' => '删除班级',
                 'add_course' => '添加课程',
@@ -280,8 +282,8 @@ class Logger
                 'remove_student' => '移除学员',
                 'recommend' => '推荐班级',
                 'cancel_recommend' => '取消推荐',
-            ),
-            self::ARTICLE => array(
+            ],
+            self::ARTICLE => [
                 'update_settings' => '更新设置',
                 'create' => '新增',
                 'update' => '修改',
@@ -291,48 +293,48 @@ class Logger
                 'removeThumb' => '移除图片',
                 'delete' => '删除',
                 'publish' => '发布',
-                'unpublish' => '取消发布', ),
+                'unpublish' => '取消发布', ],
 
-            self::NOTIFY => array(
+            self::NOTIFY => [
                 'create' => '创建',
-                'check_fail' => '检测', ),
-            self::ORDER => array(
+                'check_fail' => '检测', ],
+            self::ORDER => [
                 'pay_result' => '支付结果',
                 'andit_refund' => '退款审核',
                 'refund_cancel' => '取消退款',
-                'unbind-back' => '解绑银行卡', ),
-            self::CATEGORY => array(
+                'unbind-back' => '解绑银行卡', ],
+            self::CATEGORY => [
                 'create' => '新增',
                 'update' => '修改',
-                'delete' => '删除', ),
-            self::CONTENT => array(
+                'delete' => '删除', ],
+            self::CONTENT => [
                 'create' => '新增',
                 'update' => '修改',
                 'trash' => '移动到回收站',
                 'delete' => '删除',
-                'publish' => '发布', ),
+                'publish' => '发布', ],
 
-            self::CRONTAB => array(
+            self::CRONTAB => [
                 'job_start' => '开始任务',
-                'job_end' => '结束任务', ),
-            self::UPLOADFILE => array(
+                'job_end' => '结束任务', ],
+            self::UPLOADFILE => [
                 'create' => '新增文件',
                 'delete' => '删除文件',
                 'download' => '下载文件',
                 'cloud_convert_callback' => '回调处理',
-                'cloud_convert_error' => '转码失败', ),
-            self::MARKER => array(
+                'cloud_convert_error' => '转码失败', ],
+            self::MARKER => [
                 'create' => '增加驻点',
                 'delete' => '删除驻点',
                 'mediaId_notExist' => '视频不存在',
-                'delete_question' => '删除驻点问题', ),
-            self::GROUP => array(
+                'delete_question' => '删除驻点问题', ],
+            self::GROUP => [
                 'create_thread' => '新增话题',
                 'delete_thread' => '删除话题',
                 'close_thread' => '关闭话题',
                 'open_thread' => '开启话题',
-            ),
-            self::SMS => array(
+            ],
+            self::SMS => [
                 'sms_forget_password' => '登录密码重置',
                 'sms_user_pay' => '使用网站余额支付',
                 'sms_forget_pay_password' => '支付密码重置',
@@ -349,19 +351,19 @@ class Logger
                 'sms_classroom_buy_notify' => '班级购买',
                 'sms_vip_buy_notify' => '会员购买',
                 'sms_coin_buy_notify' => '虚拟币充值',
-            ),
-            self::TAG => array(
+            ],
+            self::TAG => [
                 'create' => '新增',
                 'update' => '修改',
-                'delete' => '删除', ),
-            self::COIN => array(
+                'delete' => '删除', ],
+            self::COIN => [
                 'update_settings' => '设置',
                 'add_coin' => '增加',
-                'deduct_coin' => '扣除', ),
-            self::ANNOUNCEMENT => array(
+                'deduct_coin' => '扣除', ],
+            self::ANNOUNCEMENT => [
                 'delete' => '删除公告',
-            ),
-            self::OPEN_COURSE => array(
+            ],
+            self::OPEN_COURSE => [
                 'create_course' => '创建公开课',
                 'update_course' => '更新公开课',
                 'delete_course' => '删除课程',
@@ -376,18 +378,18 @@ class Logger
                 'delete_material' => '移除资料',
                 'update_teacher' => '更新公开课教师',
                 'delete_recommend_course' => '删除推荐课程',
-            ),
-            self::LIVE => array(
+            ],
+            self::LIVE => [
                 'update_live_activity' => '更新直播活动',
                 'generate_live_replay' => '生成录播回放',
-            ),
-        );
+            ],
+        ];
     }
 
     public static function pluginModuleConfig()
     {
-        return array(
-            self::VIP => array(
+        return [
+            self::VIP => [
                 'create_member' => '新增会员',
                 'renew_member' => '续费会员',
                 'upgrade_member' => '升级会员',
@@ -401,21 +403,21 @@ class Logger
                 'delete_level' => '删除等级',
 
                 'exportCsv' => '导出',
-                'update_setting' => '更新设置', ),
-            self::COUPON => array(
+                'update_setting' => '更新设置', ],
+            self::COUPON => [
                 'batch_generate' => '生成优惠码',
                 'receive' => '领取优惠码',
                 'use' => '使用优惠码',
                 'batch_delete' => '删除优惠码',
-                'setting' => '更新设置', ),
-            self::DISCOUNT => array(
+                'setting' => '更新设置', ],
+            self::DISCOUNT => [
                 'apply_audit' => '申请打折',
                 'audit_pass' => '审核通过',
                 'audit_reject' => '审核拒绝',
                 'start' => '开启',
                 'close' => '关闭',
-                'delete' => '删除', ),
-            self::MONEY_CARD => array(
+                'delete' => '删除', ],
+            self::MONEY_CARD => [
                 'money_card_use' => '使用',
                 'export' => '导出',
                 'show_password' => '查询密码',
@@ -424,23 +426,23 @@ class Logger
                 'unlock' => '启用',
                 'delete' => '删除',
                 'batch_lock' => '批量作废',
-                'batch_delete' => '批量删除', ),
-            self::QUESTIONPLUS => array(
-                'update_setting' => '更新设置', ),
-            self::HOMEWORK => array(
+                'batch_delete' => '批量删除', ],
+            self::QUESTIONPLUS => [
+                'update_setting' => '更新设置', ],
+            self::HOMEWORK => [
                 'create' => '新增',
                 'update' => '修改',
-                'delete' => '删除', ),
-            self::EXERCISE => array(
+                'delete' => '删除', ],
+            self::EXERCISE => [
                 'create' => '新增',
                 'update' => '修改',
-                'delete' => '删除', ),
-        );
+                'delete' => '删除', ],
+        ];
     }
 
     public static function getLogModuleDict()
     {
-        return array(
+        return [
             self::USER => '用户',
             self::COURSE => '课程',
             self::CLASSROOM => '班级',
@@ -467,6 +469,6 @@ class Logger
             self::ANNOUNCEMENT => '公告',
             self::OPEN_COURSE => '公开课',
             self::LIVE => '直播',
-        );
+        ];
     }
 }
