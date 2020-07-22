@@ -99,12 +99,12 @@ class ClassroomGoodsMediator extends AbstractGoodsMediator
         if (empty($existProduct)) {
             throw ProductException::NOTFOUND_PRODUCT();
         }
-        $existGoods = $this->getGoodsService()->getGoodsByProductId($existProduct['id']);
-        $goods = $this->getGoodsService()->publishGoods($existGoods['id']);
 
+        $existGoods = $this->getGoodsService()->getGoodsByProductId($existProduct['id']);
         if (empty($existGoods)) {
             throw GoodsException::GOODS_NOT_FOUND();
         }
+        $goods = $this->getGoodsService()->publishGoods($existGoods['id']);
 
         return [$existProduct, $goods];
     }
