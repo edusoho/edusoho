@@ -83,15 +83,15 @@ class UploaderController extends BaseController
             'id', 'length', 'filename', 'size',
         ));
 
-        try {
+//        try {
             $file = $this->getUploadFileService()->finishedUpload($params);
-        } catch (\Exception $e) {
-            if ($isJsonp) {
-                return $this->createJsonpResponse(array('error' => $e->getMessage()), $callback, method_exists($e, 'getStatusCode') ? $e->getStatusCode() : 500);
-            } else {
-                return $this->createJsonResponse(array('error' => $e->getMessage()), method_exists($e, 'getStatusCode') ? $e->getStatusCode() : 500);
-            }
-        }
+//        } catch (\Exception $e) {
+//            if ($isJsonp) {
+//                return $this->createJsonpResponse(array('error' => $e->getMessage()), $callback, method_exists($e, 'getStatusCode') ? $e->getStatusCode() : 500);
+//            } else {
+//                return $this->createJsonResponse(array('error' => $e->getMessage()), method_exists($e, 'getStatusCode') ? $e->getStatusCode() : 500);
+//            }
+//        }
 
         if ($isJsonp) {
             return $this->createJsonpResponse($file, $callback);
@@ -169,7 +169,7 @@ class UploaderController extends BaseController
 
     protected function parseToken(Request $request)
     {
-        $token = $request->query->get('token');
+        $token = $request->query->get('uploaderToken');
         $parser = new UploaderToken();
         $params = $parser->parse($token);
 

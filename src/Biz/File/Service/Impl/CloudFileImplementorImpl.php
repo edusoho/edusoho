@@ -173,10 +173,10 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
     public function prepareUpload($params)
     {
         $file = array();
-        $file['filename'] = empty($params['fileName']) ? '' : $params['fileName'];
+        $file['fileName'] = empty($params['name']) ? '' : $params['name'];
 
-        $pos = strrpos($file['filename'], '.');
-        $file['ext'] = empty($pos) ? '' : substr($file['filename'], $pos + 1);
+        $pos = strrpos($file['fileName'], '.');
+        $file['ext'] = empty($pos) ? '' : substr($file['fileName'], $pos + 1);
 
         $file['fileSize'] = empty($params['fileSize']) ? 0 : $params['fileSize'];
         $file['status'] = 'uploading';
@@ -245,8 +245,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             'extno' => $file['id'],
             'bucket' => $file['bucket'],
             'reskey' => $file['hashId'],
-            'hash' => $file['hash'],
-            'name' => $file['fileName'],
+            'name' => $file['name'],
             'size' => $file['fileSize'],
         );
         if ('attachment' == $file['targetType']) {
@@ -272,17 +271,20 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             $params['directives'] = array_merge($params['directives'], array('convertAll' => true));
         }
 
-        $apiResult = $this->createApi('root')->post('/resources/upload_init', $params);
+//        $apiResult = $this->createApi('root')->post('/resources/upload_init', $params);
+        $apiResult = $this->getResourceService()->startUpload($params);
 
         $result = array();
 
         $result['globalId'] = $apiResult['no'];
         $result['hashId'] = $file['hashId'];
+        $result['no'] = $file['id'];
         $result['outerId'] = $file['id'];
         $result['uploadMode'] = $apiResult['uploadMode'];
         $result['uploadUrl'] = $apiResult['uploadUrl'];
         $result['uploadProxyUrl'] = '';
         $result['uploadToken'] = $apiResult['uploadToken'];
+        $result['reskey'] = $apiResult['reskey'];
 
         return $result;
     }
@@ -297,15 +299,15 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
     public function resumeUpload($file, $initParams)
     {
         $params = array(
-            'bucket' => $initParams['bucket'],
             'extno' => $file['id'],
+            'bucket' => $initParams['bucket'],
             'size' => $initParams['fileSize'],
-            'name' => $initParams['fileName'],
-            'hash' => $initParams['hash'],
+            'name' => $initParams['name'],
+            'resumeNo' => $file['globalId'],
         );
 
-        $apiResult = $this->createApi('root')->post("/resources/{$file['globalId']}/upload_resume", $params);
-
+//        $apiResult = $this->createApi('root')->post("/resources/{$file['globalId']}/upload_resume", $params);
+        $apiResult = $this->getResourceService()->startUpload($params);
         if (empty($apiResult['resumed']) || ('ok' !== $apiResult['resumed'])) {
             return null;
         }
@@ -321,6 +323,8 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $result['uploadUrl'] = $apiResult['uploadUrl'];
         $result['uploadProxyUrl'] = '';
         $result['uploadToken'] = $apiResult['uploadToken'];
+        $result['reskey'] = $apiResult['reskey'];
+        $result['no'] = $file['id'];
 
         return $result;
     }
@@ -420,18 +424,20 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             $this->createNewException(UploadFileException::GLOBALID_REQUIRED());
         }
 
-        $params = array(
-            'length' => $params['length'],
-            'name' => empty($params['filename']) ? $file['filename'] : $params['filename'],
-            'size' => $params['size'],
-            'extno' => $file['id'],
-        );
-        if ('attachment' == $file['targetType']) {
-            $params['type'] = $file['targetType'];
-        }
-        $api = $this->createApi('root');
-        $result = $api->post("/resources/{$file['globalId']}/upload_finish", $params);
-        $file = $api->get("/resources/{$file['globalId']}", array('refresh' => true));
+//        $params = array(
+//            'length' => $params['length'],
+//            'name' => empty($params['filename']) ? $file['filename'] : $params['filename'],
+//            'size' => $params['size'],
+//            'extno' => $file['id'],
+//        );
+//        if ('attachment' == $file['targetType']) {
+//            $params['type'] = $file['targetType'];
+//        }
+//        $api = $this->createApi('root');
+//        $result = $api->post("/resources/{$file['globalId']}/upload_finish", $params);
+        $result = $this->getResourceService()->finishUpload($file['globalId']);
+//        $file = $api->get("/resources/{$file['globalId']}", array('refresh' => true));
+        $file = $this->getResourceService()->get($file['globalId']);
         $result['convertStatus'] = 'none';
         $result['length'] = $file['length'];
 
@@ -649,6 +655,11 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
     {
         $apiType = $node.'-'.$version;
         $this->cloudApis[$apiType] = $mockApi;
+    }
+
+    protected function getResourceService()
+    {
+        return $this->biz['ESCloudSdk.resource'];
     }
 
     /**
