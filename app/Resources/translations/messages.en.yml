@@ -9723,3 +9723,5 @@ exception.review.not_found_review: Review not found
 exception.review.post_limit: Post no more than 5
 
 exception.favorite.forbidden_operate_favorite: Forbidden
+
+exception.s2b2c_product.adopt_failed: Adopt fail,Supplier is editing
