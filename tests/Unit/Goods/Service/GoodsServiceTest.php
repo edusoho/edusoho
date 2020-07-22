@@ -372,6 +372,16 @@ class GoodsServiceTest extends BaseTestCase
         ], $result);
     }
 
+    public function testUpdateGoodsMinAndMaxPrice()
+    {
+        $goods = $this->createGoods();
+        $this->createGoodsSpecs(['goodsId' => $goods['id'], 'targetId' => 1, 'price' => 10.00, 'status' => 'published']);
+        $this->createGoodsSpecs(['goodsId' => $goods['id'], 'targetId' => 2, 'price' => 1.00, 'status' => 'published']);
+        $res = $this->getGoodsService()->updateGoodsMinAndMaxPrice($goods['id']);
+        self::assertEquals(1.00, $res['minPrice']);
+        self::assertEquals(10.00, $res['maxPrice']);
+    }
+
     protected function createGoods($goods = [])
     {
         $default = [
