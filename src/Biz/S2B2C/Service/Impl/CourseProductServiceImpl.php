@@ -145,7 +145,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
         });
         $courseSetProduct = ArrayToolkit::get(array_values($courseSets), 0, []);
 
-        $newCourseSet = $this->getCourseSetService()->getCourseSet($courseSetProduct['localResourceId']);
+        $newCourseSet = $this->updateCourseSetProduct($courseSetProduct);
 
         $this->getProductService()->updateProduct($courseSetProduct['id'], ['localResourceId' => $newCourseSet['id'], 'syncStatus' => self::SYNC_STATUS_FINISHED]);
 
@@ -168,6 +168,36 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
         $this->getProductService()->updateProduct($courseSetProduct['id'], ['localVersion' => $courseSetProduct['remoteVersion'], 'changelog' => []]);
 
         return true;
+    }
+
+    protected function updateCourseSetProduct($courseSet)
+    {
+        if (empty($courseSetProduct)) {
+            $this->getLogger()->error('[updateProductVersionData] error $courseSetProduct not fount');
+            $this->createNewException(S2B2CProductException::UPDATE_PRODUCT_VERSION_FAIL());
+        }
+        $content = $this->getDistributeContent($courseSetProduct['s2b2cProductDetailId']);
+        if (empty($content)) {
+            $this->getLogger()->error('[updateProductVersionData] error $courseSetProductContent not fount');
+            $this->createNewException(S2B2CProductException::UPDATE_PRODUCT_VERSION_FAIL());
+        }
+        $newCourseSet = $this->getCourseSetService()->getCourseSet($courseSetProduct['localResourceId']);
+
+        return $this->getCourseSetService()->updateCourseSet(
+            $newCourseSet['id'],
+            ArrayToolkit::parts(
+                $content,
+                [
+                    'title',
+                    'subtitle',
+                    'serializeMode',
+                    'smallPicture',
+                    'middlePicture',
+                    'largePicture',
+                    'summary'
+                ]
+            )
+        );
     }
 
     protected function syncNewCourse($product, $courseSet)
@@ -270,6 +300,9 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
 
             $product = $this->getProductService()->updateProduct($product['id'], ArrayToolkit::parts($priceFields, ['suggestionPrice', 'cooperationPrice']));
             $course = $this->getCourseService()->getCourse($product['localResourceId']);
+            if (empty($course)) {
+                return true;
+            }
 
             $this->biz->offsetGet('s2b2c.merchant.logger')->info('[syncProductPrice] $merchantSetting', $s2b2cConfig);
 
@@ -304,6 +337,11 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
             if (empty($product)) {
                 $this->createNewException(CourseSetException::SOURCE_COURSE_NOTFOUND());
             }
+            //新增计划未进行同步的无需进行下架操作
+            $course = $this->getCourseService()->getCourse($product['localResourceId']);
+            if (empty($course) || $course['status'] != 'published') {
+                return true;
+            }
 
             $this->getCourseService()->closeCourse($product['localResourceId']);
             $this->commit();
@@ -333,6 +371,11 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
 
             if (empty($product)) {
                 $this->createNewException(CourseSetException::SOURCE_COURSE_NOTFOUND());
+            }
+
+            $courseSet = $this->getCourseSetService()->getCourseSet($product['localResourceId']);
+            if ($courseSet['status'] != 'published') {
+                return true;
             }
 
             $this->getCourseSetService()->closeCourseSet($product['localResourceId']);
