@@ -6033,10 +6033,10 @@ istanbul@^0.4.5:
     which "^1.1.1"
     wordwrap "^1.0.0"
 
-item-bank@1.0.11:
-  version "1.0.11"
-  resolved "https://registry.npm.taobao.org/item-bank/download/item-bank-1.0.11.tgz#8fca59f1b72ac644e159f450fb3a0a626072adb4"
-  integrity sha1-j8pZ8bcqxkThWfRQ+zoKYmByrbQ=
+item-bank@^1.0.11-2:
+  version "1.0.11-3"
+  resolved "https://registry.npm.taobao.org/item-bank/download/item-bank-1.0.11-3.tgz#1607e3a1715858b27f6638cd21993f0fd9ba476b"
+  integrity sha1-FgfjoXFYWLJ/ZjjNIZk/D9m6R2s=
   dependencies:
     "@babel/polyfill" "^7.8.7"
     ant-design-vue "^1.5.0"
