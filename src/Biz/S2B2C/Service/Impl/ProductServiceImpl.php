@@ -454,6 +454,29 @@ class ProductServiceImpl extends BaseService implements ProductService
         return true;
     }
 
+    /**
+     * @param $s2b2cProductId
+     * @return bool
+     */
+    public function notifyCourseSetNewVersion($s2b2cProductId)
+    {
+        $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
+
+        $courseSetProduct = $this->getProductBySupplierIdAndRemoteProductIdAndType($s2b2cConfig['supplierId'], $s2b2cProductId, 'course_set');
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetProduct['localResourceId']);
+
+        $localChangeLogs = $courseSetProduct['changelog'] ?: [];
+        $localChangeLogs[0] = [
+            'title' => $courseSet['title'],
+            'changeLog' => '课程基础信息更新'
+        ];
+
+        $this->getS2B2CProductDao()->update($courseSetProduct['id'], ['changelog' => $localChangeLogs]);
+        $this->getS2B2CProductDao()->wave([$courseSetProduct['id']], ['remoteVersion' => 1]);
+
+        return true;
+    }
+
     public function findUpdatedVersionProductList()
     {
         return $this->getS2B2CProductDao()->findRemoteVersionGTLocalVersion();

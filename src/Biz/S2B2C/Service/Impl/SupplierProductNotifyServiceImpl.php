@@ -66,6 +66,7 @@ class SupplierProductNotifyServiceImpl extends BaseService implements SupplierPr
             'closePlan' => 'closePlanEvent',
             'closeCourse' => 'closeCourseEvent',
             'newVersion' => 'newVersionEvent',
+            'modifyCourseSet' => 'modifyCourseSetEvent',
         ];
 
         if (!array_key_exists($notifyEvent->getEvent(), $handle)) {
@@ -139,6 +140,18 @@ class SupplierProductNotifyServiceImpl extends BaseService implements SupplierPr
     protected function closeCourseEvent($notifyEvent)
     {
         return $this->getCourseProductService()->closeCourseSet($notifyEvent->getProductId(), $notifyEvent->getData('courseSetId'));
+    }
+
+    /**
+     * @param \ApiBundle\Api\Resource\SyncProductNotify\NotifyEvent $notifyEvent
+     *
+     * @return bool
+     *
+     * @throws
+     */
+    protected function modifyCourseSetEvent($notifyEvent)
+    {
+        return $this->getProductService()->notifyCourseSetNewVersion($notifyEvent->getProductId());
     }
 
     /**
