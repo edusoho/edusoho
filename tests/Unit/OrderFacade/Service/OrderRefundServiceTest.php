@@ -352,7 +352,7 @@ class OrderRefundServiceTest extends BaseTestCase
     protected function createCourseProduct($courseFields = [])
     {
         $course = $this->createCourse($courseFields);
-        $courseProduct = $this->getProductService()->getProductByTargetIdAndType($course['id'], 'course');
+        $courseProduct = $this->getProductService()->getProductByTargetIdAndType($course['courseSetId'], 'course');
         $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByProductIdAndTargetId($courseProduct['id'], $course['id']);
 
         $product = new CourseProduct();

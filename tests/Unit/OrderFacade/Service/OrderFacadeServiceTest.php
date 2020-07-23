@@ -40,7 +40,7 @@ class OrderFacadeServiceTest extends BaseTestCase
             'buyable' => true,
         ]);
 
-        $product = $this->getProductService()->getProductByTargetIdAndType($course['id'], 'course');
+        $product = $this->getProductService()->getProductByTargetIdAndType($course['courseSetId'], 'course');
         $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByProductIdAndTargetId($product['id'], $course['id']);
 
         $this->setNewCurrentUser();
@@ -82,7 +82,7 @@ class OrderFacadeServiceTest extends BaseTestCase
             'buyable' => true,
         ]);
 
-        $product = $this->getProductService()->getProductByTargetIdAndType($course['id'], 'course');
+        $product = $this->getProductService()->getProductByTargetIdAndType($course['courseSetId'], 'course');
         $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByProductIdAndTargetId($product['id'], $course['id']);
 
         $this->mockBiz('Course:MemberService', [

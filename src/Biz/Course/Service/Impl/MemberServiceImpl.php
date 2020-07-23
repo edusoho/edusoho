@@ -86,7 +86,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         try {
             $this->beginTransaction();
             if ($data['price'] > 0) {
-                $product = $this->getProductService()->getProductByTargetIdAndType($course['id'], 'course');
+                $product = $this->getProductService()->getProductByTargetIdAndType($course['courseSetId'], 'course');
                 $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByProductIdAndTargetId($product['id'], $course['id']);
                 $order = $this->createOrder($goodsSpecs['id'], $user['id'], $data);
             } else {

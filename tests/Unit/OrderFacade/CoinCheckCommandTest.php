@@ -157,7 +157,7 @@ class CoinCheckCommandTest extends BaseTestCase
         $course = $this->createCourse();
 
         $this->setNewCurrentUser();
-        $order = $this->createCourseOrder($course['id']);
+        $order = $this->createCourseOrder($course);
 
         $result = $checker->check($order, ['coinAmount' => 0, 'payPassword' => '123456']);
 
@@ -173,7 +173,7 @@ class CoinCheckCommandTest extends BaseTestCase
         $this->getSettingService()->set('coin', ['coin_enabled' => 1, 'coin_name' => 'coin name', 'cash_rate' => 1, 'cash_model' => 'currency']);
 
         $this->setNewCurrentUser();
-        $order = $this->createCourseOrder($course['id']);
+        $order = $this->createCourseOrder($course);
 
         $payChecker = new OrderPayChecker();
         $biz = $this->getBiz();
@@ -198,10 +198,10 @@ class CoinCheckCommandTest extends BaseTestCase
         $result = $payChecker->check($order, ['coinAmount' => 10000, 'payPassword' => '123456']);
     }
 
-    protected function createCourseOrder($courseId)
+    protected function createCourseOrder($course)
     {
-        $courseProduct = $this->getProductService()->getProductByTargetIdAndType($courseId, 'course');
-        $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByProductIdAndTargetId($courseProduct['id'], $courseId);
+        $courseProduct = $this->getProductService()->getProductByTargetIdAndType($course['courseSetId'], 'course');
+        $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByProductIdAndTargetId($courseProduct['id'], $course['id']);
 
         $product = new CourseProduct();
         $product->setBiz($this->getBiz());

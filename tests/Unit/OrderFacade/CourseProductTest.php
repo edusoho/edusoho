@@ -88,7 +88,7 @@ class CourseProductTest extends BaseTestCase
 
         $course = $this->getCourseService()->getCourse($courseSet['defaultCourseId']);
 
-        $product = $this->getProductService()->getProductByTargetIdAndType($course['id'], 'course');
+        $product = $this->getProductService()->getProductByTargetIdAndType($course['courseSetId'], 'course');
 
         $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByProductIdAndTargetId($product['id'], $course['id']);
         $goods = $this->getGoodsService()->getGoods($goodsSpecs['goodsId']);
