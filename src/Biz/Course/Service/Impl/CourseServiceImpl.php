@@ -394,6 +394,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $this->dispatchEvent('course.update', new Event($course));
         $this->dispatchEvent('course.marketing.update', ['oldCourse' => $oldCourse, 'newCourse' => $course]);
+
+        return $course;
     }
 
     public function updateCourse($id, $fields)

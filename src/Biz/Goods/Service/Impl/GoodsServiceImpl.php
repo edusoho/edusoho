@@ -100,6 +100,11 @@ class GoodsServiceImpl extends BaseService implements GoodsService
         return $this->getGoodsDao()->delete($id);
     }
 
+    public function countGoods($conditions)
+    {
+        return $this->getGoodsDao()->count($conditions);
+    }
+
     public function searchGoods($conditions, $orderBys, $start, $limit, $columns = [])
     {
         return $this->getGoodsDao()->search($conditions, $orderBys, $start, $limit, $columns);

@@ -18,6 +18,8 @@ interface GoodsService
 
     public function unpublishGoods($id);
 
+    public function countGoods($conditions);
+
     public function searchGoods($conditions, $orderBys, $start, $limit, $columns = []);
 
     public function getGoodsByProductId($productId);
