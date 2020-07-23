@@ -289,6 +289,7 @@ class EduSohoUpgrade extends AbstractUpdater
                   `completionRate` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '相对当前题库的完成率',
                   `role` enum('student','teacher') NOT NULL DEFAULT 'student' COMMENT '成员角色',
                   `locked` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '学员是否锁定',
+                  `deadlineNotified` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '有效期通知',
                   `remark` varchar(255) NOT NULL COMMENT '备注',
                   `createdTime` int(11) unsigned NOT NULL DEFAULT '0',
                   `updatedTime` int(11) unsigned NOT NULL DEFAULT '0',
