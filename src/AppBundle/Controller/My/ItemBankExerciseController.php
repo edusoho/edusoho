@@ -79,7 +79,7 @@ class ItemBankExerciseController extends BaseController
         if (!empty($exerciseIds)) {
             $exercises = $this->getItemBankExerciseService()->search(
                 $conditions,
-                [],
+                ['createdTime' => 'DESC'],
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );
