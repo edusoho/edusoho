@@ -30,6 +30,9 @@ class MarketingClassroomMemberServiceImpl extends ClassroomServiceImpl
 
     public function createMarketingOrder($classroomId, $userId, $data)
     {
-        return $this->createOrder($classroomId, $userId, $data);
+        $product = $this->getProductService()->getProductByTargetIdAndType($classroomId, 'classroom');
+        $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByProductIdAndTargetId($product['id'], $classroomId);
+
+        return $this->createOrder($goodsSpecs['id'], $userId, $data);
     }
 }

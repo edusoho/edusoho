@@ -4,7 +4,11 @@ namespace Tests\Unit\OrderFacade\Service;
 
 use AppBundle\Common\ReflectionUtils;
 use Biz\BaseTestCase;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
+use Biz\Goods\Service\GoodsService;
 use Biz\OrderFacade\Product\CourseProduct;
+use Biz\Product\Service\ProductService;
 
 class OrderRefundServiceTest extends BaseTestCase
 {
@@ -259,14 +263,12 @@ class OrderRefundServiceTest extends BaseTestCase
 
     public function testNotifyStudent()
     {
-        $biz = $this->getBiz();
         $orderRefundService = $this->getOrderRefundService();
-        $courseProduct = $biz['order.product.'.CourseProduct::TYPE];
-        $courseProduct->init(['targetId' => 1]);
+        $courseProduct = $this->createCourseProduct();
+
         $message = [
             'type' => 'apply_create',
-            'targetId' => $courseProduct->targetId,
-            'targetType' => $courseProduct->targetType,
+            'targetUrl' => $courseProduct->backUrl,
             'title' => $courseProduct->title,
             'userId' => 1,
             'nickname' => 'admin',
@@ -313,8 +315,7 @@ class OrderRefundServiceTest extends BaseTestCase
         $courseProduct->init(['targetId' => 1]);
         $message = [
             'type' => 'admin_operate',
-            'targetId' => $courseProduct->targetId,
-            'targetType' => $courseProduct->targetType,
+            'targetUrl' => $courseProduct->backUrl,
             'title' => $courseProduct->title,
             'userId' => 1,
             'nickname' => 'admin',
@@ -348,6 +349,44 @@ class OrderRefundServiceTest extends BaseTestCase
         $this->assertNull($result);
     }
 
+    protected function createCourseProduct($courseFields = [])
+    {
+        $course = $this->createCourse($courseFields);
+        $courseProduct = $this->getProductService()->getProductByTargetIdAndType($course['id'], 'course');
+        $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByProductIdAndTargetId($courseProduct['id'], $course['id']);
+
+        $product = new CourseProduct();
+        $product->setBiz($this->getBiz());
+        $product->init(['targetId' => $goodsSpecs['id']]);
+
+        return $product;
+    }
+
+    protected function createCourse($courseFields = [])
+    {
+        $courseFields = array_merge([
+            'type' => 'normal',
+            'title' => 'test course title',
+            'about' => 'course about',
+            'summary' => 'course summary',
+            'price' => '100.00',
+            'originPrice' => '100.00',
+            'isFree' => 1,
+            'buyable' => 1,
+        ], $courseFields);
+
+        $courseSet = $this->getCourseSetService()->createCourseSet($courseFields);
+
+        $course = $this->getCourseService()->getCourse($courseSet['defaultCourseId']);
+
+        $this->getCourseService()->updateCourse($course['id'], $courseFields);
+        $this->getCourseService()->updateBaseInfo($course['id'], $courseFields);
+
+        $this->getCourseSetService()->publishCourseSet($courseSet['id']);
+
+        return $this->getCourseService()->getCourse($course['id']);
+    }
+
     protected function getOrderRefundService()
     {
         return $this->createService('OrderFacade:OrderRefundService');
@@ -361,5 +400,37 @@ class OrderRefundServiceTest extends BaseTestCase
     protected function getNotificationService()
     {
         return $this->createService('User:NotificationService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getProductService()
+    {
+        return $this->createService('Product:ProductService');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->createService('Goods:GoodsService');
     }
 }

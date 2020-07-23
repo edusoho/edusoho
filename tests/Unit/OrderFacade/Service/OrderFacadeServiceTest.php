@@ -2,12 +2,20 @@
 
 namespace Tests\Unit\OrderFacade\Service;
 
-use Biz\Accessor\AccessorInterface;
 use Biz\BaseTestCase;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
+use Biz\Goods\Service\GoodsService;
+use Biz\Order\OrderException;
 use Biz\OrderFacade\Product\ClassroomProduct;
 use Biz\OrderFacade\Product\CourseProduct;
 use Biz\OrderFacade\Service\OrderFacadeService;
+use Biz\Product\Service\ProductService;
 use Biz\System\Service\LogService;
+use Biz\User\CurrentUser;
+use Biz\User\Dao\UserDao;
+use Ramsey\Uuid\Uuid;
 
 class OrderFacadeServiceTest extends BaseTestCase
 {
@@ -22,28 +30,23 @@ class OrderFacadeServiceTest extends BaseTestCase
     {
         $biz = $this->getBiz();
 
-        $this->mockBiz('Course:CourseService', [
-            [
-                'functionName' => 'getCourse',
-                'returnValue' => [
-                    'id' => 1,
-                    'title' => 'course name1',
-                    'courseSetTitle' => 'course set',
-                    'price' => 100,
-                    'originPrice' => 200,
-                    'courseSetId' => 1,
-                    'status' => 'published',
-                    'maxRate' => 0,
-                    'buyable' => true,
-                ],
-            ],
-            [
-                'functionName' => 'canJoinCourse',
-                'returnValue' => ['code' => AccessorInterface::SUCCESS],
-            ],
+        $course = $this->createCourse([
+            'title' => 'course name1',
+            'price' => 100,
+            'originPrice' => 200,
+            'courseSetId' => 1,
+            'status' => 'published',
+            'maxRate' => 0,
+            'buyable' => true,
         ]);
+
+        $product = $this->getProductService()->getProductByTargetIdAndType($course['id'], 'course');
+        $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByProductIdAndTargetId($product['id'], $course['id']);
+
+        $this->setNewCurrentUser();
+
         $courseProduct = $biz['order.product.'.CourseProduct::TYPE];
-        $courseProduct->init(['targetId' => 1]);
+        $courseProduct->init(['targetId' => $goodsSpecs['id']]);
 
         $courseProduct->pickedDeducts = [
             ['deduct_id' => 1, 'deduct_type' => 'rewardPoint', 'deduct_amount' => 20],
@@ -52,18 +55,16 @@ class OrderFacadeServiceTest extends BaseTestCase
         ];
 
         $order = $this->getOrderFacadeService()->create($courseProduct);
-
         $this->assertEquals(60 * 100, $order['pay_amount']);
-        $this->assertEquals('course set-course name1', $order['title']);
+        $this->assertEquals('course name1-course name1', $order['title']);
     }
 
-    /**
-     * @expectedException \Biz\Order\OrderException
-     */
     public function testCheckOrderBeforePay()
     {
+        $this->expectException(OrderException::class);
+
         $this->mockBiz('Order:OrderService', [
-           ['functionName' => 'getOrderBySn', 'returnValue' => []],
+            ['functionName' => 'getOrderBySn', 'returnValue' => []],
         ]);
 
         $this->getOrderFacadeService()->checkOrderBeforePay('12456', []);
@@ -71,34 +72,28 @@ class OrderFacadeServiceTest extends BaseTestCase
 
     public function testCreateCourseImportOrder()
     {
-        $this->mockBiz('Course:CourseService', [
-            [
-                'functionName' => 'getCourse',
-                'returnValue' => [
-                    'id' => 1,
-                    'title' => 'course name1',
-                    'courseSetTitle' => 'course set',
-                    'price' => 1,
-                    'originPrice' => 10,
-                    'courseSetId' => 1,
-                    'status' => 'published',
-                    'maxRate' => 0,
-                ],
-            ],
+        $course = $this->createCourse([
+            'title' => 'course name1',
+            'price' => 100,
+            'originPrice' => 200,
+            'courseSetId' => 1,
+            'status' => 'published',
+            'maxRate' => 0,
+            'buyable' => true,
         ]);
+
+        $product = $this->getProductService()->getProductByTargetIdAndType($course['id'], 'course');
+        $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByProductIdAndTargetId($product['id'], $course['id']);
 
         $this->mockBiz('Course:MemberService', [
             ['functionName' => 'becomeStudent', 'returnValue' => ['id' => 1, 'courseId' => 1, 'userId' => 10]],
             ['functionName' => 'isCourseStudent', 'returnValue' => false],
         ]);
-        $this->mockBiz('Course:CourseSetService', [
-            ['functionName' => 'getCourseSet', 'returnValue' => ['id' => 1, 'title' => 'course set name1', 'cover' => '', 'status' => 'published']],
-        ]);
 
         $biz = $this->getBiz();
         $courseProduct = $biz['order.product.'.CourseProduct::TYPE];
 
-        $courseProduct->init(['targetId' => 1]);
+        $courseProduct->init(['targetId' => $goodsSpecs['id']]);
         $courseProduct->price = 10;
 
         $params = [
@@ -108,22 +103,21 @@ class OrderFacadeServiceTest extends BaseTestCase
         $order = $this->getOrderFacadeService()->createSpecialOrder($courseProduct, 10, $params);
 
         $this->assertEquals('paid', $order['status']);
-        $this->assertEquals('course set-course name1', $order['title']);
+        $this->assertEquals('course name1-course name1', $order['title']);
         $this->assertArraySubset($params, $order);
     }
 
     public function testCreateClassroomImportOrder()
     {
-        $this->mockBiz('Classroom:ClassroomService', [
-            ['functionName' => 'getClassroom', 'returnValue' => ['id' => 1, 'title' => 'classroom name1', 'price' => 10, 'middlePicture' => '', 'status' => 'published', 'maxRate' => 0, 'smallPicture' => '', 'largePicture' => '']],
-            ['functionName' => 'isClassroomStudent', 'returnValue' => false],
-            ['functionName' => 'becomeStudent', 'returnValue' => []],
-        ]);
+        $classroom = $this->createClassroom();
+
+        $product = $this->getProductService()->getProductByTargetIdAndType($classroom['id'], 'classroom');
+        $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByProductIdAndTargetId($product['id'], $classroom['id']);
 
         $biz = $this->getBiz();
         $product = $biz['order.product.'.ClassroomProduct::TYPE];
 
-        $product->init(['targetId' => 1]);
+        $product->init(['targetId' => $goodsSpecs['id']]);
         $product->price = 10;
 
         $params = [
@@ -180,10 +174,80 @@ class OrderFacadeServiceTest extends BaseTestCase
         $biz = $this->getBiz();
 
         $currency = $this->getMockBuilder('Biz\OrderFacade\Currency')
-                   ->disableOriginalConstructor()
-                   ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $currency->isoCode = 'CNY';
         $biz['currency'] = $currency;
+    }
+
+    protected function createCourse($courseFields = [])
+    {
+        $courseFields = array_merge([
+            'type' => 'normal',
+            'title' => 'test course title',
+            'about' => 'course about',
+            'summary' => 'course summary',
+            'price' => '100.00',
+            'originPrice' => '100.00',
+            'isFree' => 1,
+            'buyable' => 1,
+        ], $courseFields);
+
+        $courseSet = $this->getCourseSetService()->createCourseSet($courseFields);
+
+        $course = $this->getCourseService()->getCourse($courseSet['defaultCourseId']);
+
+        $this->getCourseService()->updateCourse($course['id'], $courseFields);
+        $this->getCourseService()->updateBaseInfo($course['id'], $courseFields);
+
+        $this->getCourseSetService()->publishCourseSet($courseSet['id']);
+
+        return $this->getCourseService()->getCourse($course['id']);
+    }
+
+    protected function createClassroom($classroomFields = [])
+    {
+        $classroomFields = array_merge([
+            'title' => 'classroom name1',
+            'price' => 10, 'middlePicture' => '',
+            'status' => 'published', 'maxRate' => 0,
+            'smallPicture' => '',
+            'largePicture' => '',
+        ], $classroomFields);
+
+        $classroom = $this->getClassroomService()->addClassroom($classroomFields);
+        $this->getClassroomService()->updateClassroom($classroom['id'], $classroomFields);
+        $this->getClassroomService()->publishClassroom($classroom['id']);
+
+        return $this->getClassroomService()->getClassroom($classroom['id']);
+    }
+
+    protected function setNewCurrentUser($newUser = [])
+    {
+        $newUser = array_merge([
+            'nickname' => 'test_user',
+            'type' => 'default',
+            'email' => 'defaultUser@howzhi.com',
+            'password' => '123123',
+            'salt' => 'salt1',
+            'roles' => ['ROLE_USER'],
+            'uuid' => Uuid::uuid4(),
+        ], $newUser);
+
+        $user = $this->getUserDao()->create($newUser);
+
+        $user['currentIp'] = '127.0.0.1';
+
+        $currentUser = new CurrentUser();
+        $this->getServiceKernel()->setCurrentUser($currentUser->fromArray($user));
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
     }
 
     /**
@@ -200,5 +264,45 @@ class OrderFacadeServiceTest extends BaseTestCase
     private function getLogService()
     {
         return $this->createService('System:LogService');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
+    }
+
+    /**
+     * @return UserDao
+     */
+    protected function getUserDao()
+    {
+        return $this->createDao('User:UserDao');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getProductService()
+    {
+        return $this->createService('Product:ProductService');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->createService('Goods:GoodsService');
     }
 }
