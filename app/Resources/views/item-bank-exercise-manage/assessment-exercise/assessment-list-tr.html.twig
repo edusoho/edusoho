@@ -37,7 +37,7 @@
         {% if isSearch is defined %}
           <div class="empty">{{ 'my.teaching.question_bank.testpaper.empty'|trans }}</div>
         {% else %}
-          {{ 'course.testpaper_manage.empty'|trans({'%createUrl%':path('question_bank_manage_testpaper_create', {id: questionBank.id})})|raw }}
+          {{ 'course.testpaper_manage.empty'|trans({'%createUrl%':path('question_bank_manage_testpaper_list', {id: questionBank.id})})|raw }}
         {% endif %}
       </td>
     </tr>

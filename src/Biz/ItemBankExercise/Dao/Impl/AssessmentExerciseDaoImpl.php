@@ -38,6 +38,15 @@ class AssessmentExerciseDaoImpl extends AdvancedDaoImpl implements AssessmentExe
         );
     }
 
+    public function getAssessmentCountGroupByExerciseId($ids)
+    {
+        $builder = $this->createQueryBuilder(['exerciseIds' => $ids])
+            ->select('exerciseId, count(id) AS assessmentNum')
+            ->groupBy('exerciseId');
+
+        return $builder->execute()->fetchAll();
+    }
+
     public function declares()
     {
         return [
@@ -45,6 +54,7 @@ class AssessmentExerciseDaoImpl extends AdvancedDaoImpl implements AssessmentExe
             'orderbys' => ['createdTime'],
             'conditions' => [
                 'id in (:ids)',
+                'exerciseId in (:exerciseIds)',
                 'exerciseId = :exerciseId',
                 'moduleId = :moduleId',
                 'assessmentId = :assessmentId',

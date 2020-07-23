@@ -14,6 +14,12 @@
             <span class="cd-dark-major">{{ exercise.title }}</span>
           {% endblock %}
         </div>
+        <div>
+          <span class="exercise-deadline">{{ 'course.teaching_plan.expiry_date'|trans }}</span>
+          <span>
+            {% include 'item-bank-exercise/header/member-deadline-info.html.twig' %}
+          </span>
+        </div>
       </div>
       <div class="exercise-header-qrcode">
         <div class="tip">
