@@ -295,13 +295,14 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
             $product = $this->getProductService()->getByProductIdAndRemoteResourceIdAndType($s2b2cProductId, $remoteCourseId, 'course');
 
             if (empty($product)) {
-                $this->createNewException(CourseSetException::SOURCE_COURSE_NOTFOUND());
+                //新增计划可能未更新导致无法查询到
+                return true;
             }
 
             $product = $this->getProductService()->updateProduct($product['id'], ArrayToolkit::parts($priceFields, ['suggestionPrice', 'cooperationPrice']));
             $course = $this->getCourseService()->getCourse($product['localResourceId']);
             if (empty($course)) {
-                return true;
+                $this->createNewException(CourseSetException::SOURCE_COURSE_NOTFOUND());
             }
 
             $this->biz->offsetGet('s2b2c.merchant.logger')->info('[syncProductPrice] $merchantSetting', $s2b2cConfig);
