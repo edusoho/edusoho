@@ -87,9 +87,11 @@ class ClassroomGoodsMediator extends AbstractGoodsMediator
         $this->getProductService()->deleteProduct($existProduct['id']);
 
         $existGoods = $this->getGoodsService()->getGoodsByProductId($existProduct['id']);
+        $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($existGoods['id'], $classroom['id']);
         if (empty($existGoods)) {
             return;
         }
+        $this->getGoodsService()->deleteGoodsSpecs($goodsSpecs['id']);
         $this->getGoodsService()->deleteGoods($existGoods['id']);
     }
 

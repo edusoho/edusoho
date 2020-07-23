@@ -104,6 +104,10 @@ class CourseSetGoodsMediator extends AbstractGoodsMediator
         return [$existProduct, $goods];
     }
 
+    /**
+     * @param $courseSet
+     * 删除课程的同时触发商品的删除，同时删除规格
+     */
     public function onDelete($courseSet)
     {
         $existProduct = $this->getProductService()->getProductByTargetIdAndType($courseSet['id'], 'course');
@@ -116,6 +120,11 @@ class CourseSetGoodsMediator extends AbstractGoodsMediator
         if (empty($existGoods)) {
             return;
         }
+        $goodsSpecs = $this->getGoodsService()->findGoodsSpecsByGoodsId($existGoods['id']);
+        foreach ($goodsSpecs as $goodsSpec) {
+            $this->getGoodsService()->deleteGoodsSpecs($goodsSpec['id']);
+        }
+
         $this->getGoodsService()->deleteGoods($existGoods['id']);
     }
 }
