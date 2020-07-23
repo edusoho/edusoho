@@ -126,7 +126,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
         $rightCount = empty($answerQuestionReports[AnswerQuestionReportService::STATUS_RIGHT]) ? 0 : count($answerQuestionReports[AnswerQuestionReportService::STATUS_RIGHT]);
 
-        return intval($rightCount / $totalCount * 100 + 0.5);
+        return sprintf("%.1f", $rightCount / $totalCount * 100 + 0.05);
     }
 
     protected function sumScore(array $answerQuestionReports)
