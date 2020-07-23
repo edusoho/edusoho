@@ -336,11 +336,12 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
             $product = $this->getProductService()->getByProductIdAndRemoteResourceIdAndType($s2b2cProductId, $remoteCourseId, 'course');
 
             if (empty($product)) {
-                $this->createNewException(CourseSetException::SOURCE_COURSE_NOTFOUND());
+                //新增计划可能未更新导致无法查询到
+                return true;
             }
             //新增计划未进行同步的无需进行下架操作
             $course = $this->getCourseService()->getCourse($product['localResourceId']);
-            if (empty($course) || $course['status'] != 'published') {
+            if ($course['status'] != 'published') {
                 return true;
             }
 
