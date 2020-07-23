@@ -41,7 +41,7 @@ class AssessmentExerciseDaoImpl extends AdvancedDaoImpl implements AssessmentExe
     public function getAssessmentCountGroupByExerciseId($ids)
     {
         $builder = $this->createQueryBuilder(['exerciseIds' => $ids])
-            ->select('exerciseId, count(id)assessmentNum')
+            ->select('exerciseId, count(id) AS assessmentNum')
             ->groupBy('exerciseId');
 
         return $builder->execute()->fetchAll();
