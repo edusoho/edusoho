@@ -182,6 +182,7 @@ class ProductServiceImpl extends BaseService implements ProductService
                 'createdTime',
                 'updatedTime',
                 'syncStatus',
+                's2b2cProductDetailId',
             ]
         );
 

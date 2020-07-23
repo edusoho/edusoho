@@ -124,6 +124,7 @@ class SupplierProductNotifyServiceTest extends BaseTestCase
             'productType' => 'course',
             'remoteProductId' => 1,
             'remoteResourceId' => 1,
+            's2b2cProductDetailId' => 1,
             'localResourceId' => 1,
             'cooperationPrice' => (float) 2.00,
             'suggestionPrice' => (float) 3.00,
