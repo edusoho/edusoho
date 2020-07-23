@@ -13,7 +13,9 @@ use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\MaterialService;
 use Biz\Favorite\Service\FavoriteService;
 use Biz\File\Service\UploadFileService;
+use Biz\Goods\Service\GoodsService;
 use Biz\Order\OrderException;
+use Biz\Product\Service\ProductService;
 use Biz\Review\Service\ReviewService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
@@ -79,6 +81,13 @@ class CourseController extends CourseBaseController
                     return $this->redirect(($this->generateUrl('my_course_show', ['id' => $id])));
                 }
             }
+        }
+
+        if (0 == $course['parentId']) {
+            $product = $this->getProductService()->getProductByTargetIdAndType($courseSet['id'], 'course');
+            $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
+
+            return $this->redirect($this->generateUrl('goods_show', ['id' => $goods['id']]));
         }
 
         if ($this->isPluginInstalled('Discount')) {
@@ -936,5 +945,21 @@ class CourseController extends CourseBaseController
     protected function getFavoriteService()
     {
         return $this->createService('Favorite:FavoriteService');
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getProductService()
+    {
+        return $this->createService('Product:ProductService');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->createService('Goods:GoodsService');
     }
 }
