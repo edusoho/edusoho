@@ -12,12 +12,12 @@
     {% endfor %}
   </ul>
   {% set token = uploader_token('subtitle', media.id, 'private') %}
-  <div class="col-md-2  caption-uploader js-select-file" id="subtitle-uploader" style="width: 130px;{% if subtitles|length > 3 %} display:none;{% endif %}" 
+  <div class="col-md-2  caption-uploader js-select-file" id="subtitle-uploader" style="width: 130px;border: none;{% if subtitles|length > 3 %} display:none;{% endif %}"
   data-media-id="{{ media.id }}"
   data-media-global-id="{{ media.globalId }}"
   data-subtitle-create-url="{{ url('media_subtitle_create', {mediaId: media.id}) }}"
-  data-init-url="{{ url('uploader_init', {token:token}) }}"
-  data-finish-url="{{ url('uploader_finished', {token:token}) }}"
+  data-init-url="{{ url('uploader_init', {uploaderToken:token}) }}"
+  data-finish-url="{{ url('uploader_finished', {uploaderToken:token}) }}"
   >
   </div>
 </div>

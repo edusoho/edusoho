@@ -59,7 +59,7 @@ define(function(require, exports, module) {
     finishUpload: function(deferred) {
       var self = this.file.uploaderWidget;
       var cloud2UploadStatus = self.get('cloud2UploadStatus');
-      var hashId = this.base64encode(this.utf16to8(this.file.hashId));
+      var hashId = this.base64encode(this.utf16to8(this.file.initResponse.reskey));
       var url = self.get('uploadUrl') + '/mkfile/' + cloud2UploadStatus.currentFileSize + '/key/' + hashId;
       var result = {};
 

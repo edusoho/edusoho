@@ -310,7 +310,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
     public function initUpload($params)
     {
-        if (!ArrayToolkit::requireds($params, ['targetId', 'targetType', 'extno'])) {
+        if (!ArrayToolkit::requireds($params, ['targetId', 'targetType'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
@@ -1248,7 +1248,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $file = $implementor->prepareUpload($params);
             $params = array_merge($params, $file);
             $attachment = [
-                'file_name' => $params['filename'],
+                'file_name' => $params['name'],
                 'ext' => $params['ext'],
                 'size' => $params['fileSize'],
                 'file_type' => $params['type'],
@@ -1287,9 +1287,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             ];
             $result = $this->getFileImplementor('cloud')->finishedUpload($file, $params);
 
-            if (empty($result) || !$result['success']) {
+            if (empty($result) || !$result['no']) {
                 $this->createNewException(UploadFileException::UPLOAD_FAILED());
             }
+
             $this->getAttachmentService()->finishUpload($attachment['id']);
 
             $this->commit();
