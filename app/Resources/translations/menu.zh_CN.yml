@@ -503,6 +503,11 @@ admin_v2.course.item_bank_exercise: 题库练习管理
 admin_v2.course.item_bank_exercise.basic_tab: 题库练习管理
 admin_v2.course.item_bank_exercise.analysis_tab: 题库练习统计
 admin_v2.course.item_bank_exercise.recommend_list_tab: 题库练习推荐
+admin_v2.course.item_bank_exercise.basic_tab.manage_btn: 管理题库练习
+admin_v2.course.item_bank_exercise.basic_tab.recommend_btn: 推荐题库练习
+admin_v2.course.item_bank_exercise.basic_tab.close_btn: 关闭题库练习
+admin_v2.course.item_bank_exercise.basic_tab.publish_submit_btn: 发布题库练习
+admin_v2.course.item_bank_exercise.basic_tab.delete_submit_btn: 删除题库练习
 
 # 教学-课程管理-公开课模块
 admin_v2.course.open_course_menu: 公开课管理
