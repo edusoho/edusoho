@@ -138,7 +138,7 @@ class GoodComponent extends AbstractResource
         }
     }
 
-    protected function getRecommendGoodsComponent($goods)
+    private function getRecommendGoodsComponent($goods)
     {
         $recommendGoods = $this->getRecommendGoodsService()->findRecommendedGoodsByGoods($goods);
 
@@ -149,7 +149,7 @@ class GoodComponent extends AbstractResource
         return $recommendGoods;
     }
 
-    protected function getClassroomCourses($product)
+    private function getClassroomCourses($product)
     {
         if ('classroom' !== $product['targetType']) {
             return [];
@@ -163,7 +163,7 @@ class GoodComponent extends AbstractResource
     /**
      * @return GoodsService
      */
-    protected function getGoodsService()
+    private function getGoodsService()
     {
         return $this->service('Goods:GoodsService');
     }
@@ -171,7 +171,7 @@ class GoodComponent extends AbstractResource
     /**
      * @return RecommendGoodsService
      */
-    protected function getRecommendGoodsService()
+    private function getRecommendGoodsService()
     {
         return $this->service('Goods:RecommendGoodsService');
     }
@@ -179,7 +179,7 @@ class GoodComponent extends AbstractResource
     /**
      * @return ProductService
      */
-    protected function getProductService()
+    private function getProductService()
     {
         return $this->service('Product:ProductService');
     }
@@ -187,7 +187,7 @@ class GoodComponent extends AbstractResource
     /**
      * @return FavoriteService
      */
-    protected function getFavoriteService()
+    private function getFavoriteService()
     {
         return $this->service('Favorite:FavoriteService');
     }
@@ -195,7 +195,7 @@ class GoodComponent extends AbstractResource
     /**
      * @return SettingService
      */
-    protected function getSettingService()
+    private function getSettingService()
     {
         return $this->service('System:SettingService');
     }
@@ -203,7 +203,7 @@ class GoodComponent extends AbstractResource
     /**
      * @return ClassroomService
      */
-    protected function getClassroomService()
+    private function getClassroomService()
     {
         return $this->service('Classroom:ClassroomService');
     }
@@ -211,7 +211,7 @@ class GoodComponent extends AbstractResource
     /**
      * @return CourseSetService
      */
-    protected function getCourseSetService()
+    private function getCourseSetService()
     {
         return $this->service('Course:CourseSetService');
     }
