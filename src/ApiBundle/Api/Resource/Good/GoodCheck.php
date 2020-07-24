@@ -11,15 +11,24 @@ use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Goods\Service\GoodsService;
-use Biz\OrderFacade\Exception\OrderPayCheckException;
-use Biz\OrderFacade\Product\Product;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserFieldService;
 use Biz\User\Service\UserService;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-class GoodBuy extends AbstractResource
+class GoodCheck extends AbstractResource
 {
+    const NO_REMAIN = 'no-remain';
+
+    const AVATAR_ALERT = 'avatar-alert';
+
+    const FILL_USER_INFO = 'fill-user-info';
+
+    const PAYMENT_DISABLED = 'payments-disabled';
+
+    const IS_JOINED = 'is-joined';
+
+    const SUCCESS = 'success';
+
     public function add(ApiRequest $request, $id)
     {
         $params = $request->request->all();
@@ -30,34 +39,32 @@ class GoodBuy extends AbstractResource
 
         $goods = $this->getGoodsService()->getGoods($id);
         $goodsSpecs = $this->getGoodsService()->getGoodsSpecs($params['targetId']);
-        $params['targetType'] = $goods['type'];
 
         if ($this->needNoStudentNumTip($goods['type'], $goodsSpecs['targetId'])) {
-            return ['success' => false, 'noticeTemplate' => 'no-remain', 'url' => ''];
+            return ['success' => false, 'code' => self::NO_REMAIN];
         }
 
         if ($this->needUploadAvatar()) {
-            return ['success' => false, 'noticeTemplate' => 'avatar-alert', 'url' => ''];
+            return ['success' => false, 'code' => self::AVATAR_ALERT];
         }
 
         if ($this->needFillUserInfo()) {
-            return ['success' => false, 'noticeTemplate' => 'fill-user-info', 'url' => ''];
+            return ['success' => false, 'code' => self::FILL_USER_INFO];
         }
 
         if ($this->needOpenPayment($goodsSpecs)) {
-            return ['success' => false, 'noticeTemplate' => 'payments-disabled', 'url' => ''];
+            return ['success' => false, 'code' => self::PAYMENT_DISABLED];
         }
 
         $this->tryFreeJoin($goods['type'], $goodsSpecs['targetId']);
 
         if ($this->isJoined($goods['type'], $goodsSpecs['targetId'])) {
-            return ['success' => false, 'noticeTemplate' => '', 'url' => $this->getSuccessUrl($goods['type'], $goodsSpecs['targetId'])];
+            return ['success' => false, 'code' => self::IS_JOINED];
         }
 
         return [
             'success' => true,
-            'noticeTemplate' => '',
-            'url' => $this->generateUrl('order_show', $params),
+            'code' => self::SUCCESS,
         ];
     }
 
@@ -134,41 +141,6 @@ class GoodBuy extends AbstractResource
         } elseif ('classroom' == $type) {
             return $this->getClassroomService()->isClassroomStudent($id, $this->getCurrentUser()->getId());
         }
-    }
-
-    protected function getSuccessUrl($type, $id)
-    {
-        if ('course' == $type) {
-            return $this->generateUrl('my_course_show', ['id' => $id]);
-        } elseif ('classroom' == $type) {
-            return $this->generateUrl('classroom_show', ['id' => $id]);
-        }
-    }
-
-    protected function getProductByParams($params)
-    {
-        try {
-            $product = $this->getProduct($params['targetType'], $params);
-            $product->validate();
-            $product->setAvailableDeduct();
-            $product->setPickedDeduct([]);
-
-            return $product;
-        } catch (OrderPayCheckException $payCheckException) {
-            throw new BadRequestHttpException($payCheckException->getMessage(), $payCheckException, $payCheckException->getCode());
-        }
-    }
-
-    private function getProduct($targetType, $params)
-    {
-        $biz = $this->getBiz();
-
-        /* @var $product Product */
-        $product = $biz['order.product.'.$targetType];
-
-        $product->init($params);
-
-        return $product;
     }
 
     /**

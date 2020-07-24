@@ -59,7 +59,7 @@
         </div>
 
         <!-- 立即购买 -->
-        <buy-sku :sku="currentSku" :btn-class="'product-detail__btn'" :is-user-login="isUserLogin"></buy-sku>
+        <buy-sku :sku="currentSku" :btn-class="'product-detail__btn'" :is-user-login="isUserLogin" :goods="goods"></buy-sku>
     </div>
 </template>
 

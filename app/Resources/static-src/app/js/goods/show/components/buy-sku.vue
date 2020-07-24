@@ -31,6 +31,10 @@
                 type: Object,
                 default: null
             },
+            goods: {
+                type: Object,
+                default: null,
+            },
             isUserLogin: {
                 type: Number,
                 default: 0,
@@ -52,26 +56,26 @@
                 ;
 
                 axios({
-                    url: '/api/goods/' + this.sku.goodsId + '/buy',
+                    url: '/api/goods/' + this.sku.goodsId + '/check',
                     method: "POST",
                     data: {
                         'targetId': this.sku.id,
                     }
                 }).then(res => {
-                    console.log(res.data);
                     if (res.data.success) {
-                        window.location.href = res.data.url;
+                        window.location.href = '/order/show?' + qs.stringify({
+                            targetId: this.sku.id,
+                            targetType: this.goods.type
+                        });
                         return;
                     }
 
-                    if (res.data.url) {
-                        window.location.href = res.data.url;
+                    if (res.data.code == 'is-joined') {
+                        window.location.href = this.goods.type == 'course' ? '/my/course/' + this.sku.targetId : '/classroom/' + this.sku.targetId;
                         return;
                     }
 
-                    if (res.data.noticeTemplate) {
-                        this.renderModal(res.data.noticeTemplate);
-                    }
+                    this.renderModal(res.data.code);
                 });
             }
         }
