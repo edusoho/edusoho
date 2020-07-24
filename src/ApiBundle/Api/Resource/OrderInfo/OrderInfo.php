@@ -33,7 +33,6 @@ class OrderInfo extends AbstractResource
 
             return $this->getOrderInfoFromProduct($product);
         } catch (OrderPayCheckException $payCheckException) {
-            var_dump($payCheckException->getTraceAsString());
             throw new BadRequestHttpException($payCheckException->getMessage(), $payCheckException, $payCheckException->getCode());
         }
     }
