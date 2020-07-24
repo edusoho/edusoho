@@ -6,7 +6,6 @@ use Biz\BaseTestCase;
 use Biz\ItemBankExercise\Dao\ExerciseMemberDao;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseService;
-use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Role\Util\PermissionBuilder;
 use Biz\User\CurrentUser;
 use Biz\User\Service\UserService;

@@ -62,7 +62,7 @@ class ExerciseEventSubscriber extends EventSubscriber implements EventSubscriber
         $manage = new MemberManage($this->getBiz());
         $teacherMember = $manage->getMemberClass('teacher');
         foreach ($members as $teacherId) {
-            if (!in_array($teacherId, $oldTeacherIds)){
+            if (!in_array($teacherId, $oldTeacherIds)) {
                 $teacherMember->join($exercise['id'], $teacherId, ['remark' => '']);
             }
         }
