@@ -121,6 +121,10 @@ class ClassroomGoodsMediator extends AbstractGoodsMediator
         // TODO: Implement onCancelRecommended() method.
     }
 
+    public function onMaxRateChange($classroom)
+    {
+    }
+
     /**
      * @return ClassroomSpecsMediator
      */

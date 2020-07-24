@@ -102,12 +102,17 @@ class CourseSetGoodsMediator extends AbstractGoodsMediator
         $this->getGoodsService()->deleteGoods($existGoods['id']);
     }
 
-    public function onRecommended($target)
+    public function onRecommended($courseSet)
     {
     }
 
-    public function onCancelRecommended($target)
+    public function onCancelRecommended($courseSet)
     {
+    }
+
+    public function onMaxRateChange($courseSet)
+    {
+        // TODO: Implement onMaxRateChange() method.
     }
 
     protected function getProductAndGoods($courseSet)

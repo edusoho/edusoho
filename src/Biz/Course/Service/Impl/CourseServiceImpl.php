@@ -26,6 +26,7 @@ use Biz\Course\Service\MemberService;
 use Biz\Exception\UnableJoinException;
 use Biz\Favorite\Dao\FavoriteDao;
 use Biz\File\UploadFileException;
+use Biz\Goods\Mediator\CourseSpecsMediator;
 use Biz\Goods\Service\GoodsService;
 use Biz\Product\Service\ProductService;
 use Biz\Review\Service\ReviewService;
@@ -225,7 +226,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->beginTransaction();
 
             $created = $this->getCourseDao()->create($course);
-            $this->addGoodsSpecs($created);
+            $this->getCourseSpecsMediator()->onCreate($created);
             $currentUser = $this->getCurrentUser();
             //set default teacher
             $this->getMemberService()->setDefaultTeacher($created['id']);
@@ -237,21 +238,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->rollback();
             throw $e;
         }
-    }
-
-    public function addGoodsSpecs($course)
-    {
-        $product = $this->getProductService()->getProductByTargetIdAndType($course['courseSetId'], 'course');
-        $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
-        $goodsSpecs = $this->getGoodsService()->createGoodsSpecs([
-            'goodsId' => $goods['id'],
-            'targetId' => $course['id'],
-            'title' => empty($course['title']) ? $course['courseSetTitle'] : $course['title'],
-            'seq' => $course['seq'],
-            'buyableMode' => $course['expiryMode'],
-        ]);
-
-        return $goodsSpecs;
     }
 
     public function syncGoodsSpecs($course)
@@ -390,7 +376,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $fields = $this->validateExpiryMode($fields);
         $fields = $this->processFields($oldCourse, $fields, $courseSet);
         $course = $this->getCourseDao()->update($id, $fields);
-        $this->syncGoodsSpecs($course);
+        $this->getCourseSpecsMediator()->onUpdateNormalData($course);
 
         $this->dispatchEvent('course.update', new Event($course));
         $this->dispatchEvent('course.marketing.update', ['oldCourse' => $oldCourse, 'newCourse' => $course]);
@@ -432,7 +418,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $course = $this->getCourseDao()->update($id, $fields);
-        $this->syncGoodsSpecs($course);
+        $this->getCourseSpecsMediator()->onUpdateNormalData($course);
 
         $this->dispatchEvent('course.update', new Event($course));
 
@@ -2810,5 +2796,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         return $this->tryManageCourse($courseId, $courseSetId);
+    }
+
+    /**
+     * @return CourseSpecsMediator
+     */
+    protected function getCourseSpecsMediator()
+    {
+        return $this->biz['specs.mediator.course'];
     }
 }

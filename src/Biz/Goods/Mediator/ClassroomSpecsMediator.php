@@ -27,10 +27,14 @@ class ClassroomSpecsMediator extends AbstractSpecsMediator
             'title' => $classroom['title'],
             'images' => $goods['images'],
             'price' => $classroom['price'],
-            'buyable' => $classroom['buyable'],
             'showable' => $classroom['showable'],
-            'buyableMode' => $classroom['expiryMode'],
-            'buyableEndTime' => $classroom['expiryValue'],
+            'buyable' => $classroom['buyable'],
+            'buyableStartTime' => 0,
+            'buyableEndTime' => 0,
+            'usageMode' => $classroom['expiryMode'],
+            'usageDays' => 'days' === $classroom['expiryMode'] ? $classroom['expiryValue'] : 0,
+            'usageStartTime' => 0,
+            'usageEndTime' => 'date' === $classroom['expiryMode'] ? $classroom['expiryValue'] : 0,
             'services' => $classroom['service'],
         ]);
     }

@@ -15,7 +15,7 @@ class CourseSpecsMediator extends AbstractSpecsMediator
             'targetId' => $course['id'],
             'title' => empty($course['title']) ? $course['courseSetTitle'] : $course['title'],
             'seq' => $course['seq'],
-            'buyableMode' => $course['expiryMode'],
+            'usageMode' => $course['expiryMode'],
         ]);
 
         return $goodsSpecs;
@@ -31,9 +31,13 @@ class CourseSpecsMediator extends AbstractSpecsMediator
             'seq' => $course['seq'],
             'price' => $course['price'],
             'coinPrice' => $course['coinPrice'],
-            'buyableMode' => $course['expiryMode'],
-            'buyableStartTime' => $course['expiryStartDate'] ? $course['expiryStartDate'] : 0,
-            'buyableEndTime' => $course['expiryEndDate'] ? $course['expiryEndDate'] : 0,
+            'usageMode' => $course['expiryMode'],
+            'usageDays' => $course['expiryDays'] ?: 0,
+            'usageStartTime' => $course['expiryStartDate'] ?: 0,
+            'usageEndTime' => $course['expiryEndDate'] ?: 0,
+            'buyable' => $course['buyable'],
+            'buyableStartTime' => 0,
+            'buyableEndTime' => $course['buyExpiryTime'] ?: 0,
             'maxJoinNum' => $course['maxStudentNum'],
             'services' => $course['services'],
         ]);
@@ -73,7 +77,7 @@ class CourseSpecsMediator extends AbstractSpecsMediator
 
     protected function getProductAndGoods($course)
     {
-        $existProduct = $this->getProductService()->getProductByTargetIdAndType($course['courseSet'], 'course');
+        $existProduct = $this->getProductService()->getProductByTargetIdAndType($course['courseSetId'], 'course');
         if (empty($existProduct)) {
             throw ProductException::NOTFOUND_PRODUCT();
         }

@@ -76,6 +76,14 @@ abstract class AbstractGoodsMediator
     abstract public function onCancelRecommended($target);
 
     /**
+     * @param $target
+     *
+     * @return mixed
+     *               最大折扣百分比
+     */
+    abstract public function onMaxRateChange($target);
+
+    /**
      * @return GoodsService
      */
     protected function getGoodsService()

@@ -19,6 +19,7 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
 use Biz\Goods\GoodsException;
+use Biz\Goods\Mediator\CourseSetGoodsMediator;
 use Biz\Goods\Service\GoodsService;
 use Biz\Product\ProductException;
 use Biz\Product\Service\ProductService;
@@ -324,26 +325,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $created;
     }
 
-    protected function addProductAndGoods($courseSet)
-    {
-        $product = $this->getProductService()->createProduct([
-            'targetType' => 'course',
-            'targetId' => $courseSet['id'],
-            'title' => $courseSet['title'],
-            'owner' => $courseSet['creator'],
-        ]);
-
-        $goods = $this->getGoodsService()->createGoods([
-            'type' => 'course',
-            'productId' => $product['id'],
-            'title' => $courseSet['title'],
-            'subtitle' => $courseSet['subtitle'],
-            'creator' => $courseSet['creator'],
-        ]);
-
-        return [$product, $goods];
-    }
-
     public function copyCourseSet($classroomId, $courseSetId, $courseId)
     {
         //$courseSet = $this->tryManageCourseSet($courseSetId);
@@ -424,7 +405,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         $this->dispatchEvent('course-set.update', new Event($courseSet));
 
-        $this->syncProductsAndGoods($courseSet);
+        $this->getCourseSetGoodsMediator()->onUpdateNormalData($courseSet);
 
         return $courseSet;
     }
@@ -907,12 +888,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function updateMaxRate($id, $maxRate)
     {
         $courseSet = $this->getCourseSetDao()->update($id, ['maxRate' => $maxRate]);
+        $this->getCourseSetGoodsMediator()->onMaxRateUpdate($courseSet);
         $this->dispatchEvent(
             'courseSet.maxRate.update',
             new Event(['courseSet' => $courseSet, 'maxRate' => $maxRate])
         );
-
-        $this->syncProductsAndGoods($courseSet);
 
         return $courseSet;
     }
@@ -1272,7 +1252,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $courseSet['creator'] = $this->getCurrentUser()->getId();
 
         $created = $this->getCourseSetDao()->create($courseSet);
-        $this->addProductAndGoods($created);
+        $this->getCourseSetGoodsMediator()->onCreate($created);
 
         return $created;
     }
@@ -1313,5 +1293,13 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     protected function getGoodsService()
     {
         return $this->createService('Goods:GoodsService');
+    }
+
+    /**
+     * @return CourseSetGoodsMediator
+     */
+    protected function getCourseSetGoodsMediator()
+    {
+        return $this->biz['goods.mediator.course_set'];
     }
 }
