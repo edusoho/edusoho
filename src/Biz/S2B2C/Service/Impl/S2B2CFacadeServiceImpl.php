@@ -101,7 +101,7 @@ class S2B2CFacadeServiceImpl extends BaseService implements S2B2CFacadeService
     {
         $disabledPermissions = $this->getSupplierPlatformApi()->getMerchantDisabledPermissions();
         if (empty($disabledPermissions) || !empty($disabledPermissions['error'])) {
-            throw S2B2CException::INVALID_S2B2C_HIDDEN_PERMISSION();
+            // throw S2B2CException::INVALID_S2B2C_HIDDEN_PERMISSION();
         }
         $this->getCacheService()->set('s2b2c_disabled_permissions', $disabledPermissions, time() + 86400);
 
