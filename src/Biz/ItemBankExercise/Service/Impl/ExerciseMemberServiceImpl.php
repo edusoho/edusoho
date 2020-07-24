@@ -66,7 +66,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
 
             $userId = $this->getCurrentUser()->getId();
             $exercise = $this->getExerciseService()->get($exerciseId);
-            $teacherIds = ArrayToolkit::column($this->getQuestionBankMemberService()->findMembersByBankId($exercise['questionBankId']), 'userId') ?? [];
+            $teacherIds = ArrayToolkit::column($this->getQuestionBankMemberService()->findMembersByBankId($exercise['questionBankId']), 'userId');
             $teacherIds = in_array($userId, $teacherIds) ? $teacherIds : array_merge($teacherIds, [$userId]);
 
             $members = [];
