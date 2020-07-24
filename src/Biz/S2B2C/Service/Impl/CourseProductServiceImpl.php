@@ -199,7 +199,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
             ),
             ['categoryId' => $newCourseSet['categoryId']]
         );
-        return $this->getCourseSetService()->updateCourseSet(
+        return $this->getCourseSetDao()->update(
             $newCourseSet['id'],
             $courseSetParams
         );
