@@ -191,9 +191,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
                     'title',
                     'subtitle',
                     'serializeMode',
-                    'smallPicture',
-                    'middlePicture',
-                    'largePicture',
+                    'cover',
                     'summary'
                 ]
             ),
