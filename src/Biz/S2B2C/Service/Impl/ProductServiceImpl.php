@@ -372,10 +372,9 @@ class ProductServiceImpl extends BaseService implements ProductService
             $this->createNewException(S2B2CProductException::ADOPT_PRODUCT_REPEAT());
         }
 
-        $this->adoptS2B2CProduct($s2b2cProductId);
-
         $this->beginTransaction();
         try {
+            $this->adoptS2B2CProduct($s2b2cProductId);
             //@todo 可以改成策略 根据商品类型进行同步，暂时只有course_set类型
             $this->getCourseProductService()->syncCourses($s2b2cProductId);
             $this->commit();
@@ -447,7 +446,12 @@ class ProductServiceImpl extends BaseService implements ProductService
         $courseSetProduct = $this->getProductBySupplierIdAndRemoteProductIdAndType($s2b2cConfig['supplierId'], $s2b2cProductId, 'course_set');
 
         $localChangeLogs = $courseSetProduct['changelog'] ?: [];
-        $localChangeLogs[$versionData['courseId']] = $versionData;
+        $localChangeLogs[$versionData['courseId']] = ArrayToolkit::parts($versionData, [
+            'title',
+            'courseId',
+            'version',
+            'versionChangeLog',
+        ]);
 
         $this->getS2B2CProductDao()->update($courseSetProduct['id'], ['changelog' => $localChangeLogs]);
         $this->getS2B2CProductDao()->wave([$courseSetProduct['id']], ['remoteVersion' => 1]);
@@ -469,7 +473,7 @@ class ProductServiceImpl extends BaseService implements ProductService
         $localChangeLogs = $courseSetProduct['changelog'] ?: [];
         $localChangeLogs[0] = [
             'title' => $courseSet['title'],
-            'changeLog' => '课程基础信息更新'
+            'versionChangeLog' => '课程基础信息更新'
         ];
 
         $this->getS2B2CProductDao()->update($courseSetProduct['id'], ['changelog' => $localChangeLogs]);
@@ -491,11 +495,10 @@ class ProductServiceImpl extends BaseService implements ProductService
             $this->createNewException(S2B2CProductException::PRODUCT_NOT_FOUNT());
         }
 
-        $this->adoptS2B2CProduct($product['remoteProductId']);
-
         $this->beginTransaction();
 
         try {
+            $this->adoptS2B2CProduct($product['remoteProductId']);
             $this->getCourseProductService()->updateProductVersionData($product['remoteProductId']);
             $this->commit();
         } catch (\Exception $exception) {

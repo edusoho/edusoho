@@ -152,6 +152,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
         $courseProducts = array_filter($waitSyncProducts, function ($product) {
             return 'course' == $product['productType'];
         });
+        $this->getLogger()->info('需要处理的计划数量' . count($courseProducts));
         foreach ($courseProducts as $courseProduct) {
             if (0 == $courseProduct['localResourceId']) {
                 //新计划进行同步
@@ -170,7 +171,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
         return true;
     }
 
-    protected function updateCourseSetProduct($courseSet)
+    protected function updateCourseSetProduct($courseSetProduct)
     {
         if (empty($courseSetProduct)) {
             $this->getLogger()->error('[updateProductVersionData] error $courseSetProduct not fount');
@@ -183,8 +184,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
         }
         $newCourseSet = $this->getCourseSetService()->getCourseSet($courseSetProduct['localResourceId']);
 
-        return $this->getCourseSetService()->updateCourseSet(
-            $newCourseSet['id'],
+        $courseSetParams = array_merge(
             ArrayToolkit::parts(
                 $content,
                 [
@@ -196,7 +196,12 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
                     'largePicture',
                     'summary'
                 ]
-            )
+            ),
+            ['categoryId' => $newCourseSet['categoryId']]
+        );
+        return $this->getCourseSetService()->updateCourseSet(
+            $newCourseSet['id'],
+            $courseSetParams
         );
     }
 

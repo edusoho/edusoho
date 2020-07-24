@@ -57,14 +57,4 @@ interface CourseProductService
      * @return mixed
      */
     public function closeCourseSet($s2b2cProductId, $remoteCourseSetId);
-
-    /**
-     * 通知
-     *
-     * @param $s2b2cProductId
-     * @param $remoteCourseSetId
-     *
-     * @return mixed
-     */
-    public function modifyCourseSet($s2b2cProductId, $remoteCourseSetId);
 }
