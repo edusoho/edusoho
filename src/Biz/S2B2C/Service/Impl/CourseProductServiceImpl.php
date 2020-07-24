@@ -21,7 +21,6 @@ use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\System\Service\CacheService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
-use Codeages\Biz\Framework\Service\Exception\ServiceException;
 use Monolog\Logger;
 
 /**
@@ -159,8 +158,10 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
                 $this->syncNewCourse($courseProduct, $newCourseSet);
                 continue;
             }
+
             if (!$this->updateCourseVersionData($courseProduct)) {
-                throw new ServiceException('更新失败，productId#'.$courseProduct['id']);
+                $this->getLogger()->error('更新失败，productId#'.$courseProduct['id']);
+                $this->createNewException(S2B2CProductException::UPDATE_PRODUCT_VERSION_FAIL());
             }
         }
 
@@ -419,8 +420,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
         } catch (\Exception $e) {
             $this->rollback();
             $this->getLogger()->error(sprintf('[deleteProductsByCourseSetError] %s', $e->getMessage()));
-
-            return false;
+            $this->createNewException(S2B2CProductException::REMOVE_PRODUCT_FAILED());
         }
 
         return true;

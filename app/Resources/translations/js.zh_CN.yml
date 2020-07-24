@@ -1498,3 +1498,5 @@ course_manage.positive_currency.message: 请输入大于0的有效价格，最�
 
 merchant.resource.product_version.update_success_hint: 更新成功
 merchant.resource.product_version.update_failed_hint: 更新失败
+
+exception.s2b2c_product.adopt_failed: 采用失败，内容正在编辑中，请稍后再试

@@ -3,6 +3,7 @@
 namespace Biz\S2B2C\Service\Impl;
 
 use Biz\BaseService;
+use Biz\S2B2C\S2B2CException;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\S2B2C\SupplierPlatformApi;
 use Biz\System\Service\CacheService;
@@ -90,11 +91,19 @@ class S2B2CFacadeServiceImpl extends BaseService implements S2B2CFacadeService
     {
         $disabledPermissions = $this->getCacheService()->get('s2b2c_disabled_permissions');
         if (empty($disabledPermissions)) {
-            $disabledPermissions = $this->getSupplierPlatformApi()->getMerchantDisabledPermissions();
-            $this->getCacheService()->set('s2b2c_disabled_permissions', $disabledPermissions, time() + 86400);
-
-            return $disabledPermissions;
+            $disabledPermissions = $this->updateMerchantDisabledPermissions();
         }
+
+        return $disabledPermissions;
+    }
+
+    public function updateMerchantDisabledPermissions()
+    {
+        $disabledPermissions = $this->getSupplierPlatformApi()->getMerchantDisabledPermissions();
+        if (empty($disabledPermissions) || !empty($disabledPermissions['error'])) {
+            throw S2B2CException::INVALID_S2B2C_HIDDEN_PERMISSION();
+        }
+        $this->getCacheService()->set('s2b2c_disabled_permissions', $disabledPermissions, time() + 86400);
 
         return $disabledPermissions;
     }

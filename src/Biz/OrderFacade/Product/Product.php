@@ -2,15 +2,15 @@
 
 namespace Biz\OrderFacade\Product;
 
+use AppBundle\Common\MathToolkit;
 use AppBundle\Common\StringToolkit;
 use Biz\AppLoggerConstant;
-use Codeages\Biz\Order\Service\OrderService;
 use Biz\OrderFacade\Command\Deduct\PickedDeductWrapper;
 use Biz\OrderFacade\Currency;
 use Biz\Sms\Service\SmsService;
 use Biz\System\Service\LogService;
 use Codeages\Biz\Framework\Context\BizAware;
-use AppBundle\Common\MathToolkit;
+use Codeages\Biz\Order\Service\OrderService;
 use Codeages\Biz\Order\Status\OrderStatusCallback;
 
 abstract class Product extends BizAware implements OrderStatusCallback
@@ -55,14 +55,14 @@ abstract class Product extends BizAware implements OrderStatusCallback
      *
      * @var array
      */
-    public $availableDeducts = array();
+    public $availableDeducts = [];
 
     /**
      * 使用到的折扣
      *
      * @var array
      */
-    public $pickedDeducts = array();
+    public $pickedDeducts = [];
 
     /**
      * 返回的链接
@@ -123,7 +123,7 @@ abstract class Product extends BizAware implements OrderStatusCallback
      *
      * @var array
      */
-    public $cover = array();
+    public $cover = [];
 
     const PRODUCT_VALIDATE_FAIL = '20007';
 
@@ -131,7 +131,7 @@ abstract class Product extends BizAware implements OrderStatusCallback
 
     abstract public function validate();
 
-    public function setAvailableDeduct($params = array())
+    public function setAvailableDeduct($params = [])
     {
         /** @var $pickedDeductWrapper PickedDeductWrapper */
         $availableDeductWrapper = $this->biz['order.product.available_deduct_wrapper'];
@@ -159,7 +159,7 @@ abstract class Product extends BizAware implements OrderStatusCallback
 
     public function getDeducts()
     {
-        $deducts = array();
+        $deducts = [];
         foreach ($this->pickedDeducts as $deduct) {
             $deducts[$deduct['deduct_type']] = $deduct['deduct_amount'];
         }
@@ -179,7 +179,7 @@ abstract class Product extends BizAware implements OrderStatusCallback
 
             if ($this->getSmsService()->isOpen($smsType)) {
                 $userId = $orderItem['user_id'];
-                $parameters = array();
+                $parameters = [];
                 $parameters['order_title'] = '购买'.$targetName.'-'.$orderItem['title'];
                 $parameters['order_title'] = StringToolkit::cutter($parameters['order_title'], 20, 15, 4);
                 $price = MathToolkit::simple($orderItem['order']['pay_amount'], 0.01);
@@ -187,38 +187,38 @@ abstract class Product extends BizAware implements OrderStatusCallback
 
                 $description = $parameters['order_title'].'成功回执';
 
-                $this->getSmsService()->smsSend($smsType, array($userId), $description, $parameters);
+                $this->getSmsService()->smsSend($smsType, [$userId], $description, $parameters);
             }
         } catch (\Exception $e) {
-            $this->getLogService()->error(AppLoggerConstant::SMS, 'sms_'.$this->targetType.'_buy_notify', "发送短信通知失败:userId:{$orderItem['user_id']}, targetType:{$this->targetType}, targetId:{$this->targetId}", array('error' => $e->getMessage()));
+            $this->getLogService()->error(AppLoggerConstant::SMS, 'sms_'.$this->targetType.'_buy_notify', "发送短信通知失败:userId:{$orderItem['user_id']}, targetType:{$this->targetType}, targetId:{$this->targetId}", ['error' => $e->getMessage()]);
         }
     }
 
     protected function updateMemberRecordByRefundItem($orderItem)
     {
         $orderRefund = $this->getOrderRefundService()->getOrderRefundById($orderItem['refund_id']);
-        $record = array(
+        $record = [
             'reason' => $orderRefund['reason'],
             'refund_id' => $orderRefund['id'],
             'reason_type' => 'refund',
-        );
+        ];
 
         $this->getMemberOperationService()->updateRefundInfoByOrderId($orderRefund['order_id'], $record);
     }
 
     public function getCreateExtra()
     {
-        return empty($this->createExtra) ? array() : $this->createExtra;
+        return empty($this->createExtra) ? [] : $this->createExtra;
     }
 
     public function setCreateExtra($createExtra)
     {
-        $this->createExtra = $createExtra;
+        $this->createExtra = empty($this->createExtra) ? $createExtra : array_merge($this->createExtra, $createExtra);
     }
 
     public function getSnapShot()
     {
-        return array();
+        return [];
     }
 
     /**

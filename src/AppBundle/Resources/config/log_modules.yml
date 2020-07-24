@@ -65,6 +65,20 @@ course:
                 path: course_show
                 param:
                     id: courseId
+    publish_lesson:
+        templateParam:
+            %url%:
+                 type: url
+                 path: course_show
+                 param:
+                     id: courseId
+    unpublish_lesson:
+        templateParam:
+            %url%:
+                 type: url
+                 path: course_show
+                 param:
+                     id: courseId
     update_thread:
         modalField: all
     add_student:
