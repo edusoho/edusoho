@@ -269,7 +269,6 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             $params['directives'] = array_merge($params['directives'], ['convertAll' => true]);
         }
 
-//        $apiResult = $this->createApi('root')->post('/resources/upload_init', $params);
         $apiResult = $this->getResourceService()->startUpload($params);
 
         $result = [];
@@ -422,19 +421,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             $this->createNewException(UploadFileException::GLOBALID_REQUIRED());
         }
 
-//        $params = array(
-//            'length' => $params['length'],
-//            'name' => empty($params['filename']) ? $file['filename'] : $params['filename'],
-//            'size' => $params['size'],
-//            'extno' => $file['id'],
-//        );
-//        if ('attachment' == $file['targetType']) {
-//            $params['type'] = $file['targetType'];
-//        }
-//        $api = $this->createApi('root');
-//        $result = $api->post("/resources/{$file['globalId']}/upload_finish", $params);
         $result = $this->getResourceService()->finishUpload($file['globalId']);
-//        $file = $api->get("/resources/{$file['globalId']}", array('refresh' => true));
         $file = $this->getResourceService()->get($file['globalId']);
         $result['convertStatus'] = 'none';
         $result['length'] = $file['length'];
