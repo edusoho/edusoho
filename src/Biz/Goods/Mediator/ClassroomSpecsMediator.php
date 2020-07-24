@@ -63,7 +63,6 @@ class ClassroomSpecsMediator extends AbstractSpecsMediator
      * @param $classroom
      *
      * @return array
-     *               删除会报错
      */
     protected function getProductAndGoods($classroom)
     {

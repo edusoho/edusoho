@@ -111,6 +111,16 @@ class ClassroomGoodsMediator extends AbstractGoodsMediator
         return [$existProduct, $goods];
     }
 
+    public function onRecommended($classroom)
+    {
+        // TODO: Implement onRecommended() method.
+    }
+
+    public function onCancelRecommended($classroom)
+    {
+        // TODO: Implement onCancelRecommended() method.
+    }
+
     /**
      * @return ClassroomSpecsMediator
      */

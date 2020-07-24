@@ -41,22 +41,13 @@ class CourseSetGoodsMediator extends AbstractGoodsMediator
 
     public function onUpdateNormalData($courseSet)
     {
-        $existProduct = $this->getProductService()->getProductByTargetIdAndType($courseSet['id'], 'course');
-        if (empty($existProduct)) {
-            throw ProductException::NOTFOUND_PRODUCT();
-        }
+        list($product, $goods) = $this->getProductAndGoods($courseSet);
 
-        $product = $this->getProductService()->updateProduct($existProduct['id'], [
+        $product = $this->getProductService()->updateProduct($product['id'], [
             'title' => $courseSet['title'],
         ]);
 
-        $existGoods = $this->getGoodsService()->getGoodsByProductId($existProduct['id']);
-
-        if (empty($existGoods)) {
-            throw GoodsException::GOODS_NOT_FOUND();
-        }
-
-        $goods = $this->getGoodsService()->updateGoods($existGoods['id'], [
+        $goods = $this->getGoodsService()->updateGoods($goods['id'], [
             'title' => $courseSet['title'],
             'subtitle' => $courseSet['subtitle'],
             'summary' => $courseSet['summary'],
@@ -71,37 +62,20 @@ class CourseSetGoodsMediator extends AbstractGoodsMediator
 
     public function onClose($courseSet)
     {
-        $existProduct = $this->getProductService()->getProductByTargetIdAndType($courseSet['id'], 'course');
-        if (empty($existProduct)) {
-            throw ProductException::NOTFOUND_PRODUCT();
-        }
+        list($product, $goods) = $this->getProductAndGoods($courseSet);
 
-        $existGoods = $this->getGoodsService()->getGoodsByProductId($existProduct['id']);
+        $goods = $this->getGoodsService()->unpublishGoods($goods['id']);
 
-        if (empty($existGoods)) {
-            throw GoodsException::GOODS_NOT_FOUND();
-        }
-
-        $goods = $this->getGoodsService()->unpublishGoods($existGoods['id']);
-
-        return [$existProduct, $goods];
+        return [$product, $goods];
     }
 
     public function onPublish($courseSet)
     {
-        $existProduct = $this->getProductService()->getProductByTargetIdAndType($courseSet['id'], 'course');
-        if (empty($existProduct)) {
-            throw ProductException::NOTFOUND_PRODUCT();
-        }
+        list($product, $goods) = $this->getProductAndGoods($courseSet);
 
-        $existGoods = $this->getGoodsService()->getGoodsByProductId($existProduct['id']);
-        if (empty($existGoods)) {
-            throw GoodsException::GOODS_NOT_FOUND();
-        }
+        $goods = $this->getGoodsService()->publishGoods($goods['id']);
 
-        $goods = $this->getGoodsService()->publishGoods($existGoods['id']);
-
-        return [$existProduct, $goods];
+        return [$product, $goods];
     }
 
     /**
@@ -126,5 +100,28 @@ class CourseSetGoodsMediator extends AbstractGoodsMediator
         }
 
         $this->getGoodsService()->deleteGoods($existGoods['id']);
+    }
+
+    public function onRecommended($target)
+    {
+    }
+
+    public function onCancelRecommended($target)
+    {
+    }
+
+    protected function getProductAndGoods($courseSet)
+    {
+        $existProduct = $this->getProductService()->getProductByTargetIdAndType($courseSet['id'], 'course');
+        if (empty($existProduct)) {
+            throw ProductException::NOTFOUND_PRODUCT();
+        }
+
+        $existGoods = $this->getGoodsService()->getGoodsByProductId($existProduct['id']);
+        if (empty($existGoods)) {
+            throw GoodsException::GOODS_NOT_FOUND();
+        }
+
+        return [$existProduct, $existGoods];
     }
 }
