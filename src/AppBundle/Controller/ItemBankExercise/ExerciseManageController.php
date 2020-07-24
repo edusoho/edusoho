@@ -4,7 +4,6 @@ namespace AppBundle\Controller\ItemBankExercise;
 
 use AppBundle\Controller\BaseController;
 use Biz\ItemBankExercise\Service\ExerciseService;
-use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\CategoryService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Symfony\Component\HttpFoundation\Request;
