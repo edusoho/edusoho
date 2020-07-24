@@ -15,6 +15,7 @@ use Biz\ItemBankExercise\Member\MemberManage;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\ItemBankExercise\Service\MemberOperationRecordService;
+use Biz\QuestionBank\Service\MemberService;
 use Biz\System\Service\LogService;
 use Biz\User\Service\UserService;
 
@@ -64,9 +65,16 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
             $this->beginTransaction();
 
             $userId = $this->getCurrentUser()->getId();
+            $exercise = $this->getExerciseService()->get($exerciseId);
+            $teacherIds = ArrayToolkit::column($this->getQuestionBankMemberService()->findMembersByBankId($exercise['questionBankId']), 'userId') ?? [];
+            $teacherIds = in_array($userId, $teacherIds) ? $teacherIds : array_merge($teacherIds, [$userId]);
+
+            $members = [];
             $manage = new MemberManage($this->biz);
             $teacherMember = $manage->getMemberClass('teacher');
-            $member = $teacherMember->join($exerciseId, $userId, ['remark' => '']);
+            foreach ($teacherIds as $teacherId) {
+                $members[] = $teacherMember->join($exercise['id'], $teacherId, ['remark' => '']);
+            }
 
             $this->commit();
         } catch (\Exception $e) {
@@ -74,7 +82,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
             throw $e;
         }
 
-        return $member;
+        return $members;
     }
 
     public function isExerciseMember($exerciseId, $userId)
@@ -326,6 +334,14 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         $record = $this->getMemberOperationRecordService()->create($record);
 
         return $record;
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getQuestionBankMemberService()
+    {
+        return $this->createService('QuestionBank:MemberService');
     }
 
     /**

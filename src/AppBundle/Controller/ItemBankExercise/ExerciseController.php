@@ -58,14 +58,10 @@ class ExerciseController extends BaseController
         }
 
         if ($request->isMethod('POST')) {
-            $seq_exercise = $this->getExerciseService()->search([], ['seq' => 'DESC'], 0, 1);
-            $maxSeqExercise = empty($seq_exercise) ? [] : $seq_exercise[0];
-            $seq = empty($maxSeqExercise) ? 1 : $maxSeqExercise['seq'] + 1;
             $data = [
                 'title' => $questionBank['name'],
                 'questionBankId' => $questionBank['id'],
                 'categoryId' => $questionBank['categoryId'],
-                'seq' => $seq,
             ];
             $exercise = $this->getExerciseService()->create($data);
 

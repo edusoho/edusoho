@@ -128,7 +128,7 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
 
             $this->getMemberService()->resetBankMembers($newQuestionBank['id'], $members);
 
-            $this->synchronizationItemBankExercise($newQuestionBank['id'], $members);
+            $this->dispatch('questionBank.update', $questionBank, ['members' => $members]);
 
             $this->commit();
         } catch (\Exception $e) {
@@ -137,25 +137,6 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
         }
 
         return $newQuestionBank;
-    }
-
-    protected function synchronizationItemBankExercise($questionBankId, $members)
-    {
-        $members = explode(',', $members);
-        $exercise = $this->getItemBankExerciseService()->getByQuestionBankId($questionBankId);
-        if (empty($exercise)) {
-            return true;
-        }
-
-        $oldTeacherIds = $exercise['teacherIds'];
-        $diffTeacherIds = array_diff($members, $oldTeacherIds);
-        if (!empty($diffTeacherIds)) {
-            $manage = new MemberManage($this->biz);
-            $teacherMember = $manage->getMemberClass('teacher');
-            foreach ($diffTeacherIds as $teacherId) {
-                $teacherMember->join($exercise['id'], $teacherId, ['remark' => '']);
-            }
-        }
     }
 
     public function updateQuestionBank($id, $fields)
@@ -169,7 +150,6 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
 
         $questionBank = $this->getQuestionBankDao()->update($id, $fields);
         $this->getItemBankService()->updateItemBank($questionBank['itemBankId'], ['name' => $questionBank['name']]);
-        $this->dispatch('questionBank.update', $questionBank);
 
         return $this->wrapQuestionBank($questionBank);
     }
