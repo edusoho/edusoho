@@ -5,10 +5,6 @@ namespace ApiBundle\Api\Resource\Good;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use ApiBundle\Api\Util\AssetHelper;
-use Biz\Classroom\Service\ClassroomService;
-use Biz\Course\Service\CourseService;
-use Biz\Course\Service\CourseSetService;
 use Biz\Favorite\Service\FavoriteService;
 use Biz\Goods\Service\GoodsService;
 use Biz\Product\Service\ProductService;
@@ -45,31 +41,6 @@ class Good extends AbstractResource
         return $goods;
     }
 
-    /**
-     * @return FavoriteService
-     */
-    protected function getFavoriteService()
-    {
-        return $this->service('Favorite:FavoriteService');
-    }
-
-    protected function buildGoodsData($goodsId)
-    {
-        $goods = $this->getGoodsService()->getGoods($goodsId);
-
-        return [
-            'id' => $goods['id'],
-            'title' => $goods['title'],
-            'subTitle' => $goods['subtitle'],
-            'description' => $goods['summary'],
-            'image' => AssetHelper::getFurl(empty($goods['images']['middle']) ? '' : $goods['images']['middle'], 'course.png'),
-            'product' => $this->getProductService()->getProduct($goods['productId']),
-            'hasExtension' => true,
-            'extensions' => $this->collectGoodsExtensions($product),
-            'specs' => $this->getGoodsSpecs($product['targetType'], $product['targetId']),
-        ];
-    }
-
     private function collectGoodsExtensions($product)
     {
         $defaultExtensions = [
@@ -90,86 +61,10 @@ class Good extends AbstractResource
         return array_merge($defaultExtensions, ['mpQrCode']);
     }
 
-    private function getGoodsSpecs($targetType, $targetId)
-    {
-        if ('course' != $targetType) {
-            return [];
-        }
-
-        $courses = $this->getCourseService()->searchCourses(
-            [
-                'courseSetId' => $targetId,
-                'status' => 'published',
-            ],
-            ['seq' => 'ASC', 'createdTime' => 'ASC'],
-            0,
-            PHP_INT_MAX
-        );
-
-        $specs = [];
-        foreach ($courses as $course) {
-            $specs[] = [
-                'id' => $course['id'],
-                'title' => empty($course['title']) ? $course['courseSetTitle'] : $course['title'],
-                'subTitle' => $course['subtitle'],
-                'expiryMode' => $course['expiryMode'],
-                'joinedNum' => $course['studentNum'],
-                'price' => $course['price'],
-                'isDefault' => $course['isDefault'],
-                'services' => $this->buildGoodsServices($course['services']),
-            ];
-        }
-
-        return $specs;
-    }
-
-    private function buildGoodsServices(array $serviceNames)
-    {
-        $allServices = [
-            'homeworkReview' => [
-                'code' => 'homeworkReview',
-                'shortName' => 'site.services.homeworkReview.shortName',
-                'fullName' => 'site.services.homeworkReview.fullName',
-                'summary' => 'site.services.homeworkReview.summary',
-                'active' => 0,
-            ],
-            'testpaperReview' => [
-                'code' => 'testpaperReview',
-                'shortName' => 'site.services.testpaperReview.shortName',
-                'fullName' => 'site.services.testpaperReview.fullName',
-                'summary' => 'site.services.testpaperReview.summary',
-                'active' => 0,
-            ],
-            'teacherAnswer' => [
-                'code' => 'teacherAnswer',
-                'shortName' => 'site.services.teacherAnswer.shortName',
-                'fullName' => 'site.services.teacherAnswer.fullName',
-                'summary' => 'site.services.teacherAnswer.summary',
-                'active' => 0,
-            ],
-            'liveAnswer' => [
-                'code' => 'liveAnswer',
-                'shortName' => 'site.services.liveAnswer.shortName',
-                'fullName' => 'site.services.liveAnswer.fullName',
-                'summary' => 'site.services.liveAnswer.summary',
-                'active' => 0,
-            ],
-        ];
-
-        $specifyServices = [];
-        foreach ($serviceNames as $serviceName) {
-            if (!empty($allServices[$serviceName])) {
-                $specifyServices = array_merge($specifyServices, $allServices[$serviceName]);
-            }
-        }
-
-        return $specifyServices;
-    }
-
     /**
      * @return GoodsService
      */
-    protected function getGoodsService()
+    private function getGoodsService()
     {
         return $this->service('Goods:GoodsService');
     }
@@ -177,40 +72,24 @@ class Good extends AbstractResource
     /**
      * @return ProductService
      */
-    protected function getProductService()
+    private function getProductService()
     {
         return $this->service('Product:ProductService');
     }
 
     /**
-     * @return ClassroomService
-     */
-    protected function getClassroomService()
-    {
-        return $this->service('Classroom:ClassroomService');
-    }
-
-    /**
-     * @return CourseSetService
-     */
-    protected function getCourseSetService()
-    {
-        return $this->service('Course:CourseSetService');
-    }
-
-    /**
-     * @return CourseService
-     */
-    protected function getCourseService()
-    {
-        return $this->service('Course:CourseService');
-    }
-
-    /**
      * @return SettingService
      */
-    protected function getSettingService()
+    private function getSettingService()
     {
         return $this->service('System:SettingService');
+    }
+
+    /**
+     * @return FavoriteService
+     */
+    private function getFavoriteService()
+    {
+        return $this->service('Favorite:FavoriteService');
     }
 }
