@@ -24,11 +24,13 @@
     <tr id="order-table-{{order.id}}" style="word-break: break-all;word-wrap: break-word;">
       <td>
         {% if order.item.target_type|default('') == 'course' %}
-          <a  class="link-primary" href="{{ path('course_show', {id:order.item.target_id}) }}" target="_blank"><strong>{{order.title}}</strong></a>
-        {% elseif order.item.target_type|default('') == 'vip' %}
-          <a class="link-primary" href="{{ path('vip', {id:order.item.target_id}) }}" target="_blank"><strong>{{order.title}}</strong></a>
+          {% set sku = goodsSpecs[order.item.target_id]|default() %}
+          <a  class="link-primary" href="{{ path('goods_show', {id:sku.goodsId,targetId:sku.targetId}) }}" target="_blank"><strong>{{order.title}}</strong></a>
         {% elseif order.item.target_type|default('') == 'classroom' %}
-          <a class="link-primary" href="{{ path('classroom_show', {id:order.item.target_id}) }}" target="_blank"><strong>{{order.title}}</strong></a>
+          {% set sku = goodsSpecs[order.item.target_id]|default() %}
+          <a  class="link-primary" href="{{ path('goods_show', {id:sku.goodsId}) }}" target="_blank"><strong>{{order.title}}</strong></a>
+        {% elseif order.item.target_type|default('') == 'vip' %}
+            <a class="link-primary" href="{{ path('vip', {id:order.item.target_id}) }}" target="_blank"><strong>{{order.title}}</strong></a>
         {% else %}
           <strong>{{order.title}}</strong>
         {% endif %}

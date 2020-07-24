@@ -6,11 +6,7 @@
     <div class="notification-body">
       {% set data = notification.content %}
 
-      {% if data.targetType == 'classroom' %}
-        {% set targetUrl = path('classroom_show',{id:data.targetId}) %}
-      {% elseif data.targetType == 'course' %}
-        {% set targetUrl = path('course_show',{id:data.targetId}) %}
-      {% endif %}
+      {% set targetUrl = path(data.targetUrl.routing,data.targetUrl.params) %}
 
       {% if data.type == 'apply_create' %}
         {% set itemContent = "<a href='" ~ targetUrl ~ "'>" ~ data.title ~ "</a>" %}

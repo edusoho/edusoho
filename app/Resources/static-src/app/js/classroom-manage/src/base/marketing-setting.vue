@@ -202,6 +202,19 @@
             }
         },
         data() {
+
+            let form = {
+                price: this.classroom.price,
+                showable: this.classroom.showable,
+                buyable: this.classroom.buyable,
+                expiryMode: this.classroom.expiryMode,
+                expiryValue: this.classroom.expiryMode == 'date' ? this.classroom.expiryValue * 1000 : this.classroom.expiryValue,
+                service: this.classroom.service,
+            };
+
+            if (this.vipInstalled && this.vipEnabled) {
+                form.vipLevelId = this.classroom.vipLevelId;
+            }
             return {
                 statusRadios: {
                     '0': Translator.trans('site.close'),
@@ -212,15 +225,7 @@
                     'days': Translator.trans('classroom.expiry_mode_days'),
                     'forever': Translator.trans('classroom.expiry_mode_forever'),
                 },
-                form: {
-                    price: this.classroom.price,
-                    showable: this.classroom.showable,
-                    buyable: this.classroom.buyable,
-                    expiryMode: this.classroom.expiryMode,
-                    expiryValue: this.classroom.expiryMode == 'date' ? this.classroom.expiryValue * 1000 : this.classroom.expiryValue,
-                    service: this.classroom.service,
-                    vipLevelId: (this.vipInstalled && this.vipEnabled) ? this.classroom.vipLevelId : null
-                },
+                form: form,
                 formRule: {
                     price: [
                         {

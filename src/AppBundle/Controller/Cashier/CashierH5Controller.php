@@ -20,9 +20,9 @@ class CashierH5Controller extends BaseController
         $tradeSn = $request->query->get('trade_sn');
         $trade = $this->getPayService()->getTradeByTradeSn($tradeSn);
 
-        return $this->forward("AppBundle:Cashier/CashierH5:{$trade['type']}Success", array(
+        return $this->forward("AppBundle:Cashier/CashierH5:{$trade['type']}Success", [
             'trade' => $trade,
-        ));
+        ]);
     }
 
     public function rechargeSuccessAction($trade)
@@ -37,14 +37,14 @@ class CashierH5Controller extends BaseController
         $items = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
         $item1 = reset($items);
 
-        $params = array(
+        $params = [
             'targetId' => $item1['target_id'],
             'num' => $item1['num'],
             'unit' => $item1['unit'],
-        );
+        ];
         $product = $this->getOrderFacadeService()->getOrderProduct($item1['target_type'], $params);
 
-        return $this->redirect($this->generateUrl($product->successUrl[0], $product->successUrl[1]));
+        return $this->redirect($this->generateUrl($product->successUrl['routing'], $product->successUrl['params']));
     }
 
     private function getPayService()
