@@ -3449,17 +3449,13 @@ item_bank_exercise_manage_students_remark:
     path:  /item_bank_exercise/{exerciseId}/manage/student/{userId}/remark
     defaults: { _controller: AppBundle:ItemBankExercise/StudentManage:remark }
 
-item_bank_exercise_open:
-    path: /question_bank/{id}/item_bank_exercise/open
-    defaults: {_controller: AppBundle:ItemBankExercise/Exercise:open}
-
 item_bank_exercise_create:
     path: /question_bank/{id}/item_bank_exercise/create
     defaults: {_controller: AppBundle:ItemBankExercise/Exercise:create}
 
 item_bank_exercise_manage_base:
-    path: /item_bank_exercise/{exerciseId}/manage/base
-    defaults: {_controller: AppBundle:ItemBankExercise/ExerciseManage:base}
+    path: /question_bank/{questionBankId}/item_bank_exercise/{exerciseId}/manage/base
+    defaults: {_controller: AppBundle:ItemBankExercise/ExerciseManage:base, questionBankId: 0}
 
 item_bank_exercise_manage_cover_crop:
     path: /item_bank_exercise/{exerciseId}/manage/cover_crop

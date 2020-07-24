@@ -16,11 +16,14 @@ class ExerciseEventSubscriberTest extends BaseTestCase
                 'id' => 1,
                 'categoryId' => 1,
                 'name' => 'questionBank',
+            ],
+            [
+                'members' => '1,2',
             ]
         );
 
         $result = $subscriber->onQuestionBankUpdate($event);
-        $this->assertNull($result);
+        $this->assertTrue($result);
     }
 
     public function testOnReviewChanged()

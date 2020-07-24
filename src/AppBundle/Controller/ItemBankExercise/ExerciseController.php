@@ -39,7 +39,7 @@ class ExerciseController extends BaseController
         }
         $exercise = $this->getExerciseService()->getByQuestionBankId($questionBank['id']);
         if (!empty($exercise)) {
-            return $this->redirect($this->generateUrl('item_bank_exercise_manage_base', ['exerciseId' => $exercise['id']]));
+            return $this->redirect($this->generateUrl('item_bank_exercise_manage_base', ['exerciseId' => $exercise['id'], 'questionBankId' => $questionBank['id']]));
         }
 
         return $this->render('question-bank/question/exercise-set.html.twig', [
@@ -58,18 +58,14 @@ class ExerciseController extends BaseController
         }
 
         if ($request->isMethod('POST')) {
-            $seq_exercise = $this->getExerciseService()->search([], ['seq' => 'DESC'], 0, 1);
-            $maxSeqExercise = empty($seq_exercise) ? [] : $seq_exercise[0];
-            $seq = empty($maxSeqExercise) ? 1 : $maxSeqExercise['seq'] + 1;
             $data = [
                 'title' => $questionBank['name'],
                 'questionBankId' => $questionBank['id'],
                 'categoryId' => $questionBank['categoryId'],
-                'seq' => $seq,
             ];
             $exercise = $this->getExerciseService()->create($data);
 
-            return $this->redirect($this->generateUrl('item_bank_exercise_manage_base', ['exerciseId' => $exercise['id']]));
+            return $this->redirect($this->generateUrl('item_bank_exercise_manage_base', ['exerciseId' => $exercise['id'], 'questionBankId' => $questionBank['id']]));
         }
 
         return $this->render(

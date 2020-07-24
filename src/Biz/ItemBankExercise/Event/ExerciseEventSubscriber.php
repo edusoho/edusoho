@@ -2,6 +2,7 @@
 
 namespace Biz\ItemBankExercise\Event;
 
+use Biz\ItemBankExercise\Member\MemberManage;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\Review\Service\ReviewService;
 use Codeages\Biz\Framework\Event\Event;
@@ -36,7 +37,11 @@ class ExerciseEventSubscriber extends EventSubscriber implements EventSubscriber
     public function onQuestionBankUpdate(Event $event)
     {
         $questionBank = $event->getSubject();
+        $members = $event->getArgument('members');
         $exercise = $this->getExerciseService()->getByQuestionBankId($questionBank['id']);
+        if (empty($exercise)) {
+            return true;
+        }
 
         $this->getExerciseService()->update(
             $exercise['id'],
@@ -45,6 +50,22 @@ class ExerciseEventSubscriber extends EventSubscriber implements EventSubscriber
                 'title' => $questionBank['name'],
             ]
         );
+
+        $this->synchronizationItemBankExercise($exercise, $members);
+    }
+
+    protected function synchronizationItemBankExercise($exercise, $members)
+    {
+        $members = explode(',', $members);
+
+        $oldTeacherIds = $exercise['teacherIds'];
+        $manage = new MemberManage($this->getBiz());
+        $teacherMember = $manage->getMemberClass('teacher');
+        foreach ($members as $teacherId) {
+            if (!in_array($teacherId, $oldTeacherIds)) {
+                $teacherMember->join($exercise['id'], $teacherId, ['remark' => '']);
+            }
+        }
     }
 
     /**
