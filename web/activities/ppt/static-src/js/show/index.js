@@ -14,13 +14,12 @@ let url = $('.js-cloud-url').data('url');
 })(url);
 
 let $element = $('#activity-ppt-content');
-let currentPPTPlayer = $element.data('type') || 'slide';
-let tokenUrl = $element.data('tokenUrl');
-const images = $element.data('imageInfo');
-const totalPagesNumber = Number(images.length);
+let typeList = [];
+let currentType = '';
+let totalPagesNumber = '';
+// let tokenUrl = $element.data('tokenUrl');
 const finishType = $element.data('finishType');
 const isIOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
-
 
 const iosFullScreen = () => {
   if (isIOS) {
@@ -34,25 +33,21 @@ const iosFullScreen = () => {
 const initPptPlayer = (flag) => {
   // 清空内容后切换
   $element.empty();
-  if ($element.data('imgType') === 'onlyImg') {
-    initPPTNormalPlayer();
-  } else {
-    if (currentPPTPlayer === 'img') {
-      initPPTImgPlayer();
-    } else if (currentPPTPlayer === 'slide') {
-      if (flag) {
-        changePPTNormalPlayer();
-      } else {
-        initPPTNormalPlayer();
-      }
-    }
-  }
+  var pptPlayer = newPlayer();
+
+  $('.js-change-ppt-btn').on('click', (event) => {
+    const $target = $(event.target);
+    $target.html(Translator.trans('site.loading')).attr('disabled', true);
+    currentType = currentType === 'ppt-img' ? 'ppt-slide' : 'ppt-img';
+    pptPlayer.switchPlayerType(currentType);
+  });
 };
 
 const toggleText = (type) => {
   if (!$('.js-change-ppt-btn').length || type === '') {
     return;
   }
+  type = type === 'ppt-img' ? 'ppt-slide' : 'ppt-img';
   const $toggleBtn = $('.js-change-ppt-btn');
   const textStr = `course.plan_task.activity_ppt_animation_${type}`;
   $toggleBtn.html(Translator.trans(textStr)).attr('disabled', false);
@@ -60,13 +55,17 @@ const toggleText = (type) => {
 
 // 触发任务finish状态
 const endFinishTip = (pageNumber) => {
+  console.log(11111111)
   if ($element.data('finishType') === 'end') {
     if (totalPagesNumber === 1) {
-      emitter.emit('finish', {page: 1});
+      console.log(222222)
+      emitter.emit('finish', { page: 1 });
     } else {
       const page = Number(pageNumber);
+      console.log(page)
       if (totalPagesNumber === page) {
-        emitter.emit('finish', {page});
+        console.log(222222)
+        emitter.emit('finish', { page });
       }
     }
   }
@@ -77,7 +76,6 @@ const newPlayer = (token) => {
   const pptPlayer = new QiQiuYun.Player({
     id: 'activity-ppt-content',
     // 环境配置
-    playServer: app.cloudPlayServer,
     sdkBaseUri: app.cloudSdkBaseUri,
     disableDataUpload: app.cloudDisableLogReport,
     disableSentry: app.cloudDisableLogReport,
@@ -89,81 +87,39 @@ const newPlayer = (token) => {
     }
   });
 
-  pptPlayer.on('slide.ready', (data) => {
-    const type = token ? 'img' : '';
-    toggleText(type);
+  pptPlayer.on('ready', (data) => {
+    // console.log(data)
+    toggleText(currentType);
     endFinishTip();
   });
 
-  pptPlayer.on('slide.pagechanged', (data) => {
-    endFinishTip(data.page);
+  pptPlayer.on('pagechanged', (data) => {
+    console.log(data)
+    if (currentType == 'ppt-slide') {
+      var page = data.page;
+    } else {
+      var page = data.pageNum
+    }
+    endFinishTip(page);
   });
 
-  pptPlayer.on('img.requestFullscreen', () => {
+  pptPlayer.on('requestFullscreen', () => {
     iosFullScreen();
   });
 
-  pptPlayer.on('slide.requestFullscreen', () => {
-    iosFullScreen();
-  });
+  //播放器第一次加载时，可以获取能够播放的类型列表
+  pptPlayer.on('sourceChanged', (data) => {
+    console.log(data);
+    typeList = data.typeList;
+    currentType = typeList[0];
+    totalPagesNumber = Number(data.resource.length);
+    if (typeList.length > 1) {
+      $('.js-change-ppt-btn').removeClass('hidden');
+      toggleText(currentType);
+    }
+  })
 
-  // 监听老图片
-  pptPlayer.on('img.ready', () => {
-    endFinishTip();
-  });
-
-  pptPlayer.on('img.poschanged', (data) => {
-    endFinishTip(data.pageNum);
-  });
-};
-
-// 兼容老ppt，默认就是时候img-player，不用切换
-const initPPTNormalPlayer = () => {
-  newPlayer();
-};
-
-const initPPTImgPlayer = () => {
-  const imgPlayer = new QiQiuYun.Player({
-    id: 'activity-ppt-content',
-    source: {
-      type: 'ppt',
-      args: {
-        player: 'ppt',
-        images,
-        type: 'img',
-      }
-    },
-  });
-
-  imgPlayer.on('img.ready', () => {
-    const type = 'slide';
-    toggleText(type);
-    endFinishTip();
-  });
-
-  imgPlayer.on('img.requestFullscreen', () => {
-    iosFullScreen();
-  });
-
-  imgPlayer.on('img.poschanged', (data) => {
-    endFinishTip(data.pageNum);
-  });
-};
-
-// img 切换成 slide播放器
-const changePPTNormalPlayer = () => {
-  $.get(tokenUrl).then(res => {
-    newPlayer(res.result.token);
-  });
+  return pptPlayer;
 };
 
 initPptPlayer();
-
-
-$('.js-change-ppt-btn').on('click', (event) => {
-  const $target = $(event.target);
-  $target.html(Translator.trans('site.loading')).attr('disabled', true);
-  currentPPTPlayer = currentPPTPlayer === 'img' ? 'slide' : 'img';
-  $element.data('type', currentPPTPlayer);
-  initPptPlayer(true);
-});

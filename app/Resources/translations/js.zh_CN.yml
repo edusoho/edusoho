@@ -1443,8 +1443,8 @@ course.question_manage.manage.delete_tips: 删除题目，可能会影响课时�
 course.question_manage.upgrade_tips: 为了更好的使用体验，请先升级插件。<br />路径：【后台】 - 【云市场】- 【营销应用】 - 【题库增强插件】。
 admin.setting.invite.coupon.empty.tips: 请设置优惠券批次
 
-course.plan_task.activity_ppt_animation_img: 切换图片模式
-course.plan_task.activity_ppt_animation_slide: 切换动画模式
+course.plan_task.activity_ppt_animation_ppt-img: 切换图片模式
+course.plan_task.activity_ppt_animation_ppt-slide: 切换动画模式
 
 admin.mobile_manage.discovery_upgrade_madal.notice_successed: '升级成功'
 admin.mobile_manage.discovery_upgrade_madal.notice_failed: '升级失败'
