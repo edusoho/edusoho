@@ -12,7 +12,7 @@
   </div>
   <div id="app"
        data-classroom="{{ classroom|json_encode }}"
-       data-tags="{{ tags|default()|json_encode }}"
+       data-tags="{{ tags|default(null)|json_encode }}"
        data-cover="{{ filepath(classroom.largePicture, 'classroom.png') }}"
        data-cover-crop-url="{{ path('classroom_manage_picture_crop', {id:classroom.id}) }}"
        data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}"
