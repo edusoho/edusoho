@@ -10954,4 +10954,6 @@ classroom.preview_btn: 预览班级
 classroom.publish_btn: 发布班级
 classroom.basic_setting: 基础设置
 classroom.cover_crop.title: 班级封面上传
+exception.goods.not_found: 商品未找到
+exception.specs.not_found: 商品规格未找到
 

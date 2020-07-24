@@ -100,6 +100,11 @@ class GoodsServiceImpl extends BaseService implements GoodsService
         return $this->getGoodsDao()->delete($id);
     }
 
+    public function countGoods($conditions)
+    {
+        return $this->getGoodsDao()->count($conditions);
+    }
+
     public function searchGoods($conditions, $orderBys, $start, $limit, $columns = [])
     {
         return $this->getGoodsDao()->search($conditions, $orderBys, $start, $limit, $columns);
@@ -127,7 +132,11 @@ class GoodsServiceImpl extends BaseService implements GoodsService
             'title',
             'images',
             'seq',
-            'buyableMode',
+            'usageMode',
+            'usageDays',
+            'usageStartTime',
+            'usageEndTime',
+            'buyable',
             'buyableStartTime',
             'buyableEndTime',
         ]);
@@ -146,13 +155,14 @@ class GoodsServiceImpl extends BaseService implements GoodsService
             'title',
             'images',
             'price',
-            'title',
             'status',
-            'images',
-            'price',
             'seq',
             'coinPrice',
-            'buyableMode',
+            'usageMode',
+            'usageDays',
+            'usageStartTime',
+            'usageEndTime',
+            'buyable',
             'buyableStartTime',
             'buyableEndTime',
             'maxJoinNum',
@@ -160,6 +170,14 @@ class GoodsServiceImpl extends BaseService implements GoodsService
         ]);
 
         return $this->getGoodsSpecsDao()->update($id, $goodsSpecs);
+    }
+
+    public function changeGoodsSpecsPrice($specsId, $price)
+    {
+        $specs = $this->getGoodsSpecs($specsId);
+        if (empty($specs)) {
+            $this->createNewException(GoodsException::SPECS_NOT_FOUND());
+        }
     }
 
     public function publishGoodsSpecs($id)

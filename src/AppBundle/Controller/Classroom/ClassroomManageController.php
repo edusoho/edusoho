@@ -1036,7 +1036,8 @@ class ClassroomManageController extends BaseController
     private function getTagIdsFromRequest($request)
     {
         $tags = $request->request->get('tags');
-        if (empty($tags)) {
+        //前台会传输'"'作为tags
+        if (empty(trim($tags, '"'))) {
             return [];
         }
         $tags = $this->getTagService()->findTagsByNames($tags);

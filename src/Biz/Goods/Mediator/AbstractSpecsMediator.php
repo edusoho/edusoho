@@ -2,6 +2,8 @@
 
 namespace Biz\Goods\Mediator;
 
+use Biz\Goods\Service\GoodsService;
+use Biz\Product\Service\ProductService;
 use Codeages\Biz\Framework\Context\Biz;
 use Pimple\Container;
 
@@ -28,4 +30,20 @@ abstract class AbstractSpecsMediator
     abstract public function onClose($target);
 
     abstract public function onDelete($target);
+
+    /**
+     * @return ProductService
+     */
+    protected function getProductService()
+    {
+        return $this->biz->service('Product:ProductService');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->biz->service('Goods:GoodsService');
+    }
 }

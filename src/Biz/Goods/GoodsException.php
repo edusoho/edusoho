@@ -10,7 +10,10 @@ class GoodsException extends AbstractException
 
     const GOODS_NOT_FOUND = 4047201;
 
+    const SPECS_NOT_FOUND = 4027202;
+
     public $messages = [
-        4047201 => 'exception.goods.not_found',
+        self::GOODS_NOT_FOUND => 'exception.goods.not_found',
+        self::SPECS_NOT_FOUND => 'exception.specs.not_found',
     ];
 }
