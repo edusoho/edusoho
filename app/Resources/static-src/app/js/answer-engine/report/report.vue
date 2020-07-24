@@ -69,6 +69,7 @@
           },
           beforeSend(request) {
             request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+            request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
           }
         }).done(function (res) {
           that.questionFavorites = res;
