@@ -34,7 +34,7 @@
         {#添加admin_v2#}
         {% set canManage =  member.role|default('') == 'teacher' or has_permission('admin_course_content_manage') or has_permission('admin_v2_course_content_manage') %}
         {% if canManage %}
-          <a class="btn btn-default btn-xs course-detail-info__manage" href="{{ path('item_bank_exercise_manage_base', {exerciseId: exercise.id}) }}">
+          <a class="btn btn-default btn-xs course-detail-info__manage" href="{{ path('item_bank_exercise_manage_base', {exerciseId: exercise.id, questionBankId: exercise.questionBankId}) }}">
             <i class="es-icon es-icon-setting"></i>&nbsp;{{ 'site.default.manage'|trans }}
           </a>
         {% endif %}

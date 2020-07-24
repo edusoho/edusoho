@@ -20,7 +20,7 @@
         </li>
         {#基础设置#}
         <li class="cd-sidebar__item {% if course_side_nav == 'base' %}active{% endif %}">
-          <a href="{{ path('item_bank_exercise_manage_base', {exerciseId:exercise.id}) }}">
+          <a href="{{ path('item_bank_exercise_manage_base', {exerciseId:exercise.id,questionBankId: exercise.questionBankId}) }}">
             {{ 'course.plan_base_info'|trans }}
           </a>
         </li>

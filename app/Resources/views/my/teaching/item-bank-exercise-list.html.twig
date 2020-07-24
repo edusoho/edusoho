@@ -1,13 +1,13 @@
 {% extends 'item-bank-exercise-manage/header.html.twig' %}
 
 {% block coursesetImg %}
-  <a href="{{ path('item_bank_exercise_manage_base', {exerciseId: item.id }) }}" target="_blank">
+  <a href="{{ path('item_bank_exercise_manage_base', {exerciseId: item.id, questionBankId: item.questionBankId }) }}" target="_blank">
     <img class="courseset-manage-header__img" src="{{ filepath(course_set_cover(item, 'small'), 'course.png') }}" />
   </a>
 {% endblock %}
 
 {% block btn %}
-  <a class="cd-btn cd-btn-ghost-primary cd-mr16" href="{{ path('item_bank_exercise_manage_base', {exerciseId: item.id }) }}" target="_blank">{{ 'item_bank_exercise.manage_btn'|trans }}</a>
+  <a class="cd-btn cd-btn-ghost-primary cd-mr16" href="{{ path('item_bank_exercise_manage_base', {exerciseId: item.id, questionBankId: item.questionBankId }) }}" target="_blank">{{ 'item_bank_exercise.manage_btn'|trans }}</a>
   {% if item.status != 'published' %}
     <a class="cd-btn cd-btn-ghost-default" href="{{ path('item_bank_exercise_show', {id: item.id, previewAs:'guest'}) }}" target="_blank">{{ 'item_bank_exercise.preview.course'|trans }}</a>
   {% else %}
@@ -16,7 +16,7 @@
 {% endblock %}
 
 {% block coursesetTitle %}
-  <a class="cd-link-major" href="{{ path('item_bank_exercise_manage_base', {exerciseId: item.id }) }}" target="_blank">{{ item.title }}</a>
+  <a class="cd-link-major" href="{{ path('item_bank_exercise_manage_base', {exerciseId: item.id, questionBankId: item.questionBankId }) }}" target="_blank">{{ item.title }}</a>
 {% endblock %}
 
 {% block liveTag %}

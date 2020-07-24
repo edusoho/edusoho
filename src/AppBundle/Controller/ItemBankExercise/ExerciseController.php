@@ -39,7 +39,7 @@ class ExerciseController extends BaseController
         }
         $exercise = $this->getExerciseService()->getByQuestionBankId($questionBank['id']);
         if (!empty($exercise)) {
-            return $this->redirect($this->generateUrl('item_bank_exercise_manage_base', ['exerciseId' => $exercise['id']]));
+            return $this->redirect($this->generateUrl('item_bank_exercise_manage_base', ['exerciseId' => $exercise['id'], 'questionBankId' => $questionBank['id']]));
         }
 
         return $this->render('question-bank/question/exercise-set.html.twig', [
@@ -69,7 +69,7 @@ class ExerciseController extends BaseController
             ];
             $exercise = $this->getExerciseService()->create($data);
 
-            return $this->redirect($this->generateUrl('item_bank_exercise_manage_base', ['exerciseId' => $exercise['id']]));
+            return $this->redirect($this->generateUrl('item_bank_exercise_manage_base', ['exerciseId' => $exercise['id'], 'questionBankId' => $questionBank['id']]));
         }
 
         return $this->render(
