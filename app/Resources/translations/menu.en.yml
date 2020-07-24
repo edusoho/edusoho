@@ -508,6 +508,11 @@ admin_v2.course.item_bank_exercise: Item Bank Exercise
 admin_v2.course.item_bank_exercise.basic_tab: Item Bank Exercise
 admin_v2.course.item_bank_exercise.analysis_tab: Item Bank Exercise Analysis
 admin_v2.course.item_bank_exercise.recommend_list_tab: Recommended
+admin_v2.course.item_bank_exercise.basic_tab.manage_btn: Manage
+admin_v2.course.item_bank_exercise.basic_tab.recommend_btn: Recommend
+admin_v2.course.item_bank_exercise.basic_tab.close_btn: Close
+admin_v2.course.item_bank_exercise.basic_tab.publish_submit_btn: Publish
+admin_v2.course.item_bank_exercise.basic_tab.delete_submit_btn: Delete
 
 #公开课模块
 admin_v2.course.open_course_menu:  Public Courses

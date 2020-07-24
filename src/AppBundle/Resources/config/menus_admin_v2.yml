@@ -255,9 +255,9 @@ admin_v2:
                                     router_name: admin_v2_item_bank_exercise
                                     children:
                                         admin_v2_item_bank_exercise_content_manage:
-                                            name: admin_v2.course.basic.basic_tab.manage_btn
+                                            name: admin_v2.course.item_bank_exercise.basic_tab.manage_btn
                                         admin_v2_item_bank_exercise_recommend:
-                                            name: admin_v2.course.basic.basic_tab.recommend_btn
+                                            name: admin_v2.course.item_bank_exercise.basic_tab.recommend_btn
                                             router_params:
                                                 id: (exercise.id)
                                             group: groupButton
@@ -273,15 +273,8 @@ admin_v2:
                                             visible: ( exercise.recommended )
                                             icon: 'glyphicon glyphicon-hand-right'
                                             mode: none
-#                                        admin_v2_item_bank_exercise_preview:
-#                                            name: admin_v2.course.basic.basic_tab.preview_btn
-#                                            router_params:
-#                                                id: (exercise.id)
-#                                            group: groupButton
-#                                            icon: 'glyphicon glyphicon-eye-open'
-#                                            blank: 1
                                         admin_v2_item_bank_exercise_publish:
-                                            name: admin_v2.course.basic.basic_tab.publish_submit_btn
+                                            name: admin_v2.course.item_bank_exercise.basic_tab.publish_submit_btn
                                             router_params:
                                                 id: (exercise.id)
                                             group: groupButton
@@ -290,7 +283,7 @@ admin_v2:
                                             mode: none
                                             visible: (exercise.status != 'published')
                                         admin_v2_item_bank_exercise_close:
-                                          name: admin_v2.course.basic.basic_tab.close_btn
+                                          name: admin_v2.course.item_bank_exercise.basic_tab.close_btn
                                           router_params:
                                             id: (exercise.id)
                                           group: groupButton
@@ -299,7 +292,7 @@ admin_v2:
                                           mode: none
                                           visible: (exercise.status == 'published')
                                         admin_v2_item_bank_exercise_delete:
-                                            name: admin_v2.course.basic.basic_tab.delete_submit_btn
+                                            name: admin_v2.course.item_bank_exercise.basic_tab.delete_submit_btn
                                             class: delete-exercise
                                             router_params:
                                                 id: (exercise.id)
