@@ -87,9 +87,9 @@ class UploaderController extends BaseController
             $file = $this->getUploadFileService()->finishedUpload($params);
         } catch (\Exception $e) {
             if ($isJsonp) {
-                return $this->createJsonpResponse(array('error' => $e->getMessage()), $callback, method_exists($e, 'getStatusCode') ? $e->getStatusCode() : 500);
+                return $this->createJsonpResponse(['error' => $e->getMessage()], $callback, method_exists($e, 'getStatusCode') ? $e->getStatusCode() : 500);
             } else {
-                return $this->createJsonResponse(array('error' => $e->getMessage()), method_exists($e, 'getStatusCode') ? $e->getStatusCode() : 500);
+                return $this->createJsonResponse(['error' => $e->getMessage()], method_exists($e, 'getStatusCode') ? $e->getStatusCode() : 500);
             }
         }
 
