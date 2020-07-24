@@ -55,16 +55,13 @@ const toggleText = (type) => {
 
 // 触发任务finish状态
 const endFinishTip = (pageNumber) => {
-  console.log(11111111)
   if ($element.data('finishType') === 'end') {
     if (totalPagesNumber === 1) {
-      console.log(222222)
       emitter.emit('finish', { page: 1 });
     } else {
       const page = Number(pageNumber);
       console.log(page)
       if (totalPagesNumber === page) {
-        console.log(222222)
         emitter.emit('finish', { page });
       }
     }
@@ -88,7 +85,6 @@ const newPlayer = (token) => {
   });
 
   pptPlayer.on('ready', (data) => {
-    // console.log(data)
     toggleText(currentType);
     endFinishTip();
   });
