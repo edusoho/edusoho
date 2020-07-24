@@ -5,6 +5,10 @@ namespace Biz\QuestionBank\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Common\CommonException;
+use Biz\ItemBankExercise\Dao\ExerciseMemberDao;
+use Biz\ItemBankExercise\Member\MemberManage;
+use Biz\ItemBankExercise\Service\ExerciseMemberService;
+use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\QuestionBank\Dao\QuestionBankDao;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\CategoryService;
@@ -126,6 +130,8 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
 
             $this->getMemberService()->resetBankMembers($newQuestionBank['id'], $members);
 
+            $this->synchronizationItemBankExercise($newQuestionBank['id'], $members);
+
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
@@ -133,6 +139,25 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
         }
 
         return $newQuestionBank;
+    }
+
+    protected function synchronizationItemBankExercise($questionBankId, $members)
+    {
+        $members = explode(',', $members);
+        $exercise = $this->getItemBankExerciseService()->getByQuestionBankId($questionBankId);
+        if (empty($exercise)) {
+            return true;
+        }
+
+        $oldTeacherIds = $exercise['teacherIds'];
+        $diffTeacherIds = array_diff($members, $oldTeacherIds);
+        if (!empty($diffTeacherIds)) {
+            $manage = new MemberManage($this->biz);
+            $teacherMember = $manage->getMemberClass('teacher');
+            foreach ($diffTeacherIds as $teacherId) {
+                $teacherMember->join($exercise['id'], $teacherId, ['remark' => '']);
+            }
+        }
     }
 
     public function updateQuestionBank($id, $fields)
@@ -259,6 +284,30 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
         $conditions['isHidden'] = 0;
 
         return $conditions;
+    }
+
+    /**
+     * @return ExerciseMemberDao
+     */
+    protected function getItemBankExerciseMemberDao()
+    {
+        return $this->createDao('ItemBankExercise:ExerciseMemberDao');
+    }
+
+    /**
+     * @return ExerciseMemberService
+     */
+    protected function getItemBankExerciseMemberService()
+    {
+        return $this->createService('ItemBankExercise:ExerciseMemberService');
+    }
+
+    /**
+     * @return ExerciseService
+     */
+    protected function getItemBankExerciseService()
+    {
+        return $this->createService('ItemBankExercise:ExerciseService');
     }
 
     /**

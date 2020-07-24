@@ -4,14 +4,22 @@ namespace AppBundle\Controller\ItemBankExercise;
 
 use AppBundle\Controller\BaseController;
 use Biz\ItemBankExercise\Service\ExerciseService;
+use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\CategoryService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Symfony\Component\HttpFoundation\Request;
 
 class ExerciseManageController extends BaseController
 {
-    public function baseAction(Request $request, $exerciseId)
+    public function baseAction(Request $request, $exerciseId, $questionBankId = 0)
     {
+        if ($questionBankId && 0 == $exerciseId) {
+            return $this->forward('AppBundle:ItemBankExercise/Exercise:open', [
+                'request' => $request,
+                'id' => $questionBankId,
+            ]);
+        }
+
         $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
 
         return $this->render(

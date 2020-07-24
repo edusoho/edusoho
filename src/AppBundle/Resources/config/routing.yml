@@ -3458,8 +3458,8 @@ item_bank_exercise_create:
     defaults: {_controller: AppBundle:ItemBankExercise/Exercise:create}
 
 item_bank_exercise_manage_base:
-    path: /item_bank_exercise/{exerciseId}/manage/base
-    defaults: {_controller: AppBundle:ItemBankExercise/ExerciseManage:base}
+    path: /{questionBankId}/item_bank_exercise/{exerciseId}/manage/base
+    defaults: {_controller: AppBundle:ItemBankExercise/ExerciseManage:base, questionBankId: 0}
 
 item_bank_exercise_manage_cover_crop:
     path: /item_bank_exercise/{exerciseId}/manage/cover_crop
