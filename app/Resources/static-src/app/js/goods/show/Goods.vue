@@ -1,7 +1,7 @@
 <template>
     <div class="cd-container">
         <div class="product-breadcrumb">首页 / {{goods.title}}</div>
-        <detail :goods="goods" :currentSku="currentSku" @changeSku="changeSku">
+        <detail :goods="goods" :currentSku="currentSku" @changeSku="changeSku" :is-user-login="isUserLogin">
         </detail>
 
         <div class="product-info clearfix" v-if="goods.id">
@@ -17,7 +17,7 @@
                             </li>
                         </ul>
                         <div class="buy__btn pull-right">
-                            <a href="javascript:;">立即购买</a>
+                            <buy-sku :sku="currentSku" :is-user-login="isUserLogin"></buy-sku>
                         </div>
                     </div>
                 </div>
@@ -37,20 +37,24 @@
                 <div class="info-left__content">
                     <div id="info-left-1" class="content-item js-content-item">
                         <h3 class="content-item__title">商品介绍</h3>
-                        <div v-html="summaryHtml" class="description-content" style="padding-left: 14px; padding-top: 10px;"></div>
+                        <div v-html="summaryHtml" class="description-content"
+                             style="padding-left: 14px; padding-top: 10px;"></div>
                     </div>
 
-                    <div v-if="goods.product.targetType === 'course'" id="info-left-2" class="content-item js-content-item">
-                        <h3  class="content-item__title">学习目录</h3>
+                    <div v-if="goods.product.targetType === 'course'" id="info-left-2"
+                         class="content-item js-content-item">
+                        <h3 class="content-item__title">学习目录</h3>
                     </div>
-                    <div v-if="goods.product.targetType === 'classroom'" id="info-left-2" class="content-item js-content-item">
-                        <h3  class="content-item__title">学习目录</h3>
+                    <div v-if="goods.product.targetType === 'classroom'" id="info-left-2"
+                         class="content-item js-content-item">
+                        <h3 class="content-item__title">学习目录</h3>
                         <classroom-courses :classroomCourses="componentsData.classroomCourses"></classroom-courses>
                     </div>
 
                     <div id="info-left-3" class="info-left-reviews content-item js-content-item reviews">
                         <h3 class="content-item__title">学员评价</h3>
-                        <reviews :can-create="true" :can-operate="true" :target-type="'goods'" :current-user-id="currentUserId"
+                        <reviews :can-create="true" :can-operate="true" :target-type="'goods'"
+                                 :current-user-id="currentUserId"
                                  :target-id="goods.id">
                         </reviews>
                     </div>
@@ -58,12 +62,12 @@
             </div>
 
             <div class="product-info__right pull-right">
-                <teacher :teachers="componentsData.teachers" />
-                <qr :mpQrcode="componentsData.mpQrCode" />
-                <recommend :recommendGoods="componentsData.recommendGoods" />
+                <teacher :teachers="componentsData.teachers"/>
+                <qr :mpQrcode="componentsData.mpQrCode"/>
+                <recommend :recommendGoods="componentsData.recommendGoods"/>
             </div>
         </div>
-        <back-to-top v-show="isFixed" />
+        <back-to-top v-show="isFixed"/>
     </div>
 </template>
 
@@ -76,6 +80,7 @@
     import BackToTop from './components/back-to-top';
     import Reviews from 'app/common/component/review/index';
     import ClassroomCourses from './components/classroom-courses';
+    import BuySku from './components/buy-sku';
 
     export default {
         data() {
@@ -95,6 +100,14 @@
             currentUserId: {
                 type: Number,
                 default: null
+            },
+            targetId: {
+                type: Number,
+                default: null
+            },
+            isUserLogin: {
+                type: Number,
+                default: 0,
             }
         },
         components: {
@@ -105,6 +118,7 @@
             BackToTop,
             Reviews,
             ClassroomCourses,
+            BuySku,
         },
         computed: {
             summaryHtml() {
@@ -115,17 +129,22 @@
         methods: {
             getGoodsInfo() {
                 axios.get(`/api/good/${this.goodsId}`, {
-                    headers: { 'Accept': 'application/vnd.edusoho.v2+json'}
+                    headers: {'Accept': 'application/vnd.edusoho.v2+json'}
                 }).then((res) => {
                     this.goods = res.data;
 
-                    if (this.goods.product.target.defaultCourseId) {
-                        this.changeSku(this.goods.product.target.defaultCourseId);
-                    } else {
-                        this.changeSku(this.goods.product.target.id);
+                    if (this.goods.type == 'classroom') {
+                        return this.changeSku(this.goods.product.target.id);
                     }
 
-                    this.initGoodsComponents();
+                    if (this.goods.type == 'course' && this.targetId) {
+                        return this.changeSku(this.targetId);
+                    }
+
+                    if (this.goods.product.target.defaultCourseId) {
+                        return this.changeSku(this.goods.product.target.defaultCourseId);
+                    }
+
                 });
             },
             initGoodsComponents() {
@@ -156,13 +175,14 @@
                 }
 
                 this.goods.hasExtension = true;
+                this.initGoodsComponents();
             },
             handleScroll() {
                 let eleTop = this.$refs.infoLeftNav.offsetTop + this.$refs.infoLeftNav.offsetHeight;
                 if (!eleTop) return;
                 let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-                if ( eleTop <= scrollTop && !this.isFixed ) this.isFixed = true;
-                if ( eleTop > scrollTop && this.isFixed ) this.isFixed = false;
+                if (eleTop <= scrollTop && !this.isFixed) this.isFixed = true;
+                if (eleTop > scrollTop && this.isFixed) this.isFixed = false;
                 clearTimeout(this.timerScroll);
                 this.timerScroll = null;
                 this.timerScroll = setTimeout(() => {
@@ -192,7 +212,6 @@
                     this.flag = true;
                 }, 300);
             },
-
         },
         created() {
             this.getGoodsInfo();

@@ -35,7 +35,7 @@ class PickedDeductWrapperTest extends BaseTestCase
 
         $courseProduct = new CourseProduct();
         $courseProduct->originPrice = 100;
-        $wrapper->wrapper($courseProduct, array());
+        $wrapper->wrapper($courseProduct, []);
 
         $this->assertEquals(70, $courseProduct->originPrice);
     }

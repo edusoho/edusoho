@@ -1,7 +1,7 @@
 <div class="order-center-card clearfix">
   <div class="order-center-card__img">
-    <a href="{{ path('classroom_show', {id: product.targetId}) }}">
-      <img src="{{ filepath(product.middlePicture, 'classroom.png') }}" alt="{{ product.title }}">
+    <a href="{{ path(product.backUrl.routing, product.backUrl.params) }}">
+      <img src="{{ filepath(product.cover.middle, 'classroom.png') }}" alt="{{ product.title }}">
     </a>
   </div>
   <div class="order-center-card__info">

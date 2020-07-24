@@ -16,14 +16,14 @@ class AvailableDeductWrapperTest extends BaseTestCase
             ->getMock();
         $command1->method('execute')
             ->willReturnCallback(function ($product) {
-                $product->availableDeducts[] = array('discount' => 1);
+                $product->availableDeducts[] = ['discount' => 1];
             });
 
         $command2 = $this->getMockBuilder('Biz\OrderFacade\Command\Command')
             ->getMock();
         $command2->method('execute')
             ->willReturnCallback(function ($product) {
-                $product->availableDeducts[] = array('coupon' => 2);
+                $product->availableDeducts[] = ['coupon' => 2];
             });
 
         $wrapper = new AvailableDeductWrapper();
@@ -37,10 +37,10 @@ class AvailableDeductWrapperTest extends BaseTestCase
         $courseProduct = new CourseProduct();
         $wrapper->wrapper($courseProduct);
 
-        $expected = array(
-            array('coupon' => 2),
-            array('discount' => 1),
-        );
+        $expected = [
+            ['coupon' => 2],
+            ['discount' => 1],
+        ];
 
         $this->assertEquals($expected, $courseProduct->availableDeducts);
     }

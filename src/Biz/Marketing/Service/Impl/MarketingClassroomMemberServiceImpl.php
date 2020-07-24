@@ -6,30 +6,33 @@ use Biz\Classroom\Service\Impl\ClassroomServiceImpl;
 
 class MarketingClassroomMemberServiceImpl extends ClassroomServiceImpl
 {
-    protected function createOrder($classroomId, $userId, $data, $source = 'outside')
+    protected function createOrder($goodsSpecsId, $userId, $data, $source = 'outside')
     {
         $classroomProduct = $this->getOrderFacadeService()->getOrderProduct(
             'classroom',
-            array(
-                'targetId' => $classroomId,
-            )
+            [
+                'targetId' => $goodsSpecsId,
+            ]
         );
 
         $classroomProduct->originPrice = $data['originPrice'];
         $data['targetType'] = 'classroom';
-        $params = array(
+        $params = [
             'created_reason' => $data['remark'],
             'source' => $data['source'],
             'create_extra' => $data,
-            'deducts' => empty($data['deducts']) ? array() : $data['deducts'],
+            'deducts' => empty($data['deducts']) ? [] : $data['deducts'],
             'pay_time' => $data['pay_time'],
-        );
+        ];
 
         return $this->getOrderFacadeService()->createSpecialOrder($classroomProduct, $userId, $params, 'Marketing');
     }
 
     public function createMarketingOrder($classroomId, $userId, $data)
     {
-        return $this->createOrder($classroomId, $userId, $data);
+        $product = $this->getProductService()->getProductByTargetIdAndType($classroomId, 'classroom');
+        $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByProductIdAndTargetId($product['id'], $classroomId);
+
+        return $this->createOrder($goodsSpecs['id'], $userId, $data);
     }
 }
