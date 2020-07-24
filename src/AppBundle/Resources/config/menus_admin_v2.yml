@@ -273,6 +273,14 @@ admin_v2:
                                             visible: ( exercise.recommended )
                                             icon: 'glyphicon glyphicon-hand-right'
                                             mode: none
+                                        admin_v2_item_bank_exercise_preview:
+                                            name: admin_v2.course.basic.basic_tab.preview_btn
+                                            router_name: item_bank_exercise_show
+                                            router_params:
+                                                id: (exercise.id)
+                                            group: groupButton
+                                            icon: 'glyphicon glyphicon-eye-open'
+                                            blank: 1
                                         admin_v2_item_bank_exercise_publish:
                                             name: admin_v2.course.item_bank_exercise.basic_tab.publish_submit_btn
                                             router_params:
