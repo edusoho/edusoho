@@ -102,7 +102,6 @@ class BalloonCloudVideoPlayer extends Emitter {
       playlist: self.options.url,
       rememberLastPos: rememberLastPos,
       initPos: self.options.customPos,
-      timelineOffset: self.options.videoHeaderLength,
       autoplay: self.options.autoplay,
       strictMode: !self.options.strictMode,
       language: lang

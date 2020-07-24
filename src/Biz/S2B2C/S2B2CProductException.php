@@ -24,7 +24,9 @@ class S2B2CProductException extends AbstractException
 
     const PRODUCT_NOT_FOUNT = 5007008;
 
-    public $message = [
+    const UPDATE_PRODUCT_VERSION_FAIL = 5007009;
+
+    public $messages = [
         5007001 => 'exception.s2b2c_product.type_invalid',
         5007002 => 'exception.s2b2c_product.update_type_invalid',
         4047003 => 'exception.s2b2c_product.not_found',
@@ -33,5 +35,6 @@ class S2B2CProductException extends AbstractException
         5007006 => 'exception.s2b2c_product.adopt_repeat',
         5007007 => 'exception.s2b2c_product.sync_fail',
         5007008 => 'exception.s2b2c_product.not_found',
+        5007009 => 'exception.s2b2c_product.update_version_fail',
     ];
 }
