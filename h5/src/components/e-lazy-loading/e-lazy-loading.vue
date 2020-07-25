@@ -1,9 +1,23 @@
 <template>
-  <van-list
-    v-model="loading"
-    :finished="finished"
-    @load="onLoad">
+  <van-list v-model="loading" :finished="finished" @load="onLoad">
+    <template v-if="typeList === 'item_bank_exercise'">
+      <courseRow
+        v-for="(course, index) in courseList"
+        :key="index"
+        :type="courseItemType"
+        :normal-tag-show="normalTagShow"
+        :vip-tag-show="vipTagShow"
+        :type-list="typeList"
+        :is-vip="course.vipLevelId"
+        :is-app-use="false"
+        :discountType="discountType"
+        :discount="discount"
+        :course-type="courseType"
+        :course="course | courseListData(listObj, 'new', 'h5')"
+      />
+    </template>
     <courseItem
+      v-else
       v-for="(course, index) in courseList"
       :key="index"
       :type="courseItemType"
@@ -11,26 +25,28 @@
       :vip-tag-show="vipTagShow"
       :type-list="typeList"
       :is-vip="course.vipLevelId"
-      :discountType="typeList === 'course_list' ? course.courseSet.discountType : ''"
-      :discount="typeList === 'course_list' ? course.courseSet.discount : ''"
-      :course-type="typeList === 'course_list' ? course.courseSet.type : ''"
+      :discountType="discountType"
+      :discount="discount"
+      :course-type="courseType"
       :course="course | courseListData(listObj)"
     />
   </van-list>
 </template>
 
 <script>
-import courseItem from '../e-class/e-class.vue'
-import courseListData from '@/utils/filter-course.js'
-import { mapState } from 'vuex'
+import courseRow from '../e-row-class/e-row-class.vue';
+import courseItem from '../e-class/e-class.vue';
+import courseListData from '@/utils/filter-course.js';
+import { mapState } from 'vuex';
 
 export default {
   components: {
-    courseItem
+    courseItem,
+    courseRow,
   },
 
   filters: {
-    courseListData
+    courseListData,
   },
 
   props: {
@@ -40,57 +56,76 @@ export default {
     courseItemType: String,
     typeList: {
       type: String,
-      default: 'course_list'
+      default: 'course_list',
     },
     normalTagShow: {
       type: Boolean,
-      default: true
+      default: true,
     },
     vipTagShow: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
   data() {
     return {
       list: [],
-      finished: false
-    }
+      finished: false,
+    };
   },
 
   computed: {
     ...mapState(['courseSettings']),
     loading: {
       get() {
-        return !this.isRequestCompile
+        return !this.isRequestCompile;
       },
       set(v) {
-        console.log(v, 'value')
-      }
+        console.log(v, 'value');
+      },
     },
     listObj() {
       return {
         type: this.courseItemType,
         typeList: this.typeList,
         showStudent: this.courseSettings
-          ? Number(this.courseSettings.show_student_num_enabled) : true
+          ? Number(this.courseSettings.show_student_num_enabled)
+          : true,
+      };
+    },
+    discountType() {
+      if (this.typeList === 'course_list') {
+        return this.course.courseSet.discountType;
       }
-    }
+      return '';
+    },
+    discount() {
+      if (this.typeList === 'course_list') {
+        return this.course.courseSet.discount;
+      }
+      return '';
+    },
+    courseType() {
+      if (this.typeList === 'course_list') {
+        return this.course.courseSet.type;
+      }
+      return '';
+    },
   },
 
   watch: {
     isAllData() {
-      this.loading = false
-      this.finished = this.isAllData
-    }
+      this.loading = false;
+      this.finished = this.isAllData;
+    },
   },
 
   methods: {
     onLoad() {
       // 通知父组件请求数据并更新courseList
-      if (this.isRequestCompile) this.$emit('needRequest')
-    }
-  }
-}
+      if (this.isRequestCompile) this.$emit('needRequest');
+    },
+  },
+};
 </script>

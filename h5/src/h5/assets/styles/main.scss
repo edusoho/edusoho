@@ -54,6 +54,9 @@
 // webview
 @import './containers/webview/index.scss';
 
+.ibs-wap-vue {
+	@import '../../../../node_modules/wap-sdk-test/src/styles/index.scss';
+}
 //隐藏滚动条
 html,
 body {

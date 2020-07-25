@@ -1,19 +1,13 @@
 <template>
   <div class="brush-exercise-exercise">
-    <div v-for="(charp, index) in charps" :key="'charp' + index">
-      <exercise-section class="exercise-charp"></exercise-section>
-      <div
-        v-for="(section, sectionIndex) in charp.childern"
-        :key="'section' + sectionIndex"
-      >
-        <exercise-section class="exercise-section"></exercise-section>
-        <div
-          v-for="(task, taskIndex) in section.childern"
-          :key="'task' + taskIndex"
-        >
-          <exercise-section class="exercise-task"></exercise-section>
-        </div>
-      </div>
+    <van-loading v-if="isLoading" vertical size="24" color="#1989fa"
+      >加载中...</van-loading
+    >
+    <div v-else v-for="(item, index) in exercise" :key="'exercise' + index">
+      <exercise-section
+        :class="getClass(item.depth)"
+        :section="item"
+      ></exercise-section>
     </div>
   </div>
 </template>
@@ -25,27 +19,34 @@ export default {
     exerciseSection,
   },
   data() {
-    return {
-      charps: [
-        {
-          title: '第一章 绪论',
-          childern: [
-            {
-              title: '第一节 从头开始说这个故事的开始',
-              childern: [
-                {
-                  title: '这是A的故事',
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    };
+    return {};
+  },
+  props: {
+    exercise: {
+      type: Array,
+      default() {
+        return [];
+      },
+    },
+    isLoading: {
+      type: Boolean,
+      default: true,
+    },
   },
   computed: {},
   watch: {},
   created() {},
-  methods: {},
+  methods: {
+    getClass(depth) {
+      switch (depth) {
+        case 1:
+          return 'exercise-charp';
+        case 2:
+          return 'exercise-section';
+        case 3:
+          return 'exercise-task';
+      }
+    },
+  },
 };
 </script>

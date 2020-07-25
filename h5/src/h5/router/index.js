@@ -143,6 +143,17 @@ const routes = [
       ),
   },
   {
+    path: '/itembank/explore',
+    name: 'more_itembank',
+    meta: {
+      title: '所有题库',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "more" */ '@/containers/more/itembank/index.vue'
+      ),
+  },
+  {
     path: '/all/explore',
     name: 'all_explore',
     redirect: {
@@ -637,6 +648,17 @@ const routes = [
     component: () =>
       import(
         /* webpackChunkName: "brush-exercise" */ '@/containers/brush-exercise/lessonTask/do.vue'
+      ),
+  },
+  {
+    path: '/item_bank_exercise/:id',
+    name: 'item_bank_exercise',
+    meta: {
+      title: '题库详情',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "brush-exercise" */ '@/containers/brush-exercise/index.vue'
       ),
   },
 ];

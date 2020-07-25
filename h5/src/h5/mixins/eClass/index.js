@@ -116,9 +116,9 @@ export default {
         case 'course_list':
           path = `/course/${id}`;
           break;
-        // case 'item_bank_exercise':
-        //   path = `/course/${id}`;
-        //   break;
+        case 'item_bank_exercise':
+          path = `/item_bank_exercise/${id}`;
+          break;
         case 'classroom_list':
           path = `/classroom/${id}`;
           break;

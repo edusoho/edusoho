@@ -336,6 +336,10 @@ const H5_BASE_MODULE = [
     default: MODULE_DEFAULT.search,
     icon: 'icon-sousuo',
   },
+  {
+    name: '题库列表',
+    default: MODULE_DEFAULT.itemBankList,
+  },
 ];
 
 const H5_MARKETING_MODULE = [
