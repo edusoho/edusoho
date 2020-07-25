@@ -26,10 +26,10 @@
           :type-list="typeList"
           :is-vip="course.vipLevelId"
           :is-app-use="isAppUse"
-          :discountType="discountType"
-          :discount="discount"
-          :course-type="courseType"
-          :course="course | courseListData(listObj, 'appSetting')"
+          :discountType="discountType(course)"
+          :discount="discount(course)"
+          :course-type="courseType(course)"
+          :course="course | courseListData(listObj, 'new', 'app')"
         />
       </template>
     </van-list>
@@ -110,24 +110,6 @@ export default {
           : true,
       };
     },
-    discountType() {
-      if (this.typeList === 'course_list') {
-        return this.course.courseSet.discountType;
-      }
-      return '';
-    },
-    discount() {
-      if (this.typeList === 'course_list') {
-        return this.course.courseSet.discount;
-      }
-      return '';
-    },
-    courseType() {
-      if (this.typeList === 'course_list') {
-        return this.course.courseSet.type;
-      }
-      return '';
-    },
   },
 
   watch: {
@@ -153,6 +135,24 @@ export default {
       // 将 loading 设置为 true，表示处于加载状态
       this.loading = true;
       this.onLoad();
+    },
+    discountType(course) {
+      if (this.typeList === 'course_list') {
+        return course.courseSet.discountType;
+      }
+      return '';
+    },
+    discount(course) {
+      if (this.typeList === 'course_list') {
+        return course.courseSet.discount;
+      }
+      return '';
+    },
+    courseType(course) {
+      if (this.typeList === 'course_list') {
+        return course.courseSet.type;
+      }
+      return '';
     },
   },
 };
