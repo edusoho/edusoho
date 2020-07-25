@@ -309,11 +309,23 @@ export default {
     },
     jumpMore() {
       const category = {};
+      let routerName = '/';
       if (this.courseList.categoryIdArray) {
         category.categoryId = this.courseList.categoryIdArray[0];
       }
+      switch (this.typeList) {
+        case 'course_list':
+          routerName = 'more_course';
+          break;
+        case 'classroom_list':
+          routerName = 'more_class';
+          break;
+        case 'item_bank_exercise':
+          routerName = 'more_itembank';
+          break;
+      }
       this.$router.push({
-        name: this.typeList === 'course_list' ? 'more_course' : 'more_class',
+        name: routerName,
         query: { ...category },
       });
     },
