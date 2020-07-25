@@ -136,21 +136,21 @@ export default {
       this.loading = true;
       this.onLoad();
     },
-    discountType() {
+    discountType(course) {
       if (this.typeList === 'course_list') {
-        return this.course.courseSet.discountType;
+        return course.courseSet.discountType;
       }
       return '';
     },
-    discount() {
+    discount(course) {
       if (this.typeList === 'course_list') {
-        return this.course.courseSet.discount;
+        return course.courseSet.discount;
       }
       return '';
     },
-    courseType() {
+    courseType(course) {
       if (this.typeList === 'course_list') {
-        return this.course.courseSet.type;
+        return course.courseSet.type;
       }
       return '';
     },
