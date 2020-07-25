@@ -25,9 +25,9 @@
       :vip-tag-show="vipTagShow"
       :type-list="typeList"
       :is-vip="course.vipLevelId"
-      :discountType="discountType"
-      :discount="discount"
-      :course-type="courseType"
+      :discountType="discountType(course)"
+      :discount="discount(course)"
+      :course-type="courseType(course)"
       :course="course | courseListData(listObj)"
     />
   </van-list>
@@ -94,24 +94,6 @@ export default {
           : true,
       };
     },
-    discountType() {
-      if (this.typeList === 'course_list') {
-        return this.course.courseSet.discountType;
-      }
-      return '';
-    },
-    discount() {
-      if (this.typeList === 'course_list') {
-        return this.course.courseSet.discount;
-      }
-      return '';
-    },
-    courseType() {
-      if (this.typeList === 'course_list') {
-        return this.course.courseSet.type;
-      }
-      return '';
-    },
   },
 
   watch: {
@@ -125,6 +107,24 @@ export default {
     onLoad() {
       // 通知父组件请求数据并更新courseList
       if (this.isRequestCompile) this.$emit('needRequest');
+    },
+    discountType(course) {
+      if (this.typeList === 'course_list') {
+        return course.courseSet.discountType;
+      }
+      return '';
+    },
+    discount(course) {
+      if (this.typeList === 'course_list') {
+        return course.courseSet.discount;
+      }
+      return '';
+    },
+    courseType(course) {
+      if (this.typeList === 'course_list') {
+        return course.courseSet.type;
+      }
+      return '';
     },
   },
 };
