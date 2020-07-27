@@ -19,6 +19,7 @@ class ExerciseEventSubscriberTest extends BaseTestCase
             ],
             [
                 'members' => '1,2',
+                'userId' => 1,
             ]
         );
 

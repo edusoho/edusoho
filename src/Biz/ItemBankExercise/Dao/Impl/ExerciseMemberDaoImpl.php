@@ -30,6 +30,7 @@ class ExerciseMemberDaoImpl extends AdvancedDaoImpl implements ExerciseMemberDao
             'conditions' => [
                 'id = :id',
                 'id NOT IN (:excludeIds)',
+                'id IN (:ids)',
                 'userId = :userId',
                 'userId IN (:userIds)',
                 'exerciseId = :exerciseId',
