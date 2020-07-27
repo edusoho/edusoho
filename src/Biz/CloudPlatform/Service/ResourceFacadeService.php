@@ -15,6 +15,7 @@ interface ResourceFacadeService
 
     /**
      * 资源上传
+     *
      * @param $params
      *        name 文件名
      *        extno file.id
