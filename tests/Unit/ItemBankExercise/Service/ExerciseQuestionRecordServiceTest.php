@@ -6,11 +6,83 @@ use Biz\BaseTestCase;
 
 class ExerciseQuestionRecordServiceTest extends BaseTestCase
 {
-    public function testFindByUserIdAndModuleId()
+    public function testUpdateByAnswerRecordIdAndModuleId()
+    {
+        $this->mockBiz(
+            'ItemBank:Answer:AnswerRecordService',
+            [
+                [
+                    'functionName' => 'get',
+                    'returnValue' => [
+                        'id' => 1,
+                        'user_id' => 1,
+                        'answer_report_id' => 1,
+                    ],
+                ],
+            ]
+        );
+
+        $this->mockBiz(
+            'ItemBankExercise:ExerciseModuleService',
+            [
+                [
+                    'functionName' => 'get',
+                    'returnValue' => [
+                        'exerciseId' => 1,
+                        'type' => 'chapter',
+                    ],
+                ],
+            ]
+        );
+
+        $this->mockBiz(
+            'ItemBank:Answer:AnswerReportService',
+            [
+                [
+                    'functionName' => 'get',
+                    'returnValue' => [
+                        'right_question_count' => 1,
+                        'right_rate' => 50.0,
+                        'answer_record_id' => 1,
+                        'section_reports' => [
+                            [
+                                'item_reports' => [
+                                    [
+                                        'item_id' => 1,
+                                        'question_reports' => [
+                                            [
+                                                'response' => ['A'],
+                                                'status' => 'right',
+                                                'question_id' => 1,
+                                            ],
+                                            [
+                                                'response' => [],
+                                                'status' => 'no_answer',
+                                                'question_id' => 2,
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ]
+        );
+
+        $this->getItemBankExerciseQuestionRecordService()->updateByAnswerRecordIdAndModuleId(1, 1);
+
+        $questionRecords = $this->getItemBankExerciseQuestionRecordService()->findByUserIdAndExerciseId(1, 1);
+
+        $this->assertEquals($questionRecords[0]['questionId'], 1);
+        $this->assertEquals($questionRecords[0]['status'], 'right');
+    }
+
+    public function testFindByUserIdAndExerciseId()
     {
         $this->mockExerciseQuestionRecord();
 
-        $records = $this->getItemBankExerciseQuestionRecordService()->findByUserIdAndModuleId(1, 1);
+        $records = $this->getItemBankExerciseQuestionRecordService()->findByUserIdAndExerciseId(1, 1);
 
         $this->assertEquals(count($records), 2);
     }
@@ -20,7 +92,7 @@ class ExerciseQuestionRecordServiceTest extends BaseTestCase
         $this->getItemBankExerciseQuestionRecordService()->batchCreate([
             [
                 'exerciseId' => 1,
-                'moduleId' => 1,
+                'answerRecordId' => 1,
                 'itemId' => 1,
                 'questionId' => 1,
                 'userId' => 1,
@@ -28,7 +100,7 @@ class ExerciseQuestionRecordServiceTest extends BaseTestCase
             ],
             [
                 'exerciseId' => 1,
-                'moduleId' => 1,
+                'answerRecordId' => 1,
                 'itemId' => 1,
                 'questionId' => 1,
                 'userId' => 1,
@@ -77,7 +149,7 @@ class ExerciseQuestionRecordServiceTest extends BaseTestCase
         $this->getItemBankExerciseQuestionRecordDao()->create([
             'id' => 1,
             'exerciseId' => 1,
-            'moduleId' => 1,
+            'answerRecordId' => 1,
             'itemId' => 1,
             'questionId' => 1,
             'userId' => 1,
@@ -87,7 +159,7 @@ class ExerciseQuestionRecordServiceTest extends BaseTestCase
         $this->getItemBankExerciseQuestionRecordDao()->create([
             'id' => 2,
             'exerciseId' => 1,
-            'moduleId' => 1,
+            'answerRecordId' => 1,
             'itemId' => 1,
             'questionId' => 2,
             'userId' => 1,

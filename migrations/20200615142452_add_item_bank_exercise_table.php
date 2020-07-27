@@ -153,7 +153,8 @@ class AddItemBankExerciseTable extends Migration
             CREATE TABLE `item_bank_exercise_question_record` (
               `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
               `exerciseId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '题库练习id',
-              `moduleId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '模块id',
+              `answerRecordId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '答题记录id',
+              `moduleType` enum('chapter','assessment') NOT NULL DEFAULT 'chapter' COMMENT '模块类型',
               `itemId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '题目id',
               `questionId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '问题id',
               `userId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',

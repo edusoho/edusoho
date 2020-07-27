@@ -5,7 +5,6 @@ namespace Biz\ItemBankExercise\Event;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Crontab\SystemCrontabInitializer;
 use Codeages\Biz\Framework\Event\Event;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -133,13 +132,15 @@ class ChapterExerciseEventSubscriber extends EventSubscriber implements EventSub
     {
         $questionBank = $this->getQuestionBankService()->getQuestionBankByItemBankId($itemBankId);
 
+        $itemBankExericse = $this->getItemBankExerciseService()->getByQuestionBankId($questionBank['id']);
+
         $this->getSchedulerService()->register([
             'name' => 'UpdateItemBankMemberMasteryRateJob',
             'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
             'expression' => intval(time()),
             'misfire_policy' => 'executing',
             'class' => 'Biz\ItemBankExercise\Job\UpdateMemberMasteryRateJob',
-            'args' => ['questionBankId' => $questionBank['id']],
+            'args' => ['itemBankExericseId' => $itemBankExericse['id']],
         ]);
     }
 
@@ -157,95 +158,9 @@ class ChapterExerciseEventSubscriber extends EventSubscriber implements EventSub
             ]
         );
 
-        $this->updateQuestionRecord($chapterExerciseRecord, $answerReport);
+        $this->getItemBankExerciseQuestionRecordService()->updateByAnswerRecordIdAndModuleId($answerReport['answer_record_id'], $chapterExerciseRecord['moduleId']);
 
-        $this->updateMember($chapterExerciseRecord);
-    }
-
-    protected function updateMember($chapterExerciseRecord)
-    {
-        $itemBankExercise = $this->getItemBankExerciseService()->get($chapterExerciseRecord['exerciseId']);
-        $questinBank = $this->getQuestionBankService()->getQuestionBank($itemBankExercise['questionBankId']);
-        $member = $this->getItemBankExerciseMemberService()->getByExerciseIdAndUserId($chapterExerciseRecord['exerciseId'], $chapterExerciseRecord['userId']);
-
-        $doneQuestionNum = $rightQuestionNum = $completionRate = $masteryRate = 0;
-        $questionRecords = $this->getItemBankExerciseQuestionRecordService()->findByUserIdAndModuleId(
-            $chapterExerciseRecord['userId'],
-            $chapterExerciseRecord['moduleId']
-        );
-
-        foreach ($questionRecords as $questionRecord) {
-            if (AnswerQuestionReportService::STATUS_RIGHT == $questionRecord['status']) {
-                ++$rightQuestionNum;
-            }
-            ++$doneQuestionNum;
-        }
-        $masteryRate = 0 == $questinBank['itemBank']['question_num'] ? 0 : $rightQuestionNum / $questinBank['itemBank']['question_num'] * 100;
-        $completionRate = 0 == $questinBank['itemBank']['question_num'] ? 0 : $doneQuestionNum / $questinBank['itemBank']['question_num'] * 100;
-
-        $this->getItemBankExerciseMemberService()->update($member['id'], [
-            'doneQuestionNum' => $doneQuestionNum,
-            'rightQuestionNum' => $rightQuestionNum,
-            'completionRate' => $completionRate,
-            'masteryRate' => $masteryRate,
-        ]);
-    }
-
-    protected function updateQuestionRecord($chapterExerciseRecord, $answerReport)
-    {
-        $questionRecords = ArrayToolkit::index(
-            $this->getItemBankExerciseQuestionRecordService()->findByUserIdAndModuleId(
-                $chapterExerciseRecord['userId'],
-                $chapterExerciseRecord['moduleId']
-            ),
-            'questionId'
-        );
-        $answerQuestionReports = $this->getAnswerQuestionReports($answerReport);
-
-        $updateRecords = [];
-        $createRecords = [];
-        foreach ($answerQuestionReports as $answerQuestionReport) {
-            if (empty($questionRecords[$answerQuestionReport['questionId']])) {
-                $createRecords[] = [
-                    'exerciseId' => $chapterExerciseRecord['exerciseId'],
-                    'userId' => $chapterExerciseRecord['userId'],
-                    'moduleId' => $chapterExerciseRecord['moduleId'],
-                    'itemId' => $answerQuestionReport['itemId'],
-                    'questionId' => $answerQuestionReport['questionId'],
-                    'status' => $answerQuestionReport['status'],
-                ];
-            } elseif ($questionRecords[$answerQuestionReport['questionId']]['status'] != $answerQuestionReport['status']) {
-                $updateRecords[] = [
-                    'id' => $questionRecords[$answerQuestionReport['questionId']]['id'],
-                    'status' => $answerQuestionReport['status'],
-                ];
-            }
-        }
-
-        !empty($updateRecords) && $this->getItemBankExerciseQuestionRecordService()->batchUpdate(ArrayToolkit::column($updateRecords, 'id'), $updateRecords);
-        !empty($createRecords) && $this->getItemBankExerciseQuestionRecordService()->batchCreate($createRecords);
-    }
-
-    protected function getAnswerQuestionReports($answerReport)
-    {
-        $answerQuestionReports = [];
-
-        foreach ($answerReport['section_reports'] as $sectionReport) {
-            foreach ($sectionReport['item_reports'] as $itemReport) {
-                foreach ($itemReport['question_reports'] as $questionReport) {
-                    if (array_filter($questionReport['response'])) {
-                        $status = AnswerQuestionReportService::STATUS_RIGHT == $questionReport['status'] ? AnswerQuestionReportService::STATUS_RIGHT : AnswerQuestionReportService::STATUS_WRONG;
-                        $answerQuestionReports[] = [
-                            'itemId' => $itemReport['item_id'],
-                            'questionId' => $questionReport['question_id'],
-                            'status' => $status,
-                        ];
-                    }
-                }
-            }
-        }
-
-        return $answerQuestionReports;
+        $this->getItemBankExerciseMemberService()->updateMasteryRate($chapterExerciseRecord['exerciseId'], $chapterExerciseRecord['userId']);
     }
 
     protected function getDoneQuestionNumByAssessmentResponse($assessmentResponse)
@@ -283,14 +198,6 @@ class ChapterExerciseEventSubscriber extends EventSubscriber implements EventSub
     }
 
     /**
-     * @return \Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService
-     */
-    protected function getAnswerRecordService()
-    {
-        return $this->getBiz()->service('ItemBank:Answer:AnswerRecordService');
-    }
-
-    /**
      * @return \Biz\ItemBankExercise\Service\ChapterExerciseRecordService
      */
     protected function getItemBankChapterExerciseRecordService()
@@ -304,14 +211,6 @@ class ChapterExerciseEventSubscriber extends EventSubscriber implements EventSub
     protected function getAnswerReportService()
     {
         return $this->getBiz()->service('ItemBank:Answer:AnswerReportService');
-    }
-
-    /**
-     * @return AnswerQuestionReportService
-     */
-    protected function getAnswerQuestionReportService()
-    {
-        return $this->getBiz()->service('ItemBank:Answer:AnswerQuestionReportService');
     }
 
     /**

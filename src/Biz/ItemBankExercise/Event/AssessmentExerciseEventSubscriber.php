@@ -47,6 +47,26 @@ class AssessmentExerciseEventSubscriber extends EventSubscriber implements Event
                 'status' => AnswerService::ANSWER_RECORD_STATUS_FINISHED,
             ]
         );
+
+        $this->getItemBankExerciseQuestionRecordService()->updateByAnswerRecordIdAndModuleId($answerReport['answer_record_id'], $assessmentExerciseRecord['moduleId']);
+
+        $this->getItemBankExerciseMemberService()->updateMasteryRate($assessmentExerciseRecord['exerciseId'], $assessmentExerciseRecord['userId']);
+    }
+
+    /**
+     * @return \Biz\ItemBankExercise\Service\ExerciseQuestionRecordService
+     */
+    protected function getItemBankExerciseQuestionRecordService()
+    {
+        return $this->getBiz()->service('ItemBankExercise:ExerciseQuestionRecordService');
+    }
+
+    /**
+     * @return \Biz\ItemBankExercise\Service\ExerciseMemberService
+     */
+    protected function getItemBankExerciseMemberService()
+    {
+        return $this->getBiz()->service('ItemBankExercise:ExerciseMemberService');
     }
 
     /**

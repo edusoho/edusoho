@@ -4,7 +4,7 @@ namespace Biz\ItemBankExercise\Service;
 
 interface ExerciseQuestionRecordService
 {
-    public function findByUserIdAndModuleId($userId, $moduleId);
+    public function findByUserIdAndExerciseId($userId, $exerciseId);
 
     public function batchCreate($questionRecords);
 
@@ -13,4 +13,6 @@ interface ExerciseQuestionRecordService
     public function deleteByQuestionIds(array $questionIds);
 
     public function deleteByItemIds(array $itemIds);
+
+    public function updateByAnswerRecordIdAndModuleId($answerRecordId, $moduleId);
 }

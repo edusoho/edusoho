@@ -37,4 +37,6 @@ interface ExerciseMemberService
     public function quitExerciseByDeadlineReach($userId, $exerciseId);
 
     public function findByUserIdAndRole($userId, $role);
+
+    public function updateMasteryRate($exerciseId, $userId);
 }

@@ -1914,7 +1914,7 @@ item_bank_exercise.export.answer_num: Answer number
 item_bank_exercise.export.completion_rate: Answer Rate
 item_bank_exercise.export.accuracy: Master rate
 item_bank_exercise.answer_number: Answer number：
-item_bank_exercise.accuracy: Master rate：
+item_bank_exercise.accuracy: Right rate：
 item_bank_exercise.manage_btn: Item bank exercise manage
 item_bank_exercise.chapter_practice: Chapter practice
 item_bank_exercise.testpaper_practice: Tests paper practice

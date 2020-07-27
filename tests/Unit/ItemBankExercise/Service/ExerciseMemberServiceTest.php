@@ -12,6 +12,45 @@ use Biz\User\Service\UserService;
 
 class ExerciseMemberServiceTest extends BaseTestCase
 {
+    public function testUpdateMasteryRate()
+    {
+        $this->createExercise();
+        $this->mockBiz(
+            'QuestionBank:QuestionBankService',
+            [
+                [
+                    'functionName' => 'getQuestionBank',
+                    'returnValue' => [
+                        'itemBank' => [
+                            'id' => 1,
+                            'question_num' => 10,
+                        ],
+                    ],
+                ],
+            ]
+        );
+        $this->createExerciseMember();
+        $this->mockBiz(
+            'ItemBankExercise:ExerciseQuestionRecordService',
+            [
+                [
+                    'functionName' => 'findByUserIdAndExerciseId',
+                    'returnValue' => [
+                        ['status' => 'right'],
+                        ['status' => 'wrong'],
+                    ],
+                ],
+            ]
+        );
+
+        $member = $this->getExerciseMemberService()->updateMasteryRate(1, 1);
+
+        $this->assertEquals(2, $member['doneQuestionNum']);
+        $this->assertEquals(1, $member['rightQuestionNum']);
+        $this->assertEquals(10.0, $member['masteryRate']);
+        $this->assertEquals(20.0, $member['completionRate']);
+    }
+
     public function testCount()
     {
         $this->batchCreateExerciseMembers();

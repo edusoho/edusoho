@@ -1170,7 +1170,7 @@ item_bank_exercise.export.answer_num: 答题数
 item_bank_exercise.export.completion_rate: 答题率
 item_bank_exercise.export.accuracy: 掌握率
 item_bank_exercise.answer_number: 答题数：
-item_bank_exercise.accuracy: 掌握率：
+item_bank_exercise.accuracy: 正确率：
 item_bank_exercise.preview.course: 预览题库练习
 item_bank_exercise.chapter_practice: 章节练习
 item_bank_exercise.testpaper_practice: 试卷练习

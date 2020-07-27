@@ -4,5 +4,5 @@ namespace Biz\ItemBankExercise\Dao;
 
 interface ExerciseQuestionRecordDao
 {
-    public function findByUserIdAndModuleId($userId, $moduleId);
+    public function findByUserIdAndExerciseId($userId, $exerciseId);
 }

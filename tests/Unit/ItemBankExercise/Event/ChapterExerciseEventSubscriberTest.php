@@ -74,10 +74,6 @@ class ChapterExerciseEventSubscriberTest extends BaseTestCase
         $this->assertEquals($record['rightQuestionNum'], 1);
         $this->assertEquals($record['status'], 'finished');
         $this->assertEquals($record['rightRate'], 50.0);
-        $this->assertEquals($member['doneQuestionNum'], 1);
-        $this->assertEquals($member['rightQuestionNum'], 1);
-        $this->assertEquals($member['masteryRate'], 50.0);
-        $this->assertEquals($member['completionRate'], 50.0);
     }
 
     public function testOnItemCreate()
@@ -209,6 +205,7 @@ class ChapterExerciseEventSubscriberTest extends BaseTestCase
                     'returnValue' => [
                         'right_question_count' => 1,
                         'right_rate' => 50.0,
+                        'answer_record_id' => 1,
                         'section_reports' => [
                             [
                                 'item_reports' => [

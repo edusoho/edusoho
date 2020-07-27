@@ -18,6 +18,7 @@ use Biz\ItemBankExercise\Service\MemberOperationRecordService;
 use Biz\QuestionBank\Service\MemberService;
 use Biz\System\Service\LogService;
 use Biz\User\Service\UserService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 
 class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberService
 {
@@ -297,6 +298,46 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         return $this->getExerciseMemberDao()->findByUserIdAndRole($userId, $role);
     }
 
+    public function updateMasteryRate($exerciseId, $userId)
+    {
+        $itemBankExercise = $this->getExerciseService()->get($exerciseId);
+        if (empty($itemBankExercise)) {
+            return;
+        }
+
+        $questinBank = $this->getQuestionBankService()->getQuestionBank($itemBankExercise['questionBankId']);
+        if (empty($questinBank)) {
+            return;
+        }
+
+        $member = $this->getByExerciseIdAndUserId($exerciseId, $userId);
+        if (empty($member)) {
+            return;
+        }
+
+        $questionNum = $questinBank['itemBank']['question_num'];
+        $doneQuestionNum = $rightQuestionNum = $completionRate = $masteryRate = 0;
+        if (0 < $questionNum) {
+            $questionRecords = $this->getItemBankExerciseQuestionRecordService()->findByUserIdAndExerciseId($userId, $exerciseId);
+            foreach ($questionRecords as $questionRecord) {
+                if (AnswerQuestionReportService::STATUS_RIGHT == $questionRecord['status']) {
+                    ++$rightQuestionNum;
+                }
+                ++$doneQuestionNum;
+            }
+
+            $masteryRate = round($rightQuestionNum / $questionNum * 100, 1);
+            $completionRate = round($doneQuestionNum / $questionNum * 100, 1);
+        }
+
+        return $this->update($member['id'], [
+            'doneQuestionNum' => $doneQuestionNum,
+            'rightQuestionNum' => $rightQuestionNum,
+            'completionRate' => $completionRate,
+            'masteryRate' => $masteryRate,
+        ]);
+    }
+
     private function removeMember($member, $reason = [])
     {
         try {
@@ -345,6 +386,14 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
     }
 
     /**
+     * @return QuestionBankService
+     */
+    protected function getQuestionBankService()
+    {
+        return $this->createService('QuestionBank:QuestionBankService');
+    }
+
+    /**
      * @return LogService
      */
     protected function getLogService()
@@ -390,5 +439,13 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
     protected function getUserService()
     {
         return $this->createService('User:UserService');
+    }
+
+    /**
+     * @return \Biz\ItemBankExercise\Service\ExerciseQuestionRecordService
+     */
+    protected function getItemBankExerciseQuestionRecordService()
+    {
+        return $this->createService('ItemBankExercise:ExerciseQuestionRecordService');
     }
 }
