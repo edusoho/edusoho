@@ -392,6 +392,8 @@ interface UserService
      */
     public function initPassword($id, $newPassword);
 
+    public function validatePassword($password);
+
     /**
      * 人脸识别采集状态修改
      */

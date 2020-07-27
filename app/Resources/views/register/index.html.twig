@@ -56,7 +56,7 @@
 					<div class="form-group mbl">
 						<label class="control-label required" for="register_password">{{'user.register.password_label'|trans}}</label>
 						<div class="controls">
-							<input type="password" id="register_password" name="password" required="required" class="form-control input-lg" placeholder="{{('user.register.password_label_placeholder.'~setting('auth.password_level')|default('low'))|trans}}" onkeydown="if(event.keyCode==13) return false;">
+							<input type="password" id="register_password" name="password" required="required" class="form-control input-lg {% if setting('auth.password_level')|default('low') != 'low' %}cd-text-sm{% endif %}" placeholder="{{('user.register.password_label_placeholder.'~setting('auth.password_level')|default('low'))|trans}}" onkeydown="if(event.keyCode==13) return false;">
 							<p class="help-block"></p>
 						</div>
 					</div>

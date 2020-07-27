@@ -263,7 +263,7 @@ $.validator.addMethod('check_password_middle', function (value, element) {
 }, Translator.trans('validate.check_password_middle.message'));
 
 $.validator.addMethod('check_password_high', function (value, element) {
-  return this.optional(element) || /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!-\/:-@\[-`{-~])[!-~]{7,31}$/.test(value);
+  return this.optional(element) || /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!-\/:-@\[-`{-~])[!-~]{8,32}$/.test(value);
 }, Translator.trans('validate.check_password_high.message'));
 
 $.validator.addMethod('before_date', function(value, element, params) {

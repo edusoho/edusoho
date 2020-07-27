@@ -150,11 +150,7 @@ export default class Register {
             type: 'get',
           }
         },
-        password: {
-          minlength: 5,
-          maxlength: 20,
-          spaceNoSupport: true,
-        },
+        password: this._passwordValidateRules(),
         email: {
           required: true,
           email: true,
@@ -222,6 +218,16 @@ export default class Register {
         },
       },
     };
+  }
+
+  _passwordValidateRules() {
+    let passwordLevel = $('#password_level').val();
+    let rules = {
+      spaceNoSupport: true,
+    };
+    rules[`check_password_${passwordLevel}`] = true;
+
+    return rules;
   }
 
   emSmsCodeValidate(mobile) {

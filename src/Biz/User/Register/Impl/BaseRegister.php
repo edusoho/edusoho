@@ -2,7 +2,7 @@
 
 namespace Biz\User\Register\Impl;
 
-use Biz\System\Service\SettingService;
+use Biz\User\Service\UserService;
 use Biz\User\UserException;
 use Codeages\Biz\Framework\Context\Biz;
 use AppBundle\Common\SimpleValidator;
@@ -90,7 +90,7 @@ abstract class BaseRegister
             throw UserException::TRUENAME_INVALID();
         }
 
-        if (!empty($registration['password']) && !$this->validatePassword($registration['password'])) {
+        if (!empty($registration['password']) && !$this->getUserService()->validatePassword($registration['password'])) {
             throw UserException::PASSWORD_INVALID();
         }
     }
@@ -146,7 +146,7 @@ abstract class BaseRegister
     }
 
     /**
-     * return \Biz\User\Service\UserService
+     * @return UserService
      */
     protected function getUserService()
     {
@@ -274,30 +274,5 @@ abstract class BaseRegister
         }
 
         return $registration;
-    }
-
-    protected function validatePassword($password)
-    {
-        $auth = $this->getSettingService()->get('auth', []);
-        $passwordLevel = empty($auth['password_level']) ? 'low' : $auth['password_level'];
-        if ('low' == $passwordLevel && SimpleValidator::lowPassword($password)) {
-            return true;
-        }
-        if ('middle' == $passwordLevel && SimpleValidator::middlePassword($password)) {
-            return true;
-        }
-        if ('high' == $passwordLevel && SimpleValidator::highPassword($password)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * @return SettingService
-     */
-    protected function getSettingService()
-    {
-        return $this->biz->service('System:SettingService');
     }
 }

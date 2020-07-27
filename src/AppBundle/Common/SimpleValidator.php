@@ -52,7 +52,7 @@ class SimpleValidator
 
     public static function highPassword($value, array $option = array())
     {
-        return (bool) preg_match('/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!-\/:-@\[-`{-~])[!-~]{7,31}$/u', $value);
+        return (bool) preg_match('/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!-\/:-@\[-`{-~])[!-~]{8,32}$/u', $value);
     }
 
     //真实姓名改成和nickname一样

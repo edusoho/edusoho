@@ -5255,6 +5255,9 @@ admin.user.fields.about_label: About Me
 admin.user.fields.personal_menu_label: Home
 admin.user.fields.user_email: 'User Email'
 admin.user.fields.password_hint: '5-20 english char, number, symbol'
+admin.user.fields.password_hint.low: '5-20 english char, number, symbol'
+admin.user.fields.password_hint.middle: '8-20 letters or numbers, including at least two, case sensitive'
+admin.user.fields.password_hint.high: '8-32 letters or numbers, , including letter uppercase, lowercase, numbers and symbols'
 admin.user.fields.confirm_password_label: 'Confirm Password'
 admin.user.fields.confirm_password_hint: 'Enter the password again'
 admin.user.fields.password_label: Password

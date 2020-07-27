@@ -644,7 +644,7 @@ class UserServiceImpl extends BaseService implements UserService
             $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
-        if (!SimpleValidator::password($password)) {
+        if (!$this->validatePassword($password)) {
             $this->createNewException(UserException::PASSWORD_INVALID());
         }
 
@@ -2137,6 +2137,23 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         return $this->getUserDao()->update($id, $fields);
+    }
+
+    public function validatePassword($password)
+    {
+        $auth = $this->getSettingService()->get('auth', []);
+        $passwordLevel = empty($auth['password_level']) ? 'low' : $auth['password_level'];
+        if ('low' == $passwordLevel && SimpleValidator::lowPassword($password)) {
+            return true;
+        }
+        if ('middle' == $passwordLevel && SimpleValidator::middlePassword($password)) {
+            return true;
+        }
+        if ('high' == $passwordLevel && SimpleValidator::highPassword($password)) {
+            return true;
+        }
+
+        return false;
     }
 
     public function setFaceRegistered($id)
