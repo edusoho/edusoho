@@ -83,7 +83,7 @@ class CourseController extends CourseBaseController
             }
         }
 
-        if (0 == $course['parentId']) {
+        if ($this->isGoods($course)) {
             $product = $this->getProductService()->getProductByTargetIdAndType($courseSet['id'], 'course');
             $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
 
@@ -124,6 +124,11 @@ class CourseController extends CourseBaseController
                 'navMember' => $member,
             ]
         );
+    }
+
+    protected function isGoods($course)
+    {
+        return 0 == $course['parentId'] && 'self' == $course['platform'] && 'reservation' != $course['type'];
     }
 
     private function canCourseShowRedirect($request)
