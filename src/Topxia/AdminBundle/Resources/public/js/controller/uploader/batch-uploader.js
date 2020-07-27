@@ -431,7 +431,7 @@ define(function(require, exports, module) {
 
             file.hash = hash;
             var params = {
-              fileName: file.name,
+              name: file.name,
               fileSize: file.size,
               hash: hash,
               directives: file.uploaderWidget._getDirectives(file)
@@ -515,7 +515,7 @@ define(function(require, exports, module) {
 
           var strategy = file.uploaderWidget.get('strategy');
           var data = strategy.finishUpload(deferred, file);
-          data.filename = file.name;
+          data.name = file.name;
           data.size = file.size;
           data.id = file.fileId;
 

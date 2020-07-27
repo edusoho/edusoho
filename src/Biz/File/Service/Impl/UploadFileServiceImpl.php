@@ -310,7 +310,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
     public function initUpload($params)
     {
-        if (!ArrayToolkit::requireds($params, ['targetId', 'targetType', 'hash'])) {
+        if (!ArrayToolkit::requireds($params, ['targetId', 'targetType'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
@@ -321,23 +321,24 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             'targetId',
             'targetType',
             'bucket',
-            'hash',
+            'extno',
             'fileSize',
-            'fileName',
+            'name',
             'watermarks',
+            'resumeNo',
         ]);
 
         $setting = $this->getSettingService()->get('storage');
         $params['storage'] = empty($setting['upload_mode']) ? 'local' : $setting['upload_mode'];
         $implementor = $this->getFileImplementor($params['storage']);
 
-        if (isset($params['id'])) {
-            $file = $this->getUploadFileInitDao()->get($params['id']);
+        if (isset($params['resumeNo'])) {
+            $file = $this->getUploadFileInitDao()->get($params['resumeNo']);
             $initParams = $implementor->resumeUpload($file, $params);
 
             if ('ok' == $initParams['resumed'] && $file && 'ok' != $file['status']) {
                 $this->getUploadFileInitDao()->update($file['id'], [
-                    'filename' => $params['fileName'],
+                    'filename' => $params['name'],
                     'fileSize' => $params['fileSize'],
                     'targetId' => $params['targetId'],
                     'targetType' => $params['targetType'],
@@ -397,7 +398,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
             $result = $implementor->finishedUpload($file, $params);
 
-            if (empty($result) || !$result['success']) {
+            if (empty($result) || !$result['no']) {
                 $this->createNewException(UploadFileException::UPLOAD_FAILED());
             }
 
@@ -1247,11 +1248,11 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $file = $implementor->prepareUpload($params);
             $params = array_merge($params, $file);
             $attachment = [
-                'file_name' => $params['filename'],
+                'file_name' => $params['name'],
                 'ext' => $params['ext'],
                 'size' => $params['fileSize'],
                 'file_type' => $params['type'],
-                'hash_id' => $params['hashId'],
+                'hash_id' => $paratestInitUploadms['hashId'],
             ];
 
             $attachment = $this->getAttachmentService()->createAttachment($attachment);
@@ -1286,9 +1287,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             ];
             $result = $this->getFileImplementor('cloud')->finishedUpload($file, $params);
 
-            if (empty($result) || !$result['success']) {
+            if (empty($result) || !$result['no']) {
                 $this->createNewException(UploadFileException::UPLOAD_FAILED());
             }
+
             $this->getAttachmentService()->finishUpload($attachment['id']);
 
             $this->commit();

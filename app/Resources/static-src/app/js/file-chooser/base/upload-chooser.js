@@ -78,8 +78,15 @@ export default class UploaderChooser extends Chooser {
     return uploadProcess;
   }
 
-  _onFileUploadFinish(file) {
-    file.source = 'self';
+  _onFileUploadFinish(uploadFile) {
+    let file = {
+      'source' : 'self',
+      'id' : uploadFile.no,
+      'name' : uploadFile.name,
+      'hashId' : uploadFile.initResponse.hashId,
+      'globalId' : uploadFile.globalId,
+      'length' : uploadFile.length ? uploadFile.length : 0,
+    };
 
     let placeFileName = (name) => {
       $('[data-role="placeholder"]').html(name);
