@@ -4,6 +4,7 @@ namespace AppBundle\Controller\AdminV2\System;
 
 use Biz\System\Service\SettingService;
 use AppBundle\Common\ArrayToolkit;
+use Biz\User\Service\UserFieldService;
 use Biz\User\UserFieldException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,6 +40,7 @@ class UserSettingController extends BaseController
             'privacy_policy_body' => '',
             'captcha_enabled' => 0,
             'register_protective' => 'middle',
+            'password_level' => 'low',
             'nickname_enabled' => 0,
             'avatar_alert' => 'none',
         );
@@ -96,11 +98,9 @@ class UserSettingController extends BaseController
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
-
         return $this->render('admin-v2/system/user-setting/auth.html.twig', array(
             'auth' => $auth,
-            'userFields' => $userFields,
+            'userFields' => $this->getUserFieldService()->getEnabledFieldsOrderBySeq(),
             'defaultSetting' => $defaultSetting,
             'hasOwnCopyright' => false,
         ));
@@ -532,6 +532,9 @@ class UserSettingController extends BaseController
         return $this->createService('System:SettingService');
     }
 
+    /**
+     * @return UserFieldService
+     */
     protected function getUserFieldService()
     {
         return $this->createService('User:UserFieldService');

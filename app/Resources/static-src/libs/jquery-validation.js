@@ -254,6 +254,18 @@ jQuery.validator.addMethod('max_year', function(value, element) {
   return this.optional(element) || value < 100000;
 }, Translator.trans('validate.max_year.message'));
 
+$.validator.addMethod('check_password_low', function (value, element) {
+  return this.optional(element) || /^[\S]{5,20}$/u.test(value);
+}, Translator.trans('validate.check_password_low.message'));
+
+$.validator.addMethod('check_password_middle', function (value, element) {
+  return this.optional(element) || /^(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?]{8,20}$/.test(value);
+}, Translator.trans('validate.check_password_middle.message'));
+
+$.validator.addMethod('check_password_high', function (value, element) {
+  return this.optional(element) || /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!-\/:-@\[-`{-~])[!-~]{8,32}$/.test(value);
+}, Translator.trans('validate.check_password_high.message'));
+
 $.validator.addMethod('before_date', function(value, element, params) {
   let date = new Date(value);
   let afterDate = new Date($(params).val());
