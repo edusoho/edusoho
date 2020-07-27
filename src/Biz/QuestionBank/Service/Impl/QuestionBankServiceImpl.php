@@ -127,7 +127,7 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
 
             $this->getMemberService()->resetBankMembers($newQuestionBank['id'], $members);
 
-            $this->dispatch('questionBank.update', $questionBank, ['members' => $members]);
+            $this->dispatch('questionBank.update', $questionBank, ['members' => $members, 'userId' => $this->getCurrentUser()->getId()]);
 
             $this->commit();
         } catch (\Exception $e) {
