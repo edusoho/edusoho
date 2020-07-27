@@ -31,6 +31,11 @@ class AssessmentExerciseEventSubscriber extends EventSubscriber implements Event
                 'status' => $answerRecord['status'],
             ]
         );
+
+        if (AnswerService::ANSWER_RECORD_STATUS_FINISHED == $answerRecord['status']) {
+            $this->getItemBankExerciseQuestionRecordService()->updateByAnswerRecordIdAndModuleId($answerRecord['id'], $assessmentExerciseRecord['moduleId']);
+            $this->getItemBankExerciseMemberService()->updateMasteryRate($assessmentExerciseRecord['exerciseId'], $assessmentExerciseRecord['userId']);
+        }
     }
 
     public function onAnswerFinished(Event $event)
@@ -49,7 +54,6 @@ class AssessmentExerciseEventSubscriber extends EventSubscriber implements Event
         );
 
         $this->getItemBankExerciseQuestionRecordService()->updateByAnswerRecordIdAndModuleId($answerReport['answer_record_id'], $assessmentExerciseRecord['moduleId']);
-
         $this->getItemBankExerciseMemberService()->updateMasteryRate($assessmentExerciseRecord['exerciseId'], $assessmentExerciseRecord['userId']);
     }
 
