@@ -1413,7 +1413,7 @@ class UploadFileServiceTest extends BaseTestCase
             'fileName' => 'test',
             'fileSize' => 1024,
         ));
-        $this->assertEquals('ok', $result['resumed']);
+        $this->assertEquals('no', $result['resumed']);
 
         $result = $this->getUploadFileService()->initUpload(array(
             'targetId' => 1,
@@ -1449,7 +1449,7 @@ class UploadFileServiceTest extends BaseTestCase
             array(
                 'functionName' => 'finishedUpload',
                 'runTimes' => 1,
-                'returnValue' => array('success' => 'ok', 'length' => 10),
+                'returnValue' => array('no' => '100', 'length' => 10),
             ),
         );
         $this->mockBiz('File:CloudFileImplementor', $params);
@@ -1516,7 +1516,7 @@ class UploadFileServiceTest extends BaseTestCase
             array(
                 'functionName' => 'finishedUpload',
                 'runTimes' => 1,
-                'returnValue' => array('success' => 0, 'length' => 10),
+                'returnValue' => array('no' => 0, 'length' => 10),
             ),
         );
         $this->mockBiz('File:CloudFileImplementor', $params);
