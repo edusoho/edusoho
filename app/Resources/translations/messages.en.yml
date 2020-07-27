@@ -9670,6 +9670,7 @@ facein.capture_face.inspection_result_modal.title: 监考抓拍
 exception.s2b2c_product.update_type_invalid: Update type invalid
 exception.s2b2c_product.not_found: Product not found
 exception.s2b2c_product.remove_failed: Product remove failed
+exception.s2b2c.hidden_permission_invalid: S2b2c hide permission invalid
 
 admin_v2.cloud_center.content_resource.product_update_setting: Update Setting
 admin_v2.cloud_center.content_resource.product_update_auto: Auto
@@ -9730,7 +9731,6 @@ admin_v2.operating.goods_leading.label_content.qrcode_tips: 'Please upload pictu
 admin_v2.operating.goods_leading_setting.tips: 'Note: After the number of WeChat groups exceeds 100, users will not be able to scan the code to enter the group and the WeChat group QR code is valid for 7 days. Please update the group QR code in time.'
 
 exception.favorite.forbidden_operate_favorite: Forbidden
-
 classroom.courses: Classroom course number
 classroom.member_number: Classroom member number
 classroom.preview_btn: Preview Classroom
@@ -9738,6 +9738,4 @@ classroom.publish_btn: Publish Classroom
 classroom.subtitle_label: Subtitle
 classroom.basic_setting: Basic Setting
 classroom.cover_crop.title: Classroom Cover
-
-
-
+exception.s2b2c_product.adopt_failed: Adopt fail,Supplier is editing

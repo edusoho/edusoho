@@ -1597,4 +1597,5 @@ classroom.courses.lesson_num: %num% lessons total
 classroom.courses.plan: plan
 site.local_more: loading more
 
+exception.s2b2c_product.adopt_failed: Adopt fail,Supplier is editing
 

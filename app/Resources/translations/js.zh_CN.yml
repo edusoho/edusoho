@@ -1542,7 +1542,4 @@ reviews.review_again: 重新评价
 classroom.courses.lesson_num: 共%num%课时
 classroom.courses.plan: 教学计划
 site.local_more: 加载更多
-
-
-
-
+exception.s2b2c_product.adopt_failed: 采用失败，内容正在编辑中，请稍后再试
