@@ -39,6 +39,10 @@ class ItemBankExercise extends AbstractResource
         $conditions = $request->query->all();
         $conditions['status'] = 'published';
 
+        if (isset($conditions['categoryId']) && '0' == $conditions['categoryId']) {
+            unset($conditions['categoryId']);
+        }
+
         $sort = $this->getSort($request);
         if (array_key_exists('recommendedSeq', $sort)) {
             $sort = array_merge($sort, ['recommendedTime' => 'DESC', 'id' => 'DESC']);

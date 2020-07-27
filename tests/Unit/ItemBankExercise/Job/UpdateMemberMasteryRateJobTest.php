@@ -30,7 +30,7 @@ class UpdateMemberMasteryRateJobTest extends BaseTestCase
             [
                 [
                     'exerciseId' => 1,
-                    'moduleId' => 1,
+                    'answerRecordId' => 1,
                     'itemId' => 1,
                     'questionId' => 1,
                     'userId' => 1,
@@ -38,7 +38,7 @@ class UpdateMemberMasteryRateJobTest extends BaseTestCase
                 ],
                 [
                     'exerciseId' => 1,
-                    'moduleId' => 1,
+                    'answerRecordId' => 1,
                     'itemId' => 1,
                     'questionId' => 1,
                     'userId' => 1,
@@ -46,7 +46,7 @@ class UpdateMemberMasteryRateJobTest extends BaseTestCase
                 ],
                 [
                     'exerciseId' => 1,
-                    'moduleId' => 1,
+                    'answerRecordId' => 1,
                     'itemId' => 1,
                     'questionId' => 1,
                     'userId' => 2,
@@ -54,7 +54,7 @@ class UpdateMemberMasteryRateJobTest extends BaseTestCase
                 ],
                 [
                     'exerciseId' => 1,
-                    'moduleId' => 1,
+                    'answerRecordId' => 1,
                     'itemId' => 1,
                     'questionId' => 1,
                     'userId' => 2,
@@ -62,7 +62,7 @@ class UpdateMemberMasteryRateJobTest extends BaseTestCase
                 ],
                 [
                     'exerciseId' => 1,
-                    'moduleId' => 1,
+                    'answerRecordId' => 1,
                     'itemId' => 1,
                     'questionId' => 1,
                     'userId' => 3,
@@ -91,9 +91,10 @@ class UpdateMemberMasteryRateJobTest extends BaseTestCase
             'ItemBankExercise:ExerciseService',
             [
                 [
-                    'functionName' => 'getByQuestionBankId',
+                    'functionName' => 'get',
                     'returnValue' => [
                         'id' => 1,
+                        'questionBankId' => 1,
                     ],
                 ],
             ]
@@ -111,7 +112,7 @@ class UpdateMemberMasteryRateJobTest extends BaseTestCase
             ]
         );
 
-        $job = new UpdateMemberMasteryRateJob(['args' => ['questionBankId' => 1]], $this->biz);
+        $job = new UpdateMemberMasteryRateJob(['args' => ['itemBankExericseId' => 1]], $this->biz);
         $job->execute();
 
         $members = $this->getItemBankExerciseMemberDao()->search(['exerciseId' => 1], [], 0, PHP_INT_MAX);

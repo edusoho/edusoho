@@ -9,9 +9,9 @@ class ExerciseQuestionRecordDaoImpl extends AdvancedDaoImpl implements ExerciseQ
 {
     protected $table = 'item_bank_exercise_question_record';
 
-    public function findByUserIdAndModuleId($userId, $moduleId)
+    public function findByUserIdAndExerciseId($userId, $exerciseId)
     {
-        return $this->findByFields(['userId' => $userId, 'moduleId' => $moduleId]);
+        return $this->findByFields(['userId' => $userId, 'exerciseId' => $exerciseId]);
     }
 
     public function declares()
