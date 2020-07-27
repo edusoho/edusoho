@@ -128,6 +128,47 @@
       </div>
     </div>
 
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label >{{'admin.user_auth.Password_level'|trans}}</label>
+      </div>
+
+      <div class="controls col-md-8 radios">
+        <label>
+          <input type="radio" name="password_level" id="low" value="low" {% if auth.password_level|default('low') == 'low' %}checked="checked"{% endif %}> {{'admin.user_auth.Protection.low'|trans}}
+        </label>
+        <label>
+          <input type="radio" name="password_level" id="middle" value="middle" {% if auth.password_level|default(null) == 'middle' %}checked="checked"{% endif %}> {{'admin.user_auth.Protection.middle'|trans}}
+        </label>
+        <label>
+          <input type="radio" name="password_level" id="high" value="high" {% if auth.password_level|default(null) == 'high' %}checked="checked"{% endif %}> {{'admin.user_auth.Protection.high'|trans}}
+        </label>
+      </div>
+
+      <div class="controls col-md-8 col-md-offset-3 dync_visible not_closed_mode low_password_level" {% if auth.password_level|default('low') == 'low' %}{% else %}style="display:none;"{% endif %}>
+        <div class="well">
+          {{'admin.user_auth.Protection.Explaination'|trans}}
+          <p class="mll mtm">{{'admin.user_auth.Password_level.low.explaination'|trans}}</p>
+        </div>
+      </div>
+
+      <div class="controls col-md-8 col-md-offset-3 dync_visible not_closed_mode middle_password_level" {% if auth.password_level|default(null) == 'middle' %}{% else %}style="display:none;"{% endif %}>
+        <div class="well">
+          {{'admin.user_auth.Protection.Explaination'|trans}}
+          <p class="mll mtm">{{'admin.user_auth.Password_level.middle.explaination'|trans}}</p>
+          <p class="mll mtm">{{'admin.user_auth.Password_level.middle.explaination_2'|trans}}</p>
+        </div>
+      </div>
+
+      <div class="controls col-md-8 col-md-offset-3 dync_visible not_closed_mode high_password_level" {% if auth.password_level|default(null) == 'high' %}{% else %}style="display:none;"{% endif %}>
+        <div class="well">
+          {{'admin.user_auth.Protection.Explaination'|trans}}
+          <p class="mll mtm">{{'admin.user_auth.Password_level.high.explaination'|trans}}</p>
+          <p class="mll mtm">{{'admin.user_auth.Password_level.high.explaination_2'|trans}}</p>
+        </div>
+      </div>
+    </div>
+
   </fieldset>
 
   <fieldset>

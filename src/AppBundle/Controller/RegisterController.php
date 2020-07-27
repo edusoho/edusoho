@@ -60,7 +60,6 @@ class RegisterController extends BaseController
 
                 //手机校验码
                 if ($this->smsCodeValidator($authSettings, $registration)) {
-                    $registration['verifiedMobile'] = '';
                     $request->request->add(array_merge($request->request->all(), array('mobile' => $registration['mobile'])));
 
                     list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario = 'sms_registration');

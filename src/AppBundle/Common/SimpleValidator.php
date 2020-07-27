@@ -40,6 +40,21 @@ class SimpleValidator
         return (bool) preg_match('/^[\S]{5,20}$/u', $value);
     }
 
+    public static function lowPassword($value, array $option = array())
+    {
+        return (bool) preg_match('/^[\S]{5,20}$/u', $value);
+    }
+
+    public static function middlePassword($value, array $option = array())
+    {
+        return (bool) preg_match('/^(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?]{8,20}$/u', $value);
+    }
+
+    public static function highPassword($value, array $option = array())
+    {
+        return (bool) preg_match('/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!-\/:-@\[-`{-~])[!-~]{7,31}$/u', $value);
+    }
+
     //真实姓名改成和nickname一样
     public static function truename($value, array $option = array())
     {
