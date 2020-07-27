@@ -58,7 +58,7 @@ export default {
       offset: 0,
       limit: 10,
       type: 'all',
-      categoryId: '',
+      categoryId: 0,
       sort: 'recommendedSeq',
       selecting: false,
       queryForm: {
