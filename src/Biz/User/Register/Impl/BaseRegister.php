@@ -2,10 +2,10 @@
 
 namespace Biz\User\Register\Impl;
 
+use AppBundle\Common\SimpleValidator;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
 use Codeages\Biz\Framework\Context\Biz;
-use AppBundle\Common\SimpleValidator;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 abstract class BaseRegister
@@ -28,7 +28,7 @@ abstract class BaseRegister
         $this->createUserProfile($registration, $user);
         $this->afterSave($registration, $user);
 
-        return array($user, $this->createPerInviteUser($registration, $user['id']));
+        return [$user, $this->createPerInviteUser($registration, $user['id'])];
     }
 
     /**
@@ -38,7 +38,7 @@ abstract class BaseRegister
      */
     protected function getCreatedProfileFields()
     {
-        return array(
+        return [
             'mobile' => '',
             'idcard' => '',
             'truename' => '',
@@ -49,7 +49,7 @@ abstract class BaseRegister
             'qq' => '',
             'site' => '',
             'gender' => 'secret',
-        );
+        ];
     }
 
     /**
@@ -59,7 +59,7 @@ abstract class BaseRegister
      */
     protected function getCreatedUserFields()
     {
-        return array(
+        return [
             'verifiedMobile' => '',
             'email' => '',
             'emailVerified' => 0,
@@ -69,7 +69,7 @@ abstract class BaseRegister
             'registeredWay' => '',
             'passwordInit' => 1,
             'registerVisitId' => '',
-        );
+        ];
     }
 
     protected function validate($registration)
@@ -95,7 +95,7 @@ abstract class BaseRegister
         }
     }
 
-    protected function beforeSave($registration, $user = array())
+    protected function beforeSave($registration, $user = [])
     {
         $registration = $this->generatePartnerAuthUser($registration);
 
@@ -107,12 +107,12 @@ abstract class BaseRegister
             }
         }
 
-        $user['roles'] = array('ROLE_USER');
+        $user['roles'] = ['ROLE_USER'];
         $user['type'] = $registration['type'];
         $user['createdTime'] = time();
 
         $type = empty($registration['providerType']) ? $registration['type'] : $registration['providerType'];
-        if (in_array($type, array('default', 'phpwind', 'discuz', 'marketing'))) {
+        if (in_array($type, ['default', 'phpwind', 'discuz', 'marketing'])) {
             $user['salt'] = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
             $user['password'] = $this->getPasswordEncoder()->encodePassword($registration['password'], $user['salt']);
         } else {
@@ -129,7 +129,7 @@ abstract class BaseRegister
 
         $user['uuid'] = $this->getUserService()->generateUUID();
 
-        return array($user, $registration);
+        return [$user, $registration];
     }
 
     protected function afterSave($registration, $user)
@@ -207,12 +207,12 @@ abstract class BaseRegister
     {
         list($user, $registration) = $this->beforeSave($registration);
 
-        return array($this->getUserDao()->create($user), $registration);
+        return [$this->getUserDao()->create($user), $registration];
     }
 
     private function createUserProfile($registration, $user)
     {
-        $profile = array();
+        $profile = [];
         $profile['id'] = $user['id'];
 
         foreach ($this->getCreatedProfileFields() as $attr => $defaultValue) {
@@ -243,7 +243,7 @@ abstract class BaseRegister
 
         $invitedCode = empty($originUser['invitedCode']) ? '' : $originUser['invitedCode'];
         $invitedCode = empty($registration['invitedCode']) ? $invitedCode : $registration['invitedCode'];
-        $inviteUser = empty($invitedCode) ? array() : $this->getUserDao()->getByInviteCode($invitedCode);
+        $inviteUser = empty($invitedCode) ? [] : $this->getUserDao()->getByInviteCode($invitedCode);
 
         if (!empty($inviteUser)) {
             $this->getInviteRecordService()->createInviteRecord($inviteUser['id'], $userId);
@@ -251,7 +251,7 @@ abstract class BaseRegister
 
             if (!empty($invitedCoupon)) {
                 $card = $this->getCardService()->getCardByCardId($invitedCoupon['id']);
-                $this->getInviteRecordService()->addInviteRewardRecordToInvitedUser($userId, array('invitedUserCardId' => $card['cardId']));
+                $this->getInviteRecordService()->addInviteRewardRecordToInvitedUser($userId, ['invitedUserCardId' => $card['cardId']]);
             }
         }
 
@@ -264,9 +264,9 @@ abstract class BaseRegister
             // 从discuz中注册过来
             if (!empty($registration['token']['userId'])) {
                 $registration['type'] = 'discuz';
-                $registration['partnerAuthUser'] = array(
+                $registration['partnerAuthUser'] = [
                     'id' => $registration['token']['userId'],
-                );
+                ];
             } else { // 非discuz注册
                 $provider = $this->getAuthService()->getAuthProvider();
                 $registration['partnerAuthUser'] = $provider->register($registration);

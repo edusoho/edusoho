@@ -46,7 +46,7 @@ interface UserService
 
     public function findUserProfilesByIds(array $ids);
 
-    public function searchUsers(array $conditions, array $orderBy, $start, $limit, $columns = array());
+    public function searchUsers(array $conditions, array $orderBy, $start, $limit, $columns = []);
 
     public function countUsers(array $conditions);
 
@@ -183,7 +183,7 @@ interface UserService
 
     public function getUserProfile($id);
 
-    public function searchUserProfiles(array $conditions, array $orderBy, $start, $limit, $columns = array());
+    public function searchUserProfiles(array $conditions, array $orderBy, $start, $limit, $columns = []);
 
     public function searchUserProfileCount(array $conditions);
 
@@ -193,7 +193,6 @@ interface UserService
 
     /**
      * @param $id
-     * @param array $roles
      *
      * @return mixed
      * @Log(module="user",action="change_role",funcName="getUser",param="id")

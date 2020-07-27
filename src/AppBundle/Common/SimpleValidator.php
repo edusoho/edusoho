@@ -12,13 +12,13 @@ class SimpleValidator
         $value = (string) $value;
         $valid = filter_var($value, FILTER_VALIDATE_EMAIL);
 
-        return $valid !== false;
+        return false !== $valid;
     }
 
-    public static function nickname($value, array $option = array())
+    public static function nickname($value, array $option = [])
     {
         $option = array_merge(
-            array('minLength' => 4, 'maxLength' => 18),
+            ['minLength' => 4, 'maxLength' => 18],
             $option
         );
 
@@ -35,31 +35,31 @@ class SimpleValidator
         return (bool) preg_match('/^[\x{4e00}-\x{9fa5}a-zA-z0-9_.·]+$/u', $value);
     }
 
-    public static function password($value, array $option = array())
+    public static function password($value, array $option = [])
     {
         return (bool) preg_match('/^[\S]{5,20}$/u', $value);
     }
 
-    public static function lowPassword($value, array $option = array())
+    public static function lowPassword($value, array $option = [])
     {
         return (bool) preg_match('/^[\S]{5,20}$/u', $value);
     }
 
-    public static function middlePassword($value, array $option = array())
+    public static function middlePassword($value, array $option = [])
     {
         return (bool) preg_match('/^(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?]{8,20}$/u', $value);
     }
 
-    public static function highPassword($value, array $option = array())
+    public static function highPassword($value, array $option = [])
     {
         return (bool) preg_match('/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!-\/:-@\[-`{-~])[!-~]{8,32}$/u', $value);
     }
 
     //真实姓名改成和nickname一样
-    public static function truename($value, array $option = array())
+    public static function truename($value, array $option = [])
     {
         $option = array_merge(
-            array('minLength' => 4, 'maxLength' => 18),
+            ['minLength' => 4, 'maxLength' => 18],
             $option
         );
 
