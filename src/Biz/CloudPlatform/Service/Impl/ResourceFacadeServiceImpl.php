@@ -119,6 +119,21 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
         return '//'.trim($cdnHost, "\/").'/'.$path.'?'.$timestamp;
     }
 
+    public function startUpload($params)
+    {
+        return $this->getResourceService()->startUpload($params);
+    }
+
+    public function finishUpload($globalId)
+    {
+        return $this->getResourceService()->finishUpload($globalId);
+    }
+
+    public function getResource($globalId)
+    {
+        return $this->getResourceService()->get($globalId);
+    }
+
     protected function isHiddenVideoHeader($isHidden = false)
     {
         $storage = $this->getSettingService()->get('storage');
@@ -127,6 +142,11 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
         }
 
         return true;
+    }
+
+    protected function getResourceService()
+    {
+        return $this->biz['ESCloudSdk.resource'];
     }
 
     protected function getSettingService()

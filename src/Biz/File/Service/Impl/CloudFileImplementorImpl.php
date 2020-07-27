@@ -8,6 +8,7 @@ use AppBundle\Common\FileToolkit;
 use Biz\BaseService;
 use Biz\CloudPlatform\Client\AbstractCloudAPI;
 use Biz\CloudPlatform\CloudAPIFactory;
+use Biz\CloudPlatform\Service\ResourceFacadeService;
 use Biz\Common\CommonException;
 use Biz\File\Dao\UploadFileDao;
 use Biz\File\Service\FileImplementor;
@@ -171,10 +172,10 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
     public function prepareUpload($params)
     {
         $file = [];
-        $file['fileName'] = empty($params['name']) ? '' : $params['name'];
+        $file['filename'] = empty($params['name']) ? '' : $params['name'];
 
-        $pos = strrpos($file['fileName'], '.');
-        $file['ext'] = empty($pos) ? '' : substr($file['fileName'], $pos + 1);
+        $pos = strrpos($file['filename'], '.');
+        $file['ext'] = empty($pos) ? '' : substr($file['filename'], $pos + 1);
 
         $file['fileSize'] = empty($params['fileSize']) ? 0 : $params['fileSize'];
         $file['status'] = 'uploading';
@@ -269,7 +270,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             $params['directives'] = array_merge($params['directives'], ['convertAll' => true]);
         }
 
-        $apiResult = $this->getResourceService()->startUpload($params);
+        $apiResult = $this->getResourceFacadeService()->startUpload($params);
 
         $result = [];
 
@@ -303,8 +304,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             'resumeNo' => $file['globalId'],
         ];
 
-//        $apiResult = $this->createApi('root')->post("/resources/{$file['globalId']}/upload_resume", $params);
-        $apiResult = $this->getResourceService()->startUpload($params);
+        $apiResult = $this->getResourceFacadeService()->startUpload($params);
         if (empty($apiResult['resumed']) || ('ok' !== $apiResult['resumed'])) {
             return null;
         }
@@ -421,8 +421,8 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             $this->createNewException(UploadFileException::GLOBALID_REQUIRED());
         }
 
-        $result = $this->getResourceService()->finishUpload($file['globalId']);
-        $file = $this->getResourceService()->get($file['globalId']);
+        $result = $this->getResourceFacadeService()->finishUpload($file['globalId']);
+        $file = $this->getResourceFacadeService()->getResource($file['globalId']);
         $result['convertStatus'] = 'none';
         $result['length'] = $file['length'];
 
@@ -642,9 +642,12 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $this->cloudApis[$apiType] = $mockApi;
     }
 
-    protected function getResourceService()
+    /**
+     * @return ResourceFacadeService
+     */
+    protected function getResourceFacadeService()
     {
-        return $this->biz['ESCloudSdk.resource'];
+        return $this->biz->service('CloudPlatform:ResourceFacadeService');
     }
 
     /**

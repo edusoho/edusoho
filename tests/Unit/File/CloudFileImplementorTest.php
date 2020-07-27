@@ -256,7 +256,7 @@ class CloudFileImplementorTest extends BaseTestCase
     public function testPrepareUpload()
     {
         $params = array(
-            'fileName' => 'test.mp4',
+            'name' => 'test.mp4',
             'targetId' => 1,
             'targetType' => 'testmode',
         );
@@ -268,23 +268,27 @@ class CloudFileImplementorTest extends BaseTestCase
 
     public function testInitUpload()
     {
-        $api = CloudAPIFactory::create('root');
-        $mockObject = \Mockery::mock($api);
-        $mockObject->shouldReceive('post')->times(1)->andReturn(array(
-            'no' => 1,
-            'uploadUrl' => '/test.mp4',
-            'uploadMode' => 'test',
-            'uploadToken' => '123456',
-        ));
-
-        $this->getCloudFileImplementor()->setApi('root', $mockObject);
+        $params = [
+            [
+                'functionName' => 'startUpload',
+                'runTimes' => 1,
+                'returnValue' => [
+                    'no' => 1,
+                    'uploadUrl' => '/test.mp4',
+                    'uploadMode' => 'test',
+                    'uploadToken' => '123456',
+                    'reskey' => 'test',
+                ],
+            ],
+        ];
+        $this->mockBiz('CloudPlatform:ResourceFacadeService', $params);
 
         $file = array(
             'id' => 1,
             'bucket' => 'test',
             'hashId' => 'test/test.mp4',
             'hash' => '123456',
-            'fileName' => 'test.mp4',
+            'name' => 'test.mp4',
             'fileSize' => 10,
             'directives' => array(),
             'type' => 'video',
@@ -316,17 +320,21 @@ class CloudFileImplementorTest extends BaseTestCase
 
     public function testResumeUpload()
     {
-        $api = CloudAPIFactory::create('root');
-        $mockObject = \Mockery::mock($api);
-        $mockObject->shouldReceive('post')->times(1)->andReturn(array(
-            'no' => 1,
-            'resumed' => 'ok',
-            'uploadUrl' => '/test.mp4',
-            'uploadMode' => 'test',
-            'uploadToken' => '123456',
-        ));
-
-        $this->getCloudFileImplementor()->setApi('root', $mockObject);
+        $params = [
+            [
+                'functionName' => 'startUpload',
+                'runTimes' => 1,
+                'returnValue' => [
+                    'no' => 1,
+                    'resumed' => 'ok',
+                    'uploadUrl' => '/test.mp4',
+                    'uploadMode' => 'test',
+                    'uploadToken' => '123456',
+                    'reskey' => 'test',
+                ],
+            ],
+        ];
+        $this->mockBiz('CloudPlatform:ResourceFacadeService', $params);
 
         $file = array(
             'globalId' => 1,
@@ -343,7 +351,7 @@ class CloudFileImplementorTest extends BaseTestCase
         $result = $this->getCloudFileImplementor()->resumeUpload($file, array(
             'bucket' => 'test',
             'hash' => '123456',
-            'fileName' => 'test.mp4',
+            'name' => 'test.mp4',
             'fileSize' => 10,
         ));
         $this->assertEquals('test/test.mp4', $result['hashId']);
@@ -352,16 +360,19 @@ class CloudFileImplementorTest extends BaseTestCase
 
     public function testResumeUploadWithNull()
     {
-        $api = CloudAPIFactory::create('root');
-        $mockObject = \Mockery::mock($api);
-        $mockObject->shouldReceive('post')->times(1)->andReturn(array(
-            'no' => 1,
-            'uploadUrl' => '/test.mp4',
-            'uploadMode' => 'test',
-            'uploadToken' => '123456',
-        ));
-
-        $this->getCloudFileImplementor()->setApi('root', $mockObject);
+        $params = [
+            [
+                'functionName' => 'startUpload',
+                'runTimes' => 1,
+                'returnValue' => [
+                    'no' => 1,
+                    'uploadUrl' => '/test.mp4',
+                    'uploadMode' => 'test',
+                    'uploadToken' => '123456',
+                ],
+            ],
+        ];
+        $this->mockBiz('CloudPlatform:ResourceFacadeService', $params);
 
         $file = array(
             'globalId' => 1,
@@ -378,7 +389,7 @@ class CloudFileImplementorTest extends BaseTestCase
         $result = $this->getCloudFileImplementor()->resumeUpload($file, array(
             'bucket' => 'test',
             'hash' => '123456',
-            'fileName' => 'test.mp4',
+            'name' => 'test.mp4',
             'fileSize' => 10,
         ));
         $this->assertNull($result);
@@ -522,19 +533,26 @@ class CloudFileImplementorTest extends BaseTestCase
 
     public function testFinishedUpload()
     {
-        $api = CloudAPIFactory::create('root');
-        $mockObject = \Mockery::mock($api);
-        $mockObject->shouldReceive('get')->times(1)->andReturn(array(
-            'no' => 1,
-            'reskey' => 'test',
-            'size' => 100,
-            'name' => 'test.file',
-            'processStatus' => 'none',
-            'length' => '10',
-        ));
-        $mockObject->shouldReceive('post')->times(1)->andReturn(array());
-
-        $this->getCloudFileImplementor()->setApi('root', $mockObject);
+        $params = [
+            [
+                'functionName' => 'finishUpload',
+                'runTimes' => 1,
+                'returnValue' => [],
+            ],
+            [
+                'functionName' => 'getResource',
+                'runTimes' => 1,
+                'returnValue' => [
+                    'no' => 1,
+                    'reskey' => 'test',
+                    'size' => 100,
+                    'name' => 'test.file',
+                    'processStatus' => 'none',
+                    'length' => '10',
+                ],
+            ],
+        ];
+        $this->mockBiz('CloudPlatform:ResourceFacadeService', $params);
 
         $result = $this->getCloudFileImplementor()->finishedUpload(array(
             'globalId' => 1,
