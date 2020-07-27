@@ -106,6 +106,7 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
             'old_uploader' => 'js-sdk/uploader/sdk-v1.js',
             'old_document' => 'js-sdk/document-player/v7/viewer.html',
             'faq' => 'js-sdk/faq/sdk-v1.js',
+            'resource_player' => 'js-sdk-v2/sdk-v1.js'
         ];
 
         if (isset($paths[$type])) {
