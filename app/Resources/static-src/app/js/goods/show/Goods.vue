@@ -44,6 +44,7 @@
                     <div v-if="goods.product.targetType === 'course'" id="info-left-2"
                          class="content-item js-content-item">
                         <h3 class="content-item__title">学习目录</h3>
+                        <course-tasks :sku="currentSku"></course-tasks>
                     </div>
                     <div v-if="goods.product.targetType === 'classroom'" id="info-left-2"
                          class="content-item js-content-item">
@@ -80,6 +81,7 @@
     import BackToTop from './components/back-to-top';
     import Reviews from 'app/common/component/review/index';
     import ClassroomCourses from './components/classroom-courses';
+    import CourseTasks from './components/course-tasks';
     import BuySku from './components/buy-sku';
 
     export default {
@@ -118,6 +120,7 @@
             BackToTop,
             Reviews,
             ClassroomCourses,
+            CourseTasks,
             BuySku,
         },
         computed: {

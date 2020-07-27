@@ -10,6 +10,7 @@
       {% include 'course/task-list/parts/list-li-title-template.html.twig' %}
     </span>
   {% elseif not isOvertime %}
+    {#  此处即使不是学员，也可以显示预览按钮，原因是控制器会报错，然后弹出登陆框提醒客户登陆  #}
     <a class="title" href="#modal" data-toggle="modal"
         data-url="{{ path('course_task_preview',{courseId:course.id, id: '{taskId}'}) }}"
         style="margin-top:-6px">{% include 'course/task-list/parts/list-li-title-template.html.twig' %}</a>

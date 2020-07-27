@@ -23,8 +23,8 @@ class Favorite extends AbstractResource
     {
         return $this->getFavoriteService()->deleteUserFavorite(
             $this->getCurrentUser()->getId(),
-            $request->query->get('targetType'),
-            $request->query->get('targetId')
+            $request->request->get('targetType'),
+            $request->request->get('targetId')
         );
     }
 
