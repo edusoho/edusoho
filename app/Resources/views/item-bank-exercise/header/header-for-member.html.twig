@@ -6,7 +6,7 @@
     <div class="clearfix js-origin-header-content">
       {# 课程封面 #}
       {% block coursesetImg %}
-        <img class="courseset-manage-header__img" src="{{ filepath(exercise.cover.large|default(null), 'courseSet.png') }}" /> <!-- courseSet.largePicture -->
+        <img class="courseset-manage-header__img" src="{{ filepath(exercise.cover.large|default(null), 'item_bank_exercise.png') }}" /> <!-- courseSet.largePicture -->
       {% endblock %}
       <div class="courseset-manage-header-info">
         <div style="margin-top: 21px;" class="courseset-manage-header-info__title text-overflow" {% if exercise.title|length > 21 %}data-toggle="tooltip" title="{{ exercise.title }}" data-container="body" {% endif %}>

@@ -1,7 +1,7 @@
 <div class="course-item">
   <div class="course-img">
     <a href="{{ path('item_bank_exercise_show', {id: exercise.id}) }}" target="_blank">
-      {{ lazy_img(filepath(exercise.cover.large|default(null), 'courseSet.png'), 'img-responsive', exercise.title) }}
+      {{ lazy_img(filepath(exercise.cover.large|default(null), 'item_bank_exercise.png'), 'img-responsive', exercise.title) }}
     </a>
   </div>
   <div class="course-info">
