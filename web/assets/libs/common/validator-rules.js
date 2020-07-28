@@ -172,7 +172,7 @@ define(function(require, exports, module) {
     ],
     [
       'check_password_high',
-      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!-\/:-@\[-`{-~])[!-~]{8,32}$/i,
+      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!-\/:-@\[-`{-~])[!-~]{8,32}$/,
       Translator.trans('validate.check_password_high.message', {display: '{{display}}'})
     ],
     [
