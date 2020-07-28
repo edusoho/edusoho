@@ -7,6 +7,11 @@ use Biz\Product\Service\ProductService;
 use Codeages\Biz\Framework\Context\Biz;
 use Pimple\Container;
 
+/**
+ * Class AbstractGoodsMediator
+ * 关于为什么课程和班级的更新不是通过事件，而是通过中介者的模式去实现:
+ * 是因为，商品属于主进程、关键路径，使用事件后，导致代码分散，可读性以及可扩展性急剧下降，使用中介模式既可以解耦课程和商品的关系，代码可读性也提高了.
+ **/
 abstract class AbstractGoodsMediator
 {
     /**

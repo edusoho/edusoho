@@ -32,6 +32,22 @@ class ClassroomGoodsMediatorTest extends BaseTestCase
 
     public function testOnPublish()
     {
+        $classroom = $this->mockClassroom();
+        list($product, $goods) = $this->getClassroomGoodsMediator()->onCreate($classroom);
+        list($publishedProduct, $publishedGoods) = $this->getClassroomGoodsMediator()->onPublish($classroom);
+        self::assertEquals('created', $goods['status']);
+        self::assertEquals('published', $publishedGoods['status']);
+    }
+
+    public function testOnClose()
+    {
+        $classroom = $this->mockClassroom();
+        list($product, $goods) = $this->getClassroomGoodsMediator()->onCreate($classroom);
+        list($publishedProduct, $publishedGoods) = $this->getClassroomGoodsMediator()->onPublish($classroom);
+        self::assertEquals('created', $goods['status']);
+        self::assertEquals('published', $publishedGoods['status']);
+        list($unpublishedProduct, $unpublishedGoods) = $this->getClassroomGoodsMediator()->onClose($classroom);
+        self::assertEquals('unpublished', $unpublishedGoods['status']);
     }
 
     public function mockClassroom($customFields = [])
