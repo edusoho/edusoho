@@ -8,6 +8,7 @@ namespace ESCloud\SDK\Service;
 class AiService extends BaseService
 {
     protected $host = 'ai-service.qiqiuyun.net';
+    protected $service = 'ai';
 
     /**
      * 创建人脸识别会话

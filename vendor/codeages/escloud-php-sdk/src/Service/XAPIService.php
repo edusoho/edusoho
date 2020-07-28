@@ -12,6 +12,7 @@ class XAPIService extends BaseService
     protected $host = 'xapi.qiqiuyun.net';
 
     protected $defaultLang = 'zh-CN';
+    protected $service = 'xapi';
 
     /**
      * 提交"听音频"的学习记录

@@ -5,6 +5,7 @@ namespace ESCloud\SDK\Service;
 class MpService extends BaseService
 {
     protected $host = 'mp-service.qiqiuyun.net';
+    protected $service = 'mp';
 
     public function getToken(array $params)
     {

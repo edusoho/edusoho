@@ -12,6 +12,8 @@ class DrpService extends BaseService
     private $loginPath = '/merchant/login';
     private $postDataPath = '/merchant_data/actions/report';
 
+    protected $service = 'drp';
+
     /**
      * 生成登陆的表单
      *

@@ -7,6 +7,7 @@ use ESCloud\SDK;
 class PlayService extends BaseService
 {
     protected $host = 'play.qiqiuyun.net';
+    protected $service = 'play';
 
     /**
      * 生成资源播放 Token
