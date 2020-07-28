@@ -127,6 +127,7 @@ class ExerciseController extends BaseController
         if (empty($condition['types'])) {
             return [];
         }
+
         return $this->getExerciseModuleService()->search(
             $condition,
             [],
