@@ -135,7 +135,7 @@ class AddItemBankExerciseTable extends Migration
               KEY `exerciseId` (`exerciseId`),
               KEY `userId` (`userId`),
               KEY `operateType` (`operateType`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='题库练习成员加入记录表';
             
             CREATE TABLE `item_bank_exercise_module` (
               `id` int(11) unsigned NOT NULL AUTO_INCREMENT,

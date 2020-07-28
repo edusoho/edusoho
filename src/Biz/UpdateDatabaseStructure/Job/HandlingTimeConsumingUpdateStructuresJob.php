@@ -152,6 +152,13 @@ class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
          *  Column is_push
          */
         $this->createIndex('xapi_activity_watch_log', 'is_push', 'is_push');
+
+        /*
+         *  Table  biz_assessment_section_item
+         *  Index  assessmentId_seq
+         *  Column assessment_id,seq
+         */
+        $this->createIndex('biz_assessment_section_item', 'assessmentId_seq', 'assessment_id, seq');
     }
 
     protected function changeTableFiledType()
