@@ -1252,7 +1252,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
                 'ext' => $params['ext'],
                 'size' => $params['fileSize'],
                 'file_type' => $params['type'],
-                'hash_id' => $paratestInitUploadms['hashId'],
+                'hash_id' => $params['hashId'],
             ];
 
             $attachment = $this->getAttachmentService()->createAttachment($attachment);
