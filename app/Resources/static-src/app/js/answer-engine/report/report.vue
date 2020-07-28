@@ -42,6 +42,7 @@
     },
     created() {
         jQuery.support.cors = true;
+        alert(8);
         const that = this;
         $.ajax({
           url: '/api/answer_record/'+$("[name='answer_record_id']").val(),
