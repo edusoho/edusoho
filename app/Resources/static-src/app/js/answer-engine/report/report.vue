@@ -41,6 +41,7 @@
       };
     },
     created() {
+        jQuery.support.cors = true;
         const that = this;
         $.ajax({
           url: '/api/answer_record/'+$("[name='answer_record_id']").val(),
