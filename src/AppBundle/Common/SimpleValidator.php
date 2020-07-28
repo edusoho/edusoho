@@ -47,7 +47,7 @@ class SimpleValidator
 
     public static function middlePassword($value, array $option = [])
     {
-        return (bool) preg_match('/^(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?]{8,20}$/u', $value);
+        return (bool) preg_match('/^(?!^(\d+|[a-zA-Z]+|[!-\/:-@\[-`{-~]+)$)^[!-~]{8,20}$/u', $value);
     }
 
     public static function highPassword($value, array $option = [])

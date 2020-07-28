@@ -167,7 +167,7 @@ define(function(require, exports, module) {
     ],
     [
       'check_password_middle',
-      /^(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?]{8,20}$/i,
+      /^(?!^(\d+|[a-zA-Z]+|[!-\/:-@\[-`{-~]+)$)^[!-~]{8,20}$/i,
       Translator.trans('validate.check_password_middle.message', {display: '{{display}}'})
     ],
     [
