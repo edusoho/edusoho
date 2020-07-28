@@ -46,6 +46,8 @@ class ItemBankExerciseException extends AbstractException
 
     const FORBIDDEN_TAKE_EXERCISE = 4037519;
 
+    const FORBIDDEN_TO_SAVE = 4037520;
+
     public $messages = [
         4037501 => 'exception.item_bank_exercise.forbidden_learn',
         5007502 => 'exception.item_bank_exercise.chapter_answer_is_doing',
@@ -66,5 +68,6 @@ class ItemBankExerciseException extends AbstractException
         5007517 => 'exception.item_bank_exercise.assessment_exercise_exist',
         5007518 => 'exception.item_bank_exercise.module.not_empty_number',
         4037519 => 'exception.item_bank_exercise.forbidden_take_exercise',
+        4037520 => 'exception.item_bank_exercise.module.switch.danger',
     ];
 }
