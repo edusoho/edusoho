@@ -1,12 +1,8 @@
 <template>
-  <div class="ibs-wap-vue">
-    <item-engine mode="do"></item-engine>
-  </div>
+  <div class=""></div>
 </template>
 
 <script>
-// import "wap-sdk-test/lib/itemBank.css"
-// import 'swiper/dist/css/swiper.css'
 export default {
   components: {},
   data() {

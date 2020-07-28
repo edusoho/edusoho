@@ -6,52 +6,52 @@ export default {
       type: Object,
       default() {
         return {};
-      }
+      },
     },
     type: {
       type: String,
-      default: 'price'
+      default: 'price',
     },
     courseType: {
       type: String,
-      default: 'normal'
+      default: 'normal',
     },
     discountType: {
       type: String,
-      default: 'discount'
+      default: 'discount',
     },
     discount: {
       type: String,
-      default: '10'
+      default: '10',
     },
     feedback: {
       type: Boolean,
-      default: true
+      default: true,
     },
     typeList: {
       type: String,
-      default: 'course_list'
+      default: 'course_list',
     },
     isAppUse: {
       type: Boolean,
-      default: false
+      default: false,
     },
     normalTagShow: {
       type: Boolean,
-      default: true
+      default: true,
     },
     vipTagShow: {
       type: Boolean,
-      default: false
+      default: false,
     },
     isVip: {
       type: String,
-      default: '0'
-    }
+      default: '0',
+    },
   },
   data() {
     return {
-      pathName: this.$route.name
+      pathName: this.$route.name,
     };
   },
   computed: {
@@ -70,7 +70,7 @@ export default {
         return `${discount}折`;
       }
       return false;
-    }
+    },
   },
   watch: {
     course: {
@@ -82,13 +82,13 @@ export default {
           for (let i = 0; i < keys.length; i += 1) {
             courseSet.cover[keys[i]] = courseSet.cover[keys[i]].replace(
               /^(\/\/)|(http:\/\/)/,
-              'https://'
+              'https://',
             );
           }
         }
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   methods: {
     onClick(e) {
@@ -108,24 +108,43 @@ export default {
         location.href = this.order.targetUrl;
         return;
       }
-      this.$router.push({
-        path:
-          this.typeList === 'course_list' ? `/course/${id}` : `/classroom/${id}`
-      });
+      this.toMore(this.typeList, id);
+    },
+    toMore(type, id) {
+      let path = '';
+      switch (type) {
+        case 'course_list':
+          path = `/course/${id}`;
+          break;
+        case 'item_bank_exercise':
+          path = `/item_bank_exercise/${id}`;
+          break;
+        case 'classroom_list':
+          path = `/classroom/${id}`;
+          break;
+      }
+      this.$router.push({ path: path });
     },
     // 调用app接口
     postMessage(type, id) {
-      let action;
+      let action = '';
       let data = {};
-      if (type === 'course_list') {
-        action = 'kuozhi_course';
-        data = { courseId: id };
-      } else {
-        action = 'kuozhi_classroom';
-        data = { classroomId: id };
+      switch (type) {
+        case 'course_list':
+          action = 'kuozhi_course';
+          data = { courseId: id };
+          break;
+        case 'item_bank_exercise':
+          action = 'kuozhi_itembank';
+          data = { exerciseId: id };
+          break;
+        case 'classroom_list':
+          action = 'kuozhi_classroom';
+          data = { classroomId: id };
+          break;
       }
       // 调用app接口
       window.postNativeMessage({ action, data });
-    }
-  }
+    },
+  },
 };

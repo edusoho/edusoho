@@ -26,4 +26,8 @@ module.exports = {
   t5: {
     url: 'http://www.t5.edusoho.cn',
   },
-}['t5'];
+  itembank: {
+    url: 'http://item-bank.st.edusoho.cn',
+    token: 'mrl79g2zjbk8so0skk00g0swo40wow',
+  },
+}['itembank'];

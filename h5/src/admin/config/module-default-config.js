@@ -61,6 +61,20 @@ const MODULE_DEFAULT = {
       items: [],
     },
   },
+  itemBankList: {
+    type: 'item_bank_exercise',
+    moduleType: '',
+    data: {
+      title: '',
+      sourceType: 'condition',
+      categoryId: '',
+      sort: 'recommendedSeq',
+      lastDays: '0',
+      limit: '4',
+      displayStyle: 'distichous',
+      items: [],
+    },
+  },
   graphicNavigation: {
     type: 'graphic_navigation',
     moduleType: 'navigation-1',
@@ -285,6 +299,10 @@ const APP_BASE_MODULE = [
     name: '公开课列表',
     default: MODULE_DEFAULT.openCourseList,
   },
+  {
+    name: '题库列表',
+    default: MODULE_DEFAULT.itemBankList,
+  },
 ];
 
 const H5_BASE_MODULE = [
@@ -317,6 +335,10 @@ const H5_BASE_MODULE = [
     name: '搜索',
     default: MODULE_DEFAULT.search,
     icon: 'icon-sousuo',
+  },
+  {
+    name: '题库列表',
+    default: MODULE_DEFAULT.itemBankList,
   },
 ];
 
@@ -383,6 +405,9 @@ const TYPE_TEXT_DEFAULT = {
   },
   open_course_list: {
     text: '公开课',
+  },
+  question_bank_list: {
+    text: '题库',
   },
   groupon: {
     text: '活动',

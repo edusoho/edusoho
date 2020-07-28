@@ -1,36 +1,77 @@
 <template>
   <div class="brush-exercise-directory-exam">
-    <div class="directory-exam-warp">
-      <div class="exam-left">
-        <div class="exam-title">2020年 教师资格证 中学生教育知识与学习中心</div>
-        <div class="exam-score">100题/100分</div>
-      </div>
-      <div class="exam-right">
-        <div class="learn-btn">开始测评</div>
-      </div>
-    </div>
-
-    <div class="directory-exam-warp">
-      <div class="exam-left">
-        <div class="exam-title">2020年 教师资格证 中学生教育知识与学习中心</div>
-        <div class="exam-score">100题/100分</div>
-      </div>
-      <div class="exam-right">
-        <div class="learn-btn">开始测评</div>
-      </div>
-    </div>
+    <template v-if="exercise.length">
+      <van-list :finished="finished" finished-text="" @load="onLoad">
+        <div
+          class="directory-exam-warp"
+          v-for="(item, index) in exercise"
+          :key="index"
+        >
+          <div class="exam-left">
+            <div class="exam-title">{{ item.assessment.name }}</div>
+            <div class="exam-score">
+              {{ item.assessment.question_count }}题/{{
+                item.assessment.total_score
+              }}分
+            </div>
+          </div>
+          <div class="exam-right">
+            <div :class="[getBtnText(item).class]">
+              {{ getBtnText(item).text }}
+            </div>
+          </div>
+        </div>
+      </van-list>
+    </template>
+    <van-loading v-if="isLoading" color="#1989fa" size="24px" vertical
+      >加载中...</van-loading
+    >
   </div>
 </template>
 
 <script>
+import getBtnText from '@/utils/itemBank-status.js';
 export default {
   components: {},
   data() {
-    return {};
+    return {
+      loading: false,
+    };
+  },
+  props: {
+    exercise: {
+      type: Array,
+      default() {
+        return [];
+      },
+    },
+    isLoading: {
+      type: Boolean,
+      default: true,
+    },
+    finished: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {},
-  watch: {},
+  watch: {
+    isLoading: {
+      handler: 'handleLoad',
+    },
+  },
   created() {},
-  methods: {},
+  methods: {
+    onLoad() {
+      console.log('加载');
+      this.$emit('loadMore');
+    },
+    handleLoad(e) {
+      this.loading = e;
+    },
+    getBtnText(item) {
+      return getBtnText(item.latestAnswerRecord?.status || '');
+    },
+  },
 };
 </script>
