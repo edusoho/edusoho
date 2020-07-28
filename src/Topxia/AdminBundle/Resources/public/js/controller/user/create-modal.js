@@ -1,11 +1,11 @@
 define(function (require, exports, module) {
-  var Validator = require('bootstrap.validator');
-  var Notify = require('common/bootstrap-notify');
+  let Validator = require('bootstrap.validator');
+  let Notify = require('common/bootstrap-notify');
   require('common/validator-rules').inject(Validator);
 
   exports.run = function () {
-    var $modal = $('#user-create-form').parents('.modal');
-    var validator = new Validator({
+    let $modal = $('#user-create-form').parents('.modal');
+    let validator = new Validator({
       element: '#user-create-form',
       autoSubmit: false,
       onFormValidated: function (error, results, $form) {
@@ -26,7 +26,7 @@ define(function (require, exports, module) {
       }
     });
     Validator.addRule('spaceNoSupport', function (options) {
-      var value = $(options.element).val();
+      let value = $(options.element).val();
       return value.indexOf(' ') < 0;
     }, Translator.trans('validate.have_spaces'));
 
