@@ -5,10 +5,13 @@ namespace Biz\Goods\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Common\CommonException;
+use Biz\Course\Service\CourseSetService;
 use Biz\Goods\Dao\GoodsDao;
 use Biz\Goods\Dao\GoodsSpecsDao;
+use Biz\Goods\GoodsEntityFactory;
 use Biz\Goods\GoodsException;
 use Biz\Goods\Service\GoodsService;
+use Biz\Product\Service\ProductService;
 
 class GoodsServiceImpl extends BaseService implements GoodsService
 {
@@ -49,6 +52,20 @@ class GoodsServiceImpl extends BaseService implements GoodsService
     public function unpublishGoods($id)
     {
         return $this->getGoodsDao()->update($id, ['status' => 'unpublished', 'publishedTime' => time()]);
+    }
+
+    public function recommendGoods($id, $weight)
+    {
+        return $this->getGoodsDao()->update($id, ['recommendWeight' => $weight, 'recommendedTime' => time()]);
+    }
+
+    public function cancelRecommendGoods($id)
+    {
+        return $this->getGoodsDao()->update($id, ['recommendWeight' => 0, 'recommendedTime' => 0]);
+    }
+
+    public function changeGoodsPrice()
+    {
     }
 
     public function updateGoods($id, $goods)
@@ -110,6 +127,12 @@ class GoodsServiceImpl extends BaseService implements GoodsService
         return $this->getGoodsDao()->search($conditions, $orderBys, $start, $limit, $columns);
     }
 
+    /**
+     * @param $productId
+     *
+     * @return mixed
+     *               如果未来业务改造成 产品：商品 1：n 后，getGoodsByProductId就应该被舍弃，不再使用
+     */
     public function getGoodsByProductId($productId)
     {
         return $this->getGoodsDao()->getByProductId($productId);
@@ -243,18 +266,22 @@ class GoodsServiceImpl extends BaseService implements GoodsService
      * @param $goods
      *
      * @return bool
-     *              大于管理员的权限，教师权限且是当前商品的创建者
-     *
-     * @todo 按照当前逻辑课程后面设定的教师也应该有管理权限，从商品上，只有创建者有管理权限，后续作额外调整
+     *              大于管理员的权限，教师权限且是当前商品的创建者,
+     *              历史原因，如果满足实体（课程、班级等）的管理权限，也可以管理
      */
     public function canManageGoods($goods)
     {
-        return $this->getCurrentUser()->isAdmin() || ($this->getCurrentUser()->isTeacher() && $this->isGoodsCreator($goods));
+        return $this->getCurrentUser()->isAdmin() || ($this->getCurrentUser()->isTeacher() && $this->isGoodsCreator($goods)) || $this->hasTargetManageRole($goods);
     }
 
     public function refreshGoodsHotSeq()
     {
         return $this->getGoodsDao()->refreshHotSeq();
+    }
+
+    protected function hasTargetManageRole($goods)
+    {
+        return $this->getGoodsEntityFactory()->create($goods['type'])->canManageTarget($goods);
     }
 
     /**
@@ -266,6 +293,14 @@ class GoodsServiceImpl extends BaseService implements GoodsService
     protected function isGoodsCreator($goods)
     {
         return $goods['creator'] && (int) $goods['creator'] === (int) $this->getCurrentUser()->getId();
+    }
+
+    /**
+     * @return GoodsEntityFactory
+     */
+    protected function getGoodsEntityFactory()
+    {
+        return $this->biz['goods.entity.factory'];
     }
 
     /**
@@ -282,5 +317,21 @@ class GoodsServiceImpl extends BaseService implements GoodsService
     protected function getGoodsSpecsDao()
     {
         return $this->createDao('Goods:GoodsSpecsDao');
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getProductService()
+    {
+        return $this->createService('Product:ProductService');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 }

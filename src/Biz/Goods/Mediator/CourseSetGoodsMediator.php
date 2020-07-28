@@ -54,6 +54,7 @@ class CourseSetGoodsMediator extends AbstractGoodsMediator
             'images' => $courseSet['cover'],
             'orgId' => $courseSet['orgId'],
             'orgCode' => $courseSet['orgCode'],
+            'categoryId' => $courseSet['categoryId'],
             'maxRate' => $courseSet['maxRate'],
         ]);
 
