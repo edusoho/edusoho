@@ -62,12 +62,12 @@ class ExerciseQuestionRecordServiceImpl extends BaseService implements ExerciseQ
                     'questionId' => $answerQuestionReport['questionId'],
                     'status' => $answerQuestionReport['status'],
                 ];
-            } elseif ($questionRecords[$answerQuestionReport['questionId']]['status'] != $answerQuestionReport['status']) {
+            } else {
                 $updateRecords[] = [
                     'id' => $questionRecords[$answerQuestionReport['questionId']]['id'],
                     'status' => $answerQuestionReport['status'],
                     'answerRecordId' => $answerRecordId,
-                    'moduleType' => $moduleType,
+                    'moduleType' => $module['type'],
                 ];
             }
         }

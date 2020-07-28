@@ -5,6 +5,7 @@ namespace Biz\ItemBankExercise\Event;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Crontab\SystemCrontabInitializer;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerQuestionReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -187,7 +188,7 @@ class ChapterExerciseEventSubscriber extends EventSubscriber implements EventSub
         foreach ($answerReport['section_reports'] as $sectionReport) {
             foreach ($sectionReport['item_reports'] as $itemReport) {
                 foreach ($itemReport['question_reports'] as $questionReport) {
-                    if (array_filter($questionReport['response'])) {
+                    if (in_array($questionReport['status'], [AnswerQuestionReportService::STATUS_RIGHT, AnswerQuestionReportService::STATUS_WRONG])) {
                         ++$doneQuestionNum;
                     }
                 }

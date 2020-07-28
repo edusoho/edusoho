@@ -27,7 +27,7 @@ class AnswerController extends BaseController
         if (AnswerService::ANSWER_RECORD_STATUS_REVIEWING == $latestAnswerRecord['status']) {
             return $this->forward('AppBundle:AnswerEngine/AnswerEngine:reviewAnswer', [
                 'answerRecordId' => $latestAnswerRecord['answerRecordId'],
-                'successGotoUrl' => $this->generateUrl('my_item_bank_exercise_show', ['id' => $exerciseId, 'moduleId' => $moduleId, 'tab' => 'chapter']),
+                'successGotoUrl' => $this->generateUrl('item_bank_exercise_assessment_answer', ['exerciseId' => $exerciseId, 'moduleId' => $moduleId, 'assessmentId' => $assessmentId]),
                 'role' => 'student',
             ]);
         } elseif (AnswerService::ANSWER_RECORD_STATUS_FINISHED == $latestAnswerRecord['status']) {
@@ -67,7 +67,7 @@ class AnswerController extends BaseController
         if (AnswerService::ANSWER_RECORD_STATUS_REVIEWING == $latestAnswerRecord['status']) {
             return $this->forward('AppBundle:AnswerEngine/AnswerEngine:reviewAnswer', [
                 'answerRecordId' => $latestAnswerRecord['answerRecordId'],
-                'successGotoUrl' => $this->generateUrl('my_item_bank_exercise_show', ['id' => $exerciseId, 'moduleId' => $moduleId, 'tab' => 'chapter']),
+                'successGotoUrl' => $this->generateUrl('item_bank_exercise_category_answer', ['exerciseId' => $exerciseId, 'moduleId' => $moduleId, 'categoryId' => $categoryId]),
                 'role' => 'student',
             ]);
         } elseif (AnswerService::ANSWER_RECORD_STATUS_FINISHED == $latestAnswerRecord['status']) {
