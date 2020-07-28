@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\ItemBankExercise;
 
 use AppBundle\Controller\BaseController;
+use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\QuestionBank\Service\CategoryService;
 use Biz\QuestionBank\Service\QuestionBankService;
@@ -52,6 +53,9 @@ class ExerciseManageController extends BaseController
 
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
+            if (isset($data['status']) && !$exercise['chapterEnable'] && !$exercise['assessmentEnable']) {
+                $this->createNewException(ItemBankExerciseException::FORBIDDEN_TO_SAVE());
+            }
             $data = $this->prepareExpiryMode($data);
 
             $this->getExerciseService()->updateBaseInfo($exerciseId, $data);
