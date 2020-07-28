@@ -1,3 +1,4 @@
+<script src="../answer/index.js"></script>
 <template>
   <div id="app" class="ibs-vue">
     <item-report
@@ -41,8 +42,6 @@
       };
     },
     created() {
-        jQuery.support.cors = true;
-        alert(8);
         const that = this;
         $.ajax({
           url: '/api/answer_record/'+$("[name='answer_record_id']").val(),

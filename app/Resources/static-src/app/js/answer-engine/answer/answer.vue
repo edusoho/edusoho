@@ -61,8 +61,6 @@
       };
     },
     created() {
-      jQuery.support.cors = true;
-      alert(1);
       this.emitter = new ActivityEmitter();
       this.emitter.emit('doing', {data: ''});
 

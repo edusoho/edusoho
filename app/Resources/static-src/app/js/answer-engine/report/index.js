@@ -1,6 +1,8 @@
 import Report from './report';
 import { isMobileDevice } from 'common/utils';
 
+jQuery.support.cors = true;
+
 if (isMobileDevice()) {
   $('body, html').css({ 'height': '100%', 'overflow': 'auto' });
 }
