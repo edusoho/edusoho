@@ -13,6 +13,8 @@ class Auth
 
     protected $useJwt;
 
+    protected $service = '';
+
     /**
      * Auth constructor.
      * @param $accessKey
@@ -55,15 +57,16 @@ class Auth
      *
      * @return string 授权信息
      */
-    public function makeRequestAuthorization($uri, $body = '', $lifetime = 600, $useNonce = true)
+    public function makeRequestAuthorization($uri, $body = '', $lifetime = 600, $useNonce = true, $service)
     {
         if ($this->useJwt) {
             $payload = array(
                 'jti' => strtolower(Sdk\random_str(16)),
                 'exp' => time() + $lifetime,
+                'iss' => $service
             );
 
-            $token =  JWT::encode($payload, $this->secretKey, 'HS256', $this->accessKey);
+            $token = JWT::encode($payload, $this->secretKey, 'HS256', $this->accessKey);
 
             return "Bearer {$token}";
         } else {
@@ -74,6 +77,7 @@ class Auth
             return "Signature {$this->accessKey}:{$deadline}:{$nonce}:{$signature}";
         }
     }
+
 
     /**
      * 制作XAPI的请求授权信息
