@@ -35,9 +35,9 @@ class UpdateMemberMasteryRateJob extends AbstractJob
             return;
         }
 
-        $sql = 'SELECT userId, `status`, count(*) AS num from item_bank_exercise_question_record GROUP BY userId, `status`;';
+        $sql = 'SELECT userId, `status`, count(*) AS num from item_bank_exercise_question_record WHERE exerciseId = ? GROUP BY userId, `status`;';
         $rightNumWrongNumGroups = ArrayToolkit::group(
-            $this->biz['db']->fetchAll($sql, []),
+            $this->biz['db']->fetchAll($sql, [$this->exerciseId]),
             'userId'
         );
 
