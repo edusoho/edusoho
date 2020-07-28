@@ -5,11 +5,16 @@ namespace Tests\Unit\QuickEntrance\Service;
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseTestCase;
 use Biz\QuickEntrance\Service\QuickEntranceService;
+use Biz\S2B2C\SupplierPlatformApi;
 
 class QuickEntranceServiceTest extends BaseTestCase
 {
     public function testFindEntrancesByUserIdEmptyWithDbDataEmpty()
     {
+        $disabledPermissions = ['course_set_manage_create'];
+        $mockeryPlatformApi = \Mockery::mock(new SupplierPlatformApi($this->biz));
+        $mockeryPlatformApi->shouldReceive('getMerchantDisabledPermissions')->times(1)->andReturn($disabledPermissions);
+        $this->biz['supplier.platform_api'] = $mockeryPlatformApi;
         $this->getQuickEntranceService()->createUserEntrance($this->getCurrentUser()->getId(), []);
 
         $result = $this->getQuickEntranceService()->findEntrancesByUserId($this->getCurrentUser()->getId());

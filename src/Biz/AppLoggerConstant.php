@@ -219,6 +219,8 @@ class AppLoggerConstant implements LoggerConstantInterface
                 'close',
                 'delete',
                 'add_task',
+                'publish_lesson',
+                'unpublish_lesson',
                 'update_task',
                 'delete_task',
                 'task_set_optional',

@@ -2,10 +2,10 @@
 
 namespace AppBundle\Controller\Admin;
 
-use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
-use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Common\Paginator;
 use Biz\System\Util\LogDataUtils;
+use Symfony\Component\HttpFoundation\Request;
 
 class LogController extends BaseController
 {
@@ -50,14 +50,14 @@ class LogController extends BaseController
         $module = isset($conditions['module']) ? $conditions['module'] : '';
         $actions = $this->getLogService()->getActionsByModule($module);
 
-        return $this->render('admin/system/log/logs.html.twig', array(
+        return $this->render('admin/system/log/logs.html.twig', [
             'logs' => $logs,
             'paginator' => $paginator,
             'users' => $users,
             'modules' => $modules,
             'actions' => $actions,
             'hasSystemOperation' => $hasSystemOperation,
-        ));
+        ]);
     }
 
     public function oldAction(Request $request)
@@ -84,21 +84,21 @@ class LogController extends BaseController
         $module = isset($conditions['module']) ? $conditions['module'] : '';
         $actions = $this->getLogService()->getActionsByModule($module);
 
-        return $this->render('admin/system/log/logs-old.html.twig', array(
+        return $this->render('admin/system/log/logs-old.html.twig', [
             'logs' => $logs,
             'paginator' => $paginator,
             'users' => $users,
             'modules' => $modules,
             'actions' => $actions,
-        ));
+        ]);
     }
 
     public function logFieldChangeAction(Request $request)
     {
         $log = $request->query->get('log');
         $data = $log['data'];
-        $modalShowFields = array();
-        $showData = array();
+        $modalShowFields = [];
+        $showData = [];
 
         $transConfigs = LogDataUtils::getYmlConfig();
         if (array_key_exists($log['module'], $transConfigs)) {
@@ -111,7 +111,7 @@ class LogController extends BaseController
         }
 
         if ('all' == $modalShowFields) {
-            $modalShowFields = array();
+            $modalShowFields = [];
             foreach ($data as $message => $fieldChange) {
                 $modalShowFields[] = $message;
             }
@@ -125,9 +125,9 @@ class LogController extends BaseController
             }
         }
 
-        return $this->render('admin/system/log/data-modal.html.twig', array(
+        return $this->render('admin/system/log/data-modal.html.twig', [
             'data' => $showData,
-        ));
+        ]);
     }
 
     private function setSystemUserName($users)
@@ -147,16 +147,16 @@ class LogController extends BaseController
         $transConfigs = LogDataUtils::getYmlConfig();
         $getValueDefaultConfig = LogDataUtils::getLogDefaultConfig();
         foreach ($logs as &$log) {
-            $transJsonData = array();
+            $transJsonData = [];
             $logData = $log['data'];
-            $log['urlParamsJson'] = array();
+            $log['urlParamsJson'] = [];
             $log['shouldShowModal'] = false;
             $log['shouldShowTemplate'] = true;
             if (empty($logData)) {
                 continue;
             }
 
-            $templateParam = array();
+            $templateParam = [];
 
             if (array_key_exists($log['module'], $transConfigs)) {
                 if (array_key_exists($log['action'], $transConfigs[$log['module']])) {
@@ -184,7 +184,7 @@ class LogController extends BaseController
                     $transJsonData[$key] = $transJsonDataValue;
                 } else {
                     if ('url' == $paramConfig['type']) {
-                        $urlParam = array();
+                        $urlParam = [];
                         foreach ($paramConfig['param'] as $param => $value) {
                             $urlParamValue = $this->getArrayValueByConventKey($value, $logData);
                             if (false === $urlParamValue) {
@@ -303,24 +303,24 @@ class LogController extends BaseController
     public function logActionsAction(Request $request)
     {
         $module = $request->query->get('module');
-        $actions = array();
+        $actions = [];
         if (!empty($module)) {
             $actions = $this->getLogService()->getActionsByModule($module);
         }
 
-        return $this->render('admin/system/log/log-action-options.html.twig', array(
+        return $this->render('admin/system/log/log-action-options.html.twig', [
             'module' => $module,
             'actions' => $actions,
-        ));
+        ]);
     }
 
     public function usernameMatchUsersAction(Request $request)
     {
         $nickname = $request->query->get('nickname');
-        $conditions = array(
+        $conditions = [
             'nickname' => $nickname,
-        );
-        $orderBy = array('createdTime' => 'ASC');
+        ];
+        $orderBy = ['createdTime' => 'ASC'];
         $users = $this->getUserService()->searchUsers($conditions, $orderBy, 0, 10);
 
         return $this->createJsonResponse($users);
@@ -335,9 +335,9 @@ class LogController extends BaseController
             $logs = '';
         }
 
-        return $this->render('admin/system/log/logs-prod.html.twig', array(
+        return $this->render('admin/system/log/logs-prod.html.twig', [
             'logs' => $logs,
-        ));
+        ]);
     }
 
     protected function readFileLastLines($filename, $n)

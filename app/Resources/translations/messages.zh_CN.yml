@@ -8897,6 +8897,8 @@ log.action.course.publish: 发布课程
 log.action.course.close: 关闭课程
 log.action.course.delete: 删除课程
 log.action.course.add_task: 添加学习任务
+log.action.course.publish_lesson: 发布学习任务
+log.action.course.unpublish_lesson: 关闭学习任务
 log.action.course.update_task: 更新学习任务
 log.action.course.delete_task: 删除学习任务
 log.action.course.task_set_optional: 任务设置选修
@@ -9176,6 +9178,8 @@ log.action.template.course.create_lesson: 新建了课时《<a href="%url%" targ
 log.action.template.course.add_task: 新建了任务《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.task_set_optional: 將任务《<a href="%url%" target="_blank">%title%</a>》设置选修
 log.action.template.course.task_unset_optional: 將任务《<a href="%url%" target="_blank">%title%</a>》设置必修
+log.action.template.course.publish_lesson: 发布了课时《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.course.unpublish_lesson: 关闭了课时《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.add_question: 新建了题目《%title%》
 log.action.template.course.delete_question: 删除了题目《%title%》
 log.action.template.course.add_testpaper: 新建了试卷《%title%》
@@ -11155,6 +11159,7 @@ facein.capture_face.inspection_result_modal.title: 监考抓拍
 exception.s2b2c_product.update_type_invalid: 设置的更新类型不合法
 exception.s2b2c_product.not_found: 不存在对应商品
 exception.s2b2c_product.remove_failed: 商品移除失败
+exception.s2b2c.hidden_permission_invalid: 获取S2b2c权限列表失败
 
 admin_v2.cloud_center.content_resource.product_update_setting: 更新设置
 admin_v2.cloud_center.content_resource.product_update_auto: 自动更新
@@ -11177,3 +11182,5 @@ exception.review.not_found_review: 评价不存在
 exception.review.post_limit: 回复数量已达5条上限，不能再回复
 
 exception.favorite.forbidden_operate_favorite: 没有权限
+
+exception.s2b2c_product.adopt_failed: 采用失败，内容正在编辑中，请稍后再试
