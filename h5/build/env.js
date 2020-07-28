@@ -30,4 +30,4 @@ module.exports = {
     url: 'http://item-bank.st.edusoho.cn',
     token: 'mrl79g2zjbk8so0skk00g0swo40wow',
   },
-}['itembank'];
+}['t5'];
