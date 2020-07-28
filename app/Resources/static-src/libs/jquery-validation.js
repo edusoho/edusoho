@@ -259,11 +259,11 @@ $.validator.addMethod('check_password_low', function (value, element) {
 }, Translator.trans('validate.check_password_low.message'));
 
 $.validator.addMethod('check_password_middle', function (value, element) {
-  return this.optional(element) || /^(?!^(\d+|[a-zA-Z]+|[!-\/:-@\[-`{-~]+)$)^[!-~]{8,20}$/.test(value);
+  return this.optional(element) || /^(?!^(\d+|[a-zA-Z]+|[^\s\da-zA-Z]+)$)^[\S]{8,20}$/.test(value);
 }, Translator.trans('validate.check_password_middle.message'));
 
 $.validator.addMethod('check_password_high', function (value, element) {
-  return this.optional(element) || /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!-\/:-@\[-`{-~])[!-~]{8,32}$/.test(value);
+  return this.optional(element) || /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^\s\da-zA-Z])[\S]{8,32}$/.test(value);
 }, Translator.trans('validate.check_password_high.message'));
 
 $.validator.addMethod('before_date', function(value, element, params) {

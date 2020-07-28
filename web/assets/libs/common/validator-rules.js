@@ -167,12 +167,12 @@ define(function(require, exports, module) {
     ],
     [
       'check_password_middle',
-      /^(?!^(\d+|[a-zA-Z]+|[!-\/:-@\[-`{-~]+)$)^[!-~]{8,20}$/i,
+      /^(?!^(\d+|[a-zA-Z]+|[^\s\da-zA-Z]+)$)^[\S]{8,20}$/i,
       Translator.trans('validate.check_password_middle.message', {display: '{{display}}'})
     ],
     [
       'check_password_high',
-      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!-\/:-@\[-`{-~])[!-~]{8,32}$/,
+      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^\s\da-zA-Z])[\S]{8,32}$/,
       Translator.trans('validate.check_password_high.message', {display: '{{display}}'})
     ],
     [
