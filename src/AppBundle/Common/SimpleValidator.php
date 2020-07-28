@@ -47,12 +47,12 @@ class SimpleValidator
 
     public static function middlePassword($value, array $option = [])
     {
-        return (bool) preg_match('/^(?!^(\d+|[a-zA-Z]+|[!-\/:-@\[-`{-~]+)$)^[!-~]{8,20}$/u', $value);
+        return (bool) preg_match('/^(?!^(\d+|[a-zA-Z]+|[^\s\da-zA-Z]+)$)^[\S]{8,20}$/u', $value);
     }
 
     public static function highPassword($value, array $option = [])
     {
-        return (bool) preg_match('/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!-\/:-@\[-`{-~])[!-~]{8,32}$/u', $value);
+        return (bool) preg_match('/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^\s\da-zA-Z])[\S]{8,32}$/u', $value);
     }
 
     //真实姓名改成和nickname一样

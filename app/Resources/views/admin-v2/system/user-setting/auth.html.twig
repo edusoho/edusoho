@@ -135,13 +135,13 @@
 
       <div class="controls col-md-8 radios">
         <label>
-          <input type="radio" name="password_level" id="low" value="low" {% if auth.password_level|default('low') == 'low' %}checked="checked"{% endif %}> {{'admin.user_auth.Protection.low'|trans}}
+          <input type="radio" name="password_level" value="low" {% if auth.password_level|default('low') == 'low' %}checked="checked"{% endif %}> {{'admin.user_auth.Protection.low'|trans}}
         </label>
         <label>
-          <input type="radio" name="password_level" id="middle" value="middle" {% if auth.password_level|default(null) == 'middle' %}checked="checked"{% endif %}> {{'admin.user_auth.Protection.middle'|trans}}
+          <input type="radio" name="password_level" value="middle" {% if auth.password_level|default(null) == 'middle' %}checked="checked"{% endif %}> {{'admin.user_auth.Protection.middle'|trans}}
         </label>
         <label>
-          <input type="radio" name="password_level" id="high" value="high" {% if auth.password_level|default(null) == 'high' %}checked="checked"{% endif %}> {{'admin.user_auth.Protection.high'|trans}}
+          <input type="radio" name="password_level" value="high" {% if auth.password_level|default(null) == 'high' %}checked="checked"{% endif %}> {{'admin.user_auth.Protection.high'|trans}}
         </label>
       </div>
 
