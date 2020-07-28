@@ -18,6 +18,10 @@ interface GoodsService
 
     public function unpublishGoods($id);
 
+    public function recommendGoods($id, $weight);
+
+    public function cancelRecommendGoods($id);
+
     public function countGoods($conditions);
 
     public function searchGoods($conditions, $orderBys, $start, $limit, $columns = []);

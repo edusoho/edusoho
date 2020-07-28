@@ -103,12 +103,32 @@ class CourseSetGoodsMediator extends AbstractGoodsMediator
         $this->getGoodsService()->deleteGoods($existGoods['id']);
     }
 
+    /**
+     * @param $courseSet
+     *
+     * @return array|mixed
+     *                     推荐商品，设置权重
+     */
     public function onRecommended($courseSet)
     {
+        list($product, $goods) = $this->getProductAndGoods($courseSet);
+        $goods = $this->getGoodsService()->recommendGoods($goods['id'], $courseSet['recommendedSeq']);
+
+        return [$product, $goods];
     }
 
+    /**
+     * @param $courseSet
+     *
+     * @return array|mixed
+     *                     取消推荐商品
+     */
     public function onCancelRecommended($courseSet)
     {
+        list($product, $goods) = $this->getProductAndGoods($courseSet);
+        $goods = $this->getGoodsService()->cancelRecommendGoods($goods['id']);
+
+        return [$product, $goods];
     }
 
     public function onMaxRateChange($courseSet)

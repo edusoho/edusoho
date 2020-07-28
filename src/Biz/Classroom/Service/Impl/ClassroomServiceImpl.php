@@ -753,7 +753,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $this->tryManageClassroom($id, 'admin_classroom_open');
 
         $classroom = $this->updateClassroom($id, ['status' => 'published']);
-        $this->publishGoodsAndSpecs($classroom);
+        $this->getClassroomGoodsMediator()->onPublish($classroom);
+
+        return $classroom;
     }
 
     public function closeClassroom($id)
@@ -761,7 +763,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $this->tryManageClassroom($id, 'admin_classroom_close');
 
         $classroom = $this->updateClassroom($id, ['status' => 'closed']);
-        $this->unpublishGoodsAndSpecs($classroom);
+        $this->getClassroomGoodsMediator()->onClose($classroom);
+
+        return $classroom;
     }
 
     public function changePicture($id, $data)
