@@ -1,4 +1,3 @@
-<script src="../answer/index.js"></script>
 <template>
   <div id="app" class="ibs-vue">
     <item-report
