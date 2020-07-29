@@ -25,11 +25,11 @@ define(function(require, exports, module) {
       let level = $('[name=password_level]:checked').val();
       let mode = $('input[name=register_mode]').val();
 
-      $(`.${protective}_protective_${mode}`).show();
+      $('.' + protective + '_protective_' + mode).show();
 
       if (mode !== 'closed') {
-        $(`.not_closed_mode.${protective}_protective`).show();
-        $(`.not_closed_mode.${level}_password_level`).show();
+        $('.not_closed_mode' + '.' + protective + '_protective').show();
+        $('.not_closed_mode' + '.' + level + '_password_level').show();
       }
     });
 
@@ -90,7 +90,7 @@ define(function(require, exports, module) {
         timeout: 3500 // sets timeout to 3 seconds
       }).done(function(resp) {
         if (resp.status) {
-          $('.js-email-status').removeClass('alert-info').addClass('alert-success').html(`<span class="text-success">${resp.message}</span>`);
+          $('.js-email-status').removeClass('alert-info').addClass('alert-success').html('<span class="text-success">' + resp.message + '</span>');
         } else {
           $('input[name="email_enabled"][value="closed"]').prop('checked', true);
           $('.js-email-send-check').addClass('hidden');
@@ -122,7 +122,7 @@ define(function(require, exports, module) {
       if (modle === 'mobile' || modle === 'email_or_mobile') {
         if ($('input[name=_cloud_sms]').val() != 1) {
           $('.model').removeClass('btn-primary');
-          $(`[data-modle="${old_modle_value}"]`).addClass('btn-primary');
+          $('[data-modle="' + old_modle_value + '"]').addClass("btn-primary");
           modle = old_modle_value;
 
           Notify.danger(Translator.trans('admin_v2.user.cloude_sms_enable_hint'));
