@@ -10,6 +10,7 @@ use phpDocumentor\Reflection\Types\String_;
 class ResourceService extends BaseService
 {
     protected $host = 'resource-service.qiqiuyun.net';
+    protected $service = 'resource';
 
     /**
      * 获取表单上传的参数
@@ -61,6 +62,18 @@ class ResourceService extends BaseService
     public function search(array $params)
     {
         return $this->request('GET', '/resources', $params);
+    }
+
+    /**
+     * @param array $params
+     * @return array
+     * @throws ClientException
+     * @throws ResponseException
+     * @throws SDKException
+     */
+    public function sync(array $params)
+    {
+        return $this->request('GET', '/resources/sync', $params);
     }
 
     /**

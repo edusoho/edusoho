@@ -13,9 +13,9 @@ class CloudAppliedTask extends BaseNewcomer
         }
 
         $storage = $this->getSettingService()->get('storage', array());
+
         if (!empty($storage['cloud_key_applied'])) {
             $this->doneTask('cloud_applied_task');
-
             return true;
         }
 

@@ -40,9 +40,9 @@ define(function(require, exports, module) {
         $list = $('[data-role=' + currentTarget + ']').find('.' + $metas.data('listClass'));
       }
 
-      $.get('/attachment/file/' + file.id + '/show', function(html) {
+      $.get('/attachment/file/' + file.no + '/show', function(html) {
         $list.append(html);
-        $ids.val(file.id);
+        $ids.val(file.no);
         $('#attachment-modal').modal('hide');
         $list.siblings('.js-upload-file').hide();
       })

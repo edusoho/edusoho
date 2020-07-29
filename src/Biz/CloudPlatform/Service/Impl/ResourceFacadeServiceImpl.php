@@ -102,10 +102,11 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
             'newPlayer' => 'js-sdk/sdk-v2.js',
             'audio' => 'js-sdk-v2/sdk-v1.js',
             'video' => 'js-sdk-v2/sdk-v1.js',
-            'uploader' => 'js-sdk/uploader/sdk-2.1.0.js',
+            'uploader' => 'js-sdk-v2/uploader/sdk-2.1.0.js',
             'old_uploader' => 'js-sdk/uploader/sdk-v1.js',
             'old_document' => 'js-sdk/document-player/v7/viewer.html',
             'faq' => 'js-sdk/faq/sdk-v1.js',
+            'resource_player' => 'js-sdk-v2/sdk-v1.js'
         ];
 
         if (isset($paths[$type])) {
@@ -119,6 +120,21 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
         return '//'.trim($cdnHost, "\/").'/'.$path.'?'.$timestamp;
     }
 
+    public function startUpload($params)
+    {
+        return $this->getResourceService()->startUpload($params);
+    }
+
+    public function finishUpload($globalId)
+    {
+        return $this->getResourceService()->finishUpload($globalId);
+    }
+
+    public function getResource($globalId)
+    {
+        return $this->getResourceService()->get($globalId);
+    }
+
     protected function isHiddenVideoHeader($isHidden = false)
     {
         $storage = $this->getSettingService()->get('storage');
@@ -127,6 +143,11 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
         }
 
         return true;
+    }
+
+    protected function getResourceService()
+    {
+        return $this->biz['ESCloudSdk.resource'];
     }
 
     protected function getSettingService()

@@ -47,9 +47,9 @@ uploader.on('file.finish', (file) => {
   }
 
   let module = $('input[name="module"]').val();
-  $.get('/attachment/file/' + file.id + '/show', {module: module},function (html) {
+  $.get('/attachment/file/' + file.no + '/show', {module: module},function (html) {
     $list.append(html);
-    $ids.val(file.id);
+    $ids.val(file.no);
     $modal.modal('hide');
     $list.siblings('.js-upload-file').hide();
   });

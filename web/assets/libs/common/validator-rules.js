@@ -161,6 +161,21 @@ define(function(require, exports, module) {
       Translator.trans('validate_old.password.message', {display: '{{display}}'})
     ],
     [
+      'check_password_low',
+      /^[\S]{5,20}$/i,
+      Translator.trans('validate.check_password_low.message', {display: '{{display}}'})
+    ],
+    [
+      'check_password_middle',
+      /^(?!^(\d+|[a-zA-Z]+|[^\s\da-zA-Z]+)$)^[\S]{8,20}$/i,
+      Translator.trans('validate.check_password_middle.message', {display: '{{display}}'})
+    ],
+    [
+      'check_password_high',
+      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^\s\da-zA-Z])[\S]{8,32}$/,
+      Translator.trans('validate.check_password_high.message', {display: '{{display}}'})
+    ],
+    [
       'second_range',
       /^([0-9]|[012345][0-9]|59)$/,
       Translator.trans('validate_old.second_range.message')
