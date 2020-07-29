@@ -132,17 +132,22 @@ class ChapterExerciseEventSubscriber extends EventSubscriber implements EventSub
     protected function createUpdateMemberMasteryRateJob($itemBankId)
     {
         $questionBank = $this->getQuestionBankService()->getQuestionBankByItemBankId($itemBankId);
-
         $itemBankExericse = $this->getItemBankExerciseService()->getByQuestionBankId($questionBank['id']);
+        if (empty($itemBankExericse)) {
+            return;
+        }
 
-        $this->getSchedulerService()->register([
-            'name' => 'UpdateItemBankMemberMasteryRateJob',
-            'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
-            'expression' => intval(time()),
-            'misfire_policy' => 'executing',
-            'class' => 'Biz\ItemBankExercise\Job\UpdateMemberMasteryRateJob',
-            'args' => ['itemBankExericseId' => $itemBankExericse['id']],
-        ]);
+        $job = $this->getSchedulerService()->getJobByName('UpdateItemBankMemberMasteryRateJob_'.$itemBankExericse['id']);
+        if (empty($job)) {
+            $this->getSchedulerService()->register([
+                'name' => 'UpdateItemBankMemberMasteryRateJob_'.$itemBankExericse['id'],
+                'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
+                'expression' => intval(time() + 3 * 60),
+                'misfire_policy' => 'executing',
+                'class' => 'Biz\ItemBankExercise\Job\UpdateMemberMasteryRateJob',
+                'args' => ['itemBankExericseId' => $itemBankExericse['id']],
+            ]);
+        }
     }
 
     protected function finished($chapterExerciseRecord, $answerReportId)

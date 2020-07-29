@@ -23,8 +23,14 @@ class ExerciseDaoImpl extends AdvancedDaoImpl implements ExerciseDao
     public function searchOrderByStudentNumAndLastDays($conditions, $lastDays, $start, $limit)
     {
         $memberTable = $this->getExerciseMemberDao()->table();
-
-        $timeRange = TimeMachine::getTimeRangeByDays($lastDays);
+        if ($lastDays <= 0) {
+            $timeRange = [
+                'startTime' => 0,
+                'endTime' => PHP_INT_MAX,
+            ];
+        } else {
+            $timeRange = TimeMachine::getTimeRangeByDays($lastDays);
+        }
 
         $builder = $this->createQueryBuilder($conditions)
             ->select("{$memberTable}.studentNumCount, {$this->table}.*")
@@ -53,8 +59,14 @@ class ExerciseDaoImpl extends AdvancedDaoImpl implements ExerciseDao
     public function searchOrderByRatingAndLastDays($conditions, $lastDays, $start, $limit)
     {
         $reviceTable = $this->getReviewDao()->table();
-
-        $timeRange = TimeMachine::getTimeRangeByDays($lastDays);
+        if ($lastDays <= 0) {
+            $timeRange = [
+                'startTime' => 0,
+                'endTime' => PHP_INT_MAX,
+            ];
+        } else {
+            $timeRange = TimeMachine::getTimeRangeByDays($lastDays);
+        }
 
         $builder = $this->createQueryBuilder($conditions)
             ->select("{$reviceTable}.rating_avg, {$this->table}.*")
