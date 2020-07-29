@@ -2533,6 +2533,9 @@ user.register.username_label: Username
 user.register.username_label_placeholder: 'No more than 18 letters'
 user.register.password_label: Password
 user.register.password_label_placeholder: '5-20 letters or numbers, case sensitive'
+user.register.password_label_placeholder.low: '5-20 letters or numbers, case sensitive'
+user.register.password_label_placeholder.middle: '8-20 letters or numbers, including at least two, case sensitive'
+user.register.password_label_placeholder.high: '8-32 letters or numbers, , including letter uppercase, lowercase, numbers and symbols'
 user.register.invite_code_label: 'Inviation code'
 user.register.invite_code_placeholder: 'If you have invitation code, please type in'
 user.register.i_agree: 'I''ve read and agree.'
@@ -5336,6 +5339,9 @@ admin.user.fields.about_label: About Me
 admin.user.fields.personal_menu_label: Home
 admin.user.fields.user_email: 'User Email'
 admin.user.fields.password_hint: '5-20 english char, number, symbol'
+admin.user.fields.password_hint.low: '5-20 english char, number, symbol'
+admin.user.fields.password_hint.middle: '8-20 letters or numbers, including at least two, case sensitive'
+admin.user.fields.password_hint.high: '8-32 letters or numbers, , including letter uppercase, lowercase, numbers and symbols'
 admin.user.fields.confirm_password_label: 'Confirm Password'
 admin.user.fields.confirm_password_hint: 'Enter the password again'
 admin.user.fields.password_label: Password
@@ -5998,6 +6004,12 @@ admin.user_auth.Protection.middle.30_times: '30 register times allowed with the 
 admin.user_auth.Protection.high.10_times: '10 register times allowed with the same IP in 24 hours.'
 admin.user_auth.Protection.high.sign_up_count: '1 register time allowed with the same IP in a hour.'
 admin.user_auth.Protection.high.Verification_code.mobile: 'Graphic verification code is needed while mobile registration obtein the SMS verification code.'
+admin.user_auth.Password_level: 'Password level setting'
+admin.user_auth.Password_level.low.explaination: 'The password is 5-20 digits in English, numbers, and symbols, and at least 5 characters are required.'
+admin.user_auth.Password_level.middle.explaination: 'The password is 8-20 digits in English, numbers, symbols, and at least 8 characters are required.'
+admin.user_auth.Password_level.middle.explaination_2: 'Contain at least any two of letters, numbers, and symbols.'
+admin.user_auth.Password_level.high.explaination: 'The password is 8-32 English, numbers, symbols, and at least 8 characters are required.'
+admin.user_auth.Password_level.high.explaination_2: 'Contains four types of English uppercase, lowercase, numbers, and symbols.'
 
 admin.user_auth.Setup_welcome_message: 'Welcome message settings'
 admin.user_auth.Setup_welcome_message.send: 'Send a welcome message'

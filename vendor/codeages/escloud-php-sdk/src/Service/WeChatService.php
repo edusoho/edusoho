@@ -8,6 +8,7 @@ namespace ESCloud\SDK\Service;
 class WeChatService extends BaseService
 {
     protected $host = 'wt-service.qiqiuyun.net';
+    protected $service = 'wt';
 
     /**
      * 获取预授权URL

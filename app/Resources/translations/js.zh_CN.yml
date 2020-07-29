@@ -777,6 +777,9 @@ validate.expiry_days_required_hint: 请输入有效期
 validate.empty_content_hint: 请输入内容!
 validate.no_number_first_hint: URL路径只能包含字母和数字,请以字母开头!长度大于2位
 validate.have_spaces: 密码不能有空格哦
+validate.check_password_low.message: 5-20位英文、数字、符号，区分大小写
+validate.check_password_middle.message: 8-20位英文、数字、符号，至少包含两种，区分大小写
+validate.check_password_high.message: 8-32位英文、数字、符号，同时包含英文大写、小写、数字和符号
 
 alert.file_convert_error.message: 文件转换提交失败，请重试！
 notify.file_not_select.message: 未选中任何文件记录
@@ -1464,8 +1467,8 @@ course.question_manage.manage.delete_tips: 删除题目，可能会影响课时�
 course.question_manage.upgrade_tips: 为了更好的使用体验，请先升级插件。<br />路径：【后台】 - 【云市场】- 【营销应用】 - 【题库增强插件】。
 admin.setting.invite.coupon.empty.tips: 请设置优惠券批次
 
-course.plan_task.activity_ppt_animation_img: 切换图片模式
-course.plan_task.activity_ppt_animation_slide: 切换动画模式
+course.plan_task.activity_ppt_animation_ppt-img: 切换图片模式
+course.plan_task.activity_ppt_animation_ppt-slide: 切换动画模式
 
 admin.mobile_manage.discovery_upgrade_madal.notice_successed: '升级成功'
 admin.mobile_manage.discovery_upgrade_madal.notice_failed: '升级失败'

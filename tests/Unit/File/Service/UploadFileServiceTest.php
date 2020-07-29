@@ -3,8 +3,8 @@
 namespace Tests\Unit\File\Service;
 
 use AppBundle\Common\ReflectionUtils;
-use Biz\File\Service\UploadFileService;
 use Biz\BaseTestCase;
+use Biz\File\Service\UploadFileService;
 use Biz\User\Service\UserService;
 
 class UploadFileServiceTest extends BaseTestCase
@@ -13,41 +13,41 @@ class UploadFileServiceTest extends BaseTestCase
     {
         $fileId = 1;
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'withParams' => array(1),
-                'returnValue' => array(
+                'withParams' => [1],
+                'returnValue' => [
                     'id' => 1,
                     'storage' => 'cloud',
                     'filename' => 'test',
                     'createdUserId' => 1,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getFile',
                 'runTimes' => 1,
-                'withParams' => array(
-                    array(
+                'withParams' => [
+                    [
                         'id' => 1,
                         'storage' => 'cloud',
                         'filename' => 'test',
                         'createdUserId' => 1,
-                    ),
-                ),
-                'returnValue' => array(
+                    ],
+                ],
+                'returnValue' => [
                     'id' => 1,
                     'storage' => 'cloud',
                     'filename' => 'test',
                     'createdUserId' => 1,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
 
         $file = $this->getUploadFileService()->getFile($fileId);
@@ -61,27 +61,27 @@ class UploadFileServiceTest extends BaseTestCase
 
     public function testGetAudioServiceStatus()
     {
-        $settingParams = array(
-            array(
+        $settingParams = [
+            [
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'returnValue' => array(
+                'returnValue' => [
                     'cloud_access_key' => 'abbbcc',
                     'cloud_secret_key' => 'testddd',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
         $this->mockBiz('System:SettingService', $settingParams);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getAudioServiceStatus',
                 'runTimes' => 1,
-                'returnValue' => array(
+                'returnValue' => [
                     'audioService' => 'opened',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
 
         $status = $this->getUploadFileService()->getAudioServiceStatus();
@@ -90,27 +90,27 @@ class UploadFileServiceTest extends BaseTestCase
 
     public function testGetAudioServiceStatusWithEmptyAudioService()
     {
-        $settingParams = array(
-            array(
+        $settingParams = [
+            [
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'returnValue' => array(
+                'returnValue' => [
                     'cloud_access_key' => 'abbbcc',
                     'cloud_secret_key' => 'testddd',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
         $this->mockBiz('System:SettingService', $settingParams);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getAudioServiceStatus',
                 'runTimes' => 1,
-                'returnValue' => array(
+                'returnValue' => [
                     'audioService' => '',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
 
         $status = $this->getUploadFileService()->getAudioServiceStatus();
@@ -119,36 +119,36 @@ class UploadFileServiceTest extends BaseTestCase
 
     public function testGetAudioServiceStatusWithNeedOpen()
     {
-        $settingParams = array(
-            array(
+        $settingParams = [
+            [
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'returnValue' => array(
+                'returnValue' => [
                     'cloud_access_key' => 'abbbcc',
                     'cloud_secret_key' => 'testddd',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
         $this->mockBiz('System:SettingService', $settingParams);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getAudioServiceStatus',
                 'runTimes' => 1,
-                'returnValue' => array(
+                'returnValue' => [
                     'audioService' => 'opened',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'isSupportEnableAudio',
                 'runTimes' => 1,
                 'returnValue' => false,
-            ),
-        );
+            ],
+        ];
         $this->mockBiz('Course:CourseService', $params);
 
         $status = $this->getUploadFileService()->getAudioServiceStatus();
@@ -159,35 +159,35 @@ class UploadFileServiceTest extends BaseTestCase
     {
         $fileId = 1;
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'withParams' => array(1),
-                'returnValue' => array(
+                'withParams' => [1],
+                'returnValue' => [
                     'id' => 1,
                     'storage' => 'cloud',
                     'filename' => 'test',
                     'createdUserId' => 1,
                     'globalId' => '535399bd5f19413c9339a5ab11c3a5d1',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         $this->mockBiz('File:UploadFileDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getFullFile',
                 'runTimes' => 1,
-                'returnValue' => array(
+                'returnValue' => [
                     'id' => 1,
                     'storage' => 'cloud',
                     'filename' => 'test',
                     'createdUserId' => 1,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
 
         $file = $this->getUploadFileService()->getFullFile($fileId);
@@ -201,7 +201,7 @@ class UploadFileServiceTest extends BaseTestCase
 
     public function testBatchConvertByIdsWithEmpty()
     {
-        $ids = array();
+        $ids = [];
 
         $result = $this->getUploadFileService()->batchConvertByIds($ids);
 
@@ -210,29 +210,29 @@ class UploadFileServiceTest extends BaseTestCase
 
     public function testBatchConvertByIds()
     {
-        $ids = array(1, 2);
+        $ids = [1, 2];
 
         $this->mockBiz('File:UploadFileDao');
         $this->getUploadFileDao()->shouldReceive('count')->andReturn(2);
 
-        $this->getUploadFileDao()->shouldReceive('search')->andReturn(array(
-            array(
+        $this->getUploadFileDao()->shouldReceive('search')->andReturn([
+            [
                 'id' => 1,
                 'globalId' => 'edc25dbecfee41cf9726882535995ac3',
-            ),
-            array(
+            ],
+            [
                 'id' => 2,
                 'globalId' => 'a6d07c5223fc4976bec4d842709e0a8b',
-            ),
-        ));
+            ],
+        ]);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'retryTranscode',
                 'runTimes' => 1,
                 'returnValue' => true,
-            ),
-        );
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
         $this->getUploadFileDao()->shouldReceive('update');
 
@@ -247,7 +247,7 @@ class UploadFileServiceTest extends BaseTestCase
 
     public function testGetAudioConvertionStatusWithEmpty()
     {
-        $ids = array();
+        $ids = [];
         $result = $this->getUploadFileService()->getAudioConvertionStatus($ids);
 
         $this->assertEquals($result, '0');
@@ -261,15 +261,15 @@ class UploadFileServiceTest extends BaseTestCase
 
     public function testGetAudioConvertionStatus()
     {
-        $ids = array(1, 2, 3, 4);
+        $ids = [1, 2, 3, 4];
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'count',
                 'runTimes' => 1,
                 'returnValue' => 2,
-            ),
-        );
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
         $result = $this->getUploadFileService()->getAudioConvertionStatus($ids);
@@ -282,32 +282,32 @@ class UploadFileServiceTest extends BaseTestCase
 
     public function testGetResourcesStatus()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getResourcesStatus',
                 'runTimes' => 1,
-                'returnValue' => array(
-                    array(
-                        'data' => array(
+                'returnValue' => [
+                    [
+                        'data' => [
                             'resourceNo' => '65d474f089074fa0810d1f2f146fd218',
                             'status' => 'ok',
                             'mp4' => false,
                             'audio' => true,
-                        ),
-                        'next' => array(
+                        ],
+                        'next' => [
                             'cursor' => '1519214541',
                             'start' => 0,
                             'limit' => 1,
-                        ),
-                    ),
-                ),
-            ),
-        );
+                        ],
+                    ],
+                ],
+            ],
+        ];
 
         $this->mockBiz('File:CloudFileImplementor', $params);
 
         $globalId = '65d474f089074fa0810d1f2f146fd218';
-        $status = $this->getUploadFileService()->getResourcesStatus(array('cursor' => 0, 'start' => 0, 'limit' => 2));
+        $status = $this->getUploadFileService()->getResourcesStatus(['cursor' => 0, 'start' => 0, 'limit' => 2]);
 
         $this->assertEquals($globalId, $status[0]['data']['resourceNo']);
         $this->assertEquals('ok', $status[0]['data']['status']);
@@ -318,68 +318,68 @@ class UploadFileServiceTest extends BaseTestCase
 
     public function testGetFileByGlobalId()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getByGlobalId',
                 'runTimes' => 1,
-                'withParams' => array('65d474f089074fa0810d1f2f146fd218'),
-                'returnValue' => array(
+                'withParams' => ['65d474f089074fa0810d1f2f146fd218'],
+                'returnValue' => [
                     'id' => 1,
                     'globalId' => '65d474f089074fa0810d1f2f146fd218',
                     'storage' => 'cloud',
                     'filename' => 'test',
                     'createdUserId' => 1,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getFile',
                 'runTimes' => 1,
-                'withParams' => array(),
-                'returnValue' => array(
+                'withParams' => [],
+                'returnValue' => [
                     'id' => 1,
                     'globalId' => '65d474f089074fa0810d1f2f146fd218',
                     'storage' => 'cloud',
                     'filename' => 'test',
                     'createdUserId' => 1,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getFile',
                 'runTimes' => 1,
-                'withParams' => array(),
-                'returnValue' => array(
+                'withParams' => [],
+                'returnValue' => [
                     'id' => 2,
                     'globalId' => 0,
                     'storage' => 'local',
                     'filename' => 'localFileName',
                     'createdUserId' => 1,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
         $this->mockBiz('File:LocalFileImplementor', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getFullFile',
                 'runTimes' => 1,
-                'withParams' => array(),
-                'returnValue' => array(
+                'withParams' => [],
+                'returnValue' => [
                     'id' => 1,
                     'globalId' => '65d474f089074fa0810d1f2f146fd218',
                     'storage' => 'cloud',
                     'filename' => 'test',
                     'createdUserId' => 1,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
 
         $globalId = '65d474f089074fa0810d1f2f146fd218';
@@ -395,14 +395,14 @@ class UploadFileServiceTest extends BaseTestCase
 
     public function testGetFileByGlobalIdWithEmptyFile()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getByGlobalId',
                 'runTimes' => 1,
-                'withParams' => array(1),
-                'returnValue' => array(),
-            ),
-        );
+                'withParams' => [1],
+                'returnValue' => [],
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
         $result = $this->getUploadFileService()->getFileByGlobalId(1);
@@ -413,44 +413,44 @@ class UploadFileServiceTest extends BaseTestCase
     {
         $hashId = 'materiallib-1/20160418040438-d11n060aceo8g8ws';
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getByHashId',
                 'runTimes' => 1,
-                'withParams' => array('materiallib-1/20160418040438-d11n060aceo8g8ws'),
-                'returnValue' => array(
+                'withParams' => ['materiallib-1/20160418040438-d11n060aceo8g8ws'],
+                'returnValue' => [
                     'id' => 1,
                     'hashId' => 'materiallib-1/20160418040438-d11n060aceo8g8ws',
                     'storage' => 'cloud',
                     'filename' => 'test',
                     'createdUserId' => 1,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getFile',
                 'runTimes' => 1,
-                'withParams' => array(
-                    array(
+                'withParams' => [
+                    [
                         'id' => 1,
                         'hashId' => 'materiallib-1/20160418040438-d11n060aceo8g8ws',
                         'storage' => 'cloud',
                         'filename' => 'test',
                         'createdUserId' => 1,
-                    ),
-                ),
-                'returnValue' => array(
+                    ],
+                ],
+                'returnValue' => [
                     'id' => 1,
                     'hashId' => 'materiallib-1/20160418040438-d11n060aceo8g8ws',
                     'storage' => 'cloud',
                     'filename' => 'test',
                     'createdUserId' => 1,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
 
         $file = $this->getUploadFileService()->getFileByHashId($hashId);
@@ -463,14 +463,14 @@ class UploadFileServiceTest extends BaseTestCase
 
     public function testGetFileByHashIddWithEmptyFile()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getByHashId',
                 'runTimes' => 1,
-                'withParams' => array(1),
-                'returnValue' => array(),
-            ),
-        );
+                'withParams' => [1],
+                'returnValue' => [],
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
         $result = $this->getUploadFileService()->getFileByHashId(1);
@@ -481,21 +481,21 @@ class UploadFileServiceTest extends BaseTestCase
     {
         $hash = 'materiallib-1/20160418040438-d11n060aceo8g8ws';
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getByConvertHash',
                 'runTimes' => 1,
-                'withParams' => array('materiallib-1/20160418040438-d11n060aceo8g8ws'),
-                'returnValue' => array(
+                'withParams' => ['materiallib-1/20160418040438-d11n060aceo8g8ws'],
+                'returnValue' => [
                     'id' => 1,
                     'hashId' => 'materiallib-1/20160418040438-d11n060aceo8g8ws',
                     'convertHash' => 'materiallib-1/20160418040438-d11n060aceo8g8ws',
                     'storage' => 'cloud',
                     'filename' => 'test',
                     'createdUserId' => 1,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
         $file = $this->getUploadFileService()->getFileByConvertHash($hash);
 
@@ -507,34 +507,34 @@ class UploadFileServiceTest extends BaseTestCase
 
     public function testFindFilesByIds()
     {
-        $ids = array(1, 2);
+        $ids = [1, 2];
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'findByIds',
                 'runTimes' => 1,
-                'withParams' => array(array(1, 2)),
-                'returnValue' => array(
-                    array(
+                'withParams' => [[1, 2]],
+                'returnValue' => [
+                    [
                         'id' => 1,
                         'hashId' => 'materiallib-1/20160418040438-d11n060aceo8g8ws',
                         'convertHash' => 'materiallib-1/20160418040438-d11n060aceo8g8ws',
                         'storage' => 'cloud',
                         'filename' => 'test',
                         'createdUserId' => 1,
-                    ),
-                    array(
+                    ],
+                    [
                         'id' => 2,
                         'hashId' => 'materiallib-1/20160418040438-d11n060aceo8g8ws',
                         'convertHash' => 'materiallib-1/20160418040438-d11n060aceo8g8ws',
                         'storage' => 'cloud',
                         'filename' => 'test',
                         'createdUserId' => 1,
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
         $this->mockBiz('File:UploadFileDao', $params);
 
@@ -634,34 +634,34 @@ class UploadFileServiceTest extends BaseTestCase
 
     public function testFindFilesByTargetTypeAndTargetIds()
     {
-        $ids = array(1, 2);
+        $ids = [1, 2];
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'findByTargetTypeAndTargetIds',
                 'runTimes' => 1,
-                'withParams' => array('video', array(1, 2)),
-                'returnValue' => array(
-                    array(
+                'withParams' => ['video', [1, 2]],
+                'returnValue' => [
+                    [
                         'id' => 1,
                         'hashId' => 'materiallib-1/20160418040438-d11n060aceo8g8ws',
                         'convertHash' => 'materiallib-1/20160418040438-d11n060aceo8g8ws',
                         'storage' => 'cloud',
                         'filename' => 'test',
                         'createdUserId' => 1,
-                    ),
-                    array(
+                    ],
+                    [
                         'id' => 2,
                         'hashId' => 'materiallib-1/20160418040438-d11n060aceo8g8ws',
                         'convertHash' => 'materiallib-1/20160418040438-d11n060aceo8g8ws',
                         'storage' => 'cloud',
                         'filename' => 'test',
                         'createdUserId' => 1,
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
         $this->mockBiz('File:UploadFileDao', $params);
         $result = $this->getUploadFileService()->findFilesByTargetTypeAndTargetIds('video', $ids);
@@ -672,39 +672,39 @@ class UploadFileServiceTest extends BaseTestCase
 
     public function testUpdate()
     {
-        $result = $this->getUploadFileService()->update(1, array());
+        $result = $this->getUploadFileService()->update(1, []);
         $this->assertFalse($result);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'withParams' => array(1),
-                'returnValue' => array(
+                'withParams' => [1],
+                'returnValue' => [
                     'id' => 2,
                     'globalId' => 0,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'arguments' => true,
                 'functionName' => 'update',
                 'runTimes' => 1,
                 'returnValue' => true,
-            ),
-        );
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'deleteByFileId',
                 'runTimes' => 1,
-                'withParams' => array(2),
-                'returnValue' => array(),
-            ),
-        );
+                'withParams' => [2],
+                'returnValue' => [],
+            ],
+        ];
         $this->mockBiz('File:UploadFileTagDao', $params);
-        $result = $this->getUploadFileService()->update(1, array(
+        $result = $this->getUploadFileService()->update(1, [
             'tags' => 0,
             'name' => 'name Test',
             'isPublic' => 1,
@@ -713,76 +713,76 @@ class UploadFileServiceTest extends BaseTestCase
             'targetId' => 1,
             'useType' => 'type',
             'usedCount' => 10,
-        ));
+        ]);
         $this->assertTrue($result);
     }
 
     public function testSearchFileCount()
     {
-        $conditions = array(
+        $conditions = [
             'source' => 'shared',
             'currentUserId' => 1,
-        );
+        ];
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'findByTargetUserIdAndIsActive',
                 'runTimes' => 1,
-                'withParams' => array(1),
-                'returnValue' => array(
-                    array(
+                'withParams' => [1],
+                'returnValue' => [
+                    [
                         'id' => 1,
                         'sourceUserId' => 2,
                         'targetUserId' => 1,
                         'isActive' => 1,
                         'createdTime' => 1461037751,
                         'updatedTime' => 1461037751,
-                    ),
-                    array(
+                    ],
+                    [
                         'id' => 2,
                         'sourceUserId' => 3,
                         'targetUserId' => 1,
                         'isActive' => 1,
                         'createdTime' => 1461037751,
                         'updatedTime' => 1461037751,
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
         $this->mockBiz('File:UploadFileShareDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'findByUserId',
                 'runTimes' => 1,
-                'withParams' => array(1),
-                'returnValue' => array(
-                    array(
+                'withParams' => [1],
+                'returnValue' => [
+                    [
                         'id' => 1,
                         'fileId' => 1,
                         'userId' => 1,
                         'createdTime' => 1461037751,
                         'updatedTime' => 1461037751,
-                    ),
-                    array(
+                    ],
+                    [
                         'id' => 2,
                         'fileId' => 2,
                         'userId' => 1,
                         'createdTime' => 1461037751,
                         'updatedTime' => 1461037751,
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
         $this->mockBiz('File:UploadFileCollectDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'count',
                 'runTimes' => 1,
                 'returnValue' => 2,
-            ),
-        );
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
         $count = $this->getUploadFileService()->searchFileCount($conditions);
         $this->assertEquals($count, 2);
@@ -795,49 +795,49 @@ class UploadFileServiceTest extends BaseTestCase
 
     public function testAddFile()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'create',
                 'runTimes' => 1,
-                'returnValue' => array(
+                'returnValue' => [
                     'id' => 1,
                     'storage' => 'cloud',
                     'filename' => 'test',
                     'createdUserId' => 1,
                     'targetType' => 'materiallib',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'addFile',
                 'runTimes' => 1,
-                'returnValue' => array(
+                'returnValue' => [
                     'id' => 1,
                     'storage' => 'cloud',
                     'filename' => 'test',
                     'createdUserId' => 1,
                     'targetType' => 'materiallib',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
         $this->mockBiz('File:LocalFileImplementor', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'addFile',
                 'runTimes' => 1,
-                'returnValue' => array(
+                'returnValue' => [
                     'id' => 1,
                     'storage' => 'cloud',
                     'filename' => 'test',
                     'createdUserId' => 1,
                     'targetType' => 'materiallib',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
         $file = $this->getUploadFileService()->addFile('materiallib', 1);
         $this->assertEquals($file['id'], 1);
@@ -852,21 +852,21 @@ class UploadFileServiceTest extends BaseTestCase
         $id = 1;
         $newFileName = 'test2';
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'update',
                 'runTimes' => 1,
-                'returnValue' => array(
+                'returnValue' => [
                     'id' => 1,
                     'storage' => 'cloud',
                     'filename' => 'test2',
                     'createdUserId' => 1,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'returnValue' => array(
+                'returnValue' => [
                     'id' => 1,
                     'convertParams' => null,
                     'metas' => null,
@@ -874,9 +874,9 @@ class UploadFileServiceTest extends BaseTestCase
                     'storage' => 'cloud',
                     'filename' => 'test2',
                     'createdUserId' => 1,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
         $file = $this->getUploadFileService()->renameFile($id, $newFileName);
@@ -890,42 +890,42 @@ class UploadFileServiceTest extends BaseTestCase
     {
         $id = 1;
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'delete',
                 'runTimes' => 1,
                 'returnValue' => true,
-            ),
-            array(
+            ],
+            [
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'returnValue' => array(
+                'returnValue' => [
                     'id' => 1,
                     'storage' => 'cloud',
                     'filename' => 'test',
                     'createdUserId' => 1,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'deleteFile',
                 'runTimes' => 1,
                 'returnValue' => true,
-            ),
-            array(
+            ],
+            [
                 'functionName' => 'getFile',
                 'runTimes' => 1,
-                'returnValue' => array(
+                'returnValue' => [
                     'id' => 1,
                     'storage' => 'cloud',
                     'filename' => 'test',
                     'createdUserId' => 1,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
 
         $result = $this->getUploadFileService()->deleteFile($id);
@@ -954,7 +954,7 @@ class UploadFileServiceTest extends BaseTestCase
 
     public function testShareFiles()
     {
-        $this->getUploadFileService()->shareFiles(1, array(2, 3, 4));
+        $this->getUploadFileService()->shareFiles(1, [2, 3, 4]);
         $userShare = $this->getUploadFileService()->findShareHistoryByUserId(1, 3);
 
         $this->assertEquals(1, $userShare['sourceUserId']);
@@ -1031,7 +1031,7 @@ class UploadFileServiceTest extends BaseTestCase
         $fileShare2 = $this->getUploadFileService()->addShare(1, 3);
         $fileShare3 = $this->getUploadFileService()->addShare(2, 3);
 
-        $shareCount = $this->getUploadFileService()->searchShareHistoryCount(array('sourceUserId' => 1, 'isActive' => 1));
+        $shareCount = $this->getUploadFileService()->searchShareHistoryCount(['sourceUserId' => 1, 'isActive' => 1]);
 
         $this->assertEquals(2, $shareCount);
     }
@@ -1043,10 +1043,10 @@ class UploadFileServiceTest extends BaseTestCase
         $fileShare3 = $this->getUploadFileService()->addShare(2, 3);
 
         $shareFiles = $this->getUploadFileService()->searchShareHistories(
-            array(
+            [
             'sourceUserId' => 1,
-        ),
-            array('createdTime' => 'DESC'),
+        ],
+            ['createdTime' => 'DESC'],
             0,
             10
         );
@@ -1056,45 +1056,45 @@ class UploadFileServiceTest extends BaseTestCase
 
     public function testWaveUploadFile()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'create',
                 'runTimes' => 1,
-                'returnValue' => array(
+                'returnValue' => [
                     'id' => 1,
                     'storage' => 'cloud',
                     'filename' => 'test',
                     'createdUserId' => 1,
                     'usedCount' => 0,
                     'targetType' => 'materiallib',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'functionName' => 'waveUsedCount',
                 'runTimes' => 1,
-                'returnValue' => array(
+                'returnValue' => [
                     'id' => 1,
                     'storage' => 'cloud',
                     'filename' => 'test',
                     'createdUserId' => 1,
                     'usedCount' => 1,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'addFile',
                 'runTimes' => 1,
-                'returnValue' => array(
+                'returnValue' => [
                     'id' => 1,
                     'storage' => 'cloud',
                     'filename' => 'test',
                     'createdUserId' => 1,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
         $this->mockBiz('File:LocalFileImplementor', $params);
 
         $file = $this->getUploadFileService()->addFile('materiallib', 1);
@@ -1112,71 +1112,71 @@ class UploadFileServiceTest extends BaseTestCase
     {
         $this->mockBiz(
             'File:UploadFileDao',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'search',
-                    'withParams' => array(array(), array(), 0, 5),
-                    'returnValue' => array(),
+                    'withParams' => [[], [], 0, 5],
+                    'returnValue' => [],
                     'runTimes' => 1,
-                ),
-                array(
+                ],
+                [
                     'functionName' => 'search',
-                    'withParams' => array(array('resType' => 'attachment'), array(), 0, 5),
-                    'returnValue' => array(
-                        array(
+                    'withParams' => [['resType' => 'attachment'], [], 0, 5],
+                    'returnValue' => [
+                        [
                             'id' => 11,
                             'type' => 'other',
-                        ),
-                    ),
+                        ],
+                    ],
                     'runTimes' => 1,
-                ),
-            )
+                ],
+            ]
         );
         $this->mockBiz(
             'File:CloudFileImplementor',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'findFiles',
-                    'withParams' => array(array(array('id' => 11, 'type' => 'other')), array('resType' => 'attachment')),
-                    'returnValue' => array(array('id' => 11)),
-                ),
-            )
+                    'withParams' => [[['id' => 11, 'type' => 'other']], ['resType' => 'attachment']],
+                    'returnValue' => [['id' => 11]],
+                ],
+            ]
         );
-        $result = $this->getUploadFileService()->searchCloudFilesFromLocal(array(), array(), 0, 5);
-        $this->assertEquals(array(), $result);
+        $result = $this->getUploadFileService()->searchCloudFilesFromLocal([], [], 0, 5);
+        $this->assertEquals([], $result);
 
-        $result = $result = $this->getUploadFileService()->searchCloudFilesFromLocal(array('resType' => 'attachment'), array(), 0, 5);
-        $this->assertEquals(array(array('id' => 11, 'type' => 'other')), $result);
+        $result = $result = $this->getUploadFileService()->searchCloudFilesFromLocal(['resType' => 'attachment'], [], 0, 5);
+        $this->assertEquals([['id' => 11, 'type' => 'other']], $result);
     }
 
     public function testCountCloudFilesFromLocal()
     {
         $this->mockBiz(
             'File:UploadFileDao',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'count',
-                    'withParams' => array(array()),
+                    'withParams' => [[]],
                     'returnValue' => 1,
                     'runTimes' => 1,
-                ),
-            )
+                ],
+            ]
         );
-        $result = $this->getUploadFileService()->countCloudFilesFromLocal(array());
+        $result = $this->getUploadFileService()->countCloudFilesFromLocal([]);
         $this->assertEquals(1, $result);
     }
 
     public function testSharePublic()
     {
-        $file = array('id' => 1, 'isPublic' => 1);
+        $file = ['id' => 1, 'isPublic' => 1];
         $this->mockBiz('File:UploadFileDao',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'update',
                     'returnValue' => $file,
                     'runTimes' => 1,
-                ),
-            )
+                ],
+            ]
         );
 
         $result = $this->getUploadFileService()->sharePublic($file['id']);
@@ -1185,15 +1185,15 @@ class UploadFileServiceTest extends BaseTestCase
 
     public function testUnsharePublic()
     {
-        $file = array('id' => 1, 'isPublic' => 0);
+        $file = ['id' => 1, 'isPublic' => 0];
         $this->mockBiz('File:UploadFileDao',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'update',
                     'returnValue' => $file,
                     'runTimes' => 1,
-                ),
-            )
+                ],
+            ]
         );
 
         $result = $this->getUploadFileService()->unsharePublic($file['id']);
@@ -1205,29 +1205,29 @@ class UploadFileServiceTest extends BaseTestCase
         $result = $this->getUploadFileService()->getDownloadMetas(1);
         $this->assertEquals('not_found', $result['error']);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'withParams' => array(1),
-                'returnValue' => array('storage' => 'cloud'),
-            ),
-        );
+                'withParams' => [1],
+                'returnValue' => ['storage' => 'cloud'],
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getDownloadFile',
                 'runTimes' => 1,
-                'returnValue' => array(
+                'returnValue' => [
                     'id' => 1,
                     'storage' => 'cloud',
                     'filename' => 'test',
                     'createdUserId' => 1,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
         $result = $this->getUploadFileService()->getDownloadMetas(1);
         $this->assertEquals('test', $result['filename']);
@@ -1235,191 +1235,191 @@ class UploadFileServiceTest extends BaseTestCase
 
     public function testGetUploadAuth()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'withParams' => array('storage'),
-                'returnValue' => array('upload_mode' => 'cloud'),
-            ),
-        );
+                'withParams' => ['storage'],
+                'returnValue' => ['upload_mode' => 'cloud'],
+            ],
+        ];
         $this->mockBiz('System:SettingService', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getUploadAuth',
                 'runTimes' => 1,
                 'returnValue' => true,
-            ),
-        );
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
 
-        $result = $this->getUploadFileService()->getUploadAuth(array());
+        $result = $this->getUploadFileService()->getUploadAuth([]);
         $this->assertTrue($result);
     }
 
     public function testInitFormUpload()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'withParams' => array('storage'),
-                'returnValue' => array('upload_mode' => 'cloud'),
-            ),
-        );
+                'withParams' => ['storage'],
+                'returnValue' => ['upload_mode' => 'cloud'],
+            ],
+        ];
         $this->mockBiz('System:SettingService', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'resumeUpload',
                 'runTimes' => 1,
-                'returnValue' => array('resumed' => 'ok'),
-            ),
-            array(
+                'returnValue' => ['resumed' => 'ok'],
+            ],
+            [
                 'functionName' => 'prepareUpload',
                 'runTimes' => 1,
-                'returnValue' => array(),
-            ),
-            array(
+                'returnValue' => [],
+            ],
+            [
                 'functionName' => 'initFormUpload',
                 'runTimes' => 1,
-                'returnValue' => array('resumed' => 'no', 'globalId' => 2),
-            ),
-        );
+                'returnValue' => ['resumed' => 'no', 'globalId' => 2],
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'returnValue' => array('status' => 'notok', 'id' => 3),
-            ),
-            array(
+                'returnValue' => ['status' => 'notok', 'id' => 3],
+            ],
+            [
                 'arguments' => true,
                 'functionName' => 'update',
                 'runTimes' => 1,
-                'returnValue' => array('id' => 1),
-            ),
-            array(
+                'returnValue' => ['id' => 1],
+            ],
+            [
                 'arguments' => true,
                 'functionName' => 'create',
                 'runTimes' => 1,
-                'returnValue' => array('id' => 1),
-            ),
-        );
+                'returnValue' => ['id' => 1],
+            ],
+        ];
         $this->mockBiz('File:UploadFileInitDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'info',
                 'runTimes' => 1,
-                'returnValue' => array(),
-            ),
-        );
+                'returnValue' => [],
+            ],
+        ];
         $this->mockBiz('logger', $params);
 
-        $result = $this->getUploadFileService()->initFormUpload(array(
+        $result = $this->getUploadFileService()->initFormUpload([
             'targetId' => 1,
             'targetType' => 'video',
             'hash' => 'materiallib-1/20160418040438-d11n060aceo8g8ws',
             'id' => 1,
             'fileName' => 'test',
             'fileSize' => 1024,
-        ));
+        ]);
         $this->assertEquals('ok', $result['resumed']);
 
-        $result = $this->getUploadFileService()->initFormUpload(array(
+        $result = $this->getUploadFileService()->initFormUpload([
             'targetId' => 1,
             'targetType' => 'video',
             'hash' => 'materiallib-1/20160418040438-d11n060aceo8g8ws',
-        ));
+        ]);
         $this->assertEquals(2, $result['globalId']);
     }
 
     public function testInitUpload()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'withParams' => array('storage'),
-                'returnValue' => array('upload_mode' => 'cloud'),
-            ),
-        );
+                'withParams' => ['storage'],
+                'returnValue' => ['upload_mode' => 'cloud'],
+            ],
+        ];
         $this->mockBiz('System:SettingService', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'resumeUpload',
                 'runTimes' => 1,
-                'returnValue' => array('resumed' => 'ok'),
-            ),
-            array(
+                'returnValue' => ['resumed' => 'ok'],
+            ],
+            [
                 'functionName' => 'prepareUpload',
                 'runTimes' => 1,
-                'returnValue' => array(),
-            ),
-            array(
+                'returnValue' => [],
+            ],
+            [
                 'functionName' => 'initUpload',
                 'runTimes' => 1,
-                'returnValue' => array('resumed' => 'no', 'globalId' => 2),
-            ),
-        );
+                'returnValue' => ['resumed' => 'no', 'globalId' => 2],
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'returnValue' => array('status' => 'notok', 'id' => 3),
-            ),
-            array(
+                'returnValue' => ['status' => 'notok', 'id' => 3],
+            ],
+            [
                 'arguments' => true,
                 'functionName' => 'update',
                 'runTimes' => 1,
-                'returnValue' => array('id' => 1),
-            ),
-            array(
+                'returnValue' => ['id' => 1],
+            ],
+            [
                 'arguments' => true,
                 'functionName' => 'create',
                 'runTimes' => 1,
-                'returnValue' => array('id' => 1),
-            ),
-        );
+                'returnValue' => ['id' => 1],
+            ],
+        ];
         $this->mockBiz('File:UploadFileInitDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'info',
                 'runTimes' => 1,
-                'returnValue' => array(),
-            ),
-        );
+                'returnValue' => [],
+            ],
+        ];
         $this->mockBiz('logger', $params);
 
-        $result = $this->getUploadFileService()->initUpload(array(
+        $result = $this->getUploadFileService()->initUpload([
             'targetId' => 1,
             'targetType' => 'video',
             'hash' => 'materiallib-1/20160418040438-d11n060aceo8g8ws',
             'id' => 1,
             'fileName' => 'test',
             'fileSize' => 1024,
-        ));
-        $this->assertEquals('ok', $result['resumed']);
+        ]);
+        $this->assertEquals('no', $result['resumed']);
 
-        $result = $this->getUploadFileService()->initUpload(array(
+        $result = $this->getUploadFileService()->initUpload([
             'targetId' => 1,
             'targetType' => 'video',
             'hash' => 'materiallib-1/20160418040438-d11n060aceo8g8ws',
-        ));
+        ]);
         $this->assertEquals(2, $result['globalId']);
     }
 
@@ -1429,68 +1429,68 @@ class UploadFileServiceTest extends BaseTestCase
      */
     public function testInitUploadWithErrorParam()
     {
-        $this->getUploadFileService()->initUpload(array());
+        $this->getUploadFileService()->initUpload([]);
     }
 
     public function testFinishedUpload()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'withParams' => array('storage'),
-                'returnValue' => array('upload_mode' => 'cloud'),
-            ),
-        );
+                'withParams' => ['storage'],
+                'returnValue' => ['upload_mode' => 'cloud'],
+            ],
+        ];
         $this->mockBiz('System:SettingService', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'finishedUpload',
                 'runTimes' => 1,
-                'returnValue' => array('success' => 'ok', 'length' => 10),
-            ),
-        );
+                'returnValue' => ['no' => '100', 'length' => 10],
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'update',
                 'runTimes' => 1,
-                'returnValue' => array('storage' => 'cloud', 'type' => 'video'),
-            ),
-        );
+                'returnValue' => ['storage' => 'cloud', 'type' => 'video'],
+            ],
+        ];
         $this->mockBiz('File:UploadFileInitDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'update',
                 'runTimes' => 1,
-                'returnValue' => array('targetType' => 'headLeader', 'id' => 4),
-            ),
-            array(
+                'returnValue' => ['targetType' => 'headLeader', 'id' => 4],
+            ],
+            [
                 'arguments' => true,
                 'functionName' => 'create',
                 'runTimes' => 1,
-                'returnValue' => array('id' => 1),
-            ),
-            array(
+                'returnValue' => ['id' => 1],
+            ],
+            [
                 'arguments' => true,
                 'functionName' => 'findHeadLeaderFiles',
                 'runTimes' => 1,
-                'returnValue' => array(array('id' => 4)),
-            ),
-        );
+                'returnValue' => [['id' => 4]],
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
-        $result = $this->getUploadFileService()->finishedUpload(array(
+        $result = $this->getUploadFileService()->finishedUpload([
             'size' => 1024,
             'uploadType' => 'direct',
             'id' => 4,
-        ));
+        ]);
         $this->assertEquals('headLeader', $result['targetType']);
         $this->assertEquals(4, $result['id']);
     }
@@ -1501,64 +1501,64 @@ class UploadFileServiceTest extends BaseTestCase
      */
     public function testFinishedUploadWithFailedUpload()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'withParams' => array('storage'),
-                'returnValue' => array('upload_mode' => 'cloud'),
-            ),
-        );
+                'withParams' => ['storage'],
+                'returnValue' => ['upload_mode' => 'cloud'],
+            ],
+        ];
         $this->mockBiz('System:SettingService', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'finishedUpload',
                 'runTimes' => 1,
-                'returnValue' => array('success' => 0, 'length' => 10),
-            ),
-        );
+                'returnValue' => ['no' => 0, 'length' => 10],
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'update',
                 'runTimes' => 1,
-                'returnValue' => array('storage' => 'cloud', 'type' => 'video'),
-            ),
-        );
+                'returnValue' => ['storage' => 'cloud', 'type' => 'video'],
+            ],
+        ];
         $this->mockBiz('File:UploadFileInitDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'create',
                 'runTimes' => 1,
-                'returnValue' => array('id' => 1),
-            ),
-        );
+                'returnValue' => ['id' => 1],
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
-        $this->getUploadFileService()->finishedUpload(array(
+        $this->getUploadFileService()->finishedUpload([
             'size' => 1024,
             'uploadType' => 'direct',
             'id' => 4,
-        ));
+        ]);
     }
 
     public function testMoveFile()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'moveFile',
                 'runTimes' => 1,
-                'withParams' => array('video', 1, null, array()),
-                'returnValue' => array('success' => 0, 'length' => 10),
-            ),
-        );
+                'withParams' => ['video', 1, null, []],
+                'returnValue' => ['success' => 0, 'length' => 10],
+            ],
+        ];
         $this->mockBiz('File:LocalFileImplementor', $params);
 
         $result = $this->getUploadFileService()->moveFile('video', 1);
@@ -1568,58 +1568,58 @@ class UploadFileServiceTest extends BaseTestCase
 
     public function testSetFileProcessed()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'getByGlobalId',
                 'runTimes' => 1,
-                'returnValue' => array('id' => 1),
-            ),
-            array(
+                'returnValue' => ['id' => 1],
+            ],
+            [
                 'arguments' => true,
                 'functionName' => 'update',
                 'runTimes' => 1,
-                'returnValue' => array(),
-            ),
-        );
+                'returnValue' => [],
+            ],
+        ];
         $mockUploadFileInitDao = $this->mockBiz('File:UploadFileInitDao', $params);
 
-        $this->getUploadFileService()->setFileProcessed(array('globalId' => 1));
+        $this->getUploadFileService()->setFileProcessed(['globalId' => 1]);
         $mockUploadFileInitDao->shouldHaveReceived('update');
     }
 
     public function testDeleteByGlobalId()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'getByGlobalId',
                 'runTimes' => 1,
-                'returnValue' => array('id' => 1),
-            ),
-            array(
+                'returnValue' => ['id' => 1],
+            ],
+            [
                 'arguments' => true,
                 'functionName' => 'deleteByGlobalId',
                 'runTimes' => 1,
                 'returnValue' => true,
-            ),
-        );
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
-        $result = $this->getUploadFileService()->deleteByGlobalId(array('globalId' => 1));
+        $result = $this->getUploadFileService()->deleteByGlobalId(['globalId' => 1]);
         $this->assertTrue($result);
     }
 
     public function testDeleteByGLobalIdWithEmptyFile()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getByGlobalId',
                 'runTimes' => 1,
-                'withParams' => array(1),
-                'returnValue' => array(),
-            ),
-        );
+                'withParams' => [1],
+                'returnValue' => [],
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
         $result = $this->getUploadFileService()->deleteByGlobalId(1);
@@ -1628,29 +1628,29 @@ class UploadFileServiceTest extends BaseTestCase
 
     public function testReconvertFile()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getFile',
                 'runTimes' => 1,
-                'returnValue' => array('storage' => 'cloud', 'globalId' => 1),
-            ),
-            array(
+                'returnValue' => ['storage' => 'cloud', 'globalId' => 1],
+            ],
+            [
                 'functionName' => 'reconvert',
                 'runTimes' => 1,
                 'returnValue' => 'materiallib-1/20160418040438-d11n060aceo8g8ws',
-            ),
-        );
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'withParams' => array(1),
-                'returnValue' => array('storage' => 'cloud', 'globalId' => 1),
-            ),
-        );
+                'withParams' => [1],
+                'returnValue' => ['storage' => 'cloud', 'globalId' => 1],
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
         $result = $this->getUploadFileService()->reconvertFile(1);
@@ -1668,145 +1668,145 @@ class UploadFileServiceTest extends BaseTestCase
 
     public function testReconvertOldFile()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getFile',
                 'runTimes' => 1,
-                'withParams' => array(array('id' => 1, 'storage' => 'cloud')),
-                'returnValue' => array(),
-            ),
-            array(
+                'withParams' => [['id' => 1, 'storage' => 'cloud']],
+                'returnValue' => [],
+            ],
+            [
                 'functionName' => 'getFile',
                 'runTimes' => 1,
-                'withParams' => array(array('id' => 2, 'storage' => 'cloud')),
-                'returnValue' => array('storage' => 'local'),
-            ),
-            array(
+                'withParams' => [['id' => 2, 'storage' => 'cloud']],
+                'returnValue' => ['storage' => 'local'],
+            ],
+            [
                 'functionName' => 'getFile',
                 'runTimes' => 1,
-                'withParams' => array(array('id' => 3, 'storage' => 'cloud')),
-                'returnValue' => array('storage' => 'cloud', 'type' => 'audio'),
-            ),
-            array(
+                'withParams' => [['id' => 3, 'storage' => 'cloud']],
+                'returnValue' => ['storage' => 'cloud', 'type' => 'audio'],
+            ],
+            [
                 'functionName' => 'getFile',
                 'runTimes' => 1,
-                'withParams' => array(array('id' => 4, 'storage' => 'cloud')),
-                'returnValue' => array('storage' => 'cloud', 'type' => 'video', 'targetType' => 'classroom'),
-            ),
-            array(
+                'withParams' => [['id' => 4, 'storage' => 'cloud']],
+                'returnValue' => ['storage' => 'cloud', 'type' => 'video', 'targetType' => 'classroom'],
+            ],
+            [
                 'functionName' => 'getFile',
                 'runTimes' => 1,
-                'withParams' => array(array('id' => 5, 'storage' => 'cloud')),
-                'returnValue' => array('storage' => 'cloud', 'type' => 'video', 'targetType' => 'courselesson', 'targetId' => 1),
-            ),
-            array(
+                'withParams' => [['id' => 5, 'storage' => 'cloud']],
+                'returnValue' => ['storage' => 'cloud', 'type' => 'video', 'targetType' => 'courselesson', 'targetId' => 1],
+            ],
+            [
                 'functionName' => 'getFile',
                 'runTimes' => 1,
-                'withParams' => array(array('id' => 6, 'storage' => 'cloud')),
-                'returnValue' => array(
+                'withParams' => [['id' => 6, 'storage' => 'cloud']],
+                'returnValue' => [
                     'storage' => 'cloud',
                     'type' => 'video',
                     'targetType' => 'courselesson',
                     'targetId' => 2,
-                    'convertParams' => array('convertor' => 'HLSEncryptedVideo'),
-                ),
-            ),
-            array(
+                    'convertParams' => ['convertor' => 'HLSEncryptedVideo'],
+                ],
+            ],
+            [
                 'functionName' => 'getFile',
                 'runTimes' => 1,
-                'withParams' => array(array('id' => 7, 'storage' => 'cloud')),
-                'returnValue' => array(
+                'withParams' => [['id' => 7, 'storage' => 'cloud']],
+                'returnValue' => [
                     'id' => 11,
                     'storage' => 'cloud',
                     'type' => 'video',
                     'targetType' => 'courselesson',
                     'targetId' => 2,
-                    'convertParams' => array('convertor' => 'HLSVideo', 'videoQuality' => 'low'),
-                ),
-            ),
-            array(
+                    'convertParams' => ['convertor' => 'HLSVideo', 'videoQuality' => 'low'],
+                ],
+            ],
+            [
                 'functionName' => 'reconvertOldFile',
                 'runTimes' => 1,
                 'returnValue' => '65d474f089074fa0810d1f2f146fd218',
-            ),
-        );
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'withParams' => array(1),
-                'returnValue' => array('id' => 1, 'storage' => 'cloud'),
-            ),
-            array(
+                'withParams' => [1],
+                'returnValue' => ['id' => 1, 'storage' => 'cloud'],
+            ],
+            [
                 'arguments' => true,
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'withParams' => array(2),
-                'returnValue' => array('id' => 2, 'storage' => 'cloud'),
-            ),
-            array(
+                'withParams' => [2],
+                'returnValue' => ['id' => 2, 'storage' => 'cloud'],
+            ],
+            [
                 'arguments' => true,
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'withParams' => array(3),
-                'returnValue' => array('id' => 3, 'storage' => 'cloud'),
-            ),
-            array(
+                'withParams' => [3],
+                'returnValue' => ['id' => 3, 'storage' => 'cloud'],
+            ],
+            [
                 'arguments' => true,
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'withParams' => array(4),
-                'returnValue' => array('id' => 4, 'storage' => 'cloud'),
-            ),
-            array(
+                'withParams' => [4],
+                'returnValue' => ['id' => 4, 'storage' => 'cloud'],
+            ],
+            [
                 'arguments' => true,
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'withParams' => array(5),
-                'returnValue' => array('id' => 5, 'storage' => 'cloud'),
-            ),
-            array(
+                'withParams' => [5],
+                'returnValue' => ['id' => 5, 'storage' => 'cloud'],
+            ],
+            [
                 'arguments' => true,
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'withParams' => array(6),
-                'returnValue' => array('id' => 6, 'storage' => 'cloud'),
-            ),
-            array(
+                'withParams' => [6],
+                'returnValue' => ['id' => 6, 'storage' => 'cloud'],
+            ],
+            [
                 'arguments' => true,
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'withParams' => array(7),
-                'returnValue' => array('id' => 7, 'storage' => 'cloud'),
-            ),
-            array(
+                'withParams' => [7],
+                'returnValue' => ['id' => 7, 'storage' => 'cloud'],
+            ],
+            [
                 'arguments' => true,
                 'functionName' => 'update',
                 'runTimes' => 1,
-                'returnValue' => array(),
-            ),
-        );
+                'returnValue' => [],
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'getCourse',
                 'runTimes' => 1,
-                'withParams' => array(1),
-                'returnValue' => array(),
-            ),
-            array(
+                'withParams' => [1],
+                'returnValue' => [],
+            ],
+            [
                 'arguments' => true,
                 'functionName' => 'getCourse',
                 'runTimes' => 1,
-                'withParams' => array(2),
-                'returnValue' => array('id' => 2),
-            ),
-        );
+                'withParams' => [2],
+                'returnValue' => ['id' => 2],
+            ],
+        ];
         $this->mockBiz('Course:CourseService', $params);
 
         $result = $this->getUploadFileService()->reconvertOldFile(1, null, null);
@@ -1833,46 +1833,46 @@ class UploadFileServiceTest extends BaseTestCase
 
     public function testReconvertOldFile2()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getFile',
                 'runTimes' => 1,
-                'returnValue' => array(
+                'returnValue' => [
                     'id' => 11,
                     'storage' => 'cloud',
                     'type' => 'video',
                     'targetType' => 'courselesson',
                     'targetId' => 2,
-                    'convertParams' => array(),
-                ),
-            ),
-            array(
+                    'convertParams' => [],
+                ],
+            ],
+            [
                 'functionName' => 'reconvertOldFile',
                 'runTimes' => 1,
                 'returnValue' => null,
-            ),
-        );
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'returnValue' => array('id' => 8, 'storage' => 'cloud'),
-            ),
-        );
+                'returnValue' => ['id' => 8, 'storage' => 'cloud'],
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'getCourse',
                 'runTimes' => 1,
-                'withParams' => array(2),
-                'returnValue' => array('id' => 2),
-            ),
-        );
+                'withParams' => [2],
+                'returnValue' => ['id' => 2],
+            ],
+        ];
         $this->mockBiz('Course:CourseService', $params);
 
         $result = $this->getUploadFileService()->reconvertOldFile(8, null, null);
@@ -1882,44 +1882,44 @@ class UploadFileServiceTest extends BaseTestCase
 
     public function testCollectFile()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'getByUserIdAndFileId',
                 'runTimes' => 1,
-                'withParams' => array(2, 2),
-                'returnValue' => array(),
-            ),
-            array(
+                'withParams' => [2, 2],
+                'returnValue' => [],
+            ],
+            [
                 'arguments' => true,
                 'functionName' => 'getByUserIdAndFileId',
                 'runTimes' => 1,
-                'withParams' => array(1, 1),
-                'returnValue' => array('fileId' => 1, 'id' => 1),
-            ),
-            array(
+                'withParams' => [1, 1],
+                'returnValue' => ['fileId' => 1, 'id' => 1],
+            ],
+            [
                 'arguments' => true,
                 'functionName' => 'create',
                 'runTimes' => 1,
-                'returnValue' => array('fileId' => 2),
-            ),
-            array(
+                'returnValue' => ['fileId' => 2],
+            ],
+            [
                 'arguments' => true,
                 'functionName' => 'delete',
                 'runTimes' => 1,
-                'returnValue' => array(),
-            ),
-        );
+                'returnValue' => [],
+            ],
+        ];
         $this->mockBiz('File:UploadFileCollectDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'get',
                 'runTimes' => 1,
                 'returnValue' => true,
-            ),
-        );
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
         $result = $this->getUploadFileService()->collectFile(2, 2);
@@ -1939,33 +1939,33 @@ class UploadFileServiceTest extends BaseTestCase
 
     public function testFindCollectionsByUserIdAndFileIds()
     {
-        $result = $this->getUploadFileService()->findCollectionsByUserIdAndFileIds(array(), 1);
+        $result = $this->getUploadFileService()->findCollectionsByUserIdAndFileIds([], 1);
         $this->assertEmpty($result);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'findByUserIdAndFileIds',
                 'runTimes' => 1,
-                'returnValue' => array(array('id' => 1)),
-            ),
-        );
+                'returnValue' => [['id' => 1]],
+            ],
+        ];
         $this->mockBiz('File:UploadFileCollectDao', $params);
 
-        $result = $this->getUploadFileService()->findCollectionsByUserIdAndFileIds(array(array(1)), 1);
+        $result = $this->getUploadFileService()->findCollectionsByUserIdAndFileIds([[1]], 1);
         $this->assertEquals(1, $result[0]['id']);
     }
 
     public function testFindCollectionsByUserId()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'findByUserId',
                 'runTimes' => 1,
-                'returnValue' => array(array('id' => 1)),
-            ),
-        );
+                'returnValue' => [['id' => 1]],
+            ],
+        ];
         $this->mockBiz('File:UploadFileCollectDao', $params);
 
         $result = $this->getUploadFileService()->findCollectionsByUserId(1);
@@ -1974,191 +1974,191 @@ class UploadFileServiceTest extends BaseTestCase
 
     public function testSyncFile()
     {
-        $result = $this->getUploadFileService()->syncFile(array('id' => 11));
+        $result = $this->getUploadFileService()->syncFile(['id' => 11]);
         $this->assertEquals(11, $result['id']);
     }
 
     public function testSearchFiles()
     {
-        $result = $this->getUploadFileService()->searchFiles(array(), array('createdTime' => 'DESC'), 0, 10);
+        $result = $this->getUploadFileService()->searchFiles([], ['createdTime' => 'DESC'], 0, 10);
         $this->assertEmpty($result);
     }
 
     public function testSearchUploadFiles()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'search',
                 'runTimes' => 1,
-                'returnValue' => array(array('id' => 1)),
-            ),
-        );
+                'returnValue' => [['id' => 1]],
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
-        $result = $this->getUploadFileService()->searchUploadFiles(array(), 'lastest', 0, 10);
+        $result = $this->getUploadFileService()->searchUploadFiles([], 'lastest', 0, 10);
         $this->assertEquals(1, $result[0]['id']);
     }
 
     public function testCountUploadFiles()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'count',
                 'runTimes' => 1,
                 'returnValue' => 10,
-            ),
-        );
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
-        $count = $this->getUploadFileService()->countUploadFiles(array());
+        $count = $this->getUploadFileService()->countUploadFiles([]);
         $this->assertEquals(10, $count);
     }
 
     public function testSearchFilesFromCloud()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'search',
                 'runTimes' => 1,
-                'withParams' => array(array(), 'created', 0, PHP_INT_MAX),
-                'returnValue' => array(array()),
-            ),
-            array(
+                'withParams' => [[], 'created', 0, PHP_INT_MAX],
+                'returnValue' => [[]],
+            ],
+            [
                 'arguments' => true,
                 'functionName' => 'search',
                 'runTimes' => 1,
-                'withParams' => array(array('processStatus' => 'draft', 'errorType' => '', 'resType' => ''), 'lastest', 0, PHP_INT_MAX),
-                'returnValue' => array(array('globalId' => 1)),
-            ),
-        );
+                'withParams' => [['processStatus' => 'draft', 'errorType' => '', 'resType' => ''], 'lastest', 0, PHP_INT_MAX],
+                'returnValue' => [['globalId' => 1]],
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'search',
                 'runTimes' => 1,
-                'returnValue' => array('data' => 'cloud'),
-            ),
-        );
+                'returnValue' => ['data' => 'cloud'],
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
-        $result = ReflectionUtils::invokeMethod($this->getUploadFileService(), 'searchFilesFromCloud', array(array(), 'created', 0, PHP_INT_MAX));
+        $result = ReflectionUtils::invokeMethod($this->getUploadFileService(), 'searchFilesFromCloud', [[], 'created', 0, PHP_INT_MAX]);
         $this->assertEmpty($result);
-        $result = ReflectionUtils::invokeMethod($this->getUploadFileService(), 'searchFilesFromCloud', array(
-            array('processStatus' => 'draft', 'errorType' => '', 'resType' => ''), 'lastest', 0, PHP_INT_MAX,
-        ));
+        $result = ReflectionUtils::invokeMethod($this->getUploadFileService(), 'searchFilesFromCloud', [
+            ['processStatus' => 'draft', 'errorType' => '', 'resType' => ''], 'lastest', 0, PHP_INT_MAX,
+        ]);
         $this->assertEquals('cloud', $result);
     }
 
     public function testSearchFilesFromLocal()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'search',
                 'runTimes' => 1,
-                'withParams' => array(array(), 'created', 0, PHP_INT_MAX),
-                'returnValue' => array(),
-            ),
-            array(
+                'withParams' => [[], 'created', 0, PHP_INT_MAX],
+                'returnValue' => [],
+            ],
+            [
                 'arguments' => true,
                 'functionName' => 'search',
                 'runTimes' => 1,
-                'withParams' => array(array('processStatus' => 'draft', 'errorType' => '', 'resType' => ''), 'lastest', 0, PHP_INT_MAX),
-                'returnValue' => array(array('storage' => 'cloud', 'globalId' => 1, 'id' => 1)),
-            ),
-        );
+                'withParams' => [['processStatus' => 'draft', 'errorType' => '', 'resType' => ''], 'lastest', 0, PHP_INT_MAX],
+                'returnValue' => [['storage' => 'cloud', 'globalId' => 1, 'id' => 1]],
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'findFiles',
                 'runTimes' => 1,
-                'returnValue' => array(array('id' => 1)),
-            ),
-        );
+                'returnValue' => [['id' => 1]],
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
-        $result = ReflectionUtils::invokeMethod($this->getUploadFileService(), 'searchFilesFromLocal', array(array(), 'created', 0, PHP_INT_MAX));
+        $result = ReflectionUtils::invokeMethod($this->getUploadFileService(), 'searchFilesFromLocal', [[], 'created', 0, PHP_INT_MAX]);
         $this->assertEmpty($result);
-        $result = ReflectionUtils::invokeMethod($this->getUploadFileService(), 'searchFilesFromLocal', array(
-            array('processStatus' => 'draft', 'errorType' => '', 'resType' => ''), 'lastest', 0, PHP_INT_MAX,
-        ));
+        $result = ReflectionUtils::invokeMethod($this->getUploadFileService(), 'searchFilesFromLocal', [
+            ['processStatus' => 'draft', 'errorType' => '', 'resType' => ''], 'lastest', 0, PHP_INT_MAX,
+        ]);
         $this->assertEquals(1, $result[0]['id']);
     }
 
     public function testSearchFileCountFromCloud()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'search',
                 'runTimes' => 1,
-                'withParams' => array(array(), array('createdTime' => 'DESC'), 0, PHP_INT_MAX),
-                'returnValue' => array(array()),
-            ),
-            array(
+                'withParams' => [[], ['createdTime' => 'DESC'], 0, PHP_INT_MAX],
+                'returnValue' => [[]],
+            ],
+            [
                 'arguments' => true,
                 'functionName' => 'search',
                 'runTimes' => 1,
-                'withParams' => array(array('processStatus' => 'draft', 'errorType' => '', 'resType' => ''), array('createdTime' => 'DESC'), 0, PHP_INT_MAX),
-                'returnValue' => array(array('globalId' => 1)),
-            ),
-        );
+                'withParams' => [['processStatus' => 'draft', 'errorType' => '', 'resType' => ''], ['createdTime' => 'DESC'], 0, PHP_INT_MAX],
+                'returnValue' => [['globalId' => 1]],
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'search',
                 'runTimes' => 1,
-                'returnValue' => array('count' => 11),
-            ),
-        );
+                'returnValue' => ['count' => 11],
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
-        $result = ReflectionUtils::invokeMethod($this->getUploadFileService(), 'searchFileCountFromCloud', array(array()));
+        $result = ReflectionUtils::invokeMethod($this->getUploadFileService(), 'searchFileCountFromCloud', [[]]);
         $this->assertEmpty($result);
-        $count = ReflectionUtils::invokeMethod($this->getUploadFileService(), 'searchFileCountFromCloud', array(
-            array('processStatus' => 'draft', 'errorType' => '', 'resType' => ''),
-        ));
+        $count = ReflectionUtils::invokeMethod($this->getUploadFileService(), 'searchFileCountFromCloud', [
+            ['processStatus' => 'draft', 'errorType' => '', 'resType' => ''],
+        ]);
         $this->assertEquals(11, $count);
     }
 
     public function testDeleteFiles()
     {
-        $this->getUploadFileService()->deleteFiles(array(1));
+        $this->getUploadFileService()->deleteFiles([1]);
     }
 
     public function testSaveConvertResult()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'returnValue' => array('storage' => 'cloud'),
-            ),
-            array(
+                'returnValue' => ['storage' => 'cloud'],
+            ],
+            [
                 'arguments' => true,
                 'functionName' => 'update',
                 'runTimes' => 1,
-                'returnValue' => array(),
-            ),
-        );
+                'returnValue' => [],
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getFile',
                 'runTimes' => 1,
-                'returnValue' => array('id' => 1, 'storage' => 'cloud'),
-            ),
-            array(
+                'returnValue' => ['id' => 1, 'storage' => 'cloud'],
+            ],
+            [
                 'functionName' => 'saveConvertResult',
                 'runTimes' => 1,
-                'returnValue' => array('convertStatus' => 'draft', 'metas2' => array()),
-            ),
-        );
+                'returnValue' => ['convertStatus' => 'draft', 'metas2' => []],
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
 
         $result = $this->getUploadFileService()->saveConvertResult(1);
@@ -2171,23 +2171,23 @@ class UploadFileServiceTest extends BaseTestCase
      */
     public function testSaveConvertResultWithEmptyFile()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'returnValue' => array('storage' => 'cloud'),
-            ),
-        );
+                'returnValue' => ['storage' => 'cloud'],
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getFile',
                 'runTimes' => 1,
-                'returnValue' => array(),
-            ),
-        );
+                'returnValue' => [],
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
 
         $this->getUploadFileService()->saveConvertResult(1);
@@ -2195,34 +2195,34 @@ class UploadFileServiceTest extends BaseTestCase
 
     public function testSaveConvertResult3()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'returnValue' => array('storage' => 'cloud'),
-            ),
-            array(
+                'returnValue' => ['storage' => 'cloud'],
+            ],
+            [
                 'arguments' => true,
                 'functionName' => 'update',
                 'runTimes' => 1,
-                'returnValue' => array(),
-            ),
-        );
+                'returnValue' => [],
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getFile',
                 'runTimes' => 1,
-                'returnValue' => array('id' => 1, 'storage' => 'cloud'),
-            ),
-            array(
+                'returnValue' => ['id' => 1, 'storage' => 'cloud'],
+            ],
+            [
                 'functionName' => 'saveConvertResult',
                 'runTimes' => 1,
-                'returnValue' => array('convertStatus' => 'success', 'metas2' => array(), 'convertParams' => array()),
-            ),
-        );
+                'returnValue' => ['convertStatus' => 'success', 'metas2' => [], 'convertParams' => []],
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
 
         $result = $this->getUploadFileService()->saveConvertResult3(1);
@@ -2235,23 +2235,23 @@ class UploadFileServiceTest extends BaseTestCase
      */
     public function testSaveConvertResult3WithEmptyFile()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'returnValue' => array('storage' => 'cloud'),
-            ),
-        );
+                'returnValue' => ['storage' => 'cloud'],
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getFile',
                 'runTimes' => 1,
-                'returnValue' => array(),
-            ),
-        );
+                'returnValue' => [],
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
 
         $this->getUploadFileService()->saveConvertResult3(1);
@@ -2259,34 +2259,34 @@ class UploadFileServiceTest extends BaseTestCase
 
     public function testConvertFile()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'returnValue' => array('storage' => 'cloud'),
-            ),
-            array(
+                'returnValue' => ['storage' => 'cloud'],
+            ],
+            [
                 'arguments' => true,
                 'functionName' => 'update',
                 'runTimes' => 1,
-                'returnValue' => array(),
-            ),
-        );
+                'returnValue' => [],
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getFile',
                 'runTimes' => 1,
-                'returnValue' => array('id' => 1, 'storage' => 'cloud'),
-            ),
-            array(
+                'returnValue' => ['id' => 1, 'storage' => 'cloud'],
+            ],
+            [
                 'functionName' => 'convertFile',
                 'runTimes' => 1,
-                'returnValue' => array('convertStatus' => 'draft', 'metas2' => array()),
-            ),
-        );
+                'returnValue' => ['convertStatus' => 'draft', 'metas2' => []],
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
 
         $result = $this->getUploadFileService()->convertFile(1, 'doing');
@@ -2308,23 +2308,23 @@ class UploadFileServiceTest extends BaseTestCase
      */
     public function testConvertFileWithEmptyFile()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'returnValue' => array('storage' => 'cloud'),
-            ),
-        );
+                'returnValue' => ['storage' => 'cloud'],
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getFile',
                 'runTimes' => 1,
-                'returnValue' => array(),
-            ),
-        );
+                'returnValue' => [],
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
 
         $this->getUploadFileService()->convertFile(1, 'none');
@@ -2332,29 +2332,29 @@ class UploadFileServiceTest extends BaseTestCase
 
     public function testSetFileConverting()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'returnValue' => array('storage' => 'cloud'),
-            ),
-            array(
+                'returnValue' => ['storage' => 'cloud'],
+            ],
+            [
                 'arguments' => true,
                 'functionName' => 'update',
                 'runTimes' => 1,
-                'returnValue' => array(),
-            ),
-        );
+                'returnValue' => [],
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getFile',
                 'runTimes' => 1,
-                'returnValue' => array('id' => 1, 'storage' => 'cloud'),
-            ),
-        );
+                'returnValue' => ['id' => 1, 'storage' => 'cloud'],
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
 
         $result = $this->getUploadFileService()->setFileConverting(1, 'waiting');
@@ -2367,23 +2367,23 @@ class UploadFileServiceTest extends BaseTestCase
      */
     public function testSetFileConvertingWithEmptyFile()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'returnValue' => array('storage' => 'cloud'),
-            ),
-        );
+                'returnValue' => ['storage' => 'cloud'],
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getFile',
                 'runTimes' => 1,
-                'returnValue' => array(),
-            ),
-        );
+                'returnValue' => [],
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
 
         $this->getUploadFileService()->setFileConverting(1, '');
@@ -2391,29 +2391,29 @@ class UploadFileServiceTest extends BaseTestCase
 
     public function testSetAudioConvertStatus()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'returnValue' => array('storage' => 'cloud'),
-            ),
-            array(
+                'returnValue' => ['storage' => 'cloud'],
+            ],
+            [
                 'arguments' => true,
                 'functionName' => 'update',
                 'runTimes' => 1,
-                'returnValue' => array(),
-            ),
-        );
+                'returnValue' => [],
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getFile',
                 'runTimes' => 1,
-                'returnValue' => array('id' => 1, 'storage' => 'cloud'),
-            ),
-        );
+                'returnValue' => ['id' => 1, 'storage' => 'cloud'],
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
 
         $result = $this->getUploadFileService()->setAudioConvertStatus(1, 'doing');
@@ -2426,23 +2426,23 @@ class UploadFileServiceTest extends BaseTestCase
      */
     public function testSetAudioConvertStatusWithErrorStatus()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'returnValue' => array('storage' => 'cloud'),
-            ),
-        );
+                'returnValue' => ['storage' => 'cloud'],
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getFile',
                 'runTimes' => 1,
-                'returnValue' => array('id' => 1),
-            ),
-        );
+                'returnValue' => ['id' => 1],
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
 
         $this->getUploadFileService()->setAudioConvertStatus(1, '');
@@ -2454,23 +2454,23 @@ class UploadFileServiceTest extends BaseTestCase
      */
     public function testSetAudioConvertStatusWithEmptyFile()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'returnValue' => array('storage' => 'cloud'),
-            ),
-        );
+                'returnValue' => ['storage' => 'cloud'],
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getFile',
                 'runTimes' => 1,
-                'returnValue' => array(),
-            ),
-        );
+                'returnValue' => [],
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
 
         $this->getUploadFileService()->setAudioConvertStatus(1, 'none');
@@ -2478,50 +2478,50 @@ class UploadFileServiceTest extends BaseTestCase
 
     public function testSetResourceConvertStatus()
     {
-        $result = $this->getUploadFileService()->setResourceConvertStatus(1, array());
+        $result = $this->getUploadFileService()->setResourceConvertStatus(1, []);
         $this->assertEmpty($result);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'getByGlobalId',
                 'runTimes' => 1,
-                'returnValue' => array('storage' => 'cloud', 'id' => 1),
-            ),
-            array(
+                'returnValue' => ['storage' => 'cloud', 'id' => 1],
+            ],
+            [
                 'arguments' => true,
                 'functionName' => 'update',
                 'runTimes' => 1,
-                'returnValue' => array('audioConvertStatus' => 'none'),
-            ),
-        );
+                'returnValue' => ['audioConvertStatus' => 'none'],
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getFile',
                 'runTimes' => 1,
-                'returnValue' => array('id' => 1, 'storage' => 'cloud'),
-            ),
-        );
+                'returnValue' => ['id' => 1, 'storage' => 'cloud'],
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
 
-        $result = $this->getUploadFileService()->setResourceConvertStatus(1, array('status' => 'error', 'errorType' => 'client', 'audio' => 1, 'mp4' => 1));
+        $result = $this->getUploadFileService()->setResourceConvertStatus(1, ['status' => 'error', 'errorType' => 'client', 'audio' => 1, 'mp4' => 1]);
         $this->assertEquals('none', $result['audioConvertStatus']);
     }
 
     public function testMakeUploadParams()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'makeUploadParams',
                 'runTimes' => 1,
-                'returnValue' => array('id' => 1, 'storage' => 'cloud'),
-            ),
-        );
+                'returnValue' => ['id' => 1, 'storage' => 'cloud'],
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
 
-        $result = $this->getUploadFileService()->makeUploadParams(array('storage' => 'cloud'));
+        $result = $this->getUploadFileService()->makeUploadParams(['storage' => 'cloud']);
         $this->assertEquals('cloud', $result['storage']);
     }
 
@@ -2530,23 +2530,23 @@ class UploadFileServiceTest extends BaseTestCase
         $result = $this->getUploadFileService()->getFileByTargetType('video');
         $this->assertNull($result);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'getByTargetType',
                 'runTimes' => 1,
-                'returnValue' => array('storage' => 'cloud', 'id' => 1),
-            ),
-        );
+                'returnValue' => ['storage' => 'cloud', 'id' => 1],
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getFullFile',
                 'runTimes' => 1,
-                'returnValue' => array('id' => 1, 'storage' => 'cloud'),
-            ),
-        );
+                'returnValue' => ['id' => 1, 'storage' => 'cloud'],
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
 
         $result = $this->getUploadFileService()->getFileByTargetType('audio');
@@ -2556,23 +2556,23 @@ class UploadFileServiceTest extends BaseTestCase
     public function testTryManageFile()
     {
         $user = $this->getCurrentUser();
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'returnValue' => array('storage' => 'cloud', 'id' => 1),
-            ),
-        );
+                'returnValue' => ['storage' => 'cloud', 'id' => 1],
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getFullFile',
                 'runTimes' => 1,
-                'returnValue' => array('id' => 1, 'storage' => 'cloud', 'createdUserId' => $user['id']),
-            ),
-        );
+                'returnValue' => ['id' => 1, 'storage' => 'cloud', 'createdUserId' => $user['id']],
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
 
         $result = $this->getUploadFileService()->tryManageFile(1);
@@ -2582,23 +2582,23 @@ class UploadFileServiceTest extends BaseTestCase
     public function testTryManageGlobalFile()
     {
         $user = $this->getCurrentUser();
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'getByGlobalId',
                 'runTimes' => 1,
-                'returnValue' => array('storage' => 'cloud', 'id' => 1),
-            ),
-        );
+                'returnValue' => ['storage' => 'cloud', 'id' => 1],
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getFullFile',
                 'runTimes' => 1,
-                'returnValue' => array('id' => 1, 'storage' => 'cloud', 'createdUserId' => $user['id']),
-            ),
-        );
+                'returnValue' => ['id' => 1, 'storage' => 'cloud', 'createdUserId' => $user['id']],
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
 
         $result = $this->getUploadFileService()->tryManageGlobalFile(1);
@@ -2608,29 +2608,29 @@ class UploadFileServiceTest extends BaseTestCase
     public function testTryAccessFile()
     {
         $user = $this->getCurrentUser();
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'returnValue' => array('storage' => 'cloud', 'id' => 1),
-            ),
-            array(
+                'returnValue' => ['storage' => 'cloud', 'id' => 1],
+            ],
+            [
                 'arguments' => true,
                 'functionName' => 'findByUserId',
                 'runTimes' => 1,
-                'returnValue' => array('storage' => 'cloud', 'id' => 1),
-            ),
-        );
+                'returnValue' => ['storage' => 'cloud', 'id' => 1],
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getFullFile',
                 'runTimes' => 1,
-                'returnValue' => array('id' => 1, 'storage' => 'cloud', 'createdUserId' => $user['id']),
-            ),
-        );
+                'returnValue' => ['id' => 1, 'storage' => 'cloud', 'createdUserId' => $user['id']],
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
 
         $result = $this->getUploadFileService()->tryAccessFile(1);
@@ -2640,23 +2640,23 @@ class UploadFileServiceTest extends BaseTestCase
     public function testCanManageFile()
     {
         $user = $this->getCurrentUser();
-        $params = array(
-            array(
+        $params = [
+            [
                 'arguments' => true,
                 'functionName' => 'get',
                 'runTimes' => 1,
-                'returnValue' => array('storage' => 'cloud', 'id' => 1),
-            ),
-        );
+                'returnValue' => ['storage' => 'cloud', 'id' => 1],
+            ],
+        ];
         $this->mockBiz('File:UploadFileDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getFullFile',
                 'runTimes' => 1,
-                'returnValue' => array('id' => 1, 'storage' => 'cloud', 'createdUserId' => $user['id']),
-            ),
-        );
+                'returnValue' => ['id' => 1, 'storage' => 'cloud', 'createdUserId' => $user['id']],
+            ],
+        ];
         $this->mockBiz('File:CloudFileImplementor', $params);
 
         $result = $this->getUploadFileService()->canManageFile(1);
@@ -2665,84 +2665,84 @@ class UploadFileServiceTest extends BaseTestCase
 
     public function testUpdateTags()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'deleteByFileId',
                 'runTimes' => 1,
-                'returnValue' => array(),
-            ),
-            array(
+                'returnValue' => [],
+            ],
+            [
                 'functionName' => 'create',
                 'runTimes' => 1,
-                'returnValue' => array(),
-            ),
-        );
+                'returnValue' => [],
+            ],
+        ];
         $this->mockBiz('File:UploadFileTagDao', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'getTagByName',
                 'runTimes' => 1,
-                'returnValue' => array('id' => 1),
-            ),
-        );
+                'returnValue' => ['id' => 1],
+            ],
+        ];
         $this->mockBiz('Taxonomy:TagService', $params);
-        ReflectionUtils::invokeMethod($this->getUploadFileService(), 'updateTags', array(array('id' => 1), array('tags' => 'name,name1')));
+        ReflectionUtils::invokeMethod($this->getUploadFileService(), 'updateTags', [['id' => 1], ['tags' => 'name,name1']]);
     }
 
     public function testFilterKeyWords()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'findCourseSetsLikeTitle',
                 'runTimes' => 1,
-                'returnValue' => array(array('id' => 1)),
-            ),
-        );
+                'returnValue' => [['id' => 1]],
+            ],
+        ];
         $this->mockBiz('Course:CourseSetService', $params);
 
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'searchMaterials',
                 'runTimes' => 1,
-                'returnValue' => array(array('fileId' => 1)),
-            ),
-        );
+                'returnValue' => [['fileId' => 1]],
+            ],
+        ];
         $this->mockBiz('Course:MaterialService', $params);
 
-        $result = ReflectionUtils::invokeMethod($this->getUploadFileService(), 'filterKeyWords', array(array(
+        $result = ReflectionUtils::invokeMethod($this->getUploadFileService(), 'filterKeyWords', [[
             'keywordType' => 'course',
             'keyword' => 'keyword',
-        )));
+        ]]);
         $this->assertEquals(1, $result['ids'][0]);
 
-        $result = ReflectionUtils::invokeMethod($this->getUploadFileService(), 'filterKeyWords', array(array(
+        $result = ReflectionUtils::invokeMethod($this->getUploadFileService(), 'filterKeyWords', [[
             'keywordType' => 'title',
             'keyword' => 'keyword',
-        )));
+        ]]);
         $this->assertEquals('keyword', $result['filenameLike']);
     }
 
     public function testFilterTag()
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'functionName' => 'findByTagId',
                 'runTimes' => 1,
-                'returnValue' => array(array('fileId' => 1)),
-            ),
-        );
+                'returnValue' => [['fileId' => 1]],
+            ],
+        ];
         $this->mockBiz('File:UploadFileTagDao', $params);
 
-        $result = ReflectionUtils::invokeMethod($this->getUploadFileService(), 'filterTag', array(array(
+        $result = ReflectionUtils::invokeMethod($this->getUploadFileService(), 'filterTag', [[
             'tagId' => 1,
-        )));
+        ]]);
         $this->assertEquals(1, $result['ids'][0]);
     }
 
     protected function createUser($user)
     {
-        $userInfo = array();
+        $userInfo = [];
         $userInfo['email'] = "{$user}@{$user}.com";
         $userInfo['nickname'] = "{$user}";
         $userInfo['password'] = "{$user}";
