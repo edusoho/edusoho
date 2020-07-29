@@ -451,12 +451,16 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
             return true;
         }
 
+        $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
+        $courseSetProduct = $this->getProductService()->getByTypeAndLocalResourceId('course_set', $courseSet['id']);
+        $courseProducts = $this->getProductService()->findProductsBySupplierIdAndProductTypeAndLocalResourceIds($courseSetProduct['supplierId'], 'course', ArrayToolkit::column($courses, 'id'));
+
+        if (empty($courseSetProduct) && empty($courseProducts)){
+            return true;
+        }
+
         try {
             $this->beginTransaction();
-            $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
-            $courseSetProduct = $this->getProductService()->getByTypeAndLocalResourceId('course_set', $courseSet['id']);
-            $courseProducts = $this->getProductService()->findProductsBySupplierIdAndProductTypeAndLocalResourceIds($courseSetProduct['supplierId'], 'course', ArrayToolkit::column($courses, 'id'));
-
             $this->getProductService()->deleteProduct($courseSetProduct['id']);
             $this->getProductService()->deleteByIds(ArrayToolkit::column($courseProducts, 'id'));
             $result = $this->getS2B2CFacadeService()->getS2B2CService()->changePurchaseStatusToRemoved($courseSetProduct['remoteProductId']);
