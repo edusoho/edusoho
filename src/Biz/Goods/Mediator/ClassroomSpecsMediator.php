@@ -61,6 +61,9 @@ class ClassroomSpecsMediator extends AbstractSpecsMediator
 
     public function onDelete($classroom)
     {
+        list($product, $goods) = $this->getProductAndGoods($classroom);
+        $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $classroom['id']);
+        $this->getGoodsService()->deleteGoodsSpecs($goodsSpecs['id']);
     }
 
     /**

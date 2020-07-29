@@ -50,6 +50,26 @@ class ClassroomGoodsMediatorTest extends BaseTestCase
         self::assertEquals('unpublished', $unpublishedGoods['status']);
     }
 
+    public function testOnDelete()
+    {
+        $classroom = $this->mockClassroom();
+        list($product, $goods) = $this->getClassroomGoodsMediator()->onCreate($classroom);
+        self::assertNotEmpty($goods);
+        $this->getClassroomGoodsMediator()->onDelete($classroom);
+        $goods = $this->getGoodsService()->getGoods($goods['id']);
+        self::assertEmpty($goods);
+    }
+
+    public function testOnMaxRateChange()
+    {
+        $classroom = $this->mockClassroom();
+        list($product, $goods) = $this->getClassroomGoodsMediator()->onCreate($classroom);
+        self::assertEquals(100, $goods['maxRate']);
+        $updatedClassroom = $this->mockClassroom(['maxRate' => 10]);
+        list($updatedProduct, $updatedGoods) = $this->getClassroomGoodsMediator()->onMaxRateChange($updatedClassroom);
+        self::assertEquals(10, $updatedGoods['maxRate']);
+    }
+
     public function mockClassroom($customFields = [])
     {
         return array_merge([

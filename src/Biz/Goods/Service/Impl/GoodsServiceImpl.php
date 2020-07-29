@@ -66,6 +66,7 @@ class GoodsServiceImpl extends BaseService implements GoodsService
 
     public function changeGoodsPrice()
     {
+        $this->get
     }
 
     public function updateGoods($id, $goods)
@@ -79,6 +80,7 @@ class GoodsServiceImpl extends BaseService implements GoodsService
             'summary',
             'orgId',
             'orgCode',
+            'categoryId',
             'minPrice',
             'maxPrice',
             'maxRate',
@@ -201,6 +203,7 @@ class GoodsServiceImpl extends BaseService implements GoodsService
         if (empty($specs)) {
             $this->createNewException(GoodsException::SPECS_NOT_FOUND());
         }
+        $this->getGoodsSpecsDao()->update($specsId, ['price' => $price]);
     }
 
     public function publishGoodsSpecs($id)

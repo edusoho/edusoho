@@ -19,12 +19,10 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Exception\UnableJoinException;
-use Biz\Goods\GoodsException;
 use Biz\Goods\Mediator\ClassroomGoodsMediator;
 use Biz\Goods\Service\GoodsService;
 use Biz\Order\OrderException;
 use Biz\OrderFacade\Service\OrderFacadeService;
-use Biz\Product\ProductException;
 use Biz\Product\Service\ProductService;
 use Biz\System\Service\LogService;
 use Biz\Task\Service\TaskResultService;
@@ -223,41 +221,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $classroom;
     }
 
-    protected function publishGoodsAndSpecs($classroom)
-    {
-        $existProduct = $this->getProductService()->getProductByTargetIdAndType($classroom['id'], 'classroom');
-        if (empty($existProduct)) {
-            $this->createNewException(ProductException::NOTFOUND_PRODUCT());
-        }
-        $existGoods = $this->getGoodsService()->getGoodsByProductId($existProduct['id']);
-        $goods = $this->getGoodsService()->publishGoods($existGoods['id']);
-        if (empty($existGoods)) {
-            $this->createNewException(GoodsException::GOODS_NOT_FOUND());
-        }
-
-        $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $classroom['id']);
-
-        $this->getGoodsService()->publishGoodsSpecs($goodsSpecs['id']);
-    }
-
-    protected function unpublishGoodsAndSpecs($classroom)
-    {
-        $existProduct = $this->getProductService()->getProductByTargetIdAndType($classroom['id'], 'classroom');
-        if (empty($existProduct)) {
-            $this->createNewException(ProductException::NOTFOUND_PRODUCT());
-        }
-        $existGoods = $this->getGoodsService()->getGoodsByProductId($existProduct['id']);
-        $goods = $this->getGoodsService()->unpublishGoods($existGoods['id']);
-
-        if (empty($existGoods)) {
-            $this->createNewException(GoodsException::GOODS_NOT_FOUND());
-        }
-
-        $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $classroom['id']);
-
-        $this->getGoodsService()->unpublishGoodsSpecs($goodsSpecs['id']);
-    }
-
     public function addCoursesToClassroom($classroomId, $courseIds)
     {
         $this->tryManageClassroom($classroomId);
@@ -359,7 +322,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         if (array_intersect(
             array_keys($fields),
-            ['title', 'subtitle', 'about', 'orgId', 'orgCode', 'smallPicture', 'middlePicture', 'largePicture', 'price', 'buyable', 'showable', 'expiryMode', 'expiryValue', 'service']
+            $this->getClassroomGoodsMediator()->normalFields
         )) {
             $this->getClassroomGoodsMediator()->onUpdateNormalData($classroom);
         }
