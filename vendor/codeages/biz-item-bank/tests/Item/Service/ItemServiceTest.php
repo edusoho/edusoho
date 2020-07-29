@@ -134,6 +134,7 @@ class ItemServiceTest extends IntegrationTestCase
 
         $fields['category_id'] = '2';
         $fields['difficulty'] = 'simple';
+        $fields['question_num'] = 1;
         $fields['questions'][0]['score'] = '3.0';
 
         $item = $this->getItemService()->updateItem($item['id'], $fields);
@@ -848,7 +849,7 @@ class ItemServiceTest extends IntegrationTestCase
                 'returnValue' => ['id' => 1],
             ],
             [
-                'functionName' => 'updateItemNum',
+                'functionName' => 'updateItemNumAndQuestionNum',
                 'returnValue' => 1,
             ],
         ]);
@@ -856,10 +857,20 @@ class ItemServiceTest extends IntegrationTestCase
 
     protected function mockItemCategoryService()
     {
-        $this->mockObjectIntoBiz('ItemBank:Item:ItemCategoryService', [[
-            'functionName' => 'getItemCategory',
-            'returnValue' => ['id' => 1],
-        ]]);
+        $this->mockObjectIntoBiz('ItemBank:Item:ItemCategoryService', [
+            [
+                'functionName' => 'getItemCategory',
+                'returnValue' => ['id' => 1, 'bank_id' => 1],
+            ],
+            [
+                'functionName' => 'updateItemNumAndQuestionNum',
+                'returnValue' => 1,
+            ],
+            [
+                'functionName' => 'buildItemNumAndQuestionNumBybankId',
+                'returnValue' => 1,
+            ]
+        ]);
     }
 
     /**

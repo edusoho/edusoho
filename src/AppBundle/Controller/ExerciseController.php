@@ -31,17 +31,15 @@ class ExerciseController extends BaseController
                 $activity['ext']['drawCondition']['range'],
                 [$activity['ext']['drawCondition']['section']]
             );
-            $assessmentId = $assessment['id'];
+            $latestAnswerRecord = $this->getAnswerService()->startAnswer($activity['ext']['answerSceneId'], $assessment['id'], $user['id']);
         } else {
             $assessmentId = $latestAnswerRecord['assessment_id'];
         }
 
         return $this->forward('AppBundle:AnswerEngine/AnswerEngine:do', [
-            'answerSceneId' => $activity['ext']['answerSceneId'],
-            'assessmentId' => $assessmentId,
-        ], [
-            'submit_goto_url' => $this->generateUrl('course_task_activity_show', ['courseId' => $activity['fromCourseId'], 'id' => $task['id']]),
-            'save_goto_url' => $this->generateUrl('my_course_show', ['id' => $activity['fromCourseId']]),
+            'answerRecordId' => $latestAnswerRecord['id'],
+            'submitGotoUrl' => $this->generateUrl('course_task_activity_show', ['courseId' => $activity['fromCourseId'], 'id' => $task['id']]),
+            'saveGotoUrl' => $this->generateUrl('my_course_show', ['id' => $activity['fromCourseId']]),
         ]);
     }
 
@@ -201,5 +199,13 @@ class ExerciseController extends BaseController
     protected function getExerciseActivityService()
     {
         return $this->getBiz()->service('Activity:ExerciseActivityService');
+    }
+
+    /**
+     * @return AnswerService
+     */
+    protected function getAnswerService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerService');
     }
 }

@@ -1,0 +1,33 @@
+{% if member|default(null) and previewAs|default(null) == 'member' %}
+    {% if record %}
+      <div class="col-xs-4 content-right">
+        <span>{{ record.doneQuestionNum }}/{{ 'course.testpaper_manage.count'|trans({'%itemCount%': record.questionNum}) }}</span>
+      </div>
+      <div class="col-xs-3 content-left hidden-xs">
+        <span>{{ 'item_bank_exercise.accuracy'|trans }}{{ record.rightRate }}%</span>
+      </div>
+      <div class="col-xs-2 content-right">
+        {% if record.status == 'doing' or record.status == 'paused' %}
+          <a id="btn-default" class="cd-btn cd-btn-primary content-right" target="_blank" href="{{ path('item_bank_exercise_category_answer', {exerciseId:exercise.id, moduleId:moduleId, categoryId:item.id}) }}">{{ 'item_bank_exercise.chapter.exercise.continue_btn'|trans }}</a>
+        {% elseif record.status == 'reviewing' or record.status == 'finished' %}
+          <a id="btn-view" class="cd-btn cd-btn-ghost-primary" target="_blank" href="{{ path('item_bank_exercise_category_answer', {exerciseId:exercise.id, moduleId:moduleId, categoryId:item.id}) }}">{{ 'item_bank_exercise.chapter.exercise.view_btn'|trans }}</a>
+        {% endif %}
+      </div>
+    {% else %}
+      {% if question_num|default(0) %}
+        <div class="col-xs-4 content-right">
+          <span>0/{{ 'course.testpaper_manage.count'|trans({'%itemCount%': question_num}) }}</span>
+        </div>
+        <div class="col-xs-3 content-left hidden-xs">
+          <span>{{ 'item_bank_exercise.accuracy'|trans }}0.0%</span>
+        </div>
+        <div class="col-xs-2 content-right">
+          <a id="btn-default" class="cd-btn cd-btn-ghost-primary" target="_blank" href="{{ path('item_bank_exercise_category_answer', {exerciseId:exercise.id, moduleId:moduleId, categoryId:item.id}) }}">{{ 'item_bank_exercise.chapter.exercise.start_btn'|trans }}</a>
+        </div>
+      {% endif %}
+    {% endif %}
+{% else %}
+  <div class="col-xs-9 content-right">
+    {% if question_num %}{{'course.testpaper_manage.count'|trans({'%itemCount%': question_num})}}{% endif %}
+  </div>
+{% endif %}
