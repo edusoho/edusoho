@@ -10,6 +10,10 @@
   {{ 'course.course_member_count'|trans({'%studentsNum%':exercise.studentNum}) }}
 {% endblock %}
 
+{% if app.request.get('previewAs') == 'guest' %}
+  {% set member = null %}
+{% endif %}
+
 {% block course_heard_content %}
   <div class="course-detail-bottom">
     <div class="course-detail-img">

@@ -7445,6 +7445,7 @@ admin.reward_point_account.log_deduction: Deduction %amount% %name%
 admin.reward_point_account.note_empty: No Note
 admin.reward_point_account.log_deduction_by: From
 
+admin.item_bank_exercise.manage.count: "Item Bank Exercise：<strong class=\"inflow-num\">%exerciseNum%</strong>\n"
 admin.item_bank_exercise.exercise.manage.status_placeholder: Status
 admin.item_bank_exercise.exercise.manage.number: Number
 admin.item_bank_exercise.exercise.manage.status: Status

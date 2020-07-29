@@ -278,6 +278,7 @@ admin_v2:
                                             router_name: item_bank_exercise_show
                                             router_params:
                                                 id: (exercise.id)
+                                                previewAs: guest
                                             group: groupButton
                                             icon: 'glyphicon glyphicon-eye-open'
                                             blank: 1

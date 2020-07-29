@@ -8761,6 +8761,7 @@ admin.reward_point_account.log_deduction: 账户扣减%amount%%name%
 admin.reward_point_account.note_empty: 无
 admin.reward_point_account.log_deduction_by: 从
 
+admin.item_bank_exercise.manage.count: "题库练习：<strong class=\"inflow-num\">%exerciseNum%</strong>\n"
 admin.item_bank_exercise.exercise.manage.status_placeholder: 题库练习状态
 admin.item_bank_exercise.exercise.manage.number: 编号
 admin.item_bank_exercise.exercise.manage.status: 题库练习状态
