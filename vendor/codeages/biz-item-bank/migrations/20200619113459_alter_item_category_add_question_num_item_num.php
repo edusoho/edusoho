@@ -10,7 +10,7 @@ class AlterItemCategoryAddQuestionNumItemNum extends Migration
     public function up()
     {
         $this->getContainer()->offsetGet('db')->exec("
-            ALTER TABLE `biz_item_category` ADD `item_num` INT(11) NOT NULL DEFAULT '0' COMMENT '题目总数' AFTER `bank_id`, ADD `question_num` INT(11) NOT NULL DEFAULT '0' COMMENT '问题总数' AFTER `item_num`;
+            ALTER TABLE `biz_item_category` ADD `item_num` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '题目总数' AFTER `bank_id`, ADD `question_num` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '问题总数' AFTER `item_num`;
         ");
     }
 
