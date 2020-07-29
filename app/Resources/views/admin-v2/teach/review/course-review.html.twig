@@ -43,8 +43,9 @@
       <tbody>
         {% for review in reviews %}
           {% set author = users[review.userId]|default(null) %}
-          {% set course = courses[review.targetId]|default(null) %}
-          {% set courseSet = courseSets[course.courseSetId]|default(null) %}
+          {% set course = review.targetType == 'course' ? courses[review.targetId]|default(null) : null %}
+          {% set courseSet = course ? courseSets[course.courseSetId]|default(null) : null %}
+          {% set good = review.targetType == 'goods' ? goods[review.targetId]|default(null) : null %}
           <tr id="review-table-tr-{{review.id}}" data-role="item">
             <td><input type="checkbox" value="{{review.id}}" data-role="batch-item"></td>
             <td>
@@ -55,6 +56,9 @@
                 <div class="long-text">{{ review.content|nl2br }} <span class="text-muted trigger">({{'admin.course_thread.collapse_td'|trans}})</span></div>
               </div>
               <div class="mts">
+                {% if good %}
+                  <a class="text-success text-sm" href="{{ path('goods_show', {id: good.id}) }}" class="text-success" target="_blank">{{ good.title }}</a>
+                {% endif %}
                 {% if courseSet %}
                   <a class="text-success text-sm" href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" class="text-success" target="_blank">{{ courseSet.title }}</a>
                 {% endif %}

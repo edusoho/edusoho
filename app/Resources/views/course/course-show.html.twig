@@ -36,7 +36,7 @@
 
         <section class="es-section">
           <div class="nav-btn-tab">
-
+            {% set showReviewTab = course.parentId > 0 %}
 	          {% if member|default(null) %}
 		          {% include 'course/header/nav-tab-for-member.html.twig' %}
 	          {% else %}
