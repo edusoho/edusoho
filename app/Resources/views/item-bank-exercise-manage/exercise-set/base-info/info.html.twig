@@ -33,7 +33,7 @@
         uploadToken: 'tmp',
         imageClass: 'course-manage-cover',
         imageText: 'course.cover.change'|trans,
-        imageSrc: filepath(course_set_cover(exercise, 'large'), 'item_bank_exercise.png'),
+        imageSrc: filepath(exercise.cover.large|default(''), 'item_bank_exercise.png'),
       } 
     %}
     <div class="courseset-manage-body__tip">
