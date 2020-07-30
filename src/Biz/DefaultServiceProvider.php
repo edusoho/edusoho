@@ -213,7 +213,7 @@ class DefaultServiceProvider implements ServiceProviderInterface
         ];
 
         $biz['item_bank_exercise.show_redirect'] = [
-            "\/(my\/)?item_bank_exercise\/show\/(\d)+/i",
+            "\/(my\/)?item_bank_exercise\/(\d)+/i",
         ];
 
         $biz['wechat.template_message_client'] = function ($biz) {
