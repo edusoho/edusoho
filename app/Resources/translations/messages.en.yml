@@ -7453,6 +7453,7 @@ admin.item_bank_exercise.exercise.manage.number: Number
 admin.item_bank_exercise.exercise.manage.status: Status
 admin.item_bank_exercise.exercise.manage.income: Income
 admin.item_bank_exercise.exercise.recommend.modal_title: Recommend Set
+admin.item_bank_exercise.exercise.manage.empty: No record
 
 reward_point_product.pending: Pending
 reward_point_product.delivered: Delivered

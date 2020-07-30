@@ -8769,6 +8769,7 @@ admin.item_bank_exercise.exercise.manage.number: 编号
 admin.item_bank_exercise.exercise.manage.status: 题库练习状态
 admin.item_bank_exercise.exercise.manage.income: 题库练习收入
 admin.item_bank_exercise.exercise.recommend.modal_title: 设置推荐题库练习
+admin.item_bank_exercise.exercise.manage.empty: 暂无题库练习记录
 
 reward_point_account.note: 备注
 reward_point_product.pending: 待处理
