@@ -126,8 +126,8 @@ const getItemBankDisplay = (data, listObj, price) => {
     },
     header: data.title,
     middle: {
-      value: data.title,
-      html: ` <span>${data.title}</span>`,
+      value: '',
+      html: ` <span></span>`,
     },
     bottom: {
       value: data.price,
