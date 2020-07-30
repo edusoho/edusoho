@@ -1364,7 +1364,7 @@ admin.util.item_delete.delete_success_hint: 删除%name%成功
 admin.shortcut_add_success_hint: 已添加当前页面为常用链接！
 admin.shortcut_delete_success_hint: 删除常用链接成功！
 
-admin.item_bank_exercise.exercise.close_hint: 确定要关闭当前题库练习吗？
+admin.item_bank_exercise.exercise.close_hint: 确定要关闭当前题库练习吗？题库练习关闭后，仍然还在有效期内的学员将可以继续学习。
 admin.item_bank_exercise.exercise.close_success_hint: 题库练习关闭成功!
 admin.item_bank_exercise.exercise.cancel_recommend_success_hint: 题库练习推荐已取消!
 admin.item_bank_exercise.exercise.publish_hint: 确定要发布当前题库练习吗？

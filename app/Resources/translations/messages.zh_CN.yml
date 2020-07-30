@@ -1150,7 +1150,7 @@ course.members_manage.join_records.date: 加入日期
 
 item_bank_exercise: 题库
 item_bank_exercise.assessment.exercise.start_btn: 开始测评
-item_bank_exercise.assessment.exercise.continue_btn: 继续测试
+item_bank_exercise.assessment.exercise.continue_btn: 继续测评
 item_bank_exercise.assessment.exercise.view_btn: 查看报告
 item_bank_exercise.assessment.exercise.again_btn: 再次测试
 item_bank_exercise.exercise.wait_tip: 等待提交
@@ -1198,6 +1198,7 @@ item_bank_exercise.marketing_setup.rule.expiry_date.first_publish_tips: 变更�
 item_bank_exercise.assessment_exercise.add_module: 添加模块
 item_bank_exercise.assessment_exercise.edit_module: 修改模块
 item_bank_exercise.assessment_exercise.module.name: 模块名称
+item_bank_exercise.goto_learing: 去学习
 
 course.testpaper_check: 试卷批阅
 course.testpaper_check.no_permission_tips: 当前用户不是本课程教师，没有批阅试卷的权限。
@@ -4821,7 +4822,7 @@ course.member.classroom.tips: 您购买的班级已到期，无法学习%taskNam
 course.member.course.tips: 您购买的课程已到期，无法学习%taskName%、提问等。如有疑问请联系老师。
 item_bank_exercise.member.expiry_tips: 您购买的题库练习已到期，无法进行章节、试卷等练习。如有疑问请联系老师。
 course.member.course.allow_buy.tips: 您购买的课程已到期，无法学习%taskName%、提问等。如有疑问请联系老师，或退出并重新加入 。
-item_bank_exercise.member.allow_buy.tips: 您购买的题库练习已到期，无法进行章节、试卷等练习。如有疑问请联系老师，或退出并重新加入 。
+item_bank_exercise.member.allow_buy.tips: 您购买的题库练习已到期，无法进行章节、试卷等练习。如有疑问请联系老师。
 course.member.course.join_btn: 退出并重新加入
 course.member.operation.quit_deadline_reach: 达到有效期，退出课程
 course.member.operation.admin_remove_course_student: 老师手动移除学员
@@ -10408,6 +10409,7 @@ exception.question_bank.forbidden_delete_category: 分类或子分类下有所�
 exception.question_bank.not_found_bank: 题库不存在
 exception.question_bank.forbidden_access_bank: 没有访问该题库的权限
 
+exception.item_bank_exercise.forbidden_learn: 您购买的题库练习已到期，无法进行章节、试卷等练习。如有疑问请联系老师。
 exception.item_bank_exercise.exercise.not_found: 题库练习不存在
 exception.item_bank_exercise.exercise.forbidden_manage_exercise: 没有管理题库练习的权限
 exception.item_bank_exercise.member.duplicate_member: 用户已加入题库练习
