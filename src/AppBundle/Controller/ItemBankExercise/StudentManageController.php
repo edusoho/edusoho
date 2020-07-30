@@ -32,7 +32,7 @@ class StudentManageController extends BaseController
         $paginator = new Paginator(
             $request,
             $this->getExerciseMemberService()->count($conditions),
-            50
+            20
         );
 
         $students = $this->getExerciseMemberService()->search(

@@ -13,6 +13,7 @@ class ItemBankExerciseMember extends AbstractResource
      */
     public function search(ApiRequest $request, $exerciseId)
     {
+        $conditions['role'] = 'student';
         $conditions['exerciseId'] = $exerciseId;
         $conditions['locked'] = 0;
 
