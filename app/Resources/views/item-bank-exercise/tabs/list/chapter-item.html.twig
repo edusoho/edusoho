@@ -4,16 +4,16 @@
 {% set type = 'chapter' %}
 {% endif %}
 
-<li id="chapter-{{chapter.id}}" class="chapter-list-li task-manage-item js-task-manage-{{type}} task-manage-{{type}}">
+<li id="chapter-{{chapter.id}}" class="chapter-list-li task-manage-item js-task-manage-{{type}} task-manage-{{type}}" style="color:#999">
   {% if type == 'unit' %}
     <div class="item-line"></div>
   {% endif %}
     {% if type == 'chapter' %}
-      <div class="col-xs-3 js-toggle-show js-toggle-{{ type }} title">
+      <div class="col-xs-6 js-toggle-show js-toggle-{{ type }} title title-overflow">
         <span class="chapter-title title-overflow">{{ chapter.name }}</span>
       </div>
     {% else %}
-      <div class="col-xs-3">
+      <div class="col-xs-6 title-overflow">
         <span class="unit-title title-overflow">{{ chapter.name }}</span>
       </div>
     {% endif %}

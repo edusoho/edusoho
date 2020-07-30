@@ -23,11 +23,15 @@ class MeItemBankExercise extends AbstractResource
         );
 
         $itemBankExercises = $this->getItemBankExerciseService()->findByIds(ArrayToolkit::column($members, 'exerciseId'));
-        foreach ($members as &$member) {
-            $member['itemBankExercise'] = empty($itemBankExercises[$member['exerciseId']]) ? (object) [] : $itemBankExercises[$member['exerciseId']];
+        foreach ($members as $key => &$member) {
+            if (empty($itemBankExercises[$member['exerciseId']])) {
+                unset($members[$key]);
+            } else {
+                $member['itemBankExercise'] = $itemBankExercises[$member['exerciseId']];
+            }
         }
 
-        return $this->makePagingObject($members, $total, $offset, $limit);
+        return $this->makePagingObject(array_values($members), $total, $offset, $limit);
     }
 
     protected function getUserService()

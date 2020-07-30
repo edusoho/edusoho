@@ -11,8 +11,8 @@
       {{ 'my.learning.question_bank_menu'|trans }}
     </div>
     <div class="panel-body">
-      {% for exercise in exercises if exercises %}
-        {% set member = members[exercise.id]|default(null) %}
+      {% for member in members if members %}
+        {% set exercise = exercises[member.exerciseId]|default(null) %}
           {% include 'my/learning/question-bank/list-li.html.twig' %}
       {% else %}
         <div class="cd-empty">{{ 'my.learning.question_bank.learning_empty'|trans }}</div>

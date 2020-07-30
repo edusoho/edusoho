@@ -65,32 +65,34 @@ class ItemBankExerciseController extends BaseController
     public function itemBankAction(Request $request)
     {
         $currentUser = $this->getUser();
-        $members = $this->getExerciseMemberService()->findByUserIdAndRole($currentUser['id'], 'student');
-        $exerciseIds = ArrayToolkit::column($members, 'exerciseId');
-        $conditions = ['ids' => $exerciseIds];
 
+        $conditions = ['role' => 'student', 'userId' => $currentUser['id']];
         $paginator = new Paginator(
             $request,
-            !empty($members) ? $this->getItemBankExerciseService()->count($conditions) : 0,
-            12
+            $this->getExerciseMemberService()->count($conditions),
+            10
         );
 
-        $exercises = [];
-        if (!empty($exerciseIds)) {
-            $exercises = $this->getItemBankExerciseService()->search(
-                $conditions,
-                ['createdTime' => 'DESC'],
-                $paginator->getOffsetCount(),
-                $paginator->getPerPageCount()
-            );
+        $members = $this->getExerciseMemberService()->search(
+            $conditions,
+            ['updatedTime' => 'DESC'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+        $itemBankExercises = $this->getItemBankExerciseService()->findByIds(ArrayToolkit::column($members, 'exerciseId'));
+
+        foreach ($members as $key => &$member) {
+            if (empty($itemBankExercises[$member['exerciseId']])) {
+                unset($members[$key]);
+            }
         }
 
         return $this->render(
             'my/learning/question-bank/list.html.twig',
             [
-                'exercises' => ArrayToolkit::index($exercises, 'id'),
+                'exercises' => ArrayToolkit::index($itemBankExercises, 'id'),
                 'paginator' => $paginator,
-                'members' => ArrayToolkit::index($members, 'exerciseId'),
+                'members' => array_values($members),
             ]
         );
     }
