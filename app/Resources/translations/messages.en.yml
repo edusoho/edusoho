@@ -1943,7 +1943,7 @@ item_bank_exercise.assessment_exercise.add_module: Create
 item_bank_exercise.assessment_exercise.edit_module: Edit
 item_bank_exercise.assessment_exercise.module.name: Module Name
 item_bank_exercise.goto_learning: Goto learning
-item_bank_exercise.my_teaching_notice: Itembank Exercise，Please goto <a class="alert-link" href="%%"><u>Itembank</u></a> Create
+item_bank_exercise.my_teaching_notice: Itembank Exercise，Please goto <a class="alert-link" href="%url%"><u>Itembank</u></a> Create
 
 activity.live.not_created_notice: Live classroom not yet created!
 activity.live.overlap_time_notice: There is already a live broadcast at the selected time. Please change your time.

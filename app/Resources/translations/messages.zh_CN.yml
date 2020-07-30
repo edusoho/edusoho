@@ -1199,7 +1199,7 @@ item_bank_exercise.assessment_exercise.add_module: 添加模块
 item_bank_exercise.assessment_exercise.edit_module: 修改模块
 item_bank_exercise.assessment_exercise.module.name: 模块名称
 item_bank_exercise.goto_learning: 去学习
-item_bank_exercise.my_teaching_notice: 题库练习，请前往 <a class="alert-link" href="%%"><u>题库</u></a> 创建
+item_bank_exercise.my_teaching_notice: 题库练习，请前往 <a class="alert-link" href="%url%"><u>题库</u></a> 创建
 
 course.testpaper_check: 试卷批阅
 course.testpaper_check.no_permission_tips: 当前用户不是本课程教师，没有批阅试卷的权限。
