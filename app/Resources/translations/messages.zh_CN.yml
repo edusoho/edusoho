@@ -1149,8 +1149,8 @@ course.members_manage.records.join_reason_type: 加入类型
 course.members_manage.join_records.date: 加入日期
 
 item_bank_exercise: 题库
-item_bank_exercise.assessment.exercise.start_btn: 开始测评
-item_bank_exercise.assessment.exercise.continue_btn: 继续测评
+item_bank_exercise.assessment.exercise.start_btn: 开始做题
+item_bank_exercise.assessment.exercise.continue_btn: 继续做题
 item_bank_exercise.assessment.exercise.view_btn: 查看报告
 item_bank_exercise.assessment.exercise.again_btn: 再次测试
 item_bank_exercise.exercise.wait_tip: 等待提交
@@ -1198,7 +1198,8 @@ item_bank_exercise.marketing_setup.rule.expiry_date.first_publish_tips: 变更�
 item_bank_exercise.assessment_exercise.add_module: 添加模块
 item_bank_exercise.assessment_exercise.edit_module: 修改模块
 item_bank_exercise.assessment_exercise.module.name: 模块名称
-item_bank_exercise.goto_learing: 去学习
+item_bank_exercise.goto_learning: 去学习
+item_bank_exercise.my_teaching_notice: 题库练习，请前往 <a class="alert-link" href="%%"><u>题库</u></a> 创建
 
 course.testpaper_check: 试卷批阅
 course.testpaper_check.no_permission_tips: 当前用户不是本课程教师，没有批阅试卷的权限。
