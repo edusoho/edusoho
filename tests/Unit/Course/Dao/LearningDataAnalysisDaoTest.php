@@ -8,24 +8,24 @@ class LearningDataAnalysisDaoTest extends BaseDaoTestCase
 {
     public function testSumStatisticDataByCourseIdsAndUserId()
     {
-        $result = $this->getDao()->sumStatisticDataByCourseIdsAndUserId(array(), 1);
-        $this->assertEquals(array('taskNum' => 0, 'learnedNum' => 0), $result);
+        $result = $this->getDao()->sumStatisticDataByCourseIdsAndUserId([], 1);
+        $this->assertEquals(['taskNum' => 0, 'learnedNum' => 0], $result);
 
         $course = $this->mockCourse();
         $courseMember = $this->mockCourseMember();
-        $result = $this->getDao()->sumStatisticDataByCourseIdsAndUserId(array(1, 2), 1);
+        $result = $this->getDao()->sumStatisticDataByCourseIdsAndUserId([1, 2], 1);
         $this->assertEquals(1, $result['taskNum']);
     }
 
     protected function getDefaultMockFields()
     {
-        return array(
-        );
+        return [
+        ];
     }
 
-    private function mockCourseMember($fields = array())
+    private function mockCourseMember($fields = [])
     {
-        $defaultFields = array(
+        $defaultFields = [
             'courseId' => '1',
             'classroomId' => '1',
             'joinedType' => 'course',
@@ -50,22 +50,22 @@ class LearningDataAnalysisDaoTest extends BaseDaoTestCase
             'lastViewTime' => '0',
             'refundDeadline' => '0',
             'learnedCompulsoryTaskNum' => '0',
-        );
+        ];
 
         $fields = array_merge($defaultFields, $fields);
 
         return $this->getCourseMemberDao()->create($fields);
     }
 
-    private function mockCourse($fields = array())
+    private function mockCourse($fields = [])
     {
-        $defaultFields = array(
+        $defaultFields = [
             'courseSetId' => 1,
             'title' => 'a',
             'address' => 'a',
             'compulsoryTaskNum' => 1,
             'taskNum' => 1,
-        );
+        ];
 
         $fields = array_merge($defaultFields, $fields);
 

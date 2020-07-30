@@ -4,12 +4,12 @@ namespace Biz\Course\Service\Impl;
 
 use Biz\BaseService;
 use Biz\Course\CourseException;
+use Biz\Course\Dao\LearningDataAnalysisDao;
 use Biz\Course\MemberException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\LearningDataAnalysisService;
 use Biz\Course\Service\MemberService;
 use Biz\Task\Service\TaskService;
-use Biz\Course\Dao\LearningDataAnalysisDao;
 
 class LearningDataAnalysisServiceImpl extends BaseService implements LearningDataAnalysisService
 {
@@ -24,12 +24,12 @@ class LearningDataAnalysisServiceImpl extends BaseService implements LearningDat
 
     public function makeProgress($learnedNum, $total)
     {
-        $progress = array(
+        $progress = [
             'percent' => 0,
             'decimal' => 0,
             'finishedCount' => 0,
             'total' => $total,
-        );
+        ];
 
         $progress['finishedCount'] = $learnedNum > $progress['total'] ? $progress['total'] : $learnedNum;
         $progress['percent'] = $progress['finishedCount'] ? round($progress['finishedCount'] / $progress['total'], 2) * 100 : 0;
@@ -62,7 +62,7 @@ class LearningDataAnalysisServiceImpl extends BaseService implements LearningDat
         }
 
         if (!$course['compulsoryTaskNum']) {
-            return array(
+            return [
                 'taskCount' => 0,
                 'progress' => 0,
                 'taskResultCount' => 0,
@@ -71,7 +71,7 @@ class LearningDataAnalysisServiceImpl extends BaseService implements LearningDat
                 'planStudyTaskCount' => 0,
                 'planProgressProgress' => 0,
                 'member' => $member,
-            );
+            ];
         }
 
         //学习进度
@@ -89,7 +89,7 @@ class LearningDataAnalysisServiceImpl extends BaseService implements LearningDat
         //计划进度
         $planProgressProgress = empty($taskCount) ? 0 : round($planStudyTaskCount / $taskCount, 2) * 100;
 
-        return array(
+        return [
             'taskCount' => $course['compulsoryTaskNum'],
             'progress' => $progress['percent'],
             'taskResultCount' => $progress['finishedCount'],
@@ -98,7 +98,7 @@ class LearningDataAnalysisServiceImpl extends BaseService implements LearningDat
             'planStudyTaskCount' => $planStudyTaskCount,
             'planProgressProgress' => $planProgressProgress,
             'member' => $member,
-        );
+        ];
     }
 
     protected function getFinishedTaskPerDay($course, $taskNum)
