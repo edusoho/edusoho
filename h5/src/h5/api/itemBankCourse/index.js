@@ -17,13 +17,25 @@ export default [
   {
     // 获取题库试卷信息
     name: 'getItemBankAssessments',
-    url: '/item_bank_exercises/{exerciseId}/modules/{moduleId}/assessments',
+    url: '/me/item_bank_exercises/{exerciseId}/modules/{moduleId}/assessments',
     disableLoading: true,
   },
   {
     // 获取题库章节信息
     name: 'gettemBankCategories',
-    url: '/item_bank_exercises/{exerciseId}/modules/{moduleId}/categories',
+    url: '/me/item_bank_exercises/{exerciseId}/modules/{moduleId}/categories',
     disableLoading: true,
+  },
+  {
+    // 模拟卷开始/再次答题
+    name: 'getAssessmentExerciseRecord',
+    url: '/item_bank_exercises/{exerciseId}/assessment_exercise_record',
+    method: 'POST',
+  },
+  {
+    // 章节练习开始/再次答题
+    name: 'getChapterExerciseRecord',
+    url: '/item_bank_exercises/{exerciseId}/chapter_exercise_record',
+    method: 'POST',
   },
 ];

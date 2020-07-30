@@ -16,7 +16,7 @@
             </div>
           </div>
           <div class="exam-right">
-            <div :class="[getBtnText(item).class]">
+            <div :class="[getBtnText(item).class]" @click="clickBtn(item)">
               {{ getBtnText(item).text }}
             </div>
           </div>
@@ -71,6 +71,15 @@ export default {
     },
     getBtnText(item) {
       return getBtnText(item.latestAnswerRecord?.status || '');
+    },
+    clickBtn(item) {
+      const query = {
+        type: 'assessment',
+        exerciseId: item.exerciseId,
+        assessmentId: item.assessment.id,
+        moduleId: item.moduleId,
+      };
+      this.$router.push({ path: '/brushDo', query });
     },
   },
 };

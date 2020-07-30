@@ -13,7 +13,7 @@ selenium-debug.log
 composer.json
 composer.lock
 /build/env.js
-
+wap-sdk/
 # Editor directories and files
 .idea
 .vscode
