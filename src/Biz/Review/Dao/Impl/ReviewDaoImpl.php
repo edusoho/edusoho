@@ -84,6 +84,11 @@ class ReviewDaoImpl extends GeneralDaoImpl implements ReviewDao
             $goodsSql .= ' AND r.userId = :userId ';
         }
 
+        if (!empty($conditions['rating'])) {
+            $courseSql .= ' AND r.rating = :rating ';
+            $goodsSql .= ' AND r.rating = :rating ';
+        }
+
         if (!empty($conditions['content'])) {
             $courseSql .= ' AND r.content LIKE :content ';
             $goodsSql .= ' AND r.content LIKE :content ';
@@ -124,6 +129,11 @@ class ReviewDaoImpl extends GeneralDaoImpl implements ReviewDao
             $goodsSql .= ' AND r.userId = :userId ';
         }
 
+        if (!empty($conditions['rating'])) {
+            $courseSql .= ' AND r.rating = :rating ';
+            $goodsSql .= ' AND r.rating = :rating ';
+        }
+
         if (!empty($conditions['content'])) {
             $courseSql .= ' AND r.content LIKE :content ';
             $goodsSql .= ' AND r.content LIKE :content ';
@@ -152,6 +162,11 @@ class ReviewDaoImpl extends GeneralDaoImpl implements ReviewDao
 
         if (!empty($conditions['classroomTitle'])) {
             $sql .= 'AND g.title LIKE :classroomTitle ';
+            $conditions['classroomTitle'] = "%{$conditions['classroomTitle']}%";
+        }
+
+        if (!empty($conditions['rating'])) {
+            $sql .= ' AND r.rating = :rating ';
         }
 
         if (isset($conditions['parentId'])) {
@@ -175,6 +190,11 @@ class ReviewDaoImpl extends GeneralDaoImpl implements ReviewDao
 
         if (!empty($conditions['classroomTitle'])) {
             $sql .= 'AND g.title LIKE :classroomTitle ';
+            $conditions['classroomTitle'] = "%{$conditions['classroomTitle']}%";
+        }
+
+        if (!empty($conditions['rating'])) {
+            $sql .= ' AND r.rating = :rating ';
         }
 
         if (isset($conditions['parentId'])) {
