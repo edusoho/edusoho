@@ -19,11 +19,12 @@ class LearningDataAnalysisDaoImpl extends GeneralDaoImpl implements LearningData
     public function sumStatisticDataByCourseIdsAndUserId($courseIds, $userId)
     {
         if (empty($courseIds)) {
-            return array('compulsoryTaskNum' => 0, 'learnedCompulsoryTaskNum' => 0);
+            return array('taskNum' => 0, 'learnedNum' => 0);
         }
 
-        $marks = str_repeat('?,', count($courseIds) - 1).'?';
-        $sql = "SELECT SUM(c.compulsoryTaskNum) as compulsoryTaskNum,SUM(cm.learnedCompulsoryTaskNum) as learnedCompulsoryTaskNum FROM {$this->course} c JOIN {$this->course_member} cm ON c.id = cm.courseId WHERE cm.courseId IN ({$marks}) AND cm.userId = ?";
+        $marks = str_repeat('?,',
+                count($courseIds) - 1).'?';
+        $sql = "SELECT SUM(c.taskNum) as taskNum,SUM(cm.learnedNum) as learnedNum FROM {$this->course} c JOIN {$this->course_member} cm ON c.id = cm.courseId WHERE cm.courseId IN ({$marks}) AND cm.userId = ?";
 
         return $this->db()->fetchAssoc($sql, array_merge($courseIds, array($userId)));
     }
