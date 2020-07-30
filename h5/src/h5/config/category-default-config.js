@@ -4,49 +4,73 @@ const CATEGORY_DEFAULT = {
       data: [],
       moduleType: 'tree',
       text: '分类',
-      type: 'category'
+      type: 'category',
     },
     {
       data: [
         { text: '全部', type: 'all' },
         { text: '课程', type: 'normal' },
-        { text: '直播', type: 'live' }
+        { text: '直播', type: 'live' },
       ],
       moduleType: 'normal',
       text: '课程类型',
-      type: 'courseType'
+      type: 'courseType',
     },
     {
       data: [
         { text: '推荐', type: 'recommendedSeq' },
         { text: '热门', type: '-studentNum' },
-        { text: '最新', type: '-createdTime' }
+        { text: '最新', type: '-createdTime' },
       ],
       moduleType: 'normal',
       text: '课程类型',
-      type: 'sort'
-    }
+      type: 'sort',
+    },
   ],
   classroom_list: [
     {
       data: [],
       moduleType: 'tree',
       text: '分类',
-      type: 'category'
+      type: 'category',
     },
     {},
     {
       data: [
         { text: '推荐', type: 'recommendedSeq' },
         { text: '热门', type: '-studentNum' },
-        { text: '最新', type: '-createdTime' }
+        { text: '最新', type: '-createdTime' },
       ],
       moduleType: 'normal',
       text: '课程类型',
-      type: 'sort'
-    }
+      type: 'sort',
+    },
   ],
-  openCourse_list: []
+  openCourse_list: [],
+  itemBank_list: [
+    {
+      data: [],
+      moduleType: 'tree',
+      text: '分类',
+      type: 'category',
+    },
+    {
+      data: '',
+      moduleType: 'normal',
+      text: '题库类型',
+      type: 'courseType',
+    },
+    {
+      data: [
+        { text: '推荐', type: 'recommendedSeq' },
+        { text: '热门', type: '-studentNum' },
+        { text: '最新', type: '-createdTime' },
+      ],
+      moduleType: 'normal',
+      text: '题库类型',
+      type: 'sort',
+    },
+  ],
 };
 
 export default CATEGORY_DEFAULT;

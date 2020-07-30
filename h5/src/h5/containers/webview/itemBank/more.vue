@@ -38,7 +38,7 @@ import empty from '&/components/e-empty/e-empty.vue';
 import backTop from '&/components/e-back-top/e-back-top.vue';
 import CATEGORY_DEFAULT from '@/config/category-default-config.js';
 export default {
-  name: 'more_course_new',
+  name: 'more_itembank_new',
   components: {
     infiniteScroll,
     treeSelects,
@@ -68,7 +68,7 @@ export default {
         sort: 'sort',
       },
       treeMenuLevel: 1,
-      selectItems: CATEGORY_DEFAULT.course_list,
+      selectItems: CATEGORY_DEFAULT.itemBank_list,
       categories: [],
     };
   },
