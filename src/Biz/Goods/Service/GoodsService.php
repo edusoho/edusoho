@@ -28,11 +28,15 @@ interface GoodsService
 
     public function getGoodsByProductId($productId);
 
+    public function changeGoodsMaxRate($id, $maxRate);
+
     public function createGoodsSpecs($goodsSpecs);
 
     public function getGoodsSpecs($id);
 
     public function updateGoodsSpecs($id, $goodsSpecs);
+
+    public function changeGoodsSpecsPrice($id, $price);
 
     public function publishGoodsSpecs($id);
 

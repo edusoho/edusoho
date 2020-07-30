@@ -7,6 +7,11 @@ use Biz\Product\ProductException;
 
 class ClassroomSpecsMediator extends AbstractSpecsMediator
 {
+    /**
+     * @param $classroom
+     *
+     * @return mixed
+     */
     public function onCreate($classroom)
     {
         list($product, $goods) = $this->getProductAndGoods($classroom);
@@ -47,8 +52,16 @@ class ClassroomSpecsMediator extends AbstractSpecsMediator
         return $this->getGoodsService()->publishGoodsSpecs($goodsSpecs['id']);
     }
 
+    /**
+     * @param $classroom
+     * 班级无专门的价格更新入口
+     */
     public function onPriceUpdate($classroom)
     {
+        list($product, $goods) = $this->getProductAndGoods($classroom);
+        $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $classroom['id']);
+
+        return $this->getGoodsService()->changeGoodsSpecsPrice($goodsSpecs, $classroom['price']);
     }
 
     public function onClose($classroom)
@@ -59,6 +72,10 @@ class ClassroomSpecsMediator extends AbstractSpecsMediator
         return $this->getGoodsService()->unpublishGoodsSpecs($goodsSpecs['id']);
     }
 
+    /**
+     * @param $classroom
+     * 班级目前不能删除
+     */
     public function onDelete($classroom)
     {
         list($product, $goods) = $this->getProductAndGoods($classroom);

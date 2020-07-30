@@ -198,6 +198,14 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $orderTeacherIds;
     }
 
+    /**
+     * @param $classroom
+     *
+     * @return mixed
+     *
+     * @throws \Exception
+     *                    班级创建调用中介者构建商品和产品
+     */
     public function addClassroom($classroom)
     {
         $title = trim($classroom['title']);
@@ -1923,6 +1931,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 'recommendedTime' => time(),
             ]
         );
+        $this->getClassroomGoodsMediator()->onRecommended($classroom);
 
         return $classroom;
     }
@@ -1942,6 +1951,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 'recommendedSeq' => 100,
             ]
         );
+
+        $this->getClassroomGoodsMediator()->onCancelRecommended($classroom);
 
         return $classroom;
     }
@@ -2024,6 +2035,14 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->getClassroomCourseDao()->countCourseTasksByClassroomId($classroomId);
     }
 
+    /**
+     * @param $userId
+     * @param $classroomId
+     *
+     * @return array|array[]
+     *
+     * @todo 商品剥离：班级抵扣计算价格
+     */
     public function findUserPaidCoursesInClassroom($userId, $classroomId)
     {
         $classroomCourses = $this->getClassroomCourseDao()->findByClassroomId($classroomId);
@@ -2055,6 +2074,13 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return [$paidCourses, $orderItems];
     }
 
+    /**
+     * @param $classroomId
+     *
+     * @throws UnableJoinException
+     *
+     * @todo 商品剥离，免费加入，商品凭证
+     */
     public function tryFreeJoin($classroomId)
     {
         $access = $this->canJoinClassroom($classroomId);

@@ -12,13 +12,11 @@
       {% include 'my/learning/course/nav-pill.html.twig' %}
 
       {% for courseFavorite in courseFavorites if courseFavorite %}
-
         {% if courseFavorite.targetType == 'course' %}
-          {% set course = data('Course',{courseId:courseFavorite.targetId}) %}
-          {% set courseSet =  data('CourseSet',{id:course.courseSetId}) %}
+          {% set courseSet =  data('CourseSet',{id:courseFavorite.targetId}) %}
+          {% set course = data('Course',{courseId:courseSet.defaultCourseId }) %}
           {% set coursePath = path('course_show', {id: courseSet.defaultCourseId}) %}
           {% include 'my/learning/my-course-set-grid.html.twig' %}
-
         {% elseif courseFavorite.targetType == 'openCourse' %}
           {% set course = data('OpenCourse',{courseId:courseFavorite.targetId})|default(null) %}
           {% if course %}
@@ -28,7 +26,6 @@
       {% else %}
         <div class="cd-empty">{{'my.learning.course.favorite_empty'|trans}}</div>
       {% endfor %}
-
       {{ web_macro.paginator(paginator) }}
     </div>
   </div>

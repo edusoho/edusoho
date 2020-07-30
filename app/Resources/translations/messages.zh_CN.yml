@@ -10960,4 +10960,5 @@ classroom.basic_setting: 基础设置
 classroom.cover_crop.title: 班级封面上传
 exception.goods.not_found: 商品未找到
 exception.specs.not_found: 商品规格未找到
+exception.goods.forbidden_manage: 无管理商品权限
 exception.s2b2c_product.adopt_failed: 采用失败，内容正在编辑中，请稍后再试

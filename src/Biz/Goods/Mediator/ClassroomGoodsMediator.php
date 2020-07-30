@@ -5,8 +5,15 @@ namespace Biz\Goods\Mediator;
 use Biz\Goods\GoodsException;
 use Biz\Product\ProductException;
 
+/**
+ * Class ClassroomGoodsMediator
+ * 班级的规格、产品和商品数据都来自于classroom,所以我们将创建流程全部汇集到goodsMediator入口，代理调用规格的对应操作
+ */
 class ClassroomGoodsMediator extends AbstractGoodsMediator
 {
+    /**
+     * @var string[]
+     */
     public $normalFields = [
         'title',
         'subtitle',
@@ -67,6 +74,8 @@ class ClassroomGoodsMediator extends AbstractGoodsMediator
             'orgId' => $classroom['orgId'],
             'orgCode' => $classroom['orgCode'],
         ]);
+
+        $this->getClassroomSpecsMediator()->onUpdateNormalData($classroom);
 
         return [$product, $goods];
     }

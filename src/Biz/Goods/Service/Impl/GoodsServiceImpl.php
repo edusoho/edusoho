@@ -64,11 +64,6 @@ class GoodsServiceImpl extends BaseService implements GoodsService
         return $this->getGoodsDao()->update($id, ['recommendWeight' => 0, 'recommendedTime' => 0]);
     }
 
-    public function changeGoodsPrice()
-    {
-        $this->get
-    }
-
     public function updateGoods($id, $goods)
     {
         $goods = ArrayToolkit::parts($goods, [
@@ -140,6 +135,14 @@ class GoodsServiceImpl extends BaseService implements GoodsService
         return $this->getGoodsDao()->getByProductId($productId);
     }
 
+    public function changeGoodsMaxRate($id, $maxRate)
+    {
+        $goods = $this->getGoods($id);
+        $this->checkGoodsPermission($goods);
+
+        return $this->getGoodsDao()->update($id, ['maxRate' => $maxRate]);
+    }
+
     public function createGoodsSpecs($goodsSpecs)
     {
         if (!ArrayToolkit::requireds($goodsSpecs, [
@@ -203,21 +206,29 @@ class GoodsServiceImpl extends BaseService implements GoodsService
         if (empty($specs)) {
             $this->createNewException(GoodsException::SPECS_NOT_FOUND());
         }
-        $this->getGoodsSpecsDao()->update($specsId, ['price' => $price]);
+        $goods = $this->getGoods($specs['goodsId']);
+        $this->checkGoodsPermission($goods);
+
+        $specs = $this->getGoodsSpecsDao()->update($specsId, ['price' => $price]);
+        $this->updateGoodsMinAndMaxPrice($goods['id']);
+
+        return $specs;
     }
 
     public function publishGoodsSpecs($id)
     {
         $specs = $this->getGoodsSpecsDao()->update($id, ['status' => 'published']);
+        $this->updateGoodsMinAndMaxPrice($specs['goodsId']);
 
-        return $this->updateGoodsMinAndMaxPrice($specs['goodsId']);
+        return $specs;
     }
 
     public function unpublishGoodsSpecs($id)
     {
         $specs = $this->getGoodsSpecsDao()->update($id, ['status' => 'unpublished']);
+        $this->updateGoodsMinAndMaxPrice($specs['goodsId']);
 
-        return $this->updateGoodsMinAndMaxPrice($specs['goodsId']);
+        return $specs;
     }
 
     public function deleteGoodsSpecs($id)
@@ -280,6 +291,16 @@ class GoodsServiceImpl extends BaseService implements GoodsService
     public function refreshGoodsHotSeq()
     {
         return $this->getGoodsDao()->refreshHotSeq();
+    }
+
+    protected function checkGoodsPermission($goods)
+    {
+        if (empty($goods)) {
+            $this->createNewException(GoodsException::GOODS_NOT_FOUND());
+        }
+        if (!$this->canManageGoods($goods)) {
+            $this->createNewException(GoodsException::FORBIDDEN_MANAGE_GOODS());
+        }
     }
 
     protected function hasTargetManageRole($goods)

@@ -94,17 +94,17 @@ class GoodsServiceTest extends BaseTestCase
 
         $result1 = $this->getGoodsService()->searchGoods($conditions1, ['id' => 'ASC'], 0, 10);
 
-        $this->assertEquals([$goods1, $goods2, $goods3, $goods4], $result1);
+        self::assertEquals([$goods1, $goods2, $goods3, $goods4], $result1);
 
         $conditions2 = ['productId' => 2];
         $result2 = $this->getGoodsService()->searchGoods($conditions2, ['id' => 'ASC'], 0, 10);
 
-        $this->assertEquals([$goods3, $goods4], $result2);
+        self::assertEquals([$goods3, $goods4], $result2);
 
         $conditions3 = ['title' => 'testTitle2'];
         $result3 = $this->getGoodsService()->searchGoods($conditions3, ['id' => 'ASC'], 0, 10);
 
-        $this->assertEquals([$goods2], $result3);
+        self::assertEquals([$goods2], $result3);
     }
 
     public function testSearchGoods_withDifferentOrderBysAndLimits()
@@ -115,13 +115,13 @@ class GoodsServiceTest extends BaseTestCase
         $goods4 = $this->createGoods(['productId' => 2]);
 
         $result1 = $this->getGoodsService()->searchGoods(['title' => 'testTitle'], ['id' => 'ASC'], 0, 10);
-        $this->assertEquals([$goods1, $goods3, $goods4], $result1);
+        self::assertEquals([$goods1, $goods3, $goods4], $result1);
 
         $result2 = $this->getGoodsService()->searchGoods(['title' => 'testTitle'], ['id' => 'DESC'], 0, 10);
-        $this->assertEquals([$goods4, $goods3, $goods1], $result2);
+        self::assertEquals([$goods4, $goods3, $goods1], $result2);
 
         $result3 = $this->getGoodsService()->searchGoods(['title' => 'testTitle'], ['id' => 'ASC'], 0, 2);
-        $this->assertEquals([$goods1, $goods3], $result3);
+        self::assertEquals([$goods1, $goods3], $result3);
     }
 
     public function testSearchGoods_withDifferentColumns()
@@ -138,7 +138,7 @@ class GoodsServiceTest extends BaseTestCase
         ];
 
         $result1 = $this->getGoodsService()->searchGoods(['title' => 'testTitle'], ['id' => 'ASC'], 0, 10, ['productId', 'title']);
-        $this->assertEquals($expected1, $result1);
+        self::assertEquals($expected1, $result1);
 
         $expected2 = [
             ['title' => $goods1['title']],
@@ -147,7 +147,7 @@ class GoodsServiceTest extends BaseTestCase
         ];
 
         $result2 = $this->getGoodsService()->searchGoods(['title' => 'testTitle'], ['id' => 'ASC'], 0, 10, ['title']);
-        $this->assertEquals($expected2, $result2);
+        self::assertEquals($expected2, $result2);
     }
 
     public function testGetGoodsByProductId()
@@ -157,7 +157,7 @@ class GoodsServiceTest extends BaseTestCase
 
         $result = $this->getGoodsService()->getGoodsByProductId($goods['productId']);
 
-        $this->assertEquals($goods, $result);
+        self::assertEquals($goods, $result);
     }
 
     public function testCreateGoodsSpecs_whenMissingGoodsId_thenThrowParamMissingException()
@@ -185,12 +185,12 @@ class GoodsServiceTest extends BaseTestCase
     {
         $result = $this->getGoodsService()->createGoodsSpecs(['goodsId' => 1, 'targetId' => 2, 'title' => 'test title']);
 
-        $this->assertEquals('1', $result['id']);
-        $this->assertEquals('1', $result['goodsId']);
-        $this->assertEquals('2', $result['targetId']);
-        $this->assertEquals('test title', $result['title']);
-        $this->assertEmpty($result['images']);
-        $this->assertEquals('0.00', $result['price']);
+        self::assertEquals('1', $result['id']);
+        self::assertEquals('1', $result['goodsId']);
+        self::assertEquals('2', $result['targetId']);
+        self::assertEquals('test title', $result['title']);
+        self::assertEmpty($result['images']);
+        self::assertEquals('0.00', $result['price']);
     }
 
     public function testGetGoodsSpecs()
@@ -199,11 +199,11 @@ class GoodsServiceTest extends BaseTestCase
 
         $result = $this->getGoodsService()->getGoodsSpecs($expected['id']);
 
-        $this->assertEquals($expected, $result);
+        self::assertEquals($expected, $result);
 
         $result2 = $this->getGoodsService()->getGoodsSpecs($expected['id'] + 10000);
 
-        $this->assertNull($result2);
+        self::assertNull($result2);
     }
 
     public function testUpdateGoodsSpecs()
@@ -223,14 +223,14 @@ class GoodsServiceTest extends BaseTestCase
 
         $after = $this->getGoodsSpecsDao()->get($goodsSpecs['id']);
 
-        $this->assertEquals($before['goodsId'], $after['goodsId']);
-        $this->assertEquals($before['targetId'], $after['targetId']);
-        $this->assertEquals($fields['title'], $after['title']);
-        $this->assertEquals($fields['images'], $after['images']);
-        $this->assertEquals($fields['price'], $after['price']);
-        $this->assertNotEquals($before['title'], $after['title']);
-        $this->assertNotEquals($before['images'], $after['images']);
-        $this->assertNotEquals($before['price'], $after['price']);
+        self::assertEquals($before['goodsId'], $after['goodsId']);
+        self::assertEquals($before['targetId'], $after['targetId']);
+        self::assertEquals($fields['title'], $after['title']);
+        self::assertEquals($fields['images'], $after['images']);
+        self::assertEquals($fields['price'], $after['price']);
+        self::assertNotEquals($before['title'], $after['title']);
+        self::assertNotEquals($before['images'], $after['images']);
+        self::assertNotEquals($before['price'], $after['price']);
     }
 
     public function testDeleteGoodsSpecs()
@@ -242,8 +242,8 @@ class GoodsServiceTest extends BaseTestCase
 
         $after = $this->getGoodsSpecsDao()->get($goodsSpecs['id']);
 
-        $this->assertEquals($goodsSpecs, $before);
-        $this->assertEmpty($after);
+        self::assertEquals($goodsSpecs, $before);
+        self::assertEmpty($after);
     }
 
     public function testGetGoodsSpecsByGoodsIdAndTargetId()
@@ -253,7 +253,7 @@ class GoodsServiceTest extends BaseTestCase
 
         $result = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goodsSpecs['goodsId'], $goodsSpecs['targetId']);
 
-        $this->assertEquals($goodsSpecs, $result);
+        self::assertEquals($goodsSpecs, $result);
     }
 
     public function testFindGoodSpecsByGoodsId()
@@ -273,9 +273,9 @@ class GoodsServiceTest extends BaseTestCase
             $goodsSpecs4['id'] => $goodsSpecs4,
         ];
 
-        $this->assertEquals(count($expected), count($result));
-        $this->assertEmpty(array_diff(array_keys($expected), array_keys($result)));
-        $this->assertEquals($goodsSpecs4, $result[$goodsSpecs4['id']]);
+        self::assertSameSize($expected, $result);
+        self::assertEmpty(array_diff(array_keys($expected), array_keys($result)));
+        self::assertEquals($goodsSpecs4, $result[$goodsSpecs4['id']]);
     }
 
     public function testGetGoodsSpecsByProductIdAndTargetId_whenGoodsNotExist_thenThrowException()
@@ -304,10 +304,10 @@ class GoodsServiceTest extends BaseTestCase
         ]);
 
         $result = $this->getGoodsService()->getGoodsSpecsByProductIdAndTargetId($goods['productId'], 1);
-        $this->assertEquals($goodsSpecs, $result);
+        self::assertEquals($goodsSpecs, $result);
 
         $resultNull = $this->getGoodsService()->getGoodsSpecsByProductIdAndTargetId($goods['productId'], 1000);
-        $this->assertNull($resultNull);
+        self::assertNull($resultNull);
     }
 
     /**
@@ -319,7 +319,7 @@ class GoodsServiceTest extends BaseTestCase
         $goods = [
             'creator' => 5,
         ];
-        $this->assertTrue(ReflectionUtils::invokeMethod($this->getGoodsService(), 'canManageGoods', [$goods]));
+        self::assertTrue(ReflectionUtils::invokeMethod($this->getGoodsService(), 'canManageGoods', [$goods]));
     }
 
     /**
@@ -328,10 +328,35 @@ class GoodsServiceTest extends BaseTestCase
     public function testCanManageGoods_whenTeacherRoleAndNotEqualCreator_thenFalse()
     {
         $this->loadCurrentUserWithTeacher(['id' => 5]);
+        $this->mockBiz('Course:CourseSetService', [
+            [
+                'functionName' => 'getCourseSet',
+                'returnValue' => [
+                    'id' => 1,
+                    'title' => '测试课程',
+                ],
+            ],
+            [
+                'functionName' => 'hasCourseSetManageRole',
+                'returnValue' => false,
+            ],
+        ]);
+
+        $this->mockBiz('Product:ProductService', [
+            [
+                'functionName' => 'getProduct',
+                'returnValue' => [
+                    'id' => 1,
+                    'targetId' => 'course',
+                ],
+            ],
+        ]);
         $goods = [
             'creator' => 10,
+            'type' => 'course',
+            'productId' => 1,
         ];
-        $this->assertFalse(ReflectionUtils::invokeMethod($this->getGoodsService(), 'canManageGoods', [$goods]));
+        self::assertFalse(ReflectionUtils::invokeMethod($this->getGoodsService(), 'canManageGoods', [$goods]));
     }
 
     /**
@@ -342,8 +367,10 @@ class GoodsServiceTest extends BaseTestCase
         $this->loadCurrentUserWithAdmin();
         $goods = [
             'creator' => 10,
+            'type' => 'course',
+            'productId' => 1,
         ];
-        $this->assertTrue(ReflectionUtils::invokeMethod($this->getGoodsService(), 'canManageGoods', [$goods]));
+        self::assertTrue(ReflectionUtils::invokeMethod($this->getGoodsService(), 'canManageGoods', [$goods]));
     }
 
     /**
@@ -352,10 +379,35 @@ class GoodsServiceTest extends BaseTestCase
     public function testCanManageGoods_whenNormalUserRole_thenFalse()
     {
         $this->loadCurrentUserWithNormalUser();
+        $this->mockBiz('Course:CourseSetService', [
+            [
+                'functionName' => 'getCourseSet',
+                'returnValue' => [
+                    'id' => 1,
+                    'title' => '测试课程',
+                ],
+            ],
+            [
+                'functionName' => 'hasCourseSetManageRole',
+                'returnValue' => false,
+            ],
+        ]);
+
+        $this->mockBiz('Product:ProductService', [
+            [
+                'functionName' => 'getProduct',
+                'returnValue' => [
+                    'id' => 1,
+                    'targetId' => 'course',
+                ],
+            ],
+        ]);
         $goods = [
             'creator' => 10,
+            'type' => 'course',
+            'productId' => 1,
         ];
-        $this->assertFalse(ReflectionUtils::invokeMethod($this->getGoodsService(), 'canManageGoods', [$goods]));
+        self::assertFalse(ReflectionUtils::invokeMethod($this->getGoodsService(), 'canManageGoods', [$goods]));
     }
 
     public function testFindGoodsByIds()
@@ -366,7 +418,7 @@ class GoodsServiceTest extends BaseTestCase
         $goods4 = $this->createGoods(['productId' => 2]);
 
         $result = $this->getGoodsService()->findGoodsByIds([$goods1['id'], $goods2['id']]);
-        $this->assertEquals([
+        self::assertEquals([
             $goods1['id'] => $goods1,
             $goods2['id'] => $goods2,
         ], $result);
@@ -382,7 +434,7 @@ class GoodsServiceTest extends BaseTestCase
         $expected = ArrayToolkit::index([$goodsSpecs1, $goodsSpecs4], 'id');
 
         $result = $this->getGoodsService()->findGoodsSpecsByIds([$goodsSpecs1['id'], $goodsSpecs4['id']]);
-        $this->assertEquals($expected, $result);
+        self::assertEquals($expected, $result);
     }
 
     public function testUpdateGoodsMinAndMaxPrice()

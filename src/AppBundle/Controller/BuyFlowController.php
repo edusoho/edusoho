@@ -13,6 +13,13 @@ abstract class BuyFlowController extends BaseController
 {
     protected $targetType = '';
 
+    /**
+     * @param $id
+     *
+     * @return \Symfony\Component\HttpFoundation\JsonResponse|\Symfony\Component\HttpFoundation\Response
+     *
+     * @todo 商品剥离控制购买入口需要改造
+     */
     public function buyAction(Request $request, $id)
     {
         $this->checkUserLogin();
@@ -35,10 +42,10 @@ abstract class BuyFlowController extends BaseController
             $userInfo = $this->getUserService()->getUserProfile($user['id']);
             $userInfo['approvalStatus'] = $user['approvalStatus'];
 
-            return $this->render('buy-flow/fill-user-info-modal.html.twig', array(
+            return $this->render('buy-flow/fill-user-info-modal.html.twig', [
                 'userFields' => $userFields,
                 'user' => $userInfo,
-            ));
+            ]);
         }
 
         if ($this->needOpenPayment($id)) {
@@ -48,10 +55,10 @@ abstract class BuyFlowController extends BaseController
         $this->tryFreeJoin($id);
 
         if ($this->isJoined($id)) {
-            return $this->createJsonResponse(array('url' => $this->getSuccessUrl($id)));
+            return $this->createJsonResponse(['url' => $this->getSuccessUrl($id)]);
         }
 
-        return $this->createJsonResponse(array('url' => $this->generateUrl('order_show', array('targetId' => $id, 'targetType' => $this->targetType))));
+        return $this->createJsonResponse(['url' => $this->generateUrl('order_show', ['targetId' => $id, 'targetType' => $this->targetType])]);
     }
 
     private function needUploadAvatar()
@@ -67,9 +74,9 @@ abstract class BuyFlowController extends BaseController
             $user = $this->getUser();
             $userInfo = $this->getUserService()->getUserProfile($user['id']);
             if (!empty($user['verifiedMobile']) && empty($userInfo['mobile'])) {
-                $userInfo = $this->getUserService()->updateUserProfile($user['id'], array(
+                $userInfo = $this->getUserService()->updateUserProfile($user['id'], [
                     'mobile' => $user['verifiedMobile'],
-                ));
+                ]);
             }
             $user = array_merge($userInfo, $user->toArray());
             $buyFields = $setting['userinfoFields'];

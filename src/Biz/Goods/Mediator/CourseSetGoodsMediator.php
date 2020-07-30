@@ -133,7 +133,6 @@ class CourseSetGoodsMediator extends AbstractGoodsMediator
 
     public function onMaxRateChange($courseSet)
     {
-        // TODO: Implement onMaxRateChange() method.
     }
 
     protected function getProductAndGoods($courseSet)
