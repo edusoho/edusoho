@@ -220,6 +220,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $classroom['teacherIds'] = [];
         $classroom['expiryMode'] = 'forever';
         $classroom['expiryValue'] = 0;
+        $classroom['showable'] = 1;
+        $classroom['buyable'] = 1;
 
         $classroom = $this->getClassroomDao()->create($classroom);
         $this->getClassroomGoodsMediator()->onCreate($classroom);

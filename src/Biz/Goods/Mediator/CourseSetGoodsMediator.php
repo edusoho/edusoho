@@ -133,6 +133,10 @@ class CourseSetGoodsMediator extends AbstractGoodsMediator
 
     public function onMaxRateChange($courseSet)
     {
+        list($product, $goods) = $this->getProductAndGoods($courseSet);
+        $goods = $this->getGoodsService()->changeGoodsMaxRate($goods['id'], $courseSet['maxRate']);
+
+        return [$product, $goods];
     }
 
     protected function getProductAndGoods($courseSet)

@@ -134,6 +134,9 @@ class ClassroomGoodsMediator extends AbstractGoodsMediator
     public function onMaxRateChange($classroom)
     {
         list($product, $goods) = $this->getProductAndGoods($classroom);
+        $goods = $this->getGoodsService()->changeGoodsMaxRate($goods['id'], $classroom['maxRate']);
+
+        return [$product, $goods];
     }
 
     /**

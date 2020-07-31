@@ -143,6 +143,17 @@ class GoodsServiceImpl extends BaseService implements GoodsService
         return $this->getGoodsDao()->update($id, ['maxRate' => $maxRate]);
     }
 
+    public function hitGoods($id)
+    {
+        $goods = $this->getGoods($id);
+
+        if (empty($goods)) {
+            $this->createNewException(GoodsException::GOODS_NOT_FOUND());
+        }
+
+        return $this->getGoodsDao()->wave([$goods['id']], ['hitNum' => 1]);
+    }
+
     public function createGoodsSpecs($goodsSpecs)
     {
         if (!ArrayToolkit::requireds($goodsSpecs, [

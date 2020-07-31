@@ -20,6 +20,8 @@ class ClassroomSpecsMediator extends AbstractSpecsMediator
             'goodsId' => $goods['id'],
             'targetId' => $classroom['id'],
             'title' => $classroom['title'],
+            'seq' => 1,
+            'usageMode' => $classroom['expiryMode'],
         ]);
     }
 

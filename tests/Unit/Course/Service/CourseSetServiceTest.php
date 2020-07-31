@@ -47,8 +47,8 @@ class CourseSetServiceTest extends BaseTestCase
         $created = $this->getCourseSetService()->createCourseSet($courseSet);
         $this->assertTrue($created['id'] > 0);
         $courses = $this->getCourseService()->findCoursesByCourseSetId($created['id']);
-        $this->assertTrue(1 === count($courses));
-        $this->assertTrue(1 == $courses[0]['isDefault']);
+        $this->assertCount(1, $courses);
+        $this->assertEquals(1, $courses[0]['isDefault']);
 
         $course = array_shift($courses);
         $this->assertEquals('freeMode', $course['learnMode']);

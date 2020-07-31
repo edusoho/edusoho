@@ -30,6 +30,8 @@ interface GoodsService
 
     public function changeGoodsMaxRate($id, $maxRate);
 
+    public function hitGoods($id);
+
     public function createGoodsSpecs($goodsSpecs);
 
     public function getGoodsSpecs($id);
