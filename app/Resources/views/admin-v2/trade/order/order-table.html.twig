@@ -25,7 +25,11 @@
       <td>
         {% if order.item.target_type|default('') == 'course' %}
           {% set sku = goodsSpecs[order.item.target_id]|default() %}
-          <a  class="link-primary" href="{{ path('goods_show', {id:sku.goodsId,targetId:sku.targetId}) }}" target="_blank"><strong>{{order.title}}</strong></a>
+          {% if sku %}
+            <a  class="link-primary" href="{{ path('goods_show', {id:sku.goodsId,targetId:sku.targetId}) }}" target="_blank"><strong>{{order.title}}</strong></a>
+          {% else %}
+            <a  class="link-primary" href="{{ path('course_show', {id:order.item.target_id}) }}" target="_blank"><strong>{{order.title}}</strong></a>
+          {% endif %}
         {% elseif order.item.target_type|default('') == 'classroom' %}
           {% set sku = goodsSpecs[order.item.target_id]|default() %}
           <a  class="link-primary" href="{{ path('goods_show', {id:sku.goodsId}) }}" target="_blank"><strong>{{order.title}}</strong></a>

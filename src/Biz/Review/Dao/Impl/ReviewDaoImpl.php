@@ -173,6 +173,11 @@ class ReviewDaoImpl extends GeneralDaoImpl implements ReviewDao
             $sql .= ' AND r.parentId = :parentId';
         }
 
+        if (!empty($conditions['content'])) {
+            $sql .= ' AND r.content LIKE :content';
+            $conditions['content'] = "%{$conditions['content']}%";
+        }
+
         $sql = $this->sql("SELECT COUNT(*) FROM ({$sql}) AS m");
 
         return $this->db()->fetchColumn($sql, $conditions);
@@ -199,6 +204,11 @@ class ReviewDaoImpl extends GeneralDaoImpl implements ReviewDao
 
         if (isset($conditions['parentId'])) {
             $sql .= ' AND r.parentId = :parentId';
+        }
+
+        if (!empty($conditions['content'])) {
+            $sql .= ' AND r.content LIKE :content';
+            $conditions['content'] = "%{$conditions['content']}%";
         }
 
         $sql = $this->sql($sql, $orderBys, $start, $limit);
