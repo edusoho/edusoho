@@ -7,12 +7,12 @@ use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\MathToolkit;
 use Biz\Common\CommonException;
 use Biz\Coupon\Service\CouponBatchService;
+use Biz\Coupon\Service\CouponService;
 use Biz\OrderFacade\Currency;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Biz\OrderFacade\Product\Product;
 use Codeages\Biz\Pay\Service\AccountService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Biz\Coupon\Service\CouponService;
 
 class OrderInfo extends AbstractResource
 {
@@ -29,7 +29,7 @@ class OrderInfo extends AbstractResource
             $product = $this->getProduct($params['targetType'], $params);
             $product->validate();
             $product->setAvailableDeduct();
-            $product->setPickedDeduct(array());
+            $product->setPickedDeduct([]);
 
             return $this->getOrderInfoFromProduct($product);
         } catch (OrderPayCheckException $payCheckException) {
@@ -46,7 +46,7 @@ class OrderInfo extends AbstractResource
         $user = $this->getCurrentUser();
         $balance = $this->getAccountService()->getUserBalanceByUserId($user->getId());
 
-        $orderInfo = array(
+        $orderInfo = [
             'targetId' => $product->targetId,
             'targetType' => $product->targetType,
             'cover' => $product->cover,
@@ -55,21 +55,21 @@ class OrderInfo extends AbstractResource
             'unitType' => $product->unit,
             'duration' => $product->num,
             'totalPrice' => $product->getPayablePrice(),
-            'availableCoupons' => array(),
+            'availableCoupons' => [],
             'coinName' => '',
             'cashRate' => '1',
             'buyType' => '',
-            'priceType' => 'CNY' == $currency->isoCode ? 'RMB' : 'Coin',
+            'priceType' => 'CNY' === $currency->isoCode ? 'RMB' : 'Coin',
             'coinPayAmount' => 0,
             'fullCoinPayable' => 0,
             'verifiedMobile' => (isset($user['verifiedMobile'])) && (strlen($user['verifiedMobile']) > 0) ? $user['verifiedMobile'] : '',
             'hasPayPassword' => $this->getAccountService()->isPayPasswordSetted($user['id']),
-            'account' => array(
+            'account' => [
                 'id' => $balance['id'],
                 'userId' => $balance['user_id'],
                 'cash' => strval(MathToolkit::simple($balance['amount'], 0.01)),
-            ),
-        );
+            ],
+        ];
 
         if ($extra = $product->getCreateExtra()) {
             $orderInfo['buyType'] = $extra['buyType'];
@@ -148,7 +148,7 @@ class OrderInfo extends AbstractResource
                 break;
             case '10':
             default:
-                if (!in_array($unit, array('year', 'month'))) {
+                if (!in_array($unit, ['year', 'month'])) {
                     $result = false;
                 }
                 break;

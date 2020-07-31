@@ -9,7 +9,7 @@ use Biz\Course\Service\MemberService;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Codeages\Biz\Order\Status\OrderStatusCallback;
 
-class CourseProduct extends BaseGoodsProduct implements OrderStatusCallback
+class CourseProduct extends BaseGoodsProduct
 {
     const TYPE = 'course';
 

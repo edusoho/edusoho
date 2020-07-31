@@ -2042,8 +2042,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
      * @param $classroomId
      *
      * @return array|array[]
-     *
-     * @todo 商品剥离：班级抵扣计算价格
+     *                       1. 获取班级内课程
+     *                       2. 通过班级内课程找到对应的原课程
+     *                       3. 筛选出学员拥有的课程（学员member列表）
+     *                       4. 查找对应的订单
      */
     public function findUserPaidCoursesInClassroom($userId, $classroomId)
     {

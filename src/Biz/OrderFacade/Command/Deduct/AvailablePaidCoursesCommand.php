@@ -2,15 +2,21 @@
 
 namespace Biz\OrderFacade\Command\Deduct;
 
+use AppBundle\Common\MathToolkit;
+use Biz\Classroom\Service\ClassroomService;
 use Biz\OrderFacade\Command\Command;
 use Biz\OrderFacade\Product\Product;
-use AppBundle\Common\MathToolkit;
+use Biz\System\Service\SettingService;
 
+/**
+ * Class AvailablePaidCoursesCommand
+ * 获取可用的抵扣手段，依赖于班级课程价格抵扣，业务围绕班级和课程，属于历史业务
+ */
 class AvailablePaidCoursesCommand extends Command
 {
-    public function execute(Product $product, $params = array())
+    public function execute(Product $product, $params = [])
     {
-        if ($product->targetType != 'classroom') {
+        if ('classroom' !== $product->targetType) {
             return;
         }
 
@@ -44,11 +50,17 @@ class AvailablePaidCoursesCommand extends Command
         $product->promotionPrice = $product->originPrice - $totalDeductAmount;
     }
 
+    /**
+     * @return ClassroomService
+     */
     private function getClassroomService()
     {
         return $this->biz->service('Classroom:ClassroomService');
     }
 
+    /**
+     * @return SettingService
+     */
     private function getSettingService()
     {
         return $this->biz->service('System:SettingService');
