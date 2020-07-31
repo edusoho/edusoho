@@ -24,6 +24,10 @@ services:
         arguments: ['@service_container']
         tags: [{ name: kernel.event_listener, event: security.interactive_login }]
 
+    user.captcha_authenticator:
+        class: AppBundle\Handler\LoginCaptchaAuthentication
+        arguments: ['@router']
+
 security:
     encoders:
         Biz\User\CurrentUser: sha256
@@ -60,6 +64,9 @@ security:
                 path:   logout
                 success_handler: topxia.logout.success_handler
             anonymous:  true
+            guard:
+                authenticators:
+                    - user.captcha_authenticator
     access_control:
         - { path: ^/crontab, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/task, role: ROLE_USER }

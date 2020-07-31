@@ -467,6 +467,7 @@ class UserSettingController extends BaseController
             'temporary_lock_allowed_times' => 5,
             'ip_temporary_lock_allowed_times' => 20,
             'temporary_lock_minutes' => 20,
+            'login_captcha_enable' => 0,
         );
 
         foreach ($clients as $type => $client) {
