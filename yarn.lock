@@ -5264,9 +5264,9 @@ istanbul@^0.4.5:
     which "^1.1.1"
     wordwrap "^1.0.0"
 
-item-bank@1.0.12:
-  version "1.0.12"
-  resolved "https://registry.npm.taobao.org/item-bank/download/item-bank-1.0.12.tgz#37feaac051fc06728f629c4fe8998c50c3c46dd5"
+item-bank@1.0.13:
+  version "1.0.13"
+  resolved "https://registry.npm.taobao.org/item-bank/download/item-bank-1.0.13.tgz#f6dd9a186ac340a63edbcab48cba761c03e3afc5"
   dependencies:
     "@babel/polyfill" "^7.8.7"
     ant-design-vue "^1.5.0"
