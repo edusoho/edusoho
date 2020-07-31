@@ -16,7 +16,8 @@ class LoginCaptchaAuthentication extends AbstractGuardAuthenticator
 {
     private $router;
 
-    public function __construct(RouterInterface $router) {
+    public function __construct(RouterInterface $router)
+    {
         $this->router = $router;
     }
 
@@ -37,7 +38,7 @@ class LoginCaptchaAuthentication extends AbstractGuardAuthenticator
      *
      *     return new Response('Auth header required', 401);
      *
-     * @param Request $request The request that resulted in an AuthenticationException
+     * @param Request                 $request       The request that resulted in an AuthenticationException
      * @param AuthenticationException $authException The exception that started the authentication process
      *
      * @return RedirectResponse
@@ -84,8 +85,8 @@ class LoginCaptchaAuthentication extends AbstractGuardAuthenticator
      * null, then a UsernameNotFoundException is thrown for you.
      *
      * @return UserInterface|null
-     * @throws AuthenticationException
      *
+     * @throws AuthenticationException
      */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {

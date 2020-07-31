@@ -4,10 +4,8 @@ namespace AppBundle\Listener;
 
 use Biz\System\Service\SettingService;
 use Exception;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 
 /**
  * Stores the locale of the user in the session after the
@@ -23,13 +21,12 @@ class UserLoginCaptchaListener
     }
 
     /**
-     * @param GetResponseEvent $event
      * @throws Exception
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
         $request = $event->getRequest();
-        if ($request->getMethod() === 'POST') {
+        if ('POST' === $request->getMethod()) {
             $loginSetting = $this->getSettingService()->get('login_bind', []);
             if (!empty($loginSetting['login_captcha_enable']) && '/login_check' == $request->getPathInfo()) {
                 $biz = $this->getBiz();
@@ -53,7 +50,7 @@ class UserLoginCaptchaListener
         return $this->getBiz()->service('System:SettingService');
     }
 
-    protected function trans($id, array $parameters = array())
+    protected function trans($id, array $parameters = [])
     {
         return $this->container->get('translator')->trans($id, $parameters);
     }
