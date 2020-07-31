@@ -12,8 +12,10 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ThreadService;
+use Biz\Goods\Service\GoodsService;
 use Biz\Order\OrderException;
 use Biz\Order\Service\OrderService;
+use Biz\Product\Service\ProductService;
 use Biz\Sign\Service\SignService;
 use Biz\System\Service\SettingService;
 use Biz\Taxonomy\Service\CategoryService;
@@ -176,9 +178,10 @@ class ClassroomController extends BaseController
             }
         }
 
-        return $this->redirect($this->generateUrl('classroom_introductions', [
-            'id' => $id,
-        ]));
+        $product = $this->getProductService()->getProductByTargetIdAndType($classroom['id'], 'classroom');
+        $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
+
+        return $this->redirect($this->generateUrl('goods_show', ['id' => $goods['id']]));
     }
 
     private function previewAsMember($previewAs, $member, $classroom)
@@ -856,5 +859,21 @@ class ClassroomController extends BaseController
     protected function getCourseMemberService()
     {
         return $this->createService('Course:MemberService');
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getProductService()
+    {
+        return $this->createService('Product:ProductService');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->createService('Goods:GoodsService');
     }
 }
