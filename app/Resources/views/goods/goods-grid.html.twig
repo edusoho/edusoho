@@ -1,0 +1,33 @@
+<div class="course-item">
+  <div class="course-img">
+    <a href="{{ path('goods_show', {id: goods.id}) }}" target="_blank">
+      {{ lazy_img(filepath(goods.images.large|default(null), 'courseSet.png'), 'img-responsive', goods.title) }}
+    </a>
+  </div>
+  <div class="course-info">
+    <div class="title">
+      <a class="link-darker" href="{{ path('goods_show', {id: goods.id}) }}" target="_blank">
+        {{ goods.title }}
+      </a>
+    </div>
+    <div class="metas clearfix">
+      <span class="course-price-widget">
+        <span class="{% if goods.maxPrice == 0 %} free {% else %} price {% endif %}">
+           {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+             {% if goods.minPrice > 0 %}
+               {{ 'course.minimum_price.unit'|trans({'%price%': goods.minPrice * setting('coin.cash_rate'), '%unit%': setting('coin.coin_name')|trans}) }}
+             {% else %}
+               {{ 'course.price.free'|trans }}
+             {% endif %}
+           {% else %}
+             {% if goods.minPrice > 0 %}
+               {{ 'course.minimum_price.unit'|trans({'%price%': goods.minPrice, '%unit%': 'site.currency.CNY'|trans}) }}
+             {% else %}
+               {{ 'course.price.free'|trans }}
+             {% endif %}
+           {% endif %}
+        </span>
+      </span>
+    </div>
+  </div>
+</div>

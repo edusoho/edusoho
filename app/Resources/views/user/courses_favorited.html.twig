@@ -7,23 +7,27 @@
 {% block main %}
   <div class="course-list course-list-new">
     <div class="row">
-      {% for courseFavorite in courseFavorites if courseFavorite %}
-        {% if courseFavorite.targetType == 'course' %}
-          {% set courseSet = data('CourseSet',{ id: courseFavorite.targetId} ) %}
+      {% for favorite in favorites if favorite %}
+        {% if favorite.targetType == 'course' %}
+          {% set courseSet = data('CourseSet',{ id: favorite.targetId} ) %}
           <div class="col-lg-3 col-md-4 col-xs-6 course-item-wrap">
             {% include 'course/widgets/course-grid-new.html.twig' with { courseSet: courseSet } %}
           </div>
-        {% elseif courseFavorite.targetType == 'openCourse' %}
-          {% set course = data('OpenCourse',{courseId:courseFavorite.targetId})|default(null) %}
+        {% elseif favorite.targetType == 'openCourse' %}
+          {% set course = data('OpenCourse',{courseId:favorite.targetId})|default(null) %}
           {% if course %}
             <div class="col-lg-3 col-md-4 col-xs-6 course-item-wrap">
               {% include 'open-course/widget/open-course-grid.html.twig' %}
             </div>
           {% endif %}
+        {% elseif favorite.targetType == 'goods' %}
+          {% set goods = data('Goods', {id: favorite.targetId}) %}
+          <div class="col-lg-3 col-md-4 col-xs-6 course-item-wrap">
+            {% include 'goods/goods-grid.html.twig' with { goods: goods} %}
+          </div>
         {% endif %}
-        
       {% else %}
-        <div class="empty">{{'user.homepage.favorite_courses.empty'|trans}}</div>
+        <div class="empty">{{ 'user.homepage.favorite_courses.empty'|trans }}</div>
       {% endfor %}
     </div>
   </div>
