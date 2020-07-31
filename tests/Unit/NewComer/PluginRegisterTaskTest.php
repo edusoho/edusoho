@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\NewComer;
 
-use Biz\NewComer\PluginRegisterTask;
 use Biz\BaseTestCase;
+use Biz\NewComer\PluginRegisterTask;
 
 class PluginRegisterTaskTest extends BaseTestCase
 {
@@ -13,9 +13,8 @@ class PluginRegisterTaskTest extends BaseTestCase
             [
                 [
                     'functionName' => 'get',
-                    'returnValue' =>
-                        ['plugin_register_task' => ['status' => []]]
-                ]
+                    'returnValue' => ['plugin_register_task' => ['status' => []]],
+                ],
             ]
         );
 
@@ -31,9 +30,8 @@ class PluginRegisterTaskTest extends BaseTestCase
             [
                 [
                     'functionName' => 'get',
-                    'returnValue' =>
-                        ['plugin_register_task' => ['status' => 1]]
-                ]
+                    'returnValue' => ['plugin_register_task' => ['status' => 1]],
+                ],
             ]
         );
 
@@ -49,13 +47,12 @@ class PluginRegisterTaskTest extends BaseTestCase
             [
                 [
                     'functionName' => 'get',
-                    'returnValue' =>
-                        ['plugin_register_task' => []]
+                    'returnValue' => ['plugin_register_task' => []],
                 ],
                 [
                     'functionName' => 'set',
-                    'returnValue' => null
-                ]
+                    'returnValue' => null,
+                ],
             ]
         );
 
@@ -63,15 +60,14 @@ class PluginRegisterTaskTest extends BaseTestCase
             [
                 [
                     'functionName' => 'findApps',
-                    'returnValue' =>
-                        [
-                            ['type' => 'plugin']
-                        ]
+                    'returnValue' => [
+                            ['type' => 'plugin'],
+                        ],
                 ],
                 [
                     'functionName' => 'findAppCount',
-                    'returnValue' => []
-                ]
+                    'returnValue' => [],
+                ],
             ]
         );
 

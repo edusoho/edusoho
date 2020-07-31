@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\NewComer;
 
-use Biz\NewComer\PaymentAppliedTask;
 use Biz\BaseTestCase;
+use Biz\NewComer\PaymentAppliedTask;
 
 class PaymentAppliedTaskTest extends BaseTestCase
 {
@@ -13,9 +13,8 @@ class PaymentAppliedTaskTest extends BaseTestCase
             [
                 [
                     'functionName' => 'get',
-                    'returnValue' =>
-                        ['payment_applied_task' => ['status' => []]]
-                ]
+                    'returnValue' => ['payment_applied_task' => ['status' => []]],
+                ],
             ]
         );
 
@@ -31,9 +30,8 @@ class PaymentAppliedTaskTest extends BaseTestCase
             [
                 [
                     'functionName' => 'get',
-                    'returnValue' =>
-                        ['payment_applied_task' => ['status' => 1]]
-                ]
+                    'returnValue' => ['payment_applied_task' => ['status' => 1]],
+                ],
             ]
         );
 
@@ -49,13 +47,12 @@ class PaymentAppliedTaskTest extends BaseTestCase
             [
                 [
                     'functionName' => 'get',
-                    'returnValue' =>
-                        ['alipay_enabled' => 1]
+                    'returnValue' => ['alipay_enabled' => 1],
                 ],
                 [
                     'functionName' => 'set',
-                    'returnValue' => null
-                ]
+                    'returnValue' => null,
+                ],
             ]
         );
 
@@ -71,13 +68,12 @@ class PaymentAppliedTaskTest extends BaseTestCase
             [
                 [
                     'functionName' => 'get',
-                    'returnValue' =>
-                        ['wxpay_enabled' => 1]
+                    'returnValue' => ['wxpay_enabled' => 1],
                 ],
                 [
                     'functionName' => 'set',
-                    'returnValue' => null
-                ]
+                    'returnValue' => null,
+                ],
             ]
         );
 
@@ -93,13 +89,12 @@ class PaymentAppliedTaskTest extends BaseTestCase
             [
                 [
                     'functionName' => 'get',
-                    'returnValue' =>
-                        ['llpay_enabled' => 1]
+                    'returnValue' => ['llpay_enabled' => 1],
                 ],
                 [
                     'functionName' => 'set',
-                    'returnValue' => null
-                ]
+                    'returnValue' => null,
+                ],
             ]
         );
 
@@ -108,5 +103,4 @@ class PaymentAppliedTaskTest extends BaseTestCase
 
         $this->assertEquals(true, $result);
     }
-
 }

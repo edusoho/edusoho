@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Tests\Unit\NewComer;
 
 use Biz\BaseTestCase;
@@ -14,9 +13,8 @@ class CloudAppliedTaskTest extends BaseTestCase
             [
                 [
                 'functionName' => 'get',
-                'returnValue' =>
-                    ['cloud_applied_task' => ['status' => []]]
-                ]
+                'returnValue' => ['cloud_applied_task' => ['status' => []]],
+                ],
             ]
         );
 
@@ -32,9 +30,8 @@ class CloudAppliedTaskTest extends BaseTestCase
             [
                 [
                 'functionName' => 'get',
-                'returnValue' =>
-                    ['cloud_applied_task' => ['status' => 1]]
-                ]
+                'returnValue' => ['cloud_applied_task' => ['status' => 1]],
+                ],
             ]
         );
 
@@ -50,13 +47,12 @@ class CloudAppliedTaskTest extends BaseTestCase
             [
                 [
                 'functionName' => 'get',
-                'returnValue' =>
-                    ['cloud_key_applied' => 1]
+                'returnValue' => ['cloud_key_applied' => 1],
                 ],
                 [
                 'functionName' => 'set',
-                'returnValue' => null
-                ]
+                'returnValue' => null,
+                ],
             ]
         );
 
@@ -64,8 +60,5 @@ class CloudAppliedTaskTest extends BaseTestCase
         $result = $storage->getStatus();
 
         $this->assertEquals(true, $result);
-
     }
-
-
 }

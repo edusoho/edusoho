@@ -2,28 +2,28 @@
 
 namespace AppBundle\Controller\AdminV2\System;
 
-use Biz\System\Service\SettingService;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Component\OAuthClient\OAuthClientFactory;
+use AppBundle\Controller\AdminV2\BaseController;
+use Biz\System\Service\SettingService;
 use Biz\User\Service\UserFieldService;
 use Biz\User\UserFieldException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use AppBundle\Component\OAuthClient\OAuthClientFactory;
-use AppBundle\Controller\AdminV2\BaseController;
 
 class UserSettingController extends BaseController
 {
     public function authAction(Request $request)
     {
-        $auth = $this->getSettingService()->get('auth', array());
-        $defaultSettings = $this->getSettingService()->get('default', array());
-        $userDefaultSetting = $this->getSettingService()->get('user_default', array());
-        $courseDefaultSetting = $this->getSettingService()->get('course_default', array());
+        $auth = $this->getSettingService()->get('auth', []);
+        $defaultSettings = $this->getSettingService()->get('default', []);
+        $userDefaultSetting = $this->getSettingService()->get('user_default', []);
+        $courseDefaultSetting = $this->getSettingService()->get('course_default', []);
         $path = $this->container->getParameter('kernel.root_dir').'/../web/assets/img/default/';
         $userDefaultSet = $this->getUserDefaultSet();
         $defaultSetting = array_merge($userDefaultSet, $userDefaultSetting);
 
-        $default = array(
+        $default = [
             'register_mode' => 'closed',
             'email_enabled' => 'closed',
             'setting_time' => -1,
@@ -31,7 +31,7 @@ class UserSettingController extends BaseController
             'email_activation_body' => '',
             'welcome_enabled' => 'closed',
             'welcome_sender' => '',
-            'welcome_methods' => array(),
+            'welcome_methods' => [],
             'welcome_title' => '',
             'welcome_body' => '',
             'user_terms' => 'closed',
@@ -43,7 +43,7 @@ class UserSettingController extends BaseController
             'password_level' => 'low',
             'nickname_enabled' => 0,
             'avatar_alert' => 'none',
-        );
+        ];
 
         if (isset($auth['captcha_enabled']) && $auth['captcha_enabled']) {
             if (!isset($auth['register_protective'])) {
@@ -63,11 +63,11 @@ class UserSettingController extends BaseController
                 $defaultSetting['user_name'] = '学员';
             }
 
-            $userDefaultSetting = ArrayToolkit::parts($defaultSetting, array(
+            $userDefaultSetting = ArrayToolkit::parts($defaultSetting, [
                 'defaultAvatar', 'user_name',
-            ));
+            ]);
 
-            $default = $this->getSettingService()->get('default', array());
+            $default = $this->getSettingService()->get('default', []);
             $defaultSetting = array_merge($default, $defaultSettings, $courseDefaultSetting, $userDefaultSetting);
 
             $this->getSettingService()->set('user_default', $userDefaultSetting);
@@ -83,7 +83,7 @@ class UserSettingController extends BaseController
             }
 
             if (empty($authUpdate['welcome_methods'])) {
-                $authUpdate['welcome_methods'] = array();
+                $authUpdate['welcome_methods'] = [];
             }
 
             if ('none' == $authUpdate['register_protective']) {
@@ -98,12 +98,12 @@ class UserSettingController extends BaseController
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        return $this->render('admin-v2/system/user-setting/auth.html.twig', array(
+        return $this->render('admin-v2/system/user-setting/auth.html.twig', [
             'auth' => $auth,
             'userFields' => $this->getUserFieldService()->getEnabledFieldsOrderBySeq(),
             'defaultSetting' => $defaultSetting,
             'hasOwnCopyright' => false,
-        ));
+        ]);
     }
 
     protected function doneNewcomerTask()
@@ -119,14 +119,14 @@ class UserSettingController extends BaseController
 
     public function userAvatarAction(Request $request)
     {
-        $defaultSetting = $this->getSettingService()->get('default', array());
+        $defaultSetting = $this->getSettingService()->get('default', []);
 
         if ('POST' == $request->getMethod()) {
             $userDefaultSetting = $request->request->all();
 
-            $userDefaultSetting = ArrayToolkit::parts($userDefaultSetting, array(
+            $userDefaultSetting = ArrayToolkit::parts($userDefaultSetting, [
                 'defaultAvatar',
-            ));
+            ]);
 
             $defaultSetting = array_merge($defaultSetting, $userDefaultSetting);
 
@@ -135,16 +135,16 @@ class UserSettingController extends BaseController
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        return $this->render('admin-v2/system/user-setting/user-avatar.html.twig', array(
+        return $this->render('admin-v2/system/user-setting/user-avatar.html.twig', [
             'defaultSetting' => $defaultSetting,
-        ));
+        ]);
     }
 
     public function loginConnectAction(Request $request)
     {
         $clients = OAuthClientFactory::clients();
         $default = $this->getDefaultLoginConnect($clients);
-        $loginConnect = $this->getSettingService()->get('login_bind', array());
+        $loginConnect = $this->getSettingService()->get('login_bind', []);
         $loginConnect = array_merge($default, $loginConnect);
 
         if ($request->isMethod('POST')) {
@@ -156,35 +156,35 @@ class UserSettingController extends BaseController
             $this->getSettingService()->set('login_bind', $loginConnect);
         }
 
-        return $this->render('admin-v2/system/user-setting/login-connect.html.twig', array(
+        return $this->render('admin-v2/system/user-setting/login-connect.html.twig', [
             'loginConnect' => $loginConnect,
             'clients' => $clients,
-        ));
+        ]);
     }
 
     public function userCenterAction(Request $request)
     {
-        $setting = $this->getSettingService()->get('user_partner', array());
+        $setting = $this->getSettingService()->get('user_partner', []);
 
-        $default = array(
+        $default = [
             'mode' => 'default',
             'nickname_enabled' => 0,
             'avatar_alert' => 'none',
             'email_filter' => '',
-            'partner_config' => array(
-                'discuz' => array(),
-                'phpwind' => array(
-                    'conf' => array(),
-                    'database' => array(),
-                ),
-            ),
-        );
+            'partner_config' => [
+                'discuz' => [],
+                'phpwind' => [
+                    'conf' => [],
+                    'database' => [],
+                ],
+            ],
+        ];
 
         $setting = array_merge($default, $setting);
 
         if ('POST' == $request->getMethod()) {
             $data = $request->request->all();
-            $data['email_filter'] = trim(str_replace(array("\n\r", "\r\n", "\r"), "\n", $data['email_filter']));
+            $data['email_filter'] = trim(str_replace(["\n\r", "\r\n", "\r"], "\n", $data['email_filter']));
             $setting['mode'] = $data['mode'];
             $setting['email_filter'] = $data['email_filter'];
 
@@ -196,7 +196,7 @@ class UserSettingController extends BaseController
                 $configDirectory = $this->getParameter('kernel.root_dir').'/config/';
                 $phpwindConfigPath = $configDirectory.'windid_client_config.php';
                 if (!file_exists($phpwindConfigPath) || !is_writable($phpwindConfigPath)) {
-                    $this->setFlashMessage('danger', $this->get('translator')->trans('admin.user_center.user_center.config_error', array('%path%' => $phpwindConfigPath)));
+                    $this->setFlashMessage('danger', $this->get('translator')->trans('admin.user_center.user_center.config_error', ['%path%' => $phpwindConfigPath]));
                     goto response;
                 }
 
@@ -211,20 +211,20 @@ class UserSettingController extends BaseController
         $discuzConfig = $setting['partner_config']['discuz'];
         $phpwindConfig = empty($setting['partner_config']['phpwind']) ? '' : $setting['partner_config']['phpwind'];
 
-        return $this->render('admin-v2/system/user-setting/user-center.html.twig', array(
+        return $this->render('admin-v2/system/user-setting/user-center.html.twig', [
             'setting' => $setting,
             'discuzConfig' => $discuzConfig,
             'phpwindConfig' => $phpwindConfig,
-        ));
+        ]);
     }
 
     public function userFieldsAction(Request $request)
     {
-        $textCount = $this->getUserFieldService()->countFields(array('fieldName' => 'textField'));
-        $intCount = $this->getUserFieldService()->countFields(array('fieldName' => 'intField'));
-        $floatCount = $this->getUserFieldService()->countFields(array('fieldName' => 'floatField'));
-        $dateCount = $this->getUserFieldService()->countFields(array('fieldName' => 'dateField'));
-        $varcharCount = $this->getUserFieldService()->countFields(array('fieldName' => 'varcharField'));
+        $textCount = $this->getUserFieldService()->countFields(['fieldName' => 'textField']);
+        $intCount = $this->getUserFieldService()->countFields(['fieldName' => 'intField']);
+        $floatCount = $this->getUserFieldService()->countFields(['fieldName' => 'floatField']);
+        $dateCount = $this->getUserFieldService()->countFields(['fieldName' => 'dateField']);
+        $varcharCount = $this->getUserFieldService()->countFields(['fieldName' => 'varcharField']);
 
         $fields = $this->getUserFieldService()->getFieldsOrderBySeq();
 
@@ -250,8 +250,8 @@ class UserSettingController extends BaseController
             }
         }
 
-        $courseSetting = $this->getSettingService()->get('course', array());
-        $auth = $this->getSettingService()->get('auth', array());
+        $courseSetting = $this->getSettingService()->get('course', []);
+        $auth = $this->getSettingService()->get('auth', []);
 
         $commomFields = $this->get('codeages_plugin.dict_twig_extension')->getDict('userInfoFields');
         $commomFieldsKeys = array_keys($commomFields);
@@ -264,7 +264,7 @@ class UserSettingController extends BaseController
             $courseSetting['userinfoFieldNameArray'] = array_unique(array_merge($courseSetting['userinfoFieldNameArray'], $commomFieldsKeys));
         }
 
-        $userPartner = $this->getSettingService()->get('user_partner', array());
+        $userPartner = $this->getSettingService()->get('user_partner', []);
         $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
         $userFields = ArrayToolkit::index($userFields, 'fieldName');
 
@@ -283,7 +283,7 @@ class UserSettingController extends BaseController
             $auth['registerSort'] = $request->request->get('registerSort');
             $auth['registerFieldNameArray'] = $request->request->get('registerFieldNameArray');
 
-            $cloudSmsSettings = $this->getSettingService()->get('cloud_sms', array('sms_enabled' => 0));
+            $cloudSmsSettings = $this->getSettingService()->get('cloud_sms', ['sms_enabled' => 0]);
             $mobileSmsValidate = $request->request->get('mobileSmsValidate', 0);
             $auth['mobileSmsValidate'] = $cloudSmsSettings['sms_enabled'] && $mobileSmsValidate ? $mobileSmsValidate : 0;
 
@@ -292,7 +292,7 @@ class UserSettingController extends BaseController
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        return $this->render('admin-v2/system/user-setting/user-fields.html.twig', array(
+        return $this->render('admin-v2/system/user-setting/user-fields.html.twig', [
             'textCount' => $textCount,
             'intCount' => $intCount,
             'floatCount' => $floatCount,
@@ -302,7 +302,7 @@ class UserSettingController extends BaseController
             'courseSetting' => $courseSetting,
             'authSetting' => $auth,
             'userFields' => $userFields,
-        ));
+        ]);
     }
 
     public function editUserFieldsAction(Request $request, $id)
@@ -348,9 +348,9 @@ class UserSettingController extends BaseController
             return $this->redirect($this->generateUrl('admin_v2_setting_user_fields'));
         }
 
-        return $this->render('admin-v2/system/user-setting/user-fields.modal.edit.html.twig', array(
+        return $this->render('admin-v2/system/user-setting/user-fields.modal.edit.html.twig', [
             'field' => $field,
-        ));
+        ]);
     }
 
     public function deleteUserFieldsAction(Request $request, $id)
@@ -369,9 +369,9 @@ class UserSettingController extends BaseController
             return $this->redirect($this->generateUrl('admin_v2_setting_user_fields'));
         }
 
-        return $this->render('admin-v2/system/user-setting/user-fields.modal.delete.html.twig', array(
+        return $this->render('admin-v2/system/user-setting/user-fields.modal.delete.html.twig', [
             'field' => $field,
-        ));
+        ]);
     }
 
     public function addUserFieldsAction(Request $request)
@@ -379,7 +379,7 @@ class UserSettingController extends BaseController
         $field = $request->request->all();
 
         if (isset($field['field_title'])
-            && in_array($field['field_title'], array('真实姓名', '手机号码', 'QQ', '所在公司', '身份证号码', '性别', '职业', '微博', '微信'))) {
+            && in_array($field['field_title'], ['真实姓名', '手机号码', 'QQ', '所在公司', '身份证号码', '性别', '职业', '微博', '微信'])) {
             $this->createNewException(UserFieldException::DUPLICATE_TITLE());
         }
 
@@ -405,7 +405,7 @@ class UserSettingController extends BaseController
 
     protected function getUserDefaultSet()
     {
-        $default = array(
+        $default = [
             'defaultAvatar' => 0,
             'defaultAvatarFileName' => 'avatar',
             'articleShareContent' => '我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。',
@@ -413,15 +413,15 @@ class UserSettingController extends BaseController
             'groupShareContent' => '我在{{groupname}}小组,发表了{{threadname}},很不错哦,一起来看看吧!',
             'classroomShareContent' => '我正在学习{{classroom}}，收获巨大哦，一起来学习吧！',
             'user_name' => '学员',
-        );
+        ];
 
         return $default;
     }
 
     private function changeUserInfoFields($fieldInfo, $type = 'update')
     {
-        $auth = $this->getSettingService()->get('auth', array());
-        $courseSetting = $this->getSettingService()->get('course', array());
+        $auth = $this->getSettingService()->get('auth', []);
+        $courseSetting = $this->getSettingService()->get('course', []);
 
         if (isset($auth['registerFieldNameArray'])) {
             if ('delete' == $type || ('update' == $type && !$fieldInfo['enabled'])) {
@@ -457,7 +457,7 @@ class UserSettingController extends BaseController
 
     private function getDefaultLoginConnect($clients)
     {
-        $default = array(
+        $default = [
             'login_limit' => 0,
             'client_login_limit' => 0,
             'enabled' => 0,
@@ -467,7 +467,7 @@ class UserSettingController extends BaseController
             'temporary_lock_allowed_times' => 5,
             'ip_temporary_lock_allowed_times' => 20,
             'temporary_lock_minutes' => 20,
-        );
+        ];
 
         foreach ($clients as $type => $client) {
             $default["{$type}_enabled"] = 0;
@@ -492,7 +492,7 @@ class UserSettingController extends BaseController
             $loginConnect['weixinmob_enabled'] = 0;
         }
         //新增第三方登录方式，加入下列列表计算，以便判断是否关闭第三方登录功能
-        $loginConnects = ArrayToolkit::parts($loginConnect, array('weibo_enabled', 'qq_enabled', 'renren_enabled', 'weixinweb_enabled', 'weixinmob_enabled'));
+        $loginConnects = ArrayToolkit::parts($loginConnect, ['weibo_enabled', 'qq_enabled', 'renren_enabled', 'weixinweb_enabled', 'weixinmob_enabled']);
         $sum = 0;
         foreach ($loginConnects as $value) {
             $sum += $value;
