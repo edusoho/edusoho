@@ -9,11 +9,11 @@ use AppBundle\Common\ServiceToolkit;
 class GoodSpecsFilter extends Filter
 {
     protected $simpleFields = [
-        'id', 'goodsId', 'targetId', 'title', 'seq', 'status', 'price', 'coinPrice', 'buyableStartTime', 'buyableEndTime', 'buyableMode', 'maxJoinNum', 'services',
+        'id', 'goodsId', 'targetId', 'title', 'seq', 'status', 'price', 'coinPrice', 'usageMode', 'usageDays', 'usageStartTime', 'usageEndTime', 'buyableStartTime', 'buyableEndTime', 'buyableMode', 'maxJoinNum', 'services',
     ];
 
     protected $publicFields = [
-        'id', 'goodsId', 'targetId', 'title', 'images', 'seq', 'status', 'price', 'coinPrice', 'buyableStartTime', 'buyableEndTime', 'buyableMode', 'maxJoinNum', 'services',
+        'id', 'goodsId', 'targetId', 'title', 'images', 'seq', 'status', 'price', 'coinPrice', 'usageMode', 'usageDays', 'usageStartTime', 'usageEndTime', 'buyableStartTime', 'buyableEndTime', 'buyableMode', 'maxJoinNum', 'services',
     ];
 
     protected function simpleFields(&$data)

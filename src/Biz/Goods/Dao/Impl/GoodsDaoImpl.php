@@ -19,6 +19,7 @@ class GoodsDaoImpl extends AdvancedDaoImpl implements GoodsDao
             'conditions' => [
                 'id = :id',
                 'id IN (:ids)',
+                'creator = :creator',
                 'categoryId = :categoryId',
                 'productId = :productId',
                 'title = :title',

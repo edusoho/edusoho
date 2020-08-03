@@ -20,14 +20,26 @@
             <p class="detail-right__title">{{ goods.title }}</p>
             <p class="detail-right__subtitle">{{ goods.subtitle }}</p>
 
-            <!-- 价格 -->
+<!--            &lt;!&ndash; 价格 &ndash;&gt;-->
+<!--            <div class="detail-right__price">-->
+<!--                &lt;!&ndash; 优惠活动 &ndash;&gt;-->
+<!--&lt;!&ndash;                <div class="detail-right__price__activities">该商品享受“某某某某某某某某某某某某”打折促销活动，24：00：00后结束，请尽快购买！</div>&ndash;&gt;-->
+<!--                <div class="detail-right__price__num">-->
+<!--                    优惠价-->
+<!--                    <span>{{ currentSku.price }}</span>-->
+<!--                    <s>价格: {{ currentSku.price }}元</s>-->
+<!--                </div>-->
+<!--            </div>-->
             <div class="detail-right__price">
                 <!-- 优惠活动 -->
-                <div class="detail-right__price__activities">该商品享受“某某某某某某某某某某某某”打折促销活动，24：00：00后结束，请尽快购买！</div>
-                <div class="detail-right__price__num">
-                    优惠价
-                    <span>{{ currentSku.price }}</span>
-                    <s>价格: {{ currentSku.price }}元</s>
+                <!--                <div class="detail-right__price__activities">该商品享受“某某某某某某某某某某某某”打折促销活动，24：00：00后结束，请尽快购买！</div>-->
+                <div class="detail-right__price__num" v-if="currentSku.price != 0">
+                    价格
+                    <span class="free">免费</span>
+                </div>
+                <div class="detail-right__price__num" v-if="currentSku.price == 0">
+                    价格
+                    <span class="unfree">{{ currentSku.price }}元</span>
                 </div>
             </div>
 
@@ -43,7 +55,7 @@
             <!-- 学习有效期 -->
             <div class="detail-right__validity validity clearfix">
                 <span class="validity-title pull-left">学习有效期</span>
-                <span class="validity-content pull-left">{{ buyableModes[currentSku.buyableMode] }}</span>
+                <span class="validity-content pull-left">{{ buyableModes[currentSku.usageMode] }}</span>
             </div>
 
             <!-- 承诺服务 -->

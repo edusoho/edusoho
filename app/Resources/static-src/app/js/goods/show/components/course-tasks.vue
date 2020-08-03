@@ -16,11 +16,13 @@
                       <span class="right-menu ">{{'course.catalogue.task_status.looking_forward'|trans}}</span>
                     </span>
                 </li>
-                <li class="task-item task-content mouse-control infinite-item {lessonContainerClass}" v-if="isTask(item)">
+                <li class="task-item task-content mouse-control infinite-item color-gray bg-gray-lighter" v-if="isTask(item)">
                     <i v-if="item.isTaskLocked" class="{taskClass}" data-toggle="tooltip" data-trigger="hover"
                        data-placement="top" title="'course.task.lock_tips'|trans">
                     </i>
                     <i v-if="item.isTaskLocked" class="hidden"></i>
+                    <span class="title" href="javascript:;" data-toggle="modal" style="margin-top:-6px">{{ getTaskName(item) }}</span>
+                    <span class="right-menu color-gray "></span>
                     <!--试看逻辑-->
                 </li>
             </span>
@@ -77,6 +79,9 @@
                 } else {
                     return Translator.trans('course.lesson', { part_name: '课时', number: context.getLessonNum(data, context), title: data.title });
                 }
+            },
+            getTaskName(data, context) {
+                return data.title;
             },
             isTask(data) {
                 return 'task' === data.itemType;

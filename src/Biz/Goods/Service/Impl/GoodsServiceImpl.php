@@ -12,6 +12,7 @@ use Biz\Goods\GoodsEntityFactory;
 use Biz\Goods\GoodsException;
 use Biz\Goods\Service\GoodsService;
 use Biz\Product\Service\ProductService;
+use Biz\User\Service\UserService;
 
 class GoodsServiceImpl extends BaseService implements GoodsService
 {
@@ -116,12 +117,26 @@ class GoodsServiceImpl extends BaseService implements GoodsService
 
     public function countGoods($conditions)
     {
+        $conditions = $this->prepareGoodsFields($conditions);
+
         return $this->getGoodsDao()->count($conditions);
     }
 
     public function searchGoods($conditions, $orderBys, $start, $limit, $columns = [])
     {
+        $conditions = $this->prepareGoodsFields($conditions);
+
         return $this->getGoodsDao()->search($conditions, $orderBys, $start, $limit, $columns);
+    }
+
+    protected function prepareGoodsFields($conditions)
+    {
+        if (!empty($conditions['creatorName'])) {
+            $user = $this->getUserService()->getUserByNickname($conditions['creatorName']);
+            $conditions['creator'] = $user ? $user['id'] : -1;
+        }
+
+        return $conditions;
     }
 
     /**
@@ -368,5 +383,13 @@ class GoodsServiceImpl extends BaseService implements GoodsService
     protected function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
+    }
+
+    /**
+     * @return UserService
+     */
+    protected function getUserService()
+    {
+        return $this->createService('User:UserService');
     }
 }

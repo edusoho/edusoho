@@ -7,6 +7,7 @@ use Biz\BaseService;
 use Biz\Coupon\Dao\CouponBatchDao;
 use Biz\Coupon\Service\CouponBatchService;
 use Biz\Coupon\Service\CouponService;
+use Biz\Goods\Service\GoodsService;
 use Codeages\Biz\Framework\Dao\BatchCreateHelper;
 use Codeages\PluginBundle\System\PluginConfigurationManager;
 use Topxia\Service\Common\ServiceKernel;
@@ -68,7 +69,8 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
             'targetType',
             'h5MpsEnable',
             'linkEnable',
-            'codeEnable', ];
+            'codeEnable',
+        ];
         if (!ArrayToolkit::requireds($couponData, $batchArray)) {
             throw $this->createServiceException('缺少必要参数，生成优惠码失败');
         }
@@ -357,7 +359,7 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
                     'status' => 'unused',
                     'rate' => $batch['rate'],
                     'batchId' => $batch['id'],
-                    'deadline' => ('time' == $batch['deadlineMode']) ? $batch['deadline'] : 0,
+                    'deadline' => ('time' === $batch['deadlineMode']) ? $batch['deadline'] : 0,
                     'targetType' => $batch['targetType'],
                     'targetId' => $batch['targetId'],
                     'targetIds' => $batch['targetIds'],
@@ -446,7 +448,7 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
         if (empty($batch['targetType']) || empty($batch['targetId']) || 'all' == $batch['targetType']) {
             return null;
         }
-        if ('vip' != $batch['targetType'] && empty($batch['targetIds'])) {
+        if ('vip' !== $batch['targetType'] && empty($batch['targetIds'])) {
             return null;
         }
         $targetId = current($batch['targetIds']);
@@ -458,7 +460,7 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
             case 'vip':
                 if ($this->isPluginInstalled('Vip')) {
                     //vip业务没有修改，沿用原来的id
-                    $target = $this->getLevelService()->getLevel($batch['targetId']);
+                    $target = $this->getLevelService()->getLevel($targetId);
                 } else {
                     $target = null;
                 }
@@ -467,7 +469,10 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
             case 'classroom':
                 $target = $this->getClassroomService()->getClassroom($targetId);
                 break;
-
+            case 'goods':
+                $goods = $this->getGoodsService()->getGoods($targetId);
+                $target = $this->biz['goods.entity.factory']->create($goods['type'])->getTarget($goods);
+                break;
             default:
                 break;
         }
@@ -598,5 +603,13 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
         $pluginManager = new PluginConfigurationManager(ServiceKernel::instance()->getParameter('kernel.root_dir'));
 
         return $pluginManager->isPluginInstalled($code);
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->createService('Goods:GoodsService');
     }
 }
