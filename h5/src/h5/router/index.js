@@ -634,6 +634,24 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "more" */ '@/containers/goods/goods.vue'),
   },
+  {
+    path: '/goods/qr',
+    name: 'goods_qr',
+    meta: {
+      title: '进群免费学习课程',
+    },
+    component: () =>
+      import(/* webpackChunkName: "more" */ '@/containers/goods/qr.vue'),
+  },
+  {
+    path: '/goods/reviews',
+    name: 'goods_reviews',
+    meta: {
+      title: '进群免费学习课程',
+    },
+    component: () =>
+      import(/* webpackChunkName: "more" */ '@/containers/goods/reviews.vue'),
+  },
 ];
 
 // 页面刷新，store数据会被清掉，需对token、user重新赋值
