@@ -613,7 +613,18 @@ const routes = [
     },
     component: () =>
       import(
-        /* webpackChunkName: "more" */ '@/containers/certificate/my/index.vue'
+        /* webpackChunkName: "more" */ '@/containers/certificate/my-certificate/index.vue'
+      ),
+  },
+  {
+    path: '/certificate/detail',
+    name: 'certificate_detail',
+    meta: {
+      title: '高级产品经理证书',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "more" */ '@/containers/certificate/certificate-detail/index.vue'
       ),
   },
 ];
