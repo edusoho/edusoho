@@ -50,6 +50,7 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
+            'updateItemQuestionNum',
             'addBizItemCategoryColumn',
             'updateBizItemCategory',
             'addBizItemBankColumn',
@@ -96,6 +97,24 @@ class EduSohoUpgrade extends AbstractUpdater
                 'progress' => 0,
             );
         }
+    }
+
+    public function updateItemQuestionNum()
+    {
+        $this->logger('info', '处理biz_item question_num字段数据');
+        
+        $this->getConnection()->exec("
+            UPDATE `biz_item` item
+                INNER JOIN (
+                    SELECT item_id, COUNT(*) AS num
+                    FROM `biz_question` question
+                    GROUP BY question.item_id
+                ) question
+                ON item.id = question.item_id
+            SET item.question_num = question.num;
+        ");
+
+        return 1;
     }
 
     public function addBizItemCategoryColumn()
