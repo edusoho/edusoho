@@ -250,6 +250,7 @@ Api Test With 7.1:
     refs:
       - /^release/.*$/
       - develop
+      - fix/65026-develop-api-unit-test
       - feature/fix-api-test
     variables:
       - $REPOSITORY == "main"
