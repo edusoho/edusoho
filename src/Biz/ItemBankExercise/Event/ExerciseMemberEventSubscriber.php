@@ -47,7 +47,8 @@ class ExerciseMemberEventSubscriber extends EventSubscriber implements EventSubs
         $exercise = $event->getSubject();
 
         $conditions = [
-            'exerciseId' => $exercise['id'],
+            'target_type' => 'item_bank_exercise',
+            'target_id' => $exercise['id'],
             'statuses' => ['paid', 'success', 'finished'],
         ];
 
