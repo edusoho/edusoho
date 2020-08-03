@@ -10,6 +10,11 @@ courseStatus:
     published: 已发布
     closed: 已关闭
 
+goodsStatus:
+  created: 未发布
+  published: 已发布
+  unpublished: 已关闭
+
 courseType:
     live: 直播课程
     open: 录播公开课
@@ -47,7 +52,7 @@ fileType:
     ppt: PPT
     flash: Flash
     other: 其他
-    
+
 orderStatus:
     created: 未付款
     paying: 付款中
@@ -457,7 +462,7 @@ join_reason:
     import_join: 导入用户
     assistant_join: 助教加入
     auditor_join: 旁听加入
-    
+
 exchangeType:
     nickName: 用户名
     sn: 订单号
