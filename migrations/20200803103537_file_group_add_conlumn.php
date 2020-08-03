@@ -19,6 +19,5 @@ class FileGroupAddConlumn extends Migration
      */
     public function down()
     {
-
     }
 }
