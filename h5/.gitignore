@@ -14,6 +14,7 @@ composer.json
 composer.lock
 /build/env.js
 wap-sdk/
+.history/
 # Editor directories and files
 .idea
 .vscode

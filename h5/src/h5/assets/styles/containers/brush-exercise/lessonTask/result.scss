@@ -1,0 +1,90 @@
+.item-bank-result {
+	padding: vw(16);
+	background: #f9f9f9;
+
+	.result-comment {
+		margin-top: vw(4);
+		color: #999;
+		font-size: vw(14);
+	}
+
+	.result-score {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		box-sizing: border-box;
+		width: 100%;
+		margin-top: vw(24);
+		padding: vw(16);
+		color: #333;
+		font-size: 16px;
+		background: #fff;
+		border-radius: vw(4);
+	}
+
+	.result-content {
+		margin-top: vw(16);
+		padding-bottom: vw(16);
+		background: #fff;
+		border-radius: vw(4);
+
+		.result-content-item {
+			display: flex;
+			justify-content: space-between;
+			margin-top: 16px;
+			font-size: vw(13);
+
+			span {
+				display: flex;
+				flex: 1;
+				justify-content: center;
+
+				i {
+					font-style: normal;
+				}
+			}
+		}
+
+		.result-section-title {
+			padding: vw(8) 0;
+			color: #999;
+			border-bottom: vw(1) solid #e1e1e1;
+		}
+	}
+
+	.result-footer {
+		position: fixed;
+		bottom: 0;
+		display: flex;
+		justify-content: space-between;
+		box-sizing: border-box;
+		width: 100%;
+		padding: vw(6) vw(10);
+		background-color: #fff;
+		box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.04);
+
+		.result-footer__btn {
+			width: 100%;
+			border-radius: 5px;
+
+			&.van-button--disabled {
+				background-color: #ccc;
+				border-color: #ccc;
+				opacity: 1;
+			}
+		}
+	}
+
+	.result-text {
+		font-weight: 500;
+		font-size: vw(18);
+	}
+
+	.result-status_success {
+		color: #03c777;
+	}
+
+	.result-status_fail {
+		color: #ff9b56;
+	}
+}

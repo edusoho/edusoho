@@ -91,7 +91,6 @@ export default {
         offset: this.list[moduleId].paging.offset,
         limit: this.list[moduleId].paging.limit,
       };
-      // debugger;
       Api.getItemBankAssessments({ query, params }).then(res => {
         if (more) {
           this.list[moduleId].data = this.list[moduleId].data.concat(res.data);

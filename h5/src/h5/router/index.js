@@ -636,7 +636,7 @@ const routes = [
     },
     component: () =>
       import(
-        /* webpackChunkName: "brush-exercise" */ '@/containers/brush-exercise/index.vue'
+        /* webpackChunkName: "brush" */ '@/containers/brush-exercise/index.vue'
       ),
   },
   {
@@ -647,7 +647,29 @@ const routes = [
     },
     component: () =>
       import(
-        /* webpackChunkName: "brush-exercise" */ '@/containers/brush-exercise/lessonTask/do.vue'
+        /* webpackChunkName: "brush" */ '@/containers/brush-exercise/lessonTask/do.vue'
+      ),
+  },
+  {
+    path: '/brushReport/:answerRecordId',
+    name: 'brush_report',
+    meta: {
+      title: '查看解析',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "brush" */ '@/containers/brush-exercise/lessonTask/report.vue'
+      ),
+  },
+  {
+    path: '/brushResult/:answerRecordId',
+    name: 'brush_result',
+    meta: {
+      title: '答题结果',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "brush" */ '@/containers/brush-exercise/lessonTask/result.vue'
       ),
   },
   {

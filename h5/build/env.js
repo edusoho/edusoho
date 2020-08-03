@@ -28,6 +28,6 @@ module.exports = {
   },
   itembank: {
     url: 'http://item-bank.st.edusoho.cn',
-    token: 'mrl79g2zjbk8so0skk00g0swo40wow',
+    token: 'c9n13vnecjcwgw88sosgck8ww88w48o',
   },
 }['itembank'];
