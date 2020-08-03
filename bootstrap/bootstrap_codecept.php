@@ -9,5 +9,5 @@ if (class_exists('PHPUnit_Runner_Filter_Factory') && !class_exists('PHPUnit\Runn
     class_alias('PHPUnit_Runner_Filter_Test', 'PHPUnit\Runner\Filter\NameFilterIterator');
     class_alias('PHPUnit_Runner_Filter_Group_Include', 'PHPUnit\Runner\Filter\IncludeGroupFilterIterator');
     class_alias('PHPUnit_Runner_Filter_Group_Exclude', 'PHPUnit\Runner\Filter\ExcludeGroupFilterIterator');
-//    class_alias('PHPUnit_Runner_Version', 'PHPUnit\Runner\Version');
+    class_alias('PHPUnit_Runner_Version', 'PHPUnit\Runner\Version');
 }
