@@ -11518,7 +11518,12 @@
 								"exec": [
 									"tests[\"Status code is 200\"] = responseCode.code === 200;",
 									"",
-									"tests[\"getLesson success\"] =true;"
+									"var jsonData = JSON.parse(responseBody);",
+									"if((jsonData.type === \"video\")){",
+									"    tests[\"getLesson success\"] =true;",
+									"}else{",
+									"    tests[\"getLesson success\"] =false",
+									"}"
 								]
 							}
 						}
