@@ -67,6 +67,7 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
             'deadline',
             'fixedDay',
             'targetType',
+            'sourceType',
             'h5MpsEnable',
             'linkEnable',
             'codeEnable',
@@ -83,7 +84,7 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
         $batch['createdTime'] = time();
         $batch['unreceivedNum'] = $batch['generatedNum'];
 
-        if ('fullDiscount' == $couponData['targetType']) {
+        if ('fullDiscount' === $couponData['targetType']) {
             if (!isset($couponData['fullDiscountPrice'])) {
                 throw $this->createServiceException('缺少必要参数，生成优惠码失败');
             }
@@ -103,11 +104,11 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
             $batch['description'] = $couponData['description'];
         }
 
-        if (('time' == $batch['deadlineMode']) && ($batch['deadline'] + 86400 < $batch['createdTime'])) {
+        if (('time' === $batch['deadlineMode']) && ($batch['deadline'] + 86400 < $batch['createdTime'])) {
             throw $this->createServiceException('优惠码有效期不能比当前日期晚！');
         }
 
-        $duration = ('time' == $batch['deadlineMode']) ? $batch['deadline'] + 86400 - time() : 3600;
+        $duration = ('time' === $batch['deadlineMode']) ? $batch['deadline'] + 86400 - time() : 3600;
         $token = $this->getTokenService()->makeToken('coupon', [
             'duration' => $duration,
         ]);
@@ -152,7 +153,7 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
             if (!empty($card)) {
                 $this->getCardService()->updateCardByCardIdAndCardType($coupon['id'], 'coupon', ['status' => 'deleted']);
 
-                if ('minus' == $coupon['type']) {
+                if ('minus' === $coupon['type']) {
                     $message = '您的一张价值为￥'.$coupon['rate'].'的优惠券已经被管理员删除，详情请联系管理员。';
                 } else {
                     $message = '您的一张折扣为'.$coupon['rate'].'折的优惠券已经被管理员删除，详情请联系管理员。';
@@ -179,7 +180,7 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
         $batch = $this->getCouponBatchDao()->getBatchByToken($token, true);
         $token = $this->getTokenService()->verifyToken('coupon', $token);
 
-        if (!$token && ('time' == $batch['deadlineMode'])) {
+        if (!$token && ('time' === $batch['deadlineMode'])) {
             return [
                 'code' => 'failed',
                 'message' => '无效的链接',

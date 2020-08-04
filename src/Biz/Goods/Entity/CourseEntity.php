@@ -2,6 +2,7 @@
 
 namespace Biz\Goods\Entity;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Course\CourseSetException;
 use Biz\Course\Service\CourseSetService;
 
@@ -19,6 +20,20 @@ class CourseEntity extends BaseGoodsEntity
         }
 
         return $courseSet;
+    }
+
+    public function fetchTargets($goodses)
+    {
+        if (empty($goodses)) {
+            return $goodses;
+        }
+        $productIds = ArrayToolkit::column($goodses, 'productId');
+        $products = $this->getProductService()->findProductsByIds($productIds);
+        $courseSetIds = ArrayToolkit::column($products, 'targetId');
+        foreach ($goodses as &$goods) {
+            $goods['product']
+        }
+
     }
 
     public function canManageTarget($goods)
