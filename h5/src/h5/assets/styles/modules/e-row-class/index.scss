@@ -23,9 +23,9 @@
       background:#EF6B50;
       text-align:center;
       color:#fff;
-      -ms-transform: rotate(45deg); 
-      -moz-transform: rotate(45deg); 
-      -webkit-transform: rotate(45deg); 
+      -ms-transform: rotate(45deg);
+      -moz-transform: rotate(45deg);
+      -webkit-transform: rotate(45deg);
       -o-transform: rotate(45deg);
       transform: rotate(45deg);
     }
@@ -83,6 +83,14 @@
       font-size:vw(14);
       color:#FE3B13;
       font-weight:500;
+    }
+    .completionRate{
+      color:$primary-color;
+      font-size:12px;
+    }
+    .masteryRate{
+      color:#666666;
+      font-size:12px;
     }
   }
 }

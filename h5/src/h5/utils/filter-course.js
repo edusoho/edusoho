@@ -135,6 +135,26 @@ const getItemBankDisplay = (data, listObj, price) => {
     },
   };
 };
+
+const getstudyItemBankDisplay = data => {
+  return {
+    id: data.itemBankExercise.id,
+    studentNum: null,
+    imgSrc: {
+      url: data.itemBankExercise.cover.middle || '',
+      className: '',
+    },
+    header: data.itemBankExercise.title,
+    middle: {
+      value: data.completionRate,
+      html: ` <class class="completionRate">答题率${data.completionRate}</class>`,
+    },
+    bottom: {
+      value: data.masteryRate,
+      html: `<class class="masteryRate">掌握率${data.masteryRate}</class>`,
+    },
+  };
+};
 const courseListData = (data, listObj, uiStyle = 'old', platform = 'h5') => {
   // h5和app用了新版ui,小程序还是用旧版ui
   switch (listObj.type) {
@@ -175,6 +195,9 @@ const courseListData = (data, listObj, uiStyle = 'old', platform = 'h5') => {
             html: `<div class="e-course__count">共 ${data.courseNum} 门课程</div>`,
           },
         };
+      }
+      if (listObj.typeList === 'item_bank_exercise') {
+        return getstudyItemBankDisplay(data);
       }
       return {
         id: data.id,
