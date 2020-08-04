@@ -266,6 +266,11 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             }
         }
 
+        if ('audio' == $file['type']) {
+            $params['directives']['output'] = 'audio';
+            $params['directives']['transcode'] = false;
+        }
+
         if ('ppt' == $file['type']) {
             $params['directives'] = array_merge($params['directives'], ['convertAll' => true]);
         }
