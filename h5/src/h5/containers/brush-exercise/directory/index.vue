@@ -14,6 +14,8 @@
       v-if="currentType === 'chapter'"
       :exercise="list[moduleId].data"
       :isLoading="isLoading"
+      :moduleId="moduleId"
+      :exerciseId="exerciseId"
     ></exercise>
   </div>
 </template>

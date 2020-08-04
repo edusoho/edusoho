@@ -44,7 +44,6 @@ export default {
         this.answerScene = res.answer_scene;
         this.answerReport = res.answer_report;
         this.answerRecord = res.answer_record;
-        console.log(res);
         this.isLoading = false;
       });
     },

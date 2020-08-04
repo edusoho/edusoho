@@ -12,6 +12,7 @@ import App from '@/App';
 import Api from '@/api';
 import VueClipboard from 'vue-clipboard2';
 import wapSdk from 'wap-sdk-test';
+// import 'wap-sdk-test/lib/itemBank.css';
 import {
   Row,
   Col,

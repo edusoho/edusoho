@@ -54,8 +54,13 @@
 // webview
 @import './containers/webview/index.scss';
 
+//wap-sdk
+@import '~wap-sdk-test/src/styles/iconfont/font.scss';
+
 .ibs-wap-vue {
-	@import '../../../../node_modules/wap-sdk-test/src/styles/index.scss';
+	$primary-color: #fb40d2;
+
+	@import '~wap-sdk-test/src/styles/index.scss';
 }
 //隐藏滚动条
 html,

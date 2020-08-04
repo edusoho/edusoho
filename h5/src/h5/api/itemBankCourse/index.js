@@ -38,4 +38,10 @@ export default [
     url: '/item_bank_exercises/{exerciseId}/chapter_exercise_record',
     method: 'POST',
   },
+  {
+    // 章节练习自判
+    name: 'pushItemBankReviewReport',
+    url: '/item_bank_exercises/{exerciseId}/review_report',
+    method: 'POST',
+  },
 ];

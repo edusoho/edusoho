@@ -83,6 +83,7 @@ export default {
       console.log('自动提交', data);
       Api.submitAnswer({ data })
         .then(res => {
+          this.goResult();
           console.log(res);
         })
         .catch(err => {
@@ -103,6 +104,7 @@ export default {
       console.log('手动提交', data);
       Api.submitAnswer({ data })
         .then(res => {
+          this.goResult();
           console.log(res);
         })
         .catch(err => {
@@ -118,6 +120,19 @@ export default {
         .catch(err => {
           console.log(err);
         });
+    },
+    goResult() {
+      const query = {
+        type: this.$route.query.exerciseId.type,
+        exerciseId: this.$route.query.exerciseId,
+        assessmentId: this.$route.query.assessment.id,
+        moduleId: this.$route.query.moduleId,
+      };
+      const answerRecordId = this.answerRecord.id;
+      this.$router.replace({
+        path: `/brushResult/${answerRecordId}`,
+        query,
+      });
     },
   },
 };

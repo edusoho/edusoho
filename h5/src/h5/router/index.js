@@ -673,6 +673,17 @@ const routes = [
       ),
   },
   {
+    path: '/brushReview/:answerRecordId',
+    name: 'brush_review',
+    meta: {
+      title: '答题批阅',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "brush" */ '@/containers/brush-exercise/lessonTask/review.vue'
+      ),
+  },
+  {
     path: '/item_bank_exercise/:id',
     name: 'item_bank_exercise',
     meta: {

@@ -5,6 +5,7 @@
     >
     <div v-else v-for="(item, index) in exercise" :key="'exercise' + index">
       <exercise-section
+        v-bind="$attrs"
         :class="getClass(item.depth)"
         :section="item"
       ></exercise-section>

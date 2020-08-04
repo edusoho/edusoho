@@ -84,14 +84,25 @@ export default {
     continueDo(item) {
       const query = {
         mode: 'continue',
+        type: 'assessment',
+        exerciseId: item.exerciseId,
+        assessmentId: item.assessment.id,
+        moduleId: item.moduleId,
         answer_record_id: item.latestAnswerRecord.answerRecordId,
       };
       this.$router.push({ path: '/brushDo', query });
     },
     goResult(item) {
+      const query = {
+        type: 'assessment',
+        exerciseId: item.exerciseId,
+        assessmentId: item.assessment.id,
+        moduleId: item.moduleId,
+      };
       const answerRecordId = item.latestAnswerRecord.answerRecordId;
       this.$router.push({
         path: `/brushResult/${answerRecordId}`,
+        query,
       });
     },
     clickBtn(item) {
