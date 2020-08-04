@@ -240,42 +240,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
     public function initUpload($file)
     {
-        $params = [
-            'extno' => $file['id'],
-            'bucket' => $file['bucket'],
-            'reskey' => $file['hashId'],
-            'name' => $file['name'],
-            'size' => $file['fileSize'],
-        ];
-        if ('attachment' == $file['targetType']) {
-            $params['type'] = $file['targetType'];
-        }
-
-        if ('subtitle' == $file['targetType']) {
-            $params['type'] = 'sub';
-        }
-        if (isset($file['directives'])) {
-            $params['directives'] = $file['directives'];
-        }
-
-        if ('video' == $file['type']) {
-            $watermarks = $this->getVideoWatermarkImages();
-
-            if (!empty($watermarks)) {
-                $params['directives']['watermarks'] = $watermarks;
-            }
-        }
-
-        if ('audio' == $file['type']) {
-            $params['directives']['output'] = 'audio';
-            $params['directives']['transcode'] = false;
-        }
-
-        if ('ppt' == $file['type']) {
-            $params['directives'] = array_merge($params['directives'], ['convertAll' => true]);
-        }
-
-        $apiResult = $this->getResourceFacadeService()->startUpload($params);
+        $apiResult = $this->getResourceFacadeService()->startUpload($file);
 
         $result = [];
 
@@ -301,15 +266,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
     public function resumeUpload($file, $initParams)
     {
-        $params = [
-            'extno' => $file['id'],
-            'bucket' => $initParams['bucket'],
-            'size' => $initParams['fileSize'],
-            'name' => $initParams['name'],
-            'resumeNo' => $file['globalId'],
-        ];
-
-        $apiResult = $this->getResourceFacadeService()->startUpload($params);
+        $apiResult = $this->getResourceFacadeService()->resumeUpload($initParams, $file);
         if (empty($apiResult['resumed']) || ('ok' !== $apiResult['resumed'])) {
             return null;
         }

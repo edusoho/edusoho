@@ -120,8 +120,58 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
         return '//'.trim($cdnHost, "\/").'/'.$path.'?'.$timestamp;
     }
 
-    public function startUpload($params)
+    public function startUpload($file)
     {
+        $params = [
+            'extno' => $file['id'],
+            'bucket' => $file['bucket'],
+            'reskey' => $file['hashId'],
+            'name' => $file['name'],
+            'size' => $file['fileSize'],
+        ];
+
+        if ('attachment' == $file['targetType']) {
+            $params['type'] = $file['targetType'];
+        }
+
+        if ('subtitle' == $file['targetType']) {
+            $params['type'] = 'sub';
+        }
+
+        if (isset($file['directives'])) {
+            $params['directives'] = $file['directives'];
+        }
+
+        if ('video' == $file['type']) {
+            $watermarks = $this->getVideoWatermarkImages();
+
+            if (!empty($watermarks)) {
+                $params['directives']['watermarks'] = $watermarks;
+            }
+        }
+
+        if ('audio' == $file['type']) {
+            $params['directives']['output'] = 'audio';
+            $params['directives']['transcode'] = false;
+        }
+
+        if ('ppt' == $file['type']) {
+            $params['directives'] = array_merge($params['directives'], ['convertAll' => true]);
+        }
+
+        return $this->getResourceService()->startUpload($params);
+    }
+
+    public function resumeUpload($params, $file)
+    {
+        $params = [
+            'extno' => $file['id'],
+            'bucket' => $params['bucket'],
+            'size' => $params['fileSize'],
+            'name' => $params['name'],
+            'resumeNo' => $file['globalId'],
+        ];
+
         return $this->getResourceService()->startUpload($params);
     }
 
@@ -143,6 +193,27 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
         }
 
         return true;
+    }
+
+    protected function getVideoWatermarkImages()
+    {
+        $setting = $this->getSettingService()->get('storage', []);
+
+        if (empty($setting['video_embed_watermark_image']) || (2 != $setting['video_watermark'])) {
+            return [];
+        }
+
+        $videoWatermarkImage = $this->biz['env']['base_url'].$this->biz['topxia.upload.public_url_path'].'/'.$setting['video_embed_watermark_image'];
+        $pathinfo = pathinfo($videoWatermarkImage);
+
+        $images = [];
+        $heighs = ['240', '360', '480', '720', '1080'];
+
+        foreach ($heighs as $height) {
+            $images[$height] = "{$pathinfo['dirname']}/{$pathinfo['filename']}-{$height}.{$pathinfo['extension']}";
+        }
+
+        return $images;
     }
 
     protected function getResourceService()
