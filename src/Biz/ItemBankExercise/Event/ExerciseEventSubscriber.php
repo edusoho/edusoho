@@ -55,47 +55,44 @@ class ExerciseEventSubscriber extends EventSubscriber implements EventSubscriber
             ]
         );
 
-        $this->synchronizationItemBankExercise($exercise, $members, $userId);
+        if ($members) {
+            $questionBankTeacherIds = explode(',', $members);
+            if (!in_array($exercise['creator'], $questionBankTeacherIds)) {
+                $questionBankTeacherIds[] = $exercise['creator'];
+            }
+        } else {
+            $questionBankTeacherIds = [$exercise['creator']];
+        }
+
+        $this->synchronizationItemBankExercise($exercise, $questionBankTeacherIds, $userId);
     }
 
-    private function synchronizationItemBankExercise($exercise, $members, $userId)
+    private function synchronizationItemBankExercise($exercise, $questionBankTeacherIds, $userId)
     {
         $manage = new MemberManage($this->getBiz());
         $teacherMember = $manage->getMemberClass('teacher');
-        $exerciseMembers = $this->getExerciseMemberService()->search(['exerciseId' => $exercise['id']], [], 0, PHP_INT_MAX);
-        $exerciseMembers = ArrayToolkit::index($exerciseMembers, 'userId');
-        if (empty($members)) {
-            if (isset($exerciseMembers[$userId])) {
-                $this->getExerciseMemberDao()->update($exerciseMembers[$userId]['id'], ['role' => 'teacher']);
-                unset($exerciseMembers[$userId]);
-                $this->getExerciseMemberDao()->update(['ids' => ArrayToolkit::column($exerciseMembers, 'id')], ['role' => 'student']);
+        $exerciseMembers = ArrayToolkit::index(
+            $this->getExerciseMemberService()->search(['exerciseId' => $exercise['id']], [], 0, PHP_INT_MAX, ['id', 'userId', 'role']),
+            'userId'
+        );
+
+        foreach ($questionBankTeacherIds as $questionBankTeacherId) {
+            if (empty($exerciseMembers[$questionBankTeacherId])) {
+                $teacherMember->join($exercise['id'], $questionBankTeacherId, ['remark' => '']);
             } else {
-                $teacherMember->join($exercise['id'], $userId, ['remark' => '']);
-            }
-        } else {
-            $members = explode(',', $members);
-            $oldTeacherIds = $exercise['teacherIds'];
-            if (count($members) >= count($oldTeacherIds)) {
-                foreach ($members as $teacherId) {
-                    if (!in_array($teacherId, $oldTeacherIds)) {
-                        if (isset($exerciseMembers[$teacherId])) {
-                            $this->getExerciseMemberDao()->update($exerciseMembers[$teacherId]['id'], ['role' => 'teacher']);
-                        } else {
-                            $teacherMember->join($exercise['id'], $teacherId, ['remark' => '']);
-                        }
-                    }
-                }
-            } else {
-                foreach ($oldTeacherIds as $oldTeacherId) {
-                    if (!in_array($oldTeacherId, $members)) {
-                        $this->getExerciseMemberDao()->update(['userId' => $oldTeacherId, 'exerciseId' => $exercise['id']], ['role' => 'student']);
-                    }
+                if ('student' == $exerciseMembers[$questionBankTeacherId]['role']) {
+                    $this->getExerciseMemberDao()->update($exerciseMembers[$questionBankTeacherId]['id'], ['role' => 'teacher']);
                 }
             }
         }
 
-        $teacherIds = $this->getExerciseMemberService()->search(['exerciseId' => $exercise['id'], 'role' => 'teacher'], [], 0, PHP_INT_MAX);
-        $this->getExerciseService()->update($exercise['id'], ['teacherIds' => ArrayToolkit::column($teacherIds, 'userId')]);
+        foreach ($exercise['teacherIds'] as $teacherId) {
+            if (!in_array($teacherId, $questionBankTeacherIds)) {
+                $this->getExerciseMemberDao()->update($exerciseMembers[$teacherId]['id'], ['role' => 'student']);
+            }
+        }
+
+        $this->getExerciseService()->update($exercise['id'], ['teacherIds' => $questionBankTeacherIds]);
     }
 
     /**
