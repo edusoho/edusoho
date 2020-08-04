@@ -627,6 +627,17 @@ const routes = [
         /* webpackChunkName: "more" */ '@/containers/certificate/certificate-detail/index.vue'
       ),
   },
+  {
+    path: '/course/certificate/list',
+    name: 'course_certificate_list',
+    meta: {
+      title: '课程证书',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "more" */ '@/containers/course/certificate/certificate-list.vue'
+      ),
+  },
 ];
 
 // 页面刷新，store数据会被清掉，需对token、user重新赋值
