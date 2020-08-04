@@ -134,7 +134,11 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
         }
 
         $statisticMap = [
-            'finishedTaskNum' => $this->getTaskResultService()->countTaskNumGroupByUserId(array_merge(['status' => 'finish'], $conditions)),
+            'finishedTaskNum' => $this->getTaskResultService()->countTaskNumGroupByUserId([
+                'status' => 'finish',
+                'finishedTime_GE' => $conditions['createdTime_GE'],
+                'finishedTime_LT' => $conditions['createdTime_LT'],
+            ]),
             'joinedClassroomNum' => $this->findUserOperateClassroomNum('join', $conditions),
             'exitClassroomNum' => $this->findUserOperateClassroomNum('exit', $conditions),
             'joinedCourseSetNum' => $this->findUserOperateCourseSetNum('join', $conditions),
