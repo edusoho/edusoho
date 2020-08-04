@@ -11519,7 +11519,11 @@
 									"tests[\"Status code is 200\"] = responseCode.code === 200;",
 									"",
 									"var jsonData = JSON.parse(responseBody);",
-									"tests[\"getLesson success\"] =false"
+									"if((jsonData.type === \"video\")){",
+									"    tests[\"getLesson success\"] =true;",
+									"}else{",
+									"    tests[\"getLesson success\"] =false",
+									"}"
 								]
 							}
 						}
@@ -16480,58 +16484,6 @@
 					},
 					"response": []
 				},
-				{
-					"name": "getExerciseResult",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"type": "text/javascript",
-								"exec": [
-									"tests[\"Status code is 200\"] = responseCode.code === 200;",
-									"",
-									"var jsonData = JSON.parse(responseBody);",
-									"if(jsonData.items.length ===0 ){",
-									"    tests[\"There is no exercise result !\"] = true ;",
-									"}",
-									"",
-									"for(var i=0;i<jsonData.items.length;i++){",
-									"    var itemsBody = JSON.stringify(jsonData.items[i]);",
-									"    tests[\"get exercise result info success !\"] = (jsonData.id === data.exerciseId)&itemsBody.has(\"type\")&itemsBody.has(\"stem\")&itemsBody.has(\"answer\")&itemsBody.has(\"analysis\")&itemsBody.has(\"metas\")&itemsBody.has(\"result\");",
-									"}",
-									""
-								]
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Auth-Token",
-								"value": "{{token}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "{{url}}/api/exercise/{{exerciseId}}/result",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"api",
-								"exercise",
-								"{{exerciseId}}",
-								"result"
-							]
-						},
-						"description": "获取练习的答案和结果"
-					},
-					"response": []
-				}
 			]
 		},
 		{

@@ -503,91 +503,91 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
             $lesson['length'] = '';
         }
 
-        if ('self' == $mediaSource) {
-            $file = $this->controller->getUploadFileService()->getFullFile($lesson['mediaId']);
-
-            if (!empty($file)) {
-                if ('cloud' == $file['storage']) {
-                    $lesson['mediaConvertStatus'] = $file['status'];
-
-                    if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
-                        if (isset($file['convertParams']['convertor']) && ('HLSEncryptedVideo' == $file['convertParams']['convertor'])) {
-                            $headLeaderInfo = $this->getHeadLeaderInfo();
-
-                            if ($headLeaderInfo) {
-                                $token = $this->getTokenService()->makeToken('hls.playlist', array(
-                                    'data' => array(
-                                        'id' => $headLeaderInfo['id'],
-                                        'fromApi' => true,
-                                    ),
-                                    'times' => 2,
-                                    'duration' => 3600,
-                                ));
-
-                                $headUrl = array(
-                                    'url' => $this->controller->generateUrl('hls_playlist', array(
-                                        'id' => $headLeaderInfo['id'],
-                                        'token' => $token['token'],
-                                        'line' => $this->request->get('line'),
-                                        'hideBeginning' => 1,
-                                    ), UrlGeneratorInterface::ABSOLUTE_URL),
-                                );
-
-                                $lesson['headUrl'] = $headUrl['url'];
-                                $lesson['headLength'] = $headLeaderInfo['length'];
-                            }
-
-                            $token = $this->getTokenService()->makeToken('hls.playlist', array(
-                                'data' => $this->makeTokenData(array(
-                                    'id' => $file['id'],
-                                    'fromApi' => true,
-                                    'options' => $options,
-                                )),
-                                'times' => 2,
-                                'duration' => 3600,
-                            ));
-
-                            $url = array(
-                                'url' => $this->controller->generateUrl('hls_playlist', array(
-                                    'id' => $file['id'],
-                                    'token' => $token['token'],
-                                    'line' => $this->request->get('line'),
-                                    'hideBeginning' => 1,
-                                ), UrlGeneratorInterface::ABSOLUTE_URL),
-                            );
-                        } else {
-                            throw new \RuntimeException('当前视频不支持播放！');
-                        }
-
-                        $lesson['mediaUri'] = (isset($url) && is_array($url) && !empty($url['url'])) ? $url['url'] : '';
-                    } else {
-                        if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
-                            $key = $file['metas']['hd']['key'];
-                        } else {
-                            if ('video' == $file['type']) {
-                                $key = null;
-                            } else {
-                                $key = $file['hashId'];
-                            }
-                        }
-
-                        if ($key) {
-                            $result = $this->controller->getMaterialLibService()->player($file['globalId']);
-                            $lesson['mediaUri'] = $result['url'];
-                        } else {
-                            $lesson['mediaUri'] = '';
-                        }
-                    }
-                } else {
-                    $lesson['mediaUri'] = $this->request->getSchemeAndHttpHost()."/mapi_v2/Lesson/getLocalVideo?targetId={$file['id']}&token={$token['token']}";
-                }
-            } else {
-                $lesson['mediaUri'] = '';
-            }
-        } else {
-            $proxy = new ParserProxy();
-            $lesson = $proxy->prepareMediaUriForMobile($lesson, $this->getSchema());
-        }
+//        if ('self' == $mediaSource) {
+//            $file = $this->controller->getUploadFileService()->getFullFile($lesson['mediaId']);
+//
+//            if (!empty($file)) {
+//                if ('cloud' == $file['storage']) {
+//                    $lesson['mediaConvertStatus'] = $file['status'];
+//
+//                    if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
+//                        if (isset($file['convertParams']['convertor']) && ('HLSEncryptedVideo' == $file['convertParams']['convertor'])) {
+//                            $headLeaderInfo = $this->getHeadLeaderInfo();
+//
+//                            if ($headLeaderInfo) {
+//                                $token = $this->getTokenService()->makeToken('hls.playlist', array(
+//                                    'data' => array(
+//                                        'id' => $headLeaderInfo['id'],
+//                                        'fromApi' => true,
+//                                    ),
+//                                    'times' => 2,
+//                                    'duration' => 3600,
+//                                ));
+//
+//                                $headUrl = array(
+//                                    'url' => $this->controller->generateUrl('hls_playlist', array(
+//                                        'id' => $headLeaderInfo['id'],
+//                                        'token' => $token['token'],
+//                                        'line' => $this->request->get('line'),
+//                                        'hideBeginning' => 1,
+//                                    ), UrlGeneratorInterface::ABSOLUTE_URL),
+//                                );
+//
+//                                $lesson['headUrl'] = $headUrl['url'];
+//                                $lesson['headLength'] = $headLeaderInfo['length'];
+//                            }
+//
+//                            $token = $this->getTokenService()->makeToken('hls.playlist', array(
+//                                'data' => $this->makeTokenData(array(
+//                                    'id' => $file['id'],
+//                                    'fromApi' => true,
+//                                    'options' => $options,
+//                                )),
+//                                'times' => 2,
+//                                'duration' => 3600,
+//                            ));
+//
+//                            $url = array(
+//                                'url' => $this->controller->generateUrl('hls_playlist', array(
+//                                    'id' => $file['id'],
+//                                    'token' => $token['token'],
+//                                    'line' => $this->request->get('line'),
+//                                    'hideBeginning' => 1,
+//                                ), UrlGeneratorInterface::ABSOLUTE_URL),
+//                            );
+//                        } else {
+//                            throw new \RuntimeException('当前视频不支持播放！');
+//                        }
+//
+//                        $lesson['mediaUri'] = (isset($url) && is_array($url) && !empty($url['url'])) ? $url['url'] : '';
+//                    } else {
+//                        if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
+//                            $key = $file['metas']['hd']['key'];
+//                        } else {
+//                            if ('video' == $file['type']) {
+//                                $key = null;
+//                            } else {
+//                                $key = $file['hashId'];
+//                            }
+//                        }
+//
+//                        if ($key) {
+//                            $result = $this->controller->getMaterialLibService()->player($file['globalId']);
+//                            $lesson['mediaUri'] = $result['url'];
+//                        } else {
+//                            $lesson['mediaUri'] = '';
+//                        }
+//                    }
+//                } else {
+//                    $lesson['mediaUri'] = $this->request->getSchemeAndHttpHost()."/mapi_v2/Lesson/getLocalVideo?targetId={$file['id']}&token={$token['token']}";
+//                }
+//            } else {
+//                $lesson['mediaUri'] = '';
+//            }
+//        } else {
+//            $proxy = new ParserProxy();
+//            $lesson = $proxy->prepareMediaUriForMobile($lesson, $this->getSchema());
+//        }
 
         return $lesson;
     }
