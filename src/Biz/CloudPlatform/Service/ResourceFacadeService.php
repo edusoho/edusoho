@@ -15,6 +15,7 @@ interface ResourceFacadeService
 
     /**
      * 资源上传
+     *
      * @param $file
      */
     public function startUpload($file);
