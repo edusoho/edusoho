@@ -63,6 +63,9 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
             return false;
         }
         $newCourseSet = $this->getCourseSetService()->addCourseSet($this->prepareCourseSetData($content));
+        //同步连载状态
+        $newCourseSet = $this->getCourseSetDao()->update($newCourseSet['id'], ['serializeMode' => $content['serializeMode']]);
+
         $this->getProductService()->updateProduct($courseSetProduct['id'], ['localResourceId' => $newCourseSet['id'], 'syncStatus' => self::SYNC_STATUS_FINISHED]);
 
         $courseProducts = array_filter($waitSyncProducts, function ($product) {
@@ -123,6 +126,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
             'cover' => $courseSetData['cover'],
             'maxCoursePrice' => $courseSetData['maxCoursePrice'],
             'minCoursePrice' => $courseSetData['minCoursePrice'],
+            'serializeMode' => $courseSetData['serializeMode'],
             'platform' => 'supplier',
         ];
     }
