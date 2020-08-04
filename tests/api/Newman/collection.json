@@ -13546,17 +13546,17 @@
 									"var flag3 = true ;",
 									"//当前课程下的所有问答/话题数",
 									"if(jsonData.total <= 100){",
-									"tests[\"The classroomThreads's total number is \"+jsonData.length] = jsonData.total == jsonData.length;",
+									"tests[\"The classroomThreads's total number is \"+jsonData.data.length] = jsonData.total == jsonData.data.length;",
 									"}else",
 									"{",
 									"    tests[\"The classroomThreads's total number is \"+jsonData.total ]= true;",
 									"}",
-									"if(jsonData.length === 0){",
+									"if(jsonData.data.length === 0){",
 									" tests[\"There is no classroomThreads !\"] = true ;   ",
 									"}",
 									"var count = 0;",
-									"if(jsonData.length>0){",
-									"for(var i = 0;i<jsonData.length;i++){",
+									"if(jsonData.data.length>0){",
+									"for(var i = 0;i<jsonData.data.length;i++){",
 									"     if(jsonData[i].isStick === \"1\"){",
 									"        count ++;",
 									"    }",
@@ -13570,7 +13570,7 @@
 									"tests[\"The type of threads is classRoom !\"] = isClassRoom === true;",
 									"}  ",
 									"//获取的问答或话题,先按置顶，再按最后一条消息时间倒序排序",
-									"if(jsonData.length>1){",
+									"if(jsonData.data.length>1){",
 									"",
 									"if(count === 1){",
 									"    if(jsonData[0].isStick == 1){",
@@ -13590,7 +13590,7 @@
 									"    }",
 									"}",
 									"",
-									"for(var i = count;i<jsonData.length-count-1;i++){",
+									"for(var i = count;i<jsonData.data.length-count-1;i++){",
 									"    if((jsonData[i].lastPostTime)>=(jsonData[i+1].lastPostTime)){",
 									"        var flag3 = true;",
 									"    }else{",
@@ -13878,7 +13878,7 @@
 									"tests[\"Status code is 200\"] = responseCode.code === 200;",
 									"",
 									"var jsonData = JSON.parse(responseBody);",
-									" tests[\"classRoomId is error !\"] = jsonData.length === 0 ;   ",
+									" tests[\"classRoomId is error !\"] = jsonData.resources.length === 0 ;   ",
 									"",
 									""
 								]
@@ -13923,7 +13923,7 @@
 								},
 								{
 									"key": "sort",
-									"value": "posted "
+									"value": "posted"
 								}
 							]
 						},
@@ -14286,25 +14286,25 @@
 									" tests[\"There is no Threadposts !\"] = true ;   ",
 									"}else",
                   "{",
-									" for(var i = 0;i<jsonData.resources.length;i++){",
-									"    if(jsonData.resources[i].threadId === data.courseQusetionId)",
-									"    {",
-									"        var f = true;",
-									"    }else{",
-									"        f = false;break;",
-									"    }",
-									" }",
+									"// for(var i = 0;i<jsonData.resources.length;i++){",
+									"//    if(jsonData.resources[i].threadId === data.courseQusetionId)",
+									"//    {",
+									"//        var f = true;",
+									"//    }else{",
+									"//        f = false;break;",
+									"//    }",
+									"// }",
+									"tests[\"The threadId is \"+data.courseQusetionId] = true;",
                   "}",
-									"tests[\"The threadId is \"+data.courseQusetionId] = f === true;",
 									"if(jsonData.resources.length>1){   ",
 									"//获取的问答或话题回复按回复时间正序排序",
 									"for(var i = 0;i<jsonData.resources.length-1;i++){",
 									"    if((jsonData.resources[i].createdTime)>(jsonData.resources[i+1].createdTime)){",
-									"        var flag = true;",
+									"        var flag = false;break;",
 									"        // tests[\"第\"+i+\"个课程创建时间为--\"+jsonData.resources[i].createdTime] =false;",
 									"        //  tests[\"第\"+(i+1)+\"个课程创建时间为--\"+jsonData.resources[i+1].createdTime] =false;",
 									"    }else{",
-									"        flag = false;break;",
+									"        flag = true;",
 									"    }",
 									"}",
 									"tests[\"The ClassroomThreadposts is sorted by latest success !\"] = flag === true;",
@@ -15814,7 +15814,13 @@
 								"api",
 								"homework",
 								"{{homeworkId}}"
-							]
+							],
+              "query": [
+                {
+                  "key": "_idType",
+                  "value": "lesson"
+                }
+              ]
 						},
 						"description": "获取 作业 信息"
 					},
