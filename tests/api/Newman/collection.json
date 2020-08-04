@@ -13542,7 +13542,7 @@
 									"var flag3 = true ;",
 									"//当前课程下的所有问答/话题数",
 									"if(jsonData.total <= 100){",
-									"tests[\"The classroomThreads's total number is \"+jsonDatalength] = jsonData.total == jsonData.length;",
+									"tests[\"The classroomThreads's total number is \"+jsonData.length] = jsonData.total == jsonData.length;",
 									"}else",
 									"{",
 									"    tests[\"The classroomThreads's total number is \"+jsonData.total ]= true;",
