@@ -12,6 +12,7 @@ import marketing from './marketing/index';
 import studyCard from './study-card/index';
 import distribution from './distribution/index';
 import liveTimetable from './liveTimetable/index';
+import itemBank from './itemBank/index';
 
 const config = [
   ...openCourse,
@@ -28,6 +29,7 @@ const config = [
   ...studyCard,
   ...liveTimetable,
   ...itemBankCourse,
+  ...itemBank,
 ];
 
 export default config;

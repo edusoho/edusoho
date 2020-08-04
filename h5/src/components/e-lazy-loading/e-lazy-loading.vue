@@ -10,9 +10,9 @@
         :type-list="typeList"
         :is-vip="course.vipLevelId"
         :is-app-use="false"
-        :discountType="discountType"
-        :discount="discount"
-        :course-type="courseType"
+        :discountType="discountType(course)"
+        :discount="discount(course)"
+        :course-type="courseType(course)"
         :course="course | courseListData(listObj, 'new', 'h5')"
       />
     </template>

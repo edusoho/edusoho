@@ -16,7 +16,7 @@
             </div>
           </div>
           <div class="exam-right">
-            <div :class="[getBtnText(item).class]">
+            <div :class="[getBtnText(item).class]" @click="clickBtn(item)">
               {{ getBtnText(item).text }}
             </div>
           </div>
@@ -63,7 +63,6 @@ export default {
   created() {},
   methods: {
     onLoad() {
-      console.log('加载');
       this.$emit('loadMore');
     },
     handleLoad(e) {
@@ -71,6 +70,56 @@ export default {
     },
     getBtnText(item) {
       return getBtnText(item.latestAnswerRecord?.status || '');
+    },
+    startDo(item) {
+      const query = {
+        mode: 'start',
+        type: 'assessment',
+        exerciseId: item.exerciseId,
+        assessmentId: item.assessment.id,
+        moduleId: item.moduleId,
+      };
+      this.$router.push({ path: '/brushDo', query });
+    },
+    continueDo(item) {
+      const query = {
+        mode: 'continue',
+        type: 'assessment',
+        exerciseId: item.exerciseId,
+        assessmentId: item.assessment.id,
+        moduleId: item.moduleId,
+        answer_record_id: item.latestAnswerRecord.answerRecordId,
+      };
+      this.$router.push({ path: '/brushDo', query });
+    },
+    goResult(item) {
+      const query = {
+        type: 'assessment',
+        exerciseId: item.exerciseId,
+        assessmentId: item.assessment.id,
+        moduleId: item.moduleId,
+      };
+      const answerRecordId = item.latestAnswerRecord.answerRecordId;
+      this.$router.push({
+        path: `/brushResult/${answerRecordId}`,
+        query,
+      });
+    },
+    clickBtn(item) {
+      const status = item.latestAnswerRecord?.status;
+      switch (status) {
+        case 'doing':
+        case 'paused':
+          this.continueDo(item);
+          break;
+        case 'reviewing':
+        case 'finished':
+          this.goResult(item);
+          break;
+        default:
+          this.startDo(item);
+          break;
+      }
     },
   },
 };

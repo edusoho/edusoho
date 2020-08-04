@@ -7,7 +7,9 @@
           {{ learnNum }}/{{ section.question_num }}题
         </div>
         <div class="directory-exercise-right">
-          <div :class="[btnText.class]">{{ btnText.text }}</div>
+          <div :class="[btnText.class]" @click="clickBtn()">
+            {{ btnText.text }}
+          </div>
         </div>
       </template>
     </div>
@@ -24,6 +26,14 @@ export default {
   },
   props: {
     section: {},
+    moduleId: {
+      type: String,
+      default: '',
+    },
+    exerciseId: {
+      type: Number,
+      default: -1,
+    },
   },
   computed: {
     learnNum() {
@@ -41,6 +51,57 @@ export default {
   },
   watch: {},
   created() {},
-  methods: {},
+  methods: {
+    clickBtn() {
+      const status = this.section.latestAnswerRecord?.status;
+      switch (status) {
+        case 'doing':
+        case 'paused':
+          this.continueDo(this.section);
+          break;
+        case 'reviewing':
+        case 'finished':
+          this.goResult(this.section);
+          break;
+        default:
+          this.startDo(this.section);
+          break;
+      }
+    },
+    startDo(item) {
+      const query = {
+        mode: 'start',
+        type: 'chapter',
+        exerciseId: this.exerciseId,
+        categoryId: item.id,
+        moduleId: this.moduleId,
+      };
+      this.$router.push({ path: '/brushDo', query });
+    },
+    continueDo(item) {
+      const query = {
+        mode: 'continue',
+        type: 'chapter',
+        exerciseId: this.exerciseId,
+        categoryId: item.id,
+        moduleId: this.moduleId,
+        answer_record_id: item.latestAnswerRecord.answerRecordId,
+      };
+      this.$router.push({ path: '/brushDo', query });
+    },
+    goResult(item) {
+      const query = {
+        type: 'chapter',
+        exerciseId: this.exerciseId,
+        categoryId: item.id,
+        moduleId: this.moduleId,
+      };
+      const answerRecordId = item.latestAnswerRecord.answerRecordId;
+      this.$router.push({
+        path: `/brushResult/${answerRecordId}`,
+        query,
+      });
+    },
+  },
 };
 </script>
