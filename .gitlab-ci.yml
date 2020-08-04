@@ -245,9 +245,9 @@ Api Test With 7.1:
     # 执行codeception的A PI 单元测试
     - bin/codecept run api --bootstrap=bootstrap/bootstrap_codecept.php -vvv
     # 执行newman的 API 单元测试
+    - npm config set registry https://registry.npm.taobao.org
     - npm install -g n
     - n stable
-    - npm config set registry https://registry.npm.taobao.org
     - npm install -g newman
     - cd tests/api/Newman && newman run collection.json  --iteration-data param.json  --environment environment.json
   only:
