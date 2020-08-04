@@ -28,12 +28,17 @@ class CourseEntity extends BaseGoodsEntity
             return $goodses;
         }
         $productIds = ArrayToolkit::column($goodses, 'productId');
-        $products = $this->getProductService()->findProductsByIds($productIds);
+        $products = ArrayToolkit::index($this->getProductService()->findProductsByIds($productIds), 'id');
         $courseSetIds = ArrayToolkit::column($products, 'targetId');
+        $courseSets = ArrayToolkit::index($this->getCourseSetService()->findCourseSetsByIds($courseSetIds), 'id');
         foreach ($goodses as &$goods) {
-            $goods['product']
+            $product = empty($products[$goods['productId']]) ? [] : $products[$goods['productId']];
+            $courseSet = empty($courseSets[$product['targetId']]) ? [] : $courseSets[$product['targetId']];
+            $goods['product'] = $product;
+            $goods['courseSet'] = $courseSet;
         }
 
+        return $goodses;
     }
 
     public function canManageTarget($goods)

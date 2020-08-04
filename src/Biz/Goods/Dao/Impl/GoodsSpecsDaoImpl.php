@@ -23,6 +23,7 @@ class GoodsSpecsDaoImpl extends GeneralDaoImpl implements GoodsSpecsDao
                 'title = :title',
                 'targetId = :targetId',
                 'title LIKE :titleLike',
+                'status = :status',
             ],
             'orderbys' => ['id'],
         ];

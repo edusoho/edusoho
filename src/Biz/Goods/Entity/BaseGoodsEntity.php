@@ -25,6 +25,8 @@ abstract class BaseGoodsEntity
 
     abstract public function canManageTarget($goods);
 
+    abstract public function fetchTargets($goodses);
+
     /**
      * @param $productId
      *

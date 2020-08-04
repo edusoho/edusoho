@@ -12,6 +12,8 @@ interface GoodsService
 
     public function updateGoodsMinAndMaxPrice($goodsId);
 
+    public function freshGoodsSpecsCount($goodsId);
+
     public function deleteGoods($id);
 
     public function publishGoods($id);
@@ -43,6 +45,10 @@ interface GoodsService
     public function publishGoodsSpecs($id);
 
     public function unpublishGoodsSpecs($id);
+
+    public function countGoodsSpecs($conditions);
+
+    public function searchGoodsSpecs($conditions, $orderBys, $start, $limit, $columns = []);
 
     public function deleteGoodsSpecs($id);
 

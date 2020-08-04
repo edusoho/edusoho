@@ -725,7 +725,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function deleteCourse($id)
     {
         $course = $this->tryManageCourse($id);
-        if ('published' == $course['status']) {
+        if ('published' === $course['status']) {
             $this->createNewException(CourseException::FORBIDDEN_DELETE_PUBLISHED());
         }
 
@@ -737,12 +737,19 @@ class CourseServiceImpl extends BaseService implements CourseService
         if ($courseCount <= 1) {
             $this->createNewException(CourseException::COURSE_NUM_REQUIRED());
         }
+        $this->beginTransaction();
+        try {
+            $result = $this->getCourseDeleteService()->deleteCourse($id);
+            $this->getCourseSpecsMediator()->onDelete($course);
 
-        $result = $this->getCourseDeleteService()->deleteCourse($id);
+            $this->dispatchEvent('course.delete', new Event($course));
+            $this->commit();
 
-        $this->dispatchEvent('course.delete', new Event($course));
-
-        return $result;
+            return $result;
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
     }
 
     public function closeCourse($id)

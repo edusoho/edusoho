@@ -2,6 +2,7 @@
 
 namespace Biz\Goods\Entity;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Classroom\ClassroomException;
 use Biz\Classroom\Service\ClassroomService;
 
@@ -19,6 +20,25 @@ class ClassroomEntity extends BaseGoodsEntity
         }
 
         return $classroom;
+    }
+
+    public function fetchTargets($goodses)
+    {
+        if (empty($goodses)) {
+            return $goodses;
+        }
+        $productIds = ArrayToolkit::column($goodses, 'productId');
+        $products = ArrayToolkit::index($this->getProductService()->findProductsByIds($productIds), 'id');
+        $classroomIds = ArrayToolkit::column($products, 'targetId');
+        $classrooms = ArrayToolkit::index($this->getClassroomService()->findClassroomsByIds($classroomIds), 'id');
+        foreach ($goodses as &$goods) {
+            $product = empty($products[$goods['productId']]) ? [] : $products[$goods['productId']];
+            $classroom = empty($classrooms[$product['targetId']]) ? [] : $classrooms[$product['targetId']];
+            $goods['product'] = $product;
+            $goods['classroom'] = $classroom;
+        }
+
+        return $goodses;
     }
 
     public function canManageTarget($goods)

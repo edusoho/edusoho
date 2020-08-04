@@ -67,7 +67,6 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
             'deadline',
             'fixedDay',
             'targetType',
-            'sourceType',
             'h5MpsEnable',
             'linkEnable',
             'codeEnable',
@@ -364,6 +363,7 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
                     'targetType' => $batch['targetType'],
                     'targetId' => $batch['targetId'],
                     'targetIds' => $batch['targetIds'],
+                    'goodsIds' => $batch['goodsIds'],
                     'fullDiscountPrice' => $batch['fullDiscountPrice'],
                     'createdTime' => $time,
                 ];

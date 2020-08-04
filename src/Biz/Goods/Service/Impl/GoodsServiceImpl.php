@@ -110,6 +110,17 @@ class GoodsServiceImpl extends BaseService implements GoodsService
         );
     }
 
+    public function freshGoodsSpecsCount($goodsId)
+    {
+        $goods = $this->getGoods($goodsId);
+        if (empty($goods)) {
+            return;
+        }
+        $publishedCount = $this->countGoodsSpecs(['goodsId' => $goodsId, 'status' => 'published']);
+        $count = $this->countGoodsSpecs(['goodsId' => $goodsId]);
+        $this->getGoodsDao()->update($goodsId, ['specsNum' => $count, 'publishedSpecsNum' => $publishedCount]);
+    }
+
     public function deleteGoods($id)
     {
         return $this->getGoodsDao()->delete($id);
@@ -194,8 +205,10 @@ class GoodsServiceImpl extends BaseService implements GoodsService
             'buyableStartTime',
             'buyableEndTime',
         ]);
+        $specs = $this->getGoodsSpecsDao()->create($goodsSpecs);
+        $this->freshGoodsSpecsCount($specs['goodsId']);
 
-        return $this->getGoodsSpecsDao()->create($goodsSpecs);
+        return $specs;
     }
 
     public function getGoodsSpecs($id)
@@ -245,6 +258,7 @@ class GoodsServiceImpl extends BaseService implements GoodsService
     {
         $specs = $this->getGoodsSpecsDao()->update($id, ['status' => 'published']);
         $this->updateGoodsMinAndMaxPrice($specs['goodsId']);
+        $this->freshGoodsSpecsCount($specs['goodsId']);
 
         return $specs;
     }
@@ -253,13 +267,26 @@ class GoodsServiceImpl extends BaseService implements GoodsService
     {
         $specs = $this->getGoodsSpecsDao()->update($id, ['status' => 'unpublished']);
         $this->updateGoodsMinAndMaxPrice($specs['goodsId']);
+        $this->freshGoodsSpecsCount($specs['goodsId']);
 
         return $specs;
     }
 
+    public function countGoodsSpecs($conditions)
+    {
+        return $this->getGoodsSpecsDao()->count($conditions);
+    }
+
+    public function searchGoodsSpecs($conditions, $orderBys, $start, $limit, $columns = [])
+    {
+        return $this->getGoodsSpecsDao()->search($conditions, $orderBys, $start, $limit, $columns);
+    }
+
     public function deleteGoodsSpecs($id)
     {
-        return $this->getGoodsSpecsDao()->delete($id);
+        $specs = $this->getGoodsSpecs($id);
+        $this->getGoodsSpecsDao()->delete($id);
+        $this->freshGoodsSpecsCount($specs['goodsId']);
     }
 
     public function getGoodsSpecsByGoodsIdAndTargetId($goodsId, $targetId)
