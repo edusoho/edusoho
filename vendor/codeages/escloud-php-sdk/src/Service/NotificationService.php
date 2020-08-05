@@ -9,6 +9,7 @@ class NotificationService extends BaseService
     const SN_MAX_COUNT = 50;
 
     protected $host = 'notification-service.qiqiuyun.net';
+    protected $service = 'notification';
 
     /**
      * @return array 返回Account

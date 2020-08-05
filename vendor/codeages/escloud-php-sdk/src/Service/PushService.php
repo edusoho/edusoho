@@ -8,6 +8,7 @@ namespace ESCloud\SDK\Service;
 class PushService extends BaseService
 {
     protected $host = 'push-service.qiqiuyun.net';
+    protected $service = 'push';
 
     /**
      * @params $params array 注册参数

@@ -27,6 +27,9 @@ switch ($action) {
         break;
 }
 
+/*
+ * 资源获取接口
+ */
 function getResource()
 {
     Permission::check($_GET['exp'], $_GET['token']);
@@ -38,6 +41,9 @@ function getResource()
 
 }
 
+/*
+ * 批量查询接口
+ */
 function searchResources()
 {
     Permission::check($_GET['exp'], $_GET['token']);
@@ -47,9 +53,13 @@ function searchResources()
     if (!empty($_GET['type'])) {
         $param['type'] = $_GET['type'];
     }
+
     echo json_encode($sdk->getResourceService()->search($param));
 }
 
+/*
+ * 删除资源接口
+ */
 function deleteResource()
 {
     Permission::check($_GET['exp'], $_GET['token']);
@@ -61,6 +71,9 @@ function deleteResource()
 
 }
 
+/*
+ * 获取下载地址接口
+ */
 function getDownloadUrl()
 {
     Permission::check($_GET['exp'], $_GET['token']);
@@ -72,6 +85,9 @@ function getDownloadUrl()
 
 }
 
+/*
+ * 重命名接口
+ */
 function renameResource()
 {
     Permission::check($_GET['exp'], $_GET['token']);
@@ -84,6 +100,9 @@ function renameResource()
     echo json_encode($sdk->getResourceService()->rename($no, $name));
 }
 
+/*
+ * 获取缩略图接口
+ */
 function getThumbnails()
 {
     Permission::check($_GET['exp'], $_GET['token']);

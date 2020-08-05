@@ -8,6 +8,7 @@ use ESCloud\SDK\HttpClient\ClientException;
 class InspectionService extends BaseService
 {
     protected $host = 'inspection-service.qiqiuyun.net';
+    protected $service = 'inspection';
 
     /**
      * 获得帐户信息
