@@ -24,17 +24,27 @@ export default {
       default: ""
     }
   },
-  data() {
-    return {
-      moreText: this.type === 'course_list' ? '好课' : '班级'
-    }
-  },
+  // data() {
+  //   return {
+  //     moreText: this.type === 'course_list' ? '好课' : (this.type === 'classroom_list' ? '班级' : '题库')
+  //   }
+  // },
   computed:{
     emptyText(){
       if(!this.text){
         return `暂无${this.type === 'course_list' ? '课程' : '班级'}`
       }
-      return  this.text
+      return '暂无' + this.text;
+    },
+    moreText(){
+      const type=this.type;
+      if(type === 'course_list'){
+        return '好课'
+      }else if(type === 'classroom_list'){
+        return '班级'
+      }else {
+        return '题库'
+      }
     }
   },
   methods: {
