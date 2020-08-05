@@ -80,6 +80,10 @@ class LearningDataAnalysisServiceTest extends BaseTestCase
                 'withParams' => [[1], 1], ],
         ]);
 
+        $this->mockBiz('Task:TaskService', [
+            ['functionName' => 'countTasks', 'returnValue' => 100],
+        ]);
+
         $result = $this->getLearningDataAnalysisService()->getUserLearningProgressByCourseIds([1], 1);
 
         $this->assertEquals([
