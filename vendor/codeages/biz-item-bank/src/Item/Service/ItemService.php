@@ -4,7 +4,7 @@ namespace Codeages\Biz\ItemBank\Item\Service;
 
 interface ItemService
 {
-    public function createItem($item);
+    public function createItem($item, $isBatch = false);
 
     public function importItems($items, $bankId);
 
@@ -28,7 +28,7 @@ interface ItemService
 
     public function findItemsByCategoryIds($categoryIds);
 
-    public function deleteItem($id);
+    public function deleteItem($id, $isBatch = false);
 
     public function deleteItems($ids);
 

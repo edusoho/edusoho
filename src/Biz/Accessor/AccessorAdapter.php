@@ -66,13 +66,13 @@ abstract class AccessorAdapter implements AccessorInterface
 
     abstract public function access($bean);
 
-    protected function buildResult($code, $params = array())
+    protected function buildResult($code, $params = [])
     {
         // api暂时不需要支持国际化
-        return array(
+        return [
             'code' => $code,
             'msg' => $this->getMessage($code, $params),
-        );
+        ];
     }
 
     private function getMessage($key, $params)
@@ -81,7 +81,7 @@ abstract class AccessorAdapter implements AccessorInterface
             return 'Denied';
         }
         if (!empty($params)) {
-            return call_user_func_array('sprintf', array_merge(array($this->messages[$key]), array_values($params)));
+            return call_user_func_array('sprintf', array_merge([$this->messages[$key]], array_values($params)));
         }
 
         return $this->messages[$key];
@@ -89,6 +89,13 @@ abstract class AccessorAdapter implements AccessorInterface
 
     private function registerDefaultMessages()
     {
+        $this->messages['item_bank_exercise.not_found'] = '题库练习未找到';
+        $this->messages['item_bank_exercise.unpublished'] = '题库练习未发布';
+        $this->messages['item_bank_exercise.closed'] = '题库练习已关闭';
+        $this->messages['item_bank_exercise.not_join_enable'] = '题库练习未开放购买';
+        $this->messages['item_bank_exercise.expired'] = '题库练习已到期';
+        $this->messages['item_bank_exercise.not_arrive'] = '题库练习未到学习时间';
+
         $this->messages['course.not_found'] = '教学计划未找到';
         $this->messages['course.unpublished'] = '教学计划(#%s)尚未发布';
         $this->messages['course.closed'] = '教学计划(#%s)已关闭';
@@ -103,7 +110,7 @@ abstract class AccessorAdapter implements AccessorInterface
 
         $this->messages['member.not_found'] = '学员未找到';
         $this->messages['member.member_exist'] = '用户(#%s)已经是学员';
-        $this->messages['member.expired'] = '学员(#%s)已过期';
+        $this->messages['member.expired'] = '学员已过期，请联系管理员';
         $this->messages['member.auditor'] = '旁听生无权限学习';
 
         $this->messages['classroom.not_found'] = '班级未找到';

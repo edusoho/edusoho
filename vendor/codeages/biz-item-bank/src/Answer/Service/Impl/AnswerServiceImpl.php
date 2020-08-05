@@ -16,16 +16,8 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 {
     public function startAnswer($answerSceneId, $assessmentId, $userId)
     {
-        $latestAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($answerSceneId, $userId);
-
-        if (empty($latestAnswerRecord)) {
-            if (!$this->getAnswerSceneService()->canStart($answerSceneId)) {
-                throw new AnswerSceneException('AnswerScene did not start.', ErrorCode::ANSWER_SCENE_NOTSTART);
-            }
-        } else {
-            if (!$this->getAnswerSceneService()->canRestart($answerSceneId, $userId)) {
-                throw new AnswerSceneException('AnswerScene did not restart.', ErrorCode::ANSWER_SCENE_CANNOT_RESTART);
-            }
+        if (!$this->getAnswerSceneService()->canStart($answerSceneId, $userId)) {
+            throw new AnswerSceneException('AnswerScene did not start.', ErrorCode::ANSWER_SCENE_NOTSTART);
         }
 
         $answerRecord = $this->getAnswerRecordService()->create([
@@ -134,7 +126,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
 
         $rightCount = empty($answerQuestionReports[AnswerQuestionReportService::STATUS_RIGHT]) ? 0 : count($answerQuestionReports[AnswerQuestionReportService::STATUS_RIGHT]);
 
-        return intval($rightCount / $totalCount * 100 + 0.5);
+        return round($rightCount / $totalCount * 100, 1);
     }
 
     protected function sumScore(array $answerQuestionReports)
@@ -334,7 +326,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         }
 
         $reviewQuestionReport['score'] = empty($reviewQuestionReport['score']) ? 0 : $reviewQuestionReport['score'];
-        if (empty($questionReport['response'])) {
+        if (empty(array_filter($questionReport['response']))) {
             $score = 0;
             $status = AnswerQuestionReportService::STATUS_NOANSWER;
         } elseif (0 == $reviewQuestionReport['score']) {
@@ -469,6 +461,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             throw $e;
         }
 
+        $this->dispatch('answer.saved', $assessmentResponse);
         return $assessmentResponse;
     }
 
