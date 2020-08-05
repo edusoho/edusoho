@@ -8,9 +8,9 @@
         :title="item"
         :key="item"/>
     </van-tabs>
-    <emptyCourse v-if="active==0 && isEmptyCourse && isCourseFirstRequestCompile" :type="typeList"/>
-    <emptyCourse v-if="active==1 && isEmptyClass && isClassFirstRequestCompile" :type="typeList"/>
-    <emptyCourse v-if="active==2 && isEmptyBank && isBankFirstRequestCompile" :type="typeList" :text="bank"/>
+    <emptyCourse v-if="active==0 && isEmptyCourse && isCourseFirstRequestCompile" :type="typeList"　text="暂无课程"/>
+    <emptyCourse v-if="active==1 && isEmptyClass && isClassFirstRequestCompile" :type="typeList"　text="暂无班级"/>
+    <emptyCourse v-if="active==2 && isEmptyBank && isBankFirstRequestCompile" :type="typeList" text="暂无题库"/>
     <div v-else>
       <lazyLoading
         v-show="active==0"
@@ -87,7 +87,6 @@ export default {
       isClassFirstRequestCompile: false,
       isBankFirstRequestCompile: false,
       tabs: ['我的课程', '我的班级', '我的题库'],
-      bank: '题库',
     }
   },
   computed: {
