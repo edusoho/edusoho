@@ -35,16 +35,7 @@ interface AnswerSceneService
      * @param int $id
      * @return boolean
      */
-    public function canStart($id);
-
-    /**
-     * 能否再次答题
-     *
-     * @param int $id
-     * @param int $userId
-     * @return boolean
-     */
-    public function canRestart($id, $userId);
+    public function canStart($id, $userId);
 
     /**
      * 统计数量

@@ -20,6 +20,7 @@ use Biz\Distributor\Service\Impl\SyncUserServiceImpl;
 use Biz\File\FireWall\FireWallFactory;
 use Biz\Importer\ClassroomMemberImporter;
 use Biz\Importer\CourseMemberImporter;
+use Biz\Importer\ItemBankExerciseMemberImporter;
 use Biz\OpenCourse\Event\OpenCourseThreadEventProcessor;
 use Biz\Sms\SmsProcessor\LiveOpenLessonSmsProcessor;
 use Biz\System\Template\TemplateFactory;
@@ -97,6 +98,10 @@ class DefaultServiceProvider implements ServiceProviderInterface
 
         $biz['thread_event_processor.article'] = function ($biz) {
             return new ArticleEventSubscriber($biz);
+        };
+
+        $biz['importer.exercise-member'] = function ($biz) {
+            return new ItemBankExerciseMemberImporter($biz);
         };
 
         $biz['importer.course-member'] = function ($biz) {
@@ -205,6 +210,10 @@ class DefaultServiceProvider implements ServiceProviderInterface
             "\/(my\/)?course\/(\d)+/i",
             "\/course_set\/(\d)+\/manage\/(\S)+/i",
             "\/my\/teaching\/course_sets/",
+        ];
+
+        $biz['item_bank_exercise.show_redirect'] = [
+            "\/(my\/)?item_bank_exercise\/(\d)+/i",
         ];
 
         $biz['wechat.template_message_client'] = function ($biz) {

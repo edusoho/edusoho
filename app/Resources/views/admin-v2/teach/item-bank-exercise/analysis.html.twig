@@ -1,0 +1,54 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_item_bank_exercise_analysis' %}
+
+{% set script_controller = 'item-bank-exercise/analysis' %}
+
+{% block main %}
+  <form id="data-search-form" class="form-inline well well-sm mtl" action="" method="get" novalidate>
+    <div class="mbm">
+      <div class="form-group">
+        <select style="width:150px;" class="form-control" name="categoryId">
+          <option value="">{{'admin.question_bank.manage.category'|trans}}</option>
+          <option value="">{{'admin.question_bank.manage.all_category'|trans}}</option>
+          {{ select_options(build_category_choices(categoryTree), app.request.get('categoryId')) }}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <input class="form-control" type="text" placeholder="{{ 'admin.course_manage.title_placeholder'|trans }}" name="title" value="{{ app.request.get('title') }}">
+      </div>
+      <div class="form-group">
+        <input class="form-control" type="text" placeholder="{{ 'admin.course_manage.creator_placeholer'|trans }}" name="creatorName" value="{{ app.request.get('creatorName') }}">
+      </div>
+      <button class="btn btn-primary">{{ 'form.btn.search'|trans }}</button>
+    </div>
+  </form>
+  <div class="table-responsive">
+    <table class="table table-bordered" style="word-break:break-all;text-align:center;">
+      <tr class="active">
+        <td width="30%">{{'item_bank_exercise.base.title'|trans}}</td>
+        <td>{{ 'course.item_number'|trans }}</td>
+        <td>{{ 'course.assessment_number'|trans }}</td>
+        <td>{{ 'admin.course_manage.statistics.student_number'|trans }}</td>
+        <td>{{ 'admin.item_bank_exercise.exercise.manage.income'|trans }}({{ 'site.currency.CNY'|trans }})</td>
+      </tr>
+
+      {% if exercises %}
+        {% for exercise in exercises %}
+          {% set questionBank = questionBanks[exercise.questionBankId]|default(null) %}
+          <tr>
+            <td>
+              <a href="{{ path('item_bank_exercise_show', {id: exercise.id}) }}" target="_blank"><strong>{{ exercise.title }}</strong></a>
+            </td>
+            <td>{{ questionBank.itemBank.item_num|default('0') }}</td>
+            <td>{{ exercise.assessment_num|default('0') }}</td>
+            <td>{{ exercise.studentNum|default() }}</td>
+            <td>{{ exercise.income|default() }}</td>
+          </tr>
+        {% endfor %}
+      {% endif %}
+    </table>
+    {{ admin_macro.paginator(paginator) }}
+  </div>
+{% endblock %}

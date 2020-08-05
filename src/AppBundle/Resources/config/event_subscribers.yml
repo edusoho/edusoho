@@ -375,3 +375,31 @@ services:
         arguments: ['@biz']
         tags:
              - { name: codeages_plugin.event.subscriber }
+
+    item_bank_chatper_exercise_event_subscriber:
+        class: Biz\ItemBankExercise\Event\ChapterExerciseEventSubscriber
+        arguments: ['@biz']
+        tags:
+             - { name: codeages_plugin.event.subscriber }
+    
+    item_bank_assessment_exercise_event_subscriber:
+        class: Biz\ItemBankExercise\Event\AssessmentExerciseEventSubscriber
+        arguments: ['@biz']
+        tags:
+             - { name: codeages_plugin.event.subscriber }
+
+    exercise_member_event_subscriber:
+        class: Biz\ItemBankExercise\Event\ExerciseMemberEventSubscriber
+        arguments: ['@biz']
+        public: true
+        tags:
+              - { name: codeages_plugin.event.subscriber }
+
+    exercise_event_subscriber:
+      class: Biz\ItemBankExercise\Event\ExerciseEventSubscriber
+      arguments: ['@biz']
+      public: true
+      tags:
+        - { name: codeages_plugin.event.subscriber }
+
+
