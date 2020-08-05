@@ -31,7 +31,7 @@
     </div>
       <div class="col-md-7 controls">
         <input type="password" id="password" name="password" class="form-control">
-      <p class="help-block">{{'admin.user.fields.password_hint'|trans}}</p>
+        <p class="help-block">{{('admin.user.fields.password_hint.'~setting('auth.password_level')|default('low'))|trans}}</p>
     </div>
   </div>
 
@@ -58,6 +58,7 @@
     </div>
   {% endif %}
 
+  <input type="hidden" id="password_level" value="{{ setting('auth.password_level')|default('low') }}">
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
 </form>

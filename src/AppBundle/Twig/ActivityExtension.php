@@ -45,9 +45,14 @@ class ActivityExtension extends \Twig_Extension
             new \Twig_SimpleFunction('ltc_source', [$this, 'findLtcSource']),
             new \Twig_SimpleFunction('flash_player', [$this, 'flashPlayer']),
             new \Twig_SimpleFunction('doc_player', [$this, 'docPlayer']),
-            new \Twig_SimpleFunction('ppt_player', [$this, 'pptPlayer']),
+            new \Twig_SimpleFunction('resource_player_context', [$this, 'resourcePlayerContext']),
             new \Twig_SimpleFunction('activity_visible', [$this, 'isActivityVisible']),
         ];
+    }
+
+    public function resourcePlayerContext($file)
+    {
+        return $this->getResourceFacadeService()->getPlayerContext($file);
     }
 
     public function prepareVideoMediaUri($video)
@@ -76,16 +81,6 @@ class ActivityExtension extends \Twig_Extension
     public function docPlayer($doc, $ssl)
     {
         list($result, $error) = $this->getPlayerService()->getDocFilePlayer($doc, $ssl);
-
-        return [
-            'error' => $error,
-            'result' => $result,
-        ];
-    }
-
-    public function pptPlayer($doc, $ssl)
-    {
-        list($result, $error) = $this->getPlayerService()->getPptFilePlayer($doc, $ssl);
 
         return [
             'error' => $error,
@@ -286,5 +281,10 @@ class ActivityExtension extends \Twig_Extension
     protected function generateUrl($route, $parameters)
     {
         return $this->container->get('router')->generate($route, $parameters, UrlGeneratorInterface::ABSOLUTE_PATH);
+    }
+
+    protected function getResourceFacadeService()
+    {
+        return $this->biz->service('CloudPlatform:ResourceFacadeService');
     }
 }

@@ -8,6 +8,8 @@ class ESopService extends BaseService
 
     private $siteTracePath = '/api/v1/site_trace';
 
+    protected $service = 'esop';
+
     public function getTraceScript($data)
     {
         return $this->request('POST', $this->siteTracePath, $data);

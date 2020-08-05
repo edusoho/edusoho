@@ -3973,6 +3973,9 @@ t.add("validate.expiry_days_required_hint", "please input the expiry days", "js"
 t.add("validate.empty_content_hint", "please input content!", "js", "en");
 t.add("validate.no_number_first_hint", "URL path can only contain letters and numbers, please start with a letter! Length is greater than 2 digits", "js", "en");
 t.add("validate.have_spaces", "Password can't have spaces", "js", "en");
+t.add("validate.check_password_low.message", "5-20 letters or numbers, case sensitive", "js", "en");
+t.add("validate.check_password_middle.message", "8-20 letters or numbers, including at least two, case sensitive", "js", "en");
+t.add("validate.check_password_high.message", "8-32 letters or numbers, , including letter uppercase, lowercase, numbers and symbols", "js", "en");
 t.add("alert.file_convert_error.message", "File conversion submission failed, please try again!", "js", "en");
 t.add("notify.file_not_select.message", "No file records selected", "js", "en");
 t.add("page.file_converting.message", "Converting in file format", "js", "en");

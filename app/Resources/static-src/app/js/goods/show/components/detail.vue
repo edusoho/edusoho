@@ -5,7 +5,7 @@
                 <img :src="goods.images ? goods.images.large : null" alt="">
             </div>
             <ul class="detail-left__text clearfix">
-                <li class="pull-left"><i class="es-icon es-icon-friends mrs"></i>{{ currentSku.maxJoinNum }}人加入学习
+                <li class="pull-left"><i class="es-icon es-icon-friends mrs"></i>{{ goods.product.target.studentNum }}人加入学习
                 </li>
                 <li class="pull-right">
                     <share :customized-class="'detail-left__text-share'" :type="'courseSet'">分享
@@ -55,7 +55,13 @@
             <!-- 学习有效期 -->
             <div class="detail-right__validity validity clearfix">
                 <span class="validity-title pull-left">学习有效期</span>
-                <span class="validity-content pull-left">{{ buyableModes[currentSku.usageMode] }}</span>
+                <span class="validity-content pull-left">
+<!--                    {{ buyableModes[currentSku.usageMode] }}-->
+                    <span v-if="currentSku.usageMode === 'forever'">长期有效</span>
+                    <span v-if="currentSku.usageMode === 'date'">开始：{{ currentSku.usageStartTime }} 截止：{{ currentSku.usageEndTime|formatDate }}</span>
+                    <span v-if="currentSku.usageMode === 'days'">{{ currentSku.usageDays }}天 （随到随学）</span>
+                    <span v-if="currentSku.usageMode === 'end_date'">截止日期： {{ currentSku.usageEndTime|formatDate }}</span>
+                </span>
             </div>
 
             <!-- 承诺服务 -->
@@ -104,7 +110,30 @@
         methods: {
             handleClick(sku) {
                 this.$emit('changeSku', sku.targetId);
-            }
+            },
+        },
+        filters: {
+            formatDate(time, fmt = 'yyyy-MM-dd') {
+                time = time * 1000
+                let date = new Date(time)
+                if (/(y+)/.test(fmt)) {
+                    fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length))
+                }
+                let o = {
+                    'M+': date.getMonth() + 1,
+                    'd+': date.getDate(),
+                    'h+': date.getHours(),
+                    'm+': date.getMinutes(),
+                    's+': date.getSeconds()
+                }
+                for (let k in o) {
+                    if (new RegExp(`(${k})`).test(fmt)) {
+                        let str = o[k] + ''
+                        fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? str : ('00' + str).substr(str.length))
+                    }
+                }
+                return fmt
+            },
         },
         data() {
             return {

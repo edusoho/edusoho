@@ -44,7 +44,7 @@
                     <div v-if="goods.product.targetType === 'course'" id="info-left-2"
                          class="content-item js-content-item">
                         <h3 class="content-item__title">学习目录</h3>
-                        <course-tasks :sku="currentSku"></course-tasks>
+                        <course-tasks :sku="currentSku" :i18n="i18n" :activity-metas="activityMetas"></course-tasks>
                     </div>
                     <div v-if="goods.product.targetType === 'classroom'" id="info-left-2"
                          class="content-item js-content-item">
@@ -110,6 +110,14 @@
             isUserLogin: {
                 type: Number,
                 default: 0,
+            },
+            i18n: {
+                type: Object,
+                default: null,
+            },
+            activityMetas: {
+                type: Object,
+                default: null,
             }
         },
         components: {

@@ -2826,6 +2826,9 @@ user.register.username_label: 用户名
 user.register.username_label_placeholder: 中、英文均可，最长18个英文或9个汉字
 user.register.password_label: 密码
 user.register.password_label_placeholder: 5-20位英文、数字、符号，区分大小写
+user.register.password_label_placeholder.low: 5-20位英文、数字、符号，区分大小写
+user.register.password_label_placeholder.middle: 8-20位英文、数字、符号，至少包含两种，区分大小写
+user.register.password_label_placeholder.high: 8-32位英文、数字、符号，同时包含英文大小写、数字符号
 user.register.invite_code_label: 邀请码
 user.register.invite_code_placeholder: 如果您有邀请码，请填写您的邀请码
 user.register.i_agree: 我已阅读并同意
@@ -6176,6 +6179,9 @@ admin.user.fields.about_label: 自我介绍
 admin.user.fields.personal_menu_label: 个人主页
 admin.user.fields.user_email: 用户邮箱
 admin.user.fields.password_hint: 5-20位英文、数字、符号，区分大小写
+admin.user.fields.password_hint.low: 5-20位英文、数字、符号，区分大小写
+admin.user.fields.password_hint.middle: 8-20位英文、数字、符号，至少包含两种，区分大小写
+admin.user.fields.password_hint.high: 8-32位英文、数字、符号，同时包含英文大写、小写、数字和符号
 admin.user.fields.confirm_password_label: 确认密码
 admin.user.fields.confirm_password_hint: 再输入一次密码
 admin.user.fields.password_label: 密码
@@ -7049,6 +7055,12 @@ admin.user_auth.Protection.middle.30_times: 同一IP24小时內只能注册30次
 admin.user_auth.Protection.high.10_times: 同一IP24小时內只能注册10次。
 admin.user_auth.Protection.high.sign_up_count: 同一IP1小时內只能注册1个帐号。
 admin.user_auth.Protection.high.Verification_code.mobile: 手机注册获取短信验证码时须要完成安全验证。
+admin.user_auth.Password_level: 密码等级设置
+admin.user_auth.Password_level.low.explaination: 密码为5-20位英文、数字、符号，最少需输入5个字符。
+admin.user_auth.Password_level.middle.explaination: 密码为8-20位英文、数字、符号，最少需输入8个字符。
+admin.user_auth.Password_level.middle.explaination_2: 至少包含字母、数字、符号中任意两种。
+admin.user_auth.Password_level.high.explaination: 密码为8-32位英文、数字、符号，最少需输入8个字符。
+admin.user_auth.Password_level.high.explaination_2: 同时包含英文大写、英文小写、数字、符号四种。
 
 admin.user_auth.Setup_welcome_message: 欢迎信息设置
 admin.user_auth.Setup_welcome_message.send: 发送欢迎信息

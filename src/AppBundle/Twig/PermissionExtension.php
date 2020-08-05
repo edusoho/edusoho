@@ -20,27 +20,27 @@ class PermissionExtension extends \Twig_Extension
 
     public function getFilters()
     {
-        return array(
-            new \Twig_SimpleFilter('parent_permission', array($this, 'getParentPermission')),
-            new \Twig_SimpleFilter('visible_menus', array($this, 'getVisibleMenus')),
-        );
+        return [
+            new \Twig_SimpleFilter('parent_permission', [$this, 'getParentPermission']),
+            new \Twig_SimpleFilter('visible_menus', [$this, 'getVisibleMenus']),
+        ];
     }
 
     public function getFunctions()
     {
-        return array(
-            new \Twig_SimpleFunction('permission', array($this, 'getPermissionByCode')),
-            new \Twig_SimpleFunction('sub_permissions', array($this, 'getSubPermissions')),
-            new \Twig_SimpleFunction('permission_path', array($this, 'getPermissionPath'), array('needs_context' => true, 'needs_environment' => true)),
-            new \Twig_SimpleFunction('grouped_permissions', array($this, 'groupedPermissions')),
-            new \Twig_SimpleFunction('has_permission', array($this, 'hasPermission')),
-            new \Twig_SimpleFunction('eval_expression', array($this, 'evalExpression'), array('needs_context' => true, 'needs_environment' => true)),
-            new \Twig_SimpleFunction('first_child_permission', array($this, 'getFirstChild')),
-            new \Twig_SimpleFunction('first_child_permission_by_code', array($this, 'getFirstChildByCode')),
-            new \Twig_SimpleFunction('side_bar_permission', array($this, 'getSideBar')),
-            new \Twig_SimpleFunction('root_permission', array($this, 'getRootPermission')),
-            new \Twig_SimpleFunction('nav_permission', array($this, 'getNavPermission')),
-        );
+        return [
+            new \Twig_SimpleFunction('permission', [$this, 'getPermissionByCode']),
+            new \Twig_SimpleFunction('sub_permissions', [$this, 'getSubPermissions']),
+            new \Twig_SimpleFunction('permission_path', [$this, 'getPermissionPath'], ['needs_context' => true, 'needs_environment' => true]),
+            new \Twig_SimpleFunction('grouped_permissions', [$this, 'groupedPermissions']),
+            new \Twig_SimpleFunction('has_permission', [$this, 'hasPermission']),
+            new \Twig_SimpleFunction('eval_expression', [$this, 'evalExpression'], ['needs_context' => true, 'needs_environment' => true]),
+            new \Twig_SimpleFunction('first_child_permission', [$this, 'getFirstChild']),
+            new \Twig_SimpleFunction('first_child_permission_by_code', [$this, 'getFirstChildByCode']),
+            new \Twig_SimpleFunction('side_bar_permission', [$this, 'getSideBar']),
+            new \Twig_SimpleFunction('root_permission', [$this, 'getRootPermission']),
+            new \Twig_SimpleFunction('nav_permission', [$this, 'getNavPermission']),
+        ];
     }
 
     /**
@@ -69,7 +69,7 @@ class PermissionExtension extends \Twig_Extension
     public function getFirstChild($menu, $filterVisible = true, $allowOriginPermission = true)
     {
         if (!$menu) {
-            return array();
+            return [];
         }
 
         return $this->getFirstChildByCode($menu['code'], $filterVisible, $allowOriginPermission);
@@ -88,12 +88,12 @@ class PermissionExtension extends \Twig_Extension
 
         if (empty($menus)) {
             if (!$allowOriginPermission) {
-                return array();
+                return [];
             }
 
-            $permissions = $this->createPermissionBuilder()->getOriginSubPermissions($menu['code']);
+            $permissions = $this->createPermissionBuilder()->getOriginSubPermissions($code);
             if (empty($permissions)) {
-                return array();
+                return [];
             } else {
                 $menus = $permissions;
             }
@@ -125,7 +125,7 @@ class PermissionExtension extends \Twig_Extension
     public function getPermissionPath($env, $context, $menu)
     {
         $route = empty($menu['router_name']) ? $menu['code'] : $menu['router_name'];
-        $params = empty($menu['router_params']) ? array() : $menu['router_params'];
+        $params = empty($menu['router_params']) ? [] : $menu['router_params'];
 
         foreach ($params as $key => $value) {
             if (0 === strpos($value, '(')) {
@@ -148,11 +148,11 @@ class PermissionExtension extends \Twig_Extension
             $code = "'{$code}'";
         }
 
-        $loader = new \Twig_Loader_Array(array(
+        $loader = new \Twig_Loader_Array([
             'expression.twig' => '{{'.$code.'}}',
-        ));
+        ]);
 
-        $loader = new \Twig_Loader_Chain(array($loader, $twig->getLoader()));
+        $loader = new \Twig_Loader_Chain([$loader, $twig->getLoader()]);
 
         $twig->setLoader($loader);
 
@@ -203,7 +203,7 @@ class PermissionExtension extends \Twig_Extension
     {
         $twig = $this->container->get('twig');
         foreach ($menus as $key => $menu) {
-            if (isset($menu['visible']) && !$this->evalExpression($twig, array(), $menu['visible'])) {
+            if (isset($menu['visible']) && !$this->evalExpression($twig, [], $menu['visible'])) {
                 unset($menus[$key]);
             }
         }
@@ -252,7 +252,7 @@ class PermissionExtension extends \Twig_Extension
 
     private function buildSidebarPermissionMenus($allGroup, $grade = 0)
     {
-        $permissions = array();
+        $permissions = [];
 
         foreach ($allGroup as $key => $group) {
             //菜单组是否为可见状态
@@ -278,12 +278,12 @@ class PermissionExtension extends \Twig_Extension
 
     private function buildGroupPermissionMenus($group, $grade = 0)
     {
-        $groupInfo = array();
+        $groupInfo = [];
         if (isset($group['is_group'])) {
             $groupInfo['grade'] = $grade;
         }
         $groupInfo['id'] = "group_{$group['code']}";
-        $groupInfo['name'] = ServiceKernel::instance()->trans($group['name'], array(), 'menu');
+        $groupInfo['name'] = ServiceKernel::instance()->trans($group['name'], [], 'menu');
         $groupInfo['class'] = isset($group['class']) ? $group['class'] : '';
         $groupInfo['code'] = $group['code'];
 
@@ -302,11 +302,11 @@ class PermissionExtension extends \Twig_Extension
 
     private function buildNodesPermissionMenus($child)
     {
-        $nodes = array();
+        $nodes = [];
         $nodes['id'] = "menu_{$child['code']}";
         $nodes['class'] = isset($child['class']) ? $child['class'] : '';
-        $nodes['name'] = ServiceKernel::instance()->trans($child['name'], array(), 'menu');
-        $nodes['link'] = $this->getPermissionPath(array(), array(), $this->getFirstChild($this->getPermissionByCode($child['code'])));
+        $nodes['name'] = ServiceKernel::instance()->trans($child['name'], [], 'menu');
+        $nodes['link'] = $this->getPermissionPath([], [], $this->getFirstChild($this->getPermissionByCode($child['code'])));
         $nodes['grade'] = 1;
         $nodes['code'] = $child['code'];
 
@@ -315,7 +315,7 @@ class PermissionExtension extends \Twig_Extension
 
     private function canVisibleMenus($visible)
     {
-        $twigExpressionResult = $this->evalExpression($this->container->get('twig'), array(), $visible);
+        $twigExpressionResult = $this->evalExpression($this->container->get('twig'), [], $visible);
 
         if ($twigExpressionResult) {
             return true;
@@ -328,12 +328,12 @@ class PermissionExtension extends \Twig_Extension
     {
         $twig = $this->container->get('twig');
         foreach ($menus as $menu) {
-            if (!isset($menu['visible']) || isset($menu['visible']) && $this->evalExpression($twig, array(), $menu['visible'])) {
+            if (!isset($menu['visible']) || isset($menu['visible']) && $this->evalExpression($twig, [], $menu['visible'])) {
                 return $menu;
             }
         }
 
-        return array();
+        return [];
     }
 
     public function getName()

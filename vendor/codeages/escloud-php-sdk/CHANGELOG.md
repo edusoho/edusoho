@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## v1.1.5
+* 新增鉴权时jwt的iss
+* 新增资源转码状态同步sync接口
+
+## v1.1.4
+* 新增.gitignore
+
+## v1.1.3
+* 新增make_play_url
+
+## v1.1.2
+* 新增Inspection API SDK
+
 ## v1.1.1
 * 新增获取缩略图接口
 

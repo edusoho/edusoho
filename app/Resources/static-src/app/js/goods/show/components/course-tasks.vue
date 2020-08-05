@@ -1,6 +1,6 @@
 <template>
     <div class="course-tasks-content">
-        <ul class="task-list">
+        <ul class="task-list goods-task-list">
             <span v-for="item in courseItems">
                 <li class="task-item bg-gray-lighter js-task-chapter infinite-item" v-if="isChapter(item)">
                     <i class="es-icon es-icon-menu left-menu"></i>
@@ -23,6 +23,10 @@
                     <i v-if="item.isTaskLocked" class="hidden"></i>
                     <span class="title" href="javascript:;" data-toggle="modal" style="margin-top:-6px">{{ getTaskName(item) }}</span>
                     <span class="right-menu color-gray "></span>
+                    <span class="right-menu mouse-leave">
+                        <i :class="getMetaIcon(item)"></i>
+                    </span>
+<!--                    <span class="right-menu mouse-enter color-warning">{{'course.plan_task.locked.task_locked'|trans({'%taskName%':'{title}'})}}</span>-->
                     <!--试看逻辑-->
                 </li>
             </span>
@@ -45,6 +49,14 @@
                 type: Object,
                 default: null
             },
+            i18n: {
+                type: Object,
+                default: null,
+            },
+            activityMetas: {
+                type: Object,
+                default: null,
+            }
         },
         methods: {
             getTasksListInfo() {
@@ -80,15 +92,29 @@
                     return Translator.trans('course.lesson', { part_name: '课时', number: context.getLessonNum(data, context), title: data.title });
                 }
             },
-            getTaskName(data, context) {
-                return data.title;
+            getTaskName(data) {
+                return Translator.trans('course.catalogue.task_status.task', { taskName: '任务', taskNumber: data.number, taskTitle: data.title });
             },
             isTask(data) {
                 return 'task' === data.itemType;
             },
+            getMetaIcon(data) {
+                if (typeof this.activityMetas[data.type] != 'undefined') {
+                    return this.activityMetas[data.type]['icon'] + ' es-icon ml5';
+                }
+                return 'es-icon ml5';
+            },
         },
         created() {
             this.getTasksListInfo();
-        }
+        },
+        watch: {
+            sku: {
+                immediate: true,
+                handler(val) {
+                    this.getTasksListInfo();
+                },
+            },
+        },
     }
 </script>
