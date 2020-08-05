@@ -15,6 +15,7 @@ class CertificateTemplateController extends BaseController
     public function indexAction(Request $request)
     {
         $conditions = $request->request->all();
+        $conditions['dropped'] = 0;
 
         $paginator = new Paginator(
             $request,
@@ -40,7 +41,7 @@ class CertificateTemplateController extends BaseController
     public function editAction(Request $request, $id)
     {
         $template = $this->getCertificateTemplateService()->get($id);
-        if (empty($template)) {
+        if (empty($template) || 1 == $template['dropped']) {
             $this->createNewException(TemplateException::NOTFOUND_TEMPLATE());
         }
 
@@ -56,6 +57,13 @@ class CertificateTemplateController extends BaseController
 
     public function deleteAction(Request $request, $id)
     {
+        $template = $this->getCertificateTemplateService()->dropTemplate($id);
+
+        if ($template) {
+            return $this->createJsonResponse(true);
+        }
+
+        return $this->createJsonResponse(false);
     }
 
     public function createAction(Request $request)

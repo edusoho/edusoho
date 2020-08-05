@@ -17,4 +17,6 @@ interface TemplateService
     public function count($conditions);
 
     public function search($conditions, $orderBys, $start, $limit, $columns = []);
+
+    public function dropTemplate($id);
 }

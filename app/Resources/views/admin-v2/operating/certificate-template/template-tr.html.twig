@@ -7,7 +7,7 @@
     {{ dict_macro.certificateTypes(template.targetType) }}
   </td>
   <td>{{ user.nickname|default('--') }}</td>
-  <td>{{ template.createdTime |date('Y-n-d H:i:s') }}</td>
+  <td>{{ template.createdTime|date('Y-n-d H:i:s') }}</td>
   <td>
     <div class="btn-group">
       <a href="{{ path('admin_v2_operation_certificate_template_edit',{id:template.id}) }}" class="btn btn-default btn-sm">{{'admin.operation_certificate.template.edit'|trans}}</a>
@@ -15,7 +15,7 @@
         <span class="caret"></span>
       </a>
       <ul class="dropdown-menu">
-        <li><a href="javascript:" data-role="publish-item"
+        <li><a href="javascript:" data-role="delete-item" class="delete-template"
                data-url="{{ path('admin_v2_operation_certificate_template_delete', {id:template.id}) }}">{{'site.btn.delete'|trans}}</a></li>
       </ul>
     </div>

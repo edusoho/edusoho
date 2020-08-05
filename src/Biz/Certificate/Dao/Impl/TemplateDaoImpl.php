@@ -12,11 +12,13 @@ class TemplateDaoImpl extends GeneralDaoImpl implements TemplateDao
     public function declares()
     {
         return [
+            'timestamps' => ['createdTime', 'updatedTime'],
             'orderbys' => ['id', 'createdTime', 'updatedTime'],
             'conditions' => [
                 'id = :id',
                 'name like :nameLike',
                 'targetType = :targetType',
+                'dropped = :dropped',
             ],
         ];
     }

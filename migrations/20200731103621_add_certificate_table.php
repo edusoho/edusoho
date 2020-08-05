@@ -22,6 +22,7 @@ class AddCertificateTable extends Migration
                 `certificateContent` text COMMENT '证书正文',
                 `qrCodeSet` tinyint(1) DEFAULT 1 COMMENT '二维码设置',
                 `createdUserId` INT(10) unsigned NOT NULL COMMENT '创建者Id',
+                `dropped` tinyint(1) DEFAULT 0 COMMENT '是否废弃',
                 `createdTime` INT(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
                 `updatedTime` INT(10) unsigned NOT NULL DEFAULT '0'  COMMENT '更新时间',
                 PRIMARY KEY (`id`)

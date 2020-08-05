@@ -42,7 +42,7 @@ class TemplateServiceImpl extends BaseService implements TemplateService
     public function update($id, $fields)
     {
         $template = $this->get($id);
-        if (empty($template)) {
+        if (empty($template) || 1 == $template['dropped']) {
             $this->createNewException(TemplateException::NOTFOUND_TEMPLATE());
         }
 
@@ -54,7 +54,7 @@ class TemplateServiceImpl extends BaseService implements TemplateService
     public function updateBaseMap($id, $fileId)
     {
         $template = $this->get($id);
-        if (empty($template)) {
+        if (empty($template) || 1 == $template['dropped']) {
             $this->createNewException(TemplateException::NOTFOUND_TEMPLATE());
         }
 
@@ -69,7 +69,7 @@ class TemplateServiceImpl extends BaseService implements TemplateService
     public function updateStamp($id, $fileId)
     {
         $template = $this->get($id);
-        if (empty($template)) {
+        if (empty($template) || 1 == $template['dropped']) {
             $this->createNewException(TemplateException::NOTFOUND_TEMPLATE());
         }
 
@@ -89,6 +89,16 @@ class TemplateServiceImpl extends BaseService implements TemplateService
     public function search($conditions, $orderBys, $start, $limit, $columns = [])
     {
         return $this->getTemplateDao()->search($conditions, $orderBys, $start, $limit, $columns);
+    }
+
+    public function dropTemplate($id)
+    {
+        $template = $this->get($id);
+        if (empty($template) || 1 == $template['dropped']) {
+            $this->createNewException(TemplateException::NOTFOUND_TEMPLATE());
+        }
+
+        return $this->getTemplateDao()->update($id, ['dropped' => 1]);
     }
 
     protected function filterTemplateFields($fields)
