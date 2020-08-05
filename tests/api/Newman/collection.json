@@ -15806,13 +15806,7 @@
 								"api",
 								"homework",
 								"{{homeworkId}}"
-							],
-              "query": [
-                {
-                  "key": "_idType",
-                  "value": "lesson"
-                }
-              ]
+							]
 						},
 						"description": "获取 作业 信息"
 					},
