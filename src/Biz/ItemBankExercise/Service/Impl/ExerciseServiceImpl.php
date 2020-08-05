@@ -34,6 +34,10 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
+        if ($this->getByQuestionBankId($exercise['questionBankId'])) {
+            $this->createNewException(ItemBankExerciseException::EXERCISE_EXISTS());
+        }
+
         try {
             $this->beginTransaction();
 
