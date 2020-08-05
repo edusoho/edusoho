@@ -1174,7 +1174,7 @@ item_bank_exercise.accuracy: 正确率：
 item_bank_exercise.preview.course: 预览题库练习
 item_bank_exercise.chapter_practice: 章节练习
 item_bank_exercise.testpaper_practice: 试卷练习
-item_bank_exercise.testpaper_practice.tip: 试卷练习支持刷题模式和评测模式。刷题模式在答题时即时得到反馈；评测模式在答题结束后统一反馈。
+item_bank_exercise.testpaper_practice.tip: 试卷练习支持评测模式，在答题结束后统一反馈。
 item_bank_exercise.testpaper_practice.open: 启用试卷练习
 item_bank_exercise.manage_btn: 管理题库练习
 item_bank_exercise.members_manage.official_student.add.price_tips: 本题库练习的价格为

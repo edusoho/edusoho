@@ -1918,7 +1918,7 @@ item_bank_exercise.accuracy: Right rate：
 item_bank_exercise.manage_btn: Item bank exercise manage
 item_bank_exercise.chapter_practice: Chapter practice
 item_bank_exercise.testpaper_practice: Tests paper practice
-item_bank_exercise.testpaper_practice.tip: The practice papers support both brush mode and assessment mode. In Brush mode, you will get immediate feedback while answering the questions; in Assessment mode, you will get feedback after answering the questions.
+item_bank_exercise.testpaper_practice.tip: The test paper exercises support the evaluation mode, and feedback is unified after the answer.
 item_bank_exercise.testpaper_practice.open: Open tests paper practice
 item_bank_exercise.preview.course: Preview item bank exercise
 item_bank_exercise.members_manage.official_student.add.price_tips: 'The price of this item bank exercise is'
