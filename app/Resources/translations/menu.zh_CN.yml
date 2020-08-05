@@ -498,6 +498,17 @@ admin_v2.course.underway.live_tab: 当前进行
 admin_v2.course.end.live_tab: 已结束的
 admin_v2.course.live.basic_tab.create_btn: 创建直播
 
+##题库管理模块
+admin_v2.course.item_bank_exercise: 题库练习管理
+admin_v2.course.item_bank_exercise.basic_tab: 题库练习管理
+admin_v2.course.item_bank_exercise.analysis_tab: 题库练习统计
+admin_v2.course.item_bank_exercise.recommend_list_tab: 题库练习推荐
+admin_v2.course.item_bank_exercise.basic_tab.manage_btn: 管理题库练习
+admin_v2.course.item_bank_exercise.basic_tab.recommend_btn: 推荐题库练习
+admin_v2.course.item_bank_exercise.basic_tab.close_btn: 关闭题库练习
+admin_v2.course.item_bank_exercise.basic_tab.publish_submit_btn: 发布题库练习
+admin_v2.course.item_bank_exercise.basic_tab.delete_submit_btn: 删除题库练习
+
 # 教学-课程管理-公开课模块
 admin_v2.course.open_course_menu: 公开课管理
 admin_v2.course.open_course.basic_tab: 公开课管理
@@ -531,6 +542,7 @@ admin_v2.course.review_menu: 反馈管理
 
 admin_v2.course.review.course_review_tab: 课程评价
 admin_v2.course.review.classroom_review_tab: 班级评价
+admin_v2.course.review.exercise_review_tab: 题库练习评价
 
 # 教学模块-资源管理
 admin_v2.cloud_resource.basic_group: 资源管理

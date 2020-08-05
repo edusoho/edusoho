@@ -14,6 +14,7 @@ class ObjectCombinationUtil
         'courseSet' => 'Course:CourseSetService',
         'classroom' => 'Classroom:ClassroomService',
         'goods' => 'Goods:GoodsService',
+        'item_bank_exercise' => 'ItemBankExercise:ExerciseService',
     ];
 
     private $methodMap = [
@@ -22,6 +23,7 @@ class ObjectCombinationUtil
         'courseSet' => 'findCourseSetsByIds',
         'classroom' => 'findClassroomsByIds',
         'goods' => 'findGoodsByIds',
+        'item_bank_exercise' => 'findByIds',
     ];
 
     public function __construct($biz)

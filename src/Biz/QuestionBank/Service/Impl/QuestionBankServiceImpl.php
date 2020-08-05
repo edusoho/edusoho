@@ -5,6 +5,7 @@ namespace Biz\QuestionBank\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Common\CommonException;
+use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\QuestionBank\Dao\QuestionBankDao;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\CategoryService;
@@ -125,6 +126,8 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
             }
 
             $this->getMemberService()->resetBankMembers($newQuestionBank['id'], $members);
+
+            $this->dispatch('questionBank.update', $questionBank, ['members' => $members, 'userId' => $this->getCurrentUser()->getId()]);
 
             $this->commit();
         } catch (\Exception $e) {
@@ -258,6 +261,14 @@ class QuestionBankServiceImpl extends BaseService implements QuestionBankService
         $conditions['isHidden'] = 0;
 
         return $conditions;
+    }
+
+    /**
+     * @return ExerciseService
+     */
+    protected function getItemBankExerciseService()
+    {
+        return $this->createService('ItemBankExercise:ExerciseService');
     }
 
     /**

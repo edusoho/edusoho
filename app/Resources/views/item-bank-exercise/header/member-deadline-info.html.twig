@@ -1,0 +1,45 @@
+{#<li class="mll">#}
+  {% if member.role == 'teacher' %}
+    <span class="deadline-black">
+      {% if exercise.expiryMode == 'forever' %}
+        {{ 'course.expiry_date.forever_mode'|trans }}
+      {% elseif exercise.expiryMode == 'days' %}
+        {{ 'course.expiry_date.days_mode.total_days'|trans({'%expiryDays%':exercise.expiryDays}) }}
+      {% else %}
+        {{ exercise.expiryEndDate|date('Y-m-d') }}
+      {% endif %}
+    </span>
+  {% else %}
+    {% if exercise.expiryMode == 'forever' and member.deadline == 0 %}
+      <span class="deadline-black">{{ 'course.expiry_date.forever_mode'|trans }}</span>
+    {% elseif exercise.expiryMode in ['end_date', 'date'] %}
+      <span class="deadline-black">{{member.deadline|date('Y-m-d') }}</span>
+      {% if date('now').timestamp > member.deadline %}
+        <span class="color-danger text-12">{{ 'course.expiry_date.overdue'|trans }}</span>
+      {% else %}
+        {% set lastDays = member.deadline|time_diff %}
+        {% if lastDays == 0 %}
+          <span class="color-warning text-12">{{ 'course.expiry_date.today_will_overdue'|trans }}</span>
+        {% elseif lastDays == 1 %}
+          <span class="color-warning text-12">{{ 'course.expiry_date.tomorrow_will_overdue'|trans }}</span>
+        {% elseif lastDays < 31 %}
+          <span class="color-warning text-12">{{ 'course.expiry_date.days_remaining'|trans({'%lastDays%':lastDays}) }}</span>
+        {% endif %}
+      {% endif %}
+    {% else %}
+      <span class="deadline-black">{{ member.deadline|date('Y-m-d') }}</span>
+      {% if date('now').timestamp > member.deadline %}
+        <span class="color-danger text-12">{{ 'course.expiry_date.overdue'|trans }}</span>
+      {% else %}
+        {% set lastDays = member.deadline|time_diff %}
+        {% if lastDays == 0 %}
+          <span class="color-warning text-12">{{ 'course.expiry_date.today_will_overdue'|trans }}</span>
+        {% elseif lastDays == 1 %}
+          <span class="color-warning text-12">{{ 'course.expiry_date.tomorrow_will_overdue'|trans }}</span>
+        {% elseif lastDays < 31 %}
+          <span class="color-warning text-12">{{ 'course.expiry_date.days_remaining'|trans({'%lastDays%':lastDays}) }}</span>
+        {% endif %}
+      {% endif %}
+    {% endif %}
+  {% endif %}
+{#</li>#}

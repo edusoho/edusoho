@@ -9,11 +9,43 @@ use Codeages\Biz\Order\Status\OrderStatusCallback;
 
 class ClassroomProduct extends BaseGoodsProduct implements OrderStatusCallback
 {
+    public $goods;
+
+    public $goodsSpecs;
+
+    public $originalTargetId;
+
+    /**
+     * 班级展示价格
+     *
+     * @var float
+     */
+    public $price;
+
     const TYPE = 'classroom';
 
     public $targetType = self::TYPE;
 
     public $showTemplate = 'order/show/classroom-item.html.twig';
+
+    public function init(array $params)
+    {
+        $goodsSpecs = $this->getGoodsService()->getGoodsSpecs($params['targetId']);
+        $goods = $this->getGoodsService()->getGoods($goodsSpecs['goodsId']);
+        $this->targetId = $params['targetId'];
+        //originalTargetId 兼容老数据，用来处理老数据的问题：这里originalTargetId对应的是classroom的id
+        $this->originalTargetId = $goodsSpecs['targetId'];
+        $this->goods = $goods;
+        $this->goodsSpecs = $goodsSpecs;
+
+        $this->backUrl = ['routing' => 'goods_show', 'params' => ['id' => $goodsSpecs['goodsId']]];
+        $this->title = $goodsSpecs['title'];
+        $this->cover = empty($goodsSpecs['images']) ? $goods['images'] : $goodsSpecs['images'];
+        $this->successUrl = ['routing' => 'classroom_show', 'params' => ['id' => $goodsSpecs['targetId']]];
+
+        $this->productEnable = 'published' === $goods['status'] && 'published' === $goodsSpecs['status'];
+        $this->originPrice = $goodsSpecs['price'];
+    }
 
     public function validate()
     {

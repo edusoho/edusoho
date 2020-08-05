@@ -4,9 +4,10 @@ namespace ApiBundle\Api\Resource\Task;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use Biz\Course\MemberException;
-use Biz\Common\CommonException;
 use ApiBundle\Api\Resource\Assessment\AssessmentFilter;
+use Biz\Common\CommonException;
+use Biz\Course\MemberException;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 
 class TaskStartAnswer extends AbstractResource
 {
@@ -31,28 +32,38 @@ class TaskStartAnswer extends AbstractResource
         $assessmentFilter = new AssessmentFilter();
         $assessmentFilter->filter($assessment);
 
-        return array(
+        return [
             'assessment' => $assessment,
             'assessment_response' => $this->getAnswerService()->getAssessmentResponseByAnswerRecordId($answerRecord['id']),
             'answer_scene' => $this->getAnswerSceneService()->get($answerRecord['answer_scene_id']),
             'answer_record' => $answerRecord,
-        );
+        ];
     }
 
     protected function startHomeWork($task, $activity)
     {
-        return $this->getAnswerService()->startAnswer($activity['ext']['answerSceneId'], $activity['ext']['assessmentId'], $this->getCurrentUser()['id']);
+        $latestAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($activity['ext']['answerSceneId'], $this->getCurrentUser()['id']);
+        if (empty($latestAnswerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED == $latestAnswerRecord['status']) {
+            return $this->getAnswerService()->startAnswer($activity['ext']['answerSceneId'], $activity['ext']['assessmentId'], $this->getCurrentUser()['id']);
+        } else {
+            return $latestAnswerRecord;
+        }
     }
 
     protected function startTestpaper($task, $activity)
     {
-        return $this->getAnswerService()->startAnswer($activity['ext']['answerSceneId'], $activity['ext']['mediaId'], $this->getCurrentUser()['id']);
+        $latestAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($activity['ext']['answerSceneId'], $this->getCurrentUser()['id']);
+        if (empty($latestAnswerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED == $latestAnswerRecord['status']) {
+            return $this->getAnswerService()->startAnswer($activity['ext']['answerSceneId'], $activity['ext']['mediaId'], $this->getCurrentUser()['id']);
+        } else {
+            return $latestAnswerRecord;
+        }
     }
 
     protected function startExercise($task, $activity)
     {
         $latestAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($activity['ext']['answerSceneId'], $this->getCurrentUser()['id']);
-        if (empty($latestAnswerRecord) || 'finished' == $latestAnswerRecord['status']) {
+        if (empty($latestAnswerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED == $latestAnswerRecord['status']) {
             $assessment = $this->createExerciseAssessment($activity);
 
             return $this->getAnswerService()->startAnswer($activity['ext']['answerSceneId'], $assessment['id'], $this->getCurrentUser()['id']);
@@ -66,16 +77,16 @@ class TaskStartAnswer extends AbstractResource
         $range = $activity['ext']['drawCondition']['range'];
         $sections = $this->getAssessmentService()->drawItems(
             $range,
-            array($activity['ext']['drawCondition']['section'])
+            [$activity['ext']['drawCondition']['section']]
         );
 
-        $assessment = array(
+        $assessment = [
             'name' => $activity['title'],
             'displayable' => 0,
             'description' => '',
             'bank_id' => $range['bank_id'],
             'sections' => $sections,
-        );
+        ];
 
         $assessment = $this->getAssessmentService()->createAssessment($assessment);
 

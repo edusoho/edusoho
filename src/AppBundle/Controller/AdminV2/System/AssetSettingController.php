@@ -11,6 +11,7 @@ use Biz\CloudPlatform\Service\AppService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Goods\Service\GoodsService;
+use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\S2B2C\Service\ProductService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
@@ -173,11 +174,6 @@ class AssetSettingController extends BaseController
                 'maxPrice_GT' => 0,
             ], ['publishedTime' => 'desc'], 0, PHP_INT_MAX);
 
-//            $courseSets = $this->getCourseSetService()->searchCourseSets([
-//                'parentId' => 0,
-//                'maxCoursePrice_GT' => 0,
-//            ], ['updatedTime' => 'desc'], 0, PHP_INT_MAX);
-
             return $this->render('admin-v2/system/asset-setting/coin/usage/effective.html.twig', [
                 'set' => $set,
                 'items' => $goods,
@@ -291,19 +287,21 @@ class AssetSettingController extends BaseController
         $type = $conditions['type'];
         $set = $conditions['set'];
 
-        if ('course' == $type) {
+        if ('course' === $type) {
             $items = $this->getGoodsService()->searchGoods([
                 'type' => 'course',
                 'maxPrice_GT' => 0,
             ], ['publishedTime' => 'desc'], 0, PHP_INT_MAX);
-        } elseif ('classroom' == $type) {
+        } elseif ('classroom' === $type) {
             $items = $this->getGoodsService()->searchGoods([
                 'type' => 'classroom',
                 'maxPrice_GT' => 0,
             ], ['publishedTime' => 'desc'], 0, PHP_INT_MAX);
-        } elseif ('vip' == $type) {
+        } elseif ('vip' === $type) {
             // todo
             $items = $this->getLevelService()->searchLevels(['enable' => 1], ['seq' => 'asc'], 0, PHP_INT_MAX);
+        } elseif ('exercise' === $type) {
+            $items = $this->getExerciseService()->search(['price_GT' => '0.00'], ['createdTime' => 'desc'], 0, PHP_INT_MAX);
         }
 
         return $this->render('admin-v2/system/asset-setting/coin/usage/effective-nav.html.twig', [
@@ -366,19 +364,21 @@ class AssetSettingController extends BaseController
         $type = $data['type'];
         $data = $data['item-rate'];
 
-        if ('course' == $type) {
+        if ('course' === $type) {
             foreach ($data as $key => $value) {
-//                $this->getCourseSetService()->updateMaxRate($key, $value);
                 $this->getGoodsService()->updateGoods($key, ['maxRate' => $value]);
             }
-        } elseif ('classroom' == $type) {
+        } elseif ('classroom' === $type) {
             foreach ($data as $key => $value) {
-//                $this->getClassroomService()->updateClassroom($key, ['maxRate' => $value]);
                 $this->getGoodsService()->updateGoods($key, ['maxRate' => $value]);
             }
-        } elseif ('vip' == $type) {
+        } elseif ('vip' === $type) {
             foreach ($data as $key => $value) {
                 $this->getLevelService()->updateLevel($key, ['maxRate' => $value]);
+            }
+        } elseif ('exercise' === $type) {
+            foreach ($data as $key => $value) {
+                $this->getExerciseService()->update($key, ['maxRate' => $value]);
             }
         }
     }
@@ -469,5 +469,13 @@ class AssetSettingController extends BaseController
     protected function getProductService()
     {
         return $this->createService('Product:ProductService');
+    }
+
+    /**
+     * @return ExerciseService
+     */
+    protected function getExerciseService()
+    {
+        return $this->createService('ItemBankExercise:ExerciseService');
     }
 }

@@ -16,6 +16,8 @@
     <div class="cd-content my-teaching-body">
       {{ render(controller('AppBundle:My/User:avatarAlert')) }}
       {% block main %}
+        {% block sidebar %}
+        {% endblock %}
       {% endblock %}
 
       {% block main_mobile %}{% endblock %}

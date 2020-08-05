@@ -1,0 +1,46 @@
+{% import "macro.html.twig" as web_macro %}
+
+<div class="courseset-manage-header cd-mb32 clearfix">
+  {% block coursesetImg %}
+  {% endblock %}
+
+  {% if item.status =='closed' %}
+    <span class="course-publish-status course-publish-status--closed">{{'course.status.closed'|trans}}</span>
+  {% elseif item.status =='draft' %}
+    <span class="course-publish-status course-publish-status--unpublished">{{'course.status.unpublished'|trans}}</span>
+  {% elseif item.status =='published' %}
+    <span class="course-publish-status course-publish-status--published">{{'course.status.published'|trans }}</span>
+  {% endif %}
+
+  <div class="courseset-manage-header-info">
+    <div class="courseset-manage-header-info__title text-overflow" {% if item.title|length > 21 %}data-toggle="tooltip" title="{{ item.title }}" data-container="body" {% endif %}>
+    {% block coursesetTitle %}
+      <span class="cd-dark-major">{{ item.title }}</span>
+    {% endblock %}
+    </div>
+    {% block liveTag %}
+      <span class="cd-tag cd-tag-orange">{{ dict('courseType')[item.type] }}</span>
+    {% endblock %}
+    <div class="courseset-manage-header-info__price color-danger">
+        {% include 'common/price.html.twig' with {'productPrice': item.price} %}
+    </div>
+  </div>
+
+  <div class="courseset-manage-header-btn">
+    {% block btn %}
+    {% endblock %}
+  </div>
+
+  <div class="courseset-manage-header-data hidden-xs">
+    <span class="cd-text-medium">{{ 'course.item_student_member'|trans }}</span>
+    <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{{ item.studentNum|default() }} </span></div>
+  </div>
+  <div class="courseset-manage-header-data hidden-xs">
+    <span class="cd-text-medium">{{ 'course.assessment_number'|trans }}</span>
+    <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{% block courseTitle %}{{ item.assessmentNum|default(0) }}{% endblock %}</span></div>
+  </div>
+  <div class="courseset-manage-header-data hidden-xs ">
+    <span class="cd-text-medium">{{ 'course.item_number'|trans }}</span>
+    <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{{ item.itemNum|default(0) }}</span></div>
+  </div>
+</div>

@@ -6,6 +6,7 @@ use ApiBundle\Api\Resource\Classroom\ClassroomFilter;
 use ApiBundle\Api\Resource\Coupon\CouponFilter;
 use ApiBundle\Api\Resource\Course\CourseFilter;
 use ApiBundle\Api\Resource\Filter;
+use ApiBundle\Api\Resource\ItemBankExercise\ItemBankExerciseFilter;
 use ApiBundle\Api\Resource\MarketingActivity\MarketingActivityFilter;
 use ApiBundle\Api\Resource\OpenCourse\OpenCourseFilter;
 use ApiBundle\Api\Util\AssetHelper;
@@ -100,6 +101,13 @@ class PageDiscoveryFilter extends Filter
 
                 $default = 'course' == $navigation['link']['type'] ? 'hot_course.png' : ('openCourse' == $navigation['link']['type'] ? 'open_course.png' : 'hot_classroom.png');
                 $navigation['image']['url'] = AssetHelper::getFurl('', $default);
+            }
+        }
+
+        if ('item_bank_exercise' == $data['type']) {
+            $itemBankExerciseFilter = new ItemBankExerciseFilter();
+            foreach ($data['data']['items'] as &$itemBankExercise) {
+                $itemBankExerciseFilter->filter($itemBankExercise);
             }
         }
     }

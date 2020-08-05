@@ -24,32 +24,6 @@ abstract class BaseGoodsProduct extends Product implements OrderStatusCallback
      */
     public $price;
 
-    public function init(array $params)
-    {
-        $goodsSpecs = $this->getGoodsService()->getGoodsSpecs($params['targetId']);
-        $goods = $this->getGoodsService()->getGoods($goodsSpecs['goodsId']);
-
-        $this->targetId = $params['targetId'];
-        //originalTargetId 兼容老数据，以前订单列表
-        $this->originalTargetId = $goodsSpecs['targetId'];
-        $this->goods = $goods;
-        $this->goodsSpecs = $goodsSpecs;
-
-        if (CourseProduct::TYPE === $this->targetType) {
-            $this->backUrl = ['routing' => 'goods_show', 'params' => ['id' => $goodsSpecs['goodsId'], 'targetId' => $goodsSpecs['targetId']]];
-            $this->title = $goods['title'].'-'.$goodsSpecs['title'];
-            $this->successUrl = ['routing' => 'my_course_show', 'params' => ['id' => $goodsSpecs['targetId']]];
-        } elseif (ClassroomProduct::TYPE === $this->targetType) {
-            $this->backUrl = ['routing' => 'goods_show', 'params' => ['id' => $goodsSpecs['goodsId']]];
-            $this->title = $goodsSpecs['title'];
-            $this->successUrl = ['routing' => 'classroom_show', 'params' => ['id' => $goodsSpecs['targetId']]];
-        }
-
-        $this->productEnable = ('published' === $goods['status'] && 'published' === $goodsSpecs['status']) ? true : false;
-        $this->originPrice = $goodsSpecs['price'];
-        $this->cover = empty($goodsSpecs['images']) ? $goods['images'] : $goodsSpecs['images'];
-    }
-
     /**
      * @return GoodsService
      */

@@ -19,6 +19,13 @@ class ItemCategoryDaoImpl extends AdvancedDaoImpl implements ItemCategoryDao
         return $this->findByFields(['bank_id' => $bankId]);
     }
 
+    public function resetItemNumAndQuestionNumByBankId($bankId)
+    {
+        $sql = "UPDATE {$this->table} SET item_num = 0, question_num = 0 WHERE bank_id = ?";
+
+        return $this->db()->executeUpdate($sql, [$bankId]);
+    }
+
     public function declares()
     {
         return [

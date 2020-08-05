@@ -17,12 +17,46 @@ class CourseProduct extends BaseGoodsProduct
 
     public $targetType = self::TYPE;
 
+    public $goods;
+
+    public $goodsSpecs;
+
+    public $originalTargetId;
+
     /**
      * 课程展示价格
      *
      * @var float
      */
     public $price;
+
+    public function init(array $params)
+    {
+        $goodsSpecs = $this->getGoodsService()->getGoodsSpecs($params['targetId']);
+        $this->goodsSpecs = $goodsSpecs;
+
+        $goods = $this->getGoodsService()->getGoods($goodsSpecs['goodsId']);
+        $this->goods = $goods;
+
+        $this->targetId = $params['targetId'];
+        //originalTargetId 兼容老数据，以前订单列表
+        $this->originalTargetId = $goodsSpecs['targetId'];
+
+        $course = $this->getCourseService()->getCourse($this->originalTargetId);
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+
+        $this->backUrl = ['routing' => 'goods_show', 'params' => ['id' => $goodsSpecs['goodsId'], 'targetId' => $goodsSpecs['targetId']]];
+        $this->title = $goods['title'] === $goodsSpecs['title'] ? $goods['title'] : $goods['title'].'-'.$goodsSpecs['title'];
+        if (empty($this->title) && isset($params['orderItemId'])) {
+            $orderItem = $this->getOrderService()->getOrderItem($params['orderItemId']);
+            $this->title = $orderItem['title'];
+        }
+        $this->successUrl = ['routing' => 'my_course_show', 'params' => ['id' => $goodsSpecs['targetId']]];
+        $this->productEnable = 'published' === $goods['status'] && 'published' === $goodsSpecs['status'];
+        $this->originPrice = $goodsSpecs['price'];
+        $this->maxRate = $goods['maxRate'];
+        $this->cover = empty($goodsSpecs['images']) ? $goods['images'] : $goodsSpecs['images'];
+    }
 
     public function validate()
     {

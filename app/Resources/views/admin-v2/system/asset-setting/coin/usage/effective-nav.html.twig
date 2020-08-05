@@ -10,6 +10,11 @@
         data-url="{{path('admin_v2_coin_model_ajax',{type:'classroom'|default('course'), set:set})}}" id="classroom">
       <a href="javascript:;">{{'classroom'|trans}}</a>
     </li>
+    <li role="presentation" class = "js-type-filter
+    {% if (type|default('course') == 'exercise') %}active {% endif %}"
+        data-url="{{path('admin_v2_coin_model_ajax',{type:'exercise'|default('course'), set:set})}}" id="exercise">
+      <a href="javascript:;">{{'item_bank_exercise'|trans}}</a>
+    </li>
     {% if is_plugin_installed('vip') and has_permission('admin_v2_coin_user_records') %}
       <li role="presentation" class = "js-type-filter
       {% if (type|default('course') == 'vip') %}active {% endif %}"
@@ -25,4 +30,6 @@
   {% include 'admin-v2/system/asset-setting/coin/usage/goods-type/coin-table-classroom.html.twig' %}
 {% elseif type == 'vip' %}
   {% include 'admin-v2/system/asset-setting/coin/usage/goods-type/coin-table-vip.html.twig' %}
+{% elseif type == 'exercise' %}
+  {% include 'admin-v2/system/asset-setting/coin/usage/goods-type/coin-table-exercise.html.twig' %}
 {% endif %}
