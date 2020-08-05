@@ -10432,6 +10432,7 @@ exception.item_bank_exercise.forbidden_take_exercise: 不能访问题库练习
 exception.item_bank_exercise.member.non_expired: 学员未过期
 exception.item_bank_exercise.member.member_not_student: 成员不是学生
 exception.item_bank_exercise.module.switch.danger: 题库练习发布时，章节练习或试卷练习至少需要启用一项
+exception.item_bank_exercise.exercise.is_exists: 题库练习已存在，请勿重复开启
 
 exception.wechat.notify_setting_not_enabled: 微信通知未开启
 exception.wechat.template_exceeds_limit_hint: 一个微信服务号只允许开启25个微信通知模板，请关闭其他模板后再次尝试

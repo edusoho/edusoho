@@ -9117,6 +9117,7 @@ exception.item_bank_exercise.forbidden_take_exercise: Can't access the item bank
 exception.item_bank_exercise.member.non_expired: The student has not expired
 exception.item_bank_exercise.member.member_not_student: Member is not student
 exception.item_bank_exercise.module.switch.danger: At the time of publication of the item bank exercise, at least one chapter exercise or assessment exercise must be enabled
+exception.item_bank_exercise.exercise.is_exists: The item bank exercise already exists. Please do not open it repeatedly
 
 exception.wechat.notify_setting_not_enabled: WeChat Notification Is Not Turned On
 exception.wechat.template_exceeds_limit_hint: A WeChat service number allows only 25 WeChat notification templates to be opened. Please close other templates and try again.
