@@ -24,11 +24,6 @@ export default {
       default: ""
     }
   },
-  // data() {
-  //   return {
-  //     moreText: this.type === 'course_list' ? '好课' : (this.type === 'classroom_list' ? '班级' : '题库')
-  //   }
-  // },
   computed:{
     emptyText(){
       if(!this.text){
