@@ -11519,7 +11519,11 @@
 									"tests[\"Status code is 200\"] = responseCode.code === 200;",
 									"",
 									"var jsonData = JSON.parse(responseBody);",
-									"tests[\"getLesson success\"] =true;"
+									"if((jsonData.id === data.videoLessonId)&(jsonData.courseId === data.courseId)&(jsonData.type === \"video\")){",
+									"    tests[\"getLesson success\"] =true;",
+									"}else{",
+									"    tests[\"getLesson success\"] =false",
+									"}"
 								]
 							}
 						}
