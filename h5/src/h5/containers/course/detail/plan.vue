@@ -48,6 +48,10 @@
         <span class="validity orange">{{ buyExpiryTime }}</span>
       </div>
     </div>
+    <div class="course-detail__certificate" @click="toCourseCertificate">
+      <span><span class="certificate-icon">证</span>我的证书</span>
+      <i class="van-icon van-icon-arrow pull-right" />
+    </div>
   </div>
 </template>
 <script>
@@ -176,6 +180,9 @@ export default {
 
       this.isFree = false;
       return `¥${details.price}`;
+    },
+    toCourseCertificate() {
+      this.$router.push({ path: '/course/certificate/list' });
     },
   },
 };
