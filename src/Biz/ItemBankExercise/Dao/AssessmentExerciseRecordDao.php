@@ -9,4 +9,6 @@ interface AssessmentExerciseRecordDao extends GeneralDaoInterface
     public function getByAnswerRecordId($answerRecordId);
 
     public function getLatestRecord($moduleId, $assessmentId, $userId);
+
+    public function deleteByExerciseId($exerciseId);
 }

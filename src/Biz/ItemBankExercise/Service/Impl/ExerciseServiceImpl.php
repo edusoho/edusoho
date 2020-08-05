@@ -8,9 +8,14 @@ use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\Content\Service\FileService;
 use Biz\Exception\UnableJoinException;
+use Biz\ItemBankExercise\Dao\AssessmentExerciseDao;
+use Biz\ItemBankExercise\Dao\AssessmentExerciseRecordDao;
+use Biz\ItemBankExercise\Dao\ChapterExerciseRecordDao;
 use Biz\ItemBankExercise\Dao\ExerciseDao;
 use Biz\ItemBankExercise\Dao\ExerciseMemberDao;
 use Biz\ItemBankExercise\Dao\ExerciseModuleDao;
+use Biz\ItemBankExercise\Dao\ExerciseQuestionRecordDao;
+use Biz\ItemBankExercise\Dao\MemberOperationRecordDao;
 use Biz\ItemBankExercise\ExpiryMode\ExpiryModeFactory;
 use Biz\ItemBankExercise\ItemBankExerciseException;
 use Biz\ItemBankExercise\OperateReason;
@@ -266,11 +271,33 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
     {
         $this->tryManageExercise($exerciseId);
 
-        $this->getExerciseDao()->delete($exerciseId);
+        try {
+            $this->beginTransaction();
 
-        $user = $this->getCurrentUser();
+            $this->getExerciseDao()->delete($exerciseId);
 
-        $this->getLogService()->info('item_bank_exercise', 'delete_exercise', "删除练习{$user['nickname']}(#{$user['id']})");
+            $this->getExerciseMemberDao()->deleteByExerciseId($exerciseId);
+
+            $this->getMemberOperationRecordDao()->deleteByExerciseId($exerciseId);
+
+            $this->getItemBankExerciseModuleDao()->deleteByExerciseId($exerciseId);
+
+            $this->getAssessmentExerciseDao()->deleteByExerciseId($exerciseId);
+
+            $this->getAssessmentExerciseRecordDao()->deleteByExerciseId($exerciseId);
+
+            $this->getChapterExerciseRecordDao()->deleteByExerciseId($exerciseId);
+
+            $this->getExerciseQuestionRecordDao()->deleteByExerciseId($exerciseId);
+
+            $user = $this->getCurrentUser();
+            $this->getLogService()->info('item_bank_exercise', 'delete_exercise', "删除练习{$user['nickname']}(#{$user['id']})");
+
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
     }
 
     public function recommendExercise($exerciseId, $number)
@@ -510,6 +537,46 @@ class ExerciseServiceImpl extends BaseService implements ExerciseService
     protected function getItemBankExerciseModuleDao()
     {
         return $this->createDao('ItemBankExercise:ExerciseModuleDao');
+    }
+
+    /**
+     * @return AssessmentExerciseDao
+     */
+    protected function getAssessmentExerciseDao()
+    {
+        return $this->createDao('ItemBankExercise:AssessmentExerciseDao');
+    }
+
+    /**
+     * @return AssessmentExerciseRecordDao
+     */
+    protected function getAssessmentExerciseRecordDao()
+    {
+        return $this->createDao('ItemBankExercise:AssessmentExerciseRecordDao');
+    }
+
+    /**
+     * @return ChapterExerciseRecordDao
+     */
+    protected function getChapterExerciseRecordDao()
+    {
+        return $this->createDao('ItemBankExercise:ChapterExerciseRecordDao');
+    }
+
+    /**
+     * @return MemberOperationRecordDao
+     */
+    protected function getMemberOperationRecordDao()
+    {
+        return $this->createDao('ItemBankExercise:MemberOperationRecordDao');
+    }
+
+    /**
+     * @return ExerciseQuestionRecordDao
+     */
+    protected function getExerciseQuestionRecordDao()
+    {
+        return $this->createDao('ItemBankExercise:ExerciseQuestionRecordDao');
     }
 
     /**

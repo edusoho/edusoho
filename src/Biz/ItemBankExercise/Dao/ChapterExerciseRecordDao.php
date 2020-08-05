@@ -11,4 +11,6 @@ interface ChapterExerciseRecordDao extends GeneralDaoInterface
     public function getLatestRecord($moduleId, $itemCategoryId, $userId);
 
     public function findWeekRankRecords($exerciseId);
+
+    public function deleteByExerciseId($exerciseId);
 }
