@@ -44,6 +44,7 @@ class LearningDataAnalysisServiceImpl extends BaseService implements LearningDat
     {
         $statisticData = $this->getLearningDataAnalysisDao()->sumStatisticDataByCourseIdsAndUserId($courseIds, $userId);
         $taskNum = $this->getTaskService()->countTasks(['courseIds' => $courseIds]);
+
         return $this->makeProgress($statisticData['learnedNum'], $taskNum);
     }
 
