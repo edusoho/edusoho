@@ -1,0 +1,7 @@
+<li id="chapter-{{ lesson.id }}" class="chapter-list-li task-manage-item task-manage-lesson js-task-manage-item">
+    <div class="col-xs-3">
+      <span class="lesson-title title-overflow">{{ lesson.name }}</span>
+    </div>
+    {% include 'item-bank-exercise/tabs/list/chapter-button.html.twig' with {previewAs:previewAs,'question_num': lesson.question_num, 'member':member|default(null), record: record} %}
+</li>
+

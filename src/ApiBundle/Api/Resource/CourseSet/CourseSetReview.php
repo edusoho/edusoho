@@ -23,18 +23,20 @@ class CourseSetReview extends AbstractResource
         }
 
         $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSetId);
-        $conditions = [
-            'targetIds' => array_values(array_column($courses, 'id')),
-            'parentId' => 0,
-            'targetType' => 'course',
-        ];
 
-        $offset = $request->query->get('offset', static::DEFAULT_PAGING_OFFSET);
-        $limit = $request->query->get('limit', static::DEFAULT_PAGING_LIMIT);
-        $total = $this->getReviewService()->countReviews($conditions);
-        $reviews = $this->searchReviews($conditions, $offset, $limit);
-
-        return $this->makePagingObject($reviews, $total, $offset, $limit);
+        return $this->invokeResource(new ApiRequest(
+            '/api/review',
+            'GET',
+            [
+                'targetIds' => array_values(array_column($courses, 'id')),
+                'parentId' => 0,
+                'targetType' => 'course',
+                'offset' => $request->query->get('offset', static::DEFAULT_PAGING_OFFSET),
+                'limit' => $request->query->get('limit', static::DEFAULT_PAGING_LIMIT),
+                'orderBys' => ['updatedTime' => 'DESC'],
+                'needPosts' => true,
+            ]
+        ));
     }
 
     protected function searchReviews($conditions, $offset, $limit)

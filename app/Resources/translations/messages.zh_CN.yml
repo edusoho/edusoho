@@ -80,6 +80,7 @@ site.org.code: 编码：
 site.tips: 提示
 site.qrcode_tips: 扫一扫
 site.tips.scan_qrcode_tips: 扫二维码继续学习 二维码时效为半小时
+site.tips.exercise_qrcode_tips: 扫描右侧二维码 前往移动端学习
 site.validate_rules.max_int: 最大值为9位整数
 site.validate_rules.two_decimal_places: 保留到2位小数
 site.btn.expand: 展开
@@ -725,6 +726,7 @@ import.user_import.download_example_btn: 点击下载示例说明文件
 import.user_import.download_example_tips: 支持从Excel文件导入
 import.user_import.price: 购买价格
 import.user_import.price_tips: 本课程的价格为
+import.exercise_user_import.price_tips: 本题库练习的价格为
 import.user_import.remark_btn: 备注
 import.user_import.remark_tips: 选填
 
@@ -1073,6 +1075,7 @@ course.members_manage.official_student.batch_upload_deadline: 批量修改有效
 course.members_manage.official_student.batch_remove: 批量移除
 course.members_manage.official_student.input_placeholder: 请输入用户名/邮箱/手机号
 course.members_manage.official_student.progress: 学习进度
+course.members_manage.official_student.stutatus: 学习状态
 course.members_manage.official_student.operation: 操作
 course.members_manage.official_student.detail: （查看详情）
 course.members_manage.official_student.show: 查看资料
@@ -1144,6 +1147,59 @@ course.members_manage.join_records: 加入记录
 course.members_manage.records.join_reason: 加入原因
 course.members_manage.records.join_reason_type: 加入类型
 course.members_manage.join_records.date: 加入日期
+
+item_bank_exercise: 题库
+item_bank_exercise.assessment.exercise.start_btn: 开始做题
+item_bank_exercise.assessment.exercise.continue_btn: 继续做题
+item_bank_exercise.assessment.exercise.view_btn: 查看报告
+item_bank_exercise.assessment.exercise.again_btn: 再次测试
+item_bank_exercise.exercise.wait_tip: 等待提交
+item_bank_exercise.chapter.exercise.start_btn: 开始做题
+item_bank_exercise.chapter.exercise.continue_btn: 继续做题
+item_bank_exercise.chapter.exercise.view_btn: 查看报告
+item_bank_exercise.chapter.exercise.again_btn: 再次做题
+item_bank_exercise.exercise.publish: 题库练习发布
+item_bank_exercise.chapter_exercise.list: 章节目录
+item_bank_exercise.chapter_exercise.item_num: 节点题目数
+item_bank_exercise.chapter_exercise.open: 启动章节练习
+item_bank_exercise.practice_test: 模拟考试
+item_bank_exercise.save_cover: 保存图片
+item_bank_exercise.upload_cover: 题库练习图片上传
+item_bank_exercise.base.title: 题库练习名称
+item_bank_exercise.export.answer_num: 答题数
+item_bank_exercise.export.completion_rate: 答题率
+item_bank_exercise.export.accuracy: 掌握率
+item_bank_exercise.answer_number: 答题数：
+item_bank_exercise.accuracy: 正确率：
+item_bank_exercise.preview.course: 预览题库练习
+item_bank_exercise.chapter_practice: 章节练习
+item_bank_exercise.testpaper_practice: 试卷练习
+item_bank_exercise.testpaper_practice.tip: 试卷练习支持刷题模式和评测模式。刷题模式在答题时即时得到反馈；评测模式在答题结束后统一反馈。
+item_bank_exercise.testpaper_practice.open: 启用试卷练习
+item_bank_exercise.manage_btn: 管理题库练习
+item_bank_exercise.members_manage.official_student.add.price_tips: 本题库练习的价格为
+item_bank_exercise.members_manage.official_student.add.failed_tips: 题库练习不能添加
+item_bank_exercise.members_manage.official_student.add.publish_tips: 请题库练习发布后再添加。
+item_bank_exercise.student_manage.can_not_add_teacher: 该用户是本题库练习的教师，不能添加
+item_bank_exercise.student_manage.student_exist: 该用户已是本题库练习的学员了
+item_bank_exercise.student_manage.student_not_exist: 该用户不存在
+item_bank_exercise.exercise_create.forbidden: 您不是该题库管理者，不能查看此页面！
+item_bank_exercise.assessment.total_score: 总分
+item_bank_exercise.assessment_exercise.add_new_module: 添加新模块
+item_bank_exercise.assessment_exercise.add_assessment: 添加试卷
+item_bank_exercise.assessment_exercise.remove_assessment: 移除试卷
+item_bank_exercise.chapter_exercise.category_empty: 当前题库练习还未添加章节
+item_bank_exercise.chapter_exercise.empty: 什么都没有，快去开启章节练习吧
+item_bank_exercise.assessment_exercise.empty: 什么都没有，快去开启试卷练习吧
+item_bank_exercise.chapter_exercise.info: 章节练习依据“题目分类管理”的设置。按层级目录向学员提供刷题练习
+item_bank_exercise.marketing_setup.no_permission_tips: 抱歉，您无权管理题库练习基础设置，如有需要请联系网站管理员！
+item_bank_exercise.marketing_setup.setup.can_join.tips: 关闭后，学员自己无法加入，需要由老师手动添加学员。
+item_bank_exercise.marketing_setup.rule.expiry_date.first_publish_tips: 变更学习有效期，仅对修改后新增的学员有效
+item_bank_exercise.assessment_exercise.add_module: 添加模块
+item_bank_exercise.assessment_exercise.edit_module: 修改模块
+item_bank_exercise.assessment_exercise.module.name: 模块名称
+item_bank_exercise.goto_learning: 去学习
+item_bank_exercise.my_teaching_notice: 题库练习，请前往 <a class="alert-link" href="%url%"><u>题库</u></a> 创建
 
 course.testpaper_check: 试卷批阅
 course.testpaper_check.no_permission_tips: 当前用户不是本课程教师，没有批阅试卷的权限。
@@ -1318,6 +1374,8 @@ course.expiry_date.date_mode: >
 course.expiry_date.forever_mode: 长期有效
 course.expiry_date.expiryStartDate: >
   课程将于%expiryStartDate%开始授课，请耐心等待
+item_bank_exercise.expiry_date.expiryStartDate: >
+  题库练习将于%expiryStartDate%开启，请耐心等待
 course.expiry_date.overdue: （已到期）
 course.expiry_date.today_will_overdue: （今日过期）
 course.expiry_date.tomorrow_will_overdue: （明日过期）
@@ -1341,6 +1399,9 @@ course.status.finished: 已完结
 course.status.published: 已发布
 course.filter.all_plan: 全部计划
 course.student_member: 课程学员
+course.item_student_member: 题库学员
+course.assessment_number: 试卷数量
+course.item_number: 题目数量
 course.student.cell: 人
 course.plan.cell: 个
 course.manage_btn: 管理课程
@@ -1353,9 +1414,11 @@ course.belong_to_classroom_tips: >
   <a href="%classroomUrl%">%classroomTitle%</a>
   请加入后再学习
 course.course_limited_tips: 抱歉，该课程为限制课程，请联系客服
+item_bank_exercise.course_limited_tips: 抱歉，该题库练习为限制题库练习，请联系客服
 course.course_closed_tips: 抱歉，教学计划%title%已关闭！
 course.courseSet_closed_tips: 抱歉，课程%title%已关闭！
 course.unbuyable.unpublished_tips: 课程还未发布，不允许加入和购买
+item_bank_exercise.unbuyable.unpublished_tips: 题库练习还未发布，不允许加入和购买
 course.unbuyable.over_buy_expiry_time_tips: 超过加入截止日期，不允许加入和购买
 course.unbuyable.over_expiry_end_date_tips: 超过学习截止日期，不允许加入和购买
 course.introduction: 介绍
@@ -1396,6 +1459,7 @@ course.teacher: 教师：
 course.reward_point.award: 积分奖励
 course.reward_point.course_award: 完成课程奖励
 course.teacher.content_title: 授课教师
+course.advanced.content_title: 上周学霸
 course.characteristic.content_title: 课程特色
 course.newest_students.content_title: 最新学员
 course.students_dynamic.content_title: 学员动态
@@ -1657,6 +1721,7 @@ course.testpaper_manage.passed_condition: 及格%passedCondition%分
 course.testpaper_manage.limited_time: %limitedTime%分钟
 course.testpaper_manage.unlimited: 无限制
 course.testpaper_manage.count: %itemCount%题
+course.testpaper_manage.total_count: 做题数
 course.testpaper_manage.testpaper_status.draft: 草稿
 course.testpaper_manage.testpaper_status.open: 已发布
 course.testpaper_manage.testpaper_status.closed: 已关闭
@@ -3373,8 +3438,10 @@ message.btn.send: 写私信
 user.homepage: %nickname%的个人主页
 user.homepage.introductions: 个人介绍
 user.homepage.teaching_courses: 在教课程
+user.homepage.teaching_question_bank: 在教题库
 user.homepage.teaching_classrooms: 在教%classroomName%
 user.homepage.learning_courses: 在学课程
+user.homepage.learning_question_bank: 在学题库
 user.homepage.learning_classrooms: 在学%classroomName%
 user.homepage.favorite_courses: 收藏课程
 user.homepage.joined_group: 加入小组
@@ -3388,6 +3455,11 @@ user.homepage.teaching_courses.empty: 无在教的课程
 
 #个人主页模块-在学课程
 user.homepage.learning_courses.empty: 无在学的课程
+
+#个人主页模块-在学题库
+user.homepage.learning_question_bank.empty: 无在学的题库
+
+user.homepage.teaching_question_bank.empty: 无在教的题库
 
 #个人主页模块-收藏课程
 user.homepage.favorite_courses.empty: 无收藏的课程
@@ -3494,6 +3566,7 @@ search.live_courses: 直播课程
 search.reservation_courses: 一对一约课
 search.all_classrooms: 全部%classroom%
 search.free_classrooms: 免费%classroom%
+search.free_item_bank: 免费题库
 
 
 #云资源
@@ -4004,6 +4077,7 @@ customer_service.send_message: 点击这里给我发消息
 customer_service.customer_email: 反馈邮件
 
 # 我的教学
+my.teaching.view.forbidden: 您不是教师，不能查看此页面!
 my.teaching.menu_heading: 我的教学
 my.teaching.course_set_menu: 在教课程
 my.teaching.live_schedule_menu: 教学课表
@@ -4019,6 +4093,7 @@ my.teaching.testpaper_check_menu: 试卷批阅
 my.teaching.homework_check_menu: 作业批阅
 my.teaching.material_lib_menu: 教学资料库
 my.teaching.course_set.normal: 普通课程
+my.teaching.item_bank_exercise.item: 题库练习
 my.teaching.course_set.live: 直播课程
 my.teaching.course_set.reservation: 预约课程
 my.teaching.course_set.classroom: %classroom%课程
@@ -4111,6 +4186,7 @@ my.teaching.course_set.course_manage_btn: 计划管理
 my.teaching.course_set.file_manage_btn: 文件管理
 my.teaching.course_set.live_empty_hint: 你还没有在教的直播课程哦, 赶快去创建吧!
 my.teaching.course_set.empty_hint: 你还没有在教的课程哦, 赶快去创建吧!
+my.teaching.item_bank_exercise.empty_hint: 你还没有在教的题库练习哦, 赶快去创建吧!
 
 # 创建课程
 my.teaching.course_set.create_btn: 创建课程
@@ -4360,6 +4436,7 @@ my.teaching.question_bank.instructions: 使用说明
 my.teaching.question_bank.list: 题库列表
 my.teaching.question_bank.name_tip: 最多输入30个字符
 my.teaching.question_bank.info: 题库信息
+my.teaching.question_bank.exercise_set: 题库练习设置
 my.teaching.question_bank.name_label: 题库名称
 my.teaching.question_bank.category_label: 题库分类
 my.teaching.question_bank.question_category.manage: 题目分类管理
@@ -4384,9 +4461,14 @@ my.teaching.question_bank.question.set_category: 设置分类
 my.teaching.question_bank.question.selected: 已选
 my.teaching.question_bank.question.set_score: 设置分值
 my.teaching.question_bank.question.add: 添加题目
+my.teaching.question_bank.start_now: 马上开启
+my.teaching.question_bank.is_open: 当前题库尚未启用题库练习，是否启用？
+my.teaching.question_bank.open_explain: 启用后，可使用当前题库向出版物开放翻译或试卷刷题功能。
+my.teaching.question_bank.open_ensure: 确认启用题库练习吗？
 
 my.learning.menu_heading: 我的学习
 my.learning.course_set_menu: 我的课程
+my.learning.question_bank_menu: 我的题库
 my.learning.live_schedule_menu: 直播课表
 my.learning.classroom_menu: 我的%classroom%
 my.learning.live_menu: 我的直播
@@ -4475,9 +4557,11 @@ my.learning.course.learned_empty: 暂无已学完的课程
 my.learning.course.finish_task: 完成%taskName%
 my.learning.course.contiune_study: 继续学习
 my.learning.course.learning_empty: 暂无学习中的课程
+my.learning.question_bank.learning_empty: 暂无学习中的题库
 my.learning.course.lesson_num: 第%num%课时
 my.learning.course.total_learn_time: 学习总时长
 my.learning.course.watch: 查看课程
+my.learning.item_bank_exercise.watch: 查看题库练习
 my.learning.course.click_loading_more: 点击加载更多
 my.learning.course.loading: 加载中...
 
@@ -4564,6 +4648,8 @@ explore.open_course.title: 公开课
 explore.open_course.list: 公开课列表
 explore.open_course.live: 直播
 explore.open_course.empty: 暂无公开课
+explore.item_bank_exercise.list: 题库练习列表
+explore.item_bank_exercise.empty: 暂无题库练习
 
 #课程存档
 archive.course.title: 课程存档
@@ -4735,7 +4821,9 @@ course.header.become_a_VIP: <a href="%href%" target="_blank">加入会员</a>
 course.member.tips.title: 提示
 course.member.classroom.tips: 您购买的班级已到期，无法学习%taskName%、提问等。如有疑问请联系老师。
 course.member.course.tips: 您购买的课程已到期，无法学习%taskName%、提问等。如有疑问请联系老师。
+item_bank_exercise.member.expiry_tips: 您购买的题库练习已到期，无法进行章节、试卷等练习。如有疑问请联系老师。
 course.member.course.allow_buy.tips: 您购买的课程已到期，无法学习%taskName%、提问等。如有疑问请联系老师，或退出并重新加入 。
+item_bank_exercise.member.allow_buy.tips: 您购买的题库练习已到期，无法进行章节、试卷等练习。如有疑问请联系老师。
 course.member.course.join_btn: 退出并重新加入
 course.member.operation.quit_deadline_reach: 达到有效期，退出课程
 course.member.operation.admin_remove_course_student: 老师手动移除学员
@@ -5046,6 +5134,7 @@ admin.course_manage.recommend.name: 课程名称
 admin.course_manage.recommend.creator: 创建者
 admin.course_manage.recommend.time: 推荐时间
 admin.course_manage.recommend.empty: 暂无推荐课程
+admin.course_manage.item_bank_exercise.recommend.empty: 暂无推荐题库练习
 admin.course_manage.recommend.category: 分类
 admin.course_manage.recommend.set_seq_btn: 设置序号
 admin.course_manage.recommend.cancel_seq_btn: 取消推荐
@@ -5749,6 +5838,7 @@ admin.setting.navigation.tips: >
   <p>课程列表页：域名/course/explore</p>
   <p>班级列表页：域名/classroom/explore</p>
   <p>公开课列表页：域名/open/course/explore</p>
+  <p>题库练习列表页：域名/exercise/explore</p>
   <p>课程分类：域名/course/explore/分类编码</p>
   <p>资讯栏目：域名/article/栏目编码</p>
 admin.setting.navigation.top.add: 新增顶部导航
@@ -8673,6 +8763,14 @@ admin.reward_point_account.log_deduction: 账户扣减%amount%%name%
 admin.reward_point_account.note_empty: 无
 admin.reward_point_account.log_deduction_by: 从
 
+admin.item_bank_exercise.manage.count: "题库练习：<strong class=\"inflow-num\">%exerciseNum%</strong>\n"
+admin.item_bank_exercise.exercise.manage.status_placeholder: 题库练习状态
+admin.item_bank_exercise.exercise.manage.number: 编号
+admin.item_bank_exercise.exercise.manage.status: 题库练习状态
+admin.item_bank_exercise.exercise.manage.income: 题库练习收入
+admin.item_bank_exercise.exercise.recommend.modal_title: 设置推荐题库练习
+admin.item_bank_exercise.exercise.manage.empty: 暂无题库练习记录
+
 reward_point_account.note: 备注
 reward_point_product.pending: 待处理
 reward_point_product.delivered: 已发货
@@ -8806,6 +8904,7 @@ log.module.wap: 微网校
 log.module.push: 推送
 log.module.question_bank: 题库
 log.module.destroy_account_record: 帐号注销
+log.module.item_bank_exercise: 题库练习
 
 log.action.course.create: 创建课程
 log.action.course.update: 修改课程
@@ -8979,6 +9078,7 @@ log.action.order.refund_cancel: 取消退款
 log.action.order.unbind-back: 解绑银行卡
 log.action.order.course_callback: 课程回调
 log.action.order.classroom_callback: 班级回调
+log.action.order.item_bank_exercise_callback: 题库练习回调
 log.action.order.adjust_price: 价格调整
 log.action.category.create: 新增
 log.action.category.update: 修改
@@ -9048,6 +9148,7 @@ log.action.open_course.update_teacher: 更新公开课教师
 log.action.open_course.delete_recommend_course: 删除推荐课程
 order.course_callback.fail: 订单处理成功，但是用户加入课程失败
 order.classroom_callback.fail: 订单处理成功，但是用户加入班级失败
+order.item_bank_exercise_callback.fail: 订单处理成功，但是用户加入题库练习失败
 crontab.register_crontab_job.fail: 定时任务注册失败，请参考官网文档重新手动注册:http://developer.edusoho.com/biz-framework/scheduler.html
 cashier.order.status.changed_tips: 订单状态已变更，请重新下单。
 log.message.order_adjust_price.success: 订单（#%title%）价格从 %oldPrice%元 调整到 %newPrice%元.
@@ -9064,6 +9165,13 @@ log.action.question_bank.update_category: 更新题库分类
 log.action.destroy_account_record.create: 申请注销帐号
 log.action.destroy_account_record.pass: 通过注销帐号申请
 log.action.destroy_account_record.reject: 拒绝注销帐号申请
+log.action.item_bank_exercise.add_student: 添加学员
+log.action.item_bank_exercise.remove_student: 移除学员
+log.action.item_bank_exercise.delete_exercise: 删除题库练习
+log.action.item_bank_exercise.recommend_exercise: 推荐题库练习
+log.action.item_bank_exercise.cancel_recommend_exercise: 取消推荐题库练习
+log.action.item_bank_exercise.publish_exercise: 发布题库练习
+log.action.item_bank_exercise.close_exercise: 关闭题库练习
 
 log.action.template.course.create: 新建了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.update: 修改了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
@@ -10302,6 +10410,28 @@ exception.discovery_column.not_found: 发现栏目不存在
 exception.question_bank.forbidden_delete_category: 分类或子分类下有所属题库，无法删除
 exception.question_bank.not_found_bank: 题库不存在
 exception.question_bank.forbidden_access_bank: 没有访问该题库的权限
+
+exception.item_bank_exercise.forbidden_learn: 您购买的题库练习已到期，无法进行章节、试卷等练习。如有疑问请联系老师。
+exception.item_bank_exercise.exercise.not_found: 题库练习不存在
+exception.item_bank_exercise.exercise.forbidden_manage_exercise: 没有管理题库练习的权限
+exception.item_bank_exercise.member.duplicate_member: 用户已加入题库练习
+exception.item_bank_exercise.exercise.exercise_not_published: 题库练习未发布
+exception.item_bank_exercise.member.not_found: 题库练习中没有该成员
+exception.item_bank_exercise.module.exceeded_number: 最多只能添加5个试卷模块
+exception.item_bank_exercise.exercise.module_not_found: 题库练习模块不存在
+exception.item_bank_exercise.expirydays_required: 有效天数不能为空
+exception.item_bank_exercise.expirydays_invalid: 有效天数不合法
+exception.item_bank_exercise.expiryenddate_required: 有效期结束日期不能为空
+exception.item_bank_exercise.expirystartdate_required: 有效期开始日期不能为空
+exception.item_bank_exercise.expirydate_end_later_than_start: 有效期结束日期不能早于开始日期
+exception.item_bank_exercise.expirymode_invalid: 有效期类型错误
+exception.item_bank_exercise.assessment_exercise_exist: 试卷已存在该模块内，请勿重复添加
+exception.item_bank_exercise.member.can_not_become_member: 题库练习已过期，学员不能加入
+exception.item_bank_exercise.module.not_empty_number: 请至少保留一个试卷模块
+exception.item_bank_exercise.forbidden_take_exercise: 不能访问题库练习
+exception.item_bank_exercise.member.non_expired: 学员未过期
+exception.item_bank_exercise.member.member_not_student: 成员不是学生
+exception.item_bank_exercise.module.switch.danger: 题库练习发布时，章节练习或试卷练习至少需要启用一项
 
 exception.wechat.notify_setting_not_enabled: 微信通知未开启
 exception.wechat.template_exceeds_limit_hint: 一个微信服务号只允许开启25个微信通知模板，请关闭其他模板后再次尝试
