@@ -502,3 +502,7 @@ s2b2cSettlementOrderStatus:
     success: Paid
     finished: Transaction complete
     refunded: Refunded
+
+certificateTypes:
+    course: course
+    classroom: classroom

@@ -935,6 +935,51 @@ admin_v2_setting_share:
     path:  /setting/share
     defaults: { _controller: AppBundle:AdminV2/Operating/SiteSetting:share }
 
+# 运营-内容运营-发证管理
+admin_v2_operation_certificate_manage:
+    path:  /certificate/manage
+    defaults: { _controller: AppBundle:AdminV2/Operating/Certificate:index }
+
+admin_v2_operation_certificate_template_manage:
+    path:  /certificate/template/manage
+    defaults: { _controller: AppBundle:AdminV2/Operating/CertificateTemplate:index }
+
+admin_v2_operation_certificate_template_edit:
+    path:  /certificate/template/{id}/edit
+    defaults: { _controller: AppBundle:AdminV2/Operating/CertificateTemplate:edit }
+
+admin_v2_operation_certificate_template_delete:
+    path:  /certificate/template/{id}/delete
+    defaults: { _controller: AppBundle:AdminV2/Operating/CertificateTemplate:delete }
+
+admin_v2_operation_certificate_template_create:
+    path:  /certificate/template/create
+    defaults: { _controller: AppBundle:AdminV2/Operating/CertificateTemplate:create }
+
+admin_v2_operation_certificate_template_creat_step_two:
+    path:  /certificate/template/{id}/create/step/two
+    defaults: { _controller: AppBundle:AdminV2/Operating/CertificateTemplate:stepTwo }
+
+admin_v2_operation_certificate_template_creat_step_three:
+    path:  /certificate/template/{id}/create/step/three
+    defaults: { _controller: AppBundle:AdminV2/Operating/CertificateTemplate:stepThree }
+
+admin_v2_operation_certificate_template_creat_step_four:
+    path:  /certificate/template/{id}/create/step/four
+    defaults: { _controller: AppBundle:AdminV2/Operating/CertificateTemplate:stepFour }
+
+admin_v2_operation_certificate_template_basemap_modal:
+    path:  /certificate/template/{id}/basemap
+    defaults: { _controller: AppBundle:AdminV2/Operating/CertificateTemplate:baseMapModal }
+
+admin_v2_operation_certificate_template_stamp_modal:
+    path:  /certificate/template/stamp
+    defaults: { _controller: AppBundle:AdminV2/Operating/CertificateTemplate:stampModal }
+
+admin_v2_operation_certificate_template_preview:
+    path:  /certificate/template/{id}/preview
+    defaults: { _controller: AppBundle:AdminV2/Operating/CertificateTemplate:preview }
+
 # 运营-内容运营-网站公告管理
 admin_v2_announcement:
     path:  /announcement

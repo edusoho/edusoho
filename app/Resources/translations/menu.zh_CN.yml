@@ -602,6 +602,11 @@ admin_v2.operation.content.basic_tab: 自定义页面
 admin_v2.operation.site.share_tab: 分享
 admin_v2.operation.site.friendlyLink_navigation_tab: '友情链接'
 
+# 运营-内容运营-发证管理
+admin_v2.operation.certificate_menu: 发证管理
+admin_v2.operation.certificate.basic_tab: 证书管理
+admin_v2.operation.certificate.template.basic_tab: 证书模版管理
+
 # 运营-内容运营-全站站内通知
 admin_v2.operation.notification_menu: 全站站内通知
 admin_v2.operation.notification.basic_tab: 全站站内通知

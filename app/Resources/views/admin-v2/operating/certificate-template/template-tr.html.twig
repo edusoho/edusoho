@@ -1,0 +1,23 @@
+{% import "common/data-dict-macro.html.twig" as dict_macro %}
+<tr>
+  <td>
+    {{ template.name }}
+  </td>
+  <td>
+    {{ dict_macro.certificateTypes(template.targetType) }}
+  </td>
+  <td>{{ user.nickname|default('--') }}</td>
+  <td>{{ template.createdTime |date('Y-n-d H:i:s') }}</td>
+  <td>
+    <div class="btn-group">
+      <a href="{{ path('admin_v2_operation_certificate_template_edit',{id:template.id}) }}" class="btn btn-default btn-sm">{{'admin.operation_certificate.template.edit'|trans}}</a>
+      <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu">
+        <li><a href="javascript:" data-role="publish-item"
+               data-url="{{ path('admin_v2_operation_certificate_template_delete', {id:template.id}) }}">{{'site.btn.delete'|trans}}</a></li>
+      </ul>
+    </div>
+  </td>
+</tr>

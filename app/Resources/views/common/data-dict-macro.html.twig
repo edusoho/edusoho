@@ -109,3 +109,11 @@
     <span class="color-danger">{{ 'common.classroomStatus.closed'|trans }}</span>
   {% endif %}
 {% endmacro %}
+
+{% macro certificateTypes(targetType) %}
+  {% if targetType == 'course' %}
+    <span class="color-gray">{{ 'common.certificate_type.course'|trans }}</span>
+  {% elseif targetType == 'classroom' %}
+    <span class="color-gray">{{ 'common.certificate_type.classroom'|trans }}</span>
+  {% endif %}
+{% endmacro %}
