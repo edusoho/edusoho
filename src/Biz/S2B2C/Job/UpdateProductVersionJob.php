@@ -16,6 +16,7 @@ class UpdateProductVersionJob extends AbstractJob
 {
     public function execute()
     {
+        $this->setDefaultUser();
         $products = $this->getProducts();
         $this->biz->offsetGet('s2b2c.merchant.logger')->info('[UpdateProductJob] product', $products);
         foreach ($products as $product) {
@@ -26,11 +27,11 @@ class UpdateProductVersionJob extends AbstractJob
     protected function setDefaultUser()
     {
         $defaultUser = $this->getUserDao()->getUserByType('system');
-        $this->biz->offsetGet('s2b2c.merchant.logger')->info('[默认用户为]' . json_encode($defaultUser));
+        $this->biz->offsetGet('s2b2c.merchant.logger')->info('[默认用户为]'.json_encode($defaultUser));
         $currentUser = new CurrentUser();
         $currentUser->fromArray($defaultUser)->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
         $currentUser['currentIp'] = '127.0.0.1';
-        ServiceKernel::instance()->setCurrentUser( $currentUser );
+        ServiceKernel::instance()->setCurrentUser($currentUser);
     }
 
     protected function getProducts()
