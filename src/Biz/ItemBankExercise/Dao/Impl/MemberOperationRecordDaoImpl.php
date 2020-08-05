@@ -9,6 +9,11 @@ class MemberOperationRecordDaoImpl extends AdvancedDaoImpl implements MemberOper
 {
     protected $table = 'item_bank_exercise_member_operation_record';
 
+    public function deleteByExerciseId($exerciseId)
+    {
+        return $this->db()->delete($this->table(), ['exerciseId' => $exerciseId]);
+    }
+
     public function declares()
     {
         return [
