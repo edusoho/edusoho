@@ -31,7 +31,7 @@ class ResourceFacadeServiceTest extends BaseTestCase
         $result = $this->getResourceFacadeService()->getFrontPlaySDKPathByType('video');
         $this->assertNotFalse(strstr($result, 'js-sdk-v2/sdk-v1.js'));
         $result = $this->getResourceFacadeService()->getFrontPlaySDKPathByType('uploader');
-        $this->assertNotFalse(strstr($result, 'js-sdk/uploader/sdk-2.1.0.js'));
+        $this->assertNotFalse(strstr($result, 'js-sdk-v2/uploader/sdk-2.1.0.js'));
         $result = $this->getResourceFacadeService()->getFrontPlaySDKPathByType('old_uploader');
         $this->assertNotFalse(strstr($result, 'js-sdk/uploader/sdk-v1.js'));
         $result = $this->getResourceFacadeService()->getFrontPlaySDKPathByType('old_document');

@@ -102,10 +102,11 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
             'newPlayer' => 'js-sdk/sdk-v2.js',
             'audio' => 'js-sdk-v2/sdk-v1.js',
             'video' => 'js-sdk-v2/sdk-v1.js',
-            'uploader' => 'js-sdk/uploader/sdk-2.1.0.js',
+            'uploader' => 'js-sdk-v2/uploader/sdk-2.1.0.js',
             'old_uploader' => 'js-sdk/uploader/sdk-v1.js',
             'old_document' => 'js-sdk/document-player/v7/viewer.html',
             'faq' => 'js-sdk/faq/sdk-v1.js',
+            'resource_player' => 'js-sdk-v2/sdk-v1.js',
         ];
 
         if (isset($paths[$type])) {
@@ -119,6 +120,71 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
         return '//'.trim($cdnHost, "\/").'/'.$path.'?'.$timestamp;
     }
 
+    public function startUpload($file)
+    {
+        $params = [
+            'extno' => $file['id'],
+            'bucket' => $file['bucket'],
+            'reskey' => $file['hashId'],
+            'name' => $file['name'],
+            'size' => $file['fileSize'],
+        ];
+
+        if ('attachment' == $file['targetType']) {
+            $params['type'] = $file['targetType'];
+        }
+
+        if ('subtitle' == $file['targetType']) {
+            $params['type'] = 'sub';
+        }
+
+        if (isset($file['directives'])) {
+            $params['directives'] = $file['directives'];
+        }
+
+        if ('video' == $file['type']) {
+            $watermarks = $this->getVideoWatermarkImages();
+
+            if (!empty($watermarks)) {
+                $params['directives']['watermarks'] = $watermarks;
+            }
+        }
+
+        if ('audio' == $file['type']) {
+            $params['directives']['output'] = 'audio';
+            $params['directives']['transcode'] = false;
+        }
+
+        if ('ppt' == $file['type']) {
+            $params['directives'] = array_merge($params['directives'], ['convertAll' => true]);
+        }
+
+        return $this->getResourceService()->startUpload($params);
+    }
+
+    public function resumeUpload($params, $file)
+    {
+        $params = [
+            'extno' => $file['id'],
+            'bucket' => $params['bucket'],
+            'size' => $params['fileSize'],
+            'name' => $params['name'],
+            'resumeNo' => $file['globalId'],
+        ];
+
+        return $this->getResourceService()->startUpload($params);
+    }
+
+    public function finishUpload($globalId)
+    {
+        return $this->getResourceService()->finishUpload($globalId);
+    }
+
+    public function getResource($globalId)
+    {
+        return $this->getResourceService()->get($globalId);
+    }
+
     protected function isHiddenVideoHeader($isHidden = false)
     {
         $storage = $this->getSettingService()->get('storage');
@@ -127,6 +193,32 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
         }
 
         return true;
+    }
+
+    protected function getVideoWatermarkImages()
+    {
+        $setting = $this->getSettingService()->get('storage', []);
+
+        if (empty($setting['video_embed_watermark_image']) || (2 != $setting['video_watermark'])) {
+            return [];
+        }
+
+        $videoWatermarkImage = $this->biz['env']['base_url'].$this->biz['topxia.upload.public_url_path'].'/'.$setting['video_embed_watermark_image'];
+        $pathinfo = pathinfo($videoWatermarkImage);
+
+        $images = [];
+        $heighs = ['240', '360', '480', '720', '1080'];
+
+        foreach ($heighs as $height) {
+            $images[$height] = "{$pathinfo['dirname']}/{$pathinfo['filename']}-{$height}.{$pathinfo['extension']}";
+        }
+
+        return $images;
+    }
+
+    protected function getResourceService()
+    {
+        return $this->biz['ESCloudSdk.resource'];
     }
 
     protected function getSettingService()

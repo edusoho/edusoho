@@ -568,7 +568,11 @@ my_teaching_course_sets:
 
 my_teaching_open_courses:
     path: /my/teaching/open/courses/{filter}
-    defaults: { _controller: AppBundle:My/OpenCourse:teaching, filter:'open'}
+    defaults: { _controller: AppBundle:My/OpenCourse:teaching, filter: 'open'}
+
+my_teaching_item_bank_exercise:
+  path: /my/teaching/item_bank_exercise/{filter}
+  defaults: { _controller: AppBundle:My/ItemBankExercise:teaching, filter: 'item' }
 
 my_teaching_threads:
     path: /my/teaching/threads/{type}
@@ -728,6 +732,14 @@ user_teaching_classrooms:
 user_learning_classrooms:
     path:  /user/{id}/learning/classrooms
     defaults: { _controller: AppBundle:User:learning }
+
+user_question_bank_learn:
+    path:  /user/{id}/question_bank/learn
+    defaults: { _controller: AppBundle:User:itemBankLearn }
+
+user_question_bank_teach:
+  path:  /user/{id}/question_bank/teach
+  defaults: { _controller: AppBundle:User:itemBankTeach }
 
 user_card_show:
     path:  /user/{userId}/card/show
@@ -2073,6 +2085,10 @@ my_classroom_questions:
     path: /my/classroom/questions
     defaults: { _controller: AppBundle:My/Classroom:classroomQuestions }
 
+my_question_bank:
+  path: /my/question_bank
+  defaults: { _controller: AppBundle:My/ItemBankExercise:itemBank }
+
 my_questions:
     path: /my/questions
     defaults: { _controller: AppBundle:My/Thread:questions }
@@ -3329,16 +3345,6 @@ question_bank_manage_question_picked:
     path: /question_bank/{id}/question/picked
     defaults: { _controller: AppBundle:QuestionBank/Testpaper:pickedQuestion }
 
-answer_engine_submit:
-    path: /answer_engine/submit
-    defaults: { _controller: AppBundle:AnswerEngine/AnswerEngine:submitAnswer }
-    methods: ['POST']
-
-answer_engine_save:
-    path: /answer_engine/save
-    defaults: { _controller: AppBundle:AnswerEngine/AnswerEngine:saveAnswer }
-    methods: ['POST']
-
 answer_engine_review:
     path: /answer_engine/review
     defaults: { _controller: AppBundle:AnswerEngine/AnswerEngine:reviewSave }
@@ -3414,6 +3420,145 @@ render_org:
 upload_image:
     path: /render/upload/image
     defaults: { _controller: AppBundle:Vue/Common:uploadImage }
+
+# item-bank-exercise
+item_bank_exercise_qrcode:
+  path: /item_bank_exercise/{id}/qrcode/{tab}
+  defaults: { _controller: AppBundle:ItemBankExercise/Exercise:qrcode, tab: 'scan' }
+
+item_bank_exercise_member_expired:
+  path:  /item_bank_exercise/{id}/member/expired
+  defaults: { _controller: AppBundle:ItemBankExercise/Exercise:memberExpired }
+
+item_bank_exercise_member_deadline_reach:
+  path:  /item_bank_exercise/{id}/member/deadline/reach
+  defaults: { _controller: AppBundle:ItemBankExercise/Exercise:deadlineReach }
+
+item_bank_exercise_manage_students:
+    path: /item_bank_exercise/{exerciseId}/manage/students
+    defaults: {_controller: AppBundle:ItemBankExercise/StudentManage:students}
+
+item_bank_exercise_manage_students_add:
+    path: /item_bank_exercise/{exerciseId}/manage/students/add
+    defaults: {_controller: AppBundle:ItemBankExercise/StudentManage:createExerciseStudent}
+
+item_bank_exercise_course_students_check:
+    path: /item_bank_exercise/{exerciseId}/manage/students/check
+    defaults: {_controller: AppBundle:ItemBankExercise/StudentManage:checkStudent}
+
+item_bank_exercise_manage_student_records:
+    path: /item_bank_exercise/{exerciseId}/manage/students/{type}/records
+    defaults: {_controller: AppBundle:ItemBankExercise/StudentManage:studentRecords}
+
+item_bank_exercise_manage_students_show:
+    path:  /item_bank_exercise/{exerciseId}/manage/students/{userId}/show
+    defaults: { _controller: AppBundle:ItemBankExercise/StudentManage:show }
+
+item_bank_exercise_manage_students_remark:
+    path:  /item_bank_exercise/{exerciseId}/manage/student/{userId}/remark
+    defaults: { _controller: AppBundle:ItemBankExercise/StudentManage:remark }
+
+item_bank_exercise_create:
+    path: /question_bank/{id}/item_bank_exercise/create
+    defaults: {_controller: AppBundle:ItemBankExercise/Exercise:create}
+
+item_bank_exercise_manage_base:
+    path: /question_bank/{questionBankId}/item_bank_exercise/{exerciseId}/manage/base
+    defaults: {_controller: AppBundle:ItemBankExercise/ExerciseManage:base, questionBankId: 0}
+
+item_bank_exercise_manage_cover_crop:
+    path: /item_bank_exercise/{exerciseId}/manage/cover_crop
+    defaults: {_controller: AppBundle:ItemBankExercise/ExerciseManage:coverCrop}
+
+item_bank_exercise_manage_can_module_open:
+  path: /item_bank_exercise/{exerciseId}/manage/can/{type}/open
+  defaults: {_controller: AppBundle:ItemBankExercise/ExerciseManage:canOpen}
+
+item_bank_exercise_manage_assessment:
+    path: /item_bank_exercise/{exerciseId}/manage/assessment/{moduleId}
+    defaults: {_controller: AppBundle:ItemBankExercise/AssessmentExercise:index, moduleId: 0}
+
+item_bank_exercise_manage_assessment_module_edit:
+    path: /item_bank_exercise/{exerciseId}/assessment/module/{moduleId}/edit
+    defaults: {_controller: AppBundle:ItemBankExercise/AssessmentExercise:editModule}
+
+item_bank_exercise_manage_assessment_module_create:
+    path: /item_bank_exercise/{exerciseId}/assessment/module/create
+    defaults: {_controller: AppBundle:ItemBankExercise/AssessmentExercise:createModule}
+
+item_bank_exercise_manage_assessment_add_list:
+    path: /item_bank_exercise/{exerciseId}/manage/assessment/{moduleId}/add/list/{isPage}
+    defaults: {_controller: AppBundle:ItemBankExercise/AssessmentExercise:assessmentAddList}
+
+item_bank_exercise_manage_add_assessment:
+    path: /item_bank_exercise/{exerciseId}/add/assessment/{moduleId}
+    defaults: {_controller: AppBundle:ItemBankExercise/AssessmentExercise:addAssessment}
+
+item_bank_exercise_manage_batch_delete_assessment:
+    path: /item_bank_exercise/{exerciseId}/batch_delete/assessment
+    defaults: {_controller: AppBundle:ItemBankExercise/AssessmentExercise:batchDeleteAssessment}
+
+item_bank_exercise_manage_delete_assessment:
+    path: /item_bank_exercise/{exerciseId}/delete/{id}/assessment
+    defaults: {_controller: AppBundle:ItemBankExercise/AssessmentExercise:deleteAssessment}
+
+item_bank_exercise_manage_assessment_module_delete:
+    path: /item_bank_exercise/{exerciseId}/assessment/module/{moduleId}/delete
+    defaults: {_controller: AppBundle:ItemBankExercise/AssessmentExercise:deleteModule}
+
+item_bank_exercise_manage_assessment_module_delete_check:
+    path: /item_bank_exercise/{exerciseId}/assessment/module/{moduleId}/delete_check
+    defaults: {_controller: AppBundle:ItemBankExercise/AssessmentExercise:deleteCheck}
+
+item_bank_exercise_manage_assessment_exercise_open:
+    path: /item_bank_exercise/{exerciseId}/manage/assessment_exercise/open
+    defaults: {_controller: AppBundle:ItemBankExercise/AssessmentExercise:open}
+
+item_bank_exercise_manage_chapter_exercise_list:
+  path: /item_bank_exercise/{exerciseId}/manage/chapter_exercise/list
+  defaults: {_controller: AppBundle:ItemBankExercise/ChapterExercise:list}
+
+item_bank_exercise_manage_chapter_exercise_open:
+  path: /item_bank_exercise/{exerciseId}/manage/chapter_exercise/open
+  defaults: {_controller: AppBundle:ItemBankExercise/ChapterExercise:open}
+
+item_bank_exercise_manage_marketing_info:
+  path: /item_bank_exercise/{exerciseId}/manage/marketing/info
+  defaults: {_controller: AppBundle:ItemBankExercise/ExerciseManage:info}
+
+item_bank_exercise_manage_students_deadline_batch:
+  path:  /item_bank_exercise/{exerciseId}/manage/student/deadline
+  defaults: { _controller: AppBundle:ItemBankExercise/StudentManage:batchUpdateMemberDeadlines }
+
+item_bank_exercise_manage_students_deadline_batch_deadline_check:
+  path:  /item_bank_exercise/{exerciseId}/manage/student/deadline/check
+  defaults: { _controller: AppBundle:ItemBankExercise/StudentManage:checkUpdateDeadline }
+
+item_bank_exercise_buy:
+    path: /item_bank_exercise/{id}/buy
+    defaults: { _controller: AppBundle:ItemBankExercise/ExerciseBuy:buy }
+
+item_bank_exercise_explore:
+    path: /exercise/explore
+    defaults: { _controller: AppBundle:ItemBankExercise/Explore:index }
+
+item_bank_exercise_show:
+  path: /item_bank_exercise/{id}/{tab}/{moduleId}
+  defaults: { _controller: AppBundle:ItemBankExercise/Exercise:show, tab: '',moduleId: 0 }
+  h5: true
+
+my_item_bank_exercise_show:
+  path:  /my/item_bank_exercise/{id}/{tab}/{moduleId}
+  defaults: { _controller: AppBundle:My/ItemBankExercise:show, tab: '',moduleId: 0 }
+  h5: true
+
+item_bank_exercise_assessment_answer:
+  path: /item_bank_exercise/{exerciseId}/module/{moduleId}/assessment/{assessmentId}/answer
+  defaults: { _controller: AppBundle:ItemBankExercise/Answer:assessmentAnswer }
+
+item_bank_exercise_category_answer:
+  path: /item_bank_exercise/{exerciseId}/module/{moduleId}/category/{categoryId}/answer
+  defaults: { _controller: AppBundle:ItemBankExercise/Answer:categoryAnswer }
 
 goods_show:
     path:     /goods/show/{id}

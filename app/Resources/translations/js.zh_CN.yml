@@ -5,6 +5,8 @@ site.date_format_is: %minutes%分钟%seconds%秒
 site.date_format_s: %seconds%秒
 site.delete.confirm_hint: 确认要删除吗？
 site.delete_success_hint: 删除成功
+site.add_success_hint: 添加成功
+site.add_fail_hint: 添加失败
 site.delete_fail_hint: 删除失败
 site.upload_success_hint: 上传成功
 site.upload_fail_retry_hint: 上传失败,请重试
@@ -19,6 +21,8 @@ site.data.not_found: 未找到...
 site.data.delete_name_hint: 真的要删除该%name%吗？
 site.data.uncheck_name_hint: 未选中任何%name%
 site.data.delete_check_name_hint: 确定要删除选中的%name%吗？
+site.data.add_check_name_hint: 确定要添加选中的%name%吗？
+site.data.add_title_hint: 添加%name%
 site.data.delete_title_hint: 删除%name%
 site.data.delete_submiting_hint: 正在删除...
 site.date.year: 年
@@ -554,6 +558,16 @@ course.question_marker.gap_filling: 填空
 course.question_marker.view_analysis: 查看解析
 course.question_marker.back_to_questions: 返回题目
 
+item_bank_exercise.student_create.price_min_error_hint: 采购的题库练习购买价格不能为0!
+item_bank_exercise.student_create.price_max_error_hint: 购买价格不能大于题库练习原价!
+item_bank_exercise.assessment_module.assessment_delete: 确定要移除当前试卷?
+item_bank_exercise.assessment_module.assessment_delete.title: 移除试卷
+item_bank_exercise.assessment_module.module_delete.title: 移除模块
+item_bank_exercise.assessment_module.module_delete: 确定要移除当前模块？
+item_bank_exercise.assessment_module.module_delete.has_assessment_hint: 当前模块下有试卷存在，是否继续移除？
+item_bank_exercise.assessment_module.module_delete.least_module_count_hint: 请至少保留一个试卷模块
+item_bank_exercise.module.switch.danger: 题库练习发布时，章节练习或试卷练习至少需要启用一项
+
 classroom.manage.tag_required_hint: 请输入标签
 classroom.manage.delete_course_hint: 是否要从班级移除该课程？
 classroom.manage.delete_course_hint_title: 移除课程
@@ -757,6 +771,9 @@ validate.expiry_days_required_hint: 请输入有效期
 validate.empty_content_hint: 请输入内容!
 validate.no_number_first_hint: URL路径只能包含字母和数字,请以字母开头!长度大于2位
 validate.have_spaces: 密码不能有空格哦
+validate.check_password_low.message: 5-20位英文、数字、符号，区分大小写
+validate.check_password_middle.message: 8-20位英文、数字、符号，至少包含两种，区分大小写
+validate.check_password_high.message: 8-32位英文、数字、符号，同时包含英文大写、小写、数字和符号
 
 alert.file_convert_error.message: 文件转换提交失败，请重试！
 notify.file_not_select.message: 未选中任何文件记录
@@ -1337,6 +1354,13 @@ admin.util.item_delete.delete_success_hint: 删除%name%成功
 admin.shortcut_add_success_hint: 已添加当前页面为常用链接！
 admin.shortcut_delete_success_hint: 删除常用链接成功！
 
+admin.item_bank_exercise.exercise.close_hint: 确定要关闭当前题库练习吗？题库练习关闭后，仍然还在有效期内的学员将可以继续学习。
+admin.item_bank_exercise.exercise.close_success_hint: 题库练习关闭成功!
+admin.item_bank_exercise.exercise.cancel_recommend_success_hint: 题库练习推荐已取消!
+admin.item_bank_exercise.exercise.publish_hint: 确定要发布当前题库练习吗？
+admin.item_bank_exercise.exercise.publish_success_hint: 题库练习发布成功!
+admin.item_bank_exercise.exercise.delete_hint: 确定要删除当前题库练习吗？
+
 task_show.user_login_protect_tip: 该账号未登录或已被踢
 
 admin.course_manage.manage.tags_select.placeholder: 输入标签名称关键字
@@ -1433,8 +1457,8 @@ course.question_manage.manage.delete_tips: 删除题目，可能会影响课时�
 course.question_manage.upgrade_tips: 为了更好的使用体验，请先升级插件。<br />路径：【后台】 - 【云市场】- 【营销应用】 - 【题库增强插件】。
 admin.setting.invite.coupon.empty.tips: 请设置优惠券批次
 
-course.plan_task.activity_ppt_animation_img: 切换图片模式
-course.plan_task.activity_ppt_animation_slide: 切换动画模式
+course.plan_task.activity_ppt_animation_ppt-img: 切换图片模式
+course.plan_task.activity_ppt_animation_ppt-slide: 切换动画模式
 
 admin.mobile_manage.discovery_upgrade_madal.notice_successed: '升级成功'
 admin.mobile_manage.discovery_upgrade_madal.notice_failed: '升级失败'

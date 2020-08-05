@@ -47,6 +47,13 @@
   {% set message = setting('default.courseShareContent')|replace({'{{':'《%','}}':'%》'})|default('share.task_message')|trans({'%course%': task.title}) %}
   {% set picture = '' %}
   {% set id = task.id%}
+{% elseif type == 'item_bank_exercise' %}
+  {% set title = exercise.title %}
+  {% set summary = '' %}
+  {% set message = setting('default.courseShareContent')|replace({'{{':'《%','}}':'%》'})|default('share.course_set_message')|trans({'%course%':exercise.title}) %}
+  {% set url = url('item_bank_exercise_show', {id:exercise.id}) %}
+  {% set picture = fileurl(exercise.cover.large|default(null), 'course.png') %}
+  {% set id = exercise.id%}
 {% endif %}
 
 <div class="dropdown-menu {% if right|default(false) %}pull-right{% endif %} js-social-share-params" data-title="{{ title }}" data-summary="{{ summary|default('') }}" data-message="{{ message }}" data-url="{{ url }}" data-picture="{{ picture|default('') }}">

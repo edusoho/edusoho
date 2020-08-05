@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\User\Register;
 
-use Biz\BaseTestCase;
 use AppBundle\Common\ReflectionUtils;
+use Biz\BaseTestCase;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class BinderRegistDecoderImplTest extends BaseTestCase
@@ -12,27 +12,26 @@ class BinderRegistDecoderImplTest extends BaseTestCase
     {
         $this->mockBiz(
             'System:SettingService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'get',
-                    'returnValue' => array(
+                    'returnValue' => [
                         'qq_enabled' => true,
                         'qq_secret' => 'qqKey',
                         'qq_key' => 'qqSecret',
                         'qq_set_fill_account' => true,
-                    ),
-                    'withParams' => array('login_bind', array()),
-                ),
-            )
+                    ],
+                ],
+            ]
         );
 
-        $registration = array(
+        $registration = [
             'email' => 'hello@howzhi.com',
             'nickname' => 'hello',
             'password' => '123456',
             'authid' => 'sdfses1',
             'type' => 'qq',
-        );
+        ];
 
         $binderDecoder = $this->getBinderRegistDecoder();
         $binderDecoder->setRegister($this->getEmailRegistDecoder());
@@ -56,16 +55,16 @@ class BinderRegistDecoderImplTest extends BaseTestCase
     {
         $this->mockBiz(
             'System:SettingService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'get',
-                    'returnValue' => array('qq_set_fill_account' => false),
-                    'withParams' => array('login_bind', array()),
+                    'returnValue' => ['qq_set_fill_account' => false],
+                    'withParams' => ['login_bind', []],
                     'runTimes' => 1,
-                ),
-            )
+                ],
+            ]
         );
-        ReflectionUtils::invokeMethod($this->getBinderRegistDecoder(), 'validateBeforeSave', array(array('type' => 'qq')));
+        ReflectionUtils::invokeMethod($this->getBinderRegistDecoder(), 'validateBeforeSave', [['type' => 'qq']]);
     }
 
     protected function getEmailRegistDecoder()

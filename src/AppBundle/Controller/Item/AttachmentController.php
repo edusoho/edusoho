@@ -16,7 +16,7 @@ class AttachmentController extends BaseController
 {
     public function initUploadAction(Request $request)
     {
-        $token = $request->query->get('token');
+        $token = $request->query->get('uploaderToken');
         $params = $this->parseToken($token);
 
         if (!$params) {
@@ -34,7 +34,7 @@ class AttachmentController extends BaseController
 
     public function finishUploadAction(Request $request)
     {
-        $token = $request->query->get('token');
+        $token = $request->query->get('uploaderToken');
         $params = $this->parseToken($token);
 
         if (!$params) {

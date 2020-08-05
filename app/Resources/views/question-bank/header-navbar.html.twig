@@ -1,3 +1,8 @@
+{% if exercise|default(null) %}
+{% set exerciseId = exercise.id %}
+{% else %}
+{% set exerciseId = 0 %}
+{% endif %}
 <div class="courseset-header-section">
   <ul class="nav nav-tabs nav-header-section clearfix">
     <li class="nav-header-section__item cd-ml32 {% if active_tab == 'question-list' %} active {% endif %}">
@@ -11,6 +16,9 @@
     </li>
     <li class="nav-header-section__item cd-ml32 {% if active_tab == 'bank-info' %} active {% endif %}">
       <a href="{{ path('question_bank_manage', {id: questionBank.id }) }}">{{ 'my.teaching.question_bank.info'|trans }}</a>
+    </li>
+    <li class="nav-header-section__item cd-ml32 {% if active_tab == 'exercise-set' %} active {% endif %}" style="float: right">
+      <a href="{{ path('item_bank_exercise_manage_base', {questionBankId: questionBank.id, exerciseId: exerciseId }) }}">{{ 'my.teaching.question_bank.exercise_set'|trans }}</a>
     </li>
   </ul>
 </div>

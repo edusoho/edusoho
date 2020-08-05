@@ -1,0 +1,39 @@
+{% import "admin-v2/macro.html.twig" as admin_macro %}
+{% import "common/data-dict-macro.html.twig" as dict_macro %}
+
+<tr id="course-tr-{{ exercise.id }}">
+  <td>{{ exercise.id }}</td>
+  <td>
+    <a href="{{ path('item_bank_exercise_show', {id: exercise.id}) }}" target="_blank"><strong>{{ exercise.title }}</strong></a>
+    <br>
+    <span class="text-muted text-sm">{{ 'admin.course_manage.manage.category'|trans }}：{{ category.name|default('--') }}</span>
+    {% if exercise.recommended %}
+      <span class="label label-default">{{ 'admin.course_manage.manage.recommend'|trans({'%recommendedTime%': exercise.recommendedTime|date('Y-m-d'), '%recommendedSeq%': exercise.recommendedSeq}) }}</span>
+    {% endif %}
+  </td>
+  <td>
+    {{ exercise.price }}
+  </td>
+  <td>
+    {{ questionBank.itemBank.item_num|default('0') }}
+  </td>
+  <td>
+    {{ exercise.studentNum }}
+  </td>
+  <td>
+    {{ admin_macro.user_link(user) }}
+    <br>
+    <span class="text-muted text-sm">{{ exercise.createdTime|date('Y-n-d H:i') }}</span>
+  </td>
+  <td>{{ dict_macro.courseStatus( exercise.status) }}</td>
+  <td>
+    <div class="btn-group">
+
+      {% if has_permission('admin_v2_item_bank_exercise_content_manage') %}
+        <a class="btn btn-default btn-sm" href="{{ path('item_bank_exercise_manage_base', {exerciseId:exercise.id, questionBankId: exercise.questionBankId}) }}"
+           target="_blank">{{ 'admin.course_manage.manage.manage_btn'|trans }}</a>
+      {% endif %}
+      {% include 'admin-v2/widget/group-button.html.twig' with {parentCode: 'admin_v2_item_bank_exercise', group:'groupButton', exercise: exercise} %}
+    </div>
+  </td>
+</tr>
