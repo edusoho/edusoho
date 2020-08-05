@@ -40,7 +40,7 @@ class PageClassroom extends AbstractResource
         $this->getOCUtil()->multiple($classroom['courses'], ['courseSetId'], 'courseSet');
         $this->getOCUtil()->multiple($classroom['courses'], ['creator', 'teacherIds']);
 
-        $classroom['reviews'] = $this->invokeResource(new ApiRequest(
+        $reviewResult = $this->invokeResource(new ApiRequest(
             '/api/review',
             'GET',
             [
@@ -52,23 +52,7 @@ class PageClassroom extends AbstractResource
             ]
         ));
 
-        foreach ($classroom['reviews'] as &$review) {
-            $reviewPosts = $this->invokeResource(new ApiRequest(
-                '/api/review',
-                'GET',
-                [
-                    'parentId' => $review['id'],
-                    'orderBys' => ['createdTime' => 'ASC'],
-                    'offset' => 0,
-                    'limit' => self::DEFAULT_DISPLAY_COUNT,
-                ]
-            ));
-
-            $this->getOCUtil()->multiple($reviewPosts, ['userId']);
-            $review['posts'] = $reviewPosts;
-        }
-
-        $this->getOCUtil()->multiple($classroom['reviews'], ['userId']);
+        $classroom['reviews'] = $reviewResult['data'];
 
         if ($this->isPluginInstalled('vip') && $classroom['vipLevelId'] > 0) {
             $apiRequest = new ApiRequest('/api/plugins/vip/vip_levels/'.$classroom['vipLevelId'], 'GET', []);

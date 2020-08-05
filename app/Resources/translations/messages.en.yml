@@ -76,6 +76,7 @@ site.org.code: Code
 site.tips: Tips
 site.qrcode_tips: Scan
 site.tips.scan_qrcode_tips: 'Scan the QR code to continue, the code will be expired in half an hour'
+site.tips.exercise_qrcode_tips: 'Scan the QR code on the right and go to the mobile terminal to learn'
 site.validate_rules.max_int: 'Maximum 9 digits integer'
 site.validate_rules.two_decimal_places: 'Keep the second decimal'
 site.btn.expand: Expand
@@ -630,6 +631,7 @@ import.user_import.download_example_btn: 'Click to download the sample file'
 import.user_import.download_example_tips: 'Support Excel file'
 import.user_import.price: Price
 import.user_import.price_tips: 'The price of the course is'
+import.exercise_user_import.price_tips: 'The price of the item bank exercise is'
 import.user_import.remark_btn: Note
 import.user_import.remark_tips: Optional
 question.no_answer: '. No answer'
@@ -951,6 +953,7 @@ course.members_manage.official_student.batch_upload_deadline: Batch modification
 course.members_manage.official_student.batch_remove: Batch remove
 course.members_manage.official_student.input_placeholder: 'Username/Email/Phone'
 course.members_manage.official_student.progress: 'Learn progress'
+course.members_manage.official_student.status: 'Learn status'
 course.members_manage.official_student.operation: Action
 course.members_manage.official_student.detail: (detail)
 course.members_manage.official_student.show: Info
@@ -1161,6 +1164,7 @@ course.expiry_date.end_date_mode: "End Date：%expiryEndDate%\n"
 course.expiry_date.date_mode: "Start Date：%expiryStartDate% &nbsp; End Date：%expiryEndDate%\n"
 course.expiry_date.forever_mode: Permanent
 course.expiry_date.expiryStartDate: "The course will start at %expiryStartDate%, Please be patient.\n"
+item_bank_exercise.expiry_date.expiryStartDate: "The item bank exercise will start at %expiryStartDate%, Please be patient.\n"
 course.expiry_date.overdue: '（Be expired）'
 course.expiry_date.today_will_overdue: '(Expired today)'
 course.expiry_date.tomorrow_will_overdue: '(Expired tommorrow)'
@@ -1180,6 +1184,9 @@ course.status.finished: Finished
 course.status.published: Published
 course.filter.all_plan: All teaching plans
 course.student_member: Course students
+course.item_student_member: Item bank students
+course.assessment_number: Test paper number
+course.item_number: Question number
 course.student.cell: people
 course.plan.cell: pcs
 course.manage_btn: Course manage
@@ -1189,9 +1196,11 @@ course.check.plan: View Plan
 course.share: Share
 course.belong_to_classroom_tips: 'The course is belong to<a href="%classroomUrl%">%classroomTitle%</a>please enroll to learn'
 course.course_limited_tips: 'Limited access, please contact the customer service.'
+item_bank_exercise.course_limited_tips: 'Limited access, please contact the customer service.'
 course.course_closed_tips: 'Sorry, this course %title% has been closed.'
 course.courseSet_closed_tips: 'Sorry, this courseSet %title% has been closed.'
 course.unbuyable.unpublished_tips: 'You are not allowed to enroll before the course published.'
+item_bank_exercise.unbuyable.unpublished_tips: 'You are not allowed to enroll before the item bank exercise published.'
 course.unbuyable.over_buy_expiry_time_tips: 'You are not allowded to enroll, since it‘s expired.'
 course.unbuyable.over_expiry_end_date_tips: 'You are not allowded to enroll, since it''s expired.'
 course.introduction: Intro
@@ -1231,6 +1240,7 @@ course.teacher: Tearcher：
 course.reward_point.award: Reward Point Award
 course.reward_point.course_award: Course Award
 course.teacher.content_title: Teacher
+course.advanced.content_title: Students with excellent grades last week
 course.characteristic.content_title: 'Course features'
 course.newest_students.content_title: 'New students'
 course.students_dynamic.content_title: 'Latest updates'
@@ -1482,6 +1492,7 @@ course.testpaper_manage.passed_condition: 'Passing score is %passedCondition% po
 course.testpaper_manage.limited_time: '%limitedTime% minutes'
 course.testpaper_manage.unlimited: 'No limits'
 course.testpaper_manage.count: '%itemCount% questions'
+course.testpaper_manage.total_count: 'questions'
 course.testpaper_manage.testpaper_status.draft: Draft
 course.testpaper_manage.testpaper_status.open: Published
 course.testpaper_manage.testpaper_status.closed: Closed
@@ -1880,6 +1891,60 @@ course.live.replay_manage.lesson_add_content_title: 'Add playback video'
 course.live.replay_manage.lesson_add_btn: Add
 course.liveroom.content_title: 'Live'
 course.liveroom.open_liveroom_tips: 'Live entering, please wait ...'
+
+item_bank_exercise: Item Bank
+item_bank_exercise.assessment.exercise.start_btn: Start
+item_bank_exercise.assessment.exercise.continue_btn: Continue
+item_bank_exercise.assessment.exercise.view_btn: View
+item_bank_exercise.assessment.exercise.again_btn: Again
+item_bank_exercise.exercise.wait_tip: Wait to commit
+item_bank_exercise.chapter.exercise.start_btn: Start
+item_bank_exercise.chapter.exercise.continue_btn: Continue
+item_bank_exercise.chapter.exercise.view_btn: View
+item_bank_exercise.chapter.exercise.again_btn: Again
+item_bank_exercise.exercise.publish: Publish item bank exercise
+item_bank_exercise.chapter_exercise.list: Chapter directory
+item_bank_exercise.chapter_exercise.item_num: Number of node problems
+item_bank_exercise.chapter_exercise.open: Start the chapter exercise
+item_bank_exercise.practice_test: Practice test
+item_bank_exercise.save_cover: Save cover
+item_bank_exercise.upload_cover: Upload item bank exercise cover
+item_bank_exercise.base.title: Item bank exercise title
+item_bank_exercise.export.answer_num: Answer number
+item_bank_exercise.export.completion_rate: Answer Rate
+item_bank_exercise.export.accuracy: Master rate
+item_bank_exercise.answer_number: Answer number：
+item_bank_exercise.accuracy: Right rate：
+item_bank_exercise.manage_btn: Item bank exercise manage
+item_bank_exercise.chapter_practice: Chapter practice
+item_bank_exercise.testpaper_practice: Tests paper practice
+item_bank_exercise.testpaper_practice.tip: The practice papers support both brush mode and assessment mode. In Brush mode, you will get immediate feedback while answering the questions; in Assessment mode, you will get feedback after answering the questions.
+item_bank_exercise.testpaper_practice.open: Open tests paper practice
+item_bank_exercise.preview.course: Preview item bank exercise
+item_bank_exercise.members_manage.official_student.add.price_tips: 'The price of this item bank exercise is'
+item_bank_exercise.members_manage.official_student.add.failed_tips: 'Fail to add'
+item_bank_exercise.members_manage.official_student.add.publish_tips: 'Please add after the item bank exerise is published'
+item_bank_exercise.student_manage.can_not_add_teacher: This user is the teacher of this item bank exercise and cannot be added
+item_bank_exercise.student_manage.student_exist: This user is already a student of this item bank exercise
+item_bank_exercise.student_manage.student_not_exist: The user does not exist
+item_bank_exercise.exercise_create.forbidden: You are not the question bank manager, can not view this page!
+item_bank_exercise.assessment.total_score: Total Score
+item_bank_exercise.assessment_exercise.add_new_module: Create
+item_bank_exercise.assessment_exercise.add_assessment: Add Assessment
+item_bank_exercise.assessment_exercise.remove_assessment: Remove Assessment
+item_bank_exercise.chapter_exercise.category_empty: No chapters have been added to the current item bank exercise
+item_bank_exercise.chapter_exercise.empty: 'It is empty, open the chapter exercise now'
+item_bank_exercise.assessment_exercise.empty: 'It is empty, open the assessment exercise now'
+item_bank_exercise.chapter_exercise.info: Chapter exercises are based on the setting of "Item management by category".Provide students with a hierarchical list of brushing exercises
+item_bank_exercise.marketing_setup.no_permission_tips: 'Sorry, you can not edit base settings. Contact site administrator for help.'
+item_bank_exercise.marketing_setup.setup.can_join.tips: After it is closed, students cannot join by themselves. Teachers need to add students manually.
+item_bank_exercise.marketing_setup.rule.expiry_date.first_publish_tips: The change of validity period is only valid for new students after the change
+item_bank_exercise.assessment_exercise.add_module: Create
+item_bank_exercise.assessment_exercise.edit_module: Edit
+item_bank_exercise.assessment_exercise.module.name: Module Name
+item_bank_exercise.goto_learning: Goto learning
+item_bank_exercise.my_teaching_notice: Itembank Exercise，Please goto <a class="alert-link" href="%url%"><u>Itembank</u></a> Create
+
 activity.live.not_created_notice: Live classroom not yet created!
 activity.live.overlap_time_notice: There is already a live broadcast at the selected time. Please change your time.
 course.note.save_btn: Save
@@ -2843,8 +2908,10 @@ message.btn.send: 'Write a message'
 user.homepage: '%nickname%''s home'
 user.homepage.introductions: About
 user.homepage.teaching_courses: 'Teaching Courses'
+user.homepage.teaching_question_bank: 'Teaching question bank'
 user.homepage.teaching_classrooms: 'Teaching %classroomName%'
 user.homepage.learning_courses: 'Learning Courses'
+user.homepage.learning_question_bank: 'Learning Question bank'
 user.homepage.learning_classrooms: 'Learning in %classroomName%'
 user.homepage.favorite_courses: Favorites
 user.homepage.joined_group: 'Enrolled Groups'
@@ -2852,6 +2919,8 @@ user.homepage.following_fan: Following/Fans
 user.homepage.introductions.empty: 'No introduction'
 user.homepage.teaching_courses.empty: 'No teaching course.'
 user.homepage.learning_courses.empty: 'No learning course.'
+user.homepage.learning_question_bank.empty: 'No learning question bank.'
+user.homepage.teaching_question_bank.empty: 'No teaching question bank.'
 user.homepage.favorite_courses.empty: 'No bookmarked course.'
 user.homepage.teaching_classrooms.empty: 'No teaching %classroomName%'
 user.homepage.learning_classrooms.empty: 'No learning %classroomName%'
@@ -2932,6 +3001,7 @@ search.live_courses: 'Live courses'
 search.reservation_courses: Reservation courses
 search.all_classrooms: 'All %classroom%'
 search.free_classrooms: 'Free %classroom%'
+search.free_item_bank: Free Item Bank
 cloud_file.preview: 'preview'
 cloud_file.re_transcoding_btn: Re-transcoding
 cloud_file.re_transcoding.submiting: Submiting...
@@ -3362,6 +3432,7 @@ customer_service.mobile_group: 'Telephone customer service'
 customer_service.weixin-content: 'Wechat QR code'
 customer_service.time: 'Service time'
 customer_service.send_message: 'Click here to send me message'
+my.teaching.view.forbidden: 'You are not a teacher, can not view this page!'
 my.teaching.menu_heading: 'My teaching'
 my.teaching.course_set_menu: Courses
 my.teaching.live_schedule_menu: Teaching Schedules
@@ -3375,6 +3446,7 @@ my.teaching.question_bank_menu: 'Question Bank'
 my.teaching.testpaper_check_menu: 'Tests review'
 my.teaching.homework_check_menu: 'Assignments review'
 my.teaching.material_lib_menu: 'Library'
+my.teaching.item_bank_exercise.item: 'Item Bank Exercise'
 my.teaching.course_set.normal: 'Normal'
 my.teaching.course_set.live: 'Live'
 my.teaching.course_set.reservation: 'Reservation'
@@ -3449,6 +3521,7 @@ my.teaching.course_set.course_manage_btn: 'Programs'
 my.teaching.course_set.file_manage_btn: 'Files'
 my.teaching.course_set.live_empty_hint: 'No live courses in teaching, try to create one!'
 my.teaching.course_set.empty_hint: 'No courses in teaching, try to create one!'
+my.teaching.item_bank_exercise.empty_hint: 'No item bank exercise in teaching, try to create one!'
 my.teaching.course_set.create_btn: 'Add'
 my.teaching.course_set.select_type: 'Choose Type'
 my.teaching.course_set.select_type.course: 'Normal Course'
@@ -3641,6 +3714,7 @@ my.teaching.question_bank.list: Question Bank List
 my.teaching.question_bank.instructions: Instructions
 my.teaching.question_bank.name_tip: Enter up to 30 characters
 my.teaching.question_bank.info: Bank Info
+my.teaching.question_bank.exercise_set: The setting of item bank exercise
 my.teaching.question_bank.name_label: Name
 my.teaching.question_bank.category_label: Category
 my.teaching.question_bank.question_category.manage: Question Category Manage
@@ -3665,9 +3739,14 @@ my.teaching.question_bank.question.set_category: Set Category
 my.teaching.question_bank.question.selected: selected Number
 my.teaching.question_bank.question.set_score: Set Score
 my.teaching.question_bank.question.add: Add title
+my.teaching.question_bank.start_now: Immediately open
+my.teaching.question_bank.is_open: The exercise in the current question bank has not been enabled. Do you want to enable it?
+my.teaching.question_bank.open_explain: After enabled, you can use the current question bank to open the translation or test paper to publications.
+my.teaching.question_bank.open_ensure: Are you sure to open the item bank exercise?
 
 my.learning.menu_heading: 'My Learning'
 my.learning.course_set_menu: 'Courses'
+my.learning.question_bank_menu: 'Question bank'
 my.learning.live_schedule_menu: Live Schedule
 my.learning.classroom_menu: '%classroom%'
 my.learning.live_menu: 'Lives'
@@ -3743,9 +3822,11 @@ my.learning.course.learned_empty: 'No record'
 my.learning.course.finish_task: 'Finish %taskName%'
 my.learning.course.contiune_study: Continue
 my.learning.course.learning_empty: 'No record'
+my.learning.question_bank.learning_empty: 'No record'
 my.learning.course.lesson_num: 'Lesson %num%'
 my.learning.course.total_learn_time: 'Learned Duration In Total'
 my.learning.course.watch: View
+my.learning.item_bank_exercise.watch: View
 my.learning.course.click_loading_more: 'Click to load more'
 my.learning.course.loading: 'loading...'
 my.learning.live: 'My Live'
@@ -3815,6 +3896,8 @@ explore.open_course.title: 'Open Course'
 explore.open_course.list: 'Open Course List'
 explore.open_course.live: Live
 explore.open_course.empty: 'No record'
+explore.item_bank_exercise.list: Exercise List
+explore.item_bank_exercise.empty: No Exercise
 archive.course.title: 'Course Archive'
 archive.course.tags: Tags
 archive.course.empty: 'No record'
@@ -3958,7 +4041,9 @@ course.header.become_a_VIP: '<a href="%href%" target="_blank">Purchase VIP</a>'
 course.member.tips.title: Tips
 course.member.classroom.tips: 'Your purchased class was expired and you have no permission to learn courses and ask questions now. Please contact your teacher for help.'
 course.member.course.tips: 'Your purchased course was expired and you have no permission to learn courses and ask questions now. Please contact your teacher for help.'
+item_bank_exercise.member.expiry_tips: 'Your purchased course was expired. You cannot proceed with the chapter, test paper, etc.If you have any questions, please contact the teacher.'
 course.member.course.allow_buy.tips: 'Your purchased course was expired and you have no permission to learn courses and ask questions now. Please contact your teacher for help or click Rejoin.'
+item_bank_exercise.member.allow_buy.tips: 'Your purchased item bank exercise was expired and you cannot proceed with the chapter, test paper, etc. and ask questions now. Please contact your teacher.'
 course.member.course.join_btn: 'Exit and re-Enroll'
 course.member.operation.quit_deadline_reach: 'The user will quit until the deadline'
 course.member.operation.admin_remove_course_student: 'The admin removes it manually'
@@ -4185,6 +4270,7 @@ admin.course_manage.recommend.name: 'Course Name'
 admin.course_manage.recommend.creator: Creator
 admin.course_manage.recommend.time: 'Recommended At'
 admin.course_manage.recommend.empty: 'No record'
+admin.course_manage.item_bank_exercise.recommend.empty: 'No record'
 admin.course_manage.recommend.category: Category
 admin.course_manage.recommend.set_seq_btn: 'SN Setting'
 admin.course_manage.recommend.cancel_seq_btn: 'Cancel Recomment'
@@ -4740,7 +4826,7 @@ admin.setting.navigation.name: Name
 admin.setting.navigation.new_windows: 'New Window'
 admin.setting.navigation.status: Status
 admin.setting.navigation.operation: Action
-admin.setting.navigation.tips: "<p>Vip Zone：domain/vip</p> <p>Live Page：domain/live</p> <p>Group Page：domain/group</p> <p>Article Page：domain/article</p> <p>Teachers Page：domain/teacher</p> <p>Mobile Page：domain/mobile</p> <p>Personal Page：domain/my/page/show</p> <p>Course List Page：domain/course/explore</p> <p>Class List Page：domain/classroom/explore</p> <p>Open Course List Page：domain/open/course/explore</p> <p>Course Category：domain/course/explore/categoryCode</p> <p>Article Category：domain/article/categoryCode</p>\n"
+\admin.setting.navigation.tips: "<p>Vip Zone：domain/vip</p> <p>Live Page：domain/live</p> <p>Group Page：domain/group</p> <p>Article Page：domain/article</p> <p>Teachers Page：domain/teacher</p> <p>Mobile Page：domain/mobile</p> <p>Personal Page：domain/my/page/show</p> <p>Course List Page：domain/course/explore</p> <p>Class List Page：domain/classroom/explore</p> <p>Open Course List Page：domain/open/course/explore</p> <p>Exercise List Page：domain/exercise/explore</p> <p>Course Category：domain/course/explore/categoryCode</p> <p>Article Category：domain/article/categoryCode</p>\n"
 admin.setting.navigation.top.add: 'Add Top Navigation Menu Item'
 admin.setting.navigation.top.edit: 'Edit Top Navigation Menu Item'
 admin.setting.navigation.foot.add: 'Add Bottom Navigation Menu Item'
@@ -7361,6 +7447,13 @@ admin.reward_point_account.log_deduction: Deduction %amount% %name%
 admin.reward_point_account.note_empty: No Note
 admin.reward_point_account.log_deduction_by: From
 
+admin.item_bank_exercise.manage.count: "Item Bank Exercise：<strong class=\"inflow-num\">%exerciseNum%</strong>\n"
+admin.item_bank_exercise.exercise.manage.status_placeholder: Status
+admin.item_bank_exercise.exercise.manage.number: Number
+admin.item_bank_exercise.exercise.manage.status: Status
+admin.item_bank_exercise.exercise.manage.income: Income
+admin.item_bank_exercise.exercise.recommend.modal_title: Recommend Set
+admin.item_bank_exercise.exercise.manage.empty: No record
 
 reward_point_product.pending: Pending
 reward_point_product.delivered: Delivered
@@ -7555,6 +7648,7 @@ log.module.mobile: 'Mobile'
 log.module.wap: 'Wap'
 log.module.push: 'Push'
 log.module.question_bank: 'Question Bank'
+log.module.item_bank_exercise: 'Item Bank Exercise'
 
 log.action.course.create: 'Create course'
 log.action.course.update: 'Update course'
@@ -7726,6 +7820,7 @@ log.action.order.refund_cancel: 'Cancel refund'
 log.action.order.unbind-back: 'Unbind bank'
 log.action.order.course_callback: 'Course callback'
 log.action.order.classroom_callback: 'Classroom callback'
+log.action.order.item_bank_exercise_callback: 'Item Bank Exercise Callback'
 log.action.order.adjust_price: 'Adjust price'
 log.action.category.create: 'Create'
 log.action.category.update: 'Update'
@@ -7795,6 +7890,7 @@ log.action.open_course.update_teacher: 'Update open course teacher'
 log.action.open_course.delete_recommend_course: 'Delete recommended course'
 order.course_callback.fail: 'Order is successful, but the user failed to join the course.'
 order.classroom_callback.fail: 'Order is successful, but the user failed to join the class.'
+order.item_bank_exercise_callback.fail: 'Order is successful, but the user failed to join the exercise.'
 crontab.register_crontab_job.fail: 'The scheduled task registration failed. Please refer to http://developer.edusoho.com/biz-framework/scheduler.html'
 cashier.order.status.changed_tips: 'The order has changed, Please order again.'
 log.message.order_adjust_price.success: 'The order (#%title%) price is adjusted from %oldPrice% to %newPrice%.'
@@ -7808,6 +7904,13 @@ log.action.question_bank.update_teacher: Update Manager
 log.action.question_bank.create_category: Create Bank Category
 log.action.question_bank.delete_category: Delete Bank Category
 log.action.question_bank.update_category: Update Bank Category
+log.action.item_bank_exercise.add_student: 'Add student'
+log.action.item_bank_exercise.remove_student: Remove Student
+log.action.item_bank_exercise.delete_exercise: Delete Item Exercise
+log.action.item_bank_exercise.recommend_exercise: Recommend Item Exercise
+log.action.item_bank_exercise.cancel_recommend_exercise: Cancel Recommend Item Exercise
+log.action.item_bank_exercise.publish_exercise: Publish Item Exercise
+log.action.item_bank_exercise.close_exercise: Close Item Exercise
 
 log.action.template.course.create: Created a new<strong class="color-success"> course </strong>《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.update: Updated the<strong class="color-success"> course </strong> 《<a href="%url%" target="_blank">%title%</a>》
@@ -8992,6 +9095,28 @@ exception.question_bank.forbidden_access_bank: Forbidden access this bank
 exception.educloud.user_disabled_hint: The education cloud has been banned, and the payment system is automatically lifted. Tutorial <a href="http://www.qiqiuyu.com/faq/438/detail" target="_blank">See here</a>
 exception.coupon.target_type_error: The batch does not support viewing details
 exception.coupon.setting_close: Coupon global switch is closed
+
+exception.item_bank_exercise.forbidden_learn: 'Your purchased item bank exercise was expired and you cannot proceed with the chapter, test paper, etc. and ask questions now. Please contact your teacher for help.'
+exception.item_bank_exercise.exercise.not_found: Item bank exercise does not exist
+exception.item_bank_exercise.exercise.forbidden_manage_exercise: Forbidden manage this item bank exercise
+exception.item_bank_exercise.member.duplicate_member: User has joined this item bank exercise
+exception.item_bank_exercise.exercise.exercise_not_published: Item bank exercise is not published
+exception.item_bank_exercise.member.not_found: The item bank exercise doesn't have this student
+exception.item_bank_exercise.module.exceeded_number: A maximum of 5 test paper modules can be added
+exception.item_bank_exercise.exercise.module_not_found: Item bank exercis module does not exist
+exception.item_bank_exercise.expirydays_required: Valid days cannot be empty
+exception.item_bank_exercise.expirydays_invalid: Valid days is invalid
+exception.item_bank_exercise.expiryenddate_required: Validity period end date cannot be empty
+exception.item_bank_exercise.expirystartdate_required: Validity period start date cannot be empty
+exception.item_bank_exercise.expirydate_end_later_than_start: Validity period end date cannot be earlier than the start date
+exception.item_bank_exercise.expirymode_invalid: Validity type error
+exception.item_bank_exercise.assessment_exercise_exist: The test paper has been saved in this module, please do not add it repeatedly
+exception.item_bank_exercise.member.can_not_become_member: The exercise has expired and students cannot join
+exception.item_bank_exercise.module.not_empty_number: Please keep at least one module
+exception.item_bank_exercise.forbidden_take_exercise: Can't access the item bank exercise
+exception.item_bank_exercise.member.non_expired: The student has not expired
+exception.item_bank_exercise.member.member_not_student: Member is not student
+exception.item_bank_exercise.module.switch.danger: At the time of publication of the item bank exercise, at least one chapter exercise or assessment exercise must be enabled
 
 exception.wechat.notify_setting_not_enabled: WeChat Notification Is Not Turned On
 exception.wechat.template_exceeds_limit_hint: A WeChat service number allows only 25 WeChat notification templates to be opened. Please close other templates and try again.

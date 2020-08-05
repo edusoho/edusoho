@@ -55,6 +55,7 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
             'need_score' => ['integer', ['in', [0, 1]]],
             'manual_marking' => ['integer', ['in', [0, 1]]],
             'start_time' => ['integer'],
+            'doing_look_analysis' => ['integer', ['in', [0, 1]]],
             'pass_score' => ['numeric', ['min', 0]],
             'enable_facein' => ['integer', ['in', [0, 1]]],
         ]);
@@ -75,10 +76,9 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
         return $this->getAnswerSceneDao()->get($id) ?: [];
     }
 
-    public function canStart($id)
+    public function canStart($id, $userId)
     {
         $answerScene = $this->get($id);
-
         if (empty($answerScene)) {
             return false;
         }
@@ -87,35 +87,20 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
             return false;
         }
 
-        return true;
-    }
-
-    public function canRestart($id, $userId)
-    {
-        $answerScene = $this->get($id);
-
-        if (empty($answerScene)) {
-            return false;
-        }
-
         $latestAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($id, $userId);
-        if (empty($latestAnswerRecord)) {
-            return false;
-        }
-
-        if (AnswerService::ANSWER_RECORD_STATUS_FINISHED == $latestAnswerRecord['status']) {
+        if ($latestAnswerRecord) {
             if (1 == $answerScene['do_times']) {
                 return false;
             }
 
-            if (0 == $answerScene['redo_interval']) {
-                return true;
-            } else {
+            if (0 < $answerScene['redo_interval']) {
                 $answerReport = $this->getAnswerReportService()->getSimple($latestAnswerRecord['answer_report_id']);
 
                 return $answerScene['redo_interval'] * 60 <= time() - $answerReport['review_time'];
             }
         }
+
+        return true;
     }
 
     public function getAnswerSceneReport($id)
@@ -260,7 +245,7 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
             ['answer_record_ids' => $answerRecordIds],
             [],
             0,
-            $this->getAnswerQuestionReportService()->count(['answer_record_ids' => $answerRecordIds]),
+            PHP_INT_MAX,
             ['status', 'response', 'question_id']
         ), 'question_id');
     }

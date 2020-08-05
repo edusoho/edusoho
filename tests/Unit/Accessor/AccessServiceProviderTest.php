@@ -13,5 +13,7 @@ class AccessServiceProviderTest extends BaseTestCase
         $this->assertNotNull($this->biz['classroom.join_chain']);
         $this->assertNotNull($this->biz['classroom.learn_chain']);
         $this->assertNotNull($this->biz['course.task.learn_chain']);
+        $this->assertNotNull($this->biz['item_bank_exercise.join_chain']);
+        $this->assertNotNull($this->biz['item_bank_exercise.learn_chain']);
     }
 }

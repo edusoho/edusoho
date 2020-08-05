@@ -1,0 +1,23 @@
+{% if chapter.depth == 2 %}
+{% set type = 'unit' %}
+{% elseif chapter.depth == 1 %}
+{% set type = 'chapter' %}
+{% endif %}
+
+<li id="chapter-{{chapter.id}}" class="chapter-list-li task-manage-item js-task-manage-{{type}} task-manage-{{type}}" style="color:#999">
+  {% if type == 'unit' %}
+    <div class="item-line"></div>
+  {% endif %}
+    {% if type == 'chapter' %}
+      <div class="col-xs-6 js-toggle-show js-toggle-{{ type }} title title-overflow">
+        <span class="chapter-title title-overflow">{{ chapter.name }}</span>
+      </div>
+    {% else %}
+      <div class="col-xs-6 title-overflow">
+        <span class="unit-title title-overflow">{{ chapter.name }}</span>
+      </div>
+    {% endif %}
+  {% include 'item-bank-exercise/tabs/list/chapter-button.html.twig' with {previewAs:previewAs,'question_num': chapter.question_num, 'member':member|default(null), record:record} %}
+</li>
+
+

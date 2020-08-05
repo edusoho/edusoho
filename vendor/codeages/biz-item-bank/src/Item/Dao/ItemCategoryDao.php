@@ -9,4 +9,6 @@ interface ItemCategoryDao extends AdvancedDaoInterface
     public function findByIds($ids);
 
     public function findByBankId($bankId);
+
+    public function resetItemNumAndQuestionNumByBankId($bankId);
 }

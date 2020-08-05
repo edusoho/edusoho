@@ -234,6 +234,13 @@ services:
         tags:
             - { name: twig.extension }
 
+    web.twig.item_bank_exercise_extension:
+      class: AppBundle\Twig\ItemBankExerciseExtension
+      arguments:    ['@service_container', '@biz']
+      public: true
+      tags:
+        - { name: twig.extension }
+
     web.twig.search_extension:
         class: AppBundle\Twig\SearchExtension
         arguments:    ['@service_container', '@biz']
