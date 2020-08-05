@@ -2,8 +2,6 @@
 
 namespace Biz\Certificate\Service;
 
-use Biz\System\Annotation\Log;
-
 interface TemplateService
 {
     public function get($id);

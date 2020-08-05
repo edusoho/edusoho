@@ -14,4 +14,3 @@ class TemplateException extends AbstractException
         4047701 => 'exception.certificate_template.notfound_template',
     ];
 }
-
