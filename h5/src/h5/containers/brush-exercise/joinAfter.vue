@@ -1,7 +1,12 @@
 <template>
   <div class="">
     <img :src="cover.large" style="width:100%;vertical-align: middle;" />
-    <directory :exerciseId="Number(id)" />
+    <van-tabs v-model="active" sticky>
+      <van-tab title="课程目录">
+        <directory :exerciseId="Number(id)" />
+      </van-tab>
+      <van-tab title="学员评价"> </van-tab>
+    </van-tabs>
   </div>
 </template>
 
@@ -14,7 +19,9 @@ export default {
     directory,
   },
   data() {
-    return {};
+    return {
+      active: 1,
+    };
   },
   computed: {
     ...mapState({
