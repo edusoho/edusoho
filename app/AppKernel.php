@@ -326,6 +326,10 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
 
     public function getSafeDomains()
     {
+        if ('test' === $this->getEnvironment()) {
+            return [];
+        }
+
         $safeIframeDomains = $this->getContainer()->get('biz')->service('System:CacheService')->get('safe_iframe_domains');
 
         return empty($safeIframeDomains) ? [] : $safeIframeDomains;
