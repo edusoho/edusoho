@@ -67,4 +67,8 @@ interface GoodsService
     public function refreshGoodsHotSeq();
 
     public function findGoodsSpecsByIds(array $ids);
+
+    public function convertGoodsPrice($goods);
+
+    public function convertSpecsPrice($goods, $specs);
 }

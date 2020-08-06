@@ -2,6 +2,7 @@
 
 namespace Biz\Goods\Service\Impl;
 
+use ApiBundle\Api\Util\Money;
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Common\CommonException;
@@ -12,7 +13,9 @@ use Biz\Goods\GoodsEntityFactory;
 use Biz\Goods\GoodsException;
 use Biz\Goods\Service\GoodsService;
 use Biz\Product\Service\ProductService;
+use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
+use DiscountPlugin\Biz\Discount\Service\DiscountService;
 
 class GoodsServiceImpl extends BaseService implements GoodsService
 {
@@ -329,6 +332,60 @@ class GoodsServiceImpl extends BaseService implements GoodsService
         return ArrayToolkit::index($this->getGoodsSpecsDao()->findByIds($ids), 'id');
     }
 
+    public function convertGoodsPrice($goods)
+    {
+        $minDisplayPrice = $goods['minPrice'];
+        $maxDisplayPrice = $goods['maxPrice'];
+        if ($goods['discountId'] && $this->isPluginInstalled('Discount')) {
+            $discount = $this->getDiscountService()->getDiscount($goods['discountId']);
+            if ('discount' === $discount['type']) {
+                $discountItem = $this->getDiscountService()->getItemByDiscountIdAndGoodsId($goods['discountId'], $goods['id']);
+                if (!empty($discount)) {
+                    if ('discount' === $discount['discountType']) {
+                        $minDisplayPrice = $goods['minPrice'] * $discountItem['discount'] / 10;
+                        $maxDisplayPrice = $goods['maxPrice'] * $discountItem['discount'] / 10;
+                    } else {
+                        $minDisplayPrice = $goods['minPrice'] - $discountItem['reduce'];
+                        $maxDisplayPrice = $goods['maxPrice'] - $discountItem['reduce'];
+                    }
+                    $goods['discount'] = $discount;
+                }
+            }
+        }
+        $goods['maxPriceObj'] = Money::convert($goods['maxPrice']);
+        $goods['minPriceObj'] = Money::convert($goods['minPrice']);
+        $goods['minDisplayPrice'] = $minDisplayPrice;
+        $goods['maxDisplayPrice'] = $maxDisplayPrice;
+        $goods['minDisplayPriceObj'] = Money::convert($minDisplayPrice);
+        $goods['maxDisplayPriceObj'] = Money::convert($maxDisplayPrice);
+
+        return $goods;
+    }
+
+    public function convertSpecsPrice($goods, $specs)
+    {
+        $displayPrice = $specs['price'];
+        if ($goods['discountId'] && $this->isPluginInstalled('Discount')) {
+            $discount = $this->getDiscountService()->getDiscount($goods['discountId']);
+            if ('discount' === $discount['type']) {
+                $discountItem = $this->getDiscountService()->getItemByDiscountIdAndGoodsId($goods['discountId'], $goods['id']);
+                if (!empty($discount)) {
+                    if ('discount' === $discount['discountType']) {
+                        $displayPrice = $specs['price'] * $discountItem['discount'] / 10;
+                    } else {
+                        $displayPrice = $specs['price'] - $discountItem['reduce'];
+                    }
+                    $goods['discount'] = $discount;
+                }
+            }
+        }
+        $specs['priceObj'] = Money::convert($specs['price']);
+        $specs['displayPrice'] = $displayPrice;
+        $specs['displayPriceObj'] = Money::convert($displayPrice);
+
+        return $specs;
+    }
+
     /**
      * @param $goods
      *
@@ -418,5 +475,21 @@ class GoodsServiceImpl extends BaseService implements GoodsService
     protected function getUserService()
     {
         return $this->createService('User:UserService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return DiscountService
+     */
+    protected function getDiscountService()
+    {
+        return $this->createService('DiscountPlugin:Discount:DiscountService');
     }
 }

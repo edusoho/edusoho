@@ -30,8 +30,12 @@ class Good extends AbstractResource
         //获取状态中的组件
         $this->getOCUtil()->single($product, ['targetId'], 'course' == $product['targetType'] ? 'courseSet' : $product['targetType']);
         $goods['product'] = $product;
+        $goods = $this->getGoodsService()->convertGoodsPrice($goods);
 
         $goods['specs'] = $this->getGoodsService()->findGoodsSpecsByGoodsId($goods['id']);
+        foreach ($goods['specs'] as &$spec) {
+            $spec = $this->getGoodsService()->convertSpecsPrice($goods, $spec);
+        }
         $goods['extensions'] = $this->collectGoodsExtensions($goods['product']);
 
         if ($this->getCurrentUser()->isLogin()) {

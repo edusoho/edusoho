@@ -499,7 +499,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             ]
         );
 
-        if ('published' != $courseSet['status'] || 'published' != $oldCourse['status']) {
+        if ('published' !== $courseSet['status'] || 'published' !== $oldCourse['status']) {
             $fields['expiryMode'] = isset($fields['expiryMode']) ? $fields['expiryMode'] : $oldCourse['expiryMode'];
         }
 
@@ -510,8 +510,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $requireFields = ['title', 'isFree', 'buyable'];
 
-        if ('normal' == $courseSet['type'] && $this->isCloudStorage()) {
-            array_push($requireFields, 'tryLookable');
+        if ('normal' === $courseSet['type'] && $this->isCloudStorage()) {
+            $requireFields[] = 'tryLookable';
         } else {
             $fields['tryLookable'] = 0;
         }

@@ -29,7 +29,7 @@ class CourseSpecsMediator extends AbstractSpecsMediator
             'title' => empty($course['title']) ? $course['courseSetTitle'] : $course['title'],
             'images' => $goods['images'],
             'seq' => $course['seq'],
-            'price' => $course['price'],
+            'price' => $course['originPrice'],
             'coinPrice' => $course['coinPrice'],
             'usageMode' => $course['expiryMode'],
             'usageDays' => $course['expiryDays'] ?: 0,
