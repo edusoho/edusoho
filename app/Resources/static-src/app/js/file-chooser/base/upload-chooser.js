@@ -81,7 +81,7 @@ export default class UploaderChooser extends Chooser {
   _onFileUploadFinish(uploadFile) {
     let file = {
       'source' : 'self',
-      'id' : uploadFile.no,
+      'id' : uploadFile.fileId,
       'name' : uploadFile.name,
       'hashId' : uploadFile.initResponse.hashId,
       'globalId' : uploadFile.globalId,

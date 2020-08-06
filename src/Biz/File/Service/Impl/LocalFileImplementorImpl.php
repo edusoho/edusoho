@@ -111,7 +111,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
     public function prepareUpload($params)
     {
         $file = array();
-        $file['filename'] = empty($params['fileName']) ? '' : $params['fileName'];
+        $file['filename'] = empty($params['name']) ? '' : $params['name'];
 
         $pos = strrpos($file['filename'], '.');
         $file['ext'] = empty($pos) ? '' : substr($file['filename'], $pos + 1);

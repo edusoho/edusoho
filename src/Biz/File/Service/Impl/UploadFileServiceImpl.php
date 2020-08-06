@@ -398,7 +398,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
             $result = $implementor->finishedUpload($file, $params);
 
-            if (empty($result) || (!$result['no'] && !$result['success'])) {
+            if (empty($result) || (!empty($result['no']) && !empty($result['success']))) {
                 $this->createNewException(UploadFileException::UPLOAD_FAILED());
             }
 
