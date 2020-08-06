@@ -19,6 +19,7 @@
       v-if="isEmptyCourse && isRequestCompile"
       :has-button="false"
       :type="'course_list'"
+      text="暂无课程"
     />
   </div>
 </template>

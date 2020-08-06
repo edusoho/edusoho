@@ -15,7 +15,7 @@
       :type-list="'course_list'"
       @needRequest="sendRequest"
     />
-    <emptyCourse v-if="isEmptyCourse && isRequestCompile" :has-button="false" :type="'course_list'"/>
+    <emptyCourse v-if="isEmptyCourse && isRequestCompile" :has-button="false" :type="'course_list'" text="暂无课程"/>
   </div>
 </template>
 
