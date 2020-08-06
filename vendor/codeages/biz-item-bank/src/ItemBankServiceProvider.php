@@ -22,6 +22,13 @@ class ItemBankServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $biz)
     {
+        $biz['item_bank.html_helper.config'] = function ($biz) {
+            return [
+                'cacheDir' => $biz['item_bank.html_helper.options']['cacheDir'],
+                'safeDomains' => empty($biz['item_bank.html_helper.options']['safeDomains']) ? [] : $biz['item_bank.html_helper.options']['safeDomains'],
+            ];
+        };
+        
         $biz['migration.directories'][] = dirname(__DIR__).'/migrations';
 
         $biz['autoload.aliases']['ItemBank'] = 'Codeages\Biz\ItemBank';
