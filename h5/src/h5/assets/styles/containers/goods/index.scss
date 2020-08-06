@@ -1,64 +1,161 @@
 .goods {
-  background-color: #F5F5F5;
-  .goods-detail {
-    .goods-detail__banner {
-      height: vw(210);
-      img {
-        width: 100%;
-        height: 100%;
-      }
-    }
-  }
-  .goods-info {
-    padding-bottom: vw(48);
-    margin-top: vw(8);
-    background-color: #F5F5F5;
-    .goods-info__nav {
-      display: flex;
-      position: sticky;
-      top: 0;
-      justify-content: space-around;
-      align-items: center;
-      height: vw(50);
-      border-bottom: vw(1) solid #e1e1e1;
-      background-color: #fff;
-      font-size: vw(14);
-      z-index: 999;
-      li > a {
-        position: relative;
-        color: #666;
-        transition: all 0.3s ease;
-        &.active {
-          font-size: vw(16);
-          color: #333;
-          font-weight: 500;
-          &::after {
-            content: '';
-            display: inline-block;
-            position: absolute;
-            bottom: vw(-16);
-            left: 50%;
-            transform: translateX(-50%);
-            width: vw(16);
-            height: vw(3);
-            background-color: #03C777;
-            border-radius: vw(2);
-          }
-        }
-      }
-    }
-    .goods-info__item {
-      margin-top: vw(8);
-      padding: vw(16);
-      background-color: #fff;
-      &:nth-of-type(1) {
-        margin-top: 0;
-      }
-    }
-    .goods-info__title {
-      font-size: vw(16);
-      font-weight: 500;
-      color: #333;
-    }
-  }
+	background-color: #f5f5f5;
+
+	.goods-detail {
+		.goods-detail__banner {
+			height: vw(210);
+
+			img {
+				width: 100%;
+				height: 100%;
+			}
+		}
+	}
+
+	.goods-info {
+		margin-top: vw(8);
+		padding-bottom: vw(48);
+		background-color: #f5f5f5;
+
+		.goods-info__nav {
+			position: sticky;
+			top: 0;
+			z-index: 999;
+			display: flex;
+			align-items: center;
+			justify-content: space-around;
+			height: vw(50);
+			font-size: vw(14);
+			background-color: #fff;
+			border-bottom: vw(1) solid #e1e1e1;
+
+			li > a {
+				position: relative;
+				color: #666;
+				transition: all 0.3s ease;
+
+				&.active {
+					color: #333;
+					font-weight: 500;
+					font-size: vw(16);
+
+					&::after {
+						position: absolute;
+						bottom: vw(-16);
+						left: 50%;
+						display: inline-block;
+						width: vw(16);
+						height: vw(3);
+						background-color: #03c777;
+						border-radius: vw(2);
+						transform: translateX(-50%);
+						content: '';
+					}
+				}
+			}
+		}
+
+		.goods-info__item {
+			margin-top: vw(8);
+			padding: vw(16);
+			background-color: #fff;
+
+			&:nth-of-type(1) {
+				margin-top: 0;
+			}
+		}
+
+		.goods-info__title {
+			color: #333;
+			font-weight: 500;
+			font-size: vw(16);
+		}
+	}
+}
+
+.enter-learning {
+	margin: vw(8) 0;
+	padding: vw(12) vw(16);
+	background-color: #fff;
+
+	.enter-learning-container {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 100%;
+		height: vw(64);
+		overflow: hidden;
+		background: rgba(3, 199, 119, 0.1);
+		border-radius: vw(32);
+
+		.enter-learning-container__icon {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: vw(40);
+			height: vw(40);
+			margin-left: vw(16);
+			background: linear-gradient(90deg, rgba(34, 209, 138, 1) 0%, rgba(138, 226, 167, 0.98) 100%);
+			border-radius: 50%;
+
+			i {
+				color: #fff;
+				font-size: vw(18);
+			}
+		}
+
+		.enter-learning-container__text {
+			flex-grow: 1;
+			margin-left: vw(12);
+
+			.content {
+				position: relative;
+				color: #03c777;
+				font-weight: 500;
+				font-size: vw(16);
+
+				.hot {
+					position: absolute;
+					top: 0;
+					right: 0;
+					width: vw(29);
+					height: vw(16);
+					color: #fff;
+					font-size: vw(12);
+					line-height: vw(16);
+					text-align: center;
+					background-color: #ff9b56;
+					border-radius: vw(20);
+					transform: translate(110%, -100%);
+
+					&::before {
+						position: absolute;
+						bottom: 0;
+						left: 0;
+						display: inline-block;
+						width: 0;
+						height: 0;
+						border-color: #ff9b56 transparent transparent;
+						border-style: solid;
+						border-width: vw(6) vw(2) 0;
+						transform: translate(0%, 50%) rotate(45deg);
+						content: "";
+					}
+				}
+			}
+		}
+
+		.enter-learning-container__add {
+			width: vw(80);
+			height: vw(28);
+			color: #fff;
+			font-weight: 500;
+			font-size: vw(14);
+			line-height: vw(28);
+			text-align: center;
+			background: linear-gradient(90deg, rgba(34, 209, 138, 1) 0%, rgba(138, 226, 167, 0.98) 100%);
+			border-radius: vw(15) 0 0 vw(15);
+			box-shadow: 0 0 vw(4) 0 rgba(3, 199, 119, 0.2);
+		}
+	}
 }
