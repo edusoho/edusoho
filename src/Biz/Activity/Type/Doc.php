@@ -107,6 +107,8 @@ class Doc extends Activity
 
     public function delete($targetId)
     {
+        $doc = $this->getDocActivityDao()->get($targetId);
+        $this->getUploadFileService()->updateUsedCount($doc['mediaId']);
         return $this->getDocActivityDao()->delete($targetId);
     }
 

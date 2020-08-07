@@ -94,6 +94,8 @@ class Flash extends Activity
 
     public function delete($targetId)
     {
+        $flash = $this->getFlashActivityDao()->get($targetId);
+        $this->getUploadFileService()->updateUsedCount($flash['mediaId']);
         return $this->getFlashActivityDao()->delete($targetId);
     }
 

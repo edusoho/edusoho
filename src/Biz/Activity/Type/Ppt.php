@@ -98,6 +98,8 @@ class Ppt extends Activity
 
     public function delete($targetId)
     {
+        $ppt = $this->getPptActivityDao()->get($targetId);
+        $this->getUploadFileService()->updateUsedCount($ppt['mediaId']);
         return $this->getPptActivityDao()->delete($targetId);
     }
 

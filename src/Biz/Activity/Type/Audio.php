@@ -86,6 +86,8 @@ class Audio extends Activity
      */
     public function delete($id)
     {
+        $audio = $this->getAudioActivityDao()->get($id);
+        $this->getUploadFileService()->updateUsedCount($audio['mediaId']);
         $this->getAudioActivityDao()->delete($id);
     }
 

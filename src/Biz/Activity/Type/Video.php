@@ -184,6 +184,8 @@ class Video extends Activity
 
     public function delete($id)
     {
+        $video = $this->getVideoActivityDao()->get($id);
+        $this->getUploadFileService()->updateUsedCount($video['mediaId']);
         return $this->getVideoActivityDao()->delete($id);
     }
 
