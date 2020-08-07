@@ -1,0 +1,74 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% do script(['app/js/admin-v2/operating/certificate-template/step-three/index.js']) %}
+
+{% set menu = 'admin_v2_operation_certificate_template_manage' %}
+
+{% set isHorizontal = template.type|default('horizontal') == 'horizontal' %}
+
+{% block main %}
+  <h4 class="mtl mbl">{{ 'admin.operation_certificate.template.create'|trans }}——{{ 'admin.operation_certificate.template.create.select'|trans }}</h4>
+  <form id="certificate-template-form" class="form-horizontal" method="post" action="{{ path('admin_v2_operation_certificate_template_creat_step_three', {id:template.id}) }}">
+
+    <div class="form-group">
+      <div class="col-md-2 control-label">
+        <label for="basemap" class="control-label-required">{{ 'admin.operation_certificate.template.basemap'|trans }}：</label>
+      </div>
+      <div class="col-md-5 controls">
+          {% if template.basemap|default() %}
+            {% set basemap = filepath(template.basemap) %}
+          {% else %}
+            {% if isHorizontal %}
+              {% set basemap = asset('static-dist/app/img/admin-v2/horizontal_basemap.jpg') %}
+            {% else%}
+              {% set basemap = asset('static-dist/app/img/admin-v2/vertical_basemap.jpg') %}
+            {% endif %}
+          {% endif %}
+          <input type="hidden" class="js-basemap-value" name="basemapFileId">
+          {% set cropWidth = isHorizontal ? '3600' : '2600' %}
+          {% set cropHeight = isHorizontal ? '2600' : '3600' %}
+          {% include 'common/upload-image.html.twig' with {
+            saveUrl: path('admin_v2_operation_certificate_template_basemap_modal', {id:template.id}),
+            imageSrc: basemap,
+            targetImg: '#basemap',
+            cropWidth: cropWidth,
+            cropHeight: cropHeight,
+            imageClass: isHorizontal ? 'certificate-horizontal-basemap' : 'certificate-vertical-basemap',
+            imageText: 'admin.operation_certificate.template.basemap.upload'|trans
+          } %}
+        <p class="help-block">{{ 'admin.operation_certificate.template.basemap.upload_hint'|trans }}</p>
+      </div>
+    </div>
+    <div class="form-group ct-mtl">
+      <div class="col-md-2 control-label">
+        <label for="stamp" class="control-label-required">{{ 'admin.operation_certificate.template.stamp'|trans }}：</label>
+      </div>
+      <div class="controls col-md-5">
+          {% set stamp = template.stamp|default() ? filepath(template.stamp) : '' %}
+          <input type="hidden" class="js-stamp-value" name="stampFileId">
+          {% include 'common/upload-image.html.twig' with {
+            saveUrl: path('admin_v2_operation_certificate_template_stamp_modal'),
+            imageSrc: stamp,
+            targetImg: '#stamp',
+            cropWidth: '650',
+            cropHeight: '650',
+            imageClass: 'certificate-stamp',
+            imageText: 'admin.operation_certificate.template.stamp.upload'|trans
+          } %}
+        <p class="help-block">{{ 'admin.operation_certificate.template.stamp.upload_hint'|trans }}</p>
+      </div>
+    </div>
+
+    <div class="form-group ct-mtl">
+      <div class="col-md-2 control-label">
+      </div>
+      <div class="controls col-md-3">
+        <button type="submit" class="btn btn-primary ct-mrxl" data-submitting-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.next'|trans }}</button>
+        <a class="btn btn-default" href="{{ path('admin_v2_operation_certificate_template_creat_step_two', {id:template.id}) }}">{{ 'form.btn.back'|trans }}</a>
+      </div>
+    </div>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+  </form>
+{% endblock %}

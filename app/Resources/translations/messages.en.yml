@@ -3927,6 +3927,8 @@ common.video_quality.high: High
 common.video_quality.high.tips: 'Good at movie'
 common.video_quality.super: Super
 common.video_quality.super.tips: 'Good at professional movie'
+common.certificate_type.course: course
+common.certificate_type.classroom: classroom
 contetn.active_list.create_template: 'Please create template'
 contetn.active_list.custom_template: Custom
 contetn.article_list.latest_articel: 'Latest Artical'
@@ -5208,6 +5210,39 @@ admin.money_records.money_record_type: Type
 admin.money_records.person: Recorder
 admin.money_records.transaction_no: 'Transaction No.'
 admin.money_records.transaction_time: 'Transaction Time'
+admin.operation_certificate.template.type: Type
+admin.operation_certificate.template.type.all: All
+admin.operation_certificate.template.title: Template Name
+admin.operation_certificate.template.title.placeholder: Template name, up to 30 characters
+admin.operation_certificate.template.creator: Creator
+admin.operation_certificate.template.create_time: create time
+admin.operation_certificate.template.operate: operate
+admin.operation_certificate.template.edit: edit
+admin.operation_certificate.template.create: Create Template
+admin.operation_certificate.template.create.basic_message: Basic Information
+admin.operation_certificate.template.create.select: Select Template
+admin.operation_certificate.template.style.horizontal: horizontal
+admin.operation_certificate.template.style.vertical: vertical
+admin.operation_certificate.template.basemap: basemap
+admin.operation_certificate.template.basemap.upload: upload basemap
+admin.operation_certificate.template.basemap.upload_hint: Please upload the bottom picture of the certificate in jpg, png format, the recommended size of 3600 × 2600 px, the file size does not exceed 2 MB.
+admin.operation_certificate.template.stamp: stamp
+admin.operation_certificate.template.stamp.upload: upload stamp
+admin.operation_certificate.template.stamp.upload_hint: Please upload the stamp image with transparent background in png, bmp, etc. The recommended size is 650 × 650 px and the file size should not exceed 2 MB.
+admin.operation_certificate.template.content.edit: Edit certificate information
+admin.operation_certificate.template.certificate.title: Certificate Title
+admin.operation_certificate.template.certificate.title_hint: optional fill in
+admin.operation_certificate.template.certificate.title.default: Certificate of course certification
+admin.operation_certificate.template.certificate.recipient: Information on the grantee
+admin.operation_certificate.template.certificate.recipient.default: $name$（$username$）classmate：
+admin.operation_certificate.template.certificate.recipient_hint: Optional, support add Name：$name$ Username：$username$
+admin.operation_certificate.template.certificate.content: Text of certificate
+admin.operation_certificate.template.certificate.content.default: Due to your excellent learning performance in the $coursename$ course, you have finally completed the course and passed the final assessment, we hereby issue this certificate!
+admin.operation_certificate.template.certificate.content_hint: 'Optional, support for adding Name: $name$ User name: $username$'
+admin.operation_certificate.template.certificate.content_hint.course: 'Course name: $courseName$'
+admin.operation_certificate.template.certificate.content_hint.classroom: 'Class name: $classroomName$'
+admin.operation_certificate.template.certificate.qrcode: Certificate Verification QR Code
+admin.operation_certificate.template.preview_btn: preview
 admin.operation_announcement.content_th: 'Content'
 admin.operation_announcement.createTime_th: 'Published Time'
 admin.operation_announcement.endTime_th: 'End Time'
@@ -9000,6 +9035,8 @@ exception.wechat.template_conflict_industry_hint: Service number industry settin
 exception.destroy_account.reason_too_long: Write off reason limit 200 words
 exception.destroy_account.not_found_record: Record Not Found
 exception.destroy_account.audit_record_exist: Audit Record Is Exist
+
+exception.certificate_template.notfound_template: Template not found
 
 course.unname_title: unname course
 

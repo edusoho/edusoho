@@ -1,0 +1,38 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% block title %}
+  {{ 'admin.operation_certificate.template.basemap'|trans }}
+{% endblock %}
+
+{% set modal_class = 'cd-modal-dialog' %}
+
+{% do script(['app/js/admin-v2/operating/certificate-template/basemap/index.js']) %}
+
+{% block body %}
+  <style>
+    .img-full {
+      display: block;
+      height: auto;
+      width: 100%;
+    }
+  </style>
+  <img class="img-full" src="" id="basemap-crop" alt=""/>
+  <div class="text-center cd-dark-major cd-mt16 cd-mb16">
+    {{ 'user.settings.avatar.crop_hint'|trans }}
+  </div>
+  <input type="hidden" name="styleType" value="{{ template.styleType }}">
+{% endblock %}
+
+{% block footer %}
+  <div class="text-center">
+    <button type="button" class="btn cd-btn btn-default cd-btn-lg" id="select-btn">
+      {{ 'user.settings.profile.choose_again'|trans }}
+    </button>
+
+    <button type="button" class="btn cd-btn btn-primary cd-btn-lg" id="save-btn"
+            data-url="{{ path('admin_v2_operation_certificate_template_basemap_modal', {id: template.id}) }}"
+            data-loading-text="{{ 'form.btn.submit.submiting'|trans }}">
+      {{ 'form.btn.save'|trans }}
+    </button>
+  </div>
+{% endblock %}

@@ -519,3 +519,7 @@ s2b2cSettlementOrderStatus:
   success: 已支付
   finished: 交易完成
   refunded: 已退款
+
+certificateTypes:
+    course: 课程
+    classroom: 班级

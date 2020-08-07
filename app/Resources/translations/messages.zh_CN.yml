@@ -4693,6 +4693,8 @@ common.video_quality.high: 精细
 common.video_quality.high.tips: 适合动态电影
 common.video_quality.super: 超精细
 common.video_quality.super.tips: 适合超高画质的专业视频
+common.certificate_type.course: 课程
+common.certificate_type.classroom: 班级
 
 # content
 contetn.active_list.create_template: 请创建模版文件
@@ -6255,6 +6257,41 @@ admin.money_records.money_record_type: 交易类型
 admin.money_records.person: 交易人
 admin.money_records.transaction_no: 交易号
 admin.money_records.transaction_time: 交易时间
+
+# 发证管理
+admin.operation_certificate.template.type: 证书类型
+admin.operation_certificate.template.type.all: 全部
+admin.operation_certificate.template.title: 模板名称
+admin.operation_certificate.template.title.placeholder: 模版名称，最多30个字
+admin.operation_certificate.template.creator: 创建人
+admin.operation_certificate.template.create_time: 创建时间
+admin.operation_certificate.template.operate: 操作
+admin.operation_certificate.template.edit: 编辑
+admin.operation_certificate.template.create: 创建模板
+admin.operation_certificate.template.create.basic_message: 基础信息
+admin.operation_certificate.template.create.select: 选择模版
+admin.operation_certificate.template.style.horizontal: 横版
+admin.operation_certificate.template.style.vertical: 竖版
+admin.operation_certificate.template.basemap: 证书底图
+admin.operation_certificate.template.basemap.upload: 上传证书底图
+admin.operation_certificate.template.basemap.upload_hint: 请上传jpg、png格式的证书底图，建议尺寸为 3600 × 2600 px，文件大小不超过 2 MB
+admin.operation_certificate.template.stamp: 证书印章
+admin.operation_certificate.template.stamp.upload: 上传证书印章
+admin.operation_certificate.template.stamp.upload_hint: 请上png、bmp等格式透明背景的印章图片，建议尺寸为 650 × 650 px，文件大小不超过 2 MB
+admin.operation_certificate.template.content.edit: 编辑证书信息
+admin.operation_certificate.template.certificate.title: 证书标题
+admin.operation_certificate.template.certificate.title_hint: 可选填
+admin.operation_certificate.template.certificate.title.default: 课程认证证书
+admin.operation_certificate.template.certificate.recipient: 被授予人信息
+admin.operation_certificate.template.certificate.recipient.default: $name$（$username$）同学：
+admin.operation_certificate.template.certificate.recipient_hint: 可选填，支持添加 姓名：$name$  用户名：$username$
+admin.operation_certificate.template.certificate.content: 证书正文
+admin.operation_certificate.template.certificate.content.default: 由于你在$coursename$ 课程中优异学习表现，最终完成课程并通过最终考核，特此发次证明！
+admin.operation_certificate.template.certificate.content_hint: 可选填，支持添加 姓名：$name$   用户名：$username$
+admin.operation_certificate.template.certificate.content_hint.course: 课程名称：$courseName$
+admin.operation_certificate.template.certificate.content_hint.classroom: 课程名称：$classroomName$
+admin.operation_certificate.template.certificate.qrcode: 证书验证二维码
+admin.operation_certificate.template.preview_btn: 预览
 
 # 网站公告管理
 admin.operation_announcement.content_th: 公告内容
@@ -10310,6 +10347,8 @@ exception.wechat.template_conflict_industry_hint: 服务号行业设置错误
 exception.destroy_account.reason_too_long: 注销原因限制200字数
 exception.destroy_account.not_found_record: 未找到注销记录
 exception.destroy_account.audit_record_exist: 已存在审核中的申请
+
+exception.certificate_template.notfound_template: 模板不存在
 
 course.unname_title: 未命名计划
 
