@@ -32,7 +32,7 @@ const CHAPTER = 'chapter'; // 章节
 const ASSESSMENT = 'assessment'; // 模拟卷
 const defaultData = {
   data: [],
-  paging: { limit: 5, offset: 0, total: 0 },
+  paging: { limit: 10, offset: 0, total: 0 },
   finished: false,
 };
 export default {
