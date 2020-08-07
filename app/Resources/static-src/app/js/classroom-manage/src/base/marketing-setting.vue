@@ -30,6 +30,9 @@
                           :label="value"
                           class="cd-radio">{{ label }}
                 </el-radio>
+                <div class="help-block">
+                    关闭后，班级将彻底隐藏，无法在前台查看到。
+                </div>
             </el-form-item>
 
             <el-form-item :label="'classroom.buy_label'|trans({'name':classroomLabel})">
@@ -39,6 +42,9 @@
                           :label="value"
                           class="cd-radio">{{ label }}
                 </el-radio>
+                <div class="help-block">
+                    关闭后班级将无法在线购买加入。
+                </div>
             </el-form-item>
             <el-form-item :label="'classroom.expiry_mode_label'|trans">
                 <el-radio v-model="form.expiryMode"
@@ -217,8 +223,9 @@
             }
             return {
                 statusRadios: {
-                    '0': Translator.trans('site.close'),
-                    '1': Translator.trans('site.open')
+                    '1': Translator.trans('site.open'),
+                    '0': Translator.trans('site.close')
+
                 },
                 expiryModeRadios: {
                     'date': Translator.trans('classroom.expiry_mode_end_date'),

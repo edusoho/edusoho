@@ -19,7 +19,7 @@
        data-flash-upload-url="{{ path('editor_upload', {token:upload_token('default', 'flash')}) }}"
        data-classroom-label="{{ setting('classroom.name')|default('classroom'|trans) }}"
        data-classroom-expiry-rule-url="{{ path('classroom_expiry_date_rule') }}"
-       data-service-tags="{{ services(course.services|default([]))|json_encode }}"
+       data-service-tags="{{ classroom_services(classroom.services|default([]))|json_encode }}"
        data-vip-installed="{{ vipInstalled|default(false) }}"
        data-vip-enabled="{{ setting('vip.enabled', '0') }}"
        data-vip-levels="{{ vipLevels|default([])|json_encode }}"
