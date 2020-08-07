@@ -9,11 +9,11 @@ use AppBundle\Common\ServiceToolkit;
 class GoodSpecsFilter extends Filter
 {
     protected $simpleFields = [
-        'id', 'goodsId', 'targetId', 'title', 'seq', 'status', 'price', 'priceObj', 'displayPrice', 'displayPriceObj', 'coinPrice', 'usageMode', 'usageDays', 'usageStartTime', 'usageEndTime', 'buyableStartTime', 'buyableEndTime', 'buyableMode', 'maxJoinNum', 'services',
+        'id', 'goodsId', 'targetId', 'title', 'seq', 'status', 'price', 'priceObj', 'displayPrice', 'displayPriceObj', 'coinPrice', 'usageMode', 'usageDays', 'usageStartTime', 'usageEndTime', 'buyableStartTime', 'buyableEndTime', 'buyableMode', 'maxJoinNum', 'services', 'isMember', 'learnUrl',
     ];
 
     protected $publicFields = [
-        'id', 'goodsId', 'targetId', 'title', 'images', 'seq', 'status', 'price', 'priceObj', 'displayPrice', 'displayPriceObj', 'coinPrice', 'usageMode', 'usageDays', 'usageStartTime', 'usageEndTime', 'buyableStartTime', 'buyableEndTime', 'buyableMode', 'maxJoinNum', 'services',
+        'id', 'goodsId', 'targetId', 'title', 'images', 'seq', 'status', 'price', 'priceObj', 'displayPrice', 'displayPriceObj', 'coinPrice', 'usageMode', 'usageDays', 'usageStartTime', 'usageEndTime', 'buyableStartTime', 'buyableEndTime', 'buyableMode', 'maxJoinNum', 'services', 'isMember', 'learnUrl',
     ];
 
     protected function simpleFields(&$data)

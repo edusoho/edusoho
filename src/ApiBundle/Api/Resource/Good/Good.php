@@ -9,6 +9,7 @@ use Biz\Favorite\Service\FavoriteService;
 use Biz\Goods\Service\GoodsService;
 use Biz\Product\Service\ProductService;
 use Biz\System\Service\SettingService;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 
 /**
  * Class Good Good并不合适,商品真实本体是Goods,单复数同形,类名为Good是为了满足接口的定义规范（带有s结尾的单词比较难处理）
@@ -23,6 +24,7 @@ class Good extends AbstractResource
      */
     public function get(ApiRequest $request, $id)
     {
+        $user = $this->getCurrentUser();
         $goods = $this->getGoodsService()->getGoods($id);
 
         $this->getOCUtil()->single($goods, ['creator']);
@@ -33,8 +35,14 @@ class Good extends AbstractResource
         $goods = $this->getGoodsService()->convertGoodsPrice($goods);
 
         $goods['specs'] = $this->getGoodsService()->findGoodsSpecsByGoodsId($goods['id']);
+        $goodsEntity = $this->getGoodsService()->getGoodsEntityFactory()->create($goods['type']);
         foreach ($goods['specs'] as &$spec) {
             $spec = $this->getGoodsService()->convertSpecsPrice($goods, $spec);
+            $spec['isMember'] = $goodsEntity->isSpecsMember($goods, $spec, $user['id']);
+            $spec['isTeacher'] = $goodsEntity->isSpecsTeacher($goods, $spec, $user['id']);
+            $spec['learnUrl'] = 'course' === $goods['type']
+                ? $this->generateUrl('my_course_show', ['id' => $spec['targetId']], UrlGenerator::ABSOLUTE_URL)
+                : $this->generateUrl('classroom_show', ['id' => $spec['targetId']], UrlGenerator::ABSOLUTE_URL);
         }
         $goods['extensions'] = $this->collectGoodsExtensions($goods['product']);
 

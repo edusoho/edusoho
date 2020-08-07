@@ -2,6 +2,8 @@
 
 namespace Biz\Goods\Service;
 
+use Biz\Goods\GoodsEntityFactory;
+
 interface GoodsService
 {
     public function getGoods($id);
@@ -71,4 +73,9 @@ interface GoodsService
     public function convertGoodsPrice($goods);
 
     public function convertSpecsPrice($goods, $specs);
+
+    /**
+     * @return GoodsEntityFactory
+     */
+    public function getGoodsEntityFactory();
 }

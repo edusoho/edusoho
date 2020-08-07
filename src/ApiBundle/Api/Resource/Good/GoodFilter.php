@@ -7,7 +7,6 @@ use ApiBundle\Api\Resource\CourseSet\CourseSetFilter;
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\User\UserFilter;
 use ApiBundle\Api\Util\AssetHelper;
-use ApiBundle\Api\Util\Money;
 
 class GoodFilter extends Filter
 {
@@ -35,7 +34,6 @@ class GoodFilter extends Filter
 
         $data['summary'] = $this->convertAbsoluteUrl($data['summary']);
         $this->transformImages($data['images']);
-        $this->transMinAndMaxPrice($data);
     }
 
     protected function publicFields(&$data)
@@ -57,13 +55,6 @@ class GoodFilter extends Filter
         $userFilter->filter($data['creator']);
 
         $this->transformImages($data['images']);
-        $this->transMinAndMaxPrice($data);
-    }
-
-    private function transMinAndMaxPrice(&$data)
-    {
-        $data['minPrice'] = Money::convert($data['minPrice']);
-        $data['maxPrice'] = Money::convert($data['maxPrice']);
     }
 
     private function transformImages(&$images)

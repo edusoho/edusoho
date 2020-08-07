@@ -432,7 +432,7 @@ class GoodsServiceImpl extends BaseService implements GoodsService
     /**
      * @return GoodsEntityFactory
      */
-    protected function getGoodsEntityFactory()
+    public function getGoodsEntityFactory()
     {
         return $this->biz['goods.entity.factory'];
     }
