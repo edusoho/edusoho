@@ -38,14 +38,18 @@ export default {
       };
       Api.answerRecord({
         query,
-      }).then(res => {
-        this.assessment = res.assessment;
-        this.answerScene = res.answer_scene;
-        this.answerReport = res.answer_report;
-        this.answerRecord = res.answer_record;
-        this.$store.commit(types.SET_NAVBAR_TITLE, res.assessment.name);
-        this.isLoading = false;
-      });
+      })
+        .then(res => {
+          this.assessment = res.assessment;
+          this.answerScene = res.answer_scene;
+          this.answerReport = res.answer_report;
+          this.answerRecord = res.answer_record;
+          this.$store.commit(types.SET_NAVBAR_TITLE, res.assessment.name);
+          this.isLoading = false;
+        })
+        .catch(err => {
+          this.$toast(err.message);
+        });
     },
     getReviewData(data) {
       const query = { exerciseId: this.$route.query.exerciseId };
@@ -53,7 +57,9 @@ export default {
         .then(res => {
           this.goResult(res);
         })
-        .catch(res => {});
+        .catch(err => {
+          this.$toast(err.message);
+        });
     },
     goResult(res) {
       const query = {

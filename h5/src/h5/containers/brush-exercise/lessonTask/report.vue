@@ -39,13 +39,17 @@ export default {
       };
       Api.answerRecord({
         query,
-      }).then(res => {
-        this.assessment = res.assessment;
-        this.answerScene = res.answer_scene;
-        this.answerReport = res.answer_report;
-        this.answerRecord = res.answer_record;
-        this.isLoading = false;
-      });
+      })
+        .then(res => {
+          this.assessment = res.assessment;
+          this.answerScene = res.answer_scene;
+          this.answerReport = res.answer_report;
+          this.answerRecord = res.answer_record;
+          this.isLoading = false;
+        })
+        .catch(err => {
+          this.$toast(err.message);
+        });
     },
   },
 };

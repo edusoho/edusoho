@@ -38,7 +38,7 @@ export default {
   computed: {
     learnNum() {
       if (this.section.latestAnswerRecord) {
-        return this.section.latestAnswerRecord.done_question_count;
+        return this.section.latestAnswerRecord.doneQuestionNum;
       }
       return 0;
     },

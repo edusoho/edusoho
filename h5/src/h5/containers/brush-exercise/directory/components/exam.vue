@@ -26,13 +26,17 @@
     <van-loading v-if="isLoading" color="#1989fa" size="24px" vertical
       >加载中...</van-loading
     >
+    <empty v-if="noData" text="暂无试卷" class="empty__exam" />
   </div>
 </template>
 
 <script>
+import empty from '&/components/e-empty/e-empty.vue';
 import getBtnText from '@/utils/itemBank-status.js';
 export default {
-  components: {},
+  components: {
+    empty,
+  },
   data() {
     return {
       loading: false,
@@ -54,7 +58,11 @@ export default {
       default: false,
     },
   },
-  computed: {},
+  computed: {
+    noData: function() {
+      return !this.isLoading && !this.exercise.length;
+    },
+  },
   watch: {
     isLoading: {
       handler: 'handleLoad',
