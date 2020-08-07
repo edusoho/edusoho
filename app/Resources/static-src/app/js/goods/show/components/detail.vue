@@ -33,13 +33,14 @@
             <div class="detail-right__price">
                 <!-- 优惠活动 -->
                 <!--                <div class="detail-right__price__activities">该商品享受“某某某某某某某某某某某某”打折促销活动，24：00：00后结束，请尽快购买！</div>-->
-                <div class="detail-right__price__free" v-if="currentSku.price == 0">
+                <div class="detail-right__price__free" v-if="currentSku.displayPrice == 0">
                     价格
                     <span class="free">免费</span>
                 </div>
-                <div class="detail-right__price__num" v-if="currentSku.price != 0">
+                <div class="detail-right__price__num" v-if="currentSku.displayPrice != 0">
                     价格
-                    <span class="unfree">{{ currentSku.price }}</span>
+                    <span v-if="currentSku.displayPriceObj.currency === 'RMB'" class="detail-right__price__price">{{ currentSku.displayPriceObj.amount }}<span class="detail-right__price__unit">元</span></span>
+                    <span v-if="currentSku.displayPriceObj.currency === 'coin'" class="detail-right__price__price">{{ currentSku.displayPriceObj.coinAmount }}<span class="detail-right__price__unit">{{ currentSku.displayPriceObj.coinName }}</span></span>
                 </div>
             </div>
 
