@@ -1,6 +1,20 @@
 <template>
   <div class="brush-exercise-directory-swipertab">
-    <van-tabs
+    <div class="brush-exercise-warp">
+      <div class="brush-exercise-scroll">
+        <button
+          v-for="(item, index) in module"
+          :key="index"
+          :class="{ activeTag: index === activeIndex }"
+          @click="checkedTab(item, index)"
+          :disabled="disabled"
+        >
+          {{ item.title }}
+        </button>
+      </div>
+    </div>
+
+    <!-- <van-tabs
       :border="false"
       @click="checkedTab"
       :ellipsis="false"
@@ -12,7 +26,7 @@
         :key="index"
         :disabled="disabled"
       ></van-tab>
-    </van-tabs>
+    </van-tabs> -->
   </div>
 </template>
 
@@ -26,6 +40,7 @@ export default {
     return {
       disabled: false,
       timer: null,
+      activeIndex: 0,
     };
   },
   computed: {
@@ -36,12 +51,14 @@ export default {
   watch: {},
   created() {},
   methods: {
-    checkedTab(e) {
+    checkedTab(item, index) {
+      this.activeIndex = index;
       const data = {
-        type: this.module[e].type,
-        id: this.module[e].id,
+        type: item.type,
+        id: item.id,
       };
       this.$emit('changModule', data);
+      this.change();
     },
     change() {
       this.disabled = true;
@@ -50,7 +67,7 @@ export default {
       }
       this.timer = setTimeout(() => {
         this.disabled = false;
-      }, 500);
+      }, 300);
     },
   },
 };

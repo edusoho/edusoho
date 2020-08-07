@@ -82,9 +82,20 @@ export default {
         this.list[this.moduleId].data.length >= ItemBankInfomation.paging.total
       );
     },
+    // 获取模拟卷
     getItemBankAssessments(more = false) {
       const moduleId = this.moduleId;
+
+      if (
+        // eslint-disable-next-line no-prototype-builtins
+        this.list[moduleId].hasOwnProperty('isRequestCompile') &&
+        !this.list[moduleId].isRequestCompile
+      ) {
+        return;
+      }
+      this.list[moduleId].isRequestCompile = false;
       this.isLoading = true;
+
       const query = {
         exerciseId: Number(this.exerciseId),
         moduleId: Number(moduleId),
@@ -99,15 +110,16 @@ export default {
         } else {
           this.list[moduleId].data = res.data;
         }
-        // this.list[moduleId].data = this.list[moduleId].data.concat(res.data);
         this.list[moduleId].finished = this.judegIsAll(res);
         if (!this.list[moduleId].finished) {
           this.list[moduleId].paging.offset = this.list[moduleId].data.length;
         }
         this.isLoading = false;
+        this.list[moduleId].isRequestCompile = true;
         this.$forceUpdate();
       });
     },
+    // 获取章节练习
     gettemBankCategories() {
       const moduleId = this.moduleId;
       this.isLoading = true;
@@ -120,8 +132,8 @@ export default {
         this.isLoading = false;
       });
     },
+    // 请求数据
     changeData() {
-      this.exercise = [];
       this.currentType === CHAPTER
         ? this.gettemBankCategories()
         : this.getItemBankAssessments();
@@ -129,6 +141,10 @@ export default {
     changModule(data) {
       this.currentType = data.type;
       this.moduleId = data.id;
+      // 保留数据缓存
+      if (this.list[data.id]) {
+        return;
+      }
       this.list[data.id] = JSON.parse(JSON.stringify(defaultData));
       this.changeData(data.id);
     },
@@ -140,7 +156,7 @@ export default {
         if (!this.list[this.moduleId].finished && !this.isLoading) {
           this.getItemBankAssessments(true);
         }
-      }, 1000);
+      }, 300);
     },
   },
 };
