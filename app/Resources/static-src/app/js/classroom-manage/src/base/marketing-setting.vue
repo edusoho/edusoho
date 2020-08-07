@@ -25,10 +25,10 @@
 
             <el-form-item :label="'classroom.show_label'|trans({'name':classroomLabel})">
                 <el-radio v-model="form.showable"
-                          v-for="(label, value) in statusRadios"
-                          :key="value"
-                          :label="value"
-                          class="cd-radio">{{ label }}
+                          v-for="item in statusRadios"
+                          :key="item.value"
+                          :label="item.value"
+                          class="cd-radio">{{ item.label }}
                 </el-radio>
                 <div class="help-block">
                     关闭后，班级将彻底隐藏，无法在前台查看到。
@@ -37,10 +37,10 @@
 
             <el-form-item :label="'classroom.buy_label'|trans({'name':classroomLabel})">
                 <el-radio v-model="form.buyable"
-                          v-for="(label, value) in statusRadios"
-                          :key="value"
-                          :label="value"
-                          class="cd-radio">{{ label }}
+                          v-for="item in statusRadios"
+                          :key="item.value"
+                          :label="item.value"
+                          class="cd-radio">{{ item.label }}
                 </el-radio>
                 <div class="help-block">
                     关闭后班级将无法在线购买加入。
@@ -222,11 +222,16 @@
                 form.vipLevelId = this.classroom.vipLevelId;
             }
             return {
-                statusRadios: {
-                    '1': Translator.trans('site.open'),
-                    '0': Translator.trans('site.close')
-
-                },
+                statusRadios: [
+                    {
+                        'value': '1',
+                        'label': Translator.trans('site.open')
+                    },
+                    {
+                        'value': '0',
+                        'label': Translator.trans('site.close')
+                    },
+                ],
                 expiryModeRadios: {
                     'date': Translator.trans('classroom.expiry_mode_end_date'),
                     'days': Translator.trans('classroom.expiry_mode_days'),
