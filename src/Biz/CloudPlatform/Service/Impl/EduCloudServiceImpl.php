@@ -2,14 +2,14 @@
 
 namespace Biz\CloudPlatform\Service\Impl;
 
-use Biz\CloudPlatform\Service\EduCloudService;
-use Biz\System\Service\CacheService;
-use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
 use Biz\BaseService;
-use Topxia\Service\Common\ServiceKernel;
 use Biz\CloudPlatform\CloudAPIFactory;
+use Biz\CloudPlatform\Service\EduCloudService;
 use Biz\Common\JsonLogger;
+use Biz\System\Service\CacheService;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
+use Topxia\Service\Common\ServiceKernel;
 
 class EduCloudServiceImpl extends BaseService implements EduCloudService
 {
@@ -86,7 +86,7 @@ class EduCloudServiceImpl extends BaseService implements EduCloudService
             $logger->pushHandler(new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/cloud-api.log', Logger::DEBUG));
             $logger->addInfo($e->getMessage());
 
-            $smsAccount = array('status' => 'uncheck', 'checkTime' => time() + 60 * 10, 'isOldSmsUser' => 'unknown');
+            $smsAccount = ['status' => 'uncheck', 'checkTime' => time() + 60 * 10, 'isOldSmsUser' => 'unknown'];
             $this->getSettingService()->set('sms_account', $smsAccount);
 
             return $smsAccount;
@@ -94,12 +94,12 @@ class EduCloudServiceImpl extends BaseService implements EduCloudService
         $smsAccountStatus = isset($smsAccount['status']) && 'used' == $smsAccount['status'];
         $accessCloud = isset($smsAccount['accessCloud']) && false == $smsAccount['accessCloud'];
         if ($smsAccountStatus && $accessCloud) {
-            $smsAccount = array('status' => 'unusual', 'checkTime' => time() + 60 * 60 * 24, 'isOldSmsUser' => true, 'remainCount' => $smsAccount['remainCount']);
+            $smsAccount = ['status' => 'unusual', 'checkTime' => time() + 60 * 60 * 24, 'isOldSmsUser' => true, 'remainCount' => $smsAccount['remainCount']];
             $this->getSettingService()->set('sms_account', $smsAccount);
 
             return $smsAccount;
         }
-        $smsAccount = array('status' => 'normal');
+        $smsAccount = ['status' => 'normal'];
         $this->getSettingService()->set('sms_account', $smsAccount);
 
         return $smsAccount;
