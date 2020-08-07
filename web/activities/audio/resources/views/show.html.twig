@@ -9,7 +9,7 @@
     {% if audio.hasText %}
       {% set activityContent = activity.content|default('')|convert_absolute_url|raw %}
     {% endif %}
-    {{ render(controller('AppBundle:Player:show', {id: audio.mediaId, isPart: true, context: {content:activityContent|default('')}})) }}
+    {{ render(controller('AppBundle:Player:show', {id: audio.mediaId, isPart: true, file:activity.ext.file|default(''), context: {content:activityContent|default('')}})) }}
   {% else %}
     {% include 'activity/file-not-found.html.twig' with {type:'audio'} %}
   {% endif %}
