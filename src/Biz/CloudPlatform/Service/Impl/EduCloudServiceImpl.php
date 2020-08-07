@@ -3,6 +3,7 @@
 namespace Biz\CloudPlatform\Service\Impl;
 
 use Biz\CloudPlatform\Service\EduCloudService;
+use Biz\System\Service\CacheService;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Biz\BaseService;
@@ -24,8 +25,12 @@ class EduCloudServiceImpl extends BaseService implements EduCloudService
 
         $this->isVisible = false;
         try {
-            $api = $this->createCloudApi();
-            $overview = $api->get("/cloud/{$api->getAccessKey()}/overview");
+            $overview = json_decode($this->getCacheService()->get('cloud_status'), true);
+            if (empty($overview) || isset($overview['error'])) {
+                $api = $this->createCloudApi();
+                $overview = $api->get("/cloud/{$api->getAccessKey()}/overview");
+                $this->getCacheService()->set('cloud_status', json_encode($overview), time() + 3600);
+            }
         } catch (\RuntimeException $e) {
             $this->writeErrorLog($e);
 
@@ -125,5 +130,13 @@ class EduCloudServiceImpl extends BaseService implements EduCloudService
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return CacheService
+     */
+    protected function getCacheService()
+    {
+        return $this->createService('System:CacheService');
     }
 }
