@@ -47,6 +47,11 @@ class AssessmentExerciseDaoImpl extends AdvancedDaoImpl implements AssessmentExe
         return $builder->execute()->fetchAll();
     }
 
+    public function deleteByExerciseId($exerciseId)
+    {
+        return $this->db()->delete($this->table(), ['exerciseId' => $exerciseId]);
+    }
+
     public function declares()
     {
         return [

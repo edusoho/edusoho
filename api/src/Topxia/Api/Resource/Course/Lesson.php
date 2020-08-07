@@ -162,7 +162,7 @@ class Lesson extends BaseResource
                 'duration' => 3600,
                 'userId' => 0,
             ]);
-            $lesson['mediaUri'] = $this->getHttpHost()."/player/{$file['id']}/file/{$token['token']}";
+            $lesson['mediaUri'] = $this->getHttpHost()."/player/{$file['id']}/file/{$token['token']}.{$file['ext']}";
         } else {
             $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
             $lesson['mediaUri'] = $result['url'];
@@ -327,7 +327,7 @@ class Lesson extends BaseResource
                         'duration' => 3600,
                         'userId' => 0,
                     ]);
-                    $lesson['mediaUri'] = $this->getHttpHost()."/player/{$file['id']}/file/{$token['token']}";
+                    $lesson['mediaUri'] = $this->getHttpHost()."/player/{$file['id']}/file/{$token['token']}.{$file['ext']}";
                 }
             } else {
                 $lesson['mediaUri'] = '';

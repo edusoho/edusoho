@@ -2,13 +2,13 @@
 
 namespace Biz\File\Service\Impl;
 
+use AppBundle\Common\FileToolkit;
 use Biz\BaseService;
 use Biz\File\Dao\UploadFileDao;
 use Biz\File\Service\FileImplementor;
-use AppBundle\Common\FileToolkit;
 use Biz\File\UploadFileException;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Biz\User\Service\UserService;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class LocalFileImplementorImpl extends BaseService implements FileImplementor
@@ -27,7 +27,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
     }
 
     //@todo 目前没用到，如果用到，逻辑要改动
-    public function addFile($targetType, $targetId, array $fileInfo = array(), UploadedFile $originalFile = null)
+    public function addFile($targetType, $targetId, array $fileInfo = [], UploadedFile $originalFile = null)
     {
         $errors = FileToolkit::validateFileExtension($originalFile);
 
@@ -36,7 +36,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
             $this->createNewException(UploadFileException::EXTENSION_NOT_ALLOWED());
         }
 
-        $uploadFile = array();
+        $uploadFile = [];
 
         $uploadFile['filename'] = $originalFile->getClientOriginalName();
 
@@ -65,7 +65,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
         return $uploadFile;
     }
 
-    public function saveConvertResult($file, array $result = array())
+    public function saveConvertResult($file, array $result = [])
     {
     }
 
@@ -80,11 +80,11 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
 
     public function makeUploadParams($params)
     {
-        $uploadParams = array();
+        $uploadParams = [];
 
         $uploadParams['storage'] = 'local';
         $uploadParams['url'] = $params['defaultUploadUrl'];
-        $uploadParams['postParams'] = array();
+        $uploadParams['postParams'] = [];
         $uploadParams['postParams']['token'] = $this->getUserService()->makeToken('fileupload', $params['user'], strtotime('+ 2 hours'));
 
         return $uploadParams;
@@ -110,8 +110,8 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
 
     public function prepareUpload($params)
     {
-        $file = array();
-        $file['filename'] = empty($params['fileName']) ? '' : $params['fileName'];
+        $file = [];
+        $file['filename'] = empty($params['name']) ? '' : $params['name'];
 
         $pos = strrpos($file['filename'], '.');
         $file['ext'] = empty($pos) ? '' : substr($file['filename'], $pos + 1);
@@ -138,7 +138,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
         return $file;
     }
 
-    public function moveFile($targetType, $targetId, UploadedFile $originalFile = null, $data = array())
+    public function moveFile($targetType, $targetId, UploadedFile $originalFile = null, $data = [])
     {
         $errors = FileToolkit::validateFileExtension($originalFile);
 
@@ -161,7 +161,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
 
     public function finishedUpload($file, $params)
     {
-        return array_merge(array('success' => true, 'convertStatus' => 'success'), $params);
+        return array_merge(['success' => true, 'convertStatus' => 'success'], $params);
     }
 
     public function resumeUpload($hash, $params)
@@ -178,7 +178,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
         $filename = $this->getFileFullPath($file);
         @unlink($filename);
 
-        return array('success' => true);
+        return ['success' => true];
     }
 
     public function search($conditions)
@@ -188,7 +188,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
         unset($conditions['start']);
         unset($conditions['limit']);
 
-        return $this->getUploadFileDao()->search($conditions, array('createdTime' => 'DESC'), $start, $limit);
+        return $this->getUploadFileDao()->search($conditions, ['createdTime' => 'DESC'], $start, $limit);
     }
 
     public function getFileByGlobalId($globalId)
@@ -197,11 +197,11 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
 
     public function initUpload($params)
     {
-        $uploadParams = array();
+        $uploadParams = [];
 
         $uploadParams['uploadMode'] = 'local';
         $uploadParams['url'] = $this->getUploadUrl($params);
-        $uploadParams['postParams'] = array();
+        $uploadParams['postParams'] = [];
         $uploadParams['postParams']['token'] = $this->getUserService()->makeToken(
             'fileupload',
             $params['userId'],
@@ -257,7 +257,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
      */
     public function download($globalId)
     {
-        return array();
+        return [];
     }
 
     /**
@@ -269,7 +269,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
      */
     public function getDefaultHumbnails($globalId)
     {
-        return array();
+        return [];
     }
 
     /**
@@ -282,7 +282,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
      */
     public function getThumbnail($globalId, $options)
     {
-        return array();
+        return [];
     }
 
     /**
@@ -294,7 +294,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
      */
     public function getStatistics($options)
     {
-        return array();
+        return [];
     }
 
     /**
@@ -307,7 +307,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
      */
     public function player($globalId, $ssl = false)
     {
-        return array();
+        return [];
     }
 
     /**

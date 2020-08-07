@@ -23,6 +23,11 @@ class ExerciseModuleDaoImpl extends GeneralDaoImpl implements ExerciseModuleDao
         return $this->db()->fetchAll($sql, [$exerciseId, $type]);
     }
 
+    public function deleteByExerciseId($exerciseId)
+    {
+        return $this->db()->delete($this->table(), ['exerciseId' => $exerciseId]);
+    }
+
     public function declares()
     {
         return [
