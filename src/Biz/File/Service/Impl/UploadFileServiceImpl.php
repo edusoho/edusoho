@@ -1344,6 +1344,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             return;
         }
         $count = $this->getCourseMaterialService()->countMaterials(['fileId' => $file['id'], 'excludeLessonId' => 0]);
+
         return $this->update($file['id'], ['usedCount' => $count]);
     }
 

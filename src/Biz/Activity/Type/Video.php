@@ -3,21 +3,21 @@
 namespace Biz\Activity\Type;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Component\MediaParser\ParserProxy;
 use Biz\Activity\ActivityException;
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\VideoActivityDao;
+use Biz\Activity\Service\ActivityService;
+use Biz\CloudPlatform\Client\CloudAPIIOException;
 use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
 use Biz\File\Service\UploadFileService;
-use Biz\Activity\Service\ActivityService;
-use Biz\CloudPlatform\Client\CloudAPIIOException;
-use AppBundle\Component\MediaParser\ParserProxy;
 
 class Video extends Activity
 {
     protected function registerListeners()
     {
-        return array('watching' => 'Biz\Activity\Listener\VideoActivityWatchListener');
+        return ['watching' => 'Biz\Activity\Listener\VideoActivityWatchListener'];
     }
 
     /**
@@ -39,16 +39,16 @@ class Video extends Activity
         return $videoActivity;
     }
 
-    public function copy($activity, $config = array())
+    public function copy($activity, $config = [])
     {
         $video = $this->getVideoActivityDao()->get($activity['mediaId']);
-        $newVideo = array(
+        $newVideo = [
             'mediaSource' => $video['mediaSource'],
             'mediaId' => $video['mediaId'],
             'mediaUri' => $video['mediaUri'],
             'finishType' => $video['finishType'],
             'finishDetail' => $video['finishDetail'],
-        );
+        ];
 
         return $this->getVideoActivityDao()->create($newVideo);
     }
@@ -112,14 +112,14 @@ class Video extends Activity
         $videoActivities = $this->getVideoActivityDao()->findByIds($ids);
         $mediaIds = ArrayToolkit::column($videoActivities, 'mediaId');
         $groupMediaIds = array_chunk($mediaIds, 50);
-        $files = array();
+        $files = [];
         try {
             foreach ($groupMediaIds as $mediaIds) {
                 $chuckFiles = $this->getUploadFileService()->findFilesByIds($mediaIds, $showCloud);
                 $files = array_merge($files, $chuckFiles);
             }
         } catch (CloudAPIIOException $e) {
-            $files = array();
+            $files = [];
         }
 
         if (empty($files)) {
@@ -149,22 +149,22 @@ class Video extends Activity
         $watchTime = $this->getTaskResultService()->getWatchTimeByActivityIdAndUserId($activity['id'], $user['id']);
 
         $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
-        $watchStatus = array('status' => 'ok');
+        $watchStatus = ['status' => 'ok'];
         if ($course['watchLimit'] > 0 && $this->setting('magic.lesson_watch_limit')) {
             //只有视频课程才限制观看时长
             if (empty($course['watchLimit']) || 'video' !== $activity['mediaType']) {
-                return array('status' => 'ignore');
+                return ['status' => 'ignore'];
             }
 
             $watchLimitTime = $activity['length'] * $course['watchLimit'];
             if (empty($watchTime)) {
-                return array('status' => 'ok', 'watchedTime' => 0, 'watchLimitTime' => $watchLimitTime);
+                return ['status' => 'ok', 'watchedTime' => 0, 'watchLimitTime' => $watchLimitTime];
             }
             if ($watchTime < $watchLimitTime) {
-                return array('status' => 'ok', 'watchedTime' => $watchTime, 'watchLimitTime' => $watchLimitTime);
+                return ['status' => 'ok', 'watchedTime' => $watchTime, 'watchLimitTime' => $watchLimitTime];
             }
 
-            return array('status' => 'error', 'watchedTime' => $watchTime, 'watchLimitTime' => $watchLimitTime);
+            return ['status' => 'error', 'watchedTime' => $watchTime, 'watchLimitTime' => $watchLimitTime];
         }
 
         return $watchStatus;
@@ -186,6 +186,7 @@ class Video extends Activity
     {
         $video = $this->getVideoActivityDao()->get($id);
         $this->getUploadFileService()->updateUsedCount($video['mediaId']);
+
         return $this->getVideoActivityDao()->delete($id);
     }
 
@@ -201,9 +202,9 @@ class Video extends Activity
         $result['mediaSource'] = empty($result['source']) ? '' : $result['source'];
         $result['mediaUri'] = empty($result['uri']) ? '' : $result['uri'];
 
-        $finishInfo = ArrayToolkit::parts($fields, array('finishType', 'finishDetail'));
+        $finishInfo = ArrayToolkit::parts($fields, ['finishType', 'finishDetail']);
         $result = array_merge($result, $finishInfo);
-        $result = ArrayToolkit::parts($result, array('mediaId', 'mediaUri', 'mediaSource', 'finishType', 'finishDetail'));
+        $result = ArrayToolkit::parts($result, ['mediaId', 'mediaUri', 'mediaSource', 'finishType', 'finishDetail']);
 
         return $result;
     }
