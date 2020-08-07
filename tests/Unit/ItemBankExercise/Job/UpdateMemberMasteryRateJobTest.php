@@ -14,14 +14,17 @@ class UpdateMemberMasteryRateJobTest extends BaseTestCase
                 [
                     'exerciseId' => 1,
                     'userId' => 1,
+                    'remark' => '',
                 ],
                 [
                     'exerciseId' => 1,
                     'userId' => 2,
+                    'remark' => '',
                 ],
                 [
                     'exerciseId' => 1,
                     'userId' => 3,
+                    'remark' => '',
                 ],
             ]
         );

@@ -216,6 +216,9 @@ class ProductServiceImpl extends BaseService implements ProductService
 
     public function deleteProduct($id)
     {
+        if (empty($id)){
+            return true;
+        }
         return $this->getS2B2CProductDao()->delete($id);
     }
 
@@ -372,10 +375,9 @@ class ProductServiceImpl extends BaseService implements ProductService
             $this->createNewException(S2B2CProductException::ADOPT_PRODUCT_REPEAT());
         }
 
-        $this->adoptS2B2CProduct($s2b2cProductId);
-
         $this->beginTransaction();
         try {
+            $this->adoptS2B2CProduct($s2b2cProductId);
             //@todo 可以改成策略 根据商品类型进行同步，暂时只有course_set类型
             $this->getCourseProductService()->syncCourses($s2b2cProductId);
             $this->commit();
@@ -447,7 +449,35 @@ class ProductServiceImpl extends BaseService implements ProductService
         $courseSetProduct = $this->getProductBySupplierIdAndRemoteProductIdAndType($s2b2cConfig['supplierId'], $s2b2cProductId, 'course_set');
 
         $localChangeLogs = $courseSetProduct['changelog'] ?: [];
-        $localChangeLogs[$versionData['courseId']] = $versionData;
+        $localChangeLogs[$versionData['courseId']] = ArrayToolkit::parts($versionData, [
+            'title',
+            'courseId',
+            'version',
+            'versionChangeLog',
+        ]);
+
+        $this->getS2B2CProductDao()->update($courseSetProduct['id'], ['changelog' => $localChangeLogs]);
+        $this->getS2B2CProductDao()->wave([$courseSetProduct['id']], ['remoteVersion' => 1]);
+
+        return true;
+    }
+
+    /**
+     * @param $s2b2cProductId
+     * @return bool
+     */
+    public function notifyCourseSetNewVersion($s2b2cProductId)
+    {
+        $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
+
+        $courseSetProduct = $this->getProductBySupplierIdAndRemoteProductIdAndType($s2b2cConfig['supplierId'], $s2b2cProductId, 'course_set');
+        $courseSet = $this->getCourseSetService()->getCourseSet($courseSetProduct['localResourceId']);
+
+        $localChangeLogs = $courseSetProduct['changelog'] ?: [];
+        $localChangeLogs[0] = [
+            'title' => $courseSet['title'],
+            'versionChangeLog' => '课程基础信息更新'
+        ];
 
         $this->getS2B2CProductDao()->update($courseSetProduct['id'], ['changelog' => $localChangeLogs]);
         $this->getS2B2CProductDao()->wave([$courseSetProduct['id']], ['remoteVersion' => 1]);
@@ -468,11 +498,10 @@ class ProductServiceImpl extends BaseService implements ProductService
             $this->createNewException(S2B2CProductException::PRODUCT_NOT_FOUNT());
         }
 
-        $this->adoptS2B2CProduct($product['remoteProductId']);
-
         $this->beginTransaction();
 
         try {
+            $this->adoptS2B2CProduct($product['remoteProductId']);
             $this->getCourseProductService()->updateProductVersionData($product['remoteProductId']);
             $this->commit();
         } catch (\Exception $exception) {

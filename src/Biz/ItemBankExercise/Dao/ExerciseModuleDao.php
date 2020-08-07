@@ -9,4 +9,6 @@ interface ExerciseModuleDao extends GeneralDaoInterface
     public function findByExerciseId($exerciseId);
 
     public function findByExerciseIdAndType($exerciseId, $type);
+
+    public function deleteByExerciseId($exerciseId);
 }

@@ -115,7 +115,7 @@ class BatchCreate {
       }
       console.log('file', file);
 
-      this.createLesson($btn, file.no, isLast);
+      this.createLesson($btn, file.fileId, isLast);
     });
   }
 

@@ -14,12 +14,18 @@ class ExerciseQuestionRecordDaoImpl extends AdvancedDaoImpl implements ExerciseQ
         return $this->findByFields(['userId' => $userId, 'exerciseId' => $exerciseId]);
     }
 
+    public function deleteByExerciseId($exerciseId)
+    {
+        return $this->db()->delete($this->table(), ['exerciseId' => $exerciseId]);
+    }
+
     public function declares()
     {
         return [
             'timestamps' => ['createdTime', 'updatedTime'],
             'orderbys' => ['createdTime'],
             'conditions' => [
+                'exerciseId = :exerciseId',
                 'itemBankId = :itemBankId',
                 'questionId IN (:questionIds)',
                 'itemId IN (:itemIds)',

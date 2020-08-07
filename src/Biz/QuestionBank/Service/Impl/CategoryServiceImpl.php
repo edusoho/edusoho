@@ -2,17 +2,17 @@
 
 namespace Biz\QuestionBank\Service\Impl;
 
-use Biz\BaseService;
-use Biz\QuestionBank\Dao\CategoryDao;
-use Biz\QuestionBank\Service\CategoryService;
-use Biz\QuestionBank\QuestionBankException;
-use AppBundle\Common\TreeToolkit;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\TreeToolkit;
+use Biz\BaseService;
 use Biz\Common\CommonException;
-use Biz\System\Service\SettingService;
-use Biz\Taxonomy\CategoryException;
+use Biz\QuestionBank\Dao\CategoryDao;
+use Biz\QuestionBank\QuestionBankException;
+use Biz\QuestionBank\Service\CategoryService;
 use Biz\QuestionBank\Service\MemberService;
 use Biz\QuestionBank\Service\QuestionBankService;
+use Biz\System\Service\SettingService;
+use Biz\Taxonomy\CategoryException;
 
 class CategoryServiceImpl extends BaseService implements CategoryService
 {
@@ -35,11 +35,11 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
     public function createCategory(array $category)
     {
-        if (!ArrayToolkit::requireds($category, array('name', 'parentId'))) {
+        if (!ArrayToolkit::requireds($category, ['name', 'parentId'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
-        $category = ArrayToolkit::parts($category, array('name', 'parentId'));
+        $category = ArrayToolkit::parts($category, ['name', 'parentId']);
 
         $this->filterCategoryFields($category);
         $category = $this->setCategoryOrg($category);
@@ -55,7 +55,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             $this->createNewException(CategoryException::NOTFOUND_CATEGORY());
         }
 
-        $fields = ArrayToolkit::parts($fields, array('name', 'parentId', 'weight'));
+        $fields = ArrayToolkit::parts($fields, ['name', 'parentId', 'weight']);
 
         if (empty($fields)) {
             $this->createNewException(CommonException::ERROR_PARAMETER());
@@ -79,12 +79,12 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
         $this->canDelete($children);
 
-        $this->getCategoryDao()->batchDelete(array('ids' => ArrayToolkit::column($children, 'id')));
+        $this->getCategoryDao()->batchDelete(['ids' => ArrayToolkit::column($children, 'id')]);
     }
 
     public function waveCategoryBankNum($id, $diff)
     {
-        return $this->getCategoryDao()->wave(array($id), array('bankNum' => $diff));
+        return $this->getCategoryDao()->wave([$id], ['bankNum' => $diff]);
     }
 
     public function findCategoryChildren($id)
@@ -92,12 +92,12 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         $category = $this->getCategory($id);
 
         if (empty($category)) {
-            return array();
+            return [];
         }
 
         $tree = $this->getCategoryTree();
 
-        $children = array();
+        $children = [];
         $depth = 0;
 
         foreach ($tree as $node) {
@@ -123,7 +123,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         $categories = $this->findAllCategories();
         $categories = ArrayToolkit::group($categories, 'parentId');
 
-        $tree = array();
+        $tree = [];
         $this->makeCategoryTree($tree, $categories, $rootId);
 
         return $tree;
@@ -133,7 +133,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
     {
         $banks = $this->getQuestionBankService()->findUserManageBanks();
         if (empty($banks)) {
-            return array();
+            return [];
         }
 
         $categories = $this->findAllCategories();
@@ -143,7 +143,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
         $categories = ArrayToolkit::group($categories, 'parentId');
         $banks = ArrayToolkit::group($banks, 'categoryId');
-        $tree = array();
+        $tree = [];
         $this->makeCategoryAndBankMixedTree($banks, $tree, $categories, 0);
 
         return $tree;
@@ -183,7 +183,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
     public function sortCategories($ids)
     {
         foreach ($ids as $index => $id) {
-            $this->updateCategory($id, array('weight' => $index + 1));
+            $this->updateCategory($id, ['weight' => $index + 1]);
         }
     }
 

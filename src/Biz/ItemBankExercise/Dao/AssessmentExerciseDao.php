@@ -15,4 +15,6 @@ interface AssessmentExerciseDao extends AdvancedDaoInterface
     public function getByModuleIdAndAssessmentId($moduleId, $assessmentId);
 
     public function getAssessmentCountGroupByExerciseId($ids);
+
+    public function deleteByExerciseId($exerciseId);
 }

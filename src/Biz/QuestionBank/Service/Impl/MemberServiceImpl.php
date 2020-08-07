@@ -2,11 +2,11 @@
 
 namespace Biz\QuestionBank\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
+use Biz\Common\CommonException;
 use Biz\QuestionBank\Dao\MemberDao;
 use Biz\QuestionBank\Service\MemberService;
-use Biz\Common\CommonException;
-use AppBundle\Common\ArrayToolkit;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\System\Service\LogService;
 use Biz\User\Service\UserService;
@@ -25,7 +25,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function createMember($fields)
     {
-        if (!ArrayToolkit::requireds($fields, array('bankId', 'userId'))) {
+        if (!ArrayToolkit::requireds($fields, ['bankId', 'userId'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
@@ -38,7 +38,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             return;
         }
 
-        return $this->getMemberDao()->batchDelete(array('bankId' => $bankId));
+        return $this->getMemberDao()->batchDelete(['bankId' => $bankId]);
     }
 
     public function findMembersByUserId($userId)
@@ -52,12 +52,12 @@ class MemberServiceImpl extends BaseService implements MemberService
             return;
         }
 
-        $members = array();
+        $members = [];
         foreach ($userIds as $userId) {
-            $members[] = array(
+            $members[] = [
                 'bankId' => $bankId,
                 'userId' => $userId,
-            );
+            ];
         }
 
         return $this->getMemberDao()->batchCreate($members);
@@ -77,7 +77,7 @@ class MemberServiceImpl extends BaseService implements MemberService
                 'question_bank',
                 'update_teacher',
                 "修改题库《{$bank['name']}》授权教师, ({$nicknames})",
-                array('nicknames' => $nicknames)
+                ['nicknames' => $nicknames]
             );
         }
     }
