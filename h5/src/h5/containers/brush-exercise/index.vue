@@ -1,7 +1,7 @@
 <template>
   <div class="">
     <e-loading v-if="isLoading" />
-    <component :is="currentComp"></component>
+    <component :is="currentComp" :details="details"></component>
   </div>
 </template>
 
@@ -9,11 +9,17 @@
 import joinAfter from './joinAfter';
 import joinBefore from './joinBefore';
 import { mapState, mapActions } from 'vuex';
+import Api from '@/api';
+import { Toast } from 'vant';
 export default {
   components: {},
   data() {
     return {
       currentComp: '',
+      details: {
+        reviews: [],
+        itemBankId: -1,
+      },
     };
   },
   computed: {
@@ -33,6 +39,8 @@ export default {
   },
   created() {
     this.getData();
+    this.details.itemBankId = Number(this.$route.params.id);
+    this.getDataItemBank();
   },
   methods: {
     ...mapActions('ItemBank', ['setItemBankExercise']),
@@ -49,6 +57,22 @@ export default {
       } else {
         this.currentComp = joinBefore;
       }
+    },
+    // 获取题库数据
+    getDataItemBank() {
+      const targetId = Number(this.details.itemBankId);
+      const targetType = 'item_bank_exercise';
+      Api.getBankReviews({
+        params: {
+          targetId,
+          targetType,
+        },
+      }).then(res => {
+          // 获取评论
+        this.details.reviews = res.data;
+      }).catch(err => {
+        Toast.fail(err.message)
+      })
     },
   },
 };
