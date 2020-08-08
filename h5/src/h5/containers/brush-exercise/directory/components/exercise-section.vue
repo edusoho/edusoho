@@ -3,10 +3,14 @@
     <div class="directory-exercise">
       <div class="directory-exercise-left">{{ section.name }}</div>
       <template v-if="hasQuestion">
-        <div class="directory-exercise-center">
-          {{ learnNum }}/{{ section.question_num }}题
+        <div
+          :class="[
+            isMember ? 'directory-exercise-center' : 'directory-exercise-end',
+          ]"
+        >
+          {{ learnNum }}{{ section.question_num }}题
         </div>
-        <div class="directory-exercise-right">
+        <div class="directory-exercise-right" v-if="isMember">
           <div :class="[btnText.class]" @click="clickBtn()">
             {{ btnText.text }}
           </div>
@@ -18,6 +22,7 @@
 
 <script>
 import getBtnText from '@/utils/itemBank-status.js';
+import { mapState } from 'vuex';
 export default {
   nama: 'exercise-section',
   components: {},
@@ -36,17 +41,23 @@ export default {
     },
   },
   computed: {
-    learnNum() {
-      if (this.section.latestAnswerRecord) {
-        return this.section.latestAnswerRecord.doneQuestionNum;
-      }
-      return 0;
-    },
+    ...mapState('ItemBank', {
+      isMember: state => state.ItemBankExercise.isMember,
+    }),
     btnText() {
       return getBtnText(this.section.latestAnswerRecord?.status || '');
     },
     hasQuestion() {
       return this.section.question_num > 0;
+    },
+    learnNum() {
+      if (!this.isMember) {
+        return '';
+      }
+      if (this.section.latestAnswerRecord) {
+        return `${this.section.latestAnswerRecord.doneQuestionNum}/`;
+      }
+      return '0/';
     },
   },
   watch: {},
