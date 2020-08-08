@@ -35,6 +35,14 @@ const defaultData = {
   paging: { limit: 10, offset: 0, total: 0 },
   finished: false,
 };
+const Assessments = {
+  hasJoin: 'getMyItemBankAssessments',
+  noJoin: 'getItemBankAssessments',
+};
+const Categories = {
+  hasJoin: 'getMyItemBankCategories',
+  noJoin: 'getItemBankCategories',
+};
 export default {
   components: {
     swiperTab,
@@ -59,7 +67,14 @@ export default {
   computed: {
     ...mapState('ItemBank', {
       module: state => state.ItemBankModules,
+      isMember: state => state.ItemBankExercise.isMember,
     }),
+    joinStatus() {
+      if (this.isMember) {
+        return 'hasJoin';
+      }
+      return 'noJoin';
+    },
   },
   watch: {},
   created() {
@@ -83,9 +98,9 @@ export default {
       );
     },
     // 获取模拟卷
-    getItemBankAssessments(more = false) {
+    getMyItemBankAssessments(more = false) {
       const moduleId = this.moduleId;
-
+      const joinStatus = this.joinStatus;
       if (
         // eslint-disable-next-line no-prototype-builtins
         this.list[moduleId].hasOwnProperty('isRequestCompile') &&
@@ -104,7 +119,7 @@ export default {
         offset: this.list[moduleId].paging.offset,
         limit: this.list[moduleId].paging.limit,
       };
-      Api.getItemBankAssessments({ query, params }).then(res => {
+      Api[Assessments[joinStatus]]({ query, params }).then(res => {
         if (more) {
           this.list[moduleId].data = this.list[moduleId].data.concat(res.data);
         } else {
@@ -120,14 +135,15 @@ export default {
       });
     },
     // 获取章节练习
-    gettemBankCategories() {
+    getMytemBankCategories() {
+      const joinStatus = this.joinStatus;
       const moduleId = this.moduleId;
       this.isLoading = true;
       const query = {
         exerciseId: Number(this.exerciseId),
         moduleId: Number(moduleId),
       };
-      Api.gettemBankCategories({ query }).then(res => {
+      Api[Categories[joinStatus]]({ query }).then(res => {
         this.list[moduleId].data = res;
         this.isLoading = false;
       });
@@ -135,8 +151,8 @@ export default {
     // 请求数据
     changeData() {
       this.currentType === CHAPTER
-        ? this.gettemBankCategories()
-        : this.getItemBankAssessments();
+        ? this.getMytemBankCategories()
+        : this.getMyItemBankAssessments();
     },
     changModule(data) {
       this.currentType = data.type;
@@ -154,7 +170,7 @@ export default {
       }
       this.timer = setTimeout(() => {
         if (!this.list[this.moduleId].finished && !this.isLoading) {
-          this.getItemBankAssessments(true);
+          this.getMyItemBankAssessments(true);
         }
       }, 300);
     },

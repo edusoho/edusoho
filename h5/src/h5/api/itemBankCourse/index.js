@@ -15,15 +15,27 @@ export default [
     url: '/item_bank_exercises/{id}/modules',
   },
   {
-    // 获取题库试卷信息
-    name: 'getItemBankAssessments',
+    // 获取个人题库试卷信息
+    name: 'getMyItemBankAssessments',
     url: '/me/item_bank_exercises/{exerciseId}/modules/{moduleId}/assessments',
     disableLoading: true,
   },
   {
-    // 获取题库章节信息
-    name: 'gettemBankCategories',
+    // 获取个人题库章节信息
+    name: 'getMyItemBankCategories',
     url: '/me/item_bank_exercises/{exerciseId}/modules/{moduleId}/categories',
+    disableLoading: true,
+  },
+  {
+    // 获取题库试卷信息
+    name: 'getItemBankAssessments',
+    url: '/item_bank_exercises/{exerciseId}/modules/{moduleId}/assessments',
+    disableLoading: true,
+  },
+  {
+    // 获取题库章节信息
+    name: 'getItemBankCategories',
+    url: '/item_bank_exercises/{exerciseId}/modules/{moduleId}/categories',
     disableLoading: true,
   },
   {
@@ -42,6 +54,12 @@ export default [
     // 章节练习自判
     name: 'pushItemBankReviewReport',
     url: '/item_bank_exercises/{exerciseId}/review_report',
+    method: 'POST',
+  },
+  {
+    // 加入
+    name: 'joinItemBank',
+    url: '/item_bank_exercises/{exerciseId}/members',
     method: 'POST',
   },
 ];
