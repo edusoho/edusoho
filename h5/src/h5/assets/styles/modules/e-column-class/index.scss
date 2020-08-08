@@ -1,93 +1,107 @@
-.e-column-class{
-  padding: 0 vw(16) vw(24);
-  display:flex;
-  flex-direction:column;
-  &:nth-of-type(2n){
-    padding:  0 vw(12) vw(16) 0;
-  }
-  .column-class-left{
-    position:relative;
-    width:vw(164);
-    border-radius:vw(4) vw(4) 0 0;
-    overflow:hidden;
-    font-size:0;
-    img{
-      width: vw(164);
-      height: vw(92.25);
-      border-radius:vw(4) vw(4) 0 0;
-    }
-    &__discount{
-      position: absolute;
-      font-size: vw(12);
-      top: vw(9);
-      right: vw(-19);
-      width: vw(75);
-      height: vw(20);
-      line-height:vw(20);
-      background:#EF6B50;
-      text-align:center;
-      color:#fff;
-      -ms-transform: rotate(45deg); 
-      -moz-transform: rotate(45deg); 
-      -webkit-transform: rotate(45deg); 
-      -o-transform: rotate(45deg);
-      transform: rotate(45deg);
-    }
-    &__member{
-      position: absolute;
-      top:vw(4);
-      padding:vw(2) vw(4);
-      height:vw(16);
-      font-size:vw(10);
-      background:rgba(246,201,63,1);
-      text-align:center;
-      color:#fff;
-      border-radius:0 vw(100) vw(100) 0;
-    }
-    &__live{
-      position: absolute;
-      bottom:0;
-      display:flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      box-sizing: border-box;
-      padding:vw(4) vw(4) vw(4) vw(8);
-      width:100%;
-      height:vw(32);
-      color:#fff;
-      font-size:vw(12);
-      background:linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(0,0,0,0.6) 100%);
-      .icon-renqi{
-        margin-right:vw(2);
-        font-size:vw(12);
-      }
-    }
-  }
-  .column-class-right{
-    display:flex;
-    padding:vw(8);
-    width:vw(164);
-    flex-direction:column;
-    box-shadow:0 vw(2) vw(8) 0 rgba(0,0,0,0.05);
-    border-radius:vw(4);
-    box-sizing:border-box;
-    &__top{
-      height:vw(20);
-      font-size:vw(14);
-      color:#333333;
-      font-weight:500;
-    }
-    &__center{
-      height:vw(14);
-      font-size:vw(12);
-      color:#999999
-    }
-    &__bottom{
-      margin-top:vw(4);
-      height:vw(20);
-      font-size:vw(14);
-      color:#FE3B13;
-      font-weight:500;
-    }
-  }
+.e-column-class {
+	display: flex;
+	flex-direction: column;
+	padding: 0 vw(16) vw(24);
+
+	&:nth-of-type(2n) {
+		padding: 0 vw(12) vw(16) 0;
+	}
+
+	.column-class-left {
+		position: relative;
+		width: vw(164);
+		overflow: hidden;
+		font-size: 0;
+		border-radius: vw(4) vw(4) 0 0;
+
+		img {
+			width: vw(164);
+			height: vw(92.25);
+			border-radius: vw(4) vw(4) 0 0;
+		}
+
+		&__discount {
+			position: absolute;
+			top: vw(9);
+			right: vw(-19);
+			width: vw(75);
+			height: vw(20);
+			color: #fff;
+			font-size: vw(12);
+			line-height: vw(20);
+			text-align: center;
+			background: #ef6b50;
+			-ms-transform: rotate(45deg);
+			-moz-transform: rotate(45deg);
+			-webkit-transform: rotate(45deg);
+			-o-transform: rotate(45deg);
+			transform: rotate(45deg);
+		}
+
+		&__member {
+			position: absolute;
+			top: vw(4);
+			height: vw(16);
+			padding: vw(2) vw(4);
+			color: #fff;
+			font-size: vw(10);
+			text-align: center;
+			background: rgba(246, 201, 63, 1);
+			border-radius: 0 vw(100) vw(100) 0;
+		}
+
+		&__live {
+			position: absolute;
+			bottom: 0;
+			display: flex;
+			align-items: flex-end;
+			justify-content: space-between;
+			box-sizing: border-box;
+			width: 100%;
+			height: vw(32);
+			padding: vw(4) vw(4) vw(4) vw(8);
+			color: #fff;
+			font-size: vw(12);
+			background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.6) 100%);
+
+			.icon-renqi {
+				margin-right: vw(2);
+				font-size: vw(12);
+			}
+		}
+	}
+
+	.column-class-right {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+		box-sizing: border-box;
+		width: vw(164);
+		padding: vw(8);
+		border-radius: vw(4);
+		box-shadow: 0 vw(2) vw(8) 0 rgba(0, 0, 0, 0.05);
+
+		&__top {
+			height: vw(20);
+			color: #333;
+			font-weight: 500;
+			font-size: vw(14);
+		}
+
+		&__center {
+			display: flex;
+			align-items: center;
+			height: vw(20);
+			color: #999;
+			font-size: vw(12);
+		}
+
+		&__bottom {
+			// margin-top:vw(4);
+			height: vw(20);
+			color: #fe3b13;
+			font-weight: 500;
+			font-size: vw(14);
+		}
+	}
 }
