@@ -1,19 +1,24 @@
-.history-learn{
-  .history-learn-list{
-      margin:0 vw(16);
-      box-sizing: border-box;
-      .history-learn-date{
-        margin-top: vw(16);
-        padding-bottom: vw(4);
-        font-size: 14px;
-        color: #313131;
-      }
-      .van-hairline--bottom::after {
-        border-bottom-width: 1px!important; 
-        border-color:#E1E1E1;
-     }
-  }
-  .empty__history_learn{
-    padding-top: 40%;
-  }
+.history-learn {
+	padding-bottom: vw(16);
+
+	.history-learn-list {
+		box-sizing: border-box;
+		margin: 0 vw(16);
+
+		.history-learn-date {
+			margin-top: vw(16);
+			padding-bottom: vw(4);
+			color: #313131;
+			font-size: 14px;
+		}
+
+		.van-hairline--bottom::after {
+			border-color: #e1e1e1;
+			border-bottom-width: 1px !important;
+		}
+	}
+
+	.empty__history_learn {
+		padding-top: 40%;
+	}
 }

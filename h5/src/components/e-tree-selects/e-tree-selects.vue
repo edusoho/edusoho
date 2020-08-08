@@ -5,13 +5,15 @@
       <div class="e-tree-warp">
         <div class="e-tree-scroll" ref="e-tree-scroll">
           <div
-            v-for="(item,index) in categories"
+            v-for="(item, index) in categories"
             :key="index"
             :ref="`treemenu${item.id}`"
-            :class="{ activeTag: (item.id==categoriesId) }"
+            :class="{ activeTag: item.id == categoriesId }"
             @click="selectTag(item.id)"
-          >{{item.name}}</div>
-          <div v-if="treeMenuLevel>1" class="e-tree-more" @click="openMore()">
+          >
+            {{ item.name }}
+          </div>
+          <div v-if="treeMenuLevel > 1" class="e-tree-more" @click="openMore()">
             <i class="iconfont icon-more"></i>
           </div>
         </div>
@@ -29,15 +31,20 @@
     <!-- 下拉选择 -->
     <div class="e-tree-select__list">
       <div class="e-tree-select__items">
-        <div
-          v-if="item.data && index>0"
-          v-for="(item, index) in selectItems"
-          :key="index"
-          :class="['e-tree-select__item' , (selectedIndex === index && isActive)?'active':'' ]"
-          @click="toggle(item, index)"
-        >{{ selectedText(item.data, index) }}</div>
-
-        <div class="showfree" v-show="type=='course'">
+        <template v-for="(item, index) in selectItems">
+          <div
+            v-if="item.data && index > 0"
+            :key="index"
+            :class="[
+              'e-tree-select__item',
+              selectedIndex === index && isActive ? 'active' : '',
+            ]"
+            @click="toggle(item, index)"
+          >
+            {{ selectedText(item.data, index) }}
+          </div>
+        </template>
+        <div class="showfree" v-show="type == 'course'">
           仅显示免费
           <van-switch v-model="showFree" size="12px" active-color="#03C777" />
         </div>
@@ -55,35 +62,35 @@
 </template>
 
 <script>
-import selectMenu from "./e-select-menu/e-select-menu.vue";
-import treeMenu from "./e-tree-menu/e-tree-menu";
+import selectMenu from './e-select-menu/e-select-menu.vue';
+import treeMenu from './e-tree-menu/e-tree-menu';
 const mo = function(e) {
   e.preventDefault();
 };
 export default {
   components: {
     selectMenu,
-    treeMenu
+    treeMenu,
   },
   model: {
-    prop: "selectedData",
-    event: "selectedChange"
+    prop: 'selectedData',
+    event: 'selectedChange',
   },
   props: {
     selectItems: Array,
     selectedData: Object,
     categories: Array,
     treeMenuLevel: Number,
-    type: String
+    type: String,
   },
   data() {
     return {
       showFree: false,
       isActive: false,
       openMenu: false,
-      categoriesId: this.selectedData.categoryId || 0, //最父级的分类id，默认是name="全部"的id
+      categoriesId: this.selectedData.categoryId || 0, // 最父级的分类id，默认是name="全部"的id
       menuContent: {},
-      selectedIndex: null
+      selectedIndex: null,
     };
   },
   computed: {
@@ -91,21 +98,21 @@ export default {
       get() {
         return { ...this.selectedData };
       },
-      set() {}
-    }
+      set() {},
+    },
   },
   watch: {
     isActive(value) {
-      this.$emit("selectToggled", value);
+      this.$emit('selectToggled', value);
     },
     showFree(value, oldValue) {
       if (value) {
-        this.$set(this.selectedData, "price", "0");
+        this.$set(this.selectedData, 'price', '0');
       } else {
-        this.$delete(this.selectedData, "price");
+        this.$delete(this.selectedData, 'price');
       }
-      this.$emit("selectedChange", this.selectedData);
-    }
+      this.$emit('selectedChange', this.selectedData);
+    },
   },
   methods: {
     // 滑动部分选择
@@ -115,7 +122,7 @@ export default {
       }
       this.categoriesId = Number(id);
       this.selectedData.categoryId = Number(id);
-      this.$emit("selectedChange", this.selectedData);
+      this.$emit('selectedChange', this.selectedData);
     },
 
     toggle(item, index) {
@@ -143,7 +150,7 @@ export default {
       this.categoriesId = categoriesId;
       this.openMenu = false;
       this.treeScroll(categoriesId);
-      this.$emit("selectedChange", value);
+      this.$emit('selectedChange', value);
       this.move();
     },
     treeScroll(categoriesId) {
@@ -153,7 +160,7 @@ export default {
         treemenu[0].offsetLeft - treescrollWarp.offsetLeft;
     },
     sendQuery(value) {
-      this.$emit("selectedChange", value);
+      this.$emit('selectedChange', value);
       this.toggle();
     },
 
@@ -161,7 +168,7 @@ export default {
       const TREE = {
         CATEGORY: 0,
         TYPE: 1,
-        SORT: 2
+        SORT: 2,
       };
       for (let i = 0; i < value.length; i++) {
         if (index === TREE.CATEGORY) {
@@ -178,19 +185,18 @@ export default {
       this.openMenu = true;
       this.stop();
     },
-    /***开启滑动限制***/
+    /** *开启滑动限制***/
     stop() {
-      document.body.style.overflow = "hidden";
-      document.addEventListener("touchmove", mo, false); //禁止页面滑动
+      document.body.style.overflow = 'hidden';
+      document.addEventListener('touchmove', mo, false); // 禁止页面滑动
     },
-    /***取消滑动限制***/
+    /** *取消滑动限制***/
     move() {
-      document.body.style.overflow = ""; //出现滚动条
-      document.removeEventListener("touchmove", mo, false);
-    }
-  }
+      document.body.style.overflow = ''; // 出现滚动条
+      document.removeEventListener('touchmove', mo, false);
+    },
+  },
 };
 </script>
 
-<style>
-</style>
+<style></style>
