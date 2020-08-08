@@ -17,10 +17,7 @@
     <div slot="setting">
       <e-suggest v-if="moduleData.tips" :suggest="moduleData.tips"></e-suggest>
       <header class="title">
-        公开课列表设置
-        <div class="text-12 color-gray mts">
-          注意：仅含直播公开课内容，不包含录播公开课
-        </div>
+        题库列表设置
       </header>
       <div class="default-allocate__content clearfix">
         <!-- 列表名称 -->
