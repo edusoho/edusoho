@@ -1,6 +1,6 @@
 import Axios from 'axios';
 import ElementUI from 'element-ui';
-import ManageInfo from './src/base/index';
+import ManageInfo from './index.vue';
 
 import qs from 'qs';
 

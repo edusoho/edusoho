@@ -1,7 +1,7 @@
 {% extends 'classroom-manage/layout.html.twig' %}
 
 {% block title %}{{ setting('classroom.name')|default("site.default.classroom"|trans) }}{{ 'classroom.manage'|trans }} - {{ parent() }}{% endblock %}
-{% do script(['libs/es-ckeditor/ckeditor.js','libs/select2.js', 'libs/vue.js', 'app/js/classroom-manage/index.js', 'libs/element-ui.js']) %}
+{% do script(['libs/es-ckeditor/ckeditor.js','libs/select2.js', 'libs/vue.js', 'app/js/classroom-manage/base-setting/index.js', 'libs/element-ui.js']) %}
 
 {% set side_nav = 'main' %}
 

@@ -59,7 +59,7 @@
                 <span class="validity-content pull-left">
 <!--                    {{ buyableModes[currentSku.usageMode] }}-->
                     <span v-if="currentSku.usageMode === 'forever'">长期有效</span>
-                    <span v-if="currentSku.usageMode === 'date'">开始：{{ currentSku.usageStartTime }} 截止：{{ currentSku.usageEndTime|formatDate }}</span>
+                    <span v-if="currentSku.usageMode === 'date'">开始：{{ currentSku.usageStartTime|formatDate }} 截止：{{ currentSku.usageEndTime|formatDate }}</span>
                     <span v-if="currentSku.usageMode === 'days'">{{ currentSku.usageDays }}天 （随到随学）</span>
                     <span v-if="currentSku.usageMode === 'end_date'">截止日期： {{ currentSku.usageEndTime|formatDate }}</span>
                 </span>

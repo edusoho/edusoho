@@ -1007,7 +1007,7 @@ course.plan_setup.placeholder: 请输入计划名称
 course.plan_setup.mode: 学习模式
 course.plan_setup.mode.free: 自由式
 course.plan_setup.mode.locked: 解锁式
-course.plan_setup.mode.tips: 自由式：学习过程自由安排<br>解锁式：根据既定顺序逐个解锁学习
+course.plan_setup.mode.tips: <b>自由式：</b>学习过程自由安排<br><b>解锁式</b>：根据既定顺序逐个解锁学习
 course.plan_setup.finish_rule: %taskName%完成规则
 course.plan_setup.finish_rule.depend_on_finish_condition: 由%taskName%完成条件决定
 course.plan_setup.finish_rule.depend_on_finish_condition_tips: 必须达到完成条件，%taskName%才算完成

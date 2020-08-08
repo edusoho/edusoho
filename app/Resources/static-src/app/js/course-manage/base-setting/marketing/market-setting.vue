@@ -4,7 +4,7 @@
         <el-form ref="marketSettingForm" :model="marketingForm"
                  :rules="formRule" label-position="right"
                  label-width="150px">
-            <div v-if="course.platform == 'supplier'">
+            <div v-if="course.platform === 'supplier'">
                 <el-form-item :label="'s2b2c.product.cooperation_price'|trans">
                     <el-col span="18">
                         {{ courseProduct.cooperationPrice }}
@@ -36,14 +36,14 @@
             </div>
 
             <div class="hidden" id="js-course-info"
-                 :data-hint-message="course.platform == 'self' ? 'validate_old.positive_currency.message' : 'course_manage.positive_currency.message'"
-                 :data-min-price="course.platform == 'self' ? 0 : 0.01">
+                 :data-hint-message="course.platform === 'self' ? 'validate_old.positive_currency.message' : 'course_manage.positive_currency.message'"
+                 :data-min-price="course.platform === 'self' ? 0 : 0.01">
             </div>
 
             <el-form-item :label="'site.price'|trans" prop="originPrice">
                 <el-col span="4">
                     <el-input v-model="marketingForm.originPrice" ref="originPrice"
-                              :disabled="course.platform == 'supplier' && !canModifyCoursePrice"></el-input>
+                              :disabled="course.platform === 'supplier' && !canModifyCoursePrice"></el-input>
                 </el-col>
                 <el-col span="8" class="mlm">{{ 'site.currency.CNY'|trans }}</el-col>
             </el-form-item>
@@ -60,13 +60,13 @@
                     </el-popover>
                 </label>
                 <el-col span="18">
-                    <el-radio v-for="(label, value) in buyableRadio"
+                    <el-radio v-for="buyableRadio in buyableRadios"
                               v-model="marketingForm.buyable"
-                              :key="value"
-                              :value="value"
-                              :label="value"
+                              :key="buyableRadio.value"
+                              :value="buyableRadio.value"
+                              :label="buyableRadio.value"
                               class="cd-radio">
-                        {{label}}
+                        {{ buyableRadio.label }}
                     </el-radio>
                 </el-col>
             </el-form-item>
@@ -74,12 +74,12 @@
             <el-form-item :label="'course.marketing_setup.expiry_date'|trans"
                           :prop="marketingForm.enableBuyExpiryTime == 1 ? 'buyExpiryTime': 'enableBuyExpiryTime'">
                 <el-col span="8">
-                    <el-radio v-for="(label, value) in buyExpiryTimeEnabledRadio"
+                    <el-radio v-for="buyExpiryTimeEnabledRadio in buyExpiryTimeEnabledRadios"
                               v-model="marketingForm.enableBuyExpiryTime"
-                              :key="value"
-                              :label="value"
+                              :key="buyExpiryTimeEnabledRadio.value"
+                              :label="buyExpiryTimeEnabledRadio.value"
                               class="cd-radio">
-                        {{label}}
+                        {{buyExpiryTimeEnabledRadio.label}}
                     </el-radio>
                 </el-col>
                 <el-date-picker v-if="marketingForm.enableBuyExpiryTime == 1"
@@ -188,18 +188,36 @@
                 notifies: {},
                 canModifyCoursePrice: true,
                 buyBeforeApproval: false,
-                buyableRadio: {
-                    0: Translator.trans('course.marketing_setup.setup.can_not_join'),
-                    1: Translator.trans('course.marketing_setup.setup.can_join'),
-                },
-                buyExpiryTimeEnabledRadio: {
-                    0: Translator.trans('course.marketing_setup.expiry_date.anytime'),
-                    1: Translator.trans('course.marketing_setup.expiry_date.custom')
-                },
-                approvalRadio: {
-                    0: Translator.trans('site.datagrid.radios.no'),
-                    1: Translator.trans('site.datagrid.radios.yes'),
-                },
+                buyableRadios: [
+                    {
+                        value: '1',
+                        label: Translator.trans('course.marketing_setup.setup.can_join'),
+                    },
+                    {
+                        value: '0',
+                        label: Translator.trans('course.marketing_setup.setup.can_not_join'),
+                    }
+                ],
+                buyExpiryTimeEnabledRadios: [
+                    {
+                        value: '1',
+                        label: Translator.trans('course.marketing_setup.expiry_date.custom'),
+                    },
+                    {
+                        value: '0',
+                        label: Translator.trans('course.marketing_setup.expiry_date.anytime'),
+                    }
+                ],
+                approvalRadios: [
+                    {
+                        value: '1',
+                        label: Translator.trans('site.datagrid.radios.yes'),
+                    },
+                    {
+                        value: '0',
+                        label: Translator.trans('site.datagrid.radios.no'),
+                    }
+                ],
                 today: Date.now(),
                 dateOptions: {
                     disabledDate(time) {

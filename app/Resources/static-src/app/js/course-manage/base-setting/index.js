@@ -1,5 +1,5 @@
-import Intro from './intro';
-import ManageInfo from './src/manage-info';
+import Intro from '../info/intro';
+import ManageInfo from './manage-info';
 import ElementUI from 'element-ui';
 import Axios from 'axios';
 
@@ -70,11 +70,11 @@ new Vue({
 
 class CourseInfo {
   constructor() {
-//     if ($('#maxStudentNum-field').length > 0) {
-//       $.get($('#maxStudentNum-field').data('liveCapacityUrl')).done((liveCapacity) => {
-//         $('#maxStudentNum-field').data('liveCapacity', liveCapacity.capacity);
-//       });
-//     }
+    //     if ($('#maxStudentNum-field').length > 0) {
+    //       $.get($('#maxStudentNum-field').data('liveCapacityUrl')).done((liveCapacity) => {
+    //         $('#maxStudentNum-field').data('liveCapacity', liveCapacity.capacity);
+    //       });
+    //     }
     this.setIntroPosition();
   }
 

@@ -8,8 +8,8 @@
                 <label slot="label">{{ 'course.plan_setup.mode'|trans }}
                     <el-popover
                         placement="top"
-                        :content="'course.plan_setup.mode.tips'|trans"
                         trigger="hover">
+                        <span v-html="learnModeTips"></span>
                         <a class="es-icon es-icon-help course-mangae-info__help text-normal"
                            slot="reference"></a>
                     </el-popover>
@@ -20,7 +20,7 @@
                               ref="learnMode"
                               :key="value"
                               :label="value"
-                              :disabled="course.status != 'draft' || course.platform !='self'"
+                              :disabled="course.status !== 'draft' || course.platform !== 'self'"
                               class="cd-radio">{{ label }}
                     </el-radio>
                 </el-col>
@@ -33,9 +33,9 @@
                         placement="top"
                         trigger="hover">
                         <ul class='pl10 list-unstyled'>
-                            <li class='mb10'>{{ 'course.teaching_plan.expiry_date.anytime'|trans }}</li>
-                            <li class='mb10'>{{ 'course.teaching_plan.expiry_date.real_time'|trans }}</li>
-                            <li>{{ 'course.teaching_plan.expiry_date.overdue_tips'|trans }}</li>
+                            <li class='mb10'><span v-html="expiryModeTips.anytime"></span></li>
+                            <li class='mb10'><span v-html="expiryModeTips.realtime"></span></li>
+                            <li><span v-html="expiryModeTips.overdue"></span></li>
                         </ul>
                         <a class="es-icon es-icon-help course-mangae-info__help text-normal" slot="reference"></a>
                     </el-popover>
@@ -45,17 +45,17 @@
                               v-model="baseRuleForm.expiryMode"
                               :label="value"
                               :key="value"
-                              :disabled="coursePublished || courseClosed || course.platform !='self'"
+                              :disabled="coursePublished || courseClosed || course.platform !== 'self'"
                               class="cd-radio">
                         {{label}}
                     </el-radio>
 
-                    <div class="course-manage-expiry" :class="{'hidden':baseRuleForm.expiryMode != 'days'}"
+                    <div class="course-manage-expiry" :class="{'hidden':baseRuleForm.expiryMode !== 'days'}"
                          id="expiry-days">
                         <span class="caret"></span>
                         <el-radio v-model="baseRuleForm.deadlineType"
                                   v-for="(label, value) in deadlineTypeRadio"
-                                  :disabled="coursePublished || courseClosed || course.platform !='self'"
+                                  :disabled="coursePublished || courseClosed || course.platform !=='self'"
                                   class="cd-radio"
                                   :label="value"
                                   :key="value">
@@ -63,7 +63,7 @@
                         </el-radio>
 
                         <div class="cd-mt16"
-                             v-if="baseRuleForm.expiryMode == 'days' && baseRuleForm.deadlineType == 'end_date'">
+                             v-if="baseRuleForm.expiryMode === 'days' && baseRuleForm.deadlineType === 'end_date'">
                             <el-form-item prop="deadline">
                                 <el-date-picker
                                     v-model="baseRuleForm.deadline"
@@ -72,17 +72,17 @@
                                     ref="deadline"
                                     :default-value="today"
                                     :picker-options="dateOptions"
-                                    :disabled="course.platform != 'self'">
+                                    :disabled="course.platform !== 'self'">
                                 </el-date-picker>
                                 <span class="mlm">{{ 'course.marketing_setup.rule.expiry_date_tips'|trans }}</span>
                             </el-form-item>
                         </div>
                         <div class="cd-mt16"
-                             v-if="baseRuleForm.expiryMode == 'days' && baseRuleForm.deadlineType == 'days'">
+                             v-if="baseRuleForm.expiryMode === 'days' && baseRuleForm.deadlineType == 'days'">
                             <el-col span="8">
                                 <el-form-item prop="expiryDays">
                                     <el-input ref="expiryDays" v-model="baseRuleForm.expiryDays"
-                                              :disabled="(coursePublished && courseSetPublished) || course.platform != 'self'">
+                                              :disabled="(coursePublished && courseSetPublished) || course.platform !== 'self'">
                                     </el-input>
                                 </el-form-item>
                             </el-col>
@@ -91,10 +91,10 @@
                     </div>
 
                     <div class="course-manage-expiry"
-                         :class="{'hidden': baseRuleForm.expiryMode != 'date'}">
+                         :class="{'hidden': baseRuleForm.expiryMode !== 'date'}">
                         <span class="caret"></span>
                         <div class="course-manage-expiry__circle"
-                             v-if="baseRuleForm.expiryMode == 'date' && baseRuleForm.expiryMode == 'date'">
+                             v-if="baseRuleForm.expiryMode === 'date' && baseRuleForm.expiryMode === 'date'">
                             <el-form-item prop="expiryDateRange">
                                 <el-date-picker
                                     v-model="baseRuleForm.expiryDateRange"
@@ -110,7 +110,7 @@
                         </div>
                     </div>
                     <div class="course-mangae-info__tip js-expiry-tip"
-                         :class="{'ml0': baseRuleForm.expiryMode == 'forever'}">
+                         :class="{'ml0': baseRuleForm.expiryMode === 'forever'}">
                         {{ 'course.marketing_setup.rule.expiry_date.first_publish_tips'|trans }}
                     </div>
                 </el-col>
@@ -135,7 +135,7 @@
                 </el-col>
             </el-form-item>
 
-            <el-form-item v-if="courseSet.type == 'live'"
+            <el-form-item v-if="courseSet.type === 'live'"
                           :label="'course.plan_setup.member_numbers'|trans"
                           prop="maxStudentNum">
                 <el-col span="8">
@@ -187,7 +187,7 @@
                     </el-col>
                 </el-form-item>
 
-                <el-form-item v-if="uploadMode != 'local'">
+                <el-form-item v-if="uploadMode !== 'local'">
                     <label slot="label">{{ 'course.marketing_setup.preview.try_watch'|trans }}
                         <el-popover
                             placement="top"
@@ -230,15 +230,15 @@
             <el-form-item id="audio-modal-id"
                           :label="'course.info.video.convert.audio.enable'|trans"
                           v-model="baseRuleForm.enableAudio"
-                          v-if="audioServiceStatus != 'needOpen' && course.type == 'normal'">
+                          v-if="audioServiceStatus !== 'needOpen' && course.type === 'normal'">
                 <el-col span="16">
                     <el-radio v-model="baseRuleForm.enableAudio"
-                              v-for="(label, value) in audioServiceStatusRadio"
+                              v-for="audioServiceStatusRadio in audioServiceStatusRadios"
                               class="cd-radio"
-                              :key="value"
-                              :label="value"
+                              :key="audioServiceStatusRadio.value"
+                              :label="audioServiceStatusRadio.value"
                               @click="changeAudioMode"
-                              :disabled="course.platform =='supplier'">{{ label }}
+                              :disabled="course.platform ==='supplier'">{{ audioServiceStatusRadio.label }}
                     </el-radio>
                     <div class="course-mangae-info__tip">
                         1.{{ 'course.enable.video.convert.audio.benefit'|trans }}
@@ -350,7 +350,7 @@
         },
         data() {
             let freeTaskJsClass = this.canFreeTasks ? ' task-price-setting-group' : '';
-            freeTaskJsClass += (this.course.platform == 'self' ? ' js-task-price-setting' : '');
+            freeTaskJsClass += (this.course.platform === 'self' ? ' js-task-price-setting' : '');
 
             let tryLookLengthOptions = [];
             let i = 0;
@@ -359,16 +359,16 @@
                 i++;
             }
 
-            let coursePublished = this.course.status ? this.course.status == 'published' : false;
-            let courseClosed = this.course.status ? this.course.status == 'closed' : false;
-            let courseSetPublished = this.courseSet.status ? this.courseSet.status == 'published' : false;
-            let courseSetClosed = this.courseSet.status ? this.courseSet.status == 'closed' : false;
+            let coursePublished = this.course.status ? this.course.status === 'published' : false;
+            let courseClosed = this.course.status ? this.course.status === 'closed' : false;
+            let courseSetPublished = this.courseSet.status ? this.courseSet.status === 'published' : false;
+            let courseSetClosed = this.courseSet.status ? this.courseSet.status === 'closed' : false;
 
             let max_year = (rule, value, callback) => {
                 value < 7300 ? callback() : callback(new Error(Translator.trans('validate.max_year.message')));
             }
-            this.course.expiryStartDate = this.course.expiryStartDate == 0 ? '' : this.course.expiryStartDate;
-            this.course.expiryEndDate = this.course.expiryEndDate == 0 ? '' : this.course.expiryEndDate
+            this.course.expiryStartDate = this.course.expiryStartDate === 0 ? '' : this.course.expiryStartDate;
+            this.course.expiryEndDate = this.course.expiryEndDate === 0 ? '' : this.course.expiryEndDate
             let expiryDateRange = (!this.course.expiryStartDate || !this.course.expiryEndDate) ? null : [
                 this.course.expiryStartDate, this.course.expiryEndDate
             ]
@@ -395,14 +395,21 @@
                     freeMode: Translator.trans('course.plan_setup.mode.free'),
                     lockMode: Translator.trans('course.plan_setup.mode.locked'),
                 },
+                learnModeTips: Translator.trans('course.plan_setup.mode.tips'),
                 freeTaskJsClass: freeTaskJsClass,
                 taskName: '',
                 activityMetas: {},
                 audioServiceStatus: '',
-                audioServiceStatusRadio: {
-                    1: Translator.trans('course.info.video.convert.audio.start'),
-                    0: Translator.trans('course.info.video.convert.audio.close')
-                },
+                audioServiceStatusRadios: [
+                    {
+                        value: '1',
+                        label: Translator.trans('course.info.video.convert.audio.start'),
+                    },
+                    {
+                        value: '0',
+                        label:  Translator.trans('course.info.video.convert.audio.close'),
+                    }
+                ],
                 videoConvertCompletion: '',
                 courseSetManageFilesUrl: '',
                 baseRuleForm: {
@@ -468,7 +475,7 @@
                             },
                             trigger: 'blur',
                         }
-                    ]
+                    ],
                 },
                 canFreeActivityTypes: '',
                 freeTaskChangelog: '',
@@ -477,6 +484,11 @@
                     'days': Translator.trans('course.teaching_plan.expiry_date.anywhere_mode'),
                     'date': Translator.trans('course.teaching_plan.expiry_date.date_mode'),
                     'forever': Translator.trans('course.teaching_plan.expiry_date.forever_mode')
+                },
+                expiryModeTips: {
+                    'anytime': Translator.trans('course.teaching_plan.expiry_date.anytime'),
+                    'realtime': Translator.trans('course.teaching_plan.expiry_date.real_time'),
+                    'overdue': Translator.trans('course.teaching_plan.expiry_date.overdue_tips'),
                 },
                 deadlineTypeRadio: {
                     'end_date': Translator.trans('course.teaching_plan.expiry_date.end_date_mode'),
