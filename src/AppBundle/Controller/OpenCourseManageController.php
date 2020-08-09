@@ -324,7 +324,7 @@ class OpenCourseManageController extends BaseController
 
     public function marketingAction(Request $request, $id)
     {
-        $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
+        $openCourse = $this->getOpenCourseService()->tryManageOpenCourse($id);
 
         if ('POST' === $request->getMethod()) {
             $recommendIds = $request->request->get('recommendIds');
@@ -343,58 +343,40 @@ class OpenCourseManageController extends BaseController
             );
         }
 
-        $recommends = $this->getOpenCourseRecommendedService()->findRecommendedCoursesByOpenCourseId($id);
+        $recommends = $this->getOpenCourseRecommendedService()->findRecommendedGoodsByOpenCourseId($id);
 
-        $courseSetIds = ArrayToolkit::column($recommends, 'recommendCourseId');
-        $commendedCourseSets = $this->getCourseSetService()->findCourseSetsByIds($courseSetIds);
+        $goodsIds = ArrayToolkit::column($recommends, 'recommendGoodsId');
+        $goodses = ArrayToolkit::index($this->getGoodsService()->findGoodsByIds($goodsIds), 'id');
 
-        $recommendedCourses = [];
-        foreach ($recommends as $key => $recommend) {
-            //if recommendedCourse has been deleted  when do not show it or will make a error
-            if (isset($commendedCourseSets[$recommend['recommendCourseId']])) {
-                $recommendedCourses[$recommend['id']] = $commendedCourseSets[$recommend['recommendCourseId']];
-            }
-        }
-
-        $courseIds = ArrayToolkit::column($recommendedCourses, 'defaultCourseId');
-        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-
-        $users = $this->_getTeacherUsers($commendedCourseSets);
+        $creators = $this->getUserService()->findUsersByIds(ArrayToolkit::column($goodses, 'creator'));
 
         return $this->render(
             'open-course-manage/open-course-marketing.html.twig',
             [
-                'courseSets' => $recommendedCourses,
-                'courses' => $courses,
-                'users' => $users,
-                'course' => $course,
+                'goodses' => $goodses,
+                'creators' => $creators,
+                'openCourse' => $openCourse,
+                'course' => $openCourse, //为了满足layout course变量名要求
+                'recommends' => $recommends,
             ]
         );
     }
 
     public function pickAction(Request $request, $filter, $id)
     {
-        $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
+        $this->getOpenCourseService()->tryManageOpenCourse($id);
 
         $conditions = $request->query->all();
 
-        list($paginator, $courseSets) = $this->_getPickCourseData($request, $id, $conditions);
+        list($paginator, $goodses) = $this->_getPickGoodsData($request, $id, $conditions);
 
-        $courseSetIds = ArrayToolkit::column($courseSets, 'id');
-        $coursesPrice = $this->_findCoursesPriceInterval($courseSetIds);
-
-        $courseIds = ArrayToolkit::column($courseSets, 'defaultCourseId');
-        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-
-        $users = $this->_getTeacherUsers($courseSets);
+        $creators = $this->getUserService()->findUsersByIds(ArrayToolkit::column($goodses, 'creator'));
 
         return $this->render(
             'open-course-manage/open-course-pick-modal.html.twig',
             [
-                'users' => $users,
-                'courseSets' => $courseSets,
-                'courses' => $courses,
-                'coursesPrice' => $coursesPrice,
+                'creators' => $creators,
+                'goodses' => $goodses,
                 'paginator' => $paginator,
                 'courseId' => $id,
                 'filter' => $filter,
@@ -405,7 +387,7 @@ class OpenCourseManageController extends BaseController
     public function deleteRecommendCourseAction(Request $request, $id, $recommendId)
     {
         $this->getOpenCourseService()->tryManageOpenCourse($id);
-        $this->getOpenCourseRecommendedService()->deleteRecommendCourse($recommendId);
+        $this->getOpenCourseRecommendedService()->deleteRecommend($recommendId);
 
         return $this->createJsonResponse(true);
     }
@@ -414,20 +396,17 @@ class OpenCourseManageController extends BaseController
     {
         $this->getOpenCourseService()->tryManageOpenCourse($id);
         $key = $request->query->get('key');
-        $conditions = ['title' => $key];
-        list($paginator, $courseSets) = $this->_getPickCourseData($request, $id, $conditions);
+        $conditions = ['titleLike' => $key];
 
-        $courseIds = ArrayToolkit::column($courseSets, 'defaultCourseId');
-        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
+        list($paginator, $goodses) = $this->_getPickGoodsData($request, $id, $conditions);
 
-        $users = $this->_getTeacherUsers($courseSets);
+        $creators = $this->getUserService()->findUsersByIds(ArrayToolkit::column($goodses, 'creator'));
 
         return $this->render(
             'open-course-manage/open-course-pick-modal.html.twig',
             [
-                'users' => $users,
-                'courseSets' => $courseSets,
-                'courses' => $courses,
+                'creators' => $creators,
+                'goodses' => $goodses,
                 'filter' => $filter,
                 'courseId' => $id,
                 'title' => $key,
@@ -438,8 +417,8 @@ class OpenCourseManageController extends BaseController
 
     public function recommendedCoursesSelectAction(Request $request, $id)
     {
-        $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
-        $this->removeDeletedCourseRelation($id);
+        $this->getOpenCourseService()->tryManageOpenCourse($id);
+        $this->removeDeletedGoodsRelation($id);
         $recommendNum = $this->getOpenCourseRecommendedService()->countRecommends(['openCourseId' => $id]);
 
         $ids = $request->request->get('ids');
@@ -449,10 +428,10 @@ class OpenCourseManageController extends BaseController
         }
 
         if (($recommendNum + count($ids)) > 5) {
-            return $this->createJsonResponse(['result' => false, 'message' => '推荐课程数量不能超过5个！']);
+            return $this->createJsonResponse(['result' => false, 'message' => '推荐课程/班级数量不能超过5个！']);
         }
 
-        $this->getOpenCourseRecommendedService()->addRecommendedCourses($id, $ids, 'normal');
+        $this->getOpenCourseRecommendedService()->addRecommendGoods($id, $ids);
 
         return $this->createJsonResponse(['result' => true]);
     }
@@ -592,29 +571,7 @@ class OpenCourseManageController extends BaseController
         return $type;
     }
 
-    protected function _getPickCourseData(Request $request, $openCourseId, $conditions)
-    {
-        $existRecommendCourseIds = $this->getExistRecommendCourseIds($openCourseId);
-
-        $conditions = $this->_filterConditions($conditions, $existRecommendCourseIds);
-
-        $paginator = new Paginator(
-            $request,
-            $this->getCourseSetService()->countCourseSets($conditions),
-            5
-        );
-
-        $courseSets = $this->getCourseSetService()->searchCourseSets(
-            $conditions,
-            ['createdTime' => 'ASC'],
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-
-        return [$paginator, $courseSets];
-    }
-
-    protected function getExistRecommendCourseIds($openCourseId)
+    protected function _getPickGoodsData(Request $request, $openCourseId, $conditions)
     {
         $coursesRecommended = $this->getOpenCourseRecommendedService()->searchRecommends(
             ['openCourseId' => $openCourseId],
@@ -622,24 +579,33 @@ class OpenCourseManageController extends BaseController
             0,
             PHP_INT_MAX
         );
+        $existRecommendGoodsIds = ArrayToolkit::column($coursesRecommended, 'recommendGoodsId');
 
-        return ArrayToolkit::column($coursesRecommended, 'recommendCourseId');
-    }
-
-    protected function _filterConditions($conditions, $excludeCourseIds)
-    {
         $conditions['status'] = 'published';
-        $conditions['parentId'] = 0;
+        $conditions['types'] = ['course', 'classroom'];
 
-        if (!empty($excludeCourseIds)) {
-            $conditions['excludeIds'] = $excludeCourseIds;
+        if (!empty($existRecommendGoodsIds)) {
+            $conditions['excludeIds'] = $existRecommendGoodsIds;
         }
 
-        if (isset($conditions['title']) && '' == $conditions['title']) {
-            unset($conditions['title']);
+        if (isset($conditions['titleLike']) && '' == $conditions['titleLike']) {
+            unset($conditions['titleLike']);
         }
 
-        return $conditions;
+        $paginator = new Paginator(
+            $request,
+            $this->getGoodsService()->countGoods($conditions),
+            5
+        );
+
+        $goodses = $this->getGoodsService()->searchGoods(
+            $conditions,
+            ['createdTime' => 'ASC'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        return [$paginator, $goodses];
     }
 
     protected function getExportContent($request, $id, $start, $limit, $exportAllowCount)
@@ -761,12 +727,12 @@ class OpenCourseManageController extends BaseController
         return $this->getUserService()->findUsersByIds($userIds);
     }
 
-    protected function removeDeletedCourseRelation($openCourseId)
+    protected function removeDeletedGoodsRelation($openCourseId)
     {
         //删除 已经被删除的课程的推荐关系
         $recommends = $this->getOpenCourseRecommendedService()->searchRecommends(['openCourseId' => $openCourseId], [], 0, \PHP_INT_MAX);
-        $recommends = ArrayToolkit::index($recommends, 'recommendCourseId');
-        $courseSets = $this->getCourseSetService()->findCourseSetsByIds(array_keys($recommends));
+        $recommends = ArrayToolkit::index($recommends, 'recommendGoodsId');
+        $courseSets = $this->getGoodsService()->findGoodsByIds(array_keys($recommends));
 
         $removeIds = [];
         foreach ($recommends as $key => $value) {
@@ -775,7 +741,7 @@ class OpenCourseManageController extends BaseController
             }
         }
 
-        $this->getOpenCourseRecommendedService()->deleteBatchRecommendCourses($removeIds);
+        $this->getOpenCourseRecommendedService()->deleteBatchRecommend($removeIds);
     }
 
     /**
@@ -783,7 +749,7 @@ class OpenCourseManageController extends BaseController
      */
     protected function getUploadFileService()
     {
-        return $this->getBiz()->service('File:UploadFileService');
+        return $this->createService('File:UploadFileService');
     }
 
     /**
@@ -791,7 +757,7 @@ class OpenCourseManageController extends BaseController
      */
     protected function getGoodsService()
     {
-        return $this->getBiz()->service('Goods:GoodsService');
+        return $this->createService('Goods:GoodsService');
     }
 
     /**
@@ -799,7 +765,7 @@ class OpenCourseManageController extends BaseController
      */
     protected function getOpenCourseService()
     {
-        return $this->getBiz()->service('OpenCourse:OpenCourseService');
+        return $this->createService('OpenCourse:OpenCourseService');
     }
 
     /**
@@ -807,7 +773,7 @@ class OpenCourseManageController extends BaseController
      */
     protected function getCourseSetService()
     {
-        return $this->getBiz()->service('Course:CourseSetService');
+        return $this->createService('Course:CourseSetService');
     }
 
     /**
@@ -815,7 +781,7 @@ class OpenCourseManageController extends BaseController
      */
     protected function getCourseService()
     {
-        return $this->getBiz()->service('Course:CourseService');
+        return $this->createService('Course:CourseService');
     }
 
     /**
@@ -823,7 +789,7 @@ class OpenCourseManageController extends BaseController
      */
     protected function getTagService()
     {
-        return $this->getBiz()->service('Taxonomy:TagService');
+        return $this->createService('Taxonomy:TagService');
     }
 
     /**
@@ -831,7 +797,7 @@ class OpenCourseManageController extends BaseController
      */
     protected function getUserFieldService()
     {
-        return $this->getBiz()->service('User:UserFieldService');
+        return $this->createService('User:UserFieldService');
     }
 
     /**
@@ -847,7 +813,7 @@ class OpenCourseManageController extends BaseController
      */
     protected function getOpenCourseRecommendedService()
     {
-        return $this->getBiz()->service('OpenCourse:OpenCourseRecommendedService');
+        return $this->createService('OpenCourse:OpenCourseRecommendedService');
     }
 
     /**
@@ -855,7 +821,7 @@ class OpenCourseManageController extends BaseController
      */
     protected function getFileService()
     {
-        return $this->getBiz()->service('Content:FileService');
+        return $this->createService('Content:FileService');
     }
 
     /**
@@ -863,7 +829,7 @@ class OpenCourseManageController extends BaseController
      */
     protected function getSettingService()
     {
-        return $this->getBiz()->service('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 
     /**
@@ -871,6 +837,6 @@ class OpenCourseManageController extends BaseController
      */
     protected function getLiveCourseService()
     {
-        return $this->getBiz()->service('OpenCourse:LiveCourseService');
+        return $this->createService('OpenCourse:LiveCourseService');
     }
 }

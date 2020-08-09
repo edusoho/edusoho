@@ -3601,7 +3601,7 @@ my.teaching.open_course.files.cloud_file: 'Cloud file'
 my.teaching.open_course.files.dev_mode_btn: 'Reconversion(debug mode)'
 my.teaching.open_course.files.media_subtitle_btn: 'Subtitles'
 my.teaching.open_course.recommend_setting.title: 'Recommend Settings'
-my.teaching.open_course.recommend_setting.add_course_btn: 'Add Course'
+my.teaching.open_course.recommend_setting.add_course_btn: 'Add Course&Classroom'
 my.teaching.open_course.recommend_setting.serializeMode.live: Serialize
 my.teaching.open_course.recommend_setting.serializeMode.finished: Finished
 my.teaching.open_course.recommend_setting.onlive: 'On live'

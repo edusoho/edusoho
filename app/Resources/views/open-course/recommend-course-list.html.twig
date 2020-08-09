@@ -1,23 +1,20 @@
-{% set recommendCourses = data('RecommendOpenCourses',{courseId:course.id,count:5}) %}
+{% set recommends = data('RecommendOpenCourses',{courseId:course.id,count:5}) %}
 
 {# course 实际是courseSet #}
-{% for course in recommendCourses if course %}
-	{% if course.type == 'open' or course.type == 'liveOpen' %}
-		{% set showUrl = path('open_course_show',{courseId:course.id}) %}
-	{% else %}
-		{% set courseSet =  course %}
-		{% set showUrl = path('course_show',{id:courseSet.defaultCourseId}) %}
-	{% endif %}
+{% for recommend in recommends %}
+  {% set goods = recommend.goods %}
+  {% set showUrl = path('goods_show',{id:recommend.goods.id}) %}
 
-	<li class="tab-recommand clearfix">
-		<a href="{{ showUrl }}" target="_blank" title="{{ course.title }}">
-      <img class="img-responsive" src="{{ filepath(course_set_cover(course, 'middle'), 'courseSet.png') }}" alt="{{ course.title }}">
+
+  <li class="tab-recommand clearfix">
+		<a href="{{ showUrl }}" target="_blank" title="{{ goods.title }}">
+      <img class="img-responsive" src="{{ filepath(goods.images.middle|default(''), 'courseSet.png') }}" alt="{{ goods.title }}">
     </a>
 		<div class="open-course-info">
-		  <a class="title" href="{{ showUrl }}" target="_blank" title="{{ course.title }}">{{ course.title }}</a>
-            {% if setting('course.show_student_num_enabled', '1') == 1  %}
-				<div class="num">{{ course.studentNum }}{{ 'my.teaching.open_course.lesson.recommend.learning_num'|trans }}</div>
-			{% endif %}
+		  <a class="title" href="{{ showUrl }}" target="_blank" title="{{ goods.title }}">{{ goods.title }}</a>
+{#      {% if setting('course.show_student_num_enabled', '1') == 1  %}#}
+{#				<div class="num">{{ course.studentNum }}{{ 'my.teaching.open_course.lesson.recommend.learning_num'|trans }}</div>#}
+{#			{% endif %}#}
 		</div>
 	</li>
 {% else %}

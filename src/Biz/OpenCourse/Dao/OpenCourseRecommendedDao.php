@@ -2,10 +2,12 @@
 
 namespace Biz\OpenCourse\Dao;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
-interface RecommendedCourseDao extends GeneralDaoInterface
+interface OpenCourseRecommendedDao extends AdvancedDaoInterface
 {
+    public function getByOpenCourseIdAndGoodsId($openCourseId, $goodsId);
+
     public function getByCourseIdAndType($openCourseId, $recommendCourseId, $type);
 
     public function findByOpenCourseId($openCourseId);

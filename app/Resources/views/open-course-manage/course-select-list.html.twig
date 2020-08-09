@@ -14,55 +14,61 @@
 
 </style>
 <ul class="course-wide-list">
-  {% for courseSet in courseSets  %}
-    <li class="course-item clearfix"   data-id="{{courseSet.id}}" >
-      <a class="course-picture-link" href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}" target="_blank">
-        <img class="course-picture" src="{{ filepath(course_set_cover(courseSet, 'middle'), 'course.png') }}" alt="{{ courseSet.title }}">
+  {% for goods in goodses  %}
+    <li class="course-item clearfix" data-id="{{goods.id}}" >
+      <a class="course-picture-link" href="{{ path('goods_show',{id: goods.id}) }}" target="_blank">
+        <img class="course-picture" src="{{ filepath(goods.images.middle|default(''), 'course.png') }}" alt="{{ goods.title }}">
       </a>
       <div class="course-body clearfix">
         <div class="color-gray mrm mls pull-right">
           {% include 'open-course-manage/course-set-price-interval.html.twig' %}
-
-          {% if setting('course.show_student_num_enabled', '1') == 1 %}
-            <span class="divider"></span>
-            <span class="color-gray mrm mls"><strong>{{ courseSet.studentNum }}</strong>{{ 'site.default.student'|trans }}</span>
-          {% endif %}
+          {# 涉及到学员数量不显示 #}
+{#          {% if setting('course.show_student_num_enabled', '1') == 1 %}#}
+{#            <span class="divider"></span>#}
+{#            <span class="color-gray mrm mls"><strong>{{ goods.studentNum|default(0) }}</strong>{{ 'site.default.student'|trans }}</span>#}
+{#          {% endif %}#}
 
         </div>
-
+        {# 去除具体的和商品无关的信息 着重关心商品元素 其余的元素去除 #}
         <h4 class="course-title text-overflow mv0">
-        {% if courseSet.serializeMode=='serialized' %}
-          <span class="label label-success ">{{'course.status.serialized'|trans}}</span>
-        {% elseif courseSet.serializeMode=='finished' %}
-          <span class="label label-warning ">{{'course.status.finished'|trans}}</span>
-        {% endif %}
+{#        {% if courseSet.serializeMode=='serialized' %}#}
+{#          <span class="label label-success ">{{'course.status.serialized'|trans}}</span>#}
+{#        {% elseif courseSet.serializeMode=='finished' %}#}
+{#          <span class="label label-warning ">{{'course.status.finished'|trans}}</span>#}
+{#        {% endif %}#}
 
-        {% if courseSet.type == 'live' %}
-            {% set task = courseSet['task']|default(null) %}
-            {% if task and "now"|date("U") >= task.startTime and "now"|date("U") <= task.endTime %}
-              <span class="label label-warning">{{'course.block_grid.onlive'|trans}}</span>
-            {% else %}
-              <span class="label label-success">{{'course.block_grid.live'|trans}}</span>
-            {% endif %}
-        {% endif %}
-        <a href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}" target="_blank" title="{{ courseSet.title }}">{{ courseSet.title }}</a>
+{#        {% if courseSet.type == 'live' %}#}
+{#            {% set task = courseSet['task']|default(null) %}#}
+{#            {% if task and "now"|date("U") >= task.startTime and "now"|date("U") <= task.endTime %}#}
+{#              <span class="label label-warning">{{'course.block_grid.onlive'|trans}}</span>#}
+{#            {% else %}#}
+{#              <span class="label label-success">{{'course.block_grid.live'|trans}}</span>#}
+{#            {% endif %}#}
+{#        {% endif %}#}
+        <a href="{{ path('goods_show',{id: goods.id}) }}" target="_blank" title="{{ goods.title }}">{{ goods.title }}</a>
+        <span class="label label-warning ">
+          {% if goods.type == 'classroom' %}
+            {{ 'site.default.classroom'|trans }}
+          {% elseif goods.type == 'course' %}
+            {{ 'site.default.course'|trans }}
+          {% endif %}
+        </span>
         </h4>
 
-        {% if courseSet.type == 'live' %}
-          {% set task = courseSet.task|default(null) %}
-          {% if task %}
-            <div class="live-course-lesson mbm">
-              <span class="color-success fsm mrm">{{ task.startTime|date('n月j日 H:i'|trans) }} ~ {{ task.endTime|date('n月j日 H:i'|trans) }}</span>
-              <span class="color-gray fsm mrm">{{'course.block_grid.taskNumber'|trans({'%number%': task.number,'%taskName%': setting('course.task_name')|default('admin.setting_course.task'|trans)})}}</span>
-            </div>
-          {% endif %}
-        {% else %}
-          <div class="course-about ellipsis text-sm">{{ courseSet.subtitle }}</div>
-        {% endif %}
-
+{#        {% if courseSet.type == 'live' %}#}
+{#          {% set task = courseSet.task|default(null) %}#}
+{#          {% if task %}#}
+{#            <div class="live-course-lesson mbm">#}
+{#              <span class="color-success fsm mrm">{{ task.startTime|date('n月j日 H:i'|trans) }} ~ {{ task.endTime|date('n月j日 H:i'|trans) }}</span>#}
+{#              <span class="color-gray fsm mrm">{{'course.block_grid.taskNumber'|trans({'%number%': task.number,'%taskName%': setting('course.task_name')|default('admin.setting_course.task'|trans)})}}</span>#}
+{#            </div>#}
+{#          {% endif %}#}
+{#        {% else %}#}
+{#          <div class="course-about ellipsis text-sm">{{ courseSet.subtitle }}</div>#}
+{#        {% endif %}#}
+        <div class="course-about ellipsis text-sm">{{ goods.subtitle }}</div>
         <div class="course-footer clearfix">
-          {% set defaultCourse = courses[courseSet.defaultCourseId]|default(null) %}
-          {% set teacher = users[defaultCourse.teacherIds|first|default(null)]|default(null) %}
+          {% set teacher = creators[goods.creator]|default(null) %}
           {% if teacher %}
             <div class="teacher">
               <a href="{{ path('user_show', {id:teacher.id}) }}" target="_blank"><img src="{{ filepath(teacher.smallAvatar, 'course.png') }}" class="teacher-avatar"></a>
@@ -71,7 +77,7 @@
             </div>
           {% endif %}
 
-          <div class="course-metas-{{courseSet.id}}" style="display:none;">
+          <div class="course-metas-{{goods.id}}" style="display:none;">
             <span class="es-icon es-icon-done pull-right" style="z-index:100;color:#02b980;font-size:30px;"></span>
           </div>
 
