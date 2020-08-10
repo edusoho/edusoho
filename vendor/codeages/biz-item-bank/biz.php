@@ -25,7 +25,12 @@ $biz->register(new \Codeages\Biz\Framework\Provider\TargetlogServiceProvider());
 $biz->register(new \Codeages\Biz\Framework\Provider\MonologServiceProvider(), [
     'monolog.logfile' => $biz['log_dir'].'/biz.log',
 ]);
-$biz->register(new \Codeages\Biz\ItemBank\ItemBankServiceProvider());
+$biz->register(new \Codeages\Biz\ItemBank\ItemBankServiceProvider(), [
+    'item_bank.html_helper.options' => [
+        'cacheDir' => __DIR__ . '/var/cache/htmlpurifier',
+        'safeDomains' => [],
+    ]
+]);
 
 $biz->boot();
 
