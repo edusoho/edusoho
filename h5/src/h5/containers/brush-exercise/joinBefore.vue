@@ -17,6 +17,7 @@ import { createNamespacedHelpers } from 'vuex';
 import directory from './directory';
 import Api from '@/api';
 import * as types from '@/store/mutation-types';
+import { formatFullTime } from '@/utils/date-toolkit';
 const { mapState, mapActions, mapMutations } = createNamespacedHelpers(
   'ItemBank',
 );
@@ -68,8 +69,43 @@ export default {
             this.changJoinStatus(true);
           }, 1000);
         } else {
+          this.getOrder();
           // 去下订单 节流处理
         }
+      });
+    },
+    learnExpiry() {
+      const expiryMode = this.ItemBankExercise.expiryMode;
+      const expiryDays = this.ItemBankExercise.expiryDays;
+      const startDateStr = formatFullTime(
+        new Date(this.ItemBankExercise.expiryStartDate * 1000),
+      );
+      const endDateStr = formatFullTime(
+        new Date(this.ItemBankExercise.expiryEndDate * 1000),
+      );
+      switch (expiryMode) {
+        case 'forever':
+          return '永久有效';
+        case 'end_date':
+          return endDateStr + '之前可学习';
+        case 'days':
+          return expiryDays + '天内可学习';
+        case 'date':
+          return `${startDateStr} 至 ${endDateStr}`;
+      }
+    },
+    // 创建订单
+    getOrder() {
+      const expiryStr = this.learnExpiry();
+      this.$router.push({
+        name: 'order',
+        params: {
+          id: this.ItemBankExercise.id,
+        },
+        query: {
+          expiryScope: expiryStr,
+          targetType: 'item_bank_exercise',
+        },
       });
     },
   },
