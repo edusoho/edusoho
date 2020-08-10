@@ -48,32 +48,26 @@ class CertificateController extends BaseController
 
     public function createDetailAction()
     {
-
     }
 
     public function editAction(Request $request, $id)
     {
-
     }
 
     public function closeAction(Request $request, $id)
     {
-
     }
 
     public function publishAction(Request $request, $id)
     {
-
     }
 
     public function memberListAction(Request $request, $id)
     {
-
     }
 
     public function auditManageAction(Request $request, $id)
     {
-
     }
 
     /**

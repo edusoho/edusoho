@@ -2,17 +2,10 @@
 
 namespace Biz\Certificate\Service\Impl;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Certificate\Dao\CertificateDao;
-use Biz\Certificate\Dao\TemplateDao;
 use Biz\Certificate\Service\CertificateService;
 use Biz\Certificate\Service\TemplateService;
-use Biz\Certificate\TemplateException;
-use Biz\Common\CommonException;
-use Biz\Content\Service\FileService;
-use Biz\File\UploadFileException;
-use Biz\System\Service\LogService;
 
 class CertificateServiceImpl extends BaseService implements CertificateService
 {

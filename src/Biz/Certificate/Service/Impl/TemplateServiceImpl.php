@@ -9,7 +9,6 @@ use Biz\Certificate\Service\TemplateService;
 use Biz\Certificate\TemplateException;
 use Biz\Common\CommonException;
 use Biz\Content\Service\FileService;
-use Biz\File\UploadFileException;
 use Biz\System\Service\LogService;
 
 class TemplateServiceImpl extends BaseService implements TemplateService
