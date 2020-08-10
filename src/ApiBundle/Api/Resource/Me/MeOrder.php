@@ -25,12 +25,15 @@ class MeOrder extends AbstractResource
             $limit
         );
 
+        /*
+         * targetType/targetId
+         */
         foreach ($orders as &$order) {
             $product = $this->getProduct($order['id']);
             $order['cover'] = empty($product->cover) ? ['middle' => ''] : $product->cover;
             $order['targetType'] = $product->targetType;
-            $order['targetId'] = $product->targetId;
-            $order['targetUrl'] = $this->generateUrl($product->successUrl['routing'], $product->successUrl['params'], UrlGeneratorInterface::ABSOLUTE_URL);
+            $order['targetId'] = $product->originalTargetId ?: $product->targetId; //targetId要转化成正常的接口
+            $order['targetUrl'] = $this->generateUrl($product->successUrl['routing'], $product->successUrl['params'], UrlGeneratorInterface::ABSOLUTE_URL); //跳转URL需要改造
         }
         $total = $this->getOrderService()->countOrders($conditions);
 

@@ -54,14 +54,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         ];
 
         $courseSet = $this->getCourseSetDao()->update($id, $fields);
+        $this->getCourseSetGoodsMediator()->onRecommended($courseSet);
 
-        $this->dispatchEvent(
-            'courseSet.recommend',
-            new Event(
-                $courseSet,
-                $fields
-            )
-        );
+        $this->dispatchEvent('courseSet.recommend', new Event($courseSet, $fields));
 
         return $courseSet;
     }
@@ -69,24 +64,19 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     // Refactor: cancelRecommendCourseSet
     public function cancelRecommendCourse($id)
     {
-        $course = $this->tryManageCourseSet($id);
+        $this->tryManageCourseSet($id);
         $fields = [
             'recommended' => 0,
             'recommendedTime' => 0,
             'recommendedSeq' => 0,
         ];
-        $this->getCourseSetDao()->update(
+        $courseSet = $this->getCourseSetDao()->update(
             $id,
             $fields
         );
+        $this->getCourseSetGoodsMediator()->onCancelRecommended($courseSet);
 
-        $this->dispatchEvent(
-            'courseSet.recommend.cancel',
-            new Event(
-                $course,
-                $fields
-            )
-        );
+        $this->dispatchEvent('courseSet.recommend.cancel', new Event($courseSet, $fields));
     }
 
     /**

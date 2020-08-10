@@ -2,7 +2,7 @@
 
 {% block title %}{{ 'course.plan_base_info'|trans }} - {{ course.title }} - {{ parent() }}{% endblock %}
 {% set course_side_nav = 'info' %}
-{% do script(['libs/jquery-intro.js', 'libs/es-ckeditor/ckeditor.js', 'libs/select2.js', 'libs/perfect-scrollbar.js', 'libs/vue.js', 'app/js/course-manage/info/index.js', 'libs/element-ui.js']) %}
+{% do script(['libs/jquery-intro.js', 'libs/es-ckeditor/ckeditor.js', 'libs/select2.js', 'libs/perfect-scrollbar.js', 'libs/vue.js', 'app/js/course-manage/base-setting/index.js', 'libs/element-ui.js']) %}
 
 {% block page_title %}{{ 'course.plan_base_info'|trans }}{% endblock %}
 {% block paddingClass %}course-manage-body course-manage-info js-course-manage-info{% endblock %}

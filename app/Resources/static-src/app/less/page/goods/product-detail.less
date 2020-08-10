@@ -66,7 +66,7 @@
         filter: progid:DXImageTransform.Microsoft.Gradient(startColorstr="#FFA677", endColorstr="#FF5C3B", gradientType="1");
         .border-radius(4px 4px 0px 0px);
       }
-      .detail-right__price__num {
+      .detail-right__price__free {
         padding-left: 30px;
         height: 68px;
         background-color: #f9f9f9;
@@ -75,10 +75,29 @@
         span {
           margin-left: 24px;
           font-size: 28px;
+          color: rgb(0, 190, 98);
+          font-weight: 600;
+        }
+        @media (max-width: 767px) {
+          padding-left: 16px;
+          span {
+            margin-left: 10px;
+            font-size: 24px;
+          }
+        }
+      }
+      .detail-right__price__num {
+        padding-left: 30px;
+        height: 68px;
+        background-color: #f9f9f9;
+        color: #666;
+        line-height: 68px;
+        .detail-right__price__price {
+          margin-left: 24px;
+          font-size: 28px;
           color: #FF5C3B;
           font-weight: 600;
-          &:after {
-            content: '元';
+          .detail-right__price__unit {
             color: #666;
             font-size: 14px;
             font-weight: normal;
@@ -137,7 +156,8 @@
         color: #666;
       }
       .validity-content {
-        color: #333;
+        color: #808080;
+        font-size: small;
       }
     }
     // 承诺服务
@@ -203,6 +223,7 @@
   .product-detail__btn {
     position: absolute;
     right: 32px;
+    text-align: center;
     bottom: 16px;
     padding: 6px 24px;
     width: 104px;
@@ -213,5 +234,16 @@
     line-height: 20px;
     cursor: pointer;
     .border-radius(4px);
+  }
+  .product-detail__unpublished {
+    position: absolute;
+    right: 32px;
+    bottom: 16px;
+    padding: 6px 24px;
+    height: 32px;
+    font-weight: 500;
+    color: #808080;
+    line-height: 20px;
+    cursor: pointer;
   }
 }

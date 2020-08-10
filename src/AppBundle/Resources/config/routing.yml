@@ -3354,6 +3354,10 @@ course_task_list_render:
     path: /course/{courseId}/task/list/render/{type}/{paged}
     defaults: { _controller: AppBundle:Course/Course:renderTaskList, paged:false }
 
+course_task_json_data:
+    path: /course/{courseId}/tasks/list_data
+    defaults: { _controller: AppBundle:Course/Course:getTaskListData }
+
 item_attachment_init_upload:
     path: /item/attachment/upload/init
     defaults: { _controller: AppBundle:Item/Attachment:initUpload }

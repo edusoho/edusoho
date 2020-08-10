@@ -37,7 +37,7 @@
             </div>
 
             <div class="courseset-manage-header-btn">
-              {% if members[classroom.id].role == "headTeacher"  or is_granted('ROLE_ADMIN') and classroom.id == 1 %}}
+              {% if members[classroom.id].role == "headTeacher"  or is_granted('ROLE_ADMIN')%}}
                 <a class="cd-btn cd-btn-primary" target="_blank"
                    href="{{ path('classroom_manage',{id:classroom.id}) }}">{{ 'my.teaching.classroom.manage_btn'|trans({'%classroom%':setting('classroom.name')|default('site.default.classroom'|trans)}) }}</a>
               {% else %}

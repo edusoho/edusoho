@@ -19,6 +19,20 @@ $('.js-setting-save-btn').on('click', (event) => {
     $('#goods-setting-form').submit();
   }
 });
+$('input[type=radio][name=recommend_rule]').change((event) => {
+  const $this = $(event.currentTarget);
+  const $recommendHelpBlock = $('.js-recommend-rule').find('.help-block');
+  if ($this.val() === 'hot') {
+    $recommendHelpBlock.addClass('hidden');
+    $('.js-recommend-rule-hot').removeClass('hidden');
+  } else if ($this.val() === 'latest') {
+    $recommendHelpBlock.addClass('hidden');
+    $('.js-recommend-rule-latest').removeClass('hidden');
+  } else if ($this.val() === 'label') {
+    $recommendHelpBlock.addClass('hidden');
+    $('.js-recommend-rule-label').removeClass('hidden');
+  }
+});
 
 function initUploadImg() {
   cd.upload({

@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Goods;
 
 use AppBundle\Controller\BaseController;
 use Biz\Common\CommonException;
+use Biz\Goods\Service\GoodsService;
 use Biz\User\Service\UserFieldService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -11,6 +12,8 @@ class GoodsController extends BaseController
 {
     public function showAction(Request $request, $id)
     {
+        $goods = $this->getGoodsService()->getGoods($id);
+//        $this->
         return $this->render(
             'goods/show.html.twig',
             []
@@ -30,7 +33,7 @@ class GoodsController extends BaseController
 
         $params = [];
 
-        if ('fill-user-info' == $request->query->get('template')) {
+        if ('fill-user-info' === $request->query->get('template')) {
             $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
             $user = $this->getCurrentUser();
             $userInfo = $this->getUserService()->getUserProfile($user['id']);
@@ -50,5 +53,13 @@ class GoodsController extends BaseController
     protected function getUserFieldService()
     {
         return $this->createService('User:UserFieldService');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->createService('Goods:GoodsService');
     }
 }

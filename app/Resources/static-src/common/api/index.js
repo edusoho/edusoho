@@ -1,8 +1,8 @@
 /**
  * 使用说明
- * 
+ *
  * import Api from 'common/api';
- * 
+ *
  * Api.course.create({
  *    params: {},
  *    data: {}
@@ -28,6 +28,7 @@ import newNotificationModule from './modules/newNotification';
 import resetPasswordEmail from './modules/reset-password/email.js';
 import resetPasswordMobile from './modules/reset-password/mobile.js';
 import resetPasswordSms from './modules/reset-password/sms.js';
+import favoriteModule from './modules/favorite';
 
 const API_URL_PREFIX = '/api';
 
@@ -36,9 +37,13 @@ const Api = {
   course: courseModule(API_URL_PREFIX),
   // 班级模块
   classroom: classroomModule(API_URL_PREFIX),
+  //交易
   trade: tradeModule(API_URL_PREFIX),
+  //验证码
   captcha: captchaModule(API_URL_PREFIX),
+  //拖动验证码
   dragCaptcha: dragCaptchaModule(API_URL_PREFIX),
+  //短信
   sms: smsModule(API_URL_PREFIX),
   teacherLiveCourse: teacherLiveCourseModule(API_URL_PREFIX),
   studentLiveCourse: studentLiveCourseModule(API_URL_PREFIX),
@@ -47,6 +52,8 @@ const Api = {
   resetPasswordEmail: resetPasswordEmail(API_URL_PREFIX),
   resetPasswordMobile: resetPasswordMobile(API_URL_PREFIX),
   resetPasswordSms: resetPasswordSms(API_URL_PREFIX),
+  //收藏
+  favorite: favoriteModule(API_URL_PREFIX),
 };
 
 export default Api;

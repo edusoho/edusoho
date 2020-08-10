@@ -1,29 +1,25 @@
-{% for course in recommendCourses if course %}
-  {% set defaultCourse = data('Course', {courseId:course.defaultCourseId}) %}
-  {% set teacherId = defaultCourse.teacherIds|first|default(null) %}
+{% for recommend in recommends %}
+  {% set goods = recommend.goods %}
+  {% set teacherId = goods.creator %}
   {% if teacherId %}
     {% set teacher = data('User',{userId:teacherId}) %}
   {% endif %}
-  {% if course.type == 'open' or course.type == 'lisrc/AppBundle/Controller/AdminV2/Teach/ReviewController.phpveOpen' %}
-    {% set showUrl = path('open_course_show',{courseId:course.id}) %}
-  {% else %}
-    {% set showUrl = path('course_show', {id: course.defaultCourseId}) %}
-  {% endif %}
+  {% set showUrl = path('goods_show', {id: goods.id}) %}
   <div class="open-course-recommend clearfix">
     <div class="open-course-img">
-      <a href="{{ showUrl }}" target="_blank" title="{{ course.title }}">
-        <img class="img-responsive" src="{{ filepath(course.cover.middle|default(''), 'course.png') }}"
-             alt="{{ course.title }}">
+      <a href="{{ showUrl }}" target="_blank" title="{{ goods.title }}">
+        <img class="img-responsive" src="{{ filepath(goods.images.middle|default(''), 'course.png') }}"
+             alt="{{ goods.title }}">
       </a>
     </div>
     <div class="open-course-content">
       <div class="title">
-        <a href="{{ showUrl }}" title="{{ course.title }}">{{ course.title }}</a>
+        <a href="{{ showUrl }}" title="{{ goods.title }}">{{ goods.title }}</a>
       </div>
       <div class="metas">
-        {% if setting('course.show_student_num_enabled', '1') == 1  %}
-          <span class="pull-right">{{ 'open_course.student_num'|trans({'%num%':course.studentNum}) }}</span>
-        {% endif %}
+{#        {% if setting('course.show_student_num_enabled', '1') == 1  %}#}
+{#          <span class="pull-right">{{ 'open_course.student_num'|trans({'%num%':course.studentNum}) }}</span>#}
+{#        {% endif %}#}
         {% if teacher|default(null) %}
           {{ teacher.nickname }}
         {% endif %}

@@ -28,39 +28,6 @@
           {% include 'org/org-tree-select-webpack.html.twig' with {lablecolmd:3} %}
 
           <div class="form-group">
-            <div class="col-md-3 control-label">
-              <label >{{'admin.classroom_manage.create.show_label'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}</label>
-            </div>
-            <div id="create-classroom"  class="col-md-8 controls radios">
-              <label>
-              <input id="showable-open" type="radio" name="showable" value="1" checked="checked" > {{'admin.classroom_manage.create.open_radio'|trans}}
-              </label>
-              <label>
-                <input id="showable-close" type="radio" name="showable" value="0"> {{'admin.classroom_manage.create.close_radio'|trans}}
-              </label>
-              <div class="help-block">{{'admin.classroom_manage.create.show_tips'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}</div>
-            </div>
-
-          </div>
-          <div class="form-group">
-            <div id='buyable'>
-              <div class="col-md-3 control-label">
-                <label >{{'admin.classroom_manage.create.buy_label'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}</label>
-              </div>
-              <div class="col-md-8 controls radios">
-                <label>
-                  <input id="buyable-open" type="radio" name="buyable" value="1" checked="checked" > {{'admin.classroom_manage.create.open_radio'|trans}}
-                </label>
-                <label>
-                  <input id="buyable-close" type="radio" name="buyable" value="0"> {{'admin.classroom_manage.create.close_radio'|trans}}
-                </label>
-                <div class="help-block">{{'admin.classroom_manage.create.buy_tips'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}</div>
-              </div>
-            </div>
-
-          </div>
-
-          <div class="form-group">
             <div class="col-md-offset-3 col-md-8 controls">
               <button id="classroom-create-btn" data-loading-text="{{'form.btn.create.submiting'|trans}}" class="btn btn-fat btn-primary" type="button">{{'admin.classroom_manage.create'|trans}}</button>
             </div>

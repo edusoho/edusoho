@@ -14,19 +14,20 @@
         <div class="col-md-3 control-label">
           <label>{{ 'admin_v2.operating.goods_recommend_rule'|trans }}</label>
         </div>
-        <div class="controls col-md-8 radios">
+        <div class="js-recommend-rule controls col-md-8 radios">
           {{ radios('recommend_rule', {
             'hot':'admin_v2.operating.goods_recommend.hot'|trans,
             'latest':'admin_v2.operating.goods_recommend.latest'|trans,
             'label':'admin_v2.operating.goods_recommend.label'|trans
           }, setting.recommend_rule|default('hot')) }}
-          <div class="help-block">
+          <div class="help-block js-recommend-rule-hot {% if setting.recommend_rule != 'hot' %}hidden{% endif %}">
             <span class="">{{ 'admin_v2.operating.goods_recommend.hot_tips'|trans }}</span>
-            <br>
+          </div>
+          <div class="help-block js-recommend-rule-latest {% if setting.recommend_rule != 'latest' %}hidden{% endif %}">
             <span class="">{{ 'admin_v2.operating.goods_recommend.latest_tips'|trans }}</span>
-            <br>
+          </div>
+          <div class="help-block js-recommend-rule-label {% if setting.recommend_rule != 'label' %}hidden{% endif %}">
             <span class="">{{ 'admin_v2.operating.goods_recommend.label_tips'|trans }}</span>
-            <br>
           </div>
         </div>
       </div>

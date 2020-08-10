@@ -2,27 +2,28 @@
 
 namespace ApiBundle\Api\Resource\Good;
 
+use ApiBundle\Api\Resource\Classroom\ClassroomFilter;
+use ApiBundle\Api\Resource\CourseSet\CourseSetFilter;
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\User\UserFilter;
 use ApiBundle\Api\Util\AssetHelper;
-use ApiBundle\Api\Util\Money;
 
 class GoodFilter extends Filter
 {
     protected $simpleFields = [
-        'id', 'title', 'subtitle', 'type', 'summary', 'minPrice', 'maxPrice', 'images', 'ratingNum', 'rating', 'hitNum',
-        'hotSeq', 'showable', 'buyable', 'creator',
+        'id', 'title', 'subtitle', 'type', 'summary', 'minPrice', 'maxPrice', 'minDisplayPrice', 'maxDisplayPrice', 'minPriceObj', 'maxPriceObj', 'minDisplayPriceObj', 'maxDisplayPriceObj', 'images', 'ratingNum', 'rating', 'hitNum',
+        'hotSeq', 'showable', 'buyable', 'creator', 'discount',
     ];
 
     protected $publicFields = [
         'id', 'title', 'subtitle', 'type',  'product', 'extensions', 'specs', 'creator', 'status',
-        'showable', 'buyable', 'summary', 'minPrice', 'maxPrice', 'images', 'orgId', 'orgCode', 'ratingNum', 'rating',
-        'hitNum', 'hotSeq', 'recommendWeight', 'recommendedTime', 'createdTime', 'updatedTime', 'isFavorite',
+        'showable', 'buyable', 'summary', 'minPrice', 'maxPrice', 'minDisplayPrice', 'maxDisplayPrice', 'minPriceObj', 'maxPriceObj', 'minDisplayPriceObj', 'maxDisplayPriceObj', 'images', 'orgId', 'orgCode', 'ratingNum', 'rating',
+        'hitNum', 'hotSeq', 'recommendWeight', 'recommendedTime', 'createdTime', 'updatedTime', 'isFavorite', 'discount',
     ];
 
     protected $filterMap = [
-        'course' => 'ApiBundle\Api\Resource\CourseSet\CourseSetFilter',
-        'classroom' => 'ApiBundle\Api\Resource\Classroom\ClassroomFilter',
+        'course' => CourseSetFilter::class,
+        'classroom' => ClassroomFilter::class,
     ];
 
     protected function simpleFields(&$data)
@@ -33,7 +34,6 @@ class GoodFilter extends Filter
 
         $data['summary'] = $this->convertAbsoluteUrl($data['summary']);
         $this->transformImages($data['images']);
-        $this->transMinAndMaxPrice($data);
     }
 
     protected function publicFields(&$data)
@@ -55,13 +55,6 @@ class GoodFilter extends Filter
         $userFilter->filter($data['creator']);
 
         $this->transformImages($data['images']);
-        $this->transMinAndMaxPrice($data);
-    }
-
-    private function transMinAndMaxPrice(&$data)
-    {
-        $data['minPrice'] = Money::convert($data['minPrice']);
-        $data['maxPrice'] = Money::convert($data['maxPrice']);
     }
 
     private function transformImages(&$images)

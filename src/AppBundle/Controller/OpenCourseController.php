@@ -11,6 +11,7 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MaterialService;
 use Biz\Favorite\Service\FavoriteService;
 use Biz\File\Service\UploadFileService;
+use Biz\Goods\Service\GoodsService;
 use Biz\OpenCourse\OpenCourseException;
 use Biz\OpenCourse\Service\OpenCourseRecommendedService;
 use Biz\OpenCourse\Service\OpenCourseService;
@@ -458,40 +459,38 @@ class OpenCourseController extends BaseOpenCourseController
     public function adModalRecommendCourseAction(Request $request, $id)
     {
         $num = $request->query->get('num', 3);
-        $courseSets = $this->getOpenCourseRecommendedService()->findRandomRecommendCourses($id, $num);
-        $courseSets = array_values($courseSets);
+        $goodses = $this->getOpenCourseRecommendedService()->findRandomRecommendGoods($id, $num);
+        $goodses = array_values($goodses);
         $conditions = [
             [
                 'status' => 'published',
-                'recommended' => 1,
-                'parentId' => 0,
+                'recommendWeight_GT' => 0,
             ],
             [
                 'status' => 'published',
-                'parentId' => 0,
             ],
         ];
 
-        //数量不够 随机取推荐课程里的课程 还是不够随机取所有课程
+        //数量不够 凑数
         foreach ($conditions as $condition) {
-            if (count($courseSets) < $num) {
-                $needNum = $num - count($courseSets);
-                $condition['excludeIds'] = ArrayToolkit::column($courseSets, 'id');
-                $randomCourseSets = $this->getCourseSetService()->findRandomCourseSets($condition, $needNum);
-                $courseSets = array_merge($courseSets, $randomCourseSets);
+            if (count($goodses) < $num) {
+                $needNum = $num - count($goodses);
+                $condition['excludeIds'] = ArrayToolkit::column($goodses, 'id');
+                $newGoodses = $this->getGoodsService()->searchGoods($condition, [], 0, $needNum);
+                $goodses = array_merge($goodses, $newGoodses);
             }
         }
         $self = $this;
-        $courseSets = array_map(function ($courseSet) use ($self) {
+        $goodses = array_map(function ($goods) use ($self) {
             foreach (['small', 'middle', 'large'] as $coverType) {
-                $picturePath = $self->get('web.twig.app_extension')->courseSetCover($courseSet, $coverType);
-                $courseSet['cover'][$coverType] = $self->get('web.twig.extension')->getFpath($picturePath, 'course.png');
+                $picturePath = empty($goods['images'][$coverType]) ? '' : $goods['images'][$coverType];
+                $goods['cover'][$coverType] = $self->get('web.twig.extension')->getFpath($picturePath, 'course.png');
             }
 
-            return $courseSet;
-        }, $courseSets);
+            return $goods;
+        }, $goodses);
 
-        return $this->createJsonResponse($courseSets);
+        return $this->createJsonResponse($goodses);
     }
 
     private function _getMember($courseId)
@@ -768,5 +767,13 @@ class OpenCourseController extends BaseOpenCourseController
     protected function getFavoriteService()
     {
         return $this->createService('Favorite:FavoriteService');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->createService('Goods:GoodsService');
     }
 }

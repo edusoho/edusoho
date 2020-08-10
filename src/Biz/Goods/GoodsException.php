@@ -12,8 +12,11 @@ class GoodsException extends AbstractException
 
     const SPECS_NOT_FOUND = 4027202;
 
+    const FORBIDDEN_MANAGE_GOODS = 4037203;
+
     public $messages = [
         self::GOODS_NOT_FOUND => 'exception.goods.not_found',
         self::SPECS_NOT_FOUND => 'exception.specs.not_found',
+        self::FORBIDDEN_MANAGE_GOODS => 'exception.goods.forbidden_manage',
     ];
 }

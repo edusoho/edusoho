@@ -44,7 +44,7 @@
                     }
                 }).then(res => {
                     this.isFavorite = true;
-                });
+                }).catch();
             },
 
             removeFavorite(targetType, targetId) {
@@ -62,7 +62,7 @@
                     }
                 }).then(res => {
                     this.isFavorite = false;
-                });
+                }).catch();
             },
 
             onFavorite() {

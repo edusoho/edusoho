@@ -2,10 +2,11 @@
 
 namespace ApiBundle\Api\Resource\CouponBatch;
 
+use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use ApiBundle\Api\Annotation\ApiConf;
 use Biz\Coupon\CouponException;
+use Biz\Coupon\Service\CouponBatchService;
 
 class CouponBatch extends AbstractResource
 {
@@ -15,9 +16,7 @@ class CouponBatch extends AbstractResource
     public function search(ApiRequest $request)
     {
         list($offset, $limit) = $this->getOffsetAndLimit($request);
-        $couponBatches = array();
-        $total = 0;
-        $conditions = $this->fillCondtions($request->query->all());
+        $conditions = $this->fillConditions($request->query->all());
         $total = $this->getCouponBatchService()->searchBatchsCount($conditions);
         $couponBatches = $this->getCouponBatchService()->searchBatchs(
             $conditions,
@@ -34,7 +33,7 @@ class CouponBatch extends AbstractResource
         return $this->makePagingObject(array_values($couponBatches), $total, $offset, $limit);
     }
 
-    protected function fillCondtions($conditions)
+    protected function fillConditions($conditions)
     {
         if (isset($conditions['name'])) {
             $conditions['nameLike'] = $conditions['name'];
@@ -54,9 +53,8 @@ class CouponBatch extends AbstractResource
      */
     public function get(ApiRequest $request, $batchToken)
     {
-        $couponBatch = array();
         $couponBatch = $this->getCouponBatchService()->getBatchByToken($batchToken);
-        $batchAfterFill = $this->getCouponBatchService()->fillUserCurrentCouponByBatches(array($couponBatch));
+        $batchAfterFill = $this->getCouponBatchService()->fillUserCurrentCouponByBatches([$couponBatch]);
         if (empty($couponBatch)) {
             throw CouponException::NOTFOUND_COUPON();
         }
@@ -67,6 +65,9 @@ class CouponBatch extends AbstractResource
         return $couponBatch;
     }
 
+    /**
+     * @return CouponBatchService
+     */
     private function getCouponBatchService()
     {
         return $this->service('Coupon:CouponBatchService');

@@ -9,4 +9,29 @@
        data-target-id="{{ app.request.query.get('targetId')|default(null) }}"
        data-is-user-login="{{ app.user.isLogin()|default(0) }}"
   ></div>
+  <div class="hidden js-hidden-i18n">
+    {
+    "i18nChapterName": "{{course_chapter_alias('chapter')|trans}}",
+    "i18nUnitName": "{{course_chapter_alias('part')|trans}}",
+    "i18nLessonName": "{{'site.data.lesson'|trans}}",
+    "i18nTaskName":"{{ course_chapter_alias('task')|trans}}"
+    }
+  </div>
+  <div class="hidden js-hidden-activity-metas">
+    {
+    {% set allMetas = activity_meta() %}
+    {% for key, item in allMetas %}
+      {% if not loop.first %}
+        ,
+      {% endif %}
+
+      "{{key}}": {
+      "icon": "{{item.icon}}",
+      "name": "{{item.name}}"
+      }
+    {% endfor %}
+    }
+  </div>
+
+  <div class="hidden js-hidden-current-timestamp">{{ date().timestamp }}</div>
 {% endblock %}

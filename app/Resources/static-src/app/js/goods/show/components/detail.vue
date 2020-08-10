@@ -5,7 +5,7 @@
                 <img :src="goods.images ? goods.images.large : null" alt="">
             </div>
             <ul class="detail-left__text clearfix">
-                <li class="pull-left"><i class="es-icon es-icon-friends mrs"></i>{{ currentSku.maxJoinNum }}人加入学习
+                <li class="pull-left"><i class="es-icon es-icon-friends mrs"></i>{{ goods.product.target.studentNum }}人加入学习
                 </li>
                 <li class="pull-right">
                     <share :customized-class="'detail-left__text-share'" :type="'courseSet'">分享
@@ -20,14 +20,27 @@
             <p class="detail-right__title">{{ goods.title }}</p>
             <p class="detail-right__subtitle">{{ goods.subtitle }}</p>
 
-            <!-- 价格 -->
+<!--            &lt;!&ndash; 价格 &ndash;&gt;-->
+<!--            <div class="detail-right__price">-->
+<!--                &lt;!&ndash; 优惠活动 &ndash;&gt;-->
+<!--&lt;!&ndash;                <div class="detail-right__price__activities">该商品享受“某某某某某某某某某某某某”打折促销活动，24：00：00后结束，请尽快购买！</div>&ndash;&gt;-->
+<!--                <div class="detail-right__price__num">-->
+<!--                    优惠价-->
+<!--                    <span>{{ currentSku.price }}</span>-->
+<!--                    <s>价格: {{ currentSku.price }}元</s>-->
+<!--                </div>-->
+<!--            </div>-->
             <div class="detail-right__price">
                 <!-- 优惠活动 -->
-                <div class="detail-right__price__activities">该商品享受“某某某某某某某某某某某某”打折促销活动，24：00：00后结束，请尽快购买！</div>
-                <div class="detail-right__price__num">
-                    优惠价
-                    <span>{{ currentSku.price }}</span>
-                    <s>价格: {{ currentSku.price }}元</s>
+                <!--                <div class="detail-right__price__activities">该商品享受“某某某某某某某某某某某某”打折促销活动，24：00：00后结束，请尽快购买！</div>-->
+                <div class="detail-right__price__free" v-if="currentSku.displayPrice == 0">
+                    价格
+                    <span class="free">免费</span>
+                </div>
+                <div class="detail-right__price__num" v-if="currentSku.displayPrice != 0">
+                    价格
+                    <span v-if="currentSku.displayPriceObj.currency === 'RMB'" class="detail-right__price__price">{{ currentSku.displayPriceObj.amount }}<span class="detail-right__price__unit">元</span></span>
+                    <span v-if="currentSku.displayPriceObj.currency === 'coin'" class="detail-right__price__price">{{ currentSku.displayPriceObj.coinAmount }}<span class="detail-right__price__unit">{{ currentSku.displayPriceObj.coinName }}</span></span>
                 </div>
             </div>
 
@@ -43,7 +56,13 @@
             <!-- 学习有效期 -->
             <div class="detail-right__validity validity clearfix">
                 <span class="validity-title pull-left">学习有效期</span>
-                <span class="validity-content pull-left">{{ buyableModes[currentSku.buyableMode] }}</span>
+                <span class="validity-content pull-left">
+<!--                    {{ buyableModes[currentSku.usageMode] }}-->
+                    <span v-if="currentSku.usageMode === 'forever'">长期有效</span>
+                    <span v-if="currentSku.usageMode === 'date'">开始：{{ currentSku.usageStartTime|formatDate }} 截止：{{ currentSku.usageEndTime|formatDate }}</span>
+                    <span v-if="currentSku.usageMode === 'days'">{{ currentSku.usageDays }}天 （随到随学）</span>
+                    <span v-if="currentSku.usageMode === 'end_date'">截止日期： {{ currentSku.usageEndTime|formatDate }}</span>
+                </span>
             </div>
 
             <!-- 承诺服务 -->
@@ -92,7 +111,30 @@
         methods: {
             handleClick(sku) {
                 this.$emit('changeSku', sku.targetId);
-            }
+            },
+        },
+        filters: {
+            formatDate(time, fmt = 'yyyy-MM-dd') {
+                time = time * 1000
+                let date = new Date(time)
+                if (/(y+)/.test(fmt)) {
+                    fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length))
+                }
+                let o = {
+                    'M+': date.getMonth() + 1,
+                    'd+': date.getDate(),
+                    'h+': date.getHours(),
+                    'm+': date.getMinutes(),
+                    's+': date.getSeconds()
+                }
+                for (let k in o) {
+                    if (new RegExp(`(${k})`).test(fmt)) {
+                        let str = o[k] + ''
+                        fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? str : ('00' + str).substr(str.length))
+                    }
+                }
+                return fmt
+            },
         },
         data() {
             return {

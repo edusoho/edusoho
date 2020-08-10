@@ -10,7 +10,7 @@ use Biz\OrderFacade\Product\Product;
 
 class AvailableCouponCommand extends Command
 {
-    public function execute(Product $product, $params = array())
+    public function execute(Product $product, $params = [])
     {
         $availableCoupons = $this->availableCouponsByIdAndType($product->targetId, $product->targetType);
 
@@ -36,17 +36,17 @@ class AvailableCouponCommand extends Command
      *
      * @return array
      */
-    private function availableCouponsSort($availableCoupons = array(), $product)
+    private function availableCouponsSort($availableCoupons = [], $product)
     {
-        if ('course' == $product->targetType) {
+        if ('course' === $product->targetType) {
             $course = $this->getCourseService()->getCourse($product->targetId);
             $targetId = $course['courseSetId'];
         } else {
             $targetId = $product->targetId;
         }
 
-        $exclusiveCoupons = array();
-        $unexclusiveCoupons = array();
+        $exclusiveCoupons = [];
+        $unexclusiveCoupons = [];
 
         foreach ($availableCoupons as $availableCoupon) {
             if ($availableCoupon['targetType'] == $product->targetType && $availableCoupon['targetId'] == $targetId) {
@@ -56,9 +56,9 @@ class AvailableCouponCommand extends Command
             }
         }
 
-        usort($exclusiveCoupons, array($this, 'compareCoupon'));
+        usort($exclusiveCoupons, [$this, 'compareCoupon']);
 
-        usort($unexclusiveCoupons, array($this, 'compareCoupon'));
+        usort($unexclusiveCoupons, [$this, 'compareCoupon']);
 
         return array_merge($exclusiveCoupons, $unexclusiveCoupons);
     }

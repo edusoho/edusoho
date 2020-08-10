@@ -488,6 +488,35 @@ class CourseController extends CourseBaseController
         ]);
     }
 
+    public function getTaskListDataAction(Request $request, $courseId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+        $member = $this->getCourseMember($request, $course);
+        list($isMarketingPage, $member) = $this->isMarketingPage($course['id'], $member);
+
+        // limit 不限制
+        list($courseItems, $nextOffsetSeq) = $this->getCourseService()->findCourseItemsByPaging($course['id'], ['limit' => PHP_INT_MAX]);
+        $courseItems = $this->get('web.twig.course_extension')->taskListJsonData($courseItems, $request->query->getBoolean('showOptional'));
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+
+        return $this->createJsonResponse([
+            'course' => $course,
+            'member' => $member,
+            'courseSet' => $courseSet,
+            'courseItems' => json_decode($courseItems, true),
+            'nextOffsetSeq' => $nextOffsetSeq,
+            'isMarketingPage' => $isMarketingPage,
+            'optionalTaskCount' => $this->getTaskService()->countTasks(
+                [
+                    'courseId' => $course['id'],
+                    'status' => 'published',
+                    'isOptional' => 1,
+                ]
+            ),
+            'showOptional' => $request->query->getBoolean('showOptional'),
+        ]);
+    }
+
     public function tasksAction($course, $member = [], $paged = false)
     {
         return $this->render(

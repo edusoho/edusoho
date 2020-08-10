@@ -19,12 +19,10 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Exception\UnableJoinException;
-use Biz\Goods\GoodsException;
 use Biz\Goods\Mediator\ClassroomGoodsMediator;
 use Biz\Goods\Service\GoodsService;
 use Biz\Order\OrderException;
 use Biz\OrderFacade\Service\OrderFacadeService;
-use Biz\Product\ProductException;
 use Biz\Product\Service\ProductService;
 use Biz\System\Service\LogService;
 use Biz\Task\Service\TaskResultService;
@@ -200,6 +198,14 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $orderTeacherIds;
     }
 
+    /**
+     * @param $classroom
+     *
+     * @return mixed
+     *
+     * @throws \Exception
+     *                    班级创建调用中介者构建商品和产品
+     */
     public function addClassroom($classroom)
     {
         $title = trim($classroom['title']);
@@ -214,6 +220,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $classroom['teacherIds'] = [];
         $classroom['expiryMode'] = 'forever';
         $classroom['expiryValue'] = 0;
+        $classroom['showable'] = 1;
+        $classroom['buyable'] = 1;
 
         $classroom = $this->getClassroomDao()->create($classroom);
         $this->getClassroomGoodsMediator()->onCreate($classroom);
@@ -221,41 +229,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $this->dispatchEvent('classroom.create', $classroom);
 
         return $classroom;
-    }
-
-    protected function publishGoodsAndSpecs($classroom)
-    {
-        $existProduct = $this->getProductService()->getProductByTargetIdAndType($classroom['id'], 'classroom');
-        if (empty($existProduct)) {
-            $this->createNewException(ProductException::NOTFOUND_PRODUCT());
-        }
-        $existGoods = $this->getGoodsService()->getGoodsByProductId($existProduct['id']);
-        $goods = $this->getGoodsService()->publishGoods($existGoods['id']);
-        if (empty($existGoods)) {
-            $this->createNewException(GoodsException::GOODS_NOT_FOUND());
-        }
-
-        $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $classroom['id']);
-
-        $this->getGoodsService()->publishGoodsSpecs($goodsSpecs['id']);
-    }
-
-    protected function unpublishGoodsAndSpecs($classroom)
-    {
-        $existProduct = $this->getProductService()->getProductByTargetIdAndType($classroom['id'], 'classroom');
-        if (empty($existProduct)) {
-            $this->createNewException(ProductException::NOTFOUND_PRODUCT());
-        }
-        $existGoods = $this->getGoodsService()->getGoodsByProductId($existProduct['id']);
-        $goods = $this->getGoodsService()->unpublishGoods($existGoods['id']);
-
-        if (empty($existGoods)) {
-            $this->createNewException(GoodsException::GOODS_NOT_FOUND());
-        }
-
-        $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $classroom['id']);
-
-        $this->getGoodsService()->unpublishGoodsSpecs($goodsSpecs['id']);
     }
 
     public function addCoursesToClassroom($classroomId, $courseIds)
@@ -359,7 +332,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         if (array_intersect(
             array_keys($fields),
-            ['title', 'subtitle', 'about', 'orgId', 'orgCode', 'smallPicture', 'middlePicture', 'largePicture', 'price', 'buyable', 'showable', 'expiryMode', 'expiryValue', 'service']
+            $this->getClassroomGoodsMediator()->normalFields
         )) {
             $this->getClassroomGoodsMediator()->onUpdateNormalData($classroom);
         }
@@ -753,7 +726,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $this->tryManageClassroom($id, 'admin_classroom_open');
 
         $classroom = $this->updateClassroom($id, ['status' => 'published']);
-        $this->publishGoodsAndSpecs($classroom);
+        $this->getClassroomGoodsMediator()->onPublish($classroom);
+
+        return $classroom;
     }
 
     public function closeClassroom($id)
@@ -761,7 +736,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $this->tryManageClassroom($id, 'admin_classroom_close');
 
         $classroom = $this->updateClassroom($id, ['status' => 'closed']);
-        $this->unpublishGoodsAndSpecs($classroom);
+        $this->getClassroomGoodsMediator()->onClose($classroom);
+
+        return $classroom;
     }
 
     public function changePicture($id, $data)
@@ -1956,6 +1933,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 'recommendedTime' => time(),
             ]
         );
+        $this->getClassroomGoodsMediator()->onRecommended($classroom);
 
         return $classroom;
     }
@@ -1975,6 +1953,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 'recommendedSeq' => 100,
             ]
         );
+
+        $this->getClassroomGoodsMediator()->onCancelRecommended($classroom);
 
         return $classroom;
     }
@@ -2057,6 +2037,16 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->getClassroomCourseDao()->countCourseTasksByClassroomId($classroomId);
     }
 
+    /**
+     * @param $userId
+     * @param $classroomId
+     *
+     * @return array|array[]
+     *                       1. 获取班级内课程
+     *                       2. 通过班级内课程找到对应的原课程
+     *                       3. 筛选出学员拥有的课程（学员member列表）
+     *                       4. 查找对应的订单
+     */
     public function findUserPaidCoursesInClassroom($userId, $classroomId)
     {
         $classroomCourses = $this->getClassroomCourseDao()->findByClassroomId($classroomId);
@@ -2088,6 +2078,13 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return [$paidCourses, $orderItems];
     }
 
+    /**
+     * @param $classroomId
+     *
+     * @throws UnableJoinException
+     *
+     * @todo 商品剥离，免费加入，商品凭证
+     */
     public function tryFreeJoin($classroomId)
     {
         $access = $this->canJoinClassroom($classroomId);

@@ -40,5 +40,12 @@ class GoodsServiceProvider implements ServiceProviderInterface
         $biz['specs.mediator.classroom'] = static function () use ($biz) {
             return new ClassroomSpecsMediator($biz);
         };
+
+        /*
+         * @return GoodsEntityFactory
+         */
+        $biz['goods.entity.factory'] = static function () use ($biz) {
+            return new GoodsEntityFactory($biz);
+        };
     }
 }

@@ -9,11 +9,58 @@ use Codeages\Biz\Order\Status\OrderStatusCallback;
 
 class ClassroomProduct extends BaseGoodsProduct implements OrderStatusCallback
 {
+    public $goods;
+
+    public $goodsSpecs;
+
+    public $originalTargetId;
+
+    public $classroom;
+
+    /**
+     * 班级展示价格
+     *
+     * @var float
+     */
+    public $price;
+
     const TYPE = 'classroom';
 
     public $targetType = self::TYPE;
 
     public $showTemplate = 'order/show/classroom-item.html.twig';
+
+    public function init(array $params)
+    {
+        //获取核心商品以及规格数据
+        $goodsSpecs = $this->getGoodsService()->getGoodsSpecs($params['targetId']);
+        $this->goodsSpecs = $goodsSpecs;
+        $goods = $this->getGoodsService()->getGoods($goodsSpecs['goodsId']);
+        $this->goods = $goods;
+
+        //声明购买目标ID，商品剥离改造之前是班级ID，改造之后是商品ID
+        $this->targetId = $params['targetId'];
+
+        //originalTargetId 兼容老数据，用来处理老数据的问题：这里originalTargetId对应的是classroom的id
+        $this->originalTargetId = $goodsSpecs['targetId'];
+
+        $classroom = $this->getClassroomService()->getClassroom($goodsSpecs['targetId']);
+        $this->classroom = $classroom;
+
+        //供PC端返回商品页面用，商品剥离改造之前是班级概览页，现在是商品页
+        $this->backUrl = ['routing' => 'goods_show', 'params' => ['id' => $goodsSpecs['goodsId']]];
+
+        //供支付成功后页面的跳转链接，改造前和改造后保持一致
+        $this->successUrl = ['routing' => 'classroom_show', 'params' => ['id' => $goodsSpecs['targetId']]];
+
+        $this->title = $goodsSpecs['title'];
+        $this->cover = empty($goodsSpecs['images']) ? $goods['images'] : $goodsSpecs['images'];
+
+        //改造之前是班级发布才能购买。现在是商品和规格都发布才是可购买
+        $this->productEnable = 'published' === $goods['status'] && 'published' === $goodsSpecs['status'];
+
+        $this->originPrice = $goodsSpecs['price'];
+    }
 
     public function validate()
     {

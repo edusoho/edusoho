@@ -93,7 +93,7 @@ export default {
         }
         this.starHover = count;
       }
-    
+
     },
     leaveRating() {
       for(var i = 0; i < this.stars.length; i++) {
@@ -171,7 +171,7 @@ export default {
           'X-Requested-With': 'XMLHttpRequest'
         }
       }).then(res => {
-        
+
       });
     }
   }

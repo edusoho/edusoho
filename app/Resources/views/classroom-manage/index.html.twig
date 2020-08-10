@@ -1,7 +1,7 @@
 {% extends 'classroom-manage/layout.html.twig' %}
 
 {% block title %}{{ setting('classroom.name')|default("site.default.classroom"|trans) }}{{ 'classroom.manage'|trans }} - {{ parent() }}{% endblock %}
-{% do script(['libs/es-ckeditor/ckeditor.js','libs/select2.js', 'libs/vue.js', 'app/js/classroom-manage/index.js', 'libs/element-ui.js']) %}
+{% do script(['libs/es-ckeditor/ckeditor.js','libs/select2.js', 'libs/vue.js', 'app/js/classroom-manage/base-setting/index.js', 'libs/element-ui.js']) %}
 
 {% set side_nav = 'main' %}
 
@@ -19,7 +19,7 @@
        data-flash-upload-url="{{ path('editor_upload', {token:upload_token('default', 'flash')}) }}"
        data-classroom-label="{{ setting('classroom.name')|default('classroom'|trans) }}"
        data-classroom-expiry-rule-url="{{ path('classroom_expiry_date_rule') }}"
-       data-service-tags="{{ services(course.services|default([]))|json_encode }}"
+       data-service-tags="{{ classroom_services(classroom.services|default([]))|json_encode }}"
        data-vip-installed="{{ vipInstalled|default(false) }}"
        data-vip-enabled="{{ setting('vip.enabled', '0') }}"
        data-vip-levels="{{ vipLevels|default([])|json_encode }}"

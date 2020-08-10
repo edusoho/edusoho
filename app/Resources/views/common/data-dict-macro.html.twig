@@ -7,7 +7,15 @@
         <span class="color-danger">{{ 'common.courseStatus.closed'|trans }}</span>
     {% endif %}
 {% endmacro %}
-
+{% macro goodsStatus(status) %}
+  {% if status == 'created' %}
+    <span class="color-gray">{{ 'common.courseStatus.draft'|trans }}</span>
+  {% elseif  status == 'published' %}
+    <span class="color-success">{{ 'common.courseStatus.published'|trans }}</span>
+  {% elseif status == 'unpublished' %}
+    <span class="color-danger">{{ 'common.courseStatus.closed'|trans }}</span>
+  {% endif %}
+{% endmacro %}
 {% macro fileType(type) %}
     {% if type == 'video' %}
         <span class="glyphicon glyphicon-facetime-video color-success">{{ 'common.fileType.video'|trans }}</span>

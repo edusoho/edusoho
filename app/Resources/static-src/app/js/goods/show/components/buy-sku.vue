@@ -1,8 +1,12 @@
 <template>
     <div>
-        <a v-if="sku" :class="btnClass" href="javascript:;" @click="buySku">
+        <a v-if="sku.status === 'published' && !sku.isMember" :class="btnClass" href="javascript:;" @click="buySku">
             <slot>立即购买</slot>
         </a>
+        <a v-if="sku.status === 'published' && sku.isMember" :class="btnClass" :href="sku.learnUrl">
+            <slot> 去学习</slot>
+        </a>
+        <span v-if="sku.status !=='published'" class="product-detail__unpublished">商品还未发布，不允许加入和购买</span>
     </div>
 </template>
 
@@ -52,8 +56,7 @@
                         $('#login-modal').modal('show').html(res.data);
                     });
                     return;
-                }
-                ;
+                };
 
                 axios({
                     url: '/api/goods/' + this.sku.goodsId + '/check',
@@ -76,7 +79,7 @@
                     }
 
                     this.renderModal(res.data.code);
-                });
+                }).catch();
             }
         }
     }

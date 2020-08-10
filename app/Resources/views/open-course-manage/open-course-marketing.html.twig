@@ -5,36 +5,36 @@
 {% block page_title %}
   {{'my.teaching.open_course.recommend_setting.title'|trans}}
   <div class="pull-right">
-    <button class="cd-btn cd-btn-success cd-btn-sm panel-bar" data-toggle="modal" data-target="#modal" data-url="{{path('open_course_manage_course_pick', {id:course['id']})}}">{{ 'my.teaching.open_course.recommend_setting.add_course_btn'|trans }}</button>
+    <button class="cd-btn cd-btn-success cd-btn-sm panel-bar" data-toggle="modal" data-target="#modal" data-url="{{path('open_course_manage_course_pick', { id: openCourse.id })}}">{{ 'my.teaching.open_course.recommend_setting.add_course_btn'|trans }}</button>
   </div>
 {% endblock %}
 
 {% block main_body %}
-  <form class="form-horizontal" id="recommend-course-form" method="post" action="{{ path('open_course_manage_marketing',{id:course.id}) }}">
-    {% set openCourse = course %}
+  <form class="form-horizontal" id="recommend-course-form" method="post" action="{{ path('open_course_manage_marketing',{id:openCourse.id}) }}">
     {{ web_macro.flash_messages() }}
 
     <div class="form-group" id="courses-form-group">
       <div class="col-md-12 controls">
         <ul class="js-course-list-group sortable-list course-wide-list courses-selected" id="course-list-group" data-role="list" >
 
-          {% for recommendId, courseSet in courseSets %}
-            {% set showUrl = path('course_show',{id: courseSet.defaultCourseId}) %}
-
-            <li class="course-item item-{{courseSet.id}} clearfix" data-role="item" >
-              <input type="hidden" name="recommendIds[]" value="{{ recommendId }}" />
+          {% for recommend in recommends %}
+            {% set goods = goodses[recommend.recommendGoodsId] %}
+            {% set showUrl = path('goods_show',{id: goods.id}) %}
+            <li class="course-item item-{{goods.id}} clearfix" data-role="item" >
+              <input type="hidden" name="recommendIds[]" value="{{ recommend.id }}">
 
               <span class="glyphicon glyphicon-resize-vertical sort-handle" style="padding: 50px 20px 0 20px"></span>
               <a class="course-picture-link" href="{{ showUrl }}" target="_blank">
-                {% if courseSet.type == 'live' %}
-                  <span class="tags">
-                    <span class="tag-live"></span>
-                  </span>
-                {% endif %}
-                <img class="course-picture" src="{{ filepath(course_set_cover(courseSet, 'middle'), 'courseSet.png') }}" alt="{{ courseSet.title }}">
+{# 涉及到班级和课程，不处理直播 #}
+{#                {% if courseSet.type == 'live' %}#}
+{#                  <span class="tags">#}
+{#                    <span class="tag-live"></span>#}
+{#                  </span>#}
+{#                {% endif %}#}
+                <img class="course-picture" src="{{ filepath(goods.images.middle|default(''), 'courseSet.png') }}" alt="{{ goods.title }}">
               </a>
 
-              <button class="close js-delete-btn course-close-btn mrl mts mll" data-role="item-delete" type="button" title="form.btn.delete" data-cancel-url="{{ path('open_course_manage_recommend_course_delete', {id:openCourse.id, recommendId: recommendId}) }}" data-recommend-id="{{ recommendId }}" data-id="{{courseSet.id}}">× </button>
+              <button class="close js-delete-btn course-close-btn mrl mts mll" data-role="item-delete" type="button" title="form.btn.delete" data-cancel-url="{{ path('open_course_manage_recommend_course_delete', {id:openCourse.id, recommendId: recommend.id}) }}" data-recommend-id="{{ recommend.id }}" data-id="{{goods.id}}">× </button>
 
               <div class="course-body clearfix">
                 <div class="color-gray cd-mr40 mls pull-right">
@@ -42,21 +42,27 @@
                 </div>
 
                 <h4 class="course-title text-overflow mv0">
-                {% if courseSet.type == 'normal' or courseSet.type == 'live' %}
-                  {% if courseSet.serializeMode=='serialized' %}
-                    <span class="label label-success ">{{ 'my.teaching.open_course.recommend_setting.serializeMode.live'|trans }}</span>
-                  {% elseif courseSet.serializeMode=='finished' %}
-                    <span class="label label-warning ">{{ 'my.teaching.open_course.recommend_setting.serializeMode.finished'|trans }}</span>
-                  {% endif %}
-                {% endif %}
-                <a href="{{ showUrl }}" target="_blank" title="{{ courseSet.title }}">{{ courseSet.title }}</a>
+{#                {% if courseSet.type == 'normal' or courseSet.type == 'live' %}#}
+{#                  {% if courseSet.serializeMode=='serialized' %}#}
+{#                    <span class="label label-success ">{{ 'my.teaching.open_course.recommend_setting.serializeMode.live'|trans }}</span>#}
+{#                  {% elseif courseSet.serializeMode=='finished' %}#}
+{#                    <span class="label label-warning ">{{ 'my.teaching.open_course.recommend_setting.serializeMode.finished'|trans }}</span>#}
+{#                  {% endif %}#}
+{#                {% endif %}#}
+                <a href="{{ showUrl }}" target="_blank" title="{{ goods.title }}">{{ goods.title }}</a>
+                  <span class="label label-warning ">
+                    {% if goods.type == 'classroom' %}
+                      {{ 'site.default.classroom'|trans }}
+                    {% elseif goods.type == 'course' %}
+                      {{ 'site.default.course'|trans }}
+                    {% endif %}
+                  </span>
                 </h4>
 
-                <div class="course-about ellipsis text-sm">{{ courseSet.subtitle }}</div>
+                <div class="course-about ellipsis text-sm">{{ goods.subtitle }}</div>
 
                 <div class="course-footer clearfix">
-                  {% set defaultCourse = courses[courseSet.defaultCourseId]|default(null) %}
-                  {% set teacher = users[defaultCourse.teacherIds|first|default(null)]|default(null) %}
+                  {% set teacher = creators[goods.creator]|default(null) %}
                   {% if teacher %}
                     <div class="teacher">
                       <a href="{{ path('user_show', {id:teacher.id}) }}" target="_blank"><img src="{{ filepath(teacher.smallAvatar, 'avatar.png') }}" class="teacher-avatar"></a>
@@ -67,10 +73,10 @@
 
                   <div class="course-metas">
 
-                    {% if setting('course.show_student_num_enabled', '1') == 1  %}
-                      <span class="color-gray text-sm">{{ courseSet.studentNum }}{{'site.default.student'|trans}}</span>
-                      {#<span class="divider"></span>#}
-                    {% endif %}
+{#                    {% if setting('course.show_student_num_enabled', '1') == 1  %}#}
+{#                      <span class="color-gray text-sm">{{ courseSet.studentNum }}{{'site.default.student'|trans}}</span>#}
+{#                      #}{#<span class="divider"></span>#}
+{#                    {% endif %}#}
 
                     {#<span class="color-gray text-sm">
                         {{course.lessonNum}}个任务
@@ -100,7 +106,7 @@
       </div>
     </div>
 
-    {% if courseSets %}
+    {% if goodses %}
       <div class="form-group">
         <div class="col-md-offset-9 col-md-3 controls">
           <button type="submit" class="cd-btn cd-btn-primary pull-right">{{ 'my.teaching.open_course.recommend_setting.save_btn'|trans }}</button>
