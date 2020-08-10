@@ -811,9 +811,11 @@ router.beforeEach((to, from, next) => {
     setWeChatSwitch();
   }
 
-  store.dispatch('setCouponSwitch').then(res => {
-    console.log(res);
-  });
+  if (store.state.couponSwitch === null) {
+    store.dispatch('setCouponSwitch').then(res => {
+      console.log(res);
+    });
+  }
 });
 
 // 异步加载配置
