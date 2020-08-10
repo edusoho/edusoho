@@ -9,6 +9,7 @@ const state = {
     courseList: [],
     paging: {},
   },
+  reviews: [],
 };
 
 const mutations = {
@@ -20,6 +21,9 @@ const mutations = {
   },
   [types.SET_ITEMBANKLIST](currentState, data) {
     currentState.searchItemBankList = data || {};
+  },
+  [types.GET_ITEMBANK_REVIEWS](currentState, data) {
+    currentState.reviews = data || [];
   },
 };
 
@@ -50,6 +54,16 @@ const actions = {
   },
   setItemBankList({ commit }, data) {
     commit(types.SET_ITEMBANKLIST, data);
+  },
+  getDataItemBankReviews({ commit }, { targetId, targetType }) {
+    const params = { targetId, targetType };
+    Api.getBankReviews({ params })
+      .then(res => {
+        commit(types.GET_ITEMBANK_REVIEWS, res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   },
 };
 

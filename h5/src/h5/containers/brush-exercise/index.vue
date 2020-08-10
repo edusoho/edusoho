@@ -29,6 +29,9 @@ export default {
     ...mapState({
       isLoading: state => state.isLoading,
     }),
+    ...mapState({
+      review: state => state.ItemBank.reviews,
+    }),
   },
   watch: {
     isMember: {
@@ -43,7 +46,10 @@ export default {
     this.getDataItemBank();
   },
   methods: {
-    ...mapActions('ItemBank', ['setItemBankExercise']),
+    ...mapActions('ItemBank', [
+      'setItemBankExercise',
+      'getDataItemBankReviews',
+    ]),
     getData() {
       const id = Number(this.$route.params.id);
       if (id) {
@@ -62,17 +68,8 @@ export default {
     getDataItemBank() {
       const targetId = Number(this.details.itemBankId);
       const targetType = 'item_bank_exercise';
-      Api.getBankReviews({
-        params: {
-          targetId,
-          targetType,
-        },
-      }).then(res => {
-          // 获取评论
-        this.details.reviews = res.data;
-      }).catch(err => {
-        Toast.fail(err.message)
-      })
+      this.getDataItemBankReviews({ targetId, targetType });
+      this.details.reviews = this.review;
     },
   },
 };
