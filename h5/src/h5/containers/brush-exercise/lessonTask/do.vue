@@ -3,6 +3,7 @@
     <e-loading v-if="isLoading" />
     <div v-else class="ibs-wap-vue">
       <item-engine
+        ref="itemEngine"
         :answerRecord="answerRecord"
         :assessmentResponse="assessmentResponse"
         :assessment="assessment"
@@ -36,6 +37,7 @@ export default {
       answerScene: {},
       answerRecord: {},
       assessmentResponse: {},
+      canLeave: false,
     };
   },
   computed: {},
@@ -43,6 +45,24 @@ export default {
   created() {
     const mode = this.$route.query.mode;
     mode === 'start' ? this.getStart() : this.getContinue();
+  },
+  mounted() {},
+  // beforeRouteEnter(to, from, next) {
+  //   // 通过链接进来
+  //   if (from.fullPath === '/') {
+  //     backUrl = '/'
+  //   } else {
+  //     backUrl = ''
+  //   }
+  //   next()
+  // },
+  beforeRouteLeave(to, from, next) {
+    // 可捕捉离开提醒
+    if (this.canLeave) {
+      next();
+    } else {
+      this.$refs.itemEngine.submitPaper(true);
+    }
   },
   methods: {
     getContinue() {
@@ -54,6 +74,7 @@ export default {
           this.isLoading = false;
         })
         .catch(err => {
+          this.$toast('提示文案');
           console.log(err);
         });
     },
@@ -80,39 +101,37 @@ export default {
       this.assessmentResponse = res.assessment_response;
     },
     reachTimeSubmitAnswerData(data) {
-      console.log('自动提交', data);
       Api.submitAnswer({ data })
         .then(res => {
+          this.canLeave = true;
           this.goResult();
           console.log(res);
         })
         .catch(err => {
-          console.log(err);
+          this.$toast(err.message);
         });
     },
     saveAnswerData(data) {
-      console.log('手动保存进度', data);
       Api.saveAnswer({ data })
         .then(res => {
-          this.$route.go(-1);
+          this.canLeave = true;
+          this.$router.go(-1);
         })
         .catch(err => {
-          console.log(err);
+          this.$toast(err.message);
         });
     },
     getAnswerData(data) {
-      console.log('手动提交', data);
       Api.submitAnswer({ data })
         .then(res => {
+          this.canLeave = true;
           this.goResult();
-          console.log(res);
         })
         .catch(err => {
-          console.log(err);
+          this.$toast(err.message);
         });
     },
     timeSaveAnswerData(data) {
-      console.log('三分钟保存进度', data);
       Api.saveAnswer({ data })
         .then(res => {
           console.log(res);
@@ -125,10 +144,10 @@ export default {
       const query = {
         type: this.$route.query.exerciseId.type,
         exerciseId: this.$route.query.exerciseId,
-        assessmentId: this.$route.query.assessment.id,
+        assessmentId: this.$route.query.assessmentId,
         moduleId: this.$route.query.moduleId,
       };
-      const answerRecordId = this.answerRecord.id;
+      const answerRecordId = this.assessmentResponse.answer_record_id;
       this.$router.replace({
         path: `/brushResult/${answerRecordId}`,
         query,

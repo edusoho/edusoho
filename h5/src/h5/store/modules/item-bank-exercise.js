@@ -22,8 +22,8 @@ const mutations = {
   [types.SET_ITEMBANKLIST](currentState, data) {
     currentState.searchItemBankList = data || {};
   },
-  [types.GET_ITEMBANK_REVIEWS](currentState, data) {
-    currentState.reviews = data || [];
+  [types.CHANGE_ITEMBANK_JOINSTATUS](currentState, data) {
+    currentState.ItemBankExercise.isMember = data;
   },
 };
 

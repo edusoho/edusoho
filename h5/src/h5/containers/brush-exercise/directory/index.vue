@@ -32,8 +32,16 @@ const CHAPTER = 'chapter'; // 章节
 const ASSESSMENT = 'assessment'; // 模拟卷
 const defaultData = {
   data: [],
-  paging: { limit: 5, offset: 0, total: 0 },
+  paging: { limit: 10, offset: 0, total: 0 },
   finished: false,
+};
+const Assessments = {
+  hasJoin: 'getMyItemBankAssessments',
+  noJoin: 'getItemBankAssessments',
+};
+const Categories = {
+  hasJoin: 'getMyItemBankCategories',
+  noJoin: 'getItemBankCategories',
 };
 export default {
   components: {
@@ -59,7 +67,14 @@ export default {
   computed: {
     ...mapState('ItemBank', {
       module: state => state.ItemBankModules,
+      isMember: state => state.ItemBankExercise.isMember,
     }),
+    joinStatus() {
+      if (this.isMember) {
+        return 'hasJoin';
+      }
+      return 'noJoin';
+    },
   },
   watch: {},
   created() {
@@ -82,9 +97,20 @@ export default {
         this.list[this.moduleId].data.length >= ItemBankInfomation.paging.total
       );
     },
-    getItemBankAssessments(more = false) {
+    // 获取模拟卷
+    getMyItemBankAssessments(more = false) {
       const moduleId = this.moduleId;
+      const joinStatus = this.joinStatus;
+      if (
+        // eslint-disable-next-line no-prototype-builtins
+        this.list[moduleId].hasOwnProperty('isRequestCompile') &&
+        !this.list[moduleId].isRequestCompile
+      ) {
+        return;
+      }
+      this.list[moduleId].isRequestCompile = false;
       this.isLoading = true;
+
       const query = {
         exerciseId: Number(this.exerciseId),
         moduleId: Number(moduleId),
@@ -93,42 +119,48 @@ export default {
         offset: this.list[moduleId].paging.offset,
         limit: this.list[moduleId].paging.limit,
       };
-      Api.getItemBankAssessments({ query, params }).then(res => {
+      Api[Assessments[joinStatus]]({ query, params }).then(res => {
         if (more) {
           this.list[moduleId].data = this.list[moduleId].data.concat(res.data);
         } else {
           this.list[moduleId].data = res.data;
         }
-        // this.list[moduleId].data = this.list[moduleId].data.concat(res.data);
         this.list[moduleId].finished = this.judegIsAll(res);
         if (!this.list[moduleId].finished) {
           this.list[moduleId].paging.offset = this.list[moduleId].data.length;
         }
         this.isLoading = false;
+        this.list[moduleId].isRequestCompile = true;
         this.$forceUpdate();
       });
     },
-    gettemBankCategories() {
+    // 获取章节练习
+    getMytemBankCategories() {
+      const joinStatus = this.joinStatus;
       const moduleId = this.moduleId;
       this.isLoading = true;
       const query = {
         exerciseId: Number(this.exerciseId),
         moduleId: Number(moduleId),
       };
-      Api.gettemBankCategories({ query }).then(res => {
+      Api[Categories[joinStatus]]({ query }).then(res => {
         this.list[moduleId].data = res;
         this.isLoading = false;
       });
     },
+    // 请求数据
     changeData() {
-      this.exercise = [];
       this.currentType === CHAPTER
-        ? this.gettemBankCategories()
-        : this.getItemBankAssessments();
+        ? this.getMytemBankCategories()
+        : this.getMyItemBankAssessments();
     },
     changModule(data) {
       this.currentType = data.type;
       this.moduleId = data.id;
+      // 保留数据缓存
+      if (this.list[data.id]) {
+        return;
+      }
       this.list[data.id] = JSON.parse(JSON.stringify(defaultData));
       this.changeData(data.id);
     },
@@ -138,9 +170,9 @@ export default {
       }
       this.timer = setTimeout(() => {
         if (!this.list[this.moduleId].finished && !this.isLoading) {
-          this.getItemBankAssessments(true);
+          this.getMyItemBankAssessments(true);
         }
-      }, 1000);
+      }, 300);
     },
   },
 };

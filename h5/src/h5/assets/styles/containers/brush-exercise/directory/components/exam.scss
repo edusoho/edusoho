@@ -6,7 +6,7 @@
 	.directory-exam-warp {
 		display: flex;
 		justify-content: space-between;
-		padding: vw(16) 0;
+		padding: vw(12) 0;
 		font-size: vw(14);
 		border-bottom: 1px solid #f5f5f5;
 	}
@@ -20,9 +20,11 @@
 		}
 
 		.exam-score {
+			margin-top: vw(4);
 			color: #999;
 		}
 	}
+
 
 	.exam-right {
 		display: flex;

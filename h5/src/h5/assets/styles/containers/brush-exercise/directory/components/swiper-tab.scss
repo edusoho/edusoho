@@ -1,5 +1,4 @@
 .brush-exercise-directory-swipertab {
-	padding: vw(16) 0;
 	background: #f5f5f5;
 
 	.van-tabs__nav {
@@ -49,5 +48,59 @@
 		color: #fff;
 		background: $primary-color;
 		border-radius: vw(14);
+	}
+
+	.brush-exercise-warp {
+		position: relative;
+	}
+
+	.brush-exercise-scroll {
+		padding: vw(16) 0;
+		padding-left: vw(16);
+		overflow-x: scroll;
+		white-space: nowrap;
+
+		&::-webkit-scrollbar {
+			display: none;
+			background-color: transparent;
+		}
+
+		button {
+			display: inline-block;
+			height: vw(28);
+			margin-right: vw(32);
+			padding: 0 vw(16);
+			color: #666;
+			font-size: vw(14);
+			background: #e2e2e2;
+			border: none;
+			border-radius: vw(14);
+			outline: none;
+		}
+
+		.activeTag {
+			position: relative;
+			color: #fff;
+			text-align: center;
+			background: $primary-color;
+			border-radius: vw(12);
+
+			&::after {
+				position: absolute;
+				bottom: vw(-16);
+				left: 50%;
+				z-index: 1;
+				width: 0 !important;
+				height: 0;
+				margin-left: -8px;
+				background: transparent;
+				border-color: transparent transparent #fff;
+				border-style: solid;
+				border-width: 0 8px 8px;
+				-webkit-box-shadow: 0 0;
+				box-shadow: 0 0;
+				content: '';
+			}
+		}
 	}
 }

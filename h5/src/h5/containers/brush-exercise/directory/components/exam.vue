@@ -10,12 +10,11 @@
           <div class="exam-left">
             <div class="exam-title">{{ item.assessment.name }}</div>
             <div class="exam-score">
-              {{ item.assessment.question_count }}题/{{
-                item.assessment.total_score
-              }}分
+              {{ item.assessment.question_count }}题/
+              {{ item.assessment.total_score }}分
             </div>
           </div>
-          <div class="exam-right">
+          <div class="exam-right" v-if="isMember">
             <div :class="[getBtnText(item).class]" @click="clickBtn(item)">
               {{ getBtnText(item).text }}
             </div>
@@ -26,13 +25,18 @@
     <van-loading v-if="isLoading" color="#1989fa" size="24px" vertical
       >加载中...</van-loading
     >
+    <empty v-if="noData" text="暂无试卷" class="empty__exam" />
   </div>
 </template>
 
 <script>
+import empty from '&/components/e-empty/e-empty.vue';
 import getBtnText from '@/utils/itemBank-status.js';
+import { mapState } from 'vuex';
 export default {
-  components: {},
+  components: {
+    empty,
+  },
   data() {
     return {
       loading: false,
@@ -54,7 +58,14 @@ export default {
       default: false,
     },
   },
-  computed: {},
+  computed: {
+    noData: function() {
+      return !this.isLoading && !this.exercise.length;
+    },
+    ...mapState('ItemBank', {
+      isMember: state => state.ItemBankExercise.isMember,
+    }),
+  },
   watch: {
     isLoading: {
       handler: 'handleLoad',
