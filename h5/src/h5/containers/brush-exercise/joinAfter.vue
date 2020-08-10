@@ -1,12 +1,17 @@
 <template>
-  <div class="course-detail-bank" >
+  <div class="course-detail-bank">
     <img :src="cover.large" style="width:100%;vertical-align: middle;" />
     <van-tabs v-model="active" sticky>
       <van-tab title="课程目录">
         <directory :exerciseId="Number(id)" />
       </van-tab>
       <van-tab title="学员评价">
-        <review-list ref="review" :target-id="details.itemBankId" :reviews="details.reviews" title="学员评价" defaul-value="暂无评价" type="item_bank_exercise"/>
+        <review-list
+          ref="review"
+          title="学员评价"
+          defaul-value="暂无评价"
+          type="item_bank_exercise"
+        />
       </van-tab>
     </van-tabs>
   </div>

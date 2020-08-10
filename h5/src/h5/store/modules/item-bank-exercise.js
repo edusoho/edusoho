@@ -9,7 +9,7 @@ const state = {
     courseList: [],
     paging: {},
   },
-  reviews: [],
+  reviews: null,
 };
 
 const mutations = {
@@ -24,6 +24,9 @@ const mutations = {
   },
   [types.CHANGE_ITEMBANK_JOINSTATUS](currentState, data) {
     currentState.ItemBankExercise.isMember = data;
+  },
+  [types.GET_ITEMBANK_REVIEWS](currentState, data) {
+    currentState.reviews = data || [];
   },
 };
 

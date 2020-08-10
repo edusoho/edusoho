@@ -1,7 +1,7 @@
 <template>
   <div class="">
     <e-loading v-if="isLoading" />
-    <component :is="currentComp" :details="details"></component>
+    <component :is="currentComp"></component>
   </div>
 </template>
 
@@ -16,10 +16,6 @@ export default {
   data() {
     return {
       currentComp: '',
-      details: {
-        reviews: [],
-        itemBankId: -1,
-      },
     };
   },
   computed: {
@@ -28,9 +24,6 @@ export default {
     }),
     ...mapState({
       isLoading: state => state.isLoading,
-    }),
-    ...mapState({
-      review: state => state.ItemBank.reviews,
     }),
   },
   watch: {
@@ -42,7 +35,6 @@ export default {
   },
   created() {
     this.getData();
-    this.details.itemBankId = Number(this.$route.params.id);
     this.getDataItemBank();
   },
   methods: {
@@ -66,10 +58,9 @@ export default {
     },
     // 获取题库数据
     getDataItemBank() {
-      const targetId = Number(this.details.itemBankId);
+      const targetId = Number(this.$route.params.id);
       const targetType = 'item_bank_exercise';
       this.getDataItemBankReviews({ targetId, targetType });
-      this.details.reviews = this.review;
     },
   },
 };
