@@ -23,4 +23,12 @@ interface ReviewService
     public function countRatingByTargetTypeAndTargetIds($targetType, $targetIds);
 
     public function getReviewByUserIdAndTargetTypeAndTargetId($userId, $targetType, $targetId);
+
+    public function countCourseReviews($conditions);
+
+    public function searchCourseReviews($conditions, $orderBys, $start, $limit);
+
+    public function countClassroomReviews($conditions);
+
+    public function searchClassroomReviews($conditions, $orderBys, $start, $limit);
 }

@@ -4,7 +4,7 @@
   {% if teacherId %}
     {% set teacher = data('User',{userId:teacherId}) %}
   {% endif %}
-  {% if course.type == 'open' or course.type == 'liveOpen' %}
+  {% if course.type == 'open' or course.type == 'lisrc/AppBundle/Controller/AdminV2/Teach/ReviewController.phpveOpen' %}
     {% set showUrl = path('open_course_show',{courseId:course.id}) %}
   {% else %}
     {% set showUrl = path('course_show', {id: course.defaultCourseId}) %}

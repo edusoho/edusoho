@@ -241,7 +241,7 @@ class UserController extends BaseController
 
         $conditions = [
             'userId' => $user['id'],
-            'targetTypes' => ['course', 'openCourse'],
+            'targetTypes' => ['course', 'openCourse', 'goods'],
         ];
 
         $paginator = new Paginator(
@@ -259,7 +259,7 @@ class UserController extends BaseController
 
         return $this->render('user/courses_favorited.html.twig', [
             'user' => $user,
-            'courseFavorites' => $favorites,
+            'favorites' => $favorites,
             'paginator' => $paginator,
             'type' => 'favorited',
         ]);

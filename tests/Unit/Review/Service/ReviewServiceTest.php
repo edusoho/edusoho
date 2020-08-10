@@ -4,7 +4,11 @@ namespace Tests\Unit\Review\Service;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseTestCase;
+use Biz\Classroom\Dao\ClassroomDao;
 use Biz\Common\CommonException;
+use Biz\Course\Dao\CourseDao;
+use Biz\Goods\Dao\GoodsDao;
+use Biz\Product\Dao\ProductDao;
 use Biz\Review\Dao\ReviewDao;
 use Biz\Review\ReviewException;
 use Biz\Review\Service\ReviewService;
@@ -359,6 +363,200 @@ class ReviewServiceTest extends BaseTestCase
         ], $result);
     }
 
+    public function testSumRatingByConditions()
+    {
+        $review1 = $this->createReview();
+        $review2 = $this->createReview(['rating' => 1, 'targetId' => $review1['targetId'] + 1000]);
+        $review3 = $this->createReview(['rating' => 3]);
+
+        $result = $this->getReviewDao()->sumRatingByConditions(['targetId' => $review1['targetId']]);
+        $this->assertEquals($review1['rating'] + $review3['rating'], $result);
+    }
+
+    public function testDeleteByParentId()
+    {
+        $review = $this->createReview();
+        $review1 = $this->createReview(['parentId' => $review['id']]);
+
+        $before = $this->getReviewDao()->get($review1['id']);
+
+        $this->getReviewDao()->deleteByParentId($review1['parentId']);
+
+        $after = $this->getReviewDao()->get($review1['id']);
+        $this->assertEquals($review1, $before);
+        $this->assertNull($after);
+    }
+
+    public function testDeleteByTargetTypeAndTargetId()
+    {
+        $review = $this->createReview();
+        $review1 = $this->createReview(['targetId' => 1000]);
+
+        $before = $this->getReviewDao()->get($review1['id']);
+
+        $this->getReviewDao()->deleteByTargetTypeAndTargetId($review1['targetType'], $review1['targetId']);
+
+        $after = $this->getReviewDao()->get($review1['id']);
+        $this->assertEquals($review1, $before);
+        $this->assertNull($after);
+    }
+
+    public function testCountCourseReview()
+    {
+        list($course1, $review1) = $this->createCourseReviews();
+        list($course1, $review2) = $this->createCourseReviews($course1, ['content' => 'review2', 'userId' => 1000]);
+        list($course1, $review3) = $this->createCourseReviews($course1, ['content' => 'review3', 'parentId' => $review1['id']]);
+
+        list($course2, $review4) = $this->createCourseReviews(['courseSetId' => 2, 'courseSetTitle' => 'title test'], ['userId' => 1000, 'content' => 'review3']);
+        list($course2, $review5) = $this->createCourseReviews($course2, ['content' => 'review4', 'rating' => 1]);
+
+        list($course3, $review6) = $this->createCourseReviews(['parentId' => 2], ['content' => 'review5']);
+        list($course3, $review7) = $this->createCourseReviews($course3, ['content' => 'review6']);
+
+        $result1 = $this->getReviewService()->countCourseReviews(['userId' => $this->getCurrentUser()->getId()]);
+        $this->assertEquals(5, $result1);
+
+        $result2 = $this->getReviewService()->countCourseReviews(['courseTitle' => $course2['courseSetTitle']]);
+        $this->assertEquals(2, $result2);
+
+        $result3 = $this->getReviewService()->countCourseReviews(['courseTitle' => 'test']);
+        $this->assertEquals(7, $result3);
+
+        $result4 = $this->getReviewService()->countCourseReviews(['rating' => 1]);
+        $this->assertEquals(1, $result4);
+
+        $result5 = $this->getReviewService()->countCourseReviews(['parentId' => 0]);
+        $this->assertEquals(6, $result5);
+    }
+
+    public function testSearchCourseReview_withDifferentConditions()
+    {
+        list($course1, $review1) = $this->createCourseReviews();
+        list($course1, $review2) = $this->createCourseReviews($course1, ['content' => 'review2', 'userId' => 1000]);
+        list($course1, $review3) = $this->createCourseReviews($course1, ['content' => 'review3', 'parentId' => $review1['id']]);
+
+        list($course2, $review4) = $this->createCourseReviews(['courseSetId' => 2, 'courseSetTitle' => 'title test'], ['userId' => 1000, 'content' => 'review3']);
+        list($course2, $review5) = $this->createCourseReviews($course2, ['content' => 'review4', 'rating' => 1]);
+
+        list($course3, $review6) = $this->createCourseReviews(['parentId' => 2], ['content' => 'review5']);
+        list($course3, $review7) = $this->createCourseReviews($course3, ['content' => 'review6']);
+
+        $result1 = $this->getReviewService()->searchCourseReviews(['userId' => $this->getCurrentUser()->getId()], ['id' => 'ASC'], 0, 10);
+        $this->assertEquals([$review1, $review3, $review5, $review6, $review7], $result1);
+
+        $result2 = $this->getReviewService()->searchCourseReviews(['courseTitle' => $course2['courseSetTitle']], ['id' => 'ASC'], 0, 10);
+        $this->assertEquals([$review4, $review5], $result2);
+
+        $result3 = $this->getReviewService()->searchCourseReviews(['courseTitle' => 'test'], ['id' => 'ASC'], 0, 10);
+        $this->assertEquals([$review1, $review2, $review3, $review4, $review5, $review6, $review7], $result3);
+
+        $result4 = $this->getReviewService()->searchCourseReviews(['rating' => 1], ['id' => 'ASC'], 0, 10);
+        $this->assertEquals([$review5], $result4);
+
+        $result5 = $this->getReviewService()->searchCourseReviews(['parentId' => 0], ['id' => 'ASC'], 0, 10);
+        $this->assertEquals([$review1, $review2, $review4, $review5, $review6, $review7], $result5);
+    }
+
+    public function testSearchCourseReview_withDifferentOrderByAndLimits()
+    {
+        list($course1, $review1) = $this->createCourseReviews();
+        list($course1, $review2) = $this->createCourseReviews($course1, ['content' => 'review2', 'userId' => 1000]);
+        list($course1, $review3) = $this->createCourseReviews($course1, ['content' => 'review3', 'parentId' => $review1['id']]);
+
+        list($course2, $review4) = $this->createCourseReviews(['courseSetId' => 2, 'courseSetTitle' => 'title test'], ['userId' => 1000, 'content' => 'review3']);
+        list($course2, $review5) = $this->createCourseReviews($course2, ['content' => 'review4', 'rating' => 1]);
+
+        list($course3, $review6) = $this->createCourseReviews(['parentId' => 2], ['content' => 'review5']);
+        list($course3, $review7) = $this->createCourseReviews($course3, ['content' => 'review6']);
+
+        $result1 = $this->getReviewService()->searchCourseReviews(['courseTitle' => 'test'], ['id' => 'ASC'], 0, 10);
+        $this->assertEquals([$review1, $review2, $review3, $review4, $review5, $review6, $review7], $result1);
+
+        $result2 = $this->getReviewService()->searchCourseReviews(['courseTitle' => 'test'], ['id' => 'DESC'], 0, 10);
+        $this->assertEquals([$review7, $review6, $review5, $review4, $review3, $review2, $review1], $result2);
+
+        $result1 = $this->getReviewService()->searchCourseReviews(['courseTitle' => 'test'], ['id' => 'ASC'], 0, 5);
+        $this->assertEquals([$review1, $review2, $review3, $review4, $review5], $result1);
+
+        $result2 = $this->getReviewService()->searchCourseReviews(['courseTitle' => 'test'], ['id' => 'DESC'], 0, 3);
+        $this->assertEquals([$review7, $review6, $review5], $result2);
+
+        $result1 = $this->getReviewService()->searchCourseReviews(['courseTitle' => 'test'], ['id' => 'ASC'], 2, 2);
+        $this->assertEquals([$review3, $review4], $result1);
+    }
+
+    public function testCountClassroomReview()
+    {
+        list($classroom1, $review1) = $this->createClassroomReviews();
+        list($classroom1, $review2) = $this->createClassroomReviews($classroom1, ['content' => 'review2', 'userId' => 1000]);
+        list($classroom1, $review3) = $this->createClassroomReviews($classroom1, ['content' => 'review3', 'parentId' => $review1['id']]);
+
+        list($classroom2, $review4) = $this->createClassroomReviews(['title' => 'title test classroom'], ['userId' => 1000, 'content' => 'review3']);
+        list($classroom2, $review5) = $this->createClassroomReviews($classroom2, ['content' => 'review4', 'rating' => 1]);
+
+        $result1 = $this->getReviewService()->countClassroomReviews(['userId' => $this->getCurrentUser()->getId()]);
+        $this->assertEquals(3, $result1);
+
+        $result2 = $this->getReviewService()->countClassroomReviews(['classroomTitle' => $classroom2['title']]);
+        $this->assertEquals(2, $result2);
+
+        $result3 = $this->getReviewService()->countClassroomReviews(['classroomTitle' => 'classroom']);
+        $this->assertEquals(5, $result3);
+
+        $result4 = $this->getReviewService()->countClassroomReviews(['rating' => 1]);
+        $this->assertEquals(1, $result4);
+
+        $result5 = $this->getReviewService()->countClassroomReviews(['parentId' => 0]);
+        $this->assertEquals(4, $result5);
+    }
+
+    public function testSearchClassroomReview_withDifferentConditions()
+    {
+        list($classroom1, $review1) = $this->createClassroomReviews();
+        list($classroom1, $review2) = $this->createClassroomReviews($classroom1, ['content' => 'review2', 'userId' => 1000]);
+        list($classroom1, $review3) = $this->createClassroomReviews($classroom1, ['content' => 'review3', 'parentId' => $review1['id']]);
+
+        list($classroom2, $review4) = $this->createClassroomReviews(['title' => 'title test classroom'], ['userId' => 1000, 'content' => 'review3']);
+        list($classroom2, $review5) = $this->createClassroomReviews($classroom2, ['content' => 'review4', 'rating' => 1]);
+
+        $result1 = $this->getReviewService()->searchClassroomReviews(['userId' => $this->getCurrentUser()->getId()], ['id' => 'ASC'], 0, 10);
+        $this->assertEquals([$review1, $review3, $review5], $result1);
+
+        $result2 = $this->getReviewService()->searchClassroomReviews(['classroomTitle' => $classroom2['title']], ['id' => 'ASC'], 0, 10);
+        $this->assertEquals([$review4, $review5], $result2);
+
+        $result3 = $this->getReviewService()->searchClassroomReviews(['classroomTitle' => 'classroom'], ['id' => 'ASC'], 0, 10);
+        $this->assertEquals([$review1, $review2, $review3, $review4, $review5], $result3);
+
+        $result4 = $this->getReviewService()->searchClassroomReviews(['rating' => 1], ['id' => 'ASC'], 0, 10);
+        $this->assertEquals([$review5], $result4);
+
+        $result5 = $this->getReviewService()->searchClassroomReviews(['parentId' => 0], ['id' => 'ASC'], 0, 10);
+        $this->assertEquals([$review1, $review2, $review4, $review5], $result5);
+    }
+
+    public function testSearchClassroomReview_withDifferentOrderByAndLimit()
+    {
+        list($classroom1, $review1) = $this->createClassroomReviews();
+        list($classroom1, $review2) = $this->createClassroomReviews($classroom1, ['content' => 'review2', 'userId' => 1000]);
+        list($classroom1, $review3) = $this->createClassroomReviews($classroom1, ['content' => 'review3', 'parentId' => $review1['id']]);
+
+        list($classroom2, $review4) = $this->createClassroomReviews(['title' => 'title test classroom'], ['userId' => 1000, 'content' => 'review3']);
+        list($classroom2, $review5) = $this->createClassroomReviews($classroom2, ['content' => 'review4', 'rating' => 1]);
+
+        $result1 = $this->getReviewService()->searchClassroomReviews(['classroomTitle' => 'classroom'], ['id' => 'ASC'], 0, 10);
+        $this->assertEquals([$review1, $review2, $review3, $review4, $review5], $result1);
+
+        $result2 = $this->getReviewService()->searchClassroomReviews(['classroomTitle' => 'classroom'], ['id' => 'DESC'], 0, 10);
+        $this->assertEquals([$review5, $review4, $review3, $review2, $review1], $result2);
+
+        $result3 = $this->getReviewService()->searchClassroomReviews(['classroomTitle' => 'classroom'], ['id' => 'ASC'], 0, 3);
+        $this->assertEquals([$review1, $review2, $review3], $result3);
+
+        $result4 = $this->getReviewService()->searchClassroomReviews(['classroomTitle' => 'classroom'], ['id' => 'DESC'], 0, 3);
+        $this->assertEquals([$review5, $review4, $review3], $result4);
+    }
+
     protected function createReview($fields = [])
     {
         $review = $this->mockDefaultReview($fields);
@@ -394,6 +592,130 @@ class ReviewServiceTest extends BaseTestCase
         $currentUser->fromArray($user);
         $currentUser->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
         ServiceKernel::instance()->setCurrentUser($currentUser);
+    }
+
+    protected function createClassroomReviews($classroom = [], $review = [])
+    {
+        if (empty($classroom['id'])) {
+            $classroom = $this->getClassroomDao()->create(array_merge([
+                'title' => 'classroom title',
+                'creator' => $this->getCurrentUser()->getId(),
+            ], $classroom));
+        } else {
+            $classroom = $this->getClassroomDao()->get($classroom['id']);
+        }
+
+        $product = $this->getProductDao()->getByTargetIdAndType($classroom['id'], 'classroom');
+        if (empty($product)) {
+            $product = $this->getProductDao()->create([
+                'targetType' => 'classroom',
+                'targetId' => $classroom['id'],
+                'title' => $classroom['title'],
+                'owner' => $classroom['creator'],
+            ]);
+        }
+
+        $goods = $this->getGoodsDao()->getByProductId($product['id']);
+        if (empty($goods)) {
+            $goods = $this->getGoodsDao()->create([
+                'productId' => $product['id'],
+                'type' => 'classroom',
+                'title' => $product['title'],
+                'creator' => $product['owner'],
+            ]);
+        }
+
+        $review = $this->createReview(array_merge([
+            'userId' => $this->getCurrentUser()->getId(),
+            'targetType' => 'goods',
+            'targetId' => $goods['id'],
+            'rating' => 5,
+            'content' => 'test review content',
+            'parentId' => 0,
+        ], $review));
+
+        return [$classroom, $review];
+    }
+
+    protected function createCourseReviews($course = [], $review = [])
+    {
+        if (empty($course['id'])) {
+            $course = $this->getCourseDao()->create(array_merge([
+                'courseSetId' => 1,
+                'courseSetTitle' => 'course-set test title',
+                'parentId' => 0,
+                'creator' => 100,
+            ], $course));
+        } else {
+            $course = $this->getCourseDao()->get($course['id']);
+        }
+
+        if (0 == $course['parentId']) {
+            $product = $this->getProductDao()->getByTargetIdAndType($course['courseSetId'], 'course');
+
+            if (empty($product)) {
+                $product = $this->getProductDao()->create([
+                    'targetType' => 'course',
+                    'targetId' => $course['courseSetId'],
+                    'title' => $course['courseSetTitle'],
+                    'owner' => $course['creator'],
+                ]);
+            }
+
+            $goods = $this->getGoodsDao()->getByProductId($product['id']);
+
+            if (empty($goods)) {
+                $goods = $this->getGoodsDao()->create([
+                    'productId' => $product['id'],
+                    'type' => 'course',
+                    'title' => $product['title'],
+                    'creator' => $product['owner'],
+                ]);
+            }
+        }
+
+        $review = $this->createReview(array_merge([
+            'userId' => $this->getCurrentUser()->getId(),
+            'targetType' => empty($goods) ? 'course' : 'goods',
+            'targetId' => empty($goods) ? $course['id'] : $goods['id'],
+            'rating' => 5,
+            'content' => 'test review content',
+            'parentId' => 0,
+        ], $review));
+
+        return [$course, $review];
+    }
+
+    /**
+     * @return CourseDao
+     */
+    protected function getCourseDao()
+    {
+        return $this->createDao('Course:CourseDao');
+    }
+
+    /**
+     * @return ClassroomDao
+     */
+    protected function getClassroomDao()
+    {
+        return $this->createDao('Classroom:ClassroomDao');
+    }
+
+    /**
+     * @return ProductDao
+     */
+    protected function getProductDao()
+    {
+        return $this->createDao('Product:ProductDao');
+    }
+
+    /**
+     * @return GoodsDao
+     */
+    protected function getGoodsDao()
+    {
+        return $this->createDao('Goods:GoodsDao');
     }
 
     /**

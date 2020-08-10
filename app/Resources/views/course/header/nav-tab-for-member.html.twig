@@ -1,5 +1,5 @@
 <ul class="nav nav-tabs nav-tabs--course  {% if mobile %} es-mobile-nav {% endif %}" role="tablist">
-  {% for key, tab in metas.tabs %}
+  {% for key, tab in metas.tabs if (key != 'reviews' or (key == 'reviews' and course.parentId > 0)) %}
     {% if  (mobile and loop.index <= 3) or (not mobile) %}
       <li role="presentation" id="{{ key }}"
           class="{% if route_params.tab|default('') == key  or nav|default('') == key %}active{% endif %}">
