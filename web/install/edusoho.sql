@@ -6,6 +6,7 @@ CREATE TABLE `activity` (
   `title` varchar(255) NOT NULL COMMENT '标题',
   `remark` text,
   `mediaId` int(10) unsigned DEFAULT '0' COMMENT '教学活动详细信息Id，如：视频id, 教室id',
+  `mediaIdBackup` int(10) NOT NULL DEFAULT '0' COMMENT '公共题库升级备份用',
   `mediaType` varchar(50) NOT NULL COMMENT '活动类型',
   `content` text COMMENT '活动描述',
   `length` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '若是视频类型，则表示时长；若是ppt，则表示页数；由具体的活动业务来定义',
@@ -20,6 +21,7 @@ CREATE TABLE `activity` (
   `migrateLessonId` int(10) DEFAULT '0',
   `finishType` varchar(64) NOT NULL DEFAULT 'time' COMMENT '任务完成条件类型',
   `finishData` varchar(256) NOT NULL DEFAULT '0' COMMENT '任务完成条件数据',
+  `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id',
   PRIMARY KEY (`id`),
   KEY `migrateLessonIdAndType` (`migrateLessonId`,`mediaType`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -32,6 +34,7 @@ CREATE TABLE `activity_audio` (
   `mediaId` int(10) DEFAULT NULL COMMENT '媒体文件ID',
   `migrateLessonId` int(10) DEFAULT '0',
   `hasText` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '是否包含图文',
+  `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='音频活动扩展表';
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -47,6 +50,7 @@ CREATE TABLE `activity_doc` (
   `createdUserId` int(11) NOT NULL,
   `updatedTime` int(11) DEFAULT NULL,
   `migrateLessonId` int(10) DEFAULT '0',
+  `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -60,8 +64,23 @@ CREATE TABLE `activity_download` (
   `updatedTime` int(10) unsigned NOT NULL,
   `fileIds` varchar(1024) DEFAULT NULL COMMENT '下载资料Ids',
   `migrateLessonId` int(10) DEFAULT '0',
+  `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `activity_exercise`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `activity_exercise` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `answerSceneId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '场次ID',
+  `drawCondition` text COMMENT '抽题条件',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id',
+  PRIMARY KEY (`id`),
+  KEY `answerSceneId` (`answerSceneId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='练习活动表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `activity_flash`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -75,8 +94,23 @@ CREATE TABLE `activity_flash` (
   `createdUserId` int(11) NOT NULL,
   `updatedTime` int(11) DEFAULT NULL,
   `migrateLessonId` int(10) DEFAULT '0',
+  `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `activity_homework`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `activity_homework` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `answerSceneId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '场次ID',
+  `assessmentId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '试卷id',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id',
+  PRIMARY KEY (`id`),
+  KEY `answerSceneId` (`answerSceneId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='作业活动表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `activity_learn_log`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -110,6 +144,7 @@ CREATE TABLE `activity_live` (
   `roomType` varchar(20) NOT NULL DEFAULT 'large' COMMENT '直播大小班课类型',
   `roomCreated` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '直播教室是否已创建',
   `migrateLessonId` int(10) DEFAULT '0',
+  `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -125,6 +160,7 @@ CREATE TABLE `activity_ppt` (
   `createdUserId` int(11) NOT NULL,
   `updatedTime` int(11) unsigned NOT NULL DEFAULT '0',
   `migrateLessonId` int(10) DEFAULT '0',
+  `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -134,6 +170,7 @@ DROP TABLE IF EXISTS `activity_testpaper`;
 CREATE TABLE `activity_testpaper` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '关联activity表的ID',
   `mediaId` int(10) NOT NULL DEFAULT '0' COMMENT '试卷ID',
+  `mediaIdBackup` int(10) NOT NULL DEFAULT '0' COMMENT '公共题库升级备份用',
   `doTimes` smallint(6) NOT NULL DEFAULT '0' COMMENT '考试次数',
   `redoInterval` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '重做时间间隔(小时)',
   `limitedTime` int(10) NOT NULL DEFAULT '0' COMMENT '考试时间',
@@ -141,8 +178,11 @@ CREATE TABLE `activity_testpaper` (
   `finishCondition` text,
   `requireCredit` int(10) NOT NULL DEFAULT '0' COMMENT '参加考试所需的学分',
   `testMode` varchar(50) NOT NULL DEFAULT 'normal' COMMENT '考试模式',
+  `answerSceneId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '答题引擎场次id',
   `migrateLessonId` int(10) DEFAULT '0',
-  PRIMARY KEY (`id`)
+  `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id',
+  PRIMARY KEY (`id`),
+  KEY `answerSceneId` (`answerSceneId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `activity_text`;
@@ -156,6 +196,7 @@ CREATE TABLE `activity_text` (
   `createdUserId` int(11) NOT NULL,
   `updatedTime` int(11) DEFAULT NULL,
   `migrateLessonId` int(10) DEFAULT '0',
+  `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -170,6 +211,7 @@ CREATE TABLE `activity_video` (
   `finishType` varchar(60) NOT NULL DEFAULT 'end' COMMENT '完成类型',
   `finishDetail` varchar(32) NOT NULL DEFAULT '0' COMMENT '完成条件',
   `migrateLessonId` int(10) DEFAULT '0',
+  `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='视频活动扩展表';
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -271,6 +313,199 @@ CREATE TABLE `batch_notification` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='群发通知表';
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `biz_answer_question_report`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `biz_answer_question_report` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `identify` varchar(255) NOT NULL COMMENT '唯一标识，(answer_record_id)_(question_id)',
+  `answer_record_id` int(10) unsigned NOT NULL COMMENT '答题记录id',
+  `assessment_id` int(10) unsigned NOT NULL COMMENT '试卷id',
+  `section_id` int(10) unsigned NOT NULL COMMENT '试卷模块id',
+  `item_id` int(10) unsigned NOT NULL COMMENT '题目id',
+  `question_id` int(10) unsigned NOT NULL COMMENT '问题id',
+  `score` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '得分',
+  `total_score` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '满分数',
+  `response` text,
+  `status` enum('reviewing','right','wrong','no_answer','part_right') NOT NULL DEFAULT 'reviewing' COMMENT '状态',
+  `comment` text COMMENT '评语',
+  `created_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `updated_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',
+  PRIMARY KEY (`id`),
+  KEY `answer_record_id` (`answer_record_id`),
+  KEY `identify` (`identify`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='题目问题报告表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `biz_answer_record`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `biz_answer_record` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `answer_scene_id` int(10) unsigned NOT NULL COMMENT '场次id',
+  `assessment_id` int(10) unsigned NOT NULL COMMENT '试卷id',
+  `answer_report_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '答题报告id',
+  `user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '答题者id',
+  `begin_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '开始答题时间',
+  `end_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '结束答题时间',
+  `used_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '答题时长-秒',
+  `status` enum('doing','paused','reviewing','finished') NOT NULL DEFAULT 'doing' COMMENT '答题状态',
+  `created_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `updated_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',
+  PRIMARY KEY (`id`),
+  KEY `answer_scene_id` (`answer_scene_id`),
+  KEY `user_id` (`user_id`),
+  KEY `answer_scene_id_status` (`answer_scene_id`,`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='答题记录表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `biz_answer_report`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `biz_answer_report` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL COMMENT '用户id',
+  `assessment_id` int(10) unsigned NOT NULL COMMENT '试卷id',
+  `answer_record_id` int(10) unsigned NOT NULL COMMENT '答题记录id',
+  `answer_scene_id` int(10) unsigned NOT NULL COMMENT '场次id',
+  `total_score` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '总分',
+  `score` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '总得分',
+  `right_rate` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '正确率',
+  `right_question_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '答对问题数',
+  `objective_score` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '客观题得分',
+  `subjective_score` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '主观题得分',
+  `grade` enum('none','excellent','good','passed','unpassed') NOT NULL DEFAULT 'none' COMMENT '等级',
+  `comment` text COMMENT '评语',
+  `review_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '批阅时间',
+  `review_user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '批阅人id',
+  `created_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `updated_time` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `answer_record_id` (`answer_record_id`),
+  KEY `user_id` (`user_id`),
+  KEY `answer_scene_id` (`answer_scene_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='答题报告';
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `biz_answer_scene`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `biz_answer_scene` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL COMMENT '场次名称',
+  `limited_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '答题限制时长(分钟) 0表示不限制',
+  `do_times` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '可作答次数 0表示不限制',
+  `redo_interval` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '答题间隔时长(分钟)',
+  `need_score` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否需要计算分值 1表示需要',
+  `manual_marking` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否支持手动批阅 1表示支持',
+  `start_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '开始答题时间 0表示不限制，可作答次数为1时可设置',
+  `pass_score` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '合格分',
+  `enable_facein` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否开启云监考',
+  `created_user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建者id',
+  `updated_user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新者id',
+  `created_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `updated_time` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='答题场次表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `biz_answer_scene_question_report`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `biz_answer_scene_question_report` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `answer_scene_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '场次id',
+  `question_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '问题id',
+  `item_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '题目id',
+  `right_num` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '答对人数',
+  `wrong_num` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '答错人数',
+  `no_answer_num` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '未作答人数',
+  `part_right_num` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '部分正确人数',
+  `response_points_report` text COMMENT '输入点报告',
+  `created_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `updated_time` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `answer_scene_id` (`answer_scene_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='场次报告';
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `biz_assessment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `biz_assessment` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `bank_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '所属题库id',
+  `displayable` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否显示 1表示显示',
+  `name` varchar(255) NOT NULL COMMENT '试卷名称',
+  `description` text COMMENT '试卷说明',
+  `total_score` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '总分',
+  `status` varchar(32) NOT NULL DEFAULT 'draft' COMMENT '试卷状态：draft,open,closed',
+  `item_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '题目数量',
+  `question_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '问题数量',
+  `created_user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建者ID',
+  `updated_user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新者ID',
+  `created_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `updated_time` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `bank_id` (`bank_id`),
+  KEY `status` (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='试卷表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `biz_assessment_section`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `biz_assessment_section` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `assessment_id` int(10) unsigned NOT NULL COMMENT '试卷ID',
+  `name` varchar(255) NOT NULL COMMENT '名称',
+  `seq` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '模块顺序',
+  `description` text COMMENT '模块说明',
+  `item_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '题目数量',
+  `total_score` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '总分',
+  `question_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '问题数量',
+  `score_rule` varchar(512) NOT NULL DEFAULT '' COMMENT '得分规则',
+  `created_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `updated_time` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `assessment_id` (`assessment_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='试卷模块表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `biz_assessment_section_item`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `biz_assessment_section_item` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `assessment_id` int(10) unsigned NOT NULL COMMENT '试卷ID',
+  `item_id` int(10) unsigned NOT NULL COMMENT '题目ID',
+  `section_id` int(10) unsigned NOT NULL COMMENT '模块ID',
+  `seq` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '题目顺序',
+  `score` float(10,1) NOT NULL COMMENT '题目分数',
+  `question_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '问题数量',
+  `question_scores` text COMMENT '问题分数',
+  `score_rule` text COMMENT '得分规则(包括题项)',
+  `created_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `updated_time` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `section_id` (`section_id`),
+  KEY `seq` (`seq`),
+  KEY `assessmentId_seq` (`assessment_id`,`seq`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='试卷题目表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `biz_facein_cheat_record`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `biz_facein_cheat_record` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
+  `answer_scene_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '场次id',
+  `answer_record_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '答题记录id',
+  `status` varchar(255) NOT NULL DEFAULT '' COMMENT '作弊状态',
+  `level` varchar(255) NOT NULL DEFAULT '' COMMENT '作弊等级',
+  `duration` varchar(255) NOT NULL DEFAULT '',
+  `behavior` varchar(255) NOT NULL DEFAULT '' COMMENT '作弊行为',
+  `picture_path` varchar(255) NOT NULL DEFAULT '' COMMENT '文件路径',
+  `created_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  KEY `answer_scene_id` (`answer_scene_id`),
+  KEY `answer_record_id` (`answer_record_id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='云监考作弊记录';
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `biz_invoice`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -327,6 +562,87 @@ CREATE TABLE `biz_invoice_template` (
   `is_default` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否默认',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `biz_item`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `biz_item` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '题目ID',
+  `bank_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '所属题库id',
+  `type` varchar(64) NOT NULL DEFAULT '' COMMENT '题目类型',
+  `material` text COMMENT '题目材料',
+  `analysis` text COMMENT '题目解析',
+  `category_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '类别',
+  `difficulty` varchar(64) NOT NULL DEFAULT 'normal' COMMENT '难度',
+  `question_num` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '问题数量',
+  `created_user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建者',
+  `updated_user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最新更新用户',
+  `updated_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
+  `created_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  KEY `bank_id` (`bank_id`),
+  KEY `difficulty` (`difficulty`),
+  KEY `category_id` (`category_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='题目表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `biz_item_attachment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `biz_item_attachment` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `global_id` varchar(32) NOT NULL DEFAULT '' COMMENT '云文件ID',
+  `hash_id` varchar(128) NOT NULL DEFAULT '' COMMENT '文件的HashID',
+  `target_id` int(10) NOT NULL DEFAULT '0' COMMENT '对象id',
+  `target_type` varchar(32) NOT NULL DEFAULT '' COMMENT '对象类型',
+  `module` varchar(32) NOT NULL DEFAULT '' COMMENT '附件所属题目模块',
+  `file_name` varchar(1024) NOT NULL DEFAULT '' COMMENT '附件名',
+  `ext` varchar(12) NOT NULL DEFAULT '' COMMENT '后缀',
+  `size` int(10) NOT NULL DEFAULT '0' COMMENT '文件大小',
+  `status` varchar(32) NOT NULL DEFAULT '' COMMENT '上传状态',
+  `file_type` varchar(32) NOT NULL DEFAULT '' COMMENT '文件类型',
+  `created_user_id` int(10) NOT NULL DEFAULT '0' COMMENT '用户Id',
+  `convert_status` varchar(32) NOT NULL DEFAULT 'none' COMMENT '转码状态',
+  `audio_convert_status` varchar(32) NOT NULL DEFAULT 'none' COMMENT '转音频状态',
+  `mp4_convert_status` varchar(32) NOT NULL DEFAULT 'none' COMMENT '转mp4状态',
+  `updated_time` int(10) NOT NULL DEFAULT '0',
+  `created_time` int(10) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `target_id` (`target_id`),
+  KEY `target_type` (`target_type`),
+  KEY `global_id` (`global_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='题目附件表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `biz_item_bank`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `biz_item_bank` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(1024) NOT NULL COMMENT '题库名称',
+  `assessment_num` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '试卷数量',
+  `item_num` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '题目数量',
+  `created_user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建者',
+  `updated_user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最新更新用户',
+  `created_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `updated_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='题库表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `biz_item_category`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `biz_item_category` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(1024) NOT NULL COMMENT '名称',
+  `weight` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '权重',
+  `parent_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '父级分类id',
+  `bank_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '所属题库id',
+  `created_user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建者',
+  `updated_user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最新更新用户',
+  `created_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `updated_time` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `bank_id` (`bank_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='题目分类表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `biz_online`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -628,6 +944,42 @@ CREATE TABLE `biz_pay_user_balance` (
   UNIQUE KEY `user_id` (`user_id`),
   KEY `migrate_id` (`migrate_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `biz_question`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `biz_question` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '问题ID',
+  `item_id` int(10) unsigned NOT NULL COMMENT '题目ID',
+  `stem` text COMMENT '题干',
+  `seq` int(10) unsigned NOT NULL COMMENT '序号',
+  `score` float(10,1) unsigned NOT NULL DEFAULT '0.0' COMMENT '分数',
+  `answer_mode` varchar(255) NOT NULL DEFAULT '' COMMENT '作答方式',
+  `response_points` text COMMENT '答题点信息',
+  `answer` text COMMENT '参考答案',
+  `analysis` text COMMENT '问题解析',
+  `created_user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建者',
+  `updated_user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最新更新用户',
+  `updated_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
+  `created_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  KEY `item_id` (`item_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='问题表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `biz_question_favorite`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `biz_question_favorite` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `target_type` varchar(32) NOT NULL DEFAULT '' COMMENT '收藏来源',
+  `target_id` int(10) NOT NULL DEFAULT '0' COMMENT '收藏来源id',
+  `question_id` int(10) NOT NULL DEFAULT '0' COMMENT '问题id',
+  `item_id` int(10) NOT NULL DEFAULT '0' COMMENT '题目id',
+  `user_id` int(10) NOT NULL DEFAULT '0' COMMENT '用户Id',
+  `created_time` int(10) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `target_type_and_target_id` (`target_type`,`target_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='题目收藏表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `biz_queue_failed_job`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1033,7 +1385,7 @@ CREATE TABLE `classroom` (
   `middlePicture` varchar(255) NOT NULL DEFAULT '' COMMENT '中图',
   `largePicture` varchar(255) NOT NULL DEFAULT '' COMMENT '大图',
   `headTeacherId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '班主任ID',
-  `teacherIds` varchar(255) NOT NULL DEFAULT '' COMMENT '教师IDs',
+  `teacherIds` varchar(1024) NOT NULL DEFAULT '' COMMENT '教师IDs',
   `assistantIds` text COMMENT '助教Ids',
   `hitNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '点击数',
   `auditorNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '旁听生数',
@@ -1236,88 +1588,52 @@ CREATE TABLE `coupon` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(255) NOT NULL COMMENT '优惠码',
   `type` enum('minus','discount') NOT NULL COMMENT '优惠方式',
-  `status` enum('used','unused','receive','using') NOT NULL DEFAULT 'unused',
+  `status` enum('used','unused','receive','using') NOT NULL DEFAULT 'unused' COMMENT '使用状态',
   `rate` float(10,2) unsigned NOT NULL COMMENT '若优惠方式为打折，则为打折率，若为抵价，则为抵价金额',
   `batchId` int(10) unsigned DEFAULT NULL COMMENT '批次号',
   `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '使用者',
   `deadline` int(10) unsigned NOT NULL COMMENT '失效时间',
   `targetType` varchar(64) DEFAULT NULL COMMENT '使用对象类型',
   `targetId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '使用对象',
+  `targetIds` text COMMENT '优惠券绑定资源',
   `orderId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '订单号',
   `orderTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '使用时间',
   `createdTime` int(10) unsigned NOT NULL,
   `receiveTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '接收时间',
+  `fullDiscountPrice` float(10,2) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `code` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='优惠码表';
 /*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `course`;
+DROP TABLE IF EXISTS `coupon_batch`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `course` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '课程ID',
-  `title` varchar(1024) NOT NULL COMMENT '课程标题',
-  `subtitle` varchar(1024) NOT NULL DEFAULT '' COMMENT '课程副标题',
-  `status` enum('draft','published','closed') NOT NULL DEFAULT 'draft' COMMENT '课程状态',
-  `buyable` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否开放购买',
-  `buyExpiryTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '购买开放有效期',
-  `type` varchar(255) NOT NULL DEFAULT 'normal' COMMENT '课程类型',
-  `maxStudentNum` int(11) NOT NULL DEFAULT '0' COMMENT '直播课程最大学员数上线',
-  `price` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '课程价格',
-  `originPrice` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '课程人民币原价',
-  `coinPrice` float(10,2) NOT NULL DEFAULT '0.00',
-  `originCoinPrice` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '课程虚拟币原价',
-  `expiryMode` enum('date','days','none') NOT NULL DEFAULT 'none' COMMENT '有效期模式（截止日期|有效期天数|不设置）',
-  `expiryDay` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '课程过期天数',
-  `showStudentNumType` enum('opened','closed') NOT NULL DEFAULT 'opened' COMMENT '学员数显示模式',
-  `serializeMode` enum('none','serialize','finished') NOT NULL DEFAULT 'none' COMMENT '连载模式',
-  `income` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '课程销售总收入',
-  `lessonNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '课时数',
-  `giveCredit` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学完课程所有课时，可获得的总学分',
-  `rating` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '排行分数',
-  `ratingNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '投票人数',
-  `vipLevelId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '可以免费看的，会员等级',
-  `categoryId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '分类ID',
-  `tags` text COMMENT '标签IDs',
-  `smallPicture` varchar(255) NOT NULL DEFAULT '' COMMENT '小图',
-  `middlePicture` varchar(255) NOT NULL DEFAULT '' COMMENT '中图',
-  `largePicture` varchar(255) NOT NULL DEFAULT '' COMMENT '大图',
-  `about` text COMMENT '简介',
-  `teacherIds` text COMMENT '显示的课程教师IDs',
-  `goals` text COMMENT '课程目标',
-  `audiences` text COMMENT '适合人群',
-  `recommended` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否为推荐课程',
-  `recommendedSeq` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '推荐序号',
-  `recommendedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '推荐时间',
-  `locationId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上课地区ID',
-  `parentId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '课程的父Id',
-  `address` varchar(255) NOT NULL DEFAULT '' COMMENT '上课地区地址',
-  `studentNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学员数',
-  `hitNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '查看次数',
-  `noteNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '课程笔记数量',
-  `userId` int(10) unsigned NOT NULL COMMENT '课程发布人ID',
-  `discountId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '折扣活动ID',
-  `discount` float(10,2) NOT NULL DEFAULT '10.00' COMMENT '折扣',
-  `deadlineNotify` enum('active','none') NOT NULL DEFAULT 'none' COMMENT '开启有效期通知',
-  `daysOfNotifyBeforeDeadline` int(10) NOT NULL DEFAULT '0',
-  `watchLimit` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '课时观看次数限制',
-  `useInClassroom` enum('single','more') NOT NULL DEFAULT 'single' COMMENT '课程能否用于多个班级',
-  `singleBuy` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '加入班级后课程能否单独购买',
-  `createdTime` int(10) unsigned NOT NULL COMMENT '课程创建时间',
-  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',
-  `freeStartTime` int(10) NOT NULL DEFAULT '0',
-  `freeEndTime` int(10) NOT NULL DEFAULT '0',
-  `approval` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否需要实名认证',
-  `locked` int(10) NOT NULL DEFAULT '0' COMMENT '是否上锁1上锁,0解锁',
-  `maxRate` tinyint(3) unsigned NOT NULL DEFAULT '100' COMMENT '最大抵扣百分比',
-  `tryLookable` tinyint(4) NOT NULL DEFAULT '0',
-  `tryLookTime` int(11) NOT NULL DEFAULT '0',
-  `conversationId` varchar(255) NOT NULL DEFAULT '0',
-  `orgId` int(10) unsigned DEFAULT '1',
-  `orgCode` varchar(255) DEFAULT '1.' COMMENT '组织机构内部编码',
-  PRIMARY KEY (`id`),
-  KEY `updatedTime` (`updatedTime`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `coupon_batch` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) NOT NULL COMMENT '批次名称',
+  `token` varchar(64) NOT NULL DEFAULT '0',
+  `type` enum('minus','discount') NOT NULL COMMENT '优惠方式',
+  `generatedNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '生成数',
+  `usedNum` int(11) NOT NULL DEFAULT '0' COMMENT '使用次数',
+  `rate` float(10,2) unsigned NOT NULL COMMENT '若优惠方式为打折，则为打折率，若为抵价，则为抵价金额',
+  `prefix` varchar(64) NOT NULL COMMENT '批次前缀',
+  `digits` int(20) unsigned NOT NULL COMMENT '优惠码位数',
+  `money` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '已优惠金额',
+  `deadline` int(10) unsigned NOT NULL COMMENT '失效时间',
+  `targetType` varchar(64) NOT NULL DEFAULT '' COMMENT '使用对象类型',
+  `targetId` int(10) unsigned NOT NULL DEFAULT '0',
+  `targetIds` text COMMENT '优惠券批次绑定资源',
+  `description` text COMMENT '优惠说明',
+  `createdTime` int(10) unsigned NOT NULL,
+  `fullDiscountPrice` float(10,2) unsigned DEFAULT NULL,
+  `h5MpsEnable` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '通过商品详情页小程序/微网校渠道发放',
+  `linkEnable` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '通过链接渠道发放',
+  `codeEnable` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '通过优惠码渠道发放',
+  `unreceivedNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '未领取的数量',
+  `deadlineMode` enum('time','day') NOT NULL DEFAULT 'time' COMMENT '有效期模式',
+  `fixedDay` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '固定天数',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='优惠码批次表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `course_chapter`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1340,6 +1656,7 @@ CREATE TABLE `course_chapter` (
   `mgrateCopyTaskId` int(10) DEFAULT '0',
   `migrate_task_id` int(10) NOT NULL DEFAULT '0' COMMENT '来源任务表id',
   `published_number` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '已发布的章节编号',
+  `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id',
   PRIMARY KEY (`id`),
   KEY `migrate_task_id` (`migrate_task_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1494,29 +1811,6 @@ CREATE TABLE `course_lesson_view` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `course_material`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `course_material` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '课程资料ID',
-  `courseId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '资料所属课程ID',
-  `lessonId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '资料所属课时ID',
-  `title` varchar(1024) NOT NULL COMMENT '资料标题',
-  `description` text COMMENT '资料描述',
-  `link` varchar(1024) NOT NULL DEFAULT '' COMMENT '外部链接地址',
-  `fileId` int(10) unsigned NOT NULL COMMENT '资料文件ID',
-  `fileUri` varchar(255) NOT NULL DEFAULT '' COMMENT '资料文件URI',
-  `fileMime` varchar(255) NOT NULL DEFAULT '' COMMENT '资料文件MIME',
-  `fileSize` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '资料文件大小',
-  `source` varchar(50) NOT NULL DEFAULT 'coursematerial',
-  `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '资料创建人ID',
-  `createdTime` int(10) unsigned NOT NULL COMMENT '资料创建时间',
-  `copyId` int(10) NOT NULL DEFAULT '0' COMMENT '复制的资料Id',
-  `type` varchar(50) NOT NULL DEFAULT 'course' COMMENT '课程类型',
-  `courseSetId` int(10) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `course_material_v8`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -1537,6 +1831,7 @@ CREATE TABLE `course_material_v8` (
   `copyId` int(10) NOT NULL DEFAULT '0' COMMENT '复制的资料Id',
   `type` varchar(50) NOT NULL DEFAULT 'course' COMMENT '课程类型',
   `courseSetId` int(10) unsigned NOT NULL DEFAULT '0',
+  `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1571,6 +1866,7 @@ CREATE TABLE `course_member` (
   `updatedTime` int(10) NOT NULL DEFAULT '0' COMMENT '最后更新时间',
   `lastViewTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后查看时间',
   `courseSetId` int(10) unsigned NOT NULL COMMENT '课程ID',
+  `stickyTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '教师计划置顶',
   PRIMARY KEY (`id`),
   UNIQUE KEY `courseId` (`courseId`,`userId`),
   KEY `courseId_role_createdTime` (`courseId`,`role`,`createdTime`),
@@ -1658,6 +1954,7 @@ CREATE TABLE `course_set_v8` (
   `orgId` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '组织机构ID',
   `orgCode` varchar(255) NOT NULL DEFAULT '1.' COMMENT '组织机构内部编码',
   `discountId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '折扣活动ID',
+  `discountType` varchar(64) NOT NULL DEFAULT 'discount' COMMENT '打折类型(discount:打折，reduce:减价)',
   `discount` float(10,2) NOT NULL DEFAULT '10.00' COMMENT '折扣',
   `hitNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '课程点击数',
   `maxRate` tinyint(3) unsigned NOT NULL DEFAULT '100' COMMENT '最大抵扣百分比',
@@ -1668,6 +1965,7 @@ CREATE TABLE `course_set_v8` (
   `maxCoursePrice` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '已发布教学计划的最高价格',
   `teacherIds` varchar(1024) DEFAULT NULL,
   `defaultCourseId` int(11) unsigned DEFAULT '0' COMMENT '默认的计划ID',
+  `platform` varchar(32) NOT NULL DEFAULT 'self' COMMENT '课程来源平台：self 自己平台创建，supplier S端提供',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1691,6 +1989,7 @@ CREATE TABLE `course_task` (
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',
   `mode` varchar(60) DEFAULT NULL COMMENT '任务模式',
+  `isLesson` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否为固定课时',
   `number` varchar(32) NOT NULL DEFAULT '' COMMENT '任务编号',
   `type` varchar(50) NOT NULL COMMENT '任务类型',
   `mediaSource` varchar(32) NOT NULL DEFAULT '' COMMENT '媒体文件来源(self:本站上传,youku:优酷)',
@@ -1698,11 +1997,13 @@ CREATE TABLE `course_task` (
   `maxOnlineNum` int(11) unsigned DEFAULT '0' COMMENT '任务最大可同时进行的人数，0为不限制',
   `copyId` int(10) NOT NULL DEFAULT '0' COMMENT '复制来源task的id',
   `migrateLessonId` int(10) DEFAULT '0',
+  `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id',
   PRIMARY KEY (`id`),
   KEY `seq` (`seq`),
   KEY `courseId` (`courseId`),
   KEY `migrateLessonIdAndType` (`migrateLessonId`,`type`),
-  KEY `migrateLessonIdAndActivityId` (`migrateLessonId`,`activityId`)
+  KEY `migrateLessonIdAndActivityId` (`migrateLessonId`,`activityId`),
+  KEY `categoryId` (`categoryId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `course_task_result`;
@@ -1725,7 +2026,8 @@ CREATE TABLE `course_task_result` (
   UNIQUE KEY `courseTaskId_userId` (`courseTaskId`,`userId`),
   KEY `courseTaskId_activityId` (`courseTaskId`,`activityId`),
   KEY `idx_userId_courseId` (`userId`,`courseId`),
-  KEY `finishedTime` (`finishedTime`)
+  KEY `finishedTime` (`finishedTime`),
+  KEY `courseId` (`courseId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `course_task_try_view`;
@@ -1817,7 +2119,7 @@ CREATE TABLE `course_v8` (
   `courseSetId` int(11) NOT NULL,
   `title` varchar(1024) DEFAULT NULL,
   `subtitle` varchar(120) DEFAULT '' COMMENT '计划副标题',
-  `courseSetTitle` varchar(128) NOT NULL DEFAULT '' COMMENT '所属课程名称',
+  `courseSetTitle` varchar(1024) NOT NULL DEFAULT '' COMMENT '所属课程名称',
   `learnMode` varchar(32) DEFAULT NULL COMMENT 'lockMode, freeMode',
   `expiryMode` varchar(32) DEFAULT NULL COMMENT 'days, date',
   `expiryDays` int(11) DEFAULT NULL,
@@ -1889,6 +2191,7 @@ CREATE TABLE `course_v8` (
   `taskRewardPoint` int(10) NOT NULL DEFAULT '0' COMMENT '任务积分',
   `enableAudio` int(1) NOT NULL DEFAULT '0',
   `isHideUnpublish` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '学员端是否隐藏未发布课时',
+  `platform` varchar(32) NOT NULL DEFAULT 'self' COMMENT '课程来源平台：self 自己平台创建，supplier S端提供',
   PRIMARY KEY (`id`),
   KEY `courseSetId` (`courseSetId`),
   KEY `courseSetId_status` (`courseSetId`,`status`),
@@ -1915,6 +2218,38 @@ CREATE TABLE `crontab_job` (
   `enabled` tinyint(1) DEFAULT '1' COMMENT '是否启用',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `destroy_account_record`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `destroy_account_record` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `nickname` varchar(128) NOT NULL DEFAULT '' COMMENT '用户名',
+  `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
+  `reason` varchar(256) NOT NULL DEFAULT '' COMMENT '注销理由',
+  `rejectedReason` varchar(128) NOT NULL DEFAULT '' COMMENT '拒绝申请理由',
+  `status` varchar(128) NOT NULL DEFAULT 'audit' COMMENT '注销状态（audit、cancel、passed、rejected）',
+  `ip` varchar(64) NOT NULL DEFAULT '' COMMENT '申请ip',
+  `auditUserId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '处理申请的用户id',
+  `auditTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '通过时间',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='注销用户记录表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `destroyed_account`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `destroyed_account` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `recordId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '注销记录ID',
+  `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '已注销用户ID',
+  `nickname` varchar(64) NOT NULL DEFAULT '' COMMENT '注销用户曾用名',
+  `time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '注销时间',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='已注销帐号表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `dictionary`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -1997,6 +2332,20 @@ CREATE TABLE `face_log` (
   KEY `idx_userId_status_createdTime` (`userId`,`createdTime`,`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `favorite`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `favorite` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '收藏人',
+  `targetType` varchar(64) NOT NULL COMMENT '收藏的对象类型',
+  `targetId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '收藏对象id',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '收藏时间',
+  PRIMARY KEY (`id`),
+  KEY `targetType_targetId` (`targetType`,`targetId`),
+  KEY `userId` (`userId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='收藏表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `file`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -2034,6 +2383,7 @@ CREATE TABLE `file_used` (
   `targetType` varchar(32) NOT NULL,
   `targetId` int(11) NOT NULL,
   `createdTime` int(11) NOT NULL,
+  `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id',
   PRIMARY KEY (`id`),
   KEY `file_used_type_targetType_targetId_index` (`type`,`targetType`,`targetId`),
   KEY `file_used_type_targetType_targetId_fileId_index` (`type`,`targetType`,`targetId`,`fileId`),
@@ -2051,6 +2401,51 @@ CREATE TABLE `friend` (
   `createdTime` int(10) unsigned NOT NULL COMMENT '关注时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `goods`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `goods` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `productId` int(10) unsigned NOT NULL COMMENT '产品id',
+  `title` varchar(1024) NOT NULL COMMENT '商品标题',
+  `images` text COMMENT '商品图片',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `goods_purchase_voucher`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `goods_purchase_voucher` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `specsId` int(11) unsigned NOT NULL,
+  `goodsId` int(11) unsigned NOT NULL,
+  `orderId` int(11) unsigned NOT NULL DEFAULT '0',
+  `userId` int(11) unsigned NOT NULL,
+  `effectiveType` varchar(64) NOT NULL COMMENT '生效类型',
+  `effectiveTime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '生效时间',
+  `invalidTime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '失效时间',
+  `createdTime` int(11) unsigned NOT NULL DEFAULT '0',
+  `updatedTime` int(11) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `goods_specs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `goods_specs` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `goodsId` int(10) unsigned NOT NULL COMMENT '商品id',
+  `targetId` int(10) unsigned NOT NULL COMMENT '目标内容Id,如教学计划id',
+  `title` varchar(1024) NOT NULL COMMENT '规格标题',
+  `images` text COMMENT '商品图片',
+  `price` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '价格',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品规格表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `groups`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -2256,6 +2651,20 @@ CREATE TABLE `keyword_banlog` (
   KEY `keywordId` (`keywordId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `live_statistics`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `live_statistics` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `liveId` int(10) unsigned NOT NULL,
+  `data` mediumtext,
+  `type` enum('checkin','visitor') NOT NULL DEFAULT 'checkin' COMMENT 'checkin:点名记录, visitor:访问记录',
+  `createdTime` int(10) unsigned NOT NULL,
+  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `liveId` (`liveId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='直播数据统计';
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `location`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -2302,7 +2711,8 @@ CREATE TABLE `log_v8` (
   `createdTime` int(10) unsigned NOT NULL COMMENT '日志发生时间',
   `level` char(10) NOT NULL COMMENT '日志等级',
   PRIMARY KEY (`id`),
-  KEY `userId` (`userId`)
+  KEY `userId` (`userId`),
+  KEY `module_action_createdTime` (`module`,`action`,`createdTime`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `marker`;
@@ -2316,6 +2726,23 @@ CREATE TABLE `marker` (
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='驻点';
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `marketing_means`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `marketing_means` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `type` varchar(64) NOT NULL DEFAULT '' COMMENT '营销手段：discount,vip,coupon',
+  `fromMeansId` int(10) unsigned NOT NULL COMMENT '对应营销手段id（discountId, couponBatchId,vipLevelId）',
+  `targetType` varchar(64) NOT NULL DEFAULT '' COMMENT '目标类型:整个商品、单个规格；goods,specs,category(商品分类)',
+  `targetId` int(10) unsigned NOT NULL COMMENT '单个目标，如果批量选，则创建多条，0：表示某目标类型的所有，>0: 表示具体对应的目标类型',
+  `status` tinyint(2) unsigned NOT NULL DEFAULT '1' COMMENT '1： 有效， 2：无效',
+  `visibleOnGoodsPage` tinyint(2) unsigned NOT NULL DEFAULT '1' COMMENT '商品页可用,  0： 不可用 1 可用 （业务需求，字段暂时启用）',
+  `createdTime` int(11) unsigned NOT NULL,
+  `updatedTime` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `targetType_targetId` (`targetType`,`targetId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `member_operation_record`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -2346,7 +2773,8 @@ CREATE TABLE `member_operation_record` (
   KEY `order_id` (`order_id`),
   KEY `operateType_operateTime` (`operate_type`,`operate_time`),
   KEY `operateType_targetType` (`operate_type`,`target_type`),
-  KEY `operate_time` (`operate_time`)
+  KEY `operate_time` (`operate_time`),
+  KEY `operateType_targetType_reasonType` (`operate_type`,`target_type`,`reason_type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `message`;
@@ -2446,6 +2874,135 @@ CREATE TABLE `notification` (
   `isRead` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否已读',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `notification_batch`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `notification_batch` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `eventId` int(11) unsigned NOT NULL COMMENT 'eventId',
+  `strategyId` int(11) unsigned NOT NULL COMMENT 'strategyId',
+  `sn` varchar(64) NOT NULL DEFAULT '' COMMENT '第三方批次SN',
+  `status` varchar(32) NOT NULL DEFAULT 'created' COMMENT 'created,finished',
+  `extra` int(11) DEFAULT NULL COMMENT '单批次',
+  `createdTime` int(11) NOT NULL,
+  `updatedTime` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `notification_event`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `notification_event` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(64) NOT NULL DEFAULT '' COMMENT '通知标题',
+  `content` text NOT NULL COMMENT '通知主体',
+  `totalCount` int(10) unsigned NOT NULL COMMENT '通知数量',
+  `succeedCount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '通知发送成功数量',
+  `status` varchar(32) NOT NULL DEFAULT 'sending' COMMENT 'sending,finish',
+  `reason` text COMMENT '失败原因',
+  `createdTime` int(10) unsigned NOT NULL,
+  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `notification_strategy`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `notification_strategy` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `eventId` int(10) unsigned NOT NULL,
+  `type` varchar(32) NOT NULL DEFAULT '' COMMENT 'wechat,email,short_message',
+  `seq` int(11) unsigned NOT NULL,
+  `createdTime` int(10) unsigned NOT NULL,
+  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `eventId` (`eventId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `oauth_access_token`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `oauth_access_token` (
+  `token` varchar(40) NOT NULL COMMENT '授权TOKEN',
+  `client_id` varchar(50) DEFAULT NULL COMMENT '客户端ID',
+  `user_id` varchar(100) DEFAULT NULL COMMENT '用户ID',
+  `expires` datetime NOT NULL COMMENT '有效期',
+  `scope` varchar(50) DEFAULT NULL COMMENT '授权范围',
+  PRIMARY KEY (`token`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='授权令牌表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `oauth_authorization_code`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `oauth_authorization_code` (
+  `code` varchar(40) NOT NULL COMMENT '授权码',
+  `client_id` varchar(50) DEFAULT NULL COMMENT '客户端ID',
+  `expires` datetime NOT NULL COMMENT '有效期',
+  `user_id` varchar(100) DEFAULT NULL COMMENT '用户ID',
+  `redirect_uri` longtext NOT NULL COMMENT '客户端授权登陆回调地址',
+  `scope` varchar(255) DEFAULT NULL COMMENT '授权范围',
+  `id_token` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='授权码表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `oauth_client`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `oauth_client` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `client_id` varchar(50) NOT NULL DEFAULT '' COMMENT '客户端ID',
+  `client_secret` varchar(40) NOT NULL DEFAULT '' COMMENT '客户端secret',
+  `redirect_uri` text NOT NULL COMMENT '客户端授权登陆回调地址',
+  `grant_types` text COMMENT '授权类型',
+  `scopes` text COMMENT '授权范围',
+  `created_user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建用户ID',
+  `created_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `update_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='授权客户端表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `oauth_client_public_key`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `oauth_client_public_key` (
+  `client_id` varchar(50) NOT NULL,
+  `public_key` longtext NOT NULL,
+  PRIMARY KEY (`client_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `oauth_refresh_token`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `oauth_refresh_token` (
+  `token` varchar(40) NOT NULL COMMENT '授权TOKEN',
+  `client_id` varchar(50) DEFAULT NULL COMMENT '客户端ID',
+  `user_id` varchar(100) DEFAULT NULL COMMENT '用户ID',
+  `expires` datetime NOT NULL COMMENT '有效期',
+  `scope` varchar(255) DEFAULT NULL COMMENT '授权类型',
+  PRIMARY KEY (`token`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='授权刷新令牌表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `oauth_scope`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `oauth_scope` (
+  `scope` varchar(255) NOT NULL COMMENT '授权范围',
+  `description` varchar(255) NOT NULL COMMENT '授权范围描述',
+  PRIMARY KEY (`scope`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='授权范围表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `oauth_user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `oauth_user` (
+  `username` varchar(255) NOT NULL COMMENT '用户名',
+  `password` varchar(255) NOT NULL COMMENT '密码',
+  `salt` varchar(255) NOT NULL,
+  `roles` longtext COMMENT '用户角色',
+  `scopes` longtext COMMENT '用户授权范围',
+  PRIMARY KEY (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='授权用户';
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `open_course`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -2687,6 +3244,37 @@ CREATE TABLE `org` (
   UNIQUE KEY `code` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='组织机构';
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `plumber_queue`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `plumber_queue` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `worker` varchar(64) NOT NULL COMMENT 'workerTopic',
+  `jobId` varchar(64) NOT NULL COMMENT 'jobId',
+  `body` text NOT NULL COMMENT 'Job消息主体',
+  `status` varchar(32) NOT NULL DEFAULT 'acquired' COMMENT 'Job执行状态',
+  `priority` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '优先级',
+  `trace` longtext COMMENT '异常信息',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `cupdatedTime` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `product`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `product` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `targetType` varchar(32) NOT NULL COMMENT '产品类型,course、classroom、lesson、open_course ...',
+  `targetId` int(10) unsigned NOT NULL COMMENT '对应产品资源id',
+  `title` varchar(1024) NOT NULL COMMENT '产品名称',
+  `owner` int(10) unsigned NOT NULL COMMENT '拥有者（创建者）',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `targetType_targetId` (`targetType`,`targetId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='产品表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `push_device`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -2712,6 +3300,7 @@ CREATE TABLE `question` (
   `analysis` text COMMENT '解析',
   `metas` text COMMENT '题目元信息',
   `categoryId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '类别',
+  `bankId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '所属题库id',
   `difficulty` varchar(64) NOT NULL DEFAULT 'normal' COMMENT '难度',
   `target` varchar(255) NOT NULL DEFAULT '' COMMENT '从属于',
   `courseSetId` int(10) NOT NULL DEFAULT '0',
@@ -2726,7 +3315,9 @@ CREATE TABLE `question` (
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   `copyId` int(10) NOT NULL DEFAULT '0' COMMENT '复制问题对应Id',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `courseSetId` (`courseSetId`),
+  KEY `bankId_categoryId` (`bankId`,`categoryId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='问题表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `question_analysis`;
@@ -2746,19 +3337,68 @@ CREATE TABLE `question_analysis` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='答题分析表';
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `question_bank`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `question_bank` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(1024) NOT NULL COMMENT '题库名称',
+  `testpaperNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '试卷数量',
+  `questionNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '题目数量',
+  `categoryId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '分类id',
+  `orgId` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '组织机构id',
+  `orgCode` varchar(265) NOT NULL DEFAULT '1.' COMMENT '组织机构编码',
+  `isHidden` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否隐藏',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `fromCourseSetId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '课程id',
+  `upgradeFlag` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '标记',
+  `itemBankId` int(10) NOT NULL COMMENT '标准题库id',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='题库表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `question_bank_category`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `question_bank_category` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) NOT NULL COMMENT '分类名称',
+  `bankNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '题库数量',
+  `weight` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '权重',
+  `parentId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '父级分类id',
+  `orgId` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '组织机构id',
+  `orgCode` varchar(265) NOT NULL DEFAULT '1.' COMMENT '组织机构编码',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='题库分类表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `question_bank_member`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `question_bank_member` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `bankId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '题库id',
+  `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='题库教师表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `question_category`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `question_category` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '题目类别ID',
-  `name` varchar(255) NOT NULL COMMENT '类别名称',
-  `target` varchar(255) NOT NULL DEFAULT '' COMMENT '从属于',
-  `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '操作用户',
-  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
-  `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-  `seq` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '排序序号',
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(1024) NOT NULL COMMENT '名称',
+  `weight` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '权重',
+  `parentId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '父级分类id',
+  `bankId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '所属题库id',
+  `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新用户id',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `upgradeFlag` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '标记',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='题库类别表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='题目分类表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `question_favorite`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -2810,12 +3450,24 @@ CREATE TABLE `question_marker_result` (
   KEY `idx_qmid_taskid_stats` (`questionMarkerId`,`taskId`,`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `quick_entrance`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `quick_entrance` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `userId` int(10) NOT NULL COMMENT '用户ID',
+  `data` text COMMENT '常用功能',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='常用功能';
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `ratelimit`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ratelimit` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `_key` varchar(64) NOT NULL,
+  `_key` varchar(128) NOT NULL,
   `data` varchar(32) NOT NULL,
   `deadline` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
@@ -2856,6 +3508,24 @@ CREATE TABLE `referer_log` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='模块(课程|班级|公开课|...)的访问来源日志';
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `review`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `review` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '评价人',
+  `targetType` varchar(64) NOT NULL COMMENT '评论的对象类型',
+  `targetId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '评论对象id',
+  `content` text NOT NULL COMMENT '评论内容',
+  `rating` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '评分',
+  `parentId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '回复id',
+  `meta` text COMMENT '评论元信息',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '评价创建时间',
+  `updatedTime` int(10) unsigned DEFAULT '0' COMMENT '评价更新时间',
+  PRIMARY KEY (`id`),
+  KEY `targetType_targetId` (`targetType`,`targetId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='评价表';
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `reward_point_account`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -2887,7 +3557,8 @@ CREATE TABLE `reward_point_account_flow` (
   `note` varchar(255) NOT NULL DEFAULT '',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `userId` (`userId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='积分帐目流水';
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `reward_point_product`;
@@ -2939,9 +3610,68 @@ CREATE TABLE `role` (
   `name` varchar(32) NOT NULL COMMENT '权限名称',
   `code` varchar(32) NOT NULL COMMENT '权限代码',
   `data` text COMMENT '权限配置',
+  `data_v2` text COMMENT 'admin_v2权限配置',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   `createdUserId` int(10) unsigned NOT NULL COMMENT '创建用户ID',
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `s2b2c_product`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `s2b2c_product` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `supplierId` int(10) unsigned NOT NULL COMMENT '平台对应的ID：supplierId S的ID',
+  `productType` varchar(64) NOT NULL DEFAULT '' COMMENT '产品类型',
+  `remoteProductId` int(10) unsigned NOT NULL COMMENT '远程产品ID',
+  `s2b2cProductDetailId` int(11) unsigned NOT NULL COMMENT '产品详情ID',
+  `remoteResourceId` int(10) unsigned NOT NULL COMMENT '远程产品对应资源ID',
+  `localResourceId` int(10) unsigned NOT NULL COMMENT '本地产品对应资源ID',
+  `cooperationPrice` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '合作价格',
+  `suggestionPrice` float(10,2) DEFAULT '0.00' COMMENT '建议零售价',
+  `localVersion` int(11) unsigned NOT NULL DEFAULT '1' COMMENT '本地版本:默认1',
+  `remoteVersion` int(11) unsigned NOT NULL DEFAULT '1' COMMENT '远程版本:默认1',
+  `syncStatus` varchar(32) NOT NULL DEFAULT 'waiting' COMMENT '产品资源同步状态 waiting,finished',
+  `changelog` mediumtext COMMENT '更新日志',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `remoteProductId` (`remoteProductId`),
+  KEY `remoteResourceId` (`remoteResourceId`),
+  KEY `localResourceId` (`localResourceId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `s2b2c_resource_sync`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `s2b2c_resource_sync` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `supplierId` int(10) unsigned NOT NULL COMMENT '供应商ID',
+  `resourceType` varchar(64) NOT NULL DEFAULT '' COMMENT '资源类型',
+  `localResourceId` int(10) unsigned NOT NULL COMMENT '本地资源ID',
+  `remoteResourceId` int(10) unsigned NOT NULL COMMENT '远程资源ID',
+  `localVersion` varchar(32) DEFAULT NULL COMMENT '本地版本',
+  `remoteVersion` varchar(32) DEFAULT NULL COMMENT '远程版本',
+  `extendedData` text COMMENT '其他关联数据',
+  `syncTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '同步时间',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `supplierId_remoteResourceId_type` (`supplierId`,`remoteResourceId`,`resourceType`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `s2b2c_sync_event`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `s2b2c_sync_event` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `event` varchar(255) NOT NULL COMMENT '事件名称',
+  `data` text COMMENT '内容',
+  `isConfirm` tinyint(3) NOT NULL DEFAULT '0' COMMENT '是否确认',
+  `productId` int(10) NOT NULL DEFAULT '0' COMMENT '资源id',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -3015,7 +3745,7 @@ CREATE TABLE `sign_user_log` (
   `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
   `targetType` varchar(255) NOT NULL DEFAULT '' COMMENT '签到目标类型',
   `targetId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '签到目标id',
-  `rank` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '签到排名',
+  `_rank` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '签到排名',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '签到时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -3055,7 +3785,8 @@ CREATE TABLE `status` (
   KEY `createdTime` (`createdTime`),
   KEY `courseId_createdTime` (`courseId`,`createdTime`),
   KEY `classroomId` (`classroomId`),
-  KEY `classroomId_createdTime` (`classroomId`,`createdTime`)
+  KEY `classroomId_createdTime` (`classroomId`,`createdTime`),
+  KEY `userid_type_object` (`userId`,`type`,`objectType`,`objectId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `subtitle`;
@@ -3143,63 +3874,6 @@ CREATE TABLE `task` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `testpaper`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `testpaper` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '试卷ID',
-  `name` varchar(255) NOT NULL DEFAULT '' COMMENT '试卷名称',
-  `description` text COMMENT '试卷说明',
-  `limitedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '限时(单位：秒)',
-  `pattern` varchar(255) NOT NULL DEFAULT '' COMMENT '试卷生成/显示模式',
-  `target` varchar(255) NOT NULL DEFAULT '' COMMENT '试卷所属对象',
-  `status` varchar(32) NOT NULL DEFAULT 'draft' COMMENT '试卷状态：draft,open,closed',
-  `score` float(10,1) unsigned NOT NULL DEFAULT '0.0' COMMENT '总分',
-  `passedScore` float(10,1) unsigned NOT NULL DEFAULT '0.0' COMMENT '通过考试的分数线',
-  `itemCount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '题目数量',
-  `createdUserId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建人',
-  `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-  `updatedUserId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '修改人',
-  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
-  `metas` text COMMENT '题型排序',
-  `copyId` int(10) NOT NULL DEFAULT '0' COMMENT '复制试卷对应Id',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `testpaper_item`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `testpaper_item` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '试卷条目ID',
-  `testId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '所属试卷',
-  `seq` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '题目顺序',
-  `questionId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '题目ID',
-  `questionType` varchar(64) NOT NULL DEFAULT '' COMMENT '题目类别',
-  `parentId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '父题ID',
-  `score` float(10,1) unsigned NOT NULL DEFAULT '0.0' COMMENT '分值',
-  `missScore` float(10,1) unsigned NOT NULL DEFAULT '0.0' COMMENT '漏选得分',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `testpaper_item_result`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `testpaper_item_result` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '试卷题目做题结果ID',
-  `itemId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '试卷条目ID',
-  `testId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '试卷ID',
-  `testPaperResultId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '试卷结果ID',
-  `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '做题人ID',
-  `questionId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '题目ID',
-  `status` enum('none','right','partRight','wrong','noAnswer') NOT NULL DEFAULT 'none' COMMENT '结果状态',
-  `score` float(10,1) NOT NULL DEFAULT '0.0' COMMENT '得分',
-  `answer` text COMMENT '回答',
-  `teacherSay` text COMMENT '老师评价',
-  `pId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '复制试卷题目Id',
-  PRIMARY KEY (`id`),
-  KEY `testPaperResultId` (`testPaperResultId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `testpaper_item_result_v8`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -3240,33 +3914,6 @@ CREATE TABLE `testpaper_item_v8` (
   `migrateItemId` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `testId` (`testId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `testpaper_result`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `testpaper_result` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '试卷结果ID',
-  `paperName` varchar(255) NOT NULL DEFAULT '' COMMENT '试卷名称',
-  `testId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '试卷ID',
-  `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '做卷人ID',
-  `score` float(10,1) unsigned NOT NULL DEFAULT '0.0' COMMENT '总分',
-  `objectiveScore` float(10,1) unsigned NOT NULL DEFAULT '0.0' COMMENT '主观题得分',
-  `subjectiveScore` float(10,1) unsigned NOT NULL DEFAULT '0.0' COMMENT '客观题得分',
-  `teacherSay` text COMMENT '老师评价',
-  `rightItemCount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '正确题目数',
-  `passedStatus` enum('none','excellent','good','passed','unpassed') NOT NULL DEFAULT 'none' COMMENT '考试通过状态，none表示该考试没有',
-  `limitedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '试卷限制时间(秒)',
-  `beginTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '开始时间',
-  `endTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '结束时间',
-  `updateTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',
-  `active` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `status` enum('doing','paused','reviewing','finished') NOT NULL COMMENT '状态',
-  `target` varchar(255) NOT NULL DEFAULT '' COMMENT '试卷结果所属对象',
-  `checkTeacherId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '批卷老师ID',
-  `checkedTime` int(11) NOT NULL DEFAULT '0' COMMENT '批卷时间',
-  `usedTime` int(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `testpaper_result_v8`;
@@ -3310,6 +3957,7 @@ CREATE TABLE `testpaper_v8` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
   `name` varchar(255) NOT NULL DEFAULT '' COMMENT '试卷名称',
   `description` text COMMENT '试卷说明',
+  `bankId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '所属题库id',
   `courseId` int(10) NOT NULL DEFAULT '0',
   `lessonId` int(10) NOT NULL DEFAULT '0',
   `limitedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '限时(单位：秒)',
@@ -3319,6 +3967,7 @@ CREATE TABLE `testpaper_v8` (
   `score` float(10,1) unsigned NOT NULL DEFAULT '0.0' COMMENT '总分',
   `passedCondition` text,
   `itemCount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '题目数量',
+  `questionTypeSeq` varchar(64) NOT NULL DEFAULT '' COMMENT '题型排序',
   `createdUserId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建人',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   `updatedUserId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '修改人',
@@ -3482,7 +4131,7 @@ CREATE TABLE `upload_file_inits` (
   `metas` text,
   `metas2` text,
   `type` enum('document','video','audio','image','ppt','other','flash','subtitle') NOT NULL DEFAULT 'other' COMMENT '文件类型',
-  `storage` enum('local','cloud') NOT NULL,
+  `storage` enum('local','cloud','supplier') NOT NULL COMMENT '文件存储方式',
   `convertParams` text COMMENT '文件转换参数',
   `updatedUserId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新用户名',
   `updatedTime` int(10) unsigned DEFAULT '0',
@@ -3515,7 +4164,7 @@ CREATE TABLE `upload_files` (
   `metas` text COMMENT '元信息',
   `metas2` text COMMENT '元信息',
   `type` enum('document','video','audio','image','ppt','other','flash','subtitle') NOT NULL DEFAULT 'other' COMMENT '文件类型',
-  `storage` enum('local','cloud') NOT NULL COMMENT '文件存储方式',
+  `storage` enum('local','cloud','supplier') NOT NULL COMMENT '文件存储方式',
   `isPublic` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否公开文件',
   `canDownload` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否可下载',
   `usedCount` int(10) unsigned NOT NULL DEFAULT '0',
@@ -3525,6 +4174,11 @@ CREATE TABLE `upload_files` (
   `createdTime` int(10) unsigned NOT NULL COMMENT '文件上传时间',
   `audioConvertStatus` enum('none','waiting','doing','success','error') NOT NULL DEFAULT 'none' COMMENT '视频转音频的状态',
   `mp4ConvertStatus` enum('none','waiting','doing','success','error') NOT NULL DEFAULT 'none' COMMENT '视频转mp4的状态',
+  `syncId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '内容市场引用的源Id',
+  `originPlatform` varchar(50) NOT NULL DEFAULT 'self' COMMENT '资源来源平台：self 自己平台创建，supplier S端提供',
+  `originPlatformId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '来源平台对应的ID：supplierId S的ID',
+  `s2b2cGlobalId` varchar(32) NOT NULL DEFAULT '' COMMENT '真实的globalId，防止资源引用无法知道真实分发信息',
+  `s2b2cHashId` varchar(128) NOT NULL DEFAULT '' COMMENT '真实的hashId，防止资源引用无法知道真实分发信息',
   PRIMARY KEY (`id`),
   UNIQUE KEY `convertHash` (`convertHash`(64)),
   UNIQUE KEY `hashId` (`hashId`(120))
@@ -3628,6 +4282,7 @@ CREATE TABLE `user` (
   `passwordInit` tinyint(1) NOT NULL DEFAULT '1' COMMENT '初始化密码',
   `faceRegistered` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否人脸注册过',
   `registerVisitId` varchar(64) NOT NULL DEFAULT '',
+  `destroyed` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否注销',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `nickname` (`nickname`),
@@ -3673,7 +4328,7 @@ DROP TABLE IF EXISTS `user_bind`;
 CREATE TABLE `user_bind` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '用户绑定ID',
   `type` varchar(64) NOT NULL COMMENT '用户绑定类型',
-  `fromId` varchar(32) NOT NULL COMMENT '来源方用户ID',
+  `fromId` varchar(64) NOT NULL COMMENT '来源方用户ID',
   `toId` int(10) unsigned NOT NULL COMMENT '被绑定的用户ID',
   `token` varchar(255) NOT NULL DEFAULT '' COMMENT 'oauth token',
   `refreshToken` varchar(255) NOT NULL DEFAULT '' COMMENT 'oauth refresh token',
@@ -3682,6 +4337,19 @@ CREATE TABLE `user_bind` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `type` (`type`,`fromId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `user_face`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_face` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
+  `picture` varchar(255) NOT NULL DEFAULT '' COMMENT '文件路径',
+  `capture_code` varchar(20) NOT NULL DEFAULT '' COMMENT '采集头像时链接码',
+  `created_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `updated_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='云监考头像采集';
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `user_field`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -3695,6 +4363,24 @@ CREATE TABLE `user_field` (
   `createdTime` int(100) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `user_footprint`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_footprint` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `userId` int(10) unsigned NOT NULL COMMENT '用户id',
+  `targetType` varchar(32) NOT NULL COMMENT '目标类型(task)',
+  `targetId` int(10) unsigned NOT NULL COMMENT '目标id(taskId)',
+  `event` varchar(32) NOT NULL COMMENT '事件类型(learn)',
+  `date` date NOT NULL COMMENT '记录时间(精确到天)',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `index_user_date` (`userId`,`date`),
+  KEY `index_target_type_id` (`targetType`,`targetId`),
+  KEY `index_date` (`date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户足迹';
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `user_fortune_log`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -3909,6 +4595,30 @@ CREATE TABLE `user_token` (
   UNIQUE KEY `token` (`token`(60))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `user_wechat`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_wechat` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `appId` varchar(64) NOT NULL DEFAULT '' COMMENT '服务标识',
+  `type` varchar(32) NOT NULL DEFAULT '' COMMENT 'official-公众号 open_app-开放平台应用',
+  `userId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'ES 用户ID',
+  `openId` varchar(64) NOT NULL DEFAULT '' COMMENT '微信openid',
+  `unionId` varchar(64) DEFAULT NULL COMMENT '微信unionid',
+  `isSubscribe` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否订阅服务号',
+  `nickname` varchar(512) NOT NULL DEFAULT '' COMMENT '微信昵称',
+  `profilePicture` varchar(256) NOT NULL DEFAULT '' COMMENT '微信头像',
+  `data` text COMMENT '接口信息',
+  `lastRefreshTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上一次数据更新时间',
+  `subscribeTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '关注时间',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `openId_type` (`openId`,`type`),
+  KEY `unionId_type` (`unionId`,`type`),
+  KEY `userId_type` (`userId`,`type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `xapi_activity_watch_log`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -3923,7 +4633,8 @@ CREATE TABLE `xapi_activity_watch_log` (
   `updated_time` int(10) unsigned NOT NULL COMMENT '更新时间',
   `is_push` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '是否推送',
   PRIMARY KEY (`id`),
-  KEY `userId_activityId` (`user_id`,`activity_id`)
+  KEY `userId_activityId` (`user_id`,`activity_id`),
+  KEY `is_push` (`is_push`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `xapi_statement`;

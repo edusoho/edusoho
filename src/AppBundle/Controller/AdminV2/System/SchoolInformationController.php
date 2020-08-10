@@ -7,7 +7,8 @@ use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\Common\HTMLHelper;
 
-class SchoolInformationController extends BaseController
+class
+SchoolInformationController extends BaseController
 {
     public function siteAction(Request $request)
     {
@@ -38,6 +39,7 @@ class SchoolInformationController extends BaseController
     public function saveSiteAction(Request $request)
     {
         $site = $request->request->all();
+        var_dump($site);exit();
 
         if (!empty($site['analytics'])) {
             $helper = new HTMLHelper($this->getBiz());
@@ -49,6 +51,41 @@ class SchoolInformationController extends BaseController
             'message' => $this->trans('site.save.success'),
         ));
     }
+
+    public function licenseAction(Request $request)
+    {
+        $license = $this->getSettingService()->get('license', array());
+        $default = array(
+            'license_name' => '',
+            'license_picture' => '',
+            'license_url' => '',
+            'permit_name' => '',
+            'permit_record_number' => '',
+            'permit_picture' => '',
+        );
+        $license = array_merge($default, $license);
+
+        return $this->render('admin-v2/system/certificates-setting.html.twig', [
+            'license' => $license,
+        ]);
+    }
+
+    public function saveLicenseAction(Request $request)
+    {
+        $license = $request->request->all();
+
+        if (!empty($license['analytics'])) {
+            $helper = new HTMLHelper($this->getBiz());
+            $site['analytics'] = $helper->closeTags($license['analytics']);
+        }
+        $this->getSettingService()->set('license', $license);
+
+        return $this->createJsonResponse(array(
+            'message' => $this->trans('site.save.success'),
+        ));
+    }
+
+
 
     /**
      * @return SettingService

@@ -28,6 +28,32 @@
           </a>
         {% endif %}
       </div>
+        <a class="navbar-brand">
+            {% if setting('license.license_picture') %}
+                <img src="{{ asset(setting('license.license_picture')) }}">
+            {% endif %}
+            {% if setting('license.license_name') %}
+                <a class="mlm" href={{ setting('license.license_url')|default('/') }} target="_blank">
+                    {{ setting('license.license_name') }}
+                </a>
+            {% endif %}
+        </a>
     </div>
+      <div>
+          <a href="{{ path('homepage') }}" class="navbar-brand">
+              {% if setting('license.permit_name') %}
+                  <a class="mlm" href={{ setting('license.permit_name')|default('/') }} target="_blank">
+                      {{ setting('license.permit_name') }}
+                  </a>
+              {% endif %}
+          </a>
+          <a class="navbar-brand">
+              {% if setting('license.permit_record_number') %}
+                  <a class="mlm" href={{ setting('license.permit_record_number')|default('/') }} target="_blank">
+                      {{ setting('license.permit_record_number') }}
+                  </a>
+              {% endif %}
+          </a>
+      </div>
   </div>
 </footer>

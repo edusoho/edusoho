@@ -142,6 +142,37 @@ class SettingController extends BaseController
         return $this->createJsonResponse($response);
     }
 
+    public function licensePictureUploadAction(Request $request)
+    {
+        $fileId = $request->request->get('id');
+        $objectFile = $this->getFileService()->getFileObject($fileId);
+
+        if (!FileToolkit::isImageFile($objectFile)){
+            $this->createNewException(FileToolkitException::NOT_IMAGE());
+        }
+
+        $file = $this->getFileService()->getFile($fileId);
+        $parsed = $this->getFileService()->parseFileUri($file['uri']);
+
+        $license = $this->getSettingService()->get('license', array());
+
+        $oldFileId = empty($license['license_picture_file_id']) ? null : $license['license_picture_file_id'];
+        $license['license_picture_file_id'] = $fileId;
+        $license['license_picture'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/".$parsed['path'];
+        $license['license_picture'] = ltrim($license['license_picture'], '/');
+
+        if ($oldFileId){
+            $this->getFileService()->deleteFile($oldFileId);
+        }
+
+        $response = [
+            'path' => $license['license_picture'],
+            'url' => $this->container->get('assets.packages')->getUrl($license['license_picture']),
+        ];
+
+        return $this->createJsonResponse($response);
+    }
+
     public function logoRemoveAction(Request $request)
     {
         $setting = $this->getSettingService()->get('site');
@@ -153,6 +184,71 @@ class SettingController extends BaseController
         $this->getSettingService()->set('site', $setting);
 
         if ($fileId) {
+            $this->getFileService()->deleteFile($fileId);
+        }
+
+        return $this->createJsonResponse(true);
+    }
+
+    public function licensePictureRemoveAction(Request $resquest)
+    {
+        $setting = $this->getSettingService()->get('license');
+        $setting['license_picture'] = '';
+
+        $fileId = empty($setting['license_picture_file_id']) ? null : $setting['license_picture_file_id'];
+        $setting['license_picture_file_id'] = '';
+
+        $this->getSettingService()->set('license', $setting);
+
+        if ($fileId){
+            $this->getFileService()->deleteFile($fileId);
+        }
+
+        return $this->createJsonResponse(true);
+    }
+
+    public function permitPictureUploadAction(Request $request)
+    {
+        $fileId = $request->request->get('id');
+        $objectFile = $this->getFileService()->getFileObject($fileId);
+
+        if (!FileToolkit::isImageFile($objectFile)){
+            $this->createNewException(FileToolkitException::NOT_IMAGE());
+        }
+
+        $file = $this->getFileService()->getFile($fileId);
+        $parsed = $this->getFileService()->parseFileUri($file['uri']);
+
+        $permit = $this->getSettingService()->get('license', array());
+
+        $oldFileId = empty($permit['permit_picture_file_id']) ? null : $permit['permit_picture_file_id'];
+        $permit['permit_picture_file_id'] = $fileId;
+        $permit['permit_picture'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/".$parsed['path'];
+        $permit['permit_picture'] = ltrim($permit['permit_picture'], '/');
+
+        if ($oldFileId){
+            $this->getFileService()->deleteFile($oldFileId);
+        }
+
+        $response = [
+            'path' => $permit['permit_picture'],
+            'url' => $this->container->get('assets.packages')->getUrl($permit['permit_picture']),
+        ];
+
+        return $this->createJsonResponse($response);
+    }
+
+    public function permitPictureRemoveAction(Request $request)
+    {
+        $setting = $this->getSettingService()->get('license');
+        $setting['permit_picture'] = '';
+
+        $fileId = empty($setting['permit_picture_file_id']) ? null : $setting['permit_picture_file_id'];
+        $setting['permit_picture_file_id'] = '';
+
+        $this->getSettingService()->set('license', $setting);
+
+        if ($fileId){
             $this->getFileService()->deleteFile($fileId);
         }
 
