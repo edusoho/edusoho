@@ -26,7 +26,7 @@ services:
 
     user.captcha_authenticator:
         class: AppBundle\Handler\LoginCaptchaAuthentication
-        arguments: ['@router']
+        arguments: ['@router', '@service_container']
 
 security:
     encoders:

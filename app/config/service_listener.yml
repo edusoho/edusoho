@@ -52,12 +52,6 @@ services:
         arguments: ['@session']
         tags:
             - { name: kernel.event_listener, event: security.interactive_login, method: onInteractiveLogin }
-
-    app.user_login_captcha_listener:
-        class: AppBundle\Listener\UserLoginCaptchaListener
-        arguments: ['@service_container']
-        tags:
-            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority:255 }
             
     kernel.listener.kernel_admin_request_intercept_listener:
         class: AppBundle\Listener\AdminRequestInterceptListener

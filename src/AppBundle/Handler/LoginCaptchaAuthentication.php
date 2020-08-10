@@ -2,6 +2,9 @@
 
 namespace AppBundle\Handler;
 
+use Biz\System\Service\SettingService;
+use Codeages\Biz\Framework\Context\Biz;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,11 +17,23 @@ use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 
 class LoginCaptchaAuthentication extends AbstractGuardAuthenticator
 {
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
+
+    /**
+     * @var Biz
+     */
+    private $biz;
+
     private $router;
 
-    public function __construct(RouterInterface $router)
+    public function __construct(RouterInterface $router, ContainerInterface $container)
     {
         $this->router = $router;
+        $this->container = $container;
+        $this->biz = $this->container->get('biz');
     }
 
     /**
@@ -73,7 +88,15 @@ class LoginCaptchaAuthentication extends AbstractGuardAuthenticator
      */
     public function getCredentials(Request $request)
     {
-        // TODO: Implement getCredentials() method.
+        if($request->getPathInfo() != '/login_check' && !$request->isMethod('POST')) {
+            return;
+        }
+
+        return array(
+            'username' => $request->request->get('_username'),
+            'password' => $request->request->get('_password'),
+            'captchaToken' => $request->request->get('dragCaptchaToken', ''),
+        );
     }
 
     /**
@@ -90,7 +113,7 @@ class LoginCaptchaAuthentication extends AbstractGuardAuthenticator
      */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-        // TODO: Implement getUser() method.
+        return $this->getUserProvider()->loadUserByUsername($credentials['username']);
     }
 
     /**
@@ -108,7 +131,14 @@ class LoginCaptchaAuthentication extends AbstractGuardAuthenticator
      */
     public function checkCredentials($credentials, UserInterface $user)
     {
-        // TODO: Implement checkCredentials() method.
+        $loginSetting = $this->getSettingService()->get('login_bind', []);
+        if (!empty($loginSetting['login_captcha_enable'])) {
+            $bizDragCaptcha = $this->biz['biz_drag_captcha'];
+
+            $bizDragCaptcha->check($credentials['captchaToken']);
+        }
+
+        return;
     }
 
     /**
@@ -124,7 +154,7 @@ class LoginCaptchaAuthentication extends AbstractGuardAuthenticator
      */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
-        // TODO: Implement onAuthenticationFailure() method.
+        return null;
     }
 
     /**
@@ -142,7 +172,7 @@ class LoginCaptchaAuthentication extends AbstractGuardAuthenticator
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
-        // TODO: Implement onAuthenticationSuccess() method.
+        return null;
     }
 
     /**
@@ -161,6 +191,19 @@ class LoginCaptchaAuthentication extends AbstractGuardAuthenticator
      */
     public function supportsRememberMe()
     {
-        // TODO: Implement supportsRememberMe() method.
+        return false;
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->biz->service('System:SettingService');
+    }
+
+    protected function getUserProvider()
+    {
+        return $this->container->get('topxia.user_provider');
     }
 }
