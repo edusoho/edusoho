@@ -66,7 +66,7 @@
             </div>
 
             <!-- 承诺服务 -->
-            <div class="detail-right__promise promise clearfix" v-if="currentSku.services.length > 0">
+            <div class="detail-right__promise promise clearfix" v-if="currentSku.services && currentSku.services.length > 0">
                 <div class="promise-title pull-left">承诺服务</div>
                 <div class="promise-content pull-left">
               <span class="promise-content__item" v-for="(item, index) in currentSku.services" :key="index">

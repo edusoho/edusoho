@@ -9,11 +9,11 @@ use AppBundle\Common\ServiceToolkit;
 class GoodSpecsFilter extends Filter
 {
     protected $simpleFields = [
-        'id', 'goodsId', 'targetId', 'title', 'seq', 'status', 'price', 'priceObj', 'displayPrice', 'displayPriceObj', 'coinPrice', 'usageMode', 'usageDays', 'usageStartTime', 'usageEndTime', 'buyableStartTime', 'buyableEndTime', 'buyableMode', 'maxJoinNum', 'services', 'isMember', 'learnUrl',
+        'id', 'goodsId', 'targetId', 'title', 'seq', 'status', 'price', 'priceObj', 'displayPrice', 'displayPriceObj', 'coinPrice', 'usageMode', 'usageDays', 'usageStartTime', 'usageEndTime', 'showable', 'buyable', 'buyableStartTime', 'buyableEndTime', 'buyableMode', 'maxJoinNum', 'services', 'isMember', 'learnUrl',
     ];
 
     protected $publicFields = [
-        'id', 'goodsId', 'targetId', 'title', 'images', 'seq', 'status', 'price', 'priceObj', 'displayPrice', 'displayPriceObj', 'coinPrice', 'usageMode', 'usageDays', 'usageStartTime', 'usageEndTime', 'buyableStartTime', 'buyableEndTime', 'buyableMode', 'maxJoinNum', 'services', 'isMember', 'learnUrl',
+        'id', 'goodsId', 'targetId', 'title', 'images', 'seq', 'status', 'price', 'priceObj', 'displayPrice', 'displayPriceObj', 'coinPrice', 'usageMode', 'usageDays', 'usageStartTime', 'usageEndTime', 'showable', 'buyable', 'buyableStartTime', 'buyableEndTime', 'buyableMode', 'maxJoinNum', 'services', 'isMember', 'learnUrl',
     ];
 
     protected function simpleFields(&$data)
@@ -31,8 +31,8 @@ class GoodSpecsFilter extends Filter
 
     private function transTime(&$specs)
     {
-        $specs['buyableStartTime'] = date('c', $specs['buyableStartTime']);
-        $specs['buyableEndTime'] = date('c', $specs['buyableEndTime']);
+        $specs['buyableStartTime'] = empty($specs['buyableStartTime']) ? '0' : date('c', $specs['buyableStartTime']);
+        $specs['buyableEndTime'] = empty($specs['buyableEndTime']) ? '0' : date('c', $specs['buyableEndTime']);
     }
 
     private function transServices(&$services)
