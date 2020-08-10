@@ -1503,3 +1503,5 @@ merchant.resource.product_version.update_success_hint: 更新成功
 merchant.resource.product_version.update_failed_hint: 更新失败
 
 exception.s2b2c_product.adopt_failed: 采用失败，内容正在编辑中，请稍后再试
+
+admin_v2.certificate.template.delete_hint: 模板被删除后，使用该模板的证书将不会受到影响。是否删除模板?

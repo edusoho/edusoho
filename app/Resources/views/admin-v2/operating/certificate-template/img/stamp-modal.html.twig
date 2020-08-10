@@ -9,14 +9,7 @@
 {% do script(['app/js/admin-v2/operating/certificate-template/stamp/index.js']) %}
 
 {% block body %}
-  <style>
-    .img-full {
-      display: block;
-      height: auto;
-      width: 100%;
-    }
-  </style>
-  <img class="img-full" src="" id="stamp-crop" alt=""/>
+  <img class="certificate-info img-full" src="" id="stamp-crop" alt=""/>
   <div class="text-center cd-dark-major cd-mt16 cd-mb16">
     {{ 'user.settings.avatar.crop_hint'|trans }}
   </div>
@@ -29,7 +22,7 @@
     </button>
 
     <button type="button" class="btn cd-btn btn-primary cd-btn-lg" id="save-btn"
-            data-url="{{ path('admin_v2_operation_certificate_template_stamp_modal') }}"
+            data-url="{{ path('admin_v2_certificate_template_stamp_modal', {id: template.id}) }}"
             data-loading-text="{{ 'form.btn.submit.submiting'|trans }}">
       {{ 'form.btn.save'|trans }}
     </button>

@@ -628,10 +628,37 @@ admin_v2:
                             name: admin_v2.operation.certificate_menu
                             group: 2
                             children:
-                                admin_v2_operation_certificate_manage:
+                                admin_v2_certificate_manage:
                                     name: admin_v2.operation.certificate.basic_tab
                                     disable: true
-                                admin_v2_operation_certificate_template_manage:
+                                    children:
+                                        admin_v2_certificate_edit:
+                                            name: admin_v2.operation.certificate.edit_tab
+                                            router_params:
+                                                id: (certificate.id)
+                                            group: groupButton
+                                        admin_v2_certificate_close:
+                                            name: admin_v2.operation.certificate.close_tab
+                                            router_params:
+                                                id: (certificate.id)
+                                            group: groupButton
+                                        admin_v2_certificate_publish:
+                                            name: admin_v2.operation.certificate.publish_tab
+                                            router_params:
+                                                id: (certificate.id)
+                                            group: groupButton
+                                            visible: ( certificate.status=='published' )
+                                        admin_v2_certificate_member_list:
+                                            name: admin_v2.operation.certificate.member_list_tab
+                                            router_params:
+                                                id: (certificate.id)
+                                            group: groupButton
+                                        admin_v2_certificate_audit_manage:
+                                            name: admin_v2.operation.certificate.audit_manage_tab
+                                            router_params:
+                                                id: (certificate.id)
+                                            group: groupButton
+                                admin_v2_certificate_template_manage:
                                     name: admin_v2.operation.certificate.template.basic_tab
                                     disable: true
                         admin_v2_operation_notification:

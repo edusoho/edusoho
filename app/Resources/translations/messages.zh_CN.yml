@@ -4695,6 +4695,9 @@ common.video_quality.super: 超精细
 common.video_quality.super.tips: 适合超高画质的专业视频
 common.certificate_type.course: 课程
 common.certificate_type.classroom: 班级
+common.certificate_status.draft: 未发布
+common.certificate_status.published: 已发布
+common.certificate_status.closed: 已关闭
 
 # content
 contetn.active_list.create_template: 请创建模版文件
@@ -6292,6 +6295,11 @@ admin.operation_certificate.template.certificate.content_hint.course: 课程名�
 admin.operation_certificate.template.certificate.content_hint.classroom: 课程名称：$classroomName$
 admin.operation_certificate.template.certificate.qrcode: 证书验证二维码
 admin.operation_certificate.template.preview_btn: 预览
+admin.operation_certificate.certificate.num_th: 编号
+admin.operation_certificate.certificate.name_th: 证书名称
+admin.operation_certificate.certificate.description_th: 证书描述
+admin.operation_certificate.certificate.status_th: 状态
+admin.operation_certificate.certificate.create_btn: 创建证书
 
 # 网站公告管理
 admin.operation_announcement.content_th: 公告内容

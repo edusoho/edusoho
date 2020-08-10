@@ -8,6 +8,7 @@ use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Certificate\Service\TemplateService;
 use Biz\Certificate\TemplateException;
 use Biz\Content\Service\FileService;
+use Biz\File\UploadFileException;
 use Symfony\Component\HttpFoundation\Request;
 
 class CertificateTemplateController extends BaseController
@@ -49,7 +50,7 @@ class CertificateTemplateController extends BaseController
             $fields = $request->request->all();
             $this->getCertificateTemplateService()->update($id, $fields);
 
-            return $this->redirect($this->generateUrl('admin_v2_operation_certificate_template_creat_step_two', ['id' => $id]));
+            return $this->redirect($this->generateUrl('admin_v2_certificate_template_creat_step_two', ['id' => $id]));
         }
 
         return $this->render('admin-v2/operating/certificate-template/manage/step-one.html.twig', ['template' => $template]);
@@ -73,7 +74,7 @@ class CertificateTemplateController extends BaseController
 
             $template = $this->getCertificateTemplateService()->create($data);
 
-            return $this->redirect($this->generateUrl('admin_v2_operation_certificate_template_creat_step_two', ['id' => $template['id']]));
+            return $this->redirect($this->generateUrl('admin_v2_certificate_template_creat_step_two', ['id' => $template['id']]));
         }
 
         return $this->render('admin-v2/operating/certificate-template/manage/step-one.html.twig');
@@ -88,7 +89,7 @@ class CertificateTemplateController extends BaseController
 
             $template = $this->getCertificateTemplateService()->update($id, ['styleType' => $type]);
 
-            return $this->redirect($this->generateUrl('admin_v2_operation_certificate_template_creat_step_three', ['id' => $template['id']]));
+            return $this->redirect($this->generateUrl('admin_v2_certificate_template_creat_step_three', ['id' => $template['id']]));
         }
 
         return $this->render('admin-v2/operating/certificate-template/manage/step-two.html.twig', ['template' => $template]);
@@ -99,16 +100,16 @@ class CertificateTemplateController extends BaseController
         $template = $this->getCertificateTemplateService()->get($id);
 
         if ($request->isMethod('POST')) {
-            $fields = $request->request->all();
+//            $fields = $request->request->all();
 
-            if (!empty($fields['basemapFileId'])) {
-                $this->getCertificateTemplateService()->updateBaseMap($id, $fields['basemapFileId']);
-            }
-            if (!empty($fields['stampFileId'])) {
-                $this->getCertificateTemplateService()->updateStamp($id, $fields['stampFileId']);
-            }
+//            if (!empty($fields['basemapFileId'])) {
+//                $this->getCertificateTemplateService()->updateBaseMap($id, $fields['basemapFileId']);
+//            }
+//            if (!empty($fields['stampFileId'])) {
+//                $this->getCertificateTemplateService()->updateStamp($id, $fields['stampFileId']);
+//            }
 
-            return $this->redirect($this->generateUrl('admin_v2_operation_certificate_template_creat_step_four', ['id' => $template['id']]));
+            return $this->redirect($this->generateUrl('admin_v2_certificate_template_creat_step_four', ['id' => $template['id']]));
         }
 
         return $this->render('admin-v2/operating/certificate-template/manage/step-three.html.twig', ['template' => $template]);
@@ -122,7 +123,7 @@ class CertificateTemplateController extends BaseController
             $fields = $request->request->all();
             $this->getCertificateTemplateService()->update($id, $fields);
 
-            return $this->redirect($this->generateUrl('admin_v2_operation_certificate_template_manage'));
+            return $this->redirect($this->generateUrl('admin_v2_certificate_template_manage'));
         }
 
         return $this->render('admin-v2/operating/certificate-template/manage/step-four.html.twig', ['template' => $template]);
@@ -131,9 +132,16 @@ class CertificateTemplateController extends BaseController
     public function baseMapModalAction(Request $request, $id)
     {
         if ($request->isMethod('POST')) {
-            $options = $request->request->all();
+            $data = $request->request->all();
 
-            return $this->buildImgJsonResponse($options['images'][0]['id']);
+            $file = $this->getFileService()->getFile($data['images'][0]['id']);
+            if (empty($file)) {
+                $this->createNewException(UploadFileException::NOTFOUND_FILE());
+            }
+            $this->getCertificateTemplateService()->updateBaseMap($id, $file['uri']);
+            $cover = $this->getWebExtension()->getFpath($file['uri']);
+
+            return $this->createJsonResponse(['image' => $cover]);
         }
 
         return $this->render('admin-v2/operating/certificate-template/img/basemap-modal.html.twig', [
@@ -141,12 +149,19 @@ class CertificateTemplateController extends BaseController
         ]);
     }
 
-    public function stampModalAction(Request $request)
+    public function stampModalAction(Request $request, $id)
     {
         if ($request->isMethod('POST')) {
-            $options = $request->request->all();
+            $data = $request->request->all();
 
-            return $this->buildImgJsonResponse($options['images'][0]['id']);
+            $file = $this->getFileService()->getFile($data['images'][0]['id']);
+            if (empty($file)) {
+                $this->createNewException(UploadFileException::NOTFOUND_FILE());
+            }
+            $this->getCertificateTemplateService()->updateStamp($id, $file['uri']);
+            $cover = $this->getWebExtension()->getFpath($file['uri']);
+
+            return $this->createJsonResponse(['image' => $cover]);
         }
 
         return $this->render('admin-v2/operating/certificate-template/img/stamp-modal.html.twig');
@@ -154,17 +169,6 @@ class CertificateTemplateController extends BaseController
 
     public function previewAction(Request $request, $id)
     {
-    }
-
-    protected function buildImgJsonResponse($fileId)
-    {
-        $file = $this->getFileService()->getFile($fileId);
-        $image = $this->getWebExtension()->getFpath($file['uri']);
-
-        return $this->createJsonResponse([
-            'fileId' => $file['id'],
-            'image' => $image,
-        ], 200);
     }
 
     /**

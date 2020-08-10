@@ -1,0 +1,45 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set script_controller = 'certificate/create-base' %}
+
+{% set menu = 'admin_v2_certificate_manage' %}
+
+{% block main %}
+  <h4>{{'admin.operation_certificate.certificate.create_btn'|trans}}</h4>
+  <form id="certificate-form" class="form-horizontal" method="post" action="{{ path('admin_v2_certificate_create') }}">
+    <div class="form-group mtl mbs">
+      <div class="col-md-2 control-label">
+        <label for="name" class="control-label-required">{{'admin.operation_certificate.certificate.name_th'|trans}}：</label>
+      </div>
+      <div class="col-md-6 controls">
+        <input class="form-control" name="name" id="name" value="{{ certificate.name|default('') }}"/>
+      </div>
+    </div>
+    <div class="form-group mtl mbs">
+      <div class="col-md-2 control-label">
+        <label for="description" class="control-label-required">{{'admin.operation_certificate.certificate.description_th'|trans}}：</label>
+      </div>
+      <div class="col-md-6 controls">
+        <textarea name="description" rows="4" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}" placeholder="{{'一句话介绍，限100字'|trans}}">{{ certificate.summary|default('') }}</textarea>
+      </div>
+    </div>
+    <div class="form-group mtl mbs">
+      <div class="col-md-2 control-label">
+        <label for="targetType" class="control-label-required">{{'admin.operation_certificate.template.type'|trans}}：</label>
+      </div>
+      <div class="col-md-6 controls">
+        <select class="form-control department-manage-search-form-group__type" id="targetType" name="targetType">
+          {{ select_options(dict('certificateTypes'), app.request.get('targetType')) }}
+        </select>
+      </div>
+    </div>
+    <div class="form-group mtl">
+      <div class="col-md-2 control-label">
+      </div>
+      <div class="controls col-md-6">
+        <button type="submit" class="btn btn-primary ct-mrxl" id="create-certificate" data-submitting-text="{{'form.btn.save.submiting'|trans}}">{{ 'form.btn.next'|trans }}</button>
+      </div>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+{% endblock %}

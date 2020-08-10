@@ -1561,3 +1561,5 @@ merchant.resource.product_version.update_failed_hint: Update Failed
 
 exception.s2b2c_product.adopt_failed: Adopt fail,Supplier is editing
 
+admin_v2.certificate.template.delete_hint: When a template is deleted, the certificates that use the templates Are templates deleted?
+
