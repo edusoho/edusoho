@@ -700,6 +700,7 @@ class SettingsController extends BaseController
                 return $this->createJsonResponse(array('message' => 'user.settings.security.password_modify.incorrect_password'), 403);
             } else {
                 $this->getUserService()->initPassword($user['id'], $passwords['newPassword']);
+                $this->kickUserLogout($user['id']);
 
                 return $this->createJsonResponse(array('message' => 'site.modify.success'));
             }
@@ -938,6 +939,7 @@ class SettingsController extends BaseController
             if ($form->isValid()) {
                 $passwords = $form->getData();
                 $this->getUserService()->changePassword($user['id'], $passwords['newPassword']);
+                $this->kickUserLogout($user['id']);
 
                 return $this->createJsonResponse(array(
                     'message' => 'user.settings.login_password_success',
@@ -954,6 +956,16 @@ class SettingsController extends BaseController
             'showType' => $showType,
             'form' => $form->createView(),
         ));
+    }
+
+    protected function kickUserLogout($userId)
+    {
+        $tokens = $this->getTokenService()->findTokensByUserIdAndType($userId, 'mobile_login');
+        if (!empty($tokens)) {
+            foreach ($tokens as $token) {
+                $this->getTokenService()->destoryToken($token['token']);
+            }
+        }
     }
 
     public function setupCheckNicknameAction(Request $request)
