@@ -1,10 +1,19 @@
 <template>
-  <div class="">
-    <img
-      :src="ItemBankExercise.cover.large"
-      style="width:100%;vertical-align: middle;"
-    />
-    <directory :exerciseId="Number(id)"></directory>
+  <div class="brush-exercise-detail-bank brush-exercise-joinbefore">
+    <img :src="ItemBankExercise.cover.large" class="brush-exercise-cover" />
+    <van-tabs v-model="active" sticky>
+      <van-tab title="课程目录">
+        <directory :exerciseId="Number(id)"></directory
+      ></van-tab>
+      <van-tab title="学员评价">
+        <review-list
+          ref="review"
+          title="学员评价"
+          defaul-value="暂无评价"
+          type="item_bank_exercise"
+        />
+      </van-tab>
+    </van-tabs>
     <!-- 加入学习 -->
     <e-footer @click.native="handleJoin">
       加入学习
@@ -19,16 +28,19 @@ import Api from '@/api';
 import * as types from '@/store/mutation-types';
 import { formatFullTime } from '@/utils/date-toolkit';
 import { Toast } from 'vant';
+import reviewList from './review-list';
 const { mapState, mapActions, mapMutations } = createNamespacedHelpers(
   'ItemBank',
 );
 export default {
   components: {
     directory,
+    reviewList,
   },
   data() {
     return {
       timer: null,
+      active: 0,
     };
   },
   computed: {

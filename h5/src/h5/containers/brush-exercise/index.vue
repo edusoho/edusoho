@@ -9,8 +9,6 @@
 import joinAfter from './joinAfter';
 import joinBefore from './joinBefore';
 import { mapState, mapActions } from 'vuex';
-import Api from '@/api';
-import { Toast } from 'vant';
 export default {
   components: {},
   data() {
@@ -40,12 +38,14 @@ export default {
   methods: {
     ...mapActions('ItemBank', [
       'setItemBankExercise',
+      'getDirectoryModules',
       'getDataItemBankReviews',
     ]),
     getData() {
       const id = Number(this.$route.params.id);
       if (id) {
         this.setItemBankExercise(id);
+        this.getDirectoryModules(id);
       }
     },
     joinStatusChange(status) {

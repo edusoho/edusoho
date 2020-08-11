@@ -1,6 +1,6 @@
 <template>
-  <div class="course-detail-bank">
-    <img :src="cover.large" style="width:100%;vertical-align: middle;" />
+  <div class="brush-exercise-detail-bank">
+    <img :src="cover.large" class="brush-exercise-cover" />
     <van-tabs v-model="active" sticky>
       <van-tab title="课程目录">
         <directory :exerciseId="Number(id)" />
@@ -21,7 +21,6 @@
 import { createNamespacedHelpers } from 'vuex';
 import directory from './directory';
 import reviewList from './review-list';
-import Api from '@/api';
 const { mapState } = createNamespacedHelpers('ItemBank');
 export default {
   components: {
@@ -31,7 +30,7 @@ export default {
   props: ['details'],
   data() {
     return {
-      active: 1,
+      active: 0,
     };
   },
   computed: {
