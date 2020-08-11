@@ -1133,6 +1133,36 @@ class TaskServiceImpl extends BaseService implements TaskService
         return $this->getTaskDao()->countLessonsWithMultipleTasks($courseId);
     }
 
+    public function canStartTask($taskId)
+    {
+        $task = $this->getTask($taskId);
+        if (empty($task)) {
+            return false;
+        }
+
+        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
+        if ($taskResult) {
+            return false;
+        }
+
+        $course = $this->getCourseService()->getCourse($task['courseId']);
+        if ('0' === $course['enableFinish']) {
+            $wrappedTasks = ArrayToolkit::index(
+                $this->wrapTaskResultToTasks(
+                    $course['id'],
+                    $this->findTasksByCourseId($course['id'])
+                ),
+                'id'
+            );
+
+            if ($wrappedTasks[$taskId]['lock']) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     /**
      * @return TaskDao
      */

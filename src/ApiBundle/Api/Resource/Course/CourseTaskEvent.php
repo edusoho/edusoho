@@ -23,14 +23,16 @@ class CourseTaskEvent extends AbstractResource
      */
     public function update(ApiRequest $request, $courseId, $taskId, $eventName)
     {
-        if (!in_array($eventName, array(self::EVENT_DOING, self::EVENT_FINISH))) {
+        if (!in_array($eventName, [self::EVENT_DOING, self::EVENT_FINISH])) {
             throw CommonException::ERROR_PARAMETER();
         }
 
-        $taskResult = $this->getTaskResultService()->getUserTaskResultByTaskId($taskId);
-
-        if (!$taskResult) {
-            $this->start($request, $courseId, $taskId, self::EVENT_START);
+        if (empty($this->getTaskResultService()->getUserTaskResultByTaskId($taskId))) {
+            if ($this->getTaskService()->canStartTask($taskId)) {
+                $this->start($request, $courseId, $taskId, self::EVENT_START);
+            } else {
+                throw TaskException::LOCKED_TASK();
+            }
         }
 
         if (self::EVENT_DOING == $eventName) {
@@ -56,7 +58,7 @@ class CourseTaskEvent extends AbstractResource
         $lastTime = $request->request->get('lastTime', time());
         $watchTime = $request->request->get('watchTime', 0);
 
-        $data = array('lastTime' => $lastTime);
+        $data = ['lastTime' => $lastTime];
         if (!empty($watchTime)) {
             $data['events']['watching']['watchTime'] = $watchTime;
         }
@@ -72,13 +74,13 @@ class CourseTaskEvent extends AbstractResource
             $completionRate = null;
         }
 
-        return array(
+        return [
             'result' => $result,
             'event' => $eventName,
             'nextTask' => $nextTask,
             'lastTime' => time(),
             'completionRate' => $completionRate,
-        );
+        ];
     }
 
     private function finish(ApiRequest $request, $courseId, $taskId, $eventName)
@@ -96,12 +98,12 @@ class CourseTaskEvent extends AbstractResource
         $nextTask = $this->getTaskService()->getNextTask($taskId);
         $learningProgress = $this->getLearningDataAnalysisService()->getUserLearningProgress($courseId, $result['userId']);
 
-        return array(
+        return [
             'result' => $result,
             'event' => $eventName,
             'nextTask' => $nextTask ?: null,
             'completionRate' => $learningProgress['percent'],
-        );
+        ];
     }
 
     /**
