@@ -9,6 +9,8 @@
 import joinAfter from './joinAfter';
 import joinBefore from './joinBefore';
 import { mapState, mapActions } from 'vuex';
+import Api from '@/api';
+import { Toast } from 'vant';
 export default {
   components: {},
   data() {
@@ -33,9 +35,13 @@ export default {
   },
   created() {
     this.getData();
+    this.getDataItemBank();
   },
   methods: {
-    ...mapActions('ItemBank', ['setItemBankExercise']),
+    ...mapActions('ItemBank', [
+      'setItemBankExercise',
+      'getDataItemBankReviews',
+    ]),
     getData() {
       const id = Number(this.$route.params.id);
       if (id) {
@@ -49,6 +55,12 @@ export default {
       } else {
         this.currentComp = joinBefore;
       }
+    },
+    // 获取题库评论数据
+    getDataItemBank() {
+      const targetId = Number(this.$route.params.id);
+      const targetType = 'item_bank_exercise';
+      this.getDataItemBankReviews({ targetId, targetType });
     },
   },
 };
