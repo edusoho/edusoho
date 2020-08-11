@@ -125,9 +125,9 @@ class ResourceSettlementController extends BaseController
                 'title_like' => empty($conditions['title']) ? null : $conditions['title'],
             ];
         } elseif ($type == self::TYPE_PRODUCT) {
-            $supplier = $this->getS2B2CFacadeService()->getSupplier();
+            $config = $this->getS2B2CFacadeService()->getS2B2CConfig();
             $conditions = [
-                'supplierId' => empty($supplier['id']) ? 0 : $supplier['id'],
+                'supplierId' => empty($config['supplierId']) ? 0 : $config['supplierId'],
                 'title' => empty($conditions['title']) ? null : $conditions['title'],
                 'limit' => $this->pageSize,
                 'sorts' => ['created_time' => 'DESC'],
