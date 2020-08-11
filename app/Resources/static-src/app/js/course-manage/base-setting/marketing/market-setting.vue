@@ -200,12 +200,12 @@
                 ],
                 buyExpiryTimeEnabledRadios: [
                     {
-                        value: '1',
-                        label: Translator.trans('course.marketing_setup.expiry_date.custom'),
-                    },
-                    {
                         value: '0',
                         label: Translator.trans('course.marketing_setup.expiry_date.anytime'),
+                    },
+                    {
+                        value: '1',
+                        label: Translator.trans('course.marketing_setup.expiry_date.custom'),
                     }
                 ],
                 approvalRadios: [
