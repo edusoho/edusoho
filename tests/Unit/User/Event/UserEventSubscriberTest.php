@@ -303,24 +303,4 @@ class UserEventSubscriberTest extends BaseTestCase
         $userService->shouldHaveReceived('getUser')->times(1);
         $notifyService->shouldHaveReceived('notify')->times(1);
     }
-
-    public function onUserChangePassword()
-    {
-        $this->mockBiz(
-            'User:TokenDao',
-            [
-                [
-                    'functionName' => 'findByUserIdAndType',
-                    'returnValue' => ['id' => 12, 'userId' => 22],
-                    'withParams' => [22, 'test_token'],
-                ],
-            ]
-        );
-
-        $event = new Event([]);
-        $eventSubscriber = new UserEventSubscriber($this->biz);
-        $result = $eventSubscriber->onUserChangePassword($event);
-
-        $this->assertNull($result);
-    }
 }
