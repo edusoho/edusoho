@@ -77,20 +77,32 @@ export default {
       return 'noJoin';
     },
   },
+  watch: {
+    module: {
+      handler: 'getData',
+      immediate: true,
+    },
+  },
   created() {
     this.getData();
   },
   methods: {
     ...mapActions('ItemBank', ['getDirectoryModules']),
-    getData() {
-      this.getDirectoryModules(this.exerciseId).then(res => {
-        if (res.length) {
-          this.currentType = res[0].type;
-          this.list[res[0].id] = JSON.parse(JSON.stringify(defaultData));
-          this.moduleId = res[0].id;
-          this.changeData(res[0].id);
-        }
-      });
+    getData(res) {
+      if (res && res.length) {
+        this.currentType = res[0].type;
+        this.list[res[0].id] = JSON.parse(JSON.stringify(defaultData));
+        this.moduleId = res[0].id;
+        this.changeData(res[0].id);
+      }
+      // this.getDirectoryModules(this.exerciseId).then(res => {
+      //   if (res.length) {
+      //     this.currentType = res[0].type;
+      //     this.list[res[0].id] = JSON.parse(JSON.stringify(defaultData));
+      //     this.moduleId = res[0].id;
+      //     this.changeData(res[0].id);
+      //   }
+      // });
     },
     judegIsAll(ItemBankInfomation) {
       return (

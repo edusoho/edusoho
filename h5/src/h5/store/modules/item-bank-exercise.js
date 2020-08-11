@@ -3,7 +3,7 @@ import * as types from '../mutation-types';
 
 const state = {
   ItemBankExercise: {},
-  ItemBankModules: {},
+  ItemBankModules: null,
   searchItemBankList: {
     selectedData: {},
     courseList: [],
@@ -43,6 +43,7 @@ const actions = {
   },
   getDirectoryModules({ commit }, id) {
     const query = { id };
+    commit(types.SET_ITEM_BANK_MODULES, null);
     return new Promise((resolve, reject) => {
       Api.getItemBankModules({ query })
         .then(res => {
