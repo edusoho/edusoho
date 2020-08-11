@@ -42,10 +42,10 @@ class UserDaoTest extends BaseDaoTestCase
         $defaultUser['type'] = 'default';
         $this->getUserDao()->create($defaultUser);
         $this->assertEquals(0, $this->getUserDao()->countByMobileNotEmpty());
-        $this->getUserProfileDao()->create(array(
+        $this->getUserProfileDao()->create([
             'id' => '3',
             'mobile' => '13967340627',
-        ));
+        ]);
 
         $this->assertEquals(1, $this->getUserDao()->countByMobileNotEmpty());
     }
@@ -56,10 +56,10 @@ class UserDaoTest extends BaseDaoTestCase
         $defaultUser['type'] = 'default';
         $this->getUserDao()->create($defaultUser);
         $this->assertEmpty($this->getUserDao()->findUnlockedUsersWithMobile(0, 10));
-        $this->getUserProfileDao()->create(array(
+        $this->getUserProfileDao()->create([
             'id' => '3',
             'mobile' => '13967340627',
-        ));
+        ]);
         $this->assertNotEmpty($this->getUserDao()->findUnlockedUsersWithMobile(0, 10));
     }
 
@@ -90,21 +90,21 @@ class UserDaoTest extends BaseDaoTestCase
     {
         $defaultUser = $this->getDefaultMockFields();
         $this->getUserDao()->create($defaultUser);
-        $this->getUserDao()->create(array(
+        $this->getUserDao()->create([
             'id' => '5',
             'nickname' => 'test2',
-            'roles' => array('ROLE_ADMIN'),
+            'roles' => ['ROLE_ADMIN'],
             'password' => '3DMYb8GyEXk32ruFzw4lxy2elz6/aoPtA5X8vCTWezg=',
             'salt' => 'qunt972ow5c48k4wc8k0ss448os0oko',
             'email' => '800@qq.com',
             'type' => 'default',
             'uuid' => $this->getUserService()->generateUUID(),
-        ));
+        ]);
 
-        $users = $this->getUserDao()->findByNicknames(array('test', 'test2'));
+        $users = $this->getUserDao()->findByNicknames(['test', 'test2']);
         $this->assertEquals(2, count($users));
 
-        $users = $this->getUserDao()->findByNicknames(array('test'));
+        $users = $this->getUserDao()->findByNicknames(['test']);
         $this->assertEquals(1, count($users));
     }
 
@@ -112,18 +112,18 @@ class UserDaoTest extends BaseDaoTestCase
     {
         $defaultUser = $this->getDefaultMockFields();
         $this->getUserDao()->create($defaultUser);
-        $this->getUserDao()->create(array(
+        $this->getUserDao()->create([
             'id' => '5',
             'nickname' => 'test2',
-            'roles' => array('ROLE_ADMIN'),
+            'roles' => ['ROLE_ADMIN'],
             'password' => '3DMYb8GyEXk32ruFzw4lxy2elz6/aoPtA5X8vCTWezg=',
             'salt' => 'qunt972ow5c48k4wc8k0ss448os0oko',
             'email' => '800@qq.com',
             'type' => 'default',
             'uuid' => $this->getUserService()->generateUUID(),
-        ));
+        ]);
 
-        $users = $this->getUserDao()->findByIds(array(3, 5));
+        $users = $this->getUserDao()->findByIds([3, 5]);
 
         $this->assertCount(2, $users);
     }
@@ -181,18 +181,40 @@ class UserDaoTest extends BaseDaoTestCase
         $this->assertEmpty($result);
     }
 
+    public function testFindUnLockedUsersByUserIds()
+    {
+        $this->getUserDao()->create([
+            'id' => 100,
+            'nickname' => '1@edusoho.com',
+            'email' => '1@edusoho.com',
+            'uuid' => 1,
+            'locked' => 1,
+        ]);
+
+        $this->getUserDao()->create([
+            'id' => 101,
+            'nickname' => '2@edusoho.com',
+            'email' => '2@edusoho.com',
+            'uuid' => 2,
+            'locked' => 0,
+        ]);
+
+        $users = $this->getUserDao()->findUnLockedUsersByUserIds([100, 101]);
+        $this->assertEquals(count($users), 1);
+    }
+
     protected function getDefaultMockFields()
     {
-        return array(
+        return [
             'id' => '3',
             'nickname' => 'test',
-            'roles' => array('ROLE_ADMIN'),
+            'roles' => ['ROLE_ADMIN'],
             'password' => '3DMYb8GyEXk32ruFzw4lxy2elz6/aoPtA5X8vCTWezg=',
             'salt' => 'qunt972ow5c48k4wc8k0ss448os0oko',
             'email' => '80@qq.com',
             'type' => 'system',
             'inviteCode' => 'test-code',
-        );
+        ];
     }
 
     private function getUserDao()
