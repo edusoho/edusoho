@@ -26,7 +26,8 @@ export default {
       offset: 0,
       ApiType: {
         course: 'getCourseReviews',
-        classroom: 'getClassroomReviews'
+        classroom: 'getClassroomReviews',
+        item_bank_exercise: 'getBankReviews',
       }
     }
   },
@@ -42,7 +43,6 @@ export default {
       const id = this.$route.params.id
       const type = this.$route.query.type
       const ApiType = this.ApiType
-
       Api[ApiType[type]]({
         query: { id },
         params: {

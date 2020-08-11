@@ -3,12 +3,13 @@ import * as types from '../mutation-types';
 
 const state = {
   ItemBankExercise: {},
-  ItemBankModules: {},
+  ItemBankModules: null,
   searchItemBankList: {
     selectedData: {},
     courseList: [],
     paging: {},
   },
+  reviews: null,
 };
 
 const mutations = {
@@ -23,6 +24,9 @@ const mutations = {
   },
   [types.CHANGE_ITEMBANK_JOINSTATUS](currentState, data) {
     currentState.ItemBankExercise.isMember = data;
+  },
+  [types.GET_ITEMBANK_REVIEWS](currentState, data) {
+    currentState.reviews = data || [];
   },
 };
 
@@ -39,6 +43,7 @@ const actions = {
   },
   getDirectoryModules({ commit }, id) {
     const query = { id };
+    commit(types.SET_ITEM_BANK_MODULES, null);
     return new Promise((resolve, reject) => {
       Api.getItemBankModules({ query })
         .then(res => {
@@ -53,6 +58,16 @@ const actions = {
   },
   setItemBankList({ commit }, data) {
     commit(types.SET_ITEMBANKLIST, data);
+  },
+  getDataItemBankReviews({ commit }, { targetId, targetType }) {
+    const params = { targetId, targetType };
+    Api.getBankReviews({ params })
+      .then(res => {
+        commit(types.GET_ITEMBANK_REVIEWS, res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   },
 };
 

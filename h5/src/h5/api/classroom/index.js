@@ -15,6 +15,11 @@ export default [
     url: '/classrooms/{id}/reviews',
     method: 'GET'
   }, {
+    // 获取题库评论
+    name: 'getBankReviews',
+    url: '/review',
+    method: 'GET'
+  }, {
     // 获取课程列表数据
     name: 'getClassList',
     url: '/classrooms'

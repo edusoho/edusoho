@@ -1,3 +1,23 @@
 @import './directory/index.scss';
 @import './lessonTask/report.scss';
 @import './lessonTask/result.scss';
+
+.brush-exercise-detail-bank {
+	.brush-exercise-joinbefore {
+		padding-bottom: vw(55);
+	}
+
+	.van-tabs__line {
+		width: 62.5px !important;
+		background-color: #408ffb;
+	}
+
+	.van-tabs__wrap {
+		box-shadow: 0 2px 6px 0 rgba(239, 239, 239, 1);
+	}
+
+	.brush-exercise-cover {
+		width: 100%;
+		vertical-align: middle;
+	}
+}

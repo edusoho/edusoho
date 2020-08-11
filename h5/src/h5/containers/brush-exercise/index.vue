@@ -33,13 +33,19 @@ export default {
   },
   created() {
     this.getData();
+    this.getDataItemBank();
   },
   methods: {
-    ...mapActions('ItemBank', ['setItemBankExercise']),
+    ...mapActions('ItemBank', [
+      'setItemBankExercise',
+      'getDirectoryModules',
+      'getDataItemBankReviews',
+    ]),
     getData() {
       const id = Number(this.$route.params.id);
       if (id) {
         this.setItemBankExercise(id);
+        this.getDirectoryModules(id);
       }
     },
     joinStatusChange(status) {
@@ -49,6 +55,12 @@ export default {
       } else {
         this.currentComp = joinBefore;
       }
+    },
+    // 获取题库评论数据
+    getDataItemBank() {
+      const targetId = Number(this.$route.params.id);
+      const targetType = 'item_bank_exercise';
+      this.getDataItemBankReviews({ targetId, targetType });
     },
   },
 };
