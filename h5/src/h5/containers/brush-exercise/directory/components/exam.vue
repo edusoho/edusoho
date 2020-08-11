@@ -31,7 +31,7 @@
 
 <script>
 import empty from '&/components/e-empty/e-empty.vue';
-import getBtnText from '@/utils/itemBank-status.js';
+import { getBtnText } from '@/utils/itemBank-status.js';
 import { mapState } from 'vuex';
 export default {
   components: {
