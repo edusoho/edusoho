@@ -4,7 +4,6 @@ namespace Biz\Certificate\Strategy\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\Certificate\Strategy\BaseStrategy;
-use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 

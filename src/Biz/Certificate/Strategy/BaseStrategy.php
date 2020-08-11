@@ -2,10 +2,7 @@
 
 namespace Biz\Certificate\Strategy;
 
-use Biz\Taxonomy\Service\CategoryService;
-use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Context\Biz;
-use AppBundle\Common\ArrayToolkit;
 
 abstract class BaseStrategy
 {

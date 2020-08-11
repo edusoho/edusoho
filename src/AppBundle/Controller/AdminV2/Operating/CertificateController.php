@@ -120,7 +120,6 @@ class CertificateController extends BaseController
 
     public function templateModalAction(Request $request)
     {
-
     }
 
     public function codeCheckAction(Request $request)

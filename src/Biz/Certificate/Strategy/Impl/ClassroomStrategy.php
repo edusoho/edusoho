@@ -4,7 +4,6 @@ namespace Biz\Certificate\Strategy\Impl;
 
 use Biz\Certificate\Strategy\BaseStrategy;
 use Biz\Classroom\Service\ClassroomService;
-use Biz\Common\CommonException;
 
 class ClassroomStrategy extends BaseStrategy
 {

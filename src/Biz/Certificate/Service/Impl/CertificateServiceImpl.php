@@ -69,7 +69,6 @@ class CertificateServiceImpl extends BaseService implements CertificateService
         );
     }
 
-
     /**
      * @return CertificateDao
      */
