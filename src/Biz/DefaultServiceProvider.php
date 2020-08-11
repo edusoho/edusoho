@@ -9,6 +9,9 @@ use AppBundle\Component\RateLimit\SmsLoginRateLimiter;
 use AppBundle\Component\RateLimit\SmsRateLimiter;
 use Biz\Announcement\Processor\AnnouncementProcessorFactory;
 use Biz\Article\Event\ArticleEventSubscriber;
+use Biz\Certificate\Strategy\CertificateStrategyContext;
+use Biz\Certificate\Strategy\Impl\ClassroomStrategy;
+use Biz\Certificate\Strategy\Impl\CourseStrategy;
 use Biz\Classroom\Event\ClassroomThreadEventProcessor;
 use Biz\Common\BizCaptcha;
 use Biz\Common\BizDragCaptcha;
@@ -242,6 +245,18 @@ class DefaultServiceProvider implements ServiceProviderInterface
 
         $biz['template_factory'] = function ($biz) {
             return new TemplateFactory($biz);
+        };
+
+        $biz['certificate.strategy_context'] = function ($biz) {
+            return new CertificateStrategyContext($biz);
+        };
+
+        $biz['certificate.course_strategy'] = function ($biz) {
+            return new CourseStrategy($biz);
+        };
+
+        $biz['certificate.classroom_strategy'] = function ($biz) {
+            return new ClassroomStrategy($biz);
         };
     }
 }

@@ -9,6 +9,11 @@ class CertificateDaoImpl extends GeneralDaoImpl implements CertificateDao
 {
     protected $table = 'certificate';
 
+    public function getByCode($code)
+    {
+        return $this->getByFields(['code' => $code]);
+    }
+
     public function declares()
     {
         return [

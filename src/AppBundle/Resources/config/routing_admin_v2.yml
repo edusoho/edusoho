@@ -945,8 +945,24 @@ admin_v2_certificate_create:
     defaults: { _controller: AppBundle:AdminV2/Operating/Certificate:create }
 
 admin_v2_certificate_create_detail:
-  path:  /certificate/manage/create/detail
-  defaults: { _controller: AppBundle:AdminV2/Operating/Certificate:createDetail }
+    path:  /certificate/manage/create/detail
+    defaults: { _controller: AppBundle:AdminV2/Operating/Certificate:createDetail }
+
+admin_v2_certificate_target_select:
+    path:  /certificate/manage/target/select
+    defaults: { _controller: AppBundle:AdminV2/Operating/Certificate:targetModal }
+
+admin_v2_certificate_target_search:
+  path:  /certificate/manage/target/{type}/search
+  defaults: { _controller: AppBundle:AdminV2/Operating/Certificate:targetSearch }
+
+admin_v2_certificate_template_select:
+    path:  /certificate/manage/template/select
+    defaults: { _controller: AppBundle:AdminV2/Operating/Certificate:templateModal }
+
+admin_v2_certificate_code_check:
+    path:  /certificate/manage/code/check
+    defaults: { _controller: AppBundle:AdminV2/Operating/Certificate:codeCheck }
 
 admin_v2_certificate_edit:
     path:  /certificate/{id}/edit

@@ -1562,4 +1562,9 @@ merchant.resource.product_version.update_failed_hint: Update Failed
 exception.s2b2c_product.adopt_failed: Adopt fail,Supplier is editing
 
 admin_v2.certificate.template.delete_hint: When a template is deleted, the certificates that use the templates Are templates deleted?
+admin_v2.certificate.code.exist: This certificate code already exists
+admin_v2.certificate.code.check: 1 to 6 digits or letters of the alphabet, not case sensitive
+admin_v2.certificate.expiry_day.check: Please enter a non-negative integer from 1 to 9999
+admin_v2.certificate.target_id.check: Please select the target group
+admin_v2.certificate.template_id.check: Please select a certificate template
 

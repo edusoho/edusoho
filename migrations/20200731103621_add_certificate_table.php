@@ -39,7 +39,6 @@ class AddCertificateTable extends Migration
                 `status` varchar(64) DEFAULT 'draft' COMMENT '证书状态',
                 `expiryDay` int(10) DEFAULT '0' COMMENT '有效期天数，0表示长期有效',
                 `autoIssue` tinyint(1) unsigned DEFAULT '1' COMMENT '是否自动发放',
-                `issueRule` VARCHAR (255) DEFAULT '' COMMENT '发放规则',
                 `createdUserId` INT(10) unsigned DEFAULT '0' COMMENT '创建者Id',
                 `createdTime` INT(10) unsigned DEFAULT '0' COMMENT '创建时间',
                 `updatedTime` INT(10) unsigned DEFAULT '0'  COMMENT '更新时间',
