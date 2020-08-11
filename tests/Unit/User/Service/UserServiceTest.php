@@ -1411,8 +1411,16 @@ class UserServiceTest extends BaseTestCase
             'locked' => 0,
         ]);
 
-        $users = $this->getUserService()->findUnLockedUsersByUserIds([100, 101]);
-        $this->assertEquals(count($users), 1);
+        $this->getUserDao()->create([
+            'id' => 102,
+            'nickname' => '3@edusoho.com',
+            'email' => '3@edusoho.com',
+            'uuid' => 3,
+            'locked' => 0,
+        ]);
+
+        $users = $this->getUserService()->findUnLockedUsersByUserIds([100, 101, 102]);
+        $this->assertEquals(count($users), 2);
     }
 
     public function testGetSimpleUser()
