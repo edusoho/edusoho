@@ -556,6 +556,7 @@ class UserManageController extends BaseController
         if ('POST' === $request->getMethod()) {
             $formData = $request->request->all();
             $this->getAuthService()->changePassword($user['id'], null, $formData['newPassword']);
+            $this->kickUserLogout($user['id']);
 
             return $this->createJsonResponse(true);
         }
