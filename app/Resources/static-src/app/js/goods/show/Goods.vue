@@ -1,7 +1,7 @@
 <template>
     <div class="cd-container">
         <div class="product-breadcrumb">首页 / {{goods.title}}</div>
-        <detail :goods="goods" :currentSku="currentSku" @changeSku="changeSku" :is-user-login="isUserLogin">
+        <detail :goods="goods" :currentSku="currentSku" @changeSku="changeSku" :current-url="currentUrl" :is-user-login="isUserLogin">
         </detail>
 
         <div class="product-info clearfix" v-if="goods.id">
@@ -65,7 +65,7 @@
             <div class="product-info__right pull-right">
                 <teacher :teachers="componentsData.teachers"/>
                 <qr :mpQrcode="componentsData.mpQrCode"/>
-                <recommend :recommendGoods="componentsData.recommendGoods"/>
+                <recommend :goods="goods" :recommendGoods="componentsData.recommendGoods"/>
             </div>
         </div>
         <back-to-top v-show="isFixed"/>
@@ -118,6 +118,10 @@
             activityMetas: {
                 type: Object,
                 default: null,
+            },
+            currentUrl: {
+                type: String,
+                default: '',
             }
         },
         components: {

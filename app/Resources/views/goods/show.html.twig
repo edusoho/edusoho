@@ -8,6 +8,7 @@
        data-current-user-id="{{ app.user.id|default(null) }}"
        data-target-id="{{ app.request.query.get('targetId')|default(null) }}"
        data-is-user-login="{{ app.user.isLogin()|default(0) }}"
+       data-current-url="{{ url('goods_show', { id: app.request.get('id')}) }}"
   ></div>
   <div class="hidden js-hidden-i18n">
     {

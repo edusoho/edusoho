@@ -8,7 +8,13 @@
                 <li class="pull-left"><i class="es-icon es-icon-friends mrs"></i>{{ goods.product.target.studentNum }}人加入学习
                 </li>
                 <li class="pull-right">
-                    <share :customized-class="'detail-left__text-share'" :type="'courseSet'">分享
+                    <share :customized-class="'detail-left__text-share'"
+                           :title="goods.title"
+                           :summary="goods.summary"
+                           :message="`我正在学习《${goods.title}》，收获巨大哦，一起来学习吧！`"
+                           :picture="goods.images.large"
+                           :url="currentUrl"
+                           :type="'courseSet'">分享
                     </share>
                     <favorite :is-favorite="goods.isFavorite" :target-type="'goods'"
                               :target-id="goods.id"></favorite>
@@ -106,6 +112,10 @@
             isUserLogin: {
                 type: Number,
                 default: 0,
+            },
+            currentUrl: {
+                type: String,
+                default: '',
             }
         },
         methods: {
