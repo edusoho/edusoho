@@ -110,27 +110,33 @@ class ResourceSettlementController extends BaseController
 
     protected function prepareConditionsByType($conditions, $type)
     {
-        $conditionTypes = [
-            self::TYPE_BALANCE => [
+        if ($type == self::TYPE_BALANCE) {
+            $conditions = [
                 'created_time_GTE' => empty($conditions['startTime']) ? null : strtotime($conditions['startTime']),
                 'created_time_LTE' => empty($conditions['endTime']) ? null : strtotime($conditions['endTime']),
                 'title_like' => empty($conditions['title']) ? null : $conditions['title'],
-            ],
-            self::TYPE_ORDER => [
+            ];
+        } elseif ($type == self::TYPE_ORDER) {
+            $conditions = [
                 'only_show_debt' => empty($conditions['showDebt']) ? 0 : 1,
                 'start_time' => empty($conditions['startTime']) ? null : strtotime($conditions['startTime']),
                 'end_time' => empty($conditions['endTime']) ? null : strtotime($conditions['endTime']),
                 'status' => empty($conditions['status']) ? null : $conditions['status'],
                 'title_like' => empty($conditions['title']) ? null : $conditions['title'],
-            ],
-            self::TYPE_PRODUCT => [
-                'parentTitleLike' => empty($conditions['title']) ? null : $conditions['title'],
+            ];
+        } elseif ($type == self::TYPE_PRODUCT) {
+            $supplier = $this->getS2B2CFacadeService()->getSupplier();
+            $conditions = [
+                'supplierId' => empty($supplier['id']) ? 0 : $supplier['id'],
+                'title' => empty($conditions['title']) ? null : $conditions['title'],
                 'limit' => $this->pageSize,
                 'sorts' => ['created_time' => 'DESC'],
-            ],
-        ];
+            ];
+        } else {
+            $conditions = [];
+        }
 
-        return empty($conditionTypes[$type]) ? [] : $conditionTypes[$type];
+        return $conditions;
     }
 
     /**
