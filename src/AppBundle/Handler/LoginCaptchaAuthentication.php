@@ -88,15 +88,15 @@ class LoginCaptchaAuthentication extends AbstractGuardAuthenticator
      */
     public function getCredentials(Request $request)
     {
-        if ('/login_check' != $request->getPathInfo() && !$request->isMethod('POST')) {
-            return;
+        if ('/login_check' == $request->getPathInfo() && $request->isMethod('POST')) {
+            return [
+                'username' => $request->request->get('_username'),
+                'password' => $request->request->get('_password'),
+                'captchaToken' => $request->request->get('dragCaptchaToken', ''),
+            ];
         }
 
-        return [
-            'username' => $request->request->get('_username'),
-            'password' => $request->request->get('_password'),
-            'captchaToken' => $request->request->get('dragCaptchaToken', ''),
-        ];
+        return;
     }
 
     /**
