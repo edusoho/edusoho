@@ -1,4 +1,5 @@
-export default status => {
+import { formatFullTime } from './date-toolkit';
+const getBtnText = status => {
   switch (status) {
     case 'doing':
     case 'paused':
@@ -19,3 +20,24 @@ export default status => {
       };
   }
 };
+const learnExpiry = ItemBankExercise => {
+  const expiryMode = ItemBankExercise.expiryMode;
+  const expiryDays = ItemBankExercise.expiryDays;
+  const startDateStr = formatFullTime(
+    new Date(ItemBankExercise.expiryStartDate * 1000),
+  );
+  const endDateStr = formatFullTime(
+    new Date(ItemBankExercise.expiryEndDate * 1000),
+  );
+  switch (expiryMode) {
+    case 'forever':
+      return '永久有效';
+    case 'end_date':
+      return endDateStr + '之前可学习';
+    case 'days':
+      return expiryDays + '天内可学习';
+    case 'date':
+      return `${startDateStr} 至 ${endDateStr}`;
+  }
+};
+export { getBtnText, learnExpiry };

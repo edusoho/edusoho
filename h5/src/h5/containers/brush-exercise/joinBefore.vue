@@ -2,6 +2,9 @@
   <div class="brush-exercise-detail-bank brush-exercise-joinbefore">
     <img :src="ItemBankExercise.cover.large" class="brush-exercise-cover" />
     <van-tabs v-model="active" sticky>
+      <van-tab title="课程简介">
+        <introduction></introduction>
+      </van-tab>
       <van-tab title="课程目录">
         <directory :exerciseId="Number(id)"></directory
       ></van-tab>
@@ -26,9 +29,10 @@ import { createNamespacedHelpers } from 'vuex';
 import directory from './directory';
 import Api from '@/api';
 import * as types from '@/store/mutation-types';
-import { formatFullTime } from '@/utils/date-toolkit';
 import { Toast } from 'vant';
 import reviewList from './review-list';
+import introduction from './introduction';
+import { learnExpiry } from '@/utils/itemBank-status';
 const { mapState, mapActions, mapMutations } = createNamespacedHelpers(
   'ItemBank',
 );
@@ -36,6 +40,7 @@ export default {
   components: {
     directory,
     reviewList,
+    introduction,
   },
   data() {
     return {
@@ -106,29 +111,18 @@ export default {
         this.getOrder();
       }
     },
-    learnExpiry() {
-      const expiryMode = this.ItemBankExercise.expiryMode;
-      const expiryDays = this.ItemBankExercise.expiryDays;
-      const startDateStr = formatFullTime(
-        new Date(this.ItemBankExercise.expiryStartDate * 1000),
-      );
-      const endDateStr = formatFullTime(
-        new Date(this.ItemBankExercise.expiryEndDate * 1000),
-      );
-      switch (expiryMode) {
-        case 'forever':
-          return '永久有效';
-        case 'end_date':
-          return endDateStr + '之前可学习';
-        case 'days':
-          return expiryDays + '天内可学习';
-        case 'date':
-          return `${startDateStr} 至 ${endDateStr}`;
-      }
+    learnExpiryHtml() {
+      const obj = {
+        expiryMode: this.ItemBankExercise.expiryMode,
+        expiryDays: this.ItemBankExercise.expiryDays,
+        expiryStartDate: this.ItemBankExercise.expiryStartDate,
+        expiryEndDate: this.ItemBankExercise.expiryEndDate,
+      };
+      return learnExpiry(obj);
     },
     // 创建订单
     getOrder() {
-      const expiryStr = this.learnExpiry();
+      const expiryStr = this.learnExpiryHtml();
       this.$router.push({
         name: 'order',
         params: {

@@ -2,6 +2,9 @@
   <div class="brush-exercise-detail-bank">
     <img :src="cover.large" class="brush-exercise-cover" />
     <van-tabs v-model="active" sticky>
+      <van-tab title="课程简介">
+        <introduction></introduction>
+      </van-tab>
       <van-tab title="课程目录">
         <directory :exerciseId="Number(id)" />
       </van-tab>
@@ -21,11 +24,13 @@
 import { createNamespacedHelpers } from 'vuex';
 import directory from './directory';
 import reviewList from './review-list';
+import introduction from './introduction';
 const { mapState } = createNamespacedHelpers('ItemBank');
 export default {
   components: {
     directory,
     reviewList,
+    introduction,
   },
   props: ['details'],
   data() {
