@@ -3640,7 +3640,7 @@ my.teaching.open_course.course_info: 'Course Info'
 my.teaching.open_course.live_manage: 'Lives'
 my.teaching.open_course.show.edusoho_school: 'EduSoho site'
 my.teaching.open_course.show.tips: "This QR code can only be scanned by wechat for preview, and not able to be shared to others"
-my.teaching.open_course.show.recommend_course: 'Recommend Course'
+my.teaching.open_course.show.recommend_course: 'Recommend Course/Classroom'
 my.teaching.open_course.show.about_empty: 'No brief introduction temporarily'
 my.teaching.open_course.header.tips: 'Share it to your wechat friends'
 my.teaching.open_course.header.understand_btn: Okay

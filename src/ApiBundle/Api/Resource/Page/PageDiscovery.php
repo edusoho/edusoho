@@ -6,6 +6,7 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Coupon\Service\CouponBatchService;
+use Biz\System\Service\H5SettingService;
 use Biz\User\UserException;
 
 class PageDiscovery extends AbstractResource
@@ -69,6 +70,9 @@ class PageDiscovery extends AbstractResource
         return $this->service('Course:CourseService');
     }
 
+    /**
+     * @return H5SettingService
+     */
     protected function getH5SettingService()
     {
         return $this->service('System:H5SettingService');

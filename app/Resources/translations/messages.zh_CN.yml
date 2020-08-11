@@ -4251,7 +4251,7 @@ my.teaching.open_course.live_manage: 录播管理
 my.teaching.open_course.show.edusoho_school: EduSoho网校
 my.teaching.open_course.show.tips: >
   二维码只用于微信扫一<br>扫预览，不可用于分享
-my.teaching.open_course.show.recommend_course: 推荐课程
+my.teaching.open_course.show.recommend_course: 推荐课程/班级
 my.teaching.open_course.show.about_empty: 暂无简介
 my.teaching.open_course.header.tips: 快分享给你的微信小伙伴吧！
 my.teaching.open_course.header.understand_btn: 知道了
@@ -4274,7 +4274,7 @@ my.teaching.open_course.lesson.header.lesson_finished: 课时学习完成
 my.teaching.open_course.lesson.header.lesson_share: 如果喜欢课程内容，赶紧分享给好友吧
 my.teaching.open_course.lesson.header.lesson_share_btn: 分享
 my.teaching.open_course.lesson.header.reply_btn: 重播
-my.teaching.open_course.lesson.recommend.empty: 暂无推荐课程
+my.teaching.open_course.lesson.recommend.empty: 暂无推荐内容
 my.teaching.open_course.lesson.recommend.learning_num: 人在学习
 my.teaching.open_course.infobar.share_btn: 分享
 my.teaching.open_course.infobar.Favorited: 已收藏
