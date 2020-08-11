@@ -56,7 +56,7 @@ export default {
         this.currentComp = joinBefore;
       }
     },
-    // 获取题库数据
+    // 获取题库评论数据
     getDataItemBank() {
       const targetId = Number(this.$route.params.id);
       const targetType = 'item_bank_exercise';

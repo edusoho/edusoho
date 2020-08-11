@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="reviews === null">
-      <van-loading color="#1989fa" size="24px" vertical style="margin-top: 20px"
+      <van-loading color="#1989fa" size="24px" vertical class="mt30"
         >加载中...</van-loading
       >
     </div>
@@ -16,7 +16,6 @@
         :max-height="400"
         @maskLoadMore="loadMore"
       >
-        <!-- <moreMask v-if="reviews.length" @maskLoadMore="loadMore" :disabled="diableMask" :forceShow="!diableMask"> -->
         <template v-for="(item, index) in reviews">
           <review :review="item" :is-class="isBank" :key="index" />
         </template>
@@ -49,10 +48,6 @@ export default {
     isBank() {
       return this.type === 'item_bank_exercise';
     },
-
-    // diableMask() {
-    //   return this.reviews.length < this.maxShowNum;
-    // }
   },
   methods: {
     loadMore() {
