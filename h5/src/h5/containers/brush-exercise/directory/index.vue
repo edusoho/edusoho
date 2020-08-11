@@ -68,6 +68,7 @@ export default {
     ...mapState('ItemBank', {
       module: state => state.ItemBankModules,
       isMember: state => state.ItemBankExercise.isMember,
+      id: state => state.ItemBankExercise.id,
     }),
     joinStatus() {
       if (this.isMember) {
@@ -76,7 +77,6 @@ export default {
       return 'noJoin';
     },
   },
-  watch: {},
   created() {
     this.getData();
   },

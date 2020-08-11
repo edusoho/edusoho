@@ -61,5 +61,6 @@ export default [
     name: 'joinItemBank',
     url: '/item_bank_exercises/{exerciseId}/members',
     method: 'POST',
+    disableLoading: true,
   },
 ];
