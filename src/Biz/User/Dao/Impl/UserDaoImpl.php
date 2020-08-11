@@ -121,6 +121,18 @@ class UserDaoImpl extends AdvancedDaoImpl implements UserDao
         return $this->db()->fetchAll($sql, $ids);
     }
 
+    public function findUnLockedUsersByUserIds($userIds = [])
+    {
+        if (empty($userIds)) {
+            return [];
+        }
+
+        $marks = str_repeat('?,', count($userIds) - 1).'?';
+        $sql = "SELECT id FROM {$this->table} WHERE locked = 1 AND id IN ({$marks});";
+
+        return $this->db()->fetchAll($sql, $userIds);
+    }
+
     protected function createQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions, function ($value) {

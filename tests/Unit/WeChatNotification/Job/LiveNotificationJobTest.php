@@ -9,59 +9,59 @@ class LiveNotificationJobTest extends BaseTestCase
 {
     public function testExecute()
     {
-        $this->getSettingService()->set('storage', array('cloud_access_key' => 'accessKey', 'cloud_secret_key' => 'secretKey'));
-        $weChatService = $this->mockBiz('WeChat:WeChatService', array(
-            array(
+        $this->getSettingService()->set('storage', ['cloud_access_key' => 'accessKey', 'cloud_secret_key' => 'secretKey']);
+        $weChatService = $this->mockBiz('WeChat:WeChatService', [
+            [
                 'functionName' => 'getTemplateId',
                 'returnValue' => 'test',
-                'withParams' => array('liveOpen'),
-            ),
-            array(
+                'withParams' => ['liveOpen'],
+            ],
+            [
                 'functionName' => 'findSubscribedUsersByUserIdsAndType',
-                'returnValue' => array(array('openId' => 'test')),
-                'withParams' => array(array(12), 'official'),
-            ),
-            array(
+                'returnValue' => [['openId' => 'test']],
+                'withParams' => [[12], 'official'],
+            ],
+            [
                 'functionName' => 'getWeChatSendChannel',
                 'returnValue' => 'wechat',
-            ),
-        ));
-        $this->mockBiz('Task:TaskService', array(
-            array(
+            ],
+        ]);
+        $this->mockBiz('Task:TaskService', [
+            [
                 'functionName' => 'getTask',
-                'returnValue' => array('status' => 'published', 'courseId' => 3, 'title' => 'test', 'startTime' => time()),
-                'withParams' => array(1),
-            ),
-        ));
-        $this->mockBiz('Course:CourseService', array(
-            array(
+                'returnValue' => ['status' => 'published', 'courseId' => 3, 'title' => 'test', 'startTime' => time()],
+                'withParams' => [1],
+            ],
+        ]);
+        $this->mockBiz('Course:CourseService', [
+            [
                 'functionName' => 'getCourse',
-                'returnValue' => array('status' => 'published', 'courseSetId' => 4, 'id' => 5, 'locked' => 0, 'parentId' => 10),
-                'withParams' => array(3),
-            ),
-        ));
-        $this->mockBiz('Course:CourseSetService', array(
-            array(
+                'returnValue' => ['status' => 'published', 'courseSetId' => 4, 'id' => 5, 'locked' => 0, 'parentId' => 10],
+                'withParams' => [3],
+            ],
+        ]);
+        $this->mockBiz('Course:CourseSetService', [
+            [
                 'functionName' => 'getCourseSet',
-                'returnValue' => array('status' => 'published', 'parentId' => 1, 'title' => 'test CourseSet', 'type' => 'live'),
-                'withParams' => array(4),
-            ),
-        ));
-        $this->mockBiz('Course:MemberService', array(
-            array(
+                'returnValue' => ['status' => 'published', 'parentId' => 1, 'title' => 'test CourseSet', 'type' => 'live'],
+                'withParams' => [4],
+            ],
+        ]);
+        $this->mockBiz('Course:MemberService', [
+            [
                 'functionName' => 'searchMembers',
-                'returnValue' => array(array('userId' => 12)),
-            ),
-        ));
-        $this->mockBiz('User:UserService', array(
-            array(
-                'functionName' => 'searchUsers',
-                'returnValue' => array(array('id' => 12)),
-            ),
-        ));
+                'returnValue' => [['userId' => 12]],
+            ],
+        ]);
+        $this->mockBiz('User:UserService', [
+            [
+                'functionName' => 'findUnLockedUsersByUserIds',
+                'returnValue' => [['id' => 12]],
+            ],
+        ]);
 
-        $job = new LiveNotificationJob(array(), $this->biz);
-        $job->args = array('key' => 'liveOpen', 'taskId' => 1, 'url' => 'www.test.com');
+        $job = new LiveNotificationJob([], $this->biz);
+        $job->args = ['key' => 'liveOpen', 'taskId' => 1, 'url' => 'www.test.com'];
         $result = $job->execute();
 
         $this->assertEmpty($result);

@@ -2,18 +2,18 @@
 
 namespace Biz\WeChatNotification\Job;
 
+use AppBundle\Common\ArrayToolkit;
+use Biz\AppLoggerConstant;
+use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Notification\Service\NotificationService;
+use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
-use Codeages\Biz\Framework\Scheduler\AbstractJob;
-use Biz\System\Service\LogService;
 use Biz\WeChat\Service\WeChatService;
-use Biz\Course\Service\CourseService;
-use Biz\AppLoggerConstant;
-use AppBundle\Common\ArrayToolkit;
+use Codeages\Biz\Framework\Scheduler\AbstractJob;
 
 class AbstractNotificationJob extends AbstractJob
 {
@@ -31,15 +31,10 @@ class AbstractNotificationJob extends AbstractJob
             return;
         }
 
-        $wechatSetting = $this->getSettingService()->get('wechat', array());
+        $wechatSetting = $this->getSettingService()->get('wechat', []);
         $channel = $this->getWeChatService()->getWeChatSendChannel();
 
-        $users = $this->getUserService()->searchUsers(
-            array('userIds' => $userIds, 'locked' => 0),
-            array(),
-            0,
-            PHP_INT_MAX
-        );
+        $users = $this->getUserService()->findUnLockedUsersByUserIds($userIds);
         $userIds = ArrayToolkit::column($users, 'id');
         if (empty($userIds)) {
             return;
@@ -48,16 +43,16 @@ class AbstractNotificationJob extends AbstractJob
         $subscribedUsers = ArrayToolkit::index($subscribedUsers, 'userId');
         $batchs = array_chunk($subscribedUsers, self::LIMIT_NUM);
         foreach ($batchs as $batch) {
-            $list = array();
+            $list = [];
             foreach ($batch as $user) {
                 $data = isset($templateData[$user['userId']]) ? $templateData[$user['userId']] : $templateData[0];
                 if (!is_array($data)) {
-                    $data = array();
+                    $data = [];
                 }
-                $list[] = array_merge(array(
+                $list[] = array_merge([
                     'channel' => $channel,
                     'to_id' => $user['openId'],
-                ), $data);
+                ], $data);
             }
 
             $this->sendWeChatNotification($key, $logName, $list);
@@ -69,7 +64,7 @@ class AbstractNotificationJob extends AbstractJob
         try {
             $result = $this->getCloudNotificationClient()->sendNotifications($list);
         } catch (\Exception $e) {
-            $this->getLogService()->error(AppLoggerConstant::NOTIFY, $logName, "发送微信通知失败:template:{$key}", array('error' => $e->getMessage()));
+            $this->getLogService()->error(AppLoggerConstant::NOTIFY, $logName, "发送微信通知失败:template:{$key}", ['error' => $e->getMessage()]);
 
             return;
         }

@@ -2161,6 +2161,11 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserDao()->update($id, ['faceRegistered' => 1]);
     }
 
+    public function findUnLockedUsersByUserIds($userIds = [])
+    {
+        return $this->getUserDao()->findUnLockedUsersByUserIds($userIds);
+    }
+
     protected function filterCustomField($fields)
     {
         $numericalFields = ['intField1', 'intField2', 'intField3', 'intField4', 'intField5', 'floatField1', 'floatField2', 'floatField3', 'floatField4', 'floatField5'];
