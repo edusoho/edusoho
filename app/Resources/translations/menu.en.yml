@@ -610,6 +610,11 @@ admin_v2.operation.site.friendlyLink_navigation_tab: 'Recommended Links'
 admin_v2.operation.certificate_menu: Certificate Operating
 admin_v2.operation.certificate.basic_tab: Certificate Manage
 admin_v2.operation.certificate.template.basic_tab: Certificate Template Manage
+admin_v2.operation.certificate.edit_tab: Edit
+admin_v2.operation.certificate.close_tab: Close
+admin_v2.operation.certificate.publish_tab: Publish
+admin_v2.operation.certificate.member_list_tab: List Manage
+admin_v2.operation.certificate.audit_manage_tab: Audit manage
 
 # 运营-内容运营-全站站内通知
 admin_v2.operation.notification_menu: Site Notices

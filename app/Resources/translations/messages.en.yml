@@ -3929,6 +3929,9 @@ common.video_quality.super: Super
 common.video_quality.super.tips: 'Good at professional movie'
 common.certificate_type.course: course
 common.certificate_type.classroom: classroom
+common.certificate_status.draft: draft
+common.certificate_status.published: published
+common.certificate_status.closed: closed
 contetn.active_list.create_template: 'Please create template'
 contetn.active_list.custom_template: Custom
 contetn.article_list.latest_articel: 'Latest Artical'
@@ -5243,6 +5246,22 @@ admin.operation_certificate.template.certificate.content_hint.course: 'Course na
 admin.operation_certificate.template.certificate.content_hint.classroom: 'Class name: $classroomName$'
 admin.operation_certificate.template.certificate.qrcode: Certificate Verification QR Code
 admin.operation_certificate.template.preview_btn: preview
+admin.operation_certificate.certificate.num_th: number
+admin.operation_certificate.certificate.name_th: Certificate Name
+admin.operation_certificate.certificate.description_th: description
+admin.operation_certificate.certificate.description.placeholder: One sentence introduction, limited to 100 words
+admin.operation_certificate.certificate.status_th: status
+admin.operation_certificate.certificate.create_btn: Create Certificate
+admin.operation_certificate.certificate.resource_choose: Selecting Issue Target
+admin.operation_certificate.certificate.resource_choose_btn: select......
+admin.operation_certificate.certificate.template_choose: Selecting Template
+admin.operation_certificate.certificate.code: Certificate Code
+admin.operation_certificate.certificate.code.placeholder: 1 to 6 digits or letters of the alphabet, not case sensitive
+admin.operation_certificate.certificate.expiry_day: Certificate validity
+admin.operation_certificate.certificate.expiry_day.placeholder: Enter the validity of the certificate, the empty value is valid for a long time
+admin.operation_certificate.certificate.auto_issue: automatic authentication
+admin.operation_certificate.certificate.issue_rule: conditions of issue
+admin.operation_certificate.certificate.issue_rule.course: Completion of all course tasks
 admin.operation_announcement.content_th: 'Content'
 admin.operation_announcement.createTime_th: 'Published Time'
 admin.operation_announcement.endTime_th: 'End Time'

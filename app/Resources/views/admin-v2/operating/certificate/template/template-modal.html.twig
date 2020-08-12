@@ -1,0 +1,42 @@
+{% import "macro.html.twig" as web_macro %}
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th width="8%">{{ 'admin.course_manage.manage.number'|trans }}</th>
+    <th width="30%">{{ 'admin.operation_certificate.template.title'|trans }}</th>
+    <th>{{ 'admin.course_manage.chooser.creator'|trans }}</th>
+    <th>{{ 'admin.course_manage.chooser.operation'|trans }}</th>
+  </tr>
+  </thead>
+  <tbody>
+  {% for template in templates %}
+    <tr>
+      <td>
+        {{ template.id}}
+        <input class="hidden js-select" value="{{ template.id }}">
+      </td>
+      <td>
+        {{ template.name }}
+      </td>
+      <td>
+        {% set creator = users[template.createdUserId]|default(null) %}
+        {% if creator %}
+          <div class="teacher">
+            <a class="teacher-nickname ellipsis link-primary" target="_blank"  href="{{ path('user_show', {id:creator.uuid}) }}">{{ creator.nickname }}</a>
+          </div>
+        {% endif %}
+      </td>
+      <td>
+        <button type="button" data-title="{{ template.name }}" data-id="{{ template.id }}" class="btn btn-primary js-item-select">{{'form.btn.select'|trans}}</button>
+      </td>
+    </tr>
+  {% else %}
+    <tr>
+      <td class="text-center" colspan="20">
+        <div class="empty">{{ 'site.datagrid.empty'|trans }}</div>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{{ web_macro.ajax_paginator(paginator) }}

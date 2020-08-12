@@ -9,6 +9,7 @@
 {% do script(['app/js/admin-v2/operating/certificate-template/basemap/index.js']) %}
 
 {% block body %}
+  <link href="{{ asset('static-dist/app/css/main.css') }}" rel="stylesheet" />
   <style>
     .img-full {
       display: block;
@@ -30,7 +31,7 @@
     </button>
 
     <button type="button" class="btn cd-btn btn-primary cd-btn-lg" id="save-btn"
-            data-url="{{ path('admin_v2_operation_certificate_template_basemap_modal', {id: template.id}) }}"
+            data-url="{{ path('admin_v2_certificate_template_basemap_modal', {id: template.id}) }}"
             data-loading-text="{{ 'form.btn.submit.submiting'|trans }}">
       {{ 'form.btn.save'|trans }}
     </button>

@@ -59,10 +59,6 @@
             {% if courseSet.courses|default(null) %}
               {% for course in courseSet.courses %}
                   {{course.title}}
-                  <option value="{{course.id}}" 
-                    data-price="{% include 'course/widgets/classroom-course-price.html.twig' with { price : course.price } %}">
-                    {{course.title}}
-                  </option>
               {% endfor %}
             {% endif %}
           </select>

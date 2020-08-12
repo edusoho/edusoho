@@ -9,7 +9,6 @@ use Biz\Certificate\Service\TemplateService;
 use Biz\Certificate\TemplateException;
 use Biz\Common\CommonException;
 use Biz\Content\Service\FileService;
-use Biz\File\UploadFileException;
 use Biz\System\Service\LogService;
 
 class TemplateServiceImpl extends BaseService implements TemplateService
@@ -51,34 +50,24 @@ class TemplateServiceImpl extends BaseService implements TemplateService
         return $this->getTemplateDao()->update($id, $fields);
     }
 
-    public function updateBaseMap($id, $fileId)
+    public function updateBaseMap($id, $fileUri)
     {
         $template = $this->get($id);
         if (empty($template) || 1 == $template['dropped']) {
             $this->createNewException(TemplateException::NOTFOUND_TEMPLATE());
         }
 
-        $file = $this->getFileService()->getFile($fileId);
-        if (empty($file)) {
-            $this->createNewException(UploadFileException::NOTFOUND_FILE());
-        }
-
-        return $this->getTemplateDao()->update($id, ['basemap' => $file['uri']]);
+        return $this->getTemplateDao()->update($id, ['basemap' => $fileUri]);
     }
 
-    public function updateStamp($id, $fileId)
+    public function updateStamp($id, $fileUri)
     {
         $template = $this->get($id);
         if (empty($template) || 1 == $template['dropped']) {
             $this->createNewException(TemplateException::NOTFOUND_TEMPLATE());
         }
 
-        $file = $this->getFileService()->getFile($fileId);
-        if (empty($file)) {
-            $this->createNewException(UploadFileException::NOTFOUND_FILE());
-        }
-
-        return $this->getTemplateDao()->update($id, ['stamp' => $file['uri']]);
+        return $this->getTemplateDao()->update($id, ['stamp' => $fileUri]);
     }
 
     public function count($conditions)

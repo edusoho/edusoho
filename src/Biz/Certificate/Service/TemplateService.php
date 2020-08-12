@@ -10,9 +10,9 @@ interface TemplateService
 
     public function update($id, $fields);
 
-    public function updateBaseMap($id, $fileId);
+    public function updateBaseMap($id, $fileUri);
 
-    public function updateStamp($id, $fileId);
+    public function updateStamp($id, $fileUri);
 
     public function count($conditions);
 

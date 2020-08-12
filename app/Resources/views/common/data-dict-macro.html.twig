@@ -117,3 +117,13 @@
     <span class="color-gray">{{ 'common.certificate_type.classroom'|trans }}</span>
   {% endif %}
 {% endmacro %}
+
+{% macro certificateStatus(status) %}
+  {% if status == 'draft' %}
+    <span class="color-gray">{{ 'common.certificate_status.draft'|trans }}</span>
+  {% elseif status == 'published' %}
+    <span class="color-success">{{ 'common.certificate_status.published'|trans }}</span>
+  {% elseif status == 'closed' %}
+    <span class="color-danger">{{ 'common.certificate_status.closed'|trans }}</span>
+  {% endif %}
+{% endmacro %}

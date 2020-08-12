@@ -11,5 +11,4 @@ new LocalImageCrop({
     large: isHorizontal ? [3600, 2600] : [2600, 3600],
   },
   uploadInput: '.basemap-upload .js-upload-input',
-  fileInput: '.js-basemap-value',
 });

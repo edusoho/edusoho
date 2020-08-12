@@ -1,0 +1,23 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% block title %}{{ 'admin.operation_certificate.certificate.template_choose'|trans }}{% endblock %}
+{% set modal_class= "modal-lg" %}
+
+{% do script(['app/js/admin-v2/operating/certificate/template/index.js']) %}
+
+{% block body %}
+  <div class="ct-well">
+    <form class="form-search form-inline clearfix mtm" id="list-search" role="search-form" action="{{ path('admin_v2_certificate_template_search', {type:targetType}) }}">
+
+      <div class="form-group mll">
+        <label>{{ 'admin.operation_certificate.template.title'|trans }}：</label>
+        <input type="text" class="form-control" name="nameLike" value="{{ app.request.get('nameLike') }}"
+               placeholder="{{ 'admin.operation_certificate.template.title'|trans }}">
+      </div>
+
+      <button type="button" class="btn btn-primary mll" id="search">{{ 'form.btn.search'|trans }}</button>
+    </form>
+  </div>
+  <div class="table-list">
+    {{ render(controller('AppBundle:AdminV2/Operating/Certificate:templateSearch', {type:targetType})) }}
+  </div>
+{% endblock %}

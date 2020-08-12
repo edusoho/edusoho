@@ -1,0 +1,21 @@
+{% import "common/data-dict-macro.html.twig" as dict_macro %}
+<tr>
+  <td>
+    {{ certificate.id }}
+  </td>
+  <td>
+    {{ certificate.name }}
+  </td>
+  <td>
+    {{ dict_macro.certificateTypes(certificate.targetType) }}
+  </td>
+  <td>{{ certificate.createdTime|date('Y-n-d H:i:s') }}</td>
+  <td>
+    {{ dict_macro.certificateStatus(certificate.status) }}
+  </td>
+  <td>
+    <div class="btn-group">
+      {% include 'admin-v2/widget/group-button.html.twig' with {parentCode: 'admin_v2_certificate_manage', group:'groupButton', certificate: certificate} %}
+    </div>
+  </td>
+</tr>

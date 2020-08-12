@@ -13,7 +13,7 @@ export default class List {
     let $table = $('#template-table');
 
     $table.on('click', '.delete-template', function () {
-      if (!confirm(Translator.trans('site.delete.confirm_hint'))) {
+      if (!confirm(Translator.trans('admin_v2.certificate.template.delete_hint'))) {
         return;
       }
       $.post($(this).data('url'), function (result) {

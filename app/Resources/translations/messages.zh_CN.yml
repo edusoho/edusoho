@@ -4695,6 +4695,9 @@ common.video_quality.super: 超精细
 common.video_quality.super.tips: 适合超高画质的专业视频
 common.certificate_type.course: 课程
 common.certificate_type.classroom: 班级
+common.certificate_status.draft: 未发布
+common.certificate_status.published: 已发布
+common.certificate_status.closed: 已关闭
 
 # content
 contetn.active_list.create_template: 请创建模版文件
@@ -6292,6 +6295,22 @@ admin.operation_certificate.template.certificate.content_hint.course: 课程名�
 admin.operation_certificate.template.certificate.content_hint.classroom: 课程名称：$classroomName$
 admin.operation_certificate.template.certificate.qrcode: 证书验证二维码
 admin.operation_certificate.template.preview_btn: 预览
+admin.operation_certificate.certificate.num_th: 编号
+admin.operation_certificate.certificate.name_th: 证书名称
+admin.operation_certificate.certificate.description_th: 证书描述
+admin.operation_certificate.certificate.description.placeholder: 一句话介绍，限100字
+admin.operation_certificate.certificate.status_th: 状态
+admin.operation_certificate.certificate.create_btn: 创建证书
+admin.operation_certificate.certificate.resource_choose: 选择发放对象
+admin.operation_certificate.certificate.resource_choose_btn: 选择......
+admin.operation_certificate.certificate.template_choose: 选择证书模板
+admin.operation_certificate.certificate.code: 证书编码
+admin.operation_certificate.certificate.code.placeholder: 1至6位数字或英文字母，不区分大小写
+admin.operation_certificate.certificate.expiry_day: 证书有效期
+admin.operation_certificate.certificate.expiry_day.placeholder: 输入证书有效期，空值位长期有效
+admin.operation_certificate.certificate.auto_issue: 自动认证
+admin.operation_certificate.certificate.issue_rule: 发放条件
+admin.operation_certificate.certificate.issue_rule.course: 完成课程全部任务
 
 # 网站公告管理
 admin.operation_announcement.content_th: 公告内容
