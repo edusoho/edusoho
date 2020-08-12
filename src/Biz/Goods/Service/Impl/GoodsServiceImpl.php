@@ -89,6 +89,8 @@ class GoodsServiceImpl extends BaseService implements GoodsService
             'hotSeq',
             'recommendWeight',
             'recommendedTime',
+            'discountId',
+            'discountType',
         ]);
 
         return $this->getGoodsDao()->update($id, $goods);
@@ -354,6 +356,10 @@ class GoodsServiceImpl extends BaseService implements GoodsService
                 $minDisplayPrice = '0.00';
                 $maxDisplayPrice = '0.00';
                 $goods['discount'] = $discount;
+            } elseif ('global' === $discount['type']) {
+                $maxDisplayPrice = $goods['maxPrice'] * $discount['globalDiscount'] / 10;
+                $minDisplayPrice = $goods['minPrice'] * $discount['globalDiscount'] / 10;
+                $goods['discount'] = $discount;
             }
         }
         $goods['maxPriceObj'] = Money::convert($goods['maxPrice']);
@@ -382,6 +388,8 @@ class GoodsServiceImpl extends BaseService implements GoodsService
                 }
             } elseif ('free' === $discount['type']) {
                 $displayPrice = '0.00';
+            } elseif ('global' === $discount['type']) {
+                $displayPrice = $specs['price'] * $discount['globalDiscount'] / 10;
             }
         }
         $specs['priceObj'] = Money::convert($specs['price']);

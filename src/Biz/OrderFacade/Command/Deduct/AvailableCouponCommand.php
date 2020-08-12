@@ -5,6 +5,7 @@ namespace Biz\OrderFacade\Command\Deduct;
 use Biz\Card\Service\CardService;
 use Biz\Coupon\Service\CouponService;
 use Biz\Course\Service\CourseService;
+use Biz\Goods\Service\GoodsService;
 use Biz\OrderFacade\Command\Command;
 use Biz\OrderFacade\Product\Product;
 
@@ -12,7 +13,11 @@ class AvailableCouponCommand extends Command
 {
     public function execute(Product $product, $params = [])
     {
-        $availableCoupons = $this->availableCouponsByIdAndType($product->targetId, $product->targetType);
+        $targetId = ('course' === $product->targetType || 'classroom' === $product->targetType)
+            ? $product->originalTargetId
+            : $product->targetId;
+
+        $availableCoupons = $this->availableCouponsByIdAndType($targetId, $product->targetType);
 
         if ($availableCoupons) {
             foreach ($availableCoupons as $key => &$coupon) {
@@ -38,9 +43,12 @@ class AvailableCouponCommand extends Command
      */
     private function availableCouponsSort($availableCoupons = [], $product)
     {
-        if ('course' === $product->targetType) {
-            $course = $this->getCourseService()->getCourse($product->targetId);
-            $targetId = $course['courseSetId'];
+        if ('course' === $product->targetType || 'classroom' === $product->targetType) {
+            $targetId = $product->originalTargetId;
+            if ('course' === $product->targetType) {
+                $course = $this->getCourseService()->getCourse($targetId);
+                $targetId = $course['courseSetId'];
+            }
         } else {
             $targetId = $product->targetId;
         }
@@ -78,7 +86,7 @@ class AvailableCouponCommand extends Command
 
     private function availableCouponsByIdAndType($id, $type)
     {
-        if ('course' == $type) {
+        if ('course' === $type) {
             $course = $this->getCourseService()->getCourse($id);
             $id = $course['courseSetId'];
         }
@@ -110,5 +118,13 @@ class AvailableCouponCommand extends Command
     private function getCourseService()
     {
         return $this->biz->service('Course:CourseService');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    private function getGoodsService()
+    {
+        return $this->biz->service('Goods:GoodsService');
     }
 }
