@@ -665,6 +665,8 @@ class UserServiceImpl extends BaseService implements UserService
 
         $this->refreshLoginSecurityFields($user['id'], $this->getCurrentUser()->currentIp);
 
+        $this->dispatch('user.change_password', $user);
+
         return true;
     }
 

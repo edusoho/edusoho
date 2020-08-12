@@ -10,27 +10,28 @@ class UserEventSubscriberTest extends BaseTestCase
 {
     public function testGetSubscribedEvents()
     {
-        $this->assertEquals(array(
+        $this->assertEquals([
             'user.registered' => 'onUserRegistered',
             'user.follow' => 'onUserFollowed',
             'user.unfollow' => 'onUserUnfollowed',
             'user.bind' => 'onUserBind',
             'user.unbind' => 'onUserUnbind',
-        ), UserEventSubscriber::getSubscribedEvents());
+            'user.change_password' => 'onUserChangePassword',
+        ], UserEventSubscriber::getSubscribedEvents());
     }
 
     public function testOnUserBindWithoutOpenid()
     {
-        $service = $this->mockBiz('WeChat:WeChatService', array(
-            array(
+        $service = $this->mockBiz('WeChat:WeChatService', [
+            [
                 'functionName' => 'freshOfficialWeChatUserWhenLogin',
-            ),
-        ));
+            ],
+        ]);
 
-        $event = new Event(array());
+        $event = new Event([]);
         $event->setArgument('bindType', 'weixinmob');
         $event->setArgument('bind', 'weixin');
-        $event->setArgument('token', array());
+        $event->setArgument('token', []);
 
         $eventSubscriber = new UserEventSubscriber($this->biz);
         $result = $eventSubscriber->onUserBind($event);
@@ -41,17 +42,17 @@ class UserEventSubscriberTest extends BaseTestCase
 
     public function testOnUserBind()
     {
-        $service = $this->mockBiz('WeChat:WeChatService', array(
-            array(
+        $service = $this->mockBiz('WeChat:WeChatService', [
+            [
                 'functionName' => 'freshOfficialWeChatUserWhenLogin',
-                'withParams' => array(array(), 'weixin', array('openid' => 1)),
-            ),
-        ));
+                'withParams' => [[], 'weixin', ['openid' => 1]],
+            ],
+        ]);
 
-        $event = new Event(array());
+        $event = new Event([]);
         $event->setArgument('bindType', 'weixinmob');
         $event->setArgument('bind', 'weixin');
-        $event->setArgument('token', array('openid' => 1));
+        $event->setArgument('token', ['openid' => 1]);
 
         $eventSubscriber = new UserEventSubscriber($this->biz);
         $eventSubscriber->onUserBind($event);
@@ -61,18 +62,18 @@ class UserEventSubscriberTest extends BaseTestCase
 
     public function testOnUserUnbindWithoutWeChatUser()
     {
-        $service = $this->mockBiz('WeChat:WeChatService', array(
-            array(
+        $service = $this->mockBiz('WeChat:WeChatService', [
+            [
                 'functionName' => 'getWeChatUserByTypeAndUnionId',
-                'returnValue' => array(),
-            ),
-            array(
+                'returnValue' => [],
+            ],
+            [
                 'functionName' => 'updateWeChatUser',
-            ),
-        ));
-        $event = new Event(array());
+            ],
+        ]);
+        $event = new Event([]);
         $event->setArgument('bindType', 'weixinmob');
-        $event->setArgument('bind', array('fromId' => 1));
+        $event->setArgument('bind', ['fromId' => 1]);
 
         $eventSubscriber = new UserEventSubscriber($this->biz);
         $eventSubscriber->onUserUnbind($event);
@@ -83,18 +84,18 @@ class UserEventSubscriberTest extends BaseTestCase
 
     public function testOnUserUnbind()
     {
-        $service = $this->mockBiz('WeChat:WeChatService', array(
-            array(
+        $service = $this->mockBiz('WeChat:WeChatService', [
+            [
                 'functionName' => 'getWeChatUserByTypeAndUnionId',
-                'returnValue' => array('id' => 1),
-            ),
-            array(
+                'returnValue' => ['id' => 1],
+            ],
+            [
                 'functionName' => 'updateWeChatUser',
-            ),
-        ));
-        $event = new Event(array());
+            ],
+        ]);
+        $event = new Event([]);
         $event->setArgument('bindType', 'weixinmob');
-        $event->setArgument('bind', array('fromId' => 1));
+        $event->setArgument('bind', ['fromId' => 1]);
 
         $eventSubscriber = new UserEventSubscriber($this->biz);
         $eventSubscriber->onUserUnbind($event);
@@ -105,18 +106,18 @@ class UserEventSubscriberTest extends BaseTestCase
 
     public function testOnUserRegisterWithoutAuth()
     {
-        $systemService = $this->mockBiz('System:SettingService', array(
-            array(
+        $systemService = $this->mockBiz('System:SettingService', [
+            [
                 'functionName' => 'get',
-                'returnValue' => array(),
-            ),
-        ));
-        $userService = $this->mockBiz('User:UserService', array(
-            array(
+                'returnValue' => [],
+            ],
+        ]);
+        $userService = $this->mockBiz('User:UserService', [
+            [
                 'functionName' => 'getUserByNickname',
-            ),
-        ));
-        $event = new Event(array());
+            ],
+        ]);
+        $event = new Event([]);
         $eventSubscriber = new UserEventSubscriber($this->biz);
         $eventSubscriber->onUserRegistered($event);
 
@@ -126,29 +127,29 @@ class UserEventSubscriberTest extends BaseTestCase
 
     public function testOnUserRegisterWithoutSenderUser()
     {
-        $systemService = $this->mockBiz('System:SettingService', array(
-            array(
+        $systemService = $this->mockBiz('System:SettingService', [
+            [
                 'functionName' => 'get',
-                'withParams' => array('auth', array()),
-                'returnValue' => array(
+                'withParams' => ['auth', []],
+                'returnValue' => [
                     'welcome_enabled' => 'opened',
                     'welcome_sender' => 'tester',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'functionName' => 'get',
-                'withParams' => array('site', array()),
-                'returnValue' => array(),
-            ),
-        ));
-        $userService = $this->mockBiz('User:UserService', array(
-            array(
+                'withParams' => ['site', []],
+                'returnValue' => [],
+            ],
+        ]);
+        $userService = $this->mockBiz('User:UserService', [
+            [
                 'functionName' => 'getUserByNickname',
-                'returnValue' => array(),
-            ),
-        ));
+                'returnValue' => [],
+            ],
+        ]);
 
-        $event = new Event(array());
+        $event = new Event([]);
         $eventSubscriber = new UserEventSubscriber($this->biz);
         $eventSubscriber->onUserRegistered($event);
 
@@ -158,38 +159,38 @@ class UserEventSubscriberTest extends BaseTestCase
 
     public function testOnUserRegisterWithoutWelcomeBody()
     {
-        $systemService = $this->mockBiz('System:SettingService', array(
-            array(
+        $systemService = $this->mockBiz('System:SettingService', [
+            [
                 'functionName' => 'get',
-                'withParams' => array('auth', array()),
-                'returnValue' => array(
+                'withParams' => ['auth', []],
+                'returnValue' => [
                     'welcome_enabled' => 'opened',
                     'welcome_sender' => 'tester',
                     'welcome_body' => '',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'functionName' => 'get',
-                'withParams' => array('site', array()),
-                'returnValue' => array(
+                'withParams' => ['site', []],
+                'returnValue' => [
                     'name' => 'site',
                     'url' => 'url',
-                ),
-            ),
-        ));
-        $userService = $this->mockBiz('User:UserService', array(
-            array(
+                ],
+            ],
+        ]);
+        $userService = $this->mockBiz('User:UserService', [
+            [
                 'functionName' => 'getUserByNickname',
-                'returnValue' => array('id' => 1),
-            ),
-        ));
-        $messageService = $this->mockBiz('User:MessageService', array(
-            array(
+                'returnValue' => ['id' => 1],
+            ],
+        ]);
+        $messageService = $this->mockBiz('User:MessageService', [
+            [
                 'functionName' => 'sendMessage',
-            ),
-        ));
+            ],
+        ]);
 
-        $event = new Event(array('nickname' => 'admin'));
+        $event = new Event(['nickname' => 'admin']);
         $eventSubscriber = new UserEventSubscriber($this->biz);
         $eventSubscriber->onUserRegistered($event);
 
@@ -200,45 +201,45 @@ class UserEventSubscriberTest extends BaseTestCase
 
     public function testOnUserRegistered()
     {
-        $systemService = $this->mockBiz('System:SettingService', array(
-            array(
+        $systemService = $this->mockBiz('System:SettingService', [
+            [
                 'functionName' => 'get',
-                'withParams' => array('auth', array()),
-                'returnValue' => array(
+                'withParams' => ['auth', []],
+                'returnValue' => [
                     'welcome_enabled' => 'opened',
                     'welcome_sender' => 'tester',
                     'welcome_body' => 'welcome',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'functionName' => 'get',
-                'withParams' => array('site', array()),
-                'returnValue' => array(
+                'withParams' => ['site', []],
+                'returnValue' => [
                     'name' => 'site',
                     'url' => 'url',
-                ),
-            ),
-        ));
-        $userService = $this->mockBiz('User:UserService', array(
-            array(
+                ],
+            ],
+        ]);
+        $userService = $this->mockBiz('User:UserService', [
+            [
                 'functionName' => 'getUserByNickname',
-                'returnValue' => array('id' => 2),
-            ),
-        ));
-        $messageService = $this->mockBiz('User:MessageService', array(
-            array(
+                'returnValue' => ['id' => 2],
+            ],
+        ]);
+        $messageService = $this->mockBiz('User:MessageService', [
+            [
                 'functionName' => 'sendMessage',
-            ),
-            array(
+            ],
+            [
                 'functionName' => 'getConversationByFromIdAndToId',
-                'returnValue' => array('id' => 1),
-            ),
-            array(
+                'returnValue' => ['id' => 1],
+            ],
+            [
                 'functionName' => 'deleteConversation',
-            ),
-        ));
+            ],
+        ]);
 
-        $event = new Event(array('id' => 1, 'nickname' => 'admin'));
+        $event = new Event(['id' => 1, 'nickname' => 'admin']);
         $eventSubscriber = new UserEventSubscriber($this->biz);
         $eventSubscriber->onUserRegistered($event);
 
@@ -251,24 +252,24 @@ class UserEventSubscriberTest extends BaseTestCase
 
     public function testOnUserFollowed()
     {
-        $userService = $this->mockBiz('User:UserService', array(
-            array(
+        $userService = $this->mockBiz('User:UserService', [
+            [
                 'functionName' => 'getUser',
-                'withParams' => array(2),
-                'returnValue' => array(
+                'withParams' => [2],
+                'returnValue' => [
                     'id' => 2,
                     'nickname' => 'tester',
-                ),
-            ),
-        ));
+                ],
+            ],
+        ]);
 
-        $notifyService = $this->mockBiz('User:NotificationService', array(
-            array(
+        $notifyService = $this->mockBiz('User:NotificationService', [
+            [
                 'functionName' => 'notify',
-            ),
-        ));
+            ],
+        ]);
 
-        $event = new Event(array('fromId' => 2, 'toId' => 1));
+        $event = new Event(['fromId' => 2, 'toId' => 1]);
         $eventSubscriber = new UserEventSubscriber($this->biz);
         $eventSubscriber->onUserFollowed($event);
 
@@ -278,24 +279,24 @@ class UserEventSubscriberTest extends BaseTestCase
 
     public function testOnUserUnFollowed()
     {
-        $userService = $this->mockBiz('User:UserService', array(
-            array(
+        $userService = $this->mockBiz('User:UserService', [
+            [
                 'functionName' => 'getUser',
-                'withParams' => array(2),
-                'returnValue' => array(
+                'withParams' => [2],
+                'returnValue' => [
                     'id' => 2,
                     'nickname' => 'tester',
-                ),
-            ),
-        ));
+                ],
+            ],
+        ]);
 
-        $notifyService = $this->mockBiz('User:NotificationService', array(
-            array(
+        $notifyService = $this->mockBiz('User:NotificationService', [
+            [
                 'functionName' => 'notify',
-            ),
-        ));
+            ],
+        ]);
 
-        $event = new Event(array('fromId' => 2, 'toId' => 1));
+        $event = new Event(['fromId' => 2, 'toId' => 1]);
         $eventSubscriber = new UserEventSubscriber($this->biz);
         $eventSubscriber->onUserUnfollowed($event);
 
