@@ -69,6 +69,12 @@ export default class Create {
         $('.js-auto-issue-setting').addClass('hidden');
       }
     });
+
+    $('#create-certificate-back').on('click',()=>{
+      $('#create-certificate-back').button('loading').addClass('disabled');
+      $('[name="back"]').val(1);
+      $('#certificate-form')[0].submit();
+    });
   }
 }
 

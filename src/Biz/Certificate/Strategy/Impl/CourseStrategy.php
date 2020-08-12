@@ -9,7 +9,7 @@ use Biz\Course\Service\CourseSetService;
 
 class CourseStrategy extends BaseStrategy
 {
-    public function getTargetModal($targets)
+    public function getTargetModal()
     {
         return 'admin-v2/operating/certificate/target/course-modal.html.twig';
     }
@@ -55,6 +55,10 @@ class CourseStrategy extends BaseStrategy
             $conditions['title'] = $conditions['keyword'];
             unset($conditions['keyword']);
         }
+
+        $conditions['status'] = 'published';
+        $conditions['parentId'] = 0;
+        $conditions['types'] = [CourseSetService::NORMAL_TYPE, CourseSetService::LIVE_TYPE];
 
         return $conditions;
     }

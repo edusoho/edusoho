@@ -960,6 +960,10 @@ admin_v2_certificate_template_select:
     path:  /certificate/manage/template/select
     defaults: { _controller: AppBundle:AdminV2/Operating/Certificate:templateModal }
 
+admin_v2_certificate_template_search:
+    path:  /certificate/manage/template/{type}/search
+    defaults: { _controller: AppBundle:AdminV2/Operating/Certificate:templateSearch }
+
 admin_v2_certificate_code_check:
     path:  /certificate/manage/code/check
     defaults: { _controller: AppBundle:AdminV2/Operating/Certificate:codeCheck }

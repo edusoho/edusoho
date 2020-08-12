@@ -33,7 +33,7 @@ class AddCertificateTable extends Migration
                 `name` varchar(255) NOT NULL COMMENT '证书名称',
                 `targetType` varchar(64) DEFAULT '' COMMENT '发放类型',
                 `targetId` int(10) DEFAULT '0' COMMENT '发放对象ID',
-                `descripton` text COMMENT '证书描述',
+                `description` text COMMENT '证书描述',
                 `templateId` int(10) DEFAULT '0' COMMENT '底图',
                 `code` VARCHAR (255) DEFAULT '' COMMENT '证书编码',
                 `status` varchar(64) DEFAULT 'draft' COMMENT '证书状态',

@@ -7,7 +7,7 @@ use Biz\Classroom\Service\ClassroomService;
 
 class ClassroomStrategy extends BaseStrategy
 {
-    public function getTargetModal($targets)
+    public function getTargetModal()
     {
         return 'admin-v2/operating/certificate/target/classroom-modal.html.twig';
     }
@@ -32,6 +32,8 @@ class ClassroomStrategy extends BaseStrategy
             $conditions['titleLike'] = $conditions['keyword'];
             unset($conditions['keyword']);
         }
+
+        $conditions['status'] = 'published';
 
         return $conditions;
     }

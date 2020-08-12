@@ -2,43 +2,38 @@
 <table class="table table-striped">
   <thead>
   <tr>
-    <th width="10%">{{ 'course.id'|trans }}</th>
-    <th width="30%">{{ 'course.name'|trans }}</th>
-    <th width="30%">{{ 'admin_v2.course.category.course_category_tab'|trans }}</th>
-    <th>{{ 'admin.course_manage.chooser.plan_name'|trans }}</th>
+    <th width="8%">{{ 'admin.course_manage.manage.number'|trans }}</th>
+    <th width="30%">{{ 'classroom.name'|trans }}</th>
+    <th width="15%">{{ 'admin_v2.course.category.classroom_category_tab'|trans }}</th>
     <th>{{ 'admin.course_manage.chooser.creator'|trans }}</th>
     <th>{{ 'admin.course_manage.chooser.operation'|trans }}</th>
   </tr>
   </thead>
   <tbody>
-  {% for courseSet in targets %}
+  {% for classroom in targets %}
     <tr>
       <td>
-        {{ courseSet.id}}
+        {{ classroom.id}}
+        <input class="hidden js-select" value="{{ classroom.id }}">
       </td>
       <td>
-        <a class="pull-left mr5 link-primary" href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}" target="_blank">
-          <img class="course-picture" src="{{ filepath(course_set_cover(courseSet, 'middle'), 'courseSet.png') }}" alt="{{ courseSet.title }}" width="100">
+        <a class="pull-left mr5 link-primary" href="{{ path('classroom_show',{id: classroom.id}) }}" target="_blank">
+          <img class="course-picture" src="{{ filepath(classroom.middlePicture, 'classroom.png') }}" alt="{{ classroom.title }}" width="100">
         </a>
         <div class="mlm">
-          <a class="link-primary" href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}">{{ courseSet.title }}</a>
-          {% if courseSet.serializeMode == 'serialized' %}
-            <span class="label label-success ">{{'course.status.serialized'|trans}}</span>
-          {% elseif courseSet.serializeMode == 'finished' %}
-            <span class="label label-warning ">{{'course.status.finished'|trans}}</span>
-          {% endif %}
+          <a class="link-primary" href="{{ path('classroom_show',{id: classroom.id}) }}">{{ classroom.title }}</a>
         </div>
       </td>
       <td>
-        {% if courseSet.categoryId != 0 %}
-          {% set category = categories[courseSet.categoryId]|default(null) %}
+        {% if classroom.categoryId != 0 %}
+          {% set category = categories[classroom.categoryId]|default(null) %}
           {{ category.name|default() }}
         {% else %}
           --
         {% endif %}
       </td>
       <td>
-        {% set teacher = users[courseSet.creator]|default(null) %}
+        {% set teacher = users[classroom.creator]|default(null) %}
         {% if teacher %}
           <div class="teacher">
             <a class="teacher-nickname ellipsis link-primary" target="_blank"  href="{{ path('user_show', {id:teacher.uuid}) }}">{{ teacher.nickname }}</a>
@@ -46,7 +41,7 @@
         {% endif %}
       </td>
       <td>
-        <button type="button" data-title="{{ courseSet.title }}" data-id="{{ courseSet.id }}" class="btn btn-primary js-item-select">{{'form.btn.select'|trans}}</button>
+        <button type="button" data-title="{{ classroom.title }}" data-id="{{ classroom.id }}" class="btn btn-primary js-item-select">{{'form.btn.select'|trans}}</button>
       </td>
     </tr>
   {% else %}

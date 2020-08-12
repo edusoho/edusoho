@@ -16,7 +16,7 @@ abstract class BaseStrategy
         $this->biz = $biz;
     }
 
-    abstract public function getTargetModal($targets);
+    abstract public function getTargetModal();
 
     abstract public function count($conditions);
 

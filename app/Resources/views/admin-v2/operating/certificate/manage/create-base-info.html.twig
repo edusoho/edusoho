@@ -20,7 +20,7 @@
         <label for="description" class="control-label-required">{{'admin.operation_certificate.certificate.description_th'|trans}}：</label>
       </div>
       <div class="col-md-6 controls">
-        <textarea name="description" rows="4" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}" placeholder="{{'admin.operation_certificate.certificate.description.placeholder'|trans}}">{{ certificate.summary|default('') }}</textarea>
+        <textarea name="description" rows="4" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}" placeholder="{{'admin.operation_certificate.certificate.description.placeholder'|trans}}">{{ certificate.description|default('') }}</textarea>
       </div>
     </div>
     <div class="form-group mtl mbs">

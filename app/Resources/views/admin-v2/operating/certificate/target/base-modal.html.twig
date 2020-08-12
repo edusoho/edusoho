@@ -8,19 +8,19 @@
   <div class="ct-well">
     <form class="form-search form-inline clearfix mtm" id="list-search" role="search-form" action="{{ path('admin_v2_certificate_target_search', {type:targetType}) }}">
       <div class="form-group">
-        <label>{{ 'admin_v2.course.category.'~targetType~'_category_tab'|trans }}：</label>
+        <label>{{ ('admin_v2.course.category.'~targetType~'_category_tab')|trans }}：</label>
         <select id="categoryId" name="categoryId" class="form-control width-input width-input-large">
           {{ select_options(category_choices(targetType), app.request.get('categoryId'), 'course.base.category'|trans) }}
         </select>
       </div>
 
       <div class="form-group mll">
-        <label>{{ 'teaching_record.course.title'|trans }}：</label>
+        <label>{{ (targetType~'.name')|trans }}：</label>
         <input type="text" class="form-control" name="keyword" value="{{ app.request.get('keyword') }}"
-               placeholder="{{ targetType~'.name'|trans }}">
+               placeholder="{{ (targetType~'.name')|trans }}">
       </div>
 
-      <button type="button" class="btn btn-primary mtl mll" id="search">{{ 'form.btn.search'|trans }}</button>
+      <button type="button" class="btn btn-primary mll" id="search">{{ 'form.btn.search'|trans }}</button>
     </form>
   </div>
   <div class="table-list">

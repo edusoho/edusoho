@@ -20,15 +20,9 @@ $('body').keydown(function (event) {
 });
 
 $('.table-list').on('click', '.js-item-select', function () {
-  $('.js-target-name').html($(this).data('title'));
-  let targetId = $(this).parents('tr').find('.js-select').val();
-  $('#targetId').val(targetId);
+  $('.js-template-name').html($(this).data('title'));
+  let templateId = $(this).parents('tr').find('.js-select').val();
+  $('#templateId').val(templateId);
   $('#modal').modal('hide');
-});
-
-cd.popover({
-  el: '[data-toggle="cd-popover"]',
-  trigger: 'hover',
-  title: 'TIP:',
 });
 

@@ -40,8 +40,10 @@ class CertificateController extends BaseController
     {
         $data = $request->request->all();
 
-        if ($request->isMethod('POST') && empty($data['back'])) {
-            return $this->redirect($this->generateUrl('admin_v2_certificate_create_detail'));
+        if (empty($data['back'])) {
+            $certificate = $this->getCertificateService()->create($data);
+
+            return $this->redirect($this->generateUrl('admin_v2_certificate_manage'));
         }
 
         return $this->render('admin-v2/operating/certificate/manage/create-base-info.html.twig', [
@@ -84,7 +86,7 @@ class CertificateController extends BaseController
     public function targetModalAction(Request $request)
     {
         return $this->render('admin-v2/operating/certificate/target/base-modal.html.twig', [
-            'targetType' => $request->request->get('targetType'),
+            'targetType' => $request->query->get('targetType'),
         ]);
     }
 
@@ -97,12 +99,13 @@ class CertificateController extends BaseController
         $paginator = new Paginator(
             $request,
             $strategy->count($conditions),
-            20
+            5
         );
+        $paginator->setBaseUrl($this->generateUrl('admin_v2_certificate_target_search', array_merge(['type' => $type], $request->query->all())));
 
         $targets = $strategy->search(
             $conditions,
-            ['createdTime' => 'desc'],
+            ['updatedTime' => 'desc'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -120,6 +123,36 @@ class CertificateController extends BaseController
 
     public function templateModalAction(Request $request)
     {
+        return $this->render('admin-v2/operating/certificate/template/base-modal.html.twig', [
+            'targetType' => $request->query->get('targetType'),
+        ]);
+    }
+
+    public function templateSearchAction(Request $request, $type)
+    {
+        $conditions = $request->query->all();
+        $conditions['targetType'] = $type;
+
+        $paginator = new Paginator(
+            $request,
+            $this->getCertificateTemplateService()->count($conditions),
+            5
+        );
+
+        $templates = $this->getCertificateTemplateService()->search(
+            $conditions,
+            ['updatedTime' => 'desc'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($templates, 'createdUserId'));
+
+        return $this->render('admin-v2/operating/certificate/template/template-modal.html.twig', [
+            'templates' => $templates,
+            'paginator' => $paginator,
+            'users' => ArrayToolkit::index($users, 'id'),
+        ]);
     }
 
     public function codeCheckAction(Request $request)
