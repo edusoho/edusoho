@@ -5,8 +5,8 @@ namespace AppBundle\Controller\AdminV2\Operating;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
+use Biz\Certificate\CertificateException;
 use Biz\Certificate\Service\TemplateService;
-use Biz\Certificate\TemplateException;
 use Biz\Content\Service\FileService;
 use Biz\File\UploadFileException;
 use Symfony\Component\HttpFoundation\Request;
@@ -43,7 +43,7 @@ class CertificateTemplateController extends BaseController
     {
         $template = $this->getCertificateTemplateService()->get($id);
         if (empty($template) || 1 == $template['dropped']) {
-            $this->createNewException(TemplateException::NOTFOUND_TEMPLATE());
+            $this->createNewException(CertificateException::NOTFOUND_TEMPLATE());
         }
 
         if ($request->isMethod('POST')) {

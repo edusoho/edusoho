@@ -5,6 +5,7 @@ namespace AppBundle\Controller\AdminV2\Operating;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
+use Biz\Certificate\CertificateException;
 use Biz\Certificate\Service\CertificateService;
 use Biz\Certificate\Service\TemplateService;
 use Biz\Taxonomy\Service\CategoryService;
@@ -65,6 +66,21 @@ class CertificateController extends BaseController
 
     public function editAction(Request $request, $id)
     {
+        $certificate = $this->getCertificateService()->get($id);
+        if (empty($certificate)) {
+            $this->createNewException(CertificateException::NOTFOUND_CERTIFICATE());
+        }
+
+        if ($request->isMethod('POST')) {
+            $fields = $request->request->all();
+            $this->getCertificateService()->update($id, $fields);
+
+            return $this->redirect($this->generateUrl('admin_v2_certificate_manage'));
+        }
+
+        return $this->render('admin-v2/operating/certificate/manage/update.html.twig', [
+            'certificate' => $certificate,
+        ]);
     }
 
     public function closeAction(Request $request, $id)

@@ -6311,6 +6311,9 @@ admin.operation_certificate.certificate.expiry_day.placeholder: 输入证书有�
 admin.operation_certificate.certificate.auto_issue: 自动认证
 admin.operation_certificate.certificate.issue_rule: 发放条件
 admin.operation_certificate.certificate.issue_rule.course: 完成课程全部任务
+admin.operation_certificate.certificate.update: 编辑证书
+admin.operation_certificate.certificate.member_manage: 名单管理
+admin.operation_certificate.certificate.audit: 待审核
 
 # 网站公告管理
 admin.operation_announcement.content_th: 公告内容
@@ -10368,6 +10371,7 @@ exception.destroy_account.not_found_record: 未找到注销记录
 exception.destroy_account.audit_record_exist: 已存在审核中的申请
 
 exception.certificate_template.notfound_template: 模板不存在
+exception.certificate_template.notfound_certificate: 证书不存在
 
 course.unname_title: 未命名计划
 

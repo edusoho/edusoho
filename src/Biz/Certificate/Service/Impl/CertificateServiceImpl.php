@@ -4,6 +4,7 @@ namespace Biz\Certificate\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
+use Biz\Certificate\CertificateException;
 use Biz\Certificate\Dao\CertificateDao;
 use Biz\Certificate\Service\CertificateService;
 use Biz\Certificate\Service\TemplateService;
@@ -50,6 +51,18 @@ class CertificateServiceImpl extends BaseService implements CertificateService
         );
 
         return $certificate;
+    }
+
+    public function update($id, $fields)
+    {
+        $certificate = $this->get($id);
+        if (empty($certificate)) {
+            $this->createNewException(CertificateException::NOTFOUND_CERTIFICATE());
+        }
+
+        $fields = $this->filterCertificateFields($fields);
+
+        return $this->getCertificateDao()->update($id, $fields);
     }
 
     protected function filterCertificateFields($fields)
