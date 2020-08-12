@@ -73,5 +73,6 @@ class AddCertificateTable extends Migration
     {
         $this->getContainer()->offsetGet('db')->exec('DROP TABLE IF EXISTS `certificate_template`');
         $this->getContainer()->offsetGet('db')->exec('DROP TABLE IF EXISTS `certificate`');
+        $this->getContainer()->offsetGet('db')->exec('DROP TABLE IF EXISTS `certificate_record`');
     }
 }
