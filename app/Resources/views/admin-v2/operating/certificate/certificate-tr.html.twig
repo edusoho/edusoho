@@ -16,7 +16,7 @@
   <td>
     <div class="btn-group">
       {% if has_permission('admin_v2_certificate_manage') %}
-        <a href="{{ path('admin_v2_certificate_edit', {id:certificate.id}) }}" target="_blank" class="btn btn-default btn-sm">{{ 'admin.operation_certificate.certificate.update'|trans }}</a>
+        <a href="{{ path('admin_v2_certificate_edit', {id:certificate.id}) }}" class="btn btn-default btn-sm">{{ 'admin.operation_certificate.certificate.update'|trans }}</a>
       {% endif %}
       {% include 'admin-v2/widget/group-button.html.twig' with {parentCode: 'admin_v2_certificate_manage', group:'groupButton', certificate: certificate} %}
     </div>

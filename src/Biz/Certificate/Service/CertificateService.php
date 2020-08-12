@@ -13,4 +13,12 @@ interface CertificateService
     public function count($conditions);
 
     public function create($fields);
+
+    public function update($id, $fields);
+
+    public function publishCertificate($id);
+
+    public function closeCertificate($id);
+
+    public function delete($id);
 }

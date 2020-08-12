@@ -78,17 +78,35 @@ class CertificateController extends BaseController
             return $this->redirect($this->generateUrl('admin_v2_certificate_manage'));
         }
 
+        $strategy = $this->getBiz()->offsetGet('certificate.strategy_context')->createStrategy($certificate['targetType']);
+        $template = $this->getCertificateTemplateService()->get($certificate['templateId']);
+
         return $this->render('admin-v2/operating/certificate/manage/update.html.twig', [
             'certificate' => $certificate,
+            'target' => $strategy->getTarget($certificate['targetId']),
+            'template' => $template,
         ]);
     }
 
     public function closeAction(Request $request, $id)
     {
+        $this->getCertificateService()->closeCertificate($id);
+
+        return $this->createJsonResponse(true);
     }
 
     public function publishAction(Request $request, $id)
     {
+        $this->getCertificateService()->publishCertificate($id);
+
+        return $this->createJsonResponse(true);
+    }
+
+    public function deleteAction(Request $request, $id)
+    {
+        $this->getCertificateService()->delete($id);
+
+        return $this->createJsonResponse(true);
     }
 
     public function memberListAction(Request $request, $id)

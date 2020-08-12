@@ -65,6 +65,40 @@ class CertificateServiceImpl extends BaseService implements CertificateService
         return $this->getCertificateDao()->update($id, $fields);
     }
 
+    public function publishCertificate($id)
+    {
+        $certificate = $this->get($id);
+        if (empty($certificate)) {
+            $this->createNewException(CertificateException::NOTFOUND_CERTIFICATE());
+        }
+
+        return $this->getCertificateDao()->update($id, ['status' => 'published']);
+    }
+
+    public function closeCertificate($id)
+    {
+        $certificate = $this->get($id);
+        if (empty($certificate)) {
+            $this->createNewException(CertificateException::NOTFOUND_CERTIFICATE());
+        }
+
+        return $this->getCertificateDao()->update($id, ['status' => 'closed']);
+    }
+
+    public function delete($id)
+    {
+        $certificate = $this->get($id);
+        if (empty($certificate)) {
+            $this->createNewException(CertificateException::NOTFOUND_CERTIFICATE());
+        }
+
+        if ('published' == $certificate['status']) {
+            $this->createNewException(CertificateException::FORBIDDEN_DELETE_PUBLISHED());
+        }
+
+        return $this->getCertificateDao()->delete($id);
+    }
+
     protected function filterCertificateFields($fields)
     {
         return ArrayToolkit::parts(

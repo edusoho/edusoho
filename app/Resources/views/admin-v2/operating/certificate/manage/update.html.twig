@@ -1,6 +1,6 @@
 {% extends 'admin-v2/layout.html.twig' %}
 
-{% set script_controller = 'certificate/create-base' %}
+{% set script_controller = 'certificate/update' %}
 
 {% set menu = 'admin_v2_certificate_manage' %}
 
@@ -10,8 +10,7 @@
 {% endblock %}
 
 {% block main %}
-  <h4>{{'admin.operation_certificate.certificate.create_btn'|trans}}</h4>
-  <form id="certificate-form" class="form-horizontal" method="post" action="{{ path('admin_v2_certificate_create_detail') }}">
+  <form id="certificate-form" class="form-horizontal" method="post" action="{{ path('admin_v2_certificate_edit', {id: certificate.id}) }}">
     <div class="form-group mtl mbs">
       <div class="col-md-2 control-label">
         <label for="name" class="control-label-required">{{'admin.operation_certificate.certificate.name_th'|trans}}：</label>
@@ -32,12 +31,65 @@
       <div class="col-md-2 control-label">
         <label for="targetType" class="control-label-required">{{'admin.operation_certificate.template.type'|trans}}：</label>
       </div>
-      <div class="col-md-6 controls">
-        <select class="form-control department-manage-search-form-group__type" id="targetType" name="targetType">
-          {{ select_options(dict('certificateTypes'), app.request.get('targetType')) }}
-        </select>
+      <div class="col-md-6 controls mts">
+        {{ ('site.default.'~certificate.targetType)|trans }}
       </div>
     </div>
+
+    <div class="form-group mtl mbs">
+      <div class="col-md-2 control-label">
+        <label for="targetId" class="control-label-required">{{'admin.operation_certificate.certificate.resource_choose'|trans}}：</label>
+      </div>
+      <div class="col-md-4 controls mts">
+        {{ target.title }}
+      </div>
+    </div>
+
+    <div class="form-group mtl mbs">
+      <div class="col-md-2 control-label">
+        <label for="templateId" class="control-label-required">{{'admin.operation_certificate.certificate.template_choose'|trans}}：</label>
+      </div>
+      <div class="col-md-4 controls">
+        <span class="js-template-name">{{ template.name }}</span>
+        <a href="#modal" data-toggle="modal" data-url="{{ path('admin_v2_certificate_template_select', {targetType: certificate.targetType}) }}" class="btn btn-default btn-sm js-modal-select-btn"><i class="es-icon es-icon-anonymous-iconfont"></i>{{'admin.operation_certificate.certificate.template_choose'|trans}}</a>
+        <input class="hidden" name="templateId" id="templateId" value="{{ template.id }}"/>
+      </div>
+    </div>
+    <div class="form-group mtl">
+      <div class="col-md-2 control-label">
+        <label for="certificateCode" class="control-label-required">{{'admin.operation_certificate.certificate.code'|trans}}：</label>
+      </div>
+      <div class="col-md-4 controls mts">
+        {{ certificate.code }}
+      </div>
+    </div>
+    <div class="form-group mtl">
+      <div class="col-md-2 control-label">
+        <label for="expiryDay" class="control-label-required">{{'admin.operation_certificate.certificate.expiry_day'|trans}}：</label>
+      </div>
+      <div class="col-md-4 controls mtm">
+        {% if certificate.expiryDay == 0 %}
+          {{ 'admin.operation_certificate.certificate.expiry_day.forever'|trans }}
+        {% else %}
+          {{ certificate.expiryDay }} {{ 'site.date.day'|trans }}
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="form-group mtl">
+      <div class="col-md-2 control-label">
+        <label for="autoIssue" class="control-label-required">{{ 'admin.operation_certificate.certificate.auto_issue'|trans }}：</label>
+      </div>
+      <div class="col-md-3">
+        <span class="es-switch js-auto-issue {% if certificate.autoIssue %}is-active {% endif %}" style="margin-top: 7px;">
+          <input class="es-switch__input" type="text" name="autoIssue" value="{{ certificate.autoIssue }}" data-close="0" data-open="1">
+        </span>
+        <div class="mtl">
+          {{'admin.operation_certificate.certificate.issue_rule'|trans}} : <span class="color-primary">{{'admin.operation_certificate.certificate.issue_rule.course'|trans}}</span>
+        </div>
+      </div>
+    </div>
+
     <div class="form-group mtl">
       <div class="col-md-2 control-label">
       </div>
