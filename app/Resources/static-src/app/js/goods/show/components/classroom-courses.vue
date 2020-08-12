@@ -6,9 +6,9 @@
       </div>
       <div class="task-content">
         <p class="task-content__title text-overflow">{{ course.courseSet.title }}</p>
-        <p class="clearfix task-content__plan">
-          <span class="pull-left">{{ 'classroom.courses.plan'|trans }}：{{ course.displayedTitle }}</span>
-          <span class="pull-right">{{ 'classroom.courses.lesson_num'|trans({num:course.compulsoryTaskNum}) }}</span>
+        <p class="task-content__plan text-overflow">
+          {{ 'classroom.courses.plan'|trans }}：{{ course.displayedTitle }}
+          <span>{{ 'classroom.courses.lesson_num'|trans({num:course.compulsoryTaskNum}) }}</span>
         </p>
         <div v-if="course.teachers[0]" class="clearfix task-content__teacher">
           <div class="pull-left teacher-info">
