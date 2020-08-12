@@ -396,8 +396,6 @@ admin_setting_my_cloud:
 admin_setting_message:
     - admin_v2_school_information
     - admin_v2_school_information_setting
-admin_setting_license:
-    - admin_v2_license_setting
 admin_setting_user:
     - admin_v2_setting_user
 admin_user_auth:
