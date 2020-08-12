@@ -7,6 +7,7 @@ use AppBundle\Common\CloudFileStatusToolkit;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\MaterialService;
 use Biz\File\Dao\FileUsedDao;
 use Biz\File\Dao\UploadFileCollectDao;
 use Biz\File\Dao\UploadFileDao;
@@ -1336,6 +1337,17 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $result;
     }
 
+    public function updateUsedCount($fileId)
+    {
+        $file = $this->getUploadFileDao()->get($fileId);
+        if (!$file) {
+            return;
+        }
+        $count = $this->getCourseMaterialService()->countMaterials(['fileId' => $file['id'], 'excludeLessonId' => 0]);
+
+        return $this->update($file['id'], ['usedCount' => $count]);
+    }
+
     protected function updateTags($localFile, $fields)
     {
         if (!empty($fields['tags'])) {
@@ -1800,5 +1812,13 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     protected function getAttachmentService()
     {
         return $this->createService('ItemBank:Item:AttachmentService');
+    }
+
+    /**
+     * @return MaterialService
+     */
+    protected function getCourseMaterialService()
+    {
+        return $this->createService('Course:MaterialService');
     }
 }
