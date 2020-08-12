@@ -4,9 +4,9 @@ namespace Biz\Certificate\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
+use Biz\Certificate\CertificateException;
 use Biz\Certificate\Dao\TemplateDao;
 use Biz\Certificate\Service\TemplateService;
-use Biz\Certificate\CertificateException;
 use Biz\Common\CommonException;
 use Biz\Content\Service\FileService;
 use Biz\System\Service\LogService;
