@@ -70,6 +70,7 @@ export default {
       answerScene: {},
       answerReport: {},
       answerRecord: {},
+      height: 0,
     };
   },
   computed: {
@@ -92,19 +93,24 @@ export default {
     isReadOver() {
       return this.answerRecord.status === 'reviewing';
     },
-    height() {
+  },
+  watch: {},
+  created() {
+    this.getData();
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.height = this.getheight();
+    });
+  },
+  methods: {
+    getheight() {
       const clientHeight = document.body.clientHeight - 46;
       if (document.body.scrollHeight - 46 > clientHeight) {
         return document.body.scrollHeight;
       }
       return clientHeight;
     },
-  },
-  watch: {},
-  created() {
-    this.getData();
-  },
-  methods: {
     getData() {
       const query = {
         answerRecordId: Number(this.$route.params.answerRecordId),
@@ -135,13 +141,18 @@ export default {
       this.$router.push({ path: `/brushReview/${answerRecordId}`, query });
     },
     doAgain() {
+      const type = this.$route.query.type;
       const query = {
         mode: 'start',
         type: this.$route.query.type,
         exerciseId: this.$route.query.exerciseId,
-        assessmentId: this.$route.query.assessmentId,
         moduleId: this.$route.query.moduleId,
       };
+      if (type === 'chapter') {
+        query.categoryId = this.$route.query.categoryId;
+      } else {
+        query.assessmentId = this.$route.query.assessmentId;
+      }
       this.$router.push({ path: '/brushDo', query });
     },
     doAnalysis() {

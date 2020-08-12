@@ -147,11 +147,11 @@ const getstudyItemBankDisplay = data => {
     header: data.itemBankExercise.title,
     middle: {
       value: data.completionRate,
-      html: ` <class class="completionRate">答题率${data.completionRate}</class>`,
+      html: ` <class class="completionRate">答题率${data.completionRate}％</class>`,
     },
     bottom: {
       value: data.masteryRate,
-      html: `<class class="masteryRate">掌握率${data.masteryRate}</class>`,
+      html: `<class class="masteryRate">掌握率${data.masteryRate}％</class>`,
     },
   };
 };
