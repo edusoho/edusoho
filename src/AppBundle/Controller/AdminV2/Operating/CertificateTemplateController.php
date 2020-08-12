@@ -164,7 +164,9 @@ class CertificateTemplateController extends BaseController
             return $this->createJsonResponse(['image' => $cover]);
         }
 
-        return $this->render('admin-v2/operating/certificate-template/img/stamp-modal.html.twig');
+        return $this->render('admin-v2/operating/certificate-template/img/stamp-modal.html.twig', [
+            'template' => $this->getCertificateTemplateService()->get($id),
+        ]);
     }
 
     public function previewAction(Request $request, $id)
