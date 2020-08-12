@@ -6,10 +6,10 @@
         <span v-else-if="sku.status !=='published'" class="product-detail__unpublished">商品还未发布，不允许加入和购买</span>
         <span v-else-if="sku.buyable == 1 && sku.buyableEndTime != 0 && new Date(sku.buyableEndTime).getTime() > new Date().getTime() + 86400000" class="product-detail__unpublished">抱歉，该商品已超过加入有效期，请联系客服</span>
         <span v-else-if="sku.buyable != 1" class="product-detail__unpublished">抱歉，该商品为限制商品，请联系客服</span>
-        <a class="product-detail__disable_btn" v-if="(sku.vipLevelInfo && !sku.vipUser) || sku.vipLevelInfo && sku.vipUser && sku.vipLevelInfo.seq < sku.vipUser.level.seq" data-toggle="tooltip" data-trigger="hover"
-           data-placement="top" title="" href="javascript:;">
+        <span class="product-detail__disable_btn" v-if="(sku.vipLevelInfo && !sku.vipUser) || sku.vipLevelInfo && sku.vipUser && sku.vipLevelInfo.seq < sku.vipUser.level.seq" data-toggle="tooltip" data-trigger="hover"
+           data-placement="top" title="test">
             <slot>会员免费学</slot>
-        </a>
+        </span>
         <a v-else-if="sku.status === 'published' && !sku.isMember" :class="btnClass" href="javascript:;" @click="buySku">
             <slot v-if="sku.price == 0">免费加入</slot>
             <slot v-if="sku.vipLevelInfo && sku.vipUser && sku.vipLevelInfo.seq >= sku.vipUser.level.seq">会员免费学</slot>
