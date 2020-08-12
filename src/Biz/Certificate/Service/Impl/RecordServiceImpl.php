@@ -7,5 +7,4 @@ use Biz\Certificate\Service\RecordService;
 
 class RecordServiceImpl extends BaseService implements RecordService
 {
-
 }
