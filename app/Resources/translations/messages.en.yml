@@ -5262,6 +5262,9 @@ admin.operation_certificate.certificate.expiry_day.placeholder: Enter the validi
 admin.operation_certificate.certificate.auto_issue: automatic authentication
 admin.operation_certificate.certificate.issue_rule: conditions of issue
 admin.operation_certificate.certificate.issue_rule.course: Completion of all course tasks
+admin.operation_certificate.certificate.update: Edit Certificate
+admin.operation_certificate.certificate.member_manage: Member Manage
+admin.operation_certificate.certificate.audit: Pending review
 admin.operation_announcement.content_th: 'Content'
 admin.operation_announcement.createTime_th: 'Published Time'
 admin.operation_announcement.endTime_th: 'End Time'
@@ -9056,6 +9059,7 @@ exception.destroy_account.not_found_record: Record Not Found
 exception.destroy_account.audit_record_exist: Audit Record Is Exist
 
 exception.certificate_template.notfound_template: Template not found
+exception.certificate_template.notfound_certificate: Certificate not found
 
 course.unname_title: unname course
 

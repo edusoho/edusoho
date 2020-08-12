@@ -6,7 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Certificate\Dao\TemplateDao;
 use Biz\Certificate\Service\TemplateService;
-use Biz\Certificate\TemplateException;
+use Biz\Certificate\CertificateException;
 use Biz\Common\CommonException;
 use Biz\Content\Service\FileService;
 use Biz\System\Service\LogService;
@@ -42,7 +42,7 @@ class TemplateServiceImpl extends BaseService implements TemplateService
     {
         $template = $this->get($id);
         if (empty($template) || 1 == $template['dropped']) {
-            $this->createNewException(TemplateException::NOTFOUND_TEMPLATE());
+            $this->createNewException(CertificateException::NOTFOUND_TEMPLATE());
         }
 
         $fields = $this->filterTemplateFields($fields);
@@ -54,7 +54,7 @@ class TemplateServiceImpl extends BaseService implements TemplateService
     {
         $template = $this->get($id);
         if (empty($template) || 1 == $template['dropped']) {
-            $this->createNewException(TemplateException::NOTFOUND_TEMPLATE());
+            $this->createNewException(CertificateException::NOTFOUND_TEMPLATE());
         }
 
         return $this->getTemplateDao()->update($id, ['basemap' => $fileUri]);
@@ -64,7 +64,7 @@ class TemplateServiceImpl extends BaseService implements TemplateService
     {
         $template = $this->get($id);
         if (empty($template) || 1 == $template['dropped']) {
-            $this->createNewException(TemplateException::NOTFOUND_TEMPLATE());
+            $this->createNewException(CertificateException::NOTFOUND_TEMPLATE());
         }
 
         return $this->getTemplateDao()->update($id, ['stamp' => $fileUri]);
@@ -84,7 +84,7 @@ class TemplateServiceImpl extends BaseService implements TemplateService
     {
         $template = $this->get($id);
         if (empty($template) || 1 == $template['dropped']) {
-            $this->createNewException(TemplateException::NOTFOUND_TEMPLATE());
+            $this->createNewException(CertificateException::NOTFOUND_TEMPLATE());
         }
 
         return $this->getTemplateDao()->update($id, ['dropped' => 1]);
