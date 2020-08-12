@@ -109,10 +109,6 @@ class CertificateController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function memberListAction(Request $request, $id)
-    {
-    }
-
     public function auditManageAction(Request $request, $id)
     {
     }

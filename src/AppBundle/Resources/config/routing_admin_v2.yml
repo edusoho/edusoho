@@ -986,7 +986,7 @@ admin_v2_certificate_delete:
 
 admin_v2_certificate_member_list:
     path:  /certificate/{id}/member/list
-    defaults: { _controller: AppBundle:AdminV2/Operating/Certificate:memberList }
+    defaults: { _controller: AppBundle:AdminV2/Operating/CertificateRecord:index }
 
 admin_v2_certificate_audit_manage:
     path:  /certificate/{id}/audit/manage
