@@ -1,6 +1,6 @@
 <template>
   <div class="classroom-task">
-    <div class="classroom-task__item" v-for="course in courses" :key="course.id">
+    <div class="classroom-task__item" v-for="course in courses" :key="course.id" @click="clickCourse(course)">
       <div class="task-banner">
         <img :src="course.courseSet.cover.small" alt="">
       </div>
@@ -50,6 +50,9 @@
                 );
                 this.page += 1;
             },
+            clickCourse: function(course) {
+                window.open('/my/course/'+course.id);
+            }
         },
         filters: {
             trans(value, params) {
