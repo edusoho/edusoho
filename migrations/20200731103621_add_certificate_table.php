@@ -44,6 +44,25 @@ class AddCertificateTable extends Migration
                 `updatedTime` INT(10) unsigned DEFAULT '0'  COMMENT '更新时间',
                 PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='证书表';
+            
+            CREATE TABLE `certificate_record` (
+                `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+                `userId` int(10) COMMENT '用户ID',
+                `certificateId` int(10) COMMENT '证书ID',
+                `certificateCode` VARCHAR (255) DEFAULT '' COMMENT '证书编码',
+                `targetType` varchar(64) DEFAULT '' COMMENT '发放类型',
+                `targetId` int(10) DEFAULT '0' COMMENT '发放对象ID',
+                `status` varchar(64) DEFAULT 'none' COMMENT '证书审核状态',
+                `rejectReason` VARCHAR (255) DEFAULT '' COMMENT '拒绝原因',
+                `auditUserId` INT(10) unsigned DEFAULT '0' COMMENT '审核用户ID',
+                `auditTime` INT(10) unsigned DEFAULT '0' COMMENT '审核时间',
+                `expiryTime` int(10) DEFAULT '0' COMMENT '过期时间',
+                `issueTime` int(10) DEFAULT '0' COMMENT '发放时间',
+                `certificateImg` VARCHAR (255) DEFAULT '' COMMENT '证书图片',
+                `createdTime` INT(10) unsigned DEFAULT '0' COMMENT '创建时间',
+                `updatedTime` INT(10) unsigned DEFAULT '0'  COMMENT '更新时间',
+                PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='证书记录表';
         ");
     }
 
