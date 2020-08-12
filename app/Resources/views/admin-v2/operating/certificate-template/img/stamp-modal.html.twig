@@ -9,6 +9,7 @@
 {% do script(['app/js/admin-v2/operating/certificate-template/stamp/index.js']) %}
 
 {% block body %}
+  <link href="{{ asset('static-dist/app/css/main.css') }}" rel="stylesheet" />
   <img class="certificate-info img-full" src="" id="stamp-crop" alt=""/>
   <div class="text-center cd-dark-major cd-mt16 cd-mb16">
     {{ 'user.settings.avatar.crop_hint'|trans }}
