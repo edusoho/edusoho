@@ -18,10 +18,8 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
-use Biz\Goods\GoodsException;
 use Biz\Goods\Mediator\CourseSetGoodsMediator;
 use Biz\Goods\Service\GoodsService;
-use Biz\Product\ProductException;
 use Biz\Product\Service\ProductService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Review\Service\ReviewService;
@@ -427,80 +425,6 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $courseSet;
     }
 
-    protected function syncProductsAndGoods($courseSet)
-    {
-        $existProduct = $this->getProductService()->getProductByTargetIdAndType($courseSet['id'], 'course');
-        if (empty($existProduct)) {
-            $this->createNewException(ProductException::NOTFOUND_PRODUCT());
-        }
-
-        $product = $this->getProductService()->updateProduct($existProduct['id'], [
-            'title' => $courseSet['title'],
-        ]);
-
-        $existGoods = $this->getGoodsService()->getGoodsByProductId($existProduct['id']);
-
-        if (empty($existGoods)) {
-            $this->createNewException(GoodsException::GOODS_NOT_FOUND());
-        }
-
-        $goods = $this->getGoodsService()->updateGoods($existGoods['id'], [
-            'title' => $courseSet['title'],
-            'subtitle' => $courseSet['subtitle'],
-            'summary' => $courseSet['summary'],
-            'images' => $courseSet['cover'],
-            'orgId' => $courseSet['orgId'],
-            'orgCode' => $courseSet['orgCode'],
-            'maxRate' => $courseSet['maxRate'],
-        ]);
-
-        return [$product, $goods];
-    }
-
-    protected function publishGoods($courseSet)
-    {
-        $existProduct = $this->getProductService()->getProductByTargetIdAndType($courseSet['id'], 'course');
-        if (empty($existProduct)) {
-            $this->createNewException(ProductException::NOTFOUND_PRODUCT());
-        }
-
-        $product = $this->getProductService()->updateProduct($existProduct['id'], [
-            'title' => $courseSet['title'],
-        ]);
-
-        $existGoods = $this->getGoodsService()->getGoodsByProductId($existProduct['id']);
-
-        if (empty($existGoods)) {
-            $this->createNewException(GoodsException::GOODS_NOT_FOUND());
-        }
-
-        $goods = $this->getGoodsService()->publishGoods($existGoods['id']);
-
-        return [$product, $goods];
-    }
-
-    protected function unpublishGoods($courseSet)
-    {
-        $existProduct = $this->getProductService()->getProductByTargetIdAndType($courseSet['id'], 'course');
-        if (empty($existProduct)) {
-            $this->createNewException(ProductException::NOTFOUND_PRODUCT());
-        }
-
-        $product = $this->getProductService()->updateProduct($existProduct['id'], [
-            'title' => $courseSet['title'],
-        ]);
-
-        $existGoods = $this->getGoodsService()->getGoodsByProductId($existProduct['id']);
-
-        if (empty($existGoods)) {
-            $this->createNewException(GoodsException::GOODS_NOT_FOUND());
-        }
-
-        $goods = $this->getGoodsService()->unpublishGoods($existGoods['id']);
-
-        return [$product, $goods];
-    }
-
     protected function updateCourseSerializeMode($courseSet, $fields)
     {
         if (isset($fields['serializeMode']) && $fields['serializeMode'] !== $courseSet['serializeMode']) {
@@ -702,7 +626,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             }
 
             $courseSet = $this->getCourseSetDao()->update($courseSet['id'], ['status' => 'published']);
-            $this->publishGoods($courseSet);
+            $this->getCourseSetGoodsMediator()->onUpdateNormalData($courseSet);
+            $this->getCourseSetGoodsMediator()->onPublish($courseSet);
 
             $this->commit();
 
@@ -729,7 +654,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 $this->getCourseService()->closeCourse($classroomRef['courseId']);
             }
             $courseSet = $this->getCourseSetDao()->update($courseSet['id'], ['status' => 'closed']);
-            $this->unpublishGoods($courseSet);
+            $this->getCourseSetGoodsMediator()->onClose($courseSet);
 
             $this->commit();
         } catch (\Exception $exception) {

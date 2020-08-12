@@ -38,6 +38,10 @@ class CourseSetCoursesCopy extends AbstractCopy
             $newCourse['price'] = $originCourse['originPrice'];
             $newCourse = $this->getCourseDao()->create($newCourse);
             $this->getCourseSpecsMediator()->onCreate($newCourse);
+            $this->getCourseSpecsMediator()->onUpdateNormalData($newCourse);
+            if ('published' === $newCourse['status']) {
+                $this->getCourseSpecsMediator()->onPublish($newCourse);
+            }
             $newCourses[] = $newCourse;
 
             if ($originCourse['id'] == $courseSet['defaultCourseId']) {

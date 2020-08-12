@@ -2,8 +2,9 @@
 
 namespace Biz\Course\Copy\Entry;
 
-use Biz\Course\Dao\CourseDao;
 use Biz\Course\Copy\AbstractEntityCopy;
+use Biz\Course\Dao\CourseDao;
+use Biz\Goods\Mediator\CourseSpecsMediator;
 
 /**
  * 复制链说明：
@@ -19,7 +20,7 @@ class CourseCopy extends AbstractEntityCopy
      *
      * @return array|mixed
      */
-    protected function copyEntity($source, $course = array())
+    protected function copyEntity($source, $course = [])
     {
         $course = array_merge($source, $course);
 
@@ -30,7 +31,12 @@ class CourseCopy extends AbstractEntityCopy
 
         $newCourse = $this->getCourseDao()->create($newCourse);
 
-        $course = array('newCourse' => $newCourse, 'modeChange' => $modeChange, 'isCopy' => false);
+        $course = ['newCourse' => $newCourse, 'modeChange' => $modeChange, 'isCopy' => false];
+        $this->getCourseSpecsMediator()->onCreate($newCourse);
+        $this->getCourseSpecsMediator()->onUpdateNormalData($newCourse);
+        if ('published' === $newCourse['status']) {
+            $this->getCourseSpecsMediator()->onPublish($newCourse);
+        }
         $this->processChainsDoCopy($source, $course);
 
         return $newCourse;
@@ -38,7 +44,7 @@ class CourseCopy extends AbstractEntityCopy
 
     protected function getFields()
     {
-        return array(
+        return [
             'title',
             'courseSetTitle',
             'learnMode',
@@ -93,7 +99,7 @@ class CourseCopy extends AbstractEntityCopy
             'lessonNum',
             'publishLessonNum',
             'subtitle',
-        );
+        ];
     }
 
     protected function processCourse($course)
@@ -113,7 +119,7 @@ class CourseCopy extends AbstractEntityCopy
         $newCourse['courseSetId'] = $courseSetId;
         $newCourse['creator'] = $user['id'];
         $newCourse['status'] = 'draft';
-        $newCourse['teacherIds'] = array($user['id']);
+        $newCourse['teacherIds'] = [$user['id']];
 
         return $newCourse;
     }
@@ -156,5 +162,13 @@ class CourseCopy extends AbstractEntityCopy
         }
 
         return $newCourse;
+    }
+
+    /**
+     * @return CourseSpecsMediator
+     */
+    protected function getCourseSpecsMediator()
+    {
+        return $this->biz['specs.mediator.course'];
     }
 }

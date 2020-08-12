@@ -56,6 +56,10 @@ class CourseSetCopy extends AbstractCopy
         $newCourseSet['creator'] = $currentUser->getId();
         $newCourseSet = $this->getCourseSetDao()->create($newCourseSet);
         $this->getCourseSetGoodsMediator()->onCreate($newCourseSet);
+        $this->getCourseSetGoodsMediator()->onUpdateNormalData($newCourseSet);
+        if ('published' === $newCourseSet['status']) {
+            $this->getCourseSetGoodsMediator()->onPublish($newCourseSet);
+        }
 
         return ['newCourseSet' => $newCourseSet];
     }
