@@ -30,7 +30,7 @@
             </a>
 
             <!-- 价格 -->
-            <div v-if="goods.discount" class="detail-right__price">
+            <div v-if="goods.discount && currentSku.price != 0" class="detail-right__price">
                 <!-- 优惠活动 -->
                 <div class="detail-right__price__activities">该商品享受“{{ goods.discount.name }}”打折促销活动，24：00：00后结束，请尽快购买！</div>
                 <div class="detail-right__price__num">
@@ -41,7 +41,7 @@
                     <s v-if="currentSku.priceObj.currency === 'coin'">价格: {{ currentSku.priceObj.coinAmount }}<span class="detail-right__price__unit">{{ currentSku.priceObj.coinName }}</span></s>
                 </div>
             </div>
-            <div v-if="!goods.discount" class="detail-right__price">
+            <div v-if="!goods.discount || currentSku.price == 0" class="detail-right__price">
                 <!-- 优惠活动 -->
                 <!--                <div class="detail-right__price__activities">该商品享受“某某某某某某某某某某某某”打折促销活动，24：00：00后结束，请尽快购买！</div>-->
                 <div class="detail-right__price__free" v-if="currentSku.displayPrice == 0">

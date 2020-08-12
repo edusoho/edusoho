@@ -12,7 +12,7 @@
                 <slot>会员免费学</slot>
             </span>
             <a v-if="!sku.isMember" :class="btnClass" href="javascript:;" @click="buySku">
-                <slot v-if="sku.price == 0">免费加入</slot>
+                <slot v-if="sku.displayPrice == 0">免费加入</slot>
                 <slot v-else-if="sku.vipLevelInfo && sku.vipUser && sku.vipLevelInfo.seq >= sku.vipUser.level.seq">会员免费学</slot>
                 <slot v-else>立即购买</slot>
             </a>
