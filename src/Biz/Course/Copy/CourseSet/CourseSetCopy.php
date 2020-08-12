@@ -4,6 +4,7 @@ namespace Biz\Course\Copy\CourseSet;
 
 use Biz\AbstractCopy;
 use Biz\Course\Dao\CourseSetDao;
+use Biz\Goods\Mediator\CourseSetGoodsMediator;
 
 class CourseSetCopy extends AbstractCopy
 {
@@ -13,7 +14,7 @@ class CourseSetCopy extends AbstractCopy
 
     protected function getFields()
     {
-        return array(
+        return [
             'type',
             'title',
             'subtitle',
@@ -32,7 +33,7 @@ class CourseSetCopy extends AbstractCopy
             'orgCode',
             'teacherIds',
             'materialNum',
-        );
+        ];
     }
 
     public function doCopy($courseSet, $options)
@@ -54,8 +55,9 @@ class CourseSetCopy extends AbstractCopy
         }
         $newCourseSet['creator'] = $currentUser->getId();
         $newCourseSet = $this->getCourseSetDao()->create($newCourseSet);
+        $this->getCourseSetGoodsMediator()->onCreate($newCourseSet);
 
-        return array('newCourseSet' => $newCourseSet);
+        return ['newCourseSet' => $newCourseSet];
     }
 
     /**
@@ -64,5 +66,13 @@ class CourseSetCopy extends AbstractCopy
     private function getCourseSetDao()
     {
         return $this->biz->dao('Course:CourseSetDao');
+    }
+
+    /**
+     * @return CourseSetGoodsMediator
+     */
+    protected function getCourseSetGoodsMediator()
+    {
+        return $this->biz['goods.mediator.course_set'];
     }
 }

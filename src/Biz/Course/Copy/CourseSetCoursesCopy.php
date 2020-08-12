@@ -7,6 +7,7 @@ use Biz\AbstractCopy;
 use Biz\Course\Dao\CourseDao;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Service\CourseSetService;
+use Biz\Goods\Mediator\CourseSpecsMediator;
 use Biz\Task\Dao\TaskDao;
 use Biz\Testpaper\Dao\TestpaperDao;
 
@@ -36,7 +37,7 @@ class CourseSetCoursesCopy extends AbstractCopy
             $newCourse['parentId'] = $originCourse['id'];
             $newCourse['price'] = $originCourse['originPrice'];
             $newCourse = $this->getCourseDao()->create($newCourse);
-
+            $this->getCourseSpecsMediator()->onCreate($newCourse);
             $newCourses[] = $newCourse;
 
             if ($originCourse['id'] == $courseSet['defaultCourseId']) {
@@ -189,5 +190,13 @@ class CourseSetCoursesCopy extends AbstractCopy
     protected function getCourseSetService()
     {
         return $this->biz->service('Course:CourseSetService');
+    }
+
+    /**
+     * @return CourseSpecsMediator
+     */
+    protected function getCourseSpecsMediator()
+    {
+        return $this->biz['specs.mediator.course'];
     }
 }
