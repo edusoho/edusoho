@@ -2,10 +2,10 @@
 
 namespace AppBundle\Controller\AdminV2\System;
 
-use AppBundle\Common\JsonToolkit;
-use AppBundle\Controller\AdminV2\BaseController;
 use AppBundle\Common\Exception\FileToolkitException;
 use AppBundle\Common\FileToolkit;
+use AppBundle\Common\JsonToolkit;
+use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Content\Service\FileService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\AuthService;
@@ -15,25 +15,25 @@ class SettingController extends BaseController
 {
     public function securityAction(Request $request)
     {
-        $security = $this->getSettingService()->get('security', array());
-        $default = array(
-            'safe_iframe_domains' => array(),
-        );
+        $security = $this->getSettingService()->get('security', []);
+        $default = [
+            'safe_iframe_domains' => [],
+        ];
         $security = array_merge($default, $security);
 
         if ($request->isMethod('POST')) {
             $security = $request->request->all();
 
-            $security['safe_iframe_domains'] = trim(str_replace(array("\r\n", "\n", "\r"), ' ', $security['safe_iframe_domains']));
+            $security['safe_iframe_domains'] = trim(str_replace(["\r\n", "\n", "\r"], ' ', $security['safe_iframe_domains']));
             $security['safe_iframe_domains'] = array_filter(explode(' ', $security['safe_iframe_domains']));
 
             $this->getSettingService()->set('security', $security);
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        return $this->render('admin-v2/system/security/security.html.twig', array(
+        return $this->render('admin-v2/system/security/security.html.twig', [
             'security' => $security,
-        ));
+        ]);
     }
 
     public function ipBlacklistAction(Request $request)
@@ -43,16 +43,16 @@ class SettingController extends BaseController
         if ('POST' === $request->getMethod()) {
             $data = $request->request->all();
 
-            $purifiedBlackIps = trim(str_replace(array("\r\n", "\n", "\r"), ' ', $data['blackListIps']));
+            $purifiedBlackIps = trim(str_replace(["\r\n", "\n", "\r"], ' ', $data['blackListIps']));
             $purifiedWhiteIps = isset($data['whiteListIps']) ? $data['whiteListIps'] : null;
-            $purifiedWhiteIps = trim(str_replace(array("\r\n", "\n", "\r"), ' ', $purifiedWhiteIps));
+            $purifiedWhiteIps = trim(str_replace(["\r\n", "\n", "\r"], ' ', $purifiedWhiteIps));
 
             $logService = $this->getLogService();
 
             if (empty($purifiedBlackIps)) {
                 $settingService->delete('blacklist_ip');
 
-                $blackListIps['ips'] = array();
+                $blackListIps['ips'] = [];
             } else {
                 $blackListIps['ips'] = array_filter(explode(' ', $purifiedBlackIps));
                 $settingService->set('blacklist_ip', $blackListIps);
@@ -61,7 +61,7 @@ class SettingController extends BaseController
             if (empty($purifiedWhiteIps)) {
                 $settingService->delete('whitelist_ip');
 
-                $whiteListIps['ips'] = array();
+                $whiteListIps['ips'] = [];
             } else {
                 $whiteListIps['ips'] = array_filter(explode(' ', $purifiedWhiteIps));
                 $settingService->set('whitelist_ip', $whiteListIps);
@@ -70,43 +70,43 @@ class SettingController extends BaseController
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        $blackListIps = $settingService->get('blacklist_ip', array());
-        $whiteListIps = $settingService->get('whitelist_ip', array());
+        $blackListIps = $settingService->get('blacklist_ip', []);
+        $whiteListIps = $settingService->get('whitelist_ip', []);
 
         if (!empty($blackListIps)) {
             $default['ips'] = join("\n", $blackListIps['ips']);
             $blackListIps = array_merge($blackListIps, $default);
         } else {
-            $blackListIps = array();
+            $blackListIps = [];
         }
 
         if (!empty($whiteListIps)) {
             $default['ips'] = join("\n", $whiteListIps['ips']);
             $whiteListIps = array_merge($whiteListIps, $default);
         } else {
-            $whiteListIps = array();
+            $whiteListIps = [];
         }
 
-        return $this->render('admin-v2/system/security/ip-blacklist.html.twig', array(
+        return $this->render('admin-v2/system/security/ip-blacklist.html.twig', [
             'blackListIps' => $blackListIps,
             'whiteListIps' => $whiteListIps,
-        ));
+        ]);
     }
 
     public function postNumRulesAction(Request $request)
     {
         if ('POST' === $request->getMethod()) {
-            $setting = $request->request->get('setting', array());
+            $setting = $request->request->get('setting', []);
             $this->getSettingService()->set('post_num_rules', $setting);
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        $setting = $this->getSettingService()->get('post_num_rules', array());
+        $setting = $this->getSettingService()->get('post_num_rules', []);
         $setting = JsonToolkit::prettyPrint(json_encode($setting));
 
-        return $this->render('admin-v2/system/security/post-num-rules.html.twig', array(
+        return $this->render('admin-v2/system/security/post-num-rules.html.twig', [
             'setting' => $setting,
-        ));
+        ]);
     }
 
     public function logoUploadAction(Request $request)
@@ -121,7 +121,7 @@ class SettingController extends BaseController
         $file = $this->getFileService()->getFile($fileId);
         $parsed = $this->getFileService()->parseFileUri($file['uri']);
 
-        $site = $this->getSettingService()->get('site', array());
+        $site = $this->getSettingService()->get('site', []);
 
         $oldFileId = empty($site['logo_file_id']) ? null : $site['logo_file_id'];
         $site['logo_file_id'] = $fileId;
@@ -134,10 +134,10 @@ class SettingController extends BaseController
             $this->getFileService()->deleteFile($oldFileId);
         }
 
-        $response = array(
+        $response = [
             'path' => $site['logo'],
             'url' => $this->container->get('assets.packages')->getUrl($site['logo']),
-        );
+        ];
 
         return $this->createJsonResponse($response);
     }
@@ -147,21 +147,21 @@ class SettingController extends BaseController
         $fileId = $request->request->get('id');
         $objectFile = $this->getFileService()->getFileObject($fileId);
 
-        if (!FileToolkit::isImageFile($objectFile)){
+        if (!FileToolkit::isImageFile($objectFile)) {
             $this->createNewException(FileToolkitException::NOT_IMAGE());
         }
 
         $file = $this->getFileService()->getFile($fileId);
         $parsed = $this->getFileService()->parseFileUri($file['uri']);
 
-        $license = $this->getSettingService()->get('license', array());
+        $license = $this->getSettingService()->get('license', []);
 
         $oldFileId = empty($license['license_picture_file_id']) ? null : $license['license_picture_file_id'];
         $license['license_picture_file_id'] = $fileId;
         $license['license_picture'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/".$parsed['path'];
         $license['license_picture'] = ltrim($license['license_picture'], '/');
 
-        if ($oldFileId){
+        if ($oldFileId) {
             $this->getFileService()->deleteFile($oldFileId);
         }
 
@@ -200,7 +200,7 @@ class SettingController extends BaseController
 
         $this->getSettingService()->set('license', $setting);
 
-        if ($fileId){
+        if ($fileId) {
             $this->getFileService()->deleteFile($fileId);
         }
 
@@ -212,21 +212,21 @@ class SettingController extends BaseController
         $fileId = $request->request->get('id');
         $objectFile = $this->getFileService()->getFileObject($fileId);
 
-        if (!FileToolkit::isImageFile($objectFile)){
+        if (!FileToolkit::isImageFile($objectFile)) {
             $this->createNewException(FileToolkitException::NOT_IMAGE());
         }
 
         $file = $this->getFileService()->getFile($fileId);
         $parsed = $this->getFileService()->parseFileUri($file['uri']);
 
-        $permit = $this->getSettingService()->get('license', array());
+        $permit = $this->getSettingService()->get('license', []);
 
         $oldFileId = empty($permit['permit_picture_file_id']) ? null : $permit['permit_picture_file_id'];
         $permit['permit_picture_file_id'] = $fileId;
         $permit['permit_picture'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/".$parsed['path'];
         $permit['permit_picture'] = ltrim($permit['permit_picture'], '/');
 
-        if ($oldFileId){
+        if ($oldFileId) {
             $this->getFileService()->deleteFile($oldFileId);
         }
 
@@ -248,7 +248,7 @@ class SettingController extends BaseController
 
         $this->getSettingService()->set('license', $setting);
 
-        if ($fileId){
+        if ($fileId) {
             $this->getFileService()->deleteFile($fileId);
         }
 
@@ -267,7 +267,7 @@ class SettingController extends BaseController
         $file = $this->getFileService()->getFile($fileId);
         $parsed = $this->getFileService()->parseFileUri($file['uri']);
 
-        $site = $this->getSettingService()->get('site', array());
+        $site = $this->getSettingService()->get('site', []);
 
         $oldFileId = empty($site['favicon_file_id']) ? null : $site['favicon_file_id'];
         $site['favicon_file_id'] = $fileId;
@@ -283,12 +283,12 @@ class SettingController extends BaseController
         //浏览器图标覆盖默认图标
         copy($this->getParameter('kernel.root_dir').'/../web/'.$site['favicon'], $this->getParameter('kernel.root_dir').'/../web/favicon.ico');
 
-        $this->getLogService()->info('system', 'update_settings', '更新浏览器图标', array('favicon' => $site['favicon']));
+        $this->getLogService()->info('system', 'update_settings', '更新浏览器图标', ['favicon' => $site['favicon']]);
 
-        $response = array(
+        $response = [
             'path' => $site['favicon'],
             'url' => $this->container->get('assets.packages')->getUrl($site['favicon']),
-        );
+        ];
 
         return $this->createJsonResponse($response);
     }
@@ -313,9 +313,9 @@ class SettingController extends BaseController
     public function adminSyncAction(Request $request)
     {
         $currentUser = $this->getUser();
-        $setting = $this->getSettingService()->get('user_partner', array());
+        $setting = $this->getSettingService()->get('user_partner', []);
 
-        if (empty($setting['mode']) || !in_array($setting['mode'], array('phpwind', 'discuz'))) {
+        if (empty($setting['mode']) || !in_array($setting['mode'], ['phpwind', 'discuz'])) {
             return $this->createMessageResponse('info', '未开启用户中心，不能同步管理员帐号！');
         }
 
@@ -349,10 +349,10 @@ class SettingController extends BaseController
         }
 
         response:
-        return $this->render('admin-v2/system/user-setting/admin-sync.html.twig', array(
+        return $this->render('admin-v2/system/user-setting/admin-sync.html.twig', [
             'mode' => $setting['mode'],
             'bind' => $bind,
-        ));
+        ]);
     }
 
     /**

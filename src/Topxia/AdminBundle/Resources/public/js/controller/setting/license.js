@@ -1,11 +1,9 @@
-define(function(require, exports, module) {
+define(function (require, exports, module) {
 
     let WebUploader = require('edusoho.webuploader');
     let Notify = require('common/bootstrap-notify');
-    let Uploader = require('upload');
 
-
-    exports.run = function() {
+    exports.run = function () {
         let $form = $("#license-form");
         let uploader = new WebUploader({
             element: '#license-picture-upload'
@@ -22,103 +20,149 @@ define(function(require, exports, module) {
             });
         });
 
-        $("#license-picture-remove").on('click', function(){
+        $("#license-picture-remove").on('click', function () {
             if (!confirm(Translator.trans('admin.site.delete_hint'))) return false;
             let $btn = $(this);
-            $.post($btn.data('url'), function(){
+            $.post($btn.data('url'), function () {
                 $("#license-picture-container").html('');
                 $form.find('#license_picture').val('');
                 $btn.hide();
                 Notify.success(Translator.trans('admin.setting.delete_license_picture_success_hint'));
-            }).error(function(){
+            }).error(function () {
                 Notify.danger(Translator.trans('admin.setting.delete_license_picture_fail_hint'));
             });
         });
 
-        let upload = function(){
-            uploader1.on('uploadSuccess', function(file, response ) {
-                let url = $("#permit-picture-upload").data("gotoUrl");
+        let uploadPermit = function ($uploaderArray, $permitIndex) {
+            $uploaderArray[$permitIndex].on('uploadSuccess', function (file, response) {
+                let permitPicture = "permit_picture" + "_" + $permitIndex;
+                let permitPictureUpload = "permit_picture_upload" + "_" + $permitIndex;
+                let permitPictureContainer = "permit_picture_container" + "_" + $permitIndex;
+                let permitPictureRemove = "permit_picture_remove" + "_" + $permitIndex;
 
-                $.post(url, response ,function(data){
-                    $("#permit-picture-container").html('<img src="' + data.url + '">');
-                    $form.find('#permit_picture').val(data.path);
-                    $("#permit-picture-remove").show();
+                let url = $("#" + permitPictureUpload).data("gotoUrl");
+
+                $.post(url, response, function (data) {
+                    $("#" + permitPictureContainer).html('<img src="' + data.url + '">');
+                    $form.find("#" + permitPicture).val(data.path);
+                    $("#" + permitPictureRemove).show();
                     Notify.success(Translator.trans('admin.setting.upload_permit_picture_success_hint'));
                 });
             });
+        };
 
-            $("#permit-picture-remove").on('click', function(){
+        let removePermitPicture = function ($removeBtnArray, $permitIndex) {
+            $(removeBtnArray[$permitIndex]).on('click', function () {
+                let permitPictureContainer = "permit_picture_container" + "_" + $permitIndex;
+                let permitPicture = "permit_picture" + "_" + $permitIndex;
+
                 if (!confirm(Translator.trans('admin.site.delete_hint'))) return false;
                 let $btn = $(this);
-                $.post($btn.data('url'), function(){
-                    $("#permit-picture-container").html('');
-                    $form.find('#license_picture').val('');
+                $.post($btn.data('url'), function () {
+                    $("#" + permitPictureContainer).html('');
+                    $form.find("#" + permitPicture).val('');
                     $btn.hide();
                     Notify.success(Translator.trans('admin.setting.delete_permit_picture_success_hint'));
-                }).error(function(){
+                }).error(function () {
                     Notify.danger(Translator.trans('admin.setting.delete_permit_picture_fail_hint' + ''));
                 });
             });
+        };
+
+        //为上传和删除增加事件监听
+        let permitIndex = $('.setting_permit').length - 1;
+        let uploaderArray = [];
+        let removeBtnArray = [];
+        for (let i = 0; i <= permitIndex; i++) {
+            let uploaderPermitString = "#permit_picture_upload" + "_" + i;
+            uploaderArray[i] = new WebUploader({element: uploaderPermitString});
+            uploadPermit(uploaderArray, i);
+
+            removeBtnArray[i] = "#permit_picture_remove" + "_" + i;
+            removePermitPicture(removeBtnArray, i);
         }
 
-
-        let uploader1 = new WebUploader({
-            element: '.permit-picture-upload'
-        });
-
-        $("#add-permit-picture-btn").on('click', function(){
-
-            let fileNode = $('#file');
-            let fromPermitDiv = $('.setting_permit').prop("outerHTML");
-            let uploaderArray = [];
-
-            fileNode.append(fromPermitDiv);
-
-            $('.setting_permit').each(function() {
-                $('.setting_permit').attr("id", function(j, origValue) {
-                    return "setting_permit" + "_" + j;
-                });
-            });
-
-            $('.setting_permit').each(function (i , val) {
-                let children = [];
-                children[i] = $('.setting_permit').find('#permit-picture-upload');
-                uploaderArray[i] = new WebUploader({
-                    element: children[i]
-                })
-            });
-
-            upload();
-        })
-
-
-        uploader1.on('uploadSuccess', function(file, response ) {
-            let url = $("#permit-picture-upload").data("gotoUrl");
-
-            $.post(url, response ,function(data){
-                $("#permit-picture-container").html('<img src="' + data.url + '">');
-                $form.find('#permit_picture').val(data.path);
-                $("#permit-picture-remove").show();
-                Notify.success(Translator.trans('admin.setting.upload_permit_picture_success_hint'));
-            });
-        });
-
-        $("#permit-picture-remove").on('click', function(){
+        $("#permit_picture_remove").on('click', function () {
             if (!confirm(Translator.trans('admin.site.delete_hint'))) return false;
             let $btn = $(this);
-            $.post($btn.data('url'), function(){
-                $("#permit-picture-container").html('');
+            $.post($btn.data('url'), function () {
+                $("#permit_picture_container").html('');
                 $form.find('#license_picture').val('');
                 $btn.hide();
                 Notify.success(Translator.trans('admin.setting.delete_permit_picture_success_hint'));
-            }).error(function(){
+            }).error(function () {
                 Notify.danger(Translator.trans('admin.setting.delete_permit_picture_fail_hint' + ''));
             });
         });
 
+        function appendPermit($id, $permitNum) {
 
-        $('#save-license').on('click', function(){
-            $.post($form.data('saveUrl'), $form.serialize(), function(data){
+            let permitArea = $('#permit_area');
+            let settingPermit = $('.setting_permit');
+            let fromPermitDiv = settingPermit.prop("outerHTML");
+
+            let permitsName = 'permits' + '[' + $permitNum + ']' + '[name]';
+            let permitsRecordNumber = 'permits' + '[' + $permitNum + ']' + '[record_number]';
+            let permitsPicture = 'permits' + '[' + $permitNum + ']' + '[picture]';
+
+            permitArea.append(fromPermitDiv);
+
+            settingPermit.last().find('.permit_name').attr("name", permitsName);
+            settingPermit.last().find('.permit_record_number').attr("name", permitsRecordNumber);
+            settingPermit.last().find('.permit_picture').attr("name", permitsPicture);
+
+            settingPermit.last().find('.permit_picture').attr("id", function () {
+                let id = "permit_picture" + "_" + $permitNum;
+                return id;
+            });
+            settingPermit.last().find('.permit_picture_upload').attr("id", function () {
+                let id = "permit_picture_upload" + "_" + $permitNum;
+                return id;
+            });
+            settingPermit.last().find('.permit_picture_container').attr("id", function () {
+                let id = "permit_picture_container" + "_" + $permitNum;
+                return id;
+            });
+            settingPermit.last().find('.permit_picture_remove').attr("id", function () {
+                let id = "permit_picture_remove" + "_" + $permitNum;
+                return id;
+            });
+
+            settingPermit.last().find('.permit_name').attr("value", "");
+            settingPermit.last().find('.permit_record_number').attr("value", "");
+            settingPermit.last().find('.permit_picture').attr("value", "");
+            settingPermit.last().find('img').attr("src", "");
+
+            settingPermit.last().find('.permit_picture_remove').hide();
+
+            let uploaderArray = [];
+            let uploaderPermitString = "#permit_picture_upload" + "_" + $permitNum;
+            uploaderArray[$permitNum] = new WebUploader({element: uploaderPermitString});
+
+            uploadPermit(uploaderArray, $permitNum);
+        }
+
+        function removePermit() {
+            let delConfirm = confirm('确定要删除吗？');
+            if (delConfirm) {
+                $('.setting_permit').last().remove();
+            }
+        }
+
+        $("#add-permit-picture-btn").on('click', function () {
+            if (permitIndex < 9) {
+                appendPermit("#add-permit-picture-btn", ++permitIndex);
+            } else {
+                alert('新增数量已达上限，暂不支持新增哦~');
+            }
+        });
+
+        $("#remove-permit-picture-btn").on('click', function () {
+            removePermit();
+        });
+
+        $('#save_license').on('click', function () {
+            $.post($form.data('saveUrl'), $form.serialize(), function (data) {
                 Notify.success(data.message);
             })
         })

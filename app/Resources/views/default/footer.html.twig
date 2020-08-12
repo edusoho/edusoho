@@ -1,10 +1,12 @@
 {% for config in themeConfig.blocks.left|default([]) %}
-    {% set code = config.code %}
-    {% if code == 'footer-link' %}
-      {% set category = config.categoryId|default(0) ? data('Category', {categoryId: config.categoryId})  : null %}
-      {% include 'default/' ~ code ~ '.html.twig' with {config:config, category: category} %}
-    {% endif %}
+  {% set code = config.code %}
+  {% if code == 'footer-link' %}
+    {% set category = config.categoryId|default(0) ? data('Category', {categoryId: config.categoryId})  : null %}
+    {% include 'default/' ~ code ~ '.html.twig' with {config:config, category: category} %}
+  {% endif %}
 {% endfor %}
+
+{% set menu = 'admin_v2_license_setting' %}
 
 <footer class="es-footer">
   <div class="copyright">
@@ -17,7 +19,7 @@
         {{ setting('siteTrace.script')|raw }}
       {% endif %}
 
-      <a class="mlm" href="{{ path('course_set_archive') }}">{{'homepage.footer.archive'|trans}}</a>
+      <a class="mlm" href="{{ path('course_set_archive') }}">{{ 'homepage.footer.archive'|trans }}</a>
       <div class="mts">
         {% if setting('site.copyright') %}
           {{ 'homepage.footer.course_copyright'|trans({'%copyRightUrl%':setting('site.copyright')})|raw }}
@@ -28,32 +30,31 @@
           </a>
         {% endif %}
       </div>
-        <a class="navbar-brand">
-            {% if setting('license.license_picture') %}
-                <img src="{{ asset(setting('license.license_picture')) }}">
-            {% endif %}
-            {% if setting('license.license_name') %}
-                <a class="mlm" href={{ setting('license.license_url')|default('/') }} target="_blank">
-                    {{ setting('license.license_name') }}
-                </a>
-            {% endif %}
-        </a>
+
+      <a class="navbar-brand">
+        {% if setting('license.license_picture') %}
+          <a href={{ setting('license.license_url')| default('/') }} target="_blank">
+            <img src="{{ asset(setting('license.license_picture')) }}">
+          </a>
+        {% endif %}
+        {% if setting('license.license_name') %}
+          <a class="mlm" href={{ setting('license.license_url')|default('/') }} target="_blank">
+            {{ setting('license.license_name') }}
+          </a>
+        {% endif %}
+      </a>
+
+      {% for permit in setting('license.permits') %}
+        <div>
+          {% if permit.name %}
+            <a class="mlm" href={{ permit.picture |default('/') }} target="_blank">{{ permit.name }}</a>
+          {% endif %}
+          {% if permit.record_number %}
+            <a class="mlm" href={{ permit.picture |default('/') }} target="_blank">{{ permit.record_number }}</a>
+          {% endif %}
+        </div>
+      {% endfor %}
+
     </div>
-      <div>
-          <a href="{{ path('homepage') }}" class="navbar-brand">
-              {% if setting('license.permit_name') %}
-                  <a class="mlm" href={{ setting('license.permit_name')|default('/') }} target="_blank">
-                      {{ setting('license.permit_name') }}
-                  </a>
-              {% endif %}
-          </a>
-          <a class="navbar-brand">
-              {% if setting('license.permit_record_number') %}
-                  <a class="mlm" href={{ setting('license.permit_record_number')|default('/') }} target="_blank">
-                      {{ setting('license.permit_record_number') }}
-                  </a>
-              {% endif %}
-          </a>
-      </div>
   </div>
 </footer>
