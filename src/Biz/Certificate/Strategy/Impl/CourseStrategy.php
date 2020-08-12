@@ -49,6 +49,13 @@ class CourseStrategy extends BaseStrategy
         return array_values($courseSets);
     }
 
+    public function getTarget($targetId)
+    {
+        $course = $this->getCourseService()->getCourse($targetId);
+
+        return $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+    }
+
     protected function filterConditions($conditions)
     {
         if (!empty($conditions['keyword'])) {

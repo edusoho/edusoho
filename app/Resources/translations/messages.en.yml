@@ -5258,6 +5258,7 @@ admin.operation_certificate.certificate.template_choose: Selecting Template
 admin.operation_certificate.certificate.code: Certificate Code
 admin.operation_certificate.certificate.code.placeholder: 1 to 6 digits or letters of the alphabet, not case sensitive
 admin.operation_certificate.certificate.expiry_day: Certificate validity
+admin.operation_certificate.certificate.expiry_day.forever: forever
 admin.operation_certificate.certificate.expiry_day.placeholder: Enter the validity of the certificate, the empty value is valid for a long time
 admin.operation_certificate.certificate.auto_issue: automatic authentication
 admin.operation_certificate.certificate.issue_rule: conditions of issue
@@ -9060,6 +9061,7 @@ exception.destroy_account.audit_record_exist: Audit Record Is Exist
 
 exception.certificate_template.notfound_template: Template not found
 exception.certificate_template.notfound_certificate: Certificate not found
+exception.certificate_template.forbidden_delete_published: Prohibit the deletion of published certificates
 
 course.unname_title: unname course
 

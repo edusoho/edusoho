@@ -613,6 +613,7 @@ admin_v2.operation.certificate.template.basic_tab: Certificate Template Manage
 admin_v2.operation.certificate.edit_tab: Edit
 admin_v2.operation.certificate.close_tab: Close
 admin_v2.operation.certificate.publish_tab: Publish
+admin_v2.operation.certificate.delete_tab: Delete
 admin_v2.operation.certificate.member_list_tab: List Manage
 admin_v2.operation.certificate.audit_manage_tab: Audit manage
 

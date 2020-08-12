@@ -1510,3 +1510,13 @@ admin_v2.certificate.code.check: 1至6位数字或英文字母，不区分大小
 admin_v2.certificate.expiry_day.check: 请输入1-9999的非负整数
 admin_v2.certificate.target_id.check: 请选择发放对象
 admin_v2.certificate.template_id.check: 请选择证书模板
+
+admin_v2.certificate.close.hint: 证书被关闭后，学员将无法再获得证书，已获取该证书的用户将不会被影响。是否关闭？
+admin_v2.certificate.close.success_hint: 证书关闭成功
+admin_v2.certificate.close.failure_hint: 证书关闭失败
+admin_v2.certificate.publish.hint: 确认要发布证书吗？
+admin_v2.certificate.publish.success_hint: 证书发布成功
+admin_v2.certificate.publish.failure_hint: 证书发布失败
+admin_v2.certificate.delete.hint: 证书被删除后，将无法查看已获取该证书的用户列表和审核列表。已获取该证书的用户将不会被影响。是否删除？
+admin_v2.certificate.delete.success_hint: 证书删除成功
+admin_v2.certificate.delete.failure_hint: 证书删除失败

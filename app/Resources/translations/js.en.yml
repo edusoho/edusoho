@@ -1568,3 +1568,13 @@ admin_v2.certificate.expiry_day.check: Please enter a non-negative integer from 
 admin_v2.certificate.target_id.check: Please select the target group
 admin_v2.certificate.template_id.check: Please select a certificate template
 
+admin_v2.certificate.close.hint: After the certificate is closed, the student will no longer be able to obtain the certificate and users who have already obtained the certificate will not be affected. Is it closed?
+admin_v2.certificate.close.success_hint: close success
+admin_v2.certificate.close.failure_hint: close failure
+admin_v2.certificate.publish.hint: Are you sure you want to issue a certificate?
+admin_v2.certificate.publish.success_hint: publish success
+admin_v2.certificate.publish.failure_hint: publish failure
+admin_v2.certificate.delete.hint: When a certificate is deleted, you cannot view the list of users who have obtained the certificate and the audit list. Users who have already obtained the certificate will not be affected. Is the certificate deleted?
+admin_v2.certificate.delete.success_hint: delete success
+admin_v2.certificate.delete.failure_hint: delete failure
+

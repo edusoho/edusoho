@@ -21,4 +21,6 @@ abstract class BaseStrategy
     abstract public function count($conditions);
 
     abstract public function search($conditions, $orderBys, $start, $limit);
+
+    abstract public function getTarget($targetId);
 }

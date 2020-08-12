@@ -609,6 +609,7 @@ admin_v2.operation.certificate.template.basic_tab: 证书模版管理
 admin_v2.operation.certificate.edit_tab: 编辑
 admin_v2.operation.certificate.close_tab: 关闭
 admin_v2.operation.certificate.publish_tab: 发布
+admin_v2.operation.certificate.delete_tab: 删除
 admin_v2.operation.certificate.member_list_tab: 名单管理
 admin_v2.operation.certificate.audit_manage_tab: 审核管理
 

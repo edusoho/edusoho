@@ -6307,6 +6307,7 @@ admin.operation_certificate.certificate.template_choose: 选择证书模板
 admin.operation_certificate.certificate.code: 证书编码
 admin.operation_certificate.certificate.code.placeholder: 1至6位数字或英文字母，不区分大小写
 admin.operation_certificate.certificate.expiry_day: 证书有效期
+admin.operation_certificate.certificate.expiry_day.forever: 长期有效
 admin.operation_certificate.certificate.expiry_day.placeholder: 输入证书有效期，空值位长期有效
 admin.operation_certificate.certificate.auto_issue: 自动认证
 admin.operation_certificate.certificate.issue_rule: 发放条件
@@ -10372,6 +10373,7 @@ exception.destroy_account.audit_record_exist: 已存在审核中的申请
 
 exception.certificate_template.notfound_template: 模板不存在
 exception.certificate_template.notfound_certificate: 证书不存在
+exception.certificate_template.forbidden_delete_published: 禁止删除已发布证书
 
 course.unname_title: 未命名计划
 

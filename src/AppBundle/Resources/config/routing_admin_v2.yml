@@ -980,6 +980,10 @@ admin_v2_certificate_publish:
     path:  /certificate/{id}/publish
     defaults: { _controller: AppBundle:AdminV2/Operating/Certificate:publish }
 
+admin_v2_certificate_delete:
+    path:  /certificate/{id}/delete
+    defaults: { _controller: AppBundle:AdminV2/Operating/Certificate:delete }
+
 admin_v2_certificate_member_list:
     path:  /certificate/{id}/member/list
     defaults: { _controller: AppBundle:AdminV2/Operating/Certificate:memberList }

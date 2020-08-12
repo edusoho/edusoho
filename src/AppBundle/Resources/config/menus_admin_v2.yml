@@ -638,15 +638,27 @@ admin_v2:
                                                 id: (certificate.id)
                                         admin_v2_certificate_close:
                                             name: admin_v2.operation.certificate.close_tab
+                                            class: close-certificate
                                             router_params:
                                                 id: (certificate.id)
                                             group: groupButton
+                                            mode: none
                                             visible: ( certificate.status=='published' )
                                         admin_v2_certificate_publish:
                                             name: admin_v2.operation.certificate.publish_tab
+                                            class: publish-certificate
                                             router_params:
                                                 id: (certificate.id)
                                             group: groupButton
+                                            mode: none
+                                            visible: ( certificate.status !='published' )
+                                        admin_v2_certificate_delete:
+                                            name: admin_v2.operation.certificate.delete_tab
+                                            class: delete-certificate
+                                            router_params:
+                                              id: (certificate.id)
+                                            group: groupButton
+                                            mode: none
                                             visible: ( certificate.status !='published' )
                                         admin_v2_certificate_member_list:
                                             name: admin_v2.operation.certificate.member_list_tab
