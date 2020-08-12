@@ -35,8 +35,8 @@
                 <div class="detail-right__price__activities">该商品享受“{{ goods.discount.name }}”打折促销活动，24：00：00后结束，请尽快购买！</div>
                 <div class="detail-right__price__num">
                     优惠价
-                    <span v-if="currentSku.displayPriceObj.currency === 'RMB'" class="detail-right__price__price">{{ currentSku.displayPriceObj.amount }}<span class="detail-right__price__unit">元</span></span>
-                    <span v-if="currentSku.displayPriceObj.currency === 'coin'" class="detail-right__price__price">{{ currentSku.displayPriceObj.coinAmount }}<span class="detail-right__price__unit">{{ currentSku.displayPriceObj.coinName }}</span></span>
+                    <span v-if="currentSku.displayPriceObj.currency === 'RMB'" class="detail-right__price__price">{{ currentSku.displayPriceObj.amount|formatPrice }}<span class="detail-right__price__unit">元</span></span>
+                    <span v-if="currentSku.displayPriceObj.currency === 'coin'" class="detail-right__price__price">{{ currentSku.displayPriceObj.coinAmount|formatPrice }}<span class="detail-right__price__unit">{{ currentSku.displayPriceObj.coinName }}</span></span>
                     <s v-if="currentSku.priceObj.currency === 'RMB'">价格: {{ currentSku.priceObj.amount }}元</s>
                     <s v-if="currentSku.priceObj.currency === 'coin'">价格: {{ currentSku.priceObj.coinAmount }}<span class="detail-right__price__unit">{{ currentSku.priceObj.coinName }}</span></s>
                 </div>
@@ -50,8 +50,8 @@
                 </div>
                 <div class="detail-right__price__num" v-if="currentSku.displayPrice != 0">
                     价格
-                    <span v-if="currentSku.displayPriceObj.currency === 'RMB'" class="detail-right__price__price">{{ currentSku.displayPriceObj.amount }}<span class="detail-right__price__unit">元</span></span>
-                    <span v-if="currentSku.displayPriceObj.currency === 'coin'" class="detail-right__price__price">{{ currentSku.displayPriceObj.coinAmount }}<span class="detail-right__price__unit">{{ currentSku.displayPriceObj.coinName }}</span></span>
+                    <span v-if="currentSku.displayPriceObj.currency === 'RMB'" class="detail-right__price__price">{{ currentSku.displayPriceObj.amount|formatPrice }}<span class="detail-right__price__unit">元</span></span>
+                    <span v-if="currentSku.displayPriceObj.currency === 'coin'" class="detail-right__price__price">{{ currentSku.displayPriceObj.coinAmount|formatPrice }}<span class="detail-right__price__unit">{{ currentSku.displayPriceObj.coinName }}</span></span>
                 </div>
             </div>
 
@@ -156,6 +156,9 @@
                     }
                 }
                 return fmt
+            },
+            formatPrice(input) {
+                return (Math.round(input * 100) / 100).toFixed(2);
             },
             removeHtml(input) {
                 return input && input.replace(/<(?:.|\n)*?>/gm, '')
