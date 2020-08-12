@@ -25,21 +25,23 @@
         <div class="product-detail__right detail-right pull-right">
             <p class="detail-right__title">{{ goods.title }}</p>
             <p class="detail-right__subtitle">{{ goods.subtitle }}</p>
-            <a  class="btn btn-default btn-xs detail-right__manage_btn" @click="manageUrl(goods)">
+            <a v-if="currentSku.isTeacher" class="btn btn-default btn-xs detail-right__manage_btn" @click="manageUrl(goods)">
                 <i class="es-icon es-icon-setting"></i>&nbsp;{{ '管理'|trans }}
             </a>
 
-<!--            &lt;!&ndash; 价格 &ndash;&gt;-->
-<!--            <div class="detail-right__price">-->
-<!--                &lt;!&ndash; 优惠活动 &ndash;&gt;-->
-<!--&lt;!&ndash;                <div class="detail-right__price__activities">该商品享受“某某某某某某某某某某某某”打折促销活动，24：00：00后结束，请尽快购买！</div>&ndash;&gt;-->
-<!--                <div class="detail-right__price__num">-->
-<!--                    优惠价-->
-<!--                    <span>{{ currentSku.price }}</span>-->
-<!--                    <s>价格: {{ currentSku.price }}元</s>-->
-<!--                </div>-->
-<!--            </div>-->
-            <div class="detail-right__price">
+            <!-- 价格 -->
+            <div v-if="goods.discount" class="detail-right__price">
+                <!-- 优惠活动 -->
+                <div class="detail-right__price__activities">该商品享受“{{ goods.discount.name }}”打折促销活动，24：00：00后结束，请尽快购买！</div>
+                <div class="detail-right__price__num">
+                    优惠价
+                    <span v-if="currentSku.displayPriceObj.currency === 'RMB'" class="detail-right__price__price">{{ currentSku.displayPriceObj.amount }}<span class="detail-right__price__unit">元</span></span>
+                    <span v-if="currentSku.displayPriceObj.currency === 'coin'" class="detail-right__price__price">{{ currentSku.displayPriceObj.coinAmount }}<span class="detail-right__price__unit">{{ currentSku.displayPriceObj.coinName }}</span></span>
+                    <s v-if="currentSku.priceObj.currency === 'RMB'">价格: {{ currentSku.priceObj.amount }}元</s>
+                    <s v-if="currentSku.priceObj.currency === 'coin'">价格: {{ currentSku.priceObj.coinAmount }}<span class="detail-right__price__unit">{{ currentSku.priceObj.coinName }}</span></s>
+                </div>
+            </div>
+            <div v-if="!goods.discount" class="detail-right__price">
                 <!-- 优惠活动 -->
                 <!--                <div class="detail-right__price__activities">该商品享受“某某某某某某某某某某某某”打折促销活动，24：00：00后结束，请尽快购买！</div>-->
                 <div class="detail-right__price__free" v-if="currentSku.displayPrice == 0">

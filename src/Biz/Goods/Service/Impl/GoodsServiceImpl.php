@@ -350,6 +350,10 @@ class GoodsServiceImpl extends BaseService implements GoodsService
                     }
                     $goods['discount'] = $discount;
                 }
+            } elseif ('free' === $discount['type']) {
+                $minDisplayPrice = '0.00';
+                $maxDisplayPrice = '0.00';
+                $goods['discount'] = $discount;
             }
         }
         $goods['maxPriceObj'] = Money::convert($goods['maxPrice']);
@@ -375,8 +379,9 @@ class GoodsServiceImpl extends BaseService implements GoodsService
                     } else {
                         $displayPrice = $specs['price'] - $discountItem['reduce'];
                     }
-                    $goods['discount'] = $discount;
                 }
+            } elseif ('free' === $discount['type']) {
+                $displayPrice = '0.00';
             }
         }
         $specs['priceObj'] = Money::convert($specs['price']);

@@ -40,6 +40,7 @@ class Good extends AbstractResource
             $spec = $this->getGoodsService()->convertSpecsPrice($goods, $spec);
             $spec['isMember'] = $goodsEntity->isSpecsMember($goods, $spec, $user['id']);
             $spec['isTeacher'] = $goodsEntity->isSpecsTeacher($goods, $spec, $user['id']);
+            $spec['canMange'] = $goodsEntity->canManageTarget($goods);
             $spec['learnUrl'] = 'course' === $goods['type']
                 ? $this->generateUrl('my_course_show', ['id' => $spec['targetId']], UrlGenerator::ABSOLUTE_URL)
                 : $this->generateUrl('classroom_show', ['id' => $spec['targetId']], UrlGenerator::ABSOLUTE_URL);
