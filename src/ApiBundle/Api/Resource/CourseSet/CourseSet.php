@@ -2,9 +2,9 @@
 
 namespace ApiBundle\Api\Resource\CourseSet;
 
+use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use ApiBundle\Api\Annotation\ApiConf;
 use Biz\Course\CourseSetException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
@@ -22,7 +22,7 @@ class CourseSet extends AbstractResource
             throw CourseSetException::NOTFOUND_COURSESET();
         }
 
-        $this->getOCUtil()->single($courseSet, array('creator', 'teacherIds'));
+        $this->getOCUtil()->single($courseSet, ['creator', 'teacherIds']);
 
         $this->appendMaxOriginPriceAndMinOriginPrice($courseSet);
 
@@ -39,7 +39,7 @@ class CourseSet extends AbstractResource
         $conditions['showable'] = 1;
         $conditions['parentId'] = 0;
         //过滤约排课
-        $conditions['excludeTypes'] = array('reservation');
+        $conditions['excludeTypes'] = ['reservation'];
         if (isset($conditions['type']) && 'all' == $conditions['type']) {
             unset($conditions['type']);
         }
@@ -54,11 +54,13 @@ class CourseSet extends AbstractResource
                 $conditions,
                 $sort,
                 $offset,
-                $limit
+                $limit,
+                [],
+                true
             );
         }
 
-        $this->getOCUtil()->multiple($courseSets, array('creator', 'teacherIds'));
+        $this->getOCUtil()->multiple($courseSets, ['creator', 'teacherIds']);
 
         $total = $this->getCourseSetService()->countCourseSets($conditions);
 
@@ -70,7 +72,7 @@ class CourseSet extends AbstractResource
         $conditions['recommended'] = 1;
         $recommendCount = $this->getCourseSetService()->countCourseSets($conditions);
         $recommendAvailable = $recommendCount - $offset;
-        $courseSets = array();
+        $courseSets = [];
 
         if ($recommendAvailable >= $limit) {
             $courseSets = $this->getCourseSetService()->searchCourseSets(
@@ -85,7 +87,7 @@ class CourseSet extends AbstractResource
             $conditions['recommended'] = 0;
             $courseSets = $this->getCourseSetService()->searchCourseSets(
                 $conditions,
-                array('createdTime' => 'DESC'),
+                ['createdTime' => 'DESC'],
                 abs($recommendAvailable),
                 $limit
             );
@@ -101,7 +103,7 @@ class CourseSet extends AbstractResource
             $conditions['recommended'] = 0;
             $coursesTemp = $this->getCourseSetService()->searchCourseSets(
                 $conditions,
-                array('createdTime' => 'DESC'),
+                ['createdTime' => 'DESC'],
                 0,
                 $limit - $recommendAvailable
             );

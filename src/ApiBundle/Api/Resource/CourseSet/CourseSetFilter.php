@@ -10,12 +10,12 @@ use ApiBundle\Api\Util\Money;
 class CourseSetFilter extends Filter
 {
     protected $simpleFields = [
-        'id', 'title', 'subtitle', 'summary', 'type', 'cover', 'studentNum', 'maxCoursePrice', 'minCoursePrice', 'discount', 'discountType', 'maxOriginPrice', 'minOriginPrice', 'status', 'defaultCourseId',
+        'id', 'title', 'subtitle', 'summary', 'type', 'cover', 'studentNum', 'maxCoursePrice', 'minCoursePrice', 'discount', 'discountType', 'maxOriginPrice', 'minOriginPrice', 'status', 'defaultCourseId', 'goodsId', 'productId',
     ];
 
     protected $publicFields = [
         'tags', 'category', 'serializeMode', 'goals', 'audiences', 'ratingNum', 'rating', 'noteNum',
-        'recommended', 'recommendedSeq', 'recommendedTime', 'orgId', 'orgCode', 'discountId', 'discount', 'discountType', 'maxRate', 'hitNum', 'materialNum', 'parentId', 'locked', 'maxCoursePrice', 'minCoursePrice', 'teachers', 'creator', 'createdTime', 'updatedTime',
+        'recommended', 'recommendedSeq', 'recommendedTime', 'orgId', 'orgCode', 'discountId', 'discount', 'discountType', 'maxRate', 'hitNum', 'materialNum', 'parentId', 'locked', 'maxCoursePrice', 'minCoursePrice', 'teachers', 'creator', 'createdTime', 'updatedTime', 'goodsId', 'productId',
     ];
 
     protected function simpleFields(&$data)

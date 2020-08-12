@@ -5,6 +5,8 @@ namespace Biz\Goods\Entity;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Classroom\ClassroomException;
 use Biz\Classroom\Service\ClassroomService;
+use VipPlugin\Biz\Vip\Service\LevelService;
+use VipPlugin\Biz\Vip\Service\VipService;
 
 /**
  * Class ClassroomEntity
@@ -58,6 +60,17 @@ class ClassroomEntity extends BaseGoodsEntity
         return $this->getClassroomService()->isClassroomStudent($specs['targetId'], $userId);
     }
 
+    public function getVipInfo($goods, $specs, $userId)
+    {
+        $vipUser = $this->getVipService()->getMemberByUserId($userId);
+        $classroom = $this->getClassroomService()->getClassroom($specs['targetId']);
+        if ($classroom['vipLevelId']) {
+            return [$this->getVipLevelService()->getLevel($classroom['vipLevelId']), $vipUser];
+        }
+
+        return [null, $vipUser];
+    }
+
     /**
      * @param $goods
      * @param $specs
@@ -85,5 +98,21 @@ class ClassroomEntity extends BaseGoodsEntity
     protected function getClassroomService()
     {
         return $this->biz->service('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return LevelService
+     */
+    protected function getVipLevelService()
+    {
+        return $this->biz->service('VipPlugin:Vip:LevelService');
+    }
+
+    /**
+     * @return VipService
+     */
+    protected function getVipService()
+    {
+        return $this->biz->service('VipPlugin:Vip:VipService');
     }
 }

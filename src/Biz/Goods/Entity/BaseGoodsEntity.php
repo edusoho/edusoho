@@ -31,6 +31,8 @@ abstract class BaseGoodsEntity
 
     abstract public function isSpecsTeacher($goods, $specs, $userId);
 
+    abstract public function getVipInfo($goods, $specs, $userId);
+
     /**
      * @param $productId
      *

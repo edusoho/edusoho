@@ -20,7 +20,7 @@ class ObjectCombinationUtil
     private $methodMap = [
         'user' => 'findUsersByIds',
         'course' => 'findCoursesByIds',
-        'courseSet' => 'findCourseSetsByIds',
+        'courseSet' => 'findCourseSetsByIdsWithMarketingInfo',
         'classroom' => 'findClassroomsByIds',
         'goods' => 'findGoodsByIds',
         'item_bank_exercise' => 'findByIds',

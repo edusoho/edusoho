@@ -9,11 +9,20 @@ use AppBundle\Common\ServiceToolkit;
 class GoodSpecsFilter extends Filter
 {
     protected $simpleFields = [
-        'id', 'goodsId', 'targetId', 'title', 'seq', 'status', 'price', 'priceObj', 'displayPrice', 'displayPriceObj', 'coinPrice', 'usageMode', 'usageDays', 'usageStartTime', 'usageEndTime', 'showable', 'buyable', 'buyableStartTime', 'buyableEndTime', 'buyableMode', 'maxJoinNum', 'services', 'isMember', 'learnUrl',
+        'id', 'goodsId', 'targetId', 'title', 'seq', 'status',
+        'price', 'priceObj', 'displayPrice', 'displayPriceObj',
+        'coinPrice', 'usageMode', 'usageDays', 'usageStartTime',
+        'usageEndTime', 'showable', 'buyable', 'buyableStartTime',
+        'buyableEndTime', 'buyableMode', 'maxJoinNum', 'services',
+        'isMember', 'learnUrl', 'vipLevelInfo', 'vipUser',
     ];
 
     protected $publicFields = [
-        'id', 'goodsId', 'targetId', 'title', 'images', 'seq', 'status', 'price', 'priceObj', 'displayPrice', 'displayPriceObj', 'coinPrice', 'usageMode', 'usageDays', 'usageStartTime', 'usageEndTime', 'showable', 'buyable', 'buyableStartTime', 'buyableEndTime', 'buyableMode', 'maxJoinNum', 'services', 'isMember', 'learnUrl',
+        'id', 'goodsId', 'targetId', 'title', 'images', 'seq', 'status',
+        'price', 'priceObj', 'displayPrice', 'displayPriceObj', 'coinPrice',
+        'usageMode', 'usageDays', 'usageStartTime', 'usageEndTime', 'showable',
+        'buyable', 'buyableStartTime', 'buyableEndTime', 'buyableMode', 'maxJoinNum',
+        'services', 'isMember', 'learnUrl', 'vipLevelInfo', 'vipUser',
     ];
 
     protected function simpleFields(&$data)

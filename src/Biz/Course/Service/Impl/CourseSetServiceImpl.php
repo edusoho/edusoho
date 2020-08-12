@@ -39,6 +39,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $this->getCourseSetDao()->findCourseSetsByParentIdAndLocked($parentId, $locked);
     }
 
+    public function findProductIdAndGoodsIdsByIds($ids)
+    {
+        return $this->getCourseSetDao()->findProductIdAndGoodsIdsByIds($ids);
+    }
+
     // Refactor: recommendCourseSet
     public function recommendCourse($id, $number)
     {
@@ -172,12 +177,21 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $user->hasPermission('admin_course_content_manage') || $user->hasPermission('admin_v2_course_content_manage');
     }
 
-    public function searchCourseSets(array $conditions, $orderBys, $start, $limit, $columns = [])
+    public function searchCourseSets(array $conditions, $orderBys, $start, $limit, $columns = [], $withMarketingInfo = false)
     {
         $orderBys = $this->getOrderBys($orderBys);
         $preparedCondtions = $this->prepareConditions($conditions);
+        $courseSets = $this->getCourseSetDao()->search($preparedCondtions, $orderBys, $start, $limit, $columns);
 
-        return $this->getCourseSetDao()->search($preparedCondtions, $orderBys, $start, $limit, $columns);
+        if ($withMarketingInfo) {
+            $relatedInfos = ArrayToolkit::index($this->findProductIdAndGoodsIdsByIds(ArrayToolkit::column($courseSets, 'id')), 'courseSetId');
+            foreach ($courseSets as &$courseSet) {
+                $courseSet['productId'] = !empty($relatedInfos[$courseSet['id']]) ? $relatedInfos[$courseSet['id']]['productId'] : null;
+                $courseSet['goodsId'] = !empty($relatedInfos[$courseSet['id']]) ? $relatedInfos[$courseSet['id']]['goodsId'] : null;
+            }
+        }
+
+        return $courseSets;
     }
 
     public function countCourseSets(array $conditions)
@@ -291,6 +305,18 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function findCourseSetsByIds(array $ids)
     {
         $courseSets = $this->getCourseSetDao()->findByIds($ids);
+
+        return ArrayToolkit::index($courseSets, 'id');
+    }
+
+    public function findCourseSetsByIdsWithMarketingInfo(array $ids)
+    {
+        $courseSets = $this->getCourseSetDao()->findByIds($ids);
+        $relatedInfos = ArrayToolkit::index($this->findProductIdAndGoodsIdsByIds(ArrayToolkit::column($courseSets, 'id')), 'courseSetId');
+        foreach ($courseSets as &$courseSet) {
+            $courseSet['productId'] = !empty($relatedInfos[$courseSet['id']]) ? $relatedInfos[$courseSet['id']]['productId'] : null;
+            $courseSet['goodsId'] = !empty($relatedInfos[$courseSet['id']]) ? $relatedInfos[$courseSet['id']]['goodsId'] : null;
+        }
 
         return ArrayToolkit::index($courseSets, 'id');
     }

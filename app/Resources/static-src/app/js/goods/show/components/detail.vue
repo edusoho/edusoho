@@ -10,7 +10,7 @@
                 <li class="pull-right">
                     <share :customized-class="'detail-left__text-share'"
                            :title="goods.title"
-                           :summary="goods.summary"
+                           :summary="goods.summary|removeHtml"
                            :message="`我正在学习《${goods.title}》，收获巨大哦，一起来学习吧！`"
                            :picture="goods.images.large"
                            :url="currentUrl"
@@ -25,6 +25,9 @@
         <div class="product-detail__right detail-right pull-right">
             <p class="detail-right__title">{{ goods.title }}</p>
             <p class="detail-right__subtitle">{{ goods.subtitle }}</p>
+            <a  class="btn btn-default btn-xs detail-right__manage_btn" @click="manageUrl(goods)">
+                <i class="es-icon es-icon-setting"></i>&nbsp;{{ '管理'|trans }}
+            </a>
 
 <!--            &lt;!&ndash; 价格 &ndash;&gt;-->
 <!--            <div class="detail-right__price">-->
@@ -122,6 +125,13 @@
             handleClick(sku) {
                 this.$emit('changeSku', sku.targetId);
             },
+            manageUrl(goods) {
+                if (goods.type === 'course') {
+                    window.open(`/course_set/${goods.product.target.id}/manage/base`, '_blank');
+                } else if (goods.type === 'classroom') {
+                    window.open(`/classroom/${goods.product.target.id}/manage`, '_blank')
+                }
+            }
         },
         filters: {
             formatDate(time, fmt = 'yyyy-MM-dd') {
@@ -145,16 +155,27 @@
                 }
                 return fmt
             },
+            removeHtml(input) {
+                return input && input.replace(/<(?:.|\n)*?>/gm, '')
+                    .replace(/(&rdquo;)/g, '\"')
+                    .replace(/&ldquo;/g, '\"')
+                    .replace(/&mdash;/g, '-')
+                    .replace(/&nbsp;/g, '')
+                    .replace(/&gt;/g, '>')
+                    .replace(/&lt;/g, '<')
+                    .replace(/<[\w\s"':=\/]*/, '');
+            },
         },
         data() {
             return {
+                goods: this.goods,
                 product: this.goods ? this.goods.product : null,
                 buyableModes: {
                     'date': Translator.trans('classroom.expiry_mode_end_date'),
                     'days': Translator.trans('classroom.expiry_mode_days'),
                     'forever': Translator.trans('classroom.expiry_mode_forever'),
-                }
+                },
             }
-        }
+        },
     }
 </script>

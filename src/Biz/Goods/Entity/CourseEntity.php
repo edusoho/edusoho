@@ -7,6 +7,8 @@ use Biz\Course\CourseSetException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
+use VipPlugin\Biz\Vip\Service\LevelService;
+use VipPlugin\Biz\Vip\Service\VipService;
 
 /**
  * Class CourseEntity
@@ -78,6 +80,20 @@ class CourseEntity extends BaseGoodsEntity
         return $this->getCourseMemberService()->isCourseMember($specs['targetId'], $userId);
     }
 
+    public function getVipInfo($goods, $specs, $userId)
+    {
+        $vipUser = $this->getVipService()->getMemberByUserId($userId);
+        if ($vipUser) {
+            $vipUser['level'] = $this->getVipLevelService()->getLevel($vipUser['levelId']);
+        }
+        $course = $this->getCourseService()->getCourse($specs['targetId']);
+        if ($course['vipLevelId']) {
+            return [$this->getVipLevelService()->getLevel($course['vipLevelId']), $vipUser];
+        }
+
+        return [null, $vipUser];
+    }
+
     /**
      * @return CourseSetService
      */
@@ -100,5 +116,21 @@ class CourseEntity extends BaseGoodsEntity
     public function getCourseMemberService()
     {
         return $this->biz->service('Course:MemberService');
+    }
+
+    /**
+     * @return LevelService
+     */
+    protected function getVipLevelService()
+    {
+        return $this->biz->service('VipPlugin:Vip:LevelService');
+    }
+
+    /**
+     * @return VipService
+     */
+    protected function getVipService()
+    {
+        return $this->biz->service('VipPlugin:Vip:VipService');
     }
 }

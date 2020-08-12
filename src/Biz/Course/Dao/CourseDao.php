@@ -28,6 +28,8 @@ interface CourseDao extends GeneralDaoInterface
 
     public function findCoursesByParentIds($parentIds);
 
+    public function findProductIdAndGoodsIdAndSpecsIdByIds($ids);
+
     public function getMinAndMaxPublishedCoursePriceByCourseSetId($courseSetId);
 
     public function updateMaxRateByCourseSetId($courseSetId, $updateFields);

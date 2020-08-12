@@ -367,8 +367,8 @@
             let max_year = (rule, value, callback) => {
                 value < 7300 ? callback() : callback(new Error(Translator.trans('validate.max_year.message')));
             }
-            this.course.expiryStartDate = this.course.expiryStartDate === 0 ? '' : this.course.expiryStartDate;
-            this.course.expiryEndDate = this.course.expiryEndDate === 0 ? '' : this.course.expiryEndDate
+            this.course.expiryStartDate = this.course.expiryStartDate == 0 ? '' : this.course.expiryStartDate;
+            this.course.expiryEndDate = this.course.expiryEndDate == 0 ? '' : this.course.expiryEndDate
             let expiryDateRange = (!this.course.expiryStartDate || !this.course.expiryEndDate) ? null : [
                 this.course.expiryStartDate, this.course.expiryEndDate
             ]
