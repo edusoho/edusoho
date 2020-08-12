@@ -279,8 +279,14 @@
         color: #333;
       }
       .task-content__plan {
+        position: relative;
+        padding-right: 70px;
         font-size: 14px;
         color: #999;
+        > span {
+          position: absolute;
+          right: 0;
+        }
       }
       .task-content__teacher {
         .teacher-info {
@@ -315,8 +321,9 @@
 
 .back-to-top-pc {
   position: fixed;
-  top: 60%;
-  right: 12%;
+  bottom: 70px;
+  right: 20px;
+  display: none;
   width: 36px;
   height: 30px;
   background-color: #fff;
@@ -336,6 +343,9 @@
     border-left: 18px solid transparent;
     border-right: 18px solid transparent;
   }
+  @media (max-width: 767px) {
+    display: block;
+   }
 }
 
 // 创建评价

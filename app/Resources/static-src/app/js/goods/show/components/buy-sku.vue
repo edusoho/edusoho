@@ -7,9 +7,9 @@
         <span v-else-if="sku.buyable == 1 && sku.buyableEndTime != 0 && new Date(sku.buyableEndTime).getTime() > new Date().getTime() + 86400000" class="product-detail__unpublished">抱歉，该商品已超过加入有效期，请联系客服</span>
         <span v-else-if="sku.buyable != 1" class="product-detail__unpublished">抱歉，该商品为限制商品，请联系客服</span>
         <span v-else>
-            <span class="product-detail__disable_btn" v-if="(sku.vipLevelInfo && !sku.vipUser) || sku.vipLevelInfo && sku.vipUser && sku.vipLevelInfo.seq < sku.vipUser.level.seq" data-toggle="tooltip" data-trigger="hover"
-                  data-placement="top" title="test">
+            <span class="product-detail__disable_btn" v-if="(sku.vipLevelInfo && !sku.vipUser) || sku.vipLevelInfo && sku.vipUser && sku.vipLevelInfo.seq < sku.vipUser.level.seq">
                 <slot>会员免费学</slot>
+                <span class="product-detail__disable_btn-hover">test</span>
             </span>
             <a v-if="!sku.isMember" :class="btnClass" href="javascript:;" @click="buySku">
                 <slot v-if="sku.displayPrice == 0">免费加入</slot>
