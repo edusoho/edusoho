@@ -100,13 +100,51 @@
       {% endfor %}
     </fieldset>
 
+{#    <legend>{{ 'admin.setting.permit.headline'|trans }}</legend>#}
+{#    <fieldset id="permit_area">#}
+{#        <div class="setting_permit">#}
+{#          <div class="form-group">#}
+{#            <div class="col-md-2 control-label">#}
+{#              <label for="analytics">{{ 'admin.setting.permit.name'|trans }}</label>#}
+{#            </div>#}
+{#            <div class="col-md-8 controls">#}
+{#              <input type="text" name="permits[0][name]" class="form-control permit_name"#}
+{#                     value="">#}
+{#            </div>#}
+{#          </div>#}
+
+{#          <div class="form-group">#}
+{#            <div class="col-md-2 control-label">#}
+{#              <label for="name">{{ 'admin.setting.permit.record.number'|trans }}</label>#}
+{#            </div>#}
+{#            <div class="col-md-8 controls">#}
+{#              <input type="text" name="permits[0][record_number]"#}
+{#                     class="form-control permit_record_number" value="">#}
+{#            </div>#}
+{#          </div>#}
+
+{#          <div class="form-group">#}
+{#            <div class="col-md-2 control-label">#}
+{#              <label for="license-picture">{{ 'admin.setting.permit.picture'|trans }}</label>#}
+{#            </div>#}
+{#            <div class="col-md-8 controls">#}
+{#              <a class="btn btn-default permit_picture_upload" id="permit_picture_upload_0"#}
+{#                 data-upload-token="{{ upload_token('system', 'image') }}"#}
+{#                 data-goto-url="{{ path('admin_v2_setting_permit_picture_upload') }}">{{ 'form.btn.upload'|trans }}</a>#}
+{#              <input type="hidden" name="permits[0][picture]"#}
+{#                     id="permit_picture_" class="permit_picture" value="">#}
+{#            </div>#}
+{#          </div>#}
+{#        </div>#}
+{#    </fieldset>#}
+
     <div class="form-group">
       <div class="col-md-2 control-label"></div>
-      <div class="controls col-md-2 control-label">
+      <div class="controls col-md-1 control-label">
         <input class="btn btn-default" type="button" id="add-permit-picture-btn" value="新增一栏">
       </div>
-      <div class="controls col-md-2 control-label">
-        <input class="btn btn-default" type="button" id="remove-permit-picture-btn" value="删除整栏">
+      <div class="controls col-md-1 control-label">
+        <input class="btn btn-default" type="button" id="remove-permit-picture-btn" style="display:none;" value="删除整栏">
       </div>
     </div>
 

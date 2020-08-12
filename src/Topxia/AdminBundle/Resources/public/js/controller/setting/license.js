@@ -5,9 +5,12 @@ define(function (require, exports, module) {
 
     exports.run = function () {
         let $form = $("#license-form");
-        let uploader = new WebUploader({
-            element: '#license-picture-upload'
-        });
+
+        if ($('.setting_permit').length > 1){
+            $('#remove-permit-picture-btn').show();
+        }
+
+        let uploader = new WebUploader({element: '#license-picture-upload'});
 
         uploader.on('uploadSuccess', function (file, response) {
             let url = $("#license-picture-upload").data("gotoUrl");
@@ -98,8 +101,7 @@ define(function (require, exports, module) {
         function appendPermit($id, $permitNum) {
 
             let permitArea = $('#permit_area');
-            let settingPermit = $('.setting_permit');
-            let fromPermitDiv = settingPermit.prop("outerHTML");
+            let fromPermitDiv = $('.setting_permit').prop("outerHTML");
 
             let permitsName = 'permits' + '[' + $permitNum + ']' + '[name]';
             let permitsRecordNumber = 'permits' + '[' + $permitNum + ']' + '[record_number]';
@@ -107,33 +109,33 @@ define(function (require, exports, module) {
 
             permitArea.append(fromPermitDiv);
 
-            settingPermit.last().find('.permit_name').attr("name", permitsName);
-            settingPermit.last().find('.permit_record_number').attr("name", permitsRecordNumber);
-            settingPermit.last().find('.permit_picture').attr("name", permitsPicture);
+            $('.setting_permit').last().find('.permit_name').attr("name", permitsName);
+            $('.setting_permit').last().find('.permit_record_number').attr("name", permitsRecordNumber);
+            $('.setting_permit').last().find('.permit_picture').attr("name", permitsPicture);
 
-            settingPermit.last().find('.permit_picture').attr("id", function () {
+            $('.setting_permit').last().find('.permit_picture').attr("id", function () {
                 let id = "permit_picture" + "_" + $permitNum;
                 return id;
             });
-            settingPermit.last().find('.permit_picture_upload').attr("id", function () {
+            $('.setting_permit').last().find('.permit_picture_upload').attr("id", function () {
                 let id = "permit_picture_upload" + "_" + $permitNum;
                 return id;
             });
-            settingPermit.last().find('.permit_picture_container').attr("id", function () {
+            $('.setting_permit').last().find('.permit_picture_container').attr("id", function () {
                 let id = "permit_picture_container" + "_" + $permitNum;
                 return id;
             });
-            settingPermit.last().find('.permit_picture_remove').attr("id", function () {
+            $('.setting_permit').last().find('.permit_picture_remove').attr("id", function () {
                 let id = "permit_picture_remove" + "_" + $permitNum;
                 return id;
             });
 
-            settingPermit.last().find('.permit_name').attr("value", "");
-            settingPermit.last().find('.permit_record_number').attr("value", "");
-            settingPermit.last().find('.permit_picture').attr("value", "");
-            settingPermit.last().find('img').attr("src", "");
+            $('.setting_permit').last().find('.permit_name').attr("value", "");
+            $('.setting_permit').last().find('.permit_record_number').attr("value", "");
+            $('.setting_permit').last().find('.permit_picture').attr("value", "");
+            $('.setting_permit').last().find('img').attr("src", "");
 
-            settingPermit.last().find('.permit_picture_remove').hide();
+            $('.setting_permit').last().find('.permit_picture_remove').hide();
 
             let uploaderArray = [];
             let uploaderPermitString = "#permit_picture_upload" + "_" + $permitNum;
@@ -142,14 +144,18 @@ define(function (require, exports, module) {
             uploadPermit(uploaderArray, $permitNum);
         }
 
-        function removePermit() {
+        function removeSettingPermit() {
             let delConfirm = confirm('确定要删除吗？');
             if (delConfirm) {
                 $('.setting_permit').last().remove();
             }
+            if ($('.setting_permit').length == 1){
+                $('#remove-permit-picture-btn').hide();
+            }
         }
 
         $("#add-permit-picture-btn").on('click', function () {
+            $("#remove-permit-picture-btn").show();
             if (permitIndex < 9) {
                 appendPermit("#add-permit-picture-btn", ++permitIndex);
             } else {
@@ -158,7 +164,7 @@ define(function (require, exports, module) {
         });
 
         $("#remove-permit-picture-btn").on('click', function () {
-            removePermit();
+            removeSettingPermit();
         });
 
         $('#save_license').on('click', function () {

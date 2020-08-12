@@ -38,8 +38,6 @@ class SchoolInformationController extends BaseController
     public function saveSiteAction(Request $request)
     {
         $site = $request->request->all();
-        var_dump($site);
-        exit();
 
         if (!empty($site['analytics'])) {
             $helper = new HTMLHelper($this->getBiz());
@@ -75,7 +73,7 @@ class SchoolInformationController extends BaseController
     {
         $license = $request->request->all();
         foreach ($license['permits'] as $key => $permit) {
-            if ('' == $permit['name'] && '' == $permit['record_number'] && '' == $permit['picture']) {
+            if ('' == $permit['name'] && '' == $permit['record_number'] && '' == $permit['picture'] && 0 != $key) {
                 unset($license['permits'][$key]);
             }
         }
