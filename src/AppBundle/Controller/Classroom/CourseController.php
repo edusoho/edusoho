@@ -38,11 +38,7 @@ class CourseController extends BaseController
             $conditions['creator'] = $user['id'];
         }
 
-        $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
-        if ($s2b2cConfig['enabled']) {
-            $conditions['platform'] = 'self';
-        }
-
+        $conditions = $this->convertS2b2cConditions($conditions);
         $paginator = new Paginator(
             $this->get('request'),
             $this->getCourseSetService()->countCourseSets($conditions),
@@ -178,6 +174,7 @@ class CourseController extends BaseController
             $conditions['creator'] = $user['id'];
         }
 
+        $conditions = $this->convertS2b2cConditions($conditions);
         $paginator = new Paginator(
             $this->get('request'),
             $this->getCourseSetService()->countCourseSets($conditions),
@@ -295,6 +292,16 @@ class CourseController extends BaseController
         }
 
         return array_values($courseSets);
+    }
+
+    private function convertS2b2cConditions($conditions)
+    {
+        $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
+        if ($s2b2cConfig['enabled']) {
+            $conditions['platform'] = 'self';
+        }
+
+        return $conditions;
     }
 
     /**
