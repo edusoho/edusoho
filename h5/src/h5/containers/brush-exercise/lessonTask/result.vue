@@ -98,11 +98,6 @@ export default {
   created() {
     this.getData();
   },
-  mounted() {
-    this.$nextTick(() => {
-      this.height = this.getheight();
-    });
-  },
   methods: {
     getheight() {
       const clientHeight = document.body.clientHeight - 46;
@@ -125,6 +120,9 @@ export default {
           this.answerRecord = res.answer_record;
           this.$store.commit(types.SET_NAVBAR_TITLE, res.assessment.name);
           this.isLoading = false;
+          this.$nextTick(() => {
+            this.height = this.getheight();
+          });
         })
         .catch(err => {
           this.$toast(err.message);

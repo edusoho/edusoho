@@ -88,11 +88,7 @@ export default {
       } else {
         data.categoryId = this.$route.query.categoryId;
       }
-      // const aa = this.$route.query.categoryId;
-      // console.log(query + '----');
-      // console.log(aa);
       Api[config[type].api]({ query, data }).then(res => {
-        // console.log(res + '11');
         this.assignData(res);
         this.isLoading = false;
       });
