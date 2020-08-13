@@ -70,6 +70,7 @@ export default {
       answerScene: {},
       answerReport: {},
       answerRecord: {},
+      height: 0,
     };
   },
   computed: {
@@ -92,19 +93,19 @@ export default {
     isReadOver() {
       return this.answerRecord.status === 'reviewing';
     },
-    height() {
-      const clientHeight = document.body.clientHeight - 46;
-      if (document.body.scrollHeight - 46 > clientHeight) {
-        return document.body.scrollHeight;
-      }
-      return clientHeight;
-    },
   },
   watch: {},
   created() {
     this.getData();
   },
   methods: {
+    getheight() {
+      const clientHeight = document.body.clientHeight - 46;
+      if (document.body.scrollHeight - 46 > clientHeight) {
+        return document.body.scrollHeight;
+      }
+      return clientHeight;
+    },
     getData() {
       const query = {
         answerRecordId: Number(this.$route.params.answerRecordId),
@@ -119,6 +120,9 @@ export default {
           this.answerRecord = res.answer_record;
           this.$store.commit(types.SET_NAVBAR_TITLE, res.assessment.name);
           this.isLoading = false;
+          this.$nextTick(() => {
+            this.height = this.getheight();
+          });
         })
         .catch(err => {
           this.$toast(err.message);
@@ -135,13 +139,18 @@ export default {
       this.$router.push({ path: `/brushReview/${answerRecordId}`, query });
     },
     doAgain() {
+      const type = this.$route.query.type;
       const query = {
         mode: 'start',
         type: this.$route.query.type,
         exerciseId: this.$route.query.exerciseId,
-        assessmentId: this.$route.query.assessmentId,
         moduleId: this.$route.query.moduleId,
       };
+      if (type === 'chapter') {
+        query.categoryId = this.$route.query.categoryId;
+      } else {
+        query.assessmentId = this.$route.query.assessmentId;
+      }
       this.$router.push({ path: '/brushDo', query });
     },
     doAnalysis() {

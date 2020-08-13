@@ -19,7 +19,7 @@
     </van-tabs>
     <!-- 加入学习 -->
     <e-footer @click.native="handleJoin">
-      加入学习
+      加入题库
     </e-footer>
   </div>
 </template>
