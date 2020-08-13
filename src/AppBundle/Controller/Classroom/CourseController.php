@@ -11,6 +11,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
+use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\System\Service\SettingService;
 use Biz\Taxonomy\Service\TagService;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,6 +37,12 @@ class CourseController extends BaseController
         if (!$user->isAdmin() && !$user->isSuperAdmin()) {
             $conditions['creator'] = $user['id'];
         }
+
+        $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
+        if ($s2b2cConfig['enabled']) {
+            $conditions['platform'] = 'self';
+        }
+
         $paginator = new Paginator(
             $this->get('request'),
             $this->getCourseSetService()->countCourseSets($conditions),
@@ -336,5 +343,13 @@ class CourseController extends BaseController
     protected function getCourseMemberService()
     {
         return $this->createService('Course:MemberService');
+    }
+
+    /**
+     * @return S2B2CFacadeService
+     */
+    protected function getS2B2CFacadeService()
+    {
+        return $this->createService('S2B2C:S2B2CFacadeService');
     }
 }
