@@ -1,9 +1,13 @@
 .brush-exercise-report {
 	.exercise-report-status {
-		text-align: center;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
 
 		img {
 			width: vw(121);
+			margin: auto;
 		}
 	}
 }

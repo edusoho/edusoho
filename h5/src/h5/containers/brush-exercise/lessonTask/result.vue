@@ -1,18 +1,16 @@
 <template>
-  <div class="item-bank-result" :style="{ height: height + 'px' }">
+  <div
+    class="item-bank-result brush-exercise-report"
+    :style="{ height: height + 'px' }"
+  >
     <e-loading v-if="isLoading" />
-    <div class="notify">
+    <div class="notify" v-if="isReadOver">
       ※请参考题目解析，对主观题自行估分批阅。
     </div>
     <div class="item-bank-result_content">
       <div v-if="isReadOver" class="exercise-report-status">
-        <img src="static/report-success.png" />
-        <p class="result-text result-status_fail">正在批阅中</p>
-      </div>
-      <div v-else class="exercise-report-status">
-        <img src="static/report-success.png" />
-        <p class="result-text result-status_fail">很遗憾，您未通过本次考试</p>
-        <p class="result-comment">教师评语：继续努力，争取下次考试通过</p>
+        <img src="static/images/report-review.png" />
+        <p class="result-text result-status_fail mt20">正在批阅中</p>
       </div>
       <div class="result-score">
         分数：
@@ -74,19 +72,6 @@ export default {
     };
   },
   computed: {
-    getStatusImg() {
-      const status = this.answerRecord.status;
-      switch (status) {
-        case 'doing':
-          return 'static/report-success.png';
-        case 'reviewing':
-          return 'static/report-success.png';
-        case 'finished':
-          return 'static/report-success.png';
-        default:
-          return '';
-      }
-    },
     usedTime() {
       return this.answerRecord.used_time / 60;
     },
