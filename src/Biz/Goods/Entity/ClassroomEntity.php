@@ -63,6 +63,9 @@ class ClassroomEntity extends BaseGoodsEntity
     public function getVipInfo($goods, $specs, $userId)
     {
         $vipUser = $this->getVipService()->getMemberByUserId($userId);
+        if ($vipUser) {
+            $vipUser['level'] = $this->getVipLevelService()->getLevel($vipUser['levelId']);
+        }
         $classroom = $this->getClassroomService()->getClassroom($specs['targetId']);
         if ($classroom['vipLevelId']) {
             return [$this->getVipLevelService()->getLevel($classroom['vipLevelId']), $vipUser];
