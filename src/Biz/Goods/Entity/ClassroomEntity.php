@@ -91,8 +91,7 @@ class ClassroomEntity extends BaseGoodsEntity
 
     public function isSpecsMember($goods, $specs, $userId)
     {
-        return $this->isSpecsTeacher($goods, $specs, $userId)
-            && $this->isSpecsStudent($goods, $specs, $userId);
+        return $this->isSpecsStudent($goods, $specs, $userId);
     }
 
     /**
