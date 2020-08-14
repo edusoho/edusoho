@@ -48,7 +48,12 @@
           开始批阅
         </div>
         <template v-else>
-          <div class="result-footer__btn" @click="doAgain">再次答题</div>
+          <div
+            class="result-footer__btn result-footer__btn-border"
+            @click="doAgain"
+          >
+            再次答题
+          </div>
           <div class="result-footer__btn" @click="doAnalysis">查看解析</div>
         </template>
       </div>
@@ -119,6 +124,7 @@ export default {
         exerciseId: this.$route.query.exerciseId,
         assessmentId: this.$route.query.assessmentId,
         moduleId: this.$route.query.moduleId,
+        categoryId: this.$route.query.categoryId,
       };
       const answerRecordId = this.$route.params.answerRecordId;
       this.$router.push({ path: `/brushReview/${answerRecordId}`, query });

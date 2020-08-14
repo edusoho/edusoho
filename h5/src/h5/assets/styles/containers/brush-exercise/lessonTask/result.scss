@@ -72,9 +72,12 @@
 			align-items: center;
 			justify-content: center;
 			height: vw(48);
-			height: 1;
 			color: #fff;
 			background: $primary-color;
+		}
+
+		.result-footer__btn-border {
+			border-right: vw(1) solid #fff;
 		}
 	}
 

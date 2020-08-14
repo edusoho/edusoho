@@ -67,6 +67,7 @@ export default {
         exerciseId: this.$route.query.exerciseId,
         assessmentId: this.$route.query.assessmentId,
         moduleId: this.$route.query.moduleId,
+        categoryId: this.$route.query.categoryId,
       };
       const answerRecordId = this.$route.params.answerRecordId;
       this.$router.replace({
