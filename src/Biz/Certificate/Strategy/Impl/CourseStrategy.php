@@ -56,6 +56,28 @@ class CourseStrategy extends BaseStrategy
         return $this->getCourseSetService()->getCourseSet($course['courseSetId']);
     }
 
+    public function findTargetsByIds($targetIds)
+    {
+        $courses =$this->getCourseService()->findCoursesByIds($targetIds);
+        foreach ($courses as &$course) {
+            $course['title'] = $course['courseSetTitle'];
+        }
+
+        return $courses;
+    }
+
+    public function findTargetsByTargetTitle($targetTitle)
+    {
+        $count = $this->getCourseService()->countCourses(['courseSetTitleLike' => $targetTitle]);
+
+        return $this->getCourseService()->searchCourses(
+            ['courseSetTitleLike' => $targetTitle],
+            [],
+            0,
+            $count
+        );
+    }
+
     protected function filterConditions($conditions)
     {
         if (!empty($conditions['keyword'])) {

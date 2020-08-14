@@ -31,6 +31,23 @@ class ClassroomStrategy extends BaseStrategy
         return $this->getClassroomService()->getClassroom($targetId);
     }
 
+    public function findTargetsByIds($targetIds)
+    {
+        return $this->getClassroomService()->findClassroomsByIds($targetIds);
+    }
+
+    public function findTargetsByTargetTitle($targetTitle)
+    {
+        $count = $this->getClassroomService()->countClassrooms(['titleLike' => $targetTitle]);
+
+        return $this->getClassroomService()->searchClassrooms(
+            ['titleLike' => $targetTitle],
+            [],
+            0,
+            $count
+        );
+    }
+
     protected function filterConditions($conditions)
     {
         if (!empty($conditions['keyword'])) {

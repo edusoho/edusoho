@@ -1,0 +1,44 @@
+<tr>
+  <td>{{ user.truename|default('--') }}<br><span class="text-muted text-sm">{{ user.nickname|default() }}</span></td>
+  <td>{{ target.title|default('--') }}</td>
+  <td>{{ record.certificateCode|default('') }}</td>
+  <td>
+    {% if record.expiryTime == 0 %}
+      {{ 'admin.operation_certificate.certificate.expiry_day.forever'|trans }}
+    {% else %}
+      {% set remainDay = record.expiryTime|time_diff %}
+      {{ 'admin.operation_certificate.certificate.record.days_remaining'|trans({'%lastDays%':remainDay}) }}<br>
+      {{ 'certificate.deadline.expire'|trans({'%deadline%':record.expiryTime|date('Y-m-d')}) }}
+    {% endif %}
+  </td>
+  <td>
+    {% if record.status == 'valid' and record.expiryTime != 0 and remainDay == 0 %}
+      {% set status = 'expired' %}
+    {% else %}
+      {% set status = record.status %}
+    {% endif %}
+    {{ dict_text('certificateStatus', status) }}
+  </td>
+  <td>
+    {{ record.issueTime|date('Y-m-d') }}
+  </td>
+  <td>
+    <div class="btn-group">
+      <a class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_certificate_record_detail', {id:record.id}) }}" type="button">{{ 'site.btn.detail'|trans }}</a>
+      <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        {% if record.status == 'valid' %}
+          <li>
+            <a class="js-cancel" data-url="{{ path('admin_v2_certificate_record_cancel', {id: record.id}) }}">{{ 'admin.operation_certificate.certificate.record.cancel'|trans }}</a>
+          </li>
+        {% else %}
+          <li>
+            <a data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_certificate_record_grant', {id: record.id}) }}" href="javascript:;">{{ 'admin.operation_certificate.certificate.record.grant'|trans }}</a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </td>
+</tr>

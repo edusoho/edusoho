@@ -660,7 +660,7 @@ admin_v2:
                                             group: groupButton
                                             mode: none
                                             visible: ( certificate.status !='published' )
-                                        admin_v2_certificate_member_list:
+                                        admin_v2_certificate_record_list:
                                             name: admin_v2.operation.certificate.member_list_tab
                                             router_params:
                                                 id: (certificate.id)

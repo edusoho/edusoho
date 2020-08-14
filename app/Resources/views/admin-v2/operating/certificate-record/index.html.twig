@@ -1,0 +1,58 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% do script(['app/js/admin-v2/operating/certificate-record/manage/index.js']) %}
+
+{% set menu = 'admin_v2_certificate_template_manage' %}
+
+{% block tabs %}
+  {% set tab = 'member' %}
+  {% include 'admin-v2/operating/certificate/tabs.html.twig' %}
+{% endblock %}
+
+{% block main %}
+  <form class="well well-sm form-inline" method="get">
+    <div class="form-group">
+      <label>{{ 'admin.operation_certificate.template.type'|trans }}:</label>
+      <select class="form-control" name="status">
+        {{ select_options(dict('certificateStatus'), app.request.query.get('status'), 'admin.operation_certificate.template.type.all'|trans) }}
+      </select>
+    </div>
+    <div class="form-group department-manage-search-form-group plt">
+      <label for="keywordType"></label>
+      <select class="form-control" id="keywordType" name="keywordType">
+        {{ select_options(dict('certificateSearchTypes'), app.request.get('keywordType')) }}
+      </select>
+    </div>
+    <div class="form-group mll">
+      <label>{{ 'admin.operation_certificate.template.title'|trans }}:</label>
+      <input class="form-control" name="keyword" type="text" placeholder="{{'form.placeholder.keyword'|trans}}" value="{{ app.request.query.get('keyword') }}">
+    </div>
+    <button class="btn btn-primary" type="submit">{{'form.btn.search'|trans}}</button>
+  </form>
+
+  <table class="table table-hover table-striped" id="record-table">
+    <thead>
+    <tr>
+      <th width="10%">{{'user.fields.truename_label'|trans}}</th>
+      <th>{{'admin.operation_certificate.certificate.batch'|trans}}</th>
+      <th>{{'admin.operation_certificate.certificate.record.code'|trans}}</th>
+      <th>{{'admin.operation_certificate.certificate.expiry_day'|trans}}
+      <th>{{'admin.operation_certificate.certificate.record.status'|trans}}</th>
+      <th>{{'admin.operation_certificate.certificate.record.issue_date'|trans}}</th>
+      <th>{{'operation'|trans}}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% if records %}
+      {% for record in records %}
+        {% set user = users[record.userId]|default(null) %}
+        {% set target = targets[record.targetId]|default(null) %}
+        {% include 'admin-v2/operating/certificate-record/record-tr.html.twig' %}
+      {% endfor %}
+    {% else %}
+      <tr><td colspan="20"><div class="empty">{{'site.datagrid.empty'|trans}}</div></td></tr>
+    {% endif %}
+    </tbody>
+  </table>
+  {{ web_macro.paginator(paginator) }}
+{% endblock %}

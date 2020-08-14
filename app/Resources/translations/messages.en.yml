@@ -5266,6 +5266,18 @@ admin.operation_certificate.certificate.issue_rule.course: Completion of all cou
 admin.operation_certificate.certificate.update: Edit Certificate
 admin.operation_certificate.certificate.member_manage: Member Manage
 admin.operation_certificate.certificate.audit: Pending review
+admin.operation_certificate.certificate.batch: batch
+admin.operation_certificate.certificate.record.code: number
+admin.operation_certificate.certificate.record.status: status
+admin.operation_certificate.certificate.record.issue_date: Issue Date
+admin.operation_certificate.certificate.record.days_remaining: remaining %lastDays% days
+admin.operation_certificate.certificate.record.days_expiry: %deadline% expired
+admin.operation_certificate.certificate.record.cancel: cancel
+admin.operation_certificate.certificate.record.grant: regrant
+admin.operation_certificate.certificate.record.user: Grantee
+admin.operation_certificate.certificate.record.information: Certification Information
+admin.operation_certificate.certificate.record.certificate_information: ertificate Information
+admin.operation_certificate.certificate.record.certificate_target: Certificate Target
 admin.operation_announcement.content_th: 'Content'
 admin.operation_announcement.createTime_th: 'Published Time'
 admin.operation_announcement.endTime_th: 'End Time'
@@ -9061,6 +9073,9 @@ exception.destroy_account.audit_record_exist: Audit Record Is Exist
 
 exception.certificate_template.notfound_template: Template not found
 exception.certificate_template.notfound_certificate: Certificate not found
+exception.certificate.record.notfound_record: Certificate not found
+exception.certificate.record.forbidden_cancel: Forbidden cancel
+exception.certificate.record.forbidden_regrant: Forbidden regrant
 exception.certificate_template.forbidden_delete_published: Prohibit the deletion of published certificates
 
 course.unname_title: unname course
