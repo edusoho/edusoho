@@ -523,3 +523,16 @@ s2b2cSettlementOrderStatus:
 certificateTypes:
     course: 课程
     classroom: 班级
+
+certificateStatus:
+    valid: 有效
+    expired: 过期
+    cancelled: 作废
+
+certificateSearchTypes:
+    truename: 姓名
+    nickname: 用户名
+    verifiedMobile: 手机号
+    email: 邮箱
+    batch: 证书批次
+    code: 证书编号

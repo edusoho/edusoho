@@ -6315,6 +6315,18 @@ admin.operation_certificate.certificate.issue_rule.course: 完成课程全部任
 admin.operation_certificate.certificate.update: 编辑证书
 admin.operation_certificate.certificate.member_manage: 名单管理
 admin.operation_certificate.certificate.audit: 待审核
+admin.operation_certificate.certificate.batch: 证书批次
+admin.operation_certificate.certificate.record.code: 证书编号
+admin.operation_certificate.certificate.record.status: 证书状态
+admin.operation_certificate.certificate.record.issue_date: 发证日期
+admin.operation_certificate.certificate.record.days_remaining: 剩余%lastDays%天
+admin.operation_certificate.certificate.record.days_expiry: %deadline%到期
+admin.operation_certificate.certificate.record.cancel: 撤销
+admin.operation_certificate.certificate.record.grant: 重新授予
+admin.operation_certificate.certificate.record.user: 被授予人
+admin.operation_certificate.certificate.record.information: 认证信息
+admin.operation_certificate.certificate.record.certificate_information: 证书信息
+admin.operation_certificate.certificate.record.certificate_target: 认证对象
 
 # 网站公告管理
 admin.operation_announcement.content_th: 公告内容
@@ -10373,6 +10385,9 @@ exception.destroy_account.audit_record_exist: 已存在审核中的申请
 
 exception.certificate_template.notfound_template: 模板不存在
 exception.certificate_template.notfound_certificate: 证书不存在
+exception.certificate.record.notfound_record: 证书不存在
+exception.certificate.record.forbidden_cancel: 证书无法撤销
+exception.certificate.record.forbidden_regrant: 证书无法重新撤销
 exception.certificate_template.forbidden_delete_published: 禁止删除已发布证书
 
 course.unname_title: 未命名计划

@@ -984,9 +984,21 @@ admin_v2_certificate_delete:
     path:  /certificate/{id}/delete
     defaults: { _controller: AppBundle:AdminV2/Operating/Certificate:delete }
 
-admin_v2_certificate_member_list:
-    path:  /certificate/{id}/member/list
+admin_v2_certificate_record_list:
+    path:  /certificate/{id}/record/list
     defaults: { _controller: AppBundle:AdminV2/Operating/CertificateRecord:index }
+
+admin_v2_certificate_record_detail:
+    path:  /certificate/record/{id}/detail
+    defaults: { _controller: AppBundle:AdminV2/Operating/CertificateRecord:detail }
+
+admin_v2_certificate_record_cancel:
+    path:  /certificate/record/{id}/cancel
+    defaults: { _controller: AppBundle:AdminV2/Operating/CertificateRecord:cancel }
+
+admin_v2_certificate_record_grant:
+    path:  /certificate/record/{id}/grant
+    defaults: { _controller: AppBundle:AdminV2/Operating/CertificateRecord:grant }
 
 admin_v2_certificate_audit_manage:
     path:  /certificate/{id}/audit/manage

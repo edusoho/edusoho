@@ -52,7 +52,7 @@ class AddCertificateTable extends Migration
                 `certificateCode` VARCHAR (255) DEFAULT '' COMMENT '证书编码',
                 `targetType` varchar(64) DEFAULT '' COMMENT '发放类型',
                 `targetId` int(10) DEFAULT '0' COMMENT '发放对象ID',
-                `status` varchar(64) DEFAULT 'none' COMMENT '证书审核状态',
+                `status` varchar(64) DEFAULT 'none' COMMENT '证书审核状态,none未审核,valid有效,expired过期,cancelled作废',
                 `rejectReason` VARCHAR (255) DEFAULT '' COMMENT '拒绝原因',
                 `auditUserId` INT(10) unsigned DEFAULT '0' COMMENT '审核用户ID',
                 `auditTime` INT(10) unsigned DEFAULT '0' COMMENT '审核时间',

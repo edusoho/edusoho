@@ -23,4 +23,8 @@ abstract class BaseStrategy
     abstract public function search($conditions, $orderBys, $start, $limit);
 
     abstract public function getTarget($targetId);
+
+    abstract public function findTargetsByIds($targetIds);
+
+    abstract public function findTargetsByTargetTitle($targetTitle);
 }

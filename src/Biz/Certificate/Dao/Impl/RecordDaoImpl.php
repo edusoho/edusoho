@@ -2,12 +2,19 @@
 
 namespace Biz\Certificate\Dao\Impl;
 
-use Biz\Certificate\Dao\TemplateDao;
+use Biz\Certificate\Dao\RecordDao;
 use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
-class RecordDaoImpl extends GeneralDaoImpl implements TemplateDao
+class RecordDaoImpl extends GeneralDaoImpl implements RecordDao
 {
     protected $table = 'certificate_record';
+
+    public function findExpiredRecords($certificateId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE `certificateId` = ? and expiryTime != 0 and expiryTime < ?; ";
+
+        return $this->db()->fetchAll($sql, [$certificateId, time()]);
+    }
 
     public function declares()
     {
@@ -16,6 +23,13 @@ class RecordDaoImpl extends GeneralDaoImpl implements TemplateDao
             'orderbys' => ['id', 'createdTime', 'updatedTime'],
             'conditions' => [
                 'id = :id',
+                'certificateId = :certificateId',
+                'certificateCode = :certificateCode',
+                'status = :status',
+                'id NOT IN (:excludeIds)',
+                'userId IN (:userIds)',
+                'targetId IN (:targetIds)',
+                'status != :statusNotEqual',
             ],
         ];
     }

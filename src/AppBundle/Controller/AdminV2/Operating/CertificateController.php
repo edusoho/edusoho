@@ -16,7 +16,7 @@ class CertificateController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $conditions = $request->request->all();
+        $conditions = $request->query->all();
 
         $paginator = new Paginator(
             $request,
