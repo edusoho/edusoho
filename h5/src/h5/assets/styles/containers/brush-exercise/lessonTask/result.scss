@@ -66,19 +66,19 @@
 		background-color: #fff;
 		box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.04);
 
-    .result-footer__btn {
+		.result-footer__btn {
 			display: flex;
 			flex: 1;
 			align-items: center;
 			justify-content: center;
 			height: vw(48);
-			height: 1;
 			color: #fff;
 			background: $primary-color;
-    }
-    .result-footer__btn-border {
-      border-right: vw(1) solid #ffffff;
-    }
+		}
+
+		.result-footer__btn-border {
+			border-right: vw(1) solid #fff;
+		}
 	}
 
 	.result-text {
