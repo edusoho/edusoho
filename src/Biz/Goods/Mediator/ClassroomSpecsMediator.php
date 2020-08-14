@@ -38,7 +38,7 @@ class ClassroomSpecsMediator extends AbstractSpecsMediator
             'buyable' => $classroom['buyable'],
             'buyableStartTime' => 0,
             'buyableEndTime' => 0,
-            'usageMode' => $classroom['expiryMode'],
+            'usageMode' => 'date' === $classroom['expiryMode'] ? 'end_date' : $classroom['expiryMode'],
             'usageDays' => 'days' === $classroom['expiryMode'] ? $classroom['expiryValue'] : 0,
             'usageStartTime' => 0,
             'usageEndTime' => 'date' === $classroom['expiryMode'] ? $classroom['expiryValue'] : 0,

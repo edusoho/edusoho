@@ -27,6 +27,7 @@ class CourseReviewDataTag extends CourseBaseDataTag implements DataTag
         unset($reviewer['password']);
         unset($reviewer['salt']);
         $review['course'] = $this->getCourseService()->getCourse($review['targetId']);
+        $review['courseId'] = $review['targetId'];
 
         return $review;
     }
