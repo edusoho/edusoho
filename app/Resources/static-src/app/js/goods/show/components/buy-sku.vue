@@ -9,7 +9,10 @@
         <span v-else>
             <span class="product-detail__disable_btn" v-if="(sku.vipLevelInfo && !sku.vipUser) || sku.vipLevelInfo && sku.vipUser && sku.vipLevelInfo.seq > sku.vipUser.level.seq">
                 <slot>会员免费学</slot>
-                <span class="product-detail__disable_btn-hover">test</span>
+                <span class="product-detail__disable_btn-hover">
+                    <span v-if="!sku.vipUser">你还不是{{ sku.vipLevelInfo.name }}，<a class='color-primary' href="/vip/upgrade" target='_blank'>升级会员</a></span>
+                    <span v-if="sku.vipUser">你还不是{{ sku.vipLevelInfo.name }}，<a class='color-primary' href="/vip/buy" target='_blank'>购买会员</a></span>
+                </span>
             </span>
             <a v-if="!sku.isMember" :class="btnClass" href="javascript:;" @click="buySku">
                 <slot v-if="sku.displayPrice == 0">免费加入</slot>
