@@ -58,7 +58,7 @@ class CourseStrategy extends BaseStrategy
 
     public function findTargetsByIds($targetIds)
     {
-        $courses =$this->getCourseService()->findCoursesByIds($targetIds);
+        $courses = $this->getCourseService()->findCoursesByIds($targetIds);
         foreach ($courses as &$course) {
             $course['title'] = $course['courseSetTitle'];
         }
