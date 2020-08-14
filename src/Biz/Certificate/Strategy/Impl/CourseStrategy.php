@@ -3,6 +3,7 @@
 namespace Biz\Certificate\Strategy\Impl;
 
 use AppBundle\Common\ArrayToolkit;
+use Biz\Certificate\Certificate;
 use Biz\Certificate\Strategy\BaseStrategy;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
@@ -90,6 +91,18 @@ class CourseStrategy extends BaseStrategy
         $conditions['types'] = [CourseSetService::NORMAL_TYPE, CourseSetService::LIVE_TYPE];
 
         return $conditions;
+    }
+
+    protected function getContent($record, $content)
+    {
+        $content = $this->getRecipientContent($record['userId'], $content);
+
+        if (strstr($content, '$courseName$')) {
+            $course = $this->getCourseService()->getCourse($record['targetId']);
+            $content = str_replace('$courseName$', $course['title'], $content);
+        }
+
+        return $content;
     }
 
     /**

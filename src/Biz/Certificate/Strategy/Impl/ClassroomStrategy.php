@@ -2,6 +2,7 @@
 
 namespace Biz\Certificate\Strategy\Impl;
 
+use Biz\Certificate\Certificate;
 use Biz\Certificate\Strategy\BaseStrategy;
 use Biz\Classroom\Service\ClassroomService;
 
@@ -58,6 +59,18 @@ class ClassroomStrategy extends BaseStrategy
         $conditions['status'] = 'published';
 
         return $conditions;
+    }
+
+    protected function getContent($record, $content)
+    {
+        $content = $this->getRecipientContent($record['userId'], $content);
+
+        if (strstr($content, '$classroomName$')) {
+            $classroom = $this->getClassroomService()->getClassroom($record['targetId']);
+            $content = str_replace('$classroomName$', $classroom['title'], $content);
+        }
+
+        return $content;
     }
 
     /**

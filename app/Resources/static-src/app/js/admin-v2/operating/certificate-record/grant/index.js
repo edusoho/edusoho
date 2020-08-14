@@ -13,12 +13,13 @@ export default class ReGrant {
   }
 
   initEvent() {
-    // if ($('.js-loading-text').length > 0) {
-    //   $.post($('.js-loading-text').data('url'), (resp) => {
-    //     $('.js-loading-text').remove();
-    //     $('.js-certificate-image').html(resp);
-    //   });
-    // }
+    if ($('.js-loading-text').length>0) {
+      $.post($('.js-loading-text').data('url'), (resp) => {
+        let html = '<img class="mll" src="data:image/png;base64,'+ resp +'" width="520px" />';
+        $('.js-loading-text').remove();
+        $('.js-certificate-image').html(html);
+      });
+    }
 
     $('#grant-certificate').on('click', () => {
       if (this.validator.form()) {
@@ -29,7 +30,7 @@ export default class ReGrant {
           notify('success', Translator.trans('admin_v2.certificate.record.grant.success_hint'));
           window.location.reload();
         }).error(function(){
-          notify('success', Translator.trans('admin_v2.certificate.record.grant.success_hint'));
+          notify('error', Translator.trans('admin_v2.certificate.record.grant.failure_hint'));
         });
       }
     });
@@ -43,9 +44,9 @@ export default class ReGrant {
         },
       },
       messages: {
-        // issueDate: {
-        //   required: Translator.trans('certificate.upload.issue_date.required_message'),
-        // },
+        issueTime: {
+          required: Translator.trans('admin_v2.certificate.record.grant.issue_time_required'),
+        },
       },
     });
   }

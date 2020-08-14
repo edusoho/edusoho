@@ -5240,7 +5240,8 @@ admin.operation_certificate.template.certificate.recipient: Information on the g
 admin.operation_certificate.template.certificate.recipient.default: $name$（$username$）classmate：
 admin.operation_certificate.template.certificate.recipient_hint: Optional, support add Name：$name$ Username：$username$
 admin.operation_certificate.template.certificate.content: Text of certificate
-admin.operation_certificate.template.certificate.content.default: Due to your excellent learning performance in the $coursename$ course, you have finally completed the course and passed the final assessment, we hereby issue this certificate!
+admin.operation_certificate.template.certificate.content.default.course: Due to your excellent learning performance in the $courseName$ course, you have finally completed the course and passed the final assessment, we hereby issue this certificate!
+admin.operation_certificate.template.certificate.content.default.classroom: Due to your excellent learning performance in the $classroomName$ classroom, you have finally completed the course and passed the final assessment, we hereby issue this certificate!
 admin.operation_certificate.template.certificate.content_hint: 'Optional, support for adding Name: $name$ User name: $username$'
 admin.operation_certificate.template.certificate.content_hint.course: 'Course name: $courseName$'
 admin.operation_certificate.template.certificate.content_hint.classroom: 'Class name: $classroomName$'
@@ -5278,6 +5279,7 @@ admin.operation_certificate.certificate.record.user: Grantee
 admin.operation_certificate.certificate.record.information: Certification Information
 admin.operation_certificate.certificate.record.certificate_information: ertificate Information
 admin.operation_certificate.certificate.record.certificate_target: Certificate Target
+admin.operation_certificate.certificate.record.img_loading: loading...
 admin.operation_announcement.content_th: 'Content'
 admin.operation_announcement.createTime_th: 'Published Time'
 admin.operation_announcement.endTime_th: 'End Time'

@@ -7,12 +7,13 @@ export default class Detail {
   }
 
   init() {
-    // if($('.js-loading-text').length>0){
-    //   $.post($('.js-loading-text').data('url'), (resp) => {
-    //     $('.js-loading-text').remove();
-    //     $('.js-certificate-image').html(resp);
-    //   });
-    // }
+    if ($('.js-loading-text').length>0) {
+      $.post($('.js-loading-text').data('url'), (resp) => {
+        let html = '<img class="mll" src="data:image/png;base64,'+ resp +'" width="520px" />';
+        $('.js-loading-text').remove();
+        $('.js-certificate-image').html(html);
+      });
+    }
 
     let $btn = $('#cancel-certificate');
     $btn.on('click', function (e) {

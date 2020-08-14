@@ -85,7 +85,9 @@ class CertificateRecordController extends BaseController
         $strategy = $this->getCertificateStrategy($record['targetType']);
 
         if ($request->isMethod('POST')) {
-            $this->getRecordService()->grantRecord($id, $request->request->all());
+            $data = $request->request->all();
+            $data['issueTime'] = strtotime($data['issueTime']);
+            $this->getRecordService()->grantRecord($id, $data);
 
             return $this->createJsonResponse(true);
         }
