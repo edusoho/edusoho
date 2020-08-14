@@ -7,12 +7,9 @@
         <span v-else-if="sku.buyable == 1 && sku.buyableEndTime != 0 && new Date(sku.buyableEndTime).getTime() > new Date().getTime() + 86400000" class="product-detail__unpublished">抱歉，该商品已超过加入有效期，请联系客服</span>
         <span v-else-if="sku.buyable != 1" class="product-detail__unpublished">抱歉，该商品为限制商品，请联系客服</span>
         <span v-else>
-            <span class="product-detail__disable_btn" v-if="(sku.vipLevelInfo && !sku.vipUser) || sku.vipLevelInfo && sku.vipUser && sku.vipLevelInfo.seq > sku.vipUser.level.seq">
+            <span class="product-detail__disable_btn" v-if="(sku.vipLevelInfo && !sku.vipUser) || sku.vipLevelInfo && sku.vipUser && sku.vipLevelInfo.seq > sku.vipUser.level.seq" data-container=".product-detail__disable_btn" data-toggle="popover" data-placement="top" data-trigger="hover" data-html="true"
+			:data-content="!sku.vipUser ? `你还不是${sku.vipLevelInfo.name}，<a class='color-primary' href='/vip/upgrade' target='_blank'>升级会员</a>` : `你还不是${ sku.vipLevelInfo.name }，<a class='color-primary' href='/vip/buy' target='_blank'>购买会员</a>`">
                 <slot>会员免费学</slot>
-                <span class="product-detail__disable_btn-hover">
-                    <span v-if="!sku.vipUser">你还不是{{ sku.vipLevelInfo.name }}，<a class='color-primary' href="/vip/upgrade" target='_blank'>升级会员</a></span>
-                    <span v-if="sku.vipUser">你还不是{{ sku.vipLevelInfo.name }}，<a class='color-primary' href="/vip/buy" target='_blank'>购买会员</a></span>
-                </span>
             </span>
             <a v-if="!sku.isMember" :class="btnClass" href="javascript:;" @click="buySku">
                 <slot v-if="sku.displayPrice == 0">免费加入</slot>
@@ -95,6 +92,11 @@
                     this.renderModal(res.data.code);
                 }).catch();
             }
+        },
+        created() {
+            $(function () {
+                $("[data-toggle='popover']").popover();
+            });
         }
     }
 </script>
