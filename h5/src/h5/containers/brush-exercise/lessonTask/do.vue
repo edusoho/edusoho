@@ -142,10 +142,11 @@ export default {
     },
     goResult() {
       const query = {
-        type: this.$route.query.exerciseId.type,
+        type: this.$route.query.type,
         exerciseId: this.$route.query.exerciseId,
         assessmentId: this.$route.query.assessmentId,
         moduleId: this.$route.query.moduleId,
+        categoryId: this.$route.query.categoryId,
       };
       const answerRecordId = this.assessmentResponse.answer_record_id;
       this.$router.replace({
