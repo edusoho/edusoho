@@ -3,7 +3,6 @@
 namespace Biz\Certificate\Strategy\Impl;
 
 use AppBundle\Common\ArrayToolkit;
-use Biz\Certificate\Certificate;
 use Biz\Certificate\Strategy\BaseStrategy;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;

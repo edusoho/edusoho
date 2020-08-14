@@ -41,6 +41,7 @@ class VerticalImgBuilder extends ImgBuilder
     protected function setCertificateRecipient(Certificate $certificate)
     {
         $length = mb_strlen($certificate->getCertificateRecipient(), 'utf-8');
+
         return $this->imageTtfText(
             [
                 'x' => 1300 * $this->imageXRatio - $length * 0.25 * $this->defaultFontSize,

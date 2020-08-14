@@ -2,7 +2,6 @@
 
 namespace Biz\Certificate\Strategy\Impl;
 
-use Biz\Certificate\Certificate;
 use Biz\Certificate\Strategy\BaseStrategy;
 use Biz\Classroom\Service\ClassroomService;
 

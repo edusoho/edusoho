@@ -5,7 +5,6 @@ namespace Biz\Certificate\ImgBuilder;
 use Biz\Certificate\Certificate;
 use Codeages\Biz\Framework\Context\Biz;
 use Endroid\QrCode\QrCode;
-use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
 abstract class ImgBuilder
@@ -44,7 +43,6 @@ abstract class ImgBuilder
     }
 
     /**
-     * @param Certificate $certificate
      * @param $percent
      *
      * @return string
@@ -60,7 +58,6 @@ abstract class ImgBuilder
     }
 
     /**
-     * @param Certificate $certificate
      * @param $percent
      *
      * @return mixed|string
@@ -118,64 +115,48 @@ abstract class ImgBuilder
     }
 
     /**
-     * @param Certificate $certificate
-     *
      * @return mixed
      *               设置证书标题
      */
     abstract protected function setCertificateTitle(Certificate $certificate);
 
     /**
-     * @param Certificate $certificate
-     *
      * @return mixed
      *               设置证书用户
      */
     abstract protected function setCertificateRecipient(Certificate $certificate);
 
     /**
-     * @param Certificate $certificate
-     *
      * @return mixed
      *               设置证书正文
      */
     abstract protected function setCertificateContent(Certificate $certificate);
 
     /**
-     * @param Certificate $certificate
-     *
      * @return mixed
      *               设置证书编码
      */
     abstract protected function setCertificateCode(Certificate $certificate);
 
     /**
-     * @param Certificate $certificate
-     *
      * @return mixed
      *               设置证书有效期
      */
     abstract protected function setCertificateDeadline(Certificate $certificate);
 
     /**
-     * @param Certificate $certificate
-     *
      * @return mixed
      *               设置证书发布时间
      */
     abstract protected function setCertificateIssueTime(Certificate $certificate);
 
     /**
-     * @param Certificate $certificate
-     *
      * @return mixed
      *               设置证书印章
      */
     abstract protected function setCertificateStamp(Certificate $certificate);
 
     /**
-     * @param Certificate $certificate
-     *
      * @return mixed
      *
      * 设置证书二维码
