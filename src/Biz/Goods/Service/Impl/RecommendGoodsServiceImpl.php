@@ -114,24 +114,24 @@ class RecommendGoodsServiceImpl extends BaseService implements RecommendGoodsSer
         );
 
         $productIds = ArrayToolkit::column($products, 'id');
-        if (self::MAX_SHOW_RECOMMENDED_GOODS_NUMBER == count($productIds)) {
-            return $this->getGoodsService()->findGoodsByProductIds($productIds);
-        }
-
-        $otherType = 'course' == $product['targetType'] ? 'classroom' : 'course';
-
-        $otherTypeOwnerIds = $this->getTagService()->findDistinctOwnerIdByOwnerTypeAndTagIdsAndExcludeOwnerId(
-            $otherType,
-            $currentGoodsTagIds,
-            0,
-            self::MAX_SHOW_RECOMMENDED_GOODS_NUMBER - count($ownerIds)
-        );
-
-        $otherProducts = $this->getProductService()->findProductsByTargetTypeAndTargetIds(
-            $otherType,
-            ArrayToolkit::column($otherTypeOwnerIds, 'ownerId'));
-
-        $productIds = array_merge($productIds, ArrayToolkit::column($otherProducts, 'id'));
+//        if (self::MAX_SHOW_RECOMMENDED_GOODS_NUMBER == count($productIds)) {
+//            return $this->getGoodsService()->findGoodsByProductIds($productIds);
+//        }
+//
+//        $otherType = 'course' == $product['targetType'] ? 'classroom' : 'course';
+//
+//        $otherTypeOwnerIds = $this->getTagService()->findDistinctOwnerIdByOwnerTypeAndTagIdsAndExcludeOwnerId(
+//            $otherType,
+//            $currentGoodsTagIds,
+//            0,
+//            self::MAX_SHOW_RECOMMENDED_GOODS_NUMBER - count($ownerIds)
+//        );
+//
+//        $otherProducts = $this->getProductService()->findProductsByTargetTypeAndTargetIds(
+//            $otherType,
+//            ArrayToolkit::column($otherTypeOwnerIds, 'ownerId'));
+//
+//        $productIds = array_merge($productIds, ArrayToolkit::column($otherProducts, 'id'));
 
         return $this->getGoodsService()->findGoodsByProductIds($productIds);
     }
