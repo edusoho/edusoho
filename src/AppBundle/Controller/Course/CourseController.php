@@ -5,6 +5,9 @@ namespace AppBundle\Controller\Course;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use Biz\Activity\Service\ActivityService;
+use Biz\Certificate\CertificateException;
+use Biz\Certificate\Service\CertificateService;
+use Biz\Certificate\Service\RecordService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\CourseException;
 use Biz\Course\CourseSetException;
@@ -408,6 +411,59 @@ class CourseController extends CourseBaseController
         );
     }
 
+    public function certificateAction($course)
+    {
+        $certificates = $this->getCertificateService()->search(
+            ['targetType' => 'course', 'status' => 'published', 'targetId' => $course['id']],
+            ['createdTime' => 'DESC'],
+            0,
+            PHP_INT_MAX
+        );
+
+        $userId = $this->getCurrentUser()->getId();
+        $obtainedCertificates = $this->getCertificateRecordService()->search(
+            ['targetType' => 'course', 'statuses' => ['valid', 'expired'], 'userId' => $userId],
+            [],
+            0,
+            PHP_INT_MAX
+        );
+
+        return $this->render('course/tabs/certificates.html.twig', [
+            'certificates' => $certificates,
+            'obtained' => ArrayToolkit::index($obtainedCertificates, 'certificateId'),
+            'course' => $course,
+        ]);
+    }
+
+    public function certificateDetailAction(Request $request, $courseId, $id)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+        if (empty($course)) {
+            $this->createNewException(CourseException::NOTFOUND_COURSE());
+        }
+
+        $certificate = $this->getCertificateService()->get($id);
+        if (empty($certificate)) {
+            $this->createNewException(CertificateException::NOTFOUND_CERTIFICATE());
+        }
+
+        $isObtained = $this->getCertificateRecordService()->isObtained([
+            'userId' => $this->getCurrentUser()->getId(),
+            'certificateId' => $certificate['id'],
+            'targetType' => 'course',
+            'targetId' => $course['id'],
+            'statuses' => ['valid', 'expired'],
+
+        ]);
+
+        return $this->render('course/tabs/certificates-detail.html.twig', [
+            'certificate' => $certificate,
+            'course' => $course,
+            'isObtained' => $isObtained,
+            'nowTime' => time(),
+        ]);
+    }
+
     /**
      * @param $course
      *
@@ -771,6 +827,22 @@ class CourseController extends CourseBaseController
         }
 
         return ['createdTime' => 'DESC'];
+    }
+
+    /**
+     * @return RecordService
+     */
+    protected function getCertificateRecordService()
+    {
+        return $this->createService('Certificate:RecordService');
+    }
+
+    /**
+     * @return CertificateService
+     */
+    protected function getCertificateService()
+    {
+        return $this->createService('Certificate:CertificateService');
     }
 
     /**

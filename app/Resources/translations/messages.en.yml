@@ -1197,10 +1197,20 @@ course.unbuyable.over_expiry_end_date_tips: 'You are not allowded to enroll, sin
 course.introduction: Intro
 course.introduction.more_teaching_plan: "You can get more teaching plan from <a href=\"%courseUrl%\">here</a>.\n"
 course.introduction.course_introduction: 'About this course'
+course.introduction.authentication_certificate: 'Authentication certificate'
 course.introduction.course_target: 'Course goals'
 course.introduction.course_target_empty: 'Set goals'
 course.introduction.audiences: 'Target audiences'
 course.introduction.audiences_empty: 'Set goals'
+course.catalogue.certificate: 'HONOR'
+course.catalogue.certificate_wait: None
+course.catalogue.certificate_have: Have
+course.catalogue.certificate_obtain: This is available by taking the course online exam
+course.catalogue.certificate_detail: Certificate details
+course.catalogue.certificate_achieve: Approach of achieving
+course.catalogue.certificate_condition: Acquisition conditions
+course.catalogue.certificate_expiry: 'valid until: %expiryTime%'
+course.catalogue.certificate_forever: 'Term of validity: long term'
 course.catalogue.content_title: Syllabus
 course.catalogue.task.preview_btn: Preview
 course.catalogue.task.try_look_btn: Preview
@@ -1339,6 +1349,7 @@ course.tab.notes: 'Notes'
 course.tab.material: 'Materials'
 course.tab.reviews: 'Reviews'
 course.tab.summary: 'Intro'
+course.tab.certificate: 'Certificate'
 course.activity.video: 'Video'
 course.activity.audio: Audio
 course.activity.live: Live
@@ -2072,10 +2083,12 @@ classroom.description: Intro
 classroom.teachers: Teachers
 classroom.reviews: Reviews
 classroom.note: Notes
+classroom.certificates: Certificates
 classroom.expiry_date_tips: 'Expired at:'
 classroom.expiry_day_tips: "<span class=\"mrm\">Class effective days: </span><span>%expiryValue% Days</span>\n"
 classroom.classroom_manage: '%name% Management'
 classroom.vip_classroom: 'VIP %name%'
+classroom.certificate_obtain: 'This is available by taking the classroom online exam'
 classroom.classroom_manage.course_select.courseTitle: 'Course name'
 classroom.classroom_manage.course_select.teach_plan: 'Program name'
 classroom.classroom_manage.course_select.teacher_name: 'Teacher name'
@@ -5258,7 +5271,6 @@ admin.operation_certificate.certificate.template_choose: Selecting Template
 admin.operation_certificate.certificate.code: Certificate Code
 admin.operation_certificate.certificate.code.placeholder: 1 to 6 digits or letters of the alphabet, not case sensitive
 admin.operation_certificate.certificate.expiry_day: Certificate validity
-admin.operation_certificate.certificate.expiry_day.forever: forever
 admin.operation_certificate.certificate.expiry_day.placeholder: Enter the validity of the certificate, the empty value is valid for a long time
 admin.operation_certificate.certificate.auto_issue: automatic authentication
 admin.operation_certificate.certificate.issue_rule: conditions of issue
