@@ -43,7 +43,9 @@ class GoodsSpecsDaoImpl extends GeneralDaoImpl implements GoodsSpecsDao
 
     public function findPublishedByGoodsId($goodsId)
     {
-        return $this->findByFields(['goodsId' => $goodsId, 'status' => 'published']);
+        $sql = "SELECT * FROM {$this->table} WHERE goodsId = ? AND status = 'published' ORDER BY `seq` ASC;";
+
+        return $this->db()->fetchAll($sql, [$goodsId]);
     }
 
     public function deleteByGoodsIdAndTargetId($goodsId, $targetId)
