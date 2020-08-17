@@ -789,7 +789,6 @@ class ClassroomController extends BaseController
             'targetType' => 'classroom',
             'targetId' => $classroom['id'],
             'statuses' => ['valid', 'expired'],
-
         ]);
 
         return $this->render('classroom/certificates/detail.html.twig', [

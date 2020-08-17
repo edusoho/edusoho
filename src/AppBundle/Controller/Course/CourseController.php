@@ -453,7 +453,6 @@ class CourseController extends CourseBaseController
             'targetType' => 'course',
             'targetId' => $course['id'],
             'statuses' => ['valid', 'expired'],
-
         ]);
 
         return $this->render('course/tabs/certificates-detail.html.twig', [
