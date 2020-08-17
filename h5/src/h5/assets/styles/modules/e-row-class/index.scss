@@ -84,12 +84,9 @@
       color:#FE3B13;
       font-weight:500;
     }
-    .completionRate{
-      color:$primary-color;
-      font-size:12px;
-    }
+    .completionRate,
     .masteryRate{
-      color:#666666;
+      color:$primary-color;
       font-size:12px;
     }
   }
