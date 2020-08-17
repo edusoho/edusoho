@@ -29,8 +29,14 @@ class MeItemBankExerciseModuleAssessment extends AbstractResource
         );
         $answerRecordGroups = ArrayToolkit::group($answerRecords, 'assessmentId');
 
-        foreach ($exerciseAssessments as &$exerciseAssessment) {
-            $exerciseAssessment['assessment'] = empty($assessments[$exerciseAssessment['assessmentId']]) ? (object) [] : $assessments[$exerciseAssessment['assessmentId']];
+        foreach ($exerciseAssessments as $key => &$exerciseAssessment) {
+            if (empty($assessments[$exerciseAssessment['assessmentId']])) {
+                unset($exerciseAssessments[$key]);
+                continue;
+            } else {
+                $exerciseAssessment['assessment'] = $assessments[$exerciseAssessment['assessmentId']];
+            }
+
             if (!empty($answerRecordGroups[$exerciseAssessment['assessmentId']])) {
                 $exerciseAssessment['latestAnswerRecord'] = end($answerRecordGroups[$exerciseAssessment['assessmentId']]);
             }
