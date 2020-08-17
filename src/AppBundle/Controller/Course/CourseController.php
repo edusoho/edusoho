@@ -460,7 +460,6 @@ class CourseController extends CourseBaseController
             'certificate' => $certificate,
             'course' => $course,
             'isObtained' => $isObtained,
-            'nowTime' => time(),
         ]);
     }
 

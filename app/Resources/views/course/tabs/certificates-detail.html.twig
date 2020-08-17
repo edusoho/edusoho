@@ -13,15 +13,6 @@
     </div>
     <div class="modal-body">
       <div class="certificate-detail-info">
-        <div class="certificate-detail-img">
-          <span class="certificate-detail-name">{{ certificate.name }}</span>
-          {% if certificate.expiryDay %}
-            {% set expiryTime = nowTime + certificate.expiryDay*24*60*60 %}
-            <p class="certificate-detail-expiry">{{ 'course.catalogue.certificate_expiry'|trans({'%expiryTime%':expiryTime|date('Y/m/d')}) }}</p>
-          {% else %}
-            <p class="certificate-detail-expiry">{{ 'course.catalogue.certificate_forever'|trans }}</p>
-          {% endif %}
-        </div>
         <div class="detail-description">
           {{ certificate.description }}
         </div>

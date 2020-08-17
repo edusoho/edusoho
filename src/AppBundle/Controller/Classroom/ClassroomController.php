@@ -796,7 +796,6 @@ class ClassroomController extends BaseController
             'certificate' => $certificate,
             'classroom' => $classroom,
             'isObtained' => $isObtained,
-            'nowTime' => time(),
         ]);
     }
 
