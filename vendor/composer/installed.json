@@ -540,12 +540,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/codeages/biz-item-bank.git",
-            "reference": "91f1c0f41f2fbaad09de4ef7c52039798cda7e0f"
+            "reference": "29e0f8791a0f4946690e5977df7c60fbfcc29083"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/codeages/biz-item-bank/zipball/91f1c0f41f2fbaad09de4ef7c52039798cda7e0f",
-            "reference": "91f1c0f41f2fbaad09de4ef7c52039798cda7e0f",
+            "url": "https://api.github.com/repos/codeages/biz-item-bank/zipball/29e0f8791a0f4946690e5977df7c60fbfcc29083",
+            "reference": "29e0f8791a0f4946690e5977df7c60fbfcc29083",
             "shasum": "",
             "mirrors": [
                 {
@@ -568,7 +568,7 @@
             "mockery/mockery": "^0.9.9",
             "phpunit/phpunit": "^5|^6"
         },
-        "time": "2020-08-12T02:43:29+00:00",
+        "time": "2020-08-17T09:30:53+00:00",
         "type": "library",
         "installation-source": "source",
         "autoload": {
@@ -5898,7 +5898,8 @@
         "homepage": "https://github.com/sebastianbergmann/php-token-stream/",
         "keywords": [
             "tokenizer"
-        ]
+        ],
+        "abandoned": true
     },
     {
         "name": "phpunit/phpunit",
