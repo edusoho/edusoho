@@ -26,6 +26,7 @@ use Biz\Course\Service\MemberService;
 use Biz\Exception\UnableJoinException;
 use Biz\Favorite\Dao\FavoriteDao;
 use Biz\File\UploadFileException;
+use Biz\Goods\Mediator\CourseSetGoodsMediator;
 use Biz\Goods\Mediator\CourseSpecsMediator;
 use Biz\Goods\Service\GoodsService;
 use Biz\Product\Service\ProductService;
@@ -2433,6 +2434,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->dispatch('courseSet.courses.sort', new Event($courseSet, [
             'courseIds' => $ids,
         ]));
+        $this->getCourseSetGoodsMediator()->onSortGoodsSpecs($courseSet);
     }
 
     public function changeHidePublishLesson($courseId, $status)
@@ -2818,5 +2820,13 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getCourseSpecsMediator()
     {
         return $this->biz['specs.mediator.course'];
+    }
+
+    /**
+     * @return CourseSetGoodsMediator
+     */
+    protected function getCourseSetGoodsMediator()
+    {
+        return $this->biz['goods.mediator.course_set'];
     }
 }

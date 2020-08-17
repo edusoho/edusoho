@@ -2,6 +2,8 @@
 
 namespace Biz\Goods\Mediator;
 
+use AppBundle\Common\ArrayToolkit;
+use Biz\Course\Service\CourseService;
 use Biz\Goods\GoodsException;
 use Biz\Product\ProductException;
 
@@ -105,6 +107,20 @@ class CourseSetGoodsMediator extends AbstractGoodsMediator
         $this->getGoodsService()->deleteGoods($existGoods['id']);
     }
 
+    public function onSortGoodsSpecs($courseSet)
+    {
+        list($product, $goods) = $this->getProductAndGoods($courseSet);
+        $specs = $this->getGoodsService()->findGoodsSpecsByGoodsId($goods['id']);
+        $targetIds = ArrayToolkit::column($specs, 'targetId');
+        $courses = ArrayToolkit::index($this->getCourseService()->findCoursesByIds($targetIds), 'id');
+        foreach ($specs as $spec) {
+            if (isset($courses[$spec['targetId']])) {
+                $this->getGoodsService()->updateGoodsSpecs($spec['id'], ['seq' => $courses[$spec['targetId']]['seq']]);
+            }
+        }
+        return [$product, $goods];
+    }
+
     /**
      * @param $courseSet
      *
@@ -154,5 +170,13 @@ class CourseSetGoodsMediator extends AbstractGoodsMediator
         }
 
         return [$existProduct, $existGoods];
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->biz->service('Course:CourseService');
     }
 }

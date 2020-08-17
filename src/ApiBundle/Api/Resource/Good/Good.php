@@ -35,7 +35,7 @@ class Good extends AbstractResource
         $goods = $this->getGoodsService()->convertGoodsPrice($goods);
         $goodsEntity = $this->getGoodsService()->getGoodsEntityFactory()->create($goods['type']);
         $goods['canManage'] = $goodsEntity->canManageTarget($goods);
-        $goods['specs'] = $this->getGoodsService()->findGoodsSpecsByGoodsId($goods['id']);
+        $goods['specs'] = $this->getGoodsService()->findPublishedGoodsSpecsByGoodsId($goods['id']);
         foreach ($goods['specs'] as &$spec) {
             $spec = $this->getGoodsService()->convertSpecsPrice($goods, $spec);
             $spec['isMember'] = $goodsEntity->isSpecsMember($goods, $spec, $user['id']);

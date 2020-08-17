@@ -89,6 +89,13 @@ abstract class AbstractGoodsMediator
     abstract public function onMaxRateChange($target);
 
     /**
+     * @param $target
+     * @return mixed
+     * 规格排序
+     */
+    abstract public function onSortGoodsSpecs($target);
+
+    /**
      * @return GoodsService
      */
     protected function getGoodsService()

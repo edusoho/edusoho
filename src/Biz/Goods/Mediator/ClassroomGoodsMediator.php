@@ -139,6 +139,11 @@ class ClassroomGoodsMediator extends AbstractGoodsMediator
         return [$product, $goods];
     }
 
+    public function onSortGoodsSpecs($classroom)
+    {
+        return null;
+    }
+
     /**
      * @return ClassroomSpecsMediator
      */
