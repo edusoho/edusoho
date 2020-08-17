@@ -20,6 +20,7 @@ use AppBundle\Util\CategoryBuilder;
 use AppBundle\Util\CdnUrl;
 use AppBundle\Util\UploadToken;
 use Biz\Account\Service\AccountProxyService;
+use Biz\Certificate\Service\CertificateService;
 use Biz\Player\Service\PlayerService;
 use Biz\S2B2C\Service\FileSourceService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
@@ -197,6 +198,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_s2b2c_enabled', [$this, 'isS2B2CEnabled']),
             new \Twig_SimpleFunction('s2b2c_has_behaviour_permission', [$this, 's2b2cHasBehaviourPermission']),
             new \Twig_SimpleFunction('make_local_media_file_token', [$this, 'makeLocalMediaFileToken']),
+            new \Twig_SimpleFunction('can_obtain_certificates', [$this, 'canObtainCertificates']),
         ];
     }
 
@@ -1978,6 +1980,22 @@ class WebExtension extends \Twig_Extension
         }
     }
 
+    public function canObtainCertificates($targetId, $targetType)
+    {
+        $certificates = $this->getCertificateService()->search(
+            ['targetId' => $targetId, 'targetType' => $targetType, 'status' => 'published'],
+            [],
+            0,
+            PHP_INT_MAX
+        );
+
+        if (empty($certificates)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     public function canModifySiteName()
     {
         $merchantSetting = $this->getSettingService()->get('merchant_setting');
@@ -2103,5 +2121,13 @@ class WebExtension extends \Twig_Extension
     protected function getResourceFacadeService()
     {
         return $this->createService('CloudPlatform:ResourceFacadeService');
+    }
+
+    /**
+     * @return CertificateService
+     */
+    protected function getCertificateService()
+    {
+        return $this->createService('Certificate:CertificateService');
     }
 }

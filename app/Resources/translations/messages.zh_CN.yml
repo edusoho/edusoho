@@ -4564,6 +4564,8 @@ explore.open_course.title: 公开课
 explore.open_course.list: 公开课列表
 explore.open_course.live: 直播
 explore.open_course.empty: 暂无公开课
+explore.classroom.certificate_tag: 获得证书
+explore.classroom.certificate_tag_short: 证
 
 #课程存档
 archive.course.title: 课程存档
