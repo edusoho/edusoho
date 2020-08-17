@@ -11,16 +11,16 @@ use AppBundle\Common\ServiceToolkit;
 
 class ClassroomFilter extends Filter
 {
-    protected $simpleFields = array(
-        'id', 'title', 'smallPicture', 'middlePicture', 'largePicture', 'price', 'studentNum', 'courseNum', 'about',
-    );
+    protected $simpleFields = [
+        'id', 'title', 'smallPicture', 'middlePicture', 'largePicture', 'price', 'studentNum', 'courseNum', 'about', 'productId', 'goodsId',
+    ];
 
-    protected $publicFields = array(
+    protected $publicFields = [
         'status', 'price', 'vipLevelId', 'headTeacher', 'teachers', 'assistants',
         'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'threadNum', 'noteNum', 'postNum', 'service', 'recommended',
         'recommendedSeq', 'rating', 'ratingNum', 'maxRate', 'showable', 'buyable', 'expiryMode', 'expiryValue',
-        'createdTime', 'updatedTime', 'creator', 'access',
-    );
+        'createdTime', 'updatedTime', 'creator', 'access', 'productId', 'goodsId',
+    ];
 
     protected function simpleFields(&$data)
     {
@@ -36,7 +36,7 @@ class ClassroomFilter extends Filter
             Converter::timestampToDate($data['expiryStartDate']);
         }
 
-        $data['service'] = AssetHelper::callAppExtensionMethod('transServiceTags', array(ServiceToolkit::getServicesByCodes($data['service'])));
+        $data['service'] = AssetHelper::callAppExtensionMethod('transServiceTags', [ServiceToolkit::getServicesByCodes($data['service'])]);
 
         $userFilter = new UserFilter();
         $userFilter->setMode(Filter::SIMPLE_MODE);
@@ -54,11 +54,11 @@ class ClassroomFilter extends Filter
         $data['smallPicture'] = AssetHelper::getFurl($data['smallPicture'], 'classroom.png');
         $data['middlePicture'] = AssetHelper::getFurl($data['middlePicture'], 'classroom.png');
         $data['largePicture'] = AssetHelper::getFurl($data['largePicture'], 'classroom.png');
-        $data['cover'] = array(
+        $data['cover'] = [
             'small' => $data['smallPicture'],
             'middle' => $data['middlePicture'],
             'large' => $data['largePicture'],
-        );
+        ];
 
         unset($data['smallPicture']);
         unset($data['middlePicture']);

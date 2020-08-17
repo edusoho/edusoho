@@ -51,7 +51,7 @@
                 axios({
                     url: "/api/favorite",
                     method: "DELETE",
-                    params: {
+                    data: {
                         'targetType': targetType,
                         'targetId': targetId
                     },

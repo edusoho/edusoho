@@ -25,7 +25,7 @@
         <div class="product-detail__right detail-right pull-right">
             <p class="detail-right__title">{{ goods.title }}</p>
             <p class="detail-right__subtitle">{{ goods.subtitle }}</p>
-            <a v-if="currentSku.isTeacher" class="btn btn-default btn-xs detail-right__manage_btn" @click="manageUrl(goods)">
+            <a v-if="goods.canManage" class="btn btn-default btn-xs detail-right__manage_btn" @click="manageUrl(goods)">
                 <i class="es-icon es-icon-setting"></i>&nbsp;{{ '管理'|trans }}
             </a>
 

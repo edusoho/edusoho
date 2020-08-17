@@ -16,8 +16,11 @@ class CourseSetDaoImpl extends AdvancedDaoImpl implements CourseSetDao
 
     public function findProductIdAndGoodsIdsByIds($ids)
     {
+        if (empty($ids)) {
+            return [];
+        }
         $marks = str_repeat('?,', count($ids) - 1).'?';
-        $sql = "SELECT csv8.id as courseSetId, p.id as productId, g.id as goodsId  FROM {$this->table} csv8 
+        $sql = "SELECT csv8.id AS courseSetId, p.id AS productId, g.id AS goodsId  FROM {$this->table} csv8 
                 LEFT JOIN `product` p ON csv8.id=p.targetId AND p.targetType='course'
                 LEFT JOIN `goods` g ON g.productId=p.id
                 WHERE csv8.id in ({$marks});";

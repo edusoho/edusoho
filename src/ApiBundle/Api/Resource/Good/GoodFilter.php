@@ -11,14 +11,18 @@ use ApiBundle\Api\Util\AssetHelper;
 class GoodFilter extends Filter
 {
     protected $simpleFields = [
-        'id', 'title', 'subtitle', 'type', 'summary', 'minPrice', 'maxPrice', 'minDisplayPrice', 'maxDisplayPrice', 'minPriceObj', 'maxPriceObj', 'minDisplayPriceObj', 'maxDisplayPriceObj', 'images', 'ratingNum', 'rating', 'hitNum',
-        'hotSeq', 'showable', 'buyable', 'creator', 'discount',
+        'id', 'title', 'subtitle', 'type', 'summary', 'minPrice', 'maxPrice',
+        'minDisplayPrice', 'maxDisplayPrice', 'minPriceObj', 'maxPriceObj',
+        'minDisplayPriceObj', 'maxDisplayPriceObj', 'images', 'ratingNum', 'rating', 'hitNum',
+        'hotSeq', 'showable', 'buyable', 'creator', 'discount', 'canManage',
     ];
 
     protected $publicFields = [
         'id', 'title', 'subtitle', 'type',  'product', 'extensions', 'specs', 'creator', 'status',
-        'showable', 'buyable', 'summary', 'minPrice', 'maxPrice', 'minDisplayPrice', 'maxDisplayPrice', 'minPriceObj', 'maxPriceObj', 'minDisplayPriceObj', 'maxDisplayPriceObj', 'images', 'orgId', 'orgCode', 'ratingNum', 'rating',
+        'showable', 'buyable', 'summary', 'minPrice', 'maxPrice', 'minDisplayPrice', 'maxDisplayPrice', 'minPriceObj',
+        'maxPriceObj', 'minDisplayPriceObj', 'maxDisplayPriceObj', 'images', 'orgId', 'orgCode', 'ratingNum', 'rating',
         'hitNum', 'hotSeq', 'recommendWeight', 'recommendedTime', 'createdTime', 'updatedTime', 'isFavorite', 'discount',
+        'canManage',
     ];
 
     protected $filterMap = [

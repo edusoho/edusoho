@@ -50,6 +50,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return ArrayToolkit::index($this->getClassroomDao()->findByIds($ids), 'id');
     }
 
+    public function findProductIdAndGoodsIdsByIds($ids)
+    {
+        return $this->getClassroomDao()->findProductIdAndGoodsIdsByIds($ids);
+    }
+
     public function findActiveCoursesByClassroomId($classroomId)
     {
         $classroomCourses = $this->getClassroomCourseDao()->findActiveCoursesByClassroomId($classroomId);
@@ -102,12 +107,21 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->getClassroomDao()->get($id);
     }
 
-    public function searchClassrooms($conditions, $orderBy, $start, $limit, $columns = [])
+    public function searchClassrooms($conditions, $orderBy, $start, $limit, $columns = [], $withMarketingInfo = false)
     {
         $orderBy = $this->getOrderBys($orderBy);
         $conditions = $this->_prepareClassroomConditions($conditions);
 
-        return $this->getClassroomDao()->search($conditions, $orderBy, $start, $limit, $columns);
+        $classrooms = $this->getClassroomDao()->search($conditions, $orderBy, $start, $limit, $columns);
+        if ($withMarketingInfo) {
+            $relatedInfos = ArrayToolkit::index($this->findProductIdAndGoodsIdsByIds(ArrayToolkit::column($classrooms, 'id')), 'classroomId');
+            foreach ($classrooms as &$classroom) {
+                $classroom['productId'] = !empty($relatedInfos[$classroom['id']]) ? $relatedInfos[$classroom['id']]['productId'] : null;
+                $classroom['goodsId'] = !empty($relatedInfos[$classroom['id']]) ? $relatedInfos[$classroom['id']]['goodsId'] : null;
+            }
+        }
+
+        return $classrooms;
     }
 
     public function countClassrooms($conditions)
