@@ -60,6 +60,18 @@ class ClassroomStrategy extends BaseStrategy
         return $conditions;
     }
 
+    protected function getContent($record, $content)
+    {
+        $content = $this->getRecipientContent($record['userId'], $content);
+
+        if (strstr($content, '$classroomName$')) {
+            $classroom = $this->getClassroomService()->getClassroom($record['targetId']);
+            $content = str_replace('$classroomName$', $classroom['title'], $content);
+        }
+
+        return $content;
+    }
+
     /**
      * @return ClassroomService
      */

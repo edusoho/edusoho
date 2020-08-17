@@ -3409,3 +3409,7 @@ facein_inspection_results_detail:
 goods_show:
     path:     /goods/show/{id}
     defaults: { _controller: AppBundle:Goods/Goods:show }
+
+certificate_image_show:
+    path:     /certificate/image/{id}/show
+    defaults: { _controller: AppBundle:Certificate/Certificate:generateImage }

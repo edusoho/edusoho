@@ -9,6 +9,8 @@ use AppBundle\Component\RateLimit\SmsLoginRateLimiter;
 use AppBundle\Component\RateLimit\SmsRateLimiter;
 use Biz\Announcement\Processor\AnnouncementProcessorFactory;
 use Biz\Article\Event\ArticleEventSubscriber;
+use Biz\Certificate\ImgBuilder\HorizontalImgBuilder;
+use Biz\Certificate\ImgBuilder\VerticalImgBuilder;
 use Biz\Certificate\Strategy\CertificateStrategyContext;
 use Biz\Certificate\Strategy\Impl\ClassroomStrategy;
 use Biz\Certificate\Strategy\Impl\CourseStrategy;
@@ -257,6 +259,14 @@ class DefaultServiceProvider implements ServiceProviderInterface
 
         $biz['certificate.classroom_strategy'] = function ($biz) {
             return new ClassroomStrategy($biz);
+        };
+
+        $biz['certificate.img_builder.vertical'] = function ($biz) {
+            return new VerticalImgBuilder($biz);
+        };
+
+        $biz['certificate.img_builder.horizontal'] = function ($biz) {
+            return new HorizontalImgBuilder($biz);
         };
     }
 }

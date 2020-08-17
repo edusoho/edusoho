@@ -1574,7 +1574,7 @@ admin_v2.certificate.close.failure_hint: close failure
 admin_v2.certificate.publish.hint: Are you sure you want to issue a certificate?
 admin_v2.certificate.publish.success_hint: publish success
 admin_v2.certificate.publish.failure_hint: publish failure
-admin_v2.certificate.delete.hint: When a certificate is deleted, you cannot view the list of users who have obtained the certificate and the audit list. Users who have already obtained the certificate will not be affected. Is the certificate deleted?
+admin_v2.certificate.delete.hint: After the certificate is deleted, you cannot view the user list and audit list of the certificate. Users who have acquired the certificate can no longer view the certificate. Is the certificate deleted?
 admin_v2.certificate.delete.success_hint: delete success
 admin_v2.certificate.delete.failure_hint: delete failure
 admin_v2.certificate.record.cancel.hint: Confirm revocation of certificate?
@@ -1582,4 +1582,5 @@ admin_v2.certificate.record.cancel.success_hint: cancel success
 admin_v2.certificate.record.cancel.failure_hint: cancel failure
 admin_v2.certificate.record.grant.success_hint: grant success
 admin_v2.certificate.record.grant.failure_hint: grant failure
+admin_v2.certificate.record.grant.issue_time_required: Please enter the date of issue
 

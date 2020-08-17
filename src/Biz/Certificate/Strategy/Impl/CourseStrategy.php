@@ -92,6 +92,18 @@ class CourseStrategy extends BaseStrategy
         return $conditions;
     }
 
+    protected function getContent($record, $content)
+    {
+        $content = $this->getRecipientContent($record['userId'], $content);
+
+        if (strstr($content, '$courseName$')) {
+            $course = $this->getCourseService()->getCourse($record['targetId']);
+            $content = str_replace('$courseName$', $course['title'], $content);
+        }
+
+        return $content;
+    }
+
     /**
      * @return CourseService
      */

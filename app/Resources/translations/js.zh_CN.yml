@@ -1517,7 +1517,7 @@ admin_v2.certificate.close.failure_hint: 证书关闭失败
 admin_v2.certificate.publish.hint: 确认要发布证书吗？
 admin_v2.certificate.publish.success_hint: 证书发布成功
 admin_v2.certificate.publish.failure_hint: 证书发布失败
-admin_v2.certificate.delete.hint: 证书被删除后，将无法查看已获取该证书的用户列表和审核列表。已获取该证书的用户将不会被影响。是否删除？
+admin_v2.certificate.delete.hint: 证书被删除后，将无法查看已获取该证书的用户列表和审核列表。且已获取证书的用户无法再查看该证书。是否删除？
 admin_v2.certificate.delete.success_hint: 证书删除成功
 admin_v2.certificate.delete.failure_hint: 证书删除失败
 admin_v2.certificate.record.cancel.hint: 确认撤销证书吗
@@ -1525,3 +1525,4 @@ admin_v2.certificate.record.cancel.success_hint: 撤销成功
 admin_v2.certificate.record.cancel.failure_hint: 撤销失败
 admin_v2.certificate.record.grant.success_hint: 授予成功
 admin_v2.certificate.record.grant.failure_hint: 授予失败
+admin_v2.certificate.record.grant.issue_time_required: 请输入发证日期

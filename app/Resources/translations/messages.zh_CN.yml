@@ -6289,7 +6289,8 @@ admin.operation_certificate.template.certificate.recipient: 被授予人信息
 admin.operation_certificate.template.certificate.recipient.default: $name$（$username$）同学：
 admin.operation_certificate.template.certificate.recipient_hint: 可选填，支持添加 姓名：$name$  用户名：$username$
 admin.operation_certificate.template.certificate.content: 证书正文
-admin.operation_certificate.template.certificate.content.default: 由于你在$coursename$ 课程中优异学习表现，最终完成课程并通过最终考核，特此发次证明！
+admin.operation_certificate.template.certificate.content.default.course: 由于你在$courseName$ 课程中优异学习表现，最终完成课程并通过最终考核，特此发次证明！
+admin.operation_certificate.template.certificate.content.default.classroom: 由于你在$classroomName$ 班级中优异学习表现，最终完成课程并通过最终考核，特此发次证明！
 admin.operation_certificate.template.certificate.content_hint: 可选填，支持添加 姓名：$name$   用户名：$username$
 admin.operation_certificate.template.certificate.content_hint.course: 课程名称：$courseName$
 admin.operation_certificate.template.certificate.content_hint.classroom: 课程名称：$classroomName$
@@ -6327,6 +6328,7 @@ admin.operation_certificate.certificate.record.user: 被授予人
 admin.operation_certificate.certificate.record.information: 认证信息
 admin.operation_certificate.certificate.record.certificate_information: 证书信息
 admin.operation_certificate.certificate.record.certificate_target: 认证对象
+admin.operation_certificate.certificate.record.img_loading: 加载中...
 
 # 网站公告管理
 admin.operation_announcement.content_th: 公告内容
