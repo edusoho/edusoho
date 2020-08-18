@@ -3,16 +3,17 @@
 namespace AppBundle\Controller\AdminV2\System;
 
 use AppBundle\Controller\AdminV2\BaseController;
-use Biz\Common\HTMLHelper;
 use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\Request;
+use Biz\Common\HTMLHelper;
 
-class SchoolInformationController extends BaseController
+class
+SchoolInformationController extends BaseController
 {
     public function siteAction(Request $request)
     {
-        $site = $this->getSettingService()->get('site', []);
-        $default = [
+        $site = $this->getSettingService()->get('site', array());
+        $default = array(
             'name' => '',
             'slogan' => '',
             'url' => '',
@@ -27,12 +28,12 @@ class SchoolInformationController extends BaseController
             'closed_note' => '',
             'favicon' => '',
             'copyright' => '',
-        ];
+        );
         $site = array_merge($default, $site);
 
-        return $this->render('admin-v2/system/school-information.html.twig', [
+        return $this->render('admin-v2/system/school-information.html.twig', array(
             'site' => $site,
-        ]);
+        ));
     }
 
     public function saveSiteAction(Request $request)
@@ -45,23 +46,23 @@ class SchoolInformationController extends BaseController
         }
         $this->getSettingService()->set('site', $site);
 
-        return $this->createJsonResponse([
+        return $this->createJsonResponse(array(
             'message' => $this->trans('site.save.success'),
-        ]);
+        ));
     }
 
     public function licenseAction(Request $request)
     {
-        $license = $this->getSettingService()->get('license', []);
+        $license = $this->getSettingService()->get('license', array());
 
-        $default = [
+        $default = array(
             'license_name' => '',
             'license_picture' => '',
             'license_url' => '',
             'permits' => [
                 ['name' => '', 'record_number' => '', 'picture' => ''],
-            ],
-        ];
+            ]
+        );
         $license = array_merge($default, $license);
 
         return $this->render('admin-v2/system/certificates-setting.html.twig', [
@@ -73,7 +74,7 @@ class SchoolInformationController extends BaseController
     {
         $license = $request->request->all();
         foreach ($license['permits'] as $key => $permit) {
-            if ('' == $permit['name'] && '' == $permit['record_number'] && '' == $permit['picture'] && 0 != $key) {
+            if (empty($permit['name']) && empty($permit['record_number']) && empty($permit['picture']) && $key != 0 ) {
                 unset($license['permits'][$key]);
             }
         }
@@ -84,10 +85,11 @@ class SchoolInformationController extends BaseController
         }
         $this->getSettingService()->set('license', $license);
 
-        return $this->createJsonResponse([
+        return $this->createJsonResponse(array(
             'message' => $this->trans('site.save.success'),
-        ]);
+        ));
     }
+
 
     /**
      * @return SettingService
