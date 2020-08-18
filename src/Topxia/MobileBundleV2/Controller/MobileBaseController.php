@@ -11,6 +11,7 @@ use Biz\Role\Util\PermissionBuilder;
 use Biz\User\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Topxia\Api\Util\TagUtil;
 
 class MobileBaseController extends BaseController
@@ -796,5 +797,10 @@ class MobileBaseController extends BaseController
     public function forward($controller, array $path = [], array $query = [])
     {
         return parent::forward($controller, $path, $query);
+    }
+
+    public function generateUrl($route, $parameters = [], $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+    {
+        return parent::generateUrl($route, $parameters, $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH);
     }
 }

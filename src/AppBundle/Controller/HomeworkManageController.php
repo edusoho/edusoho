@@ -143,7 +143,7 @@ class HomeworkManageController extends BaseController
         }
 
         $answerSceneReport = $this->getAnswerSceneService()->getAnswerSceneReport($activity['ext']['answerSceneId']);
-        
+
         return $this->render('homework/manage/result-analysis.html.twig', [
             'activity' => $activity,
             'studentNum' => $studentNum,

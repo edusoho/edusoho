@@ -21,6 +21,11 @@ class AssessmentExerciseRecordDaoImpl extends GeneralDaoImpl implements Assessme
         return $this->db()->fetchAssoc($sql, [$moduleId, $assessmentId, $userId]);
     }
 
+    public function deleteByExerciseId($exerciseId)
+    {
+        return $this->db()->delete($this->table(), ['exerciseId' => $exerciseId]);
+    }
+
     public function declares()
     {
         return [

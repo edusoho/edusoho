@@ -141,6 +141,7 @@ class ChapterExerciseEventSubscriberTest extends BaseTestCase
             'id' => 1,
             'userId' => 1,
             'exerciseId' => 1,
+            'remark' => '',
         ]);
     }
 

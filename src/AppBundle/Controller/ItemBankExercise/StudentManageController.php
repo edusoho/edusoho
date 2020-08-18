@@ -146,15 +146,11 @@ class StudentManageController extends BaseController
         if (!$user) {
             $response = $this->trans('item_bank_exercise.student_manage.student_not_exist');
         } else {
-            $isExerciseStudent = $this->getExerciseMemberService()->isExerciseMember($exerciseId, $user['id']);
-
-            if ($isExerciseStudent) {
-                $response = $this->trans('item_bank_exercise.student_manage.student_exist');
+            if ($this->getExerciseService()->isExerciseTeacher($exerciseId, $user['id'])) {
+                $response = $this->trans('item_bank_exercise.student_manage.can_not_add_teacher');
             } else {
-                $isExerciseTeacher = $this->getExerciseService()->isExerciseTeacher($exerciseId, $user['id']);
-
-                if ($isExerciseTeacher) {
-                    $response = $this->trans('item_bank_exercise.student_manage.can_not_add_teacher');
+                if ($this->getExerciseMemberService()->isExerciseMember($exerciseId, $user['id'])) {
+                    $response = $this->trans('item_bank_exercise.student_manage.student_exist');
                 }
             }
         }

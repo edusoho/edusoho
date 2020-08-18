@@ -17,6 +17,11 @@ class ExerciseMemberDaoImpl extends AdvancedDaoImpl implements ExerciseMemberDao
         ]);
     }
 
+    public function deleteByExerciseId($exerciseId)
+    {
+        return $this->db()->delete($this->table(), ['exerciseId' => $exerciseId]);
+    }
+
     public function findByUserIdAndRole($userId, $role)
     {
         return $this->findByFields(['userId' => $userId, 'role' => $role]);

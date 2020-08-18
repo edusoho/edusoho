@@ -409,4 +409,6 @@ interface UserService
     public function updateUserForDestroyedAccount($userId, $destroyedId);
 
     public function deleteUserBindByUserId($userId);
+
+    public function findUnLockedUsersByUserIds($userIds = []);
 }

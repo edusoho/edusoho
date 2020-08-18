@@ -3,6 +3,7 @@
 if (class_exists('PHPUnit_TextUI_ResultPrinter') && !class_exists('PHPUnit\TextUI\ResultPrinter')) {
     class_alias('PHPUnit_TextUI_ResultPrinter', 'PHPUnit\TextUI\ResultPrinter');
     class_alias('PHPUnit_TextUI_TestRunner', 'PHPUnit\TextUI\TestRunner');
+    class_alias('PHPUnit_Util_Printer', 'PHPUnit\Util\Printer');
 }
 if (class_exists('PHPUnit_Runner_Filter_Factory') && !class_exists('PHPUnit\Runner\Filter\Factory')) {
     class_alias('PHPUnit_Runner_Filter_Factory', 'PHPUnit\Runner\Filter\Factory');

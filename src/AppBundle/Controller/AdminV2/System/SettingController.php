@@ -7,6 +7,7 @@ use AppBundle\Common\FileToolkit;
 use AppBundle\Common\JsonToolkit;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Content\Service\FileService;
+use Biz\System\Service\CacheService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\AuthService;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,6 +28,7 @@ class SettingController extends BaseController
             $security['safe_iframe_domains'] = trim(str_replace(["\r\n", "\n", "\r"], ' ', $security['safe_iframe_domains']));
             $security['safe_iframe_domains'] = array_filter(explode(' ', $security['safe_iframe_domains']));
 
+            $this->getCacheService()->set('safe_iframe_domains', $security['safe_iframe_domains']);
             $this->getSettingService()->set('security', $security);
             $this->setFlashMessage('success', 'site.save.success');
         }
@@ -368,5 +370,14 @@ class SettingController extends BaseController
     protected function getAuthService()
     {
         return $this->createService('User:AuthService');
+    }
+
+    /**
+     * @return CacheService
+     * @return CacheService
+     */
+    protected function getCacheService()
+    {
+        return $this->createService('System:CacheService');
     }
 }
