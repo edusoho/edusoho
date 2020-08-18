@@ -29,6 +29,30 @@ class AuditServiceImpl extends BaseService implements AuditService
         return $this->getRecordDao()->search($conditions, $orderBys, $start, $limit, $columns);
     }
 
+    public function update($id, $fields)
+    {
+        $certificate = $this->get($id);
+        if (empty($certificate)) {
+            $this->createNewException(CertificateException::NOTFOUND_CERTIFICATE());
+        }
+
+        $fields = $this->filterRecordFields($fields);
+
+        return $this->getCertificateDao()->update($id, $fields);
+    }
+
+    protected function filterRecordFields($fields)
+    {
+        return ArrayToolkit::parts(
+            $fields,
+            [
+                'status',
+                'auditTime',
+                'auditUserId'
+            ]
+        );
+    }
+
     public function passCertificate($id, $fields)
     {
         $record = $this->get($id);

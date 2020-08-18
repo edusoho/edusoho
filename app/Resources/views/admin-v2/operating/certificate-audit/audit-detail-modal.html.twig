@@ -45,15 +45,13 @@
     {#    </fieldset>#}
 
     <fieldset>
-      <div class="mll">
+      <div class="mll row form-group">
         <label class="col-md-2"><input type="radio" name="status" value="valid"
                                        checked="checked"> {{ 'admin.operation_certificate.certificate.audit.certificate_pass'|trans }}
         </label>
-        <label class="col-md-2"><input type="radio" name="status" value="reject"
-                                       checked="checked"> {{ 'admin.operation_certificate.certificate.audit.certificate_reject'|trans }}
+        <label class="col-md-2"><input type="radio" name="status" value="reject"> {{ 'admin.operation_certificate.certificate.audit.certificate_reject'|trans }}
         </label>
-        <label class="col-md-2"><input type="radio" name="status" value="none"
-                                       checked="checked"> {{ 'admin.operation_certificate.certificate.audit.certificate_todo'|trans }}
+        <label class="col-md-2"><input type="radio" name="status" value="none"> {{ 'admin.operation_certificate.certificate.audit.certificate_todo'|trans }}
         </label>
       </div>
     </fieldset>
