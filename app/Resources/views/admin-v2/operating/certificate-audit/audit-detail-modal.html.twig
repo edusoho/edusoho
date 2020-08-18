@@ -1,0 +1,71 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% do script(['app/js/admin-v2/operating/certificate-audit/detail/index.js']) %}
+
+{% block title %}{{ 'admin.operation_certificate.certificate.record.grant'|trans }}{% endblock %}
+
+{% block body %}
+
+  <form class="form-horizontal" method="post"
+        data-save-url="{{ path('admin_v2_certificate_examine_audit_pass', {id: record.id}) }}">
+    <p class="mll">{{ 'admin.operation_certificate.certificate.audit.user_info'|trans }}</p><br>
+    <p class="mll">{{ 'user.fields.truename_label'|trans }}：{{ user.truename|default('') }}</p><br>
+    <p class="mll">{{ 'user.fields.username_label'|trans }}：{{ user.nickname }}</p><br>
+
+    <p class="mll">{{ 'admin.operation_certificate.certificate.audit.certificate_info'|trans }}</p><br>
+    <p class="mll">{{ 'admin.operation_certificate.certificate.record.certificate_target'|trans }}
+      ：{{ record.targetType|trans }}"{{ target.title|default('') }}"</p><br>
+    <p class="mll">{{ 'admin.operation_certificate.certificate.audit.crouse_status'|trans }}
+      ：{{ 'admin.operation_certificate.certificate.audit.crouse_complete'|trans }}</p><br>
+    <p class="mll">{{ 'admin.operation_certificate.certificate.audit.result'|trans }}</p><br>
+
+    {#    <fieldset>#}
+    {#      <div class="row form-group">#}
+    {#        <div class="radios">#}
+    {#          <label><input type="radio" name="status" value="valid"#}
+    {#                        checked="checked"> {{ 'admin.operation_certificate.certificate.audit.certificate_pass'|trans }}#}
+    {#          </label>#}
+    {#        </div>#}
+    {#        <div class="radios">#}
+    {#          <label><input type="radio" name="status" value="reject"#}
+    {#                        checked="checked"> {{ 'admin.operation_certificate.certificate.audit.certificate_reject'|trans }}#}
+    {#          </label>#}
+    {#        </div>#}
+    {#        <div class="radios">#}
+    {#          <label><input type="radio" name="status" value="none"#}
+    {#                        checked="checked"> {{ 'admin.operation_certificate.certificate.audit.certificate_todo'|trans }}#}
+    {#          </label>#}
+    {#        </div>#}
+    {#      </div>#}
+    {#      <div class="row form-group">#}
+    {#        <button type="submit" class="btn btn-primary save-btn" id="certificate-audit"#}
+    {#                data-loading-text="{{ 'form.btn.submit.submiting'|trans }}"#}
+    {#                href="{{ path('admin_v2_certificate_examine_audit_pass', {id: record.id}) }}">{{ 'admin.operation_certificate.certificate.audit.audit_certificate'|trans }}</button>#}
+    {#      </div>#}
+    {#    </fieldset>#}
+
+    <fieldset>
+      <div class="mll">
+        <label class="col-md-2"><input type="radio" name="status" value="valid"
+                                       checked="checked"> {{ 'admin.operation_certificate.certificate.audit.certificate_pass'|trans }}
+        </label>
+        <label class="col-md-2"><input type="radio" name="status" value="reject"
+                                       checked="checked"> {{ 'admin.operation_certificate.certificate.audit.certificate_reject'|trans }}
+        </label>
+        <label class="col-md-2"><input type="radio" name="status" value="none"
+                                       checked="checked"> {{ 'admin.operation_certificate.certificate.audit.certificate_todo'|trans }}
+        </label>
+      </div>
+    </fieldset>
+
+  </form>
+
+
+{% endblock %}
+{% block footer %}
+  <button type="button" class="btn btn-primary pull-left"
+          data-loading-text="{{ 'form.btn.submit.submiting'|trans }}"
+          href="{{ path('admin_v2_certificate_examine_audit_pass', {id: record.id}) }}">{{ 'admin.operation_certificate.certificate.audit.audit_certificate'|trans }}</button>
+  <button type="button" class="btn btn-default btn-link pull-right"
+          data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
+{% endblock %}

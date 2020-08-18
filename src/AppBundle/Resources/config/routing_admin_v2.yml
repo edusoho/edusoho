@@ -1044,6 +1044,22 @@ admin_v2_certificate_template_preview:
     path:  /certificate/template/{id}/preview
     defaults: { _controller: AppBundle:AdminV2/Operating/CertificateTemplate:preview }
 
+admin_v2_certificate_examine_manage:
+    path: /certificate/audit/manage
+    defaults: { _controller: AppBundle:AdminV2/Operating/CertificateAudit:index }
+
+admin_v2_certificate_examine_audit_detail:
+    path: /certificate/audit/{id}/detail
+    defaults: { _controller: AppBundle:AdminV2/Operating/CertificateAudit:detail }
+
+admin_v2_certificate_examine_audit_pass:
+    path: /certificate/audit/{id}/pass
+    defaults: { _controller: AppBundle:AdminV2/Operating/CertificateAudit:certificatePass }
+
+admin_v2_certificate_examine_audit_reject:
+    path: /certificate/audit/{id}/reject
+    defaults: { _controller: AppBundle:AdminV2/Operating/CertificateAudit:certificateReject }
+
 # 运营-内容运营-网站公告管理
 admin_v2_announcement:
     path:  /announcement

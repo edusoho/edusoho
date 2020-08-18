@@ -1525,3 +1525,5 @@ admin_v2.certificate.record.cancel.success_hint: 撤销成功
 admin_v2.certificate.record.cancel.failure_hint: 撤销失败
 admin_v2.certificate.record.grant.success_hint: 授予成功
 admin_v2.certificate.record.grant.failure_hint: 授予失败
+admin_v2.certificate.record.audit.success_hint: 审核成功
+admin_v2.certificate.record.audit.failure_hint: 审核失败

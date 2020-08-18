@@ -612,6 +612,7 @@ admin_v2.operation.certificate.publish_tab: 发布
 admin_v2.operation.certificate.delete_tab: 删除
 admin_v2.operation.certificate.member_list_tab: 名单管理
 admin_v2.operation.certificate.audit_manage_tab: 审核管理
+admin_v2.operation.certificate.audit.basic_tab: 认证审核
 
 # 运营-内容运营-全站站内通知
 admin_v2.operation.notification_menu: 全站站内通知

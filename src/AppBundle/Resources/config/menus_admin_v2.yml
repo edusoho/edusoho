@@ -670,6 +670,9 @@ admin_v2:
                                             router_params:
                                                 id: (certificate.id)
                                             group: groupButton
+                                admin_v2_certificate_examine_manage:
+                                    name: admin_v2.operation.certificate.audit.basic_tab
+                                    disable: true
                                 admin_v2_certificate_template_manage:
                                     name: admin_v2.operation.certificate.template.basic_tab
                                     disable: true

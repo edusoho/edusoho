@@ -1,0 +1,47 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% do script(['app/js/admin-v2/operating/certificate-template/manage/index.js']) %}
+
+{% set menu = 'admin_v2_certificate_examine_manage' %}
+
+{% block main %}
+  <form class="well well-sm form-inline" method="get">
+    <div class="form-group">
+      <label>{{ 'admin.operation_certificate.certificate.audit.query'|trans }}:</label>
+      <select class="form-control" name="targetType">
+        {{ select_options(dict('certificateTypes'), app.request.query.get('targetType'), 'admin.operation_certificate.template.type.all'|trans) }}
+      </select>
+    </div>
+    <div class="form-group mll">
+      <label>{{ 'admin.operation_certificate.template.title'|trans }}:</label>
+      <input class="form-control" name="nameLike" type="text"
+             placeholder="{{ 'admin.custom_page_manage.keyword_placeholder'|trans }}"
+             value="{{ app.request.query.get('nameLike') }}">
+    </div>
+    <button class="btn btn-primary" type="submit">{{ 'form.btn.search'|trans }}</button>
+  </form>
+
+  <table class="table table-hover table-striped" id="certificate-table">
+    <thead>
+    <tr>
+      <th>{{'user.fields.truename_label'|trans}}</th>
+      <th >{{'admin.operation_certificate.certificate.audit.certificate_batch'|trans}}</th>
+      <th>{{'admin.operation_certificate.certificate.audit.apply_time'|trans}}</th>
+      <th>{{'admin.operation_certificate.certificate.audit.status'|trans}}
+      <th width="15%">{{'admin.operation_certificate.certificate.audit.audit_time'|trans}}</th>
+      <th>{{'admin.operation_certificate.certificate.audit.reviewer'|trans}}</th>
+      <th>{{'admin.operation_certificate.certificate.audit.manage'|trans}}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% if certificates %}
+      {% for certificate in certificates %}
+        {% include 'admin-v2/operating/certificate-audit/certififcate-audit-tr.html.twig' %}
+      {% endfor %}
+    {% else %}
+      <tr><td colspan="20"><div class="empty">{{'site.datagrid.empty'|trans}}</div></td></tr>
+    {% endif %}
+    </tbody>
+  </table>
+  {{ web_macro.paginator(paginator) }}
+{% endblock %}
