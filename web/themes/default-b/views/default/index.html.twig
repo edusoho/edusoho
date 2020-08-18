@@ -353,11 +353,17 @@
               <ul class="media-list">
                 {% for courseSet in courseSetsRank %}
                   {% if courseSet %}
+                    {% set course = data('PublishedCourseByCourseSet', {'courseSetId':courseSet.id}) %}
                     <li class="media">
                       <a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}">
                         <div class="course-item">
                           <img src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}" class="img-responsive thumb pull-left">
-                          <div class="course-title">{{ courseSet.title }}</div>
+                          {% if can_obtain_certificates(course.id, 'course') %}
+                            <a style="margin-top: 6px" class="certificate-tag" tabindex="0" role="button" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-html="true" title="{{ 'explore.classroom.certificate_tag'|trans }}" data-content="{{ 'course.catalogue.certificate_obtain'|trans }}">{{ 'explore.classroom.certificate_tag_short'|trans }}</a>
+                          {% endif %}
+                          <div class="course-title">
+                            {{ courseSet.title }}
+                          </div>
                         </div>
                       </a>
                     </li>
@@ -460,7 +466,12 @@
                 {% endif %}
               {% endif %}
 
-              <span class="title">{{ courseSet.title }}</span>
+              <span class="title">
+                {% if can_obtain_certificates(course.id, 'course') %}
+                  <a class="certificate-tag" tabindex="0" role="button" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-html="true" title="{{ 'explore.classroom.certificate_tag'|trans }}" data-content="{{ 'course.catalogue.certificate_obtain'|trans }}">{{ 'explore.classroom.certificate_tag_short'|trans }}</a>
+                {% endif %}
+                {{ courseSet.title }}
+              </span>
               {% if mode in ['default', 'teach'] %}
 
                 {% if courseSet.type == 'live' %}
@@ -574,7 +585,12 @@
               {% endif %}
             {% endif %}
 
-            <span class="title">{{ course.title }}</span>
+            <span class="title">
+              {% if can_obtain_certificates(course.id, 'course') %}
+                <a class="certificate-tag" tabindex="0" role="button" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-html="true" title="{{ 'explore.classroom.certificate_tag'|trans }}" data-content="{{ 'course.catalogue.certificate_obtain'|trans }}">{{ 'explore.classroom.certificate_tag_short'|trans }}</a>
+              {% endif %}
+              {{ course.title }}
+            </span>
 
             {#{% if course.type == 'liveOpen' and lessons %}
               <span class="live-course-lesson metas">

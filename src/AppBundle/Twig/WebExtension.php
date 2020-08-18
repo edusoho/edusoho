@@ -1986,7 +1986,7 @@ class WebExtension extends \Twig_Extension
             ['targetId' => $targetId, 'targetType' => $targetType, 'status' => 'published'],
             [],
             0,
-            PHP_INT_MAX
+            1
         );
 
         if (empty($certificates)) {
