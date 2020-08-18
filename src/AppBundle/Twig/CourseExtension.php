@@ -4,6 +4,7 @@ namespace AppBundle\Twig;
 
 use AppBundle\Util\AvatarAlert;
 use Biz\Activity\Service\ActivityService;
+use Biz\Certificate\Service\CertificateService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
@@ -66,6 +67,7 @@ class CourseExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_teacher', array($this, 'isTeacher')),
             new \Twig_SimpleFunction('next_task', array($this, 'getNextTask')),
             new \Twig_SimpleFunction('latest_live_task', array($this, 'getLatestLiveTask')),
+            new \Twig_SimpleFunction('can_obtain_certificates', [$this, 'canObtainCertificates']),
         );
     }
 
@@ -384,6 +386,22 @@ class CourseExtension extends \Twig_Extension
         return 'success' == $result['code'];
     }
 
+    public function canObtainCertificates($targetId, $targetType)
+    {
+        $certificates = $this->getCertificateService()->search(
+            ['targetId' => $targetId, 'targetType' => $targetType, 'status' => 'published'],
+            [],
+            0,
+            1
+        );
+
+        if (empty($certificates)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     /**
      * @return SettingService
      */
@@ -471,5 +489,13 @@ class CourseExtension extends \Twig_Extension
     protected function getDiscountService()
     {
         return $this->biz->service('DiscountPlugin:Discount:DiscountService');
+    }
+
+    /**
+     * @return CertificateService
+     */
+    protected function getCertificateService()
+    {
+        return $this->biz->service('Certificate:CertificateService');
     }
 }
