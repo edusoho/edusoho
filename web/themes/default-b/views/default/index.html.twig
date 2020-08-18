@@ -466,12 +466,11 @@
                 {% endif %}
               {% endif %}
 
-              <span class="title">
-                {% if can_obtain_certificates(course.id, 'course') %}
-                  <a class="certificate-tag" tabindex="0" role="button" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-html="true" title="{{ 'explore.classroom.certificate_tag'|trans }}" data-content="{{ 'course.catalogue.certificate_obtain'|trans }}">{{ 'explore.classroom.certificate_tag_short'|trans }}</a>
-                {% endif %}
-                {{ courseSet.title }}
-              </span>
+              {% if can_obtain_certificates(course.id, 'course') %}
+                <a style="margin: 10px -6px 0 10px;" class="certificate-tag" tabindex="0" role="button" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-html="true" title="{{ 'explore.classroom.certificate_tag'|trans }}" data-content="{{ 'course.catalogue.certificate_obtain'|trans }}">{{ 'explore.classroom.certificate_tag_short'|trans }}</a>
+              {% endif %}
+              <span class="title">{{ courseSet.title }}</span>
+
               {% if mode in ['default', 'teach'] %}
 
                 {% if courseSet.type == 'live' %}
@@ -585,12 +584,7 @@
               {% endif %}
             {% endif %}
 
-            <span class="title">
-              {% if can_obtain_certificates(course.id, 'course') %}
-                <a class="certificate-tag" tabindex="0" role="button" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-html="true" title="{{ 'explore.classroom.certificate_tag'|trans }}" data-content="{{ 'course.catalogue.certificate_obtain'|trans }}">{{ 'explore.classroom.certificate_tag_short'|trans }}</a>
-              {% endif %}
-              {{ course.title }}
-            </span>
+            <span class="title">{{ course.title }}</span>
 
             {#{% if course.type == 'liveOpen' and lessons %}
               <span class="live-course-lesson metas">
