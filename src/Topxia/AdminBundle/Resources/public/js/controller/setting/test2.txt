@@ -1,0 +1,32 @@
+<pre>Array
+(
+    [license_name] => 工商网监    电子标识
+    [license_picture] => files/system/2020/08-12/1709299dc16a352295.jpg
+    [license_url] => https://www.baidu.com/
+    [permits] => Array
+        (
+            [0] => Array
+                (
+                    [name] => 广播电视节目制作经营许可证
+                    [record_number] => （京）字  第1504号
+                    [picture] => files/system/2020/08-18/1408237881e5452363.png
+                )
+
+            [1] => Array
+                (
+                    [name] => 网络文化经营许可证
+                    [record_number] => 京网文【2019】4402-449
+                    [picture] => files/system/2020/08-12/171524ce5a22281037.png
+                )
+
+            [2] => Array
+                (
+                    [name] => 增值电信业务经营许可证
+                    [record_number] => 京B2-20190815
+                    [picture] => files/system/2020/08-12/171601103e4c878654.png
+                )
+
+        )
+
+)
+</pre>{"error":{"message":"\u89e3\u6790\u6587\u4ef6URI\u5931\u8d25\uff01","code":5001006,"trace":{"previous":[{"message":"1\/1 Biz\\Content\\FileException: exception.file.parse_uri_failed","trace":["1.  in \/var\/www\/edusoho\/src\/AppBundle\/Common\/Exception\/AbstractException.php line 27","2. at AppBundle\\Common\\Exception\\AbstractException::__callStatic(...args...) in \/var\/www\/edusoho\/src\/Biz\/Content\/Service\/Impl\/FileServiceImpl.php line 247","3. at Biz\\Content\\Service\\Impl\\FileServiceImpl-\u003EparseFileUri(...args...) in \/var\/www\/edusoho\/src\/Biz\/Content\/Service\/Impl\/FileServiceImpl.php line 141","4. at Biz\\Content\\Service\\Impl\\FileServiceImpl-\u003EdeleteFileByUri(...args...) in \/var\/www\/edusoho\/src\/Biz\/Content\/Service\/Impl\/FileServiceImpl.php line 135","5. at Biz\\Content\\Service\\Impl\\FileServiceImpl-\u003EdeleteFile(...args...)","6. at call_user_func_array(...args...) in \/var\/www\/edusoho\/vendor\/codeages\/biz-framework\/src\/Service\/ServiceProxy.php line 36","7. at Codeages\\Biz\\Framework\\Service\\ServiceProxy-\u003E__call(...args...) in \/var\/www\/edusoho\/src\/AppBundle\/Controller\/AdminV2\/System\/SettingController.php line 184","8. at AppBundle\\Controller\\AdminV2\\System\\SettingController-\u003EreplaceFile(...args...) in \/var\/www\/edusoho\/src\/AppBundle\/Controller\/AdminV2\/System\/SettingController.php line 194","9. at AppBundle\\Controller\\AdminV2\\System\\SettingController-\u003ElicensePictureUploadAction(...args...) in \/var\/www\/edusoho\/vendor\/symfony\/symfony\/src\/Symfony\/Component\/HttpKernel\/HttpKernel.php line 151","10. at Symfony\\Component\\HttpKernel\\HttpKernel-\u003EhandleRaw(...args...) in \/var\/www\/edusoho\/vendor\/symfony\/symfony\/src\/Symfony\/Component\/HttpKernel\/HttpKernel.php line 68","11. at Symfony\\Component\\HttpKernel\\HttpKernel-\u003Ehandle(...args...) in \/var\/www\/edusoho\/vendor\/symfony\/symfony\/src\/Symfony\/Component\/HttpKernel\/Kernel.php line 200","12. at Symfony\\Component\\HttpKernel\\Kernel-\u003Ehandle(...args...) in \/var\/www\/edusoho\/web\/app_dev.php line 39"]}]}}}
