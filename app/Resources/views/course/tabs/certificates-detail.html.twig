@@ -1,0 +1,35 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% set modal_class= "modal-md" %}
+
+{% block modal_content %}
+  <div class="modal-content" style="overflow: hidden">
+    <div class="certificate-detail-header">
+      {{ certificate.name }}
+      {% if isObtained|default(false) %}
+        <span class="certificate-detail-tag certificate-detail-tag-have">{{ 'course.catalogue.certificate_have'|trans }}</span>
+      {% else %}
+        <span class="certificate-detail-tag certificate-detail-tag-wait">{{ 'course.catalogue.certificate_wait'|trans }}</span>
+      {% endif %}
+    </div>
+    <div class="modal-body">
+      <div class="certificate-detail-info">
+        <div class="detail-description">
+          {{ certificate.description }}
+        </div>
+      </div>
+      <div class="es-piece">
+        <div class="piece-header">{{ 'course.catalogue.certificate_achieve'|trans }}</div>
+        <div class="piece-body p-lg">
+              {{ 'course.catalogue.certificate_to_achieve'|trans({'%course%': course.title}) }}
+        </div>
+      </div>
+      <div class="es-piece">
+        <div class="piece-header">{{ 'course.catalogue.certificate_condition'|trans }}</div>
+        <div class="piece-body p-lg">
+          {{ 'course.catalogue.certificate_pass_condition'|trans }}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+

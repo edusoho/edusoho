@@ -28,6 +28,8 @@ class CertificateDaoImpl extends GeneralDaoImpl implements CertificateDao
                 'id = :id',
                 'name like :nameLike',
                 'targetType = :targetType',
+                'targetId = :targetId',
+                'status = :status',
             ],
         ];
     }
