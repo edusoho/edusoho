@@ -28,13 +28,8 @@ class S2B2CService extends BaseService
      *
      * @return
      */
-    public function reportSuccessOrder($order, $orderItems)
+    public function reportSuccessOrder($params)
     {
-        $params = array(
-            'merchantOrder' => $order,
-            'merchantOrderItems' => $orderItems,
-        );
-
         return $this->sendRequest('/distribute/order/settlement/report', $params, 'POST');
     }
 

@@ -11179,6 +11179,7 @@ exception.s2b2c_product.update_type_invalid: 设置的更新类型不合法
 exception.s2b2c_product.not_found: 不存在对应商品
 exception.s2b2c_product.remove_failed: 商品移除失败
 exception.s2b2c.hidden_permission_invalid: 获取S2b2c权限列表失败
+exception.s2b2c.settlement_report_not_found: S2b2c商品上报结算未找到
 
 admin_v2.cloud_center.content_resource.product_update_setting: 更新设置
 admin_v2.cloud_center.content_resource.product_update_auto: 自动更新

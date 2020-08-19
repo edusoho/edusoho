@@ -8,9 +8,11 @@ use Biz\OrderFacade\Service\OrderRefundService;
 use Biz\S2B2C\Service\CourseProductService;
 use Biz\S2B2C\Service\ProductService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
+use Biz\S2B2C\Service\SettlementReportService;
 use Biz\System\Service\LogService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\Order\Service\OrderService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use QiQiuYun\SDK\Service\S2B2CService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -26,7 +28,7 @@ class CourseProductSubscriber extends EventSubscriber implements EventSubscriber
     public static function getSubscribedEvents()
     {
         return [
-            'order.success' => 'onOrderSuccess',
+            'course.join' => 'onCourseJoin',
             'order.refunded' => 'onOrderRefunded',
             'course.marketing.update' => 'onCourseMarketingUpdate',
         ];
@@ -39,6 +41,42 @@ class CourseProductSubscriber extends EventSubscriber implements EventSubscriber
         if ($this->isSupplierCourse($course)) {
             $courseProduct = $this->getS2b2cProductService()->getByTypeAndLocalResourceId('course', $course['id']);
             $this->getS2B2CService()->changeProductSellingPrice($courseProduct['s2b2cProductDetailId'], $course['price']);
+        }
+    }
+
+    public function onCourseJoin(Event $event)
+    {
+        $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
+        $course = $event->getSubject();
+        if (empty($s2b2cConfig['supplierId']) || $course['platform'] == 'self') {
+            return;
+        }
+
+        $s2b2cProduct = $this->getS2b2cProductService()->getByTypeAndLocalResourceId('course', $course['id']);
+        $member = $event->getArgument('member');
+        $report = $this->getS2b2cSettlementReportService()->create([
+            's2b2cProductId' => $s2b2cProduct['id'],
+            'userId' => $member['userId'],
+            'type' => SettlementReportService::TYPE_JOIN_COURSE,
+            'orderId' => $member['orderId'],
+        ]);
+
+        $order = $this->getOrderService()->getOrder($member['orderId']);
+        $user = $this->getUserService()->getUser($member['userId']);
+        $params = [
+            'merchantOrderId' => $member['orderId'],
+            'merchantOrderRefundDays' => empty($order['expired_refund_days']) ? 0 : $order['expired_refund_days'],
+            'merchantOrderUserNickname' => $user['nickname'],
+            'productDetailId' => $s2b2cProduct['s2b2cProductDetailId'],
+            'merchantReportId' => $report['id'],
+        ];
+
+        $this->getS2b2cSettlementReportService()->updateStatusToSent($report['id']);
+        $result = $this->getS2B2CService()->reportSuccessOrder($params);
+        if (isset($result['error'])) {
+            $this->getS2b2cSettlementReportService()->updateFailedReason($report['id'], $result['error']);
+        } else {
+            $this->getS2b2cSettlementReportService()->updateStatusToSucceed($report['id']);
         }
     }
 
@@ -224,5 +262,21 @@ class CourseProductSubscriber extends EventSubscriber implements EventSubscriber
     protected function getS2b2cProductService()
     {
         return $this->getBiz()->service('S2B2C:ProductService');
+    }
+
+    /**
+     * @return SettlementReportService
+     */
+    protected function getS2b2cSettlementReportService()
+    {
+        return $this->getBiz()->service('S2B2C:SettlementReportService');
+    }
+
+    /**
+     * @return OrderService
+     */
+    protected function getOrderService()
+    {
+        return $this->getBiz()->service('Order:OrderService');
     }
 }
