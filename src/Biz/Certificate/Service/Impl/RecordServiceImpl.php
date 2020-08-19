@@ -69,7 +69,6 @@ class RecordServiceImpl extends BaseService implements RecordService
         return empty($isObtained) ? false : true;
     }
 
-
     /**
      * @return RecordDao
      */
