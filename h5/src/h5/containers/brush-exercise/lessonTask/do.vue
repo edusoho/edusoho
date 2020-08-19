@@ -89,12 +89,12 @@ export default {
         data.categoryId = this.$route.query.categoryId;
       }
       Api[config[type].api]({ query, data }).then(res => {
-        this.assignData(res);
         this.isLoading = false;
+        this.assignData(res);
       });
     },
     assignData(res) {
-      this.$store.commit(types.SET_NAVBAR_TITLE, res.assessment.name);
+      this.$store.commit(types.SET_NAVBAR_TITLE, this.$route.query.title);
       this.assessment = res.assessment;
       this.answerScene = res.answer_scene;
       this.answerRecord = res.answer_record;
@@ -142,6 +142,7 @@ export default {
     },
     goResult() {
       const query = {
+        title: this.$route.query.title,
         type: this.$route.query.type,
         exerciseId: this.$route.query.exerciseId,
         assessmentId: this.$route.query.assessmentId,

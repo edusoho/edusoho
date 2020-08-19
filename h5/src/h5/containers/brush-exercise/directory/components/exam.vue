@@ -86,6 +86,7 @@ export default {
       const query = {
         mode: 'start',
         type: 'assessment',
+        title: item.assessment.name,
         exerciseId: item.exerciseId,
         assessmentId: item.assessment.id,
         moduleId: item.moduleId,
@@ -96,6 +97,7 @@ export default {
       const query = {
         mode: 'continue',
         type: 'assessment',
+        title: item.assessment.name,
         exerciseId: item.exerciseId,
         assessmentId: item.assessment.id,
         moduleId: item.moduleId,
@@ -106,6 +108,7 @@ export default {
     goResult(item) {
       const query = {
         type: 'assessment',
+        title: item.assessment.name,
         exerciseId: item.exerciseId,
         assessmentId: item.assessment.id,
         moduleId: item.moduleId,

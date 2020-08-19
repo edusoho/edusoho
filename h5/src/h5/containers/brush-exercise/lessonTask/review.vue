@@ -44,7 +44,7 @@ export default {
           this.answerScene = res.answer_scene;
           this.answerReport = res.answer_report;
           this.answerRecord = res.answer_record;
-          this.$store.commit(types.SET_NAVBAR_TITLE, res.assessment.name);
+          this.$store.commit(types.SET_NAVBAR_TITLE, this.$route.query.title);
           this.isLoading = false;
         })
         .catch(err => {
@@ -63,6 +63,7 @@ export default {
     },
     goResult(res) {
       const query = {
+        title: this.$route.query.title,
         type: this.$route.query.type,
         exerciseId: this.$route.query.exerciseId,
         assessmentId: this.$route.query.assessmentId,
