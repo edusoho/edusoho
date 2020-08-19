@@ -9,19 +9,24 @@
         </div>
         <button class="cd-btn cd-btn-primary cd-btn-sm">{{ 'user.certificates.search'|trans }}</button>
     </form>
-
-    <div class="row">
-        <div class="col-lg-4 unclaimed-cert-item">
-            <img width="100%" src="{{ asset('assets/img/default/certificate@2x.png') }}" />
-            <div class="unclaimed-cert-message">
-                <p class="unclaimed-cert-top">{{ 'user.certificates.cart_title'|trans }}</p>
-                <p class="unclaimed-cert-title">证书名称</p>
-                <p class="unclaimed-cert-issue-time">{{ 'user.certificates.valid_time_tip'|trans }}2020/10/22</p>
+    {% if certificates %}
+        <div class="row">
+            {% for certificate in certificates %}
+            <div class="col-lg-4 unclaimed-cert-item">
+                <span class="unclaimed-cert-item-tag">{{ 'course.catalogue.certificate_wait'|trans }}</span>
+                <img width="100%" src="{{ asset('assets/img/default/certificate@2x.png') }}" />
+                <div class="unclaimed-cert-message">
+                    <p class="unclaimed-cert-top">{{ 'user.certificates.cart_title'|trans }}</p>
+                    <p class="unclaimed-cert-title">{{ certificate.name }}</p>
+                </div>
+                <p>
+                    <button class="cd-btn cd-btn-primary cd-mt8" data-target="#modal" data-toggle="modal" data-url="">{{ 'user.certificates.cart_detail_btn'|trans }}</button>
+                </p>
             </div>
-            <p><button class="cd-btn cd-btn-primary cd-mt8">{{ 'user.certificates.cart_detail_btn'|trans }}</button></p>
+            {% endfor %}
         </div>
-    </div>    
-    {# <div class="cd-empty">{{ 'user.certificates.none_record'|trans }}</div> #}
-
+    {% else %}
+        <div class="cd-empty">{{ 'user.certificates.none_record'|trans }}</div>
+    {% endif %}
     {{ web_macro.paginator(paginator) }}
 {% endblock %}

@@ -42,18 +42,27 @@ class CertificateController extends BaseController
 
     public function unclaimedAction(Request $request)
     {
-        if (!$this->getCurrentUser()->isLogin()) {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
             return $this->createMessageResponse('error', '用户未登录，请先登录！');
         }
 
         $paginator = new Paginator(
             $request,
-            100,
+            $this->getCertificateService()->countUserAvailableCertificates($user['id'], $request->query->get('q')),
             15
+        );
+
+        $certificates = $this->getCertificateService()->searchUserAvailableCertificates(
+            $user['id'],
+            $request->query->get('q'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
         );
 
         return $this->render('certificate/my/unclaimed.html.twig', [
             'paginator' => $paginator,
+            'certificates' => $certificates,
         ]);
     }
 
