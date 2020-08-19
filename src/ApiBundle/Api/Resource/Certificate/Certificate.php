@@ -25,7 +25,9 @@ class Certificate extends AbstractResource
         $target = $this->getTarget($conditions);
 
         $conditions['status'] = 'published';
-        $certificates = $this->getCertificateService()->search($conditions, ['createdTime' => 'DESC'], 0, PHP_INT_MAX);
+        list($offset, $limit) = $this->getOffsetAndLimit($request);
+        $certificates = $this->getCertificateService()->search($conditions, ['createdTime' => 'DESC'], $offset, $limit);
+        $total = $this->getCertificateService()->count($conditions);
 
         $user = $this->getCurrentUser();
         $obtainedCertificates = $this->getCertificateRecordService()->search(
@@ -40,7 +42,7 @@ class Certificate extends AbstractResource
             $certificate['isObtained'] = empty($obtainedCertificates[$certificate['id']]) ? false : true;
         }
 
-        return $certificates;
+        return $this->makePagingObject($certificates, $total, $offset, $limit);
     }
 
     protected function getTarget($condition)
