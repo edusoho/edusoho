@@ -11181,11 +11181,14 @@ exception.s2b2c_product.remove_failed: 商品移除失败
 exception.s2b2c.hidden_permission_invalid: 获取S2b2c权限列表失败
 
 admin_v2.cloud_center.content_resource.product_update_setting: 更新设置
-admin_v2.cloud_center.content_resource.product_update_auto: 自动更新
+admin_v2.cloud_center.content_resource.product_update_auto: 定时更新
+admin_v2.cloud_center.content_resource.product_update_promptly: 及时更新
 admin_v2.cloud_center.content_resource.product_update_manual: 手动更新
 
-admin_v2.cloud_center.content_resource.product_update_auto.tips: 如果S端内容有更新，自动进行同步更新
+admin_v2.cloud_center.content_resource.product_update_promptly.tips: 如果S端内容有更新，将自动及时同步更新
+admin_v2.cloud_center.content_resource.product_update_auto.tips: 如果S端内容有更新，默认凌晨2点进行同步更新
 admin_v2.cloud_center.content_resource.product_update_manual.tips: 供应商内容更新，需要手动进行更新
+
 s2b2c.resource.all_choose: 全部选择
 s2b2c.resource.return_market: 返回内容市场
 s2b2c.resource.has_new_notice_hint: 您采购的内容有更新

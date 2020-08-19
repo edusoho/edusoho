@@ -301,12 +301,14 @@ class ProductServiceImpl extends BaseService implements ProductService
 
     public function setProductUpdateType($type)
     {
-        if (!in_array($type, [self::UPDATE_TYPE_AUTO, self::UPDATE_TYPE_MANUAL])) {
+        if (!in_array($type, [self::UPDATE_TYPE_AUTO, self::UPDATE_TYPE_MANUAL, self::UPDATE_TYPE_PROMPTLY])) {
             $this->createNewException(S2B2CProductException::INVALID_S2B2C_PRODUCT_TYPE());
         }
 
         if (self::UPDATE_TYPE_AUTO == $type) {
-            $this->addUpdateProductJob();
+            $this->addUpdateProductJob('0 2 * * *');
+        } elseif (self::UPDATE_TYPE_PROMPTLY == $type) {
+            $this->addUpdateProductJob(time());
         } else {
             $this->removeUpdateProductJob();
         }
@@ -314,18 +316,20 @@ class ProductServiceImpl extends BaseService implements ProductService
         return $this->getSettingService()->set('productUpdateType', $type);
     }
 
-    protected function addUpdateProductJob()
+
+
+    protected function addUpdateProductJob($time)
     {
         $job = $this->getSchedulerService()->getJobByName('productUpdateVersion');
 
         if (!empty($job)) {
-            return true;
+            $this->getSchedulerService()->deleteJob($job['id']);
         }
 
         $job = [
             'name' => 'productUpdateVersion',
             'class' => 'Biz\S2B2C\Job\UpdateProductVersionJob',
-            'expression' => '0 2 * * *',
+            'expression' => $time,
             'args' => '',
             'misfire_threshold' => 300,
             'misfire_policy' => 'executing',
@@ -481,6 +485,13 @@ class ProductServiceImpl extends BaseService implements ProductService
 
         $this->getS2B2CProductDao()->update($courseSetProduct['id'], ['changelog' => $localChangeLogs]);
         $this->getS2B2CProductDao()->wave([$courseSetProduct['id']], ['remoteVersion' => 1]);
+
+        $updateType = $this->getSettingService()->get('productUpdateType', self::UPDATE_TYPE_MANUAL);
+        if ($updateType == self::UPDATE_TYPE_PROMPTLY) {
+            if (empty($this->getSchedulerService()->getJobByName('productUpdateVersion'))) {
+                $this->addUpdateProductJob(time());
+            }
+        }
 
         return true;
     }

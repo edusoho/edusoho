@@ -9840,9 +9840,10 @@ exception.s2b2c.hidden_permission_invalid: S2b2c hide permission invalid
 admin_v2.cloud_center.content_resource.product_update_setting: Update Setting
 admin_v2.cloud_center.content_resource.product_update_auto: Auto
 admin_v2.cloud_center.content_resource.product_update_manual: Manual
+admin_v2.cloud_center.content_resource.product_update_promptly: Promptly
 
-
-admin_v2.cloud_center.content_resource.product_update_auto.tips: Update product automatically when product updated
+admin_v2.cloud_center.content_resource.product_update_auto.tips: Update product at 2:00 when product updated
+admin_v2.cloud_center.content_resource.product_update_promptly.tips: Update product automatically when product updated
 admin_v2.cloud_center.content_resource.product_update_manual.tips: Update product manually when product updated
 
 s2b2c.resource.all_choose: Choose All
