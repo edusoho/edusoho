@@ -173,23 +173,6 @@ class SettingController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    public function licensePictureRemoveAction(Request $resquest)
-    {
-        $setting = $this->getSettingService()->get('license');
-        $setting['license_picture'] = '';
-
-        $fileId = empty($setting['license_picture_file_id']) ? null : $setting['license_picture_file_id'];
-        $setting['license_picture_file_id'] = '';
-
-        $this->getSettingService()->set('license', $setting);
-
-        if ($fileId) {
-            $this->getFileService()->deleteFile($fileId);
-        }
-
-        return $this->createJsonResponse(true);
-    }
-
     public function permitPictureUploadAction(Request $request)
     {
         $fileId = $request->request->get('id');
@@ -202,23 +185,6 @@ class SettingController extends BaseController
         ];
 
         return $this->createJsonResponse($response);
-    }
-
-    public function permitPictureRemoveAction(Request $request)
-    {
-        $setting = $this->getSettingService()->get('license');
-        $setting['permit_picture'] = '';
-
-        $fileId = empty($setting['permit_picture_file_id']) ? null : $setting['permit_picture_file_id'];
-        $setting['permit_picture_file_id'] = '';
-
-        $this->getSettingService()->set('license', $setting);
-
-        if ($fileId) {
-            $this->getFileService()->deleteFile($fileId);
-        }
-
-        return $this->createJsonResponse(true);
     }
 
     public function faviconUploadAction(Request $request)

@@ -35,7 +35,6 @@
              data-upload-token="{{ upload_token('system', 'image') }}"
              data-goto-url="{{ path('admin_v2_setting_license_picture_upload') }}">{{ 'form.btn.upload'|trans }}</a>
           <button class="btn btn-default" id="license-picture-remove" type="button"
-                  data-url="{{ path('admin_v2_setting_license_picture_remove') }}"
                   {% if not license.license_picture %}style="display:none;"{% endif %}>
             {{ 'form.btn.delete'|trans }}</button>
           <p class="help-block">{{ 'admin.setting.license.picture.help_block'|trans|raw }}</p>
@@ -89,7 +88,7 @@
                  data-upload-token="{{ upload_token('system', 'image') }}"
                  data-goto-url="{{ path('admin_v2_setting_permit_picture_upload') }}">{{ 'form.btn.upload'|trans }}</a>
               <button class="btn btn-default permit_picture_remove" id="permit_picture_remove_{{ loop.index - 1 }}"
-                      type="button" data-url="{{ path('admin_v2_setting_permit_picture_remove') }}"
+                      type="button"
                       {% if not permit.picture %}style="display:none;"{% endif %}>{{ 'form.btn.delete'|trans }}</button>
               <p class="help-block">{{ 'admin.setting.permit.picture.help_block'|trans|raw }}</p>
               <input type="hidden" name="permits[{{ loop.index - 1 }}][picture]"

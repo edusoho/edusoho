@@ -26,14 +26,12 @@ define(function (require, exports, module) {
     $("#license-picture-remove").on('click', function () {
       if (!confirm(Translator.trans('admin.site.delete_hint'))) return false;
       let $btn = $(this);
-      $.post($btn.data('url'), function () {
-        $("#license-picture-container").html('');
-        $form.find('#license_picture').val('');
-        $btn.hide();
-        Notify.success(Translator.trans('admin.setting.delete_license_picture_success_hint'));
-      }).error(function () {
-        Notify.danger(Translator.trans('admin.setting.delete_license_picture_fail_hint'));
-      });
+      $("#license-picture-container").html('');
+      $form.find('#license_picture').val('');
+      $btn.hide();
+      Notify.success(Translator.trans('admin.setting.delete_license_picture_success_hint'));
+    }).error(function () {
+      Notify.danger(Translator.trans('admin.setting.delete_license_picture_fail_hint'));
     });
 
     let uploadPermit = function ($uploaderArray, $permitIndex) {
@@ -61,14 +59,12 @@ define(function (require, exports, module) {
 
         if (!confirm(Translator.trans('admin.site.delete_hint'))) return false;
         let $btn = $(this);
-        $.post($btn.data('url'), function () {
-          $("#" + permitPictureContainer).html('');
-          $form.find("#" + permitPicture).val('');
-          $btn.hide();
-          Notify.success(Translator.trans('admin.setting.delete_permit_picture_success_hint'));
-        }).error(function () {
-          Notify.danger(Translator.trans('admin.setting.delete_permit_picture_fail_hint' + ''));
-        });
+        $("#" + permitPictureContainer).html('');
+        $form.find("#" + permitPicture).val('');
+        $btn.hide();
+        Notify.success(Translator.trans('admin.setting.delete_permit_picture_success_hint'));
+      }).error(function () {
+        Notify.danger(Translator.trans('admin.setting.delete_permit_picture_fail_hint'));
       });
     };
 
