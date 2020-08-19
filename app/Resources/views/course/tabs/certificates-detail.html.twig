@@ -14,13 +14,17 @@
     <div class="modal-body">
       <div class="certificate-detail-info">
         <div class="detail-description">
-          {{ certificate.description }}
+          {{ certificate.description|raw }}
         </div>
       </div>
       <div class="es-piece">
         <div class="piece-header">{{ 'course.catalogue.certificate_achieve'|trans }}</div>
         <div class="piece-body p-lg">
-              {{ 'course.catalogue.certificate_to_achieve'|trans({'%course%': course.title}) }}
+          {% if targetType == 'course' %}
+            {{ 'course.catalogue.certificate_to_achieve'|trans({'%targetUrl%': path('course_show', {id:target.id}),'%course%': target.courseSetTitle})|raw }}
+          {% else %}
+            {{ 'course.catalogue.certificate_to_achieve'|trans({'%targetUrl%': path('classroom_show', {id:target.id}),'%course%': target.title})|raw }}
+          {% endif %}
         </div>
       </div>
       <div class="es-piece">

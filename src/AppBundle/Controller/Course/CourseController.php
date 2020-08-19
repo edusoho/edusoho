@@ -435,33 +435,6 @@ class CourseController extends CourseBaseController
         ]);
     }
 
-    public function certificateDetailAction(Request $request, $courseId, $id)
-    {
-        $course = $this->getCourseService()->getCourse($courseId);
-        if (empty($course)) {
-            $this->createNewException(CourseException::NOTFOUND_COURSE());
-        }
-
-        $certificate = $this->getCertificateService()->get($id);
-        if (empty($certificate)) {
-            $this->createNewException(CertificateException::NOTFOUND_CERTIFICATE());
-        }
-
-        $isObtained = $this->getCertificateRecordService()->isObtained([
-            'userId' => $this->getCurrentUser()->getId(),
-            'certificateId' => $certificate['id'],
-            'targetType' => 'course',
-            'targetId' => $course['id'],
-            'statuses' => ['valid', 'expired'],
-        ]);
-
-        return $this->render('course/tabs/certificates-detail.html.twig', [
-            'certificate' => $certificate,
-            'course' => $course,
-            'isObtained' => $isObtained,
-        ]);
-    }
-
     /**
      * @param $course
      *

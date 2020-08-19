@@ -771,33 +771,6 @@ class ClassroomController extends BaseController
         ]);
     }
 
-    public function certificateDetailAction(Request $request, $classroomId, $id)
-    {
-        $classroom = $this->getClassroomService()->getClassroom($classroomId);
-        if (empty($classroom)) {
-            $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM());
-        }
-
-        $certificate = $this->getCertificateService()->get($id);
-        if (empty($certificate)) {
-            $this->createNewException(CertificateException::NOTFOUND_CERTIFICATE());
-        }
-
-        $isObtained = $this->getCertificateRecordService()->isObtained([
-            'userId' => $this->getCurrentUser()->getId(),
-            'certificateId' => $certificate['id'],
-            'targetType' => 'classroom',
-            'targetId' => $classroom['id'],
-            'statuses' => ['valid', 'expired'],
-        ]);
-
-        return $this->render('classroom/certificates/detail.html.twig', [
-            'certificate' => $certificate,
-            'classroom' => $classroom,
-            'isObtained' => $isObtained,
-        ]);
-    }
-
     /**
      * @return RecordService
      */
