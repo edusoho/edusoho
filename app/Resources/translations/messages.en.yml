@@ -9842,3 +9842,6 @@ user.certificates.detail_object: Authentication object
 user.certificates.detail_object_name: Name
 user.certificates.detail_object_usrename: Username
 user.certificates.detail_cert_message: Certificate information
+user.certificates.unclaimed_list: Certificate to be received
+user.certificates.cart_title: Certificate of honor
+user.certificates.cart_detail_btn: View get path

@@ -46,9 +46,11 @@ class CertificateController extends BaseController
     {
         $record = $this->getRecordService()->get($recordId);
         $img = $this->getCertificateStrategy($record['targetType'])->getCertificateImg($record);
+        $certificate = $this->getCertificateService()->get($record['certificateId']);
 
         return new Response(base64_decode($img), 200, [
             'Content-Type' => 'image/png',
+            'Content-Disposition' => 'inline; filename="'.$certificate['name'].'.png"',
         ]);
     }
 

@@ -21,7 +21,7 @@ class CertificateController extends BaseController
         $paginator = new Paginator(
             $request,
             $this->getCertificateRecordService()->count($conditions),
-            20
+            10
         );
 
         $certificateRecords = $this->getCertificateRecordService()->search(
@@ -35,9 +35,25 @@ class CertificateController extends BaseController
             'paginator' => $paginator,
             'certificates' => $this->getCertificateService()->findByIds(ArrayToolkit::column($certificateRecords, 'certificateId')),
             'certificateRecordGroups' => $this->wrapperCertificateRecords($certificateRecords),
-            'request' => $request,
             'startdate' => $request->query->get('startdate', date('Y/01/01')),
             'enddate' => $request->query->get('enddate', date('Y/m/d')),
+        ]);
+    }
+
+    public function unclaimedAction(Request $request)
+    {
+        if (!$this->getCurrentUser()->isLogin()) {
+            return $this->createMessageResponse('error', '用户未登录，请先登录！');
+        }
+
+        $paginator = new Paginator(
+            $request,
+            100,
+            15
+        );
+
+        return $this->render('certificate/my/unclaimed.html.twig', [
+            'paginator' => $paginator,
         ]);
     }
 

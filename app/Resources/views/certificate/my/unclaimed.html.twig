@@ -1,0 +1,27 @@
+{% extends 'certificate/my/layout.html.twig' %}
+
+{% set my_certificate_side_nav = 'unclaimed_list' %}
+
+{% block mycertificate_content %}
+    <form class="form-inline cd-form-inline" action="" method="get">
+        <div class="form-group cd-form-group cd-form-group-button cd-mr16">
+            <input name="q" type="text" value="{{app.request.get('q')}}" class="form-control form-control-sm" placeholder="{{ 'user.certificates.placeholde_name'|trans }}">
+        </div>
+        <button class="cd-btn cd-btn-primary cd-btn-sm">{{ 'user.certificates.search'|trans }}</button>
+    </form>
+
+    <div class="row">
+        <div class="col-lg-4 unclaimed-cert-item">
+            <img width="100%" src="{{ asset('assets/img/default/certificate@2x.png') }}" />
+            <div class="unclaimed-cert-message">
+                <p class="unclaimed-cert-top">{{ 'user.certificates.cart_title'|trans }}</p>
+                <p class="unclaimed-cert-title">证书名称</p>
+                <p class="unclaimed-cert-issue-time">{{ 'user.certificates.valid_time_tip'|trans }}2020/10/22</p>
+            </div>
+            <p><button class="cd-btn cd-btn-primary cd-mt8">{{ 'user.certificates.cart_detail_btn'|trans }}</button></p>
+        </div>
+    </div>    
+    {# <div class="cd-empty">{{ 'user.certificates.none_record'|trans }}</div> #}
+
+    {{ web_macro.paginator(paginator) }}
+{% endblock %}
