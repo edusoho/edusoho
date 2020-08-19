@@ -148,6 +148,11 @@ class Flash extends Activity
         return $this->getFlashActivityDao()->findByIds($targetIds);
     }
 
+    public function countByMediaId($mediaId)
+    {
+        return $this->getFlashActivityDao()->count(['mediaId' => $mediaId]);
+    }
+
     /**
      * @return FlashActivityDao
      */

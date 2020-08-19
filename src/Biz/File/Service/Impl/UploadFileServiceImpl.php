@@ -4,6 +4,7 @@ namespace Biz\File\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\CloudFileStatusToolkit;
+use Biz\Activity\Config\Activity;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
@@ -1344,8 +1345,27 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             return;
         }
         $count = $this->getCourseMaterialService()->countMaterials(['fileId' => $file['id'], 'excludeLessonId' => 0]);
-
+        if ($count == 0) {
+            $typeMap = [
+                'document' => 'doc',
+                'audio' => 'audio',
+                'flash' => 'flash',
+                'ppt' => 'ppt',
+                'video' => 'video',
+            ];
+            $count = $this->getActivityConfig($typeMap[$file['type']])->countByMediaId($file['id']);
+        }
         return $this->update($file['id'], ['usedCount' => $count]);
+    }
+
+    /**
+     * @param  $type
+     *
+     * @return Activity
+     */
+    private function getActivityConfig($type)
+    {
+        return $this->biz["activity_type.{$type}"];
     }
 
     protected function updateTags($localFile, $fields)

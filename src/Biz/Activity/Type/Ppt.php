@@ -130,6 +130,11 @@ class Ppt extends Activity
         return $this->getPptActivityDao()->findByIds($targetIds);
     }
 
+    public function countByMediaId($mediaId)
+    {
+        return $this->getPptActivityDao()->count(['mediaId' => $mediaId]);
+    }
+
     /**
      * @return PptActivityDao
      */

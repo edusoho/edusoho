@@ -195,6 +195,11 @@ class Video extends Activity
         return true;
     }
 
+    public function countByMediaId($mediaId)
+    {
+        return $this->getVideoActivityDao()->count(['mediaId' => $mediaId]);
+    }
+
     private function handleFields($fields)
     {
         $result = json_decode($fields['media'], true);
