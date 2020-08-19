@@ -390,11 +390,8 @@ class TaskServiceTest extends BaseTestCase
 
     public function testCanStartTask()
     {
-        $this->getTaskDao()->create([
-            'id' => 1,
-            'title' => 'test task',
-            'courseId' => 1,
-        ]);
+        $task = $this->mockTask();
+        $task = $this->getTaskService()->createTask($task);
 
         $this->mockBiz('Course:CourseService', [
             [
