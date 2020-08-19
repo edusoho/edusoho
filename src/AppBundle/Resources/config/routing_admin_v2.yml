@@ -1557,9 +1557,9 @@ admin_v2_school_information_save:
     permissions: [admin_v2_school_information]
     methods: [POST]
 
-admin_v2_license_setting:
+admin_v2_certificate_setting:
     path:  /setting/license
-    defaults: { _controller: AppBundle:AdminV2/System/SchoolInformation:license }
+    defaults: { _controller: AppBundle:AdminV2/System/SchoolInformation:certificate }
     permissions: [admin_v2_school_information]
 
 admin_v2_setting_license_save:

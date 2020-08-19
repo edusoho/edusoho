@@ -1095,7 +1095,7 @@ admin_v2:
                                     name: admin_v2.system.site.basic_tab
                                     router_name: admin_v2_school_information
                                     disable: true
-                                admin_v2_license_setting:
+                                admin_v2_certificate_setting:
                                     name: admin_v2.system.site.license_tab
                                     disable: true
                         # 用户设置
@@ -1477,6 +1477,7 @@ admin_v2:
                         #授权信息
                         admin_v2_setting_cloud:
                             name: admin_v2.cloud.cloud_setting_menu
+                            visible: (not is_s2b2c_enabled())
                             children:
                                 admin_v2_setting_my_cloud:
                                     name: admin_v2.cloud.cloud_setting.basic_tab

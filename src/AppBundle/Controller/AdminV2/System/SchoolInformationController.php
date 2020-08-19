@@ -50,7 +50,7 @@ class SchoolInformationController extends BaseController
         ]);
     }
 
-    public function licenseAction(Request $request)
+    public function certificateAction(Request $request)
     {
         $license = $this->getSettingService()->get('license', []);
 
@@ -72,15 +72,11 @@ class SchoolInformationController extends BaseController
     public function saveLicenseAction(Request $request)
     {
         $license = $request->request->all();
+
         foreach ($license['permits'] as $key => $permit) {
             if (empty($permit['name']) && empty($permit['record_number']) && empty($permit['picture']) && 0 != $key) {
                 unset($license['permits'][$key]);
             }
-        }
-
-        if (!empty($license['analytics'])) {
-            $helper = new HTMLHelper($this->getBiz());
-            $site['analytics'] = $helper->closeTags($license['analytics']);
         }
         $this->getSettingService()->set('license', $license);
 
