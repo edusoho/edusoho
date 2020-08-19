@@ -18,11 +18,11 @@ class SettlementReportServiceImpl extends BaseService implements SettlementRepor
         if (!ArrayToolkit::requireds($fields, ['s2b2cProductId', 'userId', 'type', 'orderId'])) {
             throw new \InvalidArgumentException();
         }
-        $supplier = $this->getS2B2CFacadeService()->getSupplier();
+        $config = $this->getS2B2CFacadeService()->getS2B2CConfig();
         $user = $this->getUserService()->getUser($fields['userId']);
 
         return $this->getSettlementReportDao()->create([
-            'supplierId' => $supplier['id'],
+            'supplierId' => $config['supplierId'],
             'productId' => $fields['s2b2cProductId'],
             'type' => $fields['type'],
             'userId' => $user['id'],
