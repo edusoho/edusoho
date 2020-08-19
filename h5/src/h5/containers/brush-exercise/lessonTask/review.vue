@@ -15,6 +15,7 @@
 <script>
 import Api from '@/api';
 import * as types from '@/store/mutation-types.js';
+import { Toast } from 'vant';
 export default {
   components: {},
   data() {
@@ -52,12 +53,18 @@ export default {
         });
     },
     getReviewData(data) {
+      Toast.loading({
+        message: '提交中...',
+        forbidClick: true,
+      });
       const query = { exerciseId: this.$route.query.exerciseId };
       Api.pushItemBankReviewReport({ query, data })
         .then(res => {
+          Toast.clear();
           this.goResult(res);
         })
         .catch(err => {
+          Toast.clear();
           this.$toast(err.message);
         });
     },

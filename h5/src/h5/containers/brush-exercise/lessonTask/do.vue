@@ -20,6 +20,7 @@
 <script>
 import Api from '@/api';
 import * as types from '@/store/mutation-types.js';
+import { Toast } from 'vant';
 const config = {
   assessment: {
     api: 'getAssessmentExerciseRecord',
@@ -74,7 +75,7 @@ export default {
           this.isLoading = false;
         })
         .catch(err => {
-          this.$toast('提示文案');
+          this.$toast(err.message);
           console.log(err);
         });
     },
@@ -112,22 +113,34 @@ export default {
         });
     },
     saveAnswerData(data) {
+      Toast.loading({
+        message: '保存中...',
+        forbidClick: true,
+      });
       Api.saveAnswer({ data })
         .then(res => {
+          Toast.clear();
           this.canLeave = true;
           this.$router.go(-1);
         })
         .catch(err => {
+          Toast.clear();
           this.$toast(err.message);
         });
     },
     getAnswerData(data) {
+      Toast.loading({
+        message: '提交中...',
+        forbidClick: true,
+      });
       Api.submitAnswer({ data })
         .then(res => {
+          Toast.clear();
           this.canLeave = true;
           this.goResult();
         })
         .catch(err => {
+          Toast.clear();
           this.$toast(err.message);
         });
     },
