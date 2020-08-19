@@ -5,7 +5,6 @@ namespace AppBundle\Controller\Course;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use Biz\Activity\Service\ActivityService;
-use Biz\Certificate\CertificateException;
 use Biz\Certificate\Service\CertificateService;
 use Biz\Certificate\Service\RecordService;
 use Biz\Classroom\Service\ClassroomService;

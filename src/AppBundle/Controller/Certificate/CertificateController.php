@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller\Certificate;
 
-use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
 use Biz\Certificate\CertificateException;
 use Biz\Certificate\Service\CertificateService;
@@ -90,7 +89,7 @@ class CertificateController extends BaseController
 
     protected function getTarget($targetId, $targetType)
     {
-        if ($targetType == 'classroom') {
+        if ('classroom' == $targetType) {
             $target = $this->getClassroomService()->getClassroom($targetId);
             if (empty($target)) {
                 $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM());

@@ -7,7 +7,6 @@ use AppBundle\Common\ClassroomToolkit;
 use AppBundle\Common\ExtensionManager;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
-use Biz\Certificate\CertificateException;
 use Biz\Certificate\Service\CertificateService;
 use Biz\Certificate\Service\RecordService;
 use Biz\Classroom\ClassroomException;
