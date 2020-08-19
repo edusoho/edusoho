@@ -15,4 +15,6 @@ interface RecordService
     public function cancelRecord($id);
 
     public function grantRecord($id, $fields);
+
+    public function isObtained($conditions);
 }

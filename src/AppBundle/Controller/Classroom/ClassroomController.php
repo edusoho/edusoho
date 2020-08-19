@@ -7,6 +7,9 @@ use AppBundle\Common\ClassroomToolkit;
 use AppBundle\Common\ExtensionManager;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
+use Biz\Certificate\CertificateException;
+use Biz\Certificate\Service\CertificateService;
+use Biz\Certificate\Service\RecordService;
 use Biz\Classroom\ClassroomException;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
@@ -736,6 +739,79 @@ class ClassroomController extends BaseController
         }
 
         return $this->render('classroom/classroom-order.html.twig', ['order' => $order, 'classroom' => $classroom]);
+    }
+
+    public function certificatesAction(Request $request, $classroomId)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($classroomId);
+        if (empty($classroom)) {
+            $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM());
+        }
+
+        $certificates = $this->getCertificateService()->search(
+            ['targetType' => 'classroom', 'status' => 'published', 'targetId' => $classroom['id']],
+            ['createdTime' => 'DESC'],
+            0,
+            PHP_INT_MAX
+        );
+
+        $user = $this->getCurrentUser();
+        $obtainedCertificates = $this->getCertificateRecordService()->search(
+            ['targetType' => 'classroom', 'statuses' => ['valid', 'expired'], 'userId' => $user['id']],
+            [],
+            0,
+            PHP_INT_MAX
+        );
+
+        return $this->render('classroom/certificates/list.html.twig', [
+            'certificates' => $certificates,
+            'obtained' => ArrayToolkit::index($obtainedCertificates, 'certificateId'),
+            'classroom' => $classroom,
+            'member' => $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null,
+        ]);
+    }
+
+    public function certificateDetailAction(Request $request, $classroomId, $id)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($classroomId);
+        if (empty($classroom)) {
+            $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM());
+        }
+
+        $certificate = $this->getCertificateService()->get($id);
+        if (empty($certificate)) {
+            $this->createNewException(CertificateException::NOTFOUND_CERTIFICATE());
+        }
+
+        $isObtained = $this->getCertificateRecordService()->isObtained([
+            'userId' => $this->getCurrentUser()->getId(),
+            'certificateId' => $certificate['id'],
+            'targetType' => 'classroom',
+            'targetId' => $classroom['id'],
+            'statuses' => ['valid', 'expired'],
+        ]);
+
+        return $this->render('classroom/certificates/detail.html.twig', [
+            'certificate' => $certificate,
+            'classroom' => $classroom,
+            'isObtained' => $isObtained,
+        ]);
+    }
+
+    /**
+     * @return RecordService
+     */
+    protected function getCertificateRecordService()
+    {
+        return $this->createService('Certificate:RecordService');
+    }
+
+    /**
+     * @return CertificateService
+     */
+    protected function getCertificateService()
+    {
+        return $this->createService('Certificate:CertificateService');
     }
 
     /**
