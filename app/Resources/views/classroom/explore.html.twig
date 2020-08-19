@@ -87,7 +87,12 @@
               {% endif %}
               <a href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">
                 {{ lazy_img(filepath(classroom.middlePicture, 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}
-                <h3>{{ classroom.title }}</h3>
+                <h3>
+                  {% if can_obtain_certificates(classroom.id, 'classroom') %}
+                    <a class="certificate-tag" tabindex="0" role="button" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-html="true" title="{{ 'explore.classroom.certificate_tag'|trans }}" data-content="{{ 'classroom.certificate_obtain'|trans }}">{{ 'explore.classroom.certificate_tag_short'|trans }}</a>
+                  {% endif %}
+                  {{ classroom.title }}
+                </h3>
                 <div class="image-overlay"></div>
               </a>
             </div>

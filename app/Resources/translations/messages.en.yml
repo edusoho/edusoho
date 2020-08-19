@@ -3829,6 +3829,8 @@ explore.open_course.title: 'Open Course'
 explore.open_course.list: 'Open Course List'
 explore.open_course.live: Live
 explore.open_course.empty: 'No record'
+explore.classroom.certificate_tag: 'Obtain certificates'
+explore.classroom.certificate_tag_short: Cr
 archive.course.title: 'Course Archive'
 archive.course.tags: Tags
 archive.course.empty: 'No record'
