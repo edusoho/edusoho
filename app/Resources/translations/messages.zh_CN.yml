@@ -3264,6 +3264,7 @@ user.account_center: 账户中心
 user.menu_heading: 账户中心
 user.account_menu: 我的账户
 user.order_menu: 我的订单
+user.certificate_menu: '我的证书'
 user.cards_menu: 优惠券
 user.vip_history_menu: 会员记录
 
@@ -3337,6 +3338,31 @@ user.orders.refund_id: 订单号：%sn%
 user.orders.refund_empty: 没有退款记录
 user.orders.placeholder_order_name: 输入订单名称搜索
 user.orders.placeholder_product_name: 输入商品名称搜索
+
+# 账户中心模块-我的证书
+user.certificates.content_title: 我的证书
+user.certificates.my_list: 我的证书
+user.certificates.none_record: 暂无证书
+user.certificates.only_valid: 仅显示有效的
+user.certificates.date_range: 证书获取时间
+user.certificates.placeholde_name: 输入证书名称搜索...
+user.certificates.cert_titile: 证书名称
+user.certificates.cert_code: 证书编号
+user.certificates.cert_issue_time: 获取时间
+user.certificates.look_cert: 查看证书
+user.certificates.download_cert: 下载证书
+user.certificates.valid_time_tip: 有效期至：
+user.certificates.status_valid: 有效中
+user.certificates.status_expired: 已过期
+user.certificates.search: 搜索
+user.certificates.select_time: 选择时间：
+user.certificates.forever: 长期有效
+user.certificates.issue_time: 发证日期
+user.certificates.valid_time: 有效日期
+user.certificates.detail_object: 认证对象
+user.certificates.detail_object_name: 姓名
+user.certificates.detail_object_usrename: 用户名
+user.certificates.detail_cert_message: 证书信息
 
 # 账户中心模块-我的卡包
 user.cards: 我的卡包

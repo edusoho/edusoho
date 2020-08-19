@@ -1,0 +1,18 @@
+{% extends 'v2/layout.html.twig' %}
+
+{% block title %}{{ 'user.certificates.content_title'|trans }} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'my-certificates' %}
+
+{% block page_title %}
+  {{ 'user.certificates.content_title'|trans }}
+{% endblock %}
+
+{% block main_body %}
+  <ul class="cd-tabs">
+    <li {% if my_certificate_side_nav == 'my_list' %}class="active"{% endif %}>
+      <a href="{{path('my_certificates')}}">{{'user.certificates.my_list'|trans}}</a>
+    </li>
+  </ul>
+  {% block mycertificate_content %}{% endblock %}
+{% endblock %}

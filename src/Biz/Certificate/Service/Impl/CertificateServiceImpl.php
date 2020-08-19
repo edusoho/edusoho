@@ -28,6 +28,11 @@ class CertificateServiceImpl extends BaseService implements CertificateService
         return $this->getCertificateDao()->search($conditions, $orderBys, $start, $limit, $columns);
     }
 
+    public function findByIds(array $ids = [])
+    {
+        return ArrayToolkit::index($this->getCertificateDao()->findByIds($ids), 'id');
+    }
+
     public function count($conditions)
     {
         return $this->getCertificateDao()->count($conditions);

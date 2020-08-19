@@ -623,6 +623,11 @@ my_orders:
     defaults: { _controller: AppBundle:My/Order:index }
     h5: true
 
+my_certificates:
+    path: /my/certificates
+    defaults: { _controller: AppBundle:My/Certificate:index }
+    h5: true
+
 my_order_refunds:
     path: /my/order_refunds
     defaults: { _controller: AppBundle:My/OrderRefund:index }
@@ -3425,3 +3430,12 @@ goods_show:
 certificate_image_show:
     path:     /certificate/image/{id}/show
     defaults: { _controller: AppBundle:Certificate/Certificate:generateImage }
+
+certificate_record:
+    path: /certificate_records/{recordId}
+    defaults: { _controller: AppBundle:Certificate/Certificate:certificateRecord }
+    h5: true
+
+certificate_image_download:
+    path: /certificate/image/{recordId}/download
+    defaults: { _controller: AppBundle:Certificate/Certificate:certificateImageDownload }

@@ -21,4 +21,6 @@ interface CertificateService
     public function closeCertificate($id);
 
     public function delete($id);
+
+    public function findByIds(array $ids = []);
 }
