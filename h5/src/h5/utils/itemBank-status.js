@@ -4,7 +4,7 @@ const getBtnText = status => {
     case 'doing':
     case 'paused':
       return {
-        text: '继续答题',
+        text: '继续做题',
         class: 'learn-btn learn-btn-doing',
       };
     case 'reviewing':
