@@ -344,7 +344,7 @@
 
           <div class="course-footer clearfix">
 
- {#           {% set teacher = courseSet.teachers|first|default(null) %}
+            {% set teacher = courseSet.teachers|first|default(null) %}
             {% if teacher %}
               <div class="teacher">{{ web_macro.user_avatar(teacher,'pull-left','teacher-avatar') }}
                 <a class="teacher-nickname ellipsis" href="{{ path('user_show', {id:teacher.id}) }}">
@@ -352,7 +352,7 @@
                 </a>
                 <span class="teacher-title ellipsis">{{ teacher.title }}</span>
               </div>
-            {% endif %} #}
+            {% endif %}
             {% if setting('course.show_review', '1') == 1 %}
               <div class="course-metas">
                 <span class="stars-{{ (courseSet.rating)|number_format }}">&nbsp;</span>
