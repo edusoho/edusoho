@@ -33,6 +33,7 @@ class RecordDaoImpl extends GeneralDaoImpl implements RecordDao
                 'targetType = :targetType',
                 'status IN (:statuses)',
                 'userId = :userId',
+                'targetId = :targetId',
             ],
         ];
     }

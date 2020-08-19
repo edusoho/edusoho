@@ -1,0 +1,33 @@
+<div class="es-piece">
+  <div class="piece-header">{{ 'course.introduction.authentication_certificate'|trans }}</div>
+  <div class="piece-body p-lg">
+    <ul class="certificates-list">
+      {% for certificate in certificates if certificates %}
+      <li class="certificates-item">
+        <div class="certificate-img">
+          <span>{{ 'course.catalogue.certificate'|trans }}</span>
+        </div>
+        <div class="certificate-info pull-left">
+          <div>
+            <span class="certificate-name">{{ certificate.name }}</span>
+            {% if obtained[certificate.id]|default(false) %}
+              <div class="certificate-tag certificate-tag-have">{{ 'course.catalogue.certificate_have'|trans }}</div>
+            {% else %}
+              <div class="certificate-tag certificate-tag-wait">{{ 'course.catalogue.certificate_wait'|trans }}</div>
+            {% endif %}
+          </div>
+          <div>
+            <span class="certificate-description">{{ 'course.catalogue.certificate_obtain'|trans }}</span>
+          </div>
+        </div>
+        <div class="certificate-view-btn pull-right">
+          <a class="cd-btn cd-btn-primary" href="#" data-target="#modal" data-toggle="modal" data-url="{{ path('course_certificate_detail', {courseId:course.id, id:certificate.id}) }}">{{ 'course.catalogue.certificate_detail'|trans }}</a>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+</section>
+
