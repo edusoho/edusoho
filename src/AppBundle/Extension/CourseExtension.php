@@ -155,6 +155,10 @@ class CourseExtension extends Extension implements ServiceProviderInterface
                 'name' => 'course.tab.summary',
                 'content' => 'AppBundle:Course/Course:summary',
             ),
+            'certificate' => array(
+                'name' => 'course.tab.certificate',
+                'content' => 'AppBundle:Course/Course:certificate',
+            ),
         );
 
         if ('forGuest' == $for) {

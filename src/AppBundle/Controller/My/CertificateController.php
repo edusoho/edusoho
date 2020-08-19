@@ -62,13 +62,13 @@ class CertificateController extends BaseController
 
         $conditions = [
             'userId' => $this->getCurrentUser()['id'],
-            'statusIn' => ['valid', 'expired'],
+            'statuses' => ['valid', 'expired'],
             'issueTimeEgt' => strtotime($startdate),
             'issueTimeElt' => strtotime($enddate) + 86400 - 1,
         ];
 
         if ('1' === $request->query->get('valid')) {
-            $conditions['statusIn'] = ['valid'];
+            $conditions['statuses'] = ['valid'];
         }
 
         if ($request->query->get('q')) {
