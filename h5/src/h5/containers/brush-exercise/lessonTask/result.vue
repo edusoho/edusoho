@@ -12,7 +12,7 @@
         <img src="static/images/report-review.png" />
         <p class="result-text result-status_fail mt20">正在批阅中</p>
       </div>
-      <div v-show="Number(answerScene.need_score)" class="result-score">
+      <div v-show="needScore" class="result-score">
         分数：
         <span class="result-status_fail" v-if="isReadOver">?</span>
         <span v-else>{{ answerReport.score }}分</span>
@@ -21,7 +21,7 @@
         <div class="result-content-item result-section-title">
           <span>题型</span>
           <span>答对题</span>
-          <span v-show="Number(answerScene.need_score)">总分</span>
+          <span v-show="needScore">总分</span>
         </div>
         <div
           class="result-content-item"
@@ -33,7 +33,7 @@
             <i class="color-primary">{{ report.right_question_num }}</i>
             / {{ report.question_count }}
           </span>
-          <span v-show="Number(answerScene.need_score)" class="color-primary">
+          <span v-show="needScore" class="color-primary">
             <i
               v-if="report.reviewing_question_num > 0 && isReadOver"
               class="result-status_fail"
@@ -82,6 +82,9 @@ export default {
     },
     isReadOver() {
       return this.answerRecord.status === 'reviewing';
+    },
+    needScore() {
+      return !!Number(this.answerScene.need_score);
     },
   },
   watch: {},
