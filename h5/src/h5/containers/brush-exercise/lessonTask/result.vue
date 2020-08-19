@@ -111,7 +111,7 @@ export default {
           this.answerScene = res.answer_scene;
           this.answerReport = res.answer_report;
           this.answerRecord = res.answer_record;
-          this.$store.commit(types.SET_NAVBAR_TITLE, res.assessment.name);
+          this.$store.commit(types.SET_NAVBAR_TITLE, this.$route.query.title);
           this.isLoading = false;
           this.$nextTick(() => {
             this.height = this.getheight();
@@ -123,6 +123,7 @@ export default {
     },
     doReview() {
       const query = {
+        title: this.$route.query.title,
         type: this.$route.query.type,
         exerciseId: this.$route.query.exerciseId,
         assessmentId: this.$route.query.assessmentId,
@@ -136,6 +137,7 @@ export default {
       const type = this.$route.query.type;
       const query = {
         mode: 'start',
+        title: this.$route.query.title,
         type: this.$route.query.type,
         exerciseId: this.$route.query.exerciseId,
         moduleId: this.$route.query.moduleId,
@@ -148,9 +150,13 @@ export default {
       this.$router.push({ path: '/brushDo', query });
     },
     doAnalysis() {
+      const query = {
+        title: this.$route.query.title,
+      };
       const answerRecordId = this.$route.params.answerRecordId;
       this.$router.push({
         path: `/brushReport/${answerRecordId}`,
+        query,
       });
     },
   },

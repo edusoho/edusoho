@@ -83,6 +83,7 @@ export default {
       const query = {
         mode: 'start',
         type: 'chapter',
+        title: item.name,
         exerciseId: this.exerciseId,
         categoryId: item.id,
         moduleId: this.moduleId,
@@ -93,6 +94,7 @@ export default {
       const query = {
         mode: 'continue',
         type: 'chapter',
+        title: item.name,
         exerciseId: this.exerciseId,
         categoryId: item.id,
         moduleId: this.moduleId,
@@ -103,6 +105,7 @@ export default {
     goResult(item) {
       const query = {
         type: 'chapter',
+        title: item.name,
         exerciseId: this.exerciseId,
         categoryId: item.id,
         moduleId: this.moduleId,

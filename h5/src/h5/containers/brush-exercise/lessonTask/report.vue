@@ -16,6 +16,7 @@
 
 <script>
 import Api from '@/api';
+import * as types from '@/store/mutation-types.js';
 export default {
   components: {},
   data() {
@@ -41,6 +42,7 @@ export default {
         query,
       })
         .then(res => {
+          this.$store.commit(types.SET_NAVBAR_TITLE, this.$route.query.title);
           this.assessment = res.assessment;
           this.answerScene = res.answer_scene;
           this.answerReport = res.answer_report;
