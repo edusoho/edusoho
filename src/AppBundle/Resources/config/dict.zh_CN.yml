@@ -536,3 +536,10 @@ certificateSearchTypes:
     email: 邮箱
     batch: 证书批次
     code: 证书编号
+
+certificateAuditStatus:
+    valid: 已发送
+    cancelled: 已发送
+    expired: 已发送
+    reject: 驳回
+    none: 未审核

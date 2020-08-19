@@ -31,14 +31,14 @@ class AuditServiceImpl extends BaseService implements AuditService
 
     public function update($id, $fields)
     {
-        $certificate = $this->get($id);
-        if (empty($certificate)) {
-            $this->createNewException(CertificateException::NOTFOUND_CERTIFICATE());
+        $record = $this->get($id);
+        if (empty($record)) {
+            $this->createNewException(CertificateException::NOTFOUND_RECORD());
         }
 
         $fields = $this->filterRecordFields($fields);
 
-        return $this->getCertificateDao()->update($id, $fields);
+        return $this->getRecordDao()->update($id, $fields);
     }
 
     protected function filterRecordFields($fields)

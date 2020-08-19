@@ -36,6 +36,9 @@
     <tbody>
     {% if certificates %}
       {% for certificate in certificates %}
+        {% set user = users[certificate.userId]| default(null) %}
+        {% set target = targets[certificate.targetId]|default(null) %}
+        {% set reviewer = reviewers[certificate.auditUserId]| default(null) %}
         {% include 'admin-v2/operating/certificate-audit/certififcate-audit-tr.html.twig' %}
       {% endfor %}
     {% else %}

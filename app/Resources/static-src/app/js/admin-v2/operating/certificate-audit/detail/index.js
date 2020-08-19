@@ -6,34 +6,29 @@ export default class Detail {
     }
 
     init() {
-        // if($('.js-loading-text').length>0){
-        //   $.post($('.js-loading-text').data('url'), (resp) => {
-        //     $('.js-loading-text').remove();
-        //     $('.js-certificate-image').html(resp);
-        //   });
-        // }
-
-        // let $btn = $('#certificate-audit');
-        // $btn.on('click', function (e) {
-        //     let url = $btn.data('url');
-        //     $btn.button('loading');
-        //     $.post(url, function (data) {
-        //         notify('success', Translator.trans('admin_v2.certificate.record.audit.success_hint'));
-        //         window.location.reload();
-        //     }).error(function () {
-        //         notify('success', Translator.trans('admin_v2.certificate.record.audit.failure_hint'));
-        //     });
-        // });
-
+        let $form = $("#audit-form");
         let $btn = $('#certificate-audit');
         $btn.on('click', function () {
             $.post($form.data('saveUrl'), $form.serialize(), function(data){
                 notify('success', Translator.trans('admin_v2.certificate.record.audit.success_hint'));
-                window.location.reload();
+                // window.location.reload();
             }).error(function () {
                 notify('success', Translator.trans('admin_v2.certificate.record.audit.failure_hint'));
             });
         });
+
+        let $btnAuditPass = $("#audit-pass");
+        let $btnAuditReject = $("#audit-reject");
+        let $btnAuditTodo = $("#audit-todo");
+        let $inputRejectReason = $("#reject-reason");
+        function rejectReason() {
+            $btnAuditReject.is(':checked');
+            $inputRejectReason.show();
+        }
+        rejectReason();
+        // $btnAuditReject.on('check', function(){
+        //     $btnAuditReject.show()
+        // })
     }
 }
 

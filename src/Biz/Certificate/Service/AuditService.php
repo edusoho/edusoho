@@ -12,6 +12,8 @@ interface AuditService
 
     public function search($conditions, $orderBys, $start, $limit, $columns = []);
 
+    public function update($id, $fields);
+
     public function passCertificate($id, $fields);
 
     public function rejectCertificate($id, $fields);

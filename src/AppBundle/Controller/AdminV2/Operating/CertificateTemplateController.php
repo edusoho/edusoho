@@ -32,13 +32,6 @@ class CertificateTemplateController extends BaseController
         );
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($templates, 'createdUserId'));
 
-//        echo('<pre>');
-//        print_r($templates);
-//        print_r($paginator);
-//        print_r($users);
-//        echo ('</pre>');
-//        exit();
-
         return $this->render('admin-v2/operating/certificate-template/index.html.twig', [
             'templates' => $templates,
             'paginator' => $paginator,

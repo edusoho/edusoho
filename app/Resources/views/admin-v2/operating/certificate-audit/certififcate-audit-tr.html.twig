@@ -1,28 +1,25 @@
 {% import "common/data-dict-macro.html.twig" as dict_macro %}
 <tr>
+  <td>{{ user.truename|default('--') }}<br><span class="text-muted text-sm">{{ user.nickname|default() }}</span></td>
+{#  <td>{{ dict_macro.certificateTypes(certificate.targetType) }}</td>#}
+  <td>{{ target.title|default('--') }}</td>
   <td>
-    {{ certificate.userId }}
+    {{ certificate.auditTime|date('Y-n-d H:i:s') }}
   </td>
-  <td>
-    {{ dict_macro.certificateTypes(certificate.targetType) }}
+  <td>{{ dict_text('certificateAuditStatus', certificate.status) }}
   </td>
   <td>
     {{ certificate.auditTime|date('Y-n-d H:i:s') }}
   </td>
-  <td>{{ certificate.status }}
-  </td>
-  <td>
-    {{ certificate.issueTime|date('Y-n-d H:i:s') }}
-  </td>
-  <td>
-    {{ certificate.userId }}
-  </td>
+  <td>{{ reviewer.truename|default('--') }}<br><span class="text-muted text-sm">{{ reviewer.nickname|default() }}</span></td>
   <td>
     <div class="btn-group">
       {% if has_permission('admin_v2_certificate_manage') %}
-        <a class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal"
-           data-url="{{ path('admin_v2_certificate_examine_audit_detail', {id:certificate.id}) }}"
-           type="button">{{ 'admin.operation_certificate.certificate.audit.audit_certificate'|trans }}</a>
+        {% if certificate['status'] != 'valid' and certificate['status'] != 'cancelled' and certificate['status'] != 'expired' %}
+          <a class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal"
+             data-url="{{ path('admin_v2_certificate_examine_audit_detail', {id:certificate.id}) }}"
+             type="button">{{ 'admin.operation_certificate.certificate.audit.audit_certificate'|trans }}</a>
+        {% endif %}
       {% endif %}
     </div>
   </td>

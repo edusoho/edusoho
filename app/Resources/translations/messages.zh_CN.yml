@@ -10408,6 +10408,7 @@ exception.certificate.record.forbidden_regrant: 证书无法重新撤销
 exception.certificate_template.forbidden_delete_published: 禁止删除已发布证书
 exception.certificate.audit.forbidden_pass: 证书无法通过
 exception.certificate.audit.forbidden_reject: 证书无法驳回
+exception.certificate.audit.forbidden_audit: 审核失败
 
 course.unname_title: 未命名计划
 
