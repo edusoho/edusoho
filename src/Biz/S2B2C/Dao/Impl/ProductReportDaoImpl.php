@@ -2,12 +2,12 @@
 
 namespace Biz\S2B2C\Dao\Impl;
 
-use Biz\S2B2C\Dao\SettlementReportDao;
+use Biz\S2B2C\Dao\ProductReportDao;
 use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class SettlementReportDaoImpl extends AdvancedDaoImpl implements SettlementReportDao
+class ProductReportDaoImpl extends AdvancedDaoImpl implements ProductReportDao
 {
-    protected $table = 's2b2c_product_settlement_report';
+    protected $table = 's2b2c_product_report';
 
     public function declares()
     {

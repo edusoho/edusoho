@@ -8,7 +8,7 @@ use Biz\OrderFacade\Service\OrderRefundService;
 use Biz\S2B2C\Service\CourseProductService;
 use Biz\S2B2C\Service\ProductService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
-use Biz\S2B2C\Service\SettlementReportService;
+use Biz\S2B2C\Service\ProductReportService;
 use Biz\System\Service\LogService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
@@ -54,10 +54,10 @@ class CourseProductSubscriber extends EventSubscriber implements EventSubscriber
 
         $s2b2cProduct = $this->getS2b2cProductService()->getByTypeAndLocalResourceId('course', $course['id']);
         $member = $event->getArgument('member');
-        $report = $this->getS2b2cSettlementReportService()->create([
+        $report = $this->getProductReportService()->create([
             's2b2cProductId' => $s2b2cProduct['id'],
             'userId' => $member['userId'],
-            'type' => SettlementReportService::TYPE_JOIN_COURSE,
+            'type' => ProductReportService::TYPE_JOIN_COURSE,
             'orderId' => $member['orderId'],
         ]);
 
@@ -71,12 +71,12 @@ class CourseProductSubscriber extends EventSubscriber implements EventSubscriber
             'merchantReportId' => $report['id'],
         ];
 
-        $this->getS2b2cSettlementReportService()->updateStatusToSent($report['id']);
+        $this->getProductReportService()->updateStatusToSent($report['id']);
         $result = $this->getS2B2CService()->reportSuccessOrder($params);
         if (isset($result['error'])) {
-            $this->getS2b2cSettlementReportService()->updateFailedReason($report['id'], $result['error']);
+            $this->getProductReportService()->updateFailedReason($report['id'], $result['error']);
         } else {
-            $this->getS2b2cSettlementReportService()->updateStatusToSucceed($report['id']);
+            $this->getProductReportService()->updateStatusToSucceed($report['id']);
         }
     }
 
@@ -265,11 +265,11 @@ class CourseProductSubscriber extends EventSubscriber implements EventSubscriber
     }
 
     /**
-     * @return SettlementReportService
+     * @return ProductReportService
      */
-    protected function getS2b2cSettlementReportService()
+    protected function getProductReportService()
     {
-        return $this->getBiz()->service('S2B2C:SettlementReportService');
+        return $this->getBiz()->service('S2B2C:ProductReportService');
     }
 
     /**

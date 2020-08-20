@@ -4,14 +4,14 @@ namespace Biz\S2B2C\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
-use Biz\S2B2C\Dao\SettlementReportDao;
+use Biz\S2B2C\Dao\ProductReportDao;
 use Biz\S2B2C\S2B2CException;
 use Biz\S2B2C\Service\ProductService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
-use Biz\S2B2C\Service\SettlementReportService;
+use Biz\S2B2C\Service\ProductReportService;
 use Biz\User\Service\UserService;
 
-class SettlementReportServiceImpl extends BaseService implements SettlementReportService
+class ProductReportServiceImpl extends BaseService implements ProductReportService
 {
     public function create($fields)
     {
@@ -21,7 +21,7 @@ class SettlementReportServiceImpl extends BaseService implements SettlementRepor
         $config = $this->getS2B2CFacadeService()->getS2B2CConfig();
         $user = $this->getUserService()->getUser($fields['userId']);
 
-        return $this->getSettlementReportDao()->create([
+        return $this->ProductReportDao()->create([
             'supplierId' => $config['supplierId'],
             'productId' => $fields['s2b2cProductId'],
             'type' => $fields['type'],
@@ -35,7 +35,7 @@ class SettlementReportServiceImpl extends BaseService implements SettlementRepor
 
     public function getById($id)
     {
-        return $this->getSettlementReportDao()->get($id);
+        return $this->ProductReportDao()->get($id);
     }
 
     public function updateFailedReason($id, $reason)
@@ -45,7 +45,7 @@ class SettlementReportServiceImpl extends BaseService implements SettlementRepor
             $this->createNewException(S2B2CException::SETTLEMENT_REPORT_NOT_FOUND());
         }
 
-        return $this->getSettlementReportDao()->update($id, [
+        return $this->ProductReportDao()->update($id, [
             'status' => self::STATUS_FAILED,
             'reason' => $reason,
         ]);
@@ -58,7 +58,7 @@ class SettlementReportServiceImpl extends BaseService implements SettlementRepor
             $this->createNewException(S2B2CException::SETTLEMENT_REPORT_NOT_FOUND());
         }
 
-        return $this->getSettlementReportDao()->update($id, ['status' => self::STATUS_SENT]);
+        return $this->ProductReportDao()->update($id, ['status' => self::STATUS_SENT]);
     }
 
     public function updateStatusToSucceed($id)
@@ -68,15 +68,15 @@ class SettlementReportServiceImpl extends BaseService implements SettlementRepor
             $this->createNewException(S2B2CException::SETTLEMENT_REPORT_NOT_FOUND());
         }
 
-        return $this->getSettlementReportDao()->update($id, ['status' => self::STATUS_SUCCEED]);
+        return $this->ProductReportDao()->update($id, ['status' => self::STATUS_SUCCEED]);
     }
 
     /**
-     * @return SettlementReportDao
+     * @return ProductReportDao
      */
-    protected function getSettlementReportDao()
+    protected function ProductReportDao()
     {
-        return $this->biz->dao('S2B2C:SettlementReportDao');
+        return $this->biz->dao('S2B2C:ProductReportDao');
     }
 
     /**

@@ -2,9 +2,11 @@
 
 namespace Biz\S2B2C\Service;
 
-interface SettlementReportService
+interface ProductReportService
 {
     const TYPE_JOIN_COURSE = 'join_course';
+
+    const TYPE_REFUND = 'refund';
 
     const STATUS_CREATED = 'created';
 
