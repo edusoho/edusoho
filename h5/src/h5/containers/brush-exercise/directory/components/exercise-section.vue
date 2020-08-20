@@ -109,6 +109,7 @@ export default {
         exerciseId: this.exerciseId,
         categoryId: item.id,
         moduleId: this.moduleId,
+        backUrl: `/item_bank_exercise/${this.exerciseId}`,
       };
       const answerRecordId = item.latestAnswerRecord.answerRecordId;
       this.$router.push({
