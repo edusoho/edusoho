@@ -121,7 +121,10 @@ export default {
         .then(res => {
           Toast.clear();
           this.canLeave = true;
-          this.$router.go(-1);
+          const exerciseId = this.$route.query.exerciseId;
+          this.$router.replace({
+            path: `/item_bank_exercise/${exerciseId}`,
+          });
         })
         .catch(err => {
           Toast.clear();
