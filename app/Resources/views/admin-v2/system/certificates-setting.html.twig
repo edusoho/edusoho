@@ -1,0 +1,121 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_certificate_setting' %}
+
+{% set script_controller = 'setting/certificate' %}
+
+{% block main %}
+
+  {{ web_macro.flash_messages() }}
+
+  <form class="form-horizontal" id="license-form" method="post"
+        data-save-url="{{ path('admin_v2_setting_license_save') }}">
+    <fieldset id="license_area">
+      <legend>{{ 'admin.setting.license.headline'|trans }}</legend>
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="name">{{ 'admin.setting.license.name'|trans }}</label>
+        </div>
+        <div class="col-md-8 controls">
+          <input type="text" id="license_name" name="license_name" class="form-control"
+                 value="{{ license.license_name }}">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="license-picture">{{ 'admin.setting.license.picture'|trans }}</label>
+        </div>
+        <div class="col-md-8 controls">
+          <div id="license-picture-container">
+            {% if license.license_picture %}<img src="{{ asset(license.license_picture) }}">
+            {% endif %}
+          </div>
+          <a class="btn btn-default" id="license-picture-upload"
+             data-upload-token="{{ upload_token('system', 'image') }}"
+             data-goto-url="{{ path('admin_v2_setting_license_picture_upload') }}">{{ 'form.btn.upload'|trans }}</a>
+          <button class="btn btn-default" id="license-picture-remove" type="button"
+                  {% if not license.license_picture %}style="display:none;"{% endif %}>
+            {{ 'form.btn.delete'|trans }}</button>
+          <p class="help-block">{{ 'admin.setting.license.picture.help_block'|trans|raw }}</p>
+          <input type="hidden" name="license_picture" id="license_picture" value="{{ license.license_picture }}">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="url">{{ 'admin.setting.license.url'|trans }}</label>
+        </div>
+        <div class="col-md-8 controls">
+          <input type="text" id="license_url" name="license_url" class="form-control" value="{{ license.license_url }}">
+          <p class="help-block">{{'admin.setting.site.url.help_block'|trans({'%http%':app.request.getScheme()})}}</p>
+        </div>
+      </div>
+    </fieldset>
+
+    <legend>{{ 'admin.setting.permit.headline'|trans }}</legend>
+    <fieldset id="permit_area">
+      {% for permit in license.permits %}
+        <div class="setting_permit">
+          <div class="form-group">
+            <div class="col-md-2 control-label">
+              <label for="analytics">{{ 'admin.setting.permit.name'|trans }}</label>
+            </div>
+            <div class="col-md-8 controls">
+              <input type="text" name="permits[{{ loop.index - 1 }}][name]" class="form-control permit_name"
+                     value="{{ permit.name }}">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-md-2 control-label">
+              <label for="name">{{ 'admin.setting.permit.record.number'|trans }}</label>
+            </div>
+            <div class="col-md-8 controls">
+              <input type="text" name="permits[{{ loop.index - 1 }}][record_number]"
+                     class="form-control permit_record_number" value="{{ permit.record_number }}">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-md-2 control-label">
+              <label for="license-picture">{{ 'admin.setting.permit.picture'|trans }}</label>
+            </div>
+            <div class="col-md-8 controls">
+              <div class="permit_picture_container"
+                   id="permit_picture_container_{{ loop.index - 1 }}">{% if permit.picture %}<img
+                  src="{{ asset(permit.picture) }}">{% endif %}</div>
+              <a class="btn btn-default permit_picture_upload" id="permit_picture_upload_{{ loop.index - 1 }}"
+                 data-upload-token="{{ upload_token('system', 'image') }}"
+                 data-goto-url="{{ path('admin_v2_setting_permit_picture_upload') }}">{{ 'form.btn.upload'|trans }}</a>
+              <button class="btn btn-default permit_picture_remove" id="permit_picture_remove_{{ loop.index - 1 }}"
+                      type="button"
+                      {% if not permit.picture %}style="display:none;"{% endif %}>{{ 'form.btn.delete'|trans }}</button>
+              <p class="help-block">{{ 'admin.setting.permit.picture.help_block'|trans|raw }}</p>
+              <input type="hidden" name="permits[{{ loop.index - 1 }}][picture]"
+                     id="permit_picture_{{ loop.index - 1 }}" class="permit_picture" value="{{ permit.picture }}">
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </fieldset>
+
+    <div class="form-group">
+      <div class="col-md-2 control-label"></div>
+      <div class="controls col-md-1 control-label">
+        <input class="btn btn-default" type="button" id="add-permit-picture-btn" value="新增一栏">
+      </div>
+      <div class="controls col-md-1 control-label">
+        <input class="btn btn-default" type="button" id="remove-permit-picture-btn" style="display:none;" value="删除整栏">
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="controls col-md-offset-2 col-md-8">
+        <button type="button" class="btn btn-primary" id="save_license">{{ 'form.btn.submit'|trans }}</button>
+      </div>
+    </div>
+
+  </form>
+
+{% endblock %}

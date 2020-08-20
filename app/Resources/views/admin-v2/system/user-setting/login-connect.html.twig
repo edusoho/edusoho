@@ -99,6 +99,19 @@
         </div>
       </div>
     </fieldset>
+
+    <fieldset>
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label>{{ 'admin.login_connect.User_login_captcha'|trans }}</label>
+        </div>
+        <div class="controls col-md-8 radios">
+          {{ radios('login_captcha_enable', {1:'admin.login_connect.open'|trans, 0:'admin.login_connect.closed'|trans}, loginConnect.login_captcha_enable) }}
+          <p class="help-block">{{ 'admin.login_connect.User_login_captcha.help_block'|trans }}</p>
+        </div>
+      </div>
+    </fieldset>
+
     <fieldset id="third_login" {% if loginConnect.enabled|default(null) == 0 %} style="display:none"{% endif %}>
       {% for type, client in clients if type not in ['weixinmob', 'weixinweb', 'apple']%}
         <fieldset data-role="oauth2-setting" data-type="{{ type }}">

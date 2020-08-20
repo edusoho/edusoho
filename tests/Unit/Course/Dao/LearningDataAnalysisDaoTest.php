@@ -9,12 +9,12 @@ class LearningDataAnalysisDaoTest extends BaseDaoTestCase
     public function testSumStatisticDataByCourseIdsAndUserId()
     {
         $result = $this->getDao()->sumStatisticDataByCourseIdsAndUserId([], 1);
-        $this->assertEquals(['taskNum' => 0, 'learnedNum' => 0], $result);
+        $this->assertEquals(['lessonNum' => 0, 'learnedNum' => 0], $result);
 
         $course = $this->mockCourse();
         $courseMember = $this->mockCourseMember();
         $result = $this->getDao()->sumStatisticDataByCourseIdsAndUserId([1, 2], 1);
-        $this->assertEquals(1, $result['taskNum']);
+        $this->assertEquals(1, $result['lessonNum']);
     }
 
     protected function getDefaultMockFields()
@@ -64,7 +64,7 @@ class LearningDataAnalysisDaoTest extends BaseDaoTestCase
             'title' => 'a',
             'address' => 'a',
             'compulsoryTaskNum' => 1,
-            'taskNum' => 1,
+            'lessonNum' => 1,
         ];
 
         $fields = array_merge($defaultFields, $fields);

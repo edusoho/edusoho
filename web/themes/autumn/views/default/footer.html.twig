@@ -14,7 +14,7 @@
       <a class="mlm" href="{{ path('course_set_archive') }}">{{ '课程存档'|trans }}</a>
       <div class="mts">
         {% if setting('site.copyright') %}{{ '课程内容版权均归'|trans }}
-          <a href="/">{{ setting('site.copyright') }}</a>{{ '所有'|trans }}
+        <a href="/">{{ setting('site.copyright') }}</a>{{ '所有'|trans }}
         {% endif %}&nbsp;
         {% if setting('site.icp') %}
           <a href={{ setting('site.icpUrl')|default('http://www.beian.miit.gov.cn') }} target="_blank">
@@ -23,5 +23,27 @@
         {% endif %}
       </div>
     </div>
+    
+    {% if setting('license.license_picture') and setting('license.license_name') %}
+      <a class="navbar-brand">
+        <a href={{ setting('license.license_url')| default('/') }} target="_blank">
+          <img src="{{ asset(setting('license.license_picture')) }}">
+        </a>
+        <a class="mlm" href={{ setting('license.license_url')|default('/') }} target="_blank">
+          {{ setting('license.license_name') }}
+        </a>
+      </a>
+    {% endif %}
+
+    {% for permit in setting('license.permits') %}
+      <div>
+        {% if permit.name %}
+          <a class="mlm" href={{ permit.picture |default('/') }} target="_blank">{{ permit.name }}</a>
+        {% endif %}
+        {% if permit.record_number %}
+          <a class="mlm" href={{ permit.picture |default('/') }} target="_blank">{{ permit.record_number }}</a>
+        {% endif %}
+      </div>
+    {% endfor %}
   </div>
 </div>

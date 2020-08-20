@@ -76,8 +76,12 @@ class LearningDataAnalysisServiceTest extends BaseTestCase
         $this->mockBiz('Course:LearningDataAnalysisDao', [
             [
                 'functionName' => 'sumStatisticDataByCourseIdsAndUserId',
-                'returnValue' => ['learnedNum' => 70, 'taskNum' => 100],
+                'returnValue' => ['learnedNum' => 70, 'lessonNum' => 100],
                 'withParams' => [[1], 1], ],
+        ]);
+
+        $this->mockBiz('Task:TaskService', [
+            ['functionName' => 'countTasks', 'returnValue' => 100],
         ]);
 
         $result = $this->getLearningDataAnalysisService()->getUserLearningProgressByCourseIds([1], 1);
