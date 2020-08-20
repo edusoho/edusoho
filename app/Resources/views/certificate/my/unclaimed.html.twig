@@ -20,7 +20,7 @@
                     <p class="unclaimed-cert-title">{{ certificate.name }}</p>
                 </div>
                 <p>
-                    <button class="cd-btn cd-btn-primary cd-mt8" data-target="#modal" data-toggle="modal" data-url="">{{ 'user.certificates.cart_detail_btn'|trans }}</button>
+                    <button class="cd-btn cd-btn-primary cd-mt8" data-target="#modal" data-toggle="modal" data-url="{{ path('certificate_detail', {id:certificate.id}) }}">{{ 'user.certificates.cart_detail_btn'|trans }}</button>
                 </p>
             </div>
             {% endfor %}
