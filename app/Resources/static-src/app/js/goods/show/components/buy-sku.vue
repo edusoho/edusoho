@@ -97,6 +97,11 @@
             $(function () {
                 $("[data-toggle='popover']").popover();
             });
+        },
+        updated() {
+            $(function () {
+                $("[data-toggle='popover']").popover();
+            });
         }
     }
 </script>
