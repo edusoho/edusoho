@@ -106,7 +106,7 @@
     "vue-template-compiler": "^2.6.11",
     "vuedraggable": "^2.16.0",
     "vuex": "^3.0.1",
-    "wap-sdk-test": "^0.1.8",
+    "wap-sdk-test": "^0.1.9",
     "webpack": "^4.42.1"
   },
   "devDependencies": {
