@@ -3433,5 +3433,5 @@ certificate_image_download:
     defaults: { _controller: AppBundle:Certificate/Certificate:certificateImageDownload }
 
 certificate_detail:
-  path: /certificate/{id}/detail/{targetType}/{targetId}
+  path: /certificate/{id}/detail
   defaults: { _controller: AppBundle:Certificate/Certificate:certificateDetail }

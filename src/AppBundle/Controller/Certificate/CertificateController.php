@@ -62,26 +62,26 @@ class CertificateController extends BaseController
         return $this->getBiz()->offsetGet('certificate.strategy_context')->createStrategy($type);
     }
 
-    public function certificateDetailAction(Request $request, $id, $targetType, $targetId)
+    public function certificateDetailAction(Request $request, $id)
     {
-        $target = $this->getTarget($targetId, $targetType);
-
         $certificate = $this->getCertificateService()->get($id);
         if (empty($certificate)) {
             $this->createNewException(CertificateException::NOTFOUND_CERTIFICATE());
         }
 
+        $target = $this->getTarget($certificate['targetId'], $certificate['targetType']);
+
         $isObtained = $this->getRecordService()->isObtained([
             'userId' => $this->getCurrentUser()->getId(),
             'certificateId' => $certificate['id'],
-            'targetType' => $targetType,
+            'targetType' => $certificate['targetType'],
             'targetId' => $target['id'],
             'statuses' => ['valid', 'expired'],
         ]);
 
-        return $this->render('course/tabs/certificates-detail.html.twig', [
+        return $this->render('classroom/certificates/detail.html.twig', [
             'certificate' => $certificate,
-            'targetType' => $targetType,
+            'targetType' => $certificate['targetType'],
             'target' => $target,
             'isObtained' => $isObtained,
         ]);

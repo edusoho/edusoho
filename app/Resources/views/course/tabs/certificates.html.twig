@@ -21,7 +21,7 @@
           </div>
         </div>
         <div class="certificate-view-btn pull-right">
-          <a class="cd-btn cd-btn-primary" href="#" data-target="#modal" data-toggle="modal" data-url="{{ path('certificate_detail', {id:certificate.id, targetType:'course', targetId:course.id }) }}">{{ 'course.catalogue.certificate_detail'|trans }}</a>
+          <a class="cd-btn cd-btn-primary" href="#" data-target="#modal" data-toggle="modal" data-url="{{ path('certificate_detail', {id:certificate.id}) }}">{{ 'course.catalogue.certificate_detail'|trans }}</a>
         </div>
       </li>
       {% endfor %}
