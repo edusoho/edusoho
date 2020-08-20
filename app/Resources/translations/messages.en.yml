@@ -1209,6 +1209,7 @@ course.catalogue.certificate_obtain: This is available by taking the course onli
 course.catalogue.certificate_detail: Certificate details
 course.catalogue.certificate_achieve: Approach of achieving
 course.catalogue.certificate_condition: Acquisition conditions
+course.catalogue.certificate_to_achieve: This is obtained by taking the <a href='%targetUrl%' target='_blank'>%course%</a> online exam
 course.catalogue.certificate_expiry: 'valid until: %expiryTime%'
 course.catalogue.certificate_forever: 'Term of validity: long term'
 course.catalogue.content_title: Syllabus

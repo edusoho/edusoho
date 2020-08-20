@@ -1374,7 +1374,7 @@ course.catalogue.certificate_obtain: 通过参加课程线上考试可以获得
 course.catalogue.certificate_detail: 证书详情
 course.catalogue.certificate_achieve: 获取途径
 course.catalogue.certificate_condition: 获取条件
-course.catalogue.certificate_to_achieve: 通过参加%course%线上考试可以获得
+course.catalogue.certificate_to_achieve: 通过参加<a href='%targetUrl%' target='_blank'>%course%</a>线上考试可以获得
 course.catalogue.certificate_pass_condition: 考试结果通过
 course.catalogue.certificate_expiry: '有效期至：%expiryTime%'
 course.catalogue.certificate_forever: '有效期：长期有效'

@@ -2791,10 +2791,6 @@ classroom_certificates:
     path: /classroom/{classroomId}/certificates/list
     defaults: { _controller: AppBundle:Classroom/Classroom:certificates }
 
-classroom_certificate_detail:
-  path: /classroom/{classroomId}/certificates/{id}/detail
-  defaults: { _controller: AppBundle:Classroom/Classroom:certificateDetail }
-
 #material_lib
 material_lib_browsing:
   path: /material/lib/browse
@@ -2973,10 +2969,6 @@ course_show:
   path: /course/{id}/{tab}
   defaults: { _controller: AppBundle:Course/Course:show, tab: 'summary' }
   h5: true
-
-course_certificate_detail:
-  path: /course/{courseId}/certificate/detail/{id}
-  defaults: { _controller: AppBundle:Course/Course:certificateDetail }
 
 course_task_paging_show:
   path: /course/{courseId}/tasks/paging
@@ -3443,3 +3435,7 @@ certificate_record:
 certificate_image_download:
     path: /certificate/image/{recordId}/download
     defaults: { _controller: AppBundle:Certificate/Certificate:certificateImageDownload }
+
+certificate_detail:
+  path: /certificate/{id}/detail
+  defaults: { _controller: AppBundle:Certificate/Certificate:certificateDetail }

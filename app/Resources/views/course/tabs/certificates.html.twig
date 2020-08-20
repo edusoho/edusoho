@@ -11,9 +11,9 @@
           <div>
             <span class="certificate-name">{{ certificate.name }}</span>
             {% if obtained[certificate.id]|default(false) %}
-              <div class="certificate-tag certificate-tag-have">{{ 'course.catalogue.certificate_have'|trans }}</div>
+              <div class="certificate-obtain-tag certificate-tag-have">{{ 'course.catalogue.certificate_have'|trans }}</div>
             {% else %}
-              <div class="certificate-tag certificate-tag-wait">{{ 'course.catalogue.certificate_wait'|trans }}</div>
+              <div class="certificate-obtain-tag certificate-tag-wait">{{ 'course.catalogue.certificate_wait'|trans }}</div>
             {% endif %}
           </div>
           <div>
@@ -21,7 +21,7 @@
           </div>
         </div>
         <div class="certificate-view-btn pull-right">
-          <a class="cd-btn cd-btn-primary" href="#" data-target="#modal" data-toggle="modal" data-url="{{ path('course_certificate_detail', {courseId:course.id, id:certificate.id}) }}">{{ 'course.catalogue.certificate_detail'|trans }}</a>
+          <a class="cd-btn cd-btn-primary" href="#" data-target="#modal" data-toggle="modal" data-url="{{ path('certificate_detail', {id:certificate.id}) }}">{{ 'course.catalogue.certificate_detail'|trans }}</a>
         </div>
       </li>
       {% endfor %}
