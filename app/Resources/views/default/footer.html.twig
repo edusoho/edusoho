@@ -29,18 +29,16 @@
         {% endif %}
       </div>
 
+      {% if setting('license.license_picture') and setting('license.license_name') %}
       <a class="navbar-brand">
-        {% if setting('license.license_picture') %}
           <a href={{ setting('license.license_url')| default('/') }} target="_blank">
             <img src="{{ asset(setting('license.license_picture')) }}">
           </a>
-        {% endif %}
-        {% if setting('license.license_name') %}
           <a class="mlm" href={{ setting('license.license_url')|default('/') }} target="_blank">
             {{ setting('license.license_name') }}
           </a>
-        {% endif %}
       </a>
+      {% endif %}
 
       {% for permit in setting('license.permits') %}
         <div>
