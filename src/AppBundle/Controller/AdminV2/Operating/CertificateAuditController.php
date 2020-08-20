@@ -7,10 +7,7 @@ use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Certificate\CertificateException;
 use Biz\Certificate\Service\AuditService;
-use Biz\Certificate\Service\CertificateService;
 use Biz\Certificate\Service\RecordService;
-use Biz\Classroom\Service\ClassroomService;
-use Biz\Course\Service\CourseService;
 use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -140,14 +137,6 @@ class CertificateAuditController extends BaseController
     }
 
     /**
-     * @return CertificateService
-     */
-    protected function getCertificateService()
-    {
-        return $this->createService('Certificate:CertificateService');
-    }
-
-    /**
      * @return RecordService
      */
     protected function getRecordService()
@@ -161,22 +150,6 @@ class CertificateAuditController extends BaseController
     protected function getUserService()
     {
         return $this->createService('User:UserService');
-    }
-
-    /**
-     * @return CourseService
-     */
-    protected function getCourseService()
-    {
-        return $this->createService('Course:CourseService');
-    }
-
-    /**
-     * @return ClassroomService
-     */
-    protected function getClassroomService()
-    {
-        return $this->createService('Classroom:ClassroomService');
     }
 
     protected function getCertificateStrategy($type)

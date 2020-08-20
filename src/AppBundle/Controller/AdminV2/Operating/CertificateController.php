@@ -31,11 +31,6 @@ class CertificateController extends BaseController
             $paginator->getPerPageCount()
         );
 
-//        echo('<pre>');
-//        print_r($certificates);
-//        echo ('</pre>');
-//        exit();
-
         return $this->render('admin-v2/operating/certificate/index.html.twig', [
             'certificates' => $certificates,
             'paginator' => $paginator,

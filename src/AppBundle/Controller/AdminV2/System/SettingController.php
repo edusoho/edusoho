@@ -109,23 +109,6 @@ class SettingController extends BaseController
         ]);
     }
 
-    public function logoRemoveAction(Request $request)
-    {
-        $setting = $this->getSettingService()->get('site');
-        $setting['logo'] = '';
-
-        $fileId = empty($setting['logo_file_id']) ? null : $setting['logo_file_id'];
-        $setting['logo_file_id'] = '';
-
-        $this->getSettingService()->set('site', $setting);
-
-        if ($fileId) {
-            $this->getFileService()->deleteFile($fileId);
-        }
-
-        return $this->createJsonResponse(true);
-    }
-
     public function logoUploadAction(Request $request)
     {
         $fileId = $request->request->get('id');
@@ -159,60 +142,15 @@ class SettingController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    public function licensePictureUploadAction(Request $request)
+    public function logoRemoveAction(Request $request)
     {
-        $fileId = $request->request->get('id');
-        $fileType = 'license_picture';
-        $license['license_picture'] = $this->replaceFile($fileType, $fileId);
+        $setting = $this->getSettingService()->get('site');
+        $setting['logo'] = '';
 
-        $response = [
-            'path' => $license['license_picture'],
-            'url' => $this->container->get('assets.packages')->getUrl($license['license_picture']),
-        ];
+        $fileId = empty($setting['logo_file_id']) ? null : $setting['logo_file_id'];
+        $setting['logo_file_id'] = '';
 
-        return $this->createJsonResponse($response);
-    }
-
-    public function licensePictureRemoveAction(Request $resquest)
-    {
-        $setting = $this->getSettingService()->get('license');
-        $setting['license_picture'] = '';
-
-        $fileId = empty($setting['license_picture_file_id']) ? null : $setting['license_picture_file_id'];
-        $setting['license_picture_file_id'] = '';
-
-        $this->getSettingService()->set('license', $setting);
-
-        if ($fileId) {
-            $this->getFileService()->deleteFile($fileId);
-        }
-
-        return $this->createJsonResponse(true);
-    }
-
-    public function permitPictureUploadAction(Request $request)
-    {
-        $fileId = $request->request->get('id');
-        $fileType = 'permit_picture';
-        $license['permit_picture'] = $this->replaceFile($fileType, $fileId);
-
-        $response = [
-            'path' => $license['permit_picture'],
-            'url' => $this->container->get('assets.packages')->getUrl($license['permit_picture']),
-        ];
-
-        return $this->createJsonResponse($response);
-    }
-
-    public function permitPictureRemoveAction(Request $request)
-    {
-        $setting = $this->getSettingService()->get('license');
-        $setting['permit_picture'] = '';
-
-        $fileId = empty($setting['permit_picture_file_id']) ? null : $setting['permit_picture_file_id'];
-        $setting['permit_picture_file_id'] = '';
-
-        $this->getSettingService()->set('license', $setting);
+        $this->getSettingService()->set('site', $setting);
 
         if ($fileId) {
             $this->getFileService()->deleteFile($fileId);
@@ -319,30 +257,6 @@ class SettingController extends BaseController
             'mode' => $setting['mode'],
             'bind' => $bind,
         ]);
-    }
-
-    protected function replaceFile($fileType, $fileId)
-    {
-        $objectFile = $this->getFileService()->getFileObject($fileId);
-        if (!FileToolkit::isImageFile($objectFile)) {
-            $this->createNewException(FileToolkitException::NOT_IMAGE());
-        }
-
-        $file = $this->getFileService()->getFile($fileId);
-        $parsed = $this->getFileService()->parseFileUri($file['uri']);
-
-        $license = $this->getSettingService()->get('license', []);
-        $oldFile = $fileType.'_file_Id';
-
-        $oldFileId = empty($license[$oldFile]) ? null : $license[$oldFile];
-        $license[$fileType] = "{$this->container->getParameter('topxia.upload.public_url_path')}/".$parsed['path'];
-        $license[$fileType] = ltrim($license[$fileType], '/');
-
-        if ($oldFileId) {
-            $this->getFileService()->deleteFile($oldFileId);
-        }
-
-        return $license[$fileType];
     }
 
     /**
