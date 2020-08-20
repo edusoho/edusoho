@@ -17,29 +17,21 @@ class CertificateFilter extends Filter
 
     protected $publicFields = [
         'id', 'name', 'targetType', 'targetId', 'description', 'templateId',
-        'code', 'status', 'expiryDay', 'autoIssue', 'createdUserId', 'createdTime', 'updatedTime', 'classroom', 'course', 'isObtained',
+        'code', 'status', 'expiryDay', 'autoIssue', 'createdTime', 'updatedTime', 'classroom', 'course', 'isObtained',
     ];
 
     protected function publicFields(&$data)
     {
-        if (isset($data['createdUserId'])) {
-            $userFilter = new UserFilter();
-            $userFilter->setMode(Filter::SIMPLE_MODE);
-            $userFilter->filter($data['createdUserId']);
-        }
-
         if (isset($data['classroom'])) {
             $classroomFilter = new ClassroomFilter();
             $classroomFilter->setMode(Filter::SIMPLE_MODE);
             $classroomFilter->filter($data['classroom']);
-            unset($data['classroom']);
         }
 
         if (isset($data['course'])) {
             $courseFilter = new CourseFilter();
             $courseFilter->setMode(Filter::SIMPLE_MODE);
             $courseFilter->filter($data['course']);
-            unset($data['course']);
         }
 
         if (!empty($data['description'])) {

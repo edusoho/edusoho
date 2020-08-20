@@ -19,12 +19,10 @@ class Certificate extends AbstractResource
 {
     /**
      * @ApiConf(isRequiredAuth=false)
-     * @ResponseFilter(class="ApiBundle\Api\Resource\Certificate\CertificateFilter", mode="public")
      */
     public function search(ApiRequest $request)
     {
         $conditions = $request->query->all();
-        $target = $this->getTarget($conditions);
 
         $conditions['status'] = 'published';
         list($offset, $limit) = $this->getOffsetAndLimit($request);
@@ -36,30 +34,9 @@ class Certificate extends AbstractResource
 
         foreach ($certificates as &$certificate) {
             $certificate['isObtained'] = $isObtaineds[$certificate['id']];
-            $certificate[$certificate['targetType']] = $certificate['targetType'];
         }
 
         return $this->makePagingObject($certificates, $total, $offset, $limit);
-    }
-
-    protected function getTarget($condition)
-    {
-        if ($condition['targetType'] == 'classroom') {
-            $target = $this->getClassroomService()->getClassroom($condition['targetId']);
-            if (empty($target)) {
-                throw ClassroomException::NOTFOUND_CLASSROOM();
-            }
-            $this->getOCUtil()->single($classroom, array('creator', 'teacherIds', 'assistantIds', 'headTeacherId'));
-        } else {
-            $target = $this->getCourseService()->getCourse($condition['targetId']);
-            if (empty($target)) {
-                throw CourseException::NOTFOUND_COURSE();
-            }
-            $this->getOCUtil()->single($course, array('creator', 'teacherIds'));
-            $this->getOCUtil()->single($course, array('courseSetId'), 'courseSet');
-        }
-
-        return $target;
     }
 
     /**
