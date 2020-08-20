@@ -51,6 +51,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = array(
             'processSafeIframeDomains',
+            'addTableIndexJob',
         );
 
         $funcNames = array();
@@ -95,6 +96,52 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->getCacheService()->set('safe_iframe_domains', $security['safe_iframe_domains']);
         }
         
+        return 1;
+    }
+
+    public function addTableIndexJob()
+    {
+        if ($this->isJobExist('HandlingTimeConsumingUpdateStructuresJob')) {
+            return 1;
+        }
+
+        $currentTime = time();
+        $time = strtotime(date('Y-m-d', $currentTime) . '02:00:00');
+
+        if ($currentTime > $time) {
+            $time = strtotime(date('Y-m-d', strtotime('+1 day')) . '02:00:00');
+        }
+
+        $this->getConnection()->exec("INSERT INTO `biz_scheduler_job` (
+              `name`,
+              `expression`,
+              `class`,
+              `args`,
+              `priority`,
+              `pre_fire_time`,
+              `next_fire_time`,
+              `misfire_threshold`,
+              `misfire_policy`,
+              `enabled`,
+              `creator_id`,
+              `updated_time`,
+              `created_time`
+        ) VALUES (
+              'HandlingTimeConsumingUpdateStructuresJob',
+              '',
+              'Biz\\\\UpdateDatabaseStructure\\\\\Job\\\\HandlingTimeConsumingUpdateStructuresJob',
+              '',
+              '200',
+              '0',
+              '{$time}',
+              '300',
+              'executing',
+              '1',
+              '0',
+              '{$currentTime}',
+              '{$currentTime}'
+        )");
+        $this->logger('info', 'INSERT增加索引的定时任务HandlingTimeConsumingUpdateStructuresJob');
         return 1;
     }
 
