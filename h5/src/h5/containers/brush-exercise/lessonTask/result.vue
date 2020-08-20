@@ -147,7 +147,7 @@ export default {
       } else {
         query.assessmentId = this.$route.query.assessmentId;
       }
-      this.$router.push({ path: '/brushDo', query });
+      this.$router.replace({ path: '/brushDo', query });
     },
     doAnalysis() {
       const query = {

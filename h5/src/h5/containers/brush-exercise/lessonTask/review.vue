@@ -69,20 +69,7 @@ export default {
         });
     },
     goResult(res) {
-      const query = {
-        title: this.$route.query.title,
-        type: this.$route.query.type,
-        exerciseId: this.$route.query.exerciseId,
-        assessmentId: this.$route.query.assessmentId,
-        moduleId: this.$route.query.moduleId,
-        categoryId: this.$route.query.categoryId,
-        backUrl: `/item_bank_exercise/${this.$route.query.exerciseId}`,
-      };
-      const answerRecordId = this.$route.params.answerRecordId;
-      this.$router.replace({
-        path: `/brushResult/${answerRecordId}`,
-        query,
-      });
+      this.$router.go(-1);
     },
   },
 };

@@ -164,7 +164,6 @@ export default {
         assessmentId: this.$route.query.assessmentId,
         moduleId: this.$route.query.moduleId,
         categoryId: this.$route.query.categoryId,
-        backUrl: `/item_bank_exercise/${this.$route.query.exerciseId}`,
       };
       const answerRecordId = this.assessmentResponse.answer_record_id;
       this.$router.replace({

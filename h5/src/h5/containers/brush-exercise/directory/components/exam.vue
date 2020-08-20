@@ -112,7 +112,6 @@ export default {
         exerciseId: item.exerciseId,
         assessmentId: item.assessment.id,
         moduleId: item.moduleId,
-        backUrl: `/item_bank_exercise/${item.exerciseId}`,
       };
       const answerRecordId = item.latestAnswerRecord.answerRecordId;
       this.$router.push({
