@@ -156,7 +156,7 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
         }
 
         if ('ppt' == $file['type']) {
-            $params['directives'] = array_merge($params['directives'], ['convertAll' => true]);
+            $params['directives'] = array_merge($params['directives'], ['convertAll' => true, 'output' => 'ppt', 'imgEncrypt' => false]);
         }
 
         return $this->getResourceService()->startUpload($params);

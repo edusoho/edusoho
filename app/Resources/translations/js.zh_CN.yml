@@ -1359,7 +1359,7 @@ admin.item_bank_exercise.exercise.close_success_hint: 题库练习关闭成功!
 admin.item_bank_exercise.exercise.cancel_recommend_success_hint: 题库练习推荐已取消!
 admin.item_bank_exercise.exercise.publish_hint: 确定要发布当前题库练习吗？
 admin.item_bank_exercise.exercise.publish_success_hint: 题库练习发布成功!
-admin.item_bank_exercise.exercise.delete_hint: 确定要删除当前题库练习吗？
+admin.item_bank_exercise.exercise.delete_hint: 删除题库练习，将删除模块设置、学员等信息。真的要删除该题库练习吗？
 
 task_show.user_login_protect_tip: 该账号未登录或已被踢
 

@@ -103,7 +103,7 @@ class Manage {
     uploader.on('file.finish', function(file) {
       $.post(subtitleCreateUrl, {
         'name': file.name,
-        'subtitleId': file.no,
+        'subtitleId': file.fileId,
         'mediaId': mediaId
       }).success(function (data) {
         if (!data) {

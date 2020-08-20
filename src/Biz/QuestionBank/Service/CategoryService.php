@@ -22,7 +22,6 @@ interface CategoryService
 
     /**
      * @param $id
-     * @param array $fields
      *
      * @return mixed
      * @Log(module="question_bank",action="update_category",param="id")
@@ -38,6 +37,8 @@ interface CategoryService
     public function deleteCategory($id);
 
     public function waveCategoryBankNum($id, $diff);
+
+    public function findCategoryChildren($id);
 
     public function getCategoryTree();
 

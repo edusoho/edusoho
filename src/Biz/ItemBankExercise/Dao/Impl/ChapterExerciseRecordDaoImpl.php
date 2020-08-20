@@ -39,6 +39,11 @@ class ChapterExerciseRecordDaoImpl extends GeneralDaoImpl implements ChapterExer
         return $builder->execute()->fetchAll();
     }
 
+    public function deleteByExerciseId($exerciseId)
+    {
+        return $this->db()->delete($this->table(), ['exerciseId' => $exerciseId]);
+    }
+
     public function declares()
     {
         return [

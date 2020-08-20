@@ -4547,7 +4547,7 @@ t.add("admin.item_bank_exercise.exercise.close_success_hint", "Close successfull
 t.add("admin.item_bank_exercise.exercise.cancel_recommend_success_hint", "The item bank exercise recommendation has been cancelled!", "js", "en");
 t.add("admin.item_bank_exercise.exercise.publish_hint", "Are you sure you want to publish the current exercise?", "js", "en");
 t.add("admin.item_bank_exercise.exercise.publish_success_hint", "The item bank exercise recommendation has been published!", "js", "en");
-t.add("admin.item_bank_exercise.exercise.delete_hint", "Are you sure you want to delete the current exercise?", "js", "en");
+t.add("admin.item_bank_exercise.exercise.delete_hint", "Delete item bank exercises, delete module settings, trainees and other information. Do you really want to delete this exercise bank?", "js", "en");
 t.add("task_show.user_login_protect_tip", "User unLogin", "js", "en");
 t.add("admin.course_manage.manage.tags_select.placeholder", "Enter the keyword of the tag", "js", "en");
 t.add("exception.common_frequent_operation", "Operate too many times, please try again later!", "js", "en");

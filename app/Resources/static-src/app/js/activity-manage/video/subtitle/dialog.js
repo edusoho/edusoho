@@ -89,7 +89,7 @@ class SubtitleDialog {
     uploader.on('file.finish', function (file) {
       $.post($elem.data('subtitleCreateUrl'), {
         'name': file.name,
-        'subtitleId': file.no,
+        'subtitleId': file.fileId,
         'mediaId': mediaId
       }).success(function (data) {
         let convertStatus = {
