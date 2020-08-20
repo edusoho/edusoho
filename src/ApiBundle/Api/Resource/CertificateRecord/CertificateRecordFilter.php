@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Api\Resource\CertificateRecord;
 
+use ApiBundle\Api\Resource\Certificate\CertificateFilter;
 use ApiBundle\Api\Resource\Filter;
 
 class CertificateRecordFilter extends Filter
@@ -31,6 +32,9 @@ class CertificateRecordFilter extends Filter
         $data['expiryTime'] = date('c', $data['expiryTime']);
         $data['issueTime'] = date('c', $data['issueTime']);
         if (!empty($data['certificate'])) {
+            $certificateFilter = new CertificateFilter();
+            $certificateFilter->setMode(Filter::SIMPLE_MODE);
+            $certificateFilter->filter($data['certificate']);
         }
     }
 }
