@@ -264,6 +264,7 @@ class UploadFileEventSubscriberTest extends BaseTestCase
         $file = $this->createUploadFile(1);
         $event = new Event([
             'fileId' => $file['id'],
+            'source' => '',
         ]);
 
         $eventSubscriber = new UploadFileEventSubscriber($this->biz);
@@ -320,7 +321,7 @@ class UploadFileEventSubscriberTest extends BaseTestCase
         $event = new Event([
             'fileId' => $file['id'],
             'courseId' => $file['targetId'],
-        ]);
+        ], ['argument' => '']);
 
         $eventSubscriber = new UploadFileEventSubscriber($this->biz);
         $eventSubscriber->onMaterialDelete($event);
