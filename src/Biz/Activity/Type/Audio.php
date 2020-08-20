@@ -148,11 +148,6 @@ class Audio extends Activity
         return ['watching' => 'Biz\Activity\Listener\VideoActivityWatchListener'];
     }
 
-    public function countByMediaId($mediaId)
-    {
-        return $this->getAudioActivityDao()->count(['mediaId' => $mediaId]);
-    }
-
     /**
      * @return AudioActivityDao
      */

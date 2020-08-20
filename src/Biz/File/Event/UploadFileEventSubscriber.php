@@ -215,7 +215,9 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
             return;
         }
 
-        $this->getUploadFileService()->updateUsedCount($file['id']);
+        if (empty($event->getArgument('argument'))) {
+            $this->getUploadFileService()->updateUsedCount($file['id']);
+        }
 
         if (!$this->getUploadFileService()->canManageFile($file['id'])) {
             return;

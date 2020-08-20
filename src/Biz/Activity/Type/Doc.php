@@ -161,11 +161,6 @@ class Doc extends Activity
         return true;
     }
 
-    public function countByMediaId($mediaId)
-    {
-        return $this->getDocActivityDao()->count(['mediaId' => $mediaId]);
-    }
-
     /**
      * @return DocActivityDao
      */

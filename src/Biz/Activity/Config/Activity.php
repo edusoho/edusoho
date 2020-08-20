@@ -132,11 +132,6 @@ class Activity
         return array();
     }
 
-    public function countByMediaId($mediaId)
-    {
-        return true;
-    }
-
     /**
      * @param string $eventName
      *
