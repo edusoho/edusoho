@@ -24,6 +24,7 @@ class RecordDaoImpl extends GeneralDaoImpl implements RecordDao
             'conditions' => [
                 'id = :id',
                 'certificateId = :certificateId',
+                'certificateId IN (:certificateIds)',
                 'certificateCode = :certificateCode',
                 'status = :status',
                 'id NOT IN (:excludeIds)',

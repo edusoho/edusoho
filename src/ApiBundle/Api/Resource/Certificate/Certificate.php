@@ -4,6 +4,7 @@
 namespace ApiBundle\Api\Resource\Certificate;
 
 use ApiBundle\Api\Annotation\ApiConf;
+use ApiBundle\Api\Annotation\ResponseFilter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
@@ -18,6 +19,7 @@ class Certificate extends AbstractResource
 {
     /**
      * @ApiConf(isRequiredAuth=false)
+     * @ResponseFilter(class="ApiBundle\Api\Resource\Certificate\CertificateFilter", mode="public")
      */
     public function search(ApiRequest $request)
     {
@@ -30,16 +32,11 @@ class Certificate extends AbstractResource
         $total = $this->getCertificateService()->count($conditions);
 
         $user = $this->getCurrentUser();
-        $obtainedCertificates = $this->getCertificateRecordService()->search(
-            ['targetType' => $conditions['targetType'], 'statuses' => ['valid', 'expired'], 'userId' => $user['id']],
-            [],
-            0,
-            PHP_INT_MAX
-        );
+        $isObtaineds = $this->getCertificateRecordService()->isCertificatesObtained($user['id'], ArrayToolkit::column($certificates, 'id'));
 
-        $obtainedCertificates = ArrayToolkit::index($obtainedCertificates, 'certificateId');
         foreach ($certificates as &$certificate) {
-            $certificate['isObtained'] = empty($obtainedCertificates[$certificate['id']]) ? false : true;
+            $certificate['isObtained'] = $isObtaineds[$certificate['id']];
+            $certificate[$certificate['targetType']] = $certificate['targetType'];
         }
 
         return $this->makePagingObject($certificates, $total, $offset, $limit);
@@ -52,11 +49,14 @@ class Certificate extends AbstractResource
             if (empty($target)) {
                 throw ClassroomException::NOTFOUND_CLASSROOM();
             }
+            $this->getOCUtil()->single($classroom, array('creator', 'teacherIds', 'assistantIds', 'headTeacherId'));
         } else {
             $target = $this->getCourseService()->getCourse($condition['targetId']);
             if (empty($target)) {
                 throw CourseException::NOTFOUND_COURSE();
             }
+            $this->getOCUtil()->single($course, array('creator', 'teacherIds'));
+            $this->getOCUtil()->single($course, array('courseSetId'), 'courseSet');
         }
 
         return $target;
