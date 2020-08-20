@@ -1209,6 +1209,7 @@ course.catalogue.certificate_obtain: This is available by taking the course onli
 course.catalogue.certificate_detail: Certificate details
 course.catalogue.certificate_achieve: Approach of achieving
 course.catalogue.certificate_condition: Acquisition conditions
+course.catalogue.certificate_to_achieve: This is obtained by taking the <a href='%targetUrl%' target='_blank'>%course%</a> online exam
 course.catalogue.certificate_expiry: 'valid until: %expiryTime%'
 course.catalogue.certificate_forever: 'Term of validity: long term'
 course.catalogue.content_title: Syllabus
@@ -2752,6 +2753,7 @@ user.account_center: 'Account Center'
 user.menu_heading: 'Account'
 user.account_menu: 'My Bills'
 user.order_menu: 'My Order'
+user.certificate_menu: 'My Certificate'
 user.cards_menu: 'My Coupons'
 user.vip_history_menu: 'VIP Record'
 user.account.empty: 'No record'
@@ -3828,6 +3830,8 @@ explore.open_course.title: 'Open Course'
 explore.open_course.list: 'Open Course List'
 explore.open_course.live: Live
 explore.open_course.empty: 'No record'
+explore.classroom.certificate_tag: 'Obtain certificates'
+explore.classroom.certificate_tag_short: Cr
 archive.course.title: 'Course Archive'
 archive.course.tags: Tags
 archive.course.empty: 'No record'
@@ -9828,3 +9832,31 @@ exception.review.post_limit: Post no more than 5
 exception.favorite.forbidden_operate_favorite: Forbidden
 
 exception.s2b2c_product.adopt_failed: Adopt fail,Supplier is editing
+
+# 账户中心模块-我的证书
+user.certificates.content_title: My Certificate
+user.certificates.my_list: My Certificate
+user.certificates.none_record: Certificate Empty
+user.certificates.only_valid: Show only valid
+user.certificates.date_range: Certificate acquisition tim
+user.certificates.placeholde_name: Enter certificate name search...
+user.certificates.cert_titile: Certificate name
+user.certificates.cert_code: Certificate number
+user.certificates.cert_issue_time: Acquisition time
+user.certificates.look_cert: View Certificate
+user.certificates.download_cert: Download certificate
+user.certificates.valid_time_tip: Valid until：
+user.certificates.status_valid: In effect
+user.certificates.status_expired: Expired
+user.certificates.search: Search
+user.certificates.select_time: Select the time：
+user.certificates.forever: Long term effectiveness
+user.certificates.issue_time: Date of issue
+user.certificates.valid_time: Effective date
+user.certificates.detail_object: Authentication object
+user.certificates.detail_object_name: Name
+user.certificates.detail_object_usrename: Username
+user.certificates.detail_cert_message: Certificate information
+user.certificates.unclaimed_list: Certificate to be received
+user.certificates.cart_title: Certificate of honor
+user.certificates.cart_detail_btn: View get path

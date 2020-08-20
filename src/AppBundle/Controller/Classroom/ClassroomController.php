@@ -7,7 +7,6 @@ use AppBundle\Common\ClassroomToolkit;
 use AppBundle\Common\ExtensionManager;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
-use Biz\Certificate\CertificateException;
 use Biz\Certificate\Service\CertificateService;
 use Biz\Certificate\Service\RecordService;
 use Biz\Classroom\ClassroomException;
@@ -768,33 +767,6 @@ class ClassroomController extends BaseController
             'obtained' => ArrayToolkit::index($obtainedCertificates, 'certificateId'),
             'classroom' => $classroom,
             'member' => $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null,
-        ]);
-    }
-
-    public function certificateDetailAction(Request $request, $classroomId, $id)
-    {
-        $classroom = $this->getClassroomService()->getClassroom($classroomId);
-        if (empty($classroom)) {
-            $this->createNewException(ClassroomException::NOTFOUND_CLASSROOM());
-        }
-
-        $certificate = $this->getCertificateService()->get($id);
-        if (empty($certificate)) {
-            $this->createNewException(CertificateException::NOTFOUND_CERTIFICATE());
-        }
-
-        $isObtained = $this->getCertificateRecordService()->isObtained([
-            'userId' => $this->getCurrentUser()->getId(),
-            'certificateId' => $certificate['id'],
-            'targetType' => 'classroom',
-            'targetId' => $classroom['id'],
-            'statuses' => ['valid', 'expired'],
-        ]);
-
-        return $this->render('classroom/certificates/detail.html.twig', [
-            'certificate' => $certificate,
-            'classroom' => $classroom,
-            'isObtained' => $isObtained,
         ]);
     }
 

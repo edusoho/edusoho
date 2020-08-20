@@ -623,6 +623,15 @@ my_orders:
     defaults: { _controller: AppBundle:My/Order:index }
     h5: true
 
+my_certificates:
+    path: /my/certificates
+    defaults: { _controller: AppBundle:My/Certificate:index }
+    h5: true
+
+my_unclaimed_certificates:
+    path: /my/certificates/unclaimed
+    defaults: { _controller: AppBundle:My/Certificate:unclaimed }
+
 my_order_refunds:
     path: /my/order_refunds
     defaults: { _controller: AppBundle:My/OrderRefund:index }
@@ -2782,10 +2791,6 @@ classroom_certificates:
     path: /classroom/{classroomId}/certificates/list
     defaults: { _controller: AppBundle:Classroom/Classroom:certificates }
 
-classroom_certificate_detail:
-  path: /classroom/{classroomId}/certificates/{id}/detail
-  defaults: { _controller: AppBundle:Classroom/Classroom:certificateDetail }
-
 #material_lib
 material_lib_browsing:
   path: /material/lib/browse
@@ -2964,10 +2969,6 @@ course_show:
   path: /course/{id}/{tab}
   defaults: { _controller: AppBundle:Course/Course:show, tab: 'summary' }
   h5: true
-
-course_certificate_detail:
-  path: /course/{courseId}/certificate/detail/{id}
-  defaults: { _controller: AppBundle:Course/Course:certificateDetail }
 
 course_task_paging_show:
   path: /course/{courseId}/tasks/paging
@@ -3425,3 +3426,16 @@ goods_show:
 certificate_image_show:
     path:     /certificate/image/{id}/show
     defaults: { _controller: AppBundle:Certificate/Certificate:generateImage }
+
+certificate_record:
+    path: /certificate_records/{recordId}
+    defaults: { _controller: AppBundle:Certificate/Certificate:certificateRecord }
+    h5: true
+
+certificate_image_download:
+    path: /certificate/image/{recordId}/download
+    defaults: { _controller: AppBundle:Certificate/Certificate:certificateImageDownload }
+
+certificate_detail:
+  path: /certificate/{id}/detail
+  defaults: { _controller: AppBundle:Certificate/Certificate:certificateDetail }

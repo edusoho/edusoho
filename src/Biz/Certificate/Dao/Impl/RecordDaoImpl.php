@@ -20,7 +20,7 @@ class RecordDaoImpl extends GeneralDaoImpl implements RecordDao
     {
         return [
             'timestamps' => ['createdTime', 'updatedTime'],
-            'orderbys' => ['id', 'createdTime', 'updatedTime'],
+            'orderbys' => ['id', 'createdTime', 'updatedTime', 'issueTime'],
             'conditions' => [
                 'id = :id',
                 'certificateId = :certificateId',
@@ -29,12 +29,15 @@ class RecordDaoImpl extends GeneralDaoImpl implements RecordDao
                 'status = :status',
                 'id NOT IN (:excludeIds)',
                 'userId IN (:userIds)',
+                'userId = :userId',
                 'targetId IN (:targetIds)',
                 'status != :statusNotEqual',
                 'targetType = :targetType',
                 'status IN (:statuses)',
                 'userId = :userId',
                 'targetId = :targetId',
+                'issueTime >= :issueTimeEgt',
+                'issueTime <= :issueTimeElt',
             ],
         ];
     }
