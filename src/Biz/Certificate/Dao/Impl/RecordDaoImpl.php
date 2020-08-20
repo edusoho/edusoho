@@ -34,6 +34,7 @@ class RecordDaoImpl extends GeneralDaoImpl implements RecordDao
                 'status != :statusNotEqual',
                 'targetType = :targetType',
                 'status IN (:statuses)',
+                'userId = :userId',
                 'targetId = :targetId',
                 'issueTime >= :issueTimeEgt',
                 'issueTime <= :issueTimeElt',
