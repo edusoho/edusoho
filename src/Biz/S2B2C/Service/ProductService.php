@@ -10,11 +10,6 @@ interface ProductService
 
     const UPDATE_TYPE_AUTO = 'auto';
 
-
-    public function searchRemoteProducts($conditions);
-
-    public function searchSelectedProducts($conditions);
-
     public function createProduct($fields);
 
     public function updateProduct($id, $productFields);

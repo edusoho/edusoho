@@ -245,29 +245,6 @@ class ProductServiceImpl extends BaseService implements ProductService
         return $changeLogs;
     }
 
-    public function searchRemoteProducts($conditions)
-    {
-        $selectedConditions = ['title', 'offset', 'limit', 'categoryId', 'sort'];
-        $conditions = ArrayToolkit::parts($conditions, $selectedConditions);
-        $conditions['merchant_access_key'] = $this->getAccessKey();
-        if (isset($conditions['title']) && empty($conditions['title'])) {
-            unset($conditions['title']);
-        }
-
-        $courseSets = $this->getS2B2CFacadeService()->getSupplierPlatformApi()
-            ->searchSupplierProducts($conditions);
-
-        if (!empty($courseSets['error'])) {
-            $total = 0;
-            $courseSets = [];
-        } else {
-            $total = $courseSets['paging']['total'];
-            $courseSets = $courseSets['data'];
-        }
-
-        return [$courseSets, $total];
-    }
-
     public function searchProducts($conditions, $orderBys, $start, $limit, $columns = [])
     {
         return $this->getS2B2CProductDao()->search($conditions, $orderBys, $start, $limit, $columns);
@@ -276,13 +253,6 @@ class ProductServiceImpl extends BaseService implements ProductService
     public function countProducts($conditions)
     {
         return $this->getS2B2CProductDao()->count($conditions);
-    }
-
-    public function searchSelectedProducts($conditions)
-    {
-        $conditions['merchant_access_key'] = $this->getAccessKey();
-
-        return $this->getS2B2CFacadeService()->getSupplierPlatformApi()->searchPurchaseProducts($conditions);
     }
 
     public function getByTypeAndLocalResourceId($type, $localResourceId)

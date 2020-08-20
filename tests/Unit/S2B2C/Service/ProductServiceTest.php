@@ -125,30 +125,6 @@ class ProductServiceTest extends BaseTestCase
         $this->assertEquals(1, $product);
     }
 
-    public function testSearchRemoteProducts()
-    {
-        $this->biz['supplier.platform_api'] = $this->mockBiz(
-            'supplier.platform_api',
-            [
-                [
-                    'functionName' => 'searchSupplierProducts',
-                    'returnValue' => [
-                        'paging' => ['total' => 1],
-                        'data' => [['id' => 134]],
-                    ],
-                    'withParams' => [['title' => 'course', 'merchant_access_key' => 'accessKey']],
-                ],
-            ]
-        );
-
-        $this->getSettingService()->set('storage', [
-            'cloud_access_key' => 'accessKey',
-            'cloud_secret_key' => 'secretKey',
-        ]);
-        list($courseSets, $total) = $this->getS2B2CProductService()->searchRemoteProducts(['title' => 'course']);
-        $this->assertEquals(1, $total);
-    }
-
     public function testSearchProducts()
     {
         $fields = ['remoteProductId' => 154];
@@ -165,27 +141,6 @@ class ProductServiceTest extends BaseTestCase
         $newProduct2 = $this->getS2B2CProductService()->createProduct($this->mockProductFields($fields));
         $products = $this->getS2B2CProductService()->countProducts($fields);
         $this->assertEquals(2, $products);
-    }
-
-    public function testSearchSelectedProducts()
-    {
-        $this->biz['supplier.platform_api'] = $this->mockBiz(
-            'supplier.platform_api',
-            [
-                [
-                    'functionName' => 'searchPurchaseProducts',
-                    'returnValue' => [],
-                    'withParams' => [['title' => 'course', 'merchant_access_key' => 'accessKey']],
-                ],
-            ]
-        );
-
-        $this->getSettingService()->set('storage', [
-            'cloud_access_key' => 'accessKey',
-            'cloud_secret_key' => 'secretKey',
-        ]);
-        $products = $this->getS2B2CProductService()->searchSelectedProducts(['title' => 'course']);
-        $this->assertEquals([], $products);
     }
 
     public function testGetByTypeAndLocalResourceId()
