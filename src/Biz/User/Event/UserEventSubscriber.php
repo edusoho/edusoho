@@ -12,13 +12,14 @@ class UserEventSubscriber extends EventSubscriber implements EventSubscriberInte
 {
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             'user.registered' => 'onUserRegistered',
             'user.follow' => 'onUserFollowed',
             'user.unfollow' => 'onUserUnfollowed',
             'user.bind' => 'onUserBind',
             'user.unbind' => 'onUserUnbind',
-        );
+            'user.change_password' => 'onUserChangePassword',
+        ];
     }
 
     public function onUserBind(Event $event)
@@ -27,7 +28,7 @@ class UserEventSubscriber extends EventSubscriber implements EventSubscriberInte
         $type = $event->getArgument('bindType');
         $bind = $event->getArgument('bind');
         $token = $event->getArgument('token');
-        if (in_array($type, array('weixinmob'))) {
+        if (in_array($type, ['weixinmob'])) {
             if (empty($token['openid'])) {
                 return;
             }
@@ -44,12 +45,12 @@ class UserEventSubscriber extends EventSubscriber implements EventSubscriberInte
     {
         $type = $event->getArgument('bindType');
         $bind = $event->getArgument('bind');
-        if (in_array($type, array('weixinmob', 'weixinweb'))) {
+        if (in_array($type, ['weixinmob', 'weixinweb'])) {
             $weChatUser = $this->getWeChatService()->getWeChatUserByTypeAndUnionId(WeChatService::OFFICIAL_TYPE, $bind['fromId']);
             if (!empty($weChatUser)) {
-                $this->getWeChatService()->updateWeChatUser($weChatUser['id'], array(
+                $this->getWeChatService()->updateWeChatUser($weChatUser['id'], [
                     'userId' => 0,
-                ));
+                ]);
             }
         }
     }
@@ -65,11 +66,11 @@ class UserEventSubscriber extends EventSubscriber implements EventSubscriberInte
         $friend = $event->getSubject();
         $user = $this->getUserService()->getUser($friend['fromId']);
 
-        $message = array(
+        $message = [
             'userId' => $user['id'],
             'userName' => $user['nickname'],
             'opration' => 'follow',
-        );
+        ];
         $this->getNotificationService()->notify($friend['toId'], 'user-follow', $message);
     }
 
@@ -78,17 +79,28 @@ class UserEventSubscriber extends EventSubscriber implements EventSubscriberInte
         $friend = $event->getSubject();
         $user = $this->getUserService()->getUser($friend['fromId']);
 
-        $message = array(
+        $message = [
             'userId' => $user['id'],
             'userName' => $user['nickname'],
             'opration' => 'unfollow',
-        );
+        ];
         $this->getNotificationService()->notify($friend['toId'], 'user-follow', $message);
+    }
+
+    public function onUserChangePassword(Event $event)
+    {
+        $user = $event->getSubject();
+        $tokens = $this->getTokenService()->findTokensByUserIdAndType($user['id'], 'mobile_login');
+        if (!empty($tokens)) {
+            foreach ($tokens as $token) {
+                $this->getTokenService()->destoryToken($token['token']);
+            }
+        }
     }
 
     private function sendRegisterMessage($user)
     {
-        $auth = $this->getSettingService()->get('auth', array());
+        $auth = $this->getSettingService()->get('auth', []);
 
         if (empty($auth['welcome_enabled'])
             || 'opened' != $auth['welcome_enabled']
@@ -124,11 +136,11 @@ class UserEventSubscriber extends EventSubscriber implements EventSubscriberInte
 
     protected function getWelcomeBody($user)
     {
-        $site = $this->getSettingService()->get('site', array());
-        $valuesToBeReplace = array('{{nickname}}', '{{sitename}}', '{{siteurl}}');
-        $valuesToReplace = array($user['nickname'], $site['name'], $site['url']);
+        $site = $this->getSettingService()->get('site', []);
+        $valuesToBeReplace = ['{{nickname}}', '{{sitename}}', '{{siteurl}}'];
+        $valuesToReplace = [$user['nickname'], $site['name'], $site['url']];
 
-        $auth = $this->getSettingService()->get('auth', array());
+        $auth = $this->getSettingService()->get('auth', []);
         $welcomeBody = '';
         if (!empty($auth) && isset($auth['welcome_body'])) {
             $welcomeBody = $auth['welcome_body'];
@@ -137,6 +149,14 @@ class UserEventSubscriber extends EventSubscriber implements EventSubscriberInte
         $welcomeBody = str_replace($valuesToBeReplace, $valuesToReplace, $welcomeBody);
 
         return $welcomeBody;
+    }
+
+    /**
+     * @return \Biz\User\Service\TokenService
+     */
+    protected function getTokenService()
+    {
+        return $this->getBiz()->service('User:TokenService');
     }
 
     /**

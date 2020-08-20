@@ -2,8 +2,8 @@
 
 namespace Biz\Activity\Type;
 
-use Biz\Activity\Config\Activity;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\FlashActivityDao;
 use Biz\Activity\Service\ActivityService;
 use Biz\CloudPlatform\Client\CloudAPIIOException;
@@ -27,17 +27,17 @@ class Flash extends Activity
         }
         $fields['mediaId'] = $media['id'];
 
-        $default = array(
+        $default = [
             'finishDetail' => 1,
             'finishType' => 'time',
-        );
+        ];
         $fields = array_merge($default, $fields);
 
-        $flash = ArrayToolkit::parts($fields, array(
+        $flash = ArrayToolkit::parts($fields, [
             'mediaId',
             'finishType',
             'finishDetail',
-        ));
+        ]);
 
         $user = $this->getCurrentUser();
         $flash['createdUserId'] = $user['id'];
@@ -47,16 +47,16 @@ class Flash extends Activity
         return $flash;
     }
 
-    public function copy($activity, $config = array())
+    public function copy($activity, $config = [])
     {
         $user = $this->getCurrentUser();
         $flash = $this->getFlashActivityDao()->get($activity['mediaId']);
-        $newFlash = array(
+        $newFlash = [
             'mediaId' => $flash['mediaId'],
             'finishType' => $flash['finishType'],
             'finishDetail' => $flash['finishDetail'],
             'createdUserId' => $user['id'],
-        );
+        ];
 
         return $this->getFlashActivityDao()->create($newFlash);
     }
@@ -83,17 +83,20 @@ class Flash extends Activity
             throw CommonException::ERROR_PARAMETER();
         }
         $fields['mediaId'] = $media['id'];
-        $updateFields = ArrayToolkit::parts($fields, array(
+        $updateFields = ArrayToolkit::parts($fields, [
             'mediaId',
             'finishType',
             'finishDetail',
-        ));
+        ]);
 
         return $this->getFlashActivityDao()->update($targetId, $updateFields);
     }
 
     public function delete($targetId)
     {
+        $flash = $this->getFlashActivityDao()->get($targetId);
+        $this->getUploadFileService()->updateUsedCount($flash['mediaId']);
+
         return $this->getFlashActivityDao()->delete($targetId);
     }
 
@@ -118,7 +121,7 @@ class Flash extends Activity
                 $showCloud
             );
         } catch (CloudAPIIOException $e) {
-            $files = array();
+            $files = [];
         }
 
         if (empty($files)) {
