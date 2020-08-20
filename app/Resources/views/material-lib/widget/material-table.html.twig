@@ -51,7 +51,7 @@
                 <span class="cd-tag cd-tag-blue">{{ 'material.common_table.file.local'|trans }}</span>
               {% endif %}
               {% if type|default('') == 'courseFile' %}
-                {% if (uploadFile.targetType == 'coursematerial' and uploadFile.usedCount < 1) or (uploadFile.targetType != 'coursematerial' and uploadFile.usedCount < 1) %}
+                {% if  uploadFile.usedCount < 1 %}
                   <span class="cd-tag">{{'course.course_files.use_status.unused'|trans}}</span>
                 {% endif %}
               {% elseif type|default('') == 'openCourseFile' %}
