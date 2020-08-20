@@ -1398,7 +1398,11 @@ class UserServiceTest extends BaseTestCase
         $this->getUserDao()->create([
             'id' => 100,
             'nickname' => '1@edusoho.com',
+            'password' => '123456',
+            'salt' => base_convert(sha1(uniqid(mt_rand(), true)), 16, 36),
+            'type' => 'default',
             'email' => '1@edusoho.com',
+            'roles' => ['ROLE_USER'],
             'uuid' => 1,
             'locked' => 1,
         ]);
@@ -1406,7 +1410,11 @@ class UserServiceTest extends BaseTestCase
         $this->getUserDao()->create([
             'id' => 101,
             'nickname' => '2@edusoho.com',
+            'password' => '123456',
+            'salt' => base_convert(sha1(uniqid(mt_rand(), true)), 16, 36),
+            'type' => 'default',
             'email' => '2@edusoho.com',
+            'roles' => ['ROLE_USER'],
             'uuid' => 2,
             'locked' => 0,
         ]);
@@ -1414,7 +1422,11 @@ class UserServiceTest extends BaseTestCase
         $this->getUserDao()->create([
             'id' => 102,
             'nickname' => '3@edusoho.com',
+            'password' => '123456',
+            'salt' => base_convert(sha1(uniqid(mt_rand(), true)), 16, 36),
+            'type' => 'default',
             'email' => '3@edusoho.com',
+            'roles' => ['ROLE_USER'],
             'uuid' => 3,
             'locked' => 0,
         ]);
