@@ -166,20 +166,6 @@ class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
          *  Column assessment_id, seq
          */
         $this->createIndex('biz_assessment_section_item', 'assessmentId_seq', 'assessment_id, seq');
-
-        /*
-         *  Table  xapi_statement
-         *  Index  status_pushTime
-         *  Column status, push_time
-         */
-        $this->createIndex('xapi_statement', 'status_pushTime', 'status, push_time');
-
-        /*
-         *  Table  xapi_statement
-         *  Index  status_createdTime
-         *  Column status, created_time
-         */
-        $this->createIndex('xapi_statement', 'status_createdTime', 'status, created_time');
     }
 
     protected function changeTableFiledType()
