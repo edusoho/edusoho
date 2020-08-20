@@ -44,7 +44,7 @@ class MeItemBankExerciseModuleAssessment extends AbstractResource
 
         $total = $this->getItemBankAssessmentExerciseService()->count($conditions);
 
-        return $this->makePagingObject($exerciseAssessments, $total, $offset, $limit);
+        return $this->makePagingObject(array_values($exerciseAssessments), $total, $offset, $limit);
     }
 
     /**
