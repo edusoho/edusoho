@@ -13,6 +13,9 @@
     <li {% if my_certificate_side_nav == 'my_list' %}class="active"{% endif %}>
       <a href="{{path('my_certificates')}}">{{'user.certificates.my_list'|trans}}</a>
     </li>
+    <li {% if my_certificate_side_nav == 'unclaimed_list' %}class="active"{% endif %}>
+      <a href="{{path('my_unclaimed_certificates')}}">{{'user.certificates.unclaimed_list'|trans}}</a>
+    </li>
   </ul>
   {% block mycertificate_content %}{% endblock %}
 {% endblock %}

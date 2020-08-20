@@ -23,4 +23,8 @@ interface CertificateService
     public function delete($id);
 
     public function findByIds(array $ids = []);
+
+    public function searchUserAvailableCertificates($userId, $nameLike = '', $start, $limit);
+
+    public function countUserAvailableCertificates($userId, $nameLike = '');
 }

@@ -3363,6 +3363,9 @@ user.certificates.detail_object: 认证对象
 user.certificates.detail_object_name: 姓名
 user.certificates.detail_object_usrename: 用户名
 user.certificates.detail_cert_message: 证书信息
+user.certificates.unclaimed_list: 待领取证书
+user.certificates.cart_title: 荣誉证书
+user.certificates.cart_detail_btn: 查看获取路径
 
 # 账户中心模块-我的卡包
 user.cards: 我的卡包

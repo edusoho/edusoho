@@ -628,6 +628,10 @@ my_certificates:
     defaults: { _controller: AppBundle:My/Certificate:index }
     h5: true
 
+my_unclaimed_certificates:
+    path: /my/certificates/unclaimed
+    defaults: { _controller: AppBundle:My/Certificate:unclaimed }
+
 my_order_refunds:
     path: /my/order_refunds
     defaults: { _controller: AppBundle:My/OrderRefund:index }
