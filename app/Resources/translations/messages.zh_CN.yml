@@ -6341,6 +6341,7 @@ admin.operation_certificate.certificate.audit.crouse_status: 课程完成状态
 admin.operation_certificate.certificate.audit.crouse_complete: 已完成
 admin.operation_certificate.certificate.audit.crouse_incomplete: 未完成
 admin.operation_certificate.certificate.audit.result: 认证结果
+admin.operation_certificate.certificate.audit.title: 认证审核
 admin.operation_certificate.certificate.audit.certificate_pass: 通过
 admin.operation_certificate.certificate.audit.certificate_reject: 驳回
 admin.operation_certificate.certificate.audit.certificate_todo: 未审核

@@ -1,16 +1,13 @@
 <?php
 
-
 namespace Biz\Certificate\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Certificate\CertificateException;
 use Biz\Certificate\Dao\CertificateDao;
-use Biz\Certificate\Service\AuditService;
-use Biz\Certificate\Service\ExamineService;
 use Biz\Certificate\Dao\RecordDao;
-
+use Biz\Certificate\Service\AuditService;
 
 class AuditServiceImpl extends BaseService implements AuditService
 {
@@ -48,7 +45,8 @@ class AuditServiceImpl extends BaseService implements AuditService
             [
                 'status',
                 'auditTime',
-                'auditUserId'
+                'auditUserId',
+                'rejectReason',
             ]
         );
     }
@@ -104,5 +102,4 @@ class AuditServiceImpl extends BaseService implements AuditService
     {
         return $this->createDao('Certificate:RecordDao');
     }
-
 }

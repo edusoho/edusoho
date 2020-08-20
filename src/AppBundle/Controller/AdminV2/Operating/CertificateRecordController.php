@@ -39,11 +39,6 @@ class CertificateRecordController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($records, 'userId'));
         $strategy = $this->getCertificateStrategy($certificate['targetType']);
 
-//        echo('<pre>');
-//        print_r($strategy->findTargetsByIds(ArrayToolkit::column($records, 'targetId')));
-//        echo('</pre>');
-//        exit();
-
         return $this->render('admin-v2/operating/certificate-record/index.html.twig', [
             'records' => $records,
             'paginator' => $paginator,

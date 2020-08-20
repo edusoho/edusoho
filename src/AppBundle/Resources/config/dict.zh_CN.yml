@@ -543,3 +543,9 @@ certificateAuditStatus:
     expired: 已发送
     reject: 驳回
     none: 未审核
+
+certificateAuditSearchTypes:
+    truename: 姓名
+    nickname: 用户名
+    verifiedMobile: 手机号
+    email: 邮箱
