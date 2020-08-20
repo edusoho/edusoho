@@ -820,7 +820,8 @@ admin_v2.general.basic_group: 通用管理
 
 # 系统-通用管理-网校信息
 admin_v2.system.site_menu: 网校信息
-admin_v2.system.site.basic_tab: 学校信息
+admin_v2.system.site.basic_tab: 基础信息设置
+admin_v2.system.site.license_tab: 工商证件设置
 
 # 系统-通用管理-运营设置
 admin_v2.system.operation_menu: 运营设置
