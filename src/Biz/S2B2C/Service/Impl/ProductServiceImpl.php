@@ -216,9 +216,10 @@ class ProductServiceImpl extends BaseService implements ProductService
 
     public function deleteProduct($id)
     {
-        if (empty($id)){
+        if (empty($id)) {
             return true;
         }
+
         return $this->getS2B2CProductDao()->delete($id);
     }
 
@@ -285,8 +286,6 @@ class ProductServiceImpl extends BaseService implements ProductService
 
         return $this->getSettingService()->set('productUpdateType', $type);
     }
-
-
 
     protected function addUpdateProductJob($time)
     {
@@ -433,11 +432,9 @@ class ProductServiceImpl extends BaseService implements ProductService
         $this->getS2B2CProductDao()->update($courseSetProduct['id'], ['changelog' => $localChangeLogs]);
         $this->getS2B2CProductDao()->wave([$courseSetProduct['id']], ['remoteVersion' => 1]);
 
-        $updateType = $this->getSettingService()->get('productUpdateType', self::UPDATE_TYPE_MANUAL);
-        if ($updateType == self::UPDATE_TYPE_PROMPTLY) {
-            if (empty($this->getSchedulerService()->getJobByName('productUpdateVersion'))) {
-                $this->addUpdateProductJob(time());
-            }
+        if (self::UPDATE_TYPE_PROMPTLY == $this->getSettingService()->get('productUpdateType', self::UPDATE_TYPE_MANUAL)
+            && empty($this->getSchedulerService()->getJobByName('productUpdateVersion'))) {
+            $this->addUpdateProductJob(time());
         }
 
         return true;
@@ -445,6 +442,7 @@ class ProductServiceImpl extends BaseService implements ProductService
 
     /**
      * @param $s2b2cProductId
+     *
      * @return bool
      */
     public function notifyCourseSetNewVersion($s2b2cProductId)
@@ -457,7 +455,7 @@ class ProductServiceImpl extends BaseService implements ProductService
         $localChangeLogs = $courseSetProduct['changelog'] ?: [];
         $localChangeLogs[0] = [
             'title' => $courseSet['title'],
-            'versionChangeLog' => '课程基础信息更新'
+            'versionChangeLog' => '课程基础信息更新',
         ];
 
         $this->getS2B2CProductDao()->update($courseSetProduct['id'], ['changelog' => $localChangeLogs]);
