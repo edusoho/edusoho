@@ -5,6 +5,7 @@ namespace AppBundle\Controller\My;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
+use Biz\Certificate\Service\CertificateService;
 use Biz\Certificate\Service\RecordService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -105,7 +106,7 @@ class CertificateController extends BaseController
     }
 
     /**
-     * @return RecordService
+     * @return CertificateService
      */
     public function getCertificateService()
     {
