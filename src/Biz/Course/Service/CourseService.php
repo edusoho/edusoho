@@ -355,4 +355,6 @@ interface CourseService
     public function canUpdateCourseBaseInfo($courseId, $courseSetId = 0);
 
     public function appendHasCertificate(array $courses);
+
+    public function hasCertificate($courseId);
 }

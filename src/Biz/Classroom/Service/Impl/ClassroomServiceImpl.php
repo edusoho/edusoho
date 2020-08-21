@@ -2408,6 +2408,17 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $classrooms;
     }
 
+    public function hasCertificate($classroomId)
+    {
+        $conditions = [
+            'targetType' => 'classroom',
+            'targetId' => $classroomId,
+            'status' => 'published',
+        ];
+
+        return !empty($this->getCertificateService()->count($conditions));
+    }
+
     /**
      * @return CertificateService
      */
