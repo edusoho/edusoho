@@ -131,7 +131,7 @@ class Homework extends Activity
 
         $this->getAssessmentService()->updateBasicAssessment($homework['assessmentId'], $fields);
 
-        return $activity;
+        return $homework;
     }
 
     public function update($targetId, &$fields, $activity)

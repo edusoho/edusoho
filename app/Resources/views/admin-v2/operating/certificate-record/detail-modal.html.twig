@@ -6,7 +6,7 @@
 
 {% block body %}
   <h5 class="mll fsl"><b>{{ 'admin.operation_certificate.certificate.record.user'|trans }}</b></h5><br>
-  <p class="mll">{{ 'user.fields.truename_label'|trans }}：{{ user.truename|default('') }}</p><br>
+  <p class="mll">{{ 'user.fields.truename_label'|trans }}：{{ user.truename|default('--') }}</p><br>
   <p class="mll">{{ 'user.fields.username_label'|trans }}：{{ user.nickname }}</p><br>
 
   <h5 class="mll fsl"><b>{{ 'admin.operation_certificate.certificate.record.information'|trans }}</b></h5><br>
@@ -14,7 +14,7 @@
 
   <h5 class="mll fsl"><b>{{ 'admin.operation_certificate.certificate.record.certificate_information'|trans }}</b></h5><br>
   <div class="img-responsive js-certificate-image">
-    <span class="el-loading-text js-loading-text mll" data-url="">{{ ''|trans }}</span>
+    <span class="el-loading-text js-loading-text mll" data-url="{{ path('certificate_image_show', {id: record.id}) }}">{{ 'admin.operation_certificate.certificate.record.img_loading'|trans }}</span>
   </div>
   <br>
   <p class="mll">{{ 'admin.operation_certificate.certificate.record.code'|trans }}： {{ record.certificateCode|default('') }}</p><br>

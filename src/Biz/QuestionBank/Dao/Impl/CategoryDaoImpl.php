@@ -18,42 +18,42 @@ class CategoryDaoImpl extends AdvancedDaoImpl implements CategoryDao
     {
         $sql = "SELECT * FROM {$this->table()} WHERE parentId = ?";
 
-        return $this->db()->fetchAll($sql, array($parentId)) ?: array();
+        return $this->db()->fetchAll($sql, [$parentId]) ?: [];
     }
 
     public function findByPrefixOrgCode($orgCode)
     {
         if (empty($orgCode)) {
-            return array();
+            return [];
         }
 
         $sql = "SELECT * FROM {$this->table()} WHERE `orgCode` LIKE ?";
 
-        return $this->db()->fetchAll($sql, array($orgCode.'%')) ?: array();
+        return $this->db()->fetchAll($sql, [$orgCode.'%']) ?: [];
     }
 
     public function findAll()
     {
         $sql = "SELECT * FROM {$this->table()} ORDER BY weight ASC";
 
-        return $this->db()->fetchAll($sql) ?: array();
+        return $this->db()->fetchAll($sql) ?: [];
     }
 
     public function declares()
     {
-        $declares['timestamps'] = array(
+        $declares['timestamps'] = [
             'createdTime',
             'updatedTime',
-        );
+        ];
 
-        $declares['orderbys'] = array(
+        $declares['orderbys'] = [
             'id',
-        );
+        ];
 
-        $declares['conditions'] = array(
+        $declares['conditions'] = [
             'id = :id',
             'id in (:ids)',
-        );
+        ];
 
         return $declares;
     }

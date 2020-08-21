@@ -201,6 +201,13 @@ class AppLoggerConstant implements LoggerConstantInterface
      */
     const DESTROY_ACCOUNT_RECORD = 'destroy_account_record';
 
+    /**
+     *  [$question_bank 题库练习]
+     *
+     * $var string
+     */
+    const ITEM_BANK_EXERCISE = 'item_bank_exercise';
+
     public function getActions()
     {
         return [
@@ -395,6 +402,7 @@ class AppLoggerConstant implements LoggerConstantInterface
                 'course_callback',
                 'classroom_callback',
                 'adjust_price',
+                'item_bank_exercise_callback',
             ],
             self::CATEGORY => [
                 'create',
@@ -508,6 +516,15 @@ class AppLoggerConstant implements LoggerConstantInterface
                 'pass',
                 'reject',
             ],
+            self::ITEM_BANK_EXERCISE => [
+                'add_student',
+                'remove_student',
+                'delete_exercise',
+                'recommend_exercise',
+                'cancel_recommend_exercise',
+                'publish_exercise',
+                'close_exercise',
+            ],
         ];
     }
 
@@ -538,6 +555,7 @@ class AppLoggerConstant implements LoggerConstantInterface
             self::PUSH,
             self::QUESTION_BANK,
             self::DESTROY_ACCOUNT_RECORD,
+            self::ITEM_BANK_EXERCISE,
 //            self::COIN,
 //            self::COUPON,
 //            self::DISCOUNT,

@@ -8,6 +8,7 @@ use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\Review\Service\ReviewService;
 use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
@@ -112,6 +113,37 @@ class ReviewController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    //题库练习评价
+    public function itemBankExerciseReviewListAction(Request $request)
+    {
+        $conditions = array_merge(['targetType' => 'item_bank_exercise'], $request->query->all());
+
+        $conditions = $this->prepareConditions($conditions);
+
+        $paginator = new Paginator(
+            $request,
+            $this->getReviewService()->countReviews($conditions),
+            20
+        );
+
+        $reviews = $this->getReviewService()->searchReviews(
+            $conditions,
+            ['createdTime' => 'DESC'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
+        $exercises = $this->getItemBankExerciseService()->findByIds(ArrayToolkit::column($reviews, 'targetId'));
+
+        return $this->render('admin-v2/teach/review/item-bank-exercise-review.html.twig', [
+            'reviews' => $reviews,
+            'users' => $users,
+            'exercises' => $exercises,
+            'paginator' => $paginator,
+        ]);
+    }
+
     protected function prepareConditions($conditions)
     {
         if (empty($conditions['rating'])) {
@@ -134,6 +166,13 @@ class ReviewController extends BaseController
             $conditions['targetIds'] = $conditions['targetIds'] ?: [-1];
         }
 
+        if (!empty($conditions['exerciseTitle']) && 'item_bank_exercise' == $conditions['targetType']) {
+            $exercises = $this->getItemBankExerciseService()->findExercisesByLikeTitle(trim($conditions['exerciseTitle']));
+            $conditions['targetIds'] = ArrayToolkit::column($exercises, 'id');
+            unset($conditions['exerciseTitle']);
+            $conditions['targetIds'] = $conditions['targetIds'] ?: [-1];
+        }
+
         if (!empty($conditions['author'])) {
             $user = $this->getUserService()->getUserByNickname($conditions['author']);
             unset($conditions['author']);
@@ -143,6 +182,14 @@ class ReviewController extends BaseController
         $conditions['parentId'] = 0;
 
         return $conditions;
+    }
+
+    /**
+     * @return ExerciseService
+     */
+    protected function getItemBankExerciseService()
+    {
+        return $this->createService('ItemBankExercise:ExerciseService');
     }
 
     /**

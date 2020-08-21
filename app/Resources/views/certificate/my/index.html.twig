@@ -1,0 +1,65 @@
+{% extends 'certificate/my/layout.html.twig' %}
+
+{% set my_certificate_side_nav = 'my_list' %}
+
+{% do script(['app/js/certificate/my/certificate/index.js']) %}
+
+{% block mycertificate_content %}
+  <form class="form-inline cd-form-inline" action="" method="get" id="mycart_search_form">
+    <span class="cd-link-major">{{ 'user.certificates.select_time'|trans }}</span>
+    <div class="form-group cd-form-group cd-form-group-button">
+      <input type="hidden" value="{{startdate}}" name="startdate" />
+      <input type="hidden" value="{{enddate}}" name="enddate" />
+      <input type="text" value="" class="form-control form-control-sm" placeholder="{{ 'user.certificates.date_range'|trans }}" id="date_range" >
+    </div>
+    <div class="form-group cd-form-group cd-form-group-button cd-ml16 cd-mr16">
+      <input name="q" type="text" value="{{app.request.get('q')}}" class="form-control form-control-sm" placeholder="{{ 'user.certificates.placeholde_name'|trans }}">
+    </div>
+    <button class="cd-btn cd-btn-primary cd-btn-sm" id="search">{{ 'user.certificates.search'|trans }}</button>
+    <div class="pull-right">
+      <input type="checkbox" value="1" name="valid" {% if app.request.get('valid') == '1' %} checked {% endif %}/> {{ 'user.certificates.only_valid'|trans }}
+    </div>
+  </form>
+  {% if certificateRecordGroups %}
+    {% for certificateRecordGroup in certificateRecordGroups %}
+      <div class="mycert-year cd-mb16">{{ certificateRecordGroup.issueYear }}</div>
+      {% for certificateRecord in certificateRecordGroup.certificateRecords %}
+      {% set certificate = certificates[certificateRecord.certificateId]|default('') %}
+      <div class="cd-card mycert-card">
+        <div class="mycert-card-img pull-left">
+          <img src="{{ asset('assets/img/default/certificate.png') }}">
+          <p class="mycert-card-title">{{ 'user.certificates.cart_title'|trans }}</p>
+        </div>
+        <div class="mycert-card-info pull-left cd-ml8">
+          <p class="mycert-card-info-title cd-link-major">{{ certificate.name|default('-') }}</p>
+          <p>{{ 'user.certificates.cert_code'|trans }}：{{ certificateRecord.certificateCode }}</p>
+          <p>{{ 'user.certificates.cert_issue_time'|trans }}：{{ certificateRecord.issueTime|date('Y/m/d') }}</p>
+        </div>
+        <div class="mycert-card-right pull-right">
+          <p>
+            <a class="cd-btn cd-btn-primary" target="_blank" href="{{ path('certificate_record', {recordId:certificateRecord.id}) }}">{{ 'user.certificates.look_cert'|trans }}</a>
+            <a class="cd-btn cd-btn-primary cd-ml16" download="{{ certificate.name }}.png" href="{{ path('certificate_image_download', {recordId:certificateRecord.id}) }}">{{ 'user.certificates.download_cert'|trans }}</a>
+          </p>
+          <p class="cd-mt16 cd-mr8">
+            <span>{{ 'user.certificates.valid_time_tip'|trans }}</span>
+            {% if certificateRecord.expiryTime == '0' %}
+              <span class="color-success">{{ 'user.certificates.forever'|trans }}</span>
+            {% else %}
+              <span>{{ certificateRecord.expiryTime|date('Y/m/d') }}</span>
+              {% if certificateRecord.status == 'valid' %}
+                <span class="cd-tag cd-tag-green cd-ml8">{{ 'user.certificates.status_valid'|trans }}</span>
+              {% endif %}
+            {% endif %}
+            {% if certificateRecord.status == 'expired' %}
+            <span class="cd-tag cd-tag-red cd-ml8">{{ 'user.certificates.status_expired'|trans }}</span>
+            {% endif %}
+          </p>
+        </div>
+      </div>
+      {% endfor %}
+    {% endfor %}
+  {% else %}
+    <div class="cd-empty">{{ 'user.certificates.none_record'|trans }}</div>
+  {% endif %}
+  {{ web_macro.paginator(paginator) }}
+{% endblock %}

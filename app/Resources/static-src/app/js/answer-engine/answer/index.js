@@ -1,4 +1,11 @@
 import Answer from './answer';
+import { isMobileDevice } from 'common/utils';
+
+jQuery.support.cors = true;
+
+if (isMobileDevice()) {
+  $('body, html').css({ 'height': '100%', 'overflow':'auto'});
+}
 
 Vue.config.productionTip = false;
 if (app.lang == 'en') {

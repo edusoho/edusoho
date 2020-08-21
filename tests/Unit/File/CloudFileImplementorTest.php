@@ -322,7 +322,7 @@ class CloudFileImplementorTest extends BaseTestCase
     {
         $params = [
             [
-                'functionName' => 'startUpload',
+                'functionName' => 'resumeUpload',
                 'runTimes' => 1,
                 'returnValue' => [
                     'no' => 1,
@@ -362,7 +362,7 @@ class CloudFileImplementorTest extends BaseTestCase
     {
         $params = [
             [
-                'functionName' => 'startUpload',
+                'functionName' => 'resumeUpload',
                 'runTimes' => 1,
                 'returnValue' => [
                     'no' => 1,

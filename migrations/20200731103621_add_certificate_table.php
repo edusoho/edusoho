@@ -58,7 +58,6 @@ class AddCertificateTable extends Migration
                 `auditTime` INT(10) unsigned DEFAULT '0' COMMENT '审核时间',
                 `expiryTime` int(10) DEFAULT '0' COMMENT '过期时间',
                 `issueTime` int(10) DEFAULT '0' COMMENT '发放时间',
-                `certificateImg` VARCHAR (255) DEFAULT '' COMMENT '证书图片',
                 `createdTime` INT(10) unsigned DEFAULT '0' COMMENT '创建时间',
                 `updatedTime` INT(10) unsigned DEFAULT '0'  COMMENT '更新时间',
                 PRIMARY KEY (`id`)

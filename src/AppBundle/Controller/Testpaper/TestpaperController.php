@@ -15,6 +15,7 @@ use Biz\User\UserException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -32,12 +33,16 @@ class TestpaperController extends BaseController
             $this->createNewException(CourseException::FORBIDDEN_TAKE_COURSE());
         }
 
+        $user = $this->getCurrentUser();
+        $latestAnswerRecord = $this->getAnswerRecordService()->getLatestAnswerRecordByAnswerSceneIdAndUserId($testpaperActivity['answerSceneId'], $user['id']);
+        if (empty($latestAnswerRecord) || AnswerService::ANSWER_RECORD_STATUS_FINISHED == $latestAnswerRecord['status']) {
+            $latestAnswerRecord = $this->getAnswerService()->startAnswer($testpaperActivity['answerSceneId'], $testpaperActivity['mediaId'], $user['id']);
+        }
+
         return $this->forward('AppBundle:AnswerEngine/AnswerEngine:do', [
-            'answerSceneId' => $testpaperActivity['answerSceneId'],
-            'assessmentId' => $testpaperActivity['mediaId'],
-        ], [
-            'submit_goto_url' => $this->generateUrl('course_task_activity_show', ['courseId' => $activity['fromCourseId'], 'id' => $task['id']]),
-            'save_goto_url' => $this->generateUrl('my_course_show', ['id' => $activity['fromCourseId']]),
+            'answerRecordId' => $latestAnswerRecord['id'],
+            'submitGotoUrl' => $this->generateUrl('course_task_activity_show', ['courseId' => $activity['fromCourseId'], 'id' => $task['id']]),
+            'saveGotoUrl' => $this->generateUrl('my_course_show', ['id' => $activity['fromCourseId']]),
         ]);
     }
 
@@ -245,5 +250,13 @@ class TestpaperController extends BaseController
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return AnswerService
+     */
+    protected function getAnswerService()
+    {
+        return $this->createService('ItemBank:Answer:AnswerService');
     }
 }

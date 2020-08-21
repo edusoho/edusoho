@@ -324,6 +324,7 @@ class BaseTestCase extends TestCase
     {
         $permissions = new \ArrayObject();
         $permissions['admin_course_content_manage'] = true;
+        $permissions['admin_v2_item_bank_exercise_content_manage'] = true;
         /* @var $currentUser CurrentUser */
         $currentUser->setPermissions($permissions);
     }

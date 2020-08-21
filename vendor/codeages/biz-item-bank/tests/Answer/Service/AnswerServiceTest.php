@@ -58,29 +58,6 @@ class AnswerServiceTest extends IntegrationTestCase
         $this->getAnswerService()->startAnswer(1, 1, 1);
     }
 
-    /**
-     * @expectedException \Codeages\Biz\ItemBank\Answer\Exception\AnswerSceneException
-     * @expectedExceptionCode 50095207
-     */
-    public function testStartAnswer_whenCanRestart_thenThrowException()
-    {
-        $this->mockObjectIntoBiz('ItemBank:Answer:AnswerRecordService', [
-            [
-                'functionName' => 'getLatestAnswerRecordByAnswerSceneIdAndUserId',
-                'returnValue' => ['id' => 1],
-            ],
-        ]);
-
-        $this->mockObjectIntoBiz('ItemBank:Answer:AnswerSceneService', [
-            [
-                'functionName' => 'canRestart',
-                'returnValue' => false,
-            ],
-        ]);
-
-        $this->getAnswerService()->startAnswer(1, 1, 1);
-    }
-
     public function testPauseAnswer()
     {
         $this->mockObjectIntoBiz('ItemBank:Answer:AnswerService', [
@@ -484,14 +461,14 @@ class AnswerServiceTest extends IntegrationTestCase
         $this->assertEquals($aswerQuestionRerport['2']['status'], 'right');
         $this->assertEquals($aswerQuestionRerport['2']['score'], 2);
         $this->assertEquals($aswerQuestionRerport['3']['status'], 'wrong');
-        $this->assertEquals($aswerQuestionRerport['4']['status'], 'no_answer');
-        $this->assertEquals($aswerQuestionRerport['4']['score'], 0);
+        $this->assertEquals($aswerQuestionRerport['4']['status'], 'right');
+        $this->assertEquals($aswerQuestionRerport['4']['score'], 2);
         $this->assertEquals($aswerQuestionRerport['5']['status'], 'part_right');
-        $this->assertEquals($answerReport['right_rate'], 40);
-        $this->assertEquals($answerReport['objective_score'], 3);
+        $this->assertEquals($answerReport['right_rate'], 60);
+        $this->assertEquals($answerReport['objective_score'], 5);
         $this->assertEquals($answerReport['subjective_score'], 2);
-        $this->assertEquals($answerReport['right_question_count'], 2);
-        $this->assertEquals($answerReport['score'], 5);
+        $this->assertEquals($answerReport['right_question_count'], 3);
+        $this->assertEquals($answerReport['score'], 7);
         $this->assertEquals($answerReport['grade'], 'excellent');
         $this->assertEquals($answerReport['comment'], '总体评语');
     }

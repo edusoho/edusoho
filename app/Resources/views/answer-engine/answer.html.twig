@@ -19,20 +19,21 @@
 
 
 {% block body %}
+  {% block header %}
+      {% if showHeader|default(0) %}{{ parent() }}{% endif %}
+  {% endblock %}
   <style>
     html, body {
-      height: 100%;
-      overflow: auto;
       -webkit-overflow-scrolling: touch;
     }  
   </style>
   {% include 'answer-engine/common.html.twig' %}
   {% include 'attachment-upload/upload-data.html.twig' %}
-  <input type="hidden" name="assessment" value='{{ assessment|json_encode }}'>
-  <input type="hidden" name="assessment_response" value='{{ assessmentResponse|json_encode }}'>
-  <input type="hidden" name="answer_scene" value='{{ answerScene|json_encode }}'>
-  <input type="hidden" name="answer_record" value='{{ answerRecord|json_encode }}'>
-  <input type="hidden" name="submit_goto_url" value='{{ app.request.query.get('submit_goto_url') }}'>
-  <input type="hidden" name="save_goto_url" value='{{ app.request.query.get('save_goto_url') }}'>
-  {{ render(controller('AppBundle:FaceInspection/Capture:inspection', {request:app.request, answerSceneId: answerScene.id, answerRecordId: answerRecord.id})) }}
+  <input type="hidden" name="answer_record_id" value='{{ answerRecord.id }}'>
+  <input type="hidden" name="submit_goto_url" value='{{ submitGotoUrl }}'>
+  <input type="hidden" name="save_goto_url" value='{{ saveGotoUrl }}'>
+  {{ render(controller('AppBundle:FaceInspection/Capture:inspection', {request:app.request, answerSceneId: answerRecord.answer_scene_id, answerRecordId: answerRecord.id})) }}
+  {% block footer %}
+      {% if showHeader|default(0) %}{{ parent() }}{% endif %}
+  {% endblock %}
 {% endblock %}
