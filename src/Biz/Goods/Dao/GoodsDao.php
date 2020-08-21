@@ -7,4 +7,6 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 interface GoodsDao extends GeneralDaoInterface
 {
     public function getByProductId($productId);
+
+    public function findByIds($ids);
 }

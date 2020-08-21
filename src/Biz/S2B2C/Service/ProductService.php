@@ -58,6 +58,8 @@ interface ProductService
 
     public function notifyNewVersionProduct($s2b2cProductId, $resourceCourseId, $versionData);
 
+    public function notifyCourseSetNewVersion($s2b2cProductId);
+
     public function findUpdatedVersionProductList();
 
     public function updateProductVersion($id);

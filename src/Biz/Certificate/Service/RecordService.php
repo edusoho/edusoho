@@ -18,7 +18,9 @@ interface RecordService
 
     public function grantRecord($id, $fields);
 
-    public function isObtained($conditions);
-
     public function autoIssueCertificates($certificateId, $userIds);
+
+    public function isObtained($userId, $certificateId);
+
+    public function isCertificatesObtained($userId, $certificateIds);
 }

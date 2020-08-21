@@ -42,7 +42,7 @@ class TaskController extends BaseController
 
         try {
             $task = $this->tryLearnTask($courseId, $id, (bool) $preview);
-            $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+            $activity = $this->getActivityService()->getActivity($task['activityId']);
 
             if (!empty($activity['ext']) && !empty($activity['ext']['mediaId'])) {
                 $media = $this->getUploadFileService()->getFile($activity['ext']['mediaId']);
@@ -441,7 +441,7 @@ class TaskController extends BaseController
 
     public function finishConditionAction($task)
     {
-        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+        $activity = $this->getActivityService()->getActivity($task['activityId'], false);
         $activityConfigManage = $this->get('activity_config_manager');
         $installedActivity = $activityConfigManage->getInstalledActivity($activity['mediaType']);
 

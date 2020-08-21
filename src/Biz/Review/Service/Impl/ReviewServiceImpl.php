@@ -8,6 +8,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
+use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\Review\Dao\ReviewDao;
 use Biz\Review\ReviewException;
 use Biz\Review\Service\ReviewService;
@@ -18,10 +19,11 @@ class ReviewServiceImpl extends BaseService implements ReviewService
 {
     const RATING_LIMIT = 5;
 
-//    TODO: 剥离完课程与班级数据后删除
+    //    TODO: 剥离完课程与班级数据后删除
     protected $reviewMap = [
         'course' => 'tryCreateCourseReview',
         'classroom' => 'tryCreateClassroomReview',
+        'item_bank_exercise' => 'tryCreateItemBankExerciseReview',
     ];
 
     public function getReview($id)
@@ -164,10 +166,20 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         return $review;
     }
 
-//    TODO: 商品剥离暂时兼容班级
+    //    TODO: 商品剥离暂时兼容班级
     protected function tryCreateClassroomReview($review)
     {
         if (!$this->getClassroomService()->canTakeClassroom($review['targetId'])) {
+            $this->createNewException(ReviewException::FORBIDDEN_CREATE_REVIEW());
+        }
+
+        return $review;
+    }
+
+    //    TODO: 商品剥离暂时兼容题库练习
+    protected function tryCreateItemBankExerciseReview($review)
+    {
+        if (!$this->getItemBankExerciseService()->canTakeItemBankExercise($review['targetId'])) {
             $this->createNewException(ReviewException::FORBIDDEN_CREATE_REVIEW());
         }
 
@@ -212,5 +224,13 @@ class ReviewServiceImpl extends BaseService implements ReviewService
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return ExerciseService
+     */
+    protected function getItemBankExerciseService()
+    {
+        return $this->createService('ItemBankExercise:ExerciseService');
     }
 }

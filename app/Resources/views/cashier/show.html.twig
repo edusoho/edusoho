@@ -19,7 +19,7 @@
     <div class="order-center-card__img">
       {% if product.cover and product.cover.middle|default('') starts with '/assets' %}
         <img src="{{ asset(product.cover.middle) }}" alt="{{ order.title }}">
-      {% elseif product.targetType in ['vip', 'course','classroom'] %}
+      {% elseif product.targetType in ['vip', 'course','classroom', 'item_bank_exercise'] %}
         <img src="{{ filepath(product.cover.middle|default(''), product.targetType ~ '.png') }}" alt="{{ order.title }}">
       {% endif %}
 

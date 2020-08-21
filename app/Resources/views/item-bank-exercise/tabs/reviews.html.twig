@@ -1,0 +1,5 @@
+{% set canAccess = (member|default(false) and 'teacher' in member.role) or 'ROLE_SUPER_ADMIN' in app.user.roles|default('') or 'ROLE_ADMIN' in app.user.roles|default('') %}
+
+{% set hideRereview = (exercise.id == 0) or (not userReview) %}
+
+{% include 'review/widget/list.html.twig' with {targetType: 'item_bank_exercise', targetId: exercise.id} %}

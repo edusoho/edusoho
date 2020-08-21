@@ -171,7 +171,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
             $eventName = $request->query->get('eventName');
             $data = $request->query->get('data');
             if (!empty($eventName)) {
-                $this->getTaskService()->trigger($task['id'], $eventName, $data);
+                $this->getTaskService()->trigger($task['id'], 'doing', $data);
             }
 
             if (in_array($taskResult['status'], ['start', 'doing'])) {

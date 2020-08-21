@@ -1,0 +1,50 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% do script(['libs/jquery-validation.js', 'app/js/item-bank-exercise/module/index.js']) %}
+{% block title %}
+  {% if module %}
+    {{ 'item_bank_exercise.assessment_exercise.edit_module'|trans }}
+  {% else %}
+    {{ 'item_bank_exercise.assessment_exercise.add_module'|trans }}
+  {% endif %}
+{% endblock %}
+
+{% block body %}
+  {% if module %}
+    {% set saveUrl = path('item_bank_exercise_manage_assessment_module_edit', {exerciseId: exercise.id, moduleId: module.id}) %}
+  {% else %}
+    {% set saveUrl = path('item_bank_exercise_manage_assessment_module_create', {exerciseId: exercise.id}) %}
+  {% endif %}
+
+  <form id="module-form" class="form-horizontal" method="post" action="{{ saveUrl }}">
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label for="module-title-field">
+          {{'item_bank_exercise.assessment_exercise.module.name'|trans}}
+        </label>
+      </div>
+      <div class="col-md-8 controls">
+        <input id="module-title-field" type="text" name="title" value="{{ module.title|default('') }}" class="form-control">
+      </div>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+{% endblock %}
+
+{% block footer %}
+  {% if module %}
+    <button type="button" class="btn btn-link js-delete-module"
+            data-url="{{ path('item_bank_exercise_manage_assessment_module_delete', {exerciseId: exercise.id, moduleId: module.id}) }}"
+            data-check-url="{{ path('item_bank_exercise_manage_assessment_module_delete_check', {exerciseId: exercise.id, moduleId: module.id}) }}"
+    >
+      {{'form.btn.delete'|trans}}
+    </button>
+  {% endif %}
+  <button type="button" class="btn btn-link" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
+  <button id="module-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" type="button" class="btn btn-primary js-submit-btn">
+    {% if module %}
+      {{'form.btn.save'|trans}}
+    {% else %}
+      {{'form.btn.add'|trans}}
+    {% endif %}
+  </button>
+{% endblock %}

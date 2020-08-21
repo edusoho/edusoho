@@ -1,0 +1,32 @@
+{% import "common/data-dict-macro.html.twig" as dict_macro %}
+{% extends 'my/my-teaching.html.twig' %}
+
+{% do script('app/js/my/learning-item-bank-exercise/index.js')  %}
+
+{% block title %}{{'my.teaching.page_title'|trans}} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'my-teaching-courses' %}
+
+{% set type = "question" %}
+
+{% block main %}
+  {% include 'my/teaching/course-type-select.html.twig' %}
+
+  <div class="alert alert-warning" role="alert">
+    <span>{{ 'item_bank_exercise.my_teaching_notice'|trans({'%url%':path('question_bank_list')})|raw }}</span>
+    <i class="icon cd-icon cd-icon-close teaching-exercise-notice-close"></i>
+  </div>
+  {% for item in itemBankExercises %}
+    <div class="open-course-item">
+      {% include 'my/teaching/item-bank-exercise-list.html.twig' %}
+    </div>
+  {% else %}
+    <div class="empty">
+      {{ 'my.teaching.course_set.empty_hint'|trans }}
+    </div>
+  {% endfor %}
+
+    <nav class="text-center">
+      {{ web_macro.paginator(paginator) }}
+    </nav>
+{% endblock %}

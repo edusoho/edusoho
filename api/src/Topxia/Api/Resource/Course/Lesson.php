@@ -42,7 +42,7 @@ class Lesson extends BaseResource
 
         $currentUser = $this->getCurrentUser();
 
-        if ($currentUser->isLogin()) {
+        if ($currentUser->isLogin() && $this->getTaskService()->canStartTask($task['id'])) {
             $this->getTaskService()->startTask($lesson['id']);
         }
 
@@ -162,7 +162,7 @@ class Lesson extends BaseResource
                 'duration' => 3600,
                 'userId' => 0,
             ]);
-            $lesson['mediaUri'] = $this->getHttpHost()."/player/{$file['id']}/file/{$token['token']}";
+            $lesson['mediaUri'] = $this->getHttpHost()."/player/{$file['id']}/file/{$token['token']}.{$file['ext']}";
         } else {
             $result = $this->getMaterialLibService()->player($file['globalId'], $ssl);
             $lesson['mediaUri'] = $result['url'];
@@ -327,7 +327,7 @@ class Lesson extends BaseResource
                         'duration' => 3600,
                         'userId' => 0,
                     ]);
-                    $lesson['mediaUri'] = $this->getHttpHost()."/player/{$file['id']}/file/{$token['token']}";
+                    $lesson['mediaUri'] = $this->getHttpHost()."/player/{$file['id']}/file/{$token['token']}.{$file['ext']}";
                 }
             } else {
                 $lesson['mediaUri'] = '';

@@ -96,7 +96,7 @@ abstract class Item
         $item['question_num'] = count($item['questions']);
         $item['material'] = $this->purifyHtml($this->getMaterial($item));
         $item['material'] = preg_replace('/\[\[.+?\]\]/', '[[]]', $item['material']);
-        if (empty($item['category_id'])) {
+        if (isset($item['category_id']) && $item['category_id'] === '') {
             unset($item['category_id']);
         }
 

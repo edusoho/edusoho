@@ -5,7 +5,7 @@ namespace ApiBundle\Api\Resource\Classroom;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Classroom\ClassroomException;
-use Biz\Group\Service\ThreadService;
+use Biz\Thread\Service\ThreadService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Group\ThreadException;
 

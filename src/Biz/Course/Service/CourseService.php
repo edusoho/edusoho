@@ -353,4 +353,6 @@ interface CourseService
      * 课程老师，后台设置可修改营销设置可修改
      */
     public function canUpdateCourseBaseInfo($courseId, $courseSetId = 0);
+
+    public function appendHasCertificate(array $courses);
 }
