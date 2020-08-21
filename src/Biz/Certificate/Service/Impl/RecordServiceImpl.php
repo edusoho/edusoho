@@ -32,6 +32,11 @@ class RecordServiceImpl extends BaseService implements RecordService
         return $this->getRecordDao()->findExpiredRecords($certificateId);
     }
 
+    public function findRecordsByCertificateId($certificateId)
+    {
+        return $this->getRecordDao()->findByCertificateId($certificateId);
+    }
+
     public function cancelRecord($id)
     {
         $record = $this->get($id);
@@ -106,8 +111,10 @@ class RecordServiceImpl extends BaseService implements RecordService
             'expiryTime' => empty($certificate['expiryDay']) ? 0 : strtotime(date('Y-m-d', time() + 24 * 3600 * (int) $certificate['expiryDay'])),
         ];
         $createRecords = [];
-        foreach ($userIds as $userId) {
+        $certificateCodes = $this->generateCertificateCode($certificate, count($userIds));
+        foreach ($userIds as $key =>  $userId) {
             $defaultRecord['userId'] = $userId;
+            $defaultRecord['certificateCode'] = $certificateCodes[$key];
             $createRecords[] = $defaultRecord;
         }
 
@@ -120,7 +127,17 @@ class RecordServiceImpl extends BaseService implements RecordService
 
     protected function generateCertificateCode($certificate, $count)
     {
+        $existCodes = $this->findRecordsByCertificateId($certificate['id']);
+        $existCodes = ArrayToolkit::column($existCodes, 'certificateCode');
+        $generateCodes = [];
+        while (count($generateCodes) < $count) {
+            $generateCode = $certificate['certificateCode'].mt_rand(100000, 999999);
+            if (!in_array($generateCode, $existCodes) && !in_array($generateCode, $generateCodes)) {
+                $generateCodes[] = $generateCode;
+            }
+        }
 
+        return $generateCodes;
     }
 
     protected function filterHasCertificateUsers($certificate, $userIds)

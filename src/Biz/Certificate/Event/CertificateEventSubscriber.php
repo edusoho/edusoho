@@ -2,8 +2,10 @@
 
 namespace Biz\Certificate\Event;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Certificate\Service\CertificateService;
 use Biz\Certificate\Service\RecordService;
+use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
@@ -41,6 +43,40 @@ class CertificateEventSubscriber extends EventSubscriber implements EventSubscri
         foreach ($certificates as $certificate) {
             $this->getRecordService()->autoIssueCertificates($certificate['id'], [$taskResult['userId']]);
         }
+    }
+
+    protected function processClassroomCertificate($courseSet, $userId)
+    {
+        $classroomCourses = $this->getClassroomService()->findClassroomCourseByCourseSetIds([$courseSet['id']]);
+        $classroomIds = ArrayToolkit::column($classroomCourses, 'classroomId');
+        $members = $this->getClassroomService()->findMembersByUserIdAndClassroomIds($userId, $classroomIds);
+        $classroomCourseGroups = ArrayToolkit::group($classroomCourses, 'classroomId');
+        $classroomIds = ArrayToolkit::column($members, 'classroomId');
+        if (empty($classroomIds)) {
+            return true;
+        }
+
+        $certificates = $this->getCertificateService()->search(['targetIds' => $classroomIds, 'targetType' => 'classroom'], [], 0, PHP_INT_MAX);
+        $classroomIds = ArrayToolkit::column($certificates, 'targetId');
+        $certificateGroups = ArrayToolkit::group($certificates, 'targetId');
+
+        foreach ($classroomIds as $classroomId) {
+            if (empty($classroomCourseGroups[$classroomId]) || empty($certificateGroups[$classroomId])) {
+                continue;
+            }
+            $courses = $classroomCourseGroups[$classroomId];
+            $courseIds = ArrayToolkit::column($courses, 'courseId');
+            $memberCounts = $this->getCourseMemberService()->countMembers(['finishedTime_GT' => 0, 'userId' => $userId, 'courseIds' => $courseIds]);
+
+            //没有全部完成忽略
+            if ($memberCounts < count($courseIds)) {
+                continue;
+            }
+            foreach ($certificateGroups[$classroomId] as $certificate) {
+                $this->getRecordService()->autoIssueCertificates($certificate['id'], [$userId]);
+            }
+        }
+
     }
 
     /**
@@ -81,5 +117,13 @@ class CertificateEventSubscriber extends EventSubscriber implements EventSubscri
     protected function getRecordService()
     {
         return $this->getBiz()->service('Certificate:RecordService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->getBiz()->service('Classroom:ClassroomService');
     }
 }

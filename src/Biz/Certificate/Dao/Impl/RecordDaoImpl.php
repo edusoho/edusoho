@@ -9,6 +9,11 @@ class RecordDaoImpl extends AdvancedDaoImpl implements RecordDao
 {
     protected $table = 'certificate_record';
 
+    public function findByCertificateId($certificateId)
+    {
+        return $this->findByFields(['certificateId' => $certificateId]);
+    }
+
     public function findExpiredRecords($certificateId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE `certificateId` = ? and expiryTime != 0 and expiryTime < ?; ";
