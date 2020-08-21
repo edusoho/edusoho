@@ -7,6 +7,7 @@ use AppBundle\Common\ClassroomToolkit;
 use AppBundle\Common\TimeMachine;
 use Biz\Accessor\AccessorInterface;
 use Biz\BaseService;
+use Biz\Certificate\Service\CertificateService;
 use Biz\Classroom\ClassroomException;
 use Biz\Classroom\Dao\ClassroomCourseDao;
 use Biz\Classroom\Dao\ClassroomDao;
@@ -2389,5 +2390,29 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     protected function getSettingService()
     {
         return $this->biz->service('System:SettingService');
+    }
+
+    public function appendHasCertificate(array $classrooms)
+    {
+        $conditions = [
+            'targetType' => 'classroom',
+            'targetIds' => ArrayToolkit::column($classrooms, 'id'),
+            'status' => 'published',
+        ];
+
+        $certificates = ArrayToolkit::index($this->getCertificateService()->search($conditions, [], 0, PHP_INT_MAX, ['targetId']), 'targetId');
+        foreach ($classrooms as &$classroom) {
+            $classroom['hasCertificate'] = !empty($certificates[$classroom['id']]);
+        }
+
+        return $classrooms;
+    }
+
+    /**
+     * @return CertificateService
+     */
+    protected function getCertificateService()
+    {
+        return $this->createService('Certificate:CertificateService');
     }
 }
