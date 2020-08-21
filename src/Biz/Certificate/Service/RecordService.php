@@ -12,9 +12,13 @@ interface RecordService
 
     public function findExpiredRecords($certificateId);
 
+    public function findRecordsByCertificateId($certificateId);
+
     public function cancelRecord($id);
 
     public function grantRecord($id, $fields);
+
+    public function autoIssueCertificates($certificateId, $userIds);
 
     public function isObtained($userId, $certificateId);
 

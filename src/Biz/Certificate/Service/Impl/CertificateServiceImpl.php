@@ -24,6 +24,11 @@ class CertificateServiceImpl extends BaseService implements CertificateService
         return $this->getCertificateDao()->getByCode($code);
     }
 
+    public function findByTargetIdAndTargetType($targetId, $targetType)
+    {
+        return $this->getCertificateDao()->findByTargetIdAndTargetType($targetId, $targetType);
+    }
+
     public function search($conditions, $orderBys, $start, $limit, $columns = [])
     {
         return $this->getCertificateDao()->search($conditions, $orderBys, $start, $limit, $columns);

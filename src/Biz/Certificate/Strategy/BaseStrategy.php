@@ -42,6 +42,9 @@ abstract class BaseStrategy
         }
 
         $template = $this->getTemplateService()->get($certificate['templateId']);
+        if ($certificate['targetType'] != $template['targetType']) {
+            return '';
+        }
 
         $certificate = new Certificate();
         $certificateContent = implode('', explode("\r\n", trim($template['certificateContent'])));
