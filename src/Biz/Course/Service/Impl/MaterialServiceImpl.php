@@ -74,7 +74,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
         return $material;
     }
 
-    public function deleteMaterial($courseSetId, $materialId)
+    public function deleteMaterial($courseSetId, $materialId, $argument = '')
     {
         $material = $this->getMaterialDao()->get($materialId);
         if (empty($material)) {
@@ -85,7 +85,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 
         $logType = 'openCourse' == $material['type'] ? 'open_course' : 'course';
         $this->getLogService()->info($logType, 'delete_material', "移除资料(#{$material['id']})", $material);
-        $this->dispatchEvent('course.material.delete', new Event($material));
+        $this->dispatchEvent('course.material.delete', new Event($material, ['argument' => $argument]));
     }
 
     public function findMaterialsByCopyIdAndLockedCourseIds($copyId, $courseIds)
@@ -147,7 +147,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
         }
 
         foreach ($materials as $key => $material) {
-            $this->deleteMaterial($courseSetId, $material['id']);
+            $this->deleteMaterial($courseSetId, $material['id'], 'course_material');
         }
 
         return $materials;

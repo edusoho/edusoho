@@ -1,0 +1,24 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% set modal_class= "modal-sd" %}
+
+{% do script(['libs/jquery-validation.js', 'app/js/item-bank-exercise/exercise/add/index.js']) %}
+
+{% block title %}
+  {{ 'my.teaching.item_bank_exercise.item'|trans }}
+{% endblock %}
+{% block body %}
+
+  <form id="exercise-add-form" class="form-horizontal" method="post"
+        action="{{ path('item_bank_exercise_create', {id:questionBank.id}) }}">
+    <p> {{ 'my.teaching.question_bank.open_ensure'|trans }}</p>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+  </form>
+
+{% endblock %}
+
+{% block footer %}
+    <button id="exercise-add-submit" type="button" class="btn btn-primary pull-right"
+            data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.confirm'|trans }}</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
+{% endblock %}

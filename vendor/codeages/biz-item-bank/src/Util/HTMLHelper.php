@@ -16,17 +16,15 @@ class HTMLHelper
         $this->biz = $biz;
     }
 
-    public function purify($html, $trusted = false)
+    public function purify($html, $trusted = true)
     {
         if (!isset($html)) {
             return '';
         }
 
-        $safeDomains = [];
-
         $config = [
-            'cacheDir' => $this->biz['cache_dir'].'/htmlpurifier',
-            'safeIframeDomains' => $safeDomains,
+            'cacheDir' => $this->biz['item_bank.html_helper.config']['cacheDir'],
+            'safeIframeDomains' => $this->biz['item_bank.html_helper.config']['safeDomains'],
         ];
 
         $factory = new HTMLPurifierFactory($config);
@@ -34,7 +32,7 @@ class HTMLHelper
 
         $html = $purifier->purify($html);
         $html = str_replace('http-equiv', '', $html);
-        $html = $this->handleOuterLink($html, $safeDomains);
+        $html = $this->handleOuterLink($html, $this->biz['item_bank.html_helper.config']['safeDomains']);
 
         if (!$trusted) {
             return $html;

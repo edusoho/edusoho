@@ -20,7 +20,7 @@ class Factory
      *
      * @return Exporter
      */
-    public function create($name, $conditions = array())
+    public function create($name, $conditions = [])
     {
         $export = $this->exportMap($name);
 
@@ -29,7 +29,7 @@ class Factory
 
     private function exportMap($name)
     {
-        $map = array(
+        $map = [
             'invite-records' => 'AppBundle\Component\Export\Invite\InviteRecordsExporter',
             'user-invite-records' => 'AppBundle\Component\Export\Invite\InviteUserRecordsExporter',
             'order' => 'AppBundle\Component\Export\Order\OrderExporter',
@@ -41,11 +41,12 @@ class Factory
             'bill-coin-flow' => 'AppBundle\Component\Export\Bill\CoinBillExporter',
             'user-learn-statistics' => 'AppBundle\Component\Export\UserLearnStatistics\UserLearnStatisticsExporter',
             'course-students' => 'AppBundle\Component\Export\Course\StudentExporter',
+            'item-bank-exercise-students' => 'AppBundle\Component\Export\ItemBankExercise\StudentExporter',
             'invoice-records' => 'InvoicePlugin\Component\Export\Invoice\InvoiceRecordsExporter',
             'course-live-statistics-list' => 'AppBundle\Component\Export\Course\CourseLiveStatisticsExporter',
             'course-live-statistics-checkin-list' => 'AppBundle\Component\Export\Course\LiveStatisticsCheckinListExporter',
             'course-live-statistics-visitor-list' => 'AppBundle\Component\Export\Course\LiveStatisticsVisitorListExporter',
-        );
+        ];
 
         $names = explode(':', $name);
         if (2 == count($names)) {

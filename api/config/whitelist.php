@@ -1,7 +1,7 @@
 <?php
 
-return array(
-    'GET'  => array(
+return [
+    'GET' => [
         '/^\/api\/users\/\d+$/',
         '/^\/api\/mobileschools\/.+$/',
         '/^\/api\/classrooms\/\w+\/members$/',
@@ -13,14 +13,13 @@ return array(
         '/^\/api\/classroom_play\/\d+$/',
         '/^\/api\/course\/\d+\/lessons$/',
         '/^\/api\/setting\/\w+$/',
-        '/^\/api\/courses\/\w+\/members$/'
-    ),
-    'POST' => array(
+        '/^\/api\/courses\/\w+\/members$/',
+    ],
+    'POST' => [
         '/^\/api\/users$/',
         '/^\/api\/users\/login$/',
-        '/^\/api\/users\/bind_login$/',
         '/^\/api\/sms_codes$/',
         '/^\/api\/users\/password$/',
-        '/^\/api\/emails$/'
-    )
-);
+        '/^\/api\/emails$/',
+    ],
+];

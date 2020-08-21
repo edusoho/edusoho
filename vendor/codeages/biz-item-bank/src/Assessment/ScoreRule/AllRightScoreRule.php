@@ -19,14 +19,10 @@ class AllRightScoreRule extends ScoreRule
 
     public function processRule($question)
     {
-        if (!empty($question['score'])) {
-            return [
-                'name' => self::RULE,
-                'score' => $question['score'],
-            ];
-        }
-
-        return [];
+        return [
+            'name' => self::RULE,
+            'score' => empty($question['score']) ? 0 : $question['score'],
+        ];
     }
 
     public function setQuestionScore($question, $score)

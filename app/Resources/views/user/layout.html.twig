@@ -14,7 +14,7 @@
 
 {% block content %}
   {% if not user.destroyed|default(0) %}
-  <ul class="nav nav-tabs clearfix">
+  <ul class="nav nav-tabs clearfix" {% if 'ROLE_TEACHER' in user.roles %} style="width: 1260px" {% endif %}>
     <li {% if pageNav == 'about' %}class="active"{% endif %}><a href="{{ path('user_about', {id: user.id}) }}">{{'user.homepage.introductions'|trans}}</a></li>
   	{% if 'ROLE_TEACHER' in user.roles %}
 	    <li {% if pageNav == 'teach' %}class="active"{% endif %}><a href="{{ path('user_teach', {id: user.id}) }}">{{'user.homepage.teaching_courses'|trans}}</a></li>
@@ -22,9 +22,11 @@
 
     {% if 'ROLE_TEACHER' in user.roles %}
       <li {% if pageNav == 'teaching' %}class="active"{% endif %}><a href="{{ path('user_teaching_classrooms', {id:user.id}) }}">{{'user.homepage.teaching_classrooms'|trans({'%classroomName%':setting('classroom.name')|default('classroom'|trans)})}}</a></li>
+      <li {% if pageNav == 'question_bank_teaching' %}class="active"{% endif %}><a href="{{ path('user_question_bank_teach', {id:user.id}) }}">{{'user.homepage.teaching_question_bank'|trans }}</a></li>
     {% endif %}
     <li {% if pageNav == 'learn' %}class="active"{% endif %}><a href="{{ path('user_learn', {id:user.id}) }}">{{'user.homepage.learning_courses'|trans}}</a></li>
     <li {% if pageNav == 'learning' %}class="active"{% endif %}><a href="{{ path('user_learning_classrooms', {id:user.id}) }}">{{'user.homepage.learning_classrooms'|trans({'%classroomName%':setting('classroom.name')|default('classroom'|trans)})}}</a></li>
+    <li {% if pageNav == 'question_bank_learning' %}class="active"{% endif %}><a href="{{ path('user_question_bank_learn', {id:user.id}) }}">{{'user.homepage.learning_question_bank'|trans}}</a></li>
 
 
     <li {% if pageNav == 'favorited' %}class="active"{% endif %}><a href="{{ path('user_favorited', {id:user.id}) }}">{{'user.homepage.favorite_courses'|trans}}</a></li>

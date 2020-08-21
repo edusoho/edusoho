@@ -68,9 +68,9 @@ class ItemBankServiceImpl extends BaseService implements ItemBankService
         return $this->getItemBankDao()->wave([$id], ['assessment_num' => $diff]);
     }
 
-    public function updateItemNum($id, $diff)
+    public function updateItemNumAndQuestionNum($id, $diffItemNum = 0, $diffQuestionNum = 0)
     {
-        return $this->getItemBankDao()->wave([$id], ['item_num' => $diff]);
+        return $this->getItemBankDao()->wave([$id], ['item_num' => $diffItemNum, 'question_num' => $diffQuestionNum]);
     }
 
     /**

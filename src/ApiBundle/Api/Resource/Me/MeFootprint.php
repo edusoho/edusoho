@@ -12,25 +12,35 @@ class MeFootprint extends AbstractResource
 {
     public function search(ApiRequest $request)
     {
-        $conditions = array(
+        $conditions = [
             'userId' => $this->getCurrentUser()->getId(),
-            'targetType' => $request->query->get('type'),
-        );
+        ];
         list($offset, $limit) = $this->getOffsetAndLimit($request);
 
         $total = $this->getUserFootprintService()->countUserFootprints($conditions);
-        $footprints = $this->getUserFootprintService()->searchUserFootprints($conditions, array('updatedTime' => 'DESC'), $offset, $limit);
-
-        $footprints = $this->getUserFootprintService()->prepareUserFootprintsByType($footprints, $request->query->get('type'));
+        $footprints = $this->getUserFootprintService()->searchUserFootprints($conditions, ['updatedTime' => 'DESC'], $offset, $limit);
+        $footprints = $this->warpperFootprints($footprints);
 
         return $this->makePagingObject($footprints, $total, $offset, $limit);
+    }
+
+    protected function warpperFootprints($footprints)
+    {
+        $warpperFootprints = [];
+
+        $footprintGroups = ArrayToolkit::group($footprints, 'targetType');
+        foreach ($footprintGroups as $targetType => $footprints) {
+            $warpperFootprints = array_merge($warpperFootprints, $this->getUserFootprintService()->prepareUserFootprintsByType($footprints, $targetType));
+        }
+
+        return ArrayToolkit::sortPerArrayValue($warpperFootprints, 'updatedTime', false);
     }
 
     public function add(ApiRequest $request)
     {
         $footprint = $request->request->all();
 
-        if (!ArrayToolkit::requireds($footprint, array('targetType', 'targetId', 'event'))) {
+        if (!ArrayToolkit::requireds($footprint, ['targetType', 'targetId', 'event'])) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
 

@@ -1,0 +1,44 @@
+{% import 'macro.html.twig' as web_macro %}
+<div class="course-detail-content js-course-detail-content">
+  <ul class="task-list infinite-container" style="margin-top:-20px">
+    {% for assessment in assessments if assessments %}
+      {% if records|default(null) %}{% set record = records[assessment.id]|default(null)  %}{% endif %}
+      <div class="row">
+        <li class="assessment-list-li">
+          <div class="col-xs-7 title-overflow">
+            <span>{{ assessment.name }}</span>
+          </div>
+          {% if member|default(null) and previewAs|default(null) == 'member' %}
+            <div class="col-xs-3 content-right">
+              <span style="color:#999">
+                {{ 'course.testpaper_manage.count'|trans({'%itemCount%': assessment.item_count}) }}/{{ 'course.testpaper_manage.score'|trans({'%score%':assessment.total_score}) }}
+              </span>
+            </div>
+            <div id="assessment-btn" class="col-xs-2">
+              {% if record|default(null) %}
+                {% if record.status == 'doing' or record.status == 'paused' %}
+                  <a id="btn-default" class="cd-btn cd-btn-primary" target="_blank" href="{{ path('item_bank_exercise_assessment_answer', {exerciseId:exercise.id, moduleId:moduleId, assessmentId:assessment.id}) }}">{{ 'item_bank_exercise.assessment.exercise.continue_btn'|trans }}</a>
+                {% elseif record.status == 'reviewing' or record.status == 'finished' %}
+                  <a id="btn-view" class="cd-btn cd-btn-ghost-primary" target="_blank" href="{{ path('item_bank_exercise_assessment_answer', {exerciseId:exercise.id, moduleId:moduleId, assessmentId:assessment.id}) }}">{{ 'item_bank_exercise.assessment.exercise.view_btn'|trans }}</a>
+                {% endif %}
+              {% else %}
+                <a id="btn-default" class="cd-btn cd-btn-ghost-primary" target="_blank" href="{{ path('item_bank_exercise_assessment_answer', {exerciseId:exercise.id, moduleId:moduleId, assessmentId:assessment.id}) }}">{{ 'item_bank_exercise.assessment.exercise.start_btn'|trans }}</a>
+              {% endif %}
+            </div>
+          {% else %}
+          <div class="col-xs-5 content-right">
+            <span style="color:#999">
+              {{ 'course.testpaper_manage.count'|trans({'%itemCount%': assessment.item_count}) }}/{{ 'course.testpaper_manage.score'|trans({'%score%':assessment.total_score}) }}
+            </span>
+          </div>
+          {% endif %}
+        </li>
+      </div>
+    {% else %}
+      <div class="empty js-task-empty">
+        {{'my.teaching.question_bank.testpaper.empty'|trans}}
+      </div>
+    {% endfor %}
+  </ul>
+  {{ web_macro.ajax_paginator(paginator) }}
+</div>
