@@ -7,9 +7,16 @@ use Biz\WeChat\Service\WeChatService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class UserEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
     public static function getSubscribedEvents()
     {
         return [
@@ -89,12 +96,21 @@ class UserEventSubscriber extends EventSubscriber implements EventSubscriberInte
 
     public function onUserChangePassword(Event $event)
     {
+        global $kernel;
+        $goto =$kernel->getContainer()->get('router')->generate('login');
+        $response = new RedirectResponse($goto, '302');
+
         $user = $event->getSubject();
         $tokens = $this->getTokenService()->findTokensByUserIdAndType($user['id'], 'mobile_login');
         if (!empty($tokens)) {
             foreach ($tokens as $token) {
                 $this->getTokenService()->destoryToken($token['token']);
+                $kernel->getContainer()->get('security.token_storage')->setToken(null);
+                $response->headers->clearCookie('REMEMBERME');
             }
+        }
+        if (!empty($user['loginSessionId'])){
+            $this->getUserDao()->update($user['id'], ['loginSessionId' => '']);
         }
     }
 
@@ -175,6 +191,11 @@ class UserEventSubscriber extends EventSubscriber implements EventSubscriberInte
     private function getUserService()
     {
         return $this->getBiz()->service('User:UserService');
+    }
+
+    private function getUserDao()
+    {
+        return $this->getBiz()->dao('User:UserDao');
     }
 
     protected function getNotificationService()
