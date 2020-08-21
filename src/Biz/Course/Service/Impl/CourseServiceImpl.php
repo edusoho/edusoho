@@ -2742,6 +2742,17 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $courses;
     }
 
+    public function hasCertificate($courseId)
+    {
+        $conditions = [
+            'targetType' => 'course',
+            'targetId' => $courseId,
+            'status' => 'published',
+        ];
+
+        return !empty($this->getCertificateService()->count($conditions));
+    }
+
     /**
      * @return CertificateService
      */
