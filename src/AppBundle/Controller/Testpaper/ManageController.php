@@ -256,10 +256,6 @@ class ManageController extends BaseController
         }
 
         $answerSceneReport = $this->getAnswerSceneService()->getAnswerSceneReport($activity['ext']['answerScene']['id']);
-        if (empty($answerSceneReport['question_reports'])) {
-            $this->getAnswerSceneService()->buildAnswerSceneReport($activity['ext']['answerScene']['id']);
-            $answerSceneReport = $this->getAnswerSceneService()->getAnswerSceneReport($activity['ext']['answerScene']['id']);
-        }
 
         return $this->render('testpaper/manage/result-analysis.html.twig', [
             'activity' => $activity,

@@ -1,0 +1,38 @@
+<div class="course-list course-list-new">
+    <div class="row">
+        {% for exercise in exercises %}
+            <div class="col-lg-3 col-md-4 col-xs-6 course-item-wrap">
+                <div class="course-item course-sticky-item">
+                  <div class="course-img">
+                    <a {% if ref|default() %} href="{{ path('my_item_bank_exercise_show', {id: exercise.id,ref:ref}) }}" {% else %} href="{{ path('my_item_bank_exercise_show', {id: exercise.id}) }}" {% endif %} target="_blank">
+                      {{ lazy_img(filepath(exercise.cover.large|default(null), 'courseSet.png'), 'img-responsive', exercise.title) }}
+                    </a>
+                  </div>
+                  <div class="course-info">
+                    <div class="title">
+                      <a class="link-dark" {% if ref|default() %} href="{{ path('my_item_bank_exercise_show', {id: exercise.id,ref:ref}) }}" {% else %} href="{{ path('my_item_bank_exercise_show', {id: exercise.id}) }}" {% endif %}
+                       target="_blank">
+                        {{ exercise.title }}
+                      </a>
+                    </div>
+                    <div class="metas clearfix">
+                      <span class="num">
+                          <i class="es-icon es-icon-people"></i>{{ exercise.studentNum }}
+                      </span>
+                      <span class="comment"><i class="es-icon es-icon-textsms"></i>{{ exercise.ratingNum }}</span>
+                      <span class="course-price-widget">
+                        <span class="price">
+                            {% if exercise.price > 0 %}
+                              {{'course.price.RMB'|trans({'%price%': exercise.price})}}
+                            {% else %}
+                              <span class="color-success">{{'course.price.free'|trans}}</span>
+                            {% endif %}
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>

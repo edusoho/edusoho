@@ -9,6 +9,8 @@ use AppBundle\Component\RateLimit\SmsLoginRateLimiter;
 use AppBundle\Component\RateLimit\SmsRateLimiter;
 use Biz\Announcement\Processor\AnnouncementProcessorFactory;
 use Biz\Article\Event\ArticleEventSubscriber;
+use Biz\Certificate\ImgBuilder\HorizontalImgBuilder;
+use Biz\Certificate\ImgBuilder\VerticalImgBuilder;
 use Biz\Certificate\Strategy\CertificateStrategyContext;
 use Biz\Certificate\Strategy\Impl\ClassroomStrategy;
 use Biz\Certificate\Strategy\Impl\CourseStrategy;
@@ -23,6 +25,7 @@ use Biz\Distributor\Service\Impl\SyncUserServiceImpl;
 use Biz\File\FireWall\FireWallFactory;
 use Biz\Importer\ClassroomMemberImporter;
 use Biz\Importer\CourseMemberImporter;
+use Biz\Importer\ItemBankExerciseMemberImporter;
 use Biz\OpenCourse\Event\OpenCourseThreadEventProcessor;
 use Biz\Sms\SmsProcessor\LiveOpenLessonSmsProcessor;
 use Biz\System\Template\TemplateFactory;
@@ -100,6 +103,10 @@ class DefaultServiceProvider implements ServiceProviderInterface
 
         $biz['thread_event_processor.article'] = function ($biz) {
             return new ArticleEventSubscriber($biz);
+        };
+
+        $biz['importer.exercise-member'] = function ($biz) {
+            return new ItemBankExerciseMemberImporter($biz);
         };
 
         $biz['importer.course-member'] = function ($biz) {
@@ -210,6 +217,10 @@ class DefaultServiceProvider implements ServiceProviderInterface
             "\/my\/teaching\/course_sets/",
         ];
 
+        $biz['item_bank_exercise.show_redirect'] = [
+            "\/(my\/)?item_bank_exercise\/(\d)+/i",
+        ];
+
         $biz['wechat.template_message_client'] = function ($biz) {
             $setting = $biz->service('System:SettingService');
             $loginBind = $setting->get('login_bind', []);
@@ -257,6 +268,14 @@ class DefaultServiceProvider implements ServiceProviderInterface
 
         $biz['certificate.classroom_strategy'] = function ($biz) {
             return new ClassroomStrategy($biz);
+        };
+
+        $biz['certificate.img_builder.vertical'] = function ($biz) {
+            return new VerticalImgBuilder($biz);
+        };
+
+        $biz['certificate.img_builder.horizontal'] = function ($biz) {
+            return new HorizontalImgBuilder($biz);
         };
     }
 }

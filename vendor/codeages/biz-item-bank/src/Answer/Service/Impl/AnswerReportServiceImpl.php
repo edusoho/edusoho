@@ -95,11 +95,18 @@ class AnswerReportServiceImpl extends BaseService implements AnswerReportService
                     $questionReport['attachments'] = empty($attachments[$questionReport['id']]) ? [] : $attachments[$questionReport['id']];
                     $questionReports[] = ArrayToolkit::parts($questionReport, ['id', 'question_id', 'total_score', 'score', 'comment', 'status', 'response', 'attachments']);
                 }
+
+                $itemReportGroupByStatus = ArrayToolkit::group($questionReports, 'status');
                 $itemReport = [
                     'item_id' => $itemId,
                     'total_score' => array_sum(ArrayToolkit::column($itemReport, 'total_score')),
                     'score' => array_sum(ArrayToolkit::column($itemReport, 'score')),
                     'question_count' => count($itemReport),
+                    'right_question_num' => empty($itemReportGroupByStatus[AnswerQuestionReportService::STATUS_RIGHT]) ? 0 : count($itemReportGroupByStatus[AnswerQuestionReportService::STATUS_RIGHT]),
+                    'wrong_question_num' => empty($itemReportGroupByStatus[AnswerQuestionReportService::STATUS_WRONG]) ? 0 : count($itemReportGroupByStatus[AnswerQuestionReportService::STATUS_WRONG]),
+                    'reviewing_question_num' => empty($itemReportGroupByStatus[AnswerQuestionReportService::STATUS_REVIEWING]) ? 0 : count($itemReportGroupByStatus[AnswerQuestionReportService::STATUS_REVIEWING]),
+                    'no_answer_question_num' => empty($itemReportGroupByStatus[AnswerQuestionReportService::STATUS_NOANSWER]) ? 0 : count($itemReportGroupByStatus[AnswerQuestionReportService::STATUS_NOANSWER]),
+                    'part_right_question_num' => empty($itemReportGroupByStatus[AnswerQuestionReportService::STATUS_PART_RIGHT]) ? 0 : count($itemReportGroupByStatus[AnswerQuestionReportService::STATUS_PART_RIGHT]),
                     'question_reports' => $questionReports,
                 ];
             }

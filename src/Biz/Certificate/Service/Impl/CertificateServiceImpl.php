@@ -7,6 +7,7 @@ use Biz\BaseService;
 use Biz\Certificate\CertificateException;
 use Biz\Certificate\Dao\CertificateDao;
 use Biz\Certificate\Service\CertificateService;
+use Biz\Certificate\Service\RecordService;
 use Biz\Certificate\Service\TemplateService;
 use Biz\Common\CommonException;
 use Biz\System\Service\LogService;
@@ -26,6 +27,11 @@ class CertificateServiceImpl extends BaseService implements CertificateService
     public function search($conditions, $orderBys, $start, $limit, $columns = [])
     {
         return $this->getCertificateDao()->search($conditions, $orderBys, $start, $limit, $columns);
+    }
+
+    public function findByIds(array $ids = [])
+    {
+        return ArrayToolkit::index($this->getCertificateDao()->findByIds($ids), 'id');
     }
 
     public function count($conditions)
@@ -99,6 +105,34 @@ class CertificateServiceImpl extends BaseService implements CertificateService
         return $this->getCertificateDao()->delete($id);
     }
 
+    public function searchUserAvailableCertificates($userId, $nameLike = '', $start, $limit)
+    {
+        $conditions = $this->getUserAvailableCertificatesConditions($userId, $nameLike);
+
+        return $this->search($conditions, ['createdTime' => 'DESC'], $start, $limit);
+    }
+
+    public function countUserAvailableCertificates($userId, $nameLike = '')
+    {
+        $conditions = $this->getUserAvailableCertificatesConditions($userId, $nameLike);
+
+        return $this->count($conditions);
+    }
+
+    protected function getUserAvailableCertificatesConditions($userId, $nameLike = '')
+    {
+        $records = $this->getCertificateRecordService()->search([
+            'userId' => $userId,
+            'statuses' => ['valid', 'expired'],
+        ], [], 0, PHP_INT_MAX);
+
+        $conditions = ['status' => 'published'];
+        $conditions['notIds'] = ArrayToolkit::column($records, 'certificateId');
+        !empty($nameLike) && $conditions['nameLike'] = $nameLike;
+
+        return $conditions;
+    }
+
     protected function filterCertificateFields($fields)
     {
         return ArrayToolkit::parts(
@@ -138,5 +172,13 @@ class CertificateServiceImpl extends BaseService implements CertificateService
     protected function getLogService()
     {
         return $this->createService('System:LogService');
+    }
+
+    /**
+     * @return RecordService
+     */
+    protected function getCertificateRecordService()
+    {
+        return $this->createService('Certificate:RecordService');
     }
 }

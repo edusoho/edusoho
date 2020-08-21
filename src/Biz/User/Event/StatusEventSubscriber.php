@@ -107,7 +107,9 @@ class StatusEventSubscriber extends EventSubscriber implements EventSubscriberIn
         $answerReport = $event->getSubject();
         $answerRecord = $this->getAnswerRecordService()->get($answerReport['answer_record_id']);
         $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerReport['answer_scene_id']);
-
+        if (empty($activity)) {
+            return;
+        }
         $course = $this->getCourseService()->getCourse($activity['fromCourseId']);
         $assessment = $this->getAssessmentService()->getAssessment($answerRecord['assessment_id']);
 

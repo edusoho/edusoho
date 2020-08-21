@@ -39,16 +39,18 @@ class CertificateController extends BaseController
 
     public function createAction(Request $request)
     {
-        $data = $request->request->all();
+        if ($request->isMethod('POST')) {
+            $data = $request->request->all();
 
-        if (empty($data['back'])) {
-            $certificate = $this->getCertificateService()->create($data);
+            if (empty($data['back'])) {
+                $certificate = $this->getCertificateService()->create($data);
 
-            return $this->redirect($this->generateUrl('admin_v2_certificate_manage'));
+                return $this->redirect($this->generateUrl('admin_v2_certificate_manage'));
+            }
         }
 
         return $this->render('admin-v2/operating/certificate/manage/create-base-info.html.twig', [
-            'certificate' => $data,
+            'certificate' => empty($data) ? [] : $data,
         ]);
     }
 

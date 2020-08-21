@@ -28,6 +28,7 @@
   {% endif %}
 
     <li role="presentation" class="{% if nav == 'teachers' %}active{% endif %}"><a href="{{ path('classroom_teachers', {classroomId:classroom.id}) }}">{{'classroom.teachers'|trans}}</a></li>
+    <li role="presentation" class="{% if nav == 'certificates' %}active{% endif %}"><a href="{{ path('classroom_certificates', {classroomId:classroom.id}) }}">{{'classroom.certificates'|trans}}</a></li>
 
   </ul>
   

@@ -3,39 +3,40 @@
 namespace AppBundle\Controller\Admin;
 
 use AppBundle\Common\Exception\FileToolkitException;
-use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\FileToolkit;
 use Biz\Common\HTMLHelper;
+use Symfony\Component\HttpFoundation\Request;
 
 class SiteSettingController extends BaseController
 {
     public function securityAction(Request $request)
     {
-        $security = $this->getSettingService()->get('security', array());
-        $default = array(
-            'safe_iframe_domains' => array(),
-        );
+        $security = $this->getSettingService()->get('security', []);
+        $default = [
+            'safe_iframe_domains' => [],
+        ];
         $security = array_merge($default, $security);
 
         if ($request->isMethod('POST')) {
             $security = $request->request->all();
 
-            $security['safe_iframe_domains'] = trim(str_replace(array("\r\n", "\n", "\r"), ' ', $security['safe_iframe_domains']));
+            $security['safe_iframe_domains'] = trim(str_replace(["\r\n", "\n", "\r"], ' ', $security['safe_iframe_domains']));
             $security['safe_iframe_domains'] = array_filter(explode(' ', $security['safe_iframe_domains']));
 
+            $this->getCacheService()->set('safe_iframe_domains', $security['safe_iframe_domains']);
             $this->getSettingService()->set('security', $security);
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        return $this->render('admin/system/security.html.twig', array(
+        return $this->render('admin/system/security.html.twig', [
             'security' => $security,
-        ));
+        ]);
     }
 
     public function siteAction(Request $request)
     {
-        $site = $this->getSettingService()->get('site', array());
-        $default = array(
+        $site = $this->getSettingService()->get('site', []);
+        $default = [
             'name' => '',
             'slogan' => '',
             'url' => '',
@@ -50,12 +51,12 @@ class SiteSettingController extends BaseController
             'closed_note' => '',
             'favicon' => '',
             'copyright' => '',
-        );
+        ];
         $site = array_merge($default, $site);
 
-        return $this->render('admin/system/site.html.twig', array(
+        return $this->render('admin/system/site.html.twig', [
             'site' => $site,
-        ));
+        ]);
     }
 
     public function saveSiteAction(Request $request)
@@ -68,31 +69,31 @@ class SiteSettingController extends BaseController
         }
         $this->getSettingService()->set('site', $site);
 
-        return $this->createJsonResponse(array(
+        return $this->createJsonResponse([
             'message' => $this->trans('site.save.success'),
-        ));
+        ]);
     }
 
     public function consultSettingAction(Request $request)
     {
-        $consult = $this->getSettingService()->get('consult', array());
-        $default = array(
+        $consult = $this->getSettingService()->get('consult', []);
+        $default = [
             'enabled' => 0,
             'worktime' => '9:00 - 17:00',
-            'qq' => array(
-                array('name' => '', 'number' => ''),
-            ),
-            'qqgroup' => array(
-                array('name' => '', 'number' => '', 'url' => ''),
-            ),
-            'phone' => array(
-                array('name' => '', 'number' => ''),
-            ),
+            'qq' => [
+                ['name' => '', 'number' => ''],
+            ],
+            'qqgroup' => [
+                ['name' => '', 'number' => '', 'url' => ''],
+            ],
+            'phone' => [
+                ['name' => '', 'number' => ''],
+            ],
             'supplier' => '',
             'webchatURI' => '',
             'email' => '',
             'color' => 'default',
-        );
+        ];
 
         $consult = array_merge($default, $consult);
         if ('POST' == $request->getMethod()) {
@@ -117,18 +118,18 @@ class SiteSettingController extends BaseController
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        return $this->render('admin/system/consult-setting.html.twig', array(
+        return $this->render('admin/system/consult-setting.html.twig', [
             'consult' => $consult,
-        ));
+        ]);
     }
 
     public function esBarSettingAction(Request $request)
     {
-        $esBar = $this->getSettingService()->get('esBar', array());
+        $esBar = $this->getSettingService()->get('esBar', []);
 
-        $default = array(
+        $default = [
             'enabled' => 1,
-        );
+        ];
 
         $esBar = array_merge($default, $esBar);
 
@@ -138,14 +139,14 @@ class SiteSettingController extends BaseController
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        return $this->render('admin/system/esbar-setting.html.twig', array(
+        return $this->render('admin/system/esbar-setting.html.twig', [
             'esBar' => $esBar,
-        ));
+        ]);
     }
 
     public function deleteWebchatAction(Request $request)
     {
-        $consult = $this->getSettingService()->get('consult', array());
+        $consult = $this->getSettingService()->get('consult', []);
         if (isset($consult['webchatURI'])) {
             $consult['webchatURI'] = '';
             $this->getSettingService()->set('consult', $consult);
@@ -165,45 +166,45 @@ class SiteSettingController extends BaseController
         $file = $this->getFileService()->getFile($fileId);
         $parsed = $this->getFileService()->parseFileUri($file['uri']);
 
-        $consult = $this->getSettingService()->get('consult', array());
+        $consult = $this->getSettingService()->get('consult', []);
 
         $consult['webchatURI'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/".$parsed['path'];
         $consult['webchatURI'] = ltrim($consult['webchatURI'], '/');
 
         $this->getSettingService()->set('consult', $consult);
 
-        $response = array(
+        $response = [
             'path' => $consult['webchatURI'],
             'url' => $this->container->get('assets.packages')->getUrl($consult['webchatURI']),
-        );
+        ];
 
         return $this->createJsonResponse($response);
     }
 
     public function shareAction(Request $request)
     {
-        $defaultSetting = $this->getSettingService()->get('default', array());
+        $defaultSetting = $this->getSettingService()->get('default', []);
         $default = $this->getDefaultSet();
 
         $defaultSetting = array_merge($default, $defaultSetting);
 
         if ('POST' == $request->getMethod()) {
             $defaultSetting = $request->request->all();
-            $default = $this->getSettingService()->get('default', array());
+            $default = $this->getSettingService()->get('default', []);
             $defaultSetting = array_merge($default, $defaultSetting);
 
             $this->getSettingService()->set('default', $defaultSetting);
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        return $this->render('admin/system/share.html.twig', array(
+        return $this->render('admin/system/share.html.twig', [
             'defaultSetting' => $defaultSetting,
-        ));
+        ]);
     }
 
     protected function getDefaultSet()
     {
-        $default = array(
+        $default = [
             'defaultAvatar' => 0,
             'defaultCoursePicture' => 0,
             'defaultAvatarFileName' => 'avatar',
@@ -216,7 +217,7 @@ class SiteSettingController extends BaseController
             'user_name' => '学员',
             'chapter_name' => '章',
             'part_name' => '节',
-        );
+        ];
 
         return $default;
     }
@@ -234,6 +235,11 @@ class SiteSettingController extends BaseController
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    protected function getCacheService()
+    {
+        return $this->createService('System:CacheService');
     }
 
     protected function getUserFieldService()

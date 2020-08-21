@@ -1,0 +1,32 @@
+{% extends 'item-bank-exercise/header/header-layout.html.twig' %}
+
+{% set page_type = 'member' %}
+
+{% block course_heard_content %}
+    <div class="clearfix js-origin-header-content">
+      {# 课程封面 #}
+      {% block coursesetImg %}
+        <img class="courseset-manage-header__img" src="{{ filepath(exercise.cover.large|default(null), 'item_bank_exercise.png') }}" /> <!-- courseSet.largePicture -->
+      {% endblock %}
+      <div class="courseset-manage-header-info">
+        <div style="margin-top: 21px;" class="courseset-manage-header-info__title text-overflow" {% if exercise.title|length > 21 %}data-toggle="tooltip" title="{{ exercise.title }}" data-container="body" {% endif %}>
+          {% block coursesetTitle %}
+            <span class="cd-dark-major">{{ exercise.title }}</span>
+          {% endblock %}
+        </div>
+        <div>
+          <span class="exercise-deadline">{{ 'course.teaching_plan.expiry_date'|trans }}</span>
+          <span>
+            {% include 'item-bank-exercise/header/member-deadline-info.html.twig' %}
+          </span>
+        </div>
+      </div>
+      <div class="exercise-header-qrcode">
+        <div class="tip">
+          {{ 'site.tips.exercise_qrcode_tips'|trans }}
+        </div>
+        <img src="{{ path('item_bank_exercise_qrcode', { id: exercise.id, tab:'img'}) }}" alt="">
+      </div>
+    </div>
+{% endblock %}
+

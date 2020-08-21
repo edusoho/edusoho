@@ -182,6 +182,30 @@ class ItemCategoryServiceTest extends IntegrationTestCase
         }
     }
 
+    public function testUpdateItemNumAndQuestionNum()
+    {
+        $this->initData();
+        $this->getItemCategoryService()->updateItemNumAndQuestionNum(1, 2, 3);
+        $this->getItemCategoryService()->updateItemNumAndQuestionNum(1, -1, -1);
+        $category = $this->getItemCategoryService()->getItemCategory(1);
+        $this->assertEquals($category['item_num'], 1);
+        $this->assertEquals($category['question_num'], 2);
+    }
+
+    public function testBuildItemNumAndQuestionNumBybankId()
+    {
+        $this->initData();
+        $this->getItemCategoryService()->buildItemNumAndQuestionNumBybankId(1);
+        $categories = $this->getItemCategoryDao()->search([], [], 0, PHP_INT_MAX);
+
+        $this->assertEquals($categories[0]['item_num'], 1);
+        $this->assertEquals($categories[0]['question_num'], 1);
+        $this->assertEquals($categories[1]['item_num'], 2);
+        $this->assertEquals($categories[1]['question_num'], 2);
+        $this->assertEquals($categories[2]['item_num'], 1);
+        $this->assertEquals($categories[2]['question_num'], 1);
+    }
+
     protected function mockItemBankService()
     {
         $this->mockObjectIntoBiz('ItemBank:ItemBank:ItemBankService', [[

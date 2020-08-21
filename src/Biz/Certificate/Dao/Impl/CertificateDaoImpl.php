@@ -14,6 +14,11 @@ class CertificateDaoImpl extends GeneralDaoImpl implements CertificateDao
         return $this->getByFields(['code' => $code]);
     }
 
+    public function findByIds(array $ids = [])
+    {
+        return $this->findInField('id', $ids);
+    }
+
     public function declares()
     {
         return [
@@ -23,6 +28,9 @@ class CertificateDaoImpl extends GeneralDaoImpl implements CertificateDao
                 'id = :id',
                 'name like :nameLike',
                 'targetType = :targetType',
+                'targetId = :targetId',
+                'status = :status',
+                'id NOT IN (:notIds)',
             ],
         ];
     }

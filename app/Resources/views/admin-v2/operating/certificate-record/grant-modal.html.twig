@@ -1,12 +1,10 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
 
-{% do script(['libs/bootstrap-datetimepicker.js', 'libs/jquery-validation.js', 'app/js/admin-v2/operating/certificate-record/grant/index.js']) %}
-
 {% block title %}{{ 'admin.operation_certificate.certificate.record.grant'|trans }}{% endblock %}
 
 {% block body %}
   <h5 class="mll fsl"><b>{{ 'admin.operation_certificate.certificate.record.user'|trans }}</b></h5><br>
-  <p class="mll">{{ 'user.fields.truename_label'|trans }}：{{ user.truename|default('') }}</p><br>
+  <p class="mll">{{ 'user.fields.truename_label'|trans }}：{{ user.truename|default('--') }}</p><br>
   <p class="mll">{{ 'user.fields.username_label'|trans }}：{{ user.nickname }}</p><br>
 
   <h5 class="mll fsl"><b>{{ 'admin.operation_certificate.certificate.record.information'|trans }}</b></h5><br>
@@ -14,21 +12,25 @@
 
   <h5 class="mll fsl"><b>{{ 'admin.operation_certificate.certificate.record.certificate_information'|trans }}</b></h5><br>
   <div class="img-responsive js-certificate-image">
-    <span class="el-loading-text js-loading-text mll" data-url="">{{ ''|trans }}</span>
+    <span class="el-loading-text js-loading-text mll" data-url="{{ path('certificate_image_show', {id: record.id}) }}">{{ 'admin.operation_certificate.certificate.record.img_loading'|trans }}</span>
   </div>
   <br>
   <form class="form-horizontal" id="grant-form" method="post" action="{{ path('admin_v2_certificate_record_grant', {id:record.id}) }}">
     <p class="mll">{{ 'admin.operation_certificate.certificate.record.code'|trans }}： {{ record.certificateCode|default('') }}</p><br>
-    <div class="form-group mlm mbs">
+    <div class="form-group mlm mbs controls">
       <p class="mlm mts" style="float:left">{{ 'admin.operation_certificate.certificate.record.issue_date'|trans }}：</p>
-      <input class="form-control" style="width: 300px" type="text" name="issueTime" id="issueTime" autocomplete="off" value="{{ record.issueTime|date('Y-m-d') }}">
+      <div class="col-sm-6">
+        <input class="form-control" style="width: 300px" type="text" name="issueTime" id="issueTime" autocomplete="off" value="{{ record.issueTime|date('Y-m-d') }}">
+        <p class="help-block has-error explainClass"></p>
+      </div>
     </div>
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   </form>
   <br>
 {% endblock %}
 {% block footer %}
-  <button id="grant-certificate" type="button" class="btn btn-primary pull-left" data-loading-text="{{ 'form.btn.submit.submiting'|trans }}">
+  <script>app.load('certificate/grant');</script>
+  <button id="grant-certificate" type="submit" data-toggle="form-submit" data-target="#grant-form" class="btn btn-primary pull-left" data-loading-text="{{ 'form.btn.submit.submiting'|trans }}">
     {{ 'admin.operation_certificate.certificate.record.grant'|trans }}</button>
   <button type="button" class="btn btn-default btn-link pull-right" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
 {% endblock %}

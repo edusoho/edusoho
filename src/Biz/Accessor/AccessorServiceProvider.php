@@ -2,17 +2,21 @@
 
 namespace Biz\Accessor;
 
-use Biz\Course\Accessor\LearnCourseTaskAccessor;
-use Pimple\Container;
-use Pimple\ServiceProviderInterface;
-use Biz\Course\Accessor\JoinCourseAccessor;
-use Biz\Course\Accessor\JoinCourseMemberAccessor;
-use Biz\Course\Accessor\LearnCourseAccessor;
-use Biz\Course\Accessor\LearnCourseMemberAccessor;
 use Biz\Classroom\Accessor\JoinClassroomAccessor;
 use Biz\Classroom\Accessor\JoinClassroomMemberAccessor;
 use Biz\Classroom\Accessor\LearnClassroomAccessor;
 use Biz\Classroom\Accessor\LearnClassroomMemberAccessor;
+use Biz\Course\Accessor\JoinCourseAccessor;
+use Biz\Course\Accessor\JoinCourseMemberAccessor;
+use Biz\Course\Accessor\LearnCourseAccessor;
+use Biz\Course\Accessor\LearnCourseMemberAccessor;
+use Biz\Course\Accessor\LearnCourseTaskAccessor;
+use Biz\ItemBankExercise\Accessor\JoinExerciseAccessor;
+use Biz\ItemBankExercise\Accessor\JoinExerciseMemberAccessor;
+use Biz\ItemBankExercise\Accessor\LearnExerciseAccessor;
+use Biz\ItemBankExercise\Accessor\LearnExerciseMemberAccessor;
+use Pimple\Container;
+use  Pimple\ServiceProviderInterface;
 
 class AccessorServiceProvider implements ServiceProviderInterface
 {
@@ -55,6 +59,22 @@ class AccessorServiceProvider implements ServiceProviderInterface
             $courseTaskLearnChain->add(new LearnCourseTaskAccessor($biz), 100);
 
             return $courseTaskLearnChain;
+        };
+
+        $biz['item_bank_exercise.join_chain'] = function () use ($biz) {
+            $joinItemBankExerciseChain = new AccessorChain();
+            $joinItemBankExerciseChain->add(new JoinExerciseAccessor($biz), 100);
+            $joinItemBankExerciseChain->add(new JoinExerciseMemberAccessor($biz), 20);
+
+            return $joinItemBankExerciseChain;
+        };
+
+        $biz['item_bank_exercise.learn_chain'] = function () use ($biz) {
+            $learnItemBankExerciseChain = new AccessorChain();
+            $learnItemBankExerciseChain->add(new LearnExerciseAccessor($biz), 100);
+            $learnItemBankExerciseChain->add(new LearnExerciseMemberAccessor($biz), 20);
+
+            return $learnItemBankExerciseChain;
         };
     }
 }
