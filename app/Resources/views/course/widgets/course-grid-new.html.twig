@@ -44,6 +44,9 @@
   </div>
   <div class="course-info">
     <div class="title">
+      {% if can_obtain_certificates(course.id, 'course') %}
+        <a class="certificate-tag" tabindex="0" role="button" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-html="true" title="{{ 'explore.classroom.certificate_tag'|trans }}" data-content="{{ 'course.catalogue.certificate_obtain'|trans }}">{{ 'explore.classroom.certificate_tag_short'|trans }}</a>
+      {% endif %}
       <a class="link-darker" href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" target="_blank">
         {{ courseSet.title }}
       </a>

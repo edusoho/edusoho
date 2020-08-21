@@ -69,6 +69,24 @@ class RecordServiceImpl extends BaseService implements RecordService
         return empty($isObtained) ? false : true;
     }
 
+    public function isCertificatesObtained($userId, $certificateIds)
+    {
+        $obtaineds = $this->getRecordDao()->search(
+            ['statuses' => ['valid', 'expired'], 'userId' => $userId, 'certificateIds' => $certificateIds],
+            [],
+            0,
+            PHP_INT_MAX
+        );
+
+        $isObtaineds = [];
+        $obtaineds = ArrayToolkit::index($obtaineds, 'certificateId');
+        foreach ($certificateIds as $certificateId) {
+            $isObtaineds[$certificateId] = isset($obtaineds[$certificateId]) ? true : false;
+        }
+
+        return $isObtaineds;
+    }
+
     /**
      * @return RecordDao
      */
