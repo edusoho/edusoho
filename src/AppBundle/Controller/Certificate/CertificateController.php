@@ -73,13 +73,7 @@ class CertificateController extends BaseController
 
         $target = $this->getTarget($certificate['targetId'], $certificate['targetType']);
 
-        $isObtained = $this->getRecordService()->isObtained([
-            'userId' => $this->getCurrentUser()->getId(),
-            'certificateId' => $certificate['id'],
-            'targetType' => $certificate['targetType'],
-            'targetId' => $target['id'],
-            'statuses' => ['valid', 'expired'],
-        ]);
+        $isObtained = $this->getRecordService()->isObtained($this->getCurrentUser()->getId(), $certificate['id']);
 
         return $this->render('classroom/certificates/detail.html.twig', [
             'certificate' => $certificate,

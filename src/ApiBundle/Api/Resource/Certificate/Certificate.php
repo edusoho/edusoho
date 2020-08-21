@@ -10,9 +10,7 @@ use Biz\Certificate\CertificateException;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Certificate\Service\CertificateService;
 use Biz\Certificate\Service\RecordService;
-use Biz\Classroom\ClassroomException;
 use Biz\Classroom\Service\ClassroomService;
-use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
 
 class Certificate extends AbstractResource
@@ -34,31 +32,13 @@ class Certificate extends AbstractResource
 
     protected function refineCertificate($certificate)
     {
-        switch ($certificate['targetType']) {
-            case 'classroom':
-                $target = $this->getClassroomService()->getClassroom($certificate['targetId']);
-                if (empty($target)) {
-                    throw ClassroomException::NOTFOUND_CLASSROOM();
-                }
-                $this->getOCUtil()->single($target, array('creator', 'teacherIds', 'assistantIds', 'headTeacherId'));
-                $certificate['classroom'] = $target;
-                break;
-            case 'course':
-                $target = $this->getCourseService()->getCourse($certificate['targetId']);
-                if (empty($target)) {
-                    throw CourseException::NOTFOUND_COURSE();
-                }
-                $this->getOCUtil()->single($target, array('creator', 'teacherIds'));
-                $this->getOCUtil()->single($target, array('courseSetId'), 'courseSet');
-                $certificate['course'] = $target;
-                break;
+        if ($certificate['targetType'] == 'classroom') {
+            $certificate['classroom'] = $this->getClassroomService()->getClassroom($certificate['targetId']);
+        } else {
+            $certificate['course'] = $this->getCourseService()->getCourse($certificate['targetId']);
         }
 
-        $certificate['isObtained'] = $this->getCertificateRecordService()->isObtained([
-            'userId' => $this->getCurrentUser()->getId(),
-            'certificateId' => $certificate['id'],
-            'statuses' => ['valid', 'expired'],
-        ]);
+        $certificate['isObtained'] = $this->getCertificateRecordService()->isObtained($this->getCurrentUser()->getId(), $certificate['id']);
 
         return $certificate;
     }
