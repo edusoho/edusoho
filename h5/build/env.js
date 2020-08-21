@@ -30,4 +30,7 @@ module.exports = {
     url: 'http://item-bank.st.edusoho.cn',
     token: 'h6gga0fthu88sgw8ws84cg8s0owockk',
   },
-}['itembank'];
+  host: {
+    url: 'http://es-dev.com',
+  },
+}['host'];

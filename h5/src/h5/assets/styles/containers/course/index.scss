@@ -352,6 +352,28 @@
 		}
 	}
 
+	&__certificate {
+		padding: vw(20);
+		line-height: vw(20);
+		border-top: vw(15) solid #f5f5f5;
+
+		.certificate-icon {
+			margin-right: vw(4);
+			padding: vw(2) vw(4);
+			color: #fff;
+			font-size: vw(12);
+			line-height: vw(16);
+			vertical-align: vw(2);
+			background-color: #43bc60;
+			border-radius: vw(4);
+		}
+
+		i {
+			position: relative;
+			top: vw(2);
+		}
+	}
+
 	// join-after component
 	.join-after {
 		.van-tabs--line {

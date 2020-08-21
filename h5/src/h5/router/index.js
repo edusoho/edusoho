@@ -617,6 +617,50 @@ const routes = [
         /* webpackChunkName: "more" */ '@/containers/webview/openCourse/more.vue'
       ),
   },
+  {
+    path: '/my/certificate',
+    name: 'my_certificate',
+    meta: {
+      title: '我的证书',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "certificate" */ '@/containers/certificate/my-certificate/index.vue'
+      ),
+  },
+  {
+    path: '/certificate/detail',
+    name: 'certificate_detail',
+    meta: {
+      title: '高级产品经理证书',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "certificate" */ '@/containers/certificate/certificate-detail/index.vue'
+      ),
+  },
+  {
+    path: '/course/certificate/list',
+    name: 'course_certificate_list',
+    meta: {
+      title: '课程证书',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "certificate" */ '@/containers/course/certificate/certificate-list.vue'
+      ),
+  },
+  {
+    path: '/course/certificate/detail',
+    name: 'course_certificate_detail',
+    meta: {
+      title: '高级产品经理证书',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "certificate" */ '@/containers/course/certificate/certificate-detail.vue'
+      ),
+  },
 ];
 
 // 页面刷新，store数据会被清掉，需对token、user重新赋值

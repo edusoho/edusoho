@@ -1,0 +1,139 @@
+.certificate-list__item {
+	position: relative;
+	margin: 0 vw(16);
+	padding: vw(16) 0;
+	border-bottom: vw(1) solid #f5f5f5;
+
+	.certificate-list__item__img {
+		position: absolute;
+		top: 50%;
+		left: 0;
+		width: vw(80);
+		height: vw(45);
+		transform: translateY(-50%);
+
+		img {
+			width: 100%;
+			height: 100%;
+		}
+	}
+
+	.certificate-list__item__info {
+		margin-right: vw(16);
+		margin-left: vw(88);
+
+		.title {
+			color: #000;
+			font-size: vw(14);
+			line-height: vw(20);
+
+			.text {
+				display: inline-block;
+				max-width: vw(190);
+			}
+
+			.acquired {
+				display: inline-block;
+				margin-left: vw(8);
+				padding: 0 vw(2);
+				color: #46c37b;
+				font-size: vw(8);
+				vertical-align: vw(6);
+				background-color: #ccffdc;
+				border-radius: vw(2);
+			}
+
+			.obtain {
+				display: inline-block;
+				margin-left: vw(8);
+				padding: 0 vw(2);
+				color: #ff752b;
+				font-size: vw(8);
+				vertical-align: vw(6);
+				background-color: #ffe5cc;
+				border-radius: vw(2);
+			}
+		}
+
+		.condition {
+			margin-top: vw(8);
+			color: #666;
+			font-size: vw(14);
+			line-height: vw(20);
+		}
+	}
+
+	.certificate-list__item__more {
+		position: absolute;
+		top: 50%;
+		right: 0;
+		width: vw(16);
+		height: vw(16);
+		transform: translateY(-50%);
+
+		i {
+			color: #cdcdcd;
+		}
+	}
+}
+
+.course-certificate-detail {
+	.ccd-item {
+		margin: 0 vw(16);
+		padding: vw(16) 0;
+		border-bottom: vw(1) solid #f5f5f5;
+
+		.ccd-item__title {
+			margin: 0 0 vw(8) 0;
+			color: #333;
+			font-weight: 500;
+			font-size: vw(16);
+			line-height: vw(24);
+		}
+
+		.ccd-item__body {
+			color: #333;
+			font-size: vw(14);
+			line-height: vw(20);
+
+			.acquired {
+				display: inline-block;
+				margin-left: vw(8);
+				padding: 0 vw(2);
+				color: #46c37b;
+				font-size: vw(8);
+				background-color: #ccffdc;
+				border-radius: vw(2);
+			}
+
+			.obtain {
+				display: inline-block;
+				margin-left: vw(8);
+				padding: 0 vw(2);
+				color: #ff752b;
+				font-size: vw(8);
+				background-color: #ffe5cc;
+				border-radius: vw(2);
+			}
+
+			.ccd-item__body__img {
+				width: 100%;
+
+				img {
+					width: 100%;
+					height: 100%;
+					border-radius: vw(8);
+				}
+			}
+
+			.ccd-item__body__content {
+				margin-top: vw(8);
+				text-indent: 2em;
+			}
+		}
+	}
+
+	.ccd-item--noborder {
+		border-bottom: none;
+	}
+}
