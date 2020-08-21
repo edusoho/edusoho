@@ -62,9 +62,14 @@ class RecordServiceImpl extends BaseService implements RecordService
         return $this->getRecordDao()->update($id, $fields);
     }
 
-    public function isObtained($conditions)
+    public function isObtained($userId, $certificateId)
     {
-        $isObtained = $this->getRecordDao()->search($conditions, [], 0, 1);
+        $isObtained = $this->getRecordDao()->search(
+            ['userId' => $userId, 'certificateId' => $certificateId, 'statuses' => ['valid', 'expired']],
+            [],
+            0,
+            1
+        );
 
         return empty($isObtained) ? false : true;
     }

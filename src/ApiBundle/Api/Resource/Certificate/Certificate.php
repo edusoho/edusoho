@@ -4,19 +4,45 @@
 namespace ApiBundle\Api\Resource\Certificate;
 
 use ApiBundle\Api\Annotation\ApiConf;
-use ApiBundle\Api\Annotation\ResponseFilter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Certificate\CertificateException;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Certificate\Service\CertificateService;
 use Biz\Certificate\Service\RecordService;
-use Biz\Classroom\ClassroomException;
 use Biz\Classroom\Service\ClassroomService;
-use Biz\Course\CourseException;
 use Biz\Course\Service\CourseService;
 
 class Certificate extends AbstractResource
 {
+    /**
+     * @ApiConf(isRequiredAuth=false)
+     */
+    public function get(ApiRequest $request, $id)
+    {
+        $certificate = $this->getCertificateService()->get($id);
+        if (empty($certificate)) {
+            throw CertificateException::NOTFOUND_CERTIFICATE();
+        }
+
+        $certificate = $this->refineCertificate($certificate);
+
+        return $certificate;
+    }
+
+    protected function refineCertificate($certificate)
+    {
+        if ($certificate['targetType'] == 'classroom') {
+            $certificate['classroom'] = $this->getClassroomService()->getClassroom($certificate['targetId']);
+        } else {
+            $certificate['course'] = $this->getCourseService()->getCourse($certificate['targetId']);
+        }
+
+        $certificate['isObtained'] = $this->getCertificateRecordService()->isObtained($this->getCurrentUser()->getId(), $certificate['id']);
+
+        return $certificate;
+    }
+
     /**
      * @ApiConf(isRequiredAuth=false)
      */
