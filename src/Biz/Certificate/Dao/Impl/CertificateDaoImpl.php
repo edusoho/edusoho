@@ -19,6 +19,11 @@ class CertificateDaoImpl extends GeneralDaoImpl implements CertificateDao
         return $this->findInField('id', $ids);
     }
 
+    public function findByTargetIdAndTargetType($targetId, $targetType)
+    {
+        return $this->findByFields(['targetId' => $targetId, 'targetType' => $targetType]);
+    }
+
     public function declares()
     {
         return [
