@@ -285,8 +285,6 @@ class SettingController extends BaseController
             'mode' => $setting['mode'],
             'bind' => $bind,
         ]);
-<<<<<<< HEAD
-=======
     }
 
     protected function replaceFile($fileType, $fileId)
@@ -311,7 +309,6 @@ class SettingController extends BaseController
         }
 
         return $license[$fileType];
->>>>>>> project/certificate
     }
 
     /**
