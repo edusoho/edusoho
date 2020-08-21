@@ -1,6 +1,10 @@
 import Face from '../login/face';
+import Drag from 'app/common/drag';
 
 let $form = $('#login-ajax-form');
+let drag = $('#drag-btn').length ? new Drag($('#drag-btn'), $('.js-jigsaw'), {
+  limitType: 'user_login'
+}) : null;
 let $btn = $('.js-submit-login-ajax');
 let validator = $form.validate({
   rules: {
@@ -9,7 +13,15 @@ let validator = $form.validate({
     },
     _password: {
       required: true,
+    },
+    dragCaptchaToken: {
+      required: true,
     }
+  },
+  messages: {
+    dragCaptchaToken: {
+      required: Translator.trans('auth.register.drag_captcha_tips')
+    },
   }
 });
 
@@ -22,6 +34,7 @@ $btn.click((event) => {
     }, 'json').error(function (jqxhr, textStatus, errorThrown) {
       var json = jQuery.parseJSON(jqxhr.responseText);
       $form.find('.alert-danger').html(Translator.trans(json.message)).show();
+      drag.initDragCaptcha();
     });
   }
 });
