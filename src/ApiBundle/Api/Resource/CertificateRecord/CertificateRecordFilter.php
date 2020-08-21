@@ -30,9 +30,10 @@ class CertificateRecordFilter extends Filter
 
     protected function publicFields(&$data)
     {
-        $data['auditTime'] = date('c', $data['auditTime']);
-        $data['expiryTime'] = date('c', $data['expiryTime']);
-        $data['issueTime'] = date('c', $data['issueTime']);
+        '0' !== $data['auditTime'] && $data['auditTime'] = date('c', $data['auditTime']);
+        '0' !== $data['expiryTime'] && $data['expiryTime'] = date('c', $data['expiryTime']);
+        '0' !== $data['issueTime'] && $data['issueTime'] = date('c', $data['issueTime']);
+
         if (!empty($data['certificate'])) {
             $certificateFilter = new CertificateFilter();
             $certificateFilter->setMode(Filter::SIMPLE_MODE);
