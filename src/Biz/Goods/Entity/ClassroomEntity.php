@@ -74,6 +74,11 @@ class ClassroomEntity extends BaseGoodsEntity
         return [null, $vipUser];
     }
 
+    public function getSpecsTeacherIds($goods, $specs)
+    {
+        return $this->getClassroomService()->findTeachers($specs['targetId']);
+    }
+
     /**
      * @param $goods
      * @param $specs

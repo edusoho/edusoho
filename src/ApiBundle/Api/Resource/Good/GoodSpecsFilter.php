@@ -3,6 +3,7 @@
 namespace ApiBundle\Api\Resource\Good;
 
 use ApiBundle\Api\Resource\Filter;
+use ApiBundle\Api\Resource\User\UserFilter;
 use ApiBundle\Api\Util\AssetHelper;
 use AppBundle\Common\ServiceToolkit;
 
@@ -14,7 +15,7 @@ class GoodSpecsFilter extends Filter
         'coinPrice', 'usageMode', 'usageDays', 'usageStartTime',
         'usageEndTime', 'showable', 'buyable', 'buyableStartTime',
         'buyableEndTime', 'buyableMode', 'maxJoinNum', 'services',
-        'isMember', 'learnUrl', 'vipLevelInfo', 'vipUser',
+        'isMember', 'learnUrl', 'vipLevelInfo', 'vipUser', 'teachers',
     ];
 
     protected $publicFields = [
@@ -22,13 +23,16 @@ class GoodSpecsFilter extends Filter
         'price', 'priceObj', 'displayPrice', 'displayPriceObj', 'coinPrice',
         'usageMode', 'usageDays', 'usageStartTime', 'usageEndTime', 'showable',
         'buyable', 'buyableStartTime', 'buyableEndTime', 'buyableMode', 'maxJoinNum',
-        'services', 'isMember', 'learnUrl', 'vipLevelInfo', 'vipUser',
+        'services', 'isMember', 'learnUrl', 'vipLevelInfo', 'vipUser', 'teachers',
     ];
 
     protected function simpleFields(&$data)
     {
         $this->transTime($data);
         $this->transServices($data['services']);
+        $userFilter = new UserFilter();
+        $userFilter->setMode(Filter::SIMPLE_MODE);
+        $userFilter->filters($data['teachers']);
     }
 
     protected function publicFields(&$data)
@@ -36,6 +40,9 @@ class GoodSpecsFilter extends Filter
         $this->transTime($data);
         $this->transServices($data['services']);
         $this->transformImages($data['images']);
+        $userFilter = new UserFilter();
+        $userFilter->setMode(Filter::SIMPLE_MODE);
+        $userFilter->filters($data['teachers']);
     }
 
     private function transTime(&$specs)

@@ -49,7 +49,9 @@ class Good extends AbstractResource
                 $spec['vipLevelInfo'] = $vipLevelInfo;
                 $spec['vipUser'] = $vipUser;
             }
+            $spec['teacherIds'] = $goodsEntity->getSpecsTeacherIds($goods, $spec);
         }
+        $this->getOCUtil()->multiple($goods['specs'], ['teacherIds']);
         $goods['extensions'] = $this->collectGoodsExtensions($goods['product']);
 
         if ($this->getCurrentUser()->isLogin()) {

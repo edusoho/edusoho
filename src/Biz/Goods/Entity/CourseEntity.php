@@ -94,6 +94,13 @@ class CourseEntity extends BaseGoodsEntity
         return [null, $vipUser];
     }
 
+    public function getSpecsTeacherIds($goods, $specs)
+    {
+        $course = $this->getCourseService()->getCourse($specs['targetId']);
+
+        return $course['teacherIds'];
+    }
+
     /**
      * @return CourseSetService
      */
