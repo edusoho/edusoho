@@ -76,7 +76,6 @@ class CertificateEventSubscriber extends EventSubscriber implements EventSubscri
                 $this->getRecordService()->autoIssueCertificates($certificate['id'], [$userId]);
             }
         }
-
     }
 
     /**

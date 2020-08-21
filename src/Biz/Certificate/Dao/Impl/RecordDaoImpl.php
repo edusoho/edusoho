@@ -24,7 +24,7 @@ class RecordDaoImpl extends AdvancedDaoImpl implements RecordDao
     public function findByUserIdsAndCertificateId($userIds, $certificateId)
     {
         if (empty($userIds)) {
-            return array();
+            return [];
         }
 
         $marks = str_repeat('?,', count($userIds) - 1).'?';

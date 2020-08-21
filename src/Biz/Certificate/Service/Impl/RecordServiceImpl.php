@@ -112,7 +112,7 @@ class RecordServiceImpl extends BaseService implements RecordService
         ];
         $createRecords = [];
         $certificateCodes = $this->generateCertificateCode($certificate, count($userIds));
-        foreach ($userIds as $key =>  $userId) {
+        foreach ($userIds as $key => $userId) {
             $defaultRecord['userId'] = $userId;
             $defaultRecord['certificateCode'] = $certificateCodes[$key];
             $createRecords[] = $defaultRecord;
@@ -150,7 +150,7 @@ class RecordServiceImpl extends BaseService implements RecordService
         $existedRecords = $this->getRecordDao()->findByUserIdsAndCertificateId($userIds, $certificate['id']);
         $existedRecords = ArrayToolkit::index($existedRecords, 'userId');
         foreach ($userIds as $userId) {
-            if (empty($existedRecords[$userId]) || $existedRecords[$userId]['status'] != 'reject') {
+            if (empty($existedRecords[$userId]) || 'reject' != $existedRecords[$userId]['status']) {
                 $filterUserIds[] = $userId;
             }
         }
