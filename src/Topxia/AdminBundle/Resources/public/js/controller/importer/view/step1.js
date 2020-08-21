@@ -28,6 +28,7 @@ define(function (require, exports, module) {
                             validated = false;
                         }
                     });
+                    $('#start-import-btn').addClass('disabled');
                     return validated;
                 },
                 success: function (res) {
@@ -53,6 +54,7 @@ define(function (require, exports, module) {
         },
 
         onChangeExcelFile: function (event) {
+            $('#start-import-btn').removeClass('disabled');
             var filename = $(event.currentTarget).val();
             if (filename === '') {
                 return;

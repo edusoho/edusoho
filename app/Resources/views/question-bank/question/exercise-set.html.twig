@@ -1,0 +1,36 @@
+{% extends 'my/my-teaching.html.twig' %}
+
+{% block title %}{{ 'my.teaching.question_bank.info'|trans }} - {{ parent() }}{% endblock %}
+{% set side_nav = 'my-question-bank' %}
+{% set active_tab = 'exercise-set' %}
+
+{% block main %}
+  <div class="panel panel-default panel-col">
+    <div class="question-bank-heading">{{ questionBank.name }}</div>
+  </div>
+
+  <div>
+    {% include 'question-bank/header-navbar.html.twig' %}
+    <div class="panel panel-default panel-col">
+      {% block panel_body %}
+        <div class="panel-body question-list-container js-testpaper-container exercise-set-open">
+          <div class="mtl">
+            <table style="margin: 120px 327px">
+              <tr>
+                <td>
+                  <p class="exercise-set-tip">{{ 'my.teaching.question_bank.is_open'|trans }}</p>
+                  <p class="exercise-set-info">{{ 'my.teaching.question_bank.open_explain'|trans }}</p>
+                </td>
+                <td style="padding-left: 60px;">
+                  <a class="cd-btn cd-btn-primary" style="vertical-align: 13px" data-url="{{ path('item_bank_exercise_create', {id:questionBank.id}) }}" data-toggle="modal" data-target="#modal">
+                    {{ 'my.teaching.question_bank.start_now'|trans }}
+                  </a>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      {% endblock %}
+    </div>
+  </div>
+{% endblock %}

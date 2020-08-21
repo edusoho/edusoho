@@ -1,3 +1,4 @@
+
 define(function(require, exports, module) {
 
     var showMessage = function(type, message, duration) {

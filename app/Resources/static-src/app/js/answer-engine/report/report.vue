@@ -10,6 +10,7 @@
       :showCKEditorData="showCKEditorData"
       :showAttachment="showAttachment"
       :cdnHost="cdnHost"
+      :collect="collect"
       :previewAttachmentCallback="previewAttachmentCallback"
       :downloadAttachmentCallback="downloadAttachmentCallback"
       @previewAttachment="previewAttachment"
@@ -25,6 +26,7 @@
   export default {
     data() {
       return {
+        collect: $("[name='collect']").val() == 1,
         answerShow: $('[name=answer_show]').val(),
         showCKEditorData: {
           publicPath: $('[name=ckeditor_path]').val(),
@@ -39,11 +41,39 @@
       };
     },
     created() {
-        this.assessment = JSON.parse($('[name=assessment]').val());
-        this.answerReport = JSON.parse($('[name=answer_report]').val());
-        this.answerRecord = JSON.parse($('[name=answer_record]').val());
-        this.answerScene = JSON.parse($('[name=answer_scene]').val());
-        this.questionFavorites = JSON.parse($('[name=question_favorites]').val());
+        const that = this;
+        $.ajax({
+          url: '/api/answer_record/'+$("[name='answer_record_id']").val(),
+          type: 'GET',
+          async:false,
+          headers:{
+            'Accept':'application/vnd.edusoho.v2+json'
+          },
+          beforeSend(request) {
+            request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+            request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+          }
+        }).done(function (res) {
+          that.assessment = res.assessment;
+          that.answerReport = res.answer_report;
+          that.answerRecord = res.answer_record;
+          that.answerScene = res.answer_scene;
+        })
+
+        $.ajax({
+          url: '/api/assessments/'+that.assessment.id+'/question_favorites',
+          type: 'GET',
+          async:false,
+          headers:{
+            'Accept':'application/vnd.edusoho.v2+json'
+          },
+          beforeSend(request) {
+            request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+            request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+          }
+        }).done(function (res) {
+          that.questionFavorites = res;
+        })
     },
     methods: {
       doAgainEvent(data) {

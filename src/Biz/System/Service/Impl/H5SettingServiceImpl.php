@@ -181,6 +181,32 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
         return $discoverySetting;
     }
 
+    public function itemBankExerciseFilter($discoverySetting, $portal, $usage = 'show')
+    {
+        if ('condition' == $discoverySetting['data']['sourceType']) {
+            $conditions = ['status' => 'published'];
+            $discoverySetting['data']['categoryId'] > 0 && $conditions['categoryId'] = $discoverySetting['data']['categoryId'];
+
+            $sort = $this->getSortByStr($discoverySetting['data']['sort']);
+            $limit = empty($discoverySetting['data']['limit']) ? 4 : $discoverySetting['data']['limit'];
+
+            if (array_key_exists('recommendedSeq', $sort)) {
+                $sort = array_merge($sort, ['recommendedTime' => 'DESC', 'id' => 'DESC']);
+                $itemBankExercises = $this->getItemBankExerciseService()->search($conditions, $sort, 0, $limit);
+            } elseif (array_key_exists('studentNum', $sort)) {
+                $itemBankExercises = $this->getItemBankExerciseService()->searchOrderByStudentNumAndLastDays($conditions, $discoverySetting['data']['lastDays'], 0, $limit);
+            } elseif (array_key_exists('rating', $sort)) {
+                $itemBankExercises = $this->getItemBankExerciseService()->searchOrderByRatingAndLastDays($conditions, $discoverySetting['data']['lastDays'], 0, $limit);
+            } else {
+                $itemBankExercises = $this->getItemBankExerciseService()->search($conditions, $sort, 0, $limit);
+            }
+        }
+
+        $discoverySetting['data']['items'] = $itemBankExercises;
+
+        return $discoverySetting;
+    }
+
     public function slideShowFilter($discoverySetting, $portal, $usage = 'show')
     {
         foreach ($discoverySetting['data'] as &$slideShow) {
@@ -582,5 +608,13 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
     protected function getOpenCourseService()
     {
         return $this->biz->service('OpenCourse:OpenCourseService');
+    }
+
+    /**
+     * @return \Biz\ItemBankExercise\Service\ExerciseService
+     */
+    protected function getItemBankExerciseService()
+    {
+        return $this->biz->service('ItemBankExercise:ExerciseService');
     }
 }

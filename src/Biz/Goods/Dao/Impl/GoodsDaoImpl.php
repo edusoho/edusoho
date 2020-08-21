@@ -31,4 +31,9 @@ class GoodsDaoImpl extends GeneralDaoImpl implements GoodsDao
     {
         return $this->getByFields(['productId' => $productId]);
     }
+
+    public function findByIds($ids)
+    {
+        return $this->findInField('id', $ids);
+    }
 }

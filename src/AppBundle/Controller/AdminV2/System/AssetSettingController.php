@@ -10,6 +10,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\CloudPlatform\Service\AppService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\System\SettingException;
@@ -25,8 +26,8 @@ class AssetSettingController extends BaseController
 {
     public function paymentAction(Request $request)
     {
-        $payment = $this->getSettingService()->get('payment', array());
-        $default = array(
+        $payment = $this->getSettingService()->get('payment', []);
+        $default = [
             'enabled' => 0,
             'disabled_message' => '由于网校未开通任一支付功能，当前商品不支持购买，请联系网校开通支付功能后再进行购买。',
             'bank_gateway' => 'none',
@@ -47,7 +48,7 @@ class AssetSettingController extends BaseController
             'llpay_key' => '',
             'llpay_accessKey' => '',
             'llpay_secretKey' => '',
-        );
+        ];
         $default['wxpay_mp_secret'] = $this->getWeixinMpFile();
 
         $payment = array_merge($default, $payment);
@@ -69,20 +70,20 @@ class AssetSettingController extends BaseController
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        return $this->render('admin-v2/system/asset-setting/payment.html.twig', array(
+        return $this->render('admin-v2/system/asset-setting/payment.html.twig', [
             'payment' => $payment,
-        ));
+        ]);
     }
 
     public function refundAction(Request $request)
     {
-        $refundSetting = $this->getSettingService()->get('refund', array());
-        $default = array(
+        $refundSetting = $this->getSettingService()->get('refund', []);
+        $default = [
             'maxRefundDays' => 0,
             'applyNotification' => '',
             'successNotification' => '',
             'failedNotification' => '',
-        );
+        ];
 
         $refundSetting = array_merge($default, $refundSetting);
 
@@ -92,16 +93,16 @@ class AssetSettingController extends BaseController
             $this->setFlashMessage('success', 'site.save.success');
         }
 
-        return $this->render('admin-v2/system/asset-setting/refund.html.twig', array(
+        return $this->render('admin-v2/system/asset-setting/refund.html.twig', [
             'refundSetting' => $refundSetting,
-        ));
+        ]);
     }
 
     public function coinAction(Request $request)
     {
-        $coinSettingsSaved = $this->getSettingService()->get('coin', array());
+        $coinSettingsSaved = $this->getSettingService()->get('coin', []);
 
-        $default = array(
+        $default = [
             'coin_enabled' => 0,
             'cash_model' => 'none',
             'cash_rate' => 1,
@@ -113,13 +114,13 @@ class AssetSettingController extends BaseController
             'coin_picture_20_20' => '',
             'coin_picture_10_10' => '',
             'charge_coin_enabled' => '',
-        );
+        ];
         $coinSettingsSaved = array_merge($default, $coinSettingsSaved);
 
         if ('POST' == $request->getMethod()) {
             $fields = $request->request->all();
 
-            $coinSettingsPosted = ArrayToolkit::parts($fields, array(
+            $coinSettingsPosted = ArrayToolkit::parts($fields, [
                 'coin_enabled',
                 'cash_model',
                 'cash_rate',
@@ -131,7 +132,7 @@ class AssetSettingController extends BaseController
                 'coin_picture_20_20',
                 'coin_picture_10_10',
                 'charge_coin_enabled',
-            ));
+            ]);
 
             $coinSettings = array_merge($coinSettingsSaved, $coinSettingsPosted);
 
@@ -148,7 +149,7 @@ class AssetSettingController extends BaseController
 
     public function coinModelAction(Request $request)
     {
-        $coinSettings = $this->getSettingService()->get('coin', array());
+        $coinSettings = $this->getSettingService()->get('coin', []);
 
         if ('POST' == $request->getMethod()) {
             $set = $request->request->all();
@@ -164,15 +165,15 @@ class AssetSettingController extends BaseController
                 goto response;
             }
 
-            $courseSets = $this->getCourseSetService()->searchCourseSets(array(
+            $courseSets = $this->getCourseSetService()->searchCourseSets([
                 'parentId' => 0,
                 'maxCoursePrice_GT' => 0,
-            ), array('updatedTime' => 'desc'), 0, PHP_INT_MAX);
+            ], ['updatedTime' => 'desc'], 0, PHP_INT_MAX);
 
-            return $this->render('admin-v2/system/asset-setting/coin/coin-course-set.html.twig', array(
+            return $this->render('admin-v2/system/asset-setting/coin/coin-course-set.html.twig', [
                 'set' => $set,
                 'items' => $courseSets,
-            ));
+            ]);
         }
 
         if ($request->query->get('set')) {
@@ -181,9 +182,9 @@ class AssetSettingController extends BaseController
 
         response :
 
-        return $this->render('admin-v2/system/asset-setting/coin/coin-model.html.twig', array(
+        return $this->render('admin-v2/system/asset-setting/coin/coin-model.html.twig', [
             'coinSettings' => $coinSettings,
-        ));
+        ]);
     }
 
     public function coinPictureAction(Request $request)
@@ -211,7 +212,7 @@ class AssetSettingController extends BaseController
         list($coin_picture_20_20, $url_20_20) = $this->savePicture($request, 20);
         list($coin_picture_10_10, $url_10_10) = $this->savePicture($request, 10);
 
-        $coin = $this->getSettingService()->get('coin', array());
+        $coin = $this->getSettingService()->get('coin', []);
 
         $coin['coin_picture'] = $coin['coin_picture_50_50'] = $url_50_50;
         $coin['coin_picture_30_30'] = $url_30_30;
@@ -220,7 +221,7 @@ class AssetSettingController extends BaseController
 
         $this->getSettingService()->set('coin', $coin);
 
-        $response = array(
+        $response = [
             'path' => $coin['coin_picture'],
             'path_50_50' => $coin['coin_picture_50_50'],
             'path_30_30' => $coin['coin_picture_30_30'],
@@ -231,7 +232,7 @@ class AssetSettingController extends BaseController
             'coin_picture_30_30' => $this->container->get('assets.packages')->getUrl($coin['coin_picture_30_30']),
             'coin_picture_20_20' => $this->container->get('assets.packages')->getUrl($coin['coin_picture_20_20']),
             'coin_picture_10_10' => $this->container->get('assets.packages')->getUrl($coin['coin_picture_10_10']),
-        );
+        ];
 
         return new Response(json_encode($response));
     }
@@ -248,7 +249,7 @@ class AssetSettingController extends BaseController
 
     public function coinModelSaveAction(Request $request)
     {
-        $coinSettings = $this->getSettingService()->get('coin', array());
+        $coinSettings = $this->getSettingService()->get('coin', []);
 
         if ('POST' == $request->getMethod()) {
             $data = $request->request->all();
@@ -283,27 +284,29 @@ class AssetSettingController extends BaseController
         $set = $conditions['set'];
 
         if ('course' == $type) {
-            $items = $this->getCourseSetService()->searchCourseSets(array(
+            $items = $this->getCourseSetService()->searchCourseSets([
                 'maxCoursePrice_GT' => '0.00',
                 'parentId' => 0,
-            ), array('updatedTime' => 'desc'), 0, PHP_INT_MAX);
+            ], ['updatedTime' => 'desc'], 0, PHP_INT_MAX);
         } elseif ('classroom' == $type) {
             $items = $this->getClassroomService()->searchClassrooms(
-                array('private' => 0, 'price_GT' => '0.00'),
-                array('createdTime' => 'DESC'),
+                ['private' => 0, 'price_GT' => '0.00'],
+                ['createdTime' => 'DESC'],
                 0,
                 PHP_INT_MAX
             );
         } elseif ('vip' == $type) {
             // todo
-            $items = $this->getLevelService()->searchLevels(array('enable' => 1), array('seq' => 'asc'), 0, PHP_INT_MAX);
+            $items = $this->getLevelService()->searchLevels(['enable' => 1], ['seq' => 'asc'], 0, PHP_INT_MAX);
+        } elseif ('exercise' == $type) {
+            $items = $this->getExerciseService()->search(['price_GT' => '0.00'], ['createdTime' => 'desc'], 0, PHP_INT_MAX);
         }
 
-        return $this->render('admin-v2/system/asset-setting/coin/coin-table-setting.html.twig', array(
+        return $this->render('admin-v2/system/asset-setting/coin/coin-table-setting.html.twig', [
             'type' => $conditions['type'],
             'items' => $items,
             'set' => $set,
-        ));
+        ]);
     }
 
     private function getWeixinMpFile()
@@ -325,9 +328,9 @@ class AssetSettingController extends BaseController
 
     protected function settingsRenderedPage($coinSettings)
     {
-        return $this->render('admin-v2/system/asset-setting/coin/coin-settings.html.twig', array(
+        return $this->render('admin-v2/system/asset-setting/coin/coin-settings.html.twig', [
             'coin_settings_posted' => $coinSettings,
-        ));
+        ]);
     }
 
     protected function savePicture(Request $request, $size)
@@ -346,12 +349,12 @@ class AssetSettingController extends BaseController
         $image->resize(new Box($size, $size));
         $filePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_{$size}-{$size}.{$pathinfo['extension']}";
         $imageName = "{$pathinfo['filename']}_{$size}-{$size}.{$pathinfo['extension']}";
-        $image = $image->save($filePath, array('quality' => 100));
+        $image = $image->save($filePath, ['quality' => 100]);
 
         $name = "{$this->container->getParameter('topxia.upload.public_url_path')}/coin/{$imageName}";
         $path = ltrim($name, '/');
 
-        return array($image, $path);
+        return [$image, $path];
     }
 
     protected function updateMaxRate($data)
@@ -365,11 +368,15 @@ class AssetSettingController extends BaseController
             }
         } elseif ('classroom' == $type) {
             foreach ($data as $key => $value) {
-                $this->getClassroomService()->updateClassroom($key, array('maxRate' => $value));
+                $this->getClassroomService()->updateClassroom($key, ['maxRate' => $value]);
             }
         } elseif ('vip' == $type) {
             foreach ($data as $key => $value) {
-                $this->getLevelService()->updateLevel($key, array('maxRate' => $value));
+                $this->getLevelService()->updateLevel($key, ['maxRate' => $value]);
+            }
+        } elseif ('exercise' == $type) {
+            foreach ($data as $key => $value) {
+                $this->getExerciseService()->update($key, ['maxRate' => $value]);
             }
         }
     }
@@ -444,5 +451,13 @@ class AssetSettingController extends BaseController
     protected function getLevelService()
     {
         return $this->createService('VipPlugin:Vip:LevelService');
+    }
+
+    /**
+     * @return ExerciseService
+     */
+    protected function getExerciseService()
+    {
+        return $this->createService('ItemBankExercise:ExerciseService');
     }
 }

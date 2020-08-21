@@ -29,7 +29,9 @@ class TestPaperEventSubscriber extends EventSubscriber implements EventSubscribe
         $answerReport = $event->getSubject();
         $answerRecord = $this->getAnswerRecordService()->get($answerReport['answer_record_id']);
         $activity = $this->getActivityService()->getActivityByAnswerSceneId($answerReport['answer_scene_id']);
-
+        if (empty($activity)) {
+            return;
+        }
         if ('homework' === $activity['mediaType']) {
             $this->notifyHomeworkResult($activity, $answerRecord);
         } elseif ('testpaper' === $activity['mediaType']) {

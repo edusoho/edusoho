@@ -16,6 +16,17 @@ class GoodsDaoTest extends BaseTestCase
         $this->assertEquals($goods, $result);
     }
 
+    public function testFindByIds()
+    {
+        $goods = $this->createGoods();
+        $goods2 = $this->createGoods(['productId' => $goods['productId'] + 1]);
+        $goods3 = $this->createGoods();
+        $goods4 = $this->createGoods(['productId' => $goods['productId'] + 1]);
+
+        $result = $this->getDao()->findByIds([$goods['id'], $goods2['id']]);
+        $this->assertEquals([$goods, $goods2], $result);
+    }
+
     protected function createGoods($goods = [])
     {
         $default = [

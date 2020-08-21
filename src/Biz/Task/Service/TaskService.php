@@ -74,8 +74,6 @@ interface TaskService
     public function countTasks($conditions);
 
     /**
-     * @param array $ids
-     *
      * @return array
      */
     public function findTasksByIds(array $ids);
@@ -110,7 +108,7 @@ interface TaskService
 
     public function tryTakeTask($taskId);
 
-    public function trigger($id, $eventName, $data = array());
+    public function trigger($id, $eventName, $data = []);
 
     /**
      * return next Task that can be learned of the  course plan, or return empty array().
@@ -237,4 +235,6 @@ interface TaskService
     public function countLessonsWithMultipleTasks($courseId);
 
     public function getUserCurrentPublishedLiveTask($userId, $startTime, $endBeforeRange);
+
+    public function canStartTask($taskId);
 }

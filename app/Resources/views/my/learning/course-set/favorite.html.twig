@@ -14,8 +14,8 @@
       {% for courseFavorite in courseFavorites if courseFavorite %}
 
         {% if courseFavorite.targetType == 'course' %}
-          {% set course = data('Course',{courseId:courseFavorite.targetId}) %}
-          {% set courseSet =  data('CourseSet',{id:course.courseSetId}) %}
+          {% set courseSet =  data('CourseSet',{id:courseFavorite.targetId}) %}
+          {% set course = data('Course',{courseId:courseSet.defaultCourseId }) %}
           {% set coursePath = path('course_show', {id: courseSet.defaultCourseId}) %}
           {% include 'my/learning/my-course-set-grid.html.twig' %}
 

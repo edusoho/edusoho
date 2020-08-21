@@ -57,7 +57,7 @@ class PageCourse extends AbstractResource
 
     protected function searchCourseReviews($courseId)
     {
-        $reviews = $this->invokeResource(new ApiRequest(
+        $result = $this->invokeResource(new ApiRequest(
             '/api/reviews',
             'GET',
             [
@@ -67,36 +67,11 @@ class PageCourse extends AbstractResource
                 'offset' => 0,
                 'limit' => self::DEFAULT_DISPLAY_COUNT,
                 'orderBys' => ['updatedTime' => 'DESC'],
+                'needPosts' => true,
             ]
         ));
 
-        $this->getOCUtil()->multiple($reviews, ['userId']);
-        $this->getOCUtil()->multiple($reviews, ['targetId'], 'course');
-
-        foreach ($reviews as &$review) {
-            $review['posts'] = $this->invokeResource(new ApiRequest(
-                '/api/reviews',
-                'GET',
-                [
-                    'parentId' => $review['id'],
-                    'offset' => 0,
-                    'limit' => self::DEFAULT_DISPLAY_COUNT,
-                    'orderBys' => ['updatedTime' => 'DESC'],
-                ]
-            ));
-            $this->getOCUtil()->multiple($review['posts'], ['userId']);
-            $this->getOCUtil()->multiple($review['posts'], ['targetId'], 'course');
-
-            array_filter($review['posts'], function (&$post) {
-                $post['course'] = $post['target'];
-                unset($post['target']);
-            });
-
-            $review['course'] = $review['target'];
-            unset($review['target']);
-        }
-
-        return $reviews;
+        return $result['data'];
     }
 
     private function getCourseService()

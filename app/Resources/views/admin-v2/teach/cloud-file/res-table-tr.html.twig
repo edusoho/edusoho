@@ -47,7 +47,7 @@
                 {{ createdUser.nickname }} {{ 'cloud_file.upload'|trans }}
             {% endif %}
           </div>
-          {% if  cloudFile.usedCount|default(0) == 0 %}
+          {% if (cloudFile.targetType == 'opencoursematerial' and cloudFile.usedCount <= 1) or (cloudFile.targetType != 'opencoursematerial' and cloudFile.usedCount == 0) %}
             <div><span class="label label-default label-default--admin">{{ 'cloud_file.no_use_tips'|trans }}</span></div>
           {% endif %}
         </div>

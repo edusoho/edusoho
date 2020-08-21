@@ -4,6 +4,8 @@ namespace Tests\Unit\File\Service;
 
 use AppBundle\Common\ReflectionUtils;
 use Biz\BaseTestCase;
+use Biz\Course\Dao\CourseMaterialDao;
+use Biz\File\Dao\UploadFileDao;
 use Biz\File\Service\UploadFileService;
 use Biz\User\Service\UserService;
 
@@ -2740,6 +2742,35 @@ class UploadFileServiceTest extends BaseTestCase
         $this->assertEquals(1, $result['ids'][0]);
     }
 
+    public function testUpdateCount()
+    {
+        $this->getCourseMaterialDao()->create(
+            [
+                'courseId' => 1,
+                'lessonId' => 1,
+                'title' => 'test.pptx',
+                'fileId' => 1,
+                'type' => 'course',
+                'createdTime' => time(),
+            ]
+        );
+        $this->getUploadFileDao()->create(
+            [
+                'id' => 1,
+                'filename' => 'test.pptx',
+                'usedCount' => 0,
+                'targetType' => 'course-activity',
+                'targetId' => 1,
+                'createdUserId' => 1,
+                'createdTime' => time(),
+            ]
+        );
+        $this->getUploadFileService()->updateUsedCount(1);
+        $result = $this->getUploadFileService()->getFile(1);
+
+        $this->assertEquals(1, $result['usedCount']);
+    }
+
     protected function createUser($user)
     {
         $userInfo = [];
@@ -2773,5 +2804,13 @@ class UploadFileServiceTest extends BaseTestCase
     protected function getUploadFileDao()
     {
         return $this->createDao('File:UploadFileDao');
+    }
+
+    /**
+     * @return CourseMaterialDao
+     */
+    protected function getCourseMaterialDao()
+    {
+        return $this->createDao('Course:CourseMaterialDao');
     }
 }

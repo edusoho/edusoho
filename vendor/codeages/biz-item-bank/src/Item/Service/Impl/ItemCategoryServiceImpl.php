@@ -211,6 +211,32 @@ class ItemCategoryServiceImpl extends BaseService implements ItemCategoryService
         return [$map, $tree];
     }
 
+    public function updateItemNumAndQuestionNum($id, $diffItemNum = 0, $diffQuestionNum = 0)
+    {
+        return $this->getItemCategoryDao()->wave([$id], ['item_num' => $diffItemNum, 'question_num' => $diffQuestionNum]);
+    }
+
+    public function buildItemNumAndQuestionNumBybankId($bankId)
+    {
+        $items = $this->getItemService()->searchItems(['bank_id' => $bankId], [], 0, PHP_INT_MAX, ['category_id', 'question_num']);
+        if (empty($items)) {
+            return true;
+        }
+        
+        $updateCategories = [];
+        $itemGroups = ArrayToolkit::group($items, 'category_id');
+        foreach ($itemGroups as $categoryId => $itemGroup) {
+            $updateCategories[] = [
+                'id' => $categoryId,
+                'question_num' => array_sum(ArrayToolkit::column($itemGroup, 'question_num')),
+                'item_num' => count($itemGroup),
+            ];
+        }
+
+        $this->getItemCategoryDao()->resetItemNumAndQuestionNumByBankId($bankId);
+        $this->getItemCategoryDao()->batchUpdate(ArrayToolkit::column($updateCategories, 'id'), $updateCategories);
+    }
+
     /**
      * @return ItemBankService
      */
