@@ -651,6 +651,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         if ($lesson) {
             $this->getOpenCourseLessonDao()->update($lesson['id'], ['mediaId' => 0]);
             $this->getUploadFileService()->updateUsedCount($lesson['mediaId']);
+
             return true;
         }
 
