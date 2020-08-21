@@ -471,7 +471,7 @@
                         },
                         {
                             validator(rule, value, callback) {
-                                value <= liveCapacity ? callback() : callback(new Error(Translator.trans('course.manage.max_capacity_hint', {capacity: liveCapacity})));
+                                parseInt(value) <= parseInt(liveCapacity) ? callback() : callback(new Error(Translator.trans('course.manage.max_capacity_hint', {capacity: liveCapacity})));
                             },
                             trigger: 'blur',
                         }
