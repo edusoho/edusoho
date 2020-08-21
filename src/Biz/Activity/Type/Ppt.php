@@ -27,17 +27,17 @@ class Ppt extends Activity
         }
         $fields['mediaId'] = $media['id'];
 
-        $default = array(
+        $default = [
             'finishDetail' => 1,
             'finishType' => 'end',
-        );
+        ];
         $fields = array_merge($default, $fields);
 
-        $ppt = ArrayToolkit::parts($fields, array(
+        $ppt = ArrayToolkit::parts($fields, [
             'mediaId',
             'finishType',
             'finishDetail',
-        ));
+        ]);
 
         $user = $this->getCurrentUser();
         $ppt['createdUserId'] = $user['id'];
@@ -48,16 +48,16 @@ class Ppt extends Activity
         return $ppt;
     }
 
-    public function copy($activity, $config = array())
+    public function copy($activity, $config = [])
     {
         $user = $this->getCurrentUser();
         $ppt = $this->getPptActivityDao()->get($activity['mediaId']);
-        $newPpt = array(
+        $newPpt = [
             'mediaId' => $ppt['mediaId'],
             'finishType' => $ppt['finishType'],
             'finishDetail' => $ppt['finishDetail'],
             'createdUserId' => $user['id'],
-        );
+        ];
 
         return $this->getPptActivityDao()->create($newPpt);
     }
@@ -85,11 +85,11 @@ class Ppt extends Activity
         }
         $fields['mediaId'] = $media['id'];
 
-        $updateFields = ArrayToolkit::parts($fields, array(
+        $updateFields = ArrayToolkit::parts($fields, [
             'mediaId',
             'finishType',
             'finishDetail',
-        ));
+        ]);
 
         $updateFields['updatedTime'] = time();
 
@@ -98,6 +98,9 @@ class Ppt extends Activity
 
     public function delete($targetId)
     {
+        $ppt = $this->getPptActivityDao()->get($targetId);
+        $this->getUploadFileService()->updateUsedCount($ppt['mediaId']);
+
         return $this->getPptActivityDao()->delete($targetId);
     }
 

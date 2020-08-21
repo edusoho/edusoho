@@ -5,6 +5,7 @@ namespace Tests\Unit\OpenCourse\Service;
 use AppBundle\Common\ReflectionUtils;
 use Biz\BaseTestCase;
 use Biz\Content\Service\FileService;
+use Biz\File\Dao\UploadFileDao;
 use Biz\OpenCourse\Service\OpenCourseService;
 use Biz\User\CurrentUser;
 use Biz\User\Service\UserService;
@@ -819,10 +820,55 @@ class OpenCourseServiceTest extends BaseTestCase
     {
         $course = $this->_createOpenCourse();
         $lesson = $this->_createOpenCourseLesson($course);
+        $this->createUploadFile(1, $course);
+        $this->mockBiz('File:UploadFileService', [
+            [
+                'functionName' => 'updateUsedCount',
+                'returnValue' => false,
+                'withParams' => [1],
+            ],
+        ]);
         $resultTrue = $this->getOpenCourseService()->resetLessonMediaId($lesson['id']);
         $this->assertTrue($resultTrue);
         $resultFalse = $this->getOpenCourseService()->resetLessonMediaId(2333);
         $this->assertFalse($resultFalse);
+    }
+
+    private function createUploadFile($id, $course)
+    {
+        return $this->getUploadFileDao()->create([
+            'id' => $id,
+            'globalId' => 0,
+            'status' => 'ok',
+            'hashId' => 'course-activity/2/'.rand(0, 100000).'-fd0zox.mp3',
+            'targetId' => $course['id'],
+            'targetType' => 'course-activity',
+            'filename' => 'test.mp3',
+            'ext' => 'mp3',
+            'convertHash' => 'ch-course-activity/2/'.rand(0, 100000).'-fd0zox.mp3',
+            'storage' => 'local',
+            'convertStatus' => 'none',
+            'isPublic' => 0,
+            'canDownload' => 0,
+            'usedCount' => 1,
+            'updatedUserId' => 1,
+            'createdUserId' => 2,
+            'audioConvertStatus' => 'none',
+            'mp4ConvertStatus' => 'none',
+            'length' => 12,
+            'type' => 'audio',
+            'fileSize' => 12,
+            'createdTime' => time(),
+            'updatedTime' => time(),
+        ]);
+    }
+
+    /**
+     * @return UploadFileDao
+     */
+    private function getUploadFileDao()
+    {
+        return $this->createDao('File:UploadFileDao');
     }
 
     /**
