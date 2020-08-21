@@ -24,6 +24,8 @@ class CertificateRecordFilter extends Filter
         'createdTime',
         'updatedTime',
         'certificate',
+        'imgUrl',
+        'qrcodeUrl',
     ];
 
     protected function publicFields(&$data)
