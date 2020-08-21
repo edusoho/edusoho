@@ -6,4 +6,5 @@ use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
 interface ProductReportDao extends AdvancedDaoInterface
 {
+    public function getByOrderIdAndType($orderId, $type);
 }

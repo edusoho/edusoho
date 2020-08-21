@@ -20,6 +20,8 @@ interface ProductReportService
 
     public function getById($id);
 
+    public function getByOrderIdAndType($orderId, $type);
+
     public function updateFailedReason($id, $reason);
 
     public function updateStatusToSent($id);

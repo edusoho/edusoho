@@ -42,14 +42,8 @@ class S2B2CService extends BaseService
      *
      * @return array
      */
-    public function reportRefundOrder($order, $orderRefund, $orderRefundItems)
+    public function reportRefundOrder($params)
     {
-        $params = array(
-            'merchantOrder' => $order,
-            'merchantOrderRefund' => $orderRefund,
-            'merchantOrderRefundItems' => $orderRefundItems,
-        );
-
         return $this->sendRequest('/order/report/refund', $params, 'POST');
     }
 

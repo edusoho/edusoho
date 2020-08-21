@@ -21,7 +21,7 @@ class ProductReportServiceImpl extends BaseService implements ProductReportServi
         $config = $this->getS2B2CFacadeService()->getS2B2CConfig();
         $user = $this->getUserService()->getUser($fields['userId']);
 
-        return $this->ProductReportDao()->create([
+        return $this->getProductReportDao()->create([
             'supplierId' => $config['supplierId'],
             'productId' => $fields['s2b2cProductId'],
             'type' => $fields['type'],
@@ -35,7 +35,16 @@ class ProductReportServiceImpl extends BaseService implements ProductReportServi
 
     public function getById($id)
     {
-        return $this->ProductReportDao()->get($id);
+        return $this->getProductReportDao()->get($id);
+    }
+
+    public function getByOrderIdAndType($orderId, $type)
+    {
+        if ($orderId <= 0) {
+            return [];
+        }
+
+        return $this->getProductReportDao()->getByOrderIdAndType($orderId, $type);
     }
 
     public function updateFailedReason($id, $reason)
@@ -45,7 +54,7 @@ class ProductReportServiceImpl extends BaseService implements ProductReportServi
             $this->createNewException(S2B2CException::SETTLEMENT_REPORT_NOT_FOUND());
         }
 
-        return $this->ProductReportDao()->update($id, [
+        return $this->getProductReportDao()->update($id, [
             'status' => self::STATUS_FAILED,
             'reason' => $reason,
         ]);
@@ -58,7 +67,7 @@ class ProductReportServiceImpl extends BaseService implements ProductReportServi
             $this->createNewException(S2B2CException::SETTLEMENT_REPORT_NOT_FOUND());
         }
 
-        return $this->ProductReportDao()->update($id, ['status' => self::STATUS_SENT]);
+        return $this->getProductReportDao()->update($id, ['status' => self::STATUS_SENT]);
     }
 
     public function updateStatusToSucceed($id)
@@ -68,13 +77,13 @@ class ProductReportServiceImpl extends BaseService implements ProductReportServi
             $this->createNewException(S2B2CException::SETTLEMENT_REPORT_NOT_FOUND());
         }
 
-        return $this->ProductReportDao()->update($id, ['status' => self::STATUS_SUCCEED]);
+        return $this->getProductReportDao()->update($id, ['status' => self::STATUS_SUCCEED]);
     }
 
     /**
      * @return ProductReportDao
      */
-    protected function ProductReportDao()
+    protected function getProductReportDao()
     {
         return $this->biz->dao('S2B2C:ProductReportDao');
     }

@@ -9,6 +9,11 @@ class ProductReportDaoImpl extends AdvancedDaoImpl implements ProductReportDao
 {
     protected $table = 's2b2c_product_report';
 
+    public function getByOrderIdAndType($orderId, $type)
+    {
+        return $this->getByFields(['orderId' => $orderId, 'type' => $type]);
+    }
+
     public function declares()
     {
         return [
