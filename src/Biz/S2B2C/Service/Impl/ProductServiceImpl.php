@@ -432,6 +432,18 @@ class ProductServiceImpl extends BaseService implements ProductService
         $this->getS2B2CProductDao()->update($courseSetProduct['id'], ['changelog' => $localChangeLogs]);
         $this->getS2B2CProductDao()->wave([$courseSetProduct['id']], ['remoteVersion' => 1]);
 
+        $this->addAutoUpdateJob();
+
+        return true;
+    }
+
+    /**
+     * 及时更新
+     *
+     * @return bool
+     */
+    protected function addAutoUpdateJob()
+    {
         if (self::UPDATE_TYPE_PROMPTLY == $this->getSettingService()->get('productUpdateType', self::UPDATE_TYPE_MANUAL)
             && empty($this->getSchedulerService()->getJobByName('productUpdateVersion'))) {
             $this->addUpdateProductJob(time());
@@ -460,6 +472,8 @@ class ProductServiceImpl extends BaseService implements ProductService
 
         $this->getS2B2CProductDao()->update($courseSetProduct['id'], ['changelog' => $localChangeLogs]);
         $this->getS2B2CProductDao()->wave([$courseSetProduct['id']], ['remoteVersion' => 1]);
+
+        $this->addAutoUpdateJob();
 
         return true;
     }
