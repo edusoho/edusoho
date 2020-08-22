@@ -6,7 +6,6 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Certificate\CertificateException;
-use Biz\Certificate\Service\AuditService;
 use Biz\Certificate\Service\RecordService;
 use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,35 +15,42 @@ class CertificateAuditController extends BaseController
     public function indexAction(Request $request)
     {
         $conditions = $request->query->all();
+        $conditions = $this->searchConditions($conditions);
 
         $paginator = new Paginator(
-                $request,
-                $this->getAuditService()->count($conditions),
-                20
-            );
+            $request,
+            $this->getRecordService()->count($conditions),
+            20
+        );
 
-        $certificates = $this->getAuditService()->search(
-                $conditions,
-                ['createdTime' => 'desc'],
-                $paginator->getOffsetCount(),
-                $paginator->getPerPageCount()
-            );
+        $records = $this->getRecordService()->search(
+            $conditions,
+            ['createdTime' => 'desc'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
 
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($certificates, 'userId'));
-        $reviewers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($certificates, 'auditUserId'));
+        $userIds = $records ? ArrayToolkit::column($records, 'userId') : [-1];
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        $userProfiles = $this->getUserService()->findUserProfilesByIds($userIds);
+        foreach ($userProfiles as $key => $userProfile) {
+            $users[$key]['truename'] = $userProfile['truename'];
+        }
+
+        $reviewers = $this->getUserService()->findUsersByIds($records ? ArrayToolkit::column($records, 'auditUserId') : [-1]);
 
         return $this->render('admin-v2/operating/certificate-audit/index.html.twig', [
-                'certificates' => $certificates,
-                'paginator' => $paginator,
-                'users' => ArrayToolkit::index($users, 'id'),
-                'reviewers' => ArrayToolkit::index($reviewers, 'id'),
-                'targets' => $this->searchTargetTitle($certificates),
-            ]);
+            'certificates' => $records,
+            'paginator' => $paginator,
+            'users' => ArrayToolkit::index($users, 'id'),
+            'reviewers' => ArrayToolkit::index($reviewers, 'id'),
+            'targets' => $this->searchTargetTitle($records),
+        ]);
     }
 
     public function detailAction(Request $request, $id)
     {
-        $record = $this->getAuditService()->get($id);
+        $record = $this->getRecordService()->get($id);
         if (empty($record)) {
             $this->createNewException(CertificateException::NOTFOUND_RECORD());
         }
@@ -58,31 +64,33 @@ class CertificateAuditController extends BaseController
         ]);
     }
 
-    public function auditAction(Request $request, $id)
+    public function submitAction(Request $request, $id)
     {
         $fields = $request->request->all();
-
-        $fields['auditTime'] = time();
-        if ('reject' != $fields['status']) {
-            unset($fields['rejectReason']);
-        }
-        if ('none' != $fields['status']) {
-            $user = $this->getUser();
-            $fields['auditUserId'] = $user['id'];
-        }
-        $this->getAuditService()->update($id, $fields);
+        $auditType = $request->get('status');
 
         $record = $this->getRecordService()->get($id);
         if (empty($record)) {
             $this->createNewException(CertificateException::NOTFOUND_RECORD);
         }
-        if ('valid' == $record['status']) {
+
+        if ('none' != $fields['status']) {
+            $user = $this->getUser();
+            $fields['auditUserId'] = $user['id'];
+            $fields['auditTime'] = time();
+        }
+
+        if ('valid' == $auditType) {
+            $this->getRecordService()->validCertificate($id, $fields);
+        } elseif ('reject' == $auditType) {
+            $this->getRecordService()->rejectCertificate($id, $fields);
+        } elseif ('none' == $auditType) {
+            $this->getRecordService()->toBeAuditCertificate($id, $fields);
+        } else {
             $this->createNewException(CertificateException::FORBIDDEN_AUDIT_RECORD);
         }
 
         if ($request->isMethod('POST')) {
-            $this->getAuditService()->update($id, $fields);
-
             return $this->createJsonResponse(true);
         }
 
@@ -91,49 +99,54 @@ class CertificateAuditController extends BaseController
         ]);
     }
 
-    protected function searchTargetTitle($certificates)
+    protected function searchTargetTitle($records)
     {
-        $courses = [];
-        $classrooms = [];
+        $courseRecords = [];
+        $classroomRecords = [];
         $targets = [];
-        foreach ($certificates as $key => $certificate) {
-            if ('course' == $certificate['targetType']) {
-                $courses[$key] = $certificate['targetId'];
-            } else {
-                $courses[$key] = '';
+
+        foreach ($records as $key => $record) {
+            if ('course' == $record['targetType']) {
+                $courseRecords[$key] = $record;
             }
-            if ('classroom' == $certificate['targetType']) {
-                $classrooms[$key] = $certificate['targetId'];
-            } else {
-                $classrooms[$key] = '';
+            if ('classroom' == $record['targetType']) {
+                $classroomRecords[$key] = $record;
             }
         }
 
-        $strategyCourses = $this->getCertificateStrategy('course')->findTargetsByIds($courses);
-        $strategyClassrooms = $this->getCertificateStrategy('classroom')->findTargetsByIds($classrooms);
+        $courses = $this->getCertificateStrategy('course')->findTargetsByIds(ArrayToolkit::column($records, 'targetId'));
+        $classrooms = $this->getCertificateStrategy('classroom')->findTargetsByIds(ArrayToolkit::column($records, 'targetId'));
 
-        foreach ($certificates as $key => $certificate) {
-            foreach ($strategyCourses as $strategyCourse) {
-                if ($strategyCourse['id'] == $certificate['targetId'] && 'course' == $certificate['targetType']) {
-                    $targets[$key + 1] = $strategyCourse;
-                }
+        foreach ($records as $key => $record) {
+            if ('course' == $record['targetType']) {
+                $targets[$key + 1] = empty($courses[$record['targetId']]) ? null : $courses[$record['targetId']];
             }
-            foreach ($strategyClassrooms as $strateClassroom) {
-                if ($strateClassroom['id'] == $certificate['targetId'] && 'classroom' == $certificate['targetType']) {
-                    $targets[$key + 1] = $strateClassroom;
-                }
+            if ('classroom' == $record['targetType']) {
+                $targets[$key + 1] = empty($classrooms[$record['targetId']]) ? null : $classrooms[$record['targetId']];
             }
         }
 
         return $targets;
     }
 
-    /**
-     * @return AuditService
-     */
-    protected function getAuditService()
+    protected function searchConditions($conditions)
     {
-        return $this->createService('Certificate:AuditService');
+        if (!empty($conditions['keyword']) && !empty($conditions['keywordType'])) {
+            if (in_array($conditions['keywordType'], ['nickname', 'verifiedMobile', 'email'])) {
+                $users = $this->getUserService()->searchUsers([$conditions['keywordType'] => $conditions['keyword']], [], 0, PHP_INT_MAX, ['id']);
+                $conditions['userIds'] = $users ? ArrayToolkit::column($users, 'id') : [-1];
+            }
+            if ('truename' == $conditions['keywordType']) {
+                $users = $this->getUserService()->searchUserProfiles([$conditions['keywordType'] => $conditions['keyword']], [], 0, PHP_INT_MAX, ['id']);
+                $conditions['userIds'] = $users ? ArrayToolkit::column($users, 'id') : [-1];
+            }
+        } else {
+            return [];
+        }
+        unset($conditions['keywordType']);
+        unset($conditions['keyword']);
+
+        return $conditions;
     }
 
     /**

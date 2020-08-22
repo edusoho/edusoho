@@ -1101,7 +1101,7 @@ admin_v2_certificate_examine_audit_detail:
 
 admin_v2_certificate_examine_audit:
     path: /certificate/audit/{id}/submit
-    defaults: { _controller: AppBundle:AdminV2/Operating/CertificateAudit:audit }
+    defaults: { _controller: AppBundle:AdminV2/Operating/CertificateAudit:submit }
 
 # 运营-内容运营-网站公告管理
 admin_v2_announcement:

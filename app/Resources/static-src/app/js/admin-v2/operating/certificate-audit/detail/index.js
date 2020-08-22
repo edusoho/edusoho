@@ -11,7 +11,7 @@ export default class Detail {
     $btn.on('click', function () {
       $.post($form.data('saveUrl'), $form.serialize(), function (data) {
         notify('success', Translator.trans('admin_v2.certificate.record.audit.success_hint'));
-        // window.location.reload();
+        window.location.reload();
       }).error(function () {
         notify('success', Translator.trans('admin_v2.certificate.record.audit.failure_hint'));
       });

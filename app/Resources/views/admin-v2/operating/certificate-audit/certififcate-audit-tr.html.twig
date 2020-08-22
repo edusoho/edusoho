@@ -1,17 +1,18 @@
 {% import "common/data-dict-macro.html.twig" as dict_macro %}
 <tr>
   <td>{{ user.truename|default('--') }}<br><span class="text-muted text-sm">{{ user.nickname|default() }}</span></td>
-{#  <td>{{ dict_macro.certificateTypes(certificate.targetType) }}</td>#}
   <td>{{ target.title|default('--') }}</td>
   <td>
-    {{ certificate.auditTime|date('Y-n-d H:i:s') }}
+    {{ certificate.issueTime|date('Y-m-d H:i:s') }}
   </td>
   <td>{{ dict_text('certificateAuditStatus', certificate.status) }}
   </td>
   <td>
-    {{ certificate.auditTime|date('Y-n-d H:i:s') }}
+    {{ certificate.auditTime|date('Y-m-d H:i:s') }}
   </td>
-  <td>{{ reviewer.truename|default('--') }}<br><span class="text-muted text-sm">{{ reviewer.nickname|default() }}</span></td>
+  <td>
+    {{ reviewer.nickname|default('--') }}
+  </td>
   <td>
     <div class="btn-group">
       {% if has_permission('admin_v2_certificate_manage') %}

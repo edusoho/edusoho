@@ -22,6 +22,10 @@ class CertificateException extends AbstractException
 
     const FORBIDDEN_AUDIT_RECORD = 4037707;
 
+    const FORBIDDEN_VALID_RECORD = 4037708;
+
+    const FORBIDDEN_REJECT_RECORD = 4037709;
+
     public $messages = [
         4047701 => 'exception.certificate_template.notfound_template',
         4047702 => 'exception.certificate_template.notfound_certificate',
@@ -30,5 +34,7 @@ class CertificateException extends AbstractException
         4037705 => 'exception.certificate.record.forbidden_cancel',
         4037706 => 'exception.certificate.record.forbidden_regrant',
         4037707 => 'exception.certificate.audit.forbidden_audit',
+        4037708 => 'exception.certificate.valid.forbidden_audit',
+        4037709 => 'exception.certificate.reject.forbidden_audit',
     ];
 }

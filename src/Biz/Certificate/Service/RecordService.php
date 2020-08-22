@@ -19,4 +19,10 @@ interface RecordService
     public function isObtained($userId, $certificateId);
 
     public function isCertificatesObtained($userId, $certificateIds);
+
+    public function validCertificate($id, $fields);
+
+    public function rejectCertificate($id, $fields);
+
+    public function toBeAuditCertificate($id, $fields);
 }

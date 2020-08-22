@@ -92,6 +92,55 @@ class RecordServiceImpl extends BaseService implements RecordService
         return $isObtaineds;
     }
 
+    public function validCertificate($id, $fields)
+    {
+        $record = $this->get($id);
+        if (empty($record)) {
+            $this->createNewException(CertificateException::NOTFOUND_RECORD);
+        }
+
+        if ('valid' == $record['status'] || 'cancelled' == $record['status'] || 'expired' == $record['status']) {
+            $this->createNewException(CertificateException::FORBIDDEN_VALID_RECORD);
+        }
+
+        $fields['rejectReason'] = '';
+        $fields = ArrayToolkit::parts($fields, ['auditTime', 'auditUserId', 'status', 'rejectReason']);
+
+        return $this->getRecordDao()->update($id, $fields);
+    }
+
+    public function rejectCertificate($id, $fields)
+    {
+        $record = $this->get($id);
+        if (empty($record)) {
+            $this->createNewException(CertificateException::NOTFOUND_RECORD);
+        }
+
+        if ('reject' != $record['status'] && 'none' != $record['status'] && !empty($record['status'])) {
+            $this->createNewException(CertificateException::FORBIDDEN_REJECT_RECORD);
+        }
+
+        $fields = ArrayToolkit::parts($fields, ['auditTime', 'auditUserId', 'status', 'rejectReason']);
+
+        return $this->getRecordDao()->update($id, $fields);
+    }
+
+    public function toBeAuditCertificate($id, $fields)
+    {
+        $record = $this->get($id);
+        if (empty($record)) {
+            $this->createNewException(CertificateException::NOTFOUND_RECORD);
+        }
+
+        if ('valid' == $record['status'] || 'cancelled' == $record['status'] || 'expired' == $record['status']) {
+            $this->createNewException(CertificateException::FORBIDDEN_AUDIT_RECORD);
+        }
+
+        $fields = ArrayToolkit::parts($fields, ['auditTime', 'auditUserId', 'status', 'rejectReason']);
+
+        return $this->getRecordDao()->update($id, $fields);
+    }
+
     /**
      * @return RecordDao
      */
