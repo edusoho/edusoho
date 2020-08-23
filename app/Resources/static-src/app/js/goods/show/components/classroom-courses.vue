@@ -10,8 +10,8 @@
           {{ 'classroom.courses.plan'|trans }}：{{ course.displayedTitle }}
           <span>{{ 'classroom.courses.lesson_num'|trans({num:course.compulsoryTaskNum}) }}</span>
         </p>
-        <div v-if="course.teachers[0]" class="clearfix task-content__teacher">
-          <div class="pull-left teacher-info">
+        <div class="clearfix task-content__teacher">
+          <div v-if="course.teachers[0]" class="pull-left teacher-info">
             <img :src="course.teachers[0].avatar.small" alt="">
             <span>{{ course.teachers[0].nickname }}</span>
           </div>
