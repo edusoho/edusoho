@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Favorite;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Favorite\Service\FavoriteService;
+use Biz\Goods\Service\GoodsService;
 
 class Favorite extends AbstractResource
 {
@@ -15,6 +16,11 @@ class Favorite extends AbstractResource
             'targetId' => $request->request->get('targetId'),
             'userId' => $this->getCurrentUser()->getId(),
         ];
+        //商品目前有明确的分类，兼容收藏按照课程和班级分开的功能要求
+        if ('goods' === $favorite['targetType']) {
+            $goods = $this->getGoodsService()->getGoods($favorite['targetId']);
+            $favorite['goodsType'] = empty($goods) ? '' : $goods['type'];
+        }
 
         return $this->getFavoriteService()->createFavorite($favorite);
     }
@@ -34,5 +40,13 @@ class Favorite extends AbstractResource
     protected function getFavoriteService()
     {
         return $this->service('Favorite:FavoriteService');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    private function getGoodsService()
+    {
+        return $this->biz->service('Goods:GoodsService');
     }
 }

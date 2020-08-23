@@ -2892,6 +2892,7 @@ user.homepage.learning_courses: 'Learning Courses'
 user.homepage.learning_question_bank: 'Learning Question bank'
 user.homepage.learning_classrooms: 'Learning in %classroomName%'
 user.homepage.favorite_courses: Favorites
+user.homepage.favorite_goods: Favorites
 user.homepage.joined_group: 'Enrolled Groups'
 user.homepage.following_fan: Following/Fans
 user.homepage.introductions.empty: 'No introduction'
@@ -2900,6 +2901,7 @@ user.homepage.learning_courses.empty: 'No learning course.'
 user.homepage.learning_question_bank.empty: 'No learning question bank.'
 user.homepage.teaching_question_bank.empty: 'No teaching question bank.'
 user.homepage.favorite_courses.empty: 'No bookmarked course.'
+user.homepage.favorite_goods.empty: 'No bookmarked goods.'
 user.homepage.teaching_classrooms.empty: 'No teaching %classroomName%'
 user.homepage.learning_classrooms.empty: 'No learning %classroomName%'
 user.homepage.joined_group.join: 'Enroll Groups'
@@ -9878,3 +9880,7 @@ classroom.subtitle_label: Subtitle
 classroom.basic_setting: Basic Setting
 classroom.cover_crop.title: Classroom Cover
 exception.s2b2c_product.adopt_failed: Adopt fail,Supplier is editing
+
+
+goods.minimum_price.unit: From %price%%unit%
+goods.origin_price.unit: %price%%unit%

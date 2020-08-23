@@ -73,6 +73,7 @@ class FavoriteDaoImpl extends GeneralDaoImpl implements FavoriteDao
                 'targetType = :targetType',
                 'targetType IN ( :targetTypes)',
                 'targetId = :targetId',
+                'goodsType = :goodsType',
             ],
         ];
     }

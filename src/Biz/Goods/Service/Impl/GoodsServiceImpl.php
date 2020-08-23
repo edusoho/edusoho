@@ -240,8 +240,10 @@ class GoodsServiceImpl extends BaseService implements GoodsService
             'maxJoinNum',
             'services',
         ]);
+        $specs = $this->getGoodsSpecsDao()->update($id, $goodsSpecs);
+        $this->updateGoodsMinAndMaxPrice($specs['goodsId']);
 
-        return $this->getGoodsSpecsDao()->update($id, $goodsSpecs);
+        return $specs;
     }
 
     public function changeGoodsSpecsPrice($specsId, $price)
