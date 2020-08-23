@@ -37,10 +37,7 @@ class GoodComponent extends AbstractResource
      */
     public function search(ApiRequest $request, $id)
     {
-        $componentTypes = $request->query->get('componentTypes');
-        if (empty($componentTypes)) {
-            return [];
-        }
+        $componentTypes = ['mpQrCode', 'teachers', 'recommendGoods', 'classroomCourses'];
 
         return $this->getComponentsByTypes($id, $componentTypes);
     }
@@ -52,11 +49,6 @@ class GoodComponent extends AbstractResource
 
         $components = [];
         foreach ($types as $type) {
-            if ('isFavorite' === $type) {
-                $components['isFavorite'] = $this->getIsFavoriteComponent($product);
-                continue;
-            }
-
             if ('mpQrCode' === $type) {
                 $components['mpQrCode'] = $this->getMpQrCodeComponent();
                 continue;
@@ -95,6 +87,9 @@ class GoodComponent extends AbstractResource
     private function getMpQrCodeComponent()
     {
         $goodsSetting = $this->getSettingService()->get('goods_setting', []);
+        if (empty($goodsSetting['leading_join_enabled'])) {
+            return [];
+        }
 
         return [
             'title' => $goodsSetting['leading']['label'],

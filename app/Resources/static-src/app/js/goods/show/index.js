@@ -5,6 +5,8 @@ Vue.config.productionTip = false;
 new Vue({
   render: createElement => createElement(Goods,{
     props: {
+      goods: $('#show-product-page').data('goods'),
+      componentsData: $('#show-product-page').data('componentsData'),
       currentUserId: $('#show-product-page').data('currentUserId'),
       targetId: $('#show-product-page').data('targetId'),
       isUserLogin: $('#show-product-page').data('isUserLogin'),

@@ -5,7 +5,7 @@
         </detail>
 
         <div class="product-info clearfix" v-if="goods.id">
-            <div class="product-info__left info-left pull-left" :class="{'all-width': !goods.hasExtension}">
+            <div class="product-info__left info-left pull-left">
                 <div v-if="isFixed" class="fixed">
                     <div class="cd-container clearfix">
                         <ul class="info-left__nav pull-left">
@@ -63,7 +63,7 @@
             </div>
 
             <div class="product-info__right pull-right">
-                <teacher :teachers="componentsData.teachers"/>
+                <teacher :teachers="currentSku.teachers"/>
                 <qr :mpQrcode="componentsData.mpQrCode"/>
                 <recommend :goods="goods" :recommendGoods="componentsData.recommendGoods"/>
             </div>
@@ -99,6 +99,14 @@
             }
         },
         props: {
+            goods: {
+                type: Object,
+                default: null,
+            },
+            componentsData: {
+                type: Array,
+                default: null,
+            },
             currentUserId: {
                 type: Number,
                 default: null
@@ -189,8 +197,8 @@
                     }
                 }
 
-                this.goods.hasExtension = true;
-                this.initGoodsComponents();
+                // this.goods.hasExtension = true;
+                // this.initGoodsComponents();
             },
             handleScroll() {
                 let eleTop = this.$refs.infoLeftNav.offsetTop + this.$refs.infoLeftNav.offsetHeight;
@@ -229,14 +237,32 @@
             },
         },
         created() {
-            this.getGoodsInfo();
+
+            if (this.goods.type == 'classroom') {
+                return this.changeSku(this.goods.product.target.id);
+            }
+
+            if (this.goods.type == 'course' && this.targetId) {
+                return this.changeSku(this.targetId);
+            }
+
+            if (this.goods.product.target.defaultCourseId) {
+                return this.changeSku(this.goods.product.target.defaultCourseId);
+            }
         },
         watch: {
             goods(newVal, oldVal) {
+                this.goods = newVal;
                 if (!oldVal.id && newVal.id) {
                     window.addEventListener("scroll", this.handleScroll);
                 }
-            }
+            },
+            componentsData: {
+                immediate: true,
+                handler(val) {
+                    this.componentsData = val;
+                },
+            },
         },
         destroyed() {
             window.removeEventListener('scroll', this.handleScroll);

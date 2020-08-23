@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Goods;
 
+use ApiBundle\Api\ApiRequest;
 use AppBundle\Controller\BaseController;
 use Biz\Common\CommonException;
 use Biz\Goods\Service\GoodsService;
@@ -12,11 +13,22 @@ class GoodsController extends BaseController
 {
     public function showAction(Request $request, $id)
     {
-        $goods = $this->getGoodsService()->getGoods($id);
-//        $this->
+        $goodsApiRequest = new ApiRequest("/api/goods/{$id}", 'GET');
+        $goods = $this->container->get('api_resource_kernel')->handleApiRequest($goodsApiRequest);
+        $goodsComponentsApiRequest = new ApiRequest("/api/goods/{$id}/components", 'GET');
+        $goodsComponents = $this->container->get('api_resource_kernel')->handleApiRequest($goodsComponentsApiRequest);
+        foreach ($goodsComponents as $goodsComponent) {
+            if (!empty($goodsComponent)) {
+//                $goods['hasExtension']
+            }
+        }
+
         return $this->render(
             'goods/show.html.twig',
-            []
+            [
+                'goods' => $goods,
+                'goodsComponents' => $goodsComponents,
+            ]
         );
     }
 
