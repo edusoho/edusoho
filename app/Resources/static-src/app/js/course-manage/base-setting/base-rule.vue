@@ -145,7 +145,7 @@
                     {{'site.data.people'|trans}}
                     <a class="cd-text-sm cd-link-primary" :href="contentCourseRuleUrl" target="_blank">{{'course.plan_setup.member_numbers.view_rule_btn'|trans}}</a>
                 </el-col>
-                <div v-if="parseInt(baseRuleForm.maxStudentNum) > parseInt(liveCapacity)" class="el-form-item__error">
+                <div v-if="liveCapacity !== null && parseInt(baseRuleForm.maxStudentNum) > parseInt(liveCapacity)" class="el-form-item__error">
                     {{'course.manage.max_capacity_hint'|trans({capacity: liveCapacity})}}
                 </div>
             </el-form-item>
@@ -376,7 +376,7 @@
                 this.course.expiryStartDate, this.course.expiryEndDate
             ]
 
-            let liveCapacity = 0;
+            let liveCapacity = null;
             this.$axios.get(this.liveCapacityUrl).then((response) => {
                 this.liveCapacity = response.data.capacity;
             });
