@@ -241,7 +241,8 @@ class UserController extends BaseController
 
         $conditions = [
             'userId' => $user['id'],
-            'targetTypes' => ['course', 'openCourse', 'goods'],
+            'targetTypes' => ['goods'],
+            'goodsType' => $request->query->get('goodsType', 'course'),
         ];
 
         $paginator = new Paginator(

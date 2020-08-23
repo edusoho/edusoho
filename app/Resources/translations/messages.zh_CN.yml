@@ -3327,6 +3327,7 @@ user.homepage.learning_courses: 在学课程
 user.homepage.learning_question_bank: 在学题库
 user.homepage.learning_classrooms: 在学%classroomName%
 user.homepage.favorite_courses: 收藏课程
+user.homepage.favorite_goods: 收藏商品
 user.homepage.joined_group: 加入小组
 user.homepage.following_fan: 关注 / 粉丝
 
@@ -3346,6 +3347,9 @@ user.homepage.teaching_question_bank.empty: 无在教的题库
 
 #个人主页模块-收藏课程
 user.homepage.favorite_courses.empty: 无收藏的课程
+
+#个人主页模块-收藏商品
+user.homepage.favorite_goods.empty: 无收藏的商品
 
 #个人主页模块-在教班级
 user.homepage.teaching_classrooms.empty: 无在教的%classroomName%
@@ -11105,3 +11109,6 @@ exception.goods.not_found: 商品未找到
 exception.specs.not_found: 商品规格未找到
 exception.goods.forbidden_manage: 无管理商品权限
 exception.s2b2c_product.adopt_failed: 采用失败，内容正在编辑中，请稍后再试
+
+goods.minimum_price.unit: %price%%unit%起
+goods.origin_price.unit: %price%%unit%

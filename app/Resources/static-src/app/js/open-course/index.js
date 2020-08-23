@@ -1,5 +1,6 @@
 import ThreadShowWidget from 'app/js/thread/thread-show';
 import notify from 'common/notify';
+import Api from 'common/api';
 
 const main = {
   init: function () {
@@ -33,44 +34,32 @@ const main = {
       var text;
 
       if (isFavorited) {
-        $.ajax({
-          type: "DELETE",
-          beforeSend: function (request) {
-            request.setRequestHeader("Accept", 'application/vnd.edusoho.v2+json');
-            request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr('content'));
-          },
-          url: '/api/favorite?' + 'targetType=' + $(this).data('targetType') + '&targetId=' + $(this).data('targetId'),
-          success: function (resp) {
-            self.parent().next().html(Translator.trans('open_course.collect'));
-            self.parent().removeClass('active');
-          },
-          error: function () {
-            $('#modal').html();
-            $('#modal').load(self.data('loginUrl'));
-            $('#modal').modal('show');
-          }
-        });
-      } else {
-        $.ajax({
-          type: "POST",
+        Api.favorite.unfavorite({
           data: {
             'targetType': $(this).data('targetType'),
             'targetId': $(this).data('targetId'),
-          },
-          beforeSend: function (request) {
-            request.setRequestHeader("Accept", 'application/vnd.edusoho.v2+json');
-            request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr('content'));
-          },
-          url: '/api/favorite',
-          success: function (resp) {
-            self.parent().next().html(Translator.trans('open_course.collected'));
-            self.parent().addClass('active');
-          },
-          error: function () {
-            $('#modal').html();
-            $('#modal').load(self.data('loginUrl'));
-            $('#modal').modal('show');
           }
+        }).then((res) => {
+          self.parent().next().html(Translator.trans('open_course.collect'));
+          self.parent().removeClass('active');
+        }).error(() => {
+          $('#modal').html();
+          $('#modal').load(self.data('loginUrl'));
+          $('#modal').modal('show');
+        });
+      } else {
+        Api.favorite.favorite({
+          data: {
+            'targetType': $(this).data('targetType'),
+            'targetId': $(this).data('targetId'),
+          }
+        }).then((res) => {
+          self.parent().next().html(Translator.trans('open_course.collected'));
+          self.parent().addClass('active');
+        }).error(() => {
+          $('#modal').html();
+          $('#modal').load(self.data('loginUrl'));
+          $('#modal').modal('show');
         });
       }
     });
