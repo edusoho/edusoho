@@ -286,8 +286,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
                 $this->setClassroomCourses($classroomId, $newCourseIds);
             }
-            $this->refreshCoursesSeq($classroomId, $courseIds);
-
+            if (!empty($newCourseIds)) {
+                $this->refreshCoursesSeq($classroomId, $newCourseIds);
+            }
             $this->dispatchEvent(
                 'classroom.course.create',
                 new Event($classroom, ['courseIds' => $courseIds])
