@@ -145,6 +145,9 @@
                     {{'site.data.people'|trans}}
                     <a class="cd-text-sm cd-link-primary" :href="contentCourseRuleUrl" target="_blank">{{'course.plan_setup.member_numbers.view_rule_btn'|trans}}</a>
                 </el-col>
+                <div v-if="parseInt(baseRuleForm.maxStudentNum) > parseInt(liveCapacity)" class="el-form-item__error">
+                    {{'course.manage.max_capacity_hint'|trans({capacity: liveCapacity})}}
+                </div>
             </el-form-item>
             <div v-else>
                 <el-form-item :label="'course.marketing_setup.preview.set_task'|trans({'taskName': taskName})">
@@ -375,10 +378,11 @@
 
             let liveCapacity = 0;
             this.$axios.get(this.liveCapacityUrl).then((response) => {
-                liveCapacity = response.data.capacity;
+                this.liveCapacity = response.data.capacity;
             });
 
             return {
+                liveCapacity: liveCapacity,
                 course: {},
                 courseSet: {},
                 lessonWatchLimit: false,
@@ -469,12 +473,12 @@
                             message: Translator.trans('validate.positive_integer.message'),
                             trigger: 'blur'
                         },
-                        {
-                            validator(rule, value, callback) {
-                                parseInt(value) <= parseInt(liveCapacity) ? callback() : callback(new Error(Translator.trans('course.manage.max_capacity_hint', {capacity: liveCapacity})));
-                            },
-                            trigger: 'blur',
-                        }
+                        // {
+                        //     validator(rule, value, callback) {
+                        //         parseInt(value) <= parseInt(liveCapacity) ? callback() : callback(new Error(Translator.trans('course.manage.max_capacity_hint', {capacity: liveCapacity})));
+                        //     },
+                        //     trigger: 'blur',
+                        // }
                     ],
                 },
                 canFreeActivityTypes: '',
