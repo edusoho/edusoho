@@ -221,38 +221,18 @@ class ClassroomController extends BaseController
         return $member;
     }
 
+    /**
+     * @param $id
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     *                                                            商品介绍跳转到商品页
+     */
     public function introductionAction($id)
     {
-        $classroom = $this->getClassroomService()->getClassroom($id);
-        $introduction = $classroom['about'];
-        $user = $this->getCurrentUser();
-        $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
+        $product = $this->getProductService()->getProductByTargetIdAndType($id, 'classroom');
+        $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
 
-        if (!$this->getClassroomService()->canLookClassroom($classroom['id'])) {
-            return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroom['title']}，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
-        }
-
-        if (!$classroom) {
-            $classroomDescription = [];
-        } else {
-            $classroomDescription = $classroom['about'];
-            $classroomDescription = strip_tags($classroomDescription, '');
-            $classroomDescription = preg_replace('/ /', '', $classroomDescription);
-        }
-
-        $layout = 'classroom/layout.html.twig';
-
-        if ($member && !$member['locked']) {
-            $layout = 'classroom/join-layout.html.twig';
-        }
-
-        return $this->render('classroom/introduction.html.twig', [
-            'introduction' => $introduction,
-            'layout' => $layout,
-            'classroom' => $classroom,
-            'member' => $member,
-            'classroomDescription' => $classroomDescription,
-        ]);
+        return $this->redirect($this->generateUrl('goods_show', ['id' => $goods['id']]));
     }
 
     public function teachersBlockAction($classroom)

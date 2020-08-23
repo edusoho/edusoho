@@ -9884,3 +9884,4 @@ exception.s2b2c_product.adopt_failed: Adopt fail,Supplier is editing
 
 goods.minimum_price.unit: From %price%%unit%
 goods.origin_price.unit: %price%%unit%
+goods.description: Goods description

@@ -11112,3 +11112,4 @@ exception.s2b2c_product.adopt_failed: 采用失败，内容正在编辑中，请
 
 goods.minimum_price.unit: %price%%unit%起
 goods.origin_price.unit: %price%%unit%
+goods.description: 商品介绍

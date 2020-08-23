@@ -68,12 +68,12 @@
             </span>
           </h2>
           <div class="metas class-info__metas mb0">
-            {% if setting('classroom.show_review', '1') == 1 %}
-              <div class="score">
-                {{ web_macro.star(classroom.rating) }}
-                <span>({{ classroom.ratingNum }}{{ 'classroom.reviews'|trans }})</span>
-              </div>
-            {% endif %}
+{#            {% if setting('classroom.show_review', '1') == 1 %}#}
+{#              <div class="score">#}
+{#                {{ web_macro.star(classroom.rating) }}#}
+{#                <span>({{ classroom.ratingNum }}{{ 'classroom.reviews'|trans }})</span>#}
+{#              </div>#}
+{#            {% endif %}#}
 
             {% if 'auditor' in member.role %}
               <div class="price">
@@ -105,10 +105,10 @@
             {% endif %}
           {% endif %}
 
-          <div class="class-info__serve class-serve hidden-sm hidden-xs">
-            <div class="serve-label">{{ 'classroom.showServices'|trans }}</div>
-            {% include 'classroom/service-block.html.twig' with {'services':classroom.service} %}
-          </div>
+{#          <div class="class-info__serve class-serve hidden-sm hidden-xs">#}
+{#            <div class="serve-label">{{ 'classroom.showServices'|trans }}</div>#}
+{#            {% include 'classroom/service-block.html.twig' with {'services':classroom.service} %}#}
+{#          </div>#}
         </div>
 
         <div class="class-operation">
