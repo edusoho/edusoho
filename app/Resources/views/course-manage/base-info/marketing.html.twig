@@ -29,8 +29,8 @@
 {% endif %}
 
 <div class="hidden" id="js-course-info"
-     data-hint-message="{% if course.platform|default('self') == 'self' %}validate_old.positive_currency.message{% else %}course_manage.positive_currency.message{% endif %}"
-     data-min-price="{% if course.platform|default('self') == 'self' %}0{% else %}0.01{% endif %}">
+     data-hint-message="validate_old.positive_currency.message"
+     data-min-price="0">
 </div>
 
 <div class="form-group">
