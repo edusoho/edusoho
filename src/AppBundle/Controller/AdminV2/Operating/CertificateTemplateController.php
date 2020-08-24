@@ -194,7 +194,6 @@ class CertificateTemplateController extends BaseController
         $base64 = $this->getCertificateImageBase64($certificateTemplate);
 
         return $this->createJsonResponse($base64);
-
     }
 
     protected function getCertificateImageBase64($template)
