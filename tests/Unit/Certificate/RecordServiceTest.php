@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Unit\Certificate;
-
 
 use Biz\BaseTestCase;
 use Biz\Certificate\Dao\RecordDao;
