@@ -1,5 +1,6 @@
 <template>
   <div>
+    <e-loading v-if="isLoading" />
     <div class="certificate-detail">
       <h3 class="certificate-detail__title">认证对象</h3>
       <div class="certificate-user clearfix">
@@ -87,6 +88,9 @@ export default {
     },
   },
   computed: {
+    ...mapState({
+      isLoading: state => state.isLoading,
+    }),
     ...mapState(['user']),
   },
   methods: {

@@ -65,8 +65,6 @@ export default {
     })
       .then(res => {
         this.certificate = res;
-        console.log(this.$route.meta.title);
-        this.$route.meta.title = res.name;
       })
       .catch(err => {
         Toast.fail(err.message);

@@ -60,7 +60,6 @@ export default {
       },
     })
       .then(res => {
-        console.log(res.data);
         this.certificates = res.data;
       })
       .catch(err => {
