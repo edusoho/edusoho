@@ -1104,8 +1104,8 @@ admin_v2_certificate_examine_audit:
     defaults: { _controller: AppBundle:AdminV2/Operating/CertificateAudit:submit }
 
 admin_v2_certificate_template_img_show:
-  path:  /certificate/template/{id}/img
-  defaults: { _controller: AppBundle:AdminV2/Operating/CertificateTemplate:imgShow }
+    path:  /certificate/template/{id}/img
+    defaults: { _controller: AppBundle:AdminV2/Operating/CertificateTemplate:imgShow }
 
 # 运营-内容运营-网站公告管理
 admin_v2_announcement:
