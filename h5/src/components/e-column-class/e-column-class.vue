@@ -18,7 +18,8 @@
     </div>
     <div class="column-class-right">
       <div class="column-class-right__top text-overflow">
-        <span class="certificate-icon">证</span>{{ course.header }}
+        <span class="certificate-icon" v-if="course.hasCertificate">证</span
+        >{{ course.header }}
       </div>
       <div class="column-class-right__center  text-overflow">
         <div v-if="course.middle.value" v-html="course.middle.html" />
@@ -35,5 +36,8 @@
 import eClassMixins from '@/mixins/eClass';
 export default {
   mixins: [eClassMixins],
+  created() {
+    console.log(this.course);
+  },
 };
 </script>

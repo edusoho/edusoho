@@ -1,21 +1,25 @@
 <template>
   <div class="certificate-list">
+    <e-loading v-if="isLoading" />
+
     <div
       class="certificate-list__item"
-      v-for="(certificate, index) in certificate"
+      v-for="(certificate, index) in certificates"
       :key="index"
-      @click="toCourseCertificateDetail"
+      @click="toCourseCertificateDetail(certificate.id)"
     >
       <div class="certificate-list__item__img">
-        <img :src="certificate.img" alt="" />
+        <img src="static/images/certificate.png" alt="" />
       </div>
       <div class="certificate-list__item__info">
         <p class="title">
           <span class="text-overflow text">{{ certificate.name }}</span>
-          <span class="acquired" v-if="certificate.isGet">已获取</span>
+          <span class="acquired" v-if="certificate.isObtained">已获取</span>
           <span class="obtain" v-else>待获取</span>
         </p>
-        <p class="condition text-overflow">{{ certificate.condition }}</p>
+        <p class="condition text-overflow">
+          通过参加课程线上考试可以获得
+        </p>
       </div>
       <div class="certificate-list__item__more">
         <i class="van-icon van-icon-arrow pull-right" />
@@ -25,60 +29,38 @@
 </template>
 
 <script>
+import Api from '@/api';
+import { mapState } from 'vuex';
+import { Toast } from 'vant';
+
 export default {
   data() {
     return {
-      certificate: [
-        {
-          img:
-            'https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3892521478,1695688217&fm=26&gp=0.jpg',
-          name: '证书名称',
-          isGet: false,
-          condition: '通过参加课程线上考试可以获得',
-        },
-        {
-          img:
-            'https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3892521478,1695688217&fm=26&gp=0.jpg',
-          name: '证书名称',
-          isGet: false,
-          condition: '通过参加课程线上考试可以获得',
-        },
-        {
-          img:
-            'https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3892521478,1695688217&fm=26&gp=0.jpg',
-          name: '证书名称',
-          isGet: false,
-          condition: '通过参加课程线上考试可以获得',
-        },
-        {
-          img:
-            'https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3892521478,1695688217&fm=26&gp=0.jpg',
-          name: '证书名称',
-          isGet: true,
-          condition: '通过参加课程线上考试可以获得',
-        },
-        {
-          img:
-            'https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3892521478,1695688217&fm=26&gp=0.jpg',
-          name: '证书名称',
-          isGet: true,
-          condition: '通过参加课程线上考试可以获得',
-        },
-        {
-          img:
-            'https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3892521478,1695688217&fm=26&gp=0.jpg',
-          name: '证书名称证书名称证书名称证书名称证书名称证书名称证书名称',
-          isGet: true,
-          condition:
-            '通过参加课程线上考试可以获得通过参加课程线上考试可以获得通过参加课程线上考试可以获得通过参加课程线上考试可以获得',
-        },
-      ],
+      certificates: [],
     };
   },
   methods: {
-    toCourseCertificateDetail() {
-      this.$router.push({ path: '/course/certificate/detail' });
+    toCourseCertificateDetail(id) {
+      this.$router.push({ path: `/course/certificate/detail/${id}` });
     },
+  },
+  created() {
+    Api.certificates({
+      params: {
+        targetId: this.$route.params.id,
+      },
+    })
+      .then(res => {
+        this.certificates = res.data;
+      })
+      .catch(err => {
+        Toast.fail(err.message);
+      });
+  },
+  computed: {
+    ...mapState({
+      isLoading: state => state.isLoading,
+    }),
   },
 };
 </script>

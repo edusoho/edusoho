@@ -640,7 +640,7 @@ const routes = [
       ),
   },
   {
-    path: '/course/certificate/list',
+    path: '/course/certificate/list/:id',
     name: 'course_certificate_list',
     meta: {
       title: '课程证书',
@@ -651,7 +651,7 @@ const routes = [
       ),
   },
   {
-    path: '/course/certificate/detail',
+    path: '/course/certificate/detail/:id',
     name: 'course_certificate_detail',
     meta: {
       title: '高级产品经理证书',

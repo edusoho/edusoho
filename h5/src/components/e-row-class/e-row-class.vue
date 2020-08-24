@@ -19,7 +19,8 @@
 
     <div class="row-class-right">
       <div class="row-class-right__top text-overflow">
-        <span class="certificate-icon">证</span>{{ course.header }}
+        <span class="certificate-icon" v-if="course.hasCertificate">证</span
+        >{{ course.header }}
       </div>
       <div class="row-class-right__center text-overflow">
         <div v-if="course.middle.value" v-html="course.middle.html" />

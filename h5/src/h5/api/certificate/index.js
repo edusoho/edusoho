@@ -19,8 +19,8 @@ export default [
   },
   {
     // 获取证书详情
-    name: 'certificates1',
-    url: '/certificates/1',
+    name: 'certificatesDetail',
+    url: '/certificates/{certificateId}',
     method: 'GET',
   },
   {
