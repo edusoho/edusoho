@@ -1,16 +1,15 @@
 <template>
   <div>
+    <e-loading v-if="isLoading" />
     <div class="certificate-detail">
       <h3 class="certificate-detail__title">认证对象</h3>
       <div class="certificate-user clearfix">
         <div class="certificate-user__img pull-left">
-          <img
-            src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1596102446781&di=e0009ca29f72350c4455832286c64f3a&imgtype=0&src=http%3A%2F%2Fa2.att.hudong.com%2F86%2F10%2F01300000184180121920108394217.jpg"
-          />
+          <img v-if="user.avatar" :src="user.avatar.small" />
         </div>
         <div class="certificate-user__info pull-left">
-          <p>姓名：{{ certificate.truename }}</p>
-          <p>用户名：houyizhen</p>
+          <p>姓名：暂时未调整</p>
+          <p>用户名：{{ user.nickname }}</p>
         </div>
       </div>
     </div>
@@ -18,15 +17,30 @@
     <div class="certificate-detail">
       <h3 class="certificate-detail__title">证书信息</h3>
       <div class="certificate-info">
-        <p class="certificate-info__item">
+        <p class="certificate-info__item" v-if="certificate.certificate">
           证书名称：{{ certificate.certificate.name }}
         </p>
-        <p class="certificate-info__item">证书编号：ABCDEF778248308458</p>
         <p class="certificate-info__item">
-          发证日期：{{ certificate.createdTime | formatSlashTime }}
+          证书编号：{{ certificate.certificateCode }}
+        </p>
+        <p class="certificate-info__item">
+          发证日期：{{ certificate.issueTime | formatSlashTime }}
         </p>
         <p class="certificate-info__item certificate-info__time">
-          有效日期：<span>长期有效</span>
+          有效日期：<span
+            v-if="certificate.expiryTime == 0"
+            class="item-right__time--green"
+            >长期有效</span
+          ><span
+            v-else-if="new Date(certificate.expiryTime) < new Date()"
+            class="item-right__time--red"
+            >{{ certificate.expiryTime | formatSlashTime }}
+            <span>已过期</span>
+          </span>
+          <span v-else class="item-right__time--green"
+            >{{ certificate.expiryTime | formatSlashTime }}
+            <span>有效中</span></span
+          >
         </p>
         <div class="certificate-info__img">
           <img :src="certificate.qrcodeUrl" />
@@ -51,6 +65,8 @@
 <script>
 import Api from '@/api';
 import { Toast } from 'vant';
+import { mapState } from 'vuex';
+
 export default {
   data() {
     return {
@@ -71,6 +87,12 @@ export default {
         .join('/');
     },
   },
+  computed: {
+    ...mapState({
+      isLoading: state => state.isLoading,
+    }),
+    ...mapState(['user', 'vipSwitch']),
+  },
   methods: {
     onDownload(id) {
       Api.certificateDownload({
@@ -85,7 +107,6 @@ export default {
     },
   },
   created() {
-    console.log('id' + this.$route.params.id);
     Api.certificateRecords({
       query: { certificateRecordId: this.$route.params.id },
     })
@@ -96,6 +117,7 @@ export default {
       .catch(err => {
         Toast.fail(err.message);
       });
+    console.log(this.user);
   },
 };
 </script>

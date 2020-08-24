@@ -1,29 +1,28 @@
 <template>
   <div class="certificate-item">
+    <e-loading v-if="isLoading" />
     <div class="certificate-item__left">
-      <img src="" alt="" />
+      <img src="static/images/certificate.png" alt="" />
     </div>
     <div class="certificate-item__right item-right">
       <p class="item-right__title">{{ certificate.certificate.name }}</p>
       <p class="item-right__time">
-        获取时间：{{ certificate.createdTime | formatSlashTime }}
+        获取时间：{{ certificate.issueTime | formatSlashTime }}
       </p>
       <p class="item-right__time">
-        有效时间：
-        <span
-          v-if="certificate.certificateCode == '长期有效'"
+        有效时间：<span
+          v-if="certificate.expiryTime == 0"
           class="item-right__time--green"
           >长期有效</span
-        >
-        <span
-          v-else-if="certificate.certificateCode == '已过期'"
+        ><span
+          v-else-if="new Date(certificate.expiryTime) < new Date()"
           class="item-right__time--red"
-        >
-          2020.08.24
+          >{{ certificate.expiryTime | formatSlashTime }}
           <span>已过期</span>
         </span>
         <span v-else class="item-right__time--green"
-          >2020.08.24<span>有效中</span></span
+          >{{ certificate.expiryTime | formatSlashTime }}
+          <span>有效中</span></span
         >
       </p>
       <div
@@ -37,6 +36,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   props: {
     certificate: {
@@ -66,6 +67,11 @@ export default {
         path: `/certificate/detail/${id}`,
       });
     },
+  },
+  computed: {
+    ...mapState({
+      isLoading: state => state.isLoading,
+    }),
   },
 };
 </script>

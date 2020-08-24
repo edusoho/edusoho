@@ -1,5 +1,6 @@
 <template>
   <div class="certificate">
+    <e-loading v-if="isLoading" />
     <div
       class="certificate-year"
       v-for="(certificate, index) in certificates"
@@ -24,7 +25,9 @@
 <script>
 import CertificateItem from '../certificate-item/index';
 import Api from '@/api';
+import { mapState } from 'vuex';
 import { Toast } from 'vant';
+
 export default {
   data() {
     return {
@@ -42,6 +45,11 @@ export default {
       .catch(err => {
         Toast.fail(err.message);
       });
+  },
+  computed: {
+    ...mapState({
+      isLoading: state => state.isLoading,
+    }),
   },
 };
 </script>

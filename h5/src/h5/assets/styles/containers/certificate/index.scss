@@ -155,8 +155,20 @@
 		.certificate-info__time {
 			margin-bottom: 0;
 
-			span {
-				color: #46c37b;
+			.item-right__time--red {
+				color: #ff2b2b;
+
+				span {
+					margin-left: vw(8);
+				}
+			}
+
+			.item-right__time--green {
+				color: #43c794;
+
+				span {
+					margin-left: vw(8);
+				}
 			}
 		}
 
