@@ -2,18 +2,18 @@
   <div class="certificate">
     <div
       class="certificate-year"
-      v-for="(item, index) in certificate"
+      v-for="(certificate, index) in certificates"
       :key="index"
-      :class="[index + 1 == certificate.length ? 'lastChild' : '']"
+      :class="[index + 1 == certificates.length ? 'lastChild' : '']"
     >
-      <p class="certificate-year__title">{{ item.year }}</p>
+      <p class="certificate-year__title">{{ certificate.issueYear }}</p>
       <certificate-item
-        v-for="(certificate, ind) in item.certificate"
-        :key="ind"
-        :certificate="certificate"
+        v-for="(certificateItem, ind) in certificate.certificateRecords"
+        :key="certificateItem.id"
+        :certificate="certificateItem"
         :class="[
           ind == 0 ? 'firstChild' : '',
-          ind + 1 == item.certificate.length ? 'lastChild' : '',
+          ind + 1 == certificate.certificateRecords.length ? 'lastChild' : '',
         ]"
       >
       </certificate-item>
@@ -23,72 +23,25 @@
 
 <script>
 import CertificateItem from '../certificate-item/index';
+import Api from '@/api';
+import { Toast } from 'vant';
 export default {
   data() {
     return {
-      certificate: [
-        {
-          year: '2020',
-          certificate: [
-            {
-              img:
-                'https://dss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2534506313,1688529724&fm=26&gp=0.jpg',
-              name: '证书名称',
-              getTime: '1280977330000',
-              currentTime: '1280977330000',
-            },
-          ],
-        },
-        {
-          year: '2019',
-          certificate: [
-            {
-              img:
-                'https://dss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2534506313,1688529724&fm=26&gp=0.jpg',
-              name: '证书名称',
-              getTime: '1280977330000',
-              currentTime: '1280977330000',
-            },
-            {
-              img:
-                'https://dss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2534506313,1688529724&fm=26&gp=0.jpg',
-              name: '证书名称',
-              getTime: '1280977330000',
-              currentTime: '1280977330000',
-            },
-            {
-              img:
-                'https://dss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2534506313,1688529724&fm=26&gp=0.jpg',
-              name: '证书名称',
-              getTime: '1280977330000',
-              currentTime: '1280977330000',
-            },
-          ],
-        },
-        {
-          year: '2018',
-          certificate: [
-            {
-              img:
-                'https://dss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2534506313,1688529724&fm=26&gp=0.jpg',
-              name: '证书名称',
-              getTime: '1280977330000',
-              currentTime: '1280977330000',
-            },
-            {
-              img:
-                'https://dss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2534506313,1688529724&fm=26&gp=0.jpg',
-              name: '证书名称',
-              getTime: '1280977330000',
-              currentTime: '1280977330000',
-            },
-          ],
-        },
-      ],
+      certificates: [],
     };
   },
   components: {
     CertificateItem,
+  },
+  created() {
+    Api.meCertificate()
+      .then(res => {
+        this.certificates = res.data;
+      })
+      .catch(err => {
+        Toast.fail(err.message);
+      });
   },
 };
 </script>

@@ -1,20 +1,37 @@
 <template>
   <div class="certificate-item">
     <div class="certificate-item__left">
-      <img :src="certificate.img" alt="" />
+      <img src="" alt="" />
     </div>
     <div class="certificate-item__right item-right">
-      <p class="item-right__title">{{ certificate.name }}</p>
+      <p class="item-right__title">{{ certificate.certificate.name }}</p>
       <p class="item-right__time">
-        获取时间：{{ certificate.getTime | formatSlashTime }}
+        获取时间：{{ certificate.createdTime | formatSlashTime }}
       </p>
       <p class="item-right__time">
-        有效时间：<span class="item-right__time--green"
-          >{{ certificate.currentTime | formatSlashTime
-          }}<span>已过期</span></span
+        有效时间：
+        <span
+          v-if="certificate.certificateCode == '长期有效'"
+          class="item-right__time--green"
+          >长期有效</span
+        >
+        <span
+          v-else-if="certificate.certificateCode == '已过期'"
+          class="item-right__time--red"
+        >
+          2020.08.24
+          <span>已过期</span>
+        </span>
+        <span v-else class="item-right__time--green"
+          >2020.08.24<span>有效中</span></span
         >
       </p>
-      <div class="item-right__show" @click="toCertificateDetail">查看证书</div>
+      <div
+        class="item-right__show"
+        @click="toCertificateDetail(certificate.id)"
+      >
+        查看证书
+      </div>
     </div>
   </div>
 </template>
@@ -30,8 +47,8 @@ export default {
     },
   },
   filters: {
-    formatSlashTime(timestamp) {
-      const date = new Date(timestamp * 1);
+    formatSlashTime(time) {
+      const date = new Date(time);
       const year = date.getFullYear();
       const month = date.getMonth() + 1;
       const day = date.getDate();
@@ -44,9 +61,9 @@ export default {
     },
   },
   methods: {
-    toCertificateDetail() {
+    toCertificateDetail(id) {
       this.$router.push({
-        path: '/certificate/detail',
+        path: `/certificate/detail/${id}`,
       });
     },
   },
