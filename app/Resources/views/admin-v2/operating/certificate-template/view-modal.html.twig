@@ -11,7 +11,7 @@
 {% block body %}
   <form class="form-horizontal">
     <div class="row text-center">
-      <span class="el-loading-text js-loading-text">{{ 'site.loading'|trans }}</span>
+      <span class="el-loading-text js-loading-text">{{ 'admin.operation_certificate.certificate.record.img_loading'|trans }}</span>
       <img class="hidden" id="certificateImg" src="" alt="certificate template preview" {% if 'horizontal' == template.styleType %}width="720" height="520" {% else %}width="520" height="720"{% endif %}>
       <input type="hidden" name="certificateBase64Url" value="{{ path('admin_v2_certificate_template_img_show', {id:template.id}) }}">
     </div>
