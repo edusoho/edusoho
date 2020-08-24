@@ -31,11 +31,11 @@
     </tr>
     </thead>
     <tbody>
-    {% if certificates %}
-      {% for certificate in certificates %}
-        {% set user = users[certificate.userId]| default(null) %}
-        {% set target = targets[certificate.id]| default(null) %}
-        {% set reviewer = reviewers[certificate.auditUserId]| default(null) %}
+    {% if records %}
+      {% for record in records %}
+        {% set user = users[record.userId]| default(null) %}
+        {% set target = targets[record.id]| default(null) %}
+        {% set reviewer = reviewers[record.auditUserId]| default(null) %}
         {% include 'admin-v2/operating/certificate-audit/certififcate-audit-tr.html.twig' %}
       {% endfor %}
     {% else %}

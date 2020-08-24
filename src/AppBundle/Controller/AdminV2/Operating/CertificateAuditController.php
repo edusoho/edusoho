@@ -39,7 +39,7 @@ class CertificateAuditController extends BaseController
         $reviewers = $this->getUserService()->findUsersByIds($records ? ArrayToolkit::column($records, 'auditUserId') : [-1]);
 
         return $this->render('admin-v2/operating/certificate-audit/index.html.twig', [
-            'certificates' => $records,
+            'records' => $records,
             'paginator' => $paginator,
             'users' => ArrayToolkit::index($users, 'id'),
             'reviewers' => ArrayToolkit::index($reviewers, 'id'),
@@ -68,11 +68,6 @@ class CertificateAuditController extends BaseController
         if ($request->isMethod('POST')) {
             $auditType = $request->get('status');
             $rejectReason = $request->get('rejectReason');
-            $record = $this->getRecordService()->get($id);
-
-            if (empty($record)) {
-                $this->createNewException(CertificateException::NOTFOUND_RECORD);
-            }
 
             $record = $this->getRecordService()->get($id);
             if (empty($record)) {
@@ -80,13 +75,14 @@ class CertificateAuditController extends BaseController
             }
 
             $auditUser = $this->getUser();
+            $auditUserId = $auditUser['id'];
 
             switch ($auditType) {
                 case 'valid':
-                    $this->getRecordService()->passCertificateRecord($id, $auditUser);
+                    $this->getRecordService()->passCertificateRecord($id, $auditUserId);
                     break;
                 case 'reject':
-                    $this->getRecordService()->rejectCertificateRecord($id, $auditUser, $rejectReason);
+                    $this->getRecordService()->rejectCertificateRecord($id, $auditUserId, $rejectReason);
                     break;
                 case 'none':
                     $this->getRecordService()->resetCertificateRecord($id);
@@ -119,15 +115,10 @@ class CertificateAuditController extends BaseController
 
         foreach ($records as $key => $record) {
             if ('course' == $record['targetType']) {
-                $targets[$key + 1] = empty($courses[$record['targetId']]) ? null : $courses[$record['targetId']];
+                $targets[$record['id']] = empty($courses[$record['targetId']]) ? null : $courses[$record['targetId']];
             }
             if ('classroom' == $record['targetType']) {
-                if ('course' == $record['targetType']) {
-                    $targets[$key + 1] = empty($courses[$record['targetId']]) ? null : $courses[$record['targetId']];
-                }
-                if ('classroom' == $record['targetType']) {
-                    $targets[$key + 1] = empty($classrooms[$record['targetId']]) ? null : $classrooms[$record['targetId']];
-                }
+                $targets[$record['id']] = empty($classrooms[$record['targetId']]) ? null : $classrooms[$record['targetId']];
             }
         }
 

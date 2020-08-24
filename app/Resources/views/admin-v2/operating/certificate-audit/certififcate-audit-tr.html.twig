@@ -3,12 +3,12 @@
   <td>{{ user.truename|default('--') }}<br><span class="text-muted text-sm">{{ user.nickname|default() }}</span></td>
   <td>{{ target.title|default('--') }}</td>
   <td>
-    {{ certificate.issueTime|date('Y-m-d H:i:s') }}
+    {{ record.issueTime|date('Y-m-d H:i:s') }}
   </td>
-  <td>{{ dict_text('certificateAuditStatus', certificate.status) }}
+  <td>{{ dict_text('certificateAuditStatus', record.status) }}
   </td>
   <td>
-    {{ certificate.auditTime|date('Y-m-d H:i:s') }}
+    {{ record.auditTime|date('Y-m-d H:i:s') }}
   </td>
   <td>
     {{ reviewer.nickname|default('--') }}
@@ -16,9 +16,9 @@
   <td>
     <div class="btn-group">
       {% if has_permission('admin_v2_certificate_manage') %}
-        {% if certificate['status'] != 'valid' and certificate['status'] != 'cancelled' and certificate['status'] != 'expired' %}
+        {% if record['status'] == 'none' or record['status'] == 'reject' %}
           <a class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal"
-             data-url="{{ path('admin_v2_certificate_examine_audit_detail', {id:certificate.id}) }}"
+             data-url="{{ path('admin_v2_certificate_examine_audit_detail', {id:record.id}) }}"
              type="button">{{ 'admin.operation_certificate.certificate.audit.audit_certificate'|trans }}</a>
         {% endif %}
       {% endif %}

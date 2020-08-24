@@ -93,7 +93,7 @@ class RecordServiceImpl extends BaseService implements RecordService
         return $isObtaineds;
     }
 
-    public function passCertificateRecord($id, $auditUser, $rejectReason = '')
+    public function passCertificateRecord($id, $auditUserId, $rejectReason = '')
     {
         $record = $this->get($id);
         $certificate = $this->getCertificateService()->get($record['certificateId']);
@@ -106,7 +106,7 @@ class RecordServiceImpl extends BaseService implements RecordService
         }
 
         $record['rejectReason'] = $rejectReason;
-        $record['auditUserId'] = $auditUser['id'];
+        $record['auditUserId'] = $auditUserId;
         $record['auditTime'] = $record['issueTime'] = time();
         $record['status'] = 'valid';
         $record['expiryTime'] = (0 == $certificate['expiryDay']) ? 0 : strtotime(date('Y-m-d', time() + 24 * 3600 * (int) $certificate['expiryDay']));
@@ -114,7 +114,7 @@ class RecordServiceImpl extends BaseService implements RecordService
         return $this->getRecordDao()->update($id, $record);
     }
 
-    public function rejectCertificateRecord($id, $auditUser, $rejectReason = '')
+    public function rejectCertificateRecord($id, $auditUserId, $rejectReason = '')
     {
         $record = $this->get($id);
         if (empty($record)) {
@@ -126,7 +126,7 @@ class RecordServiceImpl extends BaseService implements RecordService
         }
 
         $record['rejectReason'] = $rejectReason;
-        $record['auditUserId'] = $auditUser['id'];
+        $record['auditUserId'] = $auditUserId;
         $record['auditTime'] = $record['issueTime'] = time();
         $record['status'] = 'reject';
 
