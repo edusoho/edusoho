@@ -111,8 +111,8 @@ class RecordServiceImpl extends BaseService implements RecordService
             'certificateId' => $certificate['id'],
             'targetId' => $certificate['targetId'],
             'targetType' => $certificate['targetType'],
-            'status' => 'valid',
-            'issueTime' => time(),
+            'status' => empty($certificate['autoIssue']) ? 'none' : 'valid',
+            'issueTime' => empty($certificate['autoIssue']) ? 0 : time(),
             'expiryTime' => empty($certificate['expiryDay']) ? 0 : strtotime(date('Y-m-d', time() + 24 * 3600 * (int) $certificate['expiryDay'])),
         ];
         $createRecords = [];
@@ -136,7 +136,7 @@ class RecordServiceImpl extends BaseService implements RecordService
         $existCodes = ArrayToolkit::column($existCodes, 'certificateCode');
         $generateCodes = [];
         while (count($generateCodes) < $count) {
-            $generateCode = $certificate['certificateCode'].mt_rand(100000, 999999);
+            $generateCode = $certificate['code'].mt_rand(100000, 999999);
             if (!in_array($generateCode, $existCodes) && !in_array($generateCode, $generateCodes)) {
                 $generateCodes[] = $generateCode;
             }

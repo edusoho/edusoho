@@ -39,7 +39,7 @@ class CertificateEventSubscriber extends EventSubscriber implements EventSubscri
         if (empty($student['finishedTime']) || $student['learnedCompulsoryTaskNum'] != $course['compulsoryTaskNum']) {
             return;
         }
-        $certificates = $this->getCertificateService()->findByTargetIdAndTargetType($courseSet['id'], 'course');
+        $certificates = $this->getCertificateService()->findByTargetIdAndTargetType($course['id'], 'course');
         foreach ($certificates as $certificate) {
             $this->getRecordService()->autoIssueCertificates($certificate['id'], [$taskResult['userId']]);
         }

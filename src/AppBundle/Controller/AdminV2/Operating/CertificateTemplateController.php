@@ -5,6 +5,7 @@ namespace AppBundle\Controller\AdminV2\Operating;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
+use Biz\Certificate\Certificate;
 use Biz\Certificate\CertificateException;
 use Biz\Certificate\Service\TemplateService;
 use Biz\Content\Service\FileService;
@@ -171,6 +172,60 @@ class CertificateTemplateController extends BaseController
 
     public function previewAction(Request $request, $id)
     {
+        $template = $this->getCertificateTemplateService()->get($id);
+        if (empty($template)) {
+            throw $this->createNotFoundException('Not found template.');
+        }
+
+        return $this->render('admin-v2/operating/certificate-template/view-modal.html.twig', [
+            'template' => $template,
+        ]);
+    }
+
+    public function imgShowAction(Request $request, $id)
+    {
+        $certificateTemplate = $this->getCertificateTemplateService()->get($id);
+        if (empty($certificateTemplate)) {
+            throw $this->createNotFoundException('Not found template.');
+        }
+
+        $certificateTemplate = array_merge($certificateTemplate, $request->request->all());
+
+        $base64 = $this->getCertificateImageBase64($certificateTemplate);
+
+        return $this->createJsonResponse($base64);
+
+    }
+
+    protected function getCertificateImageBase64($template)
+    {
+        $certificate = new Certificate();
+        $certificate->setCertificateParams([
+            'certificateTitle' => $template['certificateName'],
+            'certificateQrCodeUrl' => '',
+            'certificateRecipient' => $template['recipientContent'],
+            'certificateContent' => implode('', explode("\r\n", trim($template['certificateContent']))),
+            'certificateCode' => '',
+            'certificateExpiryTime' => '',
+            'certificateIssueTime' => '',
+            'certificateStamp' => empty($template['stamp']) ? $this->getAssetUrl('static-dist/app/img/admin-v2/{$template[\'type\']}_basemap.jpg') : $this->getWebExtension()->getFurl($template['stamp']),
+            'certificateBasemap' => empty($template['basemap']) ? '' : $this->getWebExtension()->getFurl($template['basemap']),
+        ]);
+
+        return $this->getImgBuilder($template['styleType'])->getCertificateImgByBase64($certificate, 0.5);
+    }
+
+    protected function getAssetUrl($path)
+    {
+        $request = $this->get('request');
+        $path = $this->get('templating.helper.assets')->getUrl($path);
+
+        return $request->getSchemeAndHttpHost().$path;
+    }
+
+    protected function getImgBuilder($type)
+    {
+        return $this->getBiz()->offsetGet('certificate.img_builder.'.$type);
     }
 
     /**

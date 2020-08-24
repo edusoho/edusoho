@@ -5350,6 +5350,7 @@ admin.operation_certificate.template.certificate.content_hint.course: 'Course na
 admin.operation_certificate.template.certificate.content_hint.classroom: 'Class name: $classroomName$'
 admin.operation_certificate.template.certificate.qrcode: Certificate Verification QR Code
 admin.operation_certificate.template.preview_btn: preview
+admin.operation_certificate.template.preview_th: Template Preview
 admin.operation_certificate.certificate.num_th: number
 admin.operation_certificate.certificate.name_th: Certificate Name
 admin.operation_certificate.certificate.description_th: description
@@ -8001,6 +8002,9 @@ log.action.item_bank_exercise.recommend_exercise: Recommend Item Exercise
 log.action.item_bank_exercise.cancel_recommend_exercise: Cancel Recommend Item Exercise
 log.action.item_bank_exercise.publish_exercise: Publish Item Exercise
 log.action.item_bank_exercise.close_exercise: Close Item Exercise
+log.action.certifiacte.create_certificate: Create Certificate
+log.action.certifiacte.auto_issue: Auto Issue Certificate
+log.action.certifiacte.create_template: Create Template
 
 log.action.template.course.create: Created a new<strong class="color-success"> course </strong>《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.update: Updated the<strong class="color-success"> course </strong> 《<a href="%url%" target="_blank">%title%</a>》
