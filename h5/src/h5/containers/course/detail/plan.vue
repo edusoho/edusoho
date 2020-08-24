@@ -50,7 +50,7 @@
     </div>
     <div
       class="course-detail__certificate"
-      @click="toCourseCertificate(selectedPlanId)"
+      @click="toCertificate(selectedPlanId)"
       v-if="$route.query.hasCertificate"
     >
       <span><span class="certificate-icon">证</span>证书</span>
@@ -185,7 +185,7 @@ export default {
       this.isFree = false;
       return `¥${details.price}`;
     },
-    toCourseCertificate(id) {
+    toCertificate(id) {
       this.$router.push({ path: `/certificate/list/${id}` });
     },
   },

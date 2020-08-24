@@ -17,8 +17,17 @@
           <span class="acquired" v-if="certificate.isObtained">已获取</span>
           <span class="obtain" v-else>待获取</span>
         </p>
-        <p class="condition text-overflow">
-          通过参加课程线上考试可以获得
+        <p
+          class="condition text-overflow"
+          v-if="certificate.targetType == 'classroom'"
+        >
+          通过完成班级学习可以获得
+        </p>
+        <p
+          class="condition text-overflow"
+          v-if="certificate.targetType == 'course'"
+        >
+          通过完成课程学习可以获得
         </p>
       </div>
       <div class="certificate-list__item__more">
@@ -51,6 +60,7 @@ export default {
       },
     })
       .then(res => {
+        console.log(res.data);
         this.certificates = res.data;
       })
       .catch(err => {

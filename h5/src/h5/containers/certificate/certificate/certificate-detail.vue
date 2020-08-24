@@ -28,8 +28,11 @@
 
     <div class="ccd-item">
       <h3 class="ccd-item__title">获取途径</h3>
-      <div class="ccd-item__body" v-if="certificate.course">
+      <div class="ccd-item__body" v-if="certificate.targetType == 'course'">
         通过参加{{ certificate.course.courseSetTitle }}可以获得。
+      </div>
+      <div class="ccd-item__body" v-if="certificate.targetType == 'classroom'">
+        通过参加{{ certificate.classroom.title }}可以获得。
       </div>
     </div>
 
@@ -62,6 +65,8 @@ export default {
     })
       .then(res => {
         this.certificate = res;
+        console.log(this.$route.meta.title);
+        this.$route.meta.title = res.name;
       })
       .catch(err => {
         Toast.fail(err.message);

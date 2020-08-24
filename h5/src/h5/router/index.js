@@ -643,7 +643,7 @@ const routes = [
     path: '/certificate/list/:id',
     name: 'certificate_list',
     meta: {
-      title: '课程证书',
+      title: '证书',
     },
     component: () =>
       import(
