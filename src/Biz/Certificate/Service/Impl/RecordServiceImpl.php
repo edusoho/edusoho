@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Certificate\CertificateException;
 use Biz\Certificate\Dao\RecordDao;
+use Biz\Certificate\Service\CertificateService;
 use Biz\Certificate\Service\RecordService;
 
 class RecordServiceImpl extends BaseService implements RecordService
@@ -92,53 +93,71 @@ class RecordServiceImpl extends BaseService implements RecordService
         return $isObtaineds;
     }
 
-    public function validCertificate($id, $fields)
+    public function passCertificateRecord($id, $auditUser, $rejectReason = '')
     {
         $record = $this->get($id);
+        $certificate = $this->getCertificateService()->get($record['certificateId']);
         if (empty($record)) {
             $this->createNewException(CertificateException::NOTFOUND_RECORD);
         }
 
-        if ('valid' == $record['status'] || 'cancelled' == $record['status'] || 'expired' == $record['status']) {
+        if ('reject' !== $record['status'] && 'none' !== $record['status']) {
             $this->createNewException(CertificateException::FORBIDDEN_VALID_RECORD);
         }
 
-        $fields['rejectReason'] = '';
-        $fields = ArrayToolkit::parts($fields, ['auditTime', 'auditUserId', 'status', 'rejectReason']);
+        $record['rejectReason'] = $rejectReason;
+        $record['auditUserId'] = $auditUser['id'];
+        $record['auditTime'] = $record['issueTime'] = time();
+        $record['status'] = 'valid';
+        $record['expiryTime'] = (0 == $certificate['expiryDay']) ? 0 : strtotime(date('Y-m-d', time() + 24 * 3600 * (int) $certificate['expiryDay']));
 
-        return $this->getRecordDao()->update($id, $fields);
+        return $this->getRecordDao()->update($id, $record);
     }
 
-    public function rejectCertificate($id, $fields)
+    public function rejectCertificateRecord($id, $auditUser, $rejectReason = '')
     {
         $record = $this->get($id);
         if (empty($record)) {
             $this->createNewException(CertificateException::NOTFOUND_RECORD);
         }
 
-        if ('reject' != $record['status'] && 'none' != $record['status'] && !empty($record['status'])) {
+        if ('reject' !== $record['status'] && 'none' !== $record['status']) {
             $this->createNewException(CertificateException::FORBIDDEN_REJECT_RECORD);
         }
 
-        $fields = ArrayToolkit::parts($fields, ['auditTime', 'auditUserId', 'status', 'rejectReason']);
+        $record['rejectReason'] = $rejectReason;
+        $record['auditUserId'] = $auditUser['id'];
+        $record['auditTime'] = $record['issueTime'] = time();
+        $record['status'] = 'reject';
 
-        return $this->getRecordDao()->update($id, $fields);
+        return $this->getRecordDao()->update($id, $record);
     }
 
-    public function toBeAuditCertificate($id, $fields)
+    public function resetCertificateRecord($id, $rejectReason = '')
     {
         $record = $this->get($id);
         if (empty($record)) {
             $this->createNewException(CertificateException::NOTFOUND_RECORD);
         }
 
-        if ('valid' == $record['status'] || 'cancelled' == $record['status'] || 'expired' == $record['status']) {
+        if ('reject' !== $record['status'] && 'none' !== $record['status']) {
             $this->createNewException(CertificateException::FORBIDDEN_AUDIT_RECORD);
         }
 
-        $fields = ArrayToolkit::parts($fields, ['auditTime', 'auditUserId', 'status', 'rejectReason']);
+        $record['rejectReason'] = $rejectReason;
+        $record['auditUserId'] = null;
+        $record['auditTime'] = null;
+        $record['status'] = 'none';
 
-        return $this->getRecordDao()->update($id, $fields);
+        return $this->getRecordDao()->update($id, $record);
+    }
+
+    /**
+     * @return CertificateService
+     */
+    protected function getCertificateService()
+    {
+        return $this->createService('Certificate:CertificateService');
     }
 
     /**

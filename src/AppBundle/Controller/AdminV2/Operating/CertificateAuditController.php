@@ -14,8 +14,7 @@ class CertificateAuditController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $conditions = $request->query->all();
-        $conditions = $this->searchConditions($conditions);
+        $conditions = $this->searchConditions($request);
 
         $paginator = new Paginator(
             $request,
@@ -66,37 +65,38 @@ class CertificateAuditController extends BaseController
 
     public function submitAction(Request $request, $id)
     {
-        $fields = $request->request->all();
-        $auditType = $request->get('status');
-
-        $record = $this->getRecordService()->get($id);
-        if (empty($record)) {
-            $this->createNewException(CertificateException::NOTFOUND_RECORD);
-        }
-
-        if ('none' != $fields['status']) {
-            $user = $this->getUser();
-            $fields['auditUserId'] = $user['id'];
-            $fields['auditTime'] = time();
-        }
-
-        if ('valid' == $auditType) {
-            $this->getRecordService()->validCertificate($id, $fields);
-        } elseif ('reject' == $auditType) {
-            $this->getRecordService()->rejectCertificate($id, $fields);
-        } elseif ('none' == $auditType) {
-            $this->getRecordService()->toBeAuditCertificate($id, $fields);
-        } else {
-            $this->createNewException(CertificateException::FORBIDDEN_AUDIT_RECORD);
-        }
-
         if ($request->isMethod('POST')) {
-            return $this->createJsonResponse(true);
+            $auditType = $request->get('status');
+            $rejectReason = $request->get('rejectReason');
+            $record = $this->getRecordService()->get($id);
+
+            if (empty($record)) {
+                $this->createNewException(CertificateException::NOTFOUND_RECORD);
+            }
+
+            $record = $this->getRecordService()->get($id);
+            if (empty($record)) {
+                $this->createNewException(CertificateException::NOTFOUND_RECORD);
+            }
+
+            $auditUser = $this->getUser();
+
+            switch ($auditType) {
+                case 'valid':
+                    $this->getRecordService()->passCertificateRecord($id, $auditUser);
+                    break;
+                case 'reject':
+                    $this->getRecordService()->rejectCertificateRecord($id, $auditUser, $rejectReason);
+                    break;
+                case 'none':
+                    $this->getRecordService()->resetCertificateRecord($id);
+                    break;
+                default:
+                    $this->createNewException(CertificateException::FORBIDDEN_AUDIT_RECORD);
+            }
         }
 
-        return $this->render('', [
-            'record' => $fields,
-        ]);
+        return $this->createJsonResponse(true);
     }
 
     protected function searchTargetTitle($records)
@@ -122,15 +122,23 @@ class CertificateAuditController extends BaseController
                 $targets[$key + 1] = empty($courses[$record['targetId']]) ? null : $courses[$record['targetId']];
             }
             if ('classroom' == $record['targetType']) {
-                $targets[$key + 1] = empty($classrooms[$record['targetId']]) ? null : $classrooms[$record['targetId']];
+                if ('course' == $record['targetType']) {
+                    $targets[$key + 1] = empty($courses[$record['targetId']]) ? null : $courses[$record['targetId']];
+                }
+                if ('classroom' == $record['targetType']) {
+                    $targets[$key + 1] = empty($classrooms[$record['targetId']]) ? null : $classrooms[$record['targetId']];
+                }
             }
         }
 
         return $targets;
     }
 
-    protected function searchConditions($conditions)
+    protected function searchConditions(Request $request)
     {
+        $conditions['keywordType'] = $request->get('keywordType');
+        $conditions['keyword'] = $request->get('keyword');
+
         if (!empty($conditions['keyword']) && !empty($conditions['keywordType'])) {
             if (in_array($conditions['keywordType'], ['nickname', 'verifiedMobile', 'email'])) {
                 $users = $this->getUserService()->searchUsers([$conditions['keywordType'] => $conditions['keyword']], [], 0, PHP_INT_MAX, ['id']);
@@ -143,8 +151,6 @@ class CertificateAuditController extends BaseController
         } else {
             return [];
         }
-        unset($conditions['keywordType']);
-        unset($conditions['keyword']);
 
         return $conditions;
     }
