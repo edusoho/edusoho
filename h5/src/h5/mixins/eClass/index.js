@@ -91,7 +91,7 @@ export default {
     },
   },
   methods: {
-    onClick(e) {
+    onClick(hasCertificate, e) {
       const isOrder = this.type === 'order';
       const id = this.course.id || this.course.targetId;
       if (!this.feedback) {
@@ -108,9 +108,9 @@ export default {
         location.href = this.order.targetUrl;
         return;
       }
-      this.toMore(this.typeList, id);
+      this.toMore(hasCertificate, this.typeList, id);
     },
-    toMore(type, id) {
+    toMore(hasCertificate, type, id) {
       let path = '';
       switch (type) {
         case 'course_list':
@@ -123,7 +123,12 @@ export default {
           path = `/classroom/${id}`;
           break;
       }
-      this.$router.push({ path: path });
+      this.$router.push({
+        path: path,
+        query: {
+          hasCertificate,
+        },
+      });
     },
     // 调用app接口
     postMessage(type, id) {

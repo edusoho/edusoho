@@ -1,5 +1,8 @@
 <template>
-  <div class="e-column-class pull-left" @click="onClick">
+  <div
+    class="e-column-class pull-left"
+    @click="onClick(course.hasCertificate, $event)"
+  >
     <div class="column-class-left">
       <img v-lazy="course.imgSrc.url" :class="course.imgSrc.className" />
       <div v-if="discountNum" class="column-class-left__discount">
@@ -36,8 +39,5 @@
 import eClassMixins from '@/mixins/eClass';
 export default {
   mixins: [eClassMixins],
-  created() {
-    console.log(this.course);
-  },
 };
 </script>

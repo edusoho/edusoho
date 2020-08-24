@@ -51,8 +51,9 @@
     <div
       class="course-detail__certificate"
       @click="toCourseCertificate(selectedPlanId)"
+      v-if="$route.query.hasCertificate"
     >
-      <span><span class="certificate-icon">证</span>我的证书</span>
+      <span><span class="certificate-icon">证</span>证书</span>
       <i class="van-icon van-icon-arrow pull-right" />
     </div>
   </div>
@@ -187,10 +188,6 @@ export default {
     toCourseCertificate(id) {
       this.$router.push({ path: `/course/certificate/list/${id}` });
     },
-  },
-  created() {
-    console.log(this.course);
-    console.log(this.joinStatus);
   },
 };
 </script>

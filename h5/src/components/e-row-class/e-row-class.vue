@@ -1,5 +1,5 @@
 <template>
-  <div class="e-row-class" @click="onClick">
+  <div class="e-row-class" @click="onClick(course.hasCertificate, $event)">
     <div class="row-class-left">
       <img v-lazy="course.imgSrc.url" :class="course.imgSrc.className" />
       <div v-if="discountNum" class="row-class-left__discount">

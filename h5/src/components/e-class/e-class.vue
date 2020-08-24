@@ -1,6 +1,6 @@
 <template>
   <div class="e-course">
-    <div class="clearfix" @click="onClick">
+    <div class="clearfix" @click="onClick(course.hasCertificate, $event)">
       <div class="e-course__left pull-left">
         <img v-lazy="course.imgSrc.url" :class="course.imgSrc.className" />
         <div v-if="normalTagShow">
@@ -123,7 +123,7 @@ export default {
     },
   },
   methods: {
-    onClick(e) {
+    onClick(hasCertificate, e) {
       if (!this.feedback) {
         return;
       }
@@ -144,12 +144,18 @@ export default {
       if (this.typeList === 'classroom_list') {
         this.$router.push({
           path: `/classroom/${id}`,
+          query: {
+            hasCertificate,
+          },
         });
       }
 
       if (this.typeList === 'course_list') {
         this.$router.push({
           path: `/course/${id}`,
+          query: {
+            hasCertificate,
+          },
         });
       }
     },
