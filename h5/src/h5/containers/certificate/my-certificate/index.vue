@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import CertificateItem from '../certificate-item/index';
+import CertificateItem from './certificate-item/index';
 import Api from '@/api';
 import { mapState } from 'vuex';
 import { Toast } from 'vant';

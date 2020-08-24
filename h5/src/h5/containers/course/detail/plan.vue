@@ -186,7 +186,7 @@ export default {
       return `¥${details.price}`;
     },
     toCourseCertificate(id) {
-      this.$router.push({ path: `/course/certificate/list/${id}` });
+      this.$router.push({ path: `/certificate/list/${id}` });
     },
   },
 };

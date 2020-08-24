@@ -6,7 +6,7 @@
       class="certificate-list__item"
       v-for="(certificate, index) in certificates"
       :key="index"
-      @click="toCourseCertificateDetail(certificate.id)"
+      @click="toCertificateDetail(certificate.id)"
     >
       <div class="certificate-list__item__img">
         <img src="static/images/certificate.png" alt="" />
@@ -40,8 +40,8 @@ export default {
     };
   },
   methods: {
-    toCourseCertificateDetail(id) {
-      this.$router.push({ path: `/course/certificate/detail/${id}` });
+    toCertificateDetail(id) {
+      this.$router.push({ path: `/certificate/detail/${id}` });
     },
   },
   created() {

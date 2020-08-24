@@ -629,6 +629,28 @@ const routes = [
       ),
   },
   {
+    path: '/certificate/records/:id',
+    name: 'certificate_records',
+    meta: {
+      title: '高级产品经理证书',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "certificate" */ '@/containers/certificate/my-certificate/certificate-detail/index.vue'
+      ),
+  },
+  {
+    path: '/certificate/list/:id',
+    name: 'certificate_list',
+    meta: {
+      title: '课程证书',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "certificate" */ '@/containers/certificate/certificate/certificate-list.vue'
+      ),
+  },
+  {
     path: '/certificate/detail/:id',
     name: 'certificate_detail',
     meta: {
@@ -636,29 +658,7 @@ const routes = [
     },
     component: () =>
       import(
-        /* webpackChunkName: "certificate" */ '@/containers/certificate/certificate-detail/index.vue'
-      ),
-  },
-  {
-    path: '/course/certificate/list/:id',
-    name: 'course_certificate_list',
-    meta: {
-      title: '课程证书',
-    },
-    component: () =>
-      import(
-        /* webpackChunkName: "certificate" */ '@/containers/course/certificate/certificate-list.vue'
-      ),
-  },
-  {
-    path: '/course/certificate/detail/:id',
-    name: 'course_certificate_detail',
-    meta: {
-      title: '高级产品经理证书',
-    },
-    component: () =>
-      import(
-        /* webpackChunkName: "certificate" */ '@/containers/course/certificate/certificate-detail.vue'
+        /* webpackChunkName: "certificate" */ '@/containers/certificate/certificate/certificate-detail.vue'
       ),
   },
 ];
