@@ -112,12 +112,10 @@ export default {
     })
       .then(res => {
         this.certificate = res;
-        console.log(res);
       })
       .catch(err => {
         Toast.fail(err.message);
       });
-    console.log(this.user);
   },
 };
 </script>
