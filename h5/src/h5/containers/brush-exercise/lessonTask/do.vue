@@ -8,7 +8,6 @@
         :assessmentResponse="assessmentResponse"
         :assessment="assessment"
         :answerScene="answerScene"
-        @reachTimeSubmitAnswerData="reachTimeSubmitAnswerData"
         @saveAnswerData="saveAnswerData"
         @getAnswerData="getAnswerData"
         @timeSaveAnswerData="timeSaveAnswerData"
@@ -75,8 +74,8 @@ export default {
           this.isLoading = false;
         })
         .catch(err => {
+          this.isLoading = false;
           this.$toast(err.message);
-          console.log(err);
         });
     },
     getStart() {
@@ -89,10 +88,15 @@ export default {
       } else {
         data.categoryId = this.$route.query.categoryId;
       }
-      Api[config[type].api]({ query, data }).then(res => {
-        this.isLoading = false;
-        this.assignData(res);
-      });
+      Api[config[type].api]({ query, data })
+        .then(res => {
+          this.isLoading = false;
+          this.assignData(res);
+        })
+        .catch(err => {
+          this.isLoading = false;
+          this.$toast(err.message);
+        });
     },
     assignData(res) {
       this.$store.commit(types.SET_NAVBAR_TITLE, this.$route.query.title);
@@ -100,17 +104,6 @@ export default {
       this.answerScene = res.answer_scene;
       this.answerRecord = res.answer_record;
       this.assessmentResponse = res.assessment_response;
-    },
-    reachTimeSubmitAnswerData(data) {
-      Api.submitAnswer({ data })
-        .then(res => {
-          this.canLeave = true;
-          this.goResult();
-          console.log(res);
-        })
-        .catch(err => {
-          this.$toast(err.message);
-        });
     },
     saveAnswerData(data) {
       Toast.loading({
@@ -153,7 +146,7 @@ export default {
           console.log(res);
         })
         .catch(err => {
-          console.log(err);
+          this.$toast(err.message);
         });
     },
     goResult() {

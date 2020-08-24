@@ -118,6 +118,7 @@ export default {
           });
         })
         .catch(err => {
+          this.isLoading = false;
           this.$toast(err.message);
         });
     },

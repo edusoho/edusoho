@@ -92,9 +92,13 @@ export default {
           });
           Api.joinItemBank({
             query,
-          }).then(res => {
-            this.judgeIsJoin(res);
-          });
+          })
+            .then(res => {
+              this.judgeIsJoin(res);
+            })
+            .catch(err => {
+              this.$toast(err.message);
+            });
           this.timer = null;
         }, 1000);
       }

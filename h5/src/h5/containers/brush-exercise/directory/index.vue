@@ -131,20 +131,27 @@ export default {
         offset: this.list[moduleId].paging.offset,
         limit: this.list[moduleId].paging.limit,
       };
-      Api[Assessments[joinStatus]]({ query, params }).then(res => {
-        if (more) {
-          this.list[moduleId].data = this.list[moduleId].data.concat(res.data);
-        } else {
-          this.list[moduleId].data = res.data;
-        }
-        this.list[moduleId].finished = this.judegIsAll(res);
-        if (!this.list[moduleId].finished) {
-          this.list[moduleId].paging.offset = this.list[moduleId].data.length;
-        }
-        this.isLoading = false;
-        this.list[moduleId].isRequestCompile = true;
-        this.$forceUpdate();
-      });
+      Api[Assessments[joinStatus]]({ query, params })
+        .then(res => {
+          if (more) {
+            this.list[moduleId].data = this.list[moduleId].data.concat(
+              res.data,
+            );
+          } else {
+            this.list[moduleId].data = res.data;
+          }
+          this.list[moduleId].finished = this.judegIsAll(res);
+          if (!this.list[moduleId].finished) {
+            this.list[moduleId].paging.offset = this.list[moduleId].data.length;
+          }
+          this.isLoading = false;
+          this.list[moduleId].isRequestCompile = true;
+          this.$forceUpdate();
+        })
+        .catch(err => {
+          this.isLoading = false;
+          this.$toast(err.message);
+        });
     },
     // 获取章节练习
     getMytemBankCategories() {
@@ -155,10 +162,15 @@ export default {
         exerciseId: Number(this.exerciseId),
         moduleId: Number(moduleId),
       };
-      Api[Categories[joinStatus]]({ query }).then(res => {
-        this.list[moduleId].data = res;
-        this.isLoading = false;
-      });
+      Api[Categories[joinStatus]]({ query })
+        .then(res => {
+          this.list[moduleId].data = res;
+          this.isLoading = false;
+        })
+        .catch(err => {
+          this.isLoading = false;
+          this.$toast(err.message);
+        });
     },
     // 请求数据
     changeData() {
