@@ -6441,9 +6441,10 @@ admin.operation_certificate.template.certificate.content.default.course: 由于�
 admin.operation_certificate.template.certificate.content.default.classroom: 由于你在$classroomName$ 班级中优异学习表现，最终完成课程并通过最终考核，特此发次证明！
 admin.operation_certificate.template.certificate.content_hint: 可选填，支持添加 姓名：$name$   用户名：$username$
 admin.operation_certificate.template.certificate.content_hint.course: 课程名称：$courseName$
-admin.operation_certificate.template.certificate.content_hint.classroom: 课程名称：$classroomName$
+admin.operation_certificate.template.certificate.content_hint.classroom: 班级名称：$classroomName$
 admin.operation_certificate.template.certificate.qrcode: 证书验证二维码
 admin.operation_certificate.template.preview_btn: 预览
+admin.operation_certificate.template.preview_th: 证书模板预览
 admin.operation_certificate.certificate.num_th: 编号
 admin.operation_certificate.certificate.name_th: 证书名称
 admin.operation_certificate.certificate.description_th: 证书描述
@@ -9306,6 +9307,9 @@ log.action.item_bank_exercise.recommend_exercise: 推荐题库练习
 log.action.item_bank_exercise.cancel_recommend_exercise: 取消推荐题库练习
 log.action.item_bank_exercise.publish_exercise: 发布题库练习
 log.action.item_bank_exercise.close_exercise: 关闭题库练习
+log.action.certifiacte.create_certificate: 创建证书
+log.action.certifiacte.auto_issue: 自动发放证书
+log.action.certifiacte.create_template: 创建证书模板
 
 log.action.template.course.create: 新建了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.update: 修改了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》

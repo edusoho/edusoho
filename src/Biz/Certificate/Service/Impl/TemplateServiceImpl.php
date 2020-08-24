@@ -30,8 +30,8 @@ class TemplateServiceImpl extends BaseService implements TemplateService
         $template = $this->getTemplateDao()->create($fields);
 
         $this->getLogService()->info(
-            'certificate_template',
-            'create',
+            'certificate',
+            'create_template',
             "证书模板创建, 模板 #{$template['id']} 名称 : 《{$template['name']}》"
         );
 
