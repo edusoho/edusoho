@@ -8,6 +8,8 @@ interface CertificateService
 
     public function getCertificateByCode($code);
 
+    public function findByTargetIdAndTargetType($targetId, $targetType);
+
     public function search($conditions, $orderBys, $start, $limit, $columns = []);
 
     public function count($conditions);

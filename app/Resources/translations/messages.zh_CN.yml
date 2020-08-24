@@ -1434,12 +1434,12 @@ course.introduction.audiences_empty: 为设置目标
 course.catalogue.certificate: 荣誉证书
 course.catalogue.certificate_wait: 待获取
 course.catalogue.certificate_have: 已获取
-course.catalogue.certificate_obtain: 通过参加课程线上考试可以获得
+course.catalogue.certificate_obtain: 通过完成课程全部任务可以获得
 course.catalogue.certificate_detail: 证书详情
 course.catalogue.certificate_achieve: 获取途径
 course.catalogue.certificate_condition: 获取条件
-course.catalogue.certificate_to_achieve: 通过参加<a href='%targetUrl%' target='_blank'>%course%</a>线上考试可以获得
-course.catalogue.certificate_pass_condition: 考试结果通过
+course.catalogue.certificate_to_achieve: 通过完成<a href='%targetUrl%' target='_blank'>%course%</a>全部任务
+course.catalogue.certificate_pass_condition: 完成课程全部任务
 course.catalogue.certificate_expiry: '有效期至：%expiryTime%'
 course.catalogue.certificate_forever: '有效期：长期有效'
 course.catalogue.content_title: 目录
@@ -2437,7 +2437,9 @@ classroom.teachers: 师资
 classroom.reviews: 评价
 classroom.note: 笔记
 classroom.certificates: 班级证书
-classroom.certificate_obtain: 通过参加班级线上考试可以获得
+classroom.certificate_obtain: 通过完成班级全部课程可以获得
+classroom.certificate_to_achieve: 通过完成<a href='%targetUrl%' target='_blank'>%classroom%</a>全部课程
+classroom.certificate_pass_condition: 完成班级全部课程
 classroom.expiry_date_tips: 班级有效期：
 classroom.expiry_day_tips: >
   <span class="mrm">班级有效天数：</span><span>%expiryValue%天</span>
@@ -6441,9 +6443,10 @@ admin.operation_certificate.template.certificate.content.default.course: 由于�
 admin.operation_certificate.template.certificate.content.default.classroom: 由于你在$classroomName$ 班级中优异学习表现，最终完成课程并通过最终考核，特此发次证明！
 admin.operation_certificate.template.certificate.content_hint: 可选填，支持添加 姓名：$name$   用户名：$username$
 admin.operation_certificate.template.certificate.content_hint.course: 课程名称：$courseName$
-admin.operation_certificate.template.certificate.content_hint.classroom: 课程名称：$classroomName$
+admin.operation_certificate.template.certificate.content_hint.classroom: 班级名称：$classroomName$
 admin.operation_certificate.template.certificate.qrcode: 证书验证二维码
 admin.operation_certificate.template.preview_btn: 预览
+admin.operation_certificate.template.preview_th: 证书模板预览
 admin.operation_certificate.certificate.num_th: 编号
 admin.operation_certificate.certificate.name_th: 证书名称
 admin.operation_certificate.certificate.description_th: 证书描述
@@ -9324,6 +9327,9 @@ log.action.item_bank_exercise.recommend_exercise: 推荐题库练习
 log.action.item_bank_exercise.cancel_recommend_exercise: 取消推荐题库练习
 log.action.item_bank_exercise.publish_exercise: 发布题库练习
 log.action.item_bank_exercise.close_exercise: 关闭题库练习
+log.action.certifiacte.create_certificate: 创建证书
+log.action.certifiacte.auto_issue: 自动发放证书
+log.action.certifiacte.create_template: 创建证书模板
 
 log.action.template.course.create: 新建了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.update: 修改了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》

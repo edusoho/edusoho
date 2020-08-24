@@ -9,6 +9,7 @@ use Biz\Certificate\CertificateException;
 use Biz\Certificate\Service\CertificateService;
 use Biz\Certificate\Service\RecordService;
 use Biz\User\Service\UserService;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class CertificateRecord extends AbstractResource
 {
@@ -24,6 +25,12 @@ class CertificateRecord extends AbstractResource
         $record['certificate'] = $this->getCertificateService()->get($record['certificateId']);
         $user = $this->getUserService()->getUserAndProfile($record['userId']);
         $record['truename'] = empty($user['truename']) ? '' : $user['truename'];
+        $record['imgUrl'] = $this->generateUrl('certificate_image_download', ['recordId' => $id], UrlGeneratorInterface::ABSOLUTE_URL);
+        $record['qrcodeUrl'] = $this->generateUrl(
+            'common_qrcode',
+            ['text' => $this->generateUrl('certificate_record', ['recordId' => $id], UrlGeneratorInterface::ABSOLUTE_URL)],
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
 
         return $record;
     }
