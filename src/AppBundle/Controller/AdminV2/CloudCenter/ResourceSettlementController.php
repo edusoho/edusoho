@@ -110,13 +110,13 @@ class ResourceSettlementController extends BaseController
 
     protected function prepareConditionsByType($conditions, $type)
     {
-        if ($type == self::TYPE_BALANCE) {
+        if (self::TYPE_BALANCE == $type) {
             $conditions = [
                 'created_time_GTE' => empty($conditions['startTime']) ? null : strtotime($conditions['startTime']),
                 'created_time_LTE' => empty($conditions['endTime']) ? null : strtotime($conditions['endTime']),
                 'title_like' => empty($conditions['title']) ? null : $conditions['title'],
             ];
-        } elseif ($type == self::TYPE_ORDER) {
+        } elseif (self::TYPE_ORDER == $type) {
             $conditions = [
                 'only_show_debt' => empty($conditions['showDebt']) ? 0 : 1,
                 'start_time' => empty($conditions['startTime']) ? null : strtotime($conditions['startTime']),
@@ -124,7 +124,7 @@ class ResourceSettlementController extends BaseController
                 'status' => empty($conditions['status']) ? null : $conditions['status'],
                 'title_like' => empty($conditions['title']) ? null : $conditions['title'],
             ];
-        } elseif ($type == self::TYPE_PRODUCT) {
+        } elseif (self::TYPE_PRODUCT == $type) {
             $config = $this->getS2B2CFacadeService()->getS2B2CConfig();
             $conditions = [
                 'supplierId' => empty($config['supplierId']) ? 0 : $config['supplierId'],
