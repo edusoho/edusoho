@@ -42,7 +42,7 @@ class Lesson extends BaseResource
 
         $currentUser = $this->getCurrentUser();
 
-        if ($currentUser->isLogin()) {
+        if ($currentUser->isLogin() && $this->getTaskService()->canStartTask($task['id'])) {
             $this->getTaskService()->startTask($lesson['id']);
         }
 

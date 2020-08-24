@@ -6060,6 +6060,8 @@ admin.login_connect.User_login_protection.enter_wrong_password.banned: 'Times co
 admin.login_connect.User_login_protection.some_IP_enter_wrong_password: 'A IP  entering wrong password continuously'
 admin.login_connect.User_login_protection.some_IP_enter_wrong_password.banned: 'Will be temporarily blocked'
 admin.login_connect.User_login_protection.after: After
+admin.login_connect.User_login_captcha: 'User login captcha'
+admin.login_connect.User_login_captcha.help_block: 'When enabled, users are required to validate verification code when logging in.'
 admin.login_connect.User_login_protection.after.unblock: 'Minutes, unblock user /IP'
 admin.login_connect.weixinmob.frist.help_block: 'If turned on, users can register or login the site with wechat id in wechat app.'
 admin.login_connect.weixinmob.help_block: 'How to access:1. You need a certified <a target= "_blank" HREF = "https://MP.weixin.QQ.com" > wechat service account, </a>;2. A certified <a target= "_blank" HREF = "https://open.weixin.QQ.com" > wechat open platform </a> account;3. Bind the wechat service account with <a target=, "_blank" HREF = "https://open.weixin.QQ.com" > the open platform </a>.'

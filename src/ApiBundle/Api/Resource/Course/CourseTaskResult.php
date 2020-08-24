@@ -26,12 +26,12 @@ class CourseTaskResult extends AbstractResource
         }
         $task = $this->getTaskService()->getTask($taskId);
         $user = $this->getCurrentUser();
-        $taskResult = array(
+        $taskResult = [
             'activityId' => $task['activityId'],
             'courseId' => $task['courseId'],
             'courseTaskId' => $task['id'],
             'userId' => $user['id'],
-        );
+        ];
 
         return $this->getTaskResultService()->createTaskResult($taskResult);
     }
@@ -48,9 +48,12 @@ class CourseTaskResult extends AbstractResource
             throw TaskResultException::NOTFOUND_TASK_RESULT();
         }
 
-        $fields = $request->request->all();
-
-        return $this->getTaskResultService()->updateTaskResult($taskResult['id'], $fields);
+        $lastLearnTime = $request->request->get('lastLearnTime');
+        if (empty($lastLearnTime)) {
+            return $taskResult;
+        } else {
+            return $this->getTaskResultService()->updateTaskResult($taskResult['id'], ['lastLearnTime' => $lastLearnTime]);
+        }
     }
 
     public function search(ApiRequest $request, $courseId)
