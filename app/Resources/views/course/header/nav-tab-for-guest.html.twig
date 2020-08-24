@@ -25,5 +25,7 @@
       </li>
     {% endif %}
   {% endfor %}
-  <a class="btn btn-primary" href="{{ path('course_show', {id:course.id}) }}">{{'course.tab.summary'|trans}}</a>
+  {% if course.parentId == 0 %}
+    <a class="btn btn-primary" href="{{ path('course_show', {id:course.id}) }}">{{'course.tab.summary'|trans}}</a>
+  {% endif %}
 </ul>
