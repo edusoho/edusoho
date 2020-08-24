@@ -1214,11 +1214,12 @@ course.introduction.audiences_empty: 'Set goals'
 course.catalogue.certificate: 'HONOR'
 course.catalogue.certificate_wait: None
 course.catalogue.certificate_have: Have
-course.catalogue.certificate_obtain: This is available by taking the course online exam
+course.catalogue.certificate_obtain: By completing all of the course tasks
 course.catalogue.certificate_detail: Certificate details
 course.catalogue.certificate_achieve: Approach of achieving
 course.catalogue.certificate_condition: Acquisition conditions
-course.catalogue.certificate_to_achieve: This is obtained by taking the <a href='%targetUrl%' target='_blank'>%course%</a> online exam
+course.catalogue.certificate_to_achieve: By completing <a href='%targetUrl%' target='_blank'>%course%</a> all tasks
+course.catalogue.certificate_pass_condition: Complete all tasks of the course
 course.catalogue.certificate_expiry: 'valid until: %expiryTime%'
 course.catalogue.certificate_forever: 'Term of validity: long term'
 course.catalogue.content_title: Syllabus
@@ -2154,7 +2155,9 @@ classroom.expiry_date_tips: 'Expired at:'
 classroom.expiry_day_tips: "<span class=\"mrm\">Class effective days: </span><span>%expiryValue% Days</span>\n"
 classroom.classroom_manage: '%name% Management'
 classroom.vip_classroom: 'VIP %name%'
-classroom.certificate_obtain: 'This is available by taking the classroom online exam'
+classroom.certificate_obtain: 'By completing the entire course of the class'
+classroom.certificate_to_achieve: By completing <a href='%targetUrl%' target='_blank'>%classroom%</a> all courses
+classroom.certificate_pass_condition: Complete the entire class
 classroom.classroom_manage.course_select.courseTitle: 'Course name'
 classroom.classroom_manage.course_select.teach_plan: 'Program name'
 classroom.classroom_manage.course_select.teacher_name: 'Teacher name'
