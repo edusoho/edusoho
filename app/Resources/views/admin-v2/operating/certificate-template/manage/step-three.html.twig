@@ -44,7 +44,7 @@
         <label for="stamp" class="control-label-required">{{ 'admin.operation_certificate.template.stamp'|trans }}：</label>
       </div>
       <div class="controls col-md-5 stamp-upload">
-        {% set stamp = template.stamp|default() ? filepath(template.stamp) : '' %}
+        {% set stamp = template.stamp|default() ? filepath(template.stamp) : asset('static-dist/app/img/admin-v2/stamp.jpg') %}
         {% include 'common/upload-image.html.twig' with {
           saveUrl: path('admin_v2_certificate_template_stamp_modal', {id: template.id}),
           imageSrc: stamp,
