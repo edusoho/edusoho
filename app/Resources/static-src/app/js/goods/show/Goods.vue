@@ -237,6 +237,7 @@
             },
         },
         created() {
+            window.addEventListener("scroll", this.handleScroll);
 
             if (this.goods.type == 'classroom') {
                 return this.changeSku(this.goods.product.target.id);
