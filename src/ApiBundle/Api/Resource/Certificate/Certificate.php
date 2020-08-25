@@ -1,13 +1,12 @@
 <?php
 
-
 namespace ApiBundle\Api\Resource\Certificate;
 
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use Biz\Certificate\CertificateException;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Certificate\CertificateException;
 use Biz\Certificate\Service\CertificateService;
 use Biz\Certificate\Service\RecordService;
 use Biz\Classroom\Service\ClassroomService;
@@ -32,7 +31,7 @@ class Certificate extends AbstractResource
 
     protected function refineCertificate($certificate)
     {
-        if ($certificate['targetType'] == 'classroom') {
+        if ('classroom' == $certificate['targetType']) {
             $certificate['classroom'] = $this->getClassroomService()->getClassroom($certificate['targetId']);
         } else {
             $certificate['course'] = $this->getCourseService()->getCourse($certificate['targetId']);
@@ -96,5 +95,4 @@ class Certificate extends AbstractResource
     {
         return $this->service('Certificate:CertificateService');
     }
-
 }

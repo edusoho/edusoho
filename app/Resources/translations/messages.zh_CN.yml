@@ -1434,12 +1434,12 @@ course.introduction.audiences_empty: 为设置目标
 course.catalogue.certificate: 荣誉证书
 course.catalogue.certificate_wait: 待获取
 course.catalogue.certificate_have: 已获取
-course.catalogue.certificate_obtain: 通过参加课程线上考试可以获得
+course.catalogue.certificate_obtain: 通过完成课程全部任务可以获得
 course.catalogue.certificate_detail: 证书详情
 course.catalogue.certificate_achieve: 获取途径
 course.catalogue.certificate_condition: 获取条件
-course.catalogue.certificate_to_achieve: 通过参加<a href='%targetUrl%' target='_blank'>%course%</a>线上考试可以获得
-course.catalogue.certificate_pass_condition: 考试结果通过
+course.catalogue.certificate_to_achieve: 通过完成<a href='%targetUrl%' target='_blank'>%course%</a>全部任务
+course.catalogue.certificate_pass_condition: 完成课程全部任务
 course.catalogue.certificate_expiry: '有效期至：%expiryTime%'
 course.catalogue.certificate_forever: '有效期：长期有效'
 course.catalogue.content_title: 目录
@@ -2437,7 +2437,9 @@ classroom.teachers: 师资
 classroom.reviews: 评价
 classroom.note: 笔记
 classroom.certificates: 班级证书
-classroom.certificate_obtain: 通过参加班级线上考试可以获得
+classroom.certificate_obtain: 通过完成班级全部课程可以获得
+classroom.certificate_to_achieve: 通过完成<a href='%targetUrl%' target='_blank'>%classroom%</a>全部课程
+classroom.certificate_pass_condition: 完成班级全部课程
 classroom.expiry_date_tips: 班级有效期：
 classroom.expiry_day_tips: >
   <span class="mrm">班级有效天数：</span><span>%expiryValue%天</span>
@@ -6478,6 +6480,24 @@ admin.operation_certificate.certificate.record.information: 认证信息
 admin.operation_certificate.certificate.record.certificate_information: 证书信息
 admin.operation_certificate.certificate.record.certificate_target: 认证对象
 admin.operation_certificate.certificate.record.img_loading: 加载中...
+admin.operation_certificate.certificate.audit.audit_certificate: 审核
+admin.operation_certificate.certificate.audit.certificate_batch: 认证批次
+admin.operation_certificate.certificate.audit.apply_time: 申请时间
+admin.operation_certificate.certificate.audit.status: 审核状态
+admin.operation_certificate.certificate.audit.audit_time: 审核时间
+admin.operation_certificate.certificate.audit.reviewer: 审核人
+admin.operation_certificate.certificate.audit.manage: 操作
+admin.operation_certificate.certificate.audit.query: 精确查询
+admin.operation_certificate.certificate.audit.user_info: 用户信息
+admin.operation_certificate.certificate.audit.certificate_info: 认证信息
+admin.operation_certificate.certificate.audit.crouse_status: 课程完成状态
+admin.operation_certificate.certificate.audit.crouse_complete: 已完成
+admin.operation_certificate.certificate.audit.crouse_incomplete: 未完成
+admin.operation_certificate.certificate.audit.result: 认证结果
+admin.operation_certificate.certificate.audit.title: 认证审核
+admin.operation_certificate.certificate.audit.certificate_pass: 通过
+admin.operation_certificate.certificate.audit.certificate_reject: 驳回
+admin.operation_certificate.certificate.audit.certificate_todo: 未审核
 
 # 网站公告管理
 admin.operation_announcement.content_th: 公告内容
@@ -10586,6 +10606,9 @@ exception.certificate.record.notfound_record: 证书不存在
 exception.certificate.record.forbidden_cancel: 证书无法撤销
 exception.certificate.record.forbidden_regrant: 证书无法重新撤销
 exception.certificate_template.forbidden_delete_published: 禁止删除已发布证书
+exception.certificate.audit.forbidden_audit: 审核失败
+exception.certificate.valid.forbidden_audit: 审核发送失败
+exception.certificate.reject.forbidden_audit: 审核驳回失败
 
 course.unname_title: 未命名计划
 

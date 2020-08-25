@@ -8,7 +8,6 @@ use Biz\Certificate\CertificateException;
 use Biz\Certificate\Dao\RecordDao;
 use Biz\Certificate\Service\CertificateService;
 use Biz\Certificate\Service\RecordService;
-use Biz\System\Service\LogService;
 
 class RecordServiceImpl extends BaseService implements RecordService
 {
@@ -30,11 +29,6 @@ class RecordServiceImpl extends BaseService implements RecordService
     public function findExpiredRecords($certificateId)
     {
         return $this->getRecordDao()->findExpiredRecords($certificateId);
-    }
-
-    public function findRecordsByCertificateId($certificateId)
-    {
-        return $this->getRecordDao()->findByCertificateId($certificateId);
     }
 
     public function cancelRecord($id)
@@ -81,88 +75,6 @@ class RecordServiceImpl extends BaseService implements RecordService
         return empty($isObtained) ? false : true;
     }
 
-    public function autoIssueCertificates($certificateId, $userIds)
-    {
-        $certificate = $this->getCertificateService()->get($certificateId);
-        if (empty($certificate) || empty($certificate['autoIssue']) || empty($userIds)) {
-            return true;
-        }
-
-        $this->beginTransaction();
-        try {
-            $userIds = $this->filterHasCertificateUsers($certificate, $userIds);
-            $this->batchCreateCertificateRecords($certificate, $userIds);
-
-            $this->getLogService()->info('certificate', 'auto_issue', '自动发放证书：'.json_encode($certificate).'用户ID：'.json_encode($userIds));
-
-            $this->commit();
-        } catch (\Exception $e) {
-            $this->rollback();
-            $this->getLogService()->error('certificate', 'auto_issue', '自动发放证书失败：'.json_encode($certificate).'用户ID：'.json_encode($userIds));
-            throw $e;
-        }
-
-        return true;
-    }
-
-    protected function batchCreateCertificateRecords($certificate, $userIds)
-    {
-        $defaultRecord = [
-            'certificateId' => $certificate['id'],
-            'targetId' => $certificate['targetId'],
-            'targetType' => $certificate['targetType'],
-            'status' => empty($certificate['autoIssue']) ? 'none' : 'valid',
-            'issueTime' => empty($certificate['autoIssue']) ? 0 : time(),
-            'expiryTime' => empty($certificate['expiryDay']) ? 0 : strtotime(date('Y-m-d', time() + 24 * 3600 * (int) $certificate['expiryDay'])),
-        ];
-        $createRecords = [];
-        $certificateCodes = $this->generateCertificateCode($certificate, count($userIds));
-        foreach ($userIds as $key => $userId) {
-            $defaultRecord['userId'] = $userId;
-            $defaultRecord['certificateCode'] = $certificateCodes[$key];
-            $createRecords[] = $defaultRecord;
-        }
-
-        if (!empty($createRecords)) {
-            $this->getRecordDao()->batchCreate($createRecords);
-        }
-
-        return true;
-    }
-
-    protected function generateCertificateCode($certificate, $count)
-    {
-        $existCodes = $this->findRecordsByCertificateId($certificate['id']);
-        $existCodes = ArrayToolkit::column($existCodes, 'certificateCode');
-        $generateCodes = [];
-        while (count($generateCodes) < $count) {
-            $generateCode = $certificate['code'].mt_rand(100000, 999999);
-            if (!in_array($generateCode, $existCodes) && !in_array($generateCode, $generateCodes)) {
-                $generateCodes[] = $generateCode;
-            }
-        }
-
-        return $generateCodes;
-    }
-
-    protected function filterHasCertificateUsers($certificate, $userIds)
-    {
-        if (empty($userIds)) {
-            return [];
-        }
-
-        $filterUserIds = [];
-        $existedRecords = $this->getRecordDao()->findByUserIdsAndCertificateId($userIds, $certificate['id']);
-        $existedRecords = ArrayToolkit::index($existedRecords, 'userId');
-        foreach ($userIds as $userId) {
-            if (empty($existedRecords[$userId]) || 'reject' != $existedRecords[$userId]['status']) {
-                $filterUserIds[] = $userId;
-            }
-        }
-
-        return $filterUserIds;
-    }
-
     public function isCertificatesObtained($userId, $certificateIds)
     {
         $obtaineds = $this->getRecordDao()->search(
@@ -181,12 +93,63 @@ class RecordServiceImpl extends BaseService implements RecordService
         return $isObtaineds;
     }
 
-    /**
-     * @return RecordDao
-     */
-    protected function getRecordDao()
+    public function passCertificateRecord($id, $auditUserId, $rejectReason = '')
     {
-        return $this->createDao('Certificate:RecordDao');
+        $record = $this->get($id);
+        $certificate = $this->getCertificateService()->get($record['certificateId']);
+        if (empty($record)) {
+            $this->createNewException(CertificateException::NOTFOUND_RECORD);
+        }
+
+        if ('reject' !== $record['status'] && 'none' !== $record['status']) {
+            $this->createNewException(CertificateException::FORBIDDEN_VALID_RECORD);
+        }
+
+        $record['rejectReason'] = $rejectReason;
+        $record['auditUserId'] = $auditUserId;
+        $record['auditTime'] = $record['issueTime'] = time();
+        $record['status'] = 'valid';
+        $record['expiryTime'] = (0 == $certificate['expiryDay']) ? 0 : strtotime(date('Y-m-d', time() + 24 * 3600 * (int) $certificate['expiryDay']));
+
+        return $this->getRecordDao()->update($id, $record);
+    }
+
+    public function rejectCertificateRecord($id, $auditUserId, $rejectReason = '')
+    {
+        $record = $this->get($id);
+        if (empty($record)) {
+            $this->createNewException(CertificateException::NOTFOUND_RECORD);
+        }
+
+        if ('reject' !== $record['status'] && 'none' !== $record['status']) {
+            $this->createNewException(CertificateException::FORBIDDEN_REJECT_RECORD);
+        }
+
+        $record['rejectReason'] = $rejectReason;
+        $record['auditUserId'] = $auditUserId;
+        $record['auditTime'] = $record['issueTime'] = time();
+        $record['status'] = 'reject';
+
+        return $this->getRecordDao()->update($id, $record);
+    }
+
+    public function resetCertificateRecord($id, $rejectReason = '')
+    {
+        $record = $this->get($id);
+        if (empty($record)) {
+            $this->createNewException(CertificateException::NOTFOUND_RECORD);
+        }
+
+        if ('reject' !== $record['status'] && 'none' !== $record['status']) {
+            $this->createNewException(CertificateException::FORBIDDEN_AUDIT_RECORD);
+        }
+
+        $record['rejectReason'] = $rejectReason;
+        $record['auditUserId'] = null;
+        $record['auditTime'] = null;
+        $record['status'] = 'none';
+
+        return $this->getRecordDao()->update($id, $record);
     }
 
     /**
@@ -198,10 +161,10 @@ class RecordServiceImpl extends BaseService implements RecordService
     }
 
     /**
-     * @return LogService
+     * @return RecordDao
      */
-    protected function getLogService()
+    protected function getRecordDao()
     {
-        return $this->createService('System:LogService');
+        return $this->createDao('Certificate:RecordDao');
     }
 }

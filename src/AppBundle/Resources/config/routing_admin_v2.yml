@@ -1091,6 +1091,18 @@ admin_v2_certificate_template_preview:
     path:  /certificate/template/{id}/preview
     defaults: { _controller: AppBundle:AdminV2/Operating/CertificateTemplate:preview }
 
+admin_v2_certificate_examine_manage:
+    path: /certificate/audit/manage
+    defaults: { _controller: AppBundle:AdminV2/Operating/CertificateAudit:index }
+
+admin_v2_certificate_examine_audit_detail:
+    path: /certificate/audit/{id}/detail
+    defaults: { _controller: AppBundle:AdminV2/Operating/CertificateAudit:detail }
+
+admin_v2_certificate_examine_audit:
+    path: /certificate/audit/{id}/submit
+    defaults: { _controller: AppBundle:AdminV2/Operating/CertificateAudit:submit }
+
 admin_v2_certificate_template_img_show:
     path:  /certificate/template/{id}/img
     defaults: { _controller: AppBundle:AdminV2/Operating/CertificateTemplate:imgShow }
