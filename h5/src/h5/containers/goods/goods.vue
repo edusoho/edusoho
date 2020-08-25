@@ -9,6 +9,7 @@
         <!--        <discount :goods="goods" />-->
         <detail :goods="goods" :currentSku="currentSku" />
         <specs :goods="goods" :currentSku="currentSku" @changeSku="changeSku" />
+        <enter-learning />
       </div>
 
       <div class="goods-info">
@@ -100,6 +101,7 @@
 import Discount from './components/discount';
 import Detail from './components/detail';
 import Specs from './components/specs';
+import EnterLearning from './components/enter-learning';
 
 import Teacher from './components/teacher';
 import Reviews from '@/containers/review';
@@ -138,6 +140,7 @@ export default {
     BackToTop, // 回到顶部
     AfterjoinDirectory,
     ClassroomCourses,
+    EnterLearning,
   },
   computed: {
     summary() {

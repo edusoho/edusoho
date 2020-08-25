@@ -1,201 +1,318 @@
 // 限时优惠
 .detail-discount {
-  height: vw(46);
-  // 优惠价格
-  .detail-discount__left {
-    width: vw(240);
-    height: 100%;
-    background: linear-gradient(90deg, rgba(255, 88, 115, 1) 0%, rgba(255, 127, 88, 1) 100%);
-    color: #fff;
-    text-align: center;
-    line-height: vw(46);
-    .text,
-    .price {
-      margin-right: vw(5);
-      font-size: vw(18);
-      font-weight: 500;
-    }
-    .original-price {
-      font-size: vw(14);
-    }
-  }
-  // 活动结束倒计时
-  .detail-discount__right {
-    width: vw(135);
-    height: 100%;
-    text-align: center;
-    background-color: #F5F5F5;
-    .text {
-      margin-top: vw(4);
-      font-size: vw(12);
-      line-height: vw(16);
-      color: #666;
-    }
-    .count-down {
-      height: vw(22);
-      color: #000;
-      .van-count-down {
-        font-size: vw(12);
-        line-height: vw(22);
-        .day {
-          margin-right: vw(5);
-          color: #FF5C3B;
-          font-size: vw(16);
-        }
-        .item {
-          display: inline-block;
-          width: vw(20);
-          height: vw(20);
-          margin-right: vw(5);
-          color: #fff;
-          background-color: #FF7262;
-          border-radius: vw(4);
-        }
-      }
-    }
-  }
+	height: vw(46);
+	// 优惠价格
+	.detail-discount__left {
+		width: vw(240);
+		height: 100%;
+		color: #fff;
+		line-height: vw(46);
+		text-align: center;
+		background: linear-gradient(90deg, rgba(255, 88, 115, 1) 0%, rgba(255, 127, 88, 1) 100%);
+
+		.text,
+		.price {
+			margin-right: vw(5);
+			font-weight: 500;
+			font-size: vw(18);
+		}
+
+		.original-price {
+			font-size: vw(14);
+		}
+	}
+	// 活动结束倒计时
+	.detail-discount__right {
+		width: vw(135);
+		height: 100%;
+		text-align: center;
+		background-color: #f5f5f5;
+
+		.text {
+			margin-top: vw(4);
+			color: #666;
+			font-size: vw(12);
+			line-height: vw(16);
+		}
+
+		.count-down {
+			height: vw(22);
+			color: #000;
+
+			.van-count-down {
+				font-size: vw(12);
+				line-height: vw(22);
+
+				.day {
+					margin-right: vw(5);
+					color: #ff5c3b;
+					font-size: vw(16);
+				}
+
+				.item {
+					display: inline-block;
+					width: vw(20);
+					height: vw(20);
+					margin-right: vw(5);
+					color: #fff;
+					background-color: #ff7262;
+					border-radius: vw(4);
+				}
+			}
+		}
+	}
 }
 // 名称价格
 .detail-info {
-  padding: vw(16);
-  background-color: #fff;
-  .detail-info__title {
-    font-size: vw(16);
-    font-weight: 500;
-    color: #333;
-  }
-  .detail-info__price {
-    margin-top: vw(8);
-    font-size: vw(16);
-    color: #999;
-    .price {
-      margin: 0 vw(3) 0 vw(5);
-      font-size: vw(24);
-      font-weight: 600;
-      color: #FF5C3B;
-    }
-    .study-num {
-      position: relative;
-      top: vw(5);
-    }
-    .original-price {
-      margin-top: vw(4);
-      font-size: vw(12);
-    }
-  }
+	padding: vw(16);
+	background-color: #fff;
+
+	.detail-info__title {
+		color: #333;
+		font-weight: 500;
+		font-size: vw(16);
+	}
+
+	.detail-info__price {
+		margin-top: vw(8);
+		color: #999;
+		font-size: vw(16);
+
+		.price {
+			margin: 0 vw(3) 0 vw(5);
+			color: #ff5c3b;
+			font-weight: 600;
+			font-size: vw(24);
+		}
+
+		.study-num {
+			position: relative;
+			top: vw(5);
+		}
+
+		.original-price {
+			margin-top: vw(4);
+			font-size: vw(12);
+		}
+	}
 }
 // 教学计划
 .detail-plan {
-  margin-top: vw(8);
-  padding: vw(14) vw(16);
-  line-height: vw(20);
-  background-color: #fff;
-  .detail-plan__plan {
-    margin-bottom: vw(12);
-    &:last-child {
-      margin-bottom: 0;
-    }
-    .plan-left {
-      width: vw(72);
-      font-size: vw(12);
-      color: #999;
-    }
-    .plan-right {
-      position: relative;
-      width: vw(271);
-      font-size: vw(14);
-      color: #666;
-      .plan-right__icon {
-        font-size: vw(14);
-        position: absolute;
-        right: 0;
-        top: vw(1);
-      }
-      .plan-right__promise {
-        padding: vw(2) vw(4);
-        margin-right: vw(8);
-        font-size: vw(12);
-        background-color: #03C777;
-        color: #fff;
-        border-radius: vw(4);
-      }
-    }
-  }
-  // 学习计划弹出框
-  .detail-plan__popup {
-    padding: vw(16);
-    box-sizing: border-box;
-    border-radius: vw(12) vw(12) 0 0;
-    .plan-popup__title {
-      font-size: vw(14);
-      color: #333;
-      line-height: vw(20);
-      span {
-        position: relative;
-        top: vw(1);
-        display: inline-block;
-        width: vw(4);
-        height: vw(12);
-        background-color: #03C777;
-        border-radius: vw(2);
-      }
-    }
-    .plan-popup__type {
-      margin-top: vw(4);
-      .plan-popup__type__item {
-        display: inline-block;
-        padding: vw(4) vw(8);
-        margin: vw(12) vw(8) 0 0;
-        border: vw(1) solid rgba(225, 225, 225, 1);
-        font-size: vw(14);
-        color: #999;
-        border-radius: vw(4);
-        &.active {
-          border: vw(1) solid #03C777;
-          background: rgba(3, 199, 119, 0.1);
-        }
-      }
-    }
-    .plan-popup__other {
-      padding: vw(16);
-      margin-top: vw(16);
-      background-color: #F9F9F9;
-      border-radius: vw(4);
-      .popup-other {
-        margin-top: vw(16);
-        line-height: vw(20);
-        font-size: vw(14);
-        &:first-child {
-          margin-top: 0;
-        }
-        .popup-other__left {
-          width: vw(102);
-          color: #999;
-        }
-        .popup-other__right {
-          width: vw(209);
-          color: #666;
-          .popup-other__right__promise {
-            padding: vw(2) vw(4);
-            margin-right: vw(8);
-            font-size: vw(12);
-            background-color: #03C777;
-            color: #fff;
-            border-radius: vw(4);
-          }
-        }
-      }
-    }
-    .plan-popup__buy {
-      margin-top: vw(24);
-      height: vw(48);
-      border-radius: vw(24);
-      background: rgba(255, 118, 95, 1);
-      color: #fff;
-      text-align: center;
-      line-height: vw(48);
-      font-size: vw(16);
-      font-weight: 500;
-    }
-  }
+	margin-top: vw(8);
+	padding: vw(14) vw(16);
+	line-height: vw(20);
+	background-color: #fff;
+
+	.detail-plan__plan {
+		margin-bottom: vw(12);
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+
+		.plan-left {
+			width: vw(72);
+			color: #999;
+			font-size: vw(12);
+		}
+
+		.plan-right {
+			position: relative;
+			width: vw(271);
+			color: #666;
+			font-size: vw(14);
+
+			.plan-right__icon {
+				position: absolute;
+				top: vw(1);
+				right: 0;
+				font-size: vw(14);
+			}
+
+			.plan-right__promise {
+				margin-right: vw(8);
+				padding: vw(2) vw(4);
+				color: #fff;
+				font-size: vw(12);
+				background-color: #03c777;
+				border-radius: vw(4);
+			}
+		}
+	}
+	// 学习计划弹出框
+	.detail-plan__popup {
+		box-sizing: border-box;
+		padding: vw(16);
+		border-radius: vw(12) vw(12) 0 0;
+
+		.plan-popup__title {
+			color: #333;
+			font-size: vw(14);
+			line-height: vw(20);
+
+			span {
+				position: relative;
+				top: vw(1);
+				display: inline-block;
+				width: vw(4);
+				height: vw(12);
+				background-color: #03c777;
+				border-radius: vw(2);
+			}
+		}
+
+		.plan-popup__type {
+			margin-top: vw(4);
+
+			.plan-popup__type__item {
+				display: inline-block;
+				margin: vw(12) vw(8) 0 0;
+				padding: vw(4) vw(8);
+				color: #999;
+				font-size: vw(14);
+				border: vw(1) solid rgba(225, 225, 225, 1);
+				border-radius: vw(4);
+
+				&.active {
+					background: rgba(3, 199, 119, 0.1);
+					border: vw(1) solid #03c777;
+				}
+			}
+		}
+
+		.plan-popup__other {
+			margin-top: vw(16);
+			padding: vw(16);
+			background-color: #f9f9f9;
+			border-radius: vw(4);
+
+			.popup-other {
+				margin-top: vw(16);
+				font-size: vw(14);
+				line-height: vw(20);
+
+				&:first-child {
+					margin-top: 0;
+				}
+
+				.popup-other__left {
+					width: vw(102);
+					color: #999;
+				}
+
+				.popup-other__right {
+					width: vw(209);
+					color: #666;
+
+					.popup-other__right__promise {
+						margin-right: vw(8);
+						padding: vw(2) vw(4);
+						color: #fff;
+						font-size: vw(12);
+						background-color: #03c777;
+						border-radius: vw(4);
+					}
+				}
+			}
+		}
+
+		.plan-popup__buy {
+			height: vw(48);
+			margin-top: vw(24);
+			color: #fff;
+			font-weight: 500;
+			font-size: vw(16);
+			line-height: vw(48);
+			text-align: center;
+			background: rgba(255, 118, 95, 1);
+			border-radius: vw(24);
+		}
+	}
+}
+
+.enter-learning {
+	margin: vw(8) 0;
+	padding: vw(12) vw(16);
+	background-color: #fff;
+
+	.enter-learning-container {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 100%;
+		height: vw(64);
+		overflow: hidden;
+		background: rgba(3, 199, 119, 0.1);
+		border-radius: vw(32);
+
+		.enter-learning-container__icon {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: vw(40);
+			height: vw(40);
+			margin-left: vw(16);
+			background: linear-gradient(90deg, rgba(34, 209, 138, 1) 0%, rgba(138, 226, 167, 0.98) 100%);
+			border-radius: 50%;
+
+			i {
+				color: #fff;
+				font-size: vw(18);
+			}
+		}
+
+		.enter-learning-container__text {
+			flex-grow: 1;
+			margin-left: vw(12);
+
+			.content {
+				position: relative;
+				color: #03c777;
+				font-weight: 500;
+				font-size: vw(16);
+
+				.hot {
+					position: absolute;
+					top: 0;
+					right: 0;
+					width: vw(29);
+					height: vw(16);
+					color: #fff;
+					font-size: vw(12);
+					line-height: vw(16);
+					text-align: center;
+					background-color: #ff9b56;
+					border-radius: vw(20);
+					transform: translate(110%, -100%);
+
+					&::before {
+						position: absolute;
+						bottom: 0;
+						left: 0;
+						display: inline-block;
+						width: 0;
+						height: 0;
+						border-color: #ff9b56 transparent transparent;
+						border-style: solid;
+						border-width: vw(6) vw(2) 0;
+						transform: translate(0%, 50%) rotate(45deg);
+						content: "";
+					}
+				}
+			}
+		}
+
+		.enter-learning-container__add {
+			width: vw(80);
+			height: vw(28);
+			color: #fff;
+			font-weight: 500;
+			font-size: vw(14);
+			line-height: vw(28);
+			text-align: center;
+			background: linear-gradient(90deg, rgba(34, 209, 138, 1) 0%, rgba(138, 226, 167, 0.98) 100%);
+			border-radius: vw(15) 0 0 vw(15);
+			box-shadow: 0 0 vw(4) 0 rgba(3, 199, 119, 0.2);
+		}
+	}
 }
