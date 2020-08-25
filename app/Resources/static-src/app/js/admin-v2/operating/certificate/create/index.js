@@ -34,7 +34,7 @@ export default class Create {
             }
           },
         },
-        deadline: {
+        expiryDay: {
           deadline_check: true,
         },
       },
@@ -45,7 +45,7 @@ export default class Create {
         templateId: {
           required: Translator.trans('admin_v2.certificate.template_id.check'),
         },
-        certificateCode: {
+        code: {
           es_remote: Translator.trans('admin_v2.certificate.code.exist'),
         },
       }
@@ -83,7 +83,7 @@ jQuery.validator.addMethod('certificate_code', function (value, element, params)
 }, jQuery.validator.format(Translator.trans('admin_v2.certificate.code.check')));
 
 jQuery.validator.addMethod('deadline_check', function () {
-  let value = $('[name = deadline]').val();
+  let value = $('[name = expiryDay]').val();
   if (!value || ((/^\+?[0-9][0-9]*$/.test(value) && value < 10000 && value > 0))) {
     return true;
   }
