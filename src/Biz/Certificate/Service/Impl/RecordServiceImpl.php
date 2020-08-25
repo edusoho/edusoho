@@ -243,7 +243,7 @@ class RecordServiceImpl extends BaseService implements RecordService
     {
         $conditions = [
             'status' => 'valid',
-            'expiryTime_LE' => time() - 86400,
+            'expiryTime_LE' => strtotime(date('Y-m-d', strtotime('-1 day'))),
             'expiryTime_NE' => 0,
         ];
         $count = $this->getRecordDao()->count($conditions);
