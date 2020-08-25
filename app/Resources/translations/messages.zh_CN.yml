@@ -6431,7 +6431,7 @@ admin.operation_certificate.template.basemap.vertical_upload_hint: 请上传jpg�
 admin.operation_certificate.template.basemap.horizontal_upload_hint: 请上传jpg、png格式的证书底图，建议尺寸为 3600 × 2600 px，文件大小不超过 2 MB
 admin.operation_certificate.template.stamp: 证书印章
 admin.operation_certificate.template.stamp.upload: 上传证书印章
-admin.operation_certificate.template.stamp.upload_hint: 请上png、bmp等格式透明背景的印章图片，建议尺寸为 650 × 650 px，文件大小不超过 2 MB
+admin.operation_certificate.template.stamp.upload_hint: 请上jpg、png等格式透明背景的印章图片，建议尺寸为 650 × 650 px，文件大小不超过 2 MB
 admin.operation_certificate.template.content.edit: 编辑证书信息
 admin.operation_certificate.template.certificate.title: 证书标题
 admin.operation_certificate.template.certificate.title_hint: 可选填
@@ -6439,6 +6439,7 @@ admin.operation_certificate.template.certificate.title.default: 课程认证证�
 admin.operation_certificate.template.certificate.recipient: 被授予人信息
 admin.operation_certificate.template.certificate.recipient.default: $name$（$username$）同学：
 admin.operation_certificate.template.certificate.recipient_hint: 可选填，支持添加 姓名：$name$  用户名：$username$
+admin.operation_certificate.template.certificate.empty_recipient_hint: 如网校未将 [姓名] 设置为必填项，则学员未填写姓名时，被授予人信息为空
 admin.operation_certificate.template.certificate.content: 证书正文
 admin.operation_certificate.template.certificate.content.default.course: 由于你在$courseName$ 课程中优异学习表现，最终完成课程并通过最终考核，特此发次证明！
 admin.operation_certificate.template.certificate.content.default.classroom: 由于你在$classroomName$ 班级中优异学习表现，最终完成课程并通过最终考核，特此发次证明！

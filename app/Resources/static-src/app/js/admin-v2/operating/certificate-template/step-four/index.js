@@ -13,7 +13,7 @@ export default class StepFour {
     this.validator = this.$element.validate({
       rules: {
         certificateName: {
-          maxlength: 50,
+          maxlength: 30,
         },
         recipientContent: {
           maxlength: 50,

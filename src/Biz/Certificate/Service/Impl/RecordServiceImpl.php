@@ -168,6 +168,11 @@ class RecordServiceImpl extends BaseService implements RecordService
         $this->beginTransaction();
         try {
             $userIds = $this->filterHasCertificateUsers($certificate, $userIds);
+            if (empty($userIds)) {
+                $this->commit();
+
+                return true;
+            }
             $this->batchCreateCertificateRecords($certificate, $userIds);
 
             $this->getLogService()->info('certificate', 'auto_issue', '自动发放证书：'.json_encode($certificate).'用户ID：'.json_encode($userIds));
@@ -233,7 +238,7 @@ class RecordServiceImpl extends BaseService implements RecordService
         $existedRecords = $this->getRecordDao()->findByUserIdsAndCertificateId($userIds, $certificate['id']);
         $existedRecords = ArrayToolkit::index($existedRecords, 'userId');
         foreach ($userIds as $userId) {
-            if (empty($existedRecords[$userId]) || 'reject' != $existedRecords[$userId]['status']) {
+            if (empty($existedRecords[$userId]) || 'reject' == $existedRecords[$userId]['status']) {
                 $filterUserIds[] = $userId;
             }
         }

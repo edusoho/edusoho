@@ -16,9 +16,7 @@ class RecordDaoImpl extends AdvancedDaoImpl implements RecordDao
 
     public function findExpiredRecords($certificateId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE `certificateId` = ? and expiryTime != 0 and expiryTime < ?; ";
-
-        return $this->db()->fetchAll($sql, [$certificateId, time()]);
+        return $this->findByFields(['certificateId' => $certificateId, 'status' => 'expired']);
     }
 
     public function findByUserIdsAndCertificateId($userIds, $certificateId)
