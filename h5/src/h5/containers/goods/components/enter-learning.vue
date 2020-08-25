@@ -1,5 +1,5 @@
 <template>
-  <div class="enter-learning">
+  <div class="enter-learning" @click="goto">
     <div class="enter-learning-container">
       <div class="enter-learning-container__icon">
         <i class="iconfont icon-renqi"></i>
@@ -14,3 +14,27 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {};
+  },
+  props: {
+    qrInfo: {
+      type: Object,
+      default: () => {},
+    },
+  },
+  methods: {
+    goto(e) {
+      this.$router.push({
+        name: 'goods_qr',
+        query: {
+          imageUrl: this.qrInfo.imageUrl || '',
+        },
+      });
+    },
+  },
+};
+</script>

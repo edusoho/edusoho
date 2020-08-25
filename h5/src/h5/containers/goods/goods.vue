@@ -9,7 +9,10 @@
         <!--        <discount :goods="goods" />-->
         <detail :goods="goods" :currentSku="currentSku" />
         <specs :goods="goods" :currentSku="currentSku" @changeSku="changeSku" />
-        <enter-learning />
+        <enter-learning
+          v-if="Object.keys(componentsInfo.mpQrCode).length"
+          :qr-info="componentsInfo.mpQrCode"
+        />
       </div>
 
       <div class="goods-info">
