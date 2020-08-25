@@ -170,6 +170,7 @@ class RecordServiceImpl extends BaseService implements RecordService
             $userIds = $this->filterHasCertificateUsers($certificate, $userIds);
             if (empty($userIds)) {
                 $this->commit();
+
                 return true;
             }
             $this->batchCreateCertificateRecords($certificate, $userIds);
