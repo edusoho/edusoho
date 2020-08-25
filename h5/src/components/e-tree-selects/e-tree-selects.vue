@@ -31,19 +31,19 @@
     <!-- 下拉选择 -->
     <div class="e-tree-select__list">
       <div class="e-tree-select__items">
-        <div
-          v-if="item.data && index > 0"
-          v-for="(item, index) in selectItems"
-          :key="index"
-          :class="[
-            'e-tree-select__item',
-            selectedIndex === index && isActive ? 'active' : '',
-          ]"
-          @click="toggle(item, index)"
-        >
-          {{ selectedText(item.data, index) }}
-        </div>
-
+        <template v-for="(item, index) in selectItems">
+          <div
+            v-if="item.data && index > 0"
+            :key="index"
+            :class="[
+              'e-tree-select__item',
+              selectedIndex === index && isActive ? 'active' : '',
+            ]"
+            @click="toggle(item, index)"
+          >
+            {{ selectedText(item.data, index) }}
+          </div>
+        </template>
         <div class="showfree" v-show="type == 'course'">
           仅显示免费
           <van-switch v-model="showFree" size="12px" active-color="#03C777" />

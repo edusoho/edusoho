@@ -15,14 +15,16 @@
     </e-panel>
 
     <ul v-if="!defaultPlan" class="course-detail__plan">
-      <li
-        v-for="(item, index) in items"
-        v-if="item.title"
-        :class="{ active: item.active }"
-        @click="handleClick(item, index)"
-      >
-        {{ item.title }}
-      </li>
+      <template v-for="(item, index) in items">
+        <li
+          v-if="item.title"
+          :key="index"
+          :class="{ active: item.active }"
+          @click="handleClick(item, index)"
+        >
+          {{ item.title }}
+        </li>
+      </template>
     </ul>
 
     <div class="course-detail__validity">
@@ -43,31 +45,19 @@
       </div>
       <div v-if="details.buyExpiryTime != 0" class="mt5">
         <span class="mr20">购买截止日期</span>
-        <span class="validity orange">{{
-          details.buyExpiryTime | filterTime
-        }}</span>
+        <span class="validity orange">{{ buyExpiryTime }}</span>
       </div>
     </div>
   </div>
 </template>
 <script>
-import * as types from '@/store/mutation-types';
 import service from '@/containers/classroom/service';
-import { mapMutations, mapState, mapActions } from 'vuex';
-import { Toast } from 'vant';
+import { mapState, mapActions } from 'vuex';
+import { formatFullTime } from '@/utils/date-toolkit';
 
 export default {
   components: {
     service,
-  },
-  filters: {
-    filterTime(time) {
-      const fullDate = new Date(time);
-      const year = fullDate.getFullYear();
-      const month = `0${fullDate.getMonth()}`.slice(-2);
-      const date = `0${fullDate.getDate()}`.slice(-2);
-      return `${year}-${month}-${date}`;
-    },
   },
   data() {
     return {
@@ -116,21 +106,17 @@ export default {
       const memberInfo = this.details.member;
       const learnExpiryData = this.details.learningExpiryDate;
       const expiryMode = learnExpiryData.expiryMode;
-
+      const startDateStr = learnExpiryData.expiryStartDate.slice(0, 10);
+      const endDateStr = learnExpiryData.expiryEndDate.slice(0, 10);
       if (!memberInfo) {
         switch (expiryMode) {
           case 'forever':
             return '永久有效';
-            break;
           case 'end_date':
-            return learnExpiryData.expiryEndDate.slice(0, 10) + '之前可学习';
-            break;
+            return endDateStr + '之前可学习';
           case 'days':
             return learnExpiryData.expiryDays + '天内可学习';
-            break;
           case 'date':
-            const startDateStr = learnExpiryData.expiryStartDate.slice(0, 10);
-            const endDateStr = learnExpiryData.expiryEndDate.slice(0, 10);
             return (
               '<div class = "mt5">' +
               '开课日期：' +
@@ -140,7 +126,6 @@ export default {
               endDateStr +
               '</div>'
             );
-            break;
         }
       } else {
         if (expiryMode == 'forever') {
@@ -150,6 +135,11 @@ export default {
           ? memberInfo.deadline.slice(0, 10) + '之前可学习'
           : '永久有效';
       }
+      return '';
+    },
+    buyExpiryTime() {
+      const fullDate = new Date(this.details.buyExpiryTime);
+      return formatFullTime(fullDate);
     },
     showStudent() {
       return this.courseSettings
@@ -168,6 +158,7 @@ export default {
         if (discountNum === 0) return true;
         return discountNum;
       }
+      return '';
     },
   },
   methods: {

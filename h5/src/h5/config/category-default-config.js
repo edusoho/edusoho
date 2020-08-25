@@ -47,6 +47,30 @@ const CATEGORY_DEFAULT = {
     },
   ],
   openCourse_list: [],
+  itemBank_list: [
+    {
+      data: [],
+      moduleType: 'tree',
+      text: '分类',
+      type: 'category',
+    },
+    {
+      data: '',
+      moduleType: 'normal',
+      text: '题库类型',
+      type: 'courseType',
+    },
+    {
+      data: [
+        { text: '推荐', type: 'recommendedSeq' },
+        { text: '热门', type: '-studentNum' },
+        { text: '最新', type: '-createdTime' },
+      ],
+      moduleType: 'normal',
+      text: '题库类型',
+      type: 'sort',
+    },
+  ],
 };
 
 export default CATEGORY_DEFAULT;

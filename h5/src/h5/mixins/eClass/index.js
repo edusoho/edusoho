@@ -108,20 +108,40 @@ export default {
         location.href = this.order.targetUrl;
         return;
       }
-      this.$router.push({
-        path: `/goods/${this.course.goodsId}/show`,
-      });
+      this.toMore(this.typeList, id);
+    },
+    toMore(type, id) {
+      let path = '';
+      switch (type) {
+        case 'course_list':
+          path = `/goods/${this.course.goodsId}/show`;
+          break;
+        // case 'item_bank_exercise':
+        //   path = `/course/${id}`;
+        //   break;
+        case 'classroom_list':
+          path = `/goods/${this.course.goodsId}/show`;
+          break;
+      }
+      this.$router.push({ path: path });
     },
     // 调用app接口
     postMessage(type, id) {
-      let action;
+      let action = '';
       let data = {};
-      if (type === 'course_list') {
-        action = 'kuozhi_course';
-        data = { courseId: id };
-      } else {
-        action = 'kuozhi_classroom';
-        data = { classroomId: id };
+      switch (type) {
+        case 'course_list':
+          action = 'kuozhi_course';
+          data = { courseId: id };
+          break;
+        case 'item_bank_exercise':
+          action = 'kuozhi_itembank';
+          data = { exerciseId: id };
+          break;
+        case 'classroom_list':
+          action = 'kuozhi_classroom';
+          data = { classroomId: id };
+          break;
       }
       // 调用app接口
       window.postNativeMessage({ action, data });

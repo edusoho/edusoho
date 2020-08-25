@@ -1,6 +1,7 @@
 import Vue from 'vue';
 
 export default (module, startValidate = false) => {
+  console.log(module.type);
   // 轮播图
   if (module.type === 'slide_show') {
     for (let i = 0; i < module.data.length; i += 1) {
@@ -80,6 +81,23 @@ export default (module, startValidate = false) => {
       if (startValidate) {
         Vue.prototype.$message({
           message: '请完善公开课模块信息！',
+          type: 'error',
+        });
+      }
+      return true;
+    }
+  }
+
+  // 题库
+  if (module.type === 'item_bank_exercise') {
+    const itemBankExist = module.data.items.length;
+    if (
+      !module.data.title ||
+      (module.data.sourceType === 'custom' && !itemBankExist)
+    ) {
+      if (startValidate) {
+        Vue.prototype.$message({
+          message: '请完善题库模块信息！',
           type: 'error',
         });
       }

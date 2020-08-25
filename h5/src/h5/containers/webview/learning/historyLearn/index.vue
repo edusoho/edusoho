@@ -11,10 +11,12 @@
               <e-card
                 v-for="(item, index) in lesson[date]"
                 :key="index"
-                :course="item"
+                :course="item | cardDataList(item)"
                 @toClassroom="toClassroom"
                 @toTask="toTask"
                 @toCourse="toCourse"
+                @toItemBank="toItemBank"
+                @toItemBankTask="toItemBankTask"
               />
             </template>
           </div>
@@ -32,8 +34,8 @@
 <script>
 import ECard from '&/components/e-card/e-course-card';
 import empty from '&/components/e-empty/e-empty.vue';
-import * as types from '@/store/mutation-types';
 import { formatchinaTime } from '@/utils/date-toolkit';
+import cardDataList from '@/utils/filter-card';
 import Api from '@/api';
 export default {
   name: 'history-learn',
@@ -66,6 +68,9 @@ export default {
   created() {
     this.setTitle();
     this.getUserInfo();
+  },
+  filters: {
+    cardDataList,
   },
   methods: {
     setTitle() {
@@ -159,10 +164,22 @@ export default {
         data: { taskId: task.id, taskType: task.type, courseId: task.courseId },
       });
     },
+    toItemBankTask(task, type) {
+      window.postNativeMessage({
+        action: 'kuozhi_itembank_task',
+        data: { task, type },
+      });
+    },
     toCourse(id) {
       window.postNativeMessage({
         action: 'kuozhi_course',
         data: { courseId: id },
+      });
+    },
+    toItemBank(id) {
+      window.postNativeMessage({
+        action: 'kuozhi_itembank',
+        data: { exerciseId: id },
       });
     },
     sendError(error) {
@@ -177,5 +194,3 @@ export default {
   },
 };
 </script>
-
-<style></style>

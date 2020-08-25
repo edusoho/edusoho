@@ -22,18 +22,18 @@
     <div
       v-if="uiStyle !== 'old'"
       class="e-course-list__header"
-      style="padding:16px"
+      style="padding: 16px;"
     >
       <div class="clearfix">
         <span
           class="e-course-list__list-title text-overflow"
-          style="font-size:16px"
+          style="font-size: 16px;"
           >{{ courseList.title }}</span
         >
         <span class="e-course-list__more">
           <span
             class="more-text pull-left"
-            style="font-size:12px"
+            style="font-size: 12px;"
             @click="jumpTo(courseList.source)"
             >更多</span
           >
@@ -42,42 +42,48 @@
     </div>
     <div v-if="courseList.items.length">
       <div class="e-course-list__body">
-        <e-class
-          v-for="item in courseList.items"
-          v-if="uiStyle === 'old'"
-          :key="item.id"
-          :course="item | courseListData(listObj)"
-          :discountType="
-            typeList === 'course_list' ? item.courseSet.discountType : ''
-          "
-          :discount="typeList === 'course_list' ? item.courseSet.discount : ''"
-          :course-type="typeList === 'course_list' ? item.courseSet.type : ''"
-          :type-list="typeList"
-          :normal-tag-show="normalTagShow"
-          :vip-tag-show="vipTagShow"
-          :type="type"
-          :is-vip="item.vipLevelId"
-          :feedback="feedback"
-        />
-        <!-- 一行一列  目前只正对app -->
-        <e-row-class
-          v-for="item in courseList.items"
-          v-if="uiStyle !== 'old' && displayStyle === 'row'"
-          :key="item.id"
-          :course="item | courseListData(listObj, uiStyle, platform)"
-          :discountType="
-            typeList === 'course_list' ? item.courseSet.discountType : ''
-          "
-          :discount="typeList === 'course_list' ? item.courseSet.discount : ''"
-          :course-type="typeList === 'course_list' ? item.courseSet.type : ''"
-          :type-list="typeList"
-          :normal-tag-show="normalTagShow"
-          :vip-tag-show="vipTagShow"
-          :type="type"
-          :is-vip="item.vipLevelId"
-          :feedback="feedback"
-        />
-        <!-- 一行两列  目前只正对app -->
+        <template v-if="uiStyle === 'old'">
+          <e-class
+            v-for="item in courseList.items"
+            :key="item.id"
+            :course="item | courseListData(listObj)"
+            :discountType="
+              typeList === 'course_list' ? item.courseSet.discountType : ''
+            "
+            :discount="
+              typeList === 'course_list' ? item.courseSet.discount : ''
+            "
+            :course-type="typeList === 'course_list' ? item.courseSet.type : ''"
+            :type-list="typeList"
+            :normal-tag-show="normalTagShow"
+            :vip-tag-show="vipTagShow"
+            :type="type"
+            :is-vip="item.vipLevelId"
+            :feedback="feedback"
+          />
+        </template>
+        <!-- 一行一列  -->
+        <template v-if="uiStyle !== 'old' && displayStyle === 'row'">
+          <e-row-class
+            v-for="item in courseList.items"
+            :key="item.id"
+            :course="item | courseListData(listObj, uiStyle, platform)"
+            :discountType="
+              typeList === 'course_list' ? item.courseSet.discountType : ''
+            "
+            :discount="
+              typeList === 'course_list' ? item.courseSet.discount : ''
+            "
+            :course-type="typeList === 'course_list' ? item.courseSet.type : ''"
+            :type-list="typeList"
+            :normal-tag-show="normalTagShow"
+            :vip-tag-show="vipTagShow"
+            :type="type"
+            :is-vip="item.vipLevelId"
+            :feedback="feedback"
+          />
+        </template>
+        <!-- 一行两列   -->
         <div
           v-if="uiStyle !== 'old' && displayStyle === 'distichous'"
           class="clearfix"

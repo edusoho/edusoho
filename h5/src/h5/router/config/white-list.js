@@ -9,6 +9,7 @@ const whiteList = [
   '/login',
   '/sts',
   '/face_verification',
+  '/itemBank/explore/new',
 ];
 
 export default whiteList;

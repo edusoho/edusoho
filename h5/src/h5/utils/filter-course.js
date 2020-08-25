@@ -53,6 +53,17 @@ const getDisplayStyle = (data, listObj) => {
   };
 };
 const getNewDisplayStyle = (data, listObj, platform) => {
+  const price = getPriceDisplay(data, platform);
+
+  if (listObj.typeList === 'classroom_list') {
+    return getClassRoomDisplay(data, listObj, price);
+  }
+  if (listObj.typeList === 'item_bank_exercise') {
+    return getItemBankDisplay(data, listObj, price);
+  }
+  return getCourseDisplay(data, listObj, price);
+};
+const getPriceDisplay = (data, platform) => {
   const dataPrice = Number(data.price2.amount);
   const primaryColor = {
     app: '#20B573',
@@ -66,28 +77,30 @@ const getNewDisplayStyle = (data, listObj, platform) => {
   } else {
     price = `<span style="color:${primaryColor[platform]}">免费</span>`;
   }
-
-  if (listObj.typeList === 'classroom_list') {
-    return {
-      id: data.id,
-      targetId: data.targetId,
-      goodsId: data.goodsId,
-      studentNum: listObj.classRoomShowStudent ? data.studentNum : null,
-      imgSrc: {
-        url: data.cover.middle || '',
-        className: '',
-      },
-      header: data.title,
-      middle: {
-        value: data.courseNum,
-        html: `<span>共 ${data.courseNum} 门课程</span>`,
-      },
-      bottom: {
-        value: data.price,
-        html: `<span>${price}</span>`,
-      },
-    };
-  }
+  return price;
+};
+const getClassRoomDisplay = (data, listObj, price) => {
+  return {
+    id: data.id,
+    targetId: data.targetId,
+    goodsId: data.goodsId,
+    studentNum: listObj.classRoomShowStudent ? data.studentNum : null,
+    imgSrc: {
+      url: data.cover.middle || '',
+      className: '',
+    },
+    header: data.title,
+    middle: {
+      value: data.courseNum,
+      html: `<span>共 ${data.courseNum} 门课程</span>`,
+    },
+    bottom: {
+      value: data.price,
+      html: `<span>${price}</span>`,
+    },
+  };
+};
+const getCourseDisplay = (data, listObj, price) => {
   return {
     id: data.id,
     goodsId: data.courseSet.goodsId,
@@ -100,6 +113,25 @@ const getNewDisplayStyle = (data, listObj, platform) => {
     middle: {
       value: data.title,
       html: ` <span>${data.title}</span>`,
+    },
+    bottom: {
+      value: data.price,
+      html: `<span>${price}</span>`,
+    },
+  };
+};
+const getItemBankDisplay = (data, listObj, price) => {
+  return {
+    id: data.id,
+    studentNum: listObj.showStudent ? data.studentNum : null,
+    imgSrc: {
+      url: data.cover.middle || '',
+      className: '',
+    },
+    header: data.title,
+    middle: {
+      value: '',
+      html: ` <span></span>`,
     },
     bottom: {
       value: data.price,

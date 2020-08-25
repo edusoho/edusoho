@@ -67,6 +67,11 @@ const config = [
     url: '/open_course',
   },
   {
+    // 获取题库列表数据
+    name: 'getItemBankList',
+    url: '/item_bank_exercises',
+  },
+  {
     // 获取优惠券功能开关
     name: 'getCouponSetting',
     url: '/setting/coupon',

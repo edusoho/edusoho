@@ -60,7 +60,6 @@
       @updateModule="updateHandler(module, index)"
     ></vip>
 
-    <!-- 仅app、h5有的基础组件 -->
     <!-- 图文导航 -->
     <graphic-navigation
       v-if="module.type === moduleDefault.graphicNavigation.type"
@@ -71,6 +70,7 @@
       @updateModule="updateHandler(module, index)"
     ></graphic-navigation>
 
+    <!-- 搜索导航 -->
     <Search
       v-if="module.type === moduleDefault.search.type"
       :key="'search' + module.oldIndex"
@@ -80,7 +80,6 @@
       @updateModule="updateHandler(module, index)"
     ></Search>
 
-    <!-- 仅app有的基础组件 -->
     <!-- 公开课 -->
     <open-course
       v-if="module.type === moduleDefault.openCourseList.type"
@@ -90,6 +89,16 @@
       :incomplete="validateFuc"
       @updateModule="updateHandler(module, index)"
     ></open-course>
+
+    <!-- 题库-->
+    <item-bank
+      v-if="module.type === moduleDefault.itemBankList.type"
+      :key="'itemBankExercise' + module.oldIndex"
+      :active="isActive"
+      :moduleData="module"
+      :incomplete="validateFuc"
+      @updateModule="updateHandler(module, index)"
+    ></item-bank>
 
     <!-- 营销组件——拼团，砍价，秒杀 -->
     <marketing-activity
@@ -119,6 +128,7 @@
 import Carousel from '../carousel';
 import Course from '../course';
 import OpenCourse from '../open-course';
+import itemBank from '../item-bank';
 import GraphicNavigation from '../graphic-navigation';
 import Poster from '../poster';
 import Coupon from '../coupon';
@@ -139,6 +149,7 @@ export default {
     openCourse: OpenCourse,
     graphicNavigation: GraphicNavigation,
     Search,
+    itemBank,
   },
   props: {
     module: {
@@ -182,6 +193,7 @@ export default {
       if (this.saveFlag) {
         return validate(this.module);
       }
+      return false;
     },
   },
   watch: {

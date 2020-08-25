@@ -40,20 +40,6 @@
         </draggable>
       </div>
 
-      <!-- h5配置——底部添加组件按钮 -->
-      <!--       <div class="find-section bg-grey clearfix" v-if="portal === 'h5' || !supportActivityVersion">
-        <div class="section-title">点击添加组件</div>
-        <div class="section-button-group">
-          <div v-for="(item, index) in baseModules" :key="index">
-            <el-button class="find-section-item" type="" size="medium" @click="addModule(item, index)"
-              v-show="item.default.type !== 'vip' || item.default.type === 'vip' && vipSetupStatus"
-              v-if="(item.default.type !== 'classroom_list' || (supportClassroomVersion && item.default.type === 'classroom_list' && portal === 'miniprogram')) && (item.default.type !== 'coupon' || (supportCouponVersion && item.default.type === 'coupon' && portal === 'miniprogram')) && (item.default.type !== 'vip' || (supportVipVersion && item.default.type === 'vip' && portal === 'miniprogram')) || (portal === 'h5')">
-              {{ item.name }}
-            </el-button>
-          </div>
-        </div>
-      </div> -->
-
       <!--h5和小程序 底部添加组件按钮 -->
       <div
         class="multi-find-section find-section clearfix"

@@ -13,7 +13,11 @@
         :feedback="feedback"
       />
       <e-course-list
-        v-if="['classroom_list', 'course_list'].includes(part.type)"
+        v-if="
+          ['classroom_list', 'course_list', 'item_bank_exercise'].includes(
+            part.type,
+          )
+        "
         :course-list="part.data"
         :feedback="feedback"
         :type-list="part.type"

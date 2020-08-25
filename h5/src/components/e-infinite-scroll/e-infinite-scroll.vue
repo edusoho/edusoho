@@ -15,7 +15,7 @@
           />
         </div>
       </template>
-      <!-- 班级和课程 -->
+      <!-- 班级、课程、题库 -->
       <template v-else>
         <courseItem
           v-for="(course, index) in courseList"
@@ -26,14 +26,10 @@
           :type-list="typeList"
           :is-vip="course.vipLevelId"
           :is-app-use="isAppUse"
-          :discountType="
-            typeList === 'course_list' ? course.courseSet.discountType : ''
-          "
-          :discount="
-            typeList === 'course_list' ? course.courseSet.discount : ''
-          "
-          :course-type="typeList === 'course_list' ? course.courseSet.type : ''"
-          :course="course | courseListData(listObj, 'appSetting')"
+          :discountType="discountType(course)"
+          :discount="discount(course)"
+          :course-type="courseType(course)"
+          :course="course | courseListData(listObj, 'new', 'app')"
         />
       </template>
     </van-list>
@@ -139,6 +135,24 @@ export default {
       // 将 loading 设置为 true，表示处于加载状态
       this.loading = true;
       this.onLoad();
+    },
+    discountType(course) {
+      if (this.typeList === 'course_list') {
+        return course.courseSet.discountType;
+      }
+      return '';
+    },
+    discount(course) {
+      if (this.typeList === 'course_list') {
+        return course.courseSet.discount;
+      }
+      return '';
+    },
+    courseType(course) {
+      if (this.typeList === 'course_list') {
+        return course.courseSet.type;
+      }
+      return '';
     },
   },
 };

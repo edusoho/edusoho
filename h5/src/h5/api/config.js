@@ -1,4 +1,5 @@
 import openCourse from './openCourse/index';
+import itemBankCourse from './itemBankCourse/index';
 import classroom from './classroom/index';
 import setting from './setting/index';
 import course from './course/index';
@@ -30,6 +31,7 @@ const config = [
   ...liveTimetable,
   ...goods,
   ...reviews,
+  ...itemBankCourse,
 ];
 
 export default config;
