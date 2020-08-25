@@ -68,7 +68,7 @@ export default {
         return {};
       },
     },
-    activeIndex: 
+    activeIndex: ''
   },
   data() {
     const that = this;

@@ -76,7 +76,11 @@
         <section class="goods-info__item">
           <Recommend
             :goods="goods"
-            :recommendGoods="componentsInfo.recommendGoods.slice(0, 4)"
+            :recommendGoods="
+              componentsInfo.recommendGoods
+                ? componentsInfo.recommendGoods.slice(0, 4)
+                : componentsInfo.recommendGoods
+            "
           >
             <span slot="title">猜你想学</span>
           </Recommend>

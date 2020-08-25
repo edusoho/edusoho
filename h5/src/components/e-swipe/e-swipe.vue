@@ -5,15 +5,13 @@
         <div class="item-container">
           <!-- course/classroom -->
           <div v-if="slide.link.type !== 'url'" @click="jumpTo(slide, index)">
-            <img :src="slide.image.uri" />
+            <img :src="slide.image.uri">
           </div>
           <!-- url -->
           <a v-else :href="slide.link.url || 'javascript:;'">
-            <img v-lazy="slide.image.uri" />
+            <img v-lazy="slide.image.uri">
           </a>
-          <div class="text-overflow item-container__title">
-            {{ slide.title }}
-          </div>
+          <div class="text-overflow item-container__title">{{ slide.title }}</div>
         </div>
       </van-swipe-item>
     </van-swipe>
@@ -25,39 +23,38 @@ export default {
   props: {
     slides: {
       type: Array,
-      default: [],
+      default: []
     },
     feedback: {
       type: Boolean,
-      default: true,
-    },
+      default: true
+    }
   },
   methods: {
     jumpTo(slide, index) {
       if (!this.feedback) return
       if (!slide) return
 
-        const itemLinkData = slide.link;
-        if (itemLinkData.type === 'classroom' && itemLinkData.target) {
-          this.$router.push({
-            path: `/classroom/${itemLinkData.target.id}`
-          });
-          return;
-        }
-        if (itemLinkData.type === 'vip') {
-          this.$router.push({
-            path: `/vip`
-          });
-          return
-        }
-        if (itemLinkData.type === 'course' && itemLinkData.target) {
-          this.$router.push({
-            path: `/course/${itemLinkData.target.id}`
-          });
-          
-        }
+      const itemLinkData = slide.link;
+      if (itemLinkData.type === 'classroom' && itemLinkData.target) {
+        this.$router.push({
+          path: `/classroom/${itemLinkData.target.id}`
+        });
+        return;
       }
-    },
-  },
-};
+      if (itemLinkData.type === 'vip') {
+        this.$router.push({
+          path: `/vip`
+        });
+        return
+      }
+      if (itemLinkData.type === 'course' && itemLinkData.target) {
+        this.$router.push({
+          path: `/course/${itemLinkData.target.id}`
+        });
+        return
+      }
+    }
+  }
+}
 </script>

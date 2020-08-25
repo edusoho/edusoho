@@ -12,13 +12,13 @@
 export default {
   name: 'EPanel',
   props: {
-    'hidde-title': ,
-    title: ,
-    defaulValue: ,
+    'hidde-title': '',
+    title: '',
+    defaulValue: '',
     needFlex: {
       type: Boolean,
-      default: true,
-    },
-  },
-};
+      default: true
+    }
+  }
+}
 </script>
