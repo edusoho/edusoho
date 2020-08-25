@@ -624,7 +624,9 @@ const routes = [
       title: '商品页',
     },
     component: () =>
-      import(/* webpackChunkName: "more" */ '@/containers/goods/course.vue'),
+      import(
+        /* webpackChunkName: "old-goods" */ '@/containers/goods/course.vue'
+      ),
   },
   {
     path:
@@ -634,7 +636,9 @@ const routes = [
       title: '商品页',
     },
     component: () =>
-      import(/* webpackChunkName: "more" */ '@/containers/goods/classroom.vue'),
+      import(
+        /* webpackChunkName: "old-goods" */ '@/containers/goods/classroom.vue'
+      ),
   },
   {
     path:
@@ -644,7 +648,25 @@ const routes = [
       title: '商品详情',
     },
     component: () =>
-      import(/* webpackChunkName: "more" */ '@/containers/goods/goods.vue'),
+      import(/* webpackChunkName: "goods" */ '@/containers/goods/goods.vue'),
+  },
+  {
+    path: '/goods/qr',
+    name: 'goods_qr',
+    meta: {
+      title: '进群免费学习课程',
+    },
+    component: () =>
+      import(/* webpackChunkName: "goods" */ '@/containers/goods/qr.vue'),
+  },
+  {
+    path: '/goods/reviews',
+    name: 'goods_reviews',
+    meta: {
+      title: '进群免费学习课程',
+    },
+    component: () =>
+      import(/* webpackChunkName: "goods" */ '@/containers/goods/reviews.vue'),
   },
 ];
 
