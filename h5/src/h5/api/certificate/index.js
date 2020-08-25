@@ -23,10 +23,4 @@ export default [
     url: '/certificates/{certificateId}',
     method: 'GET',
   },
-  {
-    // 下载证书
-    name: 'certificateDownload',
-    url: '/certificate/image/{recordId}/download',
-    method: 'GET',
-  },
 ];

@@ -8,7 +8,7 @@
           <img v-if="user.avatar" :src="user.avatar.small" />
         </div>
         <div class="certificate-user__info pull-left">
-          <p>姓名：暂时未调整</p>
+          <p>姓名：{{ certificate.truename }}</p>
           <p>用户名：{{ user.nickname }}</p>
         </div>
       </div>
@@ -52,12 +52,15 @@
       <div class="certificate-detail__img">
         <img :src="certificate.imgUrl" />
       </div>
-      <div
+      <a
         class="certificate-detail__download"
-        @click="onDownload(certificate.certificateId)"
+        :href="certificate.imgUrl"
+        :download="
+          certificate.certificate ? certificate.certificate.name + '.png' : ''
+        "
       >
         下载证书
-      </div>
+      </a>
     </div>
   </div>
 </template>
@@ -65,7 +68,8 @@
 <script>
 import Api from '@/api';
 import { Toast } from 'vant';
-import { mapState } from 'vuex';
+import * as types from '@/store/mutation-types';
+import { mapMutations, mapState } from 'vuex';
 
 export default {
   data() {
@@ -94,17 +98,9 @@ export default {
     ...mapState(['user']),
   },
   methods: {
-    onDownload(id) {
-      Api.certificateDownload({
-        query: { recordId: id },
-      })
-        .then(res => {
-          console.log(res);
-        })
-        .catch(err => {
-          Toast.fail(err.message);
-        });
-    },
+    ...mapMutations({
+      setNavBarTitle: types.SET_NAVBAR_TITLE,
+    }),
   },
   created() {
     Api.certificateRecords({
@@ -112,6 +108,7 @@ export default {
     })
       .then(res => {
         this.certificate = res;
+        this.setNavBarTitle(res.certificate.name);
       })
       .catch(err => {
         Toast.fail(err.message);

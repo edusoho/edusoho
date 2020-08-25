@@ -6,8 +6,8 @@
       <h3 class="ccd-item__title">证书名称</h3>
       <div class="ccd-item__body">
         {{ certificate.name }}
-        <span class="obtain" v-if="certificate.isObtained">待获取</span>
-        <span class="acquired" v-else>已获取</span>
+        <span class="acquired" v-if="certificate.isObtained">已获取</span>
+        <span class="obtain" v-else>待获取</span>
       </div>
     </div>
 
@@ -50,8 +50,9 @@
 
 <script>
 import Api from '@/api';
-import { mapState } from 'vuex';
 import { Toast } from 'vant';
+import * as types from '@/store/mutation-types';
+import { mapMutations, mapState } from 'vuex';
 
 export default {
   data() {
@@ -65,6 +66,7 @@ export default {
     })
       .then(res => {
         this.certificate = res;
+        this.setNavBarTitle(res.name);
       })
       .catch(err => {
         Toast.fail(err.message);
@@ -73,6 +75,11 @@ export default {
   computed: {
     ...mapState({
       isLoading: state => state.isLoading,
+    }),
+  },
+  methods: {
+    ...mapMutations({
+      setNavBarTitle: types.SET_NAVBAR_TITLE,
     }),
   },
 };
