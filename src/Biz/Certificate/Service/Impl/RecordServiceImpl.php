@@ -161,7 +161,7 @@ class RecordServiceImpl extends BaseService implements RecordService
     public function autoIssueCertificates($certificateId, $userIds)
     {
         $certificate = $this->getCertificateService()->get($certificateId);
-        if (empty($certificate) || $certificate['status'] != 'published' || empty($userIds)) {
+        if (empty($certificate) || 'published' != $certificate['status'] || empty($userIds)) {
             return true;
         }
 
