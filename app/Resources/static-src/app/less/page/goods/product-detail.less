@@ -109,7 +109,7 @@
           font-weight: 600;
           .detail-right__price__unit {
             color: #666;
-            font-size: 14px;
+            font-size: 14px !important;
             font-weight: normal;
           }
         }
@@ -117,10 +117,17 @@
           margin-left: 9px;
         }
         @media (max-width: 767px) {
-          padding-left: 16px;
+          padding-left: 4px;
+          .detail-right__price__price {
+            margin-left: 4px;
+            font-size: 18px;
+          }
+          s {
+            margin-left: 4px;
+          }
           span {
-            margin-left: 10px;
-            font-size: 24px;
+            margin-left: 4px;
+            font-size: 14px;
           }
         }
       }
