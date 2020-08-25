@@ -16,6 +16,9 @@ class CourseSpecsMediator extends AbstractSpecsMediator
             'title' => empty($course['title']) ? $course['courseSetTitle'] : $course['title'],
             'seq' => $course['seq'],
             'usageMode' => $course['expiryMode'],
+            'usageDays' => $course['expiryDays'] ?: 0,
+            'usageStartTime' => $course['expiryStartDate'] ?: 0,
+            'usageEndTime' => $course['expiryEndDate'] ?: 0,
         ]);
 
         return $goodsSpecs;

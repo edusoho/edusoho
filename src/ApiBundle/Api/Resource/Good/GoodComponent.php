@@ -61,6 +61,9 @@ class GoodComponent extends AbstractResource
 
             if ('recommendGoods' === $type) {
                 $components['recommendGoods'] = $this->getRecommendGoodsComponent($goods);
+                foreach ($components['recommendGoods'] as &$good) {
+                    $good = $this->getGoodsService()->convertGoodsPrice($good);
+                }
                 continue;
             }
 
