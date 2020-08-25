@@ -29,4 +29,6 @@ interface RecordService
     public function rejectCertificateRecord($id, $auditUserId, $rejectReason = '');
 
     public function resetCertificateRecord($id, $rejectReason = '');
+
+    public function checkExpireCertificate();
 }

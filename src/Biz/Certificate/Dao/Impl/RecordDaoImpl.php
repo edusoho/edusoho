@@ -54,6 +54,8 @@ class RecordDaoImpl extends AdvancedDaoImpl implements RecordDao
                 'targetId = :targetId',
                 'issueTime >= :issueTimeEgt',
                 'issueTime <= :issueTimeElt',
+                'expiryTime <= :expiryTime_LE',
+                'expiryTime != :expiryTime_NE',
             ],
         ];
     }

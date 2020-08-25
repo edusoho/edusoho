@@ -239,6 +239,27 @@ class RecordServiceImpl extends BaseService implements RecordService
         return $filterUserIds;
     }
 
+    public function checkExpireCertificate()
+    {
+        $conditions = [
+            'status' => 'valid',
+            'expiryTime_LE' => time() - 86400,
+            'expiryTime_NE' => 0,
+        ];
+        $count = $this->getRecordDao()->count($conditions);
+        $records = $this->getRecordDao()->search($conditions, [], 0, $count);
+        if (empty($records)) {
+            return;
+        }
+
+        $updateRecords = [];
+        foreach ($records as $record) {
+            $updateRecords[] = ['id' => $record['id'], 'status' => 'expired'];
+        }
+
+        return $this->getRecordDao()->batchUpdate(ArrayToolkit::column($updateRecords, 'id'), $updateRecords);
+    }
+
     /**
      * @return CertificateService
      */
