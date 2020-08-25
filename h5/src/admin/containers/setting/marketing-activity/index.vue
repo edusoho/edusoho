@@ -1,18 +1,30 @@
 <template>
-  <module-frame containerClass="setting-groupon" :isActive="active" :isIncomplete="incomplete">
+  <module-frame
+    containerClass="setting-groupon"
+    :isActive="active"
+    :isIncomplete="incomplete"
+  >
     <div slot="preview" class="groupon-container">
       <activity
         :activity="copyModuleData.activity"
         :tag="copyModuleData.tag"
         :showTitle="radio"
         :type="moduleData.type"
-        :feedback="false">
+        :feedback="false"
+      >
       </activity>
     </div>
     <div slot="setting" class="groupon-allocate">
-      <e-suggest v-if="moduleData.tips" :suggest="moduleData.tips" :key="moduleData.moduleType"></e-suggest>
-      <header class="title">{{ activityTitle }}
-        <div class="text-12 color-gray mts" v-if="portal === 'miniprogram'">营销活动配置即将发布，敬请期待...</div>
+      <e-suggest
+        v-if="moduleData.tips"
+        :suggest="moduleData.tips"
+        :key="moduleData.moduleType"
+      ></e-suggest>
+      <header class="title">
+        {{ activityTitle }}
+        <div class="text-12 color-gray mts" v-if="portal === 'miniprogram'">
+          营销活动配置即将发布，敬请期待...
+        </div>
       </header>
       <div class="groupon-item-setting clearfix">
         <div class="groupon-item-setting__section clearfix">
@@ -24,9 +36,25 @@
           <p class="pull-left section-left">活动：</p>
           <div class="section-right">
             <div class="required-option">
-              <el-button type="info" size="mini" @click="openModal" v-show="!activityName">选择活动</el-button>
-              <el-tag class="courseLink" closable :disable-transitions="true" @close="handleClose" v-show="activityName">
-                <el-tooltip class="text-content ellipsis" effect="dark" placement="top">
+              <el-button
+                type="info"
+                size="mini"
+                @click="openModal"
+                v-show="!activityName"
+                >选择活动</el-button
+              >
+              <el-tag
+                class="courseLink"
+                closable
+                :disable-transitions="true"
+                @close="handleClose"
+                v-show="activityName"
+              >
+                <el-tooltip
+                  class="text-content ellipsis"
+                  effect="dark"
+                  placement="top"
+                >
                   <span slot="content">{{ activityName }}</span>
                   <span>{{ activityName }}</span>
                 </el-tooltip>
@@ -37,12 +65,26 @@
         <div class="groupon-item-setting__section clearfix">
           <p class="pull-left section-left">活动标签：</p>
           <div class="section-right pull-left">
-            <el-input size="mini" v-model="copyModuleData.tag" maxLength="8" placeholder="请输入活动名称" clearable></el-input>
+            <el-input
+              size="mini"
+              v-model="copyModuleData.tag"
+              maxLength="8"
+              placeholder="请输入活动名称"
+              clearable
+            ></el-input>
           </div>
         </div>
       </div>
     </div>
-    <course-modal slot="modal" :visible="modalVisible" limit=1 :courseList="courseSets" @visibleChange="modalVisibleHandler" @updateCourses="getUpdatedCourses" :type="moduleData.type">
+    <course-modal
+      slot="modal"
+      :visible="modalVisible"
+      limit="1"
+      :courseList="courseSets"
+      @visibleChange="modalVisibleHandler"
+      @updateCourses="getUpdatedCourses"
+      :type="moduleData.type"
+    >
     </course-modal>
   </module-frame>
 </template>
@@ -53,7 +95,7 @@ import moduleFrame from '../module-frame';
 import courseModal from '../course/modal/course-modal';
 import settingCell from '../module-frame/setting-cell';
 import pathName2Portal from 'admin/config/api-portal-config';
-import suggest from "&/components/e-suggest/e-suggest.vue"
+import suggest from '&/components/e-suggest/e-suggest.vue';
 export default {
   name: 'marketing-groupon',
   components: {
@@ -61,7 +103,7 @@ export default {
     courseModal,
     activity,
     settingCell,
-    'e-suggest':suggest
+    'e-suggest': suggest,
   },
   props: {
     active: {
@@ -69,26 +111,26 @@ export default {
       default: false,
     },
     moduleData: {
-      type: Object
+      type: Object,
     },
     incomplete: {
       type: Boolean,
       default: false,
-    }
+    },
   },
-  data () {
+  data() {
     return {
       modalVisible: false,
       courseSets: [],
-      pathName: this.$route.name
-    }
+      pathName: this.$route.name,
+    };
   },
   computed: {
     copyModuleData: {
       get() {
         return this.moduleData.data;
       },
-      set() {}
+      set() {},
     },
     activityName() {
       return this.moduleData.data.activity.name;
@@ -105,11 +147,11 @@ export default {
       },
       set(value) {
         this.copyModuleData.titleShow = value;
-      }
+      },
     },
     portal() {
       return pathName2Portal[this.pathName];
-    }
+    },
   },
   methods: {
     modalVisibleHandler(visible) {
@@ -131,6 +173,6 @@ export default {
     handleClose() {
       this.removeActivity();
     },
-  }
-}
+  },
+};
 </script>

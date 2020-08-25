@@ -8,10 +8,7 @@
 
     <!-- 学习上报按钮 -->
     <template v-if="joinStatus">
-      <div
-        v-if="isFinish"
-        class="web-view--btn web-view--activebtn"
-      >
+      <div v-if="isFinish" class="web-view--btn web-view--activebtn">
         <i class="iconfont icon-markdone"></i>
         学过了
       </div>
@@ -35,40 +32,40 @@
   </div>
 </template>
 <script>
-import loadScript from "load-script";
-import Api from "@/api";
-import { mapState, mapMutations } from "vuex";
-import * as types from "@/store/mutation-types";
-import { Toast } from "vant";
-import report from "@/mixins/course/report";
-import finishDialog from "../components/finish-dialog";
+import loadScript from 'load-script';
+import Api from '@/api';
+import { mapState, mapMutations } from 'vuex';
+import * as types from '@/store/mutation-types';
+import { Toast } from 'vant';
+import report from '@/mixins/course/report';
+import finishDialog from '../components/finish-dialog';
 export default {
   components: {
-    finishDialog
+    finishDialog,
   },
   mixins: [report],
   data() {
     return {
       finishCondition: undefined,
       enableFinish: false,
-      media: "",
+      media: '',
       isPreview: this.$route.query.preview,
       finishResult: null,
-      finishDialog: false, //下一课时弹出模态框
+      finishDialog: false, // 下一课时弹出模态框
       courseId: null,
       taskId: null,
       type: null,
-      player: null
+      player: null,
     };
   },
   computed: {
-    ...mapState("course", {
+    ...mapState('course', {
       details: state => state.details,
-      joinStatus: state => state.joinStatus
+      joinStatus: state => state.joinStatus,
     }),
     ...mapState({
-      isLoading: state => state.isLoading
-    })
+      isLoading: state => state.isLoading,
+    }),
   },
   created() {
     this.courseId = this.$route.query.courseId;
@@ -80,10 +77,10 @@ export default {
   },
   methods: {
     ...mapMutations({
-      setNavbarTitle: types.SET_NAVBAR_TITLE
+      setNavbarTitle: types.SET_NAVBAR_TITLE,
     }),
     async initData() {
-      if(this.joinStatus){
+      if (this.joinStatus) {
         this.initReport();
       }
       this.enableFinish = !!parseInt(this.details.enableFinish);
@@ -91,7 +88,7 @@ export default {
         Toast(err.message);
         return Promise.reject(err);
       });
-      if (["ppt", "doc"].includes(this.media)) {
+      if (['ppt', 'doc'].includes(this.media)) {
         this.initPlayer(player);
       } else {
         // text类型不需要播放器
@@ -113,7 +110,7 @@ export default {
       if (this.finishCondition) {
         this.$toast({
           message: this.finishCondition.text,
-          position: "bottom"
+          position: 'bottom',
         });
       }
     },
@@ -131,21 +128,21 @@ export default {
         ? {
             query: {
               courseId,
-              taskId
+              taskId,
             },
             params: {
               preview: 1,
-              version:'escloud'
-            }
+              version: 'escloud',
+            },
           }
         : {
             query: {
               courseId,
-              taskId
+              taskId,
             },
             params: {
-              version:'escloud'
-            }
+              version: 'escloud',
+            },
           };
     },
     initPlayer(playerParams) {
@@ -153,33 +150,33 @@ export default {
       // const playerSDKUri ="//service-cdn.qiqiuyun.net/js-sdk/sdk-v1.js?v="
       // + parseInt(Date.now() / 1000 / 60);
       const playerSDKUri =
-        "//service-cdn.qiqiuyun.net/js-sdk-v2/sdk-v1.js?" +
+        '//service-cdn.qiqiuyun.net/js-sdk-v2/sdk-v1.js?' +
         ~~(Date.now() / 1000 / 60);
       loadScript(playerSDKUri, err => {
         if (err) throw err;
 
         const player = new window.QiQiuYun.Player({
-          id: "player", // 用于初始化的DOM节点id
+          id: 'player', // 用于初始化的DOM节点id
           resNo: media.resNo, // 想要播放的资源编号
-          token:media.token,
+          token: media.token,
           source: {
             type: playerParams.mediaType,
-            args: media
-          }
+            args: media,
+          },
         });
         this.player = player;
-        player.on("ready", () => {});
-        player.on("pagechanged", e => {
+        player.on('ready', () => {});
+        player.on('pagechanged', e => {
           if (e.page === e.total) {
-            if (this.finishCondition && this.finishCondition.type === "end") {
-              this.reprtData("finish");
+            if (this.finishCondition && this.finishCondition.type === 'end') {
+              this.reprtData('finish');
             }
           }
         });
       });
     },
     toLearned() {
-      this.reprtData("finish").then(res => {
+      this.reprtData('finish').then(res => {
         this.finishResult = res;
         this.finishDialog = true;
       });
@@ -189,7 +186,7 @@ export default {
       this.taskId = data.taskId;
       this.type = data.type;
       this.initData();
-    }
-  }
+    },
+  },
 };
 </script>

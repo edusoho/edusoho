@@ -2,16 +2,27 @@
   <div class="user">
     <div class="user-section clearfix">
       <router-link to="/settings">
-        <img v-if="user.avatar" :src="user.avatar.large" class="user-img" >
+        <img v-if="user.avatar" :src="user.avatar.large" class="user-img" />
       </router-link>
       <div :class="['user-middle', vipSwitch ? '' : 'single-middle']">
         <div class="user-name">{{ user.nickname }}</div>
         <div v-if="vipSwitch">
           <span v-if="user.vip" class="user-vip">
-            <router-link :to="{ path: '/vip', query: { id: user.vip.levelId } }">
-              <img :class="['vip-img', vipDated ? 'vip-expired' : '']" :src="user.vip.icon">
-              <span v-if="!vipDated" class="color-primary">{{ user.vip.vipName }}</span>
-              <span v-else class="grey text-overflow vip-name">{{ user.vip.vipName }}已过期，<span class="color-primary">重新开通</span></span>
+            <router-link
+              :to="{ path: '/vip', query: { id: user.vip.levelId } }"
+            >
+              <img
+                :class="['vip-img', vipDated ? 'vip-expired' : '']"
+                :src="user.vip.icon"
+              />
+              <span v-if="!vipDated" class="color-primary">{{
+                user.vip.vipName
+              }}</span>
+              <span v-else class="grey text-overflow vip-name"
+                >{{ user.vip.vipName }}已过期，<span class="color-primary"
+                  >重新开通</span
+                ></span
+              >
             </router-link>
           </span>
           <div v-else>
@@ -22,32 +33,30 @@
         </div>
       </div>
       <router-link to="/settings" class="user-setting">
-        <img src="static/images/setting.png">
+        <img src="static/images/setting.png" />
       </router-link>
     </div>
   </div>
 </template>
 <script>
-import Api from '@/api'
-import { mapState, mapActions } from 'vuex'
+import Api from '@/api';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   computed: {
     ...mapState(['user', 'vipSwitch']),
     vipDated() {
-      if (!this.user.vip) return false
-      const deadLineStamp = new Date(this.user.vip.deadline).getTime()
-      const nowStamp = new Date().getTime()
-      return nowStamp > deadLineStamp
-    }
+      if (!this.user.vip) return false;
+      const deadLineStamp = new Date(this.user.vip.deadline).getTime();
+      const nowStamp = new Date().getTime();
+      return nowStamp > deadLineStamp;
+    },
   },
   created() {
-    this.getUserInfo()
+    this.getUserInfo();
   },
   methods: {
-    ...mapActions([
-      'getUserInfo'
-    ])
-  }
-}
+    ...mapActions(['getUserInfo']),
+  },
+};
 </script>

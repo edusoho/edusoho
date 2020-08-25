@@ -2,13 +2,16 @@
   <div>
     <e-loading v-if="isLoading" />
     <user />
-    <router-link :to="{name: 'couponCovert'}">
+    <router-link :to="{ name: 'couponCovert' }">
       <div v-if="hasBusinessDrainage" class="coupon-code-entrance">
         兑换卡券
         <i class="van-icon van-icon-arrow pull-right" />
       </div>
     </router-link>
-    <a v-if="isShowDistributorEntrance" :href="drpSetting.distributor_login_url">
+    <a
+      v-if="isShowDistributorEntrance"
+      :href="drpSetting.distributor_login_url"
+    >
       <div class="coupon-code-entrance">
         分销中心
         <i class="van-icon van-icon-arrow pull-right" />
@@ -22,53 +25,52 @@
   </div>
 </template>
 <script>
-import Orders from "../order/orders.vue";
-import activity from "./activity";
-import User from "./user.vue";
-import { mapState } from "vuex";
-import preloginMixin from "@/mixins/preLogin";
-import Api from "@/api";
+import Orders from '../order/orders.vue';
+import activity from './activity';
+import User from './user.vue';
+import { mapState } from 'vuex';
+import preloginMixin from '@/mixins/preLogin';
+import Api from '@/api';
 
 export default {
   components: {
     Orders,
     activity,
-    User
+    User,
   },
   mixins: [preloginMixin],
   data() {
     return {
       activeIndex: 0,
-      tabs: ["我的订单", "我的活动"],
+      tabs: ['我的订单', '我的活动'],
       hasBusinessDrainage: false,
       isShowDistributorEntrance: false, // 是否展示分销中心入口
-      drpSetting:{}
+      drpSetting: {},
     };
   },
   computed: {
-    ...mapState(["DrpSwitch"]),
+    ...mapState(['DrpSwitch']),
     ...mapState({
       isLoading: state => state.isLoading,
-    })
+    }),
   },
   created() {
     setTimeout(() => {
       window.scrollTo(0, 0);
     }, 100);
     Api.hasPluginInstalled().then(res => {
-      this.hasBusinessDrainage = res.BusinessDrainage
-    })
+      this.hasBusinessDrainage = res.BusinessDrainage;
+    });
     this.showDistributorEntrance();
   },
   methods: {
     showDistributorEntrance() {
-        if (!this.DrpSwitch) {
-          this.isShowDistributorEntrance = false;
-          return;
-        }
-        this.getDrpSetting()
-        this.getAgencyBindRelation();
-
+      if (!this.DrpSwitch) {
+        this.isShowDistributorEntrance = false;
+        return;
+      }
+      this.getDrpSetting();
+      this.getAgencyBindRelation();
     },
     getAgencyBindRelation() {
       Api.getAgencyBindRelation().then(data => {
@@ -81,10 +83,9 @@ export default {
     },
     getDrpSetting() {
       Api.getDrpSetting().then(data => {
-        this.drpSetting = data
-      })
-    }
-  }
+        this.drpSetting = data;
+      });
+    },
+  },
 };
 </script>
-

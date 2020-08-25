@@ -4,7 +4,12 @@
       <img :src="cover" alt />
     </div>
     <countDown
-      v-if="seckillActivities && counting && !isEmpty && seckillActivities.status === 'ongoing'"
+      v-if="
+        seckillActivities &&
+          counting &&
+          !isEmpty &&
+          seckillActivities.status === 'ongoing'
+      "
       :activity="seckillActivities"
       @timesUp="expire"
       @sellOut="sellOut"
@@ -13,33 +18,33 @@
   </div>
 </template>
 <script>
-import countDown from "&/components/e-marketing/e-count-down/index";
-import tagLink from "&/components/e-tag-link/e-tag-link";
-import Api from "@/api";
-import qs from "qs";
-import { mapState } from "vuex";
+import countDown from '&/components/e-marketing/e-count-down/index';
+import tagLink from '&/components/e-tag-link/e-tag-link';
+import Api from '@/api';
+import qs from 'qs';
+import { mapState } from 'vuex';
 export default {
   components: {
     countDown,
-    tagLink
+    tagLink,
   },
   props: {
     cover: {
       type: String,
-      default: ""
+      default: '',
     },
     price: {
       type: String,
-      default: ""
+      default: '',
     },
     classroomId: {
       type: String,
-      default: 0
+      default: 0,
     },
     seckillActivities: {
       type: Object,
-      default: null
-    }
+      default: null,
+    },
   },
   data() {
     return {
@@ -49,15 +54,15 @@ export default {
         // 分销标签数据
         earnings: 0,
         isShow: false,
-        link: "",
-        className: "course-tag",
-        minDirectRewardRatio: 0
+        link: '',
+        className: 'course-tag',
+        minDirectRewardRatio: 0,
       },
-      bindAgencyRelation: {} // 分销代理商绑定信息
+      bindAgencyRelation: {}, // 分销代理商绑定信息
     };
   },
   computed: {
-    ...mapState(["DrpSwitch"])
+    ...mapState(['DrpSwitch']),
   },
   created() {
     this.showTagLink();
@@ -68,7 +73,7 @@ export default {
     },
     sellOut() {
       this.isEmpty = true;
-      this.$emit("goodsEmpty");
+      this.$emit('goodsEmpty');
     },
     showTagLink() {
       if (!this.DrpSwitch) {
@@ -94,18 +99,18 @@ export default {
         this.tagData.minDirectRewardRatio = data.minDirectRewardRatio;
 
         const params = {
-          type: "classroom",
+          type: 'classroom',
           id: this.classroomId,
-          merchant_id: this.drpSetting.merchantId
+          merchant_id: this.drpSetting.merchantId,
         };
 
         this.tagData.link =
-          this.drpSetting.distributor_template_url + "?" + qs.stringify(params);
+          this.drpSetting.distributor_template_url + '?' + qs.stringify(params);
         const earnings =
           (this.drpSetting.minDirectRewardRatio / 100) * this.price;
         this.tagData.earnings = (Math.floor(earnings * 100) / 100).toFixed(2);
       });
-    }
-  }
+    },
+  },
 };
 </script>

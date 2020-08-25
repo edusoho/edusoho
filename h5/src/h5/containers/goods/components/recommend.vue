@@ -2,7 +2,7 @@
   <div class="info-learn">
     <div class="info-learn__header clearfix">
       <slot class="header-title pull-left" name="title"></slot>
-      <span class="header-more pull-right"
+      <span class="header-more pull-right" @click="onMore"
         >更多<i class="iconfont icon-About"></i
       ></span>
     </div>
@@ -21,17 +21,37 @@
             <p class="content-title text-overflow">{{ goods.title }}</p>
             <p
               class="content-price text-overflow"
-              :class="{ 'is-free': Number(goods.maxPrice.amount) == 0 }"
-              v-if="goods.maxPrice.amount == goods.minPrice.amount"
+              :class="{
+                'is-free': Number(goods.minDisplayPriceObj.amount) == 0,
+              }"
+              v-if="
+                goods.minDisplayPriceObj.amount ==
+                  goods.maxDisplayPriceObj.amount
+              "
             >
               {{
-                Number(goods.maxPrice.amount) == 0
+                Number(goods.maxDisplayPriceObj.amount) == 0
                   ? '免费'
-                  : `¥${goods.maxPrice.amount}`
+                  : goods.minDisplayPriceObj.currency === 'RMB'
+                  ? `¥${goods.maxDisplayPriceObj.amount}`
+                  : goods.minDisplayPriceObj.coinAmount +
+                    goods.minDisplayPriceObj.coinName
               }}
             </p>
             <p class="content-price text-overflow" v-else>
-              ¥{{ goods.minPrice.amount }} 起
+              <span
+                v-if="goods.minDisplayPriceObj.currency === 'RMB'"
+                class="price"
+                >{{ goods.minDisplayPriceObj.amount | formatPrice }}元</span
+              >
+              <span
+                v-if="goods.minDisplayPriceObj.currency === 'coin'"
+                class="price"
+                >{{ goods.minDisplayPriceObj.coinAmount | formatPrice
+                }}<span class="detail-right__price__unit">{{
+                  goods.minDisplayPriceObj.coinName
+                }}</span></span
+              >
             </p>
           </div>
         </div>
@@ -48,11 +68,25 @@ export default {
       type: Array,
       default: () => [],
     },
+    goods: {
+      type: Object,
+      default: () => {},
+    },
   },
   methods: {
     onJump(id) {
       if (id == this.$route.params.id) return;
       this.$router.push({ path: `/goods/${id}/show` });
+    },
+    onMore() {
+      this.$router.push({
+        name: this.goods.type === 'course' ? 'more_course' : 'more_class',
+      });
+    },
+  },
+  filters: {
+    formatPrice(input) {
+      return (Math.round(input * 100) / 100).toFixed(2);
     },
   },
 };

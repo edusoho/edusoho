@@ -31,7 +31,7 @@
         <emptyCourse
           v-if="isEmptyCourse && course.isRequestCompile"
           :has-button="false"
-           text="抱歉，没有找到相关内容"
+          text="抱歉，没有找到相关内容"
           :type="'course_list'"
         />
       </van-tab>
@@ -61,29 +61,29 @@
   </div>
 </template>
 <script>
-import lazyLoading from "&/components/e-lazy-loading/e-lazy-loading.vue";
-import emptyCourse from "@/containers/learning/emptyCourse/emptyCourse.vue";
-import Api from "@/api";
+import lazyLoading from '&/components/e-lazy-loading/e-lazy-loading.vue';
+import emptyCourse from '@/containers/learning/emptyCourse/emptyCourse.vue';
+import Api from '@/api';
 export default {
-  nama: "search",
+  nama: 'search',
   components: {
     lazyLoading,
-    emptyCourse
+    emptyCourse,
   },
   data() {
     return {
       active: 0,
       selectedData: {
-        courseSetTitle: ""
+        courseSetTitle: '',
       },
-      isSearch:false,
+      isSearch: false,
       classroomList: [],
       isEmptyClassroom: false,
       isAllClassroom: false,
       classroom: {
         isRequestCompile: false,
         offset: 0,
-        limit: 10
+        limit: 10,
       },
       courseList: [],
       isEmptyCourse: false,
@@ -91,24 +91,22 @@ export default {
       course: {
         isRequestCompile: false,
         offset: 0,
-        limit: 10
-      }
+        limit: 10,
+      },
     };
   },
-  created() {
-
-  },
+  created() {},
   methods: {
     onSearch() {
-      this.isSearch=true;
+      this.isSearch = true;
       this.initCourseList();
       this.requestCourses();
       this.initClassroomList();
       this.requestClassroom();
     },
     onCancel() {
-      this.isSearch=false;
-      this.$router.push({ path:'/'  })
+      this.isSearch = false;
+      this.$router.push({ path: '/' });
     },
     initClassroomList() {
       this.classroom.isRequestCompile = false;
@@ -125,13 +123,13 @@ export default {
       this.classroom.isRequestCompile = false;
       const setting = {
         offset: this.classroom.offset,
-        limit: this.classroom.limit
+        limit: this.classroom.limit,
       };
-      const selectedData={title:this.selectedData.courseSetTitle}
+      const selectedData = { title: this.selectedData.courseSetTitle };
       const config = Object.assign({}, selectedData, setting);
 
       return Api.getClassList({
-        params: config
+        params: config,
       })
         .then(({ data, paging }) => {
           data.forEach(element => {
@@ -140,7 +138,7 @@ export default {
           this.requestClassRoomSuccess(paging);
         })
         .catch(err => {
-          console.log(err, "error");
+          console.log(err, 'error');
         });
     },
 
@@ -172,11 +170,11 @@ export default {
       this.course.isRequestCompile = false;
       const setting = {
         offset: this.course.offset,
-        limit: this.course.limit
+        limit: this.course.limit,
       };
       const config = Object.assign({}, this.selectedData, setting);
       return Api.getCourseList({
-        params: config
+        params: config,
       })
         .then(({ data, paging }) => {
           data.forEach(element => {
@@ -185,7 +183,7 @@ export default {
           this.requestCoursesSuccess(paging);
         })
         .catch(err => {
-          console.log(err, "error");
+          console.log(err, 'error');
         });
     },
 
@@ -200,7 +198,7 @@ export default {
 
     sendRequest() {
       if (!this.isAllCourse) this.requestCourses();
-    }
-  }
+    },
+  },
 };
 </script>

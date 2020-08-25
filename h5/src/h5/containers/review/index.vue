@@ -50,7 +50,7 @@
         </div>
       </div>
     </div>
-    <div v-else class="info-evaluate__item">
+    <div v-else-if="searched" class="info-evaluate__item">
       暂无评价~
     </div>
     <div v-if="reviews.length">
@@ -83,6 +83,7 @@ export default {
         offset: 0,
         total: 0,
       },
+      searched: false,
     };
   },
   computed: {
@@ -126,6 +127,7 @@ export default {
       }).then(res => {
         this.reviews = this.reviews.concat(res.data);
         this.paging = res.paging;
+        this.searched = true;
       });
     },
   },

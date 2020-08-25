@@ -22,9 +22,9 @@ const state = {
   vipSwitch: false,
   couponSwitch: 0,
   socialBinded: {
-    wx: true
+    wx: true,
   },
-  DrpSwitch: false // 分销插件
+  DrpSwitch: false, // 分销插件
 };
 
 export default new Vuex.Store({
@@ -34,6 +34,6 @@ export default new Vuex.Store({
   mutations,
   modules: {
     course,
-    classroom
-  }
+    classroom,
+  },
 });

@@ -6,7 +6,7 @@
         <div class="goods-detail__banner">
           <img :src="goods.images.large" />
         </div>
-        <discount :goods="goods" />
+        <!--        <discount :goods="goods" />-->
         <detail :goods="goods" :currentSku="currentSku" />
         <specs :goods="goods" :currentSku="currentSku" @changeSku="changeSku" />
       </div>
@@ -36,7 +36,7 @@
         <!-- 教师 -->
         <section class="js-scroll-top goods-info__item" id="teacher">
           <div class="goods-info__title">教师风采</div>
-          <teacher :teachers="componentsInfo.teachers" />
+          <teacher :teachers="currentSku.teachers" />
         </section>
 
         <!-- 目录： 课程和班级在这里的表现不一致，需要通过product.targetType来做变化，其他应该以数据为准 -->
@@ -74,13 +74,16 @@
 
         <!-- 猜你想学 -->
         <section class="goods-info__item">
-          <Recommend :recommendGoods="componentsInfo.recommendGoods">
+          <Recommend
+            :goods="goods"
+            :recommendGoods="componentsInfo.recommendGoods.slice(0, 4)"
+          >
             <span slot="title">猜你想学</span>
           </Recommend>
         </section>
 
         <!-- 收藏/购买 -->
-        <buy />
+        <buy :is-favorite="goods.isFavorite" />
 
         <!-- 回到顶部 -->
         <back-to-top v-show="backToTopShow" />
@@ -121,7 +124,7 @@ export default {
     };
   },
   components: {
-    Discount,
+    // Discount,
     Specs,
     Detail,
     Teacher, // 教师风采

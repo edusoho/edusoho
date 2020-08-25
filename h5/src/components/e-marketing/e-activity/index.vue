@@ -1,22 +1,49 @@
 <template>
   <div class="e-groupon" @click="getMarketUrl(activity.status)">
-    <div v-if="showTitle === 'show'" class="e-coupon__title">{{ activityTitle }}</div>
-    <div :class="{ 'e-groupon__image-empty': !activity.cover }" class="e-groupon__image-container">
-      <img v-lazy="activity.cover" v-if="activity.cover" class="e-groupon__image" alt="">
+    <div v-if="showTitle === 'show'" class="e-coupon__title">
+      {{ activityTitle }}
+    </div>
+    <div
+      :class="{ 'e-groupon__image-empty': !activity.cover }"
+      class="e-groupon__image-container"
+    >
+      <img
+        v-lazy="activity.cover"
+        v-if="activity.cover"
+        class="e-groupon__image"
+        alt=""
+      />
       <div v-if="tag.length" class="e-groupon__tag">{{ tag }}</div>
     </div>
     <countDown
-      v-if="activityData && type === 'seckill' && counting && !isEmpty && activity.status === 'ongoing'"
+      v-if="
+        activityData &&
+          type === 'seckill' &&
+          counting &&
+          !isEmpty &&
+          activity.status === 'ongoing'
+      "
       :activity="activity"
       @timesUp="expire"
-      @sellOut="sellOut"/>
+      @sellOut="sellOut"
+    />
     <div class="e-groupon__context">
-      <div class="context-title text-overflow">{{ activity.name || '活动名称' }}</div>
+      <div class="context-title text-overflow">
+        {{ activity.name || '活动名称' }}
+      </div>
       <div class="context-sale clearfix">
-        <div v-if="type !== 'groupon'" class="type-tag">{{ type === 'cut' ? '砍价享' : '秒杀价' }}</div>
+        <div v-if="type !== 'groupon'" class="type-tag">
+          {{ type === 'cut' ? '砍价享' : '秒杀价' }}
+        </div>
         <div class="context-sale__sale-price">￥{{ activityPrice }}</div>
-        <div v-if="activity.originPrice" class="context-sale__origin-price">原价￥{{ activity.originPrice }}</div>
-        <a :class="[activity.status, {'bg-grey': isEmpty || bgGrey}]" class="context-sale__shopping" href="javascript:;">
+        <div v-if="activity.originPrice" class="context-sale__origin-price">
+          原价￥{{ activity.originPrice }}
+        </div>
+        <a
+          :class="[activity.status, { 'bg-grey': isEmpty || bgGrey }]"
+          class="context-sale__shopping"
+          href="javascript:;"
+        >
           {{ grouponStatus }}
         </a>
       </div>
@@ -25,111 +52,111 @@
 </template>
 
 <script>
-import countDown from '../e-count-down/index'
+import countDown from '../e-count-down/index';
 
 export default {
   name: 'EGroupon',
   components: {
-    countDown
+    countDown,
   },
   props: {
     activity: {
       type: Object,
-      default: {}
+      default: {},
     },
     tag: {
       type: String,
-      default: ''
+      default: '',
     },
     showTitle: {
       type: String,
-      default: 'show'
+      default: 'show',
     },
     type: {
       type: String,
-      default: 'groupon'
+      default: 'groupon',
     },
     feedback: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   data() {
     return {
       counting: true,
       isEmpty: false,
-      bgGrey: false
-    }
+      bgGrey: false,
+    };
   },
   computed: {
     activityData() {
-      return !!(Object.values(this.activity).length)
+      return !!Object.values(this.activity).length;
     },
     activityId() {
-      return Number(this.activity.id)
+      return Number(this.activity.id);
     },
     activityTitle() {
-      if (this.type === 'seckill') return '秒杀'
-      if (this.type === 'cut') return '砍价'
-      return '拼团'
+      if (this.type === 'seckill') return '秒杀';
+      if (this.type === 'cut') return '砍价';
+      return '拼团';
     },
     activityPrice() {
-      if (!Object.values(this.activity).length) return '00.00'
-      if (this.type === 'seckill') return this.activity.rule.seckillPrice
-      if (this.type === 'cut') return this.activity.rule.lowestPrice
-      if (this.type === 'groupon') return this.activity.rule.ownerPrice
+      if (!Object.values(this.activity).length) return '00.00';
+      if (this.type === 'seckill') return this.activity.rule.seckillPrice;
+      if (this.type === 'cut') return this.activity.rule.lowestPrice;
+      if (this.type === 'groupon') return this.activity.rule.ownerPrice;
     },
     grouponStatus() {
-      const status = this.activity.status
+      const status = this.activity.status;
       const typeText = {
-        'seckill': '秒杀',
-        'cut': '砍价',
-        'groupon': '拼团'
-      }
+        seckill: '秒杀',
+        cut: '砍价',
+        groupon: '拼团',
+      };
       if (status === 'ongoing' && !this.counting) {
-        this.activity.status = 'closed'
-        return `${typeText[this.type]}已结束`
+        this.activity.status = 'closed';
+        return `${typeText[this.type]}已结束`;
       }
       switch (this.type) {
         case 'groupon':
-          if (status === 'unstart') return '拼团未开始'
-          if (status === 'ongoing') return '去拼团'
-          if (status === 'closed') return '拼团已结束'
-          break
+          if (status === 'unstart') return '拼团未开始';
+          if (status === 'ongoing') return '去拼团';
+          if (status === 'closed') return '拼团已结束';
+          break;
         case 'seckill':
-          if (status === 'unstart') return '秒杀未开始'
-          if (status === 'closed') return '秒杀已结束'
+          if (status === 'unstart') return '秒杀未开始';
+          if (status === 'closed') return '秒杀已结束';
           if (status === 'ongoing') {
-            if (this.activity.productRemaind == 0) return '商品已售空'
-            const nowStamp = new Date().getTime()
-            const startStamp = new Date(this.activity.startTime).getTime()
-            const endStamp = new Date(this.activity.endTime).getTime()
-            if ((startStamp < nowStamp) && (nowStamp < endStamp)) return '马上秒'
+            if (this.activity.productRemaind == 0) return '商品已售空';
+            const nowStamp = new Date().getTime();
+            const startStamp = new Date(this.activity.startTime).getTime();
+            const endStamp = new Date(this.activity.endTime).getTime();
+            if (startStamp < nowStamp && nowStamp < endStamp) return '马上秒';
             if (startStamp > nowStamp) {
-              this.bgGrey = true
-              return '秒杀未开始'
+              this.bgGrey = true;
+              return '秒杀未开始';
             }
           }
-          break
+          break;
         case 'cut':
-          if (status === 'unstart') return '砍价未开始'
-          if (status === 'ongoing') return '发起砍价'
-          if (status === 'closed') return '砍价已结束'
-          break
+          if (status === 'unstart') return '砍价未开始';
+          if (status === 'ongoing') return '发起砍价';
+          if (status === 'closed') return '砍价已结束';
+          break;
       }
-    }
+    },
   },
   methods: {
     getMarketUrl(status) {
-      if (!this.feedback) return
-      this.$emit('activityHandle', this.activityId)
+      if (!this.feedback) return;
+      this.$emit('activityHandle', this.activityId);
     },
     expire() {
-      this.counting = false
+      this.counting = false;
     },
     sellOut() {
-      this.isEmpty = true
-    }
-  }
-}
+      this.isEmpty = true;
+    },
+  },
+};
 </script>

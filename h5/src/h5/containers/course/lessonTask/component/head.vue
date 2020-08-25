@@ -5,7 +5,8 @@
       <span v-show="showScore" class="left-color">[{{ score }}分]</span>
     </div>
     <div class="head-right">
-      <span class="right-color">{{ current }}</span>/{{ all }}
+      <span class="right-color">{{ current }}</span
+      >/{{ all }}
     </div>
   </div>
 </template>
@@ -16,27 +17,26 @@ export default {
   props: {
     all: {
       type: Number,
-      default: 0
+      default: 0,
     },
     current: {
       type: Number,
-      default: 0
+      default: 0,
     },
     subject: {
       type: String,
-      default: ''
+      default: '',
     },
     score: {
       type: String,
-      default: '0'
+      default: '0',
     },
     showScore: {
       type: Boolean,
-      default: true
-    }
-  }
-}
+      default: true,
+    },
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

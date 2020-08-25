@@ -1,17 +1,21 @@
-import { formatTimeByNumber, formatCompleteTime, formatSimpleHour } from '@/utils/date-toolkit';
+import {
+  formatTimeByNumber,
+  formatCompleteTime,
+  formatSimpleHour,
+} from '@/utils/date-toolkit';
 
 const filters = [
   {
     name: 'toMoney',
     handler(value) {
       return isNaN(Number(value)) ? '0.00' : (Number(value) / 100).toFixed(2);
-    }
+    },
   },
   {
     name: 'isFree',
     handler(value) {
       return value ? 'value' : '免费';
-    }
+    },
   },
   {
     name: 'taskType',
@@ -41,7 +45,7 @@ const filters = [
         default:
           return '暂不支持此类型';
       }
-    }
+    },
   },
   {
     name: 'filterTask',
@@ -77,7 +81,7 @@ const filters = [
         default:
           return '';
       }
-    }
+    },
   },
   {
     name: 'filterTaskTime',
@@ -125,7 +129,7 @@ const filters = [
         default:
           return '暂不支持';
       }
-    }
+    },
   },
   {
     name: 'filterCourse',
@@ -167,7 +171,7 @@ const filters = [
         default:
           return '暂不支持';
       }
-    }
+    },
   },
   {
     name: 'filterJoinStatus',
@@ -177,7 +181,7 @@ const filters = [
       }
       const targetType = {
         course: '课程',
-        classroom: '班级'
+        classroom: '班级',
       };
       switch (code) {
         case 'success':
@@ -218,7 +222,7 @@ const filters = [
         default:
       }
       return code;
-    }
+    },
   },
   {
     name: 'filterOrderStatus',
@@ -254,7 +258,7 @@ const filters = [
         default:
       }
       return status;
-    }
+    },
   },
   {
     name: 'formateTime',
@@ -291,14 +295,14 @@ const filters = [
         default:
           return '暂不支持';
       }
-    }
+    },
   },
   {
     name: 'formateLiveTime',
     handler(time) {
       return `${formatSimpleHour(new Date(time))} | `;
-    }
-  }
+    },
+  },
 ];
 
 export default {
@@ -307,5 +311,5 @@ export default {
       Vue.filter(item.name, item.handler);
       return item;
     });
-  }
+  },
 };

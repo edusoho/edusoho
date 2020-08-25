@@ -1,6 +1,11 @@
 <template>
   <div class="more">
-    <van-list v-model="loading" :finished="finished" style="padding-bottom: 40px;" @load="onLoad">
+    <van-list
+      v-model="loading"
+      :finished="finished"
+      style="padding-bottom: 40px;"
+      @load="onLoad"
+    >
       <e-class
         v-for="item in classroomList"
         :key="item.id"
@@ -10,33 +15,34 @@
         :type-list="typeList"
         :normal-tag-show="normalTagShow"
         :type="type"
-        :feedback="feedback"/>
+        :feedback="feedback"
+      />
     </van-list>
   </div>
 </template>
 
 <script>
-import Api from '@/api'
-import { Toast } from 'vant'
-import eClass from '&/components/e-class/e-class'
-import courseListData from '@/utils/filter-course.js'
+import Api from '@/api';
+import { Toast } from 'vant';
+import eClass from '&/components/e-class/e-class';
+import courseListData from '@/utils/filter-course.js';
 
 export default {
   components: {
-    eClass
+    eClass,
   },
   filters: {
-    courseListData
+    courseListData,
   },
   props: {
     feedback: {
       type: Boolean,
-      default: true
+      default: true,
     },
     normalTagShow: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   data() {
     return {
@@ -46,39 +52,41 @@ export default {
       type: 'price',
       offset: 0,
       levelId: this.$route.query.levelId,
-      typeList: 'classroom_list'
-    }
+      typeList: 'classroom_list',
+    };
   },
   computed: {
     listObj() {
       return {
         type: 'price',
         typeList: this.typeList,
-        showStudent: false
-      }
-    }
+        showStudent: false,
+      };
+    },
   },
   beforeRouteEnter(to, from, next) {
-    const navTitle = to.query.vipName || '会员'
-    to.meta.title = `${navTitle}班级`
-    next()
+    const navTitle = to.query.vipName || '会员';
+    to.meta.title = `${navTitle}班级`;
+    next();
   },
   methods: {
     onLoad() {
-      const params = { levelId: this.levelId, offset: this.offset }
-      Api.getVipClasses({ params }).then(({ data, paging }) => {
-        this.classroomList = [...this.classroomList, ...data]
-        this.offset = this.classroomList.length
+      const params = { levelId: this.levelId, offset: this.offset };
+      Api.getVipClasses({ params })
+        .then(({ data, paging }) => {
+          this.classroomList = [...this.classroomList, ...data];
+          this.offset = this.classroomList.length;
 
-        if (this.classroomList.length == paging.total) {
-          this.finished = true
-        }
-        this.loading = false
-      }).catch(err => {
-        Toast.fail(err.message)
-        this.loading = false
-      })
-    }
-  }
-}
+          if (this.classroomList.length == paging.total) {
+            this.finished = true;
+          }
+          this.loading = false;
+        })
+        .catch(err => {
+          Toast.fail(err.message);
+          this.loading = false;
+        });
+    },
+  },
+};
 </script>

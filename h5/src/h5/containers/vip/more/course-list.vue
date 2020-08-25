@@ -1,41 +1,49 @@
 <template>
   <div class="more">
-    <van-list v-model="loading" :finished="finished" style="padding-bottom: 40px;" @load="onLoad">
+    <van-list
+      v-model="loading"
+      :finished="finished"
+      style="padding-bottom: 40px;"
+      @load="onLoad"
+    >
       <e-class
         v-for="item in courseList"
         :key="item.id"
         :course="item | courseListData(listObj)"
-        :discountType="typeList === 'course_list' ? item.courseSet.discountType : ''"
+        :discountType="
+          typeList === 'course_list' ? item.courseSet.discountType : ''
+        "
         :discount="typeList === 'course_list' ? item.courseSet.discount : ''"
         :course-type="typeList === 'course_list' ? item.courseSet.type : ''"
         :type-list="typeList"
         :normal-tag-show="normalTagShow"
         :type="type"
-        :feedback="feedback"/>
+        :feedback="feedback"
+      />
     </van-list>
   </div>
 </template>
 
 <script>
-import Api from '@/api'
-import { Toast } from 'vant'
-import eClass from '&/components/e-class/e-class'
-import courseListData from '@/utils/filter-course.js'
-import { mapState } from 'vuex'
+import Api from '@/api';
+import { Toast } from 'vant';
+import eClass from '&/components/e-class/e-class';
+import courseListData from '@/utils/filter-course.js';
+import { mapState } from 'vuex';
 
 export default {
   components: {
-    eClass
+    eClass,
   },
   props: {
     feedback: {
       type: Boolean,
-      default: true
+      default: true,
     },
     normalTagShow: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   data() {
     return {
@@ -45,8 +53,8 @@ export default {
       type: 'price',
       offset: 0,
       levelId: this.$route.query.levelId,
-      typeList: 'course_list'
-    }
+      typeList: 'course_list',
+    };
   },
   computed: {
     ...mapState(['courseSettings']),
@@ -55,34 +63,37 @@ export default {
         type: 'price',
         typeList: this.typeList,
         showStudent: this.courseSettings
-          ? Number(this.courseSettings.show_student_num_enabled) : true
-      }
-    }
+          ? Number(this.courseSettings.show_student_num_enabled)
+          : true,
+      };
+    },
   },
   beforeRouteEnter(to, from, next) {
-    const navTitle = to.query.vipName || '会员'
-    to.meta.title = `${navTitle}课程`
-    next()
+    const navTitle = to.query.vipName || '会员';
+    to.meta.title = `${navTitle}课程`;
+    next();
   },
   filters: {
-    courseListData
+    courseListData,
   },
   methods: {
     onLoad() {
-      const params = { levelId: this.levelId, offset: this.offset }
-       Api.getVipCourses({ params }).then(({ data, paging }) => {
-        this.courseList = [...this.courseList, ...data]
-       this.offset = this.courseList.length
+      const params = { levelId: this.levelId, offset: this.offset };
+      Api.getVipCourses({ params })
+        .then(({ data, paging }) => {
+          this.courseList = [...this.courseList, ...data];
+          this.offset = this.courseList.length;
 
-        if (this.courseList.length == paging.total) {
-          this.finished = true
-        }
-       this.loading = false
-      }).catch(err => {
-        Toast.fail(err.message)
-        this.loading = false
-      })
-    }
-  }
-}
+          if (this.courseList.length == paging.total) {
+            this.finished = true;
+          }
+          this.loading = false;
+        })
+        .catch(err => {
+          Toast.fail(err.message);
+          this.loading = false;
+        });
+    },
+  },
+};
 </script>

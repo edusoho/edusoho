@@ -3,49 +3,117 @@
     <!-- 暂无学习任务 -->
     <div v-if="courseLessons.length == 0" class="empty">暂无学习任务</div>
     <div v-else class="directory-list">
-      <div v-for="(item, chapterIndex) in chapters" :key="chapterIndex" class="directory-list__item">
+      <div
+        v-for="(item, chapterIndex) in chapters"
+        :key="chapterIndex"
+        class="directory-list__item"
+      >
         <div
           v-if="item.type === 'chapter'"
           class="directory-list__item-chapter"
-          @click="item.show = !item.show">
-          <span class="text-overflow">第{{ item.number }}{{ courseSettings.chapter_name }}：{{ item.title }}</span>
-          <i :class="[ item.show ? 'icon-packup': 'icon-unfold']"/>
+          @click="item.show = !item.show"
+        >
+          <span class="text-overflow"
+            >第{{ item.number }}{{ courseSettings.chapter_name }}：{{
+              item.title
+            }}</span
+          >
+          <i :class="[item.show ? 'icon-packup' : 'icon-unfold']" />
         </div>
 
         <div
           v-for="(lesson, lessonIndex) in tasks[chapterIndex]"
-          :class="['directory-list__item-unit',
-                   {'unit-show': item.show || (item.show && tasks[chapterIndex][0].type === 'lesson')}]"
-          :key="lessonIndex">
-
+          :class="[
+            'directory-list__item-unit',
+            {
+              'unit-show':
+                item.show ||
+                (item.show && tasks[chapterIndex][0].type === 'lesson'),
+            },
+          ]"
+          :key="lessonIndex"
+        >
           <div v-if="lesson.type === 'unit'" class="lesson-cell__unit">
-            <span class="lesson-cell__unit-title text-overflow">第{{ lesson.number }}{{ courseSettings.part_name }}：{{ lesson.title }}</span>
-            <i :class="[ unitShow[`${chapterIndex}-${lessonIndex}`] ? 'icon-packup': 'icon-unfold']" @click="lessonToggle(chapterIndex, lessonIndex)"/>
+            <span class="lesson-cell__unit-title text-overflow"
+              >第{{ lesson.number }}{{ courseSettings.part_name }}：{{
+                lesson.title
+              }}</span
+            >
+            <i
+              :class="[
+                unitShow[`${chapterIndex}-${lessonIndex}`]
+                  ? 'icon-packup'
+                  : 'icon-unfold',
+              ]"
+              @click="lessonToggle(chapterIndex, lessonIndex)"
+            />
           </div>
 
           <div
             v-if="lesson.type === 'lesson'"
-            :class="{'lesson-show': unitShow[lesson.show]|| (tasks[chapterIndex][0].type === 'lesson')}"
-            class="lesson-cell__hour text-overflow">
+            :class="{
+              'lesson-show':
+                unitShow[lesson.show] ||
+                tasks[chapterIndex][0].type === 'lesson',
+            }"
+            class="lesson-cell__hour text-overflow"
+          >
             <div v-if="lesson.tasks.length > 1">
               <div class="lesson-cell__lesson text-overflow">
-                <i class="h5-icon h5-icon-dot color-primary text-18"/>
-                <span>{{ Number(lesson.isOptional) ? '选修 ' : '课时 ' }} {{ Number(lesson.isOptional) ? ' ' : `${lesson.number - optionalMap[lesson.number]}：` }}{{ lesson.title }}</span>
+                <i class="h5-icon h5-icon-dot color-primary text-18" />
+                <span
+                  >{{ Number(lesson.isOptional) ? '选修 ' : '课时 ' }}
+                  {{
+                    Number(lesson.isOptional)
+                      ? ' '
+                      : `${lesson.number - optionalMap[lesson.number]}：`
+                  }}{{ lesson.title }}</span
+                >
               </div>
               <div
                 v-for="(task, taskIndex) in lesson.tasks"
                 :class="['box', 'show-box']"
-                :key="taskIndex">
+                :key="taskIndex"
+              >
                 <div class="lesson-cell">
-                  <span v-if="!Number(lesson.isOptional)" class="lesson-cell__number pull-left">{{ filterNumber(task, taskIndex) }}</span>
-                  <div :class="['lesson-cell__content', lesson.tasks[taskIndex].type === 'live' ? 'pr10' : '']" @click="lessonCellClick(task)">
+                  <span
+                    v-if="!Number(lesson.isOptional)"
+                    class="lesson-cell__number pull-left"
+                    >{{ filterNumber(task, taskIndex) }}</span
+                  >
+                  <div
+                    :class="[
+                      'lesson-cell__content',
+                      lesson.tasks[taskIndex].type === 'live' ? 'pr10' : '',
+                    ]"
+                    @click="lessonCellClick(task)"
+                  >
                     <div class="lesson-cell__text">
                       <span class="text-overflow">{{ task.title }}</span>
-                      <span v-if="lesson.tasks[taskIndex].type === 'live' && lesson.tasks[taskIndex].status === 'published'" :class="[liveClass(lesson.tasks[taskIndex]), 'live-text', 'ml5']">{{ lesson.tasks[taskIndex] | liveStatusText }}</span>
+                      <span
+                        v-if="
+                          lesson.tasks[taskIndex].type === 'live' &&
+                            lesson.tasks[taskIndex].status === 'published'
+                        "
+                        :class="[
+                          liveClass(lesson.tasks[taskIndex]),
+                          'live-text',
+                          'ml5',
+                        ]"
+                        >{{ lesson.tasks[taskIndex] | liveStatusText }}</span
+                      >
                     </div>
-                    <span class="lesson-cell-last__text">{{ task | taskType }}{{ task | filterTask }}</span>
+                    <span class="lesson-cell-last__text"
+                      >{{ task | taskType }}{{ task | filterTask }}</span
+                    >
                   </div>
-                  <div v-if="!details.member" :class="['lesson-cell__status', details.member ? '' : task.tagStatus]">
+                  <div
+                    v-if="!details.member"
+                    :class="[
+                      'lesson-cell__status',
+                      details.member ? '' : task.tagStatus,
+                    ]"
+                  >
                     {{ filterTaskStatus(task) }}
                   </div>
                 </div>
@@ -53,49 +121,78 @@
             </div>
 
             <div v-if="lesson.tasks.length === 1">
-              <div class="lesson-cell__lesson text-overflow" @click="lessonCellClick(lesson.tasks[0])">
-                <i class="h5-icon h5-icon-dot color-primary text-18 pull-left"/>
+              <div
+                class="lesson-cell__lesson text-overflow"
+                @click="lessonCellClick(lesson.tasks[0])"
+              >
+                <i
+                  class="h5-icon h5-icon-dot color-primary text-18 pull-left"
+                />
                 <div class="lesson-cell__text ">
-                  <span class="pl3 text-overflow">{{ Number(lesson.isOptional) ? '选修 ' : '课时 ' }} {{ Number(lesson.isOptional) ? ' ' : `${lesson.number - optionalMap[lesson.number]}：` }}{{ lesson.tasks[0].title }}</span>
-                  <span v-if="lesson.tasks[0].status === 'published' && lesson.tasks[0].type === 'live'" :class="[liveClass(lesson.tasks[0]), 'live-text', 'ml5']">{{ lesson.tasks[0] | liveStatusText }}</span>
+                  <span class="pl3 text-overflow"
+                    >{{ Number(lesson.isOptional) ? '选修 ' : '课时 ' }}
+                    {{
+                      Number(lesson.isOptional)
+                        ? ' '
+                        : `${lesson.number - optionalMap[lesson.number]}：`
+                    }}{{ lesson.tasks[0].title }}</span
+                  >
+                  <span
+                    v-if="
+                      lesson.tasks[0].status === 'published' &&
+                        lesson.tasks[0].type === 'live'
+                    "
+                    :class="[liveClass(lesson.tasks[0]), 'live-text', 'ml5']"
+                    >{{ lesson.tasks[0] | liveStatusText }}</span
+                  >
                 </div>
                 <div class="lesson-cell">
-                  <span class="lesson-cell__number">{{ filterNumber(lesson.tasks[0], 0, true) }}</span>
+                  <span class="lesson-cell__number">{{
+                    filterNumber(lesson.tasks[0], 0, true)
+                  }}</span>
                   <div class="lesson-cell__content pl3">
-                    <span class="lesson-cell-last__text">{{ lesson.tasks[0] | taskType }}{{ lesson.tasks[0] | filterTask }}</span>
+                    <span class="lesson-cell-last__text"
+                      >{{ lesson.tasks[0] | taskType
+                      }}{{ lesson.tasks[0] | filterTask }}</span
+                    >
                   </div>
-                  <div v-if="!details.member" :class="['lesson-cell__status', details.member ? '' : lesson.tasks[0].tagStatus]">
+                  <div
+                    v-if="!details.member"
+                    :class="[
+                      'lesson-cell__status',
+                      details.member ? '' : lesson.tasks[0].tagStatus,
+                    ]"
+                  >
                     {{ filterTaskStatus(lesson.tasks[0]) }}
                   </div>
                 </div>
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </div>
   </e-panel>
 </template>
 <script>
-import { mapState, mapMutations } from 'vuex'
-import { Dialog, Toast } from 'vant'
-import { formatCompleteTime } from '@/utils/date-toolkit'
-import * as types from '@/store/mutation-types'
-import redirectMixin from '@/mixins/saveRedirect'
-import Api from '@/api'
+import { mapState, mapMutations } from 'vuex';
+import { Dialog, Toast } from 'vant';
+import { formatCompleteTime } from '@/utils/date-toolkit';
+import * as types from '@/store/mutation-types';
+import redirectMixin from '@/mixins/saveRedirect';
+import Api from '@/api';
 
 export default {
   mixins: [redirectMixin],
   props: {
     hiddeTitle: {
       type: Boolean,
-      default: false
+      default: false,
     },
     errorMsg: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
   data() {
     return {
@@ -105,193 +202,203 @@ export default {
       unit: [],
       optionalMap: [],
       unitShow: {},
-      firstLesson: ''
-    }
+      firstLesson: '',
+    };
   },
   computed: {
     ...mapState('course', {
       details: state => state.details,
       joinStatus: state => state.joinStatus,
       courseLessons: state => state.courseLessons,
-      selectedPlanId: state => state.selectedPlanId
+      selectedPlanId: state => state.selectedPlanId,
     }),
     ...mapState(['courseSettings', 'user']),
     currentCourseType() {
-      return Number(this.details.parentId) ? '班级' : '课程'
+      return Number(this.details.parentId) ? '班级' : '课程';
     },
     liveClass() {
-      return (lesson) => {
-        const now = new Date().getTime()
-        const startTimeStamp = new Date(lesson.startTime * 1000)
-        const endTimeStamp = new Date(lesson.endTime * 1000)
+      return lesson => {
+        const now = new Date().getTime();
+        const startTimeStamp = new Date(lesson.startTime * 1000);
+        const endTimeStamp = new Date(lesson.endTime * 1000);
         if (now <= startTimeStamp) {
-          return 'grey-medium'
+          return 'grey-medium';
         }
         if (now > endTimeStamp) {
           if (lesson.activity.replayStatus === 'ungenerated') {
-            return 'live-done'
+            return 'live-done';
           }
-          return 'live-replay'
+          return 'live-replay';
         }
-        return 'living'
-      }
-    }
+        return 'living';
+      };
+    },
   },
   watch: {
     selectedPlanId: {
       deep: true,
       immediate: true,
       handler(v) {
-        console.log(v)
-        if (!this.courseLessons.length) return
-        let task = 0
-        let unit = 0
-        let chapter = 0
-        this.directoryArray = this.courseLessons.map(item => { // 后续可考虑 getTasks 方法的遍历可以合并成一个？
+        console.log(v);
+        if (!this.courseLessons.length) return;
+        let task = 0;
+        let unit = 0;
+        let chapter = 0;
+        this.directoryArray = this.courseLessons.map(item => {
+          // 后续可考虑 getTasks 方法的遍历可以合并成一个？
           if (!this.firstLesson) {
-            this.firstLesson = item.type
+            this.firstLesson = item.type;
           }
-          task++
-          this.$set(item, 'show', true)
+          task++;
+          this.$set(item, 'show', true);
           if (item.type === 'chapter') {
-            chapter++
-            task = 0
+            chapter++;
+            task = 0;
           }
           if (item.type === 'unit') {
-            unit = task - 1
+            unit = task - 1;
           }
           if (item.type === 'lesson') {
-            const chaptersIndex = this.firstLesson === 'chapter'
-              ? Math.max(chapter - 1, 0) : Math.max(chapter, 0)
-            const unitIndex = unit
-            this.$set(item, 'show', `${chaptersIndex}-${unitIndex}`)
+            const chaptersIndex =
+              this.firstLesson === 'chapter'
+                ? Math.max(chapter - 1, 0)
+                : Math.max(chapter, 0);
+            const unitIndex = unit;
+            this.$set(item, 'show', `${chaptersIndex}-${unitIndex}`);
           }
 
-          return item
-        })
+          return item;
+        });
 
-        this.getTasks(this.directoryArray)
-      }
-    }
+        this.getTasks(this.directoryArray);
+      },
+    },
   },
   methods: {
     ...mapMutations('course', {
-      setSourceType: types.SET_SOURCETYPE
+      setSourceType: types.SET_SOURCETYPE,
     }),
     lessonToggle(chapterIndex, lessonIndex) {
-      const index = `${chapterIndex}-${lessonIndex}`
-      this.$set(this.unitShow, index, !this.unitShow[index])
+      const index = `${chapterIndex}-${lessonIndex}`;
+      this.$set(this.unitShow, index, !this.unitShow[index]);
     },
     filterNumber(task, index, single) {
       if (single) {
-        return ''
+        return '';
       }
-      return task.isOptional === '1' ? '选修' : (index + 1)
+      return task.isOptional === '1' ? '选修' : index + 1;
     },
     getTasks(data) {
-      let temp = []
-      let optionalNum = 0
-      let lessonIndex = 0
-      this.chapters = []
-      this.tasks = []
-      this.unit = []
-      this.optionalMap = []
+      let temp = [];
+      let optionalNum = 0;
+      let lessonIndex = 0;
+      this.chapters = [];
+      this.tasks = [];
+      this.unit = [];
+      this.optionalMap = [];
 
       data.forEach(item => {
         if (item.type == 'lesson') {
-          lessonIndex++
-          optionalNum = Number(item.isOptional) ? (++optionalNum) : optionalNum
-          this.optionalMap[lessonIndex] = optionalNum
+          lessonIndex++;
+          optionalNum = Number(item.isOptional) ? ++optionalNum : optionalNum;
+          this.optionalMap[lessonIndex] = optionalNum;
           item.tasks.forEach(task => {
-            task['tagStatus'] = this.getCurrentStatus(task)
-          })
+            task.tagStatus = this.getCurrentStatus(task);
+          });
         }
 
         if (item.type !== 'chapter') {
           if (item.type === 'unit') {
-            const chaptersIndex = this.firstLesson === 'chapter'
-              ? this.chapters.length - 1 : this.chapters.length
-            const unitIndex = temp.length
-            this.$set(this.unitShow, `${chaptersIndex}-${unitIndex}`, true)
-            this.unit.push(item)
+            const chaptersIndex =
+              this.firstLesson === 'chapter'
+                ? this.chapters.length - 1
+                : this.chapters.length;
+            const unitIndex = temp.length;
+            this.$set(this.unitShow, `${chaptersIndex}-${unitIndex}`, true);
+            this.unit.push(item);
           }
-          temp.push(item)
+          temp.push(item);
         } else {
           if (temp.length > 0) {
-            this.tasks.push([].concat(temp))
-            temp = []
+            this.tasks.push([].concat(temp));
+            temp = [];
           } else if (this.chapters.length > 0) {
-            this.tasks.push([])
+            this.tasks.push([]);
           }
 
-          this.chapters.push(item)
+          this.chapters.push(item);
         }
-      })
+      });
 
       if (!this.unit.length || this.firstLesson !== 'chapter') {
-        this.$set(this.unitShow, `${0}-${0}`, true)
+        this.$set(this.unitShow, `${0}-${0}`, true);
       }
 
-      const last = data.length - 1
+      const last = data.length - 1;
 
       if (data[last].type !== 'chapter') {
-        this.tasks.push(temp)
+        this.tasks.push(temp);
       }
 
       if (data[0].type !== 'chapter') {
-        this.chapters.unshift({ show: true })
+        this.chapters.unshift({ show: true });
       }
     },
     getCurrentStatus(task) {
       if (Number(task.isFree)) {
-        return 'is-free'
+        return 'is-free';
       }
-      if (Number(this.details.tryLookable) &&
-          task.type === 'video' &&
-          task.activity.mediaStorage) {
-        return 'is-tryLook'
+      if (
+        Number(this.details.tryLookable) &&
+        task.type === 'video' &&
+        task.activity.mediaStorage
+      ) {
+        return 'is-tryLook';
       }
-      return ''
+      return '';
     },
     filterTaskStatus(task) {
       if (!this.details.member && task.tagStatus === 'is-free') {
-        return '免费'
+        return '免费';
       }
       if (!this.details.member && task.tagStatus === 'is-tryLook') {
-        return '试看'
+        return '试看';
       }
-      return ''
+      return '';
     },
     lessonCellClick(task) {
       // 课程错误和未发布状态，不允许学习任务
       if (this.errorMsg || task.status === 'create') {
-        this.$emit('showDialog')
-        return
+        this.$emit('showDialog');
+        return;
       }
 
-      const details = this.details
+      const details = this.details;
 
-      !details.allowAnonymousPreview && this.$router.push({
-        name: 'login',
-        query: {
-          redirect: this.redirect
-        }
-      })
-      if (!this.joinStatus &&
-          ['is-tryLook', 'is-free'].includes(task.tagStatus)) {
+      !details.allowAnonymousPreview &&
+        this.$router.push({
+          name: 'login',
+          query: {
+            redirect: this.redirect,
+          },
+        });
+      if (
+        !this.joinStatus &&
+        ['is-tryLook', 'is-free'].includes(task.tagStatus)
+      ) {
         // trylook and free video click
         switch (task.type) {
           case 'video':
           case 'audio':
             this.$router.push({
-              name: 'course_try'
-            })
+              name: 'course_try',
+            });
 
             this.setSourceType({
               sourceType: task.type,
-              taskId: task.id
-            })
-            break
+              taskId: task.id,
+            });
+            break;
           case 'doc':
           case 'text':
           case 'ppt':
@@ -301,40 +408,42 @@ export default {
                 courseId: this.selectedPlanId,
                 taskId: task.id,
                 type: task.type,
-                preview: 1
-              }
-            })
-            break
+                preview: 1,
+              },
+            });
+            break;
           default:
-            return Toast(`请先加入${this.currentCourseType}`)
+            return Toast(`请先加入${this.currentCourseType}`);
         }
       } else {
-        this.joinStatus ? this.showTypeDetail(task) : Toast(`请先加入${this.currentCourseType}`)
+        this.joinStatus
+          ? this.showTypeDetail(task)
+          : Toast(`请先加入${this.currentCourseType}`);
       }
       // join after click
     },
     showTypeDetail(task) {
       if (task.status !== 'published') {
-        Toast('敬请期待')
-        return
+        Toast('敬请期待');
+        return;
       }
       switch (task.type) {
         case 'video':
           if (task.mediaSource === 'self') {
             this.setSourceType({
               sourceType: 'video',
-              taskId: task.id
-            })
+              taskId: task.id,
+            });
           } else {
-            Toast('暂不支持此类型')
+            Toast('暂不支持此类型');
           }
-          break
+          break;
         case 'audio':
           this.setSourceType({
             sourceType: 'audio',
-            taskId: task.id
-          })
-          break
+            taskId: task.id,
+          });
+          break;
         case 'text':
         case 'ppt':
         case 'doc':
@@ -343,32 +452,32 @@ export default {
             query: {
               courseId: this.selectedPlanId,
               taskId: task.id,
-              type: task.type
-            }
-          })
-          break
+              type: task.type,
+            },
+          });
+          break;
         case 'live':
-          const nowDate = new Date()
-          const endDate = new Date(task.endTime * 1000)
-          const startDate = new Date(task.startTime * 1000)
-          let replay = false
+          const nowDate = new Date();
+          const endDate = new Date(task.endTime * 1000);
+          const startDate = new Date(task.startTime * 1000);
+          let replay = false;
           if (nowDate > endDate) {
             if (task.activity.replayStatus == 'videoGenerated') {
               // 本站文件
               if (task.mediaSource === 'self') {
                 this.setSourceType({
                   sourceType: 'video',
-                  taskId: task.id
-                })
+                  taskId: task.id,
+                });
               } else {
-                Toast('暂不支持此类型')
+                Toast('暂不支持此类型');
               }
-              return
+              return;
             } else if (task.activity.replayStatus == 'ungenerated') {
-              Toast('暂无回放')
-              return
+              Toast('暂无回放');
+              return;
             } else {
-              replay = true
+              replay = true;
             }
           }
 
@@ -379,32 +488,32 @@ export default {
               taskId: task.id,
               type: task.type,
               title: task.title,
-              replay
-            }
-          })
-          break
+              replay,
+            },
+          });
+          break;
         default:
-          Toast('暂不支持此类型')
+          Toast('暂不支持此类型');
       }
-    }
+    },
   },
   filters: {
     liveStatusText(lesson) {
-      const now = new Date().getTime()
-      const startTimeStamp = new Date(lesson.startTime * 1000)
-      const endTimeStamp = new Date(lesson.endTime * 1000)
+      const now = new Date().getTime();
+      const startTimeStamp = new Date(lesson.startTime * 1000);
+      const endTimeStamp = new Date(lesson.endTime * 1000);
       // 直播未开始
       if (now <= startTimeStamp) {
-        return formatCompleteTime(startTimeStamp)
+        return formatCompleteTime(startTimeStamp);
       }
       if (now > endTimeStamp) {
         if (lesson.activity.replayStatus === 'ungenerated') {
-          return '已结束'
+          return '已结束';
         }
-        return '回放'
+        return '回放';
       }
-      return '直播中'
-    }
-  }
-}
+      return '直播中';
+    },
+  },
+};
 </script>

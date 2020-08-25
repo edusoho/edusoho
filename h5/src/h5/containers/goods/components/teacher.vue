@@ -1,13 +1,19 @@
 <template>
   <div class="info-teacher">
     <template v-if="teachers.length">
-      <div class="info-teacher__item clearfix" v-for="teacher in teachers" :key="teacher.id">
+      <div
+        class="info-teacher__item clearfix"
+        v-for="teacher in teachers"
+        :key="teacher.id"
+      >
         <div class="pull-left teacher-img">
-          <img :src="teacher.avatar.small" alt="">
+          <img :src="teacher.avatar.small" alt="" />
         </div>
         <div class="pull-left teacher-info">
-          <p class="teacher-info__name">{{ teacher.name }}</p>
-          <p class="teacher-info__describe text-overflow">{{ teacher.title }}</p>
+          <p class="teacher-info__name">{{ teacher.nickname }}</p>
+          <p class="teacher-info__describe text-overflow">
+            {{ teacher.title }}
+          </p>
         </div>
       </div>
     </template>
@@ -22,8 +28,8 @@ export default {
   props: {
     teachers: {
       type: Array,
-      default: () => []
-    }
-  }
-}
+      default: () => [],
+    },
+  },
+};
 </script>

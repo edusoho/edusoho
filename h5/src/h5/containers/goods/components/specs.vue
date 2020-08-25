@@ -36,11 +36,11 @@
           <div class="pull-left popup-other__left">学习有效期</div>
           <div
             class="pull-left popup-other__right"
-            v-html="currentSku.expiryMode"
+            v-html="buyableModeHtml"
           ></div>
         </div>
         <!-- 承诺服务 -->
-        <div class="popup-other clearfix" v-if="currentSku.services">
+        <div class="popup-other clearfix" v-if="currentSku.services.length">
           <div class="pull-left popup-other__left">承诺服务</div>
           <div class="pull-left popup-other__right">
             <span
@@ -107,31 +107,59 @@ export default {
       this.$emit('changeSku', specs.targetId);
       this.show = false;
     },
+    formatDate(time, fmt = 'yyyy-MM-dd') {
+      time = time * 1000;
+      const date = new Date(time);
+      if (/(y+)/.test(fmt)) {
+        fmt = fmt.replace(
+          RegExp.$1,
+          (date.getFullYear() + '').substr(4 - RegExp.$1.length),
+        );
+      }
+      const o = {
+        'M+': date.getMonth() + 1,
+        'd+': date.getDate(),
+        'h+': date.getHours(),
+        'm+': date.getMinutes(),
+        's+': date.getSeconds(),
+      };
+      for (const k in o) {
+        if (new RegExp(`(${k})`).test(fmt)) {
+          const str = o[k] + '';
+          fmt = fmt.replace(
+            RegExp.$1,
+            RegExp.$1.length === 1 ? str : ('00' + str).substr(str.length),
+          );
+        }
+      }
+      return fmt;
+    },
   },
   computed: {
     buyableModeHtml() {
       const memberInfo = this.goods.member;
       if (!memberInfo) {
-        switch (this.currentSku.buyableMode) {
+        switch (this.currentSku.usageMode) {
           case 'forever':
             return '永久有效';
           case 'end_date':
             return (
-              this.currentSku.buyableEndTime.slice(0, 10) + '&nbsp;之前可学习'
+              this.formatDate(this.currentSku.usageEndTime.slice(0, 10)) +
+              '&nbsp;之前可学习'
             );
           case 'days':
-            return 'x天内可学习';
+            return this.currentSku.usageDays + '天内可学习';
           case 'date':
             return (
-              this.currentSku.buyableStartTime.slice(0, 10) +
+              this.formatDate(this.currentSku.usageStartTime.slice(0, 10)) +
               '&nbsp;~&nbsp;' +
-              this.currentSku.buyableEndTime.slice(0, 10)
+              this.formatDate(this.currentSku.usageEndTime.slice(0, 10))
             );
           default:
             return '';
         }
       } else {
-        if (this.currentSku.buyableMode == 'forever') {
+        if (this.currentSku.usageMode == 'forever') {
           return '永久有效';
         }
         return memberInfo.deadline != 0

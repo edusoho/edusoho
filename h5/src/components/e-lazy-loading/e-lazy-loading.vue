@@ -1,8 +1,5 @@
 <template>
-  <van-list
-    v-model="loading"
-    :finished="finished"
-    @load="onLoad">
+  <van-list v-model="loading" :finished="finished" @load="onLoad">
     <courseItem
       v-for="(course, index) in courseList"
       :key="index"
@@ -11,7 +8,9 @@
       :vip-tag-show="vipTagShow"
       :type-list="typeList"
       :is-vip="course.vipLevelId"
-      :discountType="typeList === 'course_list' ? course.courseSet.discountType : ''"
+      :discountType="
+        typeList === 'course_list' ? course.courseSet.discountType : ''
+      "
       :discount="typeList === 'course_list' ? course.courseSet.discount : ''"
       :course-type="typeList === 'course_list' ? course.courseSet.type : ''"
       :course="course | courseListData(listObj)"
@@ -20,17 +19,17 @@
 </template>
 
 <script>
-import courseItem from '../e-class/e-class.vue'
-import courseListData from '@/utils/filter-course.js'
-import { mapState } from 'vuex'
+import courseItem from '../e-class/e-class.vue';
+import courseListData from '@/utils/filter-course.js';
+import { mapState } from 'vuex';
 
 export default {
   components: {
-    courseItem
+    courseItem,
   },
 
   filters: {
-    courseListData
+    courseListData,
   },
 
   props: {
@@ -40,57 +39,58 @@ export default {
     courseItemType: String,
     typeList: {
       type: String,
-      default: 'course_list'
+      default: 'course_list',
     },
     normalTagShow: {
       type: Boolean,
-      default: true
+      default: true,
     },
     vipTagShow: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
   data() {
     return {
       list: [],
-      finished: false
-    }
+      finished: false,
+    };
   },
 
   computed: {
     ...mapState(['courseSettings']),
     loading: {
       get() {
-        return !this.isRequestCompile
+        return !this.isRequestCompile;
       },
       set(v) {
-        console.log(v, 'value')
-      }
+        console.log(v, 'value');
+      },
     },
     listObj() {
       return {
         type: this.courseItemType,
         typeList: this.typeList,
         showStudent: this.courseSettings
-          ? Number(this.courseSettings.show_student_num_enabled) : true
-      }
-    }
+          ? Number(this.courseSettings.show_student_num_enabled)
+          : true,
+      };
+    },
   },
 
   watch: {
     isAllData() {
-      this.loading = false
-      this.finished = this.isAllData
-    }
+      this.loading = false;
+      this.finished = this.isAllData;
+    },
   },
 
   methods: {
     onLoad() {
       // 通知父组件请求数据并更新courseList
-      if (this.isRequestCompile) this.$emit('needRequest')
-    }
-  }
-}
+      if (this.isRequestCompile) this.$emit('needRequest');
+    },
+  },
+};
 </script>

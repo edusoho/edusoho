@@ -21,52 +21,56 @@
       @needRequest="sendRequest"
       @resetData="initCourseList"
     />
-    <empty v-if="isEmptyCourse && isRequestCompile" text="暂无课程" class="empty__couse" />
-    <back-top  icon="icon-top" color="#20B573"/>  
+    <empty
+      v-if="isEmptyCourse && isRequestCompile"
+      text="暂无课程"
+      class="empty__couse"
+    />
+    <back-top icon="icon-top" color="#20B573" />
   </div>
 </template>
 
 <script>
-import Api from "@/api";
-import infiniteScroll from "&/components/e-infinite-scroll/e-infinite-scroll.vue";
-import treeSelects from "&/components/e-tree-selects/e-tree-selects.vue";
-import empty from "&/components/e-empty/e-empty.vue";
-import backTop from "&/components/e-back-top/e-back-top.vue";
-import { mapMutations } from "vuex";
-import CATEGORY_DEFAULT from "@/config/category-default-config.js";
+import Api from '@/api';
+import infiniteScroll from '&/components/e-infinite-scroll/e-infinite-scroll.vue';
+import treeSelects from '&/components/e-tree-selects/e-tree-selects.vue';
+import empty from '&/components/e-empty/e-empty.vue';
+import backTop from '&/components/e-back-top/e-back-top.vue';
+import { mapMutations } from 'vuex';
+import CATEGORY_DEFAULT from '@/config/category-default-config.js';
 export default {
-  name: "more_course_new",
+  name: 'more_course_new',
   components: {
     infiniteScroll,
     treeSelects,
     empty,
-    backTop
+    backTop,
   },
   data() {
     return {
       showShadow: false,
-      isAppUse: true, //是否被app调用
+      isAppUse: true, // 是否被app调用
       selectedData: {},
-      courseItemType: "price",
+      courseItemType: 'price',
       isRequestCompile: false,
       isAllCourse: false,
       isEmptyCourse: true,
       courseList: [],
       offset: 0,
       limit: 10,
-      type: "all",
+      type: 'all',
       categoryId: 0,
-      sort: "recommendedSeq",
+      sort: 'recommendedSeq',
       selecting: false,
       queryForm: {
-        courseType: "type",
-        category: "categoryId",
-        categoryId: "categoryId",
-        sort: "sort"
+        courseType: 'type',
+        category: 'categoryId',
+        categoryId: 'categoryId',
+        sort: 'sort',
       },
       treeMenuLevel: 1,
-      selectItems: CATEGORY_DEFAULT["course_list"],
-      categories: []
+      selectItems: CATEGORY_DEFAULT.course_list,
+      categories: [],
     };
   },
   created() {
@@ -78,8 +82,8 @@ export default {
   methods: {
     setTitle() {
       window.postNativeMessage({
-        action: "kuozhi_native_header",
-        data: { title: "所有课程" }
+        action: 'kuozhi_native_header',
+        data: { title: '所有课程' },
       });
     },
     setQuery(value) {
@@ -101,9 +105,9 @@ export default {
     },
     formateCategories(categories) {
       categories.unshift({
-        name: "全部",
-        id: "0",
-        children: []
+        name: '全部',
+        id: '0',
+        children: [],
       });
       categories.forEach(item => {
         if (item.children.length) {
@@ -121,7 +125,7 @@ export default {
     getCourseList() {
       const setting = {
         offset: this.offset,
-        limit: this.limit
+        limit: this.limit,
       };
 
       this.requestCourses(setting).then(() => {
@@ -135,7 +139,7 @@ export default {
       this.isRequestCompile = false;
       const config = Object.assign(this.selectedData, setting);
       return Api.getCourseList({
-        params: config
+        params: config,
       })
         .then(data => {
           this.formateData(data);
@@ -155,29 +159,29 @@ export default {
     sendRequest() {
       const args = {
         offset: this.offset,
-        limit: this.limit
+        limit: this.limit,
       };
 
       if (!this.isAllCourse) this.requestCourses(args);
     },
     transform(obj) {
-      const config = {}
+      const config = {};
       const arr = Object.keys(obj);
       const defaultData = {
         categoryId: this.categoryId,
         type: this.type,
-        sort: this.sort
+        sort: this.sort,
       };
       if (!arr.length) {
         return defaultData;
       }
       arr.forEach((current, index) => {
         if (current === 'category') {
-          config[this.queryForm[current]] = Number(obj[current])
+          config[this.queryForm[current]] = Number(obj[current]);
           return;
         }
-        config[this.queryForm[current]] = obj[current]
-      })
+        config[this.queryForm[current]] = obj[current];
+      });
       return Object.assign(defaultData, config);
     },
     toggleHandler(value) {
@@ -185,16 +189,15 @@ export default {
     },
     sendError(error) {
       window.postNativeMessage({
-        action: "kuozhi_h5_error",
+        action: 'kuozhi_h5_error',
         data: {
           code: error.code,
-          message: error.message
-        }
+          message: error.message,
+        },
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
-<style>
-</style>
+<style></style>

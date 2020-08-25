@@ -4,27 +4,27 @@ export default [
     name: 'getGoodsCourse',
     url: '/goods/{id}',
     method: 'GET',
-    disableLoading: true
+    disableLoading: true,
   },
   {
     // 课程商品页的组件信息
     name: 'getGoodsCourseComponents',
     url: '/goods/{id}/components',
     method: 'GET',
-    disableLoading: true
+    disableLoading: true,
   },
   {
     // 添加收藏
     name: 'addFavorite',
     url: '/favorite',
     method: 'POST',
-    disableLoading: true
+    disableLoading: true,
   },
   {
     // 移除收藏
     name: 'removeFavorite',
     url: '/favorite',
     method: 'DELETE',
-    disableLoading: true
-  }
+    disableLoading: true,
+  },
 ];

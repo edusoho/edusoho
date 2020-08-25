@@ -24,4 +24,3 @@ const needUpgrade = function needUpgrade(supportVersion, currentVersion) {
 };
 
 export default needUpgrade;
-

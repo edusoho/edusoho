@@ -4,20 +4,36 @@
       <div class="coupon-info">{{ message }}</div>
       <div v-if="Object.keys(item).length" class="e-coupon__body">
         <div class="e-coupon__header clearfix">
-          <span class="e-coupon__price" v-html="priceHtml(item)"/>
+          <span class="e-coupon__price" v-html="priceHtml(item)" />
           <div class="e-coupon__name">
             <div class="text-overflow text-14 coupon-name">{{ item.name }}</div>
             <!-- 兼容老版本优惠券无有效期功能或者非有效期模式-->
-            <span v-if="!item.deadlineMode || item.deadlineMode==='time'" class="text-10">{{ timeExpire(item.createdTime,item.deadline) }}</span>
+            <span
+              v-if="!item.deadlineMode || item.deadlineMode === 'time'"
+              class="text-10"
+              >{{ timeExpire(item.createdTime, item.deadline) }}</span
+            >
             <!-- 新版优惠券功能 -->
             <!-- 非有效期模式 -->
-            <span v-if="item.deadlineMode==='day' && !item.currentUserCoupon" class="text-10">领取后{{ item.fixedDay }}天内有效</span>
+            <span
+              v-if="item.deadlineMode === 'day' && !item.currentUserCoupon"
+              class="text-10"
+              >领取后{{ item.fixedDay }}天内有效</span
+            >
             <!-- 有效期模式且用户已经领取 -->
-            <span v-if="item.deadlineMode==='day' && item.currentUserCoupon" class="text-10">{{ timeExpire(item.createdTime, item.currentUserCoupon.deadline) }}</span>
+            <span
+              v-if="item.deadlineMode === 'day' && item.currentUserCoupon"
+              class="text-10"
+              >{{
+                timeExpire(item.createdTime, item.currentUserCoupon.deadline)
+              }}</span
+            >
           </div>
-          <span class="coupon-button" @click="couponHandle(item, isReceive)">去使用</span>
+          <span class="coupon-button" @click="couponHandle(item, isReceive)"
+            >去使用</span
+          >
         </div>
-        <div class="e-coupon__middle"/>
+        <div class="e-coupon__middle" />
         <div class="e-coupon__bottom text-overflow">
           可用范围：{{ scopeFilter(item) }}
         </div>
@@ -27,18 +43,18 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import Api from '@/api'
-import { Toast } from 'vant'
-import couponMixin from '@/mixins/coupon'
-import getCouponMixin from '@/mixins/coupon/getCouponHandler'
+import { mapState } from 'vuex';
+import Api from '@/api';
+import { Toast } from 'vant';
+import couponMixin from '@/mixins/coupon';
+import getCouponMixin from '@/mixins/coupon/getCouponHandler';
 
 const ALL_TYPE = {
   classroom: 'classroom',
   course: 'course',
   vip: 'vip',
-  all: 'all'
-}
+  all: 'all',
+};
 export default {
   name: 'PassReceive',
   mixins: [couponMixin, getCouponMixin],
@@ -46,45 +62,47 @@ export default {
     return {
       item: {},
       message: '',
-      isReceive: true
-    }
+      isReceive: true,
+    };
   },
   computed: {
     couponStatus() {
-      return Object.keys(this.item).length ? 'coupon-receive-success' : ''
+      return Object.keys(this.item).length ? 'coupon-receive-success' : '';
     },
-    ...mapState(['couponSwitch'])
+    ...mapState(['couponSwitch']),
   },
   created() {
     if (!this.couponSwitch) {
-      Toast.fail('优惠券已失效')
-      return
+      Toast.fail('优惠券已失效');
+      return;
     }
     // 通过链接领取优惠券
-    const token = this.$route.params.token
+    const token = this.$route.params.token;
 
     // 未登录跳转登录页面
     if (!this.$store.state.token) {
       this.$router.push({
         name: 'login',
         query: {
-          redirect: this.$route.fullPath
-        }
-      })
-      return
+          redirect: this.$route.fullPath,
+        },
+      });
+      return;
     }
 
     if (token) {
       Api.receiveCoupon({
-        data: { token }
-      }).then(res => {
-        this.item = res
-        this.message = '恭喜您成功领取了一张优惠券！'
-      }).catch(err => {
-        this.message = '优惠券领取失败！'
-        Toast.fail(err.message)
+        data: { token },
       })
+        .then(res => {
+          this.item = res;
+          this.message = '恭喜您成功领取了一张优惠券！';
+        })
+        .catch(err => {
+          this.message = '优惠券领取失败！';
+          Toast.fail(err.message);
+        });
     }
-  }
-}
+  },
+};
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="util.isExist==1" class="util-directory text-overflow">
+  <div v-if="util.isExist == 1" class="util-directory text-overflow">
     第{{ util.number }}节：{{ util.title }}
   </div>
 </template>
@@ -9,8 +9,8 @@ export default {
   props: {
     util: {
       type: Object,
-      default: () => {}
-    }
-  }
-}
+      default: () => {},
+    },
+  },
+};
 </script>

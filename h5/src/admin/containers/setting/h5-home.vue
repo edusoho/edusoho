@@ -48,9 +48,9 @@
         <div class="h5-home-center">
           <div
             class="setting-page setting-page-h5"
-            :class="{'setting-page-miniprogram': portal === 'miniprogram' }"
+            :class="{ 'setting-page-miniprogram': portal === 'miniprogram' }"
           >
-          <find-header :portal="portal"></find-header>
+            <find-header :portal="portal"></find-header>
 
             <!-- 操作预览区域 -->
             <div class="find-body">
@@ -59,7 +59,7 @@
                 :options="{
                   filter: stopDraggleClasses,
                   preventOnFilter: false,
-                  forceFallback: true
+                  forceFallback: true,
                 }"
                 @start="startDrag"
                 @end="endDrag"
@@ -111,54 +111,51 @@
         >保存并发布</el-button
       >
     </div>
-    <el-dialog
-        title="提示"
-        :visible.sync="quitDialogVisible"
-        width="30%">
-        <div class="mtl">退出后编辑的内容不会保存，是否退出？</div>
-        <div slot="footer" >
-          <el-button @click="quitDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="reset">退出</el-button>
-        </div>
+    <el-dialog title="提示" :visible.sync="quitDialogVisible" width="30%">
+      <div class="mtl">退出后编辑的内容不会保存，是否退出？</div>
+      <div slot="footer">
+        <el-button @click="quitDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="reset">退出</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
 <script>
-import Api from "admin/api";
-import * as types from "admin/store/mutation-types";
+import Api from 'admin/api';
+import * as types from 'admin/store/mutation-types';
 import {
   H5_MARKETING_MODULE,
-  H5_BASE_MODULE
-} from "admin/config/module-default-config";
-import ModuleCounter from "admin/utils/module-counter";
-import getQueryVariable from "admin/utils/query-variable";
-import needUpgrade from "admin/utils/version-compare";
-import pathName2Portal from "admin/config/api-portal-config";
-import marketingMixins from "admin/mixins/marketing";
-import ObjectArray2ObjectByKey from "@/utils/array2object";
-import moduleTemplate from "./module-template";
-import findFooter from "./footer";
-import findHeader from "./header";
-import draggable from "vuedraggable";
-import { mapActions, mapState } from "vuex";
+  H5_BASE_MODULE,
+} from 'admin/config/module-default-config';
+import ModuleCounter from 'admin/utils/module-counter';
+import getQueryVariable from 'admin/utils/query-variable';
+import needUpgrade from 'admin/utils/version-compare';
+import pathName2Portal from 'admin/config/api-portal-config';
+import marketingMixins from 'admin/mixins/marketing';
+import ObjectArray2ObjectByKey from '@/utils/array2object';
+import moduleTemplate from './module-template';
+import findFooter from './footer';
+import findHeader from './header';
+import draggable from 'vuedraggable';
+import { mapActions, mapState } from 'vuex';
 
 export default {
-  name: "h5-home",
+  name: 'h5-home',
   components: {
     moduleTemplate,
     draggable,
     findFooter,
-    findHeader
+    findHeader,
   },
   mixins: [marketingMixins],
   data() {
     return {
       windowHeight: document.documentElement.clientHeight,
-      title: "EduSoho 微网校",
+      title: 'EduSoho 微网校',
       modules: [],
-      //保存标志，只有点击过保存或者预览按钮才开始实时校验，具体表现错误模块为有错误模块边框变红提示！。这里设置成为数字原因是：每次点击发布或者预览按钮时都需要去实时校验一次，
+      // 保存标志，只有点击过保存或者预览按钮才开始实时校验，具体表现错误模块为有错误模块边框变红提示！。这里设置成为数字原因是：每次点击发布或者预览按钮时都需要去实时校验一次，
       saveFlag: 0,
-      //非空提示，在点击发布或者预览按钮时才需要提示，具体表现为弹窗提示
+      // 非空提示，在点击发布或者预览按钮时才需要提示，具体表现为弹窗提示
       startValidate: false,
       incomplete: true,
       validateResults: [],
@@ -169,30 +166,30 @@ export default {
       pathName: this.$route.name,
       couponSwitch: 0,
       moduleLength: 0,
-      menuStyle:{},//右侧菜单栏样式
-      quitDialogVisible:false
+      menuStyle: {}, // 右侧菜单栏样式
+      quitDialogVisible: false,
     };
   },
   computed: {
     ...mapState([
-      "isLoading",
-      "vipLevels",
-      "vipSettings",
-      "vipSetupStatus",
-      "vipPlugin"
+      'isLoading',
+      'vipLevels',
+      'vipSettings',
+      'vipSetupStatus',
+      'vipPlugin',
     ]),
     stopDraggleClasses() {
       return (
-        ".module-frame__setting, .find-footer," +
-        ".search__container, .el-dialog__header, .el-dialog__footer"
+        '.module-frame__setting, .find-footer,' +
+        '.search__container, .el-dialog__header, .el-dialog__footer'
       );
     },
     portal() {
       return pathName2Portal[this.pathName];
-    }
+    },
   },
   created() {
-    //设置样式
+    // 设置样式
     this.setStyle();
     // 请求发现页配置
     this.getFind();
@@ -203,33 +200,33 @@ export default {
     // 获得优惠券开关
     this.getCouponSwitch();
   },
-  beforeDestroy(){
-    document.getElementById("app").style.background="#ffffff";
+  beforeDestroy() {
+    document.getElementById('app').style.background = '#ffffff';
   },
   methods: {
     ...mapActions([
-      "getCourseCategories",
-      "getClassCategories",
-      "deleteDraft",
-      "saveDraft",
-      "getDraft",
-      "getTemplate"
+      'getCourseCategories',
+      'getClassCategories',
+      'deleteDraft',
+      'saveDraft',
+      'getDraft',
+      'getTemplate',
     ]),
-    getFind(){
-      const themeTemplate=getQueryVariable("template");
-      if(themeTemplate){
-        this.getTheme(themeTemplate)
-      }else{
+    getFind() {
+      const themeTemplate = getQueryVariable('template');
+      if (themeTemplate) {
+        this.getTheme(themeTemplate);
+      } else {
         this.load();
       }
     },
-    setStyle(){
-      //设置背景色
+    setStyle() {
+      // 设置背景色
       const windowHeight = document.documentElement.clientHeight;
-      document.getElementById("app").style.background="#f5f5f5";
+      document.getElementById('app').style.background = '#f5f5f5';
       this.menuStyle = {
-        height: this.windowHeight + "px",
-        overflow: "auto"
+        height: this.windowHeight + 'px',
+        overflow: 'auto',
       };
     },
     getCouponSwitch() {
@@ -262,9 +259,9 @@ export default {
       this.currentModuleIndex = Math.max(this.currentModuleIndex - 1, 0);
       this.modules.splice(index, 1);
     },
-    scrollBottom(){
-      const top =document.body.clientHeight;
-      window.scroll({top:top,left:0,behavior:'smooth' });
+    scrollBottom() {
+      const top = document.body.clientHeight;
+      window.scroll({ top: top, left: 0, behavior: 'smooth' });
     },
     addModule(data, index) {
       /*
@@ -275,16 +272,16 @@ export default {
        * 开通会员但未配置会员等级：/admin/setting/vip/level (vipLevels)
        */
       switch (data.default.type) {
-        case "vip":
+        case 'vip':
           if (!this.vipSetupStatus) {
             return;
-          } else if (needUpgrade("1.7.26", this.vipPlugin.version)) {
-            this.$confirm("请升级会员插件", "提示", {
-              confirmButtonText: "去升级",
-              cancelButtonText: "取消"
+          } else if (needUpgrade('1.7.26', this.vipPlugin.version)) {
+            this.$confirm('请升级会员插件', '提示', {
+              confirmButtonText: '去升级',
+              cancelButtonText: '取消',
             })
               .then(() => {
-                window.open(window.location.origin + "/admin/app/upgrades");
+                window.open(window.location.origin + '/admin/app/upgrades');
               })
               .catch(() => {});
             return;
@@ -293,37 +290,37 @@ export default {
             !this.vipSettings.enabled ||
             !this.vipSettings.h5Enabled
           ) {
-            this.$confirm("会员功能未开通", "提示", {
-              confirmButtonText: "去开通",
-              cancelButtonText: "取消"
+            this.$confirm('会员功能未开通', '提示', {
+              confirmButtonText: '去开通',
+              cancelButtonText: '取消',
             })
               .then(() => {
-                window.open(window.location.origin + "/admin/setting/vip");
+                window.open(window.location.origin + '/admin/setting/vip');
               })
               .catch(() => {});
             return;
           } else if (!this.vipLevels || !this.vipLevels.length) {
-            this.$confirm("请先设置会员等级", "提示", {
-              confirmButtonText: "去设置",
-              cancelButtonText: "取消"
+            this.$confirm('请先设置会员等级', '提示', {
+              confirmButtonText: '去设置',
+              cancelButtonText: '取消',
             })
               .then(() => {
                 window.open(
-                  window.location.origin + "/admin/setting/vip/level"
+                  window.location.origin + '/admin/setting/vip/level',
                 );
               })
               .catch(() => {});
             return;
           }
           break;
-        case "coupon":
+        case 'coupon':
           if (!this.couponSwitch) {
-            this.$confirm("优惠券功能未开通", "提示", {
-              confirmButtonText: "去开通",
-              cancelButtonText: "取消"
+            this.$confirm('优惠券功能未开通', '提示', {
+              confirmButtonText: '去开通',
+              cancelButtonText: '取消',
             })
               .then(() => {
-                window.open(window.location.origin + "/admin/setting/coupon");
+                window.open(window.location.origin + '/admin/setting/coupon');
               })
               .catch(() => {});
             return;
@@ -335,33 +332,35 @@ export default {
 
       // 新增一个模块
       if (
-        data.default.type === "search" &&
+        data.default.type === 'search' &&
         this.typeCount.getCounterByType(data.default.type) >= 1
       ) {
         this.$message({
-          message: "搜索组件最多添加 1 个",
-          type: "warning"
+          message: '搜索组件最多添加 1 个',
+          type: 'warning',
         });
         return;
       }
 
       if (this.typeCount.getCounterByType(data.default.type) >= 5) {
         this.$message({
-          message: "同一类型组件最多添加 5 个",
-          type: "warning"
+          message: '同一类型组件最多添加 5 个',
+          type: 'warning',
         });
         return;
       }
       this.moduleLength = this.moduleLength + 1;
       this.typeCount.addByType(data.default.type);
       const defaultCopied = JSON.parse(JSON.stringify(data.default));
-      defaultCopied.oldIndex = this.moduleLength;      //oldIndex用于组件的key,减少组件重新创建
+      defaultCopied.oldIndex = this.moduleLength; // oldIndex用于组件的key,减少组件重新创建
       this.modules.push(defaultCopied);
       this.currentModuleIndex = Math.max(this.modules.length - 1, 0);
-      //使用异步，保证组件添加完成再滑动到底部
-      setTimeout(()=>{this.scrollBottom(),500})
+      // 使用异步，保证组件添加完成再滑动到底部
+      setTimeout(() => {
+        this.scrollBottom(), 500;
+      });
     },
-    getTheme(themeTemplate){
+    getTheme(themeTemplate) {
       this.getTemplate({
         portal: this.portal,
         template: themeTemplate,
@@ -375,73 +374,74 @@ export default {
     },
     load() {
       // 读取草稿配置
-      const mode = this.$route.query.draft == 1 ? "draft" : "published";
+      const mode = this.$route.query.draft == 1 ? 'draft' : 'published';
 
       this.getDraft({
         portal: this.portal,
-        type: "discovery",
-        mode
+        type: 'discovery',
+        mode,
       })
         .then(res => {
-          console.log(1)
-          //默认排列方式
+          console.log(1);
+          // 默认排列方式
           this.formateRes(res);
         })
         .catch(err => {
-         this.formateErr(err);
+          this.formateErr(err);
         });
     },
-    formateRes(res){
-      //默认排列方式
-          Object.keys(res).forEach((element, index) => {
-            res[element] = this.formateH5Display(
-              res[element].type, //兼容无displayStyle的老数据
-              res[element]
-            );
-            res[element].oldIndex = index; //oldIndex用于组件的key,减少组件重新创建
-          });
-          this.moduleLength = Object.keys(res).length - 1;
-          this.modules = Object.values(res);
-          this.moduleCountInit();
-    },
-    formateErr(err){
+    formateRes(res) {
+      // 默认排列方式
+      Object.keys(res).forEach((element, index) => {
+        res[element] = this.formateH5Display(
+          res[element].type, // 兼容无displayStyle的老数据
+          res[element],
+        );
+        res[element].oldIndex = index; // oldIndex用于组件的key,减少组件重新创建
+      });
+      this.moduleLength = Object.keys(res).length - 1;
+      this.modules = Object.values(res);
       this.moduleCountInit();
-          this.$message({
-            message: err.message,
-            type: "error"
+    },
+    formateErr(err) {
+      this.moduleCountInit();
+      this.$message({
+        message: err.message,
+        type: 'error',
       });
     },
-    //处理班级课程排列
+    // 处理班级课程排列
     formateH5Display(type, item) {
       if (
-        (type === "course_list" || type === "classroom_list")
-        && !item.data.displayStyle) {
-          if(this.portal === "app" ){
-              item.data.displayStyle = "distichous";
-          }else if(this.portal === "h5"){
-              item.data.displayStyle = "row";
-          }
+        (type === 'course_list' || type === 'classroom_list') &&
+        !item.data.displayStyle
+      ) {
+        if (this.portal === 'app') {
+          item.data.displayStyle = 'distichous';
+        } else if (this.portal === 'h5') {
+          item.data.displayStyle = 'row';
+        }
       }
       return item;
     },
-    quit(){
-      this.quitDialogVisible=true;
+    quit() {
+      this.quitDialogVisible = true;
     },
     reset() {
-      this.quitDialogVisible=false;
+      this.quitDialogVisible = false;
       // 删除草稿配置配置
       this.deleteDraft({
         portal: this.portal,
-        type: "discovery",
-        mode: "draft"
+        type: 'discovery',
+        mode: 'draft',
       })
         .then(res => {
-          parent.location.href=parent.location.href;
+          parent.location.href = parent.location.href;
         })
         .catch(err => {
           this.$message({
-            message: err.message || "取消失败",
-            type: "error"
+            message: err.message || '取消失败',
+            type: 'error',
           });
         });
     },
@@ -451,7 +451,7 @@ export default {
       // 验证提交配置
       const validateAndSubmit = () => {
         let data = this.modules;
-        const isPublish = mode === "published";
+        const isPublish = mode === 'published';
 
         this.startValidate = false;
 
@@ -459,7 +459,7 @@ export default {
 
         // 如果已经是对象就不用转换
         if (needTrans) {
-          data = ObjectArray2ObjectByKey(this.modules, "moduleType");
+          data = ObjectArray2ObjectByKey(this.modules, 'moduleType');
         }
         if (this.incomplete) {
           return;
@@ -468,16 +468,16 @@ export default {
           data,
           mode,
           portal: this.portal,
-          type: "discovery"
+          type: 'discovery',
         })
           .then(() => {
             this.saveFlag = 0;
             if (isPublish) {
               this.$message({
-                message: "发布成功",
-                type: "success"
+                message: '发布成功',
+                type: 'success',
               });
-              parent.location.href=parent.location.href;
+              parent.location.href = parent.location.href;
               return;
             }
             this.$store.commit(types.UPDATE_DRAFT, data);
@@ -485,8 +485,8 @@ export default {
           })
           .catch(err => {
             this.$message({
-              message: err.message || "发布失败，请重新尝试",
-              type: "error"
+              message: err.message || '发布失败，请重新尝试',
+              type: 'error',
             });
           });
       };
@@ -496,17 +496,17 @@ export default {
     },
     toPreview(isPublish) {
       this.$router.push({
-        name: "preview",
+        name: 'preview',
         query: {
           times: 10,
           preview: isPublish ? 0 : 1,
           duration: 60 * 5,
-          from: this.pathName
-        }
+          from: this.pathName,
+        },
       });
     },
     validate() {
-      for (var i = 0; i < this.modules.length; i++) {
+      for (let i = 0; i < this.modules.length; i++) {
         if (this.validateResults[i]) {
           this.incomplete = this.validateResults[i];
           return;
@@ -515,17 +515,17 @@ export default {
       this.incomplete = false;
     },
     startDrag() {
-      //开始拖动
-      const settings = document.getElementsByClassName("module-frame__setting");
+      // 开始拖动
+      const settings = document.getElementsByClassName('module-frame__setting');
       for (let i = 0; i < settings.length; i++) {
-        settings[i].style.display = "none";
+        settings[i].style.display = 'none';
       }
     },
     endDrag() {
-      //结束拖动
-      const settings = document.getElementsByClassName("module-frame__setting");
-      settings[this.currentModuleIndex].style.display = "block";
-    }
-  }
+      // 结束拖动
+      const settings = document.getElementsByClassName('module-frame__setting');
+      settings[this.currentModuleIndex].style.display = 'block';
+    },
+  },
 };
 </script>

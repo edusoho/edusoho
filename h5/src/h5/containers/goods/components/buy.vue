@@ -19,17 +19,23 @@ import Api from '@/api';
 export default {
   data() {
     return {
-      isFavorite: false
-    }
+      // isFavorite: false
+    };
+  },
+  props: {
+    isFavorite: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
     // 添加收藏
     addFavorite() {
       Api.addFavorite({
         data: {
-          'targetType': 'goods',
-          'targetId': this.$route.params.id
-        }
+          targetType: 'goods',
+          targetId: this.$route.params.id,
+        },
       }).then(res => {
         console.log(res);
       });
@@ -37,10 +43,10 @@ export default {
     // 移除收藏
     removeFavorite() {
       Api.removeFavorite({
-        params: {
-          'targetType': 'course',
-          'targetId': this.$route.params.id
-        }
+        data: {
+          targetType: 'goods',
+          targetId: this.$route.params.id,
+        },
       }).then(res => {
         console.log(res);
       });
@@ -53,7 +59,7 @@ export default {
         this.isFavorite = true;
         this.addFavorite();
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>

@@ -4,7 +4,7 @@ import activityHandle from '@/mixins/activity/request';
 export default {
   data() {
     return {
-      redirect: ''
+      redirect: '',
     };
   },
   created() {
@@ -13,8 +13,11 @@ export default {
   methods: {
     afterLogin() {
       const redirect = this.$route.query.redirect
-        ? decodeURIComponent(this.$route.query.redirect) : '/';
-      const backUrl = this.$route.query.skipUrl ? decodeURIComponent(this.$route.query.skipUrl) : '';
+        ? decodeURIComponent(this.$route.query.redirect)
+        : '/';
+      const backUrl = this.$route.query.skipUrl
+        ? decodeURIComponent(this.$route.query.skipUrl)
+        : '';
       const callbackType = this.$route.query.callbackType; // 不能用type, 和人脸识别种的type 冲突。。。
       const activityId = this.$route.query.activityId;
       const callback = decodeURIComponent(this.$route.query.callback);
@@ -32,13 +35,13 @@ export default {
         if (backUrl) {
           this.$router.replace({
             path: redirect,
-            query: { backUrl }
+            query: { backUrl },
           });
           return;
         }
         this.$router.replace({ path: redirect });
       };
       setTimeout(jumpAction, 2000);
-    }
-  }
+    },
+  },
 };

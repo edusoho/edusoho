@@ -42,7 +42,7 @@ import {
   PullRefresh,
   Overlay,
   Search,
-  CountDown
+  CountDown,
 } from 'vant';
 // 按需引入组件
 Vue.component('van-nav-bar', NavBar);
@@ -95,8 +95,8 @@ Vue.use(VueClipboard);
 Vue.config.productionTip = false;
 Api.getSettings({
   query: {
-    type: 'wap'
-  }
+    type: 'wap',
+  },
 })
   .then(res => {
     const hashStr = location.hash;
@@ -145,7 +145,7 @@ Api.getSettings({
       window.location.href = `${
         location.origin
       }/h5/index.html#/login?redirect=/course/${courseId}&skipUrl=%2F&account=${GetUrlParam(
-        'account'
+        'account',
       )}`;
     }
 
@@ -165,7 +165,7 @@ Api.getSettings({
     new Vue({
       router,
       store,
-      render: h => h(App)
+      render: h => h(App),
     }).$mount('#app');
   })
   .catch(err => {

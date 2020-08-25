@@ -1,7 +1,7 @@
 <template>
   <div class="e-poster">
     <a :href="posters.link.url">
-      <img :src="posters.image.uri" class="poster-image">
+      <img :src="posters.image.uri" class="poster-image" />
     </a>
   </div>
 </template>
@@ -11,8 +11,8 @@ export default {
   props: {
     posters: {
       type: Array,
-      default: []
-    }
-  }
-}
+      default: [],
+    },
+  },
+};
 </script>
