@@ -1,13 +1,10 @@
 <?php
 
-
 namespace ApiBundle\Api\Resource\Certificate;
-
 
 use ApiBundle\Api\Resource\Classroom\ClassroomFilter;
 use ApiBundle\Api\Resource\Course\CourseFilter;
 use ApiBundle\Api\Resource\Filter;
-use ApiBundle\Api\Resource\User\UserFilter;
 
 class CertificateFilter extends Filter
 {

@@ -23,4 +23,10 @@ interface RecordService
     public function isObtained($userId, $certificateId);
 
     public function isCertificatesObtained($userId, $certificateIds);
+
+    public function passCertificateRecord($id, $auditUserId, $rejectReason = '');
+
+    public function rejectCertificateRecord($id, $auditUserId, $rejectReason = '');
+
+    public function resetCertificateRecord($id, $rejectReason = '');
 }
