@@ -55,12 +55,11 @@
 @import './containers/webview/index.scss';
 
 //wap-sdk
-@import '~wap-sdk-test/src/styles/iconfont/font.scss';
+@import '~wap-sdk/src/styles/iconfont/font.scss';
 
 .ibs-wap-vue {
 	// $primary-color: #fb40d2;
-
-	@import '~wap-sdk-test/src/styles/index.scss';
+	@import '~wap-sdk/src/styles/index.scss';
 }
 //隐藏滚动条
 html,
