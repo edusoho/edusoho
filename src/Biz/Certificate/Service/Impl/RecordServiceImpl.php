@@ -241,9 +241,13 @@ class RecordServiceImpl extends BaseService implements RecordService
 
     public function checkExpireCertificate()
     {
-        $currentTime = time();
-        $count = $this->getRecordDao()->count(['expiryTime_LE' => $currentTime, 'expiryTime_NE' => 0]);
-        $records = $this->getRecordDao()->search(['expiryTime_LE' => $currentTime, 'expiryTime_NE' => 0], [], 0, $count);
+        $conditions = [
+            'status' => 'valid',
+            'expiryTime_LE' => time() - 86400,
+            'expiryTime_NE' => 0,
+        ];
+        $count = $this->getRecordDao()->count($conditions);
+        $records = $this->getRecordDao()->search($conditions, [], 0, $count);
         if (empty($records)) {
             return;
         }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Biz\Certificat\job;
+namespace Biz\Certificate\Job;
 
 use Biz\Certificate\Service\RecordService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
