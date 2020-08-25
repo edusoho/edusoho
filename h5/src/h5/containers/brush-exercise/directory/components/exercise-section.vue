@@ -1,22 +1,20 @@
 <template>
-  <div class="">
-    <div class="directory-exercise">
-      <div class="directory-exercise-left">{{ section.name }}</div>
-      <template v-if="hasQuestion">
-        <div
-          :class="[
-            isMember ? 'directory-exercise-center' : 'directory-exercise-end',
-          ]"
-        >
-          {{ learnNum }}{{ section.question_num }}题
+  <div class="directory-exercise">
+    <div class="directory-exercise-left">{{ section.name }}</div>
+    <template v-if="hasQuestion">
+      <div
+        :class="[
+          isMember ? 'directory-exercise-center' : 'directory-exercise-end',
+        ]"
+      >
+        {{ learnNum }}{{ allNum }}题
+      </div>
+      <div class="directory-exercise-right" v-if="isMember">
+        <div :class="[btnText.class]" @click="clickBtn()">
+          {{ btnText.text }}
         </div>
-        <div class="directory-exercise-right" v-if="isMember">
-          <div :class="[btnText.class]" @click="clickBtn()">
-            {{ btnText.text }}
-          </div>
-        </div>
-      </template>
-    </div>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -58,6 +56,12 @@ export default {
         return `${this.section.latestAnswerRecord.doneQuestionNum}/`;
       }
       return '0/';
+    },
+    allNum() {
+      if (this.section.latestAnswerRecord) {
+        return `${this.section.latestAnswerRecord.questionNum}`;
+      }
+      return `${this.section.question_num}`;
     },
   },
   watch: {},
