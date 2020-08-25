@@ -6,7 +6,11 @@
         <div class="goods-detail__banner">
           <img :src="goods.images.large" />
         </div>
-        <!--        <discount :goods="goods" />-->
+        <discount
+          v-if="goods.discount"
+          :currentSku="currentSku"
+          :goods="goods"
+        />
         <detail :goods="goods" :currentSku="currentSku" />
         <specs :goods="goods" :currentSku="currentSku" @changeSku="changeSku" />
         <enter-learning
@@ -133,7 +137,7 @@ export default {
     };
   },
   components: {
-    // Discount,
+    Discount,
     Specs,
     Detail,
     Teacher, // 教师风采
