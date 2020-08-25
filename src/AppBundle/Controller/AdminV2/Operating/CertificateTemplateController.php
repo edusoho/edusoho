@@ -207,8 +207,8 @@ class CertificateTemplateController extends BaseController
             'certificateCode' => '',
             'certificateExpiryTime' => '',
             'certificateIssueTime' => '',
-            'certificateStamp' => empty($template['stamp']) ? $this->getAssetUrl('static-dist/app/img/admin-v2/{$template[\'type\']}_basemap.jpg') : $this->getWebExtension()->getFurl($template['stamp']),
-            'certificateBasemap' => empty($template['basemap']) ? '' : $this->getWebExtension()->getFurl($template['basemap']),
+            'certificateStamp' => empty($template['stamp']) ? '' : $this->getWebExtension()->getFurl($template['stamp']),
+            'certificateBasemap' => empty($template['basemap']) ? $this->getAssetUrl("static-dist/app/img/admin-v2/{$template['styleType']}_basemap.jpg") : $this->getWebExtension()->getFurl($template['basemap']),
         ]);
 
         return $this->getImgBuilder($template['styleType'])->getCertificateImgByBase64($certificate, 0.5);

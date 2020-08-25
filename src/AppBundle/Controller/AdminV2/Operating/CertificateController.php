@@ -43,6 +43,7 @@ class CertificateController extends BaseController
             $data = $request->request->all();
 
             if (empty($data['back'])) {
+                $data['expiryDay'] = empty($data['expiryDay']) ? 0 : $data['expiryDay'];
                 $certificate = $this->getCertificateService()->create($data);
 
                 return $this->redirect($this->generateUrl('admin_v2_certificate_manage'));

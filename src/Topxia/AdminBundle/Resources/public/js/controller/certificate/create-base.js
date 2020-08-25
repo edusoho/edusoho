@@ -20,12 +20,12 @@ define(function(require, exports, module) {
     validator.addItem({
       element: '[name="name"]',
       required: true,
-      rule: 'byte_maxlength{max:100}'
+      rule: 'byte_maxlength{max:20} visible_character'
     });
 
     validator.addItem({
       element: '[name="description"]',
-      rule: 'byte_maxlength{max:300}',
+      rule: 'byte_maxlength{max:5000}',
       errormessageByte_maxlength:Translator.trans('admin_v2.certificate.validate.description')
     });
 

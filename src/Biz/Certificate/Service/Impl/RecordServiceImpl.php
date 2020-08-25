@@ -8,6 +8,7 @@ use Biz\Certificate\CertificateException;
 use Biz\Certificate\Dao\RecordDao;
 use Biz\Certificate\Service\CertificateService;
 use Biz\Certificate\Service\RecordService;
+use Biz\System\Service\LogService;
 
 class RecordServiceImpl extends BaseService implements RecordService
 {
@@ -160,7 +161,7 @@ class RecordServiceImpl extends BaseService implements RecordService
     public function autoIssueCertificates($certificateId, $userIds)
     {
         $certificate = $this->getCertificateService()->get($certificateId);
-        if (empty($certificate) || empty($certificate['autoIssue']) || empty($userIds)) {
+        if (empty($certificate) || 'published' != $certificate['status'] || empty($userIds)) {
             return true;
         }
 
@@ -190,6 +191,7 @@ class RecordServiceImpl extends BaseService implements RecordService
             'status' => empty($certificate['autoIssue']) ? 'none' : 'valid',
             'issueTime' => empty($certificate['autoIssue']) ? 0 : time(),
             'expiryTime' => empty($certificate['expiryDay']) ? 0 : strtotime(date('Y-m-d', time() + 24 * 3600 * (int) $certificate['expiryDay'])),
+            'auditTime' => empty($certificate['autoIssue']) ? 0 : time(),
         ];
         $createRecords = [];
         $certificateCodes = $this->generateCertificateCode($certificate, count($userIds));
@@ -274,5 +276,13 @@ class RecordServiceImpl extends BaseService implements RecordService
     protected function getRecordDao()
     {
         return $this->createDao('Certificate:RecordDao');
+    }
+
+    /**
+     * @return LogService
+     */
+    protected function getLogService()
+    {
+        return $this->createService('System:LogService');
     }
 }
