@@ -98,10 +98,12 @@
       }
       .detail-right__price__num {
         padding-left: 30px;
-        height: 68px;
+        padding-bottom: 20px;
+        padding-top: 20px;
+        // height: 68px;
         background-color: #f9f9f9;
         color: #666;
-        line-height: 68px;
+        // line-height: 68px;
         .detail-right__price__price {
           margin-left: 24px;
           font-size: 28px;
@@ -109,7 +111,7 @@
           font-weight: 600;
           .detail-right__price__unit {
             color: #666;
-            font-size: 12px;
+            font-size: 14px !important;
             font-weight: normal;
           }
         }
@@ -117,10 +119,17 @@
           margin-left: 9px;
         }
         @media (max-width: 767px) {
-          padding-left: 16px;
+          padding-left: 4px;
+          .detail-right__price__price {
+            margin-left: 4px;
+            font-size: 18px;
+          }
+          s {
+            margin-left: 4px;
+          }
           span {
-            margin-left: 10px;
-            font-size: 24px;
+            margin-left: 4px;
+            font-size: 14px;
           }
         }
       }
@@ -244,8 +253,11 @@
     cursor: pointer;
     .border-radius(4px);
     @media (max-width: 767px) {
-      right: 10px;
-      bottom: 5px;
+      display: inline-block;
+      position: relative;
+      right: 0px;
+      bottom: 0px;
+      margin-top: 8px;
       padding: 3px 12px;
       width: auto;
       height: auto;
@@ -268,9 +280,12 @@
     cursor: pointer;
     .border-radius(4px);
     @media (max-width: 767px) {
-      right: 80px;
-      bottom: 5px;
+      display: inline-block;
+      position: relative;
+      right: 0px;
+      bottom: 0px;
       padding: 3px 12px;
+      margin-top: 8px;
       height: auto;
     }
     .popover.top {
