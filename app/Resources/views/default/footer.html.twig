@@ -30,19 +30,17 @@
       </div>
 
       {% if setting('license.license_picture') and setting('license.license_name') %}
-        <a class="navbar-brand">
-          {% if setting('license.license_url') %}
-            <a href={{ setting('license.license_url')| default('/') }} target="_blank">
-              <img src="{{ asset(setting('license.license_picture')) }}">
-            </a>
-            <a class="mlm" href={{ setting('license.license_url')|default('/') }} target="_blank">
-              {{ setting('license.license_name') }}
-            </a>
-          {% else %}
-            <a><img src="{{ asset(setting('license.license_picture')) }}"></a>
-            <a>{{ setting('license.license_name') }}</a>
-          {% endif %}
-        </a>
+        {% if setting('license.license_url') %}
+          <a id="license-picture" href={{ setting('license.license_url')| default('/') }} target="_blank">
+            <img src="{{ asset(setting('license.license_picture')) }}">
+          </a>
+          <a class="mlm" href={{ setting('license.license_url')|default('/') }} target="_blank">
+            {{ setting('license.license_name') }}
+          </a>
+        {% else %}
+          <a><img src="{{ asset(setting('license.license_picture')) }}"></a>
+          <a>{{ setting('license.license_name') }}</a>
+        {% endif %}
       {% endif %}
 
       {% for permit in setting('license.permits') %}
@@ -58,7 +56,6 @@
           {% endif %}
         </div>
       {% endfor %}
-
     </div>
   </div>
 </footer>
