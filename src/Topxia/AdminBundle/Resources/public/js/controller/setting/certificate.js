@@ -81,7 +81,7 @@ define(function (require, exports) {
         if ($('.setting_permit').length < 10) {
           appendPermit("#settingPermit_", ++permitIndex);
         } else {
-          Notify.success(Translator.trans('admin.setting.delete_permit_setting_max_number'));
+          Notify.warning(Translator.trans('admin.setting.delete_permit_setting_max_number'));
         }
       })
     };
