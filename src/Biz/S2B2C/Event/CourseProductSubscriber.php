@@ -2,13 +2,12 @@
 
 namespace Biz\S2B2C\Event;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\OrderFacade\Service\OrderRefundService;
 use Biz\S2B2C\Service\CourseProductService;
+use Biz\S2B2C\Service\ProductReportService;
 use Biz\S2B2C\Service\ProductService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
-use Biz\S2B2C\Service\ProductReportService;
 use Biz\System\Service\LogService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
@@ -50,8 +49,9 @@ class CourseProductSubscriber extends EventSubscriber implements EventSubscriber
         try {
             $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
             $course = $event->getSubject();
-            if (empty($s2b2cConfig['supplierId']) || $course['platform'] == 'self') {
+            if (empty($s2b2cConfig['supplierId']) || 'self' == $course['platform']) {
                 $this->getLogger()->info('[onCourseJoin] s2b2c config not enabled or course not belong supplier, no need to report');
+
                 return;
             }
 
@@ -96,24 +96,38 @@ class CourseProductSubscriber extends EventSubscriber implements EventSubscriber
     {
         try {
             $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
+            if (empty($s2b2cConfig['supplierId'])) {
+                $this->getLogger()->info('[onOrderRefunded] s2b2c config not enabled, no need to report');
+
+                return;
+            }
+
             $order = $event->getSubject();
-            $orderItems = $order['items'];
-            $targetType = ArrayToolkit::column($orderItems, 'target_type');
-            if (empty($s2b2cConfig['supplierId']) || !in_array('course', $targetType)) {
-                $this->getLogger()->info('[onOrderRefunded] s2b2c config not enabled or target type not support, no need to report');
+            $target = $order['items'][0];
+            if ('course' != $target['target_type']) {
+                $this->getLogger()->info('[onOrderRefunded] target type not support, no need to report');
+
+                return;
+            }
+
+            $course = $this->getCourseService()->getCourse($target['target_id']);
+            if ('self' == $course['platform']) {
+                $this->getLogger()->info("[onOrderRefunded] course #{$target['target_id']} not supplier course, no need to report");
+
                 return;
             }
 
             $joinReport = $this->getProductReportService()->getByOrderIdAndType($order['id'], ProductReportService::TYPE_JOIN_COURSE);
             if (empty($joinReport)) {
                 $this->getLogger()->error(sprintf('[onOrderRefunded] product report orderId #%s not found', $order['id']));
+
                 return;
             }
 
-            $target = $orderItems[0];
             $s2b2cProduct = $this->getS2b2cProductService()->getByTypeAndLocalResourceId('course', $target['target_id']);
             if (empty($s2b2cProduct)) {
                 $this->getLogger()->error(sprintf('[onOrderRefunded] merchant product #%s not found', $target['target_id']));
+
                 return;
             }
 
