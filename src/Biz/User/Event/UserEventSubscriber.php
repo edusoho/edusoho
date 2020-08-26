@@ -96,7 +96,7 @@ class UserEventSubscriber extends EventSubscriber implements EventSubscriberInte
                 $this->getTokenService()->destoryToken($token['token']);
             }
         }
-        if (!empty($user['loginSessionId']) && $user['passwordInit'] == 1){
+        if (!empty($user['loginSessionId']) && 1 == $user['passwordInit']) {
             $this->getUserDao()->update($user['id'], ['loginSessionId' => 'null']);
         }
     }

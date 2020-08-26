@@ -6,12 +6,12 @@ use Biz\System\Service\SettingService;
 use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
 use Biz\User\UserException;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Topxia\MobileBundleV2\Controller\MobileBaseController;
 
@@ -65,9 +65,9 @@ class UserLoginTokenListener
             $request->getSession()->invalidate();
             $this->container->get('security.token_storage')->setToken(null);
 
-            $goto = $this->container->get('router')->generate('register_submited', array(
+            $goto = $this->container->get('router')->generate('register_submited', [
                 'id' => $user['id'], 'hash' => $this->makeHash($user),
-            ));
+            ]);
 
             $response = new RedirectResponse($goto, '302');
             $response->headers->setCookie(new Cookie('REMEMBERME', ''));
@@ -112,12 +112,12 @@ class UserLoginTokenListener
             $magic = $this->getSettingService()->get('magic');
 
             if ((!empty($magic['login_limit'])) && ($request->isXmlHttpRequest())) {
-                $response = new Response(array('error' => array('code' => UserException::LIMIT_LOGIN)), 403);
+                $response = new Response(['error' => ['code' => UserException::LIMIT_LOGIN]], 403);
                 $response->headers->clearCookie('REMEMBERME');
                 $response->send();
             }
             $request->getSession()->invalidate();
-            $content = $user['loginSessionId'] == 'null' ? '密码已修改，请您重新登录' : '此帐号已在别处登录，请重新登录';
+            $content = 'null' == $user['loginSessionId'] ? '密码已修改，请您重新登录' : '此帐号已在别处登录，请重新登录';
             $response = $this->logout($content);
 
             $event->setResponse($response);
