@@ -18,6 +18,13 @@ class SettlementReportServiceTest extends BaseTestCase
                 ],
                 'runTimes' => 1,
             ],
+            [
+                'functionName' => 'getS2B2CConfig',
+                'returnValue' => [
+                    'supplierId' => 1,
+                ],
+                'runTimes' => 1,
+            ],
         ]);
 
         $this->mockBiz('User:UserService', [
@@ -25,7 +32,7 @@ class SettlementReportServiceTest extends BaseTestCase
                 'functionName' => 'getUser',
                 'returnValue' => [
                     'id' => 1,
-                    'nickname' => 'test'
+                    'nickname' => 'test',
                 ],
                 'runTimes' => 1,
             ],
