@@ -16,7 +16,9 @@
         <p class="item-info__price" v-if="course.originPrice2.currency === 'coin'">{{ course.originPrice2.coinAmount }}{{ course.originPrice2.coinName }}</p>
         <p class="item-info__price" v-if="course.originPrice2.currency === 'RMB'">￥{{ course.originPrice2.amount }}</p>
         <p class="item-info__plan clearfix">
-          <span class="pull-left">{{ course.displayedTitle }}</span>
+          <span class="pull-left item-info__plan-mw text-overflow">{{
+            course.displayedTitle
+          }}</span>
           <span class="pull-right">共{{ course.compulsoryTaskNum }}课时</span>
         </p>
       </div>

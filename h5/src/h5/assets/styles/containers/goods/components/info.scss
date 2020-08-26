@@ -238,6 +238,10 @@
 				margin-top: vw(4);
 				color: #999;
 				font-size: vw(12);
+
+				.item-info__plan-mw {
+					max-width: vw(150);
+				}
 			}
 		}
 	}
