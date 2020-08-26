@@ -38,9 +38,8 @@ class MeThreadPost extends AbstractResource
             return $this->makePagingObject([], 0, $offset, $limit);
         }
 
-        $conditions = ['ids' => $threadIds];
+        $conditions = ['ids' => $threadIds, 'types' => []];
         $courseSetting = $this->getSettingService()->get('course', []);
-        $conditions['types'] = [];
         if (!isset($courseSetting['show_question']) || '1' === $courseSetting['show_question']) {
             $conditions['types'][] = 'question';
         }
