@@ -218,7 +218,8 @@ export default {
       this.active = value;
       const eleTop = document.getElementById(eleId).offsetTop;
       const navHeight = document.getElementById('goods-info__nav').offsetHeight;
-      document.documentElement.scrollTop = eleTop - navHeight;
+      document.documentElement.scrollTop = document.body.scrollTop =
+        eleTop - navHeight;
       this.timer = setTimeout(() => {
         this.flag = true;
       }, 500);
