@@ -112,7 +112,7 @@ class CertificateRecordController extends BaseController
             }
         }
         if (!empty($conditions['keywordType']) && !empty($conditions['keyword'])) {
-            if ('certificateCode' == $conditions['keywordType']) {
+            if ('code' == $conditions['keywordType']) {
                 $conditions['certificateCode'] = $conditions['keyword'];
             }
             if (in_array($conditions['keywordType'], ['nickname', 'verifiedMobile', 'email'])) {

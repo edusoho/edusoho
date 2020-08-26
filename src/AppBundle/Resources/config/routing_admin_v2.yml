@@ -1047,10 +1047,6 @@ admin_v2_certificate_record_grant:
     path:  /certificate/record/{id}/grant
     defaults: { _controller: AppBundle:AdminV2/Operating/CertificateRecord:grant }
 
-admin_v2_certificate_audit_manage:
-    path:  /certificate/{id}/audit/manage
-    defaults: { _controller: AppBundle:AdminV2/Operating/Certificate:auditManage }
-
 admin_v2_certificate_template_manage:
     path:  /certificate/template/manage
     defaults: { _controller: AppBundle:AdminV2/Operating/CertificateTemplate:index }
@@ -1092,7 +1088,7 @@ admin_v2_certificate_template_preview:
     defaults: { _controller: AppBundle:AdminV2/Operating/CertificateTemplate:preview }
 
 admin_v2_certificate_examine_manage:
-    path: /certificate/audit/manage
+    path: /certificate/{id}/audit/manage
     defaults: { _controller: AppBundle:AdminV2/Operating/CertificateAudit:index }
 
 admin_v2_certificate_examine_audit_detail:

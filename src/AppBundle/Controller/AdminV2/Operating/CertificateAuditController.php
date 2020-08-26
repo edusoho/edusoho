@@ -6,15 +6,22 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Certificate\CertificateException;
+use Biz\Certificate\Service\CertificateService;
 use Biz\Certificate\Service\RecordService;
 use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
 
 class CertificateAuditController extends BaseController
 {
-    public function indexAction(Request $request)
+    public function indexAction(Request $request, $id)
     {
+        $certificate = $this->getCertificateService()->get($id);
+        if (empty($certificate)) {
+            $this->createNewException(CertificateException::NOTFOUND_CERTIFICATE());
+        }
+
         $conditions = $this->searchConditions($request);
+        $conditions['certificateId'] = $id;
 
         $paginator = new Paginator(
             $request,
@@ -44,6 +51,7 @@ class CertificateAuditController extends BaseController
             'users' => ArrayToolkit::index($users, 'id'),
             'reviewers' => ArrayToolkit::index($reviewers, 'id'),
             'targets' => $this->searchTargetTitle($records),
+            'certificate' => $certificate,
         ]);
     }
 
@@ -165,5 +173,13 @@ class CertificateAuditController extends BaseController
     protected function getCertificateStrategy($type)
     {
         return $this->getBiz()->offsetGet('certificate.strategy_context')->createStrategy($type);
+    }
+
+    /**
+     * @return CertificateService
+     */
+    protected function getCertificateService()
+    {
+        return $this->createService('Certificate:CertificateService');
     }
 }

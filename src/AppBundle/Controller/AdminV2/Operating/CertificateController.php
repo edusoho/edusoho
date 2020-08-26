@@ -112,10 +112,6 @@ class CertificateController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function auditManageAction(Request $request, $id)
-    {
-    }
-
     public function targetModalAction(Request $request)
     {
         return $this->render('admin-v2/operating/certificate/target/base-modal.html.twig', [
