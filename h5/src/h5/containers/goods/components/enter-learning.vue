@@ -32,6 +32,8 @@ export default {
         name: 'goods_qr',
         query: {
           imageUrl: this.qrInfo.imageUrl || '',
+          title: this.qrInfo.title || '',
+          content: this.qrInfo.content || '',
         },
       });
     },

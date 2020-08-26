@@ -47,11 +47,11 @@
               <span
                 v-if="goods.minDisplayPriceObj.currency === 'coin'"
                 class="price"
-                >{{ goods.minDisplayPriceObj.coinAmount | formatPrice
-                }}<span class="detail-right__price__unit">{{
-                  goods.minDisplayPriceObj.coinName
-                }}</span></span
-              >
+                >{{ goods.minDisplayPriceObj.coinAmount | formatPrice }}
+              </span>
+              <span class="detail-right__price__unit">
+                {{ goods.minDisplayPriceObj.coinName }}
+              </span>
             </p>
           </div>
         </div>

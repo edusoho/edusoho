@@ -55,6 +55,19 @@
       <div class="plan-popup__buy">立即购买</div>
     </van-popup>
 
+    <div v-if="currentSku.vipLevelInfo && vipSwitch" class="detail-plan__plan clearfix">
+      <div class="pull-left plan-left">会员免费</div>
+      <div class="pull-left plan-right">
+        <img class="vip-icon" :src="currentSku.vipLevelInfo.icon" alt="" />
+        <router-link
+          :to="{ path: '/vip', query: { id: this.currentSku.vipLevelInfo.id } }"
+          class="color-primary"
+        >
+          {{ currentSku.vipLevelInfo.name }}免费学</router-link
+        >
+      </div>
+    </div>
+
     <div class="detail-plan__plan clearfix">
       <div class="pull-left plan-left">学习有效期</div>
       <div class="pull-left plan-right" v-html="buyableModeHtml"></div>
@@ -78,6 +91,8 @@
 </template>
 
 <script>
+import {mapState} from "vuex";
+
 export default {
   data() {
     return {
@@ -95,6 +110,13 @@ export default {
     },
   },
   methods: {
+    // 去会员页
+    gotoVip() {
+      this.$router.push({
+        path: '/vip',
+        query: { id: this.currentSku.vipLevelInfo.id },
+      });
+    },
     // 点击显示弹窗
     showPopup() {
       this.show = true;
@@ -136,6 +158,7 @@ export default {
     },
   },
   computed: {
+    ...mapState(['vipSwitch']),
     buyableModeHtml() {
       const memberInfo = this.goods.member;
       if (!memberInfo) {

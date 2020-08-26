@@ -105,6 +105,12 @@
 
 	.detail-plan__plan {
 		margin-bottom: vw(12);
+    .vip-icon {
+      width: 18px;
+      height: 18px;
+      vertical-align: top;
+      margin-top: 2px;
+    }
 
 		&:last-child {
 			margin-bottom: 0;
@@ -315,4 +321,9 @@
 			box-shadow: 0 0 vw(4) 0 rgba(3, 199, 119, 0.2);
 		}
 	}
+}
+.detail-right__price__unit {
+  color: #666;
+  font-size: 14px;
+  font-weight: normal;
 }
