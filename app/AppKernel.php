@@ -330,7 +330,11 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             return [];
         }
 
-        $safeIframeDomains = $this->getContainer()->get('biz')->service('System:CacheService')->get('safe_iframe_domains');
+        try {
+            $safeIframeDomains = $this->getContainer()->get('biz')->service('System:CacheService')->get('safe_iframe_domains');
+        } catch (\Exception $e) {
+            return [];
+        }
 
         return empty($safeIframeDomains) ? [] : $safeIframeDomains;
     }

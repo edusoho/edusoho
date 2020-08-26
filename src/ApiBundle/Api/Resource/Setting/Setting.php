@@ -5,21 +5,21 @@ namespace ApiBundle\Api\Resource\Setting;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use Biz\Common\CommonException;
-use AppBundle\Component\OAuthClient\OAuthClientFactory;
-use Biz\System\SettingException;
-use Biz\OrderFacade\CoinCurrency;
 use ApiBundle\Api\Util\AssetHelper;
-use Biz\User\UserException;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Component\OAuthClient\OAuthClientFactory;
+use Biz\Common\CommonException;
+use Biz\OrderFacade\CoinCurrency;
+use Biz\System\SettingException;
+use Biz\User\UserException;
 
 class Setting extends AbstractResource
 {
-    private $supportTypes = array(
+    private $supportTypes = [
         'site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig',
         'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer',
         'user', 'cloud', 'coin', 'coupon', 'mobile', 'appIm', 'cloudVideo',
-    );
+    ];
 
     /**
      * @ApiConf(isRequiredAuth=false)
@@ -37,7 +37,7 @@ class Setting extends AbstractResource
      */
     public function search(ApiRequest $request)
     {
-        $result = array();
+        $result = [];
         $types = $request->query->get('types', '');
 
         foreach ($types as $type) {
@@ -54,12 +54,12 @@ class Setting extends AbstractResource
     public function getCloudVideo()
     {
         $storageSetting = $this->getSettingService()->get('storage');
-        $fingerPrintSetting = array(
+        $fingerPrintSetting = [
             'video_fingerprint' => '0',
-        );
-        $watermarkSetting = array(
+        ];
+        $watermarkSetting = [
             'video_watermark' => '0',
-        );
+        ];
 
         if (isset($storageSetting['video_watermark'])) {
             $storageSetting['video_watermark'] = strval($storageSetting['video_watermark']);
@@ -74,29 +74,29 @@ class Setting extends AbstractResource
         }
 
         if (!empty($storageSetting)) {
-            $fingerPrintSetting = ArrayToolkit::parts($storageSetting, array(
+            $fingerPrintSetting = ArrayToolkit::parts($storageSetting, [
                 'video_fingerprint',
                 'video_fingerprint_time',
-            ));
+            ]);
 
-            $watermarkSetting = ArrayToolkit::parts($storageSetting, array(
+            $watermarkSetting = ArrayToolkit::parts($storageSetting, [
                 'video_watermark',
                 'video_watermark_image',
                 'video_embed_watermark_image',
                 'video_watermark_position',
-            ));
+            ]);
 
             foreach ($watermarkSetting as $key => &$value) {
-                if (in_array($key, array('video_watermark_image', 'video_embed_watermark_image'))) {
+                if (in_array($key, ['video_watermark_image', 'video_embed_watermark_image'])) {
                     $value = empty($value) ? '' : AssetHelper::getFurl($value);
                 }
             }
         }
 
-        return array(
+        return [
             'watermarkSetting' => $watermarkSetting,
             'fingerPrintSetting' => $fingerPrintSetting,
-        );
+        ];
     }
 
     public function getAppIm($request)
@@ -105,50 +105,50 @@ class Setting extends AbstractResource
 
         $appIm = $this->getSettingService()->get('app_im');
 
-        return array(
+        return [
             'enabled' => empty($appIm['enabled']) ? 0 : $appIm['enabled'],
             'convNo' => empty($appIm['convNo']) ? null : $appIm['convNo'],
-        );
+        ];
     }
 
     public function getMobile($request)
     {
-        $mobileSetting = $this->getSettingService()->get('mobile', array());
+        $mobileSetting = $this->getSettingService()->get('mobile', []);
 
-        $splashs = array();
+        $splashs = [];
         for ($i = 1; $i < 6; ++$i) {
             if (!empty($mobileSetting['splash'.$i])) {
                 $splashs[] = AssetHelper::uriForPath('/'.$mobileSetting['splash'.$i]);
             }
         }
 
-        $defaultStudyCenter = array(
+        $defaultStudyCenter = [
             'liveScheduleEnabled' => '0',
             'historyLearningEnabled' => '1',
             'myCacheEnabled' => '1',
             'myQAEnabled' => '1',
-        );
+        ];
 
-        return array(
+        return [
             'enabled' => isset($mobileSetting['enabled']) ? (bool) $mobileSetting['enabled'] : true,
             'logo' => empty($mobileSetting['logo']) ? '' : AssetHelper::uriForPath('/'.$mobileSetting['logo']),
             'splashs' => $splashs,
             'appDiscoveryVersion' => $this->getH5SettingService()->getAppDiscoveryVersion(),
             'studyCenter' => empty($mobileSetting['studyCenter']) ? $defaultStudyCenter : array_merge($defaultStudyCenter, $mobileSetting['studyCenter']),
-        );
+        ];
     }
 
     public function getDeveloper($request)
     {
-        $developer = $this->getSettingService()->get('developer', array());
+        $developer = $this->getSettingService()->get('developer', []);
         $cloudSdkCdn = empty($developer['cloud_sdk_cdn']) ? 'service-cdn.qiqiuyun.net' : $developer['cloud_sdk_cdn'];
         // \QiQiuYun\SDK\Service\PlayV2Service 将host设置为protect变量，拿不出来，只能自己定义
         $cloudPlayServer = empty($developer['cloud_play_server']) ? 'play1.qiqiuyun.net' : $developer['cloud_play_server'];
 
-        return array(
+        return [
             'cloudSdkCdn' => $cloudSdkCdn,
             'cloudPlayServer' => $cloudPlayServer,
-        );
+        ];
     }
 
     public function getUser($request = null)
@@ -160,20 +160,20 @@ class Setting extends AbstractResource
             SettingException::NOTFOUND_THIRD_PARTY_AUTH_CONFIG();
         }
 
-        $result = array(
-            'auth' => array(
+        $result = [
+            'auth' => [
                 'register_mode' => $authSetting['register_mode'],
                 'user_terms_enabled' => 'opened' == $authSetting['user_terms'] ? true : false,
                 'privacy_policy_enabled' => 'opened' == $authSetting['privacy_policy'] ? true : false,
-            ),
-            'login_bind' => array(
+            ],
+            'login_bind' => [
                 'oauth_enabled' => (int) $loginSetting['enabled'] ? true : false,
                 'weibo_enabled' => (int) $loginSetting['weibo_enabled'] ? true : false,
                 'qq_enabled' => (int) $loginSetting['qq_enabled'] ? true : false,
                 'weixinweb_enabled' => (int) $loginSetting['weixinweb_enabled'] ? true : false,
                 'weixinmob_enabled' => (int) $loginSetting['weixinmob_enabled'] ? true : false,
-            ),
-        );
+            ],
+        ];
 
         return $result;
     }
@@ -182,9 +182,9 @@ class Setting extends AbstractResource
     {
         $cloudSms = $this->getSettingService()->get('cloud_sms');
 
-        $result = array(
+        $result = [
             'sms_enabled' => $cloudSms['sms_enabled'] ? true : false,
-        );
+        ];
 
         return $result;
     }
@@ -193,10 +193,10 @@ class Setting extends AbstractResource
     {
         $coinSetting = $this->getSettingService()->get('coin');
 
-        return array(
+        return [
             'name' => !empty($coinSetting['coin_name']) ? $coinSetting['coin_name'] : CoinCurrency::PREFIX,
             'cash_model' => !empty($coinSetting['cash_model']) ? $coinSetting['cash_model'] : 'none',
-        );
+        ];
     }
 
     public function getHasPluginInstalled($request)
@@ -209,7 +209,7 @@ class Setting extends AbstractResource
             $pluginCodes = explode(',', $pluginCodes);
         }
 
-        $results = array();
+        $results = [];
         foreach ($pluginCodes as $pluginCode) {
             $results[$pluginCode] = $this->isPluginInstalled($pluginCode) ? true : false;
         }
@@ -221,21 +221,21 @@ class Setting extends AbstractResource
     {
         $siteSetting = $this->getSettingService()->get('site');
 
-        return array(
+        return [
             'name' => $siteSetting['name'],
             'url' => $request->getHttpRequest()->getSchemeAndHttpHost(),
             'logo' => empty($siteSetting['logo']) ? '' : $siteSetting['url'].'/'.$siteSetting['logo'],
-        );
+        ];
     }
 
     public function getWeChat($request)
     {
-        $weChatSetting = $this->getSettingService()->get('wechat', array());
+        $weChatSetting = $this->getSettingService()->get('wechat', []);
 
-        $result = array(
+        $result = [
             'enabled' => empty($weChatSetting['wechat_notification_enabled']) ? false : true,
             'official_qrcode' => empty($weChatSetting['account_code']) ? '' : $weChatSetting['account_code'],
-        );
+        ];
 
         $filter = new WeChatSettingFilter();
         $filter->filter($result);
@@ -245,28 +245,28 @@ class Setting extends AbstractResource
 
     public function getWap($request = null)
     {
-        $wapSetting = $this->getSettingService()->get('wap', array('version' => 0));
+        $wapSetting = $this->getSettingService()->get('wap', ['version' => 0]);
 
-        return array(
-            'version' => empty($wapSetting['version']) ? array('version' => 0) : $wapSetting['version'],
-        );
+        return [
+            'version' => empty($wapSetting['version']) ? ['version' => 0] : $wapSetting['version'],
+        ];
     }
 
     public function getRegister($request = null)
     {
-        $registerSetting = $this->getSettingService()->get('auth', array('register_mode' => 'closed', 'email_enabled' => 'closed'));
+        $registerSetting = $this->getSettingService()->get('auth', ['register_mode' => 'closed', 'email_enabled' => 'closed']);
         $registerMode = $registerSetting['register_mode'];
         $isEmailVerifyEnable = isset($registerSetting['email_enabled']) && 'opened' == $registerSetting['email_enabled'];
         $registerSetting = $this->getSettingService()->get('auth');
         $level = empty($registerSetting['register_protective']) ? 'none' : $registerSetting['register_protective'];
         $captchaEnabled = 'none' === $level ? false : true;
 
-        return array(
+        return [
             'mode' => $registerMode,
             'level' => $level,
             'captchaEnabled' => $captchaEnabled,
             'emailVerifyEnabled' => $isEmailVerifyEnable,
-        );
+        ];
     }
 
     /**
@@ -275,19 +275,19 @@ class Setting extends AbstractResource
      */
     public function getPayment($request = null)
     {
-        $paymentSetting = $this->getSettingService()->get('payment', array());
+        $paymentSetting = $this->getSettingService()->get('payment', []);
 
-        return array(
+        return [
             'enabled' => empty($paymentSetting['enabled']) ? false : true,
             'alipayEnabled' => empty($paymentSetting['alipay_enabled']) ? false : true,
             'wxpayEnabled' => empty($paymentSetting['wxpay_enabled']) ? false : true,
             'llpayEnabled' => empty($paymentSetting['llpay_enabled']) ? false : true,
-        );
+        ];
     }
 
     public function getVip($request = null)
     {
-        $vipSetting = $this->getSettingService()->get('vip', array());
+        $vipSetting = $this->getSettingService()->get('vip', []);
 
         if (!empty($vipSetting['buyType'])) {
             switch ($vipSetting['buyType']) {
@@ -306,44 +306,44 @@ class Setting extends AbstractResource
             }
         }
 
-        return array(
+        return [
             'enabled' => empty($vipSetting['enabled']) ? false : true,
             'h5Enabled' => empty($vipSetting['h5Enabled']) ? false : true,
             'buyType' => empty($buyType) ? 'month' : $buyType,
             'upgradeMinDay' => empty($vipSetting['upgrade_min_day']) ? '30' : $vipSetting['upgrade_min_day'],
             'defaultBuyYears' => empty($vipSetting['default_buy_years']) ? '1' : $vipSetting['default_buy_years'],
             'defaultBuyMonths' => empty($vipSetting['default_buy_months']) ? '30' : $vipSetting['default_buy_months'],
-        );
+        ];
     }
 
     public function getMagic($request = null)
     {
-        $magicSetting = $this->getSettingService()->get('magic', array());
+        $magicSetting = $this->getSettingService()->get('magic', []);
         $iosBuyDisable = isset($magicSetting['ios_buy_disable']) ? $magicSetting['ios_buy_disable'] : 0;
         $iosVipClose = isset($magicSetting['ios_vip_close']) ? $magicSetting['ios_vip_close'] : 0;
 
-        return array(
+        return [
             'iosBuyDisable' => $iosBuyDisable,
             'iosVipClose' => $iosVipClose,
             'iosExchangeCouponClose' => isset($magicSetting['ios_exchange_coupon_close']) ? $magicSetting['ios_exchange_coupon_close'] : 0,
-        );
+        ];
     }
 
     public function getCdn($request = null)
     {
         $cdn = $this->getSettingService()->get('cdn');
 
-        return array(
+        return [
             'enabled' => empty($cdn['enabled']) ? false : true,
             'defaultUrl' => empty($cdn['defaultUrl']) ? '' : $cdn['defaultUrl'],
             'userUrl' => empty($cdn['userUrl']) ? '' : $cdn['userUrl'],
             'contentUrl' => empty($cdn['contentUrl']) ? '' : $cdn['contentUrl'],
-        );
+        ];
     }
 
     public function getCourse($request = null)
     {
-        $courseSetting = $this->getSettingService()->get('course', array());
+        $courseSetting = $this->getSettingService()->get('course', []);
 
         if (isset($courseSetting['show_student_num_enabled']) && 0 == $courseSetting['show_student_num_enabled']) {
             $showStudentNumEnabled = 0;
@@ -356,28 +356,31 @@ class Setting extends AbstractResource
             $showHitNumEnabled = 0;
         }
 
-        return array(
+        return [
             'chapter_name' => empty($courseSetting['chapter_name']) ? '章' : $courseSetting['chapter_name'],
             'part_name' => empty($courseSetting['part_name']) ? '节' : $courseSetting['part_name'],
             'task_name' => empty($courseSetting['task_name']) ? '任务' : $courseSetting['task_name'],
             'show_student_num_enabled' => $showStudentNumEnabled,
             'show_hit_num_enabled' => $showHitNumEnabled,
-        );
+            'show_review' => isset($courseSetting['show_review']) ? intval($courseSetting['show_review']) : 1,
+            'show_question' => isset($courseSetting['show_question']) ? intval($courseSetting['show_question']) : 1,
+            'show_discussion' => isset($courseSetting['show_discussion']) ? intval($courseSetting['show_discussion']) : 1,
+        ];
     }
 
     public function getFace($request = null)
     {
-        $faceSetting = $this->getSettingService()->get('face', array());
-        $featureSetting = $this->getSettingService()->get('feature', array());
+        $faceSetting = $this->getSettingService()->get('face', []);
+        $featureSetting = $this->getSettingService()->get('feature', []);
 
-        $settings = array(
-            'login' => array(
+        $settings = [
+            'login' => [
                 'enabled' => 0,
                 'app_enabled' => 0,
                 'pc_enabled' => 0,
                 'h5_enabled' => 0,
-            ),
-        );
+            ],
+        ];
 
         if (isset($featureSetting['face_enabled']) && 1 == $featureSetting['face_enabled']) {
             $settings['login']['enabled'] = isset($faceSetting['login']['enabled']) ? $faceSetting['login']['enabled'] : 0;
@@ -393,7 +396,7 @@ class Setting extends AbstractResource
     {
         $params = $request->query->all();
         if (empty($params['url'])) {
-            return array();
+            return [];
         }
         $result = $this->container->get('web.twig.extension')->weixinConfig($params['url']);
         if (is_array($result) || empty($result)) {
@@ -407,10 +410,10 @@ class Setting extends AbstractResource
     {
         $authorizations = $this->getMpService()->getAuthorization();
 
-        return array(
-            'current_version' => empty($authorizations['current_version']) ? array('version' => '0.0.0') : $authorizations['current_version'],
-            'newest_version' => empty($authorizations['newest_version']) ? array('version' => '0.0.0') : $authorizations['newest_version'],
-        );
+        return [
+            'current_version' => empty($authorizations['current_version']) ? ['version' => '0.0.0'] : $authorizations['current_version'],
+            'newest_version' => empty($authorizations['newest_version']) ? ['version' => '0.0.0'] : $authorizations['newest_version'],
+        ];
     }
 
     public function getLogin()
@@ -422,11 +425,13 @@ class Setting extends AbstractResource
 
     public function getClassroom()
     {
-        $classroomSetting = $this->getSettingService()->get('classroom', array());
+        $classroomSetting = $this->getSettingService()->get('classroom', []);
 
-        return array(
+        return [
             'show_student_num_enabled' => isset($classroomSetting['show_student_num_enabled']) ? (bool) $classroomSetting['show_student_num_enabled'] : true,
-        );
+            'show_review' => isset($classroomSetting['show_review']) ? (bool) $classroomSetting['show_review'] : true,
+            'show_thread' => isset($classroomSetting['show_thread']) ? (bool) $classroomSetting['show_thread'] : true,
+        ];
     }
 
     private function checkType($type)
@@ -438,10 +443,10 @@ class Setting extends AbstractResource
 
     public function getCoupon()
     {
-        $couponSetting = $this->getSettingService()->get('coupon', array());
-        $default = array(
+        $couponSetting = $this->getSettingService()->get('coupon', []);
+        $default = [
             'enabled' => 1,
-        );
+        ];
         $couponSetting = array_merge($default, $couponSetting);
 
         return $couponSetting;
@@ -450,7 +455,7 @@ class Setting extends AbstractResource
     private function getLoginConnect($clients)
     {
         $default = $this->getDefaultLoginConnect($clients);
-        $loginConnect = $this->getSettingService()->get('login_bind', array());
+        $loginConnect = $this->getSettingService()->get('login_bind', []);
         $loginConnect = array_merge($default, $loginConnect);
         foreach ($clients as $type => $client) {
             if (isset($loginConnect["{$type}_secret"])) {
@@ -474,7 +479,7 @@ class Setting extends AbstractResource
 
     private function getDefaultLoginConnect($clients)
     {
-        $default = array(
+        $default = [
             'login_limit' => 0,
             'enabled' => 0,
             'verify_code' => '',
@@ -483,7 +488,7 @@ class Setting extends AbstractResource
             'temporary_lock_allowed_times' => 5,
             'ip_temporary_lock_allowed_times' => 20,
             'temporary_lock_minutes' => 20,
-        );
+        ];
 
         foreach ($clients as $type => $client) {
             $default["{$type}_enabled"] = 0;

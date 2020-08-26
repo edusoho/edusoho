@@ -12,7 +12,7 @@ interface MaterialService
 
     public function updateMaterial($id, $fields, $argument);
 
-    public function deleteMaterial($courseSetId, $materialId);
+    public function deleteMaterial($courseSetId, $materialId, $argument = '');
 
     public function deleteMaterialsByLessonId($lessonId, $courseType = 'course');
 

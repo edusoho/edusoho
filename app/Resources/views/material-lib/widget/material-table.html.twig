@@ -51,16 +51,16 @@
                 <span class="cd-tag cd-tag-blue">{{ 'material.common_table.file.local'|trans }}</span>
               {% endif %}
               {% if type|default('') == 'courseFile' %}
-               {% if uploadFile.usedCount < 1 %}
+                {% if  uploadFile.usedCount < 1 %}
                   <span class="cd-tag">{{'course.course_files.use_status.unused'|trans}}</span>
                 {% endif %}
               {% elseif type|default('') == 'openCourseFile' %}
                 {% set fileQuotes = filesQuote[uploadFile.id]|default(null) %}
-                {% if fileQuotes is empty and uploadFile.usedCount == 0%}
+                {% if fileQuotes is empty%}
                   <span class="cd-tag">{{'course.course_files.use_status.unused'|trans}}</span>
                 {% endif %}
               {% else %}
-                {% if uploadFile.usedCount|default(0) == 0 %}
+                {% if (uploadFile.targetType  == 'opencoursematerial' and uploadFile.usedCount <= 1) or (uploadFile.targetType != 'opencoursematerial' and uploadFile.usedCount == 0) %}
                   <span class="cd-tag">{{'material_lib.upload_file.not_used'|trans}}</span>
                 {% endif %}
               {% endif %}
