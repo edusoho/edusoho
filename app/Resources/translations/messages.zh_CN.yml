@@ -7547,7 +7547,7 @@ admin.setting_course.classroom.course_discount.help_block: 购买班级时，如
 admin.setting_course.classroom.classroom_list_default_seq: 班级列表页默认排序
 admin.setting_course.classroom.classroom_comments_manage: 班级内容管理
 admin.setting_course.classroom.classroom_review: 评价
-admin.setting_course.classroom.classroom_thread: 话题
+admin.setting_course.classroom.classroom_thread: 话题（问题）
 admin.setting_course.classroom.classroom_note: 笔记
 admin.setting_course.classroom.classroom_list.help_block: 班级列表页
 admin.setting_course.classroom.classroom_list_default_seq.help_block: 地址：域名/classroom/explore,任何人都可在此页面查看网站所有已发布班级,如需设置网站首页班级排序，请到【站点设置】-【主题】-【管理】中设置，目前仅简墨和雅致简洁主题支持。
