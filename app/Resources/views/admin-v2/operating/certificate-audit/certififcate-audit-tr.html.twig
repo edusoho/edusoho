@@ -2,13 +2,15 @@
 <tr>
   <td>{{ user.truename|default('--') }}<br><span class="text-muted text-sm">{{ user.nickname|default() }}</span></td>
   <td>{{ target.title|default('--') }}</td>
-  <td>
-    {{ record.issueTime|date('Y-m-d H:i:s') }}
-  </td>
+  <td>{{ record.createdTime|date('Y-m-d H:i:s') }}</td>
   <td>{{ dict_text('certificateAuditStatus', record.status) }}
   </td>
   <td>
-    {{ record.auditTime|date('Y-m-d H:i:s') }}
+    {% if record['status'] != 'none' %}
+      {{ record.auditTime|date('Y-m-d H:i:s') }}
+    {% else %}
+      -
+    {% endif %}
   </td>
   <td>
     {{ reviewer.nickname|default('--') }}
