@@ -68,8 +68,8 @@ class CourseProductTest extends BaseTestCase
         $this->assertEquals($product->targetId, $goodsSpecs['id']);
         $this->assertEquals($product->goods, $goods);
         $this->assertEquals($product->goodsSpecs, $goodsSpecs);
-        $this->assertEquals($product->backUrl, ['routing' => 'goods_show', 'params' => ['id' => $goodsSpecs['goodsId'], 'targetId' => $goodsSpecs['targetId']]]);
-        $this->assertEquals($product->successUrl, ['routing' => 'my_course_show', 'params' => ['id' => $goodsSpecs['targetId']]]);
+        $this->assertEquals($product->backUrl, ['goods_show', ['id' => $goodsSpecs['goodsId'], 'targetId' => $goodsSpecs['targetId']]]);
+        $this->assertEquals($product->successUrl, ['my_course_show', ['id' => $goodsSpecs['targetId']]]);
         $this->assertEquals($product->title, $goods['title'].'-'.$goodsSpecs['title']);
         $this->assertEquals($product->originPrice, $goodsSpecs['price']);
         $this->assertTrue($product->productEnable);

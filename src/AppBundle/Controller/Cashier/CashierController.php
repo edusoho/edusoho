@@ -107,7 +107,7 @@ class CashierController extends BaseController
         $product = $this->getOrderFacadeService()->getOrderProduct($item1['target_type'], $params);
 
         return $this->render('cashier/success.html.twig', [
-            'goto' => $this->generateUrl($product->successUrl['routing'], $product->successUrl['params']),
+            'goto' => $this->generateUrl($product->successUrl[0], $product->successUrl[1]),
             'product' => $product,
         ]);
     }

@@ -51,7 +51,7 @@ class ClassroomProduct extends BaseGoodsProduct implements OrderStatusCallback
         $this->backUrl = ['routing' => 'goods_show', 'params' => ['id' => $goodsSpecs['goodsId']]];
 
         //供支付成功后页面的跳转链接，改造前和改造后保持一致
-        $this->successUrl = ['routing' => 'classroom_show', 'params' => ['id' => $goodsSpecs['targetId']]];
+        $this->successUrl = ['classroom_show', ['id' => $goodsSpecs['targetId']]];
 
         $this->title = $goodsSpecs['title'];
         $this->cover = empty($goodsSpecs['images']) ? $goods['images'] : $goodsSpecs['images'];

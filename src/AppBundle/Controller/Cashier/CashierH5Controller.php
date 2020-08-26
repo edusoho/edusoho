@@ -44,7 +44,7 @@ class CashierH5Controller extends BaseController
         ];
         $product = $this->getOrderFacadeService()->getOrderProduct($item1['target_type'], $params);
 
-        return $this->redirect($this->generateUrl($product->successUrl['routing'], $product->successUrl['params']));
+        return $this->redirect($this->generateUrl($product->successUrl[0], $product->successUrl[1]));
     }
 
     private function getPayService()

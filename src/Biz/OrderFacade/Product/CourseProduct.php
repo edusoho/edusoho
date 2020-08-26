@@ -55,7 +55,7 @@ class CourseProduct extends BaseGoodsProduct
         $this->backUrl = ['routing' => 'goods_show', 'params' => ['id' => $goodsSpecs['goodsId'], 'targetId' => $goodsSpecs['targetId']]];
 
         //供支付成功后页面的跳转链接，改造前和改造后保持一致
-        $this->successUrl = ['routing' => 'my_course_show', 'params' => ['id' => $goodsSpecs['targetId']]];
+        $this->successUrl = ['my_course_show', ['id' => $goodsSpecs['targetId']]];
 
         //默认计划的标题在课程里面如果没有第二个计划是空的，商品规格这边如果没有计划标题就直接换成了课程标题，所以做如下处理
         $this->title = $goods['title'] === $goodsSpecs['title'] ? $goods['title'] : $goods['title'].'-'.$goodsSpecs['title'];
