@@ -83,16 +83,12 @@ class UserLoginTokenListener
             foreach ($tokens as $token) {
                 if (!isset($token['data']['client']) || 'app' == $token['data']['client']) {
                     $request->getSession()->invalidate();
-                    $response = $this->logout($request->isXmlHttpRequest());
+                    $response = $this->logout('此帐号已在别处登录，请重新登录', $request->isXmlHttpRequest());
                     $event->setResponse($response);
 
                     return;
                 }
             }
-        }
-
-        if (empty($loginBind['login_limit'])) {
-            return;
         }
 
         $user = $this->getUserService()->getUser($user['id']);
@@ -121,18 +117,22 @@ class UserLoginTokenListener
                 $response->send();
             }
             $request->getSession()->invalidate();
-
-            $response = $this->logout();
+            $content = $user['loginSessionId'] == 'null' ? '密码已修改，请您重新登录' : '此帐号已在别处登录，请重新登录';
+            $response = $this->logout($content);
 
             $event->setResponse($response);
         }
+
+        if (empty($loginBind['login_limit'])) {
+            return;
+        }
     }
 
-    protected function logout($isXmlHttpRequest = false)
+    protected function logout($content, $isXmlHttpRequest = false)
     {
         $this->container->get('security.token_storage')->setToken(null);
 
-        $this->container->get('session')->getFlashBag()->add('danger', '此帐号已在别处登录，请重新登录');
+        $this->container->get('session')->getFlashBag()->add('danger', $content);
 
         $goto = $this->container->get('router')->generate('login');
         $response = $isXmlHttpRequest ? new JsonResponse(['goto' => $goto], 403) : new RedirectResponse($goto, '302');
