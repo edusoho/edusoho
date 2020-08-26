@@ -5779,6 +5779,8 @@ admin.setting.permit.name: 经营许可证名称
 admin.setting.permit.record.number: 备案号
 admin.setting.permit.picture: 证件图片
 admin.setting.permit.picture.help_block: 请上传jpg,gif,png格式的图片。图片大小建议不超过5MB。网校证件图片设置后将显示在首页底栏。
+admin.setting.permit.setting.add: 新增一栏
+admin.setting.permit.setting.remove: 删除整栏
 
 admin.setting.mailer.is_trial.tips: >
   当前版本为试⽤版,不能进⾏邮件服务设置。如需购买授权版,请联系销售人员。
