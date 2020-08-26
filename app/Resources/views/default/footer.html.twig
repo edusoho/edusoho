@@ -30,23 +30,31 @@
       </div>
 
       {% if setting('license.license_picture') and setting('license.license_name') %}
-      <a class="navbar-brand">
-          <a href={{ setting('license.license_url')| default('/') }} target="_blank">
-            <img src="{{ asset(setting('license.license_picture')) }}">
-          </a>
-          <a class="mlm" href={{ setting('license.license_url')|default('/') }} target="_blank">
-            {{ setting('license.license_name') }}
-          </a>
-      </a>
+        <a class="navbar-brand">
+          {% if setting('license.license_url') %}
+            <a href={{ setting('license.license_url')| default('/') }} target="_blank">
+              <img src="{{ asset(setting('license.license_picture')) }}">
+            </a>
+            <a class="mlm" href={{ setting('license.license_url')|default('/') }} target="_blank">
+              {{ setting('license.license_name') }}
+            </a>
+          {% else %}
+            <a><img src="{{ asset(setting('license.license_picture')) }}"></a>
+            <a>{{ setting('license.license_name') }}</a>
+          {% endif %}
+        </a>
       {% endif %}
 
       {% for permit in setting('license.permits') %}
         <div>
-          {% if permit.name %}
-            <a class="mlm" href={{ permit.picture |default('/') }} target="_blank">{{ permit.name }}</a>
-          {% endif %}
-          {% if permit.record_number %}
-            <a class="mlm" href={{ permit.picture |default('/') }} target="_blank">{{ permit.record_number }}</a>
+          {% if permit.name and permit.record_number %}
+            {% if permit.picture %}
+              <a class="mlm" href={{ permit.picture |default('/') }} target="_blank">{{ permit.name }}</a>
+              <a class="mlm" href={{ permit.picture |default('/') }} target="_blank">{{ permit.record_number }}</a>
+            {% else %}
+              <a class="mlm">{{ permit.name }}</a>
+              <a class="mlm">{{ permit.record_number }}</a>
+            {% endif %}
           {% endif %}
         </div>
       {% endfor %}
