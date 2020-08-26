@@ -48,7 +48,7 @@
     <review-list
       ref="review"
       :target-id="details.courseSet.id"
-      :reviews="details.reviews"
+      :reviews="courseSettings.show_review == 1 ? details.reviews : []"
       title="学员评价"
       type="course"
       defaul-value="暂无评价"
@@ -138,7 +138,17 @@ export default {
       marketingActivities: {
         seckill: {},
       },
+      courseSettings: {},
     };
+  },
+  async created() {
+    this.courseSettings = await Api.getSettings({
+      query: {
+        type: 'course',
+      },
+    }).catch(err => {
+      console.error(err);
+    });
   },
   computed: {
     ...mapState(['couponSwitch', 'user']),

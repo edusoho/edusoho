@@ -47,7 +47,7 @@
         <review-list
           ref="review"
           :target-id="details.courseSet.id"
-          :reviews="details.reviews"
+          :reviews="courseSettings.show_review == 1 ? details.reviews : []"
           title="学员评价"
           defaul-value="暂无评价"
           type="course"
@@ -86,6 +86,7 @@ export default {
       offsetTop: '', // tab页距离顶部高度
       offsetHeight: '', // 元素自身的高度
       isFixed: false,
+      courseSettings: {},
     };
   },
   computed: {
@@ -124,6 +125,13 @@ export default {
   },
   async created() {
     this.showDialog();
+    this.courseSettings = await Api.getSettings({
+      query: {
+        type: 'course',
+      },
+    }).catch(err => {
+      console.error(err);
+    });
   },
   components: {
     // eslint-disable-next-line vue/no-unused-components

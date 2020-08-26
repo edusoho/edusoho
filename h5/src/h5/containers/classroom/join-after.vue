@@ -56,7 +56,7 @@
         <review-list
           ref="review"
           :target-id="details.classId"
-          :reviews="details.reviews"
+          :reviews="classroomSettings.show_review == 1 ? details.reviews : []"
           title="学员评价"
           defaul-value="暂无评价"
           type="classroom"
@@ -100,7 +100,17 @@ export default {
       tabs: ['班级介绍', '班级课程', '学员评价'],
       tabsClass: '',
       errorMsg: '',
+      classroomSettings: {},
     };
+  },
+  async created() {
+    this.classroomSettings = await Api.getSettings({
+      query: {
+        type: 'classroom',
+      },
+    }).catch(err => {
+      console.error(err);
+    });
   },
   mounted() {
     window.addEventListener('touchmove', this.handleScroll);
