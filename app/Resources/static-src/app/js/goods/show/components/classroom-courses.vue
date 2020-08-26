@@ -15,7 +15,8 @@
             <img :src="course.teachers[0].avatar.small" alt="">
             <span>{{ course.teachers[0].nickname }}</span>
           </div>
-          <span class="pull-right price-info">{{ course.price }}</span>
+          <span v-if="course.originPrice2.currency === 'coin'" class="pull-right coin-info">{{ course.originPrice2.coinAmount }}{{ course.originPrice2.coinName }}</span>
+          <span v-if="course.originPrice2.currency === 'RMB'" class="pull-right price-info">{{ course.originPrice2.amount }}</span>
         </div>
       </div>
     </div>

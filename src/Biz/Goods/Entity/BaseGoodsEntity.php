@@ -2,6 +2,7 @@
 
 namespace Biz\Goods\Entity;
 
+use Biz\Goods\Service\GoodsService;
 use Biz\Product\ProductException;
 use Biz\Product\Service\ProductService;
 use Codeages\Biz\Framework\Context\Biz;
@@ -22,6 +23,8 @@ abstract class BaseGoodsEntity
     }
 
     abstract public function getTarget($goods);
+
+    abstract public function getSpecsByTargetId($targetId);
 
     abstract public function canManageTarget($goods);
 
@@ -56,5 +59,13 @@ abstract class BaseGoodsEntity
     protected function getProductService()
     {
         return $this->biz->service('Product:ProductService');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->biz->service('Goods:GoodsService');
     }
 }

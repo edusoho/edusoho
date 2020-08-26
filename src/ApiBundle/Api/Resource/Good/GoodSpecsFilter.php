@@ -6,6 +6,7 @@ use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\User\UserFilter;
 use ApiBundle\Api\Util\AssetHelper;
 use AppBundle\Common\ServiceToolkit;
+use VipPlugin\Api\Resource\VipLevel\VipLevelFilter;
 
 class GoodSpecsFilter extends Filter
 {
@@ -33,6 +34,11 @@ class GoodSpecsFilter extends Filter
         $userFilter = new UserFilter();
         $userFilter->setMode(Filter::SIMPLE_MODE);
         $userFilter->filters($data['teachers']);
+        if (!empty($data['vipLevelInfo'])) {
+            $vipLevelFilter = new VipLevelFilter();
+            $vipLevelFilter->setMode(Filter::SIMPLE_MODE);
+            $vipLevelFilter->filter($data['vipLevelInfo']);
+        }
     }
 
     protected function publicFields(&$data)
@@ -43,6 +49,11 @@ class GoodSpecsFilter extends Filter
         $userFilter = new UserFilter();
         $userFilter->setMode(Filter::SIMPLE_MODE);
         $userFilter->filters($data['teachers']);
+        if (!empty($data['vipLevelInfo'])) {
+            $vipLevelFilter = new VipLevelFilter();
+            $vipLevelFilter->setMode(Filter::PUBLIC_MODE);
+            $vipLevelFilter->filter($data['vipLevelInfo']);
+        }
     }
 
     private function transTime(&$specs)

@@ -17,13 +17,13 @@ use Biz\Product\Service\ProductService;
 use Codeages\Biz\Pay\Service\AccountService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-class OrderInfo extends AbstractResource
+class GoodsOrderInfo extends AbstractResource
 {
     public function add(ApiRequest $request)
     {
         $params = $request->request->all();
 
-        if (empty($params['targetId']) || empty($params['targetType'])) {
+        if (empty($params['specsId'])) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
         $this->convertOrderParams($params);
@@ -43,16 +43,10 @@ class OrderInfo extends AbstractResource
 
     private function convertOrderParams(&$params)
     {
-        //goodsSpecs
-        if ($params['targetType'] === 'goodsSpecs') {
-            $specs = $this->getGoodsService()->getGoodsSpecs($params['targetId']);
-            $goods = $this->getGoodsService()->getGoods($specs['goodsId']);
-            $params['targetType'] = $goods['type'];
-        }
-        if (in_array($params['3'], ['classroom', 'course'])) {
-            $specs = $this->getGoodsEntityFactory()->create($params['targetType'])->getSpecsByTargetId($params['targetId']);
-            $params['targetId'] = $specs['id'];
-        }
+        $specs = $this->getGoodsService()->getGoodsSpecs($params['specsId']);
+        $goods = $this->getGoodsService()->getGoods($specs['goodsId']);
+        $params['targetType'] = $goods['type'];
+        $params['targetId'] = $params['specsId'];
     }
 
     private function getOrderInfoFromProduct(Product $product)
