@@ -67,7 +67,7 @@ define(function (require, exports) {
     let removeSettingPermit = function ($removeSettingPermitBtnArray, $permitIndex) {
       $($removeSettingPermitBtnArray[$permitIndex]).on('click', function () {
         let $settingPermit = '#settingPermit_' + $permitIndex;
-        let delConfirm = confirm('确定要删除吗？');
+        let delConfirm = confirm(Translator.trans('admin.setting.delete_permit_setting_delete_confirom'));
         if (delConfirm) {
           $($settingPermit).remove();
           $(".setting_permit").last().find(".addSettingPermitBtn").show();
@@ -81,7 +81,7 @@ define(function (require, exports) {
         if ($('.setting_permit').length < 10) {
           appendPermit("#settingPermit_", ++permitIndex);
         } else {
-          alert('新增数量已达上限，暂不支持新增哦~');
+          Notify.success(Translator.trans('admin.setting.delete_permit_setting_max_number'));
         }
       })
     };
@@ -91,7 +91,7 @@ define(function (require, exports) {
       let removeBtnArray = [];
       let removeSettingPermitBtnArray = [];
       let addSettingPermitBtnArray = [];
-      if ($permitIndex == 0) {
+      if ($permitIndex === 0) {
         $('#removeSettingPermitBtn_0').hide();
       }
       let uploaderPermitString = "#permit_picture_upload_" + $permitIndex;
@@ -166,7 +166,7 @@ define(function (require, exports) {
 
       permitSettingLastAction();
     }
-    
+
     $('#save_license').on('click', function () {
       $.post($form.data('saveUrl'), $form.serialize(), function (data) {
         Notify.success(data.message);
