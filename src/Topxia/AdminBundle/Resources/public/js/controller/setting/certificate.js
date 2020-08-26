@@ -120,8 +120,15 @@ define(function (require, exports) {
       permitSettingElementAction(permitIndex);
     };
 
-    function appendPermit($id, $permitNum) {
+    let resetElementId = function ($id, $permitNum) {
+      let lastSettingPermit = $('.setting_permit').last();
+      lastSettingPermit.find($id).attr("id", function () {
+        $id = ($id + "_" + $permitNum).replace(/\./ , '');
+        return $id;
+      })
+    };
 
+    function appendPermit($id, $permitNum) {
       let permitArea = $('#permit_area');
       let fromPermitDiv = $('.setting_permit').prop("outerHTML");
 
@@ -144,30 +151,13 @@ define(function (require, exports) {
         let id = "settingPermit_" + $permitNum;
         return id;
       });
-      lastSettingPermit.find('.permit_picture').attr("id", function () {
-        let id = "permit_picture_" + $permitNum;
-        return id;
-      });
-      lastSettingPermit.find('.permit_picture_upload').attr("id", function () {
-        let id = "permit_picture_upload_" + $permitNum;
-        return id;
-      });
-      lastSettingPermit.find('.permit_picture_container').attr("id", function () {
-        let id = "permit_picture_container_" + $permitNum;
-        return id;
-      });
-      lastSettingPermit.find('.permit_picture_remove').attr("id", function () {
-        let id = "permit_picture_remove_" + $permitNum;
-        return id;
-      });
-      lastSettingPermit.find('.removeSettingPermitBtn').attr("id", function () {
-        let id = "removeSettingPermitBtn_" + $permitNum;
-        return id;
-      });
-      lastSettingPermit.find('.addSettingPermitBtn').attr("id", function () {
-        let id = "addSettingPermitBtn_" + $permitNum;
-        return id;
-      });
+
+      resetElementId('.permit_picture', $permitNum);
+      resetElementId('.permit_picture_upload', $permitNum);
+      resetElementId('.permit_picture_container', $permitNum);
+      resetElementId('.permit_picture_remove', $permitNum);
+      resetElementId('.removeSettingPermitBtn', $permitNum);
+      resetElementId('.addSettingPermitBtn', $permitNum);
 
       lastSettingPermit.find('.permit_name').attr("value", "");
       lastSettingPermit.find('.permit_record_number').attr("value", "");
@@ -175,9 +165,8 @@ define(function (require, exports) {
       lastSettingPermit.find('img').attr("src", "");
 
       permitSettingLastAction();
-
     }
-
+    
     $('#save_license').on('click', function () {
       $.post($form.data('saveUrl'), $form.serialize(), function (data) {
         Notify.success(data.message);
