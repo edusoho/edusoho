@@ -1,6 +1,6 @@
 <template>
   <div class="detail-info" v-if="goods.id">
-    <p class="detail-info__title text-overflow">{{ goods.title }}</p>
+    <p class="detail-info__title">{{ goods.title }}</p>
 
     <div class="detail-info__price">
       <div class="clearfix">
