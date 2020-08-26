@@ -28,8 +28,13 @@ class S2B2CService extends BaseService
      *
      * @return
      */
-    public function reportSuccessOrder($params)
+    public function reportSuccessOrder($order, $orderItems)
     {
+        $params = array(
+            'merchantOrder' => $order,
+            'merchantOrderItems' => $orderItems,
+        );
+
         return $this->sendRequest('/distribute/order/settlement/report', $params, 'POST');
     }
 
@@ -42,8 +47,14 @@ class S2B2CService extends BaseService
      *
      * @return array
      */
-    public function reportRefundOrder($params)
+    public function reportRefundOrder($order, $orderRefund, $orderRefundItems)
     {
+        $params = array(
+            'merchantOrder' => $order,
+            'merchantOrderRefund' => $orderRefund,
+            'merchantOrderRefundItems' => $orderRefundItems,
+        );
+
         return $this->sendRequest('/order/report/refund', $params, 'POST');
     }
 
