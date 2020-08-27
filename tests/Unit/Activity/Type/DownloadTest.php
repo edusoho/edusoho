@@ -137,6 +137,15 @@ class DownloadTest extends BaseTypeTestCase
                     'withParams' => array(2),
                     'returnValue' => true,
                 ),
+                array(
+                    'functionName' => 'get',
+                    'withParams' => array(2),
+                    'returnValue' => array(
+                        'id' => 2,
+                        'mediaCount' => 2,
+                        'fileIds' => array(1, 2),
+                    ),
+                ),
             )
         );
 
