@@ -225,6 +225,57 @@ const filters = [
     },
   },
   {
+    name: 'filterGoodsBuyStatus',
+    handler(code, type = 'course', vipAccessToJoin) {
+      if (vipAccessToJoin && code !== 'member.member_exist') {
+        return '会员免费学';
+      }
+      const targetType = {
+        course: '课程',
+        classroom: '班级',
+      };
+      switch (code) {
+        case 'success':
+        case 'user.not_login':
+          code = '立即购买';
+          break;
+        case 'user.locked':
+          code = '用户被锁定';
+          break;
+        case 'member.member_exist':
+          code = '课程学员已存在';
+          break;
+        case `${type}.reach_max_student_num`:
+          code = '学员达到上限';
+          break;
+        case `${type}.not_found`:
+          code = '计划不存在';
+          break;
+        case `${type}.unpublished`:
+          code = `${targetType[type]}未发布`;
+          break;
+        case `${type}.closed`:
+          code = `${targetType[type]}已关闭`;
+          break;
+        case `${type}.not_buyable`:
+          code = `${targetType[type]}不可加入`;
+          break;
+        case `${type}.buy_expired`:
+          code = '购买有效期已过';
+          break;
+        case `${type}.expired`:
+          code = '学习有效期已过';
+          break;
+        case `${type}.only_vip_join_way`:
+        case 'course.only_vip_join_way': // type 为班级时，code显示为 'course.only_vip_join_way', 此处临时处理
+          code = '只能通过VIP加入';
+          break;
+        default:
+      }
+      return code;
+    },
+  },
+  {
     name: 'filterOrderStatus',
     handler(status) {
       switch (status) {

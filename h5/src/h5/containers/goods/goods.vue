@@ -95,7 +95,7 @@
         </section>
 
         <!-- 收藏/购买 -->
-        <buy :is-favorite="goods.isFavorite" />
+        <buy :goods="goods" :currentSku="currentSku" :is-favorite="goods.isFavorite" />
 
         <!-- 回到顶部 -->
         <back-to-top v-show="backToTopShow" />
