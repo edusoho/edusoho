@@ -37,9 +37,12 @@ class ClassroomProduct extends BaseGoodsProduct implements OrderStatusCallback
         $this->goodsSpecs = $goodsSpecs;
         $goods = $this->getGoodsService()->getGoods($goodsSpecs['goodsId']);
         $this->goods = $goods;
+        $this->goodsId = $goods['id'];
 
-        //声明购买目标ID，商品剥离改造之前是班级ID，改造之后是商品ID
-        $this->targetId = $params['targetId'];
+        //声明购买目标ID，商品剥离改造之前targetId是计划ID,现在增加了goodsSpecsId
+        $this->goodsSpecsId = $params['targetId'];
+
+        $this->targetId = $goodsSpecs['targetId'];
 
         //originalTargetId 兼容老数据，用来处理老数据的问题：这里originalTargetId对应的是classroom的id
         $this->originalTargetId = $goodsSpecs['targetId'];
