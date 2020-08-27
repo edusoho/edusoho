@@ -182,10 +182,12 @@ class Order extends AbstractResource
             $specs = $this->getGoodsService()->getGoodsSpecs($params['targetId']);
             $goods = $this->getGoodsService()->getGoods($specs['goodsId']);
             $params['targetType'] = $goods['type'];
+            return ;
         }
         if (in_array($params['targetType'], ['classroom', 'course'])) {
             $specs = $this->getGoodsEntityFactory()->create($params['targetType'])->getSpecsByTargetId($params['targetId']);
             $params['targetId'] = $specs['id'];
+            return ;
         }
     }
 }

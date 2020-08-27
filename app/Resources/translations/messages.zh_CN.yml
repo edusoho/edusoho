@@ -11081,6 +11081,7 @@ admin_v2.operating.goods_show_sales.classroom: 班级商品页显示销售情况
 admin_v2.operating.goods_show_data: 商品页显示数据
 admin_v2.operating.goods_show.join_number: 显示加入人数
 admin_v2.operating.goods_show.visitor_number: 显示浏览人数
+admin_v2.operating.goods_show.none: 不显示
 
 admin_v2.operating.goods_leading_setting: 商品页引导
 admin_v2.operating.goods_leading.join_group: 商品页引导加群

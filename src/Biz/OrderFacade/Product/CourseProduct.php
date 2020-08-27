@@ -39,11 +39,14 @@ class CourseProduct extends BaseGoodsProduct
         $this->goodsSpecs = $goodsSpecs;
         $goods = $this->getGoodsService()->getGoods($goodsSpecs['goodsId']);
         $this->goods = $goods;
+        $this->goodsId = $goods['id'];
 
-        //声明购买目标ID，商品剥离改造之前是计划ID，改造之后是商品ID
-        $this->targetId = $params['targetId'];
+        //声明购买目标ID，商品剥离改造之前targetId是计划ID,现在增加了goodsSpecsId
+        $this->goodsSpecsId = $params['targetId'];
 
-        //originalTargetId 兼容老数据，保存的是改造之前的计划ID
+        $this->targetId = $goodsSpecs['targetId'];
+
+        //originalTargetId 兼容老数据，保存的是改造之前的计划ID,逐步去除targetId
         $this->originalTargetId = $goodsSpecs['targetId'];
 
         //对应具体课程以及计划资源，兼容老数据

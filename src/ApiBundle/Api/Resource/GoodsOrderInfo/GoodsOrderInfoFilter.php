@@ -1,6 +1,6 @@
 <?php
 
-namespace ApiBundle\Api\Resource\OrderInfo;
+namespace ApiBundle\Api\Resource\GoodsOrderInfo;
 
 use ApiBundle\Api\Resource\Coupon\CouponFilter;
 use ApiBundle\Api\Resource\Filter;

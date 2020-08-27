@@ -17,6 +17,8 @@ class OrderInfoFilter extends Filter
         $orderInfo = [
             'targetId' => $data['targetId'],
             'targetType' => $data['targetType'],
+            'specsId' => $data['goodsSpecsId'],
+            'goodsId' => $data['goodsId'],
             'cover' => $data['cover'],
             'totalPrice' => strval($data['totalPrice']),
             'title' => $data['title'],

@@ -79,7 +79,7 @@ class OrderFacadeServiceImpl extends BaseService implements OrderFacadeService
     private function makeOrderItems(Product $product)
     {
         $orderItem = array(
-            'target_id' => $product->targetId,
+            'target_id' => in_array($product->targetType, ['course', 'classroom']) ? $product->goodsSpecsId : $product->targetId,
             'target_type' => $product->targetType,
             'price_amount' => $product->originPrice,
             'pay_amount' => $product->getPayablePrice(),

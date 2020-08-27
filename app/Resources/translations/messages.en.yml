@@ -9856,6 +9856,7 @@ admin_v2.operating.goods_show_sales.classroom: Class product page shows sales
 admin_v2.operating.goods_show_data: Product page display data
 admin_v2.operating.goods_show.join_number: Show joins
 admin_v2.operating.goods_show.visitor_number: Show visitors
+admin_v2.operating.goods_show.none: 不显示
 
 admin_v2.operating.goods_leading_setting: Product page guide
 admin_v2.operating.goods_leading.join_group: Product page guide join group

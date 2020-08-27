@@ -21,7 +21,7 @@ class PickPaidCoursesCommand extends Command
             return;
         }
 
-        $specs = $this->getGoodsService()->getGoodsSpecs($product->targetId);
+        $specs = $this->getGoodsService()->getGoodsSpecs($product->goodsSpecsId);
 
         $classroomSetting = $this->getSettingService()->get('classroom');
 

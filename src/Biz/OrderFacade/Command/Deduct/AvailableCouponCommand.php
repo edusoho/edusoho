@@ -45,6 +45,7 @@ class AvailableCouponCommand extends Command
     {
         if ('course' === $product->targetType || 'classroom' === $product->targetType) {
             $targetId = $product->originalTargetId;
+            //优惠券是基于课程的
             if ('course' === $product->targetType) {
                 $course = $this->getCourseService()->getCourse($targetId);
                 $targetId = $course['courseSetId'];
