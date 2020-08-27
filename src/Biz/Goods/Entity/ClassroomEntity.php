@@ -28,6 +28,7 @@ class ClassroomEntity extends BaseGoodsEntity
     {
         $target = $this->getClassroomService()->getClassroom($targetId);
         $product = $this->getProductService()->getProductByTargetIdAndType($target['id'], 'classroom');
+
         return $this->getGoodsService()->getGoodsSpecsByProductIdAndTargetId($product['id'], $targetId);
     }
 
@@ -57,7 +58,7 @@ class ClassroomEntity extends BaseGoodsEntity
         return $this->getClassroomService()->canManageClassroom($classroom['id']);
     }
 
-    public function canBuySpecs($goods, $specs)
+    public function buySpecsAccess($goods, $specs)
     {
         return $this->getClassroomService()->canJoinClassroom($specs['targetId']);
     }

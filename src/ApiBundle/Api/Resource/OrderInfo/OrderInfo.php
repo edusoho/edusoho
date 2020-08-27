@@ -44,12 +44,12 @@ class OrderInfo extends AbstractResource
     private function convertOrderParams(&$params)
     {
         //goodsSpecs
-        if ($params['targetType'] === 'goodsSpecs') {
+        if ('goodsSpecs' === $params['targetType']) {
             $specs = $this->getGoodsService()->getGoodsSpecs($params['targetId']);
             $goods = $this->getGoodsService()->getGoods($specs['goodsId']);
             $params['targetType'] = $goods['type'];
         }
-        if (in_array($params['3'], ['classroom', 'course'])) {
+        if (in_array($params['targetType'], ['classroom', 'course'])) {
             $specs = $this->getGoodsEntityFactory()->create($params['targetType'])->getSpecsByTargetId($params['targetId']);
             $params['targetId'] = $specs['id'];
         }
@@ -235,7 +235,7 @@ class OrderInfo extends AbstractResource
     protected function getGoodsEntityFactory()
     {
         $biz = $this->getBiz();
+
         return $biz['goods.entity.factory'];
     }
-
 }

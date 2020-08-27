@@ -7,7 +7,6 @@ use Biz\Course\CourseSetException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
-use Biz\Goods\Service\GoodsService;
 use VipPlugin\Biz\Vip\Service\LevelService;
 use VipPlugin\Biz\Vip\Service\VipService;
 
@@ -31,6 +30,7 @@ class CourseEntity extends BaseGoodsEntity
     {
         $target = $this->getCourseService()->getCourse($targetId);
         $product = $this->getProductService()->getProductByTargetIdAndType($target['courseSetId'], 'course');
+
         return $this->getGoodsService()->getGoodsSpecsByProductIdAndTargetId($product['id'], $targetId);
     }
 
@@ -60,7 +60,7 @@ class CourseEntity extends BaseGoodsEntity
         return $this->getCourseSetService()->hasCourseSetManageRole($courseSet['id']);
     }
 
-    public function canBuySpecs($goods, $specs)
+    public function buySpecsAccess($goods, $specs)
     {
         return $this->getCourseService()->canJoinCourse($specs['targetId']);
     }

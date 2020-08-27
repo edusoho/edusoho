@@ -38,6 +38,8 @@ abstract class BaseGoodsEntity
 
     abstract public function getSpecsTeacherIds($goods, $specs);
 
+    abstract public function buySpecsAccess($goods, $specs);
+
     /**
      * @param $productId
      *
