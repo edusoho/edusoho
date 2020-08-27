@@ -9,8 +9,8 @@
 export default {
   methods: {
     backToTop() {
-      document.documentElement.scrollTop = 0;
-    }
-  }
-}
+      document.documentElement.scrollTop = document.body.scrollTop = 0;
+    },
+  },
+};
 </script>
