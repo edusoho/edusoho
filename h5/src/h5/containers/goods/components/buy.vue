@@ -10,9 +10,9 @@
         <span>收藏</span>
       </template>
     </div>
-    <div @click="handleJoin" v-if="currentSku.access.code === 'member.member_exist'" class="info-buy__btn">去学习</div>
-    <div @click="handleJoin" v-else-if="currentSku.displayPrice == 0" :class="!accessToJoin ? 'disabled' : ''" class="info-buy__btn">免费加入</div>
-    <div @click="handleJoin" v-else class="info-buy__btn">{{ currentSku.access.code|filterGoodsBuyStatus(goods.type, vipAccessToJoin) }}</div>
+    <div @click="handleJoin" v-if="currentSku.isMember" class="info-buy__btn">去学习</div>
+    <div @click="handleJoin" v-else-if="currentSku.displayPrice != 0" :class="!accessToJoin ? 'disabled' : ''" class="info-buy__btn">{{ currentSku.access.code|filterGoodsBuyStatus(goods.type, vipAccessToJoin) }}</div>
+    <div @click="handleJoin" v-else :class="!accessToJoin ? 'disabled' : ''" class="info-buy__btn"><span v-if="accessToJoin">免费加入</span><span v-else>{{ currentSku.access.code|filterGoodsBuyStatus(goods.type, vipAccessToJoin) }}</span></div>
   </div>
 </template>
 
