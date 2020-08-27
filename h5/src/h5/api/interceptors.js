@@ -7,7 +7,6 @@ import * as types from '@/store/mutation-types';
 const statusCode = {
   EXPIRED_CREDENTIAL: 5,
   TOKEN_NOT_EXIST: 4040117,
-  NOT_AUTHORIZED: 11,
 };
 
 axios.interceptors.request.use(
@@ -58,8 +57,7 @@ axios.interceptors.response.use(
         // token过期的情况
         if (
           code === statusCode.EXPIRED_CREDENTIAL ||
-          code === statusCode.TOKEN_NOT_EXIST ||
-          code === statusCode.NOT_AUTHORIZED
+          code === statusCode.TOKEN_NOT_EXIST
         ) {
           store.commit(types.USER_LOGOUT);
           router.replace(

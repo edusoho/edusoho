@@ -20,6 +20,7 @@
 import Api from '@/api';
 import * as types from '@/store/mutation-types.js';
 import { Toast } from 'vant';
+import isAuthorized from '@/mixins/isAuthorized';
 const config = {
   assessment: {
     api: 'getAssessmentExerciseRecord',
@@ -29,6 +30,7 @@ const config = {
   },
 };
 export default {
+  mixins: [isAuthorized],
   components: {},
   data() {
     return {
@@ -74,8 +76,7 @@ export default {
           this.isLoading = false;
         })
         .catch(err => {
-          this.isLoading = false;
-          this.$toast(err.message);
+          this.handleError(err);
         });
     },
     getStart() {
@@ -94,9 +95,13 @@ export default {
           this.assignData(res);
         })
         .catch(err => {
-          this.isLoading = false;
-          this.$toast(err.message);
+          this.handleError(err);
         });
+    },
+    handleError(err) {
+      this.canLeave = true;
+      this.isLoading = false;
+      this.isAuthorized(err);
     },
     assignData(res) {
       this.$store.commit(types.SET_NAVBAR_TITLE, this.$route.query.title);
