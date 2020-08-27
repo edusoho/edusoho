@@ -4,7 +4,7 @@
       <div class="pull-left plan-left">教学计划</div>
       <div class="pull-left plan-right">
         {{ currentSku.title }}
-        <i class="iconfont icon-arrow-right plan-right__icon"></i>
+        <i v-if="goods.specs.length > 1" class="iconfont icon-arrow-right plan-right__icon"></i>
       </div>
     </div>
 
@@ -52,7 +52,7 @@
           </div>
         </div>
       </div>
-      <div class="plan-popup__buy">立即购买</div>
+<!--      <div class="plan-popup__buy">立即购买</div>-->
     </van-popup>
 
     <div v-if="currentSku.vipLevelInfo && vipSwitch" class="detail-plan__plan clearfix">
@@ -119,6 +119,9 @@ export default {
     },
     // 点击显示弹窗
     showPopup() {
+      if (this.goods && this.goods.specs.length == 1) {
+        return ;
+      }
       this.show = true;
     },
     // 关闭弹窗时触发
