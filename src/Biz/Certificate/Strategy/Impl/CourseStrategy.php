@@ -98,7 +98,7 @@ class CourseStrategy extends BaseStrategy
 
         if (strstr($content, '$courseName$')) {
             $course = $this->getCourseService()->getCourse($record['targetId']);
-            $content = str_replace('$courseName$', $course['title'], $content);
+            $content = str_replace('$courseName$', $course['courseSetTitle'], $content);
         }
 
         return $content;

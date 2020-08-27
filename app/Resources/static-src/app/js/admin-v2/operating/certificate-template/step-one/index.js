@@ -19,7 +19,7 @@ export default class StepOne {
     this.validator = this.$element.validate({
       rules: {
         name: {
-          maxlength: 30,
+          byte_maxlength: 60,
           required: {
             depends () {
               $(this).val($.trim($(this).val()));

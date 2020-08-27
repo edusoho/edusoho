@@ -57,7 +57,7 @@ abstract class BaseStrategy
             'certificateExpiryTime' => empty($record['expiryTime']) ? '长期有效' : date('Y-m-d', $record['expiryTime']),
             'certificateIssueTime' => date('Y-m-d', $record['issueTime']),
             'certificateStamp' => empty($template['stamp']) ? '' : $this->getWebExtension()->getFurl($template['stamp']),
-            'certificateBasemap' => empty($template['basemap']) ? $this->getAssetUrl("static-dist/app/img/admin-v2/{$template['type']}_basemap.jpg") : $this->getWebExtension()->getFurl($template['basemap']),
+            'certificateBasemap' => empty($template['basemap']) ? $this->getAssetUrl("static-dist/app/img/admin-v2/{$template['styleType']}_basemap.jpg") : $this->getWebExtension()->getFurl($template['basemap']),
         ]);
 
         return $this->getImgBuilder($template['styleType'])->getCertificateImgByBase64($certificate, 0.5);
