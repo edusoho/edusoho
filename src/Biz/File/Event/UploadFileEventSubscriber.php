@@ -183,9 +183,19 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
     public function onMaterialCreate(Event $event)
     {
         $material = $event->getSubject();
-
-        if (!empty($material['fileId']) && $material['source'] != 'coursematerial') {
-            $this->getUploadFileService()->waveUsedCount($material['fileId'], 1);
+        if (!empty($material['fileId']) ) {
+            $file = $this->getUploadFileService()->getFile($material['fileId']);
+            if ($material['source'] == 'coursematerial'){
+                if ($file['targetType'] == 'coursematerial'){
+                    if ($material['courseId'] != 0 && $material['lessonId'] != 0){
+                        $this->getUploadFileService()->waveUsedCount($material['fileId'], 1);
+                    }
+                }else{
+                    $this->getUploadFileService()->waveUsedCount($material['fileId'], 1);
+                }
+            }else{
+                $this->getUploadFileService()->waveUsedCount($material['fileId'], 1);
+            }
         }
     }
 

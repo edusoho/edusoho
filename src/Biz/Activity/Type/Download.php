@@ -4,6 +4,7 @@ namespace Biz\Activity\Type;
 
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\DownloadActivityDao;
+use Biz\File\Service\UploadFileService;
 
 class Download extends Activity
 {
@@ -67,7 +68,20 @@ class Download extends Activity
      */
     public function delete($id)
     {
+        $download = $this->getDownloadActivityDao()->get($id);
+        foreach ($download['fileIds'] as $fileId){
+            $this->getUploadFileService()->updateUsedCount($fileId);
+        }
+
         return $this->getDownloadActivityDao()->delete($id);
+    }
+
+    /**
+     * @return UploadFileService
+     */
+    protected function getUploadFileService()
+    {
+        return $this->getBiz()->service('File:UploadFileService');
     }
 
     /**
