@@ -9,6 +9,7 @@
 
 <script>
     import axios from "axios";
+    import Api from 'common/api';
 
     export default {
         props: {
@@ -30,39 +31,25 @@
         },
         methods: {
             addFavorite(targetType, targetId) {
-                axios({
-                    url: "/api/favorite",
-                    method: "POST",
+                Api.favorite.favorite({
                     data: {
                         'targetType': targetType,
-                        'targetId': targetId
-                    },
-                    headers: {
-                        'Accept': 'application/vnd.edusoho.v2+json',
-                        'X-CSRF-Token': $('meta[name=csrf-token]').attr('content'),
-                        'X-Requested-With': 'XMLHttpRequest'
+                        'targetId': targetId,
                     }
-                }).then(res => {
+                }).then((res) => {
                     this.isFavorite = true;
-                }).catch();
+                });
             },
 
             removeFavorite(targetType, targetId) {
-                axios({
-                    url: "/api/favorite",
-                    method: "DELETE",
+                Api.favorite.unfavorite({
                     data: {
                         'targetType': targetType,
-                        'targetId': targetId
-                    },
-                    headers: {
-                        'Accept': 'application/vnd.edusoho.v2+json',
-                        'X-CSRF-Token': $('meta[name=csrf-token]').attr('content'),
-                        'X-Requested-With': 'XMLHttpRequest'
+                        'targetId': targetId,
                     }
-                }).then(res => {
+                }).then((res) => {
                     this.isFavorite = false;
-                }).catch();
+                });
             },
 
             onFavorite() {
