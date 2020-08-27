@@ -230,7 +230,7 @@
                 this.flag = false;
                 this.howActive = value;
                 let ele = '#info-left-' + value;
-                document.documentElement.scrollTop = $(ele).offset().top - 80;
+                document.documentElement.scrollTop = document.body.scrollTop = $(ele).offset().top - 80;
                 this.timerClick = setTimeout(() => {
                     this.flag = true;
                 }, 300);
