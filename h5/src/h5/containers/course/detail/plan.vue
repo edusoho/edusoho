@@ -111,7 +111,7 @@ export default {
       if (!memberInfo) {
         switch (expiryMode) {
           case 'forever':
-            return '永久有效';
+            return '长期有效';
           case 'end_date':
             return endDateStr + '之前可学习';
           case 'days':
@@ -129,11 +129,11 @@ export default {
         }
       } else {
         if (expiryMode == 'forever') {
-          return '永久有效';
+          return '长期有效';
         }
         return memberInfo.deadline != 0
           ? memberInfo.deadline.slice(0, 10) + '之前可学习'
-          : '永久有效';
+          : '长期有效';
       }
       return '';
     },

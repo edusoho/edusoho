@@ -208,11 +208,11 @@ export default {
         }
       } else {
         if (this.currentSku.usageMode == 'forever') {
-          return '永久有效';
+          return '长期有效';
         }
         return memberInfo.deadline != 0
           ? memberInfo.deadline.slice(0, 10) + '之前可学习'
-          : '永久有效';
+          : '长期有效';
       }
     },
   },

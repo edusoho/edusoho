@@ -123,7 +123,7 @@ export default {
       loadMoreAbout: false,
       active: 0,
       tabsClass: '',
-      learnExpiry: '永久有效',
+      learnExpiry: '长期有效',
       startDateStr: '',
       endDateStr: '',
       tops: {
