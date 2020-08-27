@@ -160,7 +160,6 @@ export default {
   },
   computed: {
     vipAccessToJoin() {
-      console.log(111);
       let vipAccess = false;
       if (!this.currentSku.vipLevelInfo || !this.currentSku.vipUser) {
         return false;
@@ -207,7 +206,7 @@ export default {
             return '';
         }
       } else {
-        if (this.currentSku.usageMode == 'forever') {
+        if (this.currentSku.usageMode === 'forever') {
           return '长期有效';
         }
         return memberInfo.deadline != 0

@@ -227,7 +227,12 @@ const filters = [
   {
     name: 'filterGoodsBuyStatus',
     handler(code, type = 'course', vipAccessToJoin) {
-      if (vipAccessToJoin && code !== 'member.member_exist') {
+      if (
+        vipAccessToJoin &&
+        code !== 'member.member_exist' &&
+        code !== `${type}.buy_expired` &&
+        code !== `${type}.expired`
+      ) {
         return '会员免费学';
       }
       const targetType = {
