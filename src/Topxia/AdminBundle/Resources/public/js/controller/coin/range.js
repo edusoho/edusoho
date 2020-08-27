@@ -21,6 +21,16 @@ exports.run = function() {
 
         var $form = $("#coin-settings-form"),
             $modal = $form.children('.coin_content');
+        var validator0 = new Validator({
+          element: '#coin-settings-form',
+          autoSubmit: true
+        });
+
+        validator0.addItem({
+          element: '[name="coin_name"]',
+          required: true,
+          rule:'maxlength{max:6}'
+        });
 
         var validator = _initValidator($form, $modal);
         var $editor = _initEditorFields($form, validator);
