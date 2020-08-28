@@ -1109,6 +1109,14 @@ t.add("admin.site.upload_favicon_success_hint", "\u4e0a\u4f20\u7f51\u7ad9\u6d4f\
 t.add("admin.site.delete_favicon_success_hint", "\u5220\u9664\u7f51\u7ad9\u6d4f\u89c8\u5668\u56fe\u6807\u6210\u529f\uff01", "js", "zh_CN");
 t.add("admin.site.delete_favicon_fail_hint", "\u5220\u9664\u7f51\u7ad9\u6d4f\u89c8\u5668\u56fe\u6807\u5931\u8d25\uff01", "js", "zh_CN");
 t.add("admin.site.delete_hint", "\u786e\u8ba4\u8981\u5220\u9664\u5417\uff1f", "js", "zh_CN");
+t.add("admin.setting.upload_license_picture_success_hint", "\u4e0a\u4f20\u7535\u5b50\u8425\u4e1a\u6267\u7167\u56fe\u7247\u6210\u529f\uff01", "js", "zh_CN");
+t.add("admin.setting.delete_license_picture_success_hint", "\u5220\u9664\u7535\u5b50\u8425\u4e1a\u6267\u7167\u56fe\u7247\u6210\u529f\uff01", "js", "zh_CN");
+t.add("admin.setting.delete_license_picture_fail_hint", "\u5220\u9664\u7535\u5b50\u8425\u4e1a\u6267\u7167\u56fe\u7247\u5931\u8d25\uff01", "js", "zh_CN");
+t.add("admin.setting.upload_permit_picture_success_hint", "\u4e0a\u4f20\u8bb8\u53ef\u8bc1\u56fe\u7247\u6210\u529f\uff01", "js", "zh_CN");
+t.add("admin.setting.delete_permit_picture_success_hint", "\u5220\u9664\u8bb8\u53ef\u8bc1\u56fe\u7247\u6210\u529f\uff01", "js", "zh_CN");
+t.add("admin.setting.delete_permit_picture_fail_hint", "\u5220\u9664\u8bb8\u53ef\u8bc1\u56fe\u7247\u5931\u8d25\uff01", "js", "zh_CN");
+t.add("admin.setting.delete_permit_setting_max_number", "\u65b0\u589e\u6570\u91cf\u5df2\u8fbe\u4e0a\u9650\uff0c\u6682\u4e0d\u652f\u6301\u65b0\u589e\u54e6~", "js", "zh_CN");
+t.add("admin.setting.delete_permit_setting_delete_confirom", "\u786e\u5b9a\u8981\u5220\u9664\u5417\uff1f", "js", "zh_CN");
 t.add("admin.setting.theme.upgrade_error_hint", "\u8be5\u4e3b\u9898\u6682\u4e0d\u9002\u914d\u5f53\u524dES\u7248\u672c\uff0c\u8bf7\u5148\u5347\u7ea7", "js", "zh_CN");
 t.add("admin.setting.theme.use_hint", "\u771f\u7684\u8981\u4f7f\u7528\u8be5\u4e3b\u9898\u5417\uff1f", "js", "zh_CN");
 t.add("admin.sms.send_success_hint", "\u53d1\u9001\u6210\u529f\uff01", "js", "zh_CN");

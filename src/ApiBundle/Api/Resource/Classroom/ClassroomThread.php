@@ -5,26 +5,32 @@ namespace ApiBundle\Api\Resource\Classroom;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Classroom\ClassroomException;
-use Biz\Group\Service\ThreadService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Group\ThreadException;
+use Biz\Thread\Service\ThreadService;
 
 class ClassroomThread extends AbstractResource
 {
     public function search(ApiRequest $request, $classroomId)
     {
         list($offset, $limit) = $this->getOffsetAndLimit($request);
+
+        $classroomSetting = $this->getSettingService()->get('classroom', []);
+        if (isset($classroomSetting['show_thread']) && '0' === $classroomSetting['show_thread']) {
+            return $this->makePagingObject([], 0, $offset, $limit);
+        }
+
         $sort = $request->query->get('sort', 'posted');
 
-        $conditions = array(
+        $conditions = [
             'targetType' => 'classroom',
             'targetId' => $classroomId,
             'type' => $request->query->get('type', ''),
-        );
+        ];
 
         $total = $this->getThreadService()->searchThreadCount($conditions);
         $threads = $this->getThreadService()->searchThreads($conditions, $sort, $offset, $limit);
-        $this->getOCUtil()->multiple($threads, array('userId'));
+        $this->getOCUtil()->multiple($threads, ['userId']);
 
         return $this->makePagingObject($threads, $total, $offset, $limit);
     }
@@ -40,8 +46,8 @@ class ClassroomThread extends AbstractResource
             throw ThreadException::NOTFOUND_THREAD();
         }
 
-        $this->getOCUtil()->single($thread, array('userId'));
-        $this->getOCUtil()->single($thread, array('targetId'), 'classroom');
+        $this->getOCUtil()->single($thread, ['userId']);
+        $this->getOCUtil()->single($thread, ['targetId'], 'classroom');
 
         return $thread;
     }
@@ -52,16 +58,16 @@ class ClassroomThread extends AbstractResource
             throw ClassroomException::FORBIDDEN_TAKE_CLASSROOM();
         }
 
-        $thread = array(
+        $thread = [
             'title' => $request->request->get('title'),
             'content' => $request->request->get('content'),
             'targetId' => $classroomId,
             'type' => $request->request->get('type'),
             'targetType' => 'classroom',
-        );
+        ];
 
         $thread = $this->getThreadService()->createThread($thread);
-        $this->getOCUtil()->single($thread, array('userId'));
+        $this->getOCUtil()->single($thread, ['userId']);
 
         return $thread;
     }
@@ -80,5 +86,13 @@ class ClassroomThread extends AbstractResource
     protected function getClassroomService()
     {
         return $this->service('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return \Biz\System\Service\SettingService
+     */
+    private function getSettingService()
+    {
+        return $this->service('System:SettingService');
     }
 }

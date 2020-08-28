@@ -20,9 +20,10 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class PlayerController extends BaseController
 {
-    public function showAction(Request $request, $id, $isPart = false, $context = [], $rememberLastPos = true)
+    public function showAction(Request $request, $id, $isPart = false, $context = [], $rememberLastPos = true, $file = [])
     {
-        $file = $this->getUploadFileService()->getFullFile($id);
+        $file = empty($file) ? $this->getUploadFileService()->getFullFile($id) : $file;
+
         if (empty($file)) {
             $this->createNewException(UploadFileException::NOTFOUND_FILE());
         }

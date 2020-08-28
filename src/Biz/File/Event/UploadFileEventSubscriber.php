@@ -184,7 +184,7 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
     {
         $material = $event->getSubject();
 
-        if (!empty($material['fileId'])) {
+        if (!empty($material['fileId']) && $material['source'] != 'coursematerial') {
             $this->getUploadFileService()->waveUsedCount($material['fileId'], 1);
         }
     }
@@ -215,7 +215,9 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
             return;
         }
 
-        $this->getUploadFileService()->waveUsedCount($file['id'], -1);
+        if (empty($event->getArgument('argument'))) {
+            $this->getUploadFileService()->updateUsedCount($file['id']);
+        }
 
         if (!$this->getUploadFileService()->canManageFile($file['id'])) {
             return;
@@ -232,10 +234,7 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
         $lesson = $context['lesson'];
 
         if (!empty($lesson['mediaId'])) {
-            $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
-            if ($file['usedCount'] > 0) {
-                $this->getUploadFileService()->waveUsedCount($lesson['mediaId'], -1);
-            }
+            $this->getUploadFileService()->updateUsedCount($lesson['mediaId']);
         }
     }
 

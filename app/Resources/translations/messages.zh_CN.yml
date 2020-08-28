@@ -372,6 +372,7 @@ form.btn.cancel: 取消
 form.btn.confirm: 确定
 form.btn.insert: 插入
 form.btn.delete: 删除
+form.btn.add: 新增一栏
 form.btn.submit_disabled: 已提交
 form.btn.reset_password: 重设密码
 form.btn.send: 发送
@@ -5639,6 +5640,19 @@ admin.setting.theme.manage.modal.student_dynamic: 学员动态
 admin.setting.theme.manage.modal.setting_custom_classroom_count: 班级数量设置
 admin.setting.theme.manage.modal.setting_custom_teacher_count: 教师数量设置
 
+#工商证件设置
+admin.setting.license.headline: 电子营业执照配置
+admin.setting.license.name: 电子营业执照名称
+admin.setting.license.picture: 电子营业执照图片
+admin.setting.license.picture.help_block: 请上传jpg,gif,png格式的图片。图片大小建议不超过5MB。网校电子营业图片设置后将显示在首页底栏。
+admin.setting.license.url: 电子营业执照链接
+admin.setting.permit.headline: 经营许可配置
+admin.setting.permit.name: 经营许可证名称
+admin.setting.permit.record.number: 备案号
+admin.setting.permit.picture: 证件图片
+admin.setting.permit.picture.help_block: 请上传jpg,gif,png格式的图片。图片大小建议不超过5MB。网校证件图片设置后将显示在首页底栏。
+admin.setting.permit.setting.add: 新增一栏
+admin.setting.permit.setting.remove: 删除整栏
 
 admin.setting.mailer.is_trial.tips: >
   当前版本为试⽤版,不能进⾏邮件服务设置。如需购买授权版,请联系销售人员。
@@ -7204,6 +7218,8 @@ admin.login_connect.User_login_protection.enter_wrong_password.banned: 次，将
 admin.login_connect.User_login_protection.some_IP_enter_wrong_password: 同一IP连续输入错误密码
 admin.login_connect.User_login_protection.some_IP_enter_wrong_password.banned: 次，将暂时封禁IP
 admin.login_connect.User_login_protection.after: 经过
+admin.login_connect.User_login_captcha: 用户登录验证码设置
+admin.login_connect.User_login_captcha.help_block: 开启后，用户登录时需要拖动验证码校验
 admin.login_connect.User_login_protection.after.unblock: 分钟后，解锁用户/IP
 admin.login_connect.weixinmob.frist.help_block: 开通后，支持使用微信号在手机端微信APP内快捷注册或登录网站。
 admin.login_connect.weixinmob.help_block: >
@@ -7397,7 +7413,7 @@ admin.setting_course.classroom.course_discount.help_block: 购买班级时，如
 admin.setting_course.classroom.classroom_list_default_seq: 班级列表页默认排序
 admin.setting_course.classroom.classroom_comments_manage: 班级学习页内容管理
 admin.setting_course.classroom.classroom_review: 评价
-admin.setting_course.classroom.classroom_thread: 话题
+admin.setting_course.classroom.classroom_thread: 话题（问题）
 admin.setting_course.classroom.classroom_note: 笔记
 admin.setting_course.classroom.classroom_list.help_block: 班级列表页
 admin.setting_course.classroom.classroom_list_default_seq.help_block: 地址：域名/classroom/explore,任何人都可在此页面查看网站所有已发布班级,如需设置网站首页班级排序，请到【站点设置】-【主题】-【管理】中设置，目前仅简墨和雅致简洁主题支持。

@@ -54,8 +54,8 @@
 
       <div class="row form-group">
         <div class="col-md-2 control-label"><label >{{'admin.setting_course.classroom.classroom_comments_manage'|trans}}</label></div>
-        <div class="col-md-1 control-label control-label--short">{{ 'admin.setting_course.classroom.classroom_thread'|trans }}：</div>
-        <div class="controls col-md-7 radios">
+        <div class="col-md-2 control-label control-label--long">{{ 'admin.setting_course.classroom.classroom_thread'|trans }}：</div>
+        <div class="controls col-md-6 radios">
             {{ radios('show_thread', {1:'admin.setting_course.open'|trans, 0:'admin.setting_course.closed'|trans}, classroomSetting.show_thread|default('1')) }}
         </div>
       </div>

@@ -9,7 +9,8 @@
         "codeages/exam-parser": "dev-master",
         "ezyang/htmlpurifier": "4.12.0",
         "vlucas/valitron": "^1.4",
-        "firebase/php-jwt": "^5.1"
+        "firebase/php-jwt": "^5.1",
+        "cerdic/css-tidy": "1.7.1"
     },
     "license": "MIT",
     "autoload": {

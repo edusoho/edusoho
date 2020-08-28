@@ -388,6 +388,21 @@ class TaskServiceTest extends BaseTestCase
         $this->assertEquals(2, count($tasks));
     }
 
+    public function testCanStartTask()
+    {
+        $task = $this->mockTask();
+        $task = $this->getTaskService()->createTask($task);
+
+        $this->mockBiz('Course:CourseService', [
+            [
+                'functionName' => 'getCourse',
+                'returnValue' => ['id' => 1, 'enableFinish' => 1],
+            ],
+        ]);
+
+        $this->assertEquals($this->getTaskService()->canStartTask(1), true);
+    }
+
     public function testFindTasksByActivityIds()
     {
         $task = $this->mockTask();

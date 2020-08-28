@@ -218,7 +218,12 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         $biz->register(new Codeages\Biz\Order\OrderServiceProvider());
         $biz->register(new Codeages\Biz\Pay\PayServiceProvider());
         $biz->register(new Codeages\Biz\Invoice\InvoiceServiceProvider());
-        $biz->register(new Codeages\Biz\ItemBank\ItemBankServiceProvider());
+        $biz->register(new Codeages\Biz\ItemBank\ItemBankServiceProvider(), [
+            'item_bank.html_helper.options' => [
+                'cacheDir' => $this->getCacheDir().'/htmlpurifier',
+                'safeDomains' => $this->getSafeDomains(),
+            ],
+        ]);
 
         $biz->register(new \Biz\Accessor\AccessorServiceProvider());
         $biz->register(new \Biz\OrderFacade\OrderFacadeServiceProvider());
@@ -318,5 +323,20 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         $theme = empty($theme) ? '' : ucfirst(str_replace('-', '_', $theme));
 
         return $this->rootDir.'/cache/'.$this->environment.'/'.$theme;
+    }
+
+    public function getSafeDomains()
+    {
+        if ('test' === $this->getEnvironment()) {
+            return [];
+        }
+
+        try {
+            $safeIframeDomains = $this->getContainer()->get('biz')->service('System:CacheService')->get('safe_iframe_domains');
+        } catch (\Exception $e) {
+            return [];
+        }
+
+        return empty($safeIframeDomains) ? [] : $safeIframeDomains;
     }
 }

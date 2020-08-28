@@ -4439,6 +4439,14 @@ t.add("admin.site.upload_favicon_success_hint", "Upload site favicon successfull
 t.add("admin.site.delete_favicon_success_hint", "Delete site favicon successfully!", "js", "en");
 t.add("admin.site.delete_favicon_fail_hint", "Delete site favicon failed!", "js", "en");
 t.add("admin.site.delete_hint", "Are you sure you want to delete?", "js", "en");
+t.add("admin.setting.upload_license_picture_success_hint", "Successfully uploaded the electronic business license picture!", "js", "en");
+t.add("admin.setting.delete_license_picture_success_hint", "Successfully delete the electronic business license picture!", "js", "en");
+t.add("admin.setting.delete_license_picture_fail_hint", "Failed to delete electronic business license picture!", "js", "en");
+t.add("admin.setting.upload_permit_picture_success_hint", "Upload permit image successfully", "js", "en");
+t.add("admin.setting.delete_permit_picture_success_hint", "The permit image was successfully deleted!", "js", "en");
+t.add("admin.setting.delete_permit_picture_fail_hint", "Failed to delete permit image!", "js", "en");
+t.add("admin.setting.delete_permit_setting_max_number", "The number of new additions has reached the upper limit. Adding is not supported yet~", "js", "en");
+t.add("admin.setting.delete_permit_setting_delete_confirom", "You sure you want to delete it?", "js", "en");
 t.add("admin.setting.theme.upgrade_error_hint", "This topic is not currently compatible with the current ES version. Please upgrade first.", "js", "en");
 t.add("admin.setting.theme.use_hint", "Do you really want to use this theme?", "js", "en");
 t.add("admin.sms.send_success_hint", "Sent successfully!", "js", "en");

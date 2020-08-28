@@ -665,6 +665,8 @@ class UserServiceImpl extends BaseService implements UserService
 
         $this->refreshLoginSecurityFields($user['id'], $this->getCurrentUser()->currentIp);
 
+        $this->dispatch('user.change_password', $user);
+
         return true;
     }
 
@@ -2159,6 +2161,11 @@ class UserServiceImpl extends BaseService implements UserService
     public function setFaceRegistered($id)
     {
         return $this->getUserDao()->update($id, ['faceRegistered' => 1]);
+    }
+
+    public function findUnLockedUsersByUserIds($userIds = [])
+    {
+        return $this->getUserDao()->findUnLockedUsersByUserIds($userIds);
     }
 
     protected function filterCustomField($fields)
