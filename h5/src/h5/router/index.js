@@ -661,6 +661,17 @@ const routes = [
         /* webpackChunkName: "certificate" */ '@/containers/certificate/certificate/certificate-detail.vue'
       ),
   },
+  {
+    path: '/webview/certificate/detail/:id',
+    name: 'webview_certificate_detail',
+    meta: {
+      title: '高级产品经理证书',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "certificate" */ '@/containers/webview/certificate/certificate-detail.vue'
+      ),
+  },
 ];
 
 // 页面刷新，store数据会被清掉，需对token、user重新赋值
