@@ -14,6 +14,7 @@
                 <div class="reviews-text__content">{{ review.content }}</div>
                 <div class="reviews-text__reply">
                     <a href="javascript:;"
+                       v-if="canCreate"
                        :data-toggle="'reviews-text__reply-content-'+review.id"
                        @click="switchDisplay">
                         <span v-if="review.posts.length == 0">{{ 'thread.post.reply'|trans }}</span>
