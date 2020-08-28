@@ -96,8 +96,8 @@ class UserEventSubscriber extends EventSubscriber implements EventSubscriberInte
                 $this->getTokenService()->destoryToken($token['token']);
             }
         }
-        if (!empty($user['loginSessionId']) && 1 == $user['passwordInit']) {
-            $this->getUserDao()->update($user['id'], ['loginSessionId' => 'null']);
+        if (1 == $user['passwordInit']) {
+            $this->getUserService()->updatePasswordChanged($user['id'], 1);
         }
     }
 
@@ -178,11 +178,6 @@ class UserEventSubscriber extends EventSubscriber implements EventSubscriberInte
     private function getUserService()
     {
         return $this->getBiz()->service('User:UserService');
-    }
-
-    private function getUserDao()
-    {
-        return $this->getBiz()->dao('User:UserDao');
     }
 
     protected function getNotificationService()

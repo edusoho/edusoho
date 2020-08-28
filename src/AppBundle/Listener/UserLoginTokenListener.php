@@ -38,6 +38,13 @@ class UserLoginTokenListener
         if (!$user->islogin()) {
             return;
         }
+
+        if (1 == $user['passwordChanged']) {
+            $request->getSession()->invalidate();
+            $response = $this->logout('密码已修改，请您重新登录');
+            $event->setResponse($response);
+        }
+
         if (isset($user['locked']) && 1 == $user['locked']) {
             $this->container->get('security.token_storage')->setToken(null);
             setcookie('REMEMBERME');
@@ -91,6 +98,10 @@ class UserLoginTokenListener
             }
         }
 
+        if (empty($loginBind['login_limit'])) {
+            return;
+        }
+
         $user = $this->getUserService()->getUser($user['id']);
 
         if (empty($user['loginSessionId']) || strlen($user['loginSessionId']) <= 0) {
@@ -117,14 +128,9 @@ class UserLoginTokenListener
                 $response->send();
             }
             $request->getSession()->invalidate();
-            $content = 'null' == $user['loginSessionId'] ? '密码已修改，请您重新登录' : '此帐号已在别处登录，请重新登录';
-            $response = $this->logout($content);
+            $response = $this->logout('此帐号已在别处登录，请重新登录');
 
             $event->setResponse($response);
-        }
-
-        if (empty($loginBind['login_limit'])) {
-            return;
         }
     }
 
