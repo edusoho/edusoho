@@ -44,15 +44,15 @@
       </div>
     </div>
 
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label>{{'admin.setting_course.course_detail_show_relevant_course'|trans}}</label>
-      </div>
-      <div class="controls col-md-8 radios">
-        {{ radios('relatedCourses', {1:'admin.setting_course.open'|trans, 0:'admin.setting_course.closed'|trans}, courseSetting.relatedCourses) }}
-        <div class="help-block">{{'admin.setting_course.course_detail_show_relevant_course.help_block'|trans}}</div>
-      </div>
-    </div>
+{#    <div class="form-group">#}
+{#      <div class="col-md-3 control-label">#}
+{#        <label>{{'admin.setting_course.course_detail_show_relevant_course'|trans}}</label>#}
+{#      </div>#}
+{#      <div class="controls col-md-8 radios">#}
+{#        {{ radios('relatedCourses', {1:'admin.setting_course.open'|trans, 0:'admin.setting_course.closed'|trans}, courseSetting.relatedCourses) }}#}
+{#        <div class="help-block">{{'admin.setting_course.course_detail_show_relevant_course.help_block'|trans}}</div>#}
+{#      </div>#}
+{#    </div>#}
   </fieldset>
 
   <fieldset>
@@ -166,8 +166,7 @@
     </div>
 
     <div id="show-course-comments">
-      <div class="form-group">
-        <label class="col-md-3 control-label">{{ 'admin.setting_course.course_comments_manage'|trans }}</label>
+      <div class="form-group hidden">
         <div class="col-md-1 control-label control-label--short">{{ 'admin.setting_course.course_review'|trans }}：</div>
         <div class="col-md-5 controls radios pls">
           {{ radios('show_review', {1:'admin.setting_course.open'|trans, 0:'admin.setting_course.closed'|trans}, courseSetting.show_review|default('1')) }}
@@ -175,7 +174,7 @@
       </div>
 
       <div class="form-group">
-        <label class="col-md-3 control-label"></label>
+        <label class="col-md-3 control-label">{{ 'admin.setting_course.course_comments_manage'|trans }}</label>
         <div class="col-md-2 control-label control-label--long">{{ 'admin.setting_course.course_question'|trans }}：</div>
         <div class="col-md-5 controls radios pls">
           {{ radios('show_question', {1:'admin.setting_course.open'|trans, 0:'admin.setting_course.closed'|trans}, courseSetting.show_question|default('1')) }}

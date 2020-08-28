@@ -5,7 +5,13 @@
                 <img :src="goods.images ? goods.images.large : null" alt="">
             </div>
             <ul class="detail-left__text clearfix">
-                <li class="pull-left"><i class="es-icon es-icon-friends mrs"></i>{{ goods.product.target.studentNum }}人加入学习
+                <li v-if="goodsSetting.show_number_data !== 'none'" class="pull-left"><i class="es-icon es-icon-friends mrs"></i>
+                    <span v-if="goodsSetting.show_number_data === 'join'">
+                    {{ goods.product.target.studentNum }}人加入学习
+                    </span>
+                    <span v-else-if="goodsSetting.show_number_data === 'visitor'">
+                    {{ goods.product.target.studentNum }}人访问
+                    </span>
                 </li>
                 <li class="pull-right">
                     <share :customized-class="'detail-left__text-share'"
@@ -111,8 +117,11 @@
             },
             currentSku: {
                 type: Object,
-                default: () => {
-                }
+                default: () => {},
+            },
+            goodsSetting: {
+                type: Object,
+                default: () => {},
             },
             isUserLogin: {
                 type: Number,

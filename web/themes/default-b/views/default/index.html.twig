@@ -198,7 +198,7 @@
                         </p>
                       </div>
                     </li>
-                  {% endif %} 
+                  {% endif %}
                 {% endfor %}
               </ul>
             </div>
@@ -391,7 +391,7 @@
           </div>
         {% endif %}
 
-        {% if setting('course.show_review', '1') == 1 %}
+        {% if setting('goods_setting.show_review', '1') == 1 %}
           {{ render(controller('AppBundle:Default:latestReviewsBlock', {number:5})) }}
         {% endif %}
 
@@ -479,7 +479,7 @@
                  {% include "course/widgets/course-set-price.html.twig" %}
               </div>
             {% endif %}
-            {% if setting('course.show_review', '1') == 1 %}
+            {% if setting('goods_setting.show_review', '1') == 1 %}
               <span class="review-col pull-left" style="text-align: left;">
                 {% if course.ratingNum > 0 %}
                   <span class="meta-label"><strong>{{ courseSet.ratingNum }}</strong> {{ '评价'|trans }}</span>

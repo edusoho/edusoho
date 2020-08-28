@@ -44,7 +44,7 @@
             <i class="es-icon es-icon-view"></i>{{ 'course.students_count'|trans({'%studentsNum%':courseSet.hitNum|default(0)})|raw }}
           {% endif %}
         {% endif %}
-        {% if setting('course.show_review', '1') == 1 %}
+        {% if setting('goods_setting.show_review', '1') == 1 %}
           <div class="score pull-right mb0">
             {{ web_macro.star(courseSet.rating|default(0)) }}
             <span class="vertical-middle">{{'course.mask.rating_num'|trans({'%ratingNum%':courseSet.ratingNum|default(0)})}}</span>

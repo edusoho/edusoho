@@ -7360,7 +7360,7 @@ admin.setting_course.course_list_page_seq.help_block: 地址：域名/course/exp
 admin.setting_course.Prevent_copying_rich_text_doc: 图文、文档任务防复制
 admin.setting_course.Prevent_copying_test_paper: 试卷防复制
 admin.setting_course.course_operation_mode: 课程运营模式
-admin.setting_course.course_comments_manage: 内容管理
+admin.setting_course.course_comments_manage: 课程学习页内容管理
 admin.setting_course.course_review: 评价
 admin.setting_course.course_question: 问题（问答）
 admin.setting_course.course_thread: 话题
@@ -7395,7 +7395,7 @@ admin.setting_course.classroom.setting_classroom_name.tips: 请注意：以下�
 admin.setting_course.classroom.course_discount: 课程重合时抵扣购买
 admin.setting_course.classroom.course_discount.help_block: 购买班级时，如果已经购买过其中的课程，支付金额中将会扣除该课程的当前价格。反之，支付金额不受影响，以班级原价购买。
 admin.setting_course.classroom.classroom_list_default_seq: 班级列表页默认排序
-admin.setting_course.classroom.classroom_comments_manage: 班级内容管理
+admin.setting_course.classroom.classroom_comments_manage: 班级学习页内容管理
 admin.setting_course.classroom.classroom_review: 评价
 admin.setting_course.classroom.classroom_thread: 话题
 admin.setting_course.classroom.classroom_note: 笔记

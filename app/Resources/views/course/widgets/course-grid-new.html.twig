@@ -59,7 +59,7 @@
           {% endif %}
         </span>
       {% endif %}
-      {% if setting('course.show_review', '1') == 1 %}
+      {% if setting('goods_setting.show_review', '1') == 1 %}
         <span {% if setting('course.show_student_num_enabled', '1') == 1 %} class="comment" {% endif %}><i class="es-icon es-icon-textsms"></i>{{ courseSet.ratingNum }}</span>
       {% endif %}
 

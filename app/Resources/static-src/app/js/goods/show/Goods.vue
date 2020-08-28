@@ -1,7 +1,7 @@
 <template>
     <div class="cd-container">
         <div class="product-breadcrumb">首页 / {{goods.title}}</div>
-        <detail :goods="goods" :currentSku="currentSku" @changeSku="changeSku" :current-url="currentUrl" :is-user-login="isUserLogin">
+        <detail :goodsSetting="goodsSetting" :goods="goods" :currentSku="currentSku" @changeSku="changeSku" :current-url="currentUrl" :is-user-login="isUserLogin">
         </detail>
 
         <div class="product-info clearfix" v-if="goods.id">
@@ -56,8 +56,12 @@
                         <h3 class="content-item__title">学员评价</h3>
                         <reviews :can-create="isUserLogin" :can-operate="goods.canManage" :target-type="'goods'"
                                  :current-user-id="currentUserId"
-                                 :target-id="goods.id">
+                                 :target-id="goods.id"
+                                 v-if="goodsSetting.show_review == 1"
+                        >
                         </reviews>
+                        <div v-if="goodsSetting.show_review == 0" class="description-content"
+                             style="padding-left: 14px; padding-top: 10px;">暂无评价</div>
                     </div>
                 </div>
             </div>
@@ -120,6 +124,10 @@
                 default: 0,
             },
             i18n: {
+                type: Object,
+                default: null,
+            },
+            goodsSetting: {
                 type: Object,
                 default: null,
             },

@@ -13,7 +13,7 @@ class CourseSpecsMediator extends AbstractSpecsMediator
         $goodsSpecs = $this->getGoodsService()->createGoodsSpecs([
             'goodsId' => $goods['id'],
             'targetId' => $course['id'],
-            'title' => empty($course['title']) ? $course['courseSetTitle'] : $course['title'],
+            'title' => $course['title'],
             'seq' => $course['seq'],
             'usageMode' => $course['expiryMode'],
             'usageDays' => $course['expiryDays'] ?: 0,
@@ -29,7 +29,7 @@ class CourseSpecsMediator extends AbstractSpecsMediator
         list($product, $goods) = $this->getProductAndGoods($course);
         $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $course['id']);
         $goodsSpecs = $this->getGoodsService()->updateGoodsSpecs($goodsSpecs['id'], [
-            'title' => empty($course['title']) ? $course['courseSetTitle'] : $course['title'],
+            'title' => $course['title'],
             'images' => $goods['images'],
             'seq' => $course['seq'],
             'price' => $course['originPrice'],

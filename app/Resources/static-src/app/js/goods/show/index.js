@@ -13,6 +13,7 @@ new Vue({
       currentUrl: $('#show-product-page').data('currentUrl'),
       activityMetas: _toJson($('.js-hidden-activity-metas').html()),
       i18n: _toJson($('.js-hidden-i18n').html()),
+      goodsSetting: $('#show-product-page').data('goodsSetting'),
     },
   })
 }).$mount('#show-product-page');
