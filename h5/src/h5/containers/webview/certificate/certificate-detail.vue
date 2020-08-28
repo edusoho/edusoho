@@ -58,6 +58,7 @@ export default {
     return {
       certificate: {},
       token: '',
+      headers: {},
     };
   },
   created() {
@@ -70,12 +71,19 @@ export default {
   },
   methods: {
     getCertificate() {
-      Api.certificatesDetail({
-        query: { certificateId: this.$route.params.id },
-        headers: {
+      if (this.token) {
+        this.headers = {
           'Content-Type': 'application/x-www-form-urlencoded',
           'X-Auth-Token': this.token,
-        },
+        };
+      } else {
+        this.headers = {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        };
+      }
+      Api.certificatesDetail({
+        query: { certificateId: this.$route.params.id },
+        headers: this.headers,
       })
         .then(res => {
           this.certificate = res;
@@ -99,7 +107,7 @@ export default {
       };
       window.postNativeMessage({
         action: 'kuozhi_login_user',
-        data: { force: 1 },
+        data: { force: 0 },
       });
     },
   },

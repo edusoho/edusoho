@@ -665,7 +665,7 @@ const routes = [
     path: '/webview/certificate/detail/:id',
     name: 'webview_certificate_detail',
     meta: {
-      title: '高级产品经理证书',
+      hideTitle: true,
     },
     component: () =>
       import(
