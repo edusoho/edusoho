@@ -6431,7 +6431,7 @@ admin.operation_certificate.template.basemap.vertical_upload_hint: 请上传jpg�
 admin.operation_certificate.template.basemap.horizontal_upload_hint: 请上传jpg、png格式的证书底图，建议尺寸为 3600 × 2600 px，文件大小不超过 2 MB
 admin.operation_certificate.template.stamp: 证书印章
 admin.operation_certificate.template.stamp.upload: 上传证书印章
-admin.operation_certificate.template.stamp.upload_hint: 请上jpg、png等格式透明背景的印章图片，建议尺寸为 650 × 650 px，文件大小不超过 2 MB
+admin.operation_certificate.template.stamp.upload_hint: 请上png等格式透明背景的印章图片，建议尺寸为 650 × 650 px，文件大小不超过 2 MB
 admin.operation_certificate.template.content.edit: 编辑证书信息
 admin.operation_certificate.template.certificate.title: 证书标题
 admin.operation_certificate.template.certificate.title_hint: 可选填

@@ -5338,7 +5338,7 @@ admin.operation_certificate.template.basemap.vertical_upload_hint: Please upload
 admin.operation_certificate.template.basemap.horizontal_upload_hint: Please upload the bottom picture of the certificate in jpg, png format, the recommended size of 3600 × 2600 px, the file size does not exceed 2 MB.
 admin.operation_certificate.template.stamp: stamp
 admin.operation_certificate.template.stamp.upload: upload stamp
-admin.operation_certificate.template.stamp.upload_hint: Please upload the stamp image with transparent background in png, jpg, etc. The recommended size is 650 × 650 px and the file size should not exceed 2 MB.
+admin.operation_certificate.template.stamp.upload_hint: Please upload the stamp image with transparent background in png, etc. The recommended size is 650 × 650 px and the file size should not exceed 2 MB.
 admin.operation_certificate.template.content.edit: Edit certificate information
 admin.operation_certificate.template.certificate.title: Certificate Title
 admin.operation_certificate.template.certificate.title_hint: optional fill in
