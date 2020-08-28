@@ -76,6 +76,9 @@ class CertificateController extends BaseController
 
         if ($request->isMethod('POST')) {
             $fields = $request->request->all();
+            if (isset($fields['expiryDay'])) {
+                $fields['expiryDay'] = empty($fields['expiryDay']) ? 0 : $fields['expiryDay'];
+            }
             $this->getCertificateService()->update($id, $fields);
 
             return $this->redirect($this->generateUrl('admin_v2_certificate_manage'));
@@ -187,11 +190,12 @@ class CertificateController extends BaseController
     public function codeCheckAction(Request $request)
     {
         $code = $request->query->get('value', '');
+        $exceptId = $request->query->get('exceptId', 0);
         if (empty($code)) {
             return $this->createJsonResponse(true);
         }
         $certificate = $this->getCertificateService()->getCertificateByCode($code);
-        if (!empty($certificate)) {
+        if (!empty($certificate) && $certificate['id'] != $exceptId) {
             return $this->createJsonResponse(false);
         }
 

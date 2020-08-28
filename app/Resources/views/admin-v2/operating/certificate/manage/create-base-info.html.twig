@@ -28,7 +28,7 @@
         <label for="targetType" class="control-label-required">{{'admin.operation_certificate.template.type'|trans}}：</label>
       </div>
       <div class="col-md-6 controls">
-        <select class="form-control department-manage-search-form-group__type" id="targetType" name="targetType">
+        <select class="form-control" id="targetType" name="targetType">
           {{ select_options(dict('certificateTypes'), app.request.get('targetType')) }}
         </select>
       </div>

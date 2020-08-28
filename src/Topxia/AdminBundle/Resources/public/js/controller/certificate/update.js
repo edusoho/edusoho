@@ -20,13 +20,51 @@ define(function(require, exports, module) {
     validator.addItem({
       element: '[name="name"]',
       required: true,
-      rule: 'byte_maxlength{max:100}'
+      rule: 'byte_maxlength{max:20}'
     });
 
     validator.addItem({
       element: '[name="description"]',
-      rule: 'byte_maxlength{max:200}'
+      rule: 'byte_maxlength{max:1000}',
+      errormessageByte_maxlength:Translator.trans('admin_v2.certificate.validate.description')
     });
+
+    validator.addItem({
+      element: '[name="targetId"]',
+      required: true,
+    });
+
+    validator.addItem({
+      element: '[name="templateId"]',
+      required: true,
+    });
+
+    if ($('[name="code"]').length > 0) {
+      validator.addItem({
+        element: '[name="code"]',
+        required: true,
+        rule: 'remote certificate_code',
+        errormessageRemote: Translator.trans('admin_v2.certificate.code.exist')
+      });
+
+      validator.addItem({
+        element: '[name="expiryDay"]',
+        rule: 'deadline_check',
+      });
+    }
+
+    Validator.addRule('certificate_code', function(options) {
+      var value = $(options.element).val();
+      return /^[a-zA-Z0-9]+$/i.test(value);
+    }, Translator.trans('admin_v2.certificate.code.check'));
+
+    Validator.addRule('deadline_check', function(options) {
+      var value = $(options.element).val();
+      if (!value || ((/^\+?[0-9][0-9]*$/.test(value) && value < 10000 && value > 0))) {
+        return true;
+      }
+      return false;
+    }, Translator.trans('admin_v2.certificate.expiry_day.check'));
 
     validator.on('formValidate', function(elemetn, event) {
       ckeditor.updateElement();
@@ -42,6 +80,26 @@ define(function(require, exports, module) {
       } else {
         $('.js-auto-issue-setting').addClass('hidden');
       }
+    });
+
+    $('[name="targetType"]').change(function () {
+      let value = $(this).val();
+      $('.js-target-name').html('');
+      $('.js-template-name').html('');
+      $('[name="targetId"]').val('');
+      $('[name="templateId"]').val('');
+      let targetUrl = $('.js-target-select').data('url');
+      let templateUrl = $('.js-template-select').data('url');
+      if (value == 'course') {
+        targetUrl = targetUrl.replace(/classroom/g, value);
+        templateUrl = templateUrl.replace(/classroom/g, value);
+      } else {
+        targetUrl = targetUrl.replace(/course/g, value);
+        templateUrl = templateUrl.replace(/course/g, value);
+      }
+      console.log(targetUrl);
+      $('.js-target-select').data('url', targetUrl);
+      $('.js-template-select').data('url', templateUrl);
     });
 
   };

@@ -1552,7 +1552,7 @@ admin_v2.certificate.record.cancel.success_hint: 撤销成功
 admin_v2.certificate.record.cancel.failure_hint: 撤销失败
 admin_v2.certificate.record.grant.success_hint: 授予成功
 admin_v2.certificate.record.grant.failure_hint: 授予失败
-admin_v2.certificate.validate.description: 长度必须小于等于300，一个中文算两个字符
+admin_v2.certificate.validate.description: 长度必须小于等于1000，一个中文算两个字符
 admin_v2.certificate.record.audit.success_hint: 审核成功
 admin_v2.certificate.record.audit.failure_hint: 审核失败
 admin_v2.certificate.record.grant.issue_time_required: 请输入发证日期
