@@ -14,6 +14,8 @@ class MeThreadPost extends AbstractResource
      */
     public function search(ApiRequest $request)
     {
+        list($offset, $limit) = $this->getOffsetAndLimit($request);
+
         $currentUser = $this->getCurrentUser();
 
         $threadPosts = $this->getCourseThreadService()->getMyLatestReplyPerThread(0, PHP_INT_MAX);
@@ -33,17 +35,27 @@ class MeThreadPost extends AbstractResource
         $threadIds = isset($questionIds) ? array_merge($questionIds, $threadIds) : $threadIds;
 
         if (empty($threadIds)) {
-            return (object) array();
+            return $this->makePagingObject([], 0, $offset, $limit);
         }
 
-        list($offset, $limit) = $this->getOffsetAndLimit($request);
+        $conditions = ['ids' => $threadIds, 'types' => []];
+        $courseSetting = $this->getSettingService()->get('course', []);
+        if (!isset($courseSetting['show_question']) || '1' === $courseSetting['show_question']) {
+            $conditions['types'][] = 'question';
+        }
+        if (!isset($courseSetting['show_discussion']) || '1' === $courseSetting['show_discussion']) {
+            $conditions['types'][] = 'discussion';
+        }
+        if (empty($conditions['types'])) {
+            return $this->makePagingObject([], 0, $offset, $limit);
+        }
 
-        $total = $this->getCourseThreadService()->countThreads(array('ids' => $threadIds));
+        $total = $this->getCourseThreadService()->countThreads($conditions);
 
-        $courseThreads = $this->getCourseThreadService()->searchThreads(array('ids' => $threadIds), 'postedNotStick', $offset, $limit);
+        $courseThreads = $this->getCourseThreadService()->searchThreads($conditions, 'postedNotStick', $offset, $limit);
 
         if (empty($courseThreads)) {
-            return (object) array();
+            return $this->makePagingObject([], 0, $offset, $limit);
         }
 
         $posts = $this->getCourseThreadService()->searchThreadPosts(array('threadIds' => ArrayToolkit::column($courseThreads, 'id'), 'isRead' => 0, 'exceptedUserId' => $currentUser['id']), array(), 0, PHP_INT_MAX);
@@ -67,5 +79,10 @@ class MeThreadPost extends AbstractResource
     protected function getCourseMemberService()
     {
         return $this->service('Course:MemberService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->service('System:SettingService');
     }
 }

@@ -22,12 +22,24 @@ class MeThread extends AbstractResource
 
         list($offset, $limit) = $this->getOffsetAndLimit($request);
 
+        $courseSetting = $this->getSettingService()->get('course', []);
+        $conditions['types'] = [];
+        if (!isset($courseSetting['show_question']) || '1' === $courseSetting['show_question']) {
+            $conditions['types'][] = 'question';
+        }
+        if (!isset($courseSetting['show_discussion']) || '1' === $courseSetting['show_discussion']) {
+            $conditions['types'][] = 'discussion';
+        }
+        if (empty($conditions['types'])) {
+            return $this->makePagingObject([], 0, $offset, $limit);
+        }
+
         $total = $this->getCourseThreadService()->countThreads($conditions);
 
         $courseThreads = $this->getCourseThreadService()->searchThreads($conditions, 'postedNotStick', $offset, $limit);
 
         if (empty($courseThreads)) {
-            return (object) array();
+            return $this->makePagingObject([], 0, $offset, $limit);
         }
 
         $posts = $this->getCourseThreadService()->searchThreadPosts(array('threadIds' => ArrayToolkit::column($courseThreads, 'id'), 'isRead' => 0, 'exceptedUserId' => $currentUser['id']), array(), 0, PHP_INT_MAX);
@@ -45,5 +57,10 @@ class MeThread extends AbstractResource
     protected function getCourseThreadService()
     {
         return $this->service('Course:ThreadService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->service('System:SettingService');
     }
 }
