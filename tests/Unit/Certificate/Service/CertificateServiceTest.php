@@ -92,7 +92,7 @@ class CertificateServiceTest extends BaseTestCase
         $certificate = $this->createCertificate();
         $certificate = $this->getCertificateService()->publishCertificate($certificate['id']);
 
-        $res =  $this->getCertificateService()->closeCertificate($certificate['id']);
+        $res = $this->getCertificateService()->closeCertificate($certificate['id']);
 
         $this->assertEquals('closed', $res['status']);
     }

@@ -38,69 +38,69 @@ class RecordDaoTest extends BaseDaoTestCase
 
     public function testSearch()
     {
-        $expected = array();
-        $expected[] = $this->mockDataObject(array('certificateId' => 2));
-        $expected[] = $this->mockDataObject(array('certificateCode' => 'test222'));
-        $expected[] = $this->mockDataObject(array('userId' => 2));
-        $expected[] = $this->mockDataObject(array('targetId' => 2));
-        $expected[] = $this->mockDataObject(array('targetType' => 'classroom'));
-        $expected[] = $this->mockDataObject(array('issueTime' => 10000));
-        $expected[] = $this->mockDataObject(array('expiryTime' => 9999));
-        $expected[] = $this->mockDataObject(array('status' => 'valid'));
+        $expected = [];
+        $expected[] = $this->mockDataObject(['certificateId' => 2]);
+        $expected[] = $this->mockDataObject(['certificateCode' => 'test222']);
+        $expected[] = $this->mockDataObject(['userId' => 2]);
+        $expected[] = $this->mockDataObject(['targetId' => 2]);
+        $expected[] = $this->mockDataObject(['targetType' => 'classroom']);
+        $expected[] = $this->mockDataObject(['issueTime' => 10000]);
+        $expected[] = $this->mockDataObject(['expiryTime' => 9999]);
+        $expected[] = $this->mockDataObject(['status' => 'valid']);
 
-        $testCondition = array(
-            array(
-                'condition' => array(),
+        $testCondition = [
+            [
+                'condition' => [],
                 'expectedResults' => $expected,
                 'expectedCount' => 8,
-            ),
-            array(
-                'condition' => array('certificateId' => 2),
+            ],
+            [
+                'condition' => ['certificateId' => 2],
                 'expectedResults' => [$expected[0]],
                 'expectedCount' => 1,
-            ),
-            array(
-                'condition' => array('certificateIds' => [2]),
+            ],
+            [
+                'condition' => ['certificateIds' => [2]],
                 'expectedResults' => [$expected[0]],
                 'expectedCount' => 1,
-            ),
-            array(
-                'condition' => array('certificateCode' => 'test222'),
+            ],
+            [
+                'condition' => ['certificateCode' => 'test222'],
                 'expectedResults' => [$expected[1]],
                 'expectedCount' => 1,
-            ),
-            array(
-                'condition' => array('status' => 'valid'),
+            ],
+            [
+                'condition' => ['status' => 'valid'],
                 'expectedResults' => [$expected[7]],
                 'expectedCount' => 1,
-            ),
-            array(
-                'condition' => array('userId' => 2),
+            ],
+            [
+                'condition' => ['userId' => 2],
                 'expectedResults' => [$expected[2]],
                 'expectedCount' => 1,
-            ),
-            array(
-                'condition' => array('expiryTime_NE' => 0),
+            ],
+            [
+                'condition' => ['expiryTime_NE' => 0],
                 'expectedResults' => [$expected[6]],
                 'expectedCount' => 1,
-            ),
-            array(
-                'condition' => array('issueTimeEgt' => 100),
+            ],
+            [
+                'condition' => ['issueTimeEgt' => 100],
                 'expectedResults' => [$expected[5]],
                 'expectedCount' => 1,
-            ),
-        );
+            ],
+        ];
         $this->searchTestUtil($this->getDao(), $testCondition, $this->getCompareKeys());
     }
 
     protected function getDefaultMockfields()
     {
-        return array(
+        return [
             'userId' => 1,
             'certificateId' => 1,
             'certificateCode' => 'testCode111',
             'targetType' => 'course',
             'targetId' => 1,
-        );
+        ];
     }
 }
