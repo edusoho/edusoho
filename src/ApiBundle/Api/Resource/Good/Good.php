@@ -58,6 +58,7 @@ class Good extends AbstractResource
         if ($this->getCurrentUser()->isLogin()) {
             $goods['isFavorite'] = !empty($this->getFavoriteService()->getUserFavorite($this->getCurrentUser()->getId(), 'goods', $goods['id']));
         }
+        $this->getGoodsService()->hitGoods($goods['id']);
 
         return $goods;
     }
