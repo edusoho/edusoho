@@ -24,6 +24,12 @@ class ClassroomEntity extends BaseGoodsEntity
         return $classroom;
     }
 
+    public function hitTarget($goods)
+    {
+        $product = $this->getProduct($goods['productId']);
+        return $this->getClassroomService()->hitClassroom($product['targetId']);
+    }
+
     public function getSpecsByTargetId($targetId)
     {
         $target = $this->getClassroomService()->getClassroom($targetId);

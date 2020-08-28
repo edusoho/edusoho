@@ -2227,7 +2227,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->createNewException(CourseException::NOTFOUND_COURSE());
         }
 
-        return $this->getCourseDao()->wave([$courseId], ['hitNum' => 1]);
+        return $this->getCourseSetDao()->wave([$course['courseSetId']], ['hitNum' => 1]);
     }
 
     public function recountLearningData($courseId, $userId)

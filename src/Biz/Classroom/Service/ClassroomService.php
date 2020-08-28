@@ -27,6 +27,8 @@ interface ClassroomService
 
     public function getClassroom($id);
 
+    public function hitClassroom($id);
+
     /**
      * @param $id
      * @param $fields

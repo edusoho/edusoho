@@ -17,11 +17,7 @@ class GoodsController extends BaseController
         $goods = $this->container->get('api_resource_kernel')->handleApiRequest($goodsApiRequest);
         $goodsComponentsApiRequest = new ApiRequest("/api/goods/{$id}/components", 'GET');
         $goodsComponents = $this->container->get('api_resource_kernel')->handleApiRequest($goodsComponentsApiRequest);
-        foreach ($goodsComponents as $goodsComponent) {
-            if (!empty($goodsComponent)) {
-//                $goods['hasExtension']
-            }
-        }
+        $this->getGoodsService()->hitGoods($id);
 
         return $this->render(
             'goods/show.html.twig',

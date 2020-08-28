@@ -107,6 +107,15 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->getClassroomDao()->get($id);
     }
 
+    public function hitClassroom($id)
+    {
+        $classroom = $this->getClassroom($id);
+        if (empty($classroom)) {
+            return ;
+        }
+        return $this->getClassroomDao()->wave([$classroom['id']], ['hitNum' => 1]);
+    }
+
     public function searchClassrooms($conditions, $orderBy, $start, $limit, $columns = [], $withMarketingInfo = false)
     {
         $orderBy = $this->getOrderBys($orderBy);
