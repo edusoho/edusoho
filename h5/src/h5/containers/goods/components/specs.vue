@@ -1,6 +1,6 @@
 <template>
   <div class="detail-plan" v-if="goods.id">
-    <div class="detail-plan__plan clearfix" v-if="goods.type === 'course'" @click="showPopup">
+    <div class="detail-plan__plan clearfix" v-if="goods.type === 'course' && goods.specs.length > 1" @click="showPopup">
       <div class="pull-left plan-left">教学计划</div>
       <div class="pull-left plan-right">
         {{ currentSku.title }}
