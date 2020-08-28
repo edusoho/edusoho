@@ -126,24 +126,29 @@
   }
 }
 
-#certificate-detail-close{
+.certificate-detail-close{
   width: 30px;
   height: 30px;
-  margin-top: -15px;
-  margin-right: -15px;
   border-radius: 50%;
   box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
-  background: #ffffff;
+  background: #fff !important;
   z-index: 200;
-  position: relative;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform: translate(50%, -50%);
   opacity: 1;
   color: gray;
+  i {
+    position: relative;
+    left: 1px;
+    bottom: 1px;
+  }
 }
 
 .certificate-detail-tag-area{
   overflow: hidden;
   width: 80px;
   height: 80px;
-  margin-right: -15px;
   position: relative;
 }
