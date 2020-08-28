@@ -23,8 +23,6 @@ class LoginSuccessHandler
 
     /**
      * Constructor.
-     *
-     * @param AuthorizationChecker $checker
      */
     public function __construct(AuthorizationChecker $checker)
     {
@@ -33,8 +31,6 @@ class LoginSuccessHandler
 
     /**
      * Do the magic.
-     *
-     * @param InteractiveLoginEvent $event
      */
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
     {
