@@ -7,7 +7,7 @@
             <div class="reviews-item__text reviews-text">
                 <div class="reviews-text__nickname">
                     <a class="link-dark" href="javascript:;" target="_blank">{{ review.user.nickname }}</a>
-                    <span>{{ review.target.title }}</span>
+<!--                    <span>{{ review.target.title }}</span>-->
                     {{ review.createdTime | createdTime }}
                 </div>
                 <div class="reviews-text__rating" v-html="$options.filters.rating(review.rating)"></div>
