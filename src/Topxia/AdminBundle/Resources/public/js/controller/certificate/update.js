@@ -6,7 +6,7 @@ define(function(require, exports, module) {
   exports.run = function() {
 
     // group: 'default'
-    let ckeditor = CKEDITOR.replace('description', {
+    var ckeditor = CKEDITOR.replace('description', {
       toolbar: 'Simple',
       filebrowserImageUploadUrl: $('[name="description"]').data('imageUploadUrl')
     });
@@ -71,8 +71,8 @@ define(function(require, exports, module) {
     });
 
     $('.js-auto-issue').on('click', function (e) {
-      let $input = $(this).find('.es-switch__input');
-      let ToggleVal = $input.val() == $input.data('open') ? $input.data('close') : $input.data('open');
+      var $input = $(this).find('.es-switch__input');
+      var ToggleVal = $input.val() == $input.data('open') ? $input.data('close') : $input.data('open');
       $input.val(ToggleVal);
       $(this).toggleClass('is-active');
       if ($input.val() == 1) {
@@ -83,13 +83,13 @@ define(function(require, exports, module) {
     });
 
     $('[name="targetType"]').change(function () {
-      let value = $(this).val();
+      var value = $(this).val();
       $('.js-target-name').html('');
       $('.js-template-name').html('');
       $('[name="targetId"]').val('');
       $('[name="templateId"]').val('');
-      let targetUrl = $('.js-target-select').data('url');
-      let templateUrl = $('.js-template-select').data('url');
+      var targetUrl = $('.js-target-select').data('url');
+      var templateUrl = $('.js-template-select').data('url');
       if (value == 'course') {
         targetUrl = targetUrl.replace(/classroom/g, value);
         templateUrl = templateUrl.replace(/classroom/g, value);
@@ -97,7 +97,7 @@ define(function(require, exports, module) {
         targetUrl = targetUrl.replace(/course/g, value);
         templateUrl = templateUrl.replace(/course/g, value);
       }
-      console.log(targetUrl);
+
       $('.js-target-select').data('url', targetUrl);
       $('.js-template-select').data('url', templateUrl);
     });
