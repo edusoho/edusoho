@@ -165,7 +165,9 @@ export default {
       })
         .then(res => {
           this.goods = res;
-          if (this.goods.product.target.defaultCourseId) {
+          if (this.$route.query.targetId) {
+            this.changeSku(this.$route.query.targetId);
+          } else if (this.goods.product.target.defaultCourseId) {
             this.changeSku(this.goods.product.target.defaultCourseId);
           } else {
             this.changeSku(this.goods.product.target.id);

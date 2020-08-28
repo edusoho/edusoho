@@ -76,7 +76,9 @@ export default {
   methods: {
     onJump(id) {
       if (id == this.$route.params.id) return;
-      this.$router.push({ path: `/goods/${id}/show` });
+      this.$router.push({
+        path: `/goods/${id}/show`,
+      });
     },
     onMore() {
       this.$router.push({

@@ -112,9 +112,14 @@ export default {
     },
     toMore(type, id) {
       let path = '';
+      let params = {};
       switch (type) {
         case 'course_list':
           path = `/goods/${this.course.goodsId}/show`;
+          params = {
+            targetId: id,
+          };
+
           break;
         // case 'item_bank_exercise':
         //   path = `/course/${id}`;
@@ -123,7 +128,7 @@ export default {
           path = `/goods/${this.course.goodsId}/show`;
           break;
       }
-      this.$router.push({ path: path });
+      this.$router.push({ path: path, query: params });
     },
     // 调用app接口
     postMessage(type, id) {

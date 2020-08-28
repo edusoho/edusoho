@@ -145,6 +145,9 @@ export default {
       if (this.typeList === 'course_list') {
         this.$router.push({
           path: `/goods/${this.course.goodsId}/show`,
+          query: {
+            targetId: this.course.id,
+          },
         });
       }
     },
