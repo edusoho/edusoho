@@ -17,7 +17,7 @@ define(function(require, exports, module) {
           return false;
         }
 
-        let $modal = $('#modal');
+        var $modal = $('#modal');
         $('#grant-certificate').button('loading').addClass('disabled');
         $.post($form.attr('action'), $form.serialize(), function(response) {
           $modal.modal('hide');
@@ -45,7 +45,7 @@ define(function(require, exports, module) {
 
     if ($('.js-loading-text').length>0) {
       $.post($('.js-loading-text').data('url'), (resp) => {
-        let html = '<img class="mll" src="data:image/png;base64,'+ resp +'" width="520px" />';
+        var html = '<img class="mll" src="data:image/png;base64,'+ resp +'" width="520px" />';
         $('.js-loading-text').remove();
         $('.js-certificate-image').html(html);
       });

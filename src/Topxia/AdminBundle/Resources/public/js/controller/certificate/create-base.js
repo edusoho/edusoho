@@ -6,7 +6,7 @@ define(function(require, exports, module) {
   exports.run = function() {
 
     // group: 'default'
-    let ckeditor = CKEDITOR.replace('description', {
+    var ckeditor = CKEDITOR.replace('description', {
       toolbar: 'Simple',
       filebrowserImageUploadUrl: $('[name="description"]').data('imageUploadUrl')
     });
