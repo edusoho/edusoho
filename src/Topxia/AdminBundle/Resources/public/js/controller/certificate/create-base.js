@@ -25,7 +25,7 @@ define(function(require, exports, module) {
 
     validator.addItem({
       element: '[name="description"]',
-      rule: 'byte_maxlength{max:5000}',
+      rule: 'byte_maxlength{max:1000}',
       errormessageByte_maxlength:Translator.trans('admin_v2.certificate.validate.description')
     });
 
