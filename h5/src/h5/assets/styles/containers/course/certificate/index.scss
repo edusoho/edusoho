@@ -96,6 +96,10 @@
 			font-size: vw(14);
 			line-height: vw(20);
 
+			img {
+				width: 100%;
+			}
+
 			.acquired {
 				display: inline-block;
 				margin-left: vw(8);
