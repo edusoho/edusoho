@@ -26,9 +26,12 @@
 </template>
 
 <script>
+    import reviewModule from "../../../../../common/api/modules/review";
+
     let starOnImg = '/assets/img/raty/star-on.png';
     let starOffImg = '/assets/img/raty/star-off.png';
     import axios from 'axios';
+    import Api from 'common/api';
 
     axios.interceptors.request.use((config) => {
         config.headers = {
@@ -262,17 +265,15 @@
             },
             onConfirm() {
                 if (!this.validateFormItems()) return;
-                axios({
-                    url: "/api/review",
-                    method: "POST",
+                Api.review.review({
                     data: {
                         'targetType': this.targetType,
                         'targetId': this.targetId,
                         'content': this.form.content,
                         'rating': this.form.rating
-                    }
+                    },
                 }).then(res => {
-                    if (res.data.error) {
+                    if (res.error) {
                         return;
                     }
 

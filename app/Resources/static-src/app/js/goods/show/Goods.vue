@@ -54,7 +54,7 @@
 
                     <div id="info-left-3" class="info-left-reviews content-item js-content-item reviews">
                         <h3 class="content-item__title">学员评价</h3>
-                        <reviews :can-create="true" :can-operate="true" :target-type="'goods'"
+                        <reviews :can-create="isUserLogin" :can-operate="goods.canManage" :target-type="'goods'"
                                  :current-user-id="currentUserId"
                                  :target-id="goods.id">
                         </reviews>

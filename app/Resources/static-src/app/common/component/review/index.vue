@@ -66,6 +66,7 @@
                         </li>
                     </ul>
                     <a href="javascript:;" class="btn btn-default btn-xs pull-right mbs"
+                       v-if="canCreate"
                        :data-toggle="'reviews-text__reply-content-form-'+review.id"
                        @click="onFormDisplay">{{ 'thread.post.reply'|trans }}</a>
                     <form class="hidden" :class="'reviews-text__reply-content-form-'+review.id">
@@ -89,6 +90,7 @@
 <script>
     import axios from 'axios';
     import createReview from './src/create-review';
+    import Api from 'common/api';
 
     axios.interceptors.request.use((config) => {
         config.headers = {
@@ -268,15 +270,15 @@
                     });
                     return;
                 }
-
-                axios({
-                    url: "/api/review/" + reviewId + "/post",
-                    method: "POST",
+                Api.review.reviewPost({
+                    params: {
+                        reviewId: reviewId
+                    },
                     data: {
                         'content': $targetForm.find('.post-content').val().trim()
-                    },
+                    }
                 }).then(res => {
-                    let html = this.generateReviewPostLi(res.data);
+                    let html = this.generateReviewPostLi(res);
 
                     if ($targetForm.siblings('ul').length) {
                         $targetForm.siblings('ul').append(html);
@@ -291,6 +293,29 @@
                         message: Translator.trans('site.save_success_hint')
                     });
                 });
+
+                // axios({
+                //     url: "/api/review/" + reviewId + "/post",
+                //     method: "POST",
+                //     data: {
+                //         'content': $targetForm.find('.post-content').val().trim()
+                //     },
+                // }).then(res => {
+                //     let html = this.generateReviewPostLi(res.data);
+                //
+                //     if ($targetForm.siblings('ul').length) {
+                //         $targetForm.siblings('ul').append(html);
+                //     } else {
+                //         html = '<ul class="media-list thread-post-list thread-subpost-list">' + html + '</ul>';
+                //         $targetForm.before(html);
+                //     }
+                //
+                //     $targetForm.find('.post-content').val('');
+                //     cd.message({
+                //         type: 'success',
+                //         message: Translator.trans('site.save_success_hint')
+                //     });
+                // });
             },
             onDelete() {
                 $('.reviews').on('click', '.js-delete-post', function (event) {
