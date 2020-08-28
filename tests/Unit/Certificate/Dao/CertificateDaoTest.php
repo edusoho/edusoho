@@ -38,54 +38,54 @@ class CertificateDaoTest extends BaseDaoTestCase
 
     public function testSearch()
     {
-        $expected = array();
-        $expected[] = $this->mockDataObject(array('name' => 'testname'));
-        $expected[] = $this->mockDataObject(array('targetType' => 'classroom', 'targetId' => 2));
-        $expected[] = $this->mockDataObject(array('status' => 'published'));
+        $expected = [];
+        $expected[] = $this->mockDataObject(['name' => 'testname']);
+        $expected[] = $this->mockDataObject(['targetType' => 'classroom', 'targetId' => 2]);
+        $expected[] = $this->mockDataObject(['status' => 'published']);
 
-        $testCondition = array(
-            array(
-                'condition' => array(),
+        $testCondition = [
+            [
+                'condition' => [],
                 'expectedResults' => $expected,
                 'expectedCount' => 3,
-            ),
-            array(
-                'condition' => array('nameLike' => 'name'),
+            ],
+            [
+                'condition' => ['nameLike' => 'name'],
                 'expectedResults' => [$expected[0]],
                 'expectedCount' => 1,
-            ),
-            array(
-                'condition' => array('targetType' => 'classroom'),
+            ],
+            [
+                'condition' => ['targetType' => 'classroom'],
                 'expectedResults' => [$expected[1]],
                 'expectedCount' => 1,
-            ),
-            array(
-                'condition' => array('targetId' => 2),
+            ],
+            [
+                'condition' => ['targetId' => 2],
                 'expectedResults' => [$expected[1]],
                 'expectedCount' => 1,
-            ),
-            array(
-                'condition' => array('targetIds' => [2]),
+            ],
+            [
+                'condition' => ['targetIds' => [2]],
                 'expectedResults' => [$expected[1]],
                 'expectedCount' => 1,
-            ),
-            array(
-                'condition' => array('status' => 'published'),
+            ],
+            [
+                'condition' => ['status' => 'published'],
                 'expectedResults' => [$expected[2]],
                 'expectedCount' => 1,
-            ),
-        );
+            ],
+        ];
         $this->searchTestUtil($this->getDao(), $testCondition, $this->getCompareKeys());
     }
 
     protected function getDefaultMockfields()
     {
-        return array(
+        return [
             'name' => 'test',
             'targetType' => 'course',
             'targetId' => 1,
             'templateId' => 1,
             'code' => 'code',
-        );
+        ];
     }
 }

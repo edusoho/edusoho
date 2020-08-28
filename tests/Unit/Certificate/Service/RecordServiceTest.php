@@ -115,7 +115,7 @@ class RecordServiceTest extends BaseTestCase
             [
                 'functionName' => 'get',
                 'returnValue' => [
-                    'id' => 1, 'targetId' => 1, 'targetType' => 'course', 'autoIssue' => 1, 'expiryDay' => 1, 'code' => 'code', 'status' => 'published'
+                    'id' => 1, 'targetId' => 1, 'targetType' => 'course', 'autoIssue' => 1, 'expiryDay' => 1, 'code' => 'code', 'status' => 'published',
                 ],
             ],
         ]);
