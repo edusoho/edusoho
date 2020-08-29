@@ -5383,8 +5383,12 @@ admin.operation_certificate.certificate.record.days_remaining: remaining %lastDa
 admin.operation_certificate.certificate.record.days_expiry: %deadline% expired
 admin.operation_certificate.certificate.record.cancel: cancel
 admin.operation_certificate.certificate.record.grant: regrant
+admin.operation_certificate.certificate.record.detail: Detail
 admin.operation_certificate.certificate.record.user: Grantee
 admin.operation_certificate.certificate.record.information: Certification Information
+admin.operation_certificate.certificate.record.finish_status.course: Course completion status
+admin.operation_certificate.certificate.record.finish_status.classroom: Classroom completion status
+admin.operation_certificate.certificate.record.finish_status: finished
 admin.operation_certificate.certificate.record.certificate_information: ertificate Information
 admin.operation_certificate.certificate.record.certificate_target: Certificate Target
 admin.operation_certificate.certificate.record.img_loading: loading...

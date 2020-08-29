@@ -6477,8 +6477,12 @@ admin.operation_certificate.certificate.record.days_remaining: 剩余%lastDays%�
 admin.operation_certificate.certificate.record.days_expiry: %deadline%到期
 admin.operation_certificate.certificate.record.cancel: 撤销
 admin.operation_certificate.certificate.record.grant: 重新授予
+admin.operation_certificate.certificate.record.detail: 证书详情
 admin.operation_certificate.certificate.record.user: 被授予人
 admin.operation_certificate.certificate.record.information: 认证信息
+admin.operation_certificate.certificate.record.finish_status.course: 课程完成状态
+admin.operation_certificate.certificate.record.finish_status.classroom: 班级完成状态
+admin.operation_certificate.certificate.record.finish_status: 已完成
 admin.operation_certificate.certificate.record.certificate_information: 证书信息
 admin.operation_certificate.certificate.record.certificate_target: 认证对象
 admin.operation_certificate.certificate.record.img_loading: 加载中...

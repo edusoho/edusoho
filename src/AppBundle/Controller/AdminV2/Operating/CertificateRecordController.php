@@ -61,6 +61,7 @@ class CertificateRecordController extends BaseController
             'record' => $record,
             'user' => $this->getUserService()->getUserAndProfile($record['userId']),
             'target' => $strategy->getTarget($record['targetId']),
+            'model' => 'review',
         ]);
     }
 
@@ -96,6 +97,7 @@ class CertificateRecordController extends BaseController
             'record' => $record,
             'user' => $this->getUserService()->getUserAndProfile($record['userId']),
             'target' => $strategy->getTarget($record['targetId']),
+            'model' => 'grant',
         ]);
     }
 
