@@ -5,7 +5,7 @@
         v-model="selectedData.courseSetTitle"
         shape="round"
         show-action
-        placeholder="搜索课程、班级"
+        placeholder="搜索课程、班级、题库"
         @search="onSearch"
         @cancel="onCancel"
       />
@@ -26,12 +26,12 @@
           course-item-type="price"
           :is-request-compile="course.isRequestCompile"
           :type-list="'course_list'"
-          @needRequest="sendRequest"
+          @needRequest="sendRequestCourse"
         />
         <emptyCourse
           v-if="isEmptyCourse && course.isRequestCompile"
           :has-button="false"
-           text="抱歉，没有找到相关内容"
+          text="抱歉，没有找到相关内容"
           :type="'course_list'"
         />
       </van-tab>
@@ -45,7 +45,7 @@
             course-item-type="price"
             :is-request-compile="classroom.isRequestCompile"
             :type-list="'classroom_list'"
-            @needRequest="sendRequest"
+            @needRequest="sendRequestClassroom"
           />
           <emptyCourse
             v-if="isEmptyClassroom && classroom.isRequestCompile"
@@ -55,35 +55,53 @@
           />
         </div>
       </van-tab>
-      <van-tab title="" disabled> </van-tab>
-      <van-tab title="" disabled> </van-tab>
+      <van-tab title="题库">
+        <div v-if="active === 2">
+          <lazyLoading
+            :course-list="itemBankList"
+            :is-all-data="isAllItemBank"
+            :normal-tag-show="false"
+            :vip-tag-show="true"
+            course-item-type="price"
+            :is-request-compile="itemBank.isRequestCompile"
+            :type-list="'item_bank_exercise'"
+            @needRequest="sendRequestItemBank"
+          />
+          <emptyCourse
+            v-if="isEmptyItemBank && itemBank.isRequestCompile"
+            :has-button="false"
+            text="抱歉，没有找到相关内容"
+            :type="'item_bank_exercise'"
+          />
+        </div>
+      </van-tab>
     </van-tabs>
   </div>
 </template>
 <script>
-import lazyLoading from "&/components/e-lazy-loading/e-lazy-loading.vue";
-import emptyCourse from "@/containers/learning/emptyCourse/emptyCourse.vue";
-import Api from "@/api";
+import lazyLoading from '&/components/e-lazy-loading/e-lazy-loading.vue';
+import emptyCourse from '@/containers/learning/emptyCourse/emptyCourse.vue';
+import Api from '@/api';
 export default {
-  nama: "search",
+  nama: 'search',
   components: {
     lazyLoading,
-    emptyCourse
+    emptyCourse,
   },
   data() {
     return {
       active: 0,
       selectedData: {
-        courseSetTitle: ""
+        courseSetTitle: '',
       },
-      isSearch:false,
+      isSearch: false,
       classroomList: [],
       isEmptyClassroom: false,
       isAllClassroom: false,
       classroom: {
         isRequestCompile: false,
         offset: 0,
-        limit: 10
+        limit: 10,
       },
       courseList: [],
       isEmptyCourse: false,
@@ -91,24 +109,40 @@ export default {
       course: {
         isRequestCompile: false,
         offset: 0,
-        limit: 10
-      }
+        limit: 10,
+      },
+      itemBankList: [],
+      isEmptyItemBank: false,
+      isAllItemBank: false,
+      itemBank: {
+        isRequestCompile: false,
+        offset: 0,
+        limit: 10,
+      },
     };
   },
-  created() {
-
+  created() {},
+  mounted() {
+    this.$nextTick(() => {
+      document.getElementsByTagName('input')[0].focus();
+    });
   },
   methods: {
     onSearch() {
-      this.isSearch=true;
+      this.isSearch = true;
+
       this.initCourseList();
       this.requestCourses();
+
       this.initClassroomList();
       this.requestClassroom();
+
+      this.initItemBankList();
+      this.requestItemBanks();
     },
     onCancel() {
-      this.isSearch=false;
-      this.$router.push({ path:'/'  })
+      this.isSearch = false;
+      this.$router.push({ path: '/' });
     },
     initClassroomList() {
       this.classroom.isRequestCompile = false;
@@ -125,13 +159,13 @@ export default {
       this.classroom.isRequestCompile = false;
       const setting = {
         offset: this.classroom.offset,
-        limit: this.classroom.limit
+        limit: this.classroom.limit,
       };
-      const selectedData={title:this.selectedData.courseSetTitle}
+      const selectedData = { title: this.selectedData.courseSetTitle };
       const config = Object.assign({}, selectedData, setting);
 
       return Api.getClassList({
-        params: config
+        params: config,
       })
         .then(({ data, paging }) => {
           data.forEach(element => {
@@ -140,7 +174,7 @@ export default {
           this.requestClassRoomSuccess(paging);
         })
         .catch(err => {
-          console.log(err, "error");
+          console.log(err, 'error');
         });
     },
 
@@ -153,7 +187,7 @@ export default {
       this.isEmptyClassroom = this.classroomList.length === 0;
     },
 
-    sendRequest() {
+    sendRequestClassroom() {
       if (!this.isAllClassroom) this.requestClassroom();
     },
 
@@ -172,11 +206,11 @@ export default {
       this.course.isRequestCompile = false;
       const setting = {
         offset: this.course.offset,
-        limit: this.course.limit
+        limit: this.course.limit,
       };
       const config = Object.assign({}, this.selectedData, setting);
       return Api.getCourseList({
-        params: config
+        params: config,
       })
         .then(({ data, paging }) => {
           data.forEach(element => {
@@ -185,7 +219,7 @@ export default {
           this.requestCoursesSuccess(paging);
         })
         .catch(err => {
-          console.log(err, "error");
+          console.log(err, 'error');
         });
     },
 
@@ -198,9 +232,55 @@ export default {
       this.isEmptyCourse = this.courseList.length === 0;
     },
 
-    sendRequest() {
+    sendRequestCourse() {
       if (!this.isAllCourse) this.requestCourses();
-    }
-  }
+    },
+
+    initItemBankList() {
+      this.itemBank.isRequestCompile = false;
+      this.isAllItemBank = false;
+      this.itemBankList = [];
+      this.itemBank.offset = 0;
+    },
+
+    judegIsAllItemBank(paging) {
+      return this.itemBankList.length >= paging.total;
+    },
+
+    requestItemBanks() {
+      this.itemBank.isRequestCompile = false;
+      const setting = {
+        offset: this.itemBank.offset,
+        limit: this.itemBank.limit,
+      };
+      const selectedData = { title: this.selectedData.courseSetTitle };
+      const config = Object.assign({}, selectedData, setting);
+      return Api.getItemBankList({
+        params: config,
+      })
+        .then(({ data, paging }) => {
+          data.forEach(element => {
+            this.itemBankList.push(element);
+          });
+          this.requestItemBanksSuccess(paging);
+        })
+        .catch(err => {
+          console.log(err, 'error');
+        });
+    },
+
+    requestItemBanksSuccess(paging = {}) {
+      this.isAllItemBank = this.judegIsAllItemBank(paging);
+      if (!this.isAllItemBank) {
+        this.offset = this.itemBankList.length;
+      }
+      this.itemBank.isRequestCompile = true;
+      this.isEmptyItemBank = this.itemBankList.length === 0;
+    },
+
+    sendRequestItemBank() {
+      if (!this.isAllItemBank) this.requestItemBanks();
+    },
+  },
 };
 </script>
