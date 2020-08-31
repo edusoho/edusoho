@@ -60,7 +60,7 @@ define(function(require, exports, module) {
 
     Validator.addRule('deadline_check', function(options) {
       var value = $(options.element).val();
-      if (!value || ((/^\+?[0-9][0-9]*$/.test(value) && value < 10000 && value > 0))) {
+      if (!value || ((/^\+?[0-9][0-9]*$/.test(value) && value < 6001 && value > 0))) {
         return true;
       }
       return false;

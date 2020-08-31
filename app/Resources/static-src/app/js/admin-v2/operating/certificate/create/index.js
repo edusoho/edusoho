@@ -84,7 +84,7 @@ jQuery.validator.addMethod('certificate_code', function (value, element, params)
 
 jQuery.validator.addMethod('deadline_check', function () {
   let value = $('[name = expiryDay]').val();
-  if (!value || ((/^\+?[0-9][0-9]*$/.test(value) && value < 10000 && value > 0))) {
+  if (!value || ((/^\+?[0-9][0-9]*$/.test(value) && value < 6001 && value > 0))) {
     return true;
   }
   return false;
