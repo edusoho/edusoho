@@ -28,7 +28,7 @@ class HorizontalImgBuilder extends ImgBuilder
         return $this->imageTtfText(
             [
                 'x' => 1800 * $this->imageXRatio - $length * $this->defaultFontSize * 0.5,
-                'y' => 592 * $this->imageYRatio,
+                'y' => 452 * $this->imageYRatio,
                 'fontSize' => $this->defaultFontSize,
                 'color' => 0,
                 'fontWeight' => 3,

@@ -28,7 +28,7 @@ class VerticalImgBuilder extends ImgBuilder
         return $this->imageTtfText(
             [
                 'x' => 1300 * $this->imageXRatio - $length * 0.5 * $this->defaultFontSize,
-                'y' => 992 * $this->imageYRatio,
+                'y' => 492 * $this->imageYRatio,
                 'fontSize' => $this->defaultFontSize,
                 'color' => 0,
                 'fontWeight' => 3,
@@ -82,7 +82,7 @@ class VerticalImgBuilder extends ImgBuilder
         $this->imageTtfText(
             [
                 'x' => 1700 * $this->imageXRatio,
-                'y' => 600 * $this->imageYRatio,
+                'y' => 900 * $this->imageYRatio,
                 'fontSize' => 0.3 * $this->defaultFontSize,
                 'color' => 102,
                 'fontWeight' => 1,
@@ -94,7 +94,7 @@ class VerticalImgBuilder extends ImgBuilder
         return $this->imageTtfText(
             [
                 'x' => 1934 * $this->imageXRatio,
-                'y' => 600 * $this->imageYRatio,
+                'y' => 900 * $this->imageYRatio,
                 'fontSize' => 0.3 * $this->defaultFontSize,
                 'color' => 0,
                 'fontWeight' => 1,
