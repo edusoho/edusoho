@@ -45,6 +45,7 @@
     {% if records %}
       {% for record in records %}
         {% set user = users[record.userId]|default(null) %}
+        {% set userProfile = userProfiles[record.userId]|default(null) %}
         {% set target = targets[record.targetId]|default(null) %}
         {% include 'admin-v2/operating/certificate-record/record-tr.html.twig' %}
       {% endfor %}

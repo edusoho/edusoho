@@ -164,12 +164,14 @@ class CertificateController extends BaseController
     {
         $conditions = $request->query->all();
         $conditions['targetType'] = $type;
+        $conditions['dropped'] = 0;
 
         $paginator = new Paginator(
             $request,
             $this->getCertificateTemplateService()->count($conditions),
             5
         );
+        $paginator->setBaseUrl($this->generateUrl('admin_v2_certificate_template_search', array_merge(['type' => $type], $request->query->all())));
 
         $templates = $this->getCertificateTemplateService()->search(
             $conditions,
