@@ -143,6 +143,17 @@ const routes = [
       ),
   },
   {
+    path: '/itembank/explore',
+    name: 'more_itembank',
+    meta: {
+      title: '所有题库',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "more" */ '@/containers/more/itembank/index.vue'
+      ),
+  },
+  {
     path: '/all/explore',
     name: 'all_explore',
     redirect: {
@@ -617,6 +628,72 @@ const routes = [
         /* webpackChunkName: "more" */ '@/containers/webview/openCourse/more.vue'
       ),
   },
+  {
+    path: '/brushExercise',
+    name: 'brush_exercise',
+    meta: {
+      title: '刷题',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "brush" */ '@/containers/brush-exercise/index.vue'
+      ),
+  },
+  {
+    path: '/brushDo',
+    name: 'brush_do',
+    meta: {
+      title: '刷题',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "brush" */ '@/containers/brush-exercise/lessonTask/do.vue'
+      ),
+  },
+  {
+    path: '/brushReport/:answerRecordId',
+    name: 'brush_report',
+    meta: {
+      title: '查看解析',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "brush" */ '@/containers/brush-exercise/lessonTask/report.vue'
+      ),
+  },
+  {
+    path: '/brushResult/:answerRecordId',
+    name: 'brush_result',
+    meta: {
+      title: '答题结果',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "brush" */ '@/containers/brush-exercise/lessonTask/result.vue'
+      ),
+  },
+  {
+    path: '/brushReview/:answerRecordId',
+    name: 'brush_review',
+    meta: {
+      title: '答题批阅',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "brush" */ '@/containers/brush-exercise/lessonTask/review.vue'
+      ),
+  },
+  {
+    path: '/item_bank_exercise/:id',
+    name: 'item_bank_exercise',
+    meta: {
+      title: '题库详情',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "brush-exercise" */ '@/containers/brush-exercise/index.vue'
+      ),
+  },
 ];
 
 // 页面刷新，store数据会被清掉，需对token、user重新赋值
@@ -734,9 +811,11 @@ router.beforeEach((to, from, next) => {
     setWeChatSwitch();
   }
 
-  store.dispatch('setCouponSwitch').then(res => {
-    console.log(res);
-  });
+  if (store.state.couponSwitch === null) {
+    store.dispatch('setCouponSwitch').then(res => {
+      console.log(res);
+    });
+  }
 });
 
 // 异步加载配置

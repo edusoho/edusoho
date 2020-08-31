@@ -6,8 +6,9 @@
       <e-swipe v-if="part.type === 'slide_show'" :slides="part.data" />
       <e-course-list
         v-if="
-          ['classroom_list', 'course_list'].includes(part.type) &&
-            part.data.items.length
+          ['classroom_list', 'course_list', 'item_bank_exercise'].includes(
+            part.type,
+          ) && part.data.items.length
         "
         :course-list="part.data"
         :type-list="part.type"
@@ -60,11 +61,11 @@
         class="gray-border-bottom"
         @activityHandle="activityHandle"
       />
-       <e-graphic-navigation
-          v-if="part.type === 'graphic_navigation'"
-          :feedback="feedback"
-          :graphicNavigation="part.data"
-        />
+      <e-graphic-navigation
+        v-if="part.type === 'graphic_navigation'"
+        :feedback="feedback"
+        :graphicNavigation="part.data"
+      />
       <van-search
         v-if="part.type === 'search'"
         shape="round"
@@ -78,50 +79,50 @@
 </template>
 
 <script>
-import courseList from "&/components/e-course-list/e-course-list.vue";
-import poster from "&/components/e-poster/e-poster.vue";
-import marketPart from "&/components/e-marketing/e-activity/index.vue";
-import swipe from "&/components/e-swipe/e-swipe.vue";
-import couponList from "&/components/e-coupon-list/e-coupon-list.vue";
-import swithLoading from "&/components/e-switch-loading/index.vue";
-import vipList from "&/components/e-vip-list/e-vip-list.vue";
-import GraphicNavigation from "&/components/e-graphic-navigation/e-graphic-navigation.vue";
+import courseList from '&/components/e-course-list/e-course-list.vue';
+import poster from '&/components/e-poster/e-poster.vue';
+import marketPart from '&/components/e-marketing/e-activity/index.vue';
+import swipe from '&/components/e-swipe/e-swipe.vue';
+import couponList from '&/components/e-coupon-list/e-coupon-list.vue';
+import swithLoading from '&/components/e-switch-loading/index.vue';
+import vipList from '&/components/e-vip-list/e-vip-list.vue';
+import GraphicNavigation from '&/components/e-graphic-navigation/e-graphic-navigation.vue';
 // eslint-disable-next-line no-unused-vars
-import * as types from "@/store/mutation-types";
-import getCouponMixin from "@/mixins/coupon/getCouponHandler";
-import activityMixin from "@/mixins/activity/index";
-import Api from "@/api";
-import { mapState } from "vuex";
-import { Toast } from "vant";
+import * as types from '@/store/mutation-types';
+import getCouponMixin from '@/mixins/coupon/getCouponHandler';
+import activityMixin from '@/mixins/activity/index';
+import Api from '@/api';
+import { mapState } from 'vuex';
+import { Toast } from 'vant';
 
 export default {
   components: {
-    "e-course-list": courseList,
-    "e-swipe": swipe,
-    "e-poster": poster,
-    "e-coupon-list": couponList,
-    "e-vip-list": vipList,
-    "e-market-part": marketPart,
-    "e-switch-loading": swithLoading,
-    "e-graphic-navigation":GraphicNavigation
+    'e-course-list': courseList,
+    'e-swipe': swipe,
+    'e-poster': poster,
+    'e-coupon-list': couponList,
+    'e-vip-list': vipList,
+    'e-market-part': marketPart,
+    'e-switch-loading': swithLoading,
+    'e-graphic-navigation': GraphicNavigation,
   },
   mixins: [getCouponMixin, activityMixin],
   props: {
     feedback: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   data() {
     return {
       parts: [],
-      imageMode: ["responsive", "size-fit"],
+      imageMode: ['responsive', 'size-fit'],
       showFlag: true,
-      closeDate: "closedDate"
+      closeDate: 'closedDate',
     };
   },
   computed: {
-    ...mapState(["vipSwitch", "isLoading", "wechatSwitch", "couponSwitch"])
+    ...mapState(['vipSwitch', 'isLoading', 'wechatSwitch', 'couponSwitch']),
   },
   created() {
     const { preview, token } = this.$route.query;
@@ -129,10 +130,10 @@ export default {
     if (preview == 1) {
       Api.discoveries({
         params: {
-          mode: "draft",
+          mode: 'draft',
           preview: 1,
-          token
-        }
+          token,
+        },
       })
         .then(res => {
           this.parts = Object.values(res);
@@ -155,7 +156,7 @@ export default {
     if (!this.$store.state.token) {
       this.showFlag = false;
     } else {
-      const userId = JSON.parse(localStorage.getItem("user")).id;
+      const userId = JSON.parse(localStorage.getItem('user')).id;
       this.closeDate = `closedDate-${userId}`;
       const now = new Date();
       const today = `${now.getFullYear()}-${now.getMonth() +
@@ -166,23 +167,23 @@ export default {
   },
   methods: {
     fetchCourse({ params, index, typeList }) {
-      if (typeList === "classroom_list") {
+      if (typeList === 'classroom_list') {
         Api.getClassList({ params }).then(res => {
-          if (this.sourceType === "custom") return;
+          if (this.sourceType === 'custom') return;
 
           this.parts[index].data.items = res.data;
         });
         return;
       }
       Api.getCourseList({ params }).then(res => {
-        if (this.sourceType === "custom") return;
+        if (this.sourceType === 'custom') return;
 
         this.parts[index].data.items = res.data;
       });
     },
-    goSearch(){
-      this.$router.push({ name: 'search' })
-    }
-  }
+    goSearch() {
+      this.$router.push({ name: 'search' });
+    },
+  },
 };
 </script>

@@ -1,34 +1,41 @@
 <template>
   <div class="course-detail classroom-detail">
     <div class="join-after">
-      <detail-head ref="head" :cover="details.cover" :price="planDetails.price" :classroom-id="details.classId"/>
+      <detail-head
+        ref="head"
+        :cover="details.cover"
+        :price="planDetails.price"
+        :classroom-id="details.classId"
+      />
 
       <van-tabs v-model="active" :class="tabsClass">
-        <van-tab v-for="item in tabs" :title="item" :key="item"/>
+        <van-tab v-for="item in tabs" :title="item" :key="item" />
       </van-tabs>
 
       <!-- 班级介绍 -->
       <div v-if="active == 0" style="margin-top: 44px;">
-        <detail-plan :details="planDetails" :join-status="details.joinStatus"/>
-        <div class="segmentation"/>
+        <detail-plan :details="planDetails" :join-status="details.joinStatus" />
+        <div class="segmentation" />
 
         <e-panel ref="about" title="班级介绍" class="about">
-          <div v-html="details.summary"/>
+          <div v-html="details.summary" />
         </e-panel>
-        <div class="segmentation"/>
+        <div class="segmentation" />
 
         <!-- 教师介绍 -->
         <teacher
           :teacher-info="details.teachers"
           class="teacher"
-          title="教师介绍"/>
-        <div class="segmentation"/>
+          title="教师介绍"
+        />
+        <div class="segmentation" />
 
         <teacher
           :teacher-info="details.headTeacher ? [details.headTeacher] : []"
           class="teacher"
           title="班主任"
-          defaul-value="尚未设置班主任"/>
+          defaul-value="尚未设置班主任"
+        />
       </div>
 
       <!-- 班级课程 -->
@@ -40,39 +47,49 @@
           :disable-mask="true"
           title="班级课程"
           defaul-value="暂无课程"
-          @click.native="showDialog"/>
+          @click.native="showDialog"
+        />
       </div>
 
       <!-- 学员评价 -->
       <div v-if="active == 2" style="margin-top: 44px;">
-        <review-list ref="review" :target-id="details.classId" :reviews="details.reviews" title="学员评价" defaul-value="暂无评价" type="classroom"/>
+        <review-list
+          ref="review"
+          :target-id="details.classId"
+          :reviews="classroomSettings.show_review == 1 ? details.reviews : []"
+          title="学员评价"
+          defaul-value="暂无评价"
+          type="classroom"
+        />
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
-import teacher from './teacher'
-import detailHead from './head'
-import reviewList from './review-list'
-import courseSetList from './course-set-list'
-import detailPlan from './plan'
-import directory from '../course/detail/directory'
-import moreMask from '@/components/more-mask'
-import { Dialog, Toast } from 'vant'
-import Api from '@/api'
-const TAB_HEIGHT = 44
+import teacher from './teacher';
+import detailHead from './head';
+import reviewList from './review-list';
+import courseSetList from './course-set-list';
+import detailPlan from './plan';
+import directory from '../course/detail/directory';
+import moreMask from '@/components/more-mask';
+import { Dialog, Toast } from 'vant';
+import Api from '@/api';
+// eslint-disable-next-line no-unused-vars
+const TAB_HEIGHT = 44;
 
 export default {
   components: {
+    // eslint-disable-next-line vue/no-unused-components
     directory,
     detailHead,
     detailPlan,
     teacher,
     courseSetList,
     reviewList,
-    moreMask
+    // eslint-disable-next-line vue/no-unused-components
+    moreMask,
   },
   props: ['details', 'planDetails'],
   data() {
@@ -82,117 +99,129 @@ export default {
       scrollFlag: false,
       tabs: ['班级介绍', '班级课程', '学员评价'],
       tabsClass: '',
-      errorMsg: ''
-    }
+      errorMsg: '',
+      classroomSettings: {},
+    };
+  },
+  async created() {
+    this.classroomSettings = await Api.getSettings({
+      query: {
+        type: 'classroom',
+      },
+    }).catch(err => {
+      console.error(err);
+    });
   },
   mounted() {
-    window.addEventListener('touchmove', this.handleScroll)
+    window.addEventListener('touchmove', this.handleScroll);
 
-    this.showDialog()
+    this.showDialog();
   },
   destroyed() {
-    window.removeEventListener('touchmove', this.handleScroll)
+    window.removeEventListener('touchmove', this.handleScroll);
   },
   methods: {
     showDialog() {
-      let code = ''
-      let errorMessage = ''
-      let confirmCallback = function() {}
+      let code = '';
+      let errorMessage = '';
+      let confirmCallback = function() {};
 
-      if (!this.details.member) return
+      if (!this.details.member) return;
 
       if (this.details.member.access) {
-        code = this.details.member.access.code
+        code = this.details.member.access.code;
       }
       if (!code || code === 'success') {
-        return
+        return;
       }
 
       // 学习任务报错信息
-      this.errorMsg = this.getErrorMsg(code)
+      this.errorMsg = this.getErrorMsg(code);
 
       // 错误处理
       if (code === 'classroom.expired' || code === 'member.expired') {
-        errorMessage = '班级已到期，无法继续学习，是否退出'
-        const params = { id: this.details.classId }
+        errorMessage = '班级已到期，无法继续学习，是否退出';
+        const params = { id: this.details.classId };
         confirmCallback = () => {
           Api.deleteClassroom({ query: params }).then(res => {
             if (res.success) {
-              window.location.reload()
-              return
+              window.location.reload();
+              return;
             }
-            Toast.fail('退出班级失败，请稍后重试')
-          })
-        }
-        this.callConfirm(errorMessage, confirmCallback)
+            Toast.fail('退出班级失败，请稍后重试');
+          });
+        };
+        this.callConfirm(errorMessage, confirmCallback);
       } else if (code === 'vip.member_expired') {
-        errorMessage = '会员已到期，请及时续费会员'
+        errorMessage = '会员已到期，请及时续费会员';
         confirmCallback = () => {
           this.$router.push({
-            path: `/vip`
-          })
-        }
-        this.callConfirm(errorMessage, confirmCallback)
+            path: `/vip`,
+          });
+        };
+        this.callConfirm(errorMessage, confirmCallback);
       } else {
-        Toast.fail(this.getErrorMsg(code))
+        Toast.fail(this.getErrorMsg(code));
       }
     },
     handleScroll() {
       if (this.scrollFlag) {
-        return
+        return;
       }
-      this.scrollFlag = true
-      const refs = this.$refs
+      this.scrollFlag = true;
+      const refs = this.$refs;
 
       // 滚动节流
       setTimeout(() => {
-        this.headBottom = refs['head'].$el.getBoundingClientRect().bottom
-        this.scrollFlag = false
-        this.tabsClass = this.headBottom <= 0 ? 'van-tabs--fixed' : ''
-      }, 400)
+        this.headBottom = refs.head.$el.getBoundingClientRect().bottom;
+        this.scrollFlag = false;
+        this.tabsClass = this.headBottom <= 0 ? 'van-tabs--fixed' : '';
+      }, 400);
     },
     getErrorMsg(code) {
       switch (code) {
         case 'classroom.not_found':
-          return '当前班级不存在'
+          return '当前班级不存在';
         case 'classroom.unpublished':
-          return '当前班级未发布'
+          return '当前班级未发布';
         case 'classroom.expired':
-          return '当前班级已过期'
+          return '当前班级已过期';
         case 'user.not_login':
-          return '用户未登录'
+          return '用户未登录';
         case 'user.locked':
-          return '用户被锁定'
+          return '用户被锁定';
         case 'member.not_found':
-          return '用户未加入班级'
+          return '用户未加入班级';
         case 'member.auditor':
-          return '用户是旁听生'
+          return '用户是旁听生';
         case 'member.expired':
-          return '班级已过期'
+          return '班级已过期';
         case 'vip.vip_closed':
-          return '网校已关闭会员功能'
+          return '网校已关闭会员功能';
         case 'vip.not_login':
-          return '用户未登录'
+          return '用户未登录';
         case 'vip.not_member':
-          return '当前用户并不是vip'
+          return '当前用户并不是vip';
         case 'vip.member_expired':
-          return '用户会员服务已过期'
+          return '用户会员服务已过期';
         case 'vip.level_not_exist':
-          return '用户会员等级或班级会员不存在'
+          return '用户会员等级或班级会员不存在';
         case 'vip.level_low':
-          return '用户会员等级过低'
+          return '用户会员等级过低';
         default:
-          return '异常错误'
+          return '异常错误';
       }
     },
     callConfirm(message, callback) {
       Dialog.confirm({
         message,
-        title: ''
-      }).then(() => {
-        callback()
-      }).catch(() => {})
-    }
-  }
-}
+        title: '',
+      })
+        .then(() => {
+          callback();
+        })
+        .catch(() => {});
+    },
+  },
+};
 </script>

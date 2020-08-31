@@ -21,21 +21,24 @@ export default {
     },
     text:{
       type: String,
-      default: ""
-    }
-  },
-  data() {
-    return {
-      moreText: this.type === 'course_list' ? '好课' : '班级'
+      default: "暂无数据"
     }
   },
   computed:{
-    emptyText(){
-      if(!this.text){
-        return `暂无${this.type === 'course_list' ? '课程' : '班级'}`
+    emptyText() {
+      return this.text;
+    },
+    moreText() {
+      const type = this.type;
+      switch (type) {
+        case 'course_list':
+          return '好课';
+        case 'classroom_list':
+          return '班级';
+        case 'item_bank_exercise':
+          return '题库';
       }
-      return  this.text
-    }
+    },
   },
   methods: {
     jumpBack() {
