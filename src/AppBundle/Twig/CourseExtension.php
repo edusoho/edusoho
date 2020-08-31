@@ -401,11 +401,7 @@ class CourseExtension extends \Twig_Extension
             PHP_INT_MAX
         );
 
-        if (empty($certificates)) {
-            return false;
-        } else {
-            return true;
-        }
+        return empty($certificates) ? false : true;
     }
 
     /**
