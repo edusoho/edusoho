@@ -38,19 +38,19 @@ class CertificateEventSubscriber extends EventSubscriber implements EventSubscri
     public function onCertificatePublish(Event $event)
     {
         $certificate = $event->getSubject();
-        if ($certificate['status'] != 'published') {
+        if ('published' != $certificate['status']) {
             return;
         }
 
-        $this->getSchedulerService()->register(array(
+        $this->getSchedulerService()->register([
             'name' => 'issue_certificate_job'.$certificate['id'],
             'pool' => 'dedicated',
             'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
             'expression' => intval(time()),
             'misfire_policy' => 'executing',
             'class' => 'Biz\Certificate\Job\IssueCertificateJob',
-            'args' => array('certificateId' => $certificate['id']),
-        ));
+            'args' => ['certificateId' => $certificate['id']],
+        ]);
     }
 
     protected function processCourseCertificate($courseSet, $course, $taskResult)
