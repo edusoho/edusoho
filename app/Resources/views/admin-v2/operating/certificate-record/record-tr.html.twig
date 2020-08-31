@@ -1,5 +1,5 @@
 <tr>
-  <td>{{ user.truename|default('--') }}<br><span class="text-muted text-sm">{{ user.nickname|default() }}</span></td>
+  <td>{{ userProfile.truename|default('--') }}<br><span class="text-muted text-sm">{{ user.nickname|default() }}</span></td>
   <td>{{ target.title|default('--') }}</td>
   <td>{{ record.certificateCode|default('') }}</td>
   <td>
@@ -8,7 +8,7 @@
     {% else %}
       {% set remainDay = record.expiryTime|time_diff %}
       {{ 'admin.operation_certificate.certificate.record.days_remaining'|trans({'%lastDays%':remainDay}) }}<br>
-      {{ 'certificate.deadline.expire'|trans({'%deadline%':record.expiryTime|date('Y-m-d')}) }}
+      {{ 'admin.operation_certificate.certificate.record.days_expiry'|trans({'%deadline%':record.expiryTime|date('Y-m-d')}) }}
     {% endif %}
   </td>
   <td>

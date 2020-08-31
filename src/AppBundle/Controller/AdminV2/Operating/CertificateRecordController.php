@@ -37,12 +37,14 @@ class CertificateRecordController extends BaseController
         );
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($records, 'userId'));
+        $userProfiles = $this->getUserService()->findUserProfilesByIds(ArrayToolkit::column($records, 'userId'));
         $strategy = $this->getCertificateStrategy($certificate['targetType']);
 
         return $this->render('admin-v2/operating/certificate-record/index.html.twig', [
             'records' => $records,
             'paginator' => $paginator,
-            'users' => ArrayToolkit::index($users, 'id'),
+            'users' => $users,
+            'userProfiles' => $userProfiles,
             'targets' => $strategy->findTargetsByIds(ArrayToolkit::column($records, 'targetId')),
             'certificate' => $certificate,
         ]);
