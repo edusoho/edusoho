@@ -44,8 +44,8 @@ class VerticalImgBuilder extends ImgBuilder
 
         return $this->imageTtfText(
             [
-                'x' => 1300 * $this->imageXRatio - $length * 0.25 * $this->defaultFontSize,
-                'y' => 1320 * $this->imageYRatio,
+                'x' => 800 * $this->imageXRatio - $length * 0.25 * $this->defaultFontSize,
+                'y' => 1300 * $this->imageYRatio,
                 'fontSize' => 0.5 * $this->defaultFontSize,
                 'color' => 0,
                 'fontWeight' => 1,
@@ -81,8 +81,8 @@ class VerticalImgBuilder extends ImgBuilder
     {
         $this->imageTtfText(
             [
-                'x' => 400 * $this->imageXRatio,
-                'y' => 400 * $this->imageYRatio,
+                'x' => 1700 * $this->imageXRatio,
+                'y' => 600 * $this->imageYRatio,
                 'fontSize' => 0.3 * $this->defaultFontSize,
                 'color' => 102,
                 'fontWeight' => 1,
@@ -93,8 +93,8 @@ class VerticalImgBuilder extends ImgBuilder
 
         return $this->imageTtfText(
             [
-                'x' => 634 * $this->imageXRatio,
-                'y' => 400 * $this->imageYRatio,
+                'x' => 1934 * $this->imageXRatio,
+                'y' => 600 * $this->imageYRatio,
                 'fontSize' => 0.3 * $this->defaultFontSize,
                 'color' => 0,
                 'fontWeight' => 1,
@@ -108,20 +108,20 @@ class VerticalImgBuilder extends ImgBuilder
     {
         $this->imageTtfText(
             [
-                'x' => 400 * $this->imageXRatio,
-                'y' => 554 * $this->imageYRatio,
+                'x' => 1358 * $this->imageXRatio,
+                'y' => 2696 * $this->imageYRatio,
                 'fontSize' => 0.3 * $this->defaultFontSize,
                 'color' => 102,
                 'fontWeight' => 1,
                 'bottomPicUrl' => $certificate->getCertificateBasemap(),
-                'txt' => '有效期至：',
+                'txt' => '证书有效时间：',
             ]
         );
 
         return $this->imageTtfText(
             [
-                'x' => 634 * $this->imageXRatio,
-                'y' => 554 * $this->imageYRatio,
+                'x' => 1758 * $this->imageXRatio,
+                'y' => 2696 * $this->imageYRatio,
                 'fontSize' => 0.3 * $this->defaultFontSize,
                 'color' => 0,
                 'fontWeight' => 1,
@@ -135,21 +135,21 @@ class VerticalImgBuilder extends ImgBuilder
     {
         $this->imageTtfText(
             [
-                'x' => 1258 * $this->imageXRatio,
+                'x' => 1358 * $this->imageXRatio,
                 'y' => 2896 * $this->imageYRatio,
-                'fontSize' => 0.4 * $this->defaultFontSize,
+                'fontSize' => 0.3 * $this->defaultFontSize,
                 'color' => 102,
                 'fontWeight' => 1,
                 'bottomPicUrl' => $certificate->getCertificateBasemap(),
-                'txt' => '发证日期：',
+                'txt' => '证书获取时间：',
             ]
         );
 
         return $this->imageTtfText(
             [
-                'x' => 1586 * $this->imageXRatio,
+                'x' => 1758 * $this->imageXRatio,
                 'y' => 2896 * $this->imageYRatio,
-                'fontSize' => 0.4 * $this->defaultFontSize,
+                'fontSize' => 0.3 * $this->defaultFontSize,
                 'color' => 0,
                 'fontWeight' => 1,
                 'bottomPicUrl' => $certificate->getCertificateBasemap(),
@@ -185,12 +185,12 @@ class VerticalImgBuilder extends ImgBuilder
         }
         $qrCode = $this->buildQrCode($certificate->getCertificateQrCodeUrl());
         $qrCode = $this->_imageCreateFromImageOrString($qrCode);
-        imagecopymerge($this->image, $qrCode, 1980 * $this->imageXRatio, 360 * $this->imageYRatio, 0, 0, 160 * $this->imageXRatio, 160 * $this->imageXRatio, 100);
+        imagecopymerge($this->image, $qrCode, 550 * $this->imageXRatio, 2650 * $this->imageYRatio, 0, 0, 180 * $this->imageXRatio, 180 * $this->imageXRatio, 100);
 
         return $this->imageTtfText(
             [
-                'x' => 1920 * $this->imageXRatio,
-                'y' => 588 * $this->imageYRatio,
+                'x' => 500 * $this->imageXRatio,
+                'y' => 2610 * $this->imageYRatio,
                 'fontSize' => 40 / 160 * $this->defaultFontSize,
                 'color' => 102,
                 'fontWeight' => 1,

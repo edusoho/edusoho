@@ -2,8 +2,10 @@
 
 namespace Biz\Certificate\Strategy\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Certificate\Strategy\BaseStrategy;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\MemberService;
 
 class ClassroomStrategy extends BaseStrategy
 {
@@ -48,6 +50,25 @@ class ClassroomStrategy extends BaseStrategy
         );
     }
 
+    public function issueCertificate($certificate)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($certificate['targetId']);
+        $members = $this->getClassroomService()->findClassroomStudents($classroom['id'], 0, PHP_INT_MAX);
+        $courses = $this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
+        $courseIds = ArrayToolkit::column($courses, 'id');
+        $finishUserIds = [];
+        foreach ($members as $member) {
+            $memberCounts = $this->getCourseMemberService()->countMembers(['finishedTime_GT' => 0, 'userId' => $member['userId'], 'courseIds' => $courseIds]);
+            if ($memberCounts >= count($courseIds)) {
+                $finishUserIds[] = $member['userId'];
+            }
+        }
+        $batches = array_chunk($finishUserIds, self::ISSUE_LIMIT);
+        foreach ($batches as $userIds) {
+            $this->getRecordService()->autoIssueCertificates($certificate['id'], $userIds);
+        }
+    }
+
     protected function filterConditions($conditions)
     {
         if (!empty($conditions['keyword'])) {
@@ -78,5 +99,13 @@ class ClassroomStrategy extends BaseStrategy
     protected function getClassroomService()
     {
         return $this->biz->service('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getCourseMemberService()
+    {
+        return $this->biz->service('Course:MemberService');
     }
 }

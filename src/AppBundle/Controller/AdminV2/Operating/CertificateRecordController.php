@@ -136,7 +136,7 @@ class CertificateRecordController extends BaseController
         unset($conditions['keywordType']);
         unset($conditions['keyword']);
 
-        $conditions['statusNotEqual'] = 'none';
+        $conditions['statusNotIn'] = ['none', 'reject'];
 
         return $conditions;
     }

@@ -9,7 +9,9 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
+use Biz\Crontab\SystemCrontabInitializer;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -19,6 +21,7 @@ class CertificateEventSubscriber extends EventSubscriber implements EventSubscri
     {
         return [
             'course.task.finish' => 'onCourseTaskFinish',
+            'certificate.publish' => 'onCertificatePublish',
         ];
     }
 
@@ -30,6 +33,23 @@ class CertificateEventSubscriber extends EventSubscriber implements EventSubscri
 
         $this->processCourseCertificate($courseSet, $course, $taskResult);
         $this->processClassroomCertificate($courseSet, $taskResult['userId']);
+    }
+
+    public function onCertificatePublish(Event $event)
+    {
+        $certificate = $event->getSubject();
+        if ($certificate['status'] != 'published') {
+            return;
+        }
+
+        $this->getSchedulerService()->register(array(
+            'name' => 'issue_certificate_job'.$certificate['id'],
+            'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
+            'expression' => intval(time()),
+            'misfire_policy' => 'executing',
+            'class' => 'Biz\Certificate\Job\IssueCertificateJob',
+            'args' => array('certificateId' => $certificate['id']),
+        ));
     }
 
     protected function processCourseCertificate($courseSet, $course, $taskResult)
@@ -124,5 +144,13 @@ class CertificateEventSubscriber extends EventSubscriber implements EventSubscri
     protected function getClassroomService()
     {
         return $this->getBiz()->service('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return SchedulerService
+     */
+    private function getSchedulerService()
+    {
+        return $this->getBiz()->service('Scheduler:SchedulerService');
     }
 }

@@ -303,7 +303,7 @@ abstract class ImgBuilder
     {
         $qrCode = new QrCode();
         $qrCode->setText($url);
-        $qrCode->setSize(160 * $this->imageXRatio);
+        $qrCode->setSize(180 * $this->imageXRatio);
         $qrCode->setPadding(0);
         $qrCode->setForegroundColor(['r' => 153, 'g' => 153, 'b' => 153, 'a' => 1]);
         $img = $qrCode->get('jpg');

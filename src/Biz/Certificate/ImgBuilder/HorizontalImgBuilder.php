@@ -80,8 +80,8 @@ class HorizontalImgBuilder extends ImgBuilder
     {
         $this->imageTtfText(
             [
-                'x' => 592 * $this->imageXRatio,
-                'y' => 1864 * $this->imageYRatio,
+                'x' => 2313 * $this->imageXRatio,
+                'y' => 820 * $this->imageYRatio,
                 'fontSize' => 0.4 * $this->defaultFontSize,
                 'color' => 102,
                 'fontWeight' => 1,
@@ -92,8 +92,8 @@ class HorizontalImgBuilder extends ImgBuilder
 
         return $this->imageTtfText(
             [
-                'x' => 920 * $this->imageXRatio,
-                'y' => 1864 * $this->imageYRatio,
+                'x' => 2613 * $this->imageXRatio,
+                'y' => 820 * $this->imageYRatio,
                 'fontSize' => 0.4 * $this->defaultFontSize,
                 'color' => 0,
                 'fontWeight' => 1,
@@ -107,19 +107,19 @@ class HorizontalImgBuilder extends ImgBuilder
     {
         $this->imageTtfText(
             [
-                'x' => 592 * $this->imageXRatio,
+                'x' => 2258 * $this->imageXRatio,
                 'y' => 2008 * $this->imageYRatio,
                 'fontSize' => 0.4 * $this->defaultFontSize,
                 'color' => 102,
                 'fontWeight' => 1,
                 'bottomPicUrl' => $certificate->getCertificateBasemap(),
-                'txt' => '有效期至：',
+                'txt' => '证书有效时间：',
             ]
         );
 
         return $this->imageTtfText(
             [
-                'x' => 912 * $this->imageXRatio,
+                'x' => 2686 * $this->imageXRatio,
                 'y' => 2008 * $this->imageYRatio,
                 'fontSize' => 0.4 * $this->defaultFontSize,
                 'color' => 0,
@@ -135,19 +135,19 @@ class HorizontalImgBuilder extends ImgBuilder
         $this->imageTtfText(
             [
                 'x' => 2258 * $this->imageXRatio,
-                'y' => 2008 * $this->imageYRatio,
+                'y' => 1808 * $this->imageYRatio,
                 'fontSize' => 0.4 * $this->defaultFontSize,
                 'color' => 102,
                 'fontWeight' => 1,
                 'bottomPicUrl' => $certificate->getCertificateBasemap(),
-                'txt' => '发证日期：',
+                'txt' => '证书获取时间：',
             ]
         );
 
         return $this->imageTtfText(
             [
-                'x' => 2586 * $this->imageXRatio,
-                'y' => 2008 * $this->imageYRatio,
+                'x' => 2686 * $this->imageXRatio,
+                'y' => 1808 * $this->imageYRatio,
                 'fontSize' => 0.4 * $this->defaultFontSize,
                 'color' => 0,
                 'fontWeight' => 1,
@@ -184,12 +184,12 @@ class HorizontalImgBuilder extends ImgBuilder
         }
         $qrCode = $this->buildQrCode($certificate->getCertificateQrCodeUrl());
         $qrCode = $this->_imageCreateFromImageOrString($qrCode);
-        imagecopymerge($this->image, $qrCode, 420 * $this->imageXRatio, 360 * $this->imageYRatio, 0, 0, 160 * $this->imageXRatio, 160 * $this->imageXRatio, 100);
+        imagecopymerge($this->image, $qrCode, 710 * $this->imageXRatio, 1858 * $this->imageYRatio, 0, 0, 180 * $this->imageXRatio, 180 * $this->imageXRatio, 100);
 
         return $this->imageTtfText(
             [
-                'x' => 360 * $this->imageXRatio,
-                'y' => 588 * $this->imageYRatio,
+                'x' => 660 * $this->imageXRatio,
+                'y' => 1808 * $this->imageYRatio,
                 'fontSize' => 0.25 * $this->defaultFontSize,
                 'color' => 102,
                 'fontWeight' => 1,
