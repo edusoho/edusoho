@@ -44,6 +44,7 @@ class CertificateEventSubscriber extends EventSubscriber implements EventSubscri
 
         $this->getSchedulerService()->register(array(
             'name' => 'issue_certificate_job'.$certificate['id'],
+            'pool' => 'dedicated',
             'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
             'expression' => intval(time()),
             'misfire_policy' => 'executing',
