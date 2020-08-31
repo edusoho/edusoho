@@ -398,7 +398,7 @@ class CourseExtension extends \Twig_Extension
             ['targetIds' => $targetIds, 'targetType' => $targetType, 'status' => 'published'],
             [],
             0,
-            PHP_INT_MAX
+            1
         );
 
         return empty($certificates) ? false : true;
