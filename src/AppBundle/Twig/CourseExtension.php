@@ -389,7 +389,7 @@ class CourseExtension extends \Twig_Extension
     public function canObtainCertificates($targetId, $targetType)
     {
         $targetIds = [$targetId];
-        if ($targetType == 'courseSet') {
+        if ('courseSet' == $targetType) {
             $targetType = 'course';
             $courses = $this->getCourseService()->findCoursesByCourseSetId($targetId);
             $targetIds = ArrayToolkit::column($courses, 'id');
