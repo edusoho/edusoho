@@ -133,7 +133,7 @@ class CertificateServiceImpl extends BaseService implements CertificateService
     {
         $records = $this->getCertificateRecordService()->search([
             'userId' => $userId,
-            'statuses' => ['valid', 'expired'],
+            'statuses' => ['valid', 'expired', 'cancelled'],
         ], [], 0, PHP_INT_MAX);
 
         $conditions = ['status' => 'published'];
