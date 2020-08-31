@@ -12,6 +12,8 @@ use Codeages\Biz\Framework\Context\Biz;
 
 abstract class BaseStrategy
 {
+    const ISSUE_LIMIT = 50;
+
     /**
      * @var Biz
      */
@@ -33,6 +35,8 @@ abstract class BaseStrategy
     abstract public function findTargetsByIds($targetIds);
 
     abstract public function findTargetsByTargetTitle($targetTitle);
+
+    abstract public function issueCertificate($certificate);
 
     public function getCertificateImg($record)
     {

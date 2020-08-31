@@ -11,6 +11,7 @@ use Biz\Certificate\Service\RecordService;
 use Biz\Certificate\Service\TemplateService;
 use Biz\Common\CommonException;
 use Biz\System\Service\LogService;
+use Codeages\Biz\Framework\Event\Event;
 
 class CertificateServiceImpl extends BaseService implements CertificateService
 {
@@ -83,7 +84,11 @@ class CertificateServiceImpl extends BaseService implements CertificateService
             $this->createNewException(CertificateException::NOTFOUND_CERTIFICATE());
         }
 
-        return $this->getCertificateDao()->update($id, ['status' => 'published']);
+        $certificate = $this->getCertificateDao()->update($id, ['status' => 'published']);
+
+        $this->dispatchEvent('certificate.publish', new Event($certificate));
+
+        return $certificate;
     }
 
     public function closeCertificate($id)

@@ -46,7 +46,7 @@ class RecordDaoImpl extends AdvancedDaoImpl implements RecordDao
                 'userId IN (:userIds)',
                 'userId = :userId',
                 'targetId IN (:targetIds)',
-                'status != :statusNotEqual',
+                'status NOT IN (:statusNotIn)',
                 'targetType = :targetType',
                 'status IN (:statuses)',
                 'targetId = :targetId',

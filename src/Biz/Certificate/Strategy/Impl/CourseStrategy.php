@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Certificate\Strategy\BaseStrategy;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\Course\Service\MemberService;
 
 class CourseStrategy extends BaseStrategy
 {
@@ -78,6 +79,22 @@ class CourseStrategy extends BaseStrategy
         );
     }
 
+    public function issueCertificate($certificate)
+    {
+        $course = $this->getCourseService()->getCourse($certificate['targetId']);
+        $members = $this->getMemberService()->searchMembers(
+            ['courseId' => $course['id'], 'finishedTime_GT' => 0, 'learnedCompulsoryTaskNumGreaterThan' => $course['compulsoryTaskNum']],
+            [],
+            0,
+            PHP_INT_MAX
+        );
+        $memberUserIds = ArrayToolkit::column($members, 'userId');
+        $batches = array_chunk($memberUserIds, self::ISSUE_LIMIT);
+        foreach ($batches as $userIds) {
+            $this->getRecordService()->autoIssueCertificates($certificate['id'], $userIds);
+        }
+    }
+
     protected function filterConditions($conditions)
     {
         if (!empty($conditions['keyword'])) {
@@ -118,5 +135,13 @@ class CourseStrategy extends BaseStrategy
     protected function getCourseSetService()
     {
         return $this->biz->service('Course:CourseSetService');
+    }
+
+    /**
+     * @return MemberService
+     */
+    protected function getMemberService()
+    {
+        return $this->biz->service('Course:MemberService');
     }
 }
