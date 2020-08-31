@@ -3413,7 +3413,7 @@ user.certificates.my_list: 我的证书
 user.certificates.none_record: 暂无证书
 user.certificates.only_valid: 仅显示有效的
 user.certificates.date_range: 证书获取时间
-user.certificates.placeholde_name: 输入证书名称搜索...
+user.certificates.placeholde_name: 证书名称...
 user.certificates.cert_titile: 证书名称
 user.certificates.cert_code: 证书编号
 user.certificates.cert_issue_time: 获取时间
