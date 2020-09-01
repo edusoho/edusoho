@@ -1,6 +1,6 @@
 <template>
   <div class="classroom-plan">
-    <e-panel :title="details.title">
+    <e-panel :title="details.title" type="title">
       <div class="course-detail__plan-price">
         <span :class="{ isFree: Number(details.price) === 0 }">{{
           details.price | filterPrice
