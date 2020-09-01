@@ -29,7 +29,10 @@ class CourseEntity extends BaseGoodsEntity
     public function hitTarget($goods)
     {
         $product = $this->getProduct($goods['productId']);
-        return $this->getCourseSetService()->hitCourseSet($product['targetId']);
+        $this->getCourseSetService()->hitCourseSet($product['targetId']);
+        $courseSet = $this->getCourseSetService()->getCourseSet($product['targetId']);
+
+        return $courseSet['hotNum'];
     }
 
     public function getSpecsByTargetId($targetId)
