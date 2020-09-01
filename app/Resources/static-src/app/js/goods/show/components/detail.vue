@@ -10,7 +10,7 @@
                     {{ goods.product.target.studentNum }}人加入学习
                     </span>
                     <span v-else-if="goodsSetting.show_number_data === 'visitor'">
-                    {{ goods.hitNUm }}人访问
+                    {{ goods.hitNum }}人访问
                     </span>
                 </li>
                 <li class="pull-right">
