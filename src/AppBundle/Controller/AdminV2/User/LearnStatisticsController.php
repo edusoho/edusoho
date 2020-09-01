@@ -21,11 +21,10 @@ class LearnStatisticsController extends BaseController
             'endDate' => '',
             'nickname' => '',
             'isDefault' => 'false',
-            'destroyed' => 0,
         ];
         $conditions = $request->query->all();
         $conditions = array_merge($defaultCondition, $conditions);
-        $userConditions = ['nickname' => $conditions['nickname']];
+        $userConditions = ['destroyed' => 0, 'nickname' => $conditions['nickname']];
         $paginator = new Paginator(
             $request,
             $this->getUserService()->countUsers($userConditions),
