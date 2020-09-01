@@ -1,6 +1,6 @@
 <template>
     <div class="cd-container">
-        <div class="product-breadcrumb">首页 / {{goods.title}}</div>
+        <div class="product-breadcrumb"><a href="/">首页</a> / {{goods.title}}</div>
         <detail :goodsSetting="goodsSetting" :goods="goods" :currentSku="currentSku" @changeSku="changeSku" :current-url="currentUrl" :is-user-login="isUserLogin">
         </detail>
 
