@@ -4,6 +4,7 @@ namespace Biz\Activity\Type;
 
 use Biz\Activity\Config\Activity;
 use Biz\Activity\Dao\DownloadActivityDao;
+use Biz\File\Service\UploadFileService;
 
 class Download extends Activity
 {
@@ -20,19 +21,19 @@ class Download extends Activity
         $files = json_decode($fields['materials'], true);
         $fileIds = array_keys($files);
 
-        $downloadActivity = array('mediaCount' => count($files), 'fileIds' => $fileIds);
+        $downloadActivity = ['mediaCount' => count($files), 'fileIds' => $fileIds];
         $downloadActivity = $this->getDownloadActivityDao()->create($downloadActivity);
 
         return $downloadActivity;
     }
 
-    public function copy($activity, $config = array())
+    public function copy($activity, $config = [])
     {
         $download = $this->getDownloadActivityDao()->get($activity['mediaId']);
-        $newDownload = array(
+        $newDownload = [
             'mediaCount' => $download['mediaCount'],
             'fileIds' => $download['fileIds'],
-        );
+        ];
 
         return $this->getDownloadActivityDao()->create($newDownload);
     }
@@ -56,7 +57,7 @@ class Download extends Activity
 
         $fileIds = array_keys($files);
 
-        $downloadActivity = array('mediaCount' => count($files), 'fileIds' => $fileIds);
+        $downloadActivity = ['mediaCount' => count($files), 'fileIds' => $fileIds];
         $downloadActivity = $this->getDownloadActivityDao()->update($id, $downloadActivity);
 
         return $downloadActivity;
@@ -67,7 +68,20 @@ class Download extends Activity
      */
     public function delete($id)
     {
+        $download = $this->getDownloadActivityDao()->get($id);
+        foreach ($download['fileIds'] as $fileId) {
+            $this->getUploadFileService()->updateUsedCount($fileId);
+        }
+
         return $this->getDownloadActivityDao()->delete($id);
+    }
+
+    /**
+     * @return UploadFileService
+     */
+    protected function getUploadFileService()
+    {
+        return $this->getBiz()->service('File:UploadFileService');
     }
 
     /**

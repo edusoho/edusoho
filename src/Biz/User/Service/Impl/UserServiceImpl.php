@@ -2168,6 +2168,11 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserDao()->findUnLockedUsersByUserIds($userIds);
     }
 
+    public function updatePasswordChanged($id, $passwordChanged)
+    {
+        return $this->getUserDao()->update($id, ['passwordChanged' => $passwordChanged]);
+    }
+
     protected function filterCustomField($fields)
     {
         $numericalFields = ['intField1', 'intField2', 'intField3', 'intField4', 'intField5', 'floatField1', 'floatField2', 'floatField3', 'floatField4', 'floatField5'];

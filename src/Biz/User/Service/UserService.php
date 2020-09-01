@@ -411,4 +411,6 @@ interface UserService
     public function deleteUserBindByUserId($userId);
 
     public function findUnLockedUsersByUserIds($userIds = []);
+
+    public function updatePasswordChanged($id, $passwordChanged);
 }
