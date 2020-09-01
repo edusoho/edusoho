@@ -39,7 +39,10 @@ class MeCertificateRecord extends AbstractResource
         $certificates = $this->getCertificateService()->findByIds(ArrayToolkit::column($certificateRecords, 'certificateId'));
         $wrapperCertificateRecords = [];
         foreach ($certificateRecords as $certificateRecord) {
-            $certificateRecord['certificate'] = empty($certificates[$certificateRecord['certificateId']]) ? '' : $certificates[$certificateRecord['certificateId']];
+            if (empty($certificates[$certificateRecord['certificateId']])) {
+                continue;
+            }
+            $certificateRecord['certificate'] = $certificates[$certificateRecord['certificateId']];
             $issueYear = date('Y', $certificateRecord['issueTime']);
             if (!isset($wrapperCertificateRecords[$issueYear])) {
                 $wrapperCertificateRecords[$issueYear] = ['issueYear' => $issueYear, 'certificateRecords' => []];
