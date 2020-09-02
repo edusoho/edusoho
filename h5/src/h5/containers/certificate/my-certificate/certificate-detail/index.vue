@@ -5,11 +5,11 @@
       <h3 class="certificate-detail__title">认证对象</h3>
       <div class="certificate-user clearfix">
         <div class="certificate-user__img pull-left">
-          <img v-if="user.avatar" :src="user.avatar.small" />
+          <img v-if="userInfo.avatar" :src="userInfo.avatar.small" />
         </div>
         <div class="certificate-user__info pull-left">
           <p>姓名：{{ certificate.truename }}</p>
-          <p>用户名：{{ user.nickname }}</p>
+          <p>用户名：{{ userInfo.nickname }}</p>
         </div>
       </div>
     </div>
@@ -54,14 +54,8 @@
       <div class="certificate-detail__img">
         <img :src="certificate.imgUrl" />
       </div>
-      <a
-        class="certificate-detail__download"
-        :href="certificate.imgUrl"
-        :download="
-          certificate.certificate ? certificate.certificate.name + '.png' : ''
-        "
-      >
-        下载证书
+      <a v-if="isUser" class="certificate-detail__download" href="javascript:;">
+        长按图片保存
       </a>
     </div>
   </div>
@@ -77,7 +71,8 @@ export default {
   data() {
     return {
       certificate: {},
-      user: {},
+      userInfo: {},
+      isUser: false,
     };
   },
   filters: {
@@ -98,6 +93,7 @@ export default {
     ...mapState({
       isLoading: state => state.isLoading,
     }),
+    ...mapState(['user']),
   },
   methods: {
     ...mapMutations({
@@ -107,7 +103,12 @@ export default {
       Api.getCertificateUserInfo({
         query: { userId: userId },
       }).then(res => {
-        this.user = res;
+        this.userInfo = res;
+        if (res.nickname == this.user.nickname) {
+          this.isUser = true;
+        } else {
+          this.isUser = false;
+        }
       });
     },
   },

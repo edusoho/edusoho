@@ -199,15 +199,10 @@
 	.certificate-detail__download {
 		display: inline-block;
 		width: 100%;
-		height: vw(40);
-		margin-top: vw(16);
-		margin-bottom: vw(13);
-		color: #fff;
-		font-size: vw(16);
-		line-height: vw(40);
+		margin-top: vw(8);
+		color: #666;
+		font-size: vw(12);
 		text-align: center;
-		background-color: #03c777;
-		border-radius: vw(4);
 	}
 }
 
