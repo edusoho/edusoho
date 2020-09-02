@@ -32,7 +32,7 @@ class CertificateEventSubscriber extends EventSubscriber implements EventSubscri
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
 
         $this->processCourseCertificate($courseSet, $course, $taskResult);
-        $this->processClassroomCertificate($courseSet, $taskResult['userId']);
+        $this->processClassroomCertificate($course, $taskResult['userId']);
     }
 
     public function onCertificatePublish(Event $event)
@@ -66,36 +66,31 @@ class CertificateEventSubscriber extends EventSubscriber implements EventSubscri
         }
     }
 
-    protected function processClassroomCertificate($courseSet, $userId)
+    protected function processClassroomCertificate($course, $userId)
     {
-        $classroomCourses = $this->getClassroomService()->findClassroomCourseByCourseSetIds([$courseSet['id']]);
-        $classroomIds = ArrayToolkit::column($classroomCourses, 'classroomId');
-        $members = $this->getClassroomService()->findMembersByUserIdAndClassroomIds($userId, $classroomIds);
-        $classroomCourseGroups = ArrayToolkit::group($classroomCourses, 'classroomId');
-        $classroomIds = ArrayToolkit::column($members, 'classroomId');
+        $classroomCourse = $this->getClassroomService()->findClassroomIdsByCourseId($course['id']);
+        $classroomIds = ArrayToolkit::column($classroomCourse, 'classroomId');
         if (empty($classroomIds)) {
             return true;
         }
 
-        $certificates = $this->getCertificateService()->search(['targetIds' => $classroomIds, 'targetType' => 'classroom'], [], 0, PHP_INT_MAX);
-        $classroomIds = ArrayToolkit::column($certificates, 'targetId');
-        $certificateGroups = ArrayToolkit::group($certificates, 'targetId');
+        $classroomId = $classroomIds[0];
+        $courses = $this->getClassroomService()->findCoursesByClassroomId($classroomId);
+        $certificates = $this->getCertificateService()->findByTargetIdAndTargetType($classroomId, 'classroom');
+        if (empty($certificates)) {
+            return true;
+        }
 
-        foreach ($classroomIds as $classroomId) {
-            if (empty($classroomCourseGroups[$classroomId]) || empty($certificateGroups[$classroomId])) {
-                continue;
-            }
-            $courses = $classroomCourseGroups[$classroomId];
-            $courseIds = ArrayToolkit::column($courses, 'courseId');
-            $memberCounts = $this->getCourseMemberService()->countMembers(['finishedTime_GT' => 0, 'userId' => $userId, 'courseIds' => $courseIds]);
+        $courseIds = ArrayToolkit::column($courses, 'id');
+        $memberCounts = $this->getCourseMemberService()->countMembers(['finishedTime_GT' => 0, 'userId' => $userId, 'courseIds' => $courseIds]);
 
-            //没有全部完成忽略
-            if ($memberCounts < count($courseIds)) {
-                continue;
-            }
-            foreach ($certificateGroups[$classroomId] as $certificate) {
-                $this->getRecordService()->autoIssueCertificates($certificate['id'], [$userId]);
-            }
+        //没有全部完成忽略
+        if ($memberCounts < count($courseIds)) {
+            return true;
+        }
+
+        foreach ($certificates as $certificate) {
+            $this->getRecordService()->autoIssueCertificates($certificate['id'], [$userId]);
         }
     }
 

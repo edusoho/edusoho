@@ -108,11 +108,6 @@ class CertificateRecordController extends BaseController
         if (!empty($conditions['status'])) {
             if ('all' == $conditions['status']) {
                 unset($conditions['status']);
-            } elseif ('valid' == $conditions['status']) {
-                $conditions['excludeIds'] = $this->getExpiredRecordIds($conditions['certificateId']);
-            } elseif ('expired' == $conditions['status']) {
-                $conditions['ids'] = $this->getExpiredRecordIds($conditions['certificateId']) ?: [-1];
-                unset($conditions['status']);
             }
         }
         if (!empty($conditions['keywordType']) && !empty($conditions['keyword'])) {
@@ -139,13 +134,6 @@ class CertificateRecordController extends BaseController
         $conditions['statusNotIn'] = ['none', 'reject'];
 
         return $conditions;
-    }
-
-    protected function getExpiredRecordIds($certificateId)
-    {
-        $expiredRecords = $this->getRecordService()->findExpiredRecords($certificateId);
-
-        return array_column($expiredRecords, 'id');
     }
 
     protected function getCertificateStrategy($type)

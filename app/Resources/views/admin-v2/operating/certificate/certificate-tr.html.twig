@@ -10,7 +10,7 @@
     {{ dict_macro.certificateTypes(certificate.targetType) }}
   </td>
   <td>{{ certificate.createdTime|date('Y-n-d H:i:s') }}</td>
-  <td>
+  <td class="js-certificate-status" data-status="{{ certificate.status }}">
     {{ dict_macro.certificateStatus(certificate.status) }}
   </td>
   <td>

@@ -5,6 +5,7 @@ namespace Tests\Unit\Certificate\Strategy;
 use Biz\BaseTestCase;
 use Biz\Certificate\Dao\CertificateDao;
 use Biz\Certificate\Dao\TemplateDao;
+use Biz\Certificate\Strategy\CertificateStrategyContext;
 use Biz\Certificate\Strategy\Impl\CourseStrategy;
 
 class CourseStrategyTest extends BaseTestCase
@@ -97,7 +98,9 @@ class CourseStrategyTest extends BaseTestCase
 
     protected function getCourseStrategy()
     {
-        return new CourseStrategy($this->getBiz());
+        $context = new CertificateStrategyContext($this->getBiz());
+
+        return $context->createStrategy('course');
     }
 
     protected function createCertificate($certificate = [])
