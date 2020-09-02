@@ -51,6 +51,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = array(
             'addCertificateTables',
+            'addUserColumn',
         );
 
         $funcNames = array();
@@ -151,6 +152,17 @@ class EduSohoUpgrade extends AbstractUpdater
                     PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='证书记录表';
             ");
+        }
+
+        return 1;
+    }
+
+    public function addUserColumn()
+    {
+        $this->logger('info', 'user创建passwordChanged字段');
+
+        if (!$this->isFieldExist('user', 'passwordChanged')) {
+            $this->getConnection()->exec("ALTER TABLE `user` ADD `passwordChanged` tinyint(1) NOT NULL default 0 COMMENT '是否修改密码';");
         }
 
         return 1;
