@@ -23,4 +23,10 @@ export default [
     url: '/certificates/{certificateId}',
     method: 'GET',
   },
+  {
+    // 根据userId获取用户信息
+    name: 'getCertificateUserInfo',
+    url: '/user/{userId}',
+    method: 'GET',
+  },
 ];

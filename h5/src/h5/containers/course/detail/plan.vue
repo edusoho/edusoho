@@ -1,6 +1,6 @@
 <template>
   <div>
-    <e-panel :title="details.courseSet.title" type="title">
+    <e-panel :title="details.courseSet.title" :type="details.hasCertificate">
       <div class="course-detail__plan-price">
         <span :class="{ isFree: isFree }"
           >{{ filterPrice() }}
@@ -51,7 +51,7 @@
     <div
       class="course-detail__certificate"
       @click="toCertificate(selectedPlanId)"
-      v-if="$route.query.hasCertificate"
+      v-if="details.hasCertificate"
     >
       <span><span class="certificate-icon">证</span>证书</span>
       <i class="van-icon van-icon-arrow pull-right" />

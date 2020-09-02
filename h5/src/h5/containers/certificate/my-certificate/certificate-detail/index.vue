@@ -77,6 +77,7 @@ export default {
   data() {
     return {
       certificate: {},
+      user: {},
     };
   },
   filters: {
@@ -97,12 +98,18 @@ export default {
     ...mapState({
       isLoading: state => state.isLoading,
     }),
-    ...mapState(['user']),
   },
   methods: {
     ...mapMutations({
       setNavBarTitle: types.SET_NAVBAR_TITLE,
     }),
+    getUserInfo(userId) {
+      Api.getCertificateUserInfo({
+        query: { userId: userId },
+      }).then(res => {
+        this.user = res;
+      });
+    },
   },
   created() {
     Api.certificateRecords({
@@ -111,6 +118,7 @@ export default {
       .then(res => {
         this.certificate = res;
         this.setNavBarTitle(res.certificate.name);
+        this.getUserInfo(res.userId);
       })
       .catch(err => {
         Toast.fail(err.message);
