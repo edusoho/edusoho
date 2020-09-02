@@ -4,7 +4,7 @@
 
 {% block title %}商品页{% endblock %}
 {% block full_content %}
-  <div id="show-product-page"
+  <div id="show-product-page" class="" style=""
        data-goods="{{ goods|json_encode }}"
        data-components-data="{{ goodsComponents|json_encode }}"
        data-current-user-id="{{ app.user.id|default(null) }}"
