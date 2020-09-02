@@ -15,12 +15,14 @@
           class="item-right__time--green"
           >长期有效</span
         ><span
-          v-else-if="new Date(certificate.expiryTime) < new Date()"
+          v-else-if="certificate.status == 'expired'"
           class="item-right__time--red"
           >{{ certificate.expiryTime | formatSlashTime }}
           <span>已过期</span>
         </span>
-        <span v-else class="item-right__time--green"
+        <span
+          v-else-if="certificate.status == 'valid'"
+          class="item-right__time--green"
           >{{ certificate.expiryTime | formatSlashTime }}
           <span>有效中</span></span
         >
