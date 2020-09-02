@@ -135,7 +135,6 @@
           }).done(function (resp) {
             console.log(app);
             console.log(resp);
-            resp.data['playServer'] = app.cloudPlayServer;
             resp.data['sdkBaseUri'] = app.cloudSdkBaseUri;
             resp.data['disableDataUpload'] = app.cloudDisableLogReport;
             resp.data['disableSentry'] = app.cloudDisableLogReport;
