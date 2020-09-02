@@ -20,7 +20,7 @@
     <div class="pull-right mhs"><a href="{{ path('course_set_archive') }}">{{ '课程存档'|trans }}</a></div>
     <div class="text-gray" data-role="default-foot-bar" id="license-footer">
       {% if setting('license.license_picture') and setting('license.license_name') %}
-        {% if sgitetting('license.license_url') %}
+        {% if setting('license.license_url') %}
           <a id="license-picture" href={{ setting('license.license_url')| default('/') }} target="_blank">
             <img src="{{ asset(setting('license.license_picture')) }}">
           </a>
