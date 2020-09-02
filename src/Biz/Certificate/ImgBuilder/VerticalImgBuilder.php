@@ -185,7 +185,7 @@ class VerticalImgBuilder extends ImgBuilder
         }
         $qrCode = $this->buildQrCode($certificate->getCertificateQrCodeUrl());
         $qrCode = $this->_imageCreateFromImageOrString($qrCode);
-        imagecopymerge($this->image, $qrCode, 490 * $this->imageXRatio, 2650 * $this->imageYRatio, 0, 0, 300 * $this->imageXRatio, 300 * $this->imageXRatio, 100);
+        imagecopymerge($this->image, $qrCode, 490 * $this->imageXRatio, 2580 * $this->imageYRatio, 0, 0, 400 * $this->imageXRatio, 400 * $this->imageXRatio, 100);
 
         return $this->imageTtfText(
             [

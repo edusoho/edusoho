@@ -167,7 +167,7 @@ class HorizontalImgBuilder extends ImgBuilder
             $certificate->getCertificateStamp(),
             [
                 'dst_x' => 2400 * $this->imageXRatio,
-                'dst_y' => 1550 * $this->imageYRatio,
+                'dst_y' => 1650 * $this->imageYRatio,
                 'src_x' => 0,
                 'src_y' => 0,
                 'src_w' => 650 * $this->imageXRatio,
@@ -184,7 +184,7 @@ class HorizontalImgBuilder extends ImgBuilder
         }
         $qrCode = $this->buildQrCode($certificate->getCertificateQrCodeUrl());
         $qrCode = $this->_imageCreateFromImageOrString($qrCode);
-        imagecopymerge($this->image, $qrCode, 650 * $this->imageXRatio, 1858 * $this->imageYRatio, 0, 0, 300 * $this->imageXRatio, 300 * $this->imageXRatio, 100);
+        imagecopymerge($this->image, $qrCode, 650 * $this->imageXRatio, 1808 * $this->imageYRatio, 0, 0, 400 * $this->imageXRatio, 400 * $this->imageXRatio, 100);
 
         return $this->imageTtfText(
             [
