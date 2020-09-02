@@ -111,8 +111,9 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     {
         $classroom = $this->getClassroom($id);
         if (empty($classroom)) {
-            return ;
+            return;
         }
+
         return $this->getClassroomDao()->wave([$classroom['id']], ['hitNum' => 1]);
     }
 
@@ -676,6 +677,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
             $this->deleteAllCoursesInClass($id);
             $this->getClassroomDao()->delete($id);
+            $this->getClassroomGoodsMediator()->onDelete($classroom);
 
             $this->dispatchEvent('classroom.delete', $classroom);
             $this->commit();

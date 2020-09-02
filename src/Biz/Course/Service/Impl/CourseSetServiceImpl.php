@@ -518,6 +518,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $this->getCourseProductService()->deleteProductsByCourseSet($courseSet);
 
         $this->getCourseDeleteService()->deleteCourseSet($courseSet['id']);
+        $this->getCourseSetGoodsMediator()->onDelete($courseSet);
 
         $this->dispatchEvent('course-set.delete', new Event($courseSet));
     }
