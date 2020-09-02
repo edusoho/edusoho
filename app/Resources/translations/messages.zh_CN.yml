@@ -6466,7 +6466,7 @@ admin.operation_certificate.certificate.expiry_day: 证书有效期
 admin.operation_certificate.certificate.expiry_day.forever: 长期有效
 admin.operation_certificate.certificate.expiry_day.placeholder: 输入证书有效期，空值位长期有效
 admin.operation_certificate.certificate.auto_issue: 自动发放
-admin.operation_certificate.certificate.issue_rule: 发放条件
+admin.operation_certificate.certificate.issue_rule: 发放方式
 admin.operation_certificate.certificate.issue_rule.course: 完成任务后自动发放
 admin.operation_certificate.certificate.issue_rule.course_not_auto: 完成任务后管理员审核发放
 admin.operation_certificate.certificate.update: 编辑证书
