@@ -2821,7 +2821,6 @@ user.account_center: 'Account Center'
 user.menu_heading: 'Account'
 user.account_menu: 'My Bills'
 user.order_menu: 'My Order'
-user.certificate_menu: 'My Certificate'
 user.cards_menu: 'My Coupons'
 user.vip_history_menu: 'VIP Record'
 user.account.empty: 'No record'
@@ -3774,6 +3773,7 @@ my.learning.notebook_menu: 'Notes'
 my.learning.homework_menu: 'Assignments'
 my.learning.testpaper_menu: 'Tests'
 my.learning.group_menu: 'Groups'
+user.certificate_menu: 'My Certificate'
 my.course.refund_tips: 'Your have submitted the refund request, please wait for the response from admin.'
 my.course.cancle_refund_btn: 'Cancel the refund request to continue the learning'
 my.course.free_mode_plan.task_finished: Finished
@@ -9990,7 +9990,7 @@ exception.favorite.forbidden_operate_favorite: Forbidden
 
 exception.s2b2c_product.adopt_failed: Adopt fail,Supplier is editing
 
-# 账户中心模块-我的证书
+# 我的证书
 user.certificates.content_title: My Certificate
 user.certificates.my_list: My Certificate
 user.certificates.none_record: Certificate Empty
