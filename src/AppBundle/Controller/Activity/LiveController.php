@@ -5,13 +5,13 @@ namespace AppBundle\Controller\Activity;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\LiveroomController;
 use Biz\Activity\Service\ActivityService;
-use Biz\Course\LiveReplayException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\LiveReplayService;
 use Biz\Course\Service\MemberService;
 use Biz\File\Service\UploadFileService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
+use Biz\Task\TaskException;
 use Symfony\Component\HttpFoundation\Request;
 
 class LiveController extends BaseActivityController implements ActivityActionInterface
@@ -211,12 +211,22 @@ class LiveController extends BaseActivityController implements ActivityActionInt
     public function replayUrlAction(Request $request, $courseId, $activityId, $replayId)
     {
         $this->getCourseService()->tryTakeCourse($courseId);
-        $activity = $this->getActivityService()->getActivity($activityId);
-        $replay = $this->getLiveReplayService()->getReplay($replayId);
 
-        if ((bool) $replay['hidden']) {
-            $this->createNewException(LiveReplayException::NOTFOUND_LIVE_REPLAY());
+        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
+        if (empty($task)) {
+            $this->createNewException(TaskException::NOTFOUND_TASK());
         }
+
+        if (false === $this->getTaskService()->canLearnTask($task['id'])) {
+            $this->createNewException(TaskException::CAN_NOT_DO());
+        }
+
+        $replay = $this->getLiveReplayService()->getReplay($replayId);
+        if (empty($replay) || $replay['lessonId'] != $activityId || (bool) $replay['hidden']) {
+            $this->createNewException(TaskException::LIVE_REPLAY_NOT_FOUND());
+        }
+
+        $activity = $this->getActivityService()->getActivity($activityId);
 
         $sourceActivityId = empty($activity['copyId']) ? $activity['id'] : $activity['copyId'];
         $sourceActivity = $this->getActivityService()->getActivity($sourceActivityId, true);
