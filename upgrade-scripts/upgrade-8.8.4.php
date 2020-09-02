@@ -5,6 +5,8 @@ use AppBundle\Common\ArrayToolkit;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
+    protected $fontDownloadUrl = 'https://edusoho-official.oss-cn-hangzhou.aliyuncs.com/edusoho-release/SourceHanSerifCNBold.otf';
+
     public function __construct($biz)
     {
         parent::__construct($biz);
@@ -52,6 +54,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $definedFuncNames = array(
             'addCertificateTables',
             'addUserColumn',
+            'downloadFont',
         );
 
         $funcNames = array();
@@ -166,6 +169,33 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         return 1;
+    }
+
+    public function downloadFont()
+    {
+        $filename = 'SourceHanSerifCNBold.otf';
+        $directory = $this->biz['root_directory'].'/web/assets/fonts/';
+        $filepath = $directory.$filename;
+        if(file_exists($filepath)){
+            return  1;
+        }
+
+        $this->download($this->fontDownloadUrl, $filepath);
+
+        return 1;
+    }
+
+    protected function download($url, $filepath)
+    {
+        $fp = fopen($filepath, 'w');
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_FILE, $fp);
+        curl_exec($curl);
+        curl_close($curl);
+
+        fclose($fp);
+
+        return $filepath;
     }
 
     private function getSettingService()
