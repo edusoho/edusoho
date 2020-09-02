@@ -1,7 +1,7 @@
 <template>
   <div class="e-panel">
     <div v-show="!hiddeTitle" class="e-panel-heading">
-      <span class="certificate-icon" v-if="type == 'title'">证</span>{{ title }}
+      <span class="certificate-icon" v-if="type">证</span>{{ title }}
     </div>
     <div :class="needFlex ? 'flex' : ''" class="e-panel-body">
       <slot>
@@ -31,8 +31,8 @@ export default {
       default: true,
     },
     type: {
-      type: String,
-      default: '',
+      type: Boolean,
+      default: false,
     },
   },
 };
