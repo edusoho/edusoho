@@ -85,7 +85,7 @@ class CertificateEventSubscriber extends EventSubscriber implements EventSubscri
         $memberCounts = $this->getCourseMemberService()->countMembers(['finishedTime_GT' => 0, 'userId' => $userId, 'courseIds' => $courseIds]);
 
         //没有全部完成忽略
-        if ($memberCounts < count($courseIds)) {
+        if ($memberCounts < count($courseIds) || empty($memberCounts)) {
             return true;
         }
 

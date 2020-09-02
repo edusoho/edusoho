@@ -9,6 +9,7 @@ use Biz\Certificate\Service\RecordService;
 use Biz\Certificate\Service\TemplateService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Context\Biz;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 abstract class BaseStrategy
 {
@@ -54,7 +55,7 @@ abstract class BaseStrategy
         $certificateContent = implode('', explode("\r\n", trim($template['certificateContent'])));
         $certificate->setCertificateParams([
             'certificateTitle' => $template['certificateName'],
-            'certificateQrCodeUrl' => empty($template['qrCodeSet']) ? '' : $this->generateUrl('certificate_record', ['recordId' => $record['id']], true),
+            'certificateQrCodeUrl' => empty($template['qrCodeSet']) ? '' : $this->generateUrl('certificate_record', ['recordId' => $record['id']], 0),
             'certificateRecipient' => $this->getRecipientContent($record['userId'], $template['recipientContent']),
             'certificateContent' => $this->getContent($record, $certificateContent),
             'certificateCode' => $record['certificateCode'],

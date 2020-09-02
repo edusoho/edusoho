@@ -137,7 +137,7 @@ class CertificateController extends BaseController
 
         $targets = $strategy->search(
             $conditions,
-            ['updatedTime' => 'desc'],
+            ['createdTime' => 'desc'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -175,7 +175,7 @@ class CertificateController extends BaseController
 
         $templates = $this->getCertificateTemplateService()->search(
             $conditions,
-            ['updatedTime' => 'desc'],
+            ['createdTime' => 'desc'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

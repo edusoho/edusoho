@@ -6427,8 +6427,8 @@ admin.operation_certificate.template.style.horizontal: 横版
 admin.operation_certificate.template.style.vertical: 竖版
 admin.operation_certificate.template.basemap: 证书底图
 admin.operation_certificate.template.basemap.upload: 上传证书底图
-admin.operation_certificate.template.basemap.vertical_upload_hint: 请上传jpg、png格式的证书底图，建议尺寸为 2600 × 3600 px，文件大小不超过 2 MB
-admin.operation_certificate.template.basemap.horizontal_upload_hint: 请上传jpg、png格式的证书底图，建议尺寸为 3600 × 2600 px，文件大小不超过 2 MB
+admin.operation_certificate.template.basemap.vertical_upload_hint: 请上传jpg、png格式的证书底图，建议尺寸为 2800 × 3508 px，文件大小不超过 2 MB
+admin.operation_certificate.template.basemap.horizontal_upload_hint: 请上传jpg、png格式的证书底图，建议尺寸为 3508 × 2800 px，文件大小不超过 2 MB
 admin.operation_certificate.template.stamp: 证书印章
 admin.operation_certificate.template.stamp.upload: 上传证书印章
 admin.operation_certificate.template.stamp.upload_hint: 请上png等格式透明背景的印章图片，建议尺寸为 650 × 650 px，文件大小不超过 2 MB
