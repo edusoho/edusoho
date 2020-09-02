@@ -73,18 +73,18 @@ class CertificateEventSubscriberTest extends BaseTestCase
 
         $this->mockBiz('Classroom:ClassroomService', [
             [
-                'functionName' => 'findClassroomCourseByCourseSetIds',
+                'functionName' => 'findClassroomIdsByCourseId',
                 'returnValue' => [['id' => 1, 'classroomId' => 1, 'courseId' => 1]],
             ],
             [
-                'functionName' => 'findMembersByUserIdAndClassroomIds',
+                'functionName' => 'findCoursesByClassroomId',
                 'returnValue' => [['id' => 1, 'classroomId' => 1, 'userId' => 1]],
             ],
         ]);
 
         $this->mockBiz('Certificate:CertificateService', [
             [
-                'functionName' => 'search',
+                'functionName' => 'findByTargetIdAndTargetType',
                 'returnValue' => [['id' => 1, 'targetId' => 1]],
             ],
         ]);

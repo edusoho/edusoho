@@ -12,7 +12,7 @@
 {% block main %}
   <form class="well well-sm form-inline" method="get">
     <div class="form-group">
-      <label>{{ 'admin.operation_certificate.template.type'|trans }}:</label>
+      <label>{{ 'admin.operation_certificate.certificate.record.status'|trans }}:</label>
       <select class="form-control" name="status">
         {{ select_options(dict('certificateStatus'), app.request.query.get('status'), 'admin.operation_certificate.template.type.all'|trans) }}
       </select>

@@ -714,6 +714,7 @@ admin_v2:
                                             name: admin_v2.operation.certificate.edit_tab
                                             router_params:
                                                 id: (certificate.id)
+                                            blank: 1
                                         admin_v2_certificate_close:
                                             name: admin_v2.operation.certificate.close_tab
                                             class: close-certificate
@@ -743,11 +744,13 @@ admin_v2:
                                             router_params:
                                                 id: (certificate.id)
                                             group: groupButton
+                                            blank: 1
                                         admin_v2_certificate_examine_manage:
                                             name: admin_v2.operation.certificate.audit_manage_tab
                                             router_params:
                                                 id: (certificate.id)
                                             group: groupButton
+                                            blank: 1
                                 admin_v2_certificate_template_manage:
                                     name: admin_v2.operation.certificate.template.basic_tab
                                     disable: true

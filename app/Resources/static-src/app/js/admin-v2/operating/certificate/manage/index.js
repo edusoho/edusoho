@@ -41,9 +41,17 @@ export default class List {
     });
 
     $table.on('click', '.delete-certificate', function () {
-      if (!confirm(Translator.trans('admin_v2.certificate.delete.hint'))) {
-        return;
+      const status = $(this).parents('tr').find('.js-certificate-status').data('status');
+      if (status === 'draft') {
+        if (!confirm(Translator.trans('admin_v2.certificate.delete.draft_hint'))) {
+          return;
+        }
+      } else {
+        if (!confirm(Translator.trans('admin_v2.certificate.delete.hint'))) {
+          return;
+        }
       }
+
       $.post($(this).data('url'), function (result) {
         if (result) {
           notify('success', Translator.trans('admin_v2.certificate.delete.success_hint'), 1);

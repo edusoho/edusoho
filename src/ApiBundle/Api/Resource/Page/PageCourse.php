@@ -46,6 +46,7 @@ class PageCourse extends AbstractResource
         $course['courses'] = ArrayToolkit::sortPerArrayValue($course['courses'], 'seq');
         $course['progress'] = $this->getLearningDataAnalysisService()->makeProgress($course['learnedCompulsoryTaskNum'], $course['compulsoryTaskNum']);
         $course['reviews'] = $this->searchCourseReviews($course['id']);
+        $course['hasCertificate'] = $this->getCourseService()->hasCertificate($course['id']);
 
         if ($this->isPluginInstalled('vip') && $course['vipLevelId'] > 0) {
             $apiRequest = new ApiRequest('/api/plugins/vip/vip_levels/'.$course['vipLevelId'], 'GET', []);

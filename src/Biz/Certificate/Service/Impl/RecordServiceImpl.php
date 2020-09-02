@@ -44,7 +44,7 @@ class RecordServiceImpl extends BaseService implements RecordService
             $this->createNewException(CertificateException::NOTFOUND_RECORD());
         }
 
-        if ('valid' != $record['status']) {
+        if ('cancelled' == $record['status']) {
             $this->createNewException(CertificateException::FORBIDDEN_CANCEL_RECORD());
         }
 
@@ -62,9 +62,11 @@ class RecordServiceImpl extends BaseService implements RecordService
             $this->createNewException(CertificateException::FORBIDDEN_CANCEL_RECORD());
         }
 
+        $certificate = $this->getCertificateService()->get($record['certificateId']);
         $fields = ArrayToolkit::parts($fields, ['issueTime']);
 
         $fields['status'] = 'valid';
+        $fields['expiryTime'] = empty($certificate['expiryDay']) ? 0 : strtotime(date('Y-m-d', $fields['issueTime'] + 24 * 3600 * (int) $certificate['expiryDay']));
 
         return $this->getRecordDao()->update($id, $fields);
     }

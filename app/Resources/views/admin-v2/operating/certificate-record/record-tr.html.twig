@@ -29,7 +29,7 @@
         <span class="caret"></span>
       </button>
       <ul class="dropdown-menu">
-        {% if record.status == 'valid' %}
+        {% if record.status != 'cancelled' %}
           <li>
             <a class="js-cancel" data-url="{{ path('admin_v2_certificate_record_cancel', {id: record.id}) }}">{{ 'admin.operation_certificate.certificate.record.cancel'|trans }}</a>
           </li>

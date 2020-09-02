@@ -1596,6 +1596,7 @@ admin_v2.certificate.publish.hint: Are you sure you want to issue a certificate?
 admin_v2.certificate.publish.success_hint: publish success
 admin_v2.certificate.publish.failure_hint: publish failure
 admin_v2.certificate.delete.hint: After the certificate is deleted, you cannot view the user list and audit list of the certificate. Users who have acquired the certificate can no longer view the certificate. Is the certificate deleted?
+admin_v2.certificate.delete.draft_hint: The certificate has not yet been issued, is it certain to be removed?
 admin_v2.certificate.delete.success_hint: delete success
 admin_v2.certificate.delete.failure_hint: delete failure
 admin_v2.certificate.record.cancel.hint: Confirm revocation of certificate?
