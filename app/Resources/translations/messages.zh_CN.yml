@@ -1438,7 +1438,7 @@ course.catalogue.certificate_obtain: 通过完成课程全部任务可以获得
 course.catalogue.certificate_detail: 证书详情
 course.catalogue.certificate_achieve: 获取途径
 course.catalogue.certificate_condition: 获取条件
-course.catalogue.certificate_to_achieve: 通过完成<a href='%targetUrl%' target='_blank' class="btn-link">%course%</a>全部任务
+course.catalogue.certificate_to_achieve: 通过完成<a href='%targetUrl%' target='_blank' class="link-primary">%course%</a>全部任务
 course.catalogue.certificate_pass_condition: 完成课程全部任务
 course.catalogue.certificate_expiry: '有效期至：%expiryTime%'
 course.catalogue.certificate_forever: '有效期：长期有效'
@@ -2438,7 +2438,7 @@ classroom.reviews: 评价
 classroom.note: 笔记
 classroom.certificates: 班级证书
 classroom.certificate_obtain: 通过完成班级全部课程可以获得
-classroom.certificate_to_achieve: 通过完成<a href='%targetUrl%' target='_blank' class="btn-link">%classroom%</a>全部课程
+classroom.certificate_to_achieve: 通过完成<a href='%targetUrl%' target='_blank' class="link-primary">%classroom%</a>全部课程
 classroom.certificate_pass_condition: 完成班级全部课程
 classroom.expiry_date_tips: 班级有效期：
 classroom.expiry_day_tips: >

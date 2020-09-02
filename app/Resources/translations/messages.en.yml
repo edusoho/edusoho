@@ -1218,7 +1218,7 @@ course.catalogue.certificate_obtain: By completing all of the course tasks
 course.catalogue.certificate_detail: Certificate details
 course.catalogue.certificate_achieve: Approach of achieving
 course.catalogue.certificate_condition: Acquisition conditions
-course.catalogue.certificate_to_achieve: By completing <a href='%targetUrl%' target='_blank' class="btn-link">%course%</a> all tasks
+course.catalogue.certificate_to_achieve: By completing <a href='%targetUrl%' target='_blank' class="link-primary">%course%</a> all tasks
 course.catalogue.certificate_pass_condition: Complete all tasks of the course
 course.catalogue.certificate_expiry: 'valid until: %expiryTime%'
 course.catalogue.certificate_forever: 'Term of validity: long term'
@@ -2156,7 +2156,7 @@ classroom.expiry_day_tips: "<span class=\"mrm\">Class effective days: </span><sp
 classroom.classroom_manage: '%name% Management'
 classroom.vip_classroom: 'VIP %name%'
 classroom.certificate_obtain: 'By completing the entire course of the class'
-classroom.certificate_to_achieve: By completing <a href='%targetUrl%' target='_blank' class="btn-link">%classroom%</a> all courses
+classroom.certificate_to_achieve: By completing <a href='%targetUrl%' target='_blank' class="link-primary">%classroom%</a> all courses
 classroom.certificate_pass_condition: Complete the entire class
 classroom.classroom_manage.course_select.courseTitle: 'Course name'
 classroom.classroom_manage.course_select.teach_plan: 'Program name'
