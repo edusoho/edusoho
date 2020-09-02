@@ -5369,9 +5369,10 @@ admin.operation_certificate.certificate.code: Certificate Code
 admin.operation_certificate.certificate.code.placeholder: 1 to 6 digits or letters of the alphabet, not case sensitive
 admin.operation_certificate.certificate.expiry_day: Certificate validity
 admin.operation_certificate.certificate.expiry_day.placeholder: Enter the validity of the certificate, the empty value is valid for a long time
-admin.operation_certificate.certificate.auto_issue: automatic authentication
+admin.operation_certificate.certificate.auto_issue: automatic issue
 admin.operation_certificate.certificate.issue_rule: conditions of issue
-admin.operation_certificate.certificate.issue_rule.course: Completion of all course tasks
+admin.operation_certificate.certificate.issue_rule.course: Automatic release upon completion of tasks
+admin.operation_certificate.certificate.issue_rule.course_not_auto: Administrators review the release after completing the task
 admin.operation_certificate.certificate.update: Edit Certificate
 admin.operation_certificate.certificate.member_manage: Member Manage
 admin.operation_certificate.certificate.audit: Pending review

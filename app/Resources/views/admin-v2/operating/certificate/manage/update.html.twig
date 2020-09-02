@@ -109,7 +109,9 @@
           <input class="es-switch__input" type="text" name="autoIssue" value="{{ certificate.autoIssue }}" data-close="0" data-open="1" {% if certificate.status == 'published' %}disabled{% endif %}>
         </span>
         <div class="mtl">
-          {{'admin.operation_certificate.certificate.issue_rule'|trans}} : <span class="color-primary">{{'admin.operation_certificate.certificate.issue_rule.course'|trans}}</span>
+          {{'admin.operation_certificate.certificate.issue_rule'|trans}} :
+          <span class="color-primary js-auto-send {% if certificate.autoIssue == 0 %}hidden{% endif %}">{{'admin.operation_certificate.certificate.issue_rule.course'|trans}}</span>
+          <span class="color-primary js-close-auto {% if certificate.autoIssue == 1 %}hidden{% endif %}">{{'admin.operation_certificate.certificate.issue_rule.course_not_auto'|trans}}</span>
         </div>
       </div>
     </div>

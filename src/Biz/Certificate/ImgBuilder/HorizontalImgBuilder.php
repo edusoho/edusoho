@@ -107,8 +107,8 @@ class HorizontalImgBuilder extends ImgBuilder
     {
         $this->imageTtfText(
             [
-                'x' => 2258 * $this->imageXRatio,
-                'y' => 2008 * $this->imageYRatio,
+                'x' => 2313 * $this->imageXRatio,
+                'y' => 2088 * $this->imageYRatio,
                 'fontSize' => 0.4 * $this->defaultFontSize,
                 'color' => 102,
                 'fontWeight' => 1,
@@ -119,8 +119,8 @@ class HorizontalImgBuilder extends ImgBuilder
 
         return $this->imageTtfText(
             [
-                'x' => 2686 * $this->imageXRatio,
-                'y' => 2008 * $this->imageYRatio,
+                'x' => 2736 * $this->imageXRatio,
+                'y' => 2088 * $this->imageYRatio,
                 'fontSize' => 0.4 * $this->defaultFontSize,
                 'color' => 0,
                 'fontWeight' => 1,
@@ -134,8 +134,8 @@ class HorizontalImgBuilder extends ImgBuilder
     {
         $this->imageTtfText(
             [
-                'x' => 2258 * $this->imageXRatio,
-                'y' => 1808 * $this->imageYRatio,
+                'x' => 2313 * $this->imageXRatio,
+                'y' => 1988 * $this->imageYRatio,
                 'fontSize' => 0.4 * $this->defaultFontSize,
                 'color' => 102,
                 'fontWeight' => 1,
@@ -146,8 +146,8 @@ class HorizontalImgBuilder extends ImgBuilder
 
         return $this->imageTtfText(
             [
-                'x' => 2686 * $this->imageXRatio,
-                'y' => 1808 * $this->imageYRatio,
+                'x' => 2736 * $this->imageXRatio,
+                'y' => 1988 * $this->imageYRatio,
                 'fontSize' => 0.4 * $this->defaultFontSize,
                 'color' => 0,
                 'fontWeight' => 1,
@@ -166,7 +166,7 @@ class HorizontalImgBuilder extends ImgBuilder
         return $this->imageTtfStamp(
             $certificate->getCertificateStamp(),
             [
-                'dst_x' => 2500 * $this->imageXRatio,
+                'dst_x' => 2400 * $this->imageXRatio,
                 'dst_y' => 1550 * $this->imageYRatio,
                 'src_x' => 0,
                 'src_y' => 0,
@@ -194,7 +194,7 @@ class HorizontalImgBuilder extends ImgBuilder
                 'color' => 102,
                 'fontWeight' => 1,
                 'bottomPicUrl' => $certificate->getCertificateBasemap(),
-                'txt' => '证书验证二维码',
+                'txt' => '',
             ]
         );
     }

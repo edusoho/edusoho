@@ -108,8 +108,8 @@ class VerticalImgBuilder extends ImgBuilder
     {
         $this->imageTtfText(
             [
-                'x' => 1358 * $this->imageXRatio,
-                'y' => 2696 * $this->imageYRatio,
+                'x' => 1700 * $this->imageXRatio,
+                'y' => 2796 * $this->imageYRatio,
                 'fontSize' => 0.3 * $this->defaultFontSize,
                 'color' => 102,
                 'fontWeight' => 1,
@@ -120,8 +120,8 @@ class VerticalImgBuilder extends ImgBuilder
 
         return $this->imageTtfText(
             [
-                'x' => 1758 * $this->imageXRatio,
-                'y' => 2696 * $this->imageYRatio,
+                'x' => 2034 * $this->imageXRatio,
+                'y' => 2796 * $this->imageYRatio,
                 'fontSize' => 0.3 * $this->defaultFontSize,
                 'color' => 0,
                 'fontWeight' => 1,
@@ -135,7 +135,7 @@ class VerticalImgBuilder extends ImgBuilder
     {
         $this->imageTtfText(
             [
-                'x' => 1358 * $this->imageXRatio,
+                'x' => 1700 * $this->imageXRatio,
                 'y' => 2896 * $this->imageYRatio,
                 'fontSize' => 0.3 * $this->defaultFontSize,
                 'color' => 102,
@@ -147,7 +147,7 @@ class VerticalImgBuilder extends ImgBuilder
 
         return $this->imageTtfText(
             [
-                'x' => 1758 * $this->imageXRatio,
+                'x' => 2034 * $this->imageXRatio,
                 'y' => 2896 * $this->imageYRatio,
                 'fontSize' => 0.3 * $this->defaultFontSize,
                 'color' => 0,
@@ -167,8 +167,8 @@ class VerticalImgBuilder extends ImgBuilder
         return $this->imageTtfStamp(
             $certificate->getCertificateStamp(),
             [
-                'dst_x' => 1550 * $this->imageXRatio,
-                'dst_y' => 2510 * $this->imageYRatio,
+                'dst_x' => 1650 * $this->imageXRatio,
+                'dst_y' => 2410 * $this->imageYRatio,
                 'src_x' => 0,
                 'src_y' => 0,
                 'src_w' => 650 * $this->imageXRatio,
@@ -195,7 +195,7 @@ class VerticalImgBuilder extends ImgBuilder
                 'color' => 102,
                 'fontWeight' => 1,
                 'bottomPicUrl' => $certificate->getCertificateBasemap(),
-                'txt' => '证书验证二维码',
+                'txt' => '',
             ]
         );
     }

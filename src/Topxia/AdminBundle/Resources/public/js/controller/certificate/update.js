@@ -76,9 +76,11 @@ define(function(require, exports, module) {
       $input.val(ToggleVal);
       $(this).toggleClass('is-active');
       if ($input.val() == 1) {
-        $('.js-auto-issue-setting').removeClass('hidden');
+        $('.js-auto-send').removeClass('hidden');
+        $('.js-close-auto').addClass('hidden');
       } else {
-        $('.js-auto-issue-setting').addClass('hidden');
+        $('.js-close-auto').removeClass('hidden');
+        $('.js-auto-send').addClass('hidden');
       }
     });
 

@@ -6463,9 +6463,10 @@ admin.operation_certificate.certificate.code.placeholder: 1至6位数字或英�
 admin.operation_certificate.certificate.expiry_day: 证书有效期
 admin.operation_certificate.certificate.expiry_day.forever: 长期有效
 admin.operation_certificate.certificate.expiry_day.placeholder: 输入证书有效期，空值位长期有效
-admin.operation_certificate.certificate.auto_issue: 自动认证
+admin.operation_certificate.certificate.auto_issue: 自动发放
 admin.operation_certificate.certificate.issue_rule: 发放条件
-admin.operation_certificate.certificate.issue_rule.course: 完成课程全部任务
+admin.operation_certificate.certificate.issue_rule.course: 完成任务后自动发放
+admin.operation_certificate.certificate.issue_rule.course_not_auto: 完成任务后管理员审核发放
 admin.operation_certificate.certificate.update: 编辑证书
 admin.operation_certificate.certificate.member_manage: 名单管理
 admin.operation_certificate.certificate.audit: 待审核
