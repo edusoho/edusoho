@@ -315,7 +315,6 @@
             },
             freeTaskItemChange(value, event) {
                 let $currentCheckbox = $(event.currentTarget).parent().parent().parent('li');
-
                 if (value && !$currentCheckbox.hasClass('open')) {
                     $currentCheckbox.addClass('open');
                 }
@@ -323,6 +322,8 @@
                 if (!value && $currentCheckbox.hasClass('open')) {
                     $currentCheckbox.removeClass('open');
                 }
+                $('.js-task-price-setting-scroll').perfectScrollbar();
+
             },
             changeAudioMode(event) {
                 if ($('#course-audio-mode').data('value') == 'notAllowed') {
@@ -511,6 +512,10 @@
             };
         },
         mounted() {
+            $('.js-task-price-setting-scroll').perfectScrollbar();
+        },
+        created() {
+
         }
     }
 </script>
