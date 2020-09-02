@@ -41,7 +41,6 @@
               request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
             }
           }).done(function (resp) {
-            resp.data['playServer'] = app.cloudPlayServer;
             resp.data['sdkBaseUri'] = app.cloudSdkBaseUri;
             resp.data['disableDataUpload'] = app.cloudDisableLogReport;
             resp.data['disableSentry'] = app.cloudDisableLogReport;
