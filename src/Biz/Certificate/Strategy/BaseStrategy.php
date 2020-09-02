@@ -9,7 +9,6 @@ use Biz\Certificate\Service\RecordService;
 use Biz\Certificate\Service\TemplateService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Context\Biz;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 abstract class BaseStrategy
 {
