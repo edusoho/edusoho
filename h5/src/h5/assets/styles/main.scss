@@ -34,6 +34,7 @@
 @import './containers/search/index.scss';
 @import './containers/certificate/index.scss';
 @import './containers/course/certificate/index.scss';
+@import './containers/brush-exercise/index.scss';
 
 // modules
 @import './modules/e-drag.scss';
@@ -55,6 +56,13 @@
 // webview
 @import './containers/webview/index.scss';
 
+//wap-sdk
+@import '~wap-sdk/src/styles/iconfont/font.scss';
+
+.ibs-wap-vue {
+	// $primary-color: #fb40d2;
+	@import '~wap-sdk/src/styles/index.scss';
+}
 //隐藏滚动条
 html,
 body {

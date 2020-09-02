@@ -13,6 +13,7 @@ import studyCard from './study-card/index';
 import distribution from './distribution/index';
 import liveTimetable from './liveTimetable/index';
 import certificate from './certificate/index';
+import itemBank from './itemBank/index';
 
 const config = [
   ...openCourse,
@@ -30,6 +31,7 @@ const config = [
   ...liveTimetable,
   ...itemBankCourse,
   ...certificate,
+  ...itemBank,
 ];
 
 export default config;

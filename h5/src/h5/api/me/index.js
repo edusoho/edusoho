@@ -97,6 +97,11 @@ export default [
     url: '/me/classrooms',
     method: 'GET'
   }, {
+    // 我的学习
+    name: 'myStudyBanks',
+    url: '/me/item_bank_exercises',
+    method: 'GET'
+  }, {
     // 邮箱重置密码
     /*
      * @params dragCaptchaToken

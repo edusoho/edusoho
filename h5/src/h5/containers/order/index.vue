@@ -1,7 +1,7 @@
 <template>
   <div class="order">
     <div class="goods-info">
-      <e-loading v-if="isLoading"/>
+      <e-loading v-if="isLoading" />
       <!-- 商品缩略图 -->
       <e-course
         v-if="Object.keys(course).length > 0"
@@ -9,22 +9,38 @@
         :duration="course.duration"
         :order="course"
         :course="course"
-        type="confirmOrder"/>
+        type="confirmOrder"
+      />
       <!-- 使用优惠券 -->
       <div v-show="couponSwitch" class="order-coupon">
         <div class="coupon-column" @click="showList = true">
           <span>优惠券</span>
-          <span :class="['red',itemData ? 'coupon-money':'']">{{ couponShow }}<span v-if="itemData" class="coupon-type">{{ itemData.type | couponType }}</span>
-            <i class="iconfont icon-arrow-right"/>
+          <span :class="['red', itemData ? 'coupon-money' : '']"
+            >{{ couponShow
+            }}<span v-if="itemData" class="coupon-type">{{
+              itemData.type | couponType
+            }}</span>
+            <i class="iconfont icon-arrow-right" />
           </span>
         </div>
-        <van-popup v-model="showList" :overlay="false" class="e-popup full-height-popup coupon-popup" position="bottom">
+        <van-popup
+          v-model="showList"
+          :overlay="false"
+          class="e-popup full-height-popup coupon-popup"
+          position="bottom"
+        >
           <van-nav-bar
             :left-arrow="true"
             title="优惠券"
             class="nav-bar"
-            @click-left="disuse"/>
-          <div :class="['btn-coupon-exit', {active: activeItemIndex < 0}]" @click="disuse">不使用优惠 <i class="iconfont icon-About"/> </div>
+            @click-left="disuse"
+          />
+          <div
+            :class="['btn-coupon-exit', { active: activeItemIndex < 0 }]"
+            @click="disuse"
+          >
+            不使用优惠 <i class="iconfont icon-About" />
+          </div>
           <div class="e-popup__content coupon-popup__content">
             <div class="coupon-number-change">
               <van-field
@@ -34,7 +50,14 @@
                 clearable
                 placeholder="请输入优惠码"
               >
-                <van-button slot="button" :disabled="!preferenceCode" size="small" type="primary" @click="usePreferenceCode">使用</van-button>
+                <van-button
+                  slot="button"
+                  :disabled="!preferenceCode"
+                  size="small"
+                  type="primary"
+                  @click="usePreferenceCode"
+                  >使用</van-button
+                >
               </van-field>
             </div>
             <coupon
@@ -45,9 +68,10 @@
               :active="activeItemIndex"
               :show-button="false"
               :show-selecet="true"
-              @chooseItem="chooseItem"/>
+              @chooseItem="chooseItem"
+            />
             <div v-show="!course.availableCoupons.length" class="coupon-empty">
-              <img class="empty-img" src="static/images/coupon_empty.png">
+              <img class="empty-img" src="static/images/coupon_empty.png" />
               <div class="empty-text">暂无优惠券</div>
             </div>
           </div>
@@ -55,11 +79,11 @@
       </div>
       <div v-if="targetType !== 'vip'" class="order-goods-item">
         <span>学习有效期</span>
-        <span class="gray-dark" v-html="getValidity"/>
+        <span class="gray-dark" v-html="getValidity" />
       </div>
     </div>
     <div class="payPage">
-      <e-loading v-if="isLoading"/>
+      <e-loading v-if="isLoading" />
       <div class="payPage__order">
         <div class="order__head">
           支付方式
@@ -73,19 +97,33 @@
           <div class="payWay">
             <div
               v-show="paySettings.alipayEnabled && !inWechat"
-              :class="['payWay__item', {'payWay__item--selected': payWay === 'Alipay_LegacyH5'}]"
-              @click="payWay = 'Alipay_LegacyH5';selected = true">
-              <img class="correct" src="static/images/correct.png">
-              <div class="right"/>
-              <img class="payWay__img" src="static/images/zfb.png">
+              :class="[
+                'payWay__item',
+                { 'payWay__item--selected': payWay === 'Alipay_LegacyH5' },
+              ]"
+              @click="
+                payWay = 'Alipay_LegacyH5';
+                selected = true;
+              "
+            >
+              <img class="correct" src="static/images/correct.png" />
+              <div class="right" />
+              <img class="payWay__img" src="static/images/zfb.png" />
             </div>
             <div
               v-show="paySettings.wxpayEnabled"
-              :class="['payWay__item', {'payWay__item--selected': payWay === 'WechatPay_H5'}]"
-              @click="payWay = 'WechatPay_H5'; selected = false">
-              <img class="correct" src="static/images/correct.png">
-              <div class="right"/>
-              <img class="payWay__img" src="static/images/wx.png">
+              :class="[
+                'payWay__item',
+                { 'payWay__item--selected': payWay === 'WechatPay_H5' },
+              ]"
+              @click="
+                payWay = 'WechatPay_H5';
+                selected = false;
+              "
+            >
+              <img class="correct" src="static/images/correct.png" />
+              <div class="right" />
+              <img class="payWay__img" src="static/images/wx.png" />
             </div>
           </div>
         </div>
@@ -93,34 +131,38 @@
     </div>
     <div class="order-footer">
       <div class="order-footer__text">
-        实付：<div class="price">{{ total }}</div>
+        实付：
+        <div class="price">{{ total }}</div>
         <div v-show="itemData" class="discount">已优惠{{ couponMoney }}</div>
       </div>
-      <div :class="['order-footer__btn', {'disabled': !validPayWay}]" @click="handleSubmit">
+      <div
+        :class="['order-footer__btn', { disabled: !validPayWay }]"
+        @click="handleSubmit"
+      >
         去支付
       </div>
     </div>
   </div>
 </template>
 <script>
-import { mapState } from 'vuex'
-import coupon from '&/components/e-coupon/e-coupon.vue'
-import eCourse from '&/components/e-course/e-course.vue'
-import Api from '@/api'
-import { Toast } from 'vant'
+import { mapState } from 'vuex';
+import coupon from '&/components/e-coupon/e-coupon.vue';
+import eCourse from '&/components/e-course/e-course.vue';
+import Api from '@/api';
+import { Toast } from 'vant';
 
 export default {
   components: {
     eCourse,
-    coupon
+    coupon,
   },
   data() {
     return {
       course: {
         availableCoupons: [],
         courseSet: {
-          cover: {}
-        }
+          cover: {},
+        },
       },
       activeItemIndex: -1,
       showList: false,
@@ -139,80 +181,87 @@ export default {
       selected: true,
       paySettings: {},
       inWechat: this.isWeixinBrowser(),
-      timeoutId: -1
-    }
+      timeoutId: -1,
+    };
   },
   created() {
     if (this.vipOrderType === '升级') {
-      this.targetUnit = undefined
-      this.targetNum = undefined
+      this.targetUnit = undefined;
+      this.targetNum = undefined;
     }
-    this.confirmOrder()
-    this.getSettings()
+    this.confirmOrder();
+    this.getSettings();
   },
   computed: {
     ...mapState(['wechatSwitch', 'isLoading', 'couponSwitch']),
     total() {
-      const totalNumber = this.course.totalPrice
+      const totalNumber = this.course.totalPrice;
       if (!this.itemData) {
-        return totalNumber ? Number(this.course.totalPrice).toFixed(2) : ''
+        return totalNumber ? Number(this.course.totalPrice).toFixed(2) : '';
       }
-      const minusType = (this.itemData.type === 'minus')
-      const couponRate = this.itemData.rate
+      const minusType = this.itemData.type === 'minus';
+      const couponRate = this.itemData.rate;
       if (minusType) {
-        return Math.max(totalNumber - couponRate, 0).toFixed(2)
+        return Math.max(totalNumber - couponRate, 0).toFixed(2);
       }
-      return totalNumber ? Number(totalNumber * couponRate * 0.1).toFixed(2) : ''
+      return totalNumber
+        ? Number(totalNumber * couponRate * 0.1).toFixed(2)
+        : '';
     },
     couponMoney() {
       if (!this.itemData) {
-        return
+        return;
       }
-      const minusType = (this.itemData.type === 'discount')
-      let money = this.itemData.rate
+      const minusType = this.itemData.type === 'discount';
+      let money = this.itemData.rate;
       if (minusType) {
-        money = Number(this.course.totalPrice -
-          this.course.totalPrice * this.itemData.rate * 0.1).toFixed(2)
+        money = Number(
+          this.course.totalPrice -
+            this.course.totalPrice * this.itemData.rate * 0.1,
+        ).toFixed(2);
       }
-      this.couponNumber = money
-      return money
+      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+      this.couponNumber = money;
+      return money;
     },
     couponShow() {
       if (this.course.availableCoupons.length == 0) {
-        return '无可用优惠券'
+        return '无可用优惠券';
       }
       if (!this.couponNumber) {
-        return this.course.availableCoupons.length + '张可用'
+        return this.course.availableCoupons.length + '张可用';
       }
-      return parseFloat(this.itemData.rate)
+      return parseFloat(this.itemData.rate);
     },
     getValidity() {
-      return this.$route.query.expiryScope || '永久有效'
+      return this.$route.query.expiryScope || '永久有效';
     },
     validPayWay() {
-      return this.paySettings.wxpayEnabled ||
+      return (
+        this.paySettings.wxpayEnabled ||
         (this.paySettings.alipayEnabled && !this.inWechat)
-    }
+      );
+    },
   },
   filters: {
     filterPrice(price) {
-      return parseFloat(price).toFixed(2)
+      return parseFloat(price).toFixed(2);
     },
     couponType(type) {
       if (type == 'discount') {
-        return '折'
+        return '折';
       }
-      return '元'
-    }
+      return '元';
+    },
   },
   watch: {
     $route(to, from) {
-      this.confirmOrder()
-    }
+      this.confirmOrder();
+    },
   },
   beforeRouteLeave(to, from, next) {
-    clearTimeout(this.timeoutId)
-    next()
+    clearTimeout(this.timeoutId);
+    next();
   },
   methods: {
     handleSubmit() {
@@ -221,58 +270,60 @@ export default {
         //   this.handlePay();
         //   return;
         // }
-        this.createOrder('free')
+        this.createOrder('free');
       } else {
         if (!this.validPayWay) {
-          Toast.fail('无可用支付方式')
-          return
+          Toast.fail('无可用支付方式');
+          return;
         }
         // 从我的订单进来已经创建订单，直接去支付
         // if(this.detail.sn){
         //   this.handlePay();
         //   return;
         // }
-        this.createOrder('pay')
+        this.createOrder('pay');
       }
     },
     // 优惠码兑换
     usePreferenceCode() {
-      const that = this
+      const that = this;
       Api.exchangePreferential({
         query: {
-          code: this.preferenceCode
+          code: this.preferenceCode,
         },
         data: {
           targetType: this.targetType,
           targetId: this.targetId,
-          action: 'receive'
-        }
-      }).then((res) => {
-        if (res.success) {
-          that.itemData = res.data
-          const index = that.course.availableCoupons.length || 0
-          that.$set(this.course.availableCoupons, index, res.data)
-          that.preferenceCode = ''
-          that.showList = false
-        } else {
-          if (res.error) {
-            Toast.fail(res.error.message)
-          }
-        }
-      }).catch((err) => {
-        console.log(err)
+          action: 'receive',
+        },
       })
+        .then(res => {
+          if (res.success) {
+            that.itemData = res.data;
+            const index = that.course.availableCoupons.length || 0;
+            that.$set(this.course.availableCoupons, index, res.data);
+            that.preferenceCode = '';
+            that.showList = false;
+          } else {
+            if (res.error) {
+              Toast.fail(res.error.message);
+            }
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     disuse() {
-      this.showList = false
-      this.activeItemIndex = -1
-      this.itemData = null
-      this.couponNumber = 0
+      this.showList = false;
+      this.activeItemIndex = -1;
+      this.itemData = null;
+      this.couponNumber = 0;
     },
     chooseItem(data) {
-      this.activeItemIndex = data.index
-      this.itemData = data.itemData
-      this.showList = false
+      this.activeItemIndex = data.index;
+      this.itemData = data.itemData;
+      this.showList = false;
     },
     // 获取确认订单信息
     confirmOrder() {
@@ -280,21 +331,26 @@ export default {
         targetType: this.targetType,
         targetId: this.targetId,
         num: this.targetNum,
-        unit: this.targetUnit
-      }
+        unit: this.targetUnit,
+      };
       Api.confirmOrder({
-        data: data
-      }).then(res => {
-        if (!this.couponSwitch) {
-          return;
-        }
-        const coupons=res.availableCoupons;
-        this.course = res;
-        this.itemData= coupons.length>0 ? coupons[0]:null;
-      }).catch(err => {
-        // 购买后返回会造成重复下单报错
-        this.$router.go(-1)
+        data: data,
       })
+        .then(res => {
+          if (!this.couponSwitch) {
+            return;
+          }
+          const coupons = res.availableCoupons;
+          this.course = res;
+          this.itemData = coupons.length > 0 ? coupons[0] : null;
+        })
+        .catch(err => {
+          this.$toast(err.message);
+          setTimeout(() => {
+            // 购买后返回会造成重复下单报错
+            this.$router.go(-1);
+          }, 2000);
+        });
     },
     // 0元下单后逻辑跳转
     routerChange() {
@@ -303,43 +359,49 @@ export default {
           path: '/pay_success',
           query: {
             targetType: this.targetType,
-            targetId: this.targetId
-          }
-        })
-        return
+            targetId: this.targetId,
+          },
+        });
+        return;
       }
       if (this.targetType === 'vip') {
-        this.$router.replace({
-          path: `/${this.targetType}`
-        }, () => {
-          this.$router.go(-1)
-        })
+        this.$router.replace(
+          {
+            path: `/${this.targetType}`,
+          },
+          () => {
+            this.$router.go(-1);
+          },
+        );
       } else {
-        this.$router.replace({
-          path: `/${this.targetType}/${this.targetId}`
-        }, () => {
-          this.$router.go(-1)
-        })
+        this.$router.replace(
+          {
+            path: `/${this.targetType}/${this.targetId}`,
+          },
+          () => {
+            this.$router.go(-1);
+          },
+        );
       }
     },
     // 获取支付方式
     async getSettings() {
       this.paySettings = await Api.getSettings({
         query: {
-          type: 'payment'
-        }
+          type: 'payment',
+        },
       }).catch(err => {
-        Toast.fail(err.message)
-      })
+        Toast.fail(err.message);
+      });
       if (this.paySettings.alipayEnabled && !this.inWechat) {
-        this.payWay = 'Alipay_LegacyH5'
+        this.payWay = 'Alipay_LegacyH5';
       } else if (this.paySettings.wxpayEnabled) {
-        this.payWay = 'WechatPay_H5'
+        this.payWay = 'WechatPay_H5';
       }
     },
     // 创建订单
     createOrder(payment) {
-      const that = this
+      const that = this;
       Api.createOrder({
         data: {
           targetType: this.targetType,
@@ -347,62 +409,67 @@ export default {
           isOrderCreate: 1,
           couponCode: this.itemData ? this.itemData.code : '',
           unit: this.targetUnit,
-          num: this.targetNum
-        }
-      }).then(res => {
-        if (payment == 'free') {
-          that.routerChange()
-        } else if (payment == 'pay') {
-          console.log(res)
-          // 塞入付费信息
-          this.detail = Object.assign({}, res)
-          // 去付钱
-          that.handlePay()
-        }
-      }).catch(err => {
-        Toast.fail(err.message)
+          num: this.targetNum,
+        },
       })
+        .then(res => {
+          if (payment == 'free') {
+            that.routerChange();
+          } else if (payment == 'pay') {
+            // 塞入付费信息
+            this.detail = Object.assign({}, res);
+            // 去付钱
+            that.handlePay();
+          }
+        })
+        .catch(err => {
+          Toast.fail(err.message);
+        });
     },
     // 判断是否是微信浏览器
     isWeixinBrowser() {
-      return /micromessenger/.test(navigator.userAgent.toLowerCase())
+      return /micromessenger/.test(navigator.userAgent.toLowerCase());
     },
     // 轮询问检测微信外支付是否支付成功
     getTradeInfo(tradeSn) {
       return Api.getTrade({
         query: {
-          tradesSn: tradeSn
-        }
-      }).then((res) => {
-        if (res.isPaid) {
-          if (this.wechatSwitch) {
-            this.$router.replace({
-              path: '/pay_success',
-              query: {
-                paidUrl: window.location.origin + res.paidSuccessUrlH5
-              }
-            })
-            return
-          }
-          window.location.href = window.location.origin + res.paidSuccessUrlH5
-          return
-        }
-        this.timeoutId = setTimeout(() => {
-          this.getTradeInfo(tradeSn)
-        }, 2000)
-      }).catch(err => {
-        Toast.fail(err.message)
+          tradesSn: tradeSn,
+        },
       })
+        .then(res => {
+          if (res.isPaid) {
+            if (this.wechatSwitch) {
+              this.$router.replace({
+                path: '/pay_success',
+                query: {
+                  paidUrl: window.location.origin + res.paidSuccessUrlH5,
+                },
+              });
+              return;
+            }
+            window.location.href =
+              window.location.origin + res.paidSuccessUrlH5;
+            return;
+          }
+          this.timeoutId = setTimeout(() => {
+            this.getTradeInfo(tradeSn);
+          }, 2000);
+        })
+        .catch(err => {
+          Toast.fail(err.message);
+        });
     },
     // 付费
     handlePay() {
-      if (!this.validPayWay) return
+      if (!this.validPayWay) return;
 
-      const isWxPay = this.payWay === 'WechatPay_H5' && this.inWechat
+      const isWxPay = this.payWay === 'WechatPay_H5' && this.inWechat;
       if (isWxPay) {
-        window.location.href = `${window.location.origin}/pay/center/wxpay_h5?pay_amount=` +
-          `${this.detail.pay_amount}&title=${this.detail.title}&sn=${this.detail.sn}`
-        return
+        window.location.href =
+          `${window.location.origin}/pay/center/wxpay_h5?pay_amount=` +
+          `${this.detail.pay_amount}&title=${this.detail.title}&sn=${this.detail.sn}`;
+        return;
       }
 
       Api.createTrade({
@@ -410,20 +477,22 @@ export default {
           gateway: this.payWay,
           type: 'purchase',
           orderSn: this.detail.sn,
-          app_pay: 'Y'
-        }
-      }).then(res => {
-        if (this.payWay === 'WechatPay_H5') {
-          this.getTradeInfo(res.tradeSn).then(() => {
-            window.location.href = res.mwebUrl
-          })
-          return
-        }
-        window.location.href = res.payUrl
-      }).catch(err => {
-        Toast.fail(err.message)
+          app_pay: 'Y',
+        },
       })
-    }
-  }
-}
+        .then(res => {
+          if (this.payWay === 'WechatPay_H5') {
+            this.getTradeInfo(res.tradeSn).then(() => {
+              window.location.href = res.mwebUrl;
+            });
+            return;
+          }
+          window.location.href = res.payUrl;
+        })
+        .catch(err => {
+          Toast.fail(err.message);
+        });
+    },
+  },
+};
 </script>

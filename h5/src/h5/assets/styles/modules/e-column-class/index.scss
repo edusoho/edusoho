@@ -74,6 +74,7 @@
 	.column-class-right {
 		display: flex;
 		flex-direction: column;
+		justify-content: space-around;
 		box-sizing: border-box;
 		width: vw(164);
 		padding: vw(8);
@@ -99,14 +100,16 @@
 		}
 
 		&__center {
-			height: vw(14);
+			display: flex;
+			align-items: center;
+			height: vw(20);
 			color: #999;
 			font-size: vw(12);
 		}
 
 		&__bottom {
+			// margin-top: vw(4);
 			height: vw(20);
-			margin-top: vw(4);
 			color: #fe3b13;
 			font-weight: 500;
 			font-size: vw(14);
