@@ -33,7 +33,7 @@
           {{ setting('license.license_name') }}
         </a>
       {% else %}
-        <a><img src="{{ asset(setting('license.license_picture')) }}"></a>
+        <a id="license-picture"><img src="{{ asset(setting('license.license_picture')) }}"></a>
         <a>{{ setting('license.license_name') }}</a>
       {% endif %}
     {% endif %}
