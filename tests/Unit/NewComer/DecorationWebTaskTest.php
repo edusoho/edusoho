@@ -1,10 +1,9 @@
 <?php
 
-
 namespace Tests\Unit\NewComer;
 
-use Biz\NewComer\DecorationWebTask;
 use Biz\BaseTestCase;
+use Biz\NewComer\DecorationWebTask;
 
 class DecorationWebTaskTest extends BaseTestCase
 {
@@ -14,13 +13,12 @@ class DecorationWebTaskTest extends BaseTestCase
             [
                 [
                     'functionName' => 'get',
-                    'returnValue' =>
-                        ['decoration_web_task' => ['status' => []]]
+                    'returnValue' => ['decoration_web_task' => ['status' => []]],
                 ],
                 [
                     'functionName' => 'set',
-                    'returnValue' => []
-                ]
+                    'returnValue' => [],
+                ],
             ]
         );
 
@@ -36,13 +34,12 @@ class DecorationWebTaskTest extends BaseTestCase
             [
                 [
                     'functionName' => 'get',
-                    'returnValue' =>
-                        ['decoration_web_task' => ['status' => 1]]
+                    'returnValue' => ['decoration_web_task' => ['status' => 1]],
                 ],
                 [
                     'functionName' => 'set',
-                    'returnValue' => []
-                ]
+                    'returnValue' => [],
+                ],
             ]
         );
 
@@ -51,6 +48,4 @@ class DecorationWebTaskTest extends BaseTestCase
 
         $this->assertEquals(true, $result);
     }
-
-
 }

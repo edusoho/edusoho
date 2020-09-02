@@ -1,0 +1,56 @@
+{% extends 'layout.html.twig' %}
+
+{% set bodyClass = 'cd-design' %}
+
+{% block full_content %}
+<div class="container cd-container">
+    <div class="cd-content">
+        {% block main %}
+        <div class="cd-main" style="margin-left:0px">
+            <div class="cd-main__body">
+                <div class="es-piece">
+                    <div class="piece-header">{{ 'user.certificates.detail_object'|trans }}</div>
+                </div>
+                <div class="cd-card mycart-object-card">
+                    <div class="cd-md-3 pull-left">
+                        <img src="{{ filepath(user.smallAvatar, 'avatar.png') }}" alt="" class="cd-avatar"/>
+                    </div>
+                    <div class="cd-md-4 pull-left object-message cd-link-major">{{ 'user.certificates.detail_object_name'|trans }}：{{ user.truename|default('-') }}</div>
+                    <div class="cd-md-8 pull-left object-message cd-link-major">{{ 'user.certificates.detail_object_usrename'|trans }}：{{ user.nickname|default('') }}</div>
+                </div>
+                <div class="es-piece">
+                    <div class="piece-header">{{ 'user.certificates.detail_cert_message'|trans }}</div>
+                </div>
+                <div class="cd-card mycart-message-card">
+                    <div class="mycart-message-card-left pull-left">
+                        <p class="cd-link-major">{{ 'user.certificates.cert_titile'|trans }}：{{ certificate.name }}</p>
+                        <p class="cd-link-major">{{ 'user.certificates.cert_code'|trans }}：{{ record.certificateCode }}</p>
+                        <p class="cd-link-major">{{ 'user.certificates.issue_time'|trans }}：{{ record.issueTime|date('Y/m/d') }}</p>
+                        <p class="cd-link-major">
+                            {{ 'user.certificates.valid_time'|trans }}：
+                            {% if record.expiryTime == '0' %}
+                                <span class="color-success">{{ 'user.certificates.forever'|trans }}</span>
+                            {% else %}
+                                <span>{{ record.expiryTime|date('Y/m/d') }}</span>
+                                {% if record.status == 'valid' %}
+                                    <span class="cd-tag cd-tag-green cd-ml8">{{ 'user.certificates.status_valid'|trans }}</span>
+                                {% endif %}
+                            {% endif %}
+                            {% if record.status == 'expired' %}
+                                <span class="cd-tag cd-tag-red cd-ml8">{{ 'user.certificates.status_expired'|trans }}</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="mycart-message-right pull-right">
+                        <img width="80px" src="{{ path('common_qrcode', {text:url}) }}" />
+                    </div>
+                </div>
+                <div class="mycart-detail-cart">
+                    <img width="100%" src="{{ path('certificate_image_download', {recordId:record.id}) }}" />
+                </div>
+            </div>
+        </div>
+        {% endblock %}
+    </div>
+</div>
+{% endblock %}

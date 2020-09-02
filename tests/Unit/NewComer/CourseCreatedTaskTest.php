@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\NewComer;
 
-use Biz\NewComer\CourseCreatedTask;
 use Biz\BaseTestCase;
+use Biz\NewComer\CourseCreatedTask;
 
 class CourseCreatedTaskTest extends BaseTestCase
 {
@@ -13,9 +13,8 @@ class CourseCreatedTaskTest extends BaseTestCase
             [
                 [
                 'functionName' => 'get',
-                'returnValue' =>
-                    ['course_created_task' => ['status' => []]]
-                ]
+                'returnValue' => ['course_created_task' => ['status' => []]],
+                ],
             ]
         );
 
@@ -31,9 +30,8 @@ class CourseCreatedTaskTest extends BaseTestCase
             [
                 [
                 'functionName' => 'get',
-                'returnValue' =>
-                    ['course_created_task' => ['status' => 1]]
-                ]
+                'returnValue' => ['course_created_task' => ['status' => 1]],
+                ],
             ]
         );
 
@@ -49,13 +47,12 @@ class CourseCreatedTaskTest extends BaseTestCase
             [
                 [
                     'functionName' => 'countCourseSets',
-                    'returnValue' =>
-                        ['publishCount' => 1]
+                    'returnValue' => ['publishCount' => 1],
                 ],
                 [
                     'functionName' => 'set',
-                    'returnValue' => null
-                ]
+                    'returnValue' => null,
+                ],
             ]
         );
 

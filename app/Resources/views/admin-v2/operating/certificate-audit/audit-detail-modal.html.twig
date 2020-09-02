@@ -1,0 +1,51 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% do script(['app/js/admin-v2/operating/certificate-audit/detail/index.js']) %}
+
+{% block title %}{{ 'admin.operation_certificate.certificate.audit.title'|trans }}{% endblock %}
+
+{% block body %}
+
+  <form class="form-horizontal" method="post" id="audit-form"
+        data-save-url="{{ path('admin_v2_certificate_examine_audit', {id: record.id}) }}">
+    <h5 class="mll fsl"><b>{{ 'admin.operation_certificate.certificate.audit.user_info'|trans }}</b></h5><br>
+    <p class="mll">{{ 'user.fields.truename_label'|trans }}：{{ user.truename|default('') }}</p><br>
+    <p class="mll">{{ 'user.fields.username_label'|trans }}：{{ user.nickname }}</p><br>
+
+    <h5 class="mll fsl"><b>{{ 'admin.operation_certificate.certificate.audit.certificate_info'|trans }}</b></h5><br>
+    <p class="mll">{{ 'admin.operation_certificate.certificate.record.certificate_target'|trans }}
+      ：{{ record.targetType|trans }}"{{ target.title|default('') }}"</p><br>
+    <p class="mll">{{ 'admin.operation_certificate.certificate.audit.crouse_status'|trans }}
+      ：{{ 'admin.operation_certificate.certificate.audit.crouse_complete'|trans }}</p><br>
+    <h5 class="mll fsl"><b>{{ 'admin.operation_certificate.certificate.audit.result'|trans }}</b></h5><br>
+
+    <fieldset>
+      <div class="mll row form-group">
+        <label class="col-md-2"><input id="audit-pass" type="radio" name="status" value="valid"
+                                       checked="checked"> {{ 'admin.operation_certificate.certificate.audit.certificate_pass'|trans }}
+        </label>
+        <label class="col-md-2"><input id="audit-reject" type="radio" name="status"
+                                       value="reject"> {{ 'admin.operation_certificate.certificate.audit.certificate_reject'|trans }}
+        </label>
+        <label class="col-md-2"><input id="audit-todo" type="radio" name="status"
+                                       value="none"> {{ 'admin.operation_certificate.certificate.audit.certificate_todo'|trans }}
+        </label>
+      </div>
+
+      <div class="mll row form-group hidden">
+        <label>
+          <textarea form="audit-form" id="reject-reason" name="rejectReason" placeholder="驳回原因"></textarea>
+        </label>
+      </div>
+    </fieldset>
+
+  </form>
+
+{% endblock %}
+{% block footer %}
+  <button type="button" class="btn btn-primary pull-left" id="certificate-audit"
+          data-loading-text="{{ 'form.btn.submit.submiting'|trans }}"
+          href="{{ path('admin_v2_certificate_examine_audit', {id: record.id}) }}">{{ 'admin.operation_certificate.certificate.audit.audit_certificate'|trans }}</button>
+  <button type="button" class="btn btn-default btn-link pull-right"
+          data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
+{% endblock %}

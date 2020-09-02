@@ -177,6 +177,7 @@ check env:
       - develop
       - project/spbl
       - project/spbl-publish
+      - project/certificate
     variables:
       - $REPOSITORY == "main"
       - $REPOSITORY == "custom"
