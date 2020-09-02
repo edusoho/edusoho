@@ -23,6 +23,12 @@
     </div>
   </div>
 
+  {% if (setting('login_bind.login_captcha_enable')|default(0)) == 1 %}
+    <div class="form-group mbl js-drag-jigsaw">
+      {% include 'common/drag.html.twig' with { auth: true } %}
+    </div>
+  {% endif %}
+
   <div class="form-group mbl color-gray">
     <input type="checkbox" name="_remember_me" checked="checked"> {{'user.login.remember_me'|trans}}
   </div>

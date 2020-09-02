@@ -1318,6 +1318,14 @@ admin.site.upload_favicon_success_hint: Upload site favicon successfully!
 admin.site.delete_favicon_success_hint: Delete site favicon successfully!
 admin.site.delete_favicon_fail_hint: Delete site favicon failed!
 admin.site.delete_hint: Are you sure you want to delete?
+admin.setting.upload_license_picture_success_hint: Successfully uploaded the electronic business license picture!
+admin.setting.delete_license_picture_success_hint: Successfully delete the electronic business license picture!
+admin.setting.delete_license_picture_fail_hint: Failed to delete electronic business license picture!
+admin.setting.upload_permit_picture_success_hint: Upload permit image successfully
+admin.setting.delete_permit_picture_success_hint: The permit image was successfully deleted!
+admin.setting.delete_permit_picture_fail_hint: Failed to delete permit image!
+admin.setting.delete_permit_setting_max_number: The number of new additions has reached the upper limit. Adding is not supported yet~
+admin.setting.delete_permit_setting_delete_confirom: You sure you want to delete it?
 admin.setting.theme.upgrade_error_hint: This topic is not currently compatible with the current ES version. Please upgrade first.
 admin.setting.theme.use_hint: Do you really want to use this theme?
 admin.sms.send_success_hint: Sent successfully!

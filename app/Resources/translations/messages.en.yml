@@ -4815,6 +4815,20 @@ admin.setting.theme.manage.setting_navigation: Navigation bar settings
 admin.setting.theme.manage.navigation_num_tips: >
   When there are more than <input type="text" id="topNavNum" class="form-control" style="display:inline;width: auto;" value="%value%"/> navigations, it will be "..." to avoid navigation misplacement.
 
+#business license setting
+admin.setting.license.headline: Electronic business license configuration
+admin.setting.license.name: Electronic business license name
+admin.setting.license.picture: Electronic Business License Picture
+admin.setting.license.picture.help_block: Please upload pictures in jpg, gif, png format. The recommended image size should not exceed 5 MB. After the online school electronic business picture is set, it will be displayed in the bottom column of the homepage.
+admin.setting.license.url: Electronic business license link
+admin.setting.permit.headline: Operating license configuration
+admin.setting.permit.name: Business license name
+admin.setting.permit.record.number: Case number
+admin.setting.permit.picture: ID picture
+admin.setting.permit.picture.help_block: Please upload pictures in jpg, gif, png format. The recommended image size should not exceed 5 MB. After the online school ID picture is set, it will be displayed in the bottom column of the homepage.
+admin.setting.permit.setting.add: Add a column
+admin.setting.permit.setting.remove: Delete entire column
+
 admin.setting.mailer.is_trial.tips: "You are running on the trail version which cannot set the Email service.If you want to buy the verified version ,please contact our sales agent Tel：4008041114 or\n"
 admin.setting.mailer.cloud_email_crm: 'Cloud Email'
 admin.setting.mailer.cloud_email_crm.status.open: Enabled
@@ -6332,7 +6346,7 @@ admin.setting_course.classroom.classroom_list.help_block: 'Class list'
 admin.setting_course.classroom.classroom_list_default_seq.help_block: 'Address: Domain names /classroom/explore, anyone can view all published classes at this page. If you need to set class order, please go to the "site settings" - "Themes" - "Manage". Class order settings are only supported by ink-only theme and simplicity theme.'
 admin.setting_course.classroom.classroom_comments_manage: 'Classroom Comments Manage'
 admin.setting_course.classroom.classroom_review: 'Classroom review'
-admin.setting_course.classroom.classroom_thread: 'Classroom thread'
+admin.setting_course.classroom.classroom_thread: 'Classroom thread（Classroom question）'
 admin.setting_course.classroom.classroom_note: 'Classroom note'
 admin.setting_course.open_course.open_course_comments_manage: 'Open Course Comments Manage'
 admin.setting_course.open_course.open_course_review: 'Open Course review'
@@ -9951,9 +9965,10 @@ exception.s2b2c.hidden_permission_invalid: S2b2c hide permission invalid
 admin_v2.cloud_center.content_resource.product_update_setting: Update Setting
 admin_v2.cloud_center.content_resource.product_update_auto: Auto
 admin_v2.cloud_center.content_resource.product_update_manual: Manual
+admin_v2.cloud_center.content_resource.product_update_promptly: Promptly
 
-
-admin_v2.cloud_center.content_resource.product_update_auto.tips: Update product automatically when product updated
+admin_v2.cloud_center.content_resource.product_update_auto.tips: Update product at 2:00 when product updated
+admin_v2.cloud_center.content_resource.product_update_promptly.tips: Update product automatically when product updated
 admin_v2.cloud_center.content_resource.product_update_manual.tips: Update product manually when product updated
 
 s2b2c.resource.all_choose: Choose All

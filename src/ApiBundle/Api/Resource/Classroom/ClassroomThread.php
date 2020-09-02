@@ -14,6 +14,12 @@ class ClassroomThread extends AbstractResource
     public function search(ApiRequest $request, $classroomId)
     {
         list($offset, $limit) = $this->getOffsetAndLimit($request);
+
+        $classroomSetting = $this->getSettingService()->get('classroom', []);
+        if (isset($classroomSetting['show_thread']) && '0' === $classroomSetting['show_thread']) {
+            return $this->makePagingObject([], 0, $offset, $limit);
+        }
+
         $sort = $request->query->get('sort', 'posted');
 
         $conditions = [
@@ -80,5 +86,13 @@ class ClassroomThread extends AbstractResource
     protected function getClassroomService()
     {
         return $this->service('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return \Biz\System\Service\SettingService
+     */
+    private function getSettingService()
+    {
+        return $this->service('System:SettingService');
     }
 }

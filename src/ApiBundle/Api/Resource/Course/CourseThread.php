@@ -30,8 +30,8 @@ class CourseThread extends AbstractResource
             $file = $this->getUploadFileService()->getFile($thread['videoId']);
             $thread['askVideoLength'] = $file['length'];
         }
-        $this->getOCUtil()->single($thread, array('userId'));
-        $this->getOCUtil()->single($thread, array('courseId'), 'course');
+        $this->getOCUtil()->single($thread, ['userId']);
+        $this->getOCUtil()->single($thread, ['courseId'], 'course');
         $this->getCourseThreadService()->hitThread($courseId, $threadId);
 
         return $thread;
@@ -40,15 +40,29 @@ class CourseThread extends AbstractResource
     public function search(ApiRequest $request, $courseId)
     {
         $this->getCourseService()->tryTakeCourse($courseId);
+        list($offset, $limit) = $this->getOffsetAndLimit($request);
 
         $type = $request->query->get('type', 'question');
         $keyword = $request->query->get('keyword');
         $taskId = $request->query->get('taskId', 0);
-        $conditions = array(
+        $conditions = [
             'courseId' => $courseId,
-            'type' => $type,
             'title' => $keyword,
-        );
+            'type' => $type,
+        ];
+
+        $courseSetting = $this->getSettingService()->get('course', []);
+        $conditions['types'] = [];
+        if (!isset($courseSetting['show_question']) || '1' === $courseSetting['show_question']) {
+            $conditions['types'][] = 'question';
+        }
+        if (!isset($courseSetting['show_discussion']) || '1' === $courseSetting['show_discussion']) {
+            $conditions['types'][] = 'discussion';
+        }
+        if (empty($conditions['types'])) {
+            return $this->makePagingObject([], 0, $offset, $limit);
+        }
+
         if ($taskId) {
             $videoAskTime = $request->query->get('videoAskTime', 0);
             $task = $this->getTaskService()->getTask($taskId);
@@ -62,8 +76,6 @@ class CourseThread extends AbstractResource
             $conditions['videoAskTime_LE'] = $videoAskTime + 60;
         }
 
-        list($offset, $limit) = $this->getOffsetAndLimit($request);
-
         if (!empty($keyword)) {
             $this->createSearchKeyword($keyword, $type);
         }
@@ -76,7 +88,7 @@ class CourseThread extends AbstractResource
             $limit
         );
 
-        $attachments = $this->getUploadFileService()->searchUseFiles(array('targetType' => 'course.thread', 'targetIds' => ArrayToolkit::column($threads, 'id')), true, array('id' => 'ASC'));
+        $attachments = $this->getUploadFileService()->searchUseFiles(['targetType' => 'course.thread', 'targetIds' => ArrayToolkit::column($threads, 'id')], true, ['id' => 'ASC']);
         $attachments = ArrayToolkit::group($attachments, 'targetId');
         foreach ($threads as &$thread) {
             if ('app' == $thread['source']) {
@@ -85,7 +97,7 @@ class CourseThread extends AbstractResource
 
             $thread['content'] = !empty($thread['content']) ? $this->filterHtml($thread['content']) : $thread['content'];
         }
-        $this->getOCUtil()->multiple($threads, array('userId'));
+        $this->getOCUtil()->multiple($threads, ['userId']);
 
         return $this->makePagingObject(array_values($threads), $total, $offset, $limit);
     }
@@ -96,7 +108,7 @@ class CourseThread extends AbstractResource
         $fields = $request->request->all();
         $fields['courseId'] = $courseId;
         $fields['source'] = 'app';
-        if (!ArrayToolkit::requireds($fields, array('content', 'courseId', 'type'))) {
+        if (!ArrayToolkit::requireds($fields, ['content', 'courseId', 'type'])) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
@@ -157,7 +169,7 @@ class CourseThread extends AbstractResource
             $this->getSearchKeywordService()->addSearchKeywordTimes($existKeyword['id']);
             $result = $this->getSearchKeywordService()->getSearchKeyword($existKeyword['id']);
         } else {
-            $result = $this->getSearchKeywordService()->createSearchKeyword(array('name' => $keyword, 'type' => $type));
+            $result = $this->getSearchKeywordService()->createSearchKeyword(['name' => $keyword, 'type' => $type]);
         }
 
         return $result;
@@ -166,20 +178,20 @@ class CourseThread extends AbstractResource
     protected function addAttachments($thread, $attachments)
     {
         if (isset($attachments[$thread['id']])) {
-            $thread['attachments'] = array();
+            $thread['attachments'] = [];
             foreach ($attachments[$thread['id']] as $attachment) {
-                $file = isset($attachment['file']) ? $attachment['file'] : array();
+                $file = isset($attachment['file']) ? $attachment['file'] : [];
 
                 if ('video' == $file['type'] or 'audio' == $file['type']) {
-                    $thread['attachments'][$file['type']] = array(
+                    $thread['attachments'][$file['type']] = [
                         'id' => $file['id'],
                         'length' => $file['length'],
-                    );
+                    ];
                 } else {
-                    $thread['attachments']['pictures'][] = array(
+                    $thread['attachments']['pictures'][] = [
                         'id' => $file['id'],
                         'thumbnail' => isset($file['thumbnail']) ? $file['thumbnail'] : '',
-                    );
+                    ];
                 }
 
                 if ('video' == $file['type']) {
@@ -261,5 +273,13 @@ class CourseThread extends AbstractResource
     protected function getUserService()
     {
         return $this->service('User:UserService');
+    }
+
+    /**
+     * @return \Biz\System\Service\SettingService
+     */
+    private function getSettingService()
+    {
+        return $this->service('System:SettingService');
     }
 }

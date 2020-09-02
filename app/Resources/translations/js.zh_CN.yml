@@ -1266,6 +1266,8 @@ admin.setting.delete_license_picture_fail_hint: 删除电子营业执照图片�
 admin.setting.upload_permit_picture_success_hint: 上传许可证图片成功！
 admin.setting.delete_permit_picture_success_hint: 删除许可证图片成功！
 admin.setting.delete_permit_picture_fail_hint: 删除许可证图片失败！
+admin.setting.delete_permit_setting_max_number: 新增数量已达上限，暂不支持新增哦~
+admin.setting.delete_permit_setting_delete_confirom: 确定要删除吗？
 admin.setting.theme.upgrade_error_hint: 该主题暂不适配当前ES版本，请先升级
 admin.setting.theme.use_hint: 真的要使用该主题吗？
 admin.sms.send_success_hint: 发送成功！
