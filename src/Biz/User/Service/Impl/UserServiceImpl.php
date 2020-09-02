@@ -955,7 +955,7 @@ class UserServiceImpl extends BaseService implements UserService
             for ($i = 0, $iMax = count($users); $i < $iMax; ++$i) {
                 $member = $this->getUserDao()->getByEmail($users[$i]['email']);
                 $member = UserSerialize::unserialize($member);
-                $this->changePassword($member['id'], $users[$i]['password']);
+                $this->changePassword($member['id'], trim($users[$i]['password']));
                 $this->updateUserProfile($member['id'], $users[$i]);
             }
 
