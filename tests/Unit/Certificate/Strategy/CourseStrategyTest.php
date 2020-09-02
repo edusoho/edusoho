@@ -6,7 +6,6 @@ use Biz\BaseTestCase;
 use Biz\Certificate\Dao\CertificateDao;
 use Biz\Certificate\Dao\TemplateDao;
 use Biz\Certificate\Strategy\CertificateStrategyContext;
-use Biz\Certificate\Strategy\Impl\CourseStrategy;
 
 class CourseStrategyTest extends BaseTestCase
 {

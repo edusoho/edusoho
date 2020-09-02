@@ -4,9 +4,6 @@ namespace Tests\Unit\Certificate;
 
 use Biz\BaseTestCase;
 use Biz\Certificate\Certificate;
-use Biz\Certificate\Dao\CertificateDao;
-use Biz\Certificate\Dao\TemplateDao;
-use Biz\Certificate\Strategy\Impl\ClassroomStrategy;
 
 class CertificateTest extends BaseTestCase
 {
