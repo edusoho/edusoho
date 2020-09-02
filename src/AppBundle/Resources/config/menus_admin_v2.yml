@@ -710,6 +710,9 @@ admin_v2:
                                     name: admin_v2.operation.certificate.basic_tab
                                     disable: true
                                     children:
+                                        admin_v2_certificate_create:
+                                            name: admin_v2.operation.certificate.create_tab
+                                            group: topBtn
                                         admin_v2_certificate_edit:
                                             name: admin_v2.operation.certificate.edit_tab
                                             router_params:
@@ -754,6 +757,10 @@ admin_v2:
                                 admin_v2_certificate_template_manage:
                                     name: admin_v2.operation.certificate.template.basic_tab
                                     disable: true
+                                    children:
+                                      admin_v2_certificate_template_create:
+                                            name: admin_v2.operation.certificate.template.create_tab
+                                            group: topBtn
                         admin_v2_operation_notification:
                             name: admin_v2.operation.notification_menu
                             group: 2
