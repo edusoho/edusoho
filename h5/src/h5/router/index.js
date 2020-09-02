@@ -629,7 +629,7 @@ const routes = [
       ),
   },
   {
-    path: '/certificate/records/:id',
+    path: '/certificate_records/:id',
     name: 'certificate_records',
     meta: {
       title: '高级产品经理证书',

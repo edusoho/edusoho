@@ -66,7 +66,7 @@ export default {
   methods: {
     toCertificateDetail(id) {
       this.$router.push({
-        path: `/certificate/records/${id}`,
+        path: `/certificate_records/${id}`,
       });
     },
   },
