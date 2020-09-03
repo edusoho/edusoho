@@ -3,7 +3,6 @@
   padding: 0;
 
   .certificates-item{
-    height:130px;
     background:rgba(245,245,245,1);
     border-radius:4px;
     margin: 8px auto;
@@ -14,6 +13,7 @@
       float: left;
       margin: 20px 8px 20px 15px;
       background-image: url(../../../img/default_certificate.png);
+      background-size: 100% 100%;
       text-align: center;
       font-size:10px;
       font-weight:400;
@@ -62,11 +62,17 @@
         font-weight:400;
         color:rgba(102,102,102,1);
         line-height:20px;
+        @media(max-width: 500px) {
+          display: none;
+        }
       }
     }
 
     .certificate-view-btn{
       margin: 47px 20px;
+      @media(max-width: 500px) {
+        display: contents;
+      }
     }
   }
 }
