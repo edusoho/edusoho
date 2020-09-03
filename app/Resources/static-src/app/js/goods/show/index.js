@@ -14,6 +14,7 @@ new Vue({
       activityMetas: _toJson($('.js-hidden-activity-metas').html()),
       i18n: _toJson($('.js-hidden-i18n').html()),
       goodsSetting: $('#show-product-page').data('goodsSetting'),
+      timestamp: $('#js-hidden-current-timestamp').html(),
     },
   })
 }).$mount('#show-product-page');

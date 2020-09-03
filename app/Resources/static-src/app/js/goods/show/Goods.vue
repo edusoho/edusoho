@@ -1,7 +1,7 @@
 <template>
     <div class="cd-container">
         <div class="product-breadcrumb"><a href="/">首页</a> / {{goods.title}}</div>
-        <detail :goodsSetting="goodsSetting" :goods="goods" :currentSku="currentSku" @changeSku="changeSku" :current-url="currentUrl" :is-user-login="isUserLogin">
+        <detail :goodsSetting="goodsSetting" :timestamp="timestamp" :goods="goods" :currentSku="currentSku" @changeSku="changeSku" :current-url="currentUrl" :is-user-login="isUserLogin">
         </detail>
 
         <div class="product-info clearfix" v-if="goods.id">
@@ -136,6 +136,10 @@
                 default: null,
             },
             currentUrl: {
+                type: String,
+                default: '',
+            },
+            timestamp: {
                 type: String,
                 default: '',
             }
