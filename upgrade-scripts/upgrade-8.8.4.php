@@ -55,6 +55,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'addCertificateTables',
             'addUserColumn',
             'downloadFont',
+            'addCheckCertificateJob',
         );
 
         $funcNames = array();
@@ -182,6 +183,45 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $this->download($this->fontDownloadUrl, $filepath);
 
+        return 1;
+    }
+
+    public function addCheckCertificateJob()
+    {
+        if ($this->isJobExist('CheckCertificateExpireJob')) {
+            return 1;
+        }
+
+        $currentTime = time();
+        $this->getConnection()->exec("INSERT INTO `biz_scheduler_job` (
+                `name`,
+                `expression`,
+                `class`,
+                `args`,
+                `priority`,
+                `next_fire_time`,
+                `misfire_threshold`,
+                `misfire_policy`,
+                `enabled`,
+                `creator_id`,
+                `updated_time`,
+                `created_time`
+            ) VALUES
+            (
+                'CheckCertificateExpireJob',
+                '30 0 * * * ',
+                'Biz\\\\Certificate\\\\Job\\\\CheckCertificateExpireJob',
+                '',
+                '100',
+                '{$currentTime}',
+                '300',
+                'missed',
+                '1',
+                '0',
+                '{$currentTime}',
+                '{$currentTime}'
+            );");
+        $this->logger('info', '增加定时任务CheckCertificateExpireJob');
         return 1;
     }
 
