@@ -59,7 +59,7 @@ class ClassroomStrategy extends BaseStrategy
         $finishUserIds = [];
         foreach ($members as $member) {
             $memberCounts = $this->getCourseMemberService()->countMembers(['finishedTime_GT' => 0, 'userId' => $member['userId'], 'courseIds' => $courseIds]);
-            if ($memberCounts >= count($courseIds)) {
+            if ($memberCounts >= count($courseIds) && !empty($memberCounts)) {
                 $finishUserIds[] = $member['userId'];
             }
         }
