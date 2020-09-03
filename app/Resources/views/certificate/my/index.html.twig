@@ -25,7 +25,7 @@
       <div class="mycert-year cd-mb16">{{ certificateRecordGroup.issueYear }}</div>
       {% for certificateRecord in certificateRecordGroup.certificateRecords %}
       {% set certificate = certificates[certificateRecord.certificateId]|default('') %}
-      <div class="cd-card mycert-card">
+      <div class="cd-card mycert-card clearfix">
         <div class="mycert-card-img pull-left">
           <img src="{{ asset('assets/img/default/certificate.png') }}">
           <p class="mycert-card-title">{{ 'user.certificates.cart_title'|trans }}</p>
