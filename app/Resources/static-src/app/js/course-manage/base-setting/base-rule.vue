@@ -157,9 +157,11 @@
                             <el-checkbox-group v-model="baseRuleForm.freeTaskIds">
                                 <li v-for="(task) in canFreeTasks"
                                     class="task-price-setting-group__item"
-                                    :class="{'open': freeTasks[task.id] != undefined}">
+                                    :class="{'open': freeTasks[task.id]}"
+                                    :data-id="task.id"
+                                    :key="task.id">
                                     <el-checkbox :label="task.id" :key="task.id"
-                                                 @change="freeTaskItemChange">
+                                                 @change="(value) => freeTaskItemChange(task.id)(value)">
                                         <div slot="default">
                                             <el-tooltip effect="dark"
                                                         :content="'course.marketing_setup.preview.set_task.task_name'|trans({'name':activityMetas[task.type].name,'taskName':taskName})"
@@ -313,17 +315,11 @@
                     }
                 }
             },
-            freeTaskItemChange(value, event) {
-                let $currentCheckbox = $(event.currentTarget).parent().parent().parent('li');
-                if (value && !$currentCheckbox.hasClass('open')) {
-                    $currentCheckbox.addClass('open');
+            freeTaskItemChange(id) {
+                return (value) => {
+                    this.$set(this.freeTasks, id, value)
+                    $('.js-task-price-setting-scroll').perfectScrollbar();
                 }
-
-                if (!value && $currentCheckbox.hasClass('open')) {
-                    $currentCheckbox.removeClass('open');
-                }
-                $('.js-task-price-setting-scroll').perfectScrollbar();
-
             },
             changeAudioMode(event) {
                 if ($('#course-audio-mode').data('value') == 'notAllowed') {
