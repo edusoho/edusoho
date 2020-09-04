@@ -502,3 +502,20 @@ s2b2cSettlementOrderStatus:
     success: Paid
     finished: Transaction complete
     refunded: Refunded
+
+certificateTypes:
+    course: course
+    classroom: classroom
+
+certificateStatus:
+    valid: valid
+    expired: expired
+    cancelled: cancelled
+
+certificateSearchTypes:
+    truename: truename
+    nickname: nickname
+    verifiedMobile: mobile
+    email: email
+    batch: batch
+    code: code

@@ -97,6 +97,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
             }
         }
         $discoverySetting['data']['items'] = array_values($discoverySetting['data']['items']);
+        $discoverySetting['data']['items'] = $this->getCourseService()->appendHasCertificate($discoverySetting['data']['items']);
 
         return $discoverySetting;
     }
@@ -177,6 +178,7 @@ class H5SettingServiceImpl extends BaseService implements H5SettingService
             }
         }
         $discoverySetting['data']['items'] = array_values($discoverySetting['data']['items']);
+        $discoverySetting['data']['items'] = $this->getClassroomService()->appendHasCertificate($discoverySetting['data']['items']);
 
         return $discoverySetting;
     }

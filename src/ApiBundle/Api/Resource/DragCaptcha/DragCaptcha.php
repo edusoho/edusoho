@@ -2,15 +2,15 @@
 
 namespace ApiBundle\Api\Resource\DragCaptcha;
 
+use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use ApiBundle\Api\Annotation\ApiConf;
 use AppBundle\Common\ArrayToolkit;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class DragCaptcha extends AbstractResource
 {
-    private $limitTypes = array(
+    private $limitTypes = [
         'web_register',
         'bind_register',
         'reset_password',
@@ -18,7 +18,7 @@ class DragCaptcha extends AbstractResource
         'mobile_reset_password',
         'sms_login',
         'user_login',
-    );
+    ];
 
     /**
      * @ApiConf(isRequiredAuth=false)
@@ -26,16 +26,16 @@ class DragCaptcha extends AbstractResource
     public function add(ApiRequest $request)
     {
         $fields = $request->request->all();
-        $fields = ArrayToolkit::parts($fields, array(
+        $fields = ArrayToolkit::parts($fields, [
             'times',
-        ));
+        ]);
 
         $limitType = $request->request->get('limitType');
         $limitType = $this->getLimitType($limitType);
         $limitKey = $limitType.'_'.$request->getHttpRequest()->getClientIp();
 
         $result = $this->getBizDragCaptcha()->generate($fields, $limitKey);
-        $result['url'] = $this->generateUrl('drag_captcha', array('token' => $result['token']), UrlGeneratorInterface::ABSOLUTE_URL);
+        $result['url'] = $this->generateUrl('drag_captcha', ['token' => $result['token']], UrlGeneratorInterface::ABSOLUTE_URL);
 
         return $result;
     }
@@ -62,8 +62,8 @@ class DragCaptcha extends AbstractResource
      */
     public function get(ApiRequest $request, $token)
     {
-        return array(
+        return [
             'status' => $this->getBizDragCaptcha()->check($token),
-        );
+        ];
     }
 }

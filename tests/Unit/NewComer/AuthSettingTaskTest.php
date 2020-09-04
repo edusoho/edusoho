@@ -13,9 +13,8 @@ class AuthSettingTaskTest extends BaseTestCase
             [
                 [
                     'functionName' => 'get',
-                    'returnValue' =>
-                        ['auth_setting_task' => ['status' => []]]
-                ]
+                    'returnValue' => ['auth_setting_task' => ['status' => []]],
+                ],
             ]
         );
 
@@ -31,9 +30,8 @@ class AuthSettingTaskTest extends BaseTestCase
             [
                 [
                     'functionName' => 'get',
-                    'returnValue' =>
-                        ['auth_setting_task' => ['status' => 1]]
-                ]
+                    'returnValue' => ['auth_setting_task' => ['status' => 1]],
+                ],
             ]
         );
 
@@ -42,5 +40,4 @@ class AuthSettingTaskTest extends BaseTestCase
 
         $this->assertEquals(true, $result);
     }
-
 }

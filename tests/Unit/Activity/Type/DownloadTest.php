@@ -9,21 +9,21 @@ class DownloadTest extends BaseTypeTestCase
     public function testCreate()
     {
         $this->mockBiz('Activity:DownloadActivityDao',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'create',
-                    'returnValue' => array(
+                    'returnValue' => [
                         'id' => 1,
-                    ),
-                ),
-            )
+                    ],
+                ],
+            ]
         );
 
-        $fields = array(
-            'materials' => json_encode(array(
-                1 => array('id' => 1),
-            )),
-        );
+        $fields = [
+            'materials' => json_encode([
+                1 => ['id' => 1],
+            ]),
+        ];
 
         $type = $this->getActivityConfig(self::TYPE);
         $downloadActivity = $type->create($fields);
@@ -34,27 +34,27 @@ class DownloadTest extends BaseTypeTestCase
     public function testCopy()
     {
         $this->mockBiz('Activity:DownloadActivityDao',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'create',
-                    'returnValue' => array(
+                    'returnValue' => [
                         'id' => 2,
                         'mediaCount' => 2,
-                        'fileIds' => array(1, 2),
-                    ),
-                ),
-                array(
+                        'fileIds' => [1, 2],
+                    ],
+                ],
+                [
                     'functionName' => 'get',
-                    'withParams' => array(1),
-                    'returnValue' => array(
+                    'withParams' => [1],
+                    'returnValue' => [
                         'id' => 1,
                         'mediaCount' => 2,
-                        'fileIds' => array(1, 2),
-                    ),
-                ),
-            )
+                        'fileIds' => [1, 2],
+                    ],
+                ],
+            ]
         );
-        $activity = array('mediaId' => 1);
+        $activity = ['mediaId' => 1];
 
         $type = $this->getActivityConfig(self::TYPE);
         $downloadActivity = $type->copy($activity);
@@ -65,38 +65,38 @@ class DownloadTest extends BaseTypeTestCase
     public function testSync()
     {
         $this->mockBiz('Activity:DownloadActivityDao',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'update',
-                    'returnValue' => array(
+                    'returnValue' => [
                         'id' => 2,
                         'mediaCount' => 2,
-                        'fileIds' => array(1, 2),
-                    ),
-                ),
-                array(
+                        'fileIds' => [1, 2],
+                    ],
+                ],
+                [
                     'functionName' => 'get',
-                    'withParams' => array(1),
-                    'returnValue' => array(
+                    'withParams' => [1],
+                    'returnValue' => [
                         'id' => 1,
                         'mediaCount' => 2,
-                        'fileIds' => array(1, 2),
-                    ),
-                ),
-                array(
+                        'fileIds' => [1, 2],
+                    ],
+                ],
+                [
                     'functionName' => 'get',
-                    'withParams' => array(2),
-                    'returnValue' => array(
+                    'withParams' => [2],
+                    'returnValue' => [
                         'id' => 2,
                         'mediaCount' => 1,
-                        'fileIds' => array(1),
-                    ),
-                ),
-            )
+                        'fileIds' => [1],
+                    ],
+                ],
+            ]
         );
 
         $type = $this->getActivityConfig(self::TYPE);
-        $downloadActivity = $type->sync(array('mediaId' => 1), array('mediaId' => 2));
+        $downloadActivity = $type->sync(['mediaId' => 1], ['mediaId' => 2]);
 
         $this->assertEquals(2, $downloadActivity['id']);
     }
@@ -104,26 +104,26 @@ class DownloadTest extends BaseTypeTestCase
     public function testUpdate()
     {
         $this->mockBiz('Activity:DownloadActivityDao',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'update',
-                    'returnValue' => array(
+                    'returnValue' => [
                         'id' => 2,
                         'mediaCount' => 2,
-                        'fileIds' => array(1, 2),
-                    ),
-                ),
-            )
+                        'fileIds' => [1, 2],
+                    ],
+                ],
+            ]
         );
 
-        $fields = array(
-            'materials' => json_encode(array(
-                1 => array('id' => 1),
-            )),
-        );
+        $fields = [
+            'materials' => json_encode([
+                1 => ['id' => 1],
+            ]),
+        ];
 
         $type = $this->getActivityConfig(self::TYPE);
-        $downloadActivity = $type->update(2, $fields, array());
+        $downloadActivity = $type->update(2, $fields, []);
 
         $this->assertEquals(2, $downloadActivity['id']);
     }
@@ -131,13 +131,22 @@ class DownloadTest extends BaseTypeTestCase
     public function testDelete()
     {
         $this->mockBiz('Activity:DownloadActivityDao',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'delete',
-                    'withParams' => array(2),
+                    'withParams' => [2],
                     'returnValue' => true,
-                ),
-            )
+                ],
+                [
+                    'functionName' => 'get',
+                    'withParams' => [2],
+                    'returnValue' => [
+                        'id' => 2,
+                        'mediaCount' => 2,
+                        'fileIds' => [1, 2],
+                    ],
+                ],
+            ]
         );
 
         $type = $this->getActivityConfig(self::TYPE);
@@ -149,17 +158,17 @@ class DownloadTest extends BaseTypeTestCase
     public function testGet()
     {
         $this->mockBiz('Activity:DownloadActivityDao',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'get',
-                    'withParams' => array(2),
-                    'returnValue' => array(
+                    'withParams' => [2],
+                    'returnValue' => [
                         'id' => 2,
                         'mediaCount' => 1,
-                        'fileIds' => array(1),
-                    ),
-                ),
-            )
+                        'fileIds' => [1],
+                    ],
+                ],
+            ]
         );
 
         $type = $this->getActivityConfig(self::TYPE);
@@ -171,23 +180,23 @@ class DownloadTest extends BaseTypeTestCase
     public function testFind()
     {
         $this->mockBiz('Activity:DownloadActivityDao',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'findByIds',
-                    'withParams' => array(array(2)),
-                    'returnValue' => array(
-                        0 => array(
+                    'withParams' => [[2]],
+                    'returnValue' => [
+                        0 => [
                             'id' => 2,
                             'mediaCount' => 1,
-                            'fileIds' => array(1),
-                        ),
-                    ),
-                ),
-            )
+                            'fileIds' => [1],
+                        ],
+                    ],
+                ],
+            ]
         );
 
         $type = $this->getActivityConfig(self::TYPE);
-        $downloadActivities = $type->find(array(2));
+        $downloadActivities = $type->find([2]);
         $downloadActivity = reset($downloadActivities);
 
         $this->assertEquals(2, $downloadActivity['id']);
