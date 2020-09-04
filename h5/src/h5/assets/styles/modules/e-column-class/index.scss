@@ -86,6 +86,17 @@
 			color: #333;
 			font-weight: 500;
 			font-size: vw(14);
+
+			.certificate-icon {
+				margin-right: vw(4);
+				padding: vw(2) vw(4);
+				color: #fff;
+				font-size: vw(12);
+				line-height: vw(16);
+				vertical-align: vw(1);
+				background-color: #43bc60;
+				border-radius: vw(4);
+			}
 		}
 
 		&__center {
@@ -97,7 +108,7 @@
 		}
 
 		&__bottom {
-			// margin-top:vw(4);
+			// margin-top: vw(4);
 			height: vw(20);
 			color: #fe3b13;
 			font-weight: 500;

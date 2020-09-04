@@ -12,6 +12,7 @@ const getDisplayStyle = (data, listObj) => {
   if (listObj.typeList === 'classroom_list') {
     return {
       id: data.id,
+      hasCertificate: data.hasCertificate,
       targetId: data.targetId,
       imgSrc: {
         url: data.cover.middle || '',
@@ -33,6 +34,7 @@ const getDisplayStyle = (data, listObj) => {
   }
   return {
     id: data.id,
+    hasCertificate: data.hasCertificate,
     imgSrc: {
       url: data.courseSet.cover.middle || '',
       className: 'e-course__img',
@@ -80,6 +82,7 @@ const getPriceDisplay = (data, platform) => {
 const getClassRoomDisplay = (data, listObj, price) => {
   return {
     id: data.id,
+    hasCertificate: data.hasCertificate,
     targetId: data.targetId,
     studentNum: listObj.classRoomShowStudent ? data.studentNum : null,
     imgSrc: {
@@ -100,6 +103,7 @@ const getClassRoomDisplay = (data, listObj, price) => {
 const getCourseDisplay = (data, listObj, price) => {
   return {
     id: data.id,
+    hasCertificate: data.hasCertificate,
     studentNum: listObj.showStudent ? data.studentNum : null,
     imgSrc: {
       url: data.courseSet.cover.middle || '',
@@ -119,6 +123,7 @@ const getCourseDisplay = (data, listObj, price) => {
 const getItemBankDisplay = (data, listObj, price) => {
   return {
     id: data.id,
+    hasCertificate: data.hasCertificate,
     studentNum: listObj.showStudent ? data.studentNum : null,
     imgSrc: {
       url: data.cover.middle || '',
@@ -183,6 +188,7 @@ const courseListData = (data, listObj, uiStyle = 'old', platform = 'h5') => {
       if (listObj.typeList === 'classroom_list') {
         return {
           id: data.id,
+          hasCertificate: data.hasCertificate,
           targetId: data.targetId,
           imgSrc: {
             url: data.cover.middle || '',
@@ -201,6 +207,7 @@ const courseListData = (data, listObj, uiStyle = 'old', platform = 'h5') => {
       }
       return {
         id: data.id,
+        hasCertificate: data.hasCertificate,
         imgSrc: {
           url: data.courseSet.cover.middle || '',
           className: 'e-course__img',

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <e-panel :title="details.courseSet.title">
+    <e-panel :title="details.courseSet.title" :type="details.hasCertificate">
       <div class="course-detail__plan-price">
         <span :class="{ isFree: isFree }"
           >{{ filterPrice() }}
@@ -47,6 +47,14 @@
         <span class="mr20">购买截止日期</span>
         <span class="validity orange">{{ buyExpiryTime }}</span>
       </div>
+    </div>
+    <div
+      class="course-detail__certificate"
+      @click="toCertificate(selectedPlanId)"
+      v-if="details.hasCertificate"
+    >
+      <span><span class="certificate-icon">证</span>证书</span>
+      <i class="van-icon van-icon-arrow pull-right" />
     </div>
   </div>
 </template>
@@ -176,6 +184,9 @@ export default {
 
       this.isFree = false;
       return `¥${details.price}`;
+    },
+    toCertificate(id) {
+      this.$router.push({ path: `/certificate/list/${id}` });
     },
   },
 };
