@@ -1,0 +1,28 @@
+{% extends 'my/layout.html.twig' %}
+
+{% block title %}{{ 'user.certificates.content_title'|trans }} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'my-certificates' %}
+
+{% block page_title %}
+  {{ 'user.certificates.content_title'|trans }}
+{% endblock %}
+
+{% block main %}
+  <div class="panel panel-default panel-col">
+    <div class="panel-heading">
+      {{ 'user.certificates.content_title'|trans }}
+    </div>
+    <div class="panel-body">
+      <ul class="cd-tabs">
+        <li {% if my_certificate_side_nav == 'my_list' %}class="active"{% endif %}>
+          <a href="{{path('my_certificates')}}">{{'user.certificates.my_list'|trans}}</a>
+        </li>
+        <li {% if my_certificate_side_nav == 'unclaimed_list' %}class="active"{% endif %}>
+          <a href="{{path('my_unclaimed_certificates')}}">{{'user.certificates.unclaimed_list'|trans}}</a>
+        </li>
+      </ul>
+    {% block mycertificate_content %}{% endblock %}
+    </div>
+  </div>
+{% endblock %}

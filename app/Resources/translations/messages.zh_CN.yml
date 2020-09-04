@@ -1426,10 +1426,22 @@ course.introduction: 介绍
 course.introduction.more_teaching_plan: >
   想查看更多教学计划？<a href="%courseUrl%">返回课程宣传页</a>
 course.introduction.course_introduction: 课程介绍
+course.introduction.authentication_certificate: 认证证书
 course.introduction.course_target: 课程目标
 course.introduction.course_target_empty: 为设置目标
 course.introduction.audiences: 适合人群
 course.introduction.audiences_empty: 为设置目标
+course.catalogue.certificate: 荣誉证书
+course.catalogue.certificate_wait: 待获取
+course.catalogue.certificate_have: 已获取
+course.catalogue.certificate_obtain: 通过完成课程全部任务可以获得
+course.catalogue.certificate_detail: 证书详情
+course.catalogue.certificate_achieve: 获取途径
+course.catalogue.certificate_condition: 获取条件
+course.catalogue.certificate_to_achieve: 通过完成<a href='%targetUrl%' target='_blank' class="link-primary">%course%</a>全部任务
+course.catalogue.certificate_pass_condition: 完成课程全部任务
+course.catalogue.certificate_expiry: '有效期至：%expiryTime%'
+course.catalogue.certificate_forever: '有效期：长期有效'
 course.catalogue.content_title: 目录
 course.catalogue.task.preview_btn: 预览
 course.catalogue.task.try_look_btn: 试看
@@ -1563,6 +1575,7 @@ course.tab.notes: '笔记'
 course.tab.material: '资料区'
 course.tab.reviews: '评价'
 course.tab.summary: '介绍'
+course.tab.certificate: '课程证书'
 course.activity.video: '视频'
 course.activity.audio: 音频
 course.activity.live: 直播
@@ -2423,6 +2436,10 @@ classroom.description: 介绍
 classroom.teachers: 师资
 classroom.reviews: 评价
 classroom.note: 笔记
+classroom.certificates: 班级证书
+classroom.certificate_obtain: 通过完成班级全部课程可以获得
+classroom.certificate_to_achieve: 通过完成<a href='%targetUrl%' target='_blank' class="link-primary">%classroom%</a>全部课程
+classroom.certificate_pass_condition: 完成班级全部课程
 classroom.expiry_date_tips: 班级有效期：
 classroom.expiry_day_tips: >
   <span class="mrm">班级有效天数：</span><span>%expiryValue%天</span>
@@ -4479,6 +4496,7 @@ my.learning.notebook_menu: 我的笔记
 my.learning.homework_menu: 我的作业
 my.learning.testpaper_menu: 我的考试
 my.learning.group_menu: 我的小组
+user.certificate_menu: 我的证书
 
 my.course.refund_tips: 您的退款申请已提交，请等待管理员的处理。
 my.course.cancle_refund_btn: 取消退款，继续学习！
@@ -4584,6 +4602,34 @@ my.learning.gruop.answer_thread: 回复的话题
 my.learning.group.favorit_thread: 收藏的话题
 my.learning.group.manage_group: 我管理的小组
 
+# 我的证书
+user.certificates.content_title: 我的证书
+user.certificates.my_list: 我的证书
+user.certificates.none_record: 暂无证书
+user.certificates.only_valid: 仅显示有效的
+user.certificates.date_range: 证书获取时间
+user.certificates.placeholde_name: 证书名称...
+user.certificates.cert_titile: 证书名称
+user.certificates.cert_code: 证书编号
+user.certificates.cert_issue_time: 获取时间
+user.certificates.look_cert: 查看证书
+user.certificates.download_cert: 下载证书
+user.certificates.valid_time_tip: 有效期至：
+user.certificates.status_valid: 有效中
+user.certificates.status_expired: 已过期
+user.certificates.search: 搜索
+user.certificates.select_time: 选择时间：
+user.certificates.forever: 长期有效
+user.certificates.issue_time: 发证日期
+user.certificates.valid_time: 有效日期
+user.certificates.detail_object: 认证对象
+user.certificates.detail_object_name: 姓名
+user.certificates.detail_object_usrename: 用户名
+user.certificates.detail_cert_message: 证书信息
+user.certificates.unclaimed_list: 待领取证书
+user.certificates.cart_title: 荣誉证书
+user.certificates.cart_detail_btn: 查看获取路径
+
 # 我的笔记
 my.learning.note: 我的笔记
 my.learning.note.total_number: 共 %noteNum% 篇笔记
@@ -4649,6 +4695,8 @@ explore.open_course.title: 公开课
 explore.open_course.list: 公开课列表
 explore.open_course.live: 直播
 explore.open_course.empty: 暂无公开课
+explore.classroom.certificate_tag: 获得证书
+explore.classroom.certificate_tag_short: 证
 explore.item_bank_exercise.list: 题库练习列表
 explore.item_bank_exercise.empty: 暂无题库练习
 
@@ -4780,6 +4828,11 @@ common.video_quality.high: 精细
 common.video_quality.high.tips: 适合动态电影
 common.video_quality.super: 超精细
 common.video_quality.super.tips: 适合超高画质的专业视频
+common.certificate_type.course: 课程
+common.certificate_type.classroom: 班级
+common.certificate_status.draft: 未发布
+common.certificate_status.published: 已发布
+common.certificate_status.closed: 已关闭
 
 # content
 contetn.active_list.create_template: 请创建模版文件
@@ -6359,6 +6412,101 @@ admin.money_records.money_record_type: 交易类型
 admin.money_records.person: 交易人
 admin.money_records.transaction_no: 交易号
 admin.money_records.transaction_time: 交易时间
+
+# 发证管理
+admin.operation_certificate.template.type: 证书类型
+admin.operation_certificate.template.type.all: 全部
+admin.operation_certificate.template.title: 模板名称
+admin.operation_certificate.template.title.placeholder: 模版名称，最多30个字
+admin.operation_certificate.template.creator: 创建人
+admin.operation_certificate.template.create_time: 创建时间
+admin.operation_certificate.template.operate: 操作
+admin.operation_certificate.template.edit: 编辑
+admin.operation_certificate.template.create: 创建模板
+admin.operation_certificate.template.create.basic_message: 基础信息
+admin.operation_certificate.template.create.select: 选择模版
+admin.operation_certificate.template.style.horizontal: 横版
+admin.operation_certificate.template.style.vertical: 竖版
+admin.operation_certificate.template.basemap: 证书底图
+admin.operation_certificate.template.basemap.upload: 上传证书底图
+admin.operation_certificate.template.basemap.vertical_upload_hint: 请上传jpg、png格式的证书底图，建议尺寸为 2800 × 3508 px，文件大小不超过 2 MB
+admin.operation_certificate.template.basemap.horizontal_upload_hint: 请上传jpg、png格式的证书底图，建议尺寸为 3508 × 2800 px，文件大小不超过 2 MB
+admin.operation_certificate.template.stamp: 证书印章
+admin.operation_certificate.template.stamp.upload: 上传证书印章
+admin.operation_certificate.template.stamp.upload_hint: 请上png等格式透明背景的印章图片，建议尺寸为 650 × 650 px，文件大小不超过 2 MB
+admin.operation_certificate.template.content.edit: 编辑证书信息
+admin.operation_certificate.template.certificate.title: 证书标题
+admin.operation_certificate.template.certificate.title_hint: 可选填
+admin.operation_certificate.template.certificate.title.default: 课程认证证书
+admin.operation_certificate.template.certificate.recipient: 被授予人信息
+admin.operation_certificate.template.certificate.recipient.default: $name$（$username$）同学：
+admin.operation_certificate.template.certificate.recipient_hint: 可选填，支持添加 姓名：$name$  用户名：$username$
+admin.operation_certificate.template.certificate.empty_recipient_hint: 注：如网校未将 [姓名] 设置为必填项，则学员未填写姓名时，被授予人信息为空
+admin.operation_certificate.template.certificate.content: 证书正文
+admin.operation_certificate.template.certificate.content.default.course: 由于你【$courseName$】课程中表现优秀，最终完成课程并通过考核，特颁发此证书！
+admin.operation_certificate.template.certificate.content.default.classroom: 由于你在【$classroomName$】班级中表现优秀，最终完成课程并通过考核，特颁发此证书！
+admin.operation_certificate.template.certificate.content_hint: 可选填，支持添加 姓名：$name$   用户名：$username$
+admin.operation_certificate.template.certificate.content_hint.course: 课程名称：$courseName$
+admin.operation_certificate.template.certificate.content_hint.classroom: 班级名称：$classroomName$
+admin.operation_certificate.template.certificate.qrcode: 证书验证二维码
+admin.operation_certificate.template.preview_btn: 预览
+admin.operation_certificate.template.preview_th: 证书模板预览
+admin.operation_certificate.certificate.num_th: 编号
+admin.operation_certificate.certificate.name_th: 证书名称
+admin.operation_certificate.certificate.description_th: 证书描述
+admin.operation_certificate.certificate.description.placeholder: 一句话介绍，限100字
+admin.operation_certificate.certificate.status_th: 状态
+admin.operation_certificate.certificate.create_btn: 创建证书
+admin.operation_certificate.certificate.resource_choose: 选择发放对象
+admin.operation_certificate.certificate.resource_choose_btn: 选择......
+admin.operation_certificate.certificate.template_choose: 选择证书模板
+admin.operation_certificate.certificate.code: 证书编码
+admin.operation_certificate.certificate.code.placeholder: 1至6位数字或英文字母，不区分大小写
+admin.operation_certificate.certificate.expiry_day: 证书有效期
+admin.operation_certificate.certificate.expiry_day.forever: 长期有效
+admin.operation_certificate.certificate.expiry_day.placeholder: 输入证书有效期，空值位长期有效
+admin.operation_certificate.certificate.auto_issue: 自动发放
+admin.operation_certificate.certificate.issue_rule: 发放方式
+admin.operation_certificate.certificate.issue_rule.course: 完成任务后自动发放
+admin.operation_certificate.certificate.issue_rule.course_not_auto: 完成任务后管理员审核发放
+admin.operation_certificate.certificate.update: 编辑证书
+admin.operation_certificate.certificate.member_manage: 名单管理
+admin.operation_certificate.certificate.audit: 待审核
+admin.operation_certificate.certificate.batch: 证书批次
+admin.operation_certificate.certificate.record.code: 证书编号
+admin.operation_certificate.certificate.record.status: 证书状态
+admin.operation_certificate.certificate.record.issue_date: 发证日期
+admin.operation_certificate.certificate.record.days_remaining: 剩余%lastDays%天
+admin.operation_certificate.certificate.record.days_expiry: %deadline%到期
+admin.operation_certificate.certificate.record.cancel: 撤销
+admin.operation_certificate.certificate.record.grant: 重新授予
+admin.operation_certificate.certificate.record.detail: 证书详情
+admin.operation_certificate.certificate.record.user: 被授予人
+admin.operation_certificate.certificate.record.information: 认证信息
+admin.operation_certificate.certificate.record.finish_status.course: 课程完成状态
+admin.operation_certificate.certificate.record.finish_status.classroom: 班级完成状态
+admin.operation_certificate.certificate.record.finish_status: 已完成
+admin.operation_certificate.certificate.record.certificate_information: 证书信息
+admin.operation_certificate.certificate.record.certificate_target: 认证对象
+admin.operation_certificate.certificate.record.img_loading: 加载中...
+admin.operation_certificate.certificate.audit.audit_certificate: 审核
+admin.operation_certificate.certificate.audit.certificate_batch: 认证批次
+admin.operation_certificate.certificate.audit.apply_time: 申请时间
+admin.operation_certificate.certificate.audit.status: 审核状态
+admin.operation_certificate.certificate.audit.audit_time: 审核时间
+admin.operation_certificate.certificate.audit.reviewer: 审核人
+admin.operation_certificate.certificate.audit.manage: 操作
+admin.operation_certificate.certificate.audit.query: 精确查询
+admin.operation_certificate.certificate.audit.user_info: 用户信息
+admin.operation_certificate.certificate.audit.certificate_info: 认证信息
+admin.operation_certificate.certificate.audit.crouse_status: 课程完成状态
+admin.operation_certificate.certificate.audit.crouse_complete: 已完成
+admin.operation_certificate.certificate.audit.crouse_incomplete: 未完成
+admin.operation_certificate.certificate.audit.result: 认证结果
+admin.operation_certificate.certificate.audit.title: 认证审核
+admin.operation_certificate.certificate.audit.certificate_pass: 通过
+admin.operation_certificate.certificate.audit.certificate_reject: 驳回
+admin.operation_certificate.certificate.audit.certificate_todo: 未审核
 
 # 网站公告管理
 admin.operation_announcement.content_th: 公告内容
@@ -9188,6 +9336,9 @@ log.action.item_bank_exercise.recommend_exercise: 推荐题库练习
 log.action.item_bank_exercise.cancel_recommend_exercise: 取消推荐题库练习
 log.action.item_bank_exercise.publish_exercise: 发布题库练习
 log.action.item_bank_exercise.close_exercise: 关闭题库练习
+log.action.certifiacte.create_certificate: 创建证书
+log.action.certifiacte.auto_issue: 自动发放证书
+log.action.certifiacte.create_template: 创建证书模板
 
 log.action.template.course.create: 新建了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.update: 修改了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
@@ -10458,6 +10609,16 @@ exception.destroy_account.reason_too_long: 注销原因限制200字数
 exception.destroy_account.not_found_record: 未找到注销记录
 exception.destroy_account.audit_record_exist: 已存在审核中的申请
 
+exception.certificate_template.notfound_template: 模板不存在
+exception.certificate_template.notfound_certificate: 证书不存在
+exception.certificate.record.notfound_record: 证书不存在
+exception.certificate.record.forbidden_cancel: 证书无法撤销
+exception.certificate.record.forbidden_regrant: 证书无法重新撤销
+exception.certificate_template.forbidden_delete_published: 禁止删除已发布证书
+exception.certificate.audit.forbidden_audit: 审核失败
+exception.certificate.valid.forbidden_audit: 审核发送失败
+exception.certificate.reject.forbidden_audit: 审核驳回失败
+
 course.unname_title: 未命名计划
 
 admin.index.course_order: 课程订单
@@ -11197,11 +11358,14 @@ exception.s2b2c_product.remove_failed: 商品移除失败
 exception.s2b2c.hidden_permission_invalid: 获取S2b2c权限列表失败
 
 admin_v2.cloud_center.content_resource.product_update_setting: 更新设置
-admin_v2.cloud_center.content_resource.product_update_auto: 自动更新
+admin_v2.cloud_center.content_resource.product_update_auto: 定时更新
+admin_v2.cloud_center.content_resource.product_update_promptly: 及时更新
 admin_v2.cloud_center.content_resource.product_update_manual: 手动更新
 
-admin_v2.cloud_center.content_resource.product_update_auto.tips: 如果S端内容有更新，自动进行同步更新
+admin_v2.cloud_center.content_resource.product_update_promptly.tips: 如果S端内容有更新，将自动及时同步更新
+admin_v2.cloud_center.content_resource.product_update_auto.tips: 如果S端内容有更新，默认凌晨2点进行同步更新
 admin_v2.cloud_center.content_resource.product_update_manual.tips: 供应商内容更新，需要手动进行更新
+
 s2b2c.resource.all_choose: 全部选择
 s2b2c.resource.return_market: 返回内容市场
 s2b2c.resource.has_new_notice_hint: 您采购的内容有更新

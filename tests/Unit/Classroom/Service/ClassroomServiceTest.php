@@ -16,6 +16,40 @@ use Biz\User\Service\UserService;
 
 class ClassroomServiceTest extends BaseTestCase
 {
+    public function testAppendHasCertificate()
+    {
+        $classrooms = [
+            ['id' => 1],
+            ['id' => 2],
+        ];
+
+        $this->mockBiz('Certificate:CertificateService', [
+            [
+                'functionName' => 'search',
+                'returnValue' => [
+                    ['targetId' => 1],
+                ],
+            ],
+        ]);
+
+        $classrooms = $this->getClassroomService()->appendHasCertificate($classrooms);
+
+        $this->assertEquals(true, $classrooms[0]['hasCertificate']);
+        $this->assertEquals(false, $classrooms[1]['hasCertificate']);
+    }
+
+    public function testHasCertificate()
+    {
+        $this->mockBiz('Certificate:CertificateService', [
+            [
+                'functionName' => 'count',
+                'returnValue' => 1,
+            ],
+        ]);
+
+        $this->assertEquals(true, $this->getClassroomService()->hasCertificate(1));
+    }
+
     public function testUpdateMemberDeadlineByMemberId()
     {
         $user = $this->getCurrentUser();

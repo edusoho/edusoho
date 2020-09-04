@@ -6,11 +6,9 @@ interface ProductService
 {
     const UPDATE_TYPE_MANUAL = 'manual';
 
+    const UPDATE_TYPE_PROMPTLY = 'promptly';
+
     const UPDATE_TYPE_AUTO = 'auto';
-
-    public function searchRemoteProducts($conditions);
-
-    public function searchSelectedProducts($conditions);
 
     public function createProduct($fields);
 
