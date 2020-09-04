@@ -629,6 +629,61 @@ const routes = [
       ),
   },
   {
+    path: '/my/certificate',
+    name: 'my_certificate',
+    meta: {
+      title: '我的证书',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "certificate" */ '@/containers/certificate/my-certificate/index.vue'
+      ),
+  },
+  {
+    path: '/certificate_records/:id',
+    name: 'certificate_records',
+    meta: {
+      title: '高级产品经理证书',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "certificate" */ '@/containers/certificate/my-certificate/certificate-detail/index.vue'
+      ),
+  },
+  {
+    path: '/certificate/list/:id',
+    name: 'certificate_list',
+    meta: {
+      title: '可获得证书',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "certificate" */ '@/containers/certificate/certificate/certificate-list.vue'
+      ),
+  },
+  {
+    path: '/certificate/detail/:id',
+    name: 'certificate_detail',
+    meta: {
+      title: '高级产品经理证书',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "certificate" */ '@/containers/certificate/certificate/certificate-detail.vue'
+      ),
+  },
+  {
+    path: '/webview/certificate/detail/:id',
+    name: 'webview_certificate_detail',
+    meta: {
+      hideTitle: true,
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "certificate" */ '@/containers/webview/certificate/certificate-detail.vue'
+      ),
+  },
+  {
     path: '/brushExercise',
     name: 'brush_exercise',
     meta: {
