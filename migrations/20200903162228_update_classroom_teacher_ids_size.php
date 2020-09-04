@@ -11,7 +11,7 @@ class UpdateClassroomTeacherIdsSize extends Migration
     {
         $biz = $this->getContainer();
         $biz['db']->exec("
-            ALTER TABLE `classroom` CHANGE `teacherIds` `teacherIds` VARCHAR(4069) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '教师IDs';
+            ALTER TABLE `classroom` CHANGE `teacherIds` `teacherIds` VARCHAR(4096) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '教师IDs';
         ");
     }
 
