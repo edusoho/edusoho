@@ -97,6 +97,7 @@
           }
         }).done(function (resp) {
           if (resp.goto) {
+              console.log(resp.goto);
             window.location.href = resp.goto;
           }
         })
