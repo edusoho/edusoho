@@ -532,7 +532,7 @@ class CourseManageController extends BaseController
             }
 
             $updatedCourse = $this->getCourseService()->updateBaseInfo($courseId, $data);
-            if (empty($course['enableAudio']) && $updatedCourse['enableAudio']) {
+            if (empty($course['enableAudio']) && isset($updatedCourse['enableAudio'])) {
                 $this->getCourseService()->batchConvert($course['id']);
             }
 
