@@ -72,7 +72,8 @@ class UserPassword extends AbstractResource
             throw UserException::NOTFOUND_USER();
         }
 
-        if ('discuz' == $user['type']) {
+        $userPartner = $this->getSettingService()->get('user_partner', []);
+        if ('discuz' == $user['type'] && (isset($userPartner['mode']) && 'discuz' == $userPartner['mode'])) {
             throw UserException::FORBIDDEN_DISCUZ_USER_RESET_PASSWORD();
         }
 
