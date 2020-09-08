@@ -32,6 +32,10 @@ class ActivityFilter extends Filter
             $data['finishDetail'] = (string) $data['ext']['finishCondition']['finishScore'];
         }
 
+        if (!empty($data['content'])) {
+            $data['content'] = $this->convertAbsoluteUrl($data['content']);
+        }
+
         //testpaper module
         if ('testpaper' == $data['mediaType']) {
             if (!empty($data['ext'])) {
