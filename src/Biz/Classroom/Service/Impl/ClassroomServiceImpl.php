@@ -827,7 +827,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function searchMemberCount($conditions)
     {
-        $conditions = $this->_prepareClassroomConditions($conditions);
+        $conditions = $this->_prepareConditions($conditions);
 
         return $this->getClassroomMemberDao()->count($conditions);
     }
