@@ -12,11 +12,11 @@ class TablePriceFloatToDecimal extends Migration
         $biz = $this->getContainer();
         $biz['db']->exec("
             ALTER TABLE `course_v8` 
-            modify `price` decimal(10,2) DEFAULT '0.00' COMMENT '课程的价格',
+            modify `price` decimal(12,2) DEFAULT '0.00' COMMENT '课程的价格',
             modify `income` decimal(15,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '总收入',
-            modify `originPrice` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '课程人民币原价',
-            modify `coinPrice` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '虚拟币价格',
-            modify `originCoinPrice` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '课程虚拟币原价';
+            modify `originPrice` decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '课程人民币原价',
+            modify `coinPrice` decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '虚拟币价格',
+            modify `originCoinPrice` decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '课程虚拟币原价';
         ");
 
         $biz['db']->exec("
