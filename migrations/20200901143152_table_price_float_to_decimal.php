@@ -21,13 +21,13 @@ class TablePriceFloatToDecimal extends Migration
 
         $biz['db']->exec("
             ALTER TABLE `course_set_v8`
-            modify `maxCoursePrice` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '已发布教学计划的最高价格',
-            modify `minCoursePrice` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '已发布教学计划的最低价格';
+            modify `maxCoursePrice` decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '已发布教学计划的最高价格',
+            modify `minCoursePrice` decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '已发布教学计划的最低价格';
         ");
 
         $biz['db']->exec("
             ALTER TABLE `classroom`
-            modify `price` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '价格',
+            modify `price` decimal(12,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '价格',
             modify `income` decimal(15,2) NOT NULL DEFAULT '0.00' COMMENT '收入';
         ");
     }
