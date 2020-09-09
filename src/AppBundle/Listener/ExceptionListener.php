@@ -42,7 +42,7 @@ class ExceptionListener
                 $event->setResponse($response);
             } elseif (false !== strpos(get_parent_class($exception), 'AbstractException')) {
                 // 出现异常跳回原页面
-                $targetUrl = $request->server->get('HTTP_REFERER');
+                $targetUrl = $request->server->get('HTTP_REFERER', '/login');
                 if ($this->generateUrl('login', array(), UrlGeneratorInterface::ABSOLUTE_URL) == $targetUrl) {
                     $targetUrl = $this->generateUrl('homepage');
                 }
