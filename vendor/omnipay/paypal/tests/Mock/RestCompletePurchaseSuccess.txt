@@ -1,0 +1,11 @@
+HTTP/1.1 200 OK
+Server: Apache-Coyote/1.1
+PROXY_SERVER_INFO: host=slcsbplatformapiserv3001.slc.paypal.com;threadId=216
+Paypal-Debug-Id: 539b1c0678b08
+SERVER_INFO: paymentsplatformserv:v1.payments.payment&CalThreadId=4342&TopLevelTxnStartTime=14b8c84b1f3&Host=slcsbpaymentsplatformserv3002.slc.paypal.com&pid=8929
+Content-Language: *
+Date: Sun, 15 Feb 2015 09:14:43 GMT
+Content-Type: application/json
+Content-Length: 1632
+
+{"id":"PAY-4BF374015W374910XKTQGGBZ","create_time":"2015-02-15T09:12:36Z","update_time":"2015-02-15T09:14:43Z","state":"approved","intent":"sale","payer":{"payment_method":"paypal","payer_info":{"email":"test.buyer@example.com","first_name":"Betsy","last_name":"Buyer","payer_id":"Payer12345","shipping_address":{"line1":"test","city":"","state":"","postal_code":"123456","country_code":"US","recipient_name":"Buyer Betsy"}}},"transactions":[{"amount":{"total":"100.00","currency":"USD","details":{"subtotal":"100.00","fee":"3.90"}},"description":"The product description","item_list":{"items":[{"name":"Item 1","price":"100.00","currency":"USD","quantity":"1","description":"Standard Item"}],"shipping_address":{"recipient_name":"Buyer Betsy","line1":"test","city":"","state":"","postal_code":"123456","country_code":"US"}},"related_resources":[{"sale":{"id":"9EA05739TH369572R","create_time":"2015-02-15T09:12:36Z","update_time":"2015-02-15T09:14:43Z","amount":{"total":"100.00","currency":"USD"},"payment_mode":"INSTANT_TRANSFER","state":"completed","protection_eligibility":"INELIGIBLE","parent_payment":"PAY-4BF374015W374910XKTQGGBZ","links":[{"href":"https://api.sandbox.paypal.com/v1/payments/sale/9EA05739TH369572R","rel":"self","method":"GET"},{"href":"https://api.sandbox.paypal.com/v1/payments/sale/9EA05739TH369572R/refund","rel":"refund","method":"POST"},{"href":"https://api.sandbox.paypal.com/v1/payments/payment/PAY-4BF374015W374910XKTQGGBZ","rel":"parent_payment","method":"GET"}]}}]}],"links":[{"href":"https://api.sandbox.paypal.com/v1/payments/payment/PAY-4BF374015W374910XKTQGGBZ","rel":"self","method":"GET"}]}
