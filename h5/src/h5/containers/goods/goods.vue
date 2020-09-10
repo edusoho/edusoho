@@ -95,7 +95,12 @@
         </section>
 
         <!-- 收藏/购买 -->
-        <buy :goods="goods" :currentSku="currentSku" :is-favorite="goods.isFavorite" />
+        <buy
+          :goods="goods"
+          :currentSku="currentSku"
+          :is-favorite="goods.isFavorite"
+          @update-data="updateFavorite"
+        />
 
         <!-- 回到顶部 -->
         <back-to-top v-show="backToTopShow" />
@@ -249,6 +254,9 @@ export default {
           this.active = 0;
         }
       }
+    },
+    updateFavorite(value) {
+      this.goods.isFavorite = value;
     },
   },
   created() {
