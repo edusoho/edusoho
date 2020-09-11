@@ -96,6 +96,11 @@ class ClassroomEntity extends BaseGoodsEntity
         return $this->getClassroomService()->findTeachers($specs['targetId']);
     }
 
+    public function hasCertificate($goods, $specs)
+    {
+        return $this->getClassroomService()->hasCertificate($specs['targetId']);
+    }
+
     /**
      * @param $goods
      * @param $specs

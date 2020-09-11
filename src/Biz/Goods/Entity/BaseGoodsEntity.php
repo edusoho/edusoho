@@ -42,6 +42,8 @@ abstract class BaseGoodsEntity
 
     abstract public function buySpecsAccess($goods, $specs);
 
+    abstract public function hasCertificate($goods, $specs);
+
     /**
      * @param $productId
      *

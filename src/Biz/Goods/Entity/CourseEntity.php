@@ -118,6 +118,11 @@ class CourseEntity extends BaseGoodsEntity
         return $course['teacherIds'];
     }
 
+    public function hasCertificate($goods, $specs)
+    {
+        return $this->getCourseService()->hasCertificate($specs['targetId']);
+    }
+
     /**
      * @return CourseSetService
      */
