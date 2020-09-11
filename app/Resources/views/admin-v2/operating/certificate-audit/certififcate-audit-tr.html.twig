@@ -1,0 +1,29 @@
+{% import "common/data-dict-macro.html.twig" as dict_macro %}
+<tr>
+  <td>{{ user.truename|default('--') }}<br><span class="text-muted text-sm">{{ user.nickname|default() }}</span></td>
+  <td>{{ target.title|default('--') }}</td>
+  <td>{{ record.createdTime|date('Y-m-d H:i:s') }}</td>
+  <td>{{ dict_text('certificateAuditStatus', record.status) }}
+  </td>
+  <td>
+    {% if record['status'] != 'none' %}
+      {{ record.auditTime|date('Y-m-d H:i:s') }}
+    {% else %}
+      -
+    {% endif %}
+  </td>
+  <td>
+    {{ reviewer.nickname|default('--') }}
+  </td>
+  <td>
+    <div class="btn-group">
+      {% if has_permission('admin_v2_certificate_manage') %}
+        {% if record['status'] == 'none' or record['status'] == 'reject' %}
+          <a class="btn btn-default btn-sm btn-primary" data-toggle="modal" data-target="#modal"
+             data-url="{{ path('admin_v2_certificate_examine_audit_detail', {id:record.id}) }}"
+             type="button">{{ 'admin.operation_certificate.certificate.audit.audit_certificate'|trans }}</a>
+        {% endif %}
+      {% endif %}
+    </div>
+  </td>
+</tr>

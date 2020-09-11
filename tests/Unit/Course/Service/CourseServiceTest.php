@@ -21,6 +21,40 @@ use Biz\User\Service\UserService;
 
 class CourseServiceTest extends BaseTestCase
 {
+    public function testAppendHasCertificate()
+    {
+        $courses = [
+            ['id' => 1],
+            ['id' => 2],
+        ];
+
+        $this->mockBiz('Certificate:CertificateService', [
+            [
+                'functionName' => 'search',
+                'returnValue' => [
+                    ['targetId' => 1],
+                ],
+            ],
+        ]);
+
+        $courses = $this->getCourseService()->appendHasCertificate($courses);
+
+        $this->assertEquals(true, $courses[0]['hasCertificate']);
+        $this->assertEquals(false, $courses[1]['hasCertificate']);
+    }
+
+    public function testHasCertificate()
+    {
+        $this->mockBiz('Certificate:CertificateService', [
+            [
+                'functionName' => 'count',
+                'returnValue' => 1,
+            ],
+        ]);
+
+        $this->assertEquals(true, $this->getCourseService()->hasCertificate(1));
+    }
+
     public function testSortCourse()
     {
         $courseSet = $this->createNewCourseSet();

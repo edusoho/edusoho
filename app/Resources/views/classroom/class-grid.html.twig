@@ -16,7 +16,12 @@
       {% endif %}
     </div>
   </div>
-  <h3 class="text-left class-item-title"><a class="link-darker" href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a></h3>
+  <h3 class="text-left class-item-title">
+    {% if can_obtain_certificates(classroom.id, 'classroom') %}
+      <a class="certificate-tag" tabindex="0" role="button" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-html="true" title="{{ 'explore.classroom.certificate_tag'|trans }}" data-content="{{ 'classroom.certificate_obtain'|trans }}">{{ 'explore.classroom.certificate_tag_short'|trans }}</a>
+    {% endif %}
+    <a class="link-darker" href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a>
+  </h3>
   <div class="class-item-metas text-overflow">
     {{ 'classroom.courses_count'|trans({'%courseNum%': '<span>%d</span>'|format(classroom.courseNum) })|raw }}
     {% include 'classroom/classroom-price.html.twig' %}

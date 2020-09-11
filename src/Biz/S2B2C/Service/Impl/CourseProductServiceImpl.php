@@ -156,7 +156,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
         $courseProducts = array_filter($waitSyncProducts, function ($product) {
             return 'course' == $product['productType'];
         });
-        $this->getLogger()->info('需要处理的计划数量' . count($courseProducts));
+        $this->getLogger()->info('需要处理的计划数量'.count($courseProducts));
         foreach ($courseProducts as $courseProduct) {
             if (0 == $courseProduct['localResourceId']) {
                 //新计划进行同步
@@ -196,11 +196,12 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
                     'subtitle',
                     'serializeMode',
                     'cover',
-                    'summary'
+                    'summary',
                 ]
             ),
             ['categoryId' => $newCourseSet['categoryId']]
         );
+
         return $this->getCourseSetDao()->update(
             $newCourseSet['id'],
             $courseSetParams
@@ -348,7 +349,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
             }
             //新增计划未进行同步的无需进行下架操作
             $course = $this->getCourseService()->getCourse($product['localResourceId']);
-            if ($course['status'] != 'published') {
+            if ('published' != $course['status']) {
                 return true;
             }
 
@@ -383,7 +384,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
             }
 
             $courseSet = $this->getCourseSetService()->getCourseSet($product['localResourceId']);
-            if ($courseSet['status'] != 'published') {
+            if ('published' != $courseSet['status']) {
                 return true;
             }
 
@@ -459,7 +460,7 @@ class CourseProductServiceImpl extends BaseService implements CourseProductServi
         $courseSetProduct = $this->getProductService()->getByTypeAndLocalResourceId('course_set', $courseSet['id']);
         $courseProducts = $this->getProductService()->findProductsBySupplierIdAndProductTypeAndLocalResourceIds($courseSetProduct['supplierId'], 'course', ArrayToolkit::column($courses, 'id'));
 
-        if (empty($courseSetProduct) && empty($courseProducts)){
+        if (empty($courseSetProduct) && empty($courseProducts)) {
             return true;
         }
 

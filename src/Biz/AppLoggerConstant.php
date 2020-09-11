@@ -208,6 +208,13 @@ class AppLoggerConstant implements LoggerConstantInterface
      */
     const ITEM_BANK_EXERCISE = 'item_bank_exercise';
 
+    /**
+     *  [$certificate 证书]
+     *
+     * $var string
+     */
+    const CERTIFICATE = 'certificate';
+
     public function getActions()
     {
         return [
@@ -524,6 +531,11 @@ class AppLoggerConstant implements LoggerConstantInterface
                 'cancel_recommend_exercise',
                 'publish_exercise',
                 'close_exercise',
+            ],
+            self::CERTIFICATE => [
+                'create_certificate',
+                'auto_issue',
+                'create_template',
             ],
         ];
     }

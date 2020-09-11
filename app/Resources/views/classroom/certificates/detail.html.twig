@@ -1,0 +1,48 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% set modal_class= "modal-md" %}
+
+{% block modal_content %}
+  <div class="modal-content">
+    <button type="button" class="close certificate-detail-close" data-dismiss="modal" aria-hidden="true">
+      <i class="cd-icon cd-icon-close"></i>
+    </button>
+    <div class="certificate-detail-tag-area pull-right">
+      {% if isObtained|default(false) %}
+        <span class="certificate-detail-tag certificate-detail-tag-have">{{ 'course.catalogue.certificate_have'|trans }}</span>
+      {% else %}
+        <span class="certificate-detail-tag certificate-detail-tag-wait">{{ 'course.catalogue.certificate_wait'|trans }}</span>
+      {% endif %}
+    </div>
+    <div class="certificate-detail-header">
+      {{ certificate.name }}
+    </div>
+    <div class="modal-body">
+      <div class="certificate-detail-info">
+        <div class="detail-description">
+          {{ certificate.description|raw }}
+        </div>
+      </div>
+      <div class="es-piece">
+        <div class="piece-header">{{ 'course.catalogue.certificate_achieve'|trans }}</div>
+        <div class="piece-body p-lg">
+          {% if targetType == 'course' %}
+            {{ 'course.catalogue.certificate_to_achieve'|trans({'%targetUrl%': path('course_show', {id:target.id}),'%course%': target.courseSetTitle})|raw }}
+          {% else %}
+            {{ 'classroom.certificate_to_achieve'|trans({'%targetUrl%': path('classroom_show', {id:target.id}),'%classroom%': target.title})|raw }}
+          {% endif %}
+        </div>
+      </div>
+      <div class="es-piece">
+        <div class="piece-header">{{ 'course.catalogue.certificate_condition'|trans }}</div>
+        <div class="piece-body p-lg">
+          {% if targetType == 'course' %}
+            {{ 'course.catalogue.certificate_pass_condition'|trans }}
+          {% else %}
+            {{ 'classroom.certificate_pass_condition'|trans }}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+

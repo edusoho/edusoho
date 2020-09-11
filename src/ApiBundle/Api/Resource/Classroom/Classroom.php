@@ -30,6 +30,7 @@ class Classroom extends AbstractResource
         }
 
         $classroom['access'] = $this->getClassroomService()->canJoinClassroom($classroomId);
+        $classroom['hasCertificate'] = $this->getClassroomService()->hasCertificate($classroomId);
 
         return $classroom;
     }
@@ -62,6 +63,8 @@ class Classroom extends AbstractResource
         $this->mergeProfilesInClassroom($classrooms, 'headTeacher');
 
         $total = $this->getClassroomService()->countClassrooms($conditions);
+
+        $classrooms = $this->getClassroomService()->appendHasCertificate($classrooms);
 
         return $this->makePagingObject($classrooms, $total, $offset, $limit);
     }

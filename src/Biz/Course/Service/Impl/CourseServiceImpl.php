@@ -8,6 +8,7 @@ use AppBundle\Common\TimeMachine;
 use Biz\Accessor\AccessorInterface;
 use Biz\Activity\Service\Impl\ActivityServiceImpl;
 use Biz\BaseService;
+use Biz\Certificate\Service\CertificateService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Common\CommonException;
 use Biz\Course\CourseException;
@@ -2828,5 +2829,40 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getCourseSetGoodsMediator()
     {
         return $this->biz['goods.mediator.course_set'];
+    }
+
+    public function appendHasCertificate(array $courses)
+    {
+        $conditions = [
+            'targetType' => 'course',
+            'targetIds' => ArrayToolkit::column($courses, 'id'),
+            'status' => 'published',
+        ];
+
+        $certificates = ArrayToolkit::index($this->getCertificateService()->search($conditions, [], 0, PHP_INT_MAX, ['targetId']), 'targetId');
+        foreach ($courses as &$course) {
+            $course['hasCertificate'] = !empty($certificates[$course['id']]);
+        }
+
+        return $courses;
+    }
+
+    public function hasCertificate($courseId)
+    {
+        $conditions = [
+            'targetType' => 'course',
+            'targetId' => $courseId,
+            'status' => 'published',
+        ];
+
+        return !empty($this->getCertificateService()->count($conditions));
+    }
+
+    /**
+     * @return CertificateService
+     */
+    protected function getCertificateService()
+    {
+        return $this->createService('Certificate:CertificateService');
     }
 }

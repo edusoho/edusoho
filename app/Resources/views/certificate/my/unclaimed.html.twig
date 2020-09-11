@@ -1,0 +1,32 @@
+{% extends 'certificate/my/layout.html.twig' %}
+
+{% set my_certificate_side_nav = 'unclaimed_list' %}
+
+{% block mycertificate_content %}
+    <form class="form-inline cd-form-inline" action="" method="get">
+        <div class="form-group cd-form-group cd-form-group-button cd-mr16">
+            <input name="q" type="text" value="{{app.request.get('q')}}" class="form-control form-control-sm" placeholder="{{ 'user.certificates.placeholde_name'|trans }}">
+        </div>
+        <button class="cd-btn cd-btn-primary cd-btn-sm">{{ 'user.certificates.search'|trans }}</button>
+    </form>
+    {% if certificates %}
+        <div class="row">
+            {% for certificate in certificates %}
+            <div class="col-lg-4 unclaimed-cert-item">
+                <span class="unclaimed-cert-item-tag">{{ 'course.catalogue.certificate_wait'|trans }}</span>
+                <img width="100%" src="{{ asset('assets/img/default/certificate@2x.png') }}" />
+                <div class="unclaimed-cert-message">
+                    <p class="unclaimed-cert-top">{{ 'user.certificates.cart_title'|trans }}</p>
+                    <p class="unclaimed-cert-title">{{ certificate.name }}</p>
+                </div>
+                <p>
+                    <button class="cd-btn cd-btn-primary cd-mt8" data-target="#modal" data-toggle="modal" data-url="{{ path('certificate_detail', {id:certificate.id}) }}">{{ 'user.certificates.cart_detail_btn'|trans }}</button>
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="cd-empty">{{ 'user.certificates.none_record'|trans }}</div>
+    {% endif %}
+    {{ web_macro.paginator(paginator) }}
+{% endblock %}

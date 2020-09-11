@@ -276,4 +276,8 @@ interface ClassroomService
     public function tryFreeJoin($classroomId);
 
     public function refreshClassroomHotSeq();
+
+    public function appendHasCertificate(array $classrooms);
+
+    public function hasCertificate($classroomId);
 }
