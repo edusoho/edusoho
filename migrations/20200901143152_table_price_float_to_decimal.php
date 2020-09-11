@@ -30,6 +30,13 @@ class TablePriceFloatToDecimal extends Migration
             modify `price` decimal(12,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '价格',
             modify `income` decimal(15,2) NOT NULL DEFAULT '0.00' COMMENT '收入';
         ");
+
+        $biz['db']->exec("
+            ALTER TABLE `item_bank_exercise`
+            modify `price` decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '售价',
+            modify `originPrice` decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '原价',
+            modify `income` decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '总收入';
+        ");
     }
 
     /**
@@ -57,6 +64,12 @@ class TablePriceFloatToDecimal extends Migration
             ALTER TABLE `classroom`
             modify `price` float(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '价格',
             modify `income` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '收入';
+        ");
+        $biz['db']->exec("
+            ALTER TABLE `item_bank_exercise`
+            modify `income` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '总收入',
+            modify `price` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '售价',
+            modify `originPrice` float(10,2) NOT NULL DEFAULT '0.00' COMMENT '原价';
         ");
     }
 }
