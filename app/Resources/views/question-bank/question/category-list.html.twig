@@ -1,7 +1,7 @@
 {% do script(['app/js/question-category/widgets/index.js']) %}
 
 <div id="category-table-body question-category-panel__list">
-  <input class="js-category-choose" data-role="search-conditions" type="hidden" name="category_id" value="">
+  <input class="js-category-choose" data-role="search-conditions" type="hidden" name="category_id" value="{{ app.request.query.get('category_id') }}">
   <div class="js-sortable-item question-category-panel__item text-overflow">
     <a href="javascript:;" class="gray-darker js-all-category-search js-active-set {% if app.request.query.get('category_id') == '' %} active{% endif %}">{{ 'my.teaching.question_bank.question.all'|trans }}</a>
   </div>
