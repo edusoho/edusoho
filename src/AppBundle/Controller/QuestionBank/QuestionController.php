@@ -27,6 +27,12 @@ class QuestionController extends BaseController
 
         $conditions = $request->query->all();
         $conditions['bank_id'] = $questionBank['itemBankId'];
+        if (!empty($conditions['category_id'])) {
+            $childrenIds = $this->getItemCategoryService()->findCategoryChildrenIds($conditions['category_id']);
+            $childrenIds[] = $conditions['category_id'];
+            $conditions['category_ids'] = $childrenIds;
+            unset($conditions['category_id']);
+        }
 
         $paginator = new Paginator(
             $request,
