@@ -10,3 +10,11 @@ $('.js-toggle-show').on('click', (event) => {
 
   toggleIcon($sort, 'cd-icon-add', 'cd-icon-remove');
 });
+
+$(document).ready(() => {
+  let $categorySearch = $(".js-category-search.active");
+  if ($categorySearch.length > 0) {
+    $categorySearch.parents('.js-sortable-list').show();
+    $categorySearch.parents().find('.js-toggle-show.cd-icon-add').removeClass('cd-icon-add').addClass('cd-icon-remove');
+  }
+});
