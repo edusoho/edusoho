@@ -116,6 +116,20 @@
                 </el-col>
             </el-form-item>
 
+            <el-form-item prop="watchLimit" v-if="lessonWatchLimit" :label="'course.marketing_setup.rule.watch_time_limit'|trans">
+                <el-col span="2">
+                    <el-input v-model="baseRuleForm.watchLimit" ref="watchLimit"></el-input>
+                </el-col>
+                <el-col span="8" class="mlm">{{ 'course.marketing_setup.rule.watch_time_limit.watch_limit'|trans }}
+                    <el-popover width="300"
+                        placement="top"
+                        trigger="hover">
+                        <span v-html="watchLimitTip"></span>
+                        <a class="es-icon es-icon-help course-mangae-info__help text-normal" slot="reference"></a>
+                    </el-popover>
+                </el-col>
+            </el-form-item>
+
             <el-form-item :label="'course.plan_setup.finish_rule'|trans({'taskName': taskName })">
                 <el-col span="18">
                     <el-radio v-model="baseRuleForm.enableFinish" label="1" :disabled="course.platform == 'supplier'"
@@ -415,6 +429,7 @@
                 courseSetManageFilesUrl: '',
                 baseRuleForm: {
                     learnMode: this.course.learnMode,
+                    watchLimit: this.course.watchLimit,
                     enableFinish: this.course.enableFinish,
                     maxStudentNum: this.course.maxStudentNum,
                     tryLookLength: parseInt(this.course.tryLookLength),
@@ -459,6 +474,11 @@
                             trigger: 'blur'
                         }
                     ],
+                    watchLimit: {
+                        validator: validation.digits_0,
+                        message: Translator.trans('validate.unsigned_integer.message'),
+                        trigger: 'blur'
+                    },
                     maxStudentNum: [
                         {
                             required: true,
@@ -495,6 +515,7 @@
                     'end_date': Translator.trans('course.teaching_plan.expiry_date.end_date_mode'),
                     'days': Translator.trans('course.teaching_plan.expiry_date.days_mode')
                 },
+                watchLimitTip: Translator.trans('course.marketing_setup.rule.watch_time_limit.watch_limit_tips'),
                 courseClosed: courseClosed,
                 coursePublished: coursePublished,
                 courseSetClosed: courseSetClosed,

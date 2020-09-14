@@ -14,6 +14,10 @@ const digits = (rule, value, callback) => {
   /(^[1-9]\d*$)/.test(value) ? callback() : callback(new Error(Translator.trans('validate.valid_digits_input.message')));
 }
 
+const digits_0 = (rule, value, callback) => {
+  /(^[0-9]\d*$)/.test(value) ? callback() : callback(new Error(Translator.trans('validate.unsigned_integer.message')));
+}
+
 const max_year = (rule, value, callback) => {
   value < 100000 ? callback() : callback(new Error(Translator.trans('validate.max_year.message')));
 }
@@ -28,5 +32,6 @@ export {
   positive_price,
   max_year,
   digits,
+  digits_0,
   currency,
 };
