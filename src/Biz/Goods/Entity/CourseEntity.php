@@ -39,7 +39,7 @@ class CourseEntity extends BaseGoodsEntity
     {
         $target = $this->getCourseService()->getCourse($targetId);
         if ($target['parentId'] > 0 ) {
-            return (object)[];
+            return [];
         }
         $product = $this->getProductService()->getProductByTargetIdAndType($target['courseSetId'], 'course');
 
