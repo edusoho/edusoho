@@ -51,7 +51,8 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
-            'changePriceColumn'
+            'changePriceColumn',
+            'changeClassroomTeacherIdsSize',
         );
 
         $funcNames = array();
@@ -99,7 +100,31 @@ class EduSohoUpgrade extends AbstractUpdater
         ");
 
         $this->getConnection()->exec("
-        
+            ALTER TABLE `course_set_v8`
+            modify `maxCoursePrice` decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '已发布教学计划的最高价格',
+            modify `minCoursePrice` decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '已发布教学计划的最低价格';
+        ");
+
+        $this->getConnection()->exec("
+            ALTER TABLE `classroom`
+            modify `price` decimal(12,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '价格',
+            modify `income` decimal(15,2) NOT NULL DEFAULT '0.00' COMMENT '收入';
+        ");
+
+        $this->getConnection()->exec("
+            ALTER TABLE `item_bank_exercise`
+            modify `price` decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '售价',
+            modify `originPrice` decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '原价',
+            modify `income` decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '总收入';
+        ");
+
+        return 1;
+    }
+
+    public function changeClassroomTeacherIdsSize()
+    {
+        $this->getConnection()->exec("
+            ALTER TABLE `classroom` CHANGE `teacherIds` `teacherIds` VARCHAR(4096) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '教师IDs';
         ");
 
         return 1;
