@@ -53,6 +53,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $definedFuncNames = array(
             'changePriceColumn',
             'changeClassroomTeacherIdsSize',
+            'processItemBankAssessmentExercise',
         );
 
         $funcNames = array();
@@ -86,6 +87,26 @@ class EduSohoUpgrade extends AbstractUpdater
                 'progress' => 0,
             );
         }
+    }
+
+    public function processItemBankAssessmentExercise()
+    {
+        $this->logger('info', '开始删除刷题试卷练习任务关联的试卷已删除的记录');
+
+        $this->getConnection()->exec("
+            DELETE FROM item_bank_assessment_exercise
+            WHERE id IN (
+                SELECT *
+                FROM (
+                    SELECT a.id
+                    FROM item_bank_assessment_exercise a
+                        LEFT JOIN biz_assessment b ON a.assessmentId = b.id
+                    WHERE b.id IS NULL
+                ) c
+            );
+        ");
+
+        return 1;
     }
 
     public function changePriceColumn()
