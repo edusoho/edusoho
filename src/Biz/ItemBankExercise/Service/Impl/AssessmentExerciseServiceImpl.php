@@ -160,6 +160,11 @@ class AssessmentExerciseServiceImpl extends BaseService implements AssessmentExe
         return $this->getItemBankAssessmentExerciseDao()->getAssessmentCountGroupByExerciseId($ids);
     }
 
+    public function deleteByAssessmentId($assessmentId)
+    {
+        return $this->getItemBankAssessmentExerciseDao()->deleteByAssessmentId($assessmentId);
+    }
+
     /**
      * @return \Codeages\Biz\ItemBank\Answer\Service\AnswerService
      */
