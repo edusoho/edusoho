@@ -91,6 +91,10 @@ interface ClassroomService
 
     public function searchClassrooms($conditions, $orderBy, $start, $limit, $columns = [], $withMarketingInfo = false);
 
+    public function appendSpecsInfo($classrooms);
+
+    public function appendSpecInfo($classroom);
+
     public function countClassrooms($condtions);
 
     /**

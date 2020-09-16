@@ -60,6 +60,20 @@ class ClassroomEntity extends BaseGoodsEntity
         return $goodses;
     }
 
+    public function fetchSpecs($classrooms)
+    {
+        if (empty($classrooms)) {
+            return $classrooms;
+        }
+        foreach ($classrooms as &$classroom) {
+            $classroom['spec'] = $this->getSpecsByTargetId($classroom['id']);
+            $classroom['goodsId'] = empty($classroom['spec']) ? 0 : $classroom['spec']['goodsId'];
+            $classroom['specsId'] = empty($classroom['spec']) ? 0 : $classroom['spec']['id'];
+        }
+
+        return $classrooms;
+    }
+
     public function canManageTarget($goods)
     {
         $classroom = $this->getTarget($goods);

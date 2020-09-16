@@ -3,6 +3,7 @@
 namespace ApiBundle\Api\Resource\Classroom;
 
 use ApiBundle\Api\Resource\Filter;
+use ApiBundle\Api\Resource\Good\GoodSpecsFilter;
 use ApiBundle\Api\Resource\User\UserFilter;
 use ApiBundle\Api\Util\AssetHelper;
 use ApiBundle\Api\Util\Converter;
@@ -12,14 +13,14 @@ use AppBundle\Common\ServiceToolkit;
 class ClassroomFilter extends Filter
 {
     protected $simpleFields = [
-        'id', 'title', 'smallPicture', 'middlePicture', 'largePicture', 'price', 'studentNum', 'courseNum', 'about', 'productId', 'goodsId',
+        'id', 'title', 'smallPicture', 'middlePicture', 'largePicture', 'price', 'studentNum', 'courseNum', 'about', 'productId', 'goodsId', 'specsId',
     ];
 
     protected $publicFields = [
         'status', 'price', 'vipLevelId', 'headTeacher', 'teachers', 'assistants',
         'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'threadNum', 'noteNum', 'postNum', 'service', 'recommended',
         'recommendedSeq', 'rating', 'ratingNum', 'maxRate', 'showable', 'buyable', 'expiryMode', 'expiryValue',
-        'createdTime', 'updatedTime', 'creator', 'access', 'productId', 'goodsId', 'hasCertificate',
+        'createdTime', 'updatedTime', 'creator', 'access', 'productId', 'goodsId', 'hasCertificate', 'specsId', 'spec',
     ];
 
     protected function simpleFields(&$data)
@@ -46,6 +47,12 @@ class ClassroomFilter extends Filter
         if (!empty($data['headTeacher'])) {
             $userFilter->setMode(Filter::PUBLIC_MODE);
             $userFilter->filter($data['headTeacher']);
+        }
+
+        if (empty($data['spec'])) {
+            $specsFilter = new GoodSpecsFilter();
+            $specsFilter->setMode(Filter::SIMPLE_MODE);
+            $specsFilter->filter($data['spec']);
         }
     }
 

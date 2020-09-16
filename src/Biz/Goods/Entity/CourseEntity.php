@@ -62,6 +62,21 @@ class CourseEntity extends BaseGoodsEntity
         return $goodses;
     }
 
+    public function fetchSpecs($courses)
+    {
+        if (empty($courses)) {
+            return $courses;
+        }
+
+        foreach ($courses as &$course) {
+            $course['spec'] = $this->getSpecsByTargetId($course['id']);
+            $course['goodsId'] = empty($course['spec']) ? 0 : $course['spec']['goodsId'];
+            $course['specsId'] = empty($course['spec']) ? 0 : $course['spec']['id'];
+        }
+
+        return $courses;
+    }
+
     public function canManageTarget($goods)
     {
         $courseSet = $this->getTarget($goods);

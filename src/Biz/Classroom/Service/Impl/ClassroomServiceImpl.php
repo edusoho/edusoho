@@ -20,6 +20,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Exception\UnableJoinException;
+use Biz\Goods\GoodsEntityFactory;
 use Biz\Goods\Mediator\ClassroomGoodsMediator;
 use Biz\Goods\Service\GoodsService;
 use Biz\Order\OrderException;
@@ -133,6 +134,20 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         return $classrooms;
+    }
+    public function appendSpecsInfo($classrooms)
+    {
+        $classrooms = $this->getGoodsEntityFactory()->create('classroom')->fetchSpecs($classrooms);
+        return $classrooms;
+    }
+
+    public function appendSpecInfo($classroom)
+    {
+        $classroom['spec'] = $this->getGoodsEntityFactory()->create('classroom')->getSpecsByTargetId($classroom['id']);
+        $classroom['goodsId'] = empty($classroom['spec']) ? 0 : $classroom['spec']['goodsId'];
+        $classroom['specsId'] = empty($classroom['spec']) ? 0 : $classroom['spec']['id'];
+
+        return $classroom;
     }
 
     public function countClassrooms($conditions)
@@ -2531,5 +2546,15 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     protected function getCertificateService()
     {
         return $this->createService('Certificate:CertificateService');
+    }
+
+    /**
+     * @return GoodsEntityFactory
+     */
+    protected function getGoodsEntityFactory()
+    {
+        $biz = $this->biz;
+
+        return $biz['goods.entity.factory'];
     }
 }

@@ -60,6 +60,7 @@ class Course extends AbstractResource
         $course['isAudioOn'] = $enableAudioStatus ? '1' : '0';
         $course['hasCertificate'] = $this->getCourseService()->hasCertificate($course['id']);
         unset($course['enableAudio']);
+        $course = $this->getCourseService()->appendSpecInfo($course);
 
         return $course;
     }
@@ -114,6 +115,7 @@ class Course extends AbstractResource
         $this->getOCUtil()->multiple($courses, ['courseSetId'], 'courseSet');
 
         $courses = $this->getCourseService()->appendHasCertificate($courses);
+        $courses = $this->getCourseService()->appendSpecsInfo($courses);
 
         return $this->makePagingObject($courses, $total, $offset, $limit);
     }

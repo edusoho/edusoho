@@ -32,6 +32,8 @@ abstract class BaseGoodsEntity
 
     abstract public function fetchTargets($goodses);
 
+    abstract public function fetchSpecs($targets);
+
     abstract public function isSpecsMember($goods, $specs, $userId);
 
     abstract public function isSpecsTeacher($goods, $specs, $userId);
