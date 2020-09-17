@@ -401,8 +401,6 @@ class Setting extends AbstractResource
             return [];
         }
         $result = $this->container->get('web.twig.extension')->weixinConfig($params['url']);
-        var_dump($result);
-        exit();
         if (is_array($result) || empty($result)) {
             return $result;
         }
