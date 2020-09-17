@@ -18,7 +18,7 @@ class Setting extends AbstractResource
     private $supportTypes = [
         'site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig',
         'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer',
-        'user', 'cloud', 'coin', 'coupon', 'mobile', 'appIm', 'cloudVideo',
+        'user', 'cloud', 'coin', 'coupon', 'mobile', 'appIm', 'cloudVideo', 'wechatJsSdkConfig',
     ];
 
     /**
@@ -231,8 +231,10 @@ class Setting extends AbstractResource
     public function getWeChat($request)
     {
         $weChatSetting = $this->getSettingService()->get('wechat', []);
+        $loginBindSetting = $this->getSettingService()->get('login_bind', []);
 
         $result = [
+            'weixinmob_enabled' => !isset($loginBindSetting['weixinmob_enabled']) ? false : (bool) $loginBindSetting['weixinmob_enabled'],
             'enabled' => empty($weChatSetting['wechat_notification_enabled']) ? false : true,
             'official_qrcode' => empty($weChatSetting['account_code']) ? '' : $weChatSetting['account_code'],
         ];
@@ -399,6 +401,8 @@ class Setting extends AbstractResource
             return [];
         }
         $result = $this->container->get('web.twig.extension')->weixinConfig($params['url']);
+        var_dump($result);
+        exit();
         if (is_array($result) || empty($result)) {
             return $result;
         }
