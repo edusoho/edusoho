@@ -227,7 +227,7 @@ const courseListData = (data, listObj, uiStyle = 'old', platform = 'h5') => {
                       style="width:${data.progress.percent}%">
                     </div>
                   </div>
-                  <span>${data.progress.percent}%</span>
+                  <span>${parseInt(data.progress.percent)}%</span>
                 </div>`,
         },
       };
