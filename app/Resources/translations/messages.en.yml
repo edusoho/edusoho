@@ -1206,10 +1206,22 @@ course.unbuyable.over_expiry_end_date_tips: 'You are not allowded to enroll, sin
 course.introduction: Intro
 course.introduction.more_teaching_plan: "You can get more teaching plan from <a href=\"%courseUrl%\">here</a>.\n"
 course.introduction.course_introduction: 'About this course'
+course.introduction.authentication_certificate: 'Authentication certificate'
 course.introduction.course_target: 'Course goals'
 course.introduction.course_target_empty: 'Set goals'
 course.introduction.audiences: 'Target audiences'
 course.introduction.audiences_empty: 'Set goals'
+course.catalogue.certificate: 'HONOR'
+course.catalogue.certificate_wait: None
+course.catalogue.certificate_have: Have
+course.catalogue.certificate_obtain: By completing all of the course tasks
+course.catalogue.certificate_detail: Certificate details
+course.catalogue.certificate_achieve: Approach of achieving
+course.catalogue.certificate_condition: Acquisition conditions
+course.catalogue.certificate_to_achieve: By completing <a href='%targetUrl%' target='_blank' class="link-primary">%course%</a> all tasks
+course.catalogue.certificate_pass_condition: Complete all tasks of the course
+course.catalogue.certificate_expiry: 'valid until: %expiryTime%'
+course.catalogue.certificate_forever: 'Term of validity: long term'
 course.catalogue.content_title: Syllabus
 course.catalogue.task.preview_btn: Preview
 course.catalogue.task.try_look_btn: Preview
@@ -1349,6 +1361,7 @@ course.tab.notes: 'Notes'
 course.tab.material: 'Materials'
 course.tab.reviews: 'Reviews'
 course.tab.summary: 'Intro'
+course.tab.certificate: 'Certificate'
 course.activity.video: 'Video'
 course.activity.audio: Audio
 course.activity.live: Live
@@ -2137,10 +2150,14 @@ classroom.description: Intro
 classroom.teachers: Teachers
 classroom.reviews: Reviews
 classroom.note: Notes
+classroom.certificates: Certificates
 classroom.expiry_date_tips: 'Expired at:'
 classroom.expiry_day_tips: "<span class=\"mrm\">Class effective days: </span><span>%expiryValue% Days</span>\n"
 classroom.classroom_manage: '%name% Management'
 classroom.vip_classroom: 'VIP %name%'
+classroom.certificate_obtain: 'By completing the entire course of the class'
+classroom.certificate_to_achieve: By completing <a href='%targetUrl%' target='_blank' class="link-primary">%classroom%</a> all courses
+classroom.certificate_pass_condition: Complete the entire class
 classroom.classroom_manage.course_select.courseTitle: 'Course name'
 classroom.classroom_manage.course_select.teach_plan: 'Program name'
 classroom.classroom_manage.course_select.teacher_name: 'Teacher name'
@@ -3756,6 +3773,7 @@ my.learning.notebook_menu: 'Notes'
 my.learning.homework_menu: 'Assignments'
 my.learning.testpaper_menu: 'Tests'
 my.learning.group_menu: 'Groups'
+user.certificate_menu: 'My Certificate'
 my.course.refund_tips: 'Your have submitted the refund request, please wait for the response from admin.'
 my.course.cancle_refund_btn: 'Cancel the refund request to continue the learning'
 my.course.free_mode_plan.task_finished: Finished
@@ -3896,6 +3914,8 @@ explore.open_course.title: 'Open Course'
 explore.open_course.list: 'Open Course List'
 explore.open_course.live: Live
 explore.open_course.empty: 'No record'
+explore.classroom.certificate_tag: 'Obtain certificates'
+explore.classroom.certificate_tag_short: Cr
 explore.item_bank_exercise.list: Exercise List
 explore.item_bank_exercise.empty: No Exercise
 archive.course.title: 'Course Archive'
@@ -4010,6 +4030,11 @@ common.video_quality.high: High
 common.video_quality.high.tips: 'Good at movie'
 common.video_quality.super: Super
 common.video_quality.super.tips: 'Good at professional movie'
+common.certificate_type.course: course
+common.certificate_type.classroom: classroom
+common.certificate_status.draft: draft
+common.certificate_status.published: published
+common.certificate_status.closed: closed
 contetn.active_list.create_template: 'Please create template'
 contetn.active_list.custom_template: Custom
 contetn.article_list.latest_articel: 'Latest Artical'
@@ -4790,6 +4815,20 @@ admin.setting.theme.manage.setting_navigation: Navigation bar settings
 admin.setting.theme.manage.navigation_num_tips: >
   When there are more than <input type="text" id="topNavNum" class="form-control" style="display:inline;width: auto;" value="%value%"/> navigations, it will be "..." to avoid navigation misplacement.
 
+#business license setting
+admin.setting.license.headline: Electronic business license configuration
+admin.setting.license.name: Electronic business license name
+admin.setting.license.picture: Electronic Business License Picture
+admin.setting.license.picture.help_block: Please upload pictures in jpg, gif, png format. The recommended image size should not exceed 5 MB. After the online school electronic business picture is set, it will be displayed in the bottom column of the homepage.
+admin.setting.license.url: Electronic business license link
+admin.setting.permit.headline: Operating license configuration
+admin.setting.permit.name: Business license name
+admin.setting.permit.record.number: Case number
+admin.setting.permit.picture: ID picture
+admin.setting.permit.picture.help_block: Please upload pictures in jpg, gif, png format. The recommended image size should not exceed 5 MB. After the online school ID picture is set, it will be displayed in the bottom column of the homepage.
+admin.setting.permit.setting.add: Add a column
+admin.setting.permit.setting.remove: Delete entire column
+
 admin.setting.mailer.is_trial.tips: "You are running on the trail version which cannot set the Email service.If you want to buy the verified version ,please contact our sales agent Tel：4008041114 or\n"
 admin.setting.mailer.cloud_email_crm: 'Cloud Email'
 admin.setting.mailer.cloud_email_crm.status.open: Enabled
@@ -5294,6 +5333,80 @@ admin.money_records.money_record_type: Type
 admin.money_records.person: Recorder
 admin.money_records.transaction_no: 'Transaction No.'
 admin.money_records.transaction_time: 'Transaction Time'
+admin.operation_certificate.template.type: Type
+admin.operation_certificate.template.type.all: All
+admin.operation_certificate.template.title: Template Name
+admin.operation_certificate.template.title.placeholder: Template name, up to 30 characters
+admin.operation_certificate.template.creator: Creator
+admin.operation_certificate.template.create_time: create time
+admin.operation_certificate.template.operate: operate
+admin.operation_certificate.template.edit: edit
+admin.operation_certificate.template.create: Create Template
+admin.operation_certificate.template.create.basic_message: Basic Information
+admin.operation_certificate.template.create.select: Select Template
+admin.operation_certificate.template.style.horizontal: horizontal
+admin.operation_certificate.template.style.vertical: vertical
+admin.operation_certificate.template.basemap: basemap
+admin.operation_certificate.template.basemap.upload: upload basemap
+admin.operation_certificate.template.basemap.vertical_upload_hint: Please upload the bottom picture of the certificate in jpg, png format, the recommended size of 2800 × 3508 px, the file size does not exceed 2 MB.
+admin.operation_certificate.template.basemap.horizontal_upload_hint: Please upload the bottom picture of the certificate in jpg, png format, the recommended size of 3508 × 2800 px, the file size does not exceed 2 MB.
+admin.operation_certificate.template.stamp: stamp
+admin.operation_certificate.template.stamp.upload: upload stamp
+admin.operation_certificate.template.stamp.upload_hint: Please upload the stamp image with transparent background in png, etc. The recommended size is 650 × 650 px and the file size should not exceed 2 MB.
+admin.operation_certificate.template.content.edit: Edit certificate information
+admin.operation_certificate.template.certificate.title: Certificate Title
+admin.operation_certificate.template.certificate.title_hint: optional fill in
+admin.operation_certificate.template.certificate.title.default: Certificate of course certification
+admin.operation_certificate.template.certificate.recipient: Information on the grantee
+admin.operation_certificate.template.certificate.recipient.default: $name$（$username$）classmate：
+admin.operation_certificate.template.certificate.recipient_hint: Optional, support add Name：$name$ Username：$username$
+admin.operation_certificate.template.certificate.empty_recipient_hint: TIP:If the online school does not set [Name] as a required field, the grantee information will be empty if the student does not fill in the name.
+admin.operation_certificate.template.certificate.content: Text of certificate
+admin.operation_certificate.template.certificate.content.default.course: Due to your excellent learning performance in the [$courseName$] course, you have finally completed the course and passed the final assessment, we hereby issue this certificate!
+admin.operation_certificate.template.certificate.content.default.classroom: Due to your excellent learning performance in the [$classroomName$] classroom, you have finally completed the course and passed the final assessment, we hereby issue this certificate!
+admin.operation_certificate.template.certificate.content_hint: 'Optional, support for adding Name: $name$ User name: $username$'
+admin.operation_certificate.template.certificate.content_hint.course: 'Course name: $courseName$'
+admin.operation_certificate.template.certificate.content_hint.classroom: 'Class name: $classroomName$'
+admin.operation_certificate.template.certificate.qrcode: Certificate Verification QR Code
+admin.operation_certificate.template.preview_btn: preview
+admin.operation_certificate.template.preview_th: Template Preview
+admin.operation_certificate.certificate.num_th: number
+admin.operation_certificate.certificate.name_th: Certificate Name
+admin.operation_certificate.certificate.description_th: description
+admin.operation_certificate.certificate.description.placeholder: One sentence introduction, limited to 100 words
+admin.operation_certificate.certificate.status_th: status
+admin.operation_certificate.certificate.create_btn: Create Certificate
+admin.operation_certificate.certificate.resource_choose: Selecting Issue Target
+admin.operation_certificate.certificate.resource_choose_btn: select......
+admin.operation_certificate.certificate.template_choose: Selecting Template
+admin.operation_certificate.certificate.code: Certificate Code
+admin.operation_certificate.certificate.code.placeholder: 1 to 6 digits or letters of the alphabet, not case sensitive
+admin.operation_certificate.certificate.expiry_day: Certificate validity
+admin.operation_certificate.certificate.expiry_day.placeholder: Enter the validity of the certificate, the empty value is valid for a long time
+admin.operation_certificate.certificate.auto_issue: automatic issue
+admin.operation_certificate.certificate.issue_rule: conditions of issue
+admin.operation_certificate.certificate.issue_rule.course: Automatic release upon completion of tasks
+admin.operation_certificate.certificate.issue_rule.course_not_auto: Administrators review the release after completing the task
+admin.operation_certificate.certificate.update: Edit Certificate
+admin.operation_certificate.certificate.member_manage: Member Manage
+admin.operation_certificate.certificate.audit: Pending review
+admin.operation_certificate.certificate.batch: batch
+admin.operation_certificate.certificate.record.code: number
+admin.operation_certificate.certificate.record.status: status
+admin.operation_certificate.certificate.record.issue_date: Issue Date
+admin.operation_certificate.certificate.record.days_remaining: remaining %lastDays% days
+admin.operation_certificate.certificate.record.days_expiry: %deadline% expired
+admin.operation_certificate.certificate.record.cancel: cancel
+admin.operation_certificate.certificate.record.grant: regrant
+admin.operation_certificate.certificate.record.detail: Detail
+admin.operation_certificate.certificate.record.user: Grantee
+admin.operation_certificate.certificate.record.information: Certification Information
+admin.operation_certificate.certificate.record.finish_status.course: Course completion status
+admin.operation_certificate.certificate.record.finish_status.classroom: Classroom completion status
+admin.operation_certificate.certificate.record.finish_status: finished
+admin.operation_certificate.certificate.record.certificate_information: ertificate Information
+admin.operation_certificate.certificate.record.certificate_target: Certificate Target
+admin.operation_certificate.certificate.record.img_loading: loading...
 admin.operation_announcement.content_th: 'Content'
 admin.operation_announcement.createTime_th: 'Published Time'
 admin.operation_announcement.endTime_th: 'End Time'
@@ -6233,7 +6346,7 @@ admin.setting_course.classroom.classroom_list.help_block: 'Class list'
 admin.setting_course.classroom.classroom_list_default_seq.help_block: 'Address: Domain names /classroom/explore, anyone can view all published classes at this page. If you need to set class order, please go to the "site settings" - "Themes" - "Manage". Class order settings are only supported by ink-only theme and simplicity theme.'
 admin.setting_course.classroom.classroom_comments_manage: 'Classroom Comments Manage'
 admin.setting_course.classroom.classroom_review: 'Classroom review'
-admin.setting_course.classroom.classroom_thread: 'Classroom thread'
+admin.setting_course.classroom.classroom_thread: 'Classroom thread（Classroom question）'
 admin.setting_course.classroom.classroom_note: 'Classroom note'
 admin.setting_course.open_course.open_course_comments_manage: 'Open Course Comments Manage'
 admin.setting_course.open_course.open_course_review: 'Open Course review'
@@ -7913,6 +8026,9 @@ log.action.item_bank_exercise.recommend_exercise: Recommend Item Exercise
 log.action.item_bank_exercise.cancel_recommend_exercise: Cancel Recommend Item Exercise
 log.action.item_bank_exercise.publish_exercise: Publish Item Exercise
 log.action.item_bank_exercise.close_exercise: Close Item Exercise
+log.action.certifiacte.create_certificate: Create Certificate
+log.action.certifiacte.auto_issue: Auto Issue Certificate
+log.action.certifiacte.create_template: Create Template
 
 log.action.template.course.create: Created a new<strong class="color-success"> course </strong>《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.update: Updated the<strong class="color-success"> course </strong> 《<a href="%url%" target="_blank">%title%</a>》
@@ -9129,6 +9245,13 @@ exception.destroy_account.reason_too_long: Write off reason limit 200 words
 exception.destroy_account.not_found_record: Record Not Found
 exception.destroy_account.audit_record_exist: Audit Record Is Exist
 
+exception.certificate_template.notfound_template: Template not found
+exception.certificate_template.notfound_certificate: Certificate not found
+exception.certificate.record.notfound_record: Certificate not found
+exception.certificate.record.forbidden_cancel: Forbidden cancel
+exception.certificate.record.forbidden_regrant: Forbidden regrant
+exception.certificate_template.forbidden_delete_published: Prohibit the deletion of published certificates
+
 course.unname_title: unname course
 
 admin.index.course_order: "course order"
@@ -9843,9 +9966,10 @@ exception.s2b2c.settlement_report_not_found: S2b2c settlement report not found
 admin_v2.cloud_center.content_resource.product_update_setting: Update Setting
 admin_v2.cloud_center.content_resource.product_update_auto: Auto
 admin_v2.cloud_center.content_resource.product_update_manual: Manual
+admin_v2.cloud_center.content_resource.product_update_promptly: Promptly
 
-
-admin_v2.cloud_center.content_resource.product_update_auto.tips: Update product automatically when product updated
+admin_v2.cloud_center.content_resource.product_update_auto.tips: Update product at 2:00 when product updated
+admin_v2.cloud_center.content_resource.product_update_promptly.tips: Update product automatically when product updated
 admin_v2.cloud_center.content_resource.product_update_manual.tips: Update product manually when product updated
 
 s2b2c.resource.all_choose: Choose All
@@ -9866,3 +9990,31 @@ exception.review.post_limit: Post no more than 5
 exception.favorite.forbidden_operate_favorite: Forbidden
 
 exception.s2b2c_product.adopt_failed: Adopt fail,Supplier is editing
+
+# 我的证书
+user.certificates.content_title: My Certificate
+user.certificates.my_list: My Certificate
+user.certificates.none_record: Certificate Empty
+user.certificates.only_valid: Show only valid
+user.certificates.date_range: Certificate acquisition tim
+user.certificates.placeholde_name: Enter certificate name search...
+user.certificates.cert_titile: Certificate name
+user.certificates.cert_code: Certificate number
+user.certificates.cert_issue_time: Acquisition time
+user.certificates.look_cert: View Certificate
+user.certificates.download_cert: Download certificate
+user.certificates.valid_time_tip: Valid until：
+user.certificates.status_valid: In effect
+user.certificates.status_expired: Expired
+user.certificates.search: Search
+user.certificates.select_time: Select the time：
+user.certificates.forever: Long term effectiveness
+user.certificates.issue_time: Date of issue
+user.certificates.valid_time: Effective date
+user.certificates.detail_object: Authentication object
+user.certificates.detail_object_name: Name
+user.certificates.detail_object_usrename: Username
+user.certificates.detail_cert_message: Certificate information
+user.certificates.unclaimed_list: Certificate to be received
+user.certificates.cart_title: Certificate of honor
+user.certificates.cart_detail_btn: View get path

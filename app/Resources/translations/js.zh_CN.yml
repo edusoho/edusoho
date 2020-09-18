@@ -1266,6 +1266,8 @@ admin.setting.delete_license_picture_fail_hint: 删除电子营业执照图片�
 admin.setting.upload_permit_picture_success_hint: 上传许可证图片成功！
 admin.setting.delete_permit_picture_success_hint: 删除许可证图片成功！
 admin.setting.delete_permit_picture_fail_hint: 删除许可证图片失败！
+admin.setting.delete_permit_setting_max_number: 新增数量已达上限，暂不支持新增哦~
+admin.setting.delete_permit_setting_delete_confirom: 确定要删除吗？
 admin.setting.theme.upgrade_error_hint: 该主题暂不适配当前ES版本，请先升级
 admin.setting.theme.use_hint: 真的要使用该主题吗？
 admin.sms.send_success_hint: 发送成功！
@@ -1530,3 +1532,30 @@ merchant.resource.product_version.update_success_hint: 更新成功
 merchant.resource.product_version.update_failed_hint: 更新失败
 
 exception.s2b2c_product.adopt_failed: 采用失败，内容正在编辑中，请稍后再试
+
+admin_v2.certificate.template.delete_hint: 模板被删除后，使用该模板的证书将不会受到影响。是否删除模板?
+admin_v2.certificate.code.exist: 该证书编码已存在
+admin_v2.certificate.code.check: 1至6位数字或英文字母，不区分大小写
+admin_v2.certificate.expiry_day.check: 请输入1-6000的非负整数
+admin_v2.certificate.target_id.check: 请选择发放对象
+admin_v2.certificate.template_id.check: 请选择证书模板
+
+admin_v2.certificate.close.hint: 证书被关闭后，学员将无法再获得证书，已获取该证书的用户将不会被影响。是否关闭？
+admin_v2.certificate.close.success_hint: 证书关闭成功
+admin_v2.certificate.close.failure_hint: 证书关闭失败
+admin_v2.certificate.publish.hint: 确认要发布证书吗？
+admin_v2.certificate.publish.success_hint: 证书发布成功
+admin_v2.certificate.publish.failure_hint: 证书发布失败
+admin_v2.certificate.delete.hint: 证书被删除后，将无法查看已获取该证书的用户列表和审核列表。且已获取证书的用户无法再查看该证书。是否删除？
+admin_v2.certificate.delete.draft_hint: 证书还未发布，是否确定删除?
+admin_v2.certificate.delete.success_hint: 证书删除成功
+admin_v2.certificate.delete.failure_hint: 证书删除失败
+admin_v2.certificate.record.cancel.hint: 确认撤销证书吗
+admin_v2.certificate.record.cancel.success_hint: 撤销成功
+admin_v2.certificate.record.cancel.failure_hint: 撤销失败
+admin_v2.certificate.record.grant.success_hint: 授予成功
+admin_v2.certificate.record.grant.failure_hint: 授予失败
+admin_v2.certificate.validate.description: 长度必须小于等于1000，一个中文算两个字符
+admin_v2.certificate.record.audit.success_hint: 审核成功
+admin_v2.certificate.record.audit.failure_hint: 审核失败
+admin_v2.certificate.record.grant.issue_time_required: 请输入发证日期

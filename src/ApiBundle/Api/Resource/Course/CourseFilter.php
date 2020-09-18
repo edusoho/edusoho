@@ -8,28 +8,28 @@ use ApiBundle\Api\Resource\User\UserFilter;
 use ApiBundle\Api\Util\AssetHelper;
 use ApiBundle\Api\Util\Converter;
 use ApiBundle\Api\Util\Money;
-use Biz\Course\Util\CourseTitleUtils;
 use AppBundle\Common\ServiceToolkit;
+use Biz\Course\Util\CourseTitleUtils;
 
 class CourseFilter extends Filter
 {
-    protected $simpleFields = array(
+    protected $simpleFields = [
         'id', 'title', 'courseSetTitle',
-    );
+    ];
 
-    protected $publicFields = array(
+    protected $publicFields = [
         'subtitle', 'courseSet', 'learnMode', 'expiryMode', 'expiryDays', 'expiryStartDate', 'expiryEndDate', 'summary',
         'goals', 'audiences', 'isDefault', 'maxStudentNum', 'status', 'creator', 'isFree', 'price', 'originPrice',
         'vipLevelId', 'buyable', 'tryLookable', 'tryLookLength', 'watchLimit', 'services', 'ratingNum', 'rating',
-        'taskNum', 'compulsoryTaskNum', 'studentNum', 'teachers', 'parentId', 'createdTime', 'updatedTime', 'enableFinish', 'buyExpiryTime', 'access', 'isAudioOn',
-    );
+        'taskNum', 'compulsoryTaskNum', 'studentNum', 'teachers', 'parentId', 'createdTime', 'updatedTime', 'enableFinish', 'buyExpiryTime', 'access', 'isAudioOn', 'hasCertificate',
+    ];
 
     protected function publicFields(&$data)
     {
         $this->learningExpiryDate($data);
         Converter::timestampToDate($data['buyExpiryTime']);
 
-        $data['services'] = AssetHelper::callAppExtensionMethod('transServiceTags', array(ServiceToolkit::getServicesByCodes($data['services'])));
+        $data['services'] = AssetHelper::callAppExtensionMethod('transServiceTags', [ServiceToolkit::getServicesByCodes($data['services'])]);
 
         $userFilter = new UserFilter();
         $userFilter->setMode(Filter::SIMPLE_MODE);
@@ -59,12 +59,12 @@ class CourseFilter extends Filter
     {
         Converter::timestampToDate($data['expiryStartDate']);
         Converter::timestampToDate($data['expiryEndDate']);
-        $data['learningExpiryDate'] = array(
+        $data['learningExpiryDate'] = [
             'expiryMode' => $data['expiryMode'],
             'expiryStartDate' => $data['expiryStartDate'],
             'expiryEndDate' => $data['expiryEndDate'],
             'expiryDays' => $data['expiryDays'],
-        );
+        ];
 
         unset($data['expiryMode']);
         unset($data['expiryStartDate']);

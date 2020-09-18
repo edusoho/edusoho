@@ -1,0 +1,29 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% block title %}{{ 'classroom.select_course'|trans }}{% endblock %}
+{% set modal_class= "modal-lg" %}
+
+{% do script(['app/js/admin-v2/operating/certificate/target/index.js']) %}
+
+{% block body %}
+  <div class="ct-well">
+    <form class="form-search form-inline clearfix mtm" id="list-search" role="search-form" action="{{ path('admin_v2_certificate_target_search', {type:targetType}) }}">
+      <div class="form-group">
+        <label>{{ ('admin_v2.course.category.'~targetType~'_category_tab')|trans }}：</label>
+        <select id="categoryId" name="categoryId" class="form-control width-input width-input-large">
+          {{ select_options(category_choices(targetType), app.request.get('categoryId'), 'course.base.category'|trans) }}
+        </select>
+      </div>
+
+      <div class="form-group mll">
+        <label>{{ (targetType~'.name')|trans }}：</label>
+        <input type="text" class="form-control" name="keyword" value="{{ app.request.get('keyword') }}"
+               placeholder="{{ (targetType~'.name')|trans }}">
+      </div>
+
+      <button type="button" class="btn btn-primary mll" id="search">{{ 'form.btn.search'|trans }}</button>
+    </form>
+  </div>
+  <div class="table-list">
+    {{ render(controller('AppBundle:AdminV2/Operating/Certificate:targetSearch', {type:targetType})) }}
+  </div>
+{% endblock %}

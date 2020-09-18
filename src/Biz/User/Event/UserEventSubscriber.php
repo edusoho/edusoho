@@ -96,6 +96,9 @@ class UserEventSubscriber extends EventSubscriber implements EventSubscriberInte
                 $this->getTokenService()->destoryToken($token['token']);
             }
         }
+        if (1 == $user['passwordInit']) {
+            $this->getUserService()->updatePasswordChanged($user['id'], 1);
+        }
     }
 
     private function sendRegisterMessage($user)

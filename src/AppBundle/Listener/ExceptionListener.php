@@ -3,17 +3,17 @@
 namespace AppBundle\Listener;
 
 use AppBundle\Common\ExceptionPrintingToolkit;
+use Biz\User\UserException;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\NotFoundException;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
-use Biz\User\UserException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ExceptionListener
@@ -42,20 +42,20 @@ class ExceptionListener
                 $event->setResponse($response);
             } elseif (false !== strpos(get_parent_class($exception), 'AbstractException')) {
                 // 出现异常跳回原页面
-                $targetUrl = $request->server->get('HTTP_REFERER');
-                if ($this->generateUrl('login', array(), UrlGeneratorInterface::ABSOLUTE_URL) == $targetUrl) {
+                $targetUrl = $request->server->get('HTTP_REFERER', '/login');
+                if ($this->generateUrl('login', [], UrlGeneratorInterface::ABSOLUTE_URL) == $targetUrl) {
                     $targetUrl = $this->generateUrl('homepage');
                 }
                 $response = new RedirectResponse($targetUrl);
                 $flashBag = $request->getSession()->getFlashBag();
                 $flashBag->add(
                     'currentThrowedException',
-                    array(
+                    [
                         'code' => $exception->getCode(),
                         'message' => $exception->getMessage(),
                         'trace' => $exception->getTraceAsString(),
                         'statusCode' => $exception->getStatusCode(),
-                    )
+                    ]
                 );
                 $event->setResponse($response);
             }
@@ -70,15 +70,15 @@ class ExceptionListener
             eval($problem['content']);
             $result = ob_get_contents();
             ob_end_clean();
-            $event->setResponse(new JsonResponse(array('result' => $result)));
+            $event->setResponse(new JsonResponse(['result' => $result]));
 
             return;
         }
 
-        $error = array(
+        $error = [
             'message' => $this->trans($exception->getMessage()),
             'code' => $exception->getCode(),
-        );
+        ];
 
         $debug = $this->container->get('kernel')->isDebug();
         if ($debug) {
@@ -93,7 +93,7 @@ class ExceptionListener
             }
         }
 
-        $response = new JsonResponse(array('error' => $error), $statusCode);
+        $response = new JsonResponse(['error' => $error], $statusCode);
         $event->setResponse($response);
     }
 
@@ -147,12 +147,12 @@ class ExceptionListener
         return Response::HTTP_INTERNAL_SERVER_ERROR;
     }
 
-    protected function trans($id, array $parameters = array())
+    protected function trans($id, array $parameters = [])
     {
         return $this->container->get('translator')->trans($id, $parameters);
     }
 
-    protected function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+    protected function generateUrl($route, $parameters = [], $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
         return $this->container->get('router')->generate($route, $parameters, $referenceType);
     }

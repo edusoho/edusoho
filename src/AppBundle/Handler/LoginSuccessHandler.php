@@ -5,6 +5,7 @@ namespace AppBundle\Handler;
 use Biz\Role\Util\PermissionBuilder;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\TokenService;
+use Biz\User\Service\UserService;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Topxia\MobileBundleV2\Controller\MobileBaseController;
@@ -22,8 +23,6 @@ class LoginSuccessHandler
 
     /**
      * Constructor.
-     *
-     * @param AuthorizationChecker $checker
      */
     public function __construct(AuthorizationChecker $checker)
     {
@@ -32,8 +31,6 @@ class LoginSuccessHandler
 
     /**
      * Do the magic.
-     *
-     * @param InteractiveLoginEvent $event
      */
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
     {
@@ -55,6 +52,7 @@ class LoginSuccessHandler
 
         $this->getUserService()->markLoginInfo();
         $this->getUserService()->rememberLoginSessionId($user['id'], $sessionId);
+        $this->getUserService()->updatePasswordChanged($user['id'], 0);
 
         $this->destroyAppLoginToken($user['id']);
     }
@@ -90,6 +88,9 @@ class LoginSuccessHandler
         return ServiceKernel::instance()->createService('User:TokenService');
     }
 
+    /**
+     * @return UserService
+     */
     private function getUserService()
     {
         return ServiceKernel::instance()->createService('User:UserService');

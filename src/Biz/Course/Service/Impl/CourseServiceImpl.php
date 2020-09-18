@@ -8,6 +8,7 @@ use AppBundle\Common\TimeMachine;
 use Biz\Accessor\AccessorInterface;
 use Biz\Activity\Service\Impl\ActivityServiceImpl;
 use Biz\BaseService;
+use Biz\Certificate\Service\CertificateService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Common\CommonException;
 use Biz\Course\CourseException;
@@ -213,7 +214,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $lastCourse = $this->getLastCourseByCourseSetId($courseSet['id']);
 
-        $course['seq'] = $lastCourse['seq'] + 1;
+        $course['seq'] = empty($lastCourse['seq']) ? 1 : $lastCourse['seq'] + 1;
         $course['maxRate'] = $courseSet['maxRate'];
         $course['courseSetTitle'] = empty($courseSet['title']) ? '' : $courseSet['title'];
         $course['title'] = $this->purifyHtml($course['title'], true);
@@ -2723,5 +2724,40 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         return $this->tryManageCourse($courseId, $courseSetId);
+    }
+
+    public function appendHasCertificate(array $courses)
+    {
+        $conditions = [
+            'targetType' => 'course',
+            'targetIds' => ArrayToolkit::column($courses, 'id'),
+            'status' => 'published',
+        ];
+
+        $certificates = ArrayToolkit::index($this->getCertificateService()->search($conditions, [], 0, PHP_INT_MAX, ['targetId']), 'targetId');
+        foreach ($courses as &$course) {
+            $course['hasCertificate'] = !empty($certificates[$course['id']]);
+        }
+
+        return $courses;
+    }
+
+    public function hasCertificate($courseId)
+    {
+        $conditions = [
+            'targetType' => 'course',
+            'targetId' => $courseId,
+            'status' => 'published',
+        ];
+
+        return !empty($this->getCertificateService()->count($conditions));
+    }
+
+    /**
+     * @return CertificateService
+     */
+    protected function getCertificateService()
+    {
+        return $this->createService('Certificate:CertificateService');
     }
 }

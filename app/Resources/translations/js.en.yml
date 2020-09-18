@@ -1318,6 +1318,14 @@ admin.site.upload_favicon_success_hint: Upload site favicon successfully!
 admin.site.delete_favicon_success_hint: Delete site favicon successfully!
 admin.site.delete_favicon_fail_hint: Delete site favicon failed!
 admin.site.delete_hint: Are you sure you want to delete?
+admin.setting.upload_license_picture_success_hint: Successfully uploaded the electronic business license picture!
+admin.setting.delete_license_picture_success_hint: Successfully delete the electronic business license picture!
+admin.setting.delete_license_picture_fail_hint: Failed to delete electronic business license picture!
+admin.setting.upload_permit_picture_success_hint: Upload permit image successfully
+admin.setting.delete_permit_picture_success_hint: The permit image was successfully deleted!
+admin.setting.delete_permit_picture_fail_hint: Failed to delete permit image!
+admin.setting.delete_permit_setting_max_number: The number of new additions has reached the upper limit. Adding is not supported yet~
+admin.setting.delete_permit_setting_delete_confirom: You sure you want to delete it?
 admin.setting.theme.upgrade_error_hint: This topic is not currently compatible with the current ES version. Please upgrade first.
 admin.setting.theme.use_hint: Do you really want to use this theme?
 admin.sms.send_success_hint: Sent successfully!
@@ -1581,4 +1589,29 @@ merchant.resource.product_version.update_success_hint: Update Success
 merchant.resource.product_version.update_failed_hint: Update Failed
 
 exception.s2b2c_product.adopt_failed: Adopt fail,Supplier is editing
+
+admin_v2.certificate.template.delete_hint: When a template is deleted, the certificates that use the templates Are templates deleted?
+admin_v2.certificate.code.exist: This certificate code already exists
+admin_v2.certificate.code.check: 1 to 6 digits or letters of the alphabet, not case sensitive
+admin_v2.certificate.expiry_day.check: Please enter a non-negative integer from 1 to 6000
+admin_v2.certificate.target_id.check: Please select the target group
+admin_v2.certificate.template_id.check: Please select a certificate template
+
+admin_v2.certificate.close.hint: After the certificate is closed, the student will no longer be able to obtain the certificate and users who have already obtained the certificate will not be affected. Is it closed?
+admin_v2.certificate.close.success_hint: close success
+admin_v2.certificate.close.failure_hint: close failure
+admin_v2.certificate.publish.hint: Are you sure you want to issue a certificate?
+admin_v2.certificate.publish.success_hint: publish success
+admin_v2.certificate.publish.failure_hint: publish failure
+admin_v2.certificate.delete.hint: After the certificate is deleted, you cannot view the user list and audit list of the certificate. Users who have acquired the certificate can no longer view the certificate. Is the certificate deleted?
+admin_v2.certificate.delete.draft_hint: The certificate has not yet been issued, is it certain to be removed?
+admin_v2.certificate.delete.success_hint: delete success
+admin_v2.certificate.delete.failure_hint: delete failure
+admin_v2.certificate.record.cancel.hint: Confirm revocation of certificate?
+admin_v2.certificate.record.cancel.success_hint: cancel success
+admin_v2.certificate.record.cancel.failure_hint: cancel failure
+admin_v2.certificate.record.grant.success_hint: grant success
+admin_v2.certificate.record.grant.failure_hint: grant failure
+admin_v2.certificate.record.grant.issue_time_required: Please enter the date of issue
+admin_v2.certificate.validate.description: The length must be less than or equal to 1000, one Chinese character counts as two characters.
 

@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Item;
 
 use AppBundle\Controller\BaseController;
 use Biz\CloudFile\Service\CloudFileService;
+use Biz\CloudPlatform\Service\ResourceFacadeService;
 use Biz\File\Service\UploadFileService;
 use Biz\MaterialLib\Service\MaterialLibService;
 use Biz\QuestionBank\Service\QuestionBankService;
@@ -87,10 +88,8 @@ class AttachmentController extends BaseController
         }
 
         $ssl = $request->isSecure() ? true : false;
-        if (in_array($file['type'], ['video', 'ppt', 'document'])) {
+        if (in_array($file['type'], ['video', 'ppt', 'document', 'audio'])) {
             return $this->globalPlayer($file, $ssl);
-        } elseif ('audio' == $file['type']) {
-            return $this->audioPlayer($file, $ssl);
         }
 
         return $this->createJsonResponse(['result' => false, 'msg' => '无法预览该类文件', 'data' => []]);
@@ -99,31 +98,13 @@ class AttachmentController extends BaseController
     protected function globalPlayer($file, $ssl)
     {
         $user = $this->getCurrentUser();
-        $player = $this->getMaterialLibService()->player($file['globalId'], $ssl);
+        $player = $this->getResourceFacadeService()->getPlayerContext($file);
 
         return $this->createJsonResponse(['result' => true, 'msg' => '', 'data' => [
             'token' => $player['token'],
             'resNo' => $file['globalId'],
             'user' => ['id' => $user['id'], 'name' => $user['nickname']],
             'type' => $file['type'],
-        ]]);
-    }
-
-    protected function audioPlayer($file, $ssl)
-    {
-        $user = $this->getCurrentUser();
-        $player = $this->getMaterialLibService()->player($file['no'], $ssl);
-        $setting = $this->getSettingService()->get('storage', []);
-
-        return $this->createJsonResponse(['result' => true, 'msg' => '', 'data' => [
-            'playlist' => $player['url'],
-            'type' => $file['type'],
-            'statsInfo' => [
-                'accesskey' => empty($setting['cloud_access_key']) ? '' : $setting['cloud_access_key'],
-                'globalId' => $file['globalId'],
-                'userId' => $user['id'],
-                'userName' => $user['nickname'],
-            ],
         ]]);
     }
 
@@ -213,5 +194,13 @@ class AttachmentController extends BaseController
     protected function getMaterialLibService()
     {
         return $this->createService('MaterialLib:MaterialLibService');
+    }
+
+    /**
+     * @return ResourceFacadeService
+     */
+    protected function getResourceFacadeService()
+    {
+        return $this->createService('CloudPlatform:ResourceFacadeService');
     }
 }

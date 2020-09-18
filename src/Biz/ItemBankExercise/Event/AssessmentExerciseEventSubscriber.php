@@ -14,7 +14,15 @@ class AssessmentExerciseEventSubscriber extends EventSubscriber implements Event
         return [
             'answer.submitted' => 'onAnswerSubmitted',
             'answer.finished' => 'onAnswerFinished',
+            'assessment.delete' => 'onAssessmentDelete',
         ];
+    }
+
+    public function onAssessmentDelete(Event $event)
+    {
+        $assessment = $event->getSubject();
+
+        $this->getItemBankAssessmentExerciseService()->deleteByAssessmentId($assessment['id']);
     }
 
     public function onAnswerSubmitted(Event $event)
@@ -79,5 +87,13 @@ class AssessmentExerciseEventSubscriber extends EventSubscriber implements Event
     protected function getItemBankAssessmentExerciseRecordService()
     {
         return $this->getBiz()->service('ItemBankExercise:AssessmentExerciseRecordService');
+    }
+
+    /**
+     * @return \Biz\ItemBankExercise\Service\AssessmentExerciseService
+     */
+    protected function getItemBankAssessmentExerciseService()
+    {
+        return $this->getBiz()->service('ItemBankExercise:AssessmentExerciseService');
     }
 }
