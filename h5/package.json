@@ -80,6 +80,7 @@
     "husky": "^4.2.5",
     "lint-staged": "^10.2.11",
     "load-script": "^1.0.0",
+    "n": "0.1.2",
     "node-sass": "^4.12.0",
     "optimize-css-assets-webpack-plugin": "^3.2.0",
     "ora": "^1.2.0",
@@ -106,7 +107,7 @@
     "vue-template-compiler": "^2.6.11",
     "vuedraggable": "^2.16.0",
     "vuex": "^3.0.1",
-    "wap-sdk": "^0.1.0",
+    "wap-sdk": "^0.1.2",
     "webpack": "^4.42.1"
   },
   "devDependencies": {
