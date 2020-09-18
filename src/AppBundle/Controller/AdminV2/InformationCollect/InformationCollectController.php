@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AppBundle\Controller\AdminV2\InformationCollect;
-
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
@@ -17,7 +15,7 @@ class InformationCollectController extends BaseController
     public function indexAction(Request $request)
     {
         $conditions = $request->query->all();
-        $conditions = ArrayToolkit::parts($conditions, array('title', 'startDate', 'endDate'));
+        $conditions = ArrayToolkit::parts($conditions, ['title', 'startDate', 'endDate']);
 
         $page = new Paginator(
             $conditions,
@@ -31,10 +29,10 @@ class InformationCollectController extends BaseController
             $page->getPerPageCount()
         );
 
-        return $this->render('admin-v2/information-collect/list.html.twig', array(
+        return $this->render('admin-v2/information-collect/list.html.twig', [
             'lists' => $this->filterList($list),
             'paginator' => $page,
-        ));
+        ]);
     }
 
     protected function filterList($collects)

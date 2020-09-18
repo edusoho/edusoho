@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Biz\InformationCollect\TargetType;
-
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
