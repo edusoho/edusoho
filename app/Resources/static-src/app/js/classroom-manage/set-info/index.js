@@ -50,6 +50,8 @@ function initValidator() {
     rules: {
       title: {
         required: true,
+        minlength: 2,
+        maxlength: 30
       }
     },
   });

@@ -22,6 +22,13 @@ class AssessmentExerciseServiceTest extends BaseTestCase
         $this->assertEquals($assessmentExercises[0]['assessmentId'], 1);
     }
 
+    public function testDeleteByAssessmentId()
+    {
+        $this->mockAssessmentExercise();
+        $this->getItemBankAssessmentExerciseService()->deleteByAssessmentId(1);
+        $this->assertEquals($this->getItemBankAssessmentExerciseService()->count([]), 0);
+    }
+
     public function testCount()
     {
         $this->mockAssessmentExercise();

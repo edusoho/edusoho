@@ -343,7 +343,7 @@ class TestpaperController extends BaseController
         }
 
         $imgRootDir = $this->get('kernel')->getContainer()->getParameter('kernel.root_dir').'/../web';
-        $fileName = $assessment['name'].'.docx';
+        $fileName = str_replace('/', '_', $assessment['name']).'.docx';
         $baseDir = $this->get('kernel')->getContainer()->getParameter('topxia.disk.local_directory');
         $path = $baseDir.DIRECTORY_SEPARATOR.$fileName;
 
