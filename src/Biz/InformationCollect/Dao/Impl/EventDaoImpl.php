@@ -7,6 +7,8 @@ use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class EventDaoImpl extends GeneralDaoImpl implements EventDao
 {
+    protected $table = 'information_collect_event';
+
     public function declares()
     {
         return [

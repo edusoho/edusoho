@@ -6,9 +6,20 @@ use Biz\BaseService;
 use Biz\InformationCollect\Dao\EventDao;
 use Biz\InformationCollect\Dao\ItemDao;
 use Biz\InformationCollect\Dao\LocationDao;
+use Biz\InformationCollect\Service\EventService;
 
-class EventServiceImpl extends BaseService
+class EventServiceImpl extends BaseService implements EventService
 {
+    public function count($conditions)
+    {
+        return $this->getEventDao()->count($conditions);
+    }
+
+    public function search($conditions, $orderBy, $start, $limit)
+    {
+        return $this->getEventDao()->search($conditions, $orderBy, $start, $limit);
+    }
+
     /**
      * @return EventDao
      */

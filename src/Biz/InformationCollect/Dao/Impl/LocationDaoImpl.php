@@ -7,6 +7,13 @@ use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
 class LocationDaoImpl extends AdvancedDaoImpl implements LocationDao
 {
+    protected $table = 'information_collect_location';
+
+    public function findByEventIds($eventIds)
+    {
+        return $this->findInField('eventId', $eventIds);
+    }
+
     public function declares()
     {
         return [

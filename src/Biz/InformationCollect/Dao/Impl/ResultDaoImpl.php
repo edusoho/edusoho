@@ -7,6 +7,17 @@ use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class ResultDaoImpl extends GeneralDaoImpl implements ResultDao
 {
+    protected $table = 'information_collect_result';
+
+    public function countGroupByEventId($eventIds)
+    {
+        $builder = $this->createQueryBuilder(['eventIds' => $eventIds])
+            ->select('eventId, count(id) AS collectNum')
+            ->groupBy('eventId');
+
+        return $builder->execute()->fetchAll();
+    }
+
     public function declares()
     {
         return [
