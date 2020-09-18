@@ -23,7 +23,7 @@ CREATE TABLE `s2b2c_product_report` (
   `createdTime` int(11) NOT NULL,
   `updatedTime` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品结算上报表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品结算上报表'; 
         ");
     }
 
@@ -32,6 +32,6 @@ CREATE TABLE `s2b2c_product_report` (
      */
     public function down()
     {
-        $this->getContainer()->offsetGet('db')->exec("DROP TABLE `s2b2c_product_settlement_report`");
+        $this->getContainer()->offsetGet('db')->exec('DROP TABLE `s2b2c_product_settlement_report`');
     }
 }
