@@ -1,6 +1,6 @@
 <template>
   <div class="e-course">
-    <div class="clearfix" @click="onClick">
+    <div class="clearfix" @click="onClick(course.hasCertificate, $event)">
       <div class="e-course__left pull-left">
         <img v-lazy="course.imgSrc.url" :class="course.imgSrc.className" />
         <div v-if="normalTagShow">
@@ -17,7 +17,10 @@
       </div>
       <div class="e-course__right pull-left">
         <!-- header -->
-        <div class="e-course__header text-overflow">{{ course.header }}</div>
+        <div class="e-course__header text-overflow">
+          <span class="certificate-icon" v-if="course.hasCertificate">证</span
+          >{{ course.header }}
+        </div>
         <!-- middle -->
         <div class="e-course__middle">
           <div v-if="course.middle.value" v-html="course.middle.html" />
@@ -83,6 +86,7 @@ export default {
   },
   computed: {
     ...mapState(['vipSwitch', 'isLoading']),
+    // eslint-disable-next-line vue/return-in-computed-property
     discountNum() {
       if (this.typeList === 'class_list') return false;
       if (this.discount !== '') {
@@ -119,11 +123,12 @@ export default {
     },
   },
   methods: {
-    onClick(e) {
+    onClick(hasCertificate, e) {
       if (!this.feedback) {
         return;
       }
       const isOrder = this.type === 'order';
+      const id = this.course.id || this.course.targetId;
       if (e.target.tagName === 'SPAN') {
         return;
       }
@@ -137,16 +142,22 @@ export default {
       }
 
       if (this.typeList === 'classroom_list') {
+        // @todo 证书显示
         this.$router.push({
           path: `/goods/${this.course.goodsId}/show`,
+          query: {
+            hasCertificate,
+          },
         });
       }
 
       if (this.typeList === 'course_list') {
+        // todo 证书
         this.$router.push({
           path: `/goods/${this.course.goodsId}/show`,
           query: {
             targetId: this.course.id,
+            hasCertificate,
           },
         });
       }

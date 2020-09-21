@@ -37,13 +37,14 @@
 </template>
 
 <script>
-import { swiper, swiperSlide } from 'vue-awesome-swiper';
-import 'swiper/dist/css/swiper.css';
+import { Swiper, SwiperSlide } from 'vue-awesome-swiper';
+// import 'swiper/dist/css/swiper.css'
+import 'swiper/css/swiper.css';
 
 export default {
   components: {
-    swiper,
-    swiperSlide,
+    Swiper,
+    SwiperSlide,
   },
   props: {
     levels: {
@@ -68,7 +69,10 @@ export default {
         return {};
       },
     },
-    activeIndex: ''
+    activeIndex: {
+      type: Number,
+      default: 0,
+    },
   },
   data() {
     const that = this;
@@ -91,7 +95,7 @@ export default {
   },
   computed: {
     swiper() {
-      return this.$refs.mySwiper.swiper;
+      return this.$refs.mySwiper.$swiper;
     },
   },
   watch: {

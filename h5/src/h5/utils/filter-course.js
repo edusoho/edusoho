@@ -12,6 +12,7 @@ const getDisplayStyle = (data, listObj) => {
   if (listObj.typeList === 'classroom_list') {
     return {
       id: data.id,
+      hasCertificate: data.hasCertificate,
       targetId: data.targetId,
       goodsId: data.goodsId,
       specsId: data.specsId,
@@ -37,6 +38,7 @@ const getDisplayStyle = (data, listObj) => {
     id: data.id,
     goodsId: data.courseSet.goodsId,
     specsId: data.specsId,
+    hasCertificate: data.hasCertificate,
     imgSrc: {
       url: data.courseSet.cover.middle || '',
       className: 'e-course__img',
@@ -84,6 +86,7 @@ const getPriceDisplay = (data, platform) => {
 const getClassRoomDisplay = (data, listObj, price) => {
   return {
     id: data.id,
+    hasCertificate: data.hasCertificate,
     targetId: data.targetId,
     goodsId: data.goodsId,
     specsId: data.specsId,
@@ -108,6 +111,7 @@ const getCourseDisplay = (data, listObj, price) => {
     id: data.id,
     goodsId: data.courseSet.goodsId,
     specsId: data.specsId,
+    hasCertificate: data.hasCertificate,
     studentNum: listObj.showStudent ? data.studentNum : null,
     imgSrc: {
       url: data.courseSet.cover.middle || '',
@@ -127,6 +131,7 @@ const getCourseDisplay = (data, listObj, price) => {
 const getItemBankDisplay = (data, listObj, price) => {
   return {
     id: data.id,
+    hasCertificate: data.hasCertificate,
     studentNum: listObj.showStudent ? data.studentNum : null,
     imgSrc: {
       url: data.cover.middle || '',
@@ -140,6 +145,26 @@ const getItemBankDisplay = (data, listObj, price) => {
     bottom: {
       value: data.price,
       html: `<span>${price}</span>`,
+    },
+  };
+};
+
+const getstudyItemBankDisplay = data => {
+  return {
+    id: data.itemBankExercise.id,
+    studentNum: null,
+    imgSrc: {
+      url: data.itemBankExercise.cover.middle || '',
+      className: '',
+    },
+    header: data.itemBankExercise.title,
+    middle: {
+      value: data.completionRate,
+      html: ` <class class="completionRate">答题率${data.completionRate}％</class>`,
+    },
+    bottom: {
+      value: data.masteryRate,
+      html: `<class class="masteryRate">掌握率${data.masteryRate}％</class>`,
     },
   };
 };
@@ -171,6 +196,7 @@ const courseListData = (data, listObj, uiStyle = 'old', platform = 'h5') => {
       if (listObj.typeList === 'classroom_list') {
         return {
           id: data.id,
+          hasCertificate: data.hasCertificate,
           targetId: data.targetId,
           imgSrc: {
             url: data.cover.middle || '',
@@ -184,10 +210,14 @@ const courseListData = (data, listObj, uiStyle = 'old', platform = 'h5') => {
           },
         };
       }
+      if (listObj.typeList === 'item_bank_exercise') {
+        return getstudyItemBankDisplay(data);
+      }
       return {
         id: data.id,
         goodsId: data.courseSet.goodsId,
         specsId: data.specsId,
+        hasCertificate: data.hasCertificate,
         imgSrc: {
           url: data.courseSet.cover.middle || '',
           className: 'e-course__img',

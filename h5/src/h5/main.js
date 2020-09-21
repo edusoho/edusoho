@@ -10,6 +10,7 @@ import '@/assets/styles/main.scss';
 import App from '@/App';
 import Api from '@/api';
 import VueClipboard from 'vue-clipboard2';
+import wapSdk from 'wap-sdk';
 import {
   Row,
   Col,
@@ -92,6 +93,7 @@ Vue.use(Tab)
   .use(PullRefresh)
   .use(Loading);
 Vue.use(VueClipboard);
+Vue.use(wapSdk);
 Vue.config.productionTip = false;
 Api.getSettings({
   query: {

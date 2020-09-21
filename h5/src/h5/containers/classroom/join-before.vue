@@ -71,7 +71,7 @@
       <review-list
         ref="review"
         :target-id="details.classId"
-        :reviews="details.reviews"
+        :reviews="classroomSettings.show_review == 1 ? details.reviews : []"
         title="学员评价"
         type="classroom"
         defaul-value="暂无评价"
@@ -132,6 +132,7 @@ const TAB_HEIGHT = 44;
 
 export default {
   components: {
+    // eslint-disable-next-line vue/no-unused-components
     directory,
     detailHead,
     detailPlan,
@@ -165,6 +166,7 @@ export default {
       isEmpty: true,
       scrollTime: null,
       isManualSwitch: false,
+      classroomSettings: {},
     };
   },
   computed: {
@@ -216,6 +218,15 @@ export default {
         !this.isEmpty
       );
     },
+  },
+  async created() {
+    this.classroomSettings = await Api.getSettings({
+      query: {
+        type: 'classroom',
+      },
+    }).catch(err => {
+      console.error(err);
+    });
   },
   mounted() {
     // 获取促销优惠券

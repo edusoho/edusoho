@@ -220,6 +220,7 @@ export default {
             this.course.totalPrice * this.itemData.rate * 0.1,
         ).toFixed(2);
       }
+      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       this.couponNumber = money;
       return money;
     },
@@ -344,8 +345,11 @@ export default {
           this.itemData = coupons.length > 0 ? coupons[0] : null;
         })
         .catch(err => {
-          // 购买后返回会造成重复下单报错
-          this.$router.go(-1);
+          this.$toast(err.message);
+          setTimeout(() => {
+            // 购买后返回会造成重复下单报错
+            this.$router.go(-1);
+          }, 2000);
         });
     },
     // 0元下单后逻辑跳转
@@ -412,7 +416,6 @@ export default {
           if (payment == 'free') {
             that.routerChange();
           } else if (payment == 'pay') {
-            console.log(res);
             // 塞入付费信息
             this.detail = Object.assign({}, res);
             // 去付钱

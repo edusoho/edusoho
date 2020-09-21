@@ -14,6 +14,8 @@ import distribution from './distribution/index';
 import liveTimetable from './liveTimetable/index';
 import goods from './goods/index';
 import reviews from './reviews/index';
+import certificate from './certificate/index';
+import itemBank from './itemBank/index';
 
 const config = [
   ...openCourse,
@@ -32,6 +34,8 @@ const config = [
   ...goods,
   ...reviews,
   ...itemBankCourse,
+  ...certificate,
+  ...itemBank,
 ];
 
 export default config;

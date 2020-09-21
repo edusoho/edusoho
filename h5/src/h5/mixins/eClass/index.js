@@ -91,7 +91,7 @@ export default {
     },
   },
   methods: {
-    onClick(e) {
+    onClick(hasCertificate, e) {
       const isOrder = this.type === 'order';
       const id = this.course.id || this.course.targetId;
       if (!this.feedback) {
@@ -108,22 +108,24 @@ export default {
         location.href = this.order.targetUrl;
         return;
       }
-      this.toMore(this.typeList, id);
+      this.toMore(hasCertificate, this.typeList, id);
     },
-    toMore(type, id) {
+    toMore(hasCertificate, type, id) {
       let path = '';
-      let params = {};
+      let params = {
+        hasCertificate,
+      };
       switch (type) {
         case 'course_list':
           path = `/goods/${this.course.goodsId}/show`;
-          params = {
+          params = Object.assign(params, {
             targetId: id,
-          };
+          });
 
           break;
-        // case 'item_bank_exercise':
-        //   path = `/course/${id}`;
-        //   break;
+        case 'item_bank_exercise':
+          path = `/item_bank_exercise/${id}`;
+          break;
         case 'classroom_list':
           path = `/goods/${this.course.goodsId}/show`;
           break;

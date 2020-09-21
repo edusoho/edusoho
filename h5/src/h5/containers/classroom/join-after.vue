@@ -56,7 +56,7 @@
         <review-list
           ref="review"
           :target-id="details.classId"
-          :reviews="details.reviews"
+          :reviews="classroomSettings.show_review == 1 ? details.reviews : []"
           title="学员评价"
           defaul-value="暂无评价"
           type="classroom"
@@ -76,16 +76,19 @@ import directory from '../course/detail/directory';
 import moreMask from '@/components/more-mask';
 import { Dialog, Toast } from 'vant';
 import Api from '@/api';
+// eslint-disable-next-line no-unused-vars
 const TAB_HEIGHT = 44;
 
 export default {
   components: {
+    // eslint-disable-next-line vue/no-unused-components
     directory,
     detailHead,
     detailPlan,
     teacher,
     courseSetList,
     reviewList,
+    // eslint-disable-next-line vue/no-unused-components
     moreMask,
   },
   props: ['details', 'planDetails'],
@@ -97,7 +100,17 @@ export default {
       tabs: ['班级介绍', '班级课程', '学员评价'],
       tabsClass: '',
       errorMsg: '',
+      classroomSettings: {},
     };
+  },
+  async created() {
+    this.classroomSettings = await Api.getSettings({
+      query: {
+        type: 'classroom',
+      },
+    }).catch(err => {
+      console.error(err);
+    });
   },
   mounted() {
     window.addEventListener('touchmove', this.handleScroll);

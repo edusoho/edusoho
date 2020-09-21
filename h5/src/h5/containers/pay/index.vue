@@ -73,10 +73,11 @@ export default {
       inWechat: this.isWeixinBrowser(),
       targetType: this.$route.query.targetType,
       timeoutId: -1,
+      isLoading: true,
     };
   },
   computed: {
-    ...mapState(['wechatSwitch', 'isLoading']),
+    ...mapState(['wechatSwitch']),
     validPayWay() {
       return (
         this.paySettings.wxpayEnabled ||
@@ -85,6 +86,7 @@ export default {
     },
   },
   async created() {
+    this.isLoading = true;
     this.paySettings = await Api.getSettings({
       query: {
         type: 'payment',
@@ -97,7 +99,7 @@ export default {
     } else if (this.paySettings.wxpayEnabled) {
       this.payWay = 'WechatPay_H5';
     }
-    const { source, id, sn, targetId } = this.$route.query;
+    const { sn, targetId } = this.$route.query;
     // 从我的订单入口进入
     Api.getOrderDetail({
       query: {
@@ -122,6 +124,7 @@ export default {
           });
         }
         this.detail = Object.assign({}, res);
+        this.isLoading = false;
       })
       .catch(err => {
         Toast.fail(err.message);

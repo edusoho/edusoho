@@ -22,7 +22,7 @@
 
     <van-button
       :disabled="btnDisable"
-      type="default"
+      type="info"
       class="primary-btn mb20"
       @click="onSubmit"
       >登录</van-button
@@ -44,7 +44,6 @@
   </div>
 </template>
 <script>
-import activityMixin from '@/mixins/activity';
 import redirectMixin from '@/mixins/saveRedirect';
 import { mapActions } from 'vuex';
 import Api from '@/api';

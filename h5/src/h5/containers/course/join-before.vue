@@ -48,7 +48,7 @@
     <review-list
       ref="review"
       :target-id="details.courseSet.id"
-      :reviews="details.reviews"
+      :reviews="courseSettings.show_review == 1 ? details.reviews : []"
       title="学员评价"
       type="course"
       defaul-value="暂无评价"
@@ -102,6 +102,7 @@ import Api from '@/api';
 import getCouponMixin from '@/mixins/coupon/getCouponHandler';
 import getActivityMixin from '@/mixins/activity/index';
 import { dateTimeDown } from '@/utils/date-toolkit';
+import { Toast } from 'vant';
 
 const TAB_HEIGHT = 44;
 
@@ -137,7 +138,17 @@ export default {
       marketingActivities: {
         seckill: {},
       },
+      courseSettings: {},
     };
+  },
+  async created() {
+    this.courseSettings = await Api.getSettings({
+      query: {
+        type: 'course',
+      },
+    }).catch(err => {
+      console.error(err);
+    });
   },
   computed: {
     ...mapState(['couponSwitch', 'user']),
