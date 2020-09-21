@@ -47,7 +47,8 @@ class InfomationCollectTables extends Migration
               `targetId` int(11) DEFAULT NULL COMMENT '目标ID 0为当前类型全部',
               `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
               PRIMARY KEY (`id`),
-              KEY `uk_action_type_targetid` (`action`,`targetType`,`targetId`)
+              KEY `action` (`action`),
+              KEY `targetType` (`targetType`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='信息采集位置';
         ");
 
