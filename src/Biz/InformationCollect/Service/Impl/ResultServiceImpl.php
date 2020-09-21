@@ -8,6 +8,16 @@ use Biz\InformationCollect\Dao\ResultItemDao;
 
 class ResultServiceImpl extends BaseService
 {
+    public function isSubmited($userId, $eventId)
+    {
+        $count = $this->getResultDao()->count([
+            'submitter' => $userId,
+            'eventId' => $eventId,
+        ]);
+
+        return $count > 0 ? true : false;
+    }
+
     /**
      * @return ResultDao
      */
