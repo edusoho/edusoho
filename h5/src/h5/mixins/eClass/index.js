@@ -137,7 +137,11 @@ export default {
       switch (type) {
         case 'course_list':
           action = 'kuozhi_course';
-          data = { courseId: id };
+          data = {
+            courseId: id,
+            goodsId: this.course.goodsId,
+            specsId: this.course.specsId,
+          };
           break;
         case 'item_bank_exercise':
           action = 'kuozhi_itembank';
@@ -145,7 +149,11 @@ export default {
           break;
         case 'classroom_list':
           action = 'kuozhi_classroom';
-          data = { classroomId: id };
+          data = {
+            classroomId: id,
+            goodsId: this.course.goodsId,
+            specsId: this.course.specsId,
+          };
           break;
       }
       // 调用app接口

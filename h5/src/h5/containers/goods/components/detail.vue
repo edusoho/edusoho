@@ -3,7 +3,7 @@
     <p class="detail-info__title">{{ goods.title }}</p>
 
     <div
-      v-if="goods.discount && currentSku.price != 0"
+      v-if="goods.discount && currentSku.displayPrice != 0"
       class="detail-info__price"
     >
       <div class="clearfix">
@@ -28,7 +28,7 @@
         </div>
       </div>
     </div>
-    <div v-if="!goods.discount" class="detail-info__price">
+    <div v-if="!goods.discount || currentSku.displayPrice == 0" class="detail-info__price">
       <div class="clearfix">
         <div class="pull-left">
           价格

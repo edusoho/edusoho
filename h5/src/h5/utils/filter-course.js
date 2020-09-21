@@ -14,6 +14,7 @@ const getDisplayStyle = (data, listObj) => {
       id: data.id,
       targetId: data.targetId,
       goodsId: data.goodsId,
+      specsId: data.specsId,
       imgSrc: {
         url: data.cover.middle || '',
         className: 'e-course__img',
@@ -35,6 +36,7 @@ const getDisplayStyle = (data, listObj) => {
   return {
     id: data.id,
     goodsId: data.courseSet.goodsId,
+    specsId: data.specsId,
     imgSrc: {
       url: data.courseSet.cover.middle || '',
       className: 'e-course__img',
@@ -84,6 +86,7 @@ const getClassRoomDisplay = (data, listObj, price) => {
     id: data.id,
     targetId: data.targetId,
     goodsId: data.goodsId,
+    specsId: data.specsId,
     studentNum: listObj.classRoomShowStudent ? data.studentNum : null,
     imgSrc: {
       url: data.cover.middle || '',
@@ -104,6 +107,7 @@ const getCourseDisplay = (data, listObj, price) => {
   return {
     id: data.id,
     goodsId: data.courseSet.goodsId,
+    specsId: data.specsId,
     studentNum: listObj.showStudent ? data.studentNum : null,
     imgSrc: {
       url: data.courseSet.cover.middle || '',
@@ -183,6 +187,7 @@ const courseListData = (data, listObj, uiStyle = 'old', platform = 'h5') => {
       return {
         id: data.id,
         goodsId: data.courseSet.goodsId,
+        specsId: data.specsId,
         imgSrc: {
           url: data.courseSet.cover.middle || '',
           className: 'e-course__img',
