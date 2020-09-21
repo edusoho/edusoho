@@ -12,7 +12,7 @@ class CourseType extends TargetType
         $courses = $this->getCourseService()->findCoursesByIds($targetIds);
         $courses = ArrayToolkit::column($courses, 'courseSetTitle');
 
-        return implode(';', $courses);
+        return implode('；', $courses);
     }
 
     /**

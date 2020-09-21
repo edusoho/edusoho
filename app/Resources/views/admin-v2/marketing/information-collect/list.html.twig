@@ -1,0 +1,71 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_information_collection' %}
+{% set script_controller = 'invite/record' %}
+{% block page_buttons %}
+    <a class="btn btn-success btn-sm " href="" target="blank">{{ 'admin.imformation_collection.create'|trans }}</a>
+{% endblock %}
+
+{% block main %}
+  <form id="information-collect" class="form-inline well well-sm" action="{{path('admin_v2_information_collection')}}" method="get" novalidate>
+    <input id="title" class="form-control" type="text" name="title" placeholder="{{'admin.information_collection.title.placeholer'|trans}}" value="{{ app.request.query.get('title')}}">
+    <div class="form-group ">
+      <input class="form-control" type="text" id="startDate" name="startDate"
+             value="{{ app.request.query.get('startDate') }}" placeholder="{{ 'admin.user.form.input_placeholder.startDate'|trans }}" autocomplete="off">
+      -
+      <input class="form-control" type="text" id="endDate" name="endDate"
+             value="{{ app.request.query.get('endDate') }}" placeholder="{{ 'admin.user.form.input_placeholder.endDate'|trans }}" autocomplete="off">
+    </div>
+    <button class="btn btn-primary" type="submit">{{'form.btn.search'|trans}}</button>
+  </form>
+
+  <table class="table table-hover table-striped" >
+    <thead>
+    <tr>
+      <th width="10%">{{'admin.information_collection.title_th'|trans}}</th>
+      <th width="25%">{{ 'admin.information_collection.location_th'|trans }}</th>
+      <th width="15%">{{'admin.information_collection.create_time_th'|trans}}</th>
+      <th width="10%">{{ 'admin.information_collection.status_th'|trans }}</th>
+      <th width="15%">{{ 'admin.information_collection.collected_num_th'|trans }}</th>
+      <th width="15%">{{ 'admin.information_collection.operate'|trans }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% if lists|default() %}
+      {% for list in lists|default() %}
+        <tr>
+          <td>{{ list.title }}</td>
+          <td>
+            <span>{{ list.action|trans }}</span>
+            <br>
+            <span class="text-muted text-sm">{{ list.location }}</span>
+          </td>
+          <td>{{ list.createdTime|date('Y-m-d H:i:s') }}</td>
+          <td>{{ list.status|trans|raw }}</td>
+          <td>{{ list.collectNum }}</td>
+          <td>
+            <div class="btn-group">
+              <a href="" class="btn btn-default btn-sm">{{ 'admin.information_collection.operate.detail'|trans }}</a>
+              {% include 'admin-v2/widget/group-button.html.twig' with {parentCode: 'admin_v2_information_collection', group:'groupButton', collect: list} %}
+            </div>
+          </td>
+        </tr>
+      {% endfor %}
+    {% else %}
+      <tr>
+        <td colspan="20">
+          <div class="empty">
+            {% if error|default() %}
+              {{ error|default() }}
+            {% else %}
+              {{'site.datagrid.empty'|trans}}
+            {% endif %}
+          </div>
+        </td>
+      </tr>
+    {% endif %}
+    </tbody>
+  </table>
+
+  {{ admin_macro.paginator(paginator|default()) }}
+{% endblock %}

@@ -18,6 +18,7 @@ class LocationDaoImpl extends AdvancedDaoImpl implements LocationDao
     {
         return [
             'serializes' => [
+                'targetId' => 'delimiter',
             ],
             'orderbys' => [
                 'id',
@@ -27,6 +28,7 @@ class LocationDaoImpl extends AdvancedDaoImpl implements LocationDao
             ],
             'conditions' => [
                 'id = :id',
+                'eventId IN (:eventIds)'
             ],
         ];
     }

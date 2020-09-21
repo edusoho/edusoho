@@ -12,7 +12,7 @@ class ClassroomType extends TargetType
         $classrooms = $this->getClassroomService()->findClassroomsByIds($targetIds);
         $classrooms = ArrayToolkit::column($classrooms, 'title');
 
-        return implode(';', $classrooms);
+        return implode('；', $classrooms);
     }
 
     /**

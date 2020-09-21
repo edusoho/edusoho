@@ -14,7 +14,7 @@ class LocationServiceImpl extends BaseService implements LocationService
     {
         $locations = $this->getLocationDao()->findByEventIds($eventIds);
 
-        $targetTypeObject = new TargetTypeFactory();
+        $targetTypeObject = new TargetTypeFactory($this->biz);
         foreach ($locations as &$location) {
             if (0 != $location['targetId']) {
                 $location['targetInfo'] = $targetTypeObject->create($location['targetType'])->getTargetInfo($location['targetId']);

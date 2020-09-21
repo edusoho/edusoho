@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller\AdminV2\InformationCollect;
+namespace AppBundle\Controller\AdminV2\Marketing;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
@@ -15,21 +15,20 @@ class InformationCollectController extends BaseController
     public function indexAction(Request $request)
     {
         $conditions = $request->query->all();
-        $conditions = ArrayToolkit::parts($conditions, ['title', 'startDate', 'endDate']);
 
         $page = new Paginator(
-            $conditions,
+            $request,
             $this->getEventService()->count($conditions),
             20);
 
         $list = $this->getEventService()->search(
             $conditions,
-            ['createTime' => 'DESC'],
+            ['createdTime' => 'DESC'],
             $page->getOffsetCount(),
             $page->getPerPageCount()
         );
 
-        return $this->render('admin-v2/information-collect/list.html.twig', [
+        return $this->render('admin-v2/marketing/information-collect/list.html.twig', [
             'lists' => $this->filterList($list),
             'paginator' => $page,
         ]);
@@ -42,7 +41,9 @@ class InformationCollectController extends BaseController
         $collectCounts = $this->getResultService()->countGroupByEventId(ArrayToolkit::column($collects, 'id'));
 
         foreach ($collects as &$collect) {
-            $collect['location'] = isset($locations[$collect['id']]) ? $locations[$collect['id']] : '';
+            $collect['action'] = 'admin.information_collection.action.'.$collect['action'];
+            $collect['status'] = 'admin.information_collection.status.'.$collect['status'];
+            $collect['location'] = isset($locations[$collect['id']]) ? $locations[$collect['id']]['targetInfo'] : '';
             $collect['collectNum'] = isset($collectCounts[$collect['id']]) ? $collectCounts[$collect['id']]['collectNum'] : 0;
         }
 

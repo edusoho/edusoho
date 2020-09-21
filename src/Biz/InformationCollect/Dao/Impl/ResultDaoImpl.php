@@ -32,6 +32,7 @@ class ResultDaoImpl extends GeneralDaoImpl implements ResultDao
             ],
             'conditions' => [
                 'id = :id',
+                'eventId IN (:eventIds)',
             ],
         ];
     }

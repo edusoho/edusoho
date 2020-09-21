@@ -5321,6 +5321,22 @@ admin.operation_invite.register_coupon: 'Register Award'
 admin.operation_invite.invite_coupon: 'Invite Award'
 admin.operation_invite.invite_code_owner: 'inviter'
 admin.operation_invite.register_user: 'registered user'
+
+#用户信息采集
+admin.imformation_collection.create: 'Create'
+admin.information_collection.title.placeholer: 'Name of user information collection'
+admin.information_collection.title_th: 'Collection Name'
+admin.information_collection.location_th: 'Collection Location'
+admin.information_collection.create_time_th: 'Create Time'
+admin.information_collection.status_th: 'Collection Status'
+admin.information_collection.collected_num_th: 'Collected Num'
+admin.information_collection.operate: 'Operate'
+admin.information_collection.operate.detail: 'Detail'
+admin.information_collection.action.buy_after: 'Course/class merchandise after payment'
+admin.information_collection.action.buy_before: 'Course/class merchandise before payment'
+admin.information_collection.status.open: '<div class="green-circle"></div>Is collecting'
+admin.information_collection.status.close: '<div class="red-circle"></div>Stop to collect'
+
 admin.money_records.content_title: 'Account Details'
 admin.money_records.transaction_no.input_placeholder: 'Transaction No.'
 admin.money_records.nickname.input_placeholder: Username

@@ -15,7 +15,7 @@ class EventDaoImpl extends GeneralDaoImpl implements EventDao
             'serializes' => [
             ],
             'orderbys' => [
-                'id',
+                'id', 'createdTime',
             ],
             'timestamps' => [
                 'createdTime',
@@ -23,6 +23,9 @@ class EventDaoImpl extends GeneralDaoImpl implements EventDao
             ],
             'conditions' => [
                 'id = :id',
+                'title like :title',
+                'createdTime >= :startDate',
+                'createdTime < :endDate',
             ],
         ];
     }

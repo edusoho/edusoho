@@ -6399,6 +6399,21 @@ admin.operation_invite.invite_coupon: 邀请奖励
 admin.operation_invite.invite_code_owner: 邀请人
 admin.operation_invite.register_user: 注册用户
 
+#用户信息采集
+admin.imformation_collection.create: 新建
+admin.information_collection.title.placeholer: 用户信息采集名称
+admin.information_collection.title_th: 采集名称
+admin.information_collection.location_th: 采集位置
+admin.information_collection.create_time_th: 创建时间
+admin.information_collection.status_th: 采集状态
+admin.information_collection.collected_num_th: 已采集数据量
+admin.information_collection.operate: 操作
+admin.information_collection.operate.detail: 详情
+admin.information_collection.action.buy_after: 课程/班级商品支付后
+admin.information_collection.action.buy_before: 课程/班级商品支付前
+admin.information_collection.status.open: <div class="green-circle"></div>正在采集
+admin.information_collection.status.close: <div class="red-circle"></div>停止采集
+
 #账户明细
 admin.money_records.content_title: 账户明细
 admin.money_records.transaction_no.input_placeholder: 交易号

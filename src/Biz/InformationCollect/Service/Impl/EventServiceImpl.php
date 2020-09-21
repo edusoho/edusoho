@@ -17,7 +17,31 @@ class EventServiceImpl extends BaseService implements EventService
 
     public function search($conditions, $orderBy, $start, $limit)
     {
+        $conditions = $this->_prepareConditions($conditions);
+
         return $this->getEventDao()->search($conditions, $orderBy, $start, $limit);
+    }
+
+    private function _prepareConditions($conditions)
+    {
+        $conditions = array_filter($conditions, function ($value) {
+            if ($value == 0) {
+                return true;
+            }
+
+            return !empty($value);
+        }
+        );
+
+        if (!empty($conditions['startDate'])) {
+            $conditions['startDate'] = strtotime($conditions['startDate']);
+        }
+
+        if (!empty($conditions['endDate'])) {
+            $conditions['endDate'] = strtotime($conditions['endDate']);
+        }
+
+        return $conditions;
     }
 
     /**
