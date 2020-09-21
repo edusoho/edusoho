@@ -873,12 +873,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/qiqiuyun-php-sdk.git",
-                "reference": "f30b093ebfa9554cf5350102ca9252c1752e6fc3"
+                "reference": "ca6471fedd2164117815fc2ed961b5cb4f82e7f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/f30b093ebfa9554cf5350102ca9252c1752e6fc3",
-                "reference": "f30b093ebfa9554cf5350102ca9252c1752e6fc3",
+                "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/ca6471fedd2164117815fc2ed961b5cb4f82e7f9",
+                "reference": "ca6471fedd2164117815fc2ed961b5cb4f82e7f9",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -914,7 +914,7 @@
                 }
             ],
             "description": "QiQiuYun PHP SDK",
-            "time": "2020-09-21T01:50:18+00:00"
+            "time": "2020-09-21T04:46:31+00:00"
         },
         {
             "name": "codeages/rate-limiter",
