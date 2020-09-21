@@ -14,7 +14,7 @@ class InfomationCollectTables extends Migration
             CREATE TABLE `infomation_collect_event` (
               `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
               `title` varchar(256) NOT NULL COMMENT '信息采集的标题',
-              `action` varchar(32) NOT NULL COMMENT '信息采集的位置行为',
+              `action` varchar(32) NOT NULL COMMENT '信息采集的位置行为buy_after=购买后，buy_before=购买前',
               `formTitle` varchar(64) NOT NULL COMMENT '信息采集表单的标题',
               `status` varchar(32) NOT NULL DEFAULT 'open' COMMENT '信息采集开启状态',
               `allowSkip` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否允许跳过',
