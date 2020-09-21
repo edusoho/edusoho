@@ -4,16 +4,18 @@ import {checkBrowserCompatibility} from './util';
 
 class CaptureInit{
   constructor() {
-    this.$sdk = null;
+    this.sdk = null;
     this.bestFaceResult = null;
     this._initSdk();
-    this.capture();
+    if (this.sdk) {
+      this.capture();
+    }
   }
 
   _initSdk() {
     var comp = checkBrowserCompatibility();
     if (comp.ok === false) {
-      notify('danger', comp.message);
+      this.showErrorMessage(comp.message);
       return ;
     }
 

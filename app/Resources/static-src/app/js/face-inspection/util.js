@@ -169,7 +169,7 @@ const checkBrowserCompatibility = function() {
     } else if (browser.shell && browser.shell === 'qq') {
         result.ok = false;
         result.message = '不支持当前浏览器，' + hint;
-    } else if (browser.supporter === "chrome" && parseInt(browser.supporterVs) < 70) {
+    } else if (browser.supporter === "chrome" && parseInt(browser.supporterVs) < 69) {
         result.ok = false;
         result.message = '当前浏览器版本过低，' + hint;
     }

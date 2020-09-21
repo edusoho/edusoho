@@ -37,6 +37,7 @@
   export default {
     data() {
       let inspectionOpen = $('[name=token]').length > 0 && $('[name=token]').val() !== '';
+      let comp = checkBrowserCompatibility();
       return {
         showCKEditorData: {
           publicPath: $('[name=ckeditor_path]').val(),
@@ -59,7 +60,8 @@
         },
         fileId: 0,
         inspectionOpen: inspectionOpen,
-        isNotMobile: !isMobileDevice()
+        isNotMobile: !isMobileDevice(),
+        errorMessage: comp.ok ? '' : comp.message,
       };
     },
     created() {
@@ -230,11 +232,13 @@
         if ($node.length > 0 && $node.val() !== '') {
           this.$refs['inspection'].captureModal({
             token: $('[name=token]').val(),
-            faceUrl: $node.val()
+            faceUrl: $node.val(),
+            errorMessage: this.errorMessage,
           });
         } else {
           this.$refs['inspection'].captureModal({
             token: $('[name=token]').val(),
+            errorMessage: this.errorMessage,
           });
         }
       },
