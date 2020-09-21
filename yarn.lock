@@ -3343,9 +3343,10 @@ es-ckeditor@4.7.2-patch13:
   version "4.7.2-patch13"
   resolved "https://registry.yarnpkg.com/es-ckeditor/-/es-ckeditor-4.7.2-patch13.tgz#a740df84a7d2e952f352fe727e1565409f1d0e1d"
 
-es-ckeditor@4.7.2-patch14:
-  version "4.7.2-patch14"
-  resolved "https://registry.yarnpkg.com/es-ckeditor/-/es-ckeditor-4.7.2-patch14.tgz#9f9e62163a92c1a6dabb8c33da7f1b4702f11def"
+es-ckeditor@4.7.2-patch15:
+  version "4.7.2-patch15"
+  resolved "https://registry.yarnpkg.com/es-ckeditor/-/es-ckeditor-4.7.2-patch15.tgz#f21f2b6b02b987c5e325cb6f1c290f7c2d0d36a7"
+  integrity sha512-+qzyHIEc3sJIfHLObYPMJDn4IiZHwld1U4rUOOKNgyKqr17ltKeUOgz5pX2Rk9ou6tDG0ntQp0+8lxiPDa/LYA==
 
 es-commit-msg-validator@1.0.2:
   version "1.0.2"
@@ -5286,10 +5287,10 @@ istanbul@^0.4.5:
     which "^1.1.1"
     wordwrap "^1.0.0"
 
-item-bank@1.0.15:
-  version "1.0.15"
-  resolved "https://registry.yarnpkg.com/item-bank/-/item-bank-1.0.15.tgz#ec553ab5874b192c781e4fa67f6cc69b001f3d14"
-  integrity sha512-8gdhD/mNSbj2OfGaTHjXOWF2AIeoPN/asi4JKSrGTHNANTapqw3VZEnLzuHPMpOwUWjZ272SC5XGCdBgE4FFPA==
+item-bank@1.0.17:
+  version "1.0.17"
+  resolved "https://registry.yarnpkg.com/item-bank/-/item-bank-1.0.17.tgz#1a0befdfc6a28f8ae7b6fdf7caf8b75af912bffa"
+  integrity sha512-lDLdMQ0+YoPHkkQAXgxi47vuSsmQZzNpN+ltTSoViykmp+NxGfXkh8s+AijVdKuN/wzQssnvFm/Erbl/WSsk6A==
   dependencies:
     "@babel/polyfill" "^7.8.7"
     ant-design-vue "^1.5.0"

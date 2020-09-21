@@ -225,12 +225,13 @@ class CourseManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId);
         $task = $this->getTaskService()->getTask($taskId);
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+        $activity = $this->getOriginActivity($activity);
 
         $liveId = $activity['ext']['liveId'];
         $provider = $activity['ext']['liveProvider'];
         $resultList = $this->getLiveReplayService()->generateReplay(
             $liveId,
-            $course['id'],
+            $activity['fromCourseId'],
             $activity['id'],
             $provider,
             'live'
@@ -255,6 +256,16 @@ class CourseManageController extends BaseController
         }
 
         return $this->createJsonResponse(true);
+    }
+
+    protected function getOriginActivity($activity)
+    {
+        if (empty($activity['copyId'])) {
+            return $activity;
+        }
+        $copyActivity = $this->getActivityService()->getActivity($activity['copyId'], true);
+
+        return $this->getOriginActivity($copyActivity);
     }
 
     public function listAction(Request $request, $courseSetId)
@@ -531,7 +542,7 @@ class CourseManageController extends BaseController
             }
 
             $updatedCourse = $this->getCourseService()->updateBaseInfo($courseId, $data);
-            if (empty($course['enableAudio']) && $updatedCourse['enableAudio']) {
+            if (empty($course['enableAudio']) && isset($updatedCourse['enableAudio'])) {
                 $this->getCourseService()->batchConvert($course['id']);
             }
 
