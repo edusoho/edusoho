@@ -102,7 +102,8 @@ class EduSohoUpgrade extends AbstractUpdater
                   `reason` text COMMENT '错误原因',
                   `createdTime` int(11) NOT NULL,
                   `updatedTime` int(11) NOT NULL,
-                  PRIMARY KEY (`id`)
+                  PRIMARY KEY (`id`),
+                  KEY `orderId` (`orderId`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品结算上报表';
             ");
         }
