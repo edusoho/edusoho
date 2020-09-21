@@ -44,6 +44,7 @@ import {
   PullRefresh,
   Overlay,
   Search,
+  Form,
 } from 'vant';
 // 按需引入组件
 Vue.component('van-nav-bar', NavBar);
@@ -90,7 +91,8 @@ Vue.use(Tab)
   .use(Dialog)
   .use(Switch)
   .use(PullRefresh)
-  .use(Loading);
+  .use(Loading)
+  .use(Form);
 Vue.use(VueClipboard);
 Vue.use(wapSdk);
 Vue.config.productionTip = false;
