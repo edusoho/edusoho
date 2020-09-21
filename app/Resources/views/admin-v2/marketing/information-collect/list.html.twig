@@ -2,6 +2,7 @@
 
 {% set menu = 'admin_v2_information_collection' %}
 {% set script_controller = 'invite/record' %}
+{% do script(['app/js/admin-v2/marketing/information-collection/index.js']) %}
 {% block page_buttons %}
     <a class="btn btn-success btn-sm " href="" target="blank">{{ 'admin.imformation_collection.create'|trans }}</a>
 {% endblock %}
@@ -19,7 +20,7 @@
     <button class="btn btn-primary" type="submit">{{'form.btn.search'|trans}}</button>
   </form>
 
-  <table class="table table-hover table-striped" >
+  <table class="table table-hover table-striped" id="collection-table">
     <thead>
     <tr>
       <th width="10%">{{'admin.information_collection.title_th'|trans}}</th>
@@ -41,7 +42,7 @@
             <span class="text-muted text-sm">{{ list.location }}</span>
           </td>
           <td>{{ list.createdTime|date('Y-m-d H:i:s') }}</td>
-          <td>{{ list.status|trans|raw }}</td>
+          <td>{{ list.statusInfo|trans|raw }}</td>
           <td>{{ list.collectNum }}</td>
           <td>
             <div class="btn-group">

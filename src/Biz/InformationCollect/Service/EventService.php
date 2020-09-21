@@ -9,4 +9,8 @@ interface EventService
     public function search($conditions, $orderBy, $start, $limit);
 
     public function getEventByActionAndLocation($action, array $location);
+
+    public function closeCollection($id);
+
+    public function openCollection($id);
 }

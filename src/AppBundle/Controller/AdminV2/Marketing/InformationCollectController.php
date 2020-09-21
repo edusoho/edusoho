@@ -42,12 +42,26 @@ class InformationCollectController extends BaseController
 
         foreach ($collects as &$collect) {
             $collect['action'] = 'admin.information_collection.action.'.$collect['action'];
-            $collect['status'] = 'admin.information_collection.status.'.$collect['status'];
+            $collect['statusInfo'] = 'admin.information_collection.status.'.$collect['status'];
             $collect['location'] = isset($locations[$collect['id']]) ? $locations[$collect['id']]['targetInfo'] : '';
             $collect['collectNum'] = isset($collectCounts[$collect['id']]) ? $collectCounts[$collect['id']]['collectNum'] : 0;
         }
 
         return $collects;
+    }
+
+    public function closeAction(Request $request, $id)
+    {
+        $this->getEventService()->closeCollection($id);
+
+        return $this->createJsonResponse(true);
+    }
+
+    public function openAction(Request $request, $id)
+    {
+        $this->getEventService()->openCollection($id);
+
+        return $this->createJsonResponse(true);
     }
 
     /**

@@ -7,6 +7,7 @@ use Biz\BaseService;
 use Biz\InformationCollect\Dao\EventDao;
 use Biz\InformationCollect\Dao\ItemDao;
 use Biz\InformationCollect\Dao\LocationDao;
+use Biz\InformationCollect\InformationCollectionException;
 use Biz\InformationCollect\Service\EventService;
 
 class EventServiceImpl extends BaseService implements EventService
@@ -52,6 +53,31 @@ class EventServiceImpl extends BaseService implements EventService
         }
 
         return $this->getEventDao()->getEventByActionAndLocation($action, $location);
+    }
+
+    public function get($id)
+    {
+        return $this->getEventDao()->get($id);
+    }
+
+    public function closeCollection($id)
+    {
+        $collection = $this->get($id);
+        if (empty($collection)) {
+            $this->createNewException(InformationCollectionException::NOTFOUND_COLLECTION());
+        }
+
+        return $this->getEventDao()->update($id, ['status' => 'closed']);
+    }
+
+    public function openCollection($id)
+    {
+        $collection = $this->get($id);
+        if (empty($collection)) {
+            $this->createNewException(InformationCollectionException::NOTFOUND_COLLECTION());
+        }
+
+        return $this->getEventDao()->update($id, ['status' => 'open']);
     }
 
     /**

@@ -690,6 +690,7 @@ admin_v2.information_collection.menu: User Information Collection
 admin_v2.information_collection.tab: User Information Collection
 admin_v2.information_collection.operate.update_tab: 'Update'
 admin_v2.information_collection.operate.close_tab: 'Close the collection'
+admin_v2.information_collection.operate.open_tab: 'Open the collection'
 admin_v2.information_collection.export_excel_tab: 'Export Excel file'
 
 #运营-内容运营-小组管理
