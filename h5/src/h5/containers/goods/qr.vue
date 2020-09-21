@@ -1,7 +1,7 @@
 <template>
   <div class="goods-qr">
     <div class="goods-qr__header">
-      <div class="goods-qr__header-bg"></div>
+      <img src="static/images/qr_bg.png" alt="" />
     </div>
     <div class="goods-qr__body">
       <h3 class="goods-qr__body__title">{{ this.$route.query.title }}</h3>
