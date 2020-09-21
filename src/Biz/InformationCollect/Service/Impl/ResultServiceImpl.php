@@ -17,6 +17,16 @@ class ResultServiceImpl extends BaseService implements ResultService
         return ArrayToolkit::index($counts, 'eventId');
     }
 
+    public function isSubmited($userId, $eventId)
+    {
+        $count = $this->getResultDao()->count([
+            'submitter' => $userId,
+            'eventId' => $eventId,
+        ]);
+
+        return $count > 0 ? true : false;
+    }
+
     /**
      * @return ResultDao
      */

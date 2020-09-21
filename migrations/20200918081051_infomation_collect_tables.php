@@ -14,7 +14,7 @@ class InfomationCollectTables extends Migration
             CREATE TABLE `infomation_collect_event` (
               `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
               `title` varchar(256) NOT NULL COMMENT '信息采集的标题',
-              `action` varchar(32) NOT NULL COMMENT '信息采集的位置行为',
+              `action` varchar(32) NOT NULL COMMENT '信息采集的位置行为buy_after=购买后，buy_before=购买前',
               `formTitle` varchar(64) NOT NULL COMMENT '信息采集表单的标题',
               `status` varchar(32) NOT NULL DEFAULT 'open' COMMENT '信息采集开启状态',
               `allowSkip` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否允许跳过',
@@ -47,7 +47,8 @@ class InfomationCollectTables extends Migration
               `targetId` int(11) DEFAULT NULL COMMENT '目标ID 0为当前类型全部',
               `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
               PRIMARY KEY (`id`),
-              KEY `uk_action_type_targetid` (`action`,`targetType`,`targetId`)
+              KEY `action` (`action`),
+              KEY `targetType` (`targetType`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='信息采集位置';
         ");
 

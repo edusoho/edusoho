@@ -7,6 +7,7 @@ use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class ResultDaoImpl extends GeneralDaoImpl implements ResultDao
 {
+
     protected $table = 'information_collect_result';
 
     public function countGroupByEventId($eventIds)
@@ -33,6 +34,8 @@ class ResultDaoImpl extends GeneralDaoImpl implements ResultDao
             'conditions' => [
                 'id = :id',
                 'eventId IN (:eventIds)',
+                'submitter = :submitter',
+                'eventId = :eventId',
             ],
         ];
     }
