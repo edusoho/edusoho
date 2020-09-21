@@ -780,19 +780,19 @@ admin_v2:
                                             name: admin_v2.operation.notification.basic_tab.create_btn
                                             group: topBtn
 #                        # 网站公告管理
-#                        admin_v2_operation_announcement:
-#                            name: admin_v2.operation.announcement_menu
-#                            group: 2
-#                            children:
-#                                admin_v2_operation_announcement_manage:
-#                                    name: admin_v2.operation.announcement.basic_tab
-#                                    disable: true
-#                                    router_name: admin_v2_announcement
-#                                    children:
-#                                        admin_v2_announcement_create:
-#                                            name: admin_v2.operation.announcement.basic_tab.create_btn
-#                                            mode: modal
-#                                            group: topBtn
+                        admin_v2_operation_announcement:
+                            name: admin_v2.operation.announcement_menu
+                            group: 2
+                            children:
+                                admin_v2_operation_announcement_manage:
+                                    name: admin_v2.operation.announcement.basic_tab
+                                    disable: true
+                                    router_name: admin_v2_announcement
+                                    children:
+                                        admin_v2_announcement_create:
+                                            name: admin_v2.operation.announcement.basic_tab.create_btn
+                                            mode: modal
+                                            group: topBtn
                         admin_v2_operation_article:
                             name: admin_v2.operation.article_menu
                             quick_entrance_icon: 'article'
