@@ -28,7 +28,7 @@ class LocationDaoImpl extends AdvancedDaoImpl implements LocationDao
             ],
             'conditions' => [
                 'id = :id',
-                'eventId IN (:eventIds)'
+                'eventId IN (:eventIds)',
             ],
         ];
     }

@@ -25,7 +25,7 @@ class EventServiceImpl extends BaseService implements EventService
     private function _prepareConditions($conditions)
     {
         $conditions = array_filter($conditions, function ($value) {
-            if ($value == 0) {
+            if (0 == $value) {
                 return true;
             }
 
