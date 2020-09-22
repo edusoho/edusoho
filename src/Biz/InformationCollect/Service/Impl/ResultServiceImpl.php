@@ -10,12 +10,23 @@ class ResultServiceImpl extends BaseService
 {
     public function isSubmited($userId, $eventId)
     {
-        $count = $this->getResultDao()->count([
-            'submitter' => $userId,
-            'eventId' => $eventId,
-        ]);
+        return !empty($this->getResultByUserIdAndEventId($userId, $eventId));
+    }
 
-        return $count > 0 ? true : false;
+    public function getResultByUserIdAndEventId($userId, $eventId)
+    {
+        $result = $this->getResultDao()->getByUserIdAndEventId($userId, $eventId);
+
+        if ($result) {
+            $result['items'] = $this->findResultItemsByResultId($result['id']);
+        }
+
+        return $result;
+    }
+
+    public function findResultItemsByResultId($resultId)
+    {
+        return $this->getResultItemDao()->findByResultId($resultId);
     }
 
     /**

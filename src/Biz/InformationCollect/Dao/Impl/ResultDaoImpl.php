@@ -9,6 +9,11 @@ class ResultDaoImpl extends GeneralDaoImpl implements ResultDao
 {
     protected $table = 'information_collect_result';
 
+    public function getByUserIdAndEventId($userId, $eventId)
+    {
+        return $this->getByFields(['userId' => $userId, 'eventId' => $eventId]) ?: [];
+    }
+
     public function declares()
     {
         return [
@@ -22,8 +27,6 @@ class ResultDaoImpl extends GeneralDaoImpl implements ResultDao
                 'updatedTime',
             ],
             'conditions' => [
-                'submitter = :submitter',
-                'eventId = :eventId',
             ],
         ];
     }

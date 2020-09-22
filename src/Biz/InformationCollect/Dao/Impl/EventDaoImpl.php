@@ -10,10 +10,10 @@ class EventDaoImpl extends GeneralDaoImpl implements EventDao
 {
     protected $table = 'information_collect_event';
 
-    public function getEventByActionAndLocation($action, array $location)
+    public function getByActionAndLocation($action, array $location)
     {
         if (!ArrayToolkit::requireds($location, ['targetType', 'targetId'], true)) {
-            return (object) [];
+            return [];
         }
 
         $sql = "
@@ -21,7 +21,7 @@ class EventDaoImpl extends GeneralDaoImpl implements EventDao
             FROM {$this->table}
                 INNER JOIN information_collect_location ON {$this->table}.id = information_collect_location.eventId
             WHERE {$this->table}.status = 'open'
-                AND information_collect_location.action = ?
+                AND {$this->table}.action = ?
                 AND information_collect_location.targetType = ?
                 AND (information_collect_location.targetId = 0
                     OR information_collect_location.targetId = ?)
@@ -29,7 +29,7 @@ class EventDaoImpl extends GeneralDaoImpl implements EventDao
             LIMIT 1;
         ";
 
-        return $this->db()->fetchAssoc($sql, [$action, $location['targetType'], $location['targetId']]) ?: (object) [];
+        return $this->db()->fetchAssoc($sql, [$action, $location['targetType'], $location['targetId']]) ?: [];
     }
 
     public function declares()
