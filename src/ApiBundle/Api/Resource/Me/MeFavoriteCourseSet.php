@@ -32,7 +32,11 @@ class MeFavoriteCourseSet extends AbstractResource
         $total = $this->getFavoriteService()->countFavorites($conditions);
         $goods = $this->getGoodsService()->findGoodsByIds(array_column($favorites, 'targetId'));
         $goods = $this->getGoodsEntityFactory()->create('course')->fetchTargets($goods);
-        $courseSets = array_column($goods, 'courseSet');
+        $courseSets = [];
+        foreach ($goods as $good) {
+            $good['courseSet']['goodsId'] = $good['id'];
+            $courseSets[] = $good['courseSet'];
+        }
 
         return $this->makePagingObject(array_values($courseSets), $total, $offset, $limit);
     }
