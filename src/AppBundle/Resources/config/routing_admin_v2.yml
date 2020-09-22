@@ -2749,3 +2749,7 @@ admin_v2_plumber_queue:
 admin_v2_information_collect_edit:
   path: /information_collect/edit
   defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:edit }
+
+admin_v2_information_collect_target_modal:
+  path: /information_collect/target/modal
+  defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:targetModal }

@@ -1,11 +1,11 @@
-console.log('.checkbox-group');
-if ($('.checkbox-group').length) {
-    $('.checkbox-group').on('click', 'input[name="actionType"]', (event) => {
-        let $group = $(event.currentTarget).parent().find('.target-type-checkbox-group');
+console.log('.js-checkbox-group');
+if ($('.js-checkbox-group').length) {
+    $('.js-checkbox-group').on('click', 'input[name="actionType"]', (event) => {
+        let $group = $(event.currentTarget).parent().find('.js-target-type-checkbox-group');
         if ($group.hasClass('hidden')) {
             $group.removeClass('hidden');
         }
-        let $siblingGroup = $(event.currentTarget).parents('.action-type-group').siblings('.action-type-group').find('.target-type-checkbox-group');
+        let $siblingGroup = $(event.currentTarget).parents('.action-type-group').siblings('.action-type-group').find('.js-target-type-checkbox-group');
 
         if (!$siblingGroup.hasClass('hidden')) {
             $siblingGroup.addClass('hidden');
@@ -13,5 +13,6 @@ if ($('.checkbox-group').length) {
     });
 }
 
-
-// name="actionType"
+$('.js-checkbox-group').on('click', '.js-select-target', (event) => {
+    console.log('fe');
+});

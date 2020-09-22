@@ -40,8 +40,8 @@ $('.js-save-btn').on('click', (event) => {
 
 if ($('input[name="action"]').length) {
     $('input[name="action"]').on('click', (event) => {
-        let $group = $(event.currentTarget).parent().find('.checkbox-group');
-        $(event.currentTarget).parents('.action-radio').siblings('.action-radio').find('.checkbox-group').html('');
+        let $group = $(event.currentTarget).parent().find('.js-checkbox-group');
+        $(event.currentTarget).parents('.js-action-radio').siblings('.js-action-radio').find('.js-checkbox-group').html('');
 
         if (!$group.find('.radios').length) {
             $group.html($('.radio-for-action').html());

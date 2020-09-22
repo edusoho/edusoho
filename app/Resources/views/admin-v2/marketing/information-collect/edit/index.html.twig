@@ -31,21 +31,21 @@
 						{% include "admin-v2/marketing/information-collect/edit/location.html.twig" %}
 					</div>
 					<div class="radios">
-						<div class="action-radio">
+						<div class="js-action-radio">
 							<label>
 								<input type="radio" name="action" value="buy_before" checked="checked">
 								<span>{{ 'admin_v2.information_collect.create.action_before'|trans }}</span>
 								<label class="help-block display-inline">{{ 'admin_v2.information_collect.create.action_before.tip'|trans }}</label>
 								<label class="help-block pll mb0">({{ 'admin_v2.information_collect.create.action_before.help_block'|trans }})</label>
-								<div class="checkbox-group plm"></div>
+								<div class="js-checkbox-group plm"></div>
 							</label>
 						</div>
-						<div class="action-radio">
+						<div class="js-action-radio">
 							<label>
 								<input type="radio" name="action" value="buy_after" checked="checked">
 								<span>{{ 'admin_v2.information_collect.create.action_after'|trans }}</span>
 								<label class="help-block pll mb0">({{ 'admin_v2.information_collect.create.action_after.help_block'|trans }})</label>
-								<div class="checkbox-group plm">
+								<div class="js-checkbox-group plm">
 									{% include "admin-v2/marketing/information-collect/edit/location.html.twig" %}
 								</div>
 							</label>

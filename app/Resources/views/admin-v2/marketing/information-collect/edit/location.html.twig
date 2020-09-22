@@ -6,7 +6,7 @@
 			<label class="help-block display-inline">
 				{{ 'admin_v2.information_collect.create.target_type.tip'|trans }}
 			</label>
-			<div class="target-type-checkbox-group hidden">
+			<div class="js-target-type-checkbox-group hidden">
 				<div class="target-type-checkbox">
 					<label class="pll">
 						<input type="checkbox" name="targetType[]" value="course">
@@ -35,14 +35,16 @@
 		<label>
 			<input type="radio" name="actionType" value="part" checked="checked">
 			<span>{{ 'admin_v2.information_collect.create.target_type.part'|trans }}</span>
-			<div class="target-type-checkbox-group">
+			<div class="js-target-type-checkbox-group">
 				<div class="target-type-checkbox">
 					<label class="pll">
 						<input type="checkbox" name="targetType[]" value="course">
 						<span>{{ 'admin_v2.information_collect.create.target_type.part_course'|trans }}</span>
 						<span class="display-inline">
-							{{ 'admin_v2.information_collect.selected_course_count'|trans }}<span class="selected-course-count"> 0 </span>
-                            [<a href=''>{{ 'admin_v2.information_collect.selecte_course'|trans }}]</a>
+							{{ 'admin_v2.information_collect.selected_course_count'|trans }}<span class="selected-course-count">
+								0
+							</span>
+							[<a class="js-select-target" data-url="{{ path('admin_v2_information_collect_target_modal') }}" data-toggle="modal" data-target="#modal">{{ 'admin_v2.information_collect.selecte_course'|trans }}]</a>
 						</span>
 					</label>
 				</div>
@@ -51,8 +53,10 @@
 						<input type="checkbox" name="targetType[]" value="classroom">
 						<span>{{ 'admin_v2.information_collect.create.target_type.part_classroom'|trans }}</span>
 						<span class="display-inline">
-							{{ 'admin_v2.information_collect.selected_classroom_count'|trans }}<span class="selected-course-count"> 0 </span>
-                            [<a href=''>{{ 'admin_v2.information_collect.selecte_classroom'|trans }}]</a>
+							{{ 'admin_v2.information_collect.selected_classroom_count'|trans }}<span class="selected-course-count">
+								0
+							</span>
+							[<a href=''>{{ 'admin_v2.information_collect.selecte_classroom'|trans }}]</a>
 						</span>
 					</label>
 				</div>
