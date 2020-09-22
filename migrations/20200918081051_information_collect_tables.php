@@ -21,7 +21,9 @@ class InformationCollectTables extends Migration
               `creator` int(11) unsigned NOT NULL COMMENT '创建者',
               `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
               `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
-              PRIMARY KEY (`id`)
+              PRIMARY KEY (`id`),
+              KEY `action` (`action`),
+              KEY `title` (`title`(255))
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='信息采集事件表';
         ");
 
@@ -34,7 +36,8 @@ class InformationCollectTables extends Migration
               `seq` int(10) unsigned NOT NULL COMMENT '表单位置顺序',
               `required` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否必填',
               `createdTime` int(10) unsigned DEFAULT '0',
-              PRIMARY KEY (`id`)
+              PRIMARY KEY (`id`),
+              KEY `eventId` (`eventId`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='采集事件表单项';
         ");
 
@@ -47,8 +50,8 @@ class InformationCollectTables extends Migration
               `targetId` int(11) DEFAULT NULL COMMENT '目标ID 0为当前类型全部',
               `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
               PRIMARY KEY (`id`),
-              KEY `action` (`action`),
-              KEY `targetType` (`targetType`)
+              KEY `targetType` (`targetType`),
+              KEY `targetId` (`targetId`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='信息采集位置';
         ");
 
@@ -56,11 +59,13 @@ class InformationCollectTables extends Migration
             CREATE TABLE `information_collect_result` (
               `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
               `formTitle` varchar(64) NOT NULL COMMENT '表单标题',
-              `submitter` int(11) unsigned NOT NULL COMMENT '提交人',
+              `userId` int(11) unsigned NOT NULL COMMENT '提交人',
               `eventId` int(11) unsigned NOT NULL COMMENT '采集事件ID',
               `createdTime` int(10) unsigned NOT NULL,
               `updatedTime` int(10) unsigned NOT NULL,
-              PRIMARY KEY (`id`)
+              PRIMARY KEY (`id`),
+              KEY `userId` (`userId`),
+              KEY `eventId` (`eventId`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='数据采集结果';
         ");
 
@@ -74,7 +79,9 @@ class InformationCollectTables extends Migration
               `value` varchar(4096) NOT NULL DEFAULT '' COMMENT '表单值',
               `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
               `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
-              PRIMARY KEY (`id`)
+              PRIMARY KEY (`id`),
+              KEY `eventId` (`eventId`),
+              KEY `resultId` (`resultId`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='信息采集表单值';
         ");
     }

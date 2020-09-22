@@ -570,17 +570,39 @@ admin_v2:
                                     name: admin_v2.micromarketing.menu
                                     router_name: admin_v2_login_micromarketing_boot
                                     disable: true
-                        admin_v2_information_collection_manage:
-                            name: admin_v2.information_collection.menu
+                        # 用户信息采集
+                        admin_v2_information_collect_manage:
+                            name: admin_v2.information_collect.menu
                             children:
-                                admin_v2_information_collection:
-                                    name: admin_v2.information_collection.tab
+                                admin_v2_information_collect_show:
+                                    router_name: admin_v2_information_collect
+                                    name: admin_v2.information_collect.tab
                                     children: 
-                                        admin_v2_information_collection_create:
-                                            name: admin_v2.information_collection.create
-                                            disable: true
-                                            group: topBtn
-                                            router_name: admin_v2_information_collection_edit
+                                        admin_v2_information_collect:
+                                            name: admin_v2.information_collect.tab
+                                            children: 
+                                                admin_v2_information_collect_create:
+                                                    name: admin_v2.information_collect.create
+                                                    disable: true
+                                                    group: topBtn
+                                                    router_name: admin_v2_information_collect_edit
+                                                    target: '_blank'
+                                                admin_v2_information_collect_close:
+                                                    name: admin_v2.information_collect.operate.close_tab
+                                                    class: close-collection
+                                                    router_params:
+                                                        id: (collect.id)
+                                                    group: groupButton
+                                                    mode: none
+                                                    visible: ( collect.status=='open' )
+                                                admin_v2_information_collect_open:
+                                                    name: admin_v2.information_collect.operate.open_tab
+                                                    class: open-collection
+                                                    router_params:
+                                                    id: (collect.id)
+                                                    group: groupButton
+                                                    mode: none
+                                                    visible: ( collect.status!='open' )
                 # 渠道管理
                 admin_v2_channel_group:
                     name: admin_v2.channel.basic_group
@@ -783,7 +805,7 @@ admin_v2:
                                         admin_v2_batch_notification_create:
                                             name: admin_v2.operation.notification.basic_tab.create_btn
                                             group: topBtn
-                        # 网站公告管理
+#                        # 网站公告管理
                         admin_v2_operation_announcement:
                             name: admin_v2.operation.announcement_menu
                             group: 2

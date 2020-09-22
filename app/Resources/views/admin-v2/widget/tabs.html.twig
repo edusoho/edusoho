@@ -4,7 +4,7 @@
 
 {% if tabMenus|default(null) and tabMenus|length > 1 %}
   <ul class="nav nav-tabs mbm">
-    {% for m in tabMenus %}
+    {# {% for m in tabMenus %}
       {% if not m.mode|default('') == 'capsules' %}
         {% set path = permission_path(m) %}
       {% else %}
@@ -22,6 +22,6 @@
         </a>
       </li>
 
-    {% endfor %}
+    {% endfor %} #}
   </ul>
 {% endif %}

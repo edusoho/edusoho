@@ -2,9 +2,9 @@
 
 namespace Biz\InformationCollect\Dao;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
-interface EventDao extends GeneralDaoInterface
+interface EventDao extends AdvancedDaoInterface
 {
-    public function getEventByActionAndLocation($action, array $location);
+    public function getByActionAndLocation($action, array $location);
 }

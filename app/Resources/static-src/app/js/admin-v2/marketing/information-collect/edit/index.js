@@ -1,7 +1,7 @@
 import notify from 'common/notify';
 import './localtion';
 
-let $form = $('#information-collection-form');
+let $form = $('#information-collect-form');
 let validator = $form.validate({
     rules: {
         title: {

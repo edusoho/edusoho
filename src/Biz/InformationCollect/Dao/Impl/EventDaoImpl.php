@@ -4,16 +4,16 @@ namespace Biz\InformationCollect\Dao\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\InformationCollect\Dao\EventDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class EventDaoImpl extends GeneralDaoImpl implements EventDao
+class EventDaoImpl extends AdvancedDaoImpl implements EventDao
 {
     protected $table = 'information_collect_event';
 
-    public function getEventByActionAndLocation($action, array $location)
+    public function getByActionAndLocation($action, array $location)
     {
         if (!ArrayToolkit::requireds($location, ['targetType', 'targetId'], true)) {
-            return (object) [];
+            return null;
         }
 
         $sql = "
@@ -21,7 +21,7 @@ class EventDaoImpl extends GeneralDaoImpl implements EventDao
             FROM {$this->table}
                 INNER JOIN information_collect_location ON {$this->table}.id = information_collect_location.eventId
             WHERE {$this->table}.status = 'open'
-                AND information_collect_location.action = ?
+                AND {$this->table}.action = ?
                 AND information_collect_location.targetType = ?
                 AND (information_collect_location.targetId = 0
                     OR information_collect_location.targetId = ?)
@@ -29,7 +29,7 @@ class EventDaoImpl extends GeneralDaoImpl implements EventDao
             LIMIT 1;
         ";
 
-        return $this->db()->fetchAssoc($sql, [$action, $location['targetType'], $location['targetId']]) ?: (object) [];
+        return $this->db()->fetchAssoc($sql, [$action, $location['targetType'], $location['targetId']]) ?: [];
     }
 
     public function declares()
@@ -38,7 +38,7 @@ class EventDaoImpl extends GeneralDaoImpl implements EventDao
             'serializes' => [
             ],
             'orderbys' => [
-                'id',
+                'id', 'createdTime',
             ],
             'timestamps' => [
                 'createdTime',
@@ -46,6 +46,9 @@ class EventDaoImpl extends GeneralDaoImpl implements EventDao
             ],
             'conditions' => [
                 'id = :id',
+                'title like :title',
+                'createdTime >= :startDate',
+                'createdTime < :endDate',
             ],
         ];
     }
