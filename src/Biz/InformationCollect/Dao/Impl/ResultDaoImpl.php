@@ -3,15 +3,24 @@
 namespace Biz\InformationCollect\Dao\Impl;
 
 use Biz\InformationCollect\Dao\ResultDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class ResultDaoImpl extends GeneralDaoImpl implements ResultDao
+class ResultDaoImpl extends AdvancedDaoImpl implements ResultDao
 {
     protected $table = 'information_collect_result';
 
     public function getByUserIdAndEventId($userId, $eventId)
     {
-        return $this->getByFields(['userId' => $userId, 'eventId' => $eventId]) ?: [];
+        return $this->getByFields(['userId' => $userId, 'eventId' => $eventId]) ?: null;
+    }
+
+    public function countGroupByEventId($eventIds)
+    {
+        $builder = $this->createQueryBuilder(['eventIds' => $eventIds])
+            ->select('eventId, count(id) AS collectNum')
+            ->groupBy('eventId');
+
+        return $builder->execute()->fetchAll();
     }
 
     public function declares()
@@ -27,6 +36,10 @@ class ResultDaoImpl extends GeneralDaoImpl implements ResultDao
                 'updatedTime',
             ],
             'conditions' => [
+                'id = :id',
+                'eventId IN (:eventIds)',
+                'userId = :userId',
+                'eventId = :eventId',
             ],
         ];
     }

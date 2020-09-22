@@ -2,12 +2,21 @@
 
 namespace Biz\InformationCollect\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\InformationCollect\Dao\ResultDao;
 use Biz\InformationCollect\Dao\ResultItemDao;
+use Biz\InformationCollect\Service\ResultService;
 
-class ResultServiceImpl extends BaseService
+class ResultServiceImpl extends BaseService implements ResultService
 {
+    public function countGroupByEventId($eventIds)
+    {
+        $counts = $this->getResultDao()->countGroupByEventId($eventIds);
+
+        return ArrayToolkit::index($counts, 'eventId');
+    }
+
     public function isSubmited($userId, $eventId)
     {
         return !empty($this->getResultByUserIdAndEventId($userId, $eventId));

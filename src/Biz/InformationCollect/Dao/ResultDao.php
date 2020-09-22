@@ -2,9 +2,11 @@
 
 namespace Biz\InformationCollect\Dao;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
-interface ResultDao extends GeneralDaoInterface
+interface ResultDao extends AdvancedDaoInterface
 {
     public function getByUserIdAndEventId($userId, $eventId);
+
+    public function countGroupByEventId($eventIds);
 }
