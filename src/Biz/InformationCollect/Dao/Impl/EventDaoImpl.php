@@ -8,7 +8,7 @@ use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class EventDaoImpl extends GeneralDaoImpl implements EventDao
 {
-    protected $table = 'infomation_collect_event';
+    protected $table = 'information_collect_event';
 
     public function getEventByActionAndLocation($action, array $location)
     {
@@ -19,12 +19,12 @@ class EventDaoImpl extends GeneralDaoImpl implements EventDao
         $sql = "
             SELECT {$this->table}.*
             FROM {$this->table}
-                INNER JOIN infomation_collect_location ON {$this->table}.id = infomation_collect_location.eventId
+                INNER JOIN information_collect_location ON {$this->table}.id = information_collect_location.eventId
             WHERE {$this->table}.status = 'open'
-                AND infomation_collect_location.action = ?
-                AND infomation_collect_location.targetType = ?
-                AND (infomation_collect_location.targetId = 0
-                    OR infomation_collect_location.targetId = ?)
+                AND information_collect_location.action = ?
+                AND information_collect_location.targetType = ?
+                AND (information_collect_location.targetId = 0
+                    OR information_collect_location.targetId = ?)
             ORDER BY targetId DESC
             LIMIT 1;
         ";

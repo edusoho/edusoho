@@ -7,7 +7,7 @@ use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class ResultDaoImpl extends GeneralDaoImpl implements ResultDao
 {
-    protected $table = 'infomation_collect_result';
+    protected $table = 'information_collect_result';
 
     public function declares()
     {
