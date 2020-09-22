@@ -31,6 +31,19 @@ class InformationCollectForm extends AbstractResource
         return $event;
     }
 
+    public function add(ApiRequest $request)
+    {
+        $eventId = $request->request->get('eventId', '');
+
+        $this->getInformationCollectResultService()->submitForm(
+            $this->getCurrentUser()->getId(),
+            $eventId,
+            $request->request->get('form', [])
+        );
+
+        return $this->get($request, $eventId);
+    }
+
     protected function getInformationCollectEventService()
     {
         return $this->service('InformationCollect:EventService');
