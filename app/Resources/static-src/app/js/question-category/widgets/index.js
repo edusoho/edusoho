@@ -10,3 +10,12 @@ $('.js-toggle-show').on('click', (event) => {
 
   toggleIcon($sort, 'cd-icon-add', 'cd-icon-remove');
 });
+
+$(document).ready(() => {
+  let $categorySearch = $(".js-category-search.active");
+  if ($categorySearch.length > 0) {
+    $categorySearch.parents('.js-sortable-list').show();
+    $categorySearch.parents('.js-sortable-list.question-category-panel__list').find('.js-toggle-show').removeClass('cd-icon-add').addClass('cd-icon-remove');
+    $categorySearch.parents('.js-sortable-list.question-category-panel__list').prev().find('.js-toggle-show').removeClass('cd-icon-add').addClass('cd-icon-remove');
+  }
+});
