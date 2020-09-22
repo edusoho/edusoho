@@ -1,24 +1,42 @@
 <template>
   <div class="">
-    <van-form @submit="onSubmit">
-      <template v-for="(item, index) in test">
-        <van-field
-          :key="index"
-          v-model="item.value"
-          :name="item.field"
-          :label="item.title"
-          :required="isRequired(item.validate)"
-          :placeholder="`请输入${item.title}`"
-          :rules="[
-            ...item.validate,
-            {
-              validator: validator(item.value, item.validate),
-              message: getErrorMessage(item.value, item.validate),
-            },
-          ]"
-          error-message-align="left"
-        />
-      </template>
+    <van-form validate-first @submit="onSubmit">
+      <!-- 姓名
+      <van-field
+        v-model="rule[0].value"
+        :name="rule[0].field"
+        :label="rule[0].title"
+        :required="isRequired(rule[0].validate)"
+        required-align="right"
+        :placeholder="`请输入${rule[0].title}`"
+        clearable
+        @blur="avalidator(rule[0].value, rule[0].validate)"
+        :error-message="getErrorMessage(rule[0].value, rule[0].validate)"
+        error-message-align="left"
+        style="padding: 2.66667vw 4.26667vw;"
+      /> -->
+
+      <div v-for="(item, index) in rule" :key="index">
+        <div v-show="item.field === 'province_city_area' || 'birthday'">
+          <areaSelect v-show="item.field === 'province_city_area'" />
+          <birthdatSelect v-show="item.field === 'birthday'" />
+        </div>
+        <div>
+          <van-field
+            v-model="item.value"
+            :name="item.field"
+            :label="item.title"
+            :required="isRequired(item.validate)"
+            required-align="right"
+            :placeholder="`请输入${item.title}`"
+            clearable
+            @blur="avalidator(item.value, item.validate)"
+            :error-message="getErrorMessage(item.value, item.validate)"
+            error-message-align="left"
+            style="padding: 2.66667vw 4.26667vw;"
+          />
+        </div>
+      </div>
 
       <div style="margin: 16px;">
         <van-button round block type="info" native-type="submit">
@@ -30,8 +48,13 @@
 </template>
 
 <script>
+import areaSelect from './components/areaSelect.vue';
+import birthdatSelect from './components/birthdaySelect.vue';
 export default {
-  components: {},
+  components: {
+    areaSelect,
+    birthdatSelect,
+  },
   data() {
     return {
       test: [
@@ -44,6 +67,17 @@ export default {
             { required: true, message: '请输入姓名' },
             { min: 2, message: '最少2个字' },
             { max: 20, message: '最多20个字' },
+          ],
+        },
+        {
+          type: 'input',
+          field: 'weibo_name',
+          title: '新浪微博名',
+          value: '',
+          validate: [
+            { required: true, message: '请输入新浪微博名' },
+            { min: 4, message: '最少4个字' },
+            { max: 30, message: '最多30个字' },
           ],
         },
       ],
@@ -59,46 +93,51 @@ export default {
             { max: 20, message: '最多20个字' },
           ],
         },
-        {
-          type: 'select',
-          field: 'gender',
-          title: '性别',
-          value: '男',
-          options: [
-            { value: '男', label: '男' },
-            { value: '女', label: '女' },
-            { value: '保密', label: '保密' },
-          ],
-        },
+        // {
+        //   type: 'select',
+        //   field: 'gender',
+        //   title: '性别',
+        //   value: '男',
+        //   options: [
+        //     { value: '男', label: '男' },
+        //     { value: '女', label: '女' },
+        //     { value: '保密', label: '保密' },
+        //   ],
+        // },
         {
           type: 'InputNumber',
           field: 'age',
           title: '年龄',
           value: '',
-          props: {
-            min: 1,
-            max: 99,
-          },
+          validate: [
+            { required: true, message: '请输入您的年龄' },
+            { min: 1, message: '请输入正确的年龄' },
+            { max: 99, message: '请输入正确的年龄' },
+          ],
         },
         {
           type: 'DatePicker',
           field: 'birthday',
           title: '生日',
-          value: [],
+          value: '',
           props: {
             type: 'date',
             format: 'yyyy-MM-dd',
             placeholder: '请选择',
           },
+          validate: [],
         },
         {
           type: 'input',
           field: 'idcard',
           title: '身份证号（中国大陆）',
-          value: [],
+          value: '',
           validate: [
             { required: true, message: '请输入身份证号' },
-            { pattern: '[0-9]{17}[0-9xX]{1}', message: '身份证号码格式不正确' },
+            {
+              pattern: '[0-9]{17}[0-9xX]{1}',
+              message: '身份证号码格式不正确',
+            },
           ],
         },
         {
@@ -118,9 +157,9 @@ export default {
           type: 'input',
           field: 'wechat',
           title: '微信号',
-          value: [],
+          value: '',
           validate: [
-            { required: true, message: '请输入微信号' },
+            // { required: true, message: '请输入微信号' },
             {
               pattern: '^[a-zA-Z]([-_a-zA-Z0-9]{5,19})+$',
               message: '微信号格式不正确',
@@ -131,7 +170,7 @@ export default {
           type: 'input',
           field: 'qq',
           title: 'QQ号',
-          value: [],
+          value: '',
           props: {
             type: 'number',
           },
@@ -144,7 +183,7 @@ export default {
           type: 'input',
           field: 'weibo_name',
           title: '新浪微博名',
-          value: [],
+          value: '',
           validate: [
             { required: true, message: '请输入新浪微博名' },
             { min: 4, message: '最少4个字' },
@@ -155,7 +194,7 @@ export default {
           type: 'input',
           field: 'email',
           title: 'Email',
-          value: [],
+          value: '',
           validate: [
             { required: true, message: '请输入Email' },
             { type: 'email', message: 'Email格式不正确' },
@@ -165,10 +204,11 @@ export default {
           type: 'cascader',
           title: '省市',
           field: 'province_city_area',
-          value: [],
+          value: '',
           props: {
             options: window.province_city_area || [],
           },
+          validate: [],
         },
         {
           type: 'input',
@@ -290,28 +330,52 @@ export default {
     onSubmit(values) {
       console.log('submit', values);
     },
-    validator(value, validate) {
+    areaConfirm(val) {
+      this.info.province = val[0].name;
+      this.info.city = val[1].name;
+      if (this.info.province === this.info.city) {
+        this.info.area = this.info.city;
+      } else this.info.area = this.info.province + ' ' + this.info.city;
+      this.show.area = false;
+    },
+    areaCancel() {
+      this.show.area = !this.show.area;
+    },
+    avalidator(value, validate) {
+      // console.log('aaa');
       for (let i = 0; i < validate.length; i++) {
         if (validate[i].min && value.length < validate[i].min) {
+          console.log(i);
           return false;
         }
         if (validate[i].max && value.length > validate[i].max) {
+          console.log(i);
           return false;
+        }
+        if (validate[i].pattern) {
+          const reg = new RegExp(validate[i].pattern);
+          console.log(reg);
+          console.log(reg.test(value));
+          return reg.test(value);
         }
       }
       return true;
     },
     getErrorMessage(value, validate) {
       for (let i = 0; i < validate.length; i++) {
-        if (validate[i].min && value.length < validate[i].min) {
-          console.log('sss');
+        if (value && validate[i].min && value.length < validate[i].min) {
+          console.log('sss' + validate[i].message);
           return validate[i].message;
         }
-        if (validate[i].max && value.length > validate[i].max) {
+        if (value && validate[i].max && value.length > validate[i].max) {
+          console.log('sss' + validate[i].message);
+          return validate[i].message;
+        }
+        const reg = new RegExp(validate[i].pattern);
+        if (value && !reg.test(value)) {
           return validate[i].message;
         }
       }
-      console.log('sss');
       return '';
     },
     isRequired(rule) {
@@ -321,6 +385,18 @@ export default {
         }
       }
       return false;
+    },
+
+    birthConfirm() {
+      this.info.showBirthday = this.formatDate(this.birthtDate);
+      this.info.birthday = this.getTime(this.info.showBirthday) / 1000;
+      this.show.birthday = false;
+    },
+    formatDate(date) {
+      return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
+    },
+    birthCancel() {
+      this.show.birthday = !this.show.birthday;
     },
   },
 };

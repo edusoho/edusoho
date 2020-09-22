@@ -3387,7 +3387,7 @@ chrome-trace-event@^1.0.2:
   dependencies:
     tslib "^1.9.0"
 
-chromedriver@^2.27.2:
+chromedriver@^2.46.0:
   version "2.46.0"
   resolved "https://registry.npm.taobao.org/chromedriver/download/chromedriver-2.46.0.tgz#3d78e7eb9bb65dd804fe327a6bf76fced12be053"
   integrity sha1-PXjn65u2XdgE/jJ6a/dvztEr4FM=
@@ -14519,10 +14519,10 @@ walker@~1.0.5:
   dependencies:
     makeerror "1.0.x"
 
-wap-sdk-test@^0.1.4:
-  version "0.1.4"
-  resolved "https://registry.npm.taobao.org/wap-sdk-test/download/wap-sdk-test-0.1.4.tgz#baf910fe7435c44e07f8ca229bf3eb367eb92b55"
-  integrity sha1-uvkQ/nQ1xE4H+Moim/PrNn65K1U=
+wap-sdk@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.npm.taobao.org/wap-sdk/download/wap-sdk-0.1.0.tgz#dedf28aff6a685b86b5240479ca710a5edfc8113"
+  integrity sha1-3t8or/amhbhrUkBHnKcQpe38gRM=
   dependencies:
     babel-plugin-import "^1.13.0"
     core-js "^3.6.5"
