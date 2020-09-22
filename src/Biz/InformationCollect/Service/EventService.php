@@ -10,6 +10,8 @@ interface EventService
 
     public function getEventByActionAndLocation($action, array $location);
 
+    public function findItemsByEventId($eventId);
+
     public function closeCollection($id);
 
     public function openCollection($id);

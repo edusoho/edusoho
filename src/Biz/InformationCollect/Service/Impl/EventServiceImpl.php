@@ -49,15 +49,20 @@ class EventServiceImpl extends BaseService implements EventService
     public function getEventByActionAndLocation($action, array $location)
     {
         if (!ArrayToolkit::requireds($location, ['targetType', 'targetId'], true)) {
-            return (object) [];
+            return null;
         }
 
-        return $this->getEventDao()->getEventByActionAndLocation($action, $location);
+        return $this->getEventDao()->getByActionAndLocation($action, $location);
     }
 
     public function get($id)
     {
         return $this->getEventDao()->get($id);
+    }
+
+    public function findItemsByEventId($eventId)
+    {
+        return $this->getItemDao()->findByEventId($eventId);
     }
 
     public function closeCollection($id)

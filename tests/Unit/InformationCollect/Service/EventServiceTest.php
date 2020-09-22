@@ -21,6 +21,21 @@ class EventServiceTest extends BaseTestCase
         $this->assertEquals($mockEvent['id'], $event['id']);
     }
 
+    public function testFindItemsByEventId()
+    {
+        $this->getInformationCollectItemDao()->batchCreate([
+            ['id' => 1, 'eventId' => 1, 'code' => 'name', 'labelName' => '姓名', 'seq' => 1, 'required' => 1],
+            ['id' => 2, 'eventId' => 1, 'code' => 'gender', 'labelName' => '性别', 'seq' => 2, 'required' => 1],
+            ['id' => 3, 'eventId' => 2, 'code' => 'gender', 'labelName' => '性别', 'seq' => 2, 'required' => 1],
+        ]);
+
+        $items = $this->getInformationCollectEventService()->findItemsByEventId(1);
+
+        $this->assertEquals(2, count($items));
+        $this->assertEquals($items[0]['seq'], 1);
+        $this->assertEquals($items[1]['seq'], 2);
+    }
+
     public function testGet()
     {
         $this->mockEvent();
@@ -176,5 +191,10 @@ class EventServiceTest extends BaseTestCase
     protected function getInformationCollectLocationDao()
     {
         return $this->createDao('InformationCollect:LocationDao');
+    }
+
+    protected function getInformationCollectItemDao()
+    {
+        return $this->createDao('InformationCollect:ItemDao');
     }
 }

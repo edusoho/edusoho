@@ -6,4 +6,5 @@ use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
 interface ResultItemDao extends AdvancedDaoInterface
 {
+    public function findByResultId($resultId);
 }

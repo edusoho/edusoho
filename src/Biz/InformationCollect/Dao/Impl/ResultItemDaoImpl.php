@@ -9,6 +9,11 @@ class ResultItemDaoImpl extends AdvancedDaoImpl implements ResultItemDao
 {
     protected $table = 'information_collect_result_item';
 
+    public function findByResultId($resultId)
+    {
+        return $this->findByFields(['resultId' => $resultId]);
+    }
+
     public function declares()
     {
         return [
@@ -22,7 +27,6 @@ class ResultItemDaoImpl extends AdvancedDaoImpl implements ResultItemDao
                 'updatedTime',
             ],
             'conditions' => [
-                'id = :id',
             ],
         ];
     }

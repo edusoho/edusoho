@@ -7,6 +7,19 @@ use Biz\InformationCollect\Dao\ResultDao;
 
 class ResultDaoTest extends BaseTestCase
 {
+    public function testGetByUserIdAndEventId()
+    {
+        $this->getInformationCollectResultDao()->create([
+            'id' => 1,
+            'formTitle' => '测试表单',
+            'userId' => 1,
+            'eventId' => 1,
+        ]);
+
+        $result = $this->getInformationCollectResultDao()->getByUserIdAndEventId(1, 1);
+        $this->assertEquals(1, $result['id']);
+    }
+
     public function testCountGroupByEventId()
     {
         $this->mockResults();
@@ -21,19 +34,19 @@ class ResultDaoTest extends BaseTestCase
             [
                 [
                     'formTitle' => 'test1',
-                    'submitter' => 2,
+                    'userId' => 2,
                     'eventId' => 1,
                     'createdTime' => time(),
                 ],
                 [
                     'formTitle' => 'test1',
-                    'submitter' => 3,
+                    'userId' => 3,
                     'eventId' => 1,
                     'createdTime' => time(),
                 ],
                 [
                     'formTitle' => 'test2',
-                    'submitter' => 2,
+                    'userId' => 2,
                     'eventId' => 2,
                     'createdTime' => time(),
                 ],

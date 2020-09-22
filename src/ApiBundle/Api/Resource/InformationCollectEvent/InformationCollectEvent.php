@@ -19,7 +19,7 @@ class InformationCollectEvent extends AbstractResource
             $event['isSubmited'] = $this->getInformationCollectResultService()->isSubmited($this->getCurrentUser()->getId(), $event['id']);
         }
 
-        return $event;
+        return $event ?: (object) [];
     }
 
     protected function getInformationCollectEventService()

@@ -9,6 +9,11 @@ class ResultDaoImpl extends AdvancedDaoImpl implements ResultDao
 {
     protected $table = 'information_collect_result';
 
+    public function getByUserIdAndEventId($userId, $eventId)
+    {
+        return $this->getByFields(['userId' => $userId, 'eventId' => $eventId]) ?: null;
+    }
+
     public function countGroupByEventId($eventIds)
     {
         $builder = $this->createQueryBuilder(['eventIds' => $eventIds])
@@ -33,7 +38,7 @@ class ResultDaoImpl extends AdvancedDaoImpl implements ResultDao
             'conditions' => [
                 'id = :id',
                 'eventId IN (:eventIds)',
-                'submitter = :submitter',
+                'userId = :userId',
                 'eventId = :eventId',
             ],
         ];

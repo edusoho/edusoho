@@ -6,11 +6,11 @@ use Biz\BaseTestCase;
 
 class EventDaoTest extends BaseTestCase
 {
-    public function testGetEventByActionAndLocation()
+    public function testGetByActionAndLocation()
     {
         $mockEvent = $this->mockEvent();
 
-        $event = $this->getInformationCollectEventDao()->getEventByActionAndLocation('buy_after', [
+        $event = $this->getInformationCollectEventDao()->getByActionAndLocation('buy_after', [
             'targetType' => 'course',
             'targetId' => '1',
         ]);
