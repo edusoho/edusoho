@@ -10031,3 +10031,14 @@ admin_v2.information_collection.create.form_items.tip: Please drag the optional 
 admin_v2.information_collection.create.form_items.warning_tip: Too many information collection items may affect user experience
 admin_v2.information_collection.create.form_items.allow_skip: Allow Skip
 admin_v2.information_collection.create.form_items.enable: Enable
+admin_v2.information_collection.create.target_type.all: All Course/Classroom
+admin_v2.information_collection.create.target_type.part: Selected Course/Classroom
+admin_v2.information_collection.create.target_type.all_course: All Course
+admin_v2.information_collection.create.target_type.all_classroom: All Classroom
+admin_v2.information_collection.create.target_type.tip: Prioritize the execution of the collection events of the specified course/classroom
+admin_v2.information_collection.binded_tips: Linked to other collection events
+admin_v2.information_collection.more: See Details
+admin_v2.information_collection.selected_course_count: Selected Course Count
+admin_v2.information_collection.selecte_course: Selecte Course
+admin_v2.information_collection.selected_classroom_count: Selected Classroom Count
+admin_v2.information_collection.selecte_classroom: Selecte Classroom

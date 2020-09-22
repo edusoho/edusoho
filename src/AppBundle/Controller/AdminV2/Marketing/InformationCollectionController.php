@@ -12,9 +12,9 @@ class InformationCollectionController extends BaseController
         return $this->render('admin-v2/marketing/information-collection/index.html.twig', []);
     }
 
-    public function createAction(Request $request)
+    public function editAction(Request $request)
     {
 
-        return $this->render('admin-v2/marketing/information-collection/create.html.twig', []);
+        return $this->render('admin-v2/marketing/information-collection/edit/index.html.twig', []);
     }
 }

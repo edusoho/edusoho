@@ -580,7 +580,7 @@ admin_v2:
                                             name: admin_v2.information_collection.create
                                             disable: true
                                             group: topBtn
-                                            router_name: admin_v2_information_collection_create
+                                            router_name: admin_v2_information_collection_edit
                 # 渠道管理
                 admin_v2_channel_group:
                     name: admin_v2.channel.basic_group

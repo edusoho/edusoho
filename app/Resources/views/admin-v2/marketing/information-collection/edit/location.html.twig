@@ -1,0 +1,62 @@
+<div class="radios">
+	<div class="action-type-group">
+		<label>
+			<input type="radio" name="actionType" value="all" checked="checked">
+			<span>{{ 'admin_v2.information_collection.create.target_type.all'|trans }}</span>
+			<label class="help-block display-inline">
+				{{ 'admin_v2.information_collection.create.target_type.tip'|trans }}
+			</label>
+			<div class="target-type-checkbox-group hidden">
+				<div class="target-type-checkbox">
+					<label class="pll">
+						<input type="checkbox" name="targetType[]" value="course">
+						<input class="target-ids" type="hidden" name="courseIds" value="">
+						<span>{{ 'admin_v2.information_collection.create.target_type.all_course'|trans }}</span>
+						<span class="text-muted display-inline hidden">
+							({{ 'admin_v2.information_collection.binded_tips'|trans }},<a href=''>{{ 'admin_v2.information_collection.more'|trans }}</a>)
+						</span>
+					</label>
+				</div>
+				<div class="target-type-checkbox">
+					<label class="pll">
+						<input type="checkbox" name="targetType[]" value="classroom" disabled>
+						<input class="target-ids" type="hidden" name="courseIds" value="">
+						<span class="text-muted">{{ 'admin_v2.information_collection.create.target_type.all_classroom'|trans }}</span>
+						<span class="text-muted display-inline">
+							({{ 'admin_v2.information_collection.binded_tips'|trans }},<a href=''>{{ 'admin_v2.information_collection.more'|trans }}</a>)
+						</span>
+					</label>
+				</div>
+			</div>
+		</label>
+	</div>
+
+	<div class="action-type-group">
+		<label>
+			<input type="radio" name="actionType" value="part" checked="checked">
+			<span>{{ 'admin_v2.information_collection.create.target_type.part'|trans }}</span>
+			<div class="target-type-checkbox-group">
+				<div class="target-type-checkbox">
+					<label class="pll">
+						<input type="checkbox" name="targetType[]" value="course">
+						<span>{{ 'admin_v2.information_collection.create.target_type.part_course'|trans }}</span>
+						<span class="display-inline">
+							{{ 'admin_v2.information_collection.selected_course_count'|trans }}<span class="selected-course-count"> 0 </span>
+                            [<a href=''>{{ 'admin_v2.information_collection.selecte_course'|trans }}]</a>
+						</span>
+					</label>
+				</div>
+				<div class="target-type-checkbox">
+					<label class="pll">
+						<input type="checkbox" name="targetType[]" value="classroom">
+						<span>{{ 'admin_v2.information_collection.create.target_type.part_classroom'|trans }}</span>
+						<span class="display-inline">
+							{{ 'admin_v2.information_collection.selected_classroom_count'|trans }}<span class="selected-course-count"> 0 </span>
+                            [<a href=''>{{ 'admin_v2.information_collection.selecte_classroom'|trans }}]</a>
+						</span>
+					</label>
+				</div>
+			</div>
+		</label>
+	</div>
+</div>
