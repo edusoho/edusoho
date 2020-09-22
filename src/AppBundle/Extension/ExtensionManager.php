@@ -4,23 +4,25 @@ namespace AppBundle\Extension;
 
 class ExtensionManager
 {
-    protected $extensions = array();
+    protected $extensions = [];
 
-    protected $questionTypes = array();
+    protected $questionTypes = [];
 
-    protected $payments = array();
+    protected $payments = [];
 
-    protected $activities = array();
+    protected $activities = [];
 
-    protected $callbacks = array();
+    protected $callbacks = [];
 
-    protected $taskToolbars = array();
+    protected $taskToolbars = [];
 
-    protected $courseTypes = array();
+    protected $courseTypes = [];
 
-    protected $wechatTemplates = array();
+    protected $wechatTemplates = [];
 
-    protected $newcomerTasks = array();
+    protected $newcomerTasks = [];
+
+    protected $favoriteTypes = [];
 
     public function addExtension(ExtensionInterface $extension)
     {
@@ -34,6 +36,7 @@ class ExtensionManager
         $this->courseTypes = array_merge($this->courseTypes, $extension->getCourseTypes());
         $this->wechatTemplates = array_merge($this->wechatTemplates, $extension->getWeChatTemplates());
         $this->newcomerTasks = array_merge($this->newcomerTasks, $extension->getNewcomerTasks());
+        $this->favoriteTypes = array_column($this->favoriteTypes, $extension->getFavoriteTypes());
     }
 
     public function getQuestionTypes()
@@ -74,5 +77,10 @@ class ExtensionManager
     public function getNewcomerTasks()
     {
         return $this->newcomerTasks;
+    }
+
+    public function getFavoriteTypes()
+    {
+        return $this->favoriteTypes;
     }
 }

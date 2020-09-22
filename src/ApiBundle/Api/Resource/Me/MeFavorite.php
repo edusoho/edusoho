@@ -11,7 +11,28 @@ class MeFavorite extends AbstractResource
 {
     public function search(ApiRequest $request)
     {
-//        return $this->getFavoriteService()->searchFavorites();
+        list($offset, $limit) = $this->getOffsetAndLimit($request);
+
+        $conditions = [
+            'userId' => $this->getCurrentUser()->getId(),
+        ];
+
+        $types = $request->query->get('types', []);
+
+        if (empty(!$types)) {
+            $conditions['targetTypes'] = $types;
+        }
+
+        $total = $this->getFavoriteService()->countFavorites($conditions);
+
+        $favorites = $this->getFavoriteService()->searchFavorites(
+            $conditions,
+            ['createdTime' => 'DESC'],
+            $offset,
+            $limit
+        );
+
+        return $this->makePagingObject(array_values($favorites), $total, $offset, $limit);
     }
 
     /**
