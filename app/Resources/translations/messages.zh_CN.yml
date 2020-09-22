@@ -11383,3 +11383,20 @@ exception.review.post_limit: 回复数量已达5条上限，不能再回复
 exception.favorite.forbidden_operate_favorite: 没有权限
 
 exception.s2b2c_product.adopt_failed: 采用失败，内容正在编辑中，请稍后再试
+
+admin_v2.information_collection.create.title_info: 当前只支持PC、新版微网校
+admin_v2.information_collection.create.title: 采集名称
+admin_v2.information_collection.create.action: 采集位置
+admin_v2.information_collection.create.action_before: 课程/班级商品支付前
+admin_v2.information_collection.create.action_after: 课程/班级商品支付后
+admin_v2.information_collection.create.action_before.help_block: 含免费商品加入前
+admin_v2.information_collection.create.action_before.tip: 支付前采集用户信息，可能影响购买转化率
+admin_v2.information_collection.create.action_after.help_block: 含免费商品加入后
+admin_v2.information_collection.create.form_items: 采集表单
+admin_v2.information_collection.create.form_items.tip: 请从右侧拖拽可选的信息采集项至左侧，可上下拖动排序
+admin_v2.information_collection.create.form_items.code: 用户看到的表单标题
+admin_v2.information_collection.create.form_items.warning_tip: 信息采集项过多，可能影响用户使用体验
+admin_v2.information_collection.create.form_items.allow_skip: 是否允许用户跳过
+admin_v2.information_collection.create.form_items.skip.allow: 允许跳过
+admin_v2.information_collection.create.form_items.skip.not_allow: 不允许跳过
+admin_v2.information_collection.create.form_items.enable: 是否启用本次采集

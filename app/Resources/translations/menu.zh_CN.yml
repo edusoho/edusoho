@@ -960,3 +960,6 @@ admin_v2.course.basic.basic_tab.go_to_choose_btn: 去内容市场选择
 
 exception.goods.not_found: 商品未找到
 
+admin_v2.information_collection.menu: 用户信息采集
+admin_v2.information_collection.tab: 用户信息采集
+admin_v2.information_collection.create: 创建

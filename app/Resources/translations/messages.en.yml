@@ -10017,3 +10017,17 @@ user.certificates.detail_cert_message: Certificate information
 user.certificates.unclaimed_list: Certificate to be received
 user.certificates.cart_title: Certificate of honor
 user.certificates.cart_detail_btn: View get path
+
+admin_v2.information_collection.create.title_info: Only support PC and micro school
+admin_v2.information_collection.create.title: Title
+admin_v2.information_collection.create.action: Action
+admin_v2.information_collection.create.action_before: Before Course/Classroom Pay
+admin_v2.information_collection.create.action_after: After Course/Classroom Pay
+admin_v2.information_collection.create.action_before.help_block: Include free products before joining
+admin_v2.information_collection.create.action_before.tip: Collect user information before payment, which may affect purchase conversion rate
+admin_v2.information_collection.create.action_after.help_block: Include free products after joining
+admin_v2.information_collection.create.form_items: Form items
+admin_v2.information_collection.create.form_items.tip: Please drag the optional information collection items from the right to the left, and you can drag up and down to sort
+admin_v2.information_collection.create.form_items.warning_tip: Too many information collection items may affect user experience
+admin_v2.information_collection.create.form_items.allow_skip: Allow Skip
+admin_v2.information_collection.create.form_items.enable: Enable

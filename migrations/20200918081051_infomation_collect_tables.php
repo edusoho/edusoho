@@ -16,7 +16,7 @@ class InfomationCollectTables extends Migration
               `title` varchar(256) NOT NULL COMMENT '信息采集的标题',
               `action` varchar(32) NOT NULL COMMENT '信息采集的位置行为buy_after=购买后，buy_before=购买前',
               `formTitle` varchar(64) NOT NULL COMMENT '信息采集表单的标题',
-              `status` varchar(32) NOT NULL DEFAULT 'open' COMMENT '信息采集开启状态',
+              `status` varchar(32) NOT NULL DEFAULT 'open' COMMENT '信息采集开启状态,open:开启;close:关闭',
               `allowSkip` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否允许跳过',
               `creator` int(11) unsigned NOT NULL COMMENT '创建者',
               `createdTime` int(10) unsigned NOT NULL DEFAULT '0',

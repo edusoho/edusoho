@@ -2730,3 +2730,11 @@ admin_v2_plumber:
 admin_v2_plumber_queue:
   path: /plumber/queue
   defaults: { _controller: AppBundle:AdminV2/Developer/Plumber:queue }
+
+admin_v2_information_collection:
+  path: /information/collection
+  defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollection:index }
+
+admin_v2_information_collection_create:
+  path: /information/collection/create
+  defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollection:create }
