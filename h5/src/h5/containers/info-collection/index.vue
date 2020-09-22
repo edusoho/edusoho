@@ -15,7 +15,7 @@
         error-message-align="left"
         style="padding: 2.66667vw 4.26667vw;"
       /> -->
-
+      <sexSelect />
       <div v-for="(item, index) in rule" :key="index">
         <div v-show="item.field === 'province_city_area' || 'birthday'">
           <areaSelect v-show="item.field === 'province_city_area'" />
@@ -50,10 +50,12 @@
 <script>
 import areaSelect from './components/areaSelect.vue';
 import birthdatSelect from './components/birthdaySelect.vue';
+import sexSelect from './components/sexSelect.vue';
 export default {
   components: {
     areaSelect,
     birthdatSelect,
+    sexSelect,
   },
   data() {
     return {
