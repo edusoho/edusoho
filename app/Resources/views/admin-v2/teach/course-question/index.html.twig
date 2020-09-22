@@ -51,9 +51,7 @@
       </thead>
       <tbody class="tbody">
         {% for question in questions %}
-
           {% set author = users[question.userId]|default(null) %}
-          {% set courseSet = courseSets[question.courseSetId]|default(null) %}
           {% set course = courses[question.courseId]|default(null) %}
           {% set task = tasks[question.taskId]|default(null) %}
           {% if question.title == '' %}
@@ -78,15 +76,9 @@
               </div>
 
               <div class="text-sm mts">
-                {% if courseSet %}
-                  <a href="{{ path('course_show', {id:course.id}) }}" class="text-success" target="_blank">{{ courseSet.title }}</a>
-                {% endif %}
-
                 {% if course %}
-                  <span class="text-muted mhs">&raquo;</span>
-                  <a href="{{ path('course_show', {id:course.id}) }}" class="text-success" target="_blank">{{ course.title }}</a>
+                  <a href="{{ path('course_show', {id:course.id}) }}" class="text-success" target="_blank">{{ get_formated_course_title(course) }}</a>
                 {% endif %}
-
                 {% if task %}
                   <span class="text-muted mhs">&raquo;</span>
                   <a class="text-success"  href="{{ path('course_task_show', {courseId:question.courseId, id:task.id}) }}" target="_blank">{{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}{{task.number}}：{{ task.title }}</a>

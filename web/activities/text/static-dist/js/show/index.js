@@ -26,7 +26,7 @@ load.then(function(){
       }
       $('#text-activity').perfectScrollbar('update');
     }
-    document.querySelectorAll('pre code').forEach((block) => {
+    document.querySelectorAll('pre code').forEach(function(block) {
       hljs.highlightBlock(block);
     });
   });

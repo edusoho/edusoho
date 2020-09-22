@@ -7,6 +7,8 @@ use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class ResultDaoImpl extends GeneralDaoImpl implements ResultDao
 {
+    protected $table = 'information_collect_result';
+
     public function declares()
     {
         return [
@@ -20,7 +22,8 @@ class ResultDaoImpl extends GeneralDaoImpl implements ResultDao
                 'updatedTime',
             ],
             'conditions' => [
-                'id = :id',
+                'submitter = :submitter',
+                'eventId = :eventId',
             ],
         ];
     }

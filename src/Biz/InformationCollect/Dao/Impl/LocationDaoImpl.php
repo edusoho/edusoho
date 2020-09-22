@@ -7,6 +7,8 @@ use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
 class LocationDaoImpl extends AdvancedDaoImpl implements LocationDao
 {
+    protected $table = 'information_collect_location';
+
     public function declares()
     {
         return [
