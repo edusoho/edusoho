@@ -2,49 +2,39 @@
   <div class="">
     <van-form ref="infoCellectForm">
       <!-- <sexSelect /> -->
-      <div v-for="(item, index) in rule" :key="index">
-        <!-- <div v-show="item.field === 'province_city_area' || 'birthday'">
-          <areaSelect v-show="item.field === 'province_city_area'" />
-          <birthdatSelect v-show="item.field === 'birthday'" />
-        </div> -->
-        <!-- 
-           :error-message="getErrorMessage(item.value, item.validate)"
-            @blur="avalidator(item.value, item.validate)"
-         -->
-
-        <div>
-          <!-- text ，number -->
-          <template v-if="isDefaultType(item)">
-            <van-field
-              v-model="item.value"
-              :name="item.field"
-              :label="item.title"
-              :required="isRequired(item.validate)"
-              required-align="right"
-              :placeholder="`请输入${item.title}`"
-              clearable
-              @click-input="clickInput(index)"
-              :error="errorRule[index].error"
-              :error-message="errorRule[index].errorMessage"
-              @blur="checkField(index, item.value, item.validate)"
-              error-message-align="left"
-              style="padding: 2.66667vw 4.26667vw;"
-            />
-          </template>
-          <!-- select -->
-          <template v-if="isSelectType(item)">
-            <van-field
-              readonly
-              v-model="item.value"
-              :label="item.title"
-              placeholder="请选择"
-              right-icon=" iconfangxiang my_setting-more-special"
-              icon-prefix="iconfont"
-              @click="showPicker(item, index)"
-            />
-          </template>
-        </div>
-      </div>
+      <template v-for="(item, index) in rule">
+        <!-- text ，number -->
+        <template v-if="isDefaultType(item)">
+          <van-field
+            :key="index"
+            v-model="item.value"
+            :name="item.field"
+            :label="item.title"
+            :required="isRequired(item.validate)"
+            required-align="right"
+            :placeholder="`请输入${item.title}`"
+            clearable
+            :error="errorRule[index].error"
+            :error-message="errorRule[index].errorMessage"
+            @blur="checkField(index, item.value, item.validate)"
+            error-message-align="left"
+          />
+        </template>
+        <!-- select -->
+        <template v-if="isSelectType(item)">
+          <van-field
+            :key="index"
+            readonly
+            v-model="item.value"
+            :name="item.field"
+            :label="item.title"
+            placeholder="请选择"
+            right-icon=" iconfangxiang my_setting-more-special"
+            icon-prefix="iconfont"
+            @click="showPicker(item, index)"
+          />
+        </template>
+      </template>
 
       <div style="margin: 16px;">
         <van-button round block type="info" @click="onSubmit">
@@ -202,7 +192,7 @@ export default {
           title: '微信号',
           value: '',
           validate: [
-            // { required: true, message: '请输入微信号' },
+            { required: true, message: '请输入微信号' },
             {
               pattern: '^[a-zA-Z]([-_a-zA-Z0-9]{5,19})+$',
               message: '微信号格式不正确',
@@ -397,6 +387,7 @@ export default {
     onSubmit() {
       for (let i = 0; i < this.rule.length; i++) {
         if (!this.checkField(i, this.rule[i].value, this.rule[i].validate)) {
+          this.$refs.infoCellectForm.scrollToField(this.rule[i].field);
           break;
         }
       }
@@ -454,29 +445,6 @@ export default {
         }
       }
       return true;
-    },
-    clickInput(index) {
-      this.currentSelectIndex = index;
-    },
-    getErrorMessage(value, validate) {
-      if (!validate) {
-        return;
-      }
-      for (let i = 0; i < validate.length; i++) {
-        if (value && validate[i].min && value.length < validate[i].min) {
-          console.log('sss' + validate[i].message);
-          return validate[i].message;
-        }
-        if (value && validate[i].max && value.length > validate[i].max) {
-          console.log('sss' + validate[i].message);
-          return validate[i].message;
-        }
-        const reg = new RegExp(validate[i].pattern);
-        if (value && !reg.test(value)) {
-          return validate[i].message;
-        }
-      }
-      return '';
     },
     isRequired(rule) {
       for (let i = 0; i < rule.length; i++) {

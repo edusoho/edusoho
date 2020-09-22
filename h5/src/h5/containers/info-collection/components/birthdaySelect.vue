@@ -3,7 +3,6 @@
     <van-field
       readonly
       v-model="info.showBirthday"
-      :value="value"
       label="生日"
       placeholder="请选择年月日"
       right-icon=" iconfangxiang my_setting-more-special"
