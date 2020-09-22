@@ -1,61 +1,102 @@
 <template>
   <div class="">
-    <van-form validate-first @submit="onSubmit">
-      <!-- 姓名
-      <van-field
-        v-model="rule[0].value"
-        :name="rule[0].field"
-        :label="rule[0].title"
-        :required="isRequired(rule[0].validate)"
-        required-align="right"
-        :placeholder="`请输入${rule[0].title}`"
-        clearable
-        @blur="avalidator(rule[0].value, rule[0].validate)"
-        :error-message="getErrorMessage(rule[0].value, rule[0].validate)"
-        error-message-align="left"
-        style="padding: 2.66667vw 4.26667vw;"
-      /> -->
-      <sexSelect />
+    <van-form ref="infoCellectForm">
+      <!-- <sexSelect /> -->
       <div v-for="(item, index) in rule" :key="index">
-        <div v-show="item.field === 'province_city_area' || 'birthday'">
+        <!-- <div v-show="item.field === 'province_city_area' || 'birthday'">
           <areaSelect v-show="item.field === 'province_city_area'" />
           <birthdatSelect v-show="item.field === 'birthday'" />
-        </div>
-        <div>
-          <van-field
-            v-model="item.value"
-            :name="item.field"
-            :label="item.title"
-            :required="isRequired(item.validate)"
-            required-align="right"
-            :placeholder="`请输入${item.title}`"
-            clearable
+        </div> -->
+        <!-- 
+           :error-message="getErrorMessage(item.value, item.validate)"
             @blur="avalidator(item.value, item.validate)"
-            :error-message="getErrorMessage(item.value, item.validate)"
-            error-message-align="left"
-            style="padding: 2.66667vw 4.26667vw;"
-          />
+         -->
+
+        <div>
+          <!-- text ，number -->
+          <template v-if="isDefaultType(item)">
+            <van-field
+              v-model="item.value"
+              :name="item.field"
+              :label="item.title"
+              :required="isRequired(item.validate)"
+              required-align="right"
+              :placeholder="`请输入${item.title}`"
+              clearable
+              @click-input="clickInput(index)"
+              :error="errorRule[index].error"
+              :error-message="errorRule[index].errorMessage"
+              @blur="checkField(index, item.value, item.validate)"
+              error-message-align="left"
+              style="padding: 2.66667vw 4.26667vw;"
+            />
+          </template>
+          <!-- select -->
+          <template v-if="isSelectType(item)">
+            <van-field
+              readonly
+              v-model="item.value"
+              :label="item.title"
+              placeholder="请选择"
+              right-icon=" iconfangxiang my_setting-more-special"
+              icon-prefix="iconfont"
+              @click="showPicker(item, index)"
+            />
+          </template>
         </div>
       </div>
 
       <div style="margin: 16px;">
-        <van-button round block type="info" native-type="submit">
+        <van-button round block type="info" @click="onSubmit">
           提交
         </van-button>
       </div>
     </van-form>
+
+    <van-action-sheet v-model="birthtDateSelect.show">
+      <van-datetime-picker
+        v-model="birthtDateSelect.birthtDate"
+        type="date"
+        title="选择年月日"
+        :min-date="birthtDateSelect.minDate"
+        :max-date="birthtDateSelect.maxDate"
+        @confirm="birthConfirm"
+        @cancel="birthCancel"
+      />
+    </van-action-sheet>
+
+    <van-action-sheet v-model="areaSelect.show">
+      <van-area
+        title="选择地区"
+        :area-list="areaList"
+        @confirm="areaConfirm"
+        @cancel="areaCancel"
+      />
+    </van-action-sheet>
+
+    <van-action-sheet v-model="sexSelect.show">
+      <van-picker
+        show-toolbar
+        :columns="sexSelect.columns"
+        @confirm="sexConfirm"
+        @cancel="sexCancel"
+      />
+    </van-action-sheet>
   </div>
 </template>
 
 <script>
-import areaSelect from './components/areaSelect.vue';
-import birthdatSelect from './components/birthdaySelect.vue';
-import sexSelect from './components/sexSelect.vue';
+// import areaSelect from './components/areaSelect.vue';
+// import birthdatSelect from './components/birthdaySelect.vue';
+// import sexSelect from './components/sexSelect.vue';
+import { arealist } from '@/utils/arealist';
+const defaultType = ['input', 'InputNumber'];
+const selectType = ['select', 'cascader', 'DatePicker'];
 export default {
   components: {
-    areaSelect,
-    birthdatSelect,
-    sexSelect,
+    // areaSelect,
+    // birthdatSelect,
+    // sexSelect,
   },
   data() {
     return {
@@ -95,17 +136,17 @@ export default {
             { max: 20, message: '最多20个字' },
           ],
         },
-        // {
-        //   type: 'select',
-        //   field: 'gender',
-        //   title: '性别',
-        //   value: '男',
-        //   options: [
-        //     { value: '男', label: '男' },
-        //     { value: '女', label: '女' },
-        //     { value: '保密', label: '保密' },
-        //   ],
-        // },
+        {
+          type: 'select',
+          field: 'gender',
+          title: '性别',
+          value: '男',
+          options: [
+            { value: '男', label: '男' },
+            { value: '女', label: '女' },
+            { value: '保密', label: '保密' },
+          ],
+        },
         {
           type: 'InputNumber',
           field: 'age',
@@ -323,27 +364,78 @@ export default {
           ],
         },
       ],
+      birthtDateSelect: {
+        minDate: new Date(1900, 1, 1),
+        maxDate: new Date(),
+        birthtDate: new Date(),
+        show: false,
+      },
+      areaSelect: {
+        show: false,
+      },
+      sexSelect: {
+        show: false,
+        columns: ['男', '女', '保密'],
+      },
+      currentSelectIndex: 0,
+      areaList: Object.freeze(arealist),
+      errorRule: [],
     };
   },
   computed: {},
   watch: {},
-  created() {},
+  created() {
+    this.getErrorRule();
+  },
   methods: {
-    onSubmit(values) {
-      console.log('submit', values);
+    getErrorRule() {
+      const rule = this.rule;
+      rule.forEach(() => {
+        this.errorRule.push({ error: false, errorMessage: '' });
+      });
     },
-    areaConfirm(val) {
-      this.info.province = val[0].name;
-      this.info.city = val[1].name;
-      if (this.info.province === this.info.city) {
-        this.info.area = this.info.city;
-      } else this.info.area = this.info.province + ' ' + this.info.city;
-      this.show.area = false;
+    onSubmit() {
+      for (let i = 0; i < this.rule.length; i++) {
+        if (!this.checkField(i, this.rule[i].value, this.rule[i].validate)) {
+          break;
+        }
+      }
     },
-    areaCancel() {
-      this.show.area = !this.show.area;
+    checkField(index, value, validate) {
+      if (!validate) {
+        return;
+      }
+      for (let i = 0; i < validate.length; i++) {
+        if (validate[i].min && value.length < validate[i].min) {
+          this.setError(index, true, validate[i].message);
+          return false;
+        }
+        if (validate[i].max && value.length > validate[i].max) {
+          this.setError(index, true, validate[i].message);
+          return false;
+        }
+        if (validate[i].pattern) {
+          const reg = new RegExp(validate[i].pattern);
+          if (!reg.test(value)) {
+            this.setError(index, true, validate[i].message);
+            return false;
+          }
+        }
+      }
+      this.setError(index, false, '');
+      return true;
+    },
+    setError(index, error, errorMessage) {
+      const rule = {
+        error: error,
+        errorMessage: errorMessage,
+      };
+      this.$set(this.errorRule, index, rule);
     },
     avalidator(value, validate) {
+      if (!validate) {
+        return;
+      }
       // console.log('aaa');
       for (let i = 0; i < validate.length; i++) {
         if (validate[i].min && value.length < validate[i].min) {
@@ -363,7 +455,13 @@ export default {
       }
       return true;
     },
+    clickInput(index) {
+      this.currentSelectIndex = index;
+    },
     getErrorMessage(value, validate) {
+      if (!validate) {
+        return;
+      }
       for (let i = 0; i < validate.length; i++) {
         if (value && validate[i].min && value.length < validate[i].min) {
           console.log('sss' + validate[i].message);
@@ -388,17 +486,71 @@ export default {
       }
       return false;
     },
-
-    birthConfirm() {
-      this.info.showBirthday = this.formatDate(this.birthtDate);
-      this.info.birthday = this.getTime(this.info.showBirthday) / 1000;
-      this.show.birthday = false;
+    isDefaultType(item) {
+      if (defaultType.includes(item.type)) {
+        return true;
+      }
+      return false;
+    },
+    isSelectType(item) {
+      if (selectType.includes(item.type)) {
+        return true;
+      }
+      return false;
+    },
+    showPicker(item, index) {
+      this.currentSelectIndex = index;
+      switch (item.type) {
+        case 'DatePicker':
+          this.birthtDateSelect.show = true;
+          break;
+        case 'cascader':
+          this.areaSelect.show = true;
+          break;
+        case 'select':
+          this.sexSelect.show = true;
+          break;
+      }
     },
     formatDate(date) {
       return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
     },
+    birthConfirm() {
+      const currentSelectIndex = this.currentSelectIndex;
+      this.$set(
+        this.rule[currentSelectIndex],
+        'value',
+        this.formatDate(this.birthtDateSelect.birthtDate),
+      );
+      // this.rule[currentSelectIndex].value = this.formatDate(this.birthtDate);
+      this.birthCancel();
+    },
     birthCancel() {
-      this.show.birthday = !this.show.birthday;
+      this.birthtDateSelect.show = false;
+    },
+    areaConfirm(val) {
+      const currentSelectIndex = this.currentSelectIndex;
+      const province = val[0].name;
+      const city = val[1].name;
+      const local = val[2].name;
+
+      let area = province + ' ' + city + ' ' + local;
+      if (province === city) {
+        area = city + ' ' + local;
+      }
+      this.$set(this.rule[currentSelectIndex], 'value', area);
+      this.areaCancel();
+    },
+    areaCancel() {
+      this.areaSelect.show = false;
+    },
+    sexCancel() {
+      this.sexSelect.show = false;
+    },
+    sexConfirm(value) {
+      const currentSelectIndex = this.currentSelectIndex;
+      this.$set(this.rule[currentSelectIndex], 'value', value);
+      this.sexCancel();
     },
   },
 };
