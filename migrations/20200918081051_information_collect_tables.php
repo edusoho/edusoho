@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class InfomationCollectTables extends Migration
+class InformationCollectTables extends Migration
 {
     /**
      * Do the migration

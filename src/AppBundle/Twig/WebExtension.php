@@ -23,6 +23,7 @@ use Biz\Account\Service\AccountProxyService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\InformationCollect\Service\EventService;
+use Biz\Common\JsonLogger;
 use Biz\Player\Service\PlayerService;
 use Biz\S2B2C\Service\FileSourceService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
@@ -32,6 +33,8 @@ use Biz\User\Service\TokenService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Topxia\Service\Common\ServiceKernel;
@@ -1877,6 +1880,10 @@ class WebExtension extends \Twig_Extension
 
     public function getCloudSdkUrl($type)
     {
+        $stream = new StreamHandler(ServiceKernel::instance()->getParameter('kernel.logs_dir').'/cloud-api.log', Logger::DEBUG);
+        $logger = new JsonLogger('CloudAPI', $stream);
+        $logger->addInfo($type.'--getCloudSdkUrl');
+
         return $this->getResourceFacadeService()->getFrontPlaySDKPathByType($type);
     }
 

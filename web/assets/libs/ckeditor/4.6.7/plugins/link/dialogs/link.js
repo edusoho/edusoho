@@ -431,8 +431,6 @@
 						style: 'width : 100%;',
 						'items': [
 							[ commonLang.notSet, 'notSet' ],
-							[ linkLang.targetFrame, 'frame' ],
-							[ linkLang.targetPopup, 'popup' ],
 							[ commonLang.targetNew, '_blank' ],
 							[ commonLang.targetTop, '_top' ],
 							[ commonLang.targetSelf, '_self' ],
