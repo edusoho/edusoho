@@ -23,19 +23,19 @@ class ResultDaoTest extends BaseTestCase
                     'formTitle' => 'test1',
                     'submitter' => 2,
                     'eventId' => 1,
-                    'createdTime' => time()
+                    'createdTime' => time(),
                 ],
                 [
                     'formTitle' => 'test1',
                     'submitter' => 3,
                     'eventId' => 1,
-                    'createdTime' => time()
+                    'createdTime' => time(),
                 ],
                 [
                     'formTitle' => 'test2',
                     'submitter' => 2,
                     'eventId' => 2,
-                    'createdTime' => time()
+                    'createdTime' => time(),
                 ],
             ]
         );

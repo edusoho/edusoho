@@ -67,7 +67,7 @@ class EventServiceTest extends BaseTestCase
         $this->mockEvents();
         $result = $this->getInformationCollectEventService()->getEventLocations(1);
 
-        $this->assertEquals([1,2], $result['course']);
+        $this->assertEquals([1, 2], $result['course']);
     }
 
     protected function mockEvent()

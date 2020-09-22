@@ -2053,20 +2053,20 @@ class WebExtension extends \Twig_Extension
         $locationInfos = $this->getEventService()->getEventLocations($eventId);
 
         $locationInfo = '';
-        if (isset($locationInfos['course'])){
-            if(0 == $locationInfos['course'][0]){
+        if (isset($locationInfos['course'])) {
+            if (0 == $locationInfos['course'][0]) {
                 $locationInfo .= '全部课程；';
-            }else{
+            } else {
                 $courses = $this->getCourseService()->findCoursesByIds($locationInfos['course']);
-                $locationInfo .= implode('；', ArrayToolkit::column($courses, 'courseSetTitle')) . '；course1；myCourse1；homeworkClass；aaaa；';
+                $locationInfo .= implode('；', ArrayToolkit::column($courses, 'courseSetTitle')).'；course1；myCourse1；homeworkClass；aaaa；';
             }
         }
-        if (isset($locationInfos['classroom'])){
-            if(0 == $locationInfos['classroom'][0]){
+        if (isset($locationInfos['classroom'])) {
+            if (0 == $locationInfos['classroom'][0]) {
                 $locationInfo .= '全部班级；';
-            }else{
+            } else {
                 $classrooms = $this->getClassroomService()->findClassroomsByIds($locationInfos['course']);
-                $locationInfo .= implode('；', ArrayToolkit::column($classrooms, 'title')) . '；';
+                $locationInfo .= implode('；', ArrayToolkit::column($classrooms, 'title')).'；';
             }
         }
 
