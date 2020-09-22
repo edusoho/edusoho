@@ -22,39 +22,32 @@ class S2B2CService extends BaseService
 
     /**
      * 上报支付成功的订单
-     *
-     * @param $order array biz_order
-     * @param $orderItems array biz_order_item (每个Item需要增加源数据的Id信息, key为origin_product_id)
+     * 
+     * merchantOrderId => es本地订单id
+     * merchantOrderRefundDays => es本地订单退款时间
+     * merchantOrderUserNickname => es本地订单购买者
+     * productDetailId => s2b2c端productDetailId
+     * merchantReportId => es订单结算上报id
      *
      * @return
      */
-    public function reportSuccessOrder($order, $orderItems)
+    public function reportSuccessOrder($params)
     {
-        $params = array(
-            'merchantOrder' => $order,
-            'merchantOrderItems' => $orderItems,
-        );
-
         return $this->sendRequest('/distribute/order/settlement/report', $params, 'POST');
     }
 
     /**
      * 上报退款成功的订单
-     *
-     * @param $order
-     * @param $orderRefund
-     * @param $orderRefundItems
+     * 
+     * productDetailId => s2b2c端productDetailId
+     * merchantRefundReportId => es本地退款上报id
+     * merchantOrderId => es本地订单id
+     * merchantLastReportId => es订单结算时的上报id
      *
      * @return array
      */
-    public function reportRefundOrder($order, $orderRefund, $orderRefundItems)
+    public function reportRefundOrder($params)
     {
-        $params = array(
-            'merchantOrder' => $order,
-            'merchantOrderRefund' => $orderRefund,
-            'merchantOrderRefundItems' => $orderRefundItems,
-        );
-
         return $this->sendRequest('/order/report/refund', $params, 'POST');
     }
 
