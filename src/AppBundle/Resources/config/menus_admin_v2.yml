@@ -570,6 +570,30 @@ admin_v2:
                                     name: admin_v2.micromarketing.menu
                                     router_name: admin_v2_login_micromarketing_boot
                                     disable: true
+                        # 用户信息采集
+                        admin_v2_information_collection_manage:
+                            name: admin_v2.information_collection.menu
+                            children:
+                                admin_v2_information_collection:
+                                    name: admin_v2.information_collection.tab
+                                    disable: true
+                                    children:
+                                        admin_v2_information_collection_close:
+                                            name: admin_v2.information_collection.operate.close_tab
+                                            class: close-collection
+                                            router_params:
+                                                id: (collect.id)
+                                            group: groupButton
+                                            mode: none
+                                            visible: ( collect.status=='open' )
+                                        admin_v2_information_collection_open:
+                                            name: admin_v2.information_collection.operate.open_tab
+                                            class: open-collection
+                                            router_params:
+                                              id: (collect.id)
+                                            group: groupButton
+                                            mode: none
+                                            visible: ( collect.status!='open' )
                 # 渠道管理
                 admin_v2_channel_group:
                     name: admin_v2.channel.basic_group
@@ -772,7 +796,7 @@ admin_v2:
                                         admin_v2_batch_notification_create:
                                             name: admin_v2.operation.notification.basic_tab.create_btn
                                             group: topBtn
-                        # 网站公告管理
+#                        # 网站公告管理
                         admin_v2_operation_announcement:
                             name: admin_v2.operation.announcement_menu
                             group: 2

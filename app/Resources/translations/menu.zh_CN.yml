@@ -684,6 +684,14 @@ admin_v2.operation.invite.coupon_tab: 奖励查询
 #营销-营销管理-微营销
 admin_v2.micromarketing.menu: 微营销
 
+#营销-营销管理-用户信息采集
+admin_v2.information_collection.menu: 用户信息采集
+admin_v2.information_collection.tab: 用户信息采集
+admin_v2.information_collection.operate.update_tab: 编辑
+admin_v2.information_collection.operate.close_tab: 关闭采集
+admin_v2.information_collection.operate.open_tab: 开启采集
+admin_v2.information_collection.export_excel_tab: 导出Excel文件
+
 #运营-内容运营-小组管理
 admin_v2.operation.group_menu: 小组管理
 admin_v2.operation.group.group_tab: 小组管理

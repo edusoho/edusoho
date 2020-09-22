@@ -20,7 +20,10 @@ use AppBundle\Util\CategoryBuilder;
 use AppBundle\Util\CdnUrl;
 use AppBundle\Util\UploadToken;
 use Biz\Account\Service\AccountProxyService;
+use Biz\Classroom\Service\ClassroomService;
 use Biz\Common\JsonLogger;
+use Biz\Course\Service\CourseService;
+use Biz\InformationCollect\Service\EventService;
 use Biz\Player\Service\PlayerService;
 use Biz\S2B2C\Service\FileSourceService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
@@ -200,6 +203,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_s2b2c_enabled', [$this, 'isS2B2CEnabled']),
             new \Twig_SimpleFunction('s2b2c_has_behaviour_permission', [$this, 's2b2cHasBehaviourPermission']),
             new \Twig_SimpleFunction('make_local_media_file_token', [$this, 'makeLocalMediaFileToken']),
+            new \Twig_SimpleFunction('information_collection_location_info', [$this, 'informationCollectionLocationInfo']),
         ];
     }
 
@@ -2049,6 +2053,55 @@ class WebExtension extends \Twig_Extension
         }
 
         return $this->getTokenService()->makeToken($type, $fields);
+    }
+
+    public function informationCollectionLocationInfo($eventId)
+    {
+        $locationInfos = $this->getEventService()->getEventLocations($eventId);
+
+        $locationInfo = '';
+        if (isset($locationInfos['course'])) {
+            if (0 == $locationInfos['course'][0]) {
+                $locationInfo .= '全部课程；';
+            } else {
+                $courses = $this->getCourseService()->findCoursesByIds($locationInfos['course']);
+                $locationInfo .= implode('；', ArrayToolkit::column($courses, 'courseSetTitle')).'；course1；myCourse1；homeworkClass；aaaa；';
+            }
+        }
+        if (isset($locationInfos['classroom'])) {
+            if (0 == $locationInfos['classroom'][0]) {
+                $locationInfo .= '全部班级；';
+            } else {
+                $classrooms = $this->getClassroomService()->findClassroomsByIds($locationInfos['course']);
+                $locationInfo .= implode('；', ArrayToolkit::column($classrooms, 'title')).'；';
+            }
+        }
+
+        return $locationInfo;
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
+    }
+
+    /**
+     * @return EventService
+     */
+    protected function getEventService()
+    {
+        return $this->createService('InformationCollect:EventService');
     }
 
     /**

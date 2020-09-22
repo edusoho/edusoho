@@ -4,9 +4,9 @@ namespace Biz\InformationCollect\Dao\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\InformationCollect\Dao\EventDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class EventDaoImpl extends GeneralDaoImpl implements EventDao
+class EventDaoImpl extends AdvancedDaoImpl implements EventDao
 {
     protected $table = 'information_collect_event';
 
@@ -38,7 +38,7 @@ class EventDaoImpl extends GeneralDaoImpl implements EventDao
             'serializes' => [
             ],
             'orderbys' => [
-                'id',
+                'id', 'createdTime',
             ],
             'timestamps' => [
                 'createdTime',
@@ -46,6 +46,9 @@ class EventDaoImpl extends GeneralDaoImpl implements EventDao
             ],
             'conditions' => [
                 'id = :id',
+                'title like :title',
+                'createdTime >= :startDate',
+                'createdTime < :endDate',
             ],
         ];
     }
