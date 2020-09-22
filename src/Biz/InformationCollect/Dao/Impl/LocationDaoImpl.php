@@ -9,16 +9,10 @@ class LocationDaoImpl extends AdvancedDaoImpl implements LocationDao
 {
     protected $table = 'information_collect_location';
 
-    public function findByEventIds($eventIds)
-    {
-        return $this->findInField('eventId', $eventIds);
-    }
-
     public function declares()
     {
         return [
             'serializes' => [
-                'targetId' => 'delimiter',
             ],
             'orderbys' => [
                 'id',
@@ -28,7 +22,7 @@ class LocationDaoImpl extends AdvancedDaoImpl implements LocationDao
             ],
             'conditions' => [
                 'id = :id',
-                'eventId IN (:eventIds)',
+                'eventId = :eventId',
             ],
         ];
     }

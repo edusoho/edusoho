@@ -11,7 +11,7 @@ class InfomationCollectTables extends Migration
     {
         $biz = $this->getContainer();
         $biz['db']->exec("
-            CREATE TABLE `infomation_collect_event` (
+            CREATE TABLE `information_collect_event` (
               `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
               `title` varchar(256) NOT NULL COMMENT '信息采集的标题',
               `action` varchar(32) NOT NULL COMMENT '信息采集的位置行为buy_after=购买后，buy_before=购买前',
@@ -26,7 +26,7 @@ class InfomationCollectTables extends Migration
         ");
 
         $biz['db']->exec("
-            CREATE TABLE `infomation_collect_item` (
+            CREATE TABLE `information_collect_item` (
               `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
               `eventId` int(11) unsigned NOT NULL COMMENT '采集事件ID',
               `code` varchar(32) NOT NULL COMMENT '表单的code，作为表单的name',
@@ -39,7 +39,7 @@ class InfomationCollectTables extends Migration
         ");
 
         $biz['db']->exec("
-            CREATE TABLE `infomation_collect_location` (
+            CREATE TABLE `information_collect_location` (
               `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
               `eventId` int(11) unsigned NOT NULL COMMENT '采集事件ID',
               `action` varchar(32) NOT NULL DEFAULT '' COMMENT '信息采集的位置行为',
@@ -53,7 +53,7 @@ class InfomationCollectTables extends Migration
         ");
 
         $biz['db']->exec("
-            CREATE TABLE `infomation_collect_result` (
+            CREATE TABLE `information_collect_result` (
               `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
               `formTitle` varchar(64) NOT NULL COMMENT '表单标题',
               `submitter` int(11) unsigned NOT NULL COMMENT '提交人',
@@ -65,7 +65,7 @@ class InfomationCollectTables extends Migration
         ");
 
         $biz['db']->exec("
-            CREATE TABLE `infomation_collect_result_item` (
+            CREATE TABLE `information_collect_result_item` (
               `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
               `eventId` int(11) unsigned NOT NULL COMMENT '采集事件ID',
               `resultId` int(11) unsigned NOT NULL COMMENT '采集结果ID',
@@ -85,10 +85,10 @@ class InfomationCollectTables extends Migration
     public function down()
     {
         $biz = $this->getContainer();
-        $biz['db']->exec('DROP TABLE IF EXISTS `infomation_collect_event`;');
-        $biz['db']->exec('DROP TABLE IF EXISTS `infomation_collect_item`;');
-        $biz['db']->exec('DROP TABLE IF EXISTS `infomation_collect_location`;');
-        $biz['db']->exec('DROP TABLE IF EXISTS `infomation_collect_result `;');
-        $biz['db']->exec('DROP TABLE IF EXISTS `infomation_collect_result_item`;');
+        $biz['db']->exec('DROP TABLE IF EXISTS `information_collect_event`;');
+        $biz['db']->exec('DROP TABLE IF EXISTS `information_collect_item`;');
+        $biz['db']->exec('DROP TABLE IF EXISTS `information_collect_location`;');
+        $biz['db']->exec('DROP TABLE IF EXISTS `information_collect_result `;');
+        $biz['db']->exec('DROP TABLE IF EXISTS `information_collect_result_item`;');
     }
 }

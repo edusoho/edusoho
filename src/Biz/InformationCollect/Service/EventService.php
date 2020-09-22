@@ -13,4 +13,8 @@ interface EventService
     public function closeCollection($id);
 
     public function openCollection($id);
+
+    public function get($id);
+
+    public function getEventLocations($id);
 }

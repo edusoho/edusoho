@@ -67,7 +67,7 @@ class EventServiceImpl extends BaseService implements EventService
             $this->createNewException(InformationCollectionException::NOTFOUND_COLLECTION());
         }
 
-        return $this->getEventDao()->update($id, ['status' => 'closed']);
+        return $this->getEventDao()->update($id, ['status' => 'close']);
     }
 
     public function openCollection($id)
@@ -78,6 +78,27 @@ class EventServiceImpl extends BaseService implements EventService
         }
 
         return $this->getEventDao()->update($id, ['status' => 'open']);
+    }
+
+    public function getEventLocations($id)
+    {
+        $collection = $this->get($id);
+        if (empty($collection)) {
+            $this->createNewException(InformationCollectionException::NOTFOUND_COLLECTION());
+        }
+
+        $locations = $this->getLocationDao()->search(['eventId' => $id], [], 0, PHP_INT_MAX);
+
+        $locationInfo = [];
+        foreach ($locations as $location) {
+            if ('course' == $location['targetType']) {
+                $locationInfo['course'][] = $location['targetId'];
+            } else {
+                $locationInfo['classroom'][] = $location['targetId'];
+            }
+        }
+
+        return $locationInfo;
     }
 
     /**

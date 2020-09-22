@@ -6,7 +6,6 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\InformationCollect\Service\EventService;
-use Biz\InformationCollect\Service\LocationService;
 use Biz\InformationCollect\Service\ResultService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -21,7 +20,7 @@ class InformationCollectController extends BaseController
             $this->getEventService()->count($conditions),
             20);
 
-        $list = $this->getEventService()->search(
+        $events = $this->getEventService()->search(
             $conditions,
             ['createdTime' => 'DESC'],
             $page->getOffsetCount(),
@@ -29,25 +28,10 @@ class InformationCollectController extends BaseController
         );
 
         return $this->render('admin-v2/marketing/information-collect/list.html.twig', [
-            'lists' => $this->filterList($list),
+            'events' => $events,
+            'collectedNum' => $this->getResultService()->countGroupByEventId(ArrayToolkit::column($events, 'id')),
             'paginator' => $page,
         ]);
-    }
-
-    protected function filterList($collects)
-    {
-        $locations = $this->getLocationService()->getCollectLocations(ArrayToolkit::column($collects, 'id'));
-
-        $collectCounts = $this->getResultService()->countGroupByEventId(ArrayToolkit::column($collects, 'id'));
-
-        foreach ($collects as &$collect) {
-            $collect['action'] = 'admin.information_collection.action.'.$collect['action'];
-            $collect['statusInfo'] = 'admin.information_collection.status.'.$collect['status'];
-            $collect['location'] = isset($locations[$collect['id']]) ? $locations[$collect['id']]['targetInfo'] : '';
-            $collect['collectNum'] = isset($collectCounts[$collect['id']]) ? $collectCounts[$collect['id']]['collectNum'] : 0;
-        }
-
-        return $collects;
     }
 
     public function closeAction(Request $request, $id)
@@ -70,14 +54,6 @@ class InformationCollectController extends BaseController
     public function getEventService()
     {
         return $this->createService('InformationCollect:EventService');
-    }
-
-    /**
-     * @return LocationService
-     */
-    public function getLocationService()
-    {
-        return $this->createService('InformationCollect:LocationService');
     }
 
     /**

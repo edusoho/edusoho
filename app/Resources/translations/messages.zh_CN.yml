@@ -6412,7 +6412,7 @@ admin.information_collection.operate.detail: 详情
 admin.information_collection.action.buy_after: 课程/班级商品支付后
 admin.information_collection.action.buy_before: 课程/班级商品支付前
 admin.information_collection.status.open: <div class="green-circle"></div>正在采集
-admin.information_collection.status.closed: <div class="red-circle"></div>停止采集
+admin.information_collection.status.close: <div class="red-circle"></div>停止采集
 
 #账户明细
 admin.money_records.content_title: 账户明细
