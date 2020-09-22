@@ -7,6 +7,8 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Course\Service\CourseSetService;
 use Biz\Favorite\Service\FavoriteService;
+use Biz\Goods\GoodsEntityFactory;
+use Biz\Goods\Service\GoodsService;
 
 class MeFavoriteCourseSet extends AbstractResource
 {
@@ -18,7 +20,8 @@ class MeFavoriteCourseSet extends AbstractResource
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $conditions = [
             'userId' => $this->getCurrentUser()->getId(),
-            'targetType' => 'course',
+            'targetType' => 'goods',
+            'goodsType' => 'course',
         ];
         $favorites = $this->getFavoriteService()->searchFavorites(
             $conditions,
@@ -27,7 +30,9 @@ class MeFavoriteCourseSet extends AbstractResource
             $limit
         );
         $total = $this->getFavoriteService()->countFavorites($conditions);
-        $courseSets = $this->getCourseSetService()->findCourseSetsByIds(array_column($favorites, 'targetId'));
+        $goods = $this->getGoodsService()->findGoodsByIds(array_column($favorites, 'targetId'));
+        $goods = $this->getGoodsEntityFactory()->create('course')->fetchTargets($goods);
+        $courseSets = array_column($goods, 'courseSet');
 
         return $this->makePagingObject(array_values($courseSets), $total, $offset, $limit);
     }
@@ -71,5 +76,23 @@ class MeFavoriteCourseSet extends AbstractResource
     private function getFavoriteService()
     {
         return $this->service('Favorite:FavoriteService');
+    }
+
+    /**
+     * @return GoodsEntityFactory
+     */
+    protected function getGoodsEntityFactory()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['goods.entity.factory'];
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->service('Goods:GoodsService');
     }
 }
