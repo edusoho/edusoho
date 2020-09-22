@@ -9269,6 +9269,7 @@ exception.certificate.record.forbidden_regrant: Forbidden regrant
 exception.certificate_template.forbidden_delete_published: Prohibit the deletion of published certificates
 
 exception.information_collection.not_found: Collection not found
+exception.information_collection.closed: Collection is closed
 
 course.unname_title: unname course
 
