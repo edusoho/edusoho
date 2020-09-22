@@ -5,7 +5,7 @@
     </div>
     <div class="goods-qr__body">
       <h3 class="goods-qr__body__title">{{ this.$route.query.title }}</h3>
-      <p class="goods-qr__body__subtitle">长按识别二维码联系我们</p>
+      <p class="goods-qr__body__subtitle">{{ this.$route.query.content }}</p>
       <div class="goods-qr__body__img">
         <img :src="this.$route.query.imageUrl" alt="" />
         <span class="qr-border qr-border-tl"></span>
