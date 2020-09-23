@@ -2,13 +2,13 @@
 
 namespace Biz\InformationCollect\FormItem;
 
-class AgeFormItem extends FormItem
+class ProvinceCityAreaFormItem extends FormItem
 {
-    const TYPE = 'input';
+    const TYPE = 'cascader';
 
-    const TITLE = '年龄';
+    const TITLE = '省市区县';
 
-    const FILED = 'age';
+    const FILED = 'province_city_area';
 
     public function getData()
     {
@@ -16,13 +16,13 @@ class AgeFormItem extends FormItem
             'type' => self::TYPE,
             'title' => self::TITLE,
             'field' => self::FILED,
-            'value' => $this->value,
+            'value' => empty($this->value) ? [] : json_decode($this->value, true),
             'props' => [
-                'type' => 'number',
+                'options' => [],
+                'placeholder' => '请选择省市区县',
             ],
             'validate' => [
                 ['required' => $this->required, 'message' => self::TITLE.'不能为空'],
-                ['pattern' => '^[1-9]([0-9])?$', 'message' => self::TITLE.'不在正常范围内'],
             ],
         ];
     }
