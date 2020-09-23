@@ -198,7 +198,7 @@ export default {
     this.getSettings();
   },
   computed: {
-    ...mapState(['wechatSwitch', 'isLoading', 'couponSwitch', 'isSkipForm']),
+    ...mapState(['wechatSwitch', 'isLoading', 'couponSwitch', 'allowSkip']),
     total() {
       const totalNumber = this.course.totalPrice;
       if (!this.itemData) {
@@ -270,7 +270,7 @@ export default {
   },
   methods: {
     handleSubmit() {
-      if (!this.isSkipForm) Toast('请先提交信息后在提交订单');
+      if (!this.allowSkip) Toast('请先提交信息后在提交订单');
       else if (this.total == 0) {
         // if(this.detail.sn){
         //   this.handlePay();

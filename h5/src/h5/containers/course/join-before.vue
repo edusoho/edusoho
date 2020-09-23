@@ -156,7 +156,7 @@ export default {
     });
   },
   computed: {
-    ...mapState(['couponSwitch', 'user', 'isSkipForm']),
+    ...mapState(['couponSwitch', 'user', 'allowSkip']),
     ...mapState('course', {
       details: state => state.details,
     }),
@@ -338,7 +338,7 @@ export default {
       if ((Number(this.details.buyable) && isPast) || vipAccessToJoin) {
         if (+this.details.price && !vipAccessToJoin) {
           this.getOrder();
-        } else if (!this.isSkipForm) {
+        } else if (!this.allowSkip) {
           this.isShowForm = true;
         } else {
           this.joinCourse({

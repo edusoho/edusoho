@@ -176,7 +176,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['couponSwitch', 'user', 'isSkipForm']),
+    ...mapState(['couponSwitch', 'user', 'allowSkip']),
     accessToJoin() {
       return (
         this.details.access.code === 'success' ||
@@ -368,7 +368,7 @@ export default {
         });
         return;
       }
-      if (!this.isSkipForm) {
+      if (!this.allowSkip) {
         this.isShowForm = true;
       } else {
         Api.joinClass({

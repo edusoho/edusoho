@@ -63,6 +63,6 @@ export default {
   },
   /// / 报名信息表单开关
   [types.SET_INFO_COLLECTION](state, payload) {
-    state.isSkipForm = payload;
+    state.allowSkip = payload;
   },
 };
