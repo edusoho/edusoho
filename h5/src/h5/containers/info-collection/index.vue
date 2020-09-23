@@ -1,6 +1,6 @@
 <template>
   <div class="info-collection">
-    <van-form ref="infoCellectForm">
+    <van-form ref="infoCellectForm" title="我我我">
       <template v-for="(item, index) in rule">
         <!-- text ，number -->
         <template v-if="item.type === 'input' || item.type === 'textarea'">
@@ -12,13 +12,11 @@
             v-model="item.value"
             :name="item.field"
             :label="item.title"
-            :required="isRequired(item.validate)"
             :placeholder="getPlaceholder(item)"
             :error="errorRule[index].error"
             :error-message="errorRule[index].errorMessage"
             :type="getType(item)"
             @blur="checkField(index, item.value, item.validate)"
-            error-message-align="left"
             :label-class="isRequired(item.validate) ? 'info-required' : ''"
           />
         </template>
@@ -28,7 +26,7 @@
             :name="item.field"
             :label="item.title"
             :placeholder="getPlaceholder(item)"
-            :required="isRequired(item.validate)"
+            :label-class="isRequired(item.validate) ? 'info-required' : ''"
             required-align="right"
           >
             <template #input>
@@ -53,7 +51,7 @@
             v-model="item.value"
             :name="item.field"
             :label="item.title"
-            :required="isRequired(item.validate)"
+            :label-class="isRequired(item.validate) ? 'info-required' : ''"
             :placeholder="getPlaceholder(item)"
             :error="errorRule[index].error"
             :error-message="errorRule[index].errorMessage"
@@ -62,10 +60,29 @@
           />
         </template>
       </template>
+      <!-- 提交 -->
       <div style="margin: 16px;">
-        <van-button round block type="info" @click="onSubmit">
+        <!-- <van-button round block type="info" @click="onSubmit">
           提交
-        </van-button>
+        </van-button> -->
+      </div>
+      <div class="info-footer">
+        <div
+          v-if="this.infoStatus.allowSkip != '1'"
+          class="info-footer__btn"
+          @click="onSubmit"
+        >
+          确认提交
+        </div>
+        <template v-else>
+          <div
+            class="info-footer__btn info-footer__btn-border"
+            @click="waitSubmit"
+          >
+            稍后填写
+          </div>
+          <div class="info-footer__btn" @click="onSubmit">确认提交</div>
+        </template>
       </div>
     </van-form>
 
@@ -103,6 +120,7 @@
 
 <script>
 import { arealist } from '@/utils/arealist';
+import Api from '@/api';
 const defaultType = ['input', 'InputNumber'];
 const selectType = ['select', 'cascader', 'DatePicker'];
 const rule = [
@@ -349,12 +367,17 @@ const rule = [
     ],
   },
 ];
+
 export default {
   components: {},
   props: {
     formRule: {
       type: Array,
       default: () => rule,
+    },
+    infoStatus: {
+      type: Object,
+      default: () => {},
     },
   },
   data() {
@@ -377,14 +400,24 @@ export default {
       errorRule: [],
       rule: this.formRule,
       areaIndex: null,
+      formTitle: [],
     };
   },
   computed: {},
   watch: {},
   created() {
     this.getErrorRule();
+    // this.getformTitle();
+    console.log('------', this.infoStatus);
+    console.log('------', this.infoStatus.id);
   },
   methods: {
+    // 获取表单名
+    getformTitle(item) {
+      for (let i = 0; i < item.length; i++) {
+        this.formTitle[item[i].field] = item[i].value;
+      }
+    },
     getErrorRule() {
       const rule = this.rule;
       rule.forEach((item, index) => {
@@ -402,17 +435,25 @@ export default {
           this.$refs.infoCellectForm.scrollToField(this.rule[i].field);
           break;
         }
+        // this.formTitle.push({ field: this.rule[i].field });
       }
+      const formData = Object.assign([], this.rule);
       // 提交array
       if (this.areaIndex) {
-        const value = this.rule[this.areaIndex].value;
-        this.$set(
-          this.rule[this.areaIndex],
-          'value',
-          this.stringToArray(value),
-        );
+        const value = formData[this.areaIndex].value;
+        formData[this.areaIndex].value = this.stringToArray(value);
       }
-      this.$emit('submitForm', this.rule);
+      // this.$emit('submitForm', this.rule);
+      // 获取表单名，地区转数组
+      this.getformTitle(formData);
+
+      this.setInfoCollection();
+      // if (this.infoStatus.isSubmited) {
+      //   this.waitSubmit();
+      // }
+    },
+    waitSubmit() {
+      this.$emit('waitSubmit');
     },
     arrayToString(value) {
       if (Array.isArray(value)) {
@@ -573,6 +614,17 @@ export default {
       const currentSelectIndex = this.currentSelectIndex;
       this.$set(this.rule[currentSelectIndex], 'value', value);
       this.sexCancel();
+    },
+    setInfoCollection() {
+      const data = {
+        eventId: this.infoStatus.id,
+        ...this.formTitle,
+      };
+      Api.setInfoCollection({
+        data,
+      }).then(res => {
+        console.log(res);
+      });
     },
   },
 };

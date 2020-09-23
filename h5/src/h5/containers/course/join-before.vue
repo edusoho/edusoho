@@ -54,8 +54,11 @@
       defaul-value="暂无评价"
     />
     <!-- 个人信息表单填写 -->
-    <van-action-sheet v-model="isShowForm" title="标题">
-      <info-collection></info-collection>
+    <van-action-sheet v-model="isShowForm" :title="infoStatus.title">
+      <info-collection
+        :infoStatus="this.infoStatus"
+        @waitSubmit="waitSubmit"
+      ></info-collection>
     </van-action-sheet>
     <!-- 加入学习 -->
     <e-footer
@@ -144,6 +147,9 @@ export default {
       },
       courseSettings: {},
       isShowForm: false,
+      infoStatus: {},
+      info: {},
+      setInfo: {},
     };
   },
   async created() {
@@ -156,7 +162,7 @@ export default {
     });
   },
   computed: {
-    ...mapState(['couponSwitch', 'user', 'allowSkip']),
+    ...mapState(['couponSwitch', 'user']),
     ...mapState('course', {
       details: state => state.details,
     }),
@@ -217,6 +223,8 @@ export default {
     },
   },
   mounted() {
+    this.getInfoCollectionForm();
+    this.getInfoCollectionEvent();
     if (!this.isClassCourse && this.couponSwitch) {
       // 获取促销优惠券
       Api.searchCoupon({
@@ -338,7 +346,7 @@ export default {
       if ((Number(this.details.buyable) && isPast) || vipAccessToJoin) {
         if (+this.details.price && !vipAccessToJoin) {
           this.getOrder();
-        } else if (!this.allowSkip) {
+        } else if (!this.infoStatus.isSubmited && this.infoStatus.id) {
           this.isShowForm = true;
         } else {
           this.joinCourse({
@@ -356,6 +364,21 @@ export default {
             });
         }
       }
+    },
+    waitSubmit() {
+      this.joinCourse({
+        id: this.details.id,
+      })
+        .then(res => {
+          // 返回空对象，表示加入失败，需要去创建订单购买
+          if (!(Object.keys(res).length === 0)) {
+          } else {
+            this.getOrder();
+          }
+        })
+        .catch(err => {
+          console.error(err);
+        });
     },
     getAfCourse(id) {
       this.getAfterCourse({
@@ -405,6 +428,40 @@ export default {
     sellOut() {
       this.isEmpty = true;
     },
+    //  根据购买前后获取表单
+    getInfoCollectionEvent() {
+      const query = {
+        action: this.accessToJoin ? 'buy_before' : 'buy_after',
+      };
+      const params = {
+        targetType: 'course',
+        targetId: this.details.id,
+      };
+      Api.getInfoCollectionEvent({
+        query,
+        params,
+      })
+        .then(res => {
+          this.infoStatus = { ...res };
+          console.log(this.infoStatus);
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    },
+    // 根据事件id获取表单
+    getInfoCollectionForm() {
+      Api.getInfoCollectionEvent({
+        eventId: this.infoStatus.id,
+      })
+        .then(res => {
+          this.info = { ...res };
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    },
+    //
   },
 };
 </script>
