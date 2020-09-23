@@ -118,7 +118,7 @@ class TaskController extends BaseController
         }
 
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-        if ($activity['mediaType'] == 'testpaper' && !empty($activity['ext']['answerScene']['enable_facein'])) {
+        if ('testpaper' == $activity['mediaType'] && !empty($activity['ext']['answerScene']['enable_facein'])) {
             $face = $this->getFaceInspectionService()->getUserFaceByUserId($user->getId());
             if (empty($face)) {
                 return $this->redirectToRoute(
