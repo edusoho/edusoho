@@ -2,13 +2,13 @@
 
 namespace Biz\InformationCollect\FormItem;
 
-class AgeFormItem extends FormItem
+class IdcardFormItem extends FormItem
 {
     const TYPE = 'input';
 
-    const TITLE = '年龄';
+    const TITLE = '身份证号';
 
-    const FILED = 'age';
+    const FILED = 'idcard';
 
     public function getData()
     {
@@ -18,11 +18,11 @@ class AgeFormItem extends FormItem
             'field' => self::FILED,
             'value' => $this->value,
             'props' => [
-                'type' => 'number',
+                'placeholder' => '仅支持中国大陆',
             ],
             'validate' => [
                 ['required' => $this->required, 'message' => self::TITLE.'不能为空'],
-                ['pattern' => '^[1-9]([0-9])?$', 'message' => self::TITLE.'不在正常范围内'],
+                ['pattern' => '[0-9]{17}[0-9xX]{1}', 'message' => self::TITLE.'格式错误'],
             ],
         ];
     }

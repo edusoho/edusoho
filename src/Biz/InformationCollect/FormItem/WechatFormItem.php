@@ -2,13 +2,13 @@
 
 namespace Biz\InformationCollect\FormItem;
 
-class AgeFormItem extends FormItem
+class WechatFormItem extends FormItem
 {
     const TYPE = 'input';
 
-    const TITLE = '年龄';
+    const TITLE = '微信号';
 
-    const FILED = 'age';
+    const FILED = 'wechat';
 
     public function getData()
     {
@@ -17,12 +17,9 @@ class AgeFormItem extends FormItem
             'title' => self::TITLE,
             'field' => self::FILED,
             'value' => $this->value,
-            'props' => [
-                'type' => 'number',
-            ],
             'validate' => [
                 ['required' => $this->required, 'message' => self::TITLE.'不能为空'],
-                ['pattern' => '^[1-9]([0-9])?$', 'message' => self::TITLE.'不在正常范围内'],
+                ['pattern' => '^[a-zA-Z]([-_a-zA-Z0-9]{5,19})+$', 'message' => self::TITLE.'格式错误'],
             ],
         ];
     }

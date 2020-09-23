@@ -2,13 +2,13 @@
 
 namespace Biz\InformationCollect\FormItem;
 
-class AgeFormItem extends FormItem
+class BirthdayFormItem extends FormItem
 {
-    const TYPE = 'input';
+    const TYPE = 'DatePicker';
 
-    const TITLE = '年龄';
+    const TITLE = '生日';
 
-    const FILED = 'age';
+    const FILED = 'birthday';
 
     public function getData()
     {
@@ -18,11 +18,12 @@ class AgeFormItem extends FormItem
             'field' => self::FILED,
             'value' => $this->value,
             'props' => [
-                'type' => 'number',
+                'type' => 'date',
+                'format' => 'yyyy-MM-dd',
+                'placeholder' => '请选择出生年月日',
             ],
             'validate' => [
                 ['required' => $this->required, 'message' => self::TITLE.'不能为空'],
-                ['pattern' => '^[1-9]([0-9])?$', 'message' => self::TITLE.'不在正常范围内'],
             ],
         ];
     }

@@ -2,13 +2,13 @@
 
 namespace Biz\InformationCollect\FormItem;
 
-class AgeFormItem extends FormItem
+class EmailFormItem extends FormItem
 {
     const TYPE = 'input';
 
-    const TITLE = '年龄';
+    const TITLE = 'Email';
 
-    const FILED = 'age';
+    const FILED = 'email';
 
     public function getData()
     {
@@ -17,12 +17,9 @@ class AgeFormItem extends FormItem
             'title' => self::TITLE,
             'field' => self::FILED,
             'value' => $this->value,
-            'props' => [
-                'type' => 'number',
-            ],
             'validate' => [
                 ['required' => $this->required, 'message' => self::TITLE.'不能为空'],
-                ['pattern' => '^[1-9]([0-9])?$', 'message' => self::TITLE.'不在正常范围内'],
+                ['type' => 'email', 'message' => self::TITLE.'格式错误'],
             ],
         ];
     }

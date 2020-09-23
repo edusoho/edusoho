@@ -2,13 +2,13 @@
 
 namespace Biz\InformationCollect\FormItem;
 
-class AgeFormItem extends FormItem
+class WeiboFormItem extends FormItem
 {
     const TYPE = 'input';
 
-    const TITLE = '年龄';
+    const TITLE = '微博号';
 
-    const FILED = 'age';
+    const FILED = 'weibo';
 
     public function getData()
     {
@@ -17,12 +17,10 @@ class AgeFormItem extends FormItem
             'title' => self::TITLE,
             'field' => self::FILED,
             'value' => $this->value,
-            'props' => [
-                'type' => 'number',
-            ],
             'validate' => [
                 ['required' => $this->required, 'message' => self::TITLE.'不能为空'],
-                ['pattern' => '^[1-9]([0-9])?$', 'message' => self::TITLE.'不在正常范围内'],
+                ['min' => 4, 'message' => '最少输入4个字符'],
+                ['max' => 30, 'message' => '最多输入30个字符'],
             ],
         ];
     }
