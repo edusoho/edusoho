@@ -2750,6 +2750,30 @@ admin_v2_information_collect_edit:
   path: /information_collect/edit
   defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:edit }
 
-admin_v2_information_collect_target_modal:
-  path: /information_collect/target/modal
+admin_v2_information_collect_event_target_modal:
+  path: /information_collect/event/target/modal
   defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:targetModal }
+
+admin_v2_information_collect_course_chooser:
+  path: /information_collect/course_set/chooser
+  defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:chooseCourses }
+
+admin_v2_information_collect_course_chooser_ajax:
+  path: /information_collect/course_set/chooser/ajax
+  defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:ajaxChooseCourses }
+
+admin_v2_information_collect_course_selected:
+  path: /information_collect/course_set/selected
+  defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:selectedCourses }
+
+admin_v2_information_collect_classroom_chooser:
+  path: /information_collect/classroom/chooser
+  defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:chooseClassrooms }
+
+admin_v2_information_collect_classroom_chooser_ajax:
+  path: /information_collect/classroom/chooser/ajax
+  defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:ajaxChooseClassrooms }
+
+admin_v2_information_collect_classroom_selected:
+  path: /information_collect/classroom/selected
+  defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:selectedClassrooms }

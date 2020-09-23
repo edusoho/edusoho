@@ -1,5 +1,5 @@
 import notify from 'common/notify';
-import './localtion';
+import './location';
 
 let $form = $('#information-collect-form');
 let validator = $form.validate({
@@ -26,15 +26,14 @@ let validator = $form.validate({
 
 $('.js-save-btn').on('click', (event) => {
     if (validator && validator.form()) {
-        console.log($form.serialize());
+        $.post(
+            $form.data('url'), $form.serialize()
+        ).success(function (response) {
+            notify('success', Translator.trans('site.save_success_hint'));
+        }).fail(function (xhr, status, error) {
+            notify('danger', xhr.responseJSON.error.message);
+        });
     }
-    // $.post(
-    //     $form.data('url'), $form.serialize()
-    // ).success(function (response) {
-    //     notify('success', Translator.trans('site.save_success_hint'));
-    // }).fail(function (xhr, status, error) {
-    //     notify('danger', xhr.responseJSON.error.message);
-    // });
 });
 
 

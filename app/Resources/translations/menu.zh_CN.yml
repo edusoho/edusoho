@@ -970,4 +970,4 @@ exception.goods.not_found: 商品未找到
 
 admin_v2.information_collect.menu: 用户信息采集
 admin_v2.information_collect.tab: 用户信息采集
-admin_v2.information_collect.create: 创建
+admin_v2.information_collect.create: 新建

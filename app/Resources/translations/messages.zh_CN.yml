@@ -11401,29 +11401,29 @@ exception.favorite.forbidden_operate_favorite: 没有权限
 
 exception.s2b2c_product.adopt_failed: 采用失败，内容正在编辑中，请稍后再试
 
-admin_v2.information_collect.create.title_info: 当前只支持PC、新版微网校
-admin_v2.information_collect.create.title: 采集名称
-admin_v2.information_collect.create.action: 采集位置
-admin_v2.information_collect.create.action_before: 课程/班级商品支付前
-admin_v2.information_collect.create.action_after: 课程/班级商品支付后
-admin_v2.information_collect.create.action_before.help_block: 含免费商品加入前
-admin_v2.information_collect.create.action_before.tip: 支付前采集用户信息，可能影响购买转化率
-admin_v2.information_collect.create.action_after.help_block: 含免费商品加入后
-admin_v2.information_collect.create.form_items: 采集表单
-admin_v2.information_collect.create.form_items.tip: 请从右侧拖拽可选的信息采集项至左侧，可上下拖动排序
-admin_v2.information_collect.create.form_items.code: 用户看到的表单标题
-admin_v2.information_collect.create.form_items.warning_tip: 信息采集项过多，可能影响用户使用体验
-admin_v2.information_collect.create.form_items.allow_skip: 是否允许用户跳过
-admin_v2.information_collect.create.form_items.skip.allow: 允许跳过
-admin_v2.information_collect.create.form_items.skip.not_allow: 不允许跳过
-admin_v2.information_collect.create.form_items.enable: 是否启用本次采集
-admin_v2.information_collect.create.target_type.all: 全站课程/班级
-admin_v2.information_collect.create.target_type.part: 指定课程/班级
-admin_v2.information_collect.create.target_type.all_course: 全部课程
-admin_v2.information_collect.create.target_type.all_classroom: 全部班级
-admin_v2.information_collect.create.target_type.tip: 优先执行指定课程/班级的采集事件
-admin_v2.information_collect.create.target_type.part_course: 指定课程
-admin_v2.information_collect.create.target_type.part_classroom: 指定班级
+admin_v2.information_collect.edit.title_info: 当前只支持PC、新版微网校
+admin_v2.information_collect.edit.title: 采集名称
+admin_v2.information_collect.edit.action: 采集位置
+admin_v2.information_collect.edit.action_before: 课程/班级商品支付前
+admin_v2.information_collect.edit.action_after: 课程/班级商品支付后
+admin_v2.information_collect.edit.action_before.help_block: 含免费商品加入前
+admin_v2.information_collect.edit.action_before.tip: 支付前采集用户信息，可能影响购买转化率
+admin_v2.information_collect.edit.action_after.help_block: 含免费商品加入后
+admin_v2.information_collect.edit.form_items: 采集表单
+admin_v2.information_collect.edit.form_items.tip: 请从右侧拖拽可选的信息采集项至左侧，可上下拖动排序
+admin_v2.information_collect.edit.form_items.code: 用户看到的表单标题
+admin_v2.information_collect.edit.form_items.warning_tip: 信息采集项过多，可能影响用户使用体验
+admin_v2.information_collect.edit.form_items.allow_skip: 是否允许用户跳过
+admin_v2.information_collect.edit.form_items.skip.allow: 允许跳过
+admin_v2.information_collect.edit.form_items.skip.not_allow: 不允许跳过
+admin_v2.information_collect.edit.form_items.enable: 是否启用本次采集
+admin_v2.information_collect.edit.target_type.all: 全站课程/班级
+admin_v2.information_collect.edit.target_type.part: 指定课程/班级
+admin_v2.information_collect.edit.target_type.all_course: 全部课程
+admin_v2.information_collect.edit.target_type.all_classroom: 全部班级
+admin_v2.information_collect.edit.target_type.tip: 优先执行指定课程/班级的采集事件
+admin_v2.information_collect.edit.target_type.part_course: 指定课程
+admin_v2.information_collect.edit.target_type.part_classroom: 指定班级
 admin_v2.information_collect.create: 新建
 admin_v2.information_collect.update: 编辑
 admin_v2.information_collect.binded_tips: 已关联其它采集事件
@@ -11432,3 +11432,12 @@ admin_v2.information_collect.selected_course_count: 已选课程数
 admin_v2.information_collect.selecte_course: 选择课程
 admin_v2.information_collect.selected_classroom_count: 已选班级数
 admin_v2.information_collect.selecte_classroom: 选择班级
+admin_v2.information_collect.selecte_count: 已选数量
+admin_v2.information_collect.selected: 已选：
+admin_v2.information_collect.selected.clear: 清空
+admin_v2.information_collect.course.chooser.limit: 最多支持选择200个课程
+admin_v2.information_collect.chooser.delete_item: 移除本次采集
+admin_v2.information_collect.chooser.tips: 已存在冲突的关联
+admin_v2.information_collect.chooser.unbind_item: 关联到本次采集
+
+

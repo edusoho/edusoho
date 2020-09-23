@@ -4,7 +4,7 @@ namespace Biz\InformationCollect;
 
 use AppBundle\Common\Exception\AbstractException;
 
-class InformationCollectionException extends AbstractException
+class InformationCollectException extends AbstractException
 {
     const EXCEPTION_MODULE = 78;
 

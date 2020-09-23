@@ -1,4 +1,6 @@
-console.log('.js-checkbox-group');
+import Cookies from 'js-cookie';
+
+initSelectTargetCookies();
 if ($('.js-checkbox-group').length) {
     $('.js-checkbox-group').on('click', 'input[name="actionType"]', (event) => {
         let $group = $(event.currentTarget).parent().find('.js-target-type-checkbox-group');
@@ -13,6 +15,9 @@ if ($('.js-checkbox-group').length) {
     });
 }
 
-$('.js-checkbox-group').on('click', '.js-select-target', (event) => {
-    console.log('fe');
-});
+function initSelectTargetCookies() {
+    if (Cookies.getJSON('informationCollectSelectCourseIds').length > 0) {
+        Cookies.set('informationCollectSelectCourseIds', []);
+    }
+}
+

@@ -7,16 +7,18 @@
 		<a class="color-black-title" href="javascript:;">{{ currentMenu.code|parent_permission.name|trans({}, 'menu') }}</a>
 		>
 		<a class="color-black-title" href="javascript:;">{{ 'admin_v2.information_collect.create'|trans }}{{ currentMenu.code|parent_permission.name|trans({}, 'menu') }}</a>
-		<span class="help-block display-inline text-md">({{'admin_v2.information_collect.create.title_info'|trans}})</span>
+		<span class="help-block display-inline text-md">({{'admin_v2.information_collect.edit.title_info'|trans}})</span>
 	</div>
 {% endblock %}
+
+{% block page_buttons %}{% endblock %}
 
 {% block main %}
 	<form class="form-horizontal information-collect" id="information-collect-form" action="{{ path('admin_v2_information_collect_edit') }}" method="post">
 		<fieldset>
 			<div class="row form-group">
 				<div class="col-md-2 control-label">
-					<label for="title">{{ 'admin_v2.information_collect.create.title'|trans }}</label>
+					<label for="title">{{ 'admin_v2.information_collect.edit.title'|trans }}</label>
 				</div>
 				<div class="col-md-6 controls">
 					<input required type="text" name="title" class="form-control" id="title">
@@ -24,7 +26,7 @@
 			</div>
 			<div class="row form-group">
 				<div class="col-md-2 control-label">
-					<label for="type">{{ 'admin_v2.information_collect.create.action'|trans }}</label>
+					<label for="type">{{ 'admin_v2.information_collect.edit.action'|trans }}</label>
 				</div>
 				<div class="col-md-6 controls">
 					<div class="radio-for-action hidden">
@@ -34,17 +36,17 @@
 						<div class="js-action-radio">
 							<label>
 								<input type="radio" name="action" value="buy_before" checked="checked">
-								<span>{{ 'admin_v2.information_collect.create.action_before'|trans }}</span>
-								<label class="help-block display-inline">{{ 'admin_v2.information_collect.create.action_before.tip'|trans }}</label>
-								<label class="help-block pll mb0">({{ 'admin_v2.information_collect.create.action_before.help_block'|trans }})</label>
+								<span>{{ 'admin_v2.information_collect.edit.action_before'|trans }}</span>
+								<label class="help-block display-inline">{{ 'admin_v2.information_collect.edit.action_before.tip'|trans }}</label>
+								<label class="help-block pll mb0">({{ 'admin_v2.information_collect.edit.action_before.help_block'|trans }})</label>
 								<div class="js-checkbox-group plm"></div>
 							</label>
 						</div>
 						<div class="js-action-radio">
 							<label>
 								<input type="radio" name="action" value="buy_after" checked="checked">
-								<span>{{ 'admin_v2.information_collect.create.action_after'|trans }}</span>
-								<label class="help-block pll mb0">({{ 'admin_v2.information_collect.create.action_after.help_block'|trans }})</label>
+								<span>{{ 'admin_v2.information_collect.edit.action_after'|trans }}</span>
+								<label class="help-block pll mb0">({{ 'admin_v2.information_collect.edit.action_after.help_block'|trans }})</label>
 								<div class="js-checkbox-group plm">
 									{% include "admin-v2/marketing/information-collect/edit/location.html.twig" %}
 								</div>
@@ -56,10 +58,10 @@
 
 			<div class="row form-group">
 				<div class="col-md-2 control-label">
-					<label for="">{{ 'admin_v2.information_collect.create.form_items'|trans }}</label>
+					<label for="">{{ 'admin_v2.information_collect.edit.form_items'|trans }}</label>
 				</div>
 				<div class="col-md-5 control-label text-left">
-					<div class="help-block margin-unset">{{ 'admin_v2.information_collect.create.form_items.tip'|trans }}</div>
+					<div class="help-block margin-unset">{{ 'admin_v2.information_collect.edit.form_items.tip'|trans }}</div>
 				</div>
 			</div>
 			<div class="row form-group">
@@ -67,7 +69,7 @@
 				<div class="col-md-6 controls">
 					<div class="row form-group">
 						<div class="col-md-4 control-label text-left">
-							<label for="formTitle">{{ 'admin_v2.information_collect.create.form_items.code'|trans }}</label>
+							<label for="formTitle">{{ 'admin_v2.information_collect.edit.form_items.code'|trans }}</label>
 						</div>
 						<div class="col-md-8 controls">
 							<input type="text" name="formTitle" class="form-control" id="formTitle">
@@ -75,7 +77,7 @@
 					</div>
 					<div class="cd-panel">
 						<div class="cd-panel-body form-items-panel">
-							<div class="cd-alert cd-alert-warning text-center">{{ 'admin_v2.information_collect.create.form_items.warning_tip'|trans }}</div>
+							<div class="cd-alert cd-alert-warning text-center">{{ 'admin_v2.information_collect.edit.form_items.warning_tip'|trans }}</div>
 						</div>
 					</div>
 				</div>
@@ -88,20 +90,20 @@
 				</div>
 			</div>
 			<div class="row form-group">
-				<label class="col-md-2 control-label">{{ 'admin_v2.information_collect.create.form_items.allow_skip'|trans }}</label>
+				<label class="col-md-2 control-label">{{ 'admin_v2.information_collect.edit.form_items.allow_skip'|trans }}</label>
 				<div class="radios">
 					<label>
 						<input type="radio" name="allowSkip" value="1" checked="checked">
-						<span>{{ 'admin_v2.information_collect.create.form_items.skip.allow'|trans }}</span>
+						<span>{{ 'admin_v2.information_collect.edit.form_items.skip.allow'|trans }}</span>
 					</label>
 					<label>
 						<input type="radio" name="allowSkip" value="0" checked="checked">
-						<span>{{ 'admin_v2.information_collect.create.form_items.skip.not_allow'|trans }}</span>
+						<span>{{ 'admin_v2.information_collect.edit.form_items.skip.not_allow'|trans }}</span>
 					</label>
 				</div>
 			</div>
 			<div class="row form-group">
-				<label class="col-md-2 control-label">{{ 'admin_v2.information_collect.create.form_items.enable'|trans }}</label>
+				<label class="col-md-2 control-label">{{ 'admin_v2.information_collect.edit.form_items.enable'|trans }}</label>
 				<div class="radios">
 					<label>
 						<input type="radio" name="status" value="open" checked="checked">

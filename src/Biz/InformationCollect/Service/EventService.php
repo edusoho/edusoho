@@ -4,6 +4,8 @@ namespace Biz\InformationCollect\Service;
 
 interface EventService
 {
+    public function createEventWithLocations(array $fields);
+
     public function count($conditions);
 
     public function search($conditions, $orderBy, $start, $limit);
@@ -19,4 +21,8 @@ interface EventService
     public function get($id);
 
     public function getEventLocations($id);
+
+    public function searchLocations(array $conditions, array $orderBys, $start = 0, $limit = 20, $columns = []);
+
+    public function countLocations(array $conditions);
 }

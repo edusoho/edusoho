@@ -1621,3 +1621,5 @@ admin_v2.information-collection.close.success_hint: close success
 admin_v2.information-collection.close.failure_hint: close failure
 admin_v2.information-collection.open.success_hint: open success
 admin_v2.information-collection.open.failure_hint: close failure
+
+admin_v2.information_collect.chooser.tips: There is already a conflicting association

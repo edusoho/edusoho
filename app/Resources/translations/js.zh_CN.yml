@@ -1566,3 +1566,5 @@ admin_v2.information-collection.close.success_hint: 采集关闭成功
 admin_v2.information-collection.close.failure_hint: 采集关闭失败
 admin_v2.information-collection.open.success_hint: 采集开启成功
 admin_v2.information-collection.open.failure_hint: 采集开启失败
+
+admin_v2.information_collect.chooser.tips: 已存在冲突的关联
