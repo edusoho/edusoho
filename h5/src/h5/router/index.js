@@ -749,6 +749,17 @@ const routes = [
         /* webpackChunkName: "brush-exercise" */ '@/containers/brush-exercise/index.vue'
       ),
   },
+  {
+    path: '/info_collection',
+    name: 'info_collection',
+    meta: {
+      title: '用户信息收集',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "info-collection" */ '@/containers/info-collection/index.vue'
+      ),
+  },
 ];
 
 // 页面刷新，store数据会被清掉，需对token、user重新赋值

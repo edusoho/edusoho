@@ -82,10 +82,10 @@ php vendor/bin/dep deploy dev
   + containers    // 后台页面（里面一个文件夹代表一个页面，页面入口为 index.vue）
   + mixins        // mixins 复用模块
   + router        // 路由
-  + store         // vuex 文件
+  + store         // vuex 文件8.8.3
   + styles        // 样式(里面页面级样式在 container 文件夹内，组件级样式在 modules 文件夹里)
   + utils         // 工具类
-  + App-admin.vue // 项目单页入口
+  + App-admin.vue // 项目单页入口8.8.3
   + main-admin.js。// 打包入口
 - src              // h5 微网校开发目录
   + api            // 接口配置
