@@ -77,6 +77,10 @@
         defaul-value="暂无评价"
       />
 
+      <!-- 个人信息表单填写 -->
+      <van-action-sheet v-model="isShowForm" title="标题">
+        <info-collection></info-collection>
+      </van-action-sheet>
       <!-- 加入学习 -->
       <e-footer
         v-if="
@@ -127,7 +131,7 @@ import Api from '@/api';
 import getCouponMixin from '@/mixins/coupon/getCouponHandler';
 import getActivityMixin from '@/mixins/activity/index';
 import { dateTimeDown } from '@/utils/date-toolkit';
-
+import infoCollection from '../info-collection/index';
 const TAB_HEIGHT = 44;
 
 export default {
@@ -141,6 +145,7 @@ export default {
     reviewList,
     moreMask,
     onsale,
+    infoCollection,
   },
   mixins: [redirectMixin, getCouponMixin, getActivityMixin],
   props: ['details', 'planDetails'],
@@ -167,10 +172,11 @@ export default {
       scrollTime: null,
       isManualSwitch: false,
       classroomSettings: {},
+      isShowForm: false,
     };
   },
   computed: {
-    ...mapState(['couponSwitch', 'user']),
+    ...mapState(['couponSwitch', 'user', 'isSkipForm']),
     accessToJoin() {
       return (
         this.details.access.code === 'success' ||
@@ -362,18 +368,21 @@ export default {
         });
         return;
       }
-
-      Api.joinClass({
-        query: {
-          classroomId: details.classId,
-        },
-      })
-        .then(res => {
-          this.details.joinStatus = res;
+      if (!this.isSkipForm) {
+        this.isShowForm = true;
+      } else {
+        Api.joinClass({
+          query: {
+            classroomId: details.classId,
+          },
         })
-        .catch(err => {
-          console.error(err.message);
-        });
+          .then(res => {
+            this.details.joinStatus = res;
+          })
+          .catch(err => {
+            console.error(err.message);
+          });
+      }
     },
     getLearnExpiry({ val }) {
       this.learnExpiry = val;
