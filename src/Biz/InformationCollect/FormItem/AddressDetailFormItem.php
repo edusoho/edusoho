@@ -4,7 +4,7 @@ namespace Biz\InformationCollect\FormItem;
 
 class AddressDetailFormItem extends FormItem
 {
-    const TYPE = 'input';
+    const TYPE = 'text';
 
     const TITLE = '详细地址';
 
