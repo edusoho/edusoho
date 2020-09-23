@@ -1,7 +1,6 @@
 <template>
-  <div class="">
+  <div class="infoCellect-form">
     <van-form ref="infoCellectForm">
-      <!-- <sexSelect /> -->
       <template v-for="(item, index) in rule">
         <!-- text ，number -->
         <template v-if="isDefaultType(item)">
@@ -26,11 +25,15 @@
             :key="index"
             readonly
             v-model="item.value"
+            :formatter="formatter"
             :name="item.field"
             :label="item.title"
             placeholder="请选择"
             right-icon=" iconfangxiang my_setting-more-special"
             icon-prefix="iconfont"
+            :error="errorRule[index].error"
+            :error-message="errorRule[index].errorMessage"
+            @blur="checkField(index, item.value, item.validate)"
             @click="showPicker(item, index)"
           />
         </template>
@@ -90,30 +93,6 @@ export default {
   },
   data() {
     return {
-      test: [
-        {
-          type: 'input',
-          title: '姓名',
-          field: 'name',
-          value: '',
-          validate: [
-            { required: true, message: '请输入姓名' },
-            { min: 2, message: '最少2个字' },
-            { max: 20, message: '最多20个字' },
-          ],
-        },
-        {
-          type: 'input',
-          field: 'weibo_name',
-          title: '新浪微博名',
-          value: '',
-          validate: [
-            { required: true, message: '请输入新浪微博名' },
-            { min: 4, message: '最少4个字' },
-            { max: 30, message: '最多30个字' },
-          ],
-        },
-      ],
       rule: [
         {
           type: 'input',
@@ -130,7 +109,7 @@ export default {
           type: 'select',
           field: 'gender',
           title: '性别',
-          value: '男',
+          value: '',
           options: [
             { value: '男', label: '男' },
             { value: '女', label: '女' },
@@ -142,11 +121,10 @@ export default {
           field: 'age',
           title: '年龄',
           value: '',
-          validate: [
-            { required: true, message: '请输入您的年龄' },
-            { min: 1, message: '请输入正确的年龄' },
-            { max: 99, message: '请输入正确的年龄' },
-          ],
+          props: {
+            min: 1,
+            max: 99,
+          },
         },
         {
           type: 'DatePicker',
@@ -158,7 +136,6 @@ export default {
             format: 'yyyy-MM-dd',
             placeholder: '请选择',
           },
-          validate: [],
         },
         {
           type: 'input',
@@ -167,10 +144,7 @@ export default {
           value: '',
           validate: [
             { required: true, message: '请输入身份证号' },
-            {
-              pattern: '[0-9]{17}[0-9xX]{1}',
-              message: '身份证号码格式不正确',
-            },
+            { pattern: '[0-9]{17}[0-9xX]{1}', message: '身份证号码格式不正确' },
           ],
         },
         {
@@ -241,7 +215,6 @@ export default {
           props: {
             options: window.province_city_area || [],
           },
-          validate: [],
         },
         {
           type: 'input',
@@ -394,27 +367,43 @@ export default {
     },
     checkField(index, value, validate) {
       if (!validate) {
-        return;
+        return true;
       }
+
       for (let i = 0; i < validate.length; i++) {
-        if (validate[i].min && value.length < validate[i].min) {
+        if (validate[i].required && !value) {
           this.setError(index, true, validate[i].message);
           return false;
         }
-        if (validate[i].max && value.length > validate[i].max) {
-          this.setError(index, true, validate[i].message);
-          return false;
-        }
-        if (validate[i].pattern) {
-          const reg = new RegExp(validate[i].pattern);
-          if (!reg.test(value)) {
+        if (value) {
+          const type = this.rule[index].type;
+          const currentValue =
+            type === 'InputNumber' ? Number(value) : value.length;
+          if (validate[i].min && currentValue < validate[i].min) {
             this.setError(index, true, validate[i].message);
             return false;
+          }
+          if (validate[i].max && currentValue > validate[i].max) {
+            this.setError(index, true, validate[i].message);
+            return false;
+          }
+          if (validate[i].pattern) {
+            const reg = new RegExp(validate[i].pattern);
+            if (!reg.test(value)) {
+              this.setError(index, true, validate[i].message);
+              return false;
+            }
           }
         }
       }
       this.setError(index, false, '');
       return true;
+    },
+    formatter(value) {
+      if (Array.isArray(value)) {
+        return value.join(' ');
+      }
+      return value;
     },
     setError(index, error, errorMessage) {
       const rule = {
@@ -447,11 +436,14 @@ export default {
       return true;
     },
     isRequired(rule) {
-      for (let i = 0; i < rule.length; i++) {
-        if (rule[i].required) {
-          return true;
+      if (rule) {
+        for (let i = 0; i < rule.length; i++) {
+          if (rule[i].required) {
+            return true;
+          }
         }
       }
+
       return false;
     },
     isDefaultType(item) {
@@ -498,15 +490,15 @@ export default {
     },
     areaConfirm(val) {
       const currentSelectIndex = this.currentSelectIndex;
-      const province = val[0].name;
-      const city = val[1].name;
-      const local = val[2].name;
+      // const province = val[0].name;
+      // const city = val[1].name;
+      // const local = val[2].name;
 
-      let area = province + ' ' + city + ' ' + local;
-      if (province === city) {
-        area = city + ' ' + local;
-      }
-      this.$set(this.rule[currentSelectIndex], 'value', area);
+      // let area = province + ' ' + city + ' ' + local;
+      // if (province === city) {
+      //   area = city + ' ' + local;
+      // }
+      this.$set(this.rule[currentSelectIndex], 'value', val);
       this.areaCancel();
     },
     areaCancel() {
