@@ -1,5 +1,5 @@
 <template>
-  <div class="infoCellect-form">
+  <div class="info-collection">
     <van-form ref="infoCellectForm">
       <template v-for="(item, index) in rule">
         <!-- text ，number -->
@@ -18,6 +18,8 @@
             :error-message="errorRule[index].errorMessage"
             :type="getType(item)"
             @blur="checkField(index, item.value, item.validate)"
+            error-message-align="left"
+            :label-class="isRequired(item.validate) ? 'info-required' : ''"
           />
         </template>
         <template v-if="item.type === 'radio'">

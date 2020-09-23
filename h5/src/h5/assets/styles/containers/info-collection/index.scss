@@ -1,5 +1,10 @@
-.infoCellect-form {
-	.van-cell {
-		padding: 10px 16px;
+.info-collection {
+	padding: vw(16);
+
+	.info-required::after {
+		position: absolute;
+		color: #ee0a24;
+		font-size: 14px;
+		content: '*';
 	}
 }
