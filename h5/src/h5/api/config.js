@@ -14,6 +14,7 @@ import distribution from './distribution/index';
 import liveTimetable from './liveTimetable/index';
 import certificate from './certificate/index';
 import itemBank from './itemBank/index';
+import infoCollection from './infoCollection/index';
 
 const config = [
   ...openCourse,
@@ -32,6 +33,7 @@ const config = [
   ...itemBankCourse,
   ...certificate,
   ...itemBank,
+  ...infoCollection,
 ];
 
 export default config;
