@@ -101,6 +101,11 @@
 		.study-num {
 			position: relative;
 			top: vw(5);
+			color: #999;
+
+			i {
+				color: #bebebe;
+			}
 		}
 
 		.original-price {

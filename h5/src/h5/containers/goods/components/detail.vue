@@ -32,7 +32,8 @@
           </span>
         </div>
         <div class="pull-right study-num">
-          {{ goods.product.target.studentNum }}人在学
+          <i class="iconfont icon-renqi"></i>
+          {{ goods.product.target.studentNum }}人
         </div>
       </div>
     </div>
@@ -58,7 +59,8 @@
           >
         </div>
         <div class="pull-right study-num">
-          {{ goods.product.target.studentNum }}人在学
+          <i class="iconfont icon-renqi"></i>
+          {{ goods.product.target.studentNum }}人
         </div>
       </div>
     </div>
