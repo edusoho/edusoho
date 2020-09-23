@@ -4,6 +4,12 @@ namespace AppBundle\Extension;
 
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use Biz\NewComer\PaymentAppliedTask;
+use Biz\NewComer\AuthSettingTask;
+use Biz\NewComer\PluginRegisterTask;
+use Biz\NewComer\CourseCreatedTask;
+use Biz\NewComer\DecorationWebTask;
+use Biz\NewComer\CloudAppliedTask;
 
 class NewcomerExtension extends Extension implements ServiceProviderInterface
 {
@@ -17,7 +23,7 @@ class NewcomerExtension extends Extension implements ServiceProviderInterface
                 'doneUrl' => '/admin/v2/setting/cloud',
                 'guideUrl' => 'http://www.qiqiuyu.com/faq/523/detail',
                 'status' => false,
-                'class' => 'Biz\NewComer\CloudAppliedTask',
+                'class' => CloudAppliedTask::class,
             ),
             'payment_applied_task' => array(
                 'name' => 'admin_v2.newcomer_task.payment_applied.title',
@@ -25,7 +31,7 @@ class NewcomerExtension extends Extension implements ServiceProviderInterface
                 'url' => '/admin/v2/setting/payment',
                 'guideUrl' => 'http://www.qiqiuyu.com/faq/525/detail',
                 'status' => false,
-                'class' => 'Biz\NewComer\PaymentAppliedTask',
+                'class' => PaymentAppliedTask::class,
             ),
             'auth_setting_task' => array(
                 'name' => 'admin_v2.newcomer_task.auth_applied.title',
@@ -33,7 +39,7 @@ class NewcomerExtension extends Extension implements ServiceProviderInterface
                 'url' => '/admin/v2/setting/auth',
                 'guideUrl' => 'http://www.qiqiuyu.com/faq/526/detail',
                 'status' => false,
-                'class' => 'Biz\NewComer\AuthSettingTask',
+                'class' => AuthSettingTask::class,
             ),
             'plugin_register_task' => array(
                 'name' => 'admin_v2.newcomer_task.plugin_applied.title',
@@ -41,7 +47,7 @@ class NewcomerExtension extends Extension implements ServiceProviderInterface
                 'url' => '/admin/v2/app/center',
                 'guideUrl' => 'http://www.qiqiuyu.com/faq/524/detail',
                 'status' => false,
-                'class' => 'Biz\NewComer\PluginRegisterTask',
+                'class' => PluginRegisterTask::class,
             ),
             'course_created_task' => array(
                 'name' => 'admin_v2.newcomer_task.course_applied.title',
@@ -49,7 +55,7 @@ class NewcomerExtension extends Extension implements ServiceProviderInterface
                 'url' => '/admin/v2/course_set/index',
                 'guideUrl' => 'http://www.qiqiuyu.com/faq/527/detail',
                 'status' => false,
-                'class' => 'Biz\NewComer\CourseCreatedTask',
+                'class' => CourseCreatedTask::class,
             ),
             'decoration_web_task' => array(
                 'name' => 'admin_v2.newcomer_task.decoration_applied.title',
@@ -57,7 +63,7 @@ class NewcomerExtension extends Extension implements ServiceProviderInterface
                 'url' => '/admin/v2/setting/navigation?type=top',
                 'guideUrl' => 'http://www.qiqiuyu.com/faq/528/detail',
                 'status' => false,
-                'class' => 'Biz\NewComer\DecorationWebTask',
+                'class' => DecorationWebTask::class,
             ),
         );
     }

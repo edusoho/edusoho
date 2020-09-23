@@ -2,6 +2,9 @@
 
 namespace AppBundle\Extension;
 
+use Biz\Favorite\Types\Course;
+use Biz\Favorite\Types\Goods;
+use Biz\Favorite\Types\OpenCourse;
 use Deployer\Exception\Exception;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
@@ -10,11 +13,23 @@ class FavoriteTypesExtension extends Exception implements ServiceProviderInterfa
 {
     public function getFavoriteTypes()
     {
-        return [];
+        return [
+            'course' => [
+                'class' => Course::class,
+            ],
+            'goods' => [
+                'class' => Goods::class,
+            ],
+            'openCourse' => [
+                'class' => OpenCourse::class,
+            ],
+        ];
     }
 
     public function register(Container $container)
     {
-        // TODO: Implement register() method.
+        $container['favorite_types.course'] = function ($biz) {
+
+        };
     }
 }
