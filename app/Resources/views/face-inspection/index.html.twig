@@ -48,7 +48,7 @@
 
           <div class="inspection-collect-row inspection-collect-actions js-btn-group" id="inspection-collect-actions">
             <button type="button" data-upload-url="{{path('facein_capture_upload',{code:code|default()})}}" class="btn btn-primary js-upload-url" id="inspection-collect-btn" style="min-width: 100px;display: none;" disabled>采集</button>
-            <a class="btn btn-success" href="{{path('homepage')}}" id="inspection-collect-finish-btn" style="display: none;">完成采集</a>
+            <a class="btn btn-success" href="{% if goto|default(null) %}{{ goto }}{% else %}{{path('homepage')}}{% endif %}" id="inspection-collect-finish-btn" style="display: none;">完成采集</a>
           </div>
 
         </div>

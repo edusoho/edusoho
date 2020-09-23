@@ -40,6 +40,21 @@ class CaptureController extends BaseController
         ]);
     }
 
+    public function selectFaceAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+        $cloud = $this->getSettingService()->get('storage', []);
+        $token = $this->getSDKFaceInspectionService()->makeToken($user['id'], $cloud['cloud_access_key'], $cloud['cloud_secret_key']);
+
+        return $this->render('face-inspection/index.html.twig', [
+            'token' => empty($token) ? '' : $token,
+            'user_no' => $user->getId(),
+            'code' => 'face',
+            'error' => empty($error) ? '' : $error,
+            'goto' => $request->query->get('goto') ?: $this->generateUrl('homepage'),
+        ]);
+    }
+
     public function uploadAction(Request $request, $code = 'face')
     {
         $setting = $this->getSettingService()->get('cloud_facein', []);

@@ -3584,3 +3584,7 @@ certificate_image_download:
 certificate_detail:
   path: /certificate/{id}/detail
   defaults: { _controller: AppBundle:Certificate/Certificate:certificateDetail }
+
+face_inspection_select:
+    path: /face/inspection/select
+    defaults: { _controller: AppBundle:FaceInspection/Capture:selectFace }

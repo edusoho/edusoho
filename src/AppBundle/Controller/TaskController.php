@@ -12,6 +12,7 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\LearningDataAnalysisService;
 use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
+use Biz\FaceInspection\Service\FaceInspectionService;
 use Biz\File\Service\UploadFileService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
@@ -113,6 +114,17 @@ class TaskController extends BaseController
             $number = explode('-', $task['number']);
             if (array_key_exists(1, $number)) {
                 $task['number'] = $chapter['published_number'].'-'.$number[1];
+            }
+        }
+
+        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+        if ($activity['mediaType'] == 'testpaper' && !empty($activity['ext']['answerScene']['enable_facein'])) {
+            $face = $this->getFaceInspectionService()->getUserFaceByUserId($user->getId());
+            if (empty($face)) {
+                return $this->redirectToRoute(
+                    'face_inspection_select',
+                    ['goto' => $this->generateUrl('course_task_show', ['courseId' => $courseId, 'id' => $task['id']])]
+                );
             }
         }
 
@@ -704,5 +716,13 @@ class TaskController extends BaseController
     protected function getMaterialService()
     {
         return $this->createService('Course:MaterialService');
+    }
+
+    /**
+     * @return FaceInspectionService
+     */
+    protected function getFaceInspectionService()
+    {
+        return $this->createService('FaceInspection:FaceInspectionService');
     }
 }
