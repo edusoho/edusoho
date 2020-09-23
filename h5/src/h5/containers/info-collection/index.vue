@@ -3,34 +3,56 @@
     <van-form ref="infoCellectForm">
       <template v-for="(item, index) in rule">
         <!-- text ，number -->
-        <template v-if="isDefaultType(item)">
+        <template v-if="item.type === 'input' || item.type === 'textarea'">
           <van-field
             :key="index"
+            required-align="right"
+            error-message-align="left"
+            clearable
             v-model="item.value"
             :name="item.field"
             :label="item.title"
             :required="isRequired(item.validate)"
-            required-align="right"
-            :placeholder="`请输入${item.title}`"
-            clearable
+            :placeholder="getPlaceholder(item)"
             :error="errorRule[index].error"
             :error-message="errorRule[index].errorMessage"
+            :type="getType(item)"
             @blur="checkField(index, item.value, item.validate)"
-            error-message-align="left"
           />
+        </template>
+        <template v-if="item.type === 'radio'">
+          <van-field
+            :key="index"
+            :name="item.field"
+            :label="item.title"
+            :placeholder="getPlaceholder(item)"
+            :required="isRequired(item.validate)"
+            required-align="right"
+          >
+            <template #input>
+              <van-radio-group v-model="item.value" direction="horizontal">
+                <van-radio
+                  v-for="(sex, index) in item.options"
+                  :key="index"
+                  :name="sex.value"
+                  >{{ sex.label }}</van-radio
+                >
+              </van-radio-group>
+            </template>
+          </van-field>
         </template>
         <!-- select -->
         <template v-if="isSelectType(item)">
           <van-field
             :key="index"
             readonly
-            v-model="item.value"
-            :formatter="formatter"
-            :name="item.field"
-            :label="item.title"
-            placeholder="请选择"
             right-icon=" iconfangxiang my_setting-more-special"
             icon-prefix="iconfont"
+            v-model="item.value"
+            :name="item.field"
+            :label="item.title"
+            :required="isRequired(item.validate)"
+            :placeholder="getPlaceholder(item)"
             :error="errorRule[index].error"
             :error-message="errorRule[index].errorMessage"
             @blur="checkField(index, item.value, item.validate)"
@@ -38,7 +60,6 @@
           />
         </template>
       </template>
-
       <div style="margin: 16px;">
         <van-button round block type="info" @click="onSubmit">
           提交
@@ -79,254 +100,263 @@
 </template>
 
 <script>
-// import areaSelect from './components/areaSelect.vue';
-// import birthdatSelect from './components/birthdaySelect.vue';
-// import sexSelect from './components/sexSelect.vue';
 import { arealist } from '@/utils/arealist';
 const defaultType = ['input', 'InputNumber'];
 const selectType = ['select', 'cascader', 'DatePicker'];
+const rule = [
+  {
+    type: 'input',
+    title: '姓名',
+    field: 'name',
+    value: '',
+    validate: [
+      { required: true, message: '姓名不能为空' },
+      { min: 2, message: '最少输入2个字符' },
+      { max: 20, message: '最多输入20个字符' },
+    ],
+  },
+  {
+    type: 'radio',
+    field: 'gender',
+    title: '性别',
+    value: '男',
+    options: [
+      { value: '男', label: '男' },
+      { value: '女', label: '女' },
+    ],
+    validate: [{ required: true, message: '姓名' }],
+  },
+  {
+    type: 'input',
+    field: 'age',
+    title: '年龄',
+    value: '',
+    props: {
+      type: 'number',
+    },
+    validate: [
+      { required: true, message: '年龄不能为空' },
+      { pattern: '^[1-9]([0-9])?$', message: '年龄不在正常范围内' },
+    ],
+  },
+  {
+    type: 'DatePicker',
+    field: 'birthday',
+    title: '生日',
+    value: '',
+    props: {
+      type: 'date',
+      format: 'yyyy-MM-dd',
+      placeholder: '请选择出生年月日',
+    },
+    validate: [{ required: true, message: '生日不能为空' }],
+  },
+  {
+    type: 'input',
+    field: 'idcard',
+    title: '身份证号',
+    value: '',
+    props: {
+      placeholder: '仅支持中国大陆',
+    },
+    validate: [
+      { required: true, message: '身份证号不能为空' },
+      { pattern: '[0-9]{17}[0-9xX]{1}', message: '身份证号格式错误' },
+    ],
+  },
+  {
+    type: 'input',
+    field: 'phone',
+    title: '手机号码',
+    value: '',
+    props: {
+      type: 'number',
+      placeholder: '仅支持中国大陆',
+    },
+    validate: [
+      { required: true, message: '手机号不能为空' },
+      { pattern: '^[1][0-9]{10}$', message: '手机号格式错误' },
+    ],
+  },
+  {
+    type: 'input',
+    field: 'email',
+    title: 'Email',
+    value: '',
+    validate: [
+      { required: true, message: '请输入Email' },
+      { type: 'email', message: 'Email格式错误' },
+    ],
+  },
+  {
+    type: 'input',
+    field: 'wechat',
+    title: '微信号',
+    value: '',
+    validate: [
+      { required: true, message: '微信号不能为空' },
+      {
+        pattern: '^[a-zA-Z]([-_a-zA-Z0-9]{5,19})+$',
+        message: '微信号格式错误',
+      },
+    ],
+  },
+  {
+    type: 'input',
+    field: 'qq',
+    title: 'QQ号',
+    value: '',
+    props: {
+      type: 'number',
+    },
+    validate: [
+      { required: true, message: 'QQ号不能为空' },
+      { pattern: '^[0-9]{5,11}$', message: 'QQ号格式错误' },
+    ],
+  },
+  {
+    type: 'input',
+    field: 'weibo',
+    title: '微博号',
+    value: '',
+    validate: [
+      { required: true, message: '微博号不能为空' },
+      { min: 4, message: '最少输入4个字符' },
+      { max: 30, message: '最多输入30个字符' },
+    ],
+  },
+  {
+    type: 'cascader',
+    title: '省市区县',
+    field: 'province_city_area',
+    value: ['陕西省', '西安市', '新城区'],
+    props: {
+      options: [],
+      placeholder: '请选择省市区县',
+    },
+    validate: [{ required: true, message: '省市区县不能为空' }],
+  },
+  {
+    type: 'input',
+    title: '详细地址',
+    field: 'address_detail',
+    value: '',
+    validate: [
+      { required: true, message: '详细地址不能为空' },
+      { min: 2, message: '最少输入2个字符' },
+      { max: 40, message: '最多输入40个字符' },
+    ],
+  },
+  {
+    type: 'input',
+    title: '职业',
+    field: 'occupation',
+    value: '',
+    validate: [
+      { required: true, message: '职业不能为空' },
+      { min: 2, message: '最少输入2个字符' },
+      { max: 40, message: '最多输入40个字符' },
+    ],
+  },
+  {
+    type: 'input',
+    title: '公司',
+    field: 'company',
+    value: '',
+    validate: [
+      { required: true, message: '公司不能为空' },
+      { min: 2, message: '最少输入2个字符' },
+      { max: 40, message: '最多输入40个字符' },
+    ],
+  },
+  {
+    type: 'input',
+    title: '职位',
+    field: 'position',
+    value: '',
+    validate: [
+      { required: true, message: '职位不能为空' },
+      { min: 2, message: '最少输入2个字符' },
+      { max: 40, message: '最多输入40个字符' },
+    ],
+  },
+  {
+    type: 'input',
+    title: '学校',
+    field: 'school',
+    value: '',
+    validate: [
+      { required: true, message: '学校不能为空' },
+      { min: 2, message: '最少输入2个字符' },
+      { max: 40, message: '最多输入40个字符' },
+    ],
+  },
+  {
+    type: 'input',
+    title: '年级',
+    field: 'grade',
+    value: '',
+    validate: [
+      { required: true, message: '年级不能为空' },
+      { min: 2, message: '最少输入2个字符' },
+      { max: 40, message: '最多输入40个字符' },
+    ],
+  },
+  {
+    type: 'input',
+    title: '班级',
+    field: 'class',
+    value: '',
+    validate: [
+      { required: true, message: '班级不能为空' },
+      { min: 2, message: '最少输入2个字符' },
+      { max: 40, message: '最多输入40个字符' },
+    ],
+  },
+  {
+    type: 'input',
+    title: '国家',
+    field: 'country',
+    value: '',
+    validate: [
+      { required: true, message: '国家不能为空' },
+      { min: 2, message: '最少输入2个字符' },
+      { max: 40, message: '最多输入40个字符' },
+    ],
+  },
+  {
+    type: 'input',
+    title: '语言',
+    field: 'language',
+    value: '',
+    validate: [
+      { required: true, message: '语言不能为空' },
+      { min: 2, message: '最少输入2个字符' },
+      { max: 100, message: '最多输入100个字符' },
+    ],
+  },
+  {
+    type: 'textarea',
+    title: '兴趣',
+    field: 'interest',
+    value: '',
+    validate: [
+      { required: true, message: '兴趣不能为空' },
+      { min: 2, message: '最少输入2个字符' },
+      { max: 100, message: '最多输入100个字符' },
+    ],
+  },
+];
 export default {
-  components: {
-    // areaSelect,
-    // birthdatSelect,
-    // sexSelect,
+  components: {},
+  props: {
+    formRule: {
+      type: Array,
+      default: () => rule,
+    },
   },
   data() {
     return {
-      rule: [
-        {
-          type: 'input',
-          title: '姓名',
-          field: 'name',
-          value: '',
-          validate: [
-            { required: true, message: '请输入姓名' },
-            { min: 2, message: '最少2个字' },
-            { max: 20, message: '最多20个字' },
-          ],
-        },
-        {
-          type: 'select',
-          field: 'gender',
-          title: '性别',
-          value: '',
-          options: [
-            { value: '男', label: '男' },
-            { value: '女', label: '女' },
-            { value: '保密', label: '保密' },
-          ],
-        },
-        {
-          type: 'InputNumber',
-          field: 'age',
-          title: '年龄',
-          value: '',
-          props: {
-            min: 1,
-            max: 99,
-          },
-        },
-        {
-          type: 'DatePicker',
-          field: 'birthday',
-          title: '生日',
-          value: '',
-          props: {
-            type: 'date',
-            format: 'yyyy-MM-dd',
-            placeholder: '请选择',
-          },
-        },
-        {
-          type: 'input',
-          field: 'idcard',
-          title: '身份证号（中国大陆）',
-          value: '',
-          validate: [
-            { required: true, message: '请输入身份证号' },
-            { pattern: '[0-9]{17}[0-9xX]{1}', message: '身份证号码格式不正确' },
-          ],
-        },
-        {
-          type: 'input',
-          field: 'phone',
-          title: '手机号（中国大陆）',
-          value: '',
-          props: {
-            type: 'number',
-          },
-          validate: [
-            { required: true, message: '请输入手机号' },
-            { pattern: '^[1][0-9]{10}$', message: '手机号格式不正确' },
-          ],
-        },
-        {
-          type: 'input',
-          field: 'wechat',
-          title: '微信号',
-          value: '',
-          validate: [
-            { required: true, message: '请输入微信号' },
-            {
-              pattern: '^[a-zA-Z]([-_a-zA-Z0-9]{5,19})+$',
-              message: '微信号格式不正确',
-            },
-          ],
-        },
-        {
-          type: 'input',
-          field: 'qq',
-          title: 'QQ号',
-          value: '',
-          props: {
-            type: 'number',
-          },
-          validate: [
-            { required: true, message: '请输入QQ号' },
-            { pattern: '^[0-9]{5,11}$', message: 'QQ号格式不正确' },
-          ],
-        },
-        {
-          type: 'input',
-          field: 'weibo_name',
-          title: '新浪微博名',
-          value: '',
-          validate: [
-            { required: true, message: '请输入新浪微博名' },
-            { min: 4, message: '最少4个字' },
-            { max: 30, message: '最多30个字' },
-          ],
-        },
-        {
-          type: 'input',
-          field: 'email',
-          title: 'Email',
-          value: '',
-          validate: [
-            { required: true, message: '请输入Email' },
-            { type: 'email', message: 'Email格式不正确' },
-          ],
-        },
-        {
-          type: 'cascader',
-          title: '省市',
-          field: 'province_city_area',
-          value: '',
-          props: {
-            options: window.province_city_area || [],
-          },
-        },
-        {
-          type: 'input',
-          title: '详细地址',
-          field: 'address_detail',
-          value: '',
-          validate: [
-            { required: true, message: '请输入详细地址' },
-            { min: 2, message: '最少2个字' },
-            { max: 40, message: '最多40个字' },
-          ],
-        },
-        {
-          type: 'input',
-          title: '职业',
-          field: 'occupation',
-          value: '',
-          validate: [
-            { required: true, message: '请输入职业' },
-            { min: 2, message: '最少2个字' },
-            { max: 40, message: '最多40个字' },
-          ],
-        },
-        {
-          type: 'input',
-          title: '公司',
-          field: 'company',
-          value: '',
-          validate: [
-            { required: true, message: '请输入公司' },
-            { min: 2, message: '最少2个字' },
-            { max: 40, message: '最多40个字' },
-          ],
-        },
-        {
-          type: 'input',
-          title: '职位',
-          field: 'position',
-          value: '',
-          validate: [
-            { required: true, message: '请输入职业' },
-            { min: 2, message: '最少2个字' },
-            { max: 40, message: '最多40个字' },
-          ],
-        },
-        {
-          type: 'input',
-          title: '学校',
-          field: 'school',
-          value: '',
-          validate: [
-            { required: true, message: '请输入学校' },
-            { min: 2, message: '最少2个字' },
-            { max: 40, message: '最多40个字' },
-          ],
-        },
-        {
-          type: 'input',
-          title: '年级',
-          field: 'grade',
-          value: '',
-          validate: [
-            { required: true, message: '请输入年级' },
-            { min: 2, message: '最少2个字' },
-            { max: 40, message: '最多40个字' },
-          ],
-        },
-        {
-          type: 'input',
-          title: '班级',
-          field: 'class',
-          value: '',
-          validate: [
-            { required: true, message: '请输入班级' },
-            { min: 2, message: '最少2个字' },
-            { max: 40, message: '最多40个字' },
-          ],
-        },
-        {
-          type: 'input',
-          title: '国家',
-          field: 'country',
-          value: '',
-          validate: [
-            { required: true, message: '请输入国家' },
-            { min: 2, message: '最少2个字' },
-            { max: 40, message: '最多40个字' },
-          ],
-        },
-        {
-          type: 'input',
-          title: '语言',
-          field: 'language',
-          value: '',
-          validate: [
-            { required: true, message: '请输入语言' },
-            { min: 2, message: '最少2个字' },
-            { max: 100, message: '最多100个字' },
-          ],
-        },
-        {
-          type: 'input',
-          title: '兴趣',
-          field: 'interest',
-          value: '',
-          validate: [
-            { required: true, message: '请输入兴趣' },
-            { min: 2, message: '最少2个字' },
-            { max: 100, message: '最多100个字' },
-          ],
-        },
-      ],
       birthtDateSelect: {
         minDate: new Date(1900, 1, 1),
         maxDate: new Date(),
@@ -343,6 +373,8 @@ export default {
       currentSelectIndex: 0,
       areaList: Object.freeze(arealist),
       errorRule: [],
+      rule: this.formRule,
+      areaIndex: null,
     };
   },
   computed: {},
@@ -353,7 +385,12 @@ export default {
   methods: {
     getErrorRule() {
       const rule = this.rule;
-      rule.forEach(() => {
+      rule.forEach((item, index) => {
+        // 后端返回回来的是array
+        if (item.field === 'province_city_area') {
+          this.areaIndex = index;
+          this.$set(this.rule[index], 'value', this.arrayToString(item.value));
+        }
         this.errorRule.push({ error: false, errorMessage: '' });
       });
     },
@@ -364,6 +401,37 @@ export default {
           break;
         }
       }
+      // 提交array
+      if (this.areaIndex) {
+        const value = this.rule[this.areaIndex].value;
+        this.$set(
+          this.rule[this.areaIndex],
+          'value',
+          this.stringToArray(value),
+        );
+      }
+      this.$emit('submitForm', this.rule);
+    },
+    arrayToString(value) {
+      if (Array.isArray(value)) {
+        return value.join(' ');
+      }
+      return value;
+    },
+    stringToArray(value) {
+      return value.split(' ');
+    },
+    getType(item) {
+      if (item.type === 'input') {
+        return item.props?.type || 'text';
+      }
+      return item.type;
+    },
+    getPlaceholder(item) {
+      if (item.props) {
+        return item.props.placeholder || '';
+      }
+      return '';
     },
     checkField(index, value, validate) {
       if (!validate) {
@@ -376,9 +444,7 @@ export default {
           return false;
         }
         if (value) {
-          const type = this.rule[index].type;
-          const currentValue =
-            type === 'InputNumber' ? Number(value) : value.length;
+          const currentValue = value.length;
           if (validate[i].min && currentValue < validate[i].min) {
             this.setError(index, true, validate[i].message);
             return false;
@@ -398,12 +464,6 @@ export default {
       }
       this.setError(index, false, '');
       return true;
-    },
-    formatter(value) {
-      if (Array.isArray(value)) {
-        return value.join(' ');
-      }
-      return value;
     },
     setError(index, error, errorMessage) {
       const rule = {
@@ -490,15 +550,15 @@ export default {
     },
     areaConfirm(val) {
       const currentSelectIndex = this.currentSelectIndex;
-      // const province = val[0].name;
-      // const city = val[1].name;
-      // const local = val[2].name;
+      const province = val[0].name;
+      const city = val[1].name;
+      const local = val[2].name;
 
-      // let area = province + ' ' + city + ' ' + local;
-      // if (province === city) {
-      //   area = city + ' ' + local;
-      // }
-      this.$set(this.rule[currentSelectIndex], 'value', val);
+      let area = province + ' ' + city + ' ' + local;
+      if (province === city) {
+        area = city + ' ' + local;
+      }
+      this.$set(this.rule[currentSelectIndex], 'value', area);
       this.areaCancel();
     },
     areaCancel() {
