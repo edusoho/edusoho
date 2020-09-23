@@ -38,7 +38,7 @@ class InformationCollectForm extends AbstractResource
         $this->getInformationCollectResultService()->submitForm(
             $this->getCurrentUser()->getId(),
             $eventId,
-            $request->request->get('form', [])
+            $request->request->all()
         );
 
         return $this->get($request, $eventId);
