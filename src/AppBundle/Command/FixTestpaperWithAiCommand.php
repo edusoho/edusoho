@@ -6,9 +6,13 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Topxia\Service\Common\ServiceKernel;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 
 class FixTestpaperWithAiCommand extends BaseCommand
 {
+    private $logger;
+
     protected function configure()
     {
         $this->setName('fix:testpaper-with-ai')
@@ -50,11 +54,40 @@ class FixTestpaperWithAiCommand extends BaseCommand
             return;
         }
 
+        $report = $this->getAnswerReportService()->search(
+            [
+                'user_id' => $userId,
+                'answer_scene_id' => $record['answer_scene_id'],
+                'assessment_id' => $record['assessment_id']
+            ],
+            [],
+            0,
+            PHP_INT_MAX
+        );
+
+        if (empty($report) || count($report) > 1) {
+            var_dump('答题报告不存在或次数大于1');
+            return;
+        }
+
         $questionReports = $this->getAnswerQuestionReportService()->findByAnswerRecordId($recordId);
         if (empty($questionReports)) {
             var_dump('答题问题记录不存在');
             return;
         }
+
+        $this->getLogger()->info('---------------- start ----------------');
+        $this->getLogger()->info('----------------'. $userId . ' and ' . $recordId .'----------------');
+        $this->getLogger()->info('---------------- record ----------------');
+        $this->getLogger()->info('record: ' . json_encode($record));
+        $this->getLogger()->info('---------------- report ----------------');
+        $this->getLogger()->info('report: ' . json_encode($report));
+        $this->getLogger()->info('---------------- question reports ----------------');
+        foreach ($questionReports as $key => $questionReport) {
+            $this->getLogger()->info('question report '. $key . ' : ' . json_encode($questionReport));
+        }
+
+        $this->getLogger()->info('---------------- end ----------------');
 
         try {
             $this->getBiz()['db']->beginTransaction();
@@ -78,6 +111,21 @@ class FixTestpaperWithAiCommand extends BaseCommand
         }
     }
 
+    protected function getLogger($name = 'testpaper-with-ai')
+    {
+        if ($this->logger) {
+            return $this->logger;
+        }
+
+        $this->logger = new Logger($name);
+
+        $biz = $this->getBiz();
+        $this->logger->pushHandler(new StreamHandler($biz['log_directory'] . '/testpaper-with-ai.log', Logger::DEBUG));
+
+        return $this->logger;
+    }
+
+
     protected function getUserService()
     {
         return ServiceKernel::instance()->createService('User:UserService');
@@ -89,6 +137,11 @@ class FixTestpaperWithAiCommand extends BaseCommand
     protected function getAnswerRecordService()
     {
         return ServiceKernel::instance()->createService('ItemBank:Answer:AnswerRecordService');
+    }
+
+    protected function getAnswerReportService()
+    {
+        return ServiceKernel::instance()->createService('ItemBank:Answer:AnswerReportService');
     }
 
     /**
