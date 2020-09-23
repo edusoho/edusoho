@@ -19,7 +19,7 @@ class EmailFormItem extends FormItem
             'value' => $this->value,
             'validate' => [
                 ['required' => $this->required, 'message' => self::TITLE.'不能为空'],
-                ['type' => 'email', 'message' => self::TITLE.'格式错误'],
+                ['pattern' => '^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$', 'message' => self::TITLE.'格式错误'],
             ],
         ];
     }
