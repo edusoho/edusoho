@@ -65,7 +65,7 @@ class OverviewStudentExporter extends Exporter
 
             $user = $users[$member['userId']];
             $data = [];
-            $data[] = $user['nickname']."\t";
+            $data[] = is_numeric($user['nickname']) ? $user['nickname']."\t" : $user['nickname'];
 
             $learnProccess = (empty($member['learnedCompulsoryTaskNum']) || empty($course['compulsoryTaskNum'])) ? 0 : (int) ($member['learnedCompulsoryTaskNum'] * 100 / $course['compulsoryTaskNum']);
             $data[] = $learnProccess > 100 ? '100%' : $learnProccess.'%';
