@@ -966,12 +966,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/codeages/qiqiuyun-php-sdk.git",
-            "reference": "04268de4ab6a8d2496c4d81c55891b6460606b8c"
+            "reference": "ca6471fedd2164117815fc2ed961b5cb4f82e7f9"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/04268de4ab6a8d2496c4d81c55891b6460606b8c",
-            "reference": "04268de4ab6a8d2496c4d81c55891b6460606b8c",
+            "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/ca6471fedd2164117815fc2ed961b5cb4f82e7f9",
+            "reference": "ca6471fedd2164117815fc2ed961b5cb4f82e7f9",
             "shasum": "",
             "mirrors": [
                 {
@@ -989,7 +989,7 @@
             "monolog/monolog": "^1.18",
             "phpunit/phpunit": "^4 || ^5 || ^6"
         },
-        "time": "2020-07-13T05:49:14+00:00",
+        "time": "2020-09-21T04:46:31+00:00",
         "type": "library",
         "installation-source": "source",
         "autoload": {
@@ -7311,7 +7311,8 @@
         "keywords": [
             "configuration",
             "distribution"
-        ]
+        ],
+        "abandoned": true
     },
     {
         "name": "sensio/framework-extra-bundle",
