@@ -18,7 +18,7 @@ class IdcardFormItem extends FormItem
             'field' => self::FILED,
             'value' => $this->value,
             'props' => [
-                'placeholder' => '仅支持中国大陆',
+                'placeholder' => '仅支持中国大陆身份证号',
             ],
             'validate' => [
                 ['required' => $this->required, 'message' => self::TITLE.'不能为空'],

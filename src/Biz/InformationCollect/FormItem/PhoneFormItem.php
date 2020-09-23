@@ -19,7 +19,7 @@ class PhoneFormItem extends FormItem
             'value' => $this->value,
             'props' => [
                 'type' => 'number',
-                'placeholder' => '仅支持中国大陆',
+                'placeholder' => '仅支持中国大陆手机号码',
             ],
             'validate' => [
                 ['required' => $this->required, 'message' => self::TITLE.'不能为空'],
