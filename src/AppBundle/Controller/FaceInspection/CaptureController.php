@@ -6,6 +6,7 @@ use AppBundle\Controller\BaseController;
 use Biz\FaceInspection\Common\FileToolkit;
 use Biz\FaceInspection\Service\FaceInspectionService;
 use Biz\System\Service\Impl\SettingServiceImpl;
+use Biz\User\UserException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Symfony\Component\HttpFoundation\Request;
@@ -43,6 +44,9 @@ class CaptureController extends BaseController
     public function selectFaceAction(Request $request)
     {
         $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            $this->createNewException(UserException::UN_LOGIN());
+        }
         $cloud = $this->getSettingService()->get('storage', []);
         $token = $this->getSDKFaceInspectionService()->makeToken($user['id'], $cloud['cloud_access_key'], $cloud['cloud_secret_key']);
 
