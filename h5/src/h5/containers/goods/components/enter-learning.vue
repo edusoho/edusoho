@@ -6,7 +6,7 @@
       </div>
       <div class="enter-learning-container__text">
         <span class="content">
-          进群免费学习课程
+          {{ qrInfo.title }}
           <span class="hot">Hot</span>
         </span>
       </div>
