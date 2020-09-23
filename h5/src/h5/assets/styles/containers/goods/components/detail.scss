@@ -73,6 +73,19 @@
 		font-size: vw(16);
 	}
 
+	.detail-info__title--pr {
+		position: relative;
+		padding-right: vw(20);
+	}
+
+	.goods-share {
+		position: absolute;
+		top: 0;
+		right: 0;
+		color: #bebebe;
+		font-size: vw(16);
+	}
+
 	.detail-info__price {
 		margin-top: vw(8);
 		color: #999;
@@ -105,12 +118,13 @@
 
 	.detail-plan__plan {
 		margin-bottom: vw(12);
-    .vip-icon {
-      width: 18px;
-      height: 18px;
-      vertical-align: top;
-      margin-top: 2px;
-    }
+
+		.vip-icon {
+			width: 18px;
+			height: 18px;
+			margin-top: 2px;
+			vertical-align: top;
+		}
 
 		&:last-child {
 			margin-bottom: 0;
@@ -322,8 +336,9 @@
 		}
 	}
 }
+
 .detail-right__price__unit {
-  color: #666;
-  font-size: 14px;
-  font-weight: normal;
+	color: #666;
+	font-weight: normal;
+	font-size: 14px;
 }

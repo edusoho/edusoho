@@ -1,8 +1,13 @@
 <template>
   <div class="detail-info" v-if="goods.id">
-    <p class="detail-info__title">
+    <p class="detail-info__title" :class="isShare && 'detail-info__title--pr'">
       <span class="certificate-icon" v-if="currentSku.hasCertificate">证</span
       >{{ goods.title }}
+      <i
+        class="iconfont icon-fenxiang goods-share"
+        @click="onShare"
+        v-if="isShare"
+      ></i>
     </p>
 
     <div
@@ -72,9 +77,19 @@ export default {
       default: () => {},
     },
   },
+  data() {
+    return {
+      isShare: true, // 是否显示分享按钮
+    };
+  },
   filters: {
     formatPrice(input) {
       return (Math.round(input * 100) / 100).toFixed(2);
+    },
+  },
+  methods: {
+    onShare() {
+      // 分享
     },
   },
 };
