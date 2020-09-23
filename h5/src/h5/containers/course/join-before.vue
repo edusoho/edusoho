@@ -53,7 +53,10 @@
       type="course"
       defaul-value="暂无评价"
     />
-
+    <!-- 个人信息表单填写 -->
+    <van-action-sheet v-model="isShowForm" title="标题">
+      <info-collection></info-collection>
+    </van-action-sheet>
     <!-- 加入学习 -->
     <e-footer
       v-if="
@@ -103,7 +106,7 @@ import getCouponMixin from '@/mixins/coupon/getCouponHandler';
 import getActivityMixin from '@/mixins/activity/index';
 import { dateTimeDown } from '@/utils/date-toolkit';
 import { Toast } from 'vant';
-
+import infoCollection from '../info-collection/index';
 const TAB_HEIGHT = 44;
 
 export default {
@@ -116,6 +119,7 @@ export default {
     moreMask,
     reviewList,
     onsale,
+    infoCollection,
   },
   mixins: [redirectMixin, getCouponMixin, getActivityMixin],
   data() {
@@ -139,6 +143,7 @@ export default {
         seckill: {},
       },
       courseSettings: {},
+      isShowForm: false,
     };
   },
   async created() {
@@ -151,7 +156,7 @@ export default {
     });
   },
   computed: {
-    ...mapState(['couponSwitch', 'user']),
+    ...mapState(['couponSwitch', 'user', 'isSkipForm']),
     ...mapState('course', {
       details: state => state.details,
     }),
@@ -333,6 +338,8 @@ export default {
       if ((Number(this.details.buyable) && isPast) || vipAccessToJoin) {
         if (+this.details.price && !vipAccessToJoin) {
           this.getOrder();
+        } else if (!this.isSkipForm) {
+          this.isShowForm = true;
         } else {
           this.joinCourse({
             id: this.details.id,

@@ -1,0 +1,10 @@
+.info-collection {
+	padding: vw(16);
+
+	.info-required::after {
+		position: absolute;
+		color: #ee0a24;
+		font-size: 14px;
+		content: '*';
+	}
+}

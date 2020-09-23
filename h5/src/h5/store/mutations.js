@@ -34,7 +34,7 @@ export default {
   },
   [types.SET_NICKNAME](state, payload) {
     state.user = Object.assign({}, state.user, {
-      nickname: payload.nickname
+      nickname: payload.nickname,
     });
     localStorage.setItem('user', JSON.stringify(payload));
   },
@@ -60,5 +60,9 @@ export default {
   },
   [types.SET_TASK_SATUS](state, payload) {
     state.course.taskStatus = payload;
-  }
+  },
+  /// / 报名信息表单开关
+  [types.SET_INFO_COLLECTION](state, payload) {
+    state.isSkipForm = payload;
+  },
 };

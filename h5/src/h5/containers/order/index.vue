@@ -82,6 +82,11 @@
         <span class="gray-dark" v-html="getValidity" />
       </div>
     </div>
+    <!-- 报名信息填写 -->
+    <div class="personal-info" @click="showInfoForm">
+      报名信息
+      <i class="iconfont icon-arrow-right"></i>
+    </div>
     <div class="payPage">
       <e-loading v-if="isLoading" />
       <div class="payPage__order">
@@ -193,7 +198,7 @@ export default {
     this.getSettings();
   },
   computed: {
-    ...mapState(['wechatSwitch', 'isLoading', 'couponSwitch']),
+    ...mapState(['wechatSwitch', 'isLoading', 'couponSwitch', 'isSkipForm']),
     total() {
       const totalNumber = this.course.totalPrice;
       if (!this.itemData) {
@@ -265,7 +270,8 @@ export default {
   },
   methods: {
     handleSubmit() {
-      if (this.total == 0) {
+      if (!this.isSkipForm) Toast('请先提交信息后在提交订单');
+      else if (this.total == 0) {
         // if(this.detail.sn){
         //   this.handlePay();
         //   return;
@@ -492,6 +498,12 @@ export default {
         .catch(err => {
           Toast.fail(err.message);
         });
+    },
+    // 报名信息填写
+    showInfoForm() {
+      this.$router.push({
+        path: `/info_collection`,
+      });
     },
   },
 };

@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="info-collection">
     <van-form ref="infoCellectForm">
       <!-- <sexSelect /> -->
       <template v-for="(item, index) in rule">
@@ -10,7 +10,6 @@
             v-model="item.value"
             :name="item.field"
             :label="item.title"
-            :required="isRequired(item.validate)"
             required-align="right"
             :placeholder="`请输入${item.title}`"
             clearable
@@ -18,6 +17,7 @@
             :error-message="errorRule[index].errorMessage"
             @blur="checkField(index, item.value, item.validate)"
             error-message-align="left"
+            :label-class="isRequired(item.validate) ? 'info-required' : ''"
           />
         </template>
         <!-- select -->
