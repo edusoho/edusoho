@@ -25,7 +25,7 @@ class InformationCollectForm extends AbstractResource
 
         foreach ($event['items'] as &$item) {
             $value = empty($resultItems[$item['code']]) ? '' : $resultItems[$item['code']]['value'];
-            $item['data'] = FormItemFectory::create($item['code'])->required($item['required'])->value($value)->getData();
+            $item = FormItemFectory::create($item['code'])->required($item['required'])->value($value)->getData();
         }
 
         return $event;

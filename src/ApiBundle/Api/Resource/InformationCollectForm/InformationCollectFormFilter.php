@@ -17,8 +17,5 @@ class InformationCollectFormFilter extends Filter
     {
         $data['eventId'] = $data['id'];
         unset($data['id']);
-
-        $informationCollectFormItemFilter = new InformationCollectFormItemFilter();
-        $informationCollectFormItemFilter->filters($data['items']);
     }
 }

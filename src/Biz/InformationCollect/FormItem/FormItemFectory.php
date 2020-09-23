@@ -16,6 +16,7 @@ class FormItemFectory
         return [
             'name' => 'Biz\InformationCollect\FormItem\NameFormItem',
             'gender' => 'Biz\InformationCollect\FormItem\GenderFormItem',
+            'age' => 'Biz\InformationCollect\FormItem\AgeFormItem',
         ];
     }
 }
