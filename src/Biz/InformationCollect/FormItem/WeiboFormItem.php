@@ -19,6 +19,7 @@ class WeiboFormItem extends FormItem
             'value' => $this->value,
             'validate' => [
                 ['required' => $this->required, 'message' => self::TITLE.'不能为空'],
+                ['pattern' => '^[A-Za-z0-9\u4e00-\u9fa5]+$', 'message' => self::TITLE.'格式错误'],
                 ['min' => 4, 'message' => '最少输入4个字符'],
                 ['max' => 30, 'message' => '最多输入30个字符'],
             ],

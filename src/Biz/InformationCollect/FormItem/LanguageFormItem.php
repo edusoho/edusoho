@@ -20,7 +20,7 @@ class LanguageFormItem extends FormItem
             'validate' => [
                 ['required' => $this->required, 'message' => self::TITLE.'不能为空'],
                 ['min' => 2, 'message' => '最少输入2个字符'],
-                ['max' => 100, 'message' => '最多输入100个字符'],
+                ['max' => 40, 'message' => '最多输入40个字符'],
             ],
         ];
     }
