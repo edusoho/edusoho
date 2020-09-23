@@ -13,6 +13,10 @@
         />
         <detail :goods="goods" :currentSku="currentSku" />
         <specs :goods="goods" :currentSku="currentSku" @changeSku="changeSku" />
+        <certificate
+          v-if="currentSku.hasCertificate"
+          :selectedPlanId="$route.query.targetId"
+        />
         <enter-learning
           v-if="Object.keys(componentsInfo.mpQrCode).length"
           :qr-info="componentsInfo.mpQrCode"
@@ -95,7 +99,11 @@
         </section>
 
         <!-- 收藏/购买 -->
-        <buy :goods="goods" :currentSku="currentSku" :is-favorite="goods.isFavorite" />
+        <buy
+          :goods="goods"
+          :currentSku="currentSku"
+          :is-favorite="goods.isFavorite"
+        />
 
         <!-- 回到顶部 -->
         <back-to-top v-show="backToTopShow" />
@@ -108,6 +116,7 @@
 import Discount from './components/discount';
 import Detail from './components/detail';
 import Specs from './components/specs';
+import Certificate from './components/certificate';
 import EnterLearning from './components/enter-learning';
 
 import Teacher from './components/teacher';
@@ -147,6 +156,7 @@ export default {
     BackToTop, // 回到顶部
     AfterjoinDirectory,
     ClassroomCourses,
+    Certificate,
     EnterLearning,
   },
   computed: {

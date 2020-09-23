@@ -1,6 +1,9 @@
 <template>
   <div class="detail-info" v-if="goods.id">
-    <p class="detail-info__title">{{ goods.title }}</p>
+    <p class="detail-info__title">
+      <span class="certificate-icon" v-if="currentSku.hasCertificate">证</span
+      >{{ goods.title }}
+    </p>
 
     <div
       v-if="goods.discount && currentSku.displayPrice != 0"
@@ -28,7 +31,10 @@
         </div>
       </div>
     </div>
-    <div v-if="!goods.discount || currentSku.displayPrice == 0" class="detail-info__price">
+    <div
+      v-if="!goods.discount || currentSku.displayPrice == 0"
+      class="detail-info__price"
+    >
       <div class="clearfix">
         <div class="pull-left">
           价格
