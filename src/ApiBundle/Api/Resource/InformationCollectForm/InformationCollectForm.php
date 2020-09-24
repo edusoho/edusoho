@@ -21,6 +21,7 @@ class InformationCollectForm extends AbstractResource
         $result = $this->getInformationCollectResultService()->getResultByUserIdAndEventId($this->getCurrentUser()->getId(), $eventId);
         if (!empty($result['items'])) {
             $resultItems = ArrayToolkit::index($result['items'], 'code');
+            $event['allowSkip'] = true;
         }
 
         foreach ($event['items'] as &$item) {
