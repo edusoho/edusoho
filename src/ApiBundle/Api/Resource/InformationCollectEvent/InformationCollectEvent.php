@@ -17,6 +17,7 @@ class InformationCollectEvent extends AbstractResource
         $event = $this->getInformationCollectEventService()->getEventByActionAndLocation($action, $location);
         if (!empty($event)) {
             $event['isSubmited'] = $this->getInformationCollectResultService()->isSubmited($this->getCurrentUser()->getId(), $event['id']);
+            $event['allowSkip'] = true === $event['isSubmited'] ? true : (bool) $event['allowSkip'];
         }
 
         return $event ?: (object) [];
