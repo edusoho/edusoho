@@ -360,6 +360,10 @@ export default {
       type: Object,
       default: () => {},
     },
+    targetType: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
@@ -418,6 +422,10 @@ export default {
       }
     },
     laterFillIn() {
+      if (this.targetType) {
+        this.$emit('joinFreeClass');
+        return;
+      }
       this.$emit('joinFreeCourse');
     },
     arrayToString(value) {
