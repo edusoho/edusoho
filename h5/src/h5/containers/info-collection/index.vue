@@ -1,6 +1,6 @@
 <template>
   <div class="info-collection">
-    <van-form ref="infoCellectForm" title="我我我">
+    <van-form ref="infoCellectForm">
       <template v-for="(item, index) in rule">
         <!-- text ，number -->
         <template v-if="item.type === 'input' || item.type === 'textarea'">
@@ -67,17 +67,13 @@
         </van-button> -->
       </div>
       <div class="info-footer">
-        <div
-          v-if="this.infoStatus.allowSkip != '1'"
-          class="info-footer__btn"
-          @click="onSubmit"
-        >
+        <div v-if="!isAllowSkip" class="info-footer__btn" @click="onSubmit">
           确认提交
         </div>
         <template v-else>
           <div
             class="info-footer__btn info-footer__btn-border"
-            @click="waitSubmit"
+            @click="laterFillIn"
           >
             稍后填写
           </div>
@@ -375,7 +371,7 @@ export default {
       type: Array,
       default: () => rule,
     },
-    infoStatus: {
+    userInfoCellect: {
       type: Object,
       default: () => {},
     },
@@ -403,13 +399,14 @@ export default {
       formTitle: [],
     };
   },
-  computed: {},
+  computed: {
+    isAllowSkip() {
+      return Number(this.userInfoCellect.allowSkip) === 1;
+    },
+  },
   watch: {},
   created() {
     this.getErrorRule();
-    // this.getformTitle();
-    console.log('------', this.infoStatus);
-    console.log('------', this.infoStatus.id);
   },
   methods: {
     // 获取表单名
@@ -448,12 +445,9 @@ export default {
       this.getformTitle(formData);
 
       this.setInfoCollection();
-      // if (this.infoStatus.isSubmited) {
-      //   this.waitSubmit();
-      // }
     },
-    waitSubmit() {
-      this.$emit('waitSubmit');
+    laterFillIn() {
+      this.$emit('laterFillIn');
     },
     arrayToString(value) {
       if (Array.isArray(value)) {
@@ -617,13 +611,15 @@ export default {
     },
     setInfoCollection() {
       const data = {
-        eventId: this.infoStatus.id,
+        eventId: this.userInfoCellect.id,
         ...this.formTitle,
       };
       Api.setInfoCollection({
         data,
       }).then(res => {
         console.log(res);
+        this.$toast('提交成功');
+        this.laterFillIn();
       });
     },
   },

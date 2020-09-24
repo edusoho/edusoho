@@ -54,10 +54,10 @@
       defaul-value="暂无评价"
     />
     <!-- 个人信息表单填写 -->
-    <van-action-sheet v-model="isShowForm" :title="infoStatus.title">
+    <van-action-sheet v-model="isShowForm" :title="userInfoCellect.title">
       <info-collection
-        :infoStatus="this.infoStatus"
-        @waitSubmit="waitSubmit"
+        :userInfoCellect="this.userInfoCellect"
+        @laterFillIn="laterFillIn"
       ></info-collection>
     </van-action-sheet>
     <!-- 加入学习 -->
@@ -147,9 +147,8 @@ export default {
       },
       courseSettings: {},
       isShowForm: false,
-      infoStatus: {},
-      info: {},
-      setInfo: {},
+      userInfoCellect: {},
+      userInfoCellectForm: {},
     };
   },
   async created() {
@@ -223,7 +222,8 @@ export default {
     },
   },
   mounted() {
-    this.getInfoCollectionForm();
+    // this.getInfoCollectionForm();
+    console.log(this.details.id);
     this.getInfoCollectionEvent();
     if (!this.isClassCourse && this.couponSwitch) {
       // 获取促销优惠券
@@ -346,7 +346,10 @@ export default {
       if ((Number(this.details.buyable) && isPast) || vipAccessToJoin) {
         if (+this.details.price && !vipAccessToJoin) {
           this.getOrder();
-        } else if (!this.infoStatus.isSubmited && this.infoStatus.id) {
+        } else if (
+          !this.userInfoCellect.isSubmited &&
+          this.userInfoCellect.id
+        ) {
           this.isShowForm = true;
         } else {
           this.joinCourse({
@@ -365,7 +368,7 @@ export default {
         }
       }
     },
-    waitSubmit() {
+    laterFillIn() {
       this.joinCourse({
         id: this.details.id,
       })
@@ -437,13 +440,14 @@ export default {
         targetType: 'course',
         targetId: this.details.id,
       };
+      console.log(params);
       Api.getInfoCollectionEvent({
         query,
         params,
       })
         .then(res => {
-          this.infoStatus = { ...res };
-          console.log(this.infoStatus);
+          this.userInfoCellect = { ...res };
+          this.getInfoCollectionForm();
         })
         .catch(err => {
           console.error(err);
@@ -452,10 +456,10 @@ export default {
     // 根据事件id获取表单
     getInfoCollectionForm() {
       Api.getInfoCollectionEvent({
-        eventId: this.infoStatus.id,
+        eventId: this.userInfoCellect.id,
       })
         .then(res => {
-          this.info = { ...res };
+          this.userInfoCellectForm = { ...res };
         })
         .catch(err => {
           console.error(err);
