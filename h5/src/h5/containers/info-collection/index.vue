@@ -422,11 +422,7 @@ export default {
       }
     },
     laterFillIn() {
-      if (this.targetType) {
-        this.$emit('joinFreeClass');
-        return;
-      }
-      this.$emit('joinFreeCourse');
+      this.$emit('submitForm');
     },
     arrayToString(value) {
       if (Array.isArray(value)) {

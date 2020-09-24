@@ -85,7 +85,7 @@
         <info-collection
           :userInfoCellectForm="this.userInfoCellectForm"
           :formRule="this.userInfoCellectForm.items"
-          @joinFreeClass="joinFreeClass"
+          @submitForm="joinFreeClass"
           targetType="classroom"
         ></info-collection>
       </van-action-sheet>

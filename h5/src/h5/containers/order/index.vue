@@ -83,10 +83,34 @@
       </div>
     </div>
     <!-- 报名信息填写 -->
-    <div class="personal-info" @click="showInfoForm">
+    <div
+      class="personal-info"
+      v-show="userInfoCellect"
+      @click="isShowForm = true"
+    >
       报名信息
       <i class="iconfont icon-arrow-right"></i>
     </div>
+    <!-- 个人信息表单填写 -->
+    <van-popup
+      v-model="isShowForm"
+      :overlay="false"
+      class="e-popup full-height-popup coupon-popup"
+      position="bottom"
+    >
+      <van-nav-bar
+        :left-arrow="true"
+        title="用户信息填写"
+        class="nav-bar"
+        @click-left="isShowForm = false"
+      />
+      <info-collection
+        :userInfoCellectForm="this.userInfoCellectForm"
+        :formRule="this.userInfoCellectForm.items"
+        @submitForm="handleSubmit"
+      ></info-collection>
+    </van-popup>
+
     <div class="payPage">
       <e-loading v-if="isLoading" />
       <div class="payPage__order">
@@ -142,7 +166,7 @@
       </div>
       <div
         :class="['order-footer__btn', { disabled: !validPayWay }]"
-        @click="handleSubmit"
+        @click="shouldCollectUserInfo"
       >
         去支付
       </div>
@@ -155,12 +179,15 @@ import coupon from '&/components/e-coupon/e-coupon.vue';
 import eCourse from '&/components/e-course/e-course.vue';
 import Api from '@/api';
 import { Toast } from 'vant';
-
+import collectUserInfoMixins from '@/mixins/collectUserInfo/index.js';
+import infoCollection from '../info-collection/index';
 export default {
   components: {
     eCourse,
     coupon,
+    infoCollection,
   },
+  mixins: [collectUserInfoMixins],
   data() {
     return {
       course: {
@@ -187,6 +214,7 @@ export default {
       paySettings: {},
       inWechat: this.isWeixinBrowser(),
       timeoutId: -1,
+      isShowForm: false,
     };
   },
   created() {
@@ -198,7 +226,7 @@ export default {
     this.getSettings();
   },
   computed: {
-    ...mapState(['wechatSwitch', 'isLoading', 'couponSwitch', 'allowSkip']),
+    ...mapState(['wechatSwitch', 'isLoading', 'couponSwitch']),
     total() {
       const totalNumber = this.course.totalPrice;
       if (!this.itemData) {
@@ -244,7 +272,9 @@ export default {
     validPayWay() {
       return (
         this.paySettings.wxpayEnabled ||
-        (this.paySettings.alipayEnabled && !this.inWechat)
+        (this.paySettings.alipayEnabled &&
+          !this.inWechat &&
+          this.userInfoCellect)
       );
     },
   },
@@ -260,33 +290,42 @@ export default {
     },
   },
   watch: {
-    $route(to, from) {
-      this.confirmOrder();
-    },
+    // $route(to, from) {
+    //   this.confirmOrder();
+    // },
   },
   beforeRouteLeave(to, from, next) {
     clearTimeout(this.timeoutId);
     next();
   },
   methods: {
+    shouldCollectUserInfo() {
+      if (this.hasUserInfoCellectForm) {
+        Toast('请先提交报名信息后再提交订单');
+      } else {
+        this.handleSubmit();
+      }
+    },
+    getInfoCollection() {
+      const paramsList = {
+        action: 'buy_before',
+        targetType: this.targetType,
+        targetId: this.detail.id,
+      };
+      this.getInfoCollectionEvent(paramsList).then(res => {
+        if (Object.keys(res).length) {
+          this.getInfoCollectionForm();
+        }
+      });
+    },
     handleSubmit() {
-      if (!this.allowSkip) Toast('请先提交信息后在提交订单');
-      else if (this.total == 0) {
-        // if(this.detail.sn){
-        //   this.handlePay();
-        //   return;
-        // }
+      if (this.total == 0) {
         this.createOrder('free');
       } else {
         if (!this.validPayWay) {
           Toast.fail('无可用支付方式');
           return;
         }
-        // 从我的订单进来已经创建订单，直接去支付
-        // if(this.detail.sn){
-        //   this.handlePay();
-        //   return;
-        // }
         this.createOrder('pay');
       }
     },
@@ -349,6 +388,7 @@ export default {
           const coupons = res.availableCoupons;
           this.course = res;
           this.itemData = coupons.length > 0 ? coupons[0] : null;
+          this.getInfoCollection();
         })
         .catch(err => {
           this.$toast(err.message);
@@ -498,12 +538,6 @@ export default {
         .catch(err => {
           Toast.fail(err.message);
         });
-    },
-    // 报名信息填写
-    showInfoForm() {
-      this.$router.push({
-        path: `/info_collection`,
-      });
     },
   },
 };

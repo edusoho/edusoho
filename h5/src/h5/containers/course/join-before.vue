@@ -59,9 +59,9 @@
       :title="userInfoCellectForm.formTitle"
     >
       <info-collection
-        :userInfoCellectForm="this.userInfoCellectForm"
-        :formRule="this.userInfoCellectForm.items"
-        @joinFreeCourse="joinFreeCourse"
+        :userInfoCellectForm="userInfoCellectForm"
+        :formRule="userInfoCellectForm.items"
+        @submitForm="joinFreeCourse"
       ></info-collection>
     </van-action-sheet>
     <!-- 加入学习 -->
