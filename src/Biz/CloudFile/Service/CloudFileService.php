@@ -2,7 +2,7 @@
 
 namespace Biz\CloudFile\Service;
 
-interface CloudFileService
+interface CloudFileService extends FilePlayerInterface
 {
     public function search($conditions, $start, $limit);
 
