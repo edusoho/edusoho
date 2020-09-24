@@ -574,26 +574,37 @@ admin_v2:
                         admin_v2_information_collection_manage:
                             name: admin_v2.information_collection.menu
                             children:
-                                admin_v2_information_collection:
+                                admin_v2_information_collection_show:
+                                    router_name: admin_v2_information_collection
                                     name: admin_v2.information_collection.tab
-                                    disable: true
                                     children:
-                                        admin_v2_information_collection_close:
-                                            name: admin_v2.information_collection.operate.close_tab
-                                            class: close-collection
-                                            router_params:
-                                                id: (collect.id)
-                                            group: groupButton
-                                            mode: none
-                                            visible: ( collect.status=='open' )
-                                        admin_v2_information_collection_open:
-                                            name: admin_v2.information_collection.operate.open_tab
-                                            class: open-collection
-                                            router_params:
-                                              id: (collect.id)
-                                            group: groupButton
-                                            mode: none
-                                            visible: ( collect.status!='open' )
+                                        admin_v2_information_collection:
+                                            name: admin_v2.information_collection.tab
+                                            children:
+                                                admin_v2_information_collection_close:
+                                                    name: admin_v2.information_collection.operate.close_tab
+                                                    class: close-collection
+                                                    router_params:
+                                                        id: (collect.id)
+                                                    group: groupButton
+                                                    mode: none
+                                                    visible: ( collect.status=='open' )
+                                                admin_v2_information_collection_open:
+                                                    name: admin_v2.information_collection.operate.open_tab
+                                                    class: open-collection
+                                                    router_params:
+                                                      id: (collect.id)
+                                                    group: groupButton
+                                                    mode: none
+                                                    visible: ( collect.status!='open' )
+                                                admin_v2_information_collection_detail:
+                                                    name: admin_v2.information_collection.detail
+                                                    router_name: admin_v2_information_collection_detail
+                                                    router_params:
+                                                      id: id
+                                                    disable: true
+                                                    target: '_blank'
+                                                    group: groupButton
                 # 渠道管理
                 admin_v2_channel_group:
                     name: admin_v2.channel.basic_group

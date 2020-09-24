@@ -24,6 +24,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Common\JsonLogger;
 use Biz\Course\Service\CourseService;
 use Biz\InformationCollect\Service\EventService;
+use Biz\InformationCollect\Service\ResultService;
 use Biz\Player\Service\PlayerService;
 use Biz\S2B2C\Service\FileSourceService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
@@ -204,6 +205,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('s2b2c_has_behaviour_permission', [$this, 's2b2cHasBehaviourPermission']),
             new \Twig_SimpleFunction('make_local_media_file_token', [$this, 'makeLocalMediaFileToken']),
             new \Twig_SimpleFunction('information_collection_location_info', [$this, 'informationCollectionLocationInfo']),
+            new \Twig_SimpleFunction('information_collection_result_items', [$this, 'getInformationCollectionResultItems']),
         ];
     }
 
@@ -2065,7 +2067,7 @@ class WebExtension extends \Twig_Extension
                 $locationInfo .= '全部课程；';
             } else {
                 $courses = $this->getCourseService()->findCoursesByIds($locationInfos['course']);
-                $locationInfo .= implode('；', ArrayToolkit::column($courses, 'courseSetTitle')).'；course1；myCourse1；homeworkClass；aaaa；';
+                $locationInfo .= implode('；', ArrayToolkit::column($courses, 'courseSetTitle')).'；';
             }
         }
         if (isset($locationInfos['classroom'])) {
@@ -2078,6 +2080,21 @@ class WebExtension extends \Twig_Extension
         }
 
         return $locationInfo;
+    }
+
+    public function getInformationCollectionResultItems($resultId, $eventId)
+    {
+        $resultItems = $this->getResultService()->getItemsByResultIdAndEventId($resultId, $eventId);
+
+        return ArrayToolkit::index($resultItems, 'labelName');
+    }
+
+    /**
+     * @return ResultService
+     */
+    protected function getResultService()
+    {
+        return $this->createService('InformationCollect:ResultService');
     }
 
     /**

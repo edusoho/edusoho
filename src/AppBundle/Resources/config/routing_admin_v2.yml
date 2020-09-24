@@ -681,6 +681,10 @@ admin_v2_information_collection_open:
   path:  /information_collect/{id}/open
   defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:open }
 
+admin_v2_information_collection_detail:
+  path:  /information_collect/{id}/detail
+  defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:detail }
+
 # 营销-营销管理-微营销-入口页
 admin_v2_login_micromarketing_boot:
   path: /login/marketing/boot

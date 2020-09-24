@@ -6405,14 +6405,24 @@ admin.information_collection.title.placeholer: 用户信息采集名称
 admin.information_collection.title_th: 采集名称
 admin.information_collection.location_th: 采集位置
 admin.information_collection.create_time_th: 创建时间
+admin.information_collection.creator: 创建人
 admin.information_collection.status_th: 采集状态
 admin.information_collection.collected_num_th: 已采集数据量
+admin.information_collection.collected_num: %collectedNum% 份
 admin.information_collection.operate: 操作
 admin.information_collection.operate.detail: 详情
 admin.information_collection.action.buy_after: 课程/班级商品支付后
 admin.information_collection.action.buy_before: 课程/班级商品支付前
 admin.information_collection.status.open: <div class="green-circle"></div>正在采集
 admin.information_collection.status.close: <div class="red-circle"></div>停止采集
+admin.information_collection.detail: 用户信息采集 > 详情
+admin.information_collection.basic_info: 基本信息
+admin.information_collection.close_btn: 关闭采集
+admin.information_collection.update_btn: 编辑
+admin.information_collection.collected_num_tab: 已采集数据
+admin.information_collection.collected_time: 采集时间
+admin.information_collection.export_btn: 导出查询结果
+admin.information_collection.form_user_infomation: (来自个人资料)
 
 #账户明细
 admin.money_records.content_title: 账户明细

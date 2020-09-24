@@ -17,3 +17,31 @@
   border-radius: 50%;
   border: 1px solid #3CB371;
 }
+
+.table-wrapper {
+  overflow-x: scroll;
+  width: 100%;
+
+  table {
+    table-layout: fixed;
+    border-collapse: collapse;
+    border: none;
+  }
+
+  tr {
+    white-space: nowrap;
+  }
+
+  th, td {
+    text-align: center;
+    vertical-align: middle !important;
+    border-bottom-width: 1px !important;
+    width: 150px;
+    height: 51px;
+  }
+
+  th:nth-child(2){
+    padding-top: 6px;
+  }
+}
+

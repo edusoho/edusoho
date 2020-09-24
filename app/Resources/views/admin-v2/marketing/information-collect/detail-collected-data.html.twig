@@ -1,0 +1,46 @@
+<div class="table-wrapper">
+  <table class="table table-bordered">
+    <thead>
+    <tr>
+      <th>{{'user.fields.username_label'|trans}}</th>
+      <th>
+        {{'user.fields.mobile_label'|trans }}<br>
+        <span class="text-muted text-sm">{{ 'admin.information_collection.form_user_infomation'|trans }}</span>
+      </th>
+      <th>{{ 'admin.information_collection.collected_time'|trans }}</th>
+      {% for label in labels if labels|default('') %}
+        <th>{{ label }}</th>
+      {% endfor %}
+    </tr>
+    </thead>
+    <tbody class="results">
+    {% for result in collectedData if collectedData|default('') %}
+      {% set user = data('UserandProfiles',{userId:result.userId})  %}
+      {% set resultItems = information_collection_result_items(result.id, event.id) %}
+      <tr>
+        <td>{{ user.nickname }}</td>
+        <td>{{ user.profiles.mobile }}</td>
+        <td>{{ result.createdTime|date('Y-m-d H:i:s') }}</td>
+        {% for label in labels if labels|default('') %}
+          {% set resultItem = resultItems[label]|default('') %}
+          <td>{{ resultItem.value|default('') }}</td>
+        {% else %}
+          <td></td>
+        {% endfor %}
+      </tr>
+    {% else %}
+      <tr>
+        <td colspan="20">
+          <div class="empty">
+            {% if error|default() %}
+              {{ error|default() }}
+            {% else %}
+              {{'site.datagrid.empty'|trans}}
+            {% endif %}
+          </div>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>

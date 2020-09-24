@@ -17,4 +17,6 @@ interface EventService
     public function get($id);
 
     public function getEventLocations($id);
+
+    public function getItemsByEventId($eventId);
 }

@@ -7,7 +7,7 @@ use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
 class ItemDaoImpl extends AdvancedDaoImpl implements ItemDao
 {
-    protected $table = 'information_collect_result_item';
+    protected $table = 'information_collect_item';
 
     public function declares()
     {
@@ -15,13 +15,14 @@ class ItemDaoImpl extends AdvancedDaoImpl implements ItemDao
             'serializes' => [
             ],
             'orderbys' => [
-                'id',
+                'id', 'seq',
             ],
             'timestamps' => [
                 'createdTime',
             ],
             'conditions' => [
                 'id = :id',
+                'eventId = :eventId',
             ],
         ];
     }
