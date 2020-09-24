@@ -65,7 +65,7 @@
       <info-collection
         :userInfoCellectForm="userInfoCellectForm"
         :formRule="userInfoCellectForm.items"
-        @submitForm="offForm"
+        @submitForm="onCancelForm"
       ></info-collection>
     </van-action-sheet>
   </div>
@@ -293,12 +293,9 @@ export default {
         SWIPER ? SWIPER.classList.remove('swiper-directory-fix') : null;
       }
     },
-    offForm() {
-      this.onCancelForm();
-      this.isShowForm = false;
-    },
     onCancelForm() {
       this.setCurrentJoin(false);
+      this.isShowForm = false;
     },
     //  根据购买前后判断是否需要采集用户信息
     getInfoCollectionEvent() {
