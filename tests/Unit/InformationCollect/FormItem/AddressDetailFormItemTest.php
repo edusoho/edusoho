@@ -10,7 +10,7 @@ class AddressDetailFormItemTest extends BaseTestCase
     {
         $data = json_decode('
             {
-                "type": "text",
+                "type": "textarea",
                 "title": "详细地址",
                 "field": "address_detail",
                 "value": "德信AI产业园",
