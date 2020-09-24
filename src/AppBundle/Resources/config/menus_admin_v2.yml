@@ -585,7 +585,6 @@ admin_v2:
                                                     name: admin_v2.information_collect.create
                                                     disable: true
                                                     group: topBtn
-                                                    router_name: admin_v2_information_collect_edit
                                                     target: '_blank'
                                                 admin_v2_information_collect_close:
                                                     name: admin_v2.information_collect.operate.close_tab

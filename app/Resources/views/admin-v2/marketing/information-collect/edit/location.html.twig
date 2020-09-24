@@ -1,7 +1,7 @@
 <div class="radios">
 	<div class="action-type-group">
-		<label>
-			<input type="radio" name="actionType" value="all" checked="checked">
+		<label class="control-label text-left">
+			<input type="radio" name="locationType" value="all" checked="checked">
 			<span>{{ 'admin_v2.information_collect.edit.target_type.all'|trans }}</span>
 			<label class="help-block display-inline">
 				{{ 'admin_v2.information_collect.edit.target_type.tip'|trans }}
@@ -9,7 +9,7 @@
 			<div class="js-target-type-checkbox-group hidden">
 				<div class="target-type-checkbox">
 					<label class="pll">
-						<input type="checkbox" name="targetTypes[]" value="course">
+						<input type="checkbox" class="targetTypes" name="targetTypes[course]" value="course">
 						<span>{{ 'admin_v2.information_collect.edit.target_type.all_course'|trans }}</span>
 						<span class="text-muted display-inline hidden">
 							({{ 'admin_v2.information_collect.binded_tips'|trans }},<a href=''>{{ 'admin_v2.information_collect.more'|trans }}</a>)
@@ -18,9 +18,9 @@
 				</div>
 				<div class="target-type-checkbox">
 					<label class="pll">
-						<input type="checkbox" name="targetTypes[]" value="classroom" disabled>
+						<input type="checkbox" class="targetTypes" name="targetTypes[classroom]" value="classroom">
 						<span class="text-muted">{{ 'admin_v2.information_collect.edit.target_type.all_classroom'|trans }}</span>
-						<span class="text-muted display-inline">
+						<span class="text-muted display-inline hidden">
 							({{ 'admin_v2.information_collect.binded_tips'|trans }},<a href=''>{{ 'admin_v2.information_collect.more'|trans }}</a>)
 						</span>
 					</label>
@@ -29,15 +29,14 @@
 		</label>
 	</div>
 
-	<div class="action-type-group">
-		<label>
-			<input type="radio" name="actionType" value="part" checked="checked">
+	<div class="action-type-group action-type-group-part">
+		<label class="control-label text-left">
+			<input type="radio" name="locationType" value="part" checked="checked">
 			<span>{{ 'admin_v2.information_collect.edit.target_type.part'|trans }}</span>
 			<div class="js-target-type-checkbox-group">
 				<div class="target-type-checkbox">
 					<label class="pll">
-						<input type="checkbox" name="targetTypes[]" value="course">
-						<input class="target-ids" type="hidden" name="courseIds" value="">
+						<input type="checkbox" class="targetTypes" name="targetTypes[course]" value="course">
 						<span>{{ 'admin_v2.information_collect.edit.target_type.part_course'|trans }}</span>
 						<span class="display-inline">
 							{{ 'admin_v2.information_collect.selected_course_count'|trans }}<span class="selected-course-count">
@@ -49,8 +48,7 @@
 				</div>
 				<div class="target-type-checkbox">
 					<label class="pll">
-						<input type="checkbox" name="targetTypes[]" value="classroom">
-						<input class="target-ids" type="hidden" name="classroomIds" value="">
+						<input type="checkbox" class="targetTypes" name="targetTypes[classroom]" value="classroom">
 						<span>{{ 'admin_v2.information_collect.edit.target_type.part_classroom'|trans }}</span>
 						<span class="display-inline">
 							{{ 'admin_v2.information_collect.selected_classroom_count'|trans }}<span class="selected-classroom-count">

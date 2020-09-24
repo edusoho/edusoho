@@ -1,5 +1,5 @@
 if ($('.js-checkbox-group').length) {
-    $('.js-checkbox-group').on('click', 'input[name="actionType"]', (event) => {
+    $('.js-checkbox-group').on('click', 'input[name="locationType"]', (event) => {
         let $group = $(event.currentTarget).parent().find('.js-target-type-checkbox-group');
         if ($group.hasClass('hidden')) {
             $group.removeClass('hidden');
@@ -11,4 +11,3 @@ if ($('.js-checkbox-group').length) {
         }
     });
 }
-

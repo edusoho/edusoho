@@ -1623,3 +1623,8 @@ admin_v2.information-collection.open.success_hint: open success
 admin_v2.information-collection.open.failure_hint: close failure
 
 admin_v2.information_collect.chooser.tips: There is already a conflicting association
+admin_v2.information_collect.chooser.success_hint: Success
+admin_v2.information_collect.chooser.limit: No more than 200
+admin_v2.information_collect.chooser.target_hint: Please select at least 1 Course/Classroom
+admin_v2.information_collect.chooser.target_course_hint: Please select at least 1 Course
+admin_v2.information_collect.chooser.target_classroom_hint: Please select at least 1 Classroom

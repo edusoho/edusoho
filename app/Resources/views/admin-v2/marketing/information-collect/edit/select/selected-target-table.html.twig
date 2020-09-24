@@ -2,22 +2,34 @@
 <table class="table">
 	<thead>
 		<tr>
-			<th width="50%">{{ 'site.default.course'|trans }}</th>
+			<th width="50%">
+				{% if type == 'course' %}
+					{{ 'site.default.course'|trans }}
+				{% else %}
+					{{ setting('classroom.name')|default('site.default.classroom'|trans) }}
+				{% endif %}
+			</th>
 			<th>
 				<span class="pull-right">{{ 'operation'|trans }}</span>
 			</th>
 		</tr>
 	</thead>
 	<tbody>
-		{% for courseSetId in selectedCourseSetIds %}
-			{% set location = locations[courseSetId]|default(null) %}
-			{% set courseSet = courseSets[courseSetId]|default(null) %}
-			<tr class="js-selected-item {% if not courseSet %} hidden {% endif %} {% if location %} js-selected-item-binded {% endif %}" data-id="{{ courseSetId }}">
-				{% if courseSet %}
+		{% for targetId in selectedTargetIds %}
+			{% set location = locations[targetId]|default(null) %}
+			{% set target = targets[targetId]|default(null) %}
+			<tr class="js-selected-item {% if not target %} hidden {% endif %} {% if location %} js-selected-item-binded {% endif %}" data-id="{{ targetId }}">
+				{% if target %}
 					<td>
-						<a href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}" target="_blank">
-							<strong>{{ courseSet.title }}</strong>
-						</a>
+						{% if type == 'course' %}
+							<a href="{{ path('course_show',{id: target.defaultCourseId}) }}" target="_blank">
+								<strong>{{ target.title }}</strong>
+							</a>
+						{% else %}
+							<a href="{{ path('classroom_show', {id:target.id}) }}" target="_blank">
+								<strong>{{ target.title }}</strong>
+							</a>
+						{% endif %}
 						<br>
 					</td>
 					<td>

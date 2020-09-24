@@ -10,6 +10,8 @@ use Biz\InformationCollect\Service\ResultService;
 use Symfony\Component\HttpFoundation\Request;
 use Biz\Course\Service\CourseSetService;
 use Biz\Taxonomy\Service\CategoryService;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Common\CommonException;
 
 class InformationCollectController extends BaseController
 {
@@ -51,10 +53,11 @@ class InformationCollectController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function editAction(Request $request)
+    public function createAction(Request $request)
     {
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
+
             $event = $this->getEventService()->createEventWithLocations($data);
             return $this->createJsonResponse(true);
         }
@@ -62,51 +65,46 @@ class InformationCollectController extends BaseController
         return $this->render('admin-v2/marketing/information-collect/edit/index.html.twig', []);
     }
 
-    public function targetModalAction(Request $request)
+    public function targetModalAction(Request $request, $type)
     {
-        $type = $request->query->get('type', 'course');
-
         if ($request->query->get('eventId')) {
         }
 
-
-        return $this->render('admin-v2/marketing/information-collect/edit/select-target-modal.html.twig', [
+        return $this->render('admin-v2/marketing/information-collect/edit/select/select-target-modal.html.twig', [
             'type' => $type,
         ]);
     }
 
-    public function chooseCoursesAction(Request $request)
+    public function chooserAction(Request $request, $type)
     {
-        list($users, $conditions, $courseSets, $categories, $paginator) = $this->searchCourseSets($request->query->all());
+        list($users, $targets, $categories, $paginator) = $this->searchTargetsByTypeAndConditions($type, $request->query->all());
 
-        return $this->render('admin-v2/marketing/information-collect/edit/course-set-chooser/course-set-chooser.html.twig', [
+        return $this->render('admin-v2/marketing/information-collect/edit/chooser/index.html.twig', [
+            'type' => $type,
             'users' => $users,
-            'conditions' => $conditions,
-            'courseSets' => $courseSets,
+            'targets' => $targets,
             'categories' => $categories,
             'paginator' => $paginator,
         ]);
     }
 
-    public function ajaxChooseCoursesAction(Request $request)
+    public function ajaxChooserAction(Request $request, $type)
     {
-        $conditions = $request->request->all();
-
-        list($users, $conditions, $courseSets, $categories, $paginator) = $this->searchCourseSets($request->query->all(), 'ajax');
+        list($users, $targets, $categories, $paginator) = $this->searchTargetsByTypeAndConditions($type, $request->query->all(), true);
 
         return $this->render(
-            'admin-v2/marketing/information-collect/edit/course-set-chooser/course-set-chooser-table.html.twig',
+            "admin-v2/marketing/information-collect/edit/chooser/{$type}-table.html.twig",
             array(
+                'type' => $type,
                 'users' => $users,
-                'conditions' => $conditions,
-                'courseSets' => $courseSets,
+                'targets' => $targets,
                 'categories' => $categories,
                 'paginator' => $paginator,
             )
         );
     }
 
-    public function selectedCoursesAction(Request $request)
+    public function selectedChooserAction(Request $request, $type)
     {
         if ($request->isMethod('POST')) {
             $selectedIds = $request->request->get('ids', []);
@@ -116,49 +114,88 @@ class InformationCollectController extends BaseController
 
         $conditions = ['ids' => empty($selectedIds) ? [-1] : $selectedIds];
 
-        $count = $this->getCourseSetService()->countCourseSets($conditions);
-        $paginator = new Paginator($request, $count, 10);
-        $paginator->setBaseUrl($this->generateUrl('admin_v2_information_collect_course_selected'));
-        $courseSets = $this->getCourseSetService()->searchCourseSets($conditions, null,   $paginator->getOffsetCount(), $paginator->getPerPageCount());
+        if ($type == EventService::TARGET_TYPE_COURSE) {
+            list($targets, $paginator) = $this->searchCourseSets($conditions);
+        } else {
+            list($targets, $paginator) = $this->searchClassrooms($conditions);
+        }
 
-        $locations = $this->getEventService()->searchLocations(['targetIds' => $conditions['ids'], 'targetType' => 'course'], [], 0, count($selectedIds), ['targetId']);
+        $paginator->setBaseUrl($this->generateUrl('admin_v2_information_collect_chooser_selected', ['type' => $type]));
+        $locations = $this->getEventService()->searchLocations(['targetIds' => $conditions['ids'], 'targetType' => $type], [], 0, count($selectedIds), ['targetId']);
         $locations = ArrayToolkit::index($locations, 'targetId');
 
         return $this->render(
-            'admin-v2/marketing/information-collect/edit/course-set-chooser/course-set-selected-table.html.twig',
+            'admin-v2/marketing/information-collect/edit/select/selected-target-table.html.twig',
             array(
-                'courseSets' => ArrayToolkit::index($courseSets, 'id'),
-                'selectedCourseSetIds' => $selectedIds,
+                'type' => $type,
+                'targets' => ArrayToolkit::index($targets, 'id'),
+                'selectedTargetIds' => $selectedIds,
                 'locations' => $locations,
                 'paginator' => $paginator,
-                'hasRelated' => $this->getEventService()->countLocations(['targetIds' => $conditions['ids']]) > 0,
+                'hasRelated' => $this->getEventService()->countLocations(['targetIds' => $conditions['ids'],  'targetType' => $type]) > 0,
             )
         );
     }
 
-    private function searchCourseSets($conditions, $type = '')
+    private function searchTargetsByTypeAndConditions($type, array $conditions,  $isAjax = false)
+    {
+        if (!in_array($type, [EventService::TARGET_TYPE_COURSE, EventService::TARGET_TYPE_CLASSROOM])) {
+            $this->createNewException(CommonException::ERROR_PARAMETER());
+        }
+
+        if ($type == EventService::TARGET_TYPE_COURSE) {
+            list($targets, $paginator) = $this->searchCourseSets($conditions, $isAjax);
+            $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($targets, 'creator'));
+        } else {
+            list($targets, $paginator) = $this->searchClassrooms($conditions, $isAjax);
+            $users = [];
+        }
+
+        if (!$isAjax) {
+            $paginator->setBaseUrl($this->generateUrl('admin_v2_information_collect_chooser_ajax', ['type' => $type]));
+        }
+
+        $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($targets, 'categoryId'));
+
+        return [$users, $targets, $categories, $paginator];
+    }
+
+    private function searchCourseSets($conditions)
     {
         $conditions['parentId'] = 0;
 
         $count = $this->getCourseSetService()->countCourseSets($conditions);
         $paginator = new Paginator($this->get('request'), $count, 10);
 
-        if ('ajax' != $type) {
-            $paginator->setBaseUrl($this->generateUrl('admin_v2_information_collect_course_chooser_ajax'));
-        }
-
         $courseSets = $this->getCourseSetService()->searchCourseSets(
             $conditions,
-            null,
+            ['createdTime' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($courseSets, 'categoryId'));
+        return [$courseSets, $paginator];
+    }
 
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courseSets, 'creator'));
+    private function searchClassrooms($conditions)
+    {
+        $conditions['parentId'] = 0;
+        if (isset($conditions['ids'])) {
+            $conditions['classroomIds'] = $conditions['ids'];
+            unset($conditions['ids']);
+        }
 
-        return array($users, $conditions, $courseSets, $categories, $paginator);
+        $count = $this->getClassroomService()->countClassrooms($conditions);
+        $paginator = new Paginator($this->get('request'), $count, 10);
+
+        $classrooms = $this->getClassroomService()->searchClassrooms(
+            $conditions,
+            ['createdTime' => 'DESC'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        return [$classrooms, $paginator];
     }
 
     /**
@@ -191,5 +228,13 @@ class InformationCollectController extends BaseController
     protected function getCategoryService()
     {
         return $this->createService('Taxonomy:CategoryService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
     }
 }

@@ -1568,3 +1568,8 @@ admin_v2.information-collection.open.success_hint: 采集开启成功
 admin_v2.information-collection.open.failure_hint: 采集开启失败
 
 admin_v2.information_collect.chooser.tips: 已存在冲突的关联
+admin_v2.information_collect.chooser.success_hint: 选择成功
+admin_v2.information_collect.chooser.limit: 选择数不能超过200
+admin_v2.information_collect.chooser.target_hint:  请至少选择1个课程/班级
+admin_v2.information_collect.chooser.target_course_hint: 请至少选择1个课程
+admin_v2.information_collect.chooser.target_classroom_hint: 请至少选择1个班级

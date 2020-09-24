@@ -16,7 +16,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		{% for courseSet in courseSets %}
+		{% for courseSet in targets %}
 			{% set user = users[courseSet.creator]|default(null) %}
 			{% set category = categories[courseSet.categoryId]|default(null) %}
 			<tr id="course-tr-{{ courseSet.id }}">

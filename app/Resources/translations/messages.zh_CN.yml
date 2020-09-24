@@ -11435,10 +11435,11 @@ admin_v2.information_collect.selecte_classroom: 选择班级
 admin_v2.information_collect.selecte_count: 已选数量
 admin_v2.information_collect.selected: 已选：
 admin_v2.information_collect.selected.clear: 清空
-admin_v2.information_collect.course.chooser.limit: 最多支持选择200个课程
+admin_v2.information_collect.chooser.limit: 最多支持选择200个
 admin_v2.information_collect.chooser.delete_item: 移除本次采集
 admin_v2.information_collect.chooser.tips: 已存在冲突的关联
 admin_v2.information_collect.chooser.unbind_item: 关联到本次采集
 admin_v2.information_collect.chooser.empty: 暂无数据
+
 
 

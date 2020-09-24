@@ -14,7 +14,7 @@
 {% block page_buttons %}{% endblock %}
 
 {% block main %}
-	<form class="form-horizontal information-collect" id="information-collect-form" action="{{ path('admin_v2_information_collect_edit') }}" method="post">
+	<form class="form-horizontal information-collect" id="information-collect-form" action="{{ path('admin_v2_information_collect_create') }}" method="post">
 		<fieldset>
 			<div class="row form-group">
 				<div class="col-md-2 control-label">
@@ -24,15 +24,18 @@
 					<input required type="text" name="title" class="form-control" id="title">
 				</div>
 			</div>
+			<div class="radio-for-action hidden">
+				{% include "admin-v2/marketing/information-collect/edit/location.html.twig" %}
+			</div>
 			<div class="row form-group">
 				<div class="col-md-2 control-label">
 					<label for="type">{{ 'admin_v2.information_collect.edit.action'|trans }}</label>
 				</div>
 				<div class="col-md-6 controls">
-					<div class="radio-for-action hidden">
-						{% include "admin-v2/marketing/information-collect/edit/location.html.twig" %}
-					</div>
-					<div class="radios">
+					<div class="radios js-action-radio-group">
+						<input class="target-ids" type="hidden" name="selectedTargetTypes" value="">
+						<input class="target-ids" type="hidden" name="courseIds" value="">
+						<input class="target-ids" type="hidden" name="classroomIds" value="">
 						<div class="js-action-radio">
 							<label>
 								<input type="radio" name="action" value="buy_before" checked="checked">
@@ -83,8 +86,7 @@
 				</div>
 				<div class="col-md-3">
 					<div class="cd-panel">
-						<div class="cd-panel-body">
-						</div>
+						<div class="cd-panel-body"></div>
 					</div>
 				</div>
 			</div>
@@ -116,7 +118,7 @@
 			</div>
 			<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 			<div class="row text-center">
-				<button type="button" class="btn btn-primary js-save-btn col-md-4 col-md-offset-4" data-loading-text="{{ 'form.btn.submit.submiting'|trans }}">{{ 'form.btn.submit'|trans }}</button>
+				<button type="button" class="btn btn-primary js-save-btn col-md-4 col-md-offset-4" data-redirect-url="{{ path('admin_v2_information_collect') }}" data-loading-text="{{ 'form.btn.submit.submiting'|trans }}">{{ 'form.btn.submit'|trans }}</button>
 			</div>
 		</fieldset>
 	</form>

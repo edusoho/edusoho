@@ -4,6 +4,9 @@ namespace Biz\InformationCollect\Service;
 
 interface EventService
 {
+    const TARGET_TYPE_COURSE = 'course';
+    const TARGET_TYPE_CLASSROOM = 'classroom';
+    
     public function createEventWithLocations(array $fields);
 
     public function count($conditions);
