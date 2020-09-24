@@ -1,10 +1,46 @@
 .info-collection {
 	padding: vw(16);
 
+	.van-cell .van-cell__title {
+		color: #333;
+	}
+
 	.info-required::after {
 		position: absolute;
 		color: #ee0a24;
 		font-size: 14px;
 		content: '*';
+	}
+
+	.info-footer-top {
+		margin-top: vw(48);
+	}
+
+	.info-footer {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		display: flex;
+		justify-content: space-between;
+		box-sizing: border-box;
+		width: 100%;
+		background-color: #fff;
+		box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.04);
+
+		.info-footer__btn {
+			display: flex;
+			flex: 1;
+			align-items: center;
+			justify-content: center;
+			height: vw(48);
+			color: #fff;
+			background: $primary-color;
+		}
+
+		.info-footer__btn-border {
+			color: black;
+			background: #fff;
+			border-right: vw(1) solid #fff;
+		}
 	}
 }

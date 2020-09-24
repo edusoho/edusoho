@@ -12,13 +12,11 @@
             v-model="item.value"
             :name="item.field"
             :label="item.title"
-            :required="isRequired(item.validate)"
             :placeholder="getPlaceholder(item)"
             :error="errorRule[index].error"
             :error-message="errorRule[index].errorMessage"
             :type="getType(item)"
             @blur="checkField(index, item.value, item.validate)"
-            error-message-align="left"
             :label-class="isRequired(item.validate) ? 'info-required' : ''"
           />
         </template>
@@ -28,7 +26,7 @@
             :name="item.field"
             :label="item.title"
             :placeholder="getPlaceholder(item)"
-            :required="isRequired(item.validate)"
+            :label-class="isRequired(item.validate) ? 'info-required' : ''"
             required-align="right"
           >
             <template #input>
@@ -53,7 +51,7 @@
             v-model="item.value"
             :name="item.field"
             :label="item.title"
-            :required="isRequired(item.validate)"
+            :label-class="isRequired(item.validate) ? 'info-required' : ''"
             :placeholder="getPlaceholder(item)"
             :error="errorRule[index].error"
             :error-message="errorRule[index].errorMessage"
@@ -62,10 +60,19 @@
           />
         </template>
       </template>
-      <div style="margin: 16px;">
-        <van-button round block type="info" @click="onSubmit">
-          提交
-        </van-button>
+      <!-- 提交 -->
+      <div class="info-footer-top"></div>
+      <div class="info-footer">
+        <template v-if="isAllowSkip">
+          <div
+            class="info-footer__btn info-footer__btn-border"
+            @click="laterFillIn"
+          >
+            跳过
+          </div>
+        </template>
+
+        <div class="info-footer__btn" @click="onSubmit">确认提交</div>
       </div>
     </van-form>
 
@@ -89,20 +96,12 @@
         @cancel="areaCancel"
       />
     </van-action-sheet>
-
-    <van-action-sheet v-model="sexSelect.show">
-      <van-picker
-        show-toolbar
-        :columns="sexSelect.columns"
-        @confirm="sexConfirm"
-        @cancel="sexCancel"
-      />
-    </van-action-sheet>
   </div>
 </template>
 
 <script>
 import { arealist } from '@/utils/arealist';
+import Api from '@/api';
 const defaultType = ['input', 'InputNumber'];
 const selectType = ['select', 'cascader', 'DatePicker'];
 const rule = [
@@ -349,12 +348,17 @@ const rule = [
     ],
   },
 ];
+
 export default {
   components: {},
   props: {
     formRule: {
       type: Array,
       default: () => rule,
+    },
+    userInfoCellectForm: {
+      type: Object,
+      default: () => {},
     },
   },
   data() {
@@ -368,10 +372,6 @@ export default {
       areaSelect: {
         show: false,
       },
-      sexSelect: {
-        show: false,
-        columns: ['男', '女', '保密'],
-      },
       currentSelectIndex: 0,
       areaList: Object.freeze(arealist),
       errorRule: [],
@@ -379,7 +379,11 @@ export default {
       areaIndex: null,
     };
   },
-  computed: {},
+  computed: {
+    isAllowSkip() {
+      return this.userInfoCellectForm.allowSkip;
+    },
+  },
   watch: {},
   created() {
     this.getErrorRule();
@@ -397,22 +401,24 @@ export default {
       });
     },
     onSubmit() {
+      const formData = {};
       for (let i = 0; i < this.rule.length; i++) {
         if (!this.checkField(i, this.rule[i].value, this.rule[i].validate)) {
           this.$refs.infoCellectForm.scrollToField(this.rule[i].field);
-          break;
+          return;
         }
+        formData[this.rule[i].field] = this.rule[i].value;
       }
-      // 提交array
-      if (this.areaIndex) {
-        const value = this.rule[this.areaIndex].value;
-        this.$set(
-          this.rule[this.areaIndex],
-          'value',
-          this.stringToArray(value),
-        );
+      // 省市区需要转换为ａｒｒａｙ
+      if (this.areaIndex !== null) {
+        const areaKey = this.rule[this.areaIndex].field;
+        const areaValue = this.rule[this.areaIndex].value;
+        formData[areaKey] = this.stringToArray(areaValue);
+        this.setInfoCollection(formData);
       }
-      this.$emit('submitForm', this.rule);
+    },
+    laterFillIn() {
+      this.$emit('joinFreeCourse');
     },
     arrayToString(value) {
       if (Array.isArray(value)) {
@@ -529,9 +535,6 @@ export default {
         case 'cascader':
           this.areaSelect.show = true;
           break;
-        case 'select':
-          this.sexSelect.show = true;
-          break;
       }
     },
     formatDate(date) {
@@ -566,13 +569,18 @@ export default {
     areaCancel() {
       this.areaSelect.show = false;
     },
-    sexCancel() {
-      this.sexSelect.show = false;
-    },
-    sexConfirm(value) {
-      const currentSelectIndex = this.currentSelectIndex;
-      this.$set(this.rule[currentSelectIndex], 'value', value);
-      this.sexCancel();
+    setInfoCollection(formData) {
+      const data = {
+        eventId: this.userInfoCellectForm.eventId,
+        ...formData,
+      };
+      Api.setInfoCollection({
+        data,
+      }).then(res => {
+        console.log(res);
+        this.$toast('提交成功');
+        this.laterFillIn();
+      });
     },
   },
 };

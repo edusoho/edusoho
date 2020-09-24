@@ -54,8 +54,15 @@
       defaul-value="暂无评价"
     />
     <!-- 个人信息表单填写 -->
-    <van-action-sheet v-model="isShowForm" title="标题">
-      <info-collection></info-collection>
+    <van-action-sheet
+      v-model="isShowForm"
+      :title="userInfoCellectForm.formTitle"
+    >
+      <info-collection
+        :userInfoCellectForm="this.userInfoCellectForm"
+        :formRule="this.userInfoCellectForm.items"
+        @joinFreeCourse="joinFreeCourse"
+      ></info-collection>
     </van-action-sheet>
     <!-- 加入学习 -->
     <e-footer
@@ -144,6 +151,8 @@ export default {
       },
       courseSettings: {},
       isShowForm: false,
+      userInfoCellect: {},
+      userInfoCellectForm: {},
     };
   },
   async created() {
@@ -156,7 +165,7 @@ export default {
     });
   },
   computed: {
-    ...mapState(['couponSwitch', 'user', 'allowSkip']),
+    ...mapState(['couponSwitch', 'user']),
     ...mapState('course', {
       details: state => state.details,
     }),
@@ -217,6 +226,9 @@ export default {
     },
   },
   mounted() {
+    // this.getInfoCollectionForm();
+    // console.log(this.details.id);
+
     if (!this.isClassCourse && this.couponSwitch) {
       // 获取促销优惠券
       Api.searchCoupon({
@@ -338,24 +350,26 @@ export default {
       if ((Number(this.details.buyable) && isPast) || vipAccessToJoin) {
         if (+this.details.price && !vipAccessToJoin) {
           this.getOrder();
-        } else if (!this.allowSkip) {
-          this.isShowForm = true;
-        } else {
-          this.joinCourse({
-            id: this.details.id,
-          })
-            .then(res => {
-              // 返回空对象，表示加入失败，需要去创建订单购买
-              if (!(Object.keys(res).length === 0)) {
-              } else {
-                this.getOrder();
-              }
-            })
-            .catch(err => {
-              console.error(err);
-            });
+          return;
         }
+        this.collectUseInfoEvent();
       }
+    },
+    joinFreeCourse() {
+      this.joinCourse({
+        id: this.details.id,
+      })
+        .then(res => {
+          Toast.clear();
+          // 返回空对象，表示加入失败，需要去创建订单购买
+          if (!(Object.keys(res).length === 0)) {
+          } else {
+            this.getOrder();
+          }
+        })
+        .catch(err => {
+          console.error(err);
+        });
     },
     getAfCourse(id) {
       this.getAfterCourse({
@@ -405,6 +419,63 @@ export default {
     sellOut() {
       this.isEmpty = true;
     },
+    collectUseInfoEvent() {
+      const hasUserInfoCellectForm = Object.keys(this.userInfoCellectForm)
+        .length;
+      if (hasUserInfoCellectForm) {
+        this.isShowForm = true;
+        return;
+      }
+      this.getInfoCollectionEvent();
+    },
+    //  根据购买前后判断是否需要采集用户信息
+    getInfoCollectionEvent() {
+      Toast.loading({
+        message: '加载中...',
+        forbidClick: true,
+      });
+      const query = {
+        action: this.accessToJoin ? 'buy_before' : 'buy_after',
+      };
+      const params = {
+        targetType: 'course',
+        targetId: this.details.id,
+      };
+      Api.getInfoCollectionEvent({
+        query,
+        params,
+      })
+        .then(res => {
+          if (Object.keys(res).length) {
+            this.userInfoCellect = { ...res };
+            this.getInfoCollectionForm();
+            return;
+          }
+          this.joinFreeCourse();
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    },
+    // 根据事件id获取表单
+    getInfoCollectionForm() {
+      const query = {
+        eventId: this.userInfoCellect.id,
+      };
+      Api.getInfoCollectionForm({
+        query,
+      })
+        .then(res => {
+          this.userInfoCellectForm = { ...res };
+
+          this.isShowForm = true;
+          Toast.clear();
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    },
+    //
   },
 };
 </script>
