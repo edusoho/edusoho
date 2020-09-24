@@ -92,10 +92,10 @@
               </span>
                 </div>
             </div>
-        </div>
 
-        <!-- 立即购买 -->
-        <buy-sku :sku="currentSku" :btn-class="'product-detail__btn'" :is-user-login="isUserLogin" :goods="goods"></buy-sku>
+            <!-- 立即购买 -->
+            <buy-sku :sku="currentSku" :btn-class="'product-detail__btn'" :is-user-login="isUserLogin" :goods="goods"></buy-sku>
+        </div>
     </div>
 </template>
 
