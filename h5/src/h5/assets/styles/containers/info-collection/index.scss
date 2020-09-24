@@ -1,11 +1,19 @@
 .info-collection {
 	padding: vw(16);
 
+	.van-cell .van-cell__title {
+		color: #333;
+	}
+
 	.info-required::after {
 		position: absolute;
 		color: #ee0a24;
 		font-size: 14px;
 		content: '*';
+	}
+
+	.info-footer-top {
+		margin-top: vw(48);
 	}
 
 	.info-footer {

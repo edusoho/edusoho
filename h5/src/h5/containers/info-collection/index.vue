@@ -61,24 +61,18 @@
         </template>
       </template>
       <!-- 提交 -->
-      <div style="margin: 16px;">
-        <!-- <van-button round block type="info" @click="onSubmit">
-          提交
-        </van-button> -->
-      </div>
+      <div class="info-footer-top"></div>
       <div class="info-footer">
-        <div v-if="!isAllowSkip" class="info-footer__btn" @click="onSubmit">
-          确认提交
-        </div>
-        <template v-else>
+        <template v-if="isAllowSkip">
           <div
             class="info-footer__btn info-footer__btn-border"
             @click="laterFillIn"
           >
-            稍后填写
+            跳过
           </div>
-          <div class="info-footer__btn" @click="onSubmit">确认提交</div>
         </template>
+
+        <div class="info-footer__btn" @click="onSubmit">确认提交</div>
       </div>
     </van-form>
 
@@ -100,15 +94,6 @@
         :area-list="areaList"
         @confirm="areaConfirm"
         @cancel="areaCancel"
-      />
-    </van-action-sheet>
-
-    <van-action-sheet v-model="sexSelect.show">
-      <van-picker
-        show-toolbar
-        :columns="sexSelect.columns"
-        @confirm="sexConfirm"
-        @cancel="sexCancel"
       />
     </van-action-sheet>
   </div>
@@ -371,7 +356,7 @@ export default {
       type: Array,
       default: () => rule,
     },
-    userInfoCellect: {
+    userInfoCellectForm: {
       type: Object,
       default: () => {},
     },
@@ -387,21 +372,16 @@ export default {
       areaSelect: {
         show: false,
       },
-      sexSelect: {
-        show: false,
-        columns: ['男', '女', '保密'],
-      },
       currentSelectIndex: 0,
       areaList: Object.freeze(arealist),
       errorRule: [],
       rule: this.formRule,
       areaIndex: null,
-      formTitle: [],
     };
   },
   computed: {
     isAllowSkip() {
-      return Number(this.userInfoCellect.allowSkip) === 1;
+      return this.userInfoCellectForm.allowSkip;
     },
   },
   watch: {},
@@ -409,12 +389,6 @@ export default {
     this.getErrorRule();
   },
   methods: {
-    // 获取表单名
-    getformTitle(item) {
-      for (let i = 0; i < item.length; i++) {
-        this.formTitle[item[i].field] = item[i].value;
-      }
-    },
     getErrorRule() {
       const rule = this.rule;
       rule.forEach((item, index) => {
@@ -427,27 +401,24 @@ export default {
       });
     },
     onSubmit() {
+      const formData = {};
       for (let i = 0; i < this.rule.length; i++) {
         if (!this.checkField(i, this.rule[i].value, this.rule[i].validate)) {
           this.$refs.infoCellectForm.scrollToField(this.rule[i].field);
-          break;
+          return;
         }
-        // this.formTitle.push({ field: this.rule[i].field });
+        formData[this.rule[i].field] = this.rule[i].value;
       }
-      const formData = Object.assign([], this.rule);
-      // 提交array
-      if (this.areaIndex) {
-        const value = formData[this.areaIndex].value;
-        formData[this.areaIndex].value = this.stringToArray(value);
+      // 省市区需要转换为ａｒｒａｙ
+      if (this.areaIndex !== null) {
+        const areaKey = this.rule[this.areaIndex].field;
+        const areaValue = this.rule[this.areaIndex].value;
+        formData[areaKey] = this.stringToArray(areaValue);
+        this.setInfoCollection(formData);
       }
-      // this.$emit('submitForm', this.rule);
-      // 获取表单名，地区转数组
-      this.getformTitle(formData);
-
-      this.setInfoCollection();
     },
     laterFillIn() {
-      this.$emit('laterFillIn');
+      this.$emit('joinFreeCourse');
     },
     arrayToString(value) {
       if (Array.isArray(value)) {
@@ -564,9 +535,6 @@ export default {
         case 'cascader':
           this.areaSelect.show = true;
           break;
-        case 'select':
-          this.sexSelect.show = true;
-          break;
       }
     },
     formatDate(date) {
@@ -601,18 +569,10 @@ export default {
     areaCancel() {
       this.areaSelect.show = false;
     },
-    sexCancel() {
-      this.sexSelect.show = false;
-    },
-    sexConfirm(value) {
-      const currentSelectIndex = this.currentSelectIndex;
-      this.$set(this.rule[currentSelectIndex], 'value', value);
-      this.sexCancel();
-    },
-    setInfoCollection() {
+    setInfoCollection(formData) {
       const data = {
-        eventId: this.userInfoCellect.id,
-        ...this.formTitle,
+        eventId: this.userInfoCellectForm.eventId,
+        ...formData,
       };
       Api.setInfoCollection({
         data,
