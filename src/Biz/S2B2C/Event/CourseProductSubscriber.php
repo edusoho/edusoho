@@ -2,16 +2,18 @@
 
 namespace Biz\S2B2C\Event;
 
-use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\OrderFacade\Service\OrderRefundService;
 use Biz\S2B2C\Service\CourseProductService;
+use Biz\S2B2C\Service\ProductReportService;
 use Biz\S2B2C\Service\ProductService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\System\Service\LogService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Framework\Event\Event;
+use Codeages\Biz\Order\Service\OrderService;
 use Codeages\PluginBundle\Event\EventSubscriber;
+use Psr\Log\LoggerInterface;
 use QiQiuYun\SDK\Service\S2B2CService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -26,7 +28,7 @@ class CourseProductSubscriber extends EventSubscriber implements EventSubscriber
     public static function getSubscribedEvents()
     {
         return [
-            'order.success' => 'onOrderSuccess',
+            'course.join' => 'onCourseJoin',
             'order.refunded' => 'onOrderRefunded',
             'course.marketing.update' => 'onCourseMarketingUpdate',
         ];
@@ -42,99 +44,118 @@ class CourseProductSubscriber extends EventSubscriber implements EventSubscriber
         }
     }
 
-    public function onOrderSuccess(Event $event)
+    public function onCourseJoin(Event $event)
     {
-        $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
-        if (empty($s2b2cConfig['supplierId'])) {
-            return;
-        }
-        $this->getLogger()->info('[onOrderSuccess] start order report');
-        $context = $event->getSubject();
         try {
-            $targetType = ArrayToolkit::column($context['items'], 'target_type');
-            if (!in_array('course', $targetType)) {
-                $this->getLogger()->info('[onOrderSuccess] no need report');
-
-                return true;
-            }
-            $courseIds = ArrayToolkit::column($context['items'], 'target_id');
-            $courses = ArrayToolkit::index($this->getCourseService()->findCoursesByIds($courseIds), 'id');
-
             $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
-            $isS2b2cProduct = false;
-            foreach ($context['items'] as &$item) {
-                $itemProduct = $courses[$item['target_id']];
-                if (!empty($item['create_extra']['s2b2cProductDetailId'])) {
-                    $isS2b2cProduct = true;
-                    $item['origin_product_id'] = $item['create_extra']['s2b2cProductDetailId'];
-                    continue;
-                }
-                $product = $this->getS2b2cProductService()->getProductBySupplierIdAndLocalResourceIdAndType($s2b2cConfig['supplierId'], $itemProduct['id'], 'course');
-                if (!empty($product['remoteResourceId'])) {
-                    $isS2b2cProduct = true;
-                    $item['origin_product_id'] = $product['s2b2cProductDetailId'];
-                }
+            $course = $event->getSubject();
+            if (empty($s2b2cConfig['supplierId']) || 'self' == $course['platform']) {
+                $this->getLogger()->info('[onCourseJoin] s2b2c config not enabled or course not belong supplier, no need to report');
+
+                return;
             }
 
-            if (!$isS2b2cProduct) {
-                $this->getLogger()->info('[onOrderSuccess] no need report');
+            $s2b2cProduct = $this->getS2b2cProductService()->getByTypeAndLocalResourceId('course', $course['id']);
+            $member = $event->getArgument('member');
+            $report = $this->getProductReportService()->create([
+                's2b2cProductId' => $s2b2cProduct['id'],
+                'userId' => $member['userId'],
+                'type' => ProductReportService::TYPE_JOIN_COURSE,
+                'orderId' => $member['orderId'],
+            ]);
+            $this->getLogger()->info(sprintf('[onCourseJoin] report record #%s created', $report['id']));
 
-                return true;
+            $order = $this->getOrderService()->getOrder($member['orderId']);
+            $user = $this->getUserService()->getUser($member['userId']);
+            $params = [
+                'merchantOrderId' => $member['orderId'],
+                'merchantOrderRefundDays' => empty($order['expired_refund_days']) ? 0 : $order['expired_refund_days'],
+                'merchantOrderUserNickname' => $user['nickname'],
+                'productDetailId' => $s2b2cProduct['s2b2cProductDetailId'],
+                'merchantReportId' => $report['id'],
+            ];
+
+            $this->getProductReportService()->updateStatusToSent($report['id']);
+            $this->getLogger()->info(sprintf('[onCourseJoin] change report record #%s status to sent', $report['id']));
+
+            $result = $this->getS2B2CService()->reportSuccessOrder($params);
+            if (isset($result['error'])) {
+                $this->getProductReportService()->updateFailedReason($report['id'], $result['error']);
+                $this->getLogger()->info(sprintf('[onCourseJoin] report failed reportId:%s error:%s', $report['id'], $result['error']));
+            } else {
+                $this->getProductReportService()->updateStatusToSucceed($report['id']);
+                $this->getLogger()->info(sprintf('[onCourseJoin] change report record #%s status to succeed', $report['id']));
             }
-
-            $this->setUserInfo($context);
-            $this->getS2B2CService()->reportSuccessOrder($context, $context['items']);
-            $this->getLogger()->info('[onOrderSuccess] order report succeed');
-
-            return true;
-        } catch (\Exception $e) {
-            $this->getLogger()->error("[onOrderSuccess] order report failed message: {$e->getMessage()}!", ['DATA' => $context]);
-            $this->getLogService()->error('order', 'course_callback', '用户支付成功，但订单与供应商结算异常！（#'.$context['id'].'）', ['error' => $e->getMessage(), 'context' => $context]);
-
-            return true;
+            $this->getLogger()->info('[onCourseJoin] report finished');
+        } catch (\Throwable $e) {
+            $this->getLogger()->error(sprintf('[onCourseJoin] report failed: %s %s', $e->getMessage(), $e->getTraceAsString()));
         }
     }
 
     public function onOrderRefunded(Event $event)
     {
-        $this->getLogger()->info('[onOrderRefunded] start order report');
-        $context = $event->getSubject();
         try {
-            $targetType = ArrayToolkit::column($context['items'], 'target_type');
-            if (!in_array('course', $targetType)) {
-                $this->getLogger()->info('[onOrderRefunded] no need report');
-
-                return true;
-            }
             $s2b2cConfig = $this->getS2B2CFacadeService()->getS2B2CConfig();
-            $courseIds = ArrayToolkit::column($context['items'], 'target_id');
-            $productIds = ArrayToolkit::column($this->getS2b2cProductService()->findProductsBySupplierIdAndProductTypeAndLocalResourceIds($s2b2cConfig['supplierId'], 'course', $courseIds), 'remoteResourceId');
-            $s2b2cProductDetailIds = [];
-            foreach ($context['items'] as $item) {
-                if (!empty($item['create_extra']['s2b2cProductDetailId'])) {
-                    $s2b2cProductDetailIds[] = $item['create_extra']['s2b2cProductDetailId'];
-                }
-            }
-            $orderRefund = $this->getOrderRefundService()->getOrderRefundById($context['items'][0]['refund_id']);
-            $orderItemRefunds = $this->getBaseOrderRefundService()->findOrderItemRefundsByOrderRefundId($orderRefund['id']);
+            if (empty($s2b2cConfig['supplierId'])) {
+                $this->getLogger()->info('[onOrderRefunded] s2b2c config not enabled, no need to report');
 
-            if ((!empty($productIds) && max($productIds) > 0) || !empty($s2b2cProductDetailIds)) {
-                $this->setUserInfo($context);
-                $this->getLogger()->info('[onOrderRefunded] order report succeed', [
-                    'merchantOrder' => $context,
-                    'merchantOrderRefund' => $orderRefund,
-                    'merchantOrderRefundItems' => $orderItemRefunds,
-                ]);
-                $this->getS2B2CService()->reportRefundOrder($context, $orderRefund, $orderItemRefunds);
-                $this->getLogger()->info('[onOrderRefunded] order report succeed');
+                return;
             }
 
-            return true;
-        } catch (\Exception $e) {
-            $this->getLogger()->error("[onOrderRefunded] order report failed message: {$e->getMessage()}!", ['DATA' => $context]);
-            $this->getLogService()->error('order', 'course_callback', '用户退款成功，但与供应商结算异常！（#'.$context['id'].'）', ['error' => $e->getMessage(), 'context' => $context]);
+            $order = $event->getSubject();
+            $target = $order['items'][0];
+            if ('course' != $target['target_type']) {
+                $this->getLogger()->info('[onOrderRefunded] target type not support, no need to report');
 
-            return true;
+                return;
+            }
+
+            $course = $this->getCourseService()->getCourse($target['target_id']);
+            if ('self' == $course['platform']) {
+                $this->getLogger()->info("[onOrderRefunded] course #{$target['target_id']} not supplier course, no need to report");
+
+                return;
+            }
+
+            $joinReport = $this->getProductReportService()->getByOrderIdAndType($order['id'], ProductReportService::TYPE_JOIN_COURSE);
+            if (empty($joinReport)) {
+                $this->getLogger()->error(sprintf('[onOrderRefunded] product report orderId #%s not found', $order['id']));
+
+                return;
+            }
+
+            $s2b2cProduct = $this->getS2b2cProductService()->getByTypeAndLocalResourceId('course', $target['target_id']);
+            if (empty($s2b2cProduct)) {
+                $this->getLogger()->error(sprintf('[onOrderRefunded] merchant product #%s not found', $target['target_id']));
+
+                return;
+            }
+
+            $refundReport = $this->getProductReportService()->create([
+                's2b2cProductId' => $s2b2cProduct['id'],
+                'userId' => $order['user_id'],
+                'type' => ProductReportService::TYPE_REFUND,
+                'orderId' => $order['id'],
+            ]);
+
+            $params = [
+                'productDetailId' => $s2b2cProduct['s2b2cProductDetailId'],
+                'merchantRefundReportId' => $refundReport['id'],
+                'merchantOrderId' => $order['id'],
+                'merchantLastReportId' => $joinReport['id'],
+            ];
+            $result = $this->getS2B2CService()->reportRefundOrder($params);
+            if (isset($result['error'])) {
+                $this->getProductReportService()->updateFailedReason($refundReport['id'], $result['error']);
+                $this->getLogger()->info(sprintf('[onOrderRefunded] report failed reportId:%s error:%s', $refundReport['id'], $result['error']));
+            } else {
+                $this->getProductReportService()->updateStatusToSucceed($refundReport['id']);
+                $this->getLogger()->info(sprintf('[onOrderRefunded] change report record #%s status to succeed', $refundReport['id']));
+            }
+
+            $this->getLogger()->info('[onOrderRefunded] report finished');
+        } catch (\Throwable $e) {
+            $this->getLogger()->error(sprintf('[onOrderRefunded] report failed: %s %s', $e->getMessage(), $e->getTraceAsString()));
         }
     }
 
@@ -168,6 +189,9 @@ class CourseProductSubscriber extends EventSubscriber implements EventSubscriber
         return $this->getBiz()->service('Order:OrderRefundService');
     }
 
+    /**
+     * @return LoggerInterface
+     */
     protected function getLogger()
     {
         return $this->getBiz()->offsetGet('s2b2c.merchant.logger');
@@ -224,5 +248,21 @@ class CourseProductSubscriber extends EventSubscriber implements EventSubscriber
     protected function getS2b2cProductService()
     {
         return $this->getBiz()->service('S2B2C:ProductService');
+    }
+
+    /**
+     * @return ProductReportService
+     */
+    protected function getProductReportService()
+    {
+        return $this->getBiz()->service('S2B2C:ProductReportService');
+    }
+
+    /**
+     * @return OrderService
+     */
+    protected function getOrderService()
+    {
+        return $this->getBiz()->service('Order:OrderService');
     }
 }
