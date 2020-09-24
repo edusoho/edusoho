@@ -418,7 +418,7 @@ export default {
       }
     },
     laterFillIn() {
-      this.$emit('joinFreeCourse');
+      this.$emit('submitForm');
     },
     arrayToString(value) {
       if (Array.isArray(value)) {
