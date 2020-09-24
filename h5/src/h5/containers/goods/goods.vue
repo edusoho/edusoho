@@ -95,7 +95,11 @@
         </section>
 
         <!-- 收藏/购买 -->
-        <buy :goods="goods" :currentSku="currentSku" :is-favorite="goods.isFavorite" />
+        <buy
+          :goods="goods"
+          :currentSku="currentSku"
+          :is-favorite="goods.isFavorite"
+        />
 
         <!-- 回到顶部 -->
         <back-to-top v-show="backToTopShow" />
@@ -117,6 +121,7 @@ import Buy from './components/buy';
 import BackToTop from './components/back-to-top';
 import AfterjoinDirectory from './components/afterjoin-directory';
 import ClassroomCourses from './components/classroom-courses';
+import initShare from '@/utils/weiixn-share-sdk';
 
 import Api from '@/api';
 import { Toast } from 'vant';
@@ -175,11 +180,27 @@ export default {
 
           this.isLoading = false;
           document.documentElement.scrollTop = 0;
+          const message = {
+            title: this.goods.title,
+            link: window.location.href.split('#')[0] + '#' + this.$route.path,
+            imgUrl: this.goods.images.small,
+          };
+          console.log(message);
+          this.share(message);
         })
         .catch(err => {
           Toast.fail(err.message);
         });
       this.getGoodsCourseComponents();
+    },
+    share(message) {
+      const shareMessage = {
+        title: message.title || '',
+        link: message.link,
+        imgUrl: message.imgUrl,
+        desc: '发现一个好内容，分享给你~',
+      };
+      initShare({ ...shareMessage });
     },
     getGoodsCourseComponents() {
       Api.getGoodsCourseComponents({

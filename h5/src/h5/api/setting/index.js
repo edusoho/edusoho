@@ -75,4 +75,10 @@ export default [
     method: 'GET',
     disableLoading: true,
   },
+  {
+    name: 'wechatJsSdkConfig',
+    url: '/setting/weixinConfig',
+    method: 'GET',
+    disableLoading: true,
+  },
 ];
