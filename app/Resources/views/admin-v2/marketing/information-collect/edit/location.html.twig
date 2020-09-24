@@ -56,7 +56,7 @@
 							{{ 'admin_v2.information_collect.selected_classroom_count'|trans }}<span class="selected-classroom-count">
 								0
 							</span>
-							[<a href=''>{{ 'admin_v2.information_collect.selecte_classroom'|trans }}]</a>
+							[<a class="js-select-target" data-url="{{ path('admin_v2_information_collect_event_target_modal', {type: 'classroom'}) }}" data-toggle="modal" data-target="#modal">{{ 'admin_v2.information_collect.selecte_classroom'|trans }}]</a>
 						</span>
 					</label>
 				</div>

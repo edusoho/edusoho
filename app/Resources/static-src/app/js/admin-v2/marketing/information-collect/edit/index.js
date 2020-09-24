@@ -1,6 +1,8 @@
 import notify from 'common/notify';
+import Cookies from 'js-cookie';
 import './location';
 
+clearInformationCollectCookies();
 let $form = $('#information-collect-form');
 let validator = $form.validate({
     rules: {
@@ -45,5 +47,13 @@ if ($('input[name="action"]').length) {
         if (!$group.find('.radios').length) {
             $group.html($('.radio-for-action').html());
         }
+
+        clearInformationCollectCookies();
     });
+}
+
+function clearInformationCollectCookies() {
+    if (Cookies.getJSON('informationCollectSelectCourseIds')) {
+        Cookies.set('informationCollectSelectCourseIds', []);
+    }
 }

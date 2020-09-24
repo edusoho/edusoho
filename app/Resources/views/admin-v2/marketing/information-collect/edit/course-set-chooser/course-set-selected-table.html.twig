@@ -3,17 +3,17 @@
 	<thead>
 		<tr>
 			<th width="50%">{{ 'site.default.course'|trans }}</th>
-			<th><span class="pull-right">{{ 'operation'|trans }}</span></th>
+			<th>
+				<span class="pull-right">{{ 'operation'|trans }}</span>
+			</th>
 		</tr>
 	</thead>
 	<tbody>
-		{% for courseSetId in courseSetIds %}
+		{% for courseSetId in selectedCourseSetIds %}
 			{% set location = locations[courseSetId]|default(null) %}
 			{% set courseSet = courseSets[courseSetId]|default(null) %}
-			{% if not courseSet %}
-				<tr class="js-selected-item hidden" data-id="{{ courseSetId }}"/>
-			{% else %}
-				<tr class="js-selected-item {% if location %} js-selected-item-binded {% endif %}" data-id="{{ courseSetId }}">
+			<tr class="js-selected-item {% if not courseSet %} hidden {% endif %} {% if location %} js-selected-item-binded {% endif %}" data-id="{{ courseSetId }}">
+				{% if courseSet %}
 					<td>
 						<a href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}" target="_blank">
 							<strong>{{ courseSet.title }}</strong>
@@ -31,14 +31,20 @@
 							<a href="javascript:;" class="js-selected-item-delete plm">{{ 'admin_v2.information_collect.chooser.delete_item'|trans }}</a>
 						</div>
 					</td>
-				</tr>
-			{% endif %}
+				{% endif %}
+			</tr>
+		{% else %}
+			<tr>
+				<td colspan="20">
+					<div class="empty">{{ 'admin_v2.information_collect.chooser.empty'|trans }}</div>
+				</td>
+			</tr>
 		{% endfor %}
 	</tbody>
 </table>
 
 {% if hasRelated|default(false) %}
-<div class="has-related"></div>
+	<div class="has-related"></div>
 {% endif %}
 
 {% if paginator|default() %}

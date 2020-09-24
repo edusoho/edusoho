@@ -3,7 +3,6 @@ import notify from 'common/notify';
 
 const INFORMATION_COLLECT_COURSE_SELECTED_IDS = 'informationCollectSelectCourseIds';
 
-
 let $form = $("#message-search-form");
 let $modal = $form.parents('.modal');
 let $table = $("#course-table");
@@ -17,11 +16,13 @@ $('#chooser-items').on('click', function (e) {
         return false;
     }
 
-    if ($('#information-collect-course-select-table').length == 1 && length > 0) {
+    if ($('#information-collect-course-select-table').length == 1) {
         $.post($(this).data('url'), { ids: courseIds }, function (res) {
             $('#information-collect-course-select-table').empty().html(res);
             $('.js-selected-count').html(length);
-            notify('success', Translator.trans('admin.course.choose_success_hint'));
+            if (length > 0) {
+                notify('success', Translator.trans('admin.course.choose_success_hint'));
+            }
         });
     }
 

@@ -1,6 +1,3 @@
-import Cookies from 'js-cookie';
-
-initSelectTargetCookies();
 if ($('.js-checkbox-group').length) {
     $('.js-checkbox-group').on('click', 'input[name="actionType"]', (event) => {
         let $group = $(event.currentTarget).parent().find('.js-target-type-checkbox-group');
@@ -13,11 +10,5 @@ if ($('.js-checkbox-group').length) {
             $siblingGroup.addClass('hidden');
         }
     });
-}
-
-function initSelectTargetCookies() {
-    if (Cookies.getJSON('informationCollectSelectCourseIds').length > 0) {
-        Cookies.set('informationCollectSelectCourseIds', []);
-    }
 }
 

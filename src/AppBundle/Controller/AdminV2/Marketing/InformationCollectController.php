@@ -77,7 +77,6 @@ class InformationCollectController extends BaseController
 
     public function chooseCoursesAction(Request $request)
     {
-
         list($users, $conditions, $courseSets, $categories, $paginator) = $this->searchCourseSets($request->query->all());
 
         return $this->render('admin-v2/marketing/information-collect/edit/course-set-chooser/course-set-chooser.html.twig', [
@@ -96,7 +95,7 @@ class InformationCollectController extends BaseController
         list($users, $conditions, $courseSets, $categories, $paginator) = $this->searchCourseSets($request->query->all(), 'ajax');
 
         return $this->render(
-            'admin-v2/marketing/information-collect/edit/course-set-chooser/course-set-chooser-tr.html.twig',
+            'admin-v2/marketing/information-collect/edit/course-set-chooser/course-set-chooser-table.html.twig',
             array(
                 'users' => $users,
                 'conditions' => $conditions,
@@ -110,29 +109,29 @@ class InformationCollectController extends BaseController
     public function selectedCoursesAction(Request $request)
     {
         if ($request->isMethod('POST')) {
-            $ids = $request->request->get('ids', [-1]);
+            $selectedIds = $request->request->get('ids', []);
         } else {
-            $ids = $request->query->get('ids', [-1]);
+            $selectedIds = $request->query->get('ids', []);
         }
 
-        $conditions = ['ids' => $ids];
+        $conditions = ['ids' => empty($selectedIds) ? [-1] : $selectedIds];
 
         $count = $this->getCourseSetService()->countCourseSets($conditions);
         $paginator = new Paginator($request, $count, 10);
         $paginator->setBaseUrl($this->generateUrl('admin_v2_information_collect_course_selected'));
-        $courseSets = $this->getCourseSetService()->searchCourseSets($conditions, [],   $paginator->getOffsetCount(), $paginator->getPerPageCount());
+        $courseSets = $this->getCourseSetService()->searchCourseSets($conditions, null,   $paginator->getOffsetCount(), $paginator->getPerPageCount());
 
-        $locations = $this->getEventService()->searchLocations(['targetIds' => $conditions['ids'], 'targetType' => 'course'], [], 0, count($ids), ['targetId']);
+        $locations = $this->getEventService()->searchLocations(['targetIds' => $conditions['ids'], 'targetType' => 'course'], [], 0, count($selectedIds), ['targetId']);
         $locations = ArrayToolkit::index($locations, 'targetId');
 
         return $this->render(
             'admin-v2/marketing/information-collect/edit/course-set-chooser/course-set-selected-table.html.twig',
             array(
                 'courseSets' => ArrayToolkit::index($courseSets, 'id'),
-                'courseSetIds' => $conditions['ids'],
+                'selectedCourseSetIds' => $selectedIds,
                 'locations' => $locations,
                 'paginator' => $paginator,
-                'hasRelated' => $this->getEventService()->countLocations(['targetIds' => $ids]) > 0,
+                'hasRelated' => $this->getEventService()->countLocations(['targetIds' => $conditions['ids']]) > 0,
             )
         );
     }
