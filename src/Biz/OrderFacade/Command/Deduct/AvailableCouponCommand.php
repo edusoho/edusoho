@@ -13,9 +13,7 @@ class AvailableCouponCommand extends Command
 {
     public function execute(Product $product, $params = [])
     {
-        $targetId = ('course' === $product->targetType || 'classroom' === $product->targetType)
-            ? $product->originalTargetId
-            : $product->targetId;
+        $targetId = $product->targetId;
 
         $availableCoupons = $this->availableCouponsByIdAndType($targetId, $product->targetType);
 

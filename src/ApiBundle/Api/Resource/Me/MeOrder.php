@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Me;
 use ApiBundle\Api\Annotation\ResponseFilter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\OrderFacade\Product\Product;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class MeOrder extends AbstractResource
@@ -32,14 +33,21 @@ class MeOrder extends AbstractResource
             $product = $this->getProduct($order['id']);
             $order['cover'] = empty($product->cover) ? ['middle' => ''] : $product->cover;
             $order['targetType'] = $product->targetType;
-            $order['targetId'] = $product->originalTargetId ?: $product->targetId; //targetId要转化成正常的接口
+            $order['targetId'] = $product->targetId; //targetId要转化成正常的接口
             $order['targetUrl'] = $this->generateUrl($product->successUrl[0], $product->successUrl[1], UrlGeneratorInterface::ABSOLUTE_URL); //跳转URL需要改造
+            $order['goodsId'] = $product->goodsId;
+            $order['specsId'] = $product->goodsSpecsId;
         }
         $total = $this->getOrderService()->countOrders($conditions);
 
         return $this->makePagingObject($orders, $total, $offset, $limit);
     }
 
+    /**
+     * @param $orderId
+     *
+     * @return Product
+     */
     private function getProduct($orderId)
     {
         $orderItems = $this->getOrderService()->findOrderItemsByOrderId($orderId);

@@ -36,7 +36,7 @@ class ExtensionManager
         $this->courseTypes = array_merge($this->courseTypes, $extension->getCourseTypes());
         $this->wechatTemplates = array_merge($this->wechatTemplates, $extension->getWeChatTemplates());
         $this->newcomerTasks = array_merge($this->newcomerTasks, $extension->getNewcomerTasks());
-        $this->favoriteTypes = array_column($this->favoriteTypes, $extension->getFavoriteTypes());
+        $this->favoriteTypes = array_merge($this->favoriteTypes, $extension->getFavoriteTypes());
     }
 
     public function getQuestionTypes()
