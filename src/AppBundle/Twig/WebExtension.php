@@ -506,7 +506,7 @@ class WebExtension extends \Twig_Extension
             'appId' => $key,
             'timestamp' => time(),
             'nonceStr' => uniqid($prefix = 'edusoho'),
-            'jsApiList' => ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQZone', 'onMenuShareQQ'],
+            'jsApiList' => ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQZone', 'onMenuShareQQ', 'updateTimelineShareData', 'updateAppMessageShareData'],
         ];
 
         $jsapi_ticket = $jsApiTicket['data']['ticket'];
