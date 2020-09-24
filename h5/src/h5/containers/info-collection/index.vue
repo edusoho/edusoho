@@ -360,6 +360,10 @@ export default {
       type: Object,
       default: () => {},
     },
+    targetType: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {

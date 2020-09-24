@@ -26,7 +26,6 @@ const state = {
     wx: true,
   },
   DrpSwitch: false, // 分销插件
-  allowSkip: false, // 是否跳过表单
 };
 
 export default new Vuex.Store({

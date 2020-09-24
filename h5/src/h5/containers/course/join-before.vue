@@ -61,7 +61,7 @@
       <info-collection
         :userInfoCellectForm="userInfoCellectForm"
         :formRule="userInfoCellectForm.items"
-        @joinFreeCourse="joinFreeCourse"
+        @submitForm="joinFreeCourse"
       ></info-collection>
     </van-action-sheet>
     <!-- 加入学习 -->

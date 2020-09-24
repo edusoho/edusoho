@@ -78,8 +78,16 @@
       />
 
       <!-- 个人信息表单填写 -->
-      <van-action-sheet v-model="isShowForm" title="标题">
-        <info-collection></info-collection>
+      <van-action-sheet
+        v-model="isShowForm"
+        :title="userInfoCellectForm.formTitle"
+      >
+        <info-collection
+          :userInfoCellectForm="this.userInfoCellectForm"
+          :formRule="this.userInfoCellectForm.items"
+          @submitForm="joinFreeClass"
+          targetType="classroom"
+        ></info-collection>
       </van-action-sheet>
       <!-- 加入学习 -->
       <e-footer
@@ -132,6 +140,7 @@ import getCouponMixin from '@/mixins/coupon/getCouponHandler';
 import getActivityMixin from '@/mixins/activity/index';
 import { dateTimeDown } from '@/utils/date-toolkit';
 import infoCollection from '../info-collection/index';
+import { Toast } from 'vant';
 const TAB_HEIGHT = 44;
 
 export default {
@@ -173,10 +182,12 @@ export default {
       isManualSwitch: false,
       classroomSettings: {},
       isShowForm: false,
+      userInfoCellect: {},
+      userInfoCellectForm: {},
     };
   },
   computed: {
-    ...mapState(['couponSwitch', 'user', 'allowSkip']),
+    ...mapState(['couponSwitch', 'user']),
     accessToJoin() {
       return (
         this.details.access.code === 'success' ||
@@ -368,27 +379,83 @@ export default {
         });
         return;
       }
-      if (!this.allowSkip) {
-        this.isShowForm = true;
-      } else {
-        Api.joinClass({
-          query: {
-            classroomId: details.classId,
-          },
+      this.collectUseInfoEvent();
+    },
+    joinFreeClass() {
+      Api.joinClass({
+        query: {
+          classroomId: this.details.classId,
+        },
+      })
+        .then(res => {
+          this.details.joinStatus = res;
         })
-          .then(res => {
-            this.details.joinStatus = res;
-          })
-          .catch(err => {
-            console.error(err.message);
-          });
-      }
+        .catch(err => {
+          console.error(err.message);
+        });
     },
     getLearnExpiry({ val }) {
       this.learnExpiry = val;
     },
     sellOut() {
       this.isEmpty = true;
+    },
+    collectUseInfoEvent() {
+      const hasUserInfoCellectForm = Object.keys(this.userInfoCellectForm)
+        .length;
+      if (hasUserInfoCellectForm) {
+        this.isShowForm = true;
+        return;
+      }
+      this.getInfoCollectionEvent();
+    },
+    //  根据购买前后判断是否需要采集用户信息
+    getInfoCollectionEvent() {
+      Toast.loading({
+        message: '加载中...',
+        forbidClick: true,
+      });
+      const query = {
+        action: this.accessToJoin ? 'buy_before' : 'buy_after',
+      };
+      const params = {
+        targetType: 'classroom',
+        targetId: this.details.classId,
+      };
+      Api.getInfoCollectionEvent({
+        query,
+        params,
+      })
+        .then(res => {
+          console.log(res);
+          if (Object.keys(res).length) {
+            this.userInfoCellect = { ...res };
+            console.log(this.userInfoCellect);
+            this.getInfoCollectionForm();
+          }
+          this.joinFreeClass();
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    },
+    // 根据事件id获取表单
+    getInfoCollectionForm() {
+      const query = {
+        eventId: this.userInfoCellect.id,
+      };
+      Api.getInfoCollectionForm({
+        query,
+      })
+        .then(res => {
+          this.userInfoCellectForm = { ...res };
+
+          this.isShowForm = true;
+          Toast.clear();
+        })
+        .catch(err => {
+          console.error(err);
+        });
     },
   },
 };
