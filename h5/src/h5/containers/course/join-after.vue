@@ -54,6 +54,20 @@
         />
       </div>
     </div>
+
+    <!-- 个人信息表单填写 -->
+    <van-action-sheet
+      v-model="isShowForm"
+      :title="userInfoCellectForm.formTitle"
+      :close-on-click-overlay="false"
+      @cancel="onCancelForm"
+    >
+      <info-collection
+        :userInfoCellectForm="userInfoCellectForm"
+        :formRule="userInfoCellectForm.items"
+        @submitForm="offForm"
+      ></info-collection>
+    </van-action-sheet>
   </div>
 </template>
 <script>
@@ -63,9 +77,11 @@ import DetailHead from './detail/head';
 import DetailPlan from './detail/plan';
 import Teacher from './detail/teacher';
 import afterjoinDirectory from './detail/afterjoin-directory';
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 import { Dialog, Toast } from 'vant';
+import infoCollection from '../info-collection/index';
 import Api from '@/api';
+import * as types from '@/store/mutation-types.js';
 
 export default {
   inheritAttrs: true,
@@ -87,11 +103,15 @@ export default {
       offsetHeight: '', // 元素自身的高度
       isFixed: false,
       courseSettings: {},
+      isShowForm: false,
+      userInfoCellect: {},
+      userInfoCellectForm: {},
     };
   },
   computed: {
     ...mapState('course', {
       selectedPlanId: state => state.selectedPlanId,
+      currentJoin: state => state.currentJoin,
     }),
     ...mapState(['user']),
     progress() {
@@ -109,6 +129,15 @@ export default {
   watch: {
     selectedPlanId: function(val, oldVal) {
       this.active = 1;
+    },
+    currentJoin: {
+      handler(val, oldVal) {
+        if (val) {
+          this.getInfoCollectionEvent();
+        }
+      },
+      // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法，如果设置了false，那么效果和上边例子一样
+      immediate: true,
     },
   },
   mounted() {
@@ -141,11 +170,16 @@ export default {
     Teacher,
     reviewList,
     afterjoinDirectory,
+    infoCollection,
   },
   destroyed() {
     window.removeEventListener('scroll', this.handleScroll);
   },
+
   methods: {
+    ...mapMutations('course', {
+      setCurrentJoin: types.SET_CURRENT_JOIN,
+    }),
     showDialog() {
       if (!this.details.member) return;
 
@@ -258,6 +292,59 @@ export default {
         // eslint-disable-next-line no-unused-expressions
         SWIPER ? SWIPER.classList.remove('swiper-directory-fix') : null;
       }
+    },
+    offForm() {
+      this.onCancelForm();
+      this.isShowForm = false;
+    },
+    onCancelForm() {
+      this.setCurrentJoin(false);
+    },
+    //  根据购买前后判断是否需要采集用户信息
+    getInfoCollectionEvent() {
+      Toast.loading({
+        message: '加载中...',
+        forbidClick: true,
+      });
+      const query = {
+        action: 'buy_after',
+      };
+      const params = {
+        targetType: 'course',
+        targetId: this.details.id,
+      };
+      Api.getInfoCollectionEvent({
+        query,
+        params,
+      })
+        .then(res => {
+          if (Object.keys(res).length) {
+            this.userInfoCellect = { ...res };
+            this.getInfoCollectionForm();
+          }
+          // this.joinFreeCourse();
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    },
+    // 根据事件id获取表单
+    getInfoCollectionForm() {
+      const query = {
+        eventId: this.userInfoCellect.id,
+      };
+      Api.getInfoCollectionForm({
+        query,
+      })
+        .then(res => {
+          this.userInfoCellectForm = { ...res };
+
+          this.isShowForm = true;
+          Toast.clear();
+        })
+        .catch(err => {
+          console.error(err);
+        });
     },
   },
 };

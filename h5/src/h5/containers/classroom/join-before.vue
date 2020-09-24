@@ -86,7 +86,6 @@
           :userInfoCellectForm="this.userInfoCellectForm"
           :formRule="this.userInfoCellectForm.items"
           @submitForm="joinFreeClass"
-          targetType="classroom"
         ></info-collection>
       </van-action-sheet>
       <!-- 加入学习 -->

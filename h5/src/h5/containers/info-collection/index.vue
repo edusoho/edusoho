@@ -418,8 +418,8 @@ export default {
         const areaKey = this.rule[this.areaIndex].field;
         const areaValue = this.rule[this.areaIndex].value;
         formData[areaKey] = this.stringToArray(areaValue);
-        this.setInfoCollection(formData);
       }
+      this.setInfoCollection(formData);
     },
     laterFillIn() {
       this.$emit('submitForm');
