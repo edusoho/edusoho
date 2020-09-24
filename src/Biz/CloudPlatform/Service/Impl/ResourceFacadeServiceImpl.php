@@ -13,7 +13,8 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
     /**
      * @param $file
      * @param string $userAgent
-     * @param array $options: watchLimitTime
+     * @param array  $options:  watchLimitTime
+     *
      * @return mixed
      */
     public function getPlayerContext($file, $userAgent = '', $options = [])
