@@ -63,6 +63,20 @@
         />
       </div>
     </div>
+
+    <!-- 个人信息表单填写 -->
+    <van-action-sheet
+      v-model="isShowForm"
+      :title="userInfoCellectForm.formTitle"
+      :close-on-click-overlay="false"
+      @cancel="onCancelForm"
+    >
+      <info-collection
+        :userInfoCellectForm="userInfoCellectForm"
+        :formRule="userInfoCellectForm.items"
+        @submitForm="onCancelForm"
+      ></info-collection>
+    </van-action-sheet>
   </div>
 </template>
 
@@ -74,8 +88,11 @@ import courseSetList from './course-set-list';
 import detailPlan from './plan';
 import directory from '../course/detail/directory';
 import moreMask from '@/components/more-mask';
+import infoCollection from '../info-collection/index';
+import { mapState, mapMutations } from 'vuex';
 import { Dialog, Toast } from 'vant';
 import Api from '@/api';
+import * as types from '@/store/mutation-types.js';
 // eslint-disable-next-line no-unused-vars
 const TAB_HEIGHT = 44;
 
@@ -90,6 +107,7 @@ export default {
     reviewList,
     // eslint-disable-next-line vue/no-unused-components
     moreMask,
+    infoCollection,
   },
   props: ['details', 'planDetails'],
   data() {
@@ -101,7 +119,15 @@ export default {
       tabsClass: '',
       errorMsg: '',
       classroomSettings: {},
+      isShowForm: false,
+      userInfoCellect: {},
+      userInfoCellectForm: {},
     };
+  },
+  computed: {
+    ...mapState('classroom', {
+      currentJoin: state => state.currentJoin,
+    }),
   },
   async created() {
     this.classroomSettings = await Api.getSettings({
@@ -112,6 +138,17 @@ export default {
       console.error(err);
     });
   },
+  watch: {
+    currentJoin: {
+      handler(val, oldVal) {
+        if (val) {
+          this.getInfoCollectionEvent();
+        }
+      },
+      // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法，如果设置了false，那么效果和上边例子一样
+      immediate: true,
+    },
+  },
   mounted() {
     window.addEventListener('touchmove', this.handleScroll);
 
@@ -121,6 +158,9 @@ export default {
     window.removeEventListener('touchmove', this.handleScroll);
   },
   methods: {
+    ...mapMutations('classroom', {
+      setCurrentJoin: types.SET_CURRENT_CLASS_JOIN,
+    }),
     showDialog() {
       let code = '';
       let errorMessage = '';
@@ -221,6 +261,54 @@ export default {
           callback();
         })
         .catch(() => {});
+    },
+    onCancelForm() {
+      this.setCurrentJoin(false);
+      this.isShowForm = false;
+    },
+    //  根据购买前后判断是否需要采集用户信息
+    getInfoCollectionEvent() {
+      Toast.loading({
+        message: '加载中...',
+        forbidClick: true,
+      });
+      const query = {
+        action: 'buy_after',
+      };
+      const params = {
+        targetType: 'classroom',
+        targetId: this.details.classId,
+      };
+      Api.getInfoCollectionEvent({
+        query,
+        params,
+      })
+        .then(res => {
+          if (Object.keys(res).length) {
+            this.userInfoCellect = { ...res };
+            this.getInfoCollectionForm();
+          }
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    },
+    // 根据事件id获取表单
+    getInfoCollectionForm() {
+      const query = {
+        eventId: this.userInfoCellect.id,
+      };
+      Api.getInfoCollectionForm({
+        query,
+      })
+        .then(res => {
+          this.userInfoCellectForm = { ...res };
+          this.isShowForm = true;
+          Toast.clear();
+        })
+        .catch(err => {
+          console.error(err);
+        });
     },
   },
 };

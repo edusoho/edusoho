@@ -429,7 +429,6 @@ export default {
           console.log(res);
           if (Object.keys(res).length) {
             this.userInfoCellect = { ...res };
-            console.log(this.userInfoCellect);
             this.getInfoCollectionForm();
           }
           this.joinFreeClass();
@@ -448,7 +447,6 @@ export default {
       })
         .then(res => {
           this.userInfoCellectForm = { ...res };
-
           this.isShowForm = true;
           Toast.clear();
         })
