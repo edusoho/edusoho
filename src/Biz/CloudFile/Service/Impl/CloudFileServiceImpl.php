@@ -7,6 +7,7 @@ use Biz\BaseService;
 use Biz\File\Service\FileImplementor;
 use Biz\File\Service\UploadFileService;
 use Biz\File\Service\UploadFileTagService;
+use Biz\File\UploadFileException;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
 use AppBundle\Common\ArrayToolkit;
@@ -181,12 +182,32 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
 
     public function player($globalId, $ssl = false)
     {
-        $result = $this->getCloudFileImplementor()->player($globalId, $ssl);
+        $implementor = $this->getFileImplementor($globalId);
+        $result = $implementor->player($globalId, $ssl);
         if (!empty($result) && is_array($result)) {
             $result['token'] = $this->biz['qiQiuYunSdk.play']->makePlayToken($globalId);
         }
 
         return $result;
+    }
+
+    /**
+     * @return FileImplementor|null
+     */
+    protected function getFileImplementor($globalId)
+    {
+        $file = $this->getUploadFileService()->getFileByGlobalId($globalId);
+        if (empty($file)) {
+            throw $this->createNewException(UploadFileException::NOTFOUND_FILE());
+        }
+
+        if ($file['storage'] == 'supplier') {
+            return $this->getSupplierFileImplementor();
+        } elseif ($file['storage'] == 'cloud') {
+            return $this->getCloudFileImplementor();
+        }
+
+        return null;
     }
 
     public function download($globalId)
@@ -295,6 +316,14 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
     protected function getCloudFileImplementor()
     {
         return $this->createService('File:CloudFileImplementor');
+    }
+
+    /**
+     * @return FileImplementor
+     */
+    protected function getSupplierFileImplementor()
+    {
+        return $this->createService('File:SupplierFileImplementor');
     }
 
     /**
