@@ -81,7 +81,7 @@ export default {
   },
   data() {
     return {
-      isShare: true, // 是否显示分享按钮
+      isShare: false, // 是否显示分享按钮
     };
   },
   filters: {
