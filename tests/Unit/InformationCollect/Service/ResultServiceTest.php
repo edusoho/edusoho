@@ -3,6 +3,7 @@
 namespace Tests\Unit\InformationCollect\Service;
 
 use Biz\BaseTestCase;
+use Biz\InformationCollect\Service\ResultService;
 
 class ResultServiceTest extends BaseTestCase
 {
@@ -189,6 +190,46 @@ class ResultServiceTest extends BaseTestCase
         $this->assertEquals(2, count($resultItems));
     }
 
+    public function testSearchCollectedData()
+    {
+        $this->mockResults();
+
+        $result = $this->getInformationCollectResultService()->searchCollectedData(['eventId' => 1], [], 0, PHP_INT_MAX);
+
+        $this->assertEquals(2, count($result));
+    }
+
+    protected function mockResults()
+    {
+        $results = $this->getInformationCollectResultDao()->batchCreate(
+            [
+                [
+                    'formTitle' => 'test1',
+                    'userId' => 2,
+                    'eventId' => 1,
+                    'createdTime' => time()
+                ],
+                [
+                    'formTitle' => 'test1',
+                    'userId' => 3,
+                    'eventId' => 1,
+                    'createdTime' => time()
+                ],
+                [
+                    'formTitle' => 'test2',
+                    'userId' => 2,
+                    'eventId' => 2,
+                    'createdTime' => time()
+                ],
+            ]
+        );
+
+        return $results;
+    }
+
+    /**
+     * @return ResultService
+     */
     protected function getInformationCollectResultService()
     {
         return $this->createService('InformationCollect:ResultService');
