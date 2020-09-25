@@ -159,7 +159,7 @@ export default {
   },
   methods: {
     ...mapMutations('classroom', {
-      setCurrentJoin: types.SET_CURRENT_CLASS_JOIN,
+      setCurrentJoin: types.SET_CURRENT_JOIN_CLASS,
     }),
     showDialog() {
       let code = '';

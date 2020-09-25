@@ -13,7 +13,7 @@ const mutations = {
   [types.SET_CLASSROOMLIST](currentState, data) {
     currentState.searchClassRoomList = data;
   },
-  [types.SET_CURRENT_CLASS_JOIN](currentState, payload) {
+  [types.SET_CURRENT_JOIN_CLASS](currentState, payload) {
     currentState.currentJoin = payload;
   },
 };
@@ -21,7 +21,7 @@ const mutations = {
 const actions = {
   setClassRoomList({ commit }, data) {
     commit(types.SET_CLASSROOMLIST, data);
-    commit(types.SET_CURRENT_CLASS_JOIN, true);
+    commit(types.SET_CURRENT_JOIN_CLASS, true);
   },
 };
 

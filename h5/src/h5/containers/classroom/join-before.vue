@@ -81,6 +81,7 @@
       <van-action-sheet
         v-model="isShowForm"
         :title="userInfoCellectForm.formTitle"
+        :close-on-click-overlay="false"
       >
         <info-collection
           :userInfoCellectForm="this.userInfoCellectForm"
