@@ -5,7 +5,7 @@ const state = {
     selectedData: {},
     courseList: [],
     paging: {},
-    currentJoin: false, // 课程加入后是否采集用户信息
+    currentJoin: false, // 班级加入后是否采集用户信息
   },
 };
 
