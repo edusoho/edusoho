@@ -465,7 +465,6 @@ export default {
       })
         .then(res => {
           this.userInfoCellectForm = { ...res };
-
           this.isShowForm = true;
           Toast.clear();
         })

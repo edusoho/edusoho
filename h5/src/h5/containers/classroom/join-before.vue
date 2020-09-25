@@ -431,6 +431,7 @@ export default {
           if (Object.keys(res).length) {
             this.userInfoCellect = { ...res };
             this.getInfoCollectionForm();
+            return;
           }
           this.joinFreeClass();
         })

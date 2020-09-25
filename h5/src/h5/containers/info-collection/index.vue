@@ -46,8 +46,7 @@
           <van-field
             :key="index"
             readonly
-            right-icon=" iconfangxiang my_setting-more-special"
-            icon-prefix="iconfont"
+            right-icon="arrow"
             v-model="item.value"
             :name="item.field"
             :label="item.title"
@@ -55,7 +54,6 @@
             :placeholder="getPlaceholder(item)"
             :error="errorRule[index].error"
             :error-message="errorRule[index].errorMessage"
-            @blur="checkField(index, item.value, item.validate)"
             @click="showPicker(item, index)"
           />
         </template>
@@ -551,10 +549,15 @@ export default {
         'value',
         this.formatDate(this.birthtDateSelect.birthtDate),
       );
-      // this.rule[currentSelectIndex].value = this.formatDate(this.birthtDate);
       this.birthCancel();
     },
     birthCancel() {
+      const currentSelectIndex = this.currentSelectIndex;
+      this.checkField(
+        currentSelectIndex,
+        this.rule[currentSelectIndex].value,
+        this.rule[currentSelectIndex].validate,
+      );
       this.birthtDateSelect.show = false;
     },
     areaConfirm(val) {
@@ -571,6 +574,12 @@ export default {
       this.areaCancel();
     },
     areaCancel() {
+      const currentSelectIndex = this.currentSelectIndex;
+      this.checkField(
+        currentSelectIndex,
+        this.rule[currentSelectIndex].value,
+        this.rule[currentSelectIndex].validate,
+      );
       this.areaSelect.show = false;
     },
     setInfoCollection(formData) {
