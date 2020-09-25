@@ -31,8 +31,28 @@ class EventServiceImpl extends BaseService implements EventService
 
         $event = $this->getEventDao()->create($event);
 
-        $this->createEventLocations($event, $fields['action'], $fields);
+        $this->editEventLocations($event, $fields);
 
+        return $event;
+    }
+
+    public function updateEventWithLocations($id, $updateFields)
+    {
+        $event = $this->getEventDao()->get($id);
+        if (empty($event)) {
+            $this->createServiceException(InformationCollectException::NOTFOUND_COLLECTION());
+        }
+
+        $updateEventFields = ArrayToolkit::filter($updateFields, [
+            'title' => '',
+            'action' => '',
+            'formTitle' => '',
+            'status' => 'open',
+            'allowSkip' => 1,
+        ]);
+
+        $event = $this->getEventDao()->update($id, $updateEventFields);
+        $this->editEventLocations($event, $updateFields);
         return $event;
     }
 
@@ -129,10 +149,14 @@ class EventServiceImpl extends BaseService implements EventService
         return $locationInfo;
     }
 
-    public function createEventLocations($event, $action, $locationFields)
+    public function editEventLocations($event, $locationFields)
     {
         if (empty($locationFields['targetTypes'])) {
             return;
+        }
+
+        if (!ArrayToolkit::requireds($locationFields, ['locationType'])) {
+            $this->createServiceException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         foreach ($locationFields['targetTypes'] as $type) {
@@ -149,8 +173,12 @@ class EventServiceImpl extends BaseService implements EventService
                 continue;
             }
 
-            $this->batchDeleteLocations($event['id'], $type, $targetIds);
-            $this->batchCreateLocations($event['id'], $event['action'], $type, $targetIds);
+            // if ($locationFields['locationType'] == 'all') {
+
+            // } elseif($locationFields['locationType'] == 'part') {
+                $this->batchDeleteLocations($event['id'], $type, $targetIds);
+                $this->batchCreateLocations($event['id'], $event['action'], $type, $targetIds);
+            // }
         }
     }
 

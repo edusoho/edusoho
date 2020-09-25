@@ -9,6 +9,8 @@ interface EventService
     
     public function createEventWithLocations(array $fields);
 
+    public function updateEventWithLocations($id, $updateFields);
+
     public function count($conditions);
 
     public function search($conditions, $orderBy, $start, $limit);

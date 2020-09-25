@@ -25,7 +25,7 @@ class LocationDaoImpl extends AdvancedDaoImpl implements LocationDao
                 'targetType = :targetType',
                 'targetId IN (:targetIds)',
                 'eventId <> :excludeEventId',
-                'eventId = :eventId'
+                'eventId = :eventId',
             ],
         ];
     }

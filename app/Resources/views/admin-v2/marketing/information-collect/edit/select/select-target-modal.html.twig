@@ -10,7 +10,7 @@
 	<div class="text-md pts">
 		{{ 'admin_v2.information_collect.selecte_count'|trans }}
 		<span class="js-selected-count text-primary">0</span>
-		<button class="btn btn-sm btn-primary pull-right" data-url="{{ path('admin_v2_information_collect_chooser', {type: type}) }}" data-toggle="modal" data-dismiss="modal" data-target="#attachment-modal">
+		<button class="btn btn-sm btn-primary pull-right" data-url="{{ path('admin_v2_information_collect_chooser', {type: type, eventId: eventId|default(0)}) }}" data-toggle="modal" data-dismiss="modal" data-target="#attachment-modal">
 			{{ 'form.field.create'|trans }}
 		</button>
 	</div>
@@ -20,7 +20,7 @@
 {% set modal_class = "modal-lg select-target-modal" %}
 
 {% block body %}
-	<div id="information-collect-select-table" data-type="{{ type }}" data-selected-url="{{ path('admin_v2_information_collect_chooser_selected', {type:type}) }}">
+	<div id="information-collect-select-table" data-type="{{ type }}" data-selected-url="{{ path('admin_v2_information_collect_chooser_selected', {type:type, excludeEventId: eventId|default(0)}) }}">
 		<table class="table">
 			<thead>
 				<tr>

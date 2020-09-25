@@ -57,8 +57,7 @@ $.validator.addMethod('checkSelectedCourseIds', function (value, element) {
     let result = true;
 
     if ($('input[name="locationType"]:checked').val() == 'part') {
-        let $checkedTargetTypes = $('.targetTypes:checked');
-
+        let $checkedTargetTypes = $('input[name="locationType"]:checked').parents('.action-type-group').find('.targetTypes:checked');
         $.each($checkedTargetTypes, function (index, value) {
             if ($(value).val() == 'course') {
                 result = $('input[name="courseIds"]').val().length > 0;
@@ -77,7 +76,8 @@ $.validator.addMethod('checkSelectedClassroomIds', function (value, element) {
     let result = true;
 
     if ($('input[name="locationType"]:checked').val() == 'part') {
-        let $checkedTargetTypes = $('.targetTypes:checked');
+        let $checkedTargetTypes = $('input[name="locationType"]:checked').parents('.action-type-group').find('.targetTypes:checked');
+        console.log($checkedTargetTypes);
         $.each($checkedTargetTypes, function (index, value) {
             if ($(value).val() == 'classroom') {
                 result = $('input[name="classroomIds"]').val().length > 0;
@@ -90,6 +90,7 @@ $.validator.addMethod('checkSelectedClassroomIds', function (value, element) {
 }, $.validator.format(Translator.trans('admin_v2.information_collect.chooser.target_classroom_hint')));
 
 $('.js-save-btn').on('click', (event) => {
+    console.log(getFormData());
     if (validator && validator.form()) {
         $.post(
             $form.data('url'), getFormData()

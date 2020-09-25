@@ -10,7 +10,7 @@
 	{% endif %}
 {% endblock %}
 {% block body %}
-	<form id="search-form" data-type="{{ type }}" class="form-inline well well-sm" action="{{ path('admin_v2_information_collect_chooser_ajax', {type: type}) }}" method="get">
+	<form id="search-form" data-type="{{ type }}" class="form-inline well well-sm" action="{{ path('admin_v2_information_collect_chooser_ajax', {type: type, eventId: event.id|default(0)}) }}" method="get">
 		{% if type == 'course' %}
 			{% include "admin-v2/marketing/information-collect/edit/chooser/course-search-form.html.twig" %}
 		{% else %}
@@ -43,7 +43,7 @@
 	</div>
 {% endblock %}
 {% block footer %}
-	<button id="chooser-items" data-url="{{ path('admin_v2_information_collect_chooser_selected', {type: type}) }}" data-submiting-text="{{ 'form.btn.submit.submiting'|trans }}" type="submit" class="btn btn-primary pull-right">{{ 'form.btn.confirm'|trans }}
+	<button id="chooser-items" data-url="{{ path('admin_v2_information_collect_chooser_selected', {type: type, excludeEventId: eventId|default(0)}) }}" data-submiting-text="{{ 'form.btn.submit.submiting'|trans }}" type="submit" class="btn btn-primary pull-right">{{ 'form.btn.confirm'|trans }}
 	</button>
 	<button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
 {% endblock %}

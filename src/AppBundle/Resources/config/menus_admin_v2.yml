@@ -598,10 +598,15 @@ admin_v2:
                                                     name: admin_v2.information_collect.operate.open_tab
                                                     class: open-collection
                                                     router_params:
-                                                    id: (collect.id)
+                                                        id: (collect.id)
                                                     group: groupButton
                                                     mode: none
                                                     visible: ( collect.status!='open' )
+                                                admin_v2_information_collect_update:
+                                                    name: admin_v2.information_collect.operate.update_tab
+                                                    router_params:
+                                                        id: (collect.id)
+                                                    group: groupButton
                 # 渠道管理
                 admin_v2_channel_group:
                     name: admin_v2.channel.basic_group

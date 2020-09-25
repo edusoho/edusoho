@@ -2750,6 +2750,10 @@ admin_v2_information_collect_create:
   path: /information_collect/create
   defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:create }
 
+admin_v2_information_collect_update:
+  path: /information_collect/{id}/update
+  defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:update }
+
 admin_v2_information_collect_event_target_modal:
   path: /information_collect/event/target/{type}/modal
   defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:targetModal }

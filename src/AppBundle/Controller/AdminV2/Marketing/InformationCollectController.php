@@ -12,6 +12,7 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Common\CommonException;
+use Biz\InformationCollect\InformationCollectException;
 
 class InformationCollectController extends BaseController
 {
@@ -56,22 +57,66 @@ class InformationCollectController extends BaseController
     public function createAction(Request $request)
     {
         if ($request->isMethod('POST')) {
-            $data = $request->request->all();
-
-            $event = $this->getEventService()->createEventWithLocations($data);
+            $this->getEventService()->createEventWithLocations($request->request->all());
             return $this->createJsonResponse(true);
         }
 
-        return $this->render('admin-v2/marketing/information-collect/edit/index.html.twig', []);
+        $allCourseLocation  = $this->getEventService()->searchLocations(['targetType' => 'course', 'targetId' => 0], [], 0, 1);
+        $allClassroomLocation  = $this->getEventService()->searchLocations(['targetType' => 'classroom', 'targetId' => 0], [], 0, 1);
+
+        return $this->render('admin-v2/marketing/information-collect/edit/index.html.twig', [
+            'allCourseLocation' => empty($allCourseLocation) ? [] : $allCourseLocation[0],
+            'allClassroomLocation' => empty($allClassroomLocation) ? [] : $allClassroomLocation[0],
+        ]);
+    }
+
+    public function updateAction(Request $request, $id)
+    {
+        $event = $this->getEventService()->get($id);
+
+        if (empty($event)) {
+            $this->createNewException(InformationCollectException::NOTFOUND_COLLECTION());
+        }
+
+        if ($request->isMethod('POST')) {
+            $event = $this->getEventService()->updateEventWithLocations($event['id'], $request->request->all());
+            return $this->createJsonResponse(true);
+        }
+
+        $conditions = ['eventId' => $event['id']];
+        $locations = $this->getEventService()->searchLocations(
+            $conditions,
+            [],
+            0,
+            $this->getEventService()->countLocations($conditions),
+            ['targetType', 'targetId']
+        );
+
+        $locationInfo = [];
+        foreach ($locations as $location) {
+            if ('course' == $location['targetType']) {
+                $locationInfo['courseIds'][] = $location['targetId'];
+            } else {
+                $locationInfo['classroomIds'][] = $location['targetId'];
+            }
+        }
+
+        $allCourseLocation  = $this->getEventService()->searchLocations(['targetType' => 'course', 'targetId' => 0], [], 0, 1);
+        $allClassroomLocation  = $this->getEventService()->searchLocations(['targetType' => 'classroom', 'targetId' => 0], [], 0, 1);
+
+        return $this->render('admin-v2/marketing/information-collect/edit/index.html.twig', [
+            'event' => $event,
+            'locationInfo' => $locationInfo,
+            'allCourseLocation' => empty($allCourseLocation) ? [] : $allCourseLocation[0],
+            'allClassroomLocation' => empty($allClassroomLocation) ? [] : $allClassroomLocation[0],
+        ]);
     }
 
     public function targetModalAction(Request $request, $type)
     {
-        if ($request->query->get('eventId')) {
-        }
-
         return $this->render('admin-v2/marketing/information-collect/edit/select/select-target-modal.html.twig', [
             'type' => $type,
+            'eventId' => $request->query->get('eventId'),
         ]);
     }
 
@@ -85,6 +130,7 @@ class InformationCollectController extends BaseController
             'targets' => $targets,
             'categories' => $categories,
             'paginator' => $paginator,
+            'eventId' => $request->query->get('eventId'),
         ]);
     }
 
@@ -121,7 +167,9 @@ class InformationCollectController extends BaseController
         }
 
         $paginator->setBaseUrl($this->generateUrl('admin_v2_information_collect_chooser_selected', ['type' => $type]));
-        $locations = $this->getEventService()->searchLocations(['targetIds' => $conditions['ids'], 'targetType' => $type], [], 0, count($selectedIds), ['targetId']);
+
+        $locationConditions = ['targetIds' => $conditions['ids'], 'targetType' => $type, 'excludeEventId' => $request->query->get('excludeEventId', 0)];
+        $locations = $this->getEventService()->searchLocations($locationConditions, [], 0, count($selectedIds), ['targetId']);
         $locations = ArrayToolkit::index($locations, 'targetId');
 
         return $this->render(
@@ -132,7 +180,7 @@ class InformationCollectController extends BaseController
                 'selectedTargetIds' => $selectedIds,
                 'locations' => $locations,
                 'paginator' => $paginator,
-                'hasRelated' => $this->getEventService()->countLocations(['targetIds' => $conditions['ids'],  'targetType' => $type]) > 0,
+                'hasRelated' => $this->getEventService()->countLocations($locationConditions) > 0,
             )
         );
     }
