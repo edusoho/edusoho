@@ -18,9 +18,9 @@ class NameFormItem extends FormItem
             'field' => self::FILED,
             'value' => $this->value,
             'validate' => [
-                ['required' => $this->required, 'message' => '请输入姓名'],
-                ['min' => 2, 'message' => '最少2个字'],
-                ['max' => 20, 'message' => '最多20个字'],
+                ['required' => $this->required, 'message' => self::TITLE.'不能为空'],
+                ['min' => 2, 'message' => '最少输入2个字符'],
+                ['max' => 20, 'message' => '最多输入20个字符'],
             ],
         ];
     }

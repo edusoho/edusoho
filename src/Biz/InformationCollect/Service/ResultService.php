@@ -11,4 +11,6 @@ interface ResultService
     public function getResultByUserIdAndEventId($userId, $eventId);
 
     public function findResultItemsByResultId($resultId);
+
+    public function submitForm($userId, $eventId, $form);
 }

@@ -16,9 +16,7 @@ class InformationCollectFormFilter extends Filter
     protected function publicFields(&$data)
     {
         $data['eventId'] = $data['id'];
+        $data['allowSkip'] = (bool) $data['allowSkip'];
         unset($data['id']);
-
-        $informationCollectFormItemFilter = new InformationCollectFormItemFilter();
-        $informationCollectFormItemFilter->filters($data['items']);
     }
 }

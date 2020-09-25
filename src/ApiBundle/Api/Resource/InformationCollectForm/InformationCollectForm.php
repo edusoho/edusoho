@@ -21,14 +21,28 @@ class InformationCollectForm extends AbstractResource
         $result = $this->getInformationCollectResultService()->getResultByUserIdAndEventId($this->getCurrentUser()->getId(), $eventId);
         if (!empty($result['items'])) {
             $resultItems = ArrayToolkit::index($result['items'], 'code');
+            $event['allowSkip'] = true;
         }
 
         foreach ($event['items'] as &$item) {
             $value = empty($resultItems[$item['code']]) ? '' : $resultItems[$item['code']]['value'];
-            $item['data'] = FormItemFectory::create($item['code'])->required($item['required'])->value($value)->getData();
+            $item = FormItemFectory::create($item['code'])->required($item['required'])->value($value)->getData();
         }
 
         return $event;
+    }
+
+    public function add(ApiRequest $request)
+    {
+        $eventId = $request->request->get('eventId', '');
+
+        $this->getInformationCollectResultService()->submitForm(
+            $this->getCurrentUser()->getId(),
+            $eventId,
+            $request->request->all()
+        );
+
+        return $this->get($request, $eventId);
     }
 
     protected function getInformationCollectEventService()
