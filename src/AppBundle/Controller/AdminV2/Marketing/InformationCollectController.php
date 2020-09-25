@@ -72,7 +72,7 @@ class InformationCollectController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($collectedData, 'userId'));
         $userProfiles = $this->getUserService()->findUserProfilesByIds(ArrayToolkit::column($users, 'id'));
-//return $this->getResultService()->findResultDataByResultIds(ArrayToolkit::column($collectedData, 'id'));
+
         return $this->render('admin-v2/marketing/information-collect/detail.html.twig', [
             'event' => $event,
             'collectedNum' => $this->getResultService()->countGroupByEventId($id),
