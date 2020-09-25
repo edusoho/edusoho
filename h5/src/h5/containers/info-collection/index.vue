@@ -581,7 +581,6 @@ export default {
       Api.setInfoCollection({
         data,
       }).then(res => {
-        console.log(res);
         this.$toast('提交成功');
         this.laterFillIn();
       });

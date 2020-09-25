@@ -5,6 +5,9 @@ export default {
     return {
       userInfoCellect: null,
       userInfoCellectForm: {},
+      isReqUserInfoCellect: false,
+      isRequserInfoCellectForm: false,
+      needCollectUserInfo: false,
     };
   },
   computed: {
@@ -23,8 +26,9 @@ export default {
         targetId: paramsList.targetId,
       };
 
-      return new Promise((resolve, reject) => {
-        Api.getInfoCollectionEvent({
+      // eslint-disable-next-line no-async-promise-executor
+      return new Promise(async (resolve, reject) => {
+        await Api.getInfoCollectionEvent({
           query,
           params,
         })
@@ -33,19 +37,20 @@ export default {
             resolve(res);
           })
           .catch(err => {
-            this.userInfoCellect = {};
             reject(err);
             Toast(err.message);
           });
+        this.isReqUserInfoCellect = true;
       });
     },
     // 根据事件id获取表单
-    getInfoCollectionForm() {
+    getInfoCollectionForm(eventId) {
       const query = {
-        eventId: this.userInfoCellect.id,
+        eventId,
       };
-      return new Promise((resolve, reject) => {
-        Api.getInfoCollectionForm({
+      // eslint-disable-next-line no-async-promise-executor
+      return new Promise(async (resolve, reject) => {
+        await Api.getInfoCollectionForm({
           query,
         })
           .then(res => {
@@ -56,6 +61,7 @@ export default {
             reject(err);
             Toast(err.message);
           });
+        this.isRequserInfoCellectForm = true;
       });
     },
   },
