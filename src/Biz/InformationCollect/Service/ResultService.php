@@ -11,4 +11,10 @@ interface ResultService
     public function searchCollectedData($conditions, $orderBy, $start, $limit);
 
     public function getItemsByResultIdAndEventId($resultId, $eventId);
+
+    public function getResultByUserIdAndEventId($userId, $eventId);
+
+    public function findResultItemsByResultId($resultId);
+
+    public function submitForm($userId, $eventId, $form);
 }
