@@ -444,6 +444,7 @@ export default {
           });
           return;
         }
+        Toast.clear();
         this.joinFreeCourse();
       });
     },

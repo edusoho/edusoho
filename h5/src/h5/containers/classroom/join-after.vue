@@ -159,6 +159,7 @@ export default {
                 Toast.clear();
               });
             }
+            Toast.clear();
           });
         }
       },
