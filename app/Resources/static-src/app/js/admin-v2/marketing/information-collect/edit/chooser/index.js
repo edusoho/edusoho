@@ -1,22 +1,18 @@
-import Cookies from 'js-cookie';
+import 'store';
 import notify from 'common/notify';
 
 let $form = $("#search-form");
 let $modal = $form.parents('.modal');
 let type = $form.data('type');
-let cookieName = (type == 'course') ? 'informationCollectSelectCourseIds' : 'informationCollectSelectClassroomIds';
+let storeName = (type == 'course') ? 'informationCollectSelectCourseIds' : 'informationCollectSelectClassroomIds';
 let targetIds = new Array();
 
-if (!Cookies.getJSON(cookieName)) {
-    Cookies.set(cookieName, []);
-}
-
-if (Cookies.getJSON(cookieName).length > 0) {
-    initChecked(Cookies.getJSON(cookieName));
+if (store.get(storeName, []).length > 0) {
+    initChecked(store.get(storeName, []));
 }
 
 $('#chooser-items').on('click', function (e) {
-    let targetIds = Cookies.getJSON(cookieName);
+    let targetIds = store.get(storeName, []);
     let length = targetIds.length;
     if (length > 200) {
         notify('danger', Translator.trans('admin_v2.information_collect.chooser.limit'));
@@ -100,7 +96,7 @@ $('.search-list').on('click', '.pagination li', function () {
     if (typeof (url) !== 'undefined') {
         $.get(url, $form.serialize(), function (data) {
             $('.search-list').html(data);
-            initChecked(Cookies.getJSON(cookieName));
+            initChecked(store.get(storeName, []));
         });
     }
 });
@@ -108,15 +104,15 @@ $('.search-list').on('click', '.pagination li', function () {
 $('#search').on('click', function () {
     $.get($form.attr('action'), $form.serialize(), function (data) {
         $('.search-list').html(data);
-        initChecked(Cookies.getJSON(cookieName));
+        initChecked(store.get(storeName, []));
     });
 });
 
 $('.search-list').on('click', '.batch-select', function () {
     let $selectdElement = $(this);
 
-    if (Cookies.getJSON(cookieName).length > 0) {
-        targetIds = deleteVacancy(Cookies.getJSON(cookieName));
+    if (store.get(storeName, []).length > 0) {
+        targetIds = deleteVacancy(store.get(storeName, []));
     };
 
     if ($selectdElement.prop('checked') == true) {
@@ -132,7 +128,7 @@ $('.search-list').on('click', '.batch-select', function () {
     }
 
     $('#selected-count').text(targetIds.length);
-    Cookies.set(cookieName, targetIds);
+    store.set(storeName, targetIds);
 
 });
 
@@ -140,8 +136,8 @@ $('.search-list').on('click', '.batch-item', function () {
     let length = $('.batch-item').length;
     let checked_count = 0;
 
-    if (Cookies.getJSON(cookieName).length > 0) {
-        targetIds = deleteVacancy(Cookies.getJSON(cookieName));
+    if (store.get(storeName).length > 0) {
+        targetIds = deleteVacancy(store.get(storeName, []));
     };
 
     if ($(this).prop('checked') == true) {
@@ -163,13 +159,13 @@ $('.search-list').on('click', '.batch-item', function () {
     });
 
     $('#selected-count').text(targetIds.length);
-    Cookies.set(cookieName, targetIds);
+    store.set(storeName, targetIds);
 });
 
-$('#clear-cookie').click(function () {
-    targetIds = Cookies.getJSON(cookieName);
+$('#clear-storage').click(function () {
+    targetIds = store.get(storeName, []);
     targetIds.splice(0, targetIds.length);
-    Cookies.set(cookieName, targetIds);
+    store.set(storeName, targetIds);
     $('#selected-count').text(0);
     $('input[type=checkbox]').prop('checked', false);
 });

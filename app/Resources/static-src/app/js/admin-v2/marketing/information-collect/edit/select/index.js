@@ -1,15 +1,15 @@
-import Cookies from 'js-cookie';
+import 'store';
 import notify from 'common/notify';
 
 let $table = $('#information-collect-select-table');
 let type = $table.data('type');
-let cookieName = (type == 'course') ? 'informationCollectSelectCourseIds' : 'informationCollectSelectClassroomIds';
+let storeName = (type == 'course') ? 'informationCollectSelectCourseIds' : 'informationCollectSelectClassroomIds';
 
 $('.select-target-modal').on('click', '.pagination li', (event) => {
     getCourseSets($(event.currentTarget).data('url'));
 });
 
-if (Cookies.getJSON(cookieName) && Cookies.getJSON(cookieName).length > 0) {
+if (store.get(storeName, []).length > 0) {
     getSelectedTargets($table.data('selectedUrl'));
 };
 
@@ -19,20 +19,20 @@ $('.js-save-selected-target').on('click', (event) => {
         return;
     }
 
-    if (Cookies.getJSON(cookieName).length) {
-        $('.js-action-radio-group').find('input[name="' + $(event.currentTarget).data('targetInput') + '"]').val(JSON.stringify(Cookies.getJSON(cookieName)));
+    if (store.get(storeName, []).length) {
+        $('.js-action-radio-group').find('input[name="' + $(event.currentTarget).data('targetInput') + '"]').val(JSON.stringify(store.get(storeName)));
     } else {
         $('.js-action-radio-group').find('input[name="' + $(event.currentTarget).data('targetInput') + '"]').val('');
     }
-    $('.js-action-radio').find('.action-type-group-part .' + $(event.currentTarget).data('targetCount')).html(Cookies.getJSON(cookieName).length);
+    $('.js-action-radio').find('.action-type-group-part .' + $(event.currentTarget).data('targetCount')).html(store.get(storeName).length);
     notify('success', Translator.trans('admin_v2.information_collect.chooser.success_hint'));
     $('.select-target-modal').parent('.modal').modal('hide');
 });
 
 $('.select-target-modal').on('click', '.js-selected-item-delete', function (event) {
-    let courseIds = Cookies.getJSON(cookieName);
+    let courseIds = store.get(storeName, []);
     courseIds.splice(courseIds.indexOf($(this).parents('tr').data('id').toString()), 1);
-    Cookies.set(cookieName, courseIds);
+    store.set(storeName, courseIds);
 
     $(this).parents('tr').remove();
     $('.js-selected-count').html(courseIds.length);
@@ -49,17 +49,17 @@ $('.select-target-modal').on('click', '.js-selected-item-unbind', function (e) {
 });
 
 function getCourseSets(url) {
-    $.get(url, { ids: Cookies.getJSON(cookieName) }, (res) => {
+    $.get(url, { ids: store.get(storeName, []) }, (res) => {
         $table.empty().html(res);
     });
-    $('.js-selected-count').html(Cookies.getJSON(cookieName).length);
+    $('.js-selected-count').html(store.get(storeName, []).length);
 }
 
 function getSelectedTargets(url) {
-    $.get(url, { ids: Cookies.getJSON(cookieName) }, (res) => {
+    $.get(url, { ids: store.get(storeName, []) }, (res) => {
         $table.empty().html(res);
     });
-    $('.js-selected-count').html(Cookies.getJSON(cookieName).length);
+    $('.js-selected-count').html(store.get(storeName, []).length);
 }
 
 function checkItemBindedCount() {

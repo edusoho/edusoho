@@ -1,8 +1,8 @@
 import notify from 'common/notify';
-import Cookies from 'js-cookie';
+import 'store';
 import './location';
 
-clearInformationCollectCookies();
+clearInformationCollectStorage();
 let $form = $('#information-collect-form');
 let validator = $form.validate({
     rules: {
@@ -129,16 +129,16 @@ if ($('input[name="action"]').length) {
             $group.html($('.radio-for-action').html());
         }
 
-        clearInformationCollectCookies();
+        clearInformationCollectStorage();
     });
 }
 
-function clearInformationCollectCookies() {
-    if (Cookies.getJSON('informationCollectSelectCourseIds')) {
-        Cookies.set('informationCollectSelectCourseIds', []);
+function clearInformationCollectStorage() {
+    if (store.get('informationCollectSelectCourseIds', []).length) {
+        store.set('informationCollectSelectCourseIds', []);
     }
 
-    if (Cookies.getJSON('informationCollectSelectClassroomIds')) {
-        Cookies.set('informationCollectSelectClassroomIds', []);
+    if (store.get('informationCollectSelectClassroomIds', []).length) {
+        store.set('informationCollectSelectClassroomIds', []);
     }
 }
