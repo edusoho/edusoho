@@ -56,12 +56,12 @@
     <!-- 个人信息表单填写 -->
     <van-action-sheet
       v-model="isShowForm"
-      :title="userInfoCellectForm.formTitle"
+      :title="userInfoCollectForm.formTitle"
       :close-on-click-overlay="false"
     >
       <info-collection
-        :userInfoCellectForm="userInfoCellectForm"
-        :formRule="userInfoCellectForm.items"
+        :userInfoCollectForm="userInfoCollectForm"
+        :formRule="userInfoCollectForm.items"
         @submitForm="joinFreeCourse"
       ></info-collection>
     </van-action-sheet>
@@ -112,6 +112,7 @@ import redirectMixin from '@/mixins/saveRedirect';
 import Api from '@/api';
 import getCouponMixin from '@/mixins/coupon/getCouponHandler';
 import getActivityMixin from '@/mixins/activity/index';
+import collectUserInfo from '@/mixins/collectUserInfo';
 import { dateTimeDown } from '@/utils/date-toolkit';
 import { Toast } from 'vant';
 import infoCollection from '../info-collection/index';
@@ -129,7 +130,7 @@ export default {
     onsale,
     infoCollection,
   },
-  mixins: [redirectMixin, getCouponMixin, getActivityMixin],
+  mixins: [redirectMixin, getCouponMixin, getActivityMixin, collectUserInfo],
   data() {
     return {
       tabs: ['课程介绍', '课程目录', '学员评价'],
@@ -152,8 +153,7 @@ export default {
       },
       courseSettings: {},
       isShowForm: false,
-      userInfoCellect: {},
-      userInfoCellectForm: {},
+      paramsList: {},
     };
   },
   async created() {
@@ -227,6 +227,8 @@ export default {
     },
   },
   mounted() {
+    // 获取用户信息采集接口参数
+    this.getParamsList();
     if (!this.isClassCourse && this.couponSwitch) {
       // 获取促销优惠券
       Api.searchCoupon({
@@ -417,62 +419,34 @@ export default {
     sellOut() {
       this.isEmpty = true;
     },
+    getParamsList() {
+      this.paramsList = {
+        action: this.accessToJoin ? 'buy_before' : 'buy_after',
+        targetType: 'course',
+        targetId: this.details.id,
+      };
+    },
     collectUseInfoEvent() {
-      const hasUserInfoCellectForm = Object.keys(this.userInfoCellectForm)
-        .length;
-      if (hasUserInfoCellectForm) {
+      if (this.hasUserInfoCollectForm) {
         this.isShowForm = true;
         return;
       }
-      this.getInfoCollectionEvent();
-    },
-    //  根据购买前后判断是否需要采集用户信息
-    getInfoCollectionEvent() {
       Toast.loading({
         message: '加载中...',
         forbidClick: true,
       });
-      const query = {
-        action: this.accessToJoin ? 'buy_before' : 'buy_after',
-      };
-      const params = {
-        targetType: 'course',
-        targetId: this.details.id,
-      };
-      Api.getInfoCollectionEvent({
-        query,
-        params,
-      })
-        .then(res => {
-          if (Object.keys(res).length) {
-            this.userInfoCellect = { ...res };
-            this.getInfoCollectionForm();
-            return;
-          }
-          this.joinFreeCourse();
-        })
-        .catch(err => {
-          console.error(err);
-        });
+      this.getInfoCollectionEvent(this.paramsList).then(res => {
+        if (Object.keys(res).length) {
+          this.userInfoCollect = res;
+          this.getInfoCollectionForm().then(res => {
+            this.isShowForm = true;
+            Toast.clear();
+          });
+          return;
+        }
+        this.joinFreeCourse();
+      });
     },
-    // 根据事件id获取表单
-    getInfoCollectionForm() {
-      const query = {
-        eventId: this.userInfoCellect.id,
-      };
-      Api.getInfoCollectionForm({
-        query,
-      })
-        .then(res => {
-          this.userInfoCellectForm = { ...res };
-          this.isShowForm = true;
-          Toast.clear();
-        })
-        .catch(err => {
-          console.error(err);
-        });
-    },
-    //
   },
 };
 </script>

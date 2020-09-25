@@ -67,13 +67,13 @@
     <!-- 个人信息表单填写 -->
     <van-action-sheet
       v-model="isShowForm"
-      :title="userInfoCellectForm.formTitle"
+      :title="userInfoCollectForm.formTitle"
       :close-on-click-overlay="false"
       @cancel="onCancelForm"
     >
       <info-collection
-        :userInfoCellectForm="userInfoCellectForm"
-        :formRule="userInfoCellectForm.items"
+        :userInfoCollectForm="userInfoCollectForm"
+        :formRule="userInfoCollectForm.items"
         @submitForm="onCancelForm"
       ></info-collection>
     </van-action-sheet>
@@ -88,6 +88,7 @@ import courseSetList from './course-set-list';
 import detailPlan from './plan';
 import directory from '../course/detail/directory';
 import moreMask from '@/components/more-mask';
+import collectUserInfo from '@/mixins/collectUserInfo';
 import infoCollection from '../info-collection/index';
 import { mapState, mapMutations } from 'vuex';
 import { Dialog, Toast } from 'vant';
@@ -120,10 +121,14 @@ export default {
       errorMsg: '',
       classroomSettings: {},
       isShowForm: false,
-      userInfoCellect: {},
-      userInfoCellectForm: {},
+      paramsList: {
+        action: 'buy_after',
+        targetType: 'classroom',
+        targetId: this.details.classId,
+      },
     };
   },
+  mixins: [collectUserInfo],
   computed: {
     ...mapState('classroom', {
       currentJoin: state => state.currentJoin,
@@ -142,7 +147,19 @@ export default {
     currentJoin: {
       handler(val, oldVal) {
         if (val) {
-          this.getInfoCollectionEvent();
+          Toast.loading({
+            message: '加载中...',
+            forbidClick: true,
+          });
+          this.getInfoCollectionEvent(this.paramsList).then(res => {
+            if (Object.keys(res).length) {
+              this.userInfoCollect = res;
+              this.getInfoCollectionForm().then(res => {
+                this.isShowForm = true;
+                Toast.clear();
+              });
+            }
+          });
         }
       },
       // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法，如果设置了false，那么效果和上边例子一样
@@ -265,50 +282,6 @@ export default {
     onCancelForm() {
       this.setCurrentJoin(false);
       this.isShowForm = false;
-    },
-    //  根据购买前后判断是否需要采集用户信息
-    getInfoCollectionEvent() {
-      Toast.loading({
-        message: '加载中...',
-        forbidClick: true,
-      });
-      const query = {
-        action: 'buy_after',
-      };
-      const params = {
-        targetType: 'classroom',
-        targetId: this.details.classId,
-      };
-      Api.getInfoCollectionEvent({
-        query,
-        params,
-      })
-        .then(res => {
-          if (Object.keys(res).length) {
-            this.userInfoCellect = { ...res };
-            this.getInfoCollectionForm();
-          }
-        })
-        .catch(err => {
-          console.error(err);
-        });
-    },
-    // 根据事件id获取表单
-    getInfoCollectionForm() {
-      const query = {
-        eventId: this.userInfoCellect.id,
-      };
-      Api.getInfoCollectionForm({
-        query,
-      })
-        .then(res => {
-          this.userInfoCellectForm = { ...res };
-          this.isShowForm = true;
-          Toast.clear();
-        })
-        .catch(err => {
-          console.error(err);
-        });
     },
   },
 };
