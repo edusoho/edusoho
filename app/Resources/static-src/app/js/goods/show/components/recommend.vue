@@ -11,15 +11,15 @@
                   <p class="learn-text__title">{{ item.title }}</p>
 <!--                  <span v-if="item.minPrice == item.maxPrice" class="learn-text__price">{{ item.minPrice }}</span>-->
 <!--                  <span v-if="item.minPrice != item.maxPrice" class="learn-text__price">{{ item.minPrice }}起</span>-->
-                  <span v-if="goods.minDisplayPriceObj.currency === 'RMB'">
-                      <span class="learn-text__price price">{{ goods.minDisplayPriceObj.amount | formatPrice }}</span>
+                  <span v-if="item.minDisplayPriceObj.currency === 'RMB'">
+                      <span class="learn-text__price price">{{ item.minDisplayPriceObj.amount | formatPrice }}</span>
                   </span>
-                  <span v-if="goods.minDisplayPriceObj.currency === 'coin'">
-                      <span class="learn-text__price">{{ goods.minDisplayPriceObj.coinAmount | formatPrice }}
+                  <span v-if="item.minDisplayPriceObj.currency === 'coin'">
+                      <span class="learn-text__price">{{ item.minDisplayPriceObj.coinAmount | formatPrice }}
                       </span>
-                      <span class="detail-right__price__unit">{{ goods.minDisplayPriceObj.coinName }}</span>
+                      <span class="detail-right__price__unit">{{ item.minDisplayPriceObj.coinName }}</span>
                   </span>
-                  <span class="detail-right__price__unit" v-if="goods.minDisplayPriceObj.amount != goods.maxDisplayPriceObj.amount">起</span>
+                  <span class="detail-right__price__unit" v-if="item.minDisplayPriceObj.amount != item.maxDisplayPriceObj.amount">起</span>
               </div>
           </div>
           <div class="learn-more">
@@ -58,6 +58,9 @@
         onClickGotoSchool() {
             window.open(`/`, '_blank');
         }
+    },
+    mounted() {
+        console.log(this.recommendGoods);
     }
   }
 </script>
