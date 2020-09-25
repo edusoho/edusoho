@@ -43,7 +43,7 @@ class CashierH5Controller extends BaseController
             'unit' => $item1['unit'],
         ];
         $product = $this->getOrderFacadeService()->getOrderProduct($item1['target_type'], $params);
-        $redirectUrl = !empty($trade['platform_created_params']['success_url']) ? $trade['platform_created_result']['success_url'] : $this->generateUrl($product->successUrl[0], $product->successUrl[1]);
+        $redirectUrl = !empty($trade['platform_created_params']['success_url']) ? $trade['platform_created_params']['success_url'] : $this->generateUrl($product->successUrl[0], $product->successUrl[1]);
 
         return $this->redirect($redirectUrl);
     }
