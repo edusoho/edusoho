@@ -86,16 +86,6 @@ class EventServiceTest extends BaseTestCase
         $this->assertEquals([1, 2], $result['course']);
     }
 
-    public function testGetItemsByEventId()
-    {
-        $this->mockEvent();
-        $this->mockItem();
-
-        $result = $this->getInformationCollectEventService()->getItemsByEventId(1);
-
-        $this->assertEquals(1, count($result));
-    }
-
     protected function mockEvent()
     {
         $event = $this->getInformationCollectEventDao()->create([
@@ -188,7 +178,7 @@ class EventServiceTest extends BaseTestCase
             'code' => '测试表单',
             'labelName' => '性别',
             'seq' => 1,
-            'required' => 1,
+            'required' => 1
         ]);
     }
 

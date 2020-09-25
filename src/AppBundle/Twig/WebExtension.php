@@ -205,7 +205,6 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('s2b2c_has_behaviour_permission', [$this, 's2b2cHasBehaviourPermission']),
             new \Twig_SimpleFunction('make_local_media_file_token', [$this, 'makeLocalMediaFileToken']),
             new \Twig_SimpleFunction('information_collection_location_info', [$this, 'informationCollectionLocationInfo']),
-            new \Twig_SimpleFunction('information_collection_result_items', [$this, 'getInformationCollectionResultItems']),
         ];
     }
 
@@ -2080,13 +2079,6 @@ class WebExtension extends \Twig_Extension
         }
 
         return $locationInfo;
-    }
-
-    public function getInformationCollectionResultItems($resultId, $eventId)
-    {
-        $resultItems = $this->getResultService()->getItemsByResultIdAndEventId($resultId, $eventId);
-
-        return ArrayToolkit::index($resultItems, 'labelName');
     }
 
     /**

@@ -106,16 +106,6 @@ class EventServiceImpl extends BaseService implements EventService
         return $locationInfo;
     }
 
-    public function getItemsByEventId($eventId)
-    {
-        $collection = $this->get($eventId);
-        if (empty($collection)) {
-            $this->createNewException(InformationCollectionException::NOTFOUND_COLLECTION());
-        }
-
-        return $this->getItemDao()->search(['eventId' => $eventId], ['seq' => 'ASC'], 0, PHP_INT_MAX);
-    }
-
     /**
      * @return EventDao
      */

@@ -3,6 +3,7 @@
 namespace Tests\Unit\InformationCollect\Dao;
 
 use Biz\BaseTestCase;
+use Biz\InformationCollect\Dao\ResultItemDao;
 
 class ResultItemDaoTest extends BaseTestCase
 {
@@ -15,13 +16,13 @@ class ResultItemDaoTest extends BaseTestCase
         $this->assertEquals(2, count($resultItems));
     }
 
-    public function testGetItemsByResultIdAndEventId()
+    public function findResultDataByResultIds()
     {
         $this->mockResultItems();
 
-        $result = $this->getInformationCollectResultItemDao()->getItemsByResultIdAndEventId(2, 1);
+        $result = $this->getInformationCollectResultItemDao()->findResultDataByResultIds([1,2]);
 
-        $this->assertEquals(1, count($result));
+        $this->assertEquals(3, count($result));
     }
 
     protected function mockResultItems()
@@ -33,6 +34,9 @@ class ResultItemDaoTest extends BaseTestCase
         ]);
     }
 
+    /**
+     * @return ResultItemDao
+     */
     protected function getInformationCollectResultItemDao()
     {
         return $this->createDao('InformationCollect:ResultItemDao');

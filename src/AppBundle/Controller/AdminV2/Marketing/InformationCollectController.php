@@ -60,8 +60,8 @@ class InformationCollectController extends BaseController
         $conditions['eventId'] = $id;
         $paginator = new Paginator(
             $request,
-            $this->getEventService()->count($conditions),
-            20);
+            $this->getResultService()->count($conditions),
+            1);
 
         $collectedData = $this->getResultService()->searchCollectedData(
             $conditions,
@@ -70,12 +70,18 @@ class InformationCollectController extends BaseController
             $paginator->getPerPageCount()
         );
 
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($collectedData, 'userId'));
+        $userProfiles = $this->getUserService()->findUserProfilesByIds(ArrayToolkit::column($users, 'id'));
+//return $this->getResultService()->findResultDataByResultIds(ArrayToolkit::column($collectedData, 'id'));
         return $this->render('admin-v2/marketing/information-collect/detail.html.twig', [
             'event' => $event,
             'collectedNum' => $this->getResultService()->countGroupByEventId($id),
             'creator' => $this->getUserService()->getUser($event['creator']),
             'collectedData' => $collectedData,
-            'labels' => ArrayToolkit::column($this->getEventService()->getItemsByEventId($id), 'labelName'),
+            'users' => ArrayToolkit::index($users, 'id'),
+            'profiles' => ArrayToolkit::index($userProfiles, 'id'),
+            'labels' => $this->getEventService()->findItemsByEventId($id),
+            'resultData' => $this->getResultService()->findResultDataByResultIds(ArrayToolkit::column($collectedData, 'id')),
             'paginator' => $paginator,
         ]);
     }

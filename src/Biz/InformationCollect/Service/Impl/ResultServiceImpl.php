@@ -176,9 +176,20 @@ class ResultServiceImpl extends BaseService implements ResultService
         return $conditions;
     }
 
-    public function getItemsByResultIdAndEventId($resultId, $eventId)
+    public function findResultDataByResultIds($resultIds)
     {
-        return $this->getResultItemDao()->getItemsByResultIdAndEventId($resultId, $eventId);
+        $resultData = ArrayToolkit::group($this->getResultItemDao()->findResultDataByResultIds($resultIds), 'resultId');
+
+        foreach ($resultData as $resultId => &$datum) {
+            $datum = ArrayToolkit::index($datum, 'code');
+        }
+
+        return $resultData;
+    }
+
+    public function count($conditions)
+    {
+        return $this->getResultDao()->count($conditions);
     }
 
     /**

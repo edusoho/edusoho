@@ -9,21 +9,28 @@
       </th>
       <th>{{ 'admin.information_collection.collected_time'|trans }}</th>
       {% for label in labels if labels|default('') %}
-        <th>{{ label }}</th>
+        <th>{{ label.labelName }}</th>
       {% endfor %}
     </tr>
     </thead>
     <tbody class="results">
     {% for result in collectedData if collectedData|default('') %}
-      {% set user = data('UserandProfiles',{userId:result.userId})  %}
-      {% set resultItems = information_collection_result_items(result.id, event.id) %}
+      {% set user = users[result.userId]  %}
+      {% set profile = profiles[user.id] %}
+      {% set resultItems = resultData[result.id] %}
       <tr>
         <td>{{ user.nickname }}</td>
-        <td>{{ user.profiles.mobile }}</td>
+        <td>{{ profile.mobile }}</td>
         <td>{{ result.createdTime|date('Y-m-d H:i:s') }}</td>
         {% for label in labels if labels|default('') %}
-          {% set resultItem = resultItems[label]|default('') %}
-          <td>{{ resultItem.value|default('') }}</td>
+          {% set resultItem = resultItems[label.code]|default('') %}
+          <td>
+            {% if label.code == 'province_city_area' %}
+              {{ resultItem.value|default('')|join('') }}
+            {% else %}
+              {{ resultItem.value|default('') }}
+            {% endif %}
+          </td>
         {% else %}
           <td></td>
         {% endfor %}

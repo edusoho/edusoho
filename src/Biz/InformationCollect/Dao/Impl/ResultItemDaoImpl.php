@@ -9,10 +9,10 @@ class ResultItemDaoImpl extends AdvancedDaoImpl implements ResultItemDao
 {
     protected $table = 'information_collect_result_item';
 
-    public function getItemsByResultIdAndEventId($resultId, $eventId)
+    public function findResultDataByResultIds($resultIds)
     {
-        $builder = $this->createQueryBuilder(['resultId' => $resultId, 'eventId' => $eventId])
-            ->select('labelName, value');
+        $builder = $this->createQueryBuilder(['resultIds' => $resultIds])
+            ->select('resultId, code, labelName, value');
 
         return $builder->execute()->fetchAll();
     }
@@ -26,6 +26,7 @@ class ResultItemDaoImpl extends AdvancedDaoImpl implements ResultItemDao
     {
         return [
             'serializes' => [
+                'value' => 'json',
             ],
             'orderbys' => [
                 'id',
@@ -37,7 +38,7 @@ class ResultItemDaoImpl extends AdvancedDaoImpl implements ResultItemDao
             'conditions' => [
                 'id = :id',
                 'eventId = :eventId',
-                'resultId = :resultId',
+                'resultId IN (:resultIds)',
             ],
         ];
     }
