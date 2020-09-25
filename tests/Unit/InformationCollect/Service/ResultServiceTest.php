@@ -207,19 +207,19 @@ class ResultServiceTest extends BaseTestCase
                     'formTitle' => 'test1',
                     'userId' => 2,
                     'eventId' => 1,
-                    'createdTime' => time()
+                    'createdTime' => time(),
                 ],
                 [
                     'formTitle' => 'test1',
                     'userId' => 3,
                     'eventId' => 1,
-                    'createdTime' => time()
+                    'createdTime' => time(),
                 ],
                 [
                     'formTitle' => 'test2',
                     'userId' => 2,
                     'eventId' => 2,
-                    'createdTime' => time()
+                    'createdTime' => time(),
                 ],
             ]
         );

@@ -188,7 +188,7 @@ class EventServiceTest extends BaseTestCase
             'code' => '测试表单',
             'labelName' => '性别',
             'seq' => 1,
-            'required' => 1
+            'required' => 1,
         ]);
     }
 
