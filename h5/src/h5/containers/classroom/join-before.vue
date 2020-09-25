@@ -81,6 +81,7 @@
       <van-action-sheet
         v-model="isShowForm"
         :title="userInfoCellectForm.formTitle"
+        :close-on-click-overlay="false"
       >
         <info-collection
           :userInfoCellectForm="this.userInfoCellectForm"
@@ -429,7 +430,6 @@ export default {
           console.log(res);
           if (Object.keys(res).length) {
             this.userInfoCellect = { ...res };
-            console.log(this.userInfoCellect);
             this.getInfoCollectionForm();
           }
           this.joinFreeClass();
@@ -448,7 +448,6 @@ export default {
       })
         .then(res => {
           this.userInfoCellectForm = { ...res };
-
           this.isShowForm = true;
           Toast.clear();
         })

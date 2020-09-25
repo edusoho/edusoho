@@ -54,7 +54,7 @@ const mutations = {
   [types.SET_COURSELIST](currentState, data) {
     currentState.searchCourseList = data || {};
   },
-  [types.SET_CURRENT_JOIN](currentState, payload) {
+  [types.SET_CURRENT_JOIN_COURSE](currentState, payload) {
     currentState.currentJoin = payload;
   },
 };
@@ -129,7 +129,7 @@ const actions = {
       // 返回空对象，表示加入失败，需要去创建订单购买
       if (!(Object.keys(res).length === 0)) {
         commit(types.JOIN_COURSE, res);
-        commit(types.SET_CURRENT_JOIN, true);
+        commit(types.SET_CURRENT_JOIN_COURSE, true);
       }
       return res;
     });

@@ -227,9 +227,6 @@ export default {
     },
   },
   mounted() {
-    // this.getInfoCollectionForm();
-    // console.log(this.details.id);
-
     if (!this.isClassCourse && this.couponSwitch) {
       // 获取促销优惠券
       Api.searchCoupon({

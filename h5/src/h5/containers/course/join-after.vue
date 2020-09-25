@@ -178,7 +178,7 @@ export default {
 
   methods: {
     ...mapMutations('course', {
-      setCurrentJoin: types.SET_CURRENT_JOIN,
+      setCurrentJoin: types.SET_CURRENT_JOIN_COURSE,
     }),
     showDialog() {
       if (!this.details.member) return;
