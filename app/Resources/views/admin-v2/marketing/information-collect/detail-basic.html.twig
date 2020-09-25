@@ -1,7 +1,8 @@
 <div class="panel-heading clearfix">
   <span class="h3 pull-left panel-title" style="margin-top: 7px">{{ 'admin.information_collection.basic_info'|trans }}</span>
   <button class="btn btn-primary pull-right hidden-xs">{{ 'admin.information_collection.update_btn'|trans }}</button>
-  <button id="collection-close" class="btn btn-primary pull-right hidden-xs" style="margin-right: 10px" data-url="{{ path('admin_v2_information_collection_close', {id: event.id}) }}">{{ 'admin.information_collection.close_btn'|trans }}</button>
+  <button id="close-collection" class="btn btn-primary pull-right hidden-xs {% if event.status != 'open' %}hidden{% endif%}" style="margin-right: 10px" data-url="{{ path('admin_v2_information_collection_close', {id: event.id}) }}">{{ 'admin.information_collection.close_btn'|trans }}</button>
+  <button id="open-collection" class="btn btn-primary pull-right hidden-xs {% if event.status == 'open' %}hidden{% endif%}" style="margin-right: 10px" data-url="{{ path('admin_v2_information_collection_open', {id: event.id}) }}">{{ 'admin.information_collection.open_btn'|trans }}</button>
 </div>
 <div class="panel-body">
   <table class="table table-noborder" style="margin-bottom: 0">

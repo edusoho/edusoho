@@ -5341,6 +5341,7 @@ admin.information_collection.status.close: '<div class="red-circle"></div>Stop t
 admin.information_collection.detail: User Information Collection > Deatil
 admin.information_collection.basic_info: Basic Information
 admin.information_collection.close_btn: Close
+admin.information_collection.open_btn: Open
 admin.information_collection.update_btn: Update
 admin.information_collection.collected_num_tab: Collected Data
 admin.information_collection.collected_time: Collected time：

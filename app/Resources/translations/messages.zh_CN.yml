@@ -6418,6 +6418,7 @@ admin.information_collection.status.close: <div class="red-circle"></div>停止�
 admin.information_collection.detail: 用户信息采集 > 详情
 admin.information_collection.basic_info: 基本信息
 admin.information_collection.close_btn: 关闭采集
+admin.information_collection.open_btn: 开启采集
 admin.information_collection.update_btn: 编辑
 admin.information_collection.collected_num_tab: 已采集数据
 admin.information_collection.collected_time: 采集时间
