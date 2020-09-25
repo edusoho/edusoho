@@ -20,13 +20,13 @@
             'latest':'admin_v2.operating.goods_recommend.latest'|trans,
             'label':'admin_v2.operating.goods_recommend.label'|trans
           }, setting.recommend_rule|default('hot')) }}
-          <div class="help-block js-recommend-rule-hot {% if setting.recommend_rule != 'hot' %}hidden{% endif %}">
+          <div class="help-block js-recommend-rule-hot {% if setting.recommend_rule|default('hot') != 'hot' %}hidden{% endif %}">
             <span class="">{{ 'admin_v2.operating.goods_recommend.hot_tips'|trans }}</span>
           </div>
-          <div class="help-block js-recommend-rule-latest {% if setting.recommend_rule != 'latest' %}hidden{% endif %}">
+          <div class="help-block js-recommend-rule-latest {% if setting.recommend_rule|default('hot') != 'latest' %}hidden{% endif %}">
             <span class="">{{ 'admin_v2.operating.goods_recommend.latest_tips'|trans }}</span>
           </div>
-          <div class="help-block js-recommend-rule-label {% if setting.recommend_rule != 'label' %}hidden{% endif %}">
+          <div class="help-block js-recommend-rule-label {% if setting.recommend_rule|default('hot') != 'label' %}hidden{% endif %}">
             <span class="">{{ 'admin_v2.operating.goods_recommend.label_tips'|trans }}</span>
           </div>
         </div>
