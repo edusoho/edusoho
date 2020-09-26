@@ -4,6 +4,7 @@ namespace Tests\Unit\InformationCollect\Service;
 
 use Biz\BaseTestCase;
 use Biz\InformationCollect\Dao\EventDao;
+use Biz\InformationCollect\Dao\ItemDao;
 use Biz\InformationCollect\Dao\LocationDao;
 use Biz\InformationCollect\Service\EventService;
 
@@ -169,6 +170,18 @@ class EventServiceTest extends BaseTestCase
         return $event;
     }
 
+    protected function mockItem()
+    {
+        return $this->getInformationCollectItemDao()->create([
+            'id' => 1,
+            'eventId' => 1,
+            'code' => '测试表单',
+            'labelName' => '性别',
+            'seq' => 1,
+            'required' => 1
+        ]);
+    }
+
     /**
      * @return EventService
      */
@@ -193,6 +206,9 @@ class EventServiceTest extends BaseTestCase
         return $this->createDao('InformationCollect:LocationDao');
     }
 
+    /**
+     * @return ItemDao
+     */
     protected function getInformationCollectItemDao()
     {
         return $this->createDao('InformationCollect:ItemDao');

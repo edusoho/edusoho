@@ -1,6 +1,6 @@
 {% extends 'admin-v2/layout.html.twig' %}
 
-{% set menu = 'admin_v2_information_collection' %}
+{% set menu = 'admin_v2_information_collection_show' %}
 {% set script_controller = 'invite/record' %}
 {% do script(['app/js/admin-v2/marketing/information-collection/index.js']) %}
 {% block page_buttons %}
@@ -35,7 +35,7 @@
     {% if events|default() %}
       {% for event in events|default() %}
         <tr>
-          <td>{{ event.title }}</td>
+          <td>{{ event.title | slice(0,10) }}{% if event.title|length >10 %}...{% endif %}</td>
           <td>
             {% set action = 'admin.information_collection.action.' ~ event.action %}
             {% set location = information_collection_location_info(event.id) %}
@@ -48,10 +48,10 @@
             {% set statusInfo = 'admin.information_collection.status.' ~ event.status %}
             {{ statusInfo|trans|raw }}
           </td>
-          <td>{{ collectedNum[event.id].collectNum|default(0) }}</td>
+          <td>{{ 'admin.information_collection.collected_num'|trans({'%collectedNum%':collectedNum[event.id].collectNum|default(0)}) }}</td>
           <td>
             <div class="btn-group">
-              <a href="" class="btn btn-default btn-sm">{{ 'admin.information_collection.operate.detail'|trans }}</a>
+              <a target="_blank" href="{{ path('admin_v2_information_collection_detail', {id: event.id}) }}" class="btn btn-default btn-sm">{{ 'admin.information_collection.operate.detail'|trans }}</a>
               {% include 'admin-v2/widget/group-button.html.twig' with {parentCode: 'admin_v2_information_collection', group:'groupButton', collect: event} %}
             </div>
           </td>

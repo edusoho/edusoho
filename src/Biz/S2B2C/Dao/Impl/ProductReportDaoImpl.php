@@ -32,7 +32,7 @@ class ProductReportDaoImpl extends AdvancedDaoImpl implements ProductReportDao
                 'userId = :userId',
                 'nickname LIKE :nicknameLike',
                 'orderId = :orderId',
-                'status = :status'
+                'status = :status',
             ],
         ];
     }

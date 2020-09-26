@@ -688,6 +688,7 @@ admin_v2.micromarketing.menu: Micromarketing
 #营销-营销管理-用户信息采集
 admin_v2.information_collection.menu: User Information Collection
 admin_v2.information_collection.tab: User Information Collection
+admin_v2.information_collection.detail: User Information Collection > Deatil
 admin_v2.information_collection.operate.update_tab: 'Update'
 admin_v2.information_collection.operate.close_tab: 'Close the collection'
 admin_v2.information_collection.operate.open_tab: 'Open the collection'
