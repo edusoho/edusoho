@@ -150,6 +150,27 @@ class OrderRefundServiceTest extends BaseTestCase
                 ],
             ]
         );
+
+        $this->mockBiz(
+            'Goods:GoodsService',
+            [
+                [
+                    'functionName' => 'getGoodsSpecs',
+                    'returnValue' => [
+                        'goodsId' => 1,
+                        'targetId' => 111,
+                        'images' => [],
+                        'title' => 'test',
+                        'status' => 'published',
+                        'price' => '1.00',
+                    ],
+                ],
+                [
+                    'functionName' => 'getGoods',
+                    'returnValue' => ['id' => 1, 'title' => 'test', 'images' => [], 'status' => 'published', 'maxRate' => 10],
+                ],
+            ]
+        );
         $result = $this->getOrderRefundService()->refuseRefund(11, []);
         $this->getWorkflowService()->shouldHaveReceived('refuseRefund');
         $this->assertEquals(111, $result->targetId);
@@ -183,6 +204,27 @@ class OrderRefundServiceTest extends BaseTestCase
                 [
                     'functionName' => 'adoptRefund',
                     'withParams' => [11, []],
+                ],
+            ]
+        );
+
+        $this->mockBiz(
+            'Goods:GoodsService',
+            [
+                [
+                    'functionName' => 'getGoodsSpecs',
+                    'returnValue' => [
+                        'goodsId' => 1,
+                        'targetId' => 111,
+                        'images' => [],
+                        'title' => 'test',
+                        'status' => 'published',
+                        'price' => '1.00',
+                    ],
+                ],
+                [
+                    'functionName' => 'getGoods',
+                    'returnValue' => ['id' => 1, 'title' => 'test', 'images' => [], 'status' => 'published', 'maxRate' => 10],
                 ],
             ]
         );

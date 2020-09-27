@@ -61,7 +61,7 @@ class CourseProduct extends BaseGoodsProduct
         $this->successUrl = ['my_course_show', ['id' => $goodsSpecs['targetId']]];
 
         //默认计划的标题在课程里面如果没有第二个计划是空的，商品规格这边如果没有计划标题就直接换成了课程标题，所以做如下处理
-        $this->title = $goods['title'] === $goodsSpecs['title'] ? $goods['title'] : $goods['title'].'-'.$goodsSpecs['title'];
+        $this->title = empty($goodsSpecs['title']) ? $goods['title'] : $goods['title'].'-'.$goodsSpecs['title'];
         if (empty($this->title) && isset($params['orderItemId'])) {
             $orderItem = $this->getOrderService()->getOrderItem($params['orderItemId']);
             $this->title = $orderItem['title'];
