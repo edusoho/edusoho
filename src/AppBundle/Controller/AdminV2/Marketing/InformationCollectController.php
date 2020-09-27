@@ -157,8 +157,9 @@ class InformationCollectController extends BaseController
 
     public function selectedChooserAction(Request $request, $type)
     {
-        $selectedIds = $request->query->get('ids', []);
-        $conditions = ['ids' => empty($selectedIds) ? [-1] : $selectedIds];
+        $selectedIds = $request->query->get('selectedIds', []);
+        $preSelectIds = $request->query->get('ids', []);
+        $conditions = ['ids' => empty($preSelectIds) ? [-1] : $preSelectIds];
 
         if (EventService::TARGET_TYPE_COURSE == $type) {
             list($targets, $paginator) = $this->searchCourseSets($conditions);
@@ -169,15 +170,21 @@ class InformationCollectController extends BaseController
         $paginator->setBaseUrl($this->generateUrl('admin_v2_information_collect_chooser_selected', ['type' => $type]));
 
         $locationConditions = ['action' => $request->query->get('action'), 'targetIds' => $conditions['ids'], 'targetType' => $type, 'excludeEventId' => $request->query->get('excludeEventId', 0)];
-        $locations = $this->getEventService()->searchLocations($locationConditions, [], 0, count($selectedIds), ['targetId', 'eventId']);
+        $locations = $this->getEventService()->searchLocations($locationConditions, [], 0, count($preSelectIds), ['targetId', 'eventId']);
         $locations = ArrayToolkit::index($locations, 'targetId');
+
+        $locationConditions['targetIds'] = array_diff($conditions['ids'], $selectedIds);
+        if (empty($locationConditions['targetIds'])) {
+            $locationConditions['targetIds'] = [-1];
+        }
 
         return $this->render(
             'admin-v2/marketing/information-collect/edit/select/selected-target-table.html.twig',
             [
                 'type' => $type,
                 'targets' => ArrayToolkit::index($targets, 'id'),
-                'selectedTargetIds' => $selectedIds,
+                'preSelectIds' => $preSelectIds,
+                'selectedIds' => $selectedIds,
                 'locations' => $locations,
                 'paginator' => $paginator,
                 'hasRelated' => $this->getEventService()->countLocations($locationConditions) > 0,
@@ -197,7 +204,8 @@ class InformationCollectController extends BaseController
         $paginator = new Paginator(
             $request,
             $this->getResultService()->count($conditions),
-            20);
+            20
+        );
 
         $collectedData = $this->getResultService()->searchCollectedData(
             $conditions,

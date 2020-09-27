@@ -62,7 +62,7 @@
 						</div>
 						<div class="js-action-radio">
 							<label>
-								<input type="radio" name="action" value="buy_after" {% if not event or event.action|default('') == 'buy_after' %} checked="checked" {% endif %}>
+								<input type="radio" name="action" value="buy_after" {% if event.action|default('') == 'buy_after' %} checked="checked" {% endif %}>
 								<span>{{ 'admin_v2.information_collect.edit.action_after'|trans }}</span>
 								<label class="help-block pll mb0">({{ 'admin_v2.information_collect.edit.action_after.help_block'|trans }})</label>
 								<div class="js-checkbox-group plm">
@@ -112,7 +112,7 @@
 			<div class="row form-group">
 				<label class="col-md-2 control-label">{{ 'admin_v2.information_collect.edit.form_items.allow_skip'|trans }}</label>
 				<div class="radios">
-					{{ radios('allowSkip', {'1':'admin_v2.information_collect.edit.form_items.skip.allow'|trans, '0':'admin_v2.information_collect.edit.form_items.skip.not_allow'|trans}, event.allowSkip|default('1')) }}
+					{{ radios('allowSkip', {'1':'admin_v2.information_collect.edit.form_items.skip.allow'|trans, '0':'admin_v2.information_collect.edit.form_items.skip.not_allow'|trans}, event.allowSkip|default('0')) }}
 				</div>
 			</div>
 			<div class="row form-group">

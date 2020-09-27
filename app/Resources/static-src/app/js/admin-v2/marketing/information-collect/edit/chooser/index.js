@@ -5,13 +5,10 @@ let $form = $("#search-form");
 let $modal = $form.parents('.modal');
 let type = $form.data('type');
 let storeName = (type == 'course') ? 'informationCollectSelectCourseIds' : 'informationCollectSelectClassroomIds';
+let selectedStoreName = (type == 'course') ? 'informationCollectSelectedCourseIds' : 'informationCollectSelectedClassroomIds';
 let targetIds = new Array();
 
 if (store.get(storeName, []).length > 0) {
-    initChecked(store.get(storeName, []));
-}
-
-if ($('input[name="' + type + 'Ids"]').val() && !store.get(storeName, []).length) {
     initChecked(store.get(storeName, []));
 }
 
@@ -25,7 +22,7 @@ $('#chooser-items').on('click', function (e) {
     }
 
     if ($('#information-collect-select-table').length == 1) {
-        $.get($(this).data('url'), { 'action': $("[name='action']:checked").val(), ids: targetIds }, function (res) {
+        $.get($(this).data('url'), { 'action': $("[name='action']:checked").val(), ids: targetIds, selectedIds: store.get(selectedStoreName, []) }, function (res) {
             $('#information-collect-select-table').empty().html(res);
             $('.js-selected-count').html(length);
             notify('success', Translator.trans('admin_v2.information_collect.chooser.success_hint'));

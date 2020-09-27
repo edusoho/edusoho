@@ -10086,6 +10086,7 @@ admin_v2.information_collect.form_items.select_group.contact_info: Contact Info
 admin_v2.information_collect.form_items.select_group.company_info: Company Info
 admin_v2.information_collect.form_items.select_group.school_info: School Info
 admin_v2.information_collect.form_items.select_group.other_info: Other
+admin_v2.information_collect.form_items.confirm_submit: Submit
 
 
 
