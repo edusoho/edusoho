@@ -5,7 +5,6 @@ namespace Biz\Goods\Mediator;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Goods\GoodsException;
-use Biz\Product\ProductException;
 
 class CourseSetGoodsMediator extends AbstractGoodsMediator
 {
@@ -118,6 +117,7 @@ class CourseSetGoodsMediator extends AbstractGoodsMediator
                 $this->getGoodsService()->updateGoodsSpecs($spec['id'], ['seq' => $courses[$spec['targetId']]['seq']]);
             }
         }
+
         return [$product, $goods];
     }
 
@@ -161,7 +161,7 @@ class CourseSetGoodsMediator extends AbstractGoodsMediator
     {
         $existProduct = $this->getProductService()->getProductByTargetIdAndType($courseSet['id'], 'course');
         if (empty($existProduct)) {
-            throw ProductException::NOTFOUND_PRODUCT();
+            return [[], []];
         }
 
         $existGoods = $this->getGoodsService()->getGoodsByProductId($existProduct['id']);

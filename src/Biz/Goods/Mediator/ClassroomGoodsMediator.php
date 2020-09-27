@@ -3,7 +3,6 @@
 namespace Biz\Goods\Mediator;
 
 use Biz\Goods\GoodsException;
-use Biz\Product\ProductException;
 
 /**
  * Class ClassroomGoodsMediator
@@ -156,7 +155,7 @@ class ClassroomGoodsMediator extends AbstractGoodsMediator
     {
         $existProduct = $this->getProductService()->getProductByTargetIdAndType($classroom['id'], 'classroom');
         if (empty($existProduct)) {
-            throw ProductException::NOTFOUND_PRODUCT();
+            return [[], []];
         }
 
         $existGoods = $this->getGoodsService()->getGoodsByProductId($existProduct['id']);
