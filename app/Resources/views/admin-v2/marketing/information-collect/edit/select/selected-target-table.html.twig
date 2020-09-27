@@ -18,7 +18,7 @@
 		{% for targetId in preSelectIds %}
 			{% set location = locations[targetId]|default(null) %}
 			{% set target = targets[targetId]|default(null) %}
-			<tr class="js-selected-item {% if not target %} hidden {% endif %} {% if location %} js-selected-item-binded {% endif %}" data-id="{{ targetId }}">
+			<tr class="js-selected-item {% if not target %} hidden {% endif %} {% if location and (targetId not in selectedIds) %} js-selected-item-binded {% endif %}" data-id="{{ targetId }}">
 				{% if target %}
 					<td>
 						{% if type == 'course' %}
