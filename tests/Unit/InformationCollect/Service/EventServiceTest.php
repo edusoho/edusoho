@@ -21,9 +21,12 @@ class EventServiceTest extends BaseTestCase
     public function testCreateEventWithLocationsWithEmptyTargetTypes()
     {
         $event = $this->getMockedEvent();
-        $event['items'] = [['labelName' => '性别', 'code' => 'gender', 'required' => 1, 'seq' => 1]];
-        $result = $this->getInformationCollectEventService()->createEventWithLocations($event);
-        unset($event['items']);
+
+        $eventFields = array_merge($event, [
+            'items' => [['labelName' => '性别', 'code' => 'gender', 'required' => 1, 'seq' => 1]],
+        ]);
+
+        $result = $this->getInformationCollectEventService()->createEventWithLocations($eventFields);
         unset($result['id']);
         unset($result['createdTime']);
         unset($result['updatedTime']);
