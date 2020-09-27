@@ -69,6 +69,7 @@
         padding: 0 24px;
         text-align: right;
         a {
+          margin-top: 24px;
           padding: 6px 24px;
           background-color: #FF7E56;
           line-height: 20px;
@@ -194,10 +195,14 @@
         }
         .learn-text {
           width: 49.18%;
+          p {
+            margin: 0;
+          }
           .learn-text__title {
             margin: 4px 0;
             font-size: 12px;
             color: #333;
+            height: 32px;
             line-height: 16px;
             display: -webkit-box;
             overflow: hidden;
@@ -227,6 +232,33 @@
         text-align: center;
         color: #46C37B;
         line-height: 20px;
+      }
+    }
+    // 认证证书
+    .info-right-certificate {
+      margin-top: 24px;
+      .certificate-info {
+        margin-top: 24px;
+        padding: 0 8px;
+        text-align: center;
+        .certificate-info__img {
+          width: 228px;
+          height: 128px;
+          @media (max-width: 1200px) {
+            width: 180px;
+            height: 100px;
+          }
+        }
+        .certificate-info__title {
+          margin: 12px auto 0;
+          width: 228px;
+          font-size: 14px;
+          color: #333333;
+          line-height: 20px;
+          @media (max-width: 1200px) {
+            width: 180px;
+          }
+        }
       }
     }
   }

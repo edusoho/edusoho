@@ -70,6 +70,7 @@
                 <teacher :teachers="currentSku.teachers"/>
                 <qr :mpQrcode="componentsData.mpQrCode"/>
                 <recommend :goods="goods" :recommendGoods="componentsData.recommendGoods"/>
+                <certificate :goodsId="goodsId" />
             </div>
         </div>
         <back-to-top v-show="isFixed"/>
@@ -87,6 +88,7 @@
     import ClassroomCourses from './components/classroom-courses';
     import CourseTasks from './components/course-tasks';
     import BuySku from './components/buy-sku';
+    import Certificate from './components/certificate';
 
     export default {
         data() {
@@ -154,6 +156,7 @@
             ClassroomCourses,
             CourseTasks,
             BuySku,
+            Certificate,
         },
         computed: {
             summaryHtml() {
