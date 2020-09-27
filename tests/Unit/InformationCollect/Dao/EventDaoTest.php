@@ -27,7 +27,7 @@ class EventDaoTest extends BaseTestCase
             'formTitle' => '测试表单',
             'status' => 'open',
             'allowSkip' => 1,
-            'creator' => $this->getCurrentUser()->getId()
+            'creator' => $this->getCurrentUser()->getId(),
         ]);
 
         $this->getInformationCollectLocationDao()->create([

@@ -53,6 +53,7 @@ class EventServiceImpl extends BaseService implements EventService
 
         $event = $this->getEventDao()->update($id, $updateEventFields);
         $this->editEventLocations($event, $updateFields);
+
         return $event;
     }
 
@@ -139,7 +140,7 @@ class EventServiceImpl extends BaseService implements EventService
 
         $locationInfo = [
             'course' => [],
-            'classroom' => []
+            'classroom' => [],
         ];
         foreach ($locations as $location) {
             if ('course' == $location['targetType']) {
@@ -167,7 +168,7 @@ class EventServiceImpl extends BaseService implements EventService
             if (!in_array($type, [self::TARGET_TYPE_COURSE, self::TARGET_TYPE_CLASSROOM])) {
                 continue;
             }
-            if ($type === self::TARGET_TYPE_COURSE) {
+            if (self::TARGET_TYPE_COURSE === $type) {
                 $targetIds = empty($locationFields['courseIds']) ? [] : (is_array($locationFields['courseIds']) ? $locationFields['courseIds'] : json_decode($locationFields['courseIds'], true));
             } else {
                 $targetIds = empty($locationFields['classroomIds']) ? [] : (is_array($locationFields['classroomIds']) ? $locationFields['classroomIds'] : json_decode($locationFields['classroomIds'], true));
@@ -215,7 +216,7 @@ class EventServiceImpl extends BaseService implements EventService
                 'eventId' => $eventId,
                 'targetType' => $targetType,
                 'action' => $action,
-                'targetId' => $targetId
+                'targetId' => $targetId,
             ];
         }
 

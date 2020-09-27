@@ -3,7 +3,6 @@
 namespace Tests\Unit\InformationCollect\Service;
 
 use Biz\BaseTestCase;
-use Biz\Common\CommonException;
 use Biz\InformationCollect\Dao\EventDao;
 use Biz\InformationCollect\Dao\ItemDao;
 use Biz\InformationCollect\Dao\LocationDao;
@@ -36,7 +35,7 @@ class EventServiceTest extends BaseTestCase
         $eventFields = array_merge($event, [
             'targetTypes' => ['course'],
             'courseIds' => ['1', '2'],
-            'classroomIds' => ['3', '4']
+            'classroomIds' => ['3', '4'],
         ]);
 
         $result = $this->getInformationCollectEventService()->createEventWithLocations($eventFields);
@@ -67,7 +66,7 @@ class EventServiceTest extends BaseTestCase
             'title' => 'updated title',
             'targetTypes' => ['course', 'classroom'],
             'courseIds' => ['1', '2'],
-            'classroomIds' => ['3', '4']
+            'classroomIds' => ['3', '4'],
         ]);
         $locationsCourseCountBefore = $this->getInformationCollectLocationDao()->count(['eventId' => $event['id'], 'targetType' => 'course']);
         $locationsClassroomCountBefore = $this->getInformationCollectLocationDao()->count(['eventId' => $event['id'], 'targetType' => 'classroom']);
@@ -182,7 +181,7 @@ class EventServiceTest extends BaseTestCase
             'formTitle' => 'test form title',
             'status' => 'open',
             'allowSkip' => '1',
-            'creator' => $this->getCurrentUser()->getId()
+            'creator' => $this->getCurrentUser()->getId(),
         ], $event);
     }
 
@@ -298,7 +297,7 @@ class EventServiceTest extends BaseTestCase
             'code' => '测试表单',
             'labelName' => '性别',
             'seq' => 1,
-            'required' => 1
+            'required' => 1,
         ]);
     }
 

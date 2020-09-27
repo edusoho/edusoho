@@ -5,14 +5,14 @@ namespace AppBundle\Controller\AdminV2\Marketing;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
-use Biz\InformationCollect\Service\EventService;
-use Biz\InformationCollect\Service\ResultService;
-use Symfony\Component\HttpFoundation\Request;
-use Biz\Course\Service\CourseSetService;
-use Biz\Taxonomy\Service\CategoryService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Common\CommonException;
+use Biz\Course\Service\CourseSetService;
 use Biz\InformationCollect\InformationCollectException;
+use Biz\InformationCollect\Service\EventService;
+use Biz\InformationCollect\Service\ResultService;
+use Biz\Taxonomy\Service\CategoryService;
+use Symfony\Component\HttpFoundation\Request;
 
 class InformationCollectController extends BaseController
 {
@@ -58,11 +58,12 @@ class InformationCollectController extends BaseController
     {
         if ($request->isMethod('POST')) {
             $this->getEventService()->createEventWithLocations($request->request->all());
+
             return $this->createJsonResponse(true);
         }
 
-        $allCourseLocation  = $this->getEventService()->searchLocations(['targetType' => 'course', 'targetId_LTE' => 0], [], 0, 1);
-        $allClassroomLocation  = $this->getEventService()->searchLocations(['targetType' => 'classroom', 'targetId_LTE' => 0], [], 0, 1);
+        $allCourseLocation = $this->getEventService()->searchLocations(['targetType' => 'course', 'targetId_LTE' => 0], [], 0, 1);
+        $allClassroomLocation = $this->getEventService()->searchLocations(['targetType' => 'classroom', 'targetId_LTE' => 0], [], 0, 1);
 
         return $this->render('admin-v2/marketing/information-collect/edit/index.html.twig', [
             'allCourseLocation' => empty($allCourseLocation) ? [] : $allCourseLocation[0],
@@ -80,6 +81,7 @@ class InformationCollectController extends BaseController
 
         if ($request->isMethod('POST')) {
             $event = $this->getEventService()->updateEventWithLocations($event['id'], $request->request->all());
+
             return $this->createJsonResponse(true);
         }
 
@@ -101,8 +103,8 @@ class InformationCollectController extends BaseController
             }
         }
 
-        $allCourseLocation  = $this->getEventService()->searchLocations(['targetType' => 'course', 'targetId_LTE' => '0'], [], 0, 1);
-        $allClassroomLocation  = $this->getEventService()->searchLocations(['targetType' => 'classroom', 'targetId_LTE' => '0'], [], 0, 1);
+        $allCourseLocation = $this->getEventService()->searchLocations(['targetType' => 'course', 'targetId_LTE' => '0'], [], 0, 1);
+        $allClassroomLocation = $this->getEventService()->searchLocations(['targetType' => 'classroom', 'targetId_LTE' => '0'], [], 0, 1);
 
         return $this->render('admin-v2/marketing/information-collect/edit/index.html.twig', [
             'event' => $event,
@@ -140,13 +142,13 @@ class InformationCollectController extends BaseController
 
         return $this->render(
             "admin-v2/marketing/information-collect/edit/chooser/{$type}-table.html.twig",
-            array(
+            [
                 'type' => $type,
                 'users' => $users,
                 'targets' => $targets,
                 'categories' => $categories,
                 'paginator' => $paginator,
-            )
+            ]
         );
     }
 
@@ -160,7 +162,7 @@ class InformationCollectController extends BaseController
 
         $conditions = ['ids' => empty($selectedIds) ? [-1] : $selectedIds];
 
-        if ($type == EventService::TARGET_TYPE_COURSE) {
+        if (EventService::TARGET_TYPE_COURSE == $type) {
             list($targets, $paginator) = $this->searchCourseSets($conditions);
         } else {
             list($targets, $paginator) = $this->searchClassrooms($conditions);
@@ -174,14 +176,14 @@ class InformationCollectController extends BaseController
 
         return $this->render(
             'admin-v2/marketing/information-collect/edit/select/selected-target-table.html.twig',
-            array(
+            [
                 'type' => $type,
                 'targets' => ArrayToolkit::index($targets, 'id'),
                 'selectedTargetIds' => $selectedIds,
                 'locations' => $locations,
                 'paginator' => $paginator,
                 'hasRelated' => $this->getEventService()->countLocations($locationConditions) > 0,
-            )
+            ]
         );
     }
 
@@ -222,13 +224,13 @@ class InformationCollectController extends BaseController
         ]);
     }
 
-    private function searchTargetsByTypeAndConditions($type, array $conditions,  $isAjax = false)
+    private function searchTargetsByTypeAndConditions($type, array $conditions, $isAjax = false)
     {
         if (!in_array($type, [EventService::TARGET_TYPE_COURSE, EventService::TARGET_TYPE_CLASSROOM])) {
             $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
-        if ($type == EventService::TARGET_TYPE_COURSE) {
+        if (EventService::TARGET_TYPE_COURSE == $type) {
             list($targets, $paginator) = $this->searchCourseSets($conditions, $isAjax);
             $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($targets, 'creator'));
         } else {
