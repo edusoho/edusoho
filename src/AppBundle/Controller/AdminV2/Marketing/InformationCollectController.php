@@ -58,7 +58,7 @@ class InformationCollectController extends BaseController
     {
         if ($request->isMethod('POST')) {
             $field = $request->request->all();
-            $field['items'] = [['labelName' => '姓名', 'code' => 'name', 'required' => 1, 'seq' => 1]];
+
             $this->getEventService()->createEventWithLocations($field);
 
             return $this->createJsonResponse(true);
@@ -83,7 +83,6 @@ class InformationCollectController extends BaseController
 
         if ($request->isMethod('POST')) {
             $field = $request->request->all();
-            $field['items'] = [['labelName' => '性别', 'code' => 'gender', 'required' => 1, 'seq' => 1]];
             $event = $this->getEventService()->updateEventWithLocations($event['id'], $field);
 
             return $this->createJsonResponse(true);

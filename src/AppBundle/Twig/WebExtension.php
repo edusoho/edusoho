@@ -2109,8 +2109,10 @@ class WebExtension extends \Twig_Extension
     {
         $selectFormItems = [];
         if (!empty($eventId)) {
-            $selectFormItems = [];
+            $selectFormItems = $this->getEventService()->findItemsByEventId($eventId);
         }
+
+        $selectFormItems = empty($selectFormItems) ? [] : ArrayToolkit::index($selectFormItems, 'code');
 
         return [
             'base' => [
@@ -2149,11 +2151,13 @@ class WebExtension extends \Twig_Extension
         ];
     }
 
-    private function getFormItemDataByCodeWithSelectedItems($code, $eventId)
+    private function getFormItemDataByCodeWithSelectedItems($code, $eventFormItems = [])
     {
-        if (empty($eventId)) {
-            return FormItemFectory::create($code)->getData();
+        if (!empty($eventFormItems) && in_array($code, array_keys($eventFormItems))) {
+            return array_merge(FormItemFectory::create($code)->getData(), $eventFormItems[$code], ['selected' => true]);
         }
+
+        return FormItemFectory::create($code)->getData();
     }
 
     /**

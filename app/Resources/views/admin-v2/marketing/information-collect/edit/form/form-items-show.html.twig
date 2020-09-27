@@ -1,7 +1,7 @@
 <ul class="js-selected-form-item-list selected-form-item-list form-horizontal" data-role="list">
 	{% for group, fields in formFields %}
 		{% for field in fields %}
-			<li class="row form-group list-group-item hidden" data-selected="" data-role="item" id="item-{{ field.field }}" data-code="{{ field.field }}" data-label-name="{{ field.title }}" data-required="">
+			<li class="row form-group list-group-item {% if not field.selected|default(false) %} hidden {% endif %}" data-selected="{{ field.selected|default(false) }}" data-role="item" id="item-{{ field.field }}" data-code="{{ field.field }}" data-label-name="{{ field.title }}" data-required="{{ field.required|default(false) }}">
 				<div class="col-md-2 control-label">
 					<label class="js-item-label {% if field.required|default(false) %} control-label-required {% endif %}" id="{{ field.field }}-label" for="item-{{ field.field }}">{{ field.title }}</label>
 				</div>
@@ -21,13 +21,13 @@
 							{% endif %}
 						{% endif %}
 						<span class="js-delete-item-btn delete-form-item-btn" data-target-item="#item-{{ field.field }}" data-target-button="#btn-add-item-{{ field.field }}">
-                            <i class="cd-icon cd-icon-close"></i>
-                        </span>
+							<i class="cd-icon cd-icon-close"></i>
+						</span>
 					</div>
 				</div>
 				<div class="col-md-2">
 					<label>
-						<input type="checkbox" data-target-label="#{{ field.field }}-label" data-target-item="#item-{{ field.field }}" class="js-item-required">
+						<input type="checkbox" data-target-label="#{{ field.field }}-label" {% if field.required|default(false) %} checked="checked" {% endif %} data-target-item="#item-{{ field.field }}" class="js-item-required">
 						{{ 'admin_v2.information_collect.form_items.required'|trans }}
 					</label>
 				</div>

@@ -129,12 +129,12 @@ function getFormData() {
         data.classroomIds = $('.js-checkbox-group .action-type-group-part').find('.target-classroom:checked').length ? $('input[name="classroomIds"]').val() : [];
     }
 
-    data.formItems = [];
+    data.items = [];
 
     let i = 1;
     $.each($('.list-group-item'), function (index, value) {
         if ($(value).data('selected')) {
-            data.formItems.push({
+            data.items.push({
                 code: $(value).data('code'),
                 labelName: $(value).data('labelName'),
                 required: $(value).data('required') ? 1 : 0,
