@@ -1,6 +1,14 @@
 <template>
   <div class="detail-info" v-if="goods.id">
-    <p class="detail-info__title">{{ goods.title }}</p>
+    <p class="detail-info__title" :class="isShare && 'detail-info__title--pr'">
+      <span class="certificate-icon" v-if="currentSku.hasCertificate">证</span
+      >{{ goods.title }}
+      <i
+        class="iconfont icon-fenxiang goods-share"
+        @click="onShare"
+        v-if="isShare"
+      ></i>
+    </p>
 
     <div
       v-if="goods.discount && currentSku.displayPrice != 0"
@@ -24,11 +32,15 @@
           </span>
         </div>
         <div class="pull-right study-num">
-          {{ goods.product.target.studentNum }}人在学
+          <i class="iconfont icon-renqi"></i>
+          {{ goods.product.target.studentNum }}人
         </div>
       </div>
     </div>
-    <div v-if="!goods.discount || currentSku.displayPrice == 0" class="detail-info__price">
+    <div
+      v-if="!goods.discount || currentSku.displayPrice == 0"
+      class="detail-info__price"
+    >
       <div class="clearfix">
         <div class="pull-left">
           价格
@@ -47,7 +59,8 @@
           >
         </div>
         <div class="pull-right study-num">
-          {{ goods.product.target.studentNum }}人在学
+          <i class="iconfont icon-renqi"></i>
+          {{ goods.product.target.studentNum }}人
         </div>
       </div>
     </div>
@@ -66,9 +79,19 @@ export default {
       default: () => {},
     },
   },
+  data() {
+    return {
+      isShare: false, // 是否显示分享按钮
+    };
+  },
   filters: {
     formatPrice(input) {
       return (Math.round(input * 100) / 100).toFixed(2);
+    },
+  },
+  methods: {
+    onShare() {
+      // 分享
     },
   },
 };

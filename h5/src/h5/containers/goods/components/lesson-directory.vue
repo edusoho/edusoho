@@ -25,7 +25,6 @@
               v-if="!doubleLine(lessonItem.tasks[lessonItem.index])"
               class="bl l22"
             >
-              <!-- <span class="tryLes">试听</span> -->
               <span
                 :class="{
                   lessonactive:
@@ -33,6 +32,8 @@
                 }"
                 class="text-overflow ks"
               >
+                <!-- <span class="tryLes">试听</span> -->
+                <!-- <span class="freeAdmission">免费</span> -->
                 <i
                   :class="iconfont(lessonItem.tasks[lessonItem.index])"
                   class="iconfont"
@@ -56,7 +57,6 @@
               v-if="doubleLine(lessonItem.tasks[lessonItem.index])"
               class="bl"
             >
-              <!-- <span class="tryLes">试听</span> -->
               <div class="block-inline">
                 <span
                   :class="{
@@ -65,6 +65,8 @@
                   }"
                   class="bl text-overflow ks"
                 >
+                  <!-- <span class="tryLes">试听</span> -->
+                  <!-- <span class="freeAdmission">免费</span> -->
                   <i
                     :class="iconfont(lessonItem.tasks[lessonItem.index])"
                     class="iconfont"
@@ -121,6 +123,7 @@
               class="litem-r text-overflow"
             >
               <!-- <span class="tryLes">试听</span> -->
+              <!-- <span class="freeAdmission">免费</span> -->
               <i :class="iconfont(taskItem)" class="iconfont" />
               {{ Number(taskItem.isOptional) ? '选修 ' : '课时'
               }}{{

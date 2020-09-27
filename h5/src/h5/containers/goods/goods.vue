@@ -13,6 +13,10 @@
         />
         <detail :goods="goods" :currentSku="currentSku" />
         <specs :goods="goods" :currentSku="currentSku" @changeSku="changeSku" />
+        <certificate
+          v-if="currentSku.hasCertificate"
+          :selectedPlanId="$route.query.targetId"
+        />
         <enter-learning
           v-if="Object.keys(componentsInfo.mpQrCode).length"
           :qr-info="componentsInfo.mpQrCode"
@@ -112,6 +116,7 @@
 import Discount from './components/discount';
 import Detail from './components/detail';
 import Specs from './components/specs';
+import Certificate from './components/certificate';
 import EnterLearning from './components/enter-learning';
 
 import Teacher from './components/teacher';
@@ -152,6 +157,7 @@ export default {
     BackToTop, // 回到顶部
     AfterjoinDirectory,
     ClassroomCourses,
+    Certificate,
     EnterLearning,
   },
   computed: {
