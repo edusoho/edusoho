@@ -16,20 +16,21 @@ class AvailableCouponCommandTest extends BaseTestCase
         $product->targetId = 1;
         $product->targetType = 'course';
         $product->originPrice = 100;
+        $product->originalTargetId = 1;
 
-        $coupons = array(
-            array('type' => 'minus', 'targetType' => 'course', 'targetId' => 1, 'createdTime' => time() - 100, 'rate' => 30, 'deadline' => time() - 100),
-            array('type' => 'discount', 'targetType' => 'course', 'targetId' => 1, 'createdTime' => time(), 'rate' => 8, 'deadline' => time()),
-        );
+        $coupons = [
+            ['type' => 'minus', 'targetType' => 'course', 'targetId' => 1, 'createdTime' => time() - 100, 'rate' => 30, 'deadline' => time() - 100],
+            ['type' => 'discount', 'targetType' => 'course', 'targetId' => 1, 'createdTime' => time(), 'rate' => 8, 'deadline' => time()],
+        ];
 
         $cardService = $this->getMockBuilder('Biz\Card\Service\CardService')->getMock();
         $cardService->method('findCurrentUserAvailableCouponForTargetTypeAndTargetId')->willReturn($coupons);
         $biz = $this->getBiz();
         $biz['@Card:CardService'] = $cardService;
 
-        $this->mockBiz('Course:CourseService', array(
-            array('functionName' => 'getCourse', 'returnValue' => array('courseSetId' => 1)),
-        ));
+        $this->mockBiz('Course:CourseService', [
+            ['functionName' => 'getCourse', 'returnValue' => ['courseSetId' => 1]],
+        ]);
 
         $command = new AvailableCouponCommand();
         $command->setBiz($this->getBiz());

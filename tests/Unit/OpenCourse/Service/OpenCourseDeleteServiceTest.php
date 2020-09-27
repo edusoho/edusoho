@@ -231,7 +231,7 @@ class OpenCourseDeleteServiceTest extends BaseTestCase
     public function testDeleteRecommend()
     {
         $recommendCourseDao = $this->mockBiz(
-            'OpenCourse:OpenCourseRecommendDao',
+            'OpenCourse:OpenCourseRecommendedDao',
             [
                 [
                     'functionName' => 'count',

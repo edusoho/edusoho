@@ -83,6 +83,11 @@ class ClassroomGoodsMediatorTest extends BaseTestCase
             'orgCode' => '1.1',
             'orgId' => 1,
             'creator' => 1,
+            'price' => '0.00',
+            'showable' => 1,
+            'buyable' => 1,
+            'expiryMode' => 'forever',
+            'service' => [],
         ], $customFields);
     }
 
