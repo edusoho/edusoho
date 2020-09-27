@@ -117,6 +117,9 @@ class ClassroomGoodsMediator extends AbstractGoodsMediator
     public function onRecommended($classroom)
     {
         list($product, $goods) = $this->getProductAndGoods($classroom);
+        if (empty($goods)) {
+            return [[], []];
+        }
         $goods = $this->getGoodsService()->recommendGoods($goods['id'], $classroom['recommendedSeq']);
 
         return [$product, $goods];
@@ -125,6 +128,9 @@ class ClassroomGoodsMediator extends AbstractGoodsMediator
     public function onCancelRecommended($classroom)
     {
         list($product, $goods) = $this->getProductAndGoods($classroom);
+        if (empty($goods)) {
+            return [[], []];
+        }
         $goods = $this->getGoodsService()->cancelRecommendGoods($goods['id']);
 
         return [$product, $goods];

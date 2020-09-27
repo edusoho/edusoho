@@ -3,13 +3,17 @@
 namespace Biz\Goods\Mediator;
 
 use Biz\Goods\GoodsException;
-use Biz\Product\ProductException;
 
 class CourseSpecsMediator extends AbstractSpecsMediator
 {
     public function onCreate($course)
     {
         list($product, $goods) = $this->getProductAndGoods($course);
+
+        if (empty($goods)) {
+            return [];
+        }
+
         $goodsSpecs = $this->getGoodsService()->createGoodsSpecs([
             'goodsId' => $goods['id'],
             'targetId' => $course['id'],
@@ -27,6 +31,11 @@ class CourseSpecsMediator extends AbstractSpecsMediator
     public function onUpdateNormalData($course)
     {
         list($product, $goods) = $this->getProductAndGoods($course);
+
+        if (empty($goods)) {
+            return [];
+        }
+
         $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $course['id']);
         $goodsSpecs = $this->getGoodsService()->updateGoodsSpecs($goodsSpecs['id'], [
             'title' => $course['title'],
@@ -51,6 +60,11 @@ class CourseSpecsMediator extends AbstractSpecsMediator
     public function onPublish($course)
     {
         list($product, $goods) = $this->getProductAndGoods($course);
+
+        if (empty($goods)) {
+            return [];
+        }
+
         $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $course['id']);
         $goodsSpecs = $this->getGoodsService()->publishGoodsSpecs($goodsSpecs['id']);
 
@@ -82,7 +96,7 @@ class CourseSpecsMediator extends AbstractSpecsMediator
     {
         $existProduct = $this->getProductService()->getProductByTargetIdAndType($course['courseSetId'], 'course');
         if (empty($existProduct)) {
-            throw ProductException::NOTFOUND_PRODUCT();
+            return [[], []];
         }
 
         $existGoods = $this->getGoodsService()->getGoodsByProductId($existProduct['id']);
