@@ -124,7 +124,18 @@ class ResultServiceImpl extends BaseService implements ResultService
 
     public function findResultItemsByResultId($resultId)
     {
-        return $this->getResultItemDao()->findByResultId($resultId);
+        $resultItems = $this->getResultItemDao()->findByResultId($resultId);
+
+        return $this->filterResultItems($resultItems);
+    }
+
+    protected function filterResultItems($resultItems)
+    {
+        foreach ($resultItems as &$resultItem) {
+            'province_city_area' == $resultItem['code'] && $resultItem['value'] = json_decode($resultItem['value'], true);
+        }
+
+        return $resultItems;
     }
 
     /**
@@ -178,7 +189,10 @@ class ResultServiceImpl extends BaseService implements ResultService
 
     public function findResultDataByResultIds($resultIds)
     {
-        $resultData = ArrayToolkit::group($this->getResultItemDao()->findResultDataByResultIds($resultIds), 'resultId');
+        $resultData = ArrayToolkit::group(
+            $this->filterResultItems($this->getResultItemDao()->findResultDataByResultIds($resultIds)),
+            'resultId'
+        );
 
         foreach ($resultData as $resultId => &$datum) {
             $datum = ArrayToolkit::index($datum, 'code');
