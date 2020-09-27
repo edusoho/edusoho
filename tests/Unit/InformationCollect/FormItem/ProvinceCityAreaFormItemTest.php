@@ -29,6 +29,6 @@ class ProvinceCityAreaFormItemTest extends BaseTestCase
 
         $formItem = new \Biz\InformationCollect\FormItem\ProvinceCityAreaFormItem();
 
-        $this->assertEquals($data, $formItem->required(true)->value('["浙江省", "杭州市", "滨江区"]')->getData());
+        $this->assertEquals($data, $formItem->required(true)->value(['浙江省', '杭州市', '滨江区'])->getData());
     }
 }

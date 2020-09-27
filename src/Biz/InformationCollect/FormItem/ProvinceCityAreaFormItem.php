@@ -16,7 +16,7 @@ class ProvinceCityAreaFormItem extends FormItem
             'type' => self::TYPE,
             'title' => self::TITLE,
             'field' => self::FIELD,
-            'value' => empty($this->value) ? [] : json_decode($this->value, true),
+            'value' => empty($this->value) ? [] : $this->value,
             'props' => [
                 'options' => [],
                 'placeholder' => '请选择省市区县',

@@ -15,7 +15,7 @@ class EventServiceImpl extends BaseService implements EventService
 {
     public function createEventWithLocations(array $fields)
     {
-        if (!ArrayToolkit::requireds($fields, ['title', 'action', 'formTitle', 'status', 'allowSkip'])) {
+        if (!ArrayToolkit::requireds($fields, ['title', 'action', 'formTitle', 'status', 'allowSkip', 'items'])) {
             throw $this->createServiceException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
@@ -29,9 +29,19 @@ class EventServiceImpl extends BaseService implements EventService
 
         $event['creator'] = $this->getCurrentUser()->getId();
 
-        $event = $this->getEventDao()->create($event);
+        $this->beginTransaction();
+        try {
+            $event = $this->getEventDao()->create($event);
 
-        $this->editEventLocations($event, $fields);
+            $this->editEventLocations($event, $fields);
+
+            $this->editEventItems($event, $fields['items']);
+
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
 
         return $event;
     }
@@ -51,8 +61,21 @@ class EventServiceImpl extends BaseService implements EventService
             'allowSkip' => 1,
         ]);
 
-        $event = $this->getEventDao()->update($id, $updateEventFields);
-        $this->editEventLocations($event, $updateFields);
+        $this->beginTransaction();
+        try {
+            $event = $this->getEventDao()->update($id, $updateEventFields);
+
+            $this->editEventLocations($event, $updateFields);
+
+            if (!empty($updateFields['items'])) {
+                $this->editEventItems($event, $updateFields['items']);
+            }
+
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
 
         return $event;
     }
@@ -153,75 +176,51 @@ class EventServiceImpl extends BaseService implements EventService
         return $locationInfo;
     }
 
-    private function editEventLocations($event, $locationFields)
+    private function editEventItems($event, array $items)
     {
-        if (empty($locationFields['targetTypes'])) {
-            return;
+        $this->getItemDao()->batchDelete(['eventId' => $event['id']]);
+
+        foreach ($items as &$item) {
+            $item['eventId'] = $event['id'];
         }
 
-        $deleteTypes = array_diff([self::TARGET_TYPE_COURSE, self::TARGET_TYPE_CLASSROOM], $locationFields['targetTypes']);
-        if (!empty($deleteTypes)) {
-            $this->getLocationDao()->batchDelete(['targetTypes' => $deleteTypes, 'eventId' => $event['id']]);
+        $this->getItemDao()->batchCreate($items);
+    }
+
+    private function editEventLocations($event, $field)
+    {
+        if (empty($field['targetTypes'])) {
+            return false;
         }
 
-        foreach ($locationFields['targetTypes'] as $type) {
+        $this->getLocationDao()->batchDelete(['eventId' => $event['id']]);
+
+        foreach ($field['targetTypes'] as $type) {
             if (!in_array($type, [self::TARGET_TYPE_COURSE, self::TARGET_TYPE_CLASSROOM])) {
                 continue;
             }
+
             if (self::TARGET_TYPE_COURSE === $type) {
-                $targetIds = empty($locationFields['courseIds']) ? [] : (is_array($locationFields['courseIds']) ? $locationFields['courseIds'] : json_decode($locationFields['courseIds'], true));
+                $targetIds = empty($field['courseIds']) ? [] : (is_array($field['courseIds']) ? $field['courseIds'] : json_decode($field['courseIds'], true));
             } else {
-                $targetIds = empty($locationFields['classroomIds']) ? [] : (is_array($locationFields['classroomIds']) ? $locationFields['classroomIds'] : json_decode($locationFields['classroomIds'], true));
+                $targetIds = empty($field['classroomIds']) ? [] : (is_array($field['classroomIds']) ? $field['classroomIds'] : json_decode($field['classroomIds'], true));
             }
 
-            $this->batchUnbindOtherEventLocations($event['id'], $type, $targetIds);
-            $this->batchUpdateEventLocations($event['id'], $event['action'], $type, $targetIds);
-        }
-    }
+            $this->getLocationDao()->batchDelete(['targetIds' => $targetIds, 'targetType' => $type, 'action' => $event['action']]);
 
-    private function batchUnbindOtherEventLocations($eventId, $targetType, $targetIds)
-    {
-        if (empty($targetIds)) {
-            return;
-        }
-        $otherBindedLocationConditions = ['targetType' => $targetType, 'targetIds' => $targetIds, 'excludeEventId' => $eventId];
-        $otherBindedLocations = $this->getLocationDao()->search($otherBindedLocationConditions, [], 0, $this->getLocationDao()->count($otherBindedLocationConditions), ['id']);
+            $locations = [];
+            foreach ($targetIds as $targetId) {
+                $locations[] = [
+                    'eventId' => $event['id'],
+                    'targetType' => $type,
+                    'action' => $event['action'],
+                    'targetId' => $targetId,
+                ];
+            }
 
-        if (!empty($otherBindedLocations)) {
-            $this->getLocationDao()->batchDelete(['ids' => array_values(array_column($otherBindedLocations, 'id'))]);
-        }
-    }
-
-    private function batchUpdateEventLocations($eventId, $action, $targetType, array $targetIds)
-    {
-        if (empty($targetIds)) {
-            return;
-        }
-
-        $conditions = ['targetType' => $targetType, 'eventId' => $eventId];
-        $existedLocations = $this->getLocationDao()->search($conditions, [], 0, $this->getLocationDao()->count($conditions), ['targetId']);
-        $existedLocationsTargetIds = array_values(array_column($existedLocations, 'targetId'));
-
-        $deleteLocationTargetIds = array_diff($existedLocationsTargetIds, $targetIds);
-
-        if (!empty($deleteLocationTargetIds)) {
-            $this->getLocationDao()->batchDelete(['targetIds' => $deleteLocationTargetIds, 'targetType' => $targetType]);
-        }
-
-        $newLocationsTargetIds = array_diff($targetIds, $existedLocationsTargetIds);
-
-        $locations = [];
-        foreach ($newLocationsTargetIds as $targetId) {
-            $locations[] = [
-                'eventId' => $eventId,
-                'targetType' => $targetType,
-                'action' => $action,
-                'targetId' => $targetId,
-            ];
-        }
-
-        if (!empty($locations)) {
-            $this->getLocationDao()->batchCreate($locations);
+            if (!empty($locations)) {
+                $this->getLocationDao()->batchCreate($locations);
+            }
         }
     }
 

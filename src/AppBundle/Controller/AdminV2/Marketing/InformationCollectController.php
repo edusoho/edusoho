@@ -57,7 +57,9 @@ class InformationCollectController extends BaseController
     public function createAction(Request $request)
     {
         if ($request->isMethod('POST')) {
-            $this->getEventService()->createEventWithLocations($request->request->all());
+            $field = $request->request->all();
+            $field['items'] = [['labelName' => '姓名', 'code' => 'name', 'required' => 1, 'seq' => 1]];
+            $this->getEventService()->createEventWithLocations($field);
 
             return $this->createJsonResponse(true);
         }
@@ -80,7 +82,9 @@ class InformationCollectController extends BaseController
         }
 
         if ($request->isMethod('POST')) {
-            $event = $this->getEventService()->updateEventWithLocations($event['id'], $request->request->all());
+            $field = $request->request->all();
+            $field['items'] = [['labelName' => '性别', 'code' => 'gender', 'required' => 1, 'seq' => 1]];
+            $event = $this->getEventService()->updateEventWithLocations($event['id'], $field);
 
             return $this->createJsonResponse(true);
         }
@@ -154,12 +158,7 @@ class InformationCollectController extends BaseController
 
     public function selectedChooserAction(Request $request, $type)
     {
-        if ($request->isMethod('POST')) {
-            $selectedIds = $request->request->get('ids', []);
-        } else {
-            $selectedIds = $request->query->get('ids', []);
-        }
-
+        $selectedIds = $request->query->get('ids', []);
         $conditions = ['ids' => empty($selectedIds) ? [-1] : $selectedIds];
 
         if (EventService::TARGET_TYPE_COURSE == $type) {
@@ -170,8 +169,8 @@ class InformationCollectController extends BaseController
 
         $paginator->setBaseUrl($this->generateUrl('admin_v2_information_collect_chooser_selected', ['type' => $type]));
 
-        $locationConditions = ['targetIds' => $conditions['ids'], 'targetType' => $type, 'excludeEventId' => $request->query->get('excludeEventId', 0)];
-        $locations = $this->getEventService()->searchLocations($locationConditions, [], 0, count($selectedIds), ['targetId']);
+        $locationConditions = ['action' => $request->query->get('action'), 'targetIds' => $conditions['ids'], 'targetType' => $type, 'excludeEventId' => $request->query->get('excludeEventId', 0)];
+        $locations = $this->getEventService()->searchLocations($locationConditions, [], 0, count($selectedIds), ['targetId', 'eventId']);
         $locations = ArrayToolkit::index($locations, 'targetId');
 
         return $this->render(
