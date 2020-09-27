@@ -21,25 +21,29 @@
   <table class="table table-hover table-striped" id="collect-table">
     <thead>
     <tr>
-      <th width="10%">{{'admin.information_collect.title_th'|trans}}</th>
-      <th width="25%">{{ 'admin.information_collect.location_th'|trans }}</th>
-      <th width="15%">{{'admin.information_collect.create_time_th'|trans}}</th>
-      <th width="10%">{{ 'admin.information_collect.status_th'|trans }}</th>
-      <th width="15%">{{ 'admin.information_collect.collected_num_th'|trans }}</th>
-      <th width="15%">{{ 'admin.information_collect.operate'|trans }}</th>
+      <th width="15%">{{'admin.information_collection.title_th'|trans}}</th>
+      <th width="25%">{{ 'admin.information_collection.location_th'|trans }}</th>
+      <th width="15%">{{'admin.information_collection.create_time_th'|trans}}</th>
+      <th width="10%">{{ 'admin.information_collection.status_th'|trans }}</th>
+      <th width="15%">{{ 'admin.information_collection.collected_num_th'|trans }}</th>
+      <th width="15%">{{ 'admin.information_collection.operate'|trans }}</th>
     </tr>
     </thead>
     <tbody>
     {% if events|default() %}
       {% for event in events|default() %}
         <tr>
-          <td>{{ event.title | slice(0,10) }}{% if event.title|length >10 %}...{% endif %}</td>
+          <td>
+            <span style="cursor: pointer" {% if event.title|length > 31 %}title="{{ event.title }}"{% endif %}>
+              {{ event.title | slice(0,31) }}{% if event.title|length >31 %}...{% endif %}
+            </span>
+          </td>
           <td>
             {% set action = 'admin.information_collect.action.' ~ event.action %}
             {% set location = information_collect_location_info(event.id) %}
             <span>{{ action|trans }}</span>
             <br>
-            <span class="text-muted text-sm">{{ location | slice(0,32) }}{% if location|length >32 %}...{% endif %}</span>
+              <span class="text-muted text-sm" style="cursor: pointer" {% if location|length > 32 %}title="{{ location }}"{% endif %}>{{ location | slice(0,32) }}{% if location|length >32 %}...{% endif %}</span>
           </td>
           <td>{{ event.createdTime|date('Y-m-d H:i:s') }}</td>
           <td>
