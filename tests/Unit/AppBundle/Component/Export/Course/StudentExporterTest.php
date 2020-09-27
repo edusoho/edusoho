@@ -192,7 +192,7 @@ class StudentExporterTest extends BaseTestCase
 
         $this->assertArrayEquals([
             [
-                'nickname'."\t",
+                'nickname',
                 'email',
                 '1970-1-01 08:00:01',
                 '20%',

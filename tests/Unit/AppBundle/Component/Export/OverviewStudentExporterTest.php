@@ -311,7 +311,7 @@ class OverviewStudentExporterTest extends BaseTestCase
         );
         $this->assertArrayEquals(
             [
-                'test2'."\t", '100%', '未开始', '已完成',
+                'test2', '100%', '未开始', '已完成',
             ], $data[1]
         );
     }
