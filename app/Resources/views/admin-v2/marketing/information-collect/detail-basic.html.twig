@@ -7,13 +7,13 @@
 <div class="panel-body">
   <table class="table table-noborder" style="margin-bottom: 0">
     <tr>
-      <td width="8%">{{ 'admin.information_collection.title_th'|trans }}：</td>
+      <td width="8%">{{ 'admin.information_collect.title_th'|trans }}：</td>
       <td width="40%">
         <span style="cursor: pointer" {% if event.title|length > 30 %}title="{{ event.title }}"{% endif %}>
               {{ event.title | slice(0,30) }}{% if event.title|length >30 %}...{% endif %}
         </span>
       </td>
-      <td width="10%">{{ 'admin.information_collection.status_th'|trans }}：</td>
+      <td width="10%">{{ 'admin.information_collect.status_th'|trans }}：</td>
       <td>
         {% set statusInfo = 'admin.information_collect.status.' ~ event.status %}
         {{ statusInfo|trans|raw }}

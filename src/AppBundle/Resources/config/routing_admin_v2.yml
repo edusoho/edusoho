@@ -685,6 +685,30 @@ admin_v2_information_collect_detail:
   path:  /information_collect/{id}/detail
   defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:detail }
 
+admin_v2_information_collect_create:
+  path: /information_collect/create
+  defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:create }
+
+admin_v2_information_collect_update:
+  path: /information_collect/{id}/update
+  defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:update }
+
+admin_v2_information_collect_event_target_modal:
+  path: /information_collect/event/target/{type}/modal
+  defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:targetModal }
+  
+admin_v2_information_collect_chooser:
+  path: /information_collect/{type}/chooser
+  defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:chooser }
+
+admin_v2_information_collect_chooser_ajax:
+  path: /information_collect/{type}/chooser/ajax
+  defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:ajaxChooser }
+
+admin_v2_information_collect_chooser_selected:
+  path: /information_collect/{type}/selected
+  defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:selectedChooser }
+
 # 营销-营销管理-微营销-入口页
 admin_v2_login_micromarketing_boot:
   path: /login/marketing/boot
@@ -2749,27 +2773,3 @@ admin_v2_plumber:
 admin_v2_plumber_queue:
   path: /plumber/queue
   defaults: { _controller: AppBundle:AdminV2/Developer/Plumber:queue }
-
-admin_v2_information_collect_create:
-  path: /information_collect/create
-  defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:create }
-
-admin_v2_information_collect_update:
-  path: /information_collect/{id}/update
-  defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:update }
-
-admin_v2_information_collect_event_target_modal:
-  path: /information_collect/event/target/{type}/modal
-  defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:targetModal }
-  
-admin_v2_information_collect_chooser:
-  path: /information_collect/{type}/chooser
-  defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:chooser }
-
-admin_v2_information_collect_chooser_ajax:
-  path: /information_collect/{type}/chooser/ajax
-  defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:ajaxChooser }
-
-admin_v2_information_collect_chooser_selected:
-  path: /information_collect/{type}/selected
-  defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:selectedChooser }

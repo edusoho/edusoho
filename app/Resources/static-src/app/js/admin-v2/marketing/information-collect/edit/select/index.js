@@ -60,7 +60,7 @@ function getCourseSets(url) {
 }
 
 function getSelectedTargets(url) {
-    $.get(url, { ids: store.get(storeName, []) }, (res) => {
+    $.get(url, {'action': $("[name='action']:checked").val(), ids: store.get(storeName, []) }, (res) => {
         $table.empty().html(res);
     });
     $('.js-selected-count').html(store.get(storeName, []).length);
