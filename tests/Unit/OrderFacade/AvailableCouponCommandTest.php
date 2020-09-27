@@ -1,8 +1,9 @@
 <?php
 
-namespace CouponPlugin\Tests;
+namespace Tests\Unit\OrderFacade;
 
 use Biz\BaseTestCase;
+use Biz\Card\Service\CardService;
 use Biz\OrderFacade\Command\Deduct\AvailableCouponCommand;
 use Biz\OrderFacade\Product\Product;
 
@@ -10,7 +11,7 @@ class AvailableCouponCommandTest extends BaseTestCase
 {
     public function testExecute()
     {
-        $product = $this->getMockBuilder('Biz\OrderFacade\Product\Product')->getMock();
+        $product = $this->getMockBuilder(Product::class)->getMock();
 
         /* @var $product Product */
         $product->targetId = 1;
@@ -23,7 +24,7 @@ class AvailableCouponCommandTest extends BaseTestCase
             ['type' => 'discount', 'targetType' => 'course', 'targetId' => 1, 'createdTime' => time(), 'rate' => 8, 'deadline' => time()],
         ];
 
-        $cardService = $this->getMockBuilder('Biz\Card\Service\CardService')->getMock();
+        $cardService = $this->getMockBuilder(CardService::class)->getMock();
         $cardService->method('findCurrentUserAvailableCouponForTargetTypeAndTargetId')->willReturn($coupons);
         $biz = $this->getBiz();
         $biz['@Card:CardService'] = $cardService;
