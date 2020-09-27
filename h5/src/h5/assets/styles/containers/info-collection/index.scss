@@ -1,8 +1,13 @@
 .info-collection {
-	padding: vw(16);
+	padding: vw(0) vw(16) vw(16);
 
-	.van-cell .van-cell__title {
-		color: #333;
+	.van-cell {
+		padding: vw(16) vw(0);
+
+		.van-cell__title {
+			color: #333;
+			font-size: vw(16);
+		}
 	}
 
 	.info-required::after {
@@ -24,8 +29,8 @@
 		justify-content: space-between;
 		box-sizing: border-box;
 		width: 100%;
-		background-color: #fff;
-		box-shadow: 0 -2px 4px 0 rgba(0, 0, 0, 0.04);
+		background: #fff;
+		box-shadow: 0 -1px 2px 0 rgba(0, 0, 0, 0.1);
 
 		.info-footer__btn {
 			display: flex;

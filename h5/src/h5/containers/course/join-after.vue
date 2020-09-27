@@ -58,13 +58,13 @@
     <!-- 个人信息表单填写 -->
     <van-action-sheet
       v-model="isShowForm"
-      :title="userInfoCellectForm.formTitle"
+      :title="userInfoCollectForm.formTitle"
       :close-on-click-overlay="false"
       @cancel="onCancelForm"
     >
       <info-collection
-        :userInfoCellectForm="userInfoCellectForm"
-        :formRule="userInfoCellectForm.items"
+        :userInfoCollectForm="userInfoCollectForm"
+        :formRule="userInfoCollectForm.items"
         @submitForm="onCancelForm"
       ></info-collection>
     </van-action-sheet>
@@ -77,9 +77,10 @@ import DetailHead from './detail/head';
 import DetailPlan from './detail/plan';
 import Teacher from './detail/teacher';
 import afterjoinDirectory from './detail/afterjoin-directory';
+import collectUserInfo from '@/mixins/collectUserInfo';
 import { mapState, mapMutations } from 'vuex';
 import { Dialog, Toast } from 'vant';
-import infoCollection from '../info-collection/index';
+import infoCollection from '@/components/info-collection.vue';
 import Api from '@/api';
 import * as types from '@/store/mutation-types.js';
 
@@ -104,10 +105,14 @@ export default {
       isFixed: false,
       courseSettings: {},
       isShowForm: false,
-      userInfoCellect: {},
-      userInfoCellectForm: {},
+      paramsList: {
+        action: 'buy_after',
+        targetType: 'course',
+        targetId: this.details.id,
+      },
     };
   },
+  mixins: [collectUserInfo],
   computed: {
     ...mapState('course', {
       selectedPlanId: state => state.selectedPlanId,
@@ -133,11 +138,29 @@ export default {
     currentJoin: {
       handler(val, oldVal) {
         if (val) {
-          this.getInfoCollectionEvent();
+          Toast.loading({
+            duration: 0,
+            message: '加载中...',
+            forbidClick: true,
+          });
+          this.getInfoCollectionEvent(this.paramsList).then(res => {
+            if (Object.keys(res).length) {
+              this.userInfoCollect = res;
+              this.getInfoCollectionForm(res.id).then(res => {
+                this.isShowForm = true;
+                Toast.clear();
+              });
+              return;
+            }
+            Toast.clear();
+          });
         }
       },
       // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法，如果设置了false，那么效果和上边例子一样
       immediate: true,
+    },
+    $route(to, from) {
+      this.resetFrom();
     },
   },
   mounted() {
@@ -296,52 +319,6 @@ export default {
     onCancelForm() {
       this.setCurrentJoin(false);
       this.isShowForm = false;
-    },
-    //  根据购买前后判断是否需要采集用户信息
-    getInfoCollectionEvent() {
-      Toast.loading({
-        message: '加载中...',
-        forbidClick: true,
-      });
-      const query = {
-        action: 'buy_after',
-      };
-      const params = {
-        targetType: 'course',
-        targetId: this.details.id,
-      };
-      Api.getInfoCollectionEvent({
-        query,
-        params,
-      })
-        .then(res => {
-          if (Object.keys(res).length) {
-            this.userInfoCellect = { ...res };
-            this.getInfoCollectionForm();
-          }
-          // this.joinFreeCourse();
-        })
-        .catch(err => {
-          console.error(err);
-        });
-    },
-    // 根据事件id获取表单
-    getInfoCollectionForm() {
-      const query = {
-        eventId: this.userInfoCellect.id,
-      };
-      Api.getInfoCollectionForm({
-        query,
-      })
-        .then(res => {
-          this.userInfoCellectForm = { ...res };
-
-          this.isShowForm = true;
-          Toast.clear();
-        })
-        .catch(err => {
-          console.error(err);
-        });
     },
   },
 };

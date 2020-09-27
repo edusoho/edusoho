@@ -91,6 +91,8 @@
 		line-height: vw(52);
 		border-bottom: vw(14) solid #f7f7f7;
 
+		@include text-overflow-multi(1);
+
 		.icon-arrow-right {
 			margin-left: vw(4);
 			color: #ccc;

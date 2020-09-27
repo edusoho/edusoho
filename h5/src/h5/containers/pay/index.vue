@@ -182,17 +182,16 @@ export default {
       })
         .then(res => {
           if (res.isPaid) {
-            if (this.wechatSwitch) {
-              this.$router.replace({
-                path: '/pay_success',
-                query: {
-                  paidUrl: window.location.origin + res.paidSuccessUrlH5,
-                },
-              });
-              return;
-            }
-            window.location.href =
-              window.location.origin + res.paidSuccessUrlH5;
+            // if (this.wechatSwitch) {
+            //   this.$router.replace({
+            //     path: '/pay_success',
+            //     query: {
+            //       paidUrl: window.location.origin + res.paidSuccessUrlH5,
+            //     },
+            //   });
+            //   return;
+            // }
+            window.location.href = res.paidSuccessUrlH5;
             return;
           }
           this.timeoutId = setTimeout(() => {

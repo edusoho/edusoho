@@ -88,7 +88,7 @@
       v-show="showCollectEntry"
       @click="isShowForm = true"
     >
-      {{ userInfoCellectForm.formTitle }}
+      {{ userInfoCollectForm.formTitle }}
       <i class="iconfont icon-arrow-right"></i>
     </div>
     <!-- 个人信息表单填写 -->
@@ -105,8 +105,8 @@
         @click-left="isShowForm = false"
       />
       <info-collection
-        :userInfoCellectForm="this.userInfoCellectForm"
-        :formRule="this.userInfoCellectForm.items"
+        :userInfoCollectForm="this.userInfoCollectForm"
+        :formRule="this.userInfoCollectForm.items"
         @submitForm="handleSubmit"
       ></info-collection>
     </van-popup>
@@ -180,7 +180,7 @@ import eCourse from '&/components/e-course/e-course.vue';
 import Api from '@/api';
 import { Toast } from 'vant';
 import collectUserInfoMixins from '@/mixins/collectUserInfo/index.js';
-import infoCollection from '../info-collection/index';
+import infoCollection from '@/components/info-collection.vue';
 export default {
   components: {
     eCourse,
@@ -269,24 +269,24 @@ export default {
       return this.$route.query.expiryScope || '永久有效';
     },
     validPayWay() {
-      if (this.IsCollectUserInfoType && !this.isReqUserInfoCellect) {
+      if (this.IsCollectUserInfoType && !this.isReqUserInfoCollect) {
         return false;
       }
-      if (this.needCollectUserInfo && !this.isRequserInfoCellectForm) {
+      if (this.needCollectUserInfo && !this.isRequserInfoCollectForm) {
         return false;
       }
       return (
         this.paySettings.wxpayEnabled ||
         (this.paySettings.alipayEnabled &&
           !this.inWechat &&
-          this.userInfoCellect)
+          this.userInfoCollect)
       );
     },
     IsCollectUserInfoType() {
       return this.targetType === 'course' || this.targetType === 'classroom';
     },
     showCollectEntry() {
-      return Object.keys(this.userInfoCellectForm).length > 0;
+      return Object.keys(this.userInfoCollectForm).length > 0;
     },
   },
   filters: {
@@ -312,7 +312,7 @@ export default {
   methods: {
     shouldCollectUserInfo() {
       if (this.IsCollectUserInfoType) {
-        if (this.hasUserInfoCellectForm) {
+        if (this.hasUserInfoCollectForm) {
           Toast('请先提交信息后再提交订单');
         } else {
           this.handleSubmit();
@@ -322,6 +322,11 @@ export default {
       this.handleSubmit();
     },
     getInfoCollection() {
+      Toast.loading({
+        duration: 0,
+        message: '加载中...',
+        forbidClick: true,
+      });
       const paramsList = {
         action: 'buy_before',
         targetType: this.targetType,
@@ -330,8 +335,12 @@ export default {
       this.getInfoCollectionEvent(paramsList).then(res => {
         if (Object.keys(res).length) {
           this.needCollectUserInfo = true;
-          this.getInfoCollectionForm(res.id);
+          this.getInfoCollectionForm(res.id).then(() => {
+            Toast.clear();
+          });
+          return;
         }
+        Toast.clear();
       });
     },
     handleSubmit() {
@@ -512,8 +521,7 @@ export default {
             //   });
             //   return;
             // }
-            window.location.href =
-              window.location.origin + res.paidSuccessUrlH5;
+            window.location.href = res.paidSuccessUrlH5;
             return;
           }
           this.timeoutId = setTimeout(() => {

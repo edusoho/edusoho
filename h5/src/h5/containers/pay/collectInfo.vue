@@ -1,10 +1,10 @@
 <template>
   <div class="">
     <e-loading v-if="isLoading" />
-    <div v-if="Object.keys(userInfoCellectForm).length">
+    <div v-if="Object.keys(userInfoCollectForm).length">
       <info-collection
-        :userInfoCellectForm="this.userInfoCellectForm"
-        :formRule="this.userInfoCellectForm.items"
+        :userInfoCollectForm="this.userInfoCollectForm"
+        :formRule="this.userInfoCollectForm.items"
         @submitForm="handleSubmit"
       ></info-collection>
     </div>
@@ -12,9 +12,10 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import infoCollection from '@/containers/info-collection/index';
+import { mapState, mapMutations } from 'vuex';
+import infoCollection from '@/components/info-collection.vue';
 import collectUserInfoMixins from '@/mixins/collectUserInfo/index.js';
+import * as types from '@/store/mutation-types';
 export default {
   mixins: [collectUserInfoMixins],
   components: {
@@ -36,10 +37,14 @@ export default {
     this.getForm();
   },
   methods: {
+    ...mapMutations({
+      setNavbarTitle: types.SET_NAVBAR_TITLE,
+    }),
     getForm() {
       const eventId = this.$route.query.eventId;
       this.getInfoCollectionForm(eventId)
-        .then(() => {
+        .then(res => {
+          this.setNavbarTitle(res.formTitle);
           this.isLoading = false;
         })
         .catch(() => {
@@ -60,7 +65,9 @@ export default {
     },
     toWxNotify() {
       const paidUrl =
-        window.location.origin + `/#/${this.targetType}/${this.targetId}`;
+        window.location.origin +
+        window.location.pathname +
+        `#/${this.targetType}/${this.targetId}`;
       this.$router.replace({
         path: '/pay_success',
         query: {

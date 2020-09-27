@@ -80,12 +80,12 @@
       <!-- 个人信息表单填写 -->
       <van-action-sheet
         v-model="isShowForm"
-        :title="userInfoCellectForm.formTitle"
+        :title="userInfoCollectForm.formTitle"
         :close-on-click-overlay="false"
       >
         <info-collection
-          :userInfoCellectForm="this.userInfoCellectForm"
-          :formRule="this.userInfoCellectForm.items"
+          :userInfoCollectForm="this.userInfoCollectForm"
+          :formRule="this.userInfoCollectForm.items"
           @submitForm="joinFreeClass"
         ></info-collection>
       </van-action-sheet>
@@ -134,13 +134,16 @@ import directory from '../course/detail/directory';
 import onsale from '../course/detail/onsale';
 import moreMask from '@/components/more-mask';
 import redirectMixin from '@/mixins/saveRedirect';
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 import Api from '@/api';
+import collectUserInfo from '@/mixins/collectUserInfo';
 import getCouponMixin from '@/mixins/coupon/getCouponHandler';
 import getActivityMixin from '@/mixins/activity/index';
 import { dateTimeDown } from '@/utils/date-toolkit';
-import infoCollection from '../info-collection/index';
 import { Toast } from 'vant';
+import * as types from '@/store/mutation-types';
+import infoCollection from '@/components/info-collection.vue';
+
 const TAB_HEIGHT = 44;
 
 export default {
@@ -156,7 +159,7 @@ export default {
     onsale,
     infoCollection,
   },
-  mixins: [redirectMixin, getCouponMixin, getActivityMixin],
+  mixins: [redirectMixin, getCouponMixin, getActivityMixin, collectUserInfo],
   props: ['details', 'planDetails'],
   data() {
     return {
@@ -182,9 +185,12 @@ export default {
       isManualSwitch: false,
       classroomSettings: {},
       isShowForm: false,
-      userInfoCellect: {},
-      userInfoCellectForm: {},
     };
+  },
+  watch: {
+    $route(to, from) {
+      this.resetFrom();
+    },
   },
   computed: {
     ...mapState(['couponSwitch', 'user']),
@@ -246,7 +252,6 @@ export default {
     });
   },
   mounted() {
-    // 获取促销优惠券
     if (this.couponSwitch) {
       Api.searchCoupon({
         params: {
@@ -289,6 +294,9 @@ export default {
     window.removeEventListener('scroll', this.handleScroll);
   },
   methods: {
+    ...mapMutations('classroom', {
+      setCurrentJoinClass: types.SET_CURRENT_JOIN_CLASS,
+    }),
     onTabClick(index, title) {
       this.isManualSwitch = true;
 
@@ -388,6 +396,8 @@ export default {
         },
       })
         .then(res => {
+          this.setCurrentJoinClass(true);
+          Toast.clear();
           this.details.joinStatus = res;
         })
         .catch(err => {
@@ -400,60 +410,35 @@ export default {
     sellOut() {
       this.isEmpty = true;
     },
-    collectUseInfoEvent() {
-      const hasUserInfoCellectForm = Object.keys(this.userInfoCellectForm)
-        .length;
-      if (hasUserInfoCellectForm) {
-        this.isShowForm = true;
-        return;
-      }
-      this.getInfoCollectionEvent();
-    },
-    //  根据购买前后判断是否需要采集用户信息
-    getInfoCollectionEvent() {
-      Toast.loading({
-        message: '加载中...',
-        forbidClick: true,
-      });
-      const query = {
-        action: this.accessToJoin ? 'buy_before' : 'buy_after',
-      };
-      const params = {
+    getParamsList() {
+      this.paramsList = {
+        action: 'buy_before',
         targetType: 'classroom',
         targetId: this.details.classId,
       };
-      Api.getInfoCollectionEvent({
-        query,
-        params,
-      })
-        .then(res => {
-          console.log(res);
-          if (Object.keys(res).length) {
-            this.userInfoCellect = { ...res };
-            this.getInfoCollectionForm();
-          }
-          this.joinFreeClass();
-        })
-        .catch(err => {
-          console.error(err);
-        });
     },
-    // 根据事件id获取表单
-    getInfoCollectionForm() {
-      const query = {
-        eventId: this.userInfoCellect.id,
-      };
-      Api.getInfoCollectionForm({
-        query,
-      })
-        .then(res => {
-          this.userInfoCellectForm = { ...res };
-          this.isShowForm = true;
-          Toast.clear();
-        })
-        .catch(err => {
-          console.error(err);
-        });
+    collectUseInfoEvent() {
+      if (this.hasUserInfoCollectForm) {
+        this.isShowForm = true;
+        return;
+      }
+      Toast.loading({
+        duration: 0,
+        message: '加载中...',
+        forbidClick: true,
+      });
+      this.getParamsList();
+      this.getInfoCollectionEvent(this.paramsList).then(res => {
+        if (Object.keys(res).length) {
+          this.userInfoCollect = res;
+          this.getInfoCollectionForm(res.id).then(res => {
+            this.isShowForm = true;
+            Toast.clear();
+          });
+          return;
+        }
+        this.joinFreeClass();
+      });
     },
   },
 };

@@ -1,6 +1,6 @@
 <template>
   <div class="info-collection">
-    <van-form ref="infoCellectForm">
+    <van-form ref="infoCollectForm">
       <template v-for="(item, index) in rule">
         <!-- text ，number -->
         <template v-if="item.type === 'input' || item.type === 'textarea'">
@@ -46,8 +46,7 @@
           <van-field
             :key="index"
             readonly
-            right-icon=" iconfangxiang my_setting-more-special"
-            icon-prefix="iconfont"
+            right-icon="arrow"
             v-model="item.value"
             :name="item.field"
             :label="item.title"
@@ -55,7 +54,6 @@
             :placeholder="getPlaceholder(item)"
             :error="errorRule[index].error"
             :error-message="errorRule[index].errorMessage"
-            @blur="checkField(index, item.value, item.validate)"
             @click="showPicker(item, index)"
           />
         </template>
@@ -356,7 +354,7 @@ export default {
       type: Array,
       default: () => rule,
     },
-    userInfoCellectForm: {
+    userInfoCollectForm: {
       type: Object,
       default: () => {},
     },
@@ -370,7 +368,7 @@ export default {
       birthtDateSelect: {
         minDate: new Date(1900, 1, 1),
         maxDate: new Date(),
-        birthtDate: new Date(),
+        birthtDate: new Date(1990, 0, 1),
         show: false,
       },
       areaSelect: {
@@ -385,7 +383,7 @@ export default {
   },
   computed: {
     isAllowSkip() {
-      return this.userInfoCellectForm.allowSkip;
+      return this.userInfoCollectForm.allowSkip;
     },
   },
   watch: {},
@@ -408,7 +406,7 @@ export default {
       const formData = {};
       for (let i = 0; i < this.rule.length; i++) {
         if (!this.checkField(i, this.rule[i].value, this.rule[i].validate)) {
-          this.$refs.infoCellectForm.scrollToField(this.rule[i].field);
+          this.$refs.infoCollectForm.scrollToField(this.rule[i].field);
           return;
         }
         formData[this.rule[i].field] = this.rule[i].value;
@@ -488,7 +486,6 @@ export default {
       if (!validate) {
         return;
       }
-      // console.log('aaa');
       for (let i = 0; i < validate.length; i++) {
         if (validate[i].min && value.length < validate[i].min) {
           console.log(i);
@@ -551,10 +548,15 @@ export default {
         'value',
         this.formatDate(this.birthtDateSelect.birthtDate),
       );
-      // this.rule[currentSelectIndex].value = this.formatDate(this.birthtDate);
       this.birthCancel();
     },
     birthCancel() {
+      const currentSelectIndex = this.currentSelectIndex;
+      this.checkField(
+        currentSelectIndex,
+        this.rule[currentSelectIndex].value,
+        this.rule[currentSelectIndex].validate,
+      );
       this.birthtDateSelect.show = false;
     },
     areaConfirm(val) {
@@ -571,11 +573,17 @@ export default {
       this.areaCancel();
     },
     areaCancel() {
+      const currentSelectIndex = this.currentSelectIndex;
+      this.checkField(
+        currentSelectIndex,
+        this.rule[currentSelectIndex].value,
+        this.rule[currentSelectIndex].validate,
+      );
       this.areaSelect.show = false;
     },
     setInfoCollection(formData) {
       const data = {
-        eventId: this.userInfoCellectForm.eventId,
+        eventId: this.userInfoCollectForm.eventId,
         ...formData,
       };
       Api.setInfoCollection({

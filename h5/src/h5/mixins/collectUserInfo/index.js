@@ -1,18 +1,19 @@
 import { Toast } from 'vant';
 import Api from '@/api';
+
 export default {
   data() {
     return {
-      userInfoCellect: null,
-      userInfoCellectForm: {},
-      isReqUserInfoCellect: false,
-      isRequserInfoCellectForm: false,
+      isReqUserInfoCollect: false,
+      isRequserInfoCollectForm: false,
       needCollectUserInfo: false,
+      userInfoCollect: null,
+      userInfoCollectForm: {},
     };
   },
   computed: {
-    hasUserInfoCellectForm() {
-      return Object.keys(this.userInfoCellectForm).length > 0;
+    hasUserInfoCollectForm() {
+      return Object.keys(this.userInfoCollectForm).length > 0;
     },
   },
   methods: {
@@ -33,14 +34,14 @@ export default {
           params,
         })
           .then(res => {
-            this.userInfoCellect = res;
+            this.userInfoCollect = res;
             resolve(res);
           })
           .catch(err => {
             reject(err);
             Toast(err.message);
           });
-        this.isReqUserInfoCellect = true;
+        this.isReqUserInfoCollect = true;
       });
     },
     // 根据事件id获取表单
@@ -54,15 +55,22 @@ export default {
           query,
         })
           .then(res => {
-            this.userInfoCellectForm = { ...res };
+            this.userInfoCollectForm = { ...res };
             resolve(res);
           })
           .catch(err => {
             reject(err);
             Toast(err.message);
           });
-        this.isRequserInfoCellectForm = true;
+        this.isRequserInfoCollectForm = true;
       });
+    },
+    resetFrom() {
+      this.isReqUserInfoCollect = false;
+      this.isRequserInfoCollectForm = false;
+      this.needCollectUserInfo = false;
+      this.userInfoCollect = null;
+      this.userInfoCollectForm = {};
     },
   },
 };
