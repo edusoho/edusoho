@@ -2107,44 +2107,49 @@ class WebExtension extends \Twig_Extension
 
     public function informationCollectFormItems($eventId = 0)
     {
+        $selectFormItems = [];
+        if (!empty($eventId)) {
+            $selectFormItems = [];
+        }
+
         return [
             'base' => [
-                $this->getFormItemDataByCodeAndEventId(NameFormItem::FIELD, $eventId),
-                $this->getFormItemDataByCodeAndEventId(GenderFormItem::FIELD, $eventId),
-                $this->getFormItemDataByCodeAndEventId(AgeFormItem::FIELD, $eventId),
-                $this->getFormItemDataByCodeAndEventId(BirthdayFormItem::FIELD, $eventId),
-                $this->getFormItemDataByCodeAndEventId(IdcardFormItem::FIELD, $eventId),
+                $this->getFormItemDataByCodeWithSelectedItems(NameFormItem::FIELD, $selectFormItems),
+                $this->getFormItemDataByCodeWithSelectedItems(GenderFormItem::FIELD, $selectFormItems),
+                $this->getFormItemDataByCodeWithSelectedItems(AgeFormItem::FIELD, $selectFormItems),
+                $this->getFormItemDataByCodeWithSelectedItems(BirthdayFormItem::FIELD, $selectFormItems),
+                $this->getFormItemDataByCodeWithSelectedItems(IdcardFormItem::FIELD, $selectFormItems),
             ],
             'contact' => [
-                $this->getFormItemDataByCodeAndEventId(PhoneFormItem::FIELD, $eventId),
-                $this->getFormItemDataByCodeAndEventId(WechatFormItem::FIELD, $eventId),
-                $this->getFormItemDataByCodeAndEventId(QQFormItem::FIELD, $eventId),
-                $this->getFormItemDataByCodeAndEventId(WeiboFormItem::FIELD, $eventId),
-                $this->getFormItemDataByCodeAndEventId(EmailFormItem::FIELD, $eventId),
-                $this->getFormItemDataByCodeAndEventId(ProvinceCityAreaFormItem::FIELD, $eventId),
-                $this->getFormItemDataByCodeAndEventId(AddressDetailFormItem::FIELD, $eventId),
+                $this->getFormItemDataByCodeWithSelectedItems(PhoneFormItem::FIELD, $selectFormItems),
+                $this->getFormItemDataByCodeWithSelectedItems(WechatFormItem::FIELD, $selectFormItems),
+                $this->getFormItemDataByCodeWithSelectedItems(QQFormItem::FIELD, $selectFormItems),
+                $this->getFormItemDataByCodeWithSelectedItems(WeiboFormItem::FIELD, $selectFormItems),
+                $this->getFormItemDataByCodeWithSelectedItems(EmailFormItem::FIELD, $selectFormItems),
+                $this->getFormItemDataByCodeWithSelectedItems(ProvinceCityAreaFormItem::FIELD, $selectFormItems),
+                $this->getFormItemDataByCodeWithSelectedItems(AddressDetailFormItem::FIELD, $selectFormItems),
             ],
             'company' => [
-                $this->getFormItemDataByCodeAndEventId(OccupationFormItem::FIELD, $eventId),
-                $this->getFormItemDataByCodeAndEventId(CompanyFormItem::FIELD, $eventId),
-                $this->getFormItemDataByCodeAndEventId(PositionFormItem::FIELD, $eventId),
+                $this->getFormItemDataByCodeWithSelectedItems(OccupationFormItem::FIELD, $selectFormItems),
+                $this->getFormItemDataByCodeWithSelectedItems(CompanyFormItem::FIELD, $selectFormItems),
+                $this->getFormItemDataByCodeWithSelectedItems(PositionFormItem::FIELD, $selectFormItems),
 
             ],
             'school' => [
-                $this->getFormItemDataByCodeAndEventId(SchoolFormItem::FIELD, $eventId),
-                $this->getFormItemDataByCodeAndEventId(GradeFormItem::FIELD, $eventId),
-                $this->getFormItemDataByCodeAndEventId(ClassFormItem::FIELD, $eventId),
+                $this->getFormItemDataByCodeWithSelectedItems(SchoolFormItem::FIELD, $selectFormItems),
+                $this->getFormItemDataByCodeWithSelectedItems(GradeFormItem::FIELD, $selectFormItems),
+                $this->getFormItemDataByCodeWithSelectedItems(ClassFormItem::FIELD, $selectFormItems),
 
             ],
             'other' => [
-                $this->getFormItemDataByCodeAndEventId(CountryFormItem::FIELD, $eventId),
-                $this->getFormItemDataByCodeAndEventId(LanguageFormItem::FIELD, $eventId),
-                $this->getFormItemDataByCodeAndEventId(InterestFormItem::FIELD, $eventId),
+                $this->getFormItemDataByCodeWithSelectedItems(CountryFormItem::FIELD, $selectFormItems),
+                $this->getFormItemDataByCodeWithSelectedItems(LanguageFormItem::FIELD, $selectFormItems),
+                $this->getFormItemDataByCodeWithSelectedItems(InterestFormItem::FIELD, $selectFormItems),
             ],
         ];
     }
 
-    private function getFormItemDataByCodeAndEventId($code, $eventId)
+    private function getFormItemDataByCodeWithSelectedItems($code, $eventId)
     {
         if (empty($eventId)) {
             return FormItemFectory::create($code)->getData();
