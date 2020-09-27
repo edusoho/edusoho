@@ -306,7 +306,7 @@ class OverviewStudentExporterTest extends BaseTestCase
 
         $this->assertArrayEquals(
             [
-                'test1'."\t", '50%', '学习中', '未开始',
+                'test1', '50%', '学习中', '未开始',
             ], $data[0]
         );
         $this->assertArrayEquals(
