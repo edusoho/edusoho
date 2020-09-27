@@ -10080,7 +10080,7 @@ admin_v2.information_collect.chooser.delete_item: Remove
 admin_v2.information_collect.chooser.tips: There is already a conflicting association
 admin_v2.information_collect.chooser.unbind_item: Unbind conficting association
 admin_v2.information_collect.chooser.empty: Empty
-
+admin_v2.information_collect.form_items.required: Required
 
 
 

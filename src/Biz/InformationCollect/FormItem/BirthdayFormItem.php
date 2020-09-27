@@ -8,14 +8,14 @@ class BirthdayFormItem extends FormItem
 
     const TITLE = '生日';
 
-    const FILED = 'birthday';
+    const FIELD = 'birthday';
 
     public function getData()
     {
         return [
             'type' => self::TYPE,
             'title' => self::TITLE,
-            'field' => self::FILED,
+            'field' => self::FIELD,
             'value' => $this->value,
             'props' => [
                 'type' => 'date',

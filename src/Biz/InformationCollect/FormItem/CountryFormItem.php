@@ -8,14 +8,14 @@ class CountryFormItem extends FormItem
 
     const TITLE = '国家';
 
-    const FILED = 'country';
+    const FIELD = 'country';
 
     public function getData()
     {
         return [
             'type' => self::TYPE,
             'title' => self::TITLE,
-            'field' => self::FILED,
+            'field' => self::FIELD,
             'value' => $this->value,
             'validate' => [
                 ['required' => $this->required, 'message' => self::TITLE.'不能为空'],

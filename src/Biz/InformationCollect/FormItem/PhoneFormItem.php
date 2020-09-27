@@ -8,14 +8,14 @@ class PhoneFormItem extends FormItem
 
     const TITLE = '手机号码';
 
-    const FILED = 'phone';
+    const FIELD = 'phone';
 
     public function getData()
     {
         return [
             'type' => self::TYPE,
             'title' => self::TITLE,
-            'field' => self::FILED,
+            'field' => self::FIELD,
             'value' => $this->value,
             'props' => [
                 'type' => 'number',

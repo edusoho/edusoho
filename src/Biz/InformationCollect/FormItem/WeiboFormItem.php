@@ -8,14 +8,14 @@ class WeiboFormItem extends FormItem
 
     const TITLE = '微博号';
 
-    const FILED = 'weibo';
+    const FIELD = 'weibo';
 
     public function getData()
     {
         return [
             'type' => self::TYPE,
             'title' => self::TITLE,
-            'field' => self::FILED,
+            'field' => self::FIELD,
             'value' => $this->value,
             'validate' => [
                 ['required' => $this->required, 'message' => self::TITLE.'不能为空'],

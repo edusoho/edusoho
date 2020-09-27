@@ -8,14 +8,14 @@ class GenderFormItem extends FormItem
 
     const TITLE = '性别';
 
-    const FILED = 'gender';
+    const FIELD = 'gender';
 
     public function getData()
     {
         return [
             'type' => self::TYPE,
             'title' => self::TITLE,
-            'field' => self::FILED,
+            'field' => self::FIELD,
             'value' => empty($this->value) ? '男' : $this->value,
             'options' => [
                 ['value' => '男', 'label' => '男'],

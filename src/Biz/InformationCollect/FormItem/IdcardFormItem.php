@@ -8,14 +8,14 @@ class IdcardFormItem extends FormItem
 
     const TITLE = '身份证号';
 
-    const FILED = 'idcard';
+    const FIELD = 'idcard';
 
     public function getData()
     {
         return [
             'type' => self::TYPE,
             'title' => self::TITLE,
-            'field' => self::FILED,
+            'field' => self::FIELD,
             'value' => $this->value,
             'props' => [
                 'placeholder' => '仅支持中国大陆身份证号',

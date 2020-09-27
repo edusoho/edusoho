@@ -8,14 +8,14 @@ class LanguageFormItem extends FormItem
 
     const TITLE = '语言';
 
-    const FILED = 'language';
+    const FIELD = 'language';
 
     public function getData()
     {
         return [
             'type' => self::TYPE,
             'title' => self::TITLE,
-            'field' => self::FILED,
+            'field' => self::FIELD,
             'value' => $this->value,
             'validate' => [
                 ['required' => $this->required, 'message' => self::TITLE.'不能为空'],

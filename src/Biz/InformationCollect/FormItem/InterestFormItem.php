@@ -8,14 +8,14 @@ class InterestFormItem extends FormItem
 
     const TITLE = '兴趣';
 
-    const FILED = 'interest';
+    const FIELD = 'interest';
 
     public function getData()
     {
         return [
             'type' => self::TYPE,
             'title' => self::TITLE,
-            'field' => self::FILED,
+            'field' => self::FIELD,
             'value' => $this->value,
             'validate' => [
                 ['required' => $this->required, 'message' => self::TITLE.'不能为空'],
