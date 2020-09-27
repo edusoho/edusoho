@@ -8,14 +8,14 @@ class ProvinceCityAreaFormItem extends FormItem
 
     const TITLE = '省市区县';
 
-    const FILED = 'province_city_area';
+    const FIELD = 'province_city_area';
 
     public function getData()
     {
         return [
             'type' => self::TYPE,
             'title' => self::TITLE,
-            'field' => self::FILED,
+            'field' => self::FIELD,
             'value' => empty($this->value) ? [] : $this->value,
             'props' => [
                 'options' => [],

@@ -8,14 +8,14 @@ class WechatFormItem extends FormItem
 
     const TITLE = '微信号';
 
-    const FILED = 'wechat';
+    const FIELD = 'wechat';
 
     public function getData()
     {
         return [
             'type' => self::TYPE,
             'title' => self::TITLE,
-            'field' => self::FILED,
+            'field' => self::FIELD,
             'value' => $this->value,
             'validate' => [
                 ['required' => $this->required, 'message' => self::TITLE.'不能为空'],

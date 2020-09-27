@@ -11454,6 +11454,13 @@ admin_v2.information_collect.chooser.delete_item: 移除本次采集
 admin_v2.information_collect.chooser.tips: 已存在冲突的关联
 admin_v2.information_collect.chooser.unbind_item: 关联到本次采集
 admin_v2.information_collect.chooser.empty: 暂无数据
+admin_v2.information_collect.form_items.required: 必填项
+admin_v2.information_collect.form_items.select_group.base_info: 基本信息
+admin_v2.information_collect.form_items.select_group.contact_info: 联系信息
+admin_v2.information_collect.form_items.select_group.company_info: 公司信息
+admin_v2.information_collect.form_items.select_group.school_info: 学校信息
+admin_v2.information_collect.form_items.select_group.other_info: 其它信息
+
 
 
 

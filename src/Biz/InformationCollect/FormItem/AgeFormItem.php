@@ -8,14 +8,14 @@ class AgeFormItem extends FormItem
 
     const TITLE = '年龄';
 
-    const FILED = 'age';
+    const FIELD = 'age';
 
     public function getData()
     {
         return [
             'type' => self::TYPE,
             'title' => self::TITLE,
-            'field' => self::FILED,
+            'field' => self::FIELD,
             'value' => $this->value,
             'props' => [
                 'type' => 'number',

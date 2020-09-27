@@ -10080,6 +10080,12 @@ admin_v2.information_collect.chooser.delete_item: Remove
 admin_v2.information_collect.chooser.tips: There is already a conflicting association
 admin_v2.information_collect.chooser.unbind_item: Unbind conficting association
 admin_v2.information_collect.chooser.empty: Empty
+admin_v2.information_collect.form_items.required: Required
+admin_v2.information_collect.form_items.select_group.base_info: Base Info
+admin_v2.information_collect.form_items.select_group.contact_info: Contact Info
+admin_v2.information_collect.form_items.select_group.company_info: Company Info
+admin_v2.information_collect.form_items.select_group.school_info: School Info
+admin_v2.information_collect.form_items.select_group.other_info: Other
 
 
 

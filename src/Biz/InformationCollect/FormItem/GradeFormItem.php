@@ -8,14 +8,14 @@ class GradeFormItem extends FormItem
 
     const TITLE = '年级';
 
-    const FILED = 'grade';
+    const FIELD = 'grade';
 
     public function getData()
     {
         return [
             'type' => self::TYPE,
             'title' => self::TITLE,
-            'field' => self::FILED,
+            'field' => self::FIELD,
             'value' => $this->value,
             'validate' => [
                 ['required' => $this->required, 'message' => self::TITLE.'不能为空'],

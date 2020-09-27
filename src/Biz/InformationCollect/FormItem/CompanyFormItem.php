@@ -8,14 +8,14 @@ class CompanyFormItem extends FormItem
 
     const TITLE = '公司';
 
-    const FILED = 'company';
+    const FIELD = 'company';
 
     public function getData()
     {
         return [
             'type' => self::TYPE,
             'title' => self::TITLE,
-            'field' => self::FILED,
+            'field' => self::FIELD,
             'value' => $this->value,
             'validate' => [
                 ['required' => $this->required, 'message' => self::TITLE.'不能为空'],

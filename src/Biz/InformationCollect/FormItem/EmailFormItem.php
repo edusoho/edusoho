@@ -8,14 +8,14 @@ class EmailFormItem extends FormItem
 
     const TITLE = 'Email';
 
-    const FILED = 'email';
+    const FIELD = 'email';
 
     public function getData()
     {
         return [
             'type' => self::TYPE,
             'title' => self::TITLE,
-            'field' => self::FILED,
+            'field' => self::FIELD,
             'value' => $this->value,
             'validate' => [
                 ['required' => $this->required, 'message' => self::TITLE.'不能为空'],

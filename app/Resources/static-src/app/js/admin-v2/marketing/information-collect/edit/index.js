@@ -1,6 +1,7 @@
 import notify from 'common/notify';
 import 'store';
 import './location';
+import './form'
 
 clearInformationCollectStorage();
 let $form = $('#information-collect-form');
@@ -127,6 +128,21 @@ function getFormData() {
         data.courseIds = $('.js-checkbox-group .action-type-group-part').find('.target-course:checked').length ? $('input[name="courseIds"]').val() : [];
         data.classroomIds = $('.js-checkbox-group .action-type-group-part').find('.target-classroom:checked').length ? $('input[name="classroomIds"]').val() : [];
     }
+
+    data.items = [];
+
+    let i = 1;
+    $.each($('.list-group-item'), function (index, value) {
+        if ($(value).data('selected')) {
+            data.items.push({
+                code: $(value).data('code'),
+                labelName: $(value).data('labelName'),
+                required: $(value).data('required') ? 1 : 0,
+                seq: i
+            });
+            i++;
+        }
+    });
 
     return data;
 }

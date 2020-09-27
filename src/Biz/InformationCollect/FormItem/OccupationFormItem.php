@@ -8,14 +8,14 @@ class OccupationFormItem extends FormItem
 
     const TITLE = '职业';
 
-    const FILED = 'occupation';
+    const FIELD = 'occupation';
 
     public function getData()
     {
         return [
             'type' => self::TYPE,
             'title' => self::TITLE,
-            'field' => self::FILED,
+            'field' => self::FIELD,
             'value' => $this->value,
             'validate' => [
                 ['required' => $this->required, 'message' => self::TITLE.'不能为空'],

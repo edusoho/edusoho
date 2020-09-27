@@ -8,14 +8,14 @@ class ClassFormItem extends FormItem
 
     const TITLE = '班级';
 
-    const FILED = 'class';
+    const FIELD = 'class';
 
     public function getData()
     {
         return [
             'type' => self::TYPE,
             'title' => self::TITLE,
-            'field' => self::FILED,
+            'field' => self::FIELD,
             'value' => $this->value,
             'validate' => [
                 ['required' => $this->required, 'message' => self::TITLE.'不能为空'],

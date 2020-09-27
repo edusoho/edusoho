@@ -8,14 +8,14 @@ class QQFormItem extends FormItem
 
     const TITLE = 'QQ号';
 
-    const FILED = 'qq';
+    const FIELD = 'qq';
 
     public function getData()
     {
         return [
             'type' => self::TYPE,
             'title' => self::TITLE,
-            'field' => self::FILED,
+            'field' => self::FIELD,
             'value' => $this->value,
             'validate' => [
                 ['required' => $this->required, 'message' => self::TITLE.'不能为空'],

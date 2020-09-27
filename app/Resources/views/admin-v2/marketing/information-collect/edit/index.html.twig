@@ -6,7 +6,7 @@
 {% set hasCheckedAll = (event and (allCourseLocation.eventId|default('') == event.id or allClassroomLocation.eventId|default('') == event.id))|default(false) %}
 {% set hasOthersCheckedAllCourse = (allCourseLocation|default([]) and allCourseLocation.eventId != event.id|default(0))|default(false) %}
 {% set hasOthersCheckedAllClassroom = (allClassroomLocation|default([]) and allClassroomLocation.eventId != event.id|default(0))|default(false) %}
-
+{% set formFields = information_collect_form_items(event.id|default(0)) %}
 
 {% do script(['libs/jquery-validation.js','app/js/admin-v2/marketing/information-collect/edit/index.js']) %}
 {% block page_title %}
@@ -98,12 +98,14 @@
 					<div class="cd-panel">
 						<div class="cd-panel-body form-items-panel">
 							<div class="cd-alert cd-alert-warning text-center">{{ 'admin_v2.information_collect.edit.form_items.warning_tip'|trans }}</div>
+							{% include "admin-v2/marketing/information-collect/edit/form/form-items-show.html.twig" %}
 						</div>
 					</div>
 				</div>
 				<div class="col-md-3">
-					<div class="cd-panel">
-						<div class="cd-panel-body"></div>
+					<div class="cd-panel bg-gray-lighter">
+						<div class="cd-panel-body">
+						{% include "admin-v2/marketing/information-collect/edit/form/form-items-select.html.twig" %}</div>
 					</div>
 				</div>
 			</div>
