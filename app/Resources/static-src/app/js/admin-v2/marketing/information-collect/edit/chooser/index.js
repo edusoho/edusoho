@@ -11,7 +11,6 @@ if (store.get(storeName, []).length > 0) {
     initChecked(store.get(storeName, []));
 }
 
-console.log($('input[name="' + type + 'Ids"]').val());
 if ($('input[name="' + type + 'Ids"]').val() && !store.get(storeName, []).length) {
     initChecked(store.get(storeName, []));
 }

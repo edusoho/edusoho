@@ -61,8 +61,8 @@ class InformationCollectController extends BaseController
             return $this->createJsonResponse(true);
         }
 
-        $allCourseLocation  = $this->getEventService()->searchLocations(['targetType' => 'course', 'targetId' => 0], [], 0, 1);
-        $allClassroomLocation  = $this->getEventService()->searchLocations(['targetType' => 'classroom', 'targetId' => 0], [], 0, 1);
+        $allCourseLocation  = $this->getEventService()->searchLocations(['targetType' => 'course', 'targetId_LTE' => 0], [], 0, 1);
+        $allClassroomLocation  = $this->getEventService()->searchLocations(['targetType' => 'classroom', 'targetId_LTE' => 0], [], 0, 1);
 
         return $this->render('admin-v2/marketing/information-collect/edit/index.html.twig', [
             'allCourseLocation' => empty($allCourseLocation) ? [] : $allCourseLocation[0],
@@ -101,8 +101,8 @@ class InformationCollectController extends BaseController
             }
         }
 
-        $allCourseLocation  = $this->getEventService()->searchLocations(['targetType' => 'course', 'targetId' => 0], [], 0, 1);
-        $allClassroomLocation  = $this->getEventService()->searchLocations(['targetType' => 'classroom', 'targetId' => 0], [], 0, 1);
+        $allCourseLocation  = $this->getEventService()->searchLocations(['targetType' => 'course', 'targetId_LTE' => '0'], [], 0, 1);
+        $allClassroomLocation  = $this->getEventService()->searchLocations(['targetType' => 'classroom', 'targetId_LTE' => '0'], [], 0, 1);
 
         return $this->render('admin-v2/marketing/information-collect/edit/index.html.twig', [
             'event' => $event,

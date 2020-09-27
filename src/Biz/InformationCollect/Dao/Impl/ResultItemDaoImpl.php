@@ -18,6 +18,7 @@ class ResultItemDaoImpl extends AdvancedDaoImpl implements ResultItemDao
     {
         return [
             'serializes' => [
+                'value'=> 'json',
             ],
             'orderbys' => [
                 'id',

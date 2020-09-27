@@ -16,7 +16,7 @@ class EventServiceImpl extends BaseService implements EventService
     public function createEventWithLocations(array $fields)
     {
         if (!ArrayToolkit::requireds($fields, ['title', 'action', 'formTitle', 'status', 'allowSkip'])) {
-            $this->createServiceException(CommonException::ERROR_PARAMETER_MISSING());
+            throw $this->createServiceException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
         $event = ArrayToolkit::filter($fields, [
@@ -40,7 +40,7 @@ class EventServiceImpl extends BaseService implements EventService
     {
         $event = $this->getEventDao()->get($id);
         if (empty($event)) {
-            $this->createServiceException(InformationCollectException::NOTFOUND_COLLECTION());
+            throw $this->createServiceException(InformationCollectException::NOTFOUND_COLLECTION());
         }
 
         $updateEventFields = ArrayToolkit::filter($updateFields, [
@@ -149,56 +149,58 @@ class EventServiceImpl extends BaseService implements EventService
         return $locationInfo;
     }
 
-    public function editEventLocations($event, $locationFields)
+    private function editEventLocations($event, $locationFields)
     {
         if (empty($locationFields['targetTypes'])) {
             return;
         }
 
-        if (!ArrayToolkit::requireds($locationFields, ['locationType'])) {
-            $this->createServiceException(CommonException::ERROR_PARAMETER_MISSING());
+        $deleteTypes = array_diff([self::TARGET_TYPE_COURSE, self::TARGET_TYPE_CLASSROOM], $locationFields['targetTypes']);
+        if (!empty($deleteTypes)) {
+            $this->getLocationDao()->batchDelete(['targetTypes' => $deleteTypes, 'eventId' => $event['id']]);
         }
 
         foreach ($locationFields['targetTypes'] as $type) {
-            if (!in_array($type, [self::TARGET_TYPE_CLASSROOM, self::TARGET_TYPE_COURSE])) {
-                continue;
-            }
             if ($type === self::TARGET_TYPE_COURSE) {
-                $targetIds = empty($locationFields['courseIds']) ? [] : json_decode($locationFields['courseIds'], true);
+                $targetIds = empty($locationFields['courseIds']) ? [] : (is_array($locationFields['courseIds']) ? $locationFields['courseIds'] : json_decode($locationFields['courseIds'], true));
             } else {
-                $targetIds = empty($locationFields['classroomIds']) ? [] : json_decode($locationFields['classroomIds'], true);
+                $targetIds = empty($locationFields['classroomIds']) ? [] : (is_array($locationFields['classroomIds']) ? $locationFields['classroomIds'] : json_decode($locationFields['classroomIds'], true));
             }
 
-            if (empty($targetIds)) {
-                continue;
-            }
-
-            // if ($locationFields['locationType'] == 'all') {
-
-            // } elseif($locationFields['locationType'] == 'part') {
-                $this->batchDeleteLocations($event['id'], $type, $targetIds);
-                $this->batchCreateLocations($event['id'], $event['action'], $type, $targetIds);
-            // }
+            $this->batchUnbindOtherEventLocations($event['id'], $type, $targetIds);
+            $this->batchUpdateEventLocations($event['id'], $event['action'], $type, $targetIds);
         }
     }
 
-    private function batchDeleteLocations($eventId, $targetType, $targetIds)
-    {
-        $existedLocations = $this->getLocationDao()->search(['targetType' => $targetType, 'targetIds' => $targetIds, ['excludeEventId' => $eventId]], [], 0, count($targetIds), ['targetId']);
-        $existedLocationsTargetIds = array_values(array_column($existedLocations, 'targetId'));
-        $deleteLocationsTargetIds = array_intersect($targetIds, $existedLocationsTargetIds);
-        if (!empty($deleteLocationsTargetIds)) {
-            $this->getLocationDao()->batchDelete(['targetType' => $targetType, 'targetIds' => $deleteLocationsTargetIds]);
-        }
-    }
-
-    private function batchCreateLocations($eventId, $action, $targetType, array $targetIds)
+    private function batchUnbindOtherEventLocations($eventId, $targetType, $targetIds)
     {
         if (empty($targetIds)) {
             return;
         }
-        $existedLocations = $this->getLocationDao()->search(['targetType' => $targetType, 'targetIds' => $targetIds, ['eventId' => $eventId]], [], 0, count($targetIds), ['targetId']);
+        $otherBindedLocationConditions = ['targetType' => $targetType, 'targetIds' => $targetIds, 'excludeEventId' => $eventId];
+        $otherBindedLocations = $this->getLocationDao()->search($otherBindedLocationConditions, [], 0, $this->getLocationDao()->count($otherBindedLocationConditions), ['id']);
+
+        if (!empty($otherBindedLocations)) {
+            $this->getLocationDao()->batchDelete(['ids' => array_values(array_column($otherBindedLocations, 'id'))]);
+        }
+    }
+
+    private function batchUpdateEventLocations($eventId, $action, $targetType, array $targetIds)
+    {
+        if (empty($targetIds)) {
+            return;
+        }
+
+        $conditions = ['targetType' => $targetType, 'eventId' => $eventId];
+        $existedLocations = $this->getLocationDao()->search($conditions, [], 0, $this->getLocationDao()->count($conditions), ['targetId']);
         $existedLocationsTargetIds = array_values(array_column($existedLocations, 'targetId'));
+
+        $deleteLocationTargetIds = array_diff($existedLocationsTargetIds, $targetIds);
+
+        if (!empty($deleteLocationTargetIds)) {
+            $this->getLocationDao()->batchDelete(['targetIds' => $deleteLocationTargetIds, 'targetType' => $targetType]);
+        }
+
         $newLocationsTargetIds = array_diff($targetIds, $existedLocationsTargetIds);
 
         $locations = [];
@@ -211,11 +213,9 @@ class EventServiceImpl extends BaseService implements EventService
             ];
         }
 
-        if (empty($locations)) {
-            return;
+        if (!empty($locations)) {
+            $this->getLocationDao()->batchCreate($locations);
         }
-
-        $this->getLocationDao()->batchCreate($locations);
     }
 
     public function searchLocations(array $conditions, array $orderBys, $start = 0, $limit = 20, $columns = [])

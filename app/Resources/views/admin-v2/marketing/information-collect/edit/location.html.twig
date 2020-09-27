@@ -1,9 +1,5 @@
-{% set hasCheckedAll = (event and (allCourseLocation.eventId|default('0') == event.id or allClassroomLocation.eventId|default('0') == event.id))|default(false) %}
-{% set hasOthersCheckedAllCourse = (allCourseLocation|default([]) and allCourseLocation.eventId != event.id|default(0))|default(false) %}
-{% set hasOthersCheckedAllClassroom = (allClassroomLocation|default([]) and allClassroomLocation.eventId != event.id|default(0))|default(false) %}
-
 <div class="radios">
-	<div class="action-type-group">
+	<div class="action-type-group action-type-group-all">
 		<label class="control-label text-left">
 			<input type="radio" name="locationType" value="all" {% if hasCheckedAll %} checked="checked" {% endif %}>
 			<span>{{ 'admin_v2.information_collect.edit.target_type.all'|trans }}</span>
@@ -13,7 +9,7 @@
 			<div class="js-target-type-checkbox-group {% if not hasCheckedAll %} hidden {% endif %}">
 				<div class="target-type-checkbox">
 					<label class="pll">
-						<input type="checkbox" class="targetTypes" name="targetTypes[course]" value="course" {% if hasOthersCheckedAllCourse %} disabled {% endif %} {% if locationInfo.courseIds|default([])|length %} checked="checked" {% endif %}>
+						<input type="checkbox" class="target-types-all target-course" name="targetTypes[]" value="course" {% if hasOthersCheckedAllCourse %} disabled {% endif %} {% if allCourseLocation.eventId|default(null) == event.id|default(0) %} checked="checked" {% endif %}>
 						<span class="{% if hasOthersCheckedAllCourse %} text-muted {% endif %}">{{ 'admin_v2.information_collect.edit.target_type.all_course'|trans }}</span>
 						<span class="text-muted display-inline {% if not hasOthersCheckedAllCourse %} hidden {% endif %}">
 							({{ 'admin_v2.information_collect.binded_tips'|trans }},<a href=''>{{ 'admin_v2.information_collect.more'|trans }}</a>)
@@ -22,7 +18,7 @@
 				</div>
 				<div class="target-type-checkbox">
 					<label class="pll">
-						<input type="checkbox" class="targetTypes" name="targetTypes[classroom]" value="classroom" {% if hasOthersCheckedAllClassroom %} disabled {% endif %} {% if locationInfo.classroomIds|default([])|length %} checked="checked" {% endif %}>
+						<input type="checkbox" class="target-types-all target-classroom" name="targetTypes[]" value="classroom" {% if hasOthersCheckedAllClassroom %} disabled {% endif %} {% if allClassroomLocation.eventId|default(null) == event.id|default(0) %} checked="checked" {% endif %}>
 						<span class="{% if hasOthersCheckedAllClassroom %} text-muted {% endif %}">{{ 'admin_v2.information_collect.edit.target_type.all_classroom'|trans }}</span>
 						<span class="text-muted display-inline {% if not hasOthersCheckedAllClassroom %} hidden {% endif %}">
 							({{ 'admin_v2.information_collect.binded_tips'|trans }},<a href=''>{{ 'admin_v2.information_collect.more'|trans }}</a>)
@@ -40,12 +36,14 @@
 			<div class="js-target-type-checkbox-group {% if hasCheckedAll %} hidden {% endif %}">
 				<div class="target-type-checkbox">
 					<label class="pll">
-						<input type="checkbox" class="targetTypes" name="targetTypes[course]" value="course" {% if not hasCheckedAll and locationInfo.courseIds|default([])|length %} checked="checked" {% endif %}>
+						<input type="checkbox" class="target-types-part target-course" name="targetTypes[]" value="course" {% if not hasCheckedAll and locationInfo.courseIds|default([])|length %} checked="checked" {% endif %}>
 						<span>{{ 'admin_v2.information_collect.edit.target_type.part_course'|trans }}</span>
 						<span class="display-inline">
 							{{ 'admin_v2.information_collect.selected_course_count'|trans }}<span class="selected-course-count">
 								{% if not hasCheckedAll %}
 									{{ locationInfo.courseIds|default([])|length }}
+								{% else %}
+									0
 								{% endif %}
 							</span>
 							[<a class="js-select-target" data-url="{{ path('admin_v2_information_collect_event_target_modal', {type: 'course', eventId:event.id|default(0)}) }}" data-toggle="modal" data-target="#modal">{{ 'admin_v2.information_collect.selecte_course'|trans }}]</a>
@@ -54,12 +52,14 @@
 				</div>
 				<div class="target-type-checkbox">
 					<label class="pll">
-						<input type="checkbox" class="targetTypes" name="targetTypes[classroom]" value="classroom" {% if not hasCheckedAll and locationInfo.classroomIds|default([])|length %} checked="checked" {% endif %}>
+						<input type="checkbox" class="target-types-part target-classroom" name="targetTypes[]" value="classroom" {% if not hasCheckedAll and locationInfo.classroomIds|default([])|length %} checked="checked" {% endif %}>
 						<span>{{ 'admin_v2.information_collect.edit.target_type.part_classroom'|trans }}</span>
 						<span class="display-inline">
 							{{ 'admin_v2.information_collect.selected_classroom_count'|trans }}<span class="selected-classroom-count">
 								{% if not hasCheckedAll %}
 									{{ locationInfo.classroomIds|default([])|length }}
+								{% else %}
+									0
 								{% endif %}
 							</span>
 							[<a class="js-select-target" data-url="{{ path('admin_v2_information_collect_event_target_modal', {type: 'classroom', eventId:event.id|default(0)}) }}" data-toggle="modal" data-target="#modal">{{ 'admin_v2.information_collect.selecte_classroom'|trans }}]</a>

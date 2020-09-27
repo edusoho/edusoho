@@ -37,11 +37,14 @@ let validator = $form.validate({
 
 $.validator.addMethod('checkoutTargetTypes', function (value, element) {
     if ($('input[name="locationType"]:checked').val() == 'all') {
-        return true;
+        let $checkedTargetTypes = $('input[name="locationType"]:checked').parents('.action-type-group').find('.target-types-all:checked');
+        if (!$checkedTargetTypes.length) {
+            return false;
+        }
     }
 
     if ($('input[name="locationType"]:checked').val() == 'part') {
-        let $checkedTargetTypes = $('.targetTypes:checked');
+        let $checkedTargetTypes = $('input[name="locationType"]:checked').parents('.action-type-group').find('.target-types-part:checked');
         if (!$checkedTargetTypes.length) {
             return false;
         }
@@ -57,7 +60,7 @@ $.validator.addMethod('checkSelectedCourseIds', function (value, element) {
     let result = true;
 
     if ($('input[name="locationType"]:checked').val() == 'part') {
-        let $checkedTargetTypes = $('input[name="locationType"]:checked').parents('.action-type-group').find('.targetTypes:checked');
+        let $checkedTargetTypes = $('input[name="locationType"]:checked').parents('.action-type-group').find('.target-types-part:checked');
         $.each($checkedTargetTypes, function (index, value) {
             if ($(value).val() == 'course') {
                 result = $('input[name="courseIds"]').val().length > 0;
@@ -76,8 +79,7 @@ $.validator.addMethod('checkSelectedClassroomIds', function (value, element) {
     let result = true;
 
     if ($('input[name="locationType"]:checked').val() == 'part') {
-        let $checkedTargetTypes = $('input[name="locationType"]:checked').parents('.action-type-group').find('.targetTypes:checked');
-        console.log($checkedTargetTypes);
+        let $checkedTargetTypes = $('input[name="locationType"]:checked').parents('.action-type-group').find('.target-types-part:checked');
         $.each($checkedTargetTypes, function (index, value) {
             if ($(value).val() == 'classroom') {
                 result = $('input[name="classroomIds"]').val().length > 0;
@@ -90,7 +92,6 @@ $.validator.addMethod('checkSelectedClassroomIds', function (value, element) {
 }, $.validator.format(Translator.trans('admin_v2.information_collect.chooser.target_classroom_hint')));
 
 $('.js-save-btn').on('click', (event) => {
-    console.log(getFormData());
     if (validator && validator.form()) {
         $.post(
             $form.data('url'), getFormData()
@@ -105,17 +106,26 @@ $('.js-save-btn').on('click', (event) => {
 
 function getFormData() {
     let data = {};
-
     $.each($form.serializeArray(), function (index, value) {
-        data[value.name] = value.value;
+        if (value.name != 'targetTypes[]') {
+            data[value.name] = value.value;
+        }
     });
 
     if (data.locationType == 'all') {
+        data.targetTypes = [
+            $('.js-checkbox-group .action-type-group-all').find('.target-course:checked').length ? 'course' : null,
+            $('.js-checkbox-group .action-type-group-all').find('.target-classroom:checked').length ? 'classroom' : null,
+        ];
         data.courseIds = JSON.stringify(['0']);
         data.classroomIds = JSON.stringify(['0']);
-    } else if (data.locationType == 'part') {
-        data.courseIds = $('input[name="locationType"]:checked').parents('.js-action-radio-group').find('input[name="courseIds"]').val();
-        data.classroomIds = $('input[name="locationType"]:checked').parents('.js-action-radio-group').find('input[name="classroomIds"]').val();
+    } else {
+        data.targetTypes = [
+            $('.js-checkbox-group .action-type-group-part').find('.target-course:checked').length ? 'course' : null,
+            $('.js-checkbox-group .action-type-group-part').find('.target-classroom:checked').length ? 'classroom' : null,
+        ];
+        data.courseIds = $('.js-checkbox-group .action-type-group-part').find('.target-course:checked').length ? $('input[name="courseIds"]').val() : [];
+        data.classroomIds = $('.js-checkbox-group .action-type-group-part').find('.target-classroom:checked').length ? $('input[name="classroomIds"]').val() : [];
     }
 
     return data;

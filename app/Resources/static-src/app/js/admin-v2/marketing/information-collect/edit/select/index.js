@@ -9,6 +9,10 @@ $('.select-target-modal').on('click', '.pagination li', (event) => {
     getCourseSets($(event.currentTarget).data('url'));
 });
 
+if (!store.get((storeName, []).length) && $('input[name="' + type + 'Ids"]').val()) {
+    store.set(storeName, JSON.parse($('input[name="' + type + 'Ids"]').val()));
+}
+
 if (store.get(storeName, []).length > 0) {
     getSelectedTargets($table.data('selectedUrl'));
 };
