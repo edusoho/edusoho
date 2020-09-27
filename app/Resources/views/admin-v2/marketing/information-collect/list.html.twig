@@ -1,6 +1,7 @@
 {% extends 'admin-v2/layout.html.twig' %}
 
 {% set menu = 'admin_v2_information_collect' %}
+
 {% set script_controller = 'invite/record' %}
 {% do script(['app/js/admin-v2/marketing/information-collect/index.js']) %}
 
@@ -17,7 +18,7 @@
     <button class="btn btn-primary" type="submit">{{'form.btn.search'|trans}}</button>
   </form>
 
-  <table class="table table-hover table-striped" id="collection-table">
+  <table class="table table-hover table-striped" id="collect-table">
     <thead>
     <tr>
       <th width="10%">{{'admin.information_collect.title_th'|trans}}</th>
@@ -32,7 +33,7 @@
     {% if events|default() %}
       {% for event in events|default() %}
         <tr>
-          <td>{{ event.title }}</td>
+          <td>{{ event.title | slice(0,10) }}{% if event.title|length >10 %}...{% endif %}</td>
           <td>
             {% set action = 'admin.information_collect.action.' ~ event.action %}
             {% set location = information_collect_location_info(event.id) %}
@@ -45,11 +46,11 @@
             {% set statusInfo = 'admin.information_collect.status.' ~ event.status %}
             {{ statusInfo|trans|raw }}
           </td>
-          <td>{{ collectedNum[event.id].collectNum|default(0) }}</td>
+          <td>{{ 'admin.information_collect.collected_num'|trans({'%collectedNum%':collectedNum[event.id].collectNum|default(0)}) }}</td>
           <td>
             <div class="btn-group">
-              <a href="" class="btn btn-default btn-sm">{{ 'admin.information_collect.operate.detail'|trans }}</a>
-              {% include 'admin-v2/widget/group-button.html.twig' with {parentCode: 'admin_v2_information_collect', group:'groupButton', collect: event} %} 
+              <a target="_blank" href="{{ path('admin_v2_information_collect_detail', {id: event.id}) }}" class="btn btn-default btn-sm">{{ 'admin.information_collect.operate.detail'|trans }}</a>
+              {% include 'admin-v2/widget/group-button.html.twig' with {parentCode: 'admin_v2_information_collect', group:'groupButton', collect: event} %}
             </div>
           </td>
         </tr>

@@ -22,13 +22,14 @@ class ItemDaoImpl extends AdvancedDaoImpl implements ItemDao
             'serializes' => [
             ],
             'orderbys' => [
-                'id',
+                'id', 'seq',
             ],
             'timestamps' => [
                 'createdTime',
             ],
             'conditions' => [
                 'id = :id',
+                'eventId = :eventId',
             ],
         ];
     }

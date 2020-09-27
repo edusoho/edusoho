@@ -185,6 +185,43 @@ class InformationCollectController extends BaseController
         );
     }
 
+    public function detailAction(Request $request, $id)
+    {
+        $event = $this->getEventService()->get($id);
+        if (empty($event)) {
+            $this->createNewException(InformationCollectException::NOTFOUND_COLLECTION());
+        }
+
+        $conditions = $request->query->all();
+        $conditions['eventId'] = $id;
+        $paginator = new Paginator(
+            $request,
+            $this->getResultService()->count($conditions),
+            20);
+
+        $collectedData = $this->getResultService()->searchCollectedData(
+            $conditions,
+            ['createdTime' => 'DESC'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($collectedData, 'userId'));
+        $userProfiles = $this->getUserService()->findUserProfilesByIds(ArrayToolkit::column($users, 'id'));
+
+        return $this->render('admin-v2/marketing/information-collect/detail.html.twig', [
+            'event' => $event,
+            'collectedNum' => $this->getResultService()->countGroupByEventId($id),
+            'creator' => $this->getUserService()->getUser($event['creator']),
+            'collectedData' => $collectedData,
+            'users' => ArrayToolkit::index($users, 'id'),
+            'profiles' => ArrayToolkit::index($userProfiles, 'id'),
+            'labels' => $this->getEventService()->findItemsByEventId($id),
+            'resultData' => $this->getResultService()->findResultDataByResultIds(ArrayToolkit::column($collectedData, 'id')),
+            'paginator' => $paginator,
+        ]);
+    }
+
     private function searchTargetsByTypeAndConditions($type, array $conditions,  $isAjax = false)
     {
         if (!in_array($type, [EventService::TARGET_TYPE_COURSE, EventService::TARGET_TYPE_CLASSROOM])) {

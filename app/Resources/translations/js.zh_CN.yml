@@ -1560,12 +1560,12 @@ admin_v2.certificate.record.audit.success_hint: 审核成功
 admin_v2.certificate.record.audit.failure_hint: 审核失败
 admin_v2.certificate.record.grant.issue_time_required: 请输入发证日期
 
-admin_v2.information-collection.close.hint: 确定关闭采集？关闭后，将停止采集用户信息。
-admin_v2.information-collection.open.hint: 确定开启采集？开启后，将开始采集用户信息。
-admin_v2.information-collection.close.success_hint: 采集关闭成功
-admin_v2.information-collection.close.failure_hint: 采集关闭失败
-admin_v2.information-collection.open.success_hint: 采集开启成功
-admin_v2.information-collection.open.failure_hint: 采集开启失败
+admin_v2.information_collect.close.hint: 确定关闭采集？关闭后，将停止采集用户信息。
+admin_v2.information_collect.open.hint: 确定开启采集？开启后，将开始采集用户信息。
+admin_v2.information_collect.close.success_hint: 采集关闭成功
+admin_v2.information_collect.close.failure_hint: 采集关闭失败
+admin_v2.information_collect.open.success_hint: 采集开启成功
+admin_v2.information_collect.open.failure_hint: 采集开启失败
 
 admin_v2.information_collect.chooser.tips: 已存在冲突的关联
 admin_v2.information_collect.chooser.success_hint: 选择成功

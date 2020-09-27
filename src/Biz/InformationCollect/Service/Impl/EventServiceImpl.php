@@ -137,7 +137,10 @@ class EventServiceImpl extends BaseService implements EventService
 
         $locations = $this->getLocationDao()->search(['eventId' => $id], [], 0, PHP_INT_MAX);
 
-        $locationInfo = [];
+        $locationInfo = [
+            'course' => [],
+            'classroom' => []
+        ];
         foreach ($locations as $location) {
             if ('course' == $location['targetType']) {
                 $locationInfo['course'][] = $location['targetId'];
@@ -161,6 +164,9 @@ class EventServiceImpl extends BaseService implements EventService
         }
 
         foreach ($locationFields['targetTypes'] as $type) {
+            if (!in_array($type, [self::TARGET_TYPE_COURSE, self::TARGET_TYPE_CLASSROOM])) {
+                continue;
+            }
             if ($type === self::TARGET_TYPE_COURSE) {
                 $targetIds = empty($locationFields['courseIds']) ? [] : (is_array($locationFields['courseIds']) ? $locationFields['courseIds'] : json_decode($locationFields['courseIds'], true));
             } else {

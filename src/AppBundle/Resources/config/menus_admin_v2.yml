@@ -588,7 +588,7 @@ admin_v2:
                                                     target: '_blank'
                                                 admin_v2_information_collect_close:
                                                     name: admin_v2.information_collect.operate.close_tab
-                                                    class: close-collection
+                                                    class: close-collect
                                                     router_params:
                                                         id: (collect.id)
                                                     group: groupButton
@@ -596,7 +596,7 @@ admin_v2:
                                                     visible: ( collect.status=='open' )
                                                 admin_v2_information_collect_open:
                                                     name: admin_v2.information_collect.operate.open_tab
-                                                    class: open-collection
+                                                    class: open-collect
                                                     router_params:
                                                         id: (collect.id)
                                                     group: groupButton
@@ -607,6 +607,13 @@ admin_v2:
                                                     router_params:
                                                         id: (collect.id)
                                                     group: groupButton
+                                                admin_v2_information_collect_detail:
+                                                    name: admin_v2.information_collect.detail
+                                                    router_name: admin_v2_information_collect_detail
+                                                    router_params:
+                                                      id: id
+                                                    disable: true
+                                                    target: '_blank'
                 # 渠道管理
                 admin_v2_channel_group:
                     name: admin_v2.channel.basic_group

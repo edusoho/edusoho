@@ -11,18 +11,23 @@
 					<label class="pll">
 						<input type="checkbox" class="target-types-all target-course" name="targetTypes[]" value="course" {% if hasOthersCheckedAllCourse %} disabled {% endif %} {% if allCourseLocation.eventId|default(null) == event.id|default(0) %} checked="checked" {% endif %}>
 						<span class="{% if hasOthersCheckedAllCourse %} text-muted {% endif %}">{{ 'admin_v2.information_collect.edit.target_type.all_course'|trans }}</span>
-						<span class="text-muted display-inline {% if not hasOthersCheckedAllCourse %} hidden {% endif %}">
-							({{ 'admin_v2.information_collect.binded_tips'|trans }},<a href=''>{{ 'admin_v2.information_collect.more'|trans }}</a>)
-						</span>
+						{% if  hasOthersCheckedAllCourse %}
+							<span class="text-muted display-inline">
+								({{ 'admin_v2.information_collect.binded_tips'|trans }},<a href="{{ path('admin_v2_information_collect_detail', {id: allCourseLocation.eventId}) }}">{{ 'admin_v2.information_collect.more'|trans }}</a>)
+							</span>
+						{% endif %}
 					</label>
 				</div>
 				<div class="target-type-checkbox">
 					<label class="pll">
 						<input type="checkbox" class="target-types-all target-classroom" name="targetTypes[]" value="classroom" {% if hasOthersCheckedAllClassroom %} disabled {% endif %} {% if allClassroomLocation.eventId|default(null) == event.id|default(0) %} checked="checked" {% endif %}>
 						<span class="{% if hasOthersCheckedAllClassroom %} text-muted {% endif %}">{{ 'admin_v2.information_collect.edit.target_type.all_classroom'|trans }}</span>
-						<span class="text-muted display-inline {% if not hasOthersCheckedAllClassroom %} hidden {% endif %}">
-							({{ 'admin_v2.information_collect.binded_tips'|trans }},<a href=''>{{ 'admin_v2.information_collect.more'|trans }}</a>)
-						</span>
+						{% if hasOthersCheckedAllClassroom %}
+							<span class="text-muted display-inline {% if not hasOthersCheckedAllClassroom %} hidden {% endif %}">
+								({{ 'admin_v2.information_collect.binded_tips'|trans }},<a href="{{ path('admin_v2_information_collect_detail', {id: allClassroomLocation.eventId}) }}">{{ 'admin_v2.information_collect.more'|trans }}</a>)
+							</span>
+						{% endif %}
+
 					</label>
 				</div>
 			</div>

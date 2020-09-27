@@ -1,6 +1,6 @@
 import notify from 'common/notify';
 
-export default class List {
+export default class ChangeStatus {
   constructor() {
     this.init();
   }
@@ -10,9 +10,8 @@ export default class List {
   }
 
   initEvent() {
-    let $table = $('#collect-table');
 
-    $table.on('click', '.close-collect', function () {
+    $('#close-collect').on('click', function () {
       if (!confirm(Translator.trans('admin_v2.information_collect.close.hint'))) {
         return;
       }
@@ -26,7 +25,7 @@ export default class List {
       });
     });
 
-    $table.on('click', '.open-collect', function () {
+    $('#open-collect').on('click', function () {
       if (!confirm(Translator.trans('admin_v2.information_collect.open.hint'))) {
         return;
       }
@@ -43,4 +42,4 @@ export default class List {
   }
 }
 
-new List();
+new ChangeStatus();

@@ -1615,12 +1615,12 @@ admin_v2.certificate.record.grant.failure_hint: grant failure
 admin_v2.certificate.record.grant.issue_time_required: Please enter the date of issue
 admin_v2.certificate.validate.description: The length must be less than or equal to 1000, one Chinese character counts as two characters.
 
-admin_v2.information-collection.close.hint: Do you want to close the acquisition? When closed, the collection of user information will stop.
-admin_v2.information-collection.open.hint: Do you want to start collection? When turned on, user information will be collected.
-admin_v2.information-collection.close.success_hint: close success
-admin_v2.information-collection.close.failure_hint: close failure
-admin_v2.information-collection.open.success_hint: open success
-admin_v2.information-collection.open.failure_hint: close failure
+admin_v2.information_collect.close.hint: Do you want to close the acquisition? When closed, the collection of user information will stop.
+admin_v2.information_collect.open.hint: Do you want to start collection? When turned on, user information will be collected.
+admin_v2.information_collect.close.success_hint: close success
+admin_v2.information_collect.close.failure_hint: close failure
+admin_v2.information_collect.open.success_hint: open success
+admin_v2.information_collect.open.failure_hint: close failure
 
 admin_v2.information_collect.chooser.tips: There is already a conflicting association
 admin_v2.information_collect.chooser.success_hint: Success
