@@ -56,7 +56,7 @@ class ResultServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Biz\InformationCollect\InformationCollectionException
+     * @expectedException \Biz\InformationCollect\InformationCollectException
      * @expectedExceptionCode 4047801
      */
     public function testSubmitForm_whenEventNotFound_thenThrowException()
@@ -65,7 +65,7 @@ class ResultServiceTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \Biz\InformationCollect\InformationCollectionException
+     * @expectedException \Biz\InformationCollect\InformationCollectException
      * @expectedExceptionCode 5007802
      */
     public function testSubmitForm_whenEventClosed_thenThrowException()

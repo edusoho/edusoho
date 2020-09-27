@@ -1,15 +1,13 @@
 {% extends 'admin-v2/layout.html.twig' %}
 
-{% set menu = 'admin_v2_information_collection_show' %}
+{% set menu = 'admin_v2_information_collect' %}
+
 {% set script_controller = 'invite/record' %}
-{% do script(['app/js/admin-v2/marketing/information-collection/index.js']) %}
-{% block page_buttons %}
-    <a class="btn btn-success btn-sm " href="" target="blank">{{ 'admin.imformation_collection.create'|trans }}</a>
-{% endblock %}
+{% do script(['app/js/admin-v2/marketing/information-collect/index.js']) %}
 
 {% block main %}
-  <form id="information-collect" class="form-inline well well-sm" action="{{path('admin_v2_information_collection')}}" method="get" novalidate>
-    <input id="title" class="form-control" type="text" name="title" placeholder="{{'admin.information_collection.title.placeholer'|trans}}" value="{{ app.request.query.get('title')}}">
+  <form id="information-collect" class="form-inline well well-sm" action="{{path('admin_v2_information_collect')}}" method="get" novalidate>
+    <input id="title" class="form-control" type="text" name="title" placeholder="{{'admin.information_collect.title.placeholer'|trans}}" value="{{ app.request.query.get('title')}}">
     <div class="form-group ">
       <input class="form-control" type="text" id="startDate" name="startDate"
              value="{{ app.request.query.get('startDate') }}" placeholder="{{ 'admin.user.form.input_placeholder.startDate'|trans }}" autocomplete="off">
@@ -20,15 +18,15 @@
     <button class="btn btn-primary" type="submit">{{'form.btn.search'|trans}}</button>
   </form>
 
-  <table class="table table-hover table-striped" id="collection-table">
+  <table class="table table-hover table-striped" id="collect-table">
     <thead>
     <tr>
-      <th width="15%">{{'admin.information_collection.title_th'|trans}}</th>
-      <th width="25%">{{ 'admin.information_collection.location_th'|trans }}</th>
-      <th width="15%">{{'admin.information_collection.create_time_th'|trans}}</th>
-      <th width="10%">{{ 'admin.information_collection.status_th'|trans }}</th>
-      <th width="15%">{{ 'admin.information_collection.collected_num_th'|trans }}</th>
-      <th width="15%">{{ 'admin.information_collection.operate'|trans }}</th>
+      <th width="15%">{{'admin.information_collect.title_th'|trans}}</th>
+      <th width="25%">{{ 'admin.information_collect.location_th'|trans }}</th>
+      <th width="15%">{{'admin.information_collect.create_time_th'|trans}}</th>
+      <th width="10%">{{ 'admin.information_collect.status_th'|trans }}</th>
+      <th width="15%">{{ 'admin.information_collect.collected_num_th'|trans }}</th>
+      <th width="15%">{{ 'admin.information_collect.operate'|trans }}</th>
     </tr>
     </thead>
     <tbody>
@@ -41,22 +39,22 @@
             </span>
           </td>
           <td>
-            {% set action = 'admin.information_collection.action.' ~ event.action %}
-            {% set location = information_collection_location_info(event.id) %}
+            {% set action = 'admin.information_collect.action.' ~ event.action %}
+            {% set location = information_collect_location_info(event.id) %}
             <span>{{ action|trans }}</span>
             <br>
               <span class="text-muted text-sm" style="cursor: pointer" {% if location|length > 32 %}title="{{ location }}"{% endif %}>{{ location | slice(0,32) }}{% if location|length >32 %}...{% endif %}</span>
           </td>
           <td>{{ event.createdTime|date('Y-m-d H:i:s') }}</td>
           <td>
-            {% set statusInfo = 'admin.information_collection.status.' ~ event.status %}
+            {% set statusInfo = 'admin.information_collect.status.' ~ event.status %}
             {{ statusInfo|trans|raw }}
           </td>
-          <td>{{ 'admin.information_collection.collected_num'|trans({'%collectedNum%':collectedNum[event.id].collectNum|default(0)}) }}</td>
+          <td>{{ 'admin.information_collect.collected_num'|trans({'%collectedNum%':collectedNum[event.id].collectNum|default(0)}) }}</td>
           <td>
             <div class="btn-group">
-              <a target="_blank" href="{{ path('admin_v2_information_collection_detail', {id: event.id}) }}" class="btn btn-default btn-sm">{{ 'admin.information_collection.operate.detail'|trans }}</a>
-              {% include 'admin-v2/widget/group-button.html.twig' with {parentCode: 'admin_v2_information_collection', group:'groupButton', collect: event} %}
+              <a target="_blank" href="{{ path('admin_v2_information_collect_detail', {id: event.id}) }}" class="btn btn-default btn-sm">{{ 'admin.information_collect.operate.detail'|trans }}</a>
+              {% include 'admin-v2/widget/group-button.html.twig' with {parentCode: 'admin_v2_information_collect', group:'groupButton', collect: event} %}
             </div>
           </td>
         </tr>

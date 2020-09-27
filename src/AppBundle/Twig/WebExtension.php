@@ -204,7 +204,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_s2b2c_enabled', [$this, 'isS2B2CEnabled']),
             new \Twig_SimpleFunction('s2b2c_has_behaviour_permission', [$this, 's2b2cHasBehaviourPermission']),
             new \Twig_SimpleFunction('make_local_media_file_token', [$this, 'makeLocalMediaFileToken']),
-            new \Twig_SimpleFunction('information_collection_location_info', [$this, 'informationCollectionLocationInfo']),
+            new \Twig_SimpleFunction('information_collect_location_info', [$this, 'informationCollectLocationInfo']),
         ];
     }
 
@@ -363,14 +363,12 @@ class WebExtension extends \Twig_Extension
 
         $host = $request->getHttpHost();
         if ($copyright) {
-            $result = !(
-                isset($copyright['owned'])
+            $result = !(isset($copyright['owned'])
                 && isset($copyright['thirdCopyright'])
                 && 2 != $copyright['thirdCopyright']
                 && isset($copyright['licenseDomains'])
                 && in_array($host, explode(';', $copyright['licenseDomains']))
-                || (isset($copyright['thirdCopyright']) && 2 == $copyright['thirdCopyright'])
-            );
+                || (isset($copyright['thirdCopyright']) && 2 == $copyright['thirdCopyright']));
 
             return $result;
         }
@@ -469,11 +467,13 @@ class WebExtension extends \Twig_Extension
             if ($imgs) {
                 $urls = array_unique($imgs[1]);
                 foreach ($urls as $img) {
-                    if (0 === strpos($img, $publicUrlPath)
+                    if (
+                        0 === strpos($img, $publicUrlPath)
                         || 0 === strpos($img, $themeUrlPath)
                         || 0 === strpos($img, $assetUrlPath)
                         || 0 === strpos($img, $bundleUrlPath)
-                        || 0 === strpos($img, $staticDistUrlPath)) {
+                        || 0 === strpos($img, $staticDistUrlPath)
+                    ) {
                         $content = str_replace('"'.$img, '"'.$cdnUrl.$img, $content);
                     }
                 }
@@ -1221,7 +1221,8 @@ class WebExtension extends \Twig_Extension
         $assets = $this->container->get('assets.packages');
         $defaultSetting = $this->getSetting('default', []);
 
-        if (array_key_exists($defaultKey, $defaultSetting)
+        if (
+            array_key_exists($defaultKey, $defaultSetting)
             && $defaultSetting[$defaultKey]
         ) {
             $path = $defaultSetting[$defaultKey];
@@ -1305,13 +1306,13 @@ class WebExtension extends \Twig_Extension
             $defaultSetting = $this->getSetting('default', []);
 
             if ((('course.png' == $defaultKey && array_key_exists(
-                            'defaultCoursePicture',
-                            $defaultSetting
-                        ) && 1 == $defaultSetting['defaultCoursePicture'])
+                    'defaultCoursePicture',
+                    $defaultSetting
+                ) && 1 == $defaultSetting['defaultCoursePicture'])
                     || ('avatar.png' == $defaultKey && array_key_exists(
-                            'defaultAvatar',
-                            $defaultSetting
-                        ) && 1 == $defaultSetting['defaultAvatar']))
+                        'defaultAvatar',
+                        $defaultSetting
+                    ) && 1 == $defaultSetting['defaultAvatar']))
                 && (array_key_exists($defaultKey, $defaultSetting)
                     && $defaultSetting[$defaultKey])
             ) {
@@ -2056,25 +2057,25 @@ class WebExtension extends \Twig_Extension
         return $this->getTokenService()->makeToken($type, $fields);
     }
 
-    public function informationCollectionLocationInfo($eventId)
+    public function informationCollectLocationInfo($eventId)
     {
         $locationInfos = $this->getEventService()->getEventLocations($eventId);
 
         $locationInfo = '';
         if (isset($locationInfos['course'])) {
-            if (0 == $locationInfos['course'][0]) {
+            if (1 == count($locationInfos['course']) && '0' == $locationInfos['course'][0]) {
                 $locationInfo .= '全部课程；';
             } else {
                 $courses = $this->getCourseService()->findCoursesByIds($locationInfos['course']);
-                $locationInfo .= implode('；', ArrayToolkit::column($courses, 'courseSetTitle')).'；';
+                $locationInfo .= implode('；', ArrayToolkit::column($courses, 'courseSetTitle'));
             }
         }
         if (isset($locationInfos['classroom'])) {
-            if (0 == $locationInfos['classroom'][0]) {
+            if (1 == count($locationInfos['classroom']) && '0' == $locationInfos['classroom'][0]) {
                 $locationInfo .= '全部班级；';
             } else {
-                $classrooms = $this->getClassroomService()->findClassroomsByIds($locationInfos['course']);
-                $locationInfo .= implode('；', ArrayToolkit::column($classrooms, 'title')).'；';
+                $classrooms = $this->getClassroomService()->findClassroomsByIds($locationInfos['classroom']);
+                $locationInfo .= implode('；', ArrayToolkit::column($classrooms, 'title'));
             }
         }
 

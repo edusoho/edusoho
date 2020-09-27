@@ -8,7 +8,7 @@ use Biz\Common\CommonException;
 use Biz\InformationCollect\Dao\ItemDao;
 use Biz\InformationCollect\Dao\ResultDao;
 use Biz\InformationCollect\Dao\ResultItemDao;
-use Biz\InformationCollect\InformationCollectionException;
+use Biz\InformationCollect\InformationCollectException;
 use Biz\InformationCollect\Service\EventService;
 use Biz\InformationCollect\Service\ResultService;
 use Biz\User\Service\UserService;
@@ -101,11 +101,11 @@ class ResultServiceImpl extends BaseService implements ResultService
     {
         $event = $this->getInformationCollectEventService()->get($eventId);
         if (empty($event)) {
-            $this->createNewException(InformationCollectionException::NOTFOUND_COLLECTION());
+            $this->createNewException(InformationCollectException::NOTFOUND_COLLECTION());
         }
 
         if ('close' == $event['status']) {
-            $this->createNewException(InformationCollectionException::COLLECTION_IS_CLOSE());
+            $this->createNewException(InformationCollectException::COLLECTION_IS_CLOSE());
         }
 
         $user = $this->getUserService()->getUser($userId);

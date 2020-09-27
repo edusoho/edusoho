@@ -6,7 +6,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\InformationCollect\FormItem\FormItemFectory;
-use Biz\InformationCollect\InformationCollectionException;
+use Biz\InformationCollect\InformationCollectException;
 
 class InformationCollectForm extends AbstractResource
 {
@@ -14,7 +14,7 @@ class InformationCollectForm extends AbstractResource
     {
         $event = $this->getInformationCollectEventService()->get($eventId);
         if (empty($event)) {
-            throw InformationCollectionException::NOTFOUND_COLLECTION();
+            throw InformationCollectException::NOTFOUND_COLLECTION();
         }
 
         $event['items'] = $this->getInformationCollectEventService()->findItemsByEventId($eventId);

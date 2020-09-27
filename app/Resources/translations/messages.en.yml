@@ -5324,29 +5324,29 @@ admin.operation_invite.register_user: 'registered user'
 
 #用户信息采集
 admin.imformation_collection.create: 'Create'
-admin.information_collection.title.placeholer: 'Name of user information collection'
-admin.information_collection.title_th: 'Collection Name'
-admin.information_collection.location_th: 'Collection Location'
-admin.information_collection.create_time_th: 'Create Time'
-admin.information_collection.creator: 'Creator'
-admin.information_collection.status_th: 'Collection Status'
-admin.information_collection.collected_num_th: 'Collected Num'
-admin.information_collection.collected_num: %collectedNum% copies
-admin.information_collection.operate: 'Operate'
-admin.information_collection.operate.detail: 'Detail'
-admin.information_collection.action.buy_after: 'Course/class merchandise after payment'
-admin.information_collection.action.buy_before: 'Course/class merchandise before payment'
-admin.information_collection.status.open: '<div class="green-circle"></div>Is collecting'
-admin.information_collection.status.close: '<div class="red-circle"></div>Stop to collect'
-admin.information_collection.detail: User Information Collection > Deatil
-admin.information_collection.basic_info: Basic Information
-admin.information_collection.close_btn: Close
-admin.information_collection.open_btn: Open
-admin.information_collection.update_btn: Update
-admin.information_collection.collected_num_tab: Collected Data
-admin.information_collection.collected_time: Collected time：
-admin.information_collection.export_btn: Export
-admin.information_collection.form_user_infomation: (From Personal Data)
+admin.information_collect.title.placeholer: 'Name of user information collection'
+admin.information_collect.title_th: 'Collection Name'
+admin.information_collect.location_th: 'Collection Location'
+admin.information_collect.create_time_th: 'Create Time'
+admin.information_collect.status_th: 'Collection Status'
+admin.information_collect.collected_num_th: 'Collected Num'
+admin.information_collect.operate: 'Operate'
+admin.information_collect.operate.detail: 'Detail'
+admin.information_collect.action.buy_after: 'Course/class merchandise after payment'
+admin.information_collect.action.buy_before: 'Course/class merchandise before payment'
+admin.information_collect.status.open: '<div class="green-circle"></div>Is collecting'
+admin.information_collect.status.close: '<div class="red-circle"></div>Stop to collect'
+admin.information_collect.creator: 'Creator'
+admin.information_collect.collected_num: %collectedNum% copies
+admin.information_collect.detail: User Information Collection > Deatil
+admin.information_collect.basic_info: Basic Information
+admin.information_collect.close_btn: Close
+admin.information_collect.open_btn: Open
+admin.information_collect.update_btn: Update
+admin.information_collect.collected_num_tab: Collected Data
+admin.information_collect.collected_time: Collected time：
+admin.information_collect.export_btn: Export
+admin.information_collect.form_user_infomation: (From Personal Data)
 
 admin.money_records.content_title: 'Account Details'
 admin.money_records.transaction_no.input_placeholder: 'Transaction No.'
@@ -9279,8 +9279,8 @@ exception.certificate.record.forbidden_cancel: Forbidden cancel
 exception.certificate.record.forbidden_regrant: Forbidden regrant
 exception.certificate_template.forbidden_delete_published: Prohibit the deletion of published certificates
 
-exception.information_collection.not_found: Collection not found
-exception.information_collection.closed: Collection is closed
+exception.information_collect.not_found: Collection not found
+exception.information_collect.closed: Collection is closed
 
 course.unname_title: unname course
 
@@ -10048,3 +10048,40 @@ user.certificates.detail_cert_message: Certificate information
 user.certificates.unclaimed_list: Certificate to be received
 user.certificates.cart_title: Certificate of honor
 user.certificates.cart_detail_btn: View get path
+
+admin_v2.information_collect.create: Create
+admin_v2.information_collect.update: Edit
+admin_v2.information_collect.edit.title_info: Only support PC and micro school
+admin_v2.information_collect.edit.title: Title
+admin_v2.information_collect.edit.action: Action
+admin_v2.information_collect.edit.action_before: Before Course/Classroom Pay
+admin_v2.information_collect.edit.action_after: After Course/Classroom Pay
+admin_v2.information_collect.edit.action_before.help_block: Include free products before joining
+admin_v2.information_collect.edit.action_before.tip: Collect user information before payment, which may affect purchase conversion rate
+admin_v2.information_collect.edit.action_after.help_block: Include free products after joining
+admin_v2.information_collect.edit.form_items: Form items
+admin_v2.information_collect.edit.form_items.tip: Please drag the optional information collect items from the right to the left, and you can drag up and down to sort
+admin_v2.information_collect.edit.form_items.warning_tip: Too many information collect items may affect user experience
+admin_v2.information_collect.edit.form_items.allow_skip: Allow Skip
+admin_v2.information_collect.edit.form_items.enable: Enable
+admin_v2.information_collect.edit.target_type.all: All Course/Classroom
+admin_v2.information_collect.edit.target_type.part: Selected Course/Classroom
+admin_v2.information_collect.edit.target_type.all_course: All Course
+admin_v2.information_collect.edit.target_type.all_classroom: All Classroom
+admin_v2.information_collect.edit.target_type.tip: Prioritize the execution of the collect events of the specified course/classroom
+admin_v2.information_collect.binded_tips: Linked to other collect events
+admin_v2.information_collect.more: See Details
+admin_v2.information_collect.selected_course_count: Selected Course Count
+admin_v2.information_collect.selecte_course: Selecte Course
+admin_v2.information_collect.selected_classroom_count: Selected Classroom Count
+admin_v2.information_collect.selecte_classroom: Selecte Classroom
+admin_v2.information_collect.course.chooser.limit: Support up to 200 courses
+admin_v2.information_collect.chooser.delete_item: Remove
+admin_v2.information_collect.chooser.tips: There is already a conflicting association
+admin_v2.information_collect.chooser.unbind_item: Unbind conficting association
+admin_v2.information_collect.chooser.empty: Empty
+
+
+
+
+

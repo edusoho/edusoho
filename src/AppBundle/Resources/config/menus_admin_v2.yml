@@ -571,39 +571,46 @@ admin_v2:
                                     router_name: admin_v2_login_micromarketing_boot
                                     disable: true
                         # 用户信息采集
-                        admin_v2_information_collection_manage:
-                            name: admin_v2.information_collection.menu
+                        admin_v2_information_collect_manage:
+                            name: admin_v2.information_collect.menu
                             children:
-                                admin_v2_information_collection_show:
-                                    router_name: admin_v2_information_collection
-                                    name: admin_v2.information_collection.tab
-                                    children:
-                                        admin_v2_information_collection:
-                                            name: admin_v2.information_collection.tab
-                                            children:
-                                                admin_v2_information_collection_close:
-                                                    name: admin_v2.information_collection.operate.close_tab
-                                                    class: close-collection
-                                                    router_params:
-                                                        id: (collect.id)
-                                                    group: groupButton
-                                                    mode: none
-                                                    visible: ( collect.status=='open' )
-                                                admin_v2_information_collection_open:
-                                                    name: admin_v2.information_collection.operate.open_tab
-                                                    class: open-collection
-                                                    router_params:
-                                                      id: (collect.id)
-                                                    group: groupButton
-                                                    mode: none
-                                                    visible: ( collect.status!='open' )
-                                                admin_v2_information_collection_detail:
-                                                    name: admin_v2.information_collection.detail
-                                                    router_name: admin_v2_information_collection_detail
-                                                    router_params:
-                                                      id: id
-                                                    disable: true
-                                                    target: '_blank'
+                                admin_v2_information_collect:
+                                    router_name: admin_v2_information_collect
+                                    name: admin_v2.information_collect.tab
+                                    children: 
+                                        admin_v2_information_collect_create:
+                                            name: admin_v2.information_collect.create
+                                            disable: true
+                                            group: topBtn
+                                            target: '_blank'
+                                        admin_v2_information_collect_close:
+                                            name: admin_v2.information_collect.operate.close_tab
+                                            class: close-collect
+                                            router_params:
+                                                id: (collect.id)
+                                            group: groupButton
+                                            mode: none
+                                            visible: ( collect.status=='open' )
+                                        admin_v2_information_collect_open:
+                                            name: admin_v2.information_collect.operate.open_tab
+                                            class: open-collect
+                                            router_params:
+                                                id: (collect.id)
+                                            group: groupButton
+                                            mode: none
+                                            visible: ( collect.status!='open' )
+                                        admin_v2_information_collect_update:
+                                            name: admin_v2.information_collect.operate.update_tab
+                                            router_params:
+                                                id: (collect.id)
+                                            group: groupButton
+                                        admin_v2_information_collect_detail:
+                                            name: admin_v2.information_collect.detail
+                                            router_name: admin_v2_information_collect_detail
+                                            router_params:
+                                            id: id
+                                            disable: true
+                                            target: '_blank'
                 # 渠道管理
                 admin_v2_channel_group:
                     name: admin_v2.channel.basic_group

@@ -7,9 +7,85 @@ use Biz\InformationCollect\Dao\EventDao;
 use Biz\InformationCollect\Dao\ItemDao;
 use Biz\InformationCollect\Dao\LocationDao;
 use Biz\InformationCollect\Service\EventService;
+use Codeages\Biz\Framework\Service\Exception\ServiceException;
 
 class EventServiceTest extends BaseTestCase
 {
+    public function testCreateEventWithLocations_whenFieldInvalid_thenThrowException()
+    {
+        $this->expectException(ServiceException::class);
+
+        $this->getInformationCollectEventService()->createEventWithLocations(['title' => 'test title']);
+    }
+
+    public function testCreateEventWithLocationsWithEmptyTargetTypes()
+    {
+        $event = $this->getMockedEvent();
+        $event['items'] = [['labelName' => '性别', 'code' => 'gender', 'required' => 1, 'seq' => 1]];
+        $result = $this->getInformationCollectEventService()->createEventWithLocations($event);
+        unset($event['items']);
+        unset($result['id']);
+        unset($result['createdTime']);
+        unset($result['updatedTime']);
+        $this->assertEquals($event, $result);
+    }
+
+    public function testCreateEventWithLocationsWithCourseLocations()
+    {
+        $event = $this->getMockedEvent();
+
+        $eventFields = array_merge($event, [
+            'targetTypes' => ['course'],
+            'courseIds' => ['1', '2'],
+            'classroomIds' => ['3', '4'],
+            'items' => [['labelName' => '性别', 'code' => 'gender', 'required' => 1, 'seq' => 1]],
+        ]);
+
+        $result = $this->getInformationCollectEventService()->createEventWithLocations($eventFields);
+        $locationsCourseCount = $this->getInformationCollectLocationDao()->count(['eventId' => $result['id'], 'targetType' => 'course']);
+        $locationsClassroomCount = $this->getInformationCollectLocationDao()->count(['eventId' => $result['id'], 'targetType' => 'classroom']);
+
+        unset($result['id']);
+        unset($result['createdTime']);
+        unset($result['updatedTime']);
+        $this->assertEquals($event, $result);
+        $this->assertEquals(2, $locationsCourseCount);
+        $this->assertEquals(0, $locationsClassroomCount);
+    }
+
+    public function testUpdateEventWithLocations_whenEventNotFound_thenThrowException()
+    {
+        $this->expectException(ServiceException::class);
+        $this->getInformationCollectEventService()->updateEventWithLocations(1, []);
+    }
+
+    public function testUpdateEventWithLocations()
+    {
+        $event = $this->createEvent();
+        $courseLocation = $this->createLocation(['eventId' => $event['id']]);
+        $classroomLocation = $this->createLocation(['eventId' => $event['id'], 'targetType' => 'classroom']);
+
+        $eventFields = array_merge($event, [
+            'title' => 'updated title',
+            'targetTypes' => ['course', 'classroom'],
+            'courseIds' => ['1', '2'],
+            'classroomIds' => ['3', '4'],
+        ]);
+        $locationsCourseCountBefore = $this->getInformationCollectLocationDao()->count(['eventId' => $event['id'], 'targetType' => 'course']);
+        $locationsClassroomCountBefore = $this->getInformationCollectLocationDao()->count(['eventId' => $event['id'], 'targetType' => 'classroom']);
+
+        $result = $this->getInformationCollectEventService()->updateEventWithLocations($event['id'], $eventFields);
+
+        $locationsCourseCountAfter = $this->getInformationCollectLocationDao()->count(['eventId' => $event['id'], 'targetType' => 'course']);
+        $locationsClassroomCountAfter = $this->getInformationCollectLocationDao()->count(['eventId' => $event['id'], 'targetType' => 'classroom']);
+
+        $this->assertEquals('updated title', $result['title']);
+        $this->assertEquals(1, $locationsCourseCountBefore);
+        $this->assertEquals(1, $locationsClassroomCountBefore);
+        $this->assertEquals(2, $locationsCourseCountAfter);
+        $this->assertEquals(2, $locationsClassroomCountAfter);
+    }
+
     public function testGetEventByActionAndLocation()
     {
         $mockEvent = $this->mockEvent();
@@ -84,6 +160,52 @@ class EventServiceTest extends BaseTestCase
         $result = $this->getInformationCollectEventService()->getEventLocations(1);
 
         $this->assertEquals([1, 2], $result['course']);
+    }
+
+    public function testSearchLocations()
+    {
+        $location1 = $this->createLocation();
+        $location2 = $this->createLocation(['targetType' => 'test type']);
+        $location3 = $this->createLocation(['targetId' => '2']);
+        $location4 = $this->createLocation(['targetId' => 0, 'eventId' => 2]);
+
+        $result = $this->getInformationCollectEventService()->searchLocations(['targetId_LTE' => 0], [], 0, 4);
+        $this->assertEquals([$location4], $result);
+
+        $result = $this->getInformationCollectEventService()->searchLocations(['targetType' => $location2['targetType']], [], 0, 4);
+        $this->assertEquals([$location2], $result);
+    }
+
+    private function getMockedEvent($event = [])
+    {
+        return array_merge([
+            'title' => 'test title',
+            'action' => 'test action',
+            'formTitle' => 'test form title',
+            'status' => 'open',
+            'allowSkip' => '1',
+            'creator' => $this->getCurrentUser()->getId(),
+        ], $event);
+    }
+
+    private function getMockedLocation($location = [])
+    {
+        return array_merge([
+            'eventId' => '1',
+            'action' => 'test action',
+            'targetType' => 'course',
+            'targetId' => '1',
+        ], $location);
+    }
+
+    private function createLocation($location = [])
+    {
+        return $this->getInformationCollectLocationDao()->create($this->getMockedLocation($location));
+    }
+
+    private function createEvent($event = [])
+    {
+        return $this->getInformationCollectEventDao()->create($this->getMockedEvent($event));
     }
 
     protected function mockEvent()
@@ -178,7 +300,7 @@ class EventServiceTest extends BaseTestCase
             'code' => '测试表单',
             'labelName' => '性别',
             'seq' => 1,
-            'required' => 1
+            'required' => 1,
         ]);
     }
 

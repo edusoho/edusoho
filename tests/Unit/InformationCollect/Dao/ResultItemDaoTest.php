@@ -20,7 +20,7 @@ class ResultItemDaoTest extends BaseTestCase
     {
         $this->mockResultItems();
 
-        $result = $this->getInformationCollectResultItemDao()->findResultDataByResultIds([1,2]);
+        $result = $this->getInformationCollectResultItemDao()->findResultDataByResultIds([1, 2]);
 
         $this->assertEquals(3, count($result));
     }
