@@ -168,4 +168,12 @@ function clearInformationCollectStorage() {
     if (store.get('informationCollectSelectClassroomIds', []).length) {
         store.set('informationCollectSelectClassroomIds', []);
     }
+
+    if (store.get('informationCollectSelectedCourseIds', []).length) {
+        store.set('informationCollectSelectedCourseIds', []);
+    }
+
+    if (store.get('informationCollectSelectedClassroomIds', []).length) {
+        store.set('informationCollectSelectedClassroomIds', []);
+    }
 }

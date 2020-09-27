@@ -15,10 +15,10 @@
 		</tr>
 	</thead>
 	<tbody>
-		{% for targetId in selectedTargetIds %}
+		{% for targetId in preSelectIds %}
 			{% set location = locations[targetId]|default(null) %}
 			{% set target = targets[targetId]|default(null) %}
-			<tr class="js-selected-item {% if not target %} hidden {% endif %} {% if location %} js-selected-item-binded {% endif %}" data-id="{{ targetId }}">
+			<tr class="js-selected-item {% if not target %} hidden {% endif %} {% if location and (targetId not in selectedIds) %} js-selected-item-binded {% endif %}" data-id="{{ targetId }}">
 				{% if target %}
 					<td>
 						{% if type == 'course' %}
@@ -34,7 +34,7 @@
 					</td>
 					<td>
 						<div class="information-collect-selected-item-operate pull-right">
-							{% if location %}
+							{% if location and (targetId not in selectedIds) %}
 								<div class="text-danger">
 									{{ 'admin_v2.information_collect.chooser.tips'|trans }},<a class="text-danger" href="{{ path('admin_v2_information_collect_detail', {id:location.eventId}) }}" target="_blank">{{ 'admin_v2.information_collect.more'|trans }}>></a>
 								</div>

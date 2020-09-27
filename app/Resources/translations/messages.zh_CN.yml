@@ -11460,6 +11460,7 @@ admin_v2.information_collect.form_items.select_group.contact_info: 联系信息
 admin_v2.information_collect.form_items.select_group.company_info: 公司信息
 admin_v2.information_collect.form_items.select_group.school_info: 学校信息
 admin_v2.information_collect.form_items.select_group.other_info: 其它信息
+admin_v2.information_collect.form_items.confirm_submit: 确认提交
 
 
 

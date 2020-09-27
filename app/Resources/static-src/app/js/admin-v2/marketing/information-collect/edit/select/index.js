@@ -4,6 +4,7 @@ import notify from 'common/notify';
 let $table = $('#information-collect-select-table');
 let type = $table.data('type');
 let storeName = (type == 'course') ? 'informationCollectSelectCourseIds' : 'informationCollectSelectClassroomIds';
+let selectedStoreName = (type == 'course') ? 'informationCollectSelectedCourseIds' : 'informationCollectSelectedClassroomIds';
 
 $('.select-target-modal').on('click', '.pagination li', (event) => {
     getCourseSets($(event.currentTarget).data('url'));
@@ -22,6 +23,8 @@ $('.js-save-selected-target').on('click', (event) => {
         notify('danger', Translator.trans('admin_v2.information_collect.chooser.tips'));
         return;
     }
+
+    store.set(selectedStoreName, store.get(storeName, []));
 
     if (store.get(storeName, []).length) {
         $('.js-action-radio-group').find('input[name="' + $(event.currentTarget).data('targetInput') + '"]').val(JSON.stringify(store.get(storeName)));
@@ -60,7 +63,7 @@ function getCourseSets(url) {
 }
 
 function getSelectedTargets(url) {
-    $.get(url, {'action': $("[name='action']:checked").val(), ids: store.get(storeName, []) }, (res) => {
+    $.get(url, { 'action': $("[name='action']:checked").val(), ids: store.get(storeName, []), selectedIds: store.get(selectedStoreName, []) }, (res) => {
         $table.empty().html(res);
     });
     $('.js-selected-count').html(store.get(storeName, []).length);
