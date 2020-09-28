@@ -82,6 +82,31 @@ class CourseEntityTest extends BaseTestCase
         self::assertTrue($this->getGoodsEntityFactory()->create('course')->canManageTarget($goods));
     }
 
+    public function testBuySpecsAccess()
+    {
+        $courseSet = $this->getCourseSetService()->createCourseSet($this->mockCourseSet());
+        $this->getCourseSetService()->publishCourseSet($courseSet['id']);
+        list($product, $goods) = $this->getProductAndGoods($courseSet);
+        $specs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $courseSet['defaultCourseId']);
+        $access = $this->getGoodsEntityFactory()->create('course')->buySpecsAccess($goods, $specs);
+        // 当前用户已经是教师，所以会返回 `member.member_exist`已经是学员的状态
+        self::assertEquals('member.member_exist', $access['code']);
+    }
+
+    public function testIsSpecsMember()
+    {
+        $courseSet = $this->getCourseSetService()->createCourseSet($this->mockCourseSet());
+        $this->getCourseSetService()->publishCourseSet($courseSet['id']);
+        list($product, $goods) = $this->getProductAndGoods($courseSet);
+        $specs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $courseSet['defaultCourseId']);
+        $isMember = $this->getGoodsEntityFactory()->create('course')->isSpecsMember($goods, $specs, $this->getCurrentUser()->getId());
+        // 当前用户已经是教师，对课程的业务来说，老师也是member，所以true
+        self::assertTrue($isMember);
+
+        $isMember = $this->getGoodsEntityFactory()->create('course')->isSpecsMember($goods, $specs, $this->getCurrentUser()->getId() + 1);
+        self::assertFalse($isMember);
+    }
+
     private function getProductAndGoods($courseSet)
     {
         $product = $this->getProductService()->getProductByTargetIdAndType($courseSet['id'], 'course');

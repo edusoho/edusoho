@@ -79,6 +79,28 @@ class ClassroomEntityTest extends BaseTestCase
         self::assertTrue($this->getGoodsEntityFactory()->create('classroom')->canManageTarget($goods));
     }
 
+    public function testBuySpecsAccess()
+    {
+        $classroom = $this->getClassroomService()->addClassroom($this->mockClassroom());
+        $this->getClassroomService()->publishClassroom($classroom['id']);
+        list($product, $goods) = $this->getProductAndGoods($classroom);
+        $specs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $classroom['id']);
+        $access = $this->getGoodsEntityFactory()->create('classroom')->buySpecsAccess($goods, $specs);
+
+        // 班级的创建者只是班级的班主任，但是不是班级的教师，所以当前业务上返回可以加入
+        self::assertEquals('success', $access['code']);
+    }
+
+    public function testIsSpecsStudent()
+    {
+        $classroom = $this->getClassroomService()->addClassroom($this->mockClassroom());
+        $this->getClassroomService()->publishClassroom($classroom['id']);
+        list($product, $goods) = $this->getProductAndGoods($classroom);
+        $specs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $classroom['id']);
+        $isMember = $this->getGoodsEntityFactory()->create('classroom')->isSpecsMember($goods, $specs, $this->getCurrentUser()->getId());
+        self::assertFalse($isMember);
+    }
+
     private function getProductAndGoods($classroom)
     {
         $product = $this->getProductService()->getProductByTargetIdAndType($classroom['id'], 'classroom');
