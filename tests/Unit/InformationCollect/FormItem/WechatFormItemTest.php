@@ -20,8 +20,16 @@ class WechatFormItemTest extends BaseTestCase
                         "message": "微信号不能为空"
                     },
                     {
-                        "pattern": "^[a-zA-Z]([-_a-zA-Z0-9]{5,19})+$",
+                        "pattern": "^[a-zA-Z]([-_a-zA-Z0-9])+$",
                         "message": "微信号格式错误"
+                    },
+                    {
+                        "min": 6, 
+                        "message": "微信号格式错误"
+                    },
+                    {
+                        "max": 20,
+                        "message": "微信号格式错误" 
                     }
                 ]
             }
