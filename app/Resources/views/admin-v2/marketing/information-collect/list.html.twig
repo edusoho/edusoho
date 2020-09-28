@@ -34,8 +34,8 @@
       {% for event in events|default() %}
         <tr>
           <td>
-            <span style="cursor: pointer" {% if event.title|length > 31 %}title="{{ event.title }}"{% endif %}>
-              {{ event.title | slice(0,31) }}{% if event.title|length >31 %}...{% endif %}
+            <span style="cursor: pointer" {% if event.title|length > 16 %}title="{{ event.title }}"{% endif %}>
+              {{ event.title | slice(0,16) }}{% if event.title|length >16 %}...{% endif %}
             </span>
           </td>
           <td>
@@ -43,7 +43,7 @@
             {% set location = information_collect_location_info(event.id) %}
             <span>{{ action|trans }}</span>
             <br>
-              <span class="text-muted text-sm" style="cursor: pointer" {% if location|length > 20 %}title="{{ location }}"{% endif %}>{{ location | slice(0,20) }}{% if location|length >20 %}...{% endif %}</span>
+              <span class="text-muted text-sm" style="cursor: pointer" {% if location|length > 16 %}title="{{ location }}"{% endif %}>{{ location | slice(0,16) }}{% if location|length >16 %}...{% endif %}</span>
           </td>
           <td>{{ event.createdTime|date('Y-m-d H:i:s') }}</td>
           <td>
