@@ -17,6 +17,7 @@ class PhoneFormItem extends FormItem
             'title' => self::TITLE,
             'field' => self::FIELD,
             'value' => $this->value,
+            'group' => self::CONTACT_INFO_GROUP,
             'props' => [
                 'type' => 'number',
                 'placeholder' => '仅支持中国大陆手机号码',

@@ -16,6 +16,7 @@ class ProvinceCityAreaFormItem extends FormItem
             'type' => self::TYPE,
             'title' => self::TITLE,
             'field' => self::FIELD,
+            'group' => self::CONTACT_INFO_GROUP,
             'value' => empty($this->value) ? [] : $this->value,
             'props' => [
                 'options' => [],

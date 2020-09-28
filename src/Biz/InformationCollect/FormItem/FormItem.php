@@ -8,6 +8,16 @@ abstract class FormItem
 
     protected $value = '';
 
+    const BASE_INFO_GROUP = 'base';
+
+    const CONTACT_INFO_GROUP = 'contact';
+
+    const COMPANY_INFO_GROUP = 'company';
+
+    const SCHOOL_INFO_GROUP = 'school';
+
+    const OTHER_INFO_GROUP = 'other';
+
     abstract public function getData();
 
     public function required($required = false)

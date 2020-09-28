@@ -64,12 +64,12 @@ class InformationCollectController extends BaseController
             return $this->createJsonResponse(true);
         }
 
-        $allCourseLocation = $this->getEventService()->searchLocations(['targetType' => 'course', 'targetId_LTE' => 0], [], 0, 1);
-        $allClassroomLocation = $this->getEventService()->searchLocations(['targetType' => 'classroom', 'targetId_LTE' => 0], [], 0, 1);
+        $allCourseLocations = $this->getEventService()->searchLocations(['targetType' => 'course', 'targetId_LTE' => 0], [], 0, 2, ['action', 'eventId']);
+        $allClassroomLocations = $this->getEventService()->searchLocations(['targetType' => 'classroom', 'targetId_LTE' => 0], [], 0, 2, ['action', 'eventId']);
 
         return $this->render('admin-v2/marketing/information-collect/edit/index.html.twig', [
-            'allCourseLocation' => empty($allCourseLocation) ? [] : $allCourseLocation[0],
-            'allClassroomLocation' => empty($allClassroomLocation) ? [] : $allClassroomLocation[0],
+            'allCourseLocations' => ArrayToolkit::index($allCourseLocations, 'action'),
+            'allClassroomLocations' => ArrayToolkit::index($allClassroomLocations, 'action'),
         ]);
     }
 
@@ -100,26 +100,27 @@ class InformationCollectController extends BaseController
         $locationInfo = [];
         foreach ($locations as $location) {
             if ('course' == $location['targetType']) {
-                $locationInfo['courseIds'][] = $location['targetId'];
+                '0' != $location['targetId'] && $locationInfo['courseIds'][] = $location['targetId'];
             } else {
-                $locationInfo['classroomIds'][] = $location['targetId'];
+                '0' != $location['targetId'] && $locationInfo['classroomIds'][] = $location['targetId'];
             }
         }
 
-        $allCourseLocation = $this->getEventService()->searchLocations(['targetType' => 'course', 'targetId_LTE' => '0'], [], 0, 1);
-        $allClassroomLocation = $this->getEventService()->searchLocations(['targetType' => 'classroom', 'targetId_LTE' => '0'], [], 0, 1);
+        $allCourseLocations = $this->getEventService()->searchLocations(['targetType' => 'course', 'targetId_LTE' => '0', 'action' => $event['action']], [], 0, 2, ['action', 'eventId']);
+        $allClassroomLocations = $this->getEventService()->searchLocations(['targetType' => 'classroom', 'targetId_LTE' => '0', 'action' => $event['action']], [], 0, 2, ['action', 'eventId']);
 
         return $this->render('admin-v2/marketing/information-collect/edit/index.html.twig', [
             'event' => $event,
             'locationInfo' => $locationInfo,
-            'allCourseLocation' => empty($allCourseLocation) ? [] : $allCourseLocation[0],
-            'allClassroomLocation' => empty($allClassroomLocation) ? [] : $allClassroomLocation[0],
+            'allCourseLocations' => ArrayToolkit::index($allCourseLocations, 'action'),
+            'allClassroomLocations' => ArrayToolkit::index($allClassroomLocations, 'action'),
         ]);
     }
 
-    public function targetModalAction(Request $request, $type)
+    public function targetModalAction(Request $request, $action, $type)
     {
         return $this->render('admin-v2/marketing/information-collect/edit/select/select-target-modal.html.twig', [
+            'action' => $action,
             'type' => $type,
             'eventId' => $request->query->get('eventId'),
         ]);

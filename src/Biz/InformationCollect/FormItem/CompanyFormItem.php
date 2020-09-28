@@ -16,6 +16,7 @@ class CompanyFormItem extends FormItem
             'type' => self::TYPE,
             'title' => self::TITLE,
             'field' => self::FIELD,
+            'group' => self::COMPANY_INFO_GROUP,
             'value' => $this->value,
             'validate' => [
                 ['required' => $this->required, 'message' => self::TITLE.'不能为空'],

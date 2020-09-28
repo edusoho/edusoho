@@ -3,18 +3,15 @@ import notify from 'common/notify';
 
 let $table = $('#information-collect-select-table');
 let type = $table.data('type');
-let storeName = (type == 'course') ? 'informationCollectSelectCourseIds' : 'informationCollectSelectClassroomIds';
-let selectedStoreName = (type == 'course') ? 'informationCollectSelectedCourseIds' : 'informationCollectSelectedClassroomIds';
+let action = $('input[name="action"]:checked').val();
+let storeName = 'information_collect_' + action + '_' + type + '_ids';
+let selectedStoreName = 'information_collect_selected_' + action + '_' + type + '_ids';
 
 $('.select-target-modal').on('click', '.pagination li', (event) => {
-    getCourseSets($(event.currentTarget).data('url'));
+    getSelectedTargets($(event.currentTarget).data('url'));
 });
 
-if (!store.get((storeName, []).length) && $('input[name="' + type + 'Ids"]').val()) {
-    store.set(storeName, JSON.parse($('input[name="' + type + 'Ids"]').val()));
-}
-
-if (store.get(storeName, []).length > 0) {
+if (store.get(storeName, []) && store.get(storeName, []).length > 0) {
     getSelectedTargets($table.data('selectedUrl'));
 };
 
@@ -26,12 +23,17 @@ $('.js-save-selected-target').on('click', (event) => {
 
     store.set(selectedStoreName, store.get(storeName, []));
 
+    let $targetCheckbox = $($(event.currentTarget).data('targetCheckbox'));
+
     if (store.get(storeName, []).length) {
-        $('.js-action-radio-group').find('input[name="' + $(event.currentTarget).data('targetInput') + '"]').val(JSON.stringify(store.get(storeName)));
+        $('.js-action-radio-group').find('input[name="' + $(event.currentTarget).data('targetInput') + '"]').val(JSON.stringify(store.get(storeName, [])));
+        $targetCheckbox.is(':checked') ? '' : $targetCheckbox.prop('checked', 'checked');
     } else {
-        $('.js-action-radio-group').find('input[name="' + $(event.currentTarget).data('targetInput') + '"]').val('');
+        $('.js-action-radio-group').find('input[name="' + $(event.currentTarget).data('targetInput') + '"]').val(null);
+        $targetCheckbox.is(':checked') ? $targetCheckbox.removeProp('checked') : '';
     }
-    $('.js-action-radio').find('.action-type-group-part .' + $(event.currentTarget).data('targetCount')).html(store.get(storeName).length);
+
+    $('.js-action-radio').find('.action-type-group-part .' + $(event.currentTarget).data('targetCount')).html(store.get(storeName, []).length);
     notify('success', Translator.trans('admin_v2.information_collect.chooser.success_hint'));
     $('.select-target-modal').parent('.modal').modal('hide');
 });
@@ -54,13 +56,6 @@ $('.select-target-modal').on('click', '.js-selected-item-unbind', function (e) {
     $('.js-selected-count').html($('.js-selected-item').length);
     checkItemBindedCount();
 });
-
-function getCourseSets(url) {
-    $.get(url, { ids: store.get(storeName, []) }, (res) => {
-        $table.empty().html(res);
-    });
-    $('.js-selected-count').html(store.get(storeName, []).length);
-}
 
 function getSelectedTargets(url) {
     $.get(url, { 'action': $("[name='action']:checked").val(), ids: store.get(storeName, []), selectedIds: store.get(selectedStoreName, []) }, (res) => {

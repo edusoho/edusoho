@@ -17,6 +17,7 @@ class IdcardFormItem extends FormItem
             'title' => self::TITLE,
             'field' => self::FIELD,
             'value' => $this->value,
+            'group' => self::BASE_INFO_GROUP,
             'props' => [
                 'placeholder' => '仅支持中国大陆身份证号',
             ],

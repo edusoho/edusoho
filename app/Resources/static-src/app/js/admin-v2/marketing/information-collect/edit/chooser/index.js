@@ -4,11 +4,14 @@ import notify from 'common/notify';
 let $form = $("#search-form");
 let $modal = $form.parents('.modal');
 let type = $form.data('type');
-let storeName = (type == 'course') ? 'informationCollectSelectCourseIds' : 'informationCollectSelectClassroomIds';
-let selectedStoreName = (type == 'course') ? 'informationCollectSelectedCourseIds' : 'informationCollectSelectedClassroomIds';
+
+let action = $('input[name="action"]:checked').val();
+let storeName = 'information_collect_' + action + '_' + type + '_ids';   
+let selectedStoreName = 'information_collect_selected_' + action + '_' + type + '_ids';
+
 let targetIds = new Array();
 
-if (store.get(storeName, []).length > 0) {
+if (store.get(storeName, []) && store.get(storeName, []).length > 0) {
     initChecked(store.get(storeName, []));
 }
 
@@ -22,9 +25,10 @@ $('#chooser-items').on('click', function (e) {
     }
 
     if ($('#information-collect-select-table').length == 1) {
-        $.get($(this).data('url'), { 'action': $("[name='action']:checked").val(), ids: targetIds, selectedIds: store.get(selectedStoreName, []) }, function (res) {
+        $.get($(this).data('url'), { action: action, ids: targetIds, selectedIds: store.get(selectedStoreName, []) }, function (res) {
             $('#information-collect-select-table').empty().html(res);
             $('.js-selected-count').html(length);
+            
             notify('success', Translator.trans('admin_v2.information_collect.chooser.success_hint'));
         });
     }
@@ -112,7 +116,7 @@ $('#search').on('click', function () {
 $('.search-list').on('click', '.batch-select', function () {
     let $selectdElement = $(this);
 
-    if (store.get(storeName, []).length > 0) {
+    if (store.get(storeName, []) && store.get(storeName, []).length > 0) {
         targetIds = deleteVacancy(store.get(storeName, []));
     };
 
@@ -137,7 +141,7 @@ $('.search-list').on('click', '.batch-item', function () {
     let length = $('.batch-item').length;
     let checked_count = 0;
 
-    if (store.get(storeName).length > 0) {
+    if (store.get(storeName, []) && store.get(storeName, []).length > 0) {
         targetIds = deleteVacancy(store.get(storeName, []));
     };
 
