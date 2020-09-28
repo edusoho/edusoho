@@ -20,22 +20,22 @@
       </td>
     </tr>
     <tr>
-      <td width="8%">{{ 'admin.information_collect.location_th'|trans }}：</td>
+      <td width="10%">{{ 'admin.information_collect.location_th'|trans }}：</td>
       <td width="40%">
         {% set location = information_collect_location_info(event.id) %}
-        {{ event.formTitle }}
+        {{ event.title }}
         <br>
-        <span class="text-muted text-sm" style="cursor: pointer" {% if location|length > 40 %}title="{{ location }}"{% endif %}>{{ location | slice(0,40) }}{% if location|length >40 %}...{% endif %}</span>
+        <span class="text-muted text-sm" style="cursor: pointer" {% if location|length > 32 %}title="{{ location }}"{% endif %}>{{ location | slice(0,32) }}{% if location|length >32 %}...{% endif %}</span>
       </td>
       <td width="10%">{{ 'admin.information_collect.collected_num_th'|trans }}：</td>
       <td>{{ 'admin.information_collect.collected_num'|trans({'%collectedNum%':collectedNum[event.id].collectNum|default(0)}) }}</td>
     </tr>
     <tr>
-      <td width="8%">{{ 'admin.information_collect.create_time_th'|trans }}：</td>
+      <td width="10%">{{ 'admin.information_collect.create_time_th'|trans }}：</td>
       <td width="40%">{{ event.createdTime|date('Y-m-d H:i:s') }}</td>
     </tr>
     <tr>
-      <td width="8%">{{ 'admin.information_collect.creator'|trans }}：</td>
+      <td width="10%">{{ 'admin.information_collect.creator'|trans }}：</td>
       <td width="40%">{{ creator.nickname }}</td>
     </tr>
   </table>
