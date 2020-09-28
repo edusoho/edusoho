@@ -34,8 +34,8 @@
       {% for event in events|default() %}
         <tr>
           <td>
-            <span style="cursor: pointer" {% if event.title|length > 16 %}title="{{ event.title }}"{% endif %}>
-              {{ event.title | slice(0,16) }}{% if event.title|length >16 %}...{% endif %}
+            <span style="cursor: pointer" {% if event.title|length > 14 %}title="{{ event.title }}"{% endif %}>
+              {{ event.title | slice(0,14) }}{% if event.title|length >14 %}...{% endif %}
             </span>
           </td>
           <td>
