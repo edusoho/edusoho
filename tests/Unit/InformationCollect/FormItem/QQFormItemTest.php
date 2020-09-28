@@ -20,7 +20,7 @@ class QQFormItemTest extends BaseTestCase
                         "message": "QQ号不能为空"
                     },
                     {
-                        "pattern": "^[0-9]{5,11}$",
+                        "pattern": "^[0-9]{5,10}$",
                         "message": "QQ号格式错误"
                     }
                 ]

@@ -19,7 +19,7 @@ class QQFormItem extends FormItem
             'value' => $this->value,
             'validate' => [
                 ['required' => $this->required, 'message' => self::TITLE.'不能为空'],
-                ['pattern' => '^[0-9]{5,11}$', 'message' => self::TITLE.'格式错误'],
+                ['pattern' => '^[0-9]{5,10}$', 'message' => self::TITLE.'格式错误'],
             ],
         ];
     }
