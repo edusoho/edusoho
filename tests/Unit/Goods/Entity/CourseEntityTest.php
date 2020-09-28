@@ -107,6 +107,28 @@ class CourseEntityTest extends BaseTestCase
         self::assertFalse($isMember);
     }
 
+    public function testIsSpecsStudent()
+    {
+        $courseSet = $this->getCourseSetService()->createCourseSet($this->mockCourseSet());
+        $this->getCourseSetService()->publishCourseSet($courseSet['id']);
+        list($product, $goods) = $this->getProductAndGoods($courseSet);
+        $specs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $courseSet['defaultCourseId']);
+        $isMember = $this->getGoodsEntityFactory()->create('course')->isSpecsStudent($goods, $specs, $this->getCurrentUser()->getId());
+
+        self::assertFalse($isMember);
+    }
+
+    public function testIsSpecsTeacher()
+    {
+        $courseSet = $this->getCourseSetService()->createCourseSet($this->mockCourseSet());
+        $this->getCourseSetService()->publishCourseSet($courseSet['id']);
+        list($product, $goods) = $this->getProductAndGoods($courseSet);
+        $specs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $courseSet['defaultCourseId']);
+        $isMember = $this->getGoodsEntityFactory()->create('course')->isSpecsTeacher($goods, $specs, $this->getCurrentUser()->getId());
+
+        self::assertTrue($isMember);
+    }
+
     private function getProductAndGoods($courseSet)
     {
         $product = $this->getProductService()->getProductByTargetIdAndType($courseSet['id'], 'course');
