@@ -29,7 +29,7 @@ class ResultDaoImpl extends AdvancedDaoImpl implements ResultDao
             'serializes' => [
             ],
             'orderbys' => [
-                'id',
+                'id', 'createdTime',
             ],
             'timestamps' => [
                 'createdTime',
@@ -40,6 +40,8 @@ class ResultDaoImpl extends AdvancedDaoImpl implements ResultDao
                 'eventId IN (:eventIds)',
                 'userId = :userId',
                 'eventId = :eventId',
+                'createdTime >= :startDate',
+                'createdTime < :endDate',
             ],
         ];
     }

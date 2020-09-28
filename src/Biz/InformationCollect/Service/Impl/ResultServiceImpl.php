@@ -5,13 +5,14 @@ namespace Biz\InformationCollect\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Common\CommonException;
+use Biz\InformationCollect\Dao\ItemDao;
 use Biz\InformationCollect\Dao\ResultDao;
 use Biz\InformationCollect\Dao\ResultItemDao;
-use Biz\InformationCollect\InformationCollectionException;
+use Biz\InformationCollect\InformationCollectException;
 use Biz\InformationCollect\Service\EventService;
 use Biz\InformationCollect\Service\ResultService;
+use Biz\User\Service\UserService;
 use Biz\User\UserException;
-use Biz\User\UserService;
 
 class ResultServiceImpl extends BaseService implements ResultService
 {
@@ -100,11 +101,11 @@ class ResultServiceImpl extends BaseService implements ResultService
     {
         $event = $this->getInformationCollectEventService()->get($eventId);
         if (empty($event)) {
-            $this->createNewException(InformationCollectionException::NOTFOUND_COLLECTION());
+            $this->createNewException(InformationCollectException::NOTFOUND_COLLECTION());
         }
 
         if ('close' == $event['status']) {
-            $this->createNewException(InformationCollectionException::COLLECTION_IS_CLOSE());
+            $this->createNewException(InformationCollectException::COLLECTION_IS_CLOSE());
         }
 
         $user = $this->getUserService()->getUser($userId);
@@ -123,7 +124,18 @@ class ResultServiceImpl extends BaseService implements ResultService
 
     public function findResultItemsByResultId($resultId)
     {
-        return $this->getResultItemDao()->findByResultId($resultId);
+        $resultItems = $this->getResultItemDao()->findByResultId($resultId);
+
+        return $this->filterResultItems($resultItems);
+    }
+
+    protected function filterResultItems($resultItems)
+    {
+        foreach ($resultItems as &$resultItem) {
+            'province_city_area' == $resultItem['code'] && $resultItem['value'] = json_decode($resultItem['value'], true);
+        }
+
+        return $resultItems;
     }
 
     /**
@@ -140,6 +152,66 @@ class ResultServiceImpl extends BaseService implements ResultService
     protected function getUserService()
     {
         return $this->createDao('User:UserService');
+    }
+
+    public function searchCollectedData($conditions, $orderBy, $start, $limit)
+    {
+        $conditions = $this->_prepareConditions($conditions);
+
+        return $this->getResultDao()->search($conditions, $orderBy, $start, $limit);
+    }
+
+    private function _prepareConditions($conditions)
+    {
+        $conditions = array_filter($conditions, function ($value) {
+            if (0 == $value) {
+                return true;
+            }
+
+            return !empty($value);
+        }
+        );
+
+        if (empty($conditions['eventId'])) {
+            $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
+        }
+
+        if (!empty($conditions['startDate'])) {
+            $conditions['startDate'] = strtotime($conditions['startDate']);
+        }
+
+        if (!empty($conditions['endDate'])) {
+            $conditions['endDate'] = strtotime($conditions['endDate']);
+        }
+
+        return $conditions;
+    }
+
+    public function findResultDataByResultIds($resultIds)
+    {
+        $resultData = ArrayToolkit::group(
+            $this->filterResultItems($this->getResultItemDao()->findResultDataByResultIds($resultIds)),
+            'resultId'
+        );
+
+        foreach ($resultData as $resultId => &$datum) {
+            $datum = ArrayToolkit::index($datum, 'code');
+        }
+
+        return $resultData;
+    }
+
+    public function count($conditions)
+    {
+        return $this->getResultDao()->count($conditions);
+    }
+
+    /**
+     * @return ItemDao
+     */
+    protected function getItemDao()
+    {
+        return $this->createDao('InformationCollect:ItemDao');
     }
 
     /**

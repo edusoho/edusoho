@@ -22,8 +22,31 @@ use AppBundle\Util\UploadToken;
 use Biz\Account\Service\AccountProxyService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Common\JsonLogger;
-use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
+use Biz\InformationCollect\FormItem\AddressDetailFormItem;
+use Biz\InformationCollect\FormItem\AgeFormItem;
+use Biz\InformationCollect\FormItem\BirthdayFormItem;
+use Biz\InformationCollect\FormItem\ClassFormItem;
+use Biz\InformationCollect\FormItem\CompanyFormItem;
+use Biz\InformationCollect\FormItem\CountryFormItem;
+use Biz\InformationCollect\FormItem\EmailFormItem;
+use Biz\InformationCollect\FormItem\FormItemFectory;
+use Biz\InformationCollect\FormItem\GenderFormItem;
+use Biz\InformationCollect\FormItem\GradeFormItem;
+use Biz\InformationCollect\FormItem\IdcardFormItem;
+use Biz\InformationCollect\FormItem\InterestFormItem;
+use Biz\InformationCollect\FormItem\LanguageFormItem;
+use Biz\InformationCollect\FormItem\NameFormItem;
+use Biz\InformationCollect\FormItem\OccupationFormItem;
+use Biz\InformationCollect\FormItem\PhoneFormItem;
+use Biz\InformationCollect\FormItem\PositionFormItem;
+use Biz\InformationCollect\FormItem\ProvinceCityAreaFormItem;
+use Biz\InformationCollect\FormItem\QQFormItem;
+use Biz\InformationCollect\FormItem\SchoolFormItem;
+use Biz\InformationCollect\FormItem\WechatFormItem;
+use Biz\InformationCollect\FormItem\WeiboFormItem;
 use Biz\InformationCollect\Service\EventService;
+use Biz\InformationCollect\Service\ResultService;
 use Biz\Player\Service\PlayerService;
 use Biz\S2B2C\Service\FileSourceService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
@@ -203,7 +226,8 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_s2b2c_enabled', [$this, 'isS2B2CEnabled']),
             new \Twig_SimpleFunction('s2b2c_has_behaviour_permission', [$this, 's2b2cHasBehaviourPermission']),
             new \Twig_SimpleFunction('make_local_media_file_token', [$this, 'makeLocalMediaFileToken']),
-            new \Twig_SimpleFunction('information_collection_location_info', [$this, 'informationCollectionLocationInfo']),
+            new \Twig_SimpleFunction('information_collect_location_info', [$this, 'informationCollectLocationInfo']),
+            new \Twig_SimpleFunction('information_collect_form_items', [$this, 'informationCollectFormItems']),
         ];
     }
 
@@ -362,14 +386,12 @@ class WebExtension extends \Twig_Extension
 
         $host = $request->getHttpHost();
         if ($copyright) {
-            $result = !(
-                isset($copyright['owned'])
+            $result = !(isset($copyright['owned'])
                 && isset($copyright['thirdCopyright'])
                 && 2 != $copyright['thirdCopyright']
                 && isset($copyright['licenseDomains'])
                 && in_array($host, explode(';', $copyright['licenseDomains']))
-                || (isset($copyright['thirdCopyright']) && 2 == $copyright['thirdCopyright'])
-            );
+                || (isset($copyright['thirdCopyright']) && 2 == $copyright['thirdCopyright']));
 
             return $result;
         }
@@ -468,11 +490,13 @@ class WebExtension extends \Twig_Extension
             if ($imgs) {
                 $urls = array_unique($imgs[1]);
                 foreach ($urls as $img) {
-                    if (0 === strpos($img, $publicUrlPath)
+                    if (
+                        0 === strpos($img, $publicUrlPath)
                         || 0 === strpos($img, $themeUrlPath)
                         || 0 === strpos($img, $assetUrlPath)
                         || 0 === strpos($img, $bundleUrlPath)
-                        || 0 === strpos($img, $staticDistUrlPath)) {
+                        || 0 === strpos($img, $staticDistUrlPath)
+                    ) {
                         $content = str_replace('"'.$img, '"'.$cdnUrl.$img, $content);
                     }
                 }
@@ -1220,7 +1244,8 @@ class WebExtension extends \Twig_Extension
         $assets = $this->container->get('assets.packages');
         $defaultSetting = $this->getSetting('default', []);
 
-        if (array_key_exists($defaultKey, $defaultSetting)
+        if (
+            array_key_exists($defaultKey, $defaultSetting)
             && $defaultSetting[$defaultKey]
         ) {
             $path = $defaultSetting[$defaultKey];
@@ -1304,13 +1329,13 @@ class WebExtension extends \Twig_Extension
             $defaultSetting = $this->getSetting('default', []);
 
             if ((('course.png' == $defaultKey && array_key_exists(
-                            'defaultCoursePicture',
-                            $defaultSetting
-                        ) && 1 == $defaultSetting['defaultCoursePicture'])
+                    'defaultCoursePicture',
+                    $defaultSetting
+                ) && 1 == $defaultSetting['defaultCoursePicture'])
                     || ('avatar.png' == $defaultKey && array_key_exists(
-                            'defaultAvatar',
-                            $defaultSetting
-                        ) && 1 == $defaultSetting['defaultAvatar']))
+                        'defaultAvatar',
+                        $defaultSetting
+                    ) && 1 == $defaultSetting['defaultAvatar']))
                 && (array_key_exists($defaultKey, $defaultSetting)
                     && $defaultSetting[$defaultKey])
             ) {
@@ -2055,29 +2080,90 @@ class WebExtension extends \Twig_Extension
         return $this->getTokenService()->makeToken($type, $fields);
     }
 
-    public function informationCollectionLocationInfo($eventId)
+    public function informationCollectLocationInfo($eventId)
     {
         $locationInfos = $this->getEventService()->getEventLocations($eventId);
 
         $locationInfo = '';
-        if (isset($locationInfos['course'])) {
-            if (0 == $locationInfos['course'][0]) {
+        if (!empty($locationInfos['course'])) {
+            if (1 == count($locationInfos['course']) && '0' == $locationInfos['course'][0]) {
                 $locationInfo .= '全部课程；';
             } else {
-                $courses = $this->getCourseService()->findCoursesByIds($locationInfos['course']);
-                $locationInfo .= implode('；', ArrayToolkit::column($courses, 'courseSetTitle')).'；course1；myCourse1；homeworkClass；aaaa；';
+                $courses = $this->getCourseSetService()->findCourseSetsByIds($locationInfos['course']);
+                $locationInfo .= implode('；', ArrayToolkit::column($courses, 'title')).'；';
             }
         }
-        if (isset($locationInfos['classroom'])) {
-            if (0 == $locationInfos['classroom'][0]) {
+        if (!empty($locationInfos['classroom'])) {
+            if (1 == count($locationInfos['classroom']) && '0' == $locationInfos['classroom'][0]) {
                 $locationInfo .= '全部班级；';
             } else {
-                $classrooms = $this->getClassroomService()->findClassroomsByIds($locationInfos['course']);
+                $classrooms = $this->getClassroomService()->findClassroomsByIds($locationInfos['classroom']);
                 $locationInfo .= implode('；', ArrayToolkit::column($classrooms, 'title')).'；';
             }
         }
 
         return $locationInfo;
+    }
+
+    public function informationCollectFormItems($eventId = 0)
+    {
+        $selectFormItems = [];
+        if (!empty($eventId)) {
+            $selectFormItems = $this->getEventService()->findItemsByEventId($eventId);
+        }
+
+        $selectFormItems = empty($selectFormItems) ? [] : ArrayToolkit::index($selectFormItems, 'code');
+
+        return [
+            'base' => [
+                $this->getFormItemDataByCodeWithSelectedItems(NameFormItem::FIELD, $selectFormItems),
+                $this->getFormItemDataByCodeWithSelectedItems(GenderFormItem::FIELD, $selectFormItems),
+                $this->getFormItemDataByCodeWithSelectedItems(AgeFormItem::FIELD, $selectFormItems),
+                $this->getFormItemDataByCodeWithSelectedItems(BirthdayFormItem::FIELD, $selectFormItems),
+                $this->getFormItemDataByCodeWithSelectedItems(IdcardFormItem::FIELD, $selectFormItems),
+            ],
+            'contact' => [
+                $this->getFormItemDataByCodeWithSelectedItems(PhoneFormItem::FIELD, $selectFormItems),
+                $this->getFormItemDataByCodeWithSelectedItems(WechatFormItem::FIELD, $selectFormItems),
+                $this->getFormItemDataByCodeWithSelectedItems(QQFormItem::FIELD, $selectFormItems),
+                $this->getFormItemDataByCodeWithSelectedItems(WeiboFormItem::FIELD, $selectFormItems),
+                $this->getFormItemDataByCodeWithSelectedItems(EmailFormItem::FIELD, $selectFormItems),
+                $this->getFormItemDataByCodeWithSelectedItems(ProvinceCityAreaFormItem::FIELD, $selectFormItems),
+                $this->getFormItemDataByCodeWithSelectedItems(AddressDetailFormItem::FIELD, $selectFormItems),
+            ],
+            'company' => [
+                $this->getFormItemDataByCodeWithSelectedItems(OccupationFormItem::FIELD, $selectFormItems),
+                $this->getFormItemDataByCodeWithSelectedItems(CompanyFormItem::FIELD, $selectFormItems),
+                $this->getFormItemDataByCodeWithSelectedItems(PositionFormItem::FIELD, $selectFormItems),
+            ],
+            'school' => [
+                $this->getFormItemDataByCodeWithSelectedItems(SchoolFormItem::FIELD, $selectFormItems),
+                $this->getFormItemDataByCodeWithSelectedItems(GradeFormItem::FIELD, $selectFormItems),
+                $this->getFormItemDataByCodeWithSelectedItems(ClassFormItem::FIELD, $selectFormItems),
+            ],
+            'other' => [
+                $this->getFormItemDataByCodeWithSelectedItems(CountryFormItem::FIELD, $selectFormItems),
+                $this->getFormItemDataByCodeWithSelectedItems(LanguageFormItem::FIELD, $selectFormItems),
+                $this->getFormItemDataByCodeWithSelectedItems(InterestFormItem::FIELD, $selectFormItems),
+            ],
+        ];
+    }
+
+    private function getFormItemDataByCodeWithSelectedItems($code, $eventFormItems = [])
+    {
+        if (!empty($eventFormItems) && in_array($code, array_keys($eventFormItems))) {
+            return array_merge(FormItemFectory::create($code)->getData(), $eventFormItems[$code], ['selected' => true]);
+        }
+
+        return FormItemFectory::create($code)->getData();
+    }
+
+    /**
+     * @return ResultService
+     */
+    protected function getResultService()
+    {
+        return $this->createService('InformationCollect:ResultService');
     }
 
     /**
@@ -2089,11 +2175,11 @@ class WebExtension extends \Twig_Extension
     }
 
     /**
-     * @return CourseService
+     * @return CourseSetService
      */
-    protected function getCourseService()
+    protected function getCourseSetService()
     {
-        return $this->createService('Course:CourseService');
+        return $this->createService('Course:CourseSetService');
     }
 
     /**

@@ -6,7 +6,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\InformationCollect\FormItem\FormItemFectory;
-use Biz\InformationCollect\InformationCollectionException;
+use Biz\InformationCollect\InformationCollectException;
 
 class InformationCollectForm extends AbstractResource
 {
@@ -14,18 +14,19 @@ class InformationCollectForm extends AbstractResource
     {
         $event = $this->getInformationCollectEventService()->get($eventId);
         if (empty($event)) {
-            throw InformationCollectionException::NOTFOUND_COLLECTION();
+            throw InformationCollectException::NOTFOUND_COLLECTION();
         }
 
         $event['items'] = $this->getInformationCollectEventService()->findItemsByEventId($eventId);
         $result = $this->getInformationCollectResultService()->getResultByUserIdAndEventId($this->getCurrentUser()->getId(), $eventId);
         if (!empty($result['items'])) {
             $resultItems = ArrayToolkit::index($result['items'], 'code');
+            $event['allowSkip'] = true;
         }
 
         foreach ($event['items'] as &$item) {
             $value = empty($resultItems[$item['code']]) ? '' : $resultItems[$item['code']]['value'];
-            $item['data'] = FormItemFectory::create($item['code'])->required($item['required'])->value($value)->getData();
+            $item = FormItemFectory::create($item['code'])->required($item['required'])->value($value)->getData();
         }
 
         return $event;
@@ -38,7 +39,7 @@ class InformationCollectForm extends AbstractResource
         $this->getInformationCollectResultService()->submitForm(
             $this->getCurrentUser()->getId(),
             $eventId,
-            $request->request->get('form', [])
+            $request->request->all()
         );
 
         return $this->get($request, $eventId);

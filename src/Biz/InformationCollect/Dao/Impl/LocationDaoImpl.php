@@ -12,8 +12,7 @@ class LocationDaoImpl extends AdvancedDaoImpl implements LocationDao
     public function declares()
     {
         return [
-            'serializes' => [
-            ],
+            'serializes' => [],
             'orderbys' => [
                 'id',
             ],
@@ -22,7 +21,16 @@ class LocationDaoImpl extends AdvancedDaoImpl implements LocationDao
             ],
             'conditions' => [
                 'id = :id',
+                'id IN (:ids)',
                 'eventId = :eventId',
+                'targetType IN (:targetTypes)',
+                'targetType = :targetType',
+                'targetId IN (:targetIds)',
+                'eventId <> :excludeEventId',
+                'eventId = :eventId',
+                'action = :action',
+                'targetId <> :excludeTargetId',
+                'targetId <= :targetId_LTE',
             ],
         ];
     }

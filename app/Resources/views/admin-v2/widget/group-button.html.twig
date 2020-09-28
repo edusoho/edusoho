@@ -27,10 +27,10 @@
     <li>
       {% if permission.visible is defined %}
         {% if eval_expression(permission.visible) %}
-          {{ self_macro.menu_link_html(_context, permission, permission.class|default('')) }}
+          {{ self_macro.menu_link_html(_context, permission, permission.class|default(''), permission.id|default('')) }}
         {% endif %}
       {% else %}
-        {{ self_macro.menu_link_html(_context, permission, permission.class|default('')) }}
+        {{ self_macro.menu_link_html(_context, permission, permission.class|default(''), permission.id|default('')) }}
       {% endif %}
     </li>
   {% endfor %}
