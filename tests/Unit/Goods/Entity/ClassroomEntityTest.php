@@ -72,6 +72,13 @@ class ClassroomEntityTest extends BaseTestCase
         self::assertEmpty($classrooms);
     }
 
+    public function testCanManageTarget()
+    {
+        $classroom = $this->getClassroomService()->addClassroom($this->mockClassroom());
+        list($product, $goods) = $this->getProductAndGoods($classroom);
+        self::assertTrue($this->getGoodsEntityFactory()->create('classroom')->canManageTarget($goods));
+    }
+
     private function getProductAndGoods($classroom)
     {
         $product = $this->getProductService()->getProductByTargetIdAndType($classroom['id'], 'classroom');

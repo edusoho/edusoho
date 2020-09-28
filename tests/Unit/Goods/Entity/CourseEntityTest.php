@@ -75,6 +75,13 @@ class CourseEntityTest extends BaseTestCase
         self::assertEmpty($courses);
     }
 
+    public function testCanManageTarget()
+    {
+        $courseSet = $this->getCourseSetService()->createCourseSet($this->mockCourseSet());
+        list($product, $goods) = $this->getProductAndGoods($courseSet);
+        self::assertTrue($this->getGoodsEntityFactory()->create('course')->canManageTarget($goods));
+    }
+
     private function getProductAndGoods($courseSet)
     {
         $product = $this->getProductService()->getProductByTargetIdAndType($courseSet['id'], 'course');
