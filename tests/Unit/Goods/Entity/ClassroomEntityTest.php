@@ -51,13 +51,26 @@ class ClassroomEntityTest extends BaseTestCase
         $classroom = $this->getClassroomService()->addClassroom($this->mockClassroom());
         list($product, $goods) = $this->getProductAndGoods($classroom);
         $goodsLists = $this->getGoodsEntityFactory()->create('classroom')->fetchTargets([$goods]);
-        self::assertEquals($classroom, current($goodsLists)['classroom']);
+        self::assertEquals($classroom, reset($goodsLists)['classroom']);
     }
 
     public function testFetchTargets_whenEmpty()
     {
         $goodsLists = $this->getGoodsEntityFactory()->create('classroom')->fetchTargets([]);
         self::assertEmpty($goodsLists);
+    }
+
+    public function testFetchSpecs()
+    {
+        $classroom = $this->getClassroomService()->addClassroom($this->mockClassroom());
+        $classrooms = $this->getGoodsEntityFactory()->create('classroom')->fetchSpecs([$classroom]);
+        self::assertEquals($classroom['title'], reset($classrooms)['spec']['title']);
+    }
+
+    public function testFetchSpecs_whenEmpty()
+    {
+        $classrooms = $this->getGoodsEntityFactory()->create('classroom')->fetchSpecs([]);
+        self::assertEmpty($classrooms);
     }
 
     private function getProductAndGoods($classroom)
