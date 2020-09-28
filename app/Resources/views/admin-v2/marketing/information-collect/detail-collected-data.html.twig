@@ -37,7 +37,7 @@
       </tr>
     {% else %}
       <tr>
-        <td colspan="24">
+        <td colspan="{{ labels|length|default(0) + 3 }}">
           <div class="empty">
             {% if error|default() %}
               {{ error|default() }}
