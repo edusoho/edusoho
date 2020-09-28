@@ -7,8 +7,8 @@
 <div class="panel-body">
   <table class="table table-noborder" style="margin-bottom: 0">
     <tr>
-      <td width="8%">{{ 'admin.information_collect.title_th'|trans }}：</td>
-      <td width="40%">
+      <td width="10%">{{ 'admin.information_collect.title_th'|trans }}：</td>
+      <td width="50%">
         <span style="cursor: pointer" {% if event.title|length > 30 %}title="{{ event.title }}"{% endif %}>
               {{ event.title | slice(0,30) }}{% if event.title|length >30 %}...{% endif %}
         </span>
@@ -21,7 +21,7 @@
     </tr>
     <tr>
       <td width="10%">{{ 'admin.information_collect.location_th'|trans }}：</td>
-      <td width="40%">
+      <td width="50%">
         {% set location = information_collect_location_info(event.id) %}
         {% set action = 'admin.information_collect.action.' ~ event.action %}
         <span>{{ action|trans }}</span>
@@ -33,11 +33,11 @@
     </tr>
     <tr>
       <td width="10%">{{ 'admin.information_collect.create_time_th'|trans }}：</td>
-      <td width="40%">{{ event.createdTime|date('Y-m-d H:i:s') }}</td>
+      <td width="50%">{{ event.createdTime|date('Y-m-d H:i:s') }}</td>
     </tr>
     <tr>
       <td width="10%">{{ 'admin.information_collect.creator'|trans }}：</td>
-      <td width="40%">{{ creator.nickname }}</td>
+      <td width="50%">{{ creator.nickname }}</td>
     </tr>
   </table>
 </div>
