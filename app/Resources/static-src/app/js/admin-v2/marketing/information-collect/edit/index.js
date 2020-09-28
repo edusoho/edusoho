@@ -65,7 +65,7 @@ $.validator.addMethod('checkSelectedCourseIds', function (value, element) {
     }
 
     let $checkedTargetCourse = $("[name='action']:checked").parents('.js-action-radio').find('.target-course:checked');
-    return !$checkedTargetCourse.length || ($checkedTargetCourse.length && $('input[name="courseIds"]').val().length > 0);
+    return !$checkedTargetCourse.length || ($checkedTargetCourse.length && store.get('information_collect_selected_' + $("[name='action']:checked").val() + '_course_ids').length > 0);
 }, $.validator.format(Translator.trans('admin_v2.information_collect.chooser.target_course_hint')));
 
 $.validator.addMethod('checkSelectedClassroomIds', function (value, element) {
@@ -73,7 +73,7 @@ $.validator.addMethod('checkSelectedClassroomIds', function (value, element) {
         return true;
     }
     let $checkedTargetClassroom = $("[name='action']:checked").parents('.js-action-radio').find('.js-location-type:checked').parents('.action-type-group').find('.target-classroom:checked');
-    return !$checkedTargetClassroom.length || ($checkedTargetClassroom.length && $('input[name="classroomIds"]').val().length > 0);
+    return !$checkedTargetClassroom.length || ($checkedTargetClassroom.length && store.get('information_collect_selected_' + $("[name='action']:checked").val() + '_classroom_ids').length > 0);
 }, $.validator.format(Translator.trans('admin_v2.information_collect.chooser.target_classroom_hint')));
 
 $('.js-save-btn').on('click', (event) => {
@@ -109,8 +109,8 @@ function getFormData() {
             $('.js-checkbox-group .action-type-group-part').find('.target-course:checked').length ? 'course' : null,
             $('.js-checkbox-group .action-type-group-part').find('.target-classroom:checked').length ? 'classroom' : null,
         ];
-        data.courseIds = $('.js-checkbox-group .action-type-group-part').find('.target-course:checked').length ? $('input[name="courseIds"]').val() : [];
-        data.classroomIds = $('.js-checkbox-group .action-type-group-part').find('.target-classroom:checked').length ? $('input[name="classroomIds"]').val() : [];
+        data.courseIds = store.get('information_collect_selected_'+data.action+'_course_ids');
+        data.classroomIds = store.get('information_collect_selected_' + data.action + '_classroom_ids');
     }
 
     data.items = [];
@@ -158,6 +158,7 @@ function clearInformationCollectStorage() {
             store.get('information_collect_selected_' + actionName + '_' + typeName + '_ids', []) ? store.set('information_collect_selected_' + actionName + '_' + typeName + '_ids', []) : '';
             if ($('input[name="' + actionName + '_' + typeName + '_ids"]').val()) {
                 store.set('information_collect_' + actionName + '_' + typeName + '_ids', JSON.parse($('input[name="' + actionName  + '_' + typeName + '_ids"]').val()));
+                store.set('information_collect_selected_' + actionName + '_' + typeName + '_ids', JSON.parse($('input[name="' + actionName  + '_' + typeName + '_ids"]').val()));
             }            
         });
     });
