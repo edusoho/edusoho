@@ -68,8 +68,8 @@ class InformationCollectController extends BaseController
         $allClassroomLocations = $this->getEventService()->searchLocations(['targetType' => 'classroom', 'targetId_LTE' => 0], [], 0, 2, ['action', 'eventId']);
 
         return $this->render('admin-v2/marketing/information-collect/edit/index.html.twig', [
-            'allCourseLocations' =>  ArrayToolkit::index($allCourseLocations, 'action'),
-            'allClassroomLocations' =>  ArrayToolkit::index($allClassroomLocations, 'action'),
+            'allCourseLocations' => ArrayToolkit::index($allCourseLocations, 'action'),
+            'allClassroomLocations' => ArrayToolkit::index($allClassroomLocations, 'action'),
         ]);
     }
 
@@ -100,9 +100,9 @@ class InformationCollectController extends BaseController
         $locationInfo = [];
         foreach ($locations as $location) {
             if ('course' == $location['targetType']) {
-                $locationInfo['courseIds'][] = $location['targetId'];
+                '0' != $location['targetId'] && $locationInfo['courseIds'][] = $location['targetId'];
             } else {
-                $locationInfo['classroomIds'][] = $location['targetId'];
+                '0' != $location['targetId'] && $locationInfo['classroomIds'][] = $location['targetId'];
             }
         }
 
@@ -112,8 +112,8 @@ class InformationCollectController extends BaseController
         return $this->render('admin-v2/marketing/information-collect/edit/index.html.twig', [
             'event' => $event,
             'locationInfo' => $locationInfo,
-            'allCourseLocations' =>  ArrayToolkit::index($allCourseLocations, 'action'),
-            'allClassroomLocations' =>  ArrayToolkit::index($allClassroomLocations, 'action'),
+            'allCourseLocations' => ArrayToolkit::index($allCourseLocations, 'action'),
+            'allClassroomLocations' => ArrayToolkit::index($allClassroomLocations, 'action'),
         ]);
     }
 

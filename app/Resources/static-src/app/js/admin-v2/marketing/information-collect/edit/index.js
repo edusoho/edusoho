@@ -45,15 +45,12 @@ let validator = $form.validate({
 });
 
 $.validator.addMethod('checkoutTargetTypes', function (value, element) {
-    if ($('input[name="locationType"]:checked').val() == 'all') {
-        let $checkedTargetTypes = $('input[name="locationType"]:checked').parents('.action-type-group').find('.target-types-all:checked');
-        if (!$checkedTargetTypes.length) {
-            return false;
-        }
+    if (typeof($("[name='action']:checked").parents('.js-action-radio').find('.js-location-type:checked').val()) == 'undefined') {
+        return false;
     }
 
-    if ($('input[name="locationType"]:checked').val() == 'part') {
-        let $checkedTargetTypes = $('input[name="locationType"]:checked').parents('.action-type-group').find('.target-types-part:checked');
+    if ($("[name='action']:checked").parents('.js-action-radio').find('.js-location-type:checked').val() == 'all') {
+        let $checkedTargetTypes = $("[name='action']:checked").parents('.js-action-radio').find('.target-types-all:checked');
         if (!$checkedTargetTypes.length) {
             return false;
         }
@@ -63,19 +60,19 @@ $.validator.addMethod('checkoutTargetTypes', function (value, element) {
 }, $.validator.format(Translator.trans('admin_v2.information_collect.chooser.target_hint')));
 
 $.validator.addMethod('checkSelectedCourseIds', function (value, element) {
-    if ($('input[name="locationType"]:checked').val() == 'all') {
+    if ($("[name='action']:checked").parents('.js-action-radio').find('.js-location-type:checked').val() == 'all') {
         return true;
     }
 
-    let $checkedTargetCourse = $('input[name="locationType"]:checked').parents('.action-type-group').find('.target-course:checked');
+    let $checkedTargetCourse = $("[name='action']:checked").parents('.js-action-radio').find('.target-course:checked');
     return !$checkedTargetCourse.length || ($checkedTargetCourse.length && $('input[name="courseIds"]').val().length > 0);
 }, $.validator.format(Translator.trans('admin_v2.information_collect.chooser.target_course_hint')));
 
 $.validator.addMethod('checkSelectedClassroomIds', function (value, element) {
-    if ($('input[name="locationType"]:checked').val() == 'all') {
+    if ($("[name='action']:checked").parents('.js-action-radio').find('.js-location-type:checked').val() == 'all') {
         return true;
     }
-    let $checkedTargetClassroom = $('input[name="locationType"]:checked').parents('.action-type-group').find('.target-classroom:checked');
+    let $checkedTargetClassroom = $("[name='action']:checked").parents('.js-action-radio').find('.js-location-type:checked').parents('.action-type-group').find('.target-classroom:checked');
     return !$checkedTargetClassroom.length || ($checkedTargetClassroom.length && $('input[name="classroomIds"]').val().length > 0);
 }, $.validator.format(Translator.trans('admin_v2.information_collect.chooser.target_classroom_hint')));
 
@@ -100,7 +97,7 @@ function getFormData() {
         }
     });
 
-    if (data.locationType == 'all') {
+    if ($("[name='action']:checked").parents('.js-action-radio').find('.js-location-type:checked').val() == 'all') {
         data.targetTypes = [
             $('.js-checkbox-group .action-type-group-all').find('.target-course:checked').length ? 'course' : null,
             $('.js-checkbox-group .action-type-group-all').find('.target-classroom:checked').length ? 'classroom' : null,
@@ -149,8 +146,6 @@ if ($('input[name="action"]').length) {
             $('input[name="allowSkip"]').eq('1').removeProp('disabled');
             $('input[name="allowSkip"]').eq('1').prop('checked', true);
         }
-
-        clearInformationCollectStorage();
     });
 }
 

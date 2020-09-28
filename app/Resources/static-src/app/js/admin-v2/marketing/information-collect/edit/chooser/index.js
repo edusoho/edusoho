@@ -11,7 +11,7 @@ let selectedStoreName = 'information_collect_selected_' + action + '_' + type + 
 
 let targetIds = new Array();
 
-if (store.get(storeName, []).length > 0) {
+if (store.get(storeName, []) && store.get(storeName, []).length > 0) {
     initChecked(store.get(storeName, []));
 }
 
@@ -116,7 +116,7 @@ $('#search').on('click', function () {
 $('.search-list').on('click', '.batch-select', function () {
     let $selectdElement = $(this);
 
-    if (store.get(storeName, []).length > 0) {
+    if (store.get(storeName, []) && store.get(storeName, []).length > 0) {
         targetIds = deleteVacancy(store.get(storeName, []));
     };
 
@@ -141,7 +141,7 @@ $('.search-list').on('click', '.batch-item', function () {
     let length = $('.batch-item').length;
     let checked_count = 0;
 
-    if (store.get(storeName, []).length > 0) {
+    if (store.get(storeName, []) && store.get(storeName, []).length > 0) {
         targetIds = deleteVacancy(store.get(storeName, []));
     };
 

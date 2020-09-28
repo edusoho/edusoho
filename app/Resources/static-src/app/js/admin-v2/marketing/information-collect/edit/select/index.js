@@ -11,7 +11,7 @@ $('.select-target-modal').on('click', '.pagination li', (event) => {
     getSelectedTargets($(event.currentTarget).data('url'));
 });
 
-if (store.get(storeName, []).length > 0) {
+if (store.get(storeName, []) && store.get(storeName, []).length > 0) {
     getSelectedTargets($table.data('selectedUrl'));
 };
 

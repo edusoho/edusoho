@@ -40,8 +40,8 @@
 				<div class="col-md-6 controls">
 					<div class="radios js-action-radio-group">
 						<input class="target-ids" type="hidden" name="selectedTargetTypes" value="">
-						{# <input class="target-ids" type="hidden" name="courseIds" value="{% if not hasCheckedAll %}{{ locationInfo.courseIds|default([])|json_encode }}{% endif %}"> #}
-						{# <input class="target-ids" type="hidden" name="classroomIds" value="{% if not hasCheckedAll %}{{ locationInfo.classroomIds|default([])|json_encode }}{% endif %}"> #}
+						<input class="target-ids" type="hidden" name="courseIds" value="">
+						<input class="target-ids" type="hidden" name="classroomIds" value="">
 						<div class="js-action-radio">
 							<label>
 								<input type="radio" name="action" value="buy_before" {% if event.action|default('') == 'buy_before' %} checked="checked" {% endif %}>
@@ -54,8 +54,6 @@
 						<div class="js-action-radio">
 							<label>
 								<input type="radio" name="action" value="buy_after" {% if event.action|default('') == 'buy_after' %} checked="checked" {% endif %}>
-								{# <input type="hidden" name="buy_after_course_ids" value="{% if not hasCheckedAll and event.action|default('') == 'buy_after' %}{{ locationInfo.courseIds|default([])|json_encode }}{% endif %}"> #}
-								{# <input type="hidden" name="buy_after_classroom_ids" value="{% if not hasCheckedAll and event.action|default('') == 'buy_after' %}{{ locationInfo.classroomIds|default([])|json_encode }}{% endif %}"> #}
 								<span>{{ 'admin_v2.information_collect.edit.action_after'|trans }}</span>
 								<label class="help-block pll mb0">({{ 'admin_v2.information_collect.edit.action_after.help_block'|trans }})</label>
 								{% include "admin-v2/marketing/information-collect/edit/location.html.twig" with {action: 'buy_after'}%}
