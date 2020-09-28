@@ -22,7 +22,7 @@ use AppBundle\Util\UploadToken;
 use Biz\Account\Service\AccountProxyService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Common\JsonLogger;
-use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
 use Biz\InformationCollect\FormItem\AddressDetailFormItem;
 use Biz\InformationCollect\FormItem\AgeFormItem;
 use Biz\InformationCollect\FormItem\BirthdayFormItem;
@@ -2089,8 +2089,8 @@ class WebExtension extends \Twig_Extension
             if (1 == count($locationInfos['course']) && '0' == $locationInfos['course'][0]) {
                 $locationInfo .= '全部课程；';
             } else {
-                $courses = $this->getCourseService()->findCoursesByIds($locationInfos['course']);
-                $locationInfo .= implode('；', ArrayToolkit::column($courses, 'courseSetTitle'));
+                $courses = $this->getCourseSetService()->findCourseSetsByIds($locationInfos['course']);
+                $locationInfo .= implode('；', ArrayToolkit::column($courses, 'title'));
             }
         }
         if (isset($locationInfos['classroom'])) {
@@ -2175,11 +2175,11 @@ class WebExtension extends \Twig_Extension
     }
 
     /**
-     * @return CourseService
+     * @return CourseSetService
      */
-    protected function getCourseService()
+    protected function getCourseSetService()
     {
-        return $this->createService('Course:CourseService');
+        return $this->createService('Course:CourseSetService');
     }
 
     /**
