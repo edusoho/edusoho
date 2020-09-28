@@ -3,7 +3,7 @@
 		<div class="selecte-form-item-group mbm">{{('admin_v2.information_collect.form_items.select_group.'~group~'_info')|trans}}</div>
 		<div class="cd-row-flex cd-row-flex-space-between">
 			{% for field in fields %}
-				<div class="js-add-item-btn btn btn-default col-md-5 mbm {% if field.selected|default(false) %}disabled{% endif %}" id="btn-add-item-{{ field.field }}" data-target-item="#item-{{ field.field }}">{{ field.title }}</div>
+				<div class="js-add-item-btn btn btn-default col-md-5 mbm {% if field.field in selectedFormFields|keys %}disabled{% endif %}" id="btn-add-item-{{ field.field }}" data-target-item="#item-{{ field.field }}">{{ field.title }}</div>
 			{% endfor %}
 		</div>
 	{% endfor %}

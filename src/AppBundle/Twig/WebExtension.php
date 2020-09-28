@@ -23,28 +23,7 @@ use Biz\Account\Service\AccountProxyService;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Common\JsonLogger;
 use Biz\Course\Service\CourseService;
-use Biz\InformationCollect\FormItem\AddressDetailFormItem;
-use Biz\InformationCollect\FormItem\AgeFormItem;
-use Biz\InformationCollect\FormItem\BirthdayFormItem;
-use Biz\InformationCollect\FormItem\ClassFormItem;
-use Biz\InformationCollect\FormItem\CompanyFormItem;
-use Biz\InformationCollect\FormItem\CountryFormItem;
-use Biz\InformationCollect\FormItem\EmailFormItem;
 use Biz\InformationCollect\FormItem\FormItemFectory;
-use Biz\InformationCollect\FormItem\GenderFormItem;
-use Biz\InformationCollect\FormItem\GradeFormItem;
-use Biz\InformationCollect\FormItem\IdcardFormItem;
-use Biz\InformationCollect\FormItem\InterestFormItem;
-use Biz\InformationCollect\FormItem\LanguageFormItem;
-use Biz\InformationCollect\FormItem\NameFormItem;
-use Biz\InformationCollect\FormItem\OccupationFormItem;
-use Biz\InformationCollect\FormItem\PhoneFormItem;
-use Biz\InformationCollect\FormItem\PositionFormItem;
-use Biz\InformationCollect\FormItem\ProvinceCityAreaFormItem;
-use Biz\InformationCollect\FormItem\QQFormItem;
-use Biz\InformationCollect\FormItem\SchoolFormItem;
-use Biz\InformationCollect\FormItem\WechatFormItem;
-use Biz\InformationCollect\FormItem\WeiboFormItem;
 use Biz\InformationCollect\Service\EventService;
 use Biz\InformationCollect\Service\ResultService;
 use Biz\Player\Service\PlayerService;
@@ -2112,50 +2091,23 @@ class WebExtension extends \Twig_Extension
             $selectFormItems = $this->getEventService()->findItemsByEventId($eventId);
         }
 
-        $selectFormItems = empty($selectFormItems) ? [] : ArrayToolkit::index($selectFormItems, 'code');
+        $items = [];
+        if (empty($selectFormItems)) {
+            foreach (FormItemFectory::getFormItems() as $code => $itemInstanceClass) {
+                $instance = new $itemInstanceClass();
+                $item = $instance->getData();
+                $items[$item['group']][$code] = $item;
+            }
 
-        return [
-            'base' => [
-                $this->getFormItemDataByCodeWithSelectedItems(NameFormItem::FIELD, $selectFormItems),
-                $this->getFormItemDataByCodeWithSelectedItems(GenderFormItem::FIELD, $selectFormItems),
-                $this->getFormItemDataByCodeWithSelectedItems(AgeFormItem::FIELD, $selectFormItems),
-                $this->getFormItemDataByCodeWithSelectedItems(BirthdayFormItem::FIELD, $selectFormItems),
-                $this->getFormItemDataByCodeWithSelectedItems(IdcardFormItem::FIELD, $selectFormItems),
-            ],
-            'contact' => [
-                $this->getFormItemDataByCodeWithSelectedItems(PhoneFormItem::FIELD, $selectFormItems),
-                $this->getFormItemDataByCodeWithSelectedItems(WechatFormItem::FIELD, $selectFormItems),
-                $this->getFormItemDataByCodeWithSelectedItems(QQFormItem::FIELD, $selectFormItems),
-                $this->getFormItemDataByCodeWithSelectedItems(WeiboFormItem::FIELD, $selectFormItems),
-                $this->getFormItemDataByCodeWithSelectedItems(EmailFormItem::FIELD, $selectFormItems),
-                $this->getFormItemDataByCodeWithSelectedItems(ProvinceCityAreaFormItem::FIELD, $selectFormItems),
-                $this->getFormItemDataByCodeWithSelectedItems(AddressDetailFormItem::FIELD, $selectFormItems),
-            ],
-            'company' => [
-                $this->getFormItemDataByCodeWithSelectedItems(OccupationFormItem::FIELD, $selectFormItems),
-                $this->getFormItemDataByCodeWithSelectedItems(CompanyFormItem::FIELD, $selectFormItems),
-                $this->getFormItemDataByCodeWithSelectedItems(PositionFormItem::FIELD, $selectFormItems),
-            ],
-            'school' => [
-                $this->getFormItemDataByCodeWithSelectedItems(SchoolFormItem::FIELD, $selectFormItems),
-                $this->getFormItemDataByCodeWithSelectedItems(GradeFormItem::FIELD, $selectFormItems),
-                $this->getFormItemDataByCodeWithSelectedItems(ClassFormItem::FIELD, $selectFormItems),
-            ],
-            'other' => [
-                $this->getFormItemDataByCodeWithSelectedItems(CountryFormItem::FIELD, $selectFormItems),
-                $this->getFormItemDataByCodeWithSelectedItems(LanguageFormItem::FIELD, $selectFormItems),
-                $this->getFormItemDataByCodeWithSelectedItems(InterestFormItem::FIELD, $selectFormItems),
-            ],
-        ];
-    }
-
-    private function getFormItemDataByCodeWithSelectedItems($code, $eventFormItems = [])
-    {
-        if (!empty($eventFormItems) && in_array($code, array_keys($eventFormItems))) {
-            return array_merge(FormItemFectory::create($code)->getData(), $eventFormItems[$code], ['selected' => true]);
+            return $items;
         }
 
-        return FormItemFectory::create($code)->getData();
+        foreach ($selectFormItems as  $item) {
+            $formItem = FormItemFectory::create($item['code'])->getData();
+            $items[$item['code']] = array_merge($item, $formItem);
+        }
+
+        return $items;
     }
 
     /**

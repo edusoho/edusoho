@@ -48,6 +48,6 @@
 {% endblock %}
 {% block footer %}
 	<div class="row">
-		<button type="button" class="btn btn-primary js-save-selected-target col-md-4 col-md-offset-4" data-target-count="selected-{{ type }}-count" data-target-input="{{ type }}Ids">{{ 'form.btn.save'|trans }}</button>
+		<button type="button" class="btn btn-primary js-save-selected-target col-md-4 col-md-offset-4" data-target-count="selected-{{ action }}-{{ type }}-count" data-target-input="{{ type }}Ids" data-target-checkbox=".js-target-{{ action }}-course">{{ 'form.btn.save'|trans }}</button>
 	</div>
 {% endblock %}

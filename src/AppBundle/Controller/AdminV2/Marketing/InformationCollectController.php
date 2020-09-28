@@ -117,9 +117,10 @@ class InformationCollectController extends BaseController
         ]);
     }
 
-    public function targetModalAction(Request $request, $type)
+    public function targetModalAction(Request $request, $action, $type)
     {
         return $this->render('admin-v2/marketing/information-collect/edit/select/select-target-modal.html.twig', [
+            'action' => $action,
             'type' => $type,
             'eventId' => $request->query->get('eventId'),
         ]);

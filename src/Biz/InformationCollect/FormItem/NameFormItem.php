@@ -17,6 +17,7 @@ class NameFormItem extends FormItem
             'title' => self::TITLE,
             'field' => self::FIELD,
             'value' => $this->value,
+            'group' => self::BASE_INFO_GROUP,
             'validate' => [
                 ['required' => $this->required, 'message' => self::TITLE.'不能为空'],
                 ['min' => 2, 'message' => '最少输入2个字符'],

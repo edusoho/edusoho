@@ -33,6 +33,9 @@ let validator = $form.validate({
         classroomIds: {
             checkSelectedClassroomIds: true
         },
+        items: {
+            required: true
+        }
     },
 });
 
@@ -58,38 +61,17 @@ $.validator.addMethod('checkSelectedCourseIds', function (value, element) {
     if ($('input[name="locationType"]:checked').val() == 'all') {
         return true;
     }
-    let result = true;
 
-    if ($('input[name="locationType"]:checked').val() == 'part') {
-        let $checkedTargetTypes = $('input[name="locationType"]:checked').parents('.action-type-group').find('.target-types-part:checked');
-        $.each($checkedTargetTypes, function (index, value) {
-            if ($(value).val() == 'course') {
-                result = $('input[name="courseIds"]').val().length > 0;
-                return;
-            }
-        });
-    }
-
-    return result;
+    let $checkedTargetCourse = $('input[name="locationType"]:checked').parents('.action-type-group').find('.target-course:checked');
+    return !$checkedTargetCourse.length || ($checkedTargetCourse.length && $('input[name="courseIds"]').val().length > 0);
 }, $.validator.format(Translator.trans('admin_v2.information_collect.chooser.target_course_hint')));
 
 $.validator.addMethod('checkSelectedClassroomIds', function (value, element) {
     if ($('input[name="locationType"]:checked').val() == 'all') {
         return true;
     }
-    let result = true;
-
-    if ($('input[name="locationType"]:checked').val() == 'part') {
-        let $checkedTargetTypes = $('input[name="locationType"]:checked').parents('.action-type-group').find('.target-types-part:checked');
-        $.each($checkedTargetTypes, function (index, value) {
-            if ($(value).val() == 'classroom') {
-                result = $('input[name="classroomIds"]').val().length > 0;
-                return;
-            }
-        });
-    }
-
-    return result;
+    let $checkedTargetClassroom = $('input[name="locationType"]:checked').parents('.action-type-group').find('.target-classroom:checked');
+    return !$checkedTargetClassroom.length || ($checkedTargetClassroom.length && $('input[name="classroomIds"]').val().length > 0);
 }, $.validator.format(Translator.trans('admin_v2.information_collect.chooser.target_classroom_hint')));
 
 $('.js-save-btn').on('click', (event) => {
@@ -149,11 +131,19 @@ function getFormData() {
 
 if ($('input[name="action"]').length) {
     $('input[name="action"]').on('click', (event) => {
-        let $group = $(event.currentTarget).parent().find('.js-checkbox-group');
-        $(event.currentTarget).parents('.js-action-radio').siblings('.js-action-radio').find('.js-checkbox-group').html('');
+        let $group = $(event.currentTarget).parents('.js-action-radio').find('.js-checkbox-group');
+        let $siblingGroup = $(event.currentTarget).parents('.js-action-radio').siblings('.js-action-radio').find('.js-checkbox-group');
 
-        if (!$group.find('.radios').length) {
-            $group.html($('.radio-for-action').html());
+        $group.hasClass('hidden') ? $group.removeClass('hidden') : '';
+        $siblingGroup.hasClass('hidden') ? '' : $siblingGroup.addClass('hidden');
+
+        if ($(event.currentTarget).val() == 'buy_after') {
+            $('input[name="allowSkip"]').eq('0').prop('checked', true);
+            $('input[name="allowSkip"]').eq('1').prop('disabled', true);
+        } else {
+            $('input[name="allowSkip"]').eq('1').removeProp('disabled', true);
+            $('input[name="allowSkip"]').eq('1').prop('checked', true);
+            $('input[name="allowSkip"]').eq('0').prop('disabled', true);
         }
 
         clearInformationCollectStorage();
@@ -161,19 +151,10 @@ if ($('input[name="action"]').length) {
 }
 
 function clearInformationCollectStorage() {
-    if (store.get('informationCollectSelectCourseIds', []).length) {
-        store.set('informationCollectSelectCourseIds', []);
-    }
-
-    if (store.get('informationCollectSelectClassroomIds', []).length) {
-        store.set('informationCollectSelectClassroomIds', []);
-    }
-
-    if (store.get('informationCollectSelectedCourseIds', []).length) {
-        store.set('informationCollectSelectedCourseIds', []);
-    }
-
-    if (store.get('informationCollectSelectedClassroomIds', []).length) {
-        store.set('informationCollectSelectedClassroomIds', []);
-    }
+    $.each($('input[name="action"]'), function (index, action) {
+        $.each($('input[name="targetTypes[]"]'), function (index, type) {
+            store.get('information_collect_' + $(action).val() + '_' + $(type).val() + '_ids', []).length ? store.set('information_collect_' + $(action).val() + '_' + $(type).val() + '_ids', []) : '';
+            store.get('information_collect_selected_' + $(action).val() + '_' + $(type).val() + '_ids', []).length ? store.set('information_collect_selected_' + $(action).val() + '_' + $(type).val() + '_ids', []) : '';
+        });
+    });
 }

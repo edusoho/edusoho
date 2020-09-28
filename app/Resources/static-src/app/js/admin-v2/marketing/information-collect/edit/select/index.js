@@ -3,15 +3,17 @@ import notify from 'common/notify';
 
 let $table = $('#information-collect-select-table');
 let type = $table.data('type');
-let storeName = (type == 'course') ? 'informationCollectSelectCourseIds' : 'informationCollectSelectClassroomIds';
-let selectedStoreName = (type == 'course') ? 'informationCollectSelectedCourseIds' : 'informationCollectSelectedClassroomIds';
+let action = $('input[name="action"]:checked').val();
+let storeName = 'information_collect_' + action + '_' + type + '_ids';
+let selectedStoreName = 'information_collect_selected_' + action + '_' + type + '_ids';
 
 $('.select-target-modal').on('click', '.pagination li', (event) => {
-    getCourseSets($(event.currentTarget).data('url'));
+    getSelectedTargets($(event.currentTarget).data('url'));
 });
 
-if (!store.get((storeName, []).length) && $('input[name="' + type + 'Ids"]').val()) {
-    store.set(storeName, JSON.parse($('input[name="' + type + 'Ids"]').val()));
+if (!store.get(storeName, []).length && $('input[name="' + action + '_' + type + '_ids"]').val()) {
+
+    store.set(storeName, JSON.parse($('input[name="' + action + '_' + type + '_ids"]').val()));
 }
 
 if (store.get(storeName, []).length > 0) {
@@ -26,12 +28,18 @@ $('.js-save-selected-target').on('click', (event) => {
 
     store.set(selectedStoreName, store.get(storeName, []));
 
+    let $targetCheckbox = $($(event.currentTarget).data('targetCheckbox'));
+    // let $targetCheckbox = $('.js-action-radio-group').find('.action-type-group-part').find('.target-' + type);
+
     if (store.get(storeName, []).length) {
-        $('.js-action-radio-group').find('input[name="' + $(event.currentTarget).data('targetInput') + '"]').val(JSON.stringify(store.get(storeName)));
+        $('.js-action-radio-group').find('input[name="' + $(event.currentTarget).data('targetInput') + '"]').val(JSON.stringify(store.get(storeName, [])));
+        $targetCheckbox.is(':checked') ? '' : $targetCheckbox.prop('checked', 'checked');
     } else {
         $('.js-action-radio-group').find('input[name="' + $(event.currentTarget).data('targetInput') + '"]').val('');
+        $targetCheckbox.is(':checked') ? $targetCheckbox.removeProp('checked') : '';
     }
-    $('.js-action-radio').find('.action-type-group-part .' + $(event.currentTarget).data('targetCount')).html(store.get(storeName).length);
+
+    $('.js-action-radio').find('.action-type-group-part .' + $(event.currentTarget).data('targetCount')).html(store.get(storeName, []).length);
     notify('success', Translator.trans('admin_v2.information_collect.chooser.success_hint'));
     $('.select-target-modal').parent('.modal').modal('hide');
 });
