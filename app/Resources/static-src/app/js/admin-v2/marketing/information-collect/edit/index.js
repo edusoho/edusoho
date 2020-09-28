@@ -146,9 +146,8 @@ if ($('input[name="action"]').length) {
             $('input[name="allowSkip"]').eq('0').prop('checked', true);
             $('input[name="allowSkip"]').eq('1').prop('disabled', true);
         } else {
-            $('input[name="allowSkip"]').eq('1').removeProp('disabled', true);
+            $('input[name="allowSkip"]').eq('1').removeProp('disabled');
             $('input[name="allowSkip"]').eq('1').prop('checked', true);
-            $('input[name="allowSkip"]').eq('0').prop('disabled', true);
         }
 
         clearInformationCollectStorage();
