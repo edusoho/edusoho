@@ -11,11 +11,6 @@ $('.select-target-modal').on('click', '.pagination li', (event) => {
     getSelectedTargets($(event.currentTarget).data('url'));
 });
 
-if (!store.get(storeName, []).length && $('input[name="' + action + '_' + type + '_ids"]').val()) {
-
-    store.set(storeName, JSON.parse($('input[name="' + action + '_' + type + '_ids"]').val()));
-}
-
 if (store.get(storeName, []).length > 0) {
     getSelectedTargets($table.data('selectedUrl'));
 };
@@ -34,7 +29,7 @@ $('.js-save-selected-target').on('click', (event) => {
         $('.js-action-radio-group').find('input[name="' + $(event.currentTarget).data('targetInput') + '"]').val(JSON.stringify(store.get(storeName, [])));
         $targetCheckbox.is(':checked') ? '' : $targetCheckbox.prop('checked', 'checked');
     } else {
-        $('.js-action-radio-group').find('input[name="' + $(event.currentTarget).data('targetInput') + '"]').val('');
+        $('.js-action-radio-group').find('input[name="' + $(event.currentTarget).data('targetInput') + '"]').val(null);
         $targetCheckbox.is(':checked') ? $targetCheckbox.removeProp('checked') : '';
     }
 
@@ -61,13 +56,6 @@ $('.select-target-modal').on('click', '.js-selected-item-unbind', function (e) {
     $('.js-selected-count').html($('.js-selected-item').length);
     checkItemBindedCount();
 });
-
-function getCourseSets(url) {
-    $.get(url, { ids: store.get(storeName, []) }, (res) => {
-        $table.empty().html(res);
-    });
-    $('.js-selected-count').html(store.get(storeName, []).length);
-}
 
 function getSelectedTargets(url) {
     $.get(url, { 'action': $("[name='action']:checked").val(), ids: store.get(storeName, []), selectedIds: store.get(selectedStoreName, []) }, (res) => {

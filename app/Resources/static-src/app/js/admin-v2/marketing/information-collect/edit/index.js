@@ -157,8 +157,13 @@ if ($('input[name="action"]').length) {
 function clearInformationCollectStorage() {
     $.each($('input[name="action"]'), function (index, action) {
         $.each($('input[name="targetTypes[]"]'), function (index, type) {
-            store.get('information_collect_' + $(action).val() + '_' + $(type).val() + '_ids', []).length ? store.set('information_collect_' + $(action).val() + '_' + $(type).val() + '_ids', []) : '';
-            store.get('information_collect_selected_' + $(action).val() + '_' + $(type).val() + '_ids', []).length ? store.set('information_collect_selected_' + $(action).val() + '_' + $(type).val() + '_ids', []) : '';
+            let actionName = $(action).val();
+            let typeName = $(type).val();
+            store.get('information_collect_' + actionName + '_' + typeName + '_ids', []) ? store.set('information_collect_' + actionName + '_' + typeName + '_ids', []) : '';
+            store.get('information_collect_selected_' + actionName + '_' + typeName + '_ids', []) ? store.set('information_collect_selected_' + actionName + '_' + typeName + '_ids', []) : '';
+            if ($('input[name="' + actionName + '_' + typeName + '_ids"]').val()) {
+                store.set('information_collect_' + actionName + '_' + typeName + '_ids', JSON.parse($('input[name="' + actionName  + '_' + typeName + '_ids"]').val()));
+            }            
         });
     });
 }

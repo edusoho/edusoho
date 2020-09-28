@@ -64,12 +64,12 @@ class InformationCollectController extends BaseController
             return $this->createJsonResponse(true);
         }
 
-        $allCourseLocation = $this->getEventService()->searchLocations(['targetType' => 'course', 'targetId_LTE' => 0], [], 0, 1);
-        $allClassroomLocation = $this->getEventService()->searchLocations(['targetType' => 'classroom', 'targetId_LTE' => 0], [], 0, 1);
+        $allCourseLocations = $this->getEventService()->searchLocations(['targetType' => 'course', 'targetId_LTE' => 0], [], 0, 2, ['action', 'eventId']);
+        $allClassroomLocations = $this->getEventService()->searchLocations(['targetType' => 'classroom', 'targetId_LTE' => 0], [], 0, 2, ['action', 'eventId']);
 
         return $this->render('admin-v2/marketing/information-collect/edit/index.html.twig', [
-            'allCourseLocation' => empty($allCourseLocation) ? [] : $allCourseLocation[0],
-            'allClassroomLocation' => empty($allClassroomLocation) ? [] : $allClassroomLocation[0],
+            'allCourseLocations' =>  ArrayToolkit::index($allCourseLocations, 'action'),
+            'allClassroomLocations' =>  ArrayToolkit::index($allClassroomLocations, 'action'),
         ]);
     }
 
@@ -106,14 +106,14 @@ class InformationCollectController extends BaseController
             }
         }
 
-        $allCourseLocation = $this->getEventService()->searchLocations(['targetType' => 'course', 'targetId_LTE' => '0'], [], 0, 1);
-        $allClassroomLocation = $this->getEventService()->searchLocations(['targetType' => 'classroom', 'targetId_LTE' => '0'], [], 0, 1);
+        $allCourseLocations = $this->getEventService()->searchLocations(['targetType' => 'course', 'targetId_LTE' => '0', 'action' => $event['action']], [], 0, 2, ['action', 'eventId']);
+        $allClassroomLocations = $this->getEventService()->searchLocations(['targetType' => 'classroom', 'targetId_LTE' => '0', 'action' => $event['action']], [], 0, 2, ['action', 'eventId']);
 
         return $this->render('admin-v2/marketing/information-collect/edit/index.html.twig', [
             'event' => $event,
             'locationInfo' => $locationInfo,
-            'allCourseLocation' => empty($allCourseLocation) ? [] : $allCourseLocation[0],
-            'allClassroomLocation' => empty($allClassroomLocation) ? [] : $allClassroomLocation[0],
+            'allCourseLocations' =>  ArrayToolkit::index($allCourseLocations, 'action'),
+            'allClassroomLocations' =>  ArrayToolkit::index($allClassroomLocations, 'action'),
         ]);
     }
 

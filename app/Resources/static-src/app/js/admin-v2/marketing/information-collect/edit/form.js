@@ -35,9 +35,9 @@ $('.selected-form-item-list').on('click', '.js-delete-item-btn', (event) => {
     let $targetButton = $($(event.currentTarget).data('targetButton'));
     let items = $('input[name="items"]').val() ? JSON.parse($('input[name="items"]').val()) : [];
     items.indexOf($targetItem.data('code')) < 0 ? '' : items.splice(items.indexOf($targetItem.data('code')), 1);
-    
+
     $targetItem.hasClass('hidden') ? '' : $targetItem.addClass('hidden');
     $targetItem.data('selected', false);
     $targetButton.hasClass('disabled') ? $targetButton.removeClass('disabled') : '';
-    $('input[name="items"]').val(JSON.stringify(items));
+    items.length > 0 ? $('input[name="items"]').val(JSON.stringify(items)) : $('input[name="items"]').val(null);
 });
