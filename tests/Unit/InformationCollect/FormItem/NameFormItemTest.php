@@ -27,7 +27,7 @@ class NameFormItemTest extends BaseTestCase
                     'message' => '最多输入20个字符',
                 ],
                 [
-                    'pattern' => "^[\u4E00-\u9FA5A-Za-z0-9 ]+$",
+                    'pattern' => "^[\u4E00-\u9FA5A-Za-z0-9_.·]+$",
                     'message' => '姓名格式错误',
                 ],
             ],

@@ -37,7 +37,7 @@
 			{% if field.field not in selectedFormFields|keys %}
 				<li class="row form-group list-group-item hidden" data-selected="" data-role="item" id="item-{{ field.field }}" data-code="{{ field.field }}" data-label-name="{{ field.title }}" data-required="{{ true }}">
 					<div class="col-md-2 control-label">
-						<label class="js-item-label" id="{{ field.field }}-label" for="item-{{ field.field }}">{{ field.title }}</label>
+						<label class="js-item-label control-label-required" id="{{ field.field }}-label" for="item-{{ field.field }}">{{ field.title }}</label>
 					</div>
 
 					<div class="col-md-8">

@@ -25,7 +25,7 @@ $('#chooser-items').on('click', function (e) {
     }
 
     if ($('#information-collect-select-table').length == 1) {
-        $.get($(this).data('url'), { 'action': $("[name='action']:checked").val(), ids: targetIds, selectedIds: store.get(selectedStoreName, []) }, function (res) {
+        $.get($(this).data('url'), { action: action, ids: targetIds, selectedIds: store.get(selectedStoreName, []) }, function (res) {
             $('#information-collect-select-table').empty().html(res);
             $('.js-selected-count').html(length);
             

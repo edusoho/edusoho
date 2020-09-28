@@ -29,7 +29,6 @@ $('.js-save-selected-target').on('click', (event) => {
     store.set(selectedStoreName, store.get(storeName, []));
 
     let $targetCheckbox = $($(event.currentTarget).data('targetCheckbox'));
-    // let $targetCheckbox = $('.js-action-radio-group').find('.action-type-group-part').find('.target-' + type);
 
     if (store.get(storeName, []).length) {
         $('.js-action-radio-group').find('input[name="' + $(event.currentTarget).data('targetInput') + '"]').val(JSON.stringify(store.get(storeName, [])));

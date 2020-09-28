@@ -20,7 +20,9 @@ class WechatFormItem extends FormItem
             'value' => $this->value,
             'validate' => [
                 ['required' => $this->required, 'message' => self::TITLE.'不能为空'],
-                ['pattern' => '^[a-zA-Z]([-_a-zA-Z0-9]{5,19})+$', 'message' => self::TITLE.'格式错误'],
+                ['pattern' => '^[a-zA-Z]([-_a-zA-Z0-9])+$', 'message' => self::TITLE.'格式错误'],
+                ['min' => 6, 'message' => self::TITLE.'格式错误'],
+                ['max' => 20, 'message' => self::TITLE.'格式错误'],
             ],
         ];
     }
