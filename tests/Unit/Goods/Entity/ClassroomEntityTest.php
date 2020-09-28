@@ -1,0 +1,133 @@
+<?php
+
+namespace Tests\Unit\Goods\Entity;
+
+use Biz\BaseTestCase;
+use Biz\Classroom\ClassroomException;
+use Biz\Classroom\Dao\ClassroomDao;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Goods\GoodsEntityFactory;
+use Biz\Goods\Service\GoodsService;
+use Biz\Product\Service\ProductService;
+
+class ClassroomEntityTest extends BaseTestCase
+{
+    public function testGetTarget()
+    {
+        $classroom = $this->getClassroomService()->addClassroom($this->mockClassroom());
+        list($product, $goods) = $this->getProductAndGoods($classroom);
+        self::assertEquals($classroom, $this->getGoodsEntityFactory()->create('classroom')->getTarget($goods));
+    }
+
+    public function testGetTarget_whenProductUnExist()
+    {
+        $this->expectException(ClassroomException::class);
+        $this->expectExceptionCode(ClassroomException::NOTFOUND_CLASSROOM);
+
+        $classroom = $this->getClassroomService()->addClassroom($this->mockClassroom());
+        $product = $this->getProductService()->getProductByTargetIdAndType($classroom['id'], 'classroom');
+        $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
+        $this->getClassroomDao()->delete($classroom['id']);
+        $this->getGoodsEntityFactory()->create('classroom')->getTarget($goods);
+    }
+
+    public function testHitTarget()
+    {
+        $classroom = $this->getClassroomService()->addClassroom($this->mockClassroom());
+        list($product, $goods) = $this->getProductAndGoods($classroom);
+        $hitNum = $this->getGoodsEntityFactory()->create('classroom')->hitTarget($goods);
+        self::assertEquals(1, $hitNum);
+    }
+
+    public function testGetSpecsByTargetId()
+    {
+        $classroom = $this->getClassroomService()->addClassroom($this->mockClassroom());
+        $specs = $this->getGoodsEntityFactory()->create('classroom')->getSpecsByTargetId($classroom['id']);
+        self::assertEquals($classroom['title'], $specs['title']);
+    }
+
+    public function testFetchTargets()
+    {
+        $classroom = $this->getClassroomService()->addClassroom($this->mockClassroom());
+        list($product, $goods) = $this->getProductAndGoods($classroom);
+        $goodsLists = $this->getGoodsEntityFactory()->create('classroom')->fetchTargets([$goods]);
+        self::assertEquals($classroom, current($goodsLists)['classroom']);
+    }
+
+    public function testFetchTargets_whenEmpty()
+    {
+        $goodsLists = $this->getGoodsEntityFactory()->create('classroom')->fetchTargets([]);
+        self::assertEmpty($goodsLists);
+    }
+
+    private function getProductAndGoods($classroom)
+    {
+        $product = $this->getProductService()->getProductByTargetIdAndType($classroom['id'], 'classroom');
+        $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
+
+        return [$product, $goods];
+    }
+
+    private function mockClassroom($customFields = [])
+    {
+        return array_merge([
+            'id' => 1,
+            'title' => '测试班级商品',
+            'subtitle' => '测试班级商品副标题',
+            'about' => '测试班级商品简介',
+            'largePicture' => 'public://course/2018/07-25/150507367180941893.jpg',
+            'smallPicture' => 'public://course/2018/07-25/150507367180941893.jpg',
+            'middlePicture' => 'public://course/2018/07-25/150507367180941893.jpg',
+            'orgCode' => '1.1',
+            'orgId' => 1,
+            'creator' => 1,
+            'price' => '0.00',
+            'showable' => 1,
+            'buyable' => 1,
+            'expiryMode' => 'forever',
+            'service' => [],
+        ], $customFields);
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return GoodsEntityFactory
+     */
+    protected function getGoodsEntityFactory()
+    {
+        $biz = $this->biz;
+
+        return $biz['goods.entity.factory'];
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getProductService()
+    {
+        return $this->createService('Product:ProductService');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->createService('Goods:GoodsService');
+    }
+
+    /**
+     * @return ClassroomDao
+     */
+    protected function getClassroomDao()
+    {
+        return $this->createDao('Classroom:ClassroomDao');
+    }
+}
