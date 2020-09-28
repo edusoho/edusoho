@@ -37,6 +37,11 @@ let validator = $form.validate({
             required: true
         }
     },
+    messages: {
+        items: {
+            required: Translator.trans('admin_v2.information_collect.chooser.items.hint')
+        }
+    }
 });
 
 $.validator.addMethod('checkoutTargetTypes', function (value, element) {

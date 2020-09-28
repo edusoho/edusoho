@@ -99,28 +99,32 @@
 				<div class="col-md-3">
 					<div class="cd-panel control">
 						<div class="cd-panel-body bg-gray-lighter form-control height-unset">
-							<input type="hidden" name="items" value="{{ selectedFormFields|keys|json_encode }}">
+							<input type="hidden" name="items" value="{{ selectedFormFields|keys|length > 0 ? selectedFormFields|keys|json_encode : null }}">
 							{% include "admin-v2/marketing/information-collect/edit/form/form-items-select.html.twig" %}
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="row form-group">
-				<label class="col-md-2 control-label">{{ 'admin_v2.information_collect.edit.form_items.allow_skip'|trans }}</label>
-				<div class="radios">
-					{% if event %}
-						{{ radios('allowSkip', {'1':'admin_v2.information_collect.edit.form_items.skip.allow'|trans}, event.allowSkip) }}
-						{{ radios('allowSkip', { '0':'admin_v2.information_collect.edit.form_items.skip.not_allow'|trans}, event.allowSkip, (event.action == 'buy_after' ? 'disabled' : null)) }}
-					{% else %}
-						{{ radios('allowSkip', {'1':'admin_v2.information_collect.edit.form_items.skip.allow'|trans, '0':'admin_v2.information_collect.edit.form_items.skip.not_allow'|trans}, -1) }}
-					{% endif %}
+				<label class="col-md-2 control-label" for="allowSkip">{{ 'admin_v2.information_collect.edit.form_items.allow_skip'|trans }}</label>
+				<div class="col-md-6 controls">
 
+					<div class="radios">
+						{% if event %}
+							{{ radios('allowSkip', {'1':'admin_v2.information_collect.edit.form_items.skip.allow'|trans}, event.allowSkip) }}
+							{{ radios('allowSkip', { '0':'admin_v2.information_collect.edit.form_items.skip.not_allow'|trans}, event.allowSkip, (event.action == 'buy_after' ? 'disabled' : null)) }}
+						{% else %}
+							{{ radios('allowSkip', {'1':'admin_v2.information_collect.edit.form_items.skip.allow'|trans, '0':'admin_v2.information_collect.edit.form_items.skip.not_allow'|trans}, -1) }}
+						{% endif %}
+					</div>
 				</div>
 			</div>
 			<div class="row form-group">
 				<label class="col-md-2 control-label">{{ 'admin_v2.information_collect.edit.form_items.enable'|trans }}</label>
-				<div class="radios">
-					{{ radios('status', {'open':'form.radio_btn.true'|trans, 'close':'form.radio_btn.false'|trans}, event.status|default('open')) }}
+				<div class="col-md-6 controls">
+					<div class="radios">
+						{{ radios('status', {'open':'form.radio_btn.true'|trans, 'close':'form.radio_btn.false'|trans}, event.status|default('open')) }}
+					</div>
 				</div>
 			</div>
 			<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

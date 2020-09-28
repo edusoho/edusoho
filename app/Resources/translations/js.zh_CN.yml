@@ -1573,3 +1573,4 @@ admin_v2.information_collect.chooser.limit: 选择数不能超过200
 admin_v2.information_collect.chooser.target_hint:  请至少选择1个课程/班级
 admin_v2.information_collect.chooser.target_course_hint: 请至少选择1个课程
 admin_v2.information_collect.chooser.target_classroom_hint: 请至少选择1个班级
+admin_v2.information_collect.chooser.items.hint: 请选择采集表单
