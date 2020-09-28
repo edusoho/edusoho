@@ -3,6 +3,8 @@
 namespace Tests\Unit\Goods\Entity;
 
 use Biz\BaseTestCase;
+use Biz\Course\CourseSetException;
+use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Service\CourseSetService;
 use Biz\Goods\GoodsEntityFactory;
 use Biz\Goods\Service\GoodsService;
@@ -15,6 +17,17 @@ class CourseEntityTest extends BaseTestCase
         $courseSet = $this->getCourseSetService()->createCourseSet($this->mockCourseSet());
         list($product, $goods) = $this->getProductAndGoods($courseSet);
         self::assertEquals($courseSet, $this->getGoodsEntityFactory()->create('course')->getTarget($goods));
+    }
+
+    public function testGetTarget_whenProductUnExist()
+    {
+        $this->expectException(CourseSetException::class);
+        $this->expectExceptionCode(CourseSetException::NOTFOUND_COURSESET);
+        $courseSet = $this->getCourseSetService()->createCourseSet($this->mockCourseSet());
+        list($product, $goods) = $this->getProductAndGoods($courseSet);
+
+        $this->getCourseSetDao()->delete($courseSet['id']);
+        $this->getGoodsEntityFactory()->create('course')->getTarget($goods);
     }
 
     private function getProductAndGoods($courseSet)
@@ -68,5 +81,13 @@ class CourseEntityTest extends BaseTestCase
         $biz = $this->biz;
 
         return $biz['goods.entity.factory'];
+    }
+
+    /**
+     * @return CourseSetDao
+     */
+    protected function getCourseSetDao()
+    {
+        return $this->createDao('Course:CourseSetDao');
     }
 }

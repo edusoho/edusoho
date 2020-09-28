@@ -25,8 +25,7 @@ class ClassroomEntityTest extends BaseTestCase
         $this->expectExceptionCode(ClassroomException::NOTFOUND_CLASSROOM);
 
         $classroom = $this->getClassroomService()->addClassroom($this->mockClassroom());
-        $product = $this->getProductService()->getProductByTargetIdAndType($classroom['id'], 'classroom');
-        $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
+        list($product, $goods) = $this->getProductAndGoods($classroom);
         $this->getClassroomDao()->delete($classroom['id']);
         $this->getGoodsEntityFactory()->create('classroom')->getTarget($goods);
     }
