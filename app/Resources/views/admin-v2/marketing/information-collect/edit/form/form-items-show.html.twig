@@ -6,7 +6,7 @@
 			</div>
 
 			<div class="col-md-8">
-				<div class="form-control {% if field.type|default('') == 'radio' %} border-unset {% endif %}">
+				<div class="form-control {% if field.type|default('') == 'radio' %} border-unset {% else %} input-{{ field.type }} {% endif %}">
 					{% if field.type|default('') == 'radio' %}
 						{% for index, option  in field.options %}
 							<label class="prl">
@@ -41,7 +41,7 @@
 					</div>
 
 					<div class="col-md-8">
-						<div class="form-control {% if field.type|default('') == 'radio' %} border-unset {% endif %}">
+						<div class="form-control {% if field.type|default('') == 'radio' %} border-unset {% else %} input-{{ field.type }} {% endif %}">
 							{% if field.type|default('') == 'radio' %}
 								{% for index, option  in field.options %}
 									<label class="prl">
