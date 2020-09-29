@@ -71,7 +71,7 @@ $.validator.addMethod('checkSelectedCourseIds', function (value, element) {
         return true;
     }
 
-    let $checkedTargetCourse = $("[name='action']:checked").parents('.js-action-radio').find('.target-course:checked');
+    let $checkedTargetCourse = $("[name='action']:checked").parents('.js-action-radio').find('.js-location-type:checked').parents('.action-type-group').find('.target-course:checked');
     return !$checkedTargetCourse.length || ($checkedTargetCourse.length && store.get('information_collect_selected_' + $("[name='action']:checked").val() + '_course_ids').length > 0);
 }, $.validator.format(Translator.trans('admin_v2.information_collect.chooser.target_course_hint')));
 
@@ -79,6 +79,7 @@ $.validator.addMethod('checkSelectedClassroomIds', function (value, element) {
     if ($("[name='action']:checked").parents('.js-action-radio').find('.js-location-type:checked').val() == 'all') {
         return true;
     }
+    
     let $checkedTargetClassroom = $("[name='action']:checked").parents('.js-action-radio').find('.js-location-type:checked').parents('.action-type-group').find('.target-classroom:checked');
     return !$checkedTargetClassroom.length || ($checkedTargetClassroom.length && store.get('information_collect_selected_' + $("[name='action']:checked").val() + '_classroom_ids').length > 0);
 }, $.validator.format(Translator.trans('admin_v2.information_collect.chooser.target_classroom_hint')));

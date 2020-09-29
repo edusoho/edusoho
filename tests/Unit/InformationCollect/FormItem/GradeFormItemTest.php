@@ -14,6 +14,7 @@ class GradeFormItemTest extends BaseTestCase
                 "title": "年级",
                 "field": "grade",
                 "value": "一年级",
+                "group": "school",
                 "validate": [
                     {
                         "required": true,

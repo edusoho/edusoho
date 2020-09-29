@@ -14,6 +14,7 @@ class PhoneFormItemTest extends BaseTestCase
                 "title": "手机号码",
                 "field": "phone",
                 "value": "1333333333",
+                "group": "contact",
                 "props": {
                     "type": "number",
                     "placeholder": "仅支持中国大陆手机号码"

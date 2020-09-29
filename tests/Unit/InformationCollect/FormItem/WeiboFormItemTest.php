@@ -12,6 +12,7 @@ class WeiboFormItemTest extends BaseTestCase
             'type' => 'input',
             'title' => '微博号',
             'field' => 'weibo',
+            'group' => 'contact',
             'value' => 'abc123',
             'validate' => [
                 [

@@ -14,6 +14,7 @@ class PositionFormItemTest extends BaseTestCase
                 "title": "职位",
                 "field": "position",
                 "value": "PHP程序员",
+                "group": "company",
                 "validate": [
                     {
                         "required": true,

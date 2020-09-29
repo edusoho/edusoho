@@ -13,6 +13,7 @@ class GenderFormItemTest extends BaseTestCase
                 "type": "radio",
                 "title": "性别",
                 "field": "gender",
+                "group": "base",
                 "value": "男",
                 "options": [
                     {

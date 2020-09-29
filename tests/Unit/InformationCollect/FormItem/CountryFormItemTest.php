@@ -13,6 +13,7 @@ class CountryFormItemTest extends BaseTestCase
                 "type": "input",
                 "title": "国家",
                 "field": "country",
+                "group": "other",
                 "value": "中国",
                 "validate": [
                     {
