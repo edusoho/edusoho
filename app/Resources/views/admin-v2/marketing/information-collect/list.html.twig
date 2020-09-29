@@ -53,7 +53,7 @@
           <td>{{ 'admin.information_collect.collected_num'|trans({'%collectedNum%':collectedNum[event.id].collectNum|default(0)}) }}</td>
           <td>
             <div class="btn-group">
-              <a target="_blank" href="{{ path('admin_v2_information_collect_detail', {id: event.id}) }}" class="btn btn-default btn-sm">{{ 'admin.information_collect.operate.detail'|trans }}</a>
+              <a href="{{ path('admin_v2_information_collect_detail', {id: event.id}) }}" class="btn btn-default btn-sm">{{ 'admin.information_collect.operate.detail'|trans }}</a>
               {% include 'admin-v2/widget/group-button.html.twig' with {parentCode: 'admin_v2_information_collect', group:'groupButton', collect: event} %}
             </div>
           </td>
