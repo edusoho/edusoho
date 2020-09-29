@@ -5,7 +5,7 @@
 {% do script(['app/js/admin-v2/marketing/information-collect/index.js', 'app/js/admin-v2/marketing/information-collect/detail/index.js']) %}
 
 {% block page_title %}
-  {{ 'admin.information_collect.detail'|trans }}
+  {{ 'admin.information_collect.detail'|trans({'%listUrl%':path('admin_v2_information_collect')})|raw }}
   <span class="text-muted text-md">({{ 'admin_v2.information_collect.edit.title_info'|trans }})</span>
 {% endblock %}
 
