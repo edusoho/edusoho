@@ -10063,6 +10063,9 @@ admin_v2.information_collect.edit.form_items: Form items
 admin_v2.information_collect.edit.form_items.tip: Please drag the optional information collect items from the right to the left, and you can drag up and down to sort
 admin_v2.information_collect.edit.form_items.warning_tip: Too many information collect items may affect user experience
 admin_v2.information_collect.edit.form_items.allow_skip: Allow Skip
+admin_v2.information_collect.edit.form_items.allow_skip.tips: Currently only supports the collection setting "Skip not allowed" for class/course goods before payment
+admin_v2.information_collect.edit.form_items.skip.allow: 'Yes'
+admin_v2.information_collect.edit.form_items.skip.not_allow: 'No'
 admin_v2.information_collect.edit.form_items.enable: Enable
 admin_v2.information_collect.edit.target_type.all: All Course/Classroom
 admin_v2.information_collect.edit.target_type.part: Selected Course/Classroom
