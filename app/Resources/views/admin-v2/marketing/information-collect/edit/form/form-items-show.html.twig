@@ -50,8 +50,8 @@
 									</label>
 								{% endfor %}
 							{% else %}
-								{% if field.placeholder|default('') %}
-									<span class="text-muted">{{ field.placeholder }}</span>
+								{% if field.props|default('') and field.props.placeholder|default('') %}
+									<span class="text-muted">{{ field.props.placeholder }}</span>
 								{% endif %}
 							{% endif %}
 							<span class="js-delete-item-btn delete-form-item-btn" data-target-item="#item-{{ field.field }}" data-target-button="#btn-add-item-{{ field.field }}">
