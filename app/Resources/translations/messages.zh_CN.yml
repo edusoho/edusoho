@@ -11428,8 +11428,9 @@ admin_v2.information_collect.edit.form_items.tip: 请从右侧拖拽可选的信
 admin_v2.information_collect.edit.form_items.code: 用户看到的表单标题
 admin_v2.information_collect.edit.form_items.warning_tip: 信息采集项过多，可能影响用户使用体验
 admin_v2.information_collect.edit.form_items.allow_skip: 是否允许用户跳过
-admin_v2.information_collect.edit.form_items.skip.allow: 允许跳过
-admin_v2.information_collect.edit.form_items.skip.not_allow: 不允许跳过
+admin_v2.information_collect.edit.form_items.skip.allow: 是
+admin_v2.information_collect.edit.form_items.skip.not_allow: 否
+admin_v2.information_collect.edit.form_items.allow_skip.tips: 当前仅支持对 班级/课程商品支付前 的采集设置“不允许跳过”
 admin_v2.information_collect.edit.form_items.enable: 是否启用本次采集
 admin_v2.information_collect.edit.target_type.all: 全站课程/班级
 admin_v2.information_collect.edit.target_type.part: 指定课程/班级

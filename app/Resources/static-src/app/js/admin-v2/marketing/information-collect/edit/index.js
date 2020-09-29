@@ -148,9 +148,11 @@ if ($('input[name="action"]').length) {
         $siblingGroup.hasClass('hidden') ? '' : $siblingGroup.addClass('hidden');
 
         if ($(event.currentTarget).val() == 'buy_after') {
+            $('.allow-skip-help-block').hasClass('hidden') ? $('.allow-skip-help-block').removeClass('hidden') : '';
             $('input[name="allowSkip"]').eq('0').prop('checked', true);
             $('input[name="allowSkip"]').eq('1').prop('disabled', true);
         } else {
+            $('.allow-skip-help-block').hasClass('hidden') ? '' : $('.allow-skip-help-block').addClass('hidden');
             $('input[name="allowSkip"]').eq('1').removeProp('disabled');
             $('input[name="allowSkip"]').eq('1').prop('checked', true);
         }
