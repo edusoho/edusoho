@@ -13,6 +13,7 @@ class WechatFormItemTest extends BaseTestCase
                 "type": "input",
                 "title": "微信号",
                 "field": "wechat",
+                "group": "contact",
                 "value": "abc123",
                 "validate": [
                     {

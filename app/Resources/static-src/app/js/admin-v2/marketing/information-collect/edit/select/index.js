@@ -33,7 +33,7 @@ $('.js-save-selected-target').on('click', (event) => {
         $targetCheckbox.is(':checked') ? $targetCheckbox.removeProp('checked') : '';
     }
 
-    $('.js-action-radio').find('.action-type-group-part .' + $(event.currentTarget).data('targetCount')).html(store.get(storeName, []).length);
+    $('.js-action-radio').find('.action-type-group-part .' + $(event.currentTarget).data('targetCount')).html(' '+store.get(storeName, []).length);
     notify('success', Translator.trans('admin_v2.information_collect.chooser.success_hint'));
     $('.select-target-modal').parent('.modal').modal('hide');
 });

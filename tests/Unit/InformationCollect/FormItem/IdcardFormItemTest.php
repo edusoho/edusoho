@@ -14,6 +14,7 @@ class IdcardFormItemTest extends BaseTestCase
                 "title": "身份证号",
                 "field": "idcard",
                 "value": "330621199406213333",
+                "group": "base",
                 "props": {
                     "placeholder": "仅支持中国大陆身份证号"
                 },

@@ -13,6 +13,7 @@ class QQFormItemTest extends BaseTestCase
                 "type": "input",
                 "title": "QQ号",
                 "field": "qq",
+                "group": "contact",
                 "value": "543245784",
                 "validate": [
                     {

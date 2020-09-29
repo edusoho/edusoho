@@ -14,6 +14,7 @@ class LanguageFormItemTest extends BaseTestCase
                 "title": "语言",
                 "field": "language",
                 "value": "中文",
+                "group": "other",
                 "validate": [
                     {
                         "required": true,

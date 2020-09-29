@@ -14,6 +14,7 @@ class AgeFormItemTest extends BaseTestCase
                 "title": "年龄",
                 "field": "age",
                 "value": 10,
+                "group": "base",
                 "props": {
                     "type": "number"
                 },

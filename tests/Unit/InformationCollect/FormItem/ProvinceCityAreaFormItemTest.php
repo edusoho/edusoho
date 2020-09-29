@@ -13,6 +13,7 @@ class ProvinceCityAreaFormItemTest extends BaseTestCase
                 "type": "cascader",
                 "title": "省市区县",
                 "field": "province_city_area",
+                "group": "contact",
                 "value": ["浙江省", "杭州市", "滨江区"],
                 "props": {
                     "options": [],

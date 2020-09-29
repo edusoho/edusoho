@@ -13,6 +13,7 @@ class ClassFormItemTest extends BaseTestCase
                 "type": "input",
                 "title": "班级",
                 "field": "class",
+                "group": "school",
                 "value": "班级名称",
                 "validate": [
                     {
