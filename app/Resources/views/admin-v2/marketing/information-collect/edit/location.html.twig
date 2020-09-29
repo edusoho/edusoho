@@ -43,8 +43,8 @@
 
 	<div class="action-type-group action-type-group-part">
 		<label class="control-label text-left">
-			<input type="hidden" name="{{ action }}_course_ids" value="{{ locationInfo.courseIds|default([])|json_encode }}">
-			<input type="hidden" name="{{ action }}_classroom_ids" value="{{ locationInfo.classroomIds|default([])|json_encode }}">
+			<input type="hidden" name="{{ action }}_course_ids" value="{{ isEventAction ? locationInfo.courseIds|default([])|json_encode : null }}">
+			<input type="hidden" name="{{ action }}_classroom_ids" value="{{ isEventAction ?  locationInfo.classroomIds|default([])|json_encode : null }}">
 			<input type="radio" class="js-location-type" name="{{ action }}_location_type" value="part" {% if not hasCheckedAll and isEventAction %} checked="checked" {% endif %}>
 			<span>{{ 'admin_v2.information_collect.edit.target_type.part'|trans }}</span>
 			<div class="js-target-type-checkbox-group {% if hasCheckedAll or not isEventAction %} hidden {% endif %}">

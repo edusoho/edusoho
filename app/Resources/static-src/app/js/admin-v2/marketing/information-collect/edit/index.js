@@ -56,6 +56,13 @@ $.validator.addMethod('checkoutTargetTypes', function (value, element) {
         }
     }
 
+    if ($("[name='action']:checked").parents('.js-action-radio').find('.js-location-type:checked').val() == 'part') {
+        let $checkedTargetTypes = $("[name='action']:checked").parents('.js-action-radio').find('.target-types-part:checked');
+        if (!$checkedTargetTypes.length) {
+            return false;
+        }
+    }
+
     return true;
 }, $.validator.format(Translator.trans('admin_v2.information_collect.chooser.target_hint')));
 
