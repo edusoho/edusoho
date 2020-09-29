@@ -56,8 +56,10 @@
     <!-- 个人信息表单填写 -->
     <van-action-sheet
       v-model="isShowForm"
+      class="minHeight50"
       :title="userInfoCollectForm.formTitle"
       :close-on-click-overlay="false"
+      :safe-area-inset-bottom="true"
     >
       <info-collection
         :userInfoCollectForm="userInfoCollectForm"
@@ -334,6 +336,7 @@ export default {
 
       // 禁止加入
       if (!this.accessToJoin && !vipAccessToJoin) {
+        this.$toast('禁止加入');
         return;
       }
 

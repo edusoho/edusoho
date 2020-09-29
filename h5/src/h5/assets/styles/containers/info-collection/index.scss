@@ -8,12 +8,21 @@
 			color: #333;
 			font-size: vw(16);
 		}
+
+		.van-field__body {
+			font-size: vw(16);
+			line-height: vw(16);
+		}
+
+		.van-cell::after {
+			right: 0;
+		}
 	}
 
 	.info-required::after {
 		position: absolute;
 		color: #ee0a24;
-		font-size: 14px;
+		font-size: 16px;
 		content: '*';
 	}
 

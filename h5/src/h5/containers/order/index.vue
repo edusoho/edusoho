@@ -85,8 +85,8 @@
     <!-- 报名信息填写 -->
     <div
       class="personal-info"
-      v-show="showCollectEntry"
-      @click="isShowForm = true"
+      v-if="showCollectEntry"
+      @click="showUserInfoCollectForm"
     >
       {{ userInfoCollectForm.formTitle }}
       <i class="iconfont icon-arrow-right"></i>
@@ -95,19 +95,19 @@
     <van-popup
       v-model="isShowForm"
       :overlay="false"
-      class="e-popup full-height-popup coupon-popup"
+      class="e-popup full-height-popup coupon-popup mt0"
       position="bottom"
     >
       <van-nav-bar
         :left-arrow="true"
-        title="用户信息填写"
+        :title="this.userInfoCollectForm.formTitle"
         class="nav-bar"
-        @click-left="isShowForm = false"
+        @click-left="hideUserInfoCollectForm"
       />
       <info-collection
         :userInfoCollectForm="this.userInfoCollectForm"
         :formRule="this.userInfoCollectForm.items"
-        @submitForm="handleSubmit"
+        @submitForm="submitForm"
       ></info-collection>
     </van-popup>
 
@@ -214,6 +214,7 @@ export default {
       inWechat: this.isWeixinBrowser(),
       timeoutId: -1,
       isShowForm: false,
+      hasCollectUserInfo: false,
     };
   },
   created() {
@@ -311,15 +312,26 @@ export default {
   },
   methods: {
     shouldCollectUserInfo() {
-      if (this.IsCollectUserInfoType) {
-        if (this.hasUserInfoCollectForm) {
-          Toast('请先提交信息后再提交订单');
-        } else {
-          this.handleSubmit();
-        }
+      if (
+        this.IsCollectUserInfoType &&
+        !this.hasCollectUserInfo &&
+        this.hasUserInfoCollectForm
+      ) {
+        Toast('请先提交信息后再提交订单');
+        // if (this.hasUserInfoCollectForm) {
+        //   Toast('请先提交信息后再提交订单');
+        // } else {
+        //   this.handleSubmit();
+        // }
         return;
       }
       this.handleSubmit();
+    },
+    showUserInfoCollectForm() {
+      this.isShowForm = true;
+    },
+    hideUserInfoCollectForm() {
+      this.isShowForm = false;
     },
     getInfoCollection() {
       Toast.loading({
@@ -330,7 +342,7 @@ export default {
       const paramsList = {
         action: 'buy_before',
         targetType: this.targetType,
-        targetId: this.detail.id,
+        targetId: this.targetId,
       };
       this.getInfoCollectionEvent(paramsList).then(res => {
         if (Object.keys(res).length) {
@@ -342,6 +354,10 @@ export default {
         }
         Toast.clear();
       });
+    },
+    submitForm() {
+      this.hideUserInfoCollectForm();
+      this.hasCollectUserInfo = true;
     },
     handleSubmit() {
       if (this.total == 0) {
