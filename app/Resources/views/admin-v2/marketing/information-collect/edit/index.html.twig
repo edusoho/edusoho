@@ -91,7 +91,7 @@
 				</div>
 				<div class="col-md-3">
 					<div class="cd-panel control">
-						<div class="cd-panel-body bg-gray-lighter form-control height-unset">
+						<div class="cd-panel-body bg-gray-lighter form-control height-unset selecte-form-items">
 							<input type="hidden" name="items" value="{{ selectedFormFields|keys|length > 0 ? selectedFormFields|keys|json_encode : null }}">
 							{% include "admin-v2/marketing/information-collect/edit/form/form-items-select.html.twig" %}
 						</div>
