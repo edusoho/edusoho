@@ -1413,4 +1413,17 @@ t.add("admin_v2.certificate.record.grant.success_hint", "grant success", "js", "
 t.add("admin_v2.certificate.record.grant.failure_hint", "grant failure", "js", "en");
 t.add("admin_v2.certificate.record.grant.issue_time_required", "Please enter the date of issue", "js", "en");
 t.add("admin_v2.certificate.validate.description", "The length must be less than or equal to 1000, one Chinese character counts as two characters.", "js", "en");
+t.add("admin_v2.information_collect.close.hint", "Do you want to close the acquisition? When closed, the collection of user information will stop.", "js", "en");
+t.add("admin_v2.information_collect.open.hint", "Do you want to start collection? When turned on, user information will be collected.", "js", "en");
+t.add("admin_v2.information_collect.close.success_hint", "close success", "js", "en");
+t.add("admin_v2.information_collect.close.failure_hint", "close failure", "js", "en");
+t.add("admin_v2.information_collect.open.success_hint", "open success", "js", "en");
+t.add("admin_v2.information_collect.open.failure_hint", "close failure", "js", "en");
+t.add("admin_v2.information_collect.chooser.tips", "There is already a conflicting association", "js", "en");
+t.add("admin_v2.information_collect.chooser.success_hint", "Success", "js", "en");
+t.add("admin_v2.information_collect.chooser.limit", "No more than 200", "js", "en");
+t.add("admin_v2.information_collect.chooser.target_hint", "Please select Course\/Classroom", "js", "en");
+t.add("admin_v2.information_collect.chooser.target_course_hint", "Please select at least 1 Course", "js", "en");
+t.add("admin_v2.information_collect.chooser.target_classroom_hint", "Please select at least 1 Classroom", "js", "en");
+t.add("admin_v2.information_collect.chooser.items.hint", "Please select form item", "js", "en");
 })(Translator);
