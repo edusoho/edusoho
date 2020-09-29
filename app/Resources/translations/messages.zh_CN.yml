@@ -6414,7 +6414,7 @@ admin.information_collect.action.buy_before: 课程/班级商品支付前
 admin.information_collect.status.open: <div class="green-circle"></div>正在采集
 admin.information_collect.status.close: <div class="red-circle"></div>停止采集
 admin.information_collect.collected_num: %collectedNum% 份
-admin.information_collect.detail: 用户信息采集 > 详情
+admin.information_collect.detail: <a class="color-black-title" href="%listUrl%">用户信息采集</a> > 详情
 admin.information_collect.basic_info: 基本信息
 admin.information_collect.close_btn: 关闭采集
 admin.information_collect.open_btn: 开启采集
