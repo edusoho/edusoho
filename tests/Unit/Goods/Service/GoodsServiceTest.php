@@ -467,6 +467,17 @@ class GoodsServiceTest extends BaseTestCase
         $hitGoods = $this->getGoodsService()->hitGoods($goods['id']);
         $hitCourseSet = $this->getCourseSetService()->getCourseSet($courseSet['id']);
         self::assertEquals(1, $hitCourseSet['hitNum']);
+        self::assertEquals($hitGoods['hitNum'], $hitCourseSet['hitNum']);
+    }
+
+    public function testChangeGoodsSpecsPrice()
+    {
+        $courseSet = $this->createCourseSet();
+        list($product, $goods) = $this->getProductAndGoods($courseSet);
+        $specs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $courseSet['defaultCourseId']);
+        self::assertEquals('0.00', $specs['price']);
+        $specsChangedPrice = $this->getGoodsService()->changeGoodsSpecsPrice($specs['id'], 10);
+        self::assertEquals('10.00', $specsChangedPrice['price']);
     }
 
     private function createCourseSet($customFields = [])
