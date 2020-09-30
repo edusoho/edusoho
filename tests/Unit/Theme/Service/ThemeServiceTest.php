@@ -20,13 +20,13 @@ class ThemeServiceTest extends BaseTestCase
     {
         $this->mockBiz(
             'System:SettingService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'get',
-                    'withParams' => array('theme'),
-                    'returnValue' => array(),
-                ),
-            )
+                    'withParams' => ['theme'],
+                    'returnValue' => [],
+                ],
+            ]
         );
         $isAllowed = $this->getThemeService()->isAllowedConfig();
 
@@ -37,11 +37,11 @@ class ThemeServiceTest extends BaseTestCase
     {
         $this->mockBiz(
             'System:SettingService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'get',
-                    'withParams' => array('theme'),
-                    'returnValue' => array(
+                    'withParams' => ['theme'],
+                    'returnValue' => [
                         'code' => 'jianmo',
                         'name' => '简墨',
                         'author' => 'EduSoho官方',
@@ -50,9 +50,9 @@ class ThemeServiceTest extends BaseTestCase
                         'date' => '2015-6-1',
                         'thumb' => 'img/theme.jpg',
                         'uri' => 'jianmo',
-                    ),
-                ),
-            )
+                    ],
+                ],
+            ]
         );
         $isAllowed = $this->getThemeService()->isAllowedConfig();
 
@@ -63,13 +63,13 @@ class ThemeServiceTest extends BaseTestCase
     {
         $this->mockBiz(
             'System:SettingService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'get',
-                    'withParams' => array('theme'),
-                    'returnValue' => array(),
-                ),
-            )
+                    'withParams' => ['theme'],
+                    'returnValue' => [],
+                ],
+            ]
         );
         $result = $this->getThemeService()->getThemeConfigByName('简墨');
         $this->assertEquals('简墨', $result['name']);
@@ -96,13 +96,13 @@ class ThemeServiceTest extends BaseTestCase
     {
         $this->mockBiz(
             'System:SettingService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'get',
-                    'withParams' => array('theme'),
-                    'returnValue' => array(),
-                ),
-            )
+                    'withParams' => ['theme'],
+                    'returnValue' => [],
+                ],
+            ]
         );
         $result = $this->getThemeService()->getCurrentThemeConfig();
         $this->assertEquals('简墨', $result['name']);
@@ -113,10 +113,10 @@ class ThemeServiceTest extends BaseTestCase
         $this->setThemeSetting();
         $createConfig = $this->createConfig();
 
-        $config = array(
+        $config = [
             'color' => 'default',
-            'blocks' => array(
-                'left' => array(
+            'blocks' => [
+                'left' => [
                     'title' => '',
                     'count' => '6',
                     'categoryId' => '',
@@ -124,10 +124,10 @@ class ThemeServiceTest extends BaseTestCase
                     'code' => 'course-grid-with-condition-index',
                     'defaultTitle' => '课程组件',
                     'id' => 'latestCourse',
-                ),
-            ),
+                ],
+            ],
             'bottom' => '',
-        );
+        ];
 
         $configUpdate = $this->getThemeService()->saveCurrentThemeConfig($config);
 
@@ -139,20 +139,20 @@ class ThemeServiceTest extends BaseTestCase
     {
         $this->mockBiz(
             'System:SettingService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'get',
-                    'withParams' => array('theme'),
-                    'returnValue' => array(
+                    'withParams' => ['theme'],
+                    'returnValue' => [
                         'name' => 'test',
-                    ),
-                ),
-            )
+                    ],
+                ],
+            ]
         );
-        $config = array(
+        $config = [
             'color' => 'default',
-            'blocks' => array(
-                'left' => array(
+            'blocks' => [
+                'left' => [
                     'title' => '',
                     'count' => '6',
                     'categoryId' => '',
@@ -160,10 +160,10 @@ class ThemeServiceTest extends BaseTestCase
                     'code' => 'course-grid-with-condition-index',
                     'defaultTitle' => '课程组件',
                     'id' => 'latestCourse',
-                ),
-            ),
+                ],
+            ],
             'bottom' => '',
-        );
+        ];
 
         $configUpdate = $this->getThemeService()->saveCurrentThemeConfig($config);
 
@@ -175,18 +175,18 @@ class ThemeServiceTest extends BaseTestCase
     {
         $this->mockBiz(
             'System:SettingService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'get',
-                    'withParams' => array('theme'),
-                    'returnValue' => array(),
-                ),
-            )
+                    'withParams' => ['theme'],
+                    'returnValue' => [],
+                ],
+            ]
         );
-        $config = array(
+        $config = [
             'color' => 'default',
-            'blocks' => array(
-                'left' => array(
+            'blocks' => [
+                'left' => [
                     'title' => '',
                     'count' => '6',
                     'categoryId' => '',
@@ -194,10 +194,10 @@ class ThemeServiceTest extends BaseTestCase
                     'code' => 'course-grid-with-condition-index',
                     'defaultTitle' => '课程组件',
                     'id' => 'latestCourse',
-                ),
-            ),
+                ],
+            ],
             'bottom' => '',
-        );
+        ];
         $createConfig = $this->createConfig();
 
         $configUpdate = $this->getThemeService()->saveCurrentThemeConfig($config);
@@ -223,7 +223,7 @@ class ThemeServiceTest extends BaseTestCase
 
         $config = $this->getThemeService()->resetConfig();
 
-        $this->assertEquals(array(), $config['config']);
+        $this->assertEquals([], $config['config']);
     }
 
     public function testResetCurrentConfig()
@@ -233,77 +233,77 @@ class ThemeServiceTest extends BaseTestCase
 
         $config = $this->getThemeService()->resetCurrentConfig();
 
-        $this->assertEquals(array(), $config['config']);
+        $this->assertEquals([], $config['config']);
     }
 
     public function testResetCurrentConfigWithEmpty()
     {
         $this->mockBiz(
             'System:SettingService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'get',
-                    'withParams' => array('theme'),
-                    'returnValue' => array(),
-                ),
-            )
+                    'withParams' => ['theme'],
+                    'returnValue' => [],
+                ],
+            ]
         );
         $this->createConfig();
 
         $config = $this->getThemeService()->resetCurrentConfig();
 
-        $this->assertEquals(array(), $config['config']);
+        $this->assertEquals([], $config['config']);
     }
 
     public function testResetCurrentConfigWithNotExistThemeSetting()
     {
         $this->mockBiz(
             'System:SettingService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'get',
-                    'withParams' => array('theme'),
-                    'returnValue' => array(
+                    'withParams' => ['theme'],
+                    'returnValue' => [
                         'name' => 'test',
-                    ),
-                ),
-            )
+                    ],
+                ],
+            ]
         );
         $this->createConfig();
 
         $config = $this->getThemeService()->resetCurrentConfig();
 
-        $this->assertEquals(array(), $config['config']);
+        $this->assertEquals([], $config['config']);
     }
 
     public function testResetCurrentConfigWithNotExistThemeAndConfig()
     {
         $this->mockBiz(
             'System:SettingService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'get',
-                    'withParams' => array('theme'),
-                    'returnValue' => array(
-                    ),
-                ),
-            )
+                    'withParams' => ['theme'],
+                    'returnValue' => [
+                    ],
+                ],
+            ]
         );
 
         $config = $this->getThemeService()->resetCurrentConfig();
 
-        $this->assertEquals(array(), $config['config']);
+        $this->assertEquals([], $config['config']);
     }
 
     public function testChangeThemeWithEmptyTheme()
     {
-        $result = $this->getThemeService()->changeTheme(array());
+        $result = $this->getThemeService()->changeTheme([]);
         $this->assertFalse($result);
     }
 
     public function testChangeThemeWithWrongVersion()
     {
-        $themeSetting = $this->setThemeSetting(array('support_version' => '9.0.0+'));
+        $themeSetting = $this->setThemeSetting(['support_version' => '30.0.0+']);
         $result = $this->getThemeService()->changeTheme($themeSetting);
         $this->assertFalse($result);
     }
@@ -315,9 +315,9 @@ class ThemeServiceTest extends BaseTestCase
         $this->assertTrue($result);
     }
 
-    protected function setThemeSetting($setting = array())
+    protected function setThemeSetting($setting = [])
     {
-        $value = array(
+        $value = [
             'code' => 'jianmo',
             'name' => '简墨',
             'author' => 'EduSoho官方',
@@ -326,19 +326,19 @@ class ThemeServiceTest extends BaseTestCase
             'protocol' => 3,
             'date' => '2015-6-1',
             'thumb' => 'img/theme.jpg',
-        );
+        ];
         $value = array_merge($value, $setting);
         $this->getSettingService()->set('theme', $value);
 
-        return $this->getSettingService()->get('theme', array());
+        return $this->getSettingService()->get('theme', []);
     }
 
     protected function createConfig()
     {
-        $config = array(
+        $config = [
             'color' => 'green',
-            'blocks' => array(
-                'left' => array(
+            'blocks' => [
+                'left' => [
                     'title' => '',
                     'count' => '12',
                     'categoryId' => '',
@@ -346,10 +346,10 @@ class ThemeServiceTest extends BaseTestCase
                     'code' => 'course-grid-with-condition-index',
                     'defaultTitle' => '课程组件',
                     'id' => 'latestCourse',
-                ),
-            ),
+                ],
+            ],
             'bottom' => '',
-        );
+        ];
 
         return $this->getThemeService()->createThemeConfig('简墨', $config);
     }

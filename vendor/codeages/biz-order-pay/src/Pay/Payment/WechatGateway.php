@@ -108,6 +108,10 @@ class WechatGateway extends AbstractGateway
             $order['open_id'] = $data['open_id'];
         }
 
+        if(!empty($data['time_expire'])) {
+            $order['time_expire'] = $data['time_expire'];
+        }
+
         $request  = $gateway->purchase($order);
         $response = $request->send();
 

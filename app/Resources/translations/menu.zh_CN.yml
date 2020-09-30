@@ -684,6 +684,16 @@ admin_v2.operation.invite.coupon_tab: 奖励查询
 #营销-营销管理-微营销
 admin_v2.micromarketing.menu: 微营销
 
+#营销-营销管理-用户信息采集
+
+admin_v2.information_collect.menu: 用户信息采集
+admin_v2.information_collect.tab: 用户信息采集
+admin_v2.information_collect.operate.update_tab: 编辑
+admin_v2.information_collect.operate.close_tab: 关闭采集
+admin_v2.information_collect.operate.open_tab: 开启采集
+admin_v2.information_collect.export_excel_tab: 导出Excel文件
+admin_v2.information_collect.detail: 用户信息采集 > 详情
+
 #运营-内容运营-小组管理
 admin_v2.operation.group_menu: 小组管理
 admin_v2.operation.group.group_tab: 小组管理
@@ -960,3 +970,6 @@ admin_v2.course.basic.basic_tab.go_to_choose_btn: 去内容市场选择
 
 exception.goods.not_found: 商品未找到
 
+admin_v2.information_collect.menu: 用户信息采集
+admin_v2.information_collect.tab: 用户信息采集
+admin_v2.information_collect.create: 新建

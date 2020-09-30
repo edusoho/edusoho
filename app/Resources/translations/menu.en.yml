@@ -685,6 +685,17 @@ admin_v2.operation.invite.coupon_tab: Rewards
 
 admin_v2.micromarketing.menu: Micromarketing
 
+#营销-营销管理-用户信息采集
+
+admin_v2.information_collect.menu: User Information Collection
+admin_v2.information_collect.tab: User Information Collection
+admin_v2.information_collect.operate.update_tab: 'Update'
+admin_v2.information_collect.operate.close_tab: 'Close the collection'
+admin_v2.information_collect.operate.open_tab: 'Open the collection'
+admin_v2.information_collect.export_excel_tab: 'Export Excel file'
+admin_v2.information_collec.detail: User Information Collection > Deatil
+admin_v2.information_collect.operate.update_tab: 'Update'
+
 #运营-内容运营-小组管理
 admin_v2.operation.group_menu: Group Discussions
 admin_v2.operation.group.group_tab: Groups
@@ -945,3 +956,6 @@ admin_v2.developer.mobile_iap_product.basic_tab: iOS Purchase Setting
 # 新版后台结束
 
 admin_v2.course.basic.basic_tab.go_to_choose_btn: Go to the market
+admin_v2.information.collection_menu: Information Collection
+admin_v2.information.collection_tab: Information Collection
+admin_v2.information_collect.create: Create
