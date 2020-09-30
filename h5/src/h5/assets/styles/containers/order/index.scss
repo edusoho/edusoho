@@ -83,13 +83,15 @@
 	}
 
 	.personal-info {
-		display: flex;
+		display: flex !important;
 		justify-content: space-between;
 		padding: vw(0) vw(20);
 		color: #9ba5b0;
 		font-size: vw(14);
 		line-height: vw(52);
 		border-bottom: vw(14) solid #f7f7f7;
+
+		@include text-overflow-multi(1);
 
 		.icon-arrow-right {
 			margin-left: vw(4);

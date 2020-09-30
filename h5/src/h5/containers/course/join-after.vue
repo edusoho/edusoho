@@ -58,8 +58,10 @@
     <!-- 个人信息表单填写 -->
     <van-action-sheet
       v-model="isShowForm"
+      class="minHeight50"
       :title="userInfoCollectForm.formTitle"
       :close-on-click-overlay="false"
+      :safe-area-inset-bottom="true"
       @cancel="onCancelForm"
     >
       <info-collection
@@ -80,7 +82,7 @@ import afterjoinDirectory from './detail/afterjoin-directory';
 import collectUserInfo from '@/mixins/collectUserInfo';
 import { mapState, mapMutations } from 'vuex';
 import { Dialog, Toast } from 'vant';
-import infoCollection from '../info-collection/index';
+import infoCollection from '@/components/info-collection.vue';
 import Api from '@/api';
 import * as types from '@/store/mutation-types.js';
 
@@ -139,16 +141,18 @@ export default {
       handler(val, oldVal) {
         if (val) {
           Toast.loading({
+            duration: 0,
             message: '加载中...',
             forbidClick: true,
           });
           this.getInfoCollectionEvent(this.paramsList).then(res => {
             if (Object.keys(res).length) {
               this.userInfoCollect = res;
-              this.getInfoCollectionForm().then(res => {
+              this.getInfoCollectionForm(res.id).then(res => {
                 this.isShowForm = true;
                 Toast.clear();
               });
+              return;
             }
             Toast.clear();
           });
@@ -156,6 +160,9 @@ export default {
       },
       // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法，如果设置了false，那么效果和上边例子一样
       immediate: true,
+    },
+    $route(to, from) {
+      this.resetFrom();
     },
   },
   mounted() {

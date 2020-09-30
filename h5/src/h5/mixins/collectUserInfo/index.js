@@ -4,6 +4,9 @@ import Api from '@/api';
 export default {
   data() {
     return {
+      isReqUserInfoCollect: false,
+      isRequserInfoCollectForm: false,
+      needCollectUserInfo: false,
       userInfoCollect: null,
       userInfoCollectForm: {},
     };
@@ -24,8 +27,9 @@ export default {
         targetId: paramsList.targetId,
       };
 
-      return new Promise((resolve, reject) => {
-        Api.getInfoCollectionEvent({
+      // eslint-disable-next-line no-async-promise-executor
+      return new Promise(async (resolve, reject) => {
+        await Api.getInfoCollectionEvent({
           query,
           params,
         })
@@ -34,19 +38,20 @@ export default {
             resolve(res);
           })
           .catch(err => {
-            this.userInfoCollect = {};
             reject(err);
             Toast(err.message);
           });
+        this.isReqUserInfoCollect = true;
       });
     },
     // 根据事件id获取表单
-    getInfoCollectionForm() {
+    getInfoCollectionForm(eventId) {
       const query = {
-        eventId: this.userInfoCollect.id,
+        eventId,
       };
-      return new Promise((resolve, reject) => {
-        Api.getInfoCollectionForm({
+      // eslint-disable-next-line no-async-promise-executor
+      return new Promise(async (resolve, reject) => {
+        await Api.getInfoCollectionForm({
           query,
         })
           .then(res => {
@@ -57,7 +62,15 @@ export default {
             reject(err);
             Toast(err.message);
           });
+        this.isRequserInfoCollectForm = true;
       });
+    },
+    resetFrom() {
+      this.isReqUserInfoCollect = false;
+      this.isRequserInfoCollectForm = false;
+      this.needCollectUserInfo = false;
+      this.userInfoCollect = null;
+      this.userInfoCollectForm = {};
     },
   },
 };

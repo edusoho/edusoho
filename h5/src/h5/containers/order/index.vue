@@ -85,29 +85,29 @@
     <!-- 报名信息填写 -->
     <div
       class="personal-info"
-      v-show="userInfoCellect"
-      @click="isShowForm = true"
+      v-if="showCollectEntry"
+      @click="showUserInfoCollectForm"
     >
-      报名信息
+      {{ userInfoCollectForm.formTitle }}
       <i class="iconfont icon-arrow-right"></i>
     </div>
     <!-- 个人信息表单填写 -->
     <van-popup
       v-model="isShowForm"
       :overlay="false"
-      class="e-popup full-height-popup coupon-popup"
+      class="e-popup full-height-popup coupon-popup mt0"
       position="bottom"
     >
       <van-nav-bar
         :left-arrow="true"
-        title="用户信息填写"
+        :title="this.userInfoCollectForm.formTitle"
         class="nav-bar"
-        @click-left="isShowForm = false"
+        @click-left="hideUserInfoCollectForm"
       />
       <info-collection
-        :userInfoCellectForm="this.userInfoCellectForm"
-        :formRule="this.userInfoCellectForm.items"
-        @submitForm="handleSubmit"
+        :userInfoCollectForm="this.userInfoCollectForm"
+        :formRule="this.userInfoCollectForm.items"
+        @submitForm="submitForm"
       ></info-collection>
     </van-popup>
 
@@ -180,7 +180,7 @@ import eCourse from '&/components/e-course/e-course.vue';
 import Api from '@/api';
 import { Toast } from 'vant';
 import collectUserInfoMixins from '@/mixins/collectUserInfo/index.js';
-import infoCollection from '../info-collection/index';
+import infoCollection from '@/components/info-collection.vue';
 export default {
   components: {
     eCourse,
@@ -206,7 +206,6 @@ export default {
       targetUnit: this.$route.params.unit,
       targetNum: this.$route.params.num,
       vipOrderType: this.$route.params.type,
-
       detail: {},
       // WechatPay_JsH5--微信内支付 WechatPay_H5--微信wap支付
       payWay: '',
@@ -215,6 +214,7 @@ export default {
       inWechat: this.isWeixinBrowser(),
       timeoutId: -1,
       isShowForm: false,
+      hasCollectUserInfo: false,
     };
   },
   created() {
@@ -270,12 +270,24 @@ export default {
       return this.$route.query.expiryScope || '永久有效';
     },
     validPayWay() {
+      if (this.IsCollectUserInfoType && !this.isReqUserInfoCollect) {
+        return false;
+      }
+      if (this.needCollectUserInfo && !this.isRequserInfoCollectForm) {
+        return false;
+      }
       return (
         this.paySettings.wxpayEnabled ||
         (this.paySettings.alipayEnabled &&
           !this.inWechat &&
-          this.userInfoCellect)
+          this.userInfoCollect)
       );
+    },
+    IsCollectUserInfoType() {
+      return this.targetType === 'course' || this.targetType === 'classroom';
+    },
+    showCollectEntry() {
+      return Object.keys(this.userInfoCollectForm).length > 0;
     },
   },
   filters: {
@@ -300,23 +312,52 @@ export default {
   },
   methods: {
     shouldCollectUserInfo() {
-      if (this.hasUserInfoCellectForm) {
-        Toast('请先提交报名信息后再提交订单');
-      } else {
-        this.handleSubmit();
+      if (
+        this.IsCollectUserInfoType &&
+        !this.hasCollectUserInfo &&
+        this.hasUserInfoCollectForm
+      ) {
+        Toast('请先提交信息后再提交订单');
+        // if (this.hasUserInfoCollectForm) {
+        //   Toast('请先提交信息后再提交订单');
+        // } else {
+        //   this.handleSubmit();
+        // }
+        return;
       }
+      this.handleSubmit();
+    },
+    showUserInfoCollectForm() {
+      this.isShowForm = true;
+    },
+    hideUserInfoCollectForm() {
+      this.isShowForm = false;
     },
     getInfoCollection() {
+      Toast.loading({
+        duration: 0,
+        message: '加载中...',
+        forbidClick: true,
+      });
       const paramsList = {
         action: 'buy_before',
         targetType: this.targetType,
-        targetId: this.detail.id,
+        targetId: this.targetId,
       };
       this.getInfoCollectionEvent(paramsList).then(res => {
         if (Object.keys(res).length) {
-          this.getInfoCollectionForm();
+          this.needCollectUserInfo = true;
+          this.getInfoCollectionForm(res.id).then(() => {
+            Toast.clear();
+          });
+          return;
         }
+        Toast.clear();
       });
+    },
+    submitForm() {
+      this.hideUserInfoCollectForm();
+      this.hasCollectUserInfo = true;
     },
     handleSubmit() {
       if (this.total == 0) {
@@ -388,7 +429,9 @@ export default {
           const coupons = res.availableCoupons;
           this.course = res;
           this.itemData = coupons.length > 0 ? coupons[0] : null;
-          this.getInfoCollection();
+          if (this.IsCollectUserInfoType) {
+            this.getInfoCollection();
+          }
         })
         .catch(err => {
           this.$toast(err.message);
@@ -485,17 +528,16 @@ export default {
       })
         .then(res => {
           if (res.isPaid) {
-            if (this.wechatSwitch) {
-              this.$router.replace({
-                path: '/pay_success',
-                query: {
-                  paidUrl: window.location.origin + res.paidSuccessUrlH5,
-                },
-              });
-              return;
-            }
-            window.location.href =
-              window.location.origin + res.paidSuccessUrlH5;
+            // if (this.wechatSwitch) {
+            //   this.$router.replace({
+            //     path: '/pay_success',
+            //     query: {
+            //       paidUrl: window.location.origin + res.paidSuccessUrlH5,
+            //     },
+            //   });
+            //   return;
+            // }
+            window.location.href = res.paidSuccessUrlH5;
             return;
           }
           this.timeoutId = setTimeout(() => {
@@ -514,9 +556,14 @@ export default {
       if (isWxPay) {
         window.location.href =
           `${window.location.origin}/pay/center/wxpay_h5?pay_amount=` +
-          `${this.detail.pay_amount}&title=${this.detail.title}&sn=${this.detail.sn}`;
+          `${this.detail.pay_amount}&title=${this.detail.title}&sn=${this.detail.sn}&targetType=${this.targetType}&targetId=${this.targetId}&payWay=${this.payWay}`;
         return;
       }
+
+      const returnUrl =
+        window.location.origin +
+        window.location.pathname +
+        `#/pay_center?targetType=${this.targetType}&targetId=${this.targetId}&payWay=${this.payWay}`;
 
       Api.createTrade({
         data: {
@@ -524,6 +571,7 @@ export default {
           type: 'purchase',
           orderSn: this.detail.sn,
           app_pay: 'Y',
+          success_url: returnUrl,
         },
       })
         .then(res => {

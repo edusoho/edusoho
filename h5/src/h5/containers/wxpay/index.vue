@@ -1,6 +1,6 @@
 <template>
   <div class="payPage">
-    <e-loading v-if="isLoading"/>
+    <e-loading v-if="isLoading" />
     <div class="payPage__order">
       <div class="order__head">
         {{ detail.title }}
@@ -8,7 +8,9 @@
       <div class="order__infomation">
         <div class="sum">
           <span>待支付</span>
-          <span class="sum__price">¥ <span class="num">{{ detail.pay_amount | toMoney }}</span></span>
+          <span class="sum__price"
+            >¥ <span class="num">{{ detail.pay_amount | toMoney }}</span></span
+          >
         </div>
       </div>
     </div>
@@ -19,63 +21,87 @@
 </template>
 
 <script>
-import Api from '@/api'
-import axios from 'axios'
-import { mapState } from 'vuex'
-import { Toast } from 'vant'
+import Api from '@/api';
+import { mapState } from 'vuex';
+import { Toast } from 'vant';
 
 export default {
   data() {
     return {
-      detail: {}
-    }
+      detail: {},
+    };
   },
   computed: {
-    ...mapState(['wechatSwitch', 'isLoading'])
+    ...mapState(['wechatSwitch', 'isLoading']),
   },
   mounted() {
-    const { pay_amount, title, sn, openid } = this.$route.query
-    this.detail = { pay_amount, title, sn, openid }
+    const {
+      // eslint-disable-next-line camelcase
+      pay_amount,
+      title,
+      sn,
+      openid,
+      targetType,
+      targetId,
+      payWay,
+    } = this.$route.query;
+    this.detail = {
+      pay_amount,
+      title,
+      sn,
+      openid,
+      targetType,
+      targetId,
+      payWay,
+    };
   },
   methods: {
     handlePay() {
+      const returnUrl =
+        window.location.origin +
+        window.location.pathname +
+        `#/pay_center?targetType=${this.detail.targetType}&targetId=${this.detail.targetId}&payWay=${this.detail.payWay}`;
       Api.createTrade({
         data: {
           gateway: 'WechatPay_JsH5',
           type: 'purchase',
           orderSn: this.detail.sn,
-          openid: this.detail.openid
-        }
-      }).then((data) => {
-        WeixinJSBridge.invoke(
-          'getBrandWCPayRequest',
-          data.platformCreatedResult,
-          (res) => {
-            if (res.err_msg == 'get_brand_wcpay_request:ok') {
-              if (this.wechatSwitch) {
-                this.$router.replace({
-                  path: '/pay_success',
-                  query: {
-                    paidUrl: data.paidSuccessUrlH5
-                  }
-                })
-                return
-              }
-              location.href = data.paidSuccessUrlH5
-              // this.$router.push({ path: data.paidSuccessUrlH5 });
-            } else {
-              if (res.err_msg == 'get_brand_wcpay_request:fail') {
-                alert('支付失败')
-              } else if (res.err_msg == 'get_brand_wcpay_request:cancel') {
-                alert('支付已失败')
-              }
-            }
-          }
-        )
-      }).catch(err => {
-        Toast.fail(err.message)
+          openid: this.detail.openid,
+          success_url: returnUrl,
+        },
       })
-    }
-  }
-}
+        .then(data => {
+          // eslint-disable-next-line no-undef
+          WeixinJSBridge.invoke(
+            'getBrandWCPayRequest',
+            data.platformCreatedResult,
+            res => {
+              if (res.err_msg == 'get_brand_wcpay_request:ok') {
+                // if (this.wechatSwitch) {
+                //   this.$router.replace({
+                //     path: '/pay_success',
+                //     query: {
+                //       paidUrl: data.paidSuccessUrlH5,
+                //     },
+                //   });
+                //   return;
+                // }
+                location.href = data.paidSuccessUrlH5;
+                // this.$router.push({ path: data.paidSuccessUrlH5 });
+              } else {
+                if (res.err_msg == 'get_brand_wcpay_request:fail') {
+                  alert('支付失败');
+                } else if (res.err_msg == 'get_brand_wcpay_request:cancel') {
+                  alert('支付已失败');
+                }
+              }
+            },
+          );
+        })
+        .catch(err => {
+          Toast.fail(err.message);
+        });
+    },
+  },
+};
 </script>

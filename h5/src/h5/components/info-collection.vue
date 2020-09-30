@@ -368,7 +368,7 @@ export default {
       birthtDateSelect: {
         minDate: new Date(1900, 1, 1),
         maxDate: new Date(),
-        birthtDate: new Date(),
+        birthtDate: new Date(1990, 0, 1),
         show: false,
       },
       areaSelect: {
@@ -589,7 +589,6 @@ export default {
       Api.setInfoCollection({
         data,
       }).then(res => {
-        console.log(res);
         this.$toast('提交成功');
         this.laterFillIn();
       });

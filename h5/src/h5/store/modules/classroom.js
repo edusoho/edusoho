@@ -4,9 +4,9 @@ const state = {
   searchClassRoomList: {
     selectedData: {},
     courseList: [],
-    paging: {},
-    currentJoin: false, // 班级加入后是否采集用户信息
+    paging: {}, // 班级加入后是否采集用户信息
   },
+  currentJoin: false,
 };
 
 const mutations = {
@@ -21,7 +21,6 @@ const mutations = {
 const actions = {
   setClassRoomList({ commit }, data) {
     commit(types.SET_CLASSROOMLIST, data);
-    commit(types.SET_CURRENT_JOIN_CLASS, true);
   },
 };
 

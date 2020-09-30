@@ -385,6 +385,24 @@ const routes = [
       import(/* webpackChunkName: "pay" */ '@/containers/pay/success.vue'),
   },
   {
+    path: '/pay_center',
+    name: 'pay_center',
+    meta: {
+      title: '支付成功中转页',
+    },
+    component: () =>
+      import(/* webpackChunkName: "pay" */ '@/containers/pay/center.vue'),
+  },
+  {
+    path: '/pay_collectInfo',
+    name: 'pay_collectInfo',
+    meta: {
+      title: '信息填写',
+    },
+    component: () =>
+      import(/* webpackChunkName: "pay" */ '@/containers/pay/collectInfo.vue'),
+  },
+  {
     path: '/preview',
     name: 'preview',
     meta: {
@@ -747,17 +765,6 @@ const routes = [
     component: () =>
       import(
         /* webpackChunkName: "brush-exercise" */ '@/containers/brush-exercise/index.vue'
-      ),
-  },
-  {
-    path: '/info_collection',
-    name: 'info_collection',
-    meta: {
-      title: '用户信息收集',
-    },
-    component: () =>
-      import(
-        /* webpackChunkName: "info-collection" */ '@/containers/info-collection/index.vue'
       ),
   },
 ];

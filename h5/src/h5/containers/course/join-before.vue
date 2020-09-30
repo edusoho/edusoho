@@ -56,8 +56,10 @@
     <!-- 个人信息表单填写 -->
     <van-action-sheet
       v-model="isShowForm"
+      class="minHeight50"
       :title="userInfoCollectForm.formTitle"
       :close-on-click-overlay="false"
+      :safe-area-inset-bottom="true"
     >
       <info-collection
         :userInfoCollectForm="userInfoCollectForm"
@@ -115,7 +117,7 @@ import getActivityMixin from '@/mixins/activity/index';
 import collectUserInfo from '@/mixins/collectUserInfo';
 import { dateTimeDown } from '@/utils/date-toolkit';
 import { Toast } from 'vant';
-import infoCollection from '../info-collection/index';
+import infoCollection from '@/components/info-collection.vue';
 const TAB_HEIGHT = 44;
 
 export default {
@@ -155,6 +157,11 @@ export default {
       isShowForm: false,
       paramsList: {},
     };
+  },
+  watch: {
+    $route(to, from) {
+      this.resetFrom();
+    },
   },
   async created() {
     this.courseSettings = await Api.getSettings({
@@ -228,7 +235,6 @@ export default {
   },
   mounted() {
     // 获取用户信息采集接口参数
-    this.getParamsList();
     if (!this.isClassCourse && this.couponSwitch) {
       // 获取促销优惠券
       Api.searchCoupon({
@@ -330,6 +336,7 @@ export default {
 
       // 禁止加入
       if (!this.accessToJoin && !vipAccessToJoin) {
+        this.$toast('禁止加入');
         return;
       }
 
@@ -421,7 +428,7 @@ export default {
     },
     getParamsList() {
       this.paramsList = {
-        action: this.accessToJoin ? 'buy_before' : 'buy_after',
+        action: 'buy_before',
         targetType: 'course',
         targetId: this.details.id,
       };
@@ -432,19 +439,20 @@ export default {
         return;
       }
       Toast.loading({
+        duration: 0,
         message: '加载中...',
         forbidClick: true,
       });
+      this.getParamsList();
       this.getInfoCollectionEvent(this.paramsList).then(res => {
         if (Object.keys(res).length) {
           this.userInfoCollect = res;
-          this.getInfoCollectionForm().then(res => {
+          this.getInfoCollectionForm(res.id).then(res => {
             this.isShowForm = true;
             Toast.clear();
           });
           return;
         }
-        Toast.clear();
         this.joinFreeCourse();
       });
     },
