@@ -459,6 +459,16 @@ class GoodsServiceTest extends BaseTestCase
         self::assertEquals(1, $count);
     }
 
+    public function testSearchGoodsSpecs()
+    {
+        $this->createGoodsSpecs();
+        $this->createGoodsSpecs(['goodsId' => 2]);
+        $total = $this->getGoodsService()->searchGoodsSpecs([], [], 0, 10);
+        $count = $this->getGoodsService()->searchGoodsSpecs(['goodsId' => 1], [], 0, 10);
+        self::assertCount(2, $total);
+        self::assertCount(1, $count);
+    }
+
     public function testHitGoods()
     {
         $courseSet = $this->createCourseSet();
