@@ -10051,7 +10051,7 @@ user.certificates.cart_detail_btn: View get path
 
 admin_v2.information_collect.create: Create
 admin_v2.information_collect.update: Edit
-admin_v2.information_collect.edit.title_info: The current version of the client only supports Xinwei school
+admin_v2.information_collect.edit.title_info: The current version of the client only supports the new version of micro school
 admin_v2.information_collect.edit.title: Title
 admin_v2.information_collect.edit.action: Action
 admin_v2.information_collect.edit.action_before: Before Course/Classroom Pay
