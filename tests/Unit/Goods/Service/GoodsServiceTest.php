@@ -6,10 +6,12 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\ReflectionUtils;
 use Biz\BaseTestCase;
 use Biz\Common\CommonException;
+use Biz\Course\Service\CourseSetService;
 use Biz\Goods\Dao\GoodsDao;
 use Biz\Goods\Dao\GoodsSpecsDao;
 use Biz\Goods\GoodsException;
 use Biz\Goods\Service\GoodsService;
+use Biz\Product\Service\ProductService;
 
 class GoodsServiceTest extends BaseTestCase
 {
@@ -447,6 +449,42 @@ class GoodsServiceTest extends BaseTestCase
         self::assertEquals(10.00, $res['maxPrice']);
     }
 
+    public function testCountGoods()
+    {
+        $this->createGoods();
+        $this->createGoods(['productId' => 2, 'type' => 'classroom']);
+        $total = $this->getGoodsService()->countGoods([]);
+        $count = $this->getGoodsService()->countGoods(['type' => 'course']);
+        self::assertEquals(2, $total);
+        self::assertEquals(1, $count);
+    }
+
+    public function testHitGoods()
+    {
+        $courseSet = $this->createCourseSet();
+        self::assertEquals(0, $courseSet['hitNum']);
+        list($product, $goods) = $this->getProductAndGoods($courseSet);
+        $hitGoods = $this->getGoodsService()->hitGoods($goods['id']);
+        $hitCourseSet = $this->getCourseSetService()->getCourseSet($courseSet['id']);
+        self::assertEquals(1, $hitCourseSet['hitNum']);
+    }
+
+    private function createCourseSet($customFields = [])
+    {
+        return $this->getCourseSetService()->createCourseSet($this->mockCourseSet($customFields));
+    }
+
+    private function mockCourseSet($customFields = [])
+    {
+        return array_merge([
+            'id' => 1,
+            'type' => 'normal',
+            'title' => '测试构建商品的课程',
+            'subtitle' => '副标题',
+            'creator' => 1,
+        ], $customFields);
+    }
+
     protected function createGoods($goods = [])
     {
         $default = [
@@ -476,6 +514,21 @@ class GoodsServiceTest extends BaseTestCase
         return $this->getGoodsSpecsDao()->create($goodsSpecs);
     }
 
+    protected function getProductAndGoods($courseSet)
+    {
+        $existProduct = $this->getProductService()->getProductByTargetIdAndType($courseSet['id'], 'course');
+        if (empty($existProduct)) {
+            return [[], []];
+        }
+
+        $existGoods = $this->getGoodsService()->getGoodsByProductId($existProduct['id']);
+        if (empty($existGoods)) {
+            throw GoodsException::GOODS_NOT_FOUND();
+        }
+
+        return [$existProduct, $existGoods];
+    }
+
     /**
      * @return GoodsDao
      */
@@ -498,5 +551,21 @@ class GoodsServiceTest extends BaseTestCase
     protected function getGoodsSpecsDao()
     {
         return $this->createDao('Goods:GoodsSpecsDao');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getProductService()
+    {
+        return $this->createService('Product:ProductService');
     }
 }
