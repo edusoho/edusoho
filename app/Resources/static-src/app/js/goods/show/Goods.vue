@@ -70,7 +70,7 @@
                 <teacher :teachers="currentSku.teachers"/>
                 <qr :mpQrcode="componentsData.mpQrCode"/>
                 <recommend :goods="goods" :recommendGoods="componentsData.recommendGoods"/>
-                <certificate :goodsId="goodsId" />
+                <certificate :goodsId="goodsId" :sku="currentSku" />
             </div>
         </div>
         <back-to-top v-show="isFixed"/>

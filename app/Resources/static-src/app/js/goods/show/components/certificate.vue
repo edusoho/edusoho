@@ -19,12 +19,12 @@ export default {
       certificates: []
     }
   },
-  props: ['goodsId'],
+  props: ['goodsId', 'sku'],
   methods: {
     requestCertificateData() {
       axios.get('/api/certificates', {
           params: {
-            targetId: this.goodsId,
+            targetId: this.sku.targetId,
             limit: 4
           },
           headers: {
