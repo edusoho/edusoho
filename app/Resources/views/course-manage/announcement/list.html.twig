@@ -1,16 +1,21 @@
-{% extends 'announcement/announcement-modal-layout.html.twig' %}
-{% do script(['app/js/announcement/announcement/index.js'])%}
-{% set tab="list" %}
+{% extends 'course-manage/layout.html.twig' %}
 
-{% block content %}
+{% block title %}{{'course.announcement_manage'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
+{% do script(['app/js/announcement/announcement/index.js'])%}
+{% set course_side_nav = 'announcements' %}
+{% block main_heading_class %}course-main-header{% endblock %}
+{% block main_heading %}
+  {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: course_side_nav, btnGroup:1} %}
+{% endblock %}
+
+{% block main_body %}
   <div class="announcement-list">
-  {% if announcements %}
-    {% for announcement in announcements %}
+    {% if announcements %}
+      {% for announcement in announcements %}
         <div class="alert alert-default alert-edit clearfix" role="alert">
           <div class="alert-header">
             <i class="icon-click es-icon es-icon-chevronright"></i>
             <span class="title">
-              {% if plans[announcement.targetId]|default(null) %}[{{ plans[announcement.targetId].title }}]{% endif %}
               {{ announcement.content|plain_text(40) }}
             </span>
 
@@ -30,9 +35,9 @@
           </div>
         </div>
 
-    {% endfor %}
-  {% else %}
-    <div class="alert alert-edit">{{'announcement.empty'|trans}}</div>
-  {% endif %}
+      {% endfor %}
+    {% else %}
+      <div class="alert alert-edit" align="center">{{'announcement.empty'|trans}}</div>
+    {% endif %}
   </div>
 {% endblock %}

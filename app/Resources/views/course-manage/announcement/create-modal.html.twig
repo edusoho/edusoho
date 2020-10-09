@@ -10,30 +10,13 @@
       action="{{ path('announcement_add',{targetType:targetType, targetId:targetObject.id}) }}"
     {% endif %}
   >
-
-    {% if member|default(null) %}
-      <input type="hidden" name="targetId" value="{{ targetId }}">
-    {% else %}
-      <div class="row form-group">
-        <div class="col-md-2 control-label">
-          <label for="startTime">{{'announcement.modal.write.select_plan'|trans}}</label>
-        </div>
-        <div class="col-md-9 controls" style="z-index:2000;">
-          <select class="form-control" name="targetId">
-            {% for plan in plans if plan %}
-              <option value="{{ plan.id }}" {% if plan.id == course.id|default(0) or plan.id == announcement.targetId|default(0) %}selected{% endif %}>{{ plan.title }}</option>
-            {% endfor %}
-          </select>
-        </div>
-      </div>
-    {% endif %}
-
+    <input type="hidden" name="targetId" value="{{ targetId }}">
     <div class="row form-group">
       <div class="col-md-2 control-label">
         <label for="startTime">{{'announcement.modal.write.startTime'|trans}}</label>
       </div>
       <div class="col-md-9 controls" style="z-index:2000;">
-        <input type="text" id="startTime"  name="startTime" class="form-control" value="{% if announcement.startTime|default('now') %}{{announcement.startTime|default('now')|date("Y-m-d H:i")}}{% endif %}">
+        <input type="text" id="startTime" name="startTime" class="form-control" autocomplete="off" value="{% if announcement.startTime|default('now') %}{{announcement.startTime|default('now')|date("Y-m-d H:i")}}{% endif %}">
       </div>
     </div>
 
@@ -42,7 +25,7 @@
         <label for="endTime">{{'announcement.modal.write.endTime'|trans}}</label>
       </div>
       <div class="col-md-9 controls" style="z-index:2000;">
-        <input type="text" id="endTime"  name="endTime" class="form-control" value="{% if announcement.endTime|default(null) %}{{announcement.endTime|date("Y-m-d H:i")}}{% endif %}">
+        <input type="text" id="endTime"  name="endTime" class="form-control" autocomplete="off" value="{% if announcement.endTime|default(null) %}{{announcement.endTime|date("Y-m-d H:i")}}{% endif %}">
       </div>
     </div>
 
@@ -56,17 +39,17 @@
     </div>
 
     {% if not announcement.id %}
-    <div class="row form-group">
-      <div class="col-md-2 control-label">
-      </div>
-      <div class="col-md-9 controls">
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" name="notify" value="notify"> {{'announcement.modal.write.send_notify_to_user'|trans}}
-          </label>
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+        </div>
+        <div class="col-md-9 controls">
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" name="notify" value="notify"> {{'announcement.modal.write.send_notify_to_user'|trans}}
+            </label>
+          </div>
         </div>
       </div>
-    </div>
     {% endif %}
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
   </form>

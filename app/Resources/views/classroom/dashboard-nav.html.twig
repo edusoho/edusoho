@@ -30,11 +30,11 @@
     <a class="btn btn-primary" href="{{ path('classroom_introductions', {id:classroom.id}) }}">{{'goods.description'|trans}}</a>
   </ul>
 
-  {% if canManageClassroom %}
-  <div class="btnbar hidden-xs">
-    <a href="#modal" data-toggle="modal" data-url="{{ path('announcement_add', {targetType:'classroom', targetId:classroom.id}) }}" class="btn btn-link">
-      <i class="es-icon es-icon-anonymous-iconfont"></i>{{'announcement'|trans}}
-    </a>
-  </div>
-  {% endif %}
+{#  {% if canManageClassroom %}#}
+{#  <div class="btnbar hidden-xs">#}
+{#    <a href="#modal" data-toggle="modal" data-url="{{ path('announcement_add', {targetType:'classroom', targetId:classroom.id}) }}" class="btn btn-link">#}
+{#      <i class="es-icon es-icon-anonymous-iconfont"></i>{{'announcement'|trans}}#}
+{#    </a>#}
+{#  </div>#}
+{#  {% endif %}#}
 </div>
