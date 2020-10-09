@@ -147,8 +147,6 @@ class ClassroomController extends BaseController
 
             $classroom = $this->getClassroomService()->addClassroom($classroom);
 
-            $this->setFlashMessage('success', 'classroom.create.congratulation_message');
-
             return $this->redirect($this->generateUrl('classroom_manage', ['id' => $classroom['id']]));
         }
 
