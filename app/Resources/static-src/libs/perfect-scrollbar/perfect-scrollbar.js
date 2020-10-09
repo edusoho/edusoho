@@ -97,6 +97,7 @@
           display: scrollbarXActive ? 'inherit' : 'none'
         });
         $scrollbarYRail.css({
+          position: 'absolute',
           top: $this.scrollTop(),
           right: scrollbarYRight - $this.scrollLeft(),
           height: containerHeight,
