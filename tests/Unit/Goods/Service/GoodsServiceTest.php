@@ -490,6 +490,23 @@ class GoodsServiceTest extends BaseTestCase
         self::assertEquals('10.00', $specsChangedPrice['price']);
     }
 
+    public function testFindGoodsByProductIds()
+    {
+    }
+
+    public function testConvertGoodsPrice()
+    {
+        $this->mockBiz('DiscountPlugin:Discount:DiscountService', [
+//            [
+//                'status' => $this->createGoodsSpecs()
+//            ]
+        ]);
+    }
+
+    public function testConvertSpecsPrice()
+    {
+    }
+
     private function createCourseSet($customFields = [])
     {
         return $this->getCourseSetService()->createCourseSet($this->mockCourseSet($customFields));

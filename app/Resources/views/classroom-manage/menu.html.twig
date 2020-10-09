@@ -12,7 +12,11 @@
             {{ 'classroom.course_manage'|trans }}
           </a>
         </li>
-
+        <li class="cd-sidebar__item {% if side_nav == 'announcements' %}active{% endif %}">
+          <a href="{{ path('announcement_list', {targetId: classroom.id, targetType: 'classroom'}) }}">
+            {{ 'classroom.announcement_manage'|trans }}
+          </a>
+        </li>
         <li class="cd-sidebar__heading">
           <hr class="mt0 mb0 mh10 bg-border-color">
         </li>

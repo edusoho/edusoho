@@ -1116,6 +1116,7 @@ course.dashboard.student_chart.time_select_seven_days: Seven days without school
 course.dashboard.student_chart.name_or_mobile_placeholder: nickname/mobile
 
 course.members_manage.add_btn: 'Add'
+course.announcements_manage.add_btn: 'Add Announcement'
 course.members_manage.batch_import_btn: 'Import'
 course.members_manage.import_failed_tips: 'Import student failed, the %type% is not published'
 course.members_manage.add_failed_tips: %type% is unpublished, students can't be added.
@@ -1632,6 +1633,7 @@ course.files_manage.tips: "Tip：Course file could not be seen by students until
 course.plan_overview: 'Data Overview'
 
 course.plan_task: Lessons
+course.announcement_manage: Announcements
 course.plan_task.deadline_learn_tips: 'You can learn before<input class="form-control width-150 js-expiry-input" id="deadline" name="deadline" value="">.'
 course.plan_task.expiry_days_learn_tips: 'From the day of enrolled, you can learn within<input class="form-control mhs width-150 js-expiry-input" type="text" id="expiryDays" name="expiryDays">days'
 course.plan_task.start_time: 'Start date'
@@ -2322,6 +2324,7 @@ classroom.set_teachers: Teacher
 classroom.set_manage: 'Teachers'
 classroom.set_assistant: 'Assistants'
 classroom.course_manage: 'Courses'
+classroom.announcement_manage: 'Announcement'
 classroom.student_manage: 'Students'
 classroom.testpaper_check: 'Test Paper Review'
 classroom.my_check: 'My Review'

@@ -1321,6 +1321,7 @@ course.dashboard.student_chart.time_select_seven_days: 7天未学
 course.dashboard.student_chart.name_or_mobile_placeholder: 用户名/手机号
 
 course.members_manage.add_btn: 添加学员
+course.announcements_manage.add_btn: 添加公告
 course.members_manage.batch_import_btn: 批量导入
 course.members_manage.import_failed_tips: %type%未发布,不可导入学员
 course.members_manage.add_failed_tips: %type%未发布，不可添加学员
@@ -1872,6 +1873,7 @@ course.files_manage.tips: 提示：课程文件需要<strong class="color-warnin
 course.plan_overview: 数据概览
 
 course.plan_task: 课时管理
+course.announcement_manage: 公告管理
 course.plan_task.deadline_learn_tips: >
   在
   <input class="form-control width-150 js-expiry-input" id="deadline" name="deadline" value="">
@@ -2629,6 +2631,7 @@ classroom.set_teachers: 教师设置
 classroom.set_manage: 教师管理
 classroom.set_assistant: 助教设置
 classroom.course_manage: 课程管理
+classroom.announcement_manage: 公告管理
 classroom.student_manage: 学员管理
 classroom.testpaper_check: 试卷批阅
 classroom.my_check: 我的批阅
