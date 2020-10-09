@@ -110,6 +110,7 @@ payment:
     lianlianpay: 连连支付
     coin: 虚拟币
     wechat_app: 微信小程序
+    paypal: PayPal
     none: 其他
 
 paymentSelect:
