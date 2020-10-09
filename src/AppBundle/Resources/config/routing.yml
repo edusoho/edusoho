@@ -3580,6 +3580,7 @@ item_bank_exercise_category_answer:
 goods_show:
     path:     /goods/show/{id}
     defaults: { _controller: AppBundle:Goods/Goods:show }
+    h5: true
 
 goods_min_screen_show:
     path:     /goods/min_screen_show/{id}

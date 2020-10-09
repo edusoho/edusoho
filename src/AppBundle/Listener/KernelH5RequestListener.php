@@ -77,11 +77,11 @@ class KernelH5RequestListener
             $pathInfo = $this->container->get('router')->generate('classroom_show', array('id' => $route['id']), UrlGeneratorInterface::ABSOLUTE_PATH);
         }
 
-        if ('course_set_explore' == $route['_route']) {
+        if ('course_set_explore' === $route['_route']) {
             $query = array();
             $pathInfo = $this->container->get('router')->generate('course_set_explore', array(), UrlGeneratorInterface::ABSOLUTE_PATH);
         }
-        if ('task_live_entry' == $route['_route']) {
+        if ('task_live_entry' === $route['_route']) {
             $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($route['courseId'], $route['activityId']);
             $params = array(
                 'courseId' => $route['courseId'],
@@ -91,6 +91,11 @@ class KernelH5RequestListener
             );
             $query = http_build_query($params);
             $pathInfo = '/live';
+        }
+
+        if ('goods_show' === $route['_route']) {
+            $query = http_build_query($params);
+            $pathInfo = "/goods/{$route['id']}/show";
         }
 
         return empty($query) ? '/h5/index.html#'.$pathInfo : '/h5/index.html#'.$pathInfo.'?'.$query;
