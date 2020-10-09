@@ -20,7 +20,12 @@ use AppBundle\Util\CategoryBuilder;
 use AppBundle\Util\CdnUrl;
 use AppBundle\Util\UploadToken;
 use Biz\Account\Service\AccountProxyService;
+use Biz\Classroom\Service\ClassroomService;
 use Biz\Common\JsonLogger;
+use Biz\Course\Service\CourseSetService;
+use Biz\InformationCollect\FormItem\FormItemFectory;
+use Biz\InformationCollect\Service\EventService;
+use Biz\InformationCollect\Service\ResultService;
 use Biz\Player\Service\PlayerService;
 use Biz\S2B2C\Service\FileSourceService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
@@ -200,6 +205,8 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_s2b2c_enabled', [$this, 'isS2B2CEnabled']),
             new \Twig_SimpleFunction('s2b2c_has_behaviour_permission', [$this, 's2b2cHasBehaviourPermission']),
             new \Twig_SimpleFunction('make_local_media_file_token', [$this, 'makeLocalMediaFileToken']),
+            new \Twig_SimpleFunction('information_collect_location_info', [$this, 'informationCollectLocationInfo']),
+            new \Twig_SimpleFunction('information_collect_form_items', [$this, 'informationCollectFormItems']),
         ];
     }
 
@@ -358,14 +365,12 @@ class WebExtension extends \Twig_Extension
 
         $host = $request->getHttpHost();
         if ($copyright) {
-            $result = !(
-                isset($copyright['owned'])
+            $result = !(isset($copyright['owned'])
                 && isset($copyright['thirdCopyright'])
                 && 2 != $copyright['thirdCopyright']
                 && isset($copyright['licenseDomains'])
                 && in_array($host, explode(';', $copyright['licenseDomains']))
-                || (isset($copyright['thirdCopyright']) && 2 == $copyright['thirdCopyright'])
-            );
+                || (isset($copyright['thirdCopyright']) && 2 == $copyright['thirdCopyright']));
 
             return $result;
         }
@@ -464,11 +469,13 @@ class WebExtension extends \Twig_Extension
             if ($imgs) {
                 $urls = array_unique($imgs[1]);
                 foreach ($urls as $img) {
-                    if (0 === strpos($img, $publicUrlPath)
+                    if (
+                        0 === strpos($img, $publicUrlPath)
                         || 0 === strpos($img, $themeUrlPath)
                         || 0 === strpos($img, $assetUrlPath)
                         || 0 === strpos($img, $bundleUrlPath)
-                        || 0 === strpos($img, $staticDistUrlPath)) {
+                        || 0 === strpos($img, $staticDistUrlPath)
+                    ) {
                         $content = str_replace('"'.$img, '"'.$cdnUrl.$img, $content);
                     }
                 }
@@ -1216,7 +1223,8 @@ class WebExtension extends \Twig_Extension
         $assets = $this->container->get('assets.packages');
         $defaultSetting = $this->getSetting('default', []);
 
-        if (array_key_exists($defaultKey, $defaultSetting)
+        if (
+            array_key_exists($defaultKey, $defaultSetting)
             && $defaultSetting[$defaultKey]
         ) {
             $path = $defaultSetting[$defaultKey];
@@ -1300,13 +1308,13 @@ class WebExtension extends \Twig_Extension
             $defaultSetting = $this->getSetting('default', []);
 
             if ((('course.png' == $defaultKey && array_key_exists(
-                            'defaultCoursePicture',
-                            $defaultSetting
-                        ) && 1 == $defaultSetting['defaultCoursePicture'])
+                    'defaultCoursePicture',
+                    $defaultSetting
+                ) && 1 == $defaultSetting['defaultCoursePicture'])
                     || ('avatar.png' == $defaultKey && array_key_exists(
-                            'defaultAvatar',
-                            $defaultSetting
-                        ) && 1 == $defaultSetting['defaultAvatar']))
+                        'defaultAvatar',
+                        $defaultSetting
+                    ) && 1 == $defaultSetting['defaultAvatar']))
                 && (array_key_exists($defaultKey, $defaultSetting)
                     && $defaultSetting[$defaultKey])
             ) {
@@ -2049,6 +2057,89 @@ class WebExtension extends \Twig_Extension
         }
 
         return $this->getTokenService()->makeToken($type, $fields);
+    }
+
+    public function informationCollectLocationInfo($eventId)
+    {
+        $locationInfos = $this->getEventService()->getEventLocations($eventId);
+
+        $locationInfo = '';
+        if (!empty($locationInfos['course'])) {
+            if (1 == count($locationInfos['course']) && '0' == $locationInfos['course'][0]) {
+                $locationInfo .= '全部课程；';
+            } else {
+                $courses = $this->getCourseSetService()->findCourseSetsByIds($locationInfos['course']);
+                $locationInfo .= implode('；', ArrayToolkit::column($courses, 'title')).'；';
+            }
+        }
+        if (!empty($locationInfos['classroom'])) {
+            if (1 == count($locationInfos['classroom']) && '0' == $locationInfos['classroom'][0]) {
+                $locationInfo .= '全部班级；';
+            } else {
+                $classrooms = $this->getClassroomService()->findClassroomsByIds($locationInfos['classroom']);
+                $locationInfo .= implode('；', ArrayToolkit::column($classrooms, 'title')).'；';
+            }
+        }
+
+        return $locationInfo;
+    }
+
+    public function informationCollectFormItems($eventId = 0)
+    {
+        $selectFormItems = [];
+        if (!empty($eventId)) {
+            $selectFormItems = $this->getEventService()->findItemsByEventId($eventId);
+        }
+
+        $items = [];
+        if (empty($selectFormItems)) {
+            foreach (FormItemFectory::getFormItems() as $code => $itemInstanceClass) {
+                $instance = new $itemInstanceClass();
+                $item = $instance->getData();
+                $items[$item['group']][$code] = $item;
+            }
+
+            return $items;
+        }
+
+        foreach ($selectFormItems as  $item) {
+            $formItem = FormItemFectory::create($item['code'])->getData();
+            $items[$item['code']] = array_merge($item, $formItem);
+        }
+
+        return $items;
+    }
+
+    /**
+     * @return ResultService
+     */
+    protected function getResultService()
+    {
+        return $this->createService('InformationCollect:ResultService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->createService('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
+    }
+
+    /**
+     * @return EventService
+     */
+    protected function getEventService()
+    {
+        return $this->createService('InformationCollect:EventService');
     }
 
     /**

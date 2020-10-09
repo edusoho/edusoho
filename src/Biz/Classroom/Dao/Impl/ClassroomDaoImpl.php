@@ -181,6 +181,7 @@ class ClassroomDaoImpl extends AdvancedDaoImpl implements ClassroomDao
                 'orgCode PRE_LIKE :likeOrgCode',
                 'headTeacherId = :headTeacherId',
                 'updatedTime >= :updatedTime_GE',
+                'ids NOT IN (:excludeIds)',
             ],
         ];
     }
