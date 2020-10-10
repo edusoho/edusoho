@@ -33,6 +33,9 @@ class OverviewStudentExporter extends Exporter
         $tasks = $this->getAllTaskByCourseId();
 
         $taskTitles = ArrayToolkit::column($tasks, 'title');
+        foreach ($taskTitles as &$taskTitle) {
+            $taskTitle = is_numeric($taskTitle) ? $taskTitle."\t" : $taskTitle;
+        }
 
         return array_merge($titles, $taskTitles);
     }
