@@ -204,7 +204,7 @@
         watch: {},
         methods: {
             scrollLength(length) {
-                return length >= 5 ? "height: 200px;" : `height:${length * 50}px;`
+                return length >= 5 ? "height: 225px;" : `height:${length * 50}px;`
             },
             freeTaskItemChange(id) {
                 return (value) => {
