@@ -1362,4 +1362,17 @@ t.add("admin_v2.certificate.validate.description", "\u957f\u5ea6\u5fc5\u987b\u5c
 t.add("admin_v2.certificate.record.audit.success_hint", "\u5ba1\u6838\u6210\u529f", "js", "zh_CN");
 t.add("admin_v2.certificate.record.audit.failure_hint", "\u5ba1\u6838\u5931\u8d25", "js", "zh_CN");
 t.add("admin_v2.certificate.record.grant.issue_time_required", "\u8bf7\u8f93\u5165\u53d1\u8bc1\u65e5\u671f", "js", "zh_CN");
+t.add("admin_v2.information_collect.close.hint", "\u786e\u5b9a\u5173\u95ed\u91c7\u96c6\uff1f\u5173\u95ed\u540e\uff0c\u5c06\u505c\u6b62\u91c7\u96c6\u7528\u6237\u4fe1\u606f\u3002", "js", "zh_CN");
+t.add("admin_v2.information_collect.open.hint", "\u786e\u5b9a\u5f00\u542f\u91c7\u96c6\uff1f\u5f00\u542f\u540e\uff0c\u5c06\u5f00\u59cb\u91c7\u96c6\u7528\u6237\u4fe1\u606f\u3002", "js", "zh_CN");
+t.add("admin_v2.information_collect.close.success_hint", "\u91c7\u96c6\u5173\u95ed\u6210\u529f", "js", "zh_CN");
+t.add("admin_v2.information_collect.close.failure_hint", "\u91c7\u96c6\u5173\u95ed\u5931\u8d25", "js", "zh_CN");
+t.add("admin_v2.information_collect.open.success_hint", "\u91c7\u96c6\u5f00\u542f\u6210\u529f", "js", "zh_CN");
+t.add("admin_v2.information_collect.open.failure_hint", "\u91c7\u96c6\u5f00\u542f\u5931\u8d25", "js", "zh_CN");
+t.add("admin_v2.information_collect.chooser.tips", "\u5df2\u5b58\u5728\u51b2\u7a81\u7684\u5173\u8054", "js", "zh_CN");
+t.add("admin_v2.information_collect.chooser.success_hint", "\u9009\u62e9\u6210\u529f", "js", "zh_CN");
+t.add("admin_v2.information_collect.chooser.limit", "\u9009\u62e9\u6570\u4e0d\u80fd\u8d85\u8fc7200", "js", "zh_CN");
+t.add("admin_v2.information_collect.chooser.target_hint", "\u8bf7\u9009\u62e9\u8bfe\u7a0b\/\u73ed\u7ea7", "js", "zh_CN");
+t.add("admin_v2.information_collect.chooser.target_course_hint", "\u8bf7\u81f3\u5c11\u9009\u62e91\u4e2a\u8bfe\u7a0b", "js", "zh_CN");
+t.add("admin_v2.information_collect.chooser.target_classroom_hint", "\u8bf7\u81f3\u5c11\u9009\u62e91\u4e2a\u73ed\u7ea7", "js", "zh_CN");
+t.add("admin_v2.information_collect.chooser.items.hint", "\u8bf7\u9009\u62e9\u91c7\u96c6\u8868\u5355", "js", "zh_CN");
 })(Translator);

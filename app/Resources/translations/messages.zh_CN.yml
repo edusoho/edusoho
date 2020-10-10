@@ -6399,6 +6399,32 @@ admin.operation_invite.invite_coupon: 邀请奖励
 admin.operation_invite.invite_code_owner: 邀请人
 admin.operation_invite.register_user: 注册用户
 
+#用户信息采集
+admin.imformation_collection.create: 新建
+admin.information_collect.title.placeholer: 用户信息采集名称
+admin.information_collect.title_th: 采集名称
+admin.information_collect.location_th: 采集位置
+admin.information_collect.create_time_th: 创建时间
+admin.information_collect.status_th: 采集状态
+admin.information_collect.collected_num_th: 已采集数据量
+admin.information_collect.operate: 操作
+admin.information_collect.operate.detail: 详情
+admin.information_collect.action.buy_after: 课程/班级商品支付后
+admin.information_collect.action.buy_before: 课程/班级商品支付前
+admin.information_collect.status.open: <div class="green-circle"></div>正在采集
+admin.information_collect.status.close: <div class="red-circle"></div>停止采集
+admin.information_collect.collected_num: %collectedNum% 份
+admin.information_collect.detail: <a class="color-black-title" href="%listUrl%">用户信息采集</a> > 详情
+admin.information_collect.basic_info: 基本信息
+admin.information_collect.close_btn: 关闭采集
+admin.information_collect.open_btn: 开启采集
+admin.information_collect.update_btn: 编辑
+admin.information_collect.collected_num_tab: 已采集数据
+admin.information_collect.collected_time: 采集时间
+admin.information_collect.export_btn: 导出查询结果
+admin.information_collect.form_user_infomation: (来自个人资料)
+admin.information_collect.creator: 创建人
+
 #账户明细
 admin.money_records.content_title: 账户明细
 admin.money_records.transaction_no.input_placeholder: 交易号
@@ -10619,6 +10645,10 @@ exception.certificate.audit.forbidden_audit: 审核失败
 exception.certificate.valid.forbidden_audit: 审核发送失败
 exception.certificate.reject.forbidden_audit: 审核驳回失败
 
+exception.information_collect.not_found: 用户信息采集记录不存在
+exception.information_collect.not_found: 用户信息采集记录不存在
+exception.information_collect.closed: 用户信息采集已关闭
+
 course.unname_title: 未命名计划
 
 admin.index.course_order: 课程订单
@@ -11384,3 +11414,55 @@ exception.review.post_limit: 回复数量已达5条上限，不能再回复
 exception.favorite.forbidden_operate_favorite: 没有权限
 
 exception.s2b2c_product.adopt_failed: 采用失败，内容正在编辑中，请稍后再试
+
+admin_v2.information_collect.edit.title_info: 当前版本用户端仅支持新版微网校
+admin_v2.information_collect.edit.title: 采集名称
+admin_v2.information_collect.edit.action: 采集位置
+admin_v2.information_collect.edit.action_before: 课程/班级商品支付前
+admin_v2.information_collect.edit.action_after: 课程/班级商品支付后
+admin_v2.information_collect.edit.action_before.help_block: 含免费商品加入前
+admin_v2.information_collect.edit.action_before.tip: 支付前采集用户信息，可能影响购买转化率
+admin_v2.information_collect.edit.action_after.help_block: 含免费商品加入后
+admin_v2.information_collect.edit.form_items: 采集表单
+admin_v2.information_collect.edit.form_items.tip: 请从右侧点击可选的信息采集项至左侧，可上下拖动排序
+admin_v2.information_collect.edit.form_items.code: 用户看到的表单标题
+admin_v2.information_collect.edit.form_items.warning_tip: 信息采集项过多，可能影响用户使用体验
+admin_v2.information_collect.edit.form_items.allow_skip: 是否允许用户跳过
+admin_v2.information_collect.edit.form_items.skip.allow: 是
+admin_v2.information_collect.edit.form_items.skip.not_allow: 否
+admin_v2.information_collect.edit.form_items.allow_skip.tips: 当前仅支持对 班级/课程商品支付前 的采集设置“不允许跳过”
+admin_v2.information_collect.edit.form_items.enable: 是否启用本次采集
+admin_v2.information_collect.edit.target_type.all: 全站课程/班级
+admin_v2.information_collect.edit.target_type.part: 指定课程/班级
+admin_v2.information_collect.edit.target_type.all_course: 全部课程
+admin_v2.information_collect.edit.target_type.all_classroom: 全部班级
+admin_v2.information_collect.edit.target_type.tip: 优先执行指定课程/班级的采集事件
+admin_v2.information_collect.edit.target_type.part_course: 指定课程
+admin_v2.information_collect.edit.target_type.part_classroom: 指定班级
+admin_v2.information_collect.create: 新建
+admin_v2.information_collect.update: 编辑
+admin_v2.information_collect.binded_tips: 已关联其它采集事件
+admin_v2.information_collect.more: 查看详情
+admin_v2.information_collect.selected_course_count: 已选课程数
+admin_v2.information_collect.selecte_course: 选择课程
+admin_v2.information_collect.selected_classroom_count: 已选班级数
+admin_v2.information_collect.selecte_classroom: 选择班级
+admin_v2.information_collect.selecte_count: 已选数量
+admin_v2.information_collect.selected: 已选：
+admin_v2.information_collect.selected.clear: 清空
+admin_v2.information_collect.chooser.limit: 最多支持选择200个
+admin_v2.information_collect.chooser.delete_item: 移除本次采集
+admin_v2.information_collect.chooser.tips: 已存在冲突的关联
+admin_v2.information_collect.chooser.unbind_item: 关联到本次采集
+admin_v2.information_collect.chooser.empty: 暂无数据
+admin_v2.information_collect.form_items.required: 必填
+admin_v2.information_collect.form_items.select_group.base_info: 基本信息
+admin_v2.information_collect.form_items.select_group.contact_info: 联系信息
+admin_v2.information_collect.form_items.select_group.company_info: 公司信息
+admin_v2.information_collect.form_items.select_group.school_info: 学校信息
+admin_v2.information_collect.form_items.select_group.other_info: 其它信息
+admin_v2.information_collect.form_items.confirm_submit: 确认提交
+
+
+
+

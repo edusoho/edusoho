@@ -5,7 +5,6 @@
   {% if class %}
     class="{{ class }}"
   {% endif %}
-
   {% if menu.mode|default(null) == 'modal' %}
     data-url="{{ permission_path(menu) }}"
     data-toggle="modal"

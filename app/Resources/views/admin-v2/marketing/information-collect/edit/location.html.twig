@@ -1,0 +1,86 @@
+{% set isEventAction = event.action|default('') == action %}
+
+{% set isEventCheckedActionCourseAll = action in allCourseLocations|default([])|keys and allCourseLocations[action].eventId|default(null) == event.id|default(0) %}
+{% set isEventCheckedActionClassroomAll = action in allClassroomLocations|default([])|keys and allClassroomLocations[action].eventId|default(null) == event.id|default(0) %}
+{% set hasOtherEventCheckedActionCourseAll = action in allCourseLocations|default([])|keys and not isEventCheckedActionCourseAll %}
+{% set hasOtherEventCheckedActionClassroomAll = action in allClassroomLocations|default([])|keys and not isEventCheckedActionClassroomAll %}
+{% set hasCheckedAll = isEventCheckedActionCourseAll or isEventCheckedActionClassroomAll %}
+
+<div class="js-checkbox-group plm {% if not isEventAction %}hidden{% endif %}">
+	<div class="action-type-group action-type-group-all">
+		<label class="control-label text-left">
+			<input type="radio" class="js-location-type" name="{{ action }}_location_type" value="all" {% if hasCheckedAll %} checked="checked" {% endif %}>
+			<span>{{ 'admin_v2.information_collect.edit.target_type.all'|trans }}</span>
+			<label class="help-block display-inline">
+				{{ 'admin_v2.information_collect.edit.target_type.tip'|trans }}
+			</label>
+			<div class="js-target-type-checkbox-group {% if not hasCheckedAll  or not isEventAction %} hidden {% endif %}">
+				<div class="target-type-checkbox">
+					<label class="pll">
+						<input type="checkbox" class="target-types-all target-course" name="targetTypes[]" value="course" {% if hasOtherEventCheckedActionCourseAll %} disabled {% endif %} {% if isEventCheckedActionCourseAll %} checked="checked" {% endif %}>
+						<span class="{% if hasOtherEventCheckedActionCourseAll %} text-muted {% endif %}">{{ 'admin_v2.information_collect.edit.target_type.all_course'|trans }}</span>
+						{% if  hasOtherEventCheckedActionCourseAll %}
+							<span class="text-muted display-inline">
+								({{ 'admin_v2.information_collect.binded_tips'|trans }},<a href="{{ path('admin_v2_information_collect_detail', {id: allCourseLocations[action].eventId }) }}" target="_blank">{{ 'admin_v2.information_collect.more'|trans }}</a>)
+							</span>
+						{% endif %}
+					</label>
+				</div>
+				<div class="target-type-checkbox">
+					<label class="pll">
+						<input type="checkbox" class="target-types-all target-classroom" name="targetTypes[]" value="classroom" {% if hasOtherEventCheckedActionClassroomAll %} disabled {% endif %} {% if isEventCheckedActionClassroomAll %} checked="checked" {% endif %}>
+						<span class="{% if hasOtherEventCheckedActionClassroomAll %} text-muted {% endif %}">{{ 'admin_v2.information_collect.edit.target_type.all_classroom'|trans }}</span>
+						{% if hasOtherEventCheckedActionClassroomAll %}
+							<span class="text-muted display-inline">
+								({{ 'admin_v2.information_collect.binded_tips'|trans }},<a href="{{ path('admin_v2_information_collect_detail', {id: allClassroomLocations[action].eventId}) }}" target="_blank">{{ 'admin_v2.information_collect.more'|trans }}</a>)
+							</span>
+						{% endif %}
+					</label>
+				</div>
+			</div>
+		</label>
+	</div>
+
+	<div class="action-type-group action-type-group-part">
+		<label class="control-label text-left">
+			<input type="hidden" name="{{ action }}_course_ids" value="{{ isEventAction ? locationInfo.courseIds|default([])|json_encode : null }}">
+			<input type="hidden" name="{{ action }}_classroom_ids" value="{{ isEventAction ?  locationInfo.classroomIds|default([])|json_encode : null }}">
+			<input type="radio" class="js-location-type" name="{{ action }}_location_type" value="part" {% if not hasCheckedAll and isEventAction %} checked="checked" {% endif %}>
+			<span>{{ 'admin_v2.information_collect.edit.target_type.part'|trans }}</span>
+			<div class="js-target-type-checkbox-group {% if hasCheckedAll or not isEventAction %} hidden {% endif %}">
+				<div class="target-type-checkbox">
+					<label class="pll">
+						<input type="checkbox" class="target-types-part target-course js-target-{{ action }}-course" name="targetTypes[]" value="course" {% if not hasCheckedAll and isEventAction and locationInfo.courseIds|default([])|length %} checked="checked" {% endif %}>
+						<span>{{ 'admin_v2.information_collect.edit.target_type.part_course'|trans }}</span>
+						<span class="display-inline">
+							{{ 'admin_v2.information_collect.selected_course_count'|trans }}<span class="selected-{{ action }}-course-count">
+								{% if not hasCheckedAll and isEventAction %}
+									{{ locationInfo.courseIds|default([])|length }}
+								{% else %}
+									0
+								{% endif %}
+							</span>
+							[<a class="js-select-target" data-url="{{ path('admin_v2_information_collect_event_target_modal', {action: action, type: 'course', eventId:event.id|default(0)}) }}" data-toggle="modal" data-target="#modal">{{ 'admin_v2.information_collect.selecte_course'|trans }}]</a>
+						</span>
+					</label>
+				</div>
+				<div class="target-type-checkbox">
+					<label class="pll">
+						<input type="checkbox" class="target-types-part target-classroom js-target-{{ action }}-classroom" name="targetTypes[]" value="classroom" {% if not hasCheckedAll  and isEventAction and locationInfo.classroomIds|default([])|length %} checked="checked" {% endif %}>
+						<span>{{ 'admin_v2.information_collect.edit.target_type.part_classroom'|trans }}</span>
+						<span class="display-inline">
+							{{ 'admin_v2.information_collect.selected_classroom_count'|trans }}<span class="selected-{{ action }}-classroom-count">
+								{% if not hasCheckedAll  and isEventAction %}
+									{{ locationInfo.classroomIds|default([])|length }}
+								{% else %}
+									0
+								{% endif %}
+							</span>
+							[<a class="js-select-target" data-url="{{ path('admin_v2_information_collect_event_target_modal', {action: action, type: 'classroom', eventId:event.id|default(0)}) }}" data-toggle="modal" data-target="#modal">{{ 'admin_v2.information_collect.selecte_classroom'|trans }}]</a>
+						</span>
+					</label>
+				</div>
+			</div>
+		</label>
+	</div>
+</div>

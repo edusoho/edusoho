@@ -1,0 +1,43 @@
+<div class="panel-heading clearfix">
+  <span class="h3 pull-left panel-title" style="margin-top: 7px">{{ 'admin.information_collect.basic_info'|trans }}</span>
+  <a class="btn btn-primary pull-right hidden-xs" href="{{ path('admin_v2_information_collect_update', {id:event.id}) }}">{{ 'admin.information_collect.update_btn'|trans }}</a>
+  <button id="close-collect" class="btn btn-primary pull-right hidden-xs {% if event.status != 'open' %}hidden{% endif%}" style="margin-right: 10px" data-url="{{ path('admin_v2_information_collect_close', {id: event.id}) }}">{{ 'admin.information_collect.close_btn'|trans }}</button>
+  <button id="open-collect" class="btn btn-primary pull-right hidden-xs {% if event.status == 'open' %}hidden{% endif%}" style="margin-right: 10px" data-url="{{ path('admin_v2_information_collect_open', {id: event.id}) }}">{{ 'admin.information_collect.open_btn'|trans }}</button>
+</div>
+<div class="panel-body">
+  <table class="table table-noborder" style="margin-bottom: 0">
+    <tr>
+      <td width="10%">{{ 'admin.information_collect.title_th'|trans }}：</td>
+      <td width="50%">
+        <span style="cursor: pointer" {% if event.title|length > 30 %}title="{{ event.title }}"{% endif %}>
+              {{ event.title | slice(0,30) }}{% if event.title|length >30 %}...{% endif %}
+        </span>
+      </td>
+      <td width="12%">{{ 'admin.information_collect.status_th'|trans }}：</td>
+      <td>
+        {% set statusInfo = 'admin.information_collect.status.' ~ event.status %}
+        {{ statusInfo|trans|raw }}
+      </td>
+    </tr>
+    <tr>
+      <td width="10%">{{ 'admin.information_collect.location_th'|trans }}：</td>
+      <td width="50%">
+        {% set location = information_collect_location_info(event.id) %}
+        {% set action = 'admin.information_collect.action.' ~ event.action %}
+        <span>{{ action|trans }}</span>
+        <br>
+        <span class="text-muted text-sm" style="cursor: pointer" {% if location|length > 32 %}title="{{ location }}"{% endif %}>{{ location | slice(0,32) }}{% if location|length >32 %}...{% endif %}</span>
+      </td>
+      <td width="12%">{{ 'admin.information_collect.collected_num_th'|trans }}：</td>
+      <td>{{ 'admin.information_collect.collected_num'|trans({'%collectedNum%':collectedNum[event.id].collectNum|default(0)}) }}</td>
+    </tr>
+    <tr>
+      <td width="10%">{{ 'admin.information_collect.create_time_th'|trans }}：</td>
+      <td width="50%">{{ event.createdTime|date('Y-m-d H:i:s') }}</td>
+    </tr>
+    <tr>
+      <td width="10%">{{ 'admin.information_collect.creator'|trans }}：</td>
+      <td width="50%">{{ creator.nickname }}</td>
+    </tr>
+  </table>
+</div>
