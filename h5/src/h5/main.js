@@ -44,6 +44,10 @@ import {
   PullRefresh,
   Overlay,
   Search,
+  Form,
+  Area,
+  DatetimePicker,
+  Picker,
 } from 'vant';
 // 按需引入组件
 Vue.component('van-nav-bar', NavBar);
@@ -90,7 +94,11 @@ Vue.use(Tab)
   .use(Dialog)
   .use(Switch)
   .use(PullRefresh)
-  .use(Loading);
+  .use(Loading)
+  .use(Form)
+  .use(Area)
+  .use(DatetimePicker)
+  .use(Picker);
 Vue.use(VueClipboard);
 Vue.use(wapSdk);
 Vue.config.productionTip = false;

@@ -136,21 +136,25 @@ export default {
   methods: {
     handlePay() {
       if (!this.validPayWay) return;
-
       const isWxPay = this.payWay === 'WechatPay_H5' && this.inWechat;
       if (isWxPay) {
         window.location.href =
           `${window.location.origin}/pay/center/wxpay_h5?pay_amount=` +
-          `${this.detail.pay_amount}&title=${this.detail.title}&sn=${this.detail.sn}`;
+          `${this.detail.pay_amount}&title=${this.detail.title}&sn=${this.detail.sn}&targetType=${this.targetType}&targetId=${this.targetId}`;
         return;
       }
-
+      const returnUrl =
+        window.location.origin +
+        window.location.pathname +
+        window.location.hash +
+        `pay_center?targetType=${this.targetType}&targetId=${this.targetId}`;
       Api.createTrade({
         data: {
           gateway: this.payWay,
           type: 'purchase',
           orderSn: this.detail.sn,
           app_pay: 'Y',
+          success_url: returnUrl,
         },
       })
         .then(res => {
@@ -178,17 +182,16 @@ export default {
       })
         .then(res => {
           if (res.isPaid) {
-            if (this.wechatSwitch) {
-              this.$router.replace({
-                path: '/pay_success',
-                query: {
-                  paidUrl: window.location.origin + res.paidSuccessUrlH5,
-                },
-              });
-              return;
-            }
-            window.location.href =
-              window.location.origin + res.paidSuccessUrlH5;
+            // if (this.wechatSwitch) {
+            //   this.$router.replace({
+            //     path: '/pay_success',
+            //     query: {
+            //       paidUrl: window.location.origin + res.paidSuccessUrlH5,
+            //     },
+            //   });
+            //   return;
+            // }
+            window.location.href = res.paidSuccessUrlH5;
             return;
           }
           this.timeoutId = setTimeout(() => {
