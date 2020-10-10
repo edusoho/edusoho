@@ -40,9 +40,14 @@ class Good extends AbstractResource
         } else {
             $goods['specs'] = $this->getGoodsService()->findPublishedGoodsSpecsByGoodsId($goods['id']);
         }
+
+        $goods['isMember'] = false;
         foreach ($goods['specs'] as &$spec) {
             $spec = $this->getGoodsService()->convertSpecsPrice($goods, $spec);
             $spec['isMember'] = $goodsEntity->isSpecsMember($goods, $spec, $user['id']);
+            if ($spec['isMember']) {
+                $goods['isMember'] = true;
+            }
             $spec['isTeacher'] = $goodsEntity->isSpecsTeacher($goods, $spec, $user['id']);
             $spec['access'] = $goodsEntity->buySpecsAccess($goods, $spec);
             $spec['hasCertificate'] = $goodsEntity->hasCertificate($goods, $spec);

@@ -54,7 +54,7 @@
 
                     <div id="info-left-3" class="info-left-reviews content-item js-content-item reviews">
                         <h3 class="content-item__title">学员评价</h3>
-                        <reviews :can-create="isUserLogin" :can-operate="goods.canManage" :target-type="'goods'"
+                        <reviews :can-create="isUserLogin && goods.isMember" :can-operate="goods.canManage" :target-type="'goods'"
                                  :current-user-id="currentUserId"
                                  :target-id="goods.id"
                                  v-if="goodsSetting.show_review == 1"
@@ -253,7 +253,7 @@
         },
         created() {
             window.addEventListener("scroll", this.handleScroll);
-
+            console.log(this.goods);
             if (this.goods.type == 'classroom') {
                 return this.changeSku(this.goods.product.target.id);
             }

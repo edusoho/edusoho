@@ -1,91 +1,96 @@
 <template>
-    <div class="reviews">
-        <create-review :target-id="targetId" :target-type="targetType" :can-create="canCreate"
-                       :current-user-id="currentUserId"></create-review>
-        <div class="reviews-item" v-for="review in reviews" :key="review.id" :class="'reviews-item-'+ review.id">
-            <img class="reviews-item__img" :src="review.user.avatar.large" alt="">
-            <div class="reviews-item__text reviews-text">
-                <div class="reviews-text__nickname">
-                    <a class="link-dark" href="javascript:;" target="_blank">{{ review.user.nickname }}</a>
-<!--                    <span>{{ review.target.title }}</span>-->
-                    {{ review.createdTime | createdTime }}
-                </div>
-                <div class="reviews-text__rating" v-html="$options.filters.rating(review.rating)"></div>
-                <div class="reviews-text__content">{{ review.content }}</div>
-                <div class="reviews-text__reply">
-                    <a href="javascript:;"
-                       v-if="canCreate"
-                       :data-toggle="'reviews-text__reply-content-'+review.id"
-                       @click="switchDisplay">
-                        <span v-if="review.posts.length == 0">{{ 'thread.post.reply'|trans }}</span>
-                        <span v-else>{{ 'site.data.collapse'|trans }}</span>
-                    </a>
-                </div>
-                <div v-if="review.posts.length == 0" class="reviews-text__reply-content clearfix hidden"
-                     :class="'reviews-text__reply-content-'+review.id">
-                    <form>
-                        <textarea class="post-content" @blur="validatePostContent"></textarea>
-                        <p></p>
-                        <a href="javascript:;" class="btn btn-sm btn-default plm prm pull-right"
-                           @click="onSave($event, review.id)">{{ 'form.btn.save'|trans }}</a>
-                    </form>
-                </div>
-                <div v-else class="reviews-text__reply-content clearfix"
-                     :class="'reviews-text__reply-content-'+review.id">
-                    <ul class="media-list thread-post-list thread-subpost-list">
-                        <li class="thread-post media" :class="'thread-subpost-'+post.id"
-                            v-for="post in review.posts" :key="post.id">
-                            <div class="media-left">
-                                <img class="avatar-sm" :src="post.user.avatar.large" alt="">
-                            </div>
-                            <div class="media-body">
-                                <div class="metas">
-                                    <div v-if="canOperate" class="thread-post-manage-dropdown dropdown pull-right">
-                                        <a href="javascript:;" class="dropdown-toggle color-gray"
-                                           data-toggle="dropdown">
-                                            <span class="glyphicon glyphicon-collapse-down"></span>
-                                        </a>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <a href="javascript:"
-                                                   class="js-delete-post"
-                                                   :data-target="'thread-subpost-'+post.id"
-                                                   :data-target-id="post.id">{{'site.delete'|trans}}</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-
-                                    <a class="link-dark" href="javascript:;" target="_blank">
-                                        {{ post.user.nickname }}
-                                    </a>
-                                    <span class="bullet">•</span>
-                                    <span class="color-gray">{{post.createdTime|smart_time}} </span>
+    <div>
+        <div v-if="reviews.length <= 0 && !canCreate" v-html="reviewEmptyHtml" class="description-content"
+             style="padding-left: 14px; padding-top: 10px;"></div>
+        <div class="reviews">
+            <create-review :target-id="targetId" :target-type="targetType" :can-create="canCreate"
+                           :current-user-id="currentUserId"></create-review>
+            <div class="reviews-item" v-for="review in reviews" :key="review.id" :class="'reviews-item-'+ review.id">
+                <img class="reviews-item__img" :src="review.user.avatar.large" alt="">
+                <div class="reviews-item__text reviews-text">
+                    <div class="reviews-text__nickname">
+                        <a class="link-dark" href="javascript:;" target="_blank">{{ review.user.nickname }}</a>
+                        <!--                    <span>{{ review.target.title }}</span>-->
+                        {{ review.createdTime | createdTime }}
+                    </div>
+                    <div class="reviews-text__rating" v-html="$options.filters.rating(review.rating)"></div>
+                    <div class="reviews-text__content">{{ review.content }}</div>
+                    <div class="reviews-text__reply">
+                        <a href="javascript:;"
+                           v-if="canCreate"
+                           :data-toggle="'reviews-text__reply-content-'+review.id"
+                           @click="switchDisplay">
+                            <span v-if="review.posts.length == 0">{{ 'thread.post.reply'|trans }}</span>
+                            <span v-else>{{ 'site.data.collapse'|trans }}</span>
+                        </a>
+                    </div>
+                    <div v-if="review.posts.length == 0" class="reviews-text__reply-content clearfix hidden"
+                         :class="'reviews-text__reply-content-'+review.id">
+                        <form>
+                            <textarea class="post-content" @blur="validatePostContent"></textarea>
+                            <p></p>
+                            <a href="javascript:;" class="btn btn-sm btn-default plm prm pull-right"
+                               @click="onSave($event, review.id)">{{ 'form.btn.save'|trans }}</a>
+                        </form>
+                    </div>
+                    <div v-else class="reviews-text__reply-content clearfix"
+                         :class="'reviews-text__reply-content-'+review.id">
+                        <ul class="media-list thread-post-list thread-subpost-list">
+                            <li class="thread-post media" :class="'thread-subpost-'+post.id"
+                                v-for="post in review.posts" :key="post.id">
+                                <div class="media-left">
+                                    <img class="avatar-sm" :src="post.user.avatar.large" alt="">
                                 </div>
-                                <div class="editor-text">{{ post.content }}</div>
-                                <div class="ptm pbl"></div>
-                            </div>
-                        </li>
-                    </ul>
-                    <a href="javascript:;" class="btn btn-default btn-xs pull-right mbs"
-                       v-if="canCreate"
-                       :data-toggle="'reviews-text__reply-content-form-'+review.id"
-                       @click="onFormDisplay">{{ 'thread.post.reply'|trans }}</a>
-                    <form class="hidden" :class="'reviews-text__reply-content-form-'+review.id">
-                        <textarea class="post-content" @blur="validatePostContent"></textarea>
-                        <p></p>
-                        <a href="javascript:;" class="btn btn-sm btn-default plm prm pull-right"
-                           @click="onSave($event, review.id)">{{ 'form.btn.save'|trans }}</a>
-                    </form>
+                                <div class="media-body">
+                                    <div class="metas">
+                                        <div v-if="canOperate" class="thread-post-manage-dropdown dropdown pull-right">
+                                            <a href="javascript:;" class="dropdown-toggle color-gray"
+                                               data-toggle="dropdown">
+                                                <span class="glyphicon glyphicon-collapse-down"></span>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a href="javascript:"
+                                                       class="js-delete-post"
+                                                       :data-target="'thread-subpost-'+post.id"
+                                                       :data-target-id="post.id">{{'site.delete'|trans}}</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+
+                                        <a class="link-dark" href="javascript:;" target="_blank">
+                                            {{ post.user.nickname }}
+                                        </a>
+                                        <span class="bullet">•</span>
+                                        <span class="color-gray">{{post.createdTime|smart_time}} </span>
+                                    </div>
+                                    <div class="editor-text">{{ post.content }}</div>
+                                    <div class="ptm pbl"></div>
+                                </div>
+                            </li>
+                        </ul>
+                        <a href="javascript:;" class="btn btn-default btn-xs pull-right mbs"
+                           v-if="canCreate"
+                           :data-toggle="'reviews-text__reply-content-form-'+review.id"
+                           @click="onFormDisplay">{{ 'thread.post.reply'|trans }}</a>
+                        <form class="hidden" :class="'reviews-text__reply-content-form-'+review.id">
+                            <textarea class="post-content" @blur="validatePostContent"></textarea>
+                            <p></p>
+                            <a href="javascript:;" class="btn btn-sm btn-default plm prm pull-right"
+                               @click="onSave($event, review.id)">{{ 'form.btn.save'|trans }}</a>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="learn-more"><a href="javascript:;"
-                                   v-if="(parseInt(paging.offset) + 1) * paging.limit < paging.total"
-                                   @click="searchReviews(parseInt(paging.offset) + 1, paging.limit)"
-                                   :data-page="multiOffset" :data-limit="paging.limit" :data.total="paging.total">查看更多<i
-            class="es-icon es-icon-chevronright"></i></a>
+            <div class="learn-more"><a href="javascript:;"
+                                       v-if="(parseInt(paging.offset) + 1) * paging.limit < paging.total"
+                                       @click="searchReviews(parseInt(paging.offset) + 1, paging.limit)"
+                                       :data-page="multiOffset" :data-limit="paging.limit" :data.total="paging.total">查看更多<i
+                class="es-icon es-icon-chevronright"></i></a>
+            </div>
         </div>
     </div>
+
 </template>
 
 <script>
@@ -140,6 +145,9 @@
         computed: {
             multiOffset() {
                 return this.paging.offset;
+            },
+            reviewEmptyHtml() {
+                return '暂无评价哦～';
             }
         },
         props: {
