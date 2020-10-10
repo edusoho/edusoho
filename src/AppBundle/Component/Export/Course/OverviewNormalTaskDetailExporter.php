@@ -55,7 +55,7 @@ class OverviewNormalTaskDetailExporter extends Exporter
             $user = $users[$taskResult['userId']];
 
             $data = [];
-            $data[] = $user['nickname']."\t";
+            $data[] = is_numeric($user['nickname']) ? $user['nickname']."\t" : $user['nickname'];
             $data[] = date('Y-m-d H:i:s', $taskResult['createdTime']);
             $data[] = empty($taskResult['finishedTime']) ? '-' : date('Y-m-d H:i:s', $taskResult['finishedTime']);
             $data[] = empty($taskResult['time']) ? '-' : round(($taskResult['time'] / 60), 1);

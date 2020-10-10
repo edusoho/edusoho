@@ -50,7 +50,7 @@ class OverviewNormalTaskDetailExporterTest extends BaseTestCase
         $result = $expoter->getContent(0, 100);
 
         $this->assertArrayEquals([
-            'lalala'."\t",
+            'lalala',
             '1970-01-01 08:00:01',
             '1970-01-01 08:22:21',
             '0.2',
