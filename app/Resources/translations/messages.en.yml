@@ -10051,7 +10051,7 @@ user.certificates.cart_detail_btn: View get path
 
 admin_v2.information_collect.create: Create
 admin_v2.information_collect.update: Edit
-admin_v2.information_collect.edit.title_info: Only support PC and micro school
+admin_v2.information_collect.edit.title_info: The current version of the client only supports the new version of micro school
 admin_v2.information_collect.edit.title: Title
 admin_v2.information_collect.edit.action: Action
 admin_v2.information_collect.edit.action_before: Before Course/Classroom Pay
@@ -10060,7 +10060,7 @@ admin_v2.information_collect.edit.action_before.help_block: Include free product
 admin_v2.information_collect.edit.action_before.tip: Collect user information before payment, which may affect purchase conversion rate
 admin_v2.information_collect.edit.action_after.help_block: Include free products after joining
 admin_v2.information_collect.edit.form_items: Form items
-admin_v2.information_collect.edit.form_items.tip: Please drag the optional information collect items from the right to the left, and you can drag up and down to sort
+admin_v2.information_collect.edit.form_items.tip: Please click the optional information collect items from the right to the left, and you can drag up and down to sort
 admin_v2.information_collect.edit.form_items.warning_tip: Too many information collect items may affect user experience
 admin_v2.information_collect.edit.form_items.allow_skip: Allow Skip
 admin_v2.information_collect.edit.form_items.allow_skip.tips: Currently only supports the collection setting "Skip not allowed" for class/course goods before payment
