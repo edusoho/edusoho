@@ -1534,7 +1534,7 @@ category: 分类
 site.org: 组织机构
 classroom.about: 简介
 classroom.cover_image: 封面图片
-classroom.cover_image.upload_tips: 请上传jpg, gif, png格式的图片, 建议图片尺寸为 540×304px。建议图片大小不超过2MB。
+classroom.cover_image.upload_tips: 请上传jpg, gif, png格式的图片, 建议图片尺寸为 480×270px。建议图片大小不超过2MB。
 editor.iframe_tips: 为正常使用IFrame，请在【管理后台】-【系统】-【站点设置】-【安全】-【IFrame白名单】中进行设置
 classroom.upload_picture_btn: 上传新图片
 

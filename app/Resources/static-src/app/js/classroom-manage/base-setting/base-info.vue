@@ -99,8 +99,8 @@
                 let params = {
                     saveUrl: this.coverCropUrl,
                     targetImg: 'classroom-cover',
-                    cropWidth: '540',
-                    cropHeight: '304',
+                    cropWidth: '480',
+                    cropHeight: '270',
                     uploadToken: 'tmp',
                     imageClass: 'classroom-manage-cover',
                     imageText: Translator.trans('classroom.upload_picture_btn'),

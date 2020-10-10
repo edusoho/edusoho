@@ -1588,7 +1588,7 @@ category: Category
 site.org: Org
 classroom.about: about
 classroom.cover_image: Cover
-classroom.cover_image.upload_tips: Please upload images in jpg, gif, png format. The recommended image size is 540×304px. It is recommended that the image size should not exceed 2MB.
+classroom.cover_image.upload_tips: Please upload images in jpg, gif, png format. The recommended image size is 480×270px. It is recommended that the image size should not exceed 2MB.
 editor.iframe_tips: To use IFrame normally, please set it in [Admin] - [System] -[Security] -[White List Domain]
 classroom.upload_picture_btn: 'Upload an image'
 
