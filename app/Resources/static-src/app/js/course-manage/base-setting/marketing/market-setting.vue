@@ -92,6 +92,95 @@
                                 type="date">
                 </el-date-picker>
             </el-form-item>
+            <el-form-item>
+                <label slot="label">
+                    {{ 'course.marketing_setup.rule.expiry_date'|trans }}
+                    <el-popover
+                        placement="top"
+                        trigger="hover">
+                        <ul class='pl10 list-unstyled'>
+                            <li class='mb10'><span v-html="expiryModeTips.anytime"></span></li>
+                            <li class='mb10'><span v-html="expiryModeTips.realtime"></span></li>
+                            <li><span v-html="expiryModeTips.overdue"></span></li>
+                        </ul>
+                        <a class="es-icon es-icon-help course-mangae-info__help text-normal" slot="reference"></a>
+                    </el-popover>
+                </label>
+                <el-col span="18">
+                    <el-radio v-for="(label, value) in expiryMode"
+                              v-model="marketingForm.expiryMode"
+                              :label="value"
+                              :key="value"
+                              :disabled="coursePublished || courseClosed || course.platform !== 'self'"
+                              class="cd-radio">
+                        {{label}}
+                    </el-radio>
+
+                    <div class="course-manage-expiry" :class="{'hidden':marketingForm.expiryMode !== 'days'}"
+                         id="expiry-days">
+                        <span class="caret"></span>
+                        <el-radio v-model="marketingForm.deadlineType"
+                                  v-for="(label, value) in deadlineTypeRadio"
+                                  :disabled="coursePublished || courseClosed || course.platform !=='self'"
+                                  class="cd-radio"
+                                  :label="value"
+                                  :key="value">
+                            {{label}}
+                        </el-radio>
+
+                        <div class="cd-mt16"
+                             v-if="marketingForm.expiryMode === 'days' && marketingForm.deadlineType === 'end_date'">
+                            <el-form-item prop="deadline">
+                                <el-date-picker
+                                    v-model="marketingForm.deadline"
+                                    type="date"
+                                    size="small"
+                                    ref="deadline"
+                                    :default-value="today"
+                                    :picker-options="dateOptions"
+                                    :disabled="course.platform !== 'self'">
+                                </el-date-picker>
+                                <span class="mlm">{{ 'course.marketing_setup.rule.expiry_date_tips'|trans }}</span>
+                            </el-form-item>
+                        </div>
+                        <div class="cd-mt16"
+                             v-if="marketingForm.expiryMode === 'days' && marketingForm.deadlineType === 'days'">
+                            <el-col span="8">
+                                <el-form-item prop="expiryDays">
+                                    <el-input ref="expiryDays" v-model="marketingForm.expiryDays"
+                                              :disabled="(coursePublished && courseSetPublished) || course.platform !== 'self'">
+                                    </el-input>
+                                </el-form-item>
+                            </el-col>
+                            <span class="mlm">{{ 'course.marketing_setup.rule.expiry_date.publish_tips'|trans }}</span>
+                        </div>
+                    </div>
+
+                    <div class="course-manage-expiry"
+                         :class="{'hidden': marketingForm.expiryMode !== 'date'}">
+                        <span class="caret"></span>
+                        <div class="course-manage-expiry__circle"
+                             v-if="marketingForm.expiryMode === 'date' && marketingForm.expiryMode === 'date'">
+                            <el-form-item prop="expiryDateRange">
+                                <el-date-picker
+                                    v-model="marketingForm.expiryDateRange"
+                                    :default-value="today"
+                                    :picker-options="dateOptions"
+                                    type="daterange"
+                                    range-separator="-"
+                                    ref="expiryDateRange"
+                                    :start-placeholder="'course.plan_task.start_time'|trans"
+                                    :end-placeholder="'course.plan_task.start_time'|trans">
+                                </el-date-picker>
+                            </el-form-item>
+                        </div>
+                    </div>
+                    <div class="course-mangae-info__tip js-expiry-tip"
+                         :class="{'ml0': marketingForm.expiryMode === 'forever'}">
+                        {{ 'course.marketing_setup.rule.expiry_date.first_publish_tips'|trans }}
+                    </div>
+                </el-col>
+            </el-form-item>
             <!--            实名认证有bug，暂不显示-->
             <!--            <el-form-item v-if="buyBeforeApproval">-->
             <!--                <label slot="label">-->
@@ -127,6 +216,25 @@
                     </el-option>
                 </el-select>
             </el-form-item>
+
+            <el-form-item :label="'course.marketing_setup.services.provide_services'|trans">
+                <el-col>
+                    <el-popover v-for="(tag, key) in serviceTags"
+                                placement="top"
+                                :key="key"
+                                :content="tag.summary|trans"
+                                trigger="hover">
+                        <span class="service-item js-service-item"
+                              slot="reference"
+                              :key="key"
+                              :class="tag.active || marketingForm.services.indexOf(tag.code) >= 0 ? 'service-primary-item' : ''"
+                              :data-code="tag.code"
+                              @click="serviceItemClick"
+                        >{{ tag.fullName }}</span>
+                    </el-popover>
+                </el-col>
+                <el-input class="hidden" type="hidden" v-model="marketingForm.services"></el-input>
+            </el-form-item>
         </el-form>
     </div>
 </template>
@@ -138,6 +246,7 @@
         name: "market-setting",
         props: {
             course: {},
+            courseSet: {},
             courseProduct: {},
             notifies: {},
             canModifyCoursePrice: true,
@@ -145,9 +254,28 @@
             vipInstalled: false,
             vipEnabled: false,
             vipLevels: {},
+            serviceTags: {},
         },
         watch: {},
         methods: {
+            serviceItemClick(event) {
+                let $item = $(event.currentTarget);
+                if (!this.course.services) {
+                    this.course.services = [];
+                }
+
+                let code = $item.data('code')
+                if ($item.hasClass('service-primary-item')) {
+                    $item.removeClass('service-primary-item');
+                    this.course.services.splice(this.course.services.indexOf(code), 1);
+                } else {
+                    $item.addClass('service-primary-item');
+
+                    if (this.course.services.indexOf(code) < 0) {
+                        this.course.services.push(code);
+                    }
+                }
+            },
             validateForm() {
                 let result = false;
                 let invalids = {};
@@ -169,13 +297,33 @@
         },
         data() {
             this.course.buyExpiryTime = this.course.buyExpiryTime > 0 ? this.course.buyExpiryTime * 1000 : null;
+            let coursePublished = this.course.status ? this.course.status === 'published' : false;
+            let courseClosed = this.course.status ? this.course.status === 'closed' : false;
+            let courseSetPublished = this.courseSet.status ? this.courseSet.status === 'published' : false;
+            let courseSetClosed = this.courseSet.status ? this.courseSet.status === 'closed' : false;
+
+            let max_year = (rule, value, callback) => {
+                value < 7300 ? callback() : callback(new Error(Translator.trans('validate.max_year.message')));
+            }
+
+            this.course.expiryStartDate = this.course.expiryStartDate == 0 ? '' : this.course.expiryStartDate;
+            this.course.expiryEndDate = this.course.expiryEndDate == 0 ? '' : this.course.expiryEndDate
+            let expiryDateRange = (!this.course.expiryStartDate || !this.course.expiryEndDate) ? null : [
+                this.course.expiryStartDate, this.course.expiryEndDate
+            ]
 
             let form = {
                 originPrice: this.course.originPrice,
                 buyable: this.course.buyable,
                 enableBuyExpiryTime: this.course.buyExpiryTime > 0 ? '1' : '0',
                 buyExpiryTime: this.course.buyExpiryTime,
-                approval: this.course.approval
+                approval: this.course.approval,
+                expiryMode: this.course.expiryMode,
+                deadline: this.course.expiryEndDate,
+                deadlineType: this.course.deadlineType ? this.course.deadlineType : 'days',
+                expiryDays: this.course.expiryDays > 0 ? this.course.expiryDays : null,
+                expiryDateRange: expiryDateRange,
+                services: this.course.services,
             };
 
             if (this.vipInstalled && this.vipEnabled) {
@@ -188,6 +336,7 @@
                 notifies: {},
                 canModifyCoursePrice: true,
                 buyBeforeApproval: false,
+                serviceTags: {},
                 buyableRadios: [
                     {
                         value: '1',
@@ -226,6 +375,37 @@
                 },
                 marketingForm: form,
                 formRule: {
+                    deadline: [
+                        {
+                            required: true,
+                            message: Translator.trans('course.manage.deadline_end_date_error_hint'),
+                            trigger: 'blur'
+                        }
+                    ],
+                    expiryDateRange: [
+                        {
+                            required: true,
+                            message: Translator.trans('course.manage.expiry_date.error_hint'),
+                            trigger: 'blur'
+                        }
+                    ],
+                    expiryDays: [
+                        {
+                            required: true,
+                            message: Translator.trans('course.manage.expiry_days_error_hint'),
+                            trigger: 'blur'
+                        },
+                        {
+                            validator: validation.digits,
+                            message: Translator.trans('validate.positive_integer.message'),
+                            trigger: 'blur'
+                        },
+                        {
+                            validator: max_year,
+                            message: Translator.trans('course.manage.max_year_error_hint'),
+                            trigger: 'blur'
+                        }
+                    ],
                     originPrice: [
                         {
                             required: true,
@@ -245,6 +425,24 @@
                         }
                     ]
                 },
+                deadlineTypeRadio: {
+                    'end_date': Translator.trans('course.teaching_plan.expiry_date.end_date_mode'),
+                    'days': Translator.trans('course.teaching_plan.expiry_date.days_mode')
+                },
+                expiryMode: {
+                    'days': Translator.trans('course.teaching_plan.expiry_date.anywhere_mode'),
+                    'date': Translator.trans('course.teaching_plan.expiry_date.date_mode'),
+                    'forever': Translator.trans('course.teaching_plan.expiry_date.forever_mode')
+                },
+                expiryModeTips: {
+                    'anytime': Translator.trans('course.teaching_plan.expiry_date.anytime'),
+                    'realtime': Translator.trans('course.teaching_plan.expiry_date.real_time'),
+                    'overdue': Translator.trans('course.teaching_plan.expiry_date.overdue_tips'),
+                },
+                courseClosed: courseClosed,
+                courseSetClosed: courseSetClosed,
+                courseSetPublished: courseSetPublished,
+                coursePublished: coursePublished,
                 vipInstalled: false,
                 vipEnabled: false,
                 vipLevels: {}

@@ -26,96 +26,6 @@
                 </el-col>
             </el-form-item>
 
-            <el-form-item>
-                <label slot="label">
-                    {{ 'course.marketing_setup.rule.expiry_date'|trans }}
-                    <el-popover
-                        placement="top"
-                        trigger="hover">
-                        <ul class='pl10 list-unstyled'>
-                            <li class='mb10'><span v-html="expiryModeTips.anytime"></span></li>
-                            <li class='mb10'><span v-html="expiryModeTips.realtime"></span></li>
-                            <li><span v-html="expiryModeTips.overdue"></span></li>
-                        </ul>
-                        <a class="es-icon es-icon-help course-mangae-info__help text-normal" slot="reference"></a>
-                    </el-popover>
-                </label>
-                <el-col span="18">
-                    <el-radio v-for="(label, value) in expiryMode"
-                              v-model="baseRuleForm.expiryMode"
-                              :label="value"
-                              :key="value"
-                              :disabled="coursePublished || courseClosed || course.platform !== 'self'"
-                              class="cd-radio">
-                        {{label}}
-                    </el-radio>
-
-                    <div class="course-manage-expiry" :class="{'hidden':baseRuleForm.expiryMode !== 'days'}"
-                         id="expiry-days">
-                        <span class="caret"></span>
-                        <el-radio v-model="baseRuleForm.deadlineType"
-                                  v-for="(label, value) in deadlineTypeRadio"
-                                  :disabled="coursePublished || courseClosed || course.platform !=='self'"
-                                  class="cd-radio"
-                                  :label="value"
-                                  :key="value">
-                            {{label}}
-                        </el-radio>
-
-                        <div class="cd-mt16"
-                             v-if="baseRuleForm.expiryMode === 'days' && baseRuleForm.deadlineType === 'end_date'">
-                            <el-form-item prop="deadline">
-                                <el-date-picker
-                                    v-model="baseRuleForm.deadline"
-                                    type="date"
-                                    size="small"
-                                    ref="deadline"
-                                    :default-value="today"
-                                    :picker-options="dateOptions"
-                                    :disabled="course.platform !== 'self'">
-                                </el-date-picker>
-                                <span class="mlm">{{ 'course.marketing_setup.rule.expiry_date_tips'|trans }}</span>
-                            </el-form-item>
-                        </div>
-                        <div class="cd-mt16"
-                             v-if="baseRuleForm.expiryMode === 'days' && baseRuleForm.deadlineType == 'days'">
-                            <el-col span="8">
-                                <el-form-item prop="expiryDays">
-                                    <el-input ref="expiryDays" v-model="baseRuleForm.expiryDays"
-                                              :disabled="(coursePublished && courseSetPublished) || course.platform !== 'self'">
-                                    </el-input>
-                                </el-form-item>
-                            </el-col>
-                            <span class="mlm">{{ 'course.marketing_setup.rule.expiry_date.publish_tips'|trans }}</span>
-                        </div>
-                    </div>
-
-                    <div class="course-manage-expiry"
-                         :class="{'hidden': baseRuleForm.expiryMode !== 'date'}">
-                        <span class="caret"></span>
-                        <div class="course-manage-expiry__circle"
-                             v-if="baseRuleForm.expiryMode === 'date' && baseRuleForm.expiryMode === 'date'">
-                            <el-form-item prop="expiryDateRange">
-                                <el-date-picker
-                                    v-model="baseRuleForm.expiryDateRange"
-                                    :default-value="today"
-                                    :picker-options="dateOptions"
-                                    type="daterange"
-                                    range-separator="-"
-                                    ref="expiryDateRange"
-                                    :start-placeholder="'course.plan_task.start_time'|trans"
-                                    :end-placeholder="'course.plan_task.start_time'|trans">
-                                </el-date-picker>
-                            </el-form-item>
-                        </div>
-                    </div>
-                    <div class="course-mangae-info__tip js-expiry-tip"
-                         :class="{'ml0': baseRuleForm.expiryMode === 'forever'}">
-                        {{ 'course.marketing_setup.rule.expiry_date.first_publish_tips'|trans }}
-                    </div>
-                </el-col>
-            </el-form-item>
-
             <el-form-item prop="watchLimit" v-if="lessonWatchLimit" :label="'course.marketing_setup.rule.watch_time_limit'|trans">
                 <el-col span="2">
                     <el-input v-model="baseRuleForm.watchLimit" ref="watchLimit"></el-input>
@@ -132,11 +42,11 @@
 
             <el-form-item :label="'course.plan_setup.finish_rule'|trans({'taskName': taskName })">
                 <el-col span="18">
-                    <el-radio v-model="baseRuleForm.enableFinish" label="1" :disabled="course.platform == 'supplier'"
+                    <el-radio v-model="baseRuleForm.enableFinish" label="1" :disabled="course.platform === 'supplier'"
                               class="cd-radio">
                         {{ 'course.plan_setup.finish_rule.nothing'|trans }}
                     </el-radio>
-                    <el-radio v-model="baseRuleForm.enableFinish" label="0" :disabled="course.platform == 'supplier'"
+                    <el-radio v-model="baseRuleForm.enableFinish" label="0" :disabled="course.platform === 'supplier'"
                               class="cd-radio">
                         {{ 'course.plan_setup.finish_rule.depend_on_finish_condition'|trans({'taskName': taskName}) }}
                         <el-popover
@@ -216,7 +126,7 @@
                                slot="reference"></a>
                         </el-popover>
                     </label>
-                    <el-select v-model="baseRuleForm.tryLookLength" :disabled="course.platform != 'self'">
+                    <el-select v-model="baseRuleForm.tryLookLength" :disabled="course.platform !== 'self'">
                         <el-option
                             v-for="(label, value) in tryLookLengthOptions"
                             :key="value"
@@ -227,24 +137,24 @@
                 </el-form-item>
             </div>
 
-            <el-form-item :label="'course.marketing_setup.services.provide_services'|trans">
-                <el-col>
-                    <el-popover v-for="(tag, key) in serviceTags"
-                                placement="top"
-                                :key="key"
-                                :content="tag.summary|trans"
-                                trigger="hover">
-                        <span class="service-item js-service-item"
-                              slot="reference"
-                              :key="key"
-                              :class="tag.active || baseRuleForm.services.indexOf(tag.code) >= 0 ? 'service-primary-item' : ''"
-                              :data-code="tag.code"
-                              @click="serviceItemClick"
-                        >{{ tag.fullName }}</span>
-                    </el-popover>
-                </el-col>
-                <el-input class="hidden" type="hidden" v-model="baseRuleForm.services"></el-input>
-            </el-form-item>
+<!--            <el-form-item :label="'course.marketing_setup.services.provide_services'|trans">-->
+<!--                <el-col>-->
+<!--                    <el-popover v-for="(tag, key) in serviceTags"-->
+<!--                                placement="top"-->
+<!--                                :key="key"-->
+<!--                                :content="tag.summary|trans"-->
+<!--                                trigger="hover">-->
+<!--                        <span class="service-item js-service-item"-->
+<!--                              slot="reference"-->
+<!--                              :key="key"-->
+<!--                              :class="tag.active || baseRuleForm.services.indexOf(tag.code) >= 0 ? 'service-primary-item' : ''"-->
+<!--                              :data-code="tag.code"-->
+<!--                              @click="serviceItemClick"-->
+<!--                        >{{ tag.fullName }}</span>-->
+<!--                    </el-popover>-->
+<!--                </el-col>-->
+<!--                <el-input class="hidden" type="hidden" v-model="baseRuleForm.services"></el-input>-->
+<!--            </el-form-item>-->
 
             <el-form-item id="audio-modal-id"
                           :label="'course.info.video.convert.audio.enable'|trans"
@@ -301,7 +211,6 @@
             taskName: '',
             courseRemindSendDays: '',
             uploadMode: '',
-            serviceTags: {},
             activityMetas: {},
             audioServiceStatus: '',
             videoConvertCompletion: '',
@@ -311,24 +220,6 @@
         },
         watch: {},
         methods: {
-            serviceItemClick(event) {
-                let $item = $(event.currentTarget);
-                if (!this.course.services) {
-                    this.course.services = [];
-                }
-
-                let code = $item.data('code')
-                if ($item.hasClass('service-primary-item')) {
-                    $item.removeClass('service-primary-item');
-                    this.course.services.splice(this.course.services.indexOf(code), 1);
-                } else {
-                    $item.addClass('service-primary-item');
-
-                    if (this.course.services.indexOf(code) < 0) {
-                        this.course.services.push(code);
-                    }
-                }
-            },
             freeTaskItemChange(id) {
                 return (value) => {
                     this.$set(this.freeTasks, id, value)
@@ -336,7 +227,7 @@
                 }
             },
             changeAudioMode(event) {
-                if ($('#course-audio-mode').data('value') == 'notAllowed') {
+                if ($('#course-audio-mode').data('value') === 'notAllowed') {
                     let enableAudios = $("[name='enableAudio']");
                     cd.message({type: 'info', message: Translator.trans('course.audio.enable.biz.user')});
                     enableAudios[0].checked = true;
@@ -373,20 +264,6 @@
                 i++;
             }
 
-            let coursePublished = this.course.status ? this.course.status === 'published' : false;
-            let courseClosed = this.course.status ? this.course.status === 'closed' : false;
-            let courseSetPublished = this.courseSet.status ? this.courseSet.status === 'published' : false;
-            let courseSetClosed = this.courseSet.status ? this.courseSet.status === 'closed' : false;
-
-            let max_year = (rule, value, callback) => {
-                value < 7300 ? callback() : callback(new Error(Translator.trans('validate.max_year.message')));
-            }
-            this.course.expiryStartDate = this.course.expiryStartDate == 0 ? '' : this.course.expiryStartDate;
-            this.course.expiryEndDate = this.course.expiryEndDate == 0 ? '' : this.course.expiryEndDate
-            let expiryDateRange = (!this.course.expiryStartDate || !this.course.expiryEndDate) ? null : [
-                this.course.expiryStartDate, this.course.expiryEndDate
-            ]
-
             let liveCapacity = null;
             this.$axios.get(this.liveCapacityUrl).then((response) => {
                 this.liveCapacity = response.data.capacity;
@@ -405,7 +282,6 @@
                 canFreeTasks: {},
                 freeTasks: {},
                 courseRemindSendDays: '',
-                serviceTags: {},
                 learnModeRadio: {
                     freeMode: Translator.trans('course.plan_setup.mode.free'),
                     lockMode: Translator.trans('course.plan_setup.mode.locked'),
@@ -433,47 +309,11 @@
                     enableFinish: this.course.enableFinish,
                     maxStudentNum: this.course.maxStudentNum,
                     tryLookLength: parseInt(this.course.tryLookLength),
-                    services: this.course.services,
+                    // services: this.course.services,
                     enableAudio: this.course.enableAudio,
-                    expiryMode: this.course.expiryMode,
-                    deadlineType: this.course.deadlineType ? this.course.deadlineType : 'days',
-                    deadline: this.course.expiryEndDate,
-                    expiryDays: this.course.expiryDays > 0 ? this.course.expiryDays : null,
-                    expiryDateRange: expiryDateRange,
                     freeTaskIds: Object.keys(this.freeTasks)
                 },
                 formRule: {
-                    deadline: [
-                        {
-                            required: true,
-                            message: Translator.trans('course.manage.deadline_end_date_error_hint'),
-                            trigger: 'blur'
-                        }
-                    ],
-                    expiryDateRange: [
-                        {
-                            required: true,
-                            message: Translator.trans('course.manage.expiry_date.error_hint'),
-                            trigger: 'blur'
-                        }
-                    ],
-                    expiryDays: [
-                        {
-                            required: true,
-                            message: Translator.trans('course.manage.expiry_days_error_hint'),
-                            trigger: 'blur'
-                        },
-                        {
-                            validator: validation.digits,
-                            message: Translator.trans('validate.positive_integer.message'),
-                            trigger: 'blur'
-                        },
-                        {
-                            validator: max_year,
-                            message: Translator.trans('course.manage.max_year_error_hint'),
-                            trigger: 'blur'
-                        }
-                    ],
                     watchLimit: {
                         validator: validation.digits_0,
                         message: Translator.trans('validate.unsigned_integer.message'),
@@ -501,25 +341,7 @@
                 canFreeActivityTypes: '',
                 freeTaskChangelog: '',
                 tryLookLengthOptions: tryLookLengthOptions,
-                expiryMode: {
-                    'days': Translator.trans('course.teaching_plan.expiry_date.anywhere_mode'),
-                    'date': Translator.trans('course.teaching_plan.expiry_date.date_mode'),
-                    'forever': Translator.trans('course.teaching_plan.expiry_date.forever_mode')
-                },
-                expiryModeTips: {
-                    'anytime': Translator.trans('course.teaching_plan.expiry_date.anytime'),
-                    'realtime': Translator.trans('course.teaching_plan.expiry_date.real_time'),
-                    'overdue': Translator.trans('course.teaching_plan.expiry_date.overdue_tips'),
-                },
-                deadlineTypeRadio: {
-                    'end_date': Translator.trans('course.teaching_plan.expiry_date.end_date_mode'),
-                    'days': Translator.trans('course.teaching_plan.expiry_date.days_mode')
-                },
                 watchLimitTip: Translator.trans('course.marketing_setup.rule.watch_time_limit.watch_limit_tips'),
-                courseClosed: courseClosed,
-                coursePublished: coursePublished,
-                courseSetClosed: courseSetClosed,
-                courseSetPublished: courseSetPublished,
                 today: Date.now(),
                 dateOptions: {
                     disabledDate(time) {
