@@ -78,28 +78,30 @@
                     <el-col span="16">
                         <ul v-if="canFreeTasks.length" class="list-group mb0 pb0 js-task-price-setting-scroll"
                             :class="freeTaskJsClass">
-                            <el-checkbox-group v-model="baseRuleForm.freeTaskIds">
-                                <li v-for="(task) in canFreeTasks"
-                                    class="task-price-setting-group__item"
-                                    :class="{'open': freeTasks[task.id]}"
-                                    :data-id="task.id"
-                                    :key="task.id">
-                                    <el-checkbox :label="task.id" :key="task.id"
-                                                 @change="(value) => freeTaskItemChange(task.id)(value)">
-                                        <div slot="default">
-                                            <el-tooltip effect="dark"
-                                                        :content="'course.marketing_setup.preview.set_task.task_name'|trans({'name':activityMetas[task.type].name,'taskName':taskName})"
-                                                        placement="top">
-                                                <i class="color-gray" :class="activityMetas[task.type].icon"></i>
-                                            </el-tooltip>
-                                            <span class="inline-block vertical-middle text-overflow title">
+                            <el-scrollbar :style="scrollLength(canFreeTasks.length)">
+                                <el-checkbox-group v-model="baseRuleForm.freeTaskIds">
+                                    <li v-for="(task) in canFreeTasks"
+                                        class="task-price-setting-group__item"
+                                        :class="{'open': freeTasks[task.id]}"
+                                        :data-id="task.id"
+                                        :key="task.id">
+                                        <el-checkbox :label="task.id" :key="task.id"
+                                                     @change="(value) => freeTaskItemChange(task.id)(value)">
+                                            <div slot="default">
+                                                <el-tooltip effect="dark"
+                                                            :content="'course.marketing_setup.preview.set_task.task_name'|trans({'name':activityMetas[task.type].name,'taskName':taskName})"
+                                                            placement="top">
+                                                    <i class="color-gray" :class="activityMetas[task.type].icon"></i>
+                                                </el-tooltip>
+                                                <span class="inline-block vertical-middle text-overflow title">
                                                                                 {{ taskName }} {{ task.number }}：{{ task.title }}
                                                                             </span>
-                                            <span class="cd-tag cd-tag-orange pull-right price">{{ 'course.marketing_setup.preview.set_task.free'|trans }}</span>
-                                        </div>
-                                    </el-checkbox>
-                                </li>
-                            </el-checkbox-group>
+                                                <span class="cd-tag cd-tag-orange pull-right price">{{ 'course.marketing_setup.preview.set_task.free'|trans }}</span>
+                                            </div>
+                                        </el-checkbox>
+                                    </li>
+                                </el-checkbox-group>
+                            </el-scrollbar>
                         </ul>
 
                         <div class="help-block course-mange-space" :class="{'mt0': !canFreeTasks.length}">
@@ -201,10 +203,12 @@
         },
         watch: {},
         methods: {
+            scrollLength(length) {
+                return length >= 5 ? "height: 200px;" : `height:${length * 50}px;`
+            },
             freeTaskItemChange(id) {
                 return (value) => {
                     this.$set(this.freeTasks, id, value)
-                    $('.js-task-price-setting-scroll').perfectScrollbar();
                 }
             },
             changeAudioMode(event) {
@@ -331,7 +335,6 @@
             };
         },
         mounted() {
-            $('.js-task-price-setting-scroll').perfectScrollbar();
         },
         created() {
 
