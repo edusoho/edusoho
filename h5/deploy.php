@@ -34,8 +34,8 @@ foreach ($yaml['ssh']['options'] as $key => $option){
 
 desc('Build frontend');
 task('frontend:build', function() {
-    run('cnpm install --production');
-    run('cnpm run build');
+    run('yarn install --production');
+    run('yarn run build');
 })->local();
 
 desc('Upload frontend compiled files');
