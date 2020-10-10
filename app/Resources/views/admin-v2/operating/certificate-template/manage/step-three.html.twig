@@ -24,8 +24,8 @@
             {% set basemap = asset('static-dist/app/img/admin-v2/vertical_basemap.jpg') %}
           {% endif %}
         {% endif %}
-        {% set cropWidth = isHorizontal ? '3508' : '2800' %}
-        {% set cropHeight = isHorizontal ? '2800' : '3508' %}
+        {% set cropWidth = isHorizontal ? '3508' : '2480' %}
+        {% set cropHeight = isHorizontal ? '2480' : '3508' %}
         {% set hint = isHorizontal ? 'admin.operation_certificate.template.basemap.horizontal_upload_hint' : 'admin.operation_certificate.template.basemap.vertical_upload_hint' %}
         {% include 'common/upload-image.html.twig' with {
           saveUrl: path('admin_v2_certificate_template_basemap_modal', {id:template.id}),
