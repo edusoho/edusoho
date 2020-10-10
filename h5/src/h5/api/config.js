@@ -16,6 +16,7 @@ import goods from './goods/index';
 import reviews from './reviews/index';
 import certificate from './certificate/index';
 import itemBank from './itemBank/index';
+import infoCollection from './infoCollection/index';
 
 const config = [
   ...openCourse,
@@ -36,6 +37,7 @@ const config = [
   ...itemBankCourse,
   ...certificate,
   ...itemBank,
+  ...infoCollection,
 ];
 
 export default config;

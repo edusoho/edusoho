@@ -77,6 +77,20 @@
         defaul-value="暂无评价"
       />
 
+      <!-- 个人信息表单填写 -->
+      <van-action-sheet
+        v-model="isShowForm"
+        class="minHeight50"
+        :title="userInfoCollectForm.formTitle"
+        :close-on-click-overlay="false"
+        :safe-area-inset-bottom="true"
+      >
+        <info-collection
+          :userInfoCollectForm="this.userInfoCollectForm"
+          :formRule="this.userInfoCollectForm.items"
+          @submitForm="joinFreeClass"
+        ></info-collection>
+      </van-action-sheet>
       <!-- 加入学习 -->
       <e-footer
         v-if="
@@ -122,11 +136,15 @@ import directory from '../course/detail/directory';
 import onsale from '../course/detail/onsale';
 import moreMask from '@/components/more-mask';
 import redirectMixin from '@/mixins/saveRedirect';
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 import Api from '@/api';
+import collectUserInfo from '@/mixins/collectUserInfo';
 import getCouponMixin from '@/mixins/coupon/getCouponHandler';
 import getActivityMixin from '@/mixins/activity/index';
 import { dateTimeDown } from '@/utils/date-toolkit';
+import { Toast } from 'vant';
+import * as types from '@/store/mutation-types';
+import infoCollection from '@/components/info-collection.vue';
 
 const TAB_HEIGHT = 44;
 
@@ -141,8 +159,9 @@ export default {
     reviewList,
     moreMask,
     onsale,
+    infoCollection,
   },
-  mixins: [redirectMixin, getCouponMixin, getActivityMixin],
+  mixins: [redirectMixin, getCouponMixin, getActivityMixin, collectUserInfo],
   props: ['details', 'planDetails'],
   data() {
     return {
@@ -167,7 +186,13 @@ export default {
       scrollTime: null,
       isManualSwitch: false,
       classroomSettings: {},
+      isShowForm: false,
     };
+  },
+  watch: {
+    $route(to, from) {
+      this.resetFrom();
+    },
   },
   computed: {
     ...mapState(['couponSwitch', 'user']),
@@ -229,7 +254,6 @@ export default {
     });
   },
   mounted() {
-    // 获取促销优惠券
     if (this.couponSwitch) {
       Api.searchCoupon({
         params: {
@@ -272,6 +296,9 @@ export default {
     window.removeEventListener('scroll', this.handleScroll);
   },
   methods: {
+    ...mapMutations('classroom', {
+      setCurrentJoinClass: types.SET_CURRENT_JOIN_CLASS,
+    }),
     onTabClick(index, title) {
       this.isManualSwitch = true;
 
@@ -362,13 +389,17 @@ export default {
         });
         return;
       }
-
+      this.collectUseInfoEvent();
+    },
+    joinFreeClass() {
       Api.joinClass({
         query: {
-          classroomId: details.classId,
+          classroomId: this.details.classId,
         },
       })
         .then(res => {
+          this.setCurrentJoinClass(true);
+          Toast.clear();
           this.details.joinStatus = res;
         })
         .catch(err => {
@@ -380,6 +411,36 @@ export default {
     },
     sellOut() {
       this.isEmpty = true;
+    },
+    getParamsList() {
+      this.paramsList = {
+        action: 'buy_before',
+        targetType: 'classroom',
+        targetId: this.details.classId,
+      };
+    },
+    collectUseInfoEvent() {
+      if (this.hasUserInfoCollectForm) {
+        this.isShowForm = true;
+        return;
+      }
+      Toast.loading({
+        duration: 0,
+        message: '加载中...',
+        forbidClick: true,
+      });
+      this.getParamsList();
+      this.getInfoCollectionEvent(this.paramsList).then(res => {
+        if (Object.keys(res).length) {
+          this.userInfoCollect = res;
+          this.getInfoCollectionForm(res.id).then(res => {
+            this.isShowForm = true;
+            Toast.clear();
+          });
+          return;
+        }
+        this.joinFreeClass();
+      });
     },
   },
 };

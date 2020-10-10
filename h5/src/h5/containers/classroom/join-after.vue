@@ -13,7 +13,7 @@
       </van-tabs>
 
       <!-- 班级介绍 -->
-      <div v-if="active == 0" style="margin-top: 44px;">
+      <div v-if="active == 0">
         <detail-plan :details="planDetails" :join-status="details.joinStatus" />
         <div class="segmentation" />
 
@@ -39,7 +39,7 @@
       </div>
 
       <!-- 班级课程 -->
-      <div v-if="active == 1" style="margin-top: 44px;">
+      <div v-if="active == 1">
         <course-set-list
           ref="course"
           :feedback="!errorMsg"
@@ -52,7 +52,7 @@
       </div>
 
       <!-- 学员评价 -->
-      <div v-if="active == 2" style="margin-top: 44px;">
+      <div v-if="active == 2">
         <review-list
           ref="review"
           :target-id="details.classId"
@@ -63,6 +63,22 @@
         />
       </div>
     </div>
+
+    <!-- 个人信息表单填写 -->
+    <van-action-sheet
+      v-model="isShowForm"
+      class="minHeight50"
+      :title="userInfoCollectForm.formTitle"
+      :close-on-click-overlay="false"
+      :safe-area-inset-bottom="true"
+      @cancel="onCancelForm"
+    >
+      <info-collection
+        :userInfoCollectForm="userInfoCollectForm"
+        :formRule="userInfoCollectForm.items"
+        @submitForm="onCancelForm"
+      ></info-collection>
+    </van-action-sheet>
   </div>
 </template>
 
@@ -74,8 +90,12 @@ import courseSetList from './course-set-list';
 import detailPlan from './plan';
 import directory from '../course/detail/directory';
 import moreMask from '@/components/more-mask';
+import collectUserInfo from '@/mixins/collectUserInfo';
+import infoCollection from '@/components/info-collection.vue';
+import { mapState, mapMutations } from 'vuex';
 import { Dialog, Toast } from 'vant';
 import Api from '@/api';
+import * as types from '@/store/mutation-types.js';
 // eslint-disable-next-line no-unused-vars
 const TAB_HEIGHT = 44;
 
@@ -90,6 +110,7 @@ export default {
     reviewList,
     // eslint-disable-next-line vue/no-unused-components
     moreMask,
+    infoCollection,
   },
   props: ['details', 'planDetails'],
   data() {
@@ -101,7 +122,19 @@ export default {
       tabsClass: '',
       errorMsg: '',
       classroomSettings: {},
+      isShowForm: false,
+      paramsList: {
+        action: 'buy_after',
+        targetType: 'classroom',
+        targetId: this.details.classId,
+      },
     };
+  },
+  mixins: [collectUserInfo],
+  computed: {
+    ...mapState('classroom', {
+      currentJoin: state => state.currentJoin,
+    }),
   },
   async created() {
     this.classroomSettings = await Api.getSettings({
@@ -112,6 +145,35 @@ export default {
       console.error(err);
     });
   },
+  watch: {
+    currentJoin: {
+      handler(val, oldVal) {
+        if (val) {
+          Toast.loading({
+            duration: 0,
+            message: '加载中...',
+            forbidClick: true,
+          });
+          this.getInfoCollectionEvent(this.paramsList).then(res => {
+            if (Object.keys(res).length) {
+              this.userInfoCollect = res;
+              this.getInfoCollectionForm(res.id).then(res => {
+                this.isShowForm = true;
+                Toast.clear();
+              });
+              return;
+            }
+            Toast.clear();
+          });
+        }
+      },
+      // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法，如果设置了false，那么效果和上边例子一样
+      immediate: true,
+    },
+    $route(to, from) {
+      this.resetFrom();
+    },
+  },
   mounted() {
     window.addEventListener('touchmove', this.handleScroll);
 
@@ -121,6 +183,9 @@ export default {
     window.removeEventListener('touchmove', this.handleScroll);
   },
   methods: {
+    ...mapMutations('classroom', {
+      setCurrentJoin: types.SET_CURRENT_JOIN_CLASS,
+    }),
     showDialog() {
       let code = '';
       let errorMessage = '';
@@ -221,6 +286,10 @@ export default {
           callback();
         })
         .catch(() => {});
+    },
+    onCancelForm() {
+      this.setCurrentJoin(false);
+      this.isShowForm = false;
     },
   },
 };

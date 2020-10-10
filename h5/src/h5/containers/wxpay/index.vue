@@ -22,7 +22,6 @@
 
 <script>
 import Api from '@/api';
-import axios from 'axios';
 import { mapState } from 'vuex';
 import { Toast } from 'vant';
 
@@ -36,34 +35,57 @@ export default {
     ...mapState(['wechatSwitch', 'isLoading']),
   },
   mounted() {
-    const { pay_amount, title, sn, openid } = this.$route.query;
-    this.detail = { pay_amount, title, sn, openid };
+    const {
+      // eslint-disable-next-line camelcase
+      pay_amount,
+      title,
+      sn,
+      openid,
+      targetType,
+      targetId,
+      payWay,
+    } = this.$route.query;
+    this.detail = {
+      pay_amount,
+      title,
+      sn,
+      openid,
+      targetType,
+      targetId,
+      payWay,
+    };
   },
   methods: {
     handlePay() {
+      const returnUrl =
+        window.location.origin +
+        window.location.pathname +
+        `#/pay_center?targetType=${this.detail.targetType}&targetId=${this.detail.targetId}&payWay=${this.detail.payWay}`;
       Api.createTrade({
         data: {
           gateway: 'WechatPay_JsH5',
           type: 'purchase',
           orderSn: this.detail.sn,
           openid: this.detail.openid,
+          success_url: returnUrl,
         },
       })
         .then(data => {
+          // eslint-disable-next-line no-undef
           WeixinJSBridge.invoke(
             'getBrandWCPayRequest',
             data.platformCreatedResult,
             res => {
               if (res.err_msg == 'get_brand_wcpay_request:ok') {
-                if (this.wechatSwitch) {
-                  this.$router.replace({
-                    path: '/pay_success',
-                    query: {
-                      paidUrl: data.paidSuccessUrlH5,
-                    },
-                  });
-                  return;
-                }
+                // if (this.wechatSwitch) {
+                //   this.$router.replace({
+                //     path: '/pay_success',
+                //     query: {
+                //       paidUrl: data.paidSuccessUrlH5,
+                //     },
+                //   });
+                //   return;
+                // }
                 location.href = data.paidSuccessUrlH5;
                 // this.$router.push({ path: data.paidSuccessUrlH5 });
               } else {
