@@ -53,7 +53,20 @@
       type="course"
       defaul-value="暂无评价"
     />
-
+    <!-- 个人信息表单填写 -->
+    <van-action-sheet
+      v-model="isShowForm"
+      class="minHeight50"
+      :title="userInfoCollectForm.formTitle"
+      :close-on-click-overlay="false"
+      :safe-area-inset-bottom="true"
+    >
+      <info-collection
+        :userInfoCollectForm="userInfoCollectForm"
+        :formRule="userInfoCollectForm.items"
+        @submitForm="joinFreeCourse"
+      ></info-collection>
+    </van-action-sheet>
     <!-- 加入学习 -->
     <e-footer
       v-if="
@@ -101,9 +114,10 @@ import redirectMixin from '@/mixins/saveRedirect';
 import Api from '@/api';
 import getCouponMixin from '@/mixins/coupon/getCouponHandler';
 import getActivityMixin from '@/mixins/activity/index';
+import collectUserInfo from '@/mixins/collectUserInfo';
 import { dateTimeDown } from '@/utils/date-toolkit';
 import { Toast } from 'vant';
-
+import infoCollection from '@/components/info-collection.vue';
 const TAB_HEIGHT = 44;
 
 export default {
@@ -116,8 +130,9 @@ export default {
     moreMask,
     reviewList,
     onsale,
+    infoCollection,
   },
-  mixins: [redirectMixin, getCouponMixin, getActivityMixin],
+  mixins: [redirectMixin, getCouponMixin, getActivityMixin, collectUserInfo],
   data() {
     return {
       tabs: ['课程介绍', '课程目录', '学员评价'],
@@ -139,7 +154,14 @@ export default {
         seckill: {},
       },
       courseSettings: {},
+      isShowForm: false,
+      paramsList: {},
     };
+  },
+  watch: {
+    $route(to, from) {
+      this.resetFrom();
+    },
   },
   async created() {
     this.courseSettings = await Api.getSettings({
@@ -212,6 +234,7 @@ export default {
     },
   },
   mounted() {
+    // 获取用户信息采集接口参数
     if (!this.isClassCourse && this.couponSwitch) {
       // 获取促销优惠券
       Api.searchCoupon({
@@ -313,6 +336,7 @@ export default {
 
       // 禁止加入
       if (!this.accessToJoin && !vipAccessToJoin) {
+        this.$toast('禁止加入');
         return;
       }
 
@@ -333,22 +357,26 @@ export default {
       if ((Number(this.details.buyable) && isPast) || vipAccessToJoin) {
         if (+this.details.price && !vipAccessToJoin) {
           this.getOrder();
-        } else {
-          this.joinCourse({
-            id: this.details.id,
-          })
-            .then(res => {
-              // 返回空对象，表示加入失败，需要去创建订单购买
-              if (!(Object.keys(res).length === 0)) {
-              } else {
-                this.getOrder();
-              }
-            })
-            .catch(err => {
-              console.error(err);
-            });
+          return;
         }
+        this.collectUseInfoEvent();
       }
+    },
+    joinFreeCourse() {
+      this.joinCourse({
+        id: this.details.id,
+      })
+        .then(res => {
+          Toast.clear();
+          // 返回空对象，表示加入失败，需要去创建订单购买
+          if (!(Object.keys(res).length === 0)) {
+          } else {
+            this.getOrder();
+          }
+        })
+        .catch(err => {
+          console.error(err);
+        });
     },
     getAfCourse(id) {
       this.getAfterCourse({
@@ -397,6 +425,36 @@ export default {
     },
     sellOut() {
       this.isEmpty = true;
+    },
+    getParamsList() {
+      this.paramsList = {
+        action: 'buy_before',
+        targetType: 'course',
+        targetId: this.details.id,
+      };
+    },
+    collectUseInfoEvent() {
+      if (this.hasUserInfoCollectForm) {
+        this.isShowForm = true;
+        return;
+      }
+      Toast.loading({
+        duration: 0,
+        message: '加载中...',
+        forbidClick: true,
+      });
+      this.getParamsList();
+      this.getInfoCollectionEvent(this.paramsList).then(res => {
+        if (Object.keys(res).length) {
+          this.userInfoCollect = res;
+          this.getInfoCollectionForm(res.id).then(res => {
+            this.isShowForm = true;
+            Toast.clear();
+          });
+          return;
+        }
+        this.joinFreeCourse();
+      });
     },
   },
 };
