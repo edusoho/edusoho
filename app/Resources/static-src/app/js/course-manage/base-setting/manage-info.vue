@@ -26,7 +26,6 @@
                    v-bind:activity-metas="activityMetas"
                    v-bind:course-remind-send-days="courseRemindSendDays"
                    v-bind:upload-mode="uploadMode"
-                   v-bind:service-tags="serviceTags"
                    v-bind:audio-service-status="audioServiceStatus"
                    v-bind:video-convert-completion="videoConvertCompletion"
                    v-bind:course-set-manage-files-url="courseSetManageFilesUrl"
@@ -37,6 +36,7 @@
         ></base-rule>
         <market-setting ref="marketing"
                         v-bind:course="course"
+                        v-bind:course-set="courseSet"
                         v-bind:course-product="courseProduct"
                         v-bind:can-modify-course-price="canModifyCoursePrice"
                         v-bind:notifies="notifies"
@@ -44,6 +44,7 @@
                         v-bind:vip-installed="vipInstalled"
                         v-bind:vip-enabled="vipEnabled"
                         v-bind:vip-levels="vipLevels"
+                        v-bind:service-tags="serviceTags"
         ></market-setting>
 
         <el-row>
