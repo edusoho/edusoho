@@ -19,8 +19,8 @@
                         {{ form.price * coinSetting.cash_rate }}
                         {{coinSetting.coin_name}}
                     </div>
-
                 </el-col>
+                <el-col span="4" class="mlm">{{ 'site.currency.CNY'|trans }}</el-col>
             </el-form-item>
 
             <el-form-item :label="'classroom.show_label'|trans({'name':classroomLabel})">
