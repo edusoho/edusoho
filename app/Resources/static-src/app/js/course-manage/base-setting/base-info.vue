@@ -22,14 +22,14 @@
                  label-width="150px">
             <div class="course-manage-subltitle cd-mb40">{{ 'course.base_info'|trans }}</div>
 
-            <el-form-item :label="'course.plan_setup.name'|trans" prop="title">
+            <el-form-item :label="'course.base.title'|trans" prop="title">
                 <el-col span="18">
                     <el-input ref="title" v-model="baseInfoForm.title" auto-complete="off"
                               :placeholder="'course.plan_setup.placeholder'|trans">
                     </el-input>
                 </el-col>
             </el-form-item>
-            <el-form-item :label="'course.plan_setup.subtitle'|trans" prop="subtitle">
+            <el-form-item :label="'course.base.sub_title'|trans" prop="subtitle">
                 <el-col span="18">
                     <el-input ref="subtitle" v-model="baseInfoForm.subtitle" type="textarea" rows="3"></el-input>
                 </el-col>
