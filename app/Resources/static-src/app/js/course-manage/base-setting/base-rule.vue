@@ -137,25 +137,6 @@
                 </el-form-item>
             </div>
 
-<!--            <el-form-item :label="'course.marketing_setup.services.provide_services'|trans">-->
-<!--                <el-col>-->
-<!--                    <el-popover v-for="(tag, key) in serviceTags"-->
-<!--                                placement="top"-->
-<!--                                :key="key"-->
-<!--                                :content="tag.summary|trans"-->
-<!--                                trigger="hover">-->
-<!--                        <span class="service-item js-service-item"-->
-<!--                              slot="reference"-->
-<!--                              :key="key"-->
-<!--                              :class="tag.active || baseRuleForm.services.indexOf(tag.code) >= 0 ? 'service-primary-item' : ''"-->
-<!--                              :data-code="tag.code"-->
-<!--                              @click="serviceItemClick"-->
-<!--                        >{{ tag.fullName }}</span>-->
-<!--                    </el-popover>-->
-<!--                </el-col>-->
-<!--                <el-input class="hidden" type="hidden" v-model="baseRuleForm.services"></el-input>-->
-<!--            </el-form-item>-->
-
             <el-form-item id="audio-modal-id"
                           :label="'course.info.video.convert.audio.enable'|trans"
                           v-model="baseRuleForm.enableAudio"
@@ -309,7 +290,6 @@
                     enableFinish: this.course.enableFinish,
                     maxStudentNum: this.course.maxStudentNum,
                     tryLookLength: parseInt(this.course.tryLookLength),
-                    // services: this.course.services,
                     enableAudio: this.course.enableAudio,
                     freeTaskIds: Object.keys(this.freeTasks)
                 },
