@@ -55,6 +55,18 @@ class GoodsDaoImpl extends AdvancedDaoImpl implements GoodsDao
         return $this->findInField('productId', $productIds);
     }
 
+    public function findPublishedByProductIds(array $productIds)
+    {
+        if (empty($productIds)) {
+            return [];
+        }
+
+        $marks = str_repeat('?,', count($productIds) - 1).'?';
+        $sql = "SELECT * FROM {$this->table} WHERE status = 'published' AND productId IN ({$marks});";
+
+        return $this->db()->fetchAll($sql, $productIds);
+    }
+
     public function refreshHotSeq()
     {
         $sql = "UPDATE {$this->table} set hotSeq = 0;";

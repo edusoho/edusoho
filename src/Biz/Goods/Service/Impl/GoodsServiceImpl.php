@@ -185,7 +185,7 @@ class GoodsServiceImpl extends BaseService implements GoodsService
         $goodsEntity = $this->getGoodsEntityFactory()->create($goods['type']);
         $hitNum = $goodsEntity->hitTarget($goods);
         if (empty($hitNum)) {
-            return ;
+            return;
         }
 
         return $this->getGoodsDao()->update($goods['id'], ['hitNum' => $hitNum]);
@@ -335,6 +335,11 @@ class GoodsServiceImpl extends BaseService implements GoodsService
     public function findGoodsByProductIds(array $productIds)
     {
         return $this->getGoodsDao()->findByProductIds($productIds);
+    }
+
+    public function findPublishedGoodsByProductIds(array $productIds)
+    {
+        return $this->getGoodsDao()->findPublishedByProductIds($productIds);
     }
 
     public function findGoodsSpecsByIds(array $ids)

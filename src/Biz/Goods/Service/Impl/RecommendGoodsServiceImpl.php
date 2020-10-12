@@ -133,7 +133,7 @@ class RecommendGoodsServiceImpl extends BaseService implements RecommendGoodsSer
 //
 //        $productIds = array_merge($productIds, ArrayToolkit::column($otherProducts, 'id'));
 
-        return $this->getGoodsService()->findGoodsByProductIds($productIds);
+        return $this->getGoodsService()->findPublishedGoodsByProductIds($productIds);
     }
 
     private function getTagOwnerTypeByProductType($productType)

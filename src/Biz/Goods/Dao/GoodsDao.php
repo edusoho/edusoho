@@ -12,5 +12,7 @@ interface GoodsDao extends AdvancedDaoInterface
 
     public function findByProductIds(array $productIds);
 
+    public function findPublishedByProductIds(array $productIds);
+
     public function refreshHotSeq();
 }
