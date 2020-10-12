@@ -2,23 +2,46 @@
   <div class="info-buy">
     <div class="info-buy__collection" @click="onFavorite">
       <template v-if="isFavorite">
-        <i class="iconfont icon-wode" style="color: #FF7E56;"></i>
+        <i class="iconfont icon-aixin1" style="color: #FF7E56;"></i>
         <span style="color: #FF7E56;">已收藏</span>
       </template>
       <template v-else>
-        <i class="iconfont icon-wode"></i>
+        <i class="iconfont icon-aixin"></i>
         <span>收藏</span>
       </template>
     </div>
-    <div @click="handleJoin" v-if="currentSku.isMember" class="info-buy__btn">去学习</div>
-    <div @click="handleJoin" v-else-if="currentSku.displayPrice != 0" :class="!accessToJoin ? 'disabled' : ''" class="info-buy__btn">{{ currentSku.access.code|filterGoodsBuyStatus(goods.type, vipAccessToJoin) }}</div>
-    <div @click="handleJoin" v-else :class="!accessToJoin ? 'disabled' : ''" class="info-buy__btn"><span v-if="accessToJoin">免费加入</span><span v-else>{{ currentSku.access.code|filterGoodsBuyStatus(goods.type, vipAccessToJoin) }}</span></div>
+    <div @click="handleJoin" v-if="currentSku.isMember" class="info-buy__btn">
+      去学习
+    </div>
+    <div
+      @click="handleJoin"
+      v-else-if="currentSku.displayPrice != 0"
+      :class="!accessToJoin ? 'disabled' : ''"
+      class="info-buy__btn"
+    >
+      {{
+        currentSku.access.code
+          | filterGoodsBuyStatus(goods.type, vipAccessToJoin)
+      }}
+    </div>
+    <div
+      @click="handleJoin"
+      v-else
+      :class="!accessToJoin ? 'disabled' : ''"
+      class="info-buy__btn"
+    >
+      <span v-if="accessToJoin">免费加入</span
+      ><span v-else>{{
+        currentSku.access.code
+          | filterGoodsBuyStatus(goods.type, vipAccessToJoin)
+      }}</span>
+    </div>
   </div>
 </template>
 
 <script>
 import Api from '@/api';
-import {mapActions, mapState} from "vuex";
+import { mapActions, mapState } from 'vuex';
 export default {
   data() {
     return {
@@ -53,7 +76,7 @@ export default {
 
       // 禁止加入
       if (!this.accessToJoin && !vipAccessToJoin) {
-        return ;
+        return;
       }
 
       if (!this.$store.state.token) {
@@ -63,7 +86,7 @@ export default {
             redirect: this.redirect,
           },
         });
-        return ;
+        return;
       }
       // const endDate = this.currentSku.usageEndTime;
       // const endDateStamp = new Date(endDate).getTime();
@@ -101,7 +124,7 @@ export default {
               .then(res => {
                 this.$router.push({
                   path: `/classroom/${this.currentSku.targetId}`,
-                })
+                });
               })
               .catch(err => {
                 console.error(err.message);
