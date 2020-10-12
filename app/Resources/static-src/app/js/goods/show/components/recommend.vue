@@ -1,6 +1,6 @@
 <template>
   <div class="info-right-learn info-right-box">
-    <div class="title">猜你想学</div>
+    <div class="title">{{ 'goods.show_page.components.recommends'|trans }}</div>
     <div class="learn-info">
       <div v-if="recommendGoods.length">
           <div class="learn-info-item learn clearfix" @click="onClickGoods(item)"  v-for="item in recommendGoods" :key="item.id">
@@ -25,14 +25,14 @@
               </div>
           </div>
           <div class="learn-more">
-              <a v-if="goods.type ==='course'" target="_blank" href="/course/explore">查看更多<i class="es-icon es-icon-chevronright"></i></a>
-              <a v-if="goods.type ==='classroom'" target="_blank" href="/classroom/explore">查看更多<i class="es-icon es-icon-chevronright"></i></a>
+              <a v-if="goods.type ==='course'" target="_blank" href="/course/explore">{{ 'goods.show_page.load_more'|trans }}<i class="es-icon es-icon-chevronright"></i></a>
+              <a v-if="goods.type ==='classroom'" target="_blank" href="/classroom/explore">{{ 'goods.show_page.load_more'|trans }}<i class="es-icon es-icon-chevronright"></i></a>
           </div>
       </div>
           <div v-else style="margin-left: auto;margin-top:50%;text-align: center;min-height: 200px;" @click="onClickGotoSchool">
               <a href="/">
                   <img style="" src="/static-dist/app/img/goods/goto-school.png" srcset="/static-dist/app/img/goods/goto-school.png 1x, /static-dist/app/img/goods/goto-school@2x.png 2x" alt="">
-                  <p style="color: #999999;">前往网校</p>
+                  <p style="color: #999999;">{{ 'goods.show_page.goto_school'|trans }}</p>
               </a>
           </div>
     </div>

@@ -1705,3 +1705,9 @@ goods.show_page.tab.catalogue: 学习目录
 goods.show_page.tab.reviews: 学员评价
 goods.show_page.tab.reviews_empty_tips: 暂无评价哦~
 goods.show_page.tab.summary_empty_tips: 暂无简介哦～
+goods.show_page.authentication_certificate: 认证证书
+site.favorited: 已收藏
+site.favorite: 收藏
+goods.show_page.components.recommends: 猜你想学
+goods.show_page.load_more: 查看更多
+goods.show_page.goto_school: 前往网校

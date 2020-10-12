@@ -1752,3 +1752,9 @@ goods.show_page.tab.catalogue: Learn Catalogue
 goods.show_page.tab.reviews: Reviews
 goods.show_page.tab.reviews_empty_tips: No Reviews
 goods.show_page.tab.summary_empty_tips: No Summary
+goods.show_page.authentication_certificate: Authentication Certificate
+site.favorited: Favorited
+site.favorite: Favorite
+goods.show_page.components.recommends: Recommends Goods
+goods.show_page.load_more: Load more
+goods.show_page.goto_school: Goto homepage

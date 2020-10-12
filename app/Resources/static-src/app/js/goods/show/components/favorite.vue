@@ -1,9 +1,9 @@
 <template>
     <span v-if="isFavorite" @click="onFavorite" style="color: #FF7E56;" class="detail-hover-span">
-      <i class="es-icon es-icon-favorite mrs" style="color: #FF7E56;"></i>已收藏
+      <i class="es-icon es-icon-favorite mrs" style="color: #FF7E56;"></i>{{ 'site.favorited'|trans }}
     </span>
     <span v-else @click="onFavorite" class="detail-hover-span">
-      <i class="es-icon es-icon-favoriteoutline mrs"></i>收藏
+      <i class="es-icon es-icon-favoriteoutline mrs"></i>{{ 'site.favorite'|trans }}
     </span>
 </template>
 
