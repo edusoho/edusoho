@@ -9,11 +9,11 @@
                 <div v-if="isFixed" class="fixed">
                     <div class="cd-container clearfix">
                         <ul class="info-left__nav pull-left">
-                            <li :class="howActive == 1 ? 'active' : ''"><a href="javascript:;" @click="clickType(1)">商品介绍</a>
+                            <li :class="howActive == 1 ? 'active' : ''"><a href="javascript:;" @click="clickType(1)">{{ 'goods.show_page.tab.intro'|trans }}</a>
                             </li>
-                            <li :class="howActive == 2 ? 'active' : ''"><a href="javascript:;" @click="clickType(2)">学习目录</a>
+                            <li :class="howActive == 2 ? 'active' : ''"><a href="javascript:;" @click="clickType(2)">{{ 'goods.show_page.tab.catalogue'|trans }}</a>
                             </li>
-                            <li :class="howActive == 3 ? 'active' : ''"><a href="javascript:;" @click="clickType(3)">学员评价</a>
+                            <li :class="howActive == 3 ? 'active' : ''"><a href="javascript:;" @click="clickType(3)">{{ 'goods.show_page.tab.reviews'|trans }}</a>
                             </li>
                         </ul>
                         <div class="buy__btn pull-right">
@@ -24,36 +24,36 @@
 
                 <ul class="info-left__nav" ref="infoLeftNav">
                     <li :class="howActive == 1 ? 'active' : ''">
-                        <a href="javascript:;" @click="clickType(1)">商品介绍</a>
+                        <a href="javascript:;" @click="clickType(1)">{{ 'goods.show_page.tab.intro'|trans }}</a>
                     </li>
                     <li :class="howActive == 2 ? 'active' : ''">
-                        <a href="javascript:;" @click="clickType(2)">学习目录</a>
+                        <a href="javascript:;" @click="clickType(2)">{{ 'goods.show_page.tab.catalogue'|trans }}</a>
                     </li>
                     <li :class="howActive == 3 ? 'active' : ''">
-                        <a href="javascript:;" @click="clickType(3)">学员评价</a>
+                        <a href="javascript:;" @click="clickType(3)">{{ 'goods.show_page.tab.reviews'|trans }}</a>
                     </li>
                 </ul>
 
                 <div class="info-left__content">
                     <div id="info-left-1" class="content-item js-content-item">
-                        <h3 class="content-item__title">商品介绍</h3>
+                        <h3 class="content-item__title">{{ 'goods.show_page.tab.intro'|trans }}</h3>
                         <div v-html="summaryHtml" class="description-content"
                              style="padding-left: 14px; padding-top: 10px;"></div>
                     </div>
 
                     <div v-if="goods.product.targetType === 'course'" id="info-left-2"
                          class="content-item js-content-item">
-                        <h3 class="content-item__title">学习目录</h3>
+                        <h3 class="content-item__title">{{ 'goods.show_page.tab.catalogue'|trans }}</h3>
                         <course-tasks :sku="currentSku" :i18n="i18n" :activity-metas="activityMetas"></course-tasks>
                     </div>
                     <div v-if="goods.product.targetType === 'classroom'" id="info-left-2"
                          class="content-item js-content-item">
-                        <h3 class="content-item__title">学习目录</h3>
+                        <h3 class="content-item__title">{{ 'goods.show_page.tab.catalogue'|trans }}</h3>
                         <classroom-courses :classroomCourses="componentsData.classroomCourses"></classroom-courses>
                     </div>
 
                     <div id="info-left-3" class="info-left-reviews content-item js-content-item reviews">
-                        <h3 class="content-item__title">学员评价</h3>
+                        <h3 class="content-item__title">{{ 'goods.show_page.tab.reviews'|trans }}</h3>
                         <reviews :can-create="isUserLogin && goods.isMember" :can-operate="goods.canManage" :target-type="'goods'"
                                  :current-user-id="currentUserId"
                                  :target-id="goods.id"
@@ -61,7 +61,7 @@
                         >
                         </reviews>
                         <div v-if="goodsSetting.show_review == 0" class="description-content"
-                             style="padding-left: 14px; padding-top: 10px;">暂无评价</div>
+                             style="padding-left: 14px; padding-top: 10px;">{{ 'goods.show_page.tab.reviews_empty_tips'|trans }}</div>
                     </div>
                 </div>
             </div>
@@ -160,7 +160,7 @@
         },
         computed: {
             summaryHtml() {
-                if (!this.goods.summary) return '暂无简介哦～';
+                if (!this.goods.summary) return Translator.trans('goods.show_page.tab.summary_empty_tips');
                 return this.goods.summary;
             }
         },

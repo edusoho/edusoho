@@ -2,6 +2,11 @@ import Goods from './Goods';
 
 Vue.config.productionTip = false;
 
+Vue.filter('trans', function (value, params) {
+  if (!value) return '';
+  return Translator.trans(value, params);
+});
+
 new Vue({
   render: createElement => createElement(Goods,{
     props: {
@@ -18,6 +23,7 @@ new Vue({
     },
   })
 }).$mount('#show-product-page');
+
 
 function _toJson(str) {
   let json = {};
