@@ -103,6 +103,7 @@
           :goods="goods"
           :currentSku="currentSku"
           :is-favorite="goods.isFavorite"
+          @update-data="updateFavorite"
         />
 
         <!-- 回到顶部 -->
@@ -276,6 +277,9 @@ export default {
           this.active = 0;
         }
       }
+    },
+    updateFavorite(value) {
+      this.goods.isFavorite = value;
     },
   },
   created() {

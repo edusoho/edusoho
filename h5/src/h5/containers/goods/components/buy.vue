@@ -141,7 +141,7 @@ export default {
           targetId: this.$route.params.id,
         },
       }).then(res => {
-        console.log(res);
+        // console.log(res);
       });
     },
     // 移除收藏
@@ -152,16 +152,16 @@ export default {
           targetId: this.$route.params.id,
         },
       }).then(res => {
-        console.log(res);
+        // console.log(res);
       });
     },
     onFavorite() {
       if (this.isFavorite) {
-        this.isFavorite = false;
         this.removeFavorite();
+        this.$emit('update-data', false);
       } else {
-        this.isFavorite = true;
         this.addFavorite();
+        this.$emit('update-data', true);
       }
     },
     getOrder() {
