@@ -6,6 +6,8 @@
                    v-bind:enable-org="enableOrg"
                    v-bind:cover="cover"
                    v-bind:cover-crop-url="coverCropUrl"
+                   v-bind:image-upload-url="imageUploadUrl"
+                   v-bind:flash-upload-url="flashUploadUrl"
         ></base-info>
         <marketing-setting ref="marketing"
                            v-bind:classroom="classroom"
