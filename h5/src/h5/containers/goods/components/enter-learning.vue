@@ -6,7 +6,7 @@
       </div>
       <div class="enter-learning-container__text">
         <span class="content">
-          {{ qrInfo.title }}
+          {{ qrTitle }}
           <span class="hot">Hot</span>
         </span>
       </div>
@@ -36,6 +36,13 @@ export default {
           content: this.qrInfo.content || '',
         },
       });
+    },
+  },
+  computed: {
+    qrTitle() {
+      return this.qrInfo.title.slice(0, 10).length == 10
+        ? this.qrInfo.title.slice(0, 10) + '...'
+        : this.qrInfo.title.slice(0, 10);
     },
   },
 };
