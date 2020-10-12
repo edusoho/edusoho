@@ -123,11 +123,6 @@ export default {
       })
       .catch(err => {
         Toast.fail(err.message);
-        setTimeout(() => {
-          this.$router.push({
-            path: `/`,
-          });
-        }, 1500);
       });
   },
 };
