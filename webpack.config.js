@@ -72,6 +72,12 @@ module.exports = {
     },
     {
       name: 'element-ui',
+      ignore: [
+        'lib/**',
+        'packages/**',
+        'src/**',
+        'types/**'
+      ],
     },
     // 纯拷贝item-bank/lib/itemBank.umd.min.js
     {
