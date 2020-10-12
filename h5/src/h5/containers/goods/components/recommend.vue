@@ -56,7 +56,7 @@
           </div>
         </div>
       </template>
-      <div v-else>暂时还没有推荐课程哦...</div>
+      <div v-else>暂时还没有推荐商品哦...</div>
     </div>
   </div>
 </template>
