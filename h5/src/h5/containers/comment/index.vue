@@ -38,8 +38,9 @@ export default {
       ApiType: {
         course: 'getCourseReviews',
         classroom: 'getClassroomReviews',
-      },
-    };
+        item_bank_exercise: 'getBankReviews',
+      }
+    }
   },
   computed: {
     isClass() {
@@ -49,10 +50,9 @@ export default {
   created() {},
   methods: {
     onLoad() {
-      const id = this.$route.params.id;
-      const type = this.$route.query.type;
-      const ApiType = this.ApiType;
-
+      const id = this.$route.params.id
+      const type = this.$route.query.type
+      const ApiType = this.ApiType
       Api[ApiType[type]]({
         query: { id },
         params: {

@@ -112,6 +112,11 @@ export default [
     // 我的学习
     name: 'myStudyClasses',
     url: '/me/classrooms',
+    method: 'GET'
+  }, {
+    // 我的学习
+    name: 'myStudyBanks',
+    url: '/me/item_bank_exercises',
     method: 'GET',
   },
   {

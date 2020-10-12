@@ -1,16 +1,17 @@
 <template>
   <div class="e-tree-select">
     <div class="e-tree-select__items">
-      <div
-        v-for="(item, index) in selectItems"
-        v-if="item.data"
-        :class="{ active: selectedIndex === index && isActive }"
-        class="e-tree-select__item"
-        @click="toggle(item, index)"
-        :key="index"
-      >
-        {{ selectedText(item.data, index) }}
-      </div>
+      <template v-for="(item, index) in selectItems">
+        <div
+          v-if="item.data"
+          :class="{ active: selectedIndex === index && isActive }"
+          class="e-tree-select__item"
+          @click="toggle(item, index)"
+          :key="index"
+        >
+          {{ selectedText(item.data, index) }}
+        </div>
+      </template>
     </div>
 
     <selectMenu

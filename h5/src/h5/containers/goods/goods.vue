@@ -13,6 +13,10 @@
         />
         <detail :goods="goods" :currentSku="currentSku" />
         <specs :goods="goods" :currentSku="currentSku" @changeSku="changeSku" />
+        <certificate
+          v-if="currentSku.hasCertificate"
+          :selectedPlanId="$route.query.targetId"
+        />
         <enter-learning
           v-if="Object.keys(componentsInfo.mpQrCode).length"
           :qr-info="componentsInfo.mpQrCode"
@@ -113,6 +117,7 @@
 import Discount from './components/discount';
 import Detail from './components/detail';
 import Specs from './components/specs';
+import Certificate from './components/certificate';
 import EnterLearning from './components/enter-learning';
 
 import Teacher from './components/teacher';
@@ -122,6 +127,7 @@ import Buy from './components/buy';
 import BackToTop from './components/back-to-top';
 import AfterjoinDirectory from './components/afterjoin-directory';
 import ClassroomCourses from './components/classroom-courses';
+import initShare from '@/utils/weiixn-share-sdk';
 
 import Api from '@/api';
 import { Toast } from 'vant';
@@ -152,6 +158,7 @@ export default {
     BackToTop, // 回到顶部
     AfterjoinDirectory,
     ClassroomCourses,
+    Certificate,
     EnterLearning,
   },
   computed: {
@@ -180,11 +187,27 @@ export default {
 
           this.isLoading = false;
           document.documentElement.scrollTop = 0;
+          const message = {
+            title: this.goods.title,
+            link: window.location.href.split('#')[0] + '#' + this.$route.path,
+            imgUrl: this.goods.images.small,
+          };
+          console.log(message);
+          this.share(message);
         })
         .catch(err => {
           Toast.fail(err.message);
         });
       this.getGoodsCourseComponents();
+    },
+    share(message) {
+      const shareMessage = {
+        title: message.title || '',
+        link: message.link,
+        imgUrl: message.imgUrl,
+        desc: '发现一个好内容，分享给你~',
+      };
+      initShare({ ...shareMessage });
     },
     getGoodsCourseComponents() {
       Api.getGoodsCourseComponents({

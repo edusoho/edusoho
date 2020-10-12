@@ -4,13 +4,17 @@ const state = {
   searchClassRoomList: {
     selectedData: {},
     courseList: [],
-    paging: {},
+    paging: {}, // 班级加入后是否采集用户信息
   },
+  currentJoin: false,
 };
 
 const mutations = {
   [types.SET_CLASSROOMLIST](currentState, data) {
     currentState.searchClassRoomList = data;
+  },
+  [types.SET_CURRENT_JOIN_CLASS](currentState, payload) {
+    currentState.currentJoin = payload;
   },
 };
 

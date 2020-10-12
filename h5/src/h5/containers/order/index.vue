@@ -82,6 +82,35 @@
         <span class="gray-dark" v-html="getValidity" />
       </div>
     </div>
+    <!-- 报名信息填写 -->
+    <div
+      class="personal-info"
+      v-if="showCollectEntry"
+      @click="showUserInfoCollectForm"
+    >
+      {{ userInfoCollectForm.formTitle }}
+      <i class="iconfont icon-arrow-right"></i>
+    </div>
+    <!-- 个人信息表单填写 -->
+    <van-popup
+      v-model="isShowForm"
+      :overlay="false"
+      class="e-popup full-height-popup coupon-popup mt0"
+      position="bottom"
+    >
+      <van-nav-bar
+        :left-arrow="true"
+        :title="this.userInfoCollectForm.formTitle"
+        class="nav-bar"
+        @click-left="hideUserInfoCollectForm"
+      />
+      <info-collection
+        :userInfoCollectForm="this.userInfoCollectForm"
+        :formRule="this.userInfoCollectForm.items"
+        @submitForm="submitForm"
+      ></info-collection>
+    </van-popup>
+
     <div class="payPage">
       <e-loading v-if="isLoading" />
       <div class="payPage__order">
@@ -137,7 +166,7 @@
       </div>
       <div
         :class="['order-footer__btn', { disabled: !validPayWay }]"
-        @click="handleSubmit"
+        @click="shouldCollectUserInfo"
       >
         去支付
       </div>
@@ -150,12 +179,15 @@ import coupon from '&/components/e-coupon/e-coupon.vue';
 import eCourse from '&/components/e-course/e-course.vue';
 import Api from '@/api';
 import { Toast } from 'vant';
-
+import collectUserInfoMixins from '@/mixins/collectUserInfo/index.js';
+import infoCollection from '@/components/info-collection.vue';
 export default {
   components: {
     eCourse,
     coupon,
+    infoCollection,
   },
+  mixins: [collectUserInfoMixins],
   data() {
     return {
       course: {
@@ -174,7 +206,6 @@ export default {
       targetUnit: this.$route.params.unit,
       targetNum: this.$route.params.num,
       vipOrderType: this.$route.params.type,
-
       detail: {},
       // WechatPay_JsH5--微信内支付 WechatPay_H5--微信wap支付
       payWay: '',
@@ -182,6 +213,8 @@ export default {
       paySettings: {},
       inWechat: this.isWeixinBrowser(),
       timeoutId: -1,
+      isShowForm: false,
+      hasCollectUserInfo: false,
     };
   },
   created() {
@@ -220,6 +253,7 @@ export default {
             this.course.totalPrice * this.itemData.rate * 0.1,
         ).toFixed(2);
       }
+      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       this.couponNumber = money;
       return money;
     },
@@ -236,10 +270,24 @@ export default {
       return this.$route.query.expiryScope || '长期有效';
     },
     validPayWay() {
+      if (this.IsCollectUserInfoType && !this.isReqUserInfoCollect) {
+        return false;
+      }
+      if (this.needCollectUserInfo && !this.isRequserInfoCollectForm) {
+        return false;
+      }
       return (
         this.paySettings.wxpayEnabled ||
-        (this.paySettings.alipayEnabled && !this.inWechat)
+        (this.paySettings.alipayEnabled &&
+          !this.inWechat &&
+          this.userInfoCollect)
       );
+    },
+    IsCollectUserInfoType() {
+      return this.targetType === 'course' || this.targetType === 'classroom';
+    },
+    showCollectEntry() {
+      return Object.keys(this.userInfoCollectForm).length > 0;
     },
   },
   filters: {
@@ -254,32 +302,71 @@ export default {
     },
   },
   watch: {
-    $route(to, from) {
-      this.confirmOrder();
-    },
+    // $route(to, from) {
+    //   this.confirmOrder();
+    // },
   },
   beforeRouteLeave(to, from, next) {
     clearTimeout(this.timeoutId);
     next();
   },
   methods: {
+    shouldCollectUserInfo() {
+      if (
+        this.IsCollectUserInfoType &&
+        !this.hasCollectUserInfo &&
+        this.hasUserInfoCollectForm
+      ) {
+        Toast('请先提交信息后再提交订单');
+        // if (this.hasUserInfoCollectForm) {
+        //   Toast('请先提交信息后再提交订单');
+        // } else {
+        //   this.handleSubmit();
+        // }
+        return;
+      }
+      this.handleSubmit();
+    },
+    showUserInfoCollectForm() {
+      this.isShowForm = true;
+    },
+    hideUserInfoCollectForm() {
+      this.isShowForm = false;
+    },
+    getInfoCollection() {
+      Toast.loading({
+        duration: 0,
+        message: '加载中...',
+        forbidClick: true,
+      });
+      const paramsList = {
+        action: 'buy_before',
+        targetType: this.targetType,
+        targetId: this.targetId,
+      };
+      this.getInfoCollectionEvent(paramsList).then(res => {
+        if (Object.keys(res).length) {
+          this.needCollectUserInfo = true;
+          this.getInfoCollectionForm(res.id).then(() => {
+            Toast.clear();
+          });
+          return;
+        }
+        Toast.clear();
+      });
+    },
+    submitForm() {
+      this.hideUserInfoCollectForm();
+      this.hasCollectUserInfo = true;
+    },
     handleSubmit() {
       if (this.total == 0) {
-        // if(this.detail.sn){
-        //   this.handlePay();
-        //   return;
-        // }
         this.createOrder('free');
       } else {
         if (!this.validPayWay) {
           Toast.fail('无可用支付方式');
           return;
         }
-        // 从我的订单进来已经创建订单，直接去支付
-        // if(this.detail.sn){
-        //   this.handlePay();
-        //   return;
-        // }
         this.createOrder('pay');
       }
     },
@@ -342,10 +429,16 @@ export default {
           const coupons = res.availableCoupons;
           this.course = res;
           this.itemData = coupons.length > 0 ? coupons[0] : null;
+          if (this.IsCollectUserInfoType) {
+            this.getInfoCollection();
+          }
         })
         .catch(err => {
-          // 购买后返回会造成重复下单报错
-          this.$router.go(-1);
+          this.$toast(err.message);
+          setTimeout(() => {
+            // 购买后返回会造成重复下单报错
+            this.$router.go(-1);
+          }, 2000);
         });
     },
     // 0元下单后逻辑跳转
@@ -412,7 +505,6 @@ export default {
           if (payment == 'free') {
             that.routerChange();
           } else if (payment == 'pay') {
-            console.log(res);
             // 塞入付费信息
             this.detail = Object.assign({}, res);
             // 去付钱
@@ -436,17 +528,16 @@ export default {
       })
         .then(res => {
           if (res.isPaid) {
-            if (this.wechatSwitch) {
-              this.$router.replace({
-                path: '/pay_success',
-                query: {
-                  paidUrl: window.location.origin + res.paidSuccessUrlH5,
-                },
-              });
-              return;
-            }
-            window.location.href =
-              window.location.origin + res.paidSuccessUrlH5;
+            // if (this.wechatSwitch) {
+            //   this.$router.replace({
+            //     path: '/pay_success',
+            //     query: {
+            //       paidUrl: window.location.origin + res.paidSuccessUrlH5,
+            //     },
+            //   });
+            //   return;
+            // }
+            window.location.href = res.paidSuccessUrlH5;
             return;
           }
           this.timeoutId = setTimeout(() => {
@@ -465,9 +556,14 @@ export default {
       if (isWxPay) {
         window.location.href =
           `${window.location.origin}/pay/center/wxpay_h5?pay_amount=` +
-          `${this.detail.pay_amount}&title=${this.detail.title}&sn=${this.detail.sn}`;
+          `${this.detail.pay_amount}&title=${this.detail.title}&sn=${this.detail.sn}&targetType=${this.targetType}&targetId=${this.targetId}&payWay=${this.payWay}`;
         return;
       }
+
+      const returnUrl =
+        window.location.origin +
+        window.location.pathname +
+        `#/pay_center?targetType=${this.targetType}&targetId=${this.targetId}&payWay=${this.payWay}`;
 
       Api.createTrade({
         data: {
@@ -475,6 +571,7 @@ export default {
           type: 'purchase',
           orderSn: this.detail.sn,
           app_pay: 'Y',
+          success_url: returnUrl,
         },
       })
         .then(res => {

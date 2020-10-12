@@ -58,7 +58,6 @@
 
 <script>
 import Api from '@/api';
-import axios from 'axios';
 import { mapState } from 'vuex';
 import { Toast } from 'vant';
 
@@ -73,10 +72,11 @@ export default {
       inWechat: this.isWeixinBrowser(),
       targetType: this.$route.query.targetType,
       timeoutId: -1,
+      isLoading: true,
     };
   },
   computed: {
-    ...mapState(['wechatSwitch', 'isLoading']),
+    ...mapState(['wechatSwitch']),
     validPayWay() {
       return (
         this.paySettings.wxpayEnabled ||
@@ -85,6 +85,7 @@ export default {
     },
   },
   async created() {
+    this.isLoading = true;
     this.paySettings = await Api.getSettings({
       query: {
         type: 'payment',
@@ -97,7 +98,7 @@ export default {
     } else if (this.paySettings.wxpayEnabled) {
       this.payWay = 'WechatPay_H5';
     }
-    const { source, id, sn, targetId } = this.$route.query;
+    const { sn, targetId } = this.$route.query;
     // 从我的订单入口进入
     Api.getOrderDetail({
       query: {
@@ -122,6 +123,7 @@ export default {
           });
         }
         this.detail = Object.assign({}, res);
+        this.isLoading = false;
       })
       .catch(err => {
         Toast.fail(err.message);
@@ -134,21 +136,25 @@ export default {
   methods: {
     handlePay() {
       if (!this.validPayWay) return;
-
       const isWxPay = this.payWay === 'WechatPay_H5' && this.inWechat;
       if (isWxPay) {
         window.location.href =
           `${window.location.origin}/pay/center/wxpay_h5?pay_amount=` +
-          `${this.detail.pay_amount}&title=${this.detail.title}&sn=${this.detail.sn}`;
+          `${this.detail.pay_amount}&title=${this.detail.title}&sn=${this.detail.sn}&targetType=${this.targetType}&targetId=${this.targetId}`;
         return;
       }
-
+      const returnUrl =
+        window.location.origin +
+        window.location.pathname +
+        window.location.hash +
+        `pay_center?targetType=${this.targetType}&targetId=${this.targetId}`;
       Api.createTrade({
         data: {
           gateway: this.payWay,
           type: 'purchase',
           orderSn: this.detail.sn,
           app_pay: 'Y',
+          success_url: returnUrl,
         },
       })
         .then(res => {
@@ -176,17 +182,16 @@ export default {
       })
         .then(res => {
           if (res.isPaid) {
-            if (this.wechatSwitch) {
-              this.$router.replace({
-                path: '/pay_success',
-                query: {
-                  paidUrl: window.location.origin + res.paidSuccessUrlH5,
-                },
-              });
-              return;
-            }
-            window.location.href =
-              window.location.origin + res.paidSuccessUrlH5;
+            // if (this.wechatSwitch) {
+            //   this.$router.replace({
+            //     path: '/pay_success',
+            //     query: {
+            //       paidUrl: window.location.origin + res.paidSuccessUrlH5,
+            //     },
+            //   });
+            //   return;
+            // }
+            window.location.href = res.paidSuccessUrlH5;
             return;
           }
           this.timeoutId = setTimeout(() => {

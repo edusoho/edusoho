@@ -143,6 +143,17 @@ const routes = [
       ),
   },
   {
+    path: '/itembank/explore',
+    name: 'more_itembank',
+    meta: {
+      title: '所有题库',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "more" */ '@/containers/more/itembank/index.vue'
+      ),
+  },
+  {
     path: '/all/explore',
     name: 'all_explore',
     redirect: {
@@ -372,6 +383,24 @@ const routes = [
     },
     component: () =>
       import(/* webpackChunkName: "pay" */ '@/containers/pay/success.vue'),
+  },
+  {
+    path: '/pay_center',
+    name: 'pay_center',
+    meta: {
+      title: '支付成功中转页',
+    },
+    component: () =>
+      import(/* webpackChunkName: "pay" */ '@/containers/pay/center.vue'),
+  },
+  {
+    path: '/pay_collectInfo',
+    name: 'pay_collectInfo',
+    meta: {
+      title: '信息填写',
+    },
+    component: () =>
+      import(/* webpackChunkName: "pay" */ '@/containers/pay/collectInfo.vue'),
   },
   {
     path: '/preview',
@@ -668,6 +697,127 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "goods" */ '@/containers/goods/reviews.vue'),
   },
+  {
+    path: '/my/certificate',
+    name: 'my_certificate',
+    meta: {
+      title: '我的证书',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "certificate" */ '@/containers/certificate/my-certificate/index.vue'
+      ),
+  },
+  {
+    path: '/certificate_records/:id',
+    name: 'certificate_records',
+    meta: {
+      title: '高级产品经理证书',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "certificate" */ '@/containers/certificate/my-certificate/certificate-detail/index.vue'
+      ),
+  },
+  {
+    path: '/certificate/list/:id',
+    name: 'certificate_list',
+    meta: {
+      title: '可获得证书',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "certificate" */ '@/containers/certificate/certificate/certificate-list.vue'
+      ),
+  },
+  {
+    path: '/certificate/detail/:id',
+    name: 'certificate_detail',
+    meta: {
+      title: '高级产品经理证书',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "certificate" */ '@/containers/certificate/certificate/certificate-detail.vue'
+      ),
+  },
+  {
+    path: '/webview/certificate/detail/:id',
+    name: 'webview_certificate_detail',
+    meta: {
+      hideTitle: true,
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "certificate" */ '@/containers/webview/certificate/certificate-detail.vue'
+      ),
+  },
+  {
+    path: '/brushExercise',
+    name: 'brush_exercise',
+    meta: {
+      title: '刷题',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "brush" */ '@/containers/brush-exercise/index.vue'
+      ),
+  },
+  {
+    path: '/brushDo',
+    name: 'brush_do',
+    meta: {
+      title: '刷题',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "brush" */ '@/containers/brush-exercise/lessonTask/do.vue'
+      ),
+  },
+  {
+    path: '/brushReport/:answerRecordId',
+    name: 'brush_report',
+    meta: {
+      title: '查看解析',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "brush" */ '@/containers/brush-exercise/lessonTask/report.vue'
+      ),
+  },
+  {
+    path: '/brushResult/:answerRecordId',
+    name: 'brush_result',
+    meta: {
+      title: '答题结果',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "brush" */ '@/containers/brush-exercise/lessonTask/result.vue'
+      ),
+  },
+  {
+    path: '/brushReview/:answerRecordId',
+    name: 'brush_review',
+    meta: {
+      title: '答题批阅',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "brush" */ '@/containers/brush-exercise/lessonTask/review.vue'
+      ),
+  },
+  {
+    path: '/item_bank_exercise/:id',
+    name: 'item_bank_exercise',
+    meta: {
+      title: '题库详情',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "brush-exercise" */ '@/containers/brush-exercise/index.vue'
+      ),
+  },
 ];
 
 // 页面刷新，store数据会被清掉，需对token、user重新赋值
@@ -785,9 +935,11 @@ router.beforeEach((to, from, next) => {
     setWeChatSwitch();
   }
 
-  store.dispatch('setCouponSwitch').then(res => {
-    console.log(res);
-  });
+  if (store.state.couponSwitch === null) {
+    store.dispatch('setCouponSwitch').then(res => {
+      console.log(res);
+    });
+  }
 });
 
 // 异步加载配置

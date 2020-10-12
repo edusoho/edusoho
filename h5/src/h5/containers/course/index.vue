@@ -11,10 +11,10 @@ import joinBefore from './join-before.vue';
 import { mapState, mapActions, mapMutations } from 'vuex';
 import * as types from '@/store/mutation-types';
 import { Toast } from 'vant';
-import { debug } from 'util';
 
 export default {
   components: {},
+  inject: ['reload'],
   data() {
     return {
       currentComp: '',

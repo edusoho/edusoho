@@ -2,11 +2,11 @@
   <div class="info-buy">
     <div class="info-buy__collection" @click="onFavorite">
       <template v-if="isFavorite">
-        <i class="iconfont icon-wode" style="color: #FF7E56;"></i>
+        <i class="iconfont icon-aixin1" style="color: #FF7E56;"></i>
         <span style="color: #FF7E56;">已收藏</span>
       </template>
       <template v-else>
-        <i class="iconfont icon-wode"></i>
+        <i class="iconfont icon-aixin"></i>
         <span>收藏</span>
       </template>
     </div>

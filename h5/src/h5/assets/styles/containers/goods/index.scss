@@ -72,6 +72,7 @@
 		}
 	}
 }
+
 .goods-qr {
 	position: relative;
 	bottom: vw(46);
@@ -133,5 +134,17 @@
 		font-size: vw(16);
 		background-color: #03c777;
 		border-radius: vw(4);
+	}
+}
+
+.goods-certificate {
+	margin-top: vw(8);
+	padding: vw(14);
+	line-height: vw(20);
+	background-color: #fff;
+
+	i {
+		position: relative;
+		top: vw(2);
 	}
 }
