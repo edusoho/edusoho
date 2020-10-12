@@ -2505,7 +2505,7 @@ classroom.manage.reviews.empty: 该%name%尚无评价
 classroom.manage.set_info: 基本信息
 classroom.manage.set_info.name: 名称
 classroom.manage.set_info.introduction: 简介
-classroom.manage.set_info.introduction.help_block: 为正常使用IFrame，请在【管理后台】-【系统】-【站点设置】-【安全】-【IFrame白名单】中进行设置
+classroom.manage.set_info.introduction.help_block: 为正常使用IFrame，请在【管理后台】-【系统】-【安全设置】-【白名单域名】中进行设置
 classroom.manage.set_info.tags: 标签
 classroom.manage.set_info.tags.explain: 用于按标签检索班级等，由网校管理员后台统一管理
 classroom.manage.set_info.tags.help_block: 用于按标签检索班级等，由网校管理员后台统一管理
@@ -2647,7 +2647,7 @@ classroom.homework_check_tips: 当前用户不是本班级教师或助教，没�
 classroom.yesterday: 昨天
 classroom.today: 今天
 classroom.name_label: 名称
-classroom.about_tips: 为正常使用IFrame，请在【管理后台】-【系统】-【站点设置】-【安全】-【IFrame白名单】中进行设置
+classroom.about_tips: 为正常使用IFrame，请在【管理后台】-【系统】-【安全设置】-【白名单域名】中进行设置
 classroom.tag_label: 标签
 classroom.tag_tips: 用于按标签检索班级等，由网校管理员后台统一管理
 classroom.show_label: >
@@ -4233,7 +4233,7 @@ my.teaching.open_course.Basic_Info.tags.explain: 将会应用于按标签搜索�
 my.teaching.open_course.Basic_Info.tags.help_block: 将会应用于按标签搜索课程、相关课程的提取等
 my.teaching.open_course.Basic_Info.category: 分类
 my.teaching.open_course.Basic_Info.about: 课程简介
-my.teaching.open_course.Basic_Info.about.help_block: 为正常使用IFrame，请在【管理后台】-【系统】-【安全设置】-【IFrame白名单】中进行设置
+my.teaching.open_course.Basic_Info.about.help_block: 为正常使用IFrame，请在【管理后台】-【系统】-【安全设置】-【白名单域名】中进行设置
 my.teaching.open_course.course_picture.title: 课程图片
 my.teaching.open_course.course_picture.title.help_block: >
   请上传jpg, gif, png格式的图片, 建议图片尺寸为 480×270px。<br>建议图片大小不超过
@@ -10815,7 +10815,7 @@ mobile.task.finish_tips.video.time: 至少学习 %finishData% 分钟
 classroom.joining_date.expired_tips: 班级已过有效期！
 
 # 富文本
-editor.iframe_tips: 为正常使用IFrame，请在【管理后台】-【系统】-【站点设置】-【安全】-【IFrame白名单】中进行设置
+editor.iframe_tips: 为正常使用IFrame，请在【管理后台】-【系统】-【安全设置】-【白名单域名】中进行设置
 
 #coupon
 coupon.usage_detail_title: 优惠券使用详情
