@@ -196,6 +196,8 @@ const courseListData = (data, listObj, uiStyle = 'old', platform = 'h5') => {
       if (listObj.typeList === 'classroom_list') {
         return {
           id: data.id,
+          goodsId: data.goodsId,
+          specsId: data.specsId,
           hasCertificate: data.hasCertificate,
           targetId: data.targetId,
           imgSrc: {
