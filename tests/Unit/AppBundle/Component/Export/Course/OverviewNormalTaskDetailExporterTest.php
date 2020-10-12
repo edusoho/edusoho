@@ -111,10 +111,10 @@ class OverviewNormalTaskDetailExporterTest extends BaseTestCase
     {
         self::$appKernel->getContainer()->set('biz', $this->getBiz());
         $this->mockBiz(
-            'Course:MemberService',
+            'Task:TaskResultService',
             [
                 [
-                    'functionName' => 'countMembers',
+                    'functionName' => 'countTaskResults',
                     'returnValue' => 51,
                 ],
             ]

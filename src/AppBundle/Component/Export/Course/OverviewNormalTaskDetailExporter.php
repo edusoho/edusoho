@@ -4,6 +4,7 @@ namespace AppBundle\Component\Export\Course;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Component\Export\Exporter;
+use Biz\Task\Service\TaskResultService;
 
 class OverviewNormalTaskDetailExporter extends Exporter
 {
@@ -23,7 +24,7 @@ class OverviewNormalTaskDetailExporter extends Exporter
 
     public function getCount()
     {
-        return $this->getCourseMemberService()->countMembers($this->conditions);
+        return $this->getTaskResultService()->countTaskResults($this->conditions);
     }
 
     public function getTitles()
