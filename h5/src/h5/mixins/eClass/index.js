@@ -91,7 +91,7 @@ export default {
     },
   },
   methods: {
-    onClick(e) {
+    onClick(hasCertificate, e) {
       const isOrder = this.type === 'order';
       const id = this.course.id || this.course.targetId;
       if (!this.feedback) {
@@ -108,22 +108,24 @@ export default {
         location.href = this.order.targetUrl;
         return;
       }
-      this.toMore(this.typeList, id);
+      this.toMore(hasCertificate, this.typeList, id);
     },
-    toMore(type, id) {
+    toMore(hasCertificate, type, id) {
       let path = '';
-      let params = {};
+      let params = {
+        hasCertificate,
+      };
       switch (type) {
         case 'course_list':
           path = `/goods/${this.course.goodsId}/show`;
-          params = {
+          params = Object.assign(params, {
             targetId: id,
-          };
+          });
 
           break;
-        // case 'item_bank_exercise':
-        //   path = `/course/${id}`;
-        //   break;
+        case 'item_bank_exercise':
+          path = `/item_bank_exercise/${id}`;
+          break;
         case 'classroom_list':
           path = `/goods/${this.course.goodsId}/show`;
           break;
@@ -137,7 +139,11 @@ export default {
       switch (type) {
         case 'course_list':
           action = 'kuozhi_course';
-          data = { courseId: id };
+          data = {
+            courseId: id,
+            goodsId: this.course.goodsId,
+            specsId: this.course.specsId,
+          };
           break;
         case 'item_bank_exercise':
           action = 'kuozhi_itembank';
@@ -145,7 +151,11 @@ export default {
           break;
         case 'classroom_list':
           action = 'kuozhi_classroom';
-          data = { classroomId: id };
+          data = {
+            classroomId: id,
+            goodsId: this.course.goodsId,
+            specsId: this.course.specsId,
+          };
           break;
       }
       // 调用app接口

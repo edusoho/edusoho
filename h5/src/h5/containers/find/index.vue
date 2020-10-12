@@ -6,8 +6,9 @@
       <e-swipe v-if="part.type === 'slide_show'" :slides="part.data" />
       <e-course-list
         v-if="
-          ['classroom_list', 'course_list'].includes(part.type) &&
-            part.data.items.length
+          ['classroom_list', 'course_list', 'item_bank_exercise'].includes(
+            part.type,
+          ) && part.data.items.length
         "
         :course-list="part.data"
         :type-list="part.type"

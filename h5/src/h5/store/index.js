@@ -6,6 +6,7 @@ import * as actions from './actions';
 import mutations from './mutations';
 import course from './modules/course';
 import classroom from './modules/classroom';
+import ItemBank from './modules/item-bank-exercise';
 
 Vue.use(Vuex);
 
@@ -20,7 +21,7 @@ const state = {
   vipSettings: {},
   wechatSwitch: false,
   vipSwitch: false,
-  couponSwitch: 0,
+  couponSwitch: null,
   socialBinded: {
     wx: true,
   },
@@ -35,5 +36,6 @@ export default new Vuex.Store({
   modules: {
     course,
     classroom,
+    ItemBank,
   },
 });

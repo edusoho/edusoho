@@ -17,6 +17,12 @@
         <i class="van-icon van-icon-arrow pull-right" />
       </div>
     </a>
+    <router-link :to="{ name: 'my_certificate' }">
+      <div class="coupon-code-entrance">
+        我的证书
+        <i class="van-icon van-icon-arrow pull-right" />
+      </div>
+    </router-link>
     <van-tabs v-model="activeIndex" class="after-tabs e-learn">
       <van-tab v-for="(item, index) in tabs" :title="item" :key="index" />
     </van-tabs>

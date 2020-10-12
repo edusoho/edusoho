@@ -1,5 +1,5 @@
 <template>
-  <div class="e-row-class" @click="onClick">
+  <div class="e-row-class" @click="onClick(course.hasCertificate, $event)">
     <div class="row-class-left">
       <img v-lazy="course.imgSrc.url" :class="course.imgSrc.className" />
       <div v-if="discountNum" class="row-class-left__discount">
@@ -18,7 +18,10 @@
     </div>
 
     <div class="row-class-right">
-      <div class="row-class-right__top text-overflow">{{ course.header }}</div>
+      <div class="row-class-right__top text-overflow">
+        <span class="certificate-icon" v-if="course.hasCertificate">证</span
+        >{{ course.header }}
+      </div>
       <div class="row-class-right__center text-overflow">
         <div v-if="course.middle.value" v-html="course.middle.html" />
       </div>

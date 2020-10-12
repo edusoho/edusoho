@@ -15,6 +15,12 @@ export default [
     // 获取班级评论
     name: 'getClassroomReviews',
     url: '/classrooms/{id}/reviews',
+    method: 'GET'
+  },
+  {
+    // 获取题库评论
+    name: 'getBankReviews',
+    url: '/review',
     method: 'GET',
   },
   {

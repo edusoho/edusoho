@@ -47,13 +47,29 @@
         <review-list
           ref="review"
           :target-id="details.courseSet.id"
-          :reviews="details.reviews"
+          :reviews="courseSettings.show_review == 1 ? details.reviews : []"
           title="学员评价"
           defaul-value="暂无评价"
           type="course"
         />
       </div>
     </div>
+
+    <!-- 个人信息表单填写 -->
+    <van-action-sheet
+      v-model="isShowForm"
+      class="minHeight50"
+      :title="userInfoCollectForm.formTitle"
+      :close-on-click-overlay="false"
+      :safe-area-inset-bottom="true"
+      @cancel="onCancelForm"
+    >
+      <info-collection
+        :userInfoCollectForm="userInfoCollectForm"
+        :formRule="userInfoCollectForm.items"
+        @submitForm="onCancelForm"
+      ></info-collection>
+    </van-action-sheet>
   </div>
 </template>
 <script>
@@ -63,9 +79,12 @@ import DetailHead from './detail/head';
 import DetailPlan from './detail/plan';
 import Teacher from './detail/teacher';
 import afterjoinDirectory from './detail/afterjoin-directory';
-import { mapState } from 'vuex';
+import collectUserInfo from '@/mixins/collectUserInfo';
+import { mapState, mapMutations } from 'vuex';
 import { Dialog, Toast } from 'vant';
+import infoCollection from '@/components/info-collection.vue';
 import Api from '@/api';
+import * as types from '@/store/mutation-types.js';
 
 export default {
   inheritAttrs: true,
@@ -86,11 +105,20 @@ export default {
       offsetTop: '', // tab页距离顶部高度
       offsetHeight: '', // 元素自身的高度
       isFixed: false,
+      courseSettings: {},
+      isShowForm: false,
+      paramsList: {
+        action: 'buy_after',
+        targetType: 'course',
+        targetId: this.details.id,
+      },
     };
   },
+  mixins: [collectUserInfo],
   computed: {
     ...mapState('course', {
       selectedPlanId: state => state.selectedPlanId,
+      currentJoin: state => state.currentJoin,
     }),
     ...mapState(['user']),
     progress() {
@@ -109,6 +137,33 @@ export default {
     selectedPlanId: function(val, oldVal) {
       this.active = 1;
     },
+    currentJoin: {
+      handler(val, oldVal) {
+        if (val) {
+          Toast.loading({
+            duration: 0,
+            message: '加载中...',
+            forbidClick: true,
+          });
+          this.getInfoCollectionEvent(this.paramsList).then(res => {
+            if (Object.keys(res).length) {
+              this.userInfoCollect = res;
+              this.getInfoCollectionForm(res.id).then(res => {
+                this.isShowForm = true;
+                Toast.clear();
+              });
+              return;
+            }
+            Toast.clear();
+          });
+        }
+      },
+      // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法，如果设置了false，那么效果和上边例子一样
+      immediate: true,
+    },
+    $route(to, from) {
+      this.resetFrom();
+    },
   },
   mounted() {
     window.addEventListener('scroll', this.handleScroll);
@@ -124,19 +179,32 @@ export default {
   },
   async created() {
     this.showDialog();
+    this.courseSettings = await Api.getSettings({
+      query: {
+        type: 'course',
+      },
+    }).catch(err => {
+      console.error(err);
+    });
   },
   components: {
+    // eslint-disable-next-line vue/no-unused-components
     Directory,
     DetailHead,
     DetailPlan,
     Teacher,
     reviewList,
     afterjoinDirectory,
+    infoCollection,
   },
   destroyed() {
     window.removeEventListener('scroll', this.handleScroll);
   },
+
   methods: {
+    ...mapMutations('course', {
+      setCurrentJoin: types.SET_CURRENT_JOIN_COURSE,
+    }),
     showDialog() {
       if (!this.details.member) return;
 
@@ -242,11 +310,17 @@ export default {
         DOCUMENTHEIGHT - this.offsetTop > CLIENTHEIGHT
       ) {
         this.tabFixed = true;
+        // eslint-disable-next-line no-unused-expressions
         SWIPER ? SWIPER.classList.add('swiper-directory-fix') : null;
       } else {
         this.tabFixed = false;
+        // eslint-disable-next-line no-unused-expressions
         SWIPER ? SWIPER.classList.remove('swiper-directory-fix') : null;
       }
+    },
+    onCancelForm() {
+      this.setCurrentJoin(false);
+      this.isShowForm = false;
     },
   },
 };

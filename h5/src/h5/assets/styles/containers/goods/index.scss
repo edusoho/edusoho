@@ -205,3 +205,15 @@
 		border-radius: vw(4);
 	}
 }
+
+.goods-certificate {
+	margin-top: vw(8);
+	padding: vw(14);
+	line-height: vw(20);
+	background-color: #fff;
+
+	i {
+		position: relative;
+		top: vw(2);
+	}
+}
