@@ -3,7 +3,7 @@
     <div class="title">{{ 'goods.show_page.authentication_certificate'|trans }}</div>
     <div class="certificate-info" v-for="certificate in certificates" :key="certificate.id">
       <a href="#" data-target="#modal" data-toggle="modal" :data-url="`/certificate/${certificate.id}/detail`">
-        <img src="/static-dist/app/img/default_certificate.png" class="certificate-info__img" />
+        <img src="/static-dist/app/img/default_certificate1.png" class="certificate-info__img" />
 
         <p class="certificate-info__title text-overflow">{{ certificate.name }}</p>
       </a>
