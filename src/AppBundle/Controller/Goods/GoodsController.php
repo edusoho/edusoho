@@ -27,11 +27,6 @@ class GoodsController extends BaseController
         );
     }
 
-    public function minScreenShowAction(Request $request, $id)
-    {
-        return $this->render('goods/min-screen-show.html.twig', []);
-    }
-
     public function buyFLowModalAction(Request $request)
     {
         if (!in_array($request->query->get('template'), ['no-remain', 'payments-disabled', 'avatar-alert', 'fill-user-info'])) {

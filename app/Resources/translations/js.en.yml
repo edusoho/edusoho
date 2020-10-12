@@ -1758,3 +1758,4 @@ site.favorite: Favorite
 goods.show_page.components.recommends: Recommends Goods
 goods.show_page.load_more: Load more
 goods.show_page.goto_school: Goto homepage
+goods.show_page.components.teachers: Teachers

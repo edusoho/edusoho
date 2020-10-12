@@ -1,6 +1,6 @@
 <template>
   <div v-if="teachers.length" class="info-right-teacher info-right-box">
-    <div class="title">授课老师</div>
+    <div class="title">{{ 'goods.show_page.components.teachers'|trans }}</div>
     <div class="teacher-info clearfix" v-for="item in teachers" :key="item.id">
       <img class="teacher-info__img pull-left" :src="item.avatar.large" alt="">
       <div class="teacher-info__introduce introduce pull-left">
