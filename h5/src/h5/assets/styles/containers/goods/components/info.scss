@@ -42,6 +42,10 @@
 // 课程简介
 .info-introduction {
 	padding-top: vw(16);
+
+	img {
+		width: 100%;
+	}
 }
 
 // 猜你想学
@@ -174,9 +178,10 @@
 		font-size: vw(16);
 		background-color: #ff765f;
 	}
-  .disabled {
-    background-color: #b0bdc9;
-  }
+
+	.disabled {
+		background-color: #b0bdc9;
+	}
 }
 
 // 回到顶部
