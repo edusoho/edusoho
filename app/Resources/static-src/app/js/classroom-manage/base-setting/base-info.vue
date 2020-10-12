@@ -10,7 +10,7 @@
                     <el-input ref="title" v-model="form.title" auto-complete="off"></el-input>
                 </el-col>
             </el-form-item>
-            <el-form-item :label="'classroom.subtitle_label'|trans">
+            <el-form-item :label="'classroom.subtitle_label'|trans" prop="subtitle">
                 <el-col span="18">
                     <el-input ref="subtitle" v-model="form.subtitle" type="textarea" rows="3"></el-input>
                 </el-col>
@@ -64,6 +64,7 @@
     import tags from 'app/js/common/src/tags.vue';
     import category from 'app/js/common/src/category.vue';
     import org from 'app/js/common/src/org.vue';
+    import * as validation from 'common/element-validation';
 
     let aboutEditor = null;
     export default {
@@ -150,11 +151,27 @@
                     orgCode: this.classroom.orgCode,
                 },
                 formRule: {
-                    title: {
-                        required: true,
-                        message: Translator.trans('validate.required.message', {'display': Translator.trans('classroom.title_label')}),
-                        trigger: 'blur'
-                    }
+                    title: [
+                        {
+                            required: true,
+                            message: Translator.trans('validate.required.message', {'display': Translator.trans('classroom.title_label')}),
+                            trigger: 'blur'
+                        },
+                        {
+                            max: 10,
+                            message: Translator.trans('validate.length_max.message', {'length': 10}),
+                            trigger: 'blur',
+                        },
+                        {validator: validation.trim, trigger: 'blur'},
+                        {validator: validation.course_title, trigger: 'blur'}
+                    ],
+                    subtitle: [
+                        {
+                            max: 30,
+                            message: Translator.trans('validate.length_max.message', {'length': 30}),
+                            trigger: 'blur',
+                        },
+                    ]
                 },
             };
         },
