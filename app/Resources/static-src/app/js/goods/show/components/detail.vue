@@ -20,7 +20,7 @@
                            :message="`我正在学习《${goods.title}》，收获巨大哦，一起来学习吧！`"
                            :picture="goods.images.large"
                            :url="currentUrl"
-                           :type="'courseSet'">分享
+                           :type="'courseSet'">{{ 'site.share'|trans }}
                     </share>
                     <favorite :is-favorite="goods.isFavorite" :target-type="'goods'"
                               :target-id="goods.id"></favorite>
@@ -32,7 +32,7 @@
             <p class="detail-right__title">{{ goods.title }}</p>
             <p class="detail-right__subtitle">{{ goods.subtitle }}</p>
             <a v-if="goods.canManage" class="detail-right__manage_btn" @click="manageUrl(goods)">
-                <i class="es-icon es-icon-setting"></i>&nbsp;{{ '管理'|trans }}
+                <i class="es-icon es-icon-setting"></i>&nbsp;{{ 'site.manage'|trans }}
             </a>
 
             <!-- 价格 -->
@@ -63,7 +63,7 @@
 
             <!-- 教学计划 -->
             <div class="detail-right__plan plan clearfix" v-if="goods.specs.length > 1">
-                <div class="plan-title pull-left">教学计划</div>
+                <div class="plan-title pull-left">{{ 'site.course_plan'|trans }}</div>
                 <div class="plan-btns pull-right">
                     <span class="plan-btns__item" v-for="plan in goods.specs" :key="plan.id"
                           :class="{ active: plan.active }" @click="handleClick(plan)">{{ plan.title }}</span>
@@ -72,19 +72,19 @@
 
             <!-- 学习有效期 -->
             <div class="detail-right__validity validity clearfix">
-                <span class="validity-title pull-left">学习有效期</span>
+                <span class="validity-title pull-left">{{ 'goods.show_page.components.expiry_mode'|trans }}</span>
                 <span class="validity-content pull-left">
 <!--                    {{ buyableModes[currentSku.usageMode] }}-->
-                    <span v-if="currentSku.usageMode === 'forever'">长期有效</span>
-                    <span v-if="currentSku.usageMode === 'date'">开始：{{ currentSku.usageStartTime|formatDate }} 截止：{{ currentSku.usageEndTime|formatDate }}</span>
-                    <span v-if="currentSku.usageMode === 'days'">{{ currentSku.usageDays }}天 （随到随学）</span>
-                    <span v-if="currentSku.usageMode === 'end_date'">截止日期： {{ currentSku.usageEndTime|formatDate }}</span>
+                    <span v-if="currentSku.usageMode === 'forever'">{{ 'goods.show_page.components.expiry_mode.forever'|trans }}</span>
+                    <span v-if="currentSku.usageMode === 'date'">{{ 'goods.show_page.components.expiry_mode.date_start'|trans }}：{{ currentSku.usageStartTime|formatDate }} {{ 'goods.show_page.components.expiry_mode.date_end'|trans }}：{{ currentSku.usageEndTime|formatDate }}</span>
+                    <span v-if="currentSku.usageMode === 'days'">{{ currentSku.usageDays }}{{ 'site.date.day'|trans }} （{{ 'goods.show_page.components.expiry_mode.forever_tips'|trans }}）</span>
+                    <span v-if="currentSku.usageMode === 'end_date'">{{ 'goods.show_page.components.expiry_mode.date_end_label'|trans }}： {{ currentSku.usageEndTime|formatDate }}</span>
                 </span>
             </div>
 
             <!-- 承诺服务 -->
             <div class="detail-right__promise promise clearfix" v-if="currentSku.services && currentSku.services.length > 0">
-                <div class="promise-title pull-left">承诺服务</div>
+                <div class="promise-title pull-left">{{ 'goods.show_page.components.services'|trans }}</div>
                 <div class="promise-content pull-left">
               <span class="promise-content__item" v-for="(item, index) in currentSku.services" :key="index">
                 {{ item.shortName }}

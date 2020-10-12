@@ -1757,5 +1757,16 @@ site.favorited: Favorited
 site.favorite: Favorite
 goods.show_page.components.recommends: Recommends Goods
 goods.show_page.load_more: Load more
+goods.show_page.more: More
 goods.show_page.goto_school: Goto homepage
 goods.show_page.components.teachers: Teachers
+goods.show_page.components.expiry_mode: Expiry Mode
+goods.show_page.components.expiry_mode.forever: Forever
+goods.show_page.components.expiry_mode.forever_tips: Learn Anytime
+goods.show_page.components.expiry_mode.date_start: Start
+goods.show_page.components.expiry_mode.date_end: End
+goods.show_page.components.expiry_mode.date_end_label: End Date
+site.course_plan: Plan
+goods.show_page.components.services: Services
+site.share: Share
+site.manage: Manage
