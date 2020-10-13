@@ -1,7 +1,3 @@
-<head>
-  <title>圖片上傳</title>
-  <meta charset="UTF-8">
-</head>
 <div class="balloon-uploader ckeditor-balloon-uploader">
     <div class="balloon-uploader-body">
         <div class="balloon-nofile">請點擊添加文件按鈕</div>
@@ -19,8 +15,3 @@
         <div class="start-upload-btn js-start-upload-btn">開始上傳</div>
     </div>
 </div>
-
-<script>
-  var outerHtml = document.getElementsByTagName('div')[0].outerHTML;
-  window.parent.postMessage({eventName:'es-ckeditor.post', html:outerHtml }, '*');
-</script>
