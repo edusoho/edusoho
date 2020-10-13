@@ -84,6 +84,7 @@ export default {
         total: 0,
       },
       searched: false,
+      searching: false,
     };
   },
   computed: {
@@ -114,7 +115,10 @@ export default {
       if (!this.targetType || !this.targetId) {
         return;
       }
-
+      if (this.searching) {
+        return;
+      }
+      this.searching = true;
       Api.searchReviews({
         params: {
           targetType: this.targetType,
@@ -124,11 +128,17 @@ export default {
           limit: this.limit == null ? parseInt(limit) : this.limit,
           needPosts: this.needPosts,
         },
-      }).then(res => {
-        this.reviews = this.reviews.concat(res.data);
-        this.paging = res.paging;
-        this.searched = true;
-      });
+      })
+        .then(res => {
+          this.reviews = this.reviews.concat(res.data);
+          this.paging = res.paging;
+          this.searched = true;
+          this.searching = false;
+        })
+        .catch(err => {
+          console.error(err);
+          this.searching = false;
+        });
     },
   },
   filters: {
