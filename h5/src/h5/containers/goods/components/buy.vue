@@ -156,6 +156,15 @@ export default {
       });
     },
     onFavorite() {
+      if (!this.$store.state.token) {
+        this.$router.push({
+          name: 'login',
+          query: {
+            redirect: this.redirect,
+          },
+        });
+        return;
+      }
       if (this.isFavorite) {
         this.removeFavorite();
         this.$emit('update-data', false);
