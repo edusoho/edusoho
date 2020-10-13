@@ -31,6 +31,11 @@
     {% endif %}
   {% endfor %}
   {% if course.parentId == 0 %}
-    <a class="btn btn-primary" href="{{ path('course_show', {id:course.id}) }}">{{'course.tab.summary'|trans}}</a>
+    <div class="btnbar hidden-xs">
+      <a href="{{ path('course_show',{ id:course.id }) }}"
+         class="btn btn-link">
+        {{ 'goods.description'|trans ~ ' >' }}
+      </a>
+    </div>
   {% endif %}
 </ul>

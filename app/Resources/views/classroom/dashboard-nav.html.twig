@@ -27,7 +27,12 @@
     {% if can_obtain_certificates(classroom.id, 'classroom') %}
       <li role="presentation" class="{% if nav == 'certificates' %}active{% endif %}"><a href="{{ path('classroom_certificates', {classroomId:classroom.id}) }}">{{ 'classroom.certificates'|trans }}</a></li>
     {% endif %}
-    <a class="btn btn-primary" href="{{ path('classroom_introductions', {id:classroom.id}) }}">{{'goods.description'|trans}}</a>
+    <div class="btnbar hidden-xs">
+      <a href="{{ path('classroom_introductions', {id:classroom.id}) }}"
+         class="btn btn-link">
+        {{ 'goods.description'|trans ~ ' >' }}
+      </a>
+    </div>
   </ul>
 
 {#  {% if canManageClassroom %}#}
