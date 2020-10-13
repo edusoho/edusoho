@@ -37,35 +37,36 @@ abstract class BaseTrade
         $this->biz = $biz;
     }
 
-    protected function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+    protected function generateUrl($route, $parameters = [], $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
         return $this->container->get('router')->generate($route, $parameters, $referenceType);
     }
 
-    public function renderView($view, array $parameters = array())
+    public function renderView($view, array $parameters = [])
     {
         return $this->container->get('templating')->render($view, $parameters);
     }
 
     public function create($params)
     {
-        $tradeFields = array(
+        $tradeFields = [
             'type' => $params['type'],
             'goods_detail' => '',
             'price_type' => 'money',
             'user_id' => $params['userId'],
             'create_ip' => $params['clientIp'],
-            'attach' => array(
+            'attach' => [
                 'user_id' => $params['userId'],
-            ),
+            ],
             'platform' => $this->payment,
             'platform_type' => $this->platformType,
             'app_pay' => isset($params['app_pay']) ? $params['app_pay'] : '',
             'wap_pay' => isset($params['wap_pay']) ? $params['wap_pay'] : '',
-            'notify_url' => $this->generateUrl('cashier_pay_notify', array('payment' => $this->payment), UrlGeneratorInterface::ABSOLUTE_URL),
-            'return_url' => isset($params['return_url']) ? $params['return_url'] : $this->generateUrl('cashier_pay_return', array('payment' => $this->payment), UrlGeneratorInterface::ABSOLUTE_URL),
+            'notify_url' => $this->generateUrl('cashier_pay_notify', ['payment' => $this->payment], UrlGeneratorInterface::ABSOLUTE_URL),
+            'return_url' => isset($params['return_url']) ? $params['return_url'] : $this->generateUrl('cashier_pay_return', ['payment' => $this->payment], UrlGeneratorInterface::ABSOLUTE_URL),
             'show_url' => isset($params['show_url']) ? $params['show_url'] : '',
-        );
+            'success_url' => isset($params['success_url']) ? $params['success_url'] : '',
+        ];
 
         if ('purchase' == $params['type'] && !empty($params['orderSn'])) {
             $order = $this->getOrderService()->getOrderBySn($params['orderSn']);
@@ -92,24 +93,24 @@ abstract class BaseTrade
 
     public function getCustomFields($params)
     {
-        return array();
+        return [];
     }
 
     public function getCustomResponse($trade)
     {
-        return array();
+        return [];
     }
 
     public function createResponse($trade)
     {
-        $defaultResponse = array(
+        $defaultResponse = [
             'tradeSn' => $trade['trade_sn'],
             'status' => $trade['status'],
-            'payUrl' => $this->generateUrl('cashier_redirect', array('tradeSn' => $trade['trade_sn'])),
-        );
+            'payUrl' => $this->generateUrl('cashier_redirect', ['tradeSn' => $trade['trade_sn']]),
+        ];
 
         if ('paid' == $trade['status']) {
-            $defaultResponse['paidSuccessUrl'] = $this->generateUrl('cashier_pay_success', array('trade_sn' => $trade['trade_sn']));
+            $defaultResponse['paidSuccessUrl'] = $this->generateUrl('cashier_pay_success', ['trade_sn' => $trade['trade_sn']]);
 
             return $defaultResponse;
         } else {

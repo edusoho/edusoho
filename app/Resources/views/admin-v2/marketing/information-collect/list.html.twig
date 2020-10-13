@@ -1,0 +1,79 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_information_collect' %}
+
+{% set script_controller = 'invite/record' %}
+{% do script(['app/js/admin-v2/marketing/information-collect/index.js']) %}
+
+{% block main %}
+  <form id="information-collect" class="form-inline well well-sm" action="{{path('admin_v2_information_collect')}}" method="get" novalidate>
+    <input id="title" class="form-control" type="text" name="title" placeholder="{{'admin.information_collect.title.placeholer'|trans}}" value="{{ app.request.query.get('title')}}">
+    <div class="form-group ">
+      <input class="form-control" type="text" id="startDate" name="startDate"
+             value="{{ app.request.query.get('startDate') }}" placeholder="{{ 'admin.user.form.input_placeholder.startDate'|trans }}" autocomplete="off">
+      -
+      <input class="form-control" type="text" id="endDate" name="endDate"
+             value="{{ app.request.query.get('endDate') }}" placeholder="{{ 'admin.user.form.input_placeholder.endDate'|trans }}" autocomplete="off">
+    </div>
+    <button class="btn btn-primary" type="submit">{{'form.btn.search'|trans}}</button>
+  </form>
+
+  <table class="table table-hover table-striped" id="collect-table">
+    <thead>
+    <tr>
+      <th width="20%">{{'admin.information_collect.title_th'|trans}}</th>
+      <th width="20%">{{ 'admin.information_collect.location_th'|trans }}</th>
+      <th width="15%">{{'admin.information_collect.create_time_th'|trans}}</th>
+      <th width="10%">{{ 'admin.information_collect.status_th'|trans }}</th>
+      <th width="10%">{{ 'admin.information_collect.collected_num_th'|trans }}</th>
+      <th width="10%">{{ 'admin.information_collect.operate'|trans }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% if events|default() %}
+      {% for event in events|default() %}
+        <tr>
+          <td>
+            <span style="cursor: pointer" {% if event.title|length > 14 %}title="{{ event.title }}"{% endif %}>
+              {{ event.title | slice(0,14) }}{% if event.title|length >14 %}...{% endif %}
+            </span>
+          </td>
+          <td>
+            {% set action = 'admin.information_collect.action.' ~ event.action %}
+            {% set location = information_collect_location_info(event.id) %}
+            <span>{{ action|trans }}</span>
+            <br>
+              <span class="text-muted text-sm" style="cursor: pointer" {% if location|length > 16 %}title="{{ location }}"{% endif %}>{{ location | slice(0,16) }}{% if location|length >16 %}...{% endif %}</span>
+          </td>
+          <td>{{ event.createdTime|date('Y-m-d H:i:s') }}</td>
+          <td>
+            {% set statusInfo = 'admin.information_collect.status.' ~ event.status %}
+            {{ statusInfo|trans|raw }}
+          </td>
+          <td>{{ 'admin.information_collect.collected_num'|trans({'%collectedNum%':collectedNum[event.id].collectNum|default(0)}) }}</td>
+          <td>
+            <div class="btn-group">
+              <a href="{{ path('admin_v2_information_collect_detail', {id: event.id}) }}" class="btn btn-default btn-sm">{{ 'admin.information_collect.operate.detail'|trans }}</a>
+              {% include 'admin-v2/widget/group-button.html.twig' with {parentCode: 'admin_v2_information_collect', group:'groupButton', collect: event} %}
+            </div>
+          </td>
+        </tr>
+      {% endfor %}
+    {% else %}
+      <tr>
+        <td colspan="20">
+          <div class="empty">
+            {% if error|default() %}
+              {{ error|default() }}
+            {% else %}
+              {{'site.datagrid.empty'|trans}}
+            {% endif %}
+          </div>
+        </td>
+      </tr>
+    {% endif %}
+    </tbody>
+  </table>
+
+  {{ admin_macro.paginator(paginator|default()) }}
+{% endblock %}

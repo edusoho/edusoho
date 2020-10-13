@@ -6,9 +6,9 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\S2B2C\Dao\ProductReportDao;
 use Biz\S2B2C\S2B2CException;
+use Biz\S2B2C\Service\ProductReportService;
 use Biz\S2B2C\Service\ProductService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
-use Biz\S2B2C\Service\ProductReportService;
 use Biz\User\Service\UserService;
 
 class ProductReportServiceImpl extends BaseService implements ProductReportService

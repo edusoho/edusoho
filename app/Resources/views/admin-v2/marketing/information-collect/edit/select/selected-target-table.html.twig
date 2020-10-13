@@ -1,0 +1,64 @@
+{% import "admin-v2/macro.html.twig" as admin_macro %}
+<table class="table">
+	<thead>
+		<tr>
+			<th width="50%">
+				{% if type == 'course' %}
+					{{ 'site.default.course'|trans }}
+				{% else %}
+					{{ setting('classroom.name')|default('site.default.classroom'|trans) }}
+				{% endif %}
+			</th>
+			<th>
+				<span class="pull-right">{{ 'operation'|trans }}</span>
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for targetId in preSelectIds %}
+			{% set location = locations[targetId]|default(null) %}
+			{% set target = targets[targetId]|default(null) %}
+			<tr class="js-selected-item {% if not target %} hidden {% endif %} {% if location and (targetId not in selectedIds) %} js-selected-item-binded {% endif %}" data-id="{{ targetId }}">
+				{% if target %}
+					<td>
+						{% if type == 'course' %}
+							<a href="{{ path('course_show',{id: target.defaultCourseId}) }}" target="_blank">
+								<strong>{{ target.title }}</strong>
+							</a>
+						{% else %}
+							<a href="{{ path('classroom_show', {id:target.id}) }}" target="_blank">
+								<strong>{{ target.title }}</strong>
+							</a>
+						{% endif %}
+						<br>
+					</td>
+					<td>
+						<div class="information-collect-selected-item-operate pull-right">
+							{% if location and (targetId not in selectedIds) %}
+								<div class="text-danger">
+									{{ 'admin_v2.information_collect.chooser.tips'|trans }},<a class="text-danger" href="{{ path('admin_v2_information_collect_detail', {id:location.eventId}) }}" target="_blank">{{ 'admin_v2.information_collect.more'|trans }}>></a>
+								</div>
+								<a href="javascript:;" class="js-selected-item-unbind plm">{{ 'admin_v2.information_collect.chooser.unbind_item'|trans }}</a>
+							{% endif %}
+							<a href="javascript:;" class="js-selected-item-delete plm">{{ 'admin_v2.information_collect.chooser.delete_item'|trans }}</a>
+						</div>
+					</td>
+				{% endif %}
+			</tr>
+		{% else %}
+			<tr>
+				<td colspan="20">
+					<div class="empty">{{ 'admin_v2.information_collect.chooser.empty'|trans }}</div>
+				</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+{% if hasRelated|default(false) %}
+	<div class="has-related"></div>
+{% endif %}
+
+{% if paginator|default() %}
+	{{ admin_macro.ajax_paginator(paginator) }}
+{% endif %}

@@ -10,7 +10,14 @@ use Biz\S2B2C\Service\S2B2CFacadeService;
 
 class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeService
 {
-    public function getPlayerContext($file, $userAgent = '')
+    /**
+     * @param $file
+     * @param string $userAgent
+     * @param array  $options:  watchLimitTime
+     *
+     * @return mixed
+     */
+    public function getPlayerContext($file, $userAgent = '', $options = [])
     {
         $context = [];
 
@@ -22,6 +29,9 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
 
         //获取用于权限验证的token和资源编码
         $payload = [];
+        if (!empty($options['watchLimitTime'])) {
+            $payload['preview'] = $options['watchLimitTime'];
+        }
         if (!$this->isHiddenVideoHeader()) {
             // 加入片头信息
             $videoHeaderFile = $this->getUploadFileService()->getFileByTargetType('headLeader');
