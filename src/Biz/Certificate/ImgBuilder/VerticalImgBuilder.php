@@ -17,9 +17,9 @@ class VerticalImgBuilder extends ImgBuilder
 
     protected $imageYRatio = 1;
 
-    protected $DEFAULT_IMAGE_X = 2600;
+    protected $DEFAULT_IMAGE_X = 2480;
 
-    protected $DEFAULT_IMAGE_Y = 3600;
+    protected $DEFAULT_IMAGE_Y = 3508;
 
     protected function setCertificateTitle(Certificate $certificate)
     {
