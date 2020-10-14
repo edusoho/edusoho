@@ -132,28 +132,28 @@
             mainBtnView(sku) {
                 if (sku.status !== 'published') { //如果商品未发布
                     this.buyViewMode = 'text';
-                    this.buyViewText = '商品还未发布，不允许加入和购买';
+                    this.buyViewText = Translator.trans('goods.show_page.unpublished_tips');
                 } else if (sku.buyable != 1) {  // 已发布，但是未开放购买
                     this.buyViewMode = 'text';
-                    this.buyViewText = '抱歉，该商品为限制商品，请联系客服';
+                    this.buyViewText = Translator.trans('goods.show_page.not_buyable_tips');
                 } else if (sku.buyable == 1
                     && sku.buyableEndTime != 0
                     && new Date(parseInt(sku.buyableEndTime)).getTime() < new Date().getTime() + 86400 * 1000) { // 已发布，开放购买，但是不在开放时间区间内
                     this.buyViewMode = 'text';
-                    this.buyViewText = '抱歉，该商品已超过加入有效期，请联系客服';
+                    this.buyViewText = Translator.trans('goods.show_page.join_expiry_tips');
                 } else if (['date', 'end_date'].includes(sku.usageMode)
                     && new Date(parseInt(sku.usageEndTime)).getTime() < new Date().getTime() + 86400 * 1000) { // 已发布，开放购买，但是超过最后学习期限了
                     this.buyViewMode = 'text';
-                    this.buyViewText = '超过学习截止日期，不允许加入和购买';
+                    this.buyViewText = Translator.trans('goods.show_page.usage_expiry_tips');
                 } else if (sku.displayPrice == 0) {
                     this.buyViewMode = 'btn';
-                    this.buyViewText = '免费加入';
+                    this.buyViewText = Translator.trans('goods.show_page.free_join_btn');
                 } else if (sku.vipLevelInfo && sku.vipUser && sku.vipLevelInfo.seq <= sku.vipUser.level.seq) {
                     this.buyViewMode = 'btn';
-                    this.buyViewText = '会员免费学';
+                    this.buyViewText = Translator.trans('goods.show_page.vip_free_learn');
                 } else {
                     this.buyViewMode = 'btn';
-                    this.buyViewText = '立即购买';
+                    this.buyViewText = Translator.trans('goods.show_page.buy_btn');
                 }
             },
         },
