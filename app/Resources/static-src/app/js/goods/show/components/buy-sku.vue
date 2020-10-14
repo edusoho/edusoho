@@ -21,10 +21,10 @@
 <!--        </div>-->
         <div class="clearfix">
             <a v-if="sku.isMember" :class="btnClass" class="goods-btn-hover pull-right" :href="sku.learnUrl">
-                <slot>去学习</slot>
+                <slot>{{ 'goods.show_page.goto_learn'|trans }}</slot>
             </a>
             <span v-else>
-                <span v-if="buyViewMode === 'text' && isShow" class="product-detail__unpublished pull-right">
+                <span v-if="buyViewMode === 'text' && isShow" class="pull-right">
                     {{ buyViewText }}
                 </span>
                 <span v-if="buyViewMode === 'btn'">
@@ -41,7 +41,7 @@
                           data-trigger="hover"
                           data-html="true"
                           :data-content="vipBtnTips(sku)">
-                        <slot>会员免费学</slot>
+                        <slot>{{ 'goods.show_page.vip_free_learn'|trans }}</slot>
                     </span>
                 </span>
             </span>
@@ -142,11 +142,11 @@
                     this.buyViewText = '抱歉，该商品为限制商品，请联系客服';
                 } else if (sku.buyable == 1
                     && sku.buyableEndTime != 0
-                    && new Date(sku.buyableEndTime).getTime() < new Date().getTime() + 86400 * 1000) { // 已发布，开放购买，但是不在开放时间区间内
+                    && new Date(parseInt(sku.buyableEndTime)).getTime() < new Date().getTime() + 86400 * 1000) { // 已发布，开放购买，但是不在开放时间区间内
                     this.buyViewMode = 'text';
                     this.buyViewText = '抱歉，该商品已超过加入有效期，请联系客服';
                 } else if (['date', 'end_date'].includes(sku.usageMode)
-                    && new Date(sku.usageEndTime).getTime() < new Date().getTime() + 86400 * 1000) { // 已发布，开放购买，但是超过最后学习期限了
+                    && new Date(parseInt(sku.usageEndTime)).getTime() < new Date().getTime() + 86400 * 1000) { // 已发布，开放购买，但是超过最后学习期限了
                     this.buyViewMode = 'text';
                     this.buyViewText = '超过学习截止日期，不允许加入和购买';
                 } else if (sku.displayPrice == 0) {

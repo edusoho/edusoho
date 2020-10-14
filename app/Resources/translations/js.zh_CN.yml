@@ -1723,3 +1723,5 @@ site.course_plan: 教学计划
 goods.show_page.components.services: 承诺服务
 site.share: 分享
 site.manage: 管理
+goods.show_page.goto_learn: 去学习
+goods.show_page.vip_free_learn: 会员免费学
