@@ -37,7 +37,7 @@ class LearnCourseTaskAccessor extends AccessorAdapter
             if ($course['tryLookable']
                 && $task['type'] == 'video') {
                 $activity = $this->getActivityService()->getActivity($task['activityId'], true);
-                if (!empty($activity['ext']) && !empty($activity['ext']['file']) && $activity['ext']['file']['storage'] === 'cloud') {
+                if (!empty($activity['ext']) && !empty($activity['ext']['file']) && in_array($activity['ext']['file']['storage'], ['cloud', 'supplier'])) {
                     return $this->buildResult('allow_trial');
                 }
             }
