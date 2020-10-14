@@ -146,6 +146,7 @@ export default {
         this.$router.push({
           path: `/goods/${this.course.goodsId}/show`,
           query: {
+            targetId: id,
             hasCertificate,
           },
         });
@@ -156,7 +157,7 @@ export default {
         this.$router.push({
           path: `/goods/${this.course.goodsId}/show`,
           query: {
-            targetId: this.course.id,
+            targetId: id,
             hasCertificate,
           },
         });
