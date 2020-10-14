@@ -24,7 +24,7 @@
                 <slot>{{ 'goods.show_page.goto_learn'|trans }}</slot>
             </a>
             <span v-else>
-                <span v-if="buyViewMode === 'text'" class="pull-right">
+                <span v-if="buyViewMode === 'text' && isShow" class="pull-right">
                     {{ buyViewText }}
                 </span>
                 <span v-if="buyViewMode === 'btn'">
@@ -34,7 +34,7 @@
                         <slot>{{ buyViewText }}</slot>
                     </a>
                     <span class="product-detail__disable_btn goods-btn-hover pull-right"
-                          v-if="(sku.vipLevelInfo && !sku.vipUser) || sku.vipLevelInfo && sku.vipUser && sku.vipLevelInfo.seq > sku.vipUser.level.seq"
+                          v-if="(sku.vipLevelInfo && !sku.vipUser) || sku.vipLevelInfo && sku.vipUser && sku.vipLevelInfo.seq > sku.vipUser.level.seq && isShow"
                           data-container=".product-detail__disable_btn"
                           data-toggle="popover"
                           data-placement="top"
@@ -87,6 +87,10 @@
             isUserLogin: {
                 type: Number,
                 default: 0,
+            },
+            isShow: {
+                type: Boolean,
+                default: true
             }
         },
         methods: {
