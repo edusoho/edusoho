@@ -17,7 +17,7 @@
                             </li>
                         </ul>
                         <div class="buy__btn pull-right">
-                            <buy-sku :sku="currentSku" :is-user-login="isUserLogin" :goods="goods"></buy-sku>
+                            <buy-sku :sku="currentSku" :isShow="false" :is-user-login="isUserLogin" :goods="goods"></buy-sku>
                         </div>
                     </div>
                 </div>
