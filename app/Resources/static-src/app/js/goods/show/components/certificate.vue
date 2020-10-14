@@ -38,6 +38,11 @@ export default {
   },
   mounted() {
     this.requestCertificateData();
+  }, 
+  watch: {
+    sku() {
+      this.requestCertificateData();
+    }
   }
 };
 </script>
