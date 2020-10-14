@@ -21,7 +21,7 @@
 <!--        </div>-->
         <div class="clearfix">
             <a v-if="sku.isMember" :class="btnClass" class="goods-btn-hover pull-right" :href="sku.learnUrl">
-                <slot>去学习</slot>
+                <slot>{{ 'goods.show_page.goto_learn'|trans }}</slot>
             </a>
             <span v-else>
                 <span v-if="buyViewMode === 'text'" class="pull-right">
@@ -41,7 +41,7 @@
                           data-trigger="hover"
                           data-html="true"
                           :data-content="vipBtnTips(sku)">
-                        <slot>会员免费学</slot>
+                        <slot>{{ 'goods.show_page.vip_free_learn'|trans }}</slot>
                     </span>
                 </span>
             </span>
