@@ -148,7 +148,7 @@
                 }
             },
             remainTime() {
-                if (!this.goods.discountId) {
+                if (this.goods.discountId == 0) {
                     return ;
                 }
                 if (this.timer) {
