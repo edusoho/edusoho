@@ -358,6 +358,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
     public function getLesson()
     {
+        exit('feafe');
         $courseId = $this->getParam('courseId');
         $lessonId = $this->getParam('lessonId');
         $ssl = $this->request->isSecure() ? true : false;

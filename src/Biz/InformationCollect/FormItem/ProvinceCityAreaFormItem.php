@@ -2,6 +2,8 @@
 
 namespace Biz\InformationCollect\FormItem;
 
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+
 class ProvinceCityAreaFormItem extends FormItem
 {
     const TYPE = 'cascader';
@@ -18,12 +20,17 @@ class ProvinceCityAreaFormItem extends FormItem
             'field' => self::FIELD,
             'group' => self::CONTACT_INFO_GROUP,
             'value' => empty($this->value) ? [] : $this->value,
+            'builderType' => ChoiceType::class,
+            'builderOptions' => [
+                'placeholder' => '请选择省市区县',
+                'choices' => []
+            ],
             'props' => [
                 'options' => [],
                 'placeholder' => '请选择省市区县',
             ],
             'validate' => [
-                ['required' => $this->required, 'message' => self::TITLE.'不能为空'],
+                ['required' => $this->required, 'message' => self::TITLE . '不能为空'],
             ],
         ];
     }

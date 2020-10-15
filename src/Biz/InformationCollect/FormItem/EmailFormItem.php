@@ -2,6 +2,8 @@
 
 namespace Biz\InformationCollect\FormItem;
 
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+
 class EmailFormItem extends FormItem
 {
     const TYPE = 'input';
@@ -18,6 +20,7 @@ class EmailFormItem extends FormItem
             'field' => self::FIELD,
             'group' => self::CONTACT_INFO_GROUP,
             'value' => $this->value,
+            'builderType' => TextType::class,
             'validate' => [
                 ['required' => $this->required, 'message' => self::TITLE.'不能为空'],
                 ['pattern' => '^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$', 'message' => self::TITLE.'格式错误'],

@@ -1574,3 +1574,7 @@ admin_v2.information_collect.chooser.target_hint:  请选择课程/班级
 admin_v2.information_collect.chooser.target_course_hint: 请至少选择1个课程
 admin_v2.information_collect.chooser.target_classroom_hint: 请至少选择1个班级
 admin_v2.information_collect.chooser.items.hint: 请选择采集表单
+
+user.fields.gender_label: 性别
+information_collect.form.check_age_invalid: 年龄不在正常范围内
+information_collect.form.check_format_invalid: %display%格式错误

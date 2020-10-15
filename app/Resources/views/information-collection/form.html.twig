@@ -1,0 +1,26 @@
+{% do script(['libs/jquery-validation.js','libs/bootstrap-datetimepicker.js','app/js/information-collect/form/index.js'])%}
+
+<form id="infomation-collect-form" class="form-horizontal" method="post" data-url="{{ path('homepage') }}">
+	<div class="row mbm">
+		<h4 class="text-center">{{event.formTitle|default('')}}</h4>
+	</div>
+	{% for item in eventFormItems %}
+		{% if formItemsView[item.field] is not null %}
+			<div class="form-group">
+				<div class="col-md-3 control-label">{{ form_label(formItemsView[item.field], item.title, {label_attr: {for: "testa"}}) }}</div>
+				<div class="controls col-md-8 controls">
+					{% set class = item.type in ['input' , 'textarea', 'cascader', 'DatePicker'] ? 'form-control' : '' %}
+					{{ form_widget(formItemsView[item.field], {attr:{class: class}}) }}
+				</div>
+			</div>
+		{% endif %}
+	{% endfor %}
+	<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+	{{ form_rest(formItemsView) }}
+	<div class="row">
+		<button type="submit" class="btn btn-primary js-btn-thread-save col-sm-6 col-sm-offset-3">{{'information_collect.form_items.confirm_submit'|trans}}</button>
+		{% if event.allowSkip|default(0) %}
+			<button type="button" class="btn btn-default js-btn-thread-save col-sm-6 col-sm-offset-3">{{'information_collect.form_items.skip'|trans}}</button>
+		{% endif %}
+	</div>
+</form>

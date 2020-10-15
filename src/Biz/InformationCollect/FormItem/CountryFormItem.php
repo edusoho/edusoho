@@ -2,6 +2,9 @@
 
 namespace Biz\InformationCollect\FormItem;
 
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+
 class CountryFormItem extends FormItem
 {
     const TYPE = 'input';
@@ -18,6 +21,7 @@ class CountryFormItem extends FormItem
             'field' => self::FIELD,
             'group' => self::OTHER_INFO_GROUP,
             'value' => $this->value,
+            'builderType' => TextType::class,
             'validate' => [
                 ['required' => $this->required, 'message' => self::TITLE.'不能为空'],
                 ['min' => 2, 'message' => '最少输入2个字符'],
