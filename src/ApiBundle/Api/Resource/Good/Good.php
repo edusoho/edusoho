@@ -24,57 +24,22 @@ class Good extends AbstractResource
      */
     public function get(ApiRequest $request, $id)
     {
-        $user = $this->getCurrentUser();
         $goods = $this->getGoodsService()->getGoods($id);
-
         $this->getOCUtil()->single($goods, ['creator']);
-        $product = $this->getProductService()->getProduct($goods['productId']);
-        //获取状态中的组件
-        $this->getOCUtil()->single($product, ['targetId'], 'course' == $product['targetType'] ? 'courseSet' : $product['targetType']);
-        $goods['product'] = $product;
+
+        $goods['product'] = $this->getProduct($goods);
         $goods = $this->getGoodsService()->convertGoodsPrice($goods);
         $goodsEntity = $this->getGoodsService()->getGoodsEntityFactory()->create($goods['type']);
         $goods['canManage'] = $goodsEntity->canManageTarget($goods);
-        $goodSetting = $this->getSettingService()->get('goods_setting', []);
-        if ('visitor' === $goodSetting['show_number_data']) {
-            $goods['peopleShowNum'] = $goods['hitNum'];
-        } else {
-            $goods['peopleShowNum'] = $product['target']['studentNum'];
-        }
-        if (1 == $request->query->get('preview')) {
-            $goods['specs'] = $this->getGoodsService()->findGoodsSpecsByGoodsId($goods['id']);
-        } else {
-            $goods['specs'] = $this->getGoodsService()->findPublishedGoodsSpecsByGoodsId($goods['id']);
-        }
-
-        $goods['isMember'] = false;
-        foreach ($goods['specs'] as &$spec) {
-            $spec = $this->getGoodsService()->convertSpecsPrice($goods, $spec);
-            $spec['isMember'] = $goodsEntity->isSpecsMember($goods, $spec, $user['id']);
-            if ($spec['isMember']) {
-                $goods['isMember'] = true;
-            }
-            $spec['isTeacher'] = $goodsEntity->isSpecsTeacher($goods, $spec, $user['id']);
-            $spec['access'] = $goodsEntity->buySpecsAccess($goods, $spec);
-            $spec['hasCertificate'] = $goodsEntity->hasCertificate($goods, $spec);
-            $spec['learnUrl'] = 'course' === $goods['type']
-                ? $this->generateUrl('my_course_show', ['id' => $spec['targetId']], UrlGenerator::ABSOLUTE_URL)
-                : $this->generateUrl('classroom_show', ['id' => $spec['targetId']], UrlGenerator::ABSOLUTE_URL);
-
-            if ($this->isPluginInstalled('Vip')) {
-                list($vipLevelInfo, $vipUser) = $goodsEntity->getVipInfo($goods, $spec, $user['id']);
-                $spec['vipLevelInfo'] = $vipLevelInfo;
-                $spec['vipUser'] = $vipUser;
-                $spec['canVipJoin'] = $vipLevelInfo && $vipUser && $vipLevelInfo['seq'] <= $vipUser['level']['seq'];
-            }
-            $spec['teacherIds'] = $goodsEntity->getSpecsTeacherIds($goods, $spec);
-        }
-        $this->getOCUtil()->multiple($goods['specs'], ['teacherIds']);
+        $goods['peopleShowNum'] = $this->getPeopleShowNum($goods);
         $goods['extensions'] = $this->collectGoodsExtensions($goods['product']);
+
+        $this->fetchSpecs($goods, $goodsEntity, $request);
 
         if ($this->getCurrentUser()->isLogin()) {
             $goods['isFavorite'] = !empty($this->getFavoriteService()->getUserFavorite($this->getCurrentUser()->getId(), 'goods', $goods['id']));
         }
+
         $this->getGoodsService()->hitGoods($goods['id']);
 
         return $goods;
@@ -98,6 +63,58 @@ class Good extends AbstractResource
         }
 
         return array_merge($defaultExtensions, ['mpQrCode']);
+    }
+
+    private function getProduct($goods)
+    {
+        $product = $this->getProductService()->getProduct($goods['productId']);
+        //获取状态中的组件
+        $this->getOCUtil()->single($product, ['targetId'], 'course' == $product['targetType'] ? 'courseSet' : $product['targetType']);
+
+        return $product;
+    }
+
+    private function fetchSpecs($goods, $goodsEntity, $request)
+    {
+        $user = $this->getCurrentUser();
+        if (1 == $request->query->get('preview')) {
+            $goods['specs'] = $this->getGoodsService()->findGoodsSpecsByGoodsId($goods['id']);
+        } else {
+            $goods['specs'] = $this->getGoodsService()->findPublishedGoodsSpecsByGoodsId($goods['id']);
+        }
+        $goods['isMember'] = false;
+        foreach ($goods['specs'] as &$spec) {
+            $spec = $this->getGoodsService()->convertSpecsPrice($goods, $spec);
+            $spec['isMember'] = $goodsEntity->isSpecsMember($goods, $spec, $user['id']);
+            if ($spec['isMember']) {
+                $goods['isMember'] = true;
+            }
+            $spec['isTeacher'] = $goodsEntity->isSpecsTeacher($goods, $spec, $user['id']);
+            $spec['access'] = $goodsEntity->buySpecsAccess($goods, $spec);
+            $spec['hasCertificate'] = $goodsEntity->hasCertificate($goods, $spec);
+            $spec['learnUrl'] = 'course' === $goods['type']
+                ? $this->generateUrl('my_course_show', ['id' => $spec['targetId']], UrlGenerator::ABSOLUTE_URL)
+                : $this->generateUrl('classroom_show', ['id' => $spec['targetId']], UrlGenerator::ABSOLUTE_URL);
+
+            if ($this->isPluginInstalled('Vip')) {
+                list($vipLevelInfo, $vipUser) = $goodsEntity->getVipInfo($goods, $spec, $user['id']);
+                $spec['vipLevelInfo'] = $vipLevelInfo;
+                $spec['vipUser'] = $vipUser;
+                $spec['canVipJoin'] = $vipLevelInfo && $vipUser && $vipLevelInfo['seq'] <= $vipUser['level']['seq'];
+            }
+            $spec['teacherIds'] = $goodsEntity->getSpecsTeacherIds($goods, $spec);
+        }
+        $this->getOCUtil()->multiple($goods['specs'], ['teacherIds']);
+    }
+
+    private function getPeopleShowNum($goods)
+    {
+        $goodSetting = $this->getSettingService()->get('goods_setting', []);
+        if ('visitor' === $goodSetting['show_number_data']) {
+            return $goods['hitNum'];
+        }
+
+        return $goods['peopleShowNum'] = isset($goods['product']['target']['studentNum']) ? $goods['product']['target']['studentNum'] : 0;
     }
 
     /**
