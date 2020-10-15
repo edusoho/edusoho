@@ -112,8 +112,9 @@ export default [
     // 我的学习
     name: 'myStudyClasses',
     url: '/me/classrooms',
-    method: 'GET'
-  }, {
+    method: 'GET',
+  },
+  {
     // 我的学习
     name: 'myStudyBanks',
     url: '/me/item_bank_exercises',
@@ -191,5 +192,15 @@ export default [
     url: '/wechat_user_notify_state/official',
     method: 'GET',
     disableLoading: true,
+  },
+  {
+    name: 'meCourseMember',
+    url: '/me/course_members/{id}',
+    method: 'GET',
+  },
+  {
+    name: 'meClassroomMember',
+    url: '/me/classroom_members/{id}',
+    method: 'GET',
   },
 ];

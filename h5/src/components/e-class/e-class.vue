@@ -34,6 +34,8 @@
 
 <script>
 import { mapState } from 'vuex';
+import Api from '@/api';
+
 export default {
   props: {
     course: {
@@ -128,7 +130,7 @@ export default {
         return;
       }
       const isOrder = this.type === 'order';
-      const id = this.course.id || this.course.targetId;
+      // const id = this.course.id || this.course.targetId;
       if (e.target.tagName === 'SPAN') {
         return;
       }
@@ -143,23 +145,66 @@ export default {
 
       if (this.typeList === 'classroom_list') {
         // @todo 证书显示
-        this.$router.push({
-          path: `/goods/${this.course.goodsId}/show`,
+        Api.meClassroomMember({
           query: {
-            hasCertificate,
+            id: this.course.id,
           },
-        });
+        })
+          .then(res => {
+            if (res.id) {
+              this.$router.push({
+                path: `/classroom/${this.course.id}`,
+              });
+            } else {
+              this.$router.push({
+                path: `/goods/${this.course.goodsId}/show`,
+                query: {
+                  hasCertificate,
+                },
+              });
+            }
+          })
+          .catch(() => {
+            this.$router.push({
+              path: `/goods/${this.course.goodsId}/show`,
+              query: {
+                hasCertificate,
+              },
+            });
+          });
       }
 
       if (this.typeList === 'course_list') {
         // todo 证书
-        this.$router.push({
-          path: `/goods/${this.course.goodsId}/show`,
+        Api.meCourseMember({
           query: {
-            targetId: this.course.id,
-            hasCertificate,
+            id: this.course.id,
           },
-        });
+        })
+          .then(res => {
+            if (res.id) {
+              this.$router.push({
+                path: `/course/${this.course.id}`,
+              });
+            } else {
+              this.$router.push({
+                path: `/goods/${this.course.goodsId}/show`,
+                query: {
+                  targetId: this.course.id,
+                  hasCertificate,
+                },
+              });
+            }
+          })
+          .catch(() => {
+            this.$router.push({
+              path: `/goods/${this.course.goodsId}/show`,
+              query: {
+                targetId: this.course.id,
+                hasCertificate,
+              },
+            });
+          });
       }
     },
   },

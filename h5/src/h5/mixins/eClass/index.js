@@ -1,4 +1,5 @@
 import { mapState } from 'vuex';
+import Api from '@/api';
 
 export default {
   props: {
@@ -117,20 +118,54 @@ export default {
       };
       switch (type) {
         case 'course_list':
-          path = `/goods/${this.course.goodsId}/show`;
-          params = Object.assign(params, {
-            targetId: id,
-          });
-
+          Api.meCourseMember({
+            query: {
+              id: this.course.id,
+            },
+          })
+            .then(res => {
+              if (res.id) {
+                path = `/course/${this.course.id}`;
+              } else {
+                path = `/goods/${this.course.goodsId}/show`;
+                params = Object.assign(params, {
+                  targetId: id,
+                });
+              }
+              this.$router.push({ path: path, query: params });
+            })
+            .catch(() => {
+              path = `/goods/${this.course.goodsId}/show`;
+              params = Object.assign(params, {
+                targetId: id,
+              });
+              this.$router.push({ path: path, query: params });
+            });
           break;
         case 'item_bank_exercise':
           path = `/item_bank_exercise/${id}`;
+          this.$router.push({ path: path, query: params });
           break;
         case 'classroom_list':
-          path = `/goods/${this.course.goodsId}/show`;
+          Api.meClassroomMember({
+            query: {
+              id: this.course.id,
+            },
+          })
+            .then(res => {
+              if (res.id) {
+                path = `/classroom/${this.course.id}`;
+              } else {
+                path = `/goods/${this.course.goodsId}/show`;
+              }
+              this.$router.push({ path: path, query: params });
+            })
+            .catch(() => {
+              path = `/goods/${this.course.goodsId}/show`;
+              this.$router.push({ path: path, query: params });
+            });
           break;
       }
-      this.$router.push({ path: path, query: params });
     },
     // 调用app接口
     postMessage(type, id) {
