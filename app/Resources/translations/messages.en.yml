@@ -9020,6 +9020,7 @@ exception.classroom.expired_classroom: Classroom has expired
 exception.classroom.forbidden_auditor_learn: Auditors have no right to learn
 exception.classroom.expired_member: The student has expired
 exception.classroom.forbidden_create_thread_event: Create an activity without permission
+exception.classroom.at_least_one_course: At least one course in classroom
 exception.course.member.not_found: The course doesn't have this student
 exception.course.member.not_member: The user is not a member of this course
 exception.course.member.duplicate_member: User has joined the teaching plan

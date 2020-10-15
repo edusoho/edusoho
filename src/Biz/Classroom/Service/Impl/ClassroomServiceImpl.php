@@ -135,9 +135,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         return $classrooms;
     }
+
     public function appendSpecsInfo($classrooms)
     {
         $classrooms = $this->getGoodsEntityFactory()->create('classroom')->fetchSpecs($classrooms);
+
         return $classrooms;
     }
 
@@ -766,8 +768,12 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     public function publishClassroom($id)
     {
         $this->tryManageClassroom($id, 'admin_classroom_open');
-
+        $classroom = $this->getClassroom($id);
+        if (0 == $classroom['courseNum']) {
+            $this->createNewException(ClassroomException::AT_LEAST_ONE_COURSE());
+        }
         $classroom = $this->updateClassroom($id, ['status' => 'published']);
+
         $this->getClassroomGoodsMediator()->onPublish($classroom);
 
         return $classroom;
