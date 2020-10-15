@@ -14,7 +14,8 @@ class GoodFilter extends Filter
         'id', 'title', 'subtitle', 'type', 'summary', 'minPrice', 'maxPrice',
         'minDisplayPrice', 'maxDisplayPrice', 'minPriceObj', 'maxPriceObj',
         'minDisplayPriceObj', 'maxDisplayPriceObj', 'images', 'ratingNum', 'rating', 'hitNum',
-        'hotSeq', 'showable', 'buyable', 'creator', 'discount', 'canManage', 'discountId', 'isMember'
+        'hotSeq', 'showable', 'buyable', 'creator', 'discount', 'canManage', 'discountId', 'isMember',
+        'peopleShowNum',
     ];
 
     protected $publicFields = [
@@ -22,7 +23,7 @@ class GoodFilter extends Filter
         'showable', 'buyable', 'summary', 'minPrice', 'maxPrice', 'minDisplayPrice', 'maxDisplayPrice', 'minPriceObj',
         'maxPriceObj', 'minDisplayPriceObj', 'maxDisplayPriceObj', 'images', 'orgId', 'orgCode', 'ratingNum', 'rating',
         'hitNum', 'hotSeq', 'recommendWeight', 'recommendedTime', 'createdTime', 'updatedTime', 'isFavorite', 'discount',
-        'discountId', 'canManage', 'isMember'
+        'discountId', 'canManage', 'isMember', 'peopleShowNum',
     ];
 
     protected $filterMap = [

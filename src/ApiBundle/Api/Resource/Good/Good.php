@@ -35,6 +35,12 @@ class Good extends AbstractResource
         $goods = $this->getGoodsService()->convertGoodsPrice($goods);
         $goodsEntity = $this->getGoodsService()->getGoodsEntityFactory()->create($goods['type']);
         $goods['canManage'] = $goodsEntity->canManageTarget($goods);
+        $goodSetting = $this->getSettingService()->get('goods_setting', []);
+        if ('visitor' === $goodSetting['show_number_data']) {
+            $goods['peopleShowNum'] = $goods['hitNum'];
+        } else {
+            $goods['peopleShowNum'] = $product['target']['studentNum'];
+        }
         if (1 == $request->query->get('preview')) {
             $goods['specs'] = $this->getGoodsService()->findGoodsSpecsByGoodsId($goods['id']);
         } else {
