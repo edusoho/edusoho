@@ -74,7 +74,7 @@ class Good extends AbstractResource
         return $product;
     }
 
-    private function fetchSpecs($goods, $goodsEntity, $request)
+    private function fetchSpecs(&$goods, $goodsEntity, $request)
     {
         $user = $this->getCurrentUser();
         if (1 == $request->query->get('preview')) {
@@ -114,7 +114,7 @@ class Good extends AbstractResource
             return $goods['hitNum'];
         }
 
-        return $goods['peopleShowNum'] = isset($goods['product']['target']['studentNum']) ? $goods['product']['target']['studentNum'] : 0;
+        return isset($goods['product']['target']['studentNum']) ? $goods['product']['target']['studentNum'] : 0;
     }
 
     /**
