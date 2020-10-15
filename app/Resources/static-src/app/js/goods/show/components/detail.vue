@@ -7,10 +7,10 @@
             <ul class="detail-left__text clearfix">
                 <li v-if="goodsSetting.show_number_data !== 'none'" class="pull-left"><i class="es-icon es-icon-friends mrs"></i>
                     <span v-if="goodsSetting.show_number_data === 'join'">
-                    {{ goods.product.target.studentNum }}人加入学习
+                    {{ goods.product.target.studentNum }}人
                     </span>
                     <span v-else-if="goodsSetting.show_number_data === 'visitor'">
-                    {{ goods.hitNum }}人访问
+                    {{ goods.hitNum }}人
                     </span>
                 </li>
                 <li class="pull-right">
