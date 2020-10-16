@@ -19,8 +19,14 @@ class OrderController extends BaseController
         $product->setAvailableDeduct();
         $product->setPickedDeduct([]);
 
+        $informationCollectEvent = $this->getInformationCollectEventService()->getEventByActionAndLocation('buy_before', [
+            'targetType' => $request->query->get('targetType'),
+            'targetId' => $request->query->get('targetId'),
+        ]);
+
         return $this->render('order/show/index.html.twig', [
             'product' => $product,
+            'informationCollectEvent' => $informationCollectEvent,
         ]);
     }
 
@@ -211,5 +217,10 @@ class OrderController extends BaseController
     protected function getCouponBatchService()
     {
         return $this->createService('Coupon:CouponBatchService');
+    }
+
+    protected function getInformationCollectEventService()
+    {
+        return $this->createService('InformationCollect:EventService');
     }
 }
