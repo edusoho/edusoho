@@ -40,6 +40,7 @@ class AssessmentSectionItemDaoImpl extends AdvancedDaoImpl implements Assessment
             ],
             'conditions' => [
                 'id = :id',
+                'assessment_id in (:assessmentIds)',
             ],
         );
     }

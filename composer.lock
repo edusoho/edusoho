@@ -65,6 +65,7 @@
                 "extension",
                 "twig"
             ],
+            "abandoned": "twig/cache-extension",
             "time": "2020-01-01T20:47:37+00:00"
         },
         {
@@ -463,12 +464,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-item-bank.git",
-                "reference": "29e0f8791a0f4946690e5977df7c60fbfcc29083"
+                "reference": "33368b09957761f1b3ba411aa6aec1ac5bbf5bc6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-item-bank/zipball/29e0f8791a0f4946690e5977df7c60fbfcc29083",
-                "reference": "29e0f8791a0f4946690e5977df7c60fbfcc29083",
+                "url": "https://api.github.com/repos/codeages/biz-item-bank/zipball/33368b09957761f1b3ba411aa6aec1ac5bbf5bc6",
+                "reference": "33368b09957761f1b3ba411aa6aec1ac5bbf5bc6",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -479,7 +480,7 @@
             },
             "require": {
                 "cerdic/css-tidy": "1.7.1",
-                "codeages/biz-framework": "^0.9.33",
+                "codeages/biz-framework": ">=0.9.33",
                 "codeages/exam-parser": "dev-master",
                 "ext-json": "*",
                 "ezyang/htmlpurifier": "4.12.0",
@@ -502,7 +503,7 @@
                 "MIT"
             ],
             "description": "item bank with biz-framework",
-            "time": "2020-08-17T09:30:53+00:00"
+            "time": "2020-10-16T07:56:18+00:00"
         },
         {
             "name": "codeages/biz-order-pay",
@@ -546,7 +547,7 @@
                 "MIT"
             ],
             "description": "order, pay module",
-            "time": "2020-09-28T10:02:01+00:00"
+            "time": "2020-09-03T09:33:21+00:00"
         },
         {
             "name": "codeages/biz-rate-limiter",
