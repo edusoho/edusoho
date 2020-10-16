@@ -34,7 +34,8 @@
                         <slot>{{ buyViewText }}</slot>
                     </a>
                     <span class="product-detail__disable_btn goods-btn-hover pull-right"
-                          v-if="(sku.vipLevelInfo && !sku.vipUser) || sku.vipLevelInfo && sku.vipUser && sku.vipLevelInfo.seq > sku.vipUser.level.seq && isShow"
+                          v-if="(sku.vipLevelInfo && !sku.vipUser)
+                          || sku.vipLevelInfo && sku.vipUser && (sku.vipLevelInfo.seq > sku.vipUser.level.seq || sku.vipLevelInfo.seq <= sku.vipUser.level.seq && parseInt(sku.vipUser.deadline) * 1000 < new Date().getTime()) && isShow"
                           data-container=".product-detail__disable_btn"
                           data-toggle="popover"
                           data-placement="top"
@@ -131,7 +132,7 @@
                 }).catch();
             },
             vipBtnTips(sku) {
-                return sku.vipUser ? `你还不是${sku.vipLevelInfo.name}，<a class='color-primary' href='/vip/upgrade' target='_blank'>升级会员</a>` : `你还不是${ sku.vipLevelInfo.name }，<a class='color-primary' href='/vip/buy' target='_blank'>购买会员</a>`;
+                return sku.vipUser && parseInt(sku.vipUser.deadline) * 1000 > new Date().getTime() ? `你还不是${sku.vipLevelInfo.name}，<a class='color-primary' href='/vip/upgrade' target='_blank'>升级会员</a>` : `你还不是${ sku.vipLevelInfo.name }，<a class='color-primary' href='/vip/buy' target='_blank'>购买会员</a>`;
             },
             mainBtnView(sku) {
                 if (sku.status !== 'published') { //如果商品未发布
@@ -149,16 +150,17 @@
                     && new Date(parseInt(sku.usageEndTime)).getTime() < new Date().getTime() + 86400 * 1000) { // 已发布，开放购买，但是超过最后学习期限了
                     this.buyViewMode = 'text';
                     this.buyViewText = Translator.trans('goods.show_page.usage_expiry_tips');
+                } else if (sku.vipLevelInfo && sku.vipUser && sku.vipLevelInfo.seq <= sku.vipUser.level.seq && parseInt(sku.vipUser.deadline) * 1000 > new Date().getTime()) {
+                    this.buyViewMode = 'btn';
+                    this.buyViewText = Translator.trans('goods.show_page.vip_free_learn');
                 } else if (sku.displayPrice == 0) {
                     this.buyViewMode = 'btn';
                     this.buyViewText = Translator.trans('goods.show_page.free_join_btn');
-                } else if (sku.vipLevelInfo && sku.vipUser && sku.vipLevelInfo.seq <= sku.vipUser.level.seq) {
-                    this.buyViewMode = 'btn';
-                    this.buyViewText = Translator.trans('goods.show_page.vip_free_learn');
                 } else {
                     this.buyViewMode = 'btn';
                     this.buyViewText = Translator.trans('goods.show_page.buy_btn');
                 }
+                console.log(parseInt(sku.vipUser.deadline) * 1000)
             },
         },
         created() {
