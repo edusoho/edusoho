@@ -2,8 +2,6 @@
 
 namespace Biz\InformationCollect\FormItem;
 
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-
 class CompanyFormItem extends FormItem
 {
     const TYPE = 'input';
@@ -20,7 +18,7 @@ class CompanyFormItem extends FormItem
             'field' => self::FIELD,
             'group' => self::COMPANY_INFO_GROUP,
             'value' => $this->value,
-            'builderType' => TextType::class,
+            'required' => $this->required,
             'validate' => [
                 ['required' => $this->required, 'message' => self::TITLE.'不能为空'],
                 ['min' => 2, 'message' => '最少输入2个字符'],

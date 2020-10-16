@@ -2,8 +2,6 @@
 
 namespace Biz\InformationCollect\FormItem;
 
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-
 class IdcardFormItem extends FormItem
 {
     const TYPE = 'input';
@@ -20,8 +18,7 @@ class IdcardFormItem extends FormItem
             'field' => self::FIELD,
             'value' => $this->value,
             'group' => self::BASE_INFO_GROUP,
-            'builderType' => TextType::class,
-            'attr' => ['placeholder' => '仅支持中国大陆身份证号',],
+            'required' => $this->required,
             'props' => [
                 'placeholder' => '仅支持中国大陆身份证号',
             ],

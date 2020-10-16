@@ -2,8 +2,6 @@
 
 namespace Biz\InformationCollect\FormItem;
 
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-
 class WeiboFormItem extends FormItem
 {
     const TYPE = 'input';
@@ -20,10 +18,10 @@ class WeiboFormItem extends FormItem
             'field' => self::FIELD,
             'group' => self::CONTACT_INFO_GROUP,
             'value' => $this->value,
-            'builderType' => TextType::class,
+            'required' => $this->required,
             'validate' => [
-                ['required' => $this->required, 'message' => self::TITLE . '不能为空'],
-                ['pattern' => '^[A-Za-z0-9\u4e00-\u9fa5]+$', 'message' => self::TITLE . '格式错误'],
+                ['required' => $this->required, 'message' => self::TITLE.'不能为空'],
+                ['pattern' => '^[A-Za-z0-9\u4e00-\u9fa5]+$', 'message' => self::TITLE.'格式错误'],
                 ['min' => 4, 'message' => '最少输入4个字符'],
                 ['max' => 30, 'message' => '最多输入30个字符'],
             ],

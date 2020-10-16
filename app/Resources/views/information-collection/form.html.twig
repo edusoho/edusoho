@@ -1,26 +1,72 @@
-{% do script(['libs/jquery-validation.js','libs/bootstrap-datetimepicker.js','app/js/information-collect/form/index.js'])%}
+{% do script(['libs/jquery-validation.js', 'libs/province-city-area.js', 'libs/select2.js', 'libs/bootstrap-datetimepicker.js', 'app/js/information-collect/form/index.js'])%}
 
-<form id="infomation-collect-form" class="form-horizontal" method="post" data-url="{{ path('homepage') }}">
+<form id="infomation-collect-form" class="form-horizontal">
 	<div class="row mbm">
 		<h4 class="text-center">{{event.formTitle|default('')}}</h4>
 	</div>
-	{% for item in eventFormItems %}
-		{% if formItemsView[item.field] is not null %}
-			<div class="form-group">
-				<div class="col-md-3 control-label">{{ form_label(formItemsView[item.field], item.title, {label_attr: {for: "testa"}}) }}</div>
-				<div class="controls col-md-8 controls">
-					{% set class = item.type in ['input' , 'textarea', 'cascader', 'DatePicker'] ? 'form-control' : '' %}
-					{{ form_widget(formItemsView[item.field], {attr:{class: class}}) }}
-				</div>
+	<input type="hidden" name="eventId" value="{{ event.eventId }}"/>
+	{% for item in event.items %}
+		<div class="form-group">
+			<div class="col-md-3 control-label">
+				<label class="" for="{{ item.field }}">{{ item.title }}</label>
 			</div>
-		{% endif %}
+			<div class="controls col-md-8 controls">
+				{% if item.type in ['radio'] %}
+					{% for option in item.options %}
+						<label class="mts">
+							<input type="radio" name="{{ item.field }}" value="{{ option.value|default(null) }}" {% if item.value == option.value %} checked="checked" {% endif %} {% if item.required|default(0) %} required="required" {% endif %}>
+							{{ option.label }}</label>
+					{% endfor %}
+				{% else %}
+					<input type="{{ item.field == 'province_city_area' ? 'hidden' : item.type }}" id="{{ item.field }}" name="{{ item.field }}" {% if item.required|default(0) %} required="required" {% endif %} class="form-control" value="{{ item.field == 'province_city_area' ? item.value|json_encode|default(null) : item.value|default(null) }}">
+				{% endif %}
+				{% if item.field == 'province_city_area' %}
+					<div class="form-control" style="border: none;padding: unset;">
+						<div class="cd-select col-md-4 pl0" id="province">
+							<input type="hidden" name="province" value="{{ item.value[0]|default(null) }}"/>
+							<div class="select-value">
+								{% if not item.value[0]|default(null) %}
+									<span class="text-muted">{{ 'information_collect.select_placeholeder'|trans }}</span>
+								{% else %}
+									{{ item.value[0] }}
+								{% endif %}
+							</div>
+							<ul class="select-options province-select-options"/>
+						</div>
+
+						<div class="cd-select col-md-4 {% if not item.value[1]|default(null) %} hidden {% endif %}" id="city">
+							<input type="hidden" name="city" value="{{ item.value[1]|default(null) }}"/>
+							<div class="select-value">
+								{% if not item.value[1]|default(null) %}
+									<span class="text-muted">{{ 'information_collect.select_placeholeder'|trans }}</span>
+								{% else %}
+									{{ item.value[1] }}
+								{% endif %}
+							</div>
+							<ul class="select-options city-select-options"/>
+						</div>
+
+						<div class="cd-select col-md-4 {% if not item.value[2]|default(null) %} hidden {% endif %}" id="area">
+							<input type="hidden" name="area" value="{{ item.value[2]|default(null) }}"/>
+							<div class="select-value">
+								{% if not item.value[2]|default(null) %}
+									<span class="text-muted">{{ 'information_collect.select_placeholeder'|trans }}</span>
+								{% else %}
+									{{ item.value[2] }}
+								{% endif %}
+							</div>
+							<ul class="select-options area-select-options"/>
+						</div>
+					</div>
+				{% endif %}
+			</div>
+		</div>
 	{% endfor %}
 	<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-	{{ form_rest(formItemsView) }}
 	<div class="row">
-		<button type="submit" class="btn btn-primary js-btn-thread-save col-sm-6 col-sm-offset-3">{{'information_collect.form_items.confirm_submit'|trans}}</button>
+		<button type="button" class="btn btn-primary js-btn-save col-sm-6 col-sm-offset-3" data-goto="{{ goto|default('/') }}">{{'information_collect.form_items.confirm_submit'|trans}}</button>
 		{% if event.allowSkip|default(0) %}
-			<button type="button" class="btn btn-default js-btn-thread-save col-sm-6 col-sm-offset-3">{{'information_collect.form_items.skip'|trans}}</button>
+			<a href="{{ goto|default('/') }}" class="btn btn-default js-btn-skip col-sm-6 col-sm-offset-3 mts">{{'information_collect.form_items.skip'|trans}}</a>
 		{% endif %}
 	</div>
 </form>

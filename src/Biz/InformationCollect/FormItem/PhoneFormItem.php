@@ -2,8 +2,6 @@
 
 namespace Biz\InformationCollect\FormItem;
 
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-
 class PhoneFormItem extends FormItem
 {
     const TYPE = 'input';
@@ -20,10 +18,7 @@ class PhoneFormItem extends FormItem
             'field' => self::FIELD,
             'value' => $this->value,
             'group' => self::CONTACT_INFO_GROUP,
-            'builderType' => TextType::class,
-            'builderOptions' => [
-                'attr' => ['placeholder' => '仅支持中国大陆手机号码',],
-            ],
+            'required' => $this->required,
             'props' => [
                 'type' => 'number',
                 'placeholder' => '仅支持中国大陆手机号码',

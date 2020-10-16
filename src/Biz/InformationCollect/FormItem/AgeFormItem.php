@@ -2,8 +2,6 @@
 
 namespace Biz\InformationCollect\FormItem;
 
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
-
 class AgeFormItem extends FormItem
 {
     const TYPE = 'input';
@@ -20,7 +18,7 @@ class AgeFormItem extends FormItem
             'field' => self::FIELD,
             'value' => $this->value,
             'group' => self::BASE_INFO_GROUP,
-            'builderType' => NumberType::class,
+            'required' => $this->required,
             'props' => [
                 'type' => 'number',
             ],
