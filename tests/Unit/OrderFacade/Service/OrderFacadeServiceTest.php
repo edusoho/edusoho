@@ -199,9 +199,6 @@ class OrderFacadeServiceTest extends BaseTestCase
 
         $this->getCourseService()->updateCourse($course['id'], $courseFields);
         $this->getCourseService()->updateBaseInfo($course['id'], $courseFields);
-        $course = $this->createCourse('Test Course 1');
-        $courseIds = [$course['id']];
-        $this->getClassroomService()->addCoursesToClassroom($classroom['id'], $courseIds);
         $this->getCourseSetService()->publishCourseSet($courseSet['id']);
 
         return $this->getCourseService()->getCourse($course['id']);
@@ -219,6 +216,9 @@ class OrderFacadeServiceTest extends BaseTestCase
 
         $classroom = $this->getClassroomService()->addClassroom($classroomFields);
         $this->getClassroomService()->updateClassroom($classroom['id'], $classroomFields);
+        $course = $this->createCourse();
+        $courseIds = [$course['id']];
+        $this->getClassroomService()->addCoursesToClassroom($classroom['id'], $courseIds);
         $this->getClassroomService()->publishClassroom($classroom['id']);
 
         return $this->getClassroomService()->getClassroom($classroom['id']);
