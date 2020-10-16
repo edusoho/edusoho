@@ -6,9 +6,12 @@ use Biz\BaseTestCase;
 use Biz\Classroom\ClassroomException;
 use Biz\Classroom\Dao\ClassroomDao;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
 use Biz\Goods\GoodsEntityFactory;
 use Biz\Goods\Service\GoodsService;
 use Biz\Product\Service\ProductService;
+use Biz\User\CurrentUser;
 
 class ClassroomEntityTest extends BaseTestCase
 {
@@ -81,10 +84,24 @@ class ClassroomEntityTest extends BaseTestCase
 
     public function testBuySpecsAccess()
     {
+        $course = $this->createCourse('Test Course 1');
+        $courseIds = [$course['id']];
         $classroom = $this->getClassroomService()->addClassroom($this->mockClassroom());
+        $this->getClassroomService()->addCoursesToClassroom($classroom['id'], $courseIds);
         $this->getClassroomService()->publishClassroom($classroom['id']);
         list($product, $goods) = $this->getProductAndGoods($classroom);
         $specs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $classroom['id']);
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray([
+            'id' => 4,
+            'nickname' => 'admin4',
+            'email' => 'admin4@admin.com',
+            'password' => 'admin',
+            'currentIp' => '127.0.0.1',
+            'roles' => ['ROLE_USER'],
+            'locked' => 0,
+        ]);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
         $access = $this->getGoodsEntityFactory()->create('classroom')->buySpecsAccess($goods, $specs);
 
         // 班级的创建者只是班级的班主任，但是不是班级的教师，所以当前业务上返回可以加入
@@ -93,7 +110,10 @@ class ClassroomEntityTest extends BaseTestCase
 
     public function testIsSpecsMember()
     {
+        $course = $this->createCourse('Test Course 1');
+        $courseIds = [$course['id']];
         $classroom = $this->getClassroomService()->addClassroom($this->mockClassroom());
+        $this->getClassroomService()->addCoursesToClassroom($classroom['id'], $courseIds);
         $this->getClassroomService()->publishClassroom($classroom['id']);
         list($product, $goods) = $this->getProductAndGoods($classroom);
         $specs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $classroom['id']);
@@ -103,7 +123,10 @@ class ClassroomEntityTest extends BaseTestCase
 
     public function testIsSpecsStudent()
     {
+        $course = $this->createCourse('Test Course 1');
+        $courseIds = [$course['id']];
         $classroom = $this->getClassroomService()->addClassroom($this->mockClassroom());
+        $this->getClassroomService()->addCoursesToClassroom($classroom['id'], $courseIds);
         $this->getClassroomService()->publishClassroom($classroom['id']);
         list($product, $goods) = $this->getProductAndGoods($classroom);
         $specs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $classroom['id']);
@@ -113,7 +136,10 @@ class ClassroomEntityTest extends BaseTestCase
 
     public function testIsSpecsTeacher()
     {
+        $course = $this->createCourse('Test Course 1');
+        $courseIds = [$course['id']];
         $classroom = $this->getClassroomService()->addClassroom($this->mockClassroom());
+        $this->getClassroomService()->addCoursesToClassroom($classroom['id'], $courseIds);
         $this->getClassroomService()->publishClassroom($classroom['id']);
         list($product, $goods) = $this->getProductAndGoods($classroom);
         $specs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $classroom['id']);
@@ -192,5 +218,46 @@ class ClassroomEntityTest extends BaseTestCase
     protected function getClassroomDao()
     {
         return $this->createDao('Classroom:ClassroomDao');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    private function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    private function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
+    }
+
+    private function mockCourse($title = 'Test Course 1')
+    {
+        return [
+            'title' => $title,
+            'courseSetId' => 1,
+            'learnMode' => 'freeMode',
+            'expiryMode' => 'forever',
+            'courseType' => 'normal',
+        ];
+    }
+
+    private function createCourse($title)
+    {
+        $courseSet = [
+            'title' => '新课程开始！',
+            'type' => 'normal',
+        ];
+
+        $courseSet = $this->getCourseSetService()->createCourseSet($courseSet);
+        $course = $this->mockCourse($title);
+        $course['courseSetId'] = $courseSet['id'];
+
+        return $this->getCourseService()->createCourse($course);
     }
 }

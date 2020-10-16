@@ -5,6 +5,8 @@ namespace Tests\Unit\Marketing\Service;
 use AppBundle\Common\TimeMachine;
 use Biz\BaseTestCase;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
 use Biz\Marketing\Service\Impl\MarketingClassroomServiceImpl;
 use Biz\User\Dao\UserDao;
 use Codeages\Biz\Order\Service\OrderService;
@@ -155,7 +157,9 @@ class MarketingClassroomServiceTest extends BaseTestCase
             'price' => '100.00',
         ], $classroomFields);
         $classroom = $this->getClassroomService()->addClassroom($classroomFields);
-
+        $course = $this->createCourse('Test Course 1');
+        $courseIds = [$course['id']];
+        $this->getClassroomService()->addCoursesToClassroom($classroom['id'], $courseIds);
         $this->getClassroomService()->updateClassroom($classroom['id'], $classroomFields);
         $this->getClassroomService()->publishClassroom($classroom['id']);
 
@@ -202,5 +206,46 @@ class MarketingClassroomServiceTest extends BaseTestCase
     protected function getMarketingClassroomMemberService()
     {
         return $this->createService('Marketing:MarketingClassroomMemberService');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    private function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    private function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
+    }
+
+    private function mockCourse($title = 'Test Course 1')
+    {
+        return [
+            'title' => $title,
+            'courseSetId' => 1,
+            'learnMode' => 'freeMode',
+            'expiryMode' => 'forever',
+            'courseType' => 'normal',
+        ];
+    }
+
+    private function createCourse($title)
+    {
+        $courseSet = [
+            'title' => '新课程开始！',
+            'type' => 'normal',
+        ];
+
+        $courseSet = $this->getCourseSetService()->createCourseSet($courseSet);
+        $course = $this->mockCourse($title);
+        $course['courseSetId'] = $courseSet['id'];
+
+        return $this->getCourseService()->createCourse($course);
     }
 }
