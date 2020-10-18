@@ -43,7 +43,7 @@
     created() {
         const that = this;
         $.ajax({
-          url: '/api/answer_record/'+$("[name='answer_record_id']").val(),
+          url: '/api/plugins/CloudItemBank/answer_record/'+$("[name='answer_record_id']").val(),
           type: 'GET',
           async:false,
           headers:{
@@ -61,7 +61,7 @@
         })
 
         $.ajax({
-          url: '/api/assessments/'+that.assessment.id+'/question_favorites',
+          url: '/api/plugins/CloudItemBank/assessments/'+that.assessment.id+'/question_favorites',
           type: 'GET',
           async:false,
           headers:{
