@@ -40,8 +40,8 @@ class TaskSync extends AbstractEntitySync
         $config['newUploadFiles'] = $newUploadFiles;
 
         $this->logger->info('[syncEntity] 开始同步课程题库数据');
-        $questionMap = $this->doSyncQuestions($source, $config);
-        $this->logger->info('[syncEntity] 同步课程题库数据完成');
+       // $questionMap = $this->doSyncQuestions($source, $config);
+        //$this->logger->info('[syncEntity] 同步课程题库数据完成');
 
         $this->logger->info('[syncEntity] 开始同步课程教学活活动数据');
         $activityMap = $this->doSyncActivities($source, $config);
@@ -132,8 +132,8 @@ class TaskSync extends AbstractEntitySync
 
         $config['newUploadFiles'] = $newUploadFiles;
         $this->logger->info('[updateEntityToLastedVersion] 开始更新课程题库数据');
-        $questionMap = $this->doUpdateQuestions($source, $config);
-        $this->logger->info('[updateEntityToLastedVersion] 更新课程题库数据完成');
+//        $questionMap = $this->doUpdateQuestions($source, $config);
+//        $this->logger->info('[updateEntityToLastedVersion] 更新课程题库数据完成');
 
         $this->logger->info('[updateEntityToLastedVersion] 开始更新课程教学计划数据');
         $activityMap = $this->doUpdateActivities($source, $config);
