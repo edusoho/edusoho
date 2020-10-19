@@ -22,7 +22,6 @@ class InformationCollectController extends BaseController
 
     public function eventFormAction(Request $request, $eventId)
     {
-        $event = $this->getEventService()->get($eventId);
         $apiRequest = new ApiRequest(
             "/api/information_collect_form/{$eventId}",
             'GET'

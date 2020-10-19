@@ -1,4 +1,5 @@
 import notify from 'common/notify';
+import Api from 'common/api';
 
 let $form = $('#infomation-collect-form');
 let validator = $form.validate({
@@ -199,6 +200,7 @@ function initAreaSelectOptions(cityIndex, selectedValue = '') {
     $('input[name="area"]').siblings('.select-value').html('<span class="text-muted"> ' + selectedValue + '</span>');
     if (selectedValue) {
         $('input[name="area"]').siblings('.select-value').html('<span> ' + selectedValue + '</span>');
+        $('input[name="province_city_area"]').val(JSON.stringify([$('input[name="province"]').val(), $('input[name="city"]').val(), selectedValue]));
     } else {
         $('input[name="area"]').siblings('.select-value').html('<span class="text-muted"> ' + Translator.trans('site.choose_hint') + '</span>');
     }
@@ -221,17 +223,12 @@ $('.js-btn-save').on('click', (event) => {
         return;
     }
 
-    $.ajax({
-        type: "POST",
+    Api.informationCollect.submitEvent({
         data: $form.serialize(),
-        beforeSend: function (request) {
-            request.setRequestHeader("Accept", 'application/vnd.edusoho.v2+json');
-            request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr('content'));
-        },
-        url: '/api/information_collect_form',
-        success: function (resp) {
-            notify('success', Translator.trans('site.save_success_hint'));
-            window.location.href = $('.js-btn-save').data('goto');
-        }
+    }).then((resp) => {
+        notify('success', Translator.trans('site.save_success_hint'));
+        window.location.href = $('.js-btn-save').data('goto');
+    }).catch(() => {
+        notify('danger', Translator.trans('site.save_error_hint'));
     });
 });
