@@ -97,7 +97,6 @@ payment:
     lianlianpay: LLPay
     coin: Coin
     wechat_app: MiniProgram
-    paypal: PayPal
     none: Others
 
 paymentSelect:
