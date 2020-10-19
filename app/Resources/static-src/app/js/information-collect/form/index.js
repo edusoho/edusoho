@@ -220,18 +220,10 @@ $('.js-btn-save').on('click', (event) => {
     if (!validator.form()) {
         return;
     }
-    let formData = {};
-    $.each($form.serializeArray(), function (index, item) {
-        if (item.name.indexOf('[') >= 0) {
-            formData[item.name.slice(item.name.indexOf('[') + 1, item.name.indexOf(']'))] = item.value;
-        } else {
-            formData[item.name] = item.value;
-        }
-    });
 
     $.ajax({
         type: "POST",
-        data: formData,
+        data: $form.serialize(),
         beforeSend: function (request) {
             request.setRequestHeader("Accept", 'application/vnd.edusoho.v2+json');
             request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr('content'));
