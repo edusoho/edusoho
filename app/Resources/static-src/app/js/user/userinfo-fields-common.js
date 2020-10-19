@@ -1,5 +1,6 @@
 import SmsSender from 'app/common/widget/sms-sender';
 import notify from 'common/notify';
+import Api from 'common/api';
 
 export default class UserInfoFieldsItemValidate {
   constructor(options) {
@@ -104,18 +105,15 @@ export default class UserInfoFieldsItemValidate {
       submitHandler: form => {
         if ($(form).valid()) {
 
-          $.ajax({
-            type: "GET",
+          Api.informationCollect.getEvent({
+            params: {
+              action: 'buy_before',
+            },
             data: {
-              'targetType': $('#form-submit-btn').data('targetType'),
-              'targetId': $('#form-submit-btn').data('targetId'),
-            },
-            beforeSend: function (request) {
-              request.setRequestHeader("Accept", 'application/vnd.edusoho.v2+json');
-              request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr('content'));
-            },
-            url: '/api/information_collect_event/buy_before',
-          }).done(function (resp) {
+              targetType: $(this).data('targetType'),
+              targetId: $(this).data('targetId'),
+            }
+          }).then((resp) => {
             if (resp && resp.status =='open'){
               $.get('/information_collect/event/' + resp.id, resp => {
                 if (typeof resp === 'object') {

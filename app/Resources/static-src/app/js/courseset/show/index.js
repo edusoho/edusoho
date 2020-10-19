@@ -2,6 +2,7 @@ import { chapterAnimate } from 'app/common/widget/chapter-animate';
 import AttachmentActions from 'app/js/attachment/widget/attachment-actions';
 import { Browser } from 'common/utils';
 import { buyBtn } from 'app/common/widget/btn-util';
+import Api from 'common/api';
 
 courseBeforeJoin();
 initTaskLearnChart();
@@ -13,37 +14,36 @@ if ($('.js-attachment-list').length > 0) {
 }
 
 function courseBeforeJoin() {
+
   $('.js-course-buy-btn').on('click', function () {
-    $.ajax({
-      type: "GET",
+    Api.informationCollect.getEvent({
+      params: {
+        action: 'buy_before',
+      },
       data: {
-        'targetType': $(this).data('targetType'),
-        'targetId': $(this).data('targetId'),
-      },
-      beforeSend: function (request) {
-        request.setRequestHeader("Accept", 'application/vnd.edusoho.v2+json');
-        request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr('content'));
-      },
-      url: '/api/information_collect_event/buy_before',
-    }).done(function (resp) {
-      if (resp && resp.status =='open'){
-        $.get('/information_collect/event/' + resp.id, resp => {
-          if (typeof resp === 'object') {
-            window.location.href = resp.url;
+        targetType: $(this).data('targetType'),
+        targetId: $(this).data('targetId'),
+      }
+    }).then((res) => {
+      if (res && res.status =='open'){
+        $.get('/information_collect/event/' + res.id, res => {
+          if (typeof res === 'object') {
+            window.location.href = res.url;
           } else {
-            $('#modal').modal('show').html(resp);
+            $('#modal').modal('show').html(res);
           }
         });
       }else{
-        $.post($('.js-course-buy-btn').data('url'), resp => {
-          if (typeof resp === 'object') {
-            window.location.href = resp.url;
+        $.post($('.js-course-buy-btn').data('url'), res => {
+          if (typeof res === 'object') {
+            window.location.href = res.url;
           } else {
-            $('#modal').modal('show').html(resp);
+            $('#modal').modal('show').html(res);
           }
         });
       }
     });
+
   });
 }
 
