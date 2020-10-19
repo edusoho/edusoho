@@ -201,7 +201,7 @@ export default {
         this.currentSku.vipLevelInfo.seq <= this.currentSku.vipUser.level.seq
       ) {
         const vipExpired =
-          new Date(this.currentSku.vipUser.deadline).getTime() <
+          parseInt(this.currentSku.vipUser.deadline) * 1000 <
           new Date().getTime();
         vipAccess = !vipExpired;
       }
