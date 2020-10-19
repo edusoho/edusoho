@@ -15,7 +15,7 @@
       class="goods-reviews__content"
       v-model="content"
     ></textarea>
-    <div class="goods-reviews__submit" @click="onSubmit">发布</div>
+    <div class="goods-reviews__submit" @click="onSubmit">提交</div>
   </div>
 </template>
 
@@ -24,7 +24,7 @@ export default {
   data() {
     return {
       value: 0,
-      content: '还不错的课程',
+      content: '',
     };
   },
   methods: {

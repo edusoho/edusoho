@@ -692,7 +692,7 @@ const routes = [
     path: '/goods/reviews',
     name: 'goods_reviews',
     meta: {
-      title: '进群免费学习课程',
+      title: '评分',
     },
     component: () =>
       import(/* webpackChunkName: "goods" */ '@/containers/goods/reviews.vue'),
