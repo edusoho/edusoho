@@ -14,6 +14,7 @@ class WeiboFormItemTest extends BaseTestCase
             'field' => 'weibo',
             'group' => 'contact',
             'value' => 'abc123',
+            'required' => true,
             'validate' => [
                 [
                     'required' => true,

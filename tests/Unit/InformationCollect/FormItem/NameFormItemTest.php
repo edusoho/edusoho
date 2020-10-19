@@ -14,6 +14,7 @@ class NameFormItemTest extends BaseTestCase
             'field' => 'name',
             'value' => '张三',
             'group' => 'base',
+            'required' => true,
             'validate' => [
                 [
                     'required' => true,

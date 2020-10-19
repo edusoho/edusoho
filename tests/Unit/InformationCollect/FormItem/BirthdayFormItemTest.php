@@ -15,6 +15,7 @@ class BirthdayFormItemTest extends BaseTestCase
                 "field": "birthday",
                 "value": "1994-06-21",
                 "group": "base",
+                "required": true,
                 "props": {
                     "type": "date",
                     "format": "yyyy-MM-dd",

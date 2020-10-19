@@ -1,0 +1,12 @@
+.information-collect-form .control-border-unset {
+    border: unset !important;
+    padding: unset !important;
+}
+
+.information-collect-form .label-required {
+    position: relative;
+    &::after {
+      content: "*";
+      color: @brand-warning;
+    }
+}

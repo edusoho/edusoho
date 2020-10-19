@@ -15,6 +15,7 @@ class GenderFormItemTest extends BaseTestCase
                 "field": "gender",
                 "group": "base",
                 "value": "男",
+                "required": true,
                 "options": [
                     {
                         "value": "男",

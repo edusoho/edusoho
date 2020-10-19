@@ -1,6 +1,6 @@
 {% do script(['libs/jquery-validation.js', 'libs/province-city-area.js', 'libs/select2.js', 'libs/bootstrap-datetimepicker.js', 'app/js/information-collect/form/index.js'])%}
 
-<form id="infomation-collect-form" class="form-horizontal">
+<form id="infomation-collect-form" class="form-horizontal information-collect-form">
 	<div class="row mbm">
 		<h4 class="text-center">{{event.formTitle|default('')}}</h4>
 	</div>
@@ -8,7 +8,7 @@
 	{% for item in event.items %}
 		<div class="form-group">
 			<div class="col-md-3 control-label">
-				<label class="" for="{{ item.field }}">{{ item.title }}</label>
+				<label class="{% if item.required %}label-required{% endif %}" for="{{ item.field }}">{{ item.title }}</label>
 			</div>
 			<div class="controls col-md-8 controls">
 				{% if item.type in ['radio'] %}
@@ -18,10 +18,15 @@
 							{{ option.label }}</label>
 					{% endfor %}
 				{% else %}
-					<input type="{{ item.field == 'province_city_area' ? 'hidden' : item.type }}" id="{{ item.field }}" name="{{ item.field }}" {% if item.required|default(0) %} required="required" {% endif %} class="form-control" value="{{ item.field == 'province_city_area' ? item.value|json_encode|default(null) : item.value|default(null) }}">
+					{% if item.type == 'textarea' %}
+						<textarea class="form-control" rows="4" id="{{ item.field }}" name="{{ item.field }}" {% if item.required|default(0) %} required="required" {% endif %}>{{ item.value|default(null) }}</textarea>
+					{% else %}
+						<input type="{{ item.field == 'province_city_area' ? 'hidden' : item.type }}" id="{{ item.field }}" name="{{ item.field }}" {% if item.required|default(0) %} required="required" {% endif %} class="form-control" value="{{ item.field == 'province_city_area' ? item.value|json_encode|default(null) : item.value|default(null) }}">
+					{% endif %}
+
 				{% endif %}
 				{% if item.field == 'province_city_area' %}
-					<div class="form-control" style="border: none;padding: unset;">
+					<div class="form-control border-unset control-border-unset">
 						<div class="cd-select col-md-4 pl0" id="province">
 							<input type="hidden" name="province" value="{{ item.value[0]|default(null) }}"/>
 							<div class="select-value">

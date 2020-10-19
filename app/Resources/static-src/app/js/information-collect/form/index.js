@@ -105,7 +105,15 @@ $.validator.addMethod('check_weibo', function (value, element) {
 }, Translator.trans('information_collect.form.check_format_invalid'));
 
 if ($('input[name="province_city_area"]').length) {
-    initProvinceOptionsAndSelect();
+    initProvinceOptions();
+    cd.select({
+        el: '#province',
+        type: 'single'
+    }).on('change', (value, text) => {
+        $('#city').hasClass('hidden') ? $('#city').removeClass('hidden') : '';
+        initCitySelectOptions(value);
+        initAreaSelectOptions();
+    });
 
     cd.select({
         el: '#city',
@@ -146,36 +154,55 @@ function initDatePicker($target) {
     });
 }
 
-function initProvinceOptionsAndSelect() {
+function initProvinceOptions() {
     appendSelectOption($('.province-select-options'), window.arealist.province_list);
 
-    cd.select({
-        el: '#province',
-        type: 'single'
-    }).on('change', (value, text) => {
-        $('#city').hasClass('hidden') ? $('#city').removeClass('hidden') : '';
-        initCitySelectOptions(value);
-        initAreaSelectOptions();
-    });
+    if ($('input[name="province"]').val()) {
+        let provinceIndex = 0;
+        $.each(window.arealist.province_list, function (index, value) {
+            if (value == $('input[name="province"]').val()) {
+                provinceIndex = index;
+                return;
+            }
+        });
+        initCitySelectOptions(provinceIndex, $('input[name="city"]').val());
+    }
+
+    if ($('input[name="city"]').val()) {
+        let cityIndex = 0;
+        $.each(window.arealist.city_list, function (index, value) {
+            if (value == $('input[name="city"]').val()) {
+                cityIndex = index;
+                return;
+            }
+        });
+        initAreaSelectOptions(cityIndex, $('input[name="area"]').val());
+    }
 }
 
-function initCitySelectOptions(provinceIndex) {
+function initCitySelectOptions(provinceIndex, selectedValue = '') {
     $('.city-select-options').empty();
     $('input[name="province_city_area"]').attr('value', '');
-    $('input[name="city"]').attr('value', '');
-    $('input[name="city"]').siblings('.select-value').html('<span class="text-muted"> ' + '请选择' + '</span>');
-    appendSelectOption($('.city-select-options'), window.arealist.city_list, provinceIndex, provinceIndex + 10000);
+    $('input[name="city"]').attr('value', selectedValue);
+    if (selectedValue) {
+        $('input[name="city"]').siblings('.select-value').html('<span> ' + selectedValue + '</span>');
+    } else {
+        $('input[name="city"]').siblings('.select-value').html('<span class="text-muted"> ' + Translator.trans('site.choose_hint') + '</span>');
+    }
+    appendSelectOption($('.city-select-options'), window.arealist.city_list, parseInt(provinceIndex), parseInt(provinceIndex) + 10000);
 }
 
-function initAreaSelectOptions(cityIndex = 0) {
+function initAreaSelectOptions(cityIndex, selectedValue = '') {
     $('.area-select-options').empty();
     $('input[name="province_city_area"]').attr('value', '');
-    $('input[name="area"]').attr('value', '');
-    $('input[name="area"]').siblings('.select-value').html('<span class="text-muted"> ' + '请选择' + '</span>');
-    if (!cityIndex) {
-        return;
+    $('input[name="area"]').attr('value', selectedValue);
+    $('input[name="area"]').siblings('.select-value').html('<span class="text-muted"> ' + selectedValue + '</span>');
+    if (selectedValue) {
+        $('input[name="area"]').siblings('.select-value').html('<span> ' + selectedValue + '</span>');
+    } else {
+        $('input[name="area"]').siblings('.select-value').html('<span class="text-muted"> ' + Translator.trans('site.choose_hint') + '</span>');
     }
-    appendSelectOption($('.area-select-options'), window.arealist.county_list, cityIndex, cityIndex + 100);
+    appendSelectOption($('.area-select-options'), window.arealist.county_list, parseInt(cityIndex), parseInt(cityIndex) + 100);
 }
 
 function appendSelectOption($target, options, sliceStartIndex = 0, sliceEndIndex = 0) {
@@ -190,7 +217,6 @@ function appendSelectOption($target, options, sliceStartIndex = 0, sliceEndIndex
 }
 
 $('.js-btn-save').on('click', (event) => {
-
     if (!validator.form()) {
         return;
     }

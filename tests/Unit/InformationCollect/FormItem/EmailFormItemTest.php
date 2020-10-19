@@ -14,6 +14,7 @@ class EmailFormItemTest extends BaseTestCase
             'field' => 'email',
             'group' => 'contact',
             'value' => 'edusoho@edusoho.com',
+            'required' => true,
             'validate' => [
                 [
                     'required' => true,
