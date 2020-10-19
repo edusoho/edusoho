@@ -20,7 +20,7 @@ class LearnCourseTaskAccessor extends AccessorAdapter
         $course = $this->getCourseService()->getCourse($task['courseId']);
         $courseLearnResult = $learnCourseChain->process($course);
 
-        if ($courseLearnResult['code'] == AccessorInterface::SUCCESS) {
+        if (AccessorInterface::SUCCESS == $courseLearnResult['code']) {
             return null;
         } else {
             return $this->tryFreeLearn($task, $course, $courseLearnResult['code']);
@@ -35,7 +35,7 @@ class LearnCourseTaskAccessor extends AccessorAdapter
             }
 
             if ($course['tryLookable']
-                && $task['type'] == 'video') {
+                && 'video' == $task['type']) {
                 $activity = $this->getActivityService()->getActivity($task['activityId'], true);
                 if (!empty($activity['ext']) && !empty($activity['ext']['file']) && in_array($activity['ext']['file']['storage'], ['cloud', 'supplier'])) {
                     return $this->buildResult('allow_trial');
