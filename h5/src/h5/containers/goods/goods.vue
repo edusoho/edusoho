@@ -15,7 +15,7 @@
         <specs :goods="goods" :currentSku="currentSku" @changeSku="changeSku" />
         <certificate
           v-if="currentSku.hasCertificate"
-          :selectedPlanId="$route.query.targetId"
+          :selectedPlanId="currentSku.targetId"
         />
         <enter-learning
           v-if="Object.keys(componentsInfo.mpQrCode).length"
