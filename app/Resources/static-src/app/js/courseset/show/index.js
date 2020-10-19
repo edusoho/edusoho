@@ -3,12 +3,42 @@ import AttachmentActions from 'app/js/attachment/widget/attachment-actions';
 import { Browser } from 'common/utils';
 import { buyBtn } from 'app/common/widget/btn-util';
 
+courseBeforeJoin();
 initTaskLearnChart();
 triggerMemberExpired();
 remainTime();
 
 if ($('.js-attachment-list').length > 0) {
   new AttachmentActions($('.js-attachment-list'));
+}
+
+function courseBeforeJoin() {
+  $('.js-course-buy-btn').on('click', function () {
+    $.ajax({
+      type: "GET",
+      data: {
+        'targetType': $(this).data('targetType'),
+        'targetId': $(this).data('targetId'),
+      },
+      beforeSend: function (request) {
+        request.setRequestHeader("Accept", 'application/vnd.edusoho.v2+json');
+        request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr('content'));
+      },
+      url: '/api/information_collect_event/buy_before',
+    }).done(function (resp) {
+      if (resp && resp.status =='open'){
+        console.log(' ');
+      }else{
+        $.post($('.js-course-buy-btn').data('url'), resp => {
+          if (typeof resp === 'object') {
+            window.location.href = resp.url;
+          } else {
+            $('#modal').modal('show').html(resp);
+          }
+        });
+      }
+    });
+  });
 }
 
 buyBtn($('.js-buy-btn'));

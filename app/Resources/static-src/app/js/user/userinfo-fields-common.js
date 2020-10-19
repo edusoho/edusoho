@@ -103,15 +103,33 @@ export default class UserInfoFieldsItemValidate {
       },
       submitHandler: form => {
         if ($(form).valid()) {
-          $.post($(form).attr('action'), $(form).serialize(), resp => {
-            if (resp.url) {
-              location.href = resp.url;
-            } else {
-              notify('success', Translator.trans('site.save_success_hint'));
-              $('#modal').modal('hide');
-            }
 
+          $.ajax({
+            type: "GET",
+            data: {
+              'targetType': $('#form-submit-btn').data('targetType'),
+              'targetId': $('#form-submit-btn').data('targetId'),
+            },
+            beforeSend: function (request) {
+              request.setRequestHeader("Accept", 'application/vnd.edusoho.v2+json');
+              request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr('content'));
+            },
+            url: '/api/information_collect_event/buy_before',
+          }).done(function (resp) {
+            if (resp && resp.status =='open'){
+              console.log(' ');
+            }else{
+              $.post($(form).attr('action'), $(form).serialize(), resp => {
+                if (resp.url) {
+                  location.href = resp.url;
+                } else {
+                  notify('success', Translator.trans('site.save_success_hint'));
+                  $('#modal').modal('hide');
+                }
+              });
+            }
           });
+
         }
       }
     });
