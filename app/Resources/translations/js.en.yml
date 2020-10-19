@@ -1630,3 +1630,7 @@ admin_v2.information_collect.chooser.target_hint: Please select Course/Classroom
 admin_v2.information_collect.chooser.target_course_hint: Please select at least 1 Course
 admin_v2.information_collect.chooser.target_classroom_hint: Please select at least 1 Classroom
 admin_v2.information_collect.chooser.items.hint: Please select form item
+
+user.fields.gender_label: Gender
+information_collect.form.check_age_invalid: Age Invalid
+information_collect.form.check_format_invalid: %display% Invalid

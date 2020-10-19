@@ -3583,3 +3583,11 @@ certificate_image_download:
 certificate_detail:
   path: /certificate/{id}/detail
   defaults: { _controller: AppBundle:Certificate/Certificate:certificateDetail }
+
+information_collect_event:
+  path: /information_collect/event/{eventId}
+  defaults: { _controller: AppBundle:InformationCollect/InformationCollect:index }
+
+information_collect_event_form:
+  path: /information_collect/event/{eventId}/form
+  defaults: { _controller: AppBundle:InformationCollect/InformationCollect:eventForm }

@@ -18,6 +18,7 @@ class WechatFormItem extends FormItem
             'field' => self::FIELD,
             'group' => self::CONTACT_INFO_GROUP,
             'value' => $this->value,
+            'required' => $this->required,
             'validate' => [
                 ['required' => $this->required, 'message' => self::TITLE.'不能为空'],
                 ['pattern' => '^[a-zA-Z]([-_a-zA-Z0-9])+$', 'message' => self::TITLE.'格式错误'],
