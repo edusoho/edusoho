@@ -19,10 +19,15 @@ class OrderController extends BaseController
         $product->setAvailableDeduct();
         $product->setPickedDeduct([]);
 
-        $informationCollectEvent = $this->getInformationCollectEventService()->getEventByActionAndLocation('buy_before', [
-            'targetType' => $request->query->get('targetType'),
-            'targetId' => $request->query->get('targetId'),
-        ]);
+        $location = [
+            'targetType' => $request->query->get('targetType', ''),
+            'targetId' => $request->query->get('targetId', '0'),
+        ];
+        if ('course' == $location['targetType'] && '0' != $location['targetId']) {
+            $course = $this->getCourseService()->getCourse($location['targetId']);
+            $location['targetId'] = $course['courseSetId'];
+        }
+        $informationCollectEvent = $this->getInformationCollectEventService()->getEventByActionAndLocation('buy_before', $location);
 
         return $this->render('order/show/index.html.twig', [
             'product' => $product,
@@ -222,5 +227,10 @@ class OrderController extends BaseController
     protected function getInformationCollectEventService()
     {
         return $this->createService('InformationCollect:EventService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->createService('Course:CourseService');
     }
 }

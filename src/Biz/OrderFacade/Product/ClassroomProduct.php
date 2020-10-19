@@ -20,18 +20,18 @@ class ClassroomProduct extends Product implements OrderStatusCallback
         $classroom = $this->getClassroomService()->getClassroom($params['targetId']);
 
         $this->targetId = $params['targetId'];
-        $this->backUrl = array('routing' => 'classroom_show', 'params' => array('id' => $classroom['id']));
-        $this->successUrl = array('classroom_show', array('id' => $this->targetId));
+        $this->backUrl = ['routing' => 'classroom_show', 'params' => ['id' => $classroom['id']]];
         $this->title = $classroom['title'];
         $this->originPrice = $classroom['price'];
         $this->middlePicture = $classroom['middlePicture'];
         $this->maxRate = $classroom['maxRate'];
         $this->productEnable = 'published' === $classroom['status'] ? true : false;
-        $this->cover = array(
+        $this->cover = [
             'small' => $classroom['smallPicture'],
             'middle' => $classroom['middlePicture'],
             'large' => $classroom['largePicture'],
-        );
+        ];
+        $this->successUrl = $this->getSuccessUrl();
     }
 
     public function validate()
@@ -56,10 +56,10 @@ class ClassroomProduct extends Product implements OrderStatusCallback
         $this->smsCallback($orderItem, $targetName);
 
         $order = $this->getOrderService()->getOrder($orderItem['order_id']);
-        $info = array(
+        $info = [
             'orderId' => $order['id'],
             'note' => $order['created_reason'],
-        );
+        ];
 
         try {
             $isStudent = $this->getClassroomService()->isClassroomStudent($orderItem['target_id'], $orderItem['user_id']);
@@ -69,13 +69,13 @@ class ClassroomProduct extends Product implements OrderStatusCallback
 
             if (isset($member)) {
                 $classroom = $this->getClassroomService()->getClassroom($orderItem['target_id']);
-                $this->getLogService()->info('classroom', 'join_classroom', "加入班级《{$classroom['title']}》", array('userId' => $orderItem['user_id'], 'classroomId' => $classroom['id'], 'title' => $classroom['title']));
+                $this->getLogService()->info('classroom', 'join_classroom', "加入班级《{$classroom['title']}》", ['userId' => $orderItem['user_id'], 'classroomId' => $classroom['id'], 'title' => $classroom['title']]);
             }
 
             return OrderStatusCallback::SUCCESS;
         } catch (\Exception $e) {
             $this->getLogService()->error('order', 'classroom_callback', 'order.classroom_callback.fail',
-                array('error' => $e->getMessage(), 'context' => $orderItem));
+                ['error' => $e->getMessage(), 'context' => $orderItem]);
 
             return false;
         }
@@ -109,6 +109,20 @@ class ClassroomProduct extends Product implements OrderStatusCallback
     {
         $orderItem = $orderRefundItem['order_item'];
         $this->getClassroomService()->unlockStudent($orderItem['target_id'], $orderItem['user_id']);
+    }
+
+    protected function getSuccessUrl()
+    {
+        $event = $this->getInformationCollectEventService()->getEventByActionAndLocation('buy_after', [
+            'targetType' => $this->targetType,
+            'targetId' => $this->targetId,
+        ]);
+
+        if (empty($event)) {
+            return ['classroom_show', ['id' => $this->targetId]];
+        } else {
+            return ['information_collect_event', ['eventId' => $event['id']]];
+        }
     }
 
     protected function getMemberOperationService()
