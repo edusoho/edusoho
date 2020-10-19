@@ -2974,7 +2974,6 @@ course_member_deadline_reach:
 course_buy:
     path: /course/{id}/buy
     defaults: { _controller: AppBundle:Course/CourseBuy:buy }
-    methods: [POST]
 
 course_order_repay:
     path:  /course/order/repay
