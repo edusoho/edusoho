@@ -658,6 +658,7 @@ order.create.use_price_coupon_hint: 优惠券可用，您当前使用的是抵�
 order.refund.reason_limit_hint: 退学原因的长度请小于或等于120。
 order.refund.reason_required_hint: 请输入退学原因。
 order.refund.reason_choose_hint: 请选择退学原因
+order.information_collect_error_hint: 请先提交信息后再提交订单
 
 settings.setup.set_success.hint: 设置帐号成功，正在跳转
 settings.setup.set_failed.hint: 设置帐号失败，请重试
