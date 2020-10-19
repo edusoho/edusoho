@@ -117,7 +117,13 @@ export default class UserInfoFieldsItemValidate {
             url: '/api/information_collect_event/buy_before',
           }).done(function (resp) {
             if (resp && resp.status =='open'){
-              console.log(' ');
+              $.get('/information_collect/event/' + resp.id, resp => {
+                if (typeof resp === 'object') {
+                  window.location.href = resp.url;
+                } else {
+                  $('#modal').modal('show').html(resp);
+                }
+              });
             }else{
               $.post($(form).attr('action'), $(form).serialize(), resp => {
                 if (resp.url) {

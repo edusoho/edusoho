@@ -27,7 +27,13 @@ function courseBeforeJoin() {
       url: '/api/information_collect_event/buy_before',
     }).done(function (resp) {
       if (resp && resp.status =='open'){
-        console.log(' ');
+        $.get('/information_collect/event/' + resp.id, resp => {
+          if (typeof resp === 'object') {
+            window.location.href = resp.url;
+          } else {
+            $('#modal').modal('show').html(resp);
+          }
+        });
       }else{
         $.post($('.js-course-buy-btn').data('url'), resp => {
           if (typeof resp === 'object') {
