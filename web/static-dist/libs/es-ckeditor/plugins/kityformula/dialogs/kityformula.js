@@ -84,7 +84,7 @@
                     "imageDownloadUrl"
                     ),
                     data: { url: $imgUrl },
-                    beforeSend: function(request) {
+                    beforeSend(request) {
                         request.setRequestHeader(
                             "X-CSRF-Token",
                             $("meta[name=csrf-token]").attr("content")
