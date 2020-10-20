@@ -45,6 +45,7 @@
     </div>
 
     <div>
+      {#  此处控制权限移交给商品剥离去控制，由于APP兼容老版本的原因，需要对配置进行隐藏同步 时间：2020-10-20，版本： 20.4.3  #}
       <div class="row form-group hidden">
         <div class="col-md-1 control-label control-label--short">{{ 'admin.setting_course.classroom.classroom_review'|trans }}：</div>
         <div class="controls col-md-7 radios">
@@ -69,7 +70,8 @@
       </div>
     </div>
 
-    <div class="row form-group">
+    {#  此处控制权限移交给商品剥离去控制，由于APP兼容老版本的原因，需要对配置进行隐藏同步 时间：2020-10-20，版本： 20.4.3 #}
+    <div class="row form-group hidden">
       <label class="col-md-2 control-label">{{ 'admin.setting_classroom.classroom_operation_mode.allow_show_user_count'|trans }}</label>
       <div class="col-md-7 controls radios">
         {{ radios('show_student_num_enabled', {'1':'admin.setting_course.open'|trans, '0':'admin.setting_course.closed'|trans}, setting('classroom').show_student_num_enabled|default('1') ) }}

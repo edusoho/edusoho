@@ -43,21 +43,22 @@
           {{ radios('show_number_data', {
             'join':'admin_v2.operating.goods_show.join_number'|trans,
             'visitor':'admin_v2.operating.goods_show.visitor_number'|trans,
+            'none': 'admin_v2.operating.goods_show.none'|trans,
           }, setting.show_number_data|default('join')) }}
         </div>
       </div>
     </fieldset>
 
     <fieldset>
-      <legend>{{ '商品页评价设置'|trans }}</legend>
+      <legend>{{ 'admin_v2.operating.review_setting'|trans }}</legend>
       <div class="form-group">
         <div class="col-md-3 control-label">
-          <label>{{ '商品页显示评价'|trans }}</label>
+          <label>{{ 'admin_v2.operating.review_show'|trans }}</label>
         </div>
         <div class="controls col-md-8 radios">
           {{ radios('show_review', {
-            '1':'开启'|trans,
-            '0':'关闭'|trans,
+            '1':'form.radio_btn.open'|trans,
+            '0':'form.radio_btn.close'|trans,
           }, setting.show_number|default('1')) }}
         </div>
       </div>
