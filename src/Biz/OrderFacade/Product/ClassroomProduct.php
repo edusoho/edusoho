@@ -142,4 +142,9 @@ class ClassroomProduct extends Product implements OrderStatusCallback
     {
         return $this->biz->service('System:SettingService');
     }
+
+    private function getInformationCollectEventService()
+    {
+        return $this->biz->service('InformationCollect:EventService');
+    }
 }

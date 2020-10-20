@@ -6,6 +6,12 @@ const informationCollect = (api) => {
             return ajax(Object.assign({
                 url: `${api}/information_collect_event/${options.params.action}`,
             }, options));
+        },
+        submitEvent(options) {
+            return ajax(Object.assign({
+                url: `${api}/information_collect_form`,
+                type: 'POST',
+            }, options));
         }
     };
 };

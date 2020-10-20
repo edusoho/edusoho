@@ -34,7 +34,8 @@ module.exports = {
     'ltc-sdk-client': ['libs/ltc-sdk-client/index.js'],
     'ltc-sdk-server': ['libs/ltc-sdk-server/index.js'],
     'bootstrap-treeview': ['libs/bootstrap-treeview/index.js'],
-    'vue': ['vue']
+    'vue': ['vue'],
+    'province-city-area': ['libs/province-city-area.js']
   },
   noParseDeps: { // 不解析依赖，加快编译速度
     'jquery': 'jquery/dist/jquery.js',

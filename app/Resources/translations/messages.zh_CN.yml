@@ -11463,6 +11463,12 @@ admin_v2.information_collect.form_items.select_group.school_info: 学校信息
 admin_v2.information_collect.form_items.select_group.other_info: 其它信息
 admin_v2.information_collect.form_items.confirm_submit: 确认提交
 
+information_collect.title: 用户信息采集
+information_collect.form_items.confirm_submit: 确认提交
+information_collect.form_items.skip: 跳过
+information_collect.select_placeholeder: 请选择
+
+
 
 
 

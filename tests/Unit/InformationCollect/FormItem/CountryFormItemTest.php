@@ -15,6 +15,7 @@ class CountryFormItemTest extends BaseTestCase
                 "field": "country",
                 "group": "other",
                 "value": "中国",
+                "required": true,
                 "validate": [
                     {
                         "required": true,

@@ -18,6 +18,7 @@ class BirthdayFormItem extends FormItem
             'field' => self::FIELD,
             'value' => $this->value,
             'group' => self::BASE_INFO_GROUP,
+            'required' => $this->required,
             'props' => [
                 'type' => 'date',
                 'format' => 'yyyy-MM-dd',
