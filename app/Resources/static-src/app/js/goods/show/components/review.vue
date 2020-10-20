@@ -19,7 +19,7 @@
 </template>
 
 <script>
-  import axios from 'axios';z
+  import axios from 'axios';
   export default {
     data() {
       return {

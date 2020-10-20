@@ -44,6 +44,7 @@ class PageCourse extends AbstractResource
         $course['allowAnonymousPreview'] = $this->getSettingService()->get('course.allowAnonymousPreview', 1);
         $course['courses'] = $this->getCourseService()->findPublishedCoursesByCourseSetId($course['courseSet']['id']);
         $course['courses'] = ArrayToolkit::sortPerArrayValue($course['courses'], 'seq');
+        $course['courses'] = $this->getCourseService()->appendSpecsInfo($course['courses']);
         $course['progress'] = $this->getLearningDataAnalysisService()->makeProgress($course['learnedCompulsoryTaskNum'], $course['compulsoryTaskNum']);
         $course['reviews'] = $this->searchCourseReviews($course['id']);
         $course['hasCertificate'] = $this->getCourseService()->hasCertificate($course['id']);

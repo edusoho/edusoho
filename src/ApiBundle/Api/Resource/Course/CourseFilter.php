@@ -15,7 +15,7 @@ use Biz\Course\Util\CourseTitleUtils;
 class CourseFilter extends Filter
 {
     protected $simpleFields = [
-        'id', 'title', 'courseSetTitle',
+        'id', 'title', 'courseSetTitle', 'goodsId', 'specsId',
     ];
 
     protected $publicFields = [
@@ -23,7 +23,7 @@ class CourseFilter extends Filter
         'goals', 'audiences', 'isDefault', 'maxStudentNum', 'status', 'creator', 'isFree', 'price', 'originPrice',
         'vipLevelId', 'buyable', 'tryLookable', 'tryLookLength', 'watchLimit', 'services', 'ratingNum', 'rating',
         'taskNum', 'compulsoryTaskNum', 'studentNum', 'teachers', 'parentId', 'createdTime', 'updatedTime', 'enableFinish',
-        'buyExpiryTime', 'access', 'isAudioOn', 'hasCertificate', 'goodsId', 'specsId', 'spec'
+        'buyExpiryTime', 'access', 'isAudioOn', 'hasCertificate', 'goodsId', 'specsId', 'spec',
     ];
 
     protected function publicFields(&$data)
