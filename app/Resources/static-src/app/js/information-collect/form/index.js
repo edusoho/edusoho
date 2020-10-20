@@ -6,12 +6,8 @@ let validator = $form.validate({
     rules: {
         'name': {
             chinese_alphanumeric: true,
-            byte_minlength: 4,
-            byte_maxlength: 18,
-            nickname: true,
-        },
-        'gender': {
-            maxlength: 1000,
+            minlength: 2,
+            maxlength: 36,
         },
         'age': {
             check_age: true
@@ -27,6 +23,8 @@ let validator = $form.validate({
         },
         'wechat': {
             check_wechat: true,
+            minlength: 6,
+            maxlength: 20,
         },
         'qq': {
             check_qq: true,

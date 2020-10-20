@@ -25,8 +25,8 @@ class NameFormItemTest extends BaseTestCase
                     'message' => '最少输入2个字符',
                 ],
                 [
-                    'max' => 20,
-                    'message' => '最多输入20个字符',
+                    'max' => 36,
+                    'message' => '最多输入36个字符',
                 ],
                 [
                     'pattern' => "^[\u4E00-\u9FA5A-Za-z0-9_.·]+$",

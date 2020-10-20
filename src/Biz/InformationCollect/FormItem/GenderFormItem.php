@@ -17,7 +17,7 @@ class GenderFormItem extends FormItem
             'title' => self::TITLE,
             'field' => self::FIELD,
             'group' => self::BASE_INFO_GROUP,
-            'value' => $this->value,
+            'value' => empty($this->value) ? '男' : $this->value,
             'required' => $this->required,
             'options' => [
                 ['value' => '男', 'label' => '男'],
