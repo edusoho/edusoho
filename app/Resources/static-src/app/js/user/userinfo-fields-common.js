@@ -113,8 +113,8 @@ export default class UserInfoFieldsItemValidate {
               targetType: $(this).data('targetType'),
               targetId: $(this).data('targetId'),
             }
-          }).then((resp) => {
-            if (resp && resp.status =='open'){
+          }).then(resp => {
+            if (resp && resp.status === 'open'){
               $.get('/information_collect/event/' + resp.id, resp => {
                 if (typeof resp === 'object') {
                   window.location.href = resp.url;

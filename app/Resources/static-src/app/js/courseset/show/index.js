@@ -24,8 +24,8 @@ function courseBeforeJoin() {
         targetType: $(this).data('targetType'),
         targetId: $(this).data('targetId'),
       }
-    }).then((res) => {
-      if (res && res.status =='open'){
+    }).then(res => {
+      if (res && res.status === 'open'){
         $.get('/information_collect/event/' + res.id, res => {
           if (typeof res === 'object') {
             window.location.href = res.url;
