@@ -542,6 +542,17 @@ class S2B2CService extends BaseService
         throw new SDKException('request fail');
     }
 
+    public function getNextReviewingAnswer($answerSceneId)
+    {
+        $result = $this->sendRequest($this->itemBnakRoutePrefix."/next_answer/answer_scene_id/{$answerSceneId}", [], 'GET');
+
+        if (!empty($result['status']) && $result['status'] = 'success') {
+            return $result['data'];
+        }
+
+        throw new SDKException('request fail');
+    }
+
     public function startAnswer($answerSceneId, $mediaId, $userId)
     {
         $data = [
@@ -616,6 +627,17 @@ class S2B2CService extends BaseService
         throw new SDKException('request fail');
     }
 
+    public function reviewAnswer($reviewReport)
+    {
+        $result = $this->sendRequest($this->itemBnakRoutePrefix."/answer/review", $reviewReport, 'POST');
+
+        if (!empty($result['status']) && $result['status'] = 'success') {
+            return $result['data'];
+        }
+
+        throw new SDKException('request fail');
+    }
+
     public function getAnswerReport($answerReportId)
     {
 
@@ -641,7 +663,36 @@ class S2B2CService extends BaseService
 
     public function countAnswerRecord($conditions)
     {
+
         $result = $this->sendRequest($this->itemBnakRoutePrefix."/answer_record/count", $conditions, 'GET');
+
+        if (!empty($result['status']) && $result['status'] = 'success') {
+            return $result['data'];
+        }
+
+        throw new SDKException('request fail');
+    }
+
+    public function searchAnswerRecord($conditions, $orderBy, $start, $limit)
+    {
+        $data = [
+            'conditions' => $conditions,
+            'orderBy' => $orderBy,
+            'start' => $start,
+            'limit' => $limit
+        ];
+        $result = $this->sendRequest($this->itemBnakRoutePrefix."/answer_record/search", $data, 'GET');
+        
+        if (!empty($result['status']) && $result['status'] = 'success') {
+            return $result['data'];
+        }
+
+        throw new SDKException('request fail');
+    }
+
+    public function findAssessmentsByIds($ids)
+    {
+        $result = $this->sendRequest($this->itemBnakRoutePrefix."/assessment/find", ['ids' => $ids], 'GET');
 
         if (!empty($result['status']) && $result['status'] = 'success') {
             return $result['data'];

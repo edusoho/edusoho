@@ -39,7 +39,7 @@
     created() {
         const that = this;
         $.ajax({
-          url: '/api/answer_record/'+$("[name='answer_record_id']").val(),
+          url: '/api/plugins/CloudItemBank/answer_record/'+$("[name='answer_record_id']").val(),
           type: 'GET',
           async:false,
           headers:{

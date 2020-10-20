@@ -93,16 +93,16 @@ define(function (require, exports, module) {
       });
     });
 
-    $table.find('.copy-course[data-type="live"]').tooltip();
+    //$table.find('.copy-course[data-type="live"]').tooltip();
 
     $table.on('click', '.copy-course[data-type="live"]', function (e) {
       e.stopPropagation();
     });
-      $('[data-toggle="tooltip"]').tooltip();
-      $('[data-toggle="popover"]').popover({
-          html: true,
-          trigger: 'hover'
-      });
+      // $('[data-toggle="tooltip"]').tooltip();
+      // $('[data-toggle="popover"]').popover({
+      //     html: true,
+      //     trigger: 'hover'
+      // });
       var $tagContainer = $('#tag');
 
       $tagContainer.select2({

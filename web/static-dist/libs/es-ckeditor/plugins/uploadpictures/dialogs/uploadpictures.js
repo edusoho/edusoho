@@ -9,11 +9,7 @@ CKEDITOR.dialog.add('uploadpictures', function(editor) {
           if (eventName === 'es-ckeditor.post') {
               var innerHtml = event.data.html;
               $('.' + editor.id + ' #js-uploadpictures-body').append(innerHtml);
-              try{
-                $(document.getElementById("uploadContainer_" + editor.name))[0].remove();
-              }catch(err){
-                $(document.getElementById("uploadContainer_" + editor.name))[0].removeNode(true);
-              };
+              $(document.getElementById("uploadContainer_" + editor.name))[0].remove();
 
               onLoadDialog();
           }
@@ -108,7 +104,12 @@ CKEDITOR.dialog.add('uploadpictures', function(editor) {
     };
 
     var url = CKEDITOR.getUrl('plugins/uploadpictures/html/index_'+editor.config.language+'.html');
-    var dialogHtml = '<div id="js-uploadpictures-body"><iframe src=' + url + ' scrolling="no" id="uploadContainer_' + editor.name + '" width="0" height="0" style="display:none;visibility:hidden"></iframe></div>';
+    var dialogHtml = `
+        <div id="js-uploadpictures-body">
+            <iframe src=${url} scrolling="no" id="uploadContainer_${editor.name}" width="0" height="0" style="display:none;visibility:hidden">
+            </iframe>
+        </div>
+    `;
 
     var dialogDefinition = {
         title: editor.lang.uploadpictures.title,
