@@ -62,6 +62,7 @@
 import service from '@/containers/classroom/service';
 import { mapState, mapActions } from 'vuex';
 import { formatFullTime } from '@/utils/date-toolkit';
+import Api from '@/api';
 
 export default {
   components: {
@@ -172,7 +173,33 @@ export default {
   methods: {
     ...mapActions('course', ['getCourseLessons']),
     handleClick(item, index) {
-      this.$router.push({ path: `/course/${item.id}` });
+      Api.meCourseMember({
+        query: {
+          id: item.id,
+        },
+      })
+        .then(res => {
+          if (res.id) {
+            this.$router.push({
+              path: `/course/${item.id}`,
+            });
+          } else {
+            this.$router.push({
+              path: `/goods/${item.goodsId}/show`,
+              query: {
+                targetId: item.id,
+              },
+            });
+          }
+        })
+        .catch(() => {
+          this.$router.push({
+            path: `/goods/${item.goodsId}/show`,
+            query: {
+              targetId: item.id,
+            },
+          });
+        });
     },
     filterPrice() {
       const details = this.details;

@@ -70,6 +70,7 @@ export default {
         this.$router.push({
           path: `/${this.goods.type}/${this.currentSku.targetId}`,
         });
+        return;
       }
       // 会员免费学
       const vipAccessToJoin = this.vipAccessToJoin;
