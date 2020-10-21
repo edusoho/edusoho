@@ -801,6 +801,6 @@ class MobileBaseController extends BaseController
 
     public function generateUrl($route, $parameters = [], $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
-        return parent::generateUrl($route, $parameters, $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH);
+        return parent::generateUrl($route, $parameters, $referenceType);
     }
 }
