@@ -147,7 +147,7 @@
       },
       saveAnswerData(assessmentResponse){
         $.ajax({
-          url: '/api/save_answer',
+          url: '/api/plugins/CloudItemBank/save_answer',
           contentType: 'application/json;charset=utf-8',
           type: 'POST',
           headers:{
