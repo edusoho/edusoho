@@ -630,7 +630,7 @@ t.add("validate.byte_maxlength.message", "\u5b57\u7b26\u957f\u5ea6\u5fc5\u987b\u
 t.add("validate.character_maxlength", "\u5b57\u6570\u4e0d\u80fd\u8d85\u8fc7%max%\u5b57\uff01", "js", "zh_CN");
 t.add("validate.choose_item.message", "\u8bf7\u9009\u62e9%display%", "js", "zh_CN");
 t.add("validate.tag_required_hint", "\u8bf7\u8f93\u5165\u6807\u7b7e", "js", "zh_CN");
-t.add("validate.tag_required_not_found_hint", "\u672a\u641c\u7d22\u5230\u6807\u7b7e\uff0c\u8bf7\u7f51\u6821\u7ba1\u7406\u5458\u901a\u8fc7\u3010\u7ba1\u7406\u540e\u53f0\u3011-\u3010\u8bfe\u7a0b\u3011-\u3010\u6807\u7b7e\u7ba1\u7406\u3011\u8fdb\u884c\u8bbe\u7f6e\u3002", "js", "zh_CN");
+t.add("validate.tag_required_not_found_hint", "\u672a\u641c\u7d22\u5230\u6807\u7b7e\uff0c\u8bf7\u7f51\u6821\u7ba1\u7406\u5458\u901a\u8fc7\u3010\u7ba1\u7406\u540e\u53f0\u3011-\u3010\u6559\u5b66\u3011-\u3010\u5206\u7c7b\u6807\u7b7e\u3011-\u3010\u6807\u7b7e\u7ba1\u7406\u3011\u8fdb\u884c\u8bbe\u7f6e\u3002", "js", "zh_CN");
 t.add("validate.title_required_hint", "\u8bf7\u8f93\u5165\u6807\u9898\uff0c\u4e0d\u80fd\u4e3a\u7a7a\u3002", "js", "zh_CN");
 t.add("validate.email_or_mobile_check.message", "\u4e0d\u5141\u8bb8\u4ee51\u5f00\u5934\u768411\u4f4d\u7eaf\u6570\u5b57", "js", "zh_CN");
 t.add("validate.phone_and_email_input.message", "\u8bf7\u8f93\u5165\u624b\u673a\/\u90ae\u7bb1", "js", "zh_CN");
@@ -812,7 +812,7 @@ t.add("admin.index.order_count", "\u8ba2\u5355\u91cf", "js", "zh_CN");
 t.add("admin.index.finished_task_count", "\u5b66\u4e60\u4efb\u52a1\u6570", "js", "zh_CN");
 t.add("admin.index.notify_teacher_success", "\u63d0\u9192\u6559\u5e08\u7684\u901a\u77e5\uff0c\u53d1\u9001\u6210\u529f\uff01", "js", "zh_CN");
 t.add("admin.index.upgrade_acceptance_hint", "\u5347\u7ea7\u53d7\u7406\u4e2d", "js", "zh_CN");
-t.add("admin.user.cloude_sms_enable_hint", "\u8bf7\u5148\u5230\u3010\u7ba1\u7406\u540e\u53f0\u3011-\u3010\u6559\u80b2\u4e91\u3011-\u3010\u4e91\u77ed\u4fe1\u8bbe\u7f6e\u3011\u4e2d\u5f00\u542f\u4e91\u77ed\u4fe1\u54e6~", "js", "zh_CN");
+t.add("admin.user.cloude_sms_enable_hint", "\u8bf7\u5148\u5230\u3010\u7ba1\u7406\u540e\u53f0\u3011-\u3010\u4e91\u5e02\u573a\u3011-\u3010\u4e91\u670d\u52a1\u3011-\u3010\u4e91\u77ed\u4fe1\u8bbe\u7f6e\u3011\u4e2d\u5f00\u542f\u4e91\u77ed\u4fe1\u54e6~", "js", "zh_CN");
 t.add("admin.account_center.cash_income", "\u73b0\u91d1\u6536\u5165", "js", "zh_CN");
 t.add("admin.account_center.coin_income", "\u865a\u62df\u5e01\u6536\u5165", "js", "zh_CN");
 t.add("admin.analysis.classroom_income", "\u73ed\u7ea7\u8425\u6536\u989d", "js", "zh_CN");
