@@ -582,7 +582,6 @@ class S2B2CService extends BaseService
 
     public function getAnswerRecord($answerRecordId)
     {
-
         $result = $this->sendRequest($this->itemBnakRoutePrefix."/answer_record/{$answerRecordId}", [], 'GET');
 
         if (!empty($result['status']) && $result['status'] = 'success') {
@@ -641,7 +640,7 @@ class S2B2CService extends BaseService
     public function getAnswerReport($answerReportId)
     {
 
-        $result = $this->sendRequest($this->itemBnakRoutePrefix."/answer_report/{$answerReportId}", [], 'GET');
+        $result = $this->sendRequest($this->itemBnakRoutePrefix."/answer_report/{$answerReportId}/get", [], 'GET');
 
         if (!empty($result['status']) && $result['status'] = 'success') {
             return $result['data'];
@@ -693,6 +692,17 @@ class S2B2CService extends BaseService
     public function findAssessmentsByIds($ids)
     {
         $result = $this->sendRequest($this->itemBnakRoutePrefix."/assessment/find", ['ids' => $ids], 'GET');
+
+        if (!empty($result['status']) && $result['status'] = 'success') {
+            return $result['data'];
+        }
+
+        throw new SDKException('request fail');
+    }
+
+    public function findAnswerReport($ids)
+    {
+        $result = $this->sendRequest($this->itemBnakRoutePrefix."/answer_report/find", ['ids' => $ids], 'GET');
 
         if (!empty($result['status']) && $result['status'] = 'success') {
             return $result['data'];
