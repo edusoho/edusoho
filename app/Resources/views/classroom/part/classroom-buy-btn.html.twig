@@ -12,7 +12,7 @@
     </button>
   {% else %}
       {% if checkMemberLevelResult == 'ok' %}
-        <a class="cd-btn cd-btn-primary js-classroom-buy-btn btn-vip-free" href="javascript:" data-url="{{ path('classroom_buy',{id:classroom.id}) }}">{{ 'classroom.free_study'|trans({'%memberLevel%':classroomMemberLevel.name}) }}</a>
+        <a class="cd-btn cd-btn-primary js-classroom-buy-before-btn btn-vip-free" href="javascript:" data-url="{{ path('classroom_buy',{id:classroom.id}) }}" data-target-type="classroom" data-target-id="{{ classroom.id }}">{{ 'classroom.free_study'|trans({'%memberLevel%':classroomMemberLevel.name}) }}</a>
       {% else %}
         {% if classroom.price > 0 and ( ( not canFreeJoin and not classroomMemberLevel) or checkMemberLevelResult in ['not_member', 'not_login', 'member_expired', 'level_low']) %}
           {% if classroom.buyable == 1 %}
@@ -40,7 +40,7 @@
 
         {% else %}
           {% if classroom.buyable == 1 %}
-            <a class="cd-btn cd-btn-primary js-classroom-buy-btn" href="javascript:" data-url="{{ path('classroom_buy',{id:classroom.id}) }}">{{ 'classroom.free_join'|trans }}</a>
+            <a class="cd-btn cd-btn-primary js-classroom-buy-before-btn" href="javascript:" data-url="{{ path('classroom_buy',{id:classroom.id}) }}" data-target-type="classroom" data-target-id="{{ classroom.id }}">{{ 'classroom.free_join'|trans }}</a>
           {% else %}
             <button type="button" style="pointer-events:auto" class="btn btn-default cd-btn cd-btn-default disabled" data-toggle="tooltip" data-placement="top"
               title="{{ 'classroom.not_online_buy_tips'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)}) }}">{{ 'classroom.not_buy'|trans }}</button>
