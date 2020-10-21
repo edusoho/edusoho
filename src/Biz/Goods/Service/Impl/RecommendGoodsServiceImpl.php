@@ -105,7 +105,7 @@ class RecommendGoodsServiceImpl extends BaseService implements RecommendGoodsSer
             $tagOwnerType,
             $currentGoodsTagIds,
             $product['targetId'],
-            self::MAX_SHOW_RECOMMENDED_GOODS_NUMBER
+            PHP_INT_MAX
         );
 
         $products = $this->getProductService()->findProductsByTargetTypeAndTargetIds(
@@ -114,26 +114,8 @@ class RecommendGoodsServiceImpl extends BaseService implements RecommendGoodsSer
         );
 
         $productIds = ArrayToolkit::column($products, 'id');
-//        if (self::MAX_SHOW_RECOMMENDED_GOODS_NUMBER == count($productIds)) {
-//            return $this->getGoodsService()->findGoodsByProductIds($productIds);
-//        }
-//
-//        $otherType = 'course' == $product['targetType'] ? 'classroom' : 'course';
-//
-//        $otherTypeOwnerIds = $this->getTagService()->findDistinctOwnerIdByOwnerTypeAndTagIdsAndExcludeOwnerId(
-//            $otherType,
-//            $currentGoodsTagIds,
-//            0,
-//            self::MAX_SHOW_RECOMMENDED_GOODS_NUMBER - count($ownerIds)
-//        );
-//
-//        $otherProducts = $this->getProductService()->findProductsByTargetTypeAndTargetIds(
-//            $otherType,
-//            ArrayToolkit::column($otherTypeOwnerIds, 'ownerId'));
-//
-//        $productIds = array_merge($productIds, ArrayToolkit::column($otherProducts, 'id'));
 
-        return $this->getGoodsService()->findPublishedGoodsByProductIds($productIds);
+        return $this->getGoodsService()->searchGoods(['productIds' => $productIds, 'status' => 'published'], [], 0, self::MAX_SHOW_RECOMMENDED_GOODS_NUMBER);
     }
 
     private function getTagOwnerTypeByProductType($productType)
