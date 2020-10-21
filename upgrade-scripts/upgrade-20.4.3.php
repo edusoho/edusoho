@@ -199,10 +199,10 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         if(!$this->isFieldExist('goods', 'hotSeq')) {
-            $this->getConnection()->exec("ALTER TABLE `goods` ADD COLUMN `hotSeq` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '商品热度(计算规则依业务来定)' AFTER `rating`;")
+            $this->getConnection()->exec("ALTER TABLE `goods` ADD COLUMN `hotSeq` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '商品热度(计算规则依业务来定)' AFTER `rating`;");
         }
 
-        if(!$this->isFieldExist('goods', 'recommendWeight')) {
+        if (!$this->isFieldExist('goods', 'recommendWeight')) {
             $this->getConnection()->exec("ALTER TABLE `goods` ADD COLUMN `recommendWeight` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '推荐序号' AFTER `hotSeq`;");
         }
 
@@ -1070,7 +1070,7 @@ class EduSohoUpgrade extends AbstractUpdater
         return 1;
     }
 
-    private function getSettingService()
+    protected function getSettingService()
     {
         return new \Biz\System\Service\Impl\SettingServiceImpl($this->biz);
     }
