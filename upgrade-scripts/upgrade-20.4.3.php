@@ -21,9 +21,9 @@ class EduSohoUpgrade extends AbstractUpdater
 
             if (!empty($result)) {
                 return $result;
-            } else {
-                $this->logger('info', '执行升级脚本结束');
             }
+
+            $this->logger('info', '执行升级脚本结束');
         } catch (\Exception $e) {
             $this->getConnection()->rollback();
             $this->logger('error', $e->getTraceAsString());
@@ -51,6 +51,9 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
+            'goodsTableAlter',
+            'goodSpecsTableAlter',
+            'otherTableAlter',
             'processCourseGoodsAndProduct',
             'processClassroomGoodsAndProduct',
             'processReviews',
@@ -91,6 +94,190 @@ class EduSohoUpgrade extends AbstractUpdater
                 'progress' => 0,
             );
         }
+    }
+
+    public function otherTableAlter()
+    {
+        if (!$this->isFieldExist('classroom', 'subtitle')) {
+            $this->getConnection()->exec("ALTER TABLE `classroom` ADD COLUMN `subtitle` varchar(1024) DEFAULT '' COMMENT '班级副标题' AFTER `title`;");
+        }
+
+        if (!$this->isFieldExist('open_course_recommend', 'recommendGoodsId')) {
+            $this->exec("ALTER TABLE `open_course_recommend` ADD COLUMN `recommendGoodsId` int(10) NOT NULL DEFAULT '0' COMMENT '推荐商品id' AFTER `recommendCourseId`;");
+        }
+
+        if (!$this->isFieldExist('coupon', 'goodsIds')) {
+            $this->exec("ALTER TABLE `coupon` ADD COLUMN `goodsIds` text COMMENT '资源商品ID' AFTER `targetIds`;");
+        }
+
+        if (!$this->isFieldExist('coupon_batch', 'goodsIds')) {
+            $this->getConnection()->exec("ALTER TABLE `coupon_batch` ADD COLUMN `goodsIds` text COMMENT '资源商品ID' AFTER `targetIds`;");
+        }
+
+        if (!$this->isFieldExist('favorite', 'goodsType')) {
+            $this->exec("ALTER TABLE `favorite` ADD COLUMN `goodsType` varchar(64) NOT NULL DEFAULT '' COMMENT '商品类型，因为业务限制增加的冗余字段' AFTER `targetId`;");
+        }
+
+        return 1;
+    }
+
+    public function goodSpecsTableAlter()
+    {
+        if (!$this->isFieldExist('goods_specs', 'status')) {
+            $this->getConnection()->exec("ALTER TABLE `goods_specs` ADD COLUMN `status` varchar(32) DEFAULT 'created' COMMENT '商品规格状态：created, published, unpublished' AFTER `images`;");
+        }
+
+        if (!$this->isFieldExist('goods_specs', 'maxJoinNum')) {
+            $this->getConnection()->exec("ALTER TABLE `goods_specs` ADD COLUMN `maxJoinNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最大购买加入人数' AFTER `price`;");
+        }
+
+        if (!$this->isFieldExist('goods_specs', 'seq')) {
+            $this->getConnection()->exec("ALTER TABLE `goods_specs` ADD COLUMN `seq` int(10) NOT NULL DEFAULT '0' COMMENT '规格排序序号' AFTER `images`;");
+        }
+
+        if (!$this->isFieldExist('goods_specs', 'coinPrice')) {
+            $this->getConnection()->exec("ALTER TABLE ADD COLUMN `coinPrice` decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '虚拟币价格' AFTER `price`;");
+        }
+
+        if (!$this->isFieldExist('goods_specs', 'buyableMode')) {
+            $this->getConnection()->exec("ALTER TABLE `goods_specs` ADD COLUMN `buyableMode` varchar(32) DEFAULT NULL COMMENT 'days, date' AFTER `coinPrice`;");
+        }
+
+        if (!$this->isFieldExist('goods_specs', 'buyableStartTime')) {
+            $this->getConnection()->exec("ALTER TABLE `goods_specs` ADD COLUMN `buyableStartTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '可购买起始时间，默认为0不限制' AFTER `coinPrice`;");
+        }
+
+        if (!$this->isFieldExist('goods_specs', 'buyableEndTime')) {
+            $this->getConnection()->exec("ALTER TABLE `goods_specs` ADD COLUMN `buyableEndTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '可购买结束时间，默认为0不限制' AFTER `buyableStartTime`;");
+        }
+
+        if (!$this->isFieldExist('goods_specs', 'services')) {
+            $this->getConnection()->exec("ALTER TABLE `goods_specs` ADD COLUMN `services` text COMMENT '提供服务' AFTER `maxJoinNum`;");
+        }
+
+        if (!$this->isFieldExist('goods_specs', 'usageMode')) {
+            $this->getConnection()->exec("ALTER TABLE `goods_specs` ADD COLUMN `usageMode` varchar(32) DEFAULT NULL COMMENT 'forever, days, date' AFTER `coinPrice`;");
+        }
+
+        if (!$this->isFieldExist('goods_specs', 'usageDays')) {
+            $this->getConnection()->exec("ALTER TABLE `goods_specs` ADD COLUMN `usageDays` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '购买后可用的天数' AFTER `usageMode`;");
+        }
+
+        if (!$this->isFieldExist('goods_specs', 'usageStartTime')) {
+            $this->getConnection()->exec("ALTER TABLE `goods_specs` ADD COLUMN `usageStartTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学习有效期起始时间' AFTER `usageDays`;");
+        }
+
+        if (!$this->isFieldExist('goods_specs', 'usageEndTime')) {
+            $this->getConnection()->exec("ALTER TABLE `goods_specs` ADD COLUMN `usageEndTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学习有效期起始时间' AFTER `usageStartTime`;");
+        }
+
+        if (!$this->isFieldExist('goods_specs', 'buyable')) {
+            $this->getConnection()->exec("ALTER TABLE `goods_specs` ADD COLUMN `buyable` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否允许该规格商品购买' AFTER `buyableMode`;");
+        }
+
+        $this->getConnection()->exec("ALTER TABLE `goods_specs` modify `price` decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '价格';");
+
+        return 1;
+    }
+
+    public function goodsTableAlter()
+    {
+        if (!$this->isFieldExist('goods', 'subtitle')) {
+            $this->getConnection()->exec("ALTER TABLE `goods` ADD COLUMN `subtitle` varchar(1024) DEFAULT '' COMMENT '商品副标题' AFTER `title`;");
+        }
+
+        if (!$this->isFieldExist('goods', 'summary')) {
+            $this->getConnection()->exec("ALTER TABLE `goods` ADD COLUMN `summary` longtext COMMENT '商品介绍' AFTER `subtitle`;");
+        }
+
+        if (!$this->isFieldExist('goods', 'ratingNum')) {
+            $this->getConnection()->exec("ALTER TABLE `goods` ADD COLUMN `ratingNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '评价数量' AFTER `images`;");
+        }
+
+        if (!$this->isFieldExist('goods', 'rating')) {
+            $this->getConnection()->exec("ALTER TABLE `goods` ADD COLUMN `rating` float unsigned NOT NULL DEFAULT '0' COMMENT '平均评分' AFTER `ratingNum`;");
+        }
+
+        if(!$this->isFieldExist('goods', 'hotSeq')) {
+            $this->getConnection()->exec("ALTER TABLE `goods` ADD COLUMN `hotSeq` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '商品热度(计算规则依业务来定)' AFTER `rating`;")
+        }
+
+        if(!$this->isFieldExist('goods', 'recommendWeight')) {
+            $this->getConnection()->exec("ALTER TABLE `goods` ADD COLUMN `recommendWeight` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '推荐序号' AFTER `hotSeq`;");
+        }
+
+        if (!$this->isFieldExist('goods', 'recommendedTime')) {
+            $this->getConnection()->exec("ALTER TABLE `goods` ADD COLUMN `recommendedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '推荐时间' AFTER `recommendWeight`;");
+        }
+
+        if (!$this->isFieldExist('goods', 'orgId')) {
+            $this->getConnection()->exec("ALTER TABLE `goods` ADD COLUMN `orgId` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '组织机构ID' AFTER `images`;");
+        }
+
+        if (!$this->isFieldExist('goods', 'orgCode')) {
+            $this->getConnection()->exec("ALTER TABLE `goods` ADD COLUMN `orgCode` varchar(255) NOT NULL DEFAULT '1.' COMMENT '组织机构内部编码' AFTER `orgId`;");
+        }
+
+        if (!$this->isFieldExist('goods', 'hitNum')) {
+            $this->getConnection()->exec("ALTER TABLE `goods` ADD COLUMN `hitNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '商品页点击数' AFTER `rating`;");
+        }
+
+        if (!$this->isFieldExist('goods', 'maxPrice')) {
+            $this->getConnection()->exec("ALTER TABLE `goods` ADD COLUMN `maxPrice` decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '已发布商品的最高价格' AFTER `summary`;");
+        }
+
+        if (!$this->isFieldExist('goods', 'minPrice')) {
+            $this->getConnection()->exec("ALTER TABLE `goods` ADD COLUMN `minPrice` decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '已发布商品的最低价格' AFTER `summary`;");
+        }
+
+        if (!$this->isFieldExist('goods', 'creator')) {
+            $this->getConnection()->exec("ALTER TABLE `goods` ADD COLUMN `creator` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建者id' AFTER `subtitle`;");
+        }
+
+        if (!$this->isFieldExist('goods', 'status')) {
+            $this->getConnection("ALTER TABLE `goods` ADD COLUMN `status` varchar(32) DEFAULT 'created' COMMENT '商品状态：created, published, unpublished' AFTER `creator`;");
+        }
+
+        if (!$this->isFieldExist('goods', 'showable')) {
+            $this->getConnection()->exec("ALTER TABLE `goods` ADD COLUMN `showable` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否开放商品页展示' AFTER `status`;");
+        }
+
+        if (!$this->isFieldExist('goods', 'buyable')) {
+            $this->getConnection()->exec("ALTER TABLE `goods` ADD COLUMN `buyable` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否开放商品购买' AFTER `showable`;");
+        }
+
+        if (!$this->isFieldExist('goods', 'type')) {
+            $this->getConnection()->exec("ALTER TABLE `goods` ADD COLUMN `type` varchar(32) NOT NULL COMMENT 'course、classroom' AFTER `productId`;");
+        }
+
+        if (!$this->isFieldExist('goods', 'publishedTime')) {
+            $this->getConnection()->exec("ALTER TABLE `goods` ADD COLUMN `publishedTime` int(10) unsigned NOT NULL DEFAULT '0' AFTER `updatedTime`;");
+        }
+
+        if (!$this->isFieldExist('goods', 'maxRate')) {
+            $this->getConnection()->exec("ALTER TABLE `goods` ADD COLUMN `maxRate` tinyint(3) unsigned NOT NULL DEFAULT '100' COMMENT '最大抵扣百分比' AFTER `maxPrice`;");
+        }
+
+        if (!$this->isFieldExist('goods', 'specsNum')) {
+            $this->getConnection()->exec("ALTER TABLE `goods` ADD COLUMN `specsNum` int unsigned NOT NULL DEFAULT '0' COMMENT '商品下的规格数量' AFTER `orgCode`;");
+        }
+
+        if (!$this->isFieldExist('goods', 'publishedSpecsNum')) {
+            $this->getConnection()->exec("ALTER TABLE `goods` ADD COLUMN `publishedSpecsNum` int unsigned NOT NULL DEFAULT '0' COMMENT '商品已发布的规格数量' AFTER `specsNum`;");
+        }
+
+        if (!$this->isFieldExist('goods', 'categoryId')) {
+            $this->getConnection()->exec("ALTER TABLE `goods` ADD COLUMN `categoryId` int(10) NOT NULL DEFAULT '0' COMMENT '分类id' AFTER `orgCode`;");
+        }
+
+        if (!$this->isFieldExist('goods', 'discountId')) {
+            $this->getConnection()->exec("ALTER TABLE `goods` ADD COLUMN `discountId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '折扣活动ID' AFTER `maxRate`;");
+        }
+
+        if (!$this->isFieldExist('goods', 'discountType')) {
+            $this->getConnection()->exec("ALTER TABLE `goods` ADD COLUMN `discountType` varchar(64) NOT NULL DEFAULT 'discount' COMMENT '打折类型(discount:打折，reduce:减价)' AFTER `discountId`;");
+        }
+        return 1;
     }
 
     protected function processCourseGoodsAndProduct($page)
