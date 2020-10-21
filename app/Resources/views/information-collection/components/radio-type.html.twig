@@ -1,0 +1,6 @@
+{% for index, option in options %}
+	<label class="mts {% if index %} pll mll {% endif %}">
+		<input type="radio" name="{{ name }}" value="{{ option.value }}" {% if value == option.value %} checked="checked" {% endif %} {% if required %} required="required" {% endif %}>
+		{{ option.label }}
+	</label>
+{% endfor %}
