@@ -89,15 +89,26 @@ class EduSohoUpgrade extends AbstractUpdater
     public function batchUpdateFileUsedCount()
     {
         $fileUsedCounts = $this->getConnection()->fetchAll("
-            SELECT id, realUsedCount, usedCount FROM 
+            SELECT id, realUsedCount FROM 
                 (SELECT fileId, COUNT(id) AS realUsedCount FROM course_material_v8 WHERE courseId > 0 AND lessonId > 0 GROUP BY fileId) AS m, 
                 (SELECT id, usedCount FROM upload_files) AS f 
                 WHERE m.fileId = f.id AND m.realUsedCount != usedCount;
         ");
-
-        foreach ($fileUsedCounts as $fileCount) {
-            $this->getUploadFileDao()->update($fileCount['id'], ['usedCount' => $fileCount['realUsedCount']]);
+        
+        if (empty($fileUsedCounts)) {
+            return;
         }
+
+        $caseMarks = str_repeat(' WHEN ? THEN ? ', count($fileUsedCounts));
+        $idMarks = str_repeat('?,', count($fileUsedCounts) - 1).'?';
+        $sql = "UPDATE `upload_files` SET `usedCount` = ( CASE `id` $caseMarks END) WHERE id IN ($idMarks)";
+       
+        $values = [];
+        foreach ($fileUsedCounts as $fileCount) {
+            $values = array_merge($values, [$fileCount['id'], $fileCount['realUsedCount']]);
+        }
+
+        $this->getConnection()->executeUpdate($sql, array_merge($values, array_column($fileUsedCounts, 'id')));
         
         $this->logger('info', '刷新文件使用数成功');
         return 1;
