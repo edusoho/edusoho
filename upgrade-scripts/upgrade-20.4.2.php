@@ -96,7 +96,7 @@ class EduSohoUpgrade extends AbstractUpdater
         ");
         
         if (empty($fileUsedCounts)) {
-            return;
+            return 1;
         }
 
         $caseMarks = str_repeat(' WHEN ? THEN ? ', count($fileUsedCounts));
