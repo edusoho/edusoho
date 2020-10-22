@@ -11,7 +11,7 @@
 	<div style="max-width: 600px; margin:auto;">
 		<div class="cd-panel">
 			<div class="cd-panel-body">
-				{{ render(controller('AppBundle:InformationCollect/InformationCollect:eventForm', {eventId: eventId})) }}
+				{{ render(controller('AppBundle:InformationCollect/InformationCollect:eventForm', { request:app.request, eventId: eventId })) }}
 			</div>
 		</div>
 	</div>
