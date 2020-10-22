@@ -31,6 +31,7 @@ class InformationCollectController extends BaseController
 
         return $this->render('information-collection/form.html.twig', [
             'event' => $event,
+            'goto' => $request->query->get('goto', ''),
         ]);
     }
 

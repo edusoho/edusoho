@@ -19,7 +19,9 @@ let validator = $form.validate({
             phone: true,
         },
         'email': {
-            email: true,
+            check_email: true,
+            minlength: 4,
+            maxlength: 64,
         },
         'wechat': {
             check_wechat: true,
@@ -103,6 +105,10 @@ $.validator.addMethod('check_weibo', function (value, element) {
     return this.optional(element) || /^[A-Za-z0-9\u4e00-\u9fa5]+$/.test(value);
 }, Translator.trans('information_collect.form.check_format_invalid'));
 
+$.validator.addMethod('check_email', function (value, element) {
+    return this.optional(element) || /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/.test(value);
+}, Translator.trans('information_collect.form.check_format_invalid'));
+
 if ($('input[name="province_city_area"]').length) {
     initProvinceOptions();
     cd.select({
@@ -132,7 +138,6 @@ if ($('input[name="province_city_area"]').length) {
             window.arealist.city_list[$('input[name="city"]').val()],
             window.arealist.county_list[$('input[name="area"]').val()]
         ]));
-        validator.form();
     });
 }
 
@@ -148,8 +153,6 @@ function initDatePicker($target) {
         datepicker: true,
         timepicker: false,
         endDate: new Date(Date.now() + 86400 * 365 * 10 * 1000),
-    }).on('hide', () => {
-        validator.form();
     });
 }
 
@@ -230,3 +233,10 @@ $('.js-btn-save').on('click', (event) => {
         notify('danger', Translator.trans('site.save_error_hint'));
     });
 });
+
+if ($('.js-delete-content-btn').length) {
+    $('.js-delete-content-btn').on('click', (event) => {
+        console.log(1)
+        $($(event.currentTarget).data('target')).val('');
+    });
+}
