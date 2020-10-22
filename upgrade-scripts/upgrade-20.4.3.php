@@ -103,11 +103,11 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         if (!$this->isFieldExist('open_course_recommend', 'recommendGoodsId')) {
-            $this->exec("ALTER TABLE `open_course_recommend` ADD COLUMN `recommendGoodsId` int(10) NOT NULL DEFAULT '0' COMMENT '推荐商品id' AFTER `recommendCourseId`;");
+            $this->getConnection()->exec("ALTER TABLE `open_course_recommend` ADD COLUMN `recommendGoodsId` int(10) NOT NULL DEFAULT '0' COMMENT '推荐商品id' AFTER `recommendCourseId`;");
         }
 
         if (!$this->isFieldExist('coupon', 'goodsIds')) {
-            $this->exec("ALTER TABLE `coupon` ADD COLUMN `goodsIds` text COMMENT '资源商品ID' AFTER `targetIds`;");
+            $this->getConnection()->exec("ALTER TABLE `coupon` ADD COLUMN `goodsIds` text COMMENT '资源商品ID' AFTER `targetIds`;");
         }
 
         if (!$this->isFieldExist('coupon_batch', 'goodsIds')) {
@@ -115,7 +115,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         if (!$this->isFieldExist('favorite', 'goodsType')) {
-            $this->exec("ALTER TABLE `favorite` ADD COLUMN `goodsType` varchar(64) NOT NULL DEFAULT '' COMMENT '商品类型，因为业务限制增加的冗余字段' AFTER `targetId`;");
+            $this->getConnection()->exec("ALTER TABLE `favorite` ADD COLUMN `goodsType` varchar(64) NOT NULL DEFAULT '' COMMENT '商品类型，因为业务限制增加的冗余字段' AFTER `targetId`;");
         }
 
         return 1;
@@ -136,7 +136,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         if (!$this->isFieldExist('goods_specs', 'coinPrice')) {
-            $this->getConnection()->exec("ALTER TABLE ADD COLUMN `coinPrice` decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '虚拟币价格' AFTER `price`;");
+            $this->getConnection()->exec("ALTER TABLE `goods_specs` ADD COLUMN `coinPrice` decimal(12,2) NOT NULL DEFAULT '0.00' COMMENT '虚拟币价格' AFTER `price`;");
         }
 
         if (!$this->isFieldExist('goods_specs', 'buyableMode')) {
@@ -235,7 +235,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         if (!$this->isFieldExist('goods', 'status')) {
-            $this->getConnection("ALTER TABLE `goods` ADD COLUMN `status` varchar(32) DEFAULT 'created' COMMENT '商品状态：created, published, unpublished' AFTER `creator`;");
+            $this->getConnection()->exec("ALTER TABLE `goods` ADD COLUMN `status` varchar(32) DEFAULT 'created' COMMENT '商品状态：created, published, unpublished' AFTER `creator`;");
         }
 
         if (!$this->isFieldExist('goods', 'showable')) {
@@ -584,7 +584,7 @@ class EduSohoUpgrade extends AbstractUpdater
                     END AS status,
                     c.summary, c.minCoursePrice, c.maxCoursePrice, c.maxRate, c.cover, c.orgId, c.orgCode, c.ratingNum, 
                     c.rating, c.hitNum, c.hotSeq, c.recommendedSeq, c.recommendedTime, c.createdTime, c.updatedTime, 
-                    c.discountId, c.dicountType,
+                    c.discountId, c.discountType,
                     c.createdTime
                 FROM product p, course_set_v8 c 
                 WHERE p.targetId = c.id AND p.id IN ({$newProductIds});
