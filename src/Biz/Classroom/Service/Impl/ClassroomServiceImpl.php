@@ -1661,15 +1661,19 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             return false;
         }
 
-        if ($user->isAdmin()) {
+        if ($user->isSuperAdmin()) {
             return true;
         }
 
-        $permissions = array_merge([$permission], $this->getMarriedPermissions($permission));
-        foreach ($permissions as $permission) {
-            if ($user->hasPermission($permission)) {
-                return true;
+        if ($user->isAdmin()) {
+            $permissions = array_merge([$permission], $this->getMarriedPermissions($permission));
+            foreach ($permissions as $singlePermission) {
+                if ($user->hasPermission($singlePermission)) {
+                    return true;
+                }
             }
+
+            return false;
         }
 
         $member = $this->getClassroomMember($id, $user['id']);
@@ -1685,7 +1689,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return false;
     }
 
-    public function tryManageClassroom($id, $actionPermission = null)
+    public function tryManageClassroom($id, $actionPermission = 'admin_classroom_content_manage')
     {
         if (!$this->canManageClassroom($id, $actionPermission)) {
             $this->createNewException(ClassroomException::FORBIDDEN_MANAGE_CLASSROOM());
