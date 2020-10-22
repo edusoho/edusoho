@@ -70,7 +70,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
         if (0 == $index) {
             $this->logger('info', '开始执行升级脚本');
-            $this->deleteCache();
+//            $this->deleteCache();
 
             return array(
                 'index' => $this->generateIndex(1, 1),
@@ -569,13 +569,14 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->logger('info', "开始创建课程Product对应的Goods信息(ProductIds:{$newProductIds})");
             $this->getConnection()->exec("
                 INSERT INTO `goods` (
-                    `productId`, `type`, `title`, `subtitle`, `creator`,
+                    `productId`, `type`, `title`, `subtitle`, `creator`, `categoryId`,
                     `status`, 
                     `summary`, `minPrice`, `maxPrice`, `maxRate`, `images`, `orgId`, `orgCode`, `ratingNum`, 
                     `rating`, `hitNum`, `hotSeq`, `recommendWeight`, `recommendedTime`, `createdTime`, `updatedTime`, 
+                    `discountId`,  `discountType`,
                     `publishedTime`
                 ) SELECT 
-                    p.id, 'course' AS type, c.title, c.subtitle, creator, 
+                    p.id, 'course' AS type, c.title, c.subtitle, c.creator, c.categoryId,
                     CASE 
                         WHEN c.status = 'draft' THEN 'created'
                         WHEN c.status = 'closed' THEN 'unpublished'
@@ -583,6 +584,7 @@ class EduSohoUpgrade extends AbstractUpdater
                     END AS status,
                     c.summary, c.minCoursePrice, c.maxCoursePrice, c.maxRate, c.cover, c.orgId, c.orgCode, c.ratingNum, 
                     c.rating, c.hitNum, c.hotSeq, c.recommendedSeq, c.recommendedTime, c.createdTime, c.updatedTime, 
+                    c.discountId, c.dicountType,
                     c.createdTime
                 FROM product p, course_set_v8 c 
                 WHERE p.targetId = c.id AND p.id IN ({$newProductIds});
@@ -596,7 +598,7 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->getConnection()->exec("
                  UPDATE `goods` g INNER JOIN (
                 	SELECT 
-                        p.id, c.title, c.subtitle, c.creator, 
+                        p.id, c.title, c.subtitle, c.creator, c.categoryId,
                         CASE 
                             WHEN c.status = 'draft' THEN 'created'
                             WHEN c.status = 'closed' THEN 'unpublished'
@@ -605,15 +607,16 @@ class EduSohoUpgrade extends AbstractUpdater
                         c.summary, c.minCoursePrice AS minPrice, c.maxCoursePrice AS maxPrice, c.maxRate, 
                         c.cover AS images, c.orgId, c.orgCode, c.ratingNum , 
                         c.rating, c.hitNum, c.hotSeq, c.recommendedSeq AS recommendWeight, 
-                        c.recommendedTime, c.createdTime, c.updatedTime 
+                        c.recommendedTime, c.createdTime, c.updatedTime, c.discountId,  c.discountType
                 	FROM product p, course_set_v8 c WHERE p.targetId = c.id AND p.id IN ({$existedProductIds})
                  ) m ON m.id = g.productId  AND g.type = 'course'
                  SET 
-                    g.title = m.title, g.subtitle = m.subtitle, g.creator = m.creator, g.status = m.status, 
+                    g.title = m.title, g.subtitle = m.subtitle, g.creator = m.creator, g.categoryId = m.categoryId, g.status = m.status, 
                     g.summary =m.summary, g.minPrice = m.minPrice, g.maxPrice = m.maxPrice, g.maxRate = m.maxRate, 
                     g.images = m.images, g.orgId = m.orgId, g.orgCode = m.orgCode, g.ratingNum = m.ratingNum,
                     g.rating = m.rating, g.hitNum = m.hitNum, g.hotSeq = m.hotSeq, g.recommendWeight = m.recommendWeight,
                     g.recommendedTime = m.recommendedTime, g.createdTime = m.createdTime, g.updatedTime =m.updatedTime,
+                    g.discountId = m.discountId, g.discountType = m.discountType,
                     g.publishedTime = m.createdTime;
             ");
         }
@@ -813,14 +816,14 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->logger('info', "开始创建班级Product对应的Goods信息(ProductIds:{$newProductIds})");
             $this->getConnection()->exec("
                 INSERT INTO `goods` (
-                    `productId`, `type`, `title`, `subtitle`, `creator`,
+                    `productId`, `type`, `title`, `subtitle`, `creator`, `categoryId`,
                     `status`,
                     `showable`, `buyable`, `summary`, `minPrice`, `maxPrice`, `maxRate`,
                     `images`,
                     `orgId`, `orgCode`, `ratingNum`, `rating`, `hitNum`, `hotSeq`, `recommendWeight`, `recommendedTime`, 
                     `createdTime`, `updatedTime`, `publishedTime`
                 ) SELECT 
-                    p.id, 'classroom' AS type, c.title, c.subtitle, creator, 
+                    p.id, 'classroom' AS type, c.title, c.subtitle, c.creator, c.categoryId,
                     CASE 
                         WHEN c.status = 'draft' THEN 'created'
                         WHEN c.status = 'closed' THEN 'unpublished'
@@ -845,7 +848,7 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->getConnection()->exec("
                  UPDATE `goods` g INNER JOIN (
                 	SELECT 
-                        p.id AS productId, c.title, c.subtitle, creator, 
+                        p.id AS productId, c.title, c.subtitle, c.creator, c.categoryId,
                         CASE 
                             WHEN c.status = 'draft' THEN 'created'
                             WHEN c.status = 'closed' THEN 'unpublished'
@@ -864,7 +867,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 	WHERE p.targetId = c.id AND p.id IN ({$implodedProductIds})
                  ) m ON m.productId = g.productId AND g.type = 'classroom'
                  SET 
-                    g.title = m.title, g.subtitle = m.subtitle, g.creator = m.creator, g.status = m.status, 
+                    g.title = m.title, g.subtitle = m.subtitle, g.creator = m.creator, g.categoryId = m.categoryId, g.status = m.status, 
                     g.images = m.images, g.showable = m.showable, g.buyable = m.buyable, g.summary = m.summary, 
                     g.minPrice = m.minPrice, g.maxPrice = m.maxPrice, g.maxRate = m.maxRate, g.orgId = m.orgId, 
                     g.orgCode = m.orgCode, g.ratingNum = m.ratingNum, g.rating = m.rating, g.hitNum = m.hitNum, 
