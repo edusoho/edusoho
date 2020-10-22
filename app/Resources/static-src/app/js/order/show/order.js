@@ -69,11 +69,11 @@ class Order {
     this.$element.submit( event => {
       if ('' !=  this.$element.find('[name="informationCollectEventId"]').val() && '1' != this.$element.find('[name="informationCollectIsSubmited"]').val()) {
         notify('danger', Translator.trans('order.information_collect_error_hint'));
-        $('.order-center-information-collect').addClass('error');
+        $('.order-center-information-collect-content').addClass('error');
         return false;
       }
       $('#order-create-btn').button('loading');
-      $('.order-center-information-collect').removeClass('error');
+      $('.order-center-information-collect-content').removeClass('error');
       return true;
     });
   }

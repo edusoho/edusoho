@@ -68,10 +68,11 @@
 		</div>
 	{% endfor %}
 	<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+	<input type="hidden" name="in_order" value="{{ inOrder|default('0') }}">
 	<div class="row">
 		<button type="button" class="btn btn-primary js-btn-save col-sm-6 col-sm-offset-3" data-goto="{{ goto|default('/') }}">{{'information_collect.form_items.confirm_submit'|trans}}</button>
 		{% if event.allowSkip|default(0) %}
-			<a href="{{ goto|default('/') }}" class="btn btn-default js-btn-skip col-sm-6 col-sm-offset-3 mts">{{'information_collect.form_items.skip'|trans}}</a>
+			<button type="button" class="btn btn-default js-btn-skip col-sm-6 col-sm-offset-3 mts" id="skip">{{'information_collect.form_items.skip'|trans}}</button>
 		{% endif %}
 	</div>
 </form>
