@@ -167,7 +167,7 @@ class VerticalImgBuilder extends ImgBuilder
         return $this->imageTtfStamp(
             $certificate->getCertificateStamp(),
             [
-                'dst_x' => 1650 * $this->imageXRatio,
+                'dst_x' => 1500 * $this->imageXRatio,
                 'dst_y' => 2410 * $this->imageYRatio,
                 'src_x' => 0,
                 'src_y' => 0,
