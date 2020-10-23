@@ -30,7 +30,7 @@ class CourseBuyController extends BuyFlowController
 
     protected function getSuccessUrl($id)
     {
-        return $this->generateUrl('my_course_show', array('id' => $id));
+        return $this->generateUrl('my_course_show', ['id' => $id]);
     }
 
     protected function needNoStudentNumTip($id)
@@ -54,7 +54,7 @@ class CourseBuyController extends BuyFlowController
         $member = $this->getCourseMemberService()->getCourseMember($id, $user['id']);
         if (!empty($member)) {
             $course = $this->getCourseService()->getCourse($id);
-            $this->getLogService()->info('course', 'join_course', "加入教学计划《{$course['title']}》", array('userId' => $user['id'], 'courseId' => $course['id'], 'title' => ($course['title']) ? $course['title'] : $course['courseSetTitle']));
+            $this->getLogService()->info('course', 'join_course', "加入教学计划《{$course['title']}》", ['userId' => $user['id'], 'courseId' => $course['id'], 'title' => ($course['title']) ? $course['title'] : $course['courseSetTitle']]);
         }
 
         return $member;
@@ -74,13 +74,13 @@ class CourseBuyController extends BuyFlowController
 
         $event = $this->getInformationCollectEventService()->getEventByActionAndLocation('buy_before', ['targetType' => 'course', 'targetId' => $targetId]);
 
-        if (empty($event) || $event['status'] !== 'open') {
+        if (empty($event) || 'open' !== $event['status']) {
             return [];
         }
 
         $url = $this->generateUrl('information_collect_event', [
             'eventId' => $event['id'],
-            'goto' => $this->generateUrl("course_buy", ['id' => $targetId, 'need' => 'false']),
+            'goto' => $this->generateUrl('course_buy', ['id' => $targetId, 'need' => 'false']),
         ]);
 
         return [$event['id'], 'url' => $url];
@@ -95,7 +95,7 @@ class CourseBuyController extends BuyFlowController
 
         $event = $this->getInformationCollectEventService()->getEventByActionAndLocation('buy_after', ['targetType' => 'course', 'targetId' => $targetId]);
 
-        if (empty($event) || $event['status'] !== 'open') {
+        if (empty($event) || 'open' !== $event['status']) {
             return [];
         }
 

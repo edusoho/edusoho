@@ -29,7 +29,7 @@ class ClassroomBuyController extends BuyFlowController
 
     protected function getSuccessUrl($id)
     {
-        return $this->generateUrl('classroom_courses', array('classroomId' => $id));
+        return $this->generateUrl('classroom_courses', ['classroomId' => $id]);
     }
 
     protected function isJoined($id)
@@ -42,18 +42,18 @@ class ClassroomBuyController extends BuyFlowController
     protected function needInformationCollectionBeforeJoin($targetId)
     {
         $classroom = $this->getClassroomService()->getClassroom($targetId);
-        if ($classroom['price'] !== '0.00') {
+        if ('0.00' !== $classroom['price']) {
             return [];
         }
 
         $event = $this->getInformationCollectEventService()->getEventByActionAndLocation('buy_before', ['targetType' => 'classroom', 'targetId' => $targetId]);
-        if (empty($event) || $event['status'] !== 'open') {
+        if (empty($event) || 'open' !== $event['status']) {
             return [];
         }
 
         $url = $this->generateUrl('information_collect_event', [
             'eventId' => $event['id'],
-            'goto' => $this->generateUrl("classroom_buy", ['id' => $targetId, 'need' => 'false']),
+            'goto' => $this->generateUrl('classroom_buy', ['id' => $targetId, 'need' => 'false']),
         ]);
 
         return [$event['id'], 'url' => $url];
@@ -62,12 +62,12 @@ class ClassroomBuyController extends BuyFlowController
     protected function needInformationCollectionAfterJoin($targetId)
     {
         $classroom = $this->getClassroomService()->getClassroom($targetId);
-        if ($classroom['price'] !== '0.00') {
+        if ('0.00' !== $classroom['price']) {
             return [];
         }
 
         $event = $this->getInformationCollectEventService()->getEventByActionAndLocation('buy_after', ['targetType' => 'classroom', 'targetId' => $targetId]);
-        if (empty($event) || $event['status'] !== 'open') {
+        if (empty($event) || 'open' !== $event['status']) {
             return [];
         }
 

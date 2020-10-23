@@ -8,7 +8,6 @@ use Biz\System\Service\SettingService;
 use Biz\User\Service\UserFieldService;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 abstract class BuyFlowController extends BaseController
 {
@@ -46,7 +45,7 @@ abstract class BuyFlowController extends BaseController
             return $this->render('buy-flow/payments-disabled-modal.html.twig');
         }
 
-        if ($request->query->get('need', 'true') === 'true') {
+        if ('true' === $request->query->get('need', 'true')) {
             $event = $this->needInformationCollectionBeforeJoin($id);
             if (!empty($event)) {
                 return $this->createJsonResponse(['url' => $event['url']]);
@@ -55,7 +54,7 @@ abstract class BuyFlowController extends BaseController
         $this->tryFreeJoin($id);
 
         if ($this->isJoined($id)) {
-            if ($request->query->get('isNeed', 'true') === 'true') {
+            if ('true' === $request->query->get('isNeed', 'true')) {
                 $event = $this->needInformationCollectionAfterJoin($id);
                 if (!empty($event)) {
                     if (!empty($this->needInformationCollectionBeforeJoin($id))) {

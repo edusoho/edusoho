@@ -2707,7 +2707,6 @@ classroom_introductions:
 classroom_buy:
     path: /classroom/{id}/buy
     defaults: { _controller: AppBundle:Classroom/ClassroomBuy:buy }
-#    methods: [POST]
 
 classroom_sign:
     path:  classroom/sign/{classroomId}
