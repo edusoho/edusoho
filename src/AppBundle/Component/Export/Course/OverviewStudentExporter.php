@@ -33,6 +33,9 @@ class OverviewStudentExporter extends Exporter
         $tasks = $this->getAllTaskByCourseId();
 
         $taskTitles = ArrayToolkit::column($tasks, 'title');
+        foreach ($taskTitles as &$taskTitle) {
+            $taskTitle = is_numeric($taskTitle) ? $taskTitle."\t" : $taskTitle;
+        }
 
         return array_merge($titles, $taskTitles);
     }
@@ -65,7 +68,7 @@ class OverviewStudentExporter extends Exporter
 
             $user = $users[$member['userId']];
             $data = [];
-            $data[] = $user['nickname']."\t";
+            $data[] = is_numeric($user['nickname']) ? $user['nickname']."\t" : $user['nickname'];
 
             $learnProccess = (empty($member['learnedCompulsoryTaskNum']) || empty($course['compulsoryTaskNum'])) ? 0 : (int) ($member['learnedCompulsoryTaskNum'] * 100 / $course['compulsoryTaskNum']);
             $data[] = $learnProccess > 100 ? '100%' : $learnProccess.'%';

@@ -41,4 +41,6 @@ interface ItemService
     public function exportItems($bankId, $conditions, $path, $imgRootDir);
 
     public function findQuestionsByQuestionIds($questionIds);
+
+    public function countQuestionsByBankId($bankId);
 }
