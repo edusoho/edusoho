@@ -60,20 +60,20 @@
           that.answerScene = res.answer_scene;
         })
 
-        // $.ajax({
-        //   url: '/api/plugins/CloudItemBank/assessments/'+that.assessment.id+'/question_favorites',
-        //   type: 'GET',
-        //   async:false,
-        //   headers:{
-        //     'Accept':'application/vnd.edusoho.v2+json'
-        //   },
-        //   beforeSend(request) {
-        //     request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
-        //     request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-        //   }
-        // }).done(function (res) {
-        //   that.questionFavorites = res;
-        // })
+        $.ajax({
+          url: '/api/plugins/CloudItemBank/assessments/'+that.assessment.id+'/question_favorites',
+          type: 'GET',
+          async:false,
+          headers:{
+            'Accept':'application/vnd.edusoho.v2+json'
+          },
+          beforeSend(request) {
+            request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
+            request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+          }
+        }).done(function (res) {
+          that.questionFavorites = res;
+        })
     },
     methods: {
       doAgainEvent(data) {
@@ -81,7 +81,7 @@
       },
       cancelFavoriteEvent(favorite) {
         $.ajax({
-          url: '/api/me/question_favorite/1',
+          url: '/api/plugins/CloudItemBank/me/question_favorite/1',
           headers:{
             'Accept':'application/vnd.edusoho.v2+json'
           },
@@ -97,7 +97,7 @@
       },
       favoriteEvent(favorite) {
         $.ajax({
-          url: '/api/me/question_favorite',
+          url: '/api/plugins/CloudItemBank/me/question_favorite',
           headers:{
             'Accept':'application/vnd.edusoho.v2+json'
           },

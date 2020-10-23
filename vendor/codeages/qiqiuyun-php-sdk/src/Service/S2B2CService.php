@@ -689,6 +689,45 @@ class S2B2CService extends BaseService
         throw new SDKException('request fail');
     }
 
+    public function searchQuestionFavorite($conditions, $orderBy, $start, $limit)
+    {
+        $data = [
+            'conditions' => $conditions,
+            'orderBy' => $orderBy,
+            'start' => $start,
+            'limit' => $limit
+        ];
+        $result = $this->sendRequest($this->itemBnakRoutePrefix."/question/favorites", $data, 'GET');
+
+        if (!empty($result['status']) && $result['status'] = 'success') {
+            return $result['data'];
+        }
+
+        throw new SDKException('request fail');
+    }
+
+    public function createQuestionFavorite($questionFavorite)
+    {
+        $result = $this->sendRequest($this->itemBnakRoutePrefix."/question/favorite/create", $questionFavorite, 'POST');
+
+        if (!empty($result['status']) && $result['status'] = 'success') {
+            return $result['data'];
+        }
+
+        throw new SDKException('request fail');
+    }
+
+    public function deleteByQuestionFavorite($questionFavorite)
+    {
+        $result = $this->sendRequest($this->itemBnakRoutePrefix."/question/favorite/delete", $questionFavorite, 'POST');
+
+        if (!empty($result['status']) && $result['status'] = 'success') {
+            return $result['data'];
+        }
+
+        throw new SDKException('request fail');
+    }
+
     public function findAssessmentsByIds($ids)
     {
         $result = $this->sendRequest($this->itemBnakRoutePrefix."/assessment/find", ['ids' => $ids], 'GET');
