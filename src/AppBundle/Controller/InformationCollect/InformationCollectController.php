@@ -20,7 +20,7 @@ class InformationCollectController extends BaseController
         return $this->render('information-collection/index.html.twig', ['eventId' => $eventId]);
     }
 
-    public function eventFormAction(Request $request, $eventId)
+    public function eventFormAction(Request $request, $eventId, $inOrder = 0)
     {
         $apiRequest = new ApiRequest(
             "/api/information_collect_form/{$eventId}",
@@ -31,8 +31,19 @@ class InformationCollectController extends BaseController
 
         return $this->render('information-collection/form.html.twig', [
             'event' => $event,
+            'inOrder' => $inOrder,
             'goto' => $request->query->get('goto', ''),
         ]);
+    }
+
+    public function indexModalAction(Request $request, $eventId)
+    {
+        $event = $this->getEventService()->get($eventId);
+        if (empty($event)) {
+            throw $this->createNewException(InformationCollectException::NOTFOUND_COLLECTION());
+        }
+
+        return $this->render('information-collection/index-modal.html.twig', ['eventId' => $eventId]);
     }
 
     /**

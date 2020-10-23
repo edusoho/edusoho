@@ -583,6 +583,7 @@ order.confirm.exchange_rate: (1元 = %cashRate%%coin_name%）
 order.confirm.use_tips: 本次使用
 order.confirm.price: 商品价格
 order.confirm.bought_course_deduction: 已购课程抵扣
+order.confirm.information-collect-title: 信息采集
 order.adjust_price_btn: 改价
 order.before_adjust_price: 订单原价
 order.adjust_price_modal_title: 订单改价

@@ -121,7 +121,7 @@ class ClassroomProduct extends Product implements OrderStatusCallback
         if (empty($event)) {
             return ['classroom_show', ['id' => $this->targetId]];
         } else {
-            return ['information_collect_event', ['eventId' => $event['id']]];
+            return ['information_collect_event', ['eventId' => $event['id'], 'goto' => $this->generateUrl('classroom_show', ['id' => $this->targetId])]];
         }
     }
 

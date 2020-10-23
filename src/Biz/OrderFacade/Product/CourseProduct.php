@@ -135,7 +135,7 @@ class CourseProduct extends Product implements OrderStatusCallback
         if (empty($event)) {
             return ['my_course_show', ['id' => $this->targetId]];
         } else {
-            return ['information_collect_event', ['eventId' => $event['id']]];
+            return ['information_collect_event', ['eventId' => $event['id'], 'goto' => $this->generateUrl('my_course_show', ['id' => $this->targetId])]];
         }
     }
 

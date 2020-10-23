@@ -503,6 +503,7 @@ order.confirm.exchange_rate: '1 CNY = %cashRate%%coin_name%）'
 order.confirm.use_tips: 'Used this time'
 order.confirm.price: Product price
 order.confirm.bought_course_deduction: 'Purchased course deduction'
+order.confirm.information-collect-title: Information collect
 order.adjust_price_btn: 'Change price'
 order.adjust_price_modal_title: 'Change order price'
 order.adjust_price_modal.hint: 'Please fill the discount in inputbox'

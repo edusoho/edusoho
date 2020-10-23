@@ -3590,3 +3590,7 @@ information_collect_event:
 information_collect_event_form:
   path: /information_collect/event/{eventId}/form
   defaults: { _controller: AppBundle:InformationCollect/InformationCollect:eventForm }
+
+information_collect_event_modal:
+  path: /information_collect/event_modal/{eventId}
+  defaults: { _controller: AppBundle:InformationCollect/InformationCollect:indexModal }

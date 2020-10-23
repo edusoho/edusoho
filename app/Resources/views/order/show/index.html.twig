@@ -22,7 +22,8 @@
       {% if informationCollectEvent %}
       <input type="hidden" name="informationCollectIsSubmited" value="" />
       <div class="order-center-information-collect">
-        <div class="order-center-information-collect-content">
+        <div class="order-center-information-collect-title">{{ 'order.confirm.information-collect-title'|trans }}</div>
+        <div class="order-center-information-collect-content" data-target="#modal" data-toggle="modal" data-url="{{ path('information_collect_event_modal', {eventId:informationCollectEvent.id}) }}">
           <span class="order-center-information-collect-content-title">{{ informationCollectEvent.formTitle }}</span>
           <span class="order-center-information-collect-content-arrow-right">
             <i class="icon cd-icon cd-icon-arrow-right"></i>
