@@ -63,7 +63,7 @@ class CourseBuyController extends BuyFlowController
     protected function needInformationCollectionBeforeJoin($targetId)
     {
         $course = $this->getCourseService()->getCourse($targetId);
-        if (!$course['isFree']) {
+        if (1 != $course['isFree'] || 0 != $course['originPrice']) {
             return [];
         }
 
@@ -74,13 +74,13 @@ class CourseBuyController extends BuyFlowController
 
         $event = $this->getInformationCollectEventService()->getEventByActionAndLocation('buy_before', ['targetType' => 'course', 'targetId' => $targetId]);
 
-        if (empty($event) || 'open' !== $event['status']) {
+        if (empty($event)) {
             return [];
         }
 
         $url = $this->generateUrl('information_collect_event', [
             'eventId' => $event['id'],
-            'goto' => $this->generateUrl('course_buy', ['id' => $targetId, 'need' => 'false']),
+            'goto' => $this->generateUrl('course_buy', ['id' => $targetId]),
         ]);
 
         return [$event['id'], 'url' => $url];
@@ -95,13 +95,13 @@ class CourseBuyController extends BuyFlowController
 
         $event = $this->getInformationCollectEventService()->getEventByActionAndLocation('buy_after', ['targetType' => 'course', 'targetId' => $targetId]);
 
-        if (empty($event) || 'open' !== $event['status']) {
+        if (empty($event)) {
             return [];
         }
 
         $url = $this->generateUrl('information_collect_event', [
             'eventId' => $event['id'],
-            'goto' => $this->generateUrl('my_course_show', ['id' => $targetId, 'isNeed' => 'false']),
+            'goto' => $this->getSuccessUrl($targetId),
         ]);
 
         return [$event['id'], 'url' => $url];

@@ -45,7 +45,7 @@ abstract class BuyFlowController extends BaseController
             return $this->render('buy-flow/payments-disabled-modal.html.twig');
         }
 
-        if ('true' === $request->query->get('need', 'true')) {
+        if ('POST' == $request->getMethod()) {
             $event = $this->needInformationCollectionBeforeJoin($id);
             if (!empty($event)) {
                 return $this->createJsonResponse(['url' => $event['url']]);
@@ -54,10 +54,11 @@ abstract class BuyFlowController extends BaseController
         $this->tryFreeJoin($id);
 
         if ($this->isJoined($id)) {
-            if ('true' === $request->query->get('isNeed', 'true')) {
+            $beforeEvent = $this->needInformationCollectionBeforeJoin($id);
+            if ('POST' == $request->getMethod() || !empty($beforeEvent)) {
                 $event = $this->needInformationCollectionAfterJoin($id);
                 if (!empty($event)) {
-                    if (!empty($this->needInformationCollectionBeforeJoin($id))) {
+                    if (!empty($beforeEvent)) {
                         return $this->redirect($event['url']);
                     } else {
                         return $this->createJsonResponse(['url' => $event['url']]);

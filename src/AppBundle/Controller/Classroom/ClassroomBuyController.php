@@ -42,18 +42,18 @@ class ClassroomBuyController extends BuyFlowController
     protected function needInformationCollectionBeforeJoin($targetId)
     {
         $classroom = $this->getClassroomService()->getClassroom($targetId);
-        if ('0.00' !== $classroom['price']) {
+        if (0 != $classroom['price']) {
             return [];
         }
 
         $event = $this->getInformationCollectEventService()->getEventByActionAndLocation('buy_before', ['targetType' => 'classroom', 'targetId' => $targetId]);
-        if (empty($event) || 'open' !== $event['status']) {
+        if (empty($event)) {
             return [];
         }
 
         $url = $this->generateUrl('information_collect_event', [
             'eventId' => $event['id'],
-            'goto' => $this->generateUrl('classroom_buy', ['id' => $targetId, 'need' => 'false']),
+            'goto' => $this->generateUrl('classroom_buy', ['id' => $targetId]),
         ]);
 
         return [$event['id'], 'url' => $url];
@@ -61,19 +61,14 @@ class ClassroomBuyController extends BuyFlowController
 
     protected function needInformationCollectionAfterJoin($targetId)
     {
-        $classroom = $this->getClassroomService()->getClassroom($targetId);
-        if ('0.00' !== $classroom['price']) {
-            return [];
-        }
-
         $event = $this->getInformationCollectEventService()->getEventByActionAndLocation('buy_after', ['targetType' => 'classroom', 'targetId' => $targetId]);
-        if (empty($event) || 'open' !== $event['status']) {
+        if (empty($event)) {
             return [];
         }
 
         $url = $this->generateUrl('information_collect_event', [
             'eventId' => $event['id'],
-            'goto' => $this->generateUrl('classroom_courses', ['classroomId' => $targetId, 'isNeed' => 'false']),
+            'goto' => $this->getSuccessUrl($targetId),
         ]);
 
         return [$event['id'], 'url' => $url];
