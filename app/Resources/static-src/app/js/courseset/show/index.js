@@ -2,49 +2,13 @@ import { chapterAnimate } from 'app/common/widget/chapter-animate';
 import AttachmentActions from 'app/js/attachment/widget/attachment-actions';
 import { Browser } from 'common/utils';
 import { buyBtn } from 'app/common/widget/btn-util';
-import Api from 'common/api';
 
-courseBeforeJoin();
 initTaskLearnChart();
 triggerMemberExpired();
 remainTime();
 
 if ($('.js-attachment-list').length > 0) {
   new AttachmentActions($('.js-attachment-list'));
-}
-
-function courseBeforeJoin() {
-
-  $('.js-course-buy-btn').on('click', function () {
-    Api.informationCollect.getEvent({
-      params: {
-        action: 'buy_before',
-      },
-      data: {
-        targetType: $(this).data('targetType'),
-        targetId: $(this).data('targetId'),
-      }
-    }).then(res => {
-      if (res && res.status === 'open'){
-        $.get('/information_collect/event/' + res.id, res => {
-          if (typeof res === 'object') {
-            window.location.href = res.url;
-          } else {
-            $('#modal').modal('show').html(res);
-          }
-        });
-      }else{
-        $.post($('.js-course-buy-btn').data('url'), res => {
-          if (typeof res === 'object') {
-            window.location.href = res.url;
-          } else {
-            $('#modal').modal('show').html(res);
-          }
-        });
-      }
-    });
-
-  });
 }
 
 buyBtn($('.js-buy-btn'));
