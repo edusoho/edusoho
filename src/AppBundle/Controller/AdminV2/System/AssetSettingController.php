@@ -261,7 +261,8 @@ class AssetSettingController extends BaseController
                 $coinSettings['price_type'] = 'RMB';
                 $coinSettings['cash_model'] = 'deduction';
 
-                if (isset($data['item-rate'])) {
+                $data['item_rate'] = empty($data['item_rate']) ? [] : json_decode($data['item_rate'], true);
+                if (!empty($data['item_rate'])) {
                     $this->updateMaxRate($data);
                 }
             } else {
@@ -360,7 +361,7 @@ class AssetSettingController extends BaseController
     protected function updateMaxRate($data)
     {
         $type = $data['type'];
-        $data = $data['item-rate'];
+        $data = $data['item_rate'];
 
         if ('course' == $type) {
             foreach ($data as $key => $value) {

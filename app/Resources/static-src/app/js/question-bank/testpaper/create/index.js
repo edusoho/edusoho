@@ -1,4 +1,3 @@
-import { delHtmlTag } from 'common/utils';
 import BatchSelect from '../../../../common/widget/batch-select';
 import 'jquery-sortable';
 
@@ -310,10 +309,10 @@ class TestpaperForm {
         height: 100
       });
       editor.on('change', () => {
-        this.$description.val(delHtmlTag(editor.getData()));
+        this.$description.val(editor.getData());
       });
       editor.on('blur', () => {
-        this.$description.val(delHtmlTag(editor.getData()));
+        this.$description.val(editor.getData());
         validator.form();
       });
     }

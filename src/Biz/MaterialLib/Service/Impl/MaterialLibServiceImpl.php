@@ -4,6 +4,9 @@ namespace Biz\MaterialLib\Service\Impl;
 
 use Biz\BaseService;
 use Biz\CloudFile\Service\CloudFileService;
+use Biz\CloudFile\Service\FilePlayerInterface;
+use Biz\CloudFile\Service\SupplierFileService;
+use Biz\File\UploadFileException;
 use Biz\MaterialLib\Service\MaterialLibService;
 use AppBundle\Common\ArrayToolkit;
 
@@ -21,7 +24,27 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 
     public function player($globalId, $ssl = false)
     {
-        return $this->getCloudFileService()->player($globalId, $ssl);
+        $service = $this->getPlayerService($globalId);
+        return $service->player($globalId, $ssl);
+    }
+
+    /**
+     * @return CloudFileService|SupplierFileService|null
+     */
+    protected function getPlayerService($globalId)
+    {
+        $file = $this->getUploadFileService()->getFileByGlobalId($globalId);
+        if (empty($file)) {
+            throw $this->createNewException(UploadFileException::NOTFOUND_FILE());
+        }
+
+        if ($file['storage'] == 'supplier') {
+            return $this->getSupplierFileService();
+        } elseif ($file['storage'] == 'cloud') {
+            return $this->getCloudFileService();
+        }
+
+        return null;
     }
 
     public function edit($fileId, $fields)
@@ -141,6 +164,14 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
     protected function getCloudFileService()
     {
         return $this->createService('CloudFile:CloudFileService');
+    }
+
+    /**
+     * @return SupplierFileService
+     */
+    protected function getSupplierFileService()
+    {
+        return $this->createService('CloudFile:SupplierFileService');
     }
 
     protected function getUploadFileTagService()

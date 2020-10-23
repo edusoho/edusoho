@@ -8,7 +8,7 @@ new LocalImageCrop({
   selectBtn: '#select-btn',
   group: 'system',
   imgs: {
-    large: isHorizontal ? [3600, 2600] : [2600, 3600],
+    large: isHorizontal ? [3508, 2480] : [2480, 3508],
   },
   uploadInput: '.basemap-upload .js-upload-input',
 });

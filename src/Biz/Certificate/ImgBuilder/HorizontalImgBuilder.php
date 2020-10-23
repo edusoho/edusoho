@@ -17,9 +17,9 @@ class HorizontalImgBuilder extends ImgBuilder
 
     protected $imageYRatio = 1; //缩放基数
 
-    protected $DEFAULT_IMAGE_X = 3600;
+    protected $DEFAULT_IMAGE_X = 3508;
 
-    protected $DEFAULT_IMAGE_Y = 2600;
+    protected $DEFAULT_IMAGE_Y = 2480;
 
     protected function setCertificateTitle(Certificate $certificate)
     {

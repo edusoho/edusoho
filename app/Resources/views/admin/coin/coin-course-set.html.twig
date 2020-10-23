@@ -5,8 +5,6 @@
 {% set script_controller = "coin/save" %}
 {% block main %}
   {{ web_macro.flash_messages() }}
-  <form class="form-horizontal" method="post" id="coin-model-form" action="{{path('admin_coin_model_save')}}">
-  
     <ul class="breadcrumb">
       <li><a href="{{path('admin_coin_model')}}">{{'admin.coin.model_setting'|trans}}</a></li>
       <li class="active">{{'course.price_setting'|trans}}</li>
@@ -27,13 +25,15 @@
     <div id="typelist">
       {% include 'admin/coin/coin-table-setting.html.twig' %}
     </div>
-    <input type="hidden" name="cash_model" value="{{ set.cash_model }}">
-    <input type="hidden" name="cash_rate" value="{{ set.cash_rate }}">
-    <input type="hidden" name="type" value="{{type|default('course')}}">
-    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-    <p>
-      <button type="submit" class="btn btn-primary pull-right" id="finish" >{{'form.btn.finish'|trans}}</button>
-      <a type="button" href="{{ url('admin_coin_model',{set:set}) }}" class="btn btn-link pull-right">{{'form.btn.back'|trans}}</a>
-    </p>
-  </form>
+    <form class="form-horizontal" method="post" id="coin-model-form" action="{{path('admin_coin_model_save')}}">
+      <input type="hidden" name="item_rate" value="">
+      <input type="hidden" name="cash_model" value="{{ set.cash_model }}">
+      <input type="hidden" name="cash_rate" value="{{ set.cash_rate }}">
+      <input type="hidden" name="type" value="{{type|default('course')}}">
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      <p>
+        <button type="submit" class="btn btn-primary pull-right" id="finish" >{{'form.btn.finish'|trans}}</button>
+        <a type="button" href="{{ url('admin_coin_model',{set:set}) }}" class="btn btn-link pull-right">{{'form.btn.back'|trans}}</a>
+      </p>
+    </form>
 {% endblock %}

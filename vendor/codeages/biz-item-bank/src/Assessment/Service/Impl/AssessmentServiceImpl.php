@@ -75,6 +75,7 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
             throw new ItemBankException('Item bank is not found.', ErrorCode::ITEM_BANK_NOT_FOUND);
         }
 
+        isset($assessment['description']) && $assessment['description'] = $this->biz['item_bank_html_helper']->purify($assessment['description']);
         $assessment['created_user_id'] = empty($assessment['created_user_id']) ? empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'] : $assessment['created_user_id'];
         $assessment['updated_user_id'] = $assessment['created_user_id'];
 
@@ -194,6 +195,7 @@ class AssessmentServiceImpl extends BaseService implements AssessmentService
             'description' => [],
         ]);
         $assessment['updated_user_id'] = empty($assessment['updated_user_id']) ? empty($this->biz['user']['id']) ? 0 : $this->biz['user']['id'] : $assessment['updated_user_id'];
+        isset($assessment['description']) && $assessment['description'] = $this->biz['item_bank_html_helper']->purify($assessment['description']);
 
         return $this->getAssessmentDao()->update($assessmentId, $assessment);
     }

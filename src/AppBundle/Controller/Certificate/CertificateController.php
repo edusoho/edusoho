@@ -32,8 +32,8 @@ class CertificateController extends BaseController
     public function certificateRecordAction(Request $request, $recordId)
     {
         $record = $this->getRecordService()->get($recordId);
-        if (empty($record)) {
-            return $this->createMessageResponse('error', '证书不存在！');
+        if (empty($record) || in_array($record['status'], ['reject', 'none', 'cancelled'])) {
+            return $this->createMessageResponse('info', '证书不存在', '', 3, $this->generateUrl('homepage'));
         }
 
         $user = $this->getUserService()->getUserAndProfile($record['userId']);
