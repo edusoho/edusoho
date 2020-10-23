@@ -228,15 +228,29 @@ $('.js-btn-save').on('click', (event) => {
         data: $form.serialize(),
     }).then((resp) => {
         notify('success', Translator.trans('site.save_success_hint'));
-        window.location.href = $('.js-btn-save').data('goto');
+        submitAfter();
     }).catch(() => {
         notify('danger', Translator.trans('site.save_error_hint'));
     });
 });
 
+$("#skip").click(function(){
+    submitAfter();
+});
+
+function submitAfter()
+{   
+    if ('1' == $('input[name="in_order"]').val()) {
+        $('input[name="informationCollectIsSubmited"]').val('1');
+        $('.order-center-information-collect-content').removeClass('error');
+        $("#modal").modal('hide');
+    } else {
+        window.location.href = $('.js-btn-save').data('goto');
+    }
+}
+
 if ($('.js-delete-content-btn').length) {
     $('.js-delete-content-btn').on('click', (event) => {
-        console.log(1)
         $($(event.currentTarget).data('target')).val('');
     });
 }
