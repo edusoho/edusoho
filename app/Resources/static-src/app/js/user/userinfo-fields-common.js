@@ -1,6 +1,5 @@
 import SmsSender from 'app/common/widget/sms-sender';
 import notify from 'common/notify';
-import Api from 'common/api';
 
 export default class UserInfoFieldsItemValidate {
   constructor(options) {
@@ -104,36 +103,15 @@ export default class UserInfoFieldsItemValidate {
       },
       submitHandler: form => {
         if ($(form).valid()) {
+          $.post($(form).attr('action'), $(form).serialize(), resp => {
+            if (resp.url) {
+              location.href = resp.url;
+            } else {
+              notify('success', Translator.trans('site.save_success_hint'));
+              $('#modal').modal('hide');
+            }
 
-          Api.informationCollect.getEvent({
-            params: {
-              action: 'buy_before',
-            },
-            data: {
-              targetType: $(this).data('targetType'),
-              targetId: $(this).data('targetId'),
-            }
-          }).then(resp => {
-            if (resp && resp.status === 'open'){
-              $.get('/information_collect/event/' + resp.id, resp => {
-                if (typeof resp === 'object') {
-                  window.location.href = resp.url;
-                } else {
-                  $('#modal').modal('show').html(resp);
-                }
-              });
-            }else{
-              $.post($(form).attr('action'), $(form).serialize(), resp => {
-                if (resp.url) {
-                  location.href = resp.url;
-                } else {
-                  notify('success', Translator.trans('site.save_success_hint'));
-                  $('#modal').modal('hide');
-                }
-              });
-            }
           });
-
         }
       }
     });
@@ -143,8 +121,6 @@ export default class UserInfoFieldsItemValidate {
   smsCodeValidate() {
     if ($('.js-captch-num').length > 0) {
       
-      //$('.js-captch-num').find('#getcode_num').attr("src", $("#getcode_num").data("url") + "?" + Math.random());
-
       $('input[name="captcha_num"]').rules('add', {
         required: true,
         alphanumeric: true,

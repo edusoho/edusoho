@@ -8,6 +8,7 @@ use Biz\System\Service\SettingService;
 use Biz\User\Service\UserFieldService;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 abstract class BuyFlowController extends BaseController
 {
@@ -45,9 +46,25 @@ abstract class BuyFlowController extends BaseController
             return $this->render('buy-flow/payments-disabled-modal.html.twig');
         }
 
+        if ($request->query->get('need', 'true') === 'true') {
+            $event = $this->needInformationCollectionBeforeJoin($id);
+            if (!empty($event)) {
+                return $this->createJsonResponse(['url' => $event['url']]);
+            }
+        }
         $this->tryFreeJoin($id);
 
         if ($this->isJoined($id)) {
+            if ($request->query->get('isNeed', 'true') === 'true') {
+                $event = $this->needInformationCollectionAfterJoin($id);
+                if (!empty($event)) {
+                    if (!empty($this->needInformationCollectionBeforeJoin($id))) {
+                        return $this->redirect($event['url']);
+                    } else {
+                        return $this->createJsonResponse(['url' => $event['url']]);
+                    }
+                }
+            }
             if ('POST' == $request->getMethod()) {
                 return $this->createJsonResponse(['url' => $this->getSuccessUrl($id)]);
             } else {
@@ -140,4 +157,8 @@ abstract class BuyFlowController extends BaseController
     abstract protected function isJoined($id);
 
     abstract protected function tryFreeJoin($id);
+
+    abstract protected function needInformationCollectionBeforeJoin($targetId);
+
+    abstract protected function needInformationCollectionAfterJoin($targetId);
 }

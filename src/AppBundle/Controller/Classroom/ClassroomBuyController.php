@@ -39,6 +39,51 @@ class ClassroomBuyController extends BuyFlowController
         return $this->getClassroomService()->isClassroomStudent($id, $user['id']);
     }
 
+    protected function needInformationCollectionBeforeJoin($targetId)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($targetId);
+        if ($classroom['price'] !== '0.00') {
+            return [];
+        }
+
+        $event = $this->getInformationCollectEventService()->getEventByActionAndLocation('buy_before', ['targetType' => 'classroom', 'targetId' => $targetId]);
+        if (empty($event) || $event['status'] !== 'open') {
+            return [];
+        }
+
+        $url = $this->generateUrl('information_collect_event', [
+            'eventId' => $event['id'],
+            'goto' => $this->generateUrl("classroom_buy", ['id' => $targetId, 'need' => 'false']),
+        ]);
+
+        return [$event['id'], 'url' => $url];
+    }
+
+    protected function needInformationCollectionAfterJoin($targetId)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($targetId);
+        if ($classroom['price'] !== '0.00') {
+            return [];
+        }
+
+        $event = $this->getInformationCollectEventService()->getEventByActionAndLocation('buy_after', ['targetType' => 'classroom', 'targetId' => $targetId]);
+        if (empty($event) || $event['status'] !== 'open') {
+            return [];
+        }
+
+        $url = $this->generateUrl('information_collect_event', [
+            'eventId' => $event['id'],
+            'goto' => $this->generateUrl('classroom_courses', ['classroomId' => $targetId, 'isNeed' => 'false']),
+        ]);
+
+        return [$event['id'], 'url' => $url];
+    }
+
+    protected function getInformationCollectEventService()
+    {
+        return $this->createService('InformationCollect:EventService');
+    }
+
     /**
      * @return ClassroomService
      */

@@ -60,6 +60,63 @@ class CourseBuyController extends BuyFlowController
         return $member;
     }
 
+    protected function needInformationCollectionBeforeJoin($targetId)
+    {
+        $course = $this->getCourseService()->getCourse($targetId);
+        if (!$course['isFree']) {
+            return [];
+        }
+
+        if ('0' != $targetId) {
+            $course = $this->getCourseService()->getCourse($targetId);
+            $targetId = $course['courseSetId'];
+        }
+
+        $event = $this->getInformationCollectEventService()->getEventByActionAndLocation('buy_before', ['targetType' => 'course', 'targetId' => $targetId]);
+
+        if (empty($event) || $event['status'] !== 'open') {
+            return [];
+        }
+
+        $url = $this->generateUrl('information_collect_event', [
+            'eventId' => $event['id'],
+            'goto' => $this->generateUrl("course_buy", ['id' => $targetId, 'need' => 'false']),
+        ]);
+
+        return [$event['id'], 'url' => $url];
+    }
+
+    protected function needInformationCollectionAfterJoin($targetId)
+    {
+        if ('0' != $targetId) {
+            $course = $this->getCourseService()->getCourse($targetId);
+            $targetId = $course['courseSetId'];
+        }
+
+        $event = $this->getInformationCollectEventService()->getEventByActionAndLocation('buy_after', ['targetType' => 'course', 'targetId' => $targetId]);
+
+        if (empty($event) || $event['status'] !== 'open') {
+            return [];
+        }
+
+        $url = $this->generateUrl('information_collect_event', [
+            'eventId' => $event['id'],
+            'goto' => $this->generateUrl('my_course_show', ['id' => $targetId, 'isNeed' => 'false']),
+        ]);
+
+        return [$event['id'], 'url' => $url];
+    }
+
+    protected function getInformationCollectResultService()
+    {
+        return $this->createService('InformationCollect:ResultService');
+    }
+
+    protected function getInformationCollectEventService()
+    {
+        return $this->createService('InformationCollect:EventService');
+    }
+
     /**
      * @return MemberService
      */
