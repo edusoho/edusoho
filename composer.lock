@@ -464,12 +464,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-item-bank.git",
-                "reference": "33368b09957761f1b3ba411aa6aec1ac5bbf5bc6"
+                "reference": "75d529583775231b032f1715b2d1812427b7d52c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-item-bank/zipball/33368b09957761f1b3ba411aa6aec1ac5bbf5bc6",
-                "reference": "33368b09957761f1b3ba411aa6aec1ac5bbf5bc6",
+                "url": "https://api.github.com/repos/codeages/biz-item-bank/zipball/75d529583775231b032f1715b2d1812427b7d52c",
+                "reference": "75d529583775231b032f1715b2d1812427b7d52c",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -503,7 +503,7 @@
                 "MIT"
             ],
             "description": "item bank with biz-framework",
-            "time": "2020-10-16T07:56:18+00:00"
+            "time": "2020-10-21T02:16:04+00:00"
         },
         {
             "name": "codeages/biz-order-pay",
@@ -7444,6 +7444,7 @@
                 }
             ],
             "description": "JSONPath implementation for parsing, searching and flattening arrays",
+            "abandoned": "softcreatr/jsonpath",
             "time": "2019-07-15T17:23:22+00:00"
         },
         {
