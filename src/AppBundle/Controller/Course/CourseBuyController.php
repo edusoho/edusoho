@@ -63,7 +63,7 @@ class CourseBuyController extends BuyFlowController
     protected function needInformationCollectionBeforeJoin($targetId)
     {
         $course = $this->getCourseService()->getCourse($targetId);
-        if ((1 != $course['isFree'] || 0 != $course['originPrice']) && !$course['isVip']) {
+        if ((1 != $course['isFree'] || 0 != $course['originPrice']) && !$course['vipLevelId']) {
             return [];
         }
 
