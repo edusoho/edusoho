@@ -514,6 +514,11 @@ class UserController extends BaseController
          */
         $courseId = $request->request->get('courseId', 0);
         if ($courseId) {
+            $event = $this->needInformationCollectionBeforeJoin($courseId);
+            if (!empty($event)) {
+                return $this->createJsonResponse(['url' => $event['url']]);
+            }
+
             $this->getCourseService()->tryFreeJoin($courseId);
             $member = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
             if ($member) {
@@ -531,6 +536,33 @@ class UserController extends BaseController
         return $this->createJsonResponse([
             'msg' => 'success',
         ]);
+    }
+
+    protected function needInformationCollectionBeforeJoin($targetId)
+    {
+        $location = ['targetType' => 'course', 'targetId' => $targetId];
+        if ('0' != $targetId) {
+            $course = $this->getCourseService()->getCourse($targetId);
+            $location['targetId'] = $course['courseSetId'];
+        }
+
+        $event = $this->getInformationCollectEventService()->getEventByActionAndLocation('buy_before', $location);
+
+        if (empty($event)) {
+            return [];
+        }
+
+        $url = $this->generateUrl('information_collect_event', [
+            'eventId' => $event['id'],
+            'goto' => $this->generateUrl('course_buy', ['id' => $targetId]),
+        ]);
+
+        return [$event['id'], 'url' => $url];
+    }
+
+    protected function getInformationCollectEventService()
+    {
+        return $this->createService('InformationCollect:EventService');
     }
 
     public function stickCourseSetAction(Request $request, $courseSetId)
