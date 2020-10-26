@@ -1,4 +1,5 @@
-<input type="hidden" id="{{ name }}" name="{{ name }}"  class="form-control {{ class|default('') }}" value="{{ value|json_encode|default(null) }}
+<input type="hidden" id="{{ name }}" name="{{ name }}"  class="form-control {{ class|default('') }}"
+{% if value %}value="{{ value|json_encode }}{% endif %}
 {% if required|default(false) %} required="required" {% endif %} 
 {% if disabled|default(false) %} disabled="disabled" {% endif %}">
 <div class="form-control border-unset control-border-unset">
@@ -11,7 +12,7 @@
 				{{ value[0] }}
 			{% endif %}
 		</div>
-		<ul class="select-options province-select-options"/>
+		<ul class="select-options province-select-options"></ul>
 	</div>
 
 	<div class="cd-select col-md-4 {% if not value[1]|default(null) %} hidden {% endif %}" id="city">
@@ -23,7 +24,7 @@
 				{{ value[1] }}
 			{% endif %}
 		</div>
-		<ul class="select-options city-select-options"/>
+		<ul class="select-options city-select-options"></ul>
 	</div>
 
 	<div class="cd-select col-md-4 {% if not value[2]|default(null) %} hidden {% endif %}" id="area">
@@ -35,6 +36,6 @@
 				{{ value[2] }}
 			{% endif %}
 		</div>
-		<ul class="select-options area-select-options"/>
+		<ul class="select-options area-select-options"></ul>
 	</div>
 </div>
