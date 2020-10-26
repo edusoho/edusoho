@@ -1390,6 +1390,7 @@ t.add("course_manage.positive_currency.message", "Please enter a valid price gre
 t.add("merchant.resource.product_version.update_success_hint", "Update Success", "js", "en");
 t.add("merchant.resource.product_version.update_failed_hint", "Update Failed", "js", "en");
 t.add("validate.length_max.message", "Please enter no more than %length% characters.", "js", "en");
+t.add("validate.length_min.message", "Please enter no less than %length% characters.", "js", "en");
 t.add("classroom.title_label", "Title", "js", "en");
 t.add("classroom.subtitle_label", "Subtitle", "js", "en");
 t.add("classroom.basic_info", "Base Info", "js", "en");

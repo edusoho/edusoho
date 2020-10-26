@@ -1337,6 +1337,7 @@ t.add("course_manage.positive_currency.message", "\u8bf7\u8f93\u5165\u5927\u4e8e
 t.add("merchant.resource.product_version.update_success_hint", "\u66f4\u65b0\u6210\u529f", "js", "zh_CN");
 t.add("merchant.resource.product_version.update_failed_hint", "\u66f4\u65b0\u5931\u8d25", "js", "zh_CN");
 t.add("validate.length_max.message", "\u6700\u591a\u53ea\u80fd\u8f93\u5165 %length% \u4e2a\u5b57\u7b26", "js", "zh_CN");
+t.add("validate.length_min.message", "\u81f3\u5c11\u8f93\u5165 %length% \u4e2a\u5b57\u7b26", "js", "zh_CN");
 t.add("course.manage.expiry_date.error_hint", "\u8bf7\u8f93\u5165\u65f6\u95f4\u8303\u56f4", "js", "zh_CN");
 t.add("classroom.title_label", "\u73ed\u7ea7\u6807\u9898", "js", "zh_CN");
 t.add("classroom.subtitle_label", "\u73ed\u7ea7\u526f\u6807\u9898", "js", "zh_CN");
