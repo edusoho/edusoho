@@ -1522,6 +1522,7 @@ merchant.resource.product_version.update_success_hint: 更新成功
 merchant.resource.product_version.update_failed_hint: 更新失败
 
 validate.length_max.message: 最多只能输入 %length% 个字符
+validate.length_min.message: 至少输入 %length% 个字符
 course.manage.expiry_date.error_hint: 请输入时间范围
 
 classroom.title_label: 班级标题

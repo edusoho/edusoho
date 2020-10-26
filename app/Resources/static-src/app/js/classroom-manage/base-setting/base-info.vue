@@ -158,8 +158,13 @@
                             trigger: 'blur'
                         },
                         {
-                            max: 10,
-                            message: Translator.trans('validate.length_max.message', {'length': 10}),
+                            min: 2,
+                            message: Translator.trans('validate.length_min.message', {'length': 2}),
+                            trigger: 'blur',
+                        },
+                        {
+                            max: 30,
+                            message: Translator.trans('validate.length_max.message', {'length': 30}),
                             trigger: 'blur',
                         },
                         {validator: validation.trim, trigger: 'blur'},

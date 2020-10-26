@@ -1577,7 +1577,7 @@ merchant.resource.product_version.update_success_hint: Update Success
 merchant.resource.product_version.update_failed_hint: Update Failed
 
 validate.length_max.message: Please enter no more than %length% characters.
-
+validate.length_min.message: Please enter no less than %length% characters.
 classroom.title_label: Title
 classroom.subtitle_label: Subtitle
 classroom.basic_info: Base Info
