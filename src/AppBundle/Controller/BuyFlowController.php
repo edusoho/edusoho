@@ -59,9 +59,9 @@ abstract class BuyFlowController extends BaseController
             if ('POST' == $request->getMethod() || !empty($beforeEvent)) {
                 $event = $this->needInformationCollectionAfterJoin($id);
                 if (!empty($event)) {
-                    return empty($beforeEvent) ? $this->createJsonResponse(['url' => $event['url']]) : $this->redirect($event['url']);
+                    return (empty($beforeEvent) || 'classroom' !== $this->targetType) ? $this->createJsonResponse(['url' => $event['url']]) : $this->redirect($event['url']);
                 } else {
-                    return 'classroom' === $this->targetType ? $this->createJsonResponse(['url' => $this->getSuccessUrl($id)]) : $this->redirect($this->getSuccessUrl($id));
+                    return $this->createJsonResponse(['url' => $this->getSuccessUrl($id)]);
                 }
             }
 
