@@ -11416,7 +11416,6 @@ exception.favorite.forbidden_operate_favorite: 没有权限
 
 exception.s2b2c_product.adopt_failed: 采用失败，内容正在编辑中，请稍后再试
 
-admin_v2.information_collect.edit.title_info: 当前版本用户端仅支持新版微网校
 admin_v2.information_collect.edit.title: 采集名称
 admin_v2.information_collect.edit.action: 采集位置
 admin_v2.information_collect.edit.action_before: 课程/班级商品支付前
