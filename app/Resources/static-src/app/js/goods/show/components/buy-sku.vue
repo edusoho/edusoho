@@ -34,8 +34,8 @@
                         <slot>{{ buyViewText }}</slot>
                     </a>
                     <span class="product-detail__disable_btn goods-btn-hover pull-right"
-                          v-if="(sku.vipLevelInfo && !sku.vipUser)
-                          || sku.vipLevelInfo && sku.vipUser && (sku.vipLevelInfo.seq > sku.vipUser.level.seq || sku.vipLevelInfo.seq <= sku.vipUser.level.seq && parseInt(sku.vipUser.deadline) * 1000 < new Date().getTime()) && isShow"
+                          v-if="isShow && ((sku.vipLevelInfo && !sku.vipUser)
+                          || sku.vipLevelInfo && sku.vipUser && (sku.vipLevelInfo.seq > sku.vipUser.level.seq || sku.vipLevelInfo.seq <= sku.vipUser.level.seq && parseInt(sku.vipUser.deadline) * 1000 < new Date().getTime()))"
                           data-container=".product-detail__disable_btn"
                           data-toggle="popover"
                           data-placement="top"
@@ -45,6 +45,9 @@
                         <slot>{{ 'goods.show_page.vip_free_learn'|trans }}</slot>
                     </span>
                 </span>
+            </span>
+            <span v-if="!sku.isMember && goods.type === 'classroom' && isShow">
+                <a class="btn btn-link pull-right" style="margin-top:8px;" :href="`/classroom/${sku.targetId}/becomeAuditor`">{{ 'classroom.go_inside'|trans }}</a>
             </span>
         </div>
     </div>

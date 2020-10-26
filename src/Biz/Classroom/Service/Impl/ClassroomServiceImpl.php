@@ -1878,7 +1878,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         foreach ($courseIds as $key => $courseId) {
             $count = 0;
             $courseMember = $this->getCourseMemberService()->getCourseMember($courseId, $userId);
-            if ('student' != $courseMember['role']) {
+            if (empty($courseMember) || 'student' !== $courseMember['role']) {
                 continue;
             }
 
