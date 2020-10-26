@@ -146,12 +146,13 @@
                     this.buyViewText = Translator.trans('goods.show_page.not_buyable_tips');
                 } else if (sku.buyable == 1
                     && sku.buyableEndTime != 0
-                    && new Date(parseInt(sku.buyableEndTime)).getTime() < new Date().getTime() + 86400 * 1000) { // 已发布，开放购买，但是不在开放时间区间内
+                    && new Date(parseInt(sku.buyableEndTime)).getTime() * 1000 < new Date().getTime() + 86400 * 1000) { // 已发布，开放购买，但是不在开放时间区间内
                     this.buyViewMode = 'text';
                     this.buyViewText = Translator.trans('goods.show_page.join_expiry_tips');
                 } else if (['date', 'end_date'].includes(sku.usageMode)
-                    && new Date(parseInt(sku.usageEndTime)).getTime() < new Date().getTime() + 86400 * 1000) { // 已发布，开放购买，但是超过最后学习期限了
+                    && new Date(parseInt(sku.usageEndTime)).getTime() * 1000 < new Date().getTime() + 86400 * 1000) { // 已发布，开放购买，但是超过最后学习期限了
                     this.buyViewMode = 'text';
+                    console.log(new Date(parseInt(sku.usageEndTime)).getTime());
                     this.buyViewText = Translator.trans('goods.show_page.usage_expiry_tips');
                 } else if (sku.vipLevelInfo && sku.vipUser && sku.vipLevelInfo.seq <= sku.vipUser.level.seq && parseInt(sku.vipUser.deadline) * 1000 > new Date().getTime()) {
                     this.buyViewMode = 'btn';
@@ -163,7 +164,6 @@
                     this.buyViewMode = 'btn';
                     this.buyViewText = Translator.trans('goods.show_page.buy_btn');
                 }
-                console.log(parseInt(sku.vipUser.deadline) * 1000)
             },
         },
         created() {
