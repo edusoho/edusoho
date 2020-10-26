@@ -42,7 +42,7 @@ class ClassroomBuyController extends BuyFlowController
     protected function needInformationCollectionBeforeJoin($targetId)
     {
         $classroom = $this->getClassroomService()->getClassroom($targetId);
-        if (0 != $classroom['price']) {
+        if ((0 != $classroom['price']) && !$classroom['vipLevelId']) {
             return [];
         }
 
