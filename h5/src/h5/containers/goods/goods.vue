@@ -80,7 +80,7 @@
           <reviews
             :target-type="'goods'"
             :target-id="parseInt($route.params.id)"
-            :limit="1"
+            :limit="5"
           ></reviews>
         </section>
 
