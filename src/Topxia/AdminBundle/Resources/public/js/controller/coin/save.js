@@ -145,7 +145,15 @@ define(function(require, exports, module) {
       });
     });
 
+    $('#finish').click(function(){
+      if ('deduction' == $("[name='cash_model']").val()) {
+        var item_rate = {};
+        $(".rate").each(function(){
+          item_rate[$(this).data('id')] = $(this).val();
+        });
+        $("[name='item_rate']").val(JSON.stringify(item_rate));
+      }
+    });
+
   };
-
-
 });

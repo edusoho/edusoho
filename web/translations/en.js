@@ -690,7 +690,7 @@ t.add("validate.phone_and_email_input.message", "Please enter your phone \/ emai
 t.add("validate.user_terms.message", "Check to agree to this service agreement in order to continue to register", "js", "en");
 t.add("validate.visible_character.message", "Not allowed to enter invisible characters, such as spaces", "js", "en");
 t.add("validate.tag_required_hint", "Please input tags", "js", "en");
-t.add("validate.tag_required_not_found_hint", "The tag is not found, please call the administrator to set it through [Management Background] - [Course] - [Label Management].", "js", "en");
+t.add("validate.tag_required_not_found_hint", "The tag is not found, please call the administrator to set it through [Management Background] - [Teaching] - [Classification Label] - [Label Management].", "js", "en");
 t.add("validate.valid_score_input.message", "Please enter the correct decimals, leaving only ONE decimal places", "js", "en");
 t.add("validate.modify_date", "Please enter the date of modification", "js", "en");
 t.add("validate.modify_days", "Please enter the number of days modified", "js", "en");
@@ -869,7 +869,7 @@ t.add("admin.index.order_count", "order count", "js", "en");
 t.add("admin.index.finished_task_count", "finished task count", "js", "en");
 t.add("admin.index.notify_teacher_success", "remind the teacher's notice and send it successfully!", "js", "en");
 t.add("admin.index.upgrade_acceptance_hint", "Upgrade acceptance", "js", "en");
-t.add("admin.user.cloude_sms_enable_hint", "please go to\u3010Admin\u3011-\u3010ES Cloud\u3011-\u3010Cloud Sms\u3011open cloud sms first.", "js", "en");
+t.add("admin.user.cloude_sms_enable_hint", "please go to\u3010Admin\u3011-\u3010App Cente\u3011-\u3010Cloud service\u3011-\u3010Cloud Sms Setting\u3011open cloud sms first.", "js", "en");
 t.add("admin.account_center.cash_income", "cash income", "js", "en");
 t.add("admin.account_center.coin_income", "coin income", "js", "en");
 t.add("admin.analysis.classroom_income", "classroom income", "js", "en");
