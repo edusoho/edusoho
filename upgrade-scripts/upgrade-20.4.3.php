@@ -4,7 +4,7 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
-    const PAGINATOR_LIMIT = 200;
+    const PAGINATOR_LIMIT = 2000;
 
     public function __construct($biz)
     {
@@ -70,7 +70,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
         if (0 == $index) {
             $this->logger('info', '开始执行升级脚本');
-//            $this->deleteCache();
+            $this->deleteCache();
 
             return array(
                 'index' => $this->generateIndex(1, 1),
