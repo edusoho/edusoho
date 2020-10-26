@@ -26,7 +26,7 @@
 
             <el-form-item :label="'classroom.category_label'|trans">
                 <el-col span="8">
-                    <category v-bind:category="form.categoryId"
+                    <category v-bind:category="form.categoryId" v-bind:type="'classroom'"
                               v-on:update:category="form.categoryId = $event"></category>
                 </el-col>
             </el-form-item>
