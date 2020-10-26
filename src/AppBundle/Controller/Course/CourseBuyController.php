@@ -67,12 +67,13 @@ class CourseBuyController extends BuyFlowController
             return [];
         }
 
+        $location = ['targetType' => 'course', 'targetId' => $targetId];
         if ('0' != $targetId) {
             $course = $this->getCourseService()->getCourse($targetId);
-            $targetId = $course['courseSetId'];
+            $location['targetId'] = $course['courseSetId'];
         }
 
-        $event = $this->getInformationCollectEventService()->getEventByActionAndLocation('buy_before', ['targetType' => 'course', 'targetId' => $targetId]);
+        $event = $this->getInformationCollectEventService()->getEventByActionAndLocation('buy_before', $location);
 
         if (empty($event)) {
             return [];
@@ -88,12 +89,13 @@ class CourseBuyController extends BuyFlowController
 
     protected function needInformationCollectionAfterJoin($targetId)
     {
+        $location = ['targetType' => 'course', 'targetId' => $targetId];
         if ('0' != $targetId) {
             $course = $this->getCourseService()->getCourse($targetId);
-            $targetId = $course['courseSetId'];
+            $location['targetId'] = $course['courseSetId'];
         }
 
-        $event = $this->getInformationCollectEventService()->getEventByActionAndLocation('buy_after', ['targetType' => 'course', 'targetId' => $targetId]);
+        $event = $this->getInformationCollectEventService()->getEventByActionAndLocation('buy_after', $location);
 
         if (empty($event)) {
             return [];
