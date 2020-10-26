@@ -1526,4 +1526,5 @@ t.add("goods.show_page.join_expiry_tips", "\u62b1\u6b49\uff0c\u8be5\u5546\u54c1\
 t.add("goods.show_page.usage_expiry_tips", "\u8d85\u8fc7\u5b66\u4e60\u622a\u6b62\u65e5\u671f\uff0c\u4e0d\u5141\u8bb8\u52a0\u5165\u548c\u8d2d\u4e70", "js", "zh_CN");
 t.add("goods.show_page.free_join_btn", "\u514d\u8d39\u52a0\u5165", "js", "zh_CN");
 t.add("goods.show_page.buy_btn", "\u7acb\u5373\u8d2d\u4e70", "js", "zh_CN");
+t.add("classroom.go_inside", "\u8fdb\u53bb\u901b\u901b", "js", "zh_CN");
 })(Translator);

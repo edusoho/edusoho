@@ -1576,4 +1576,5 @@ t.add("goods.show_page.join_expiry_tips", "Sorry, this product has expired. Plea
 t.add("goods.show_page.usage_expiry_tips", "You are not allowed to join or purchase after the deadline", "js", "en");
 t.add("goods.show_page.free_join_btn", "Free Join", "js", "en");
 t.add("goods.show_page.buy_btn", "Buy", "js", "en");
+t.add("classroom.go_inside", "Go to preview", "js", "en");
 })(Translator);
