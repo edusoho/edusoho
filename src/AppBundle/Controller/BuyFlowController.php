@@ -61,7 +61,7 @@ abstract class BuyFlowController extends BaseController
                 if (!empty($event)) {
                     return empty($beforeEvent) ? $this->createJsonResponse(['url' => $event['url']]) : $this->redirect($event['url']);
                 } else {
-                    return $this->redirect($this->getSuccessUrl($id));
+                    return $this->targetType === 'classroom' ? $this->createJsonResponse(['url' => $this->getSuccessUrl($id)]) : $this->redirect($this->getSuccessUrl($id));
                 }
             }
 
