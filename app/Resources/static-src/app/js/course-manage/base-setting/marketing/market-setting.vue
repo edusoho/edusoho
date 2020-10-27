@@ -303,7 +303,7 @@
             let courseSetClosed = this.courseSet.status ? this.courseSet.status === 'closed' : false;
 
             let max_year = (rule, value, callback) => {
-                value < 7300 ? callback() : callback(new Error(Translator.trans('validate.max_year.message')));
+                value <= 7300 ? callback() : callback(new Error(Translator.trans('validate.max_year.message')));
             }
 
             this.course.expiryStartDate = this.course.expiryStartDate == 0 ? '' : this.course.expiryStartDate;
