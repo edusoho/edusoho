@@ -526,6 +526,7 @@ class UserController extends BaseController
                 if (!empty($afterEvent)) {
                     return $this->createJsonResponse(['url' => $afterEvent['url']]);
                 }
+
                 return $this->createJsonResponse([
                     'url' => $this->generateUrl('my_course_show', ['id' => $courseId]),
                 ]);
