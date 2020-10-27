@@ -30,7 +30,6 @@ abstract class BuyFlowController extends BaseController
         }
 
         if ($this->needFillUserInfo()) {
-            file_put_contents('./a.log', 'need_alert', FILE_APPEND);
             $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
             $user = $this->getUser();
             $userInfo = $this->getUserService()->getUserProfile($user['id']);
@@ -75,36 +74,31 @@ abstract class BuyFlowController extends BaseController
     protected function needFillUserInfo()
     {
         $setting = $this->getSettingService()->get('course');
-        file_put_contents('./a.log', 'setting_start'.json_encode($setting).'setting_over', FILE_APPEND);
+
         if (!empty($setting['buy_fill_userinfo'])) {
-            file_put_contents('./a.log', 'is_not_empty'.$setting['buy_fill_userinfo'], FILE_APPEND);
             $user = $this->getUser();
             $userInfo = $this->getUserService()->getUserProfile($user['id']);
-            file_put_contents('./a.log', 'user_info'.json_encode($userInfo), FILE_APPEND);
             if (!empty($user['verifiedMobile']) && empty($userInfo['mobile'])) {
                 $userInfo = $this->getUserService()->updateUserProfile($user['id'], [
                     'mobile' => $user['verifiedMobile'],
                 ]);
             }
             $user = array_merge($userInfo, $user->toArray());
-            file_put_contents('./a.log', 'user'.json_encode($user), FILE_APPEND);
             $buyFields = $setting['userinfoFields'];
             foreach ($buyFields as $buyField) {
                 if (empty($user[$buyField])) {
                     return true;
                 }
             }
-            file_put_contents('./a.log', 'not_return_true_1', FILE_APPEND);
+
             if (in_array('email', $buyFields) && UserToolkit::isEmailGeneratedBySystem($user['email'])) {
                 return true;
             }
-            file_put_contents('./a.log', 'not_return_true_2', FILE_APPEND);
+
             if (in_array('gender', $buyFields) && UserToolkit::isGenderDefault($user['gender'])) {
                 return true;
             }
-            file_put_contents('./a.log', 'not_return_true_3', FILE_APPEND);
         }
-        file_put_contents('./a.log', 'return_false', FILE_APPEND);
 
         return false;
     }
