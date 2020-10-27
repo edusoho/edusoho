@@ -190,7 +190,7 @@
                     params: {
                         targetType: this.targetType,
                         targetId: this.targetId,
-                        offset: parseInt(offset),
+                        offset: parseInt(offset) * limit,
                         limit: this.limit == null ? parseInt(limit) : this.limit,
                         needPosts: this.needPosts,
                     },
