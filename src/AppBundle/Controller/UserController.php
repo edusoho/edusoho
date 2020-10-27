@@ -514,9 +514,14 @@ class UserController extends BaseController
          */
         $courseId = $request->request->get('courseId', 0);
         if ($courseId) {
-            $event = $this->needInformationCollectionBeforeJoin($courseId);
-            if (!empty($event)) {
-                return $this->createJsonResponse(['url' => $event['url']]);
+            $beforeEvent = $this->needInformationCollection('buy_before', $courseId);
+            if (!empty($beforeEvent)) {
+                return $this->createJsonResponse(['url' => $beforeEvent['url']]);
+            }
+
+            $afterEvent = $this->needInformationCollection('buy_before', $courseId);
+            if (!empty($afterEvent)) {
+                return $this->createJsonResponse(['url' => $afterEvent['url']]);
             }
 
             $this->getCourseService()->tryFreeJoin($courseId);
@@ -538,7 +543,7 @@ class UserController extends BaseController
         ]);
     }
 
-    protected function needInformationCollectionBeforeJoin($targetId)
+    protected function needInformationCollection($action, $targetId)
     {
         $location = ['targetType' => 'course', 'targetId' => $targetId];
         if ('0' != $targetId) {
@@ -546,15 +551,16 @@ class UserController extends BaseController
             $location['targetId'] = $course['courseSetId'];
         }
 
-        $event = $this->getInformationCollectEventService()->getEventByActionAndLocation('buy_before', $location);
+        $event = $this->getInformationCollectEventService()->getEventByActionAndLocation($action, $location);
 
         if (empty($event)) {
             return [];
         }
 
+        $goto = 'buy_before' === $action ? $this->generateUrl('course_buy', ['id' => $targetId]) : $this->generateUrl('my_course_show', ['id' => $targetId]);
         $url = $this->generateUrl('information_collect_event', [
             'eventId' => $event['id'],
-            'goto' => $this->generateUrl('course_buy', ['id' => $targetId]),
+            'goto' => $goto,
         ]);
 
         return [$event['id'], 'url' => $url];
