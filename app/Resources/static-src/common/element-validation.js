@@ -26,6 +26,20 @@ const currency = (rule, value, callback) => {
   /^[0-9]{0,8}(\.\d{0,2})?$/.test(value) ? callback() : callback(new Error(Translator.trans('validate.currency.message')));
 }
 
+const course_title_length = (rule, value, callback) => {
+  let l = calculateByteLength(value);
+  l <= 200 ? callback() : callback(new Error(Translator.trans(`字符长度必须小于等于200，一个中文字算2个字符`)));
+}
+
+const calculateByteLength = (string) => {
+  let length = string.length;
+  for (let i = 0; i < string.length; i++) {
+    if (string.charCodeAt(i) > 127)
+      length++;
+  }
+  return length;
+}
+
 export {
   trim,
   course_title,
@@ -34,4 +48,5 @@ export {
   digits,
   digits_0,
   currency,
+  course_title_length,
 };

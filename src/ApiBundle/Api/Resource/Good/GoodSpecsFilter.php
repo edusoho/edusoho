@@ -17,7 +17,7 @@ class GoodSpecsFilter extends Filter
         'usageEndTime', 'showable', 'buyable', 'buyableStartTime',
         'buyableEndTime', 'buyableMode', 'maxJoinNum', 'services',
         'isMember', 'learnUrl', 'vipLevelInfo', 'vipUser', 'teachers',
-        'access', 'canVipJoin', 'hasCertificate'
+        'access', 'canVipJoin', 'hasCertificate',
     ];
 
     protected $publicFields = [
@@ -67,7 +67,7 @@ class GoodSpecsFilter extends Filter
     private function transServices(&$services)
     {
         if (empty($services)) {
-            return $services;
+            return [];
         }
         $services = AssetHelper::callAppExtensionMethod('transServiceTags', [ServiceToolkit::getServicesByCodes($services)]);
     }

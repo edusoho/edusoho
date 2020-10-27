@@ -209,10 +209,10 @@
                     <el-option value="0" :label="'site.default.none'|trans"></el-option>
                     <el-option
                         v-if="vipLevels"
-                        v-for="(label, level) in vipLevels"
-                        :key="level"
-                        :label="label"
-                        :value="level">
+                        v-for="(level) in vipLevels"
+                        :key="level.id"
+                        :label="level.name"
+                        :value="level.id">
                     </el-option>
                 </el-select>
             </el-form-item>

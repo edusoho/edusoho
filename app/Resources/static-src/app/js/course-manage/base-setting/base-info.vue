@@ -17,7 +17,7 @@
                 </el-col>
             </el-form-item>
         </el-form>
-        <el-form v-if="isUnMultiCourseSet" :model="baseInfoForm" :rules="formRule" ref="baseInfoForm"
+        <el-form v-if="isUnMultiCourseSet" :model="baseInfoForm" :rules="liveFormRule" ref="baseInfoForm"
                  label-position="right"
                  label-width="150px">
             <div class="course-manage-subltitle cd-mb40">{{ 'course.base_info'|trans }}</div>
@@ -25,7 +25,7 @@
             <el-form-item :label="'course.base.title'|trans" prop="title">
                 <el-col span="18">
                     <el-input ref="title" v-model="baseInfoForm.title" auto-complete="off"
-                              :placeholder="'course.plan_setup.placeholder'|trans">
+                              :placeholder="'course.base.title.placeholder'|trans">
                     </el-input>
                 </el-col>
             </el-form-item>
@@ -210,6 +210,28 @@
                         {
                             max: 30,
                             message: Translator.trans('validate.length_max.message', {'length': 30}),
+                            trigger: 'blur',
+                        },
+                    ]
+                },
+                liveFormRule: {
+                    title: [
+                        {
+                            required: true,
+                            message: Translator.trans('validate.required.message', {'display': Translator.trans('course.base.title')}),
+                            trigger: 'blur'
+                        },
+                        {
+                            validator: validation.course_title_length,
+                            trigger: 'blur',
+                        },
+                        {validator: validation.trim, trigger: 'blur'},
+                        {validator: validation.course_title, trigger: 'blur'}
+                    ],
+                    subtitle: [
+                        {
+                            max: 50,
+                            message: Translator.trans('validate.length_max.message', {'length': 50}),
                             trigger: 'blur',
                         },
                     ]

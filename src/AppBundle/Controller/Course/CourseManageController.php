@@ -589,7 +589,7 @@ class CourseManageController extends BaseController
                 'freeTasks' => $freeTasks,
                 'notifies' => empty($notifies) ? [] : $notifies,
                 'vipInstalled' => $this->isPluginInstalled('Vip'),
-                'vipLevels' => empty($vipLevels) ? [] : array_column($vipLevels, 'name', 'id'),
+                'vipLevels' => empty($vipLevels) ? [] : array_values($vipLevels),
             ]
         );
     }
