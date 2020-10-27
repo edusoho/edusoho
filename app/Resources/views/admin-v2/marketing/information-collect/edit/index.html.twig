@@ -108,7 +108,7 @@
 						{% else %}
 							{{ radios('allowSkip', {'1':'admin_v2.information_collect.edit.form_items.skip.allow'|trans, '0':'admin_v2.information_collect.edit.form_items.skip.not_allow'|trans}, -1) }}
 						{% endif %}
-						<div class="help-block allow-skip-help-block hidden">{{ 'admin_v2.information_collect.edit.form_items.allow_skip.tips'|trans }}</div>
+						<div class="help-block allow-skip-help-block {% if not event or event.action|default(null) != 'buy_after' %}hidden{% endif %}">{{ 'admin_v2.information_collect.edit.form_items.allow_skip.tips'|trans }}</div>
 					</div>
 				</div>
 			</div>
