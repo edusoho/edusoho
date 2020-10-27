@@ -519,7 +519,7 @@ class UserController extends BaseController
                 return $this->createJsonResponse(['url' => $beforeEvent['url']]);
             }
 
-            $afterEvent = $this->needInformationCollection('buy_before', $courseId);
+            $afterEvent = $this->needInformationCollection('buy_after', $courseId);
             if (!empty($afterEvent)) {
                 return $this->createJsonResponse(['url' => $afterEvent['url']]);
             }
