@@ -103,6 +103,7 @@ abstract class BuyFlowController extends BaseController
             file_put_contents('./a.log', 'not_return_true_3', FILE_APPEND);
         }
         file_put_contents('./a.log', 'return_false', FILE_APPEND);
+
         return false;
     }
 
