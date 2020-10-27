@@ -78,10 +78,14 @@
         <section class="js-scroll-top goods-info__item" id="evaluate">
           <div class="goods-info__title">课程评价</div>
           <reviews
+            v-if="goodsSetting.show_review == '1'"
             :target-type="'goods'"
             :target-id="parseInt($route.params.id)"
             :limit="5"
           ></reviews>
+          <div v-else class="info-introduction">
+            暂无评价~
+          </div>
         </section>
 
         <!-- 猜你想学 -->
@@ -145,6 +149,7 @@ export default {
       backToTopShow: false, // 是否显示回到顶部
       componentsInfo: {}, // 组件数据
       isLoading: true,
+      goodsSetting: {},
     };
   },
   components: {
@@ -284,6 +289,18 @@ export default {
   },
   created() {
     this.getGoodsCourse();
+    Api.getSettings({
+      query: {
+        type: 'goods',
+      },
+    })
+      .then(resp => {
+        this.goodsSetting = resp;
+        console.log(resp.show_review);
+      })
+      .catch(err => {
+        console.error(err);
+      });
   },
   watch: {
     // 如果路由发生变化，再次执行该方法
