@@ -83,8 +83,8 @@
                 </div>
             </div>
             <div class="learn-more"><a href="javascript:;"
-                                       v-if="(parseInt(paging.offset) + 1) * paging.limit < paging.total"
-                                       @click="searchReviews(parseInt(paging.offset) + 1, paging.limit)"
+                                       v-if="parseInt(paging.offset) + parseInt(paging.limit) < parseInt(paging.total)"
+                                       @click="searchReviews(parseInt(paging.offset) + parseInt(paging.limit), paging.limit)"
                                        :data-page="multiOffset" :data-limit="paging.limit" :data.total="paging.total">查看更多<i
                 class="es-icon es-icon-chevronright"></i></a>
             </div>
@@ -190,7 +190,7 @@
                     params: {
                         targetType: this.targetType,
                         targetId: this.targetId,
-                        offset: parseInt(offset) * limit,
+                        offset: parseInt(offset),
                         limit: this.limit == null ? parseInt(limit) : this.limit,
                         needPosts: this.needPosts,
                     },
