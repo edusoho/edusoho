@@ -519,14 +519,13 @@ class UserController extends BaseController
                 return $this->createJsonResponse(['url' => $beforeEvent['url']]);
             }
 
-            $afterEvent = $this->needInformationCollection('buy_after', $courseId);
-            if (!empty($afterEvent)) {
-                return $this->createJsonResponse(['url' => $afterEvent['url']]);
-            }
-
             $this->getCourseService()->tryFreeJoin($courseId);
             $member = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
             if ($member) {
+                $afterEvent = $this->needInformationCollection('buy_after', $courseId);
+                if (!empty($afterEvent)) {
+                    return $this->createJsonResponse(['url' => $afterEvent['url']]);
+                }
                 return $this->createJsonResponse([
                     'url' => $this->generateUrl('my_course_show', ['id' => $courseId]),
                 ]);
