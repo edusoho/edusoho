@@ -55,9 +55,17 @@
     </div>
     <div v-if="reviews.length">
       <div
-        v-if="(parseInt(paging.offset) + 1) * paging.limit < paging.total"
+        v-if="
+          parseInt(paging.offset) + parseInt(paging.limit) <
+            parseInt(paging.total)
+        "
         class="load-more__footer"
-        @click="searchReviews(parseInt(paging.offset) + 1, paging.limit)"
+        @click="
+          searchReviews(
+            parseInt(paging.offset) + parseInt(paging.limit),
+            paging.limit,
+          )
+        "
       >
         点击查看更多
       </div>
@@ -124,7 +132,7 @@ export default {
           targetType: this.targetType,
           targetId: this.targetId,
           parentId: 0,
-          offset: parseInt(offset) * limit,
+          offset: parseInt(offset),
           limit: this.limit == null ? parseInt(limit) : this.limit,
           needPosts: this.needPosts,
         },
