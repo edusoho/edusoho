@@ -1,10 +1,17 @@
 <template>
   <div class="detail-plan" v-if="goods.id">
-    <div class="detail-plan__plan clearfix" v-if="goods.type === 'course' && goods.specs.length > 1" @click="showPopup">
+    <div
+      class="detail-plan__plan clearfix"
+      v-if="goods.type === 'course' && goods.specs.length > 1"
+      @click="showPopup"
+    >
       <div class="pull-left plan-left">教学计划</div>
       <div class="pull-left plan-right">
         {{ currentSku.title }}
-        <i v-if="goods.specs.length > 1" class="iconfont icon-arrow-right plan-right__icon"></i>
+        <i
+          v-if="goods.specs.length > 1"
+          class="iconfont icon-arrow-right plan-right__icon"
+        ></i>
       </div>
     </div>
 
@@ -52,10 +59,13 @@
           </div>
         </div>
       </div>
-<!--      <div class="plan-popup__buy">立即购买</div>-->
+      <!--      <div class="plan-popup__buy">立即购买</div>-->
     </van-popup>
 
-    <div v-if="currentSku.vipLevelInfo && vipSwitch" class="detail-plan__plan clearfix">
+    <div
+      v-if="currentSku.vipLevelInfo && vipSwitch"
+      class="detail-plan__plan clearfix"
+    >
       <div class="pull-left plan-left">会员免费</div>
       <div class="pull-left plan-right">
         <img class="vip-icon" :src="currentSku.vipLevelInfo.icon" alt="" />
@@ -87,18 +97,60 @@
         >
       </div>
     </div>
+    <!-- 优惠活动 -->
+    <div v-if="showOnsale">
+      <div
+        class="detail-plan__plan clearfix"
+        v-if="marketingActivities.groupon"
+        @click="activityHandle(marketingActivities.groupon.id)"
+      >
+        <div class="pull-left plan-left">拼团</div>
+        <div class="pull-left plan-right">
+          <van-tag class="van-tag--primary">拼团 </van-tag>
+          <span class="text-12 dark">跟好友一起买更划算哦！</span>
+        </div>
+      </div>
+
+      <div
+        class="detail-plan__plan clearfix"
+        v-if="marketingActivities.cut"
+        @click="activityHandle(marketingActivities.cut.id)"
+      >
+        <div class="pull-left plan-left">砍价</div>
+        <div class="pull-left plan-right">
+          <van-tag class="van-tag--success">砍价 </van-tag>
+          <span class="text-12 dark">最低可砍至1分钱！</span>
+        </div>
+      </div>
+
+      <div
+        class="detail-plan__plan clearfix"
+        v-if="marketingActivities.seckill"
+        @click="activityHandle(marketingActivities.seckill.id)"
+      >
+        <div class="pull-left plan-left">秒杀</div>
+        <div class="pull-left plan-right">
+          <van-tag class="van-tag--warning">秒杀 </van-tag>
+          <span class="text-12 dark">去秒杀！</span>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import {mapState} from "vuex";
+import { mapState } from 'vuex';
+import Api from '@/api';
+import activityMixin from '@/mixins/activity/index';
 
 export default {
   data() {
     return {
       show: false, // 是否显示弹出层
+      marketingActivities: {},
     };
   },
+  mixins: [activityMixin],
   props: {
     goods: {
       type: Object,
@@ -120,7 +172,7 @@ export default {
     // 点击显示弹窗
     showPopup() {
       if (this.goods && this.goods.specs.length == 1) {
-        return ;
+        return;
       }
       this.show = true;
     },
@@ -160,8 +212,40 @@ export default {
       return fmt;
     },
   },
+  mounted() {
+    // 获取营销活动
+    if (this.goods.type === 'classroom') {
+      Api.classroomsActivities({
+        query: { id: this.currentSku.targetId },
+      })
+        .then(res => {
+          console.log(res);
+          this.marketingActivities = res;
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    } else if (this.goods.type === 'course') {
+      Api.coursesActivities({
+        query: { id: this.currentSku.targetId },
+      })
+        .then(res => {
+          console.log(res);
+          this.marketingActivities = res;
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    }
+  },
   computed: {
     ...mapState(['vipSwitch']),
+    showOnsale() {
+      return (
+        Number(this.currentSku.price) !== 0 &&
+        !!Object.keys(this.marketingActivities).length
+      );
+    },
     buyableModeHtml() {
       const memberInfo = this.goods.member;
       if (!memberInfo) {
