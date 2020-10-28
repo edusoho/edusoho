@@ -91,7 +91,7 @@ class GoodComponent extends AbstractResource
     {
         $goodsSetting = $this->getSettingService()->get('goods_setting', []);
         if (empty($goodsSetting['leading_join_enabled'])) {
-            return [];
+            return null;
         }
 
         return [
