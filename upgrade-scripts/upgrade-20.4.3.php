@@ -59,6 +59,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'processReviews',
             'processFavorites',
             'tableOrderItemAddTargetIdBefore',
+            'processOpenCourseRecommend',
             'processCourseOrderItems',
             'processClassroomOrderItems',
         );
@@ -423,17 +424,30 @@ class EduSohoUpgrade extends AbstractUpdater
         return 1;
     }
 
+    protected function processOpenCourseRecommend($page)
+    {
+        $this->getConnection()->exec("
+            UPDATE `open_course_recommend` oc INNER  JOIN 
+                (SELECT o.id as id, g.id as goodsId FROM `open_course_recommend` o 
+                JOIN `course_v8` c ON c.id = o.`recommendCourseId` AND o.recommendGoodsId != 0 
+                JOIN `product` p ON p.targetId = c.courseSetId AND p.targetType='course' 
+                JOIN `goods` g ON g.productId = p.id) m 
+                ON m.id = oc.id SET oc.recommendGoodsId = m.goodsId;");
+
+        return 1;
+    }
+
     protected function processCourseOrderItems($page)
     {
         $paginator = $this->getPaginator('course_order_item_paginator',
             "
-                        SELECT COUNT(id) FROM biz_order_item WHERE target_type = 'course';
+                        SELECT COUNT(id) FROM biz_order_item WHERE target_type = 'course' AND target_id_before = 0;
         ");
         $currentPage = $paginator['currentPage'] + 1;
 
         $this->logger('info', "更新课程订单：{$currentPage}/{$paginator['totalPage']}");
         $itemIds = $this->getConnection()->fetchAll("
-            SELECT id FROM  biz_order_item WHERE target_type = 'course' ORDER BY id ASC LIMIT {$paginator['start']}, {$paginator['limit']};
+            SELECT id FROM  biz_order_item WHERE target_type = 'course' AND target_id_before = 0 ORDER BY id ASC LIMIT {$paginator['start']}, {$paginator['limit']};
         ");
         if (empty($itemIds)) {
             return 1;
@@ -462,13 +476,13 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $paginator = $this->getPaginator('classroom_order_item_paginator',
             "
-                        SELECT COUNT(id) FROM  biz_order_item WHERE target_type = 'classroom';
+                        SELECT COUNT(id) FROM  biz_order_item WHERE target_type = 'classroom' AND target_id_before = 0;
         ");
         $currentPage = $paginator['currentPage'] + 1;
 
         $this->logger('info', "更新班级订单：{$currentPage}/{$paginator['totalPage']}");
         $itemIds = $this->getConnection()->fetchAll("
-            SELECT id FROM  biz_order_item WHERE target_type = 'classroom' ORDER BY id ASC LIMIT {$paginator['start']}, {$paginator['limit']};
+            SELECT id FROM  biz_order_item WHERE target_type = 'classroom' AND target_id_before = 0 ORDER BY id ASC LIMIT {$paginator['start']}, {$paginator['limit']};
         ");
 
         if (empty($itemIds)) {
@@ -916,7 +930,11 @@ class EduSohoUpgrade extends AbstractUpdater
                     `buyable`, `services`, `createdTime`, `updatedTime`                    
                 ) 
                 SELECT 
-                    g.id AS goodsId, c.id AS targetId, c.title, c.price, c.expiryMode, 
+                    g.id AS goodsId, c.id AS targetId, c.title, c.price,
+                    CASE
+                        WHEN c.expiryMode = 'date' THEN 'end_date'
+                        ELSE c.expiryMode
+                    END AS usageMode,
                     CASE 
                         WHEN c.status = 'draft' THEN 'created'
                         WHEN c.status = 'closed' THEN 'unpublished'
@@ -947,7 +965,11 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->getConnection()->exec("
                  UPDATE goods_specs g INNER JOIN (
                     SELECT 
-                        g.id AS goodsId, c.id AS targetId, c.title, c.price, c.expiryMode as usageMode, 
+                        g.id AS goodsId, c.id AS targetId, c.title, c.price,
+                        CASE
+                            WHEN c.expiryMode = 'date' THEN 'end_date'
+                            ELSE c.expiryMode
+                        END AS usageMode,
                         CASE 
                             WHEN c.status = 'draft' THEN 'created'
                             WHEN c.status = 'closed' THEN 'unpublished'
