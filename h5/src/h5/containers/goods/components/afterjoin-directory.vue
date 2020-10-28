@@ -19,6 +19,7 @@
             <util-directory :util="list" />
             <lesson-directory
               :lesson="list.children"
+              :deatil="details"
               :task-id="taskId"
               :task-number="item[slideIndex].lessonNum"
               :unit-num="item[slideIndex].unitNum"
@@ -51,7 +52,7 @@ import swiperDirectory from './swiper-directory.vue';
 import utilDirectory from './util-directory.vue';
 import lessonDirectory from './lesson-directory.vue';
 // import Api from "@/api";
-import { mapState, mapActions } from 'vuex';
+import { mapState } from 'vuex';
 import * as types from '@/store/mutation-types';
 export default {
   name: 'AfterjoinDirectory',
@@ -114,7 +115,6 @@ export default {
     },
   },
   methods: {
-    ...mapActions('course', ['getCourseLessons']),
     getNextStudy() {
       if (this.nextStudy.nextTask) {
         this.taskId = Number(this.nextStudy.nextTask.id);
@@ -141,13 +141,6 @@ export default {
       this.setItems(res);
       this.mapChild(this.item);
       this.startScroll();
-      // this.allTask.each(item => {
-      //   if (item.type == 'lesson') {
-      //   item.tasks.forEach(task => {
-      //     task['tagStatus'] = this.getCurrentStatus(task)
-      //   })
-      // }
-      // })
       console.log(this.allTask);
       this.$store.commit(`course/${types.SET_ALL_TASK}`, this.allTask);
     },

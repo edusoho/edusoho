@@ -173,7 +173,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions('course', ['getCourseLessons']),
+    ...mapActions('course', ['getCourse', 'getCourseLessons']),
     getGoodsCourse() {
       Api.getGoodsCourse({
         query: {
@@ -241,6 +241,9 @@ export default {
       }
       if (this.goods.product.targetType === 'course') {
         this.getCourseLessons({
+          courseId: targetId,
+        }).then(res => {});
+        this.getCourse({
           courseId: targetId,
         }).then(res => {});
       }

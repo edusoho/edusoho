@@ -32,8 +32,16 @@
                 }"
                 class="text-overflow ks"
               >
-                <!-- <span class="tryLes">试听</span> -->
-                <!-- <span class="freeAdmission">免费</span> -->
+                <span
+                  v-if="isTry(lessonItem.tasks[lessonItem.index])"
+                  class="tryLes"
+                  >试看</span
+                >
+                <span
+                  v-if="isFree(lessonItem.tasks[lessonItem.index])"
+                  class="freeAdmission"
+                  >免费</span
+                >
                 <i
                   :class="iconfont(lessonItem.tasks[lessonItem.index])"
                   class="iconfont"
@@ -65,8 +73,16 @@
                   }"
                   class="bl text-overflow ks"
                 >
-                  <!-- <span class="tryLes">试听</span> -->
-                  <!-- <span class="freeAdmission">免费</span> -->
+                  <span
+                    v-if="isTry(lessonItem.tasks[lessonItem.index])"
+                    class="tryLes"
+                    >试看</span
+                  >
+                  <span
+                    v-if="isFree(lessonItem.tasks[lessonItem.index])"
+                    class="freeAdmission"
+                    >免费</span
+                  >
                   <i
                     :class="iconfont(lessonItem.tasks[lessonItem.index])"
                     class="iconfont"
@@ -112,18 +128,17 @@
       <div v-if="lessonItem.tasks.length > 1" class="lesson-items">
         <div
           v-for="(taskItem, taskIndex) in lessonItem.tasks"
-          :id="taskItem.id"
           :key="taskIndex"
-          class="litem"
+          :id="taskItem.id"
           @click="lessonCellClick(taskItem, lessonIndex, taskIndex)"
         >
-          <div v-if="showTask(taskItem, taskIndex)">
+          <div class="litem" v-if="showTask(taskItem, taskIndex)">
             <div
               :class="{ lessonactive: currentTask == Number(taskItem.id) }"
               class="litem-r text-overflow"
             >
-              <!-- <span class="tryLes">试听</span> -->
-              <!-- <span class="freeAdmission">免费</span> -->
+              <span v-if="isTry(taskItem)" class="tryLes">试看</span>
+              <span v-if="isFree(taskItem)" class="freeAdmission">免费</span>
               <i :class="iconfont(taskItem)" class="iconfont" />
               {{ Number(taskItem.isOptional) ? '选修 ' : '课时'
               }}{{
@@ -132,7 +147,7 @@
                   : `${taskItem.number}:${taskItem.title}`
               }}
             </div>
-            <div class="litem-l clearfix">
+            <div v-if="showTask(taskItem, taskIndex)" class="litem-l clearfix">
               <span :class="[liveClass(taskItem), 'text-overflow']">{{
                 taskItem | filterTaskTime
               }}</span>
@@ -189,6 +204,9 @@ export default {
       handler: 'getTaskId',
       immediate: true,
     },
+    details(value) {
+      console.log(value);
+    },
   },
   computed: {
     ...mapState('course', {
@@ -217,27 +235,25 @@ export default {
     ...mapMutations('course', {
       setSourceType: types.SET_SOURCETYPE,
     }),
-    getCurrentStatus(task) {
+    isFree(task) {
       if (Number(task.isFree)) {
-        return 'is-free';
+        return true;
+      }
+      return false;
+    },
+    isTry(task) {
+      if (this.isFree(task)) {
+        return false;
       }
       if (
+        this.details.tryLookable &&
         Number(this.details.tryLookable) &&
         task.type === 'video' &&
         task.activity.mediaStorage
       ) {
-        return 'is-tryLook';
+        return true;
       }
-      return '';
-    },
-    filterTaskStatus(task) {
-      if (!this.details.member && task.tagStatus === 'is-free') {
-        return '免费';
-      }
-      if (!this.details.member && task.tagStatus === 'is-tryLook') {
-        return '试看';
-      }
-      return '';
+      return false;
     },
     // 获取lesson位置
     getTaskId() {
@@ -269,29 +285,15 @@ export default {
       }
       return result;
     },
-    lessonCellClick(task, lessonIndex, taskIndex) {
-      this.$store.commit(types.SET_TASK_SATUS, '');
+    lessonCellClick(task) {
       // 课程错误和未发布状态，不允许学习任务
-      if (this.errorMsg) {
+      if (this.errorMsg || task.status === 'create') {
         this.$emit('showDialog');
         return;
       }
-      if (task.lock) {
-        Toast('需要解锁上一个任务');
-        return;
-      }
-      // 课程再创建阶段或者和未发布状态
-      if (task.status === 'create' || task.status !== 'published') {
-        Toast('敬请期待');
-        return;
-      }
-      const nextTask = {
-        id: task.id,
-      };
-      // 更改store中的当前学习
-      this.$store.commit(`course/${types.GET_NEXT_STUDY}`, { nextTask });
 
       const details = this.details;
+
       !details.allowAnonymousPreview &&
         this.$router.push({
           name: 'login',
@@ -299,9 +301,43 @@ export default {
             redirect: this.redirect,
           },
         });
-      if (this.joinStatus) {
-        this.showTypeDetail(task);
+      if (
+        !this.joinStatus &&
+        (Number(task.isFree) || Number(details.tryLookable))
+      ) {
+        // trylook and free video click
+        switch (task.type) {
+          case 'video':
+          case 'audio':
+            this.$router.push({
+              name: 'course_try',
+            });
+
+            this.setSourceType({
+              sourceType: task.type,
+              taskId: task.id,
+            });
+            break;
+          case 'doc':
+          case 'text':
+          case 'ppt':
+            this.$router.push({
+              name: 'course_web',
+              query: {
+                courseId: this.selectedPlanId,
+                taskId: task.id,
+                type: task.type,
+                preview: 1,
+              },
+            });
+            break;
+          default:
+            return Toast(`请先加入课程`);
+        }
+      } else {
+        this.joinStatus ? this.showTypeDetail(task) : Toast(`请先加入课程`);
       }
+      // join after click
     },
     showTypeDetail(task) {
       if (task.status !== 'published') {
@@ -338,8 +374,10 @@ export default {
           });
           break;
         case 'live': {
+          const nowDate = new Date();
+          const endDate = new Date(task.endTime * 1000);
           let replay = false;
-          if (new Date() > new Date(task.endTime * 1000)) {
+          if (nowDate > endDate) {
             if (task.activity.replayStatus === 'videoGenerated') {
               // 本站文件
               if (task.mediaSource === 'self') {
@@ -350,7 +388,7 @@ export default {
               } else {
                 Toast('暂不支持此类型');
               }
-              break;
+              return;
             } else if (task.activity.replayStatus === 'ungenerated') {
               Toast('暂无回放');
               return;
@@ -358,6 +396,7 @@ export default {
               replay = true;
             }
           }
+
           this.$router.push({
             name: 'live',
             query: {
@@ -370,44 +409,8 @@ export default {
           });
           break;
         }
-        case 'testpaper': {
-          const testId = task.activity.testpaperInfo.testpaperId;
-          this.$router.push({
-            name: 'testpaperIntro',
-            query: {
-              testId: testId,
-              targetId: task.id,
-            },
-          });
-          break;
-        }
-        case 'homework': {
-          this.$router.push({
-            name: 'homeworkIntro',
-            query: {
-              courseId: this.$route.params.id,
-              taskId: task.id,
-            },
-          });
-          break;
-        }
-        case 'exercise': {
-          this.$router.push({
-            name: 'exerciseIntro',
-            query: {
-              courseId: this.$route.params.id,
-              taskId: task.id,
-            },
-          });
-          break;
-        }
         default:
-          // 防止视频遮挡了弹出框
-          this.setSourceType({
-            sourceType: 'img',
-            taskId: task.id,
-          });
-          this.copyPcUrl(task.courseUrl);
+          Toast('暂不支持此类型');
       }
     },
     // 任务图标(缺少下载)

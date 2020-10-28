@@ -13,8 +13,18 @@
         <p class="item-info__title text-overflow">
           {{ course.courseSet.title }}
         </p>
-        <p class="item-info__price" v-if="course.originPrice2.currency === 'coin'">{{ course.originPrice2.coinAmount }}{{ course.originPrice2.coinName }}</p>
-        <p class="item-info__price" v-if="course.originPrice2.currency === 'RMB'">￥{{ course.originPrice2.amount }}</p>
+        <p
+          class="item-info__price"
+          v-if="course.originPrice2.currency === 'coin'"
+        >
+          {{ course.originPrice2.coinAmount }}{{ course.originPrice2.coinName }}
+        </p>
+        <p
+          class="item-info__price"
+          v-if="course.originPrice2.currency === 'RMB'"
+        >
+          ￥{{ course.originPrice2.amount }}
+        </p>
         <p class="item-info__plan clearfix">
           <span class="pull-left item-info__plan-mw text-overflow">{{
             course.title
@@ -52,7 +62,7 @@ export default {
     },
   },
   methods: {
-    gotoCourse: function (course) {
+    gotoCourse: function(course) {
       this.$router.push({
         path: `/course/${course.id}`,
       });
