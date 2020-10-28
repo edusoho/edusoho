@@ -236,10 +236,10 @@ const courseListData = (data, listObj, uiStyle = 'old', platform = 'h5') => {
           html: `<div class="rank-box">
                   <div class="progress round-conner">
                     <div class="curRate round-conner"
-                      style="width:${data.progress.percent}%">
+                      style="width:${parseInt(data.progress.percent)}%">
                     </div>
                   </div>
-                  <span>${data.progress.percent}%</span>
+                  <span>${parseInt(data.progress.percent)}%</span>
                 </div>`,
         },
       };
