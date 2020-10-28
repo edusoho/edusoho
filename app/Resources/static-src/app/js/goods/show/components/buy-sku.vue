@@ -44,10 +44,10 @@
                           :data-content="vipBtnTips(sku)">
                         <slot>{{ 'goods.show_page.vip_free_learn'|trans }}</slot>
                     </span>
+                    <span v-if="!sku.isMember && goods.type === 'classroom' && isShow">
+                        <a class="btn btn-link pull-right" style="margin-top:8px;" :href="`/classroom/${sku.targetId}/becomeAuditor`">{{ 'classroom.go_inside'|trans }}</a>
+                    </span>
                 </span>
-            </span>
-            <span v-if="!sku.isMember && goods.type === 'classroom' && isShow">
-                <a class="btn btn-link pull-right" style="margin-top:8px;" :href="`/classroom/${sku.targetId}/becomeAuditor`">{{ 'classroom.go_inside'|trans }}</a>
             </span>
         </div>
     </div>
