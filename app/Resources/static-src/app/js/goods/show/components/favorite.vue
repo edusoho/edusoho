@@ -1,5 +1,5 @@
 <template>
-    <span v-if="isFavorite" @click="onFavorite" style="color: #FF7E56;" class="detail-hover-span">
+    <span v-if="favorite" @click="onFavorite" style="color: #FF7E56;" class="detail-hover-span">
       <i class="es-icon es-icon-favorite mrs" style="color: #FF7E56;"></i>{{ 'site.favorited'|trans }}
     </span>
     <span v-else @click="onFavorite" class="detail-hover-span">
@@ -12,6 +12,11 @@
     import Api from 'common/api';
 
     export default {
+        data() {
+            return {
+                favorite: false
+            }
+        },
         props: {
             isFavorite: {
                 type: Boolean,
@@ -29,6 +34,15 @@
 
             },
         },
+        watch: {
+            isFavorite: {
+                handler(newValue, oldValue) {
+                    this.favorite = newValue;
+                },
+                deep: true,
+                immediate: true,
+            }
+        },
         methods: {
             addFavorite(targetType, targetId) {
                 Api.favorite.favorite({
@@ -37,7 +51,7 @@
                         'targetId': targetId,
                     }
                 }).then((res) => {
-                    this.isFavorite = true;
+                    this.favorite = true;
                 });
             },
 
@@ -48,12 +62,12 @@
                         'targetId': targetId,
                     }
                 }).then((res) => {
-                    this.isFavorite = false;
+                    this.favorite = false;
                 });
             },
 
             onFavorite() {
-                if (this.isFavorite) {
+                if (this.favorite) {
                     this.removeFavorite(this.targetType, this.targetId);
                 } else {
                     this.addFavorite(this.targetType, this.targetId);
