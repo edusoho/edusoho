@@ -148,7 +148,9 @@ export default {
   watch: {
     currentJoin: {
       handler(val, oldVal) {
+        console.log(val);
         if (val) {
+          console.log(val);
           Toast.loading({
             duration: 0,
             message: '加载中...',

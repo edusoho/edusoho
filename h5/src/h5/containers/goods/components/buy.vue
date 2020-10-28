@@ -54,10 +54,11 @@
 
 <script>
 import Api from '@/api';
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapMutations, mapState } from 'vuex';
 import { Toast } from 'vant';
 import collectUserInfo from '@/mixins/collectUserInfo';
 import infoCollection from '@/components/info-collection.vue';
+import * as types from '@/store/mutation-types';
 
 export default {
   components: {
@@ -87,6 +88,9 @@ export default {
   },
   methods: {
     ...mapActions('course', ['joinCourse']),
+    ...mapMutations('classroom', {
+      setCurrentJoinClass: types.SET_CURRENT_JOIN_CLASS,
+    }),
     handleJoin() {
       if (this.currentSku.access.code === 'member.member_exist') {
         this.$router.push({
@@ -214,6 +218,7 @@ export default {
           },
         })
           .then(res => {
+            this.setCurrentJoinClass(true);
             this.$router.push({
               path: `/classroom/${this.currentSku.targetId}`,
             });
