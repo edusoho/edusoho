@@ -27,7 +27,6 @@ use Biz\Course\Service\MemberService;
 use Biz\Exception\UnableJoinException;
 use Biz\Favorite\Dao\FavoriteDao;
 use Biz\File\UploadFileException;
-use Biz\Goods\Entity\CourseEntity;
 use Biz\Goods\GoodsEntityFactory;
 use Biz\Goods\Mediator\CourseSetGoodsMediator;
 use Biz\Goods\Mediator\CourseSpecsMediator;
@@ -1203,6 +1202,10 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $chapter = $this->getChapterDao()->get($chapterId);
         $course = $this->getCourseDao()->get($courseId);
+        if (empty($chapter)) {
+            return [];
+        }
+
         if ($course['id'] == $chapter['courseId']) {
             return $chapter;
         }
@@ -1567,13 +1570,14 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $conditions = $this->_prepareCourseConditions($conditions);
         $orderBy = $this->_prepareCourseOrderBy($sort);
-        return $this->getCourseDao()->search($conditions, $orderBy, $start, $limit, $columns);
 
+        return $this->getCourseDao()->search($conditions, $orderBy, $start, $limit, $columns);
     }
 
     public function appendSpecsInfo($courses)
     {
         $courses = $this->getGoodsEntityFactory()->create('course')->fetchSpecs($courses);
+
         return $courses;
     }
 
@@ -1582,6 +1586,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course['spec'] = $this->getGoodsEntityFactory()->create('course')->getSpecsByTargetId($course['id']);
         $course['goodsId'] = empty($course['spec']) ? 0 : $course['spec']['goodsId'];
         $course['specsId'] = empty($course['spec']) ? 0 : $course['spec']['id'];
+
         return $course;
     }
 
