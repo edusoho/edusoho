@@ -1,5 +1,18 @@
 <template>
   <div class="info-buy">
+    <van-action-sheet
+      v-model="isShowForm"
+      class="minHeight50"
+      :title="userInfoCollectForm.formTitle"
+      :close-on-click-overlay="false"
+      :safe-area-inset-bottom="true"
+    >
+      <info-collection
+        :userInfoCollectForm="userInfoCollectForm"
+        :formRule="userInfoCollectForm.items"
+        @submitForm="freeJoin"
+      ></info-collection>
+    </van-action-sheet>
     <div class="info-buy__collection" @click="onFavorite">
       <template v-if="isFavorite">
         <i class="iconfont icon-aixin1" style="color: #FF7E56;"></i>
@@ -42,11 +55,20 @@
 <script>
 import Api from '@/api';
 import { mapActions, mapState } from 'vuex';
+import { Toast } from 'vant';
+import collectUserInfo from '@/mixins/collectUserInfo';
+import infoCollection from '@/components/info-collection.vue';
+
 export default {
+  components: {
+    infoCollection,
+  },
+  mixins: [collectUserInfo],
   data() {
     return {
       // isFavorite: false
       redirect: '',
+      isShowForm: false,
     };
   },
   props: {
@@ -89,48 +111,11 @@ export default {
         });
         return;
       }
-      // const endDate = this.currentSku.usageEndTime;
-      // const endDateStamp = new Date(endDate).getTime();
-      // const todayStamp = new Date().getTime();
-      // let isPast = todayStamp < endDateStamp;
-      // endDate == 0 ? (isPast = true) : (isPast = todayStamp < endDateStamp);
       if (Number(this.currentSku.buyable) || vipAccessToJoin) {
         if (+this.currentSku.displayPrice && !vipAccessToJoin) {
           this.getOrder();
         } else {
-          if (this.goods.type === 'course') {
-            this.joinCourse({
-              id: this.currentSku.targetId,
-            })
-              .then(res => {
-                // 返回空对象，表示加入失败，需要去创建订单购买
-                if (!(Object.keys(res).length === 0)) {
-                } else {
-                  this.getOrder();
-                }
-                this.$router.push({
-                  path: `/course/${this.currentSku.targetId}`,
-                });
-              })
-              .catch(err => {
-                console.error(err);
-              });
-          }
-          if (this.goods.type === 'classroom') {
-            Api.joinClass({
-              query: {
-                classroomId: this.currentSku.targetId,
-              },
-            })
-              .then(res => {
-                this.$router.push({
-                  path: `/classroom/${this.currentSku.targetId}`,
-                });
-              })
-              .catch(err => {
-                console.error(err.message);
-              });
-          }
+          this.collectUseInfoEvent();
         }
       }
     },
@@ -174,11 +159,71 @@ export default {
         this.$emit('update-data', true);
       }
     },
+    getParamsList() {
+      this.paramsList = {
+        action: 'buy_before',
+        targetType: this.goods.type,
+        targetId: this.currentSku.targetId,
+      };
+    },
+    collectUseInfoEvent() {
+      if (this.hasUserInfoCollectForm) {
+        this.isShowForm = true;
+        return;
+      }
+      Toast.loading({
+        duration: 0,
+        message: '加载中...',
+        forbidClick: true,
+      });
+      this.getParamsList();
+      this.getInfoCollectionEvent(this.paramsList).then(res => {
+        console.log(Object.keys(res).length);
+        if (Object.keys(res).length) {
+          this.userInfoCollect = res;
+          this.getInfoCollectionForm(res.id).then(res => {
+            this.isShowForm = true;
+            Toast.clear();
+          });
+          return;
+        }
+        this.freeJoin();
+      });
+    },
+    freeJoin() {
+      if (this.goods.type === 'course') {
+        this.joinCourse({
+          id: this.currentSku.targetId,
+        })
+          .then(res => {
+            // 返回空对象，表示加入失败，需要去创建订单购买
+            if (!(Object.keys(res).length === 0)) {
+              this.$router.push({
+                path: `/course/${this.currentSku.targetId}`,
+              });
+            }
+          })
+          .catch(err => {
+            console.error(err);
+          });
+      }
+      if (this.goods.type === 'classroom') {
+        Api.joinClass({
+          query: {
+            classroomId: this.currentSku.targetId,
+          },
+        })
+          .then(res => {
+            this.$router.push({
+              path: `/classroom/${this.currentSku.targetId}`,
+            });
+          })
+          .catch(err => {
+            console.error(err.message);
+          });
+      }
+    },
     getOrder() {
-      // const expiryMode = this.details.learningExpiryDate.expiryMode;
-      // const expiryScopeStr = `${this.startDateStr} 至 ${this.endDateStr}`;
-      // const expiryStr =
-      //   expiryMode === 'date' ? expiryScopeStr : this.learnExpiry;
       this.$router.push({
         name: 'order',
         params: {
