@@ -47,7 +47,10 @@
           ></div>
         </div>
         <!-- 承诺服务 -->
-        <div class="popup-other clearfix" v-if="currentSku.services.length">
+        <div
+          class="popup-other clearfix"
+          v-if="!(currentSku.services === null) && currentSku.services.length"
+        >
           <div class="pull-left popup-other__left">承诺服务</div>
           <div class="pull-left popup-other__right">
             <span
@@ -85,7 +88,7 @@
 
     <div
       class="detail-plan__plan clearfix"
-      v-if="currentSku.services.length > 0"
+      v-if="!(currentSku.services === null) && currentSku.services.length"
     >
       <div class="pull-left plan-left">承诺服务</div>
       <div class="pull-left plan-right">
