@@ -154,7 +154,12 @@ export default {
             message: '加载中...',
             forbidClick: true,
           });
-          this.getInfoCollectionEvent(this.paramsList).then(res => {
+          const paramsList = {
+            action: 'buy_after',
+            targetType: 'classroom',
+            targetId: this.details.classId,
+          };
+          this.getInfoCollectionEvent(paramsList).then(res => {
             if (Object.keys(res).length) {
               this.userInfoCollect = res;
               this.getInfoCollectionForm(res.id).then(res => {
