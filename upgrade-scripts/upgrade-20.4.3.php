@@ -52,6 +52,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = array(
             'goodsTableAlter',
+            'initGoodsSetting',
             'goodSpecsTableAlter',
             'otherTableAlter',
             'processCourseGoodsAndProduct',
@@ -95,6 +96,23 @@ class EduSohoUpgrade extends AbstractUpdater
                 'progress' => 0,
             );
         }
+    }
+
+    public function initGoodsSetting()
+    {
+        $goodsSetting = $this->getSettingService()->get('goods_setting', []);
+        if (empty($goodsSetting)) {
+            $courseSetting = $this->getSettingService()->get('course', []);
+            $saveSetting = [
+                'show_review' => empty($courseSetting['show_review']) ? 1 : $courseSetting['show_review'],
+                'show_number_data' => empty($courseSetting['show_student_num_enabled']) ? 'studentNum' : 'none',
+                'leading_join_enabled' => 0,
+                'recommend_rule' => 'hot',
+
+            ];
+            $this->getSettingService()->set('goods_setting', $saveSetting);
+        }
+        return 1;
     }
 
     public function otherTableAlter()
