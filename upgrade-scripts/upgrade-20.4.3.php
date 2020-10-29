@@ -379,7 +379,7 @@ class EduSohoUpgrade extends AbstractUpdater
                     INNER JOIN goods g INNER JOIN course_v8 c 
                     ON gs.goodsId = g.id AND g.type = 'course' AND gs.targetId = c.id
                 ) m ON m.courseId = f.targetId AND f.targetType = 'course'
-                SET f.targetId = m.goodsId, f.targetType = 'goods';
+                SET f.targetId = m.goodsId, f.targetType = 'goods',f.goodsType = 'course';
             ");
 
             return 1;
@@ -391,7 +391,7 @@ class EduSohoUpgrade extends AbstractUpdater
                     INNER JOIN goods g INNER JOIN course_v8 c 
                     ON gs.goodsId = g.id AND g.type = 'course' AND gs.targetId = c.id
             ) m ON m.courseId = f.targetId AND f.targetType = 'course' AND f.createdTime <= {$updateTime}
-            SET f.targetId = m.goodsId, f.targetType = 'goods';
+            SET f.targetId = m.goodsId, f.targetType = 'goods',f.goodsType = 'course';
         ");
 
         $this->getConnection()->exec("
@@ -399,7 +399,7 @@ class EduSohoUpgrade extends AbstractUpdater
                 SELECT g.id AS goodsId, p.targetId AS courseSetId FROM goods g INNER JOIN product p 
             		ON g.productId = p.id AND g.type = 'course' AND p.targetType = 'course'
             ) m ON m.courseSetId = f.targetId AND f.targetType = 'course' AND f.createdTime > {$updateTime}
-            SET f.targetId = m.goodsId, f.targetType = 'goods';
+            SET f.targetId = m.goodsId, f.targetType = 'goods',f.goodsType = 'course';
         ");
 
         $newCreatedTime = $updateTime + 1;
