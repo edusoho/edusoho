@@ -51,7 +51,7 @@ export default {
       this.getCourseLessons({
         courseId: this.$route.params.id,
       }).then(res => {
-        if (!res.member) {
+        if (!res.member && !Number(this.details.parentId)) {
           this.$router.push({
             path: `/goods/${res.goodsId}/show`,
           });
