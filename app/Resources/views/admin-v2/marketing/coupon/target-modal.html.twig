@@ -29,7 +29,11 @@
       <tr>
         <td>{{ target.id }}</td>
         <td>
-          <a href="{{ path('goods_show', {id: target.id}) }}" target="_blank"><strong>{{ target.title }}</strong></a>
+          {% if targetType == 'classroom' %}
+            <a href="{{ path('classroom_show', {id: target.id}) }}" target="_blank"><strong>{{ target.title }}</strong></a>
+          {% elseif targetType == 'course' %}
+            <a href="{{ path('course_set_show', {id: target.id}) }}" target="_blank"><strong>{{ target.title }}</strong></a>
+          {% endif %}
           {% if targetType == 'classroom' %}
             <br>
             <span class="text-muted text-sm">{{ 'admin.classroom_manage.manage.category'|trans }}：{{ category.name|default('--') }}</span>
