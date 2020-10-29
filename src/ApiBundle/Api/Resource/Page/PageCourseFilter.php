@@ -4,21 +4,21 @@ namespace ApiBundle\Api\Resource\Page;
 
 use ApiBundle\Api\Resource\Course\CourseFilter;
 use ApiBundle\Api\Resource\Course\CourseItemWithLessonFilter;
-use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\CourseSet\CourseSetReviewFilter;
+use ApiBundle\Api\Resource\Filter;
 
 class PageCourseFilter extends Filter
 {
-    protected $simpleFields = array(
-        'id', 'title', 'courseSetTitle',
-    );
-    protected $publicFields = array(
+    protected $simpleFields = [
+        'id', 'title', 'courseSetTitle', 'goodsId', 'specsId', 'spec',
+    ];
+    protected $publicFields = [
         'vipLevel', 'access', 'learnMode', 'studentNum', 'allowAnonymousPreview', 'parentId', 'compulsoryTaskNum',
         'tryLookable', 'expiryMode', 'expiryDays', 'expiryStartDate', 'expiryEndDate', 'buyExpiryTime', 'summary',
         'audiences', 'goals', 'isDefault', 'maxStudentNum', 'status', 'isFree', 'price', 'originPrice', 'teachers',
         'creator', 'services', 'courseSet', 'courseItems', 'courses', 'member', 'courseType', 'progress', 'buyable',
-        'reviews', 'enableFinish', 'hasCertificate',
-    );
+        'reviews', 'enableFinish', 'hasCertificate', 'goodsId', 'specsId', 'spec',
+    ];
 
     protected function publicFields(&$data)
     {
