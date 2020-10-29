@@ -66,6 +66,12 @@ export default {
       query: { classroomId },
     })
       .then(res => {
+        if (!res.member) {
+          this.$router.push({
+            path: `/goods/${res.goodsId}/show`,
+          });
+          return;
+        }
         this.getComponent(res.member);
         this.getDetails(res);
       })
@@ -94,6 +100,8 @@ export default {
         price,
         studentNum,
         service,
+        goodsId,
+        specsId,
       } = res;
       const cover = res.cover.large;
       const classId = res.id;
@@ -123,6 +131,8 @@ export default {
         cover,
         reviews,
         member,
+        goodsId,
+        specsId,
       };
     },
     getComponent(status) {
