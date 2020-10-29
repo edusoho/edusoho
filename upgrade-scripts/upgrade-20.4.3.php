@@ -63,6 +63,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'processOpenCourseRecommend',
             'processCourseOrderItems',
             'processClassroomOrderItems',
+            'updatePlugin',
         );
 
         $funcNames = array();
@@ -1187,6 +1188,101 @@ abstract class AbstractUpdater
         file_put_contents($this->getLoggerFile(), $data, FILE_APPEND);
     }
 
+    protected function downloadPlugin($page)
+    {
+        $plugin = $this->getUpdatePluginInfo($page);
+        if (empty($plugin)) {
+            return 1;
+        }
+
+        $pluginCode = $plugin[0];
+        $pluginPackageId = $plugin[1];
+
+        $this->logger('warning', '检测是否安装'.$pluginCode);
+        $pluginApp = $this->getAppService()->getAppByCode($pluginCode);
+        if (empty($pluginApp)) {
+            $this->logger('warning', '网校未安装'.$pluginCode);
+
+            return $page + 1;
+        }
+        try {
+            $package = $this->getAppService()->getCenterPackageInfo($pluginPackageId);
+            if (isset($package['error'])) {
+                $this->logger('warning', $package['error']);
+                return $page + 1;
+            }
+            $error1 = $this->getAppService()->checkDownloadPackageForUpdate($pluginPackageId);
+            $error2 = $this->getAppService()->downloadPackageForUpdate($pluginPackageId);
+            $errors = array_merge($error1, $error2);
+            if (!empty($errors)) {
+                foreach ($errors as $error) {
+                    $this->logger('warning', $error);
+                }
+            };
+        } catch (\Exception $e) {
+            $this->logger('warning', $e->getMessage());
+        }
+        $this->logger('info', '检测完毕');
+        return $page + 1;
+    }
+
+    protected function updatePlugin($page)
+    {
+        $plugin = $this->getUpdatePluginInfo($page);
+        if (empty($plugin)) {
+            return 1;
+        }
+
+        $pluginCode = $plugin[0];
+        $pluginPackageId = $plugin[1];
+
+        $this->logger('warning', '升级' . $pluginCode);
+        $pluginApp = $this->getAppService()->getAppByCode($pluginCode);
+        if (empty($pluginApp)) {
+            $this->logger('warning', '网校未安装' . $pluginCode);
+
+            return $page + 1;
+        }
+
+        try {
+            $package = $this->getAppService()->getCenterPackageInfo($pluginPackageId);
+            if (isset($package['error'])) {
+                $this->logger('warning', $package['error']);
+                return $page + 1;
+            }
+            $errors = $this->getAppService()->beginPackageUpdate($pluginPackageId, 'install', 0);
+            if (!empty($errors)) {
+                foreach ($errors as $error) {
+                    $this->logger('warning', $error);
+                }
+            }
+        } catch (\Exception $e) {
+            $this->logger('warning', $e->getMessage());
+        }
+        $this->logger('info', '升级完毕');
+        return $page + 1;
+    }
+
+    private function getUpdatePluginInfo($page)
+    {
+        $pluginList = array(
+            [
+                'Coupon',
+                1990
+            ],
+            [
+                'Discount',
+                1989
+            ]
+        );
+
+        if (empty($pluginList[$page - 1])) {
+            return;
+        }
+
+        return $pluginList[$page - 1];
+    }
+
     private function getLoggerFile()
     {
         return $this->biz['kernel.root_dir'] . '/../app/logs/upgrade.log';
@@ -1245,5 +1341,13 @@ abstract class AbstractUpdater
     protected function getAttachmentDao()
     {
         return $this->biz->dao('ItemBank:Item:AttachmentDao');
+    }
+
+    /**
+     * @return \Biz\CloudPlatform\Service\AppService
+     */
+    protected function getAppService()
+    {
+        return $this->createService('CloudPlatform:AppService');
     }
 }
