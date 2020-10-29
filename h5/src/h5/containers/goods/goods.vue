@@ -18,7 +18,10 @@
           :selectedPlanId="currentSku.targetId"
         />
         <enter-learning
-          v-if="Object.keys(componentsInfo.mpQrCode).length"
+          v-if="
+            componentsInfo.mpQrCode &&
+              Object.keys(componentsInfo.mpQrCode).length
+          "
           :qr-info="componentsInfo.mpQrCode"
         />
       </div>
