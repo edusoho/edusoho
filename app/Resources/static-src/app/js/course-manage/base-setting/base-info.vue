@@ -166,7 +166,7 @@
         },
         data() {
             let baseForm = {
-                title: this.course.title ? this.course.title : this.course.courseSetTitle,
+                title: this.course.title ? this.course.title : '',
                 subtitle: this.course.subtitle ? this.course.subtitle : null,
             };
 
