@@ -203,6 +203,9 @@ export default {
     gotoGoodsPage() {
       this.$router.push({
         path: `/goods/${this.details.goodsId}/show`,
+        query: {
+          targetId: this.details.id,
+        },
       });
     },
     showDialog() {

@@ -33,7 +33,7 @@
                 Number(goods.maxDisplayPriceObj.amount) == 0
                   ? '免费'
                   : goods.minDisplayPriceObj.currency === 'RMB'
-                  ? `¥${goods.maxDisplayPriceObj.amount}`
+                  ? `${goods.maxDisplayPriceObj.amount}元`
                   : goods.minDisplayPriceObj.coinAmount +
                     goods.minDisplayPriceObj.coinName
               }}
@@ -49,7 +49,10 @@
                 class="price"
                 >{{ goods.minDisplayPriceObj.coinAmount | formatPrice }}
               </span>
-              <span class="detail-right__price__unit">
+              <span
+                v-if="goods.minDisplayPriceObj.currency === 'coin'"
+                class="detail-right__price__unit"
+              >
                 {{ goods.minDisplayPriceObj.coinName }}
               </span>
             </p>

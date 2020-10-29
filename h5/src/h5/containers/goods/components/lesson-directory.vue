@@ -344,6 +344,11 @@ export default {
         Toast('敬请期待');
         return;
       }
+
+      if (task.lock) {
+        Toast('需要解锁上一个任务');
+        return;
+      }
       switch (task.type) {
         case 'video':
           if (task.mediaSource === 'self') {
@@ -409,6 +414,35 @@ export default {
           });
           break;
         }
+        case 'testpaper':
+          // eslint-disable-next-line no-case-declarations
+          const testId = task.activity.testpaperInfo.testpaperId;
+          this.$router.push({
+            name: 'testpaperIntro',
+            query: {
+              testId: testId,
+              targetId: task.id,
+            },
+          });
+          break;
+        case 'homework':
+          this.$router.push({
+            name: 'homeworkIntro',
+            query: {
+              courseId: this.$route.params.id,
+              taskId: task.id,
+            },
+          });
+          break;
+        case 'exercise':
+          this.$router.push({
+            name: 'exerciseIntro',
+            query: {
+              courseId: this.$route.params.id,
+              taskId: task.id,
+            },
+          });
+          break;
         default:
           Toast('暂不支持此类型');
       }
