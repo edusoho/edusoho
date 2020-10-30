@@ -6,6 +6,7 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Classroom\ClassroomException;
+use Biz\Classroom\Service\ClassroomService;
 
 class PageClassroom extends AbstractResource
 {
@@ -36,6 +37,7 @@ class PageClassroom extends AbstractResource
 
         $classroom['access'] = $this->getClassroomService()->canJoinClassroom($classroomId);
         $classroom['courses'] = $this->getClassroomService()->findCoursesByClassroomId($classroomId);
+        $classroom = $this->getClassroomService()->appendSpecInfo($classroom);
 
         $this->getOCUtil()->multiple($classroom['courses'], ['courseSetId'], 'courseSet');
         $this->getOCUtil()->multiple($classroom['courses'], ['creator', 'teacherIds']);
@@ -68,6 +70,9 @@ class PageClassroom extends AbstractResource
         $user = array_merge($profile, $user);
     }
 
+    /**
+     * @return ClassroomService
+     */
     private function getClassroomService()
     {
         return $this->service('Classroom:ClassroomService');

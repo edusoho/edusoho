@@ -150,6 +150,10 @@ class BaseTestCase extends TestCase
         return $this;
     }
 
+    /**
+     * @return $this
+     *               默认CurrentUser 具有全部权限，并且具有数据库实体用户
+     */
     protected function initCurrentUser()
     {
         /** @var $userService \Biz\User\Service\UserService */
@@ -196,6 +200,66 @@ class BaseTestCase extends TestCase
         $singletonBiz['user'] = $currentUser;
 
         return $this;
+    }
+
+    /**
+     * @param array $customFields
+     *                            载入教师身份的CurrentUser
+     */
+    protected function loadCurrentUserWithTeacher(array $customFields = [])
+    {
+        $customFields = ArrayToolkit::parts($customFields, ['id', 'nickname', 'email', 'password', 'currentIp']);
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array_merge([
+            'id' => 2,
+            'nickname' => 'teacher',
+            'email' => 'teacher@teacher.com',
+            'password' => 'teacher',
+            'currentIp' => '127.0.0.1',
+            'roles' => ['ROLE_USER', 'ROLE_TEACHER'],
+        ], $customFields));
+        $currentUser->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
+        $this->biz['user'] = $currentUser;
+    }
+
+    /**
+     * @param array $customFields
+     *                            载入管理员身份的CurrentUser
+     */
+    protected function loadCurrentUserWithAdmin(array $customFields = [])
+    {
+        $customFields = ArrayToolkit::parts($customFields, ['id', 'nickname', 'email', 'password', 'currentIp']);
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array_merge([
+            'id' => 2,
+            'nickname' => 'admin',
+            'email' => 'admin@admin.com',
+            'password' => 'admin',
+            'currentIp' => '127.0.0.1',
+            'roles' => ['ROLE_USER', 'ROLE_ADMIN'],
+        ], $customFields));
+        $currentUser->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
+        $this->biz['user'] = $currentUser;
+    }
+
+    /**
+     * @param array $customFields
+     *                            载入普通用户身份的CurrentUser
+     */
+    protected function loadCurrentUserWithNormalUser(array $customFields = [])
+    {
+        $customFields = ArrayToolkit::parts($customFields, ['id', 'nickname', 'email', 'password', 'currentIp']);
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array_merge([
+            'id' => 2,
+            'nickname' => 'user',
+            'email' => 'user@user.com',
+            'password' => 'user',
+            'currentIp' => '127.0.0.1',
+            'roles' => ['ROLE_USER'],
+        ], $customFields));
+        $currentUser->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
+        $this->biz['user'] = $currentUser;
     }
 
     /**

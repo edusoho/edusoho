@@ -64,11 +64,11 @@ class TaskController extends BaseController
             return $this->redirectToRoute('my_course_show', ['id' => $courseId]);
         }
 
-        if ($this->isCourseExpired($course) && !$this->getCourseService()->hasCourseManagerRole($course['id'])) {
-            return $this->redirectToRoute('course_show', ['id' => $courseId]);
-        }
+//        if ($this->isCourseExpired($course) && !$this->getCourseService()->hasCourseManagerRole($course['id'])) {
+//            return $this->redirectToRoute('course_show', ['id' => $courseId]);
+//        }
 
-        if (null !== $member && 'teacher' != $member['role'] && !$this->getCourseMemberService()->isMemberNonExpired(
+        if (null !== $member && 'teacher' !== $member['role'] && !$this->getCourseMemberService()->isMemberNonExpired(
                 $course,
                 $member
             )
@@ -605,11 +605,11 @@ class TaskController extends BaseController
     protected function isCourseExpired($course)
     {
         return (
-                'date' == $course['expiryMode']
+                'date' === $course['expiryMode']
                 && ($course['expiryStartDate'] > time() || $course['expiryEndDate'] < time())
             )
             || (
-                'endDate' == $course['expiryMode'] && $course['expiryEndDate'] < time()
+                'end_date' === $course['expiryMode'] && $course['expiryEndDate'] < time()
             );
     }
 

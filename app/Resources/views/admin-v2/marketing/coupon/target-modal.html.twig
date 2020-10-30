@@ -26,19 +26,18 @@
     {% for target in targets %}
       {% set user = users[target.creator]|default(null) %}
       {% set category = categories[target.categoryId]|default(null) %}
-      {% if targetType == 'course' %}
-        {% set pathname = 'course_set_show' %}
-      {% elseif targetType == 'classroom' %}
-        {% set pathname = 'classroom_show' %}
-      {% endif %}
       <tr>
         <td>{{ target.id }}</td>
         <td>
-          <a href="{{ path(pathname, {id: target.id}) }}" target="_blank"><strong>{{ target.title }}</strong></a>
+          {% if targetType == 'classroom' %}
+            <a href="{{ path('classroom_show', {id: target.id}) }}" target="_blank"><strong>{{ target.title }}</strong></a>
+          {% elseif targetType == 'course' %}
+            <a href="{{ path('course_set_show', {id: target.id}) }}" target="_blank"><strong>{{ target.title }}</strong></a>
+          {% endif %}
           {% if targetType == 'classroom' %}
             <br>
             <span class="text-muted text-sm">{{ 'admin.classroom_manage.manage.category'|trans }}：{{ category.name|default('--') }}</span>
-            {% if target.recommended %}
+            {% if target.recommendedWeight %}
               <span class="label label-default">{{ 'admin.classroom_manage.chooser.recommend'|trans }}：{{ target.recommendedTime|date('Y-m-d') }}</span>
             {% endif %}
           {% endif %}

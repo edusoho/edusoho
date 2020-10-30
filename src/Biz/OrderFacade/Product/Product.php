@@ -17,14 +17,28 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 abstract class Product extends BizAware implements OrderStatusCallback
 {
     /**
-     * 商品ID
+     * 如果是商品，则商品规格ID
+     *
+     * @var int
+     */
+    public $goodsSpecsId;
+
+    /**
+     * 如果是商品，则商品ID
+     *
+     * @var int
+     */
+    public $goodsId;
+
+    /**
+     * 购买对象ID
      *
      * @var int
      */
     public $targetId;
 
     /**
-     * 商品类型
+     * 购买对象类型
      *
      * @var string
      */

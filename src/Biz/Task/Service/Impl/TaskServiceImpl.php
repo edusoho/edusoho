@@ -446,8 +446,7 @@ class TaskServiceImpl extends BaseService implements TaskService
                     $task['watchLimitRemaining'] = $course['watchLimit'] * $task['length'];
                 }
             }
-
-            $isTryLookable = $course['tryLookable'] && 'video' == $task['type'] && !empty($task['ext']['file']) && 'cloud' === $task['ext']['file']['storage'];
+            $isTryLookable = $course['tryLookable'] && 'video' == $task['type'] && !empty($task['activity']['ext']['file']) && 'cloud' === $task['activity']['ext']['file']['storage'];
             if ($isTryLookable) {
                 $task['tryLookable'] = 1;
             } else {

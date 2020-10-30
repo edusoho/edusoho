@@ -31,6 +31,7 @@ class Classroom extends AbstractResource
 
         $classroom['access'] = $this->getClassroomService()->canJoinClassroom($classroomId);
         $classroom['hasCertificate'] = $this->getClassroomService()->hasCertificate($classroomId);
+        $classroom = $this->getClassroomService()->appendSpecInfo($classroom);
 
         return $classroom;
     }
@@ -53,7 +54,9 @@ class Classroom extends AbstractResource
             $conditions,
             $this->getSort($request),
             $offset,
-            $limit
+            $limit,
+            [],
+            true
         );
 
         $this->getOCUtil()->multiple($classrooms, ['creator', 'teacherIds', 'headTeacherId', 'assistantIds']);
@@ -63,6 +66,7 @@ class Classroom extends AbstractResource
         $total = $this->getClassroomService()->countClassrooms($conditions);
 
         $classrooms = $this->getClassroomService()->appendHasCertificate($classrooms);
+        $classrooms = $this->getClassroomService()->appendSpecsInfo($classrooms);
 
         return $this->makePagingObject($classrooms, $total, $offset, $limit);
     }

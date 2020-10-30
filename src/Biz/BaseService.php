@@ -2,17 +2,17 @@
 
 namespace Biz;
 
+use AppBundle\Common\Exception\AbstractException;
 use Biz\Org\OrgException;
-use Monolog\Logger;
 use Biz\User\CurrentUser;
 use Codeages\Biz\Framework\Event\Event;
-use Topxia\Service\Common\ServiceKernel;
-use Codeages\Biz\Framework\Service\Exception\ServiceException;
-use Codeages\Biz\Framework\Service\Exception\NotFoundException;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
 use Codeages\Biz\Framework\Service\Exception\InvalidArgumentException;
-use AppBundle\Common\Exception\AbstractException;
+use Codeages\Biz\Framework\Service\Exception\NotFoundException;
+use Codeages\Biz\Framework\Service\Exception\ServiceException;
+use Monolog\Logger;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Topxia\Service\Common\ServiceKernel;
 
 class BaseService extends \Codeages\Biz\Framework\Service\BaseService
 {
@@ -50,7 +50,7 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
      *
      * @return Event
      */
-    protected function dispatchEvent($eventName, $subject, $arguments = array())
+    protected function dispatchEvent($eventName, $subject, $arguments = [])
     {
         if ($subject instanceof Event) {
             $event = $subject;
@@ -170,7 +170,7 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
         return $this->lock;
     }
 
-    protected function trans($message, $arguments = array(), $domain = null, $locale = null)
+    protected function trans($message, $arguments = [], $domain = null, $locale = null)
     {
         return ServiceKernel::instance()->trans($message, $arguments, $domain, $locale);
     }
@@ -186,6 +186,18 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
         $rolePermissionsYml = $this->biz['role.get_permissions_yml'];
         $allPermissions = array_merge($rolePermissionsYml['adminV2'], $rolePermissionsYml['admin']);
 
-        return !empty($allPermissions[$code]) ? $allPermissions[$code] : array();
+        return !empty($allPermissions[$code]) ? $allPermissions[$code] : [];
+    }
+
+    /**
+     * @param $pluginCode
+     *
+     * @return bool
+     */
+    protected function isPluginInstalled($pluginCode)
+    {
+        global $kernel;
+
+        return $kernel->getPluginConfigurationManager()->isPluginInstalled($pluginCode);
     }
 }

@@ -14,7 +14,11 @@
     <div>
       <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
         <input type="hidden" name="orderItemType" value="course">
-        <input type="hidden" name="order_item_target_ids[]" value="{{ course.id }}">
+        {% for sku in goodsSpecs if course.parentId == 0 %}
+          <input type="hidden" name="order_item_target_ids[]" value="{{ sku.id }}">
+        {% else %}
+          <input type="hidden" name="order_item_target_ids[]" value="{{ course.id }}">
+        {% endfor %}
         <div class="mbm">
           {{'course.order.create_time'|trans}} :
           <div class="form-group">

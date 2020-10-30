@@ -1,0 +1,26 @@
+.product-info {
+  .product-info__left {
+    .info-left__nav {
+      li {
+        &.active a {
+          color: @brand-primary;
+          &:after {
+            background-color: @brand-primary;
+          }
+        }
+      }
+    }
+  }
+}
+.create-review {
+  .create-review__btn {
+    .btn-confirm {
+      background: @brand-primary;
+      color: #fff;
+
+      &:hover {
+        background: lighten(@brand-primary, 10%);
+      }
+    }
+  }
+}

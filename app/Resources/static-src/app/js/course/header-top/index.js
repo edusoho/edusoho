@@ -1,7 +1,9 @@
 import 'app/common/widget/qrcode';
+import Api from 'common/api';
 
 let $unfavorite = $('.js-unfavorite-btn');
 let $favorite = $('.js-favorite-btn');
+let $loginModal = $('#login-modal');
 discountCountdown();
 ancelRefund();
 
@@ -35,38 +37,28 @@ function discountCountdown() {
 
 if ($favorite.length) {
   $favorite.on('click', function () {
-    $.ajax({
-      type: "POST",
+    Api.favorite.favorite({
       data: {
         'targetType': $(this).data('targetType'),
         'targetId': $(this).data('targetId'),
-      },
-      beforeSend: function (request) {
-        request.setRequestHeader("Accept", 'application/vnd.edusoho.v2+json');
-        request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr('content'));
-      },
-      url: '/api/favorite',
-      success: function (resp) {
-        $unfavorite.removeClass('hidden');
-        $favorite.addClass('hidden');
       }
+    }).then((res) => {
+      $unfavorite.removeClass('hidden');
+      $favorite.addClass('hidden');
     });
   });
 }
 
 if ($unfavorite.length) {
   $unfavorite.on('click', function () {
-    $.ajax({
-      type: "DELETE",
-      beforeSend: function (request) {
-        request.setRequestHeader("Accept", 'application/vnd.edusoho.v2+json');
-        request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr('content'));
-      },
-      url: '/api/favorite?' + 'targetType=' + $(this).data('targetType') + '&targetId=' + $(this).data('targetId'),
-      success: function (resp) {
-        $favorite.removeClass('hidden');
-        $unfavorite.addClass('hidden');
+    Api.favorite.unfavorite({
+      data: {
+        'targetType': $(this).data('targetType'),
+        'targetId': $(this).data('targetId'),
       }
+    }).then((res) => {
+      $favorite.removeClass('hidden');
+      $unfavorite.addClass('hidden');
     });
   });
 }

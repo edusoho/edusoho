@@ -234,6 +234,10 @@ interface CourseService
 
     public function searchCourses($conditions, $sort, $start, $limit, $columns = []);
 
+    public function appendSpecsInfo($courses);
+
+    public function appendSpecInfo($course);
+
     public function searchWithJoinCourseSet($conditions, $sort, $start, $limit, $columns = []);
 
     public function searchBySort($conditions, $sort, $start, $limit);

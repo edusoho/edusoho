@@ -23,35 +23,36 @@ class MeCourse extends AbstractResource
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $members = $this->getCourseMemberService()->searchMembers(
             $conditions,
-            array('lastLearnTime' => 'DESC'),
+            ['lastLearnTime' => 'DESC'],
             0,
             PHP_INT_MAX
         );
 
-        $courseConditions = array(
-            'ids' => ArrayToolkit::column($members, 'courseId') ?: array(0),
-            'excludeTypes' => array('reservation'),
-        );
+        $courseConditions = [
+            'ids' => ArrayToolkit::column($members, 'courseId') ?: [0],
+            'excludeTypes' => ['reservation'],
+        ];
 
         $courses = $this->getCourseService()->searchCourses(
             $courseConditions,
-            array(),
+            [],
             $offset,
             $limit
         );
 
         $courses = $this->appendAttrAndOrder($courses, $members);
+        $courses = $this->getCourseService()->appendSpecsInfo($courses);
 
         $total = $this->getCourseService()->countCourses($courseConditions);
 
-        $this->getOCUtil()->multiple($courses, array('courseSetId'), 'courseSet');
+        $this->getOCUtil()->multiple($courses, ['courseSetId'], 'courseSet');
 
         return $this->makePagingObject($courses, $total, $offset, $limit);
     }
 
     private function appendAttrAndOrder($courses, $members)
     {
-        $orderedCourses = array();
+        $orderedCourses = [];
         $members = ArrayToolkit::index($members, 'courseId');
         $courses = ArrayToolkit::index($courses, 'id');
         foreach ($members as $member) {

@@ -13,6 +13,13 @@ abstract class BuyFlowController extends BaseController
 {
     protected $targetType = '';
 
+    /**
+     * @param $id
+     *
+     * @return \Symfony\Component\HttpFoundation\JsonResponse|\Symfony\Component\HttpFoundation\Response
+     *
+     * @todo 商品剥离控制购买入口需要改造
+     */
     public function buyAction(Request $request, $id)
     {
         $this->checkUserLogin();

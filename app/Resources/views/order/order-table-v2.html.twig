@@ -17,8 +17,8 @@
   {% for order in orders %}
     <tr id="order-table-{{order.id}}">
       <td>
-        {% if order.item.target_type == 'course' %}
-          <a class="cd-link-major" href="{{ path('course_show', {id:order.item.target_id}) }}" target="_blank">{{order.title}}</a>
+        {% if order.item.target_type in ['course', 'classroom'] and order.goodsId %}
+          <a class="cd-link-major" href="{{ path('goods_show', {id: order.goodsId}) }}" target="_blank">{{order.title}}</a>
         {% elseif order.item.target_type == 'vip' %}
           <a class="cd-link-major" href="{{ path('vip', {id:order.item.target_id}) }}" target="_blank">{{order.title}}</a>
         {% elseif order.item.target_type == 'classroom' %}
