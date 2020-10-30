@@ -17,12 +17,14 @@ abstract class Product extends BizAware implements OrderStatusCallback
 {
     /**
      * 如果是商品，则商品规格ID
+     *
      * @var int
      */
     public $goodsSpecsId;
 
     /**
      * 如果是商品，则商品ID
+     *
      * @var int
      */
     public $goodsId;

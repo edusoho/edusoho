@@ -90,8 +90,9 @@ abstract class AbstractGoodsMediator
 
     /**
      * @param $target
+     *
      * @return mixed
-     * 规格排序
+     *               规格排序
      */
     abstract public function onSortGoodsSpecs($target);
 

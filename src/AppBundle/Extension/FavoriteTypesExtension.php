@@ -29,7 +29,6 @@ class FavoriteTypesExtension extends Exception implements ServiceProviderInterfa
     public function register(Container $container)
     {
         $container['favorite_types.course'] = function ($biz) {
-
         };
     }
 }
