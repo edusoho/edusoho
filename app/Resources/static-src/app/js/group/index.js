@@ -1,5 +1,6 @@
 import notify from 'common/notify';
 import {initThread, initThreadReplay} from './thread-opreate';
+import Api from 'common/api';
 
 initThread();
 initThreadReplay();
@@ -16,42 +17,32 @@ let addBtnClicked = false;
 $('#thread-list').on('click', '.uncollect-btn, .collect-btn', function (e) {
   let $this = $(this);
   if ($this.hasClass('uncollect-btn')) {
-    $.ajax({
-      type: "DELETE",
-      beforeSend: function (request) {
-        request.setRequestHeader("Accept", 'application/vnd.edusoho.v2+json');
-        request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr('content'));
-      },
-      url: '/api/favorite?' + 'targetType=' + $this.data('targetType') + '&targetId=' + $this.data('targetId'),
-      success: function (resp) {
-        $this.hide();
-        if ($this.hasClass('collect-btn')) {
-          $this.parent().find('.uncollect-btn').show();
-        } else {
-          $this.parent().find('.collect-btn').show();
-        }
+    Api.favorite.unfavorite({
+      data: {
+        'targetType': $this.data('targetType'),
+        'targetId': $this.data('targetId'),
+      }
+    }).then((res) => {
+      $this.hide();
+      if ($this.hasClass('collect-btn')) {
+        $this.parent().find('.uncollect-btn').show();
+      } else {
+        $this.parent().find('.collect-btn').show();
       }
     });
   } else if ($this.hasClass('collect-btn')) {
-    $.ajax({
-      type: "POST",
+    Api.favorite.favorite({
       data: {
-        'targetType': $(this).data('targetType'),
-        'targetId': $(this).data('targetId'),
-      },
-      beforeSend: function (request) {
-        request.setRequestHeader("Accept", 'application/vnd.edusoho.v2+json');
-        request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr('content'));
-      },
-      url: '/api/favorite',
-      success: function (resp) {
-        $this.hide();
-        if ($this.hasClass('collect-btn')) {
-          $this.parent().find('.uncollect-btn').show();
-        } else {
-          $this.parent().find('.collect-btn').show();
-        }
-      },
+        'targetType': $this.data('targetType'),
+        'targetId': $this.data('targetId'),
+      }
+    }).then((res) => {
+      $this.hide();
+      if ($this.hasClass('collect-btn')) {
+        $this.parent().find('.uncollect-btn').show();
+      } else {
+        $this.parent().find('.collect-btn').show();
+      }
     });
   }
 });

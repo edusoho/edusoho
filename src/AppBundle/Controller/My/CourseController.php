@@ -187,7 +187,8 @@ class CourseController extends CourseBaseController
             $this->joinCourseMemberByClassroomId($course['id'], $classroom['id']);
         }
 
-        if (empty($member)) {
+        // 非班级课程，点击介绍跳转到概览商品页
+        if (empty($member) || (0 == $course['parentId'] && 'summary' === $tab)) {
             return $this->redirect(
                 $this->generateUrl(
                     'course_show',

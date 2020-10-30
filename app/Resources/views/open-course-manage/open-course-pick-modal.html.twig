@@ -5,8 +5,6 @@
 
 {% block body %}
 
-{#{% include 'open-course-manage/pick-tab.html.twig' %}#}
-
 <form class="form-inline form-search" role="search-form" data-url="{{ path('open_course_course_search',{id:courseId,filter:filter}) }}">
   <div class="form-group ">
     <input type="text" class="form-control" name="key" id="enterSearch" value="{{ app.request.get('key') }}" placeholder="{{ 'search_by_course_title_or_keyword'|trans }}">

@@ -2,27 +2,27 @@
 
 namespace ApiBundle\Api\Resource\Page;
 
+use ApiBundle\Api\Resource\Classroom\ClassroomReviewFilter;
+use ApiBundle\Api\Resource\Course\CourseFilter;
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\User\UserFilter;
-use ApiBundle\Api\Resource\Course\CourseFilter;
 use ApiBundle\Api\Util\AssetHelper;
 use ApiBundle\Api\Util\Converter;
 use ApiBundle\Api\Util\Money;
 use AppBundle\Common\ServiceToolkit;
-use ApiBundle\Api\Resource\Classroom\ClassroomReviewFilter;
 
 class PageClassroomFilter extends Filter
 {
-    protected $simpleFields = array(
-        'id', 'title', 'smallPicture', 'middlePicture', 'largePicture', 'price', 'studentNum', 'about',
-    );
+    protected $simpleFields = [
+        'id', 'title', 'smallPicture', 'middlePicture', 'largePicture', 'price', 'studentNum', 'about', 'goodsId', 'specsId', 'spec',
+    ];
 
-    protected $publicFields = array(
+    protected $publicFields = [
         'status', 'price', 'vipLevelId', 'headTeacher', 'teachers', 'assistants',
         'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'threadNum', 'noteNum', 'postNum', 'service', 'recommended',
         'recommendedSeq', 'rating', 'ratingNum', 'maxRate', 'showable', 'buyable', 'expiryMode', 'expiryValue',
-        'createdTime', 'updatedTime', 'creator', 'access', 'courses', 'reviews', 'member', 'vipLevel',
-    );
+        'createdTime', 'updatedTime', 'creator', 'access', 'courses', 'reviews', 'member', 'vipLevel', 'goodsId', 'specsId', 'spec',
+    ];
 
     protected function simpleFields(&$data)
     {
@@ -38,7 +38,7 @@ class PageClassroomFilter extends Filter
             Converter::timestampToDate($data['expiryStartDate']);
         }
 
-        $data['service'] = AssetHelper::callAppExtensionMethod('transServiceTags', array(ServiceToolkit::getServicesByCodes($data['service'])));
+        $data['service'] = AssetHelper::callAppExtensionMethod('transServiceTags', [ServiceToolkit::getServicesByCodes($data['service'])]);
 
         $userFilter = new UserFilter();
         $userFilter->setMode(Filter::SIMPLE_MODE);
@@ -63,11 +63,11 @@ class PageClassroomFilter extends Filter
         $data['smallPicture'] = AssetHelper::getFurl($data['smallPicture'], 'classroom.png');
         $data['middlePicture'] = AssetHelper::getFurl($data['middlePicture'], 'classroom.png');
         $data['largePicture'] = AssetHelper::getFurl($data['largePicture'], 'classroom.png');
-        $data['cover'] = array(
+        $data['cover'] = [
             'small' => $data['smallPicture'],
             'middle' => $data['middlePicture'],
             'large' => $data['largePicture'],
-        );
+        ];
 
         unset($data['smallPicture']);
         unset($data['middlePicture']);

@@ -44,6 +44,7 @@ class NotifyEvent
         if (is_null($dataIndex)) {
             return $this->eventData;
         }
+
         return $this->eventData[$dataIndex];
     }
 
