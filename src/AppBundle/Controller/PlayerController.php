@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Common\FileToolkit;
 use Biz\CloudPlatform\CloudAPIFactory;
+use Biz\CloudPlatform\Service\ResourceFacadeService;
 use Biz\File\Service\UploadFileService;
 use Biz\File\UploadFileException;
 use Biz\MaterialLib\Service\MaterialLibService;
@@ -281,6 +282,9 @@ class PlayerController extends BaseController
         return $this->getBiz()->service('Player:PlayerService');
     }
 
+    /**
+     * @return ResourceFacadeService
+     */
     protected function getResourceFacadeService()
     {
         return $this->getBiz()->service('CloudPlatform:ResourceFacadeService');

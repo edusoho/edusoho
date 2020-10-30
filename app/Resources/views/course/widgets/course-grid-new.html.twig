@@ -58,11 +58,11 @@
               <i class="es-icon es-icon-people"></i>{{ courseSet.studentNum }}
             </span>
           {% elseif setting('course.show_cover_num_mode') == 'hitNum' %}
-            <span><i class="es-icon es-icon-view"></i>{{ course.hitNum }}</span>
+            <span><i class="es-icon es-icon-view"></i>{{ courseSet.hitNum }}</span>
           {% endif %}
         </span>
       {% endif %}
-      {% if setting('course.show_review', '1') == 1 %}
+      {% if setting('goods_setting.show_review', '1') == 1 %}
         <span {% if setting('course.show_student_num_enabled', '1') == 1 %} class="comment" {% endif %}><i class="es-icon es-icon-textsms"></i>{{ courseSet.ratingNum }}</span>
       {% endif %}
 

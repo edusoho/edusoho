@@ -2,7 +2,7 @@
 
 namespace Biz\CloudFile\Service;
 
-interface CloudFileService
+interface CloudFileService extends FilePlayerInterface
 {
     public function search($conditions, $start, $limit);
 
@@ -24,7 +24,7 @@ interface CloudFileService
 
     public function getThumbnail($globalId, $options);
 
-    public function getStatistics($options = array());
+    public function getStatistics($options = []);
 
     public function deleteCloudMP4Files($userId, $callback);
 

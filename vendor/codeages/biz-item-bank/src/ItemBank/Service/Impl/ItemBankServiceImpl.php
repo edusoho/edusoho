@@ -4,6 +4,7 @@ namespace Codeages\Biz\ItemBank\ItemBank\Service\Impl;
 
 use Codeages\Biz\ItemBank\BaseService;
 use Codeages\Biz\ItemBank\ErrorCode;
+use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Codeages\Biz\ItemBank\ItemBank\Dao\ItemBankDao;
 use Codeages\Biz\ItemBank\ItemBank\Exception\ItemBankException;
 use Codeages\Biz\ItemBank\ItemBank\Service\ItemBankService;
@@ -68,9 +69,19 @@ class ItemBankServiceImpl extends BaseService implements ItemBankService
         return $this->getItemBankDao()->wave([$id], ['assessment_num' => $diff]);
     }
 
-    public function updateItemNumAndQuestionNum($id, $diffItemNum = 0, $diffQuestionNum = 0)
+    public function updateItemNumAndQuestionNum($id)
     {
-        return $this->getItemBankDao()->wave([$id], ['item_num' => $diffItemNum, 'question_num' => $diffQuestionNum]);
+        $itemCount = $this->getItemService()->countItems(['bank_id' => $id]);
+        $questionCount = $this->getItemService()->countQuestionsByBankId($id);
+        return $this->getItemBankDao()->update($id, ['item_num' => $itemCount, 'question_num' => $questionCount]);
+    }
+
+    /**
+     * @return ItemService
+     */
+    protected function getItemService()
+    {
+        return $this->biz->service('ItemBank:Item:ItemService');
     }
 
     /**

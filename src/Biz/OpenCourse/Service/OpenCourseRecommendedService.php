@@ -6,7 +6,9 @@ interface OpenCourseRecommendedService
 {
     public function addRecommendedCourses($openCourseId, $recommendCourseIds, $origin);
 
-    public function findRecommendedCoursesByOpenCourseId($openCourseId);
+    public function addRecommendGoods($openCourseId, $goodsIds);
+
+    public function findRecommendedGoodsByOpenCourseId($openCourseId);
 
     public function updateOpenCourseRecommendedCourses($openCourseId, $activeCourseIds);
 
@@ -21,13 +23,13 @@ interface OpenCourseRecommendedService
 
     public function searchRecommends($conditions, $orderBy, $start, $limit);
 
-    public function recommendedCoursesSort($recommendCourses);
+    public function recommendedGoodsSort($recommendCourses);
 
     public function getRecommendedCourseByCourseIdAndType($openCourseId, $recommendCourseId, $type);
 
-    public function findRandomRecommendCourses($courseId, $num = 3);
+    public function findRandomRecommendGoods($courseId, $num = 3);
 
-    public function deleteRecommendCourse($recommendId);
+    public function deleteRecommend($recommendId);
 
-    public function deleteBatchRecommendCourses($recommendIds);
+    public function deleteBatchRecommend($recommendIds);
 }

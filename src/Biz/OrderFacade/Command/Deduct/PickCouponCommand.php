@@ -8,11 +8,16 @@ use Biz\OrderFacade\Product\Product;
 
 class PickCouponCommand extends Command
 {
-    public function execute(Product $product, $params = array())
+    public function execute(Product $product, $params = [])
     {
         if (!empty($params['couponCode'])) {
+            if ('course' === $product->targetType || 'classroom' === $product->targetType) {
+                $targetId = $product->originalTargetId;
+            } else {
+                $targetId = $product->targetId;
+            }
             $couponCode = trim($params['couponCode']);
-            $checkData = $this->getCouponService()->checkCoupon($couponCode, $product->targetId, $product->targetType);
+            $checkData = $this->getCouponService()->checkCoupon($couponCode, $targetId, $product->targetType);
 
             if (isset($checkData['useable']) && 'no' == $checkData['useable']) {
                 return;
@@ -26,14 +31,14 @@ class PickCouponCommand extends Command
                 $coupon['deduct_amount'] = $this->getCouponService()->getDeductAmount($coupon, $product->originPrice);
             }
 
-            $deduct = array(
+            $deduct = [
                 'deduct_amount' => $coupon['deduct_amount'],
                 'deduct_type' => 'coupon',
                 'deduct_id' => $coupon['id'],
-                'snapshot' => array(
+                'snapshot' => [
                     'couponCode' => $coupon['code'],
-                ),
-            );
+                ],
+            ];
             $product->pickedDeducts[] = $deduct;
         }
     }

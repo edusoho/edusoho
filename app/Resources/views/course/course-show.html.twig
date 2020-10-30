@@ -36,23 +36,23 @@
 
         <section class="es-section">
           <div class="nav-btn-tab">
-
+            {% set showReviewTab = course.parentId > 0 %}
 	          {% if member|default(null) %}
 		          {% include 'course/header/nav-tab-for-member.html.twig' %}
 	          {% else %}
 		          {% include 'course/header/nav-tab-for-guest.html.twig' %}
 	          {% endif %}
 
-            {% if app.user.admin|default(false) or isCourseTeacher|default(false) %}
-              <div class="btnbar hidden-xs">
-                <a href="#modal" data-toggle="modal"
-                  data-url="{{ path('announcement_add',{targetType:'course',targetId:course.id}) }}"
-                  class="btn btn-link">
-                  <i class="es-icon es-icon-anonymous-iconfont"></i>
-                  {{ 'course.btn.announcement'|trans }}
-                </a>
-              </div>
-            {% endif %}
+{#            {% if app.user.admin|default(false) or isCourseTeacher|default(false) %}#}
+{#              <div class="btnbar hidden-xs">#}
+{#                <a href="#modal" data-toggle="modal"#}
+{#                  data-url="{{ path('announcement_add',{targetType:'course',targetId:course.id}) }}"#}
+{#                  class="btn btn-link">#}
+{#                  <i class="es-icon es-icon-anonymous-iconfont"></i>#}
+{#                  {{ 'course.btn.announcement'|trans }}#}
+{#                </a>#}
+{#              </div>#}
+{#            {% endif %}#}
 
           </div>
           {% block detail_content %}

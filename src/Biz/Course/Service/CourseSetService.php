@@ -66,13 +66,20 @@ interface CourseSetService
     public function findCourseSetsByIds(array $ids);
 
     /**
+     * @return mixed
+     */
+    public function findCourseSetsByIdsWithMarketingInfo(array $ids);
+
+    /**
      * @param array|string $orderBys
      * @param int          $start
      * @param int          $limit
+     * @param array        $columns
+     * @param bool         $withMarketingInfo
      *
      * @return array[]
      */
-    public function searchCourseSets(array $conditions, $orderBys, $start, $limit, $columns = []);
+    public function searchCourseSets(array $conditions, $orderBys, $start, $limit, $columns = [], $withMarketingInfo = false);
 
     /**
      * @return int
@@ -193,6 +200,8 @@ interface CourseSetService
      * @Log(module="course",action="close",funcName="getCourseSet")
      */
     public function closeCourseSet($id);
+
+    public function findProductIdAndGoodsIdsByIds($ids);
 
     public function findCourseSetsByParentIdAndLocked($parentId, $locked);
 

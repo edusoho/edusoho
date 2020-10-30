@@ -5,10 +5,13 @@ namespace ApiBundle\Api\Resource\Order;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Common\CommonException;
+use Biz\Goods\GoodsEntityFactory;
+use Biz\Goods\Service\GoodsService;
 use Biz\Order\OrderException;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
+use Biz\Product\Service\ProductService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -24,6 +27,7 @@ class Order extends AbstractResource
         }
 
         $this->filterParams($params);
+        $this->convertOrderParams($params);
 
         try {
             /* @var $product Product */
@@ -143,5 +147,47 @@ class Order extends AbstractResource
     protected function getPayService()
     {
         return $this->service('Pay:PayService');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    private function getGoodsService()
+    {
+        return $this->service('Goods:GoodsService');
+    }
+
+    /**
+     * @return ProductService
+     */
+    private function getProductService()
+    {
+        return $this->service('Product:ProductService');
+    }
+
+    /**
+     * @return GoodsEntityFactory
+     */
+    protected function getGoodsEntityFactory()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['goods.entity.factory'];
+    }
+
+    private function convertOrderParams(&$params)
+    {
+        //goodsSpecs
+        if ('goodsSpecs' === $params['targetType']) {
+            $specs = $this->getGoodsService()->getGoodsSpecs($params['targetId']);
+            $goods = $this->getGoodsService()->getGoods($specs['goodsId']);
+            $params['targetType'] = $goods['type'];
+            return ;
+        }
+        if (in_array($params['targetType'], ['classroom', 'course'])) {
+            $specs = $this->getGoodsEntityFactory()->create($params['targetType'])->getSpecsByTargetId($params['targetId']);
+            $params['targetId'] = $specs['id'];
+            return ;
+        }
     }
 }

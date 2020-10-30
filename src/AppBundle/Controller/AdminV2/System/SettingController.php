@@ -9,6 +9,7 @@ use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Content\Service\FileService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\AuthService;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 
 class SettingController extends BaseController
@@ -238,6 +239,9 @@ class SettingController extends BaseController
         if ($fileId) {
             $this->getFileService()->deleteFile($fileId);
         }
+
+        $filesystem = new Filesystem();
+        $filesystem->copy('favicon-default.ico', 'favicon.ico', true);
 
         return $this->createJsonResponse(true);
     }

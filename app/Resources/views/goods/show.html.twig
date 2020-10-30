@@ -1,2 +1,41 @@
 {% extends 'layout.html.twig' %}
-{% block title %}商品页{% endblock %}
+
+{% do script(['libs/vue.js', 'libs/jquery-countdown.js', 'app/js/goods/show/index.js', 'app/js/courseset/show/tasks/index.js']) %}
+
+{% block title %}{{ goods.title }} - {{ parent() }}{% endblock %}
+{% block full_content %}
+  <div id="show-product-page" class="" style=""
+       data-goods="{{ goods|json_encode }}"
+       data-components-data="{{ goodsComponents|json_encode }}"
+       data-current-user-id="{{ app.user.id|default(null) }}"
+       data-target-id="{{ app.request.query.get('targetId')|default(null) }}"
+       data-is-user-login="{{ app.user.isLogin()|default(0) }}"
+       data-current-url="{{ url('goods_show', { id: app.request.get('id')}) }}"
+       data-goods-setting="{{ setting('goods_setting', {})|json_encode }}"
+  ></div>
+  <div class="hidden js-hidden-i18n">
+    {
+    "i18nChapterName": "{{course_chapter_alias('chapter')|trans}}",
+    "i18nUnitName": "{{course_chapter_alias('part')|trans}}",
+    "i18nLessonName": "{{'site.data.lesson'|trans}}",
+    "i18nTaskName":"{{ course_chapter_alias('task')|trans}}"
+    }
+  </div>
+  <div class="hidden js-hidden-activity-metas">
+    {
+    {% set allMetas = activity_meta() %}
+    {% for key, item in allMetas %}
+      {% if not loop.first %}
+        ,
+      {% endif %}
+
+      "{{key}}": {
+      "icon": "{{item.icon}}",
+      "name": "{{item.name}}"
+      }
+    {% endfor %}
+    }
+  </div>
+
+  <div class="hidden js-hidden-current-timestamp">{{ date().timestamp }}</div>
+{% endblock %}

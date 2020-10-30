@@ -29,10 +29,10 @@ class CourseAd {
 
   template(id, cover, title) {
     return `<div class="modal-img">
-        <a href="/course_set/${id}">
+        <a href="/goods/show/${id}">
           <img class="img-responsive" src="${cover.middle}" alt="">
         </a>
-        <div class="title"><a class="link-dark" href="/course_set/${id}">${title}</a></div>
+        <div class="title"><a class="link-dark" href="/goods/show/${id}">${title}</a></div>
       </div>`;
   }
 

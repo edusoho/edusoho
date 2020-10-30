@@ -33,7 +33,7 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
         $user = $this->getCurrentUser();
 
         $canApplyOrderRefund = ($user->getId() == $order['created_user_id']) && ($order['pay_amount'] > 0) && ($order['refund_deadline'] > time());
-        $refunds = $this->getOrderRedoundService()->searchRefunds(array('order_id' => $order['id'], 'status' => 'auditing'), array(), 0, PHP_INT_MAX);
+        $refunds = $this->getOrderRedoundService()->searchRefunds(['order_id' => $order['id'], 'status' => 'auditing'], [], 0, PHP_INT_MAX);
         if (count($refunds) >= 1) {
             $refund = $refunds[0];
             $canApplyOrderRefund = false;
@@ -41,9 +41,9 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
         if ($canApplyOrderRefund) {
             try {
                 $this->beginTransaction();
-                $refund = $this->getWorkflowService()->applyOrderRefund($order['id'], array(
+                $refund = $this->getWorkflowService()->applyOrderRefund($order['id'], [
                     'reason' => $fields['reason'],
-                ));
+                ]);
                 $this->notifyStudent($product);
                 $this->notifyAdmins($product);
                 $this->commit();
@@ -130,30 +130,29 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
         }
         $orderItem = reset($orderItems);
 
-        $params = array('targetId' => $orderItem['target_id'], 'orderId' => $order['id'], 'orderItemId' => $orderItem['id']);
+        $params = ['targetId' => $orderItem['target_id'], 'orderId' => $order['id'], 'orderItemId' => $orderItem['id']];
         $product = $this->getOrderFacadeService()->getOrderProduct($orderItem['target_type'], $params);
 
-        return array($product, $orderItem);
+        return [$product, $orderItem];
     }
 
     protected function notifyStudent($product)
     {
         $user = $this->getCurrentUser();
-        $setting = $this->getSettingService()->get('refund', array());
+        $setting = $this->getSettingService()->get('refund', []);
 
         $isNotify = empty($setting['applyNotification']) ? 0 : 1;
         if (!$isNotify) {
             return;
         }
 
-        $message = array(
+        $message = [
             'type' => 'apply_create',
-            'targetId' => $product->targetId,
-            'targetType' => $product->targetType,
+            'targetUrl' => $product->backUrl,
             'title' => $product->title,
             'userId' => $user['id'],
             'nickname' => $user['nickname'],
-        );
+        ];
 
         $this->getNotificationService()->notify($user['id'], 'order-refund', $message);
     }
@@ -163,20 +162,19 @@ class OrderRefundServiceImpl extends BaseService implements OrderRefundService
         $user = $this->getCurrentUser();
 
         $admins = $this->getUserService()->searchUsers(
-            array('roles' => 'ADMIN'),
-            array('id' => 'DESC'),
+            ['roles' => 'ADMIN'],
+            ['id' => 'DESC'],
             0,
             PHP_INT_MAX
         );
 
-        $message = array(
+        $message = [
             'type' => 'admin_operate',
-            'targetId' => $product->targetId,
-            'targetType' => $product->targetType,
+            'targetUrl' => $product->backUrl,
             'title' => $product->title,
             'userId' => $user['id'],
             'nickname' => $user['nickname'],
-        );
+        ];
 
         foreach ($admins as $key => $admin) {
             $this->getNotificationService()->notify($admin['id'], 'order-refund', $message);

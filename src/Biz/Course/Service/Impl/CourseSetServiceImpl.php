@@ -18,6 +18,9 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
+use Biz\Goods\Mediator\CourseSetGoodsMediator;
+use Biz\Goods\Service\GoodsService;
+use Biz\Product\Service\ProductService;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Review\Service\ReviewService;
 use Biz\S2B2C\Service\CourseProductService;
@@ -32,6 +35,11 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function findCourseSetsByParentIdAndLocked($parentId, $locked)
     {
         return $this->getCourseSetDao()->findCourseSetsByParentIdAndLocked($parentId, $locked);
+    }
+
+    public function findProductIdAndGoodsIdsByIds($ids)
+    {
+        return $this->getCourseSetDao()->findProductIdAndGoodsIdsByIds($ids);
     }
 
     // Refactor: recommendCourseSet
@@ -49,14 +57,9 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         ];
 
         $courseSet = $this->getCourseSetDao()->update($id, $fields);
+        $this->getCourseSetGoodsMediator()->onRecommended($courseSet);
 
-        $this->dispatchEvent(
-            'courseSet.recommend',
-            new Event(
-                $courseSet,
-                $fields
-            )
-        );
+        $this->dispatchEvent('courseSet.recommend', new Event($courseSet, $fields));
 
         return $courseSet;
     }
@@ -64,24 +67,19 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     // Refactor: cancelRecommendCourseSet
     public function cancelRecommendCourse($id)
     {
-        $course = $this->tryManageCourseSet($id);
+        $this->tryManageCourseSet($id);
         $fields = [
             'recommended' => 0,
             'recommendedTime' => 0,
             'recommendedSeq' => 0,
         ];
-        $this->getCourseSetDao()->update(
+        $courseSet = $this->getCourseSetDao()->update(
             $id,
             $fields
         );
+        $this->getCourseSetGoodsMediator()->onCancelRecommended($courseSet);
 
-        $this->dispatchEvent(
-            'courseSet.recommend.cancel',
-            new Event(
-                $course,
-                $fields
-            )
-        );
+        $this->dispatchEvent('courseSet.recommend.cancel', new Event($courseSet, $fields));
     }
 
     /**
@@ -177,12 +175,21 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return $user->hasPermission('admin_course_content_manage') || $user->hasPermission('admin_v2_course_content_manage');
     }
 
-    public function searchCourseSets(array $conditions, $orderBys, $start, $limit, $columns = [])
+    public function searchCourseSets(array $conditions, $orderBys, $start, $limit, $columns = [], $withMarketingInfo = false)
     {
         $orderBys = $this->getOrderBys($orderBys);
         $preparedCondtions = $this->prepareConditions($conditions);
+        $courseSets = $this->getCourseSetDao()->search($preparedCondtions, $orderBys, $start, $limit, $columns);
 
-        return $this->getCourseSetDao()->search($preparedCondtions, $orderBys, $start, $limit, $columns);
+        if ($withMarketingInfo) {
+            $relatedInfos = ArrayToolkit::index($this->findProductIdAndGoodsIdsByIds(ArrayToolkit::column($courseSets, 'id')), 'courseSetId');
+            foreach ($courseSets as &$courseSet) {
+                $courseSet['productId'] = !empty($relatedInfos[$courseSet['id']]) ? $relatedInfos[$courseSet['id']]['productId'] : null;
+                $courseSet['goodsId'] = !empty($relatedInfos[$courseSet['id']]) ? $relatedInfos[$courseSet['id']]['goodsId'] : null;
+            }
+        }
+
+        return $courseSets;
     }
 
     public function countCourseSets(array $conditions)
@@ -300,6 +307,18 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         return ArrayToolkit::index($courseSets, 'id');
     }
 
+    public function findCourseSetsByIdsWithMarketingInfo(array $ids)
+    {
+        $courseSets = $this->getCourseSetDao()->findByIds($ids);
+        $relatedInfos = ArrayToolkit::index($this->findProductIdAndGoodsIdsByIds(ArrayToolkit::column($courseSets, 'id')), 'courseSetId');
+        foreach ($courseSets as &$courseSet) {
+            $courseSet['productId'] = !empty($relatedInfos[$courseSet['id']]) ? $relatedInfos[$courseSet['id']]['productId'] : null;
+            $courseSet['goodsId'] = !empty($relatedInfos[$courseSet['id']]) ? $relatedInfos[$courseSet['id']]['goodsId'] : null;
+        }
+
+        return ArrayToolkit::index($courseSets, 'id');
+    }
+
     public function findCourseSetsLikeTitle($title)
     {
         return $this->getCourseSetDao()->findLikeTitle($title);
@@ -401,6 +420,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
 
         $this->dispatchEvent('course-set.update', new Event($courseSet));
 
+        $this->getCourseSetGoodsMediator()->onUpdateNormalData($courseSet);
+
         return $courseSet;
     }
 
@@ -449,6 +470,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         );
 
         $courseSet = $this->getCourseSetDao()->update($courseSet['id'], $fields);
+        $this->getCourseSetGoodsMediator()->onUpdateNormalData($courseSet);
 
         $this->dispatchEvent(
             'course-set.marketing.update',
@@ -496,6 +518,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $this->getCourseProductService()->deleteProductsByCourseSet($courseSet);
 
         $this->getCourseDeleteService()->deleteCourseSet($courseSet['id']);
+        $this->getCourseSetGoodsMediator()->onDelete($courseSet);
 
         $this->dispatchEvent('course-set.delete', new Event($courseSet));
     }
@@ -604,6 +627,8 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             }
 
             $courseSet = $this->getCourseSetDao()->update($courseSet['id'], ['status' => 'published']);
+            $this->getCourseSetGoodsMediator()->onUpdateNormalData($courseSet);
+            $this->getCourseSetGoodsMediator()->onPublish($courseSet);
 
             $this->commit();
 
@@ -630,6 +655,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
                 $this->getCourseService()->closeCourse($classroomRef['courseId']);
             }
             $courseSet = $this->getCourseSetDao()->update($courseSet['id'], ['status' => 'closed']);
+            $this->getCourseSetGoodsMediator()->onClose($courseSet);
 
             $this->commit();
         } catch (\Exception $exception) {
@@ -809,6 +835,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
     public function updateMaxRate($id, $maxRate)
     {
         $courseSet = $this->getCourseSetDao()->update($id, ['maxRate' => $maxRate]);
+        $this->getCourseSetGoodsMediator()->onMaxRateChange($courseSet);
         $this->dispatchEvent(
             'courseSet.maxRate.update',
             new Event(['courseSet' => $courseSet, 'maxRate' => $maxRate])
@@ -1090,7 +1117,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
             if (empty($fields['tags'])) {
                 $fields['tags'] = [];
             } else {
-                $tags = explode(',', $fields['tags']);
+                $tags = is_array($fields['tags']) ? $fields['tags'] : explode(',', $fields['tags']);
                 $tags = $this->getTagService()->findTagsByNames($tags);
                 $tagIds = ArrayToolkit::column($tags, 'id');
                 $fields['tags'] = $tagIds;
@@ -1172,6 +1199,7 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $courseSet['creator'] = $this->getCurrentUser()->getId();
 
         $created = $this->getCourseSetDao()->create($courseSet);
+        $this->getCourseSetGoodsMediator()->onCreate($created);
 
         return $created;
     }
@@ -1196,6 +1224,30 @@ class CourseSetServiceImpl extends BaseService implements CourseSetService
         $defaultCourse = $this->generateDefaultCourse($created);
 
         return $this->getCourseService()->createCourse($defaultCourse);
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getProductService()
+    {
+        return $this->createService('Product:ProductService');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->createService('Goods:GoodsService');
+    }
+
+    /**
+     * @return CourseSetGoodsMediator
+     */
+    protected function getCourseSetGoodsMediator()
+    {
+        return $this->biz['goods.mediator.course_set'];
     }
 
     /**

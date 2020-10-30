@@ -62,6 +62,8 @@ class ClassroomException extends AbstractException
 
     const FORBIDDEN_CREATE_THREAD_EVENT = 5001827;
 
+    const AT_LEAST_ONE_COURSE = 5001828;
+
     public $messages = [
         4041801 => 'exception.classroom.not_found',
         4031802 => 'exception.classroom.forbidden_manage_classroom',
@@ -90,5 +92,6 @@ class ClassroomException extends AbstractException
         4031825 => 'exception.classroom.forbidden_auditor_learn',
         5001826 => 'exception.classroom.expired_member',
         5001827 => 'exception.classroom.forbidden_create_thread_event',
+        5001828 => 'exception.classroom.at_least_one_course',
     ];
 }
