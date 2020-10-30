@@ -2,21 +2,21 @@
 
 namespace AppBundle\Controller\AdminV2\Marketing;
 
-use AppBundle\Controller\AdminV2\BaseController;
-use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\ArrayToolkit;
-use Biz\User\Service\InviteRecordService;
 use AppBundle\Common\Paginator;
+use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Card\Service\CardService;
 use Biz\Coupon\Service\CouponService;
+use Biz\User\Service\InviteRecordService;
 use Codeages\Biz\Order\Service\OrderService;
+use Symfony\Component\HttpFoundation\Request;
 
 class InviteController extends BaseController
 {
     public function recordAction(Request $request)
     {
         $conditions = $request->query->all();
-        $conditions = ArrayToolkit::parts($conditions, array('nickname', 'startDate', 'endDate'));
+        $conditions = ArrayToolkit::parts($conditions, ['nickname', 'startDate', 'endDate']);
 
         $page = $request->query->get('page', 0);
         $firstPage = 1;
@@ -40,7 +40,7 @@ class InviteController extends BaseController
 
         $inviteRecords = $this->getInviteRecordService()->searchRecords(
             $conditions,
-            array('inviteTime' => 'desc'),
+            ['inviteTime' => 'desc'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -51,16 +51,16 @@ class InviteController extends BaseController
 
         $users = $this->getInviteRecordService()->getAllUsersByRecords($inviteRecords);
 
-        return $this->render('admin-v2/marketing/invite/records.html.twig', array(
+        return $this->render('admin-v2/marketing/invite/records.html.twig', [
             'records' => $inviteRecords,
             'users' => $users,
             'paginator' => $paginator,
-        ));
+        ]);
     }
 
     public function userRecordsAction(Request $request)
     {
-        $conditions = array();
+        $conditions = [];
         $nickName = $request->query->get('nickname');
         if (!empty($nickName)) {
             $user = $this->getUserService()->getUserByNickname($nickName);
@@ -78,10 +78,10 @@ class InviteController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        return $this->render('admin-v2/marketing/invite/user-record.html.twig', array(
+        return $this->render('admin-v2/marketing/invite/user-record.html.twig', [
             'paginator' => $paginator,
             'records' => $records,
-        ));
+        ]);
     }
 
     public function inviteDetailAction(Request $request)
@@ -93,16 +93,16 @@ class InviteController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds($invitedUserIds);
 
-        return $this->render('admin-v2/marketing/invite/invite-modal.html.twig', array(
+        return $this->render('admin-v2/marketing/invite/invite-modal.html.twig', [
             'invitedRecords' => $invitedRecords,
             'users' => $users,
-        ));
+        ]);
     }
 
     public function couponAction(Request $request, $filter)
     {
         $fileds = $request->query->all();
-        $conditions = array();
+        $conditions = [];
         $conditions = $this->_prepareQueryCondition($fileds);
 
         if ('invite' == $filter) {
@@ -122,7 +122,7 @@ class InviteController extends BaseController
         $cards = $this->getCardService()->findCardsByCardIds($cardIds);
         list($coupons, $orders, $users) = $this->getCardsData($cards);
 
-        return $this->render('admin-v2/marketing/invite/coupon.html.twig', array(
+        return $this->render('admin-v2/marketing/invite/coupon.html.twig', [
             'paginator' => $paginator,
             'cardInformations' => $cardInformations,
             'filter' => $filter,
@@ -130,28 +130,28 @@ class InviteController extends BaseController
             'coupons' => $coupons,
             'cards' => $cards,
             'orders' => $orders,
-        ));
+        ]);
     }
 
     public function queryInviteCouponAction(Request $request)
     {
         $fileds = $request->query->all();
-        $conditions = array();
+        $conditions = [];
         $conditions = $this->_prepareQueryCondition($fileds);
         $conditions['cardType'] = 'coupon';
         $cards = $this->getCardService()->searchCards(
             $conditions,
-            array('id' => 'ASC'),
+            ['id' => 'ASC'],
             0,
             PHP_INT_MAX
         );
         $cards = ArrayToolkit::index($cards, 'cardId');
         list($coupons, $orders, $users) = $this->getCardsData($cards);
-        $conditions = array();
-        $conditions['inviteUserCardIds'] = empty($cards) ? array(-1) : ArrayToolkit::column($cards, 'cardId');
+        $conditions = [];
+        $conditions['inviteUserCardIds'] = empty($cards) ? [-1] : ArrayToolkit::column($cards, 'cardId');
         list($paginator, $cardInformations) = $this->getCardInformations($request, $conditions);
 
-        return $this->render('admin-v2/marketing/invite/coupon.html.twig', array(
+        return $this->render('admin-v2/marketing/invite/coupon.html.twig', [
             'paginator' => $paginator,
             'cardInformations' => $cardInformations,
             'filter' => 'invite',
@@ -159,12 +159,12 @@ class InviteController extends BaseController
             'coupons' => $coupons,
             'cards' => $cards,
             'orders' => $orders,
-        ));
+        ]);
     }
 
     private function _prepareQueryCondition($fileds)
     {
-        $conditions = array();
+        $conditions = [];
 
         if (!empty($fileds['nickname'])) {
             $conditions['nickname'] = $fileds['nickname'];
@@ -190,7 +190,7 @@ class InviteController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($cards, 'userId'));
 
-        return array($coupons, $orders, $users);
+        return [$coupons, $orders, $users];
     }
 
     private function getCardInformations($request, $conditions)
@@ -203,24 +203,24 @@ class InviteController extends BaseController
 
         $cardInformations = $this->getInviteRecordService()->searchRecords(
             $conditions,
-            array('inviteTime' => 'DESC'),
+            ['inviteTime' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
-        return array($paginator, $cardInformations);
+        return [$paginator, $cardInformations];
     }
 
     protected function getInvitedRecordByUserIdAndConditions($user, $conditions)
     {
         if (empty($user)) {
-            return array();
+            return [];
         }
-        $invitedRecordConditions = ArrayToolkit::parts($conditions, array('startDate', 'endDate'));
+        $invitedRecordConditions = ArrayToolkit::parts($conditions, ['startDate', 'endDate']);
         $invitedRecordConditions['invitedUserId'] = $user['id'];
         $invitedRecord = $this->getInviteRecordService()->searchRecords(
             $invitedRecordConditions,
-            array(),
+            [],
             0,
             1
         );
