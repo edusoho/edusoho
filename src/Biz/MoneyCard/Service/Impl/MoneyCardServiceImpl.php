@@ -507,7 +507,7 @@ class MoneyCardServiceImpl extends BaseService implements MoneyCardService
         if (!$token) {
             return array(
                 'code' => 'failed',
-                'message' => '无效的链接',
+                'message' => '学习卡已过期',
             );
         }
 
