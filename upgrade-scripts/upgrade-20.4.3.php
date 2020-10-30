@@ -460,13 +460,13 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $paginator = $this->getPaginator('course_order_item_paginator',
             "
-                        SELECT COUNT(id) FROM biz_order_item WHERE target_type = 'course' AND target_id_before = 0;
+                        SELECT COUNT(id) FROM biz_order_item WHERE target_type = 'course';
         ");
         $currentPage = $paginator['currentPage'] + 1;
 
         $this->logger('info', "更新课程订单：{$currentPage}/{$paginator['totalPage']}");
         $itemIds = $this->getConnection()->fetchAll("
-            SELECT id FROM  biz_order_item WHERE target_type = 'course' AND target_id_before = 0 ORDER BY id ASC LIMIT {$paginator['start']}, {$paginator['limit']};
+            SELECT id FROM  biz_order_item WHERE target_type = 'course' ORDER BY id ASC LIMIT {$paginator['start']}, {$paginator['limit']};
         ");
         if (empty($itemIds)) {
             return 1;
@@ -495,13 +495,13 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $paginator = $this->getPaginator('classroom_order_item_paginator',
             "
-                        SELECT COUNT(id) FROM  biz_order_item WHERE target_type = 'classroom' AND target_id_before = 0;
+                        SELECT COUNT(id) FROM  biz_order_item WHERE target_type = 'classroom';
         ");
         $currentPage = $paginator['currentPage'] + 1;
 
         $this->logger('info', "更新班级订单：{$currentPage}/{$paginator['totalPage']}");
         $itemIds = $this->getConnection()->fetchAll("
-            SELECT id FROM  biz_order_item WHERE target_type = 'classroom' AND target_id_before = 0 ORDER BY id ASC LIMIT {$paginator['start']}, {$paginator['limit']};
+            SELECT id FROM  biz_order_item WHERE target_type = 'classroom' ORDER BY id ASC LIMIT {$paginator['start']}, {$paginator['limit']};
         ");
 
         if (empty($itemIds)) {
