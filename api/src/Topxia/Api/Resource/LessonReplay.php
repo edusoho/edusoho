@@ -2,9 +2,9 @@
 
 namespace Topxia\Api\Resource;
 
-use Silex\Application;
 use AppBundle\Common\SettingToolkit;
 use Biz\CloudPlatform\CloudAPIFactory;
+use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 
 class LessonReplay extends BaseResource
@@ -19,11 +19,11 @@ class LessonReplay extends BaseResource
         }
 
         if (!$this->getCourseService()->canTakeCourse($task['courseId'])) {
-            return array('message' => 'Access Denied');
+            return ['message' => 'Access Denied'];
         }
 
         if ('videoGenerated' == $activity['ext']['replayStatus']) {
-            return json_decode($this->sendRequest('GET', $this->getHttpHost().$app['url_generator']->generate('get_lesson', array('id' => $task['id'])), array(sprintf('X-Auth-Token: %s', $request->headers->get('X-Auth-Token')))), true);
+            return json_decode($this->sendRequest('GET', $this->getHttpHost().$app['url_generator']->generate('get_lesson', ['id' => $task['id']]), [sprintf('X-Auth-Token: %s', $request->headers->get('X-Auth-Token'))]), true);
         }
 
         $device = $request->query->get('device');
@@ -40,20 +40,20 @@ class LessonReplay extends BaseResource
         $visibleReplays = array_values($visibleReplays);
 
         $user = $this->getCurrentUser();
-        $response = array(
+        $response = [
             'url' => '',
-            'extra' => array(
+            'extra' => [
                 'provider' => '',
                 'lessonId' => $activity['id'],
-            ),
+            ],
             'device' => $device,
-        );
+        ];
         try {
             // if liveProvider is edusoho light live we you video as replay;
             if (5 == $activity['ext']['liveProvider']) {
                 //获取globalid
                 $globalId = $visibleReplays[0]['globalId'];
-                $options = array(
+                $options = [
                     'fromApi' => !$this->isSetEncryption(),
                     'times' => 2,
                     'line' => $request->query->get('line', ''),
@@ -61,19 +61,19 @@ class LessonReplay extends BaseResource
                     'type' => 'apiLessonReplay',
                     'replayId' => $visibleReplays[0]['id'],
                     'duration' => '3600',
-                );
+                ];
                 $response['url'] = $this->getEsLiveReplayUrl($globalId, $options);
                 $response['extra']['provider'] = 'longinus';
             } else {
                 $protocol = $request->isSecure() ? 'https' : 'http';
-                $replays = array();
-                $sendParams = array(
+                $replays = [];
+                $sendParams = [
                     'liveId' => $activity['ext']['liveId'],
                     'userId' => $user['id'],
                     'nickname' => $user['nickname'],
                     'device' => $device,
-                    'protocol' => $protocol
-                );
+                    'protocol' => $protocol,
+                ];
 
                 foreach ($visibleReplays as $index => $visibleReplay) {
                     $sendParams['replayId'] = $visibleReplays[$index]['replayId'];
@@ -120,16 +120,16 @@ class LessonReplay extends BaseResource
 
         if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
             if (isset($file['convertParams']['convertor']) && ('HLSEncryptedVideo' == $file['convertParams']['convertor'])) {
-                $tokenFields = array(
-                    'data' => array(
+                $tokenFields = [
+                    'data' => [
                         'id' => $file['id'],
                         'fromApi' => $options['fromApi'],
                         'type' => $options['type'],
                         'replayId' => $options['replayId'],
-                    ),
+                    ],
                     'times' => $options['times'],
                     'duration' => $options['duration'],
-                );
+                ];
 
                 $token = $this->getTokenService()->makeToken('hls.playlist', $tokenFields);
 
@@ -187,7 +187,7 @@ class LessonReplay extends BaseResource
         return $this->getServiceKernel()->createService('User:TokenService');
     }
 
-    protected function sendRequest($method, $url, $headers = array(), $params = array())
+    protected function sendRequest($method, $url, $headers = [], $params = [])
     {
         $curl = curl_init();
 

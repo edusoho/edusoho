@@ -2,9 +2,9 @@
 
 namespace Topxia\Api\Resource;
 
+use Biz\CloudPlatform\CloudAPIFactory;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
-use Biz\CloudPlatform\CloudAPIFactory;
 
 class LessonLiveTicket extends BaseResource
 {
@@ -17,6 +17,7 @@ class LessonLiveTicket extends BaseResource
         } else {
             $ticket = CloudAPIFactory::create('leaf')->get("/liverooms/{$activity['ext']['liveId']}/tickets/{$ticket}");
         }
+
         return $ticket;
     }
 

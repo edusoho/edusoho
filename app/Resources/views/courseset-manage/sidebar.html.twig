@@ -47,7 +47,13 @@
             </a>
           {% endif %}
         </li>
-        {# 录播管理 #}
+
+        <li class="cd-sidebar__item {% if course_side_nav == 'announcements' %}active{% endif %}">
+          <a href="{{ path('announcement_list', { targetType: 'course', targetId: curCourse.id }) }}">
+            {{ 'course.announcement_manage'|trans }}
+          </a>
+        </li>
+      {# 录播管理 #}
         {% if hasLiveTasks or courseSet.type == 'live' %}
           <li class="cd-sidebar__item {% if course_side_nav == 'replay' %}active{% endif %}">
             {% if courseSet.locked %}

@@ -279,7 +279,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $review['rating'] = (float) $this->getParam('rating', 0);
         $review['content'] = $this->getParam('content', '');
 
-        $existed = $this->controller->getReviewService()->getByUserIdAndTargetTypeAndTargetId($user['id'], 'course', $courseId);
+        $existed = $this->controller->getReviewService()->getReviewByUserIdAndTargetTypeAndTargetId($user['id'], 'course', $courseId);
 
         if (empty($existed)) {
             $review = $this->controller->getReviewService()->createReview($review);

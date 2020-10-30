@@ -68,7 +68,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         return $review;
     }
 
-    public function getByUserIdAndTargetTypeAndTargetId($userId, $targetType, $targetId)
+    public function getReviewByUserIdAndTargetTypeAndTargetId($userId, $targetType, $targetId)
     {
         return $this->getReviewDao()->getByUserIdAndTargetTypeAndTargetId($userId, $targetType, $targetId);
     }
@@ -110,6 +110,26 @@ class ReviewServiceImpl extends BaseService implements ReviewService
     public function countReviews($conditions)
     {
         return $this->getReviewDao()->count($conditions);
+    }
+
+    public function countCourseReviews($conditions)
+    {
+        return $this->getReviewDao()->countCourseReviews($conditions);
+    }
+
+    public function searchCourseReviews($conditions, $orderBys, $start, $limit)
+    {
+        return $this->getReviewDao()->searchCourseReviews($conditions, $orderBys, $start, $limit);
+    }
+
+    public function countClassroomReviews($conditions)
+    {
+        return $this->getReviewDao()->countClassroomReviews($conditions);
+    }
+
+    public function searchClassroomReviews($conditions, $orderBys, $start, $limit)
+    {
+        return $this->getReviewDao()->searchClassroomReviews($conditions, $orderBys, $start, $limit);
     }
 
     public function searchReviews($conditions, $orderBys, $start, $limit, $columns = [])

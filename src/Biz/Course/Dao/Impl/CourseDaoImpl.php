@@ -12,7 +12,7 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
 
     public function findCoursesByParentIdAndLocked($parentId, $locked)
     {
-        return $this->findByFields(array('parentId' => $parentId, 'locked' => $locked));
+        return $this->findByFields(['parentId' => $parentId, 'locked' => $locked]);
     }
 
     public function findCoursesByParentIds($parentIds)
@@ -20,24 +20,37 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
         return $this->findInField('parentId', $parentIds);
     }
 
+    public function findProductIdAndGoodsIdAndSpecsIdByIds($ids)
+    {
+        $marks = str_repeat('?,', count($ids) - 1).'?';
+        $sql = "SELECT c.id as courseId, p.id as productId, g.id as goodsId, gs.id as specsId FROM {$this->table} c
+                LEFT JOIN `course_set_v8` csv8 ON c.courseSetId = csv8.id
+                LEFT JOIN `product` p ON p.targetId = csv8.id AND p.targetType = 'course'
+                LEFT JOIN `goods` g ON g.productId = p.id
+                LEFT JOIN `goods_specs` gs ON g.id = gs.goodsId AND gs.targetId = c.id
+                WHERE c.id IN ({$marks});";
+
+        return $this->db()->fetchAll($sql, $ids);
+    }
+
     public function findCoursesByCourseSetIdAndStatus($courseSetId, $status = null)
     {
         if (empty($status)) {
-            return $this->findByFields(array('courseSetId' => $courseSetId));
+            return $this->findByFields(['courseSetId' => $courseSetId]);
         }
 
-        return $this->findByFields(array('courseSetId' => $courseSetId, 'status' => $status));
+        return $this->findByFields(['courseSetId' => $courseSetId, 'status' => $status]);
     }
 
     public function getDefaultCourseByCourseSetId($courseSetId)
     {
-        return $this->getByFields(array('courseSetId' => $courseSetId, 'isDefault' => 1));
+        return $this->getByFields(['courseSetId' => $courseSetId, 'isDefault' => 1]);
     }
 
     public function getDefaultCoursesByCourseSetIds($courseSetIds)
     {
         if (empty($courseSetIds)) {
-            return array();
+            return [];
         }
 
         $marks = str_repeat('?,', count($courseSetIds) - 1).'?';
@@ -59,7 +72,7 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
     public function findPriceIntervalByCourseSetIds($courseSetIds)
     {
         if (empty($courseSetIds)) {
-            return array();
+            return [];
         }
         $marks = str_repeat('?,', count($courseSetIds) - 1).'?';
 
@@ -71,7 +84,7 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
     public function countGroupByCourseSetIds($courseSetIds)
     {
         if (empty($courseSetIds)) {
-            return array();
+            return [];
         }
         $marks = str_repeat('?,', count($courseSetIds) - 1).'?';
 
@@ -83,7 +96,7 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
     public function findCourseSetIncomesByCourseSetIds(array $courseSetIds)
     {
         if (empty($courseSetIds)) {
-            return array();
+            return [];
         }
 
         $marks = str_repeat('?,', count($courseSetIds) - 1).'?';
@@ -94,11 +107,11 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
 
     public function analysisCourseDataByTime($startTime, $endTime)
     {
-        $conditions = array(
+        $conditions = [
             'startTime' => $startTime,
             'endTime' => $endTime,
             'parentId' => 0,
-        );
+        ];
 
         $builder = $this->createQueryBuilder($conditions)
             ->select("count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date")
@@ -117,17 +130,17 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
 
     public function updateMaxRateByCourseSetId($courseSetId, $updateFields)
     {
-        $this->db()->update($this->table, $updateFields, array('courseSetId' => $courseSetId));
+        $this->db()->update($this->table, $updateFields, ['courseSetId' => $courseSetId]);
     }
 
     public function updateCourseRecommendByCourseSetId($courseSetId, $fields)
     {
-        $this->db()->update($this->table, $fields, array('courseSetId' => $courseSetId));
+        $this->db()->update($this->table, $fields, ['courseSetId' => $courseSetId]);
     }
 
     public function updateCategoryByCourseSetId($courseSetId, $fields)
     {
-        $this->db()->update($this->table, $fields, array('courseSetId' => $courseSetId));
+        $this->db()->update($this->table, $fields, ['courseSetId' => $courseSetId]);
     }
 
     public function searchWithJoinCourseSet($conditions, $orderBys, $start, $limit)
@@ -139,7 +152,7 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
 
         $declares = $this->declares();
 
-        foreach ($orderBys ?: array() as $order => $sort) {
+        foreach ($orderBys ?: [] as $order => $sort) {
             $this->checkOrderBy($order, $sort, $declares['orderbys']);
             $builder->addOrderBy($this->table.'.'.$order, $sort);
         }
@@ -161,37 +174,37 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
     public function searchByStudentNumAndTimeZone($conditions, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $params = array();
+        $params = [];
         $courseSql = $this->getCourseSql($conditions, $params);
         $courseMemberSql = $this->getCourseMemberSql($conditions, $params);
 
         $sql = "SELECT cv.* FROM ($courseSql) cv LEFT JOIN ($courseMemberSql) cm ON cv.id=cm.courseId ORDER BY cm.co DESC,cv.createdTime DESC LIMIT $start,$limit";
 
-        return $this->db()->fetchAll($sql, $params) ?: array();
+        return $this->db()->fetchAll($sql, $params) ?: [];
     }
 
     public function searchByRatingAndTimeZone($conditions, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $params = array();
+        $params = [];
         $courseSql = $this->getCourseSql($conditions, $params);
         $courseReviewSql = $this->getCourseReviewSql($conditions, $params);
 
         $sql = "SELECT cv.* FROM ($courseSql) cv LEFT JOIN ($courseReviewSql) cm ON cv.id=cm.courseId ORDER BY cm.co DESC,cv.createdTime DESC LIMIT $start,$limit";
 
-        return $this->db()->fetchAll($sql, $params) ?: array();
+        return $this->db()->fetchAll($sql, $params) ?: [];
     }
 
     public function declares()
     {
-        return array(
-            'serializes' => array(
+        return [
+            'serializes' => [
                 'goals' => 'delimiter',
                 'audiences' => 'delimiter',
                 'services' => 'delimiter',
                 'teacherIds' => 'delimiter',
-            ),
-            'orderbys' => array(
+            ],
+            'orderbys' => [
                 'hitNum',
                 'recommendedTime',
                 'rating',
@@ -204,9 +217,9 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
                 'seq',
                 'price',
                 'parentId',
-            ),
-            'timestamps' => array('createdTime', 'updatedTime'),
-            'conditions' => array(
+            ],
+            'timestamps' => ['createdTime', 'updatedTime'],
+            'conditions' => [
                 'course_v8.id = :id',
                 'course_v8.courseSetId = :courseSetId',
                 'course_v8.courseSetId IN (:courseSetIds)',
@@ -251,9 +264,9 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
                 'course_v8.type NOT IN (:excludeTypes)',
                 'course_v8.type IN (:types)',
                 'course_v8.courseType = :courseType',
-            ),
-            'wave_cahceable_fields' => array('hitNum'),
-        );
+            ],
+            'wave_cahceable_fields' => ['hitNum'],
+        ];
     }
 
     protected function createQueryBuilder($conditions)
@@ -293,9 +306,9 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
         $builder = $this->createQueryBuilder($conditions);
         $builder->innerJoin($this->table, 'course_set_v8', 'csv', 'csv.id = '.$this->table.'.courseSetId');
 
-        $joinConditions = array(
+        $joinConditions = [
             'csv.status = :courseSetStatus',
-        );
+        ];
 
         foreach ($joinConditions as $condition) {
             $builder->andWhere($condition);
@@ -383,11 +396,9 @@ class CourseDaoImpl extends AdvancedDaoImpl implements CourseDao
     private function checkOrderBy($order, $sort, $allowOrderBys)
     {
         if (!in_array($order, $allowOrderBys, true)) {
-            throw $this->createDaoException(
-                sprintf("SQL order by field is only allowed '%s', but you give `{$order}`.", implode(',', $allowOrderBys))
-            );
+            throw $this->createDaoException(sprintf("SQL order by field is only allowed '%s', but you give `{$order}`.", implode(',', $allowOrderBys)));
         }
-        if (!in_array(strtoupper($sort), array('ASC', 'DESC'), true)) {
+        if (!in_array(strtoupper($sort), ['ASC', 'DESC'], true)) {
             throw $this->createDaoException("SQL order by direction is only allowed `ASC`, `DESC`, but you give `{$sort}`.");
         }
     }

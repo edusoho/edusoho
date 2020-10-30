@@ -34,6 +34,7 @@ class ReviewPost extends AbstractResource
 
         $post = $this->getReviewService()->createReview($reviewPost);
         $post['user'] = $this->getUserService()->getUser($post['userId']);
+//        兼容老的评价页面
         $post['template'] = $this->renderView('review/widget/subpost-item.html.twig', [
             'post' => $post,
             'author' => $this->getCurrentUser(),

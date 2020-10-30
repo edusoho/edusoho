@@ -33,6 +33,7 @@ class GoodsDaoTest extends BaseTestCase
             'productId' => 1,
             'title' => 'testTitle',
             'images' => [],
+            'type' => 'course',
         ];
 
         $goods = array_merge($default, $goods);

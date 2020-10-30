@@ -92,7 +92,8 @@
     "vue": "^2.6.11",
     "waypoints": "4.0.1",
     "websocket": "^1.0.25",
-    "weixin-js-sdk": "1.2.0"
+    "weixin-js-sdk": "1.2.0",
+    "element-ui": "file:app/Resources/static-src/libs/element-ui"
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon --trace-deprecation --max_old_space_size=4096 node_modules/es-webpack-engine/dist/webpack.dev.js --parameters webpack.config.js",

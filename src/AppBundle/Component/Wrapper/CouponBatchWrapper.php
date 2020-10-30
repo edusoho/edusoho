@@ -2,8 +2,8 @@
 
 namespace AppBundle\Component\Wrapper;
 
-use Topxia\Service\Common\ServiceKernel;
 use Codeages\PluginBundle\System\PluginConfigurationManager;
+use Topxia\Service\Common\ServiceKernel;
 
 class CouponBatchWrapper extends Wrapper
 {
@@ -11,12 +11,13 @@ class CouponBatchWrapper extends Wrapper
     {
         $targetType = $batch['targetType'];
         $targetId = $batch['targetId'];
-        $couponContents = array(
+        $couponContents = [
             'all' => $this->getServiceKernel()->trans('coupon.for_any_purchase_on_our_web_site'),
             'vip' => $this->getServiceKernel()->trans('coupon.target_type.vip_all'),
             'course' => $this->getServiceKernel()->trans('coupon.target_type.course_all'),
             'classroom' => $this->getServiceKernel()->trans('coupon.target_type.classroom_all'),
-        );
+//            'goods' => $this->getServiceKernel()->trans()
+        ];
 
         $couponContent = 'multi';
 
@@ -50,7 +51,7 @@ class CouponBatchWrapper extends Wrapper
     public function targetDetail($batch)
     {
         list($productType, $numType) = $this->getProductTypeAndNumType($batch);
-        $data = array();
+        $data = [];
         if ('all' != $numType) {
             switch ($productType) {
                 case 'course':
@@ -62,7 +63,7 @@ class CouponBatchWrapper extends Wrapper
                 case 'vip':
                     if ($this->isPluginInstalled('Vip')) {
                         $vip = $this->getLevelService()->getLevel($batch['targetId']);
-                        $data = array($vip);
+                        $data = [$vip];
                     }
                     // no break
                 default:
@@ -70,11 +71,11 @@ class CouponBatchWrapper extends Wrapper
             }
             $data = array_values($data);
         }
-        $batch['targetDetail'] = array(
+        $batch['targetDetail'] = [
             'product' => $productType,
             'numType' => $numType,
             'data' => $data,
-        );
+        ];
 
         return $batch;
     }
@@ -90,15 +91,15 @@ class CouponBatchWrapper extends Wrapper
             $numType = 'multi';
         }
 
-        return array($productType, $numType);
+        return [$productType, $numType];
     }
 
     protected function getWrapList()
     {
-        return array(
+        return [
             'targetContent',
             'targetDetail',
-        );
+        ];
     }
 
     private function getServiceKernel()

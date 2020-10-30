@@ -379,7 +379,7 @@
       {% endif %}
 
       {# 学员评价 #}
-      {% if setting('course.show_review', '1') == 1 %}
+      {% if setting('goods_setting.show_review', '1') == 1 %}
         {{ render(controller('AppBundle:Default:latestReviewsBlock', {number:5})) }}
       {% endif %}
 

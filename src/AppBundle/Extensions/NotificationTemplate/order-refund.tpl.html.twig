@@ -5,11 +5,14 @@
   <div class="media-body">
     <div class="notification-body">
       {% set data = notification.content %}
-
-      {% if data.targetType == 'classroom' %}
-        {% set targetUrl = path('classroom_show',{id:data.targetId}) %}
-      {% elseif data.targetType == 'course' %}
-        {% set targetUrl = path('course_show',{id:data.targetId}) %}
+      {% if data.targetUrl %}
+        {% set targetUrl = path(data.targetUrl.routing,data.targetUrl.params) %}
+      {% else %}
+        {% if data.targetType == 'classroom' %}
+          {% set targetUrl = path('classroom_show',{id:data.targetId}) %}
+        {% elseif data.targetType == 'course' %}
+          {% set targetUrl = path('course_show',{id:data.targetId}) %}
+        {% endif %}
       {% endif %}
 
       {% if data.type == 'apply_create' %}

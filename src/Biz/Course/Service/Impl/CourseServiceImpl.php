@@ -27,6 +27,11 @@ use Biz\Course\Service\MemberService;
 use Biz\Exception\UnableJoinException;
 use Biz\Favorite\Dao\FavoriteDao;
 use Biz\File\UploadFileException;
+use Biz\Goods\GoodsEntityFactory;
+use Biz\Goods\Mediator\CourseSetGoodsMediator;
+use Biz\Goods\Mediator\CourseSpecsMediator;
+use Biz\Goods\Service\GoodsService;
+use Biz\Product\Service\ProductService;
 use Biz\Review\Service\ReviewService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
@@ -50,6 +55,13 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     public function findCoursesByIds($ids)
+    {
+        $courses = $this->getCourseDao()->findCoursesByIds($ids);
+
+        return ArrayToolkit::index($courses, 'id');
+    }
+
+    public function findCourseByIdsWithMarketingInfo($ids)
     {
         $courses = $this->getCourseDao()->findCoursesByIds($ids);
 
@@ -224,6 +236,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->beginTransaction();
 
             $created = $this->getCourseDao()->create($course);
+            $this->getCourseSpecsMediator()->onCreate($created);
             $currentUser = $this->getCurrentUser();
             //set default teacher
             $this->getMemberService()->setDefaultTeacher($created['id']);
@@ -235,6 +248,47 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->rollback();
             throw $e;
         }
+    }
+
+    public function syncGoodsSpecs($course)
+    {
+        $product = $this->getProductService()->getProductByTargetIdAndType($course['courseSetId'], 'course');
+        $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
+        $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $course['id']);
+        $goodsSpecs = $this->getGoodsService()->updateGoodsSpecs($goodsSpecs['id'], [
+            'title' => empty($course['title']) ? $course['courseSetTitle'] : $course['title'],
+            'images' => $goods['images'],
+            'seq' => $course['seq'],
+            'price' => $course['price'],
+            'coinPrice' => $course['coinPrice'],
+            'buyableMode' => $course['expiryMode'],
+            'buyableStartTime' => $course['expiryStartDate'] ? $course['expiryStartDate'] : 0,
+            'buyableEndTime' => $course['expiryEndDate'] ? $course['expiryEndDate'] : 0,
+            'maxJoinNum' => $course['maxStudentNum'],
+            'services' => $course['services'],
+        ]);
+
+        return $goodsSpecs;
+    }
+
+    public function publishGoodsSpecs($course)
+    {
+        $product = $this->getProductService()->getProductByTargetIdAndType($course['courseSetId'], 'course');
+        $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
+        $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $course['id']);
+        $goodsSpecs = $this->getGoodsService()->publishGoodsSpecs($goodsSpecs['id']);
+
+        return $goodsSpecs;
+    }
+
+    public function unpublishGoodsSpecs($course)
+    {
+        $product = $this->getProductService()->getProductByTargetIdAndType($course['courseSetId'], 'course');
+        $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
+        $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByGoodsIdAndTargetId($goods['id'], $course['id']);
+        $goodsSpecs = $this->getGoodsService()->unpublishGoodsSpecs($goodsSpecs['id']);
+
+        return $goodsSpecs;
     }
 
     public function copyCourse($newCourse)
@@ -268,6 +322,12 @@ class CourseServiceImpl extends BaseService implements CourseService
         if (empty($fields['enableBuyExpiryTime'])) {
             $fields['buyExpiryTime'] = 0;
         }
+
+        if (!empty($fields['expiryDateRange'])) {
+            $fields['expiryStartDate'] = $fields['expiryDateRange'][0];
+            $fields['expiryEndDate'] = $fields['expiryDateRange'][1];
+        }
+
         $fields = ArrayToolkit::parts(
             $fields,
             [
@@ -326,9 +386,12 @@ class CourseServiceImpl extends BaseService implements CourseService
         $fields = $this->validateExpiryMode($fields);
         $fields = $this->processFields($oldCourse, $fields, $courseSet);
         $course = $this->getCourseDao()->update($id, $fields);
+        $this->getCourseSpecsMediator()->onUpdateNormalData($course);
 
         $this->dispatchEvent('course.update', new Event($course));
         $this->dispatchEvent('course.marketing.update', ['oldCourse' => $oldCourse, 'newCourse' => $course]);
+
+        return $course;
     }
 
     public function updateCourse($id, $fields)
@@ -365,6 +428,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $course = $this->getCourseDao()->update($id, $fields);
+        $this->getCourseSpecsMediator()->onUpdateNormalData($course);
 
         $this->dispatchEvent('course.update', new Event($course));
 
@@ -445,7 +509,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             ]
         );
 
-        if ('published' != $courseSet['status'] || 'published' != $oldCourse['status']) {
+        if ('published' !== $courseSet['status'] || 'published' !== $oldCourse['status']) {
             $fields['expiryMode'] = isset($fields['expiryMode']) ? $fields['expiryMode'] : $oldCourse['expiryMode'];
         }
 
@@ -456,8 +520,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $requireFields = ['title', 'isFree', 'buyable'];
 
-        if ('normal' == $courseSet['type'] && $this->isCloudStorage()) {
-            array_push($requireFields, 'tryLookable');
+        if ('normal' === $courseSet['type'] && $this->isCloudStorage()) {
+            $requireFields[] = 'tryLookable';
         } else {
             $fields['tryLookable'] = 0;
         }
@@ -671,7 +735,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function deleteCourse($id)
     {
         $course = $this->tryManageCourse($id);
-        if ('published' == $course['status']) {
+        if ('published' === $course['status']) {
             $this->createNewException(CourseException::FORBIDDEN_DELETE_PUBLISHED());
         }
 
@@ -683,12 +747,19 @@ class CourseServiceImpl extends BaseService implements CourseService
         if ($courseCount <= 1) {
             $this->createNewException(CourseException::COURSE_NUM_REQUIRED());
         }
+        $this->beginTransaction();
+        try {
+            $result = $this->getCourseDeleteService()->deleteCourse($id);
+            $this->getCourseSpecsMediator()->onDelete($course);
 
-        $result = $this->getCourseDeleteService()->deleteCourse($id);
+            $this->dispatchEvent('course.delete', new Event($course));
+            $this->commit();
 
-        $this->dispatchEvent('course.delete', new Event($course));
-
-        return $result;
+            return $result;
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
     }
 
     public function closeCourse($id)
@@ -710,6 +781,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             }
             $this->commit();
             $this->dispatchEvent('course.close', new Event($course));
+            $this->unpublishGoodsSpecs($course);
         } catch (\Exception $exception) {
             $this->rollback();
             throw $exception;
@@ -728,6 +800,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->dispatchEvent('course.publish', $course);
 
         $this->getCourseLessonService()->publishLessonByCourseId($course['id']);
+        $this->publishGoodsSpecs($course);
     }
 
     public function hasNoTitleForDefaultPlanInMulPlansCourse($id)
@@ -809,7 +882,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             if (empty($course['expiryEndDate'])) {
                 $this->createNewException(CourseException::EXPIRYENDDATE_REQUIRED());
             }
-            $course['expiryEndDate'] = TimeMachine::isTimestamp($course['expiryEndDate']) ? $course['expiryEndDate'] : strtotime($course['expiryEndDate'].' 23:59:59');
+            $course['expiryEndDate'] = TimeMachine::isTimestamp($course['expiryEndDate']) ? $course['expiryEndDate'] : strtotime(date('Y-m-d 23:59:59', strtotime($course['expiryEndDate'])));
         } elseif ('date' === $course['expiryMode']) {
             $course['expiryDays'] = 0;
             if (isset($course['expiryStartDate'])) {
@@ -820,7 +893,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             if (empty($course['expiryEndDate'])) {
                 $this->createNewException(CourseException::EXPIRYENDDATE_REQUIRED());
             } else {
-                $course['expiryEndDate'] = TimeMachine::isTimestamp($course['expiryEndDate']) ? $course['expiryEndDate'] : strtotime($course['expiryEndDate'].' 23:59:59');
+                $course['expiryEndDate'] = TimeMachine::isTimestamp($course['expiryEndDate']) ? $course['expiryEndDate'] : strtotime(date('Y-m-d 23:59:59', strtotime($course['expiryEndDate'])));
             }
             if ($course['expiryEndDate'] <= $course['expiryStartDate']) {
                 $this->createNewException(CourseException::EXPIRY_DATE_SET_INVALID());
@@ -1129,6 +1202,10 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $chapter = $this->getChapterDao()->get($chapterId);
         $course = $this->getCourseDao()->get($courseId);
+        if (empty($chapter)) {
+            return [];
+        }
+
         if ($course['id'] == $chapter['courseId']) {
             return $chapter;
         }
@@ -1495,6 +1572,22 @@ class CourseServiceImpl extends BaseService implements CourseService
         $orderBy = $this->_prepareCourseOrderBy($sort);
 
         return $this->getCourseDao()->search($conditions, $orderBy, $start, $limit, $columns);
+    }
+
+    public function appendSpecsInfo($courses)
+    {
+        $courses = $this->getGoodsEntityFactory()->create('course')->fetchSpecs($courses);
+
+        return $courses;
+    }
+
+    public function appendSpecInfo($course)
+    {
+        $course['spec'] = $this->getGoodsEntityFactory()->create('course')->getSpecsByTargetId($course['id']);
+        $course['goodsId'] = empty($course['spec']) ? 0 : $course['spec']['goodsId'];
+        $course['specsId'] = empty($course['spec']) ? 0 : $course['spec']['id'];
+
+        return $course;
     }
 
     public function searchWithJoinCourseSet($conditions, $sort, $start, $limit, $columns = [])
@@ -2156,7 +2249,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->createNewException(CourseException::NOTFOUND_COURSE());
         }
 
-        return $this->getCourseDao()->wave([$courseId], ['hitNum' => 1]);
+        return $this->getCourseSetDao()->wave([$course['courseSetId']], ['hitNum' => 1]);
     }
 
     public function recountLearningData($courseId, $userId)
@@ -2363,6 +2456,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->dispatch('courseSet.courses.sort', new Event($courseSet, [
             'courseIds' => $ids,
         ]));
+        $this->getCourseSetGoodsMediator()->onSortGoodsSpecs($courseSet);
     }
 
     public function changeHidePublishLesson($courseId, $status)
@@ -2567,6 +2661,22 @@ class CourseServiceImpl extends BaseService implements CourseService
     }
 
     /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->createService('Goods:GoodsService');
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getProductService()
+    {
+        return $this->createService('Product:ProductService');
+    }
+
+    /**
      * 当默认值未设置时，合并默认值
      *
      * @param  $course
@@ -2665,7 +2775,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         if (!empty($fields['buyExpiryTime'])) {
             if (is_numeric($fields['buyExpiryTime'])) {
-                $fields['buyExpiryTime'] = date('Y-m-d', $fields['buyExpiryTime']);
+                $fields['buyExpiryTime'] = date('Y-m-d', strlen($fields['buyExpiryTime']) > 10 ? $fields['buyExpiryTime'] / 1000 : $fields['buyExpiryTime']);
             }
 
             $fields['buyExpiryTime'] = strtotime($fields['buyExpiryTime'].' 23:59:59');
@@ -2726,6 +2836,22 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->tryManageCourse($courseId, $courseSetId);
     }
 
+    /**
+     * @return CourseSpecsMediator
+     */
+    protected function getCourseSpecsMediator()
+    {
+        return $this->biz['specs.mediator.course'];
+    }
+
+    /**
+     * @return CourseSetGoodsMediator
+     */
+    protected function getCourseSetGoodsMediator()
+    {
+        return $this->biz['goods.mediator.course_set'];
+    }
+
     public function appendHasCertificate(array $courses)
     {
         $conditions = [
@@ -2759,5 +2885,15 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function getCertificateService()
     {
         return $this->createService('Certificate:CertificateService');
+    }
+
+    /**
+     * @return GoodsEntityFactory
+     */
+    protected function getGoodsEntityFactory()
+    {
+        $biz = $this->biz;
+
+        return $biz['goods.entity.factory'];
     }
 }

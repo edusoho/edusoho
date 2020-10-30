@@ -28,10 +28,14 @@ class MeClassroom extends AbstractResource
             list($offset, $limit) = $this->getOffsetAndLimit($request);
 
             $classrooms = $this->getClassrooms($conditions, [], $offset, $limit);
+            $classrooms = $this->getClassroomService()->appendSpecsInfo($classrooms);
 
             return $this->makePagingObject($classrooms, $total, $offset, $limit);
         } else {
-            return $this->getClassrooms($conditions, [], 0, $total);
+            $classrooms = $this->getClassrooms($conditions, [], 0, $total);
+            $classrooms = $this->getClassroomService()->appendSpecsInfo($classrooms);
+
+            return $classrooms;
         }
     }
 

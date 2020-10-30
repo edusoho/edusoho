@@ -9,6 +9,10 @@ courseStatus:
     draft: Unpublished
     published: Published
     closed: Closed
+goodsStatus:
+    created: Created
+    published: Published
+    unpublished: Unpublished
 
 courseType:
     live: Living course
@@ -47,7 +51,7 @@ fileType:
     ppt: PPT
     flash: Flash
     other: Other
-    
+
 orderStatus:
     created: Unpaid
     paying: Paying
@@ -270,7 +274,7 @@ questionType:
     single_choice: Single choice
     choice: Multiple choice
     uncertain_choice: Indefinite choice
-    fill: Gap filling 
+    fill: Gap filling
     determine: True or False
     essay: Q&A
     material: Material
@@ -314,7 +318,7 @@ coinOrderType:
 discountType:
     discount: Limited time discount
     free: Limited time free
-    global: Site discount 
+    global: Site discount
 
 discountStatus:
     unstart: Not start

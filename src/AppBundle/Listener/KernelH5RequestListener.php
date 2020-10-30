@@ -2,11 +2,11 @@
 
 namespace AppBundle\Listener;
 
-use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use AppBundle\Common\DeviceToolkit;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use AppBundle\Common\DeviceToolkit;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -44,7 +44,7 @@ class KernelH5RequestListener
             return;
         }
 
-        $h5 = empty($route['_h5']) ? array() : $route['_h5'];
+        $h5 = empty($route['_h5']) ? [] : $route['_h5'];
         if (empty($h5)) {
             return;
         }
@@ -66,31 +66,36 @@ class KernelH5RequestListener
     {
         $params = $request->query->all();
         $query = http_build_query($params);
-        if (in_array($route['_route'], array('my_course_show', 'course_show'))) {
-            $pathInfo = $this->container->get('router')->generate('course_show', array('id' => $route['id']), UrlGeneratorInterface::ABSOLUTE_PATH);
+        if (in_array($route['_route'], ['my_course_show', 'course_show'])) {
+            $pathInfo = $this->container->get('router')->generate('course_show', ['id' => $route['id']], UrlGeneratorInterface::ABSOLUTE_PATH);
             if (isset($params['loginToken'])) {
                 $pathInfo = $pathInfo.'/loginToken/'.$params['loginToken'];
             }
         }
 
-        if (in_array($route['_route'], array('classroom_reviews', 'classroom_introductions'))) {
-            $pathInfo = $this->container->get('router')->generate('classroom_show', array('id' => $route['id']), UrlGeneratorInterface::ABSOLUTE_PATH);
+        if (in_array($route['_route'], ['classroom_reviews', 'classroom_introductions'])) {
+            $pathInfo = $this->container->get('router')->generate('classroom_show', ['id' => $route['id']], UrlGeneratorInterface::ABSOLUTE_PATH);
         }
 
-        if ('course_set_explore' == $route['_route']) {
-            $query = array();
-            $pathInfo = $this->container->get('router')->generate('course_set_explore', array(), UrlGeneratorInterface::ABSOLUTE_PATH);
+        if ('course_set_explore' === $route['_route']) {
+            $query = [];
+            $pathInfo = $this->container->get('router')->generate('course_set_explore', [], UrlGeneratorInterface::ABSOLUTE_PATH);
         }
-        if ('task_live_entry' == $route['_route']) {
+        if ('task_live_entry' === $route['_route']) {
             $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($route['courseId'], $route['activityId']);
-            $params = array(
+            $params = [
                 'courseId' => $route['courseId'],
                 'taskId' => $task['id'],
                 'type' => $task['type'],
                 'title' => $task['title'],
-            );
+            ];
             $query = http_build_query($params);
             $pathInfo = '/live';
+        }
+
+        if ('goods_show' === $route['_route']) {
+            $query = http_build_query($params);
+            $pathInfo = "/goods/{$route['id']}/show";
         }
 
         return empty($query) ? '/h5/index.html#'.$pathInfo : '/h5/index.html#'.$pathInfo.'?'.$query;
@@ -106,7 +111,7 @@ class KernelH5RequestListener
         return $this->getBiz()->service('Task:TaskService');
     }
 
-    protected function trans($id, array $parameters = array())
+    protected function trans($id, array $parameters = [])
     {
         return $this->container->get('translator')->trans($id, $parameters);
     }

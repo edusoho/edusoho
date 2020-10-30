@@ -8,6 +8,8 @@ use Biz\Course\Dao\CourseDao;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
+use Biz\Goods\GoodsEntityFactory;
+use Biz\Goods\Service\GoodsService;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
@@ -103,8 +105,9 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     {
         $course = $event->getSubject();
 
+        $specs = $this->getGoodsEntityFactory()->create('course')->getSpecsByTargetId($course['id']);
         $conditions = array(
-            'target_id' => $course['id'],
+            'target_id' => $specs['id'],
             'target_type' => 'course',
             'statuses' => array('paid', 'success', 'finished'),
         );
@@ -304,5 +307,23 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
     protected function getCourseDao()
     {
         return $this->getBiz()->dao('Course:CourseDao');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->getBiz()->service('Goods:GoodsService');
+    }
+
+    /**
+     * @return GoodsEntityFactory
+     */
+    protected function getGoodsEntityFactory()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['goods.entity.factory'];
     }
 }

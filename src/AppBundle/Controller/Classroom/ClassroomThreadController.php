@@ -2,13 +2,15 @@
 
 namespace AppBundle\Controller\Classroom;
 
-use Biz\Classroom\ClassroomException;
-use Biz\Common\CommonException;
-use Biz\User\Service\UserService;
-use Biz\Thread\Service\ThreadService;
-use Biz\System\Service\SettingService;
 use AppBundle\Controller\BaseController;
+use Biz\Classroom\ClassroomException;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Common\CommonException;
+use Biz\Goods\Service\GoodsService;
+use Biz\Product\Service\ProductService;
+use Biz\System\Service\SettingService;
+use Biz\Thread\Service\ThreadService;
+use Biz\User\Service\UserService;
 use Symfony\Component\HttpFoundation\Request;
 
 class ClassroomThreadController extends BaseController
@@ -26,18 +28,23 @@ class ClassroomThreadController extends BaseController
 
         $user = $this->getCurrentUser();
         $member = $user->isLogin() ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
+        if (!$member || $member['locked']) {
+            $product = $this->getProductService()->getProductByTargetIdAndType($classroom['id'], 'classroom');
+            $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
 
-        $layout = ($member && $member['locked'] == '0') ? 'classroom/join-layout.html.twig' : 'classroom/layout.html.twig';
+            return $this->redirect($this->generateUrl('goods_show', ['id' => $goods['id']]));
+        }
+        $layout = ($member && '0' == $member['locked']) ? 'classroom/join-layout.html.twig' : 'classroom/layout.html.twig';
 
         if (!$classroom) {
-            $classroomDescription = array();
+            $classroomDescription = [];
         } else {
             $classroomDescription = $classroom['about'];
             $classroomDescription = strip_tags($classroomDescription, '');
             $classroomDescription = preg_replace('/ /', '', $classroomDescription);
         }
 
-        return $this->render('classroom-thread/list.html.twig', array(
+        return $this->render('classroom-thread/list.html.twig', [
             'classroom' => $classroom,
             'filters' => $this->getThreadSearchFilters($request),
             'canLook' => $canLook,
@@ -45,32 +52,32 @@ class ClassroomThreadController extends BaseController
             'layout' => $layout,
             'member' => $member,
             'classroomDescription' => $classroomDescription,
-        ));
+        ]);
     }
 
     public function createAction(Request $request, $classroomId, $type)
     {
-        if (!in_array($type, array('discussion', 'question', 'event'))) {
+        if (!in_array($type, ['discussion', 'question', 'event'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
-            $request->getSession()->set('_target_path', $this->generateUrl('classroom_thread_create', array('classroomId' => $classroomId, 'type' => $type)));
+            $request->getSession()->set('_target_path', $this->generateUrl('classroom_thread_create', ['classroomId' => $classroomId, 'type' => $type]));
 
             return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
         }
 
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
-        if ($type == 'event' && !$this->getClassroomService()->canCreateThreadEvent(array('targetId' => $classroomId))) {
+        if ('event' == $type && !$this->getClassroomService()->canCreateThreadEvent(['targetId' => $classroomId])) {
             $this->createNewException(ClassroomException::FORBIDDEN_CREATE_THREAD_EVENT());
-        } elseif (in_array($type, array('discussion', 'question')) && !$this->getClassroomService()->canTakeClassroom($classroomId, true)) {
+        } elseif (in_array($type, ['discussion', 'question']) && !$this->getClassroomService()->canTakeClassroom($classroomId, true)) {
             $this->createNewException(ClassroomException::FORBIDDEN_TAKE_CLASSROOM());
         }
 
-        if ($request->getMethod() == 'POST') {
-            return $this->forward('AppBundle:Thread:create', array('request' => $request, 'target' => array('type' => 'classroom', 'id' => $classroom['id'])));
+        if ('POST' == $request->getMethod()) {
+            return $this->forward('AppBundle:Thread:create', ['request' => $request, 'target' => ['type' => 'classroom', 'id' => $classroom['id']]]);
         }
 
         $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']);
@@ -80,12 +87,12 @@ class ClassroomThreadController extends BaseController
             $layout = 'classroom/join-layout.html.twig';
         }
 
-        return $this->render('classroom-thread/create.html.twig', array(
+        return $this->render('classroom-thread/create.html.twig', [
             'classroom' => $classroom,
             'layout' => $layout,
             'type' => $type,
             'member' => $member,
-        ));
+        ]);
     }
 
     public function updateAction(Request $request, $classroomId, $threadId)
@@ -108,15 +115,15 @@ class ClassroomThreadController extends BaseController
         $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
         if ($request->isMethod('POST')) {
-            return $this->forward('AppBundle:Thread:update', array('request' => $request, 'target' => array('type' => 'classroom', 'id' => $classroom['id']), 'thread' => $thread));
+            return $this->forward('AppBundle:Thread:update', ['request' => $request, 'target' => ['type' => 'classroom', 'id' => $classroom['id']], 'thread' => $thread]);
         }
 
-        return $this->render('classroom-thread/create.html.twig', array(
+        return $this->render('classroom-thread/create.html.twig', [
             'classroom' => $classroom,
             'thread' => $thread,
             'type' => $thread['type'],
             'member' => $member,
-        ));
+        ]);
     }
 
     public function showAction(Request $request, $classroomId, $threadId)
@@ -133,9 +140,9 @@ class ClassroomThreadController extends BaseController
         $author = $this->getUserService()->getUser($thread['userId']);
         $user = $this->getCurrentUser();
         $adopted = $request->query->get('adopted');
-        $filter = array();
+        $filter = [];
         if (!empty($adopted)) {
-            $filter = array('adopted' => $adopted);
+            $filter = ['adopted' => $adopted];
         }
 
         $member = $user['id'] ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
@@ -152,7 +159,7 @@ class ClassroomThreadController extends BaseController
             $layout = 'classroom/join-layout.html.twig';
         }
 
-        return $this->render('classroom-thread/show.html.twig', array(
+        return $this->render('classroom-thread/show.html.twig', [
             'classroom' => $classroom,
             'thread' => $thread,
             'author' => $author,
@@ -160,7 +167,7 @@ class ClassroomThreadController extends BaseController
             'layout' => $layout,
             'filter' => $filter,
             'canLook' => $canLook,
-        ));
+        ]);
     }
 
     private function canManageThread($user, $classroomId, $thread)
@@ -182,14 +189,14 @@ class ClassroomThreadController extends BaseController
 
     private function getThreadSearchFilters($request)
     {
-        $filters = array();
+        $filters = [];
         $filters['type'] = $request->query->get('type');
-        if (!in_array($filters['type'], array('all', 'question', 'nice'))) {
+        if (!in_array($filters['type'], ['all', 'question', 'nice'])) {
             $filters['type'] = 'all';
         }
         $filters['sort'] = $request->query->get('sort');
 
-        if (!in_array($filters['sort'], array('created', 'posted', 'createdNotStick', 'postedNotStick'))) {
+        if (!in_array($filters['sort'], ['created', 'posted', 'createdNotStick', 'postedNotStick'])) {
             $filters['sort'] = 'posted';
         }
 
@@ -226,5 +233,21 @@ class ClassroomThreadController extends BaseController
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getProductService()
+    {
+        return $this->createService('Product:ProductService');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->createService('Goods:GoodsService');
     }
 }

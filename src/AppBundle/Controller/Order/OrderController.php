@@ -5,6 +5,7 @@ namespace AppBundle\Controller\Order;
 use AppBundle\Controller\BaseController;
 use Biz\Coupon\Service\CouponService;
 use Biz\Distributor\Util\DistributorCookieToolkit;
+use Biz\Goods\GoodsEntityFactory;
 use Biz\OrderFacade\Product\Product;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Codeages\Biz\Pay\Service\PayService;
@@ -26,7 +27,13 @@ class OrderController extends BaseController
 
     public function createAction(Request $request)
     {
-        $product = $this->getProduct($request->request->get('targetType'), $request->request->all());
+        $targetType = $request->request->get('targetType');
+        $fields = $request->request->all();
+        if (in_array($targetType, ['classroom', 'course'])) {
+            $specs = $this->getGoodsEntityFactory()->create($targetType)->getSpecsByTargetId($fields['targetId']);
+            $fields['targetId'] = $specs['id'];
+        }
+        $product = $this->getProduct($targetType, $fields);
         $product->setPickedDeduct($request->request->all());
 
         $this->addCreateDealers($request);
@@ -49,6 +56,10 @@ class OrderController extends BaseController
     {
         $targetType = $request->query->get('targetType');
         $fields = $request->query->all();
+        if (in_array($targetType, ['classroom', 'course'])) {
+            $specs = $this->getGoodsEntityFactory()->create($targetType)->getSpecsByTargetId($fields['targetId']);
+            $fields['targetId'] = $specs['id'];
+        }
 
         $product = $this->getProduct($targetType, $fields);
         $product->setPickedDeduct($fields);
@@ -211,5 +222,15 @@ class OrderController extends BaseController
     protected function getCouponBatchService()
     {
         return $this->createService('Coupon:CouponBatchService');
+    }
+
+    /**
+     * @return GoodsEntityFactory
+     */
+    protected function getGoodsEntityFactory()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['goods.entity.factory'];
     }
 }

@@ -6,3 +6,7 @@
 {% else %}
   <script src="{{ asset('translations/' ~ locales ~ '.js') }}"></script>
 {% endif %}
+
+ {% if needJsMessages|default(0) %}
+   <script src="{{ asset('translations/messages/' ~ locales ~ '.js') }}"></script>
+ {% endif %}

@@ -7,6 +7,7 @@ use Biz\BaseService;
 use Biz\Coupon\Dao\CouponBatchDao;
 use Biz\Coupon\Service\CouponBatchService;
 use Biz\Coupon\Service\CouponService;
+use Biz\Goods\Service\GoodsService;
 use Codeages\Biz\Framework\Dao\BatchCreateHelper;
 use Codeages\PluginBundle\System\PluginConfigurationManager;
 use Topxia\Service\Common\ServiceKernel;
@@ -68,7 +69,8 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
             'targetType',
             'h5MpsEnable',
             'linkEnable',
-            'codeEnable', ];
+            'codeEnable',
+        ];
         if (!ArrayToolkit::requireds($couponData, $batchArray)) {
             throw $this->createServiceException('缺少必要参数，生成优惠码失败');
         }
@@ -81,7 +83,7 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
         $batch['createdTime'] = time();
         $batch['unreceivedNum'] = $batch['generatedNum'];
 
-        if ('fullDiscount' == $couponData['targetType']) {
+        if ('fullDiscount' === $couponData['targetType']) {
             if (!isset($couponData['fullDiscountPrice'])) {
                 throw $this->createServiceException('缺少必要参数，生成优惠码失败');
             }
@@ -101,11 +103,11 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
             $batch['description'] = $couponData['description'];
         }
 
-        if (('time' == $batch['deadlineMode']) && ($batch['deadline'] + 86400 < $batch['createdTime'])) {
+        if (('time' === $batch['deadlineMode']) && ($batch['deadline'] + 86400 < $batch['createdTime'])) {
             throw $this->createServiceException('优惠码有效期不能比当前日期晚！');
         }
 
-        $duration = ('time' == $batch['deadlineMode']) ? $batch['deadline'] + 86400 - time() : 3600;
+        $duration = ('time' === $batch['deadlineMode']) ? $batch['deadline'] + 86400 - time() : 3600;
         $token = $this->getTokenService()->makeToken('coupon', [
             'duration' => $duration,
         ]);
@@ -150,7 +152,7 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
             if (!empty($card)) {
                 $this->getCardService()->updateCardByCardIdAndCardType($coupon['id'], 'coupon', ['status' => 'deleted']);
 
-                if ('minus' == $coupon['type']) {
+                if ('minus' === $coupon['type']) {
                     $message = '您的一张价值为￥'.$coupon['rate'].'的优惠券已经被管理员删除，详情请联系管理员。';
                 } else {
                     $message = '您的一张折扣为'.$coupon['rate'].'折的优惠券已经被管理员删除，详情请联系管理员。';
@@ -177,7 +179,7 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
         $batch = $this->getCouponBatchDao()->getBatchByToken($token, true);
         $token = $this->getTokenService()->verifyToken('coupon', $token);
 
-        if (!$token && ('time' == $batch['deadlineMode'])) {
+        if (!$token && ('time' === $batch['deadlineMode'])) {
             return [
                 'code' => 'failed',
                 'message' => '无效的链接',
@@ -357,10 +359,11 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
                     'status' => 'unused',
                     'rate' => $batch['rate'],
                     'batchId' => $batch['id'],
-                    'deadline' => ('time' == $batch['deadlineMode']) ? $batch['deadline'] : 0,
+                    'deadline' => ('time' === $batch['deadlineMode']) ? $batch['deadline'] : 0,
                     'targetType' => $batch['targetType'],
                     'targetId' => $batch['targetId'],
                     'targetIds' => $batch['targetIds'],
+                    'goodsIds' => $batch['goodsIds'],
                     'fullDiscountPrice' => $batch['fullDiscountPrice'],
                     'createdTime' => $time,
                 ];
@@ -446,7 +449,7 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
         if (empty($batch['targetType']) || empty($batch['targetId']) || 'all' == $batch['targetType']) {
             return null;
         }
-        if ('vip' != $batch['targetType'] && empty($batch['targetIds'])) {
+        if ('vip' !== $batch['targetType'] && empty($batch['targetIds'])) {
             return null;
         }
         $targetId = current($batch['targetIds']);
@@ -458,7 +461,7 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
             case 'vip':
                 if ($this->isPluginInstalled('Vip')) {
                     //vip业务没有修改，沿用原来的id
-                    $target = $this->getLevelService()->getLevel($batch['targetId']);
+                    $target = $this->getLevelService()->getLevel($targetId);
                 } else {
                     $target = null;
                 }
@@ -467,7 +470,10 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
             case 'classroom':
                 $target = $this->getClassroomService()->getClassroom($targetId);
                 break;
-
+            case 'goods':
+                $goods = $this->getGoodsService()->getGoods($targetId);
+                $target = $this->biz['goods.entity.factory']->create($goods['type'])->getTarget($goods);
+                break;
             default:
                 break;
         }
@@ -598,5 +604,13 @@ class CouponBatchServiceImpl extends BaseService implements CouponBatchService
         $pluginManager = new PluginConfigurationManager(ServiceKernel::instance()->getParameter('kernel.root_dir'));
 
         return $pluginManager->isPluginInstalled($code);
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->createService('Goods:GoodsService');
     }
 }

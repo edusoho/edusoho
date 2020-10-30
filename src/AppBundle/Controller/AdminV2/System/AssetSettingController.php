@@ -10,7 +10,9 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\CloudPlatform\Service\AppService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\Goods\Service\GoodsService;
 use Biz\ItemBankExercise\Service\ExerciseService;
+use Biz\S2B2C\Service\ProductService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\System\SettingException;
@@ -151,10 +153,13 @@ class AssetSettingController extends BaseController
     {
         $coinSettings = $this->getSettingService()->get('coin', []);
 
-        if ('POST' == $request->getMethod()) {
+        /*
+         * 这里独立写CourseSet的原因是：默认第一栏是courseSet
+         */
+        if ('POST' === $request->getMethod()) {
             $set = $request->request->all();
 
-            if ('none' == $set['cash_model']) {
+            if ('none' === $set['cash_model']) {
                 $coinSettings['cash_model'] = 'none';
                 $coinSettings['price_type'] = 'RMB';
                 $coinSettings['cash_rate'] = $set['cash_rate'];
@@ -164,15 +169,14 @@ class AssetSettingController extends BaseController
                 $this->setFlashMessage('success', 'site.save.success');
                 goto response;
             }
+            $goods = $this->getGoodsService()->searchGoods([
+                'type' => 'course',
+                'maxPrice_GT' => 0,
+            ], ['publishedTime' => 'desc'], 0, PHP_INT_MAX);
 
-            $courseSets = $this->getCourseSetService()->searchCourseSets([
-                'parentId' => 0,
-                'maxCoursePrice_GT' => 0,
-            ], ['updatedTime' => 'desc'], 0, PHP_INT_MAX);
-
-            return $this->render('admin-v2/system/asset-setting/coin/coin-course-set.html.twig', [
+            return $this->render('admin-v2/system/asset-setting/coin/usage/effective.html.twig', [
                 'set' => $set,
-                'items' => $courseSets,
+                'items' => $goods,
             ]);
         }
 
@@ -182,7 +186,7 @@ class AssetSettingController extends BaseController
 
         response :
 
-        return $this->render('admin-v2/system/asset-setting/coin/coin-model.html.twig', [
+        return $this->render('admin-v2/system/asset-setting/coin/usage/select-mode.html.twig', [
             'coinSettings' => $coinSettings,
         ]);
     }
@@ -284,26 +288,24 @@ class AssetSettingController extends BaseController
         $type = $conditions['type'];
         $set = $conditions['set'];
 
-        if ('course' == $type) {
-            $items = $this->getCourseSetService()->searchCourseSets([
-                'maxCoursePrice_GT' => '0.00',
-                'parentId' => 0,
-            ], ['updatedTime' => 'desc'], 0, PHP_INT_MAX);
-        } elseif ('classroom' == $type) {
-            $items = $this->getClassroomService()->searchClassrooms(
-                ['private' => 0, 'price_GT' => '0.00'],
-                ['createdTime' => 'DESC'],
-                0,
-                PHP_INT_MAX
-            );
-        } elseif ('vip' == $type) {
+        if ('course' === $type) {
+            $items = $this->getGoodsService()->searchGoods([
+                'type' => 'course',
+                'maxPrice_GT' => 0,
+            ], ['publishedTime' => 'desc'], 0, PHP_INT_MAX);
+        } elseif ('classroom' === $type) {
+            $items = $this->getGoodsService()->searchGoods([
+                'type' => 'classroom',
+                'maxPrice_GT' => 0,
+            ], ['publishedTime' => 'desc'], 0, PHP_INT_MAX);
+        } elseif ('vip' === $type) {
             // todo
             $items = $this->getLevelService()->searchLevels(['enable' => 1], ['seq' => 'asc'], 0, PHP_INT_MAX);
-        } elseif ('exercise' == $type) {
+        } elseif ('exercise' === $type) {
             $items = $this->getExerciseService()->search(['price_GT' => '0.00'], ['createdTime' => 'desc'], 0, PHP_INT_MAX);
         }
 
-        return $this->render('admin-v2/system/asset-setting/coin/coin-table-setting.html.twig', [
+        return $this->render('admin-v2/system/asset-setting/coin/usage/effective-nav.html.twig', [
             'type' => $conditions['type'],
             'items' => $items,
             'set' => $set,
@@ -363,19 +365,19 @@ class AssetSettingController extends BaseController
         $type = $data['type'];
         $data = $data['item_rate'];
 
-        if ('course' == $type) {
+        if ('course' === $type) {
             foreach ($data as $key => $value) {
-                $this->getCourseSetService()->updateMaxRate($key, $value);
+                $this->getGoodsService()->updateGoods($key, ['maxRate' => $value]);
             }
-        } elseif ('classroom' == $type) {
+        } elseif ('classroom' === $type) {
             foreach ($data as $key => $value) {
-                $this->getClassroomService()->updateClassroom($key, ['maxRate' => $value]);
+                $this->getGoodsService()->updateGoods($key, ['maxRate' => $value]);
             }
-        } elseif ('vip' == $type) {
+        } elseif ('vip' === $type) {
             foreach ($data as $key => $value) {
                 $this->getLevelService()->updateLevel($key, ['maxRate' => $value]);
             }
-        } elseif ('exercise' == $type) {
+        } elseif ('exercise' === $type) {
             foreach ($data as $key => $value) {
                 $this->getExerciseService()->update($key, ['maxRate' => $value]);
             }
@@ -452,6 +454,22 @@ class AssetSettingController extends BaseController
     protected function getLevelService()
     {
         return $this->createService('VipPlugin:Vip:LevelService');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->createService('Goods:GoodsService');
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getProductService()
+    {
+        return $this->createService('Product:ProductService');
     }
 
     /**
