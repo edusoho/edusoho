@@ -64,7 +64,7 @@ class InviteController extends BaseController
         $nickName = $request->query->get('nickname');
         if (!empty($nickName)) {
             $user = $this->getUserService()->getUserByNickname($nickName);
-            $conditions['inviteUserId'] = $user['id'];
+            $conditions['inviteUserId'] = $user['id'] ?? 0;
         }
         $paginator = new Paginator(
             $request,
