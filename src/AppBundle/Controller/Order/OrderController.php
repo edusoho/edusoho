@@ -21,10 +21,11 @@ class OrderController extends BaseController
         $product->setPickedDeduct([]);
 
         $location = [
-            'targetType' => $request->query->get('targetType', ''),
-            'targetId' => $request->query->get('targetId', '0'),
+            'targetType' => $product->targetType,
+            'targetId' => $product->targetId,
         ];
-        if ('course' == $location['targetType'] && '0' != $location['targetId']) {
+
+        if ('course' === $location['targetType'] && '0' != $location['targetId']) {
             $course = $this->getCourseService()->getCourse($location['targetId']);
             $location['targetId'] = $course['courseSetId'];
         }

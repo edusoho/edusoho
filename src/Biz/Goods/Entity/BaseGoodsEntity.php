@@ -6,6 +6,8 @@ use Biz\Goods\Service\GoodsService;
 use Biz\Product\ProductException;
 use Biz\Product\Service\ProductService;
 use Codeages\Biz\Framework\Context\Biz;
+use Codeages\PluginBundle\System\PluginConfigurationManager;
+use Topxia\Service\Common\ServiceKernel;
 
 /**
  * Class BaseGoodsEntity
@@ -42,6 +44,8 @@ abstract class BaseGoodsEntity
 
     abstract public function getVipInfo($goods, $specs, $userId);
 
+    abstract public function canVipFreeJoin($goods, $specs, $userId);
+
     abstract public function getSpecsTeacherIds($goods, $specs);
 
     abstract public function buySpecsAccess($goods, $specs);
@@ -77,5 +81,12 @@ abstract class BaseGoodsEntity
     protected function getGoodsService()
     {
         return $this->biz->service('Goods:GoodsService');
+    }
+
+    protected function isPluginInstalled($code)
+    {
+        $pluginManager = new PluginConfigurationManager(ServiceKernel::instance()->getParameter('kernel.root_dir'));
+
+        return $pluginManager->isPluginInstalled($code);
     }
 }

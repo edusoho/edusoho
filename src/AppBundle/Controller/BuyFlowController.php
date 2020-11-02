@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Common\UserToolkit;
 use AppBundle\Util\AvatarAlert;
+use Biz\Order\OrderException;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserFieldService;
 use Biz\User\UserException;
@@ -25,49 +26,38 @@ abstract class BuyFlowController extends BaseController
         $this->checkUserLogin();
 
         if ($this->needApproval($id)) {
-            return $this->render('buy-flow/approve-modal.html.twig');
+            $this->createNewException(OrderException::BEYOND_AUTHORITY);
         }
 
         if ($this->needNoStudentNumTip($id)) {
-            return $this->render('buy-flow/no-remain-modal.html.twig');
+            $this->createNewException(OrderException::BEYOND_AUTHORITY);
         }
 
         if ($this->needUploadAvatar()) {
-            return $this->render('buy-flow/avatar-alert-modal.html.twig');
+            $this->createNewException(OrderException::BEYOND_AUTHORITY);
         }
 
         if ($this->needFillUserInfo()) {
-            $userFields = $this->getUserFieldService()->getEnabledFieldsOrderBySeq();
-            $user = $this->getUser();
-            $userInfo = $this->getUserService()->getUserProfile($user['id']);
-            $userInfo['approvalStatus'] = $user['approvalStatus'];
-
-            return $this->render('buy-flow/fill-user-info-modal.html.twig', [
-                'userFields' => $userFields,
-                'user' => $userInfo,
-            ]);
+            $this->createNewException(OrderException::BEYOND_AUTHORITY);
         }
 
         if ($this->needOpenPayment($id)) {
-            return $this->render('buy-flow/payments-disabled-modal.html.twig');
+            $this->createNewException(OrderException::BEYOND_AUTHORITY);
         }
-
-        if ('POST' == $request->getMethod()) {
-            $event = $this->needInformationCollectionBeforeJoin($id);
-            if (!empty($event)) {
-                return $this->createJsonResponse(['url' => $event['url']]);
-            }
-        }
+//
+//        if ('POST' == $request->getMethod()) {
+//            $event = $this->needInformationCollectionBeforeJoin($id);
+//            if (!empty($event)) {
+//                return $this->createJsonResponse(['url' => $event['url']]);
+//            }
+//        }
 
         $this->tryFreeJoin($id);
 
         if ($this->isJoined($id)) {
             $event = $this->needInformationCollectionAfterJoin($id);
-            if ('POST' == $request->getMethod()) {
-                return !empty($event) ? $this->createJsonResponse(['url' => $event['url']]) : $this->createJsonResponse(['url' => $this->getSuccessUrl($id)]);
-            } else {
-                return !empty($event) ? $this->redirect($event['url']) : $this->redirect($this->getSuccessUrl($id));
-            }
+
+            return !empty($event) ? $this->redirect($event['url']) : $this->redirect($this->getSuccessUrl($id));
         }
 
         return $this->createJsonResponse(['url' => $this->generateUrl('order_show', ['targetId' => $id, 'targetType' => $this->targetType])]);
