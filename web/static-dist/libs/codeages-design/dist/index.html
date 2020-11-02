@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./codeages-design.css">
+</head>
+<body>
+    <button class="cd-btn cd-btn-primary">按钮</button>
+    <button class="cd-btn cd-btn-primary" id="btn">按钮的loading效果</button>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="./codeages-design.js"></script>
+    <script>
+        cd.btn({el: '#btn'}).loading();
+    </script>
+</body>
+</html>
