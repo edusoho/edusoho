@@ -39,10 +39,6 @@ class TaskSync extends AbstractEntitySync
 
         $config['newUploadFiles'] = $newUploadFiles;
 
-        $this->logger->info('[syncEntity] 开始同步课程题库数据');
-       // $questionMap = $this->doSyncQuestions($source, $config);
-        //$this->logger->info('[syncEntity] 同步课程题库数据完成');
-
         $this->logger->info('[syncEntity] 开始同步课程教学活活动数据');
         $activityMap = $this->doSyncActivities($source, $config);
         $this->logger->info('[syncEntity] 同步课程教学活活动数据完成');
@@ -92,13 +88,6 @@ class TaskSync extends AbstractEntitySync
         return $chapterSync->sync($source, $config);
     }
 
-    private function doSyncQuestions($source, $config)
-    {
-        $questionSync = new CourseSetQuestionSync($this->biz);
-
-        return $questionSync->sync($source, $config);
-    }
-
     private function doSyncActivities($source, $config)
     {
         $activitySync = new ActivitySync($this->biz);
@@ -131,10 +120,6 @@ class TaskSync extends AbstractEntitySync
         $newUploadFiles = $this->doUpdateUploadFiles($source, $config);
 
         $config['newUploadFiles'] = $newUploadFiles;
-        $this->logger->info('[updateEntityToLastedVersion] 开始更新课程题库数据');
-//        $questionMap = $this->doUpdateQuestions($source, $config);
-//        $this->logger->info('[updateEntityToLastedVersion] 更新课程题库数据完成');
-
         $this->logger->info('[updateEntityToLastedVersion] 开始更新课程教学计划数据');
         $activityMap = $this->doUpdateActivities($source, $config);
         $this->logger->info('[updateEntityToLastedVersion] 更新课程教学计划数据完成');
@@ -203,13 +188,6 @@ class TaskSync extends AbstractEntitySync
         $chapterSync = new UploadFileSync($this->biz);
 
         return $chapterSync->updateEntityToLastedVersion($source, $config);
-    }
-
-    private function doUpdateQuestions($source, $config)
-    {
-        $questionSync = new CourseSetQuestionSync($this->biz);
-
-        return $questionSync->updateEntityToLastedVersion($source, $config);
     }
 
     private function doUpdateActivities($source, $config)
