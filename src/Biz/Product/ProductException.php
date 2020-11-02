@@ -8,5 +8,9 @@ class ProductException extends AbstractException
 {
     const EXCEPTION_MODULE = 71;
 
-    public $messages = [];
+    const NOTFOUND_PRODUCT = 4047101;
+
+    public $messages = [
+        self::NOTFOUND_PRODUCT => 'exception.product.not_exist',
+    ];
 }

@@ -6,8 +6,6 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Resource\Filter;
-use Biz\Coupon\Service\CouponBatchService;
-use Biz\User\UserException;
 
 class PageTemplate extends AbstractResource
 {
@@ -16,7 +14,7 @@ class PageTemplate extends AbstractResource
      */
     public function get(ApiRequest $request, $portal, $template)
     {
-        if (!in_array($portal, array('h5', 'miniprogram', 'apps'))) {
+        if (!in_array($portal, ['h5', 'miniprogram', 'apps'])) {
             throw PageException::ERROR_PORTAL();
         }
 
@@ -31,11 +29,11 @@ class PageTemplate extends AbstractResource
     protected function handleSetting($discoverySetting)
     {
         if ('course_list' == $discoverySetting['type']) {
-            $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('creator', 'teacherIds'));
-            $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('courseSetId'), 'courseSet');
+            $this->getOCUtil()->multiple($discoverySetting['data']['items'], ['creator', 'teacherIds']);
+            $this->getOCUtil()->multiple($discoverySetting['data']['items'], ['courseSetId'], 'courseSet');
         }
         if ('classroom_list' == $discoverySetting['type']) {
-            $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('creator', 'teacherIds', 'assistantIds', 'headTeacherId'));
+            $this->getOCUtil()->multiple($discoverySetting['data']['items'], ['creator', 'teacherIds', 'assistantIds', 'headTeacherId']);
         }
         if ('coupon' == $discoverySetting['type']) {
             foreach ($discoverySetting['data']['items'] as &$couponBatch) {

@@ -6,58 +6,63 @@ use Biz\BaseTestCase;
 use Biz\Course\Copy\CourseMemberCopy;
 use Biz\Course\Dao\CourseMemberDao;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
 
 class CourseMemberCopyTest extends BaseTestCase
 {
     public function testPreCopy()
     {
-        $copy = new CourseMemberCopy($this->biz, array(
+        $copy = new CourseMemberCopy($this->biz, [
             'class' => 'Biz\Course\Copy\CourseMemberCopy',
             'priority' => 100,
-        ), false);
+        ], false);
 
-        $this->assertNull($copy->preCopy($this->mockCourse(), array()));
+        self::assertNull($copy->preCopy($this->mockCourse(), []));
     }
 
     public function testDoCopy()
     {
-        $course = $this->getCourseService()->createCourse($this->mockCourse());
+        $courseSet = $this->getCourseSetService()->createCourseSet([
+            'title' => 'testCourseSet',
+            'type' => 'normal',
+        ]);
+        $course = $this->getCourseService()->createCourse($this->mockCourse('测试课程', $courseSet));
         $user = $this->getCurrentUser();
-        $this->mockBiz('Course:CourseDao', array(
-            array('functionName' => 'update', 'returnValue' => array()),
-        ));
+        $this->mockBiz('Course:CourseDao', [
+            ['functionName' => 'update', 'returnValue' => []],
+        ]);
 
-        $copy = new CourseMemberCopy($this->biz, array(
+        $copy = new CourseMemberCopy($this->biz, [
             'class' => 'Biz\Course\Copy\CourseMemberCopy',
             'priority' => 100,
-        ), false);
+        ], false);
 
-        $copy->doCopy(array(), array('originCourse' => array('id' => $course['id'], 'courseSetId' => $course['courseSetId']), 'newCourse' => array('id' => $course['id'] + 2, 'courseSetId' => $course['id'] + 2)));
+        $copy->doCopy([], ['originCourse' => ['id' => $course['id'], 'courseSetId' => $course['courseSetId']], 'newCourse' => ['id' => $course['id'] + 2, 'courseSetId' => $course['id'] + 2]]);
 
         $member = $this->getMemberDao()->getByCourseIdAndUserId($course['id'] + 2, $user->getId());
 
-        $this->assertNotEmpty($member);
+        self::assertNotEmpty($member);
     }
 
     public function testAfterCopy()
     {
-        $copy = new CourseMemberCopy($this->biz, array(
+        $copy = new CourseMemberCopy($this->biz, [
             'class' => 'Biz\Course\Copy\CourseMemberCopy',
             'priority' => 100,
-        ), false);
+        ], false);
 
-        $this->assertNull($copy->afterCopy($this->mockCourse(), array()));
+        self::assertNull($copy->afterCopy($this->mockCourse(), []));
     }
 
-    protected function mockCourse($title = '测试课程', $courseSet = array())
+    protected function mockCourse($title = '测试课程', $courseSet = [])
     {
-        return array(
+        return [
             'title' => $title,
             'courseSetId' => empty($courseSet) ? 1 : $courseSet['id'],
             'expiryMode' => 'forever',
             'learnMode' => 'freeMode',
             'courseType' => 'normal',
-        );
+        ];
     }
 
     /**
@@ -74,5 +79,13 @@ class CourseMemberCopyTest extends BaseTestCase
     protected function getMemberDao()
     {
         return $this->biz->dao('Course:CourseMemberDao');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    protected function getCourseSetService()
+    {
+        return $this->createService('Course:CourseSetService');
     }
 }

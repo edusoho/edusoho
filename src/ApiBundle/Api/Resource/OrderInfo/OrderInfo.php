@@ -7,12 +7,15 @@ use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\MathToolkit;
 use Biz\Common\CommonException;
 use Biz\Coupon\Service\CouponBatchService;
+use Biz\Coupon\Service\CouponService;
+use Biz\Goods\GoodsEntityFactory;
+use Biz\Goods\Service\GoodsService;
 use Biz\OrderFacade\Currency;
 use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Biz\OrderFacade\Product\Product;
+use Biz\Product\Service\ProductService;
 use Codeages\Biz\Pay\Service\AccountService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Biz\Coupon\Service\CouponService;
 
 class OrderInfo extends AbstractResource
 {
@@ -23,17 +26,36 @@ class OrderInfo extends AbstractResource
         if (empty($params['targetId']) || empty($params['targetType'])) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
+        $this->convertOrderParams($params);
 
         try {
             $this->addVipParams($params);
             $product = $this->getProduct($params['targetType'], $params);
             $product->validate();
             $product->setAvailableDeduct();
-            $product->setPickedDeduct(array());
+            $product->setPickedDeduct([]);
 
             return $this->getOrderInfoFromProduct($product);
         } catch (OrderPayCheckException $payCheckException) {
             throw new BadRequestHttpException($payCheckException->getMessage(), $payCheckException, $payCheckException->getCode());
+        }
+    }
+
+    private function convertOrderParams(&$params)
+    {
+        //goodsSpecs
+        if ('goodsSpecs' === $params['targetType']) {
+            $specs = $this->getGoodsService()->getGoodsSpecs($params['targetId']);
+            $goods = $this->getGoodsService()->getGoods($specs['goodsId']);
+            $params['targetType'] = $goods['type'];
+
+            return;
+        }
+        if (in_array($params['targetType'], ['classroom', 'course'])) {
+            $specs = $this->getGoodsEntityFactory()->create($params['targetType'])->getSpecsByTargetId($params['targetId']);
+            $params['targetId'] = $specs['id'];
+
+            return;
         }
     }
 
@@ -46,30 +68,32 @@ class OrderInfo extends AbstractResource
         $user = $this->getCurrentUser();
         $balance = $this->getAccountService()->getUserBalanceByUserId($user->getId());
 
-        $orderInfo = array(
+        $orderInfo = [
             'targetId' => $product->targetId,
             'targetType' => $product->targetType,
+            'goodsSpecsId' => $product->goodsSpecsId,
+            'goodsId' => $product->goodsId,
             'cover' => $product->cover,
             'title' => $product->title,
             'maxRate' => $product->maxRate,
             'unitType' => $product->unit,
             'duration' => $product->num,
             'totalPrice' => $product->getPayablePrice(),
-            'availableCoupons' => array(),
+            'availableCoupons' => [],
             'coinName' => '',
             'cashRate' => '1',
             'buyType' => '',
-            'priceType' => 'CNY' == $currency->isoCode ? 'RMB' : 'Coin',
+            'priceType' => 'CNY' === $currency->isoCode ? 'RMB' : 'Coin',
             'coinPayAmount' => 0,
             'fullCoinPayable' => 0,
             'verifiedMobile' => (isset($user['verifiedMobile'])) && (strlen($user['verifiedMobile']) > 0) ? $user['verifiedMobile'] : '',
             'hasPayPassword' => $this->getAccountService()->isPayPasswordSetted($user['id']),
-            'account' => array(
+            'account' => [
                 'id' => $balance['id'],
                 'userId' => $balance['user_id'],
                 'cash' => strval(MathToolkit::simple($balance['amount'], 0.01)),
-            ),
-        );
+            ],
+        ];
 
         if ($extra = $product->getCreateExtra()) {
             $orderInfo['buyType'] = $extra['buyType'];
@@ -148,7 +172,7 @@ class OrderInfo extends AbstractResource
                 break;
             case '10':
             default:
-                if (!in_array($unit, array('year', 'month'))) {
+                if (!in_array($unit, ['year', 'month'])) {
                     $result = false;
                 }
                 break;
@@ -193,5 +217,31 @@ class OrderInfo extends AbstractResource
     private function getCouponBatchService()
     {
         return $this->service('Coupon:CouponBatchService');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    private function getGoodsService()
+    {
+        return $this->service('Goods:GoodsService');
+    }
+
+    /**
+     * @return ProductService
+     */
+    private function getProductService()
+    {
+        return $this->service('Product:ProductService');
+    }
+
+    /**
+     * @return GoodsEntityFactory
+     */
+    protected function getGoodsEntityFactory()
+    {
+        $biz = $this->getBiz();
+
+        return $biz['goods.entity.factory'];
     }
 }

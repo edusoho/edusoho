@@ -3,9 +3,11 @@
 namespace AppBundle\Controller\Classroom;
 
 use AppBundle\Common\ArrayToolkit;
-use Biz\Course\Service\CourseService;
 use AppBundle\Controller\BaseController;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\CourseService;
+use Biz\Goods\Service\GoodsService;
+use Biz\Product\Service\ProductService;
 use Symfony\Component\HttpFoundation\Request;
 
 class CourseNoteController extends BaseController
@@ -23,7 +25,7 @@ class CourseNoteController extends BaseController
 
         $user = $this->getCurrentUser();
 
-        $classroomSetting = $this->setting('classroom', array());
+        $classroomSetting = $this->setting('classroom', []);
         $classroomName = isset($classroomSetting['name']) ? $classroomSetting['name'] : '班级';
 
         $member = $user->isLogin() ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
@@ -33,19 +35,26 @@ class CourseNoteController extends BaseController
             return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomName}11111，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
         }
 
+        if (!$member || $member['locked']) {
+            $product = $this->getProductService()->getProductByTargetIdAndType($classroom['id'], 'classroom');
+            $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
+
+            return $this->redirect($this->generateUrl('goods_show', ['id' => $goods['id']]));
+        }
+
         $layout = 'classroom/layout.html.twig';
         if ($member && !$member['locked']) {
             $layout = 'classroom/join-layout.html.twig';
         }
         if (!$classroom) {
-            $classroomDescription = array();
+            $classroomDescription = [];
         } else {
             $classroomDescription = $classroom['about'];
             $classroomDescription = strip_tags($classroomDescription, '');
             $classroomDescription = preg_replace('/ /', '', $classroomDescription);
         }
 
-        return $this->render('classroom/course/notes-list.html.twig', array(
+        return $this->render('classroom/course/notes-list.html.twig', [
             'layout' => $layout,
             'filters' => $this->getNoteSearchFilters($request),
             'canLook' => $canLook,
@@ -55,17 +64,17 @@ class CourseNoteController extends BaseController
             'member' => $member,
             'classroomDescription' => $classroomDescription,
             'courseSets' => $courseSets,
-        ));
+        ]);
     }
 
     private function getNoteSearchFilters($request)
     {
-        $filters = array();
+        $filters = [];
 
         $filters['courseId'] = $request->query->get('courseId', '');
         $filters['sort'] = $request->query->get('sort');
 
-        if (!in_array($filters['sort'], array('latest', 'likeNum'))) {
+        if (!in_array($filters['sort'], ['latest', 'likeNum'])) {
             $filters['sort'] = 'latest';
         }
 
@@ -91,5 +100,21 @@ class CourseNoteController extends BaseController
     private function getCourseSetService()
     {
         return $this->createService('Course:CourseSetService');
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getProductService()
+    {
+        return $this->createService('Product:ProductService');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->createService('Goods:GoodsService');
     }
 }

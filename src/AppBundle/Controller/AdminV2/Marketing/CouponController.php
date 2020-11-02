@@ -2,15 +2,16 @@
 
 namespace AppBundle\Controller\AdminV2\Marketing;
 
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Exception\AccessDeniedException;
 use AppBundle\Common\Paginator;
-use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Coupon\Service\CouponBatchService;
 use Biz\Coupon\Service\CouponService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
+use Biz\Goods\Service\GoodsService;
 use Biz\System\Service\SettingService;
 use Biz\Taxonomy\Service\CategoryService;
 use Codeages\Biz\Order\Service\OrderService;
@@ -38,7 +39,7 @@ class CouponController extends BaseController
 
         $batchs = $this->getCouponBatchService()->searchBatchs(
             $conditions,
-            array('createdTime' => 'DESC'),
+            ['createdTime' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -47,10 +48,10 @@ class CouponController extends BaseController
             $batch['couponContent'] = $this->getCouponBatchService()->getCouponBatchContent($batch['id']);
         }
 
-        return $this->render('admin-v2/marketing/coupon/index.html.twig', array(
+        return $this->render('admin-v2/marketing/coupon/index.html.twig', [
             'batchs' => $batchs,
             'paginator' => $paginator,
-        ));
+        ]);
     }
 
     public function queryIndexAction(Request $request)
@@ -64,7 +65,7 @@ class CouponController extends BaseController
 
         $coupons = $this->getCouponService()->searchCoupons(
             $conditions,
-            array('orderTime' => 'DESC'),
+            ['orderTime' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -72,35 +73,35 @@ class CouponController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($coupons, 'userId'));
         $orders = $this->getOrderService()->findOrdersByIds(ArrayToolkit::column($coupons, 'orderId'));
 
-        return $this->render('admin-v2/marketing/coupon/query.html.twig', array(
+        return $this->render('admin-v2/marketing/coupon/query.html.twig', [
             'coupons' => $coupons,
             'paginator' => $paginator,
             'batchs' => $batchs,
             'users' => $users,
             'orders' => ArrayToolkit::index($orders, 'id'),
-        ));
+        ]);
     }
 
     public function settingAction(Request $request)
     {
-        $couponSetting = $this->getSettingService()->get('coupon', array());
+        $couponSetting = $this->getSettingService()->get('coupon', []);
 
-        $default = array(
+        $default = [
             'enabled' => 1,
-        );
+        ];
 
         $couponSetting = array_merge($default, $couponSetting);
 
         if ('POST' == $request->getMethod()) {
             $couponSetting = $request->request->all();
             if (0 == $couponSetting['enabled']) {
-                $inviteSetting = $this->getSettingService()->get('invite', array());
+                $inviteSetting = $this->getSettingService()->get('invite', []);
                 $inviteSetting['invite_code_setting'] = 0;
                 $this->getSettingService()->set('invite', $inviteSetting);
             }
             $this->getSettingService()->set('coupon', $couponSetting);
 
-            $hiddenMenus = $this->getSettingService()->get('menu_hiddens', array());
+            $hiddenMenus = $this->getSettingService()->get('menu_hiddens', []);
 
             if ($couponSetting['enabled']) {
                 unset($hiddenMenus['admin_coupon_generate']);
@@ -115,17 +116,17 @@ class CouponController extends BaseController
             return $this->createJsonResponse(true);
         }
 
-        return $this->render('admin-v2/marketing/coupon/setting.html.twig', array(
+        return $this->render('admin-v2/marketing/coupon/setting.html.twig', [
             'couponSetting' => $couponSetting,
-        ));
+        ]);
     }
 
     public function generateAction(Request $request)
     {
-        $couponSetting = $this->getSettingService()->get('coupon', array());
+        $couponSetting = $this->getSettingService()->get('coupon', []);
 
         if (empty($couponSetting['enabled'])) {
-            return $this->render('admin-v2/marketing/coupon/permission-message.html.twig', array('type' => 'info'));
+            return $this->render('admin-v2/marketing/coupon/permission-message.html.twig', ['type' => 'info']);
         }
 
         if ('POST' == $request->getMethod()) {
@@ -136,12 +137,12 @@ class CouponController extends BaseController
 
             $batch = $this->getCouponBatchService()->generateCoupon($couponData);
 
-            $data = array(
+            $data = [
                 'code' => true,
                 'message' => '',
-                'url' => $this->generateUrl('admin_v2_coupon_batch_create', array('batchId' => $batch['id'])),
+                'url' => $this->generateUrl('admin_v2_coupon_batch_create', ['batchId' => $batch['id']]),
                 'num' => $batch['generatedNum'],
-            );
+            ];
 
             return $this->createJsonResponse($data);
         }
@@ -155,20 +156,20 @@ class CouponController extends BaseController
 
         $generateNum = $request->request->get('generateNum', 0);
         if ($generateNum >= 1000) {
-            return $this->createJsonResponse(array('code' => fase, 'message' => 'GenerateNum must be less than 1000'));
+            return $this->createJsonResponse(['code' => false, 'message' => 'GenerateNum must be less than 1000']);
         }
 
         $this->getCouponBatchService()->createBatchCoupons($batch['id'], $generateNum);
 
-        $generatedNum = $this->getCouponService()->searchCouponsCount(array('batchId' => $batch['id']));
+        $generatedNum = $this->getCouponService()->searchCouponsCount(['batchId' => $batch['id']]);
 
-        $data = array(
+        $data = [
             'code' => true,
-            'url' => $this->generateUrl('admin_v2_coupon_batch_create', array('batchId' => $batch['id'])),
+            'url' => $this->generateUrl('admin_v2_coupon_batch_create', ['batchId' => $batch['id']]),
             'generatedNum' => $generatedNum,
             'percent' => ceil($generatedNum / $batch['generatedNum'] * 100),
             'goto' => '',
-        );
+        ];
 
         if ($generatedNum >= $batch['generatedNum']) {
             $data['goto'] = $this->generateUrl('admin_v2_coupon');
@@ -183,9 +184,9 @@ class CouponController extends BaseController
         $result = $this->getCouponBatchService()->checkBatchPrefix($prefix);
 
         if ($result) {
-            $response = array('success' => true, 'message' => '该前缀可以使用');
+            $response = ['success' => true, 'message' => '该前缀可以使用'];
         } else {
-            $response = array('success' => false, 'message' => '该前缀已存在');
+            $response = ['success' => false, 'message' => '该前缀已存在'];
         }
 
         return $this->createJsonResponse($response);
@@ -226,7 +227,7 @@ class CouponController extends BaseController
 
         $exportFilename = 'couponBatch-'.$batchId.'-'.date('YmdHi').'.csv';
 
-        $titles = array('批次', '有效期至', '优惠码', '状态');
+        $titles = ['批次', '有效期至', '优惠码', '状态'];
 
         $exportFile = $this->createExporteCSVResponse($titles, $coupons, $exportFilename);
 
@@ -250,15 +251,15 @@ class CouponController extends BaseController
 
     public function detailAction(Request $request, $batchId)
     {
-        $count = $this->getCouponService()->searchCouponsCount(array('batchId' => $batchId));
+        $count = $this->getCouponService()->searchCouponsCount(['batchId' => $batchId]);
 
         $batch = $this->getCouponBatchService()->getBatch($batchId);
 
         $paginator = new Paginator($this->get('request'), $count, 20);
 
         $coupons = $this->getCouponService()->searchCoupons(
-            array('batchId' => $batchId),
-            array('orderTime' => 'DESC', 'id' => 'ASC'),
+            ['batchId' => $batchId],
+            ['orderTime' => 'DESC', 'id' => 'ASC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -266,59 +267,66 @@ class CouponController extends BaseController
 
         $orders = $this->getOrderService()->findOrdersByIds(ArrayToolkit::column($coupons, 'orderId'));
 
-        return $this->render('admin-v2/marketing/coupon/coupon-modal.html.twig', array(
+        return $this->render('admin-v2/marketing/coupon/coupon-modal.html.twig', [
             'coupons' => $coupons,
             'batch' => $batch,
             'paginator' => $paginator,
             'users' => $users,
             'orders' => ArrayToolkit::index($orders, 'id'),
-        ));
+        ]);
     }
 
     public function targetDetailAction(Request $request, $targetType, $batchId)
     {
         $batch = $this->getCouponBatchService()->getBatch($batchId);
         $paginator = new Paginator($this->get('request'), count($batch['targetIds']), 10);
-        $targetIds = empty($batch['targetIds']) ? array(-1) : $batch['targetIds'];
+        $targetIds = empty($batch['targetIds']) ? [-1] : $batch['targetIds'];
 
-        $targets = array();
-        $users = array();
-        $categories = array();
-        if ('course' == $targetType) {
+        $targets = [];
+        $users = [];
+        $categories = [];
+        if ('course' === $targetType) {
             $targets = $this->getCourseSetService()->searchCourseSets(
-                array('ids' => $targetIds),
-                array('createdTime' => 'ASC'),
+                ['ids' => $targetIds],
+                ['createdTime' => 'ASC'],
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );
             $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($targets, 'creator'));
-        } elseif ('classroom' == $targetType) {
+        } elseif ('classroom' === $targetType) {
             $targets = $this->getClassroomService()->searchClassrooms(
-                array('classroomIds' => $targetIds),
-                array('createdTime' => 'ASC'),
+                ['classroomIds' => $targetIds],
+                ['createdTime' => 'ASC'],
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );
             $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($targets, 'categoryId'));
+        } elseif ('goods' === $targetType) {
+            $targets = $this->getGoodsService()->searchGoods(
+                ['ids' => $targetIds],
+                ['createdTime' => 'DESC'],
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
         }
 
-        return $this->render('admin-v2/marketing/coupon/target-modal.html.twig', array(
+        return $this->render('admin-v2/marketing/coupon/target-modal.html.twig', [
             'targets' => $targets,
             'targetType' => $targetType,
             'users' => $users,
             'categories' => $categories,
             'paginator' => $paginator,
-        ));
+        ]);
     }
 
     public function getReceiveUrlAction(Request $request, $batchId)
     {
         $batch = $this->getCouponBatchService()->getBatch($batchId);
 
-        return $this->render('admin-v2/marketing/coupon/get-receive-url-modal.html.twig', array(
+        return $this->render('admin-v2/marketing/coupon/get-receive-url-modal.html.twig', [
             'batch' => $batch,
-            'url' => $this->generateUrl('coupon_receive', array('token' => $batch['token']), UrlGeneratorInterface::ABSOLUTE_URL),
-        ));
+            'url' => $this->generateUrl('coupon_receive', ['token' => $batch['token']], UrlGeneratorInterface::ABSOLUTE_URL),
+        ]);
     }
 
     public function couponReceiveAction(Request $request, $token)
@@ -326,9 +334,9 @@ class CouponController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            $goto = $this->generateUrl('coupon_receive', array('token' => $token), UrlGeneratorInterface::ABSOLUTE_URL);
+            $goto = $this->generateUrl('coupon_receive', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
 
-            return $this->redirect($this->generateUrl('login', array('goto' => $goto)));
+            return $this->redirect($this->generateUrl('login', ['goto' => $goto]));
         }
         $couponBatch = $this->getCouponBatchService()->getBatchByToken($token);
         if (!$couponBatch['linkEnable']) {
@@ -338,14 +346,14 @@ class CouponController extends BaseController
 
         if ($result['code']) {
             if (isset($result['id'])) {
-                $response = $this->redirect($this->generateUrl('my_cards', array('cardType' => 'coupon', 'cardId' => $result['id'])));
+                $response = $this->redirect($this->generateUrl('my_cards', ['cardType' => 'coupon', 'cardId' => $result['id']]));
 
                 $response->headers->setCookie(new Cookie('modalOpened', '1'));
 
                 return $response;
             }
 
-            return $this->createMessageResponse('info', $result['message'], '', 3, $this->generateUrl('my_cards', array('cardType' => 'coupon')));
+            return $this->createMessageResponse('info', $result['message'], '', 3, $this->generateUrl('my_cards', ['cardType' => 'coupon']));
         }
 
         return $this->createMessageResponse('info', '无效的链接', '', 3, $this->generateUrl('homepage'));
@@ -389,6 +397,14 @@ class CouponController extends BaseController
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->createService('Goods:GoodsService');
     }
 
     /**

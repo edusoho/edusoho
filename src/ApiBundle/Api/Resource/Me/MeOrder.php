@@ -2,9 +2,10 @@
 
 namespace ApiBundle\Api\Resource\Me;
 
+use ApiBundle\Api\Annotation\ResponseFilter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use ApiBundle\Api\Annotation\ResponseFilter;
+use Biz\OrderFacade\Product\Product;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class MeOrder extends AbstractResource
@@ -14,29 +15,39 @@ class MeOrder extends AbstractResource
      */
     public function search(ApiRequest $request)
     {
-        $conditions = array(
+        $conditions = [
             'user_id' => $this->getCurrentUser()->getId(),
-        );
+        ];
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $orders = $this->getOrderService()->searchOrders(
             $conditions,
-            array('created_time' => 'DESC'),
+            ['created_time' => 'DESC'],
             $offset,
             $limit
         );
 
+        /*
+         * targetType/targetId
+         */
         foreach ($orders as &$order) {
             $product = $this->getProduct($order['id']);
-            $order['cover'] = empty($product->cover) ? array('middle' => '') : $product->cover;
+            $order['cover'] = empty($product->cover) ? ['middle' => ''] : $product->cover;
             $order['targetType'] = $product->targetType;
-            $order['targetId'] = $product->targetId;
-            $order['targetUrl'] = $this->generateUrl($product->successUrl[0], $product->successUrl[1], UrlGeneratorInterface::ABSOLUTE_URL);
+            $order['targetId'] = $product->targetId; //targetId要转化成正常的接口
+            $order['targetUrl'] = $this->generateUrl($product->successUrl[0], $product->successUrl[1], UrlGeneratorInterface::ABSOLUTE_URL); //跳转URL需要改造
+            $order['goodsId'] = $product->goodsId;
+            $order['specsId'] = $product->goodsSpecsId;
         }
         $total = $this->getOrderService()->countOrders($conditions);
 
         return $this->makePagingObject($orders, $total, $offset, $limit);
     }
 
+    /**
+     * @param $orderId
+     *
+     * @return Product
+     */
     private function getProduct($orderId)
     {
         $orderItems = $this->getOrderService()->findOrderItemsByOrderId($orderId);

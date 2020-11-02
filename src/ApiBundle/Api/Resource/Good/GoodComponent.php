@@ -2,108 +2,215 @@
 
 namespace ApiBundle\Api\Resource\Good;
 
+use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use ApiBundle\Api\Resource\Filter;
+use ApiBundle\Api\Resource\User\UserFilter;
+use ApiBundle\Api\Util\AssetHelper;
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\CourseSetService;
+use Biz\Favorite\Service\FavoriteService;
+use Biz\Goods\Service\GoodsService;
+use Biz\Goods\Service\RecommendGoodsService;
+use Biz\Product\Service\ProductService;
+use Biz\System\Service\SettingService;
 
 class GoodComponent extends AbstractResource
 {
+    /**
+     * @param $id
+     * @param $component
+     *
+     * @ApiConf(isRequiredAuth=false)
+     */
     public function get(ApiRequest $request, $id, $component)
     {
-        return (object) ['teachers' => $this->getMockedComponents($component)];
+        return $this->getComponentsByTypes($id, [$component]);
     }
 
+    /**
+     * @param $id
+     *
+     * @return array
+     * @ApiConf(isRequiredAuth=false)
+     */
     public function search(ApiRequest $request, $id)
     {
-        $componentTypes = $request->query->get('componentTypes', []);
+        $componentTypes = ['mpQrCode', 'teachers', 'recommendGoods', 'classroomCourses'];
+
+        return $this->getComponentsByTypes($id, $componentTypes);
+    }
+
+    private function getComponentsByTypes($goodsId, array $types)
+    {
+        $goods = $this->getGoodsService()->getGoods($goodsId);
+        $product = $this->getProductService()->getProduct($goods['productId']);
+
         $components = [];
-        foreach ($componentTypes as $componentType) {
-            $components[$componentType] = $this->getMockedComponents($componentType);
+        foreach ($types as $type) {
+            if ('mpQrCode' === $type) {
+                $components['mpQrCode'] = $this->getMpQrCodeComponent();
+                continue;
+            }
+
+            if ('teachers' === $type) {
+                $components['teachers'] = $this->getTeacherComponent($product);
+                continue;
+            }
+
+            if ('recommendGoods' === $type) {
+                $components['recommendGoods'] = $this->getRecommendGoodsComponent($goods);
+                foreach ($components['recommendGoods'] as &$good) {
+                    $good = $this->getGoodsService()->convertGoodsPrice($good);
+                }
+                continue;
+            }
+
+            if ('classroomCourses' === $type) {
+                $components['classroomCourses'] = $this->getClassroomCourses($product);
+                continue;
+            }
         }
 
         return $components;
     }
 
-    protected function getMockedComponents($component)
+    private function getIsFavoriteComponent($product)
     {
-        $mockedComponents = [
-            'teachers' => [
-                [
-                    'id' => 1,
-                    'avatar' => [
-                        'small' => 'http://try6.edusoho.cn/files/user/2020/06-15/1741586dd258161303.jpg',
-                        'medium' => 'http://try6.edusoho.cn/files/user/2020/06-15/1741586dd258161303.jpg',
-                        'large' => 'http://try6.edusoho.cn/files/user/2020/06-15/1741586dd258161303.jpg',
-                    ],
-                    'name' => '马老师',
-                    'title' => '国家一级教师',
-                ],
-                [
-                    'id' => 2,
-                    'avatar' => [
-                        'small' => 'http://try6.edusoho.cn/files/user/2020/06-15/1741586dd258161303.jpg',
-                        'medium' => 'http://try6.edusoho.cn/files/user/2020/06-15/1741586dd258161303.jpg',
-                        'large' => 'http://try6.edusoho.cn/files/user/2020/06-15/1741586dd258161303.jpg',
-                    ],
-                    'name' => '李老师',
-                    'title' => '国家中级教师',
-                ],
-            ],
-            'mpQrcode' => [
-                'title' => '关注公众号',
-                'imageUrl' => 'https://cdn2.jianshu.io/assets/web/download-index-side-qrcode-4130a7a6521701c4cb520ee6997d5fdb.png',
-                'mpName' => '小兵果屋',
-                'content' => '关注公众号，随时随地学习最新知识',
-            ],
-            'reviews' => [
-                [
-                    'id' => 1,
-                    'userId' => 10,
-                    'user' => [
-                        'id' => 10,
-                        'nickname' => '小兵张嘎',
-                    ],
-                    'content' => '不错的课程',
-                    'rating' => '4',
-                    'targetName' => '默认学习计划',
-                    'targetId' => 1,
-                    'createdTime' => date('c'),
-                ],
-                [
-                    'id' => 2,
-                    'userId' => 11,
-                    'user' => [
-                        'id' => 11,
-                        'nickname' => '小兵张嘎',
-                    ],
-                    'content' => '很棒的课程',
-                    'rating' => '5',
-                    'targetId' => 1,
-                    'targetName' => '默认学习计划',
-                    'createdTime' => date('c'),
-                ],
-            ],
-            'recommendGoods' => [
-                [
-                    'id' => 1,
-                    'dataDescription' => '富文本商品描述，有挂件，多计划，计划无优惠，永久有效，承诺服务',
-                    'title' => '课程商品标题',
-                    'subtitle' => '课程商品副标题',
-                    'image' => 'http://try6.edusoho.cn/files/course/2020/04-14/18332003d725680219.jpeg',
-                ],
-                [
-                    'id' => 2,
-                    'dataDescription' => '富文本商品描述，有挂件，多计划，计划无优惠，永久有效，承诺服务',
-                    'title' => '课程商品标题',
-                    'subtitle' => '课程商品副标题',
-                    'image' => 'http://try6.edusoho.cn/files/course/2020/04-14/18332003d725680219.jpeg',
-                ],
-            ],
-            'classroomCourses' => [
-            ],
-            'courseTasks' => [
-            ],
-        ];
+        $favorite = $this->getFavoriteService()->getUserFavorite(
+            $this->getCurrentUser()->getId(),
+            $product['targetType'],
+            $product['targetId']
+        );
 
-        return empty($mockedComponents[$component]) ? [] : $mockedComponents[$component];
+        return !empty($favorite);
+    }
+
+    private function getMpQrCodeComponent()
+    {
+        $goodsSetting = $this->getSettingService()->get('goods_setting', []);
+        if (empty($goodsSetting['leading_join_enabled'])) {
+            return null;
+        }
+
+        return [
+            'title' => $goodsSetting['leading']['label'],
+            'content' => $goodsSetting['leading']['description'],
+            'imageUrl' => AssetHelper::getFurl($goodsSetting['leading']['qrcode']),
+        ];
+    }
+
+    private function getTeacherComponent($product)
+    {
+        if ('course' === $product['targetType']) {
+            $courseSet = $this->getCourseSetService()->getCourseSet($product['targetId']);
+            if (empty($courseSet['teacherIds'])) {
+                return [];
+            }
+
+            $teachers['teacherIds'] = $courseSet['teacherIds'];
+            $this->getOCUtil()->single($teachers, ['teacherIds']);
+
+            $userFilter = new UserFilter();
+            $userFilter->setMode(Filter::SIMPLE_MODE);
+            $userFilter->filters($teachers['teachers']);
+
+            return $teachers['teachers'];
+        }
+
+        if ('classroom' === $product['targetType']) {
+            $classroom = $this->getClassroomService()->getClassroom($product['targetId']);
+            if (empty($classroom['headTeacherId'])) {
+                return [];
+            }
+
+            $teachers['teacherIds'] = [$classroom['headTeacherId']];
+            $this->getOCUtil()->single($teachers, ['teacherIds']);
+
+            $userFilter = new UserFilter();
+            $userFilter->setMode(Filter::SIMPLE_MODE);
+            $userFilter->filters($teachers['teachers']);
+
+            return $teachers['teachers'];
+        }
+    }
+
+    private function getRecommendGoodsComponent($goods)
+    {
+        $recommendGoods = $this->getRecommendGoodsService()->findRecommendedGoodsByGoods($goods);
+
+        $goodsFilter = new GoodFilter();
+        $goodsFilter->setMode(Filter::SIMPLE_MODE);
+        $goodsFilter->filters($recommendGoods);
+
+        return $recommendGoods;
+    }
+
+    private function getClassroomCourses($product)
+    {
+        if ('classroom' !== $product['targetType']) {
+            return [];
+        }
+
+        $apiRequest = new ApiRequest("/api/classrooms/{$product['targetId']}/courses", 'GET');
+
+        return $this->invokeResource($apiRequest);
+    }
+
+    /**
+     * @return GoodsService
+     */
+    private function getGoodsService()
+    {
+        return $this->service('Goods:GoodsService');
+    }
+
+    /**
+     * @return RecommendGoodsService
+     */
+    private function getRecommendGoodsService()
+    {
+        return $this->service('Goods:RecommendGoodsService');
+    }
+
+    /**
+     * @return ProductService
+     */
+    private function getProductService()
+    {
+        return $this->service('Product:ProductService');
+    }
+
+    /**
+     * @return FavoriteService
+     */
+    private function getFavoriteService()
+    {
+        return $this->service('Favorite:FavoriteService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    private function getSettingService()
+    {
+        return $this->service('System:SettingService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    private function getClassroomService()
+    {
+        return $this->service('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return CourseSetService
+     */
+    private function getCourseSetService()
+    {
+        return $this->service('Course:CourseSetService');
     }
 }

@@ -2,8 +2,8 @@
 
 namespace Biz\Coupon\Dao\Impl;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 use Biz\Coupon\Dao\CouponBatchDao;
+use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class CouponBatchDaoImpl extends GeneralDaoImpl implements CouponBatchDao
 {
@@ -11,13 +11,14 @@ class CouponBatchDaoImpl extends GeneralDaoImpl implements CouponBatchDao
 
     public function declares()
     {
-        return array(
-            'serializes' => array(
+        return [
+            'serializes' => [
                 'targetIds' => 'delimiter',
-            ),
-            'orderbys' => array('createdTime', 'id'),
-            'timestamps' => array('createdTime'),
-            'conditions' => array(
+                'goodsIds' => 'delimiter',
+            ],
+            'orderbys' => ['createdTime', 'id'],
+            'timestamps' => ['createdTime'],
+            'conditions' => [
                 'targetId = :targetId',
                 'targetId IN (:targetIds)',
                 'targetType = :targetType',
@@ -29,8 +30,8 @@ class CouponBatchDaoImpl extends GeneralDaoImpl implements CouponBatchDao
                 'h5MpsEnable = :h5MpsEnable',
                 'deadline > :deadlineGt',
                 'deadline = 0 OR deadline > :unexpiredTime',
-            ),
-        );
+            ],
+        ];
     }
 
     public function findBatchsByIds($ids)
@@ -42,13 +43,13 @@ class CouponBatchDaoImpl extends GeneralDaoImpl implements CouponBatchDao
     {
         $sql = "SELECT * FROM {$this->table()} WHERE token = ?".($locked ? ' FOR UPDATE' : '');
 
-        return $this->db()->fetchAssoc($sql, array($token)) ?: null;
+        return $this->db()->fetchAssoc($sql, [$token]) ?: null;
     }
 
     public function sumDeductAmountByBatchId($batchId)
     {
         $sql = "SELECT sum(od.`deduct_amount`) FROM `biz_order_item_deduct` as od left join `coupon` as c on od.deduct_id = c.id where od.`deduct_type` = 'coupon' and c.`batchId`= ? and c.status ='used'";
-        $sum = $this->db()->fetchColumn($sql, array($batchId));
+        $sum = $this->db()->fetchColumn($sql, [$batchId]);
 
         return empty($sum) ? 0 : $sum;
     }
@@ -75,12 +76,12 @@ class CouponBatchDaoImpl extends GeneralDaoImpl implements CouponBatchDao
                 LIMIT {$offset}, {$limit}
             ";
 
-            return $this->db()->fetchAll($sql, array(
+            return $this->db()->fetchAll($sql, [
                 $conditions['userId'],
                 $conditions['deadlineGt'],
                 $conditions['likeTargetIds'],
                 $conditions['targetType'],
-            ));
+            ]);
         } else {
             $sql = "
                 SELECT *
@@ -94,11 +95,11 @@ class CouponBatchDaoImpl extends GeneralDaoImpl implements CouponBatchDao
                 LIMIT {$offset}, {$limit}
             ";
 
-            return $this->db()->fetchAll($sql, array(
+            return $this->db()->fetchAll($sql, [
                 $conditions['deadlineGt'],
                 $conditions['likeTargetIds'],
                 $conditions['targetType'],
-            ));
+            ]);
         }
     }
 
@@ -121,12 +122,12 @@ class CouponBatchDaoImpl extends GeneralDaoImpl implements CouponBatchDao
                     AND (coupon_batch.targetType IN ('all', ?))
             ";
 
-            return $this->db()->fetchColumn($sql, array(
+            return $this->db()->fetchColumn($sql, [
                 $conditions['userId'],
                 $conditions['deadlineGt'],
                 $conditions['likeTargetIds'],
                 $conditions['targetType'],
-            ));
+            ]);
         } else {
             $sql = "
                 SELECT COUNT(DISTINCT(id))
@@ -138,18 +139,18 @@ class CouponBatchDaoImpl extends GeneralDaoImpl implements CouponBatchDao
                     AND targetType IN ('all', ?)
             ";
 
-            return $this->db()->fetchColumn($sql, array(
+            return $this->db()->fetchColumn($sql, [
                 $conditions['deadlineGt'],
                 $conditions['likeTargetIds'],
                 $conditions['targetType'],
-            ));
+            ]);
         }
     }
 
     public function findBatchByPrefix($prefix)
     {
-        return $this->findByFields(array(
+        return $this->findByFields([
             'prefix' => $prefix,
-        ));
+        ]);
     }
 }

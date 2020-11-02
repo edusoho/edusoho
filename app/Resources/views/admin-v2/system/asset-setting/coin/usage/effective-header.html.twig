@@ -1,0 +1,17 @@
+<ul class="breadcrumb">
+  <li><a href="{{path('admin_v2_coin_model')}}">{{'admin.coin.model_setting'|trans}}</a></li>
+  <li class="active">{{'course.price_setting'|trans}}</li>
+</ul>
+
+<p>
+  <span>{{'admin.coin.model'|trans}}：</span>
+  <strong class="text-info">
+    {% if set.cash_model =="deduction" %}
+      {{'finance.use_deduction'|trans}}
+    {% else %}
+      {{'finance.user_currency'|trans}}
+    {% endif %}
+  </strong>
+  <span class="mll" data-val="{{ set.cash_rate}}" id="cash-rate">{{'coin.rate'|trans}}：</span>
+  {{ 'admin.coin_course_set.tips'|trans({'%cashRate%':set.cash_rate, '%coinName%': setting('coin.coin_name')})|raw }}
+</p>

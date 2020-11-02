@@ -27,6 +27,8 @@ interface ClassroomService
 
     public function getClassroom($id);
 
+    public function hitClassroom($id);
+
     /**
      * @param $id
      * @param $fields
@@ -87,7 +89,11 @@ interface ClassroomService
      */
     public function deleteClassroom($id);
 
-    public function searchClassrooms($conditions, $orderBy, $start, $limit, $columns = []);
+    public function searchClassrooms($conditions, $orderBy, $start, $limit, $columns = [], $withMarketingInfo = false);
+
+    public function appendSpecsInfo($classrooms);
+
+    public function appendSpecInfo($classroom);
 
     public function countClassrooms($condtions);
 

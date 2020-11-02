@@ -36,6 +36,7 @@ module.exports = {
     'bootstrap-treeview': ['libs/bootstrap-treeview/index.js'],
     'vue': ['vue'],
     'province-city-area': ['libs/province-city-area.js']
+    'element-ui': ['element-ui'],
   },
   noParseDeps: { // 不解析依赖，加快编译速度
     'jquery': 'jquery/dist/jquery.js',
@@ -59,7 +60,8 @@ module.exports = {
     'handlebars': 'handlebars/dist/handlebars.min.js',
     'moment': 'moment/moment.js',
     'fullcalendar': 'es-fullcalendar/dist/fullcalendar.js',
-    'codeages-design': 'codeages-design/dist/codeages-design.js'
+    'codeages-design': 'codeages-design/dist/codeages-design.js',
+    'element-ui': 'element-ui/dist/index.js',
   },
   onlyCopys: [ //纯拷贝文件到输出的libs目录下
     {
@@ -68,6 +70,15 @@ module.exports = {
         '**/samples/**',
         '**/kityformula/libs/**',
       ]
+    },
+    {
+      name: 'element-ui',
+      ignore: [
+        'lib/**',
+        'packages/**',
+        'src/**',
+        'types/**'
+      ],
     },
     // 纯拷贝item-bank/lib/itemBank.umd.min.js
     {

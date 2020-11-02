@@ -15,7 +15,9 @@ use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\MaterialService;
 use Biz\Favorite\Service\FavoriteService;
 use Biz\File\Service\UploadFileService;
+use Biz\Goods\Service\GoodsService;
 use Biz\Order\OrderException;
+use Biz\Product\Service\ProductService;
 use Biz\Review\Service\ReviewService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
@@ -83,6 +85,13 @@ class CourseController extends CourseBaseController
             }
         }
 
+        if ($this->isGoods($course)) {
+            $product = $this->getProductService()->getProductByTargetIdAndType($courseSet['id'], 'course');
+            $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
+
+            return $this->redirect($this->generateUrl('goods_show', ['id' => $goods['id'], 'targetId' => $course['id']]));
+        }
+
         if ($this->isPluginInstalled('Discount')) {
             $discount = $this->getDiscountService()->getDiscount($courseSet['discountId']);
             if (!empty($discount)) {
@@ -117,6 +126,11 @@ class CourseController extends CourseBaseController
                 'navMember' => $member,
             ]
         );
+    }
+
+    protected function isGoods($course)
+    {
+        return 0 == $course['parentId'] && 'self' == $course['platform'] && 'reservation' != $course['type'];
     }
 
     private function canCourseShowRedirect($request)
@@ -384,9 +398,9 @@ class CourseController extends CourseBaseController
         }
         if (!empty($member)) {
             if ($selectedCourseId > 0) {
-                $userReview = $this->getReviewService()->getByUserIdAndTargetTypeAndTargetId($member['userId'], 'course', $selectedCourseId);
+                $userReview = $this->getReviewService()->getReviewByUserIdAndTargetTypeAndTargetId($member['userId'], 'course', $selectedCourseId);
             } else {
-                $userReview = $this->getReviewService()->getByUserIdAndTargetTypeAndTargetId($member['userId'], 'course', $course['id']);
+                $userReview = $this->getReviewService()->getReviewByUserIdAndTargetTypeAndTargetId($member['userId'], 'course', $course['id']);
             }
         }
 
@@ -496,6 +510,35 @@ class CourseController extends CourseBaseController
             'courseItems' => $courseItems,
             'nextOffsetSeq' => $nextOffsetSeq,
             'isMarketingPage' => $isMarketingPage,
+            'showOptional' => $request->query->getBoolean('showOptional'),
+        ]);
+    }
+
+    public function getTaskListDataAction(Request $request, $courseId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+        $member = $this->getCourseMember($request, $course);
+        list($isMarketingPage, $member) = $this->isMarketingPage($course['id'], $member);
+
+        // limit 不限制
+        list($courseItems, $nextOffsetSeq) = $this->getCourseService()->findCourseItemsByPaging($course['id'], ['limit' => PHP_INT_MAX]);
+        $courseItems = $this->get('web.twig.course_extension')->taskListJsonData($courseItems, $request->query->getBoolean('showOptional'));
+        $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
+
+        return $this->createJsonResponse([
+            'course' => $course,
+            'member' => $member,
+            'courseSet' => $courseSet,
+            'courseItems' => json_decode($courseItems, true),
+            'nextOffsetSeq' => $nextOffsetSeq,
+            'isMarketingPage' => $isMarketingPage,
+            'optionalTaskCount' => $this->getTaskService()->countTasks(
+                [
+                    'courseId' => $course['id'],
+                    'status' => 'published',
+                    'isOptional' => 1,
+                ]
+            ),
             'showOptional' => $request->query->getBoolean('showOptional'),
         ]);
     }
@@ -978,5 +1021,21 @@ class CourseController extends CourseBaseController
     protected function getFavoriteService()
     {
         return $this->createService('Favorite:FavoriteService');
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getProductService()
+    {
+        return $this->createService('Product:ProductService');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->createService('Goods:GoodsService');
     }
 }

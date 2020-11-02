@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Course\Service;
 
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\ReflectionUtils;
 use AppBundle\Common\TimeMachine;
 use Biz\Activity\Dao\ActivityDao;
@@ -85,9 +86,10 @@ class CourseServiceTest extends BaseTestCase
     public function testRecommendCourseByCourseSetId()
     {
         TimeMachine::setMockedTime(time());
-        $courseParams = $this->defaultCourse('默认教学计划', ['id' => 1]);
+        $courseSet = $this->createNewCourseSet();
+        $courseParams = $this->defaultCourse('默认教学计划', $courseSet);
         $course = $this->getCourseService()->createCourse($courseParams);
-        $this->getCourseService()->recommendCourseByCourseSetId(1, [
+        $this->getCourseService()->recommendCourseByCourseSetId($courseSet['id'], [
             'recommended' => 1,
             'recommendedTime' => TimeMachine::time(),
             'recommendedSeq' => 1,
@@ -112,9 +114,10 @@ class CourseServiceTest extends BaseTestCase
     public function testCancelRecommendCourseByCourseSetId()
     {
         TimeMachine::setMockedTime(time());
-        $courseParams = $this->defaultCourse('默认教学计划', ['id' => 1]);
+        $courseSet = $this->createNewCourseSet();
+        $courseParams = $this->defaultCourse('默认教学计划', $courseSet);
         $course = $this->getCourseService()->createCourse($courseParams);
-        $this->getCourseService()->recommendCourseByCourseSetId(1, [
+        $this->getCourseService()->recommendCourseByCourseSetId($courseSet['id'], [
             'recommended' => 1,
             'recommendedTime' => TimeMachine::time(),
             'recommendedSeq' => 1,
@@ -133,26 +136,29 @@ class CourseServiceTest extends BaseTestCase
 
     public function testUpdateMaxRate()
     {
-        $courseParams = $this->defaultCourse('默认教学计划', ['id' => 1]);
+        $courseSet = $this->createNewCourseSet();
+        $courseParams = $this->defaultCourse('默认教学计划', $courseSet);
         $course = $this->getCourseService()->createCourse($courseParams);
         $newCourse = $this->getCourseService()->updateMaxRate($course['id'], 4);
-        $this->assertEquals($course['maxRate'], 0);
-        $this->assertEquals($newCourse['maxRate'], 4);
+        self::assertEquals($course['maxRate'], 100);
+        self::assertEquals($newCourse['maxRate'], 4);
     }
 
     public function testUpdateMaxRateByCourseSetId()
     {
-        $courseParams = $this->defaultCourse('默认教学计划', ['id' => 1]);
+        $courseSet = $this->createNewCourseSet();
+        $courseParams = $this->defaultCourse('默认教学计划', $courseSet);
         $course = $this->getCourseService()->createCourse($courseParams);
-        $this->getCourseService()->updateMaxRateByCourseSetId($course['id'], 4);
+        $this->getCourseService()->updateMaxRateByCourseSetId($courseSet['id'], 4);
         $newCourse = $this->getCourseService()->getCourse($course['id']);
-        $this->assertEquals($course['maxRate'], 0);
+        $this->assertEquals($course['maxRate'], 100);
         $this->assertEquals($newCourse['maxRate'], 4);
     }
 
     public function testUpdateCourseRewardPoint()
     {
-        $courseParams = $this->defaultCourse('默认教学计划', ['id' => 1]);
+        $courseSet = $this->createNewCourseSet();
+        $courseParams = $this->defaultCourse('默认教学计划', $courseSet);
         $course = $this->getCourseService()->createCourse($courseParams);
         $newCourse = $this->getCourseService()->updateCourseRewardPoint(
             $course['id'],
@@ -162,12 +168,12 @@ class CourseServiceTest extends BaseTestCase
                 'title' => 'changeTitle',
             ]
         );
-        $this->assertEquals($course['taskRewardPoint'], 0);
-        $this->assertEquals($newCourse['taskRewardPoint'], 10);
-        $this->assertEquals($course['rewardPoint'], 0);
-        $this->assertEquals($newCourse['rewardPoint'], 5);
-        $this->assertEquals($course['title'], '默认教学计划');
-        $this->assertEquals($newCourse['title'], '默认教学计划');
+        self::assertEquals($course['taskRewardPoint'], 0);
+        self::assertEquals($newCourse['taskRewardPoint'], 10);
+        self::assertEquals($course['rewardPoint'], 0);
+        self::assertEquals($newCourse['rewardPoint'], 5);
+        self::assertEquals($course['title'], '默认教学计划');
+        self::assertEquals($newCourse['title'], '默认教学计划');
     }
 
     public function testValidateCourseRewardPoint()
@@ -389,26 +395,24 @@ class CourseServiceTest extends BaseTestCase
 
     public function testFindCoursesByCourseSetIds()
     {
-        $course = $this->defaultCourse('第一个教学计划', ['id' => 1]);
+        $courseSet = $this->createNewCourseSet();
+        $course = $this->defaultCourse('第一个教学计划', $courseSet);
 
         $result = $this->getCourseService()->createCourse($course);
-        $this->assertNotNull($result);
-        $courses = $this->getCourseService()->findCoursesByCourseSetIds([1]);
-        $this->assertEquals(sizeof($courses), 1);
+        self::assertNotNull($result);
+        $courses = $this->getCourseService()->findCoursesByCourseSetIds([$courseSet['id']]);
+        self::assertEquals(count($courses), 2);
     }
 
     public function testGetDefaultCoursesByCourseSetIds()
     {
-        $course = $this->defaultCourse('默认教学计划', ['id' => 1]);
-        $course['isDefault'] = '1';
-        $result = $this->getCourseService()->createCourse($course);
-        $this->assertNotNull($result);
+        $courseSet = $this->createNewCourseSet();
 
-        $courses = $this->getCourseService()->getDefaultCoursesByCourseSetIds([1]);
-        $this->assertEquals(sizeof($courses), 1);
+        $courses = $this->getCourseService()->getDefaultCoursesByCourseSetIds([$courseSet['id']]);
+        $this->assertEquals(count($courses), 1);
         $defaultCourse = reset($courses);
 
-        $this->assertEquals($defaultCourse['title'], $course['title']);
+        $this->assertEquals($defaultCourse['title'], '');
     }
 
     public function testSetDefaultCourse()
@@ -452,7 +456,8 @@ class CourseServiceTest extends BaseTestCase
 
     public function testCreateCourse()
     {
-        $course = $this->defaultCourse('默认教学计划', ['id' => 1]);
+        $courseSet = $this->createNewCourseSet();
+        $course = $this->defaultCourse('默认教学计划', $courseSet);
         $result = $this->getCourseService()->createCourse($course);
 
         $this->assertEquals($result['title'], $course['title']);
@@ -484,17 +489,19 @@ class CourseServiceTest extends BaseTestCase
      */
     public function testFindCoursesByCourseSetId()
     {
-        $course = $this->defaultCourse('第一个教学计划', ['id' => 1]);
+        $courseSet = $this->createNewCourseSet();
+        $course = $this->defaultCourse('第一个教学计划', $courseSet);
 
         $result = $this->getCourseService()->createCourse($course);
         $this->assertNotNull($result);
-        $courses = $this->getCourseService()->findCoursesByCourseSetId(1);
-        $this->assertEquals(sizeof($courses), 1);
+        $courses = $this->getCourseService()->findCoursesByCourseSetId($courseSet['id']);
+        $this->assertEquals(sizeof($courses), 2);
     }
 
     public function testCreateAndGet()
     {
-        $course = $this->defaultCourse('第一个教学计划', ['id' => 1]);
+        $courseSet = $this->createNewCourseSet();
+        $course = $this->defaultCourse('第一个教学计划', $courseSet);
         $result = $this->getCourseService()->createCourse($course);
         $this->assertNotNull($result);
 
@@ -504,7 +511,8 @@ class CourseServiceTest extends BaseTestCase
 
     public function testUpdate()
     {
-        $course = $this->defaultCourse('第一个教学计划', ['id' => 1]);
+        $courseSet = $this->createNewCourseSet();
+        $course = $this->defaultCourse('第一个教学计划', $courseSet);
         $result = $this->getCourseService()->createCourse($course);
 
         $result['title'] = '第一个教学计划(改)';
@@ -550,19 +558,21 @@ class CourseServiceTest extends BaseTestCase
 
     public function testDelete()
     {
-        $course = $this->defaultCourse('第一个教学计划', ['id' => 1]);
+        $courseSet = $this->createNewCourseSet();
+        $course = $this->defaultCourse('第一个教学计划', $courseSet);
 
         $this->getCourseService()->createCourse($course);
         $result = $this->getCourseService()->createCourse($course);
 
         $deleted = $this->getCourseService()->deleteCourse($result['id']);
 
-        $this->assertEquals($deleted, 2);
+        self::assertEquals($deleted, $result['id']);
     }
 
     public function testCloseCourse()
     {
-        $course = $this->defaultCourse('第一个教学计划', ['id' => 1]);
+        $courseSet = $this->createNewCourseSet();
+        $course = $this->defaultCourse('第一个教学计划', $courseSet);
 
         $result = $this->getCourseService()->createCourse($course);
         $this->getCourseService()->publishCourse($result['id']);
@@ -570,36 +580,39 @@ class CourseServiceTest extends BaseTestCase
 
         $closed = $this->getCourseService()->getCourse($result['id']);
 
-        $this->assertTrue('closed' == $closed['status']);
+        self::assertTrue('closed' === $closed['status']);
     }
 
     public function testPublishCourse()
     {
-        $course = $this->defaultCourse('第一个教学计划', ['id' => 1]);
+        $courseSet = $this->createNewCourseSet();
+        $course = $this->defaultCourse('第一个教学计划', $courseSet);
 
         $result = $this->getCourseService()->createCourse($course);
 
         $this->getCourseService()->publishCourse($result['id']);
 
         $published = $this->getCourseService()->getCourse($result['id']);
-        $this->assertEquals($published['status'], 'published');
+        self::assertEquals($published['status'], 'published');
     }
 
     public function testHasNoTitleForDefaultPlanInMulPlansCourse()
     {
-        $defaultCourse = $this->createDefaultCourse('', ['id' => 1]);
+        $courseSet = $this->createNewCourseSet();
+        $defaultCourse = $this->getCourseService()->getCourse($courseSet['defaultCourseId']);
         $hasNoTitle = $this->getCourseService()->hasNoTitleForDefaultPlanInMulPlansCourse($defaultCourse['id']);
-        $this->assertFalse($hasNoTitle);
+        self::assertFalse($hasNoTitle);
 
-        $secondCourse = $this->createDefaultCourse('第二个教学计划', ['id' => 1], 0);
-        $hasNoTitle = $this->getCourseService()->hasNoTitleForDefaultPlanInMulPlansCourse($defaultCourse['id']);
-        $this->assertTrue($hasNoTitle);
+        $secondCourse = $this->createDefaultCourse('第二个教学计划', $courseSet, 0);
+        $hasNoTitle = $this->getCourseService()->hasNoTitleForDefaultPlanInMulPlansCourse($secondCourse['id']);
+        self::assertTrue($hasNoTitle);
     }
 
     public function testPublishAndSetDefaultCourseType()
     {
-        $defaultCourse = $this->createDefaultCourse('', ['id' => 1]);
-        $secondCourse = $this->createDefaultCourse('第二个教学计划', ['id' => 1], 0);
+        $courseSet = $this->createNewCourseSet();
+        $defaultCourse = $this->getCourseService()->getCourse($courseSet['defaultCourseId']);
+        $secondCourse = $this->createDefaultCourse('第二个教学计划', $courseSet, 0);
 
         $this->assertEquals('', $defaultCourse['title']);
         $this->assertEquals('draft', $secondCourse['status']);
@@ -615,8 +628,9 @@ class CourseServiceTest extends BaseTestCase
 
     public function testHasMulCourses()
     {
-        $defaultCourse = $this->createDefaultCourse('', ['id' => 1]);
-        $secondCourse = $this->createDefaultCourse('第二个教学计划', ['id' => 1], 0);
+        $courseSet = $this->createNewCourseSet();
+        $defaultCourse = $this->createDefaultCourse('', $courseSet);
+        $secondCourse = $this->createDefaultCourse('第二个教学计划', $courseSet, 0);
 
         $hasMulCourses = $this->getCourseService()->hasMulCourses($defaultCourse['courseSetId']);
         $this->assertTrue($hasMulCourses);
@@ -627,8 +641,9 @@ class CourseServiceTest extends BaseTestCase
 
     public function testIsCourseSetCoursesSummaryEmpty()
     {
-        $defaultCourse = $this->createDefaultCourse('', ['id' => 1]);
-        $secondCourse = $this->createDefaultCourse('第二个教学计划', ['id' => 1], 0);
+        $courseSet = $this->createNewCourseSet();
+        $defaultCourse = $this->createDefaultCourse('', $courseSet);
+        $secondCourse = $this->createDefaultCourse('第二个教学计划', $courseSet, 0);
 
         $isCoursesSummaryEmpty = $this->getCourseService()->isCourseSetCoursesSummaryEmpty($defaultCourse['courseSetId']);
         $this->assertFalse($isCoursesSummaryEmpty);
@@ -640,7 +655,8 @@ class CourseServiceTest extends BaseTestCase
 
     public function testFindCourseItems()
     {
-        $defaultCourse = $this->createDefaultCourse('第二个教学计划', ['id' => 1], 0);
+        $courseSet = $this->createNewCourseSet();
+        $defaultCourse = $this->createDefaultCourse('第二个教学计划', $courseSet, 0);
         $this->getCourseService()->publishCourse($defaultCourse['id']);
         $this->createActivity(['title' => 'activity 1']);
         $defaultTask = $this->createTask('default', $defaultCourse['id']);
@@ -651,7 +667,8 @@ class CourseServiceTest extends BaseTestCase
 
     public function testFindCourseItemsByPaging()
     {
-        $defaultCourse = $this->createDefaultCourse('第二个教学计划', ['id' => 1], 0);
+        $courseSet = $this->createNewCourseSet();
+        $defaultCourse = $this->createDefaultCourse('第二个教学计划', $courseSet, 0);
         $this->getCourseService()->publishCourse($defaultCourse['id']);
 
         $result = $this->getCourseService()->findCourseItemsByPaging($defaultCourse['id']);
@@ -669,7 +686,8 @@ class CourseServiceTest extends BaseTestCase
 
     public function testFindStudentsByCourseId()
     {
-        $defaultCourse = $this->createDefaultCourse('第二个教学计划', ['id' => 1], 0);
+        $courseSet = $this->createNewCourseSet();
+        $defaultCourse = $this->createDefaultCourse('第二个教学计划', $courseSet, 0);
 
         $result = $this->getCourseService()->findStudentsByCourseId($defaultCourse['id']);
         $this->assertEmpty($result);
@@ -677,7 +695,8 @@ class CourseServiceTest extends BaseTestCase
 
     public function testFindTeachersByCourseId()
     {
-        $defaultCourse = $this->createDefaultCourse('第二个教学计划', ['id' => 1], 0);
+        $courseSet = $this->createNewCourseSet();
+        $defaultCourse = $this->createDefaultCourse('第二个教学计划', $courseSet, 0);
 
         $result = $this->getCourseService()->findTeachersByCourseId($defaultCourse['id']);
         $this->assertEquals($defaultCourse['id'], $result[0]['courseId']);
@@ -685,7 +704,8 @@ class CourseServiceTest extends BaseTestCase
 
     public function testCountThreadsByCourseId()
     {
-        $defaultCourse = $this->createDefaultCourse('第二个教学计划', ['id' => 1], 0);
+        $courseSet = $this->createNewCourseSet();
+        $defaultCourse = $this->createDefaultCourse('第二个教学计划', $courseSet, 0);
 
         $count = $this->getCourseService()->countThreadsByCourseId($defaultCourse['id']);
         $this->assertEquals(0, $count);
@@ -694,7 +714,8 @@ class CourseServiceTest extends BaseTestCase
     public function testGetUserRoleInCourse()
     {
         $user = $this->getCurrentUser();
-        $defaultCourse = $this->createDefaultCourse('第二个教学计划', ['id' => 1], 0);
+        $courseSet = $this->createNewCourseSet();
+        $defaultCourse = $this->createDefaultCourse('第二个教学计划', $courseSet, 0);
 
         $result = $this->getCourseService()->getUserRoleInCourse($defaultCourse['id'], $user['id']);
         $this->assertEquals('teacher', $result);
@@ -702,26 +723,30 @@ class CourseServiceTest extends BaseTestCase
 
     public function testFindUserTeachingCoursesByCourseSetId()
     {
-        $defaultCourse = $this->createDefaultCourse('第二个教学计划', ['id' => 1], 0);
+        $courseSet = $this->createNewCourseSet();
+        $defaultCourse = $this->createDefaultCourse('第二个教学计划', $courseSet, 0);
         $result = $this->getCourseService()->findUserTeachingCoursesByCourseSetId($defaultCourse['id']);
         $this->assertEmpty($result);
 
-        $result = $this->getCourseService()->findUserTeachingCoursesByCourseSetId($defaultCourse['id'], false);
-        $this->assertEquals('第二个教学计划', $result[1]['title']);
+        $result = $this->getCourseService()->findUserTeachingCoursesByCourseSetId($courseSet['id'], false);
+        $result = ArrayToolkit::index($result, 'id');
+        $this->assertEquals('第二个教学计划', $result[$defaultCourse['id']]['title']);
     }
 
     public function testFindPriceIntervalByCourseSetIds()
     {
-        $this->createDefaultCourse('第二个教学计划', ['id' => 1], 0);
+        $courseSet = $this->createNewCourseSet();
+        $this->createDefaultCourse('第二个教学计划', $courseSet, 0);
 
-        $result = $this->getCourseService()->findPriceIntervalByCourseSetIds([1]);
+        $result = $this->getCourseService()->findPriceIntervalByCourseSetIds([$courseSet['id']]);
         $this->assertEquals('0.00', $result[1]['minPrice']);
         $this->assertEquals('0.00', $result[1]['maxPrice']);
     }
 
     public function testCanJoinCourse()
     {
-        $defaultCourse = $this->createDefaultCourse('第二个教学计划', ['id' => 1], 0);
+        $courseSet = $this->createNewCourseSet();
+        $defaultCourse = $this->createDefaultCourse('第二个教学计划', $courseSet, 0);
 
         $result = $this->getCourseService()->canJoinCourse($defaultCourse['id']);
         $this->assertEquals('course.unpublished', $result['code']);
@@ -729,7 +754,8 @@ class CourseServiceTest extends BaseTestCase
 
     public function testCanLearnCourse()
     {
-        $defaultCourse = $this->createDefaultCourse('第二个教学计划', ['id' => 1], 0);
+        $courseSet = $this->createNewCourseSet();
+        $defaultCourse = $this->createDefaultCourse('第二个教学计划', $courseSet, 0);
 
         $result = $this->getCourseService()->canLearnCourse($defaultCourse['id']);
         $this->assertEquals('course.unpublished', $result['code']);
@@ -745,7 +771,8 @@ class CourseServiceTest extends BaseTestCase
 
     public function testSortCourseItems()
     {
-        $defaultCourse = $this->createDefaultCourse('第二个教学计划', ['id' => 1], 0);
+        $courseSet = $this->createNewCourseSet();
+        $defaultCourse = $this->createDefaultCourse('第二个教学计划', $courseSet, 0);
         $this->getCourseService()->publishCourse($defaultCourse['id']);
 
         $result = $this->getCourseService()->sortCourseItems($defaultCourse['id'], []);
@@ -754,7 +781,8 @@ class CourseServiceTest extends BaseTestCase
 
     public function testDeleteChapter()
     {
-        $defaultCourse = $this->createDefaultCourse('第二个教学计划', ['id' => 1], 0);
+        $courseSet = $this->createNewCourseSet();
+        $defaultCourse = $this->createDefaultCourse('第二个教学计划', $courseSet, 0);
         $mockChapter = $this->createChapter($defaultCourse['id'], 'test Chapter');
 
         $this->getCourseService()->deleteChapter($defaultCourse['id'], $mockChapter['id']);
@@ -764,7 +792,8 @@ class CourseServiceTest extends BaseTestCase
 
     public function testDeleteChapterWithNoChapter()
     {
-        $defaultCourse = $this->createDefaultCourse('第二个教学计划', ['id' => 1], 0);
+        $courseSet = $this->createNewCourseSet();
+        $defaultCourse = $this->createDefaultCourse('第二个教学计划', $courseSet, 0);
         $this->mockBiz('Course:CourseChapterDao', [
             ['functionName' => 'get', 'returnValue' => []],
         ]);
@@ -779,7 +808,8 @@ class CourseServiceTest extends BaseTestCase
      */
     public function testDeleteChapterWithErrorParam()
     {
-        $defaultCourse = $this->createDefaultCourse('第二个教学计划', ['id' => 1], 0);
+        $courseSet = $this->createNewCourseSet();
+        $defaultCourse = $this->createDefaultCourse('第二个教学计划', $courseSet, 0);
         $this->mockBiz('Course:CourseChapterDao', [
             ['functionName' => 'get', 'returnValue' => ['courseId' => 10]],
         ]);
@@ -796,7 +826,8 @@ class CourseServiceTest extends BaseTestCase
 
     public function testFindUserLearningCourses()
     {
-        $this->createDefaultCourse('第二个教学计划', ['id' => 1], 0);
+        $courseSet = $this->createNewCourseSet();
+        $this->createDefaultCourse('第二个教学计划', $courseSet, 0);
         $this->mockBiz('Course:CourseMemberDao', [
             ['functionName' => 'findLearningMembers', 'returnValue' => [['courseId' => 1, 'learnedNum' => 1]]],
         ]);
@@ -807,13 +838,14 @@ class CourseServiceTest extends BaseTestCase
 
     public function testFindLearnedCoursesByCourseIdAndUserId()
     {
-        $course1 = $this->defaultCourse('test course 1', ['id' => 1]);
+        $courseSet = $this->createNewCourseSet();
+        $course1 = $this->defaultCourse('test course 1', $courseSet);
 
-        $course2 = $this->defaultCourse('test course 2', ['id' => 1]);
+        $course2 = $this->defaultCourse('test course 2', $courseSet);
         $createCourse1 = $this->getCourseService()->createCourse($course1);
         $createCourse2 = $this->getCourseService()->createCourse($course2);
-        $publishCourse = $this->getCourseService()->publishCourse($createCourse1['id']);
-        $publishCourse = $this->getCourseService()->publishCourse($createCourse2['id']);
+        $publishCourse1 = $this->getCourseService()->publishCourse($createCourse1['id']);
+        $publishCourse2 = $this->getCourseService()->publishCourse($createCourse2['id']);
 
         $lesson1 = [
             'courseId' => $createCourse1['id'],
@@ -898,7 +930,8 @@ class CourseServiceTest extends BaseTestCase
 
     public function testFindUserLearnedCourses()
     {
-        $this->createDefaultCourse('第二个教学计划', ['id' => 1], 0);
+        $courseSet = $this->createNewCourseSet();
+        $this->createDefaultCourse('第二个教学计划', $courseSet, 0);
         $this->mockBiz('Course:CourseMemberDao', [
             ['functionName' => 'findLearnedMembers', 'returnValue' => [['courseId' => 1, 'learnedNum' => 3]]],
         ]);
@@ -909,26 +942,40 @@ class CourseServiceTest extends BaseTestCase
 
     public function testFindUserTeachCourseCount()
     {
-        $defaultCourse = $this->createDefaultCourse('第二个教学计划', ['id' => 1], 0);
-        $this->getCourseService()->publishCourse($defaultCourse['id']);
+        $courseSet = $this->createNewCourseSet();
+        $this->getCourseService()->publishCourse($courseSet['defaultCourseId']);
         $this->mockBiz('Course:CourseMemberDao', [
-            ['functionName' => 'findByUserIdAndRole', 'returnValue' => [['courseId' => 1]]],
+            [
+                'functionName' => 'findByUserIdAndRole',
+                'returnValue' => [
+                    [
+                        'courseId' => $courseSet['defaultCourseId'],
+                    ],
+                ],
+            ],
         ]);
 
         $count = $this->getCourseService()->findUserTeachCourseCount(['userId' => 1]);
-        $this->assertEquals(1, $count);
+        self::assertEquals(1, $count);
     }
 
     public function testFindUserTeachCourses()
     {
-        $defaultCourse = $this->createDefaultCourse('第二个教学计划', ['id' => 1], 0);
+        $courseSet = $this->createNewCourseSet();
+        $defaultCourse = $this->createDefaultCourse('第二个教学计划', $courseSet, 0);
         $this->getCourseService()->publishCourse($defaultCourse['id']);
         $this->mockBiz('Course:CourseMemberDao', [
-            ['functionName' => 'findByUserIdAndRole', 'returnValue' => [['courseId' => 1]]],
+            [
+                'functionName' => 'findByUserIdAndRole',
+                'returnValue' => [
+                    ['courseId' => $courseSet['defaultCourseId']],
+                    ['courseId' => $defaultCourse['id']],
+                ],
+            ],
         ]);
 
-        $result = $this->getCourseService()->findUserTeachCourses(['userId' => 1], 0, 10);
-        $this->assertEquals('第二个教学计划', $result[0]['title']);
+        $result = ArrayToolkit::index($this->getCourseService()->findUserTeachCourses(['userId' => 1], 0, 10), 'id');
+        $this->assertEquals('第二个教学计划', $result[$defaultCourse['id']]['title']);
     }
 
     public function testAnalysisCourseDataByTime()
@@ -939,10 +986,11 @@ class CourseServiceTest extends BaseTestCase
 
     public function testFindUserManageCoursesByCourseSetId()
     {
-        $this->createDefaultCourse('第二个教学计划', ['id' => 1], 0);
+        $courseSet = $this->createNewCourseSet();
+        $secondCourse = $this->createDefaultCourse('第二个教学计划', $courseSet, 0);
 
-        $result = $this->getCourseService()->findUserManageCoursesByCourseSetId(1, 1);
-        $this->assertEquals('第二个教学计划', $result[1]['title']);
+        $result = ArrayToolkit::index($this->getCourseService()->findUserManageCoursesByCourseSetId(1, $courseSet['id']), 'id');
+        $this->assertEquals('第二个教学计划', $result[$secondCourse['id']]['title']);
     }
 
     public function testFillMembersWithUserInfo()
@@ -971,7 +1019,8 @@ class CourseServiceTest extends BaseTestCase
 
     public function testFindCourseTasksAndChapters()
     {
-        $defaultCourse = $this->createDefaultCourse('第二个教学计划', ['id' => 1], 0);
+        $courseSet = $this->createNewCourseSet();
+        $defaultCourse = $this->createDefaultCourse('第二个教学计划', $courseSet, 0);
         $this->getCourseService()->publishCourse($defaultCourse['id']);
 
         $this->mockBiz('Task:TaskService', [
@@ -1045,7 +1094,8 @@ class CourseServiceTest extends BaseTestCase
 
     public function testFindUserLearningCoursesNotInClassroom()
     {
-        $this->createDefaultCourse('第二个教学计划', ['id' => 1], 0);
+        $courseSet = $this->createNewCourseSet();
+        $this->createDefaultCourse('第二个教学计划', $courseSet, 0);
         $this->mockBiz('Course:CourseMemberDao', [
             ['functionName' => 'findMembersNotInClassroomByUserIdAndRoleAndIsLearned', 'returnValue' => [['courseId' => 1, 'learnedNum' => 3]]],
         ]);
@@ -1072,7 +1122,8 @@ class CourseServiceTest extends BaseTestCase
 
     public function testFindUserLearnedCoursesNotInClassroom()
     {
-        $this->createDefaultCourse('第二个教学计划', ['id' => 1], 0);
+        $courseSet = $this->createNewCourseSet();
+        $this->createDefaultCourse('第二个教学计划', $courseSet, 0);
         $this->mockBiz('Course:CourseMemberDao', [
             ['functionName' => 'findMembersNotInClassroomByUserIdAndRoleAndIsLearned', 'returnValue' => [['courseId' => 1, 'learnedNum' => 3]]],
         ]);
@@ -1096,48 +1147,52 @@ class CourseServiceTest extends BaseTestCase
 
     public function testFindUserLearnCoursesNotInClassroom()
     {
-        $this->createDefaultCourse('第二个教学计划', ['id' => 1], 0);
+        $courseSet = $this->createNewCourseSet();
+        $secondCourse = $this->createDefaultCourse('第二个教学计划', $courseSet, 0);
         $this->mockBiz('Course:CourseMemberDao', [
-            ['functionName' => 'findMembersNotInClassroomByUserIdAndRole', 'returnValue' => [['courseId' => 1]]],
+            ['functionName' => 'findMembersNotInClassroomByUserIdAndRole', 'returnValue' => [['courseId' => $secondCourse['id']]]],
         ]);
 
-        $result = $this->getCourseService()->findUserLearnCoursesNotInClassroom(1, 0, 5);
-        $this->assertEquals('第二个教学计划', $result[1]['title']);
+        $result = ArrayToolkit::index($this->getCourseService()->findUserLearnCoursesNotInClassroom(1, 0, 5), 'id');
+        self::assertEquals('第二个教学计划', $result[$secondCourse['id']]['title']);
     }
 
     public function testFindUserLearnCoursesNotInClassroomWithType()
     {
-        $this->createDefaultCourse('第二个教学计划', ['id' => 1], 0);
+        $courseSet = $this->createNewCourseSet();
+        $secondCourse = $this->createDefaultCourse('第二个教学计划', $courseSet, 0);
         $this->mockBiz('Course:CourseMemberDao', [
-            ['functionName' => 'findMembersNotInClassroomByUserIdAndRoleAndType', 'returnValue' => [['courseId' => 1]]],
+            ['functionName' => 'findMembersNotInClassroomByUserIdAndRoleAndType', 'returnValue' => [['courseId' => $secondCourse['id']]]],
         ]);
 
-        $result = $this->getCourseService()->findUserLearnCoursesNotInClassroomWithType(1, 'live', 0, 5);
-        $this->assertEquals('第二个教学计划', $result[1]['title']);
+        $result = ArrayToolkit::index($this->getCourseService()->findUserLearnCoursesNotInClassroomWithType(1, 'live', 0, 5), 'id');
+        self::assertEquals('第二个教学计划', $result[$secondCourse['id']]['title']);
     }
 
     public function testFindUserTeachCourseCountNotInClassroom()
     {
-        $defaultCourse = $this->createDefaultCourse('第二个教学计划', ['id' => 1], 0);
-        $this->getCourseService()->publishCourse($defaultCourse['id']);
+        $courseSet = $this->createNewCourseSet();
+        $secondCourse = $this->createDefaultCourse('第二个教学计划', $courseSet, 0);
+        $this->getCourseService()->publishCourse($secondCourse['id']);
         $this->mockBiz('Course:CourseMemberDao', [
-            ['functionName' => 'findMembersNotInClassroomByUserIdAndRole', 'returnValue' => [['courseId' => 1]]],
+            ['functionName' => 'findMembersNotInClassroomByUserIdAndRole', 'returnValue' => [['courseId' => $secondCourse['id']]]],
         ]);
 
         $count = $this->getCourseService()->findUserTeachCourseCountNotInClassroom(['userId' => 1]);
-        $this->assertEquals(1, $count);
+        self::assertEquals(1, $count);
     }
 
     public function testFindUserTeachCoursesNotInClassroom()
     {
-        $defaultCourse = $this->createDefaultCourse('第二个教学计划', ['id' => 1], 0);
+        $courseSet = $this->createNewCourseSet();
+        $defaultCourse = $this->createDefaultCourse('第二个教学计划', $courseSet, 0);
         $this->getCourseService()->publishCourse($defaultCourse['id']);
         $this->mockBiz('Course:CourseMemberDao', [
-            ['functionName' => 'findMembersNotInClassroomByUserIdAndRole', 'returnValue' => [['courseId' => 1]]],
+            ['functionName' => 'findMembersNotInClassroomByUserIdAndRole', 'returnValue' => [['courseId' => $courseSet['defaultCourseId']], ['courseId' => $defaultCourse['id']]]],
         ]);
 
-        $result = $this->getCourseService()->findUserTeachCoursesNotInClassroom(['userId' => 1], 0, 5);
-        $this->assertEquals('第二个教学计划', $result[0]['title']);
+        $result = ArrayToolkit::index($this->getCourseService()->findUserTeachCoursesNotInClassroom(['userId' => 1], 0, 5), 'id');
+        $this->assertEquals('第二个教学计划', $result[$defaultCourse['id']]['title']);
     }
 
     public function testFindUserFavoritedCourseCountNotInClassroom()
@@ -1149,7 +1204,8 @@ class CourseServiceTest extends BaseTestCase
         $count = $this->getCourseService()->findUserFavoritedCourseCountNotInClassroom(1);
         $this->assertEquals(0, $count);
 
-        $defaultCourse = $this->createDefaultCourse('第二个教学计划', ['id' => 1], 0);
+        $courseSet = $this->createNewCourseSet();
+        $defaultCourse = $this->createDefaultCourse('第二个教学计划', $courseSet, 0);
         $this->getCourseService()->publishCourse($defaultCourse['id']);
         $this->mockBiz('Favorite:FavoriteDao', [
             ['functionName' => 'findCourseFavoritesNotInClassroomByUserId', 'returnValue' => [['targetId' => 1]]],
@@ -1173,12 +1229,13 @@ class CourseServiceTest extends BaseTestCase
 
     public function testFindUserFavoriteCoursesNotInClassroomWithCourseType()
     {
-        $this->createDefaultCourse('第二个教学计划', ['id' => 1], 0);
+        $courseSet = $this->createNewCourseSet();
+        $secondCourse = $this->createDefaultCourse('第二个教学计划', $courseSet, 0);
         $this->mockBiz('Favorite:FavoriteDao', [
-            ['functionName' => 'findUserFavoriteCoursesNotInClassroomWithCourseType', 'returnValue' => [['id' => 1]]],
+            ['functionName' => 'findUserFavoriteCoursesNotInClassroomWithCourseType', 'returnValue' => [['id' => $secondCourse['id']]]],
         ]);
-        $result = $this->getCourseService()->findUserFavoriteCoursesNotInClassroomWithCourseType(1, 'live', 0, 5);
-        $this->assertEquals('第二个教学计划', $result[1]['title']);
+        $result = ArrayToolkit::index($this->getCourseService()->findUserFavoriteCoursesNotInClassroomWithCourseType(1, 'live', 0, 5), 'id');
+        self::assertEquals('第二个教学计划', $result[$secondCourse['id']]['title']);
     }
 
     public function testCountUserFavoriteCourseNotInClassroomWithCourseType()
@@ -1229,10 +1286,10 @@ class CourseServiceTest extends BaseTestCase
         $fileds = [
             'enableAudio' => '1',
         ];
-
+        $courseSet = $this->createNewCourseSet();
         $courseFields = [
             'id' => 2,
-            'courseSetId' => 2,
+            'courseSetId' => $courseSet['id'],
             'title' => '计划名称',
             'enableAudio' => '0',
             'learnMode' => 'lockMode',
@@ -1252,9 +1309,10 @@ class CourseServiceTest extends BaseTestCase
 
     public function testConverAudioByCourseIdAndMediaIdunableAudio()
     {
+        $courseSet = $this->createNewCourseSet();
         $fields = [
             'id' => 2,
-            'courseSetId' => 2,
+            'courseSetId' => $courseSet['id'],
             'title' => '计划名称',
             'enableAudio' => '0',
             'learnMode' => 'lockMode',
@@ -1274,9 +1332,10 @@ class CourseServiceTest extends BaseTestCase
      */
     public function testConverAudioByCourseIdAndMediaIdEmptyMedia()
     {
+        $courseSet = $this->createNewCourseSet();
         $fields = [
             'id' => 2,
-            'courseSetId' => 2,
+            'courseSetId' => $courseSet['id'],
             'title' => '计划名称',
             'enableAudio' => '1',
             'learnMode' => 'lockMode',
@@ -1302,9 +1361,10 @@ class CourseServiceTest extends BaseTestCase
 
     public function testConverAudioByCourseIdAndMediaIdLocal()
     {
+        $courseSet = $this->createNewCourseSet();
         $fields = [
             'id' => 2,
-            'courseSetId' => 2,
+            'courseSetId' => $courseSet['id'],
             'title' => '计划名称',
             'enableAudio' => '1',
             'learnMode' => 'lockMode',
@@ -1337,9 +1397,10 @@ class CourseServiceTest extends BaseTestCase
 
     public function testConverAudioByCourseIdAndMediaId()
     {
+        $courseSet = $this->createNewCourseSet();
         $fields = [
             'id' => 2,
-            'courseSetId' => 2,
+            'courseSetId' => $courseSet['id'],
             'title' => '计划名称',
             'enableAudio' => '1',
             'learnMode' => 'lockMode',
@@ -1580,22 +1641,23 @@ class CourseServiceTest extends BaseTestCase
 
     public function testCountCoursesByCourseSetId()
     {
-        $this->createDefaultCourse('第二个教学计划', ['id' => 1], 0);
+        $courseSet = $this->createNewCourseSet();
+        $this->createDefaultCourse('第二个教学计划', $courseSet, 0);
 
-        $count = $this->getCourseService()->countCoursesByCourseSetId(1);
-        $this->assertEquals(1, $count);
+        $count = $this->getCourseService()->countCoursesByCourseSetId($courseSet['id']);
+        self::assertEquals(2, $count);
     }
 
     public function testCalculateLearnProgressByUserIdAndCourseIds()
     {
-        $defaultCourse = $this->createDefaultCourse('第二个教学计划', ['id' => 1], 0);
-        $this->getCourseService()->publishCourse($defaultCourse['id']);
+        $courseSet = $this->createNewCourseSet();
+        $this->getCourseService()->publishCourse($courseSet['defaultCourseId']);
         $this->mockBiz('Course:MemberService', [
             ['functionName' => 'countMembers', 'returnValue' => 1],
-            ['functionName' => 'searchMembers', 'returnValue' => [['courseId' => 1, 'learnedNum' => 4]]],
+            ['functionName' => 'searchMembers', 'returnValue' => [['courseId' => $courseSet['defaultCourseId'], 'learnedNum' => 4]]],
         ]);
 
-        $result = $this->getCourseService()->calculateLearnProgressByUserIdAndCourseIds(1, [1]);
+        $result = $this->getCourseService()->calculateLearnProgressByUserIdAndCourseIds(1, [$courseSet['defaultCourseId']]);
         $this->assertEquals(4, $result[0]['learnedNum']);
     }
 
@@ -1670,11 +1732,8 @@ class CourseServiceTest extends BaseTestCase
             'title' => '新课程开始！',
             'type' => 'normal',
         ];
-        $courseSet = $this->getCourseSetService()->createCourseSet($courseSetFields);
 
-        $this->assertNotEmpty($courseSet);
-
-        return $courseSet;
+        return $this->getCourseSetService()->createCourseSet($courseSetFields);
     }
 
     protected function createNewCourse($courseSetId)

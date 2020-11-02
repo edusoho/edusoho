@@ -8,9 +8,9 @@ use ApiBundle\Api\Util\Money;
 
 class MeOrderFilter extends Filter
 {
-    protected $simpleFields = array(
-        'id', 'title', 'sn', 'pay_amount', 'created_time', 'status', 'cover', 'targetType', 'targetId', 'targetUrl',
-    );
+    protected $simpleFields = [
+        'id', 'title', 'sn', 'pay_amount', 'created_time', 'status', 'cover', 'targetType', 'targetId', 'targetUrl', 'goodsId', 'specsId',
+    ];
 
     protected function simpleFields(&$data)
     {

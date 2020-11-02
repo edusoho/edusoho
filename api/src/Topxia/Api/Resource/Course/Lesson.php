@@ -231,7 +231,7 @@ class Lesson extends BaseResource
 
             if (!empty($file)) {
                 $lesson['mediaStorage'] = $file['storage'];
-                if (in_array($file['storage'], array('cloud', 'supplier'))) {
+                if (in_array($file['storage'], ['cloud', 'supplier'])) {
                     $lesson['mediaConvertStatus'] = $file['convertStatus'];
 
                     if (isset($file['processAudioStatus']) && 'ok' == $file['processAudioStatus']) {

@@ -1,21 +1,36 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}{{ setting('classroom.name')|default("classroom"|trans) }}{{'classroom.manage'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{ setting('classroom.name')|default("classroom"|trans) }}{{ 'classroom.manage'|trans }} - {{ parent() }}{% endblock %}
+{% block full_content %}
+  {% block top_content %}
+    <div class="classroom-header-section">
+      <div class="container cd-container">
+        <ul class="breadcrumb breadcrumb-o">
+          <li class="text-overflow">
+            <a href="{{ path('my_teaching_classrooms') }}">
+              {{ 'my.teaching.classroom_menu'|trans({'%classroom%': setting('classroom.name')|default("classroom"|trans)}) }}
+            </a></li>
+          <li class="text-overflow">
+            <a class="active" title="{{ classroom.title }}">{{ classroom.title }}</a>
+          </li>
+        </ul>
 
-{% block content %}
-  {% include ('classroom-manage/header.html.twig') %}
-
-  <div class="row">
-    <div class="col-md-3">
-      {% block side %}
-        {% set side_nav = side_nav|default(null) %}
-        <div class="sidenav">
-          {{ render(controller('AppBundle:Classroom/ClassroomManage:menu',{classroom:classroom,sideNav:side_nav, context: _context})) }}
-        </div>
-      {% endblock %}
+        {% include ('classroom-manage/header.html.twig') %}
+      </div>
     </div>
-    <div class="col-md-9">
-      {% block main %}{% endblock %}
+  {% endblock %}
+  <div class="container cd-container classroom-manage-content">
+    <div class="cd-content">
+      {{ render(controller('AppBundle:Classroom/ClassroomManage:menu',{classroom:classroom,sideNav:side_nav, context: _context})) }}
+      <div class="cd-main">
+        {% block main %}
+        {% endblock %}
+      </div>
     </div>
   </div>
+{% endblock %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <link href="/static-dist/libs/element-ui/dist/index.css" rel="stylesheet">
 {% endblock %}

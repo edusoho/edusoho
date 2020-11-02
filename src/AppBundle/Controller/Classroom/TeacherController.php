@@ -5,6 +5,8 @@ namespace AppBundle\Controller\Classroom;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\Goods\Service\GoodsService;
+use Biz\Product\Service\ProductService;
 use Symfony\Component\HttpFoundation\Request;
 
 class TeacherController extends BaseController
@@ -24,20 +26,20 @@ class TeacherController extends BaseController
         $assisantIds = $this->getClassroomService()->findAssistants($classroomId);
 
         $teacherIds = array_unique(array_merge($teacherIds, $assisantIds));
-        $newTeacherIds = array();
+        $newTeacherIds = [];
         foreach ($teacherIds as $key => $value) {
             $newTeacherIds[] = $value;
         }
         $teacherIds = $newTeacherIds;
         $teachers = $this->getUserService()->findUsersByIds($teacherIds);
-        $users = array();
+        $users = [];
         foreach ($teacherIds as $key => $teacherId) {
             $users[$key] = $teachers[$teacherId];
         }
         $profiles = $this->getUserService()->findUserProfilesByIds($teacherIds);
         $user = $this->getCurrentUser();
 
-        $classroomSetting = $this->setting('classroom', array());
+        $classroomSetting = $this->setting('classroom', []);
         $classroomName = isset($classroomSetting['name']) ? $classroomSetting['name'] : '班级';
 
         $myfollowings = $this->getUserService()->filterFollowingIds($user['id'], $teacherIds);
@@ -46,19 +48,25 @@ class TeacherController extends BaseController
         if (!$canLook) {
             return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomName}，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
         }
+        if (!$member || $member['locked']) {
+            $product = $this->getProductService()->getProductByTargetIdAndType($classroom['id'], 'classroom');
+            $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
+
+            return $this->redirect($this->generateUrl('goods_show', ['id' => $goods['id']]));
+        }
         $layout = 'classroom/layout.html.twig';
         if ($member && !$member['locked']) {
             $layout = 'classroom/join-layout.html.twig';
         }
         if (!$classroom) {
-            $classroomDescription = array();
+            $classroomDescription = [];
         } else {
             $classroomDescription = $classroom['about'];
             $classroomDescription = strip_tags($classroomDescription, '');
             $classroomDescription = preg_replace('/ /', '', $classroomDescription);
         }
 
-        return $this->render('classroom/teacher/list.html.twig', array(
+        return $this->render('classroom/teacher/list.html.twig', [
             'layout' => $layout,
             'canLook' => $canLook,
             'classroom' => $classroom,
@@ -68,7 +76,7 @@ class TeacherController extends BaseController
             'members' => $members,
             'Myfollowings' => $myfollowings,
             'classroomDescription' => $classroomDescription,
-        ));
+        ]);
     }
 
     public function catchIdsAction(Request $request, $classroomId)
@@ -96,5 +104,21 @@ class TeacherController extends BaseController
     protected function getClassroomService()
     {
         return $this->createService('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getProductService()
+    {
+        return $this->createService('Product:ProductService');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->createService('Goods:GoodsService');
     }
 }

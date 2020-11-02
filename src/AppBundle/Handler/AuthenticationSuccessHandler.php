@@ -2,12 +2,12 @@
 
 namespace AppBundle\Handler;
 
-use Topxia\Service\Common\ServiceKernel;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Authentication\DefaultAuthenticationSuccessHandler;
+use Topxia\Service\Common\ServiceKernel;
 
 class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
 {
@@ -15,15 +15,14 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
     {
         $forbidden = AuthenticationHelper::checkLoginForbidden($request);
 
-        if ('error' == $forbidden['status']) {
-            $exception = new AuthenticationException($forbidden['message']);
-            throw $exception;
+        if ('error' === $forbidden['status']) {
+            throw new AuthenticationException($forbidden['message']);
         }
 
         if ($request->isXmlHttpRequest()) {
-            $content = array(
+            $content = [
                 'success' => true,
-            );
+            ];
 
             return new JsonResponse($content, 200);
         }
@@ -32,7 +31,7 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
 
         if (!$currentUser['passwordInit']) {
             $url = $this->httpUtils->generateUri($request, 'password_init');
-            $queries = array('goto' => $this->determineTargetUrl($request));
+            $queries = ['goto' => $this->determineTargetUrl($request)];
             $url = $url.'?'.http_build_query($queries);
 
             return $this->httpUtils->createRedirectResponse($request, $url);
@@ -40,7 +39,7 @@ class AuthenticationSuccessHandler extends DefaultAuthenticationSuccessHandler
 
         if ($this->getAuthService()->hasPartnerAuth()) {
             $url = $this->httpUtils->generateUri($request, 'partner_login');
-            $queries = array('goto' => $this->determineTargetUrl($request));
+            $queries = ['goto' => $this->determineTargetUrl($request)];
             $url = $url.'?'.http_build_query($queries);
 
             return $this->httpUtils->createRedirectResponse($request, $url);
