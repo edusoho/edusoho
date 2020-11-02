@@ -2,9 +2,9 @@
 
 namespace AppBundle\Controller\AdminV2\User;
 
-use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\ConvertIpToolkit;
+use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\System\Service\LogService;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,34 +13,23 @@ class LoginRecordController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $userConditions = $conditions = $request->query->all();
-
-        unset($userConditions['startDateTime']);
-        unset($userConditions['endDateTime']);
-
+        $userConditions = [
+            'keywordType' => $request->query->get('keywordType'),
+            'keyword' => $request->query->get('keyword'),
+            'orgCode' => $request->query->get('orgCode'),
+        ];
         $userConditions = $this->fillOrgCode($userConditions);
-
-        $users = $this->getUserService()->searchUsers($userConditions, array('createdTime' => 'DESC'), 0, 2000);
-        $userIds = ArrayToolkit::column($users, 'id');
-
-        if ($userIds) {
-            $conditions['userIds'] = $userIds;
-            unset($conditions['nickname']);
-        } else {
-            $paginator = new Paginator(
-                $this->get('request'),
-                0,
-                20
-            );
-
-            return $this->render('admin-v2/user/login-record/index.html.twig', array(
-                'logRecords' => array(),
-                'users' => array(),
-                'paginator' => $paginator,
-            ));
+        if ($userConditions['keyword'] || (isset($userConditions['likeOrgCode']) && '1.' != $userConditions['likeOrgCode'])) {
+            $users = $this->getUserService()->searchUsers($userConditions, ['createdTime' => 'DESC'], 0, PHP_INT_MAX, ['id']);
+            $userIds = empty($users) ? [-1] : ArrayToolkit::column($users, 'id');
         }
 
-        $conditions['action'] = 'login_success';
+        $conditions = [
+            'action' => 'login_success',
+            'startDateTime' => $request->query->get('startDateTime'),
+            'endDateTime' => $request->query->get('endDateTime'),
+            'userIds' => empty($userIds) ? [] : $userIds,
+        ];
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -56,27 +45,24 @@ class LoginRecordController extends BaseController
         );
 
         $logRecords = ConvertIpToolkit::ConvertIps($logRecords);
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($logRecords, 'userId'));
 
-        $userIds = ArrayToolkit::column($logRecords, 'userId');
-
-        $users = $this->getUserService()->findUsersByIds($userIds);
-
-        return $this->render('admin-v2/user/login-record/index.html.twig', array(
+        return $this->render('admin-v2/user/login-record/index.html.twig', [
             'logRecords' => $logRecords,
             'users' => $users,
             'paginator' => $paginator,
-        ));
+        ]);
     }
 
     public function showUserLoginRecordAction(Request $request, $id)
     {
         $user = $this->getUserService()->getUser($id);
 
-        $conditions = array(
+        $conditions = [
             'userId' => $user['id'],
-            'actions' => array('login_success', 'user_login'),
-            'modules' => array('user', 'mobile'),
-        );
+            'actions' => ['login_success', 'user_login'],
+            'modules' => ['user', 'mobile'],
+        ];
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -93,11 +79,11 @@ class LoginRecordController extends BaseController
 
         $loginRecords = ConvertIpToolkit::ConvertIps($loginRecords);
 
-        return $this->render('admin-v2/user/login-record/login-record-details.html.twig', array(
+        return $this->render('admin-v2/user/login-record/login-record-details.html.twig', [
             'user' => $user,
             'loginRecords' => $loginRecords,
             'loginRecordPaginator' => $paginator,
-        ));
+        ]);
     }
 
     /**

@@ -1,0 +1,72 @@
+<ul class="js-selected-form-item-list selected-form-item-list form-horizontal" data-role="list">
+	{% for field in selectedFormFields %}
+		<li class="row form-group list-group-item" data-selected="{{ true }}" data-role="item" id="item-{{ field.field }}" data-code="{{ field.field }}" data-label-name="{{ field.title }}" data-required="{{ field.required|default(false) }}">
+			<div class="col-md-2 control-label">
+				<label class="js-item-label {% if field.required|default(false) %} control-label-required {% endif %}" id="{{ field.field }}-label" for="item-{{ field.field }}">{{ field.title }}</label>
+			</div>
+
+			<div class="col-md-8">
+				<div class="form-control {% if field.type|default('') == 'radio' %} border-unset {% else %} input-{{ field.type }} {% endif %}">
+					{% if field.type|default('') == 'radio' %}
+						{% for index, option  in field.options %}
+							<label class="prl">
+								<input type="radio" name="{{ field.field }}" value="{{ option.value }}" {% if index == 0 %} checked="checked" {% endif %}>
+								{{ option.label }}
+							</label>
+						{% endfor %}
+					{% else %}
+						{% if field.placeholder|default('') %}
+							<span class="text-muted">{{ field.placeholder }}</span>
+						{% endif %}
+					{% endif %}
+					<span class="js-delete-item-btn delete-form-item-btn" data-target-item="#item-{{ field.field }}" data-target-button="#btn-add-item-{{ field.field }}">
+						<i class="cd-icon cd-icon-close"></i>
+					</span>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<label class="control-label">
+					<input type="checkbox" data-target-label="#{{ field.field }}-label" {% if field.required|default(true) %} checked="checked" {% endif %} data-target-item="#item-{{ field.field }}" class="js-item-required">
+					{{ 'admin_v2.information_collect.form_items.required'|trans }}
+				</label>
+			</div>
+		</li>
+	{% endfor %}
+	{% for group, fields in formFields %}
+		{% for field in fields %}
+			{% if field.field not in selectedFormFields|keys %}
+				<li class="row form-group list-group-item hidden" data-selected="" data-role="item" id="item-{{ field.field }}" data-code="{{ field.field }}" data-label-name="{{ field.title }}" data-required="{{ true }}">
+					<div class="col-md-2 control-label">
+						<label class="js-item-label control-label-required" id="{{ field.field }}-label" for="item-{{ field.field }}">{{ field.title }}</label>
+					</div>
+
+					<div class="col-md-8">
+						<div class="form-control {% if field.type|default('') == 'radio' %} border-unset {% else %} input-{{ field.type }} {% endif %}">
+							{% if field.type|default('') == 'radio' %}
+								{% for index, option  in field.options %}
+									<label class="prl">
+										<input type="radio" name="{{ field.field }}" value="{{ option.value }}" {% if index == 0 %} checked="checked" {% endif %}>
+										{{ option.label }}
+									</label>
+								{% endfor %}
+							{% else %}
+								{% if field.props|default('') and field.props.placeholder|default('') %}
+									<span class="text-muted">{{ field.props.placeholder }}</span>
+								{% endif %}
+							{% endif %}
+							<span class="js-delete-item-btn delete-form-item-btn" data-target-item="#item-{{ field.field }}" data-target-button="#btn-add-item-{{ field.field }}">
+								<i class="cd-icon cd-icon-close"></i>
+							</span>
+						</div>
+					</div>
+					<div class="col-md-2">
+						<label class="control-label">
+							<input type="checkbox" data-target-label="#{{ field.field }}-label" checked="checked" data-target-item="#item-{{ field.field }}" class="js-item-required">
+							{{ 'admin_v2.information_collect.form_items.required'|trans }}
+						</label>
+					</div>
+				</li>
+			{% endif %}
+		{% endfor %}
+	{% endfor %}
+</ul>

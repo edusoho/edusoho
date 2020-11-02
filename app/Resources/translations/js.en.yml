@@ -102,7 +102,6 @@ user.settings.unbind_success: unbind successfully
 user.settings.unbind_title: unbind
 user.settings.unbind_content: Are you determined to unbind?
 
-material.share.teacher_nickname_label: teacher nickname
 material.cancel_share.tips: Already cancel share
 
 uploader.title: Upload
@@ -258,7 +257,6 @@ User.unfollow_success_hint: Unfollow succeed
 
 User.card_load_hint: User card loading
 
-user.settings.security.security_questions.type_duplicate_hint: Problem type can not be repeated
 user.settings.security.questions.set.incorrect_password: Incorrect password, you are unable to add security question
 user.settings.security.questions.set.not_modify_aligin_hint: You have set up a security question, do not change again
 user.settings.security.questions.set.success: Security question set successfully
@@ -285,7 +283,6 @@ Activity.audio_manage.length_unsigned_integer_error_hint: The duration must be g
 Activity.audio_manage.second_range_error_hint: Seconds between 0-59
 Activity.audio_manage.media_error_hint: Please upload or select an audio file
 
-Activity.audio_manage.media_error_hint: Please upload or select the document
 Activity.audio_manage.finish_detail_required_error_hint: Please enter the completion condition
 Activity.audio_manage.finish_detail_digits_error_hint: The completion condition must be a number
 
@@ -523,10 +520,6 @@ course.manage.expiry_start_date_error_hint: Please enter the start date
 course.manage.expiry_days_error_hint: Please enter the number of valid days
 course.manage.deadline_end_date_error_hint: Please enter the due date
 course.manage.max_student_num_error_hint: Please enter the number of courses
-course.manage.deadline_end_date_error_hint: Please enter a study validity period
-course.manage.expiry_days_error_hint: The start date should be before the end date
-course.manage.expiry_start_date_error_hint: End date should be later than start date
-course.manage.expiry_end_date_error_hint: The start date should be earlier than the end date
 course.manage.max_year_error_hint: Please enter a value less than 7300 (20 years)
 course.manage.max_capacity_hint: The site can support up to %capacity% people to participate in the live at the same time, you can set a larger value, but then may lead to students can not enter the live.
 course.manage.publish_hint: Are you sure you want to publish the program?
@@ -715,6 +708,7 @@ order.create.use_price_coupon_hint: Coupon is available, and you are currently u
 order.refund.reason_limit_hint: The length of the quit reason should be less than or equal to 120.
 order.refund.reason_required_hint: Please enter the reason of quiting.
 order.refund.reason_choose_hint: Please choose the reason of quiting.
+order.information_collect_error_hint: Please submit the information before submitting the order.
 
 settings.setup.set_success.hint: Set account successfully, redirecting
 settings.setup.set_failed.hint: Set account failed, please try again
@@ -813,7 +807,6 @@ validate.password_check.message: Wrong password
 validate.sms_code_input.message: Please enter the verification code
 validate.sms_code.message: Verification code error
 validate.es_remote.message: Validation error
-validate.reg_invite_code.message: Must be a 5-digit alphabet
 validate.byte_minlength.message: Character length must be greater than or equal to %min%, a Chinese word count 2 characters
 validate.byte_maxlength.message: The character length must be less than or equal to %max%, and a Chinese word is 2 characters
 
@@ -822,7 +815,7 @@ validate.phone_and_email_input.message: Please enter your phone / email
 validate.user_terms.message: Check to agree to this service agreement in order to continue to register
 validate.visible_character.message: Not allowed to enter invisible characters, such as spaces
 validate.tag_required_hint: Please input tags
-validate.tag_required_not_found_hint: The tag is not found, please call the administrator to set it through [Management Background] - [Course] - [Label Management].
+validate.tag_required_not_found_hint: The tag is not found, please call the administrator to set it through [Management Background] - [Teaching] - [Classification Label] - [Label Management].
 validate.valid_score_input.message: Please enter the correct decimals, leaving only ONE decimal places
 validate.modify_date: Please enter the date of modification
 validate.modify_days: Please enter the number of days modified
@@ -926,7 +919,6 @@ validate_old.visible_character.message: %display% Enter the visibility character
 validate_old.chinese_limit.message: %display% must be less than or equal to% max% and 2 characters in Chinese
 validate_old.chinese.message: %display% must be Chinese
 validate_old.phone.message: Please enter a valid %display% (only mainland China phone number).
-validate_old.mobile.message: Please enter a valid %display% (only mainland China phone number).
 validate_old.chinese_alphanumeric.message: %display% supports Chinese characters, letters, numbers and _ . ·
 validate_old.reg_invite_code.message: %display% must be a 5-digit alphabet
 validate_old.alphanumeric.message: %display% must be alphabetical, numeric, and underlined
@@ -1027,7 +1019,7 @@ admin.index.order_count: order count
 admin.index.finished_task_count: finished task count
 admin.index.notify_teacher_success: remind the teacher's notice and send it successfully!
 admin.index.upgrade_acceptance_hint: Upgrade acceptance
-admin.user.cloude_sms_enable_hint: please go to【Admin】-【ES Cloud】-【Cloud Sms】open cloud sms first.
+admin.user.cloude_sms_enable_hint: please go to【Admin】-【App Cente】-【Cloud service】-【Cloud Sms Setting】open cloud sms first.
 
 admin.account_center.cash_income: cash income
 admin.account_center.coin_income: coin income
@@ -1089,7 +1081,6 @@ admin.block.edit_success_hint: Update the block template successfully!
 admin.block.upload_failed_hint: Upload the picture failed, please try again!
 admin.block.upload_success_hint: Upload the picture successfully!
 admin.block.delete_picture_success_hint: Delete the picture successfully!
-admin.block.edit_success_hint: Updated successfully!
 admin.block.submit_success_hint: Submitted successfully!
 admin.block.select_picture_hint: Please select the image to upload first
 admin.block.upload_picture_success_hint: Upload the picture successfully!
@@ -1098,8 +1089,6 @@ admin.block.add_max_num_hint: Can only add up to %panelGroup%!
 admin.block.delete_tip: Are you sure you want to delete?
 admin.block.delete_min_num_hint: There must be one!
 admin.block.uploading_hint: Uploading, please wait!
-admin.block.upload_success_hint: Uploaded successfully!
-admin.block.upload_failed_hint: Upload failed, please try again!
 admin.block.poster: poster (%index%)
 admin.category.icon_delete_hint: Are you sure you want to delete the icon?
 admin.category.icon_delete_success_hint: Delete the category icon successfully!
@@ -1588,5 +1577,209 @@ course_manage.positive_currency.message: Please enter a valid price greater than
 merchant.resource.product_version.update_success_hint: Update Success
 merchant.resource.product_version.update_failed_hint: Update Failed
 
+validate.length_max.message: Please enter no more than %length% characters.
+validate.length_min.message: Please enter no less than %length% characters.
+classroom.title_label: Title
+classroom.subtitle_label: Subtitle
+classroom.basic_info: Base Info
+classroom.tag_label: Tag
+classroom.category_label: Category
+classroom.manage.set_info.tags.help_block: 'Used to query classes by label, and managed by administrator'
+category: Category
+site.org: Org
+classroom.about: about
+classroom.cover_image: Cover
+classroom.cover_image.upload_tips: Please upload images in jpg, gif, png format. The recommended image size is 480×270px. It is recommended that the image size should not exceed 2MB.
+editor.iframe_tips: To use IFrame normally, please set it in [Admin] - [System] -[Security] -[White List Domain]
+classroom.upload_picture_btn: 'Upload an image'
+
+
+classroom.marketing_setting: Marketing Setting
+classroom.price_label: Price
+classroom.show_label: "Show %name%\n"
+classroom.buy_label: Buy %name%
+classroom.expiry_mode_label: 'Expired on'
+classroom.watch_expiry_mode_rule: 'View the rule'
+classroom.expiry_mode.first_publish_tips: 'Expiry mode can not be edited since the classroom was published'
+classroom.expiry_mode_end_date_tips: "If set，student can only study before the deadline. The system will remind students by 10 days before the deadline.\n"
+classroom.expiry_mode_days_tips: "If set，student can only study before the deadline. The system will remind students by 10 days before the deadline.\n"
+classroom.expiry_mode_end_date: 'Expired on'
+classroom.expiry_mode_days: 'Effective days'
+classroom.expiry_mode_forever: Forever
+classroom.price_tips: "Total %courseNum% courses, original %price% CNY.\n"
+classroom.amount: "Equals to "
+
+
+site.open: Open
+site.date.day: Day
+course.marketing_setup.services.provide_services: Services
+vip.level.free_learning: Free for Vip
+site.default.none: None
+form.btn.save: Save
+
+site.twig.extension.smarttime.future: Feature
+site.twig.extension.smarttime.hardly: A moment ago
+site.twig.extension.smarttime.previous_second: %diff% second ago
+site.twig.extension.smarttime.previous_minute: %diff% minute ago
+site.twig.extension.smarttime.previous_hour: %diff% hour ago
+site.twig.extension.smarttime.previous_day: %diff% day ago
+
+reviews.review_again: Review Again
+
+classroom.courses.lesson_num: %num% lessons total
+classroom.courses.plan: plan
+site.local_more: loading more
+
 exception.s2b2c_product.adopt_failed: Adopt fail,Supplier is editing
 
+admin_v2.certificate.template.delete_hint: When a template is deleted, the certificates that use the templates Are templates deleted?
+admin_v2.certificate.code.exist: This certificate code already exists
+admin_v2.certificate.code.check: 1 to 6 digits or letters of the alphabet, not case sensitive
+admin_v2.certificate.expiry_day.check: Please enter a non-negative integer from 1 to 6000
+admin_v2.certificate.target_id.check: Please select the target group
+admin_v2.certificate.template_id.check: Please select a certificate template
+
+admin_v2.certificate.close.hint: After the certificate is closed, the student will no longer be able to obtain the certificate and users who have already obtained the certificate will not be affected. Is it closed?
+admin_v2.certificate.close.success_hint: close success
+admin_v2.certificate.close.failure_hint: close failure
+admin_v2.certificate.publish.hint: Are you sure you want to issue a certificate?
+admin_v2.certificate.publish.success_hint: publish success
+admin_v2.certificate.publish.failure_hint: publish failure
+admin_v2.certificate.delete.hint: After the certificate is deleted, you cannot view the user list and audit list of the certificate. Users who have acquired the certificate can no longer view the certificate. Is the certificate deleted?
+admin_v2.certificate.delete.draft_hint: The certificate has not yet been issued, is it certain to be removed?
+admin_v2.certificate.delete.success_hint: delete success
+admin_v2.certificate.delete.failure_hint: delete failure
+admin_v2.certificate.record.cancel.hint: Confirm revocation of certificate?
+admin_v2.certificate.record.cancel.success_hint: cancel success
+admin_v2.certificate.record.cancel.failure_hint: cancel failure
+admin_v2.certificate.record.grant.success_hint: grant success
+admin_v2.certificate.record.grant.failure_hint: grant failure
+admin_v2.certificate.record.grant.issue_time_required: Please enter the date of issue
+admin_v2.certificate.validate.description: The length must be less than or equal to 1000, one Chinese character counts as two characters.
+
+admin_v2.information_collect.close.hint: Do you want to close the acquisition? When closed, the collection of user information will stop.
+admin_v2.information_collect.open.hint: Do you want to start collection? When turned on, user information will be collected.
+admin_v2.information_collect.close.success_hint: close success
+admin_v2.information_collect.close.failure_hint: close failure
+admin_v2.information_collect.open.success_hint: open success
+admin_v2.information_collect.open.failure_hint: close failure
+
+admin_v2.information_collect.chooser.tips: There is already a conflicting association
+admin_v2.information_collect.chooser.success_hint: Success
+admin_v2.information_collect.chooser.limit: No more than 200
+admin_v2.information_collect.chooser.target_hint: Please select Course/Classroom
+admin_v2.information_collect.chooser.target_course_hint: Please select at least 1 Course
+admin_v2.information_collect.chooser.target_classroom_hint: Please select at least 1 Classroom
+admin_v2.information_collect.chooser.items.hint: Please select form item
+user.fields.gender_label: Gender
+information_collect.form.check_age_invalid: Age Invalid
+information_collect.form.check_format_invalid: %display% Invalid
+course.marketing_setup: 'Markets'
+site.currency.CNY: CNY
+s2b2c.product.cooperation_price: Cooperation Price
+s2b2c.product.suggestion_price: Suggestion Price
+s2b2c.resource.sync.prev_price.notify: 上个版本价格为
+site.price: Price
+course.marketing_setup.setup.can_join: Can join
+course.marketing_setup.setup.can_not_join: Can not join
+course.marketing_setup.setup.can_join.tips: 'If enrollment is closed，the course will appeared as "restricted course". Students can not enroll the course except added by teahcers. It is used for closed teaching.'
+course.marketing_setup.expiry_date: 'Deadline'
+course.marketing_setup.rule.expiry_date: 'Learn expiry date'
+course.marketing_setup.rule.expiry_date_tips: 'Students can Learn before the date'
+course.marketing_setup.rule.expiry_date.publish_tips: 'Students can Learn in several days since the enrollment.'
+course.plan_task.start_time: 'Start date'
+course.marketing_setup.rule.expiry_date.first_publish_tips: Once the teaching plan is pubished, the validity period cannot be modified. You can only modify the date when the course or teaching plan is closed, and the new validity period is only valid for the students who have joined after the modification.
+course.marketing_setup.approval: 'Id verification'
+course.marketing_setup.approval_tips: 'If this is chosen, student must verify their id before enrollment.'
+course.marketing_setup.expiry_date.anytime: 'Any time'
+course.marketing_setup.expiry_date.custom: Custom
+site.datagrid.radios.yes: 'Yes'
+site.datagrid.radios.no: 'No'
+course.teaching_plan.expiry_date.end_date_mode: 'Expiration date mode'
+course.teaching_plan.expiry_date.days_mode: 'Valid days mode'
+
+course.teaching_plan.expiry_date.anywhere_mode: 'Pick-up study'
+course.teaching_plan.expiry_date.date_mode: 'Fix time'
+course.teaching_plan.expiry_date.forever_mode: Permanet
+course.teaching_plan.expiry_date.anytime: "<b>pick-up study：</b>the expiry date is count from the day when student enroll in the course to 23:59 o'clock of the last day.\n"
+course.teaching_plan.expiry_date.real_time: '<b>fixed time:</b>course started and finished at fixed time'
+course.teaching_plan.expiry_date.overdue_tips: 'Student can not study if expired. System will inform the student 10 days before expired.'
+course.base_info: Basic info
+course.plan_setup.name: 'Program name'
+course.plan_setup.placeholder: Please enter the plan name
+course.plan_setup.subtitle: Plan subtitle
+course.base.title: Title
+course.base.sub_title: Subtitle
+course.base.tag: Tag
+course.base.tag_tips: 'Used to search courses. Managed by site administrator.'
+course.base.category: Category
+course.base.serialize_mode: 'To be continued'
+course.base.serialize_mode.none: 'Non Serial'
+course.base.serialize_mode.serialized: In the series
+course.base.serialize_mode.finished: Series end
+course.cover_image.content_title: 'Cover'
+course.cover.change: Cover change
+course.cover_image.upload_tips: "You can upload jpg, gif, png files, suggest size could be 480x270px. <br>The maxium size should less than <strong>2MB</strong>.\n"
+course.detail.summary: About
+course.base_setup.rules: Basic rule
+course.plan_setup.mode: 'Learn mode'
+course.plan_setup.mode.free: 'Free'
+course.plan_setup.mode.locked: 'Lock'
+course.plan_setup.mode.tips: 'Free:Learn freely<br>Lock:Unlock lessons step by step'
+course.marketing_setup.rule.watch_time_limit: 'Video watch time limit'
+course.marketing_setup.rule.watch_time_limit.watch_limit: 'Times of total video duration'
+course.plan_setup.finish_rule: '%taskName% rules'
+course.plan_setup.finish_rule.nothing: 'No limitation'
+course.plan_setup.finish_rule.depend_on_finish_condition: 'Determined by %taskName% finish conditions'
+course.plan_setup.finish_rule.depend_on_finish_condition_tips: 'Student should meet determined conditions to finish the %taskName%'
+course.plan_setup.member_numbers: Students
+site.data.people: Person
+course.plan_setup.member_numbers.view_rule_btn: '[check the live course information]'
+course.marketing_setup.preview.set_task: 'Free %taskName%'
+course.marketing_setup.preview.set_task.task_name: %name%%taskName%
+course.marketing_setup.preview.set_task.free: Free
+course.marketing_setup.preview.set_task.free_tips: 'Free lesson %taskName% only support'
+course.marketing_setup.preview.try_watch: Preview
+course.marketing_setup.preview.try_watch_tips: 'It is usally used to let student preview the paid course'
+course.info.video.convert.audio.enable: 'Audio lecture (trial)'
+course.enable.video.convert.audio.benefit: 'After opening, user can switch to audio and video.'
+course.video.convert.audio.status: 'Audio transcoding'
+course.video.convert.audio.detail: 'Details'
+course.marketing_setup.preview.minutes.try_watch: Trial it in minutes
+course.marketing_setup.preview.not.support.try_watch: Do not support trial
+course.info.video.convert.audio.start: 'Open'
+course.info.video.convert.audio.close: 'Close'
+course.marketing_setup.rule.watch_time_limit.watch_limit_tips: 'Eg.: The total video duration of the course is 100 minutes. If you set 5 times, then students can watch videos for 500 minutes. 0 means no limits.<br/>It only affect the video upload manually. It won''t affect record live or videos saved on third party live platform.'
+goods.show_page.tab.intro: Goods Intro
+goods.show_page.tab.catalogue: Learn Catalogue
+goods.show_page.tab.reviews: Reviews
+goods.show_page.tab.reviews_empty_tips: No Reviews
+goods.show_page.tab.summary_empty_tips: No Summary
+goods.show_page.authentication_certificate: Authentication Certificate
+site.favorited: Favorited
+site.favorite: Favorite
+goods.show_page.components.recommends: Recommends Goods
+goods.show_page.load_more: Load more
+goods.show_page.more: More
+goods.show_page.goto_school: Goto homepage
+goods.show_page.components.teachers: Teachers
+goods.show_page.components.expiry_mode: Expiry Mode
+goods.show_page.components.expiry_mode.forever: Forever
+goods.show_page.components.expiry_mode.forever_tips: Learn Anytime
+goods.show_page.components.expiry_mode.date_start: Start
+goods.show_page.components.expiry_mode.date_end: End
+goods.show_page.components.expiry_mode.date_end_label: End Date
+site.course_plan: Plan
+goods.show_page.components.services: Services
+site.share: Share
+site.manage: Manage
+goods.show_page.goto_learn: Goto Learn
+goods.show_page.vip_free_learn: Vip Free Learn
+goods.show_page.unpublished_tips: The product has not been released. It is not allowed to join or purchase
+goods.show_page.not_buyable_tips: Sorry, this product is restricted. Please contact customer service
+goods.show_page.join_expiry_tips: Sorry, this product has expired. Please contact customer service
+goods.show_page.usage_expiry_tips: You are not allowed to join or purchase after the deadline
+goods.show_page.free_join_btn: Free Join
+goods.show_page.buy_btn: Buy
+classroom.go_inside: Go to preview
+course.base.title.placeholder: Please insert course title

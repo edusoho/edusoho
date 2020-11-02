@@ -27,6 +27,8 @@ interface ClassroomService
 
     public function getClassroom($id);
 
+    public function hitClassroom($id);
+
     /**
      * @param $id
      * @param $fields
@@ -87,7 +89,11 @@ interface ClassroomService
      */
     public function deleteClassroom($id);
 
-    public function searchClassrooms($conditions, $orderBy, $start, $limit, $columns = array());
+    public function searchClassrooms($conditions, $orderBy, $start, $limit, $columns = [], $withMarketingInfo = false);
+
+    public function appendSpecsInfo($classrooms);
+
+    public function appendSpecInfo($classroom);
 
     public function countClassrooms($condtions);
 
@@ -177,9 +183,9 @@ interface ClassroomService
 
     public function removeStudents($classroomId, $userIds, $info);
 
-    public function becomeStudent($classroomId, $userId, $info = array());
+    public function becomeStudent($classroomId, $userId, $info = []);
 
-    public function becomeStudentWithOrder($classroomId, $userId, $info = array());
+    public function becomeStudentWithOrder($classroomId, $userId, $info = []);
 
     public function becomeAuditor($classroomId, $userId);
 
@@ -274,4 +280,8 @@ interface ClassroomService
     public function tryFreeJoin($classroomId);
 
     public function refreshClassroomHotSeq();
+
+    public function appendHasCertificate(array $classrooms);
+
+    public function hasCertificate($classroomId);
 }

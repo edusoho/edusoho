@@ -18,7 +18,7 @@ class Setting extends AbstractResource
     private $supportTypes = [
         'site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig',
         'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer',
-        'user', 'cloud', 'coin', 'coupon', 'mobile', 'appIm', 'cloudVideo',
+        'user', 'cloud', 'coin', 'coupon', 'mobile', 'appIm', 'cloudVideo', 'goods',
     ];
 
     /**
@@ -49,6 +49,17 @@ class Setting extends AbstractResource
         }
 
         return $result;
+    }
+
+    public function getGoods()
+    {
+        $goodsSetting = $this->getSettingService()->get('goods_setting', []);
+
+        return [
+            'show_number_data' => empty($goodsSetting['show_number_data']) ? 'join' : $goodsSetting['show_number_data'],
+            'show_review' => !isset($goodsSetting['show_review']) ? '1' : $goodsSetting['show_review'],
+            'recommend_rule' => empty($goodsSetting['recommend_rule']) ? 'hot' : $goodsSetting['recommend_rule'],
+        ];
     }
 
     public function getCloudVideo()

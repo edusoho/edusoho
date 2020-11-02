@@ -52,7 +52,7 @@ class ReviewController extends BaseController
         $reviewUsers = $this->getUserService()->findUsersByIds($reviewUserIds);
 
         $classroom = $this->getClassroomService()->getClassroom($id);
-        $review = $this->getReviewService()->getByUserIdAndTargetTypeAndTargetId($user['id'], 'classroom', $classroom['id']);
+        $review = $this->getReviewService()->getReviewByUserIdAndTargetTypeAndTargetId($user['id'], 'classroom', $classroom['id']);
         $layout = 'classroom/layout.html.twig';
 
         if ($member && !$member['locked']) {

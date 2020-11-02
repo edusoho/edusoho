@@ -1,22 +1,22 @@
-{% set minPrice = courseSet.minCoursePrice|currency %}
-{% set maxPrice = courseSet.maxCoursePrice|currency %}
+{% set minPrice = goods.minPrice|currency %}
+{% set maxPrice = goods.maxPrice|currency %}
 
 {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-    <span class="course-price course-price-{{ courseSet.id }}" style="display:inline">
+    <span class="course-price course-price-{{ goods.id }}" style="display:inline">
     {% if minPrice == 0 and maxPrice == 0 %}
         {{ 'course.price.free'|trans }}
     {% else %}
         {% set minCoinPrice = minPrice * setting('coin.cash_rate') %}
         {% set maxCoinPrice = maxPrice * setting('coin.cash_rate') %}
-        {#{% if minPrice != maxPrice %}
+        {% if minPrice != maxPrice %}
             {{ '价格 : %minPrice%%coinName% - %maxPrice%%coinName%'|trans({'%minPrice%': minCoinPrice,'%maxPrice%': maxCoinPrice, '%coinName%': setting('coin.coin_name')}) }}
         {% else %}
-            {{ '价格 : %minPrice%%coinName%'|trans({'%minPrice%': minCoinPrice,'%maxPrice%': maxCoinPrice)}) }}
-        {% endif %}#}
+            {{ '价格 : %minPrice%%coinName%'|trans({'%minPrice%': minCoinPrice,'%maxPrice%': maxCoinPrice, '%coinName%': setting('coin.coin_name')}) }}
+        {% endif %}
     {% endif %}
   </span>
 {% else %}
-    <span class="course-price course-price-{{ courseSet.id }}">
+    <span class="course-price course-price-{{ goods.id }}">
     {% if minPrice == 0 and maxPrice == 0 %}
         {{ 'course.price.free'|trans }}
     {% else %}

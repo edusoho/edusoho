@@ -61,7 +61,7 @@
 {% endblock %}
 
 {% block footer %}
-  <button id="form-submit-btn" class="btn btn-primary" type="button" data-loading-text="{{'course.btn.pay_tips'|trans}}" data-toggle="form-submit" data-target="#course-buy-form">
+  <button id="form-submit-btn" class="btn btn-primary" type="button" data-loading-text="{{'course.btn.pay_tips'|trans}}" data-toggle="form-submit" data-target="#course-buy-form" data-target-type="course" data-target-id="{{ course.courseSetId }}">
     {% if course.isFree or vipStatus|default(0) %}
       {{'course.btn.free_join'|trans}}
     {% else%}

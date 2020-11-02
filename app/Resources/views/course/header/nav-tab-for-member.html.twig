@@ -1,8 +1,13 @@
 <ul class="nav nav-tabs nav-tabs--course  {% if mobile %} es-mobile-nav {% endif %}" role="tablist">
-  {% for key, tab in metas.tabs %}
+  {% for key, tab in metas.tabs if (key not in ['reviews', 'summary'] or (key in ['reviews', 'summary'] and course.parentId > 0)) %}
     {% if  (mobile and loop.index <= 3) or (not mobile) %}
+      {% if key == 'certificate' %}
+        {% set isShow = can_obtain_certificates(course.id, 'course') %}
+      {% else %}
+        {% set isShow = true %}
+      {% endif %}
       <li role="presentation" id="{{ key }}"
-          class="{% if route_params.tab|default('') == key  or nav|default('') == key %}active{% endif %}">
+          class="{% if route_params.tab|default('') == key  or nav|default('') == key %}active{% endif %} {% if isShow == false %}hidden{% endif %}">
         <a
           {% if member|default(false) %}
             href="{{ path('my_course_show', {'id': course.id, 'tab': key, previewAs:previewAs, type: key|default('tasks')}) }}"
@@ -25,4 +30,13 @@
       </li>
     {% endif %}
   {% endfor %}
+  {% if course.parentId == 0 %}
+    <div class="btnbar hidden-xs">
+      <a href="{{ path('course_show',{ id:course.id }) }}"
+         class="btn btn-link">
+        {{ 'goods.description'|trans ~ ' >' }}
+      </a>
+    </div>
+  {% endif %}
+
 </ul>

@@ -111,7 +111,7 @@
   {% endblock %}
 
   {% block floatConsult %}
-  
+
     {% set cloudConsultPath = cloudConsultPath() %}
     {% if cloudConsultPath|default() %}
       {{ cloudConsultPath | raw }}

@@ -10,9 +10,9 @@ class MeCourseFilter extends Filter
     /**
      * @TODO 2017-06-29 业务变更、字段变更:publishedTaskNum变更为compulsoryTaskNum,兼容一段时间
      */
-    protected $publicFields = array(
-        'id', 'title', 'courseSetTitle', 'learnedNum', 'courseSet', 'compulsoryTaskNum', 'publishedTaskNum', 'learnedCompulsoryTaskNum', 'progress',
-    );
+    protected $publicFields = [
+        'id', 'title', 'courseSetTitle', 'learnedNum', 'courseSet', 'compulsoryTaskNum', 'publishedTaskNum', 'learnedCompulsoryTaskNum', 'progress', 'goodsId', 'specsId', 'spec',
+    ];
 
     protected function publicFields(&$data)
     {

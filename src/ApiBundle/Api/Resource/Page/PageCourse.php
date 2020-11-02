@@ -7,6 +7,7 @@ use ApiBundle\Api\Annotation\ResponseFilter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Course\Service\CourseService;
 
 class PageCourse extends AbstractResource
 {
@@ -44,8 +45,11 @@ class PageCourse extends AbstractResource
         $course['allowAnonymousPreview'] = $this->getSettingService()->get('course.allowAnonymousPreview', 1);
         $course['courses'] = $this->getCourseService()->findPublishedCoursesByCourseSetId($course['courseSet']['id']);
         $course['courses'] = ArrayToolkit::sortPerArrayValue($course['courses'], 'seq');
+        $course['courses'] = $this->getCourseService()->appendSpecsInfo($course['courses']);
         $course['progress'] = $this->getLearningDataAnalysisService()->makeProgress($course['learnedCompulsoryTaskNum'], $course['compulsoryTaskNum']);
         $course['reviews'] = $this->searchCourseReviews($course['id']);
+        $course['hasCertificate'] = $this->getCourseService()->hasCertificate($course['id']);
+        $course = $this->getCourseService()->appendSpecInfo($course);
 
         if ($this->isPluginInstalled('vip') && $course['vipLevelId'] > 0) {
             $apiRequest = new ApiRequest('/api/plugins/vip/vip_levels/'.$course['vipLevelId'], 'GET', []);
@@ -74,6 +78,9 @@ class PageCourse extends AbstractResource
         return $result['data'];
     }
 
+    /**
+     * @return CourseService
+     */
     private function getCourseService()
     {
         return $this->service('Course:CourseService');

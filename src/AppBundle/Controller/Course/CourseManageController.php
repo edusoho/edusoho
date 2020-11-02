@@ -18,8 +18,10 @@ use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ReportService;
 use Biz\Course\Service\ThreadService;
 use Biz\File\Service\UploadFileService;
+use Biz\Goods\Service\GoodsService;
+use Biz\Product\Service\ProductService;
 use Biz\S2B2C\Service\CourseProductService;
-use Biz\S2B2C\Service\ProductService;
+use Biz\S2B2C\Service\ProductService as S2B2CProductService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\S2B2C\Service\SyncEventService;
 use Biz\System\Service\SettingService;
@@ -223,12 +225,13 @@ class CourseManageController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId);
         $task = $this->getTaskService()->getTask($taskId);
         $activity = $this->getActivityService()->getActivity($task['activityId'], true);
+        $activity = $this->getOriginActivity($activity);
 
         $liveId = $activity['ext']['liveId'];
         $provider = $activity['ext']['liveProvider'];
         $resultList = $this->getLiveReplayService()->generateReplay(
             $liveId,
-            $course['id'],
+            $activity['fromCourseId'],
             $activity['id'],
             $provider,
             'live'
@@ -253,6 +256,16 @@ class CourseManageController extends BaseController
         }
 
         return $this->createJsonResponse(true);
+    }
+
+    protected function getOriginActivity($activity)
+    {
+        if (empty($activity['copyId'])) {
+            return $activity;
+        }
+        $copyActivity = $this->getActivityService()->getActivity($activity['copyId'], true);
+
+        return $this->getOriginActivity($copyActivity);
     }
 
     public function listAction(Request $request, $courseSetId)
@@ -517,9 +530,6 @@ class CourseManageController extends BaseController
                 unset($data['subtitle']);
             }
             $data = $this->prepareExpiryMode($data);
-            if (!empty($data['services'])) {
-                $data['services'] = json_decode($data['services'], true);
-            }
 
             if (!empty($data['freeTaskIds']) || !empty($freeTasks)) {
                 $freeTaskIds = ArrayToolkit::column($freeTasks, 'id');
@@ -532,7 +542,7 @@ class CourseManageController extends BaseController
             }
 
             $updatedCourse = $this->getCourseService()->updateBaseInfo($courseId, $data);
-            if (empty($course['enableAudio']) && $updatedCourse['enableAudio']) {
+            if (empty($course['enableAudio']) && isset($updatedCourse['enableAudio'])) {
                 $this->getCourseService()->batchConvert($course['id']);
             }
 
@@ -564,6 +574,10 @@ class CourseManageController extends BaseController
             'ownerId' => $course['courseSetId'],
         ]);
 
+        if ($this->isPluginInstalled('Vip')) {
+            $vipLevels = $this->createService('VipPlugin:Vip:LevelService')->findEnabledLevels();
+        }
+
         return $this->render(
             'course-manage/info.html.twig',
             [
@@ -574,6 +588,8 @@ class CourseManageController extends BaseController
                 'canFreeTasks' => $this->findCanFreeTasks($course),
                 'freeTasks' => $freeTasks,
                 'notifies' => empty($notifies) ? [] : $notifies,
+                'vipInstalled' => $this->isPluginInstalled('Vip'),
+                'vipLevels' => empty($vipLevels) ? [] : array_values($vipLevels),
             ]
         );
     }
@@ -901,7 +917,15 @@ class CourseManageController extends BaseController
             $conditions[$conditions['keywordType']] = trim($conditions['keyword']);
         }
 
-        $conditions['order_item_target_ids'] = [$courseId];
+        $orderItemTargetId = $course['id'];
+
+        if (!$course['parentId']) {
+            $product = $this->getProductService()->getProductByTargetIdAndType($courseSet['id'], 'course');
+            $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByProductIdAndTargetId($product['id'], $course['id']);
+            $orderItemTargetId = $goodsSpecs['id'];
+        }
+
+        $conditions['order_item_target_ids'] = [$orderItemTargetId];
 
         if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {
             $conditions['start_time'] = strtotime($conditions['startDateTime']);
@@ -953,6 +977,7 @@ class CourseManageController extends BaseController
                 'course' => $course,
                 'request' => $request,
                 'orders' => $orders,
+                'goodsSpecs' => empty($goodsSpecs) ? null : [$goodsSpecs['id'] => $goodsSpecs],
                 'users' => $users,
                 'paginator' => $paginator,
             ]
@@ -1258,7 +1283,7 @@ class CourseManageController extends BaseController
     }
 
     /**
-     * @return ProductService
+     * @return S2B2CProductService
      */
     protected function getS2B2CProductService()
     {
@@ -1279,5 +1304,21 @@ class CourseManageController extends BaseController
     protected function getS2B2CFacadeService()
     {
         return $this->createService('S2B2C:S2B2CFacadeService');
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getProductService()
+    {
+        return $this->createService('Product:ProductService');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->createService('Goods:GoodsService');
     }
 }

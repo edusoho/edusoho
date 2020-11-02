@@ -1,0 +1,9 @@
+<div>
+	{% if options.before|default() %}
+		<span class="{{ options.before.class|default('') }}">{{ options.before.value|default('') }}</span>
+	{% endif %}
+	<input type="text" id="{{ name }}" name="{{ name }}" class="form-control {{ class|default() }}" value="{{ value }}" {% if required %} required="required" {% endif %} {% if disabled|default(false) %} disabled="disabled" {% endif %}>
+	<span class="js-delete-content-btn delete-content-btn" data-target="#{{ name }}">
+		<i class="cd-icon cd-icon-close"></i>
+	</span>
+</div>

@@ -13,10 +13,17 @@
       </label>
       <div class="controls col-md-10 radios">
         <label>
+          <input type="radio" name="type" value="promptly"
+                 data-tip="{{ 'admin_v2.cloud_center.content_resource.product_update_promptly.tips'|trans }}"
+                 {% if type|default('manual') == 'promptly' %}checked{% endif %}>
+          {{ 'admin_v2.cloud_center.content_resource.product_update_promptly'|trans }}
+        </label>
+        <label>
           <input type="radio" name="type" value="auto"
                  data-tip="{{ 'admin_v2.cloud_center.content_resource.product_update_auto.tips'|trans }}"
                  {% if type|default('manual') == 'auto' %}checked{% endif %}>
-          {{ 'admin_v2.cloud_center.content_resource.product_update_auto'|trans }}</label>
+          {{ 'admin_v2.cloud_center.content_resource.product_update_auto'|trans }}
+        </label>
         <label>
           <input type="radio" name="type" value="manual"
                  data-tip="{{ 'admin_v2.cloud_center.content_resource.product_update_manual.tips'|trans }}"
@@ -27,6 +34,7 @@
       </div>
 
     </div>
+
 
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     <div class="form-group">

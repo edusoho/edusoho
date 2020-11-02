@@ -2,12 +2,12 @@
 
 namespace ApiBundle\Api\Resource\Classroom;
 
+use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Classroom\ClassroomException;
 use Biz\Classroom\Service\ClassroomService;
-use ApiBundle\Api\Annotation\ApiConf;
 use Biz\User\Service\UserService;
 
 class Classroom extends AbstractResource
@@ -23,13 +23,15 @@ class Classroom extends AbstractResource
             throw ClassroomException::NOTFOUND_CLASSROOM();
         }
 
-        $this->getOCUtil()->single($classroom, array('creator', 'teacherIds', 'assistantIds', 'headTeacherId'));
+        $this->getOCUtil()->single($classroom, ['creator', 'teacherIds', 'assistantIds', 'headTeacherId']);
 
         if (!empty($classroom['headTeacher'])) {
             $this->mergeProfile($classroom['headTeacher']);
         }
 
         $classroom['access'] = $this->getClassroomService()->canJoinClassroom($classroomId);
+        $classroom['hasCertificate'] = $this->getClassroomService()->hasCertificate($classroomId);
+        $classroom = $this->getClassroomService()->appendSpecInfo($classroom);
 
         return $classroom;
     }
@@ -52,14 +54,19 @@ class Classroom extends AbstractResource
             $conditions,
             $this->getSort($request),
             $offset,
-            $limit
+            $limit,
+            [],
+            true
         );
 
-        $this->getOCUtil()->multiple($classrooms, array('creator', 'teacherIds', 'headTeacherId', 'assistantIds'));
+        $this->getOCUtil()->multiple($classrooms, ['creator', 'teacherIds', 'headTeacherId', 'assistantIds']);
 
         $this->mergeProfilesInClassroom($classrooms, 'headTeacher');
 
         $total = $this->getClassroomService()->countClassrooms($conditions);
+
+        $classrooms = $this->getClassroomService()->appendHasCertificate($classrooms);
+        $classrooms = $this->getClassroomService()->appendSpecsInfo($classrooms);
 
         return $this->makePagingObject($classrooms, $total, $offset, $limit);
     }

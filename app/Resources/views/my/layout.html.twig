@@ -67,6 +67,9 @@
         {% if side_nav == 'my-group' %} active {% endif %}">
             <a href="{{ path('my_group_member_center') }}">{{ 'my.learning.group_menu'|trans }}</a>
           </li>
+          <li class="list-group-item {% if side_nav == 'my-certificates' %} active {% endif %}">
+            <a href="{{path('my_certificates')}}">{{'user.certificate_menu'|trans}}</a>
+          </li>
 
           {{ slot('my.learning.menu', {'side_nav': side_nav}) }}
         </ul>

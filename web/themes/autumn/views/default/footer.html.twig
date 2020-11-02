@@ -33,7 +33,7 @@
           {{ setting('license.license_name') }}
         </a>
       {% else %}
-        <a><img src="{{ asset(setting('license.license_picture')) }}"></a>
+        <a id="license-picture"><img src="{{ asset(setting('license.license_picture')) }}"></a>
         <a>{{ setting('license.license_name') }}</a>
       {% endif %}
     {% endif %}
@@ -42,8 +42,8 @@
       <div>
         {% if permit.name and permit.record_number %}
           {% if permit.picture %}
-            <a class="mlm" href={{ permit.picture |default('/') }} target="_blank">{{ permit.name }}</a>
-            <a class="mlm" href={{ permit.picture |default('/') }} target="_blank">{{ permit.record_number }}</a>
+            <a class="mlm" href={{ fileurl('../'~permit.picture, null) |default('/') }} target="_blank">{{ permit.name }}</a>
+            <a class="mlm" href={{ fileurl('../'~permit.picture, null) |default('/') }} target="_blank">{{ permit.record_number }}</a>
           {% else %}
             <a class="mlm">{{ permit.name }}</a>
             <a class="mlm">{{ permit.record_number }}</a>

@@ -234,6 +234,10 @@ interface CourseService
 
     public function searchCourses($conditions, $sort, $start, $limit, $columns = []);
 
+    public function appendSpecsInfo($courses);
+
+    public function appendSpecInfo($course);
+
     public function searchWithJoinCourseSet($conditions, $sort, $start, $limit, $columns = []);
 
     public function searchBySort($conditions, $sort, $start, $limit);
@@ -353,4 +357,8 @@ interface CourseService
      * 课程老师，后台设置可修改营销设置可修改
      */
     public function canUpdateCourseBaseInfo($courseId, $courseSetId = 0);
+
+    public function appendHasCertificate(array $courses);
+
+    public function hasCertificate($courseId);
 }

@@ -2,11 +2,11 @@
 
 namespace ApiBundle\Api\Resource\Me;
 
+use ApiBundle\Api\Annotation\ResponseFilter;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use Biz\Classroom\Service\ClassroomService;
-use ApiBundle\Api\Annotation\ResponseFilter;
 use AppBundle\Common\ArrayToolkit;
+use Biz\Classroom\Service\ClassroomService;
 
 class MeClassroom extends AbstractResource
 {
@@ -17,28 +17,32 @@ class MeClassroom extends AbstractResource
     {
         $querys = $request->query->all();
 
-        $conditions = array(
+        $conditions = [
             'userId' => $this->getCurrentUser()->getId(),
-            'roles' => array('student', 'auditor', 'assistant'),
-        );
+            'role' => 'student',
+        ];
 
         $total = $this->getClassroomService()->searchMemberCount($conditions);
 
         if (isset($querys['format']) && 'pagelist' == $querys['format']) {
             list($offset, $limit) = $this->getOffsetAndLimit($request);
 
-            $classrooms = $this->getClassrooms($conditions, array(), $offset, $limit);
+            $classrooms = $this->getClassrooms($conditions, [], $offset, $limit);
+            $classrooms = $this->getClassroomService()->appendSpecsInfo($classrooms);
 
             return $this->makePagingObject($classrooms, $total, $offset, $limit);
         } else {
-            return $this->getClassrooms($conditions, array(), 0, $total);
+            $classrooms = $this->getClassrooms($conditions, [], 0, $total);
+            $classrooms = $this->getClassroomService()->appendSpecsInfo($classrooms);
+
+            return $classrooms;
         }
     }
 
     private function getClassrooms($conditions, $orderBy, $offset, $limit)
     {
         $classroomIds = ArrayToolkit::column(
-            $this->getClassroomService()->searchMembers($conditions, array(), $offset, $limit),
+            $this->getClassroomService()->searchMembers($conditions, [], $offset, $limit),
             'classroomId'
         );
 

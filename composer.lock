@@ -65,6 +65,7 @@
                 "extension",
                 "twig"
             ],
+            "abandoned": "twig/cache-extension",
             "time": "2020-01-01T20:47:37+00:00"
         },
         {
@@ -463,12 +464,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-item-bank.git",
-                "reference": "29e0f8791a0f4946690e5977df7c60fbfcc29083"
+                "reference": "75d529583775231b032f1715b2d1812427b7d52c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-item-bank/zipball/29e0f8791a0f4946690e5977df7c60fbfcc29083",
-                "reference": "29e0f8791a0f4946690e5977df7c60fbfcc29083",
+                "url": "https://api.github.com/repos/codeages/biz-item-bank/zipball/75d529583775231b032f1715b2d1812427b7d52c",
+                "reference": "75d529583775231b032f1715b2d1812427b7d52c",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -479,7 +480,7 @@
             },
             "require": {
                 "cerdic/css-tidy": "1.7.1",
-                "codeages/biz-framework": "^0.9.33",
+                "codeages/biz-framework": ">=0.9.33",
                 "codeages/exam-parser": "dev-master",
                 "ext-json": "*",
                 "ezyang/htmlpurifier": "4.12.0",
@@ -502,7 +503,7 @@
                 "MIT"
             ],
             "description": "item bank with biz-framework",
-            "time": "2020-08-17T09:30:53+00:00"
+            "time": "2020-10-21T02:16:04+00:00"
         },
         {
             "name": "codeages/biz-order-pay",
@@ -510,12 +511,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-order-pay.git",
-                "reference": "6198c98d78b9e52d03088df8761bae5cbcc5c1ea"
+                "reference": "014aaa9de94616364c32247e794479a0374fae34"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-order-pay/zipball/6198c98d78b9e52d03088df8761bae5cbcc5c1ea",
-                "reference": "6198c98d78b9e52d03088df8761bae5cbcc5c1ea",
+                "url": "https://api.github.com/repos/codeages/biz-order-pay/zipball/014aaa9de94616364c32247e794479a0374fae34",
+                "reference": "014aaa9de94616364c32247e794479a0374fae34",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -546,7 +547,7 @@
                 "MIT"
             ],
             "description": "order, pay module",
-            "time": "2020-04-10T12:19:10+00:00"
+            "time": "2020-09-03T09:33:21+00:00"
         },
         {
             "name": "codeages/biz-rate-limiter",
@@ -873,12 +874,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/qiqiuyun-php-sdk.git",
-                "reference": "04268de4ab6a8d2496c4d81c55891b6460606b8c"
+                "reference": "ca6471fedd2164117815fc2ed961b5cb4f82e7f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/04268de4ab6a8d2496c4d81c55891b6460606b8c",
-                "reference": "04268de4ab6a8d2496c4d81c55891b6460606b8c",
+                "url": "https://api.github.com/repos/codeages/qiqiuyun-php-sdk/zipball/ca6471fedd2164117815fc2ed961b5cb4f82e7f9",
+                "reference": "ca6471fedd2164117815fc2ed961b5cb4f82e7f9",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -914,7 +915,7 @@
                 }
             ],
             "description": "QiQiuYun PHP SDK",
-            "time": "2020-07-13T05:49:14+00:00"
+            "time": "2020-09-21T04:46:31+00:00"
         },
         {
             "name": "codeages/rate-limiter",
@@ -7509,6 +7510,7 @@
                 }
             ],
             "description": "JSONPath implementation for parsing, searching and flattening arrays",
+            "abandoned": "softcreatr/jsonpath",
             "time": "2019-07-15T17:23:22+00:00"
         },
         {

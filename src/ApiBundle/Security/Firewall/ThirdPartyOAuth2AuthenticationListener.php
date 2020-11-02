@@ -57,7 +57,7 @@ class ThirdPartyOAuth2AuthenticationListener extends BaseAuthenticationListener
             throw SettingException::NOTFOUND_THIRD_PARTY_AUTH_CONFIG();
         }
 
-        if ($type == 'apple') {
+        if ('apple' == $type) {
             return $this->createAppleClient();
         }
 
@@ -69,7 +69,7 @@ class ThirdPartyOAuth2AuthenticationListener extends BaseAuthenticationListener
             throw SettingException::FORBIDDEN_THIRD_PARTY_AUTH();
         }
 
-        $config = array('key' => $settings[$type.'_key'], 'secret' => $settings[$type.'_secret']);
+        $config = ['key' => $settings[$type.'_key'], 'secret' => $settings[$type.'_secret']];
 
         return OAuthClientFactory::create($type, $config);
     }

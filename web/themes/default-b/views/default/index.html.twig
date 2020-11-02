@@ -198,7 +198,7 @@
                         </p>
                       </div>
                     </li>
-                  {% endif %} 
+                  {% endif %}
                 {% endfor %}
               </ul>
             </div>
@@ -357,7 +357,12 @@
                       <a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}">
                         <div class="course-item">
                           <img src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}" class="img-responsive thumb pull-left">
-                          <div class="course-title">{{ courseSet.title }}</div>
+                          {% if can_obtain_certificates(courseSet.id, 'courseSet') %}
+                            <a style="margin-top: 6px" class="certificate-tag" tabindex="0" role="button" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-html="true" title="{{ 'explore.classroom.certificate_tag'|trans }}" data-content="{{ 'course.catalogue.certificate_obtain'|trans }}">{{ 'explore.classroom.certificate_tag_short'|trans }}</a>
+                          {% endif %}
+                          <div class="course-title">
+                            {{ courseSet.title }}
+                          </div>
                         </div>
                       </a>
                     </li>
@@ -391,7 +396,7 @@
           </div>
         {% endif %}
 
-        {% if setting('course.show_review', '1') == 1 %}
+        {% if setting('goods_setting.show_review', '1') == 1 %}
           {{ render(controller('AppBundle:Default:latestReviewsBlock', {number:5})) }}
         {% endif %}
 
@@ -460,7 +465,11 @@
                 {% endif %}
               {% endif %}
 
+              {% if can_obtain_certificates(course.id, 'course') %}
+                <a style="margin: 10px -6px 0 10px;" class="certificate-tag" tabindex="0" role="button" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-html="true" title="{{ 'explore.classroom.certificate_tag'|trans }}" data-content="{{ 'course.catalogue.certificate_obtain'|trans }}">{{ 'explore.classroom.certificate_tag_short'|trans }}</a>
+              {% endif %}
               <span class="title">{{ courseSet.title }}</span>
+
               {% if mode in ['default', 'teach'] %}
 
                 {% if courseSet.type == 'live' %}
@@ -479,7 +488,7 @@
                  {% include "course/widgets/course-set-price.html.twig" %}
               </div>
             {% endif %}
-            {% if setting('course.show_review', '1') == 1 %}
+            {% if setting('goods_setting.show_review', '1') == 1 %}
               <span class="review-col pull-left" style="text-align: left;">
                 {% if course.ratingNum > 0 %}
                   <span class="meta-label"><strong>{{ courseSet.ratingNum }}</strong> {{ '评价'|trans }}</span>

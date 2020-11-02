@@ -1,0 +1,128 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set script_controller = 'certificate/update' %}
+
+{% set menu = 'admin_v2_certificate_manage' %}
+
+{% block tabs %}
+  {% set tab = 'edit' %}
+  {% include 'admin-v2/operating/certificate/tabs.html.twig' %}
+{% endblock %}
+
+{% block main %}
+  <form id="certificate-form" class="form-horizontal" method="post" action="{{ path('admin_v2_certificate_edit', {id: certificate.id}) }}">
+    <div class="form-group mtl mbs">
+      <div class="col-md-2 control-label">
+        <label for="name" class="control-label-required">{{'admin.operation_certificate.certificate.name_th'|trans}}：</label>
+      </div>
+      <div class="col-md-6 controls">
+        <input class="form-control" name="name" id="name" value="{{ certificate.name|default('') }}"/>
+      </div>
+    </div>
+    <div class="form-group mtl mbs">
+      <div class="col-md-2 control-label">
+        <label for="description" class="control-label-required">{{'admin.operation_certificate.certificate.description_th'|trans}}：</label>
+      </div>
+      <div class="col-md-6 controls">
+        <textarea name="description" rows="4" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{ certificate.description|default('') }}</textarea>
+      </div>
+    </div>
+
+    <div class="form-group mtl mbs">
+      <div class="col-md-2 control-label">
+        <label for="targetType" class="control-label-required">{{'admin.operation_certificate.template.type'|trans}}：</label>
+      </div>
+      <div class="col-md-4 controls mts">
+        {% if certificate.status != 'published' %}
+          <select class="form-control" id="targetType" name="targetType">
+            {{ select_options(dict('certificateTypes'), certificate.targetType) }}
+          </select>
+        {% else %}
+          {{ ('site.default.'~certificate.targetType)|trans }}
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="form-group mtl mbs">
+      <div class="col-md-2 control-label">
+        <label for="targetId" class="control-label-required">{{'admin.operation_certificate.certificate.resource_choose'|trans}}：</label>
+      </div>
+      <div class="col-md-4 controls mts">
+        <span class="js-target-name">{{ target.title }}</span>
+        {% if certificate.status != 'published' %}
+          <a href="#modal" class="js-target-select" data-toggle="modal" data-url="{{ path('admin_v2_certificate_target_select', {targetType: certificate.targetType}) }}" >{{'admin.operation_certificate.certificate.resource_choose_btn'|trans}}</a>
+        {% endif %}
+        <input class="hidden" name="targetId" id="targetId" value="{{ certificate.targetId }}"/>
+      </div>
+    </div>
+
+    <div class="form-group mtl mbs">
+      <div class="col-md-2 control-label">
+        <label for="templateId" class="control-label-required">{{'admin.operation_certificate.certificate.template_choose'|trans}}：</label>
+      </div>
+      <div class="col-md-4 controls">
+        <span class="js-template-name">{{ template.name }}</span>
+        {% if certificate.status != 'published' %}
+          <a href="#modal" class="js-template-select" data-toggle="modal" data-url="{{ path('admin_v2_certificate_template_select', {targetType: certificate.targetType}) }}" class="btn btn-default btn-sm js-modal-select-btn"><i class="es-icon es-icon-anonymous-iconfont"></i>{{'admin.operation_certificate.certificate.template_choose'|trans}}</a>
+        {% endif %}
+        <input class="hidden" name="templateId" id="templateId" value="{{ template.id }}"/>
+      </div>
+    </div>
+    <div class="form-group mtl">
+      <div class="col-md-2 control-label">
+        <label for="code" class="control-label-required">{{'admin.operation_certificate.certificate.code'|trans}}：</label>
+      </div>
+      <div class="col-md-4 controls mts">
+        {% if certificate.status != 'published' %}
+          <input class="form-control" name="code" id="code" data-url="{{ path('admin_v2_certificate_code_check', {exceptId: certificate.id}) }}" placeholder="{{'admin.operation_certificate.certificate.code.placeholder'|trans}}" value="{{ certificate.code }}" />
+        {% else %}
+          {{ certificate.code }}
+        {% endif %}
+      </div>
+    </div>
+    <div class="form-group mtl">
+      <div class="col-md-2 control-label">
+        <label for="expiryDay" class="control-label-required">{{'admin.operation_certificate.certificate.expiry_day'|trans}}：</label>
+      </div>
+      {% if certificate.status != 'published' %}
+        <div class="col-md-4 controls">
+          <input class="form-control" name="expiryDay" id="expiryDay" placeholder="{{'admin.operation_certificate.certificate.expiry_day.placeholder'|trans}}" value="{% if certificate.expiryDay %}{{ certificate.expiryDay }}{% endif %}" />
+        </div>
+        <div class="col-md-1 controls mts" style="margin-left: -20px">{{ 'site.date.day'|trans }}</div>
+      {% else %}
+        <div class="col-md-4 controls mts">
+          {% if certificate.expiryDay == 0 %}
+            {{ 'admin.operation_certificate.certificate.expiry_day.forever'|trans }}
+          {% else %}
+            {{ certificate.expiryDay }} {{ 'site.date.day'|trans }}
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="form-group mtl">
+      <div class="col-md-2 control-label">
+        <label for="autoIssue" class="control-label-required">{{ 'admin.operation_certificate.certificate.auto_issue'|trans }}：</label>
+      </div>
+      <div class="col-md-3">
+        <span class="es-switch {% if certificate.status != 'published' %}js-auto-issue{% endif %} {% if certificate.status == 'published' %}es-switch-disabled{% endif %} {% if certificate.autoIssue %}is-active {% endif %}" style="margin-top: 7px;">
+          <input class="es-switch__input" type="text" name="autoIssue" value="{{ certificate.autoIssue }}" data-close="0" data-open="1" {% if certificate.status == 'published' %}disabled{% endif %}>
+        </span>
+        <div class="mtl">
+          {{'admin.operation_certificate.certificate.issue_rule'|trans}} :
+          <span class="color-primary js-auto-send {% if certificate.autoIssue == 0 %}hidden{% endif %}">{{'admin.operation_certificate.certificate.issue_rule.course'|trans}}</span>
+          <span class="color-primary js-close-auto {% if certificate.autoIssue == 1 %}hidden{% endif %}">{{'admin.operation_certificate.certificate.issue_rule.course_not_auto'|trans}}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group mtl">
+      <div class="col-md-2 control-label">
+      </div>
+      <div class="controls col-md-6">
+        <button type="submit" class="btn btn-primary ct-mrxl js-submit-btn" id="create-certificate" data-submitting-text="{{'form.btn.save.submiting'|trans}}">{{ 'form.btn.save'|trans }}</button>
+      </div>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+{% endblock %}

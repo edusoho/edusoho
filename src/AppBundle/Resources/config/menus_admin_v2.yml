@@ -570,6 +570,47 @@ admin_v2:
                                     name: admin_v2.micromarketing.menu
                                     router_name: admin_v2_login_micromarketing_boot
                                     disable: true
+                        # 用户信息采集
+                        admin_v2_information_collect_manage:
+                            name: admin_v2.information_collect.menu
+                            children:
+                                admin_v2_information_collect:
+                                    router_name: admin_v2_information_collect
+                                    name: admin_v2.information_collect.tab
+                                    children: 
+                                        admin_v2_information_collect_create:
+                                            name: admin_v2.information_collect.create
+                                            disable: true
+                                            group: topBtn
+                                            target: '_blank'
+                                        admin_v2_information_collect_close:
+                                            name: admin_v2.information_collect.operate.close_tab
+                                            class: close-collect
+                                            router_params:
+                                                id: (collect.id)
+                                            group: groupButton
+                                            mode: none
+                                            visible: ( collect.status=='open' )
+                                        admin_v2_information_collect_open:
+                                            name: admin_v2.information_collect.operate.open_tab
+                                            class: open-collect
+                                            router_params:
+                                                id: (collect.id)
+                                            group: groupButton
+                                            mode: none
+                                            visible: ( collect.status!='open' )
+                                        admin_v2_information_collect_update:
+                                            name: admin_v2.information_collect.operate.update_tab
+                                            router_params:
+                                                id: (collect.id)
+                                            group: groupButton
+                                        admin_v2_information_collect_detail:
+                                            name: admin_v2.information_collect.detail
+                                            router_name: admin_v2_information_collect_detail
+                                            router_params:
+                                            id: id
+                                            disable: true
+                                            target: '_blank'
                 # 渠道管理
                 admin_v2_channel_group:
                     name: admin_v2.channel.basic_group
@@ -697,11 +738,77 @@ admin_v2:
                                     router_name: admin_v2_navigation
                                     router_params:
                                         type: friendlyLink
+                        admin_v2_goods_manage:
+                            name: admin_v2.operating.goods_setting
+                            router_name: admin_v2_goods_setting
+                            children:
+                                admin_v2_goods_setting:
+                                    name: admin_v2.operating.goods_setting
+                                    router_name: admin_v2_goods_setting
                 #内容运营(group)
                 admin_v2_content_operation_group:
                     name: admin_v2.operation.content_operation.basic_group
                     is_group: true
                     children:
+                        admin_v2_operation_certificate:
+                            name: admin_v2.operation.certificate_menu
+                            group: 2
+                            children:
+                                admin_v2_certificate_manage:
+                                    name: admin_v2.operation.certificate.basic_tab
+                                    disable: true
+                                    children:
+                                        admin_v2_certificate_create:
+                                            name: admin_v2.operation.certificate.create_tab
+                                            group: topBtn
+                                        admin_v2_certificate_edit:
+                                            name: admin_v2.operation.certificate.edit_tab
+                                            router_params:
+                                                id: (certificate.id)
+                                            blank: 1
+                                        admin_v2_certificate_close:
+                                            name: admin_v2.operation.certificate.close_tab
+                                            class: close-certificate
+                                            router_params:
+                                                id: (certificate.id)
+                                            group: groupButton
+                                            mode: none
+                                            visible: ( certificate.status=='published' )
+                                        admin_v2_certificate_publish:
+                                            name: admin_v2.operation.certificate.publish_tab
+                                            class: publish-certificate
+                                            router_params:
+                                                id: (certificate.id)
+                                            group: groupButton
+                                            mode: none
+                                            visible: ( certificate.status !='published' )
+                                        admin_v2_certificate_delete:
+                                            name: admin_v2.operation.certificate.delete_tab
+                                            class: delete-certificate
+                                            router_params:
+                                              id: (certificate.id)
+                                            group: groupButton
+                                            mode: none
+                                            visible: ( certificate.status !='published' )
+                                        admin_v2_certificate_record_list:
+                                            name: admin_v2.operation.certificate.member_list_tab
+                                            router_params:
+                                                id: (certificate.id)
+                                            group: groupButton
+                                            blank: 1
+                                        admin_v2_certificate_examine_manage:
+                                            name: admin_v2.operation.certificate.audit_manage_tab
+                                            router_params:
+                                                id: (certificate.id)
+                                            group: groupButton
+                                            blank: 1
+                                admin_v2_certificate_template_manage:
+                                    name: admin_v2.operation.certificate.template.basic_tab
+                                    disable: true
+                                    children:
+                                      admin_v2_certificate_template_create:
+                                            name: admin_v2.operation.certificate.template.create_tab
+                                            group: topBtn
                         admin_v2_operation_notification:
                             name: admin_v2.operation.notification_menu
                             group: 2
@@ -713,7 +820,7 @@ admin_v2:
                                         admin_v2_batch_notification_create:
                                             name: admin_v2.operation.notification.basic_tab.create_btn
                                             group: topBtn
-                        # 网站公告管理
+#                        # 网站公告管理
                         admin_v2_operation_announcement:
                             name: admin_v2.operation.announcement_menu
                             group: 2

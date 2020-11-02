@@ -187,6 +187,7 @@ class UploadFileEventSubscriber extends EventSubscriber implements EventSubscrib
         if ('coursematerial' == $material['source'] && 0 == $material['courseId'] && 0 == $material['lessonId']) {
             return;
         }
+
         $this->getUploadFileService()->waveUsedCount($material['fileId'], 1);
     }
 

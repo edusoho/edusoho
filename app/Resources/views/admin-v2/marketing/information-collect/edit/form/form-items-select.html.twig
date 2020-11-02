@@ -1,0 +1,12 @@
+<div class="js-selecte-form-items form-horizontal">
+	{% for group, fields in formFields %}
+		<div class="selecte-form-item-group mbm">{{('admin_v2.information_collect.form_items.select_group.'~group~'_info')|trans}}</div>
+		<div class="row">
+			{% for field in fields %}
+			<div class="col-md-6 mbm">
+				<div class="js-add-item-btn btn btn-default {% if field.field in selectedFormFields|keys %}disabled{% endif %}" id="btn-add-item-{{ field.field }}" data-target-item="#item-{{ field.field }}">{{ field.title }}</div>
+				</div>
+			{% endfor %}
+		</div>
+	{% endfor %}
+</div>

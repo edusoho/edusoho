@@ -17,7 +17,9 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Util\CourseTitleUtils;
+use Biz\Goods\Service\GoodsService;
 use Biz\Order\OrderException;
+use Biz\Product\Service\ProductService;
 use Biz\S2B2C\Service\CourseProductService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
@@ -84,7 +86,9 @@ class MemberServiceImpl extends BaseService implements MemberService
         try {
             $this->beginTransaction();
             if ($data['price'] > 0) {
-                $order = $this->createOrder($course['id'], $user['id'], $data);
+                $product = $this->getProductService()->getProductByTargetIdAndType($course['courseSetId'], 'course');
+                $goodsSpecs = $this->getGoodsService()->getGoodsSpecsByProductIdAndTargetId($product['id'], $course['id']);
+                $order = $this->createOrder($goodsSpecs['id'], $user['id'], $data);
             } else {
                 $order = ['id' => 0];
                 $info = [
@@ -1330,9 +1334,9 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->count($conditions);
     }
 
-    protected function createOrder($courseId, $userId, $data)
+    protected function createOrder($goodsSpecsId, $userId, $data)
     {
-        $courseProduct = $this->getOrderFacadeService()->getOrderProduct('course', ['targetId' => $courseId]);
+        $courseProduct = $this->getOrderFacadeService()->getOrderProduct('course', ['targetId' => $goodsSpecsId]);
 
         $params = [
             'created_reason' => $data['remark'],
@@ -1581,4 +1585,20 @@ class MemberServiceImpl extends BaseService implements MemberService
     }
 
     /*END*/
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->createService('Goods:GoodsService');
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getProductService()
+    {
+        return $this->createService('Product:ProductService');
+    }
 }

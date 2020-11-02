@@ -83,9 +83,8 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
     public function deleteCourse($courseId)
     {
+        $this->beginTransaction();
         try {
-            $this->beginTransaction();
-
             $this->deleteCourseMaterial($courseId);
 
             $this->deleteCourseChapter($courseId);

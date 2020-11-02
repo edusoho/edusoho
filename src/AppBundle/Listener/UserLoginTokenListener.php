@@ -39,7 +39,7 @@ class UserLoginTokenListener
             return;
         }
 
-        if (1 == $user['passwordChanged']) {
+        if (isset($user['passwordChanged']) && 1 == $user['passwordChanged']) {
             $request->getSession()->invalidate();
             $response = $this->logout('密码已修改，请您重新登录');
             $event->setResponse($response);
