@@ -38,7 +38,7 @@ class S2B2CService extends BaseService
 
     /**
      * 上报退款成功的订单
-     *
+     * 
      * productDetailId => s2b2c端productDetailId
      * merchantRefundReportId => es本地退款上报id
      * merchantOrderId => es本地订单id
