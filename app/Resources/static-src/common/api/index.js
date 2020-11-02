@@ -30,7 +30,8 @@ import resetPasswordMobile from './modules/reset-password/mobile.js';
 import resetPasswordSms from './modules/reset-password/sms.js';
 import informationCollect from './modules/informationCollect.js';
 import favoriteModule from './modules/favorite';
-import reviewModule from "./modules/review";
+import reviewModule from './modules/review';
+
 const API_URL_PREFIX = '/api';
 
 const Api = {
