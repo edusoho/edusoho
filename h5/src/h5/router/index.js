@@ -647,6 +647,57 @@ const routes = [
       ),
   },
   {
+    path: '/goods/:id/course' /* 不要采用此路由，入口统一为/goods/:id/show */,
+    name: 'goods_course',
+    meta: {
+      title: '商品页',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "old-goods" */ '@/containers/goods/course.vue'
+      ),
+  },
+  {
+    path:
+      '/goods/:id/classroom' /* 不要采用此路由，入口统一为/goods/:id/show */,
+    name: 'goods_classroom',
+    meta: {
+      title: '商品页',
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "old-goods" */ '@/containers/goods/classroom.vue'
+      ),
+  },
+  {
+    path:
+      '/goods/:id/show' /* 商品的扩展必然不能通过入口来实现，入口只有一个，内部分为商品常态数据以及商品额外数据，借助插槽或者插件分开取舍 */,
+    name: 'goods_show',
+    meta: {
+      title: '商品详情',
+    },
+    component: () =>
+      import(/* webpackChunkName: "goods" */ '@/containers/goods/goods.vue'),
+  },
+  {
+    path: '/goods/qr',
+    name: 'goods_qr',
+    meta: {
+      title: '进群免费学习课程',
+    },
+    component: () =>
+      import(/* webpackChunkName: "goods" */ '@/containers/goods/qr.vue'),
+  },
+  {
+    path: '/goods/reviews',
+    name: 'goods_reviews',
+    meta: {
+      title: '评分',
+    },
+    component: () =>
+      import(/* webpackChunkName: "goods" */ '@/containers/goods/reviews.vue'),
+  },
+  {
     path: '/my/certificate',
     name: 'my_certificate',
     meta: {

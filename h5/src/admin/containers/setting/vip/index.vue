@@ -1,15 +1,29 @@
 <template>
-  <module-frame containerClass="setting-vip" :isActive="isActive" :isIncomplete="isIncomplete">
+  <module-frame
+    containerClass="setting-vip"
+    :isActive="isActive"
+    :isIncomplete="isIncomplete"
+  >
     <div slot="preview">
-      <vip-list :items="items" :sort="copyModuleData.sort" :feedback="false" :showTitle="radio"/>
+      <vip-list
+        :items="items"
+        :sort="copyModuleData.sort"
+        :feedback="false"
+        :showTitle="radio"
+      />
     </div>
 
     <div slot="setting">
-      <e-suggest v-if="moduleData.tips" :suggest="moduleData.tips" :key="moduleData.moduleType"></e-suggest>
+      <e-suggest
+        v-if="moduleData.tips"
+        :suggest="moduleData.tips"
+        :key="moduleData.moduleType"
+      ></e-suggest>
       <header class="title">
         会员设置
         <div class="text-12 color-gray mts" v-if="portal === 'miniprogram'">
-        使用会员专区配置功能，小程序版本需要升级到1.3.4及以上</div>
+          使用会员专区配置功能，小程序版本需要升级到1.3.4及以上
+        </div>
       </header>
       <div class="default-allocate__content clearfix">
         <!-- 标题栏 -->
@@ -18,13 +32,26 @@
           <el-radio v-model="radio" label="unshow">不显示</el-radio>
         </setting-cell>
         <setting-cell title="排列顺序：">
-          <el-radio v-model="copyModuleData.sort" label="asc">从低到高</el-radio>
-          <el-radio v-model="copyModuleData.sort" label="desc">从高到低</el-radio>
+          <el-radio v-model="copyModuleData.sort" label="asc"
+            >从低到高</el-radio
+          >
+          <el-radio v-model="copyModuleData.sort" label="desc"
+            >从高到低</el-radio
+          >
         </setting-cell>
 
-        <div v-model="items" class="default-draggable__list still-draggable__list">
-          <div class="default-draggable__item" v-for="(item, index) in items" :key="index">
-            <div class="default-draggable__title text-overflow">{{ item.name }}</div>
+        <div
+          v-model="items"
+          class="default-draggable__list still-draggable__list"
+        >
+          <div
+            class="default-draggable__item"
+            v-for="(item, index) in items"
+            :key="index"
+          >
+            <div class="default-draggable__title text-overflow">
+              {{ item.name }}
+            </div>
           </div>
         </div>
       </div>
@@ -38,19 +65,19 @@ import settingCell from '../module-frame/setting-cell';
 import vipList from '&/components/e-vip-list/e-vip-list';
 import pathName2Portal from 'admin/config/api-portal-config';
 import { mapState } from 'vuex';
-import suggest from "&/components/e-suggest/e-suggest.vue"
+import suggest from '&/components/e-suggest/e-suggest.vue';
 export default {
   name: 'vip',
   components: {
     moduleFrame,
     settingCell,
     vipList,
-    'e-suggest':suggest
+    'e-suggest': suggest,
   },
-  data () {
+  data() {
     return {
-      pathName: this.$route.name
-    }
+      pathName: this.$route.name,
+    };
   },
   props: {
     active: {
@@ -58,12 +85,12 @@ export default {
       default: false,
     },
     moduleData: {
-      type: Object
+      type: Object,
     },
     incomplete: {
       type: Boolean,
       default: false,
-    }
+    },
   },
   computed: {
     ...mapState(['vipLevels']),
@@ -71,19 +98,19 @@ export default {
       get() {
         return this.active;
       },
-      set() {}
+      set() {},
     },
     isIncomplete: {
       get() {
         return this.incomplete;
       },
-      set() {}
+      set() {},
     },
     copyModuleData: {
       get() {
         return this.moduleData.data;
       },
-      set() {}
+      set() {},
     },
     sort: {
       get() {
@@ -91,7 +118,7 @@ export default {
       },
       set(value) {
         this.moduleData.data.sort = value;
-      }
+      },
     },
     items: {
       get() {
@@ -99,7 +126,7 @@ export default {
       },
       set(value) {
         this.moduleData.data.items = value;
-      }
+      },
     },
     radio: {
       get() {
@@ -111,7 +138,7 @@ export default {
     },
     portal() {
       return pathName2Portal[this.pathName];
-    }
+    },
   },
   watch: {
     copyModuleData: {
@@ -125,19 +152,19 @@ export default {
     },
     radio(value) {
       this.showTitle(value);
-    }
+    },
   },
   created() {
     const existItems = Array.isArray(this.items) && this.items.length > 0;
-    if(existItems) {
+    if (existItems) {
       return;
     }
     this.items.push(...this.vipLevels);
   },
   methods: {
     showTitle() {
-      this.copyModuleData.titleShow = this.radio
-    }
-  }
-}
+      this.copyModuleData.titleShow = this.radio;
+    },
+  },
+};
 </script>

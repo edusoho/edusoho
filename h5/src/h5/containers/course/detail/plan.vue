@@ -62,6 +62,7 @@
 import service from '@/containers/classroom/service';
 import { mapState, mapActions } from 'vuex';
 import { formatFullTime } from '@/utils/date-toolkit';
+import Api from '@/api';
 
 export default {
   components: {
@@ -119,7 +120,7 @@ export default {
       if (!memberInfo) {
         switch (expiryMode) {
           case 'forever':
-            return '永久有效';
+            return '长期有效';
           case 'end_date':
             return endDateStr + '之前可学习';
           case 'days':
@@ -137,11 +138,11 @@ export default {
         }
       } else {
         if (expiryMode == 'forever') {
-          return '永久有效';
+          return '长期有效';
         }
         return memberInfo.deadline != 0
           ? memberInfo.deadline.slice(0, 10) + '之前可学习'
-          : '永久有效';
+          : '长期有效';
       }
       return '';
     },
@@ -172,7 +173,33 @@ export default {
   methods: {
     ...mapActions('course', ['getCourseLessons']),
     handleClick(item, index) {
-      this.$router.push({ path: `/course/${item.id}` });
+      Api.meCourseMember({
+        query: {
+          id: item.id,
+        },
+      })
+        .then(res => {
+          if (res.id) {
+            this.$router.push({
+              path: `/course/${item.id}`,
+            });
+          } else {
+            this.$router.push({
+              path: `/goods/${item.goodsId}/show`,
+              query: {
+                targetId: item.id,
+              },
+            });
+          }
+        })
+        .catch(() => {
+          this.$router.push({
+            path: `/goods/${item.goodsId}/show`,
+            query: {
+              targetId: item.id,
+            },
+          });
+        });
     },
     filterPrice() {
       const details = this.details;

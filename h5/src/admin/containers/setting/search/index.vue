@@ -1,6 +1,10 @@
 <template>
-  <module-frame containerClass="setting-search" :isActive="isActive" :isIncomplete="isIncomplete">
-    <div slot="preview" >
+  <module-frame
+    containerClass="setting-search"
+    :isActive="isActive"
+    :isIncomplete="isIncomplete"
+  >
+    <div slot="preview">
       <van-search
         shape="round"
         background="#ffffff"
@@ -9,68 +13,72 @@
     </div>
 
     <div slot="setting">
-      <e-suggest v-if="moduleData.tips" :suggest="moduleData.tips" :key="moduleData.moduleType"></e-suggest>
-        <header class="title">
+      <e-suggest
+        v-if="moduleData.tips"
+        :suggest="moduleData.tips"
+        :key="moduleData.moduleType"
+      ></e-suggest>
+      <header class="title">
         搜索设置
       </header>
-      <div  class="text-14 color-gray mts">
-        <i class="el-icon-warning"></i> 
-        搜索功能目前只支持搜索班级和课程</div>
+      <div class="text-14 color-gray mts">
+        <i class="el-icon-warning"></i>
+        搜索功能目前只支持搜索班级和课程
+      </div>
     </div>
-
   </module-frame>
 </template>
 <script>
-import courseList from "&/components/e-course-list/e-course-list.vue";
+import courseList from '&/components/e-course-list/e-course-list.vue';
 import moduleFrame from '../module-frame';
-import suggest from "&/components/e-suggest/e-suggest.vue"
+import suggest from '&/components/e-suggest/e-suggest.vue';
 export default {
-  name:"search",
+  name: 'search',
   components: {
     moduleFrame,
-    'e-suggest':suggest
+    'e-suggest': suggest,
   },
   props: {
     active: {
       type: Boolean,
-      default: false
+      default: false,
     },
     moduleData: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
     incomplete: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   computed: {
     isActive: {
       get() {
-        return this.active
+        return this.active;
       },
-      set() {}
+      set() {},
     },
     isIncomplete: {
       get() {
-        return this.incomplete
+        return this.incomplete;
       },
-      set() {}
+      set() {},
     },
     copyModuleData: {
       get() {
-        return this.moduleData
+        return this.moduleData;
       },
-      set() {}
-    }
+      set() {},
+    },
   },
   watch: {
     copyModuleData: {
       handler(data) {
-        this.$emit('updateModule', data)
+        this.$emit('updateModule', data);
       },
-      deep: true
-    }
-  }
-}
+      deep: true,
+    },
+  },
+};
 </script>

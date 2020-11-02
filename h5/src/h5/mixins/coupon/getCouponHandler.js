@@ -5,7 +5,7 @@ const ALL_TYPE = {
   classroom: 'classroom',
   course: 'course',
   vip: 'vip',
-  all: 'all'
+  all: 'all',
 };
 
 export default {
@@ -16,8 +16,8 @@ export default {
         this.$router.push({
           name: 'login',
           query: {
-            redirect: this.$route.fullPath
-          }
+            redirect: this.$route.fullPath,
+          },
         });
         return;
       }
@@ -26,17 +26,19 @@ export default {
       if (!coupon.currentUserCoupon && !isReceive) {
         const token = coupon.token;
         Api.receiveCoupon({
-          data: { token }
-        }).then(res => {
-          coupon.currentUserCoupon = res;
-          Toast.success({
-            message: '领取成功',
-            duration: 2000
+          data: { token },
+        })
+          .then(res => {
+            coupon.currentUserCoupon = res;
+            Toast.success({
+              message: '领取成功',
+              duration: 2000,
+            });
+          })
+          .catch(err => {
+            Toast.fail(err.message);
+            coupon.unreceivedNum = '0';
           });
-        }).catch(err => {
-          Toast.fail(err.message);
-          coupon.unreceivedNum = '0';
-        });
         return;
       }
       this.hasreceiveCoupon(coupon);
@@ -60,8 +62,8 @@ export default {
           this.$router.push({
             path: '/vip',
             query: {
-              id: targetId
-            }
+              id: targetId,
+            },
           });
           return;
         }
@@ -69,27 +71,27 @@ export default {
         this.getPathParams(targetType, targetId).then(({ id }) => {
           if (!id) return;
           this.$router.push({
-            path: `/${targetType}/${id}` // course/{id} | classroom/{id}
+            path: `/${targetType}/${id}`, // course/{id} | classroom/{id}
           });
         });
       } else if (['multi', 'all'].indexOf(targetNum) > -1) {
         if (targetType === 'vip') {
           // 全部vip
           this.$router.push({
-            path: `/${coupon.targetDetail.product}` // vip
+            path: `/${coupon.targetDetail.product}`, // vip
           });
           return;
         }
         if (targetType === 'all') {
           // 全站
           this.$router.push({
-            path: '/'
+            path: '/',
           });
           return;
         }
         // 多个班级/课程
         this.$router.push({
-          path: `/${coupon.targetDetail.product}/explore` // course/explore | classroom/explore
+          path: `/${coupon.targetDetail.product}/explore`, // course/explore | classroom/explore
         });
       }
     },
@@ -100,15 +102,17 @@ export default {
       }
 
       return Api.getCourseByCourseSet({
-        query: { id }
-      }).then(res => {
-        if (res.length && res[0]) {
-          return { id: res[0].id };
-        }
-        return Promise.reject({ message: '当前课程不存在了' });
-      }).catch(err => {
-        Toast.fail(err.message);
-      });
-    }
-  }
+        query: { id },
+      })
+        .then(res => {
+          if (res.length && res[0]) {
+            return { id: res[0].id };
+          }
+          return Promise.reject({ message: '当前课程不存在了' });
+        })
+        .catch(err => {
+          Toast.fail(err.message);
+        });
+    },
+  },
 };

@@ -7,7 +7,6 @@ import plugins from '@/plugins';
 import EdusohoUI from '@/components';
 import whiteList from '@/router/config/white-list';
 import '@/assets/styles/main.scss';
-
 import App from '@/App';
 import Api from '@/api';
 import VueClipboard from 'vue-clipboard2';
@@ -44,6 +43,7 @@ import {
   PullRefresh,
   Overlay,
   Search,
+  CountDown,
   Form,
   Area,
   DatetimePicker,
@@ -72,6 +72,7 @@ Vue.component('van-panel', Panel);
 Vue.component('van-pull-refresh', PullRefresh);
 Vue.component('van-overlay', Overlay);
 Vue.component('van-search', Search);
+Vue.component('van-count-down', CountDown);
 
 Vue.use(ActionSheet);
 Vue.use(filters);

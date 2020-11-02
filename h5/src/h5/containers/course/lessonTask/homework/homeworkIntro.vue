@@ -1,90 +1,109 @@
 <template>
   <div>
-    <e-loading v-if="isLoading"/>
+    <e-loading v-if="isLoading" />
     <div v-if="homework" class="intro-body">
       <van-panel class="panel intro-panel" title="作业名称">
-        <div class="intro-panel__content intro-panel__content--title">{{ homework.name }}</div>
+        <div class="intro-panel__content intro-panel__content--title">
+          {{ homework.name }}
+        </div>
       </van-panel>
       <van-panel class="panel intro-panel" title="作业说明">
-        <div class="intro-panel__content" v-html="homework.description"/>
+        <div class="intro-panel__content" v-html="homework.description" />
       </van-panel>
     </div>
     <div v-if="homework" class="intro-footer">
-      <van-button v-if="hasResult" class="intro-footer__btn" type="primary" @click="showResult">查看结果</van-button>
-      <van-button v-else class="intro-footer__btn" type="primary" @click="startHomework()">开始答题</van-button>
+      <van-button
+        v-if="hasResult"
+        class="intro-footer__btn"
+        type="primary"
+        @click="showResult"
+        >查看结果</van-button
+      >
+      <van-button
+        v-else
+        class="intro-footer__btn"
+        type="primary"
+        @click="startHomework()"
+        >开始答题</van-button
+      >
     </div>
   </div>
 </template>
 
 <script>
-import Api from '@/api'
-import { mapState, mapActions } from 'vuex'
-import { Dialog, Toast } from 'vant'
+import Api from '@/api';
+import { mapState, mapActions } from 'vuex';
+import { Dialog, Toast } from 'vant';
 
-import homeworkMixin from '@/mixins/lessonTask/homework.js'
-import report from "@/mixins/course/report";
+import homeworkMixin from '@/mixins/lessonTask/homework.js';
+import report from '@/mixins/course/report';
 
 export default {
   name: 'HomeworkIntro',
-  mixins: [homeworkMixin,report],
+  mixins: [homeworkMixin, report],
   data() {
     return {
       courseId: null,
       taskId: null,
-      homework: null
-    }
+      homework: null,
+    };
   },
   computed: {
     hasResult() {
-      const latestHomeworkResult = this.homework.latestHomeworkResult
-      return !!latestHomeworkResult
+      const latestHomeworkResult = this.homework.latestHomeworkResult;
+      return !!latestHomeworkResult;
     },
     ...mapState({
       isLoading: state => state.isLoading,
-      user: state => state.user
-    })
+      user: state => state.user,
+    }),
   },
   created() {
     this.getInfo();
     this.initReport();
   },
   beforeRouteEnter(to, from, next) {
-    document.getElementById('app').style.background = '#f6f6f6'
-    next()
+    document.getElementById('app').style.background = '#f6f6f6';
+    next();
   },
   beforeRouteLeave(to, from, next) {
-    document.getElementById('app').style.background = ''
-    next()
+    document.getElementById('app').style.background = '';
+    next();
   },
   methods: {
-    ...mapActions('course', [
-      'handHomeworkdo'
-    ]),
+    ...mapActions('course', ['handHomeworkdo']),
     getInfo() {
-      this.courseId = this.$route.query.courseId
-      this.taskId = this.$route.query.taskId
+      this.courseId = this.$route.query.courseId;
+      this.taskId = this.$route.query.taskId;
       Api.getHomeworkIntro({
         query: {
           courseId: this.courseId,
-          taskId: this.taskId
-        }
+          taskId: this.taskId,
+        },
       }).then(res => {
-        this.homework = res.homework
+        this.homework = res.homework;
 
-        this.interruption()
-      })
+        this.interruption();
+      });
     },
-    //初始化上报数据
+    // 初始化上报数据
     initReport() {
-      this.initReportData(this.$route.query.courseId,this.taskId,"homework",false);
+      this.initReportData(
+        this.$route.query.courseId,
+        this.taskId,
+        'homework',
+        false,
+      );
     },
     // 异常中断
     interruption() {
-      this.canDoing(this.homework.latestHomeworkResult, this.user.id).then(() => {
-        this.startHomework()
-      }).catch(({ answer }) => {
-        this.submitHomework(answer)
-      })
+      this.canDoing(this.homework.latestHomeworkResult, this.user.id)
+        .then(() => {
+          this.startHomework();
+        })
+        .catch(({ answer }) => {
+          this.submitHomework(answer);
+        });
     },
     // 跳转到结果页
     showResult() {
@@ -94,9 +113,9 @@ export default {
           homeworkId: this.homework.id,
           homeworkResultId: this.homework.latestHomeworkResult.id,
           courseId: this.$route.query.courseId,
-          taskId: this.taskId
-        }
-      })
+          taskId: this.taskId,
+        },
+      });
     },
     // 开始作业
     startHomework() {
@@ -105,12 +124,12 @@ export default {
         query: {
           targetId: this.taskId,
           homeworkId: this.homework.id,
-          courseId: this.$route.query.courseId
+          courseId: this.$route.query.courseId,
         },
         params: {
-          KeepDoing: true
-        }
-      })
+          KeepDoing: true,
+        },
+      });
     },
     // 交作业
     submitHomework(answer) {
@@ -118,21 +137,21 @@ export default {
         answer,
         homeworkId: this.homework.id,
         userId: this.user.id,
-        homeworkResultId: this.homework.latestHomeworkResult.id
-      }
+        homeworkResultId: this.homework.latestHomeworkResult.id,
+      };
       // 提交作业+跳转到结果页
-      this.handHomeworkdo(datas).then(res => {
-        //上报完成作业课时
-        this.reprtData("finish");
-        this.showResult()
-      }).catch((err) => {
-        Toast.fail(err.message)
-      })
-    }
-  }
-}
+      this.handHomeworkdo(datas)
+        .then(res => {
+          // 上报完成作业课时
+          this.reprtData('finish');
+          this.showResult();
+        })
+        .catch(err => {
+          Toast.fail(err.message);
+        });
+    },
+  },
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

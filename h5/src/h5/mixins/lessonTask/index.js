@@ -19,7 +19,9 @@ export default {
         item.stem = stem;
         item.fillnum = index;
 
-        const answer = lastAnswer ? lastAnswer[item.id] : new Array(index).fill('');
+        const answer = lastAnswer
+          ? lastAnswer[item.id]
+          : new Array(index).fill('');
 
         return { item, answer };
       }
@@ -40,7 +42,7 @@ export default {
           });
           // 为了回显，这里传给子组件的answer要是正确答案和学员选择答案的合集，因为都要选中。
           answer = Array.from(
-            new Set([...item.answer, ...item.testResult.answer])
+            new Set([...item.answer, ...item.testResult.answer]),
           );
         }
       }
@@ -54,7 +56,9 @@ export default {
         item.stem = stem;
         item.fillnum = index;
 
-        answer = item.testResult ? item.testResult.answer : new Array(index).fill('');
+        answer = item.testResult
+          ? item.testResult.answer
+          : new Array(index).fill('');
       }
 
       return { item, answer };
@@ -69,6 +73,6 @@ export default {
         });
       }
       return { stem, index };
-    }
-  }
+    },
+  },
 };

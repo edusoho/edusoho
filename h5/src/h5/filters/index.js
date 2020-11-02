@@ -1,17 +1,21 @@
-import { formatTimeByNumber, formatCompleteTime, formatSimpleHour } from '@/utils/date-toolkit';
+import {
+  formatTimeByNumber,
+  formatCompleteTime,
+  formatSimpleHour,
+} from '@/utils/date-toolkit';
 
 const filters = [
   {
     name: 'toMoney',
     handler(value) {
       return isNaN(Number(value)) ? '0.00' : (Number(value) / 100).toFixed(2);
-    }
+    },
   },
   {
     name: 'isFree',
     handler(value) {
       return value ? 'value' : '免费';
-    }
+    },
   },
   {
     name: 'taskType',
@@ -41,7 +45,7 @@ const filters = [
         default:
           return '暂不支持此类型';
       }
-    }
+    },
   },
   {
     name: 'filterTask',
@@ -77,7 +81,7 @@ const filters = [
         default:
           return '';
       }
-    }
+    },
   },
   {
     name: 'filterTaskTime',
@@ -125,7 +129,7 @@ const filters = [
         default:
           return '暂不支持';
       }
-    }
+    },
   },
   {
     name: 'filterCourse',
@@ -167,7 +171,7 @@ const filters = [
         default:
           return '暂不支持';
       }
-    }
+    },
   },
   {
     name: 'filterJoinStatus',
@@ -177,7 +181,7 @@ const filters = [
       }
       const targetType = {
         course: '课程',
-        classroom: '班级'
+        classroom: '班级',
       };
       switch (code) {
         case 'success':
@@ -218,7 +222,63 @@ const filters = [
         default:
       }
       return code;
-    }
+    },
+  },
+  {
+    name: 'filterGoodsBuyStatus',
+    handler(code, type = 'course', vipAccessToJoin) {
+      if (
+        vipAccessToJoin &&
+        code !== 'member.member_exist' &&
+        code !== `${type}.buy_expired` &&
+        code !== `${type}.expired`
+      ) {
+        return '会员免费学';
+      }
+      const targetType = {
+        course: '课程',
+        classroom: '班级',
+      };
+      switch (code) {
+        case 'success':
+        case 'user.not_login':
+          code = '立即购买';
+          break;
+        case 'user.locked':
+          code = '用户被锁定';
+          break;
+        case 'member.member_exist':
+          code = '课程学员已存在';
+          break;
+        case `${type}.reach_max_student_num`:
+          code = '学员达到上限';
+          break;
+        case `${type}.not_found`:
+          code = '计划不存在';
+          break;
+        case `${type}.unpublished`:
+          code = `${targetType[type]}未发布`;
+          break;
+        case `${type}.closed`:
+          code = `${targetType[type]}已关闭`;
+          break;
+        case `${type}.not_buyable`:
+          code = `${targetType[type]}不可加入`;
+          break;
+        case `${type}.buy_expired`:
+          code = '购买有效期已过';
+          break;
+        case `${type}.expired`:
+          code = '学习有效期已过';
+          break;
+        case `${type}.only_vip_join_way`:
+        case 'course.only_vip_join_way': // type 为班级时，code显示为 'course.only_vip_join_way', 此处临时处理
+          code = '只能通过VIP加入';
+          break;
+        default:
+      }
+      return code;
+    },
   },
   {
     name: 'filterOrderStatus',
@@ -254,7 +314,7 @@ const filters = [
         default:
       }
       return status;
-    }
+    },
   },
   {
     name: 'formateTime',
@@ -291,14 +351,14 @@ const filters = [
         default:
           return '暂不支持';
       }
-    }
+    },
   },
   {
     name: 'formateLiveTime',
     handler(time) {
       return `${formatSimpleHour(new Date(time))} | `;
-    }
-  }
+    },
+  },
 ];
 
 export default {
@@ -307,5 +367,5 @@ export default {
       Vue.filter(item.name, item.handler);
       return item;
     });
-  }
+  },
 };

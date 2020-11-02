@@ -1,10 +1,6 @@
 <template>
   <div class="login">
-    <van-action-sheet
-      v-model="visible"
-      title=" "
-      @close="updateShow(show)"
-    >
+    <van-action-sheet v-model="visible" title=" " @close="updateShow(show)">
       <div class="login__container">
         <div class="receive-login-input">
           <van-field
@@ -15,7 +11,11 @@
             type="text"
             clearable
             @focus="errorMessage.mobile = ''"
-            @blur="loginMode === 'fastLoginMode' ? validateMobileOrPsw('mobile') : validateEmail()"
+            @blur="
+              loginMode === 'fastLoginMode'
+                ? validateMobileOrPsw('mobile')
+                : validateEmail()
+            "
             @input="loginMode === 'fastLoginMode' && validatedChecker()"
           />
         </div>
@@ -35,7 +35,7 @@
             <div
               v-show="loginMode === 'fastLoginMode'"
               slot="button"
-              :class="['code-btn',cansentCode ? '': 'code-btn--disabled']"
+              :class="['code-btn', cansentCode ? '' : 'code-btn--disabled']"
               @click="clickSmsBtn"
             >
               <span v-show="!count.showCount">发送验证码</span>
@@ -46,7 +46,7 @@
             to="/setting/password/reset"
             class="reset-password"
             tag="div"
-          >忘记密码？
+            >忘记密码？
           </router-link>
         </div>
         <div v-if="dragEnable" class="mobile-drag">
@@ -56,22 +56,41 @@
               ref="dragComponent"
               :key="dragKey"
               limit-type="receive_coupon"
-              @success="handleSmsSuccess"/>
+              @success="handleSmsSuccess"
+            />
           </div>
         </div>
         <div
-          :class="['receive-login__btn',btnDisable ? 'disabled__btn' : '']"
-          @click="onSubmit">登录并领取
+          :class="['receive-login__btn', btnDisable ? 'disabled__btn' : '']"
+          @click="onSubmit"
+        >
+          登录并领取
         </div>
         <div class="choice-bar">
           <div class="left">
             <div v-show="!isLogin" @click="jump2register">注册账号</div>
           </div>
-          <div v-show="loginMode === 'fastLoginMode'" class="right" @click="changeLoginMode">使用其他方式登录 >></div>
-          <div v-show="loginMode === 'normalLoginMode'" class="right" @click="changeLoginMode">使用手机快捷登录 >></div>
+          <div
+            v-show="loginMode === 'fastLoginMode'"
+            class="right"
+            @click="changeLoginMode"
+          >
+            使用其他方式登录 >>
+          </div>
+          <div
+            v-show="loginMode === 'normalLoginMode'"
+            class="right"
+            @click="changeLoginMode"
+          >
+            使用手机快捷登录 >>
+          </div>
         </div>
         <div class="receive-login__text">
-          <span v-show="loginMode === 'fastLoginMode'" class="receive-login-tools">新用户领取将为您自动注册</span>
+          <span
+            v-show="loginMode === 'fastLoginMode'"
+            class="receive-login-tools"
+            >新用户领取将为您自动注册</span
+          >
           <div
             v-show="loginMode === 'normalLoginMode'"
             class="third-part-login"
@@ -83,27 +102,27 @@
 </template>
 
 <script>
-import EDrag from '&/components/e-drag'
-import fastLoginMixin from '@/mixins/fastLogin'
-import { mapActions, mapState } from 'vuex'
-import activityMixin from '@/mixins/activity'
-import redirectMixin from '@/mixins/saveRedirect'
-import { Toast } from 'vant'
+import EDrag from '&/components/e-drag';
+import fastLoginMixin from '@/mixins/fastLogin';
+import { mapActions, mapState } from 'vuex';
+import activityMixin from '@/mixins/activity';
+import redirectMixin from '@/mixins/saveRedirect';
+import { Toast } from 'vant';
 
 export default {
   name: 'Login',
   components: {
-    EDrag
+    EDrag,
   },
   props: {
     show: {
       type: Boolean,
-      default: false
+      default: false,
     },
     processIsDone: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
 
   data() {
@@ -114,16 +133,16 @@ export default {
         dragCaptchaToken: undefined, // 默认不需要滑动验证,图片验证码token
         smsCode: '', // 验证码
         smsToken: '', // 验证码token
-        type: 'sms_login'
+        type: 'sms_login',
       },
       dragEnable: false,
       dragKey: 0,
       errorMessage: {
         mobile: '',
-        password: ''
+        password: '',
       },
       validated: {
-        mobile: false
+        mobile: false,
       },
 
       // fastLoginMode 为手机快捷登录，normalLoginMode 为账号密码登录
@@ -131,37 +150,41 @@ export default {
       currentLoginMode: {},
       fastLoginMode: {
         accountPlaceholder: '请输入手机号',
-        passwordPlaceholder: '请输入验证码'
+        passwordPlaceholder: '请输入验证码',
       },
       normalLoginMode: {
         accountPlaceholder: '请输入手机号/邮箱号/用户名',
-        passwordPlaceholder: '请输入密码'
-      }
-    }
+        passwordPlaceholder: '请输入密码',
+      },
+    };
   },
   computed: {
     ...mapState({
-      isLogin: state => !!state.token
+      isLogin: state => !!state.token,
     }),
     btnDisable() {
-      const reg = /^1\d{10}$/
+      const reg = /^1\d{10}$/;
       if (this.loginMode === 'fastLoginMode') {
-        return !(reg.test(this.userinfo.mobile) && this.userinfo.smsCode)
+        return !(reg.test(this.userinfo.mobile) && this.userinfo.smsCode);
       }
-      return !(this.userinfo.mobile && this.userinfo.smsCode && this.validateEmail())
+      return !(
+        this.userinfo.mobile &&
+        this.userinfo.smsCode &&
+        this.validateEmail()
+      );
     },
     cansentCode() {
-      return !(this.count.codeBtnDisable || !this.validated.mobile)
-    }
+      return !(this.count.codeBtnDisable || !this.validated.mobile);
+    },
   },
   watch: {
     show() {
-      this.visible = this.show
-    }
+      this.visible = this.show;
+    },
   },
   mixins: [activityMixin, redirectMixin, fastLoginMixin],
   created() {
-    this.currentLoginMode = this[this.loginMode]
+    this.currentLoginMode = this[this.loginMode];
   },
   methods: {
     ...mapActions([
@@ -169,86 +192,88 @@ export default {
       'setMobile',
       'sendSmsSend',
       'fastLogin',
-      'userLogin'
+      'userLogin',
     ]),
     jump2register() {
       this.$router.push({
         name: 'register',
         query: {
-          redirect: this.$route.fullPath
-        }
-      })
+          redirect: this.$route.fullPath,
+        },
+      });
     },
     onSubmit() {
       if (this.btnDisable) {
-        return
+        return;
       }
       if (this.loginMode === 'fastLoginMode') {
-        this.handleSubmit(this.handleSubmitSuccess, this.handleSubmitFail)
-        return
+        this.handleSubmit(this.handleSubmitSuccess, this.handleSubmitFail);
+        return;
       }
       this.userLogin({
         username: this.userinfo.mobile,
-        password: this.userinfo.smsCode
+        password: this.userinfo.smsCode,
       })
         .then(res => {
-          this.updateShow()
-          this.$emit('submit')
+          this.updateShow();
+          this.$emit('submit');
         })
         .catch(err => {
-          Toast.fail(err.message)
+          Toast.fail(err.message);
           if (err.code === 4040104) {
-            this.errorMessage.mobile = err.message
-            this.errorMessage.password = ''
+            this.errorMessage.mobile = err.message;
+            this.errorMessage.password = '';
           }
           if (err.code === 5000116) {
-            this.errorMessage.mobile = ''
-            this.errorMessage.password = err.message
+            this.errorMessage.mobile = '';
+            this.errorMessage.password = err.message;
           }
-          this.userinfo.smsCode = ''
-        })
+          this.userinfo.smsCode = '';
+        });
     },
     updateShow() {
-      this.$emit('update:show', false)
+      this.$emit('update:show', false);
     },
 
     updateProcessIsDone() {
-      this.$emit('update:processIsDone', true)
+      this.$emit('update:processIsDone', true);
     },
 
     // 校验成功
     handleSmsSuccess(token) {
-      this.userinfo.dragCaptchaToken = token
-      this.handleSendSms()
+      this.userinfo.dragCaptchaToken = token;
+      this.handleSendSms();
     },
     handleSubmitSuccess() {
-      this.updateShow()
-      this.$emit('submit')
+      this.updateShow();
+      this.$emit('submit');
     },
     handleSubmitFail(err) {
-      this.errorMessage.password = err
+      this.errorMessage.password = err;
     },
     changeLoginMode() {
-      this.loginMode = this.loginMode === 'fastLoginMode' ? 'normalLoginMode' : 'fastLoginMode'
-      this.currentLoginMode = this[this.loginMode]
-      this.userinfo.mobile = ''
-      this.userinfo.smsCode = ''
-      this.errorMessage.mobile = ''
-      this.errorMessage.password = ''
+      this.loginMode =
+        this.loginMode === 'fastLoginMode'
+          ? 'normalLoginMode'
+          : 'fastLoginMode';
+      this.currentLoginMode = this[this.loginMode];
+      this.userinfo.mobile = '';
+      this.userinfo.smsCode = '';
+      this.errorMessage.mobile = '';
+      this.errorMessage.password = '';
     },
     validateEmail() {
       if (this.userinfo.mobile.includes('@')) {
-        const reg = /^\w+@\w+(\.\w+)+$/
+        const reg = /^\w+@\w+(\.\w+)+$/;
         reg.test(this.userinfo.mobile)
-          ? this.errorMessage.mobile = '' : this.errorMessage.mobile = '邮箱输入错误'
-        return reg.test(this.userinfo.mobile)
+          ? (this.errorMessage.mobile = '')
+          : (this.errorMessage.mobile = '邮箱输入错误');
+        return reg.test(this.userinfo.mobile);
       }
-      return true
-    }
-  }
-}
+      return true;
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

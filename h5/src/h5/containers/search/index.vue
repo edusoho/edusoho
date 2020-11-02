@@ -111,26 +111,11 @@ export default {
         offset: 0,
         limit: 10,
       },
-      itemBankList: [],
-      isEmptyItemBank: false,
-      isAllItemBank: false,
-      itemBank: {
-        isRequestCompile: false,
-        offset: 0,
-        limit: 10,
-      },
     };
-  },
-  created() {},
-  mounted() {
-    this.$nextTick(() => {
-      document.getElementsByTagName('input')[0].focus();
-    });
   },
   methods: {
     onSearch() {
       this.isSearch = true;
-
       this.initCourseList();
       this.requestCourses();
 
@@ -235,7 +220,6 @@ export default {
     sendRequestCourse() {
       if (!this.isAllCourse) this.requestCourses();
     },
-
     initItemBankList() {
       this.itemBank.isRequestCompile = false;
       this.isAllItemBank = false;

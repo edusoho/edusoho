@@ -24,7 +24,7 @@ axios.interceptors.request.use(
 
     return config;
   },
-  error => Promise.reject(error)
+  error => Promise.reject(error),
 );
 
 axios.interceptors.response.use(
@@ -45,5 +45,5 @@ axios.interceptors.response.use(
     }
 
     return Promise.reject(error.response.data.error);
-  }
+  },
 );

@@ -267,7 +267,7 @@ export default {
       return parseFloat(this.itemData.rate);
     },
     getValidity() {
-      return this.$route.query.expiryScope || '永久有效';
+      return this.$route.query.expiryScope || '长期有效';
     },
     validPayWay() {
       if (this.IsCollectUserInfoType && !this.isReqUserInfoCollect) {

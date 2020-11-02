@@ -1,89 +1,106 @@
 <template>
   <div>
-    <e-loading v-if="isLoading"/>
+    <e-loading v-if="isLoading" />
     <div v-if="exercise" class="intro-body">
       <van-panel class="panel intro-panel" title="练习名称">
-        <div class="intro-panel__content intro-panel__content--title">{{ exercise.name }}</div>
+        <div class="intro-panel__content intro-panel__content--title">
+          {{ exercise.name }}
+        </div>
       </van-panel>
       <van-panel class="panel intro-panel" title="题目数量">
-        <div class="intro-panel__content" >
-          共计 {{ exercise.itemCount }} 题
-        </div>
+        <div class="intro-panel__content">共计 {{ exercise.itemCount }} 题</div>
       </van-panel>
     </div>
     <div v-if="exercise" class="intro-footer">
-      <van-button v-if="hasResult" class="intro-footer__btn" type="primary" @click="showResult">查看结果</van-button>
-      <van-button v-else class="intro-footer__btn" type="primary" @click="startExercise()">开始答题</van-button>
+      <van-button
+        v-if="hasResult"
+        class="intro-footer__btn"
+        type="primary"
+        @click="showResult"
+        >查看结果</van-button
+      >
+      <van-button
+        v-else
+        class="intro-footer__btn"
+        type="primary"
+        @click="startExercise()"
+        >开始答题</van-button
+      >
     </div>
   </div>
 </template>
 
 <script>
-import Api from '@/api'
-import { mapState, mapActions } from 'vuex'
-import { Dialog, Toast } from 'vant'
-import exerciseMixin from '@/mixins/lessonTask/exercise.js'
-import report from "@/mixins/course/report";
+import Api from '@/api';
+import { mapState, mapActions } from 'vuex';
+import { Dialog, Toast } from 'vant';
+import exerciseMixin from '@/mixins/lessonTask/exercise.js';
+import report from '@/mixins/course/report';
 export default {
   name: 'ExerciseIntro',
-  mixins: [exerciseMixin,report],
+  mixins: [exerciseMixin, report],
   data() {
     return {
       courseId: null,
       taskId: null,
-      exercise: null
-    }
+      exercise: null,
+    };
   },
   computed: {
     hasResult() {
-      const latestExerciseResult = this.exercise.latestExerciseResult
-      return !!latestExerciseResult
+      const latestExerciseResult = this.exercise.latestExerciseResult;
+      return !!latestExerciseResult;
     },
     ...mapState({
       isLoading: state => state.isLoading,
-      user: state => state.user
-    })
+      user: state => state.user,
+    }),
   },
   created() {
-    this.getInfo()
+    this.getInfo();
     this.initReport();
   },
   beforeRouteEnter(to, from, next) {
-    document.getElementById('app').style.background = '#f6f6f6'
-    next()
+    document.getElementById('app').style.background = '#f6f6f6';
+    next();
   },
   beforeRouteLeave(to, from, next) {
-    document.getElementById('app').style.background = ''
-    next()
+    document.getElementById('app').style.background = '';
+    next();
   },
   methods: {
-    ...mapActions('course', [
-      'handExercisedo'
-    ]),
+    ...mapActions('course', ['handExercisedo']),
     getInfo() {
-      this.courseId = this.$route.query.courseId
-      this.taskId = this.$route.query.taskId
+      this.courseId = this.$route.query.courseId;
+      this.taskId = this.$route.query.taskId;
       Api.getExerciseIntro({
         query: {
           courseId: this.courseId,
-          taskId: this.taskId
-        }
+          taskId: this.taskId,
+        },
       }).then(res => {
-        this.exercise = res.exercise
-        this.interruption()
-      })
+        this.exercise = res.exercise;
+        this.interruption();
+      });
     },
-    //初始化上报数据
+    // 初始化上报数据
     initReport() {
-      this.initReportData(this.$route.query.courseId,this.taskId,"exercise",false);
+      this.initReportData(
+        this.$route.query.courseId,
+        this.taskId,
+        'exercise',
+        false,
+      );
     },
     // 异常中断
     interruption() {
-      this.canDoing(this.exercise.latestExerciseResult, this.user.id).then(() => {
-        this.startExercise()
-      }).catch(({ answer }) => {
-        this.submitExercise(answer)
-      })
+      this.canDoing(this.exercise.latestExerciseResult, this.user.id)
+        .then(() => {
+          this.startExercise();
+        })
+        .catch(({ answer }) => {
+          this.submitExercise(answer);
+        });
     },
     // 跳转到结果页
     showResult() {
@@ -93,9 +110,9 @@ export default {
           exerciseId: this.exercise.id,
           exerciseResultId: this.exercise.latestExerciseResult.id,
           courseId: this.courseId,
-          taskId: this.taskId
-        }
-      })
+          taskId: this.taskId,
+        },
+      });
     },
     // 开始作业
     startExercise() {
@@ -104,12 +121,12 @@ export default {
         query: {
           targetId: this.taskId,
           exerciseId: this.exercise.id,
-          courseId: this.courseId
+          courseId: this.courseId,
         },
         params: {
-          KeepDoing: true
-        }
-      })
+          KeepDoing: true,
+        },
+      });
     },
     // 交练习
     submitExercise(answer) {
@@ -117,21 +134,21 @@ export default {
         answer,
         exerciseId: this.exercise.id,
         userId: this.user.id,
-        exerciseResultId: this.exercise.latestExerciseResult.id
-      }
+        exerciseResultId: this.exercise.latestExerciseResult.id,
+      };
       // 提交练习+跳转到结果页
-      this.handExercisedo(datas).then(res => {
-         //上报完成作业课时
-        this.reprtData("finish");
-        this.showResult()
-      }).catch((err) => {
-        Toast.fail(err.message)
-      })
-    }
-  }
-}
+      this.handExercisedo(datas)
+        .then(res => {
+          // 上报完成作业课时
+          this.reprtData('finish');
+          this.showResult();
+        })
+        .catch(err => {
+          Toast.fail(err.message);
+        });
+    },
+  },
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

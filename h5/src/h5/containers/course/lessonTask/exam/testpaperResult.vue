@@ -4,37 +4,50 @@
     <div v-if="result" ref="data" class="result-data">
       <div class="result-data__item">
         本次得分
-        <div v-if="isReadOver" class="result-data__bottom data-number-orange data-medium">
-          <span class="data-number">{{ result.score }}</span>分
+        <div
+          v-if="isReadOver"
+          class="result-data__bottom data-number-orange data-medium"
+        >
+          <span class="data-number">{{ result.score }}</span
+          >分
         </div>
         <div v-else class="result-data__bottom data-text-blue">待批阅</div>
       </div>
       <div class="result-data__item">
         正确率
-        <div v-if="isReadOver" class="result-data__bottom data-number-green data-medium">
-          <span class="data-number">{{ result.rightRate }}</span>%
+        <div
+          v-if="isReadOver"
+          class="result-data__bottom data-number-green data-medium"
+        >
+          <span class="data-number">{{ result.rightRate }}</span
+          >%
         </div>
         <div v-else class="result-data__bottom data-text-blue">待批阅</div>
       </div>
       <div class="result-data__item">
         做题用时
         <div class="result-data__bottom data-number-gray data-medium">
-          <span class="data-number">{{ usedTime }}</span>分钟
+          <span class="data-number">{{ usedTime }}</span
+          >分钟
         </div>
       </div>
     </div>
     <div ref="tag" class="result-tag">
       <div class="result-tag-item clearfix">
-        <div class="result-tag-item__circle circle-green" />正确
+        <div class="result-tag-item__circle circle-green" />
+        正确
       </div>
       <div class="result-tag-item clearfix">
-        <div class="result-tag-item__circle circle-orange" />错误
+        <div class="result-tag-item__circle circle-orange" />
+        错误
       </div>
       <div class="result-tag-item clearfix">
-        <div class="result-tag-item__circle circle-gray" />未作答
+        <div class="result-tag-item__circle circle-gray" />
+        未作答
       </div>
       <div v-show="!isReadOver" class="result-tag-item clearfix">
-        <div class="result-tag-item__circle circle-brown" />待批阅
+        <div class="result-tag-item__circle circle-brown" />
+        待批阅
       </div>
     </div>
 
@@ -50,10 +63,12 @@
             v-for="(item, index) in subjectList[keyItem]"
             :class="[
               'result-list__item testpaper-number',
-              `circle-${color[item.status]}`
+              `circle-${color[item.status]}`,
             ]"
             :key="index"
-          >{{ item.seq }}</li>
+          >
+            {{ item.seq }}
+          </li>
         </ul>
       </van-panel>
 
@@ -63,40 +78,43 @@
           class="result-footer__btn"
           type="primary"
           @click="viewAnalysis()"
-        >查看解析</van-button>
+          >查看解析</van-button
+        >
         <van-button
           v-if="again && isReadOver && doTimes == 0"
           class="result-footer__btn"
           type="primary"
           @click="startTestpaper()"
-        >再考一次</van-button>
+          >再考一次</van-button
+        >
         <van-button
           v-if="!again && remainTime && isReadOver && doTimes == 0"
           class="result-footer__btn"
           type="primary"
           disabled
           style="line-height: 21px"
-        >在{{ remainTime }}后可以再考一次</van-button>
+          >在{{ remainTime }}后可以再考一次</van-button
+        >
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import Api from "@/api";
-import { mapState, mapMutations, mapActions } from "vuex";
-import * as types from "@/store/mutation-types";
-import examMixin from "@/mixins/lessonTask/exam.js";
-import report from "@/mixins/course/report";
-import { getdateTimeDown } from "@/utils/date-toolkit.js";
-import { Dialog, Toast } from "vant";
+import Api from '@/api';
+import { mapState, mapMutations, mapActions } from 'vuex';
+import * as types from '@/store/mutation-types';
+import examMixin from '@/mixins/lessonTask/exam.js';
+import report from '@/mixins/course/report';
+import { getdateTimeDown } from '@/utils/date-toolkit.js';
+import { Dialog, Toast } from 'vant';
 
 export default {
-  name: "TestpaperResult",
+  name: 'TestpaperResult',
   mixins: [examMixin, report],
   data() {
     return {
-      enable_facein: "", //是否开启云监考
+      enable_facein: '', // 是否开启云监考
       isReadOver: false, // 是否已批阅
       resultId: null, // 考试结果ID
       again: 0, // 是否再考一次
@@ -112,22 +130,22 @@ export default {
       testpaperTitle: null, // 考试题目
       obj: {
         // 题型判断
-        single_choice: "单选题",
-        choice: "多选题",
-        essay: "问答题",
-        uncertain_choice: "不定项选择题",
-        determine: "判断题",
-        fill: "填空题",
-        material: "材料题"
+        single_choice: '单选题',
+        choice: '多选题',
+        essay: '问答题',
+        uncertain_choice: '不定项选择题',
+        determine: '判断题',
+        fill: '填空题',
+        material: '材料题',
       },
       color: {
         // 题号标签状态判断
-        right: "green",
-        none: "brown",
-        wrong: "orange",
-        partRight: "orange",
-        noAnswer: "gray"
-      }
+        right: 'green',
+        none: 'brown',
+        wrong: 'orange',
+        partRight: 'orange',
+        noAnswer: 'gray',
+      },
     };
   },
   computed: {
@@ -139,23 +157,23 @@ export default {
     usedTime: function() {
       const timeInterval = parseInt(this.result.usedTime) || 0;
       return timeInterval <= 60 ? 1 : Math.round(timeInterval / 60);
-    }
+    },
   },
   watch: {
     doTimes: function() {
       this.calSubjectHeight();
-    }
+    },
   },
   created() {
     this.initReport();
     this.getTestpaperResult();
   },
   beforeRouteEnter(to, from, next) {
-    document.getElementById("app").style.background = "#f6f6f6";
+    document.getElementById('app').style.background = '#f6f6f6';
     next();
   },
   beforeRouteLeave(to, from, next) {
-    document.getElementById("app").style.background = "";
+    document.getElementById('app').style.background = '';
     next();
   },
   beforeDestroy() {
@@ -164,25 +182,25 @@ export default {
   },
   methods: {
     ...mapMutations({
-      setNavbarTitle: types.SET_NAVBAR_TITLE
+      setNavbarTitle: types.SET_NAVBAR_TITLE,
     }),
-    ...mapActions("course", ["handExamdo"]),
+    ...mapActions('course', ['handExamdo']),
     async getTestpaperResult() {
       await Api.testpaperResult({
         query: {
-          resultId: this.$route.query.resultId
-        }
+          resultId: this.$route.query.resultId,
+        },
       }).then(res => {
         this.result = res.testpaperResult;
         this.question_type_seq = res.testpaper.metas.question_type_seq;
-        this.isReadOver = this.result.status === "finished";
+        this.isReadOver = this.result.status === 'finished';
         this.getSubjectList(res.items);
         this.calSubjectHeight();
-        //上报学习进度
-        this.reprtData("doing");
+        // 上报学习进度
+        this.reprtData('doing');
         this.canDoing(this.result, this.user.id)
           .then(() => {
-            this.startTestpaper("KeepDoing");
+            this.startTestpaper('KeepDoing');
           })
           .catch(({ answer, endTime }) => {
             this.submitExam(answer, endTime);
@@ -190,9 +208,14 @@ export default {
       });
       this.getInfo();
     },
-    //初始化上报数据
+    // 初始化上报数据
     initReport() {
-      this.initReportData(this.selectedPlanId,this.$route.query.targetId, "testpaper",false);
+      this.initReportData(
+        this.selectedPlanId,
+        this.$route.query.targetId,
+        'testpaper',
+        false,
+      );
     },
     judgeTime() {
       const interval = this.redoInterval;
@@ -210,7 +233,7 @@ export default {
         this.timeMeter = setInterval(() => {
           i = i++;
           this.remainTime = getdateTimeDown(sumTime, i);
-          if (this.remainTime == "") {
+          if (this.remainTime == '') {
             this.again = true;
             this.clearTime();
           }
@@ -221,7 +244,7 @@ export default {
       for (const i in resData) {
         const final = [];
         resData[i].forEach(one => {
-          if (i === "material") {
+          if (i === 'material') {
             one.subs.forEach(item => {
               this.getStatus(item, final);
             });
@@ -248,7 +271,7 @@ export default {
       if (data.testResult) {
         obj.status = data.testResult.status;
       } else {
-        obj.status = "noAnswer";
+        obj.status = 'noAnswer';
       }
       arr.push(obj);
     },
@@ -259,18 +282,18 @@ export default {
         resultId: this.result.id,
         userId: this.user.id,
         beginTime: Number(this.result.beginTime),
-        endTime
+        endTime,
       };
       // 交卷+跳转到结果页
       this.handExamdo(datas)
         .then(res => {
           this.$router.replace({
-            name: "testpaperResult",
+            name: 'testpaperResult',
             query: {
               resultId: this.$route.query.resultId,
               testId: this.$route.query.testId,
-              targetId: this.$route.query.targetId
-            }
+              targetId: this.$route.query.targetId,
+            },
           });
         })
         .catch(err => {
@@ -284,10 +307,10 @@ export default {
     startTestpaper() {
       if (this.enable_facein === 1) {
         Dialog.alert({
-          title: "",
-          confirmButtonText: "知道了",
+          title: '',
+          confirmButtonText: '知道了',
           message:
-            "本场考试已开启云监考，暂不支持在移动端答题，请前往PC端进行答题。"
+            '本场考试已开启云监考，暂不支持在移动端答题，请前往PC端进行答题。',
         }).then(() => {});
       } else {
         this.goDoTestpaper();
@@ -295,16 +318,16 @@ export default {
     },
     goDoTestpaper() {
       this.$router.replace({
-        name: "testpaperDo",
+        name: 'testpaperDo',
         query: {
           testId: this.result.testId,
           targetId: this.targetId,
           title: this.testpaperTitle,
-          action: "redo"
+          action: 'redo',
         },
         params: {
-          KeepDoing: true
-        }
+          KeepDoing: true,
+        },
       });
     },
     getInfo() {
@@ -313,17 +336,17 @@ export default {
       Api.testpaperIntro({
         params: {
           targetId: this.targetId,
-          targetType: "task"
+          targetType: 'task',
         },
         query: {
-          testId: this.testId
-        }
+          testId: this.testId,
+        },
       }).then(res => {
         this.testpaperTitle = res.task.title;
         this.setNavbarTitle(res.task.title);
         this.doTimes = Number(res.task.activity.testpaperInfo.doTimes);
         this.redoInterval = Number(
-          res.task.activity.testpaperInfo.redoInterval
+          res.task.activity.testpaperInfo.redoInterval,
         );
         this.enable_facein = res.task.enable_facein;
         this.judgeTime();
@@ -332,13 +355,13 @@ export default {
     // 查看解析
     viewAnalysis() {
       this.$router.push({
-        name: "testpaperAnalysis",
+        name: 'testpaperAnalysis',
         query: {
           resultId: this.$route.query.resultId,
-          title: this.testpaperTitle
-        }
+          title: this.testpaperTitle,
+        },
       });
-    }
-  }
+    },
+  },
 };
 </script>

@@ -8,8 +8,8 @@ export default {
       count: {
         showCount: false,
         num: 60,
-        codeBtnDisable: false
-      }
+        codeBtnDisable: false,
+      },
     };
   },
   methods: {
@@ -20,8 +20,7 @@ export default {
       if (ele.length === 0) {
         this.errorMessage[type] = '';
       }
-      this.errorMessage[type] = !rule.validator(ele)
-        ? rule.message : '';
+      this.errorMessage[type] = !rule.validator(ele) ? rule.message : '';
     },
     validatedChecker() {
       if (this.userinfo.mobile.length > 11) {
@@ -60,7 +59,7 @@ export default {
         smsToken: this.userinfo.smsToken,
         smsCode: this.userinfo.smsCode,
         loginType: 'sms',
-        client: 'h5'
+        client: 'h5',
       })
         .then(res => cb(res))
         .catch(err => {
@@ -114,6 +113,6 @@ export default {
         return;
       }
       this.$refs.dragComponent.initDragCaptcha();
-    }
-  }
+    },
+  },
 };

@@ -2,7 +2,7 @@
   <div :class="customClass" class="default-item-setting__section clearfix">
     <p :class="leftClass" class="pull-left section-left">{{ title }}</p>
     <div :class="rightClass" class="section-right">
-      <slot/>
+      <slot />
     </div>
   </div>
 </template>
@@ -11,6 +11,6 @@
 export default {
   name: 'SettingCell',
   // eslint-disable-next-line vue/require-prop-types
-  props: ['customClass', 'leftClass', 'rightClass', 'title']
-}
+  props: ['customClass', 'leftClass', 'rightClass', 'title'],
+};
 </script>

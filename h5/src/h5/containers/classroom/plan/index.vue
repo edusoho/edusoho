@@ -27,7 +27,6 @@
         <span v-html="learnExpiryHtml" />
       </div>
     </div>
-
     <div
       class="course-detail__certificate"
       @click="toCertificate"
@@ -82,7 +81,7 @@ export default {
       if (!memberInfo) {
         switch (expiryMode) {
           case 'forever':
-            return '永久有效';
+            return '长期有效';
             // eslint-disable-next-line no-unreachable
             break;
           case 'date':
@@ -98,7 +97,7 @@ export default {
         }
       } else {
         if (expiryMode == 'forever') {
-          return '永久有效';
+          return '长期有效';
         }
         return memberInfo.deadline != 0
           ? memberInfo.deadline.slice(0, 10) + '之前可学习'

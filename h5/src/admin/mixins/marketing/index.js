@@ -2,7 +2,7 @@
 export default {
   data() {
     return {
-      createMarketingUrl: '/admin/login/marketing?target=activity_create'
+      createMarketingUrl: '/admin/login/marketing?target=activity_create',
     };
-  }
+  },
 };

@@ -1,28 +1,30 @@
 <template>
-  <div class="e-menus">  
-    <div  class="e-menu__line">
+  <div class="e-menus">
+    <div class="e-menu__line">
       <div
-        v-for="(item , index) in menuContent.data"
+        v-for="(item, index) in menuContent.data"
         :key="index"
         :class="judgeIsSelected(item, menuContent.type)"
         class="e-menu__item"
         @click="itemSelect(item, menuContent.type)"
-      >{{ item.text }}</div>
+      >
+        {{ item.text }}
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import Api from '@/api'
+import Api from '@/api';
 
 export default {
   model: {
     prop: 'selectedData',
-    event: 'selectedChange'
+    event: 'selectedChange',
   },
   props: {
     menuContent: Object,
-    selectedData: Object
+    selectedData: Object,
   },
   data() {
     return {
@@ -31,31 +33,29 @@ export default {
       queryForm: {
         courseType: 'type',
         category: 'categoryId',
-        sort: 'sort'
+        sort: 'sort',
       },
-    }
+    };
   },
   computed: {
     queryData: {
       get() {
-        return { ...this.selectedData }
+        return { ...this.selectedData };
       },
-      set() {
-      }
-    }
+      set() {},
+    },
   },
   methods: {
     itemSelect(item, type, level) {
-      const query = this.queryForm[type]
-      this.queryData[query] = item.type
+      const query = this.queryForm[type];
+      this.queryData[query] = item.type;
       // 更新数据
-      this.$emit('selectedChange', this.queryData)
+      this.$emit('selectedChange', this.queryData);
     },
     judgeIsSelected(item, type) {
-      const isSelected = this.queryData[this.queryForm[type]] === item.type
-      if (isSelected) return 'selected'
-    }
-  }
-}
-
+      const isSelected = this.queryData[this.queryForm[type]] === item.type;
+      if (isSelected) return 'selected';
+    },
+  },
+};
 </script>

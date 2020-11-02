@@ -1,18 +1,18 @@
 <template>
-  <div class="fill" >
-    <div class="subject-stem" >
+  <div class="fill">
+    <div class="subject-stem">
       <div class="serial-number">{{ itemdata.seq }}、</div>
-      <div class="rich-text" v-html="stem"/>
+      <div class="rich-text" v-html="stem" />
     </div>
 
     <div v-if="itemdata.parentTitle" class="material-title">
       <span class="serial-number">问题{{ itemdata.materialIndex }}：</span>
-      <div class="rich-text" v-html="itemdata.stem"/>
+      <div class="rich-text" v-html="itemdata.stem" />
     </div>
 
     <div class="answer-paper">
-      <div v-for="(i,index) in itemdata.fillnum" :key="index" >
-        <div class="fill-subject">填空题（{{ index+1 }}）</div>
+      <div v-for="(i, index) in itemdata.fillnum" :key="index">
+        <div class="fill-subject">填空题（{{ index + 1 }}）</div>
         <van-field
           v-model="answer[index]"
           :placeholder="placeholder"
@@ -34,53 +34,52 @@ export default {
   props: {
     filldata: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   props: {
     itemdata: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
     answer: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     number: {
       type: Number,
-      default: 1
+      default: 1,
     },
     canDo: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   data() {
     return {
-      index: 0
-    }
+      index: 0,
+    };
   },
   computed: {
     stem: {
       get() {
         if (this.itemdata.parentTitle) {
-          return this.itemdata.parentTitle.stem
+          return this.itemdata.parentTitle.stem;
         } else {
-          return this.itemdata.stem
+          return this.itemdata.stem;
         }
-      }
+      },
     },
     placeholder: {
       get() {
         if (this.canDo) {
-          return '请填写答案'
+          return '请填写答案';
         } else {
-          return '未作答'
+          return '未作答';
         }
-      }
-    }
+      },
+    },
   },
-  methods: {
-  }
-}
+  methods: {},
+};
 </script>

@@ -8,12 +8,12 @@ export default {
           return 'subject-option__order_right';
         } else if (
           (rightanswer.includes(index) && !answer.includes(index)) ||
-                (!rightanswer.includes(index) && answer.includes(index))
+          (!rightanswer.includes(index) && answer.includes(index))
         ) {
           return 'subject-option__order_wrong';
         }
       }
       return '';
-    }
-  }
+    },
+  },
 };

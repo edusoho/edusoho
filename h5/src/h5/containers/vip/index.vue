@@ -13,7 +13,9 @@
               :src="vipInfo.icon"
             />
             <span v-if="!vipDated">{{ vipInfo.vipName }}</span>
-            <span v-else class="grey vip-name vip-name-short text-overflow">{{ vipInfo.vipName }}已过期</span>
+            <span v-else class="grey vip-name vip-name-short text-overflow"
+              >{{ vipInfo.vipName }}已过期</span
+            >
           </span>
           <span v-else class="user-vip">您还不是会员</span>
         </div>
@@ -23,17 +25,26 @@
             ref="joinBtnTop"
             class="vip-status__btn"
             @click="popShow"
-          >{{ vipDated ? '重新开通' : btnStatus }}</div>
+          >
+            {{ vipDated ? '重新开通' : btnStatus }}
+          </div>
           <div
             v-if="vipDeadline"
-            :class="['vip-status__deadline', btnStatus ? '' : 'deadline-middle']"
-          >{{ vipDeadline }} 到期</div>
+            :class="[
+              'vip-status__deadline',
+              btnStatus ? '' : 'deadline-middle',
+            ]"
+          >
+            {{ vipDeadline }} 到期
+          </div>
         </div>
       </div>
-      <router-link v-else :to="{path: '/login', query: { redirect : '/vip'}}">
+      <router-link v-else :to="{ path: '/login', query: { redirect: '/vip' } }">
         <img class="user-img" src="static/images/avatar.png" />
         <div class="user-middle single-middle">
-          <div :class="['user-vip', !user ? 'text-middle' : '']">立即登录，查看会员权益</div>
+          <div :class="['user-vip', !user ? 'text-middle' : '']">
+            立即登录，查看会员权益
+          </div>
         </div>
       </router-link>
     </div>
@@ -90,7 +101,11 @@
       <div class="vip-popup__header text-14">选择{{ btnStatus }}时长</div>
       <div class="vip-popup__body">
         <van-row gutter="20">
-          <van-col v-for="(item, index) in priceItems[currentLevelIndex]" :key="index" span="8">
+          <van-col
+            v-for="(item, index) in priceItems[currentLevelIndex]"
+            :key="index"
+            span="8"
+          >
             <price-item
               :item="item"
               :index="index"
@@ -105,35 +120,39 @@
         :class="{ disabled: activePriceIndex < 0 }"
         class="btn-join-bottom"
         @click="joinVip"
-      >确认{{ btnStatus }}</div>
+      >
+        确认{{ btnStatus }}
+      </div>
     </e-popup>
 
     <div
       v-if="bottomBtnShow && btnStatus && !vipDated"
       class="btn-join-bottom"
       @click="popShow"
-    >立即{{ btnStatus }}</div>
+    >
+      立即{{ btnStatus }}
+    </div>
   </div>
 </template>
 <script>
-import EPopup from "@/components/popup";
-import Api from "@/api";
-import introduce from "./introduce";
-import priceItem from "./vip-price-item";
-import courseList from "&/components/e-course-list/e-course-list";
-import getPriceItems from "../../config/vip-price-config";
-import { formatFullTime, getOffsetDays } from "@/utils/date-toolkit.js";
-import { mapState } from "vuex";
-import { Toast } from "vant";
-import * as types from "@/store/mutation-types";
-import qs from "qs";
+import EPopup from '@/components/popup';
+import Api from '@/api';
+import introduce from './introduce';
+import priceItem from './vip-price-item';
+import courseList from '&/components/e-course-list/e-course-list';
+import getPriceItems from '../../config/vip-price-config';
+import { formatFullTime, getOffsetDays } from '@/utils/date-toolkit.js';
+import { mapState } from 'vuex';
+import { Toast } from 'vant';
+import * as types from '@/store/mutation-types';
+import qs from 'qs';
 
 export default {
   components: {
     EPopup,
     priceItem,
-    "vip-introduce": introduce,
-    "e-course-list": courseList
+    'vip-introduce': introduce,
+    'e-course-list': courseList,
   },
   data() {
     return {
@@ -144,32 +163,32 @@ export default {
       levels: [
         {
           courses: {
-            data: []
+            data: [],
           },
           classrooms: {
-            data: []
-          }
-        }
+            data: [],
+          },
+        },
       ],
       currentLevelIndex: 0,
       activePriceIndex: -1,
       vipPopShow: false,
       priceItems: [],
-      buyType: "month",
+      buyType: 'month',
       bottomBtnShow: false,
       orderParams: {
-        unit: "month",
-        num: 0
+        unit: 'month',
+        num: 0,
       },
       isShowInviteUrl: false, // 是否显示邀请链接
       bindAgencyRelation: {}, // 分销代理商绑定信息
-      drpSetting:{}
+      drpSetting: {},
     };
   },
   computed: {
-    ...mapState(["vipSettings", "isLoading", "vipSwitch", "DrpSwitch"]),
+    ...mapState(['vipSettings', 'isLoading', 'vipSwitch', 'DrpSwitch']),
     ...mapState({
-      userInfo: state => state.user
+      userInfo: state => state.user,
     }),
     vipDated() {
       if (!this.vipInfo) return false;
@@ -182,9 +201,9 @@ export default {
       if (data.length == 0) return false;
       const dataFormat = {
         items: [],
-        title: "会员课程",
+        title: '会员课程',
         source: {},
-        limit: 4
+        limit: 4,
       };
       dataFormat.items = data;
       return dataFormat;
@@ -194,25 +213,25 @@ export default {
       if (data.length == 0) return false;
       const dataFormat = {
         items: [],
-        title: "会员班级",
+        title: '会员班级',
         source: {},
-        limit: 4
+        limit: 4,
       };
       dataFormat.items = data;
       return dataFormat;
     },
     vipDeadline() {
-      if (!Object.values(this.vipInfo).length) return "";
+      if (!Object.values(this.vipInfo).length) return '';
       const time = new Date(this.vipInfo.deadline);
       return formatFullTime(time);
     },
     btnStatus() {
-      if (!this.vipInfo) return "开通";
+      if (!this.vipInfo) return '开通';
       const currentSeq = Number(this.levels[this.currentLevelIndex].seq);
       const userSeq = this.vipInfo.seq;
-      if (userSeq > currentSeq) return "";
-      if (this.vipDated) return "开通";
-      return userSeq < currentSeq ? "升级" : "续费";
+      if (userSeq > currentSeq) return '';
+      if (this.vipDated) return '开通';
+      return userSeq < currentSeq ? '升级' : '续费';
     },
     leftDays() {
       if (!Object.values(this.vipInfo).length) return false;
@@ -222,18 +241,18 @@ export default {
     },
     inviteUrl() {
       const params = {
-        type: "vip",
+        type: 'vip',
         id: this.levels[this.currentLevelIndex].id,
-        merchant_id: this.drpSetting.merchantId
+        merchant_id: this.drpSetting.merchantId,
       };
       return (
-        this.drpSetting.distributor_template_url + "?" + qs.stringify(params)
+        this.drpSetting.distributor_template_url + '?' + qs.stringify(params)
       );
-    }
+    },
   },
   created() {
     if (!this.vipSwitch) {
-      this.$router.push({ name: "find" });
+      this.$router.push({ name: 'find' });
       return;
     }
     this.getVipLevels();
@@ -243,20 +262,20 @@ export default {
     }, 100);
   },
   mounted() {
-    window.addEventListener("scroll", this.handleScroll, true);
+    window.addEventListener('scroll', this.handleScroll, true);
   },
   beforeDestroy() {
-    window.removeEventListener("scroll", this.handleScroll, true);
+    window.removeEventListener('scroll', this.handleScroll, true);
   },
   methods: {
     getVipLevels() {
       Api.getVipLevels({ disableLoading: false })
         .then(res => {
           if (!res.length) {
-            this.$router.push({ name: "find" });
+            this.$router.push({ name: 'find' });
             return;
           }
-          let levelId = res[0].id;
+          const levelId = res[0].id;
           this.getVipDetail(levelId);
         })
         .catch(err => {
@@ -267,8 +286,8 @@ export default {
       const queryId = this.$route.query.id;
       Api.getVipDetail({
         query: {
-          levelId: levelId
-        }
+          levelId: levelId,
+        },
       }).then(res => {
         this.vipUser = res.vipUser || {};
         this.levels = res.levels;
@@ -292,15 +311,15 @@ export default {
       });
     },
     getPriceItems(levels) {
-      for (var i = 0; i < this.levels.length; i++) {
+      for (let i = 0; i < this.levels.length; i++) {
         const item = levels[i];
         this.priceItems = [
           ...this.priceItems,
           getPriceItems(
             this.vipSettings.buyType,
             item.monthPrice,
-            item.yearPrice
-          )
+            item.yearPrice,
+          ),
         ];
       }
     },
@@ -327,25 +346,25 @@ export default {
       }
 
       this.$router.push({
-        name: "order",
+        name: 'order',
         params: {
           id: this.levels[this.currentLevelIndex].id,
           unit: this.orderParams.unit,
           num: this.orderParams.num,
-          type: this.btnStatus
+          type: this.btnStatus,
         },
         query: {
-          targetType: "vip"
-        }
+          targetType: 'vip',
+        },
       });
     },
     vipOpen() {
       if (!this.user) {
         this.$router.push({
-          path: "/login",
+          path: '/login',
           query: {
-            redirect: "/vip"
-          }
+            redirect: '/vip',
+          },
         });
         return;
       }
@@ -354,7 +373,7 @@ export default {
     handleScroll() {
       // 执行函数
       if (!this.btnStatus) return;
-      let topSize = "";
+      let topSize = '';
       let num = 0;
       if (!this.user || !this.vipUser.vip) {
         topSize = this.$refs.joinBtnBottom.$el.getBoundingClientRect().bottom;
@@ -367,16 +386,16 @@ export default {
     popShow() {
       if (!this.user) {
         this.$router.push({
-          path: "/login",
+          path: '/login',
           query: {
-            redirect: "/vip"
-          }
+            redirect: '/vip',
+          },
         });
         return;
       }
 
       // 会员升级
-      if (this.btnStatus === "升级") {
+      if (this.btnStatus === '升级') {
         const upgradeMinDay = this.vipSettings.upgradeMinDay;
         if (this.leftDays <= upgradeMinDay) {
           Toast(`会员剩余天数小于${upgradeMinDay}天，请先续费后再升级`);
@@ -415,7 +434,7 @@ export default {
       Api.getDrpSetting().then(data => {
         this.drpSetting = data;
       });
-    }
-  }
+    },
+  },
 };
 </script>

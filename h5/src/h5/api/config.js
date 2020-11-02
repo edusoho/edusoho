@@ -12,6 +12,8 @@ import marketing from './marketing/index';
 import studyCard from './study-card/index';
 import distribution from './distribution/index';
 import liveTimetable from './liveTimetable/index';
+import goods from './goods/index';
+import reviews from './reviews/index';
 import certificate from './certificate/index';
 import itemBank from './itemBank/index';
 import infoCollection from './infoCollection/index';
@@ -30,6 +32,8 @@ const config = [
   ...distribution,
   ...studyCard,
   ...liveTimetable,
+  ...goods,
+  ...reviews,
   ...itemBankCourse,
   ...certificate,
   ...itemBank,

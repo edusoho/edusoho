@@ -1,7 +1,9 @@
 import { formatTime } from '@/utils/date-toolkit';
 
 const tableFilter = (item, label, subProperty) => {
-  const labelStr = subProperty ? subProperty.toLocaleLowerCase() : label.toLocaleLowerCase();
+  const labelStr = subProperty
+    ? subProperty.toLocaleLowerCase()
+    : label.toLocaleLowerCase();
   const labelField = subProperty ? item[label][subProperty] : item[label];
   if (labelStr.includes('price')) {
     if (!labelField) {

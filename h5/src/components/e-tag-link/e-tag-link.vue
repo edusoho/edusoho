@@ -17,10 +17,9 @@ export default {
         isShow: false,
         link: '',
         className: '',
-        minDirectRewardRatio: 0
-      }
-    }
-  }
-}
+        minDirectRewardRatio: 0,
+      },
+    },
+  },
+};
 </script>
-

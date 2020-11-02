@@ -8,16 +8,16 @@ const DEFAULT_OPTIONS = {
     testResult: 'testpaperResult',
     courseData: 'getCourseData',
     courseList: 'getCourseLessons',
-    learningProcess: 'getNextStudy'
+    learningProcess: 'getNextStudy',
   },
   learnTimeSec: 1,
   reportData: {},
-  formatReportData: data => data
+  formatReportData: data => data,
 };
 
 const FINISH_JUDGEMENT = {
   end: () => true,
-  time: (time, limit) => time >= limit
+  time: (time, limit) => time >= limit,
 };
 
 class TaskPipe extends Event {
@@ -61,7 +61,10 @@ class TaskPipe extends Event {
       this.flush();
     };
     this.clearInterval();
-    this.intervalId = this.waittingExecute(() => this.flush(), this.options.learnTimeSec * 1000);
+    this.intervalId = this.waittingExecute(
+      () => this.flush(),
+      this.options.learnTimeSec * 1000,
+    );
   }
 
   clearInterval() {
@@ -75,7 +78,7 @@ class TaskPipe extends Event {
     this.setReportParams(data);
     return Api[this.options.reportMap[state]]({
       query: this.reportData,
-      data: this.options.formatReportData(data)
+      data: this.options.formatReportData(data),
     }).then(res => {
       this.trigger(state, res);
       return res;
@@ -86,25 +89,27 @@ class TaskPipe extends Event {
     if (state === 'finish') {
       this.clearInterval();
     }
-    this.getReportData(state, { lastTime: this.lastTime, ...data }).then(res => {
-      if (res.lastTime) {
-        this.lastTime = res.lastTime;
-      }
-      if (res.result && res.result.status) {
-        if (param.data) {
-          res.playerMsg = param.data.playerMsg;
+    this.getReportData(state, { lastTime: this.lastTime, ...data })
+      .then(res => {
+        if (res.lastTime) {
+          this.lastTime = res.lastTime;
         }
-        if (res.result.status === 'finish') {
+        if (res.result && res.result.status) {
+          if (param.data) {
+            res.playerMsg = param.data.playerMsg;
+          }
+          if (res.result.status === 'finish') {
+            this.clearInterval();
+          }
+          this.trigger(`report.${res.result.status}`, res);
+        }
+      })
+      .catch(error => {
+        if (error.status === 403) {
           this.clearInterval();
+          this.trigger('error', error);
         }
-        this.trigger(`report.${res.result.status}`, res);
-      }
-    }).catch(error => {
-      if (error.status === 403) {
-        this.clearInterval();
-        this.trigger('error', error);
-      }
-    });
+      });
   }
 
   waittingExecute(cb, time) {

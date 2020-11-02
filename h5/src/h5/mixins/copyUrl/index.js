@@ -8,12 +8,12 @@ export default {
         title: '暂不支持',
         message,
         messageAlign: 'left',
-        confirmButtonText: '复制链接'
+        confirmButtonText: '复制链接',
       }).then(() => {
         this.$copyText(courseUrl).then(e => {
           console.log(e);
         });
       });
-    }
-  }
+    },
+  },
 };

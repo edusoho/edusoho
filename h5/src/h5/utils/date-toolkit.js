@@ -11,15 +11,19 @@ const formatTimeByNumber = time => {
   time %= 60;
   const second = time;
   if (hour <= 0) {
-    return [minute, second].map(n => {
+    return [minute, second]
+      .map(n => {
+        n = n.toString();
+        return n[1] ? n : `0${n}`;
+      })
+      .join(':');
+  }
+  return [hour, minute, second]
+    .map(n => {
       n = n.toString();
       return n[1] ? n : `0${n}`;
-    }).join(':');
-  }
-  return [hour, minute, second].map(n => {
-    n = n.toString();
-    return n[1] ? n : `0${n}`;
-  }).join(':');
+    })
+    .join(':');
 };
 
 // 11-16
@@ -27,20 +31,24 @@ const formatSimpleTime = date => {
   const month = date.getMonth() + 1;
   const day = date.getDate();
 
-  return [month, day].map(n => {
-    n = n.toString();
-    return n[1] ? n : `0${n}`;
-  }).join('-');
+  return [month, day]
+    .map(n => {
+      n = n.toString();
+      return n[1] ? n : `0${n}`;
+    })
+    .join('-');
 };
 
 const formatDotTime = date => {
   const month = date.getMonth() + 1;
   const day = date.getDate();
 
-  return [month, day].map(n => {
-    n = n.toString();
-    return n[1] ? n : `0${n}`;
-  }).join('.');
+  return [month, day]
+    .map(n => {
+      n = n.toString();
+      return n[1] ? n : `0${n}`;
+    })
+    .join('.');
 };
 
 // 11月16日
@@ -55,10 +63,12 @@ const formatSimpleHour = date => {
   const hour = date.getHours();
   const minute = date.getMinutes();
 
-  return [hour, minute].map(n => {
-    n = n.toString();
-    return n[1] ? n : `0${n}`;
-  }).join(':');
+  return [hour, minute]
+    .map(n => {
+      n = n.toString();
+      return n[1] ? n : `0${n}`;
+    })
+    .join(':');
 };
 
 // 2018-12-06
@@ -67,10 +77,12 @@ const formatFullTime = date => {
   const month = date.getMonth() + 1;
   const day = date.getDate();
 
-  return [year, month, day].map(n => {
-    n = n.toString();
-    return n[1] ? n : `0${n}`;
-  }).join('-');
+  return [year, month, day]
+    .map(n => {
+      n = n.toString();
+      return n[1] ? n : `0${n}`;
+    })
+    .join('-');
 };
 
 // 2018年
@@ -95,13 +107,17 @@ const formatTime = date => {
   const hour = date.getHours();
   const minute = date.getMinutes();
   const second = date.getSeconds();
-  return `${[year, month, day].map(n => {
-    n = n.toString();
-    return n[1] ? n : `0${n}`;
-  }).join('/')} ${[hour, minute, second].map(n => {
-    n = n.toString();
-    return n[1] ? n : `0${n}`;
-  }).join(':')}`;
+  return `${[year, month, day]
+    .map(n => {
+      n = n.toString();
+      return n[1] ? n : `0${n}`;
+    })
+    .join('/')} ${[hour, minute, second]
+    .map(n => {
+      n = n.toString();
+      return n[1] ? n : `0${n}`;
+    })
+    .join(':')}`;
 };
 
 // 2018-12-06 12:03
@@ -122,8 +138,8 @@ const dateTimeDown = date => {
   let minute = parseInt((diff / 60) % 60, 10);
   let second = parseInt(diff % 60, 10);
   day = day ? `${day}天` : '';
-  hour = (day || hour) ? `${hour || '0'}小时` : '';
-  minute = (day || hour || minute) ? `${minute || '0'}分` : '';
+  hour = day || hour ? `${hour || '0'}小时` : '';
+  minute = day || hour || minute ? `${minute || '0'}分` : '';
   second = `${second || '0'}秒`;
   const time = day + hour + minute + second;
   return time;
@@ -145,9 +161,9 @@ const checkTime = i => {
 
 // 倒计时 01:01:01 传入时间戳
 const getCountDown = (time, i) => {
-  const nowTime = Number(time) - (i * 1000);
-  let minutes = parseInt(nowTime / 1000 / 60 % 60, 10); // 计算剩余的分钟
-  let seconds = parseInt(nowTime / 1000 % 60, 10);// 计算剩余的秒数
+  const nowTime = Number(time) - i * 1000;
+  let minutes = parseInt((nowTime / 1000 / 60) % 60, 10); // 计算剩余的分钟
+  let seconds = parseInt((nowTime / 1000) % 60, 10); // 计算剩余的秒数
   let hours = parseInt(nowTime / (1000 * 60 * 60), 10); // 计算剩余的小时
   minutes = checkTime(minutes);
   seconds = checkTime(seconds);
@@ -157,7 +173,7 @@ const getCountDown = (time, i) => {
 
 // 剩余时间 1天1小时1分钟  秒只是在最后60秒显示
 const getdateTimeDown = (date, i) => {
-  date = Number(date) - (i * 1000);
+  date = Number(date) - i * 1000;
   const now = new Date().getTime();
   if (now >= date) {
     return '';
@@ -168,9 +184,9 @@ const getdateTimeDown = (date, i) => {
   let minute = parseInt((diff / 60) % 60, 10);
   let second = parseInt(diff % 60, 10);
   day = day ? `${day}天` : '';
-  hour = (day || hour) ? `${hour || '0'}小时` : '';
-  minute = (day || hour || minute) ? `${minute || '0'}分钟` : '';
-  second = (!day && !hour && !minute) ? `${second || '0'}秒` : '';
+  hour = day || hour ? `${hour || '0'}小时` : '';
+  minute = day || hour || minute ? `${minute || '0'}分钟` : '';
+  second = !day && !hour && !minute ? `${second || '0'}秒` : '';
   const time = day + hour + minute + second;
   return time;
 };
@@ -211,5 +227,5 @@ export {
   getOffsetDays,
   getCountDown,
   getdateTimeDown,
-  compareDate
+  compareDate,
 };
