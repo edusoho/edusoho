@@ -11333,6 +11333,10 @@ goods.minimum_price.unit: %price%%unit%起
 goods.origin_price.unit: %price%%unit%
 goods.description: 商品介绍
 
+goods.minimum_price.unit: %price%%unit%起
+goods.origin_price.unit: %price%%unit%
+goods.description: 商品介绍
+
 admin_v2.information_collect.edit.title_info: 当前版本用户端仅支持新版微网校
 admin_v2.information_collect.edit.title: 采集名称
 admin_v2.information_collect.edit.action: 采集位置
@@ -11380,7 +11384,6 @@ admin_v2.information_collect.form_items.select_group.company_info: 公司信息
 admin_v2.information_collect.form_items.select_group.school_info: 学校信息
 admin_v2.information_collect.form_items.select_group.other_info: 其它信息
 admin_v2.information_collect.form_items.confirm_submit: 确认提交
-
 information_collect.title: 用户信息采集
 information_collect.form_items.confirm_submit: 确认提交
 information_collect.form_items.skip: 跳过
