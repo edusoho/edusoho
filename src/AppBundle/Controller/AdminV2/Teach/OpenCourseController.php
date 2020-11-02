@@ -187,6 +187,12 @@ class OpenCourseController extends BaseController
         $conditions = $request->query->all();
         $conditions['recommended'] = 1;
 
+        if (!empty($conditions['creator'])) {
+            $users = $this->getUserService()->searchUsers(['nickname' => $conditions['creator']], ['createdTime' => 'DESC'], 0, PHP_INT_MAX);
+            $conditions['userIds'] = $users ? ArrayToolkit::column($users, 'id') : [-1];
+            unset($conditions['creator']);
+        }
+
         $paginator = new Paginator(
             $this->get('request'),
             $this->getOpenCourseService()->countCourses($conditions),
