@@ -22,7 +22,7 @@ class S2B2CService extends BaseService
 
     /**
      * 上报支付成功的订单
-     * 
+     *
      * merchantOrderId => es本地订单id
      * merchantOrderRefundDays => es本地订单退款时间
      * merchantOrderUserNickname => es本地订单购买者
@@ -38,7 +38,7 @@ class S2B2CService extends BaseService
 
     /**
      * 上报退款成功的订单
-     *
+     * 
      * productDetailId => s2b2c端productDetailId
      * merchantRefundReportId => es本地退款上报id
      * merchantOrderId => es本地订单id
