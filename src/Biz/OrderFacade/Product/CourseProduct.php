@@ -187,13 +187,6 @@ class CourseProduct extends BaseGoodsProduct
         return $this->getCourseService()->getCourse($goodsSpecs['targetId']);
     }
 
-    protected function getCourseByGoodsSpecsId($id)
-    {
-        $goodsSpecs = $this->getGoodsService()->getGoodsSpecs($id);
-
-        return $this->getCourseService()->getCourse($goodsSpecs['targetId']);
-    }
-
     /**
      * @return MemberService
      */
