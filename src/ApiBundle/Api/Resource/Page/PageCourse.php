@@ -55,7 +55,7 @@ class PageCourse extends AbstractResource
             $course['vipLevel'] = $this->invokeResource($apiRequest);
         }
         $course['reviews'] = $this->searchCourseReviews($course);
-        $course['my_review'] = $this->getMyReview($course, $user);
+        $course['myReview'] = $this->getMyReview($course, $user);
 
         return $course;
     }

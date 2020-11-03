@@ -42,7 +42,7 @@ class PageClassroom extends AbstractResource
         $this->getOCUtil()->multiple($classroom['courses'], ['courseSetId'], 'courseSet');
         $this->getOCUtil()->multiple($classroom['courses'], ['creator', 'teacherIds']);
 
-        $classroom['my_review'] = $this->getMyReview($classroom, $user);
+        $classroom['myReview'] = $this->getMyReview($classroom, $user);
 
         $reviewResult = $this->invokeResource(new ApiRequest(
             '/api/review',
