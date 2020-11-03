@@ -18,6 +18,7 @@ class OccupationFormItem extends FormItem
             'field' => self::FIELD,
             'value' => $this->value,
             'group' => self::COMPANY_INFO_GROUP,
+            'required' => $this->required,
             'validate' => [
                 ['required' => $this->required, 'message' => self::TITLE.'不能为空'],
                 ['min' => 2, 'message' => '最少输入2个字符'],

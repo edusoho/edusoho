@@ -18,9 +18,13 @@ class PhoneFormItem extends FormItem
             'field' => self::FIELD,
             'value' => $this->value,
             'group' => self::CONTACT_INFO_GROUP,
+            'required' => $this->required,
             'props' => [
                 'type' => 'number',
                 'placeholder' => '仅支持中国大陆手机号码',
+            ],
+            'options' => [
+                'before' => ['class' => 'phone-input-before', 'value' => '+86'],
             ],
             'validate' => [
                 ['required' => $this->required, 'message' => self::TITLE.'不能为空'],

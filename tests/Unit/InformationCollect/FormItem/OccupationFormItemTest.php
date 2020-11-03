@@ -15,6 +15,7 @@ class OccupationFormItemTest extends BaseTestCase
                 "field": "occupation",
                 "value": "程序员",
                 "group": "company",
+                "required": true,
                 "validate": [
                     {
                         "required": true,

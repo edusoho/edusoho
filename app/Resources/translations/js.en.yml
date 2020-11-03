@@ -708,6 +708,7 @@ order.create.use_price_coupon_hint: Coupon is available, and you are currently u
 order.refund.reason_limit_hint: The length of the quit reason should be less than or equal to 120.
 order.refund.reason_required_hint: Please enter the reason of quiting.
 order.refund.reason_choose_hint: Please choose the reason of quiting.
+order.information_collect_error_hint: Please submit the information before submitting the order.
 
 settings.setup.set_success.hint: Set account successfully, redirecting
 settings.setup.set_failed.hint: Set account failed, please try again
@@ -1670,7 +1671,9 @@ admin_v2.information_collect.chooser.target_hint: Please select Course/Classroom
 admin_v2.information_collect.chooser.target_course_hint: Please select at least 1 Course
 admin_v2.information_collect.chooser.target_classroom_hint: Please select at least 1 Classroom
 admin_v2.information_collect.chooser.items.hint: Please select form item
-
+user.fields.gender_label: Gender
+information_collect.form.check_age_invalid: Age Invalid
+information_collect.form.check_format_invalid: %display% Invalid
 course.marketing_setup: 'Markets'
 site.currency.CNY: CNY
 s2b2c.product.cooperation_price: Cooperation Price

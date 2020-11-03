@@ -14,6 +14,7 @@ class EmailFormItemTest extends BaseTestCase
             'field' => 'email',
             'group' => 'contact',
             'value' => 'edusoho@edusoho.com',
+            'required' => true,
             'validate' => [
                 [
                     'required' => true,
@@ -23,6 +24,8 @@ class EmailFormItemTest extends BaseTestCase
                     'pattern' => '^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$',
                     'message' => 'Email格式错误',
                 ],
+                ['min' => 4, 'message' => '最少输入4个字符'],
+                ['max' => 64, 'message' => '最多输入64个字符'],
             ],
         ];
 

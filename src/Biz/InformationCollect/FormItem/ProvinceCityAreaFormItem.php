@@ -18,6 +18,7 @@ class ProvinceCityAreaFormItem extends FormItem
             'field' => self::FIELD,
             'group' => self::CONTACT_INFO_GROUP,
             'value' => empty($this->value) ? [] : $this->value,
+            'required' => $this->required,
             'props' => [
                 'options' => [],
                 'placeholder' => '请选择省市区县',
