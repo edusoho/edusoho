@@ -21,7 +21,7 @@ class PageClassroomFilter extends Filter
         'status', 'price', 'vipLevelId', 'headTeacher', 'teachers', 'assistants',
         'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'threadNum', 'noteNum', 'postNum', 'service', 'recommended',
         'recommendedSeq', 'rating', 'ratingNum', 'maxRate', 'showable', 'buyable', 'expiryMode', 'expiryValue',
-        'createdTime', 'updatedTime', 'creator', 'access', 'courses', 'reviews', 'member', 'vipLevel', 'goodsId', 'specsId', 'spec',
+        'createdTime', 'updatedTime', 'creator', 'access', 'courses', 'reviews', 'my_review', 'member', 'vipLevel', 'goodsId', 'specsId', 'spec',
     ];
 
     protected function simpleFields(&$data)
@@ -56,6 +56,7 @@ class PageClassroomFilter extends Filter
         $reviewFilter = new ClassroomReviewFilter();
         $reviewFilter->setMode(Filter::PUBLIC_MODE);
         $reviewFilter->filters($data['reviews']);
+        $reviewFilter->filter($data['my_review']);
     }
 
     private function transformCover(&$data)

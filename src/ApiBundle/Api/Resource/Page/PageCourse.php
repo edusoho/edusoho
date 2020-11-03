@@ -47,7 +47,6 @@ class PageCourse extends AbstractResource
         $course['courses'] = ArrayToolkit::sortPerArrayValue($course['courses'], 'seq');
         $course['courses'] = $this->getCourseService()->appendSpecsInfo($course['courses']);
         $course['progress'] = $this->getLearningDataAnalysisService()->makeProgress($course['learnedCompulsoryTaskNum'], $course['compulsoryTaskNum']);
-        $course['reviews'] = $this->searchCourseReviews($course['id']);
         $course['hasCertificate'] = $this->getCourseService()->hasCertificate($course['id']);
         $course = $this->getCourseService()->appendSpecInfo($course);
 
@@ -55,18 +54,27 @@ class PageCourse extends AbstractResource
             $apiRequest = new ApiRequest('/api/plugins/vip/vip_levels/'.$course['vipLevelId'], 'GET', []);
             $course['vipLevel'] = $this->invokeResource($apiRequest);
         }
+        $course['reviews'] = $this->searchCourseReviews($course);
+        $course['my_review'] = $this->getMyReview($course, $user);
 
         return $course;
     }
 
-    protected function searchCourseReviews($courseId)
+    protected function searchCourseReviews($course)
     {
+        if (0 == $course['parentId']) {
+            $targetType = 'goods';
+            $targetId = $course['goodsId'];
+        } else {
+            $targetType = 'course';
+            $targetId = $course['id'];
+        }
         $result = $this->invokeResource(new ApiRequest(
             '/api/reviews',
             'GET',
             [
-                'targetType' => 'course',
-                'targetId' => $courseId,
+                'targetType' => $targetType,
+                'targetId' => $targetId,
                 'parentId' => 0,
                 'offset' => 0,
                 'limit' => self::DEFAULT_DISPLAY_COUNT,
@@ -76,6 +84,37 @@ class PageCourse extends AbstractResource
         ));
 
         return $result['data'];
+    }
+
+    protected function getMyReview($course, $user)
+    {
+        if (empty($user['id'])) {
+            return null;
+        }
+
+        if (0 == $course['parentId']) {
+            $targetType = 'goods';
+            $targetId = $course['goodsId'];
+        } else {
+            $targetType = 'course';
+            $targetId = $course['id'];
+        }
+        $result = $this->invokeResource(new ApiRequest(
+            '/api/reviews',
+            'GET',
+            [
+                'targetType' => $targetType,
+                'targetId' => $targetId,
+                'userId' => $user['id'],
+                'parentId' => 0,
+                'offset' => 0,
+                'limit' => self::DEFAULT_DISPLAY_COUNT,
+                'orderBys' => ['updatedTime' => 'DESC'],
+                'needPosts' => true,
+            ]
+        ));
+
+        return empty($result['data']) ? null : reset($result['data']);
     }
 
     /**
