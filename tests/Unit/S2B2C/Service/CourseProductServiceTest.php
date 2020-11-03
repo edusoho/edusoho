@@ -30,29 +30,41 @@ class CourseProductServiceTest extends BaseTestCase
             ]
         );
 
-        $this->biz['cloud_testpaperActivity'] = $this->mockBiz(
+        $this->biz['s2b2c.sync_activity_type.cloud_testpaper'] = $this->mockBiz(
             'CloudItemBank.cloud_testpaperActivity',
             [
                 [
                     'functionName' => 'sync',
                     'returnValue' => ['id' => 1],
                 ],
+                [
+                    'functionName' => 'updateToLastedVersion',
+                    'returnValue' => ['id' => 1],
+                ],
             ]
         );
-        $this->biz['cloud_homeworkActivity'] = $this->mockBiz(
+        $this->biz['s2b2c.sync_activity_type.cloud_homework'] = $this->mockBiz(
             'CloudItemBank.cloud_homeworkActivity',
             [
                 [
                     'functionName' => 'sync',
                     'returnValue' => ['id' => 2],
                 ],
+                [
+                    'functionName' => 'updateToLastedVersion',
+                    'returnValue' => ['id' => 2],
+                ],
             ]
         );
-        $this->biz['cloud_exerciseActivity'] = $this->mockBiz(
+        $this->biz['s2b2c.sync_activity_type.cloud_exercise'] = $this->mockBiz(
             'CloudItemBank.cloud_exerciseActivity',
             [
                 [
                     'functionName' => 'sync',
+                    'returnValue' => ['id' => 3],
+                ],
+                [
+                    'functionName' => 'updateToLastedVersion',
                     'returnValue' => ['id' => 3],
                 ],
             ]
@@ -146,7 +158,7 @@ class CourseProductServiceTest extends BaseTestCase
             ]
         );
 
-        $this->biz['cloud_testpaperActivity'] = $this->mockBiz(
+        $this->biz['s2b2c.sync_activity_type.cloud_testpaper'] = $this->mockBiz(
             'CloudItemBank.cloud_testpaperActivity',
             [
                 [
@@ -159,7 +171,7 @@ class CourseProductServiceTest extends BaseTestCase
                 ],
             ]
         );
-        $this->biz['cloud_homeworkActivity'] = $this->mockBiz(
+        $this->biz['s2b2c.sync_activity_type.cloud_homework'] = $this->mockBiz(
             'CloudItemBank.cloud_homeworkActivity',
             [
                 [
@@ -172,7 +184,7 @@ class CourseProductServiceTest extends BaseTestCase
                 ],
             ]
         );
-        $this->biz['cloud_exerciseActivity'] = $this->mockBiz(
+        $this->biz['s2b2c.sync_activity_type.cloud_exercise'] = $this->mockBiz(
             'CloudItemBank.cloud_exerciseActivity',
             [
                 [
