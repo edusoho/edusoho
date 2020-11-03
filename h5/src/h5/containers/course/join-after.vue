@@ -41,6 +41,10 @@
         <!-- 教师介绍 -->
         <teacher :teacher-info="details.teachers" class="teacher" />
         <div class="segmentation" />
+
+        <!-- 评价 -->
+        <reviews :details="details" />
+        <div class="segmentation" />
         <div class="segmentation" />
         <div class="segmentation" />
       </div>
@@ -75,6 +79,7 @@ import DetailHead from './detail/head';
 import DetailPlan from './detail/plan';
 import Teacher from './detail/teacher';
 import afterjoinDirectory from './detail/afterjoin-directory';
+import Reviews from '@/components/reviews';
 import collectUserInfo from '@/mixins/collectUserInfo';
 import { mapState, mapMutations } from 'vuex';
 import { Dialog, Toast } from 'vant';
@@ -191,6 +196,7 @@ export default {
     Teacher,
     afterjoinDirectory,
     infoCollection,
+    Reviews,
   },
   destroyed() {
     window.removeEventListener('scroll', this.handleScroll);

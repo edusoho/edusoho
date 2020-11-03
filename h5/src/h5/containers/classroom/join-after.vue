@@ -13,7 +13,7 @@
       </van-tabs>
 
       <!-- 班级介绍 -->
-      <div v-if="active == 0">
+      <div v-show="active == 0">
         <detail-plan :details="planDetails" :join-status="details.joinStatus" />
         <div class="segmentation" />
         <e-panel ref="about" title="班级介绍" class="about">
@@ -36,12 +36,16 @@
           defaul-value="尚未设置班主任"
         />
         <div class="segmentation" />
+
+        <!-- 评价 -->
+        <reviews :details="details" />
+        <div class="segmentation" />
         <div class="segmentation" />
         <div class="segmentation" />
       </div>
 
       <!-- 班级课程 -->
-      <div v-if="active == 1">
+      <div v-show="active == 1">
         <course-set-list
           ref="course"
           :feedback="!errorMsg"
@@ -86,6 +90,7 @@ import detailPlan from './plan';
 import directory from '../course/detail/directory';
 import collectUserInfo from '@/mixins/collectUserInfo';
 import infoCollection from '@/components/info-collection.vue';
+import Reviews from '@/components/reviews';
 import { mapState, mapMutations } from 'vuex';
 import { Dialog, Toast } from 'vant';
 import Api from '@/api';
@@ -102,6 +107,7 @@ export default {
     teacher,
     courseSetList,
     infoCollection,
+    Reviews,
   },
   props: ['details', 'planDetails'],
   data() {
