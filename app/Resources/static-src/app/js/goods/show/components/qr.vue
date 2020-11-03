@@ -1,5 +1,5 @@
 <template>
-    <div v-if="mpQrcode.imageUrl" class="info-right-qr info-right-box">
+    <div v-if="mpQrcode && mpQrcode.imageUrl" class="info-right-qr info-right-box">
         <div class="title">{{ mpQrcode.title }}</div>
         <div class="qr-info">
             <div class="qr-info__img">

@@ -229,7 +229,7 @@ class GoodsOrderInfo extends AbstractResource
     protected function getGoodsEntityFactory()
     {
         $biz = $this->getBiz();
+
         return $biz['goods.entity.factory'];
     }
-
 }

@@ -12,6 +12,7 @@ use Biz\System\Service\LogService;
 use Codeages\Biz\Framework\Context\BizAware;
 use Codeages\Biz\Order\Service\OrderService;
 use Codeages\Biz\Order\Status\OrderStatusCallback;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 abstract class Product extends BizAware implements OrderStatusCallback
 {
@@ -233,6 +234,30 @@ abstract class Product extends BizAware implements OrderStatusCallback
     public function getSnapShot()
     {
         return [];
+    }
+
+    protected function generateUrl($route, $parameters, $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+    {
+        global $kernel;
+        $router = $this->decorateRouter($kernel->getContainer()->get('router'));
+
+        return $router->generate($route, $parameters, $referenceType);
+    }
+
+    protected function decorateRouter($router)
+    {
+        $routerContext = $router->getContext();
+        if ('localhost' == $routerContext->getHost()) {
+            $url = $this->getSettingService()->node('site.url');
+            if (!empty($url)) {
+                $parsedUrl = parse_url($url);
+
+                empty($parsedUrl['host']) ?: $routerContext->setHost($parsedUrl['host']);
+                empty($parsedUrl['scheme']) ?: $routerContext->setScheme($parsedUrl['scheme']);
+            }
+        }
+
+        return $router;
     }
 
     /**

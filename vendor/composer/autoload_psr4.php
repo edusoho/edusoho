@@ -54,6 +54,7 @@ return array(
     'PhpOffice\\Common\\' => array($vendorDir . '/phpoffice/common/src/Common'),
     'PhpCsFixer\\' => array($vendorDir . '/friendsofphp/php-cs-fixer/src'),
     'Omnipay\\WechatPay\\' => array($vendorDir . '/lokielse/omnipay-wechatpay/src'),
+    'Omnipay\\PayPal\\' => array($vendorDir . '/omnipay/paypal/src'),
     'Omnipay\\Common\\' => array($vendorDir . '/omnipay/common/src/Common'),
     'Omnipay\\Alipay\\Tests\\' => array($vendorDir . '/codeages/omnipay-alipay/tests'),
     'Omnipay\\Alipay\\' => array($vendorDir . '/codeages/omnipay-alipay/src'),

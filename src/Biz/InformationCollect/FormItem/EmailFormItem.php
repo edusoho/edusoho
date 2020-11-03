@@ -18,9 +18,12 @@ class EmailFormItem extends FormItem
             'field' => self::FIELD,
             'group' => self::CONTACT_INFO_GROUP,
             'value' => $this->value,
+            'required' => $this->required,
             'validate' => [
                 ['required' => $this->required, 'message' => self::TITLE.'不能为空'],
                 ['pattern' => '^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$', 'message' => self::TITLE.'格式错误'],
+                ['min' => 4, 'message' => '最少输入4个字符'],
+                ['max' => 64, 'message' => '最多输入64个字符'],
             ],
         ];
     }

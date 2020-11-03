@@ -15,6 +15,7 @@ class AddressDetailFormItemTest extends BaseTestCase
                 "field": "address_detail",
                 "value": "德信AI产业园",
                 "group": "contact",
+                "required": true,
                 "validate": [
                     {
                         "required": true,

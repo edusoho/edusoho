@@ -160,7 +160,7 @@ class PagedCourseLesson {
         },
 
         'lessonContainerClass': function(data, context) {
-          let containerClass = 'color-gray bg-gray-lighter';
+          let containerClass = 'color-gray';
           if (context.isTask(data, context)) {
             return data.isSingleTaskLesson ? containerClass : '';
           } else if (context.isLesson(data, context)) {

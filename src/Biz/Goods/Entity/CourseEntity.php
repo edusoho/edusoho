@@ -117,6 +117,10 @@ class CourseEntity extends BaseGoodsEntity
 
     public function getVipInfo($goods, $specs, $userId)
     {
+        if (!$this->isPluginInstalled('vip')) {
+            return [null, null];
+        }
+
         $vipUser = $this->getVipService()->getMemberByUserId($userId);
         if ($vipUser) {
             $vipUser['level'] = $this->getVipLevelService()->getLevel($vipUser['levelId']);
@@ -127,6 +131,18 @@ class CourseEntity extends BaseGoodsEntity
         }
 
         return [null, $vipUser];
+    }
+
+    public function canVipFreeJoin($goods, $specs, $userId)
+    {
+        if (!$this->isPluginInstalled('vip')) {
+            return false;
+        }
+
+        $course = $this->getCourseService()->getCourse($specs['targetId']);
+        $status = $this->getVipService()->checkUserInMemberLevel($userId, $course['vipLevelId']);
+
+        return 'ok' === $status;
     }
 
     public function getSpecsTeacherIds($goods, $specs)

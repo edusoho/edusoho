@@ -11,6 +11,7 @@ use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\MemberService;
 use Biz\Goods\Service\GoodsService;
+use Biz\InformationCollect\Service\EventService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserFieldService;
 use Biz\User\Service\UserService;
@@ -28,6 +29,10 @@ class GoodCheck extends AbstractResource
     const IS_JOINED = 'is-joined';
 
     const SUCCESS = 'success';
+
+    const BEFORE_EVENT = 'before_event';
+
+    const AFTER_EVENT = 'after_event';
 
     public function add(ApiRequest $request, $id)
     {
@@ -56,9 +61,17 @@ class GoodCheck extends AbstractResource
             return ['success' => false, 'code' => self::PAYMENT_DISABLED];
         }
 
+        if ($beforeEvent = $this->needInformationCollectionBeforeJoin($goods, $goodsSpecs)) {
+            return ['success' => false, 'code' => self::BEFORE_EVENT, 'context' => $beforeEvent];
+        }
+
         $this->tryFreeJoin($goods['type'], $goodsSpecs['targetId']);
 
         if ($this->isJoined($goods['type'], $goodsSpecs['targetId'])) {
+            if ($afterEvent = $this->needInformationCollectionAfterJoin($goods, $goodsSpecs)) {
+                return ['success' => false, 'code' => self::AFTER_EVENT, 'context' => $afterEvent];
+            }
+
             return ['success' => false, 'code' => self::IS_JOINED];
         }
 
@@ -127,20 +140,74 @@ class GoodCheck extends AbstractResource
 
     protected function tryFreeJoin($type, $id)
     {
-        if ('course' == $type) {
+        if ('course' === $type) {
             $this->getCourseService()->tryFreeJoin($id);
-        } elseif ('classroom' == $type) {
+        } elseif ('classroom' === $type) {
             $this->getClassroomService()->tryFreeJoin($id);
         }
     }
 
     protected function isJoined($type, $id)
     {
-        if ('course' == $type) {
+        if ('course' === $type) {
             return $this->getCourseMemberService()->getCourseMember($id, $this->getCurrentUser()->getId());
-        } elseif ('classroom' == $type) {
+        }
+
+        if ('classroom' === $type) {
             return $this->getClassroomService()->isClassroomStudent($id, $this->getCurrentUser()->getId());
         }
+    }
+
+    protected function needInformationCollectionBeforeJoin($goods, $goodsSpecs)
+    {
+        $goodsEntity = $this->getGoodsService()->getGoodsEntityFactory()->create($goods['type']);
+        $target = $goodsEntity->getTarget($goods);
+        $canVipFreeJoin = $goodsEntity->canVipFreeJoin($goods, $goodsSpecs, $this->getCurrentUser()->getId());
+        $goodsSpecs = $this->getGoodsService()->convertSpecsPrice($goods, $goodsSpecs);
+        if ('0.00' == $goodsSpecs['displayPrice'] || $canVipFreeJoin) {
+            $location = ['targetType' => $goods['type'], 'targetId' => $target['id']];
+            $event = $this->getInformationCollectEventService()->getEventByActionAndLocation('buy_before', $location);
+            if (empty($event)) {
+                return [];
+            }
+            if ('classroom' === $goods['type']) {
+                $goto = $this->generateUrl('classroom_buy', ['id' => $goodsSpecs['targetId']]);
+            } elseif ('course' === $goods['type']) {
+                $goto = $this->generateUrl('course_buy', ['id' => $goodsSpecs['targetId']]);
+            }
+
+            $url = $this->generateUrl('information_collect_event', [
+                'eventId' => $event['id'],
+                'goto' => empty($goto) ? '' : $goto,
+            ]);
+
+            return [
+                'eventId' => $event['id'],
+                'url' => $url,
+            ];
+        }
+    }
+
+    protected function needInformationCollectionAfterJoin($goods, $goodsSpecs)
+    {
+        $goodsEntity = $this->getGoodsService()->getGoodsEntityFactory()->create($goods['type']);
+        $target = $goodsEntity->getTarget($goods);
+        $event = $this->getInformationCollectEventService()->getEventByActionAndLocation('buy_after', ['targetType' => $goods['type'], 'targetId' => $target['id']]);
+        if (empty($event)) {
+            return [];
+        }
+
+        if ('classroom' === $goods['type']) {
+            $successUrl = $this->generateUrl('classroom_courses', ['classroomId' => $target['id']]);
+        } elseif ('course' === $goods['type']) {
+            $successUrl = $this->generateUrl('my_course_show', ['id' => $goodsSpecs['targetId']]);
+        }
+        $url = $this->generateUrl('information_collect_event', [
+            'eventId' => $event['id'],
+            'goto' => empty($successUrl) ? '' : $successUrl,
+        ]);
+
+        return ['eventId' => $event['id'], 'url' => $url];
     }
 
     /**
@@ -197,5 +264,13 @@ class GoodCheck extends AbstractResource
     private function getClassroomService()
     {
         return $this->service('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return EventService
+     */
+    protected function getInformationCollectEventService()
+    {
+        return $this->service('InformationCollect:EventService');
     }
 }
