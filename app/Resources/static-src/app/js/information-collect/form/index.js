@@ -20,7 +20,7 @@ let validator = $form.validate({
         },
         'email': {
             check_email: true,
-            minlength: 4,
+            minlength: 6,
             maxlength: 64,
         },
         'wechat': {
@@ -106,7 +106,7 @@ $.validator.addMethod('check_weibo', function (value, element) {
 }, Translator.trans('information_collect.form.check_format_invalid'));
 
 $.validator.addMethod('check_email', function (value, element) {
-    return this.optional(element) || /^[a-zA-Z0-9]+([._\\-]*[a-zA-Z0-9])*@([a-zA-Z0-9]+[-a-zA-Z0-9]*[a-zA-Z0-9]+.){1,63}[a-zA-Z0-9]+$/.test(value);
+    return this.optional(element) || /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(value);
 }, Translator.trans('information_collect.form.check_format_invalid'));
 
 if ($('input[name="province_city_area"]').length) {
