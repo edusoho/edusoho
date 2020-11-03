@@ -101,7 +101,6 @@ export default {
         targetType = 'goods';
         targetId = this.details.goodsId;
       }
-      console.log(targetId, targetType);
       const data = {
         targetType,
         targetId,
