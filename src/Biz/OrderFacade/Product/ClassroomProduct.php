@@ -61,7 +61,11 @@ class ClassroomProduct extends BaseGoodsProduct implements OrderStatusCallback
         $this->successUrl = $this->getSuccessUrl();
 
         $this->title = $goodsSpecs['title'];
-        $this->cover = empty($goodsSpecs['images']) ? $goods['images'] : $goodsSpecs['images'];
+        $this->cover = [
+            'small' => $classroom['smallPicture'],
+            'middle' => $classroom['middlePicture'],
+            'large' => $classroom['largePicture'],
+        ];
 
         //改造之前是班级发布才能购买。现在是商品和规格都发布才是可购买
         $this->productEnable = 'published' === $goods['status'] && 'published' === $goodsSpecs['status'];
