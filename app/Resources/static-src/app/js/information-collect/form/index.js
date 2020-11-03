@@ -152,6 +152,7 @@ function initDatePicker($target) {
         autoclose: true,
         datepicker: true,
         timepicker: false,
+        startDate: new Date('1900-01-01'),
         endDate: new Date()
     });
 }
