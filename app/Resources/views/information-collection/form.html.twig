@@ -12,7 +12,7 @@
 			</div>
 			<div class="controls col-md-8 controls">
 				{% set template = "information-collection/components/"~item.type~"-type.html.twig" %}
-				{% include template  with {name: item.field, value: item.value ,required: item.required, options: item.options|default([])} %}
+				{% include template  with {name: item.field, value: item.value ,required: item.required, props: item.props|default([]), options: item.options|default([])} %}
 			</div>
 		</div>
 	{% endfor %}

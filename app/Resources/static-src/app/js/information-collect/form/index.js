@@ -106,7 +106,7 @@ $.validator.addMethod('check_weibo', function (value, element) {
 }, Translator.trans('information_collect.form.check_format_invalid'));
 
 $.validator.addMethod('check_email', function (value, element) {
-    return this.optional(element) || /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/.test(value);
+    return this.optional(element) || /^[a-zA-Z0-9]+([._\\-]*[a-zA-Z0-9])*@([a-zA-Z0-9]+[-a-zA-Z0-9]*[a-zA-Z0-9]+.){1,63}[a-zA-Z0-9]+$/.test(value);
 }, Translator.trans('information_collect.form.check_format_invalid'));
 
 if ($('input[name="province_city_area"]').length) {
@@ -152,7 +152,8 @@ function initDatePicker($target) {
         autoclose: true,
         datepicker: true,
         timepicker: false,
-        endDate: new Date(Date.now() + 86400 * 365 * 10 * 1000),
+        startDate: new Date('1900-01-01'),
+        endDate: new Date()
     });
 }
 
@@ -234,12 +235,11 @@ $('.js-btn-save').on('click', (event) => {
     });
 });
 
-$("#skip").click(function(){
+$("#skip").click(function () {
     submitAfter();
 });
 
-function submitAfter()
-{   
+function submitAfter() {
     if ('1' == $('input[name="in_order"]').val()) {
         $('input[name="informationCollectIsSubmited"]').val('1');
         $('.order-center-information-collect-content').removeClass('error');
