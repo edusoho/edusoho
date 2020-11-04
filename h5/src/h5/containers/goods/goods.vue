@@ -319,7 +319,7 @@ export default {
       })
         .then(res => {
           if (res.id) {
-            this.$router.push({
+            this.$router.replace({
               path: `/course/${targetId}`,
             });
           } else {
@@ -337,7 +337,7 @@ export default {
       })
         .then(res => {
           if (res.id) {
-            this.$router.push({
+            this.$router.replace({
               path: `/classroom/${targetId}`,
             });
           } else {
