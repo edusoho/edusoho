@@ -24,7 +24,7 @@
           rows="2"
           autosize
           type="textarea"
-          maxlength="100"
+          maxlength="500"
           placeholder="请输入评价"
           show-word-limit
         />
@@ -71,7 +71,7 @@ export default {
   name: 'Reviews',
   data() {
     return {
-      value: 5,
+      value: 0,
       message: '',
       reviews: null,
     };
@@ -93,6 +93,14 @@ export default {
   },
   methods: {
     onSubmit() {
+      if (this.value == 0) {
+        this.$toast('评分不能为空~');
+        return;
+      }
+      if (!this.message.trim()) {
+        this.$toast('评价内容不能为空~');
+        return;
+      }
       let targetId, targetType;
       if (Number(this.details.parentId)) {
         targetType = 'course';
