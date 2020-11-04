@@ -164,7 +164,7 @@ class GoodCheck extends AbstractResource
         $target = $goodsEntity->getTarget($goods);
         $canVipFreeJoin = $goodsEntity->canVipFreeJoin($goods, $goodsSpecs, $this->getCurrentUser()->getId());
         $goodsSpecs = $this->getGoodsService()->convertSpecsPrice($goods, $goodsSpecs);
-        if ('0.00' == $goodsSpecs['displayPrice'] || $canVipFreeJoin) {
+        if ('0.00' == $goodsSpecs['price'] || $canVipFreeJoin) {
             $location = ['targetType' => $goods['type'], 'targetId' => $target['id']];
             $event = $this->getInformationCollectEventService()->getEventByActionAndLocation('buy_before', $location);
             if (empty($event)) {
