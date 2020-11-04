@@ -30,6 +30,46 @@ class CourseProductServiceTest extends BaseTestCase
             ]
         );
 
+        $this->biz['s2b2c.sync_activity_type.cloud_testpaper'] = $this->mockBiz(
+            'CloudItemBank.cloud_testpaperActivity',
+            [
+                [
+                    'functionName' => 'sync',
+                    'returnValue' => ['id' => 1],
+                ],
+                [
+                    'functionName' => 'updateToLastedVersion',
+                    'returnValue' => ['id' => 1],
+                ],
+            ]
+        );
+        $this->biz['s2b2c.sync_activity_type.cloud_homework'] = $this->mockBiz(
+            'CloudItemBank.cloud_homeworkActivity',
+            [
+                [
+                    'functionName' => 'sync',
+                    'returnValue' => ['id' => 2],
+                ],
+                [
+                    'functionName' => 'updateToLastedVersion',
+                    'returnValue' => ['id' => 2],
+                ],
+            ]
+        );
+        $this->biz['s2b2c.sync_activity_type.cloud_exercise'] = $this->mockBiz(
+            'CloudItemBank.cloud_exerciseActivity',
+            [
+                [
+                    'functionName' => 'sync',
+                    'returnValue' => ['id' => 3],
+                ],
+                [
+                    'functionName' => 'updateToLastedVersion',
+                    'returnValue' => ['id' => 3],
+                ],
+            ]
+        );
+
         $this->biz->offsetUnset('s2b2c.config');
         $this->biz->offsetSet('s2b2c.config', [
             'enabled' => true,
@@ -114,6 +154,46 @@ class CourseProductServiceTest extends BaseTestCase
                     'functionName' => 'getDistributeContent',
                     'returnValue' => json_decode(file_get_contents($courseProductDetailJsonFile), true),
                     'withParams' => [81],
+                ],
+            ]
+        );
+
+        $this->biz['s2b2c.sync_activity_type.cloud_testpaper'] = $this->mockBiz(
+            'CloudItemBank.cloud_testpaperActivity',
+            [
+                [
+                    'functionName' => 'sync',
+                    'returnValue' => ['id' => 1],
+                ],
+                [
+                    'functionName' => 'updateToLastedVersion',
+                    'returnValue' => ['id' => 1],
+                ],
+            ]
+        );
+        $this->biz['s2b2c.sync_activity_type.cloud_homework'] = $this->mockBiz(
+            'CloudItemBank.cloud_homeworkActivity',
+            [
+                [
+                    'functionName' => 'sync',
+                    'returnValue' => ['id' => 2],
+                ],
+                [
+                    'functionName' => 'updateToLastedVersion',
+                    'returnValue' => ['id' => 2],
+                ],
+            ]
+        );
+        $this->biz['s2b2c.sync_activity_type.cloud_exercise'] = $this->mockBiz(
+            'CloudItemBank.cloud_exerciseActivity',
+            [
+                [
+                    'functionName' => 'sync',
+                    'returnValue' => ['id' => 3],
+                ],
+                [
+                    'functionName' => 'updateToLastedVersion',
+                    'returnValue' => ['id' => 3],
                 ],
             ]
         );
