@@ -29,15 +29,10 @@ import {
   MenuItem,
   MenuItemGroup,
   Carousel,
-  CarouselItem
+  CarouselItem,
 } from 'element-ui';
 
-import {
-  Swipe,
-  SwipeItem,
-  Lazyload,
-  Search
-} from 'vant';
+import { Swipe, SwipeItem, Lazyload, Search } from 'vant';
 
 import router from './router';
 import store from './store';
@@ -75,7 +70,6 @@ Vue.use(MenuItemGroup);
 Vue.use(Carousel);
 Vue.use(CarouselItem);
 
-
 Vue.prototype.$message = Message;
 Vue.prototype.$confirm = MessageBox.confirm;
 
@@ -85,5 +79,5 @@ Vue.config.productionTip = false;
 new Vue({
   router,
   store,
-  render: h => h(App)
+  render: h => h(App),
 }).$mount('#app');

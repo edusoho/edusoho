@@ -239,7 +239,6 @@ export default {
       };
       if (!this.isAllClass) this.requestClasses(args);
     },
-
     bankSendRequest() {
       const args = {
         offset: this.offset_bank,

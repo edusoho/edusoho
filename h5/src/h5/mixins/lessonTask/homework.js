@@ -1,4 +1,3 @@
-
 import { Dialog } from 'vant';
 /**
  * 异常离开或者页面刷新作业监控，用户可选直接提交和继续做题
@@ -28,15 +27,16 @@ export default {
             title: '提示',
             cancelButtonText: '放弃做题',
             confirmButtonText: '继续做题',
-            message: '您有未完成的作业，是否继续？'
-          }).then(() => {
-            resolve();
+            message: '您有未完成的作业，是否继续？',
           })
+            .then(() => {
+              resolve();
+            })
             .catch(() => {
               reject({ answer });
             });
         }
       });
-    }
-  }
+    },
+  },
 };

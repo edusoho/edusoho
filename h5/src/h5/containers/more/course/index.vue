@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ 'more__still': selecting }" class="more">
+  <div :class="{ more__still: selecting }" class="more">
     <treeSelect
       :select-items="selectItems"
       v-model="selectedData"
@@ -15,24 +15,29 @@
       :type-list="'course_list'"
       @needRequest="sendRequest"
     />
-    <emptyCourse v-if="isEmptyCourse && isRequestCompile" :has-button="false" :type="'course_list'" text="暂无课程"/>
+    <emptyCourse
+      v-if="isEmptyCourse && isRequestCompile"
+      :has-button="false"
+      :type="'course_list'"
+      text="暂无课程"
+    />
   </div>
 </template>
 
 <script>
-import Api from '@/api'
-import treeSelect from '&/components/e-tree-select/e-tree-select.vue'
-import lazyLoading from '&/components/e-lazy-loading/e-lazy-loading.vue'
-import emptyCourse from '../../learning/emptyCourse/emptyCourse.vue'
-import { mapState, mapActions } from 'vuex'
-import * as types from '@/store/mutation-types'
-import CATEGORY_DEFAULT from '@/config/category-default-config.js'
+import Api from '@/api';
+import treeSelect from '&/components/e-tree-select/e-tree-select.vue';
+import lazyLoading from '&/components/e-lazy-loading/e-lazy-loading.vue';
+import emptyCourse from '../../learning/emptyCourse/emptyCourse.vue';
+import { mapState, mapActions } from 'vuex';
+import * as types from '@/store/mutation-types';
+import CATEGORY_DEFAULT from '@/config/category-default-config.js';
 
 export default {
   components: {
     treeSelect,
     lazyLoading,
-    emptyCourse
+    emptyCourse,
   },
   data() {
     return {
@@ -52,14 +57,14 @@ export default {
       queryForm: {
         courseType: 'type',
         category: 'categoryId',
-        sort: 'sort'
+        sort: 'sort',
       },
-      dataDefault: CATEGORY_DEFAULT['course_list']
-    }
+      dataDefault: CATEGORY_DEFAULT.course_list,
+    };
   },
   computed: {
     ...mapState({
-      searchCourseList: state => state.course.searchCourseList
+      searchCourseList: state => state.course.searchCourseList,
     }),
   },
   watch: {
@@ -73,50 +78,47 @@ export default {
         return;
       }
 
-      this.initCourseList()
+      this.initCourseList();
       const setting = {
         offset: this.offset,
-        limit: this.limit
-      }
-      this.requestCourses(setting)
-    }
+        limit: this.limit,
+      };
+      this.requestCourses(setting);
+    },
   },
   created() {
     window.scroll(0, 0);
-    this.selectedData = this.transform(this.$route.query)
+    this.selectedData = this.transform(this.$route.query);
     // 合并参数
     const config = Object.assign({}, this.selectedData, {
       offset: this.offset,
-      limit: this.limit
-    })
+      limit: this.limit,
+    });
 
     // 获取班级分类数据
-    Api.getCourseCategories()
-      .then((data) => {
-        data.unshift({
-          name: '全部',
-          id: '0'
-        })
-        this.dataDefault[0].data = data
-        this.selectItems = this.dataDefault
-      })
+    Api.getCourseCategories().then(data => {
+      data.unshift({
+        name: '全部',
+        id: '0',
+      });
+      this.dataDefault[0].data = data;
+      this.selectItems = this.dataDefault;
+    });
   },
   methods: {
-    ...mapActions('course', [
-      'setCourseList',
-    ]),
+    ...mapActions('course', ['setCourseList']),
     setQuery(value) {
       this.$router.replace({
         name: 'more_course',
         query: value,
-      })
+      });
     },
 
     initCourseList() {
-      this.isRequestCompile = false
-      this.isAllCourse = false
-      this.courseList = []
-      this.offset = 0
+      this.isRequestCompile = false;
+      this.isAllCourse = false;
+      this.courseList = [];
+      this.offset = 0;
     },
 
     judegIsAllCourse(paging) {
@@ -124,52 +126,57 @@ export default {
     },
 
     requestCourses(setting) {
-      this.isRequestCompile = false
-      const config = Object.assign({}, this.selectedData, setting)
+      this.isRequestCompile = false;
+      const config = Object.assign({}, this.selectedData, setting);
       return Api.getCourseList({
-        params: config
-      }).then(({ data, paging }) => {
-        data.forEach(element => {
-          this.courseList.push(element);
-        });
-        this.setCourseList({
-          selectedData: this.selectedData,
-          courseList: this.courseList,
-          paging,
-        });
-        this.requestCoursesSuccess(paging);
-      }).catch((err) => {
-        console.log(err, 'error')
+        params: config,
       })
+        .then(({ data, paging }) => {
+          data.forEach(element => {
+            this.courseList.push(element);
+          });
+          this.setCourseList({
+            selectedData: this.selectedData,
+            courseList: this.courseList,
+            paging,
+          });
+          this.requestCoursesSuccess(paging);
+        })
+        .catch(err => {
+          console.log(err, 'error');
+        });
     },
 
     requestCoursesSuccess(paging = {}) {
-      this.isAllCourse = this.judegIsAllCourse(paging)
+      this.isAllCourse = this.judegIsAllCourse(paging);
       if (!this.isAllCourse) {
-        this.offset = this.courseList.length
+        this.offset = this.courseList.length;
       }
-      this.isRequestCompile = true
-      this.isEmptyCourse = this.courseList.length === 0
+      this.isRequestCompile = true;
+      this.isEmptyCourse = this.courseList.length === 0;
     },
 
     sendRequest() {
       const args = {
         offset: this.offset,
-        limit: this.limit
-      }
+        limit: this.limit,
+      };
 
-      if (!this.isAllCourse) this.requestCourses(args)
+      if (!this.isAllCourse) this.requestCourses(args);
     },
 
     transform(obj = {}) {
-      return Object.assign({
-        categoryId: this.categoryId,
-        type: this.type,
-        sort: this.sort
-      }, obj);
+      return Object.assign(
+        {
+          categoryId: this.categoryId,
+          type: this.type,
+          sort: this.sort,
+        },
+        obj,
+      );
     },
     toggleHandler(value) {
-      this.selecting = value
+      this.selecting = value;
     },
     isSelectedDataSame(selectedData) {
       for (const key in this.selectedData) {
@@ -179,7 +186,7 @@ export default {
       }
 
       return true;
-    }
-  }
-}
+    },
+  },
+};
 </script>

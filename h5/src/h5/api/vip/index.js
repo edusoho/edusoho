@@ -2,19 +2,22 @@ export default [
   {
     name: 'getVipDetail',
     url: '/plugins/vip/pages/h5/vips/{levelId}',
-    method: 'GET'
-  }, {
+    method: 'GET',
+  },
+  {
     name: 'getVipCourses',
     url: '/plugins/vip/vip_courses?sort=-price',
-    method: 'GET'
-  }, {
+    method: 'GET',
+  },
+  {
     name: 'getVipClasses',
     url: '/plugins/vip/vip_classrooms?sort=-price',
-    method: 'GET'
-  }, {
+    method: 'GET',
+  },
+  {
     name: 'getVipLevels',
     url: '/plugins/vip/vip_levels',
     method: 'GET',
-    disableLoading: true
-  }
+    disableLoading: true,
+  },
 ];

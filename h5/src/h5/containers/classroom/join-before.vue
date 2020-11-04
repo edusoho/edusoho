@@ -176,7 +176,7 @@ export default {
       tabsClass: '',
       loadMoreAbout: false,
       disableMask: false,
-      learnExpiry: '永久有效',
+      learnExpiry: '长期有效',
       unreceivedCoupons: [],
       miniCoupons: [],
       marketingActivities: {

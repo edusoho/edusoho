@@ -1,4 +1,5 @@
 import { mapState } from 'vuex';
+import Api from '@/api';
 
 export default {
   props: {
@@ -112,23 +113,59 @@ export default {
     },
     toMore(hasCertificate, type, id) {
       let path = '';
+      let params = {
+        hasCertificate,
+      };
       switch (type) {
         case 'course_list':
-          path = `/course/${id}`;
+          Api.meCourseMember({
+            query: {
+              id: this.course.id,
+            },
+          })
+            .then(res => {
+              if (res.id) {
+                path = `/course/${this.course.id}`;
+              } else {
+                path = `/goods/${this.course.goodsId}/show`;
+                params = Object.assign(params, {
+                  targetId: id,
+                });
+              }
+              this.$router.push({ path: path, query: params });
+            })
+            .catch(() => {
+              path = `/goods/${this.course.goodsId}/show`;
+              params = Object.assign(params, {
+                targetId: id,
+              });
+              this.$router.push({ path: path, query: params });
+            });
           break;
         case 'item_bank_exercise':
           path = `/item_bank_exercise/${id}`;
+          this.$router.push({ path: path, query: params });
           break;
         case 'classroom_list':
-          path = `/classroom/${id}`;
+          Api.meClassroomMember({
+            query: {
+              id: this.course.id,
+            },
+          })
+            .then(res => {
+              if (res.id) {
+                path = `/classroom/${this.course.id}`;
+              } else {
+                path = `/goods/${this.course.goodsId}/show`;
+              }
+              this.$router.push({ path: path, query: params });
+            })
+            .catch(() => {
+              path = `/goods/${this.course.goodsId}/show`;
+              this.$router.push({ path: path, query: params });
+            });
           break;
       }
-      this.$router.push({
-        path: path,
-        query: {
-          hasCertificate,
-        },
-      });
     },
     // 调用app接口
     postMessage(type, id) {
@@ -137,7 +174,11 @@ export default {
       switch (type) {
         case 'course_list':
           action = 'kuozhi_course';
-          data = { courseId: id };
+          data = {
+            courseId: id,
+            goodsId: this.course.goodsId,
+            specsId: this.course.specsId,
+          };
           break;
         case 'item_bank_exercise':
           action = 'kuozhi_itembank';
@@ -145,7 +186,11 @@ export default {
           break;
         case 'classroom_list':
           action = 'kuozhi_classroom';
-          data = { classroomId: id };
+          data = {
+            classroomId: id,
+            goodsId: this.course.goodsId,
+            specsId: this.course.specsId,
+          };
           break;
       }
       // 调用app接口

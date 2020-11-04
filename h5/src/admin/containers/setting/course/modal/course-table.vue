@@ -2,30 +2,43 @@
   <div class="course-table">
     <div class="course-table__th">
       <!-- 遍历表头数据 -->
-      <span class="course-table__td"
+      <span
+        class="course-table__td"
         v-for="(item, index) in head[type]"
         :class="tdClass(item.col)"
-        :key="index">{{ item.title }}</span>
+        :key="index"
+        >{{ item.title }}</span
+      >
     </div>
 
     <draggable v-model="courseSets">
-      <div class="course-table__tr" v-for="(course, courseIndex) in courseSets" :key="courseIndex">
+      <div
+        class="course-table__tr"
+        v-for="(course, courseIndex) in courseSets"
+        :key="courseIndex"
+      >
         <div class="tr-content">
           <!-- 遍历表格内数据 -->
           <template v-for="(item, index) in head[type]">
-            <span class="course-table__td text-overflow course-table__td-space"
+            <span
+              class="course-table__td text-overflow course-table__td-space"
               v-if="index !== 0"
-              :class="[ tdClass(item.col), { 'delete': item.label === 'delete' }]"
-              @click="deleteItem(item.label === 'delete', courseIndex)">
-              {{ course | tableFilter(item.label, item.subProperty)}}</span>
+              :class="[tdClass(item.col), { delete: item.label === 'delete' }]"
+              @click="deleteItem(item.label === 'delete', courseIndex)"
+            >
+              {{ course | tableFilter(item.label, item.subProperty) }}</span
+            >
             <el-tooltip
               v-if="index === 0"
               :disabled="course[item.label].length <= 20"
               :class="['text-content', `td-col-${item.col}`]"
               placement="top-start"
-              effect="dark">
+              effect="dark"
+            >
               <span slot="content">{{ course | tableFilter(item.label) }}</span>
-              <span class="course-table__td text-overflow">{{ course | tableFilter(item.label) }}</span>
+              <span class="course-table__td text-overflow">{{
+                course | tableFilter(item.label)
+              }}</span>
             </el-tooltip>
           </template>
         </div>
@@ -53,13 +66,13 @@ export default {
     },
     type: {
       type: String,
-      default: 'course_list'
-    }
+      default: 'course_list',
+    },
   },
-  data () {
+  data() {
     return {
       head,
-    }
+    };
   },
   computed: {
     courseSets: {
@@ -68,15 +81,15 @@ export default {
       },
       set(courses) {
         this.$emit('updateCourses', courses);
-      }
-    }
+      },
+    },
   },
   filters: {
-    tableFilter
+    tableFilter,
   },
   methods: {
     tdClass(ratio) {
-      return `td-col-${ratio}`
+      return `td-col-${ratio}`;
     },
     deleteItem(isDeleteBtn, index) {
       if (!isDeleteBtn) {
@@ -84,8 +97,7 @@ export default {
       }
       this.courseSets.splice(index, 1);
       this.courseSets = this.courseSets; // 触发 courseSets 的 set 事件，向父组件抛出事件
-    }
-  }
-}
+    },
+  },
+};
 </script>
-

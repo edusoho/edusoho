@@ -6,12 +6,15 @@ export const updateLoading = ({ commit }, { isLoading }) => {
 };
 
 export const userLogin = ({ commit }, { username, password }) => {
-  localStorage.setItem('Authorization', btoa(unescape(encodeURIComponent(`${username}:${password}`))));
+  localStorage.setItem(
+    'Authorization',
+    btoa(unescape(encodeURIComponent(`${username}:${password}`))),
+  );
 
   return Api.login({
     headers: {
-      Authorization: `Basic ${localStorage.getItem('Authorization')}`
-    }
+      Authorization: `Basic ${localStorage.getItem('Authorization')}`,
+    },
   }).then(res => {
     commit(types.USER_LOGIN, res);
     return res;
@@ -19,13 +22,13 @@ export const userLogin = ({ commit }, { username, password }) => {
 };
 
 // 短信快捷登录
-export const fastLogin = ({ commit }, data) => Api.fastlogin({ data })
-  .then(res => {
+export const fastLogin = ({ commit }, data) =>
+  Api.fastlogin({ data }).then(res => {
     commit(types.USER_LOGIN, res);
   });
 
-export const getUserInfo = ({ commit }) => Api.getUserInfo({})
-  .then(res => {
+export const getUserInfo = ({ commit }) =>
+  Api.getUserInfo({}).then(res => {
     commit(types.USER_INFO, res);
     return res;
   });
@@ -33,84 +36,96 @@ export const getUserInfo = ({ commit }) => Api.getUserInfo({})
 export const addUser = ({ commit }, data) =>
   new Promise((resolve, reject) => {
     Api.addUser({
-      data
-    }).then(res => {
-      commit(types.ADD_USER, res);
-      resolve(res);
-      return res;
-    }).catch(err => reject(err));
+      data,
+    })
+      .then(res => {
+        commit(types.ADD_USER, res);
+        resolve(res);
+        return res;
+      })
+      .catch(err => reject(err));
   });
 
 export const setMobile = ({ commit }, { query, data }) =>
   new Promise((resolve, reject) => {
-    Api.setMobile({ query, data }).then(res => {
-      commit(types.BIND_MOBILE, res);
-      resolve(res);
-      return res;
-    }).catch(err => reject(err));
+    Api.setMobile({ query, data })
+      .then(res => {
+        commit(types.BIND_MOBILE, res);
+        resolve(res);
+        return res;
+      })
+      .catch(err => reject(err));
   });
 
 export const sendSmsSend = ({ commit }, data) =>
   new Promise((resolve, reject) => {
     Api.getSmsSend({
-      data
-    }).then(res => {
-      commit(types.SMS_SEND);
-      resolve(res);
-      return res;
-    }).catch(err => reject(err));
+      data,
+    })
+      .then(res => {
+        commit(types.SMS_SEND);
+        resolve(res);
+        return res;
+      })
+      .catch(err => reject(err));
   });
 
 export const sendSmsCenter = ({ commit }, data) =>
   new Promise((resolve, reject) => {
     Api.getSmsCenter({
-      data
-    }).then(res => {
-      commit(types.SMS_CENTER);
-      resolve(res);
-      return res;
-    }).catch(err => reject(err));
+      data,
+    })
+      .then(res => {
+        commit(types.SMS_CENTER);
+        resolve(res);
+        return res;
+      })
+      .catch(err => reject(err));
   });
 
 export const setNickname = ({ commit }, { nickname }) =>
   new Promise((resolve, reject) => {
     Api.setNickname({
       data: {
-        nickname
-      }
-    }).then(res => {
-      commit(types.SET_AVATAR, res);
-      resolve(res);
-      return res;
-    }).catch(err => reject(err));
+        nickname,
+      },
+    })
+      .then(res => {
+        commit(types.SET_AVATAR, res);
+        resolve(res);
+        return res;
+      })
+      .catch(err => reject(err));
   });
 
 export const setAvatar = ({ commit }, { avatarId }) =>
   new Promise((resolve, reject) => {
     Api.setAvatar({
       data: {
-        avatarId
-      }
-    }).then(res => {
-      commit(types.SET_NICKNAME, res);
-      resolve(res);
-      return res;
-    }).catch(err => reject(err));
+        avatarId,
+      },
+    })
+      .then(res => {
+        commit(types.SET_NICKNAME, res);
+        resolve(res);
+        return res;
+      })
+      .catch(err => reject(err));
   });
 
 // 全局设置
 export const getGlobalSettings = ({ commit }, { type, key }) =>
   Api.getSettings({
     query: {
-      type
-    }
+      type,
+    },
   }).then(res => {
     if (type === 'site') {
       document.title = res.name;
     }
     commit(types.GET_SETTINGS, {
       key,
-      setting: res || {}
+      setting: res || {},
     });
     return res;
   });
@@ -139,26 +154,31 @@ export const setWeChatSwitch = ({ commit }, isOn) =>
       resolve(isOn);
       return isOn;
     }
-    return Api.weChatNotifyState().then(res => {
-      const isWeChatBind = !!(res && res.subscribe);
-      commit(types.GET_SETTINGS, { key: 'wechatSwitch', setting: !isWeChatBind });
-      resolve(isWeChatBind);
-      return isWeChatBind;
-    }).catch(error => {
-      console.log(error.message);
-    });
+    return Api.weChatNotifyState()
+      .then(res => {
+        const isWeChatBind = !!(res && res.subscribe);
+        commit(types.GET_SETTINGS, {
+          key: 'wechatSwitch',
+          setting: !isWeChatBind,
+        });
+        resolve(isWeChatBind);
+        return isWeChatBind;
+      })
+      .catch(error => {
+        console.log(error.message);
+      });
   });
 
 // 全局优惠券显示开关
-export const setCouponSwitch = ({ commit }) => Api.getCouponSetting({})
-  .then(res => {
+export const setCouponSwitch = ({ commit }) =>
+  Api.getCouponSetting({}).then(res => {
     const couponSwitch = parseInt(res.enabled, 10);
     commit(types.COUPON_SWITCH, couponSwitch);
     return couponSwitch;
   });
 
 // 全局分销插件开关
-export const setDrpSwitch = ({ commit }) => Api.hasDrpPluginInstalled({})
-  .then(res => {
+export const setDrpSwitch = ({ commit }) =>
+  Api.hasDrpPluginInstalled({}).then(res => {
     commit(types.GET_SETTINGS, { key: 'DrpSwitch', setting: res.Drp });
   });

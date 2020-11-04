@@ -10,41 +10,55 @@ const routes = [
     path: '/',
     name: 'h5Setting',
     meta: {
-      title: 'h5后台配置'
+      title: 'h5后台配置',
     },
-    component: () => import(/* webpackChunkName: "setting" */'admin/containers/setting/h5-home.vue')
+    component: () =>
+      import(
+        /* webpackChunkName: "setting" */ 'admin/containers/setting/h5-home.vue'
+      ),
   },
   {
     path: '/preview',
     name: 'preview',
     meta: {
-      title: '发现页预览'
+      title: '发现页预览',
     },
-    component: () => import(/* webpackChunkName: "preview" */'admin/containers/preview/index.vue')
+    component: () =>
+      import(
+        /* webpackChunkName: "preview" */ 'admin/containers/preview/index.vue'
+      ),
   },
   {
     path: '/miniprogram',
     name: 'miniprogramSetting',
     meta: {
-      title: '小程序后台配置'
+      title: '小程序后台配置',
     },
-    component: () => import(/* webpackChunkName: "miniprogramSetting" */'admin/containers/setting/index.vue')
+    component: () =>
+      import(
+        /* webpackChunkName: "miniprogramSetting" */ 'admin/containers/setting/index.vue'
+      ),
   },
   {
     path: '/app',
     name: 'appSetting',
     meta: {
-      title: 'app后台配置'
+      title: 'app后台配置',
     },
-    component: () => import(/* webpackChunkName: "appSetting" */'admin/containers/setting/index.vue')
-  }
+    component: () =>
+      import(
+        /* webpackChunkName: "appSetting" */ 'admin/containers/setting/index.vue'
+      ),
+  },
 ];
 
 const env = process.env.NODE_ENV;
 console.log('process.env', env);
 // csrfToken 赋值
 if (!store.state.csrfToken && env === 'production') {
-  const csrfTag = window.parent.document.getElementsByTagName('meta')['csrf-token'];
+  const csrfTag = window.parent.document.getElementsByTagName('meta')[
+    'csrf-token'
+  ];
   if (csrfTag && csrfTag.content) {
     store.commit(types.GET_CSRF_TOKEN, csrfTag.content);
   } else {
@@ -53,7 +67,7 @@ if (!store.state.csrfToken && env === 'production') {
 }
 
 const router = new Router({
-  routes
+  routes,
 });
 
 router.beforeEach((to, from, next) => {
@@ -62,25 +76,34 @@ router.beforeEach((to, from, next) => {
     Promise.all([
       store.dispatch('setVipSetupStatus'),
       store.dispatch('getGlobalSettings', { type: 'vip', key: 'vipSettings' }),
-      store.dispatch('getGlobalSettings', { type: 'course', key: 'courseSettings' }),
+      store.dispatch('getGlobalSettings', {
+        type: 'course',
+        key: 'courseSettings',
+      }),
       store.dispatch('getGlobalSettings', { type: 'site', key: 'settings' }),
-      store.dispatch('getGlobalSettings', { type: 'classroom', key: 'classroomSettings' })
-    ]).then(([vipPlugin, vipRes]) => {
-      console.log(vipPlugin, 8888);
-      return vipRes;
-    }).then(vipRes => {
-      if (vipRes && vipRes.h5Enabled && vipRes.enabled) {
-        store.dispatch('setVipLevels').then(() => next());
-      } else {
+      store.dispatch('getGlobalSettings', {
+        type: 'classroom',
+        key: 'classroomSettings',
+      }),
+    ])
+      .then(([vipPlugin, vipRes]) => {
+        console.log(vipPlugin, 8888);
+        return vipRes;
+      })
+      .then(vipRes => {
+        if (vipRes && vipRes.h5Enabled && vipRes.enabled) {
+          store.dispatch('setVipLevels').then(() => next());
+        } else {
+          next();
+        }
+      })
+      .catch(err => {
+        Vue.prototype.$message({
+          message: err.message,
+          type: 'error',
+        });
         next();
-      }
-    }).catch(err => {
-      Vue.prototype.$message({
-        message: err.message,
-        type: 'error'
       });
-      next();
-    });
   } else {
     next();
   }

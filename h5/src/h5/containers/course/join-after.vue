@@ -40,18 +40,9 @@
 
         <!-- 教师介绍 -->
         <teacher :teacher-info="details.teachers" class="teacher" />
-      </div>
-
-      <!-- 学员评价 -->
-      <div v-show="active == 2">
-        <review-list
-          ref="review"
-          :target-id="details.courseSet.id"
-          :reviews="courseSettings.show_review == 1 ? details.reviews : []"
-          title="学员评价"
-          defaul-value="暂无评价"
-          type="course"
-        />
+        <div class="segmentation" />
+        <div class="segmentation" />
+        <div class="segmentation" />
       </div>
     </div>
 
@@ -70,10 +61,15 @@
         @submitForm="onCancelForm"
       ></info-collection>
     </van-action-sheet>
+    <e-footer
+      @click.native="gotoGoodsPage"
+      v-if="active == 0 && this.details.goodsId"
+    >
+      去商品页
+    </e-footer>
   </div>
 </template>
 <script>
-import reviewList from '@/containers/classroom/review-list';
 import Directory from './detail/directory';
 import DetailHead from './detail/head';
 import DetailPlan from './detail/plan';
@@ -99,7 +95,7 @@ export default {
       headBottom: 0,
       active: 1,
       scrollFlag: false,
-      tabs: ['课程介绍', '课程目录', '学员评价'],
+      tabs: ['课程介绍', '课程目录'],
       tabFixed: false,
       errorMsg: '',
       offsetTop: '', // tab页距离顶部高度
@@ -193,7 +189,6 @@ export default {
     DetailHead,
     DetailPlan,
     Teacher,
-    reviewList,
     afterjoinDirectory,
     infoCollection,
   },
@@ -205,6 +200,14 @@ export default {
     ...mapMutations('course', {
       setCurrentJoin: types.SET_CURRENT_JOIN_COURSE,
     }),
+    gotoGoodsPage() {
+      this.$router.push({
+        path: `/goods/${this.details.goodsId}/show`,
+        query: {
+          targetId: this.details.id,
+        },
+      });
+    },
     showDialog() {
       if (!this.details.member) return;
 

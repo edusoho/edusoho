@@ -1,11 +1,11 @@
 <template>
   <div class="loading">
     <div :class="classList" :style="sizeStyle" class="es-loading">
-      <span class="spot"/>
-      <span class="spot"/>
-      <span class="spot"/>
+      <span class="spot" />
+      <span class="spot" />
+      <span class="spot" />
     </div>
-    <div class="loading-mask" @touchstart="stopMove"/>
+    <div class="loading-mask" @touchstart="stopMove" />
   </div>
 </template>
 
@@ -14,45 +14,45 @@ export default {
   props: {
     type: {
       type: String,
-      default: 'default'
+      default: 'default',
     },
     color: {
       type: String,
-      default: 'primary'
+      default: 'primary',
     },
     size: {
       type: String,
-      default: '56px'
-    }
+      default: '56px',
+    },
   },
   data() {
     return {
       colorList: ['primary'],
-      typeList: ['default']
-    }
+      typeList: ['default'],
+    };
   },
   computed: {
     classList() {
-      let list = ''
-      const colorExists = this.colorList.includes(this.color)
-      const typeExists = this.typeList.includes(this.type)
+      let list = '';
+      const colorExists = this.colorList.includes(this.color);
+      const typeExists = this.typeList.includes(this.type);
 
-      list = colorExists ? list += ` ${this.color}` : list
-      list = typeExists ? list += ` ${this.type}` : list
+      list = colorExists ? (list += ` ${this.color}`) : list;
+      list = typeExists ? (list += ` ${this.type}`) : list;
 
-      return list
+      return list;
     },
     sizeStyle() {
       return {
         width: this.size,
-        height: this.size
-      }
-    }
+        height: this.size,
+      };
+    },
   },
   methods: {
     stopMove(e) {
-      e.preventDefault()
-    }
-  }
-}
+      e.preventDefault();
+    },
+  },
+};
 </script>

@@ -10,7 +10,9 @@ class Event {
     if (!callback) {
       throw new Error('event listener need a callback!');
     }
-    this.eventBus[event] = this.eventBus[event] ? [...this.eventBus[event], callback] : [callback];
+    this.eventBus[event] = this.eventBus[event]
+      ? [...this.eventBus[event], callback]
+      : [callback];
     return this;
   }
 

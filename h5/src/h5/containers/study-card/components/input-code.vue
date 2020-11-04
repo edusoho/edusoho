@@ -12,11 +12,14 @@
       />
     </div>
     <van-button
-      :class="['submit', {
-        'active': code.length === 19
-      }]"
+      :class="[
+        'submit',
+        {
+          active: code.length === 19,
+        },
+      ]"
       :disabled="code.length !== 19"
-      :style="{'display': currentHeight < defaultHeight ? 'none' : 'block'}"
+      :style="{ display: currentHeight < defaultHeight ? 'none' : 'block' }"
       type="default"
       @click="submit"
     >
@@ -26,9 +29,9 @@
 </template>
 
 <script>
-import Api from '@/api'
-import { mapState } from 'vuex'
-import { Toast } from 'vant'
+import Api from '@/api';
+import { mapState } from 'vuex';
+import { Toast } from 'vant';
 export default {
   name: 'EntityCard',
   data() {
@@ -36,44 +39,41 @@ export default {
       code: '',
       errorMessage: '',
       defaultHeight: window.innerHeight,
-      currentHeight: window.innerHeight
-    }
+      currentHeight: window.innerHeight,
+    };
   },
   computed: {
     ...mapState({
-      settingsName: state => state.settings.name
-    })
+      settingsName: state => state.settings.name,
+    }),
   },
   mounted() {
     window.onresize = () => {
-      this.currentHeight = window.innerHeight
-    }
+      this.currentHeight = window.innerHeight;
+    };
   },
   methods: {
     handleCode(value) {
-      value = value.replace(/\W/g, '')
-        .replace(/....(?!$)/g, '$& ')
-      this.code = value.slice(0, 19)
+      value = value.replace(/\W/g, '').replace(/....(?!$)/g, '$& ');
+      this.code = value.slice(0, 19);
     },
     submit() {
       if (this.code.length === 19) {
-        const password = this.code.replace(/\s/g, '')
+        const password = this.code.replace(/\s/g, '');
         Api.getMoneyCardByPassword({
-          query: { password }
+          query: { password },
         })
           .then(res => {
-            this.$router.push(`/moneycard/receive/${password}`)
+            this.$router.push(`/moneycard/receive/${password}`);
           })
           .catch(err => {
-            Toast.fail(err.message)
-            this.errorMessage = err.message
-          })
+            Toast.fail(err.message);
+            this.errorMessage = err.message;
+          });
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

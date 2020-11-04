@@ -1,58 +1,85 @@
 <template>
   <div class="valid-card">
-    <e-loading v-if="isLoading !== 2"/>
+    <e-loading v-if="isLoading !== 2" />
     <div class="container">
       <div class="top text-overflow">
         {{ settingsName }}
       </div>
       <div class="middle">
         <div class="card">
-          <div class="valid-date">
-            学习卡充值有效期至：{{ date }}
-          </div>
-          <div class="money">{{ money }}
+          <div class="valid-date">学习卡充值有效期至：{{ date }}</div>
+          <div class="money">
+            {{ money }}
             <span>{{ coin }}</span>
           </div>
           <div class="password">{{ formattedPassword }}</div>
         </div>
         <div class="result-box">
-          <div v-show="!initProcess && !invalidCard && this.isLogin && !processIsDone" class="result-box__valid-card">
+          <div
+            v-show="
+              !initProcess && !invalidCard && this.isLogin && !processIsDone
+            "
+            class="result-box__valid-card"
+          >
             <div>将充值到当前账户：{{ account }}</div>
-            <a href="javascript: void(0)" class="link" @click="jump2login">是否放入其他账户</a>
+            <a href="javascript: void(0)" class="link" @click="jump2login"
+              >是否放入其他账户</a
+            >
           </div>
-          <div v-show="invalidCard" class="result-box__invalid-card--process-is-done">
-            <div class="icon"><i class="iconfont icon-Fail"/>
-            <span>充值失败</span></div>
-            <div class="res-msg" v-html="message"/>
+          <div
+            v-show="invalidCard"
+            class="result-box__invalid-card--process-is-done"
+          >
+            <div class="icon">
+              <i class="iconfont icon-Fail" /> <span>充值失败</span>
+            </div>
+            <div class="res-msg" v-html="message" />
           </div>
-          <div v-show="processIsDone && !invalidCard" class="result-box__valid-card--process-is-done">
-            <div class="icon"><i class="result-box__icon-Success"/>
-            <span>充值成功</span></div>
-            <div class="result-box__account">当前账户余额：{{ cash }}{{ coin }}</div>
+          <div
+            v-show="processIsDone && !invalidCard"
+            class="result-box__valid-card--process-is-done"
+          >
+            <div class="icon">
+              <i class="result-box__icon-Success" /> <span>充值成功</span>
+            </div>
+            <div class="result-box__account">
+              当前账户余额：{{ cash }}{{ coin }}
+            </div>
             <div>尽情去购物啦～</div>
           </div>
         </div>
       </div>
       <div class="bottom">
-        <van-button v-show="!processIsDone" type="primary" block @click="switchSubmit">立即充值</van-button>
-        <van-button v-show="!initProcess && processIsDone" type="primary" block to="/">去首页</van-button>
+        <van-button
+          v-show="!processIsDone"
+          type="primary"
+          block
+          @click="switchSubmit"
+          >立即充值</van-button
+        >
+        <van-button
+          v-show="!initProcess && processIsDone"
+          type="primary"
+          block
+          to="/"
+          >去首页</van-button
+        >
       </div>
     </div>
-    <e-login :show.sync="show" @submit="switchUser2charge"/>
+    <e-login :show.sync="show" @submit="switchUser2charge" />
   </div>
 </template>
 
 <script>
-
-import eLogin from './login'
-import { Dialog } from 'vant'
-import { mapState } from 'vuex'
-import Api from '@/api'
+import eLogin from './login';
+import { Dialog } from 'vant';
+import { mapState } from 'vuex';
+import Api from '@/api';
 
 export default {
   name: 'ValidCard',
   components: {
-    eLogin
+    eLogin,
   },
   data() {
     return {
@@ -77,164 +104,173 @@ export default {
       token: '',
       cash: 0,
       cardStatusList: {
-        'expired': '卡已过期，去看看其他精品吧～',
-        'invalid': '卡已失效，去看看其他精品吧～',
-        'recharged': '',
-        'usedByOther': '卡已被其他人充值，去看看其他精品吧～',
-        'empty': '卡已被抢完，去看看其他精品吧～'
+        expired: '卡已过期，去看看其他精品吧～',
+        invalid: '卡已失效，去看看其他精品吧～',
+        recharged: '',
+        usedByOther: '卡已被其他人充值，去看看其他精品吧～',
+        empty: '卡已被抢完，去看看其他精品吧～',
       },
-      isLoading: 0
-    }
+      isLoading: 0,
+    };
   },
   computed: {
     ...mapState({
-      account: state => state.user['verifiedMobile'] || state.user.nickname,
+      account: state => state.user.verifiedMobile || state.user.nickname,
       isLogin: state => !!state.token,
       settingsName: state => state.settings.name,
       userToken: state => state.token,
-      userId: state => state.user.id
+      userId: state => state.user.id,
     }),
     // 格式化成每4个空一个的样式
     formattedPassword() {
-      return this.password.toString()
+      return this.password
+        .toString()
         .replace(/\W/g, '')
-        .replace(/....(?!$)/g, '$& ')
-    }
+        .replace(/....(?!$)/g, '$& ');
+    },
   },
   created() {
-    document.title = '学习卡充值'
+    document.title = '学习卡充值';
     // 根据token获取卡批次信息
-    this.token = this.$route.params.token || ''
-    this.password = this.$route.params.password || ''
+    this.token = this.$route.params.token || '';
+    this.password = this.$route.params.password || '';
     // isECard 为 true 的时候，根据 token 获取信息，为 false 根据 password 获取信息
-    this.isECard = !!this.token.length
-    this.init()
+    this.isECard = !!this.token.length;
+    this.init();
   },
   methods: {
     async init() {
-      await this.getCoin()
-      await this.getCash()
+      await this.getCoin();
+      await this.getCash();
       if (this.isECard === true) {
-        this.getMoneyCardByToken()
+        this.getMoneyCardByToken();
       } else {
-        this.getMoneyCardByPassword()
+        this.getMoneyCardByPassword();
       }
     },
     getCoin() {
       return Api.getCoin()
         .then(res => {
-          this.coin = res.name
-          this.isLoading += 1
+          this.coin = res.name;
+          this.isLoading += 1;
         })
-        .catch(err => console.log(err))
+        .catch(err => console.log(err));
     },
     switchCharge(name, query) {
-      this.isLoading -= 1
+      this.isLoading -= 1;
       Api[name]({
         query: { [query]: this[query] },
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          'X-Auth-Token': this.userToken
-        }
+          'X-Auth-Token': this.userToken,
+        },
       })
         .then(res => {
-          this.isLoading += 1
+          this.isLoading += 1;
           if (res.cardPassword) {
-            this.password = res.cardPassword
+            this.password = res.cardPassword;
           }
           if (res.success === true) {
-            this.invalidCard = false
-            this.message = res.message
-            this.cash = res.cash
+            this.invalidCard = false;
+            this.message = res.message;
+            this.cash = res.cash;
           } else {
-            this.invalidCard = true
-            this.message = res.error.message
+            this.invalidCard = true;
+            this.message = res.error.message;
             if (res.error.status === 'recharged') {
-              this.message = this.cardStatusList['recharged']
+              this.message = this.cardStatusList.recharged;
             }
           }
-          this.processIsDone = true
+          this.processIsDone = true;
         })
         .catch(err => {
-          console.log(err)
-        })
+          console.log(err);
+        });
     },
     switchSubmit() {
-      this.initProcess ? this.initStatus() : this.submit()
+      this.initProcess ? this.initStatus() : this.submit();
     },
     async switchUser2charge() {
-      await this.getCash()
+      await this.getCash();
       this.isECard === true
-        ? this.chargeMoneyCardByToken() : this.chargeMoneyCardByPassword()
+        ? this.chargeMoneyCardByToken()
+        : this.chargeMoneyCardByPassword();
     },
     initStatus() {
-      this.initProcess = false
+      this.initProcess = false;
       // 先校验卡是否有效，有效的话判断用户是否登录，卡无效的话就显示卡校验失败的页面。
       if (this.invalidCard) {
         // 卡无效,流程结束
-        this.processIsDone = true
-        return
+        this.processIsDone = true;
+        return;
       }
       // 用户没有登录就先去登录
-      !this.isLogin && this.jump2login()
+      !this.isLogin && this.jump2login();
     },
     getCash() {
       return Api.getCash({
         query: {
-          userId: this.userId
-        }
+          userId: this.userId,
+        },
       })
         .then(res => {
-          this.cash = res.cash
-          this.cardStatusList['recharged'] =
-              '之前已充值，当前账户余额：' + res.cash + this.coin + '<br/>尽情去购物啦～'
+          this.cash = res.cash;
+          this.cardStatusList.recharged =
+            '之前已充值，当前账户余额：' +
+            res.cash +
+            this.coin +
+            '<br/>尽情去购物啦～';
         })
-        .catch(err => console.log(err))
+        .catch(err => console.log(err));
     },
     getMoneyCardByToken() {
       Api.getMoneyCardByToken({
-        query: { token: this.token }
+        query: { token: this.token },
       })
         .then(res => {
-          this.isLoading += 1
-          this.date = res.deadline
-          this.money = res.coin
-          if (res.batchStatus === 'normal') return
-          this.message = this.cardStatusList[res.batchStatus]
-          this.initProcess = false
-          this.invalidCard = true
-          this.processIsDone = true
+          this.isLoading += 1;
+          this.date = res.deadline;
+          this.money = res.coin;
+          if (res.batchStatus === 'normal') return;
+          this.message = this.cardStatusList[res.batchStatus];
+          this.initProcess = false;
+          this.invalidCard = true;
+          this.processIsDone = true;
         })
         .catch(err => {
           // 第一次进页面的时候如果卡密无效就直接去首页
-          this.$router.push('/')
-        })
+          this.$router.push('/');
+        });
     },
     getMoneyCardByPassword() {
       Api.getMoneyCardByPassword({
-        query: { password: this.password }
+        query: { password: this.password },
       })
         .then(res => {
-          this.isLoading += 1
-          this.date = res.deadline
-          this.money = res.coin
-          this.code = res.password
-          if (res.cardStatus === 'normal' ||
-              (res.rechargeUserId === this.userId && res.cardStatus === 'receive')) {
-            return
+          this.isLoading += 1;
+          this.date = res.deadline;
+          this.money = res.coin;
+          this.code = res.password;
+          if (
+            res.cardStatus === 'normal' ||
+            (res.rechargeUserId === this.userId && res.cardStatus === 'receive')
+          ) {
+            return;
           }
-          res.cardStatus = res.rechargeUserId !== this.userId &&
+          res.cardStatus =
+            res.rechargeUserId !== this.userId &&
             (res.cardStatus === 'recharged' || res.cardStatus === 'receive')
-            ? 'usedByOther' : res.cardStatus
-          this.message = this.cardStatusList[res.cardStatus]
-          this.initProcess = false
-          this.invalidCard = true
-          this.processIsDone = true
+              ? 'usedByOther'
+              : res.cardStatus;
+          this.message = this.cardStatusList[res.cardStatus];
+          this.initProcess = false;
+          this.invalidCard = true;
+          this.processIsDone = true;
         })
         .catch(err => {
           // 第一次进页面的时候如果卡密无效就直接去首页
-          this.$router.push('/')
-        })
+          this.$router.push('/');
+        });
     },
     submit() {
       // 卡有效且用户已经登录的情况
@@ -242,32 +278,32 @@ export default {
         Dialog.confirm({
           title: '将充值到当前登录账户',
           message: this.account,
-          cancelButtonText: '充值其他账户'
+          cancelButtonText: '充值其他账户',
         })
           .then(() => {
             // 判断是电子卡还是实体卡
             this.isECard === true
-              ? this.chargeMoneyCardByToken() : this.chargeMoneyCardByPassword()
+              ? this.chargeMoneyCardByToken()
+              : this.chargeMoneyCardByPassword();
           })
           .catch(() => {
-            this.jump2login()
-          })
+            this.jump2login();
+          });
       }
       // 卡有效但用户没有登录的情况
       if (!this.invalidCard && !this.isLogin) {
-        this.jump2login()
+        this.jump2login();
       }
     },
     jump2login() {
-      this.show = true
+      this.show = true;
     },
     chargeMoneyCardByToken() {
-      this.switchCharge('chargeMoneyCardByToken', 'token')
+      this.switchCharge('chargeMoneyCardByToken', 'token');
     },
     chargeMoneyCardByPassword() {
-      this.switchCharge('chargeMoneyCardByPassword', 'password')
-    }
-  }
-}
+      this.switchCharge('chargeMoneyCardByPassword', 'password');
+    },
+  },
+};
 </script>
-

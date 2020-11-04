@@ -9,43 +9,40 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState } from 'vuex';
 export default {
-  data(){
-    return{
-    }
+  data() {
+    return {};
   },
   props: {
     // 当前终端 apps、miniprogram、h5
     portal: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
-  computed:{
-    ...mapState([
-      "settings"
-    ]),
+  computed: {
+    ...mapState(['settings']),
     headImg() {
       switch (this.portal) {
-        case "miniprogram":
-          return "static/images/miniprogram_head.jpg";
-        case "apps":
-          return "static/images/app_head.jpg";
+        case 'miniprogram':
+          return 'static/images/miniprogram_head.jpg';
+        case 'apps':
+          return 'static/images/app_head.jpg';
         default:
-          return "static/images/find_head_url.jpg";
+          return 'static/images/find_head_url.jpg';
       }
     },
     headTitle() {
       switch (this.portal) {
-        case "miniprogram":
-          return "小程序";
-        case "apps":
+        case 'miniprogram':
+          return '小程序';
+        case 'apps':
           return this.settings.name;
         default:
-          return "微网校";
+          return '微网校';
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>

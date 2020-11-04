@@ -2,155 +2,178 @@
   <div class="e-course">
     <div class="clearfix" @click="onClick">
       <div class="e-course__left pull-left">
-        <img v-lazy="imgSrc" :class="imgClass">
+        <img v-lazy="imgSrc" :class="imgClass" />
       </div>
       <div class="e-course__right pull-left">
-        <div v-if="type === 'confirmOrder'" class="e-course__title course-confirm-title">
-          {{ title }}<span v-if="typeList === 'vip'" class="grey-medium"> x {{ vipDuration }}</span>
+        <div
+          v-if="type === 'confirmOrder'"
+          class="e-course__title course-confirm-title"
+        >
+          {{ title
+          }}<span v-if="typeList === 'vip'" class="grey-medium">
+            x {{ vipDuration }}</span
+          >
         </div>
         <div v-else>
           <div class="e-course__title text-overflow">{{ title }}</div>
-          <div v-if="typeList==='classroom_list'" class="e-course__count">
+          <div v-if="typeList === 'classroom_list'" class="e-course__count">
             共 {{ course.courseNum }} 门课程
           </div>
-          <div v-if="typeList==='course_list'" class="e-course__project text-overflow">
+          <div
+            v-if="typeList === 'course_list'"
+            class="e-course__project text-overflow"
+          >
             <span v-if="teachPlan">{{ teachPlan }}</span>
           </div>
         </div>
-        <switchBox :type="type" :course="course" :order="order" :student-num="course.studentNum" :published-task-num="course.publishedTaskNum"/>
+        <switchBox
+          :type="type"
+          :course="course"
+          :order="order"
+          :student-num="course.studentNum"
+          :published-task-num="course.publishedTaskNum"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import switchBox from './e-course-switch-box.vue'
+import switchBox from './e-course-switch-box.vue';
 
 export default {
   components: {
-    switchBox
+    switchBox,
   },
   props: {
     course: {
       type: Object,
       default() {
-        return {}
-      }
+        return {};
+      },
     },
     order: {
       type: Object,
       default() {
-        return {}
-      }
+        return {};
+      },
     },
     type: {
       type: String,
-      default: 'price'
+      default: 'price',
     },
     feedback: {
       type: Boolean,
-      default: true
+      default: true,
     },
     typeList: {
       type: String,
-      default: 'course_list'
+      default: 'course_list',
     },
     duration: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
   },
   data() {
     return {
-      pathName: this.$route.name
-    }
+      pathName: this.$route.name,
+    };
   },
   computed: {
     imgSrc() {
       if (this.typeList === 'classroom_list') {
-        return this.course.cover.middle
+        return this.course.cover.middle;
       }
-      const courseSet = this.course.courseSet
-      let imageSrc = courseSet ? courseSet.cover.middle : this.order.cover.middle
-      return imageSrc ? imageSrc : ''
+      const courseSet = this.course.courseSet;
+      const imageSrc = courseSet
+        ? courseSet.cover.middle
+        : this.order.cover.middle;
+      return imageSrc || '';
     },
     title() {
       if (this.typeList === 'classroom_list') {
-        return this.course.title
+        return this.course.title;
       }
-      return this.course.courseSetTitle ||
-          (this.course.courseSet ? this.course.courseSet.title : '') ||
-          this.order.title
+      return (
+        this.course.courseSetTitle ||
+        (this.course.courseSet ? this.course.courseSet.title : '') ||
+        this.order.title
+      );
     },
     teachPlan() {
       if (this.course.title) {
-        return this.course.title
+        return this.course.title;
       } else {
-        return false
+        return false;
       }
     },
     imgClass() {
-      if (this.typeList === 'vip') return 'e-vip__img'
-      return 'e-course__img'
+      if (this.typeList === 'vip') return 'e-vip__img';
+      return 'e-course__img';
     },
     vipDuration() {
-      if (this.order.unitType === 'month') return `${this.duration}个月`
-      if (this.order.unitType === 'year') return `${this.duration}年`
-      return `${this.duration}天`
-    }
+      if (this.order.unitType === 'month') return `${this.duration}个月`;
+      if (this.order.unitType === 'year') return `${this.duration}年`;
+      return `${this.duration}天`;
+    },
   },
   watch: {
     course: {
       handler(course) {
         // 小程序后台替换图片协议
-        const courseSet = course.courseSet
-        const mpSettingPath = this.pathName === 'miniprogramSetting' && courseSet
+        const courseSet = course.courseSet;
+        const mpSettingPath =
+          this.pathName === 'miniprogramSetting' && courseSet;
 
         if (!mpSettingPath) {
-          return
+          return;
         }
-        const keys = Object.keys(courseSet.cover)
-        for (var i = 0; i < keys.length; i++) {
-          courseSet.cover[keys[i]] = courseSet.cover[keys[i]].replace(/^(\/\/)|(http:\/\/)/, 'https://')
+        const keys = Object.keys(courseSet.cover);
+        for (let i = 0; i < keys.length; i++) {
+          courseSet.cover[keys[i]] = courseSet.cover[keys[i]].replace(
+            /^(\/\/)|(http:\/\/)/,
+            'https://',
+          );
         }
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   methods: {
     onClick(e) {
       if (!this.feedback) {
-        return
+        return;
       }
-      if (this.typeList === 'vip') return
-      const isOrder = this.type === 'order'
-      const id = this.course.id || this.order.targetId
+      if (this.typeList === 'vip') return;
+      const isOrder = this.type === 'order';
+      const id = this.course.id || this.order.targetId;
       if (e.target.tagName === 'SPAN') {
-        console.log(e.target.tagName)
-        return
+        console.log(e.target.tagName);
+        return;
       }
 
       if (isOrder) {
-        location.href = this.order.targetUrl
-        return
+        location.href = this.order.targetUrl;
+        return;
       }
 
       if (this.typeList === 'course') {
-        return
+        return;
       }
 
       if (this.typeList === 'classroom_list') {
         this.$router.push({
-          path: `/classroom/${id}`
-        })
+          path: `/classroom/${id}`,
+        });
       }
 
       if (this.typeList === 'course_list') {
         this.$router.push({
-          path: `/course/${id}`
-        })
+          path: `/course/${id}`,
+        });
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>

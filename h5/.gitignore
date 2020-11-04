@@ -23,3 +23,4 @@ wap-sdk/
 *.njsproj
 *.sln
 deploy.yml
+package-lock.json

@@ -19,11 +19,11 @@ const state = {
   vipPlugin: {},
   courseSettings: {},
   classroomSettings: {},
-  settings: {}
+  settings: {},
 };
 
 export default new Vuex.Store({
   state,
   actions,
-  mutations
+  mutations,
 });

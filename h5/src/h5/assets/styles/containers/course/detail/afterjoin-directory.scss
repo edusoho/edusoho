@@ -1,247 +1,314 @@
 .afterjoin-directory {
-   // margin-top: vw(10);
-    p{
-        margin: 0px;
-        padding: 0px;
-    }
-    .icon-weiwancheng,.icon-yiwanchengliang{
-        color: #408FFB;
-    }
-    .icon-weixuexi{
-        color: #DCDCDC
-    }
-    .wrapper{
-        overflow: hidden; 
-        width: 100%; 
-        background-color: #fff; 
-        touch-action: none;
-        .pd-bo{
-            padding-bottom: vw(20)
-        }
-    }
-    .swiper-directory{
-        padding: 0 0 vw(10) 0;
-        background: #fff;
-        .swiper-directory-active{
-            color: rgba(64,143,251,1)!important;
-            background:rgba(64,143,251,0.08)!important;
-            .chapter-title{
-                color:rgba(64,143,251,1)!important;
-            }
-            .chapter-des{
-                color:rgba(64,143,251,1)!important;
-            }
-            .iconfont{
-                color:rgba(64,143,251,1)!important;
-            }
-        }
-        .nochapter{
-            padding: vw(0) vw(21);
-            line-height:vw(68);
-        }
-        .haschapter{
-            padding: vw(10) vw(14);
-        }
-        .chapter{
-            // width:vw(250);
-            height:vw(68);
-            margin-left: vw(15);
-            background:rgba(245,245,245,1);;
-            box-sizing: border-box;
-            .icon-wuzhangjieliang{
-                font-size: vw(30);
-                vertical-align: middle;
-                margin-right: vw(20);
-            }
-            .iconfont{
-                color: #BEBEBE
-            }
-            .chapter-title{
-                width: 100%;
-                font-size:vw(16);
-                font-family:PingFangSC-Regular;
-                font-weight:400;
-                color:#333333;
-                line-height:vw(22);
-            }
-            .chapter-des{
-                font-size:vw(14);
-                margin-top:vw(6);
-                font-family:PingFangSC-Regular;
-                font-weight:400;
-                color:#999999;
-                line-height:vw(20);
-            }
-        }
-    }
-    .swiper-directory-fix{
-        position: sticky;
-        width: 100%;
-        top:104px;
-    }
-    .bl{
-        display: block!important;
-        .iconfont{
-            color: #BEBEBE
-        }
-    }
-    .noneItem{
-        text-align: center;
-        color: #919191;
-        font-size: vw(16);
-        .nodata{
-            width: vw(180);
-            margin: vw(30) 0;
-        }
-        .notask{
-            width: vw(140);
-            margin: vw(15) 0;
-        }
-    }
-    .util-directory{
-        margin: vw(10) 0 0 vw(15);
-        padding-left: vw(15);
-        height: vw(30);
-        width:vw(345);
-        box-sizing: border-box;
-        border-bottom: vw(1) solid rgba(235,235,235,1);
-        font-size:vw(16);
-        font-family:PingFangSC-Regular;
-        font-weight:400;
-        color:rgba(51,51,51,1);
-        line-height:vw(22);
-    }
-    .lesson-directory{
-        margin: vw(10) 0 0 vw(15);
-        width: vw(345);
-        color: #333333;
-        border:1px solid rgba(245,245,245,1);
-        .lessonactive{
-            color: #408FFB!important;
-        }
-        .end{
-            border:vw(1) solid #999999;
-            color: #999999;
-        }
-        .nopublished{
-            color: #999999;
-        }
-        .back{
-            border:vw(1) solid #F99931;
-            color: #F99931;
-        }
-        .play{
-            color: #408FFB;
-        }
+	// margin-top: vw(10);
+	p {
+		margin: 0;
+		padding: 0;
+	}
 
-        .tryLes{
-            padding: vw(0) vw(2);
-            display: inline-block!important;
-            line-height: vw(18)!important;
-            vertical-align: top;
-            background:rgba(249,153,49,1);
-            border-radius:vw(4);
-            color: #fff;
-            text-align: center;
-            margin-right: vw(10);
-            font-size: vw(12)
-        }
-        .lesson-title{
-            font-size: vw(14);
-            width: 100%;
-            height:vw(40);
-            background:rgba(245,245,245,1);
-            line-height: vw(40);
-            box-sizing: border-box;
-            padding: 0 vw(15);
-            div{
-                display: inline-block;
-            }
-            .lesson-title-r{
-                .lesson-title-des{
-                    display: inline-block;
-                    line-height: vw(40);
-                    box-sizing: border-box;
-                    i{
-                        margin-right: vw(8);
-                    }
-                    .l22{
-                        .tryLes{
-                            vertical-align: middle
-                        }
-                    }
-                    .ks{
-                        width: vw(220);
-                        display: inline-block;
-                        vertical-align: top;
-                    }
-                }
-            }
-            .icon-shipin{
-                font-size: vw(16);
-                color:rgba(190,190,190,1);
-            }
-            .lesson-title-l{
-                float: right;
-                color:#999999;
-                span{
-                    margin-right: vw(9)
-                }
-            }
-            .iconfont{
-                font-size: vw(16);
-            }
-        }
-        .zb-ks{
-            height: vw(60);
-            padding: vw(10) vw(15);
-            .lesson-title-l{
-                line-height: vw(40)
-            }
-            .zbtime{
-                color: #408FFB;
-                font-size: vw(12);
-                margin-left: vw(26);
-                margin-top: vw(3);
-            }
-            .bl{
-                line-height: normal!important;
-            }
-        }
-        .lesson-items{
-            box-sizing: border-box;
-            padding: vw(12) vw(15) vw(12) vw(15);
-            
-            .litem{
-                display: flex;
-                justify-content: space-between;
-                padding: vw(12) vw(0);
-                height: vw(20);
-                line-height: vw(20);
-                div{
-                    display: inline-block;
-                }
-                .litem-r{
-                    color: #666666;
-                    font-size: vw(14);
-                    .iconfont{
-                        font-size: vw(16);
-                        color: #BEBEBE;
-                        margin-right: vw(8)
-                    }
-                }
-                .litem-l{
-                    color:#999999;
-                    display: flex;
-                    font-size: vw(14);
-                    span{
-                        margin-right: vw(9)
-                    }
-                    .iconfont{
-                        font-size: vw(16);
-                    }
-                }
-            }
-        }
-    }
+	.icon-weiwancheng,
+	.icon-yiwanchengliang {
+		color: #408ffb;
+	}
+
+	.icon-weixuexi {
+		color: #dcdcdc;
+	}
+
+	.wrapper {
+		width: 100%;
+		overflow: hidden;
+		background-color: #fff;
+		touch-action: none;
+
+		.pd-bo {
+			padding-bottom: vw(20);
+		}
+	}
+
+	.swiper-directory {
+		padding: 0 0 vw(10) 0;
+		background: #fff;
+
+		.swiper-directory-active {
+			color: rgba(64, 143, 251, 1) !important;
+			background: rgba(64, 143, 251, 0.08) !important;
+
+			.chapter-title {
+				color: rgba(64, 143, 251, 1) !important;
+			}
+
+			.chapter-des {
+				color: rgba(64, 143, 251, 1) !important;
+			}
+
+			.iconfont {
+				color: rgba(64, 143, 251, 1) !important;
+			}
+		}
+
+		.nochapter {
+			padding: vw(0) vw(21);
+			line-height: vw(68);
+		}
+
+		.haschapter {
+			padding: vw(10) vw(14);
+		}
+
+		.chapter {
+			box-sizing: border-box;
+			// width:vw(250);
+			height: vw(68);
+			margin-left: vw(15);
+			background: rgba(245, 245, 245, 1);
+
+			.icon-wuzhangjieliang {
+				margin-right: vw(20);
+				font-size: vw(30);
+				vertical-align: middle;
+			}
+
+			.iconfont {
+				color: #bebebe;
+			}
+
+			.chapter-title {
+				width: 100%;
+				color: #333;
+				font-weight: 400;
+				font-size: vw(16);
+				font-family: PingFangSC-Regular;
+				line-height: vw(22);
+			}
+
+			.chapter-des {
+				margin-top: vw(6);
+				color: #999;
+				font-weight: 400;
+				font-size: vw(14);
+				font-family: PingFangSC-Regular;
+				line-height: vw(20);
+			}
+		}
+	}
+
+	.swiper-directory-fix {
+		position: sticky;
+		top: 104px;
+		width: 100%;
+	}
+
+	.bl {
+		display: block !important;
+
+		.iconfont {
+			color: #bebebe;
+		}
+	}
+
+	.noneItem {
+		color: #919191;
+		font-size: vw(16);
+		text-align: center;
+
+		.nodata {
+			width: vw(180);
+			margin: vw(30) 0;
+		}
+
+		.notask {
+			width: vw(140);
+			margin: vw(15) 0;
+		}
+	}
+
+	.util-directory {
+		box-sizing: border-box;
+		width: vw(345);
+		height: vw(30);
+		margin: vw(10) 0 0 vw(15);
+		padding-left: vw(15);
+		color: rgba(51, 51, 51, 1);
+		font-weight: 400;
+		font-size: vw(16);
+		font-family: PingFangSC-Regular;
+		line-height: vw(22);
+		border-bottom: vw(1) solid rgba(235, 235, 235, 1);
+	}
+
+	.lesson-directory {
+		width: vw(345);
+		margin: vw(10) 0 0 vw(15);
+		color: #333;
+		border: 1px solid rgba(245, 245, 245, 1);
+
+		.lessonactive {
+			color: #408ffb !important;
+		}
+
+		.end {
+			color: #999;
+			border: vw(1) solid #999;
+		}
+
+		.nopublished {
+			color: #999;
+		}
+
+		.back {
+			color: #f99931;
+			border: vw(1) solid #f99931;
+		}
+
+		.play {
+			color: #408ffb;
+		}
+
+		.tryLes {
+			display: inline-block !important;
+			margin-right: vw(10);
+			padding: vw(0) vw(2);
+			color: #fff;
+			font-size: vw(12);
+			line-height: vw(18) !important;
+			text-align: center;
+			vertical-align: top;
+			vertical-align: middle;
+			background: rgba(249, 153, 49, 1);
+			border-radius: vw(4);
+		}
+
+		.freeAdmission {
+			display: inline-block !important;
+			margin-right: vw(10);
+			padding: vw(0) vw(2);
+			color: #fff;
+			font-size: vw(12);
+			line-height: vw(18) !important;
+			text-align: center;
+			vertical-align: top;
+			vertical-align: middle;
+			background: #03c777;
+			border-radius: vw(4);
+		}
+
+		.lesson-title {
+			box-sizing: border-box;
+			width: 100%;
+			height: vw(40);
+			padding: 0 vw(15);
+			font-size: vw(14);
+			line-height: vw(40);
+			background: rgba(245, 245, 245, 1);
+
+			div {
+				display: inline-block;
+			}
+
+			.lesson-title-r {
+				.lesson-title-des {
+					display: inline-block;
+					box-sizing: border-box;
+					line-height: vw(40);
+
+					i {
+						margin-right: vw(8);
+					}
+
+					.l22 {
+						.tryLes,
+						.freeAdmission {
+							vertical-align: middle;
+						}
+					}
+
+					.ks {
+						display: inline-block;
+						width: vw(220);
+						vertical-align: top;
+					}
+				}
+			}
+
+			.icon-shipin {
+				color: rgba(190, 190, 190, 1);
+				font-size: vw(16);
+			}
+
+			.lesson-title-l {
+				float: right;
+				color: #999;
+
+				span {
+					margin-right: vw(9);
+				}
+			}
+
+			.iconfont {
+				font-size: vw(16);
+			}
+		}
+
+		.zb-ks {
+			height: vw(60);
+			padding: vw(10) vw(15);
+
+			.lesson-title-l {
+				line-height: vw(40);
+			}
+
+			.zbtime {
+				margin-top: vw(3);
+				margin-left: vw(26);
+				color: #408ffb;
+				font-size: vw(12);
+			}
+
+			.bl {
+				line-height: normal !important;
+			}
+		}
+
+		.lesson-items {
+			box-sizing: border-box;
+			padding: vw(12) vw(15) vw(12) vw(15);
+
+			.litem {
+				display: flex;
+				justify-content: space-between;
+				height: vw(20);
+				padding: vw(12) vw(0);
+				line-height: vw(20);
+
+				div {
+					display: inline-block;
+				}
+
+				.litem-r {
+					color: #666;
+					font-size: vw(14);
+
+					.iconfont {
+						margin-right: vw(8);
+						color: #bebebe;
+						font-size: vw(16);
+					}
+				}
+
+				.litem-l {
+					display: flex;
+					color: #999;
+					font-size: vw(14);
+
+					span {
+						margin-right: vw(9);
+					}
+
+					.iconfont {
+						font-size: vw(16);
+					}
+				}
+			}
+		}
+	}
 }

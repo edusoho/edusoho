@@ -3,21 +3,24 @@ export default [
     // 微营销活动
     name: 'marketingActivities',
     url: '/marketing_activities/{activityId}/urls',
-    method: 'POST'
-  }, {
+    method: 'POST',
+  },
+  {
     // 班级下营销活动
     name: 'classroomsActivities',
     url: '/classrooms/{id}/marketing_activities',
-    disableLoading: true
-  }, {
+    disableLoading: true,
+  },
+  {
     // 课程下营销活动
     name: 'coursesActivities',
     url: '/courses/{id}/marketing_activities',
-    disableLoading: true
-  }, {
+    disableLoading: true,
+  },
+  {
     // 我的营销活动
     name: 'myActivities',
     url: '/me/marketing_activities',
-    disableLoading: true
-  }
+    disableLoading: true,
+  },
 ];

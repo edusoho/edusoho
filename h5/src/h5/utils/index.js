@@ -3,5 +3,5 @@ import * as DateToolkit from './date-toolkit';
 
 export default {
   RULES,
-  DateToolkit
+  DateToolkit,
 };

@@ -3,67 +3,82 @@ export default [
     // 人脸识别 判断是否设置了人脸识别
     name: 'settingsFace',
     url: '/settings/face',
-    method: 'GET'
-  }, {
+    method: 'GET',
+  },
+  {
     // 云短信服务
     name: 'sitePlugins',
     url: '/site_plugins/{pluginName}',
-    method: 'GET'
-  }, {
+    method: 'GET',
+  },
+  {
     // 云短信服务
     name: 'settingsCloud',
     url: '/settings/cloud',
-    method: 'GET'
-  }, {
+    method: 'GET',
+  },
+  {
     // 更多课程分类
     name: 'getCourseCategories',
-    url: '/categories/course'
-  }, {
+    url: '/categories/course',
+  },
+  {
     // 更多班级分类
     name: 'getClassCategories',
-    url: '/categories/classroom'
-  }, {
+    url: '/categories/classroom',
+  },
+  {
     // 更多获取筛选信息
     name: 'getSelectItems',
-    url: '/pages/h5/settings/course'
-  }, {
+    url: '/pages/h5/settings/course',
+  },
+  {
     // 获取全局设置
     name: 'getSettings',
     url: '/settings/{type}',
     method: 'GET',
-    disableLoading: true
-  }, {
+    disableLoading: true,
+  },
+  {
     // 后台配置保存草稿数据
     name: 'saveDraftDate',
     url: '/pages/h5/settings/{type}/draft',
-    method: 'GET'
-  }, {
+    method: 'GET',
+  },
+  {
     // 首页正式数据
     name: 'discoveries',
     url: '/pages/h5/discoveries',
-    method: 'GET'
-  }, {
+    method: 'GET',
+  },
+  {
     // 上传文件
     name: 'updateFile',
     url: '/files',
-    method: 'POST'
+    method: 'POST',
   },
   {
     name: 'weixinConfig',
     url: '/settings/weixinConfig',
     method: 'GET',
-    disableLoading: true
+    disableLoading: true,
   },
   {
     name: 'loginConfig',
     url: '/settings/login',
     method: 'GET',
-    disableLoading: true
+    disableLoading: true,
   },
   {
     name: 'wechatConfig',
     url: '/setting/wechat',
     method: 'GET',
-    disableLoading: true
-  }
+    disableLoading: true,
+  },
+  {
+    name: 'wechatJsSdkConfig',
+    url: '/setting/weixinConfig',
+    method: 'GET',
+    disableLoading: true,
+  },
 ];

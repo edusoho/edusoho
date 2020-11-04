@@ -14,6 +14,8 @@ const getDisplayStyle = (data, listObj) => {
       id: data.id,
       hasCertificate: data.hasCertificate,
       targetId: data.targetId,
+      goodsId: data.goodsId,
+      specsId: data.specsId,
       imgSrc: {
         url: data.cover.middle || '',
         className: 'e-course__img',
@@ -34,6 +36,8 @@ const getDisplayStyle = (data, listObj) => {
   }
   return {
     id: data.id,
+    goodsId: data.courseSet.goodsId,
+    specsId: data.specsId,
     hasCertificate: data.hasCertificate,
     imgSrc: {
       url: data.courseSet.cover.middle || '',
@@ -84,6 +88,8 @@ const getClassRoomDisplay = (data, listObj, price) => {
     id: data.id,
     hasCertificate: data.hasCertificate,
     targetId: data.targetId,
+    goodsId: data.goodsId,
+    specsId: data.specsId,
     studentNum: listObj.classRoomShowStudent ? data.studentNum : null,
     imgSrc: {
       url: data.cover.middle || '',
@@ -103,6 +109,8 @@ const getClassRoomDisplay = (data, listObj, price) => {
 const getCourseDisplay = (data, listObj, price) => {
   return {
     id: data.id,
+    goodsId: data.courseSet.goodsId,
+    specsId: data.specsId,
     hasCertificate: data.hasCertificate,
     studentNum: listObj.showStudent ? data.studentNum : null,
     imgSrc: {
@@ -188,6 +196,8 @@ const courseListData = (data, listObj, uiStyle = 'old', platform = 'h5') => {
       if (listObj.typeList === 'classroom_list') {
         return {
           id: data.id,
+          goodsId: data.goodsId,
+          specsId: data.specsId,
           hasCertificate: data.hasCertificate,
           targetId: data.targetId,
           imgSrc: {
@@ -207,6 +217,8 @@ const courseListData = (data, listObj, uiStyle = 'old', platform = 'h5') => {
       }
       return {
         id: data.id,
+        goodsId: data.courseSet.goodsId,
+        specsId: data.specsId,
         hasCertificate: data.hasCertificate,
         imgSrc: {
           url: data.courseSet.cover.middle || '',

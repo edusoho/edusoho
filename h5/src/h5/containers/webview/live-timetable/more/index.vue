@@ -1,55 +1,59 @@
 <template>
-<van-pull-refresh v-model="pullLoading" @refresh="onRefresh">
-  <div class="app live-timetable">
-    <div ref="liveList" class="live-list">
-      <div class="live-list__title">
-        <div class="live-title__left">直播课表</div>
-        <div class="live-title__right">{{today}}</div>
-      </div>
-      <div class="text-center mt20">
+  <van-pull-refresh v-model="pullLoading" @refresh="onRefresh">
+    <div class="app live-timetable">
+      <div ref="liveList" class="live-list">
+        <div class="live-list__title">
+          <div class="live-title__left">直播课表</div>
+          <div class="live-title__right">{{ today }}</div>
+        </div>
+        <div class="text-center mt20">
           <van-loading size="24px" v-show="isLoad">加载中...</van-loading>
+        </div>
+        <e-card
+          v-if="isRequestComplete"
+          v-for="(item, index) in liveCourse"
+          :key="index"
+          :course="item"
+          @toClassroom="toClassroom"
+          @toTask="toTask"
+          @toCourse="toCourse"
+        />
+        <empty
+          v-if="noData"
+          text="空空如也，暂无内容"
+          class="empty__more-live"
+        />
       </div>
-      <e-card
-        v-if="isRequestComplete"
-        v-for="(item,index) in liveCourse"
-        :key="index"
-        :course="item"
-        @toClassroom="toClassroom"
-        @toTask="toTask"
-        @toCourse="toCourse"
-      />
-      <empty v-if="noData" text="空空如也，暂无内容" class="empty__more-live" />
     </div>
-  </div>
-</van-pull-refresh>
+  </van-pull-refresh>
 </template>
 
 <script>
-import ECard from "&/components/e-card/e-live-card";
-import empty from "&/components/e-empty/e-empty.vue";
-import { formatFullTime } from "@/utils/date-toolkit";
-import * as types from "@/store/mutation-types";
-import Api from "@/api";
+import ECard from '&/components/e-card/e-live-card';
+import empty from '&/components/e-empty/e-empty.vue';
+import { formatFullTime } from '@/utils/date-toolkit';
+import * as types from '@/store/mutation-types';
+import Api from '@/api';
 export default {
-  name: "more-live",
+  name: 'more-live',
   components: {
     ECard,
-    empty
+    empty,
   },
   data() {
     return {
-      today: "",
+      today: '',
       liveCourse: [],
       isRequestComplete: false,
-      token: "",
-      isLoad:true,
-      pullLoading: false
+      token: '',
+      isLoad: true,
+      pullLoading: false,
     };
   },
   computed: {
     noData: function() {
       return this.isRequestComplete && !this.liveCourse.length;
-    }
+    },
   },
   created() {
     this.setTitle();
@@ -62,8 +66,8 @@ export default {
   methods: {
     setTitle() {
       window.postNativeMessage({
-        action: "kuozhi_native_header",
-        data: { title: "今日直播" }
+        action: 'kuozhi_native_header',
+        data: { title: '今日直播' },
       });
     },
     getmyLiveCourse(time) {
@@ -71,14 +75,14 @@ export default {
       Api.myliveCourse({
         params,
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          "X-Auth-Token": this.token
-        }
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-Auth-Token': this.token,
+        },
       })
         .then(res => {
           this.liveCourse = res;
           this.isRequestComplete = true;
-          this.isLoad=false;
+          this.isLoad = false;
           this.pullLoading = false;
         })
         .catch(error => {
@@ -89,7 +93,7 @@ export default {
       const nowTimeDate = new Date(time);
       return {
         startTime: parseInt(nowTimeDate.setHours(0, 0, 0, 0) / 1000),
-        endTime: parseInt(nowTimeDate.setHours(23, 59, 59, 999) / 1000)
+        endTime: parseInt(nowTimeDate.setHours(23, 59, 59, 999) / 1000),
       };
     },
     getUserInfo() {
@@ -99,53 +103,52 @@ export default {
         self.getmyLiveCourse(new Date());
       };
       window.postNativeMessage({
-        action: "kuozhi_login_user",
-        data: { force: 1 }
+        action: 'kuozhi_login_user',
+        data: { force: 1 },
       });
     },
     toClassroom(id) {
       window.postNativeMessage({
-        action: "kuozhi_classroom",
-        data: { classroomId: id }
+        action: 'kuozhi_classroom',
+        data: { classroomId: id },
       });
     },
     toTask(task) {
       const data = {
         taskId: task.id,
         taskType: task.type,
-        courseId: task.courseId
+        courseId: task.courseId,
       };
       window.postNativeMessage({
-        action: "kuozhi_learn_task",
-        data: { taskId: task.id, taskType: task.type, courseId: task.courseId }
+        action: 'kuozhi_learn_task',
+        data: { taskId: task.id, taskType: task.type, courseId: task.courseId },
       });
     },
     toCourse(id) {
       window.postNativeMessage({
-        action: "kuozhi_course",
-        data: { courseId: id }
+        action: 'kuozhi_course',
+        data: { courseId: id },
       });
     },
     sendError(error) {
       window.postNativeMessage({
-        action: "kuozhi_h5_error",
+        action: 'kuozhi_h5_error',
         data: {
           code: error.code,
-          message: error.message
-        }
+          message: error.message,
+        },
       });
     },
-    initData(){
+    initData() {
       this.liveCourse = [];
       this.isRequestComplete = false;
     },
     onRefresh() {
-      this.initData()
+      this.initData();
       this.getmyLiveCourse(new Date());
-    }
-  }
+    },
+  },
 };
 </script>
 
-<style>
-</style>
+<style></style>

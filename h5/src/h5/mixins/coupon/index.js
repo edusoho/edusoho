@@ -22,13 +22,16 @@ export default {
       const intPrice = parseInt(rate, 10);
       const intNum = intPrice.toString().length;
       const intClass = intNum > 3 ? 'text-16 ml-5' : '';
-      let pointPrice = Number(rate).toFixed(2).split('.')[1];
-      pointPrice = Number(pointPrice) === 0 ? '' : (`.${pointPrice}`);
+      let pointPrice = Number(rate)
+        .toFixed(2)
+        .split('.')[1];
+      pointPrice = Number(pointPrice) === 0 ? '' : `.${pointPrice}`;
       const typeText = type === 'discount' ? '折' : '元';
       if (!needStyle) {
         return intPrice + pointPrice + typeText;
       }
-      return `<span class="${intClass}">${intPrice}</span><span class="text-14">${pointPrice + typeText}</span>`;
+      return `<span class="${intClass}">${intPrice}</span><span class="text-14">${pointPrice +
+        typeText}</span>`;
     },
     scopeFilter({ targetDetail }) {
       const numberType = targetDetail.numType;
@@ -82,6 +85,6 @@ export default {
     receiveTimeExpire(deadline) {
       deadline = formatchinaTime(new Date(deadline));
       return deadline;
-    }
-  }
+    },
+  },
 };

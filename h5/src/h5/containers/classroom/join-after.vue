@@ -16,7 +16,6 @@
       <div v-if="active == 0">
         <detail-plan :details="planDetails" :join-status="details.joinStatus" />
         <div class="segmentation" />
-
         <e-panel ref="about" title="班级介绍" class="about">
           <div v-html="details.summary" />
         </e-panel>
@@ -36,6 +35,9 @@
           title="班主任"
           defaul-value="尚未设置班主任"
         />
+        <div class="segmentation" />
+        <div class="segmentation" />
+        <div class="segmentation" />
       </div>
 
       <!-- 班级课程 -->
@@ -48,18 +50,6 @@
           title="班级课程"
           defaul-value="暂无课程"
           @click.native="showDialog"
-        />
-      </div>
-
-      <!-- 学员评价 -->
-      <div v-if="active == 2">
-        <review-list
-          ref="review"
-          :target-id="details.classId"
-          :reviews="classroomSettings.show_review == 1 ? details.reviews : []"
-          title="学员评价"
-          defaul-value="暂无评价"
-          type="classroom"
         />
       </div>
     </div>
@@ -79,17 +69,21 @@
         @submitForm="onCancelForm"
       ></info-collection>
     </van-action-sheet>
+    <e-footer
+      @click.native="gotoGoodsPage"
+      v-if="active == 0 && this.details.goodsId"
+    >
+      去商品页
+    </e-footer>
   </div>
 </template>
 
 <script>
 import teacher from './teacher';
 import detailHead from './head';
-import reviewList from './review-list';
 import courseSetList from './course-set-list';
 import detailPlan from './plan';
 import directory from '../course/detail/directory';
-import moreMask from '@/components/more-mask';
 import collectUserInfo from '@/mixins/collectUserInfo';
 import infoCollection from '@/components/info-collection.vue';
 import { mapState, mapMutations } from 'vuex';
@@ -107,9 +101,6 @@ export default {
     detailPlan,
     teacher,
     courseSetList,
-    reviewList,
-    // eslint-disable-next-line vue/no-unused-components
-    moreMask,
     infoCollection,
   },
   props: ['details', 'planDetails'],
@@ -118,7 +109,7 @@ export default {
       headBottom: 0,
       active: 1,
       scrollFlag: false,
-      tabs: ['班级介绍', '班级课程', '学员评价'],
+      tabs: ['班级介绍', '班级课程'],
       tabsClass: '',
       errorMsg: '',
       classroomSettings: {},
@@ -148,13 +139,20 @@ export default {
   watch: {
     currentJoin: {
       handler(val, oldVal) {
+        console.log(val);
         if (val) {
+          console.log(val);
           Toast.loading({
             duration: 0,
             message: '加载中...',
             forbidClick: true,
           });
-          this.getInfoCollectionEvent(this.paramsList).then(res => {
+          const paramsList = {
+            action: 'buy_after',
+            targetType: 'classroom',
+            targetId: this.details.classId,
+          };
+          this.getInfoCollectionEvent(paramsList).then(res => {
             if (Object.keys(res).length) {
               this.userInfoCollect = res;
               this.getInfoCollectionForm(res.id).then(res => {
@@ -186,6 +184,11 @@ export default {
     ...mapMutations('classroom', {
       setCurrentJoin: types.SET_CURRENT_JOIN_CLASS,
     }),
+    gotoGoodsPage() {
+      this.$router.push({
+        path: `/goods/${this.details.goodsId}/show`,
+      });
+    },
     showDialog() {
       let code = '';
       let errorMessage = '';

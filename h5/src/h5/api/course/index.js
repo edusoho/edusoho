@@ -4,93 +4,102 @@ export default [
     name: 'getCourseDetail',
     url: '/pages/h5/courses/{courseId}',
     method: 'GET',
-    disableLoading: true
-  }, {
+    disableLoading: true,
+  },
+  {
     // 获取计划目录
     name: 'getCourseLessons',
     url: '/courses/{courseId}/item_with_lessons',
     method: 'GET',
-    disableLoading: true
-  }, {
+    disableLoading: true,
+  },
+  {
     // 优化目录获取计划结构
     name: 'getOptimizationCourseLessons',
     url: '/courses/{courseId}/item_with_lessons?format=tree',
     method: 'GET',
-    disableLoading: true
+    disableLoading: true,
   },
   {
     // 加入课程
     name: 'joinCourse',
     url: '/courses/{id}/members',
-    method: 'POST'
-  }, {
+    method: 'POST',
+  },
+  {
     // 课时播放
     name: 'getMedia',
     url: '/courses/{courseId}/task_medias/{taskId}',
-    method: 'GET'
+    method: 'GET',
   },
   {
     // 课时信息
     name: 'getCourseData',
     url: '/courses/{courseId}/task/{taskId}',
     method: 'GET',
-    disableLoading: true
+    disableLoading: true,
   },
   {
     // 课时doing
     name: 'reportTaskDoing',
     url: '/courses/{courseId}/task/{taskId}/events/doing',
     method: 'PUT',
-    disableLoading: true
+    disableLoading: true,
   },
   {
     // 课时上报事件
     name: 'reportTask',
     url: '/courses/{courseId}/task/{taskId}/events/{events}',
     method: 'PUT',
-    disableLoading: true
+    disableLoading: true,
   },
   {
     // 课时finish
     name: 'reportTaskFinish',
     url: '/courses/{courseId}/task/{taskId}/events/finish',
     method: 'PUT',
-    disableLoading: true
+    disableLoading: true,
   },
   {
     // 下次学习课时
     name: 'getNextStudy',
     url: '/me/course_learning_progress/{courseId}',
-    method: 'GET'
-  }, {
+    method: 'GET',
+  },
+  {
     // 获取课程列表数据
     name: 'getCourseList',
-    url: '/courses'
-  }, {
+    url: '/courses',
+  },
+  {
     // 获取课程搜索列表
     name: 'getCourseSets',
-    url: '/course_sets'
-  }, {
+    url: '/course_sets',
+  },
+  {
     // 根据计划 id 查询计划详情
     name: 'getCourse',
     url: '/course_sets/{courseId}',
-    method: 'GET'
-  }, {
+    method: 'GET',
+  },
+  {
     // 获取课程评论
     name: 'getCourseReviews',
     url: '/courseSet/{id}/reviews',
-    method: 'GET'
-  }, {
+    method: 'GET',
+  },
+  {
     // 根据课程查询计划
     name: 'getCourseByCourseSet',
     url: '/course_sets/{id}/courses',
     method: 'GET',
-    disableLoading: true
-  }, {
+    disableLoading: true,
+  },
+  {
     // 退出课程
     name: 'deleteCourse',
     url: '/me/course_members/{id}',
     method: 'DELETE',
-    disableLoading: true
-  }
+    disableLoading: true,
+  },
 ];

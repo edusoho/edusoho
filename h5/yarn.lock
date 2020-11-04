@@ -1099,15 +1099,15 @@
     "@types/unist" "*"
     "@types/vfile-message" "*"
 
-"@vant/icons@1.2.1":
-  version "1.2.1"
-  resolved "https://registry.npm.taobao.org/@vant/icons/download/@vant/icons-1.2.1.tgz#309fecb97a4989866f045ce676b545c454701c8f"
-  integrity sha1-MJ/suXpJiYZvBFzmdrVFxFRwHI8=
-
 "@vant/icons@1.2.3":
   version "1.2.3"
   resolved "https://registry.npm.taobao.org/@vant/icons/download/@vant/icons-1.2.3.tgz#c46b7ddd32363f790944c3af974b73bda80df7a1"
   integrity sha1-xGt93TI2P3kJRMOvl0tzvagN96E=
+
+"@vant/icons@1.3.0":
+  version "1.3.0"
+  resolved "https://registry.npm.taobao.org/@vant/icons/download/@vant/icons-1.3.0.tgz#94f4c93122fd7331e0e00df55804779aead8c9c2"
+  integrity sha1-lPTJMSL9czHg4A31WAR3murYycI=
 
 "@vue/babel-helper-vue-jsx-merge-props@^1.0.0":
   version "1.0.0"
@@ -3387,7 +3387,7 @@ chrome-trace-event@^1.0.2:
   dependencies:
     tslib "^1.9.0"
 
-chromedriver@^2.46.0:
+chromedriver@^2.27.2:
   version "2.46.0"
   resolved "https://registry.npm.taobao.org/chromedriver/download/chromedriver-2.46.0.tgz#3d78e7eb9bb65dd804fe327a6bf76fced12be053"
   integrity sha1-PXjn65u2XdgE/jJ6a/dvztEr4FM=
@@ -4745,6 +4745,13 @@ dom7@^2.1.5:
   integrity sha1-p5QRAXgAsx2EAAcM2uu/ySwfY3c=
   dependencies:
     ssr-window "^2.0.0"
+
+dom7@^3.0.0-alpha.7:
+  version "3.0.0-alpha.9"
+  resolved "https://registry.npm.taobao.org/dom7/download/dom7-3.0.0-alpha.9.tgz?cache=0&sync_timestamp=1598357047746&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fdom7%2Fdownload%2Fdom7-3.0.0-alpha.9.tgz#0110c21181b8bad3a1ee72443e04d3c2e3f1d38f"
+  integrity sha1-ARDCEYG4utOh7nJEPgTTwuPx048=
+  dependencies:
+    ssr-window "^3.0.0-alpha.1"
 
 domain-browser@^1.1.1:
   version "1.2.0"
@@ -9467,6 +9474,11 @@ mz@^2.4.0:
     object-assign "^4.0.1"
     thenify-all "^1.0.0"
 
+n@0.1.2:
+  version "0.1.2"
+  resolved "https://registry.npm.taobao.org/n/download/n-0.1.2.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fn%2Fdownload%2Fn-0.1.2.tgz#767811ba70818e0e59821379303d7a72e7b1ab98"
+  integrity sha1-dngRunCBjg5ZghN5MD16cuexq5g=
+
 nan@^2.12.1, nan@^2.13.2:
   version "2.14.1"
   resolved "https://registry.npm.taobao.org/nan/download/nan-2.14.1.tgz?cache=0&sync_timestamp=1587497111086&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fnan%2Fdownload%2Fnan-2.14.1.tgz#d7be34dfa3105b91494c3147089315eff8874b01"
@@ -12805,6 +12817,11 @@ ssr-window@^2.0.0:
   resolved "https://registry.npm.taobao.org/ssr-window/download/ssr-window-2.0.0.tgz#98c301aef99523317f8d69618f0010791096efc4"
   integrity sha1-mMMBrvmVIzF/jWlhjwAQeRCW78Q=
 
+ssr-window@^3.0.0-alpha.1, ssr-window@^3.0.0-alpha.4:
+  version "3.0.0-alpha.4"
+  resolved "https://registry.npm.taobao.org/ssr-window/download/ssr-window-3.0.0-alpha.4.tgz#0c69a18c4305ecccdd8e11596155ca07b635f345"
+  integrity sha1-DGmhjEMF7MzdjhFZYVXKB7Y180U=
+
 ssri@^5.2.4:
   version "5.3.0"
   resolved "https://registry.npm.taobao.org/ssri/download/ssri-5.3.0.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fssri%2Fdownload%2Fssri-5.3.0.tgz#ba3872c9c6d33a0704a7d71ff045e5ec48999d06"
@@ -13376,6 +13393,14 @@ swiper@^5.4.5:
   dependencies:
     dom7 "^2.1.5"
     ssr-window "^2.0.0"
+
+swiper@^6.2.0:
+  version "6.2.0"
+  resolved "https://registry.npm.taobao.org/swiper/download/swiper-6.2.0.tgz?cache=0&sync_timestamp=1599227457591&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fswiper%2Fdownload%2Fswiper-6.2.0.tgz#f9dafdc2ccb5d6dd2bd728c78db87605329cb50e"
+  integrity sha1-+dr9wsy11t0r1yjHjbh2BTKctQ4=
+  dependencies:
+    dom7 "^3.0.0-alpha.7"
+    ssr-window "^3.0.0-alpha.4"
 
 symbol-tree@^3.2.2:
   version "3.2.4"
@@ -14212,13 +14237,13 @@ value-or-function@^3.0.0:
   resolved "https://registry.npm.taobao.org/value-or-function/download/value-or-function-3.0.0.tgz#1c243a50b595c1be54a754bfece8563b9ff8d813"
   integrity sha1-HCQ6ULWVwb5Up1S/7OhWO5/42BM=
 
-vant@^2.5.0:
-  version "2.8.7"
-  resolved "https://registry.npm.taobao.org/vant/download/vant-2.8.7.tgz#24220a8aa6919bf34b774c3b1c1d051543453770"
-  integrity sha1-JCIKiqaRm/NLd0w7HB0FFUNFN3A=
+vant@^2.10.7:
+  version "2.10.9"
+  resolved "https://registry.npm.taobao.org/vant/download/vant-2.10.9.tgz?cache=0&sync_timestamp=1601711582177&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fvant%2Fdownload%2Fvant-2.10.9.tgz#311e7f53541067f45de07c23020ac23339272615"
+  integrity sha1-MR5/U1QQZ/Rd4HwjAgrCMzknJhU=
   dependencies:
     "@babel/runtime" "7.x"
-    "@vant/icons" "1.2.1"
+    "@vant/icons" "1.3.0"
     "@vue/babel-helper-vue-jsx-merge-props" "^1.0.0"
     vue-lazyload "1.2.3"
 
@@ -14519,10 +14544,10 @@ walker@~1.0.5:
   dependencies:
     makeerror "1.0.x"
 
-wap-sdk@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.npm.taobao.org/wap-sdk/download/wap-sdk-0.1.0.tgz#dedf28aff6a685b86b5240479ca710a5edfc8113"
-  integrity sha1-3t8or/amhbhrUkBHnKcQpe38gRM=
+wap-sdk@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.npm.taobao.org/wap-sdk/download/wap-sdk-0.1.2.tgz#8d2c4bcd73d5484d83917a0f40305eaaeed5c4c6"
+  integrity sha1-jSxLzXPVSE2DkXoPQDBequ7VxMY=
   dependencies:
     babel-plugin-import "^1.13.0"
     core-js "^3.6.5"
@@ -14534,6 +14559,7 @@ wap-sdk@^0.1.0:
     node-sass "^4.14.1"
     sass "^1.26.8"
     sass-loader "^8.0.2"
+    swiper "^6.2.0"
     vant "^2.8.6"
     vue "^2.6.11"
     vue-awesome-swiper "^4.1.1"
@@ -14733,6 +14759,11 @@ websocket-extensions@>=0.1.1:
   version "0.1.4"
   resolved "https://registry.npm.taobao.org/websocket-extensions/download/websocket-extensions-0.1.4.tgz#7f8473bc839dfd87608adb95d7eb075211578a42"
   integrity sha1-f4RzvIOd/YdgituV1+sHUhFXikI=
+
+weixin-js-sdk@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.npm.taobao.org/weixin-js-sdk/download/weixin-js-sdk-1.6.0.tgz#ff50484d8118ce1208f11248cf4a1c0831577514"
+  integrity sha1-/1BITYEYzhII8RJIz0ocCDFXdRQ=
 
 whatwg-encoding@^1.0.1, whatwg-encoding@^1.0.3:
   version "1.0.5"
