@@ -292,43 +292,64 @@ export default {
     updateFavorite(value) {
       this.goods.isFavorite = value;
     },
+    init() {
+      this.getGoodsCourse();
+      Api.getSettings({
+        query: {
+          type: 'goods',
+        },
+      })
+        .then(resp => {
+          this.goodsSetting = resp;
+          console.log(resp.show_review);
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    },
   },
   created() {
     const targetId = this.$route.query.targetId;
     const type = this.$route.query.type;
-    console.log(targetId, type);
-    Api.meClassroomMember({
-      query: {
-        id: targetId,
-      },
-    }).then(res => {
-      console.log('res', res);
-      if (res.id) {
-        if (type === 'course_list') {
-          this.$router.push({
-            path: `/course/${targetId}`,
-          });
-        }
-        if (type === 'classroom_list') {
-          this.$router.push({
-            path: `/classroom/${targetId}`,
-          });
-        }
-      }
-    });
-    this.getGoodsCourse();
-    Api.getSettings({
-      query: {
-        type: 'goods',
-      },
-    })
-      .then(resp => {
-        this.goodsSetting = resp;
-        console.log(resp.show_review);
+    if (type === 'course_list') {
+      Api.meCourseMember({
+        query: {
+          id: targetId,
+        },
       })
-      .catch(err => {
-        console.error(err);
-      });
+        .then(res => {
+          if (res.id) {
+            this.$router.push({
+              path: `/course/${targetId}`,
+            });
+          } else {
+            this.init();
+          }
+        })
+        .catch(() => {
+          this.init();
+        });
+    } else if (type === 'classroom_list') {
+      Api.meClassroomMember({
+        query: {
+          id: targetId,
+        },
+      })
+        .then(res => {
+          if (res.id) {
+            this.$router.push({
+              path: `/classroom/${targetId}`,
+            });
+          } else {
+            this.init();
+          }
+        })
+        .catch(() => {
+          this.init();
+        });
+    } else {
+      this.init();
+    }
   },
   watch: {
     // 如果路由发生变化，再次执行该方法
