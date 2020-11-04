@@ -128,6 +128,7 @@ export default {
         query: {
           targetId: id,
           type,
+          hasCertificate,
         },
       });
     },

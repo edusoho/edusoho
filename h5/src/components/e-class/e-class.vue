@@ -148,6 +148,7 @@ export default {
           query: {
             targetId: this.course.id,
             type: 'classroom_list',
+            hasCertificate,
           },
         });
       }
@@ -158,6 +159,7 @@ export default {
           query: {
             targetId: this.course.id,
             type: 'course_list',
+            hasCertificate,
           },
         });
       }
