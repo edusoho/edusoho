@@ -4,6 +4,9 @@
 @import './vant.scss';
 @import '../fonts/iconfont.css';
 
+// components
+@import './components/reviews.scss';
+
 // containers
 @import './containers/home.scss';
 @import './containers/login/index.scss';
