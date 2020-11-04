@@ -31,7 +31,7 @@
         <van-button
           type="default"
           size="small"
-          style="border-radius: 8px; margin-top: 10px;"
+          style="border-radius: 8px; margin-top: 10px; background: #408ffb; color: #fff;"
           @click="onSubmit"
           >提交评价</van-button
         >
