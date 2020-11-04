@@ -294,6 +294,28 @@ export default {
     },
   },
   created() {
+    const targetId = this.$route.query.targetId;
+    const type = this.$route.query.type;
+    console.log(targetId, type);
+    Api.meClassroomMember({
+      query: {
+        id: targetId,
+      },
+    }).then(res => {
+      console.log('res', res);
+      if (res.id) {
+        if (type === 'course_list') {
+          this.$router.push({
+            path: `/course/${targetId}`,
+          });
+        }
+        if (type === 'classroom_list') {
+          this.$router.push({
+            path: `/classroom/${targetId}`,
+          });
+        }
+      }
+    });
     this.getGoodsCourse();
     Api.getSettings({
       query: {

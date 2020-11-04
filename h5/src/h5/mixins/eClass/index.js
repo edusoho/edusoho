@@ -1,5 +1,4 @@
 import { mapState } from 'vuex';
-import Api from '@/api';
 
 export default {
   props: {
@@ -113,59 +112,24 @@ export default {
     },
     toMore(hasCertificate, type, id) {
       let path = '';
-      let params = {
-        hasCertificate,
-      };
       switch (type) {
         case 'course_list':
-          Api.meCourseMember({
-            query: {
-              id: this.course.id,
-            },
-          })
-            .then(res => {
-              if (res.id) {
-                path = `/course/${this.course.id}`;
-              } else {
-                path = `/goods/${this.course.goodsId}/show`;
-                params = Object.assign(params, {
-                  targetId: id,
-                });
-              }
-              this.$router.push({ path: path, query: params });
-            })
-            .catch(() => {
-              path = `/goods/${this.course.goodsId}/show`;
-              params = Object.assign(params, {
-                targetId: id,
-              });
-              this.$router.push({ path: path, query: params });
-            });
+          path = `/goods/${this.course.goodsId}/show`;
           break;
         case 'item_bank_exercise':
           path = `/item_bank_exercise/${id}`;
-          this.$router.push({ path: path, query: params });
           break;
         case 'classroom_list':
-          Api.meClassroomMember({
-            query: {
-              id: this.course.id,
-            },
-          })
-            .then(res => {
-              if (res.id) {
-                path = `/classroom/${this.course.id}`;
-              } else {
-                path = `/goods/${this.course.goodsId}/show`;
-              }
-              this.$router.push({ path: path, query: params });
-            })
-            .catch(() => {
-              path = `/goods/${this.course.goodsId}/show`;
-              this.$router.push({ path: path, query: params });
-            });
+          path = `/goods/${this.course.goodsId}/show`;
           break;
       }
+      this.$router.push({
+        path: path,
+        query: {
+          targetId: id,
+          type,
+        },
+      });
     },
     // 调用app接口
     postMessage(type, id) {
