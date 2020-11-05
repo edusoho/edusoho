@@ -2,7 +2,6 @@
 
 namespace ApiBundle\Api\Resource\Page;
 
-use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
@@ -34,9 +33,6 @@ class PageSetting extends AbstractResource
         return $this->$method($portal, $mode);
     }
 
-    /**
-     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN")
-     */
     public function add(ApiRequest $request, $portal)
     {
         $mode = $request->query->get('mode');
@@ -51,15 +47,34 @@ class PageSetting extends AbstractResource
         if (!in_array($portal, ['h5', 'miniprogram', 'apps'])) {
             throw PageException::ERROR_PORTAL();
         }
+
+        $this->checkPermissionByPortal($portal);
         $content = $request->request->all();
         $method = 'add'.ucfirst($type);
 
         return $this->$method($portal, $mode, $content);
     }
 
-    /**
-     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN")
-     */
+    private function checkPermissionByPortal($portal)
+    {
+        $backstage = $this->getSettingService()->get('backstage', ['is_v2' => 0]);
+
+        $isAdminV2 = $backstage['is_v2'] ? true : false;
+        if ('h5' === $portal && $this->getCurrentUser()->hasPermission($isAdminV2 ? 'admin_v2_h5_set' : 'admin_h5_set')) {
+            return true;
+        }
+
+        if ('miniprogram' === $portal && $this->getCurrentUser()->hasPermission($isAdminV2 ? 'admin_v2_wechat_app_manage' : 'admin_wechat_app_manage')) {
+            return true;
+        }
+
+        if ('apps' === $portal && $this->getCurrentUser()->hasPermission($isAdminV2 ? 'admin_v2_setting_mobile' : 'admin_setting_mobile')) {
+            return true;
+        }
+
+        throw UserException::PERMISSION_DENIED();
+    }
+
     public function remove(ApiRequest $request, $portal, $type)
     {
         $mode = $request->query->get('mode');
@@ -73,6 +88,8 @@ class PageSetting extends AbstractResource
         if (!in_array($portal, ['h5', 'miniprogram', 'apps'])) {
             throw PageException::ERROR_PORTAL();
         }
+
+        $this->checkPermissionByPortal($portal);
         $method = 'remove'.ucfirst($type);
 
         return $this->$method($portal, $mode);

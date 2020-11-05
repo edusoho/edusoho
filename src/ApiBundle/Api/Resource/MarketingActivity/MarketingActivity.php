@@ -2,21 +2,25 @@
 
 namespace ApiBundle\Api\Resource\MarketingActivity;
 
-use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Marketing\MarketingAPIFactory;
+use Biz\System\Service\SettingService;
+use Biz\User\UserException;
 
 class MarketingActivity extends AbstractResource
 {
     /**
-     * @param ApiRequest $request
-     *
      * @return mixed
-     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN")
      */
     public function search(ApiRequest $request)
     {
+        $backstage = $this->getSettingService()->get('backstage', ['is_v2' => 0]);
+
+        if (!$this->getCurrentUser()->hasPermission($backstage['is_v2'] ? 'admin_v2_h5_set' : 'admin_h5_set')) {
+            throw UserException::PERMISSION_DENIED();
+        }
+
         $conditions = $request->query->all();
         if (isset($conditions['name'])) {
             $conditions['name_like'] = $conditions['name'];
@@ -45,9 +49,17 @@ class MarketingActivity extends AbstractResource
         $pages = $client->get(
             '/activities',
             $conditions,
-            array('MERCHANT-USER-ID: '.$user['id'])
+            ['MERCHANT-USER-ID: '.$user['id']]
         );
 
         return $this->makePagingObject($pages['data'], $pages['paging']['total'], $offset, $limit);
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->service('System:SettingService');
     }
 }
