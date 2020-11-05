@@ -316,8 +316,13 @@ class CourseItemSortingVisitor implements CourseStrategyVisitorInterface
 
         if ('lesson' == $chapter['type']) {
             ++$seq;
-            $fields['number'] = $lessonNumber;
-            ++$lessonNumber;
+            if($chapter['isOptional']){
+                $fields['number'] = 0;
+            }
+            else {
+                $fields['number'] = $lessonNumber;
+                ++$lessonNumber;
+            }
             if ('published' == $chapter['status'] && !$chapter['isOptional']) {
                 $fields['published_number'] = $publishedLessonNumber;
                 ++$publishedLessonNumber;
