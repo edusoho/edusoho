@@ -292,21 +292,71 @@ export default {
     updateFavorite(value) {
       this.goods.isFavorite = value;
     },
+    init() {
+      this.getGoodsCourse();
+      Api.getSettings({
+        query: {
+          type: 'goods',
+        },
+      })
+        .then(resp => {
+          this.goodsSetting = resp;
+          console.log(resp.show_review);
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    },
   },
   created() {
-    this.getGoodsCourse();
-    Api.getSettings({
-      query: {
-        type: 'goods',
-      },
-    })
-      .then(resp => {
-        this.goodsSetting = resp;
-        console.log(resp.show_review);
+    const targetId = this.$route.query.targetId;
+    const type = this.$route.query.type;
+    const hasCertificate = this.$route.query.hasCertificate;
+    if (type === 'course_list') {
+      Api.meCourseMember({
+        query: {
+          id: targetId,
+        },
       })
-      .catch(err => {
-        console.error(err);
-      });
+        .then(res => {
+          if (res.id) {
+            this.$router.replace({
+              path: `/course/${targetId}`,
+              query: {
+                hasCertificate,
+              },
+            });
+          } else {
+            this.init();
+          }
+        })
+        .catch(() => {
+          this.init();
+        });
+    } else if (type === 'classroom_list') {
+      Api.meClassroomMember({
+        query: {
+          id: targetId,
+        },
+      })
+        .then(res => {
+          if (res.id) {
+            this.$router.replace({
+              path: `/classroom/${targetId}`,
+              query: {
+                hasCertificate,
+              },
+            });
+          } else {
+            this.init();
+          }
+        })
+        .catch(() => {
+          this.init();
+        });
+    } else {
+      this.init();
+    }
   },
   watch: {
     // 如果路由发生变化，再次执行该方法
