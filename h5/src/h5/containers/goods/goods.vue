@@ -311,6 +311,7 @@ export default {
   created() {
     const targetId = this.$route.query.targetId;
     const type = this.$route.query.type;
+    const hasCertificate = this.$route.query.hasCertificate;
     if (type === 'course_list') {
       Api.meCourseMember({
         query: {
@@ -321,6 +322,9 @@ export default {
           if (res.id) {
             this.$router.replace({
               path: `/course/${targetId}`,
+              query: {
+                hasCertificate,
+              },
             });
           } else {
             this.init();
@@ -339,6 +343,9 @@ export default {
           if (res.id) {
             this.$router.replace({
               path: `/classroom/${targetId}`,
+              query: {
+                hasCertificate,
+              },
             });
           } else {
             this.init();
