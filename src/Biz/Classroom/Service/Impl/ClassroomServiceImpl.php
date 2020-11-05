@@ -258,6 +258,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $classroom = $this->fillOrgId($classroom);
         $userId = $this->getCurrentUser()->getId();
+        $classroom['title'] = $this->purifyHtml($classroom['title'], true);
         $classroom['creator'] = $userId;
         $classroom['teacherIds'] = [];
         $classroom['expiryMode'] = 'forever';
