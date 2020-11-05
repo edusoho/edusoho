@@ -27,6 +27,7 @@ class LatestStatusesDataTag extends BaseDataTag implements DataTag
         if (isset($arguments['private']) && $arguments['private'] == 0) {
             $conditions['private'] = 0;
         }
+        $orderBys = ['createdTime' => 'DESC'];
 
         if (isset($arguments['objectType']) && isset($arguments['objectId'])) {
             if ($arguments['objectType'] == 'course') {
@@ -46,7 +47,11 @@ class LatestStatusesDataTag extends BaseDataTag implements DataTag
             }
         }
 
-        $statuses = $this->getStatusService()->searchStatuses($conditions, array('createdTime' => 'DESC'), 0, $arguments['count']);
+        if (!empty($conditions['courseIds'])) {
+            $orderBys = ['createdTime' => 'DESC', 'courseId' => 'ASC'];
+        }
+
+        $statuses = $this->getStatusService()->searchStatuses($conditions, $orderBys, 0, $arguments['count']);
 
         if (empty($statuses)) {
             return array();

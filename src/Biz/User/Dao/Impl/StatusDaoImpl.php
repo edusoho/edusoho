@@ -45,7 +45,7 @@ class StatusDaoImpl extends GeneralDaoImpl implements StatusDao
             'serializes' => array(
                 'properties' => 'json',
             ),
-            'orderbys' => array('createdTime'),
+            'orderbys' => array('createdTime', 'courseId'),
             'conditions' => array(
                 'courseId = :courseId',
                 'courseId IN ( :courseIds )',
