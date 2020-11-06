@@ -449,7 +449,7 @@ class Setting extends AbstractResource
     {
         $backstage = $this->getSettingService()->get('backstage');
 
-        return $backstage;
+        return ['is_v2' => isset($backstage['is_v2']) ? (int) $backstage['is_v2'] : 0];
     }
 
     private function checkType($type)
