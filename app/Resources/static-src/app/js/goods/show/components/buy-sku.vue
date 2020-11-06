@@ -127,10 +127,7 @@
                 if (sku.status !== 'published') { //如果商品未发布
                     this.buyViewMode = 'text';
                     this.buyViewText = Translator.trans('goods.show_page.unpublished_tips');
-                } else if (sku.buyable != 1) {  // 已发布，但是未开放购买
-                    this.buyViewMode = 'text';
-                    this.buyViewText = Translator.trans('goods.show_page.not_buyable_tips');
-                } else if (sku.buyable == 1
+                }  else if (sku.buyable == 1
                     && sku.buyableEndTime != 0
                     && new Date(sku.buyableEndTime).getTime() < new Date().getTime()) { // 已发布，开放购买，但是不在开放时间区间内
                     console.log(new Date(sku.buyableEndTime).getTime());
@@ -146,6 +143,9 @@
                     console.log(parseInt(sku.vipUser.deadline) * 1000);
                     this.buyViewMode = 'btn';
                     this.buyViewText = Translator.trans('goods.show_page.vip_free_learn');
+                } else if (sku.buyable != 1) {  // 已发布，但是未开放购买
+                    this.buyViewMode = 'text';
+                    this.buyViewText = Translator.trans('goods.show_page.not_buyable_tips');
                 } else if (sku.displayPrice == 0) {
                     this.buyViewMode = 'btn';
                     this.buyViewText = Translator.trans('goods.show_page.free_join_btn');
