@@ -18,6 +18,7 @@ class WeiboFormItem extends FormItem
             'field' => self::FIELD,
             'group' => self::CONTACT_INFO_GROUP,
             'value' => $this->value,
+            'required' => $this->required,
             'validate' => [
                 ['required' => $this->required, 'message' => self::TITLE.'不能为空'],
                 ['pattern' => '^[A-Za-z0-9\u4e00-\u9fa5]+$', 'message' => self::TITLE.'格式错误'],

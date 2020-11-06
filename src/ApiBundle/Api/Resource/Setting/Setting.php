@@ -54,9 +54,10 @@ class Setting extends AbstractResource
     public function getGoods()
     {
         $goodsSetting = $this->getSettingService()->get('goods_setting', []);
+
         return [
             'show_number_data' => empty($goodsSetting['show_number_data']) ? 'join' : $goodsSetting['show_number_data'],
-            'show_review' => !isset($goodsSetting['show_review']) ? '1' :  $goodsSetting['show_review'],
+            'show_review' => !isset($goodsSetting['show_review']) ? '1' : $goodsSetting['show_review'],
             'recommend_rule' => empty($goodsSetting['recommend_rule']) ? 'hot' : $goodsSetting['recommend_rule'],
         ];
     }

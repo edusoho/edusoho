@@ -600,6 +600,7 @@ t.add("order.create.use_price_coupon_hint", "Coupon is available, and you are cu
 t.add("order.refund.reason_limit_hint", "The length of the quit reason should be less than or equal to 120.", "js", "en");
 t.add("order.refund.reason_required_hint", "Please enter the reason of quiting.", "js", "en");
 t.add("order.refund.reason_choose_hint", "Please choose the reason of quiting.", "js", "en");
+t.add("order.information_collect_error_hint", "Please submit the information before submitting the order.", "js", "en");
 t.add("settings.setup.set_success.hint", "Set account successfully, redirecting", "js", "en");
 t.add("settings.setup.set_failed.hint", "Set account failed, please try again", "js", "en");
 t.add("settings.user_profile.save_success_hint", "Saved successfully", "js", "en");
@@ -1471,6 +1472,9 @@ t.add("admin_v2.information_collect.chooser.target_hint", "Please select Course\
 t.add("admin_v2.information_collect.chooser.target_course_hint", "Please select at least 1 Course", "js", "en");
 t.add("admin_v2.information_collect.chooser.target_classroom_hint", "Please select at least 1 Classroom", "js", "en");
 t.add("admin_v2.information_collect.chooser.items.hint", "Please select form item", "js", "en");
+t.add("user.fields.gender_label", "Gender", "js", "en");
+t.add("information_collect.form.check_age_invalid", "Age Invalid", "js", "en");
+t.add("information_collect.form.check_format_invalid", "%display% Invalid", "js", "en");
 t.add("course.marketing_setup", "Markets", "js", "en");
 t.add("site.currency.CNY", "CNY", "js", "en");
 t.add("s2b2c.product.cooperation_price", "Cooperation Price", "js", "en");

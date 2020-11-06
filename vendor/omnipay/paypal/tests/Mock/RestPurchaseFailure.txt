@@ -1,0 +1,14 @@
+HTTP/1.1 400 Bad Request
+Server: Apache-Coyote/1.1
+PROXY_SERVER_INFO: host=slcsbjava2.slc.paypal.com;threadId=38554
+Paypal-Debug-Id: b31c6360606e6
+SERVER_INFO: paymentsplatformserv:v1.payments.payment&CalThreadId=235&TopLevelTxnStartTime=146fc97eb2a&Host=slcsbjm2.slc.paypal.com&pid=14594
+CORRELATION-ID: b31c6360606e6
+Content-Language: *
+Date: Thu, 03 Jul 2014 14:19:12 GMT
+Connection: close
+Content-Type: application/json
+Content-Length: 290
+Connection: close
+
+{"name":"VALIDATION_ERROR","details":[{"field":"payer.funding_instruments[0].credit_card.number","issue":"Value is invalid"}],"message":"Invalid request - see details","information_link":"https://developer.paypal.com/webapps/developer/docs/api/#VALIDATION_ERROR","debug_id":"b31c6360606e6"}

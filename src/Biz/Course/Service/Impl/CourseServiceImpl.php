@@ -2280,7 +2280,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $course = $this->getCourse($courseId);
-
         if ((1 == $course['isFree'] || 0 == $course['originPrice']) && $course['buyable']) {
             $this->getMemberService()->becomeStudent($course['id'], $this->getCurrentUser()->getId());
         }

@@ -4,7 +4,7 @@ namespace Biz\Favorite\Types;
 
 use Codeages\Biz\Framework\Context\Biz;
 
-class AbstractType
+abstract class AbstractType
 {
     /**
      * @var Biz

@@ -201,4 +201,30 @@
       }
     }
   }
+  &-information-collect {
+    margin-bottom: 30px;
+    cursor:pointer;
+    &-title {
+      color: rgba(0, 0, 0, 0.88);
+      font-weight: 500;
+      margin-top: 20px;
+    }
+    &-content {
+      line-height: 50px;
+      &-title {
+        color:#333;
+      }
+      &-arrow-right {
+        float: right;
+        line-height: 60px;
+        & i {
+          font-size: 26px;
+          color: #999;
+        }
+      }
+      &.error {
+        background: #FFF1F1;
+      }
+    }
+  }
 }

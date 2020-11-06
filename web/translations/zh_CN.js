@@ -542,6 +542,7 @@ t.add("order.create.use_price_coupon_hint", "\u4f18\u60e0\u5238\u53ef\u7528\uff0
 t.add("order.refund.reason_limit_hint", "\u9000\u5b66\u539f\u56e0\u7684\u957f\u5ea6\u8bf7\u5c0f\u4e8e\u6216\u7b49\u4e8e120\u3002", "js", "zh_CN");
 t.add("order.refund.reason_required_hint", "\u8bf7\u8f93\u5165\u9000\u5b66\u539f\u56e0\u3002", "js", "zh_CN");
 t.add("order.refund.reason_choose_hint", "\u8bf7\u9009\u62e9\u9000\u5b66\u539f\u56e0", "js", "zh_CN");
+t.add("order.information_collect_error_hint", "\u8bf7\u5148\u63d0\u4ea4\u4fe1\u606f\u540e\u518d\u63d0\u4ea4\u8ba2\u5355", "js", "zh_CN");
 t.add("settings.setup.set_success.hint", "\u8bbe\u7f6e\u5e10\u53f7\u6210\u529f\uff0c\u6b63\u5728\u8df3\u8f6c", "js", "zh_CN");
 t.add("settings.setup.set_failed.hint", "\u8bbe\u7f6e\u5e10\u53f7\u5931\u8d25\uff0c\u8bf7\u91cd\u8bd5", "js", "zh_CN");
 t.add("settings.user_profile.save_success_hint", "\u4fdd\u5b58\u6210\u529f", "js", "zh_CN");
@@ -1421,6 +1422,9 @@ t.add("admin_v2.information_collect.chooser.target_hint", "\u8bf7\u9009\u62e9\u8
 t.add("admin_v2.information_collect.chooser.target_course_hint", "\u8bf7\u81f3\u5c11\u9009\u62e91\u4e2a\u8bfe\u7a0b", "js", "zh_CN");
 t.add("admin_v2.information_collect.chooser.target_classroom_hint", "\u8bf7\u81f3\u5c11\u9009\u62e91\u4e2a\u73ed\u7ea7", "js", "zh_CN");
 t.add("admin_v2.information_collect.chooser.items.hint", "\u8bf7\u9009\u62e9\u91c7\u96c6\u8868\u5355", "js", "zh_CN");
+t.add("user.fields.gender_label", "\u6027\u522b", "js", "zh_CN");
+t.add("information_collect.form.check_age_invalid", "\u5e74\u9f84\u4e0d\u5728\u6b63\u5e38\u8303\u56f4\u5185", "js", "zh_CN");
+t.add("information_collect.form.check_format_invalid", "%display%\u683c\u5f0f\u9519\u8bef", "js", "zh_CN");
 t.add("course.marketing_setup", "\u8425\u9500\u8bbe\u7f6e", "js", "zh_CN");
 t.add("site.currency.CNY", "\u5143", "js", "zh_CN");
 t.add("s2b2c.product.cooperation_price", "\u5408\u4f5c\u9762\u989d", "js", "zh_CN");
