@@ -13,10 +13,10 @@ class DestroyAccountEventSubscriber extends EventSubscriber implements EventSubs
 {
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             'user.destroyed' => 'onUserDestroyed',
             'user.reject.destroy' => 'onUserRejectDestroy',
-        );
+        ];
     }
 
     public function onUserDestroyed(Event $event)
@@ -27,11 +27,11 @@ class DestroyAccountEventSubscriber extends EventSubscriber implements EventSubs
             $site = $this->getSettingService()->get('site');
             $siteName = empty($site['name']) ? '本网校' : $site['name'];
 
-            $smsParams = array(
+            $smsParams = [
                 'mobiles' => $user['verifiedMobile'],
                 'templateId' => SmsType::USER_DESTROYED,
-                'templateParams' => array('schoolName' => $siteName),
-            );
+                'templateParams' => ['schoolName' => $siteName],
+            ];
 
             try {
                 $this->getSDKSmsService()->sendToOne($smsParams);
@@ -46,18 +46,18 @@ class DestroyAccountEventSubscriber extends EventSubscriber implements EventSubs
         $user = $event->getSubject();
         $reason = $event->getArgument('reason');
 
-        $message = array(
+        $message = [
             'userName' => $user['nickname'],
             'reason' => $reason,
-        );
+        ];
         $this->getNotificationService()->notify($user['id'], 'reject-destroy', $message);
 
         if (!empty($user['verifiedMobile'])) {
-            $smsParams = array(
+            $smsParams = [
                 'mobiles' => $user['verifiedMobile'],
                 'templateId' => SmsType::USER_REJECT_DESTROYED,
-                'templateParams' => array('reason' => $reason),
-            );
+                'templateParams' => ['reason' => $reason],
+            ];
 
             try {
                 $this->getSDKSmsService()->sendToOne($smsParams);
