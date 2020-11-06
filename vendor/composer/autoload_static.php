@@ -118,6 +118,7 @@ class ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8
         'O' => 
         array (
             'Omnipay\\WechatPay\\' => 18,
+            'Omnipay\\PayPal\\' => 15,
             'Omnipay\\Common\\' => 15,
             'Omnipay\\Alipay\\Tests\\' => 21,
             'Omnipay\\Alipay\\' => 15,
@@ -398,6 +399,10 @@ class ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8
         'Omnipay\\WechatPay\\' => 
         array (
             0 => __DIR__ . '/..' . '/lokielse/omnipay-wechatpay/src',
+        ),
+        'Omnipay\\PayPal\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/omnipay/paypal/src',
         ),
         'Omnipay\\Common\\' => 
         array (

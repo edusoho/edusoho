@@ -17,7 +17,7 @@ class PageCourseFilter extends Filter
         'tryLookable', 'expiryMode', 'expiryDays', 'expiryStartDate', 'expiryEndDate', 'buyExpiryTime', 'summary',
         'audiences', 'goals', 'isDefault', 'maxStudentNum', 'status', 'isFree', 'price', 'originPrice', 'teachers',
         'creator', 'services', 'courseSet', 'courseItems', 'courses', 'member', 'courseType', 'progress', 'buyable',
-        'reviews', 'enableFinish', 'hasCertificate', 'goodsId', 'specsId', 'spec',
+        'reviews', 'myReview', 'enableFinish', 'hasCertificate', 'goodsId', 'specsId', 'spec',
     ];
 
     protected function publicFields(&$data)
@@ -45,6 +45,8 @@ class PageCourseFilter extends Filter
         $reviewFilter = new CourseSetReviewFilter();
         $reviewFilter->setMode(Filter::PUBLIC_MODE);
         $reviewFilter->filters($reviews);
+        $review = $data['myReview'];
+        $reviewFilter->filter($review);
 
         $progress = $data['progress'];
         $allowAnonymousPreview = $data['allowAnonymousPreview'];
@@ -57,6 +59,7 @@ class PageCourseFilter extends Filter
         $data['courses'] = $courses;
         $data['member'] = $member;
         $data['reviews'] = $reviews;
+        $data['myReview'] = $review;
         $data['vipLevel'] = empty($vipLevel) ? null : $vipLevel;
     }
 }

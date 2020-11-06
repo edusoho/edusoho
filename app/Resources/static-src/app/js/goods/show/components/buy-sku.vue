@@ -112,6 +112,11 @@
                         return;
                     }
 
+                    if (['before_event', 'after_event'].includes(res.data.code)) {
+                        window.location.href = res.data.context.url;
+                        return;
+                    }
+
                     this.renderModal(res.data.code);
                 }).catch();
             },

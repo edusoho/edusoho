@@ -1,0 +1,5 @@
+<textarea id="{{ name }}" name="{{ name }}" class="form-control {{ class|default('') }}" rows="{{ 4 }}" {% if required|default(false) %} required="required" {% endif %}>{{ value|default(null) }}
+</textarea>
+<span class="js-delete-content-btn delete-content-btn" data-target="#{{ name }}">
+	<i class="cd-icon cd-icon-close"></i>
+</span>

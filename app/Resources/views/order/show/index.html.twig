@@ -16,7 +16,23 @@
       <input type="hidden" name="targetType" value="{{product.targetType}}"/>
       <input type="hidden" name="targetId" value="{{product.targetId}}"/>
       <input type="hidden" name="price" value="{{product.getPayablePrice()}}"/>
+      <input type="hidden" name="informationCollectEventId" value="{{ informationCollectEvent.id|default('') }}"/>
       {% include product.showTemplate %}
+      
+      {% if informationCollectEvent %}
+      <input type="hidden" name="informationCollectIsSubmited" value="" />
+      <div class="order-center-information-collect">
+        <div class="order-center-information-collect-title">{{ 'order.confirm.information-collect-title'|trans }}</div>
+        <div class="order-center-information-collect-content" data-target="#modal" data-toggle="modal" data-url="{{ path('information_collect_event_modal', {eventId:informationCollectEvent.id}) }}">
+          <span class="order-center-information-collect-content-title">{{ informationCollectEvent.formTitle }}</span>
+          <span class="order-center-information-collect-content-arrow-right">
+            <i class="icon cd-icon cd-icon-arrow-right"></i>
+          </span>
+        </div>
+        <div class="order-center-line"></div>
+      </div>
+      {% endif %}
+      
       {% if setting('coupon.enabled', 0) and product.couponEnable|default(true) %}
         {% include 'order/show/coupon-item.html.twig' %}
       {% endif %}
