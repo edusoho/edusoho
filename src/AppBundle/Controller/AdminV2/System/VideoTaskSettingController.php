@@ -8,8 +8,30 @@ use Symfony\Component\HttpFoundation\Request;
 
 class VideoTaskSettingController extends BaseController
 {
-    public function videoPlaySettingAction(Request $request)
+    public function videoTaskPlaySettingAction(Request $request)
     {
+        $videoSetting = $this->getSettingService()->get('videoTaskPlay', array());
+
+        $default = array(
+            'same_video_multiple' => '0',
+            'different_video_multiple' => '0',
+            'multiple_forbidden_effect' => 'kick_previous',
+            'play_rule' => 'auto_pause',
+        );
+
+        $videoSetting = array_merge($default, $videoSetting);
+
+        if ('POST' == $request->getMethod()) {
+            $set = $request->request->all();
+
+            $videoSetting = array_merge($videoSetting, $set);
+
+            $this->getSettingService()->set('videoTaskPlay', $set);
+        }
+
+        return $this->render('admin-v2/system/course-setting/video-task-play-setting.html.twig', [
+            'videoSetting' => $videoSetting,
+        ]);
     }
 
     /**
