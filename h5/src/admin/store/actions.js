@@ -179,3 +179,14 @@ export const getQrcode = ({ commit }, { route, preview, times, duration }) =>
       duration,
     },
   });
+
+// 获取微营销创建活动地址
+export const getCreateMarketingUrl = ({ commit }) =>
+  Api.getCreateMarketingUrl().then(res => {
+    if (res.is_v2 == 0) {
+      commit(
+        types.GET_CREATE_MARKETING_URL,
+        '/admin/login/marketing?target=activity_create',
+      );
+    }
+  });

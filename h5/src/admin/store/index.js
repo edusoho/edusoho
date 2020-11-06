@@ -20,6 +20,7 @@ const state = {
   courseSettings: {},
   classroomSettings: {},
   settings: {},
+  createMarketingUrl: '/admin/v2/login/marketing?target=activity_create',
 };
 
 export default new Vuex.Store({
