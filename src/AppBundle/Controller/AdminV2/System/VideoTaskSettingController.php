@@ -10,14 +10,14 @@ class VideoTaskSettingController extends BaseController
 {
     public function videoTaskPlaySettingAction(Request $request)
     {
-        $videoSetting = $this->getSettingService()->get('videoTaskPlay', array());
+        $videoSetting = $this->getSettingService()->get('videoTaskPlay', []);
 
-        $default = array(
+        $default = [
             'same_video_multiple' => '0',
             'different_video_multiple' => '0',
             'multiple_forbidden_effect' => 'kick_previous',
             'play_rule' => 'auto_pause',
-        );
+        ];
 
         $videoSetting = array_merge($default, $videoSetting);
 
