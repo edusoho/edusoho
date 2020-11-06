@@ -10,7 +10,6 @@ class VideoTaskSettingController extends BaseController
 {
     public function videoPlaySettingAction(Request $request)
     {
-
     }
 
     /**
@@ -18,6 +17,6 @@ class VideoTaskSettingController extends BaseController
      */
     protected function getSettingService()
     {
-        return $this->biz->service('System:SettingService');
+        return $this->createService('System:SettingService');
     }
 }
