@@ -156,6 +156,6 @@ class CouponEventSubscriber extends EventSubscriber implements EventSubscriberIn
     {
         $biz = $this->getBiz();
 
-        return $biz['qiQiuYunSdk.sms'];
+        return $biz['ESCloudSdk.sms'];
     }
 }

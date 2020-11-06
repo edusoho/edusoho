@@ -4,6 +4,7 @@ namespace Biz\Sms\Event;
 
 use AppBundle\Common\StringToolkit;
 use Biz\Sms\Service\SmsService;
+use Biz\Sms\SmsType;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -38,9 +39,7 @@ class PayCenterEventSubscriber extends EventSubscriber implements EventSubscribe
                 $parameters['totalPrice'] = $order['totalPrice'].'元';
             }
 
-            $description = $parameters['order_title'].'成功回执';
-
-            $this->getSmsService()->smsSend($smsType, array($userId), $description, $parameters);
+            $this->getSmsService()->smsSend($smsType, array($userId), SmsType::BUY_NOTIFY, $parameters);
         }
     }
 

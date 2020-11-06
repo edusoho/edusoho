@@ -8,6 +8,7 @@ use Biz\AppLoggerConstant;
 use Biz\OrderFacade\Command\Deduct\PickedDeductWrapper;
 use Biz\OrderFacade\Currency;
 use Biz\Sms\Service\SmsService;
+use Biz\Sms\SmsType;
 use Biz\System\Service\LogService;
 use Codeages\Biz\Framework\Context\BizAware;
 use Codeages\Biz\Order\Service\OrderService;
@@ -199,9 +200,7 @@ abstract class Product extends BizAware implements OrderStatusCallback
                 $price = MathToolkit::simple($orderItem['order']['pay_amount'], 0.01);
                 $parameters['totalPrice'] = $price.'元';
 
-                $description = $parameters['order_title'].'成功回执';
-
-                $this->getSmsService()->smsSend($smsType, [$userId], $description, $parameters);
+                $this->getSmsService()->smsSend($smsType, [$userId], SmsType::BUY_NOTIFY, $parameters);
             }
         } catch (\Exception $e) {
             $this->getLogService()->error(AppLoggerConstant::SMS, 'sms_'.$this->targetType.'_buy_notify', "发送短信通知失败:userId:{$orderItem['user_id']}, targetType:{$this->targetType}, targetId:{$this->targetId}", ['error' => $e->getMessage()]);

@@ -7,6 +7,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Sms\Service\SmsService;
 use Biz\Sms\SmsException;
+use Biz\Sms\SmsType;
 use Biz\System\Service\SettingService;
 use AppBundle\Common\SmsToolkit;
 use AppBundle\Common\ArrayToolkit;
@@ -66,7 +67,7 @@ class SmsController extends BaseController
         $count = $request->query->get('count');
         $parameters = array();
         $mobileNeedVerified = false;
-        $description = '';
+        $templateId = '';
         $courseSet = array();
 
         if ('classroom' == $targetType) {
@@ -75,13 +76,13 @@ class SmsController extends BaseController
             $classroomName = isset($classroomSetting['name']) ? $classroomSetting['name'] : '班级';
             $classroom['title'] = StringToolkit::cutter($classroom['title'], 20, 15, 4);
             $parameters['classroom_title'] = $classroomName.'：《'.$classroom['title'].'》';
-            $description = $parameters['classroom_title'].'发布';
+            $templateId = SmsType::CLASSROOM_PUBLISH;
             $students = $this->getUserService()->findUsersHasMobile($index, $onceSendNum, $mobileNeedVerified);
         } elseif ('course' == $targetType) {
             $courseSet = $this->getCourseSetService()->getCourseSet($id);
             $courseSet['title'] = StringToolkit::cutter($courseSet['title'], 20, 15, 4);
             $parameters['course_title'] = '课程'.'：《'.$courseSet['title'].'》';
-            $description = $parameters['course_title'].'发布';
+            $templateId = SmsType::COURSE_PUBLISH;
 
             if ($courseSet['parentId']) {
                 $classroomCourse = $this->getClassroomService()->getClassroomCourseByCourseSetId($courseSet['id']);
@@ -107,7 +108,7 @@ class SmsController extends BaseController
                 $studentIds = ArrayToolkit::column($students, 'id');
             }
 
-            $this->getSmsService()->smsSend($smsType, $studentIds, $description, $parameters);
+            $this->getSmsService()->smsSend($smsType, $studentIds, $templateId, $parameters);
         }
 
         if ($count > $index + $onceSendNum) {

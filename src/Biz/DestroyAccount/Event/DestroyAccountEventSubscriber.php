@@ -2,6 +2,7 @@
 
 namespace Biz\DestroyAccount\Event;
 
+use Biz\Sms\SmsType;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\NotificationService;
 use Codeages\Biz\Framework\Event\Event;
@@ -28,7 +29,7 @@ class DestroyAccountEventSubscriber extends EventSubscriber implements EventSubs
 
             $smsParams = array(
                 'mobiles' => $user['verifiedMobile'],
-                'templateId' => 2040,
+                'templateId' => SmsType::USER_DESTROYED,
                 'templateParams' => array('schoolName' => $siteName),
             );
 
@@ -54,7 +55,7 @@ class DestroyAccountEventSubscriber extends EventSubscriber implements EventSubs
         if (!empty($user['verifiedMobile'])) {
             $smsParams = array(
                 'mobiles' => $user['verifiedMobile'],
-                'templateId' => 2032,
+                'templateId' => SmsType::USER_REJECT_DESTROYED,
                 'templateParams' => array('reason' => $reason),
             );
 
@@ -96,6 +97,6 @@ class DestroyAccountEventSubscriber extends EventSubscriber implements EventSubs
     {
         $biz = $this->getBiz();
 
-        return $biz['qiQiuYunSdk.sms'];
+        return $biz['ESCloudSdk.sms'];
     }
 }
