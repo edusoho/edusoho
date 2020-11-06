@@ -1,7 +1,6 @@
 <?php
 
 use Symfony\Component\Filesystem\Filesystem;
-use AppBundle\Common\ArrayToolkit;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
