@@ -1,6 +1,6 @@
 import notify from 'common/notify';
 
-var $form = $('#video-play-form');
+let $form = $('#video-play-form');
 $('.js-setting-submit').click(function () {
   $.post($form.data('url'), $form.serialize())
     .success(function(response) {
@@ -19,8 +19,8 @@ $('input:radio[name="same_video_multiple"]').click(function(){
 });
 
 function isEffectShow() {
-  var value = $('input:radio[name="different_video_multiple"]:checked').val();
-  var open = $('input:radio[name="same_video_multiple"]:checked').val();
+  let value = $('input:radio[name="different_video_multiple"]:checked').val();
+  let open = $('input:radio[name="same_video_multiple"]:checked').val();
   if(value == 0 || open ==0) {
     $('.js-effect-show').removeClass('hidden');
   } else {
