@@ -102,4 +102,10 @@ export default [
     method: 'DELETE',
     disableLoading: true,
   },
+  {
+    // 创建评价
+    name: 'createReview',
+    url: '/review',
+    method: 'POST',
+  },
 ];

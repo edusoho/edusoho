@@ -1,0 +1,76 @@
+.course-reviews {
+	margin: 0 vw(20);
+	background-color: white;
+
+	&__heading {
+		@extend .title-18;
+
+		padding: vw(25) 0 vw(15);
+
+		.reset-reviews {
+			padding: vw(3) vw(5);
+			font-size: vw(12);
+			background-color: #eee;
+			border-radius: vw(4);
+		}
+	}
+
+	&__body {
+		margin-bottom: vw(25);
+		font-size: vw(14);
+
+		.course-reviews__avatar {
+			width: vw(32);
+			height: vw(32);
+			margin-right: vw(8);
+
+			img {
+				width: 100%;
+				height: 100%;
+				border-radius: 50%;
+			}
+		}
+
+		.course-reviews__content {
+			width: vw(295);
+			padding-bottom: vw(16);
+		}
+
+		.reviews-content_rating {
+			margin-top: vw(8);
+			color: #999;
+			font-size: vw(12);
+			line-height: vw(16);
+
+			.plan-rate {
+				position: relative;
+				top: vw(1);
+
+				i {
+					font-size: vw(12) !important;
+				}
+			}
+		}
+
+		.reviews-content_text {
+			margin-top: vw(8);
+			color: #333;
+			font-size: vw(14);
+			word-wrap: break-word;
+		}
+
+		.reviews-content__header {
+			.reviews-content__header__nickname {
+				color: #666;
+				font-size: vw(14);
+			}
+
+			.reviews-content__header__time {
+				position: relative;
+				top: vw(2);
+				color: #999;
+				font-size: vw(12);
+			}
+		}
+	}
+}
