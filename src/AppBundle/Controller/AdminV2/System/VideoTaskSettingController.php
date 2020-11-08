@@ -55,7 +55,7 @@ class VideoTaskSettingController extends BaseController
 
         return $this->render('admin-v2/system/course-setting/video-effective-learning-time-setting.html.twig', [
             'effectiveTimeSetting' => $effectiveTimeSetting,
-            'videoSetting' => $this->getSettingService()->get('videoTaskPlay', [])
+            'videoSetting' => $this->getSettingService()->get('videoTaskPlay', []),
         ]);
     }
 
