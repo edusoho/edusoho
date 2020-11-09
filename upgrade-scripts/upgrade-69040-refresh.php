@@ -51,6 +51,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $definedFuncNames = array(
             'updateGoodsSpecsNums',
             'updateGoodsSpecsTitle',
+            'updateOpenCourseRecommendGoodsId',
         );
 
         $funcNames = array();
@@ -122,6 +123,20 @@ class EduSohoUpgrade extends AbstractUpdater
         }
         $this->logger('info', '更新goods_specs表的title成功.');
         return 1;
+    }
+
+    public function updateOpenCourseRecommendGoodsId()
+    {
+        if ($this->isTableExist('open_course_recommend') && $this->isTableExist('course_v8') && $this->isTableExist('product') && $this->isTableExist('goods') ) {
+            $this->getConnection()->exec("
+                UPDATE `open_course_recommend` oc INNER  JOIN (
+                    SELECT o.id as id, g.id as goodsId FROM `open_course_recommend` o 
+                        JOIN `course_v8` c ON c.id = o.`recommendCourseId` AND o.recommendGoodsId = 0 
+                        JOIN `product` p ON p.targetId = c.courseSetId AND p.targetType='course' 
+                        JOIN `goods` g ON g.productId = p.id) m 
+                    ON m.id = oc.id SET oc.recommendGoodsId = m.goodsId;
+            ");
+        }
     }
 
     protected function generateIndex($step, $page)
