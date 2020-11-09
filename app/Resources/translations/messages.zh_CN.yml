@@ -7602,6 +7602,18 @@ admin.setting_course.open_course.open_course_review: 评价
 admin.article_setting.article_comments_manage: 资讯内容管理
 admin.article_setting.message_comments_manage: 私信内容管理
 admin.setting_course.article.article_comment: 评价
+admin.setting_course.video_play_setting: 在线视频课时播放配置
+admin.setting_course.video_play_setting.multiple_open: 多开学习
+admin.setting_course.video_play_setting.same_video_multiple: 同一视频课时多开
+admin.setting_course.video_play_setting.different_video_multiple: 不同视频课时多开
+admin.setting_course.video_play_setting.multiple_forbidden_effect: 禁止多开效果
+admin.setting_course.video_play_setting.kick_previous_play: 踢掉前次播放，需要终端升级到最新版本
+admin.setting_course.video_play_setting.reject_current_play: 拒绝本次播放
+admin.setting_course.video_play_setting.ineffective_learning: 无效学习时
+admin.setting_course.video_play_setting.play_rule: 播放规则
+admin.setting_course.video_play_setting.play_rule.tips: 当前播放窗口不是屏幕活跃窗口，部分终端不支持。当前播放窗口，长时间未检测到用户动作。
+admin.setting_course.video_play_setting.play_rule.auto_pause: 自动暂停
+admin.setting_course.video_play_setting.play_rule.no_action: 不做干预
 
 #微信授权设置
 admin.setting_wechat_auth.web_scan_login: 网页扫码登录
