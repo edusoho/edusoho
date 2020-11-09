@@ -1,6 +1,6 @@
 import notify from 'common/notify';
 
-var $form = $('#video-effective-time-form');
+let $form = $('#video-effective-time-form');
 $('.js-setting-submit').click(function () {
   if (!confirm(Translator.trans('admin_v2.video_effective_time_setting.cancel.hint'))) {
     return;
