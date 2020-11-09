@@ -51,6 +51,9 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = array(
             'updateBizSchedulerJob',
+            'updateGoodsSpecsNums',
+            'updateGoodsSpecsTitle',
+            'updateOpenCourseRecommendGoodsId',
         );
 
         $funcNames = array();
@@ -97,6 +100,62 @@ class EduSohoUpgrade extends AbstractUpdater
         }
         
         $this->logger('info', '更新同步云资源定时任务');
+        return 1;
+    }
+
+
+    public function updateGoodsSpecsNums()
+    {
+        if ($this->isTableExist('goods') && $this->isTableExist('goods_specs')) {
+            $this->getConnection()->exec("
+                UPDATE goods g INNER JOIN (
+                    SELECT g.id, COUNT(gs.id) AS num FROM goods g, goods_specs gs 
+                        WHERE g.id = gs.goodsId GROUP BY g.id
+                ) m SET g.specsNum = m.num WHERE g.id = m.id;
+            ");
+            $this->logger('info', '更新goods表的specsNum成功.');
+
+            $this->getConnection()->exec("
+                UPDATE goods g INNER JOIN (
+                    SELECT g.id, COUNT(gs.id) AS num FROM goods g, goods_specs gs 
+                        WHERE g.id = gs.goodsId AND gs.status = 'published' GROUP BY g.id
+                ) m SET g.publishedSpecsNum = m.num WHERE g.id = m.id;
+            ");
+
+            $this->logger('info', '更新goods表的publishedSpecsNum成功.');
+        }
+        return 1;
+    }
+
+    public function updateGoodsSpecsTitle()
+    {
+        if ($this->isTableExist('goods') && $this->isTableExist('goods_specs')) {
+            $this->getConnection()->exec("
+                UPDATE `goods_specs` SET title = '' WHERE id IN ( 
+                    SELECT id FROM (
+                        SELECT gs.id AS id FROM goods g, goods_specs gs WHERE g.id = gs.goodsId AND g.type = 'course' AND gs.title = g.title AND g.specsNum = 1
+                    ) gds
+                );
+            ");
+        }
+        $this->logger('info', '更新goods_specs表的title成功.');
+        return 1;
+    }
+
+    public function updateOpenCourseRecommendGoodsId()
+    {
+        if ($this->isTableExist('open_course_recommend') && $this->isTableExist('course_v8') && $this->isTableExist('product') && $this->isTableExist('goods') ) {
+            $this->getConnection()->exec("
+                UPDATE `open_course_recommend` oc INNER  JOIN (
+                    SELECT o.id as id, g.id as goodsId FROM `open_course_recommend` o 
+                        JOIN `course_v8` c ON c.id = o.`recommendCourseId` AND o.recommendGoodsId = 0 
+                        JOIN `product` p ON p.targetId = c.courseSetId AND p.targetType='course' 
+                        JOIN `goods` g ON g.productId = p.id) m 
+                    ON m.id = oc.id SET oc.recommendGoodsId = m.goodsId;
+            ");
+        }
+
+        $this->logger('info', '更新open_course_recommend表的recommendGoodsId成功.');
         return 1;
     }
 
