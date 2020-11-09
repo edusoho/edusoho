@@ -2,7 +2,7 @@
 {% if value %}value="{{ value|json_encode }}{% endif %}
 {% if required|default(false) %} required="required" {% endif %} 
 {% if disabled|default(false) %} disabled="disabled" {% endif %}">
-<div class="form-control border-unset control-border-unset">
+<div class="form-control border-unset control-border-unset cascader-select">
 	<div class="cd-select col-md-4 pl0" id="province">
 		<input type="hidden" name="province" value="{{ value[0]|default(null) }}"/>
 		<div class="select-value">
