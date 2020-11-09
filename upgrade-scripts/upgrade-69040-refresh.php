@@ -49,6 +49,7 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
+            'updateGoodsSpecsNums',
             'updateGoodsSpecsTitle',
         );
 
@@ -83,6 +84,29 @@ class EduSohoUpgrade extends AbstractUpdater
                 'progress' => 0,
             );
         }
+    }
+
+    public function updateGoodsSpecsNums()
+    {
+        if ($this->isTableExist('goods') && $this->isTableExist('goods_specs')) {
+            $this->getConnection()->exec("
+                UPDATE goods g INNER JOIN (
+                    SELECT g.id, COUNT(gs.id) AS num FROM goods g, goods_specs gs 
+                        WHERE g.id = gs.goodsId GROUP BY g.id
+                ) m SET g.specsNum = m.num WHERE g.id = m.id;
+            ");
+            $this->logger('info', '更新goods表的specsNum成功.');
+
+            $this->getConnection()->exec("
+                UPDATE goods g INNER JOIN (
+                    SELECT g.id, COUNT(gs.id) AS num FROM goods g, goods_specs gs 
+                        WHERE g.id = gs.goodsId AND gs.status = 'published' GROUP BY g.id
+                ) m SET g.publishedSpecsNum = m.num WHERE g.id = m.id;
+            ");
+
+            $this->logger('info', '更新goods表的publishedSpecsNum成功.');
+        }
+        return 1;
     }
 
     public function updateGoodsSpecsTitle()
