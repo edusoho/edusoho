@@ -17,6 +17,8 @@ class ActivityVideoWatchRecordDaoImpl extends AdvancedDaoImpl
             ],
             'conditions' => [
                 'id = :id',
+                'startTime >= :startTime_GE',
+                'endTime < :endTime_LT',
             ],
             'orderbys' => ['id', 'createdTime'],
         ];
