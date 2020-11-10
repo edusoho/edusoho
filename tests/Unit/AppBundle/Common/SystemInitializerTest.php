@@ -140,7 +140,7 @@ class SystemInitializerTest extends BaseTestCase
 
         $this->assertEquals(25, count($result));
 
-        $this->assertArrayEquals(array(
+        $this->assertArrayEquals([
             'Order_FinishSuccessOrdersJob',
             'Order_CloseOrdersJob',
             'DeleteExpiredTokenJob',
@@ -165,7 +165,7 @@ class SystemInitializerTest extends BaseTestCase
             'UpdateLiveStatusJob',
             'CloudConsultFreshJob',
             'DeleteUserFootprintJob',
-            ), ArrayToolkit::column($result, 'name'));
+            ], ArrayToolkit::column($result, 'name'));
     }
 
     public function testInitSystemUsers()
