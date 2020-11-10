@@ -64,8 +64,8 @@ class SystemCrontabInitializer
                 AppLoggerConstant::CRONTAB,
                 'register_crontab_job',
              'crontab.register_crontab_job.fail',
-                      array('error' => $e->getMessage(),
-                ));
+                      ['error' => $e->getMessage(),
+                ]);
             }
         }
     }
@@ -94,123 +94,129 @@ class SystemCrontabInitializer
         $xapiRandNum3 = rand(1, 59);
         $consultRandNum = rand(1, 59);
         $consultHourRandNum = rand(0, 6);
-        $jobMap = array(
-            'Order_FinishSuccessOrdersJob' => array(
+        $jobMap = [
+            'Order_FinishSuccessOrdersJob' => [
                 'expression' => '20 * * * *',
                 'class' => 'Codeages\Biz\Order\Job\FinishSuccessOrdersJob',
-            ),
-            'Order_CloseOrdersJob' => array(
+            ],
+            'Order_CloseOrdersJob' => [
                 'expression' => '20 * * * *',
                 'class' => 'Codeages\Biz\Order\Job\CloseExpiredOrdersJob',
-            ),
-            'DeleteExpiredTokenJob' => array(
+            ],
+            'DeleteExpiredTokenJob' => [
                 'expression' => '0 * * * *',
                 'class' => 'Biz\User\Job\DeleteExpiredTokenJob',
-            ),
-            'SessionGcJob' => array(
+            ],
+            'SessionGcJob' => [
                 'expression' => '0 * * * *',
                 'class' => 'Codeages\Biz\Framework\Session\Job\SessionGcJob',
-            ),
-            'OnlineGcJob' => array(
+            ],
+            'OnlineGcJob' => [
                 'expression' => '0 * * * *',
                 'class' => 'Codeages\Biz\Framework\Session\Job\OnlineGcJob',
-            ),
-            'Scheduler_MarkExecutingTimeoutJob' => array(
+            ],
+            'Scheduler_MarkExecutingTimeoutJob' => [
                 'expression' => '0 * * * *',
                 'class' => 'Codeages\Biz\Framework\Scheduler\Job\MarkExecutingTimeoutJob',
-            ),
-            'RefreshLearningProgressJob' => array(
+            ],
+            'RefreshLearningProgressJob' => [
                 'expression' => '0 2 * * *',
                 'class' => 'Biz\Course\Job\RefreshLearningProgressJob',
                 'misfire_policy' => 'executing',
-            ),
-            'UpdateInviteRecordOrderInfoJob' => array(
+            ],
+            'UpdateInviteRecordOrderInfoJob' => [
                 'expression' => '0 * * * *',
                 'class' => 'Biz\User\Job\UpdateInviteRecordOrderInfoJob',
-            ),
-            'Xapi_PushStatementsJob' => array(
+            ],
+            'Xapi_PushStatementsJob' => [
                 'expression' => "{$xapiRandNum1} 1-6 * * *",
                 'class' => 'Biz\Xapi\Job\PushStatementJob',
-            ),
-            'Xapi_AddActivityWatchToStatementJob' => array(
+            ],
+            'Xapi_AddActivityWatchToStatementJob' => [
                 'expression' => "{$xapiRandNum2} 1-6 * * *",
                 'class' => 'Biz\Xapi\Job\AddActivityWatchToStatementJob',
-            ),
-            'Xapi_ArchiveStatementJob' => array(
+            ],
+            'Xapi_ArchiveStatementJob' => [
                 'expression' => "{$xapiRandNum3} 1-6 * * *",
                 'class' => 'Biz\Xapi\Job\ArchiveStatementJob',
-            ),
-            'Xapi_ConvertStatementsJob' => array(
+            ],
+            'Xapi_ConvertStatementsJob' => [
                 'expression' => '*/10 1-6 * * *',
                 'class' => 'Biz\Xapi\Job\ConvertStatementJob',
-            ),
-            'SyncUserTotalLearnStatisticsJob' => array(
+            ],
+            'SyncUserTotalLearnStatisticsJob' => [
                 'expression' => '*/3 1-6 * * *',
                 'class' => 'Biz\UserLearnStatistics\Job\SyncTotalJob',
-            ),
-            'SyncUserLearnDailyPastLearnStatisticsJob' => array(
+            ],
+            'SyncUserLearnDailyPastLearnStatisticsJob' => [
                 'expression' => '*/3 1-6 * * *',
                 'class' => 'Biz\UserLearnStatistics\Job\SyncDailyPastDataJob',
-            ),
-            'DeleteUserLearnDailyPastLearnStatisticsJob' => array(
+            ],
+            'DeleteUserLearnDailyPastLearnStatisticsJob' => [
                 'expression' => '0 2 * * *',
                 'class' => 'Biz\UserLearnStatistics\Job\DeletePastDataJob',
-            ),
-            'SyncUserLearnDailyLearnStatisticsJob' => array(
+            ],
+            'SyncUserLearnDailyLearnStatisticsJob' => [
                 'expression' => '0 1 * * *',
                 'class' => 'Biz\UserLearnStatistics\Job\SyncDaily',
-            ),
-            'StorageDailyLearnStatisticsJob' => array(
+            ],
+            'StorageDailyLearnStatisticsJob' => [
                 'expression' => '0 3 * * *',
                 'class' => 'Biz\UserLearnStatistics\Job\StorageDailyJob',
-            ),
-            'DistributorSyncJob' => array(
+            ],
+            'DistributorSyncJob' => [
                 'expression' => '*/19 * * * *',
                 'class' => 'Biz\Distributor\Job\DistributorSyncJob',
-            ),
-            'DeleteFiredLogJob' => array(
+            ],
+            'DeleteFiredLogJob' => [
                 'expression' => '0 23 * * *',
                 'class' => 'Codeages\Biz\Framework\Scheduler\Job\DeleteFiredLogJob',
-            ),
-            'CheckConvertStatusJob' => array(
+            ],
+            'CheckConvertStatusJob' => [
                 'expression' => '*/15 * * * *',
                 'class' => 'Biz\File\Job\VideoMediaStatusUpdateJob',
                 'misfire_threshold' => 300,
-            ),
-            'updateCourseSetHotSeq' => array(
+            ],
+            'updateCourseSetHotSeq' => [
                 'expression' => '47 4 * * *',
                 'class' => 'Biz\Course\Job\UpdateCourseSetHotSeqJob',
                 'misfire_threshold' => 0,
-            ),
-            'UpdateLiveStatusJob' => array(
+            ],
+            'UpdateLiveStatusJob' => [
                 'expression' => '*/10 * * * *',
                 'class' => 'Biz\Live\Job\UpdateLiveStatusJob',
                 'misfire_threshold' => 300,
-            ),
-            'CloudConsultFreshJob' => array(
+            ],
+            'CloudConsultFreshJob' => [
                 'expression' => "{$consultRandNum} {$consultHourRandNum} * * *",
                 'class' => 'Biz\CloudPlatform\Job\CloudConsultFreshJob',
                 'misfire_policy' => 'executing',
-            ),
-            'DeleteUserFootprintJob' => array(
+            ],
+            'DeleteUserFootprintJob' => [
                 'expression' => '0 1 * * *',
                 'class' => 'Biz\User\Job\DeleteUserFootprintJob',
                 'misfire_policy' => 'executing',
-            ),
-            'StatisticsPageStayDailyDataJob' => array(
+
+            ],
+            'StatisticsPageStayDailyDataJob' => [
                 'expression' => '30 1 * * *',
                 'class' => 'Biz\Visualization\Job\StatisticsPageStayDailyDataJob',
                 'misfire_policy' => 'executing',
-            ),
-        );
-        $defaultJob = array(
+            ],
+            'StatisticsVideoDailyDataJob' => [
+                'expression' => '30 1 * * *',
+                'class' => 'Biz\Visualization\Job\StatisticsVideoDailyDataJob',
+                'misfire_policy' => 'executing',
+            ],
+        ];
+        $defaultJob = [
             'pool' => 'default',
             'source' => self::SOURCE_SYSTEM,
-            'args' => array(),
-        );
+            'args' => [],
+        ];
 
         foreach ($jobMap as $key => $job) {
-            $count = self::getSchedulerService()->countJobs(array('name' => $key, 'source' => self::SOURCE_SYSTEM));
+            $count = self::getSchedulerService()->countJobs(['name' => $key, 'source' => self::SOURCE_SYSTEM]);
             if (0 == $count) {
                 $job = array_merge($defaultJob, $job);
                 $job['name'] = $key;
