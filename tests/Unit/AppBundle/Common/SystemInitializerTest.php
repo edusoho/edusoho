@@ -138,7 +138,7 @@ class SystemInitializerTest extends BaseTestCase
 
         $result = $this->getSchedulerService()->searchJobs(array(), array(), 0, \PHP_INT_MAX);
 
-        $this->assertEquals(24, count($result));
+        $this->assertEquals(25, count($result));
 
         $this->assertArrayEquals(array(
             'Order_FinishSuccessOrdersJob',
