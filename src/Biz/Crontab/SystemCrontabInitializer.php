@@ -197,6 +197,11 @@ class SystemCrontabInitializer
                 'class' => 'Biz\User\Job\DeleteUserFootprintJob',
                 'misfire_policy' => 'executing',
             ),
+            'StatisticsPageStayDailyDataJob' => array(
+                'expression' => '30 1 * * *',
+                'class' => 'Biz\Visualization\Job\StatisticsPageStayDailyDataJob',
+                'misfire_policy' => 'executing',
+            ),
         );
         $defaultJob = array(
             'pool' => 'default',
