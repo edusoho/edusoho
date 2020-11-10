@@ -10,7 +10,7 @@
                 </span>
                 <span v-if="buyViewMode === 'btn'">
                     <a :class="btnClass"
-                       v-if="!needBuyVip"
+                       v-if="!needBuyVip || (needBuyVip && sku.buyable)"
                        class="goods-btn-hover pull-right"
                        @click="buySku">
                         <slot>{{ buyViewText }}</slot>
@@ -147,6 +147,7 @@
                         this.needBuyVip = false;
                     } else {
                         this.needBuyVip = true;
+                        this.buyViewText = sku.displayPrice == 0 ? Translator.trans('goods.show_page.free_join_btn') : Translator.trans('goods.show_page.buy_btn');
                     }
                 } else if (sku.buyable != 1) {  // 已发布，但是未开放购买
                     this.buyViewMode = 'text';
