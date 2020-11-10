@@ -34,6 +34,31 @@ class VideoTaskSettingController extends BaseController
         ]);
     }
 
+    public function videoEffectiveLearningTimeSettingAction(Request $request)
+    {
+        $effectiveTimeSetting = $this->getSettingService()->get('videoEffectiveTimeStatistics', []);
+
+        $default = [
+            'statistical_dimension' => 'playing',
+            'video_multiple' => 'de-weight',
+        ];
+
+        $effectiveTimeSetting = array_merge($default, $effectiveTimeSetting);
+
+        if ('POST' == $request->getMethod()) {
+            $set = $request->request->all();
+
+            $effectiveTimeSetting = array_merge($effectiveTimeSetting, $set);
+
+            $this->getSettingService()->set('videoEffectiveTimeStatistics', $set);
+        }
+
+        return $this->render('admin-v2/system/course-setting/video-effective-learning-time-setting.html.twig', [
+            'effectiveTimeSetting' => $effectiveTimeSetting,
+            'videoSetting' => $this->getSettingService()->get('videoTaskPlay', []),
+        ]);
+    }
+
     /**
      * @return SettingService
      */
