@@ -9,7 +9,6 @@ use Biz\Visualization\Service\ActivityDataDailyStatisticsService;
 
 class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
 {
-
     public function testStatisticsPageStayDailyData()
     {
         $this->mockBiz('Visualization:ActivityLearnRecordDao', [

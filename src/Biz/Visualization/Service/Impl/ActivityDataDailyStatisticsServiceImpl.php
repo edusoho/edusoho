@@ -12,7 +12,6 @@ use Biz\Visualization\Service\ActivityDataDailyStatisticsService;
 
 class ActivityDataDailyStatisticsServiceImpl extends BaseService implements ActivityDataDailyStatisticsService
 {
-
     public function statisticsPageStayDailyData($startTime, $endTime)
     {
         $learnRecords = $this->getActivityLearnRecordDao()->search(
