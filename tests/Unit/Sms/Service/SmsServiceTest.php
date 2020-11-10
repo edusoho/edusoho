@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\Sms\Service;
 
+use Biz\BaseTestCase;
 use Biz\Sms\SmsType;
 use Mockery;
-use Biz\BaseTestCase;
 
 class SmsServiceTest extends BaseTestCase
 {
@@ -42,12 +42,12 @@ class SmsServiceTest extends BaseTestCase
 
         $user1 = $this->createUser('user1', '15869165217');
         $user2 = $this->createUser('user2', '15869165222');
-        $userIds = array($user1['id'], $user2['id']);
+        $userIds = [$user1['id'], $user2['id']];
 
-        $parameters = array(
+        $parameters = [
             'lesson_title' => '《综合测试》试卷',
             'course_title' => '《课程1》',
-        );
+        ];
         $result = $this->getSmsService()->smsSend('sms_testpaper_check', $userIds, SmsType::EXAM_REVIEW, $parameters);
 
         $this->assertTrue($result);
@@ -174,7 +174,7 @@ class SmsServiceTest extends BaseTestCase
 
     protected function createUser($user, $phone)
     {
-        $userInfo = array();
+        $userInfo = [];
         $userInfo['email'] = "{$user}@{$user}.com";
         $userInfo['verifiedMobile'] = $phone;
         $userInfo['nickname'] = "{$user}";
@@ -186,7 +186,7 @@ class SmsServiceTest extends BaseTestCase
 
     protected function createApiMock($return = null)
     {
-        $return = isset($return) ? $return : array('status' => 'ok');
+        $return = isset($return) ? $return : ['status' => 'ok'];
         $mockObject = Mockery::mock('MockedApi_ddescll2'.rand());
         $mockObject->shouldReceive('post')->times(1)->andReturn($return);
         $mockObject->shouldReceive('getAccessKey')->andReturn('access_key');
@@ -195,7 +195,7 @@ class SmsServiceTest extends BaseTestCase
 
     protected function setSmsSetting()
     {
-        $dataUserPosted = array(
+        $dataUserPosted = [
             'sms_enabled' => '1',
             'sms_registration' => 'off',
             'sms_forget_password' => 'off',
@@ -215,10 +215,10 @@ class SmsServiceTest extends BaseTestCase
             'sms_classroom_buy_notify' => 'off',
             'sms_vip_buy_notify' => 'off',
             'sms_coin_buy_notify' => 'off',
-        );
+        ];
         $this->getSettingService()->set('cloud_sms', $dataUserPosted);
 
-        return $this->getSettingService()->get('cloud_sms', array());
+        return $this->getSettingService()->get('cloud_sms', []);
     }
 
     protected function getUserService()
