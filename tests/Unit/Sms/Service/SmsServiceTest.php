@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Sms\Service;
 
+use Biz\Sms\SmsType;
 use Mockery;
 use Biz\BaseTestCase;
 
@@ -27,6 +28,14 @@ class SmsServiceTest extends BaseTestCase
 
     public function testSmsSend()
     {
+        $mockedSms = $this->mockPureBiz('ESCloudSdk.sms', [
+            [
+                'functionName' => 'sendToMany',
+                'returnValue' => [
+                    'no' => 'test no',
+                ],
+            ],
+        ]);
         $smsSetting = $this->setSmsSetting();
         $smsSetting['sms_testpaper_check'] = 'on';
         $this->getSettingService()->set('cloud_sms', $smsSetting);
@@ -35,14 +44,14 @@ class SmsServiceTest extends BaseTestCase
         $user2 = $this->createUser('user2', '15869165222');
         $userIds = array($user1['id'], $user2['id']);
 
-        $description = '试卷批阅提醒';
         $parameters = array(
             'lesson_title' => '《综合测试》试卷',
             'course_title' => '《课程1》',
         );
-        $result = $this->getSmsService()->smsSend('sms_testpaper_check', $userIds, $description, $parameters);
+        $result = $this->getSmsService()->smsSend('sms_testpaper_check', $userIds, SmsType::EXAM_REVIEW, $parameters);
 
         $this->assertTrue($result);
+        $mockedSms->shouldReceive('sendToMany')->times(1);
     }
 
     /**
@@ -50,6 +59,15 @@ class SmsServiceTest extends BaseTestCase
      */
     public function testSendVerifySms()
     {
+        $mockedSms = $this->mockPureBiz('ESCloudSdk.sms', [
+            [
+                'functionName' => 'sendToMany',
+                'returnValue' => [
+                    'no' => 'test no',
+                ],
+            ],
+        ]);
+
         $smsSetting = $this->setSmsSetting();
         $smsSetting['sms_bind'] = 'on';
         $this->getSettingService()->set('cloud_sms', $smsSetting);
@@ -60,10 +78,19 @@ class SmsServiceTest extends BaseTestCase
         $smsLastTime = 0;
         $result = $this->getSmsService()->sendVerifySms('sms_bind', $toMobile, $smsLastTime);
         $this->assertEquals($toMobile, $result['to']);
+        $mockedSms->shouldReceive('sendToMany')->times(1);
     }
 
     public function testUserPayVerifySms()
     {
+        $mockedSms = $this->mockPureBiz('ESCloudSdk.sms', [
+            [
+                'functionName' => 'sendToOne',
+                'returnValue' => [
+                    'no' => 'test no',
+                ],
+            ],
+        ]);
         $smsSetting = $this->setSmsSetting();
         $smsSetting['sms_user_pay'] = 'on';
         $this->getSettingService()->set('cloud_sms', $smsSetting);
@@ -75,10 +102,19 @@ class SmsServiceTest extends BaseTestCase
         $this->createApiMock();
         $result = $this->getSmsService()->sendVerifySms('sms_user_pay', $toMobile, $smsLastTime);
         $this->assertEquals($toMobile, $result['to']);
+        $mockedSms->shouldReceive('sendToOne')->times(1);
     }
 
     public function testForgetPasswordVerifySms()
     {
+        $mockedSms = $this->mockPureBiz('ESCloudSdk.sms', [
+            [
+                'functionName' => 'sendToOne',
+                'returnValue' => [
+                    'no' => 'test no',
+                ],
+            ],
+        ]);
         $smsSetting = $this->setSmsSetting();
         $smsSetting['sms_forget_password'] = 'on';
         $this->getSettingService()->set('cloud_sms', $smsSetting);
@@ -90,6 +126,7 @@ class SmsServiceTest extends BaseTestCase
         $this->createApiMock();
         $result = $this->getSmsService()->sendVerifySms('sms_forget_password', $toMobile, $smsLastTime);
         $this->assertEquals($toMobile, $result['to']);
+        $mockedSms->shouldReceive('sendToOne')->times(1);
     }
 
     /**
@@ -99,21 +136,6 @@ class SmsServiceTest extends BaseTestCase
     {
         $this->createUser('user1', '');
         $this->getSmsService()->sendVerifySms('sms_forget_password', '18435180000', 0);
-    }
-
-    public function testSendError()
-    {
-        $smsSetting = $this->setSmsSetting();
-        $smsSetting['sms_user_pay'] = 'on';
-        $this->getSettingService()->set('cloud_sms', $smsSetting);
-
-        $toMobile = '15869165217';
-        $currentUser = $this->getCurrentUser();
-        $currentUser['verifiedMobile'] = $toMobile;
-        $smsLastTime = 0;
-        $this->createApiMock(array('error' => '测试发送失败'));
-        $result = $this->getSmsService()->sendVerifySms('sms_user_pay', $toMobile, $smsLastTime);
-        $this->assertEquals('发送失败, 测试发送失败', $result['error']);
     }
 
     public function testCheckVerifySms()
