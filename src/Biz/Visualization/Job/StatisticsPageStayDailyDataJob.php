@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Biz\Visualization\Job;
-
 
 use Biz\Visualization\Service\ActivityDataDailyStatisticsService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;

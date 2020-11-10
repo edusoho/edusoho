@@ -2,7 +2,6 @@
 
 namespace Biz\Visualization\Service\Impl;
 
-
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Visualization\Dao\ActivityLearnRecordDao;
@@ -26,9 +25,9 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
         $learnRecords = ArrayToolkit::group($learnRecords, 'userId');
 
         $data = [];
-        foreach ($learnRecords as $userId => $learnRecord){
+        foreach ($learnRecords as $userId => $learnRecord) {
             $learnRecord = ArrayToolkit::group($learnRecord, 'activityId');
-            foreach($learnRecord as $activityId => $activityRecords){
+            foreach ($learnRecord as $activityId => $activityRecords) {
                 $activityRecord = current($activityRecords);
                 $data[] = [
                     'userId' => $userId,

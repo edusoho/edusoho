@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tests\Unit\Visualization\Service;
-
 
 use Biz\BaseTestCase;
 use Biz\Visualization\Dao\ActivityStayDailyDao;
