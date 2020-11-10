@@ -70,7 +70,6 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
                     'dayTime' => $startTime,
                     'sumTime' => array_sum(ArrayToolkit::column($activityLearnRecords, 'duration')),
                     'pureTime' => $this->sumPureTime($activityLearnRecords),
-
                 ];
             }
         }
