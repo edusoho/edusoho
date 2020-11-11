@@ -9,7 +9,6 @@ class AddUserLearnStatisticsColumns extends Migration
      */
     public function up()
     {
-
     }
 
     /**
@@ -17,6 +16,5 @@ class AddUserLearnStatisticsColumns extends Migration
      */
     public function down()
     {
-
     }
 }
