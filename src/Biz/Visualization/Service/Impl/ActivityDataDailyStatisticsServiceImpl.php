@@ -4,6 +4,9 @@ namespace Biz\Visualization\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
+use Biz\System\Service\SettingService;
+use Biz\Visualization\Dao\ActivityLearnDailyDao;
+use Biz\Visualization\Dao\ActivityStayDailyDao;
 use Biz\Visualization\Dao\ActivityVideoDailyDao;
 use Biz\Visualization\Dao\ActivityVideoWatchRecordDao;
 use Biz\Visualization\Service\ActivityDataDailyStatisticsService;
@@ -41,6 +44,23 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
         return $this->getActivityVideoDailyDao()->batchCreate($data);
     }
 
+    public function statisticsLearnDailyData($dayTime)
+    {
+        $statisticsSetting = $this->getSettingService()->get('videoEffectiveTimeStatistics', []);
+        $data = [];
+        $conditions = ['dayTime' => $dayTime];
+        $columns = ['userId', 'activityId', 'taskId', 'courseId', 'courseSetId', 'dayTime', 'sumTime', 'pureTime'];
+        if (empty($statisticsSetting) || 'playing' == $statisticsSetting['statistical_dimension']) {
+            $data = $this->getActivityVideoDailyDao()->search($conditions, [], 0, PHP_INT_MAX, $columns);
+        }
+
+        if ('page' == $statisticsSetting['statistical_dimension']) {
+            $data = $this->getActivityStayDailyDao()->search($conditions, [], 0, PHP_INT_MAX, $columns);
+        }
+
+        return $this->getActivityLearnDailyDao()->batchCreate($data);
+    }
+
     public function sumPureTime($records)
     {
         uasort($records, function ($record1, $record2) {
@@ -51,7 +71,7 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
         $pureTime = 0;
         foreach ($records as $record) {
             if ($record['startTime'] > $end) {
-                $pureTime = $pureTime + ($end - $start);
+                $pureTime += $end - $start;
                 $start = $record['startTime'];
                 $end = $record['endTime'];
             } elseif ($record['endTime'] > $end && $record['startTime'] <= $end) {
@@ -60,7 +80,7 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
                 continue;
             }
         }
-        $pureTime = $pureTime + ($end - $start);
+        $pureTime += $end - $start;
 
         return $pureTime;
     }
@@ -79,5 +99,29 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
     protected function getActivityVideoDailyDao()
     {
         return $this->createDao('Visualization:ActivityVideoDailyDao');
+    }
+
+    /**
+     * @return ActivityStayDailyDao
+     */
+    protected function getActivityStayDailyDao()
+    {
+        return $this->createDao('Visualization:ActivityStayDailyDao');
+    }
+
+    /**
+     * @return ActivityLearnDailyDao
+     */
+    protected function getActivityLearnDailyDao()
+    {
+        return $this->createDao('Visualization:ActivityLearnDailyDao');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 }
