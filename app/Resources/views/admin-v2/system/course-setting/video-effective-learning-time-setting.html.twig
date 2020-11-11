@@ -1,0 +1,54 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_video_task_setting' %}
+{% do script(['app/js/admin-v2/system/video-effective-time/index.js']) %}
+
+{% block main %}
+  <ul class="nav nav-pills mbl small">
+    <li>
+      <a href="{{ path('admin_v2_video_task_setting') }}">{{ 'admin.setting_course.video_play_setting'|trans }}</a>
+    </li>
+    <li class="active">
+      <a href="{{ path('admin_v2_video_effective_learning_time_setting') }}">{{ 'admin.setting_course.effective_learning_time_rule'|trans }}</a>
+    </li>
+  </ul>
+
+  <form class="form-horizontal" method="post" id="video-effective-time-form" data-url="{{ path('admin_v2_video_effective_learning_time_setting') }}" novalidate>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label >{{'admin.setting_course.learning_time_statistical_dimension'|trans}}</label></div>
+      <div class="controls col-md-8 radios">
+        {{ radios('statistical_dimension', {'playing':'admin.setting_course.effective_learning_time.playing_time'|trans, 'page':'admin.setting_course.effective_learning_time.page_time'|trans}, effectiveTimeSetting.statistical_dimension) }}
+        <div class="help-block" >{{'admin.setting_course.effective_learning_time.help_block'|trans}}</div>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label >{{'admin.setting_course.video_play_setting.multiple_open'|trans}}</label></div>
+      <div class="controls col-md-8 radios">
+        {% if videoSetting.same_video_multiple == 1 or videoSetting.different_video_multiple == 1 %}
+          {% set canMultiple = 1 %}
+        {% else %}
+          {% set canMultiple = 0 %}
+        {% endif %}
+        <label>
+          <input {% if canMultiple == 0%}disabled{% endif %} type="radio" name="video_multiple" id="deWeight" value="de-weight" {% if effectiveTimeSetting.video_multiple == 'de-weight' %}checked="checked"{% endif %}> {{'admin.setting_course.effective_learning_time.reweighted_merge'|trans}}
+        </label>
+        <div class="help-block" >{{'admin.setting_course.effective_learning_time.reweighted_merge.help_block'|trans}}</div>
+
+        <label style="display: block">
+          <input {% if canMultiple == 0%}disabled{% endif %} type="radio" name="video_multiple" id="accumulation" value="accumulation" {% if effectiveTimeSetting.video_multiple == 'accumulation' %}checked="checked"{% endif %}> {{'admin.setting_course.effective_learning_time.accumulated_merge'|trans}}
+        </label>
+        <div class="help-block" >{{'admin.setting_course.effective_learning_time.accumulated_merge.help_block'|trans}}</div>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label"></div>
+      <div class="controls col-md-8">
+        <button type="submit" class="btn btn-primary js-setting-submit">{{'form.btn.submit'|trans}}</button>
+      </div>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+{% endblock %}

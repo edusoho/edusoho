@@ -6364,6 +6364,16 @@ admin.setting_course.open_course.open_course_comments_manage: 'Open Course Comme
 admin.setting_course.open_course.open_course_review: 'Open Course review'
 admin.setting_course.custom_chapter_name: Set chapter name
 admin.setting_course.custom_chapter_name_enabled_hint: After opening, add a chapter in the lesson management, the system will automatically generate the chapter name set as follows.
+admin.setting_course.effective_learning_time_rule: Statistical rules of effective learning time in online video class
+admin.setting_course.learning_time_statistical_dimension: Statistical dimension of learning time
+admin.setting_course.effective_learning_time.help_block: The actual playing time was taken as the learning time statistics
+admin.setting_course.effective_learning_time.playing_time: Active playing time
+admin.setting_course.effective_learning_time.page_time: Page active duration
+admin.setting_course.effective_learning_time.accumulated_merge: The learning hours are directly accumulated and combined
+admin.setting_course.effective_learning_time.reweighted_merge: The learning hours were reweighted and then merged
+admin.setting_course.effective_learning_time.reweighted_merge.help_block: The learning time generated in multiple places at the same time is automatically de-merged
+admin.setting_course.effective_learning_time.accumulated_merge.help_block: The learning hours generated in multiple places at the same time do not re-accumulate and merge
+
 admin.setting_wechat_auth.web_scan_login: Web Scan Login
 admin.setting_wechat_auth.wechat_auth_login: WeChat Authorize Login
 admin.setting_wechat_auth.wechat_notification: WeChat Account Notification

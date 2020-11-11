@@ -1623,6 +1623,8 @@ user.fields.gender_label: 性别
 information_collect.form.check_age_invalid: 年龄不在正常范围内
 information_collect.form.check_format_invalid: %display%格式错误
 
+admin_v2.video_effective_time_setting.cancel.hint: 全站内学习时长数据中，视频课时学习时长数据将将按新的规则统计生成，更改配置前已产生的学习时长数据将不会随新的规则更改统计。是否确认更改统计规则？
+
 course.marketing_setup: 营销设置
 site.currency.CNY: 元
 s2b2c.product.cooperation_price: 合作面额
