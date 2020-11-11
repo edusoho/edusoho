@@ -166,7 +166,7 @@ class SystemInitializerTest extends BaseTestCase
             'CloudConsultFreshJob',
             'DeleteUserFootprintJob',
             'StatisticsVideoDailyDataJob',
-            'StatisticsLearnDailyDataJob'
+            'StatisticsLearnDailyDataJob',
             ], ArrayToolkit::column($result, 'name'));
     }
 
