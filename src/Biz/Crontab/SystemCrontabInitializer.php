@@ -197,6 +197,11 @@ class SystemCrontabInitializer
                 'class' => 'Biz\User\Job\DeleteUserFootprintJob',
                 'misfire_policy' => 'executing',
             ],
+            'StatisticsPageStayDailyDataJob' => [
+                'expression' => '30 1 * * *',
+                'class' => 'Biz\Visualization\Job\StatisticsPageStayDailyDataJob',
+                'misfire_policy' => 'executing',
+            ],
             'StatisticsVideoDailyDataJob' => [
                 'expression' => '30 0 * * *',
                 'class' => 'Biz\Visualization\Job\StatisticsVideoDailyDataJob',

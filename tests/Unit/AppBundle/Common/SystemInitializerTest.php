@@ -167,6 +167,7 @@ class SystemInitializerTest extends BaseTestCase
             'DeleteUserFootprintJob',
             'StatisticsVideoDailyDataJob',
             'StatisticsLearnDailyDataJob',
+            'StatisticsPageStayDailyDataJob',
             ], ArrayToolkit::column($result, 'name'));
     }
 

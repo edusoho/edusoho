@@ -25,6 +25,7 @@ use Biz\Taxonomy\Service\CategoryService;
 use Biz\Taxonomy\Service\Impl\TagServiceImpl;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\User\UserException;
+use Biz\Visualization\Service\ActivityLearnDataService;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -473,6 +474,8 @@ class CourseSetController extends BaseController
         $tasks = $this->getTaskService()->findTasksByCourseSetIds($courseSetIds);
         $tasks = ArrayToolkit::group($tasks, 'fromCourseSetId');
 
+        $activityLearnData = $this->getActivityLearnDataService()->sumCourseSetLearnTime($courseSetIds);
+
         foreach ($courseSets as &$courseSet) {
             // TODO 完成人数目前只统计了默认教学计划
             $courseSetId = $courseSet['id'];
@@ -482,9 +485,7 @@ class CourseSetController extends BaseController
                 ['finishedTime_GT' => 0, 'courseId' => $courseSet['defaultCourseId'], 'learnedCompulsoryTaskNumGreaterThan' => $defaultCourses[$defaultCourseId]['compulsoryTaskNum']]
             );
 
-            $courseSet['learnedTime'] = empty($tasks[$courseSetId]) ? 0 : $this->getTaskResultService()->sumCourseSetLearnedTimeByTaskIds(
-                ArrayToolkit::column($tasks[$courseSetId], 'id')
-            );
+            $courseSet['learnedTime'] = empty($activityLearnData[$courseSetId]) ? 0 : $activityLearnData[$courseSetId];
             $courseSet['learnedTime'] = round($courseSet['learnedTime'] / 60);
             if (!empty($courseSetIncomes[$courseSetId])) {
                 $courseSet['income'] = $courseSetIncomes[$courseSetId]['income'];
@@ -1082,5 +1083,13 @@ class CourseSetController extends BaseController
     protected function getSyncEventService()
     {
         return $this->createService('S2B2C:SyncEventService');
+    }
+
+    /**
+     * @return ActivityLearnDataService
+     */
+    protected function getActivityLearnDataService()
+    {
+        return $this->createService('Visualization:ActivityLearnDataService');
     }
 }
