@@ -13,4 +13,8 @@ interface ActivityDataDailyStatisticsService
     public function statisticsUserStayDailyData($startTime, $endTime);
 
     public function statisticsUserVideoDailyData($startTime, $endTime);
+
+    public function statisticsCoursePlanStayDailyData($startTime, $endTime);
+
+    public function statisticsCoursePlanVideoDailyData($startTime, $endTime);
 }
