@@ -115,6 +115,36 @@ class DataVisualizationTable extends Migration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
         ");
+
+        $biz['db']->exec("
+            CREATE TABLE `course_plan_stay_daily` (
+              `id` bigint(15) unsigned NOT NULL AUTO_INCREMENT,
+              `userId` int(10) unsigned NOT NULL COMMENT '用户ID',
+              `courseId` int(10) unsigned NOT NULL COMMENT '计划ID',
+              `courseSetId` int(10) unsigned NOT NULL COMMENT '课程ID',
+              `dayTime` int(10) unsigned NOT NULL COMMENT '以天为精度的时间戳',
+              `sumTime` int(10) unsigned NOT NULL COMMENT '简单累加时长',
+              `pureTime` int(10) unsigned NOT NULL COMMENT '时间轴累计时长',
+              `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
+              `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
+              PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        ");
+
+        $biz['db']->exec("
+            CREATE TABLE `course_plan_video_daily` (
+              `id` bigint(15) unsigned NOT NULL AUTO_INCREMENT,
+              `userId` int(10) unsigned NOT NULL COMMENT '用户ID',
+              `courseId` int(10) unsigned NOT NULL COMMENT '计划ID',
+              `courseSetId` int(10) unsigned NOT NULL COMMENT '课程ID',
+              `dayTime` int(10) unsigned NOT NULL COMMENT '以天为精度的时间戳',
+              `sumTime` int(10) unsigned NOT NULL COMMENT '简单累加时长',
+              `pureTime` int(10) unsigned NOT NULL COMMENT '时间轴累计时长',
+              `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
+              `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
+              PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        ");
     }
 
     /**
@@ -140,6 +170,12 @@ class DataVisualizationTable extends Migration
         ');
         $biz['db']->exec('
             DROP TABLE IF EXISTS `activity_learn_daily`;
+        ');
+        $biz['db']->exec('
+            DROP TABLE IF EXISTS `course_plan_stay_daily`;
+        ');
+        $biz['db']->exec('
+            DROP TABLE IF EXISTS `course_plan_video_daily`;
         ');
     }
 }
