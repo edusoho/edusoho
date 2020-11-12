@@ -221,7 +221,7 @@ class CourseController extends BaseController
 
         $courseTasksCount = ($courseTasksCount > $exportAllowCount) ? $exportAllowCount : $courseTasksCount;
 
-        $titles = '任务名,学习人数,完成人数,平均学习时长(分),音视频时长(分),音视频平均观看时长(分),测试平均得分';
+        $titles = '任务名,学习人数,完成人数,平均学习时长(分),视频时长(分),视频平均观看时长(分),测试平均得分';
 
         $originaTasks = $this->makeTasksDatasByCourseId($courseId, $start, $limit);
 
@@ -247,8 +247,8 @@ class CourseController extends BaseController
             $exportTask .= $task['finishedNum'] ? $task['finishedNum'].',' : '-'.',';
 
             $studentNum = (int) $task['studentNum'];
-            $learnedTime = $studentNum ? floor((int) $task['learnedTime'] / $studentNum) : (int) $task['learnedTime'];
-            $watchTime = empty($task['watchTime']) ? '' : ($studentNum ? floor((int) $task['watchTime'] / $studentNum) : (int) $task['watchTime']);
+            $learnedTime = $task['avgLearnedTime'];
+            $watchTime = empty($task['avgWatchTime']) ? '' : $task['avgLearnedTime'];
 
             $exportTask .= $learnedTime ? $learnedTime.',' : '-'.',';
 
@@ -287,16 +287,15 @@ class CourseController extends BaseController
     protected function taskDataStatistics($tasks)
     {
         foreach ($tasks as $key => &$task) {
-            $finishedNum = $this->getTaskResultService()->countTaskResults(
+            $task['finishedNum'] = $this->getTaskResultService()->countTaskResults(
                 ['status' => 'finish', 'courseTaskId' => $task['id']]
             );
-            $studentNum = $this->getTaskResultService()->countTaskResults(['courseTaskId' => $task['id']]);
-            $learnedTime = $this->getTaskResultService()->getLearnedTimeByCourseIdGroupByCourseTaskId($task['id']);
+            $task['studentNum'] = $this->getTaskResultService()->countTaskResults(['courseTaskId' => $task['id']]);
+            $task['avgLearnedTime'] = 0 == $task['studentNum'] ? 0 : intval($this->getTaskResultService()->sumLearnedTimeByCourseTaskId($task['id']) / 60 / $task['studentNum']);
 
-            if (in_array($task['type'], ['video', 'audio'])) {
-                $task['length'] = (int) ($task['length'] / 60);
-                $watchTime = $this->getTaskResultService()->getWatchTimeByCourseIdGroupByCourseTaskId($task['id']);
-                $task['watchTime'] = round($watchTime / 60);
+            if ('video' == $task['type']) {
+                $task['length'] = intval($task['length'] / 60);
+                $task['avgWatchTime'] = 0 == $task['studentNum'] ? 0 : intval($this->getTaskResultService()->sumWatchTimeByCourseTaskId($task['id']) / 60 / $task['studentNum']);
             }
 
             if ('testpaper' === $task['type'] && !empty($task['activity'])) {
@@ -305,11 +304,6 @@ class CourseController extends BaseController
 
                 $task['score'] = $score['avg_score'];
             }
-
-            $task['finishedNum'] = $finishedNum;
-            $task['studentNum'] = $studentNum;
-
-            $task['learnedTime'] = round($learnedTime / 60);
         }
 
         return $tasks;
