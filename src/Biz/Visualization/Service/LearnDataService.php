@@ -2,7 +2,7 @@
 
 namespace Biz\Visualization\Service;
 
-interface ActivityLearnDataService
+interface LearnDataService
 {
     public function sumCourseSetLearnTime($courseSetIds);
 

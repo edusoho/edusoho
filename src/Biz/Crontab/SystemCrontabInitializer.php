@@ -232,6 +232,16 @@ class SystemCrontabInitializer
                 'class' => 'Biz\Visualization\Job\StatisticsUserVideoDailyDataJob',
                 'misfire_policy' => 'executing',
             ],
+            'StatisticsUserLearnDailyDataJob' => [
+                'expression' => '15 2 * * *',
+                'class' => 'Biz\Visualization\Job\StatisticsUserLearnDailyDataJob',
+                'misfire_policy' => 'executing',
+            ],
+            'StatisticsCoursePlanLearnDailyDataJob' => [
+                'expression' => '30 2 * * *',
+                'class' => 'Biz\Visualization\Job\StatisticsCoursePlanLearnDailyDataJob',
+                'misfire_policy' => 'executing',
+            ],
         ];
         $defaultJob = [
             'pool' => 'default',

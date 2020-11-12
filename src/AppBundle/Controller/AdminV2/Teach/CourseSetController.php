@@ -25,7 +25,7 @@ use Biz\Taxonomy\Service\CategoryService;
 use Biz\Taxonomy\Service\Impl\TagServiceImpl;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\User\UserException;
-use Biz\Visualization\Service\ActivityLearnDataService;
+use Biz\Visualization\Service\LearnDataService;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -474,7 +474,7 @@ class CourseSetController extends BaseController
         $tasks = $this->getTaskService()->findTasksByCourseSetIds($courseSetIds);
         $tasks = ArrayToolkit::group($tasks, 'fromCourseSetId');
 
-        $activityLearnData = $this->getActivityLearnDataService()->sumCourseSetLearnTime($courseSetIds);
+        $activityLearnData = $this->getLearnDataService()->sumCourseSetLearnTime($courseSetIds);
 
         foreach ($courseSets as &$courseSet) {
             // TODO 完成人数目前只统计了默认教学计划
@@ -1086,10 +1086,10 @@ class CourseSetController extends BaseController
     }
 
     /**
-     * @return ActivityLearnDataService
+     * @return LearnDataService
      */
-    protected function getActivityLearnDataService()
+    protected function getLearnDataService()
     {
-        return $this->createService('Visualization:ActivityLearnDataService');
+        return $this->createService('Visualization:LearnDataService');
     }
 }

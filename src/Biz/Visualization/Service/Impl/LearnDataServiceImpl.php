@@ -6,9 +6,9 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\System\Service\SettingService;
 use Biz\Visualization\Dao\ActivityLearnDailyDao;
-use Biz\Visualization\Service\ActivityLearnDataService;
+use Biz\Visualization\Service\LearnDataService;
 
-class ActivityLearnDataServiceImpl extends BaseService implements ActivityLearnDataService
+class LearnDataServiceImpl extends BaseService implements LearnDataService
 {
     public function sumCourseSetLearnTime($courseSetIds)
     {

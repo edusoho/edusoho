@@ -11,8 +11,10 @@ use Biz\Visualization\Dao\ActivityLearnRecordDao;
 use Biz\Visualization\Dao\ActivityStayDailyDao;
 use Biz\Visualization\Dao\ActivityVideoDailyDao;
 use Biz\Visualization\Dao\ActivityVideoWatchRecordDao;
+use Biz\Visualization\Dao\CoursePlanLearnDailyDao;
 use Biz\Visualization\Dao\CoursePlanStayDailyDao;
 use Biz\Visualization\Dao\CoursePlanVideoDailyDao;
+use Biz\Visualization\Dao\UserLearnDailyDao;
 use Biz\Visualization\Dao\UserStayDailyDao;
 use Biz\Visualization\Dao\UserVideoDailyDao;
 use Biz\Visualization\Service\ActivityDataDailyStatisticsService;
@@ -98,19 +100,53 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
             $data = $this->getActivityStayDailyDao()->search($conditions, [], 0, PHP_INT_MAX, $columns);
         }
 
-        $this->beginTransaction();
-        try {
+//        $this->beginTransaction();
+//        try {
             $this->sumTaskResultPureTime($data);
 
             $this->getActivityLearnDailyDao()->batchCreate($data);
 
-            $this->commit();
+//            $this->commit();
 
             return true;
-        } catch (\Exception $e) {
-            $this->rollback();
-            throw $e;
+//        } catch (\Exception $e) {
+//            $this->rollback();
+//            throw $e;
+//        }
+    }
+
+    public function statisticsUserLearnDailyData($dayTime)
+    {
+        $statisticsSetting = $this->getSettingService()->get('videoEffectiveTimeStatistics', []);
+        $data = [];
+        $conditions = ['dayTime' => $dayTime];
+        $columns = ['userId', 'dayTime', 'sumTime', 'pureTime'];
+        if (empty($statisticsSetting) || 'playing' == $statisticsSetting['statistical_dimension']) {
+            $data = $this->getUserVideoDailyDao()->search($conditions, [], 0, PHP_INT_MAX, $columns);
         }
+
+        if ('page' == $statisticsSetting['statistical_dimension']) {
+            $data = $this->getUserStayDailyDao()->search($conditions, [], 0, PHP_INT_MAX, $columns);
+        }
+
+        return $this->getUserLearnDailyDao()->batchCreate($data);
+    }
+
+    public function statisticsCoursePlanLearnDailyData($dayTime)
+    {
+        $statisticsSetting = $this->getSettingService()->get('videoEffectiveTimeStatistics', []);
+        $data = [];
+        $conditions = ['dayTime' => $dayTime];
+        $columns = ['userId', 'courseId', 'courseSetId', 'dayTime', 'sumTime', 'pureTime'];
+        if (empty($statisticsSetting) || 'playing' == $statisticsSetting['statistical_dimension']) {
+            $data = $this->getCoursePlanVideoDailyDao()->search($conditions, [], 0, PHP_INT_MAX, $columns);
+        }
+
+        if ('page' == $statisticsSetting['statistical_dimension']) {
+            $data = $this->getCoursePlanStayDailyDao()->search($conditions, [], 0, PHP_INT_MAX, $columns);
+        }
+
+        return $this->getUserLearnDailyDao()->batchCreate($data);
     }
 
     public function statisticsCoursePlanStayDailyData($startTime, $endTime)
@@ -202,7 +238,6 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
     {
         $watchRecords = $this->getActivityVideoWatchRecordDao()->search(
             ['startTime_GE' => $startTime, 'endTime_LT' => $endTime],
-
             [],
             0,
             PHP_INT_MAX,
@@ -358,5 +393,21 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
     protected function getUserVideoDailyDao()
     {
         return $this->createDao('Visualization:UserVideoDailyDao');
+    }
+
+    /**
+     * @return UserLearnDailyDao
+     */
+    protected function getUserLearnDailyDao()
+    {
+        return $this->createDao('Visualization:UserLearnDailyDao');
+    }
+
+    /**
+     * @return CoursePlanLearnDailyDao
+     */
+    protected function getCoursePlanLearnDailyDao()
+    {
+        return $this->createDao('Visualization:CoursePlanLearnDailyDao');
     }
 }

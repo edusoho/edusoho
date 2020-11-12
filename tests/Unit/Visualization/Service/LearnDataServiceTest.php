@@ -4,9 +4,9 @@ namespace Tests\Unit\Visualization\Service;
 
 use Biz\BaseTestCase;
 use Biz\Visualization\Dao\ActivityLearnDailyDao;
-use Biz\Visualization\Service\ActivityLearnDataService;
+use Biz\Visualization\Service\LearnDataService;
 
-class ActivityLearnDataServiceTest extends BaseTestCase
+class LearnDataServiceTest extends BaseTestCase
 {
     public function testSumCourseSetLearnTime()
     {
@@ -23,11 +23,11 @@ class ActivityLearnDataServiceTest extends BaseTestCase
             ]],
         ]);
 
-        $result = $this->getActivityLearnDataService()->sumCourseSetLearnTime([1, 2]);
+        $result = $this->getLearnDataService()->sumCourseSetLearnTime([1, 2]);
         $this->assertEquals(240, $result[1]);
         $this->assertEquals(120, $result[2]);
 
-        $result = $this->getActivityLearnDataService()->sumCourseSetLearnTime([1, 2]);
+        $result = $this->getLearnDataService()->sumCourseSetLearnTime([1, 2]);
         $this->assertEquals(580, $result[1]);
         $this->assertEquals(240, $result[2]);
     }
@@ -37,7 +37,7 @@ class ActivityLearnDataServiceTest extends BaseTestCase
         $this->getActivityLearnDailyDao()->create($this->getDefaultFields());
         $this->getActivityLearnDailyDao()->create($this->getDefaultFields(['courseSetId' => 2]));
 
-        $result = $this->getActivityLearnDataService()->findActivityLearnDailyByCourseSetIds([1]);
+        $result = $this->getLearnDataService()->findActivityLearnDailyByCourseSetIds([1]);
         $this->assertCount(1, $result);
     }
 
@@ -58,11 +58,11 @@ class ActivityLearnDataServiceTest extends BaseTestCase
     }
 
     /**
-     * @return ActivityLearnDataService
+     * @return LearnDataService
      */
-    protected function getActivityLearnDataService()
+    protected function getLearnDataService()
     {
-        return $this->biz->service('Visualization:ActivityLearnDataService');
+        return $this->biz->service('Visualization:LearnDataService');
     }
 
     /**
