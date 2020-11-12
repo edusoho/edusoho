@@ -43,7 +43,7 @@ interface TaskResultService
      */
     public function countTaskResults($conditions);
 
-    public function searchTaskResults($conditions, $orderbys, $start, $limit, $columns = array());
+    public function searchTaskResults($conditions, $orderbys, $start, $limit, $columns = []);
 
     public function countLearnNumByTaskId($taskId);
 

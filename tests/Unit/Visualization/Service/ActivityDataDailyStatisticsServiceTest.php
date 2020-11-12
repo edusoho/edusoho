@@ -48,11 +48,11 @@ class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
             ]],
         ]);
 
-        $this->mockTaskResult(array(
+        $this->mockTaskResult([
             'userId' => 1,
             'courseTaskId' => 1,
             'status' => 'finish',
-        ));
+        ]);
 
         $this->getActivityDataDailyStatisticsService()->statisticsLearnDailyData(1604793600);
 
@@ -70,9 +70,9 @@ class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
         $this->assertEquals(340, $result['pureTime']);
     }
 
-    protected function mockTaskResult($fields = array())
+    protected function mockTaskResult($fields = [])
     {
-        $taskReult = array_merge(array(
+        $taskReult = array_merge([
             'activityId' => 1,
             'courseTaskId' => 2,
             'time' => 1,
@@ -80,7 +80,7 @@ class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
             'userId' => 1,
             'courseId' => 1,
             'pureTime' => 0,
-        ), $fields);
+        ], $fields);
 
         return $this->getTaskResultDao()->create($taskReult);
     }
