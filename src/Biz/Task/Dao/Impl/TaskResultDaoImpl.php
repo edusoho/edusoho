@@ -3,9 +3,9 @@
 namespace Biz\Task\Dao\Impl;
 
 use Biz\Task\Dao\TaskResultDao;
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class TaskResultDaoImpl extends GeneralDaoImpl implements TaskResultDao
+class TaskResultDaoImpl extends AdvancedDaoImpl implements TaskResultDao
 {
     protected $table = 'course_task_result';
 

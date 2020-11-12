@@ -5,6 +5,7 @@ namespace Biz\Visualization\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\System\Service\SettingService;
+use Biz\Task\Service\TaskResultService;
 use Biz\Visualization\Dao\ActivityLearnDailyDao;
 use Biz\Visualization\Dao\ActivityStayDailyDao;
 use Biz\Visualization\Dao\ActivityVideoDailyDao;
@@ -58,7 +59,44 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
             $data = $this->getActivityStayDailyDao()->search($conditions, [], 0, PHP_INT_MAX, $columns);
         }
 
-        return $this->getActivityLearnDailyDao()->batchCreate($data);
+        $this->beginTransaction();
+        try {
+            $this->sumTaskResultPureTime($data);
+
+            $this->getActivityLearnDailyDao()->batchCreate($data);
+
+            $this->commit();
+
+            return true;
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+    }
+
+    public function sumTaskResultPureTime($data)
+    {
+        $taskResults = $this->getTaskResultService()->searchTaskResults(
+            ['userIds' => ArrayToolkit::column($data, 'userId'), 'courseTaskIds' => ArrayToolkit::column($data, 'taskId')],
+            [],
+            0,
+            PHP_INT_MAX,
+            ['id', 'pureTime', 'userId', 'courseTaskId']
+        );
+        $data = ArrayToolkit::groupIndex($data, 'userId', 'taskId');
+
+        $updateFields = [];
+        foreach ($taskResults as $taskResult) {
+            if (!empty($data[$taskResult['userId']][$taskResult['courseTaskId']])) {
+                $learnData = $data[$taskResult['userId']][$taskResult['courseTaskId']];
+                $updateFields[] = [
+                    'id' => $taskResult['id'],
+                    'pureTime' => $taskResult['pureTime'] + $learnData['pureTime'],
+                ];
+            }
+        }
+
+        return $this->getTaskResultService()->batchUpdate(ArrayToolkit::column($updateFields, 'id'), $updateFields);
     }
 
     public function sumPureTime($records)
@@ -123,5 +161,13 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return TaskResultService
+     */
+    protected function getTaskResultService()
+    {
+        return $this->createService('Task:TaskResultService');
     }
 }

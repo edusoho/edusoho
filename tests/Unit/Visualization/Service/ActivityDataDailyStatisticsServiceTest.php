@@ -3,6 +3,7 @@
 namespace Tests\Unit\Visualization\Service;
 
 use Biz\BaseTestCase;
+use Biz\Task\Dao\TaskResultDao;
 use Biz\Visualization\Dao\ActivityLearnDailyDao;
 use Biz\Visualization\Dao\ActivityVideoDailyDao;
 use Biz\Visualization\Service\ActivityDataDailyStatisticsService;
@@ -47,16 +48,49 @@ class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
             ]],
         ]);
 
+        $this->mockTaskResult(array(
+            'userId' => 1,
+            'courseTaskId' => 1,
+            'status' => 'finish',
+        ));
+
         $this->getActivityDataDailyStatisticsService()->statisticsLearnDailyData(1604793600);
 
         $result = $this->getActivityLearnDailyDao()->search([], [], 0, 2);
         $this->assertEquals(340, $result[0]['sumTime']);
         $this->assertEquals(240, $result[1]['sumTime']);
+        $result = $this->getTaskResultDao()->getByTaskIdAndUserId(1, 1);
+        $this->assertEquals(120, $result['pureTime']);
 
         $this->getActivityDataDailyStatisticsService()->statisticsLearnDailyData(1604793600);
         $result = $this->getActivityLearnDailyDao()->search([], [], 0, 4);
         $this->assertEquals(440, $result[2]['sumTime']);
         $this->assertEquals(540, $result[3]['sumTime']);
+        $result = $this->getTaskResultDao()->getByTaskIdAndUserId(1, 1);
+        $this->assertEquals(340, $result['pureTime']);
+    }
+
+    protected function mockTaskResult($fields = array())
+    {
+        $taskReult = array_merge(array(
+            'activityId' => 1,
+            'courseTaskId' => 2,
+            'time' => 1,
+            'watchTime' => 1,
+            'userId' => 1,
+            'courseId' => 1,
+            'pureTime' => 0,
+        ), $fields);
+
+        return $this->getTaskResultDao()->create($taskReult);
+    }
+
+    /**
+     * @return TaskResultDao
+     */
+    protected function getTaskResultDao()
+    {
+        return $this->createDao('Task:TaskResultDao');
     }
 
     /**
