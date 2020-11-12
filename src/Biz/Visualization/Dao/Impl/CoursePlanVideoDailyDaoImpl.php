@@ -7,7 +7,7 @@ use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
 class CoursePlanVideoDailyDaoImpl extends AdvancedDaoImpl implements CoursePlanVideoDailyDao
 {
-    protected $table = 'course_plan_stay_daily';
+    protected $table = 'course_plan_video_daily';
 
     public function declares()
     {
