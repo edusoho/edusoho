@@ -203,8 +203,13 @@ class SystemCrontabInitializer
                 'misfire_policy' => 'executing',
             ],
             'StatisticsVideoDailyDataJob' => [
-                'expression' => '30 1 * * *',
+                'expression' => '30 0 * * *',
                 'class' => 'Biz\Visualization\Job\StatisticsVideoDailyDataJob',
+                'misfire_policy' => 'executing',
+            ],
+            'StatisticsLearnDailyDataJob' => [
+                'expression' => '30 1 * * *',
+                'class' => 'Biz\Visualization\Job\StatisticsLearnDailyDataJob',
                 'misfire_policy' => 'executing',
             ],
         ];
