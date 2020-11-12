@@ -2,9 +2,10 @@
 
 namespace Biz\Visualization\Dao\Impl;
 
+use Biz\Visualization\Dao\ActivityLearnRecordDao;
 use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class ActivityLearnRecordDaoImpl extends AdvancedDaoImpl
+class ActivityLearnRecordDaoImpl extends AdvancedDaoImpl implements ActivityLearnRecordDao
 {
     protected $table = 'activity_learn_record';
 

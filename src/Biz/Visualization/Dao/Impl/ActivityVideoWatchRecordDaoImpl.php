@@ -2,9 +2,10 @@
 
 namespace Biz\Visualization\Dao\Impl;
 
+use Biz\Visualization\Dao\ActivityVideoWatchRecordDao;
 use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class ActivityVideoWatchRecordDaoImpl extends AdvancedDaoImpl
+class ActivityVideoWatchRecordDaoImpl extends AdvancedDaoImpl implements ActivityVideoWatchRecordDao
 {
     protected $table = 'activity_video_watch_record';
 
