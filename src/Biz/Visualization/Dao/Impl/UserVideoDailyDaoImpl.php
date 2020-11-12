@@ -2,12 +2,12 @@
 
 namespace Biz\Visualization\Dao\Impl;
 
-use Biz\Visualization\Dao\ActivityVideoDailyDao;
+use Biz\Visualization\Dao\UserVideoDailyDao;
 use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
-class ActivityVideoDailyDaoImpl extends AdvancedDaoImpl implements ActivityVideoDailyDao
+class UserVideoDailyDaoImpl extends AdvancedDaoImpl implements UserVideoDailyDao
 {
-    protected $table = 'activity_video_daily';
+    protected $table = 'user_video_daily';
 
     public function declares()
     {
