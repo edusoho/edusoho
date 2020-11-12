@@ -16,6 +16,7 @@ class ActivityVideoDailyDaoImpl extends AdvancedDaoImpl
             ],
             'conditions' => [
                 'id = :id',
+                'dayTime = :dayTime',
             ],
             'orderbys' => ['id', 'createdTime'],
         ];

@@ -4,6 +4,9 @@ namespace Biz\Visualization\Service\Impl;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
+use Biz\System\Service\SettingService;
+use Biz\Task\Service\TaskResultService;
+use Biz\Visualization\Dao\ActivityLearnDailyDao;
 use Biz\Visualization\Dao\ActivityLearnRecordDao;
 use Biz\Visualization\Dao\ActivityStayDailyDao;
 use Biz\Visualization\Dao\ActivityVideoDailyDao;
@@ -77,6 +80,60 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
         return $this->getActivityVideoDailyDao()->batchCreate($data);
     }
 
+    public function statisticsLearnDailyData($dayTime)
+    {
+        $statisticsSetting = $this->getSettingService()->get('videoEffectiveTimeStatistics', []);
+        $data = [];
+        $conditions = ['dayTime' => $dayTime];
+        $columns = ['userId', 'activityId', 'taskId', 'courseId', 'courseSetId', 'dayTime', 'sumTime', 'pureTime'];
+        if (empty($statisticsSetting) || 'playing' == $statisticsSetting['statistical_dimension']) {
+            $data = $this->getActivityVideoDailyDao()->search($conditions, [], 0, PHP_INT_MAX, $columns);
+        }
+
+        if ('page' == $statisticsSetting['statistical_dimension']) {
+            $data = $this->getActivityStayDailyDao()->search($conditions, [], 0, PHP_INT_MAX, $columns);
+        }
+
+        $this->beginTransaction();
+        try {
+            $this->sumTaskResultPureTime($data);
+
+            $this->getActivityLearnDailyDao()->batchCreate($data);
+
+            $this->commit();
+
+            return true;
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
+    }
+
+    public function sumTaskResultPureTime($data)
+    {
+        $taskResults = $this->getTaskResultService()->searchTaskResults(
+            ['userIds' => ArrayToolkit::column($data, 'userId'), 'courseTaskIds' => ArrayToolkit::column($data, 'taskId')],
+            [],
+            0,
+            PHP_INT_MAX,
+            ['id', 'pureTime', 'userId', 'courseTaskId']
+        );
+        $data = ArrayToolkit::groupIndex($data, 'userId', 'taskId');
+
+        $updateFields = [];
+        foreach ($taskResults as $taskResult) {
+            if (!empty($data[$taskResult['userId']][$taskResult['courseTaskId']])) {
+                $learnData = $data[$taskResult['userId']][$taskResult['courseTaskId']];
+                $updateFields[] = [
+                    'id' => $taskResult['id'],
+                    'pureTime' => $taskResult['pureTime'] + $learnData['pureTime'],
+                ];
+            }
+        }
+
+        return $this->getTaskResultService()->batchUpdate(ArrayToolkit::column($updateFields, 'id'), $updateFields);
+    }
+
     public function sumPureTime($records)
     {
         uasort($records, function ($record1, $record2) {
@@ -87,7 +144,7 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
         $pureTime = 0;
         foreach ($records as $record) {
             if ($record['startTime'] > $end) {
-                $pureTime = $pureTime + ($end - $start);
+                $pureTime += $end - $start;
                 $start = $record['startTime'];
                 $end = $record['endTime'];
             } elseif ($record['endTime'] > $end && $record['startTime'] <= $end) {
@@ -96,7 +153,7 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
                 continue;
             }
         }
-        $pureTime = $pureTime + ($end - $start);
+        $pureTime += $end - $start;
 
         return $pureTime;
     }
@@ -131,5 +188,29 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
     protected function getActivityVideoDailyDao()
     {
         return $this->createDao('Visualization:ActivityVideoDailyDao');
+    }
+
+    /**
+     * @return ActivityLearnDailyDao
+     */
+    protected function getActivityLearnDailyDao()
+    {
+        return $this->createDao('Visualization:ActivityLearnDailyDao');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return TaskResultService
+     */
+    protected function getTaskResultService()
+    {
+        return $this->createService('Task:TaskResultService');
     }
 }

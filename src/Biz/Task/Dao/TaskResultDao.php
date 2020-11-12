@@ -2,9 +2,9 @@
 
 namespace Biz\Task\Dao;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
-interface TaskResultDao extends GeneralDaoInterface
+interface TaskResultDao extends AdvancedDaoInterface
 {
     public function analysisCompletedTaskDataByTime($startTime, $endTime);
 
