@@ -118,6 +118,51 @@ class CourseTaskEvent extends AbstractResource
         if (!empty($watchTime)) {
             $data['events']['watching']['watchTime'] = $watchTime;
         }
+        $user = $this->getCurrentUser();
+        $sign = $request->request->get('sign');
+        $version = (int) $request->request->get('version', '1');
+        $task = $this->getTaskService()->getTask($taskId);
+        $activity = $this->getActivityService()->getActivity($task['activityId']);
+        /**
+         * 通过UA只能判断出iOS APP, Android APP, H5和新版旧版微网校会随着发布一起加上client字段，暂无法判断小程序，所以unknown的全部被认为是小程序
+         */
+        $client = $request->request->get('client', '');
+        if (empty($client)) {
+            $client = $this->getClient($request);
+        }
+        if (empty($sign)) {
+            if (1 === $version) {
+                $sign = $user['loginToken'].'-'.$user['id'].'-'.$activity['id'].'-'.substr(md5($user['id']), 0, 6);
+            } elseif (2 === $version) {
+                $sign = date('YmdHis').'-'.$user['id'].'-'.$activity['id'].'-'.substr(md5($user['id']), 0, 6);
+            } else {
+                throw CommonException::ERROR_PARAMETER();
+            }
+        }
+
+        $flow = $this->getDataCollectService()->getFlowBySign($sign);
+
+        if (empty($flow)) {
+            $this->getDataCollectService()->createLearnFlow($user['id'], $activity['id'], $sign);
+        }
+        $currentTime = time();
+        $record = $this->getDataCollectService()->push([
+            'userId' => $user['id'],
+            'activityId' => $task['activityId'],
+            'taskId' => $task['id'],
+            'courseId' => $task['courseId'],
+            'courseSetId' => $task['fromCourseSetId'],
+            'event' => self::EVENT_DOING,
+            'client' => $client,
+            'startTime' => $lastTime,
+            'endTime' => $currentTime,
+            'duration' => $currentTime - $lastTime, //这里需要做校验，兼容老数据
+            'mediaType' => $activity['mediaType'],
+            'flowSign' => $sign,
+            'data' => array_merge([
+                'userAgent' => $request->headers->get('user-agent'),
+            ], $data),
+        ]);
 
         $result = $this->getTaskService()->trigger($taskId, $eventName, $data);
 
