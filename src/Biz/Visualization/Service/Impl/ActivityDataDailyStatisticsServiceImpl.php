@@ -13,6 +13,8 @@ use Biz\Visualization\Dao\ActivityVideoDailyDao;
 use Biz\Visualization\Dao\ActivityVideoWatchRecordDao;
 use Biz\Visualization\Dao\CoursePlanStayDailyDao;
 use Biz\Visualization\Dao\CoursePlanVideoDailyDao;
+use Biz\Visualization\Dao\UserStayDailyDao;
+use Biz\Visualization\Dao\UserVideoDailyDao;
 use Biz\Visualization\Service\ActivityDataDailyStatisticsService;
 
 class ActivityDataDailyStatisticsServiceImpl extends BaseService implements ActivityDataDailyStatisticsService
@@ -172,6 +174,55 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
         return $this->getCoursePlanVideoDailyDao()->batchCreate($data);
     }
 
+    public function statisticsUserStayDailyData($startTime, $endTime)
+    {
+        $learnRecords = $this->getActivityLearnRecordDao()->search(
+            ['startTime_GE' => $startTime, 'endTime_GE' => $endTime],
+            [],
+            0,
+            PHP_INT_MAX,
+            ['userId', 'startTime', 'endTime', 'duration']
+        );
+        $learnRecords = ArrayToolkit::group($learnRecords, 'userId');
+
+        $data = [];
+        foreach ($learnRecords as $userId => $learnRecord) {
+            $data[] = [
+                'userId' => $userId,
+                'dayTime' => $startTime,
+                'sumTime' => array_sum(ArrayToolkit::column($learnRecord, 'duration')),
+                'pureTime' => $this->sumPureTime($learnRecord),
+            ];
+        }
+
+        return $this->getUserStayDailyDao()->batchCreate($data);
+    }
+
+    public function statisticsUserVideoDailyData($startTime, $endTime)
+    {
+        $watchRecords = $this->getActivityVideoWatchRecordDao()->search(
+            ['startTime_GE' => $startTime, 'endTime_LT' => $endTime],
+
+            [],
+            0,
+            PHP_INT_MAX,
+            ['userId', 'startTime', 'endTime', 'duration']
+        );
+        $watchRecords = ArrayToolkit::group($watchRecords, 'userId');
+
+        $data = [];
+        foreach ($watchRecords as $userId => $userWatchRecords) {
+            $data[] = [
+                'userId' => $userId,
+                'dayTime' => $startTime,
+                'sumTime' => array_sum(ArrayToolkit::column($userWatchRecords, 'duration')),
+                'pureTime' => $this->sumPureTime($userWatchRecords),
+            ];
+        }
+
+        return $this->getUserVideoDailyDao()->batchCreate($data);
+    }
+
     public function sumTaskResultPureTime($data)
     {
         $taskResults = $this->getTaskResultService()->searchTaskResults(
@@ -291,5 +342,21 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
     protected function getTaskResultService()
     {
         return $this->createService('Task:TaskResultService');
+    }
+
+    /**
+     * @return UserStayDailyDao
+     */
+    protected function getUserStayDailyDao()
+    {
+        return $this->createDao('Visualization:UserStayDailyDao');
+    }
+
+    /**
+     * @return UserVideoDailyDao
+     */
+    protected function getUserVideoDailyDao()
+    {
+        return $this->createDao('Visualization:UserVideoDailyDao');
     }
 }

@@ -9,6 +9,8 @@ use Biz\Visualization\Dao\ActivityStayDailyDao;
 use Biz\Visualization\Dao\ActivityVideoDailyDao;
 use Biz\Visualization\Dao\CoursePlanStayDailyDao;
 use Biz\Visualization\Dao\CoursePlanVideoDailyDao;
+use Biz\Visualization\Dao\UserStayDailyDao;
+use Biz\Visualization\Dao\UserVideoDailyDao;
 use Biz\Visualization\Service\ActivityDataDailyStatisticsService;
 
 class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
@@ -139,6 +141,40 @@ class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
         $this->assertEquals(260, $result[0]['pureTime']);
     }
 
+    public function testStatisticsUserStayDailyData()
+    {
+        $this->mockBiz('Visualization:ActivityLearnRecordDao', [
+            ['functionName' => 'search', 'returnValue' => [
+                ['userId' => 1, 'activityId' => 1, 'taskId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'startTime' => 1604793600, 'endTime' => 1604793720, 'duration' => 120],
+                ['userId' => 1, 'activityId' => 1, 'taskId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'startTime' => 1604793730, 'endTime' => 1604793850, 'duration' => 120],
+                ['userId' => 1, 'activityId' => 1, 'taskId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'startTime' => 1604793750, 'endTime' => 1604793870, 'duration' => 120],
+                ['userId' => 1, 'activityId' => 1, 'taskId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'startTime' => 1604793750, 'endTime' => 1604793810, 'duration' => 60],
+            ]],
+        ]);
+
+        $this->getActivityDataDailyStatisticsService()->statisticsUserStayDailyData(1604764800, 1604851199);
+        $result = $this->getUserStayDailyDao()->search([], [], 0, 1);
+        $this->assertEquals(420, $result[0]['sumTime']);
+        $this->assertEquals(260, $result[0]['pureTime']);
+    }
+
+    public function testStatisticsUserVideoDailyData()
+    {
+        $this->mockBiz('Visualization:ActivityVideoWatchRecordDao', [
+            ['functionName' => 'search', 'returnValue' => [
+                ['userId' => 1, 'activityId' => 1, 'taskId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'startTime' => 1604793600, 'endTime' => 1604793720, 'duration' => 120],
+                ['userId' => 1, 'activityId' => 1, 'taskId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'startTime' => 1604793730, 'endTime' => 1604793850, 'duration' => 120],
+                ['userId' => 1, 'activityId' => 1, 'taskId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'startTime' => 1604793750, 'endTime' => 1604793870, 'duration' => 120],
+                ['userId' => 1, 'activityId' => 1, 'taskId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'startTime' => 1604793750, 'endTime' => 1604793810, 'duration' => 60],
+            ]],
+        ]);
+
+        $this->getActivityDataDailyStatisticsService()->statisticsUserVideoDailyData(1604764800, 1604851199);
+        $result = $this->getUserVideoDailyDao()->search([], [], 0, 1);
+        $this->assertEquals(420, $result[0]['sumTime']);
+        $this->assertEquals(260, $result[0]['pureTime']);
+    }
+
     /**
      * @return CoursePlanVideoDailyDao
      */
@@ -193,5 +229,21 @@ class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
     protected function getActivityLearnDailyDao()
     {
         return $this->biz->dao('Visualization:ActivityLearnDailyDao');
+    }
+
+    /**
+     * @return UserStayDailyDao
+     */
+    protected function getUserStayDailyDao()
+    {
+        return $this->createDao('Visualization:UserStayDailyDao');
+    }
+
+    /**
+     * @return UserVideoDailyDao
+     */
+    protected function getUserVideoDailyDao()
+    {
+        return $this->createDao('Visualization:UserVideoDailyDao');
     }
 }

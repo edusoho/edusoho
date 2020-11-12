@@ -2,12 +2,22 @@
 
 namespace Biz\Visualization\Job;
 
+use Biz\Visualization\Service\ActivityDataDailyStatisticsService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 
 class StatisticsUserStayDailyDataJob extends AbstractJob
 {
     public function execute()
     {
-        // TODO: Implement execute() method.
+        $startTime = strtotime('yesterday');
+        $this->getActivityDataDailyStatisticsService()->statisticsUserStayDailyData($startTime, $startTime + 86400);
+    }
+
+    /**
+     * @return ActivityDataDailyStatisticsService
+     */
+    protected function getActivityDataDailyStatisticsService()
+    {
+        return $this->biz->service('Visualization:ActivityDataDailyStatisticsService');
     }
 }
