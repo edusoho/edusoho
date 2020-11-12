@@ -168,9 +168,10 @@ class ActivitySync extends AbstractEntitySync
      */
     private function getSyncActivityConfig($type)
     {
-        if (!$this->biz->offsetExists("s2b2c.sync_activity_type.{$type}")){
+        if (!$this->biz->offsetExists("s2b2c.sync_activity_type.{$type}")) {
             return null;
         }
+
         return $this->biz["s2b2c.sync_activity_type.{$type}"];
     }
 
