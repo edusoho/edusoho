@@ -181,7 +181,7 @@ class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
         $this->getUserLearnDailyDao()->batchCreate(
             [
                 ['userId' => 1, 'dayTime' => 1604793600, 'sumTime' => 440, 'pureTime' => 220],
-                ['userId' => 1, 'dayTime' => 1604793600, 'sumTime' => 540, 'pureTime' => 320],
+                ['userId' => 1, 'dayTime' => 1604880000, 'sumTime' => 540, 'pureTime' => 320],
                 ['userId' => 2, 'dayTime' => 1604793600, 'sumTime' => 540, 'pureTime' => 320],
             ]
         );
@@ -230,6 +230,21 @@ class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
         $result = $this->getActivityDataDailyStatisticsService()->getVideoEffectiveTimeStatisticsSetting();
         $this->assertEquals('playing', $result['statistical_dimension']);
         $this->assertEquals('de-weight', $result['video_multiple']);
+    }
+
+    public function testGetDailyLearnData()
+    {
+        $this->getUserLearnDailyDao()->batchCreate(
+            [
+                ['userId' => 1, 'dayTime' => 1604793600, 'sumTime' => 440, 'pureTime' => 220],
+                ['userId' => 1, 'dayTime' => 1604880000, 'sumTime' => 540, 'pureTime' => 320],
+                ['userId' => 2, 'dayTime' => 1604793600, 'sumTime' => 540, 'pureTime' => 320],
+            ]
+        );
+
+        $result = $this->getActivityDataDailyStatisticsService()->getDailyLearnData(1, '', '');
+        $this->assertEquals(220, $result[0]['learnedTime']);
+        $this->assertEquals(320, $result[1]['learnedTime']);
     }
 
     /**

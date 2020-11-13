@@ -29,12 +29,12 @@ class UserVideoDailyDaoImpl extends AdvancedDaoImpl implements UserVideoDailyDao
                 'userId IN ( :userIds )',
                 'userId = :userId',
                 'dayTime = :dayTime',
-                'createdTime >= :createdTime_GE',
-                'createdTime > :createdTime_GT',
-                'createdTime <= :createdTime_LE',
-                'createdTime < :createdTime_LT',
+                'dayTime >= :dayTime_GE',
+                'dayTime > :dayTime_GT',
+                'dayTime <= :dayTime_LE',
+                'dayTime < :dayTime_LT',
             ],
-            'orderbys' => ['id', 'createdTime'],
+            'orderbys' => ['id', 'createdTime', 'dayTime'],
         ];
     }
 }

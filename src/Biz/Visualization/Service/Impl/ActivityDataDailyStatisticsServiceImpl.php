@@ -319,8 +319,8 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
     {
         $conditions = ArrayToolkit::parts($conditions, ['startDate', 'endDate', 'userIds']);
         if (!empty($conditions['startDate']) || !empty($conditions['endDate'])) {
-            $conditions['createdTime_GE'] = !empty($conditions['startDate']) ? strtotime($conditions['startDate']) : '';
-            $conditions['createdTime_LE'] = !empty($conditions['endDate']) ? strtotime($conditions['endDate']) : '';
+            $conditions['dayTime_GE'] = !empty($conditions['startDate']) ? strtotime($conditions['startDate']) : '';
+            $conditions['dayTime_LE'] = !empty($conditions['endDate']) ? strtotime($conditions['endDate']) : '';
             unset($conditions['startDate']);
             unset($conditions['endDate']);
         }
@@ -333,7 +333,7 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
         $statisticsSetting = $this->getVideoEffectiveTimeStatisticsSetting();
         $timeField = 'de-weight' === $statisticsSetting['video_multiple'] ? 'pureTime' : 'sumTime';
 
-        return $this->getUserLearnDailyDao()->findUserDailyLearnTimeByDate(['userId' => $userId, 'createdTime_GE' => $startTime, 'createdTime_LT' => $endTime], $timeField);
+        return $this->getUserLearnDailyDao()->findUserDailyLearnTimeByDate(['userId' => $userId, 'dayTime_GE' => $startTime, 'dayTime_LT' => $endTime], $timeField);
     }
 
     /**
