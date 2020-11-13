@@ -224,7 +224,7 @@ class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
     public function testGetVideoEffectiveTimeStatisticsSetting()
     {
         $this->mockBiz('System:SettingService', [
-            ['functionName' => 'get', 'returnValue' => ['statistical_dimension' => 'playing', 'video_multiple' => 'de-weight']]
+            ['functionName' => 'get', 'returnValue' => ['statistical_dimension' => 'playing', 'video_multiple' => 'de-weight']],
         ]);
 
         $result = $this->getActivityDataDailyStatisticsService()->getVideoEffectiveTimeStatisticsSetting();
