@@ -276,24 +276,27 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
     {
         $statisticsSetting = $this->getVideoEffectiveTimeStatisticsSetting();
         $timeField = 'de-weight' === $statisticsSetting['video_multiple'] ? 'pureTime' : 'sumTime';
+        $records = $this->getActivityLearnDailyDao()->sumUserLearnTime($this->analysisCondition($conditions), $timeField);
 
-        return $this->getActivityLearnDailyDao()->sumUserLearnTime($this->analysisCondition($conditions), $timeField);
+        return ArrayToolkit::index($records, 'userId');
     }
 
     public function findUserVideoWatchTime($conditions)
     {
         $statisticsSetting = $this->getVideoEffectiveTimeStatisticsSetting();
         $timeField = 'de-weight' === $statisticsSetting['video_multiple'] ? 'pureTime' : 'sumTime';
+        $records = $this->getUserVideoDailyDao()->sumUserVideoWatchTime($this->analysisCondition($conditions), $timeField);
 
-        return $this->getCoursePlanVideoDailyDao()->sumUserVideoWatchTime($this->analysisCondition($conditions), $timeField);
+        return ArrayToolkit::index($records, 'userId');
     }
 
     public function findUserPageStayTime($conditions)
     {
         $statisticsSetting = $this->getVideoEffectiveTimeStatisticsSetting();
         $timeField = 'de-weight' === $statisticsSetting['video_multiple'] ? 'pureTime' : 'sumTime';
+        $records = $this->getUserStayDailyDao()->sumUserPageStayTime($this->analysisCondition($conditions), $timeField);
 
-        return $this->getCoursePlanStayDailyDao()->sumUserPageStayTime($this->analysisCondition($conditions), $timeField);
+        return ArrayToolkit::index($records, 'userId');
     }
 
     public function getVideoEffectiveTimeStatisticsSetting()

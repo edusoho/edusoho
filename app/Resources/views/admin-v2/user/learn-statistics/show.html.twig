@@ -58,8 +58,8 @@
               <td>{{ statistic.joinedTaskNum|default(0) }}</td>
               <td>{{ statistic.finishedTaskNum|default(0) }}</td>
               <td>{{ (userLearnRecords[user.id].userLearnTime|default(0)/60)|number_format(0) }}</td>
-              <td>{{ (userLearnRecords[user.id].userVideoTime|default(0)/60)|number_format(0) }}</td>
-              <td>{{ (userLearnRecords[user.id].userStayTime|default(0)/60)|number_format(0) }}</td>
+              <td>{{ (userVideoRecords[user.id].userVideoTime|default(0)/60)|number_format(0) }}</td>
+              <td>{{ (userStayRecords[user.id].userStayTime|default(0)/60)|number_format(0) }}</td>
               <td>{{ statistic.actualAmount|default(0)|to_cash(0) }}</td>
               <td><a href="{{ path('admin_v2_user_learn_detail', {userId:user.id}) }}">{{ 'site.btn.detail'|trans }}</a></td>
             </tr>
