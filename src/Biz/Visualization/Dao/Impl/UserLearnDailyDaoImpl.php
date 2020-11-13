@@ -9,6 +9,23 @@ class UserLearnDailyDaoImpl extends AdvancedDaoImpl implements UserLearnDailyDao
 {
     protected $table = 'user_learn_daily';
 
+    public function sumUserLearnTime($conditions, $timeField)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select("userId, sum({$timeField}) as userLearnTime")
+            ->groupBy('userId');
+
+        return $builder->execute()->fetchAll();
+    }
+
+    public function findUserDailyLearnTimeByDate($conditions, $timeField)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select("{$timeField} as learnedTime ,from_unixtime(dayTime,'%Y-%m-%d') date");
+
+        return $builder->execute()->fetchAll(0) ?: array();
+    }
+
     public function declares()
     {
         return [
@@ -17,6 +34,13 @@ class UserLearnDailyDaoImpl extends AdvancedDaoImpl implements UserLearnDailyDao
             ],
             'conditions' => [
                 'id = :id',
+                'userId IN ( :userIds )',
+                'userId = :userId',
+                'dayTime = :dayTime',
+                'createdTime >= :createdTime_GE',
+                'createdTime > :createdTime_GT',
+                'createdTime <= :createdTime_LE',
+                'createdTime < :createdTime_LT',
             ],
             'orderbys' => ['id', 'createdTime'],
         ];

@@ -25,4 +25,6 @@ interface ActivityDataDailyStatisticsService
     public function findUserPageStayTime($conditions);
 
     public function getVideoEffectiveTimeStatisticsSetting();
+
+    public function getDailyLearnData($userId, $startTime, $endTime);
 }

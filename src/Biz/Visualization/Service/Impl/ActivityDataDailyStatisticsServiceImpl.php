@@ -13,6 +13,7 @@ use Biz\Visualization\Dao\ActivityVideoDailyDao;
 use Biz\Visualization\Dao\ActivityVideoWatchRecordDao;
 use Biz\Visualization\Dao\CoursePlanStayDailyDao;
 use Biz\Visualization\Dao\CoursePlanVideoDailyDao;
+use Biz\Visualization\Dao\UserLearnDailyDao;
 use Biz\Visualization\Dao\UserStayDailyDao;
 use Biz\Visualization\Dao\UserVideoDailyDao;
 use Biz\Visualization\Service\ActivityDataDailyStatisticsService;
@@ -276,7 +277,7 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
     {
         $statisticsSetting = $this->getVideoEffectiveTimeStatisticsSetting();
         $timeField = 'de-weight' === $statisticsSetting['video_multiple'] ? 'pureTime' : 'sumTime';
-        $records = $this->getActivityLearnDailyDao()->sumUserLearnTime($this->analysisCondition($conditions), $timeField);
+        $records = $this->getUserLearnDailyDao()->sumUserLearnTime($this->analysisCondition($conditions), $timeField);
 
         return ArrayToolkit::index($records, 'userId');
     }
@@ -325,6 +326,22 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
         }
 
         return $conditions;
+    }
+
+    public function getDailyLearnData($userId, $startTime, $endTime)
+    {
+        $statisticsSetting = $this->getVideoEffectiveTimeStatisticsSetting();
+        $timeField = 'de-weight' === $statisticsSetting['video_multiple'] ? 'pureTime' : 'sumTime';
+
+        return $this->getUserLearnDailyDao()->findUserDailyLearnTimeByDate(['userId' => $userId, 'createdTime_GE' => $startTime, 'createdTime_LT' => $endTime], $timeField);
+    }
+
+    /**
+     * @return UserLearnDailyDao
+     */
+    protected function getUserLearnDailyDao()
+    {
+        return $this->createDao('Visualization:UserLearnDailyDao');
     }
 
     /**

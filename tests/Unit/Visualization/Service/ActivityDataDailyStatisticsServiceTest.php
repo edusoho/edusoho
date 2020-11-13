@@ -9,6 +9,7 @@ use Biz\Visualization\Dao\ActivityStayDailyDao;
 use Biz\Visualization\Dao\ActivityVideoDailyDao;
 use Biz\Visualization\Dao\CoursePlanStayDailyDao;
 use Biz\Visualization\Dao\CoursePlanVideoDailyDao;
+use Biz\Visualization\Dao\UserLearnDailyDao;
 use Biz\Visualization\Dao\UserStayDailyDao;
 use Biz\Visualization\Dao\UserVideoDailyDao;
 use Biz\Visualization\Service\ActivityDataDailyStatisticsService;
@@ -177,7 +178,7 @@ class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
 
     public function testFindUserLearnTime()
     {
-        $this->getActivityLearnDailyDao()->batchCreate(
+        $this->getUserLearnDailyDao()->batchCreate(
             [
                 ['userId' => 1, 'dayTime' => 1604793600, 'sumTime' => 440, 'pureTime' => 220],
                 ['userId' => 1, 'dayTime' => 1604793600, 'sumTime' => 540, 'pureTime' => 320],
@@ -229,6 +230,14 @@ class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
         $result = $this->getActivityDataDailyStatisticsService()->getVideoEffectiveTimeStatisticsSetting();
         $this->assertEquals('playing', $result['statistical_dimension']);
         $this->assertEquals('de-weight', $result['video_multiple']);
+    }
+
+    /**
+     * @return UserLearnDailyDao
+     */
+    protected function getUserLearnDailyDao()
+    {
+        return $this->biz->dao('Visualization:UserLearnDailyDao');
     }
 
     /**

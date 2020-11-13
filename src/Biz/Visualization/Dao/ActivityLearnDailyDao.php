@@ -7,6 +7,4 @@ use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 interface ActivityLearnDailyDao extends AdvancedDaoInterface
 {
     public function findByCourseSetIds($courseSetIds);
-
-    public function sumUserLearnTime($conditions, $timeField);
 }

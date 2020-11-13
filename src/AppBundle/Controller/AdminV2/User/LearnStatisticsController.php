@@ -86,7 +86,7 @@ class LearnStatisticsController extends BaseController
     {
         $conditions = $request->query->all();
         $timeRange = $this->getTimeRange($conditions);
-        $learnData = $this->getLearnStatisticsService()->getDailyLearnData($userId, $timeRange['startTime'], $timeRange['endTime']);
+        $learnData = $this->getActivityDataDailyStatisticsService()->getDailyLearnData($userId, $timeRange['startTime'], $timeRange['endTime']);
         $learnData = $this->fillAnalysisData($timeRange, $learnData);
 
         return $this->createJsonResponse($learnData);
