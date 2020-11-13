@@ -272,6 +272,58 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
         return $pureTime;
     }
 
+    public function findUserLearnTime($conditions)
+    {
+        $statisticsSetting = $this->getVideoEffectiveTimeStatisticsSetting();
+        $timeField = 'de-weight' === $statisticsSetting['video_multiple'] ? 'pureTime' : 'sumTime';
+
+        return $this->getActivityLearnDailyDao()->sumUserLearnTime($this->analysisCondition($conditions), $timeField);
+    }
+
+    public function findUserVideoWatchTime($conditions)
+    {
+        $statisticsSetting = $this->getVideoEffectiveTimeStatisticsSetting();
+        $timeField = 'de-weight' === $statisticsSetting['video_multiple'] ? 'pureTime' : 'sumTime';
+
+        return $this->getCoursePlanVideoDailyDao()->sumUserVideoWatchTime($this->analysisCondition($conditions), $timeField);
+    }
+
+    public function findUserPageStayTime($conditions)
+    {
+        $statisticsSetting = $this->getVideoEffectiveTimeStatisticsSetting();
+        $timeField = 'de-weight' === $statisticsSetting['video_multiple'] ? 'pureTime' : 'sumTime';
+
+        return $this->getCoursePlanStayDailyDao()->sumUserPageStayTime($this->analysisCondition($conditions), $timeField);
+    }
+
+    public function getVideoEffectiveTimeStatisticsSetting()
+    {
+        $statisticsSetting = $this->getSettingService()->get('videoEffectiveTimeStatistics', []);
+
+        if (empty($statisticsSetting)) {
+            $statisticsSetting = [
+                'statistical_dimension' => 'playing',
+                'video_multiple' => 'de-weight',
+            ];
+            $this->getSettingService()->set('videoEffectiveTimeStatistics', $statisticsSetting);
+        }
+
+        return $statisticsSetting;
+    }
+
+    private function analysisCondition($conditions)
+    {
+        $conditions = ArrayToolkit::parts($conditions, ['startDate', 'endDate', 'userIds']);
+        if (!empty($conditions['startDate']) || !empty($conditions['endDate'])) {
+            $conditions['createdTime_GE'] = !empty($conditions['startDate']) ? strtotime($conditions['startDate']) : '';
+            $conditions['createdTime_LE'] = !empty($conditions['endDate']) ? strtotime($conditions['endDate']) : '';
+            unset($conditions['startDate']);
+            unset($conditions['endDate']);
+        }
+
+        return $conditions;
+    }
+
     /**
      * @return CoursePlanVideoDailyDao
      */

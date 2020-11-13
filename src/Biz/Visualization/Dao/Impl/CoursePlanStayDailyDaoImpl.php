@@ -9,6 +9,15 @@ class CoursePlanStayDailyDaoImpl extends AdvancedDaoImpl implements CoursePlanSt
 {
     protected $table = 'course_plan_stay_daily';
 
+    public function sumUserPageStayTime($conditions, $timeField)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select("userId, sum({$timeField}) as userStayTime")
+            ->groupBy('userId');
+
+        return $builder->execute()->fetchAll();
+    }
+
     public function declares()
     {
         return [

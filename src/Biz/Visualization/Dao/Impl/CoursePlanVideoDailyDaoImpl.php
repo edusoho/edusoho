@@ -9,6 +9,15 @@ class CoursePlanVideoDailyDaoImpl extends AdvancedDaoImpl implements CoursePlanV
 {
     protected $table = 'course_plan_video_daily';
 
+    public function sumUserVideoWatchTime($conditions, $timeField)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select("userId, sum({$timeField}) as userVideoTime")
+            ->groupBy('userId');
+
+        return $builder->execute()->fetchAll();
+    }
+
     public function declares()
     {
         return [

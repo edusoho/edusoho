@@ -14,6 +14,15 @@ class ActivityLearnDailyDaoImpl extends AdvancedDaoImpl implements ActivityLearn
         return $this->findInField('courseSetId', $courseSetIds);
     }
 
+    public function sumUserLearnTime($conditions, $timeField)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+            ->select("userId, sum({$timeField}) as userLearnTime")
+            ->groupBy('userId');
+
+        return $builder->execute()->fetchAll();
+    }
+
     public function declares()
     {
         return [

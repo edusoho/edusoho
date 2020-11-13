@@ -9,6 +9,7 @@ use AppBundle\Controller\AdminV2\BaseController;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
 use Biz\UserLearnStatistics\Service\LearnStatisticsService;
+use Biz\Visualization\Service\ActivityDataDailyStatisticsService;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -50,6 +51,9 @@ class LearnStatisticsController extends BaseController
             'recordEndTime' => $recordEndTime,
             'isDefault' => $conditions['isDefault'],
             'isInit' => $this->getInitStatus(),
+            'userLearnRecords' => $this->getActivityDataDailyStatisticsService()->findUserLearnTime($conditions),
+            'userVideoRecords' => $this->getActivityDataDailyStatisticsService()->findUserVideoWatchTime($conditions),
+            'userStayRecords' => $this->getActivityDataDailyStatisticsService()->findUserPageStayTime($conditions),
         ]);
     }
 
@@ -157,6 +161,14 @@ class LearnStatisticsController extends BaseController
         return $this->render('admin-v2/user/learn-statistics/sync-info.html.twig', [
             'data' => $data,
         ]);
+    }
+
+    /**
+     * @return ActivityDataDailyStatisticsService
+     */
+    protected function getActivityDataDailyStatisticsService()
+    {
+        return $this->createService('Visualization:ActivityDataDailyStatisticsService');
     }
 
     /**
