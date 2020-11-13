@@ -38,6 +38,7 @@ class LearnDataServiceTest extends BaseTestCase
         $this->getActivityLearnDailyDao()->create($this->getDefaultFields(['courseSetId' => 2]));
 
         $result = $this->getLearnDataService()->findActivityLearnDailyByCourseSetIds([1]);
+        var_dump($result);
         $this->assertCount(1, $result);
     }
 

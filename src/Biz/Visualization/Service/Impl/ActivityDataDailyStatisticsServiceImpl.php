@@ -100,19 +100,19 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
             $data = $this->getActivityStayDailyDao()->search($conditions, [], 0, PHP_INT_MAX, $columns);
         }
 
-//        $this->beginTransaction();
-//        try {
-        $this->sumTaskResultPureTime($data);
+        $this->beginTransaction();
+        try {
+            $this->sumTaskResultPureTime($data);
 
-        $this->getActivityLearnDailyDao()->batchCreate($data);
+            $this->getActivityLearnDailyDao()->batchCreate($data);
 
-//            $this->commit();
+            $this->commit();
+        } catch (\Exception $e) {
+            $this->rollback();
+            throw $e;
+        }
 
         return true;
-//        } catch (\Exception $e) {
-//            $this->rollback();
-//            throw $e;
-//        }
     }
 
     public function statisticsUserLearnDailyData($dayTime)
