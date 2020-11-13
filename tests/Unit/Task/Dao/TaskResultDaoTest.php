@@ -2,60 +2,104 @@
 
 namespace Tests\Unit\Task\Dao;
 
-use Tests\Unit\Base\BaseDaoTestCase;
 use AppBundle\Common\ArrayToolkit;
+use Tests\Unit\Base\BaseDaoTestCase;
 
 class TaskResultDaoTest extends BaseDaoTestCase
 {
+    public function testSumPureLearnedTimeByCourseTaskId()
+    {
+        $this->mockDataObject(['userId' => 1, 'time' => 100, 'pureTime' => 200, 'watchTime' => 100, 'pureWatchTime' => 200, 'courseTaskId' => 1]);
+        $this->mockDataObject(['userId' => 2, 'time' => 200, 'pureTime' => 400, 'watchTime' => 200, 'pureWatchTime' => 400, 'courseTaskId' => 1]);
+        $this->mockDataObject(['userId' => 1, 'time' => 100, 'pureTime' => 100, 'watchTime' => 100, 'pureWatchTime' => 100, 'courseTaskId' => 2]);
+
+        $result = $this->getDao()->sumPureLearnedTimeByCourseTaskId(1);
+
+        $this->assertEquals(600, $result);
+    }
+
+    public function testSumLearnedTimeByCourseTaskId()
+    {
+        $this->mockDataObject(['userId' => 1, 'time' => 100, 'pureTime' => 200, 'watchTime' => 100, 'pureWatchTime' => 200, 'courseTaskId' => 1]);
+        $this->mockDataObject(['userId' => 2, 'time' => 200, 'pureTime' => 400, 'watchTime' => 200, 'pureWatchTime' => 400, 'courseTaskId' => 1]);
+        $this->mockDataObject(['userId' => 1, 'time' => 100, 'pureTime' => 100, 'watchTime' => 100, 'pureWatchTime' => 100, 'courseTaskId' => 2]);
+
+        $result = $this->getDao()->sumLearnedTimeByCourseTaskId(1);
+
+        $this->assertEquals(300, $result);
+    }
+
+    public function testSumPureWatchTimeByCourseTaskId()
+    {
+        $this->mockDataObject(['userId' => 1, 'time' => 100, 'pureTime' => 200, 'watchTime' => 100, 'pureWatchTime' => 200, 'courseTaskId' => 1]);
+        $this->mockDataObject(['userId' => 2, 'time' => 200, 'pureTime' => 400, 'watchTime' => 200, 'pureWatchTime' => 400, 'courseTaskId' => 1]);
+        $this->mockDataObject(['userId' => 1, 'time' => 100, 'pureTime' => 100, 'watchTime' => 100, 'pureWatchTime' => 100, 'courseTaskId' => 2]);
+
+        $result = $this->getDao()->sumPureWatchTimeByCourseTaskId(1);
+
+        $this->assertEquals(600, $result);
+    }
+
+    public function testSumWatchTimeByCourseTaskId()
+    {
+        $this->mockDataObject(['userId' => 1, 'time' => 100, 'pureTime' => 200, 'watchTime' => 100, 'pureWatchTime' => 200, 'courseTaskId' => 1]);
+        $this->mockDataObject(['userId' => 2, 'time' => 200, 'pureTime' => 400, 'watchTime' => 200, 'pureWatchTime' => 400, 'courseTaskId' => 1]);
+        $this->mockDataObject(['userId' => 1, 'time' => 100, 'pureTime' => 100, 'watchTime' => 100, 'pureWatchTime' => 100, 'courseTaskId' => 2]);
+
+        $result = $this->getDao()->sumWatchTimeByCourseTaskId(1);
+
+        $this->assertEquals(300, $result);
+    }
+
     public function testFindTaskresultsByTaskId()
     {
-        $expected = array();
-        $expected[] = $this->mockDataObject(array(
+        $expected = [];
+        $expected[] = $this->mockDataObject([
             'activityId' => 1,
             'courseTaskId' => 1,
             'time' => 1,
             'watchTime' => 1,
-        ));
-        $expected[] = $this->mockDataObject(array(
+        ]);
+        $expected[] = $this->mockDataObject([
             'activityId' => 2,
             'courseTaskId' => 2,
             'time' => 1,
             'watchTime' => 1,
-        ));
+        ]);
         $result = $this->getDao()->findTaskresultsByTaskId(2);
         $this->assertArrayEquals($expected[1], $result[0], $this->getCompareKeys());
     }
 
     public function testAnalysisCompletedTaskDataByTime()
     {
-        $expected = array();
-        $expected[] = $this->mockDataObject(array('activityId' => 3, 'courseTaskId' => 3, 'finishedTime' => 4000));
-        $expected[] = $this->mockDataObject(array('activityId' => 4, 'courseTaskId' => 4, 'finishedTime' => 3000));
+        $expected = [];
+        $expected[] = $this->mockDataObject(['activityId' => 3, 'courseTaskId' => 3, 'finishedTime' => 4000]);
+        $expected[] = $this->mockDataObject(['activityId' => 4, 'courseTaskId' => 4, 'finishedTime' => 3000]);
         $result = $this->getDao()->analysisCompletedTaskDataByTime(2000, 6000);
         $this->assertEquals(2, $result[0]['count']);
     }
 
     public function testFindByCourseIdAndUserId()
     {
-        $expected = array();
+        $expected = [];
         $expected[] = $this->mockDataObject();
-        $expected[] = $this->mockDataObject(array('courseId' => 3, 'userId' => 3));
+        $expected[] = $this->mockDataObject(['courseId' => 3, 'userId' => 3]);
         $result = $this->getDao()->findByCourseIdAndUserId(3, 3);
         $this->assertArrayEquals($expected[1], $result[0], $this->getCompareKeys());
     }
 
     public function testFindByActivityIdAndUserId()
     {
-        $expected = array();
+        $expected = [];
         $expected[] = $this->mockDataObject();
-        $expected[] = $this->mockDataObject(array('activityId' => 3, 'userId' => 3));
+        $expected[] = $this->mockDataObject(['activityId' => 3, 'userId' => 3]);
         $result = $this->getDao()->findByActivityIdAndUserId(3, 3);
         $this->assertArrayEquals($expected[1], $result[0], $this->getCompareKeys());
     }
 
     public function testDeleteByCourseId()
     {
-        $expected = $this->mockDataObject(array('courseId' => 1));
+        $expected = $this->mockDataObject(['courseId' => 1]);
         $this->assertNotNull($expected);
 
         $this->getDao()->deleteByCourseId(1);
@@ -66,9 +110,9 @@ class TaskResultDaoTest extends BaseDaoTestCase
 
     public function testCountLearnNumByTaskId()
     {
-        $expected = array();
-        $expected[] = $this->mockDataObject(array('activityId' => 5, 'courseTaskId' => 5, 'userId' => 1));
-        $expected[] = $this->mockDataObject(array('activityId' => 5, 'courseTaskId' => 5, 'userId' => 5));
+        $expected = [];
+        $expected[] = $this->mockDataObject(['activityId' => 5, 'courseTaskId' => 5, 'userId' => 1]);
+        $expected[] = $this->mockDataObject(['activityId' => 5, 'courseTaskId' => 5, 'userId' => 5]);
         $result = $this->getDao()->countLearnNumByTaskId(5);
         $this->assertEquals(2, $result);
     }
@@ -76,73 +120,73 @@ class TaskResultDaoTest extends BaseDaoTestCase
     public function testFindFinishedTimeByCourseIdGroupByUserId()
     {
         $result = $this->getDao()->findFinishedTimeByCourseIdGroupByUserId(2);
-        $this->assertEquals(array(), $result);
+        $this->assertEquals([], $result);
 
         $courseMember = $this->mockCourseMember();
         $courseTask = $this->mockCourseTask();
-        $expected = array();
-        $expected[] = $this->mockDataObject(array(
+        $expected = [];
+        $expected[] = $this->mockDataObject([
             'courseId' => 1,
             'courseTaskId' => 6,
             'status' => 'finish',
             'userId' => 2,
-        ));
-        $expected[] = $this->mockDataObject(array(
+        ]);
+        $expected[] = $this->mockDataObject([
             'courseId' => 1,
             'courseTaskId' => 7,
             'status' => 'finish',
             'userId' => 2,
-        ));
+        ]);
         $result = $this->getDao()->findFinishedTimeByCourseIdGroupByUserId(1);
         $this->assertEquals(2, $result[0]['taskCount']);
     }
 
     public function testSumLearnTimeByCourseIdAndUserId()
     {
-        $expected = array();
-        $expected[] = $this->mockDataObject(array(
+        $expected = [];
+        $expected[] = $this->mockDataObject([
             'courseId' => 1,
             'courseTaskId' => 8,
             'userId' => 2,
             'status' => 'finish',
-        ));
-        $expected[] = $this->mockDataObject(array(
+        ]);
+        $expected[] = $this->mockDataObject([
             'courseId' => 1,
             'courseTaskId' => 9,
             'userId' => 2,
             'time' => 2,
             'status' => 'finish',
-        ));
+        ]);
         $result = $this->getDao()->sumLearnTimeByCourseIdAndUserId(1, 2);
         $this->assertEquals(3, $result);
     }
 
     public function testCountFinishedTasksByUserIdAndCourseIdsGroupByCourseId()
     {
-        $expected = array();
-        $expected[] = $this->mockDataObject(array('courseId' => 1, 'courseTaskId' => 10, 'userId' => 2));
-        $expected[] = $this->mockDataObject(array('courseId' => 2, 'courseTaskId' => 11, 'userId' => 2));
-        $result = $this->getDao()->countFinishedTasksByUserIdAndCourseIdsGroupByCourseId(2, array(1, 2));
+        $expected = [];
+        $expected[] = $this->mockDataObject(['courseId' => 1, 'courseTaskId' => 10, 'userId' => 2]);
+        $expected[] = $this->mockDataObject(['courseId' => 2, 'courseTaskId' => 11, 'userId' => 2]);
+        $result = $this->getDao()->countFinishedTasksByUserIdAndCourseIdsGroupByCourseId(2, [1, 2]);
         $this->assertEquals(1, $result[0]['count']);
     }
 
     public function testGetLearnedTimeByCourseIdGroupByCourseTaskId()
     {
-        $taksResult = $this->mockTaskResult(array('userId' => 2, 'courseTaskId' => 12, 'time' => 3));
-        $taksResult = $this->mockTaskResult(array('userId' => 3, 'courseTaskId' => 12, 'time' => 1));
-        $taksResult = $this->mockTaskResult(array('userId' => 4, 'courseTaskId' => 12, 'time' => 2));
-        $taksResult = $this->mockTaskResult(array('userId' => 5, 'courseTaskId' => 15, 'time' => 5));
+        $taksResult = $this->mockTaskResult(['userId' => 2, 'courseTaskId' => 12, 'time' => 3]);
+        $taksResult = $this->mockTaskResult(['userId' => 3, 'courseTaskId' => 12, 'time' => 1]);
+        $taksResult = $this->mockTaskResult(['userId' => 4, 'courseTaskId' => 12, 'time' => 2]);
+        $taksResult = $this->mockTaskResult(['userId' => 5, 'courseTaskId' => 15, 'time' => 5]);
         $learnedTime = $this->getDao()->getLearnedTimeByCourseIdGroupByCourseTaskId(12);
         $this->assertEquals(6, $learnedTime);
     }
 
     public function testGetWatchTimeByCourseIdGroupByCourseTaskId()
     {
-        $taksResult = $this->mockTaskResult(array('courseTaskId' => 16, 'watchTime' => 3));
-        $taksResult = $this->mockTaskResult(array('userId' => 2, 'courseTaskId' => 16, 'watchTime' => 6));
-        $taksResult = $this->mockTaskResult(array('courseTaskId' => 20));
-        $taksResult = $this->mockTaskResult(array('courseTaskId' => 17, 'watchTime' => 4));
-        $taksResult = $this->mockTaskResult(array('watchTime' => 15, 'courseTaskId' => 18));
+        $taksResult = $this->mockTaskResult(['courseTaskId' => 16, 'watchTime' => 3]);
+        $taksResult = $this->mockTaskResult(['userId' => 2, 'courseTaskId' => 16, 'watchTime' => 6]);
+        $taksResult = $this->mockTaskResult(['courseTaskId' => 20]);
+        $taksResult = $this->mockTaskResult(['courseTaskId' => 17, 'watchTime' => 4]);
+        $taksResult = $this->mockTaskResult(['watchTime' => 15, 'courseTaskId' => 18]);
         $learnedTime = $this->getDao()->getWatchTimeByCourseIdGroupByCourseTaskId(16);
         $this->assertEquals(9, $learnedTime);
 
@@ -152,50 +196,50 @@ class TaskResultDaoTest extends BaseDaoTestCase
 
     public function testSumCourseSetLearnedTimeByTaskIds()
     {
-        $taksResult = $this->mockTaskResult(array('activityId' => 1, 'courseTaskId' => 1, 'time' => 1, 'watchTime' => 1));
-        $result = $this->getDao()->sumCourseSetLearnedTimeByTaskIds(array(1));
+        $taksResult = $this->mockTaskResult(['activityId' => 1, 'courseTaskId' => 1, 'time' => 1, 'watchTime' => 1]);
+        $result = $this->getDao()->sumCourseSetLearnedTimeByTaskIds([1]);
         $this->assertEquals(1, $result);
     }
 
     public function testCountTaskNumGroupByUserId()
     {
-        $taskResult1 = $this->mockTaskResult(array(
+        $taskResult1 = $this->mockTaskResult([
             'userId' => 1,
             'courseTaskId' => 20,
             'status' => 'finish',
-        ));
-        $taskResult2 = $this->mockTaskResult(array(
+        ]);
+        $taskResult2 = $this->mockTaskResult([
             'userId' => 2,
             'courseTaskId' => 21,
             'status' => 'start',
-        ));
-        $taskResult2 = $this->mockTaskResult(array(
+        ]);
+        $taskResult2 = $this->mockTaskResult([
             'userId' => 2,
             'courseTaskId' => 22,
             'status' => 'finish',
-        ));
-        $taskResult2 = $this->mockTaskResult(array(
+        ]);
+        $taskResult2 = $this->mockTaskResult([
             'userId' => 2,
             'courseTaskId' => 23,
             'status' => 'finish',
-        ));
-        $result = $this->getDao()->countTaskNumGroupByUserId(array());
+        ]);
+        $result = $this->getDao()->countTaskNumGroupByUserId([]);
         $result = ArrayToolkit::index($result, 'userId');
         $this->assertEquals(1, $result[1]['count']);
         $this->assertEquals(3, $result[2]['count']);
 
-        $result = $this->getDao()->countTaskNumGroupByUserId(array('status' => 'finish'));
+        $result = $this->getDao()->countTaskNumGroupByUserId(['status' => 'finish']);
         $result = ArrayToolkit::index($result, 'userId');
         $this->assertEquals(1, $result[1]['count']);
         $this->assertEquals(2, $result[2]['count']);
 
-        $result = $this->getDao()->countTaskNumGroupByUserId(array('status' => 'start'));
+        $result = $this->getDao()->countTaskNumGroupByUserId(['status' => 'start']);
         $result = ArrayToolkit::index($result, 'userId');
         $this->assertTrue(empty($result[1]));
         $this->assertEquals(1, $result[2]['count']);
     }
 
-    protected function mockTaskResult($fields = array())
+    protected function mockTaskResult($fields = [])
     {
         $taskReult = array_merge($this->getDefaultMockFields(), $fields);
         $this->getDao()->create($taskReult);
@@ -203,12 +247,12 @@ class TaskResultDaoTest extends BaseDaoTestCase
 
     protected function getDefaultMockFields()
     {
-        return array('activityId' => 1, 'courseTaskId' => 2, 'time' => 1, 'watchTime' => 1);
+        return ['activityId' => 1, 'courseTaskId' => 2, 'time' => 1, 'watchTime' => 1];
     }
 
-    private function mockCourseMember($fields = array())
+    private function mockCourseMember($fields = [])
     {
-        $defaultFields = array(
+        $defaultFields = [
             'courseId' => '1',
             'classroomId' => '1',
             'joinedType' => 'course',
@@ -233,16 +277,16 @@ class TaskResultDaoTest extends BaseDaoTestCase
             'lastViewTime' => '0',
             'refundDeadline' => '0',
             'learnedCompulsoryTaskNum' => '0',
-        );
+        ];
 
         $fields = array_merge($defaultFields, $fields);
 
         return $this->getCourseMemberDao()->create($fields);
     }
 
-    private function mockCourseTask($fields = array())
+    private function mockCourseTask($fields = [])
     {
-        $defaultFields = array(
+        $defaultFields = [
             'courseId' => 1,
             'seq' => 1,
             'categoryId' => 3,
@@ -262,7 +306,7 @@ class TaskResultDaoTest extends BaseDaoTestCase
             'length' => 10,
             'copyId' => 3,
             'createdUserId' => 2,
-        );
+        ];
 
         $fields = array_merge($defaultFields, $fields);
 
