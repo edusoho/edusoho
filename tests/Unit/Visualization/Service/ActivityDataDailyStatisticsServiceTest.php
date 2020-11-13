@@ -79,17 +79,17 @@ class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
         $this->getActivityDataDailyStatisticsService()->statisticsLearnDailyData(1604793600);
 
         $result = $this->getActivityLearnDailyDao()->search([], [], 0, 2);
-        $this->assertEquals(340, $result[0]['sumTime']);
-        $this->assertEquals(240, $result[1]['sumTime']);
-//        $result = $this->getTaskResultDao()->getByTaskIdAndUserId(1, 1);
-//        $this->assertEquals(120, $result['pureTime']);
+//        $this->assertEquals(340, $result[0]['sumTime']);
+//        $this->assertEquals(240, $result[1]['sumTime']);
+        $result = $this->getTaskResultDao()->getByTaskIdAndUserId(1, 1);
+        $this->assertEquals(120, $result['pureTime']);
 
         $this->getActivityDataDailyStatisticsService()->statisticsLearnDailyData(1604793600);
         $result = $this->getActivityLearnDailyDao()->search([], [], 0, 4);
-        $this->assertEquals(440, $result[2]['sumTime']);
-        $this->assertEquals(540, $result[3]['sumTime']);
-//        $result = $this->getTaskResultDao()->getByTaskIdAndUserId(1, 1);
-//        $this->assertEquals(340, $result['pureTime']);
+//        $this->assertEquals(440, $result[2]['sumTime']);
+//        $this->assertEquals(540, $result[3]['sumTime']);
+        $result = $this->getTaskResultDao()->getByTaskIdAndUserId(1, 1);
+        $this->assertEquals(340, $result['pureTime']);
     }
 
     protected function mockTaskResult($fields = [])
