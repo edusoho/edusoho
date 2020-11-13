@@ -5095,8 +5095,8 @@ admin.course_manage.statistics.data.name: %taskName%名
 admin.course_manage.statistics.data.study_number: 学习人数
 admin.course_manage.statistics.data.finished_number: 完成人数
 admin.course_manage.statistics.data.average_study_time: 平均学习时长(分)
-admin.course_manage.statistics.data.video_and_music_study_time: 音视频时长(分)
-admin.course_manage.statistics.data.video_and_music_average_study_time: 音视频平均观看时长(分)
+admin.course_manage.statistics.data.video_study_time: 视频时长(分)
+admin.course_manage.statistics.data.video_average_study_time: 视频平均观看时长(分)
 admin.course_manage.statistics.data.average_score: 测试平均得分
 
 ## 任务统计详细数据
