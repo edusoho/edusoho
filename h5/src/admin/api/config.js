@@ -101,6 +101,12 @@ const config = [
     name: 'vipPlugin',
     url: '/site_plugins/Vip',
   },
+  {
+    // 微营销创建活动地址
+    name: 'getCreateMarketingUrl',
+    url: '/settings/backstage',
+    method: 'GET',
+  },
 ];
 
 export default config;

@@ -199,6 +199,8 @@ export default {
     this.getClassCategories();
     // 获得优惠券开关
     this.getCouponSwitch();
+    // 获取微营销创建活动地址
+    this.getCreateMarketingUrl();
   },
   beforeDestroy() {
     document.getElementById('app').style.background = '#ffffff';
@@ -211,6 +213,7 @@ export default {
       'saveDraft',
       'getDraft',
       'getTemplate',
+      'getCreateMarketingUrl',
     ]),
     getFind() {
       const themeTemplate = getQueryVariable('template');
@@ -222,7 +225,7 @@ export default {
     },
     setStyle() {
       // 设置背景色
-      const windowHeight = document.documentElement.clientHeight;
+      // const windowHeight = document.documentElement.clientHeight;
       document.getElementById('app').style.background = '#f5f5f5';
       this.menuStyle = {
         height: this.windowHeight + 'px',
@@ -357,8 +360,8 @@ export default {
       this.currentModuleIndex = Math.max(this.modules.length - 1, 0);
       // 使用异步，保证组件添加完成再滑动到底部
       setTimeout(() => {
-        this.scrollBottom(), 500;
-      });
+        this.scrollBottom();
+      }, 500);
     },
     getTheme(themeTemplate) {
       this.getTemplate({
@@ -436,6 +439,7 @@ export default {
         mode: 'draft',
       })
         .then(res => {
+          // eslint-disable-next-line no-self-assign
           parent.location.href = parent.location.href;
         })
         .catch(err => {
@@ -477,6 +481,7 @@ export default {
                 message: '发布成功',
                 type: 'success',
               });
+              // eslint-disable-next-line no-self-assign
               parent.location.href = parent.location.href;
               return;
             }

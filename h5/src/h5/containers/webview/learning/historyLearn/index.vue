@@ -7,17 +7,20 @@
             <div class="history-learn-date van-hairline--bottom">
               {{ date }}
             </div>
+
             <template v-if="isRequestComplete">
-              <e-card
-                v-for="(item, index) in lesson[date]"
-                :key="index"
-                :course="item | cardDataList(item)"
-                @toClassroom="toClassroom"
-                @toTask="toTask"
-                @toCourse="toCourse"
-                @toItemBank="toItemBank"
-                @toItemBankTask="toItemBankTask"
-              />
+              <div v-for="(item, index) in lesson[date]" :key="index">
+                <e-card
+                  v-if="item.target"
+                  :key="index"
+                  :course="item | cardDataList(item)"
+                  @toClassroom="toClassroom"
+                  @toTask="toTask"
+                  @toCourse="toCourse"
+                  @toItemBank="toItemBank"
+                  @toItemBankTask="toItemBankTask"
+                />
+              </div>
             </template>
           </div>
         </van-list>

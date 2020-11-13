@@ -19,4 +19,7 @@ export default {
   [types.GET_SETTINGS](state, { key, setting }) {
     state[key] = setting;
   },
+  [types.GET_CREATE_MARKETING_URL](state, payload) {
+    state.createMarketingUrl = payload;
+  },
 };
