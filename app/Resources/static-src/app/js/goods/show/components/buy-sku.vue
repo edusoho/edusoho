@@ -10,13 +10,13 @@
                 </span>
                 <span v-if="buyViewMode === 'btn'">
                     <a :class="btnClass"
+                       v-if="!needBuyVip || (needBuyVip && parseInt(sku.buyable))"
                        class="goods-btn-hover pull-right"
                        @click="buySku">
                         <slot>{{ buyViewText }}</slot>
                     </a>
                     <span class="product-detail__disable_btn goods-btn-hover pull-right"
-                          v-if="isShow && ((sku.vipLevelInfo && !sku.vipUser)
-                          || sku.vipLevelInfo && sku.vipUser && (sku.vipLevelInfo.seq > sku.vipUser.level.seq || sku.vipLevelInfo.seq <= sku.vipUser.level.seq && parseInt(sku.vipUser.deadline) * 1000 < new Date().getTime()))"
+                          v-if="isShow && needBuyVip"
                           data-container=".product-detail__disable_btn"
                           data-toggle="popover"
                           data-placement="top"
@@ -25,7 +25,7 @@
                           :data-content="vipBtnTips(sku)">
                         <slot>{{ 'goods.show_page.vip_free_learn'|trans }}</slot>
                     </span>
-                    <span v-if="!sku.isMember && goods.type === 'classroom' && isShow">
+                    <span v-if="!sku.isMember && goods.type === 'classroom' && parseInt(sku.buyable) && isShow">
                         <a class="btn btn-link pull-right" style="margin-top:8px;" :href="`/classroom/${sku.targetId}/becomeAuditor`">{{ 'classroom.go_inside'|trans }}</a>
                     </span>
                 </span>
@@ -54,6 +54,7 @@
             return {
                 buyViewMode : '', //btn text
                 buyViewText : '',
+                needBuyVip : 0,
             }
         },
         props: {
@@ -127,10 +128,7 @@
                 if (sku.status !== 'published') { //如果商品未发布
                     this.buyViewMode = 'text';
                     this.buyViewText = Translator.trans('goods.show_page.unpublished_tips');
-                } else if (sku.buyable != 1) {  // 已发布，但是未开放购买
-                    this.buyViewMode = 'text';
-                    this.buyViewText = Translator.trans('goods.show_page.not_buyable_tips');
-                } else if (sku.buyable == 1
+                }  else if (sku.buyable == 1
                     && sku.buyableEndTime != 0
                     && new Date(sku.buyableEndTime).getTime() < new Date().getTime()) { // 已发布，开放购买，但是不在开放时间区间内
                     console.log(new Date(sku.buyableEndTime).getTime());
@@ -142,10 +140,18 @@
                     this.buyViewMode = 'text';
                     console.log(new Date(parseInt(sku.usageEndTime)).getTime());
                     this.buyViewText = Translator.trans('goods.show_page.usage_expiry_tips');
-                } else if (sku.vipLevelInfo && sku.vipUser && sku.vipLevelInfo.seq <= sku.vipUser.level.seq && parseInt(sku.vipUser.deadline) * 1000 > new Date().getTime()) {
-                    console.log(parseInt(sku.vipUser.deadline) * 1000);
+                } else if (sku.vipLevelInfo) {
                     this.buyViewMode = 'btn';
-                    this.buyViewText = Translator.trans('goods.show_page.vip_free_learn');
+                    if (sku.vipUser && sku.vipLevelInfo.seq <= sku.vipUser.level.seq && parseInt(sku.vipUser.deadline) * 1000 > new Date().getTime()) {
+                        this.buyViewText = Translator.trans('goods.show_page.vip_free_learn');
+                        this.needBuyVip = 0;
+                    } else {
+                        this.needBuyVip = 1;
+                        this.buyViewText = sku.displayPrice == 0 ? Translator.trans('goods.show_page.free_join_btn') : Translator.trans('goods.show_page.buy_btn');
+                    }
+                } else if (sku.buyable != 1) {  // 已发布，但是未开放购买
+                    this.buyViewMode = 'text';
+                    this.buyViewText = Translator.trans('goods.show_page.not_buyable_tips');
                 } else if (sku.displayPrice == 0) {
                     this.buyViewMode = 'btn';
                     this.buyViewText = Translator.trans('goods.show_page.free_join_btn');

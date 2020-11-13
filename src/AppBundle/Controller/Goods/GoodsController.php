@@ -13,7 +13,7 @@ class GoodsController extends BaseController
 {
     public function showAction(Request $request, $id)
     {
-        $goodsApiRequest = new ApiRequest("/api/goods/{$id}", 'GET', ['preview' => 1]);
+        $goodsApiRequest = new ApiRequest("/api/goods/{$id}", 'GET', ['preview' => $request->query->get('preview', 0)]);
         $goods = $this->container->get('api_resource_kernel')->handleApiRequest($goodsApiRequest);
         $goodsComponentsApiRequest = new ApiRequest("/api/goods/{$id}/components", 'GET');
         $goodsComponents = $this->container->get('api_resource_kernel')->handleApiRequest($goodsComponentsApiRequest);

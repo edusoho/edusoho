@@ -89,7 +89,7 @@ class CourseController extends CourseBaseController
             $product = $this->getProductService()->getProductByTargetIdAndType($courseSet['id'], 'course');
             $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
 
-            return $this->redirect($this->generateUrl('goods_show', ['id' => $goods['id'], 'targetId' => $course['id']]));
+            return $this->redirect($this->generateUrl('goods_show', ['id' => $goods['id'], 'targetId' => $course['id'], 'preview' => 'guest' == $request->query->get('previewAs', '') ? 1 : 0]));
         }
 
         if ($this->isPluginInstalled('Discount')) {
