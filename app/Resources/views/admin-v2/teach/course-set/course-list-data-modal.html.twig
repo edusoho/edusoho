@@ -23,8 +23,8 @@
             <td>{{'admin.course_manage.statistics.data.study_number'|trans}}</td>
             <td>{{'admin.course_manage.statistics.data.finished_number'|trans}}</td>
             <td>{{'admin.course_manage.statistics.data.average_study_time'|trans}}</td>
-            <td>{{'admin.course_manage.statistics.data.video_and_music_study_time'|trans}}</td>
-            <td>{{'admin.course_manage.statistics.data.video_and_music_average_study_time'|trans}}</td>
+            <td>{{'admin.course_manage.statistics.data.video_study_time'|trans}}</td>
+            <td>{{'admin.course_manage.statistics.data.video_average_study_time'|trans}}</td>
             <td>{{'admin.course_manage.statistics.data.average_score'|trans}}</td>
           </tr>
           {% if tasks %}
@@ -33,18 +33,16 @@
                 <td>{{ task.title }}</td>
                 <td>{{task.studentNum|default() }}</td>
                 <td>{{task.finishedNum|default() }}</td>
-                <td>{% if task.studentNum|default() == 0 %}0{% else %}{{task.learnedTime|default() // task.studentNum|default()}}{% endif %}</td>
+                <td>{{ task.avgLearnedTime|default(0) }}</td>
                 <td>
                   {{ task.length|default(0) }}
                 </td>
                 <td>
-                  {% if task.type in ['video', 'audio'] %}
-                    {% if task.type == 'video' and task.activity.ext.mediaSource != 'self' %}
+                  {% if task.type == 'video' %}
+                    {% if task.activity.ext.mediaSource != 'self' %}
                       --
-                    {% elseif  task.studentNum == 0 %}
-                      0
                     {% else %}
-                      {{task.watchTime|default(0) // task.studentNum  }}
+                      {{ task.avgWatchTime|default(0) }}
                     {% endif %}
                   {% else %}
                     --

@@ -5095,8 +5095,8 @@ admin.course_manage.statistics.data.name: %taskName%名
 admin.course_manage.statistics.data.study_number: 学习人数
 admin.course_manage.statistics.data.finished_number: 完成人数
 admin.course_manage.statistics.data.average_study_time: 平均学习时长(分)
-admin.course_manage.statistics.data.video_and_music_study_time: 音视频时长(分)
-admin.course_manage.statistics.data.video_and_music_average_study_time: 音视频平均观看时长(分)
+admin.course_manage.statistics.data.video_study_time: 视频时长(分)
+admin.course_manage.statistics.data.video_average_study_time: 视频平均观看时长(分)
 admin.course_manage.statistics.data.average_score: 测试平均得分
 
 ## 任务统计详细数据
@@ -7602,6 +7602,27 @@ admin.setting_course.open_course.open_course_review: 评价
 admin.article_setting.article_comments_manage: 资讯内容管理
 admin.article_setting.message_comments_manage: 私信内容管理
 admin.setting_course.article.article_comment: 评价
+admin.setting_course.video_play_setting: 在线视频课时播放配置
+admin.setting_course.video_play_setting.multiple_open: 多开学习
+admin.setting_course.video_play_setting.same_video_multiple: 同一视频课时多开
+admin.setting_course.video_play_setting.different_video_multiple: 不同视频课时多开
+admin.setting_course.video_play_setting.multiple_forbidden_effect: 禁止多开效果
+admin.setting_course.video_play_setting.kick_previous_play: 踢掉前次播放，需要终端升级到最新版本
+admin.setting_course.video_play_setting.reject_current_play: 拒绝本次播放
+admin.setting_course.video_play_setting.ineffective_learning: 无效学习时
+admin.setting_course.video_play_setting.play_rule: 播放规则
+admin.setting_course.video_play_setting.play_rule.tips: 当前播放窗口不是屏幕活跃窗口，部分终端不支持。当前播放窗口，长时间未检测到用户动作。
+admin.setting_course.video_play_setting.play_rule.auto_pause: 自动暂停
+admin.setting_course.video_play_setting.play_rule.no_action: 不做干预
+admin.setting_course.effective_learning_time_rule: 在线视频课时有效学习时长统计规则
+admin.setting_course.learning_time_statistical_dimension: 学习时长统计维度
+admin.setting_course.effective_learning_time.help_block: 以实际播放时长作为学习时长统计
+admin.setting_course.effective_learning_time.playing_time: 播放活跃时长
+admin.setting_course.effective_learning_time.page_time: 页面活跃时长
+admin.setting_course.effective_learning_time.reweighted_merge: 各处学习时长去重后再合并
+admin.setting_course.effective_learning_time.accumulated_merge: 各处学习时长直接累加合并
+admin.setting_course.effective_learning_time.reweighted_merge.help_block: 同时在多处产生的学习时长自动去重合并
+admin.setting_course.effective_learning_time.accumulated_merge.help_block: 同时在多处产生的学习时长不去重累加合并
 
 #微信授权设置
 admin.setting_wechat_auth.web_scan_login: 网页扫码登录

@@ -1674,6 +1674,9 @@ admin_v2.information_collect.chooser.items.hint: Please select form item
 user.fields.gender_label: Gender
 information_collect.form.check_age_invalid: Age Invalid
 information_collect.form.check_format_invalid: %display% Invalid
+
+admin_v2.video_effective_time_setting.cancel.hint: Among the learning time data in the whole station, the video class learning time data will be statistically generated according to the new rules, and the learning time data generated before configuration change will not be statistically changed with the new rules.Are you sure to change statistical rules?
+
 course.marketing_setup: 'Markets'
 site.currency.CNY: CNY
 s2b2c.product.cooperation_price: Cooperation Price

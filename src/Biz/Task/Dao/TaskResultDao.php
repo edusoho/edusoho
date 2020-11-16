@@ -2,9 +2,9 @@
 
 namespace Biz\Task\Dao;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
+use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
-interface TaskResultDao extends GeneralDaoInterface
+interface TaskResultDao extends AdvancedDaoInterface
 {
     public function analysisCompletedTaskDataByTime($startTime, $endTime);
 
@@ -32,7 +32,15 @@ interface TaskResultDao extends GeneralDaoInterface
 
     public function getLearnedTimeByCourseIdGroupByCourseTaskId($courseTaskIds);
 
+    public function sumPureLearnedTimeByCourseTaskId($courseTaskId);
+
+    public function sumLearnedTimeByCourseTaskId($courseTaskId);
+
     public function getWatchTimeByCourseIdGroupByCourseTaskId($courseTaskId);
+
+    public function sumPureWatchTimeByCourseTaskId($courseTaskId);
+
+    public function sumWatchTimeByCourseTaskId($courseTaskId);
 
     public function countFinishedTasksByUserIdAndCourseIdsGroupByCourseId($userId, $courseIds);
 
