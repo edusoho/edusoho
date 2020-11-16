@@ -178,13 +178,7 @@ class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
 
     public function testFindUserLearnTime()
     {
-        $this->getUserLearnDailyDao()->batchCreate(
-            [
-                ['userId' => 1, 'dayTime' => 1604793600, 'sumTime' => 440, 'pureTime' => 220],
-                ['userId' => 1, 'dayTime' => 1604880000, 'sumTime' => 540, 'pureTime' => 320],
-                ['userId' => 2, 'dayTime' => 1604793600, 'sumTime' => 540, 'pureTime' => 320],
-            ]
-        );
+        $this->batchMockUserLearnDailyData();
 
         $result = $this->getActivityDataDailyStatisticsService()->findUserLearnTime(['startDate' => '', 'endDate' => '', 'userIds' => [1, 2]]);
         $this->assertEquals(540, $result[1]['userLearnTime']);
@@ -196,7 +190,7 @@ class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
         $this->getUserVideoDailyDao()->batchCreate(
             [
                 ['userId' => 1, 'dayTime' => 1604793600, 'sumTime' => 440, 'pureTime' => 220],
-                ['userId' => 1, 'dayTime' => 1604793600, 'sumTime' => 540, 'pureTime' => 320],
+                ['userId' => 1, 'dayTime' => 1604880000, 'sumTime' => 540, 'pureTime' => 320],
                 ['userId' => 2, 'dayTime' => 1604793600, 'sumTime' => 540, 'pureTime' => 320],
             ]
         );
@@ -211,7 +205,7 @@ class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
         $this->getUserStayDailyDao()->batchCreate(
             [
                 ['userId' => 1, 'dayTime' => 1604793600, 'sumTime' => 440, 'pureTime' => 220],
-                ['userId' => 1, 'dayTime' => 1604793600, 'sumTime' => 540, 'pureTime' => 320],
+                ['userId' => 1, 'dayTime' => 1604880000, 'sumTime' => 540, 'pureTime' => 320],
                 ['userId' => 2, 'dayTime' => 1604793600, 'sumTime' => 540, 'pureTime' => 320],
             ]
         );
@@ -234,17 +228,22 @@ class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
 
     public function testGetDailyLearnData()
     {
-        $this->getUserLearnDailyDao()->batchCreate(
+        $this->batchMockUserLearnDailyData();
+
+        $result = $this->getActivityDataDailyStatisticsService()->getDailyLearnData(1, '', '');
+        $this->assertEquals(220, $result[0]['learnedTime']);
+        $this->assertEquals(320, $result[1]['learnedTime']);
+    }
+
+    protected function batchMockUserLearnDailyData()
+    {
+        return $this->getUserLearnDailyDao()->batchCreate(
             [
                 ['userId' => 1, 'dayTime' => 1604793600, 'sumTime' => 440, 'pureTime' => 220],
                 ['userId' => 1, 'dayTime' => 1604880000, 'sumTime' => 540, 'pureTime' => 320],
                 ['userId' => 2, 'dayTime' => 1604793600, 'sumTime' => 540, 'pureTime' => 320],
             ]
         );
-
-        $result = $this->getActivityDataDailyStatisticsService()->getDailyLearnData(1, '', '');
-        $this->assertEquals(220, $result[0]['learnedTime']);
-        $this->assertEquals(320, $result[1]['learnedTime']);
     }
 
     /**
