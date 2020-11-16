@@ -9,6 +9,24 @@ class CoursePlanLearnDailyDaoImpl extends AdvancedDaoImpl implements CoursePlanL
 {
     protected $table = 'course_plan_learn_daily';
 
+    public function sumLearnedTimeByCourseIdGroupByUserId($courseId, array $userIds)
+    {
+        $marks = str_repeat('?,', count($userIds) - 1).'?';
+
+        $sql = "SELECT sum(`sumTime`) AS learnedTime, `userId` FROM `{$this->table}` WHERE `courseId`= ? AND userId IN ($marks) GROUP BY `userId`;";
+
+        return $this->db()->fetchAll($sql, array_merge([$courseId], $userIds));
+    }
+
+    public function sumPureLearnedTimeByCourseIdGroupByUserId($courseId, array $userIds)
+    {
+        $marks = str_repeat('?,', count($userIds) - 1).'?';
+
+        $sql = "SELECT sum(`pureTime`) AS learnedTime, `userId` FROM `{$this->table}` WHERE `courseId`= ? AND userId IN ($marks) GROUP BY `userId`;";
+
+        return $this->db()->fetchAll($sql, array_merge([$courseId], $userIds));
+    }
+
     public function declares()
     {
         return [
