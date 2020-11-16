@@ -60,7 +60,7 @@ class OverviewNormalTaskDetailExporter extends Exporter
             $data[] = is_numeric($user['nickname']) ? $user['nickname']."\t" : $user['nickname'];
             $data[] = date('Y-m-d H:i:s', $taskResult['createdTime']);
             $data[] = empty($taskResult['finishedTime']) ? '-' : date('Y-m-d H:i:s', $taskResult['finishedTime']);
-            if ('de-weight' === $videoEffectiveTimeStatistics['video_multiple']){
+            if ('de-weight' === $videoEffectiveTimeStatistics['video_multiple']) {
                 $data[] = empty($taskResult['pureTime']) ? '-' : round(($taskResult['pureTime'] / 60), 1);
                 $data[] = empty($taskResult['pureWatchTime']) ? '-' : round(($taskResult['pureWatchTime'] / 60), 1);
             } else {

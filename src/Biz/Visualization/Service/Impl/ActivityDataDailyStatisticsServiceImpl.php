@@ -287,7 +287,6 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
         return $statisticsSetting;
     }
 
-
     /**
      * @return CoursePlanVideoDailyDao
      */
