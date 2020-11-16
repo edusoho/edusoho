@@ -316,7 +316,7 @@ class CourseController extends CourseBaseController
             $currentCourses = $courses[$courseSet['id']];
             $courseIds = ArrayToolkit::column($currentCourses, 'id');
 
-            $learnProgress = $this->getLearningDataAnalysisService()->getUserLearningProgressByCourseIds($courseIds, $user['id']);
+            $learnProgress = $this->getLearningDataAnalysisService()->getUserLearningCompulsoryProgressByCourseIds($courseIds, $user['id']);
 
             $courseSets[$courseSetId]['percent'] = $learnProgress['percent'];
         }

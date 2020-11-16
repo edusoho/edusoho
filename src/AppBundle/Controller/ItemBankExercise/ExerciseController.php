@@ -230,7 +230,7 @@ class ExerciseController extends BaseController
             $member = $this->getExerciseMemberService()->getExerciseMember($exercise['id'], $user['id']);
         }
         if (!empty($member)) {
-            $userReview = $this->getReviewService()->getByUserIdAndTargetTypeAndTargetId($member['userId'], 'item_bank_exercise', $exercise['id']);
+            $userReview = $this->getReviewService()->getReviewByUserIdAndTargetTypeAndTargetId($member['userId'], 'item_bank_exercise', $exercise['id']);
         }
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($reviews, 'userId'));
