@@ -364,7 +364,7 @@ class QuestionController extends BaseController
             $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
         }
 
-        return str_replace(',', '', $questionBank['name']).'-题目.docx';
+        return  rawurlencode("{$questionBank['name']}-题目.docx");
     }
 
     protected function convertCategoryTreeToArray($categoryTree)

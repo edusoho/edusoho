@@ -113,15 +113,15 @@ class TaskEventSubscriber extends EventSubscriber implements EventSubscriberInte
 
             if ($this->getSmsService()->isOpen($smsType)) {
                 $processor = SmsProcessorFactory::create('task');
-                $return = $processor->getUrls($task['id'], $smsType);
-                $callbackUrls = $return['urls'];
-                $count = ceil($return['count'] / 1000);
-                if ($count = 0) {
-                    $return;
+                $returnUrls = $processor->getUrls($task['id'], $smsType);
+                $callbackUrls = $returnUrls['urls'];
+                $count = ceil($returnUrls['count'] / 1000);
+                if (0 == $count) {
+                    return;
                 }
                 try {
                     $api = CloudAPIFactory::create('root');
-                    $result = $api->post('/sms/sendBatch', ['total' => $count, 'callbackUrls' => $callbackUrls]);
+                    $api->post('/sms/sendBatch', ['total' => $count, 'callbackUrls' => $callbackUrls]);
                 } catch (\Exception $e) {
                     throw SmsException::FAILED_SEND();
                 }

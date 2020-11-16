@@ -1583,4 +1583,5 @@ t.add("goods.show_page.free_join_btn", "Free Join", "js", "en");
 t.add("goods.show_page.buy_btn", "Buy", "js", "en");
 t.add("classroom.go_inside", "Go to preview", "js", "en");
 t.add("course.base.title.placeholder", "Please insert course title", "js", "en");
+t.add("course.unname_title", "Unnamed plan", "js", "en");
 })(Translator);
