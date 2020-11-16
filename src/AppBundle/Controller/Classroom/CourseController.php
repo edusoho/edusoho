@@ -129,7 +129,7 @@ class CourseController extends BaseController
             $product = $this->getProductService()->getProductByTargetIdAndType($classroom['id'], 'classroom');
             $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
 
-            return $this->redirect($this->generateUrl('goods_show', ['id' => $goods['id']]));
+            return $this->redirect($this->generateUrl('goods_show', ['id' => $goods['id'], 'preview' => 'guest' == $request->query->get('previewAs', '') ? 1 : 0]));
         }
 
         $layout = 'classroom/layout.html.twig';
