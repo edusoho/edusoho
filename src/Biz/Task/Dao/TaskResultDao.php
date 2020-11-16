@@ -32,7 +32,15 @@ interface TaskResultDao extends AdvancedDaoInterface
 
     public function getLearnedTimeByCourseIdGroupByCourseTaskId($courseTaskIds);
 
+    public function sumPureLearnedTimeByCourseTaskId($courseTaskId);
+
+    public function sumLearnedTimeByCourseTaskId($courseTaskId);
+
     public function getWatchTimeByCourseIdGroupByCourseTaskId($courseTaskId);
+
+    public function sumPureWatchTimeByCourseTaskId($courseTaskId);
+
+    public function sumWatchTimeByCourseTaskId($courseTaskId);
 
     public function countFinishedTasksByUserIdAndCourseIdsGroupByCourseId($userId, $courseIds);
 
