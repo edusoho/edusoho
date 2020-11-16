@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Activity;
 
 use AppBundle\Controller\BaseController;
+use Biz\Visualization\Service\ActivityDataDailyStatisticsService;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
@@ -36,6 +37,7 @@ class BaseActivityController extends BaseController
             'taskResults' => $taskResults,
             'users' => $users,
             'paginator' => $paginator,
+            'videoEffectiveTimeStatistics' => $this->getActivityDataDailyStatisticsService()->getVideoEffectiveTimeStatisticsSetting(),
         ));
     }
 
@@ -47,5 +49,13 @@ class BaseActivityController extends BaseController
     protected function getUserService()
     {
         return $this->createService('User:UserService');
+    }
+
+    /**
+     * @return ActivityDataDailyStatisticsService
+     */
+    protected function getActivityDataDailyStatisticsService()
+    {
+        return $this->createService('Visualization:ActivityDataDailyStatisticsService');
     }
 }

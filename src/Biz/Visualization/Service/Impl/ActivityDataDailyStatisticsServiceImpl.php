@@ -272,6 +272,22 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
         return $pureTime;
     }
 
+    public function getVideoEffectiveTimeStatisticsSetting()
+    {
+        $statisticsSetting = $this->getSettingService()->get('videoEffectiveTimeStatistics', []);
+
+        if (empty($statisticsSetting)) {
+            $statisticsSetting = [
+                'statistical_dimension' => 'playing',
+                'video_multiple' => 'de-weight',
+            ];
+            $this->getSettingService()->set('videoEffectiveTimeStatistics', $statisticsSetting);
+        }
+
+        return $statisticsSetting;
+    }
+
+
     /**
      * @return CoursePlanVideoDailyDao
      */
