@@ -1533,4 +1533,5 @@ t.add("goods.show_page.free_join_btn", "\u514d\u8d39\u52a0\u5165", "js", "zh_CN"
 t.add("goods.show_page.buy_btn", "\u7acb\u5373\u8d2d\u4e70", "js", "zh_CN");
 t.add("classroom.go_inside", "\u8fdb\u53bb\u901b\u901b", "js", "zh_CN");
 t.add("course.base.title.placeholder", "\u8bf7\u8f93\u5165\u8bfe\u7a0b\u6807\u9898", "js", "zh_CN");
+t.add("course.unname_title", "\u672a\u547d\u540d\u8ba1\u5212", "js", "zh_CN");
 })(Translator);
