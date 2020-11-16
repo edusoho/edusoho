@@ -180,7 +180,7 @@ class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
     {
         $this->batchMockUserLearnDailyData();
 
-        $result = $this->getActivityDataDailyStatisticsService()->findUserLearnTime(['startDate' => '', 'endDate' => '', 'userIds' => [1, 2]]);
+        $result = $this->getActivityDataDailyStatisticsService()->findUserLearnTime(['userIds' => [1, 2]]);
         $this->assertEquals(540, $result[1]['userLearnTime']);
         $this->assertEquals(320, $result[2]['userLearnTime']);
     }
@@ -195,7 +195,7 @@ class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
             ]
         );
 
-        $result = $this->getActivityDataDailyStatisticsService()->findUserVideoWatchTime(['startDate' => '', 'endDate' => '', 'userIds' => [1, 2]]);
+        $result = $this->getActivityDataDailyStatisticsService()->findUserVideoWatchTime(['userIds' => [1, 2]]);
         $this->assertEquals(540, $result[1]['userVideoTime']);
         $this->assertEquals(320, $result[2]['userVideoTime']);
     }
@@ -210,7 +210,7 @@ class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
             ]
         );
 
-        $result = $this->getActivityDataDailyStatisticsService()->findUserPageStayTime(['startDate' => '', 'endDate' => '', 'userIds' => [1, 2]]);
+        $result = $this->getActivityDataDailyStatisticsService()->findUserPageStayTime(['userIds' => [1, 2]]);
         $this->assertEquals(540, $result[1]['userStayTime']);
         $this->assertEquals(320, $result[2]['userStayTime']);
     }
