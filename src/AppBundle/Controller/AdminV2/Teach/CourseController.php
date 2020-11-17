@@ -13,6 +13,8 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\CategoryService;
+use Biz\Visualization\Service\ActivityLearnDataService;
+use Biz\Visualization\Service\CoursePlanLearnDataDailyStatisticsService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
@@ -39,12 +41,15 @@ class CourseController extends BaseController
 
         $tasks = $this->taskDataStatistics($tasks);
 
+        $coursePlanSumLearnedTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByCourseId($courseId);
+
         return $this->render(
             'admin-v2/teach/course-set/course-list-data-modal.html.twig',
             [
                 'tasks' => $tasks,
                 'courseSet' => $courseSet,
                 'courses' => $courses,
+                'coursePlanSumLearnedTime' => intval(empty($coursePlanSumLearnedTime) ? 0 : $coursePlanSumLearnedTime / 60),
                 'courseId' => $courseId,
             ]
         );
@@ -222,43 +227,33 @@ class CourseController extends BaseController
         $courseTasksCount = ($courseTasksCount > $exportAllowCount) ? $exportAllowCount : $courseTasksCount;
 
         $titles = '任务名,学习人数,完成人数,平均学习时长(分),视频时长(分),视频平均观看时长(分),测试平均得分';
+        $titles = implode(',', [
+            $this->trans('admin.course_manage.statistics.data.name'),
+            $this->trans('admin.course_manage.statistics.data.task_type'),
+            $this->trans('admin.course_manage.statistics.data.video_length'),
+            $this->trans('admin.course_manage.statistics.data.study_number'),
+            $this->trans('admin.course_manage.statistics.data.finished_number'),
+            $this->trans('admin.course_manage.statistics.data.task_sum_study_time'),
+            $this->trans('admin.course_manage.statistics.data.average_study_time'),
+            $this->trans('admin.course_manage.statistics.data.average_score'),
+        ]);
 
         $originaTasks = $this->makeTasksDatasByCourseId($courseId, $start, $limit);
 
         $exportTasks = [];
         foreach ($originaTasks as $task) {
-            $exportTask = '';
+            $exportTask = [
+                $task['title'],
+                $this->trans('course.activity.'.$task['type']),
+                'video' == $task['type'] ? $task['length'] : '--',
+                empty($task['studentNum']) ? 0 : $task['studentNum'],
+                empty($task['finishedNum']) ? 0 : $task['finishedNum'],
+                empty($task['sumLearnedTime']) ? 0 : $task['sumLearnedTime'],
+                empty($task['avgLearnedTime']) ? 0 : $task['avgLearnedTime'],
+                'testpaper' == $task['type'] ? $task['score'] : '--',
+            ];
 
-            if ('text' == $task['type']) {
-                $exportTask .= $task['title'] ? $task['title'].'(图文),' : '-'.',';
-            } elseif ('video' == $task['type']) {
-                $exportTask .= $task['title'] ? $task['title'].'(视频),' : '-'.',';
-            } elseif ('audio' == $task['type']) {
-                $exportTask .= $task['title'] ? $task['title'].'(音频),' : '-'.',';
-            } elseif ('testpaper' == $task['type']) {
-                $exportTask .= $task['title'] ? $task['title'].'(试卷),' : '-'.',';
-            } elseif ('ppt' == $task['type']) {
-                $exportTask .= $task['title'] ? $task['title'].'(ppt),' : '-'.',';
-            } else {
-                $exportTask .= $task['title'] ? $task['title'].',' : '-'.',';
-            }
-
-            $exportTask .= $task['studentNum'] ? $task['studentNum'].',' : '-'.',';
-            $exportTask .= $task['finishedNum'] ? $task['finishedNum'].',' : '-'.',';
-
-            $studentNum = (int) $task['studentNum'];
-            $learnedTime = $task['avgLearnedTime'];
-            $watchTime = empty($task['avgWatchTime']) ? '' : $task['avgLearnedTime'];
-
-            $exportTask .= $learnedTime ? $learnedTime.',' : '-'.',';
-
-            $exportTask .= !empty($task['length']) ? $task['length'].',' : '-'.',';
-
-            $exportTask .= $watchTime ? $watchTime.',' : '-'.',';
-
-            $exportTask .= !empty($task['score']) ? $task['score'].',' : '-'.',';
-
-            $exportTasks[] = $exportTask;
+            $exportTasks[] = implode(',', $exportTask);
         }
 
         return [$titles, $exportTasks, $courseTasksCount];
@@ -286,16 +281,19 @@ class CourseController extends BaseController
     //统计课程任务数据
     protected function taskDataStatistics($tasks)
     {
+        $sumlearnedTimeGroupByTaskIds = $this->getActivityLearnDataService()->sumLearnedTimeGroupByTaskIds(ArrayToolkit::column($tasks, 'id'));
+
         foreach ($tasks as $key => &$task) {
             $task['finishedNum'] = $this->getTaskResultService()->countTaskResults(
                 ['status' => 'finish', 'courseTaskId' => $task['id']]
             );
             $task['studentNum'] = $this->getTaskResultService()->countTaskResults(['courseTaskId' => $task['id']]);
-            $task['avgLearnedTime'] = 0 == $task['studentNum'] ? 0 : intval($this->getTaskResultService()->sumLearnedTimeByCourseTaskId($task['id']) / 60 / $task['studentNum']);
+            $sumLearnedTime = empty($sumlearnedTimeGroupByTaskIds[$task['id']]) ? 0 : $sumlearnedTimeGroupByTaskIds[$task['id']]['learnedTime'];
+            $task['sumLearnedTime'] = intval($sumLearnedTime / 60);
+            $task['avgLearnedTime'] = 0 == $task['studentNum'] ? 0 : intval($sumLearnedTime / $task['studentNum'] / 60);
 
             if ('video' == $task['type']) {
                 $task['length'] = intval($task['length'] / 60);
-                $task['avgWatchTime'] = 0 == $task['studentNum'] ? 0 : intval($this->getTaskResultService()->sumWatchTimeByCourseTaskId($task['id']) / 60 / $task['studentNum']);
             }
 
             if ('testpaper' === $task['type'] && !empty($task['activity'])) {
@@ -387,5 +385,21 @@ class CourseController extends BaseController
     protected function getNoteService()
     {
         return $this->createService('Course:CourseNoteService');
+    }
+
+    /**
+     * @return ActivityLearnDataService
+     */
+    protected function getActivityLearnDataService()
+    {
+        return $this->createService('Visualization:ActivityLearnDataService');
+    }
+
+    /**
+     * @return CoursePlanLearnDataDailyStatisticsService
+     */
+    protected function getCoursePlanLearnDataDailyStatisticsService()
+    {
+        return $this->createService('Visualization:CoursePlanLearnDataDailyStatisticsService');
     }
 }

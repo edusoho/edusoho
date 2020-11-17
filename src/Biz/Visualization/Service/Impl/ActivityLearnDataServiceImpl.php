@@ -31,6 +31,15 @@ class ActivityLearnDataServiceImpl extends BaseService implements ActivityLearnD
         return $this->getActivityLearnDailyDao()->findByCourseSetIds($courseSetIds);
     }
 
+    public function sumLearnedTimeGroupByTaskIds(array $taskIds)
+    {
+        if (empty($taskIds)) {
+            return [];
+        }
+
+        return ArrayToolkit::index($this->getActivityLearnDailyDao()->sumLearnedTimeGroupByTaskIds($taskIds), 'taskId');
+    }
+
     /**
      * @return ActivityLearnDailyDao
      */
