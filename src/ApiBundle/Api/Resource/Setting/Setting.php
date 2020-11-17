@@ -18,7 +18,7 @@ class Setting extends AbstractResource
     private $supportTypes = [
         'site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig',
         'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer',
-        'user', 'cloud', 'coin', 'coupon', 'mobile', 'appIm', 'cloudVideo', 'goods',
+        'user', 'cloud', 'coin', 'coupon', 'mobile', 'appIm', 'cloudVideo', 'goods', 'backstage',
     ];
 
     /**
@@ -443,6 +443,13 @@ class Setting extends AbstractResource
             'show_review' => isset($classroomSetting['show_review']) ? (bool) $classroomSetting['show_review'] : true,
             'show_thread' => isset($classroomSetting['show_thread']) ? (bool) $classroomSetting['show_thread'] : true,
         ];
+    }
+
+    public function getBackstage($request = null)
+    {
+        $backstage = $this->getSettingService()->get('backstage');
+
+        return ['is_v2' => isset($backstage['is_v2']) ? (int) $backstage['is_v2'] : 0];
     }
 
     private function checkType($type)

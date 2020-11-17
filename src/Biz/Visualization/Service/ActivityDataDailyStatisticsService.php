@@ -17,4 +17,6 @@ interface ActivityDataDailyStatisticsService
     public function statisticsCoursePlanStayDailyData($startTime, $endTime);
 
     public function statisticsCoursePlanVideoDailyData($startTime, $endTime);
+
+    public function getVideoEffectiveTimeStatisticsSetting();
 }
