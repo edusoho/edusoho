@@ -2,6 +2,7 @@ import postal from 'postal';
 import 'postal.federation';
 import 'postal.xframe';
 import DurationStorage from '../../../common/duration-storage';
+import Api from 'common/api';
 
 export default class TaskPipe {
   constructor(element) {
@@ -89,7 +90,7 @@ export default class TaskPipe {
           if (param.data) {
             response.playerMsg = param.data.playerMsg;
           }
-          
+
           let listners = this.eventMap.receives[response.result.status];
           if (listners) {
             for (var i = listners.length - 1; i >= 0; i--) {

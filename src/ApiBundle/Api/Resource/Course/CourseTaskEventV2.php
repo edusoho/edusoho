@@ -115,6 +115,10 @@ class CourseTaskEventV2 extends AbstractResource
         $triggerData = ['lastTime' => $record['endTime']];
         $result = $this->getTaskService()->trigger($taskId, self::EVENT_DOING, $triggerData);
 
+        if (!empty($data['watchData'])) {
+            $watchRecord = $this->watching($request, $courseId, $taskId, $data);
+        }
+
         if (self::EVENT_FINISH === $result['status']) {
             $nextTask = $this->getTaskService()->getNextTask($taskId);
             $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($courseId, $result['userId']);
@@ -181,6 +185,7 @@ class CourseTaskEventV2 extends AbstractResource
         $user = $this->getCurrentUser();
         $task = $this->getTaskService()->getTask($taskId);
         $activity = $this->getActivityService()->getActivity($task['activityId']);
+        $watchData = $data['watchData'];
         $currentTime = time();
         $record = $this->getDataCollectService()->push([
             'userId' => $user['id'],
@@ -190,9 +195,9 @@ class CourseTaskEventV2 extends AbstractResource
             'courseSetId' => $task['fromCourseSetId'],
             'event' => self::EVENT_WATCHING,
             'client' => $data['client'],
-            'startTime' => $data['startTime'],
-            'endTime' => $data['startTime'] + $data['duration'],
-            'duration' => $data['duration'],
+            'startTime' => $watchData['startTime'],
+            'endTime' => $watchData['startTime'] + $watchData['duration'],
+            'duration' => $watchData['duration'],
             'mediaType' => $activity['mediaType'],
             'flowSign' => $data['sign'],
             'data' => [

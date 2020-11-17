@@ -31,6 +31,7 @@ import resetPasswordSms from './modules/reset-password/sms.js';
 import informationCollect from './modules/informationCollect.js';
 import favoriteModule from './modules/favorite';
 import reviewModule from './modules/review';
+import courseTaskEventModule from './modules/courseTaskEvent';
 
 const API_URL_PREFIX = '/api';
 
@@ -58,6 +59,8 @@ const Api = {
   //收藏
   favorite: favoriteModule(API_URL_PREFIX),
   review: reviewModule(API_URL_PREFIX),
+  //event数据上报
+  courseTaskEvent: courseTaskEventModule(API_URL_PREFIX),
 };
 
 export default Api;
