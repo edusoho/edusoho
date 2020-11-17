@@ -37,10 +37,10 @@ class CourseTaskEventV2 extends AbstractResource
         if (self::EVENT_FINISH === $event) {
             return $this->finish($request, $courseId, $taskId, $data);
         }
-
-        if (self::EVENT_WATCHING === $event) {
-            return $this->watching($request, $courseId, $taskId, $data);
-        }
+//
+//        if (self::EVENT_WATCHING === $event) {
+//            return $this->watching($request, $courseId, $taskId, $data);
+//        }
     }
 
     protected function start(ApiRequest $request, $courseId, $taskId, $data)
@@ -115,8 +115,9 @@ class CourseTaskEventV2 extends AbstractResource
         $triggerData = ['lastTime' => $record['endTime']];
         $result = $this->getTaskService()->trigger($taskId, self::EVENT_DOING, $triggerData);
 
+        $watchResult = null;
         if (!empty($data['watchData'])) {
-            $watchRecord = $this->watching($request, $courseId, $taskId, $data);
+            $watchResult = $this->watching($request, $courseId, $taskId, $data);
         }
 
         if (self::EVENT_FINISH === $result['status']) {
@@ -133,6 +134,7 @@ class CourseTaskEventV2 extends AbstractResource
             'nextTask' => $nextTask,
             'completionRate' => $completionRate,
             'record' => $record,
+            'watchResult' => $watchResult,
         ];
     }
 
@@ -208,19 +210,8 @@ class CourseTaskEventV2 extends AbstractResource
         $triggerData = ['lastTime' => $record['endTime']];
         $result = $this->getTaskService()->trigger($taskId, self::EVENT_DOING, $triggerData);
 
-        if (self::EVENT_FINISH === $result['status']) {
-            $nextTask = $this->getTaskService()->getNextTask($taskId);
-            $progress = $this->getLearningDataAnalysisService()->getUserLearningProgress($courseId, $result['userId']);
-            $completionRate = $progress['percent'];
-        } else {
-            $nextTask = null;
-            $completionRate = null;
-        }
-
         return [
             'taskResult' => $result,
-            'nextTask' => $nextTask,
-            'completionRate' => $completionRate,
             'record' => $record,
         ];
     }

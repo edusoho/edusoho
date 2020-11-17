@@ -32,6 +32,7 @@ import informationCollect from './modules/informationCollect.js';
 import favoriteModule from './modules/favorite';
 import reviewModule from './modules/review';
 import courseTaskEventModule from './modules/courseTaskEvent';
+import courseTaskResultModule from './modules/courseTaskResult';
 
 const API_URL_PREFIX = '/api';
 
@@ -59,8 +60,10 @@ const Api = {
   //收藏
   favorite: favoriteModule(API_URL_PREFIX),
   review: reviewModule(API_URL_PREFIX),
-  //event数据上报
+  //task event数据上报
   courseTaskEvent: courseTaskEventModule(API_URL_PREFIX),
+  //courseTaskResult接口
+  courseTaskResult: courseTaskResultModule(API_URL_PREFIX),
 };
 
 export default Api;
