@@ -86,6 +86,10 @@ class CourseTaskEventV2 extends AbstractResource
             'nextTask' => $nextTask,
             'completionRate' => $completionRate,
             'record' => $record,
+            'learnControl' => [
+                'allowLearn' => true,
+                'denyReason' => '',
+            ],
         ];
     }
 
@@ -135,6 +139,10 @@ class CourseTaskEventV2 extends AbstractResource
             'completionRate' => $completionRate,
             'record' => $record,
             'watchResult' => $watchResult,
+            'learnControl' => [
+                'allowLearn' => true,
+                'denyReason' => '',
+            ],
         ];
     }
 
@@ -179,6 +187,10 @@ class CourseTaskEventV2 extends AbstractResource
             'nextTask' => $nextTask,
             'completionRate' => $completionRate,
             'record' => $record,
+            'learnControl' => [
+                'allowLearn' => true,
+                'denyReason' => '',
+            ],
         ];
     }
 
