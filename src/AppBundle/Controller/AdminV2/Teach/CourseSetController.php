@@ -26,6 +26,7 @@ use Biz\Taxonomy\Service\Impl\TagServiceImpl;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\User\UserException;
 use Biz\Visualization\Service\ActivityLearnDataService;
+use Biz\Visualization\Service\CoursePlanLearnDataDailyStatisticsService;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -335,6 +336,7 @@ class CourseSetController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+        $usersLearnedTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByCourseIdGroupByUserId($courseId, ArrayToolkit::column($students, 'userId'));
 
         foreach ($students as $key => &$student) {
             $user = $this->getUserService()->getUser($student['userId']);
@@ -351,7 +353,7 @@ class CourseSetController extends BaseController
                 $student['fininshDay'] = intval((time() - $student['createdTime']) / (60 * 60 * 24));
             }
 
-            $student['learnTime'] = intval($student['lastLearnTime'] - $student['createdTime']);
+            $student['learnTime'] = empty($usersLearnedTime[$student['userId']]) ? 0 : $usersLearnedTime[$student['userId']]['learnedTime'];
         }
 
         return $this->render(
@@ -739,6 +741,7 @@ class CourseSetController extends BaseController
             $start,
             $limit
         );
+        $usersLearnedTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByCourseIdGroupByUserId($courseId, ArrayToolkit::column($students, 'userId'));
 
         $exportMembers = [];
         foreach ($students as $key => $student) {
@@ -755,7 +758,7 @@ class CourseSetController extends BaseController
                 $exportMember['studyDays'] = intval((time() - $student['createdTime']) / (60 * 60 * 24));
             }
 
-            $learnTime = intval($student['lastLearnTime'] - $student['createdTime']);
+            $learnTime = empty($usersLearnedTime[$student['userId']]) ? 0 : $usersLearnedTime[$student['userId']]['learnedTime'];
             $exportMember['learnTime'] = $learnTime > 0 ? floor($learnTime / 60) : '--';
 
             $questionCount = $this->getThreadService()->countThreads(
@@ -1091,5 +1094,13 @@ class CourseSetController extends BaseController
     protected function getActivityLearnDataService()
     {
         return $this->createService('Visualization:ActivityLearnDataService');
+    }
+
+    /**
+     * @return CoursePlanLearnDataDailyStatisticsService
+     */
+    protected function getCoursePlanLearnDataDailyStatisticsService()
+    {
+        return $this->createService('Visualization:CoursePlanLearnDataDailyStatisticsService');
     }
 }
