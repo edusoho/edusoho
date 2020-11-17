@@ -15,13 +15,16 @@ class CoursePlanLearnDataDailyStatisticsServiceImpl extends BaseService implemen
             return [];
         }
 
-        $effectiveTimeSetting = $this->getSettingService()->get('videoEffectiveTimeStatistics', [
-            'video_multiple' => 'de-weight',
-        ]);
+        return ArrayToolkit::index($this->getCoursePlanLearnDailyDao()->sumLearnedTimeByCourseIdGroupByUserId($courseId, $userIds), 'userId');
+    }
 
-        $usersLearnedTime = 'de-weight' == $effectiveTimeSetting['video_multiple'] ? $this->getCoursePlanLearnDailyDao()->sumPureLearnedTimeByCourseIdGroupByUserId($courseId, $userIds) : $this->getCoursePlanLearnDailyDao()->sumLearnedTimeByCourseIdGroupByUserId($courseId, $userIds);
+    public function sumPureLearnedTimeByCourseIdGroupByUserId($courseId, array $userIds)
+    {
+        if (empty($userIds)) {
+            return [];
+        }
 
-        return ArrayToolkit::index($usersLearnedTime, 'userId');
+        return ArrayToolkit::index($this->getCoursePlanLearnDailyDao()->sumPureLearnedTimeByCourseIdGroupByUserId($courseId, $userIds), 'userId');
     }
 
     protected function getSettingService()

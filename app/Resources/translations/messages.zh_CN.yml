@@ -5101,12 +5101,14 @@ admin.course_manage.statistics.data.average_score: 测试平均得分
 
 ## 任务统计详细数据
 admin.course_manage.statistics.data_detail.name: 用户名
-admin.course_manage.statistics.data_detail.join_time: 加入课程时间
-admin.course_manage.statistics.data_detail.finished_time: 完成课程时间
-admin.course_manage.statistics.data_detail.study_days: 课程学习天数
-admin.course_manage.statistics.data_detail.study_time: 课程学习时长（分）
+admin.course_manage.statistics.data_detail.join_time: 加入时间
+admin.course_manage.statistics.data_detail.finished_time: 完成时间
+admin.course_manage.statistics.data_detail.study_days: 学习天数
+admin.course_manage.statistics.data_detail.study_time: 累加学习时长（分）
+admin.course_manage.statistics.data_detail.pure_study_time: 去重学习时长（分）
 admin.course_manage.statistics.data_detail.question_number: 提问数
 admin.course_manage.statistics.data_detail.note_number: 笔记数
+admin.course_manage.statistics.data_detail.plan_study_time: 计划被累加学习时长（分）：%mins%
 
 ## 用户数据统计
 admin.user.statistics.data_detail.note_number: 笔记数
