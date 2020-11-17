@@ -22,8 +22,13 @@
           {% else %}
             <td>-</td>
           {% endif %}
-          <td>{% if taskResult.time > 0 %}{{ (taskResult.time / 60)|number_format(1) }}{% else %}0{% endif %}</td>
-          <td>{% if taskResult.watchTime > 0 %}{{ (taskResult.watchTime / 60)|number_format(1) }}{% else %}0{% endif %}</td>
+          {% if videoEffectiveTimeStatistics.video_multiple == 'de-weight' %}
+            <td>{% if taskResult.pureTime > 0 %}{{ (taskResult.pureTime / 60)|number_format(1) }}{% else %}0{% endif %}</td>
+            <td>{% if taskResult.pureWatchTime > 0 %}{{ (taskResult.pureWatchTime / 60)|number_format(1) }}{% else %}0{% endif %}</td>
+          {% else %}
+            <td>{% if taskResult.time > 0 %}{{ (taskResult.time / 60)|number_format(1) }}{% else %}0{% endif %}</td>
+            <td>{% if taskResult.watchTime > 0 %}{{ (taskResult.watchTime / 60)|number_format(1) }}{% else %}0{% endif %}</td>
+          {% endif %}
         </tr>
       {% endfor %}
     </tbody>
