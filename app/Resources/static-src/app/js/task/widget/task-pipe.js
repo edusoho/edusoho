@@ -11,12 +11,16 @@ export default class TaskPipe {
     this.learnTimeSec = this.element.data('learnTimeSec');
     this.userId = this.element.data('userId');
     this.fileId = this.element.data('fileId');
+    this.taskId = this.element.data('taskId');
+    this.courseId = this.element.data('courseId');
     this.isLogout = false;
     if (parseInt(this.element.data('lastLearnTime')) != parseInt(DurationStorage.get(this.userId, this.fileId))) {
       DurationStorage.del(this.userId, this.fileId);
       DurationStorage.set(this.userId, this.fileId, this.element.data('lastLearnTime'));
     }
     this.lastLearnTime = DurationStorage.get(this.userId, this.fileId);
+    this.sign = '';
+    this.record = {};
 
     if (this.eventUrl === undefined) {
       throw Error('task event url is undefined');
@@ -81,35 +85,77 @@ export default class TaskPipe {
   _flush(param = {}) {
     if (this.isLogout) return;
 
-    let ajax = $.post(this.eventUrl, { data: { lastTime: this.lastTime, lastLearnTime: DurationStorage.get(this.userId, this.fileId), events: this.eventDatas}})
-      .done((response) => {
-        this._publishResponse(response);
-        this.eventDatas = {};
-        this.lastTime = response.lastTime;
-        if (response && response.result && response.result.status) {
-          if (param.data) {
-            response.playerMsg = param.data.playerMsg;
-          }
-
-          let listners = this.eventMap.receives[response.result.status];
-          if (listners) {
-            for (var i = listners.length - 1; i >= 0; i--) {
-              let listner = listners[i];
-              listner(response);
-            }
-          }
-        }
-      })
-      .fail((error) => {
-        if (error.status == 403 && !this.isLogout) {
-          this._clearInterval();
-          cd.message({ type: 'danger', message: Translator.trans('task_show.user_login_protect_tip') });
-          this.isLogout = true;
-          window.location.href = '/logout';
-        }
+    if (this.sign === '') {
+      Api.courseTaskEvent.pushEvent({
+        params: {
+          courseId: this.courseId,
+          taskId: this.taskId,
+          eventName: 'start',
+        },
+        data: {
+          client : 'pc',
+        },
+      }).then(res => {
+        this.sign = res.record.flowSign;
+        this.record = res.record;
+        this._doing();
       });
+    } else{
+      this._doing();
+    }
 
-    return ajax;
+
+
+    // let ajax = $.post(this.eventUrl, { data: { lastTime: this.lastTime, lastLearnTime: DurationStorage.get(this.userId, this.fileId), events: this.eventDatas}})
+    //   .done((response) => {
+    //     this._publishResponse(response);
+    //     this.eventDatas = {};
+    //     this.lastTime = response.lastTime;
+    //     if (response && response.result && response.result.status) {
+    //       if (param.data) {
+    //         response.playerMsg = param.data.playerMsg;
+    //       }
+    //
+    //       let listners = this.eventMap.receives[response.result.status];
+    //       if (listners) {
+    //         for (var i = listners.length - 1; i >= 0; i--) {
+    //           let listner = listners[i];
+    //           listner(response);
+    //         }
+    //       }
+    //     }
+    //   })
+    //   .fail((error) => {
+    //     if (error.status == 403 && !this.isLogout) {
+    //       this._clearInterval();
+    //       cd.message({ type: 'danger', message: Translator.trans('task_show.user_login_protect_tip') });
+    //       this.isLogout = true;
+    //       window.location.href = '/logout';
+    //     }
+    //   });
+    //
+    // return ajax;
+  }
+
+  _doing() {
+    Api.courseTaskEvent.pushEvent({
+      params: {
+        courseId: this.courseId,
+        taskId: this.taskId,
+        eventName: 'doing',
+      },
+      data: {
+        client: 'pc',
+        sign: this.sign,
+        startTime: this.record.endTime,
+        duration: 60,
+      },
+    }).then(res => {
+      this.record = res.record;
+    }).catch(error => {
+      this._clearInterval();
+      cd.message({ type: 'danger', message: Translator.trans('task_show.user_login_protect_tip') });
+    });
   }
 
   _publishResponse(response) {
