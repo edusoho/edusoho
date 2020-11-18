@@ -51,9 +51,7 @@ class LearnStatisticsController extends BaseController
             'recordEndTime' => $recordEndTime,
             'isDefault' => $conditions['isDefault'],
             'isInit' => $this->getInitStatus(),
-            'userLearnRecords' => $this->getActivityDataDailyStatisticsService()->findUserLearnTime($conditions),
-            'userVideoRecords' => $this->getActivityDataDailyStatisticsService()->findUserVideoWatchTime($conditions),
-            'userStayRecords' => $this->getActivityDataDailyStatisticsService()->findUserPageStayTime($conditions),
+            'userLearnRecords' => $this->getActivityDataDailyStatisticsService()->findUserLearnRecords($conditions),
         ]);
     }
 

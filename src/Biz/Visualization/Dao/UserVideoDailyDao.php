@@ -6,5 +6,4 @@ use Codeages\Biz\Framework\Dao\AdvancedDaoInterface;
 
 interface UserVideoDailyDao extends AdvancedDaoInterface
 {
-    public function sumUserVideoWatchTime($conditions, $timeField);
 }

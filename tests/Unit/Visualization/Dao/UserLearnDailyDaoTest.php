@@ -28,15 +28,6 @@ class UserLearnDailyDaoTest extends BaseTestCase
         ];
     }
 
-    public function testSumUserLearnTime()
-    {
-        $this->batchMockUserLearnDailyData();
-
-        $result = $this->getUserLearnDailyDao()->sumUserLearnTime(['userIds' => [1, 2]], 'pureTime');
-        $this->assertEquals(540, $result[0]['userLearnTime']);
-        $this->assertEquals(320, $result[1]['userLearnTime']);
-    }
-
     public function testFindUserDailyLearnTimeByDate()
     {
         $this->batchMockUserLearnDailyData();

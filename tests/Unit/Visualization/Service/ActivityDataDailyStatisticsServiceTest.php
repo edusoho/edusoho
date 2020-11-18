@@ -185,36 +185,6 @@ class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
         $this->assertEquals(320, $result[2]['userLearnTime']);
     }
 
-    public function testFindUserVideoWatchTime()
-    {
-        $this->getUserVideoDailyDao()->batchCreate(
-            [
-                ['userId' => 1, 'dayTime' => 1604793600, 'sumTime' => 440, 'pureTime' => 220],
-                ['userId' => 1, 'dayTime' => 1604880000, 'sumTime' => 540, 'pureTime' => 320],
-                ['userId' => 2, 'dayTime' => 1604793600, 'sumTime' => 540, 'pureTime' => 320],
-            ]
-        );
-
-        $result = $this->getActivityDataDailyStatisticsService()->findUserVideoWatchTime(['userIds' => [1, 2]]);
-        $this->assertEquals(540, $result[1]['userVideoTime']);
-        $this->assertEquals(320, $result[2]['userVideoTime']);
-    }
-
-    public function testFindUserPageStayTime()
-    {
-        $this->getUserStayDailyDao()->batchCreate(
-            [
-                ['userId' => 1, 'dayTime' => 1604793600, 'sumTime' => 440, 'pureTime' => 220],
-                ['userId' => 1, 'dayTime' => 1604880000, 'sumTime' => 540, 'pureTime' => 320],
-                ['userId' => 2, 'dayTime' => 1604793600, 'sumTime' => 540, 'pureTime' => 320],
-            ]
-        );
-
-        $result = $this->getActivityDataDailyStatisticsService()->findUserPageStayTime(['userIds' => [1, 2]]);
-        $this->assertEquals(540, $result[1]['userStayTime']);
-        $this->assertEquals(320, $result[2]['userStayTime']);
-    }
-
     public function testGetVideoEffectiveTimeStatisticsSetting()
     {
         $this->mockBiz('System:SettingService', [

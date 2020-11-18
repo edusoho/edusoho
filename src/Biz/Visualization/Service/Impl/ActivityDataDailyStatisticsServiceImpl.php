@@ -274,29 +274,9 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
         return $pureTime;
     }
 
-    public function findUserLearnTime($conditions)
+    public function findUserLearnRecords($conditions)
     {
-        $statisticsSetting = $this->getVideoEffectiveTimeStatisticsSetting();
-        $timeField = 'de-weight' === $statisticsSetting['video_multiple'] ? 'pureTime' : 'sumTime';
-        $records = $this->getUserLearnDailyDao()->sumUserLearnTime($this->analysisCondition($conditions), $timeField);
-
-        return ArrayToolkit::index($records, 'userId');
-    }
-
-    public function findUserVideoWatchTime($conditions)
-    {
-        $statisticsSetting = $this->getVideoEffectiveTimeStatisticsSetting();
-        $timeField = 'de-weight' === $statisticsSetting['video_multiple'] ? 'pureTime' : 'sumTime';
-        $records = $this->getUserVideoDailyDao()->sumUserVideoWatchTime($this->analysisCondition($conditions), $timeField);
-
-        return ArrayToolkit::index($records, 'userId');
-    }
-
-    public function findUserPageStayTime($conditions)
-    {
-        $statisticsSetting = $this->getVideoEffectiveTimeStatisticsSetting();
-        $timeField = 'de-weight' === $statisticsSetting['video_multiple'] ? 'pureTime' : 'sumTime';
-        $records = $this->getUserStayDailyDao()->sumUserPageStayTime($this->analysisCondition($conditions), $timeField);
+        $records = $this->getUserLearnDailyDao()->sumUserLearnTime($this->analysisCondition($conditions));
 
         return ArrayToolkit::index($records, 'userId');
     }
@@ -331,10 +311,7 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
 
     public function getDailyLearnData($userId, $startTime, $endTime)
     {
-        $statisticsSetting = $this->getVideoEffectiveTimeStatisticsSetting();
-        $timeField = 'de-weight' === $statisticsSetting['video_multiple'] ? 'pureTime' : 'sumTime';
-
-        return $this->getUserLearnDailyDao()->findUserDailyLearnTimeByDate(['userId' => $userId, 'dayTime_GE' => $startTime, 'dayTime_LT' => $endTime], $timeField);
+        return $this->getUserLearnDailyDao()->findUserDailyLearnTimeByDate(['userId' => $userId, 'dayTime_GE' => $startTime, 'dayTime_LT' => $endTime]);
     }
 
     /**

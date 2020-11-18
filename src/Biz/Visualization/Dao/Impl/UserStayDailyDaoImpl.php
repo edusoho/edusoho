@@ -9,15 +9,6 @@ class UserStayDailyDaoImpl extends AdvancedDaoImpl implements UserStayDailyDao
 {
     protected $table = 'user_stay_daily';
 
-    public function sumUserPageStayTime($conditions, $timeField)
-    {
-        $builder = $this->createQueryBuilder($conditions)
-            ->select("userId, sum({$timeField}) as userStayTime")
-            ->groupBy('userId');
-
-        return $builder->execute()->fetchAll();
-    }
-
     public function declares()
     {
         return [
