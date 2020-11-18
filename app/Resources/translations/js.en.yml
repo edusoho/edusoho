@@ -1675,7 +1675,7 @@ user.fields.gender_label: Gender
 information_collect.form.check_age_invalid: Age Invalid
 information_collect.form.check_format_invalid: %display% Invalid
 
-admin_v2.video_effective_time_setting.cancel.hint: Among the learning time data in the whole station, the video class learning time data will be statistically generated according to the new rules, and the learning time data generated before configuration change will not be statistically changed with the new rules.Are you sure to change statistical rules?
+admin_v2.video_effective_time_setting.cancel.hint: After the statistical dimension of video class learning time changes, the statistics of the whole station will be generated according to the new statistical rules, and the statistics of learning time generated before the change of rules will not be changed with the new rules.It is suggested that you do not change the statistical dimension of data frequently. Do you confirm to change the statistical dimension of learning time this time?
 
 course.marketing_setup: 'Markets'
 site.currency.CNY: CNY

@@ -279,7 +279,7 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
         if (empty($statisticsSetting)) {
             $statisticsSetting = [
                 'statistical_dimension' => 'playing',
-                'video_multiple' => 'de-weight',
+                'play_rule' => 'auto_pause',
             ];
             $this->getSettingService()->set('videoEffectiveTimeStatistics', $statisticsSetting);
         }
