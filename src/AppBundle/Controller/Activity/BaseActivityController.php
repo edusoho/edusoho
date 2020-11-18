@@ -37,7 +37,6 @@ class BaseActivityController extends BaseController
             'taskResults' => $taskResults,
             'users' => $users,
             'paginator' => $paginator,
-            'videoEffectiveTimeStatistics' => $this->getActivityDataDailyStatisticsService()->getVideoEffectiveTimeStatisticsSetting(),
         ]);
     }
 
