@@ -4,18 +4,27 @@ namespace ApiBundle\Api\Resource\Course;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Common\CommonException;
 use Biz\Course\Service\CourseService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Biz\Visualization\Service\DataCollectService;
 
-class CourseTaskLearnCheck extends AbstractResource
+class CourseTaskLearnAction extends AbstractResource
 {
-    public function get(ApiRequest $request, $courseId, $taskId)
+    const ACTION_CHECK = 'check';
+
+    public function get(ApiRequest $request, $courseId, $taskId, $action)
     {
+        if (self::ACTION_CHECK !== $action) {
+            throw CommonException::ERROR_PARAMETER();
+        }
         $course = $this->getCourseService()->getCourse($courseId);
         $task = $this->getTaskService()->getTask($taskId);
         if (empty($course) || empty($task)) {
+            $allowLearn = false;
+            $denyReason = 'course_task_item';
+        } else {
             $allowLearn = false;
             $denyReason = 'course_task_item';
         }
