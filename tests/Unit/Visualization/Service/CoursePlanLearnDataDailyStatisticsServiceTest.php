@@ -6,6 +6,18 @@ use Biz\BaseTestCase;
 
 class CoursePlanLearnDataDailyStatisticsServiceTest extends BaseTestCase
 {
+    public function testSumLearnedTimeByCourseId()
+    {
+        $this->mockCoursePlanLearnDaily(['userId' => 1, 'courseId' => 2, 'sumTime' => 100, 'pureTime' => 100]);
+        $this->mockCoursePlanLearnDaily(['userId' => 1, 'sumTime' => 200, 'pureTime' => 50]);
+        $this->mockCoursePlanLearnDaily(['userId' => 2, 'sumTime' => 100, 'pureTime' => 100]);
+        $this->mockCoursePlanLearnDaily(['userId' => 2, 'sumTime' => 200, 'pureTime' => 50]);
+
+        $result = $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByCourseId(1);
+
+        $this->assertEquals(500, $result);
+    }
+
     public function testSumLearnedTimeByCourseIdGroupByUserId()
     {
         $this->mockCoursePlanLearnDaily(['userId' => 1, 'sumTime' => 100, 'pureTime' => 100]);

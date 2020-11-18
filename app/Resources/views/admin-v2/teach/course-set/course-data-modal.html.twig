@@ -1,7 +1,17 @@
 {% set modal_class= "modal-lg" %}
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
 
-{% block title %}{{ 'admin.course_manage.statistics.modal_title'|trans({'%title%': '《' ~ courseSet.title ~ '》'}) }}{% endblock %}
+{% block title %}
+{{ 'admin.course_manage.statistics.modal_title'|trans({'%title%': '《' ~ courseSet.title ~ '》'}) }}
+<div class="js-tooltip-twig-widget" style="display:inline-block;">
+  <span class="glyphicon glyphicon-question-sign text-muted js-twig-widget-tips" data-placement="right" href="javascript:;">
+  </span>
+  <div class="js-twig-widget-html" style="display:none;font-size:14px">
+    
+  </div>
+</div>
+{% endblock %}
+
 {% block body %}
   <div class="clearfix mbl">
     {% if courses|default()|length > 1 %}
@@ -66,4 +76,5 @@
   </div>
 
   <script>app.load('course-set/data-detail.js');</script>
+  <script>app.load('widget/tooltip-widget');</script>
 {% endblock %}

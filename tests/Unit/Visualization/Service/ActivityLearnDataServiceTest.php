@@ -41,6 +41,17 @@ class ActivityLearnDataServiceTest extends BaseTestCase
         $this->assertCount(1, $result);
     }
 
+    public function testSumLearnedTimeGroupByTaskIds()
+    {
+        $this->getActivityLearnDailyDao()->create($this->getDefaultFields());
+        $this->getActivityLearnDailyDao()->create($this->getDefaultFields(['taskId' => 2]));
+
+        $results = $this->getActivityLearnDataService()->sumLearnedTimeGroupByTaskIds([1, 2]);
+
+        $this->assertEquals(10, $results[1]['learnedTime']);
+        $this->assertEquals(10, $results[2]['learnedTime']);
+    }
+
     protected function getDefaultFields($learn = [])
     {
         $default = [
