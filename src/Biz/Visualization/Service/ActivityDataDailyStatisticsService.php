@@ -18,5 +18,9 @@ interface ActivityDataDailyStatisticsService
 
     public function statisticsCoursePlanVideoDailyData($startTime, $endTime);
 
+    public function findUserLearnRecords($conditions);
+
     public function getVideoEffectiveTimeStatisticsSetting();
+
+    public function getDailyLearnData($userId, $startTime, $endTime);
 }

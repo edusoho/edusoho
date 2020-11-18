@@ -10036,8 +10036,11 @@ user.learn.statistics.join.classroom.num: 加入班级数
 user.learn.statistics.exit.classroom.num: 退出班级数
 user.learn.statistics.join.course.num: 加入计划数
 user.learn.statistics.exit.course.num: 退出计划数
+user.learn.statistics.join.task.num: 加入任务数
 user.learn.statistics.finished.task.num: 学完任务数
 user.learn.statistics.learned.seconds: 学习时长(分)
+user.learn.statistics.video_playing.seconds: 累加学习时长（分）
+user.learn.statistics.page_stay.seconds: 去重学习时长（分）
 user.learn.statistics.actual.amount: 消费总额(元)
 user.learn.statistics.empty: 暂无用户统计数据
 user.learn.statistics.init: 数据升级中，请稍候（用户量越大，升级时间越久）

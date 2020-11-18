@@ -17,9 +17,15 @@ class UserStayDailyDaoImpl extends AdvancedDaoImpl implements UserStayDailyDao
             ],
             'conditions' => [
                 'id = :id',
+                'userId IN ( :userIds )',
+                'userId = :userId',
                 'dayTime = :dayTime',
+                'dayTime >= :dayTime_GE',
+                'dayTime > :dayTime_GT',
+                'dayTime <= :dayTime_LE',
+                'dayTime < :dayTime_LT',
             ],
-            'orderbys' => ['id', 'createdTime'],
+            'orderbys' => ['id', 'createdTime', 'dayTime'],
         ];
     }
 }

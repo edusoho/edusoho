@@ -41,7 +41,7 @@ define(function (require, exports, module) {
           }
           self.dateArr = dateArr;
           self.learnTime = learnTime;
-          totalTime = (Math.floor(totalTime/60) + Translator.trans('site.date.hour') + (totalTime%60) + Translator.trans('site.date.minute') );
+          totalTime = (totalTime + Translator.trans('site.date.minute') );
           self.totalTime = totalTime;
           self.show(self.learnTime, self.dateArr);
         }

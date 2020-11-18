@@ -13,6 +13,7 @@ use Biz\Visualization\Dao\ActivityVideoDailyDao;
 use Biz\Visualization\Dao\ActivityVideoWatchRecordDao;
 use Biz\Visualization\Dao\CoursePlanStayDailyDao;
 use Biz\Visualization\Dao\CoursePlanVideoDailyDao;
+use Biz\Visualization\Dao\UserLearnDailyDao;
 use Biz\Visualization\Dao\UserStayDailyDao;
 use Biz\Visualization\Dao\UserVideoDailyDao;
 use Biz\Visualization\Service\ActivityDataDailyStatisticsService;
@@ -273,6 +274,13 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
         return $pureTime;
     }
 
+    public function findUserLearnRecords($conditions)
+    {
+        $records = $this->getUserLearnDailyDao()->sumUserLearnTime($this->analysisCondition($conditions));
+
+        return ArrayToolkit::index($records, 'userId');
+    }
+
     public function getVideoEffectiveTimeStatisticsSetting()
     {
         $statisticsSetting = $this->getSettingService()->get('videoEffectiveTimeStatistics', []);
@@ -286,6 +294,32 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
         }
 
         return $statisticsSetting;
+    }
+
+    private function analysisCondition($conditions)
+    {
+        $conditions = ArrayToolkit::parts($conditions, ['startDate', 'endDate', 'userIds']);
+        if (!empty($conditions['startDate']) || !empty($conditions['endDate'])) {
+            $conditions['dayTime_GE'] = !empty($conditions['startDate']) ? strtotime($conditions['startDate']) : '';
+            $conditions['dayTime_LE'] = !empty($conditions['endDate']) ? strtotime($conditions['endDate']) : '';
+            unset($conditions['startDate']);
+            unset($conditions['endDate']);
+        }
+
+        return $conditions;
+    }
+
+    public function getDailyLearnData($userId, $startTime, $endTime)
+    {
+        return $this->getUserLearnDailyDao()->findUserDailyLearnTimeByDate(['userId' => $userId, 'dayTime_GE' => $startTime, 'dayTime_LT' => $endTime]);
+    }
+
+    /**
+     * @return UserLearnDailyDao
+     */
+    protected function getUserLearnDailyDao()
+    {
+        return $this->createDao('Visualization:UserLearnDailyDao');
     }
 
     /**

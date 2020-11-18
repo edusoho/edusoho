@@ -6,6 +6,7 @@ use AppBundle\Common\DateToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Common\ArrayToolkit;
 use Biz\UserLearnStatistics\Service\LearnStatisticsService;
+use Biz\Visualization\Service\ActivityDataDailyStatisticsService;
 use Symfony\Component\HttpFoundation\Request;
 
 class UserLearnStatisticsController extends BaseController
@@ -78,7 +79,7 @@ class UserLearnStatisticsController extends BaseController
     {
         $conditions = $request->query->all();
         $timeRange = $this->getTimeRange($conditions);
-        $learnData = $this->getLearnStatisticsService()->getDailyLearnData($userId, $timeRange['startTime'], $timeRange['endTime']);
+        $learnData = $this->getActivityDataDailyStatisticsService()->getDailyLearnData($userId, $timeRange['startTime'], $timeRange['endTime']);
         $learnData = $this->fillAnalysisData($timeRange, $learnData);
 
         return $this->createJsonResponse($learnData);
@@ -153,6 +154,14 @@ class UserLearnStatisticsController extends BaseController
         return $this->render('admin/learn-statistics/sync-info.html.twig', array(
             'data' => $data,
         ));
+    }
+
+    /**
+     * @return ActivityDataDailyStatisticsService
+     */
+    protected function getActivityDataDailyStatisticsService()
+    {
+        return $this->createService('Visualization:ActivityDataDailyStatisticsService');
     }
 
     /**
