@@ -46,15 +46,44 @@ class DataCollectServiceImpl extends BaseService
 
     const EVENT_DOING = 'doing';
 
-    const EVENT_FINISHED = 'finished';
+    const EVENT_FINISH = 'finish';
 
     const EVENT_START_ID = 1;
 
     const EVENT_DOING_ID = 2;
 
-    const EVENT_FINISHED_ID = 3;
+    const EVENT_FINISH_ID = 3;
 
     public function push($data)
+    {
+        if ('watching' === $data['event']) {
+            return $this->watchingPush($data);
+        }
+
+        return $this->stayPush($data);
+    }
+
+    protected function watchingPush($data)
+    {
+        $data = ArrayToolkit::parts($data, [
+            'courseId',
+            'courseSetId',
+            'taskId',
+            'activityId',
+            'userId',
+            'startTime',
+            'endTime',
+            'duration',
+            'client',
+            'flowSign',
+            'data',
+        ]);
+        $data['client'] = $this->convertClient($data['client']);
+
+        return $this->getActivityVideoWatchRecordDao()->create($data);
+    }
+
+    protected function stayPush($data)
     {
         $data = ArrayToolkit::parts($data, [
             'courseId',
@@ -121,7 +150,7 @@ class DataCollectServiceImpl extends BaseService
         $map = [
             self::EVENT_START => self::EVENT_START_ID,
             self::EVENT_DOING => self::EVENT_DOING_ID,
-            self::EVENT_FINISHED => self::EVENT_FINISHED_ID,
+            self::EVENT_FINISH => self::EVENT_FINISH_ID,
         ];
 
         return $map[$event];
@@ -132,7 +161,7 @@ class DataCollectServiceImpl extends BaseService
      */
     protected function getActivityVideoWatchRecordDao()
     {
-        return $this->createDao('Visualization:ActivityVideoWatchRecord');
+        return $this->createDao('Visualization:ActivityVideoWatchRecordDao');
     }
 
     /**
