@@ -2,6 +2,7 @@ import postal from 'postal';
 import 'postal.federation';
 import 'postal.xframe';
 import DurationStorage from '../../../common/duration-storage';
+import MonitoringEvents from './monitoringEvents';
 import Api from 'common/api';
 
 export default class TaskPipe {
@@ -83,6 +84,7 @@ export default class TaskPipe {
   }
 
   _flush(param = {}) {
+    console.log()
     if (this.isLogout) return;
 
     if (this.sign === '') {
