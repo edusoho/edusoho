@@ -358,6 +358,8 @@ class CourseSetController extends BaseController
             $student['pureLearnTime'] = empty($usersPureLearnedTime[$student['userId']]) ? 0 : $usersPureLearnedTime[$student['userId']]['learnedTime'];
         }
 
+        $coursePlanSumLearnedTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByCourseId($courseId);
+
         return $this->render(
             'admin-v2/teach/course-set/course-data-modal.html.twig',
             [
@@ -365,6 +367,7 @@ class CourseSetController extends BaseController
                 'courses' => $courses,
                 'paginator' => $paginator,
                 'students' => $students,
+                'coursePlanSumLearnedTime' => intval(empty($coursePlanSumLearnedTime) ? 0 : $coursePlanSumLearnedTime / 60),
                 'courseId' => $courseId,
             ]
         );
