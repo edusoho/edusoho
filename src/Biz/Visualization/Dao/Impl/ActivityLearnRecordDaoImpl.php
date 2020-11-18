@@ -24,4 +24,11 @@ class ActivityLearnRecordDaoImpl extends AdvancedDaoImpl implements ActivityLear
             'orderbys' => ['id', 'createdTime'],
         ];
     }
+
+    public function getUserLastLearnRecord($userId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE  userId = ? ORDER BY endTime DESC LIMIT 1;";
+
+        return $this->db()->fetchAssoc($sql, [$userId]);
+    }
 }
