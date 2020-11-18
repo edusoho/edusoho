@@ -6729,8 +6729,9 @@ admin.setting_course.video_play_setting.multiple_forbidden_effect: Multi-opening
 admin.setting_course.video_play_setting.kick_previous_play: Kicks previous play, requires terminal upgrade to latest version
 admin.setting_course.video_play_setting.reject_current_play: Reject this broadcast
 admin.setting_course.video_play_setting.ineffective_learning: Ineffective Learning
-admin.setting_course.video_play_setting.play_rule: Play Rule
-admin.setting_course.video_play_setting.play_rule.tips: The current play window is not a screen active window, some terminals do not support it. The current playback window has not detected user action for a long time.
+admin.setting_course.video_play_setting.play_rule: Unfocused Learning Play Rule
+admin.setting_course.video_play_setting.play_rule.tips: The playing window of the current video class is not an active screen window (such as window minimization, window switching, etc.), or the playing window of the current video class does not detect the user's action behavior within 20 minutes.
+admin.setting_course.video_play_setting.play_rule.help_block: When the system detects that the user is not paying attention to learning, it will automatically pause the current play.
 admin.setting_course.video_play_setting.play_rule.auto_pause: automatic pause
 admin.setting_course.video_play_setting.play_rule.no_action: no intervention
 admin.article_setting.edit: 'Edit articles'

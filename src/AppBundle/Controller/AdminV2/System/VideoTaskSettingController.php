@@ -40,7 +40,7 @@ class VideoTaskSettingController extends BaseController
 
         $default = [
             'statistical_dimension' => 'playing',
-            'video_multiple' => 'de-weight',
+            'play_rule' => 'auto_pause',
         ];
 
         $effectiveTimeSetting = array_merge($default, $effectiveTimeSetting);
@@ -53,13 +53,7 @@ class VideoTaskSettingController extends BaseController
             $this->getSettingService()->set('videoEffectiveTimeStatistics', $set);
         }
 
-        return $this->render('admin-v2/system/course-setting/video-effective-learning-time-setting.html.twig', [
-            'effectiveTimeSetting' => $effectiveTimeSetting,
-            'videoSetting' => $this->getSettingService()->get('videoTaskPlay', [
-                'same_video_multiple' => '0',
-                'different_video_multiple' => '0',
-            ]),
-        ]);
+        return $this->render('admin-v2/system/course-setting/video-effective-learning-time-setting.html.twig', ['effectiveTimeSetting' => $effectiveTimeSetting]);
     }
 
     /**
