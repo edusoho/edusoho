@@ -90,26 +90,26 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
         $data = [];
         $conditions = ['dayTime' => $dayTime];
         $columns = ['userId', 'activityId', 'taskId', 'courseId', 'courseSetId', 'dayTime', 'sumTime', 'pureTime'];
-        if (empty($statisticsSetting) || 'playing' == $statisticsSetting['statistical_dimension']) {
+        if (empty($statisticsSetting) || 'playing' === $statisticsSetting['statistical_dimension']) {
             $data = $this->getActivityVideoDailyDao()->search($conditions, [], 0, PHP_INT_MAX, $columns);
         }
 
-        if ('page' == $statisticsSetting['statistical_dimension']) {
+        if ('page' === $statisticsSetting['statistical_dimension']) {
             $data = $this->getActivityStayDailyDao()->search($conditions, [], 0, PHP_INT_MAX, $columns);
         }
 
         try {
-//            $this->beginTransaction();
+            $this->beginTransaction();
 
             $this->sumTaskResultPureTime($data);
 
             $this->getActivityLearnDailyDao()->batchCreate($data);
 
-//            $this->commit();
+            $this->commit();
 
             return true;
         } catch (\Exception $e) {
-//            $this->rollback();
+            $this->rollback();
             throw $e;
         }
     }
