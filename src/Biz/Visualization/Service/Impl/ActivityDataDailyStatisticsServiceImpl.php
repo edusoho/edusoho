@@ -99,17 +99,17 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
         }
 
         try {
-            $this->beginTransaction();
+//            $this->beginTransaction();
 
             $this->sumTaskResultPureTime($data);
 
             $this->getActivityLearnDailyDao()->batchCreate($data);
 
-            $this->commit();
+//            $this->commit();
 
             return true;
         } catch (\Exception $e) {
-            $this->rollback();
+//            $this->rollback();
             throw $e;
         }
     }

@@ -15,6 +15,14 @@
 
     <!-- 如何执行见 .travis.yml -->
     <testsuites>
+        <testsuite name="UnitU2Z">
+<!--            <directory>../tests/Unit/U*</directory>-->
+            <directory>../tests/Unit/V*</directory>
+            <directory>../tests/Unit/W*</directory>
+<!--            <directory>../tests/Unit/X*</directory>-->
+<!--            <directory>../tests/Unit/Y*</directory>-->
+<!--            <directory>../tests/Unit/Z*</directory>-->
+        </testsuite>
         <testsuite name="UnitA2B">
             <directory>../tests/Unit/A*</directory>
             <directory>../tests/Unit/B*</directory>
@@ -47,14 +55,14 @@
             <directory>../tests/Unit/S*</directory>
             <directory>../tests/Unit/T*</directory>
         </testsuite>
-        <testsuite name="UnitU2Z">
-            <directory>../tests/Unit/U*</directory>
-            <directory>../tests/Unit/V*</directory>
-            <directory>../tests/Unit/W*</directory>
-            <directory>../tests/Unit/X*</directory>
-            <directory>../tests/Unit/Y*</directory>
-            <directory>../tests/Unit/Z*</directory>
-        </testsuite>
+<!--        <testsuite name="UnitU2Z">-->
+<!--            <directory>../tests/Unit/U*</directory>-->
+<!--            <directory>../tests/Unit/V*</directory>-->
+<!--            <directory>../tests/Unit/W*</directory>-->
+<!--            <directory>../tests/Unit/X*</directory>-->
+<!--            <directory>../tests/Unit/Y*</directory>-->
+<!--            <directory>../tests/Unit/Z*</directory>-->
+<!--        </testsuite>-->
         <testsuite name="SpecialTest">
             <file>../tests/Unit/CloudPlatform/Service/AppServiceTest.php</file>
         </testsuite>
