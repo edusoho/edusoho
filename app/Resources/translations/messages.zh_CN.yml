@@ -5091,13 +5091,15 @@ admin.course_manage.statistics.watch_course_data: 查看课时数据
 
 ## 任务统计数据
 admin.course_manage.statistics.modal_title: %title%课程的数据
-admin.course_manage.statistics.data.name: %taskName%名
+admin.course_manage.statistics.data.name: 任务名
+admin.course_manage.statistics.data.task_type: 任务类型
 admin.course_manage.statistics.data.study_number: 学习人数
 admin.course_manage.statistics.data.finished_number: 完成人数
-admin.course_manage.statistics.data.average_study_time: 平均学习时长(分)
-admin.course_manage.statistics.data.video_study_time: 视频时长(分)
-admin.course_manage.statistics.data.video_average_study_time: 视频平均观看时长(分)
-admin.course_manage.statistics.data.average_score: 测试平均得分
+admin.course_manage.statistics.data.average_study_time: 人均学习时长（分）
+admin.course_manage.statistics.data.video_length: 视频长度（分）
+admin.course_manage.statistics.data.task_sum_study_time: 任务被累加学习时长（分）
+admin.course_manage.statistics.data.average_score: 考试平均得分
+admin.course_manage.statistics.data.plan_study_time: 计划被累加学习时长（分）：%mins%
 
 ## 任务统计详细数据
 admin.course_manage.statistics.data_detail.name: 用户名
