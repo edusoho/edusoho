@@ -1019,6 +1019,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $task = $this->getTask($id);
         $data['task'] = $task;
+        $data['taskId'] = $task['id'];
         $this->getActivityService()->trigger($task['activityId'], $eventName, $data);
 
         return $this->getTaskResultService()->getUserTaskResultByTaskId($id);

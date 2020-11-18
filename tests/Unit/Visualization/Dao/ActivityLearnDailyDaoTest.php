@@ -18,6 +18,16 @@ class ActivityLearnDailyDaoTest extends BaseTestCase
         self::assertEquals($result['userId'], $defaultMockFields['userId']);
     }
 
+    public function testSumLearnedTimeGroupByTaskIds()
+    {
+        $this->getActivityLearnDailyDao()->create($this->getDefaultMockFields());
+        $this->getActivityLearnDailyDao()->create($this->getDefaultMockFields());
+
+        $results = $this->getActivityLearnDailyDao()->sumLearnedTimeGroupByTaskIds([1, 2]);
+
+        $this->assertEquals(20, $results[0]['learnedTime']);
+    }
+
     protected function getDefaultMockFields()
     {
         return [
