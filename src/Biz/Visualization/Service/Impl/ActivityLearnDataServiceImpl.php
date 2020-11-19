@@ -6,9 +6,9 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\System\Service\SettingService;
 use Biz\Visualization\Dao\ActivityLearnDailyDao;
-use Biz\Visualization\Service\LearnDataService;
+use \Biz\Visualization\Service\ActivityLearnDataService;
 
-class LearnDataServiceImpl extends BaseService implements LearnDataService
+class ActivityLearnDataServiceImpl extends BaseService implements ActivityLearnDataService
 {
     public function sumCourseSetLearnTime($courseSetIds)
     {
@@ -29,6 +29,15 @@ class LearnDataServiceImpl extends BaseService implements LearnDataService
     public function findActivityLearnDailyByCourseSetIds($courseSetIds)
     {
         return $this->getActivityLearnDailyDao()->findByCourseSetIds($courseSetIds);
+    }
+
+    public function sumLearnedTimeGroupByTaskIds(array $taskIds)
+    {
+        if (empty($taskIds)) {
+            return [];
+        }
+
+        return ArrayToolkit::index($this->getActivityLearnDailyDao()->sumLearnedTimeGroupByTaskIds($taskIds), 'taskId');
     }
 
     /**

@@ -9,6 +9,7 @@ use Biz\Visualization\Dao\ActivityStayDailyDao;
 use Biz\Visualization\Dao\ActivityVideoDailyDao;
 use Biz\Visualization\Dao\CoursePlanStayDailyDao;
 use Biz\Visualization\Dao\CoursePlanVideoDailyDao;
+use Biz\Visualization\Dao\UserLearnDailyDao;
 use Biz\Visualization\Dao\UserStayDailyDao;
 use Biz\Visualization\Dao\UserVideoDailyDao;
 use Biz\Visualization\Service\ActivityDataDailyStatisticsService;
@@ -173,6 +174,54 @@ class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
         $result = $this->getUserVideoDailyDao()->search([], [], 0, 1);
         $this->assertEquals(420, $result[0]['sumTime']);
         $this->assertEquals(260, $result[0]['pureTime']);
+    }
+
+    public function testFindUserLearnTime()
+    {
+        $this->batchMockUserLearnDailyData();
+
+        $result = $this->getActivityDataDailyStatisticsService()->findUserLearnTime(['userIds' => [1, 2]]);
+        $this->assertEquals(540, $result[1]['userLearnTime']);
+        $this->assertEquals(320, $result[2]['userLearnTime']);
+    }
+
+    public function testGetVideoEffectiveTimeStatisticsSetting()
+    {
+        $this->mockBiz('System:SettingService', [
+            ['functionName' => 'get', 'returnValue' => ['statistical_dimension' => 'playing', 'video_multiple' => 'de-weight']],
+        ]);
+
+        $result = $this->getActivityDataDailyStatisticsService()->getVideoEffectiveTimeStatisticsSetting();
+        $this->assertEquals('playing', $result['statistical_dimension']);
+        $this->assertEquals('de-weight', $result['video_multiple']);
+    }
+
+    public function testGetDailyLearnData()
+    {
+        $this->batchMockUserLearnDailyData();
+
+        $result = $this->getActivityDataDailyStatisticsService()->getDailyLearnData(1, '', '');
+        $this->assertEquals(220, $result[0]['learnedTime']);
+        $this->assertEquals(320, $result[1]['learnedTime']);
+    }
+
+    protected function batchMockUserLearnDailyData()
+    {
+        return $this->getUserLearnDailyDao()->batchCreate(
+            [
+                ['userId' => 1, 'dayTime' => 1604793600, 'sumTime' => 440, 'pureTime' => 220],
+                ['userId' => 1, 'dayTime' => 1604880000, 'sumTime' => 540, 'pureTime' => 320],
+                ['userId' => 2, 'dayTime' => 1604793600, 'sumTime' => 540, 'pureTime' => 320],
+            ]
+        );
+    }
+
+    /**
+     * @return UserLearnDailyDao
+     */
+    protected function getUserLearnDailyDao()
+    {
+        return $this->biz->dao('Visualization:UserLearnDailyDao');
     }
 
     /**

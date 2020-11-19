@@ -1258,6 +1258,10 @@ admin_v2:
                                     name: admin_v2.system.course.open_course_tab
                                     disable: true
                                     parent: admin_v2_setting_course_setting
+                                admin_v2_task_multiple_open_setting:
+                                    name: admin_v2.system.course.task_multiple_open_tab
+                                    disable: true
+                                    parent: admin_v2_setting_course_setting
                                 admin_v2_video_task_setting:
                                     name: admin_v2.system.course.video_task_tab
                                     disable: true

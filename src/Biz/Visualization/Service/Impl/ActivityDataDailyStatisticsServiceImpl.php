@@ -92,16 +92,17 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
         $data = [];
         $conditions = ['dayTime' => $dayTime];
         $columns = ['userId', 'activityId', 'taskId', 'courseId', 'courseSetId', 'dayTime', 'sumTime', 'pureTime'];
-        if (empty($statisticsSetting) || 'playing' == $statisticsSetting['statistical_dimension']) {
+        if (empty($statisticsSetting) || 'playing' === $statisticsSetting['statistical_dimension']) {
             $data = $this->getActivityVideoDailyDao()->search($conditions, [], 0, PHP_INT_MAX, $columns);
         }
 
-        if ('page' == $statisticsSetting['statistical_dimension']) {
+        if ('page' === $statisticsSetting['statistical_dimension']) {
             $data = $this->getActivityStayDailyDao()->search($conditions, [], 0, PHP_INT_MAX, $columns);
         }
 
-        $this->beginTransaction();
         try {
+            $this->beginTransaction();
+
             $this->sumTaskResultPureTime($data);
 
             $this->getActivityLearnDailyDao()->batchCreate($data);
@@ -305,6 +306,54 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
         $pureTime += $end - $start;
 
         return $pureTime;
+    }
+
+    public function findUserLearnRecords($conditions)
+    {
+        $records = $this->getUserLearnDailyDao()->sumUserLearnTime($this->analysisCondition($conditions));
+
+        return ArrayToolkit::index($records, 'userId');
+    }
+
+    public function getVideoEffectiveTimeStatisticsSetting()
+    {
+        $statisticsSetting = $this->getSettingService()->get('videoEffectiveTimeStatistics', []);
+
+        if (empty($statisticsSetting)) {
+            $statisticsSetting = [
+                'statistical_dimension' => 'playing',
+                'play_rule' => 'auto_pause',
+            ];
+            $this->getSettingService()->set('videoEffectiveTimeStatistics', $statisticsSetting);
+        }
+
+        return $statisticsSetting;
+    }
+
+    private function analysisCondition($conditions)
+    {
+        $conditions = ArrayToolkit::parts($conditions, ['startDate', 'endDate', 'userIds']);
+        if (!empty($conditions['startDate']) || !empty($conditions['endDate'])) {
+            $conditions['dayTime_GE'] = !empty($conditions['startDate']) ? strtotime($conditions['startDate']) : '';
+            $conditions['dayTime_LE'] = !empty($conditions['endDate']) ? strtotime($conditions['endDate']) : '';
+            unset($conditions['startDate']);
+            unset($conditions['endDate']);
+        }
+
+        return $conditions;
+    }
+
+    public function getDailyLearnData($userId, $startTime, $endTime)
+    {
+        return $this->getUserLearnDailyDao()->findUserDailyLearnTimeByDate(['userId' => $userId, 'dayTime_GE' => $startTime, 'dayTime_LT' => $endTime]);
+    }
+
+    /**
+     * @return UserLearnDailyDao
+     */
+    protected function getUserLearnDailyDao()
+    {
+        return $this->createDao('Visualization:UserLearnDailyDao');
     }
 
     /**

@@ -119,6 +119,34 @@ class TaskResultDaoImpl extends AdvancedDaoImpl implements TaskResultDao
         return $builder->execute()->fetchColumn();
     }
 
+    public function sumPureLearnedTimeByCourseTaskId($courseTaskId)
+    {
+        $sql = 'SELECT sum(`pureTime`) AS learnedTime FROM `course_task_result` WHERE `courseTaskId`= ?;';
+
+        return $this->db()->fetchColumn($sql, [$courseTaskId]);
+    }
+
+    public function sumLearnedTimeByCourseTaskId($courseTaskId)
+    {
+        $sql = 'SELECT sum(`time`) FROM `course_task_result` WHERE `courseTaskId`= ?;';
+
+        return $this->db()->fetchColumn($sql, [$courseTaskId]);
+    }
+
+    public function sumPureWatchTimeByCourseTaskId($courseTaskId)
+    {
+        $sql = 'SELECT sum(`pureWatchTime`) AS learnedTime FROM `course_task_result` WHERE `courseTaskId`= ?;';
+
+        return $this->db()->fetchColumn($sql, [$courseTaskId]);
+    }
+
+    public function sumWatchTimeByCourseTaskId($courseTaskId)
+    {
+        $sql = 'SELECT sum(`watchTime`) AS learnedTime FROM `course_task_result` WHERE `courseTaskId`= ?;';
+
+        return $this->db()->fetchColumn($sql, [$courseTaskId]);
+    }
+
     public function getWatchTimeByCourseIdGroupByCourseTaskId($courseTaskId)
     {
         $builder = $this->createQueryBuilder(['courseTaskId' => $courseTaskId])

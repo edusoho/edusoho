@@ -14,7 +14,7 @@ class LearningDataAnalysisServiceImpl extends BaseService implements LearningDat
         $classroomCourseRelations = $this->getClassroomCourseDao()->findByClassroomId($classroomId);
         $courseIds = array_column($classroomCourseRelations, 'courseId');
 
-        return $this->getCourseLearningDataAnalysisService()->getUserLearningProgressByCourseIds($courseIds, $userId);
+        return $this->getCourseLearningDataAnalysisService()->getUserLearningCompulsoryProgressByCourseIds($courseIds, $userId);
     }
 
     /**

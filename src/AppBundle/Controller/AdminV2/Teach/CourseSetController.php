@@ -23,9 +23,9 @@ use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Taxonomy\Service\Impl\TagServiceImpl;
-use Biz\Testpaper\Service\TestpaperService;
 use Biz\User\UserException;
-use Biz\Visualization\Service\LearnDataService;
+use Biz\Visualization\Service\ActivityLearnDataService;
+use Biz\Visualization\Service\CoursePlanLearnDataDailyStatisticsService;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -335,6 +335,7 @@ class CourseSetController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+        $usersLearnedTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByCourseIdGroupByUserId($courseId, ArrayToolkit::column($students, 'userId'));
 
         foreach ($students as $key => &$student) {
             $user = $this->getUserService()->getUser($student['userId']);
@@ -351,7 +352,7 @@ class CourseSetController extends BaseController
                 $student['fininshDay'] = intval((time() - $student['createdTime']) / (60 * 60 * 24));
             }
 
-            $student['learnTime'] = intval($student['lastLearnTime'] - $student['createdTime']);
+            $student['learnTime'] = empty($usersLearnedTime[$student['userId']]) ? 0 : $usersLearnedTime[$student['userId']]['learnedTime'];
         }
 
         return $this->render(
@@ -474,7 +475,7 @@ class CourseSetController extends BaseController
         $tasks = $this->getTaskService()->findTasksByCourseSetIds($courseSetIds);
         $tasks = ArrayToolkit::group($tasks, 'fromCourseSetId');
 
-        $activityLearnData = $this->getLearnDataService()->sumCourseSetLearnTime($courseSetIds);
+        $activityLearnData = $this->getActivityLearnDataService()->sumCourseSetLearnTime($courseSetIds);
 
         foreach ($courseSets as &$courseSet) {
             // TODO 完成人数目前只统计了默认教学计划
@@ -739,6 +740,7 @@ class CourseSetController extends BaseController
             $start,
             $limit
         );
+        $usersLearnedTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByCourseIdGroupByUserId($courseId, ArrayToolkit::column($students, 'userId'));
 
         $exportMembers = [];
         foreach ($students as $key => $student) {
@@ -755,7 +757,7 @@ class CourseSetController extends BaseController
                 $exportMember['studyDays'] = intval((time() - $student['createdTime']) / (60 * 60 * 24));
             }
 
-            $learnTime = intval($student['lastLearnTime'] - $student['createdTime']);
+            $learnTime = empty($usersLearnedTime[$student['userId']]) ? 0 : $usersLearnedTime[$student['userId']]['learnedTime'];
             $exportMember['learnTime'] = $learnTime > 0 ? floor($learnTime / 60) : '--';
 
             $questionCount = $this->getThreadService()->countThreads(
@@ -1086,10 +1088,18 @@ class CourseSetController extends BaseController
     }
 
     /**
-     * @return LearnDataService
+     * @return ActivityLearnDataService
      */
-    protected function getLearnDataService()
+    protected function getActivityLearnDataService()
     {
-        return $this->createService('Visualization:LearnDataService');
+        return $this->createService('Visualization:ActivityLearnDataService');
+    }
+
+    /**
+     * @return CoursePlanLearnDataDailyStatisticsService
+     */
+    protected function getCoursePlanLearnDataDailyStatisticsService()
+    {
+        return $this->createService('Visualization:CoursePlanLearnDataDailyStatisticsService');
     }
 }

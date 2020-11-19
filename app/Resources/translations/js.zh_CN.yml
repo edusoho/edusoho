@@ -925,7 +925,7 @@ oauth.register.error_message: 注册出现异常，请联系管理员
 
 
 ## 用户数据统计
-admin.user.statistics.data.learn_total_time: 学习总时长
+admin.user.statistics.data.learn_total_time: 累加学习时长（分）
 admin.user.statistics.data.learn_time: 学习时长/分钟
 admin.user.statistics.data.time: 时长
 
@@ -1623,7 +1623,7 @@ user.fields.gender_label: 性别
 information_collect.form.check_age_invalid: 年龄不在正常范围内
 information_collect.form.check_format_invalid: %display%格式错误
 
-admin_v2.video_effective_time_setting.cancel.hint: 全站内学习时长数据中，视频课时学习时长数据将将按新的规则统计生成，更改配置前已产生的学习时长数据将不会随新的规则更改统计。是否确认更改统计规则？
+admin_v2.video_effective_time_setting.cancel.hint: 视频课时学习时长统计维度变更后，全站数据统计中将按新的统计规则生成，变更规则前已产生的学习时长统计不会随新的规则更改。建议您不要频繁改动数据统计维度，本次是否确认更改学习时长统计维度？
 
 course.marketing_setup: 营销设置
 site.currency.CNY: 元
@@ -1739,3 +1739,4 @@ goods.show_page.free_join_btn: 免费加入
 goods.show_page.buy_btn: 立即购买
 classroom.go_inside: 进去逛逛
 course.base.title.placeholder: 请输入课程标题
+course.unname_title: 未命名计划

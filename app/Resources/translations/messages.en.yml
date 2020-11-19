@@ -4302,13 +4302,17 @@ admin.course_manage.statistics.classroom.remove: Removed from %classroomName%
 admin.course_manage.statistics.watch_task: 'View %taskName%'
 admin.course_manage.statistics.watch_course_data: 'View Course Data'
 admin.course_manage.statistics.modal_title: '%title% Course Data'
-admin.course_manage.statistics.data.name: '%taskName% Name'
+
+admin.course_manage.statistics.data.name: 'Task Name'
+admin.course_manage.statistics.data.task_type: Task Type
 admin.course_manage.statistics.data.study_number: 'Study Num(Person)'
 admin.course_manage.statistics.data.finished_number: 'Finish Num(Person)'
-admin.course_manage.statistics.data.average_study_time: 'Avg Study Duration(mins)'
-admin.course_manage.statistics.data.video_and_music_study_time: 'Video/Audio Duration'
-admin.course_manage.statistics.data.video_and_music_average_study_time: 'Avg Video/Audio Watch Duration(mins)'
+admin.course_manage.statistics.data.average_study_time: 'Average Learning Time(mins)'
+admin.course_manage.statistics.data.video_length: 'Video Length'
+admin.course_manage.statistics.data.task_sum_study_time: 'The Task Is Accumulated Learning Time(mins)'
 admin.course_manage.statistics.data.average_score: 'Avg Test Points'
+admin.course_manage.statistics.data.plan_study_time: Course Plan Sum Learned Time(mins)：%mins%
+
 admin.course_manage.statistics.data_detail.name: 'User Name'
 admin.course_manage.statistics.data_detail.join_time: 'Joined At'
 admin.course_manage.statistics.data_detail.finished_time: 'Finished At'
@@ -6725,8 +6729,9 @@ admin.setting_course.video_play_setting.multiple_forbidden_effect: Multi-opening
 admin.setting_course.video_play_setting.kick_previous_play: Kicks previous play, requires terminal upgrade to latest version
 admin.setting_course.video_play_setting.reject_current_play: Reject this broadcast
 admin.setting_course.video_play_setting.ineffective_learning: Ineffective Learning
-admin.setting_course.video_play_setting.play_rule: Play Rule
-admin.setting_course.video_play_setting.play_rule.tips: The current play window is not a screen active window, some terminals do not support it. The current playback window has not detected user action for a long time.
+admin.setting_course.video_play_setting.play_rule: Unfocused Learning Play Rule
+admin.setting_course.video_play_setting.play_rule.tips: The playing window of the current video class is not an active screen window (such as window minimization, window switching, etc.), or the playing window of the current video class does not detect the user's action behavior within 20 minutes.
+admin.setting_course.video_play_setting.play_rule.help_block: When the system detects that the user is not paying attention to learning, it will automatically pause the current play.
 admin.setting_course.video_play_setting.play_rule.auto_pause: automatic pause
 admin.setting_course.video_play_setting.play_rule.no_action: no intervention
 admin.article_setting.edit: 'Edit articles'
@@ -8787,8 +8792,11 @@ user.learn.statistics.join.classroom.num: 'Number of join class'
 user.learn.statistics.exit.classroom.num: 'Number of exit class'
 user.learn.statistics.join.course.num: 'Number of plans added'
 user.learn.statistics.exit.course.num: 'Number of exit plans'
+user.learn.statistics.join.task.num: 'Number of join tasks'
 user.learn.statistics.finished.task.num: 'Number of tasks completed'
 user.learn.statistics.learned.seconds: 'Length of study (minutes)'
+user.learn.statistics.video_playing.seconds: 'Length of incremental learning (minutes)'
+user.learn.statistics.page_stay.seconds: 'Length of de-weight learning (minutes)'
 user.learn.statistics.actual.amount: 'Total amount (CNY)'
 user.learn.statistics.empty: 'No user statistics'
 user.learn.statistics.init: 'Data upgrading, please wait'

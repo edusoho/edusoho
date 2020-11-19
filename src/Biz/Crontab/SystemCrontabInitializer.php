@@ -94,6 +94,7 @@ class SystemCrontabInitializer
         $xapiRandNum3 = rand(1, 59);
         $consultRandNum = rand(1, 59);
         $consultHourRandNum = rand(0, 6);
+        $convertStatusRandNum = rand(0, 15);
         $jobMap = [
             'Order_FinishSuccessOrdersJob' => [
                 'expression' => '20 * * * *',
@@ -173,7 +174,7 @@ class SystemCrontabInitializer
                 'class' => 'Codeages\Biz\Framework\Scheduler\Job\DeleteFiredLogJob',
             ],
             'CheckConvertStatusJob' => [
-                'expression' => '*/15 * * * *',
+                'expression' => "{$convertStatusRandNum}/15 * * * *",
                 'class' => 'Biz\File\Job\VideoMediaStatusUpdateJob',
                 'misfire_threshold' => 300,
             ],
