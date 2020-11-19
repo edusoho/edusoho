@@ -32,9 +32,9 @@ class UserLearnDailyDaoTest extends BaseTestCase
     {
         $this->batchMockUserLearnDailyData();
 
-        $result = $this->getUserLearnDailyDao()->findUserDailyLearnTimeByDate(['userId' => 1], 'pureTime');
-        $this->assertEquals(220, $result[0]['learnedTime']);
-        $this->assertEquals(320, $result[1]['learnedTime']);
+        $result = $this->getUserLearnDailyDao()->findUserDailyLearnTimeByDate(['userId' => 1]);
+        $this->assertEquals(440, $result[0]['learnedTime']);
+        $this->assertEquals(540, $result[1]['learnedTime']);
     }
 
     protected function batchMockUserLearnDailyData()
