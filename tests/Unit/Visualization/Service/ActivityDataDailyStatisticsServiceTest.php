@@ -192,8 +192,8 @@ class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
         $this->batchMockUserLearnDailyData();
 
         $result = $this->getActivityDataDailyStatisticsService()->getDailyLearnData(1, '', '');
-        $this->assertEquals(220, $result[0]['learnedTime']);
-        $this->assertEquals(320, $result[1]['learnedTime']);
+        $this->assertEquals(440, $result[0]['learnedTime']);
+        $this->assertEquals(540, $result[1]['learnedTime']);
     }
 
     protected function batchMockUserLearnDailyData()
