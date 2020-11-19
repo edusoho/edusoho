@@ -8,7 +8,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Yaml\Yaml;
 use ZipArchive;
 
 class BatchExporter
@@ -83,6 +82,7 @@ class BatchExporter
         $key = array_search($name, $this->names);
         if ('finish' === $result['status']) {
             $csvName = $this->writeCsv($result['fileName'], $this->generateCsvName($name));
+
             return [
                 'fileName' => $result['fileName'],
                 'csvName' => $csvName,
@@ -111,7 +111,7 @@ class BatchExporter
         }
 
         $response = new Response();
-        if (count($fileNames) == 1) {
+        if (1 == count($fileNames)) {
             $response = $this->exportCsv($response, $name, $fileNames[0]);
         } else {
             $response = $this->exportZip($response, $name, $fileNames);
@@ -142,7 +142,7 @@ class BatchExporter
 
         $zipPath = $this->exportFileRootPath().$this->generateExportName();
 
-        if ($zip->open($zipPath, ZipArchive::CREATE) === true) {
+        if (true === $zip->open($zipPath, ZipArchive::CREATE)) {
             foreach ($fileNames as $value) {
                 $path = $this->exportFileRootPath().$value;
                 if (file_exists($path)) {
@@ -212,7 +212,7 @@ class BatchExporter
 
     protected function getContentRows($filePath)
     {
-        $contentRows = array();
+        $contentRows = [];
         $data = unserialize(file_get_contents($filePath));
         foreach ($data as $item) {
             $contentRows[] = unserialize(file_get_contents($item));

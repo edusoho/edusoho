@@ -17,7 +17,7 @@ class DailyStatisticsDaoImpl extends AdvancedDaoImpl implements DailyStatisticsD
             ->groupBy('userId');
 
         $declares = $this->declares();
-        foreach ($orderBys ?: array() as $order => $sort) {
+        foreach ($orderBys ?: [] as $order => $sort) {
             $this->checkOrderBy($order, $sort, $declares['orderbys']);
             $builder->addOrderBy($order, $sort);
         }
@@ -30,11 +30,9 @@ class DailyStatisticsDaoImpl extends AdvancedDaoImpl implements DailyStatisticsD
     private function checkOrderBy($order, $sort, $allowOrderBys)
     {
         if (!in_array($order, $allowOrderBys, true)) {
-            throw new DaoException(
-                sprintf("SQL order by field is only allowed '%s', but you give `{$order}`.", implode(',', $allowOrderBys))
-            );
+            throw new DaoException(sprintf("SQL order by field is only allowed '%s', but you give `{$order}`.", implode(',', $allowOrderBys)));
         }
-        if (!in_array(strtoupper($sort), array('ASC', 'DESC'), true)) {
+        if (!in_array(strtoupper($sort), ['ASC', 'DESC'], true)) {
             throw new DaoException("SQL order by direction is only allowed `ASC`, `DESC`, but you give `{$sort}`.");
         }
     }
@@ -51,7 +49,7 @@ class DailyStatisticsDaoImpl extends AdvancedDaoImpl implements DailyStatisticsD
     public function findByIds($ids)
     {
         if (empty($ids)) {
-            return array();
+            return [];
         }
 
         return $this->findInField('id', $ids);
@@ -59,7 +57,7 @@ class DailyStatisticsDaoImpl extends AdvancedDaoImpl implements DailyStatisticsD
 
     public function updateStorageByIds($ids)
     {
-        return $this->update(array('ids' => $ids), array('isStorage' => 1));
+        return $this->update(['ids' => $ids], ['isStorage' => 1]);
     }
 
     public function findUserDailyLearnTimeByDate($conditions)
@@ -67,24 +65,24 @@ class DailyStatisticsDaoImpl extends AdvancedDaoImpl implements DailyStatisticsD
         $builder = $this->createQueryBuilder($conditions)
             ->select("learnedSeconds as learnedTime ,from_unixtime(recordTime,'%Y-%m-%d') date");
 
-        return $builder->execute()->fetchAll(0) ?: array();
+        return $builder->execute()->fetchAll(0) ?: [];
     }
 
     public function declares()
     {
-        return array(
-            'serializes' => array(
-            ),
-            'orderbys' => array(
+        return [
+            'serializes' => [
+            ],
+            'orderbys' => [
                 'id',
                 'createdTime',
                 'updatedTime',
                 'userId',
                 'joinedCourseNum',
                 'actualAmount',
-            ),
-            'timestamps' => array('createdTime', 'updatedTime'),
-            'conditions' => array(
+            ],
+            'timestamps' => ['createdTime', 'updatedTime'],
+            'conditions' => [
                 'id = :id',
                 'id IN ( :ids)',
                 'id NOT IN ( :excludeIds )',
@@ -98,7 +96,7 @@ class DailyStatisticsDaoImpl extends AdvancedDaoImpl implements DailyStatisticsD
                 'recordTime < :recordTime_LT',
                 'recordTime <= :recordTime_LE',
                 'recordTime >= :recordTime_GE',
-            ),
-        );
+            ],
+        ];
     }
 }

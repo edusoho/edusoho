@@ -2,8 +2,8 @@
 
 namespace AppBundle\Controller\Export;
 
-use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\BaseController;
+use Symfony\Component\HttpFoundation\Request;
 
 class ExportController extends BaseController
 {
@@ -15,21 +15,21 @@ class ExportController extends BaseController
         try {
             $batchExporter = $this->container->get('batch_exporter');
         } catch (\Exception $e) {
-            return $this->createJsonResponse(array('message' => $e->getMessage()));
+            return $this->createJsonResponse(['message' => $e->getMessage()]);
         }
-        $response = array('success' => 1);
+        $response = ['success' => 1];
 
         $batchExporter->findExporter($names, $conditions);
         $counts = $batchExporter->getCount();
 
         if (!$batchExporter->canExport()) {
-            $response = array('success' => 0, 'message' => 'export.not_allowed');
+            $response = ['success' => 0, 'message' => 'export.not_allowed'];
         }
 
         $magic = $this->getSettingService()->get('magic');
 
         if (0 == count($counts)) {
-            $response = array('success' => 0, 'message' => 'export.empty');
+            $response = ['success' => 0, 'message' => 'export.empty'];
         }
 
         if (empty($magic['export_allow_count'])) {
@@ -37,11 +37,11 @@ class ExportController extends BaseController
         }
 
         if (max($counts) > $magic['export_allow_count'] && !empty($limit)) {
-            $response = array(
+            $response = [
                 'success' => 0,
                 'message' => 'export.over.limit',
-                'parameters' => array('exportAllowCount' => $magic['export_allow_count'], 'count' => max($counts)),
-            );
+                'parameters' => ['exportAllowCount' => $magic['export_allow_count'], 'count' => max($counts)],
+            ];
         }
 
         return $this->createJsonResponse($response);

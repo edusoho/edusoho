@@ -33,7 +33,6 @@ class ActivityLearnDataServiceImpl extends BaseService implements ActivityLearnD
         return $this->getActivityLearnDailyDao()->findByCourseSetIds($courseSetIds);
     }
 
-
     public function sumLearnedTimeGroupByTaskIds(array $taskIds)
     {
         if (empty($taskIds)) {
@@ -43,7 +42,7 @@ class ActivityLearnDataServiceImpl extends BaseService implements ActivityLearnD
         return ArrayToolkit::index($this->getActivityLearnDailyDao()->sumLearnedTimeGroupByTaskIds($taskIds), 'taskId');
     }
 
-    public function searchCoursePlanLearnDailyData($conditions, $orderBys, $start, $limit, $columns = array())
+    public function searchCoursePlanLearnDailyData($conditions, $orderBys, $start, $limit, $columns = [])
     {
         $conditions = $this->prepareConditions($conditions);
 
@@ -57,7 +56,7 @@ class ActivityLearnDataServiceImpl extends BaseService implements ActivityLearnD
         return $this->getCoursePlanLearnDailyDao()->count($conditions);
     }
 
-    public function searchActivityLearnDailyData($conditions, $orderBys, $start, $limit, $columns = array())
+    public function searchActivityLearnDailyData($conditions, $orderBys, $start, $limit, $columns = [])
     {
         $conditions = $this->prepareConditions($conditions);
 
@@ -71,7 +70,7 @@ class ActivityLearnDataServiceImpl extends BaseService implements ActivityLearnD
         return $this->getActivityLearnDailyDao()->count($conditions);
     }
 
-    public function searchUserLearnDailyData($conditions, $orderBys, $start, $limit, $columns = array())
+    public function searchUserLearnDailyData($conditions, $orderBys, $start, $limit, $columns = [])
     {
         $conditions = $this->prepareConditions($conditions);
 

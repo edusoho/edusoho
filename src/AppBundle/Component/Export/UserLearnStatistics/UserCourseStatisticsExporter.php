@@ -2,8 +2,8 @@
 
 namespace AppBundle\Component\Export\UserLearnStatistics;
 
-use AppBundle\Component\Export\Exporter;
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Component\Export\Exporter;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
@@ -24,15 +24,15 @@ class UserCourseStatisticsExporter extends Exporter
             'user.learn.statistics.pure_learn_time',
             'user.learn.statistics.task_num',
             'user.learn.statistics.finish_task_num',
-            'user.learn.statistics.finish_rate'
+            'user.learn.statistics.finish_rate',
         ];
     }
 
     public function getContent($start, $limit)
     {
         $users = $this->getUserService()->searchUsers(
-            ArrayToolkit::parts($this->conditions, array('userIds')),
-            array('id' => 'DESC'),
+            ArrayToolkit::parts($this->conditions, ['userIds']),
+            ['id' => 'DESC'],
             $start,
             $limit,
             ['id', 'verifiedMobile', 'nickname']
@@ -90,7 +90,7 @@ class UserCourseStatisticsExporter extends Exporter
         $courseMemberData = [];
         $courseMembers = ArrayToolkit::group($courseMembers, 'userId');
         foreach ($courseMembers as $userId => $members) {
-            $conditions = array_merge($this->conditions, array('userId' => $userId));
+            $conditions = array_merge($this->conditions, ['userId' => $userId]);
             $statistics = $this->getActivityLearnDataService()->searchCoursePlanLearnDailyData(
                 $conditions,
                 [],
@@ -103,7 +103,6 @@ class UserCourseStatisticsExporter extends Exporter
                 if (empty($courses[$member['courseId']])) {
                     continue;
                 }
-
 
                 $course = $courses[$member['courseId']];
                 $courseMemberData[$member['userId'].'-'.$member['courseId']] = [
@@ -132,15 +131,15 @@ class UserCourseStatisticsExporter extends Exporter
 
     public function getCount()
     {
-        return $this->getUserService()->countUsers(ArrayToolkit::parts($this->conditions, array('userIds')));
+        return $this->getUserService()->countUsers(ArrayToolkit::parts($this->conditions, ['userIds']));
     }
 
     public function buildCondition($conditions)
     {
         if (!empty($conditions['nickname'])) {
             $users = $this->getUserService()->searchUsers(
-                array('nickname' => $conditions['nickname']),
-                array(),
+                ['nickname' => $conditions['nickname']],
+                [],
                 0,
                 PHP_INT_MAX
             );
@@ -148,7 +147,7 @@ class UserCourseStatisticsExporter extends Exporter
             $conditions['userIds'] = ArrayToolkit::column($users, 'id');
             unset($conditions['nickname']);
         } else {
-            $conditions['userIds'] = array();
+            $conditions['userIds'] = [];
         }
 
         return $conditions;
@@ -156,7 +155,7 @@ class UserCourseStatisticsExporter extends Exporter
 
     protected function getPageConditions()
     {
-        return array($this->parameter['start'], 50);
+        return [$this->parameter['start'], 50];
     }
 
     /**

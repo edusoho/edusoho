@@ -2,14 +2,14 @@
 
 namespace AppBundle\Component\Export\UserLearnStatistics;
 
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\MathToolkit;
 use AppBundle\Component\Export\Exporter;
-use AppBundle\Common\ArrayToolkit;
 use Biz\Visualization\Service\ActivityLearnDataService;
 
 class UserLearnStatisticsExporter extends Exporter
 {
-    private $orderBy = array();
+    private $orderBy = [];
 
     public function canExport()
     {
@@ -20,19 +20,19 @@ class UserLearnStatisticsExporter extends Exporter
 
     public function getCount()
     {
-        return $this->getUserService()->countUsers(ArrayToolkit::parts($this->conditions, array('userIds')));
+        return $this->getUserService()->countUsers(ArrayToolkit::parts($this->conditions, ['userIds']));
     }
 
     public function getContent($start, $limit)
     {
         $users = $this->getUserService()->searchUsers(
-            ArrayToolkit::parts($this->conditions, array('userIds')),
-            array('id' => 'DESC'),
+            ArrayToolkit::parts($this->conditions, ['userIds']),
+            ['id' => 'DESC'],
             $start,
             $limit
         );
 
-        $conditions = array_merge($this->conditions, array('userIds' => ArrayToolkit::column($users, 'id')));
+        $conditions = array_merge($this->conditions, ['userIds' => ArrayToolkit::column($users, 'id')]);
 
         $statistics = $this->getLearnStatisticsService()->statisticsDataSearch(
             $conditions,
@@ -47,11 +47,11 @@ class UserLearnStatisticsExporter extends Exporter
     protected function handlerStatistics($statistics, $users)
     {
         $statistics = ArrayToolkit::index($statistics, 'userId');
-        $statisticsContent = array();
+        $statisticsContent = [];
 
         foreach ($users as $key => $user) {
-            $member = array();
-            $conditions = array_merge($this->conditions, array('userId' => $user['id']));
+            $member = [];
+            $conditions = array_merge($this->conditions, ['userId' => $user['id']]);
             $userStatistics = $this->getActivityLearnDataService()->searchUserLearnDailyData(
                 $conditions,
                 [],
@@ -92,7 +92,7 @@ class UserLearnStatisticsExporter extends Exporter
             'user.learn.statistics.finished.task.num',
             'user.learn.statistics.sum_learn_time',
             'user.learn.statistics.pure_learn_time',
-            'user.learn.statistics.actual.amount'
+            'user.learn.statistics.actual.amount',
         ];
     }
 
@@ -100,8 +100,8 @@ class UserLearnStatisticsExporter extends Exporter
     {
         if (!empty($conditions['nickname'])) {
             $users = $this->getUserService()->searchUsers(
-                array('nickname' => $conditions['nickname']),
-                array(),
+                ['nickname' => $conditions['nickname']],
+                [],
                 0,
                 PHP_INT_MAX
             );
@@ -109,7 +109,7 @@ class UserLearnStatisticsExporter extends Exporter
             $conditions['userIds'] = ArrayToolkit::column($users, 'id');
             unset($conditions['nickname']);
         } else {
-            $conditions['userIds'] = array();
+            $conditions['userIds'] = [];
         }
 
         return $conditions;
