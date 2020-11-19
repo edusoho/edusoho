@@ -6,9 +6,7 @@ use AppBundle\Common\Exception\UnexpectedValueException;
 use AppBundle\Common\FileToolkit;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use ZipArchive;
 
 class BatchExporter
