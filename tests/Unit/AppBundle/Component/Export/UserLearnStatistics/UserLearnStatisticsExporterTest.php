@@ -13,7 +13,17 @@ class UserLearnStatisticsExporterTest extends BaseTestCase
         $expoter = new UserLearnStatisticsExporter(self::$appKernel->getContainer(), array(
         ));
 
-        $result = array('user.learn.statistics.nickname', 'user.learn.statistics.join.classroom.num', 'user.learn.statistics.exit.classroom.num', 'user.learn.statistics.join.course.num', 'user.learn.statistics.exit.course.num', 'user.learn.statistics.finished.task.num', 'user.learn.statistics.learned.seconds', 'user.learn.statistics.actual.amount');
+        $result = [
+            'user.learn.statistics.nickname',
+            'user.learn.statistics.join.classroom.num',
+            'user.learn.statistics.exit.classroom.num',
+            'user.learn.statistics.join.course.num',
+            'user.learn.statistics.exit.course.num',
+            'user.learn.statistics.finished.task.num',
+            'user.learn.statistics.sum_learn_time',
+            'user.learn.statistics.pure_learn_time',
+            'user.learn.statistics.actual.amount',
+        ];
 
         $this->assertArrayEquals($expoter->getTitles(), $result);
     }
@@ -88,7 +98,7 @@ class UserLearnStatisticsExporterTest extends BaseTestCase
                 ),
             )
         );
-        $expoter = new UserLearnStatisticsExporter(self::$appKernel->getContainer(), array(
+        $exporter = new UserLearnStatisticsExporter(self::$appKernel->getContainer(), array(
         ));
 
         $users = array(
@@ -109,7 +119,7 @@ class UserLearnStatisticsExporterTest extends BaseTestCase
                 'actualAmount' => 100,
             ),
         );
-        $data = ReflectionUtils::invokeMethod($expoter, 'handlerStatistics', array($statistics, $users));
+        $data = ReflectionUtils::invokeMethod($exporter, 'handlerStatistics', array($statistics, $users));
 
         $this->assertArrayEquals(array(
             'lalal',
@@ -118,7 +128,8 @@ class UserLearnStatisticsExporterTest extends BaseTestCase
             '35',
             '13',
             '23',
-            '1',
+            '0',
+            '0',
             '1',
         ), $data[0]);
     }
