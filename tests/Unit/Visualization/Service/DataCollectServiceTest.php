@@ -33,7 +33,7 @@ class DataCollectServiceTest extends BaseTestCase
     public function testCreateLearnFlow()
     {
         $flow = $this->getDataCollectService()->createLearnFlow(1, 1, 'testsign');
-        $res = $this->getDataCollectService()->getFlowBySign($flow['sign']);
+        $res = $this->getDataCollectService()->getFlowBySign(1, $flow['sign']);
         self::assertEquals($flow, $res);
     }
 

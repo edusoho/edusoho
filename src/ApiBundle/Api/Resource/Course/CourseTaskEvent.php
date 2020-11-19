@@ -73,7 +73,7 @@ class CourseTaskEvent extends AbstractResource
             }
         }
 
-        $flow = $this->getDataCollectService()->getFlowBySign($sign);
+        $flow = $this->getDataCollectService()->getFlowBySign($user['id'], $sign);
 
         if (empty($flow)) {
             $this->getDataCollectService()->createLearnFlow($user['id'], $activity['id'], $sign);
@@ -140,7 +140,7 @@ class CourseTaskEvent extends AbstractResource
             }
         }
 
-        $flow = $this->getDataCollectService()->getFlowBySign($sign);
+        $flow = $this->getDataCollectService()->getFlowBySign($user['id'], $sign);
 
         if (empty($flow)) {
             $this->getDataCollectService()->createLearnFlow($user['id'], $activity['id'], $sign);

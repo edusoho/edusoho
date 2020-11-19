@@ -105,9 +105,9 @@ class DataCollectServiceImpl extends BaseService
         return $this->getActivityLearnRecordDao()->create($data);
     }
 
-    public function getFlowBySign($sign)
+    public function getFlowBySign($userId, $sign)
     {
-        return $this->getUserActivityLearnFlowDao()->getBySign($sign);
+        return $this->getUserActivityLearnFlowDao()->getByUserIdAndSign($userId, $sign);
     }
 
     public function createLearnFlow($userId, $activityId, $sign)

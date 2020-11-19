@@ -18,12 +18,26 @@ class UserActivityLearnFlowDaoImpl extends AdvancedDaoImpl implements UserActivi
             'conditions' => [
                 'id = :id',
             ],
-            'orderbys' => ['id', 'createdTime'],
+            'orderbys' => ['id', 'createdTime', 'startTime', 'lastLearnTime'],
         ];
     }
 
-    public function getBySign($sign)
+    public function getByUserIdAndSign($userId, $sign)
     {
-        return $this->getByFields(['sign' => $sign]);
+        return $this->getByFields(['userId' => $userId, 'sign' => $sign]);
+    }
+
+    public function setUserOtherFlowUnActive($userId, $activeSign)
+    {
+        $sql = "UPDATE {$this->table} SET active = 0 WHERE userId = ? AND sign != ?;";
+
+        return $this->db()->executeUpdate($sql, [$userId, $activeSign]);
+    }
+
+    public function getUserLatestActiveFlow($userId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND active = 0 ORDER BY lastLearnTime LIMIT 1;";
+
+        return $this->db()->fetchAssoc($sql, [$userId]);
     }
 }

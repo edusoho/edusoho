@@ -4,4 +4,11 @@ namespace Biz\Visualization\Service;
 
 interface LearnControlService
 {
+    public function getUserLastLearnRecord($userId);
+
+    public function getUserLastLearnRecordBySign($userId, $sign);
+
+    public function freshFlow($userId, $sign);
+
+    public function checkActive($userId, $sign, $reActive = false);
 }

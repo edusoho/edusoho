@@ -8,5 +8,5 @@ interface DataCollectService
 
     public function createLearnFlow($userId, $activityId, $sign);
 
-    public function getFlowBySign($sign);
+    public function getFlowBySign($userId, $sign);
 }

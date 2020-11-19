@@ -10,6 +10,7 @@ use Biz\Course\Service\LearningDataAnalysisService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
 use Biz\Visualization\Service\DataCollectService;
+use Biz\Visualization\Service\LearnControlService;
 
 class CourseTaskEventV2 extends AbstractResource
 {
@@ -243,6 +244,11 @@ class CourseTaskEventV2 extends AbstractResource
 //        }
     }
 
+    protected function getKickOutStatus($userId, $sign)
+    {
+        $this->getLearnControlService()->isActive($userId, $sign);
+    }
+
     /**
      * @return DataCollectService
      */
@@ -273,5 +279,13 @@ class CourseTaskEventV2 extends AbstractResource
     private function getLearningDataAnalysisService()
     {
         return $this->service('Course:LearningDataAnalysisService');
+    }
+
+    /**
+     * @return LearnControlService
+     */
+    private function getLearnControlService()
+    {
+        return $this->service('Visualization:LearnControlService');
     }
 }
