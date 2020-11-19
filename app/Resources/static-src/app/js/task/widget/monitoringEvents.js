@@ -6,11 +6,11 @@ export default class MonitoringEvents {
     this.OutFocusMask = new OutFocusMask('#task-content-iframe');
 
     this.activityTimer = null;
-    this.ACTIVITY_TIME = 10;
+    this.ACTIVITY_TIME = 60;
 
     this.eventMaskElement = null;
     this.eventMaskTimer = null;
-    this.EVENT_MASK_TIME = 5;
+    this.EVENT_MASK_TIME = 30;
 
     this.taskId = params.taskId;
     this.courseId = params.courseId;
