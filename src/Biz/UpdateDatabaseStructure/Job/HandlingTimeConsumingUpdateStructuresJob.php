@@ -180,6 +180,13 @@ class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
          *  Column status, created_time
          */
         $this->createIndex('xapi_statement', 'status_createdTime', 'status, created_time');
+
+        /*
+         *  Table  course_material_v8
+         *  Index  lessonId_type
+         *  Column lessonId, type
+         */
+        $this->createIndex('course_material_v8', 'lessonId_type', 'lessonId, type');
     }
 
     protected function changeTableFiledType()
