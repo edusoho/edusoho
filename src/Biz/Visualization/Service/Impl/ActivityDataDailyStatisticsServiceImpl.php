@@ -445,14 +445,6 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
     }
 
     /**
-     * @return UserLearnDailyDao
-     */
-    protected function getUserLearnDailyDao()
-    {
-        return $this->createDao('Visualization:UserLearnDailyDao');
-    }
-
-    /**
      * @return CoursePlanLearnDailyDao
      */
     protected function getCoursePlanLearnDailyDao()

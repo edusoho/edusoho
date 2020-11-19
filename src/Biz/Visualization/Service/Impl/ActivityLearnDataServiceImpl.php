@@ -6,7 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\System\Service\SettingService;
 use Biz\Visualization\Dao\ActivityLearnDailyDao;
-use \Biz\Visualization\Service\ActivityLearnDataService;
+use Biz\Visualization\Service\ActivityLearnDataService;
 
 class ActivityLearnDataServiceImpl extends BaseService implements ActivityLearnDataService
 {
