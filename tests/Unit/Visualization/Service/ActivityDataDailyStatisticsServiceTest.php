@@ -176,15 +176,6 @@ class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
         $this->assertEquals(260, $result[0]['pureTime']);
     }
 
-    public function testFindUserLearnTime()
-    {
-        $this->batchMockUserLearnDailyData();
-
-        $result = $this->getActivityDataDailyStatisticsService()->findUserLearnTime(['userIds' => [1, 2]]);
-        $this->assertEquals(540, $result[1]['userLearnTime']);
-        $this->assertEquals(320, $result[2]['userLearnTime']);
-    }
-
     public function testGetVideoEffectiveTimeStatisticsSetting()
     {
         $this->mockBiz('System:SettingService', [
@@ -201,8 +192,8 @@ class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
         $this->batchMockUserLearnDailyData();
 
         $result = $this->getActivityDataDailyStatisticsService()->getDailyLearnData(1, '', '');
-        $this->assertEquals(220, $result[0]['learnedTime']);
-        $this->assertEquals(320, $result[1]['learnedTime']);
+        $this->assertEquals(440, $result[0]['learnedTime']);
+        $this->assertEquals(540, $result[1]['learnedTime']);
     }
 
     protected function batchMockUserLearnDailyData()

@@ -57,7 +57,6 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
     {
         $learnRecords = $this->getActivityVideoWatchRecordDao()->search(
             ['startTime_GE' => $startTime, 'endTime_LT' => $endTime],
-
             [],
             0,
             PHP_INT_MAX,
@@ -89,14 +88,11 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
     public function statisticsLearnDailyData($dayTime)
     {
         $statisticsSetting = $this->getSettingService()->get('videoEffectiveTimeStatistics', []);
-        $data = [];
         $conditions = ['dayTime' => $dayTime];
         $columns = ['userId', 'activityId', 'taskId', 'courseId', 'courseSetId', 'dayTime', 'sumTime', 'pureTime'];
         if (empty($statisticsSetting) || 'playing' === $statisticsSetting['statistical_dimension']) {
             $data = $this->getActivityVideoDailyDao()->search($conditions, [], 0, PHP_INT_MAX, $columns);
-        }
-
-        if ('page' === $statisticsSetting['statistical_dimension']) {
+        } else {
             $data = $this->getActivityStayDailyDao()->search($conditions, [], 0, PHP_INT_MAX, $columns);
         }
 
@@ -119,14 +115,11 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
     public function statisticsUserLearnDailyData($dayTime)
     {
         $statisticsSetting = $this->getSettingService()->get('videoEffectiveTimeStatistics', []);
-        $data = [];
         $conditions = ['dayTime' => $dayTime];
         $columns = ['userId', 'dayTime', 'sumTime', 'pureTime'];
         if (empty($statisticsSetting) || 'playing' == $statisticsSetting['statistical_dimension']) {
             $data = $this->getUserVideoDailyDao()->search($conditions, [], 0, PHP_INT_MAX, $columns);
-        }
-
-        if ('page' == $statisticsSetting['statistical_dimension']) {
+        } else {
             $data = $this->getUserStayDailyDao()->search($conditions, [], 0, PHP_INT_MAX, $columns);
         }
 
@@ -136,14 +129,11 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
     public function statisticsCoursePlanLearnDailyData($dayTime)
     {
         $statisticsSetting = $this->getSettingService()->get('videoEffectiveTimeStatistics', []);
-        $data = [];
         $conditions = ['dayTime' => $dayTime];
         $columns = ['userId', 'courseId', 'courseSetId', 'dayTime', 'sumTime', 'pureTime'];
         if (empty($statisticsSetting) || 'playing' == $statisticsSetting['statistical_dimension']) {
             $data = $this->getCoursePlanVideoDailyDao()->search($conditions, [], 0, PHP_INT_MAX, $columns);
-        }
-
-        if ('page' == $statisticsSetting['statistical_dimension']) {
+        } else {
             $data = $this->getCoursePlanStayDailyDao()->search($conditions, [], 0, PHP_INT_MAX, $columns);
         }
 
