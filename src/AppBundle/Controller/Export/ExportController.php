@@ -10,23 +10,25 @@ class ExportController extends BaseController
     public function tryExportAction(Request $request, $name, $limit)
     {
         $conditions = $request->query->all();
+        $names = $request->query->get('names', [$name]);
 
         try {
-            $export = $this->container->get('export_factory')->create($name, $conditions);
+            $batchExporter = $this->container->get('batch_exporter');
         } catch (\Exception $e) {
             return $this->createJsonResponse(array('message' => $e->getMessage()));
         }
         $response = array('success' => 1);
 
-        $count = $export->getCount();
+        $batchExporter->findExporter($names, $conditions);
+        $counts = $batchExporter->getCount();
 
-        if (!$export->canExport()) {
+        if (!$batchExporter->canExport()) {
             $response = array('success' => 0, 'message' => 'export.not_allowed');
         }
 
         $magic = $this->getSettingService()->get('magic');
 
-        if (0 == $count) {
+        if (0 == count($counts)) {
             $response = array('success' => 0, 'message' => 'export.empty');
         }
 
@@ -34,11 +36,11 @@ class ExportController extends BaseController
             $magic['export_allow_count'] = 10000;
         }
 
-        if ($count > $magic['export_allow_count'] && !empty($limit)) {
+        if (max($counts) > $magic['export_allow_count'] && !empty($limit)) {
             $response = array(
                 'success' => 0,
                 'message' => 'export.over.limit',
-                'parameters' => array('exportAllowCount' => $magic['export_allow_count'], 'count' => $count),
+                'parameters' => array('exportAllowCount' => $magic['export_allow_count'], 'count' => max($counts)),
             );
         }
 
@@ -48,29 +50,21 @@ class ExportController extends BaseController
     public function preExportAction(Request $request, $name)
     {
         $conditions = $request->query->all();
+        $names = $request->query->get('names', [$name]);
+        $currentName = $request->query->get('name', $name);
 
-        $exporter = $this->container->get('export_factory')->create($name, $conditions);
-        $result = $exporter->export($name);
+        $batchExporter = $this->container->get('batch_exporter');
+        $batchExporter->findExporter($names, $conditions);
+        $result = $batchExporter->export($currentName);
 
         return $this->createJsonResponse($result);
     }
 
     public function exportAction(Request $request, $name, $type)
     {
-        $biz = $this->getBiz();
-        $fileName = $request->query->get('fileName');
+        $fileNames = $request->query->get('fileNames');
 
-        $exportPath = $biz['topxia.upload.private_directory'].'/'.basename($fileName);
-        if (!file_exists($exportPath)) {
-            return  $this->createJsonResponse(array('success' => 0, 'message' => 'empty file'));
-        }
-
-        $officeHelpMap = array(
-            'csv' => 'AppBundle\Component\Office\CsvHelper',
-        );
-        $officeHelp = new $officeHelpMap[$type]();
-
-        return $officeHelp->write($name, $exportPath);
+        return $this->container->get('batch_exporter')->exportFile($name, $fileNames);
     }
 
     protected function getSettingService()

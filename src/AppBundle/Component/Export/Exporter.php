@@ -141,7 +141,7 @@ abstract class Exporter implements ExporterInterface
             $filesystem->mkdir($rootPath);
         }
 
-        return  $rootPath;
+        return $rootPath;
     }
 
     public function getUser()

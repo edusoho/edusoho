@@ -13,7 +13,7 @@ class TotalStatisticsDaoImpl extends AdvancedDaoImpl implements TotalStatisticsD
     public function statisticSearch($conditions, $orderBys)
     {
         $builder = $this->createQueryBuilder($conditions)
-            ->select('userId, sum(joinedClassroomNum) as joinedClassroomNum, sum(joinedCourseSetNum) as joinedCourseSetNum, sum(joinedCourseNum) as joinedCourseNum, sum(exitClassroomNum) as exitClassroomNum, max(createdTime), sum(exitCourseNum) as exitCourseNum, sum(joinedTaskNum) as joinedTaskNum, sum(finishedTaskNum) as finishedTaskNum, sum(actualAmount) as actualAmount')
+            ->select('userId, sum(joinedClassroomNum) as joinedClassroomNum, sum(joinedCourseSetNum) as joinedCourseSetNum, sum(joinedCourseNum) as joinedCourseNum, sum(exitClassroomNum) as exitClassroomNum, max(createdTime), sum(exitCourseNum) as exitCourseNum, sum(finishedTaskNum) as finishedTaskNum, sum(actualAmount) as actualAmount')
             ->groupBy('userId');
 
         $declares = $this->declares();

@@ -5,7 +5,9 @@ namespace Biz\Visualization\Service\Impl;
 use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\System\Service\SettingService;
+use Biz\UserLearnStatistics\Service\LearnStatisticsService;
 use Biz\Visualization\Dao\ActivityLearnDailyDao;
+use Biz\Visualization\Dao\CoursePlanLearnDailyDao;
 use Biz\Visualization\Service\ActivityLearnDataService;
 
 class ActivityLearnDataServiceImpl extends BaseService implements ActivityLearnDataService
@@ -31,6 +33,7 @@ class ActivityLearnDataServiceImpl extends BaseService implements ActivityLearnD
         return $this->getActivityLearnDailyDao()->findByCourseSetIds($courseSetIds);
     }
 
+
     public function sumLearnedTimeGroupByTaskIds(array $taskIds)
     {
         if (empty($taskIds)) {
@@ -38,6 +41,60 @@ class ActivityLearnDataServiceImpl extends BaseService implements ActivityLearnD
         }
 
         return ArrayToolkit::index($this->getActivityLearnDailyDao()->sumLearnedTimeGroupByTaskIds($taskIds), 'taskId');
+    }
+
+    public function searchCoursePlanLearnDailyData($conditions, $orderBys, $start, $limit, $columns = array())
+    {
+        $conditions = $this->prepareConditions($conditions);
+
+        return $this->getCoursePlanLearnDailyDao()->search($conditions, $orderBys, $start, $limit, $columns);
+    }
+
+    public function countCoursePlanLearnDailyData($conditions)
+    {
+        $conditions = $this->prepareConditions($conditions);
+
+        return $this->getCoursePlanLearnDailyDao()->count($conditions);
+    }
+
+    public function searchActivityLearnDailyData($conditions, $orderBys, $start, $limit, $columns = array())
+    {
+        $conditions = $this->prepareConditions($conditions);
+
+        return $this->getActivityLearnDailyDao()->search($conditions, $orderBys, $start, $limit, $columns);
+    }
+
+    public function countActivityLearnDailyData($conditions)
+    {
+        $conditions = $this->prepareConditions($conditions);
+
+        return $this->getActivityLearnDailyDao()->count($conditions);
+    }
+
+    public function searchUserLearnDailyData($conditions, $orderBys, $start, $limit, $columns = array())
+    {
+        $conditions = $this->prepareConditions($conditions);
+
+        return $this->getActivityLearnDailyDao()->search($conditions, $orderBys, $start, $limit, $columns);
+    }
+
+    public function countUserLearnDailyData($conditions)
+    {
+        $conditions = $this->prepareConditions($conditions);
+
+        return $this->getActivityLearnDailyDao()->count($conditions);
+    }
+
+    protected function prepareConditions($conditions)
+    {
+        if (!empty($conditions['startDate']) || !empty($conditions['endDate'])) {
+            $conditions['dayTime_GE'] = !empty($conditions['startDate']) ? strtotime($conditions['startDate']) : strtotime($this->getLearnStatisticsService()->getRecordEndTime());
+            $conditions['dayTime_LE'] = !empty($conditions['endDate']) ? strtotime($conditions['endDate']) : strtotime(date('Y-m-d', time()));
+            unset($conditions['startDate']);
+            unset($conditions['endDate']);
+        }
+
+        return $conditions;
     }
 
     /**
@@ -49,10 +106,26 @@ class ActivityLearnDataServiceImpl extends BaseService implements ActivityLearnD
     }
 
     /**
+     * @return CoursePlanLearnDailyDao
+     */
+    protected function getCoursePlanLearnDailyDao()
+    {
+        return $this->createDao('Visualization:CoursePlanLearnDailyDao');
+    }
+
+    /**
      * @return SettingService
      */
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return LearnStatisticsService
+     */
+    protected function getLearnStatisticsService()
+    {
+        return $this->createService('UserLearnStatistics:LearnStatisticsService');
     }
 }

@@ -48,6 +48,8 @@ interface TaskResultDao extends AdvancedDaoInterface
 
     public function findTaskresultsByTaskId($taskId);
 
+    public function findByUserId($userId);
+
     public function sumCourseSetLearnedTimeByTaskIds($taskIds);
 
     public function countTaskNumGroupByUserId($conditions);

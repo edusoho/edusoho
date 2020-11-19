@@ -10032,6 +10032,40 @@ user.learn.statistics.end_time: 结束时间
 user.learn.statistics.default.search: 默认排序
 user.learn.statistics.search: 搜索
 user.learn.statistics.nickname: 用户名
+user.learn.statistics.mobile: 手机号
+user.learn.statistics.course: 计划
+user.learn.statistics.course_name: 计划名称
+user.learn.statistics.sum_learn_time: 累加学习时长(分)
+user.learn.statistics.pure_learn_time: 去重学习时长(分)
+user.learn.statistics.task_num: 课时任务总数
+user.learn.statistics.finish_task_num: 完成任务数
+user.learn.statistics.finish_rate: 课程/班级完成率
+user.learn.statistics.lesson_name: 课时任务名称
+user.learn.statistics.lesson_type: 课时类型
+user.learn.statistics.type: 类型
+user.learn.statistics.video_length: 视频长度(分)
+user.learn.statistics.lesson_watch_time: 播放时长(分)
+user.learn.statistics.lesson_stay_time: 页面停留时长(分)
+user.learn.statistics.lesson.finish_rate: 课时完成率
+user.learn.statistics.lesson.video: 视频课时
+user.learn.statistics.lesson.audio: 音频课时
+user.learn.statistics.lesson.live: 直播课时
+user.learn.statistics.lesson.discuss: 讨论课时
+user.learn.statistics.lesson.flash: Flash课时
+user.learn.statistics.lesson.doc: 文档课时
+user.learn.statistics.lesson.ppt: PPT课时
+user.learn.statistics.lesson.testpaper: 考试课时
+user.learn.statistics.lesson.homework: 作业课时
+user.learn.statistics.lesson.exercise: 练习课时
+user.learn.statistics.lesson.download: 下载资料课时
+user.learn.statistics.lesson.text: 图文课时
+user.learn.statistics.lesson.compulsory: 必修
+user.learn.statistics.lesson.optional: 选修
+user.learn.statistics.lesson.finish: 完成
+user.learn.statistics.lesson.un_finish: 未完成
+user.learn.statistics.user_learn_statistics: 用户数据统计
+user.learn.statistics.user_course_statistics: 用户课程学习数据统计
+user.learn.statistics.user_lesson_statistics: 用户课时学习数据统计
 user.learn.statistics.join.classroom.num: 加入班级数
 user.learn.statistics.exit.classroom.num: 退出班级数
 user.learn.statistics.join.course.num: 加入计划数
@@ -10048,6 +10082,9 @@ user.learn.statistics.manage.describe_tips: >
   <div style='width:250px;'>
     <h5 style='color:blue;margin:5px 0;'>用户数据说明</h5>
     <P style='margin:0;'>用户数据每日00:00-02:00间更新。</p>
+    <P style='margin:0;'>累加学习时长（分）为筛选条件内该用户在网校产生的所有学习时长累加。</p>
+    <P style='margin:0;'>去重学习时长（分）为筛选条件内该用户在网校产生的所有学习时长去重后累加。</p>
+    <P style='margin:0;'>其中视频课时学习时长统计维度（播放活跃时长or页面活跃时长）以在系统-课程设置-视频课时学习配置为准。</p>
   </div>
 
 
