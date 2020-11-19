@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Export;
 
 use AppBundle\Controller\BaseController;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class ExportController extends BaseController
@@ -64,7 +65,18 @@ class ExportController extends BaseController
     {
         $fileNames = $request->query->get('fileNames');
 
-        return $this->container->get('batch_exporter')->exportFile($name, $fileNames);
+        list($path, $name) = $this->container->get('batch_exporter')->exportFile($name, $fileNames);
+
+        if (!file_exists($path)) {
+            return $this->createJsonResponse(['success' => 0, 'message' => 'empty file']);
+        }
+
+        $headers = [
+            'Content-Type' => 'application/msword',
+            'Content-Disposition' => 'attachment; filename='.$name,
+        ];
+
+        return new BinaryFileResponse($path, 200, $headers);
     }
 
     protected function getSettingService()

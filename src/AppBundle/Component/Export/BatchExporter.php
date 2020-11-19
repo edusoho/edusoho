@@ -6,6 +6,7 @@ use AppBundle\Common\Exception\UnexpectedValueException;
 use AppBundle\Common\FileToolkit;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use ZipArchive;
@@ -110,33 +111,21 @@ class BatchExporter
             return new JsonResponse(['success' => 0, 'message' => 'empty file']);
         }
 
-        $response = new Response();
         if (1 == count($fileNames)) {
-            $response = $this->exportCsv($response, $name, $fileNames[0]);
+            return $this->exportCsv($name, $fileNames[0]);
         } else {
-            $response = $this->exportZip($response, $name, $fileNames);
+            return $this->exportZip($name, $fileNames);
         }
-
-        return $response;
     }
 
-    protected function exportCsv($response, $name, $fileName)
+    protected function exportCsv($name, $fileName)
     {
         $exportPath = $this->exportFileRootPath().$fileName;
-        if (!file_exists($exportPath)) {
-            return new JsonResponse(['success' => 0, 'message' => 'empty file']);
-        }
 
-        $response->headers->set('Content-Disposition', 'attachment; filename="'.$fileName.'"');
-        $response->headers->set('Content-length', filesize($exportPath));
-        $response->headers->set('Content-type', 'text/csv');
-        readfile($exportPath);
-        FileToolkit::remove($exportPath);
-
-        return $response;
+        return [$exportPath, $this->transTitle($fileName)];
     }
 
-    protected function exportZip($response, $name, $fileNames)
+    protected function exportZip($name, $fileNames)
     {
         $zip = new ZipArchive();
 
@@ -163,14 +152,8 @@ class BatchExporter
         }
 
         $fileName = sprintf($name.'-(%s).zip', date('Y-n-d'));
-        $response->headers->set('Content-type', 'application/zip');
-        $response->headers->set('Content-Transfer-Encoding', 'binary');
-        $response->headers->set('Content-Disposition', 'attachment; filename="'.$fileName.'"');
-        $response->headers->set('Content-length', filesize($zipPath));
-        readfile($zipPath);
-        FileToolkit::remove($zipPath);
 
-        return $response;
+        return [$zipPath, $fileName];
     }
 
     protected function transTitle($name)
@@ -225,7 +208,7 @@ class BatchExporter
     {
         $biz = $this->getBiz();
         $filesystem = new Filesystem();
-        $rootPath = $biz['topxia.upload.private_directory'].'/';
+        $rootPath = $biz['topxia.upload.private_directory'].'/tmp/';
         if (!$filesystem->exists($rootPath)) {
             $filesystem->mkdir($rootPath);
         }

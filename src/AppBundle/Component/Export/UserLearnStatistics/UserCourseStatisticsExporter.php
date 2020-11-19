@@ -31,7 +31,7 @@ class UserCourseStatisticsExporter extends Exporter
     public function getContent($start, $limit)
     {
         $users = $this->getUserService()->searchUsers(
-            ArrayToolkit::parts($this->conditions, ['userIds']),
+            ArrayToolkit::parts($this->conditions, ['userIds', 'destroyed']),
             ['id' => 'DESC'],
             $start,
             $limit,
@@ -131,7 +131,7 @@ class UserCourseStatisticsExporter extends Exporter
 
     public function getCount()
     {
-        return $this->getUserService()->countUsers(ArrayToolkit::parts($this->conditions, ['userIds']));
+        return $this->getUserService()->countUsers(ArrayToolkit::parts($this->conditions, ['userIds', 'destroyed']));
     }
 
     public function buildCondition($conditions)
@@ -149,6 +149,8 @@ class UserCourseStatisticsExporter extends Exporter
         } else {
             $conditions['userIds'] = [];
         }
+
+        $conditions['destroyed'] = 0;
 
         return $conditions;
     }

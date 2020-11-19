@@ -50,7 +50,7 @@ class UserLessonStatisticsExporter extends Exporter
     public function getContent($start, $limit)
     {
         $users = $this->getUserService()->searchUsers(
-            ArrayToolkit::parts($this->conditions, ['userIds']),
+            ArrayToolkit::parts($this->conditions, ['userIds', 'destroyed']),
             ['id' => 'DESC'],
             $start,
             $limit,
@@ -143,7 +143,7 @@ class UserLessonStatisticsExporter extends Exporter
                         'taskName' => $task['title'],
                         'taskType' => $this->getTaskType($task['type']),
                         'type' => $this->getTaskOptional($task['isOptional']),
-                        'length' => in_array($task['type'], ['audio', 'video']) ? $task['length'] : '',
+                        'length' => in_array($task['type'], ['audio', 'video']) ? round($task['length'] / 60, 1) : '',
                         'sumTime' => empty($statistics[$task['id']]) ? 0 : array_sum(ArrayToolkit::column($statistics[$task['id']], 'sumTime')),
                         'pureTime' => empty($statistics[$task['id']]) ? 0 : array_sum(ArrayToolkit::column($statistics[$task['id']], 'pureTime')),
                         'finishStatus' => empty($taskResults[$task['id']]) ? $this->getFinishStatus([]) : $this->getFinishStatus($taskResults[$task['id']]),
@@ -165,7 +165,7 @@ class UserLessonStatisticsExporter extends Exporter
 
     public function getCount()
     {
-        return $this->getUserService()->countUsers(ArrayToolkit::parts($this->conditions, ['userIds']));
+        return $this->getUserService()->countUsers(ArrayToolkit::parts($this->conditions, ['userIds', 'destroyed']));
     }
 
     public function buildCondition($conditions)
@@ -183,6 +183,8 @@ class UserLessonStatisticsExporter extends Exporter
         } else {
             $conditions['userIds'] = [];
         }
+
+        $conditions['destroyed'] = 0;
 
         return $conditions;
     }

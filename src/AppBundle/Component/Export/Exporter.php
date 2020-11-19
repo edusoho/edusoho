@@ -136,7 +136,7 @@ abstract class Exporter implements ExporterInterface
     {
         $biz = $this->getBiz();
         $filesystem = new Filesystem();
-        $rootPath = $biz['topxia.upload.private_directory'].'/';
+        $rootPath = $biz['topxia.upload.private_directory'].'/tmp/';
         if (!$filesystem->exists($rootPath)) {
             $filesystem->mkdir($rootPath);
         }

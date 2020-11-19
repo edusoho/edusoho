@@ -75,7 +75,7 @@ class ExporterTest extends BaseTestCase
         $path = ReflectionUtils::invokeMethod($expoter, 'exportFileRootPath');
 
         $this->assertTrue($filesystem->exists($path));
-        $this->assertEquals($biz['topxia.upload.private_directory'].'/', $path);
+        $this->assertEquals($biz['topxia.upload.private_directory'].'/tmp/', $path);
     }
 
     public function testTransTitles()
