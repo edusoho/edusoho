@@ -553,7 +553,7 @@ function _initKey()
 
     if (file_exists($filePath)) {
         $yaml = new Yaml();
-        $visitor = $yaml->parse($filePath);
+        $visitor = $yaml->parseFile($filePath);
         $visitorId = empty($visitor['visitorId']) ? '' : $visitor['visitorId'];
     }
     $users[0]['visitorId'] = empty($visitorId) ? '' : $visitorId;
