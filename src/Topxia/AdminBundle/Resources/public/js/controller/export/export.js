@@ -4,7 +4,7 @@ define(function(require, exports, module) {
     exports.run = function() {
         var $exportBtns = $('.js-export-btn');
         var $exportBtn;
-        var fileNames = [];
+        var exportFileNames = [];
 
         var $modal = $('#modal');
         exportDataEvent();
@@ -68,15 +68,15 @@ define(function(require, exports, module) {
 
                 if (response.name !== '') {
                     if (response.status === 'finish') {
-                      fileNames.push(response.csvName);
+                      exportFileNames.push(response.csvName);
                     }
                     var process = response.start * 100 / response.count + '%';
                     $modal.find('#progress-bar').width(process);
                     exportData(response.start, response.fileName, urls, response.name);
                 } else {
-                    fileNames.push(response.csvName);
+                  exportFileNames.push(response.csvName);
                     $exportBtn.button('reset');
-                    download(urls, fileNames) ?  finish() : notifyError('unexpected error, try again');
+                    download(urls, exportFileNames) ?  finish() : notifyError('unexpected error, try again');
                 }
             }).error(function(e){
                 console.log(e);
@@ -106,6 +106,7 @@ define(function(require, exports, module) {
                 $.each(fileNames, function (index, value) {
                   url += `fileNames[]=${value}&`;
                 });
+                exportFileNames = [];
                 window.location.href = url;
                 return true;
             }

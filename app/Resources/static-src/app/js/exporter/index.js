@@ -75,6 +75,7 @@ class Export {
       $.each(fileNames, function (index, value) {
         url += `fileNames[]=${value}&`;
       });
+      this.fileNames = [];
       window.location.href = url;
       return true;
     }
