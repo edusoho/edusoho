@@ -1,3 +1,6 @@
+import postal from 'postal';
+import 'postal.federation';
+import 'postal.xframe';
 export default class OutFocusMask {
   constructor(element) {
     this.$element = $(element);
@@ -19,6 +22,7 @@ export default class OutFocusMask {
       this.$element.contents().off('click', '.js-continue-studying');
       this.$element.contents().on('click', '.js-continue-studying', () => this.continueStudying());
     });
+    this._registerChannel();
   }
 
   validateMask() {
@@ -47,9 +51,7 @@ export default class OutFocusMask {
 
   continueStudying() {
     this.destroyMask();
-    console.log('player 播放事件');
-    // player 播放事件
-    // doing 事件, 并刷新计时
+    this._publishResponse('play');
   }
 
   destroyMask() {
@@ -57,8 +59,28 @@ export default class OutFocusMask {
   }
 
   popAfter() {
-    console.log('player 暂停事件');
-    // player 暂停事件
-    // doing 事件, 并刷新计时
+    this._publishResponse('pause');
+  }
+
+  _registerChannel() {
+    postal.instanceId('task');
+
+    postal.fedx.addFilter([
+      {
+        channel: 'task-events',  // 发送事件到activity iframe
+        topic: 'monitoringEvent',
+        direction: 'out'
+      }
+    ]);
+
+    return this;
+  }
+
+  _publishResponse(type) {
+    postal.publish({
+      channel: 'task-events',
+      topic: 'monitoringEvent',
+      data: type
+    });
   }
 }

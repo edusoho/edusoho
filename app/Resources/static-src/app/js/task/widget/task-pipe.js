@@ -40,6 +40,8 @@ export default class TaskPipe {
     if (this.element.data('eventEnable') == 1) {
       this._initInterval();
     }
+
+    this.MonitoringEvents = null;
   }
 
   _registerChannel() {
@@ -71,6 +73,7 @@ export default class TaskPipe {
   }
 
   _initInterval() {
+    this._flush();
     window.onbeforeunload = () => {
       this._clearInterval();
       this._flush();
@@ -84,7 +87,6 @@ export default class TaskPipe {
   }
 
   _flush(param = {}) {
-    console.log()
     if (this.isLogout) return;
 
     if (this.sign === '') {
@@ -101,6 +103,14 @@ export default class TaskPipe {
         this.sign = res.record.flowSign;
         this.record = res.record;
         this._doing();
+        this.MonitoringEvents = new MonitoringEvents({
+          taskId: this.taskId,
+          courseId: this.courseId,
+          sign: this.sign,
+          record: this.record,
+          _clearInterval: this._clearInterval,
+          _initInterval: this._initInterval
+        });
       });
     } else{
       this._doing();
@@ -154,6 +164,9 @@ export default class TaskPipe {
       },
     }).then(res => {
       this.record = res.record;
+      if (!res.learnControl.allowLearn && res.learnControl.denyReason === 'exist_new_learning') {
+        this.MonitoringEvents.triggerEvent('exist_new_learning');
+      }
     }).catch(error => {
       this._clearInterval();
       cd.message({ type: 'danger', message: Translator.trans('task_show.user_login_protect_tip') });

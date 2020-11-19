@@ -1,4 +1,7 @@
 import Emitter from 'component-emitter';
+import postal from 'postal';
+import 'postal.federation';
+import 'postal.xframe';
 class BalloonCloudVideoPlayer extends Emitter {
 
   constructor(options) {
@@ -144,6 +147,7 @@ class BalloonCloudVideoPlayer extends Emitter {
     });
 
     this.player = player;
+    this._registerChannel();
   }
 
   play() {
@@ -227,6 +231,32 @@ class BalloonCloudVideoPlayer extends Emitter {
     }
 
     return source;
+  }
+
+  _registerChannel() {
+    postal.instanceId('task');
+
+    postal.fedx.addFilter([
+      {
+        channel: 'task-events', //接收 activity iframe的事件
+        topic: 'monitoringEvent',
+        direction: 'in'
+      }
+    ]);
+
+    postal.subscribe({
+      channel: 'task-events',
+      topic: 'monitoringEvent',
+      callback: (type) => {
+        if (type === 'pause') {
+          this.pause();
+        } else if (type === 'play') {
+          this.play();
+        } 
+      }
+    });
+
+    return this;
   }
 
 }
