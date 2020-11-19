@@ -2,16 +2,16 @@
 
 namespace Tests\Unit\Component\Export;
 
-use Biz\BaseTestCase;
-use AppBundle\Component\Export\UserLearnStatistics\UserLearnStatisticsExporter;
 use AppBundle\Common\ReflectionUtils;
+use AppBundle\Component\Export\UserLearnStatistics\UserLearnStatisticsExporter;
+use Biz\BaseTestCase;
 
 class UserLearnStatisticsExporterTest extends BaseTestCase
 {
     public function testGetTitles()
     {
-        $expoter = new UserLearnStatisticsExporter(self::$appKernel->getContainer(), array(
-        ));
+        $expoter = new UserLearnStatisticsExporter(self::$appKernel->getContainer(), [
+        ]);
 
         $result = [
             'user.learn.statistics.nickname',
@@ -33,21 +33,21 @@ class UserLearnStatisticsExporterTest extends BaseTestCase
         self::$appKernel->getContainer()->set('biz', $this->getBiz());
         $this->mockBiz(
             'User:UserService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'searchUsers',
-                    'returnValue' => array(array('id' => 1)),
-                ),
-            )
+                    'returnValue' => [['id' => 1]],
+                ],
+            ]
         );
-        $expoter = new UserLearnStatisticsExporter(self::$appKernel->getContainer(), array(
-        ));
+        $expoter = new UserLearnStatisticsExporter(self::$appKernel->getContainer(), [
+        ]);
 
-        $contisions = array();
+        $contisions = [];
         $result = $expoter->buildCondition($contisions);
-        $this->assertEquals(array(), $result['userIds']);
+        $this->assertEquals([], $result['userIds']);
 
-        $contisions = array('nickname' => 'la');
+        $contisions = ['nickname' => 'la'];
 
         $result = $expoter->buildCondition($contisions);
         $this->assertEquals(1, $result['userIds'][0]);
@@ -56,13 +56,13 @@ class UserLearnStatisticsExporterTest extends BaseTestCase
 
     public function testCanExport()
     {
-        $expoter = new UserLearnStatisticsExporter(self::$appKernel->getContainer(), array(
-        ));
+        $expoter = new UserLearnStatisticsExporter(self::$appKernel->getContainer(), [
+        ]);
         $this->assertEquals(true, $expoter->canExport());
 
         $biz = $this->getBiz();
         $user = $biz['user'];
-        $user->setPermissions(array());
+        $user->setPermissions([]);
 
         $this->assertEquals(false, $expoter->canExport());
     }
@@ -72,15 +72,15 @@ class UserLearnStatisticsExporterTest extends BaseTestCase
         self::$appKernel->getContainer()->set('biz', $this->getBiz());
         $this->mockBiz(
             'User:UserService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'countUsers',
                     'returnValue' => 3,
-                ),
-            )
+                ],
+            ]
         );
-        $expoter = new UserLearnStatisticsExporter(self::$appKernel->getContainer(), array(
-        ));
+        $expoter = new UserLearnStatisticsExporter(self::$appKernel->getContainer(), [
+        ]);
         $count = $expoter->getCount();
 
         $this->assertEquals(3, $expoter->getCount());
@@ -91,24 +91,24 @@ class UserLearnStatisticsExporterTest extends BaseTestCase
         self::$appKernel->getContainer()->set('biz', $this->getBiz());
         $this->mockBiz(
             'User:UserService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'countUsers',
                     'returnValue' => 3,
-                ),
-            )
+                ],
+            ]
         );
-        $exporter = new UserLearnStatisticsExporter(self::$appKernel->getContainer(), array(
-        ));
+        $exporter = new UserLearnStatisticsExporter(self::$appKernel->getContainer(), [
+        ]);
 
-        $users = array(
-            array(
+        $users = [
+            [
                 'id' => 1,
                 'nickname' => 'lalal',
-            ),
-        );
-        $statistics = array(
-            array(
+            ],
+        ];
+        $statistics = [
+            [
                 'userId' => 1,
                 'joinedClassroomNum' => 3,
                 'exitClassroomNum' => 4,
@@ -117,11 +117,11 @@ class UserLearnStatisticsExporterTest extends BaseTestCase
                 'finishedTaskNum' => 23,
                 'learnedSeconds' => 60,
                 'actualAmount' => 100,
-            ),
-        );
-        $data = ReflectionUtils::invokeMethod($exporter, 'handlerStatistics', array($statistics, $users));
+            ],
+        ];
+        $data = ReflectionUtils::invokeMethod($exporter, 'handlerStatistics', [$statistics, $users]);
 
-        $this->assertArrayEquals(array(
+        $this->assertArrayEquals([
             'lalal',
             '3',
             '4',
@@ -131,17 +131,17 @@ class UserLearnStatisticsExporterTest extends BaseTestCase
             '0',
             '0',
             '1',
-        ), $data[0]);
+        ], $data[0]);
     }
 
     public function testGetContent()
     {
         self::$appKernel->getContainer()->set('biz', $this->getBiz());
-        $expoter = new UserLearnStatisticsExporter(self::$appKernel->getContainer(), array(
-        ));
+        $expoter = new UserLearnStatisticsExporter(self::$appKernel->getContainer(), [
+        ]);
 
         $data = $expoter->getContent(0, 10);
-        $this->assertArrayEquals(array(
+        $this->assertArrayEquals([
             'admin',
             '0',
             '0',
@@ -150,6 +150,6 @@ class UserLearnStatisticsExporterTest extends BaseTestCase
             '0',
             '0',
             '0',
-        ), $data[0]);
+        ], $data[0]);
     }
 }
