@@ -40,6 +40,8 @@ class Factory
             'bill-cash-flow' => 'AppBundle\Component\Export\Bill\CashBillExporter',
             'bill-coin-flow' => 'AppBundle\Component\Export\Bill\CoinBillExporter',
             'user-learn-statistics' => 'AppBundle\Component\Export\UserLearnStatistics\UserLearnStatisticsExporter',
+            'user-lesson-statistics' => 'AppBundle\Component\Export\UserLearnStatistics\UserLessonStatisticsExporter',
+            'user-course-statistics' => 'AppBundle\Component\Export\UserLearnStatistics\UserCourseStatisticsExporter',
             'course-students' => 'AppBundle\Component\Export\Course\StudentExporter',
             'item-bank-exercise-students' => 'AppBundle\Component\Export\ItemBankExercise\StudentExporter',
             'invoice-records' => 'InvoicePlugin\Component\Export\Invoice\InvoiceRecordsExporter',

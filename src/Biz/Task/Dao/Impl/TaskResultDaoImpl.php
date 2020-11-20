@@ -16,6 +16,11 @@ class TaskResultDaoImpl extends AdvancedDaoImpl implements TaskResultDao
         ]);
     }
 
+    public function findByUserId($userId)
+    {
+        return $this->findByFields(['userId' => $userId]);
+    }
+
     public function analysisCompletedTaskDataByTime($startTime, $endTime)
     {
         $sql = "SELECT count(id) AS count, from_unixtime(finishedTime, '%Y-%m-%d') AS date FROM
