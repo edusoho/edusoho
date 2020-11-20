@@ -6731,11 +6731,15 @@ admin.article_setting.message_comments_manage: 'Message comment manage'
 admin.setting_course.article.article_comment: 'Article Comment'
 admin.setting_course.video_play_setting: Online Video Task Playback Configuration
 admin.setting_course.video_play_setting.multiple_open: Multiple Open
-admin.setting_course.video_play_setting.same_video_multiple: Multiple sessions of the same video lesson
+admin.setting_course.video_play_setting.multiple_open.tips: Allows users to access a time-learning page on one or more ends at the same time
 admin.setting_course.video_play_setting.different_video_multiple: Multiple sessions of the different video lesson
 admin.setting_course.video_play_setting.multiple_forbidden_effect: Multi-opening prohibition effect
-admin.setting_course.video_play_setting.kick_previous_play: Kicks previous play, requires terminal upgrade to latest version
-admin.setting_course.video_play_setting.reject_current_play: Reject this broadcast
+admin.setting_course.video_play_setting.kick_previous_play: Kick the previous learning page and require a terminal upgrade to the latest version.
+admin.setting_course.video_play_setting.kick_previous_play.tips: >
+  <p>When a user opens more than one page, the next learning page is the main one, and the previous learning page is kicked out.</p>
+  <p>When the three types of lessons (homework/exam/live) are being studied, the study page will not be able to kick out these three types of lessons.</p>
+admin.setting_course.video_play_setting.reject_current_play: Reject this access to the study page
+admin.setting_course.video_play_setting.reject_current_play.tips: When the user opens more than one page, the first learning page will take precedence and the second learning page will not be allowed to enter.
 admin.setting_course.video_play_setting.ineffective_learning: Ineffective Learning
 admin.setting_course.video_play_setting.play_rule: Unfocused Learning Play Rule
 admin.setting_course.video_play_setting.play_rule.tips: The playing window of the current video class is not an active screen window (such as window minimization, window switching, etc.), or the playing window of the current video class does not detect the user's action behavior within 20 minutes.

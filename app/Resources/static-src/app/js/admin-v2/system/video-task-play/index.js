@@ -10,20 +10,11 @@ $('.js-setting-submit').click(function () {
     });
 });
 
-$('input:radio[name="different_video_multiple"]').click(function(){
-  isEffectShow();
-});
-
-$('input:radio[name="same_video_multiple"]').click(function(){
-  isEffectShow();
-});
-
-function isEffectShow() {
-  let value = $('input:radio[name="different_video_multiple"]:checked').val();
-  let open = $('input:radio[name="same_video_multiple"]:checked').val();
-  if(value == 0 || open ==0) {
+$('input:radio[name="multiple_learn_enable"]').click(function(){
+  let value = $('input:radio[name="multiple_learn_enable"]:checked').val();
+  if(value == 0) {
     $('.js-effect-show').removeClass('hidden');
   } else {
     $('.js-effect-show').addClass('hidden');
   }
-}
+});
