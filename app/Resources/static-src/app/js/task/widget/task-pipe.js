@@ -117,6 +117,7 @@ export default class TaskPipe {
         });
       });
     } else{
+      console.log(param);
       this._doing(param);
     }
 
@@ -153,19 +154,28 @@ export default class TaskPipe {
     // return ajax;
   }
 
-  _doing(param) {
+  _doing(param = {}) {
+    let data = {
+      client: 'pc',
+      sign: this.sign,
+      startTime: this.record.endTime,
+      duration: 60,
+    };
+    if (param.watchTime) {
+      let watchData = {
+        watchData: {
+          duration: param.watchTime,
+        }
+      };
+      data = Object.assign(data, watchData)
+    }
     Api.courseTaskEvent.pushEvent({
       params: {
         courseId: this.courseId,
         taskId: this.taskId,
         eventName: 'doing',
       },
-      data: {
-        client: 'pc',
-        sign: this.sign,
-        startTime: this.record.endTime,
-        duration: 60,
-      },
+      data: data,
     }).then(res => {
       this.record = res.record;
       if (param.type === 'beforeunload') {
