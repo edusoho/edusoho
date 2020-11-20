@@ -1787,3 +1787,10 @@ goods.show_page.buy_btn: Buy
 classroom.go_inside: Go to preview
 course.base.title.placeholder: Please insert course title
 course.unname_title: Unnamed plan
+
+course.task.out_focus_mask.continue_studying: Continue studying
+course.task.out_focus_mask.stop.tips: >
+  <p class="color-primary">You can take a break after studying hard :D</p>
+course.task.out_focus_mask.anti_brush.tips: >
+  <p class="color-warning mar-no">Do not open more tasks to learn at the same time</p>
+  <p class="color-warning">Don’t multitask !</p>

@@ -1740,3 +1740,10 @@ goods.show_page.buy_btn: 立即购买
 classroom.go_inside: 进去逛逛
 course.base.title.placeholder: 请输入课程标题
 course.unname_title: 未命名计划
+
+course.task.out_focus_mask.continue_studying: 继续学习
+course.task.out_focus_mask.stop.tips: >
+  <p class="color-primary">学累了可以休息一会 :D</p>
+course.task.out_focus_mask.anti_brush.tips: >
+  <p class="color-warning mar-no">请勿同时多开任务学习</p>
+  <p class="color-warning">不要一心多用哦！</p>

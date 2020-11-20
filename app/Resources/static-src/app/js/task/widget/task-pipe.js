@@ -2,6 +2,7 @@ import postal from 'postal';
 import 'postal.federation';
 import 'postal.xframe';
 import DurationStorage from '../../../common/duration-storage';
+import MonitoringEvents from './monitoringEvents';
 import Api from 'common/api';
 
 export default class TaskPipe {
@@ -39,6 +40,8 @@ export default class TaskPipe {
     if (this.element.data('eventEnable') == 1) {
       this._initInterval();
     }
+
+    this.MonitoringEvents = null;
   }
 
   _registerChannel() {
@@ -70,9 +73,10 @@ export default class TaskPipe {
   }
 
   _initInterval() {
+    this._flush();
     window.onbeforeunload = () => {
       this._clearInterval();
-      this._flush();
+      this._flush({ type: 'beforeunload' });
     };
     this._clearInterval();
     this.intervalId = setInterval(() => this._flush(), this.learnTimeSec*1000);
@@ -84,8 +88,12 @@ export default class TaskPipe {
 
   _flush(param = {}) {
     if (this.isLogout) return;
-
     if (this.sign === '') {
+      let flowSign = localStorage.getItem('flowSign');
+      if (flowSign) {
+        this.sign = flowSign;
+        localStorage.removeItem('flowSign');
+      }
       Api.courseTaskEvent.pushEvent({
         params: {
           courseId: this.courseId,
@@ -98,7 +106,15 @@ export default class TaskPipe {
       }).then(res => {
         this.sign = res.record.flowSign;
         this.record = res.record;
-        this._doing();
+        this._doing(param);
+        this.MonitoringEvents = new MonitoringEvents({
+          taskId: this.taskId,
+          courseId: this.courseId,
+          sign: this.sign,
+          record: this.record,
+          _clearInterval: this._clearInterval,
+          _initInterval: this._initInterval
+        });
       });
     } else{
       console.log(param);
@@ -162,6 +178,14 @@ export default class TaskPipe {
       data: data,
     }).then(res => {
       this.record = res.record;
+      if (param.type === 'beforeunload') {
+        localStorage.setItem('flowSign', res.record.flowSign);
+      }
+      if (!res.learnControl.allowLearn && res.learnControl.denyReason === 'kick_previous') {
+        this.MonitoringEvents.triggerEvent('kick_previous');
+      } else if (!res.learnControl.allowLearn && res.learnControl.denyReason === 'reject_current') {
+        this.MonitoringEvents.triggerEvent('reject_current');
+      }
     }).catch(error => {
       this._clearInterval();
       cd.message({ type: 'danger', message: Translator.trans('task_show.user_login_protect_tip') });
