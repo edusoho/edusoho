@@ -337,6 +337,7 @@ class CourseSetController extends BaseController
             $paginator->getPerPageCount()
         );
         $usersLearnedTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByCourseIdGroupByUserId($courseId, ArrayToolkit::column($students, 'userId'));
+        $usersPureLearnedTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumPureLearnedTimeByCourseIdGroupByUserId($courseId, ArrayToolkit::column($students, 'userId'));
 
         foreach ($students as $key => &$student) {
             $user = $this->getUserService()->getUser($student['userId']);
@@ -354,7 +355,10 @@ class CourseSetController extends BaseController
             }
 
             $student['learnTime'] = empty($usersLearnedTime[$student['userId']]) ? 0 : $usersLearnedTime[$student['userId']]['learnedTime'];
+            $student['pureLearnTime'] = empty($usersPureLearnedTime[$student['userId']]) ? 0 : $usersPureLearnedTime[$student['userId']]['learnedTime'];
         }
+
+        $coursePlanSumLearnedTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByCourseId($courseId);
 
         return $this->render(
             'admin-v2/teach/course-set/course-data-modal.html.twig',
@@ -363,6 +367,7 @@ class CourseSetController extends BaseController
                 'courses' => $courses,
                 'paginator' => $paginator,
                 'students' => $students,
+                'coursePlanSumLearnedTime' => intval(empty($coursePlanSumLearnedTime) ? 0 : $coursePlanSumLearnedTime / 60),
                 'courseId' => $courseId,
             ]
         );
@@ -742,6 +747,7 @@ class CourseSetController extends BaseController
             $limit
         );
         $usersLearnedTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByCourseIdGroupByUserId($courseId, ArrayToolkit::column($students, 'userId'));
+        $usersPureLearnedTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumPureLearnedTimeByCourseIdGroupByUserId($courseId, ArrayToolkit::column($students, 'userId'));
 
         $exportMembers = [];
         foreach ($students as $key => $student) {
@@ -761,6 +767,9 @@ class CourseSetController extends BaseController
             $learnTime = empty($usersLearnedTime[$student['userId']]) ? 0 : $usersLearnedTime[$student['userId']]['learnedTime'];
             $exportMember['learnTime'] = $learnTime > 0 ? floor($learnTime / 60) : '--';
 
+            $pureLearnTime = empty($usersPureLearnedTime[$student['userId']]) ? 0 : $usersPureLearnedTime[$student['userId']]['learnedTime'];
+            $exportMember['pureLearnTime'] = $pureLearnTime > 0 ? floor($pureLearnTime / 60) : '--';
+
             $questionCount = $this->getThreadService()->countThreads(
                 ['courseId' => $courseId, 'type' => 'question', 'userId' => $user['id']]
             );
@@ -777,6 +786,7 @@ class CourseSetController extends BaseController
             $this->trans('admin.course_manage.statistics.data_detail.finished_time'),
             $this->trans('admin.course_manage.statistics.data_detail.study_days'),
             $this->trans('admin.course_manage.statistics.data_detail.study_time'),
+            $this->trans('admin.course_manage.statistics.data_detail.pure_study_time'),
             $this->trans('admin.course_manage.statistics.data_detail.question_number'),
             $this->trans('admin.course_manage.statistics.data_detail.note_number'),
         ];

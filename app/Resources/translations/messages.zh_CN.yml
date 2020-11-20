@@ -5103,12 +5103,20 @@ admin.course_manage.statistics.data.plan_study_time: 计划被累加学习时长
 
 ## 任务统计详细数据
 admin.course_manage.statistics.data_detail.name: 用户名
-admin.course_manage.statistics.data_detail.join_time: 加入课程时间
-admin.course_manage.statistics.data_detail.finished_time: 完成课程时间
-admin.course_manage.statistics.data_detail.study_days: 课程学习天数
-admin.course_manage.statistics.data_detail.study_time: 课程学习时长（分）
+admin.course_manage.statistics.data_detail.join_time: 加入时间
+admin.course_manage.statistics.data_detail.finished_time: 完成时间
+admin.course_manage.statistics.data_detail.study_days: 学习天数
+admin.course_manage.statistics.data_detail.study_time: 累加学习时长（分）
+admin.course_manage.statistics.data_detail.pure_study_time: 去重学习时长（分）
 admin.course_manage.statistics.data_detail.question_number: 提问数
 admin.course_manage.statistics.data_detail.note_number: 笔记数
+admin.course_manage.statistics.data_detail.plan_study_time: 计划被累加学习时长（分）：%mins%
+admin.course_manage.statistics.data_detail.tips: >
+  <span style='font-size:14px'>
+    1. 累加学习时长（分）为用户在课程-计划下产生的所有学习时长累加。<br />
+    2. 去重学习时长（分）为该用户在课程-计划下产生的学习时长去重后累加。<br />
+    3. 其中视频课时学习时长统计维度（播放活跃时长or页面活跃时长）以在系统-课程设置-视频课时学习配置为准。<br />
+  </span>
 
 ## 用户数据统计
 admin.user.statistics.data_detail.note_number: 笔记数
