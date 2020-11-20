@@ -5,10 +5,10 @@
     <thead>
       <tr class="active">
         <th>{{ 'task.learn_data_detail.nickname'|trans }}</th>
-        <th>{{ 'task.learn_data_detail.createdTime'|trans }}</th>
-        <th>{{ 'task.learn_data_detail.finishedTime'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}</th>
-        <th>{{ 'task.learn_data_detail.learnTime'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}</th>
-        <th>{{ 'task.learn_data_detail.video_and_audio_learnTime'|trans }}</th>
+        <th>{{ 'task.learn_data_detail.join_time'|trans }}</th>
+        <th>{{ 'task.learn_data_detail.finished_time'|trans }}</th>
+        <th>{{ 'task.learn_data_detail.learn_total_time'|trans }}</th>
+        <th>{{ 'task.learn_data_detail.learn_deWeight_time'|trans }}</th>
       </tr>
     </thead>
     <tbody>
@@ -22,13 +22,8 @@
           {% else %}
             <td>-</td>
           {% endif %}
-          {% if videoEffectiveTimeStatistics.video_multiple == 'de-weight' %}
-            <td>{% if taskResult.pureTime > 0 %}{{ (taskResult.pureTime / 60)|number_format(1) }}{% else %}0{% endif %}</td>
-            <td>{% if taskResult.pureWatchTime > 0 %}{{ (taskResult.pureWatchTime / 60)|number_format(1) }}{% else %}0{% endif %}</td>
-          {% else %}
-            <td>{% if taskResult.time > 0 %}{{ (taskResult.time / 60)|number_format(1) }}{% else %}0{% endif %}</td>
-            <td>{% if taskResult.watchTime > 0 %}{{ (taskResult.watchTime / 60)|number_format(1) }}{% else %}0{% endif %}</td>
-          {% endif %}
+          <td>{% if taskResult.time > 0 %}{{ (taskResult.time / 60)|number_format(1) }}{% else %}0{% endif %}</td>
+          <td>{% if taskResult.pureTime > 0 %}{{ (taskResult.pureTime / 60)|number_format(1) }}{% else %}0{% endif %}</td>
         </tr>
       {% endfor %}
     </tbody>
