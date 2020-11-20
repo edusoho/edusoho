@@ -138,7 +138,7 @@ class SystemInitializerTest extends BaseTestCase
 
         $result = $this->getSchedulerService()->searchJobs([], [], 0, \PHP_INT_MAX);
 
-        $this->assertEquals(31, count($result));
+        $this->assertEquals(33, count($result));
 
         $this->assertArrayEquals([
             'Order_FinishSuccessOrdersJob',
@@ -172,6 +172,8 @@ class SystemInitializerTest extends BaseTestCase
             'StatisticsCoursePlanVideoDailyDataJob',
             'StatisticsUserStayDailyDataJob',
             'StatisticsUserVideoDailyDataJob',
+            'StatisticsUserLearnDailyDataJob',
+            'StatisticsCoursePlanLearnDailyDataJob',
             ], ArrayToolkit::column($result, 'name'));
     }
 

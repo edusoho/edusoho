@@ -23,7 +23,6 @@ use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\Taxonomy\Service\Impl\TagServiceImpl;
-use Biz\Testpaper\Service\TestpaperService;
 use Biz\User\UserException;
 use Biz\Visualization\Service\ActivityLearnDataService;
 use Biz\Visualization\Service\CoursePlanLearnDataDailyStatisticsService;

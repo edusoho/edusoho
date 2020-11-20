@@ -11,6 +11,7 @@ use Biz\Visualization\Dao\ActivityLearnRecordDao;
 use Biz\Visualization\Dao\ActivityStayDailyDao;
 use Biz\Visualization\Dao\ActivityVideoDailyDao;
 use Biz\Visualization\Dao\ActivityVideoWatchRecordDao;
+use Biz\Visualization\Dao\CoursePlanLearnDailyDao;
 use Biz\Visualization\Dao\CoursePlanStayDailyDao;
 use Biz\Visualization\Dao\CoursePlanVideoDailyDao;
 use Biz\Visualization\Dao\UserLearnDailyDao;
@@ -56,7 +57,6 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
     {
         $learnRecords = $this->getActivityVideoWatchRecordDao()->search(
             ['startTime_GE' => $startTime, 'endTime_LT' => $endTime],
-
             [],
             0,
             PHP_INT_MAX,
@@ -88,14 +88,11 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
     public function statisticsLearnDailyData($dayTime)
     {
         $statisticsSetting = $this->getSettingService()->get('videoEffectiveTimeStatistics', []);
-        $data = [];
         $conditions = ['dayTime' => $dayTime];
         $columns = ['userId', 'activityId', 'taskId', 'courseId', 'courseSetId', 'dayTime', 'sumTime', 'pureTime'];
         if (empty($statisticsSetting) || 'playing' === $statisticsSetting['statistical_dimension']) {
             $data = $this->getActivityVideoDailyDao()->search($conditions, [], 0, PHP_INT_MAX, $columns);
-        }
-
-        if ('page' === $statisticsSetting['statistical_dimension']) {
+        } else {
             $data = $this->getActivityStayDailyDao()->search($conditions, [], 0, PHP_INT_MAX, $columns);
         }
 
@@ -107,12 +104,40 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
             $this->getActivityLearnDailyDao()->batchCreate($data);
 
             $this->commit();
-
-            return true;
         } catch (\Exception $e) {
             $this->rollback();
             throw $e;
         }
+
+        return true;
+    }
+
+    public function statisticsUserLearnDailyData($dayTime)
+    {
+        $statisticsSetting = $this->getSettingService()->get('videoEffectiveTimeStatistics', []);
+        $conditions = ['dayTime' => $dayTime];
+        $columns = ['userId', 'dayTime', 'sumTime', 'pureTime'];
+        if (empty($statisticsSetting) || 'playing' == $statisticsSetting['statistical_dimension']) {
+            $data = $this->getUserVideoDailyDao()->search($conditions, [], 0, PHP_INT_MAX, $columns);
+        } else {
+            $data = $this->getUserStayDailyDao()->search($conditions, [], 0, PHP_INT_MAX, $columns);
+        }
+
+        return $this->getUserLearnDailyDao()->batchCreate($data);
+    }
+
+    public function statisticsCoursePlanLearnDailyData($dayTime)
+    {
+        $statisticsSetting = $this->getSettingService()->get('videoEffectiveTimeStatistics', []);
+        $conditions = ['dayTime' => $dayTime];
+        $columns = ['userId', 'courseId', 'courseSetId', 'dayTime', 'sumTime', 'pureTime'];
+        if (empty($statisticsSetting) || 'playing' == $statisticsSetting['statistical_dimension']) {
+            $data = $this->getCoursePlanVideoDailyDao()->search($conditions, [], 0, PHP_INT_MAX, $columns);
+        } else {
+            $data = $this->getCoursePlanStayDailyDao()->search($conditions, [], 0, PHP_INT_MAX, $columns);
+        }
+
+        return $this->getUserLearnDailyDao()->batchCreate($data);
     }
 
     public function statisticsCoursePlanStayDailyData($startTime, $endTime)
@@ -204,7 +229,6 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
     {
         $watchRecords = $this->getActivityVideoWatchRecordDao()->search(
             ['startTime_GE' => $startTime, 'endTime_LT' => $endTime],
-
             [],
             0,
             PHP_INT_MAX,
@@ -408,5 +432,13 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
     protected function getUserVideoDailyDao()
     {
         return $this->createDao('Visualization:UserVideoDailyDao');
+    }
+
+    /**
+     * @return CoursePlanLearnDailyDao
+     */
+    protected function getCoursePlanLearnDailyDao()
+    {
+        return $this->createDao('Visualization:CoursePlanLearnDailyDao');
     }
 }
