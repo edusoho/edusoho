@@ -3,7 +3,7 @@ import Api from 'common/api';
 
 export default class MonitoringEvents {
   constructor(params) {
-    this.OutFocusMask = new OutFocusMask('#task-content-iframe');
+    this.OutFocusMask = new OutFocusMask();
 
     this.activityTimer = null;
     this.ACTIVITY_TIME = 60;

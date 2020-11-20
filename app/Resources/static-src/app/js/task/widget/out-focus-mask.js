@@ -2,8 +2,9 @@ import postal from 'postal';
 import 'postal.federation';
 import 'postal.xframe';
 export default class OutFocusMask {
-  constructor(element) {
-    this.$element = $(element);
+  constructor() {
+    this.$element = $('.all-wrapper');
+    console.log(this.$element);
     this.mask = `
             <div class="out-focus-mask">
                 <div class="content">
@@ -13,20 +14,24 @@ export default class OutFocusMask {
                     </div>
                 </div>
             </div>`;
+    this.mask1 = `
+            <div class="out-focus-mask">
+                <div class="content">
+                    <div class="tips"></div>
+                </div>
+            </div>`;
 
     this.initEvent();
   }
 
   initEvent() {
-    this.$element.on('load', (event) => {
-      this.$element.contents().off('click', '.js-continue-studying');
-      this.$element.contents().on('click', '.js-continue-studying', () => this.continueStudying());
-    });
+    this.$element.off('click', '.js-continue-studying');
+    this.$element.on('click', '.js-continue-studying', () => this.continueStudying());
     this._registerChannel();
   }
 
   validateMask() {
-    return this.$element.contents().find('.out-focus-mask').length > 0;
+    return this.$element.find('.out-focus-mask').length > 0;
   }
 
   initLearStopTips() {
@@ -34,8 +39,8 @@ export default class OutFocusMask {
       return;
     }
 
-    this.$element.contents().find('body').append(this.mask);
-    this.$element.contents().find('.out-focus-mask .content .tips').html(Translator.trans('course.task.out_focus_mask.stop.tips'));
+    this.$element.append(this.mask);
+    this.$element.find('.out-focus-mask .content .tips').html(Translator.trans('course.task.out_focus_mask.stop.tips'));
     this.popAfter();
   }
 
@@ -44,8 +49,18 @@ export default class OutFocusMask {
       return;
     }
 
-    this.$element.contents().find('body').append(this.mask);
-    this.$element.contents().find('.out-focus-mask .content .tips').html(Translator.trans('course.task.out_focus_mask.anti_brush.tips'));
+    this.$element.append(this.mask);
+    this.$element.find('.out-focus-mask .content .tips').html(Translator.trans('course.task.out_focus_mask.anti_brush.tips'));
+    this.popAfter();
+  }
+
+  initBanTips() {
+    if (this.validateMask()) {
+      return;
+    }
+
+    this.$element.append(this.mask1);
+    this.$element.find('.out-focus-mask .content .tips').html(Translator.trans('course.task.out_focus_mask.anti_brush.tips'));
     this.popAfter();
   }
 
@@ -55,7 +70,7 @@ export default class OutFocusMask {
   }
 
   destroyMask() {
-    this.$element.contents().find('.out-focus-mask').remove();
+    this.$element.find('.out-focus-mask').remove();
   }
 
   popAfter() {
