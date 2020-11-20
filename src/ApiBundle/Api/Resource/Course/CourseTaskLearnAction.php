@@ -9,6 +9,7 @@ use Biz\Course\Service\CourseService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Biz\Visualization\Service\DataCollectService;
+use Biz\Visualization\Service\LearnControlService;
 
 class CourseTaskLearnAction extends AbstractResource
 {
@@ -19,14 +20,14 @@ class CourseTaskLearnAction extends AbstractResource
         if (self::ACTION_CHECK !== $action) {
             throw CommonException::ERROR_PARAMETER();
         }
+        $user = $this->getCurrentUser();
         $course = $this->getCourseService()->getCourse($courseId);
         $task = $this->getTaskService()->getTask($taskId);
         if (empty($course) || empty($task)) {
             $allowLearn = false;
-            $denyReason = 'course_task_item';
+            $denyReason = 'course_task_not_exist';
         } else {
-            $allowLearn = false;
-            $denyReason = 'course_task_item';
+            list($allowLearn, $denyReason) = $this->getLearnControlService()->checkCreateNewFlow($user['id'], $request->query->get('lastSign', ''));
         }
 
         return [
@@ -65,5 +66,13 @@ class CourseTaskLearnAction extends AbstractResource
     protected function getSettingService()
     {
         return $this->service('Setting:SettingService');
+    }
+
+    /**
+     * @return LearnControlService
+     */
+    protected function getLearnControlService()
+    {
+        return $this->service('Visualization:LearnControlService');
     }
 }
