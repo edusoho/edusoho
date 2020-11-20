@@ -164,8 +164,10 @@ export default class TaskPipe {
       },
     }).then(res => {
       this.record = res.record;
-      if (!res.learnControl.allowLearn && res.learnControl.denyReason === 'exist_new_learning') {
-        this.MonitoringEvents.triggerEvent('exist_new_learning');
+      if (!res.learnControl.allowLearn && res.learnControl.denyReason === 'kick_previous') {
+        this.MonitoringEvents.triggerEvent('kick_previous');
+      } else if (!res.learnControl.allowLearn && res.learnControl.denyReason === 'reject_current') {
+        this.MonitoringEvents.triggerEvent('reject_current');
       }
     }).catch(error => {
       this._clearInterval();

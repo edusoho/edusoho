@@ -43,11 +43,11 @@ export default class MonitoringEvents {
 
   triggerEvent(type) { // 触发事件
     this._doing();
-    if (type === 'exist_new_learning') {
+    if (type === 'kick_previous') {
       this.OutFocusMask.initAntiBrushTips();
       return;
     }
-    if (type === 'ban_learning') {
+    if (type === 'reject_current') {
       this.OutFocusMask.initBanTips();
       return;
     }
@@ -107,8 +107,10 @@ export default class MonitoringEvents {
       },
     }).then(res => {
       this.record = res.record;
-      if (!res.learnControl.allowLearn && res.learnControl.denyReason === 'exist_new_learning') {
-        this.triggerEvent('exist_new_learning');
+      if (!res.learnControl.allowLearn && res.learnControl.denyReason === 'kick_previous') {
+        this.triggerEvent('kick_previous');
+      } else if (!res.learnControl.allowLearn && res.learnControl.denyReason === 'reject_current') {
+        this.triggerEvent('reject_current');
       }
       this._clearInterval();
       this._initInterval();
