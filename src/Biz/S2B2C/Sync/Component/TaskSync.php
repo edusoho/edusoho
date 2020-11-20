@@ -15,7 +15,6 @@ class TaskSync extends AbstractEntitySync
      * - Activity 活动信息
      *   - ActivityConfig 活动自定义信息
      *   - Material 关联到activity的Material
-     *   - Testpaper 关联到Activity的testpaper.
      */
 
     /*
