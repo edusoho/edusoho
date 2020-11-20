@@ -145,10 +145,6 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             'exitCourseSetNum' => $this->findUserOperateCourseSetNum('exit', $conditions),
             'joinedCourseNum' => $this->findUserOperateCourseNum('join', $conditions),
             'exitCourseNum' => $this->findUserOperateCourseNum('exit', $conditions),
-            'joinedTaskNum' => $this->getTaskResultService()->countTaskNumGroupByUserId([
-                'createdTime_GE' => $conditions['createdTime_GE'],
-                'createdTime_LT' => $conditions['createdTime_LT'],
-            ]),
         ];
 
         if (!isset($userIds)) {

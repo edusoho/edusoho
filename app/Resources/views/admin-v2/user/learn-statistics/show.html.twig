@@ -16,8 +16,11 @@
       </div>
       <a class="btn btn-primary" id="search">{{'user.learn.statistics.search'|trans}}</a>
       {% include 'export/export-btn.html.twig' with
-      { 'exportFileName': 'user-learn-statistics', 
-        'targetFormId': 'user-search'}  
+      {
+        'exportFileName': 'user-learn-statistics',
+        'targetFormId': 'user-search',
+        'fileNames': ['user-course-statistics', 'user-lesson-statistics', 'user-learn-statistics']
+      }
       %}
       {% include 'admin-v2/widget/tooltip-widget.html.twig' with { icon: 'glyphicon-question-sign', content: 'user.learn.statistics.manage.describe_tips'|trans|raw, placement: 'left'} %}
     </form>
@@ -29,7 +32,6 @@
           <th>{{'user.learn.statistics.exit.classroom.num'|trans}}</th>
           <th>{{'user.learn.statistics.join.course.num'|trans}}</th>
           <th>{{'user.learn.statistics.exit.course.num'|trans}}</th>
-          <th>{{'user.learn.statistics.join.task.num'|trans}}</th>
           <th>{{'user.learn.statistics.finished.task.num'|trans}}</th>
           <th>{{'user.learn.statistics.video_playing.seconds'|trans}}</th>
           <th>{{'user.learn.statistics.page_stay.seconds'|trans}}</th>
@@ -54,7 +56,6 @@
               <td>{{ statistic.exitClassroomNum|default(0) }}</td>
               <td>{{ statistic.joinedCourseNum|default(0) }}</td>
               <td>{{ statistic.exitCourseNum|default(0) }}</td>
-              <td>{{ statistic.joinedTaskNum|default(0) }}</td>
               <td>{{ statistic.finishedTaskNum|default(0) }}</td>
               <td>{{ (userLearnRecords[user.id].userSumTime|default(0)/60)|number_format(0) }}</td>
               <td>{{ (userLearnRecords[user.id].userPureTime|default(0)/60)|number_format(0) }}</td>

@@ -10,6 +10,10 @@ interface ActivityDataDailyStatisticsService
 
     public function statisticsLearnDailyData($dayTime);
 
+    public function statisticsUserLearnDailyData($dayTime);
+
+    public function statisticsCoursePlanLearnDailyData($dayTime);
+
     public function statisticsUserStayDailyData($startTime, $endTime);
 
     public function statisticsUserVideoDailyData($startTime, $endTime);

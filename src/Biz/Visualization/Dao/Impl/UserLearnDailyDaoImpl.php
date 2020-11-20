@@ -12,7 +12,7 @@ class UserLearnDailyDaoImpl extends AdvancedDaoImpl implements UserLearnDailyDao
     public function sumUserLearnTime($conditions)
     {
         $builder = $this->createQueryBuilder($conditions)
-            ->select("userId, sum(sumTime) as userSumTime, sum(pureTime) as userPureTime")
+            ->select('userId, sum(sumTime) as userSumTime, sum(pureTime) as userPureTime')
             ->groupBy('userId');
 
         return $builder->execute()->fetchAll();

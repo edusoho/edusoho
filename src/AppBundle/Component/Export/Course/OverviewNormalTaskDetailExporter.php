@@ -5,7 +5,6 @@ namespace AppBundle\Component\Export\Course;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Component\Export\Exporter;
 use Biz\Task\Service\TaskResultService;
-use Biz\Visualization\Service\ActivityDataDailyStatisticsService;
 
 class OverviewNormalTaskDetailExporter extends Exporter
 {
@@ -32,10 +31,10 @@ class OverviewNormalTaskDetailExporter extends Exporter
     {
         return [
             'task.learn_data_detail.nickname',
-            'task.learn_data_detail.createdTime',
-            'task.learn_data_detail.finishedTime',
-            'task.learn_data_detail.learnTime',
-            'task.learn_data_detail.video_and_audio_learnTime',
+            'task.learn_data_detail.join_time',
+            'task.learn_data_detail.finished_time',
+            'task.learn_data_detail.learn_total_time',
+            'task.learn_data_detail.learn_deWeight_time',
         ];
     }
 
@@ -52,7 +51,7 @@ class OverviewNormalTaskDetailExporter extends Exporter
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         $datas = [];
-        $videoEffectiveTimeStatistics = $this->getActivityDataDailyStatisticsService()->getVideoEffectiveTimeStatisticsSetting();
+
         foreach ($taskResults as $taskResult) {
             $user = $users[$taskResult['userId']];
 
@@ -60,13 +59,8 @@ class OverviewNormalTaskDetailExporter extends Exporter
             $data[] = is_numeric($user['nickname']) ? $user['nickname']."\t" : $user['nickname'];
             $data[] = date('Y-m-d H:i:s', $taskResult['createdTime']);
             $data[] = empty($taskResult['finishedTime']) ? '-' : date('Y-m-d H:i:s', $taskResult['finishedTime']);
-            if ('de-weight' === $videoEffectiveTimeStatistics['video_multiple']) {
-                $data[] = empty($taskResult['pureTime']) ? '-' : round(($taskResult['pureTime'] / 60), 1);
-                $data[] = empty($taskResult['pureWatchTime']) ? '-' : round(($taskResult['pureWatchTime'] / 60), 1);
-            } else {
-                $data[] = empty($taskResult['time']) ? '-' : round(($taskResult['time'] / 60), 1);
-                $data[] = empty($taskResult['watchTime']) ? '-' : round(($taskResult['watchTime'] / 60), 1);
-            }
+            $data[] = empty($taskResult['time']) ? '-' : round(($taskResult['time'] / 60), 1);
+            $data[] = empty($taskResult['pureTime']) ? '-' : round(($taskResult['pureTime'] / 60), 1);
 
             $datas[] = $data;
         }
@@ -119,13 +113,5 @@ class OverviewNormalTaskDetailExporter extends Exporter
     protected function getTaskResultService()
     {
         return $this->getBiz()->service('Task:TaskResultService');
-    }
-
-    /**
-     * @return ActivityDataDailyStatisticsService
-     */
-    protected function getActivityDataDailyStatisticsService()
-    {
-        return $this->getBiz()->service('Visualization:ActivityDataDailyStatisticsService');
     }
 }

@@ -60,6 +60,7 @@ class DataVisualizationTable extends Migration
               `sign` varchar(64) NOT NULL DEFAULT '' COMMENT '学习行为签名',
               `active` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否活跃，1：活跃 2：不活跃',
               `startTime` int(10) unsigned NOT NULL COMMENT '开始时间',
+              `lastLearnTime` int(10) unsigned NOT NULL COMMENT '最新学习时间',
               `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

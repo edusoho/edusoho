@@ -329,6 +329,11 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         return $this->getTaskResultDao()->findTaskresultsByTaskId($taskId);
     }
 
+    public function findTaskResultsByUserId($userId)
+    {
+        return $this->getTaskResultDao()->findByUserId($userId);
+    }
+
     public function getTaskResultByTaskIdAndUserId($taskId, $userId)
     {
         return $this->getTaskResultDao()->getByTaskIdAndUserId($taskId, $userId);

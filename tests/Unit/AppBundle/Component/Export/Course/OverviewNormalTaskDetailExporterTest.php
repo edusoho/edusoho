@@ -26,6 +26,18 @@ class OverviewNormalTaskDetailExporterTest extends BaseTestCase
         );
 
         $this->mockBiz(
+            'Visualization:ActivityDataDailyStatisticsService',
+            [
+                [
+                    'functionName' => 'getVideoEffectiveTimeStatisticsSetting',
+                    'returnValue' => [
+                        'video_multiple' => 'de-weight',
+                    ],
+                ],
+            ]
+        );
+
+        $this->mockBiz(
             'Task:TaskResultService',
             [
                 [

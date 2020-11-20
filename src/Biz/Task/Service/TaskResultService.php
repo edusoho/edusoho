@@ -67,6 +67,8 @@ interface TaskResultService
 
     public function findTaskresultsByTaskId($taskId);
 
+    public function findTaskResultsByUserId($userId);
+
     public function countTaskNumGroupByUserId($conditions);
 
     public function getTaskResultByTaskIdAndUserId($taskId, $userId);

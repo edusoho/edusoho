@@ -18,9 +18,36 @@ class ActivityLearnRecordDaoTest extends BaseTestCase
         self::assertEquals($result['userId'], $defaultMockFields['userId']);
     }
 
-    protected function getDefaultMockFields()
+    public function testGetLastLearnRecord()
     {
-        return [
+        $currentTime = time();
+        $record1 = $this->getActivityLearnRecordDao()->create($this->getDefaultMockFields([
+            'userId' => 5,
+            'startTime' => $currentTime,
+            'endTime' => $currentTime + 60,
+        ]));
+
+        $record2 = $this->getActivityLearnRecordDao()->create($this->getDefaultMockFields([
+            'userId' => 5,
+            'startTime' => $currentTime + 60,
+            'endTime' => $currentTime + 120,
+        ]));
+
+        $record3 = $this->getActivityLearnRecordDao()->create($this->getDefaultMockFields([
+            'userId' => 6,
+            'startTime' => $currentTime + 150,
+            'endTime' => $currentTime + 210,
+        ]));
+
+        $result1 = $this->getActivityLearnRecordDao()->getUserLastLearnRecord(5);
+        $result2 = $this->getActivityLearnRecordDao()->getUserLastLearnRecord(6);
+        self::assertEquals($record2, $result1);
+        self::assertEquals($record3, $result2);
+    }
+
+    protected function getDefaultMockFields($customFields = [])
+    {
+        return array_merge([
             'userId' => 3,
             'activityId' => 1,
             'taskId' => 1,
@@ -34,7 +61,7 @@ class ActivityLearnRecordDaoTest extends BaseTestCase
             'duration' => 120,
             'mediaType' => 'video',
             'flowSign' => 'test12345',
-        ];
+        ], $customFields);
     }
 
     /**
