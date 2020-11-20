@@ -76,7 +76,7 @@ export default class TaskPipe {
     this._flush();
     window.onbeforeunload = () => {
       this._clearInterval();
-      this._flush('beforeunload');
+      this._flush({ type: 'beforeunload' });
     };
     this._clearInterval();
     this.intervalId = setInterval(() => this._flush(), this.learnTimeSec*1000);
@@ -86,7 +86,7 @@ export default class TaskPipe {
     clearInterval(this.intervalId);
   }
 
-  _flush(type = '', param = {}) {
+  _flush(param = {}) {
     if (this.isLogout) return;
     if (this.sign === '') {
       let flowSign = localStorage.getItem('flowSign');
@@ -106,7 +106,7 @@ export default class TaskPipe {
       }).then(res => {
         this.sign = res.record.flowSign;
         this.record = res.record;
-        this._doing(type);
+        this._doing(param);
         this.MonitoringEvents = new MonitoringEvents({
           taskId: this.taskId,
           courseId: this.courseId,
@@ -117,7 +117,7 @@ export default class TaskPipe {
         });
       });
     } else{
-      this._doing(type);
+      this._doing(param);
     }
 
 
@@ -153,7 +153,7 @@ export default class TaskPipe {
     // return ajax;
   }
 
-  _doing(type) {
+  _doing(param) {
     Api.courseTaskEvent.pushEvent({
       params: {
         courseId: this.courseId,
@@ -168,7 +168,7 @@ export default class TaskPipe {
       },
     }).then(res => {
       this.record = res.record;
-      if (type === 'beforeunload') {
+      if (param.type === 'beforeunload') {
         localStorage.setItem('flowSign', res.record.flowSign);
       }
       if (!res.learnControl.allowLearn && res.learnControl.denyReason === 'kick_previous') {
