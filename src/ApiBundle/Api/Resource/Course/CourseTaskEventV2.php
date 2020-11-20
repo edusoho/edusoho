@@ -50,6 +50,19 @@ class CourseTaskEventV2 extends AbstractResource
         $task = $this->getTaskService()->getTask($taskId);
         $activity = $this->getActivityService()->getActivity($task['activityId']);
         $sign = date('YmdHis').'-'.$user['id'].'-'.$activity['id'].'-'.substr(md5($user['id'].$data['client'].microtime()), 0, 6);
+        list($canCreate, $denyReason) = $this->getLearnControlService()->checkCreateNewFlow($user['id'], $request->request->get('lastSign', ''));
+        if (!$canCreate) {
+            return [
+                'taskResult' => null,
+                'nextTask' => null,
+                'completionRate' => null,
+                'record' => null,
+                'learnControl' => [
+                    'allowLearn' => false,
+                    'denyReason' => $denyReason,
+                ],
+            ];
+        }
         $flow = $this->getDataCollectService()->createLearnFlow($user['id'], $activity['id'], $sign);
         $currentTime = time();
         $record = $this->getDataCollectService()->push([
@@ -99,6 +112,8 @@ class CourseTaskEventV2 extends AbstractResource
         $user = $this->getCurrentUser();
         $task = $this->getTaskService()->getTask($taskId);
         $activity = $this->getActivityService()->getActivity($task['activityId']);
+        list($canDoing, $denyReason) = $this->getLearnControlService()->checkActive($user['id'], $data['sign'], $request->request->get('reActive', 0));
+        $flow = $this->getDataCollectService()->getFlowBySign($user['id'], $data['sign']);
         $currentTime = time();
         $record = $this->getDataCollectService()->push([
             'userId' => $user['id'],
@@ -108,21 +123,22 @@ class CourseTaskEventV2 extends AbstractResource
             'courseSetId' => $task['fromCourseSetId'],
             'event' => self::EVENT_DOING,
             'client' => $data['client'],
-            'startTime' => $data['startTime'],
-            'endTime' => $data['startTime'] + $data['duration'],
-            'duration' => $data['duration'],
+            'startTime' => $currentTime - $flow['lastLearnTime'] - 20 > $data['duration'] ? $currentTime - $data['duration'] : $flow['lastLearnTime'],
+            'endTime' => $currentTime,
+            'duration' => $currentTime - $flow['lastLearnTime'] - 20 > $data['duration'] ? $data['duration'] : $currentTime - $flow['lastLearnTime'],
             'mediaType' => $activity['mediaType'],
             'flowSign' => $data['sign'],
             'data' => [
                 'userAgent' => $request->headers->get('user-agent'),
             ],
         ]);
+        $this->getDataCollectService()->updateLearnFlow($flow['id'], ['lastLearnTime' => $record['endTime']]);
         $triggerData = ['lastTime' => $record['endTime']];
         $result = $this->getTaskService()->trigger($taskId, self::EVENT_DOING, $triggerData);
 
         $watchResult = null;
         if (!empty($data['watchData'])) {
-            $watchResult = $this->watching($request, $courseId, $taskId, $data);
+            $watchResult = $this->watching($request, $courseId, $taskId, $data, $record);
         }
 
         if (self::EVENT_FINISH === $result['status']) {
@@ -141,8 +157,8 @@ class CourseTaskEventV2 extends AbstractResource
             'record' => $record,
             'watchResult' => $watchResult,
             'learnControl' => [
-                'allowLearn' => true,
-                'denyReason' => '',
+                'allowLearn' => $canDoing,
+                'denyReason' => $denyReason,
             ],
         ];
     }
@@ -152,6 +168,8 @@ class CourseTaskEventV2 extends AbstractResource
         $user = $this->getCurrentUser();
         $task = $this->getTaskService()->getTask($taskId);
         $activity = $this->getActivityService()->getActivity($task['activityId']);
+        list($canDoing, $denyReason) = $this->getLearnControlService()->checkActive($user['id'], $data['sign'], $request->request->get('reActive', 0));
+        $flow = $this->getDataCollectService()->getFlowBySign($user['id'], $data['sign']);
         $currentTime = time();
         $record = $this->getDataCollectService()->push([
             'userId' => $user['id'],
@@ -161,9 +179,9 @@ class CourseTaskEventV2 extends AbstractResource
             'courseSetId' => $task['fromCourseSetId'],
             'event' => self::EVENT_FINISH,
             'client' => $data['client'],
-            'startTime' => $data['startTime'],
-            'endTime' => $data['startTime'] + $data['duration'],
-            'duration' => $data['duration'],
+            'startTime' => $currentTime - $flow['lastLearnTime'] - 20 > $data['duration'] ? $currentTime - $data['duration'] : $flow['lastLearnTime'],
+            'endTime' => $currentTime,
+            'duration' => $currentTime - $flow['lastLearnTime'] - 20 > $data['duration'] ? $data['duration'] : $currentTime - $flow['lastLearnTime'],
             'mediaType' => $activity['mediaType'],
             'flowSign' => $data['sign'],
             'data' => [
@@ -189,19 +207,18 @@ class CourseTaskEventV2 extends AbstractResource
             'completionRate' => $completionRate,
             'record' => $record,
             'learnControl' => [
-                'allowLearn' => true,
-                'denyReason' => '',
+                'allowLearn' => $canDoing,
+                'denyReason' => $denyReason,
             ],
         ];
     }
 
-    protected function watching(ApiRequest $request, $courseId, $taskId, $data)
+    protected function watching(ApiRequest $request, $courseId, $taskId, $data, $record)
     {
         $user = $this->getCurrentUser();
         $task = $this->getTaskService()->getTask($taskId);
         $activity = $this->getActivityService()->getActivity($task['activityId']);
         $watchData = $data['watchData'];
-        $currentTime = time();
         $record = $this->getDataCollectService()->push([
             'userId' => $user['id'],
             'activityId' => $task['activityId'],
@@ -210,9 +227,9 @@ class CourseTaskEventV2 extends AbstractResource
             'courseSetId' => $task['fromCourseSetId'],
             'event' => self::EVENT_WATCHING,
             'client' => $data['client'],
-            'startTime' => $watchData['startTime'],
-            'endTime' => $watchData['startTime'] + $watchData['duration'],
-            'duration' => $watchData['duration'],
+            'startTime' => $record['duration'] > $watchData['duration'] ? $record['endTime'] - $watchData['duration'] : $record['startTime'],
+            'endTime' => $record['endTime'],
+            'duration' => $record['duration'] > $watchData['duration'] ? $watchData['duration'] : $record['duration'],
             'mediaType' => $activity['mediaType'],
             'flowSign' => $data['sign'],
             'data' => [
@@ -246,7 +263,7 @@ class CourseTaskEventV2 extends AbstractResource
 
     protected function getKickOutStatus($userId, $sign)
     {
-        $this->getLearnControlService()->isActive($userId, $sign);
+        $this->getLearnControlService()->checkActive($userId, $sign);
     }
 
     /**

@@ -7,8 +7,9 @@ use Biz\BaseService;
 use Biz\Visualization\Dao\ActivityLearnRecordDao;
 use Biz\Visualization\Dao\ActivityVideoWatchRecordDao;
 use Biz\Visualization\Dao\UserActivityLearnFlowDao;
+use Biz\Visualization\Service\DataCollectService;
 
-class DataCollectServiceImpl extends BaseService
+class DataCollectServiceImpl extends BaseService implements DataCollectService
 {
     //==============CLIENT==============
 
@@ -125,7 +126,7 @@ class DataCollectServiceImpl extends BaseService
 
     public function updateLearnFlow($id, $flow)
     {
-        $flow = ArrayToolkit::parts($flow, ['active']);
+        $flow = ArrayToolkit::parts($flow, ['active', 'lastLearnTime']);
 
         return $this->getUserActivityLearnFlowDao()->update($id, $flow);
     }

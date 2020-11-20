@@ -11,4 +11,6 @@ interface LearnControlService
     public function freshFlow($userId, $sign);
 
     public function checkActive($userId, $sign, $reActive = false);
+
+    public function checkCreateNewFlow($userId, $invalidSign = '');
 }

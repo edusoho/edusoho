@@ -41,6 +41,7 @@ class LearnControlServiceImpl extends BaseService implements LearnControlService
      * @param false $reActive 是否需要重新使其变成活跃状态，需要标记其他为非活跃
      *
      * @return array
+     *               核验已有flow是否有效
      */
     public function checkActive($userId, $sign, $reActive = false)
     {
@@ -76,7 +77,8 @@ class LearnControlServiceImpl extends BaseService implements LearnControlService
      * @param $userId
      * @param string $invalidSign
      *
-     * @return array|bool
+     * @return array
+     *               是否可以新增观看流水
      */
     public function checkCreateNewFlow($userId, $invalidSign = '')
     {
