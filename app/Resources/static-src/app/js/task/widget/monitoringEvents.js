@@ -47,6 +47,10 @@ export default class MonitoringEvents {
       this.OutFocusMask.initAntiBrushTips();
       return;
     }
+    if (type === 'ban_learning') {
+      this.OutFocusMask.initBanTips();
+      return;
+    }
     this.OutFocusMask.initLearStopTips();
   }
 

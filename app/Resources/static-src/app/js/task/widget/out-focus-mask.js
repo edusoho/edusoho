@@ -4,7 +4,6 @@ import 'postal.xframe';
 export default class OutFocusMask {
   constructor() {
     this.$element = $('.all-wrapper');
-    console.log(this.$element);
     this.mask = `
             <div class="out-focus-mask">
                 <div class="content">
