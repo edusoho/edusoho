@@ -112,7 +112,11 @@ class CourseTaskEventV2 extends AbstractResource
         $user = $this->getCurrentUser();
         $task = $this->getTaskService()->getTask($taskId);
         $activity = $this->getActivityService()->getActivity($task['activityId']);
-        list($canDoing, $denyReason) = $this->getLearnControlService()->checkActive($user['id'], $data['sign'], $request->request->get('reActive', 0));
+        if (in_array($task['type'], ['live', 'testpaper', 'homework'])) {
+            list($canDoing, $denyReason) = [true, ''];
+        } else {
+            list($canDoing, $denyReason) = $this->getLearnControlService()->checkActive($user['id'], $data['sign'], $request->request->get('reActive', 0));
+        }
         $flow = $this->getDataCollectService()->getFlowBySign($user['id'], $data['sign']);
         $currentTime = time();
         $record = $this->getDataCollectService()->push([
