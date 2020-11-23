@@ -45,6 +45,48 @@ class CourseExtension extends Extension implements ServiceProviderInterface
         ];
     }
 
+    public function getTaskTypes()
+    {
+        return [
+            'audio' => [
+                'name' => 'user.learn.statistics.lesson.audio'
+            ],
+            'discuss' => [
+                'name' => 'user.learn.statistics.lesson.discuss'
+            ],
+            'doc' => [
+                'name' => 'user.learn.statistics.lesson.doc'
+            ],
+            'download' => [
+                'name' => 'user.learn.statistics.lesson.download'
+            ],
+            'exercise' => [
+                'name' => 'user.learn.statistics.lesson.exercise'
+            ],
+            'flash' => [
+                'name' => 'user.learn.statistics.lesson.flash'
+            ],
+            'homework' => [
+                'name' => 'user.learn.statistics.lesson.homework'
+            ],
+            'live' => [
+                'name' => 'user.learn.statistics.lesson.live'
+            ],
+            'ppt' => [
+                'name' => 'user.learn.statistics.lesson.ppt'
+            ],
+            'testpaper' => [
+                'name' => 'user.learn.statistics.lesson.testpaper'
+            ],
+            'text' => [
+                'name' => 'user.learn.statistics.lesson.text'
+            ],
+            'video' => [
+                'name' => 'user.learn.statistics.lesson.video'
+            ],
+        ];
+    }
+
     public function getCourseShowMetas()
     {
         $widgets = [
