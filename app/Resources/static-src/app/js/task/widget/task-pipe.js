@@ -121,6 +121,7 @@ export default class TaskPipe {
       }).then(res => {
         this.MonitoringEvents = new MonitoringEvents({
           videoPlayRule: this.videoPlayRule,
+          taskPipe: this
         });
 
         if (!res.learnControl.allowLearn && res.learnControl.denyReason === 'kick_previous') {

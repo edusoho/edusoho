@@ -24,8 +24,8 @@ export default class OutFocusMask {
   }
 
   initEvent() {
-    this.$element.off('click', '.js-continue-studying');
-    this.$element.on('click', '.js-continue-studying', () => this.continueStudying());
+    // this.$element.off('click', '.js-continue-studying');
+    // this.$element.on('click', '.js-continue-studying', () => this.continueStudying());
     this._registerChannel();
   }
 
