@@ -2,11 +2,8 @@
 
 namespace Tests\Unit\Component\Export;
 
-use AppBundle\Common\ReflectionUtils;
 use AppBundle\Component\Export\BatchExporter;
-use AppBundle\Component\Export\Exporter;
 use Biz\BaseTestCase;
-use Symfony\Component\Filesystem\Filesystem;
 
 class BatchExporterTest extends BaseTestCase
 {
