@@ -7,7 +7,11 @@
           <p>请勿同时多开任务学习</p>
           <p>不要一心多用哦！</p>
         </div>
-        <van-button color="#43bc60" size="small" @click="onKeepLearning">
+        <van-button
+          color="#43bc60"
+          size="small"
+          @click="onKeepLearning('ineffective_learning')"
+        >
           继续学习
         </van-button>
       </div>
@@ -19,7 +23,11 @@
           <p>请勿同时多开任务学习</p>
           <p>不要一心多用哦！</p>
         </div>
-        <van-button color="#43bc60" size="small" @click="onKeepLearning">
+        <van-button
+          color="#43bc60"
+          size="small"
+          @click="onKeepLearning('kick_previous')"
+        >
           继续学习
         </van-button>
       </div>
@@ -45,6 +53,14 @@ export default {
     isShow: {
       type: Boolean,
       default: false,
+    },
+  },
+  methods: {
+    /**
+     * 继续学习
+     */
+    onKeepLearning(type) {
+      this.$emit('outFocusMask', type);
     },
   },
 };

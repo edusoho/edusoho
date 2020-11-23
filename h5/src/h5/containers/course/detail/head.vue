@@ -3,6 +3,7 @@
     <out-focus-mask
       :type="outFocusMaskType"
       :isShow="isShowOutFocusMask"
+      @outFocusMask="outFocusMask"
     ></out-focus-mask>
     <div
       v-if="textContent"

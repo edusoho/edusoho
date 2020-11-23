@@ -171,12 +171,9 @@ export default {
       this.reportIntervalTime = null;
       this.reportLearnTime = null;
     },
-    /**
-     * 继续学习
-     */
-    onKeepLearning() {
+    outFocusMask(type) {
+      console.log(type);
       this.isShowOutFocusMask = false;
-      console.log('继续学习');
     },
   },
 };
