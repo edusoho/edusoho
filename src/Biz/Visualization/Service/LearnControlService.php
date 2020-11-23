@@ -13,4 +13,6 @@ interface LearnControlService
     public function checkActive($userId, $sign, $reActive = false);
 
     public function checkCreateNewFlow($userId, $invalidSign = '');
+
+    public function getMultipleLearnSetting();
 }

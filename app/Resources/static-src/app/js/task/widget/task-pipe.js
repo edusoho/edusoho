@@ -9,12 +9,15 @@ export default class TaskPipe {
   constructor(element) {
     this.element = $(element);
     this.eventUrl = this.element.data('eventUrl');
+    this.videoPlayRule = this.element.data('videoPlayRule');
     this.learnTimeSec = this.element.data('learnTimeSec');
+    this.TASK_PIPE_INTERNAL = this.element.data('learnTimeSec');
     this.userId = this.element.data('userId');
     this.fileId = this.element.data('fileId');
     this.taskId = this.element.data('taskId');
     this.courseId = this.element.data('courseId');
     this.isLogout = false;
+    this.taskPipeCounter = 0;
     if (parseInt(this.element.data('lastLearnTime')) != parseInt(DurationStorage.get(this.userId, this.fileId))) {
       DurationStorage.del(this.userId, this.fileId);
       DurationStorage.set(this.userId, this.fileId, this.element.data('lastLearnTime'));
@@ -76,10 +79,18 @@ export default class TaskPipe {
     this._flush();
     window.onbeforeunload = () => {
       this._clearInterval();
-      this._flush({ type: 'beforeunload' });
+      // this._flush({ type: 'beforeunload' });
+      localStorage.setItem('flowSign', this.sign);
     };
     this._clearInterval();
-    this.intervalId = setInterval(() => this._flush(), this.learnTimeSec*1000);
+    this.intervalId = setInterval(() => this._addPipeCounter(), 1000);
+  }
+
+  _addPipeCounter() {
+    this.taskPipeCounter++;
+    if (this.taskPipeCounter >= this.TASK_PIPE_INTERNAL) {
+      this._flush();
+    }
   }
 
   _clearInterval() {
@@ -89,9 +100,11 @@ export default class TaskPipe {
   _flush(param = {}) {
     if (this.isLogout) return;
     if (this.sign === '') {
+      let customData = {};
       let flowSign = localStorage.getItem('flowSign');
       if (flowSign) {
-        this.sign = flowSign;
+        this.lastSign = flowSign;
+        customData.lastSign = flowSign;
         localStorage.removeItem('flowSign');
       }
       Api.courseTaskEvent.pushEvent({
@@ -100,24 +113,27 @@ export default class TaskPipe {
           taskId: this.taskId,
           eventName: 'start',
         },
-        data: {
+        data: Object.assign({
           client : 'pc',
-        },
+        }, customData),
       }).then(res => {
+        this.MonitoringEvents = new MonitoringEvents({
+          videoPlayRule: this.videoPlayRule,
+        });
+
+        if (!res.learnControl.allowLearn && res.learnControl.denyReason === 'kick_previous') {
+          this.MonitoringEvents.triggerEvent('kick_previous');
+          return ;
+        } else if (!res.learnControl.allowLearn && res.learnControl.denyReason === 'reject_current') {
+          this.MonitoringEvents.triggerEvent('reject_current');
+          this.element.attr('src', '');
+          return;
+        }
         this.sign = res.record.flowSign;
         this.record = res.record;
         this._doing(param);
-        this.MonitoringEvents = new MonitoringEvents({
-          taskId: this.taskId,
-          courseId: this.courseId,
-          sign: this.sign,
-          record: this.record,
-          _clearInterval: this._clearInterval,
-          _initInterval: this._initInterval
-        });
       });
     } else{
-      console.log(param);
       this._doing(param);
     }
 
@@ -158,8 +174,7 @@ export default class TaskPipe {
     let data = {
       client: 'pc',
       sign: this.sign,
-      startTime: this.record.endTime,
-      duration: 60,
+      duration: this.taskPipeCounter,
     };
     if (param.watchTime) {
       let watchData = {
@@ -178,9 +193,7 @@ export default class TaskPipe {
       data: data,
     }).then(res => {
       this.record = res.record;
-      if (param.type === 'beforeunload') {
-        localStorage.setItem('flowSign', res.record.flowSign);
-      }
+      this.taskPipeCounter = 0;
       if (!res.learnControl.allowLearn && res.learnControl.denyReason === 'kick_previous') {
         this.MonitoringEvents.triggerEvent('kick_previous');
       } else if (!res.learnControl.allowLearn && res.learnControl.denyReason === 'reject_current') {

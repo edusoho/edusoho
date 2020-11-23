@@ -261,6 +261,7 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
         $data = ArrayToolkit::groupIndex($data, 'userId', 'taskId');
 
         $updateFields = [];
+        //taskTime 如何计算
         foreach ($taskResults as $taskResult) {
             if (!empty($data[$taskResult['userId']][$taskResult['courseTaskId']])) {
                 $learnData = $data[$taskResult['userId']][$taskResult['courseTaskId']];
