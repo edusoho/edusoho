@@ -187,6 +187,9 @@ export default class TaskPipe {
       };
       data = Object.assign(data, watchData)
     }
+    if (param.reActive) {
+      data.reActive = param.reActive;
+    }
     Api.courseTaskEvent.pushEvent({
       params: {
         courseId: this.courseId,

@@ -38,10 +38,6 @@ class CourseTaskEventV2 extends AbstractResource
         if (self::EVENT_FINISH === $event) {
             return $this->finish($request, $courseId, $taskId, $data);
         }
-//
-//        if (self::EVENT_WATCHING === $event) {
-//            return $this->watching($request, $courseId, $taskId, $data);
-//        }
     }
 
     protected function start(ApiRequest $request, $courseId, $taskId, $data)

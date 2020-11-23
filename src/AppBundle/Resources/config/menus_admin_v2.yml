@@ -577,7 +577,7 @@ admin_v2:
                                 admin_v2_information_collect:
                                     router_name: admin_v2_information_collect
                                     name: admin_v2.information_collect.tab
-                                    children: 
+                                    children:
                                         admin_v2_information_collect_create:
                                             name: admin_v2.information_collect.create
                                             disable: true
@@ -1694,3 +1694,11 @@ admin_v2:
                             children:
                                 admin_v2_queue_failed_logs:
                                     name: admin_v2.system.queue_failed_tab
+                        admin_v2_data_visualization:
+                            name: 数据可视化
+                            disable: true
+                            children:
+                                admin_v2_data_visualization_activity_learn_record:
+                                    name: 教学活动原始停留数据上报
+                                admin_v2_data_visualization_activity_vide_watch_log:
+                                    name: 教学活动原始观看数据上报

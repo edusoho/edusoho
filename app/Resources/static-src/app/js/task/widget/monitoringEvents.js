@@ -10,13 +10,6 @@ export default class MonitoringEvents {
     this.eventMaskElement = null;
     this.eventMaskTimer = null;
     this.EVENT_MASK_TIME = 30;
-
-    // this.taskId = params.taskId;
-    // this.courseId = params.courseId;
-    // this.sign = params.sign;
-    // this.record = params.record;
-    // this._initInterval = params._initInterval;
-    // this._clearInterval = params._clearInterval;
     this.videoPlayRule = params.videoPlayRule;
     this.taskPipe = params.taskPipe;
 
@@ -26,7 +19,7 @@ export default class MonitoringEvents {
   initEvent() {
     $('body').off('click', '.js-continue-studying');
     $('body').on('click', '.js-continue-studying', () =>  {
-      this.taskPipe._doing();
+      this.taskPipe._doing({reActive: 1});
       this.OutFocusMask.continueStudying();
     });
     if (navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)) {
