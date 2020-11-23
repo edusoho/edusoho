@@ -16,8 +16,8 @@ export default {
       isFinish: false, //是否完成
       reportType: null, //上报类型
       learnTime: 0, // 学习时长
-      isShowOutFocusMask: false, // 是否显示遮罩层
-      outFocusMaskType: '', // 显示遮罩层的类型 ineffective_learning、kick_previous、reject_current
+      isShowOutFocusMask: true, // 是否显示遮罩层
+      outFocusMaskType: 'ineffective_learning', // 显示遮罩层的类型 ineffective_learning、kick_previous、reject_current
     };
   },
   beforeDestroy() {

@@ -12,11 +12,15 @@
 	outline: 0;
 
 	.content {
-		margin-bottom: vw(150);
 		text-align: center;
 
-		p {
-			color: red;
+		.tips {
+			margin-bottom: vw(10);
+
+			p {
+				color: red;
+				font-size: vw(14);
+			}
 		}
 	}
 }
