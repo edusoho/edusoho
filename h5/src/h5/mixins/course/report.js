@@ -16,8 +16,10 @@ export default {
       isFinish: false, //是否完成
       reportType: null, //上报类型
       learnTime: 0, // 学习时长
-      isShowOutFocusMask: true, // 是否显示遮罩层
-      outFocusMaskType: 'ineffective_learning', // 显示遮罩层的类型 ineffective_learning、kick_previous、reject_current
+      isShowOutFocusMask: false, // 是否显示遮罩层
+      outFocusMaskType: '', // 显示遮罩层的类型 ineffective_learning、kick_previous、reject_current
+      sign: '',
+      record: {},
     };
   },
   beforeDestroy() {
@@ -43,6 +45,7 @@ export default {
       if (reportNow) {
         this.initReportEvent();
       }
+      this.initVisibilitychange();
     },
     /**
      * 初始化上报所需方法
@@ -77,7 +80,7 @@ export default {
      * @param {*} events  //doing finish
      *  @param {*} ContinuousReport //是否每间隔一分钟上报
      */
-    reprtData(events = 'doing', ContinuousReport = false, watchTime = null) {
+    reprtData(eventName = 'start', ContinuousReport = false) {
       if (
         this.reportData.courseId === null ||
         this.reportData.taskId === null
@@ -87,32 +90,98 @@ export default {
       if (this.isFinish && !ContinuousReport) {
         return;
       }
-      let params = {};
-      if (events === 'doing') {
-        if (this.reportResult !== null) {
-          let lastTime = this.reportResult.lastTime;
-          params = { lastTime };
-        }
-        if (watchTime) {
-          params.watchTime = watchTime;
-        }
-      }
 
-      const query = {
-        courseId: this.reportData.courseId,
-        taskId: this.reportData.taskId,
-        events,
+      if (this.sign === '') {
+        Api.reportTaskEvent({
+          query: {
+            courseId: this.reportData.courseId,
+            taskId: this.reportData.taskId,
+            eventName: 'start',
+          },
+          data: {
+            client: 'h5',
+          },
+        }).then(res => {
+          this.handleReprtResult(res);
+          if (
+            !res.learnControl.allowLearn &&
+            res.learnControl.denyReason === 'kick_previous'
+          ) {
+            this.outFocusMaskShow('kick_previous');
+            return;
+          } else if (
+            !res.learnControl.allowLearn &&
+            res.learnControl.denyReason === 'reject_current'
+          ) {
+            this.outFocusMaskShow('reject_current');
+            return;
+          }
+          this.sign = res.record.flowSign;
+          this.record = res.record;
+          this.doing(eventName);
+        });
+      } else {
+        this.doing(eventName);
+      }
+      // if (events === 'doing') {
+      //   if (this.reportResult !== null) {
+      //     let lastTime = this.reportResult.lastTime;
+      //     params = { lastTime };
+      //   }
+      //   if (watchTime) {
+      //     params.watchTime = watchTime;
+      //   }
+      // }
+
+      // const query = {
+      //   courseId: this.reportData.courseId,
+      //   taskId: this.reportData.taskId,
+      //   events,
+      // };
+      // return new Promise((resolve, reject) => {
+      //   Api.reportTask({ query, data: params })
+      //     .then(res => {
+      //       this.handleReprtResult(res);
+      //       resolve(res);
+      //     })
+      //     .catch(err => {
+      //       reject(err);
+      //     });
+      // });
+    },
+    doing(eventName) {
+      let data = {
+        client: 'h5',
+        sign: this.sign,
+        duration: this.learnTime,
       };
-      return new Promise((resolve, reject) => {
-        Api.reportTask({ query, data: params })
-          .then(res => {
-            this.handleReprtResult(res);
-            resolve(res);
-          })
-          .catch(err => {
-            reject(err);
-          });
-      });
+      Api.reportTaskEvent({
+        query: {
+          courseId: this.courseId,
+          taskId: this.taskId,
+          eventName,
+        },
+        data: data,
+      })
+        .then(res => {
+          this.handleReprtResult(res);
+          this.record = res.record;
+          this.learnTime = 0;
+          if (
+            !res.learnControl.allowLearn &&
+            res.learnControl.denyReason === 'kick_previous'
+          ) {
+            this.outFocusMaskShow('kick_previous');
+          } else if (
+            !res.learnControl.allowLearn &&
+            res.learnControl.denyReason === 'reject_current'
+          ) {
+            this.outFocusMaskShow('reject_current');
+          }
+        })
+        .catch(error => {
+          this.clearReportIntervalTime();
+        });
     },
     /**
      * 课时finish后去做一些操作
@@ -120,7 +189,7 @@ export default {
      */
     handleReprtResult(res) {
       this.reportResult = res;
-      if (res.result.status === 'finish') {
+      if (res.taskResult.status === 'finish') {
         this.isFinish = true;
         this.$store.commit(types.SET_TASK_SATUS, 'finish');
         this.$store.commit(
@@ -172,8 +241,23 @@ export default {
       this.reportLearnTime = null;
     },
     outFocusMask(type) {
-      console.log(type);
       this.isShowOutFocusMask = false;
+      this.reprtData('doing');
+    },
+    outFocusMaskShow(type) {
+      this.isShowOutFocusMask = true;
+      this.outFocusMaskType = type;
+      this.reprtData('doing');
+    },
+    /**
+     * 监控 tab 切换最小化
+     */
+    initVisibilitychange() {
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'hidden') {
+          this.outFocusMaskShow('ineffective_learning');
+        }
+      });
     },
   },
 };

@@ -1,5 +1,10 @@
 <template>
   <div class="testResults">
+    <out-focus-mask
+      :type="outFocusMaskType"
+      :isShow="isShowOutFocusMask"
+      @outFocusMask="outFocusMask"
+    ></out-focus-mask>
     <e-loading v-if="isLoading" />
     <div v-if="result" ref="data" class="result-data">
       <div class="result-data__item">
@@ -108,9 +113,13 @@ import examMixin from '@/mixins/lessonTask/exam.js';
 import report from '@/mixins/course/report';
 import { getdateTimeDown } from '@/utils/date-toolkit.js';
 import { Dialog, Toast } from 'vant';
+import OutFocusMask from '@/components/out-focus-mask.vue';
 
 export default {
   name: 'TestpaperResult',
+  components: {
+    OutFocusMask,
+  },
   mixins: [examMixin, report],
   data() {
     return {

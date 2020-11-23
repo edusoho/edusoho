@@ -111,7 +111,7 @@ export default [
   {
     // 数据上报
     name: 'reportTaskEvent',
-    url: '/courses/{courseId}/task/{taskId}/event_v2/{events}',
+    url: '/courses/{courseId}/task/{taskId}/event_v2/{eventName}',
     method: 'PATCH',
     disableLoading: true,
   },

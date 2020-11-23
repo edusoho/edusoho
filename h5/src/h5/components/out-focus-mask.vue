@@ -4,8 +4,7 @@
     <template v-if="type === 'ineffective_learning'">
       <div class="content">
         <div class="tips">
-          <p>请勿同时多开任务学习</p>
-          <p>不要一心多用哦！</p>
+          <p>学累了可以休息一会 :D</p>
         </div>
         <van-button
           color="#43bc60"

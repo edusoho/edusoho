@@ -4,6 +4,7 @@
     <out-focus-mask
       :type="outFocusMaskType"
       :isShow="isShowOutFocusMask"
+      @outFocusMask="outFocusMask"
     ></out-focus-mask>
     <e-loading v-if="isLoading" />
     <!-- web-view -->

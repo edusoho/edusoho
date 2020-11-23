@@ -1,5 +1,10 @@
 <template>
   <div class="web-view">
+    <out-focus-mask
+      :type="outFocusMaskType"
+      :isShow="isShowOutFocusMask"
+      @outFocusMask="outFocusMask"
+    ></out-focus-mask>
     <e-loading v-if="isLoading" />
     <!-- web-view -->
     <iframe id="player" :src="playUrl" width="100%" frameborder="0" />
@@ -12,7 +17,12 @@ import * as types from '@/store/mutation-types';
 import { Toast } from 'vant';
 import redirectMixin from '@/mixins/saveRedirect';
 import report from '@/mixins/course/report';
+import OutFocusMask from '@/components/out-focus-mask.vue';
+
 export default {
+  components: {
+    OutFocusMask,
+  },
   mixins: [redirectMixin, report],
   data() {
     return {
