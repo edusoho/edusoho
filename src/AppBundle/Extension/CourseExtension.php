@@ -49,40 +49,40 @@ class CourseExtension extends Extension implements ServiceProviderInterface
     {
         return [
             'audio' => [
-                'name' => 'user.learn.statistics.lesson.audio'
+                'name' => 'user.learn.statistics.lesson.audio',
             ],
             'discuss' => [
-                'name' => 'user.learn.statistics.lesson.discuss'
+                'name' => 'user.learn.statistics.lesson.discuss',
             ],
             'doc' => [
-                'name' => 'user.learn.statistics.lesson.doc'
+                'name' => 'user.learn.statistics.lesson.doc',
             ],
             'download' => [
-                'name' => 'user.learn.statistics.lesson.download'
+                'name' => 'user.learn.statistics.lesson.download',
             ],
             'exercise' => [
-                'name' => 'user.learn.statistics.lesson.exercise'
+                'name' => 'user.learn.statistics.lesson.exercise',
             ],
             'flash' => [
-                'name' => 'user.learn.statistics.lesson.flash'
+                'name' => 'user.learn.statistics.lesson.flash',
             ],
             'homework' => [
-                'name' => 'user.learn.statistics.lesson.homework'
+                'name' => 'user.learn.statistics.lesson.homework',
             ],
             'live' => [
-                'name' => 'user.learn.statistics.lesson.live'
+                'name' => 'user.learn.statistics.lesson.live',
             ],
             'ppt' => [
-                'name' => 'user.learn.statistics.lesson.ppt'
+                'name' => 'user.learn.statistics.lesson.ppt',
             ],
             'testpaper' => [
-                'name' => 'user.learn.statistics.lesson.testpaper'
+                'name' => 'user.learn.statistics.lesson.testpaper',
             ],
             'text' => [
-                'name' => 'user.learn.statistics.lesson.text'
+                'name' => 'user.learn.statistics.lesson.text',
             ],
             'video' => [
-                'name' => 'user.learn.statistics.lesson.video'
+                'name' => 'user.learn.statistics.lesson.video',
             ],
         ];
     }

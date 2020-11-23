@@ -208,7 +208,7 @@ class UserLessonStatisticsExporter extends Exporter
 
     private function getTaskTypes()
     {
-        return $this->container->get('web.twig.course_extension')->getTaskTypes();
+        return $this->container->get('course.extension')->getTaskTypes();
     }
 
     private function getTaskOptional($isOptional)
