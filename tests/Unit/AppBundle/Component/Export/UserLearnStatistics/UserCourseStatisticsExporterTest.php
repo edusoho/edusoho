@@ -96,7 +96,7 @@ class UserCourseStatisticsExporterTest extends BaseTestCase
                 [
                     'functionName' => 'findCourseSetsByIds',
                     'returnValue' => [
-                        '1' => ['id' => 1, 'title' => 'testTitle']
+                        '1' => ['id' => 1, 'title' => 'testTitle'],
                     ],
                 ],
             ]
@@ -107,7 +107,7 @@ class UserCourseStatisticsExporterTest extends BaseTestCase
                 [
                     'functionName' => 'findCoursesByCourseSetIds',
                     'returnValue' => [
-                        ['id' => 1, 'title' => 'courseTitle', 'taskNum' => 5]
+                        ['id' => 1, 'title' => 'courseTitle', 'taskNum' => 5],
                     ],
                 ],
             ]
@@ -118,7 +118,7 @@ class UserCourseStatisticsExporterTest extends BaseTestCase
                 [
                     'functionName' => 'findClassroomsByIds',
                     'returnValue' => [
-                        '1' => ['id' => 1, 'title' => 'classroomTitle']
+                        '1' => ['id' => 1, 'title' => 'classroomTitle'],
                     ],
                 ],
             ]
@@ -131,7 +131,7 @@ class UserCourseStatisticsExporterTest extends BaseTestCase
                     'returnValue' => [
                         ['userId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'sumTime' => 300, 'pureTime' => 120],
                         ['userId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'sumTime' => 300, 'pureTime' => 120],
-                        ['userId' => 2, 'courseId' => 1, 'courseSetId' => 1, 'sumTime' => 300, 'pureTime' => 120]
+                        ['userId' => 2, 'courseId' => 1, 'courseSetId' => 1, 'sumTime' => 300, 'pureTime' => 120],
                     ],
                 ],
             ]
@@ -167,11 +167,11 @@ class UserCourseStatisticsExporterTest extends BaseTestCase
                 'taskNum' => 5,
                 'finishTaskNum' => 2,
                 'finishRate' => 40,
-            ]]
+            ]],
         ];
         $data = ReflectionUtils::invokeMethod($exporter, 'handleStatistics', [$users, $courseMemberData]);
 
-        $this->assertArrayEquals(["test", "11123455678", "test", "test", "test", 120, 60, 5, 2, "40%"], $data[0]);
+        $this->assertArrayEquals(['test', '11123455678', 'test', 'test', 'test', 120, 60, 5, 2, '40%'], $data[0]);
     }
 
     public function testGetContent()

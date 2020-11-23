@@ -98,7 +98,7 @@ class UserLessonStatisticsExporterTest extends BaseTestCase
                 [
                     'functionName' => 'findCourseSetsByIds',
                     'returnValue' => [
-                        '1' => ['id' => 1, 'title' => 'testTitle']
+                        '1' => ['id' => 1, 'title' => 'testTitle'],
                     ],
                 ],
             ]
@@ -109,7 +109,7 @@ class UserLessonStatisticsExporterTest extends BaseTestCase
                 [
                     'functionName' => 'findCoursesByCourseSetIds',
                     'returnValue' => [
-                        ['id' => 1, 'title' => 'courseTitle', 'taskNum' => 5]
+                        ['id' => 1, 'title' => 'courseTitle', 'taskNum' => 5],
                     ],
                 ],
             ]
@@ -120,7 +120,7 @@ class UserLessonStatisticsExporterTest extends BaseTestCase
                 [
                     'functionName' => 'findClassroomsByIds',
                     'returnValue' => [
-                        '1' => ['id' => 1, 'title' => 'classroomTitle']
+                        '1' => ['id' => 1, 'title' => 'classroomTitle'],
                     ],
                 ],
             ]
@@ -131,7 +131,7 @@ class UserLessonStatisticsExporterTest extends BaseTestCase
                 [
                     'functionName' => 'findTasksByCourseIds',
                     'returnValue' => [
-                        ['id' => 1, 'title' => 'taskTitle', 'type' => 'text', 'isOptional' => 0, 'courseId' => 1]
+                        ['id' => 1, 'title' => 'taskTitle', 'type' => 'text', 'isOptional' => 0, 'courseId' => 1],
                     ],
                 ],
             ]
@@ -142,14 +142,14 @@ class UserLessonStatisticsExporterTest extends BaseTestCase
                 [
                     'functionName' => 'findTaskResultsByUserId',
                     'returnValue' => [
-                        []
+                        [],
                     ],
                     'runTimes' => 1,
                 ],
                 [
                     'functionName' => 'findTaskResultsByUserId',
                     'returnValue' => [
-                        ['courseTaskId' => 1, 'finishedTime' => time()]
+                        ['courseTaskId' => 1, 'finishedTime' => time()],
                     ],
                     'runTimes' => 1,
                 ],
@@ -163,7 +163,7 @@ class UserLessonStatisticsExporterTest extends BaseTestCase
                     'returnValue' => [
                         ['userId' => 1, 'activityId' => 1, 'taskId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'sumTime' => 300, 'pureTime' => 120],
                         ['userId' => 1, 'activityId' => 1, 'taskId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'sumTime' => 300, 'pureTime' => 120],
-                        ['userId' => 2, 'activityId' => 1, 'taskId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'sumTime' => 300, 'pureTime' => 120]
+                        ['userId' => 2, 'activityId' => 1, 'taskId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'sumTime' => 300, 'pureTime' => 120],
                     ],
                 ],
             ]
@@ -201,11 +201,11 @@ class UserLessonStatisticsExporterTest extends BaseTestCase
                 'sumTime' => 120,
                 'pureTime' => 60,
                 'finishStatus' => '完成',
-            ]]
+            ]],
         ];
         $data = ReflectionUtils::invokeMethod($exporter, 'handleStatistics', [$users, $memberTaskData]);
 
-        $this->assertArrayEquals(["test", "11123455678", "test", "test", "test", "test", "图文课时", "必修", 0, 120, 60, "完成"], $data[0]);
+        $this->assertArrayEquals(['test', '11123455678', 'test', 'test', 'test', 'test', '图文课时', '必修', 0, 120, 60, '完成'], $data[0]);
     }
 
     public function testGetContent()
