@@ -185,7 +185,7 @@ export default class TaskPipe {
           duration: param.watchTime,
         }
       };
-      data = Object.assign(data, watchData)
+      data = Object.assign(data, watchData);
     }
     if (param.reActive) {
       data.reActive = param.reActive;

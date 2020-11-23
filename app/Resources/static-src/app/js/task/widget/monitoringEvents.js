@@ -43,14 +43,14 @@ export default class MonitoringEvents {
   }
 
   triggerEvent(type) { // 触发事件
-    this.taskPipe._doing();
 
-    if (type === 'kick_previous') {
-      this.OutFocusMask.initAntiBrushTips();
-      return;
-    }
     if (type === 'reject_current') {
       this.OutFocusMask.initBanTips();
+      return;
+    }
+    this.taskPipe._doing();
+    if (type === 'kick_previous') {
+      this.OutFocusMask.initAntiBrushTips();
       return;
     }
     this.OutFocusMask.initLearStopTips();
