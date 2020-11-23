@@ -8,8 +8,8 @@ class ExportUtil
     {
         $title = [
             'user-learn-statistics' => 'user.learn.statistics.user_learn_statistics',
-            'user-lesson-statistics' => 'user.learn.statistics.user_course_statistics',
-            'user-course-statistics' => 'user.learn.statistics.user_lesson_statistics',
+            'user-lesson-statistics' => 'user.learn.statistics.user_lesson_statistics',
+            'user-course-statistics' => 'user.learn.statistics.user_course_statistics',
         ];
 
         return empty($title[$name]) ? $name : $title[$name];

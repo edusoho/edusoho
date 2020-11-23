@@ -100,7 +100,7 @@ class UserCourseStatisticsExporter extends Exporter
             );
             $statistics = ArrayToolkit::group($statistics, 'courseId');
             foreach ($members as $member) {
-                if (empty($courses[$member['courseId']])) {
+                if (empty($courses[$member['courseId']]) || empty($courseSets[$member['courseSetId']])) {
                     continue;
                 }
 

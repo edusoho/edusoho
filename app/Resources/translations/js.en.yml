@@ -984,7 +984,7 @@ oauth.register.error_message: Register error. Please contact the admin for help.
 
 ## 用户数据统计
 admin.user.statistics.data.learn_total_time: Length of incremental learning (minutes)
-admin.user.statistics.data.learn_time: study time/minutes
+admin.user.statistics.data.learn_time: accumulated study time/minutes
 admin.user.statistics.data.time: time
 
 course.audio.enable.biz.user: To enable the audio mode, please upgrade to business plans.

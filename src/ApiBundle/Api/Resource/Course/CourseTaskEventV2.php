@@ -112,7 +112,11 @@ class CourseTaskEventV2 extends AbstractResource
         $user = $this->getCurrentUser();
         $task = $this->getTaskService()->getTask($taskId);
         $activity = $this->getActivityService()->getActivity($task['activityId']);
-        list($canDoing, $denyReason) = $this->getLearnControlService()->checkActive($user['id'], $data['sign'], $request->request->get('reActive', 0));
+        if (in_array($task['type'], ['live', 'testpaper', 'homework'])) {
+            list($canDoing, $denyReason) = [true, ''];
+        } else {
+            list($canDoing, $denyReason) = $this->getLearnControlService()->checkActive($user['id'], $data['sign'], $request->request->get('reActive', 0));
+        }
         $flow = $this->getDataCollectService()->getFlowBySign($user['id'], $data['sign']);
         $currentTime = time();
         $record = $this->getDataCollectService()->push([
@@ -219,6 +223,7 @@ class CourseTaskEventV2 extends AbstractResource
         $task = $this->getTaskService()->getTask($taskId);
         $activity = $this->getActivityService()->getActivity($task['activityId']);
         $watchData = $data['watchData'];
+        $currentTime = time();
         $record = $this->getDataCollectService()->push([
             'userId' => $user['id'],
             'activityId' => $task['activityId'],
@@ -227,9 +232,9 @@ class CourseTaskEventV2 extends AbstractResource
             'courseSetId' => $task['fromCourseSetId'],
             'event' => self::EVENT_WATCHING,
             'client' => $data['client'],
-            'startTime' => $record['duration'] > $watchData['duration'] ? $record['endTime'] - $watchData['duration'] : $record['startTime'],
-            'endTime' => $record['endTime'],
-            'duration' => $record['duration'] > $watchData['duration'] ? $watchData['duration'] : $record['duration'],
+            'startTime' => $currentTime - $watchData['duration'],
+            'endTime' => $currentTime,
+            'duration' => $watchData['duration'],
             'mediaType' => $activity['mediaType'],
             'flowSign' => $data['sign'],
             'data' => [

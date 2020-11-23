@@ -66,7 +66,7 @@ abstract class BuyFlowController extends BaseController
         return $this->createJsonResponse(['url' => $this->generateUrl('order_show', ['targetId' => $id, 'targetType' => $this->targetType])]);
     }
 
-    private function needUploadAvatar()
+    protected function needUploadAvatar()
     {
         return AvatarAlert::alertJoinCourse($this->getUser());
     }
