@@ -45,7 +45,7 @@ export default class OutFocusMask {
 
   initAntiBrushTips() {
     if (this.validateMask()) {
-      return;
+      this.destroyMask();
     }
 
     this.$element.append(this.mask);
@@ -55,7 +55,7 @@ export default class OutFocusMask {
 
   initBanTips() {
     if (this.validateMask()) {
-      return;
+      this.destroyMask();
     }
 
     this.$element.append(this.mask1);
