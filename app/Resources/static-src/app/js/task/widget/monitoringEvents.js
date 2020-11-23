@@ -12,12 +12,13 @@ export default class MonitoringEvents {
     this.eventMaskTimer = null;
     this.EVENT_MASK_TIME = 30;
 
-    this.taskId = params.taskId;
-    this.courseId = params.courseId;
-    this.sign = params.sign;
-    this.record = params.record;
-    this._initInterval = params._initInterval;
-    this._clearInterval = params._clearInterval;
+    // this.taskId = params.taskId;
+    // this.courseId = params.courseId;
+    // this.sign = params.sign;
+    // this.record = params.record;
+    // this._initInterval = params._initInterval;
+    // this._clearInterval = params._clearInterval;
+    this.videoPlayRule = params.videoPlayRule;
 
     this.initEvent();
   }
@@ -25,6 +26,9 @@ export default class MonitoringEvents {
   initEvent() {
 
     if (navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)) {
+      return;
+    }
+    if (this.videoPlayRule !== 'auto_pause') {
       return;
     }
     this.initMaskElement();
@@ -42,7 +46,8 @@ export default class MonitoringEvents {
   }
 
   triggerEvent(type) { // 触发事件
-    this._doing();
+    // this._doing();
+    console.log();
     if (type === 'kick_previous') {
       this.OutFocusMask.initAntiBrushTips();
       return;
@@ -92,31 +97,31 @@ export default class MonitoringEvents {
     this.maskElementShow();
   }
 
-  _doing() {
-    Api.courseTaskEvent.pushEvent({
-      params: {
-        courseId: this.courseId,
-        taskId: this.taskId,
-        eventName: 'doing',
-      },
-      data: {
-        client: 'pc',
-        sign: this.sign,
-        startTime: this.record.endTime,
-        duration: 60,
-      },
-    }).then(res => {
-      this.record = res.record;
-      if (!res.learnControl.allowLearn && res.learnControl.denyReason === 'kick_previous') {
-        this.triggerEvent('kick_previous');
-      } else if (!res.learnControl.allowLearn && res.learnControl.denyReason === 'reject_current') {
-        this.triggerEvent('reject_current');
-      }
-      this._clearInterval();
-      this._initInterval();
-    }).catch(error => {
-      this._clearInterval();
-      cd.message({ type: 'danger', message: Translator.trans('task_show.user_login_protect_tip') });
-    });
-  }
+  // _doing() {
+  //   Api.courseTaskEvent.pushEvent({
+  //     params: {
+  //       courseId: this.courseId,
+  //       taskId: this.taskId,
+  //       eventName: 'doing',
+  //     },
+  //     data: {
+  //       client: 'pc',
+  //       sign: this.sign,
+  //       startTime: this.record.endTime,
+  //       duration: 60,
+  //     },
+  //   }).then(res => {
+  //     this.record = res.record;
+  //     if (!res.learnControl.allowLearn && res.learnControl.denyReason === 'kick_previous') {
+  //       this.triggerEvent('kick_previous');
+  //     } else if (!res.learnControl.allowLearn && res.learnControl.denyReason === 'reject_current') {
+  //       this.triggerEvent('reject_current');
+  //     }
+  //     this._clearInterval();
+  //     this._initInterval();
+  //   }).catch(error => {
+  //     this._clearInterval();
+  //     cd.message({ type: 'danger', message: Translator.trans('task_show.user_login_protect_tip') });
+  //   });
+  // }
 }

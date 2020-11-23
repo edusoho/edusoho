@@ -119,6 +119,7 @@ class DataCollectServiceImpl extends BaseService implements DataCollectService
             'sign' => $sign,
             'active' => 1,
             'startTime' => time(),
+            'lastLearnTime' => time(),
         ];
 
         return $this->getUserActivityLearnFlowDao()->create($learnFlow);

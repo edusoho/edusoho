@@ -91,7 +91,11 @@ class LearnControlServiceImpl extends BaseService implements LearnControlService
         //如果存在前端传过来的需要标记为无效的请求，则标记为无效
         if ($invalidSign) {
             $flow = $this->getUserActivityLearnFlowDao()->getByUserIdAndSign($userId, $invalidSign);
-            $this->getUserActivityLearnFlowDao()->update($flow['id'], ['active' => 0]);
+            !empty($flow) ? $this->getUserActivityLearnFlowDao()->update($flow['id'], ['active' => 0]) : null;
+        }
+
+        if (self::MULTIPLE_LEARN_MODE_KICK_PREVIOUS === $setting['multiple_learn_kick_mode']) {
+            $this->freshFlow($userId);
         }
 
         //如果不允许后开，则当没活跃的记录存在返回false
@@ -107,14 +111,16 @@ class LearnControlServiceImpl extends BaseService implements LearnControlService
         return [true, ''];
     }
 
-    public function freshFlow($userId, $sign)
+    public function freshFlow($userId, $sign = '')
     {
-        $flow = $this->getUserActivityLearnFlowDao()->getByUserIdAndSign($userId, $sign);
-        $this->getUserActivityLearnFlowDao()->update($flow['id'], ['active' => 1]);
+        if ($sign) {
+            $flow = $this->getUserActivityLearnFlowDao()->getByUserIdAndSign($userId, $sign);
+            $this->getUserActivityLearnFlowDao()->update($flow['id'], ['active' => 1]);
+        }
         $this->getUserActivityLearnFlowDao()->setUserOtherFlowUnActive($userId, $sign);
     }
 
-    protected function getMultipleLearnSetting()
+    public function getMultipleLearnSetting()
     {
         $multiLearnSetting = $this->getSettingService()->get('taskPlayMultiple', []);
 

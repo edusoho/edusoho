@@ -36,7 +36,7 @@ class UserActivityLearnFlowDaoImpl extends AdvancedDaoImpl implements UserActivi
 
     public function getUserLatestActiveFlow($userId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND active = 0 ORDER BY lastLearnTime LIMIT 1;";
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND active = 1 ORDER BY lastLearnTime DESC LIMIT 1;";
 
         return $this->db()->fetchAssoc($sql, [$userId]);
     }
