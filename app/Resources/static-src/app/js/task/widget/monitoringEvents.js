@@ -1,5 +1,4 @@
 import OutFocusMask from './out-focus-mask';
-import Api from 'common/api';
 
 export default class MonitoringEvents {
   constructor(params) {
@@ -19,12 +18,17 @@ export default class MonitoringEvents {
     // this._initInterval = params._initInterval;
     // this._clearInterval = params._clearInterval;
     this.videoPlayRule = params.videoPlayRule;
+    this.taskPipe = params.taskPipe;
 
     this.initEvent();
   }
 
   initEvent() {
-
+    $('body').off('click', '.js-continue-studying');
+    $('body').on('click', '.js-continue-studying', () =>  {
+      this.taskPipe._doing();
+      this.OutFocusMask.continueStudying();
+    });
     if (navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)) {
       return;
     }
@@ -46,8 +50,8 @@ export default class MonitoringEvents {
   }
 
   triggerEvent(type) { // 触发事件
-    // this._doing();
-    console.log();
+    this.taskPipe._doing();
+
     if (type === 'kick_previous') {
       this.OutFocusMask.initAntiBrushTips();
       return;
@@ -96,32 +100,4 @@ export default class MonitoringEvents {
     this.eventMaskElement.hide();
     this.maskElementShow();
   }
-
-  // _doing() {
-  //   Api.courseTaskEvent.pushEvent({
-  //     params: {
-  //       courseId: this.courseId,
-  //       taskId: this.taskId,
-  //       eventName: 'doing',
-  //     },
-  //     data: {
-  //       client: 'pc',
-  //       sign: this.sign,
-  //       startTime: this.record.endTime,
-  //       duration: 60,
-  //     },
-  //   }).then(res => {
-  //     this.record = res.record;
-  //     if (!res.learnControl.allowLearn && res.learnControl.denyReason === 'kick_previous') {
-  //       this.triggerEvent('kick_previous');
-  //     } else if (!res.learnControl.allowLearn && res.learnControl.denyReason === 'reject_current') {
-  //       this.triggerEvent('reject_current');
-  //     }
-  //     this._clearInterval();
-  //     this._initInterval();
-  //   }).catch(error => {
-  //     this._clearInterval();
-  //     cd.message({ type: 'danger', message: Translator.trans('task_show.user_login_protect_tip') });
-  //   });
-  // }
 }
