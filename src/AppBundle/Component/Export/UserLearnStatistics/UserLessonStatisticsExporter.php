@@ -111,10 +111,11 @@ class UserLessonStatisticsExporter extends Exporter
         $tasks = $this->getTaskService()->findTasksByCourseIds(ArrayToolkit::column($courses, 'id'));
         $tasks = ArrayToolkit::group($tasks, 'courseId');
         $courseMembers = ArrayToolkit::group($courseMembers, 'userId');
+        $taskTypes = $this->getTaskTypes();
         $memberTaskData = [];
         foreach ($courseMembers as $userId => $members) {
             foreach ($members as $member) {
-                if (empty($courses[$member['courseId']])) {
+                if (empty($courses[$member['courseId']]) || empty($courseSets[$member['courseSetId']])) {
                     continue;
                 }
 
@@ -135,13 +136,17 @@ class UserLessonStatisticsExporter extends Exporter
                 $courseSetName = empty($courseSets[$member['courseSetId']]) ? '' : $courseSets[$member['courseSetId']]['title'];
                 $courseName = empty($course['title']) ? $courseSetName : $course['title'];
                 foreach ($courseTasks as $task) {
+                    if (empty($taskTypes[$task['type']])) {
+                        continue;
+                    }
+
                     $memberTaskData[] = [
                         'userId' => $member['userId'],
                         'classroomName' => $classroomName,
                         'courseSetName' => $courseSetName,
                         'courseName' => $courseName,
                         'taskName' => $task['title'],
-                        'taskType' => $this->getTaskType($task['type']),
+                        'taskType' => $this->trans($taskTypes[$task['type']]['name']),
                         'type' => $this->getTaskOptional($task['isOptional']),
                         'length' => in_array($task['type'], ['audio', 'video']) ? round($task['length'] / 60, 1) : '',
                         'sumTime' => empty($statistics[$task['id']]) ? 0 : array_sum(ArrayToolkit::column($statistics[$task['id']], 'sumTime')),
@@ -194,11 +199,16 @@ class UserLessonStatisticsExporter extends Exporter
         return [$this->parameter['start'], 50];
     }
 
-    private function getTaskType($type)
+    private function trans($name)
     {
         $translator = $this->container->get('translator');
 
-        return $translator->trans($this->taskType[$type]);
+        return $translator->trans($name);
+    }
+
+    private function getTaskTypes()
+    {
+        return $this->container->get('course.extension')->getTaskTypes();
     }
 
     private function getTaskOptional($isOptional)
