@@ -22,7 +22,7 @@ class LearnControlServiceTest extends BaseTestCase
         $result = $this->getLearnControlService()->checkActive(1, 'test123');
 
         self::assertEquals(1, $flow1['active']);
-        self::assertTrue($result);
+        self::assertTrue($result[0]);
     }
 
     public function testFreshFlow()
