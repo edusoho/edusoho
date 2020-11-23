@@ -96,7 +96,7 @@ class UserCourseStatisticsExporter extends Exporter
                 [],
                 0,
                 PHP_INT_MAX,
-                ['userId', 'courseSetId', 'sumTime', 'pureTime']
+                ['userId', 'courseId','courseSetId', 'sumTime', 'pureTime']
             );
             $statistics = ArrayToolkit::group($statistics, 'courseId');
             foreach ($members as $member) {

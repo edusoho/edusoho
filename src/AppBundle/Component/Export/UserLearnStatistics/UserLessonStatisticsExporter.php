@@ -14,21 +14,6 @@ use Biz\Visualization\Service\ActivityLearnDataService;
 
 class UserLessonStatisticsExporter extends Exporter
 {
-    protected $taskType = [
-        'audio' => 'user.learn.statistics.lesson.audio',
-        'discuss' => 'user.learn.statistics.lesson.discuss',
-        'doc' => 'user.learn.statistics.lesson.doc',
-        'download' => 'user.learn.statistics.lesson.download',
-        'exercise' => 'user.learn.statistics.lesson.exercise',
-        'flash' => 'user.learn.statistics.lesson.flash',
-        'homework' => 'user.learn.statistics.lesson.homework',
-        'live' => 'user.learn.statistics.lesson.live',
-        'ppt' => 'user.learn.statistics.lesson.ppt',
-        'testpaper' => 'user.learn.statistics.lesson.testpaper',
-        'text' => 'user.learn.statistics.lesson.text',
-        'video' => 'user.learn.statistics.lesson.video',
-    ];
-
     public function getTitles()
     {
         return [
