@@ -80,7 +80,9 @@ export default class TaskPipe {
     window.onbeforeunload = () => {
       this._clearInterval();
       // this._flush({ type: 'beforeunload' });
-      localStorage.setItem('flowSign', this.sign);
+      if (this.sign.length > 0) {
+        localStorage.setItem('flowSign', this.sign);
+      }
     };
     this._clearInterval();
     this.intervalId = setInterval(() => this._addPipeCounter(), 1000);
