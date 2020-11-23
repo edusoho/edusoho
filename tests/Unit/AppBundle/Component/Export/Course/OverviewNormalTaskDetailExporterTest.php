@@ -112,10 +112,10 @@ class OverviewNormalTaskDetailExporterTest extends BaseTestCase
 
         $title = [
             'task.learn_data_detail.nickname',
-            'task.learn_data_detail.createdTime',
-            'task.learn_data_detail.finishedTime',
-            'task.learn_data_detail.learnTime',
-            'task.learn_data_detail.video_and_audio_learnTime',
+            'task.learn_data_detail.join_time',
+            'task.learn_data_detail.finished_time',
+            'task.learn_data_detail.learn_total_time',
+            'task.learn_data_detail.learn_deWeight_time',
         ];
 
         $this->assertArrayEquals($title, $expoter->getTitles());
