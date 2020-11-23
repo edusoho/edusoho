@@ -1,0 +1,22 @@
+.out-focus-mask {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 1050;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(0, 0, 0, 0.56);
+	outline: 0;
+
+	.content {
+		margin-bottom: vw(150);
+		text-align: center;
+
+		p {
+			color: red;
+		}
+	}
+}

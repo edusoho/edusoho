@@ -1,6 +1,10 @@
 <template>
   <!-- 文档播放器 -->
   <div class="web-view">
+    <out-focus-mask
+      :type="outFocusMaskType"
+      :isShow="isShowOutFocusMask"
+    ></out-focus-mask>
     <e-loading v-if="isLoading" />
     <!-- web-view -->
     <div v-show="media !== 'text'" id="player" />
@@ -39,9 +43,11 @@ import * as types from '@/store/mutation-types';
 import { Toast } from 'vant';
 import report from '@/mixins/course/report';
 import finishDialog from '../components/finish-dialog';
+import OutFocusMask from '@/components/out-focus-mask.vue';
 export default {
   components: {
     finishDialog,
+    OutFocusMask,
   },
   mixins: [report],
   data() {

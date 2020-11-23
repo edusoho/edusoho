@@ -1,34 +1,36 @@
 /* eslint-disable */
-import Api from "@/api/index";
-import * as types from "@/store/mutation-types";
+import Api from '@/api/index';
+import * as types from '@/store/mutation-types';
 
 export default {
   data() {
     return {
-      reportIntervalTime: null,//每分钟上报计时器
-      reportLearnTime: null,//学习时长 计时器
-      reportFinishCondition: null,//完成条件
+      reportIntervalTime: null, //每分钟上报计时器
+      reportLearnTime: null, //学习时长 计时器
+      reportFinishCondition: null, //完成条件
       reportData: {
         courseId: null,
-        taskId: null
+        taskId: null,
       },
-      reportResult:null,
-      isFinish: false,//是否完成
-      reportType: null,//上报类型
-      learnTime: 0 // 学习时长
+      reportResult: null,
+      isFinish: false, //是否完成
+      reportType: null, //上报类型
+      learnTime: 0, // 学习时长
+      isShowOutFocusMask: false, // 是否显示遮罩层
+      outFocusMaskType: '', // 显示遮罩层的类型 ineffective_learning、kick_previous、reject_current
     };
   },
-  beforeDestroy(){
+  beforeDestroy() {
     this.clearReportIntervalTime();
   },
   methods: {
     /**
      * 初始化上报数据
-     * @param {*} courseId 
-     * @param {*} taskId 
+     * @param {*} courseId
+     * @param {*} taskId
      * @param {*} sourceType  上报课程类型
      */
-    initReportData(courseId, taskId, sourceType,reportNow=true) {
+    initReportData(courseId, taskId, sourceType, reportNow = true) {
       this.clearReportIntervalTime();
       this.reportData = { courseId, taskId };
       this.reportType = sourceType;
@@ -36,7 +38,7 @@ export default {
       this.reportIntervalTime = null;
       this.reportLearnTime = null;
       this.reportResult = null;
-      this.learnTime=0;
+      this.learnTime = 0;
       this.reportFinishCondition = null;
       if (reportNow) {
         this.initReportEvent();
@@ -52,8 +54,8 @@ export default {
     },
     /**
      * 获取当前task信息
-     * @param {*} courseId 
-     * @param {*} taskId 
+     * @param {*} courseId
+     * @param {*} taskId
      */
     getCourseData(courseId, taskId) {
       const param = { courseId, taskId };
@@ -75,31 +77,34 @@ export default {
      * @param {*} events  //doing finish
      *  @param {*} ContinuousReport //是否每间隔一分钟上报
      */
-    reprtData(events = "doing",ContinuousReport=false,watchTime=null) {
-      if(this.reportData.courseId===null || this.reportData.taskId===null){
+    reprtData(events = 'doing', ContinuousReport = false, watchTime = null) {
+      if (
+        this.reportData.courseId === null ||
+        this.reportData.taskId === null
+      ) {
         return;
       }
-      if (this.isFinish&&!ContinuousReport) {
+      if (this.isFinish && !ContinuousReport) {
         return;
       }
       let params = {};
-      if (events === "doing") {
-        if(this.reportResult!==null){
-          let lastTime=this.reportResult.lastTime
+      if (events === 'doing') {
+        if (this.reportResult !== null) {
+          let lastTime = this.reportResult.lastTime;
           params = { lastTime };
         }
-        if(watchTime){
-          params.watchTime = watchTime ;
+        if (watchTime) {
+          params.watchTime = watchTime;
         }
       }
 
       const query = {
         courseId: this.reportData.courseId,
         taskId: this.reportData.taskId,
-        events
+        events,
       };
       return new Promise((resolve, reject) => {
-        Api.reportTask({ query, data:params })
+        Api.reportTask({ query, data: params })
           .then(res => {
             this.handleReprtResult(res);
             resolve(res);
@@ -111,16 +116,19 @@ export default {
     },
     /**
      * 课时finish后去做一些操作
-     * @param {*} res 
+     * @param {*} res
      */
     handleReprtResult(res) {
-      this.reportResult=res;
-      if (res.result.status === "finish") {
+      this.reportResult = res;
+      if (res.result.status === 'finish') {
         this.isFinish = true;
-        this.$store.commit(types.SET_TASK_SATUS, "finish");
-        this.$store.commit(`course/${types.UPDATE_PROGRESS}`, res.completionRate);
+        this.$store.commit(types.SET_TASK_SATUS, 'finish');
+        this.$store.commit(
+          `course/${types.UPDATE_PROGRESS}`,
+          res.completionRate,
+        );
       } else {
-        this.$store.commit(types.SET_TASK_SATUS, "start");
+        this.$store.commit(types.SET_TASK_SATUS, 'start');
       }
     },
     intervalReportLearnTime() {
@@ -135,7 +143,7 @@ export default {
     intervalReportData(min = 1) {
       const intervalTime = min * 60 * 1000;
       this.reportIntervalTime = setInterval(() => {
-        this.reprtData("doing",true);
+        this.reprtData('doing', true);
       }, intervalTime);
     },
     /**
@@ -145,12 +153,12 @@ export default {
       if (!this.reportFinishCondition) {
         return;
       }
-      if (this.reportFinishCondition.type === "time") {
+      if (this.reportFinishCondition.type === 'time') {
         if (
           parseInt(this.learnTime / 60, 10) >=
           parseInt(this.reportFinishCondition.data, 10)
         ) {
-          this.reprtData("finish");
+          this.reprtData('finish');
         }
       }
     },
@@ -162,6 +170,13 @@ export default {
       clearInterval(this.reportLearnTime);
       this.reportIntervalTime = null;
       this.reportLearnTime = null;
-    }
-  }
+    },
+    /**
+     * 继续学习
+     */
+    onKeepLearning() {
+      this.isShowOutFocusMask = false;
+      console.log('继续学习');
+    },
+  },
 };

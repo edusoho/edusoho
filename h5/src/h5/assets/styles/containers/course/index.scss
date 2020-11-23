@@ -475,6 +475,9 @@
 // web-view
 
 .web-view {
+	position: relative;
+	height: calc(100vh - 46px);
+
 	#player {
 		height: calc(100vh - 46px);
 	}
