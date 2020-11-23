@@ -219,6 +219,7 @@ class CourseTaskEventV2 extends AbstractResource
         $task = $this->getTaskService()->getTask($taskId);
         $activity = $this->getActivityService()->getActivity($task['activityId']);
         $watchData = $data['watchData'];
+        $currentTime = time();
         $record = $this->getDataCollectService()->push([
             'userId' => $user['id'],
             'activityId' => $task['activityId'],
@@ -227,9 +228,9 @@ class CourseTaskEventV2 extends AbstractResource
             'courseSetId' => $task['fromCourseSetId'],
             'event' => self::EVENT_WATCHING,
             'client' => $data['client'],
-            'startTime' => $record['duration'] > $watchData['duration'] ? $record['endTime'] - $watchData['duration'] : $record['startTime'],
-            'endTime' => $record['endTime'],
-            'duration' => $record['duration'] > $watchData['duration'] ? $watchData['duration'] : $record['duration'],
+            'startTime' => $currentTime - $watchData['duration'],
+            'endTime' => $currentTime,
+            'duration' => $watchData['duration'],
             'mediaType' => $activity['mediaType'],
             'flowSign' => $data['sign'],
             'data' => [
