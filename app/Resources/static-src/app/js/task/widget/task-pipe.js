@@ -11,6 +11,7 @@ export default class TaskPipe {
     this.eventUrl = this.element.data('eventUrl');
     this.videoPlayRule = this.element.data('videoPlayRule');
     this.learnTimeSec = this.element.data('learnTimeSec');
+    this.taskType = this.element.data('taskType');
     this.TASK_PIPE_INTERNAL = this.element.data('learnTimeSec');
     this.userId = this.element.data('userId');
     this.fileId = this.element.data('fileId');
