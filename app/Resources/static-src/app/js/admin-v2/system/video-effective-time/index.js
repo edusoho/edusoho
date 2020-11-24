@@ -15,7 +15,7 @@ $('.js-setting-submit').click(function () {
         notify('danger', xhr.responseJSON.error.message);
       });
   }).on('cancel', () => {
-    window.location.reload();
+    return ;
   });
 });
 
