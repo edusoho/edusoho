@@ -25,6 +25,9 @@ export default {
   beforeDestroy() {
     this.clearReportIntervalTime();
     document.removeEventListener('visibilitychange', this.visibilityState);
+    if (this.sign.length > 0) {
+      localStorage.setItem('flowSign', this.sign);
+    }
   },
   methods: {
     /**
@@ -93,15 +96,24 @@ export default {
       }
 
       if (this.sign === '') {
+        let customData = {};
+        let flowSign = localStorage.getItem('flowSign');
+        if (flowSign) {
+          customData.lastSign = flowSign;
+          localStorage.removeItem('flowSign');
+        }
         Api.reportTaskEvent({
           query: {
             courseId: this.reportData.courseId,
             taskId: this.reportData.taskId,
             eventName: 'start',
           },
-          data: {
-            client: 'h5',
-          },
+          data: Object.assign(
+            {
+              client: 'h5',
+            },
+            customData,
+          ),
         }).then(res => {
           this.handleReprtResult(res);
           this.reportJudge(res);
