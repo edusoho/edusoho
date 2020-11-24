@@ -13,7 +13,7 @@ class VideoTaskSettingController extends BaseController
         $setting = $this->getSettingService()->get('taskPlayMultiple', []);
 
         $default = [
-            'multiple_learn_enable' => '0',
+            'multiple_learn_enable' => '1',
             'multiple_learn_kick_mode' => 'kick_previous',
         ];
 

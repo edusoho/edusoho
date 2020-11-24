@@ -6734,7 +6734,7 @@ admin.setting_course.video_play_setting.multiple_open: Multiple Open
 admin.setting_course.video_play_setting.multiple_open.tips: Allows users to access a time-learning page on one or more ends at the same time
 admin.setting_course.video_play_setting.different_video_multiple: Multiple sessions of the different video lesson
 admin.setting_course.video_play_setting.multiple_forbidden_effect: Multi-opening prohibition effect
-admin.setting_course.video_play_setting.kick_previous_play: Kick the previous learning page and require a terminal upgrade to the latest version.
+admin.setting_course.video_play_setting.kick_previous_play: Kick the previous learning page, require terminal upgrade to PC side V20.4.6, APP side V4.9.3.
 admin.setting_course.video_play_setting.kick_previous_play.tips: >
   <p>When a user opens more than one page, the next learning page is the main one, and the previous learning page is kicked out.</p>
   <p>When the three types of lessons (homework/exam/live) are being studied, the study page will not be able to kick out these three types of lessons.</p>
