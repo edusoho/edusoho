@@ -6378,7 +6378,8 @@ admin.setting_course.custom_chapter_name: Set chapter name
 admin.setting_course.custom_chapter_name_enabled_hint: After opening, add a chapter in the lesson management, the system will automatically generate the chapter name set as follows.
 admin.setting_course.effective_learning_time_rule: Statistical rules of effective learning time in online video class
 admin.setting_course.learning_time_statistical_dimension: Statistical dimension of learning time
-admin.setting_course.effective_learning_time.help_block: The actual playing time was taken as the learning time statistics
+admin.setting_course.effective_learning_time.playing.help_block: The actual playing time was taken as the learning time statistics
+admin.setting_course.effective_learning_time.page.help_block: The page stay time is taken as the learning time statistics
 admin.setting_course.effective_learning_time.playing_time: Active playing time
 admin.setting_course.effective_learning_time.page_time: Page active duration
 admin.setting_course.effective_learning_time.accumulated_merge: The learning hours are directly accumulated and combined
@@ -6742,8 +6743,9 @@ admin.setting_course.video_play_setting.reject_current_play: Reject this access 
 admin.setting_course.video_play_setting.reject_current_play.tips: When the user opens more than one page, the first learning page will take precedence and the second learning page will not be allowed to enter.
 admin.setting_course.video_play_setting.ineffective_learning: Ineffective Learning
 admin.setting_course.video_play_setting.play_rule: Unfocused Learning Play Rule
-admin.setting_course.video_play_setting.play_rule.tips: The playing window of the current video class is not an active screen window (such as window minimization, window switching, etc.), or the playing window of the current video class does not detect the user's action behavior within 20 minutes.
-admin.setting_course.video_play_setting.play_rule.help_block: When the system detects that the user is not paying attention to learning, it will automatically pause the current play.
+admin.setting_course.video_play_setting.play_rule.tips: The playing window of the current video class is not an active window on the screen (such as minimizing the window on the PC side, switching the window, etc.), or the playing window of the current video class on the PC side or micro-network school side has not detected the user's action behavior within 20 minutes.
+admin.setting_course.video_play_setting.play_rule.auto_pause.help_block: When the system detects that the user is not focusing on learning, the PC side will automatically suspend the current play.
+admin.setting_course.video_play_setting.play_rule.no_action.help_block: When the system detects that the user is not focusing on learning, the PC side will continue to maintain the current play.
 admin.setting_course.video_play_setting.play_rule.auto_pause: automatic pause
 admin.setting_course.video_play_setting.play_rule.no_action: no intervention
 admin.article_setting.edit: 'Edit articles'
