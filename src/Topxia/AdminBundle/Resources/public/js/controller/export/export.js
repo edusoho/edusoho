@@ -6,6 +6,7 @@ define(function(require, exports, module) {
         var $exportBtn;
         var exportFileNames = [];
         var totalCount = 0;
+        var currentCount = 0;
 
         var $modal = $('#modal');
         exportDataEvent();
@@ -46,9 +47,10 @@ define(function(require, exports, module) {
                     if (!response.success) {
                         notifyError(Translator.trans(response.message,response.parameters));
                         can = false;
-                        response.counts.forEach(function(val) {
-                          totalCount += val;
-                        }, 0);
+                    } else {
+                      response.counts.forEach(function(val) {
+                        totalCount += val;
+                      }, 0);
                     }
                 }
             });
@@ -73,8 +75,10 @@ define(function(require, exports, module) {
                 if (response.name !== '') {
                     if (response.status === 'finish') {
                       exportFileNames.push(response.csvName);
+                      currentCount += response.count;
                     }
-                    var process = response.start * 100 / totalCount + '%';
+                    var process = (response.start + currentCount) * 100 / totalCount + '%';
+                    console.log(process);
                     $modal.find('#progress-bar').width(process);
                     exportData(response.start, response.fileName, urls, response.name);
                 } else {
@@ -111,6 +115,7 @@ define(function(require, exports, module) {
                   url += `fileNames[]=${value}&`;
                 });
                 totalCount = 0;
+                currentCount = 0;
                 exportFileNames = [];
                 window.location.href = url;
                 return true;

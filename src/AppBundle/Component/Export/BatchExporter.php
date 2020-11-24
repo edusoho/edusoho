@@ -86,7 +86,7 @@ class BatchExporter
                 'fileName' => $result['fileName'],
                 'csvName' => $csvName,
                 'start' => 0,
-                'count' => 0,
+                'count' => $result['count'],
                 'status' => $result['status'],
                 'name' => empty($this->names[$key + 1]) ? '' : $this->names[$key + 1],
                 'success' => '1',

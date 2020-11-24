@@ -6,6 +6,7 @@ class Export {
     this.$modal = $('#modal');
     this.fileNames = [];
     this.totalCount = 0;
+    this.currentCount = 0;
     this.exportDataEvent();
   }
 
@@ -46,6 +47,7 @@ class Export {
         if (!response.success) {
           self.notifyError(Translator.trans(response.message,response.parameters));
           can = false;
+        } else {
           response.counts.forEach(function(val) {
             self.totalCount += val;
           }, 0);
@@ -81,6 +83,7 @@ class Export {
       });
       this.fileNames = [];
       this.totalCount = 0;
+      this.currentCount = 0;
       window.location.href = url;
       return true;
     }
@@ -112,9 +115,10 @@ class Export {
 
       if (response.name !== '') {
         if (response.status === 'finish') {
-          self.fileNames.push(response.fileName);
+          self.fileNames.push(response.csvName);
+          self.currentCount += response.count;
         }
-        let process = response.start * 100 / self.totalCount + '%';
+        let process = (response.start + self.currentCount) * 100 / self.totalCount + '%';
         self.$modal.find('#progress-bar').width(process);
         self.exportData(response.start, response.fileName, urls, response.name);
       } else {
