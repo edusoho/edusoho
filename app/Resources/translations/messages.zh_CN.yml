@@ -7620,7 +7620,7 @@ admin.setting_course.video_play_setting.multiple_forbidden_effect: 禁止多开�
 admin.setting_course.video_play_setting.kick_previous_play: 踢掉前次学习页面，需要终端升级至PC端V20.4.6版本，APP端V4.9.3版本
 admin.setting_course.video_play_setting.kick_previous_play.tips: >
   <p>当用户多开时，以后开的学习页面为主，踢掉前次学习页面。</p>
-  <p>作业课时/考试课时/直播课时三类课时在学习时，后开的学习页面将无法踢掉这三类课时</p>
+  <p>作业课时/考试课时/直播课时三类课时在学习时，后开的学习页面将无法踢掉这三类课时。</p>
 admin.setting_course.video_play_setting.reject_current_play: 拒绝本次进入学习页面
 admin.setting_course.video_play_setting.reject_current_play.tips: 当用户多开时，以先开的学习页面为主，后开学习页面不允许进入。
 admin.setting_course.video_play_setting.ineffective_learning: 无效学习时
