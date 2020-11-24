@@ -17,13 +17,14 @@ export default {
       reportType: null, //上报类型
       learnTime: 0, // 学习时长
       isShowOutFocusMask: false, // 是否显示遮罩层
-      outFocusMaskType: '', // 显示遮罩层的类型 ineffective_learning、kick_previous、reject_current
+      outFocusMaskType: '', // 显示遮罩层的类型
       sign: '',
       record: {},
     };
   },
   beforeDestroy() {
     this.clearReportIntervalTime();
+    document.removeEventListener('visibilitychange', this.visibilityState);
   },
   methods: {
     /**
@@ -80,7 +81,7 @@ export default {
      * @param {*} events  //doing finish
      *  @param {*} ContinuousReport //是否每间隔一分钟上报
      */
-    reprtData(eventName = 'start', ContinuousReport = false) {
+    reprtData(eventName = 'doing', ContinuousReport = false) {
       if (
         this.reportData.courseId === null ||
         this.reportData.taskId === null
@@ -103,19 +104,7 @@ export default {
           },
         }).then(res => {
           this.handleReprtResult(res);
-          if (
-            !res.learnControl.allowLearn &&
-            res.learnControl.denyReason === 'kick_previous'
-          ) {
-            this.outFocusMaskShow('kick_previous');
-            return;
-          } else if (
-            !res.learnControl.allowLearn &&
-            res.learnControl.denyReason === 'reject_current'
-          ) {
-            this.outFocusMaskShow('reject_current');
-            return;
-          }
+          this.reportJudge(res);
           this.sign = res.record.flowSign;
           this.record = res.record;
           this.doing(eventName);
@@ -157,8 +146,8 @@ export default {
       };
       Api.reportTaskEvent({
         query: {
-          courseId: this.courseId,
-          taskId: this.taskId,
+          courseId: this.reportData.courseId,
+          taskId: this.reportData.taskId,
           eventName,
         },
         data: data,
@@ -167,17 +156,7 @@ export default {
           this.handleReprtResult(res);
           this.record = res.record;
           this.learnTime = 0;
-          if (
-            !res.learnControl.allowLearn &&
-            res.learnControl.denyReason === 'kick_previous'
-          ) {
-            this.outFocusMaskShow('kick_previous');
-          } else if (
-            !res.learnControl.allowLearn &&
-            res.learnControl.denyReason === 'reject_current'
-          ) {
-            this.outFocusMaskShow('reject_current');
-          }
+          this.reportJudge(res);
         })
         .catch(error => {
           this.clearReportIntervalTime();
@@ -240,24 +219,57 @@ export default {
       this.reportIntervalTime = null;
       this.reportLearnTime = null;
     },
+    /**
+     * 判断用户当前状态
+     * @param {*} res 数据上报返回参数
+     */
+    reportJudge(res) {
+      if (
+        !res.learnControl.allowLearn &&
+        res.learnControl.denyReason === 'kick_previous'
+      ) {
+        this.outFocusMaskShow('kick_previous');
+      } else if (
+        !res.learnControl.allowLearn &&
+        res.learnControl.denyReason === 'reject_current'
+      ) {
+        this.outFocusMaskShow('reject_current');
+      }
+      return;
+    },
+    /**
+     * 遮罩层关闭
+     * @param {*} type
+     */
     outFocusMask(type) {
       this.isShowOutFocusMask = false;
-      this.reprtData('doing');
+      this.reprtData('doing', true);
     },
+    /**
+     * 遮罩层显示
+     * @param { String } type 遮罩层类型
+     * ineffective_learning   // 无效学习
+     * kick_previous          // 互踢，挤掉前面的
+     * reject_current         // 互踢，不允许后来
+     */
     outFocusMaskShow(type) {
+      if (this.isShowOutFocusMask && type === 'ineffective_learning') {
+        return;
+      }
       this.isShowOutFocusMask = true;
       this.outFocusMaskType = type;
-      this.reprtData('doing');
+      this.reprtData('doing', true);
     },
     /**
      * 监控 tab 切换最小化
      */
     initVisibilitychange() {
-      document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'hidden') {
-          this.outFocusMaskShow('ineffective_learning');
-        }
-      });
+      document.addEventListener('visibilitychange', this.visibilityState);
+    },
+    visibilityState() {
+      if (document.visibilityState === 'hidden') {
+        this.outFocusMaskShow('ineffective_learning');
+      }
     },
   },
 };
