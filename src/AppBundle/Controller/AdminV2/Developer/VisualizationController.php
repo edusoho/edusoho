@@ -5,6 +5,7 @@ namespace AppBundle\Controller\AdminV2\Developer;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Visualization\Dao\ActivityLearnRecordDao;
+use Biz\Visualization\Dao\ActivityStayDailyDao;
 use Biz\Visualization\Dao\ActivityVideoWatchRecordDao;
 use Biz\Visualization\Dao\UserActivityLearnFlowDao;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,7 +20,12 @@ class VisualizationController extends BaseController
             $this->getActivityLearnRecordDao()->count($conditions),
             20
         );
-        $records = $this->getActivityLearnRecordDao()->search($conditions, ['id' => 'DESC'], 0, 20);
+        $records = $this->getActivityLearnRecordDao()->search(
+            $conditions,
+            ['id' => 'DESC'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
 
         return $this->render('admin-v2/developer/visualization/activity-learn-record.html.twig', [
             'records' => $records,
@@ -35,7 +41,12 @@ class VisualizationController extends BaseController
             $this->getActivityVideoWatchRecordDao()->count($conditions),
             20
         );
-        $records = $this->getActivityVideoWatchRecordDao()->search($conditions, ['id' => 'DESC'], 0, 20);
+        $records = $this->getActivityVideoWatchRecordDao()->search(
+            $conditions,
+            ['id' => 'DESC'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
 
         return $this->render('admin-v2/developer/visualization/activity-video-watch-record.html.twig', [
             'records' => $records,
@@ -51,7 +62,12 @@ class VisualizationController extends BaseController
             $this->getActivityLearnFlowDao()->count($conditions),
             20
         );
-        $records = $this->getActivityLearnFlowDao()->search($conditions, ['id' => 'DESC'], 0, 20);
+        $records = $this->getActivityLearnFlowDao()->search(
+            $conditions,
+            ['id' => 'DESC'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
 
         return $this->render('admin-v2/developer/visualization/activity-learn-flow.html.twig', [
             'records' => $records,
@@ -59,8 +75,34 @@ class VisualizationController extends BaseController
         ]);
     }
 
-    public function activityStayDailyAction()
+    public function activityStayDailyAction(Request $request)
     {
+        $conditions = $request->query->all();
+        $paginator = new Paginator(
+            $request,
+            $this->getActivityStayDailyDao()->count($conditions),
+            20
+        );
+
+        $records = $this->getActivityStayDailyDao()->search(
+            $conditions,
+            ['id' => 'DESC'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        return $this->render('admin-v2/developer/visualization/activity-stay-daily.html.twig', [
+            'records' => $records,
+            'paginator' => $paginator,
+        ]);
+    }
+
+    /**
+     * @return ActivityStayDailyDao
+     */
+    protected function getActivityStayDailyDao()
+    {
+        return $this->getBiz()->dao('Visualization:ActivityStayDailyDao');
     }
 
     /**

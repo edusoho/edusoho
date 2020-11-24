@@ -2799,5 +2799,9 @@ admin_v2_data_visualization_activity_learn_record:
   defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:activityLearnRecord }
 
 admin_v2_data_visualization_activity_video_watch_record:
-  path: /data_visualization/activity_vide_watch_record
+  path: /data_visualization/activity_video_watch_record
   defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:activityVideoWatchRecord }
+
+admin_v2_data_visualization_activity_stay_daily:
+  path: /data_visualization/activity_stay_daily
+  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:activityStayDaily }
