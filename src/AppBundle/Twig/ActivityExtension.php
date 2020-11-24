@@ -194,6 +194,8 @@ class ActivityExtension extends \Twig_Extension
     {
         $activities = $this->container->get('extension.manager')->getActivities();
 
+        $type = $this->removeFlashTask($type);
+
         return isset($activities[$type]) ? call_user_func($activities[$type]['visible'], $courseSet, $course) : false;
     }
 
@@ -229,6 +231,15 @@ class ActivityExtension extends \Twig_Extension
         }
 
         return $types;
+    }
+
+    private function removeFlashTask($type)
+    {
+        if ('flash' == $type) {
+            return;
+        } else {
+            return $type;
+        }
     }
 
     /**
