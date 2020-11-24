@@ -5,6 +5,7 @@ define(function(require, exports, module) {
         var $exportBtns = $('.js-export-btn');
         var $exportBtn;
         var exportFileNames = [];
+        var totalCount = 0;
 
         var $modal = $('#modal');
         exportDataEvent();
@@ -45,6 +46,9 @@ define(function(require, exports, module) {
                     if (!response.success) {
                         notifyError(Translator.trans(response.message,response.parameters));
                         can = false;
+                        response.counts.forEach(function(val) {
+                          totalCount += val;
+                        }, 0);
                     }
                 }
             });
@@ -70,7 +74,7 @@ define(function(require, exports, module) {
                     if (response.status === 'finish') {
                       exportFileNames.push(response.csvName);
                     }
-                    var process = response.start * 100 / response.count + '%';
+                    var process = response.start * 100 / totalCount + '%';
                     $modal.find('#progress-bar').width(process);
                     exportData(response.start, response.fileName, urls, response.name);
                 } else {
@@ -106,6 +110,7 @@ define(function(require, exports, module) {
                 $.each(fileNames, function (index, value) {
                   url += `fileNames[]=${value}&`;
                 });
+                totalCount = 0;
                 exportFileNames = [];
                 window.location.href = url;
                 return true;

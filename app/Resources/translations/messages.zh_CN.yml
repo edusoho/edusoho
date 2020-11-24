@@ -7617,7 +7617,7 @@ admin.setting_course.video_play_setting.multiple_open: 多开学习
 admin.setting_course.video_play_setting.multiple_open.tips: 允许用户在一端或多端同时进入课时学习页面学习
 admin.setting_course.video_play_setting.different_video_multiple: 不同视频课时多开
 admin.setting_course.video_play_setting.multiple_forbidden_effect: 禁止多开效果
-admin.setting_course.video_play_setting.kick_previous_play: 踢掉前次学习页面，需要终端升级到最新版本
+admin.setting_course.video_play_setting.kick_previous_play: 踢掉前次学习页面，需要终端升级至PC端V20.4.6版本，APP端V4.9.3版本
 admin.setting_course.video_play_setting.kick_previous_play.tips: >
   <p>当用户多开时，以后开的学习页面为主，踢掉前次学习页面。</p>
   <p>作业课时/考试课时/直播课时三类课时在学习时，后开的学习页面将无法踢掉这三类课时</p>

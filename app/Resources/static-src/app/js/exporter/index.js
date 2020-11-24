@@ -5,6 +5,7 @@ class Export {
     this.$exportBtns = $exprtBtns;
     this.$modal = $('#modal');
     this.fileNames = [];
+    this.totalCount = 0;
     this.exportDataEvent();
   }
 
@@ -45,6 +46,9 @@ class Export {
         if (!response.success) {
           self.notifyError(Translator.trans(response.message,response.parameters));
           can = false;
+          response.counts.forEach(function(val) {
+            self.totalCount += val;
+          }, 0);
         }
       }
     });
@@ -76,6 +80,7 @@ class Export {
         url += `fileNames[]=${value}&`;
       });
       this.fileNames = [];
+      this.totalCount = 0;
       window.location.href = url;
       return true;
     }
@@ -109,7 +114,7 @@ class Export {
         if (response.status === 'finish') {
           self.fileNames.push(response.fileName);
         }
-        let process = response.start * 100 / response.count + '%';
+        let process = response.start * 100 / self.totalCount + '%';
         self.$modal.find('#progress-bar').width(process);
         self.exportData(response.start, response.fileName, urls, response.name);
       } else {
