@@ -7,6 +7,7 @@ use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Activity\Service\ActivityService;
 use Biz\Common\CommonException;
 use Biz\Course\Service\LearningDataAnalysisService;
+use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
 use Biz\Visualization\Service\DataCollectService;
@@ -133,7 +134,7 @@ class CourseTaskEventV2 extends AbstractResource
             ],
         ]);
         $this->getDataCollectService()->updateLearnFlow($flow['id'], ['lastLearnTime' => $record['endTime']]);
-        $triggerData = ['lastTime' => $record['endTime']];
+        $triggerData = ['lastTime' => $record['startTime']];
         $result = $this->getTaskService()->trigger($taskId, self::EVENT_DOING, $triggerData);
 
         $watchResult = null;
@@ -189,7 +190,12 @@ class CourseTaskEventV2 extends AbstractResource
             ],
         ]);
 
-        $triggerData = ['lastTime' => $record['endTime']];
+        $triggerData = [
+            'lastTime' => $record['endTime'],
+            'finish' => [
+                'data' => [],
+            ],
+        ];
         $result = $this->getTaskService()->trigger($taskId, self::EVENT_FINISH, $triggerData);
 
         if (self::EVENT_FINISH === $result['status']) {
@@ -305,5 +311,13 @@ class CourseTaskEventV2 extends AbstractResource
     private function getLearnControlService()
     {
         return $this->service('Visualization:LearnControlService');
+    }
+
+    /**
+     * @return TaskResultService
+     */
+    protected function getTaskResultService()
+    {
+        return $this->service('Task:TaskResultService');
     }
 }

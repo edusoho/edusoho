@@ -205,6 +205,19 @@ export default class TaskPipe {
       } else if (!res.learnControl.allowLearn && res.learnControl.denyReason === 'reject_current') {
         this.MonitoringEvents.triggerEvent('reject_current');
       }
+      if (res && res.taskResult && res.taskResult.status) {
+        if (param.data) {
+          res.playerMsg = param.data.playerMsg;
+        }
+
+        let listners = this.eventMap.receives[res.taskResult.status];
+        if (listners) {
+          for (var i = listners.length - 1; i >= 0; i--) {
+            let listner = listners[i];
+            listner(res);
+          }
+        }
+      }
     }).catch(error => {
       this._clearInterval();
       cd.message({ type: 'danger', message: Translator.trans('task_show.user_login_protect_tip') });

@@ -11,11 +11,11 @@ class ActivitySubscriber extends EventSubscriber implements EventSubscriberInter
 {
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             'activity.start' => 'onActivityStart',
             'activity.doing' => 'onActivityDoing',
             'activity.finish' => 'onActivityFinish',
-        );
+        ];
     }
 
     public function onActivityFinish(Event $event)
@@ -47,6 +47,7 @@ class ActivitySubscriber extends EventSubscriber implements EventSubscriberInter
         $task = $event->getArgument('task');
         $lastTime = $event->getArgument('lastTime');
         $time = time() - $lastTime;
+//        var_dump($time);
         $learnTimeSec = $this->getTaskService()->getTimeSec('learn');
         if ($time >= $learnTimeSec) {
             $time = $learnTimeSec;
