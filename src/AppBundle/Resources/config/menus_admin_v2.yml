@@ -1698,7 +1698,9 @@ admin_v2:
                             name: 数据可视化
                             disable: true
                             children:
+                                admin_v2_data_visualization_activity_learn_flow:
+                                    name: 教学活动流水数据
                                 admin_v2_data_visualization_activity_learn_record:
                                     name: 教学活动原始停留数据上报
-                                admin_v2_data_visualization_activity_vide_watch_log:
+                                admin_v2_data_visualization_activity_video_watch_record:
                                     name: 教学活动原始观看数据上报
