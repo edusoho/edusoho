@@ -81,29 +81,6 @@ class Live {
     timestamp = timestamp.substr(0,10);
     this._initInterval();
 
-    // let eventTrigger = setInterval(function() {
-    //   if (!self.isLiveRoomOpened || $('meta[name="trigger_url"]').length === 0) return;
-    //   eventName = eventName ? 'doing' : 'start';
-    //   $.ajax({
-    //     url: $('meta[name="trigger_url"]').attr('content'),
-    //     type: 'GET',
-    //     data: { eventName: eventName, data: {lastTime: timestamp, events: {watching: {watchTime: 60}}}},
-    //     success: function(response) {
-    //       if (response.live_end) {
-    //         clearInterval(eventTrigger);
-    //       }
-    //     },
-    //     error: function (jqxhr) {
-    //       let goto = jqxhr.responseJSON.goto;
-    //       if (goto !== undefined) {
-    //         window.location.href = goto;
-    //       }
-    //     }
-    //   });
-    //   timestamp = Date.parse( new Date() ).toString();
-    //   timestamp = timestamp.substr(0,10);
-    // }, 60000);
-
   }
 
   _clearInterval() {

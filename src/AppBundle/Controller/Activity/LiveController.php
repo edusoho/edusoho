@@ -156,6 +156,13 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         ]);
     }
 
+    public function liveReplayEntryAction(Request $request, $liveId)
+    {
+        return $this->forward('AppBundle:Player:show', [
+            'id' => $liveId,
+        ]);
+    }
+
     public function triggerAction(Request $request, $courseId, $activityId)
     {
         $this->getCourseService()->tryTakeCourse($courseId);

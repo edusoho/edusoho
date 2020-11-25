@@ -2,7 +2,8 @@ import OutFocusMask from './out-focus-mask';
 
 export default class MonitoringEvents {
   constructor(params) {
-    this.OutFocusMask = new OutFocusMask();
+    this.maskElement = params.maskElement || null;
+    this.OutFocusMask = new OutFocusMask(this.maskElement);
 
     this.activityTimer = null;
     this.ACTIVITY_TIME = 180;
@@ -13,7 +14,6 @@ export default class MonitoringEvents {
     this.videoPlayRule = params.videoPlayRule;
     this.taskType = params.taskType;
     this.taskPipe = params.taskPipe;
-    this.maskElement = params.maskElement || null;
 
     this.initEvent();
   }
@@ -37,7 +37,7 @@ export default class MonitoringEvents {
       return;
     }
 
-    this.initMaskElement(this.maskElement);
+    this.initMaskElement();
     this.initVisibilitychange();
     this.initActivity();
   }

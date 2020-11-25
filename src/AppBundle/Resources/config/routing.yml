@@ -1767,6 +1767,9 @@ task_live_replay_player:
   path: /course/{courseId}/activity/{activityId}/replay
   defaults: {_controller: AppBundle:Activity/Live:liveReplay }
 
+task_live_replay_entry_player:
+  path: /course/{courseId}/activity/{activityId}/replay
+  defaults: {_controller: AppBundle:Activity/Live:liveReplayEntry }
 
 
 # task_liveroom_ticket:
