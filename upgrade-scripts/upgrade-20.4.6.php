@@ -51,6 +51,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = array(
             'updateGoodsAndGoodsSpecsPrice',
+            'updateItemCategoryNum',
         );
 
         $funcNames = array();
