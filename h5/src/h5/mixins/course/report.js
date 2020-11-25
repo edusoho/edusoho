@@ -54,6 +54,7 @@ export default {
         this.initVisibilitychange();
       }
     },
+
     /**
      * 初始化上报所需方法
      */
@@ -62,6 +63,7 @@ export default {
       this.intervalReportData();
       this.intervalReportLearnTime();
     },
+
     /**
      * 获取当前task信息
      * @param {*} courseId
@@ -80,6 +82,7 @@ export default {
           });
       });
     },
+
     /**
      * 上报课时学习情况
      * @param {*} courseId
@@ -87,73 +90,53 @@ export default {
      * @param {*} events  //doing finish
      *  @param {*} ContinuousReport //是否每间隔一分钟上报
      */
-    reprtData(eventName = 'doing', ContinuousReport = false) {
+    reprtData(param = { ContinuousReport: false }) {
       if (
         this.reportData.courseId === null ||
         this.reportData.taskId === null
       ) {
         return;
       }
-      if (this.isFinish && !ContinuousReport) {
+
+      if (this.isFinish && !param.ContinuousReport) {
         return;
       }
 
       if (this.sign === '') {
-        let customData = {};
+        let data = {
+          client: 'h5',
+        };
         let flowSign = localStorage.getItem('flowSign');
+
         if (flowSign) {
-          customData.lastSign = flowSign;
+          data.lastSign = flowSign;
           localStorage.removeItem('flowSign');
         }
-        Api.reportTaskEvent({
-          query: {
-            courseId: this.reportData.courseId,
-            taskId: this.reportData.taskId,
-            eventName: 'start',
-          },
-          data: Object.assign(
-            {
-              client: 'h5',
-            },
-            customData,
-          ),
-        }).then(res => {
-          this.handleReprtResult(res);
-          this.reportJudge(res);
-          this.sign = res.record.flowSign;
-          this.record = res.record;
-          this.doing(eventName);
-        });
-      } else {
-        this.doing(eventName);
-      }
-      // if (events === 'doing') {
-      //   if (this.reportResult !== null) {
-      //     let lastTime = this.reportResult.lastTime;
-      //     params = { lastTime };
-      //   }
-      //   if (watchTime) {
-      //     params.watchTime = watchTime;
-      //   }
-      // }
 
-      // const query = {
-      //   courseId: this.reportData.courseId,
-      //   taskId: this.reportData.taskId,
-      //   events,
-      // };
-      // return new Promise((resolve, reject) => {
-      //   Api.reportTask({ query, data: params })
-      //     .then(res => {
-      //       this.handleReprtResult(res);
-      //       resolve(res);
-      //     })
-      //     .catch(err => {
-      //       reject(err);
-      //     });
-      // });
+        this.start(data);
+      } else {
+        this.doing();
+      }
     },
-    doing(eventName) {
+
+    start(data) {
+      Api.reportTaskEvent({
+        query: {
+          courseId: this.reportData.courseId,
+          taskId: this.reportData.taskId,
+          eventName: 'start',
+        },
+        data,
+      }).then(res => {
+        // this.handleReprtResult(res);
+        this.reportJudge(res);
+        this.sign = res.record.flowSign;
+        this.record = res.record;
+        this.doing();
+      });
+    },
+
+    doing() {
       if (this.sign.length === 0) {
         return;
       }
@@ -166,7 +149,7 @@ export default {
         query: {
           courseId: this.reportData.courseId,
           taskId: this.reportData.taskId,
-          eventName,
+          eventName: 'doing',
         },
         data: data,
       })
@@ -180,6 +163,7 @@ export default {
           this.clearReportIntervalTime();
         });
     },
+
     /**
      * 课时finish后去做一些操作
      * @param {*} res
@@ -197,21 +181,24 @@ export default {
         this.$store.commit(types.SET_TASK_SATUS, 'start');
       }
     },
+
     intervalReportLearnTime() {
       this.reportLearnTime = setInterval(() => {
         // this.checkoutTime();
         this.learnTime++;
       }, 1000);
     },
+
     /**
      * 1分钟上报一次
      */
     intervalReportData(min = 1) {
       const intervalTime = min * 60 * 1000;
       this.reportIntervalTime = setInterval(() => {
-        this.reprtData('doing', true);
+        this.reprtData({ ContinuousReport: true });
       }, intervalTime);
     },
+
     /**
      * 检验是否到达完成条件时间
      */
@@ -228,6 +215,7 @@ export default {
         }
       }
     },
+
     /**
      * 清除定时器
      */
@@ -237,6 +225,7 @@ export default {
       this.reportIntervalTime = null;
       this.reportLearnTime = null;
     },
+
     /**
      * 判断用户当前状态
      * @param {*} res 数据上报返回参数
@@ -253,15 +242,15 @@ export default {
       ) {
         this.outFocusMaskShow('reject_current');
       }
-      return;
     },
+
     /**
      * 遮罩层关闭
      * @param {*} type
      */
     outFocusMask(type) {
       this.isShowOutFocusMask = false;
-      this.reprtData('doing', true);
+      this.reprtData({ ContinuousReport: false });
 
       if (this.player && this.reportType === 'video') {
         this.player.play();
@@ -269,6 +258,7 @@ export default {
 
       document.body.style.overflow = '';
     },
+
     /**
      * 遮罩层显示
      * @param { String } type 遮罩层类型
@@ -282,7 +272,7 @@ export default {
       }
       this.isShowOutFocusMask = true;
       this.outFocusMaskType = type;
-      this.reprtData('doing', true);
+      this.reprtData({ ContinuousReport: true });
 
       if (this.player && this.reportType === 'video') {
         this.player.pause();
@@ -290,12 +280,14 @@ export default {
 
       document.body.style.overflow = 'hidden';
     },
+
     /**
      * 监控 tab 切换最小化
      */
     initVisibilitychange() {
       document.addEventListener('visibilitychange', this.visibilityState);
     },
+
     visibilityState() {
       if (document.visibilityState === 'hidden') {
         this.outFocusMaskShow('ineffective_learning');
