@@ -18,7 +18,7 @@ class DataVisualizationTable extends Migration
               `taskId` int(10) unsigned NOT NULL COMMENT '任务ID',
               `courseId` int(10) unsigned NOT NULL COMMENT '计划ID',
               `courseSetId` int(10) unsigned NOT NULL COMMENT '课程ID',
-              `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '状态：1：有效 2：无效',
+              `status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '状态：0：有效 1：无效',
               `event` tinyint(1) unsigned NOT NULL COMMENT '事件ID  1：start 2：doing 3：finish',
               `client` tinyint(1) unsigned NOT NULL COMMENT '终端',
               `startTime` int(10) unsigned NOT NULL COMMENT '开始时间',

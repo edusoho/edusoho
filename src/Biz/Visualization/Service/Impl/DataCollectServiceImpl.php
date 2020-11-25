@@ -78,6 +78,7 @@ class DataCollectServiceImpl extends BaseService implements DataCollectService
             'client',
             'flowSign',
             'data',
+            'status',
         ]);
         $data['client'] = $this->convertClient($data['client']);
 
@@ -98,7 +99,9 @@ class DataCollectServiceImpl extends BaseService implements DataCollectService
             'client',
             'event',
             'flowSign',
+            'mediaType',
             'data',
+            'status',
         ]);
         $data['client'] = $this->convertClient($data['client']);
         $data['event'] = $this->convertEvent($data['event']);
