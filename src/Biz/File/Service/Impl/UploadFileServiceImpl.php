@@ -1387,6 +1387,11 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $conditions['startCount'] = 1;
         }
 
+        if ('other' == $conditions['type']) {
+            $conditions['types'] = ['other', 'flash'];
+            unset($conditions['type']);
+        }
+
         $conditions = $this->filterKeyWords($conditions);
         $conditions = $this->filterSourceForm($conditions);
         $conditions = $this->filterTag($conditions);
