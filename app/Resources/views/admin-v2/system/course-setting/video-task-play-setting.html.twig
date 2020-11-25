@@ -12,7 +12,8 @@
       </div>
       <div class="controls col-md-8 radios">
         {{ radios('multiple_learn_enable', {1:'admin.setting_course.allow'|trans, 0:'admin.setting_course.not_allow'|trans}, setting.multiple_learn_enable) }}
-        <div class="help-block js-tips-show {% if setting.multiple_learn_enable == 0 %}hidden{% endif %}">{{ 'admin.setting_course.video_play_setting.multiple_open.tips'|trans }}</div>
+        <div class="help-block js-allow-tips {% if setting.multiple_learn_enable == 0 %}hidden{% endif %}">{{ 'admin.setting_course.video_play_setting.multiple_open.allow_tips'|trans }}</div>
+        <div class="help-block js-forbidden-tips {% if setting.multiple_learn_enable == 1 %}hidden{% endif %}">{{ 'admin.setting_course.video_play_setting.multiple_open.not_allow_tips'|trans }}</div>
       </div>
     </div>
 

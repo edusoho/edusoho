@@ -14,9 +14,11 @@ $('input:radio[name="multiple_learn_enable"]').click(function(){
   let value = $('input:radio[name="multiple_learn_enable"]:checked').val();
   if(value == 0) {
     $('.js-effect-show').removeClass('hidden');
-    $('.js-tips-show').addClass('hidden');
+    $('.js-allow-tips').addClass('hidden');
+    $('.js-forbidden-tips').removeClass('hidden');
   } else {
     $('.js-effect-show').addClass('hidden');
-    $('.js-tips-show').removeClass('hidden');
+    $('.js-allow-tips').removeClass('hidden');
+    $('.js-forbidden-tips').addClass('hidden');
   }
 });

@@ -7614,7 +7614,8 @@ admin.article_setting.message_comments_manage: 私信内容管理
 admin.setting_course.article.article_comment: 评价
 admin.setting_course.video_play_setting: 在线视频课时播放配置
 admin.setting_course.video_play_setting.multiple_open: 多开学习
-admin.setting_course.video_play_setting.multiple_open.tips: 允许用户在一端或多端同时进入课时学习页面学习
+admin.setting_course.video_play_setting.multiple_open.allow_tips: 允许用户在一端或多端同时进入课时学习页面学习
+admin.setting_course.video_play_setting.multiple_open.not_allow_tips: 禁止用户在一端或多端同时进入课时学习页面学习
 admin.setting_course.video_play_setting.different_video_multiple: 不同视频课时多开
 admin.setting_course.video_play_setting.multiple_forbidden_effect: 禁止多开效果
 admin.setting_course.video_play_setting.kick_previous_play: 踢掉前次学习页面，需要终端升级至PC端V20.4.6版本，APP端V4.9.3版本

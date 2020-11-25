@@ -6732,7 +6732,8 @@ admin.article_setting.message_comments_manage: 'Message comment manage'
 admin.setting_course.article.article_comment: 'Article Comment'
 admin.setting_course.video_play_setting: Online Video Task Playback Configuration
 admin.setting_course.video_play_setting.multiple_open: Multiple Open
-admin.setting_course.video_play_setting.multiple_open.tips: Allows users to access a time-learning page on one or more ends at the same time
+admin.setting_course.video_play_setting.multiple_open.allow_tips: Allows users to access a time-learning page on one or more ends at the same time
+admin.setting_course.video_play_setting.multiple_open.not_allow_tips: Forbidden users to access a time-learning page on one or more ends at the same time
 admin.setting_course.video_play_setting.different_video_multiple: Multiple sessions of the different video lesson
 admin.setting_course.video_play_setting.multiple_forbidden_effect: Multi-opening prohibition effect
 admin.setting_course.video_play_setting.kick_previous_play: Kick the previous learning page, require terminal upgrade to PC side V20.4.6, APP side V4.9.3.
