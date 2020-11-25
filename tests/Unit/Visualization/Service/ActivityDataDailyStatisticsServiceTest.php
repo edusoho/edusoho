@@ -275,7 +275,6 @@ class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
 
     public function testSumTaskResultTime()
     {
-
     }
 
     public function testGetVideoEffectiveTimeStatisticsSetting()
