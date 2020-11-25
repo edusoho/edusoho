@@ -124,7 +124,7 @@ class EduSohoUpgrade extends AbstractUpdater
                     FROM biz_item 
                     WHERE category_id > 0 
                     GROUP BY bank_id, category_id
-                ) m ON m.bank_id = c.bank_id AND m.category_id = c.id 
+                ) m ON m.bank_id = c.bank_id AND m.category_id = c.id AND c.question_num != m.question_num AND c.item_num != m.item_num
                 SET c.item_num = m.item_num, c.question_num = m.question_num;
             ");
         }
