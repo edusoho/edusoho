@@ -11,6 +11,10 @@
 	background: rgba(0, 0, 0, 0.56);
 	outline: 0;
 
+	&.full {
+		position: fixed;
+	}
+
 	.content {
 		text-align: center;
 

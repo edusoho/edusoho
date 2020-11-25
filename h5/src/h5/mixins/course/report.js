@@ -20,6 +20,7 @@ export default {
       outFocusMaskType: '', // 显示遮罩层的类型
       sign: '',
       record: {},
+      isFull: false, // 遮罩层是否全屏
     };
   },
   beforeDestroy() {
@@ -49,7 +50,9 @@ export default {
       if (reportNow) {
         this.initReportEvent();
       }
-      this.initVisibilitychange();
+      if (this.reportType === 'video') {
+        this.initVisibilitychange();
+      }
     },
     /**
      * 初始化上报所需方法
@@ -151,6 +154,9 @@ export default {
       // });
     },
     doing(eventName) {
+      if (this.sign.length === 0) {
+        return;
+      }
       let data = {
         client: 'h5',
         sign: this.sign,
@@ -193,7 +199,7 @@ export default {
     },
     intervalReportLearnTime() {
       this.reportLearnTime = setInterval(() => {
-        this.checkoutTime();
+        // this.checkoutTime();
         this.learnTime++;
       }, 1000);
     },
@@ -256,6 +262,12 @@ export default {
     outFocusMask(type) {
       this.isShowOutFocusMask = false;
       this.reprtData('doing', true);
+
+      if (this.player && this.reportType === 'video') {
+        this.player.play();
+      }
+
+      document.body.style.overflow = '';
     },
     /**
      * 遮罩层显示
@@ -271,6 +283,12 @@ export default {
       this.isShowOutFocusMask = true;
       this.outFocusMaskType = type;
       this.reprtData('doing', true);
+
+      if (this.player && this.reportType === 'video') {
+        this.player.pause();
+      }
+
+      document.body.style.overflow = 'hidden';
     },
     /**
      * 监控 tab 切换最小化

@@ -1,6 +1,6 @@
 <!-- 数据上报遮罩层 -->
 <template>
-  <div class="out-focus-mask" v-if="isShow">
+  <div class="out-focus-mask" :class="isFull ? 'full' : ''" v-if="isShow">
     <template v-if="type === 'ineffective_learning'">
       <div class="content">
         <div class="tips">
@@ -52,6 +52,10 @@ export default {
     isShow: {
       type: Boolean,
       default: false,
+    },
+    isFull: {
+      type: Boolean,
+      default: true,
     },
   },
   methods: {
