@@ -27,6 +27,7 @@ export default class TaskPipe {
     this.sign = '';
     this.record = {};
     this.pushing = false;
+    this.absorbed = 0;
 
     if (this.eventUrl === undefined) {
       throw Error('task event url is undefined');
@@ -127,6 +128,7 @@ export default class TaskPipe {
       }).then(res => {
         this.MonitoringEvents = new MonitoringEvents({
           videoPlayRule: this.videoPlayRule,
+          taskType: this.taskType,
           taskPipe: this
         });
 
@@ -197,6 +199,7 @@ export default class TaskPipe {
     this.pushing = true;
     Api.courseTaskEvent.pushEvent({
       params: {
+        status: this.absorbed,
         courseId: this.courseId,
         taskId: this.taskId,
         eventName: 'doing',
@@ -242,5 +245,9 @@ export default class TaskPipe {
   addListener(event, callback) {
     this.eventMap.receives[event] = this.eventMap.receives[event] || [];
     this.eventMap.receives[event].push(callback);
+  }
+
+  absorbedChange(n) {
+    this.absorbed = n;
   }
 }

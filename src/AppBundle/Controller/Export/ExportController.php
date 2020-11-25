@@ -18,10 +18,11 @@ class ExportController extends BaseController
         } catch (\Exception $e) {
             return $this->createJsonResponse(['message' => $e->getMessage()]);
         }
-        $response = ['success' => 1];
 
         $batchExporter->findExporter($names, $conditions);
         $counts = $batchExporter->getCount();
+
+        $response = ['success' => 1, 'counts' => $counts];
 
         if (!$batchExporter->canExport()) {
             $response = ['success' => 0, 'message' => 'export.not_allowed'];

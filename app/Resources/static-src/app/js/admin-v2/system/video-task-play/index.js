@@ -14,7 +14,9 @@ $('input:radio[name="multiple_learn_enable"]').click(function(){
   let value = $('input:radio[name="multiple_learn_enable"]:checked').val();
   if(value == 0) {
     $('.js-effect-show').removeClass('hidden');
+    $('.js-tips-show').addClass('hidden');
   } else {
     $('.js-effect-show').addClass('hidden');
+    $('.js-tips-show').removeClass('hidden');
   }
 });
