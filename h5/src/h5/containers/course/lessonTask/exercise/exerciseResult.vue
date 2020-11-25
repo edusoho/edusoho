@@ -1,5 +1,11 @@
 <template>
   <div class="testResults">
+    <out-focus-mask
+      :type="outFocusMaskType"
+      :isShow="isShowOutFocusMask"
+      :isFull="isFull"
+      @outFocusMask="outFocusMask"
+    ></out-focus-mask>
     <e-loading v-if="isLoading" />
     <div v-if="result" ref="data" class="result-data">
       <div class="result-data__item">
@@ -79,15 +85,21 @@
 
 <script>
 import Api from '@/api';
-import { mapState, mapMutations, mapActions } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 import * as types from '@/store/mutation-types';
 
 import exerciseMixin from '@/mixins/lessonTask/exercise.js';
 import report from '@/mixins/course/report';
+import OutFocusMask from '@/components/out-focus-mask.vue';
+
+import { Toast } from 'vant';
 
 export default {
   name: 'ExerciseResult',
   mixins: [exerciseMixin, report],
+  components: {
+    OutFocusMask,
+  },
   data() {
     return {
       result: null,
@@ -226,7 +238,7 @@ export default {
               exerciseId: this.$route.query.exerciseId,
               exerciseResultId: this.$route.query.exerciseResultId,
               courseId: this.$route.query.courseId,
-              taskId: tthis.$route.query.taskId,
+              taskId: this.$route.query.taskId,
             },
           });
         })

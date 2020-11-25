@@ -1,5 +1,11 @@
 <template>
   <div>
+    <out-focus-mask
+      :type="outFocusMaskType"
+      :isShow="isShowOutFocusMask"
+      :isFull="isFull"
+      @outFocusMask="outFocusMask"
+    ></out-focus-mask>
     <e-loading v-if="isLoading" />
     <div v-if="homework" class="intro-body">
       <van-panel class="panel intro-panel" title="作业名称">
@@ -33,14 +39,18 @@
 <script>
 import Api from '@/api';
 import { mapState, mapActions } from 'vuex';
-import { Dialog, Toast } from 'vant';
+import { Toast } from 'vant';
 
 import homeworkMixin from '@/mixins/lessonTask/homework.js';
 import report from '@/mixins/course/report';
+import OutFocusMask from '@/components/out-focus-mask.vue';
 
 export default {
   name: 'HomeworkIntro',
   mixins: [homeworkMixin, report],
+  components: {
+    OutFocusMask,
+  },
   data() {
     return {
       courseId: null,

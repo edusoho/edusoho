@@ -3,6 +3,7 @@
     <out-focus-mask
       :type="outFocusMaskType"
       :isShow="isShowOutFocusMask"
+      :isFull="isFull"
       @outFocusMask="outFocusMask"
     ></out-focus-mask>
     <e-loading v-if="isLoading" />
