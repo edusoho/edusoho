@@ -21,6 +21,7 @@ export default {
       sign: '',
       record: {},
       isFull: false, // 遮罩层是否全屏
+      absorbed: 0, // 是否无效学习
     };
   },
   beforeDestroy() {
@@ -29,6 +30,7 @@ export default {
     if (this.sign.length > 0) {
       localStorage.setItem('flowSign', this.sign);
     }
+    document.body.style.overflow = '';
   },
   methods: {
     /**
@@ -90,7 +92,7 @@ export default {
      * @param {*} events  //doing finish
      *  @param {*} ContinuousReport //是否每间隔一分钟上报
      */
-    reprtData(param = { ContinuousReport: false }) {
+    reprtData(param = { eventName: 'doing', ContinuousReport: false }) {
       if (
         this.reportData.courseId === null ||
         this.reportData.taskId === null
@@ -113,13 +115,13 @@ export default {
           localStorage.removeItem('flowSign');
         }
 
-        this.start(data);
+        this.start(param, data);
       } else {
-        this.doing();
+        this.reportTaskEvent(param);
       }
     },
 
-    start(data) {
+    start(param, data) {
       Api.reportTaskEvent({
         query: {
           courseId: this.reportData.courseId,
@@ -128,15 +130,18 @@ export default {
         },
         data,
       }).then(res => {
-        // this.handleReprtResult(res);
-        this.reportJudge(res);
+        this.handleReprtResult(res);
+        let reportJudgeStatus = this.reportJudge(res);
+        if (reportJudgeStatus) {
+          return;
+        }
         this.sign = res.record.flowSign;
         this.record = res.record;
-        this.doing();
+        this.reportTaskEvent(param);
       });
     },
 
-    doing() {
+    reportTaskEvent(param) {
       if (this.sign.length === 0) {
         return;
       }
@@ -144,12 +149,16 @@ export default {
         client: 'h5',
         sign: this.sign,
         duration: this.learnTime,
+        status: this.absorbed,
       };
+      if (param.reActive) {
+        data.reActive = param.reActive;
+      }
       Api.reportTaskEvent({
         query: {
           courseId: this.reportData.courseId,
           taskId: this.reportData.taskId,
-          eventName: 'doing',
+          eventName: param.eventName,
         },
         data: data,
       })
@@ -170,7 +179,7 @@ export default {
      */
     handleReprtResult(res) {
       this.reportResult = res;
-      if (res.taskResult.status === 'finish') {
+      if (res.taskResult && res.taskResult.status === 'finish') {
         this.isFinish = true;
         this.$store.commit(types.SET_TASK_SATUS, 'finish');
         this.$store.commit(
@@ -184,7 +193,7 @@ export default {
 
     intervalReportLearnTime() {
       this.reportLearnTime = setInterval(() => {
-        // this.checkoutTime();
+        this.checkoutTime();
         this.learnTime++;
       }, 1000);
     },
@@ -195,7 +204,7 @@ export default {
     intervalReportData(min = 1) {
       const intervalTime = min * 60 * 1000;
       this.reportIntervalTime = setInterval(() => {
-        this.reprtData({ ContinuousReport: true });
+        this.reprtData({ eventName: 'doing', ContinuousReport: true });
       }, intervalTime);
     },
 
@@ -211,7 +220,7 @@ export default {
           parseInt(this.learnTime / 60, 10) >=
           parseInt(this.reportFinishCondition.data, 10)
         ) {
-          this.reprtData('finish');
+          this.reprtData({ eventName: 'finish', ContinuousReport: true });
         }
       }
     },
@@ -235,13 +244,17 @@ export default {
         !res.learnControl.allowLearn &&
         res.learnControl.denyReason === 'kick_previous'
       ) {
-        this.outFocusMaskShow('kick_previous');
+        this.kickEachOther('kick_previous');
+        return true;
       } else if (
         !res.learnControl.allowLearn &&
         res.learnControl.denyReason === 'reject_current'
       ) {
-        this.outFocusMaskShow('reject_current');
+        this.kickEachOther('reject_current');
+        this.clearReportIntervalTime();
+        return true;
       }
+      return false;
     },
 
     /**
@@ -249,48 +262,58 @@ export default {
      * @param {*} type
      */
     outFocusMask(type) {
+      this.absorbed = 0;
       this.isShowOutFocusMask = false;
-      this.reprtData({ ContinuousReport: false });
-
       if (this.player && this.reportType === 'video') {
         this.player.play();
       }
-
       document.body.style.overflow = '';
+      this.reprtData({
+        eventName: 'doing',
+        ContinuousReport: true,
+        reActive: 1,
+      });
     },
 
     /**
-     * 遮罩层显示
-     * @param { String } type 遮罩层类型
-     * ineffective_learning   // 无效学习
+     * 互踢
+     * @param {*} type
      * kick_previous          // 互踢，挤掉前面的
      * reject_current         // 互踢，不允许后来
      */
-    outFocusMaskShow(type) {
-      if (this.isShowOutFocusMask && type === 'ineffective_learning') {
-        return;
-      }
-      this.isShowOutFocusMask = true;
-      this.outFocusMaskType = type;
-      this.reprtData({ ContinuousReport: true });
-
-      if (this.player && this.reportType === 'video') {
-        this.player.pause();
-      }
-
-      document.body.style.overflow = 'hidden';
+    kickEachOther(type) {
+      this.outFocusMaskShow(type);
     },
 
     /**
-     * 监控 tab 切换最小化
+     * 显示 无效学习 遮罩层
+     * @param {*} type ineffective_learning
      */
+    ineffectiveLearning(type) {
+      if (this.isShowOutFocusMask) {
+        return;
+      }
+      this.outFocusMaskShow(type);
+      this.reprtData({ eventName: 'doing', ContinuousReport: true });
+    },
+
+    outFocusMaskShow(type) {
+      this.absorbed = 1;
+      this.isShowOutFocusMask = true;
+      this.outFocusMaskType = type;
+      if (this.player && this.reportType === 'video') {
+        this.player.pause();
+      }
+      document.body.style.overflow = 'hidden';
+    },
+
     initVisibilitychange() {
       document.addEventListener('visibilitychange', this.visibilityState);
     },
 
     visibilityState() {
       if (document.visibilityState === 'hidden') {
-        this.outFocusMaskShow('ineffective_learning');
+        this.ineffectiveLearning('ineffective_learning');
       }
     },
   },
