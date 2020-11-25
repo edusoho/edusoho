@@ -137,6 +137,9 @@ class CourseTaskEventV2 extends AbstractResource
         $this->getDataCollectService()->updateLearnFlow($flow['id'], ['lastLearnTime' => $record['endTime']]);
         $triggerData = ['lastTime' => $record['startTime']];
         $result = $this->getTaskService()->trigger($taskId, self::EVENT_DOING, $triggerData);
+        if (isset($data['lastLearnTime'])) {
+            $this->getTaskResultService()->updateTaskResult($result['id'], ['lastLearnTime' => $data['lastLearnTime']]);
+        }
 
         $watchResult = null;
         if (!empty($data['watchData'])) {

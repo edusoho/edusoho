@@ -189,6 +189,7 @@ export default class TaskPipe {
       sign: this.sign,
       duration: this.taskPipeCounter,
       status: this.absorbed,
+      lastLearnTime: DurationStorage.get(this.userId, this.fileId),
     };
     if (param.watchTime) {
       let watchData = {
