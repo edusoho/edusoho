@@ -50,6 +50,8 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
             }
         }
 
+        $this->getActivityStayDailyDao()->batchDelete(['dayTime' => $startTime]);
+
         return $this->getActivityStayDailyDao()->batchCreate($data);
     }
 
@@ -82,6 +84,8 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
             }
         }
 
+        $this->getActivityVideoDailyDao()->batchDelete(['dayTime' => $startTime]);
+
         return $this->getActivityVideoDailyDao()->batchCreate($data);
     }
 
@@ -100,6 +104,8 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
             $this->beginTransaction();
 
             $this->sumTaskResultPureTime($data);
+
+            $this->getActivityLearnDailyDao()->batchDelete($conditions);
 
             $this->getActivityLearnDailyDao()->batchCreate($data);
 
@@ -123,6 +129,8 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
             $data = $this->getUserStayDailyDao()->search($conditions, [], 0, PHP_INT_MAX, $columns);
         }
 
+        $this->getUserLearnDailyDao()->batchDelete($conditions);
+
         return $this->getUserLearnDailyDao()->batchCreate($data);
     }
 
@@ -136,6 +144,8 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
         } else {
             $data = $this->getCoursePlanStayDailyDao()->search($conditions, [], 0, PHP_INT_MAX, $columns);
         }
+
+        $this->getCoursePlanLearnDailyDao()->batchDelete($conditions);
 
         return $this->getCoursePlanLearnDailyDao()->batchCreate($data);
     }
@@ -166,6 +176,8 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
                 ];
             }
         }
+
+        $this->getCoursePlanStayDailyDao()->batchDelete(['dayTime' => $startTime]);
 
         return $this->getCoursePlanStayDailyDao()->batchCreate($data);
     }
@@ -198,6 +210,8 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
             }
         }
 
+        $this->getCoursePlanVideoDailyDao()->batchDelete(['dayTime' => $startTime]);
+
         return $this->getCoursePlanVideoDailyDao()->batchCreate($data);
     }
 
@@ -222,6 +236,8 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
             ];
         }
 
+        $this->getUserStayDailyDao()->batchDelete(['dayTime' => $startTime]);
+
         return $this->getUserStayDailyDao()->batchCreate($data);
     }
 
@@ -245,6 +261,8 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
                 'pureTime' => $this->sumPureTime($userWatchRecords),
             ];
         }
+
+        $this->getUserVideoDailyDao()->batchDelete(['dayTime' => $startTime]);
 
         return $this->getUserVideoDailyDao()->batchCreate($data);
     }

@@ -46,6 +46,7 @@ class CoursePlanLearnDailyDaoImpl extends AdvancedDaoImpl implements CoursePlanL
                 'dayTime <= :dayTime_LE',
                 'userId IN (:userIds)',
                 'userId = :userId',
+                'dayTime = :dayTime',
             ],
             'orderbys' => ['id', 'createdTime', 'userId'],
         ];
