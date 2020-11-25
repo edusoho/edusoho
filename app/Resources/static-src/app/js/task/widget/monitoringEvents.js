@@ -21,7 +21,7 @@ export default class MonitoringEvents {
     $('body').off('click', '.js-continue-studying');
     $('body').on('click', '.js-continue-studying', () =>  {
       this.OutFocusMask.continueStudying();
-      this.taskPipe._doing({reActive: 1});
+      this.taskPipe._flush({reActive: 1});
       this.taskPipe.absorbedChange(0);
     });
     if (navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)) {
@@ -53,7 +53,7 @@ export default class MonitoringEvents {
   ineffectiveEvent() { // 触发无效学习
     this.OutFocusMask.initLearStopTips();
     this.taskPipe.absorbedChange(1);
-    this.taskPipe._doing();
+    this.taskPipe._flush();
   }
 
   triggerEvent(type) { // 触发互踢事件
