@@ -26,6 +26,7 @@ export default class TaskPipe {
     this.lastLearnTime = DurationStorage.get(this.userId, this.fileId);
     this.sign = '';
     this.record = {};
+    this.absorbed = 0;
 
     if (this.eventUrl === undefined) {
       throw Error('task event url is undefined');
@@ -122,6 +123,7 @@ export default class TaskPipe {
       }).then(res => {
         this.MonitoringEvents = new MonitoringEvents({
           videoPlayRule: this.videoPlayRule,
+          taskType: this.taskType,
           taskPipe: this
         });
 
@@ -236,5 +238,9 @@ export default class TaskPipe {
   addListener(event, callback) {
     this.eventMap.receives[event] = this.eventMap.receives[event] || [];
     this.eventMap.receives[event].push(callback);
+  }
+
+  absorbedChange(n) {
+    this.absorbed = n;
   }
 }

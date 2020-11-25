@@ -11,6 +11,7 @@ export default class MonitoringEvents {
     this.eventMaskTimer = null;
     this.EVENT_MASK_TIME = 30;
     this.videoPlayRule = params.videoPlayRule;
+    this.taskType = params.taskType;
     this.taskPipe = params.taskPipe;
 
     this.initEvent();
@@ -20,14 +21,16 @@ export default class MonitoringEvents {
     $('body').off('click', '.js-continue-studying');
     $('body').on('click', '.js-continue-studying', () =>  {
       this.taskPipe._doing({reActive: 1});
+      this.taskPipe.absorbedChange(0);
       this.OutFocusMask.continueStudying();
     });
     if (navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)) {
       return;
     }
-    if (this.videoPlayRule !== 'auto_pause') {
+    if (this.videoPlayRule !== 'auto_pause' && this.taskType !== 'video') {
       return;
     }
+
     this.initMaskElement();
     this.initVisibilitychange();
     this.initActivity();
@@ -43,6 +46,7 @@ export default class MonitoringEvents {
   }
 
   triggerEvent(type) { // 触发事件
+    this.taskPipe.absorbedChange(1);
 
     if (type === 'reject_current') {
       this.OutFocusMask.initBanTips();
