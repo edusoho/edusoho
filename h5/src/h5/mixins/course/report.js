@@ -20,7 +20,6 @@ export default {
       outFocusMaskType: '', // 显示遮罩层的类型
       sign: '',
       record: {},
-      isFull: false, // 遮罩层是否全屏
       absorbed: 0, // 是否无效学习
     };
   },
@@ -312,7 +311,10 @@ export default {
     },
 
     visibilityState() {
-      if (document.visibilityState === 'hidden') {
+      if (
+        document.visibilityState === 'hidden' &&
+        this.reportType === 'video'
+      ) {
         this.ineffectiveLearning('ineffective_learning');
       }
     },

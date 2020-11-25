@@ -1,5 +1,5 @@
 .out-focus-mask {
-	position: absolute;
+	position: fixed;
 	top: 0;
 	right: 0;
 	bottom: 0;
@@ -8,11 +8,17 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	margin-top: 0;
 	background: rgba(0, 0, 0, 0.56);
 	outline: 0;
 
-	&.full {
-		position: fixed;
+	&.not-full {
+		margin-top: 46px;
+	}
+
+	&.player {
+		position: absolute !important;
+		margin-top: 0 !important;
 	}
 
 	.content {

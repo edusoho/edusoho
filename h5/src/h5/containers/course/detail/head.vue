@@ -3,7 +3,7 @@
     <out-focus-mask
       :type="outFocusMaskType"
       :isShow="isShowOutFocusMask"
-      :isFull="isFull"
+      :reportType="reportType"
       @outFocusMask="outFocusMask"
     ></out-focus-mask>
     <div
