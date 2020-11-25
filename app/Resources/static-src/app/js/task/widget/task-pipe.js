@@ -137,6 +137,7 @@ export default class TaskPipe {
           return ;
         } else if (!res.learnControl.allowLearn && res.learnControl.denyReason === 'reject_current') {
           this.MonitoringEvents.triggerEvent('reject_current');
+          this._clearInterval();
           this.element.attr('src', '');
           return;
         }
@@ -180,7 +181,7 @@ export default class TaskPipe {
   }
 
   _doing(param = {}) {
-    if (this.sign) {
+    if (this.sign.length === 0) {
       return;
     }
     let data = {
