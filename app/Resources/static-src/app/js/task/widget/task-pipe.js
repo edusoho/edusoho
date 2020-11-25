@@ -180,10 +180,14 @@ export default class TaskPipe {
   }
 
   _doing(param = {}) {
+    if (this.sign) {
+      return;
+    }
     let data = {
       client: 'pc',
       sign: this.sign,
       duration: this.taskPipeCounter,
+      status: this.absorbed,
     };
     if (param.watchTime) {
       let watchData = {
@@ -199,7 +203,6 @@ export default class TaskPipe {
     this.pushing = true;
     Api.courseTaskEvent.pushEvent({
       params: {
-        status: this.absorbed,
         courseId: this.courseId,
         taskId: this.taskId,
         eventName: 'doing',
