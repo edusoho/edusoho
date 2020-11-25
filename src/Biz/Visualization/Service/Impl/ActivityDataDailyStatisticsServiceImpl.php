@@ -137,7 +137,7 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
             $data = $this->getCoursePlanStayDailyDao()->search($conditions, [], 0, PHP_INT_MAX, $columns);
         }
 
-        return $this->getUserLearnDailyDao()->batchCreate($data);
+        return $this->getCoursePlanLearnDailyDao()->batchCreate($data);
     }
 
     public function statisticsCoursePlanStayDailyData($startTime, $endTime)
