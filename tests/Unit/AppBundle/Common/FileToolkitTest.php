@@ -159,7 +159,7 @@ class FileTookitTest extends BaseTestCase
     public function testGetFileTypeByFlashExtension()
     {
         $extension = FileToolkit::getFileTypeByExtension('swf');
-        $this->assertEquals('other', $extension);
+        $this->assertEquals('flash', $extension);
     }
 
     public function testGetFileTypeByOtherExtension()

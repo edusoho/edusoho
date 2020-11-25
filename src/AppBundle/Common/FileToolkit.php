@@ -911,6 +911,8 @@ class FileToolkit
             return 'document';
         } elseif (in_array($extension, ['ppt', 'pptx'])) {
             return 'ppt';
+        } elseif (in_array($extension, ['swf'])) {
+            return 'flash';
         } elseif (in_array($extension, ['srt'])) {
             return 'subtitle';
         } else {
