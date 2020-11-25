@@ -129,8 +129,8 @@ export default {
         },
         data,
       }).then(res => {
-        this.handleReprtResult(res);
-        let reportJudgeStatus = this.reportJudge(res);
+        this.handleReportResult(res);
+        let reportJudgeStatus = this.reportJudge(res.learnControl);
         if (reportJudgeStatus) {
           return;
         }
@@ -162,10 +162,10 @@ export default {
         data: data,
       })
         .then(res => {
-          this.handleReprtResult(res);
+          this.handleReportResult(res);
           this.record = res.record;
           this.learnTime = 0;
-          this.reportJudge(res);
+          this.reportJudge(res.learnControl);
         })
         .catch(error => {
           this.clearReportIntervalTime();
@@ -176,7 +176,7 @@ export default {
      * 课时finish后去做一些操作
      * @param {*} res
      */
-    handleReprtResult(res) {
+    handleReportResult(res) {
       this.reportResult = res;
       if (res.taskResult && res.taskResult.status === 'finish') {
         this.isFinish = true;
@@ -238,16 +238,16 @@ export default {
      * 判断用户当前状态
      * @param {*} res 数据上报返回参数
      */
-    reportJudge(res) {
+    reportJudge(learnControl) {
       if (
-        !res.learnControl.allowLearn &&
-        res.learnControl.denyReason === 'kick_previous'
+        !learnControl.allowLearn &&
+        learnControl.denyReason === 'kick_previous'
       ) {
         this.kickEachOther('kick_previous');
         return true;
       } else if (
-        !res.learnControl.allowLearn &&
-        res.learnControl.denyReason === 'reject_current'
+        !learnControl.allowLearn &&
+        learnControl.denyReason === 'reject_current'
       ) {
         this.kickEachOther('reject_current');
         this.clearReportIntervalTime();

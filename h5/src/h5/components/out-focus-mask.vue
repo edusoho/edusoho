@@ -1,7 +1,7 @@
 <!-- 数据上报遮罩层 -->
 <template>
   <div>
-    <template v-if="type === 'ineffective_learning'">
+    <template v-if="type === 'ineffective_learning' && reportType === 'video'">
       <div
         class="out-focus-mask"
         :class="
