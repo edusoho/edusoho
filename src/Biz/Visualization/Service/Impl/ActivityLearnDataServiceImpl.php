@@ -8,6 +8,7 @@ use Biz\System\Service\SettingService;
 use Biz\UserLearnStatistics\Service\LearnStatisticsService;
 use Biz\Visualization\Dao\ActivityLearnDailyDao;
 use Biz\Visualization\Dao\CoursePlanLearnDailyDao;
+use Biz\Visualization\Dao\UserLearnDailyDao;
 use Biz\Visualization\Service\ActivityLearnDataService;
 
 class ActivityLearnDataServiceImpl extends BaseService implements ActivityLearnDataService
@@ -74,14 +75,14 @@ class ActivityLearnDataServiceImpl extends BaseService implements ActivityLearnD
     {
         $conditions = $this->prepareConditions($conditions);
 
-        return $this->getActivityLearnDailyDao()->search($conditions, $orderBys, $start, $limit, $columns);
+        return $this->getUserLearnDailyDao()->search($conditions, $orderBys, $start, $limit, $columns);
     }
 
     public function countUserLearnDailyData($conditions)
     {
         $conditions = $this->prepareConditions($conditions);
 
-        return $this->getActivityLearnDailyDao()->count($conditions);
+        return $this->getUserLearnDailyDao()->count($conditions);
     }
 
     protected function prepareConditions($conditions)
@@ -102,6 +103,14 @@ class ActivityLearnDataServiceImpl extends BaseService implements ActivityLearnD
     protected function getActivityLearnDailyDao()
     {
         return $this->createDao('Visualization:ActivityLearnDailyDao');
+    }
+
+    /**
+     * @return UserLearnDailyDao
+     */
+    protected function getUserLearnDailyDao()
+    {
+        return $this->createDao('Visualization:UserLearnDailyDao');
     }
 
     /**

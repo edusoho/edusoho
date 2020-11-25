@@ -18,6 +18,8 @@ class ActivityVideoDailyDaoImpl extends AdvancedDaoImpl implements ActivityVideo
             'conditions' => [
                 'id = :id',
                 'dayTime = :dayTime',
+                'taskId in (:taskIds)',
+                'userId = :userId',
             ],
             'orderbys' => ['id', 'createdTime'],
         ];

@@ -199,7 +199,7 @@ class SystemCrontabInitializer
                 'misfire_policy' => 'executing',
             ],
             'StatisticsPageStayDailyDataJob' => [
-                'expression' => '30 1 * * *',
+                'expression' => '30 0 * * *',
                 'class' => 'Biz\Visualization\Job\StatisticsPageStayDailyDataJob',
                 'misfire_policy' => 'executing',
             ],
@@ -241,6 +241,11 @@ class SystemCrontabInitializer
             'StatisticsCoursePlanLearnDailyDataJob' => [
                 'expression' => '30 2 * * *',
                 'class' => 'Biz\Visualization\Job\StatisticsCoursePlanLearnDailyDataJob',
+                'misfire_policy' => 'executing',
+            ],
+            'StatisticsCourseTaskResultJob' => [
+                'expression' => '0 3 * * *',
+                'class' => 'Biz\Visualization\Job\StatisticsCourseTaskResultJob',
                 'misfire_policy' => 'executing',
             ],
         ];
