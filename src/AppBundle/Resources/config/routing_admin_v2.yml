@@ -2803,5 +2803,41 @@ admin_v2_data_visualization_activity_video_watch_record:
   defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:activityVideoWatchRecord }
 
 admin_v2_data_visualization_activity_stay_daily:
-  path: /data_visualization/activity_stay_daily
+  path: /data_visualization/action/activity_stay_daily
   defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:activityStayDaily }
+
+admin_v2_data_visualization_activity_video_daily_statistics:
+  path: /data_visualization/action/activity_video_daily_statistics
+  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:activityVideoDailyStatistics }
+
+admin_v2_data_visualization_activity_stay_daily_statistics:
+  path: /data_visualization/action/activity_stay_daily_statistics
+  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:activityStayDailyStatistics }
+
+admin_v2_data_visualization_course_plan_video_daily_statistics:
+  path: /data_visualization/action/course_plan_video_daily_statistics
+  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:coursePlanVideoDailyStatistics }
+
+admin_v2_data_visualization_course_plan_stay_daily_statistics:
+  path: /data_visualization/action/course_plan_stay_daily_statistics
+  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:coursePlanStayDailyStatistics }
+
+admin_v2_data_visualization_user_video_daily_statistics:
+  path: /data_visualization/action/user_video_daily_statistics
+  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:userVideoDailyStatistics }
+
+admin_v2_data_visualization_user_stay_statistics:
+  path: /data_visualization/action/user_stay_daily_statistics
+  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:userStayDailyStatistics }
+
+admin_v2_data_visualization_user_learn_daily_statistics:
+  path: /data_visualization/action/user_learn_daily_statistics
+  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:userLearnDailyStatistics }
+
+admin_v2_data_visualization_activity_learn_daily_statistics:
+  path: /data_visualization/action/activity_learn_daily_statistics
+  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:activityLearnDailyStatistics }
+
+admin_v2_data_visualization_course_plan_learn_daily_statistics:
+  path: /data_visualization/action/course_plan_learn_daily_statistics
+  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:coursePlanLearnDailyStatistics }

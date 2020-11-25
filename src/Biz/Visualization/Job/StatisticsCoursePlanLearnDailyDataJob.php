@@ -10,7 +10,7 @@ class StatisticsCoursePlanLearnDailyDataJob extends AbstractJob
     public function execute()
     {
         $startTime = strtotime('yesterday');
-        $this->getActivityDataDailyStatisticsService()->statisticsUserLearnDailyData($startTime);
+        $this->getActivityDataDailyStatisticsService()->statisticsCoursePlanLearnDailyData($startTime);
     }
 
     /**

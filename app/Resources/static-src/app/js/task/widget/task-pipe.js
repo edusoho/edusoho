@@ -26,6 +26,7 @@ export default class TaskPipe {
     this.lastLearnTime = DurationStorage.get(this.userId, this.fileId);
     this.sign = '';
     this.record = {};
+    this.pushing = false;
 
     if (this.eventUrl === undefined) {
       throw Error('task event url is undefined');
@@ -101,6 +102,10 @@ export default class TaskPipe {
   }
 
   _flush(param = {}) {
+    if (this.pushing) {
+      //同时出现的doing需要忽略，比如播放行为
+      return ;
+    }
     if (this.isLogout) return;
     if (this.sign === '') {
       let customData = {};
@@ -140,8 +145,6 @@ export default class TaskPipe {
     } else{
       this._doing(param);
     }
-
-
 
     // let ajax = $.post(this.eventUrl, { data: { lastTime: this.lastTime, lastLearnTime: DurationStorage.get(this.userId, this.fileId), events: this.eventDatas}})
     //   .done((response) => {
@@ -191,6 +194,7 @@ export default class TaskPipe {
     if (param.reActive) {
       data.reActive = param.reActive;
     }
+    this.pushing = true;
     Api.courseTaskEvent.pushEvent({
       params: {
         courseId: this.courseId,
@@ -199,6 +203,7 @@ export default class TaskPipe {
       },
       data: data,
     }).then(res => {
+      this.pushing = false;
       this.record = res.record;
       this.taskPipeCounter = 0;
       if (!res.learnControl.allowLearn && res.learnControl.denyReason === 'kick_previous') {
@@ -220,6 +225,7 @@ export default class TaskPipe {
         }
       }
     }).catch(error => {
+      this.pushing = false;
       this._clearInterval();
       cd.message({ type: 'danger', message: Translator.trans('task_show.user_login_protect_tip') });
     });

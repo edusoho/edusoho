@@ -8,6 +8,7 @@ use Biz\Visualization\Dao\ActivityLearnRecordDao;
 use Biz\Visualization\Dao\ActivityStayDailyDao;
 use Biz\Visualization\Dao\ActivityVideoWatchRecordDao;
 use Biz\Visualization\Dao\UserActivityLearnFlowDao;
+use Biz\Visualization\Service\ActivityDataDailyStatisticsService;
 use Symfony\Component\HttpFoundation\Request;
 
 class VisualizationController extends BaseController
@@ -97,6 +98,87 @@ class VisualizationController extends BaseController
         ]);
     }
 
+    public function activityStayDailyStatisticsAction(Request $request)
+    {
+        $day = $request->query->get('date', 'today');
+        $startTime = strtotime($day);
+        $this->getActivityDataDailyStatisticsService()->statisticsPageStayDailyData($startTime, $startTime + 86400);
+
+        return $this->createJsonResponse(true);
+    }
+
+    public function activityVideoDailyStatisticsAction(Request $request)
+    {
+        $day = $request->query->get('date', 'today');
+        $startTime = strtotime($day);
+        $this->getActivityDataDailyStatisticsService()->statisticsVideoDailyData($startTime, $startTime + 86400);
+
+        return $this->createJsonResponse(true);
+    }
+
+    public function coursePlanStayDailyStatisticsAction(Request $request)
+    {
+        $day = $request->query->get('date', 'today');
+        $startTime = strtotime($day);
+        $this->getActivityDataDailyStatisticsService()->statisticsCoursePlanStayDailyData($startTime, $startTime + 86400);
+
+        return $this->createJsonResponse(true);
+    }
+
+    public function coursePlanVideoDailyStatisticsAction(Request $request)
+    {
+        $day = $request->query->get('date', 'today');
+        $startTime = strtotime($day);
+        $this->getActivityDataDailyStatisticsService()->statisticsCoursePlanVideoDailyData($startTime, $startTime + 86400);
+
+        return $this->createJsonResponse(true);
+    }
+
+    public function userStayDailyStatisticsAction(Request $request)
+    {
+        $day = $request->query->get('date', 'today');
+        $startTime = strtotime($day);
+        $this->getActivityDataDailyStatisticsService()->statisticsUserStayDailyData($startTime, $startTime + 86400);
+
+        return $this->createJsonResponse(true);
+    }
+
+    public function userVideoDailyStatisticsAction(Request $request)
+    {
+        $day = $request->query->get('date', 'today');
+        $startTime = strtotime($day);
+        $this->getActivityDataDailyStatisticsService()->statisticsUserVideoDailyData($startTime, $startTime + 86400);
+
+        return $this->createJsonResponse(true);
+    }
+
+    public function userLearnDailyStatisticsAction(Request $request)
+    {
+        $day = $request->query->get('date', 'today');
+        $startTime = strtotime($day);
+        $this->getActivityDataDailyStatisticsService()->statisticsUserLearnDailyData($startTime);
+
+        return $this->createJsonResponse(true);
+    }
+
+    public function coursePlanLearnDailyStatisticsAction(Request $request)
+    {
+        $day = $request->query->get('date', 'today');
+        $startTime = strtotime($day);
+        $this->getActivityDataDailyStatisticsService()->statisticsCoursePlanLearnDailyData($startTime);
+
+        return $this->createJsonResponse(true);
+    }
+
+    public function activityLearnDailyStatisticsAction(Request $request)
+    {
+        $day = $request->query->get('date', 'today');
+        $startTime = strtotime($day);
+        $this->getActivityDataDailyStatisticsService()->statisticsLearnDailyData($startTime);
+
+        return $this->createJsonResponse(true);
+    }
+
     /**
      * @return ActivityStayDailyDao
      */
@@ -127,5 +209,13 @@ class VisualizationController extends BaseController
     protected function getActivityLearnFlowDao()
     {
         return $this->getBiz()->dao('Visualization:UserActivityLearnFlowDao');
+    }
+
+    /**
+     * @return ActivityDataDailyStatisticsService
+     */
+    protected function getActivityDataDailyStatisticsService()
+    {
+        return $this->getBiz()->service('Visualization:ActivityDataDailyStatisticsService');
     }
 }
