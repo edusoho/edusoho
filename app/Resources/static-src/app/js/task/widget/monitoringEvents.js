@@ -5,7 +5,7 @@ export default class MonitoringEvents {
     this.OutFocusMask = new OutFocusMask();
 
     this.activityTimer = null;
-    this.ACTIVITY_TIME = 60;
+    this.ACTIVITY_TIME = 180;
 
     this.eventMaskElement = null;
     this.eventMaskTimer = null;
@@ -13,6 +13,7 @@ export default class MonitoringEvents {
     this.videoPlayRule = params.videoPlayRule;
     this.taskType = params.taskType;
     this.taskPipe = params.taskPipe;
+    this.maskElement = params.maskElement || null;
 
     this.initEvent();
   }
@@ -36,7 +37,7 @@ export default class MonitoringEvents {
       return;
     }
 
-    this.initMaskElement();
+    this.initMaskElement(this.maskElement);
     this.initVisibilitychange();
     this.initActivity();
   }

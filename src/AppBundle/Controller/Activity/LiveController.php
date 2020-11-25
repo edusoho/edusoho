@@ -90,6 +90,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         }
 
         $activity = $this->getActivityService()->getActivity($activityId, $fetchMedia = true);
+        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
 
         $params = [];
         if ($this->getCourseMemberService()->isCourseTeacher($courseId, $user['id'])) {
@@ -133,8 +134,10 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         return $this->forward('AppBundle:Liveroom:_entry', [
             'roomId' => $activity['ext']['liveId'],
             'params' => [
+                'triggerEvent' => true,
                 'courseId' => $courseId,
                 'activityId' => $activityId,
+                'taskId' => $task['id'],
                 'provider' => $provider,
                 'startTime' => $activity['startTime'],
                 'endTime' => $activity['endTime'],
