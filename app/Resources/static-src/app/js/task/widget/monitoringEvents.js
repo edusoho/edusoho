@@ -27,7 +27,12 @@ export default class MonitoringEvents {
     if (navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)) {
       return;
     }
-    if (this.videoPlayRule !== 'auto_pause' && this.taskType !== 'video') {
+
+    if (this.videoPlayRule !== 'auto_pause') {
+      return;
+    }
+
+    if (this.taskType !== 'video') {
       return;
     }
 
