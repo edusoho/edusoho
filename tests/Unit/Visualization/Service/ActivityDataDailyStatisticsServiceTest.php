@@ -21,10 +21,10 @@ class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
     {
         $this->mockBiz('Visualization:ActivityLearnRecordDao', [
             ['functionName' => 'search', 'returnValue' => [
-                ['userId' => 1, 'activityId' => 1, 'taskId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'startTime' => 1604793600, 'endTime' => 1604793720, 'duration' => 120],
-                ['userId' => 1, 'activityId' => 1, 'taskId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'startTime' => 1604793730, 'endTime' => 1604793850, 'duration' => 120],
-                ['userId' => 1, 'activityId' => 1, 'taskId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'startTime' => 1604793750, 'endTime' => 1604793870, 'duration' => 120],
-                ['userId' => 1, 'activityId' => 1, 'taskId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'startTime' => 1604793750, 'endTime' => 1604793810, 'duration' => 60],
+                ['userId' => 1, 'activityId' => 1, 'taskId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'startTime' => 1604793600, 'endTime' => 1604793720, 'duration' => 120, 'mediaType' => 'text'],
+                ['userId' => 1, 'activityId' => 1, 'taskId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'startTime' => 1604793730, 'endTime' => 1604793850, 'duration' => 120, 'mediaType' => 'text'],
+                ['userId' => 1, 'activityId' => 1, 'taskId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'startTime' => 1604793750, 'endTime' => 1604793870, 'duration' => 120, 'mediaType' => 'text'],
+                ['userId' => 1, 'activityId' => 1, 'taskId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'startTime' => 1604793750, 'endTime' => 1604793810, 'duration' => 60, 'mediaType' => 'text'],
             ]],
         ]);
 
@@ -61,29 +61,25 @@ class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
         $this->mockBiz('Visualization:ActivityVideoDailyDao', [
             ['functionName' => 'search', 'returnValue' => [
                 ['userId' => 1, 'activityId' => 1, 'taskId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'dayTime' => 1604793600, 'sumTime' => 340, 'pureTime' => 120],
-                ['userId' => 1, 'activityId' => 2, 'taskId' => 2, 'courseId' => 1, 'courseSetId' => 1, 'dayTime' => 1604793600, 'sumTime' => 240, 'pureTime' => 120],
             ]],
         ]);
 
         $this->mockBiz('Visualization:ActivityStayDailyDao', [
             ['functionName' => 'search', 'returnValue' => [
+                ['userId' => 1, 'activityId' => 1, 'taskId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'dayTime' => 1604793600, 'sumTime' => 440, 'pureTime' => 220, 'mediaType' => 'video'],
+                ['userId' => 1, 'activityId' => 2, 'taskId' => 2, 'courseId' => 1, 'courseSetId' => 1, 'dayTime' => 1604793600, 'sumTime' => 540, 'pureTime' => 320, 'mediaType' => 'text'],
+            ], 'runTimes' => 1],
+            ['functionName' => 'search', 'returnValue' => [
                 ['userId' => 1, 'activityId' => 1, 'taskId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'dayTime' => 1604793600, 'sumTime' => 440, 'pureTime' => 220],
                 ['userId' => 1, 'activityId' => 2, 'taskId' => 2, 'courseId' => 1, 'courseSetId' => 1, 'dayTime' => 1604793600, 'sumTime' => 540, 'pureTime' => 320],
-            ]],
-        ]);
-
-        $this->mockBiz('Activity:ActivityService', [
-            ['functionName' => 'findActivities', 'returnValue' => [
-                ['id' => 1, 'mediaType' => 'video'],
-                ['id' => 2, 'mediaType' => 'text'],
-            ]],
+            ], 'runTimes' => 1],
         ]);
 
         $this->getActivityDataDailyStatisticsService()->statisticsLearnDailyData(1604793600);
 
         $result = $this->getActivityLearnDailyDao()->search([], [], 0, 2);
-        $this->assertEquals(340, $result[0]['sumTime']);
-        $this->assertEquals(540, $result[1]['sumTime']);
+        $this->assertEquals(540, $result[0]['sumTime']);
+        $this->assertEquals(340, $result[1]['sumTime']);
 
         $this->getActivityDataDailyStatisticsService()->statisticsLearnDailyData(1604793600);
         $result = $this->getActivityLearnDailyDao()->search([], [], 0, 2);
@@ -106,22 +102,15 @@ class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
 
         $this->mockBiz('Visualization:ActivityLearnRecordDao', [
             ['functionName' => 'search', 'returnValue' => [
-                ['userId' => 1, 'activityId' => 1, 'taskId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'startTime' => 1604793600, 'endTime' => 1604793720, 'duration' => 120],
-                ['userId' => 1, 'activityId' => 2, 'taskId' => 2, 'courseId' => 1, 'courseSetId' => 1, 'startTime' => 1604793730, 'endTime' => 1604793850, 'duration' => 120],
-                ['userId' => 1, 'activityId' => 2, 'taskId' => 2, 'courseId' => 1, 'courseSetId' => 1, 'startTime' => 1604793730, 'endTime' => 1604793850, 'duration' => 120],
+                ['userId' => 1, 'activityId' => 1, 'taskId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'startTime' => 1604793600, 'endTime' => 1604793720, 'duration' => 120, 'mediaType' => 'video'],
+                ['userId' => 1, 'activityId' => 2, 'taskId' => 2, 'courseId' => 1, 'courseSetId' => 1, 'startTime' => 1604793730, 'endTime' => 1604793850, 'duration' => 120, 'mediaType' => 'text'],
+                ['userId' => 1, 'activityId' => 2, 'taskId' => 2, 'courseId' => 1, 'courseSetId' => 1, 'startTime' => 1604793730, 'endTime' => 1604793850, 'duration' => 120, 'mediaType' => 'text'],
             ]],
         ]);
 
         $this->mockBiz('Visualization:UserStayDailyDao', [
             ['functionName' => 'search', 'returnValue' => [
                 ['userId' => 1, 'dayTime' => 1604793600, 'sumTime' => 440, 'pureTime' => 220],
-            ]],
-        ]);
-
-        $this->mockBiz('Activity:ActivityService', [
-            ['functionName' => 'findActivities', 'returnValue' => [
-                ['id' => 1, 'mediaType' => 'video'],
-                ['id' => 2, 'mediaType' => 'text'],
             ]],
         ]);
 
@@ -151,23 +140,16 @@ class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
 
         $this->mockBiz('Visualization:ActivityLearnRecordDao', [
             ['functionName' => 'search', 'returnValue' => [
-                ['userId' => 1, 'activityId' => 1, 'taskId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'startTime' => 1604793600, 'endTime' => 1604793720, 'duration' => 120],
-                ['userId' => 1, 'activityId' => 3, 'taskId' => 3, 'courseId' => 1, 'courseSetId' => 1, 'startTime' => 1604793640, 'endTime' => 1604793760, 'duration' => 120],
-                ['userId' => 1, 'activityId' => 2, 'taskId' => 2, 'courseId' => 2, 'courseSetId' => 2, 'startTime' => 1604793730, 'endTime' => 1604793850, 'duration' => 120],
-                ['userId' => 1, 'activityId' => 2, 'taskId' => 2, 'courseId' => 2, 'courseSetId' => 2, 'startTime' => 1604793730, 'endTime' => 1604793850, 'duration' => 120],
+                ['userId' => 1, 'activityId' => 1, 'taskId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'startTime' => 1604793600, 'endTime' => 1604793720, 'duration' => 120, 'mediaType' => 'video'],
+                ['userId' => 1, 'activityId' => 3, 'taskId' => 3, 'courseId' => 1, 'courseSetId' => 1, 'startTime' => 1604793640, 'endTime' => 1604793760, 'duration' => 120, 'mediaType' => 'text'],
+                ['userId' => 1, 'activityId' => 2, 'taskId' => 2, 'courseId' => 2, 'courseSetId' => 2, 'startTime' => 1604793730, 'endTime' => 1604793850, 'duration' => 120, 'mediaType' => 'text'],
+                ['userId' => 1, 'activityId' => 2, 'taskId' => 2, 'courseId' => 2, 'courseSetId' => 2, 'startTime' => 1604793730, 'endTime' => 1604793850, 'duration' => 120, 'mediaType' => 'text'],
             ]],
         ]);
 
         $this->mockBiz('Visualization:CoursePlanStayDailyDao', [
             ['functionName' => 'search', 'returnValue' => [
                 ['userId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'dayTime' => 1604793600, 'sumTime' => 440, 'pureTime' => 220],
-            ]],
-        ]);
-
-        $this->mockBiz('Activity:ActivityService', [
-            ['functionName' => 'findActivities', 'returnValue' => [
-                ['id' => 1, 'mediaType' => 'video'],
-                ['id' => 2, 'mediaType' => 'text'],
             ]],
         ]);
 

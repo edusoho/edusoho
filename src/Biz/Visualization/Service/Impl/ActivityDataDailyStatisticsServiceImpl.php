@@ -29,7 +29,7 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
             [],
             0,
             PHP_INT_MAX,
-            ['userId', 'activityId', 'taskId', 'courseId', 'courseSetId', 'startTime', 'endTime', 'duration']
+            ['userId', 'activityId', 'taskId', 'courseId', 'courseSetId', 'startTime', 'endTime', 'duration', 'mediaType']
         );
         $learnRecords = ArrayToolkit::group($learnRecords, 'userId');
 
@@ -44,6 +44,7 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
                     'taskId' => $activityRecord['taskId'],
                     'courseId' => $activityRecord['courseId'],
                     'courseSetId' => $activityRecord['courseSetId'],
+                    'mediaType' => $activityRecord['mediaType'],
                     'dayTime' => $startTime,
                     'sumTime' => array_sum(ArrayToolkit::column($activityRecords, 'duration')),
                     'pureTime' => $this->sumPureTime($activityRecords),
@@ -95,28 +96,30 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
         $statisticsSetting = $this->getSettingService()->get('videoEffectiveTimeStatistics', []);
         $conditions = ['dayTime' => $dayTime];
         $columns = ['userId', 'activityId', 'taskId', 'courseId', 'courseSetId', 'dayTime', 'sumTime', 'pureTime'];
-        $stayData = $this->getActivityStayDailyDao()->search($conditions, [], 0, PHP_INT_MAX, $columns);
         if (empty($statisticsSetting) || 'playing' === $statisticsSetting['statistical_dimension']) {
+            $stayData = $this->getActivityStayDailyDao()->search(
+                $conditions,
+                [],
+                0,
+                PHP_INT_MAX,
+                ['userId', 'activityId', 'taskId', 'courseId', 'courseSetId', 'dayTime', 'sumTime', 'pureTime', 'mediaType']
+            );
             $videoData = $this->getActivityVideoDailyDao()->search($conditions, [], 0, PHP_INT_MAX, $columns);
-            $videoData = ArrayToolkit::index($videoData, 'activityId');
-            $activities = $this->getActivityService()->findActivities(ArrayToolkit::column($stayData, 'activityId'));
-            $activities = ArrayToolkit::index($activities, 'id');
             $data = [];
             foreach ($stayData as $record) {
-                if (empty($activities[$record['activityId']])) {
-                    $data[] = $record;
-                    continue;
-                }
-
-                $activity = $activities[$record['activityId']];
-                if ('video' == $activity['mediaType'] && !empty($videoData[$record['activityId']])) {
-                    $data[] = $videoData[$record['activityId']];
-                } else {
-                    $data[] = $record;
+                if ('video' != $record['mediaType']) {
+                    $data[] = ArrayToolkit::parts($record, $columns);
                 }
             }
+            $data = array_merge($data, $videoData);
         } else {
-            $data = $stayData;
+            $data = $this->getActivityStayDailyDao()->search(
+                $conditions,
+                [],
+                0,
+                PHP_INT_MAX,
+                $columns
+            );
         }
 
         $this->getActivityLearnDailyDao()->batchDelete($conditions);
@@ -194,19 +197,15 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
             [],
             0,
             PHP_INT_MAX,
-            ['userId', 'activityId', 'taskId', 'courseId', 'courseSetId', 'startTime', 'endTime', 'duration']
+            ['userId', 'activityId', 'taskId', 'courseId', 'courseSetId', 'startTime', 'endTime', 'duration', 'mediaType']
         );
-        $activities = $this->getActivityService()->findActivities(array_values(array_unique(ArrayToolkit::column($learnRecords, 'activityId'))));
-        $activities = ArrayToolkit::index($activities, 'id');
-        $learnRecords = ArrayToolkit::group($learnRecords, 'activityId');
-        $totalRecords = [];
-        foreach ($learnRecords as $activityId => $records) {
-            if (empty($activities[$activityId]) || 'video' != $activities[$activityId]['mediaType']) {
-                $totalRecords = array_merge($totalRecords, $records);
+        foreach ($learnRecords as $key => $record) {
+            if ('video' == $record['mediaType']) {
+                unset($learnRecords[$key]);
             }
         }
 
-        $totalRecords = array_merge($totalRecords, $watchRecords);
+        $totalRecords = array_merge($learnRecords, $watchRecords);
 
         return ArrayToolkit::group($totalRecords, 'userId');
     }
@@ -352,7 +351,7 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
                 [],
                 0,
                 PHP_INT_MAX,
-                ['userId', 'taskId', 'pureTime']
+                ['userId', 'taskId', 'pureTime', 'sumTime']
             );
             $learnRecords = ArrayToolkit::group($learnRecords, 'taskId');
             $watchRecords = $this->getActivityVideoDailyDao()->search(
@@ -360,7 +359,7 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
                 [],
                 0,
                 PHP_INT_MAX,
-                ['userId', 'taskId', 'pureTime']
+                ['userId', 'taskId', 'pureTime', 'sumTime']
             );
             $watchRecords = ArrayToolkit::group($watchRecords, 'taskId');
             foreach ($userRecords as $record) {
