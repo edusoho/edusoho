@@ -29,7 +29,10 @@ export default {
     if (this.sign.length > 0) {
       localStorage.setItem('flowSign', this.sign);
     }
-    document.body.style.overflow = '';
+
+    document
+      .getElementsByTagName('body')[0]
+      .classList.remove('out-focus-mask-body');
   },
   methods: {
     /**
@@ -266,7 +269,10 @@ export default {
       if (this.player && this.reportType === 'video') {
         this.player.play();
       }
-      document.body.style.overflow = '';
+
+      document
+        .getElementsByTagName('body')[0]
+        .classList.remove('out-focus-mask-body');
       this.reprtData({
         eventName: 'doing',
         ContinuousReport: true,
@@ -303,7 +309,13 @@ export default {
       if (this.player && this.reportType === 'video') {
         this.player.pause();
       }
-      document.body.style.overflow = 'hidden';
+
+      if (this.reportType === 'video' || this.reportType === 'audio') {
+        return;
+      }
+      document
+        .getElementsByTagName('body')[0]
+        .classList.add('out-focus-mask-body');
     },
 
     initVisibilitychange() {
