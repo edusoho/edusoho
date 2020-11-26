@@ -266,24 +266,6 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         return $this->getTaskResultDao()->getLearnedTimeByCourseIdGroupByCourseTaskId($courseTaskId);
     }
 
-    public function sumLearnedTimeByCourseTaskId($courseTaskId)
-    {
-        $effectiveTimeSetting = $this->getSettingService()->get('videoEffectiveTimeStatistics', [
-            'video_multiple' => 'de-weight',
-        ]);
-
-        return 'de-weight' == $effectiveTimeSetting['video_multiple'] ? $this->getTaskResultDao()->sumPureLearnedTimeByCourseTaskId($courseTaskId) : $this->getTaskResultDao()->sumLearnedTimeByCourseTaskId($courseTaskId);
-    }
-
-    public function sumWatchTimeByCourseTaskId($courseTaskId)
-    {
-        $effectiveTimeSetting = $this->getSettingService()->get('videoEffectiveTimeStatistics', [
-            'video_multiple' => 'de-weight',
-        ]);
-
-        return 'de-weight' == $effectiveTimeSetting['video_multiple'] ? $this->getTaskResultDao()->sumPureWatchTimeByCourseTaskId($courseTaskId) : $this->getTaskResultDao()->sumWatchTimeByCourseTaskId($courseTaskId);
-    }
-
     public function getWatchTimeByCourseIdGroupByCourseTaskId($courseTaskId)
     {
         return $this->getTaskResultDao()->getWatchTimeByCourseIdGroupByCourseTaskId($courseTaskId);
