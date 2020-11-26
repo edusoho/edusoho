@@ -102,6 +102,9 @@ class LearnControlServiceImpl extends BaseService implements LearnControlService
         if (self::MULTIPLE_LEARN_MODE_REJECT_CURRENT === $setting['multiple_learn_kick_mode']) {
             $latestFlow = $this->getUserLatestActiveFlow($userId);
             if (!$latestFlow || time() - $latestFlow['lastLearnTime'] > 80) {
+                //互踢不允许后踢前，满足新开条件，把老的fresh掉
+                $this->freshFlow($userId);
+
                 return [true, ''];
             }
 
