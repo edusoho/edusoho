@@ -160,7 +160,7 @@ class CourseTaskEventV2 extends AbstractResource
             'nextTask' => empty($nextTask) ? null : $nextTask,
             'completionRate' => $completionRate,
             'record' => $record,
-            'watchResult' => $watchResult,
+            'watchResult' => empty($watchResult) ? null : $watchResult,
             'learnControl' => [
                 'allowLearn' => $canDoing,
                 'denyReason' => $denyReason,
