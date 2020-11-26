@@ -74,6 +74,7 @@ class DataVisualizationTable extends Migration
               `taskId` int(10) unsigned NOT NULL COMMENT '任务ID',
               `courseId` int(10) unsigned NOT NULL COMMENT '计划ID',
               `courseSetId` int(10) unsigned NOT NULL COMMENT '课程ID',
+              `mediaType` varchar(32) NOT NULL DEFAULT '' COMMENT '教学活动类型',
               `dayTime` int(10) unsigned NOT NULL COMMENT '以天为精度的时间戳',
               `sumTime` int(10) unsigned NOT NULL COMMENT '简单累加时长',
               `pureTime` int(10) unsigned NOT NULL COMMENT '时间轴累计时长',
