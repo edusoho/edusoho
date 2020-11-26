@@ -2,7 +2,7 @@
 <template>
   <div class="out-focus-mask" v-if="isShow">
     <div class="report-go-back" @click="$router.go(-1)">
-      <van-icon name="arrow-left" size="30" color="#43bc60" />
+      <van-icon name="arrow-left" size="25" color="#43bc60" />
     </div>
     <template v-if="type === 'kick_previous'">
       <div class="content">
