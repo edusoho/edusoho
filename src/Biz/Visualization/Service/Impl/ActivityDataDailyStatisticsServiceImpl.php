@@ -25,7 +25,7 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
     public function statisticsPageStayDailyData($startTime, $endTime)
     {
         $learnRecords = $this->getActivityLearnRecordDao()->search(
-            ['startTime_GE' => $startTime, 'endTime_GE' => $endTime],
+            ['startTime_GE' => $startTime, 'endTime_LT' => $endTime],
             [],
             0,
             PHP_INT_MAX,
