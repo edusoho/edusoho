@@ -2,10 +2,11 @@ import OutFocusMask from './out-focus-mask';
 
 export default class MonitoringEvents {
   constructor(params) {
-    this.OutFocusMask = new OutFocusMask();
+    this.maskElement = params.maskElement || null;
+    this.OutFocusMask = new OutFocusMask(this.maskElement);
 
     this.activityTimer = null;
-    this.ACTIVITY_TIME = 60;
+    this.ACTIVITY_TIME = 180;
 
     this.eventMaskElement = null;
     this.eventMaskTimer = null;
@@ -20,9 +21,9 @@ export default class MonitoringEvents {
   initEvent() {
     $('body').off('click', '.js-continue-studying');
     $('body').on('click', '.js-continue-studying', () =>  {
-      this.taskPipe._doing({reActive: 1});
-      this.taskPipe.absorbedChange(0);
       this.OutFocusMask.continueStudying();
+      this.taskPipe._flush({reActive: 1});
+      this.taskPipe.absorbedChange(0);
     });
     if (navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)) {
       return;
@@ -50,25 +51,29 @@ export default class MonitoringEvents {
     this.maskElementShow();
   }
 
-  triggerEvent(type) { // 触发事件
+  ineffectiveEvent() { // 触发无效学习
+    this.OutFocusMask.initLearStopTips();
+    this.taskPipe.absorbedChange(1);
+    this.taskPipe._flush();
+  }
+
+  triggerEvent(type) { // 触发互踢事件
     this.taskPipe.absorbedChange(1);
 
     if (type === 'reject_current') {
       this.OutFocusMask.initBanTips();
       return;
     }
-    this.taskPipe._doing();
     if (type === 'kick_previous') {
       this.OutFocusMask.initAntiBrushTips();
       return;
     }
-    this.OutFocusMask.initLearStopTips();
   }
 
   initVisibilitychange() {
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'hidden') {
-        this.triggerEvent('visibilitychange');
+        this.ineffectiveEvent();
       }
     });
   }
@@ -86,7 +91,7 @@ export default class MonitoringEvents {
     clearTimeout(this.activityTimer);
     this.activityTimer = null;
     this.activityTimer = setTimeout(() => {
-      this.triggerEvent('activity');
+      this.ineffectiveEvent();
     }, this.ACTIVITY_TIME * 1000);
   }
 

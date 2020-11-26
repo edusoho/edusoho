@@ -2,8 +2,8 @@ import postal from 'postal';
 import 'postal.federation';
 import 'postal.xframe';
 export default class OutFocusMask {
-  constructor() {
-    this.$element = $('.all-wrapper');
+  constructor($element = null) {
+    this.$element = $element === null ?  $('.all-wrapper') : $element;
     this.mask = `
             <div class="out-focus-mask">
                 <div class="content">

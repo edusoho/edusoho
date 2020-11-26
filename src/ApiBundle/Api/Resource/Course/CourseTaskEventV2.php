@@ -94,7 +94,7 @@ class CourseTaskEventV2 extends AbstractResource
 
         return [
             'taskResult' => $result,
-            'nextTask' => $nextTask,
+            'nextTask' => empty($nextTask) ? null : $nextTask,
             'completionRate' => $completionRate,
             'record' => $record,
             'learnControl' => [
@@ -137,6 +137,9 @@ class CourseTaskEventV2 extends AbstractResource
         $this->getDataCollectService()->updateLearnFlow($flow['id'], ['lastLearnTime' => $record['endTime']]);
         $triggerData = ['lastTime' => $record['startTime']];
         $result = $this->getTaskService()->trigger($taskId, self::EVENT_DOING, $triggerData);
+        if (isset($data['lastLearnTime'])) {
+            $this->getTaskResultService()->updateTaskResult($result['id'], ['lastLearnTime' => $data['lastLearnTime']]);
+        }
 
         $watchResult = null;
         if (!empty($data['watchData'])) {
@@ -154,10 +157,10 @@ class CourseTaskEventV2 extends AbstractResource
 
         return [
             'taskResult' => $result,
-            'nextTask' => $nextTask,
+            'nextTask' => empty($nextTask) ? null : $nextTask,
             'completionRate' => $completionRate,
             'record' => $record,
-            'watchResult' => $watchResult,
+            'watchResult' => empty($watchResult) ? null : $watchResult,
             'learnControl' => [
                 'allowLearn' => $canDoing,
                 'denyReason' => $denyReason,
@@ -211,7 +214,7 @@ class CourseTaskEventV2 extends AbstractResource
 
         return [
             'taskResult' => $result,
-            'nextTask' => $nextTask,
+            'nextTask' => empty($nextTask) ? null : $nextTask,
             'completionRate' => $completionRate,
             'record' => $record,
             'learnControl' => [

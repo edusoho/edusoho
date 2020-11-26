@@ -175,6 +175,7 @@ class VisualizationController extends BaseController
         $day = $request->query->get('date', 'today');
         $startTime = strtotime($day);
         $this->getActivityDataDailyStatisticsService()->statisticsLearnDailyData($startTime);
+        $this->getActivityDataDailyStatisticsService()->sumTaskResultTime($startTime);
 
         return $this->createJsonResponse(true);
     }

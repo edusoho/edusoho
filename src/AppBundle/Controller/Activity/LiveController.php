@@ -90,6 +90,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         }
 
         $activity = $this->getActivityService()->getActivity($activityId, $fetchMedia = true);
+        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
 
         $params = [];
         if ($this->getCourseMemberService()->isCourseTeacher($courseId, $user['id'])) {
@@ -133,8 +134,10 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         return $this->forward('AppBundle:Liveroom:_entry', [
             'roomId' => $activity['ext']['liveId'],
             'params' => [
+                'triggerEvent' => true,
                 'courseId' => $courseId,
                 'activityId' => $activityId,
+                'taskId' => $task['id'],
                 'provider' => $provider,
                 'startTime' => $activity['startTime'],
                 'endTime' => $activity['endTime'],
@@ -147,9 +150,21 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         $this->getCourseService()->tryTakeCourse($courseId);
         $activity = $this->getActivityService()->getActivity($activityId);
         $live = $this->getActivityService()->getActivityConfig('live')->get($activity['mediaId']);
+        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
 
         return $this->render('activity/live/replay-player.html.twig', [
+            'courseId' => $courseId,
+            'activityId' => $activityId,
+            'taskId' => $task['id'],
             'live' => $live,
+            'mediaId' => $live['mediaId'],
+        ]);
+    }
+
+    public function liveReplayEntryAction(Request $request, $mediaId)
+    {
+        return $this->render('activity/live/replay-player-show.html.twig', [
+            'mediaId' => $mediaId,
         ]);
     }
 

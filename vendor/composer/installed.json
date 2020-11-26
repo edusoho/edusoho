@@ -541,12 +541,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/codeages/biz-item-bank.git",
-            "reference": "75d529583775231b032f1715b2d1812427b7d52c"
+            "reference": "097a45fd19157be3d86e60920a2340523af93a3f"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/codeages/biz-item-bank/zipball/75d529583775231b032f1715b2d1812427b7d52c",
-            "reference": "75d529583775231b032f1715b2d1812427b7d52c",
+            "url": "https://api.github.com/repos/codeages/biz-item-bank/zipball/097a45fd19157be3d86e60920a2340523af93a3f",
+            "reference": "097a45fd19157be3d86e60920a2340523af93a3f",
             "shasum": "",
             "mirrors": [
                 {
@@ -569,7 +569,7 @@
             "mockery/mockery": "^0.9.9",
             "phpunit/phpunit": "^5|^6"
         },
-        "time": "2020-10-21T02:16:04+00:00",
+        "time": "2020-11-24T09:50:23+00:00",
         "type": "library",
         "installation-source": "source",
         "autoload": {
@@ -6248,7 +6248,8 @@
             "devicedetection",
             "parser",
             "useragent"
-        ]
+        ],
+        "abandoned": "matomo/device-detector"
     },
     {
         "name": "psr/cache",
