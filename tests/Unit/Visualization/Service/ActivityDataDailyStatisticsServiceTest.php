@@ -79,12 +79,6 @@ class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
             ]],
         ]);
 
-//        $this->mockTaskResult([
-//            'userId' => 1,
-//            'courseTaskId' => 1,
-//            'status' => 'finish',
-//        ]);
-
         $this->getActivityDataDailyStatisticsService()->statisticsLearnDailyData(1604793600);
 
         $result = $this->getActivityLearnDailyDao()->search([], [], 0, 2);
@@ -190,21 +184,6 @@ class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
         $this->assertEquals(220, $result[0]['pureTime']);
     }
 
-    protected function mockTaskResult($fields = [])
-    {
-        $taskResult = array_merge([
-            'activityId' => 1,
-            'courseTaskId' => 2,
-            'time' => 1,
-            'watchTime' => 1,
-            'userId' => 1,
-            'courseId' => 1,
-            'pureTime' => 0,
-        ], $fields);
-
-        return $this->getTaskResultDao()->create($taskResult);
-    }
-
     public function testStatisticsCoursePlanStayDailyData()
     {
         $this->mockBiz('Visualization:ActivityLearnRecordDao', [
@@ -275,6 +254,47 @@ class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
 
     public function testSumTaskResultTime()
     {
+        $this->mockBiz('Visualization:ActivityLearnDailyDao', [
+            ['functionName' => 'search', 'returnValue' => [
+                ['userId' => 1, 'activityId' => 1, 'taskId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'dayTime' => 1604793600, 'sumTime' => 140, 'pureTime' => 120],
+                ['userId' => 1, 'activityId' => 2, 'taskId' => 2, 'courseId' => 1, 'courseSetId' => 1, 'dayTime' => 1604793600, 'sumTime' => 240, 'pureTime' => 120],
+            ]],
+        ]);
+
+        $this->mockBiz('Visualization:ActivityVideoDailyDao', [
+            ['functionName' => 'search', 'returnValue' => [
+                ['userId' => 1, 'activityId' => 1, 'taskId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'dayTime' => 1604793600, 'sumTime' => 340, 'pureTime' => 240],
+                ['userId' => 1, 'activityId' => 2, 'taskId' => 2, 'courseId' => 1, 'courseSetId' => 1, 'dayTime' => 1604793600, 'sumTime' => 240, 'pureTime' => 120],
+            ]],
+        ]);
+
+        $this->mockTaskResult([
+            'userId' => 1,
+            'courseTaskId' => 1,
+            'status' => 'finish',
+        ]);
+
+        $this->getActivityDataDailyStatisticsService()->sumTaskResultTime(1604793600);
+        $result = $this->getTaskResultDao()->search([], [], 0, 1);
+        $this->assertEquals(140, $result[0]['time']);
+        $this->assertEquals(340, $result[0]['watchTime']);
+        $this->assertEquals(120, $result[0]['pureTime']);
+        $this->assertEquals(240, $result[0]['pureWatchTime']);
+    }
+
+    protected function mockTaskResult($fields = [])
+    {
+        $taskResult = array_merge([
+            'activityId' => 1,
+            'courseTaskId' => 2,
+            'time' => 1,
+            'watchTime' => 1,
+            'userId' => 1,
+            'courseId' => 1,
+            'pureTime' => 0,
+        ], $fields);
+
+        return $this->getTaskResultDao()->create($taskResult);
     }
 
     public function testGetVideoEffectiveTimeStatisticsSetting()

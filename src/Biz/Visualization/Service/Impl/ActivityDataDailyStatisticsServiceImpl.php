@@ -25,7 +25,7 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
     public function statisticsPageStayDailyData($startTime, $endTime)
     {
         $learnRecords = $this->getActivityLearnRecordDao()->search(
-            ['startTime_GE' => $startTime, 'endTime_GE' => $endTime],
+            ['startTime_GE' => $startTime, 'endTime_LT' => $endTime],
             [],
             0,
             PHP_INT_MAX,
@@ -341,7 +341,7 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
             [],
             0,
             PHP_INT_MAX,
-            ['id', 'pureTime', 'userId', 'courseTaskId']
+            ['id', 'userId', 'courseTaskId']
         );
         $taskResults = ArrayToolkit::groupIndex($taskResults, 'userId', 'courseTaskId');
         $activityRecords = ArrayToolkit::group($activityRecords, 'userId');
@@ -354,7 +354,7 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
                 PHP_INT_MAX,
                 ['userId', 'taskId', 'pureTime']
             );
-            $learnRecords = ArrayToolkit::index($learnRecords, 'taskId');
+            $learnRecords = ArrayToolkit::group($learnRecords, 'taskId');
             $watchRecords = $this->getActivityVideoDailyDao()->search(
                 ['userId' => $userId, 'taskIds' => ArrayToolkit::column($userRecords, 'taskId')],
                 [],
@@ -362,12 +362,14 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
                 PHP_INT_MAX,
                 ['userId', 'taskId', 'pureTime']
             );
-            $watchRecords = ArrayToolkit::index($watchRecords, 'taskId');
+            $watchRecords = ArrayToolkit::group($watchRecords, 'taskId');
             foreach ($userRecords as $record) {
                 if (!empty($taskResults[$userId][$record['taskId']])) {
                     $taskResult = $taskResults[$userId][$record['taskId']];
                     $updateFields[] = [
                         'id' => $taskResult['id'],
+                        'time' => array_sum(ArrayToolkit::column($learnRecords[$record['taskId']], 'sumTime')),
+                        'watchTime' => array_sum(ArrayToolkit::column($watchRecords[$record['taskId']], 'sumTime')),
                         'pureTime' => array_sum(ArrayToolkit::column($learnRecords[$record['taskId']], 'pureTime')),
                         'pureWatchTime' => array_sum(ArrayToolkit::column($watchRecords[$record['taskId']], 'pureTime')),
                     ];
