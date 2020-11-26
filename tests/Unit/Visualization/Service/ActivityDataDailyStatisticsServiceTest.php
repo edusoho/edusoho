@@ -280,12 +280,12 @@ class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
     public function testGetVideoEffectiveTimeStatisticsSetting()
     {
         $this->mockBiz('System:SettingService', [
-            ['functionName' => 'get', 'returnValue' => ['statistical_dimension' => 'playing', 'play_rule' => 'auto_pause']],
+            ['functionName' => 'get', 'returnValue' => ['statistical_dimension' => 'page', 'play_rule' => 'no_action']],
         ]);
 
         $result = $this->getActivityDataDailyStatisticsService()->getVideoEffectiveTimeStatisticsSetting();
-        $this->assertEquals('playing', $result['statistical_dimension']);
-        $this->assertEquals('auto_pause', $result['play_rule']);
+        $this->assertEquals('page', $result['statistical_dimension']);
+        $this->assertEquals('no_action', $result['play_rule']);
     }
 
     public function testGetDailyLearnData()

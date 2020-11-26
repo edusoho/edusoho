@@ -37,8 +37,8 @@ class VideoTaskSettingController extends BaseController
         $effectiveTimeSetting = $this->getSettingService()->get('videoEffectiveTimeStatistics', []);
 
         $default = [
-            'statistical_dimension' => 'playing',
-            'play_rule' => 'auto_pause',
+            'statistical_dimension' => 'page',
+            'play_rule' => 'no_action',
         ];
 
         $effectiveTimeSetting = array_merge($default, $effectiveTimeSetting);
