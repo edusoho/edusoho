@@ -14,13 +14,15 @@
 
 	.report-go-back {
 		position: absolute;
-		top: vw(10);
-		left: vw(10);
+		top: vw(15);
+		left: vw(15);
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		width: vw(40);
-		height: vw(40);
+		width: vw(50);
+		height: vw(35);
+		background-color: #444;
+		border-radius: vw(8);
 	}
 
 	.content {
