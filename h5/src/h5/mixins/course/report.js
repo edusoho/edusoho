@@ -26,13 +26,12 @@ export default {
   beforeDestroy() {
     this.clearReportIntervalTime();
     document.removeEventListener('visibilitychange', this.visibilityState);
+
     if (this.sign.length > 0) {
       localStorage.setItem('flowSign', this.sign);
     }
 
-    document
-      .getElementsByTagName('body')[0]
-      .classList.remove('out-focus-mask-body');
+    this.toggleReportMaskHidden('remove');
   },
   methods: {
     /**
@@ -270,9 +269,8 @@ export default {
         this.player.play();
       }
 
-      document
-        .getElementsByTagName('body')[0]
-        .classList.remove('out-focus-mask-body');
+      this.toggleReportMaskHidden('remove');
+
       this.reprtData({
         eventName: 'doing',
         ContinuousReport: true,
@@ -310,12 +308,22 @@ export default {
         this.player.pause();
       }
 
+      this.toggleReportMaskHidden('add');
+    },
+
+    toggleReportMaskHidden(type) {
       if (this.reportType === 'video' || this.reportType === 'audio') {
         return;
       }
-      document
-        .getElementsByTagName('body')[0]
-        .classList.add('out-focus-mask-body');
+      if (type === 'add') {
+        document
+          .getElementsByTagName('body')[0]
+          .classList.add('report-mask-hidden');
+      } else if (type === 'remove') {
+        document
+          .getElementsByTagName('body')[0]
+          .classList.remove('report-mask-hidden');
+      }
     },
 
     initVisibilitychange() {
