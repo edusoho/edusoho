@@ -1,5 +1,11 @@
 <template>
   <div id="course-detail__head" class="course-detail__head pos-rl">
+    <video-report-mask
+      :type="outFocusMaskType"
+      :isShow="isShowOutFocusMask"
+      :reportType="reportType"
+      @outFocusMask="outFocusMask"
+    ></video-report-mask>
     <div
       v-if="textContent"
       v-show="
@@ -107,12 +113,14 @@ import tagLink from '&/components/e-tag-link/e-tag-link';
 import finishDialog from '../components/finish-dialog';
 import qs from 'qs';
 import report from '@/mixins/course/report';
+import VideoReportMask from '@/components/video-report-mask';
 
 export default {
   components: {
     countDown,
     tagLink,
     finishDialog,
+    VideoReportMask,
   },
   mixins: [report],
   props: {

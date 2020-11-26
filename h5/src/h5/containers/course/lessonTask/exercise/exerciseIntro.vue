@@ -1,5 +1,11 @@
 <template>
   <div>
+    <out-focus-mask
+      :type="outFocusMaskType"
+      :isShow="isShowOutFocusMask"
+      :reportType="reportType"
+      @outFocusMask="outFocusMask"
+    ></out-focus-mask>
     <e-loading v-if="isLoading" />
     <div v-if="exercise" class="intro-body">
       <van-panel class="panel intro-panel" title="练习名称">
@@ -33,12 +39,17 @@
 <script>
 import Api from '@/api';
 import { mapState, mapActions } from 'vuex';
-import { Dialog, Toast } from 'vant';
+import { Toast } from 'vant';
 import exerciseMixin from '@/mixins/lessonTask/exercise.js';
 import report from '@/mixins/course/report';
+import OutFocusMask from '@/components/out-focus-mask.vue';
+
 export default {
   name: 'ExerciseIntro',
   mixins: [exerciseMixin, report],
+  components: {
+    OutFocusMask,
+  },
   data() {
     return {
       courseId: null,
@@ -85,12 +96,7 @@ export default {
     },
     // 初始化上报数据
     initReport() {
-      this.initReportData(
-        this.$route.query.courseId,
-        this.taskId,
-        'exercise',
-        false,
-      );
+      this.initReportData(this.$route.query.courseId, this.taskId, 'exercise');
     },
     // 异常中断
     interruption() {
