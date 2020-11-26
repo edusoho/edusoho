@@ -72,7 +72,17 @@ class UserLearnStatisticsExporter extends Exporter
                 $member[] = empty($userStatistics) ? 0 : round(array_sum(ArrayToolkit::column($userStatistics, 'pureTime')) / 60);
                 $member[] = MathToolkit::simple($statistic['actualAmount'], 0.01);
             } else {
-                $member = [$user['nickname'], 0, 0, 0, 0, 0, 0, 0, 0];
+                $member = [
+                    $user['nickname'],
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    empty($userStatistics) ? 0 : round(array_sum(ArrayToolkit::column($userStatistics, 'sumTime')) / 60),
+                    empty($userStatistics) ? 0 : round(array_sum(ArrayToolkit::column($userStatistics, 'pureTime')) / 60),
+                    0
+                ];
             }
 
             $statisticsContent[] = $member;
