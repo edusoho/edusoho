@@ -193,7 +193,7 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
             ['userId', 'activityId', 'taskId', 'courseId', 'courseSetId', 'startTime', 'endTime', 'duration']
         );
         $learnRecords = $this->getActivityLearnRecordDao()->search(
-            ['startTime_GE' => $dayTime, 'endTime_GE' => $dayTime + 86400],
+            ['startTime_GE' => $dayTime, 'endTime_LT' => $dayTime + 86400],
             [],
             0,
             PHP_INT_MAX,
@@ -213,7 +213,7 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
     public function statisticsCoursePlanStayDailyData($startTime, $endTime)
     {
         $learnRecords = $this->getActivityLearnRecordDao()->search(
-            ['startTime_GE' => $startTime, 'endTime_GE' => $endTime],
+            ['startTime_GE' => $startTime, 'endTime_LT' => $endTime],
             [],
             0,
             PHP_INT_MAX,
@@ -277,7 +277,7 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
     public function statisticsUserStayDailyData($startTime, $endTime)
     {
         $learnRecords = $this->getActivityLearnRecordDao()->search(
-            ['startTime_GE' => $startTime, 'endTime_GE' => $endTime],
+            ['startTime_GE' => $startTime, 'endTime_LT' => $endTime],
             [],
             0,
             PHP_INT_MAX,
