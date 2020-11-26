@@ -81,7 +81,7 @@ class UserLearnStatisticsExporter extends Exporter
                     0,
                     empty($userStatistics) ? 0 : round(array_sum(ArrayToolkit::column($userStatistics, 'sumTime')) / 60),
                     empty($userStatistics) ? 0 : round(array_sum(ArrayToolkit::column($userStatistics, 'pureTime')) / 60),
-                    0
+                    0,
                 ];
             }
 
