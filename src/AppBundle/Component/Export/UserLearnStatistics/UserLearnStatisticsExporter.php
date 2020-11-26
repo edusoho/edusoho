@@ -68,8 +68,8 @@ class UserLearnStatisticsExporter extends Exporter
                 $member[] = $statistic['joinedCourseNum'];
                 $member[] = $statistic['exitCourseNum'];
                 $member[] = $statistic['finishedTaskNum'];
-                $member[] = empty($userStatistics) ? 0 : array_sum(ArrayToolkit::column($userStatistics, 'sumTime'));
-                $member[] = empty($userStatistics) ? 0 : array_sum(ArrayToolkit::column($userStatistics, 'pureTime'));
+                $member[] = empty($userStatistics) ? 0 : round(array_sum(ArrayToolkit::column($userStatistics, 'sumTime')) / 60);
+                $member[] = empty($userStatistics) ? 0 : round(array_sum(ArrayToolkit::column($userStatistics, 'pureTime')) / 60);
                 $member[] = MathToolkit::simple($statistic['actualAmount'], 0.01);
             } else {
                 $member = [$user['nickname'], 0, 0, 0, 0, 0, 0, 0, 0];

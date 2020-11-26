@@ -36,6 +36,7 @@ class ActivityLearnDailyDaoImpl extends AdvancedDaoImpl implements ActivityLearn
                 'userId IN (:userIds)',
                 'userId = :userId',
                 'dayTime = :dayTime',
+                'taskId in (:taskIds)',
             ],
             'orderbys' => ['id', 'createdTime'],
         ];
