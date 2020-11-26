@@ -224,7 +224,6 @@ export default {
         this.selectedPlanId,
         this.$route.query.targetId,
         'testpaper',
-        false,
       );
     },
     judgeTime() {

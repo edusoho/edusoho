@@ -168,7 +168,6 @@ export default {
         this.$route.query.courseId,
         this.$route.query.taskId,
         'homework',
-        false,
       );
     },
     // 异常中断

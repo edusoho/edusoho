@@ -169,7 +169,6 @@ export default {
         this.$route.query.courseId,
         this.$route.query.taskId,
         'exercise',
-        false,
       );
     },
     // 异常中断

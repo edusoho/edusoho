@@ -1,6 +1,7 @@
 <!-- 数据上报遮罩层 -->
 <template>
   <div class="out-focus-mask" v-if="isShow">
+    <div class="report-go-back" @click="$router.go(-1)"></div>
     <template v-if="type === 'kick_previous'">
       <div class="content">
         <div class="tips">

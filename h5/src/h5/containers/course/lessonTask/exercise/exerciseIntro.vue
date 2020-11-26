@@ -96,12 +96,7 @@ export default {
     },
     // 初始化上报数据
     initReport() {
-      this.initReportData(
-        this.$route.query.courseId,
-        this.taskId,
-        'exercise',
-        false,
-      );
+      this.initReportData(this.$route.query.courseId, this.taskId, 'exercise');
     },
     // 异常中断
     interruption() {
