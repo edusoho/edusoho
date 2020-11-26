@@ -130,14 +130,14 @@ class ItemServiceImpl extends BaseService implements ItemService
 
             if ($originItem['category_id'] != $item['category_id']) {
                 if (0 < $originItem['category_id']) {
-                    $this->getItemCategoryService()->updateItemNumAndQuestionNum($originItem['category_id'], -1, -$originItem['question_num']);
+                    $this->getItemCategoryService()->updateItemNumAndQuestionNum($originItem['category_id']);
                 }
                 if (0 < $item['category_id']) {
-                    $this->getItemCategoryService()->updateItemNumAndQuestionNum($item['category_id'], 1, $item['question_num']);
+                    $this->getItemCategoryService()->updateItemNumAndQuestionNum($item['category_id']);
                 }
             } else {
                 if (0 < $originItem['category_id']) {
-                    $this->getItemCategoryService()->updateItemNumAndQuestionNum($item['category_id'], 0, -$originItem['question_num'] + $item['question_num']);
+                    $this->getItemCategoryService()->updateItemNumAndQuestionNum($item['category_id']);
                 }
             }
 
@@ -242,7 +242,7 @@ class ItemServiceImpl extends BaseService implements ItemService
             $this->getItemBankService()->updateItemNumAndQuestionNum($item['bank_id']);
 
             if (0 < $item['category_id']) {
-                $this->getItemCategoryService()->updateItemNumAndQuestionNum($item['category_id'], -1, -$item['question_num']);
+                $this->getItemCategoryService()->updateItemNumAndQuestionNum($item['category_id']);
             }
 
             if (!$isBatch) {
@@ -348,6 +348,11 @@ class ItemServiceImpl extends BaseService implements ItemService
     public function countQuestionsByBankId($bankId)
     {
         return $this->getItemDao()->countItemQuestionNumByBankId($bankId);
+    }
+
+    public function countQuestionsByCategoryId($categoryId)
+    {
+        return $this->getItemDao()->countItemQuestionNumByCategoryId($categoryId);
     }
 
     protected function createQuestions($itemId, $questions)

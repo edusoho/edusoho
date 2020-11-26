@@ -132,7 +132,7 @@ class ItemCategoryServiceImpl extends BaseService implements ItemCategoryService
 
         $categories = $this->findItemCategoriesByBankId($bankId);
         $categories = ArrayToolkit::group($categories, 'parent_id');
-       
+
         $tree = array();
         $this->prepareCategoryTreeList($tree, $categories, 0);
         return $tree;
@@ -211,9 +211,12 @@ class ItemCategoryServiceImpl extends BaseService implements ItemCategoryService
         return [$map, $tree];
     }
 
-    public function updateItemNumAndQuestionNum($id, $diffItemNum = 0, $diffQuestionNum = 0)
+    public function updateItemNumAndQuestionNum($id)
     {
-        return $this->getItemCategoryDao()->wave([$id], ['item_num' => $diffItemNum, 'question_num' => $diffQuestionNum]);
+        $itemCount = $this->getItemService()->countItems(['category_id' => $id]);
+        $questionCount = $this->getItemService()->countQuestionsByCategoryId($id);
+
+        return $this->getItemCategoryDao()->update($id, ['item_num' => $itemCount, 'question_num' => $questionCount]);
     }
 
     public function buildItemNumAndQuestionNumBybankId($bankId)
@@ -222,7 +225,7 @@ class ItemCategoryServiceImpl extends BaseService implements ItemCategoryService
         if (empty($items)) {
             return true;
         }
-        
+
         $updateCategories = [];
         $itemGroups = ArrayToolkit::group($items, 'category_id');
         foreach ($itemGroups as $categoryId => $itemGroup) {
