@@ -94,7 +94,7 @@ class CourseTaskEventV2 extends AbstractResource
 
         return [
             'taskResult' => $result,
-            'nextTask' => $nextTask,
+            'nextTask' => empty($nextTask) ? null : $nextTask,
             'completionRate' => $completionRate,
             'record' => $record,
             'learnControl' => [
@@ -157,7 +157,7 @@ class CourseTaskEventV2 extends AbstractResource
 
         return [
             'taskResult' => $result,
-            'nextTask' => $nextTask,
+            'nextTask' => empty($nextTask) ? null : $nextTask,
             'completionRate' => $completionRate,
             'record' => $record,
             'watchResult' => $watchResult,
@@ -214,7 +214,7 @@ class CourseTaskEventV2 extends AbstractResource
 
         return [
             'taskResult' => $result,
-            'nextTask' => $nextTask,
+            'nextTask' => empty($nextTask) ? null : $nextTask,
             'completionRate' => $completionRate,
             'record' => $record,
             'learnControl' => [
