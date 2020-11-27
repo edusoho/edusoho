@@ -258,7 +258,7 @@ class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
 
         $this->getActivityDataDailyStatisticsService()->sumTaskResultTime(1604793600);
         $result = $this->getTaskResultDao()->search([], [], 0, 1);
-        $this->assertEquals(140, $result[0]['time']);
+        $this->assertEquals(140, $result[0]['sumTime']);
         $this->assertEquals(340, $result[0]['watchTime']);
         $this->assertEquals(120, $result[0]['pureTime']);
         $this->assertEquals(240, $result[0]['pureWatchTime']);
