@@ -132,8 +132,8 @@ export default {
     },
   },
   created() {
-    this.gethomeworkResult();
     this.initReport();
+    this.gethomeworkResult();
   },
   beforeRouteEnter(to, from, next) {
     document.getElementById('app').style.background = '#f6f6f6';

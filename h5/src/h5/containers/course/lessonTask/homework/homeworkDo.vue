@@ -123,8 +123,8 @@ export default {
     },
   },
   created() {
-    this.getData();
     this.initReport();
+    this.getData();
   },
   beforeRouteEnter(to, from, next) {
     // 通过链接进来
