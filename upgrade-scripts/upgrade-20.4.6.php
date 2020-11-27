@@ -51,6 +51,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = array(
             'updateGoodsAndGoodsSpecsPrice',
+            'updateItemCategoryNum',
         );
 
         $funcNames = array();
@@ -110,6 +111,24 @@ class EduSohoUpgrade extends AbstractUpdater
             ");
         }
         $this->logger('info', '更新goods_specs价格成功.');
+
+        return 1;
+    }
+
+    public function updateItemCategoryNum()
+    {
+        if ($this->isTableExist('biz_item') && $this->isTableExist('biz_item_category')) {
+            $this->getConnection()->exec("
+                UPDATE biz_item_category c INNER JOIN (
+                    SELECT bank_id, category_id, count(id) AS item_num, sum(question_num) AS question_num 
+                    FROM biz_item 
+                    WHERE category_id > 0 
+                    GROUP BY bank_id, category_id
+                ) m ON m.bank_id = c.bank_id AND m.category_id = c.id AND c.question_num != m.question_num AND c.item_num != m.item_num
+                SET c.item_num = m.item_num, c.question_num = m.question_num;
+            ");
+        }
+        $this->logger('info', '更新题库练习分类数成功.');
 
         return 1;
     }
