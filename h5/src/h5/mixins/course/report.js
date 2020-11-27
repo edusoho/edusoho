@@ -132,10 +132,13 @@ export default {
         data,
       }).then(res => {
         this.handleReportResult(res);
-        let reportJudgeStatus = this.reportJudge(res.learnControl);
-        if (reportJudgeStatus) {
+
+        if (!res.learnControl.allowLearn) {
+          let status = res.learnControl.denyReason;
+          this.reportJudge(status);
           return;
         }
+
         this.sign = res.record.flowSign;
         this.record = res.record;
         this.reportTaskEvent(param);
@@ -167,7 +170,10 @@ export default {
           this.handleReportResult(res);
           this.record = res.record;
           this.learnTime = 0;
-          this.reportJudge(res.learnControl);
+
+          if (res.learnControl.allowLearn) return;
+          let status = res.learnControl.denyReason;
+          this.reportJudge(status);
         })
         .catch(error => {
           this.clearReportIntervalTime();
@@ -236,26 +242,13 @@ export default {
       this.reportLearnTime = null;
     },
 
-    /**
-     * 判断用户当前状态
-     * @param {*} res 数据上报返回参数
-     */
-    reportJudge(learnControl) {
-      if (
-        !learnControl.allowLearn &&
-        learnControl.denyReason === 'kick_previous'
-      ) {
+    reportJudge(status) {
+      if (status === 'kick_previous') {
         this.kickEachOther('kick_previous');
-        return true;
-      } else if (
-        !learnControl.allowLearn &&
-        learnControl.denyReason === 'reject_current'
-      ) {
-        this.kickEachOther('reject_current');
+      } else if (status === 'reject_current') {
         this.clearReportIntervalTime();
-        return true;
+        this.kickEachOther('reject_current');
       }
-      return false;
     },
 
     /**
