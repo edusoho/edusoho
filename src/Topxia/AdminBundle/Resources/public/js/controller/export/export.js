@@ -41,7 +41,7 @@ define(function(require, exports, module) {
                 url : tryUrl,
                 async : false,
                 data: {
-                  names: $exportBtns.data('fileNames')
+                  names: $exportBtn.data('fileNames')
                 },
                 success : function(response){
                     if (!response.success) {
@@ -62,7 +62,7 @@ define(function(require, exports, module) {
             var data = {
                 'start': start,
                 'fileName': fileName,
-                'names': $exportBtns.data('fileNames'),
+                'names': $exportBtn.data('fileNames'),
                 'name': currentName,
             }
 

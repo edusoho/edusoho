@@ -134,8 +134,8 @@ class UserLessonStatisticsExporter extends Exporter
                         'taskType' => $this->trans($taskTypes[$task['type']]['name']),
                         'type' => $this->getTaskOptional($task['isOptional']),
                         'length' => in_array($task['type'], ['audio', 'video']) ? round($task['length'] / 60, 1) : '',
-                        'sumTime' => empty($statistics[$task['id']]) ? 0 : round(array_sum(ArrayToolkit::column($statistics[$task['id']], 'sumTime')) / 60),
-                        'pureTime' => empty($statistics[$task['id']]) ? 0 : round(array_sum(ArrayToolkit::column($statistics[$task['id']], 'pureTime')) / 60),
+                        'sumTime' => empty($statistics[$task['id']]) ? 0 : round(array_sum(ArrayToolkit::column($statistics[$task['id']], 'sumTime')) / 60, 1),
+                        'pureTime' => empty($statistics[$task['id']]) ? 0 : round(array_sum(ArrayToolkit::column($statistics[$task['id']], 'pureTime')) / 60, 1),
                         'finishStatus' => empty($taskResults[$task['id']]) ? $this->getFinishStatus([]) : $this->getFinishStatus($taskResults[$task['id']]),
                     ];
                     $classroomName = $courseSetName = $courseName = '';

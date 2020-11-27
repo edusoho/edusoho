@@ -69,8 +69,8 @@ class UserLearnStatisticsExporter extends Exporter
                 $member[] = $statistic['joinedCourseNum'];
                 $member[] = $statistic['exitCourseNum'];
                 $member[] = $statistic['finishedTaskNum'];
-                $member[] = empty($userStatistics) ? 0 : round(array_sum(ArrayToolkit::column($userStatistics, 'sumTime')) / 60);
-                $member[] = empty($userStatistics) ? 0 : round(array_sum(ArrayToolkit::column($userStatistics, 'pureTime')) / 60);
+                $member[] = empty($userStatistics) ? 0 : round(array_sum(ArrayToolkit::column($userStatistics, 'sumTime')) / 60, 1);
+                $member[] = empty($userStatistics) ? 0 : round(array_sum(ArrayToolkit::column($userStatistics, 'pureTime')) / 60, 1);
                 $member[] = MathToolkit::simple($statistic['actualAmount'], 0.01);
             } else {
                 $member = [
@@ -80,8 +80,8 @@ class UserLearnStatisticsExporter extends Exporter
                     0,
                     0,
                     0,
-                    empty($userStatistics) ? 0 : round(array_sum(ArrayToolkit::column($userStatistics, 'sumTime')) / 60),
-                    empty($userStatistics) ? 0 : round(array_sum(ArrayToolkit::column($userStatistics, 'pureTime')) / 60),
+                    empty($userStatistics) ? 0 : round(array_sum(ArrayToolkit::column($userStatistics, 'sumTime')) / 60, 1),
+                    empty($userStatistics) ? 0 : round(array_sum(ArrayToolkit::column($userStatistics, 'pureTime')) / 60, 1),
                     0,
                 ];
             }

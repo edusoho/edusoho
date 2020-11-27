@@ -53,14 +53,14 @@
             <td>{{ student.fininshDay|default() }}</td>
             <td>
               {% if student.learnTime > 0 %}
-                {{ (student.learnTime|default(0)/60)|round(0, 'floor') }}
+                {{ (student.learnTime|default(0)/60)|number_format(1) }}
               {% else %}
                 ----
               {% endif %}
             </td>
             <td>
               {% if student.pureLearnTime > 0 %}
-                {{ (student.pureLearnTime|default(0)/60)|round(0, 'floor') }}
+                {{ (student.pureLearnTime|default(0)/60)|number_format(1) }}
               {% else %}
                 ----
               {% endif %}

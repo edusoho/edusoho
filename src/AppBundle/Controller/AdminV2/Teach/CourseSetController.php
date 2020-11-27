@@ -366,7 +366,7 @@ class CourseSetController extends BaseController
                 'courses' => $courses,
                 'paginator' => $paginator,
                 'students' => $students,
-                'coursePlanSumLearnedTime' => intval(empty($coursePlanSumLearnedTime) ? 0 : $coursePlanSumLearnedTime / 60),
+                'coursePlanSumLearnedTime' => empty($coursePlanSumLearnedTime) ? 0 : round($coursePlanSumLearnedTime / 60, 1),
                 'courseId' => $courseId,
             ]
         );
@@ -760,10 +760,10 @@ class CourseSetController extends BaseController
             }
 
             $learnTime = empty($usersLearnedTime[$student['userId']]) ? 0 : $usersLearnedTime[$student['userId']]['learnedTime'];
-            $exportMember['learnTime'] = $learnTime > 0 ? floor($learnTime / 60) : '--';
+            $exportMember['learnTime'] = $learnTime > 0 ? round($learnTime / 60, 1) : '--';
 
             $pureLearnTime = empty($usersPureLearnedTime[$student['userId']]) ? 0 : $usersPureLearnedTime[$student['userId']]['learnedTime'];
-            $exportMember['pureLearnTime'] = $pureLearnTime > 0 ? floor($pureLearnTime / 60) : '--';
+            $exportMember['pureLearnTime'] = $pureLearnTime > 0 ? round($pureLearnTime / 60, 1) : '--';
 
             $questionCount = $this->getThreadService()->countThreads(
                 ['courseId' => $courseId, 'type' => 'question', 'userId' => $user['id']]
