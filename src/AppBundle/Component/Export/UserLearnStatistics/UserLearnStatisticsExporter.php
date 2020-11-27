@@ -60,9 +60,10 @@ class UserLearnStatisticsExporter extends Exporter
                 ['userId', 'sumTime', 'pureTime']
             );
             $statistic = !empty($statistics[$user['id']]) ? $statistics[$user['id']] : false;
+            $nickname = is_numeric($user['nickname']) ? $user['nickname']."\t" : $user['nickname'];
 
             if ($statistic) {
-                $member[] = $user['nickname'];
+                $member[] = $nickname;
                 $member[] = $statistic['joinedClassroomNum'];
                 $member[] = $statistic['exitClassroomNum'];
                 $member[] = $statistic['joinedCourseNum'];
@@ -73,7 +74,7 @@ class UserLearnStatisticsExporter extends Exporter
                 $member[] = MathToolkit::simple($statistic['actualAmount'], 0.01);
             } else {
                 $member = [
-                    $user['nickname'],
+                    $nickname,
                     0,
                     0,
                     0,

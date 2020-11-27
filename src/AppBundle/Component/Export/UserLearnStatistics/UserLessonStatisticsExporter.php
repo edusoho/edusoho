@@ -62,7 +62,7 @@ class UserLessonStatisticsExporter extends Exporter
     {
         $statisticsContent = [];
         foreach ($users as $user) {
-            $nickname = $user['nickname'];
+            $nickname = is_numeric($user['nickname']) ? $user['nickname']."\t" : $user['nickname'];
             $mobile = $user['verifiedMobile'];
             $userData = empty($memberTaskData[$user['id']]) ? [] : $memberTaskData[$user['id']];
             foreach ($userData as $data) {
