@@ -68,8 +68,8 @@ export default {
     }),
   },
   created() {
-    this.getInfo();
     this.initReport();
+    this.getInfo();
   },
   beforeRouteEnter(to, from, next) {
     document.getElementById('app').style.background = '#f6f6f6';
@@ -96,7 +96,11 @@ export default {
     },
     // 初始化上报数据
     initReport() {
-      this.initReportData(this.$route.query.courseId, this.taskId, 'exercise');
+      this.initReportData(
+        this.$route.query.courseId,
+        this.$route.query.taskId,
+        'exercise',
+      );
     },
     // 异常中断
     interruption() {

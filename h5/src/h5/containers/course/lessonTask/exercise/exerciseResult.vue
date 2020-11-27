@@ -133,8 +133,8 @@ export default {
     },
   },
   created() {
-    this.getexerciseResult();
     this.initReport();
+    this.getexerciseResult();
   },
   beforeRouteEnter(to, from, next) {
     document.getElementById('app').style.background = '#f6f6f6';

@@ -1,5 +1,11 @@
 <template>
   <div class="paper-swiper">
+    <out-focus-mask
+      :type="outFocusMaskType"
+      :isShow="isShowOutFocusMask"
+      :reportType="reportType"
+      @outFocusMask="outFocusMask"
+    ></out-focus-mask>
     <e-loading v-if="isLoading" />
     <item-bank
       v-if="info.length > 0"
@@ -71,12 +77,14 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 import * as types from '@/store/mutation-types';
 import Api from '@/api';
 import itemBank from '../component/itemBank';
 import { Toast } from 'vant';
 import testMixin from '@/mixins/lessonTask/index.js';
+import report from '@/mixins/course/report';
+import OutFocusMask from '@/components/out-focus-mask.vue';
 
 export default {
   name: 'ExerciseAnalysis',
@@ -85,32 +93,26 @@ export default {
       switch (type) {
         case 'single_choice':
           return '单选题';
-          break;
         case 'choice':
           return '多选题';
-          break;
         case 'essay':
           return '问答题';
-          break;
         case 'uncertain_choice':
           return '不定项选择题';
-          break;
         case 'determine':
           return '判断题';
-          break;
         case 'fill':
           return '填空题';
-          break;
         case 'material':
           return '材料题';
-          break;
       }
     },
   },
   components: {
     itemBank,
+    OutFocusMask,
   },
-  mixins: [testMixin],
+  mixins: [testMixin, report],
   data() {
     return {
       result: null,
@@ -134,6 +136,7 @@ export default {
     }),
   },
   created() {
+    this.initReport();
     this.setNavbarTitle(this.$route.query.title);
     this.getexerciseResult();
   },
@@ -141,6 +144,14 @@ export default {
     ...mapMutations({
       setNavbarTitle: types.SET_NAVBAR_TITLE,
     }),
+    // 初始化上报数据
+    initReport() {
+      this.initReportData(
+        this.$route.query.courseId,
+        this.$route.query.taskId,
+        'exercise',
+      );
+    },
     getexerciseResult() {
       Api.exerciseResult({
         query: {
@@ -194,19 +205,14 @@ export default {
         switch (status) {
           case 'right':
             return 'cicle-right';
-            break;
           case 'none':
             return 'cicle-subjective';
-            break;
           case 'wrong':
             return 'cicle-wrong';
-            break;
           case 'partRight':
             return 'cicle-wrong';
-            break;
           case 'noAnswer':
             return '';
-            break;
         }
       }
     },
