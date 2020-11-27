@@ -190,6 +190,7 @@ export default class TaskPipe {
       duration: this.taskPipeCounter,
       status: this.absorbed,
       lastLearnTime: DurationStorage.get(this.userId, this.fileId),
+      events: this.eventDatas,
     };
     if (param.watchTime) {
       let watchData = {
@@ -235,7 +236,6 @@ export default class TaskPipe {
     }).catch(error => {
       this.pushing = false;
       this._clearInterval();
-      cd.message({ type: 'danger', message: Translator.trans('task_show.user_login_protect_tip') });
     });
   }
 
