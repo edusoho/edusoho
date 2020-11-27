@@ -50,8 +50,35 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
-            'updateGoodsAndGoodsSpecsPrice',
-            'updateItemCategoryNum',
+            'updateGoodsAndGoodsSpecsPrice',//ok
+            'updateItemCategoryNum',//ok
+            'createDataVisualizationActivityLearnRecordTables',//ok
+            'createDataVisualizationActivityVideoWatchRecordTables',//ok
+            'createDataVisualizationActivityUserActivityLearnFlowTables', //ok
+            'createDataVisualizationActivityActivityStayDailyTables',//ok
+            'createDataVisualizationActivityVideoDailyTables',//ok
+            'createDataVisualizationActivityLearnDailyTables',//ok
+            'createDataVisualizationCoursePlanStayDaily',//ok
+            'createDataVisualizationCoursePlanVideoDaily',//ok
+            'createDataVisualizationCoursePlanLearnDaily',//ok
+            'createDataVisualizationUserStayDaily',//ok
+            'createDataVisualizationUserVideoDaily',//ok
+            'createDataVisualizationUserLearnDaily',//ok
+            'alterCourseTaskResultAddSumTimeColumns',//ok
+            'alterCourseTaskResultAddPureTimeColumns',//ok
+            'alterCourseTaskResultAddPureWatchTimeColumns',//ok
+            'dealCourseTaskResultDataToActivityStayDaily',//ok
+            'dealCourseTaskResultDataToActivityWatchDaily',//ok
+            'dealCourseTaskResultDataToActivityLearnDaily',//ok'
+            'dealCourseTaskResultDataToCoursePlanStayDaily',//ok
+            'dealCourseTaskResultDataToCoursePlanVideoDaily',//ok
+            'dealCourseTaskResultDataToCoursePlanLearnDaily',//ok
+            'dealCourseTaskResultDataToUserStayDaily',//ok
+            'dealCourseTaskResultDataToUserVideoDaily',//ok
+            'dealCourseTaskResultDataToUserLearnDaily',//ok
+
+
+
         );
 
         $funcNames = array();
@@ -85,6 +112,405 @@ class EduSohoUpgrade extends AbstractUpdater
                 'progress' => 0,
             );
         }
+    }
+
+    public function createDataVisualizationActivityLearnRecordTables()
+    {
+        if (!$this->isTableExist('activity_learn_record')) {
+            $this->getConnection()->exec("
+                CREATE TABLE `activity_learn_record` (
+                  `id` bigint(15) unsigned NOT NULL AUTO_INCREMENT,
+                  `userId` int(10) unsigned NOT NULL COMMENT '用户ID',
+                  `activityId` int(10) unsigned NOT NULL COMMENT '教学活动ID',
+                  `taskId` int(10) unsigned NOT NULL COMMENT '任务ID',
+                  `courseId` int(10) unsigned NOT NULL COMMENT '计划ID',
+                  `courseSetId` int(10) unsigned NOT NULL COMMENT '课程ID',
+                  `status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '状态：0：有效 1：无效',
+                  `event` tinyint(1) unsigned NOT NULL COMMENT '事件ID  1：start 2：doing 3：finish',
+                  `client` tinyint(1) unsigned NOT NULL COMMENT '终端',
+                  `startTime` int(10) unsigned NOT NULL COMMENT '开始时间',
+                  `endTime` int(10) unsigned NOT NULL COMMENT '结束时间',
+                  `duration` int(10) unsigned NOT NULL COMMENT '持续时间',
+                  `mediaType` varchar(32) NOT NULL DEFAULT '' COMMENT '教学活动类型',
+                  `data` text COMMENT '原始数据',
+                  `flowSign` varchar(64) NOT NULL DEFAULT '' COMMENT '学习行为签名',
+                  `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
+                  PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ");
+        }
+        return 1;
+    }
+
+    public function createDataVisualizationActivityVideoWatchRecordTables()
+    {
+        if (!$this->isTableExist('activity_video_watch_record')) {
+            $this->getConnection()->exec("
+                CREATE TABLE `activity_video_watch_record` (
+                  `id` bigint(15) unsigned NOT NULL AUTO_INCREMENT,
+                  `userId` int(10) unsigned NOT NULL COMMENT '用户ID',
+                  `activityId` int(10) unsigned NOT NULL COMMENT '教学活动ID',
+                  `taskId` int(10) unsigned NOT NULL COMMENT '任务ID',
+                  `courseId` int(10) unsigned NOT NULL COMMENT '计划ID',
+                  `courseSetId` int(10) unsigned NOT NULL COMMENT '课程ID',
+                  `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '状态：1：有效 2：无效',
+                  `client` tinyint(1) unsigned NOT NULL COMMENT '终端',
+                  `startTime` int(10) unsigned NOT NULL COMMENT '开始时间',
+                  `endTime` int(10) unsigned NOT NULL COMMENT '结束时间',
+                  `duration` int(10) unsigned NOT NULL COMMENT '持续时间',
+                  `data` text COMMENT '原始数据',
+                  `flowSign` varchar(64) NOT NULL DEFAULT '' COMMENT '学习行为签名',
+                  `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
+                  PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ");
+        }
+
+        return 1;
+    }
+
+    public function createDataVisualizationActivityUserActivityLearnFlowTables()
+    {
+        if (!$this->isTableExist('user_activity_learn_flow')) {
+            $this->getConnection()->exec("
+                CREATE TABLE `user_activity_learn_flow` (
+                  `id` bigint(15) unsigned NOT NULL AUTO_INCREMENT,
+                  `userId` int(10) unsigned NOT NULL COMMENT '用户ID',
+                  `activityId` int(10) unsigned NOT NULL COMMENT '教学活动ID',
+                  `sign` varchar(64) NOT NULL DEFAULT '' COMMENT '学习行为签名',
+                  `active` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否活跃，1：活跃 2：不活跃',
+                  `startTime` int(10) unsigned NOT NULL COMMENT '开始时间',
+                  `lastLearnTime` int(10) unsigned NOT NULL COMMENT '最新学习时间',
+                  `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
+                  PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ");
+        }
+
+        return 1;
+    }
+
+    public function createDataVisualizationActivityActivityStayDailyTables()
+    {
+        if (!$this->isTableExist('activity_stay_daily')) {
+            $this->getConnection()->exec("
+                CREATE TABLE `activity_stay_daily` (
+                  `id` bigint(15) unsigned NOT NULL AUTO_INCREMENT,
+                  `userId` int(10) unsigned NOT NULL COMMENT '用户ID',
+                  `activityId` int(10) unsigned NOT NULL COMMENT '教学活动ID',
+                  `taskId` int(10) unsigned NOT NULL COMMENT '任务ID',
+                  `courseId` int(10) unsigned NOT NULL COMMENT '计划ID',
+                  `courseSetId` int(10) unsigned NOT NULL COMMENT '课程ID',
+                  `mediaType` varchar(32) NOT NULL DEFAULT '' COMMENT '教学活动类型',
+                  `dayTime` int(10) unsigned NOT NULL COMMENT '以天为精度的时间戳',
+                  `sumTime` int(10) unsigned NOT NULL COMMENT '简单累加时长',
+                  `pureTime` int(10) unsigned NOT NULL COMMENT '时间轴累计时长',
+                  `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
+                  `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
+                  PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ");
+        }
+
+        return 1;
+    }
+
+    public function createDataVisualizationActivityVideoDailyTables()
+    {
+        if (!$this->isTableExist('activity_video_daily')) {
+            $this->getConnection()->exec("
+                CREATE TABLE `activity_video_daily` (
+                  `id` bigint(15) unsigned NOT NULL AUTO_INCREMENT,
+                  `userId` int(10) unsigned NOT NULL COMMENT '用户ID',
+                  `activityId` int(10) unsigned NOT NULL COMMENT '教学活动ID',
+                  `taskId` int(10) unsigned NOT NULL COMMENT '任务ID',
+                  `courseId` int(10) unsigned NOT NULL COMMENT '计划ID',
+                  `courseSetId` int(10) unsigned NOT NULL COMMENT '课程ID',
+                  `dayTime` int(10) unsigned NOT NULL COMMENT '以天为精度的时间戳',
+                  `sumTime` int(10) unsigned NOT NULL COMMENT '简单累加时长',
+                  `pureTime` int(10) unsigned NOT NULL COMMENT '时间轴累计时长',
+                  `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
+                  `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
+                  PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ");
+        }
+
+        return 1;
+    }
+
+    public function createDataVisualizationActivityLearnDailyTables()
+    {
+        if (!$this->isTableExist('activity_learn_daily')) {
+            $this->getConnection()->exec("
+                CREATE TABLE `activity_learn_daily` (
+                  `id` bigint(15) unsigned NOT NULL AUTO_INCREMENT,
+                  `userId` int(10) unsigned NOT NULL COMMENT '用户ID',
+                  `activityId` int(10) unsigned NOT NULL COMMENT '教学活动ID',
+                  `taskId` int(10) unsigned NOT NULL COMMENT '任务ID',
+                  `courseId` int(10) unsigned NOT NULL COMMENT '计划ID',
+                  `courseSetId` int(10) unsigned NOT NULL COMMENT '课程ID',
+                  `dayTime` int(10) unsigned NOT NULL COMMENT '以天为精度的时间戳',
+                  `sumTime` int(10) unsigned NOT NULL COMMENT '简单累加时长',
+                  `pureTime` int(10) unsigned NOT NULL COMMENT '时间轴累计时长',
+                  `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
+                  `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
+                  PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ");
+        }
+
+        return 1;
+    }
+
+    public function createDataVisualizationCoursePlanStayDaily()
+    {
+        if (!$this->isTableExist('course_plan_stay_daily')) {
+            $this->getConnection()->exec("
+                CREATE TABLE `course_plan_stay_daily` (
+                  `id` bigint(15) unsigned NOT NULL AUTO_INCREMENT,
+                  `userId` int(10) unsigned NOT NULL COMMENT '用户ID',
+                  `courseId` int(10) unsigned NOT NULL COMMENT '计划ID',
+                  `courseSetId` int(10) unsigned NOT NULL COMMENT '课程ID',
+                  `dayTime` int(10) unsigned NOT NULL COMMENT '以天为精度的时间戳',
+                  `sumTime` int(10) unsigned NOT NULL COMMENT '简单累加时长',
+                  `pureTime` int(10) unsigned NOT NULL COMMENT '时间轴累计时长',
+                  `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
+                  `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
+                  PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ");
+        }
+
+        return 1;
+    }
+
+    public function createDataVisualizationCoursePlanVideoDaily()
+    {
+        if (!$this->isTableExist('course_plan_video_daily')) {
+            $this->getConnection()->exec("
+                CREATE TABLE `course_plan_video_daily` (
+                  `id` bigint(15) unsigned NOT NULL AUTO_INCREMENT,
+                  `userId` int(10) unsigned NOT NULL COMMENT '用户ID',
+                  `courseId` int(10) unsigned NOT NULL COMMENT '计划ID',
+                  `courseSetId` int(10) unsigned NOT NULL COMMENT '课程ID',
+                  `dayTime` int(10) unsigned NOT NULL COMMENT '以天为精度的时间戳',
+                  `sumTime` int(10) unsigned NOT NULL COMMENT '简单累加时长',
+                  `pureTime` int(10) unsigned NOT NULL COMMENT '时间轴累计时长',
+                  `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
+                  `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
+                  PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ");
+        }
+
+        return 1;
+    }
+
+    public function createDataVisualizationCoursePlanLearnDaily()
+    {
+        if (!$this->isTableExist('course_plan_learn_daily')) {
+            $this->getConnection()->exec("
+                CREATE TABLE `course_plan_learn_daily` (
+                  `id` bigint(15) unsigned NOT NULL AUTO_INCREMENT,
+                  `userId` int(10) unsigned NOT NULL COMMENT '用户ID',
+                  `courseId` int(10) unsigned NOT NULL COMMENT '计划ID',
+                  `courseSetId` int(10) unsigned NOT NULL COMMENT '课程ID',
+                  `dayTime` int(10) unsigned NOT NULL COMMENT '以天为精度的时间戳',
+                  `sumTime` int(10) unsigned NOT NULL COMMENT '简单累加时长',
+                  `pureTime` int(10) unsigned NOT NULL COMMENT '时间轴累计时长',
+                  `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
+                  `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
+                  PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ");
+        }
+
+        return 1;
+    }
+
+    public function createDataVisualizationUserStayDaily()
+    {
+        if (!$this->isTableExist('user_stay_daily')) {
+            $this->getConnection()->exec("
+                CREATE TABLE `user_stay_daily` (
+                  `id` bigint(15) unsigned NOT NULL AUTO_INCREMENT,
+                  `userId` int(10) unsigned NOT NULL COMMENT '用户ID',
+                  `dayTime` int(10) unsigned NOT NULL COMMENT '以天为精度的时间戳',
+                  `sumTime` int(10) unsigned NOT NULL COMMENT '简单累加时长',
+                  `pureTime` int(10) unsigned NOT NULL COMMENT '时间轴累计时长',
+                  `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
+                  `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
+                  PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ");
+        }
+
+        return 1;
+    }
+
+    public function createDataVisualizationUserVideoDaily()
+    {
+        if (!$this->isTableExist('user_video_daily')) {
+            $this->getConnection()->exec("
+                CREATE TABLE `user_video_daily` (
+                  `id` bigint(15) unsigned NOT NULL AUTO_INCREMENT,
+                  `userId` int(10) unsigned NOT NULL COMMENT '用户ID',
+                  `dayTime` int(10) unsigned NOT NULL COMMENT '以天为精度的时间戳',
+                  `sumTime` int(10) unsigned NOT NULL COMMENT '简单累加时长',
+                  `pureTime` int(10) unsigned NOT NULL COMMENT '时间轴累计时长',
+                  `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
+                  `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
+                  PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ");
+        }
+
+        return 1;
+    }
+
+    public function createDataVisualizationUserLearnDaily()
+    {
+        if (!$this->isTableExist('user_learn_daily')) {
+            $this->getConnection()->exec("
+                CREATE TABLE `user_learn_daily` (
+                  `id` bigint(15) unsigned NOT NULL AUTO_INCREMENT,
+                  `userId` int(10) unsigned NOT NULL COMMENT '用户ID',
+                  `dayTime` int(10) unsigned NOT NULL COMMENT '以天为精度的时间戳',
+                  `sumTime` int(10) unsigned NOT NULL COMMENT '简单累加时长',
+                  `pureTime` int(10) unsigned NOT NULL COMMENT '时间轴累计时长',
+                  `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
+                  `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
+                  PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ");
+        }
+
+        return 1;
+    }
+
+    public function alterCourseTaskResultAddSumTimeColumns()
+    {
+        if (!$this->isFieldExist('course_task_result', 'sumTime')) {
+            $this->getConnection()->exec("ALTER TABLE `course_task_result` ADD sumTime int(10) unsigned NOT NULL default 0 COMMENT '简单累加时长' after `time`;");
+        }
+
+        return 1;
+    }
+
+    public function alterCourseTaskResultAddPureTimeColumns()
+    {
+        if (!$this->isFieldExist('course_task_result', 'pureTime')) {
+            $this->getConnection()->exec("ALTER TABLE `course_task_result` ADD pureTime int(10) unsigned NOT NULL default 0 COMMENT '学习时间轴总时长' after `time`;");
+        }
+        return 1;
+    }
+
+    public function alterCourseTaskResultAddPureWatchTimeColumns()
+    {
+        if (!$this->isFieldExist('course_task_result', 'pureWatchTime')) {
+            $this->getConnection()->exec("ALTER TABLE `course_task_result` ADD pureWatchTime int(10) unsigned NOT NULL default 0 COMMENT '视频观看时间轴总时长' after `watchTime`;");
+        }
+        return 1;
+    }
+
+    public function dealCourseTaskResultDataToActivityStayDaily()
+    {
+        $deleteSql = "DELETE FROM `activity_stay_daily` WHERE dayTime = 0;";
+        $this->getConnection()->exec($deleteSql);
+        $sql = "INSERT INTO activity_stay_daily (activityId,taskId,courseId,courseSetId, userId, dayTime,sumTime,pureTime, createdTime, updatedTime) 
+                SELECT ctr.activityId, ctr.courseTaskId, ctr.courseId, cv.courseSetId, ctr.userId, 0, ctr.time, ctr.time,  unix_timestamp(now()),  unix_timestamp(now()) 
+                FROM course_task_result ctr LEFT JOIN course_v8 cv ON cv.id = ctr.courseId;";
+        $this->getConnection()->exec($sql);
+        return 1;
+    }
+
+    public function dealCourseTaskResultDataToActivityWatchDaily()
+    {
+        $deleteSql = "DELETE FROM `activity_video_daily` WHERE dayTime = 0;";
+        $this->getConnection()->exec($deleteSql);
+        $sql = "INSERT INTO activity_video_daily (activityId,taskId,courseId,courseSetId, userId, dayTime,sumTime,pureTime, createdTime, updatedTime) 
+                SELECT ctr.activityId, ctr.courseTaskId, ctr.courseId, cv.courseSetId, ctr.userId, 0, ctr.watchTime, ctr.watchTime, unix_timestamp(now()),  unix_timestamp(now()) 
+                FROM course_task_result ctr LEFT JOIN course_v8 cv ON cv.id = ctr.courseId;";
+        $this->getConnection()->exec($sql);
+        return 1;
+    }
+
+    public function dealCourseTaskResultDataToActivityLearnDaily()
+    {
+        $deleteSql = "DELETE FROM `activity_learn_daily` WHERE dayTime = 0;";
+        $this->getConnection()->exec($deleteSql);
+        $sql = "INSERT INTO activity_learn_daily (activityId,taskId,courseId,courseSetId, userId, dayTime,sumTime,pureTime, createdTime, updatedTime) 
+                SELECT asd.activityId, asd.taskId, asd.courseId, cv.courseSetId, asd.userId, asd.dayTime, asd.sumTime, asd.pureTime, unix_timestamp(now()),  unix_timestamp(now()) 
+                FROM activity_stay_daily asd LEFT JOIN course_v8 cv ON cv.id = asd.courseId WHERE asd.dayTime = 0;";
+        $this->getConnection()->exec($sql);
+        return 1;
+    }
+
+    public function dealCourseTaskResultDataToCoursePlanStayDaily()
+    {
+        $deleteSql = "DELETE FROM `course_plan_stay_daily` WHERE dayTime = 0;";
+        $this->getConnection()->exec($deleteSql);
+        $sql = "INSERT INTO course_plan_stay_daily (courseId,courseSetId, userId, dayTime,sumTime,pureTime, createdTime, updatedTime) 
+                SELECT asd.courseId, cv.courseSetId, asd.userId, asd.dayTime, sum(asd.sumTime), sum(asd.pureTime), unix_timestamp(now()),  unix_timestamp(now()) 
+                FROM activity_stay_daily asd LEFT JOIN course_v8 cv ON cv.id = asd.courseId WHERE asd.dayTime = 0 GROUP BY asd.courseId;";
+        $this->getConnection()->exec($sql);
+        return 1;
+    }
+
+    public function dealCourseTaskResultDataToCoursePlanVideoDaily()
+    {
+        $deleteSql = "DELETE FROM `course_plan_video_daily` WHERE dayTime = 0;";
+        $this->getConnection()->exec($deleteSql);
+        $sql = "INSERT INTO course_plan_video_daily (courseId,courseSetId, userId, dayTime,sumTime,pureTime, createdTime, updatedTime) 
+                SELECT asd.courseId, cv.courseSetId, asd.userId, asd.dayTime, sum(asd.sumTime), sum(asd.pureTime), unix_timestamp(now()),  unix_timestamp(now()) 
+                FROM activity_video_daily asd LEFT JOIN course_v8 cv ON cv.id = asd.courseId WHERE asd.dayTime = 0 GROUP BY asd.courseId;";
+        $this->getConnection()->exec($sql);
+        return 1;
+    }
+
+    public function dealCourseTaskResultDataToCoursePlanLearnDaily()
+    {
+        $deleteSql = "DELETE FROM `course_plan_learn_daily` WHERE dayTime = 0;";
+        $this->getConnection()->exec($deleteSql);
+        $sql = "INSERT INTO course_plan_learn_daily (courseId,courseSetId, userId, dayTime,sumTime,pureTime, createdTime, updatedTime) 
+                SELECT asd.courseId, cv.courseSetId, asd.userId, asd.dayTime, sum(asd.sumTime), sum(asd.pureTime), unix_timestamp(now()),  unix_timestamp(now()) 
+                FROM activity_learn_daily asd LEFT JOIN course_v8 cv ON cv.id = asd.courseId WHERE asd.dayTime = 0 GROUP BY asd.courseId;";
+        $this->getConnection()->exec($sql);
+        return 1;
+    }
+
+    public function dealCourseTaskResultDataToUserStayDaily()
+    {
+        $deleteSql = "DELETE FROM `user_stay_daily` WHERE dayTime = 0;";
+        $this->getConnection()->exec($deleteSql);
+        $sql = "INSERT INTO user_stay_daily (userId, dayTime,sumTime,pureTime, createdTime, updatedTime) 
+                SELECT userId, dayTime, sum(sumTime), sum(pureTime), unix_timestamp(now()),  unix_timestamp(now()) 
+                FROM activity_stay_daily WHERE dayTime = 0 GROUP BY userId;";
+        $this->getConnection()->exec($sql);
+        return 1;
+    }
+
+    public function dealCourseTaskResultDataToUserVideoDaily()
+    {
+        $deleteSql = "DELETE FROM `user_video_daily` WHERE dayTime = 0;";
+        $this->getConnection()->exec($deleteSql);
+        $sql = "INSERT INTO user_video_daily (userId, dayTime,sumTime,pureTime, createdTime, updatedTime) 
+                SELECT userId, dayTime, sum(sumTime), sum(pureTime), unix_timestamp(now()),  unix_timestamp(now()) 
+                FROM activity_video_daily WHERE dayTime = 0 GROUP BY userId;";
+        $this->getConnection()->exec($sql);
+        return 1;
+    }
+
+    public function dealCourseTaskResultDataToUserLearnDaily()
+    {
+        $deleteSql = "DELETE FROM `user_learn_daily` WHERE dayTime = 0;";
+        $this->getConnection()->exec($deleteSql);
+        $sql = "INSERT INTO user_learn_daily (userId, dayTime,sumTime,pureTime, createdTime, updatedTime) 
+                SELECT userId, dayTime, sum(sumTime), sum(pureTime), unix_timestamp(now()),  unix_timestamp(now()) 
+                FROM activity_learn_daily WHERE dayTime = 0 GROUP BY userId;";
+        $this->getConnection()->exec($sql);
+        return 1;
     }
 
     public function updateGoodsAndGoodsSpecsPrice()
