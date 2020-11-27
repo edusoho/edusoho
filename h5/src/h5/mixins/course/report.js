@@ -331,11 +331,11 @@ export default {
     },
 
     visibilityState() {
-      if (
-        document.visibilityState === 'hidden' &&
-        this.reportType === 'video'
-      ) {
+      if (this.reportType !== 'video') return;
+      if (document.visibilityState === 'hidden') {
         this.ineffectiveLearning('ineffective_learning');
+      } else if (document.visibilityState === 'visible') {
+        this.player.pause();
       }
     },
   },
