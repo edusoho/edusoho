@@ -11,7 +11,7 @@
           {% endfor %}
         </select>
       {% endif %}
-      <div class="pull-left" style="line-height:32px;">{{ 'admin.course_manage.statistics.data.plan_study_time'|trans({'%mins%':coursePlanSumLearnedTime|default(0)}) }}</div>
+      <div class="pull-left" style="line-height:32px;">{{ 'admin.course_manage.statistics.data.plan_study_time'|trans({'%mins%':coursePlanSumLearnedTime|default(0)|number_format(1)}) }}</div>
       <div class="pull-right">
         {% set course = courses[0]|default() %}
         <a class="btn btn-primary btn-sm task-export" data-prepare-url="{{ path("admin_v2_course_task_data_export_prepare",{courseId: courseId}) }}" data-export-url="{{ path('admin_v2_course_task_data_export',{courseId: courseId}) }}" href="javascript:;">{{ 'course.export'|trans }}</a>
@@ -36,15 +36,15 @@
                 <td>{{ ('course.activity.'~task.type)|trans }}</td>
                 <td>
                   {% if task.type == 'video' %}
-                    {{ task.length|default(0) }}
+                    {{ task.length|default(0)|number_format(1) }}
                   {% else %}
                     --
                   {% endif %}
                 </td>
                 <td>{{task.studentNum|default() }}</td>
                 <td>{{task.finishedNum|default() }}</td>
-                <td>{{task.sumLearnedTime|default(0)}}</td>
-                <td>{{task.avgLearnedTime|default(0)}}</td>
+                <td>{{task.sumLearnedTime|default(0)|number_format(1)}}</td>
+                <td>{{task.avgLearnedTime|default(0)|number_format(1)}}</td>
                 <td>
                   {% if task.type in ['testpaper'] %}
                     {{ task.score|default('0') }}
