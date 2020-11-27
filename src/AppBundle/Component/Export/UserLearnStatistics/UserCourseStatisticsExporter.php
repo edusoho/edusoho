@@ -58,7 +58,7 @@ class UserCourseStatisticsExporter extends Exporter
     {
         $statisticsContent = [];
         foreach ($users as $user) {
-            $nickname = is_numeric($user['nickname']) ? $user['nickname']."\t" : $user['nickname'];;
+            $nickname = is_numeric($user['nickname']) ? $user['nickname']."\t" : $user['nickname'];
             $mobile = $user['verifiedMobile'];
             $userData = empty($courseMemberData[$user['id']]) ? [] : $courseMemberData[$user['id']];
             foreach ($userData as $data) {
