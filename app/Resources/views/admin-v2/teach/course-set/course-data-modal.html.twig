@@ -21,7 +21,7 @@
         {% endfor %}
       </select>
     {% endif %}
-    <div class="pull-left" style="line-height:32px;">{{ 'admin.course_manage.statistics.data_detail.plan_study_time'|trans({'%mins%':coursePlanSumLearnedTime|default(0)}) }}</div>
+    <div class="pull-left" style="line-height:32px;">{{ 'admin.course_manage.statistics.data_detail.plan_study_time'|trans({'%mins%':coursePlanSumLearnedTime|default(0)|number_format(1)}) }}</div>
     <div class="pull-right">
       {% set course = courses[0]|default() %}
       <a class="btn btn-primary btn-sm task-export"

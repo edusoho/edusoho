@@ -22,8 +22,8 @@
           {% else %}
             <td>-</td>
           {% endif %}
-          <td>{% if taskResult.sumTime > 0 %}{{ (taskResult.sumTime / 60)|number_format(1) }}{% else %}0{% endif %}</td>
-          <td>{% if taskResult.pureTime > 0 %}{{ (taskResult.pureTime / 60)|number_format(1) }}{% else %}0{% endif %}</td>
+          <td>{% if taskResult.sumTime > 0 %}{{ (taskResult.sumTime / 60)|number_format(1) }}{% else %}0.0{% endif %}</td>
+          <td>{% if taskResult.pureTime > 0 %}{{ (taskResult.pureTime / 60)|number_format(1) }}{% else %}0.0{% endif %}</td>
         </tr>
       {% endfor %}
     </tbody>
