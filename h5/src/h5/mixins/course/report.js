@@ -278,7 +278,15 @@ export default {
      * reject_current         // 互踢，不允许后来
      */
     kickEachOther(type) {
-      this.outFocusMaskShow(type);
+      this.absorbed = 1;
+      this.isShowOutFocusMask = true;
+      this.outFocusMaskType = type;
+
+      if (this.player && this.reportType === 'video') {
+        this.player.pause();
+      }
+
+      this.toggleReportMaskHidden('add');
     },
 
     /**
@@ -289,19 +297,16 @@ export default {
       if (this.isShowOutFocusMask) {
         return;
       }
-      this.outFocusMaskShow(type);
-      this.reprtData({ eventName: 'doing', ContinuousReport: true });
-    },
 
-    outFocusMaskShow(type) {
       this.absorbed = 1;
       this.isShowOutFocusMask = true;
       this.outFocusMaskType = type;
+
       if (this.player && this.reportType === 'video') {
         this.player.pause();
       }
 
-      this.toggleReportMaskHidden('add');
+      this.reprtData({ eventName: 'doing', ContinuousReport: true });
     },
 
     toggleReportMaskHidden(type) {
