@@ -36,12 +36,12 @@ define(function (require, exports, module) {
             learnTime = [];
           for (var value of resp) {
             dateArr.push(value.date);
-            learnTime.push(parseInt(value.learnedTime/60));
-            totalTime += parseInt(value.learnedTime/60);
+            learnTime.push((parseInt(value.learnedTime)/60).toFixed(1));
+            totalTime += parseInt(value.learnedTime)/60;
           }
           self.dateArr = dateArr;
           self.learnTime = learnTime;
-          self.totalTime = totalTime;
+          self.totalTime = totalTime.toFixed(1);
           self.show(self.learnTime, self.dateArr);
         }
       });

@@ -49,7 +49,7 @@ class CourseController extends BaseController
                 'tasks' => $tasks,
                 'courseSet' => $courseSet,
                 'courses' => $courses,
-                'coursePlanSumLearnedTime' => intval(empty($coursePlanSumLearnedTime) ? 0 : $coursePlanSumLearnedTime / 60),
+                'coursePlanSumLearnedTime' => empty($coursePlanSumLearnedTime) ? 0 : round($coursePlanSumLearnedTime / 60, 1),
                 'courseId' => $courseId,
             ]
         );
@@ -289,11 +289,11 @@ class CourseController extends BaseController
             );
             $task['studentNum'] = $this->getTaskResultService()->countTaskResults(['courseTaskId' => $task['id']]);
             $sumLearnedTime = empty($sumlearnedTimeGroupByTaskIds[$task['id']]) ? 0 : $sumlearnedTimeGroupByTaskIds[$task['id']]['learnedTime'];
-            $task['sumLearnedTime'] = intval($sumLearnedTime / 60);
-            $task['avgLearnedTime'] = 0 == $task['studentNum'] ? 0 : intval($sumLearnedTime / $task['studentNum'] / 60);
+            $task['sumLearnedTime'] = round($sumLearnedTime / 60, 1);
+            $task['avgLearnedTime'] = 0 == $task['studentNum'] ? 0 : round($sumLearnedTime / $task['studentNum'] / 60, 1);
 
             if ('video' == $task['type']) {
-                $task['length'] = intval($task['length'] / 60);
+                $task['length'] = round($task['length'] / 60, 1);
             }
 
             if ('testpaper' === $task['type'] && !empty($task['activity'])) {

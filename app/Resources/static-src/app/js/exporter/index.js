@@ -5,6 +5,7 @@ class Export {
     this.$exportBtns = $exprtBtns;
     this.$modal = $('#modal');
     this.fileNames = [];
+    this.names = [];
     this.totalCount = 0;
     this.currentCount = 0;
     this.exportDataEvent();
@@ -15,6 +16,7 @@ class Export {
     let self  = this;
     self.$exportBtns.on('click', function () {
       self.$exportBtn = $(this);
+      self.names = self.$exportBtn.data('fileNames');
       let $form = $(self.$exportBtn.data('targetForm'));
       let formData = $form.length > 0 ? $form.serialize() : '';
       let preUrl = self.$exportBtn.data('preUrl') + '?' + formData;
@@ -41,7 +43,7 @@ class Export {
       url : tryUrl,
       async : false,
       data: {
-        names: self.$exportBtns.data('fileNames')
+        names: self.names
       },
       success : function(response){
         if (!response.success) {
@@ -101,14 +103,12 @@ class Export {
     let data = {
       'start': start,
       'fileName': fileName,
-      'names': self.$exportBtns.data('fileNames'),
+      'names': self.names,
       'name': currentName,
     };
 
     $.get(urls.preUrl, data, function (response) {
       if (!response.success) {
-        console.log(response);
-
         notify('danger', Translator.trans(response.message));
         return;
       }
