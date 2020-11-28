@@ -81,7 +81,7 @@ class CourseTaskEventV2 extends AbstractResource
         ]);
 
         $active = $request->request->get('release', 0) ? 0 : 1;
-        $this->getDataCollectService()->updateLearnFlow($flow['id'], ['lastLearnTime' => $record['endTime'], 'active、' => $active]);
+        $this->getDataCollectService()->updateLearnFlow($flow['id'], ['lastLearnTime' => $record['endTime'], 'active' => $active]);
         $triggerData = ['lastTime' => $record['endTime']];
         $result = $this->getTaskService()->trigger($taskId, self::EVENT_START, $triggerData);
 
