@@ -272,7 +272,10 @@ export default {
     outFocusMask(type) {
       this.absorbed = 1;
       this.isShowOutFocusMask = false;
-      if (this.player && this.reportType === 'video') {
+      if (
+        this.player &&
+        (this.reportType === 'video' || this.reportType === 'audio')
+      ) {
         this.player.play();
       }
 
@@ -299,7 +302,10 @@ export default {
       this.isShowOutFocusMask = true;
       this.outFocusMaskType = type;
 
-      if (this.player && this.reportType === 'video') {
+      if (
+        (this.player && this.reportType === 'video') ||
+        this.reportType === 'audio'
+      ) {
         this.player.pause();
       }
 
