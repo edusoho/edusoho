@@ -261,6 +261,8 @@ export default {
           homeworkId: this.$route.query.homeworkId,
           homeworkResultId: this.$route.query.homeworkResultId,
           title: this.title,
+          targetId: this.$route.query.taskId,
+          courseId: this.$route.query.courseId,
         },
       });
     },

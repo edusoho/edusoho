@@ -25,7 +25,7 @@ export default {
   },
   beforeDestroy() {
     this.clearReportIntervalTime();
-    document.removeEventListener('visibilitychange', this.visibilityState);
+    // document.removeEventListener('visibilitychange', this.visibilityState);
 
     if (this.sign.length > 0) {
       localStorage.setItem('flowSign', this.sign);
@@ -53,9 +53,9 @@ export default {
       if (reportNow) {
         this.initReportEvent();
       }
-      if (this.reportType === 'video') {
-        this.initVisibilitychange();
-      }
+      // if (this.reportType === 'video') {
+      //   this.initVisibilitychange();
+      // }
     },
 
     /**
