@@ -47,6 +47,7 @@ class OverviewNormalTaskDetailExporterTest extends BaseTestCase
                             'id' => '1',
                             'userId' => 1,
                             'time' => 12,
+                            'sumTime' => 12,
                             'pureTime' => 12,
                             'finishedTime' => 1341,
                             'watchTime' => 13,
