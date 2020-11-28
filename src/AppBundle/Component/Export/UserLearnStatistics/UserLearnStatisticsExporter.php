@@ -130,6 +130,11 @@ class UserLearnStatisticsExporter extends Exporter
         return $conditions;
     }
 
+    protected function getPageConditions()
+    {
+        return [$this->parameter['start'], 100];
+    }
+
     protected function getLearnStatisticsService()
     {
         return $this->getBiz()->service('UserLearnStatistics:LearnStatisticsService');
