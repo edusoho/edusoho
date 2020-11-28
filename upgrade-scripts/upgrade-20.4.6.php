@@ -557,7 +557,7 @@ class EduSohoUpgrade extends AbstractUpdater
     public function dealCourseTaskResultDataToActivityWatchDaily($page)
     {
         $table = 'course_task_result';
-        $count = $this->getTableCount($table);
+        $count = $this->getConnection()->fetchColumn("SELECT count(*) FROM {$table} WHERE watchTime > 0;");
         $start = ($page -1) * $this->perPageCount;
         if ($count > $start) {
             $sql = "INSERT IGNORE INTO `activity_video_daily`
@@ -584,7 +584,8 @@ class EduSohoUpgrade extends AbstractUpdater
                             ctr.watchTime, 
                             unix_timestamp(now()),  
                             unix_timestamp(now()) 
-                        FROM course_task_result ctr LEFT JOIN course_v8 cv ON cv.id = ctr.courseId ORDER BY ctr.id limit {$start},{$this->perPageCount};";
+                        FROM course_task_result ctr LEFT JOIN course_v8 cv ON cv.id = ctr.courseId 
+                        WHERE watchTime > 0 ORDER BY ctr.id limit {$start},{$this->perPageCount};";
             $this->getConnection()->exec($sql);
             $this->logger('info', "ActivityWatchDaily数据刷新，当前第{$page}页，从{$start}条开始");
             $page = $page + 1;
