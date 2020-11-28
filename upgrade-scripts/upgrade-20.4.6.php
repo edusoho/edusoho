@@ -842,7 +842,7 @@ class EduSohoUpgrade extends AbstractUpdater
         if ($this->isTableExist('goods') && $this->isTableExist('goods_specs')) {
             $this->getConnection()->exec("
                 UPDATE goods g INNER JOIN (
-                    SELECT gs.goodsId AS goodsId, max(gs.price) AS minPrice, min(gs.price) AS maxPrice
+                    SELECT gs.goodsId AS goodsId, min(gs.price) AS minPrice, max(gs.price) AS maxPrice
                     FROM goods_specs gs, goods g WHERE g.type='course' AND gs.goodsId = g.id GROUP BY goodsId
                 ) m ON g.id = m.goodsId SET g.minPrice = m.minPrice, g.maxPrice = m.maxPrice;
             ");
