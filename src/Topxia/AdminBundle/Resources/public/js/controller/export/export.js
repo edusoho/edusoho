@@ -112,7 +112,7 @@ define(function(require, exports, module) {
             if (urls.url && fileNames) {
                 var url = urls.url + '?';
                 $.each(fileNames, function (index, value) {
-                  url += `fileNames[]=${value}&`;
+                  url += 'fileNames[]=' + value + '&';
                 });
                 totalCount = 0;
                 currentCount = 0;

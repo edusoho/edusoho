@@ -59,7 +59,7 @@ class OverviewNormalTaskDetailExporter extends Exporter
             $data[] = is_numeric($user['nickname']) ? $user['nickname']."\t" : $user['nickname'];
             $data[] = date('Y-m-d H:i:s', $taskResult['createdTime']);
             $data[] = empty($taskResult['finishedTime']) ? '-' : date('Y-m-d H:i:s', $taskResult['finishedTime']);
-            $data[] = empty($taskResult['time']) ? '-' : round(($taskResult['time'] / 60), 1);
+            $data[] = empty($taskResult['sumTime']) ? '-' : round(($taskResult['sumTime'] / 60), 1);
             $data[] = empty($taskResult['pureTime']) ? '-' : round(($taskResult['pureTime'] / 60), 1);
 
             $datas[] = $data;
