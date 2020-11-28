@@ -16,9 +16,9 @@ date_default_timezone_set('Asia/Shanghai');
 require __DIR__.'/../../bootstrap/bootstrap_install.php';
 
 $loader = new Twig_Loader_Filesystem(__DIR__.'/templates');
-$twig = new Twig_Environment($loader, array(
+$twig = new Twig_Environment($loader, [
     'cache' => false,
-));
+]);
 
 $twig->addGlobal('edusoho_version', \AppBundle\System::VERSION);
 
@@ -28,10 +28,10 @@ $functionName = 'install_step'.$step;
 
 $functionName($init_data);
 
+use Biz\Crontab\SystemCrontabInitializer;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Yaml\Yaml;
 use Topxia\Service\Common\ServiceKernel;
-use Biz\Crontab\SystemCrontabInitializer;
 
 function check_installed()
 {
@@ -50,7 +50,7 @@ function install_step0($init_data = 0)
     check_installed();
 
     global $twig;
-    echo $twig->render('step-0.html.twig', array('step' => 0));
+    echo $twig->render('step-0.html.twig', ['step' => 0]);
 }
 
 function install_step1($init_data = 0)
@@ -60,7 +60,7 @@ function install_step1($init_data = 0)
 
     $pass = true;
 
-    $env = array();
+    $env = [];
     $env['os'] = PHP_OS;
     $env['phpVersion'] = PHP_VERSION;
     $env['phpVersionOk'] = version_compare(PHP_VERSION, '5.5.0') >= 0;
@@ -87,7 +87,7 @@ function install_step1($init_data = 0)
         $pass = false;
     }
 
-    $paths = array(
+    $paths = [
         'app/config/parameters.yml',
         'app/data/udisk',
         'app/data/private_files',
@@ -96,9 +96,9 @@ function install_step1($init_data = 0)
         'app/cache',
         'app/data',
         'app/logs',
-    );
+    ];
 
-    $checkedPaths = array();
+    $checkedPaths = [];
 
     foreach ($paths as $path) {
         $checkedPath = __DIR__.'/../../'.$path;
@@ -124,14 +124,14 @@ function install_step1($init_data = 0)
     if (false === $result) {
         $pass = false;
     }
-    echo $twig->render('step-1.html.twig', array(
+    echo $twig->render('step-1.html.twig', [
         'step' => 1,
         'env' => $env,
         'paths' => $checkedPaths,
         'safemode' => $safemode,
         'pass' => $pass,
         'root' => $result,
-    ));
+    ]);
 }
 
 function install_step2($init_data = 0)
@@ -140,7 +140,7 @@ function install_step2($init_data = 0)
     global $twig;
 
     $error = null;
-    $post = array();
+    $post = [];
 
     if ('POST' == strtoupper($_SERVER['REQUEST_METHOD'])) {
         $post = $_POST;
@@ -152,11 +152,11 @@ function install_step2($init_data = 0)
         exit();
     }
 
-    echo $twig->render('step-2.html.twig', array(
+    echo $twig->render('step-2.html.twig', [
         'step' => 2,
         'error' => $error,
         'post' => $post,
-    ));
+    ]);
 }
 
 function install_step3($init_data = 0)
@@ -183,7 +183,7 @@ function install_step3($init_data = 0)
             $admin = $initializer->initAdminUser($_POST);
             _init_setting($admin);
             $service = ServiceKernel::instance()->createService('System:SettingService');
-            $settings = $service->get('storage', array());
+            $settings = $service->get('storage', []);
             if (!empty($settings['cloud_key_applied'])) {
                 unset($settings['cloud_access_key']);
                 unset($settings['cloud_secret_key']);
@@ -204,20 +204,20 @@ function install_step3($init_data = 0)
         }
     }
 
-    echo $twig->render('step-3.html.twig', array(
+    echo $twig->render('step-3.html.twig', [
         'step' => 3,
         'error' => $error,
         'request' => $_POST,
-    ));
+    ]);
 }
 
 function install_step4($init_data = 0)
 {
     global $twig;
 
-    echo $twig->render('step-4.html.twig', array(
+    echo $twig->render('step-4.html.twig', [
         'step' => 4,
-    ));
+    ]);
 }
 
 function install_step5($init_data = 0)
@@ -264,10 +264,10 @@ function install_step999($init_data = 0)
 
         echo json_encode($key);
     } else {
-        echo json_encode(array(
+        echo json_encode([
             'accessKey' => '__NOKEY__',
             'secretKey' => '__NOKEY__',
-        ));
+        ]);
     }
 }
 
@@ -292,7 +292,9 @@ function _create_database($config, $replace)
             $result = $pdo->exec($sql);
 
             if (false === $result) {
-                return "创建数据库失败，查看<a href='http://www.qiqiuyu.com/faq/585/detail' target='_blank'>解决方案</a>";
+                $error = $pdo->errorInfo();
+
+                return "<span>ERROR {$error[1]} ({$error[0]}): {$error[2]} </span> <br>创建数据库失败，查看<a href='http://www.qiqiuyu.com/faq/585/detail' target='_blank'>解决方案</a>";
             }
 
             /*if (empty($config['database_init'])) {
@@ -318,10 +320,10 @@ function _create_database($config, $replace)
             if (!$filesystem->exists('edusoho_init_'.$index.'.sql')) {
                 _init_auto_increment($pdo, $config);
 
-                return array('success' => true);
+                return ['success' => true];
             }
 
-            return array('index' => $index);
+            return ['index' => $index];
         }
 
         return null;
@@ -406,17 +408,17 @@ Hi, {{nickname}}
 (这是一封自动产生的email，请勿回复。)
 EOD;
 
-    $settings = array(
-        'refund' => array(
+    $settings = [
+        'refund' => [
             'maxRefundDays' => 10,
             'applyNotification' => '您好，您退款的{{item}}，管理员已收到您的退款申请，请耐心等待退款审核结果。',
             'successNotification' => '您好，您申请退款的{{item}} 审核通过，将为您退款{{amount}}元。',
             'failedNotification' => '您好，您申请退款的{{item}} 审核未通过，请与管理员再协商解决纠纷。',
-        ),
-        'article' => array(
+        ],
+        'article' => [
             'name' => '资讯频道', 'pageNums' => 20,
-        ),
-        'site' => array(
+        ],
+        'site' => [
             'name' => $_POST['sitename'],
             'slogan' => '',
             'url' => '',
@@ -429,19 +431,19 @@ EOD;
             'status' => 'open',
             'closed_note' => '',
             'homepage_template' => 'less',
-        ),
-        'developer' => array('cloud_api_failover' => 1),
-        'auth' => array(
+        ],
+        'developer' => ['cloud_api_failover' => 1],
+        'auth' => [
             'register_mode' => 'email',
             'email_activation_title' => '请激活您的{{sitename}}帐号',
             'email_activation_body' => trim($emailBody),
             'welcome_enabled' => 'opened',
             'welcome_sender' => $user['nickname'],
-            'welcome_methods' => array(),
+            'welcome_methods' => [],
             'welcome_title' => '欢迎加入{{sitename}}',
             'welcome_body' => '您好{{nickname}}，我是{{sitename}}的管理员，欢迎加入{{sitename}}，祝您学习愉快。如有问题，随时与我联系。',
-        ),
-        'mailer' => array(
+        ],
+        'mailer' => [
             'enabled' => 0,
             'host' => 'smtp.example.com',
             'port' => '25',
@@ -449,43 +451,43 @@ EOD;
             'password' => '',
             'from' => 'user@example.com',
             'name' => $_POST['sitename'],
-        ),
-        'payment' => array(
+        ],
+        'payment' => [
             'enabled' => 0,
             'bank_gateway' => 'none',
             'alipay_enabled' => 0,
             'alipay_key' => '',
             'alipay_secret' => '',
-        ),
-        'storage' => array(
+        ],
+        'storage' => [
             'upload_mode' => 'local',
             'cloud_access_key' => '',
             'cloud_secret_key' => '',
             'cloud_api_server' => 'http://api.edusoho.net',
             'enable_playback_rates' => 0,
-        ),
-        'post_num_rules' => array(
-            'rules' => array(
-                'thread' => array(
-                    'fiveMuniteRule' => array(
+        ],
+        'post_num_rules' => [
+            'rules' => [
+                'thread' => [
+                    'fiveMuniteRule' => [
                         'interval' => 300,
                         'postNum' => 100,
-                    ),
-                ),
-                'threadLoginedUser' => array(
-                    'fiveMuniteRule' => array(
+                    ],
+                ],
+                'threadLoginedUser' => [
+                    'fiveMuniteRule' => [
                         'interval' => 300,
                         'postNum' => 50,
-                    ),
-                ),
-            ),
-        ),
-        'default' => array(
+                    ],
+                ],
+            ],
+        ],
+        'default' => [
             'user_name' => '学员',
             'chapter_name' => '章',
             'part_name' => '节',
-        ),
-        'coin' => array(
+        ],
+        'coin' => [
             'coin_enabled' => 0,
             'cash_model' => 'none',
             'cash_rate' => 1,
@@ -497,27 +499,27 @@ EOD;
             'coin_picture_20_20' => '',
             'coin_picture_10_10' => '',
             'charge_coin_enabled' => '',
-        ),
-        'magic' => array(
+        ],
+        'magic' => [
             'export_allow_count' => 100000,
             'export_limit' => 10000,
             'enable_org' => 0,
-        ),
-        'cloud_sms' => array(
+        ],
+        'cloud_sms' => [
             'system_remind' => 'on',
-        ),
-        'coupon' => array(
+        ],
+        'coupon' => [
             'enabled' => 1,
-        ),
-        'backstage' => array(
+        ],
+        'backstage' => [
             'is_v2' => 1,
             'allow_show_switch_btn' => 0,
-        ),
-    );
+        ],
+    ];
 
     $service = ServiceKernel::instance()->createService('System:SettingService');
     foreach ($settings as $key => $value) {
-        $setting = $service->get($key, array());
+        $setting = $service->get($key, []);
         $setting = array_merge($setting, $value);
         $service->set($key, $setting);
     }
@@ -531,22 +533,22 @@ function _initKey()
     $biz['user'] = $currentUser;
     $settingService = $biz->service('System:SettingService');
 
-    $settings = $settingService->get('storage', array());
+    $settings = $settingService->get('storage', []);
 
     if (!empty($settings['cloud_key_applied'])) {
-        return array(
+        return [
             'accessKey' => '您的Key已生成，请直接进入系统',
             'secretKey' => '---',
-        );
+        ];
     }
 
     $applier = new \Biz\CloudPlatform\KeyApplier();
 
     $userService = $biz->service('User:UserService');
-    $users = $userService->searchUsers(array('roles' => 'ROLE_SUPER_ADMIN'), array('createdTime' => 'DESC'), 0, 1);
+    $users = $userService->searchUsers(['roles' => 'ROLE_SUPER_ADMIN'], ['createdTime' => 'DESC'], 0, 1);
 
     if (empty($users) || empty($users[0])) {
-        return array('error' => '管理员帐号不存在，创建Key失败');
+        return ['error' => '管理员帐号不存在，创建Key失败'];
     }
 
     $filePath = ServiceKernel::instance()->getParameter('kernel.root_dir').'/config/visitor.yml';
@@ -561,7 +563,7 @@ function _initKey()
     $keys = $applier->applyKey($users[0], 'opensource', 'install');
 
     if (empty($keys['accessKey']) || empty($keys['secretKey'])) {
-        return array('error' => 'Key生成失败，请检查服务器网络后，重试！');
+        return ['error' => 'Key生成失败，请检查服务器网络后，重试！'];
     }
 
     $settings['cloud_access_key'] = $keys['accessKey'];
