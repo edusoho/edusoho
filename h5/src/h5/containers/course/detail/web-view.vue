@@ -177,14 +177,14 @@ export default {
         player.on('pagechanged', e => {
           if (e.page === e.total) {
             if (this.finishCondition && this.finishCondition.type === 'end') {
-              this.reprtData('finish');
+              this.reprtData({ eventName: 'finish' });
             }
           }
         });
       });
     },
     toLearned() {
-      this.reprtData('finish').then(res => {
+      this.reprtData({ eventName: 'finish' }).then(res => {
         this.finishResult = res;
         this.finishDialog = true;
       });

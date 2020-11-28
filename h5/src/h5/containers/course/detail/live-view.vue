@@ -87,7 +87,7 @@ export default {
             if (res.url.indexOf('/error/') > -1) {
               Toast('暂无回放');
             } else {
-              this.reprtData('finish');
+              this.reprtData({ eventName: 'finish' });
               const index = res.url.indexOf('/');
               this.playUrl = index == 0 ? res.url : res.url.substring(index);
             }
@@ -134,7 +134,7 @@ export default {
             // 由于在safari中从https转到http的地址会出错
             this.playUrl =
               index == 0 ? res.roomUrl : res.roomUrl.substring(index);
-            this.reprtData('finish');
+            this.reprtData({ eventName: 'finish' });
           } else {
             if (this.requestCount < 30) {
               this.getLiveUrl(taskId, no);

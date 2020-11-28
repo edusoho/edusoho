@@ -230,7 +230,7 @@ export default {
       this.handExercisedo(datas)
         .then(res => {
           // 上报完成作业课时
-          this.reprtData('finish');
+          this.reprtData({ eventName: 'finish' });
           this.$router.replace({
             name: 'exerciseResult',
             query: {

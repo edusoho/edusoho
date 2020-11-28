@@ -248,7 +248,7 @@ export default {
     // 直播视频回放刚进入课程就算学习完成
     IsLivePlayback() {
       if (this.allTask[this.taskId].type === 'live') {
-        this.reprtData('finish');
+        this.reprtData({ eventName: 'finish' });
       }
     },
     viewAudioDoc() {
@@ -418,12 +418,16 @@ export default {
           this.clearComputeWatchTime();
           const watchTime = parseInt(this.nowWatchTime - this.lastWatchTime);
           this.lastWatchTime = this.nowWatchTime;
-          this.reprtData('doing', true, watchTime);
+          this.reprtData({
+            eventName: 'doing',
+            ContinuousReport: true,
+            watchTime: watchTime,
+          });
         });
         player.on('ended', () => {
           this.clearComputeWatchTime();
           if (this.finishCondition && this.finishCondition.type === 'end') {
-            this.reprtData('finish');
+            this.reprtData({ eventName: 'finish' });
           }
         });
       });
@@ -472,7 +476,7 @@ export default {
       });
     },
     toLearned() {
-      this.reprtData('finish').then(res => {
+      this.reprtData({ eventName: 'finish' }).then(res => {
         this.finishResult = res;
         this.finishDialog = true;
       });

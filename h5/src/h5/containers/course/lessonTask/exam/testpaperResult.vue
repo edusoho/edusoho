@@ -207,7 +207,7 @@ export default {
         this.getSubjectList(res.items);
         this.calSubjectHeight();
         // 上报学习进度
-        this.reprtData('doing');
+        this.reprtData({ eventName: 'doing' });
         this.canDoing(this.result, this.user.id)
           .then(() => {
             this.startTestpaper('KeepDoing');

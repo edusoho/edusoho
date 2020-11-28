@@ -383,7 +383,7 @@ export default {
             this.isHandExercise = true;
             resolve();
             // 上报完成作业课时
-            this.reprtData('finish');
+            this.reprtData({ eventName: 'finish' });
             // 跳转到结果页
             this.showResult();
           })

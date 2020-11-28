@@ -93,7 +93,9 @@ export default {
      * @param {*} events  //doing finish
      * @param {*} ContinuousReport //是否每间隔一分钟上报
      */
-    reprtData(param = { eventName: 'doing', ContinuousReport: false }) {
+    reprtData(
+      param = { eventName: 'doing', ContinuousReport: false, watchTime: null },
+    ) {
       if (
         this.reportData.courseId === null ||
         this.reportData.taskId === null
@@ -285,6 +287,10 @@ export default {
 
       if (this.player && this.reportType === 'video') {
         this.player.pause();
+      }
+
+      if (this.player && this.player.destory && type === 'reject_current') {
+        this.player.destory();
       }
 
       this.toggleReportMaskHidden('add');
