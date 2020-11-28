@@ -368,6 +368,7 @@ export default {
         query: {
           resultId: this.$route.query.resultId,
           title: this.testpaperTitle,
+          targetId: this.$route.query.targetId,
         },
       });
     },

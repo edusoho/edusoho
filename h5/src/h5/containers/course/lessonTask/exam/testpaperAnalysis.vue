@@ -1,5 +1,11 @@
 <template>
   <div class="paper-swiper">
+    <out-focus-mask
+      :type="outFocusMaskType"
+      :isShow="isShowOutFocusMask"
+      :reportType="reportType"
+      @outFocusMask="outFocusMask"
+    ></out-focus-mask>
     <e-loading v-if="isLoading" />
     <item-bank
       v-if="info.length > 0"
@@ -95,6 +101,8 @@ import Api from '@/api';
 import itemBank from '../component/itemBank';
 import { Toast } from 'vant';
 import testMixin from '@/mixins/lessonTask/index.js';
+import report from '@/mixins/course/report';
+import OutFocusMask from '@/components/out-focus-mask.vue';
 
 export default {
   name: 'TestpaperAnalysis',
@@ -120,8 +128,9 @@ export default {
   },
   components: {
     itemBank,
+    OutFocusMask,
   },
-  mixins: [testMixin],
+  mixins: [testMixin, report],
   data() {
     return {
       result: null,
@@ -143,9 +152,11 @@ export default {
     ...mapState({
       isLoading: state => state.isLoading,
       user: state => state.user,
+      selectedPlanId: state => state.course.selectedPlanId,
     }),
   },
-  created() {
+  mounted() {
+    this.initReport();
     this.setNavbarTitle(this.$route.query.title);
     this.getTestpaperResult();
   },
@@ -153,6 +164,14 @@ export default {
     ...mapMutations({
       setNavbarTitle: types.SET_NAVBAR_TITLE,
     }),
+    // 初始化上报数据
+    initReport() {
+      this.initReportData(
+        this.selectedPlanId,
+        this.$route.query.targetId,
+        'testpaper',
+      );
+    },
     async getTestpaperResult() {
       await Api.testpaperResult({
         query: {

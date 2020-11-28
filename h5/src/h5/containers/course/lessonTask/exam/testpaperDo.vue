@@ -1,5 +1,11 @@
 <template>
   <div class="paper-swiper">
+    <out-focus-mask
+      :type="outFocusMaskType"
+      :isShow="isShowOutFocusMask"
+      :reportType="reportType"
+      @outFocusMask="outFocusMask"
+    ></out-focus-mask>
     <e-loading v-if="isLoading" />
 
     <item-bank
@@ -100,6 +106,8 @@ import { getCountDown } from '@/utils/date-toolkit.js';
 
 import examMixin from '@/mixins/lessonTask/exam.js';
 import testMixin from '@/mixins/lessonTask/index.js';
+import report from '@/mixins/course/report';
+import OutFocusMask from '@/components/out-focus-mask.vue';
 
 let backUrl = '';
 
@@ -108,6 +116,7 @@ export default {
   components: {
     itemBank,
     guidePage,
+    OutFocusMask,
   },
   filters: {
     type: function(type) {
@@ -129,7 +138,7 @@ export default {
       }
     },
   },
-  mixins: [examMixin, testMixin],
+  mixins: [examMixin, testMixin, report],
   data() {
     return {
       cardSeq: 0, // 点击题卡要滑动的指定位置的索引
@@ -154,7 +163,8 @@ export default {
       slideIndex: 0, // 题库组件当前所在的划片位置
     };
   },
-  created() {
+  mounted() {
+    this.initReport();
     this.getData();
   },
   beforeRouteEnter(to, from, next) {
@@ -192,6 +202,7 @@ export default {
     ...mapState({
       isLoading: state => state.isLoading,
       user: state => state.user,
+      selectedPlanId: state => state.course.selectedPlanId,
     }),
   },
   watch: {
@@ -202,6 +213,14 @@ export default {
   },
   methods: {
     ...mapActions('course', ['handExamdo']),
+    // 初始化上报数据
+    initReport() {
+      this.initReportData(
+        this.selectedPlanId,
+        this.$route.query.targetId,
+        'testpaper',
+      );
+    },
     // 请求接口获取数据
     getData() {
       const testId = this.$route.query.testId;
