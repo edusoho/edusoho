@@ -110,6 +110,7 @@ export default class TaskPipe {
     if (this.isLogout) return;
     if (this.sign === '') {
       let customData = {};
+      let release = param.release || 0;
       let flowSign = localStorage.getItem('flowSign');
       if (flowSign) {
         this.lastSign = flowSign;
@@ -123,9 +124,15 @@ export default class TaskPipe {
           eventName: 'start',
         },
         data: Object.assign({
+          release: release,
           client : 'pc',
         }, customData),
       }).then(res => {
+        //对于只需要一次性释放的逻辑，不弹遮罩，而且flow.active == 0
+        if (release === 1) {
+          this._clearInterval();
+          return ;
+        }
         this.MonitoringEvents = new MonitoringEvents({
           videoPlayRule: this.videoPlayRule,
           taskType: this.taskType,
