@@ -303,8 +303,8 @@ export default {
       this.outFocusMaskType = type;
 
       if (
-        (this.player && this.reportType === 'video') ||
-        this.reportType === 'audio'
+        this.player &&
+        (this.reportType === 'video' || this.reportType === 'audio')
       ) {
         this.player.pause();
       }
