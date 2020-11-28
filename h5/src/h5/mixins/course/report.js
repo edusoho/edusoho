@@ -57,7 +57,7 @@ export default {
       this.reportIntervalTime = null;
       this.reportLearnTime = null;
       this.reportResult = null;
-      this.learnTime = 1;
+      this.learnTime = 0;
       this.reportFinishCondition = null;
       if (reportNow) {
         this.initReportEvent();
@@ -168,6 +168,7 @@ export default {
       if (param.reActive) {
         data.reActive = param.reActive;
       }
+      this.learnTime = 0;
       Api.reportTaskEvent({
         query: {
           courseId: this.reportData.courseId,
@@ -179,7 +180,6 @@ export default {
         .then(res => {
           this.handleReportResult(res);
           this.record = res.record;
-          this.learnTime = 1;
           this.absorbed = 0;
           this.sign = res.record.flowSign;
 
