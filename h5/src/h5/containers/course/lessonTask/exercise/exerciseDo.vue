@@ -147,7 +147,7 @@ export default {
       if (this.submitpaper()) {
         next();
       } else {
-        next(false);
+        next();
       }
     }
   },

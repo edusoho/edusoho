@@ -23,13 +23,22 @@ export default {
       absorbed: 0, // 是否无效学习
     };
   },
+  beforeRouteLeave(to, from, next) {
+    if (this.sign.length > 0) {
+      localStorage.setItem('flowSign', this.sign);
+    }
+    next();
+  },
   beforeDestroy() {
     this.clearReportIntervalTime();
     // document.removeEventListener('visibilitychange', this.visibilityState);
 
-    if (this.sign.length > 0) {
-      localStorage.setItem('flowSign', this.sign);
-    }
+    // let flowSign = localStorage.getItem('flowSign');
+    // if (!flowSign && this.sign.length > 0) {
+    //   console.log('beforeDestroy');
+
+    //   localStorage.setItem('flowSign', this.sign);
+    // }
 
     this.toggleReportMaskHidden('remove');
   },
@@ -112,7 +121,6 @@ export default {
           client: 'h5',
         };
         let flowSign = localStorage.getItem('flowSign');
-
         if (flowSign) {
           data.lastSign = flowSign;
           localStorage.removeItem('flowSign');
@@ -173,6 +181,7 @@ export default {
           this.record = res.record;
           this.learnTime = 1;
           this.absorbed = 0;
+          this.sign = res.record.flowSign;
 
           if (res.learnControl.allowLearn) return;
           let status = res.learnControl.denyReason;

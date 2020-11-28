@@ -199,6 +199,9 @@ export default {
     this.showTagLink();
   },
   beforeDestroy() {
+    if (this.sign.length > 0) {
+      localStorage.setItem('flowSign', this.sign);
+    }
     // 销毁播放器
     if (this.player && this.player.destory) {
       this.player.destory();
