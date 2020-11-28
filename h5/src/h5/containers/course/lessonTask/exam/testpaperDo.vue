@@ -89,9 +89,9 @@
 
 <script>
 import Api from '@/api';
-import { mapState, mapMutations, mapActions } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import * as types from '@/store/mutation-types';
-import { Toast, Overlay, Popup, Dialog, Lazyload } from 'vant';
+import { Toast, Dialog } from 'vant';
 
 import guidePage from '../component/guide-page';
 import itemBank from '../component/itemBank';
@@ -108,32 +108,24 @@ export default {
   components: {
     itemBank,
     guidePage,
-    vanOverlay: Overlay,
   },
   filters: {
     type: function(type) {
       switch (type) {
         case 'single_choice':
           return '单选题';
-          break;
         case 'choice':
           return '多选题';
-          break;
         case 'essay':
           return '问答题';
-          break;
         case 'uncertain_choice':
           return '不定项选择题';
-          break;
         case 'determine':
           return '判断题';
-          break;
         case 'fill':
           return '填空题';
-          break;
         case 'material':
           return '材料题';
-          break;
       }
     },
   },
@@ -296,8 +288,6 @@ export default {
     // 遍历数据类型去做对应处理
     formatData(res) {
       const paper = res.items;
-      const info = [];
-      const answer = [];
       Object.keys(paper).forEach(key => {
         if (key != 'material') {
           paper[key].forEach(item => {
@@ -425,10 +415,10 @@ export default {
           confirmButtonText: '检查一下',
           message: message,
         })
-          .then(() => {
+          .then(res => {
             // 显示答题卡
             this.cardShow = true;
-            reject();
+            reject(res);
           })
           .catch(() => {
             this.clearTime();
@@ -437,7 +427,7 @@ export default {
                 resolve();
               })
               .catch(err => {
-                reject();
+                reject(err);
               });
           });
       });
@@ -471,7 +461,7 @@ export default {
             this.showResult();
           })
           .catch(err => {
-            reject();
+            reject(err);
             Toast.fail(err.message);
             this.isHandExam = true;
             this.showResult();

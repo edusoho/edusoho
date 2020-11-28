@@ -51,38 +51,37 @@
           <i class="iconfont icon-no" @click="cardShow = false" />
         </div>
         <div class="card-list">
-          <div
-            v-for="(cards, name) in items"
-            v-if="isWrongType(name)"
-            :key="name"
-            class="card-item"
-          >
-            <div class="card-item-title">{{ name | type }}</div>
-            <div v-if="name != 'material'" class="card-item-list">
-              <div
-                v-for="craditem in items[name]"
-                v-if="isWrongList(craditem)"
-                :class="['list-cicle', formatStatus(craditem)]"
-                :key="craditem.id"
-                @click="slideToNumber(craditem.seq)"
-              >
-                {{ craditem.seq }}
+          <template v-for="(cards, name) in items">
+            <div v-if="isWrongType(name)" :key="name" class="card-item">
+              <div class="card-item-title">{{ name | type }}</div>
+              <div v-if="name != 'material'" class="card-item-list">
+                <template v-for="craditem in items[name]">
+                  <div
+                    v-if="isWrongList(craditem)"
+                    :class="['list-cicle', formatStatus(craditem)]"
+                    :key="craditem.id"
+                    @click="slideToNumber(craditem.seq)"
+                  >
+                    {{ craditem.seq }}
+                  </div>
+                </template>
+              </div>
+              <div v-if="name == 'material'" class="card-item-list">
+                <template v-for="craditem in items[name]">
+                  <template v-for="materialitem in craditem.subs">
+                    <div
+                      v-if="isWrongList(materialitem)"
+                      :class="['list-cicle', formatStatus(materialitem)]"
+                      :key="materialitem.id"
+                      @click="slideToNumber(materialitem.seq)"
+                    >
+                      {{ materialitem.seq }}
+                    </div>
+                  </template>
+                </template>
               </div>
             </div>
-            <div v-if="name == 'material'" class="card-item-list">
-              <template v-for="craditem in items[name]">
-                <div
-                  v-for="materialitem in craditem.subs"
-                  v-if="isWrongList(materialitem)"
-                  :class="['list-cicle', formatStatus(materialitem)]"
-                  :key="materialitem.id"
-                  @click="slideToNumber(materialitem.seq)"
-                >
-                  {{ materialitem.seq }}
-                </div>
-              </template>
-            </div>
-          </div>
+          </template>
         </div>
       </div>
     </van-popup>
@@ -90,7 +89,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 import * as types from '@/store/mutation-types';
 import Api from '@/api';
 import itemBank from '../component/itemBank';
@@ -104,25 +103,18 @@ export default {
       switch (type) {
         case 'single_choice':
           return '单选题';
-          break;
         case 'choice':
           return '多选题';
-          break;
         case 'essay':
           return '问答题';
-          break;
         case 'uncertain_choice':
           return '不定项选择题';
-          break;
         case 'determine':
           return '判断题';
-          break;
         case 'fill':
           return '填空题';
-          break;
         case 'material':
           return '材料题';
-          break;
       }
     },
   },
@@ -285,19 +277,14 @@ export default {
         switch (status) {
           case 'right':
             return 'cicle-right';
-            break;
           case 'none':
             return 'cicle-none';
-            break;
           case 'wrong':
             return 'cicle-wrong';
-            break;
           case 'partRight':
             return 'cicle-wrong';
-            break;
           case 'noAnswer':
             return '';
-            break;
         }
       }
     },
