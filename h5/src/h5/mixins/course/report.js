@@ -290,6 +290,9 @@ export default {
      * reject_current         // 互踢，不允许后来
      */
     kickEachOther(type) {
+      if (this.reportType === 'testpaper' || this.reportType === 'live') {
+        return;
+      }
       this.absorbed = 1;
       this.isShowOutFocusMask = true;
       this.outFocusMaskType = type;
