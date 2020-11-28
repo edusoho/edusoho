@@ -10050,6 +10050,11 @@ user.learn.statistics.start_time: 起始时间
 user.learn.statistics.end_time: 结束时间
 user.learn.statistics.default.search: 默认排序
 user.learn.statistics.search: 搜索
+user.learn.statistics.learn_statistics.export: 用户数据统计导出
+user.learn.statistics.course_statistics.export: 用户课程学习数据统计导出
+user.learn.statistics.lesson_statistics.export: 用户课时学习数据统计导出
+user.learn.statistics.all.export: 全部文件导出
+user.learn.statistics.export.tips: 数据量较大时，下载较慢，请耐心等待
 user.learn.statistics.nickname: 用户名
 user.learn.statistics.mobile: 手机号
 user.learn.statistics.course: 计划
