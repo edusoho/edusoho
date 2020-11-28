@@ -48,7 +48,7 @@ export default {
       this.reportIntervalTime = null;
       this.reportLearnTime = null;
       this.reportResult = null;
-      this.learnTime = 0;
+      this.learnTime = 1;
       this.reportFinishCondition = null;
       if (reportNow) {
         this.initReportEvent();
@@ -91,7 +91,7 @@ export default {
      * @param {*} courseId
      * @param {*} taskId
      * @param {*} events  //doing finish
-     *  @param {*} ContinuousReport //是否每间隔一分钟上报
+     * @param {*} ContinuousReport //是否每间隔一分钟上报
      */
     reprtData(param = { eventName: 'doing', ContinuousReport: false }) {
       if (
@@ -169,7 +169,8 @@ export default {
         .then(res => {
           this.handleReportResult(res);
           this.record = res.record;
-          this.learnTime = 0;
+          this.learnTime = 1;
+          this.absorbed = 0;
 
           if (res.learnControl.allowLearn) return;
           let status = res.learnControl.denyReason;
@@ -256,7 +257,7 @@ export default {
      * @param {*} type
      */
     outFocusMask(type) {
-      this.absorbed = 0;
+      this.absorbed = 1;
       this.isShowOutFocusMask = false;
       if (this.player && this.reportType === 'video') {
         this.player.play();
@@ -298,7 +299,7 @@ export default {
         return;
       }
 
-      this.absorbed = 1;
+      this.absorbed = 0;
       this.isShowOutFocusMask = true;
       this.outFocusMaskType = type;
 
