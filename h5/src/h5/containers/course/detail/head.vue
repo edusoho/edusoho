@@ -56,15 +56,17 @@
       />
     </div>
     <!-- 由于在安卓端弹出层会被视频遮挡，因此在弹出层显示时，隐藏视频，显示课程封面图，判断字段 finishDialog-->
-    <div
-      v-show="
-        ['video', 'audio'].includes(sourceType) &&
-          !isEncryptionPlus &&
-          !finishDialog
-      "
-      id="course-detail__head--video"
-      ref="video"
-    />
+    <div v-show="!isShowOutFocusMask">
+      <div
+        v-show="
+          ['video', 'audio'].includes(sourceType) &&
+            !isEncryptionPlus &&
+            !finishDialog
+        "
+        id="course-detail__head--video"
+        ref="video"
+      />
+    </div>
     <!-- 学习上报按钮 -->
     <template v-if="showLearnBtn">
       <div
@@ -199,6 +201,7 @@ export default {
     this.showTagLink();
   },
   beforeDestroy() {
+    console.log('beforeDestroy');
     if (this.sign.length > 0) {
       localStorage.setItem('flowSign', this.sign);
     }

@@ -132,7 +132,7 @@ export default {
       return !!(this.result && this.result.status === 'finished');
     },
   },
-  created() {
+  mounted() {
     this.initReport();
     this.getexerciseResult();
   },

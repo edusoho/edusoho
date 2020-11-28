@@ -67,7 +67,7 @@ export default {
       user: state => state.user,
     }),
   },
-  created() {
+  mounted() {
     this.initReport();
     this.getInfo();
   },

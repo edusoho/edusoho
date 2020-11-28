@@ -174,7 +174,7 @@ export default {
       this.calSubjectHeight();
     },
   },
-  created() {
+  mounted() {
     this.initReport();
     this.getTestpaperResult();
   },

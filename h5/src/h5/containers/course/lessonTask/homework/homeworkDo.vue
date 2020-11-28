@@ -122,7 +122,7 @@ export default {
       deep: true,
     },
   },
-  created() {
+  mounted() {
     this.initReport();
     this.getData();
   },
