@@ -13,7 +13,7 @@ export default class LiveShow {
     $('.js-replay').on('click', function(){
       let triggerUrl = $(this).data('finish');
       $.post(triggerUrl, function(res){
-        self.emitter.emit('finish');
+        self.emitter.emit('finish', {release: 1});
       });
     });
   }
@@ -28,7 +28,7 @@ export default class LiveShow {
         }
         if (!self.started) {
           this.started = true;
-          self.emitter.emit('start', {}).then(() => {
+          self.emitter.emit('start', {release: 1}).then(() => {
             console.log('live.start');
           }).catch((error) => {
             console.error(error);
