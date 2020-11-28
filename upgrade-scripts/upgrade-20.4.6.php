@@ -5,6 +5,8 @@ use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
+    private $perPageCount = 10000;
+
     public function __construct($biz)
     {
         parent::__construct($biz);
@@ -64,9 +66,9 @@ class EduSohoUpgrade extends AbstractUpdater
             'createDataVisualizationUserStayDaily',//ok
             'createDataVisualizationUserVideoDaily',//ok
             'createDataVisualizationUserLearnDaily',//ok
-            'alterCourseTaskResultAddSumTimeColumns',//ok
-            'alterCourseTaskResultAddPureTimeColumns',//ok
-            'alterCourseTaskResultAddPureWatchTimeColumns',//ok
+            'addCourseTaskResultAddSomeTimeTempTable',//ok
+            'addCourseTaskResultAddSomeTime',//ok
+            'addCourseTaskResultAddLastSomeTimeReNameTable',//ok
             'dealCourseTaskResultDataToActivityStayDaily',//ok
             'dealCourseTaskResultDataToActivityWatchDaily',//ok
             'dealCourseTaskResultDataToActivityLearnDaily',//ok'
@@ -76,6 +78,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'dealCourseTaskResultDataToUserStayDaily',//ok
             'dealCourseTaskResultDataToUserVideoDaily',//ok
             'dealCourseTaskResultDataToUserLearnDaily',//ok
+            'resetCrontabJobNum',//ok
 
 
 
@@ -389,104 +392,385 @@ class EduSohoUpgrade extends AbstractUpdater
         return 1;
     }
 
-    public function alterCourseTaskResultAddSumTimeColumns()
+    protected function addCourseTaskResultAddSomeTimeTempTable()
     {
-        if (!$this->isFieldExist('course_task_result', 'sumTime')) {
-            $this->getConnection()->exec("ALTER TABLE `course_task_result` ADD sumTime int(10) unsigned NOT NULL default 0 COMMENT '简单累加时长' after `time`;");
+        if ($this->isFieldExist('course_task_result', 'sumTime')
+            && $this->isFieldExist('course_task_result', 'pureTime')
+            && $this->isFieldExist('course_task_result', 'pureWatchTime')) {
+            return 1;
         }
 
-        return 1;
-    }
-
-    public function alterCourseTaskResultAddPureTimeColumns()
-    {
-        if (!$this->isFieldExist('course_task_result', 'pureTime')) {
-            $this->getConnection()->exec("ALTER TABLE `course_task_result` ADD pureTime int(10) unsigned NOT NULL default 0 COMMENT '学习时间轴总时长' after `time`;");
+        $count = $this->getTableCount('course_task_result');
+        if ($count < 100000) {
+            if (!$this->isFieldExist('course_task_result', 'sumTime')) {
+                $this->getConnection()->exec("ALTER TABLE `course_task_result` ADD sumTime int(10) unsigned NOT NULL default 0 COMMENT '简单累加时长' after `time`;");
+            }
+            if (!$this->isFieldExist('course_task_result', 'pureTime')) {
+                $this->getConnection()->exec("ALTER TABLE `course_task_result` ADD pureTime int(10) unsigned NOT NULL default 0 COMMENT '学习时间轴总时长' after `time`;");
+            }
+            if (!$this->isFieldExist('course_task_result', 'pureWatchTime')) {
+                $this->getConnection()->exec("ALTER TABLE `course_task_result` ADD pureWatchTime int(10) unsigned NOT NULL default 0 COMMENT '视频观看时间轴总时长' after `watchTime`;");
+            }
+            return 1;
         }
+        $this->getConnection()->exec("DROP TABLE IF EXISTS `course_task_result_temp`;");
+        $this->getConnection()->exec("
+              CREATE TABLE `course_task_result_temp` (
+                  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+                  `activityId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '活动的id',
+                  `courseId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '所属课程的id',
+                  `courseTaskId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '课程的任务id',
+                  `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
+                  `status` varchar(255) NOT NULL DEFAULT 'start' COMMENT '任务状态，start，finish',
+                  `lastLearnTime` int(10) DEFAULT '0' COMMENT '最后学习时间',
+                  `finishedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '完成时间',
+                  `time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '任务进行时长（分钟）',
+                  `sumTime` int(10) unsigned NOT NULL default '0' COMMENT '简单累加时长',
+                  `pureTime` int(10) unsigned NOT NULL default '0' COMMENT '学习时间轴总时长',
+                  `watchTime` int(10) unsigned NOT NULL DEFAULT '0',
+                  `pureWatchTime` int(10) unsigned NOT NULL default '0' COMMENT '视频观看时间轴总时长',
+                  `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+                  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',
+                  PRIMARY KEY (`id`),
+                  UNIQUE KEY `courseTaskId_userId` (`courseTaskId`,`userId`),
+                  KEY `courseTaskId_activityId` (`courseTaskId`,`activityId`),
+                  KEY `idx_userId_courseId` (`userId`,`courseId`),
+                  KEY `finishedTime` (`finishedTime`)
+              ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            ");
         return 1;
     }
 
-    public function alterCourseTaskResultAddPureWatchTimeColumns()
+    protected function addCourseTaskResultAddSomeTime($page)
     {
-        if (!$this->isFieldExist('course_task_result', 'pureWatchTime')) {
-            $this->getConnection()->exec("ALTER TABLE `course_task_result` ADD pureWatchTime int(10) unsigned NOT NULL default 0 COMMENT '视频观看时间轴总时长' after `watchTime`;");
+        if ($this->isFieldExist('course_task_result', 'sumTime')
+            && $this->isFieldExist('course_task_result', 'pureTime')
+            && $this->isFieldExist('course_task_result', 'pureWatchTime')) {
+            return 1;
         }
-        return 1;
+
+        $table = 'course_task_result';
+        $count = $this->getTableCount($table);
+        $start = ($page -1) * $this->perPageCount;
+        if ($count > $start) {
+            $this->getConnection()->exec("
+                INSERT IGNORE INTO `course_task_result_temp` 
+                  (
+                   `id`, 
+                   `activityId`,
+                   `courseId`,
+                   `courseTaskId`,
+                   `userId`,
+                   `status`,
+                   `lastLearnTime`,
+                   `finishedTime`,
+                   `createdTime`,
+                   `updatedTime`,
+                   `time`,
+                   `sumTime`,
+                   `pureTime`,
+                   `watchTime`,
+                   `pureWatchTime`
+                   ) SELECT 
+                    `id`, 
+                   `activityId`,
+                   `courseId`,
+                   `courseTaskId`,
+                   `userId`,
+                   `status`,
+                   `lastLearnTime`,
+                   `finishedTime`,
+                   `createdTime`,
+                   `updatedTime`,
+                   `time`,
+                   `time`,
+                   `time`,
+                   `watchTime`,
+                   `watchTime`
+                    FROM course_task_result ORDER BY id limit {$start},{$this->perPageCount};
+            ");
+
+            $this->logger('info', "复制到临时数据库，当前第{$page}页，从{$start}条开始");
+
+            $page = $page + 1;
+            return $page;
+
+        } else {
+            return 1;
+        }
     }
 
-    public function dealCourseTaskResultDataToActivityStayDaily()
+    protected function addCourseTaskResultAddLastSomeTimeReNameTable()
     {
-        $deleteSql = "DELETE FROM `activity_stay_daily` WHERE dayTime = 0;";
-        $this->getConnection()->exec($deleteSql);
-        $sql = "INSERT INTO activity_stay_daily (activityId,taskId,courseId,courseSetId, userId, dayTime,sumTime,pureTime, createdTime, updatedTime) 
-                SELECT ctr.activityId, ctr.courseTaskId, ctr.courseId, cv.courseSetId, ctr.userId, 0, ctr.time, ctr.time,  unix_timestamp(now()),  unix_timestamp(now()) 
-                FROM course_task_result ctr LEFT JOIN course_v8 cv ON cv.id = ctr.courseId;";
-        $this->getConnection()->exec($sql);
+        if ($this->isFieldExist('course_task_result', 'sumTime')
+            && $this->isFieldExist('course_task_result', 'pureTime')
+            && $this->isFieldExist('course_task_result', 'pureWatchTime')) {
+            return 1;
+        }
+
+        $this->getConnection()->exec("RENAME TABLE `course_task_result` TO `course_task_result_bak`;");
+        $this->getConnection()->exec("RENAME TABLE `course_task_result_temp` TO `course_task_result`;");
         return 1;
     }
 
-    public function dealCourseTaskResultDataToActivityWatchDaily()
+    public function dealCourseTaskResultDataToActivityStayDaily($page)
     {
-        $deleteSql = "DELETE FROM `activity_video_daily` WHERE dayTime = 0;";
-        $this->getConnection()->exec($deleteSql);
-        $sql = "INSERT INTO activity_video_daily (activityId,taskId,courseId,courseSetId, userId, dayTime,sumTime,pureTime, createdTime, updatedTime) 
-                SELECT ctr.activityId, ctr.courseTaskId, ctr.courseId, cv.courseSetId, ctr.userId, 0, ctr.watchTime, ctr.watchTime, unix_timestamp(now()),  unix_timestamp(now()) 
-                FROM course_task_result ctr LEFT JOIN course_v8 cv ON cv.id = ctr.courseId;";
-        $this->getConnection()->exec($sql);
-        return 1;
+        $table = 'course_task_result';
+        $count = $this->getTableCount($table);
+        $start = ($page -1) * $this->perPageCount;
+        if ($count > $start) {
+            $sql = "INSERT IGNORE INTO `activity_stay_daily`
+                    (
+                        activityId,
+                        taskId,
+                        courseId,
+                        courseSetId, 
+                        userId, 
+                        dayTime,
+                        sumTime,
+                        pureTime, 
+                        createdTime, 
+                        updatedTime
+                    ) 
+                    SELECT 
+                        ctr.activityId, 
+                        ctr.courseTaskId, 
+                        ctr.courseId, 
+                        cv.courseSetId, 
+                        ctr.userId, 
+                        0, 
+                        ctr.time, 
+                        ctr.time,  
+                        unix_timestamp(now()),  
+                        unix_timestamp(now()) 
+                    FROM course_task_result ctr LEFT JOIN course_v8 cv ON cv.id = ctr.courseId ORDER BY ctr.id limit {$start},{$this->perPageCount};";
+            $this->getConnection()->exec($sql);
+            $this->logger('info', "ActivityStayDaily数据刷新，当前第{$page}页，从{$start}条开始");
+            $page = $page + 1;
+            return $page;
+        } else {
+            return 1;
+        }
+
     }
 
-    public function dealCourseTaskResultDataToActivityLearnDaily()
+    public function dealCourseTaskResultDataToActivityWatchDaily($page)
     {
-        $deleteSql = "DELETE FROM `activity_learn_daily` WHERE dayTime = 0;";
-        $this->getConnection()->exec($deleteSql);
-        $sql = "INSERT INTO activity_learn_daily (activityId,taskId,courseId,courseSetId, userId, dayTime,sumTime,pureTime, createdTime, updatedTime) 
-                SELECT asd.activityId, asd.taskId, asd.courseId, cv.courseSetId, asd.userId, asd.dayTime, asd.sumTime, asd.pureTime, unix_timestamp(now()),  unix_timestamp(now()) 
-                FROM activity_stay_daily asd LEFT JOIN course_v8 cv ON cv.id = asd.courseId WHERE asd.dayTime = 0;";
-        $this->getConnection()->exec($sql);
-        return 1;
+        $table = 'course_task_result';
+        $count = $this->getTableCount($table);
+        $start = ($page -1) * $this->perPageCount;
+        if ($count > $start) {
+            $sql = "INSERT IGNORE INTO `activity_video_daily`
+                        (
+                            activityId,
+                            taskId,
+                            courseId,
+                            courseSetId, 
+                            userId, 
+                            dayTime,
+                            sumTime,
+                            pureTime, 
+                            createdTime, 
+                            updatedTime
+                        ) 
+                        SELECT 
+                            ctr.activityId, 
+                            ctr.courseTaskId, 
+                            ctr.courseId, 
+                            cv.courseSetId, 
+                            ctr.userId, 
+                            0, 
+                            ctr.watchTime, 
+                            ctr.watchTime, 
+                            unix_timestamp(now()),  
+                            unix_timestamp(now()) 
+                        FROM course_task_result ctr LEFT JOIN course_v8 cv ON cv.id = ctr.courseId ORDER BY ctr.id limit {$start},{$this->perPageCount};";
+            $this->getConnection()->exec($sql);
+            $this->logger('info', "ActivityWatchDaily数据刷新，当前第{$page}页，从{$start}条开始");
+            $page = $page + 1;
+            return $page;
+        } else{
+            return 1;
+        }
+
     }
 
-    public function dealCourseTaskResultDataToCoursePlanStayDaily()
+    public function dealCourseTaskResultDataToActivityLearnDaily($page)
     {
-        $deleteSql = "DELETE FROM `course_plan_stay_daily` WHERE dayTime = 0;";
-        $this->getConnection()->exec($deleteSql);
-        $sql = "INSERT INTO course_plan_stay_daily (courseId,courseSetId, userId, dayTime,sumTime,pureTime, createdTime, updatedTime) 
-                SELECT asd.courseId, cv.courseSetId, asd.userId, asd.dayTime, sum(asd.sumTime), sum(asd.pureTime), unix_timestamp(now()),  unix_timestamp(now()) 
-                FROM activity_stay_daily asd LEFT JOIN course_v8 cv ON cv.id = asd.courseId WHERE asd.dayTime = 0 GROUP BY asd.courseId;";
-        $this->getConnection()->exec($sql);
-        return 1;
+        $table = 'activity_stay_daily';
+        $count = $this->getTableCount($table);
+        $start = ($page -1) * $this->perPageCount;
+        if ($count > $start) {
+            $sql = "INSERT IGNORE INTO activity_learn_daily 
+                        (
+                            activityId,
+                            taskId,
+                            courseId,
+                            courseSetId, 
+                            userId, 
+                            dayTime,
+                            sumTime,
+                            pureTime, 
+                            createdTime, 
+                            updatedTime
+                        ) 
+                        SELECT 
+                            asd.activityId, 
+                            asd.taskId, 
+                            asd.courseId, 
+                            cv.courseSetId, 
+                            asd.userId, 
+                            asd.dayTime, 
+                            asd.sumTime, 
+                            asd.pureTime, 
+                            unix_timestamp(now()),  
+                            unix_timestamp(now()) 
+                        FROM activity_stay_daily asd LEFT JOIN course_v8 cv ON cv.id = asd.courseId WHERE asd.dayTime = 0 ORDER BY asd.id limit {$start},{$this->perPageCount};";
+            $this->getConnection()->exec($sql);
+            $this->logger('info', "ActivityLearnDaily数据刷新，当前第{$page}页，从{$start}条开始");
+            $page = $page + 1;
+            return $page;
+        } else {
+            return 1;
+        }
     }
 
-    public function dealCourseTaskResultDataToCoursePlanVideoDaily()
+    public function dealCourseTaskResultDataToCoursePlanStayDaily($page)
     {
-        $deleteSql = "DELETE FROM `course_plan_video_daily` WHERE dayTime = 0;";
-        $this->getConnection()->exec($deleteSql);
-        $sql = "INSERT INTO course_plan_video_daily (courseId,courseSetId, userId, dayTime,sumTime,pureTime, createdTime, updatedTime) 
-                SELECT asd.courseId, cv.courseSetId, asd.userId, asd.dayTime, sum(asd.sumTime), sum(asd.pureTime), unix_timestamp(now()),  unix_timestamp(now()) 
-                FROM activity_video_daily asd LEFT JOIN course_v8 cv ON cv.id = asd.courseId WHERE asd.dayTime = 0 GROUP BY asd.courseId;";
-        $this->getConnection()->exec($sql);
-        return 1;
+        $count = $this->getConnection()->fetchColumn("SELECT count(*) FROM `activity_stay_daily` WHERE dayTime = 0 GROUP BY courseId, userId;") ?: 0;
+        $start = ($page -1) * $this->perPageCount;
+        if ($count > $start) {
+            $sql = "INSERT IGNORE INTO course_plan_stay_daily 
+                        (
+                            courseId,
+                            courseSetId, 
+                            userId, 
+                            dayTime,
+                            sumTime,
+                            pureTime, 
+                            createdTime, 
+                            updatedTime
+                        ) 
+                        SELECT 
+                            asd.courseId, 
+                            cv.courseSetId, 
+                            asd.userId, 
+                            asd.dayTime, 
+                            sum(asd.sumTime), 
+                            sum(asd.pureTime), 
+                            unix_timestamp(now()),  
+                            unix_timestamp(now()) 
+                        FROM activity_stay_daily asd LEFT JOIN course_v8 cv ON cv.id = asd.courseId 
+                        WHERE asd.dayTime = 0 GROUP BY asd.courseId, asd.userId ORDER BY asd.courseId, asd.userId limit {$start},{$this->perPageCount};";
+            $this->getConnection()->exec($sql);
+            $this->logger('info', "CoursePlanStayDaily数据刷新，当前第{$page}页，从{$start}条开始");
+            $page = $page + 1;
+            return $page;
+        } else {
+            return 1;
+        }
     }
 
-    public function dealCourseTaskResultDataToCoursePlanLearnDaily()
+    public function dealCourseTaskResultDataToCoursePlanVideoDaily($page)
     {
-        $deleteSql = "DELETE FROM `course_plan_learn_daily` WHERE dayTime = 0;";
-        $this->getConnection()->exec($deleteSql);
-        $sql = "INSERT INTO course_plan_learn_daily (courseId,courseSetId, userId, dayTime,sumTime,pureTime, createdTime, updatedTime) 
-                SELECT asd.courseId, cv.courseSetId, asd.userId, asd.dayTime, sum(asd.sumTime), sum(asd.pureTime), unix_timestamp(now()),  unix_timestamp(now()) 
-                FROM activity_learn_daily asd LEFT JOIN course_v8 cv ON cv.id = asd.courseId WHERE asd.dayTime = 0 GROUP BY asd.courseId;";
-        $this->getConnection()->exec($sql);
-        return 1;
+        $count = $this->getConnection()->fetchColumn("SELECT count(*) FROM `activity_video_daily` WHERE dayTime = 0 GROUP BY courseId, userId;") ?: 0;
+        $start = ($page -1) * $this->perPageCount;
+        if ($count > $start) {
+            $sql = "INSERT IGNORE INTO course_plan_video_daily 
+                        (
+                            courseId,
+                            courseSetId, 
+                            userId, 
+                            dayTime,
+                            sumTime,
+                            pureTime, 
+                            createdTime, 
+                            updatedTime
+                        ) 
+                        SELECT 
+                            asd.courseId, 
+                            cv.courseSetId, 
+                            asd.userId, 
+                            asd.dayTime, 
+                            sum(asd.sumTime), 
+                            sum(asd.pureTime), 
+                            unix_timestamp(now()),  
+                            unix_timestamp(now()) 
+                        FROM activity_video_daily asd LEFT JOIN course_v8 cv ON cv.id = asd.courseId 
+                        WHERE asd.dayTime = 0 GROUP BY asd.courseId, asd.userId ORDER BY asd.courseId, asd.userId limit {$start},{$this->perPageCount};";
+            $this->getConnection()->exec($sql);
+            $this->logger('info', "CoursePlanVideoDaily数据刷新，当前第{$page}页，从{$start}条开始");
+            $page = $page + 1;
+            return $page;
+        } else {
+            return 1;
+        }
+
     }
 
+    public function dealCourseTaskResultDataToCoursePlanLearnDaily($page)
+    {
+        $count = $this->getConnection()->fetchColumn("SELECT count(*) FROM `activity_learn_daily` WHERE dayTime = 0 GROUP BY courseId, userId;") ?: 0;
+        $start = ($page -1) * $this->perPageCount;
+        if ($count > $start) {
+            $sql = "INSERT INTO course_plan_learn_daily 
+                        (
+                            courseId,
+                            courseSetId, 
+                            userId, 
+                            dayTime,
+                            sumTime,
+                            pureTime, 
+                            createdTime, 
+                            updatedTime
+                        ) 
+                        SELECT 
+                            asd.courseId, 
+                            cv.courseSetId, 
+                            asd.userId, 
+                            asd.dayTime, 
+                            sum(asd.sumTime), 
+                            sum(asd.pureTime), 
+                            unix_timestamp(now()),  
+                            unix_timestamp(now()) 
+                        FROM activity_learn_daily asd LEFT JOIN course_v8 cv ON cv.id = asd.courseId 
+                        WHERE asd.dayTime = 0 GROUP BY asd.courseId, asd.userId ORDER BY asd.courseId, asd.userId limit {$start},{$this->perPageCount};";
+            $this->getConnection()->exec($sql);
+            $this->logger('info', "CoursePlanLearnDaily数据刷新，当前第{$page}页，从{$start}条开始");
+            $page = $page + 1;
+            return $page;
+        } else {
+            return 1;
+        }
+
+    }
+
+    /**
+     * @return int
+     * @throws \Doctrine\DBAL\DBALException
+     * 用户为单位的不做分页，数量可控
+     */
     public function dealCourseTaskResultDataToUserStayDaily()
     {
         $deleteSql = "DELETE FROM `user_stay_daily` WHERE dayTime = 0;";
         $this->getConnection()->exec($deleteSql);
-        $sql = "INSERT INTO user_stay_daily (userId, dayTime,sumTime,pureTime, createdTime, updatedTime) 
-                SELECT userId, dayTime, sum(sumTime), sum(pureTime), unix_timestamp(now()),  unix_timestamp(now()) 
-                FROM activity_stay_daily WHERE dayTime = 0 GROUP BY userId;";
+        $sql = "INSERT INTO user_stay_daily 
+                    (
+                        userId, 
+                        dayTime,
+                        sumTime,
+                        pureTime, 
+                        createdTime, 
+                        updatedTime
+                    ) 
+                    SELECT 
+                        userId, 
+                        dayTime, 
+                        sum(sumTime), 
+                        sum(pureTime), 
+                        unix_timestamp(now()),  
+                        unix_timestamp(now()) 
+                    FROM activity_stay_daily WHERE dayTime = 0 GROUP BY userId;";
         $this->getConnection()->exec($sql);
         return 1;
     }
@@ -495,8 +779,21 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $deleteSql = "DELETE FROM `user_video_daily` WHERE dayTime = 0;";
         $this->getConnection()->exec($deleteSql);
-        $sql = "INSERT INTO user_video_daily (userId, dayTime,sumTime,pureTime, createdTime, updatedTime) 
-                SELECT userId, dayTime, sum(sumTime), sum(pureTime), unix_timestamp(now()),  unix_timestamp(now()) 
+        $sql = "INSERT INTO user_video_daily (
+                    userId, 
+                    dayTime,
+                    sumTime,
+                    pureTime, 
+                    createdTime, 
+                    updatedTime
+                ) 
+                SELECT 
+                    userId, 
+                    dayTime, 
+                    sum(sumTime), 
+                    sum(pureTime), 
+                    unix_timestamp(now()),  
+                    unix_timestamp(now()) 
                 FROM activity_video_daily WHERE dayTime = 0 GROUP BY userId;";
         $this->getConnection()->exec($sql);
         return 1;
@@ -506,8 +803,21 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $deleteSql = "DELETE FROM `user_learn_daily` WHERE dayTime = 0;";
         $this->getConnection()->exec($deleteSql);
-        $sql = "INSERT INTO user_learn_daily (userId, dayTime,sumTime,pureTime, createdTime, updatedTime) 
-                SELECT userId, dayTime, sum(sumTime), sum(pureTime), unix_timestamp(now()),  unix_timestamp(now()) 
+        $sql = "INSERT INTO user_learn_daily (
+                    userId, 
+                    dayTime,
+                    sumTime,
+                    pureTime, 
+                    createdTime, 
+                    updatedTime
+                ) 
+                SELECT 
+                    userId, 
+                    dayTime, 
+                    sum(sumTime), 
+                    sum(pureTime), 
+                    unix_timestamp(now()),  
+                    unix_timestamp(now()) 
                 FROM activity_learn_daily WHERE dayTime = 0 GROUP BY userId;";
         $this->getConnection()->exec($sql);
         return 1;
@@ -559,6 +869,13 @@ class EduSohoUpgrade extends AbstractUpdater
         return 1;
     }
 
+    protected function resetCrontabJobNum()
+    {
+        \Biz\Crontab\SystemCrontabInitializer::init();
+
+        return 1;
+    }
+
     protected function getUploadFileDao()
     {
         return $this->createDao('File:UploadFileDao');
@@ -605,6 +922,14 @@ class EduSohoUpgrade extends AbstractUpdater
         if (!$this->isIndexExist($table, $column, $index)) {
             $this->getConnection()->exec("ALTER TABLE {$table} ADD INDEX {$index} ({$column})");
         }
+    }
+
+    protected function getTableCount($table)
+    {
+        $sql = "select count(*) from `{$table}`;";
+
+        return $this->getConnection()->fetchColumn($sql) ?: 0;
+
     }
 
     protected function isJobExist($code)
