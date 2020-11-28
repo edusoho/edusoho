@@ -201,7 +201,6 @@ export default {
     this.showTagLink();
   },
   beforeDestroy() {
-    console.log('beforeDestroy');
     if (this.sign.length > 0) {
       localStorage.setItem('flowSign', this.sign);
     }

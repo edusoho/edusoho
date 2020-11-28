@@ -32,6 +32,7 @@ export default {
   beforeDestroy() {
     this.clearReportIntervalTime();
     // document.removeEventListener('visibilitychange', this.visibilityState);
+    window.removeEventListener('beforeunload', this.onbeforeunloadFlowSign);
 
     // let flowSign = localStorage.getItem('flowSign');
     // if (!flowSign && this.sign.length > 0) {
@@ -65,6 +66,7 @@ export default {
       // if (this.reportType === 'video') {
       //   this.initVisibilitychange();
       // }
+      this.onbeforeunload();
     },
 
     /**
@@ -353,6 +355,14 @@ export default {
         this.ineffectiveLearning('ineffective_learning');
       } else if (document.visibilityState === 'visible') {
         this.player.pause();
+      }
+    },
+    onbeforeunload() {
+      window.addEventListener('beforeunload', this.onbeforeunloadFlowSign);
+    },
+    onbeforeunloadFlowSign() {
+      if (this.sign.length > 0) {
+        localStorage.setItem('flowSign', this.sign);
       }
     },
   },
