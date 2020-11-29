@@ -475,12 +475,15 @@ class EduSohoUpgrade extends AbstractUpdater
         if ($count < 100000) {
             if (!$this->isFieldExist('course_task_result', 'sumTime')) {
                 $this->getConnection()->exec("ALTER TABLE `course_task_result` ADD sumTime int(10) unsigned NOT NULL default 0 COMMENT '简单累加时长' after `time`;");
+                $this->getConnection()->exec("UPDATE `course_task_result` SET sumTime = time;");
             }
             if (!$this->isFieldExist('course_task_result', 'pureTime')) {
                 $this->getConnection()->exec("ALTER TABLE `course_task_result` ADD pureTime int(10) unsigned NOT NULL default 0 COMMENT '学习时间轴总时长' after `time`;");
+                $this->getConnection()->exec("UPDATE `course_task_result` SET pureTime = time;");
             }
             if (!$this->isFieldExist('course_task_result', 'pureWatchTime')) {
                 $this->getConnection()->exec("ALTER TABLE `course_task_result` ADD pureWatchTime int(10) unsigned NOT NULL default 0 COMMENT '视频观看时间轴总时长' after `watchTime`;");
+                $this->getConnection()->exec("UPDATE `course_task_result` SET pureWatchTime = time;");
             }
             return 1;
         }
