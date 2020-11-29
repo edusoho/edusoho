@@ -1,7 +1,6 @@
 /* eslint-disable */
 import Api from '@/api/index';
 import * as types from '@/store/mutation-types';
-import { setTimeout } from 'core-js';
 
 export default {
   data() {
