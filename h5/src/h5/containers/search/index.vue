@@ -111,6 +111,14 @@ export default {
         offset: 0,
         limit: 10,
       },
+      itemBankList: [],
+      isEmptyItemBank: false,
+      isAllItemBank: false,
+      itemBank: {
+        isRequestCompile: false,
+        offset: 0,
+        limit: 10,
+      },
     };
   },
   methods: {
