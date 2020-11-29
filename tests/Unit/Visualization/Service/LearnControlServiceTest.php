@@ -73,6 +73,10 @@ class LearnControlServiceTest extends BaseTestCase
         self::assertTrue($result[0]);
     }
 
+    public function testCheckCreateNewFlow()
+    {
+    }
+
     public function testFreshFlow()
     {
         $this->mockBiz('System:SettingService', [
