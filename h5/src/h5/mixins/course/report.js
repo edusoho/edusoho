@@ -305,15 +305,14 @@ export default {
       this.isShowOutFocusMask = true;
       this.outFocusMaskType = type;
 
-      if (
-        this.player &&
-        (this.reportType === 'video' || this.reportType === 'audio')
-      ) {
-        this.player.pause();
-      }
-
-      if (this.player && this.player.destory && type === 'reject_current') {
-        this.player.destory();
+      if (this.reportType === 'video' || this.reportType === 'audio') {
+        if (this.player && this.player.destory && type === 'reject_current') {
+          this.player.destory();
+          return;
+        }
+        if (this.player && this.player.pause) {
+          this.player.pause();
+        }
       }
 
       this.toggleReportMaskHidden('add');

@@ -240,7 +240,6 @@ export default {
       }
     },
     initReport() {
-      this.initReportData(this.selectedPlanId, this.taskId, this.sourceType);
       this.finishDialog = false;
       this.getFinishCondition();
       this.IsLivePlayback();
@@ -292,6 +291,11 @@ export default {
           };
     },
     initData() {
+      this.isShowOutFocusMask = false;
+      if (this.sign.length > 0) {
+        localStorage.setItem('flowSign', this.sign);
+        this.sign = '';
+      }
       this.$refs.video && (this.$refs.video.innerHTML = '');
       // 是否为无限制任务
       this.enableFinish = !!parseInt(this.details.enableFinish);
@@ -413,7 +417,13 @@ export default {
               '当前内容不支持该手机浏览器观看，建议您使用Chrome、Safari浏览器观看。',
           }).then(() => {});
         });
-        player.on('ready', () => {});
+        player.on('ready', () => {
+          this.initReportData(
+            this.selectedPlanId,
+            this.taskId,
+            this.sourceType,
+          );
+        });
         player.on('playing', () => {
           this.isPlaying = true;
           this.computeWatchTime();
@@ -421,13 +431,13 @@ export default {
         player.on('paused', e => {
           this.isPlaying = false;
           this.clearComputeWatchTime();
-          const watchTime = parseInt(this.nowWatchTime - this.lastWatchTime);
+          // const watchTime = parseInt(this.nowWatchTime - this.lastWatchTime);
           this.lastWatchTime = this.nowWatchTime;
-          this.reprtData({
-            eventName: 'doing',
-            ContinuousReport: true,
-            watchTime: watchTime,
-          });
+          // this.reprtData({
+          //   eventName: 'doing',
+          //   ContinuousReport: true,
+          //   watchTime: watchTime,
+          // });
         });
         player.on('ended', () => {
           this.clearComputeWatchTime();
