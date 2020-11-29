@@ -240,7 +240,6 @@ export default {
       }
     },
     initReport() {
-      this.initReportData(this.selectedPlanId, this.taskId, this.sourceType);
       this.finishDialog = false;
       this.getFinishCondition();
       this.IsLivePlayback();
@@ -413,7 +412,13 @@ export default {
               '当前内容不支持该手机浏览器观看，建议您使用Chrome、Safari浏览器观看。',
           }).then(() => {});
         });
-        player.on('ready', () => {});
+        player.on('ready', () => {
+          this.initReportData(
+            this.selectedPlanId,
+            this.taskId,
+            this.sourceType,
+          );
+        });
         player.on('playing', () => {
           this.isPlaying = true;
           this.computeWatchTime();
