@@ -54,6 +54,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $definedFuncNames = array(
             'updateGoodsAndGoodsSpecsPrice',//ok
             'updateItemCategoryNum',//ok
+            'initSetting',//
             'createDataVisualizationActivityLearnRecordTables',//ok
             'createDataVisualizationActivityVideoWatchRecordTables',//ok
             'createDataVisualizationActivityUserActivityLearnFlowTables', //ok
@@ -79,9 +80,6 @@ class EduSohoUpgrade extends AbstractUpdater
             'dealCourseTaskResultDataToUserVideoDaily',//ok
             'dealCourseTaskResultDataToUserLearnDaily',//ok
             'resetCrontabJobNum',//ok
-
-
-
         );
 
         $funcNames = array();
@@ -117,6 +115,28 @@ class EduSohoUpgrade extends AbstractUpdater
         }
     }
 
+    public function initSetting()
+    {
+        $taskPlaySetting = $this->getSettingService()->get('taskPlayMultiple', []);
+        if (empty($taskPlaySetting)) {
+            $this->getSettingService()->set('taskPlayMultiple', [
+                'multiple_learn_enable' => 1,
+                'multiple_learn_kick_mode' => 'kick_previous',
+            ]);
+        }
+
+        $videoEffectiveTimeSetting = $this->getSettingService()->get('videoEffectiveTimeStatistics', []);
+        if (empty($videoEffectiveTimeSetting)) {
+            $this->getSettingService()->set('videoEffectiveTimeStatistics', [
+                'play_rule' => 'no_action',
+                'statistical_dimension' => 'page',
+            ]);
+        }
+
+        return 1;
+
+    }
+
     public function createDataVisualizationActivityLearnRecordTables()
     {
         if (!$this->isTableExist('activity_learn_record')) {
@@ -138,7 +158,11 @@ class EduSohoUpgrade extends AbstractUpdater
                   `data` text COMMENT '原始数据',
                   `flowSign` varchar(64) NOT NULL DEFAULT '' COMMENT '学习行为签名',
                   `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
-                  PRIMARY KEY (`id`)
+                  PRIMARY KEY (`id`),
+                  KEY `userId` (`userId`),
+                  KEY `userId_taskId` (`userId`,`taskId`),
+                  KEY `userId_activityId` (`userId`,`activityId`),
+                  KEY `userId_courseId` (`userId`,`courseId`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             ");
         }
@@ -164,7 +188,11 @@ class EduSohoUpgrade extends AbstractUpdater
                   `data` text COMMENT '原始数据',
                   `flowSign` varchar(64) NOT NULL DEFAULT '' COMMENT '学习行为签名',
                   `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
-                  PRIMARY KEY (`id`)
+                  PRIMARY KEY (`id`),
+                  KEY `userId` (`userId`),
+                  KEY `userId_taskId` (`userId`,`taskId`),
+                  KEY `userId_activityId` (`userId`,`activityId`),
+                  KEY `userId_courseId` (`userId`,`courseId`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             ");
         }
@@ -185,7 +213,8 @@ class EduSohoUpgrade extends AbstractUpdater
                   `startTime` int(10) unsigned NOT NULL COMMENT '开始时间',
                   `lastLearnTime` int(10) unsigned NOT NULL COMMENT '最新学习时间',
                   `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
-                  PRIMARY KEY (`id`)
+                  PRIMARY KEY (`id`),
+                  KEY `userId_activityId` (`userId`,`activityId`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             ");
         }
@@ -210,7 +239,15 @@ class EduSohoUpgrade extends AbstractUpdater
                   `pureTime` int(10) unsigned NOT NULL COMMENT '时间轴累计时长',
                   `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
                   `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
-                  PRIMARY KEY (`id`)
+                  PRIMARY KEY (`id`),
+                  KEY `userId` (`userId`),
+                  KEY `taskId` (`taskId`),
+                  KEY `activityId` (`activityId`),
+                  KEY `courseId` (`courseId`),
+                  KEY `userId_taskId` (`userId`,`taskId`),
+                  KEY `userId_activityId` (`userId`,`activityId`),
+                  KEY `userId_courseId` (`userId`,`courseId`),
+                  KEY `userId_dayTime` (`userId`,`dayTime`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             ");
         }
@@ -234,7 +271,15 @@ class EduSohoUpgrade extends AbstractUpdater
                   `pureTime` int(10) unsigned NOT NULL COMMENT '时间轴累计时长',
                   `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
                   `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
-                  PRIMARY KEY (`id`)
+                  PRIMARY KEY (`id`),
+                  KEY `userId` (`userId`),
+                  KEY `taskId` (`taskId`),
+                  KEY `activityId` (`activityId`),
+                  KEY `courseId` (`courseId`),
+                  KEY `userId_taskId` (`userId`,`taskId`),
+                  KEY `userId_activityId` (`userId`,`activityId`),
+                  KEY `userId_courseId` (`userId`,`courseId`),
+                  KEY `userId_dayTime` (`userId`,`dayTime`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             ");
         }
@@ -258,7 +303,15 @@ class EduSohoUpgrade extends AbstractUpdater
                   `pureTime` int(10) unsigned NOT NULL COMMENT '时间轴累计时长',
                   `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
                   `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
-                  PRIMARY KEY (`id`)
+                  PRIMARY KEY (`id`),
+                  KEY `userId` (`userId`),
+                  KEY `taskId` (`taskId`),
+                  KEY `activityId` (`activityId`),
+                  KEY `courseId` (`courseId`),
+                  KEY `userId_taskId` (`userId`,`taskId`),
+                  KEY `userId_activityId` (`userId`,`activityId`),
+                  KEY `userId_courseId` (`userId`,`courseId`),
+                  KEY `userId_dayTime` (`userId`,`dayTime`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             ");
         }
@@ -280,7 +333,11 @@ class EduSohoUpgrade extends AbstractUpdater
                   `pureTime` int(10) unsigned NOT NULL COMMENT '时间轴累计时长',
                   `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
                   `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
-                  PRIMARY KEY (`id`)
+                  PRIMARY KEY (`id`),
+                  KEY `userId` (`userId`),
+                  KEY `courseId` (`courseId`),
+                  KEY `userId_courseId` (`userId`,`courseId`),
+                  KEY `userId_dayTime` (`userId`,`dayTime`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             ");
         }
@@ -302,7 +359,11 @@ class EduSohoUpgrade extends AbstractUpdater
                   `pureTime` int(10) unsigned NOT NULL COMMENT '时间轴累计时长',
                   `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
                   `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
-                  PRIMARY KEY (`id`)
+                  PRIMARY KEY (`id`),
+                  KEY `userId` (`userId`),
+                  KEY `courseId` (`courseId`),
+                  KEY `userId_courseId` (`userId`,`courseId`),
+                  KEY `userId_dayTime` (`userId`,`dayTime`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             ");
         }
@@ -324,7 +385,11 @@ class EduSohoUpgrade extends AbstractUpdater
                   `pureTime` int(10) unsigned NOT NULL COMMENT '时间轴累计时长',
                   `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
                   `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
-                  PRIMARY KEY (`id`)
+                  PRIMARY KEY (`id`),
+                  KEY `userId` (`userId`),
+                  KEY `courseId` (`courseId`),
+                  KEY `userId_courseId` (`userId`,`courseId`),
+                  KEY `userId_dayTime` (`userId`,`dayTime`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             ");
         }
@@ -344,7 +409,9 @@ class EduSohoUpgrade extends AbstractUpdater
                   `pureTime` int(10) unsigned NOT NULL COMMENT '时间轴累计时长',
                   `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
                   `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
-                  PRIMARY KEY (`id`)
+                  PRIMARY KEY (`id`),
+                  KEY `userId` (`userId`),
+                  KEY `userId_dayTime` (`userId`,`dayTime`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             ");
         }
@@ -364,7 +431,9 @@ class EduSohoUpgrade extends AbstractUpdater
                   `pureTime` int(10) unsigned NOT NULL COMMENT '时间轴累计时长',
                   `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
                   `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
-                  PRIMARY KEY (`id`)
+                  PRIMARY KEY (`id`),
+                  KEY `userId` (`userId`),
+                  KEY `userId_dayTime` (`userId`,`dayTime`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             ");
         }
@@ -384,7 +453,9 @@ class EduSohoUpgrade extends AbstractUpdater
                   `pureTime` int(10) unsigned NOT NULL COMMENT '时间轴累计时长',
                   `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
                   `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
-                  PRIMARY KEY (`id`)
+                  PRIMARY KEY (`id`),
+                  KEY `userId` (`userId`),
+                  KEY `userId_dayTime` (`userId`,`dayTime`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             ");
         }
@@ -954,6 +1025,9 @@ class EduSohoUpgrade extends AbstractUpdater
         return 1;
     }
 
+    /**
+     * @return \Biz\System\Service\SettingService
+     */
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
