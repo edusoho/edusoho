@@ -19,7 +19,9 @@ class DataVisualizationAddUserDailyTable extends Migration
               `pureTime` int(10) unsigned NOT NULL COMMENT '时间轴累计时长',
               `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
               `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
-              PRIMARY KEY (`id`)
+              PRIMARY KEY (`id`),
+              KEY `userId` (`userId`),
+              KEY `userId_dayTime` (`userId`,`dayTime`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
         ");
 
@@ -32,7 +34,9 @@ class DataVisualizationAddUserDailyTable extends Migration
               `pureTime` int(10) unsigned NOT NULL COMMENT '时间轴累计时长',
               `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
               `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
-              PRIMARY KEY (`id`)
+              PRIMARY KEY (`id`),
+              KEY `userId` (`userId`),
+              KEY `userId_dayTime` (`userId`,`dayTime`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
         ");
     }
