@@ -291,6 +291,7 @@ export default {
           };
     },
     initData() {
+      this.isShowOutFocusMask = false;
       this.$refs.video && (this.$refs.video.innerHTML = '');
       // 是否为无限制任务
       this.enableFinish = !!parseInt(this.details.enableFinish);

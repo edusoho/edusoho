@@ -1,6 +1,7 @@
 /* eslint-disable */
 import Api from '@/api/index';
 import * as types from '@/store/mutation-types';
+import { setTimeout } from 'core-js';
 
 export default {
   data() {
@@ -311,7 +312,9 @@ export default {
           return;
         }
         if (this.player && this.player.pause) {
-          this.player.pause();
+          setTimeout(() => {
+            this.player.pause();
+          }, 500);
         }
       }
 
