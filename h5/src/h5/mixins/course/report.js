@@ -297,7 +297,9 @@ export default {
     kickEachOther(type) {
       this.absorbed = 1;
       if (
-        (this.reportType === 'testpaper' || this.reportType === 'live') &&
+        (this.reportType === 'testpaper' ||
+          this.reportType === 'live' ||
+          this.reportType === 'homework') &&
         type === 'kick_previous'
       ) {
         return;
