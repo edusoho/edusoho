@@ -295,10 +295,13 @@ export default {
      * reject_current         // 互踢，不允许后来
      */
     kickEachOther(type) {
-      if (this.reportType === 'testpaper' || this.reportType === 'live') {
+      this.absorbed = 1;
+      if (
+        (this.reportType === 'testpaper' || this.reportType === 'live') &&
+        type === 'kick_previous'
+      ) {
         return;
       }
-      this.absorbed = 1;
       this.isShowOutFocusMask = true;
       this.outFocusMaskType = type;
 
