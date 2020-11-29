@@ -426,13 +426,13 @@ export default {
         player.on('paused', e => {
           this.isPlaying = false;
           this.clearComputeWatchTime();
-          const watchTime = parseInt(this.nowWatchTime - this.lastWatchTime);
+          // const watchTime = parseInt(this.nowWatchTime - this.lastWatchTime);
           this.lastWatchTime = this.nowWatchTime;
-          this.reprtData({
-            eventName: 'doing',
-            ContinuousReport: true,
-            watchTime: watchTime,
-          });
+          // this.reprtData({
+          //   eventName: 'doing',
+          //   ContinuousReport: true,
+          //   watchTime: watchTime,
+          // });
         });
         player.on('ended', () => {
           this.clearComputeWatchTime();
