@@ -7,50 +7,6 @@ use Tests\Unit\Base\BaseDaoTestCase;
 
 class TaskResultDaoTest extends BaseDaoTestCase
 {
-    public function testSumPureLearnedTimeByCourseTaskId()
-    {
-        $this->mockDataObject(['userId' => 1, 'time' => 100, 'pureTime' => 200, 'watchTime' => 100, 'pureWatchTime' => 200, 'courseTaskId' => 1]);
-        $this->mockDataObject(['userId' => 2, 'time' => 200, 'pureTime' => 400, 'watchTime' => 200, 'pureWatchTime' => 400, 'courseTaskId' => 1]);
-        $this->mockDataObject(['userId' => 1, 'time' => 100, 'pureTime' => 100, 'watchTime' => 100, 'pureWatchTime' => 100, 'courseTaskId' => 2]);
-
-        $result = $this->getDao()->sumPureLearnedTimeByCourseTaskId(1);
-
-        $this->assertEquals(600, $result);
-    }
-
-    public function testSumLearnedTimeByCourseTaskId()
-    {
-        $this->mockDataObject(['userId' => 1, 'time' => 100, 'pureTime' => 200, 'watchTime' => 100, 'pureWatchTime' => 200, 'courseTaskId' => 1]);
-        $this->mockDataObject(['userId' => 2, 'time' => 200, 'pureTime' => 400, 'watchTime' => 200, 'pureWatchTime' => 400, 'courseTaskId' => 1]);
-        $this->mockDataObject(['userId' => 1, 'time' => 100, 'pureTime' => 100, 'watchTime' => 100, 'pureWatchTime' => 100, 'courseTaskId' => 2]);
-
-        $result = $this->getDao()->sumLearnedTimeByCourseTaskId(1);
-
-        $this->assertEquals(300, $result);
-    }
-
-    public function testSumPureWatchTimeByCourseTaskId()
-    {
-        $this->mockDataObject(['userId' => 1, 'time' => 100, 'pureTime' => 200, 'watchTime' => 100, 'pureWatchTime' => 200, 'courseTaskId' => 1]);
-        $this->mockDataObject(['userId' => 2, 'time' => 200, 'pureTime' => 400, 'watchTime' => 200, 'pureWatchTime' => 400, 'courseTaskId' => 1]);
-        $this->mockDataObject(['userId' => 1, 'time' => 100, 'pureTime' => 100, 'watchTime' => 100, 'pureWatchTime' => 100, 'courseTaskId' => 2]);
-
-        $result = $this->getDao()->sumPureWatchTimeByCourseTaskId(1);
-
-        $this->assertEquals(600, $result);
-    }
-
-    public function testSumWatchTimeByCourseTaskId()
-    {
-        $this->mockDataObject(['userId' => 1, 'time' => 100, 'pureTime' => 200, 'watchTime' => 100, 'pureWatchTime' => 200, 'courseTaskId' => 1]);
-        $this->mockDataObject(['userId' => 2, 'time' => 200, 'pureTime' => 400, 'watchTime' => 200, 'pureWatchTime' => 400, 'courseTaskId' => 1]);
-        $this->mockDataObject(['userId' => 1, 'time' => 100, 'pureTime' => 100, 'watchTime' => 100, 'pureWatchTime' => 100, 'courseTaskId' => 2]);
-
-        $result = $this->getDao()->sumWatchTimeByCourseTaskId(1);
-
-        $this->assertEquals(300, $result);
-    }
-
     public function testFindTaskresultsByTaskId()
     {
         $expected = [];
