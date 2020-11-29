@@ -10,10 +10,51 @@ class LearnControlServiceTest extends BaseTestCase
 {
     public function testGetUserLastLearnRecord()
     {
+        $currentTime = time();
+        $record = $this->getDataCollectService()->push([
+            'userId' => 1,
+            'activityId' => 1,
+            'taskId' => 1,
+            'courseId' => 1,
+            'courseSetId' => 1,
+            'event' => 'start',
+            'client' => 'pc',
+            'startTime' => $currentTime,
+            'endTime' => $currentTime,
+            'duration' => 0,
+            'mediaType' => 'text',
+            'flowSign' => 'test12345',
+            'data' => [
+                'userAgent' => 'PC',
+            ],
+        ]);
+        $lastRecord = $this->getLearnControlService()->getUserLastLearnRecord(1);
+        self::assertEquals($record, $lastRecord);
     }
 
     public function testGetUserLastLearnRecordBySign()
     {
+        $currentTime = time();
+        $record = $this->getDataCollectService()->push([
+            'userId' => 1,
+            'activityId' => 1,
+            'taskId' => 1,
+            'courseId' => 1,
+            'courseSetId' => 1,
+            'event' => 'start',
+            'client' => 'pc',
+            'startTime' => $currentTime,
+            'endTime' => $currentTime,
+            'duration' => 0,
+            'mediaType' => 'text',
+            'flowSign' => 'test12345',
+            'data' => [
+                'userAgent' => 'PC',
+            ],
+        ]);
+
+        $lastRecord = $this->getLearnControlService()->getUserLastLearnRecordBySign(1, 'test12345');
+        self::assertEquals($record, $lastRecord);
     }
 
     public function testCheckActive()

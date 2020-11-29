@@ -34,7 +34,7 @@ class ActivityLearnRecordDaoImpl extends AdvancedDaoImpl implements ActivityLear
 
     public function getUserLastLearnRecordBySign($userId, $sign)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND sign = ? ORDER BY endTime DESC LIMIT 1;";
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND flowSign = ? ORDER BY endTime DESC LIMIT 1;";
 
         return $this->db()->fetchAssoc($sql, [$userId, $sign]);
     }

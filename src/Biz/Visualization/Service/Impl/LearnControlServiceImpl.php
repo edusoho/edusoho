@@ -154,6 +154,6 @@ class LearnControlServiceImpl extends BaseService implements LearnControlService
      */
     protected function getActivityLearnRecordDao()
     {
-        return $this->createDao(['Visualization:ActivityLearnRecordDao']);
+        return $this->createDao('Visualization:ActivityLearnRecordDao');
     }
 }

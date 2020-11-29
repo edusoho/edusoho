@@ -25,6 +25,7 @@ class UserActivityLearnFlowDaoTest extends BaseTestCase
             'activityId' => 1,
             'sign' => 'test12345',
             'startTime' => time(),
+            'lastLearnTime' => time(),
         ];
     }
 
