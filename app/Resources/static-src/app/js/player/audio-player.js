@@ -1,4 +1,7 @@
 import Emitter from 'component-emitter';
+import postal from 'postal';
+import 'postal.federation';
+import 'postal.xframe';
 class AudioPlayer extends Emitter {
 
   constructor(options) {
@@ -106,6 +109,7 @@ class AudioPlayer extends Emitter {
     });
 
     this.player = player;
+    this._registerChannel();
   }
 
   play() {
@@ -137,6 +141,31 @@ class AudioPlayer extends Emitter {
     return false;
   }
 
+  _registerChannel() {
+    postal.instanceId('task');
+
+    postal.fedx.addFilter([
+      {
+        channel: 'task-events', //接收 activity iframe的事件
+        topic: 'monitoringEvent',
+        direction: 'in'
+      }
+    ]);
+
+    postal.subscribe({
+      channel: 'task-events',
+      topic: 'monitoringEvent',
+      callback: (type) => {
+        if (type === 'pause') {
+          this.pause();
+        } else if (type === 'play') {
+          this.play();
+        }
+      }
+    });
+
+    return this;
+  }
 }
 
 export default AudioPlayer;
