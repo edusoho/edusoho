@@ -57,6 +57,13 @@ class LearnControlServiceTest extends BaseTestCase
         self::assertEquals($record, $lastRecord);
     }
 
+    public function testGetUserLatestActiveFlow()
+    {
+        $flow1 = $this->getDataCollectService()->createLearnFlow(1, 1, 'test123');
+        $latestFlow = $this->getLearnControlService()->getUserLatestActiveFlow(1);
+        self::assertEquals($flow1, $latestFlow);
+    }
+
     public function testCheckActive()
     {
         $flow1 = $this->getDataCollectService()->createLearnFlow(1, 1, 'test123');

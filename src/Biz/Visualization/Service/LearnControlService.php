@@ -8,6 +8,8 @@ interface LearnControlService
 
     public function getUserLastLearnRecordBySign($userId, $sign);
 
+    public function getUserLatestActiveFlow($userId);
+
     public function freshFlow($userId, $sign);
 
     public function checkActive($userId, $sign, $reActive = false);
