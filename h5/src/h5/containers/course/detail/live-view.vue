@@ -69,7 +69,7 @@ export default {
         this.getReplayUrl(taskId);
         return;
       }
-      this.initReportData(this.courseId, this.taskId, 'live', false);
+      this.initReportData(this.courseId, this.taskId, 'live', true);
       this.requestLiveNo(taskId);
     },
     getReplayUrl(taskId) {
