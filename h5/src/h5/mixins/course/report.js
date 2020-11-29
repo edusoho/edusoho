@@ -312,9 +312,7 @@ export default {
           return;
         }
         if (this.player && this.player.pause) {
-          setTimeout(() => {
-            this.player.pause();
-          }, 500);
+          this.player.pause();
         }
       }
 

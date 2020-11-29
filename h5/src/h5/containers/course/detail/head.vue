@@ -292,6 +292,10 @@ export default {
     },
     initData() {
       this.isShowOutFocusMask = false;
+      if (this.sign.length > 0) {
+        localStorage.setItem('flowSign', this.sign);
+        this.sign = '';
+      }
       this.$refs.video && (this.$refs.video.innerHTML = '');
       // 是否为无限制任务
       this.enableFinish = !!parseInt(this.details.enableFinish);
