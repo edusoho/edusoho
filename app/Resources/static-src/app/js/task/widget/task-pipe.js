@@ -80,13 +80,20 @@ export default class TaskPipe {
 
   _initInterval() {
     this._flush();
-    window.onbeforeunload = () => {
+    window.addEventListener('beforeunload', () =>{
       this._clearInterval();
       // this._flush({ type: 'beforeunload' });
       if (this.sign.length > 0) {
         localStorage.setItem('flowSign', this.sign);
       }
-    };
+    });
+    // window.onbeforeunload = () => {
+    //   this._clearInterval();
+    //   // this._flush({ type: 'beforeunload' });
+    //   if (this.sign.length > 0) {
+    //     localStorage.setItem('flowSign', this.sign);
+    //   }
+    // };
     this._clearInterval();
     this.intervalId = setInterval(() => this._addPipeCounter(), 1000);
   }
