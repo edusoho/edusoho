@@ -4,6 +4,7 @@ import 'postal.xframe';
 import DurationStorage from '../../../common/duration-storage';
 import MonitoringEvents from './monitoringEvents';
 import Api from 'common/api';
+import { isMobileDevice } from 'common/utils';
 
 export default class TaskPipe {
   constructor(element) {
@@ -123,6 +124,10 @@ export default class TaskPipe {
       return ;
     }
     if (this.isLogout) return;
+    let clientType = 'pc';
+    if (isMobileDevice()) {
+      clientType = 'wap';
+    }
     if (this.sign === '') {
       let customData = {};
       let release = param.release || 0;
@@ -140,7 +145,7 @@ export default class TaskPipe {
         },
         data: Object.assign({
           release: release,
-          client : 'pc',
+          client : clientType,
         }, customData),
       }).then(res => {
         //对于只需要一次性释放的逻辑，不弹遮罩，而且flow.active == 0
@@ -206,8 +211,12 @@ export default class TaskPipe {
     if (this.sign.length === 0) {
       return;
     }
+    let clientType = 'pc';
+    if (isMobileDevice()) {
+      clientType = 'wap';
+    }
     let data = {
-      client: 'pc',
+      client: clientType,
       sign: this.sign,
       duration: this.taskPipeCounter,
       status: this.absorbed,
