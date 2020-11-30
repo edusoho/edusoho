@@ -87,20 +87,20 @@ export default class TaskPipe {
     //     localStorage.setItem('flowSign', this.sign);
     //   }
     // });
-    // window.onbeforeunload = () => {
-    //   this._clearInterval();
-    //   // this._flush({ type: 'beforeunload' });
-    //   if (this.sign.length > 0) {
-    //     localStorage.setItem('flowSign', this.sign);
-    //   }
-    // };
-    window.addEventListener('pagehide', () => {
+    window.onbeforeunload = () => {
       this._clearInterval();
       // this._flush({ type: 'beforeunload' });
       if (this.sign.length > 0) {
         localStorage.setItem('flowSign', this.sign);
       }
-    });
+    };
+    // window.addEventListener('pagehide', () => {
+    //   this._clearInterval();
+    //   // this._flush({ type: 'beforeunload' });
+    //   if (this.sign.length > 0) {
+    //     localStorage.setItem('flowSign', this.sign);
+    //   }
+    // });
 
     this._clearInterval();
     this.intervalId = setInterval(() => this._addPipeCounter(), 1000);
