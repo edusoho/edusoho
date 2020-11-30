@@ -1,4 +1,5 @@
 import OutFocusMask from './out-focus-mask';
+import { isMobileDevice } from 'common/utils';
 
 export default class MonitoringEvents {
   constructor(params) {
@@ -25,7 +26,8 @@ export default class MonitoringEvents {
       this.taskPipe._flush({reActive: 1});
       this.taskPipe.absorbedChange(0);
     });
-    if (navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)) {
+
+    if (isMobileDevice()) {
       return;
     }
 
