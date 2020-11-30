@@ -163,6 +163,9 @@ export default class TaskPipe {
           this.MonitoringEvents.triggerEvent('kick_previous');
           return ;
         } else if (!res.learnControl.allowLearn && res.learnControl.denyReason === 'reject_current') {
+          if (isMobileDevice()) {
+            return;
+          }
           this.MonitoringEvents.triggerEvent('reject_current');
           this._clearInterval();
           this.element.attr('src', '');
