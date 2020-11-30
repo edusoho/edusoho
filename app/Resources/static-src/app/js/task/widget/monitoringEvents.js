@@ -6,7 +6,7 @@ export default class MonitoringEvents {
     this.OutFocusMask = new OutFocusMask(this.maskElement);
 
     this.activityTimer = null;
-    this.ACTIVITY_TIME = 180;
+    this.ACTIVITY_TIME = 1200;
 
     this.eventMaskElement = null;
     this.eventMaskTimer = null;
