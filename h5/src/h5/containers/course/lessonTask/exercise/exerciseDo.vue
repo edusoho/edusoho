@@ -1,5 +1,11 @@
 <template>
   <div class="paper-swiper">
+    <out-focus-mask
+      :type="outFocusMaskType"
+      :isShow="isShowOutFocusMask"
+      :reportType="reportType"
+      @outFocusMask="outFocusMask"
+    ></out-focus-mask>
     <e-loading v-if="isLoading" />
 
     <!-- 做题 -->
@@ -69,13 +75,15 @@ import Api from '@/api';
 import * as types from '@/store/mutation-types';
 import { mapState, mapMutations, mapActions } from 'vuex';
 
-import { Toast, Overlay, Popup, Dialog, Lazyload } from 'vant';
+import { Toast, Dialog } from 'vant';
 import guidePage from '../component/guide-page';
 import itemBank from '../component/itemBank';
 
 import exerciseMixin from '@/mixins/lessonTask/exercise.js';
 import testMixin from '@/mixins/lessonTask/index.js';
 import report from '@/mixins/course/report';
+import OutFocusMask from '@/components/out-focus-mask.vue';
+
 // 由于会重定向到说明页或者结果页，为了避免跳转后不能返回，添加backUrl机制
 let backUrl = '';
 export default {
@@ -83,6 +91,7 @@ export default {
   components: {
     itemBank,
     guidePage,
+    OutFocusMask,
   },
   mixins: [exerciseMixin, testMixin, report],
   data() {
@@ -96,7 +105,6 @@ export default {
       localanswerName: null,
       localtimeName: null,
       lastUsedTime: null,
-      lastAnswer: null,
       usedTime: null, // 使用时间，本地实时计时
       isHandExercise: false, // 是否已经交完练习
       slideIndex: 0, // 题库组件当前所在的划片位置
@@ -114,7 +122,7 @@ export default {
       deep: true,
     },
   },
-  created() {
+  mounted() {
     this.getData();
     this.initReport();
   },
@@ -139,7 +147,7 @@ export default {
       if (this.submitpaper()) {
         next();
       } else {
-        next(false);
+        next();
       }
     }
   },
@@ -157,7 +165,6 @@ export default {
     getData() {
       const exerciseId = this.$route.query.exerciseId;
       const targetId = this.$route.query.targetId;
-      const action = this.$route.query.action;
       Api.getExerciseInfo({
         query: {
           exerciseId,
@@ -233,8 +240,6 @@ export default {
     // 遍历数据类型去做对应处理
     formatData(res) {
       const paper = res.items;
-      const info = [];
-      const answer = [];
       paper.forEach(item => {
         if (item.type != 'material') {
           const detail = this.sixType(item.type, item, this.lastAnswer);
@@ -349,7 +354,7 @@ export default {
             .then(res => {
               return true;
             })
-            .catch(err => {
+            .catch(() => {
               return false;
             });
         });
@@ -378,7 +383,7 @@ export default {
             this.isHandExercise = true;
             resolve();
             // 上报完成作业课时
-            this.reprtData('finish');
+            this.reprtData({ eventName: 'finish' });
             // 跳转到结果页
             this.showResult();
           })
@@ -395,7 +400,7 @@ export default {
                 this.showResult();
               }, 2000);
             } else {
-              reject();
+              reject(err);
             }
           });
       });

@@ -1,5 +1,11 @@
 <template>
   <div class="web-view">
+    <out-focus-mask
+      :type="outFocusMaskType"
+      :isShow="isShowOutFocusMask"
+      :reportType="reportType"
+      @outFocusMask="outFocusMask"
+    ></out-focus-mask>
     <e-loading v-if="isLoading" />
     <!-- web-view -->
     <iframe id="player" :src="playUrl" width="100%" frameborder="0" />
@@ -12,7 +18,12 @@ import * as types from '@/store/mutation-types';
 import { Toast } from 'vant';
 import redirectMixin from '@/mixins/saveRedirect';
 import report from '@/mixins/course/report';
+import OutFocusMask from '@/components/out-focus-mask.vue';
+
 export default {
+  components: {
+    OutFocusMask,
+  },
   mixins: [redirectMixin, report],
   data() {
     return {
@@ -58,7 +69,7 @@ export default {
         this.getReplayUrl(taskId);
         return;
       }
-      this.initReportData(this.courseId, this.taskId, 'live', false);
+      this.initReportData(this.courseId, this.taskId, 'live', true);
       this.requestLiveNo(taskId);
     },
     getReplayUrl(taskId) {
@@ -76,7 +87,7 @@ export default {
             if (res.url.indexOf('/error/') > -1) {
               Toast('暂无回放');
             } else {
-              this.reprtData('finish');
+              this.reprtData({ eventName: 'finish' });
               const index = res.url.indexOf('/');
               this.playUrl = index == 0 ? res.url : res.url.substring(index);
             }
@@ -123,7 +134,7 @@ export default {
             // 由于在safari中从https转到http的地址会出错
             this.playUrl =
               index == 0 ? res.roomUrl : res.roomUrl.substring(index);
-            this.reprtData('finish');
+            this.reprtData({ eventName: 'finish' });
           } else {
             if (this.requestCount < 30) {
               this.getLiveUrl(taskId, no);

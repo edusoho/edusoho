@@ -1,5 +1,11 @@
 <template>
   <div class="testResults">
+    <out-focus-mask
+      :type="outFocusMaskType"
+      :isShow="isShowOutFocusMask"
+      :reportType="reportType"
+      @outFocusMask="outFocusMask"
+    ></out-focus-mask>
     <e-loading v-if="isLoading" />
     <div v-if="result" ref="data" class="result-data">
       <div class="result-data__item">
@@ -79,15 +85,21 @@
 
 <script>
 import Api from '@/api';
-import { mapState, mapMutations, mapActions } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 import * as types from '@/store/mutation-types';
 
 import exerciseMixin from '@/mixins/lessonTask/exercise.js';
 import report from '@/mixins/course/report';
+import OutFocusMask from '@/components/out-focus-mask.vue';
+
+import { Toast } from 'vant';
 
 export default {
   name: 'ExerciseResult',
   mixins: [exerciseMixin, report],
+  components: {
+    OutFocusMask,
+  },
   data() {
     return {
       result: null,
@@ -120,9 +132,9 @@ export default {
       return !!(this.result && this.result.status === 'finished');
     },
   },
-  created() {
-    this.getexerciseResult();
+  mounted() {
     this.initReport();
+    this.getexerciseResult();
   },
   beforeRouteEnter(to, from, next) {
     document.getElementById('app').style.background = '#f6f6f6';
@@ -157,7 +169,6 @@ export default {
         this.$route.query.courseId,
         this.$route.query.taskId,
         'exercise',
-        false,
       );
     },
     // 异常中断
@@ -219,14 +230,14 @@ export default {
       this.handExercisedo(datas)
         .then(res => {
           // 上报完成作业课时
-          this.reprtData('finish');
+          this.reprtData({ eventName: 'finish' });
           this.$router.replace({
             name: 'exerciseResult',
             query: {
               exerciseId: this.$route.query.exerciseId,
               exerciseResultId: this.$route.query.exerciseResultId,
               courseId: this.$route.query.courseId,
-              taskId: tthis.$route.query.taskId,
+              taskId: this.$route.query.taskId,
             },
           });
         })

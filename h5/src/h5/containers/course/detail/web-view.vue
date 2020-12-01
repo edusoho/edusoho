@@ -1,6 +1,12 @@
 <template>
   <!-- 文档播放器 -->
   <div class="web-view">
+    <out-focus-mask
+      :type="outFocusMaskType"
+      :isShow="isShowOutFocusMask"
+      :reportType="reportType"
+      @outFocusMask="outFocusMask"
+    ></out-focus-mask>
     <e-loading v-if="isLoading" />
     <!-- web-view -->
     <div v-show="media !== 'text'" id="player" />
@@ -39,9 +45,11 @@ import * as types from '@/store/mutation-types';
 import { Toast } from 'vant';
 import report from '@/mixins/course/report';
 import finishDialog from '../components/finish-dialog';
+import OutFocusMask from '@/components/out-focus-mask.vue';
 export default {
   components: {
     finishDialog,
+    OutFocusMask,
   },
   mixins: [report],
   data() {
@@ -169,14 +177,14 @@ export default {
         player.on('pagechanged', e => {
           if (e.page === e.total) {
             if (this.finishCondition && this.finishCondition.type === 'end') {
-              this.reprtData('finish');
+              this.reprtData({ eventName: 'finish' });
             }
           }
         });
       });
     },
     toLearned() {
-      this.reprtData('finish').then(res => {
+      this.reprtData({ eventName: 'finish' }).then(res => {
         this.finishResult = res;
         this.finishDialog = true;
       });

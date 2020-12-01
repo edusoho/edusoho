@@ -1,5 +1,11 @@
 <template>
   <div>
+    <out-focus-mask
+      :type="outFocusMaskType"
+      :isShow="isShowOutFocusMask"
+      :reportType="reportType"
+      @outFocusMask="outFocusMask"
+    ></out-focus-mask>
     <e-loading v-if="isLoading" />
     <div class="intro-body">
       <van-panel class="panel intro-panel" title="考试名称">
@@ -77,9 +83,15 @@ import { mapState, mapActions } from 'vuex';
 import { Dialog, Toast } from 'vant';
 import { formatTime } from '@/utils/date-toolkit.js';
 import examMixin from '@/mixins/lessonTask/exam.js';
+import report from '@/mixins/course/report';
+import OutFocusMask from '@/components/out-focus-mask.vue';
+
 export default {
   name: 'TestpaperIntro',
-  mixins: [examMixin],
+  mixins: [examMixin, report],
+  components: {
+    OutFocusMask,
+  },
   data() {
     return {
       enable_facein: '', // 是否开启云监考
@@ -125,9 +137,11 @@ export default {
     ...mapState({
       isLoading: state => state.isLoading,
       user: state => state.user,
+      selectedPlanId: state => state.course.selectedPlanId,
     }),
   },
-  created() {
+  mounted() {
+    this.initReport();
     this.getInfo();
   },
   beforeRouteEnter(to, from, next) {
@@ -140,6 +154,14 @@ export default {
   },
   methods: {
     ...mapActions('course', ['handExamdo']),
+    // 初始化上报数据
+    initReport() {
+      this.initReportData(
+        this.selectedPlanId,
+        this.$route.query.targetId,
+        'testpaper',
+      );
+    },
     getInfo() {
       this.testId = this.$route.query.testId;
       this.targetId = this.$route.query.targetId;

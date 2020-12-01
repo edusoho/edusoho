@@ -1,5 +1,11 @@
 <template>
   <div id="course-detail__head" class="course-detail__head pos-rl">
+    <video-report-mask
+      :type="outFocusMaskType"
+      :isShow="isShowOutFocusMask"
+      :reportType="reportType"
+      @outFocusMask="outFocusMask"
+    ></video-report-mask>
     <div
       v-if="textContent"
       v-show="
@@ -50,15 +56,17 @@
       />
     </div>
     <!-- 由于在安卓端弹出层会被视频遮挡，因此在弹出层显示时，隐藏视频，显示课程封面图，判断字段 finishDialog-->
-    <div
-      v-show="
-        ['video', 'audio'].includes(sourceType) &&
-          !isEncryptionPlus &&
-          !finishDialog
-      "
-      id="course-detail__head--video"
-      ref="video"
-    />
+    <div v-show="!isShowOutFocusMask">
+      <div
+        v-show="
+          ['video', 'audio'].includes(sourceType) &&
+            !isEncryptionPlus &&
+            !finishDialog
+        "
+        id="course-detail__head--video"
+        ref="video"
+      />
+    </div>
     <!-- 学习上报按钮 -->
     <template v-if="showLearnBtn">
       <div
@@ -107,12 +115,14 @@ import tagLink from '&/components/e-tag-link/e-tag-link';
 import finishDialog from '../components/finish-dialog';
 import qs from 'qs';
 import report from '@/mixins/course/report';
+import VideoReportMask from '@/components/video-report-mask';
 
 export default {
   components: {
     countDown,
     tagLink,
     finishDialog,
+    VideoReportMask,
   },
   mixins: [report],
   props: {
@@ -191,6 +201,9 @@ export default {
     this.showTagLink();
   },
   beforeDestroy() {
+    if (this.sign.length > 0) {
+      localStorage.setItem('flowSign', this.sign);
+    }
     // 销毁播放器
     if (this.player && this.player.destory) {
       this.player.destory();
@@ -227,7 +240,6 @@ export default {
       }
     },
     initReport() {
-      this.initReportData(this.selectedPlanId, this.taskId, this.sourceType);
       this.finishDialog = false;
       this.getFinishCondition();
       this.IsLivePlayback();
@@ -240,7 +252,7 @@ export default {
     // 直播视频回放刚进入课程就算学习完成
     IsLivePlayback() {
       if (this.allTask[this.taskId].type === 'live') {
-        this.reprtData('finish');
+        this.reprtData({ eventName: 'finish' });
       }
     },
     viewAudioDoc() {
@@ -279,6 +291,11 @@ export default {
           };
     },
     initData() {
+      this.isShowOutFocusMask = false;
+      if (this.sign.length > 0) {
+        localStorage.setItem('flowSign', this.sign);
+        this.sign = '';
+      }
       this.$refs.video && (this.$refs.video.innerHTML = '');
       // 是否为无限制任务
       this.enableFinish = !!parseInt(this.details.enableFinish);
@@ -400,7 +417,13 @@ export default {
               '当前内容不支持该手机浏览器观看，建议您使用Chrome、Safari浏览器观看。',
           }).then(() => {});
         });
-        player.on('ready', () => {});
+        player.on('ready', () => {
+          this.initReportData(
+            this.selectedPlanId,
+            this.taskId,
+            this.sourceType,
+          );
+        });
         player.on('playing', () => {
           this.isPlaying = true;
           this.computeWatchTime();
@@ -408,14 +431,18 @@ export default {
         player.on('paused', e => {
           this.isPlaying = false;
           this.clearComputeWatchTime();
-          const watchTime = parseInt(this.nowWatchTime - this.lastWatchTime);
+          // const watchTime = parseInt(this.nowWatchTime - this.lastWatchTime);
           this.lastWatchTime = this.nowWatchTime;
-          this.reprtData('doing', true, watchTime);
+          // this.reprtData({
+          //   eventName: 'doing',
+          //   ContinuousReport: true,
+          //   watchTime: watchTime,
+          // });
         });
         player.on('ended', () => {
           this.clearComputeWatchTime();
           if (this.finishCondition && this.finishCondition.type === 'end') {
-            this.reprtData('finish');
+            this.reprtData({ eventName: 'finish' });
           }
         });
       });
@@ -464,7 +491,7 @@ export default {
       });
     },
     toLearned() {
-      this.reprtData('finish').then(res => {
+      this.reprtData({ eventName: 'finish' }).then(res => {
         this.finishResult = res;
         this.finishDialog = true;
       });
