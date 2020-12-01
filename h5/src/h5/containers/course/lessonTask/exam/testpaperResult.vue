@@ -1,5 +1,11 @@
 <template>
   <div class="testResults">
+    <out-focus-mask
+      :type="outFocusMaskType"
+      :isShow="isShowOutFocusMask"
+      :reportType="reportType"
+      @outFocusMask="outFocusMask"
+    ></out-focus-mask>
     <e-loading v-if="isLoading" />
     <div v-if="result" ref="data" class="result-data">
       <div class="result-data__item">
@@ -108,9 +114,13 @@ import examMixin from '@/mixins/lessonTask/exam.js';
 import report from '@/mixins/course/report';
 import { getdateTimeDown } from '@/utils/date-toolkit.js';
 import { Dialog, Toast } from 'vant';
+import OutFocusMask from '@/components/out-focus-mask.vue';
 
 export default {
   name: 'TestpaperResult',
+  components: {
+    OutFocusMask,
+  },
   mixins: [examMixin, report],
   data() {
     return {
@@ -164,7 +174,7 @@ export default {
       this.calSubjectHeight();
     },
   },
-  created() {
+  mounted() {
     this.initReport();
     this.getTestpaperResult();
   },
@@ -197,7 +207,7 @@ export default {
         this.getSubjectList(res.items);
         this.calSubjectHeight();
         // 上报学习进度
-        this.reprtData('doing');
+        this.reprtData({ eventName: 'doing' });
         this.canDoing(this.result, this.user.id)
           .then(() => {
             this.startTestpaper('KeepDoing');
@@ -214,7 +224,6 @@ export default {
         this.selectedPlanId,
         this.$route.query.targetId,
         'testpaper',
-        false,
       );
     },
     judgeTime() {
@@ -359,6 +368,7 @@ export default {
         query: {
           resultId: this.$route.query.resultId,
           title: this.testpaperTitle,
+          targetId: this.$route.query.targetId,
         },
       });
     },

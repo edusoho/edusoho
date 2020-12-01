@@ -1,5 +1,11 @@
 <template>
   <div class="paper-swiper">
+    <out-focus-mask
+      :type="outFocusMaskType"
+      :isShow="isShowOutFocusMask"
+      :reportType="reportType"
+      @outFocusMask="outFocusMask"
+    ></out-focus-mask>
     <e-loading v-if="isLoading" />
 
     <item-bank
@@ -89,9 +95,9 @@
 
 <script>
 import Api from '@/api';
-import { mapState, mapMutations, mapActions } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import * as types from '@/store/mutation-types';
-import { Toast, Overlay, Popup, Dialog, Lazyload } from 'vant';
+import { Toast, Dialog } from 'vant';
 
 import guidePage from '../component/guide-page';
 import itemBank from '../component/itemBank';
@@ -100,6 +106,8 @@ import { getCountDown } from '@/utils/date-toolkit.js';
 
 import examMixin from '@/mixins/lessonTask/exam.js';
 import testMixin from '@/mixins/lessonTask/index.js';
+import report from '@/mixins/course/report';
+import OutFocusMask from '@/components/out-focus-mask.vue';
 
 let backUrl = '';
 
@@ -108,36 +116,29 @@ export default {
   components: {
     itemBank,
     guidePage,
-    vanOverlay: Overlay,
+    OutFocusMask,
   },
   filters: {
     type: function(type) {
       switch (type) {
         case 'single_choice':
           return '单选题';
-          break;
         case 'choice':
           return '多选题';
-          break;
         case 'essay':
           return '问答题';
-          break;
         case 'uncertain_choice':
           return '不定项选择题';
-          break;
         case 'determine':
           return '判断题';
-          break;
         case 'fill':
           return '填空题';
-          break;
         case 'material':
           return '材料题';
-          break;
       }
     },
   },
-  mixins: [examMixin, testMixin],
+  mixins: [examMixin, testMixin, report],
   data() {
     return {
       cardSeq: 0, // 点击题卡要滑动的指定位置的索引
@@ -162,7 +163,8 @@ export default {
       slideIndex: 0, // 题库组件当前所在的划片位置
     };
   },
-  created() {
+  mounted() {
+    this.initReport();
     this.getData();
   },
   beforeRouteEnter(to, from, next) {
@@ -200,6 +202,7 @@ export default {
     ...mapState({
       isLoading: state => state.isLoading,
       user: state => state.user,
+      selectedPlanId: state => state.course.selectedPlanId,
     }),
   },
   watch: {
@@ -210,6 +213,14 @@ export default {
   },
   methods: {
     ...mapActions('course', ['handExamdo']),
+    // 初始化上报数据
+    initReport() {
+      this.initReportData(
+        this.selectedPlanId,
+        this.$route.query.targetId,
+        'testpaper',
+      );
+    },
     // 请求接口获取数据
     getData() {
       const testId = this.$route.query.testId;
@@ -296,8 +307,6 @@ export default {
     // 遍历数据类型去做对应处理
     formatData(res) {
       const paper = res.items;
-      const info = [];
-      const answer = [];
       Object.keys(paper).forEach(key => {
         if (key != 'material') {
           paper[key].forEach(item => {
@@ -425,10 +434,10 @@ export default {
           confirmButtonText: '检查一下',
           message: message,
         })
-          .then(() => {
+          .then(res => {
             // 显示答题卡
             this.cardShow = true;
-            reject();
+            reject(res);
           })
           .catch(() => {
             this.clearTime();
@@ -437,7 +446,7 @@ export default {
                 resolve();
               })
               .catch(err => {
-                reject();
+                reject(err);
               });
           });
       });
@@ -471,7 +480,7 @@ export default {
             this.showResult();
           })
           .catch(err => {
-            reject();
+            reject(err);
             Toast.fail(err.message);
             this.isHandExam = true;
             this.showResult();

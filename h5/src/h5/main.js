@@ -48,6 +48,7 @@ import {
   Area,
   DatetimePicker,
   Picker,
+  Icon,
 } from 'vant';
 // 按需引入组件
 Vue.component('van-nav-bar', NavBar);
@@ -101,6 +102,7 @@ Vue.use(Tab)
   .use(DatetimePicker)
   .use(Picker);
 Vue.use(VueClipboard);
+Vue.use(Icon);
 Vue.use(wapSdk);
 Vue.config.productionTip = false;
 Api.getSettings({
