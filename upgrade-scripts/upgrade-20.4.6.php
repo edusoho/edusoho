@@ -610,7 +610,7 @@ class EduSohoUpgrade extends AbstractUpdater
                         ctr.activityId, 
                         ctr.courseTaskId, 
                         ctr.courseId, 
-                        cv.courseSetId, 
+                        if(cv.courseSetId is null, 0, cv.courseSetId), 
                         ctr.userId, 
                         0, 
                         ctr.time, 
@@ -651,7 +651,7 @@ class EduSohoUpgrade extends AbstractUpdater
                             ctr.activityId, 
                             ctr.courseTaskId, 
                             ctr.courseId, 
-                            cv.courseSetId, 
+                            if(cv.courseSetId is null, 0, cv.courseSetId), 
                             ctr.userId, 
                             0, 
                             ctr.watchTime, 
@@ -693,7 +693,7 @@ class EduSohoUpgrade extends AbstractUpdater
                             asd.activityId, 
                             asd.taskId, 
                             asd.courseId, 
-                            cv.courseSetId, 
+                            if(cv.courseSetId is null, 0, cv.courseSetId), 
                             asd.userId, 
                             asd.dayTime, 
                             asd.sumTime, 
@@ -728,7 +728,7 @@ class EduSohoUpgrade extends AbstractUpdater
                         ) 
                         SELECT 
                             asd.courseId, 
-                            cv.courseSetId, 
+                            if(cv.courseSetId is null, 0, cv.courseSetId), 
                             asd.userId, 
                             asd.dayTime, 
                             sum(asd.sumTime), 
@@ -764,7 +764,7 @@ class EduSohoUpgrade extends AbstractUpdater
                         ) 
                         SELECT 
                             asd.courseId, 
-                            cv.courseSetId, 
+                            if(cv.courseSetId is null, 0, cv.courseSetId), 
                             asd.userId, 
                             asd.dayTime, 
                             sum(asd.sumTime), 
@@ -801,7 +801,7 @@ class EduSohoUpgrade extends AbstractUpdater
                         ) 
                         SELECT 
                             asd.courseId, 
-                            cv.courseSetId, 
+                            if(cv.courseSetId is null, 0, cv.courseSetId), 
                             asd.userId, 
                             asd.dayTime, 
                             sum(asd.sumTime), 
