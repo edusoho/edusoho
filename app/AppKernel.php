@@ -48,7 +48,6 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
                 $this->resetServices = false;
                 if ($this->debug) {
                     $this->startTime = microtime(true);
-                    error_reporting(3);
                 }
             }
 
@@ -56,6 +55,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         }
         if ($this->debug) {
             $this->startTime = microtime(true);
+            error_reporting(3);
         }
         if ($this->debug && !isset($_ENV['SHELL_VERBOSITY']) && !isset($_SERVER['SHELL_VERBOSITY'])) {
             putenv('SHELL_VERBOSITY=3');
