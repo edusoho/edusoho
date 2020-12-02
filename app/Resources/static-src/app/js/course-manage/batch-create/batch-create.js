@@ -47,6 +47,7 @@ class BatchCreate {
 
   initEvent() {
     let self = this;
+    self.status = true;
     $('.js-upload-params').on('change', (event) => {
       this.uploader.setProcess(this.getUploadProcess());
     });
@@ -63,6 +64,30 @@ class BatchCreate {
       if (!this.validLessonNum($btn)) {
         console.log(this.validLessonNum($btn));
         return;
+      }
+
+      //Select
+      if (!$('#material li:first').hasClass('active')){
+        $('.js-batch-create-content').find('input[data-role="batch-item"]:checked').map((index, event, array) => {
+          let fileId = $(event).parents('.file-browser-item').data('id');
+          if (!this.validLessonType($btn, fileId)) {
+            self.status = false;
+            $('.active').find('#material-table-tr-'+fileId).css('color', 'red');
+          }
+        });
+      }
+      //Upload
+      else {
+        this.files.map((file, index) => {
+          if (!this.validLessonType($btn, file['no'])) {
+            self.status = false;
+            $('.active').find('#WU_FILE_'+$selectLength).css('color', 'red');
+          }
+        });
+      }
+
+      if (!self.status){
+        return false;
       }
 
       if ($selectLength > 0) {
@@ -158,6 +183,28 @@ class BatchCreate {
           valid = false;
         }
         valid = true;
+      }
+    });
+    return valid;
+  }
+
+  validLessonType($btn, fileId) {
+    let valid = true;
+    $.ajax({
+      type: 'post',
+      url: $btn.data('typeUrl'),
+      async: false,
+      data: {
+        fileId: fileId
+      },
+      success: function (response) {
+        if (response && response.error) {
+          notify('danger', response.error);
+          $btn.button('reset');
+          valid = false;
+        } else {
+          valid = true;
+        }
       }
     });
     return valid;

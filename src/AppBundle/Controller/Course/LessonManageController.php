@@ -109,6 +109,18 @@ class LessonManageController extends BaseController
         return $this->createJsonResponse(['success' => true]);
     }
 
+    public function validLessonTypeAction(Request $request)
+    {
+        $fileId = $request->request->get('fileId');
+        $file = $this->getUploadFileService()->getFile($fileId);
+
+        if ('flash' == $file['type'] && !empty($file)) {
+            return $this->createJsonResponse(['error' => '不支持的文件类型']);
+        }
+
+        return $this->createJsonResponse(['success' => true]);
+    }
+
     public function updateAction(Request $request, $courseId, $lessonId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
