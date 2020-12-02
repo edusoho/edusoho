@@ -48,6 +48,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
                 $this->resetServices = false;
                 if ($this->debug) {
                     $this->startTime = microtime(true);
+                    error_reporting(3);
                 }
             }
 
