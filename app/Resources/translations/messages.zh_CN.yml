@@ -9009,6 +9009,7 @@ log.action.course.sync_when_task_create: 同步创建任务
 log.action.course.sync_when_task_update: 同步更新任务
 log.action.course.sync_when_task_delete: 同步删除任务
 log.action.course.clone_course_set: 复制课程
+log.action.course.copy_course: 复制教学计划
 log.action.course.unlock_course: 解除课程同步
 log.action.course.create_course: 创建教学计划
 log.action.course.update_course: 修改教学计划
