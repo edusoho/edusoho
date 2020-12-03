@@ -52,10 +52,6 @@ class BatchCreate {
       this.uploader.setProcess(this.getUploadProcess());
     });
 
-    $('[data-toggle="popover"]').popover({
-      html: true,
-    });
-
     $('.js-batch-create-lesson-btn').on('click', (event) => {
       let $selectLength = $('.js-batch-create-content').find('input[data-role="batch-item"]:checked').length;
       if (!this.files.length && $selectLength < 1) {
