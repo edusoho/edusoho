@@ -7820,6 +7820,7 @@ log.action.course.sync_when_task_update: 'Sync task updating'
 log.action.course.sync_when_task_delete: 'Sync task deletion'
 log.action.course.clone_course_set: 'Copy course'
 log.action.course.unlock_course: 'Unlock course sync'
+log.action.course.copy_course: 'copy teaching plan'
 log.action.course.create_course: Create teaching plan
 log.action.course.update_course: Update teaching plan
 log.action.course.delete_course: Delete teaching plan
