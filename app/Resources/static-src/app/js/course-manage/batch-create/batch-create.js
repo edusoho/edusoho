@@ -89,6 +89,10 @@ class BatchCreate {
 
     });
 
+    $('[data-toggle="popover"]').popover({
+      html: true,
+    });
+
     $('.js-batch-create-content').on('click', '[data-role=batch-select]', function () {
       if ($(this).is(":checked") == true) {
         $(this).parents('.js-table-list').find('[data-role=batch-item]').prop('checked', true);
