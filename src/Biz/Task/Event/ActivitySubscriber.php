@@ -13,7 +13,7 @@ class ActivitySubscriber extends EventSubscriber implements EventSubscriberInter
     {
         return [
             'activity.start' => 'onActivityStart',
-            'activity.doing' => '                                                                                                                             ',
+            'activity.doing' => 'onActivityDoing',
             'activity.finish' => 'onActivityFinish',
         ];
     }
