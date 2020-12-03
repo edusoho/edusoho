@@ -52,7 +52,7 @@ class LatestCourseReviewsDataTagTest extends BaseTestCase
         $this->getCourseMemberService()->becomeStudent($course1['id'], $user2['id']);
 
         $review1 = $this->getReviewService()->createReview([
-            'targetType' => 'course',
+            'targetType' => 'goods',
             'targetId' => $course1['id'],
             'userId' => $user1['id'],
             'title' => 'review1',
@@ -70,7 +70,7 @@ class LatestCourseReviewsDataTagTest extends BaseTestCase
 
         $datatag = new LatestCourseReviewsDataTag();
         $reviews = $datatag->getData(['courseId' => $course1['id'], 'count' => 5]);
-        $this->assertEquals(2, count($reviews));
+        $this->assertEquals(1, count($reviews));
     }
 
     public function getReviewService()
