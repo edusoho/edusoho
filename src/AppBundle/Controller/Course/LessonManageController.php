@@ -89,7 +89,7 @@ class LessonManageController extends BaseController
             'course-manage/batch-create/batch-create-modal.html.twig',
             [
                 'token' => $token,
-                'targetType' => $params['targetType'],
+                'targetType' => 'course-batch-create-lesson',
                 'courseId' => $courseId,
                 'mode' => $mode,
                 'enableLessonCount' => $enableLessonCount,
