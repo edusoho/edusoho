@@ -3,12 +3,12 @@
 
 {% block title %}{{'my.teaching.page_title'|trans}} - {{ parent() }}{% endblock %}
 
-{% set side_nav = 'my-teaching-courses' %}
+{% set side_nav = 'my-teaching-open-courses' %}
 
 {% set type = "question" %}
 
 {% block main %}
-  {% include 'my/teaching/course-type-select.html.twig' %}
+  {% include 'my/teaching/open-course-type-select.html.twig' %}
 
   {% for course in courses %}
     <div class="open-course-item">

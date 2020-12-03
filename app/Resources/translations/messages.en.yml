@@ -3440,6 +3440,7 @@ my.teaching.live_schedule_menu: Teaching Schedules
 my.teaching.hints_block: Only live courses are shown currently
 my.teaching.today_courses: 'Number of courses today'
 my.teaching.classroom_menu: Class
+my.teaching.open_course_menu: Open Course
 my.teaching.classroom.studen_count: Students
 my.teaching.classroom.course_count: Courses
 my.teaching.question_menu: 'Q&A'
