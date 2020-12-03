@@ -7,6 +7,7 @@ class BatchCreate {
     this.uploader = null;
     this.files = [];
     this.$sortable = $('#sortable-list');
+    this.fileIds = [];
     this.init();
   }
 
@@ -47,9 +48,12 @@ class BatchCreate {
 
   initEvent() {
     let self = this;
-    self.status = true;
     $('.js-upload-params').on('change', (event) => {
       this.uploader.setProcess(this.getUploadProcess());
+    });
+
+    $('[data-toggle="popover"]').popover({
+      html: true,
     });
 
     $('.js-batch-create-lesson-btn').on('click', (event) => {
@@ -66,28 +70,18 @@ class BatchCreate {
         return;
       }
 
-      //Select
-      if (!$('#material li:first').hasClass('active')){
-        $('.js-batch-create-content').find('input[data-role="batch-item"]:checked').map((index, event, array) => {
-          let fileId = $(event).parents('.file-browser-item').data('id');
-          if (!this.validLessonType($btn, fileId)) {
-            self.status = false;
-            $('.active').find('#material-table-tr-'+fileId).css('color', 'red');
-          }
-        });
-      }
-      //Upload
-      else {
-        this.files.map((file, index) => {
-          if (!this.validLessonType($btn, file['no'])) {
-            self.status = false;
-            $('.active').find('#WU_FILE_'+$selectLength).css('color', 'red');
-          }
-        });
-      }
+      $('.js-batch-create-content').find('input[data-role="batch-item"]:checked').map((index, event, array) => {
+        let fileId = $(event).parents('.file-browser-item').data('id');
+        this.fileIds.push(fileId);
+      });
 
-      if (!self.status){
-        return false;
+      let data = this.validLessonType($btn, this.fileIds);
+      if (!data.status) {
+        for (let i = 0; i < data.invalidFileIds.length; i++) {
+          $('.active').find('#material-table-tr-' + data.invalidFileIds[i]).css('color', 'red');
+        }
+        notify('danger', Translator.trans('uploader.file.unsupported.type'));
+        return;
       }
 
       if ($selectLength > 0) {
@@ -97,10 +91,6 @@ class BatchCreate {
         self.submitUploaderFile($btn);
       }
 
-    });
-
-    $('[data-toggle="popover"]').popover({
-      html: true,
     });
 
     $('.js-batch-create-content').on('click', '[data-role=batch-select]', function () {
@@ -188,26 +178,23 @@ class BatchCreate {
     return valid;
   }
 
-  validLessonType($btn, fileId) {
+  validLessonType($btn, fileIds) {
     let valid = true;
     $.ajax({
       type: 'post',
       url: $btn.data('typeUrl'),
+      dataType: 'json',
       async: false,
       data: {
-        fileId: fileId
+        fileIds: fileIds
       },
       success: function (response) {
-        if (response && response.error) {
-          notify('danger', response.error);
-          $btn.button('reset');
-          valid = false;
-        } else {
-          valid = true;
-        }
+        $btn.button('reset');
+        self.response = response;
       }
     });
-    return valid;
+    this.fileIds = [];
+    return self.response;
   }
 
   createLesson($btn, fileId, isLast) {
