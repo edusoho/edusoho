@@ -10,7 +10,7 @@
                 </span>
                 <span v-if="buyViewMode === 'btn'">
                     <a :class="btnClass"
-                       v-if="!needBuyVip"
+                       v-if="!needBuyVip || (needBuyVip && parseInt(sku.buyable))"
                        class="goods-btn-hover pull-right"
                        @click="buySku">
                         <slot>{{ buyViewText }}</slot>
@@ -25,7 +25,7 @@
                           :data-content="vipBtnTips(sku)">
                         <slot>{{ 'goods.show_page.vip_free_learn'|trans }}</slot>
                     </span>
-                    <span v-if="!sku.isMember && goods.type === 'classroom' && sku.buyable && isShow">
+                    <span v-if="!sku.isMember && goods.type === 'classroom' && parseInt(sku.buyable) && isShow">
                         <a class="btn btn-link pull-right" style="margin-top:8px;" :href="`/classroom/${sku.targetId}/becomeAuditor`">{{ 'classroom.go_inside'|trans }}</a>
                     </span>
                 </span>
@@ -54,7 +54,7 @@
             return {
                 buyViewMode : '', //btn text
                 buyViewText : '',
-                needBuyVip : false,
+                needBuyVip : 0,
             }
         },
         props: {
@@ -144,9 +144,10 @@
                     this.buyViewMode = 'btn';
                     if (sku.vipUser && sku.vipLevelInfo.seq <= sku.vipUser.level.seq && parseInt(sku.vipUser.deadline) * 1000 > new Date().getTime()) {
                         this.buyViewText = Translator.trans('goods.show_page.vip_free_learn');
-                        this.needBuyVip = false;
+                        this.needBuyVip = 0;
                     } else {
-                        this.needBuyVip = true;
+                        this.needBuyVip = 1;
+                        this.buyViewText = sku.displayPrice == 0 ? Translator.trans('goods.show_page.free_join_btn') : Translator.trans('goods.show_page.buy_btn');
                     }
                 } else if (sku.buyable != 1) {  // 已发布，但是未开放购买
                     this.buyViewMode = 'text';
