@@ -312,7 +312,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $newCourse = $this->validateExpiryMode($newCourse);
         $course = $this->biz['course_copy']->copy($sourceCourse, $newCourse);
 
-        $this->getLogService()->info(AppLoggerConstant::COURSE, 'copy_course', "复制教学计划 - {$sourceCourse['title']}(#{$sourceCourse['id']}) 成功", ['courseId' => $sourceCourse['id']]);
+        $this->getLogService()->info(AppLoggerConstant::COURSE, 'copy_course', "复制教学计划 - 源课程：{$sourceCourse['title']}(#{$sourceCourse['id']}) - 新课程：{$course['title']}(#{$course['id']}) - 成功", ['sourceCourseId' => $sourceCourse['id'], 'newCourseId' => $course['id']]);
 
         return $course;
     }
