@@ -15,6 +15,7 @@ class WechatFormItemTest extends BaseTestCase
                 "field": "wechat",
                 "group": "contact",
                 "value": "abc123",
+                "required": true,
                 "validate": [
                     {
                         "required": true,

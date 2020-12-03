@@ -3,6 +3,7 @@
 namespace ApiBundle\Api\Resource\Trade\Factory;
 
 use Biz\Common\CommonException;
+use PayPalPlugin\Api\Resource\Trade\Factory\PayPalTrade;
 
 class TradeFactory
 {
@@ -48,6 +49,9 @@ class TradeFactory
                 break;
             case 'Alipay_LegacyH5':
                 $tradeInstance = new AlipayLegacyH5Trade();
+                break;
+            case 'PayPal':
+                $tradeInstance = new PayPalTrade();
                 break;
             default:
                 throw CommonException::ERROR_PARAMETER();

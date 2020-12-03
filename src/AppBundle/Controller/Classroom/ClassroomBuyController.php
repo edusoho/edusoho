@@ -29,7 +29,7 @@ class ClassroomBuyController extends BuyFlowController
 
     protected function getSuccessUrl($id)
     {
-        return $this->generateUrl('classroom_courses', array('classroomId' => $id));
+        return $this->generateUrl('classroom_courses', ['classroomId' => $id]);
     }
 
     protected function isJoined($id)
@@ -37,6 +37,46 @@ class ClassroomBuyController extends BuyFlowController
         $user = $this->getUser();
 
         return $this->getClassroomService()->isClassroomStudent($id, $user['id']);
+    }
+
+    protected function needInformationCollectionBeforeJoin($targetId)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($targetId);
+        if ((0 != $classroom['price']) && !$classroom['vipLevelId']) {
+            return [];
+        }
+
+        $event = $this->getInformationCollectEventService()->getEventByActionAndLocation('buy_before', ['targetType' => 'classroom', 'targetId' => $targetId]);
+        if (empty($event)) {
+            return [];
+        }
+
+        $url = $this->generateUrl('information_collect_event', [
+            'eventId' => $event['id'],
+            'goto' => $this->generateUrl('classroom_buy', ['id' => $targetId]),
+        ]);
+
+        return [$event['id'], 'url' => $url];
+    }
+
+    protected function needInformationCollectionAfterJoin($targetId)
+    {
+        $event = $this->getInformationCollectEventService()->getEventByActionAndLocation('buy_after', ['targetType' => 'classroom', 'targetId' => $targetId]);
+        if (empty($event)) {
+            return [];
+        }
+
+        $url = $this->generateUrl('information_collect_event', [
+            'eventId' => $event['id'],
+            'goto' => $this->getSuccessUrl($targetId),
+        ]);
+
+        return [$event['id'], 'url' => $url];
+    }
+
+    protected function getInformationCollectEventService()
+    {
+        return $this->createService('InformationCollect:EventService');
     }
 
     /**

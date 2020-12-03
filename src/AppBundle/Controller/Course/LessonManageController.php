@@ -59,7 +59,7 @@ class LessonManageController extends BaseController
             $fileId = $request->request->get('fileId');
             $file = $this->getUploadFileService()->getFile($fileId);
 
-            if (!in_array($file['type'], ['document', 'video', 'audio', 'ppt', 'flash'])) {
+            if (!in_array($file['type'], ['document', 'video', 'audio', 'ppt'])) {
                 return $this->createJsonResponse(['error' => '不支持的文件类型']);
             }
             $formData = $this->createTaskByFileAndCourse($file, $course);

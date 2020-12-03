@@ -15,6 +15,7 @@ class InterestFormItemTest extends BaseTestCase
                 "field": "interest",
                 "value": "篮球",
                 "group": "other",
+                "required": true,
                 "validate": [
                     {
                         "required": true,

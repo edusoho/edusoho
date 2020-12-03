@@ -15,6 +15,7 @@ class CompanyFormItemTest extends BaseTestCase
                 "field": "company",
                 "group": "company",
                 "value": "杭州阔知网络有限公司",
+                "required": true,
                 "validate": [
                     {
                         "required": true,

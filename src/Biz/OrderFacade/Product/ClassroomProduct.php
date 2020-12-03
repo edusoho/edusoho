@@ -50,14 +50,22 @@ class ClassroomProduct extends BaseGoodsProduct implements OrderStatusCallback
         $classroom = $this->getClassroomService()->getClassroom($goodsSpecs['targetId']);
         $this->classroom = $classroom;
 
+        //原有选项
+        $this->middlePicture = $classroom['middlePicture'];
+        $this->maxRate = $classroom['maxRate'];
+
         //供PC端返回商品页面用，商品剥离改造之前是班级概览页，现在是商品页
         $this->backUrl = ['routing' => 'goods_show', 'params' => ['id' => $goodsSpecs['goodsId']]];
 
         //供支付成功后页面的跳转链接，改造前和改造后保持一致
-        $this->successUrl = ['classroom_show', ['id' => $goodsSpecs['targetId']]];
+        $this->successUrl = $this->getSuccessUrl();
 
         $this->title = $goodsSpecs['title'];
-        $this->cover = empty($goodsSpecs['images']) ? $goods['images'] : $goodsSpecs['images'];
+        $this->cover = [
+            'small' => $classroom['smallPicture'],
+            'middle' => $classroom['middlePicture'],
+            'large' => $classroom['largePicture'],
+        ];
 
         //改造之前是班级发布才能购买。现在是商品和规格都发布才是可购买
         $this->productEnable = 'published' === $goods['status'] && 'published' === $goodsSpecs['status'];
@@ -157,6 +165,20 @@ class ClassroomProduct extends BaseGoodsProduct implements OrderStatusCallback
         return $this->getClassroomService()->getClassroom($goodsSpecs['targetId']);
     }
 
+    protected function getSuccessUrl()
+    {
+        $event = $this->getInformationCollectEventService()->getEventByActionAndLocation('buy_after', [
+            'targetType' => $this->targetType,
+            'targetId' => $this->targetId,
+        ]);
+
+        if (empty($event)) {
+            return ['classroom_show', ['id' => $this->targetId]];
+        }
+
+        return ['information_collect_event', ['eventId' => $event['id'], 'goto' => $this->generateUrl('classroom_show', ['id' => $this->targetId])]];
+    }
+
     protected function getMemberOperationService()
     {
         return $this->biz->service('MemberOperation:MemberOperationService');
@@ -173,5 +195,10 @@ class ClassroomProduct extends BaseGoodsProduct implements OrderStatusCallback
     protected function getSettingService()
     {
         return $this->biz->service('System:SettingService');
+    }
+
+    private function getInformationCollectEventService()
+    {
+        return $this->biz->service('InformationCollect:EventService');
     }
 }

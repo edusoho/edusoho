@@ -18,6 +18,7 @@ class AgeFormItem extends FormItem
             'field' => self::FIELD,
             'value' => $this->value,
             'group' => self::BASE_INFO_GROUP,
+            'required' => $this->required,
             'props' => [
                 'type' => 'number',
             ],

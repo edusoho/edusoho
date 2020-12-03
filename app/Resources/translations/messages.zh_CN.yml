@@ -588,6 +588,7 @@ order.confirm.exchange_rate: (1元 = %cashRate%%coin_name%）
 order.confirm.use_tips: 本次使用
 order.confirm.price: 商品价格
 order.confirm.bought_course_deduction: 已购课程抵扣
+order.confirm.information-collect-title: 信息采集
 order.adjust_price_btn: 改价
 order.before_adjust_price: 订单原价
 order.adjust_price_modal_title: 订单改价
@@ -9008,6 +9009,7 @@ log.action.course.sync_when_task_create: 同步创建任务
 log.action.course.sync_when_task_update: 同步更新任务
 log.action.course.sync_when_task_delete: 同步删除任务
 log.action.course.clone_course_set: 复制课程
+log.action.course.copy_course: 复制教学计划
 log.action.course.unlock_course: 解除课程同步
 log.action.course.create_course: 创建教学计划
 log.action.course.update_course: 修改教学计划
@@ -11328,6 +11330,9 @@ exception.goods.not_found: 商品未找到
 exception.specs.not_found: 商品规格未找到
 exception.goods.forbidden_manage: 无管理商品权限
 exception.s2b2c_product.adopt_failed: 采用失败，内容正在编辑中，请稍后再试
+goods.minimum_price.unit: %price%%unit%起
+goods.origin_price.unit: %price%%unit%
+goods.description: 商品介绍
 
 goods.minimum_price.unit: %price%%unit%起
 goods.origin_price.unit: %price%%unit%
@@ -11380,3 +11385,7 @@ admin_v2.information_collect.form_items.select_group.company_info: 公司信息
 admin_v2.information_collect.form_items.select_group.school_info: 学校信息
 admin_v2.information_collect.form_items.select_group.other_info: 其它信息
 admin_v2.information_collect.form_items.confirm_submit: 确认提交
+information_collect.title: 用户信息采集
+information_collect.form_items.confirm_submit: 确认提交
+information_collect.form_items.skip: 跳过
+information_collect.select_placeholeder: 请选择

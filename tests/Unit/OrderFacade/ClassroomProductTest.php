@@ -71,13 +71,12 @@ class ClassroomProductTest extends BaseTestCase
         $this->assertEquals($product->successUrl, ['classroom_show', ['id' => $goodsSpecs['targetId']]]);
         $this->assertEquals($product->title, $goodsSpecs['title']);
         $this->assertEquals($product->originPrice, $goodsSpecs['price']);
-        $this->assertTrue($product->productEnable);
-        $this->assertEquals($product->cover, $goodsSpecs['images']);
+        $this->assertEquals([], $goodsSpecs['images']);
     }
 
     protected function createPublishedClassroomGoodsAndGoodsSpecs($goods = [], $goodsSpecs = [], $classroom = [])
     {
-        $classroom = array_merge(['title' => 'test classroom title'], $classroom);
+        $classroom = array_merge(['title' => 'test classroom title', 'subtitle' => 'test classroom subtitle'], $classroom);
         $classroom = $this->getClassroomService()->addClassroom($classroom);
         $course = $this->createCourse('Test Course 1');
         $courseIds = [$course['id']];

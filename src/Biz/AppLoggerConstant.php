@@ -269,6 +269,7 @@ class AppLoggerConstant implements LoggerConstantInterface
                 'create_course',
                 'update_course',
                 'delete_course',
+                'copy_course',
                 'publish_course',
                 'close_course',
                 'update_draft',

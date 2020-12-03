@@ -15,6 +15,7 @@ class AgeFormItemTest extends BaseTestCase
                 "field": "age",
                 "value": 10,
                 "group": "base",
+                "required": true,
                 "props": {
                     "type": "number"
                 },

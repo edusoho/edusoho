@@ -176,7 +176,9 @@
                     categoryId: this.course.categoryId,
                     serializeMode: this.course.serializeMode,
                     orgCode: this.course.orgCode,
-                    summary: this.courseSet.summary
+                    summary: this.courseSet.summary,
+                    title: this.courseSet.title,
+                    subtitle: this.courseSet.subtitle,
                 });
 
                 this.getUploadImageTemplate();

@@ -67,7 +67,7 @@
                     <div class="plan-title pull-left">{{ 'site.course_plan'|trans }}</div>
                     <div class="plan-btns pull-right">
                         <span class="plan-btns__item" v-for="plan in goods.specs" :key="plan.id"
-                            :class="{ active: plan.active }" @click="handleClick(plan)">{{ plan.title }}</span>
+                            :class="{ active: plan.active }" @click="handleClick(plan)">{{ plan.title|transSpecsTitle(goods.type) }}</span>
                     </div>
                 </div>
 
@@ -231,6 +231,12 @@
                     .replace(/&lt;/g, '<')
                     .replace(/<[\w\s"':=\/]*/, '');
             },
+            transSpecsTitle(specsTitle, goodsType) {
+                if ('course' === goodsType && '' == specsTitle) {
+                    return Translator.trans('course.unname_title');
+                } 
+                return specsTitle;
+            }
         },
         data() {
             return {

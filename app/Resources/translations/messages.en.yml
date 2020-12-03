@@ -502,6 +502,7 @@ order.confirm.exchange_rate: '1 CNY = %cashRate%%coin_name%）'
 order.confirm.use_tips: 'Used this time'
 order.confirm.price: Product price
 order.confirm.bought_course_deduction: 'Purchased course deduction'
+order.confirm.information-collect-title: Information collect
 order.adjust_price_btn: 'Change price'
 order.adjust_price_modal_title: 'Change order price'
 order.adjust_price_modal.hint: 'Please fill the discount in inputbox'
@@ -7819,6 +7820,7 @@ log.action.course.sync_when_task_update: 'Sync task updating'
 log.action.course.sync_when_task_delete: 'Sync task deletion'
 log.action.course.clone_course_set: 'Copy course'
 log.action.course.unlock_course: 'Unlock course sync'
+log.action.course.copy_course: 'copy teaching plan'
 log.action.course.create_course: Create teaching plan
 log.action.course.update_course: Update teaching plan
 log.action.course.delete_course: Delete teaching plan
@@ -10079,7 +10081,6 @@ user.certificates.cart_detail_btn: View get path
 
 admin_v2.information_collect.create: Create
 admin_v2.information_collect.update: Edit
-admin_v2.information_collect.edit.title_info: The current version of the client only supports the new version of micro school
 admin_v2.information_collect.edit.title: Title
 admin_v2.information_collect.edit.action: Action
 admin_v2.information_collect.edit.action_before: Before Course/Classroom Pay
@@ -10119,7 +10120,9 @@ admin_v2.information_collect.form_items.select_group.school_info: School Info
 admin_v2.information_collect.form_items.select_group.other_info: Other
 admin_v2.information_collect.form_items.confirm_submit: Submit
 
-
-
+information_collect.title: Information Collect
+information_collect.form_items.confirm_submit: Submit
+information_collect.form_items.skip: Skip
+information_collect.select_placeholeder: Choose
 
 

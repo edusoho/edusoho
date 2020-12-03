@@ -42,12 +42,14 @@ class PageClassroom extends AbstractResource
         $this->getOCUtil()->multiple($classroom['courses'], ['courseSetId'], 'courseSet');
         $this->getOCUtil()->multiple($classroom['courses'], ['creator', 'teacherIds']);
 
+        $classroom['myReview'] = $this->getMyReview($classroom, $user);
+
         $reviewResult = $this->invokeResource(new ApiRequest(
             '/api/review',
             'GET',
             [
-                'targetType' => 'classroom',
-                'targetId' => $classroomId,
+                'targetType' => 'goods',
+                'targetId' => $classroom['goodsId'],
                 'parentId' => 0,
                 'offset' => 0,
                 'limit' => self::DEFAULT_DISPLAY_COUNT,
@@ -62,6 +64,27 @@ class PageClassroom extends AbstractResource
         }
 
         return $classroom;
+    }
+
+    private function getMyReview($classroom, $user)
+    {
+        if (empty($user['id'])) {
+            return null;
+        }
+        $myReviewResult = $this->invokeResource(new ApiRequest(
+            '/api/review',
+            'GET',
+            [
+                'targetType' => 'goods',
+                'targetId' => $classroom['goodsId'],
+                'userId' => $user['id'],
+                'parentId' => 0,
+                'offset' => 0,
+                'limit' => self::DEFAULT_DISPLAY_COUNT,
+            ]
+        ));
+
+        return empty($myReviewResult['data']) ? null : reset($myReviewResult['data']);
     }
 
     private function mergeProfile(&$user)

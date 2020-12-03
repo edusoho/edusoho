@@ -15,6 +15,7 @@ class SchoolFormItemTest extends BaseTestCase
                 "field": "school",
                 "group": "school",
                 "value": "浙江大学",
+                "required": true,
                 "validate": [
                     {
                         "required": true,
