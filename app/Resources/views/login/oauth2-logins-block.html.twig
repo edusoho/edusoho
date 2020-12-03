@@ -17,9 +17,15 @@
       <i class="es-icon es-icon-{{ client.icon_class }}"></i>
     </a>
   {% elseif type in ['weixinweb', 'weixinmob'] %}
-    <a href="{{ path('login_bind', {type: type, _target_path:targetPath|default(''),inviteCode:app.request.get('inviteCode', '')}) }}" class="social-icon social-{{ client.icon_class|default('weixin') }} {% if not is_micro_messenger()|default(false) and type == 'weixinmob' %}hidden{% endif %}">
-      <i class="es-icon es-icon-{{ client.icon_class|default('weixin') }}"></i>
-    </a>
+    {% if is_micro_messenger()|default(false) %}
+      <a href="{{ path('login_bind', {type: type, _target_path:targetPath|default(''),inviteCode:app.request.get('inviteCode', '')}) }}" class="social-icon social-{{ client.icon_class|default('weixin') }} {% if type == 'weixinweb' %}hidden{% endif %}">
+        <i class="es-icon es-icon-{{ client.icon_class|default('weixin') }}"></i>
+      </a>
+    {% else %}
+      <a href="{{ path('login_bind', {type: type, _target_path:targetPath|default(''),inviteCode:app.request.get('inviteCode', '')}) }}" class="social-icon social-{{ client.icon_class|default('weixin') }} {% if type == 'weixinmob' %}hidden{% endif %}">
+        <i class="es-icon es-icon-{{ client.icon_class|default('weixin') }}"></i>
+      </a>
+    {% endif %}
   {% else %}
     {% set otherClients = otherClients|merge({(type):client}) %}
   {% endif %}
