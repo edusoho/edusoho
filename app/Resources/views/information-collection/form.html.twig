@@ -1,0 +1,27 @@
+{% do script(['libs/jquery-validation.js', 'libs/province-city-area.js', 'libs/select2.js', 'libs/bootstrap-datetimepicker.js', 'app/js/information-collect/form/index.js'])%}
+
+<form id="infomation-collect-form" class="form-horizontal information-collect-form">
+	<div class="row mbm">
+		<h4 class="text-center">{{event.formTitle|default('')}}</h4>
+	</div>
+	<input type="hidden" name="eventId" value="{{ event.eventId }}"/>
+	{% for item in event.items %}
+		<div class="form-group">
+			<div class="col-md-3 control-label">
+				<label class="{% if item.required %}label-required{% endif %}" for="{{ item.field }}">{{ item.title }}</label>
+			</div>
+			<div class="controls col-md-8 controls">
+				{% set template = "information-collection/components/"~item.type~"-type.html.twig" %}
+				{% include template  with {name: item.field, value: item.value ,required: item.required, props: item.props|default([]), options: item.options|default([])} %}
+			</div>
+		</div>
+	{% endfor %}
+	<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+	<input type="hidden" name="in_order" value="{{ inOrder|default('0') }}">
+	<div class="row">
+		<button type="button" class="cd-btn cd-btn-primary js-btn-save col-sm-6 col-sm-offset-3" data-goto="{{ goto|default('/') }}">{{'information_collect.form_items.confirm_submit'|trans}}</button>
+		{% if event.allowSkip|default(0) %}
+			<a class="cd-btn cd-btn-link-primary js-btn-skip col-sm-6 col-sm-offset-3 mts" id="skip">{{'information_collect.form_items.skip'|trans}}</a>
+		{% endif %}
+	</div>
+</form>

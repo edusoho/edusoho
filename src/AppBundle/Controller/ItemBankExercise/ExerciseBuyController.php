@@ -31,6 +31,16 @@ class ExerciseBuyController extends BuyFlowController
         $this->getExerciseService()->freeJoinExercise($id);
     }
 
+    protected function needInformationCollectionBeforeJoin($targetId)
+    {
+        return [];
+    }
+
+    protected function needInformationCollectionAfterJoin($targetId)
+    {
+        return [];
+    }
+
     /**
      * @return ExerciseService
      */

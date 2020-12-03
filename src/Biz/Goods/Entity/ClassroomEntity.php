@@ -105,6 +105,17 @@ class ClassroomEntity extends BaseGoodsEntity
         return [null, $vipUser];
     }
 
+    public function canVipFreeJoin($goods, $specs, $userId)
+    {
+        if (!$this->isPluginInstalled('vip')) {
+            return false;
+        }
+        $classroom = $this->getClassroomService()->getClassroom($specs['targetId']);
+        $status = $this->getVipService()->checkUserInMemberLevel($userId, $classroom['vipLevelId']);
+
+        return 'ok' === $status;
+    }
+
     public function getSpecsTeacherIds($goods, $specs)
     {
         return $this->getClassroomService()->findTeachers($specs['targetId']);

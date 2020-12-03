@@ -2,9 +2,9 @@
 
 namespace AppBundle\Extensions\DataTag;
 
-use Biz\Course\Service\CourseService;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\ExtensionManager;
+use Biz\Course\Service\CourseService;
 
 class LatestStatusesDataTag extends BaseDataTag implements DataTag
 {
@@ -23,15 +23,16 @@ class LatestStatusesDataTag extends BaseDataTag implements DataTag
      */
     public function getData(array $arguments)
     {
-        $conditions = array();
-        if (isset($arguments['private']) && $arguments['private'] == 0) {
+        $conditions = [];
+        if (isset($arguments['private']) && 0 == $arguments['private']) {
             $conditions['private'] = 0;
         }
+        $orderBys = ['createdTime' => 'DESC'];
 
         if (isset($arguments['objectType']) && isset($arguments['objectId'])) {
-            if ($arguments['objectType'] == 'course') {
-                $conditions['courseIds'] = array($arguments['objectId']);
-            } elseif ($arguments['objectType'] == 'courseSet') {
+            if ('course' == $arguments['objectType']) {
+                $conditions['courseIds'] = [$arguments['objectId']];
+            } elseif ('courseSet' == $arguments['objectType']) {
                 $courses = $this->getCourseService()->findCoursesByCourseSetId($arguments['objectId']);
                 $conditions['courseIds'] = ArrayToolkit::column($courses, 'id');
             } else {
@@ -46,10 +47,14 @@ class LatestStatusesDataTag extends BaseDataTag implements DataTag
             }
         }
 
-        $statuses = $this->getStatusService()->searchStatuses($conditions, array('createdTime' => 'DESC'), 0, $arguments['count']);
+        if (!empty($conditions['courseIds'])) {
+            $orderBys = ['createdTime' => 'DESC', 'courseId' => 'ASC'];
+        }
+
+        $statuses = $this->getStatusService()->searchStatuses($conditions, $orderBys, 0, $arguments['count']);
 
         if (empty($statuses)) {
-            return array();
+            return [];
         }
 
         $userIds = ArrayToolkit::column($statuses, 'userId');

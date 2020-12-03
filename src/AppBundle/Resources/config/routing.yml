@@ -1839,6 +1839,11 @@ course_manage_lesson_valid_num:
     defaults: { _controller: AppBundle:Course/LessonManage:validLessonNum }
     methods: [POST]
 
+course_manage_lesson_valid_type:
+    path: /course/lesson/valid_type
+    defaults: { _controller: AppBundle:Course/LessonManage:validLessonType }
+    methods: [POST]
+
 course_manage_lesson_update:
     path:  /course/{courseId}/lesson/{lessonId}/update
     defaults: { _controller: AppBundle:Course/LessonManage:update }
@@ -2696,7 +2701,6 @@ classroom_introductions:
 classroom_buy:
     path: /classroom/{id}/buy
     defaults: { _controller: AppBundle:Classroom/ClassroomBuy:buy }
-    methods: [POST]
 
 classroom_sign:
     path:  classroom/sign/{classroomId}
@@ -2963,7 +2967,6 @@ course_member_deadline_reach:
 course_buy:
     path: /course/{id}/buy
     defaults: { _controller: AppBundle:Course/CourseBuy:buy }
-    methods: [POST]
 
 course_order_repay:
     path:  /course/order/repay
@@ -3602,3 +3605,15 @@ certificate_image_download:
 certificate_detail:
   path: /certificate/{id}/detail
   defaults: { _controller: AppBundle:Certificate/Certificate:certificateDetail }
+
+information_collect_event:
+  path: /information_collect/event/{eventId}
+  defaults: { _controller: AppBundle:InformationCollect/InformationCollect:index }
+
+information_collect_event_form:
+  path: /information_collect/event/{eventId}/form
+  defaults: { _controller: AppBundle:InformationCollect/InformationCollect:eventForm }
+
+information_collect_event_modal:
+  path: /information_collect/event_modal/{eventId}
+  defaults: { _controller: AppBundle:InformationCollect/InformationCollect:indexModal }

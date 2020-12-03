@@ -1,4 +1,4 @@
-site.flash_not_install_hint: 您的浏览器可能存在未安装flash播放器，未开启flash播放器，flash低于11版本的情况，请先确认flash播放器能够正常使用。<a target="_blank" href="http://www.adobe.com/go/getflashplayer">flash设置与安装</a>
+site.flash_not_install_hint: 因Adobe Flash Player终止，各浏览器在2021年1月1日起升级的版本不再支持Flash技术，建议您使用更低版本浏览器；如低版本浏览器仍无法打开，请检查是否安装和开启了Flash播放器，<a target="_blank" href="http://www.adobe.com/go/getflashplayer">flash设置与安装</a>
 site.date_format_dhis: %days%天%hours%小时%minutes%分钟%seconds%秒
 site.date_format_his: %hours%小时%minutes%分钟%seconds%秒
 site.date_format_is: %minutes%分钟%seconds%秒
@@ -154,7 +154,7 @@ uploader.filelist.head.status: 状态
 uploader.filelist.head.operation: 操作
 uploader.select_one_file: 请至少选择一个文件上传
 uploader.file.exist: 这个文件已经被添加过了
-
+uploader.file.unsupported.type: 不支持的文件类型
 
 importer.import_verify_tips_start: 校验成功！一共包含
 importer.import_verify_tips_end: 条数据
@@ -653,6 +653,7 @@ order.create.use_price_coupon_hint: 优惠券可用，您当前使用的是抵�
 order.refund.reason_limit_hint: 退学原因的长度请小于或等于120。
 order.refund.reason_required_hint: 请输入退学原因。
 order.refund.reason_choose_hint: 请选择退学原因
+order.information_collect_error_hint: 请先提交信息后再提交订单
 
 settings.setup.set_success.hint: 设置帐号成功，正在跳转
 settings.setup.set_failed.hint: 设置帐号失败，请重试
@@ -1618,7 +1619,9 @@ admin_v2.information_collect.chooser.target_hint:  请选择课程/班级
 admin_v2.information_collect.chooser.target_course_hint: 请至少选择1个课程
 admin_v2.information_collect.chooser.target_classroom_hint: 请至少选择1个班级
 admin_v2.information_collect.chooser.items.hint: 请选择采集表单
-
+user.fields.gender_label: 性别
+information_collect.form.check_age_invalid: 年龄不在正常范围内
+information_collect.form.check_format_invalid: %display%格式错误
 
 course.marketing_setup: 营销设置
 site.currency.CNY: 元
@@ -1734,3 +1737,4 @@ goods.show_page.free_join_btn: 免费加入
 goods.show_page.buy_btn: 立即购买
 classroom.go_inside: 进去逛逛
 course.base.title.placeholder: 请输入课程标题
+course.unname_title: 未命名计划

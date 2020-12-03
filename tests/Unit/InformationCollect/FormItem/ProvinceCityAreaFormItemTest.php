@@ -15,6 +15,7 @@ class ProvinceCityAreaFormItemTest extends BaseTestCase
                 "field": "province_city_area",
                 "group": "contact",
                 "value": ["浙江省", "杭州市", "滨江区"],
+                "required": true,
                 "props": {
                     "options": [],
                     "placeholder": "请选择省市区县"

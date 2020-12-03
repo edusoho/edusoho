@@ -1,0 +1,81 @@
+.information-collect-form .control-border-unset {
+    border: none !important;
+    padding: 0 !important;
+}
+
+.information-collect-form .label-required {
+    position: relative;
+    &::after {
+      content: "*";
+      color: @brand-warning;
+    }
+}
+
+input:valid + .delete-content-btn {
+  display: block;
+}
+
+.information-collect-form .select-value {
+  padding: 5px 0px 4px !important;
+}
+
+textarea:valid + .delete-content-btn {
+  display: block;
+}
+
+.delete-content-btn {
+  display: none;
+  position: absolute;
+  cursor: pointer;
+  right: 24px;
+  top: 10px;
+  border-radius: 10px 10px;
+  background: #CECECE;
+  line-height: 0px;
+  color: #fff;
+}
+
+.delete-content-btn .cd-icon {
+  font-size: 14px;
+}
+
+.information-collect-form .cd-btn-link-primary {
+  color: #666666 !important;
+}
+
+.information-collect-form .cd-btn-link-primary:hover {
+  background: unset !important;
+  cursor: pointer;
+}
+
+.information-collect-form .form-control {
+  border-radius: 4px !important;
+}
+
+.information-collect-form .input-group .form-control {
+  border-radius: 0 4px 4px 0 !important;
+}
+
+.information-collect-form .form-control {
+  padding-right: 35px;
+}
+
+.phone-input-before {
+  position: absolute;
+  left: 25px;
+  top: 6px;
+  padding-right: 12px;
+  border-right: solid 1px #e1e1e1;
+}
+
+.phone-input-before + input {
+  padding-left: 60px;
+}
+
+.cascader-select {
+  display: inline-flex;
+}
+
+.cascader-select .cd-select {
+  width: 33%;
+}
