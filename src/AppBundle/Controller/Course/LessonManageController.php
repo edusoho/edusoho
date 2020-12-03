@@ -89,7 +89,7 @@ class LessonManageController extends BaseController
             'course-manage/batch-create/batch-create-modal.html.twig',
             [
                 'token' => $token,
-                'targetType' => $params['targetType'],
+                'targetType' => 'course-batch-create-lesson',
                 'courseId' => $courseId,
                 'mode' => $mode,
                 'enableLessonCount' => $enableLessonCount,
@@ -107,6 +107,24 @@ class LessonManageController extends BaseController
         }
 
         return $this->createJsonResponse(['success' => true]);
+    }
+
+    public function validLessonTypeAction(Request $request)
+    {
+        $fileIds = $request->request->get('fileIds');
+        $files = $this->getUploadFileService()->findFilesByIds($fileIds);
+
+        foreach ($files as $file) {
+            if ('flash' == $file['type']) {
+                $invalidFileIds[] = $file['id'];
+            }
+        }
+
+        if (!empty($invalidFileIds)) {
+            return $this->createJsonResponse(['status' => false, 'invalidFileIds' => $invalidFileIds]);
+        }
+
+        return $this->createJsonResponse(['status' => true]);
     }
 
     public function updateAction(Request $request, $courseId, $lessonId)

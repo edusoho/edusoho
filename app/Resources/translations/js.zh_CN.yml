@@ -154,7 +154,7 @@ uploader.filelist.head.status: 状态
 uploader.filelist.head.operation: 操作
 uploader.select_one_file: 请至少选择一个文件上传
 uploader.file.exist: 这个文件已经被添加过了
-
+uploader.file.unsupported.type: 不支持的文件类型
 
 importer.import_verify_tips_start: 校验成功！一共包含
 importer.import_verify_tips_end: 条数据
