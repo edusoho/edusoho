@@ -515,7 +515,7 @@ admin_v2.course.item_bank_exercise.basic_tab.publish_submit_btn: Publish
 admin_v2.course.item_bank_exercise.basic_tab.delete_submit_btn: Delete
 
 #公开课模块
-admin_v2.course.open_course_menu:  Public Courses
+admin_v2.course.open_course_menu:  Normal Public Courses
 admin_v2.course.open_course.basic_tab: Open courses
 admin_v2.course.open_course.basic_tab.create_btn: Create
 admin_v2.course.open_course.recommend_list_tab: Recommended
@@ -660,6 +660,8 @@ admin_v2.operation.sensitive_words.sensitive_words_list_tab: Sensitive Words Lis
 admin_v2.operation.sensitive_words.sensitive_words_list_tab.create_btn: Add Sensitive Word
 admin_v2.operation.sensitive_words.banlogs_tab: Processing History
 
+#营销-公开课管理
+admin_v2.open_course.basic_group: Open Course
 
 #营销-营销管理
 admin_v2.marketing.basic_group: Marketing Manage

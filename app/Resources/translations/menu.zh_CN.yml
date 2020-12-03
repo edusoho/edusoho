@@ -510,7 +510,7 @@ admin_v2.course.item_bank_exercise.basic_tab.publish_submit_btn: 发布题库练
 admin_v2.course.item_bank_exercise.basic_tab.delete_submit_btn: 删除题库练习
 
 # 教学-课程管理-公开课模块
-admin_v2.course.open_course_menu: 公开课管理
+admin_v2.course.open_course_menu: 常规公开课
 admin_v2.course.open_course.basic_tab: 公开课管理
 admin_v2.course.open_course.basic_tab.create_btn: 创建公开课
 admin_v2.course.open_course.recommend_list_tab: 公开课推荐
@@ -658,6 +658,8 @@ admin_v2.operation.sensitive_words.sensitive_words_list_tab.create_btn: 添加�
 admin_v2.operation.sensitive_words.banlogs_tab: 屏蔽记录
 
 
+#营销-公开课管理
+admin_v2.open_course.basic_group: 公开课
 
 #营销-营销管理
 admin_v2.marketing.basic_group: 营销管理
