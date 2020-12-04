@@ -342,7 +342,7 @@
             <div class="course-about ellipsis">{{ courseSet.subtitle }}</div>
           {% endif %}
 
-          <div class="course-footer clearfix">
+          <div class="default-theme course-footer clearfix">
 
             {% set teacher = courseSet.teachers|first|default(null) %}
             {% if teacher %}
@@ -413,7 +413,7 @@
             <div class="course-about ellipsis">{{ course.subtitle }}</div>
           {% endif %}
 
-          <div class="course-footer clearfix">
+          <div class="default-theme course-footer clearfix">
 
             {% set teacher = course.teachers|first|default(null) %}
             {% if teacher %}
