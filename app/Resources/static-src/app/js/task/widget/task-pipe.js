@@ -319,6 +319,7 @@ export default class TaskPipe {
 
   removeSafariTimer() {
     let safariTimerIframe = document.querySelector('.safari-timer-iframe');
+    if (!safariTimerIframe) return;
     safariTimerIframe.parentNode.removeChild(safariTimerIframe);
   }
 }
