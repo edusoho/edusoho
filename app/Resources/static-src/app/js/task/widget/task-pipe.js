@@ -4,7 +4,7 @@ import 'postal.xframe';
 import DurationStorage from '../../../common/duration-storage';
 import MonitoringEvents from './monitoringEvents';
 import Api from 'common/api';
-import { isMobileDevice } from 'common/utils';
+import { Browser, isMobileDevice } from 'common/utils';
 
 export default class TaskPipe {
   constructor(element) {
@@ -103,8 +103,15 @@ export default class TaskPipe {
     //   }
     // });
 
-    this._clearInterval();
-    this.intervalId = setInterval(() => this._addPipeCounter(), 1000);
+    if (Browser.safari) {
+      this.removeSafariTimer();
+      this.addSafariTimer();
+      console.log('safariTimer');
+    } else {
+      this._clearInterval();
+      this.intervalId = setInterval(() => this._addPipeCounter(), 1000);
+      console.log('noSafariTimer');
+    }
   }
 
   _addPipeCounter() {
@@ -115,7 +122,11 @@ export default class TaskPipe {
   }
 
   _clearInterval() {
-    clearInterval(this.intervalId);
+    if (Browser.safari) {
+      this.removeSafariTimer();
+    } else {
+      clearInterval(this.intervalId);
+    }
   }
 
   _flush(param = {}) {
