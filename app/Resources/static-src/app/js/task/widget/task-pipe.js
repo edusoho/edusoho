@@ -304,6 +304,7 @@ export default class TaskPipe {
   addSafariTimer() {
     window.addEventListener('message', (e) => {
       if (e.data === 'refresh') {
+        console.log(this.taskPipeCounter);
         this._addPipeCounter();
       }
     }, false);
