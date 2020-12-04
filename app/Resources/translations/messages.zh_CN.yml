@@ -3989,6 +3989,7 @@ my.teaching.live_schedule_menu: 教学课表
 my.teaching.hints_block: (当前仅展示直播课程)
 my.teaching.today_courses: 今日课程数
 my.teaching.classroom_menu: 在教%classroom%
+my.teaching.open_course_menu: 公开课
 my.teaching.question_menu: 学员问答
 my.teaching.discussion_menu: 学员话题
 my.teaching.online_review_menu: 在线批阅
