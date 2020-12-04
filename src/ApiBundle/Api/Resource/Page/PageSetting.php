@@ -33,6 +33,9 @@ class PageSetting extends AbstractResource
         return $this->$method($portal, $mode);
     }
 
+    /**
+     * @ApiConf(isRequiredAuth=true)
+     */
     public function add(ApiRequest $request, $portal)
     {
         $mode = $request->query->get('mode');
@@ -55,26 +58,6 @@ class PageSetting extends AbstractResource
         return $this->$method($portal, $mode, $content);
     }
 
-    private function checkPermissionByPortal($portal)
-    {
-        $backstage = $this->getSettingService()->get('backstage', ['is_v2' => 0]);
-
-        $isAdminV2 = $backstage['is_v2'] ? true : false;
-        if ('h5' === $portal && $this->getCurrentUser()->hasPermission($isAdminV2 ? 'admin_v2_h5_set' : 'admin_h5_set')) {
-            return true;
-        }
-
-        if ('miniprogram' === $portal && $this->getCurrentUser()->hasPermission($isAdminV2 ? 'admin_v2_wechat_app_manage' : 'admin_wechat_app_manage')) {
-            return true;
-        }
-
-        if ('apps' === $portal && $this->getCurrentUser()->hasPermission($isAdminV2 ? 'admin_v2_setting_mobile' : 'admin_setting_mobile')) {
-            return true;
-        }
-
-        throw UserException::PERMISSION_DENIED();
-    }
-
     public function remove(ApiRequest $request, $portal, $type)
     {
         $mode = $request->query->get('mode');
@@ -93,6 +76,23 @@ class PageSetting extends AbstractResource
         $method = 'remove'.ucfirst($type);
 
         return $this->$method($portal, $mode);
+    }
+
+    private function checkPermissionByPortal($portal)
+    {
+        if ('h5' === $portal && (!$this->getCurrentUser()->hasPermission('admin_v2_h5_set') || !$this->getCurrentUser()->hasPermission('admin_h5_set'))) {
+            return true;
+        }
+
+        if ('miniprogram' === $portal && (!$this->getCurrentUser()->hasPermission('admin_v2_wechat_app_manage') || !$this->getCurrentUser()->hasPermission('admin_wechat_app_manage'))) {
+            return true;
+        }
+
+        if ('apps' === $portal && (!$this->getCurrentUser()->hasPermission('admin_v2_setting_mobile') || !$this->getCurrentUser()->hasPermission('admin_setting_mobile'))) {
+            return true;
+        }
+
+        throw UserException::PERMISSION_DENIED();
     }
 
     protected function addDiscovery($portal, $mode = 'draft', $content = [])

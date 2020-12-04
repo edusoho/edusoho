@@ -5,19 +5,17 @@ namespace ApiBundle\Api\Resource\MarketingActivity;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Marketing\MarketingAPIFactory;
-use Biz\System\Service\SettingService;
 use Biz\User\UserException;
 
 class MarketingActivity extends AbstractResource
 {
     /**
+     * @ApiConf(isRequiredAuth=true)
      * @return mixed
      */
     public function search(ApiRequest $request)
     {
-        $backstage = $this->getSettingService()->get('backstage', ['is_v2' => 0]);
-
-        if (!$this->getCurrentUser()->hasPermission($backstage['is_v2'] ? 'admin_v2_h5_set' : 'admin_h5_set')) {
+        if (!$this->getCurrentUser()->hasPermission('admin_v2_h5_set') || !$this->getCurrentUser()->hasPermission('admin_h5_set')) {
             throw UserException::PERMISSION_DENIED();
         }
 
@@ -53,13 +51,5 @@ class MarketingActivity extends AbstractResource
         );
 
         return $this->makePagingObject($pages['data'], $pages['paging']['total'], $offset, $limit);
-    }
-
-    /**
-     * @return SettingService
-     */
-    protected function getSettingService()
-    {
-        return $this->service('System:SettingService');
     }
 }
