@@ -29,6 +29,7 @@ export default class TaskPipe {
     this.record = {};
     this.pushing = false;
     this.absorbed = 0;
+    this.lastTimestamp = 0;
 
     if (this.eventUrl === undefined) {
       throw Error('task event url is undefined');
@@ -49,6 +50,10 @@ export default class TaskPipe {
     }
 
     this.MonitoringEvents = null;
+    
+    if (Browser.safari && !isMobileDevice()) {
+      this.safariVisibilitychange();
+    }
   }
 
   _registerChannel() {
@@ -81,33 +86,21 @@ export default class TaskPipe {
 
   _initInterval() {
     this._flush();
-    // window.addEventListener('beforeunload', () =>{
-    //   this._clearInterval();
-    //   // this._flush({ type: 'beforeunload' });
-    //   if (this.sign.length > 0) {
-    //     localStorage.setItem('flowSign', this.sign);
-    //   }
-    // });
+    
     window.onbeforeunload = () => {
       this._clearInterval();
-      // this._flush({ type: 'beforeunload' });
+      this._flush();
       if (this.sign.length > 0) {
         localStorage.setItem('flowSign', this.sign);
       }
     };
-    // window.addEventListener('pagehide', () => {
-    //   this._clearInterval();
-    //   // this._flush({ type: 'beforeunload' });
-    //   if (this.sign.length > 0) {
-    //     localStorage.setItem('flowSign', this.sign);
-    //   }
-    // });
 
     this._clearInterval();
     this.intervalId = setInterval(() => this._addPipeCounter(), 1000);
   }
 
   _addPipeCounter() {
+    console.log(this.taskPipeCounter);
     this.taskPipeCounter++;
     if (this.taskPipeCounter >= this.TASK_PIPE_INTERNAL) {
       this._flush();
@@ -249,6 +242,7 @@ export default class TaskPipe {
       this.pushing = false;
       this.record = res.record;
       this.taskPipeCounter = 0;
+      this.lastTimestamp = new Date().getTime();
       if (!res.learnControl.allowLearn && res.learnControl.denyReason === 'kick_previous') {
         this.MonitoringEvents.triggerEvent('kick_previous');
       } else if (!res.learnControl.allowLearn && res.learnControl.denyReason === 'reject_current') {
@@ -288,5 +282,17 @@ export default class TaskPipe {
 
   absorbedChange(n) {
     this.absorbed = n;
+  }
+
+  safariVisibilitychange() {
+    document.addEventListener('visibilitychange', () => {
+      let status = document.visibilityState;
+      if (status === 'hidden') {
+        this._clearInterval();
+      } else if(status === 'visible') {
+        this.taskPipeCounter = Math.round((new Date().getTime() - this.lastTimestamp) / 1000);
+        this.intervalId = setInterval(() => this._addPipeCounter(), 1000);
+      }
+    });
   }
 }
