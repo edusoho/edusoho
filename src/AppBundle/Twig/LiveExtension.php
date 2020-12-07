@@ -98,7 +98,7 @@ class LiveExtension extends \Twig_Extension
 
             $self = $this;
             $replays = array_map(function ($replay) use ($activity, $self) {
-                $replay['url'] = $self->generateUrl('live_activity_replay_entry', [
+                $replay['url'] = $self->generateUrl('custom_live_activity_replay_entry', [
                     'courseId' => $activity['fromCourseId'],
                     'activityId' => $activity['id'],
                     'replayId' => $replay['id'],
