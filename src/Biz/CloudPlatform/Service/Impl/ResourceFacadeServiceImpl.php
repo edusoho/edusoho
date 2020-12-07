@@ -33,7 +33,7 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
             $payload['preview'] = $options['watchLimitTime'];
         }
         if (!empty($options['playAudio'])) {
-            $payload['playAudio'] = (int)$options['playAudio'];
+            $payload['playAudio'] = (int) $options['playAudio'];
         }
         if (!$this->isHiddenVideoHeader()) {
             // 加入片头信息
