@@ -50,7 +50,7 @@ export default class TaskPipe {
     }
 
     this.MonitoringEvents = null;
-    
+
     if (Browser.safari && !isMobileDevice()) {
       this.safariVisibilitychange();
     }
@@ -86,7 +86,7 @@ export default class TaskPipe {
 
   _initInterval() {
     this._flush();
-    
+
     window.onbeforeunload = () => {
       this._clearInterval();
       this._flush();
@@ -286,6 +286,10 @@ export default class TaskPipe {
 
   safariVisibilitychange() {
     document.addEventListener('visibilitychange', () => {
+      if (['live'].includes(this.taskType) ) {
+        return ;
+      }
+
       let status = document.visibilityState;
       if (status === 'hidden') {
         this._clearInterval();
