@@ -552,13 +552,13 @@ class AppServiceImpl extends BaseService implements AppService
                 goto last;
             }
 
-            try {
-                $this->deleteCache();
-            } catch (\Exception $e) {
-                $errors[] = sprintf('删除缓存时时发生了错误：%s', $e->getMessage());
-                $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
-                goto last;
-            }
+//            try {
+//                $this->deleteCache();
+//            } catch (\Exception $e) {
+//                $errors[] = sprintf('删除缓存时时发生了错误：%s', $e->getMessage());
+//                $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
+//                goto last;
+//            }
         }
 
         try {
@@ -580,14 +580,14 @@ class AppServiceImpl extends BaseService implements AppService
             goto last;
         }
 
-        try {
-            $this->deleteCache();
-        } catch (\Exception $e) {
-            $cachePath = $this->biz['cache_directory'];
-            $errors[] = sprintf('应用安装升级成功，但刷新缓存失败！请检查%s的权限', $cachePath);
-            $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
-            goto last;
-        }
+//        try {
+//            $this->deleteCache();
+//        } catch (\Exception $e) {
+//            $cachePath = $this->biz['cache_directory'];
+//            $errors[] = sprintf('应用安装升级成功，但刷新缓存失败！请检查%s的权限', $cachePath);
+//            $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
+//            goto last;
+//        }
 
         try {
             $this->_refreshDefaultRoles();
@@ -613,6 +613,14 @@ class AppServiceImpl extends BaseService implements AppService
             UpgradeLock::unlock();
         } else {
             $result = $info;
+        }
+        try {
+            $this->deleteCache();
+        } catch (\Exception $e) {
+            $cachePath = $this->biz['cache_directory'];
+            $errors[] = sprintf('应用安装升级成功，但刷新缓存失败！请检查%s的权限', $cachePath);
+            $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));
+            goto last;
         }
 
         return $result;
