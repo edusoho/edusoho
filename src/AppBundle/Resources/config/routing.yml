@@ -1755,6 +1755,10 @@ task_live_entry:
   defaults: {_controller:  AppBundle:Activity/Live:liveEntry}
   h5: true
 
+custom_live_activity_replay_entry:
+  path: /course/{courseId}/activity/{activityId}/replay/{replayId}/custom_entry
+  defaults: { _controller: AppBundle:Activity/Live:customReplayEntry }
+
 live_activity_replay_entry:
   path: /course/{courseId}/activity/{activityId}/replay/{replayId}/entry
   defaults: { _controller: AppBundle:Activity/Live:replayEntry }
