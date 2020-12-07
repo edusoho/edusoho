@@ -145,6 +145,13 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         ], $params);
     }
 
+    /**
+     * @param $courseId
+     * @param $activityId
+     *
+     * @return \Symfony\Component\HttpFoundation\Response|null
+     *                                                         自己上传的回放播放入口
+     */
     public function liveReplayAction($courseId, $activityId)
     {
         $this->getCourseService()->tryTakeCourse($courseId);
@@ -161,6 +168,12 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         ]);
     }
 
+    /**
+     * @param $mediaId
+     *
+     * @return \Symfony\Component\HttpFoundation\Response|null
+     *                                                         自己上传的视频回放链接
+     */
     public function liveReplayEntryAction(Request $request, $mediaId)
     {
         return $this->render('activity/live/replay-player-show.html.twig', [
@@ -206,6 +219,26 @@ class LiveController extends BaseActivityController implements ActivityActionInt
     public function finishConditionAction(Request $request, $activity)
     {
         return $this->render('activity/live/finish-condition.html.twig', []);
+    }
+
+    /**
+     * @param $courseId
+     * @param $activityId
+     * @param $replayId
+     * 第三方供应商的直播播放
+     *
+     * @return \Symfony\Component\HttpFoundation\Response|null
+     */
+    public function customReplayEntryAction(Request $request, $courseId, $activityId, $replayId)
+    {
+        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
+
+        return $this->render('live-course/entry.html.twig', [
+            'courseId' => $courseId,
+            'replayId' => $replayId,
+            'activityId' => $activityId,
+            'task' => $task,
+        ]);
     }
 
     public function replayEntryAction(Request $request, $courseId, $activityId, $replayId)
@@ -332,7 +365,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
 
             $self = $this;
             $replays = array_map(function ($replay) use ($activity, $self) {
-                $replay['url'] = $self->generateUrl('live_activity_replay_entry', [
+                $replay['url'] = $self->generateUrl('custom_live_activity_replay_entry', [
                     'courseId' => $activity['fromCourseId'],
                     'activityId' => $activity['id'],
                     'replayId' => $replay['id'],

@@ -47,7 +47,6 @@ class ActivitySubscriber extends EventSubscriber implements EventSubscriberInter
         $task = $event->getArgument('task');
         $lastTime = $event->getArgument('lastTime');
         $time = time() - $lastTime;
-//        var_dump($time);
         $learnTimeSec = $this->getTaskService()->getTimeSec('learn');
         if ($time >= $learnTimeSec) {
             $time = $learnTimeSec;
@@ -56,7 +55,9 @@ class ActivitySubscriber extends EventSubscriber implements EventSubscriberInter
         if (empty($task)) {
             return;
         }
-        if ($time > 0) {
+        if ($event->hasArgument('duration')) {
+            $this->getTaskService()->doTask($task['id'], $event->getArgument('duration'));
+        } elseif ($time > 0) {
             $this->getTaskService()->doTask($task['id'], $time);
         }
         $this->updateLastLearnTime($task);
