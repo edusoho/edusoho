@@ -2,6 +2,7 @@ import UAParser from 'ua-parser-js';
 import Api from 'common/api';
 import DurationStorage from '../../common/duration-storage';
 import MonitoringEvents from '../task/widget/monitoringEvents';
+import { Browser, isMobileDevice } from 'common/utils';
 
 class Live {
   constructor() {
@@ -13,8 +14,8 @@ class Live {
     this.absorbed = 0;
     this.TASK_PIPE_INTERNAL = 60;
     this.intervalId = null;
+    this.lastTimestamp = 0;
     this.init();
-
   }
 
   init() {
@@ -81,6 +82,9 @@ class Live {
     timestamp = timestamp.substr(0,10);
     this._initInterval();
 
+    if (Browser.safari && !isMobileDevice()) {
+      this.safariVisibilitychange();
+    }
   }
 
   _clearInterval() {
@@ -91,6 +95,7 @@ class Live {
     this._flush();
     window.onbeforeunload = () => {
       this._clearInterval();
+      this._flush();
       if (this.sign.length > 0) {
         localStorage.setItem('flowSign', this.sign);
       }
@@ -180,6 +185,7 @@ class Live {
       this.pushing = false;
       this.record = res.record;
       this.taskPipeCounter = 0;
+      this.lastTimestamp = new Date().getTime();
       if (!res.learnControl.allowLearn && res.learnControl.denyReason === 'kick_previous') {
         this.MonitoringEvents.triggerEvent('kick_previous');
       } else if (!res.learnControl.allowLearn && res.learnControl.denyReason === 'reject_current') {
@@ -201,6 +207,18 @@ class Live {
     if (this.taskPipeCounter >= this.TASK_PIPE_INTERNAL) {
       this._flush();
     }
+  }
+
+  safariVisibilitychange() {
+    document.addEventListener('visibilitychange', () => {
+      let status = document.visibilityState;
+      if (status === 'hidden') {
+        this._clearInterval();
+      } else if(status === 'visible') {
+        this.taskPipeCounter = Math.round((new Date().getTime() - this.lastTimestamp) / 1000);
+        this.intervalId = setInterval(() => this._addPipeCounter(), 1000);
+      }
+    });
   }
 }
 
