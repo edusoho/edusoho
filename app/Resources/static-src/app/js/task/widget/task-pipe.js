@@ -100,7 +100,6 @@ export default class TaskPipe {
   }
 
   _addPipeCounter() {
-    console.log(this.taskPipeCounter);
     this.taskPipeCounter++;
     if (this.taskPipeCounter >= this.TASK_PIPE_INTERNAL) {
       this._flush();

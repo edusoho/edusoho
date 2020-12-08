@@ -90,6 +90,7 @@ class DataVisualizationTable extends Migration
               `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
               `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
               PRIMARY KEY (`id`),
+              UNIQUE KEY `uk_userId_activityId_dayTime` (`userId`,`activityId`,`dayTime`),
               KEY `userId` (`userId`),
               KEY `taskId` (`taskId`),
               KEY `activityId` (`activityId`),
@@ -115,6 +116,7 @@ class DataVisualizationTable extends Migration
               `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
               `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
               PRIMARY KEY (`id`),
+              UNIQUE KEY `uk_userId_activityId_dayTime` (`userId`,`activityId`,`dayTime`),
               KEY `userId` (`userId`),
               KEY `taskId` (`taskId`),
               KEY `activityId` (`activityId`),
@@ -140,6 +142,7 @@ class DataVisualizationTable extends Migration
               `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
               `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
               PRIMARY KEY (`id`),
+              UNIQUE KEY `uk_userId_activityId_dayTime` (`userId`,`activityId`,`dayTime`),
               KEY `userId` (`userId`),
               KEY `taskId` (`taskId`),
               KEY `activityId` (`activityId`),
@@ -163,6 +166,7 @@ class DataVisualizationTable extends Migration
               `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
               `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
               PRIMARY KEY (`id`),
+              UNIQUE KEY `uk_userId_courseId_dayTime` (`userId`,`courseId`,`dayTime`),
               KEY `userId` (`userId`),
               KEY `courseId` (`courseId`),
               KEY `userId_courseId` (`userId`,`courseId`),
@@ -182,6 +186,7 @@ class DataVisualizationTable extends Migration
               `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
               `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
               PRIMARY KEY (`id`),
+              UNIQUE KEY `uk_userId_courseId_dayTime` (`userId`,`courseId`,`dayTime`),
               KEY `userId` (`userId`),
               KEY `courseId` (`courseId`),
               KEY `userId_courseId` (`userId`,`courseId`),
@@ -201,6 +206,7 @@ class DataVisualizationTable extends Migration
               `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
               `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
               PRIMARY KEY (`id`),
+              UNIQUE KEY `uk_userId_courseId_dayTime` (`userId`,`courseId`,`dayTime`),
               KEY `userId` (`userId`),
               KEY `courseId` (`courseId`),
               KEY `userId_courseId` (`userId`,`courseId`),
@@ -218,8 +224,8 @@ class DataVisualizationTable extends Migration
               `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
               `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
               PRIMARY KEY (`id`),
-              KEY `userId` (`userId`),
-              KEY `userId_dayTime` (`userId`,`dayTime`)
+              UNIQUE KEY `uk_userId_dayTime` (`userId`,`dayTime`),
+              KEY `userId` (`userId`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
         ");
     }
