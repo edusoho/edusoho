@@ -231,6 +231,12 @@ class CourseTaskEventV2 extends AbstractResource
     {
         $user = $this->getCurrentUser();
         $task = $this->getTaskService()->getTask($taskId);
+        if ('video' !== $task['type']) {
+            return [
+                'taskResult' => null,
+                'record' => null,
+            ];
+        }
         $activity = $this->getActivityService()->getActivity($task['activityId']);
         $watchData = $data['watchData'];
         $currentTime = time();
