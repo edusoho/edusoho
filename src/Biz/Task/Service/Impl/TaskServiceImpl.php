@@ -588,6 +588,10 @@ class TaskServiceImpl extends BaseService implements TaskService
             $this->createNewException(TaskException::CAN_NOT_DO());
         }
 
+        if (empty($watchTime)) {
+            return;
+        }
+
         $this->getTaskResultService()->waveWatchTime($taskResult['id'], $watchTime);
     }
 

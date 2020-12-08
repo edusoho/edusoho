@@ -130,7 +130,7 @@ class DataCollectServiceImpl extends BaseService implements DataCollectService
 
     public function updateLearnFlow($id, $flow)
     {
-        $flow = ArrayToolkit::parts($flow, ['active', 'lastLearnTime']);
+        $flow = ArrayToolkit::parts($flow, ['active', 'lastLearnTime', 'lastWatchTime']);
 
         return $this->getUserActivityLearnFlowDao()->update($id, $flow);
     }
