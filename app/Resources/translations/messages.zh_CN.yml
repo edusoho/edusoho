@@ -5116,6 +5116,7 @@ admin.course_manage.statistics.data_detail.tips: >
     1. 累加学习时长（分）为用户在课程-计划下产生的所有学习时长累加。<br />
     2. 去重学习时长（分）为该用户在课程-计划下产生的学习时长去重后累加。<br />
     3. 其中视频课时学习时长统计维度（播放活跃时长or页面活跃时长）以在系统-课程设置-视频课时学习配置为准。<br />
+    4. 数据统计为昨日及之前数据。
   </span>
 
 ## 用户数据统计
@@ -8959,7 +8960,12 @@ task.learn_data_detail.testpaper_maxScore: 最高分
 task.learn_data_detail.learnTime: %taskName%学习时长（分）
 task.learn_data_detail.learn_total_time: 累加学习时长（分）
 task.learn_data_detail.learn_deWeight_time: 去重学习时长（分）
+task.learn_data_detail.stay_total_time: 页面累加时长（分）
+task.learn_data_detail.stay_de_weight_time: 页面去重时长（分）
+task.learn_data_detail.video_total_time: 播放累加时长（分）
+task.learn_data_detail.video_de_weight_time: 播放去重时长（分）
 task.learn_data_detail.video_and_audio_learnTime: 音视频学习时长（分）
+task.learn_data_detail.popover: 累加时长：任务下A学员产生的所有学习时长总和；<br/>去重时长：任务下A学员产生的学习时长在自然时间内去重后合并；<br/>如学员同时开启2个页面各学习该任务5分钟，则累加时长为10分钟，去重时长为5分钟。累加数据为实时数据。
 task.learn_data_detail.finished_rate: 完成率
 task.learn_data_detail.contact_information: 联系方式
 task.learn_data_detail.task_title: 任务名称
