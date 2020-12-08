@@ -1,7 +1,7 @@
 <template>
     <div class="cd-container">
         <div class="product-breadcrumb"><a href="/">首页</a> / {{goods.title}}</div>
-        <detail :goodsSetting="goodsSetting" :timestamp="timestamp" :goods="goods" :currentSku="currentSku" @changeSku="changeSku" :current-url="currentUrl" :is-user-login="isUserLogin">
+        <detail :drp-info="drpInfo" :drp-recruit-switch="drpRecruitSwitch" :goodsSetting="goodsSetting" :timestamp="timestamp" :goods="goods" :currentSku="currentSku" @changeSku="changeSku" :current-url="currentUrl" :is-user-login="isUserLogin">
         </detail>
 
         <div class="product-info clearfix" v-if="goods.id">
@@ -144,6 +144,14 @@
             timestamp: {
                 type: String,
                 default: '',
+            },
+            drpInfo: {
+                type: Object,
+                default: null
+            },
+            drpRecruitSwitch: {
+                type: Number,
+                default: 0
             }
         },
         components: {

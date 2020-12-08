@@ -2,6 +2,7 @@
     <div class="product-detail clearfix" v-if="goods.id">
         <div class="product-detail__left detail-left pull-left">
             <div class="detail-left__img">
+                <drp-info v-if="isUserLogin && drpInfo && drpInfo.tagVisible" :drp-info="drpInfo" :drp-recruit-switch="drpRecruitSwitch"></drp-info>
                 <img :src="goods.images ? goods.images.large : null" alt="">
             </div>
             <ul class="detail-left__text clearfix">
@@ -104,12 +105,14 @@
     import Favorite from "./favorite";
     import Share from 'app/js/share/src/share.vue';
     import BuySku from './buy-sku';
+    import DrpInfo from './drp-info';
 
     export default {
         components: {
             Favorite,
             Share,
             BuySku,
+            DrpInfo,
         },
         props: {
             goods: {
@@ -135,6 +138,14 @@
             timestamp: {
                 type: String,
                 default: '',
+            },
+            drpInfo: {
+                type: Object,
+                default: null,
+            },
+            drpRecruitSwitch: {
+                type: Number,
+                default: 0
             }
         },
         methods: {
@@ -234,7 +245,7 @@
             transSpecsTitle(specsTitle, goodsType) {
                 if ('course' === goodsType && '' == specsTitle) {
                     return Translator.trans('course.unname_title');
-                } 
+                }
                 return specsTitle;
             }
         },
