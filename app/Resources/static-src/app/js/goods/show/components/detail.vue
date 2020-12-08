@@ -4,7 +4,6 @@
             <div class="detail-left__img">
                 <drp-info v-if="isUserLogin && drpInfo && drpInfo.tagVisible" :drp-info="drpInfo" :drp-recruit-switch="drpRecruitSwitch"></drp-info>
                 <img :src="goods.images ? goods.images.large : null" alt="">
-                <span>{{drpInfo}}</span>
             </div>
             <ul class="detail-left__text clearfix">
                 <li v-if="goodsSetting.show_number_data !== 'none'" class="pull-left"><i class="es-icon es-icon-friends mrs"></i>
@@ -141,10 +140,6 @@
                 type: String,
                 default: '',
             },
-            // drpInfo: {
-            //     type: Object,
-            //     default: null,
-            // },
             drpRecruitSwitch: {
                 type: Number,
                 default: 0
@@ -270,8 +265,8 @@
             }
         },
         mounted() {
-            this.remainTime()
-            this.getDrpInfo()
+            this.remainTime();
+            this.getDrpInfo();
         },
         watch: {
             currentSku(newVal, oldVal) {
