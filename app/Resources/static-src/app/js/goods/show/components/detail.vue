@@ -4,6 +4,7 @@
             <div class="detail-left__img">
                 <drp-info v-if="isUserLogin && drpInfo && drpInfo.tagVisible" :drp-info="drpInfo" :drp-recruit-switch="drpRecruitSwitch"></drp-info>
                 <img :src="goods.images ? goods.images.large : null" alt="">
+                <span>{{drpInfo}}</span>
             </div>
             <ul class="detail-left__text clearfix">
                 <li v-if="goodsSetting.show_number_data !== 'none'" class="pull-left"><i class="es-icon es-icon-friends mrs"></i>
@@ -102,6 +103,7 @@
 </template>
 
 <script>
+    import axios from 'axios';
     import Favorite from "./favorite";
     import Share from 'app/js/share/src/share.vue';
     import BuySku from './buy-sku';
@@ -139,10 +141,10 @@
                 type: String,
                 default: '',
             },
-            drpInfo: {
-                type: Object,
-                default: null,
-            },
+            // drpInfo: {
+            //     type: Object,
+            //     default: null,
+            // },
             drpRecruitSwitch: {
                 type: Number,
                 default: 0
@@ -206,6 +208,11 @@
                 }
                 return time;
             },
+            getDrpInfo() {
+                axios.get(`/drp_info/${this.goods.product.target.id}/${this.goods.product.targetType}`).then(res => {
+                        this.drpInfo = res.data;
+                    });
+            }
         },
         filters: {
             formatDate(time, fmt = 'yyyy-MM-dd') {
@@ -259,10 +266,12 @@
                     'forever': Translator.trans('classroom.expiry_mode_forever'),
                 },
                 discountCountDown: '',
+                drpInfo: [],
             }
         },
         mounted() {
-            this.remainTime();
+            this.remainTime()
+            this.getDrpInfo()
         },
         watch: {
             currentSku(newVal, oldVal) {
