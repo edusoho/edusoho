@@ -1,4 +1,4 @@
-site.flash_not_install_hint: Due to the termination of Adobe Flash Player, all browsers upgraded from January 1, 2021 no longer support Flash technology. It is recommended that you use a lower version browser; if the lower version browser still cannot be opened, please check whether it is installed and opened Flash player, <a target="_blank" href="http://www.adobe.com/go/getflashplayer"> Click Install</a>
+site.flash_not_install_hint: Since 2021, the new versions of mainstream browsers no longer support Flash technology, please use lower version browsers or check whether Flash is enabled, <a target="_blank" href="http://www.adobe.com/go/getflashplayer"> Click Install</a>
 site.date_format_dhis: 'Days %day% Hours %hour% Minutes %minutes% seconds %seconds%'
 site.date_format_his: 'Hours %hours% Minutes %minutes% Seconds %seconds%'
 site.date_format_is: 'Minutes %minutes% seconds %seconds%'
@@ -8,7 +8,7 @@ site.delete_success_hint: Deleted successfully
 site.delete_fail_hint: Delete failed
 site.upload_success_hint: Uploaded successfully
 site.upload_fail_retry_hint: Upload failed, please try again
-site.save_success_hint: Saved successfully
+site.save_success_hint: Saved successfullygit
 site.searching_hint: Search ...
 site.search_hint: Search
 site.choose_gender_hint: Please select gender

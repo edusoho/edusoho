@@ -1,4 +1,4 @@
-site.flash_not_install_hint: 因Adobe Flash Player终止，各浏览器在2021年1月1日起升级的版本不再支持Flash技术，建议您使用更低版本浏览器；如低版本浏览器仍无法打开，请检查是否安装和开启了Flash播放器，<a target="_blank" href="http://www.adobe.com/go/getflashplayer">flash设置与安装</a>
+site.flash_not_install_hint: 自2021年起，主流浏览器新出版本已不再支持Flash技术，请使用低版本浏览器或检查Flash是否已启用，<a target="_blank" href="http://www.adobe.com/go/getflashplayer">flash设置与安装</a>
 site.date_format_dhis: %days%天%hours%小时%minutes%分钟%seconds%秒
 site.date_format_his: %hours%小时%minutes%分钟%seconds%秒
 site.date_format_is: %minutes%分钟%seconds%秒
