@@ -45,6 +45,8 @@ class GoodsController extends BaseController
 
         $tagVisible = $this->getVisibleStatus();
 
+        $this->tryRefreshAgencyRecruitSetting();
+
         $bindRelation = $this->tryRefreshAgencyEquityReward($tagVisible);
 
         if (empty($bindRelation)) {
@@ -79,6 +81,39 @@ class GoodsController extends BaseController
         }
 
         return true;
+    }
+
+    protected function tryRefreshAgencyRecruitSetting()
+    {
+        $drpSettings = $this->getSettingService()->get('drp', array());
+        if (empty($drpSettings['serviceStatus']) || $drpSettings['serviceStatus'] != 'enable') {
+            return true;
+        }
+        $refreshTime = empty($drpSettings['refreshTime']) ? 0 : $drpSettings['refreshTime'];
+        // 定义3小时刷新一次网校权益最低比例
+        if (!empty($drpSettings['merchantId']) && (time() - $refreshTime < 60 * 60 * 3)) {
+            return true;
+        }
+        $storageSetting = $this->getSettingService()->get('storage', array());
+        if (empty($storageSetting['cloud_access_key']) || empty($storageSetting['cloud_secret_key'])) {
+            return true;
+        }
+        $result = $this->getDrpPlatformApi()->getAgencyRecruitBaseSetting(array('accessKey' => $storageSetting['cloud_access_key']));
+        if (!empty($result) && empty($result['error']) && isset($result['minDirectRewardRatio'])) {
+            $fields = array(
+                'merchantId' => $result['merchantId'],
+                'recruitSwitch' => empty($result['isOpening']) ? 0 : $result['isOpening'],
+                'minDirectRewardRatio' => $result['minDirectRewardRatio'],
+                'serviceStatus' => $result['serviceStatus'],
+                'refreshTime' => time(),
+            );
+            if ($drpSettings['merchantId'] >0) {
+                unset($fields['merchantId']);
+            }
+            $newDrpSettings = array_merge($drpSettings, $fields);
+
+            $this->getSettingService()->set('drp', $newDrpSettings);
+        }
     }
 
     protected function tryRefreshAgencyEquityReward($tagVisible)
