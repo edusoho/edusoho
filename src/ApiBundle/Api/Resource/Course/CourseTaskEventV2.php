@@ -234,6 +234,7 @@ class CourseTaskEventV2 extends AbstractResource
         $activity = $this->getActivityService()->getActivity($task['activityId']);
         $watchData = $data['watchData'];
         $currentTime = time();
+        $flow = $this->getDataCollectService()->getFlowBySign($user['id'], $data['sign']);
         $record = $this->getDataCollectService()->push([
             'userId' => $user['id'],
             'activityId' => $task['activityId'],
