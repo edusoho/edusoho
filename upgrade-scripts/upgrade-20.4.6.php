@@ -462,7 +462,7 @@ class EduSohoUpgrade extends AbstractUpdater
                   PRIMARY KEY (`id`),
                   UNIQUE KEY `uk_userId_dayTime` (`userId`,`dayTime`),
                   KEY `userId` (`userId`)
-]                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             ");
         }
 
