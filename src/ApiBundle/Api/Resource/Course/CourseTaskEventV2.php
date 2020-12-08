@@ -244,9 +244,9 @@ class CourseTaskEventV2 extends AbstractResource
             'courseSetId' => $task['fromCourseSetId'],
             'event' => self::EVENT_WATCHING,
             'client' => $data['client'],
-            'startTime' => $currentTime - $flow['lastWatchTime'] - 20 > $watchData['duration'] ? $currentTime - $watchData['duration'] : $flow['lastLearnTime'],
+            'startTime' => $currentTime - $flow['lastWatchTime'] - 20 > $watchData['duration'] ? $currentTime - $watchData['duration'] : $flow['lastWatchTime'],
             'endTime' => $currentTime,
-            'duration' => $currentTime - $flow['lastWatchTime'] - 20 > $watchData['duration'] ? $watchData['duration'] : $currentTime - $flow['lastLearnTime'],
+            'duration' => $currentTime - $flow['lastWatchTime'] - 20 > $watchData['duration'] ? $watchData['duration'] : $currentTime - $flow['lastWatchTime'],
             'mediaType' => $activity['mediaType'],
             'flowSign' => $data['sign'],
             'data' => [

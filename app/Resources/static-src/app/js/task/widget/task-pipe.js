@@ -77,6 +77,7 @@ export default class TaskPipe {
       topic: '#',
       callback: ({event, data}) => {
         this.eventDatas[event] = data;
+        console.log(event, data);
         this._flush(data);
       }
     });
@@ -218,6 +219,7 @@ export default class TaskPipe {
       lastLearnTime: DurationStorage.get(this.userId, this.fileId),
       events: this.eventDatas,
     };
+    console.log(param);
     if (param.watchTime) {
       let watchData = {
         watchData: {

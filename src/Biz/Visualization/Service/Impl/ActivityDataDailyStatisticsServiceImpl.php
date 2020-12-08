@@ -346,6 +346,14 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
         $activityRecords = ArrayToolkit::group($activityRecords, 'userId');
         $updateFields = [];
         foreach ($activityRecords as $userId => $userRecords) {
+            $stayRecords = $this->getActivityStayDailyDao()->search(
+                ['userId' => $userId, 'taskIds' => ArrayToolkit::column($userRecords, 'taskId')],
+                [],
+                0,
+                PHP_INT_MAX,
+                ['userId', 'taskId', 'pureTime', 'sumTime']
+            );
+            $stayRecords = ArrayToolkit::group($stayRecords, 'taskId');
             $learnRecords = $this->getActivityLearnDailyDao()->search(
                 ['userId' => $userId, 'taskIds' => ArrayToolkit::column($userRecords, 'taskId')],
                 [],
@@ -368,10 +376,10 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
                     $updateFields[] = [
                         'id' => $taskResult['id'],
                         'sumTime' => array_sum(ArrayToolkit::column($learnRecords[$record['taskId']], 'sumTime')),
-                        'stayTime' => array_sum(ArrayToolkit::column($learnRecords[$record['taskId']], 'sumTime')),
+                        'stayTime' => array_sum(ArrayToolkit::column($stayRecords[$record['taskId']], 'sumTime')),
 //                        'watchTime' => empty($watchRecords[$record['taskId']]) ? 0 : array_sum(ArrayToolkit::column($watchRecords[$record['taskId']], 'sumTime')),
                         'pureTime' => array_sum(ArrayToolkit::column($learnRecords[$record['taskId']], 'pureTime')),
-                        'pureStayTime' => array_sum(ArrayToolkit::column($learnRecords[$record['taskId']], 'pureTime')),
+                        'pureStayTime' => array_sum(ArrayToolkit::column($stayRecords[$record['taskId']], 'pureTime')),
                         'pureWatchTime' => empty($watchRecords[$record['taskId']]) ? 0 : array_sum(ArrayToolkit::column($watchRecords[$record['taskId']], 'pureTime')),
                     ];
                 }
