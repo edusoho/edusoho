@@ -17,6 +17,7 @@ class ActivityStayDailyDaoImpl extends AdvancedDaoImpl implements ActivityStayDa
             ],
             'conditions' => [
                 'id = :id',
+                'taskId in (:taskIds)',
                 'dayTime = :dayTime',
             ],
             'orderbys' => ['id', 'createdTime'],
