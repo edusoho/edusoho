@@ -1,7 +1,6 @@
 <?php
 
 use Symfony\Component\Filesystem\Filesystem;
-use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
@@ -79,6 +78,7 @@ class EduSohoUpgrade extends AbstractUpdater
             'dealCourseTaskResultDataToUserStayDaily',//ok
             'dealCourseTaskResultDataToUserVideoDaily',//ok
             'dealCourseTaskResultDataToUserLearnDaily',//ok
+            'registerJobs',
             'resetCrontabJobNum',//ok
         );
 
@@ -89,7 +89,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
         if (0 == $index) {
             $this->logger('info', '开始执行升级脚本');
-
+            $this->deleteCache();
             return array(
                 'index' => $this->generateIndex(1, 1),
                 'message' => '升级数据...',
@@ -112,6 +112,77 @@ class EduSohoUpgrade extends AbstractUpdater
                 'progress' => 0,
             );
         }
+    }
+
+    public function registerJobs()
+    {
+        $jobs = [
+            'StatisticsPageStayDailyDataJob' => [
+                'expression' => '30 0 * * *',
+                'class' => 'Biz\Visualization\Job\StatisticsPageStayDailyDataJob',
+                'misfire_policy' => 'executing',
+            ],
+            'StatisticsVideoDailyDataJob' => [
+                'expression' => '30 0 * * *',
+                'class' => 'Biz\Visualization\Job\StatisticsVideoDailyDataJob',
+                'misfire_policy' => 'executing',
+            ],
+            'StatisticsLearnDailyDataJob' => [
+                'expression' => '30 1 * * *',
+                'class' => 'Biz\Visualization\Job\StatisticsLearnDailyDataJob',
+                'misfire_policy' => 'executing',
+            ],
+            'StatisticsCoursePlanStayDailyDataJob' => [
+                'expression' => '0 1 * * *',
+                'class' => 'Biz\Visualization\Job\StatisticsCoursePlanStayDailyDataJob',
+                'misfire_policy' => 'executing',
+            ],
+            'StatisticsCoursePlanVideoDailyDataJob' => [
+                'expression' => '0 1 * * *',
+                'class' => 'Biz\Visualization\Job\StatisticsCoursePlanVideoDailyDataJob',
+                'misfire_policy' => 'executing',
+            ],
+            'StatisticsUserStayDailyDataJob' => [
+                'expression' => '0 1 * * *',
+                'class' => 'Biz\Visualization\Job\StatisticsUserStayDailyDataJob',
+                'misfire_policy' => 'executing',
+            ],
+            'StatisticsUserVideoDailyDataJob' => [
+                'expression' => '0 1 * * *',
+                'class' => 'Biz\Visualization\Job\StatisticsUserVideoDailyDataJob',
+                'misfire_policy' => 'executing',
+            ],
+            'StatisticsUserLearnDailyDataJob' => [
+                'expression' => '15 2 * * *',
+                'class' => 'Biz\Visualization\Job\StatisticsUserLearnDailyDataJob',
+                'misfire_policy' => 'executing',
+            ],
+            'StatisticsCoursePlanLearnDailyDataJob' => [
+                'expression' => '30 2 * * *',
+                'class' => 'Biz\Visualization\Job\StatisticsCoursePlanLearnDailyDataJob',
+                'misfire_policy' => 'executing',
+            ],
+            'StatisticsCourseTaskResultJob' => [
+                'expression' => '0 3 * * *',
+                'class' => 'Biz\Visualization\Job\StatisticsCourseTaskResultJob',
+                'misfire_policy' => 'executing',
+            ],
+        ];
+        $defaultJob = [
+            'pool' => 'default',
+            'source' => 'MAIN',
+            'args' => [],
+        ];
+
+        foreach ($jobs as $key => $job) {
+            $count = $this->getSchedulerService()->countJobs(['name' => $key, 'source' => 'MAIN']);
+            if (0 == $count) {
+                $job = array_merge($defaultJob, $job);
+                $job['name'] = $key;
+                $this->getSchedulerService()->register($job);
+            }
+        }
+        return 1;
     }
 
     public function initSetting()
@@ -1114,6 +1185,14 @@ abstract class AbstractUpdater
     protected function getCategoryService()
     {
         return $this->createService('Taxonomy:CategoryService');
+    }
+
+    /**
+     * @return \Codeages\Biz\Framework\Scheduler\Service\SchedulerService
+     */
+    protected function getSchedulerService()
+    {
+        return $this->createService('Scheduler:SchedulerService');
     }
 
     /**
