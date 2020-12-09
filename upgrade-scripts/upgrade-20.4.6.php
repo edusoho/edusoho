@@ -89,7 +89,6 @@ class EduSohoUpgrade extends AbstractUpdater
 
         if (0 == $index) {
             $this->logger('info', '开始执行升级脚本');
-            $this->deleteCache();
 
             return array(
                 'index' => $this->generateIndex(1, 1),
@@ -212,6 +211,7 @@ class EduSohoUpgrade extends AbstractUpdater
                   `active` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否活跃，1：活跃 2：不活跃',
                   `startTime` int(10) unsigned NOT NULL COMMENT '开始时间',
                   `lastLearnTime` int(10) unsigned NOT NULL COMMENT '最新学习时间',
+                  `lastWatchTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最新观看时间',
                   `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
                   PRIMARY KEY (`id`),
                   KEY `userId_activityId` (`userId`,`activityId`)
@@ -240,6 +240,7 @@ class EduSohoUpgrade extends AbstractUpdater
                   `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
                   `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
                   PRIMARY KEY (`id`),
+                  UNIQUE KEY `uk_userId_activityId_dayTime` (`userId`,`activityId`,`dayTime`),
                   KEY `userId` (`userId`),
                   KEY `taskId` (`taskId`),
                   KEY `activityId` (`activityId`),
@@ -272,6 +273,7 @@ class EduSohoUpgrade extends AbstractUpdater
                   `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
                   `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
                   PRIMARY KEY (`id`),
+                  UNIQUE KEY `uk_userId_activityId_dayTime` (`userId`,`activityId`,`dayTime`),
                   KEY `userId` (`userId`),
                   KEY `taskId` (`taskId`),
                   KEY `activityId` (`activityId`),
@@ -304,6 +306,7 @@ class EduSohoUpgrade extends AbstractUpdater
                   `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
                   `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
                   PRIMARY KEY (`id`),
+                  UNIQUE KEY `uk_userId_activityId_dayTime` (`userId`,`activityId`,`dayTime`),
                   KEY `userId` (`userId`),
                   KEY `taskId` (`taskId`),
                   KEY `activityId` (`activityId`),
@@ -334,6 +337,7 @@ class EduSohoUpgrade extends AbstractUpdater
                   `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
                   `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
                   PRIMARY KEY (`id`),
+                  UNIQUE KEY `uk_userId_courseId_dayTime` (`userId`,`courseId`,`dayTime`),
                   KEY `userId` (`userId`),
                   KEY `courseId` (`courseId`),
                   KEY `userId_courseId` (`userId`,`courseId`),
@@ -360,6 +364,7 @@ class EduSohoUpgrade extends AbstractUpdater
                   `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
                   `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
                   PRIMARY KEY (`id`),
+                  UNIQUE KEY `uk_userId_courseId_dayTime` (`userId`,`courseId`,`dayTime`),
                   KEY `userId` (`userId`),
                   KEY `courseId` (`courseId`),
                   KEY `userId_courseId` (`userId`,`courseId`),
@@ -386,6 +391,7 @@ class EduSohoUpgrade extends AbstractUpdater
                   `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
                   `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
                   PRIMARY KEY (`id`),
+                  UNIQUE KEY `uk_userId_courseId_dayTime` (`userId`,`courseId`,`dayTime`),
                   KEY `userId` (`userId`),
                   KEY `courseId` (`courseId`),
                   KEY `userId_courseId` (`userId`,`courseId`),
@@ -410,8 +416,8 @@ class EduSohoUpgrade extends AbstractUpdater
                   `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
                   `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
                   PRIMARY KEY (`id`),
-                  KEY `userId` (`userId`),
-                  KEY `userId_dayTime` (`userId`,`dayTime`)
+                  UNIQUE KEY `uk_userId_dayTime` (`userId`,`dayTime`),
+                  KEY `userId` (`userId`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             ");
         }
@@ -432,8 +438,8 @@ class EduSohoUpgrade extends AbstractUpdater
                   `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
                   `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
                   PRIMARY KEY (`id`),
-                  KEY `userId` (`userId`),
-                  KEY `userId_dayTime` (`userId`,`dayTime`)
+                  UNIQUE KEY `uk_userId_dayTime` (`userId`,`dayTime`),
+                  KEY `userId` (`userId`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             ");
         }
@@ -454,8 +460,8 @@ class EduSohoUpgrade extends AbstractUpdater
                   `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
                   `updatedTime` int(10) unsigned NOT NULL COMMENT '更新时间',
                   PRIMARY KEY (`id`),
-                  KEY `userId` (`userId`),
-                  KEY `userId_dayTime` (`userId`,`dayTime`)
+                  UNIQUE KEY `uk_userId_dayTime` (`userId`,`dayTime`),
+                  KEY `userId` (`userId`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             ");
         }
@@ -467,7 +473,9 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         if ($this->isFieldExist('course_task_result', 'sumTime')
             && $this->isFieldExist('course_task_result', 'pureTime')
-            && $this->isFieldExist('course_task_result', 'pureWatchTime')) {
+            && $this->isFieldExist('course_task_result', 'pureWatchTime')
+            && $this->isFieldExist('course_task_result', 'stayTime')
+            && $this->isFieldExist('course_task_result', 'pureStayTime')) {
             return 1;
         }
 
@@ -485,6 +493,14 @@ class EduSohoUpgrade extends AbstractUpdater
                 $this->getConnection()->exec("ALTER TABLE `course_task_result` ADD pureWatchTime int(10) unsigned NOT NULL default 0 COMMENT '视频观看时间轴总时长' after `watchTime`;");
                 $this->getConnection()->exec("UPDATE `course_task_result` SET pureWatchTime = time;");
             }
+            if (!$this->isFieldExist('course_task_result', 'stayTime')) {
+                $this->getConnection()->exec("ALTER TABLE `course_task_result` ADD `stayTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '停留时间累积总时长' after `time`;");
+                $this->getConnection()->exec("UPDATE `course_task_result` SET stayTime = time;");
+            }
+            if (!$this->isFieldExist('course_task_result', 'pureStayTime')) {
+                $this->getConnection()->exec("ALTER TABLE `course_task_result` ADD `pureStayTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '停留时间去重总时长' after `time`;");
+                $this->getConnection()->exec("UPDATE `course_task_result` SET pureStayTime = time;");
+            }
             return 1;
         }
         $this->getConnection()->exec("DROP TABLE IF EXISTS `course_task_result_temp`;");
@@ -499,6 +515,8 @@ class EduSohoUpgrade extends AbstractUpdater
                   `lastLearnTime` int(10) DEFAULT '0' COMMENT '最后学习时间',
                   `finishedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '完成时间',
                   `time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '任务进行时长（分钟）',
+                  `stayTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '停留时间累积总时长',
+                  `pureStayTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '停留时间去重总时长',
                   `sumTime` int(10) unsigned NOT NULL default '0' COMMENT '简单累加时长',
                   `pureTime` int(10) unsigned NOT NULL default '0' COMMENT '学习时间轴总时长',
                   `watchTime` int(10) unsigned NOT NULL DEFAULT '0',
@@ -541,6 +559,8 @@ class EduSohoUpgrade extends AbstractUpdater
                    `createdTime`,
                    `updatedTime`,
                    `time`,
+                   `stayTime`,
+                   `pureStayTime`,
                    `sumTime`,
                    `pureTime`,
                    `watchTime`,
@@ -556,6 +576,8 @@ class EduSohoUpgrade extends AbstractUpdater
                    `finishedTime`,
                    `createdTime`,
                    `updatedTime`,
+                   `time`,
+                   `time`,
                    `time`,
                    `time`,
                    `time`,
@@ -610,7 +632,7 @@ class EduSohoUpgrade extends AbstractUpdater
                         ctr.activityId, 
                         ctr.courseTaskId, 
                         ctr.courseId, 
-                        cv.courseSetId, 
+                        if(cv.courseSetId is null, 0, cv.courseSetId), 
                         ctr.userId, 
                         0, 
                         ctr.time, 
@@ -651,7 +673,7 @@ class EduSohoUpgrade extends AbstractUpdater
                             ctr.activityId, 
                             ctr.courseTaskId, 
                             ctr.courseId, 
-                            cv.courseSetId, 
+                            if(cv.courseSetId is null, 0, cv.courseSetId), 
                             ctr.userId, 
                             0, 
                             ctr.watchTime, 
@@ -693,7 +715,7 @@ class EduSohoUpgrade extends AbstractUpdater
                             asd.activityId, 
                             asd.taskId, 
                             asd.courseId, 
-                            cv.courseSetId, 
+                            if(cv.courseSetId is null, 0, cv.courseSetId), 
                             asd.userId, 
                             asd.dayTime, 
                             asd.sumTime, 
@@ -728,7 +750,7 @@ class EduSohoUpgrade extends AbstractUpdater
                         ) 
                         SELECT 
                             asd.courseId, 
-                            cv.courseSetId, 
+                            if(cv.courseSetId is null, 0, cv.courseSetId), 
                             asd.userId, 
                             asd.dayTime, 
                             sum(asd.sumTime), 
@@ -764,7 +786,7 @@ class EduSohoUpgrade extends AbstractUpdater
                         ) 
                         SELECT 
                             asd.courseId, 
-                            cv.courseSetId, 
+                            if(cv.courseSetId is null, 0, cv.courseSetId), 
                             asd.userId, 
                             asd.dayTime, 
                             sum(asd.sumTime), 
@@ -788,7 +810,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $count = $this->getConnection()->fetchColumn("SELECT count(*) FROM `activity_learn_daily` WHERE dayTime = 0 GROUP BY courseId, userId;") ?: 0;
         $start = ($page -1) * $this->perPageCount;
         if ($count > $start) {
-            $sql = "INSERT INTO course_plan_learn_daily 
+            $sql = "INSERT IGNORE INTO course_plan_learn_daily 
                         (
                             courseId,
                             courseSetId, 
@@ -801,7 +823,7 @@ class EduSohoUpgrade extends AbstractUpdater
                         ) 
                         SELECT 
                             asd.courseId, 
-                            cv.courseSetId, 
+                            if(cv.courseSetId is null, 0, cv.courseSetId), 
                             asd.userId, 
                             asd.dayTime, 
                             sum(asd.sumTime), 
