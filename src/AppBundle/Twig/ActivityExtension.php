@@ -225,7 +225,7 @@ class ActivityExtension extends \Twig_Extension
         $types = [];
         $activities = $this->container->get('extension.manager')->getActivities();
         foreach ($activities as $type => $activity) {
-            if (isset($activity['canFree']) && $activity['canFree']) {
+            if (isset($activity['canFree']) && $activity['canFree'] && $type != 'flash') {
                 $types[$type] = $this->container->get('translator')->trans($activity['meta']['name']);
             }
         }
