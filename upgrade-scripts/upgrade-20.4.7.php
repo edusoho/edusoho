@@ -2,6 +2,7 @@
 
 use Symfony\Component\Filesystem\Filesystem;
 use Codeages\Biz\Framework\Dao\BatchUpdateHelper;
+use Topxia\Service\Common\ServiceKernel;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
@@ -52,6 +53,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $definedFuncNames = array(
             'addTableIndexJob',
             'updateRoles',
+            'checkPermissions',
         );
 
         $funcNames = array();
@@ -61,7 +63,6 @@ class EduSohoUpgrade extends AbstractUpdater
 
         if (0 == $index) {
             $this->logger('info', '开始执行升级脚本');
-            $this->deleteCache();
 
             return array(
                 'index' => $this->generateIndex(1, 1),
@@ -149,6 +150,27 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->logger('info', 'INSERT增加索引的定时任务HandlingTimeConsumingUpdateStructuresJob');
         return 1;
     }
+
+    public function checkPermissions()
+    {
+        $rootDir = ServiceKernel::instance()->getParameter('kernel.root_dir');
+
+        $permissionsFile = "{$rootDir}/../permissions.yml";
+        $permissionsBackupFile = "{$rootDir}/../permissions_backup.yml";
+
+        $this->logger('info', '检查permissions.yml文件是否存在');
+
+        if (file_exists($permissionsFile)) {
+            @unlink("{$rootDir}/../permissions_backup.yml");
+        } elseif (!file_exists($permissionsFile) && file_exists($permissionsBackupFile)) {
+            shell_exec("mv {$rootDir}/../permissions_backup.yml {$rootDir}/../permissions.yml");
+        } else {
+            throw new Exception('permissions.yml和permissions_backup.yml文件不存在');
+        }
+
+        return 1;
+    }
+
 
     /**
      * @return \Biz\Role\Service\RoleService
