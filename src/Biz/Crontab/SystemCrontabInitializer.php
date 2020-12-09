@@ -198,56 +198,56 @@ class SystemCrontabInitializer
                 'class' => 'Biz\User\Job\DeleteUserFootprintJob',
                 'misfire_policy' => 'executing',
             ],
-            'StatisticsPageStayDailyDataJob' => [
-                'expression' => '30 0 * * *',
-                'class' => 'Biz\Visualization\Job\StatisticsPageStayDailyDataJob',
-                'misfire_policy' => 'executing',
-            ],
-            'StatisticsVideoDailyDataJob' => [
-                'expression' => '30 0 * * *',
-                'class' => 'Biz\Visualization\Job\StatisticsVideoDailyDataJob',
-                'misfire_policy' => 'executing',
-            ],
-            'StatisticsLearnDailyDataJob' => [
-                'expression' => '30 1 * * *',
-                'class' => 'Biz\Visualization\Job\StatisticsLearnDailyDataJob',
-                'misfire_policy' => 'executing',
-            ],
-            'StatisticsCoursePlanStayDailyDataJob' => [
-                'expression' => '0 1 * * *',
-                'class' => 'Biz\Visualization\Job\StatisticsCoursePlanStayDailyDataJob',
-                'misfire_policy' => 'executing',
-            ],
-            'StatisticsCoursePlanVideoDailyDataJob' => [
-                'expression' => '0 1 * * *',
-                'class' => 'Biz\Visualization\Job\StatisticsCoursePlanVideoDailyDataJob',
-                'misfire_policy' => 'executing',
-            ],
-            'StatisticsUserStayDailyDataJob' => [
-                'expression' => '0 1 * * *',
-                'class' => 'Biz\Visualization\Job\StatisticsUserStayDailyDataJob',
-                'misfire_policy' => 'executing',
-            ],
-            'StatisticsUserVideoDailyDataJob' => [
-                'expression' => '0 1 * * *',
-                'class' => 'Biz\Visualization\Job\StatisticsUserVideoDailyDataJob',
-                'misfire_policy' => 'executing',
-            ],
-            'StatisticsUserLearnDailyDataJob' => [
-                'expression' => '15 2 * * *',
-                'class' => 'Biz\Visualization\Job\StatisticsUserLearnDailyDataJob',
-                'misfire_policy' => 'executing',
-            ],
-            'StatisticsCoursePlanLearnDailyDataJob' => [
-                'expression' => '30 2 * * *',
-                'class' => 'Biz\Visualization\Job\StatisticsCoursePlanLearnDailyDataJob',
-                'misfire_policy' => 'executing',
-            ],
-            'StatisticsCourseTaskResultJob' => [
-                'expression' => '0 3 * * *',
-                'class' => 'Biz\Visualization\Job\StatisticsCourseTaskResultJob',
-                'misfire_policy' => 'executing',
-            ],
+//            'StatisticsPageStayDailyDataJob' => [
+//                'expression' => '30 0 * * *',
+//                'class' => 'Biz\Visualization\Job\StatisticsPageStayDailyDataJob',
+//                'misfire_policy' => 'executing',
+//            ],
+//            'StatisticsVideoDailyDataJob' => [
+//                'expression' => '30 0 * * *',
+//                'class' => 'Biz\Visualization\Job\StatisticsVideoDailyDataJob',
+//                'misfire_policy' => 'executing',
+//            ],
+//            'StatisticsLearnDailyDataJob' => [
+//                'expression' => '30 1 * * *',
+//                'class' => 'Biz\Visualization\Job\StatisticsLearnDailyDataJob',
+//                'misfire_policy' => 'executing',
+//            ],
+//            'StatisticsCoursePlanStayDailyDataJob' => [
+//                'expression' => '0 1 * * *',
+//                'class' => 'Biz\Visualization\Job\StatisticsCoursePlanStayDailyDataJob',
+//                'misfire_policy' => 'executing',
+//            ],
+//            'StatisticsCoursePlanVideoDailyDataJob' => [
+//                'expression' => '0 1 * * *',
+//                'class' => 'Biz\Visualization\Job\StatisticsCoursePlanVideoDailyDataJob',
+//                'misfire_policy' => 'executing',
+//            ],
+//            'StatisticsUserStayDailyDataJob' => [
+//                'expression' => '0 1 * * *',
+//                'class' => 'Biz\Visualization\Job\StatisticsUserStayDailyDataJob',
+//                'misfire_policy' => 'executing',
+//            ],
+//            'StatisticsUserVideoDailyDataJob' => [
+//                'expression' => '0 1 * * *',
+//                'class' => 'Biz\Visualization\Job\StatisticsUserVideoDailyDataJob',
+//                'misfire_policy' => 'executing',
+//            ],
+//            'StatisticsUserLearnDailyDataJob' => [
+//                'expression' => '15 2 * * *',
+//                'class' => 'Biz\Visualization\Job\StatisticsUserLearnDailyDataJob',
+//                'misfire_policy' => 'executing',
+//            ],
+//            'StatisticsCoursePlanLearnDailyDataJob' => [
+//                'expression' => '30 2 * * *',
+//                'class' => 'Biz\Visualization\Job\StatisticsCoursePlanLearnDailyDataJob',
+//                'misfire_policy' => 'executing',
+//            ],
+//            'StatisticsCourseTaskResultJob' => [
+//                'expression' => '0 3 * * *',
+//                'class' => 'Biz\Visualization\Job\StatisticsCourseTaskResultJob',
+//                'misfire_policy' => 'executing',
+//            ],
         ];
         $defaultJob = [
             'pool' => 'default',
