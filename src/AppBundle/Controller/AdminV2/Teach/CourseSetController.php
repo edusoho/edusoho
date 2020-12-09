@@ -904,6 +904,7 @@ class CourseSetController extends BaseController
                 $courseSet['displayTag'] = $tags[$courseSet['tags'][0]]['name'];
                 if (count($courseSet['tags']) > 1) {
                     $courseSet['displayTagNames'] = $this->buildTagsDisplayNames($courseSet['tags'], $tags);
+                    $courseSet['tags'] = $this->reviseTagsNumber($courseSet['tags'], $tags);
                 }
             }
         }
@@ -922,6 +923,17 @@ class CourseSetController extends BaseController
         }
 
         return trim($tagsNames, $delimiter);
+    }
+
+    private function reviseTagsNumber($tagIds, $tags)
+    {
+        foreach ($tagIds as $key => $tagId) {
+            if (empty($tags[$tagId])) {
+                unset($tagIds[$key]);
+            }
+        }
+
+        return $tagIds;
     }
 
     protected function removeUnpublishAndNonDefaultCourses($courses)
