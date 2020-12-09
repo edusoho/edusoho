@@ -464,12 +464,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-item-bank.git",
-                "reference": "75d529583775231b032f1715b2d1812427b7d52c"
+                "reference": "f413e115734b42d16c58403c283e291a00599a24"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-item-bank/zipball/75d529583775231b032f1715b2d1812427b7d52c",
-                "reference": "75d529583775231b032f1715b2d1812427b7d52c",
+                "url": "https://api.github.com/repos/codeages/biz-item-bank/zipball/f413e115734b42d16c58403c283e291a00599a24",
+                "reference": "f413e115734b42d16c58403c283e291a00599a24",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -503,7 +503,7 @@
                 "MIT"
             ],
             "description": "item bank with biz-framework",
-            "time": "2020-10-21T02:16:04+00:00"
+            "time": "2020-11-27T06:41:15+00:00"
         },
         {
             "name": "codeages/biz-order-pay",
@@ -4466,6 +4466,7 @@
                 "parser",
                 "useragent"
             ],
+            "abandoned": "matomo/device-detector",
             "time": "2020-01-13T16:15:20+00:00"
         },
         {
@@ -9262,6 +9263,5 @@
         "php": ">=5.5.9",
         "ext-json": "*"
     },
-    "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "platform-dev": []
 }

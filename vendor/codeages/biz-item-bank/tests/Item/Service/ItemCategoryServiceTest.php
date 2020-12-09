@@ -185,11 +185,10 @@ class ItemCategoryServiceTest extends IntegrationTestCase
     public function testUpdateItemNumAndQuestionNum()
     {
         $this->initData();
-        $this->getItemCategoryService()->updateItemNumAndQuestionNum(1, 2, 3);
-        $this->getItemCategoryService()->updateItemNumAndQuestionNum(1, -1, -1);
+        $this->getItemCategoryService()->updateItemNumAndQuestionNum(1);
         $category = $this->getItemCategoryService()->getItemCategory(1);
         $this->assertEquals($category['item_num'], 1);
-        $this->assertEquals($category['question_num'], 2);
+        $this->assertEquals($category['question_num'], 0);
     }
 
     public function testBuildItemNumAndQuestionNumBybankId()

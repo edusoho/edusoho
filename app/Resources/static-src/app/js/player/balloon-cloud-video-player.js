@@ -1,4 +1,9 @@
 import Emitter from 'component-emitter';
+import postal from 'postal';
+import 'postal.federation';
+import 'postal.xframe';
+import screenfull from 'es-screenfull';
+
 class BalloonCloudVideoPlayer extends Emitter {
 
   constructor(options) {
@@ -107,7 +112,6 @@ class BalloonCloudVideoPlayer extends Emitter {
       language: lang
     });
     var player = new QiQiuYun.Player(extConfig);
-
     player.on('ready', function(e) {
       self.emit('ready', e);
     });
@@ -144,6 +148,7 @@ class BalloonCloudVideoPlayer extends Emitter {
     });
 
     this.player = player;
+    this._registerChannel();
   }
 
   play() {
@@ -227,6 +232,35 @@ class BalloonCloudVideoPlayer extends Emitter {
     }
 
     return source;
+  }
+
+  _registerChannel() {
+    postal.instanceId('task');
+
+    postal.fedx.addFilter([
+      {
+        channel: 'task-events', //接收 activity iframe的事件
+        topic: 'monitoringEvent',
+        direction: 'in'
+      }
+    ]);
+
+    postal.subscribe({
+      channel: 'task-events',
+      topic: 'monitoringEvent',
+      callback: (type) => {
+        if (screenfull.isFullscreen) {
+          screenfull.exit();
+        }
+        if (type === 'pause') {
+          this.pause();
+        } else if (type === 'play') {
+          this.play();
+        }
+      }
+    });
+
+    return this;
   }
 
 }

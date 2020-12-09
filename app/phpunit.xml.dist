@@ -48,8 +48,8 @@
             <directory>../tests/Unit/T*</directory>
         </testsuite>
         <testsuite name="UnitU2Z">
-            <directory>../tests/Unit/U*</directory>
             <directory>../tests/Unit/V*</directory>
+            <directory>../tests/Unit/U*</directory>
             <directory>../tests/Unit/W*</directory>
             <directory>../tests/Unit/X*</directory>
             <directory>../tests/Unit/Y*</directory>
