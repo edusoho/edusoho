@@ -44,7 +44,7 @@
 
         <!-- 简介 -->
         <section class="js-scroll-top goods-info__item" id="introduction">
-          <div class="goods-info__title">课程简介</div>
+          <div class="goods-info__title">简介</div>
           <div class="info-introduction" v-html="summary"></div>
         </section>
 
