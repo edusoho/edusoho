@@ -2,8 +2,8 @@
 
 namespace Biz\UserLearnStatistics\Dao\Impl;
 
-use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 use Biz\UserLearnStatistics\Dao\TotalStatisticsDao;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 use Codeages\Biz\Framework\Dao\DaoException;
 
 class TotalStatisticsDaoImpl extends AdvancedDaoImpl implements TotalStatisticsDao
@@ -13,11 +13,11 @@ class TotalStatisticsDaoImpl extends AdvancedDaoImpl implements TotalStatisticsD
     public function statisticSearch($conditions, $orderBys)
     {
         $builder = $this->createQueryBuilder($conditions)
-            ->select('userId, sum(joinedClassroomNum) as joinedClassroomNum, sum(joinedCourseSetNum) as joinedCourseSetNum, sum(joinedCourseNum) as joinedCourseNum, sum(exitClassroomNum) as exitClassroomNum, max(createdTime), sum(exitCourseNum) as exitCourseNum, sum(finishedTaskNum) as finishedTaskNum, sum(learnedSeconds) as learnedSeconds, sum(actualAmount) as actualAmount')
+            ->select('userId, sum(joinedClassroomNum) as joinedClassroomNum, sum(joinedCourseSetNum) as joinedCourseSetNum, sum(joinedCourseNum) as joinedCourseNum, sum(exitClassroomNum) as exitClassroomNum, max(createdTime), sum(exitCourseNum) as exitCourseNum, sum(finishedTaskNum) as finishedTaskNum, sum(actualAmount) as actualAmount')
             ->groupBy('userId');
 
         $declares = $this->declares();
-        foreach ($orderBys ?: array() as $order => $sort) {
+        foreach ($orderBys ?: [] as $order => $sort) {
             $this->checkOrderBy($order, $sort, $declares['orderbys']);
             $builder->addOrderBy($order, $sort);
         }
@@ -28,11 +28,9 @@ class TotalStatisticsDaoImpl extends AdvancedDaoImpl implements TotalStatisticsD
     private function checkOrderBy($order, $sort, $allowOrderBys)
     {
         if (!in_array($order, $allowOrderBys, true)) {
-            throw new DaoException(
-                sprintf("SQL order by field is only allowed '%s', but you give `{$order}`.", implode(',', $allowOrderBys))
-            );
+            throw new DaoException(sprintf("SQL order by field is only allowed '%s', but you give `{$order}`.", implode(',', $allowOrderBys)));
         }
-        if (!in_array(strtoupper($sort), array('ASC', 'DESC'), true)) {
+        if (!in_array(strtoupper($sort), ['ASC', 'DESC'], true)) {
             throw new DaoException("SQL order by direction is only allowed `ASC`, `DESC`, but you give `{$sort}`.");
         }
     }
@@ -49,7 +47,7 @@ class TotalStatisticsDaoImpl extends AdvancedDaoImpl implements TotalStatisticsD
     public function findByIds($ids)
     {
         if (empty($ids)) {
-            return array();
+            return [];
         }
 
         return $this->findInField('id', $ids);
@@ -57,19 +55,19 @@ class TotalStatisticsDaoImpl extends AdvancedDaoImpl implements TotalStatisticsD
 
     public function declares()
     {
-        return array(
-            'serializes' => array(
-            ),
-            'orderbys' => array(
+        return [
+            'serializes' => [
+            ],
+            'orderbys' => [
                 'id',
                 'createdTime',
                 'updatedTime',
                 'userId',
                 'joinedCourseNum',
                 'actualAmount',
-            ),
-            'timestamps' => array('createdTime', 'updatedTime'),
-            'conditions' => array(
+            ],
+            'timestamps' => ['createdTime', 'updatedTime'],
+            'conditions' => [
                 'id = :id',
                 'id IN ( :ids)',
                 'id NOT IN ( :excludeIds )',
@@ -79,7 +77,7 @@ class TotalStatisticsDaoImpl extends AdvancedDaoImpl implements TotalStatisticsD
                 'createdTime <= :createTime_LE',
                 'updatedTime >= :updateTime_GE',
                 'updatedTime <= :updateTime_LE',
-            ),
-        );
+            ],
+        ];
     }
 }

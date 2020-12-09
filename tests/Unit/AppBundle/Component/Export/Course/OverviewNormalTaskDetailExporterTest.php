@@ -26,6 +26,18 @@ class OverviewNormalTaskDetailExporterTest extends BaseTestCase
         );
 
         $this->mockBiz(
+            'Visualization:ActivityDataDailyStatisticsService',
+            [
+                [
+                    'functionName' => 'getVideoEffectiveTimeStatisticsSetting',
+                    'returnValue' => [
+                        'video_multiple' => 'de-weight',
+                    ],
+                ],
+            ]
+        );
+
+        $this->mockBiz(
             'Task:TaskResultService',
             [
                 [
@@ -35,8 +47,11 @@ class OverviewNormalTaskDetailExporterTest extends BaseTestCase
                             'id' => '1',
                             'userId' => 1,
                             'time' => 12,
+                            'sumTime' => 12,
+                            'pureTime' => 12,
                             'finishedTime' => 1341,
                             'watchTime' => 13,
+                            'pureWatchTime' => 13,
                             'createdTime' => 1,
                         ],
                     ],
@@ -48,13 +63,12 @@ class OverviewNormalTaskDetailExporterTest extends BaseTestCase
         ]);
 
         $result = $expoter->getContent(0, 100);
-
         $this->assertArrayEquals([
             'lalala',
             '1970-01-01 08:00:01',
             '1970-01-01 08:22:21',
             '0.2',
-            '0.2',
+            '-',
         ], $result[0]);
     }
 
@@ -98,10 +112,10 @@ class OverviewNormalTaskDetailExporterTest extends BaseTestCase
 
         $title = [
             'task.learn_data_detail.nickname',
-            'task.learn_data_detail.createdTime',
-            'task.learn_data_detail.finishedTime',
-            'task.learn_data_detail.learnTime',
-            'task.learn_data_detail.video_and_audio_learnTime',
+            'task.learn_data_detail.join_time',
+            'task.learn_data_detail.finished_time',
+            'task.learn_data_detail.learn_total_time',
+            'task.learn_data_detail.learn_deWeight_time',
         ];
 
         $this->assertArrayEquals($title, $expoter->getTitles());

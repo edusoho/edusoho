@@ -267,3 +267,8 @@ services:
         class: AppBundle\Component\QrCode\QrCodeWhiteListFilter
         arguments: ['@service_container']
         public: true
+
+    batch_exporter:
+      class: AppBundle\Component\Export\BatchExporter
+      arguments: ['@service_container']
+      public: true

@@ -1,0 +1,44 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_task_multiple_open_setting' %}
+
+{% do script(['app/js/admin-v2/system/video-task-play/index.js']) %}
+
+{% block main %}
+  <form class="form-horizontal" method="post" id="video-play-form" novalidate>
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label >{{'admin.setting_course.video_play_setting.multiple_open'|trans}}</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('multiple_learn_enable', {1:'admin.setting_course.allow'|trans, 0:'admin.setting_course.not_allow'|trans}, setting.multiple_learn_enable) }}
+        <div class="help-block js-allow-tips {% if setting.multiple_learn_enable == 0 %}hidden{% endif %}">{{ 'admin.setting_course.video_play_setting.multiple_open.allow_tips'|trans }}</div>
+        <div class="help-block js-forbidden-tips {% if setting.multiple_learn_enable == 1 %}hidden{% endif %}">{{ 'admin.setting_course.video_play_setting.multiple_open.not_allow_tips'|trans }}</div>
+      </div>
+    </div>
+
+    <div class="form-group js-effect-show {% if setting.multiple_learn_enable == 1 %}hidden{% endif %}">
+      <div class="col-md-3 control-label">
+        <label >{{'admin.setting_course.video_play_setting.multiple_forbidden_effect'|trans}}</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        <label class="col-md-12">
+          <input type="radio" name="multiple_learn_kick_mode" value="kick_previous" {% if setting.multiple_learn_kick_mode == 'kick_previous' %}checked{% endif %}> {{'admin.setting_course.video_play_setting.kick_previous_play'|trans}}
+          <div class="help-block">{{ 'admin.setting_course.video_play_setting.kick_previous_play.tips'|trans|raw }}</div>
+        </label>
+        <label class="col-md-12">
+          <input type="radio" name="multiple_learn_kick_mode" value="reject_current" {% if setting.multiple_learn_kick_mode == 'reject_current' %}checked{% endif %}> {{'admin.setting_course.video_play_setting.reject_current_play'|trans}}
+          <div class="help-block">{{ 'admin.setting_course.video_play_setting.reject_current_play.tips'|trans }}</div>
+        </label>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label"></div>
+      <div class="controls col-md-8">
+        <button type="submit" class="btn btn-primary js-setting-submit">{{'form.btn.submit'|trans}}</button>
+      </div>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+{% endblock %}
