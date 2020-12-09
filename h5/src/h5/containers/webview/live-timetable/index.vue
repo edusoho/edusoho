@@ -22,15 +22,17 @@
         <div class="live-timetable-loading" v-show="!isRequestComplete">
           <van-loading vertical>加载中...</van-loading>
         </div>
-        <e-card
-          v-if="isRequestComplete"
-          v-for="(item, index) in liveCourse"
-          :key="index"
-          :course="item"
-          @toClassroom="toClassroom"
-          @toTask="toTask"
-          @toCourse="toCourse"
-        />
+
+        <template v-for="(item, index) in liveCourse">
+          <e-card
+            v-if="isRequestComplete"
+            :key="index"
+            :course="item"
+            @toClassroom="toClassroom"
+            @toTask="toTask"
+            @toCourse="toCourse"
+          />
+        </template>
         <empty v-if="noData" text="空空如也，暂无内容" class="empty__live" />
       </div>
     </div>
@@ -42,9 +44,7 @@ import ECard from '&/components/e-card/e-live-card';
 import Calendar from 'vue-calendar-component';
 import empty from '&/components/e-empty/e-empty.vue';
 import { formatFullTime, compareDate } from '@/utils/date-toolkit';
-import * as types from '@/store/mutation-types';
 import Api from '@/api';
-import { parse } from 'querystring';
 export default {
   name: 'live-timetable',
   components: {
@@ -176,6 +176,7 @@ export default {
       data.setMinutes(0);
       const data1 = new Date(time); // 下月
       if (data.getMonth() == 11) {
+        data1.setFullYear(data.getFullYear() + 1);
         data1.setMonth(0);
       } else {
         data1.setMonth(data.getMonth() + 1);
