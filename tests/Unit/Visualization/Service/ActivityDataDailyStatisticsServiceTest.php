@@ -236,6 +236,13 @@ class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
 
     public function testSumTaskResultTime()
     {
+        $this->mockBiz('Visualization:ActivityStayDailyDao', [
+            ['functionName' => 'search', 'returnValue' => [
+                ['userId' => 1, 'activityId' => 1, 'taskId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'dayTime' => 1604793600, 'sumTime' => 140, 'pureTime' => 120],
+                ['userId' => 1, 'activityId' => 2, 'taskId' => 2, 'courseId' => 1, 'courseSetId' => 1, 'dayTime' => 1604793600, 'sumTime' => 240, 'pureTime' => 120],
+            ]],
+        ]);
+
         $this->mockBiz('Visualization:ActivityLearnDailyDao', [
             ['functionName' => 'search', 'returnValue' => [
                 ['userId' => 1, 'activityId' => 1, 'taskId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'dayTime' => 1604793600, 'sumTime' => 140, 'pureTime' => 120],
@@ -259,7 +266,6 @@ class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
         $this->getActivityDataDailyStatisticsService()->sumTaskResultTime(1604793600);
         $result = $this->getTaskResultDao()->search([], [], 0, 1);
         $this->assertEquals(140, $result[0]['sumTime']);
-        $this->assertEquals(340, $result[0]['watchTime']);
         $this->assertEquals(120, $result[0]['pureTime']);
         $this->assertEquals(240, $result[0]['pureWatchTime']);
     }

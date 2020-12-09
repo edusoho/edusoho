@@ -80,7 +80,7 @@ class OverviewNormalTaskDetailExporter extends Exporter
             }
             $data[] = empty($taskResult['pureStayTime']) ? '-' : round(($taskResult['pureStayTime'] / 60), 1);
             if ('video' === $task['type']) {
-                $data[] = empty($taskResult['pureWatchTime']) ? '-' : round(($taskResult['pureWwatchTime'] / 60), 1);
+                $data[] = empty($taskResult['pureWatchTime']) ? '-' : round(($taskResult['pureWatchTime'] / 60), 1);
             }
             $datas[] = $data;
         }
