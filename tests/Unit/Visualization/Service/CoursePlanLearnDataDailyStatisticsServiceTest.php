@@ -8,10 +8,10 @@ class CoursePlanLearnDataDailyStatisticsServiceTest extends BaseTestCase
 {
     public function testSumLearnedTimeByCourseId()
     {
-        $this->mockCoursePlanLearnDaily(['userId' => 1, 'courseId' => 2, 'sumTime' => 100, 'pureTime' => 100]);
-        $this->mockCoursePlanLearnDaily(['userId' => 1, 'sumTime' => 200, 'pureTime' => 50]);
-        $this->mockCoursePlanLearnDaily(['userId' => 2, 'sumTime' => 100, 'pureTime' => 100]);
-        $this->mockCoursePlanLearnDaily(['userId' => 2, 'sumTime' => 200, 'pureTime' => 50]);
+        $this->mockCoursePlanLearnDaily(['userId' => 1, 'courseId' => 2, 'sumTime' => 100, 'pureTime' => 100, 'dayTime' => 10]);
+        $this->mockCoursePlanLearnDaily(['userId' => 1, 'sumTime' => 200, 'pureTime' => 50, 'dayTime' => 20]);
+        $this->mockCoursePlanLearnDaily(['userId' => 2, 'sumTime' => 100, 'pureTime' => 100, 'dayTime' => 30]);
+        $this->mockCoursePlanLearnDaily(['userId' => 2, 'sumTime' => 200, 'pureTime' => 50, 'dayTime' => 40]);
 
         $result = $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByCourseId(1);
 
@@ -20,10 +20,10 @@ class CoursePlanLearnDataDailyStatisticsServiceTest extends BaseTestCase
 
     public function testSumLearnedTimeByCourseIdGroupByUserId()
     {
-        $this->mockCoursePlanLearnDaily(['userId' => 1, 'sumTime' => 100, 'pureTime' => 100]);
-        $this->mockCoursePlanLearnDaily(['userId' => 1, 'sumTime' => 200, 'pureTime' => 50]);
-        $this->mockCoursePlanLearnDaily(['userId' => 2, 'sumTime' => 100, 'pureTime' => 100]);
-        $this->mockCoursePlanLearnDaily(['userId' => 2, 'sumTime' => 200, 'pureTime' => 50]);
+        $this->mockCoursePlanLearnDaily(['userId' => 1, 'sumTime' => 100, 'pureTime' => 100, 'dayTime' => 10]);
+        $this->mockCoursePlanLearnDaily(['userId' => 1, 'sumTime' => 200, 'pureTime' => 50, 'dayTime' => 20]);
+        $this->mockCoursePlanLearnDaily(['userId' => 2, 'sumTime' => 100, 'pureTime' => 100, 'dayTime' => 30]);
+        $this->mockCoursePlanLearnDaily(['userId' => 2, 'sumTime' => 200, 'pureTime' => 50, 'dayTime' => 40]);
 
         $results = $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByCourseIdGroupByUserId(1, [1, 2]);
         $this->assertEquals(300, $results[1]['learnedTime']);
@@ -32,10 +32,10 @@ class CoursePlanLearnDataDailyStatisticsServiceTest extends BaseTestCase
 
     public function testPureSumLearnedTimeByCourseIdGroupByUserId()
     {
-        $this->mockCoursePlanLearnDaily(['userId' => 1, 'sumTime' => 100, 'pureTime' => 100]);
-        $this->mockCoursePlanLearnDaily(['userId' => 1, 'sumTime' => 200, 'pureTime' => 50]);
-        $this->mockCoursePlanLearnDaily(['userId' => 2, 'sumTime' => 100, 'pureTime' => 100]);
-        $this->mockCoursePlanLearnDaily(['userId' => 2, 'sumTime' => 200, 'pureTime' => 50]);
+        $this->mockCoursePlanLearnDaily(['userId' => 1, 'sumTime' => 100, 'pureTime' => 100, 'dayTime' => 10]);
+        $this->mockCoursePlanLearnDaily(['userId' => 1, 'sumTime' => 200, 'pureTime' => 50, 'dayTime' => 20]);
+        $this->mockCoursePlanLearnDaily(['userId' => 2, 'sumTime' => 100, 'pureTime' => 100, 'dayTime' => 30]);
+        $this->mockCoursePlanLearnDaily(['userId' => 2, 'sumTime' => 200, 'pureTime' => 50, 'dayTime' => 40]);
 
         $results = $this->getCoursePlanLearnDataDailyStatisticsService()->sumPureLearnedTimeByCourseIdGroupByUserId(1, [1, 2]);
         $this->assertEquals(150, $results[1]['learnedTime']);

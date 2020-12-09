@@ -10,9 +10,9 @@ class CoursePlanLearnDailyDaoTest extends BaseTestCase
     public function testSumLearnedTimeByCourseId()
     {
         $this->mockCoursePlanLearnDaily(['userId' => 1, 'courseId' => 2, 'sumTime' => 100, 'pureTime' => 100]);
-        $this->mockCoursePlanLearnDaily(['userId' => 1, 'sumTime' => 200, 'pureTime' => 50]);
-        $this->mockCoursePlanLearnDaily(['userId' => 2, 'sumTime' => 100, 'pureTime' => 100]);
-        $this->mockCoursePlanLearnDaily(['userId' => 2, 'sumTime' => 200, 'pureTime' => 50]);
+        $this->mockCoursePlanLearnDaily(['userId' => 1, 'sumTime' => 200, 'pureTime' => 50, 'dayTime' => 10]);
+        $this->mockCoursePlanLearnDaily(['userId' => 2, 'sumTime' => 100, 'pureTime' => 100, 'dayTime' => 20]);
+        $this->mockCoursePlanLearnDaily(['userId' => 2, 'sumTime' => 200, 'pureTime' => 50, 'dayTime' => 30]);
 
         $result = $this->getCoursePlanLearnDailyDao()->sumLearnedTimeByCourseId(1);
 
@@ -21,10 +21,10 @@ class CoursePlanLearnDailyDaoTest extends BaseTestCase
 
     public function testSumLearnedTimeByCourseIdGroupByUserId()
     {
-        $this->mockCoursePlanLearnDaily(['userId' => 1, 'sumTime' => 100, 'pureTime' => 100]);
-        $this->mockCoursePlanLearnDaily(['userId' => 1, 'sumTime' => 200, 'pureTime' => 50]);
-        $this->mockCoursePlanLearnDaily(['userId' => 2, 'sumTime' => 100, 'pureTime' => 100]);
-        $this->mockCoursePlanLearnDaily(['userId' => 2, 'sumTime' => 200, 'pureTime' => 50]);
+        $this->mockCoursePlanLearnDaily(['userId' => 1, 'sumTime' => 100, 'pureTime' => 100, 'dayTime' => 10]);
+        $this->mockCoursePlanLearnDaily(['userId' => 1, 'sumTime' => 200, 'pureTime' => 50, 'dayTime' => 20]);
+        $this->mockCoursePlanLearnDaily(['userId' => 2, 'sumTime' => 100, 'pureTime' => 100, 'dayTime' => 30]);
+        $this->mockCoursePlanLearnDaily(['userId' => 2, 'sumTime' => 200, 'pureTime' => 50, 'dayTime' => 40]);
 
         $results = $this->getCoursePlanLearnDailyDao()->sumLearnedTimeByCourseIdGroupByUserId(1, [1, 2]);
 
@@ -33,10 +33,10 @@ class CoursePlanLearnDailyDaoTest extends BaseTestCase
 
     public function testSumPureLearnedTimeByCourseIdGroupByUserId()
     {
-        $this->mockCoursePlanLearnDaily(['userId' => 1, 'sumTime' => 100, 'pureTime' => 100]);
-        $this->mockCoursePlanLearnDaily(['userId' => 1, 'sumTime' => 200, 'pureTime' => 50]);
-        $this->mockCoursePlanLearnDaily(['userId' => 2, 'sumTime' => 100, 'pureTime' => 100]);
-        $this->mockCoursePlanLearnDaily(['userId' => 2, 'sumTime' => 200, 'pureTime' => 50]);
+        $this->mockCoursePlanLearnDaily(['userId' => 1, 'sumTime' => 100, 'pureTime' => 100, 'dayTime' => 10]);
+        $this->mockCoursePlanLearnDaily(['userId' => 1, 'sumTime' => 200, 'pureTime' => 50, 'dayTime' => 20]);
+        $this->mockCoursePlanLearnDaily(['userId' => 2, 'sumTime' => 100, 'pureTime' => 100, 'dayTime' => 30]);
+        $this->mockCoursePlanLearnDaily(['userId' => 2, 'sumTime' => 200, 'pureTime' => 50, 'dayTime' => 40]);
 
         $results = $this->getCoursePlanLearnDailyDao()->sumPureLearnedTimeByCourseIdGroupByUserId(1, [1, 2]);
 

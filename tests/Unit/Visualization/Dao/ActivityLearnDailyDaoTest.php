@@ -20,17 +20,17 @@ class ActivityLearnDailyDaoTest extends BaseTestCase
 
     public function testSumLearnedTimeGroupByTaskIds()
     {
-        $this->getActivityLearnDailyDao()->create($this->getDefaultMockFields());
-        $this->getActivityLearnDailyDao()->create($this->getDefaultMockFields());
+        $this->getActivityLearnDailyDao()->create($this->getDefaultMockFields(['activityId' => 1]));
+        $this->getActivityLearnDailyDao()->create($this->getDefaultMockFields(['activityId' => 2]));
 
         $results = $this->getActivityLearnDailyDao()->sumLearnedTimeGroupByTaskIds([1, 2]);
 
         $this->assertEquals(20, $results[0]['learnedTime']);
     }
 
-    protected function getDefaultMockFields()
+    protected function getDefaultMockFields($customFields = [])
     {
-        return [
+        return array_merge([
             'userId' => 3,
             'activityId' => 1,
             'taskId' => 1,
@@ -39,7 +39,7 @@ class ActivityLearnDailyDaoTest extends BaseTestCase
             'dayTime' => time(),
             'sumTime' => 10,
             'pureTime' => 10,
-        ];
+        ], $customFields);
     }
 
     /**
