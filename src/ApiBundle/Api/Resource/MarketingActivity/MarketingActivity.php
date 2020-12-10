@@ -15,7 +15,7 @@ class MarketingActivity extends AbstractResource
      */
     public function search(ApiRequest $request)
     {
-        if (!$this->getCurrentUser()->hasPermission('admin_v2_h5_set') && !$this->getCurrentUser()->hasPermission('admin_h5_set')) {
+        if (!($this->getCurrentUser()->hasPermission('admin_v2_h5_set') || $this->getCurrentUser()->hasPermission('admin_h5_set'))) {
             throw UserException::PERMISSION_DENIED();
         }
 
