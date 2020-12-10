@@ -97,7 +97,11 @@ class EduSohoUpgrade extends AbstractUpdater
                 if (!in_array('admin_v2_marketing', $role['data_v2'])) {
                     $role['data_v2'][] = 'admin_v2_marketing';
                 }
-                $role['data_v2'][] = 'admin_v2_open_course_group';
+                
+                if (!in_array('admin_v2_open_course_group', $role['data_v2'])) {
+                    $role['data_v2'][] = 'admin_v2_open_course_group';
+                }
+
                 $this->getRoleService()->updateRole($role['id'], ['data_v2' => $role['data_v2']]);
             }
         }
