@@ -1,0 +1,107 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_data_visualization_activity_stay_daily' %}
+
+{% block main %}
+
+  <a target="_blank" href="{{ path('admin_v2_data_visualization_activity_stay_daily_statistics', {date: 'yesterday'}) }}" class="btn btn-primary" type="button">教学活动停留时长昨日统计</a>
+  <a target="_blank" href="{{ path('admin_v2_data_visualization_activity_video_daily_statistics', {date: 'yesterday'}) }}" class="btn btn-primary" type="button">教学活动观看时长昨日统计</a>
+  <a target="_blank" href="{{ path('admin_v2_data_visualization_activity_learn_daily_statistics', {date: 'yesterday'}) }}" class="btn btn-primary" type="button">教学活动学习时长昨日统计</a>
+
+  <a target="_blank" href="{{ path('admin_v2_data_visualization_course_plan_stay_daily_statistics', {date: 'yesterday'}) }}" class="btn btn-primary" type="button">计划停留时长昨日统计</a>
+  <a target="_blank" href="{{ path('admin_v2_data_visualization_course_plan_video_daily_statistics', {date: 'yesterday'}) }}" class="btn btn-primary" type="button">计划观看时长昨日统计</a>
+  <a target="_blank" href="{{ path('admin_v2_data_visualization_course_plan_learn_daily_statistics', {date: 'yesterday'}) }}" class="btn btn-primary" type="button">计划学习时长昨日统计</a>
+
+  <a target="_blank" href="{{ path('admin_v2_data_visualization_user_stay_statistics', {date: 'yesterday'}) }}" class="btn btn-primary" type="button">用户停留时长昨日统计</a>
+  <a target="_blank" href="{{ path('admin_v2_data_visualization_user_video_daily_statistics', {date: 'yesterday'}) }}" class="btn btn-primary" type="button">用户观看时长昨日统计</a>
+  <a target="_blank" href="{{ path('admin_v2_data_visualization_user_learn_daily_statistics', {date: 'yesterday'}) }}" class="btn btn-primary" type="button">用户学习时长昨日统计</a>
+
+  <br/><br/>
+  <a target="_blank" href="{{ path('admin_v2_data_visualization_activity_stay_daily_statistics') }}" class="btn btn-primary" type="button">教学活动停留时长今日统计</a>
+  <a target="_blank" href="{{ path('admin_v2_data_visualization_activity_video_daily_statistics') }}" class="btn btn-primary" type="button">教学活动观看时长今日统计</a>
+  <a target="_blank" href="{{ path('admin_v2_data_visualization_activity_learn_daily_statistics') }}" class="btn btn-primary" type="button">教学活动学习时长今日统计</a>
+
+  <a target="_blank" href="{{ path('admin_v2_data_visualization_course_plan_stay_daily_statistics') }}" class="btn btn-primary" type="button">计划停留时长今日统计</a>
+  <a target="_blank" href="{{ path('admin_v2_data_visualization_course_plan_video_daily_statistics') }}" class="btn btn-primary" type="button">计划观看时长今日统计</a>
+  <a target="_blank" href="{{ path('admin_v2_data_visualization_course_plan_learn_daily_statistics') }}" class="btn btn-primary" type="button">计划学习时长今日统计</a>
+
+  <a target="_blank" href="{{ path('admin_v2_data_visualization_user_stay_statistics') }}" class="btn btn-primary" type="button">用户停留时长今日统计</a>
+  <a target="_blank" href="{{ path('admin_v2_data_visualization_user_video_daily_statistics') }}" class="btn btn-primary" type="button">用户观看时长今日统计</a>
+  <a target="_blank" href="{{ path('admin_v2_data_visualization_user_learn_daily_statistics') }}" class="btn btn-primary" type="button">用户学习时长今日统计</a>
+
+
+  {% if records|default([]) %}
+    <table class="table table-striped table-hover">
+      <thead>
+      <tr>
+        <th width="5%">{{ 'ID'|trans }}</th>
+        <th>{{ '用户ID'|trans }}</th>
+        <th>{{ '教学活动ID'|trans }}</th>
+        <th>{{ '任务ID'|trans }}</th>
+        <th>{{ '计划ID'|trans }}</th>
+        <th>{{ '课程ID'|trans }}</th>
+        <th>{{ '日期'|trans }}</th>
+        <th>{{ '累加时长'|trans }}</th>
+        <th>{{ '去重时长'|trans }}</th>
+        <th>{{ '创建时间'|trans }}</th>
+        <th>{{ '更新时间'|trans }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for record in records|default([]) %}
+        <tr id="job-log-table-tr-{{ record.id }}">
+          <td>
+            {{ record.id }}
+          </td>
+
+          <td>
+            {{ record.userId }}
+          </td>
+
+          <td>
+            {{ record.activityId }}
+          </td>
+
+          <td>
+            {{ record.taskId }}
+          </td>
+
+          <td>
+            {{ record.courseId }}
+          </td>
+
+          <td>
+            {{ record.courseSetId }}
+          </td>
+
+          <td>
+            {{ record.dayTime|date('Y-m-d') }}
+          </td>
+
+          <td>
+            {{ record.sumTime }}
+          </td>
+
+          <td>
+            {{ record.pureTime }}
+          </td>
+
+          <td>
+            {{ record.createdTime|date('Y-m-d H:i:s') }}
+          </td>
+
+          <td>
+            {{ record.updatedTime|date('Y-m-d H:i:s') }}
+          </td>
+
+        </tr>
+      {% endfor %}
+      </tbody>
+
+    </table>
+  {% else %}
+    <div class="empty">{{'无数据'|trans}}</div>
+  {% endif %}
+  {{ admin_macro.paginator(paginator) }}
+
+{% endblock %}

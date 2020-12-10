@@ -19,6 +19,7 @@ use Biz\Task\TaskException;
 use Biz\User\Service\TokenService;
 use Biz\User\TokenException;
 use Biz\User\UserException;
+use Biz\Visualization\Service\LearnControlService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -116,6 +117,8 @@ class TaskController extends BaseController
             }
         }
 
+        $learnControlSetting = $this->getLearnControlService()->getMultipleLearnSetting();
+
         return $this->render(
             'task/show.html.twig',
             [
@@ -128,6 +131,7 @@ class TaskController extends BaseController
                 'finishedRate' => empty($finishedRate) ? 0 : $finishedRate,
                 'allowEventAutoTrigger' => $activityConfig->allowEventAutoTrigger(),
                 'media' => $media,
+                'learnControlSetting' => $learnControlSetting,
             ]
         );
     }
@@ -704,5 +708,13 @@ class TaskController extends BaseController
     protected function getMaterialService()
     {
         return $this->createService('Course:MaterialService');
+    }
+
+    /**
+     * @return LearnControlService
+     */
+    protected function getLearnControlService()
+    {
+        return $this->createService('Visualization:LearnControlService');
     }
 }
