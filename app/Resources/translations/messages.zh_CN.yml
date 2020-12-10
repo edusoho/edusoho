@@ -7629,7 +7629,7 @@ admin.setting_course.video_play_setting.reject_current_play: 拒绝本次进入�
 admin.setting_course.video_play_setting.reject_current_play.tips: 当用户多开时，以先开的学习页面为主，后开学习页面不允许进入。微网校中仅对启航主题生效。
 admin.setting_course.video_play_setting.ineffective_learning: 无效学习时
 admin.setting_course.video_play_setting.play_rule: 非专注学习时播放规则
-admin.setting_course.video_play_setting.play_rule.tips: 当前视频课时的播放窗口不是屏幕活跃窗口（例如在PC端将窗口最小化，切换窗口等），或在PC端或微网校端当前视频课时播放窗口在20分钟内未检测到用户动作行为。
+admin.setting_course.video_play_setting.play_rule.tips: 当前视频课时的播放窗口不是屏幕活跃窗口（例如在PC端将窗口最小化，切换窗口等），或在PC端当前视频课时播放窗口在20分钟内未检测到用户动作行为。
 admin.setting_course.video_play_setting.play_rule.auto_pause.help_block: 当系统检测到用户处于非专注学习时，PC端将自动暂停当前播放
 admin.setting_course.video_play_setting.play_rule.no_action.help_block: 当系统检测到用户处于非专注学习时，PC端将继续维持当前播放
 admin.setting_course.video_play_setting.play_rule.auto_pause: 自动暂停

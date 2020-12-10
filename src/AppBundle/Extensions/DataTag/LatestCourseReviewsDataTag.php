@@ -22,7 +22,7 @@ class LatestCourseReviewsDataTag extends CourseBaseDataTag implements DataTag
 
         $defaultConditions = [
             'parentId' => 0,
-            'targetType' => 'goods',
+            'targetType' => 'course',
         ];
 
         if (isset($conditions['courseId'])) {
