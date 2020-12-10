@@ -103,10 +103,14 @@ class BatchExporter
         ];
     }
 
-    public function exportFile($name, array $fileNames)
+    public function exportFile($name, $fileNames)
     {
         if (empty($fileNames)) {
             return new JsonResponse(['success' => 0, 'message' => 'empty file']);
+        }
+
+        if (!is_array($fileNames)) {
+            $fileNames = [$fileNames];
         }
 
         if (1 == count($fileNames)) {
