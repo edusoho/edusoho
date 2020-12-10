@@ -201,7 +201,8 @@ Api.getSettings({
   },
 }).then(res => {
   if (!res.analytics) return;
-  const funStr = res.analytics.replace(/<\/?script[^>]*?>/gi, '');
+  let funStr = res.analytics.replace(/<\/?script[^>]*?>/gi, '');
+  funStr = funStr.replace(/<noscript[^>]*?>.*?<\/noscript>/gis, '');
   const script = document.createElement('script');
   const scriptEle = document.getElementsByTagName('script')[0];
   script.type = 'text/javascript';
