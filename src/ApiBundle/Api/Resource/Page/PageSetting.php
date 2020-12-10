@@ -80,15 +80,15 @@ class PageSetting extends AbstractResource
 
     private function checkPermissionByPortal($portal)
     {
-        if ('h5' === $portal && (!$this->getCurrentUser()->hasPermission('admin_v2_h5_set') || !$this->getCurrentUser()->hasPermission('admin_h5_set'))) {
+        if ('h5' === $portal && ($this->getCurrentUser()->hasPermission('admin_v2_h5_set') || $this->getCurrentUser()->hasPermission('admin_h5_set'))) {
             return true;
         }
 
-        if ('miniprogram' === $portal && (!$this->getCurrentUser()->hasPermission('admin_v2_wechat_app_manage') || !$this->getCurrentUser()->hasPermission('admin_wechat_app_manage'))) {
+        if ('miniprogram' === $portal && ($this->getCurrentUser()->hasPermission('admin_v2_wechat_app_manage') || $this->getCurrentUser()->hasPermission('admin_wechat_app_manage'))) {
             return true;
         }
 
-        if ('apps' === $portal && (!$this->getCurrentUser()->hasPermission('admin_v2_setting_mobile') || !$this->getCurrentUser()->hasPermission('admin_setting_mobile'))) {
+        if ('apps' === $portal && ($this->getCurrentUser()->hasPermission('admin_v2_setting_mobile') || $this->getCurrentUser()->hasPermission('admin_setting_mobile'))) {
             return true;
         }
 
