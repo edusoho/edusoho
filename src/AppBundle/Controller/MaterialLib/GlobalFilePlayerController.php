@@ -48,12 +48,14 @@ class GlobalFilePlayerController extends BaseController
 
     public function globalPlayer($file, $request)
     {
-        $ssl = $request->isSecure() ? true : false;
-        $player = $this->getMaterialLibService()->player($file['globalId'], $ssl);
+//        $ssl = $request->isSecure() ? true : false;
+//        $player = $this->getMaterialLibService()->player($file['globalId'], $ssl);
+        $playerContext = $this->getResourceFacadeService()->getPlayerContext($file);
 
         return $this->render('material-lib/player/global-player.html.twig', [
             'file' => $file,
-            'player' => $player,
+            'playerContext' => $playerContext,
+            'cloudSdk' => 'resource_player',
         ]);
     }
 
