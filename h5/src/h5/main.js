@@ -194,3 +194,17 @@ Api.getSettings({
 // }).catch(err => {
 //   console.log(err.message);
 // });
+
+Api.getSettings({
+  query: {
+    type: 'site',
+  },
+}).then(res => {
+  if (!res.analytics) return;
+  const funStr = res.analytics.replace(/<\/?script[^>]*?>/gi, '');
+  const script = document.createElement('script');
+  const scriptEle = document.getElementsByTagName('script')[0];
+  script.type = 'text/javascript';
+  script.innerHTML = funStr;
+  scriptEle.parentNode.insertBefore(script, scriptEle);
+});

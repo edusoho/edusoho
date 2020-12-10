@@ -79,6 +79,7 @@ import activityMixin from '@/mixins/activity';
 import redirectMixin from '@/mixins/saveRedirect';
 import EDrag from '&/components/e-drag';
 import { mapActions, mapState } from 'vuex';
+// eslint-disable-next-line no-unused-vars
 import XXTEA from '@/utils/xxtea.js';
 import { Toast } from 'vant';
 import rulesConfig from '@/utils/rule-config.js';
@@ -143,6 +144,9 @@ export default {
         this.registerInfo.smsCode
       );
     },
+  },
+  mounted() {
+    this.registerInfo.registerVisitId = window._VISITOR_ID;
   },
   methods: {
     ...mapActions(['addUser', 'setMobile', 'sendSmsCenter', 'userLogin']),
