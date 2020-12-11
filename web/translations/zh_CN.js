@@ -2,7 +2,7 @@
 t.fallback = 'zh_CN';
 t.defaultDomain = 'js';
 // zh_CN
-t.add("site.flash_not_install_hint", "\u60a8\u7684\u6d4f\u89c8\u5668\u53ef\u80fd\u5b58\u5728\u672a\u5b89\u88c5flash\u64ad\u653e\u5668\uff0c\u672a\u5f00\u542fflash\u64ad\u653e\u5668\uff0cflash\u4f4e\u4e8e11\u7248\u672c\u7684\u60c5\u51b5\uff0c\u8bf7\u5148\u786e\u8ba4flash\u64ad\u653e\u5668\u80fd\u591f\u6b63\u5e38\u4f7f\u7528\u3002<a target=\"_blank\" href=\"http:\/\/www.adobe.com\/go\/getflashplayer\">flash\u8bbe\u7f6e\u4e0e\u5b89\u88c5<\/a>", "js", "zh_CN");
+t.add("site.flash_not_install_hint", "\u81ea2021\u5e74\u8d77\uff0c\u4e3b\u6d41\u6d4f\u89c8\u5668\u65b0\u51fa\u7248\u672c\u5df2\u4e0d\u518d\u652f\u6301Flash\u6280\u672f\uff0c\u8bf7\u4f7f\u7528\u4f4e\u7248\u672c\u6d4f\u89c8\u5668\u6216\u68c0\u67e5Flash\u662f\u5426\u5df2\u542f\u7528\uff0c<a target=\"_blank\" href=\"http:\/\/www.adobe.com\/go\/getflashplayer\">flash\u8bbe\u7f6e\u4e0e\u5b89\u88c5<\/a>", "js", "zh_CN");
 t.add("site.date_format_dhis", "%days%\u5929%hours%\u5c0f\u65f6%minutes%\u5206\u949f%seconds%\u79d2", "js", "zh_CN");
 t.add("site.date_format_his", "%hours%\u5c0f\u65f6%minutes%\u5206\u949f%seconds%\u79d2", "js", "zh_CN");
 t.add("site.date_format_is", "%minutes%\u5206\u949f%seconds%\u79d2", "js", "zh_CN");
@@ -134,6 +134,7 @@ t.add("uploader.filelist.head.status", "\u72b6\u6001", "js", "zh_CN");
 t.add("uploader.filelist.head.operation", "\u64cd\u4f5c", "js", "zh_CN");
 t.add("uploader.select_one_file", "\u8bf7\u81f3\u5c11\u9009\u62e9\u4e00\u4e2a\u6587\u4ef6\u4e0a\u4f20", "js", "zh_CN");
 t.add("uploader.file.exist", "\u8fd9\u4e2a\u6587\u4ef6\u5df2\u7ecf\u88ab\u6dfb\u52a0\u8fc7\u4e86", "js", "zh_CN");
+t.add("uploader.file.unsupported.type", "\u4e0d\u652f\u6301\u7684\u6587\u4ef6\u7c7b\u578b", "js", "zh_CN");
 t.add("importer.import_verify_tips_start", "\u6821\u9a8c\u6210\u529f\uff01\u4e00\u5171\u5305\u542b", "js", "zh_CN");
 t.add("importer.import_verify_tips_end", "\u6761\u6570\u636e", "js", "zh_CN");
 t.add("importer.import_back_btn", "\u8fd4\u56de", "js", "zh_CN");

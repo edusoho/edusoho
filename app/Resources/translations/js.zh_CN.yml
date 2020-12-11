@@ -1,4 +1,4 @@
-site.flash_not_install_hint: 您的浏览器可能存在未安装flash播放器，未开启flash播放器，flash低于11版本的情况，请先确认flash播放器能够正常使用。<a target="_blank" href="http://www.adobe.com/go/getflashplayer">flash设置与安装</a>
+site.flash_not_install_hint: 自2021年起，主流浏览器新出版本已不再支持Flash技术，请使用低版本浏览器或检查Flash是否已启用，<a target="_blank" href="http://www.adobe.com/go/getflashplayer">flash设置与安装</a>
 site.date_format_dhis: %days%天%hours%小时%minutes%分钟%seconds%秒
 site.date_format_his: %hours%小时%minutes%分钟%seconds%秒
 site.date_format_is: %minutes%分钟%seconds%秒
@@ -154,7 +154,7 @@ uploader.filelist.head.status: 状态
 uploader.filelist.head.operation: 操作
 uploader.select_one_file: 请至少选择一个文件上传
 uploader.file.exist: 这个文件已经被添加过了
-
+uploader.file.unsupported.type: 不支持的文件类型
 
 importer.import_verify_tips_start: 校验成功！一共包含
 importer.import_verify_tips_end: 条数据
