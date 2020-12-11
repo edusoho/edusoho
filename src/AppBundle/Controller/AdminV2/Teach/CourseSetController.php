@@ -915,6 +915,7 @@ class CourseSetController extends BaseController
     protected function buildTagsDisplayNames(array $tagIds, array $tags, $delimiter = '/')
     {
         $tagsNames = '';
+
         foreach ($tagIds as $tagId) {
             if (!empty($tags[$tagId])) {
                 $tagsNames = $tagsNames.$delimiter.$tags[$tagId]['name'];
