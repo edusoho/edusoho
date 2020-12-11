@@ -903,8 +903,8 @@ class CourseSetController extends BaseController
             if (!empty($courseSet['tags']) && !empty($tags[$courseSet['tags'][0]])) {
                 $courseSet['displayTag'] = $tags[$courseSet['tags'][0]]['name'];
                 if (count($courseSet['tags']) > 1) {
-                    $courseSet['displayTagNames'] = $this->buildTagsDisplayNames($courseSet['tags'], $tags);
                     $courseSet['tags'] = $this->reviseTagsNumber($courseSet['tags'], $tags);
+                    $courseSet['displayTagNames'] = $this->buildTagsDisplayNames($courseSet['tags'], $tags);
                 }
             }
         }
@@ -915,7 +915,6 @@ class CourseSetController extends BaseController
     protected function buildTagsDisplayNames(array $tagIds, array $tags, $delimiter = '/')
     {
         $tagsNames = '';
-
         foreach ($tagIds as $tagId) {
             if (!empty($tags[$tagId])) {
                 $tagsNames = $tagsNames.$delimiter.$tags[$tagId]['name'];
@@ -925,15 +924,11 @@ class CourseSetController extends BaseController
         return trim($tagsNames, $delimiter);
     }
 
-    private function reviseTagsNumber($tagIds, $tags)
+    private function reviseTagsNumber(array $tagIds, array $tags)
     {
-        foreach ($tagIds as $key => $tagId) {
-            if (empty($tags[$tagId])) {
-                unset($tagIds[$key]);
-            }
-        }
+        $tags = ArrayToolkit::columns($tags, ['id']);
 
-        return $tagIds;
+        return array_intersect($tagIds, $tags[0]);
     }
 
     protected function removeUnpublishAndNonDefaultCourses($courses)
