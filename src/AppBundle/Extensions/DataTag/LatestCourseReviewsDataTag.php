@@ -18,6 +18,7 @@ class LatestCourseReviewsDataTag extends CourseBaseDataTag implements DataTag
     public function getData(array $arguments)
     {
         $this->checkCount($arguments);
+
         $conditions = $this->checkCourseArguments($arguments);
 
         $defaultConditions = [

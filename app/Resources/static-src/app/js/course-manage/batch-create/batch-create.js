@@ -7,6 +7,7 @@ class BatchCreate {
     this.uploader = null;
     this.files = [];
     this.$sortable = $('#sortable-list');
+    this.fileIds = [];
     this.init();
   }
 
@@ -62,6 +63,20 @@ class BatchCreate {
 
       if (!this.validLessonNum($btn)) {
         console.log(this.validLessonNum($btn));
+        return;
+      }
+
+      $('.js-batch-create-content').find('input[data-role="batch-item"]:checked').map((index, event, array) => {
+        let fileId = $(event).parents('.file-browser-item').data('id');
+        this.fileIds.push(fileId);
+      });
+
+      let data = this.validLessonType($btn, this.fileIds);
+      if (!data.status) {
+        for (let i = 0; i < data.invalidFileIds.length; i++) {
+          $('.active').find('#material-table-tr-' + data.invalidFileIds[i]).css('color', 'red');
+        }
+        notify('danger', Translator.trans('uploader.file.unsupported.type'));
         return;
       }
 
@@ -161,6 +176,25 @@ class BatchCreate {
       }
     });
     return valid;
+  }
+
+  validLessonType($btn, fileIds) {
+    let valid = true;
+    $.ajax({
+      type: 'post',
+      url: $btn.data('typeUrl'),
+      dataType: 'json',
+      async: false,
+      data: {
+        fileIds: fileIds
+      },
+      success: function (response) {
+        $btn.button('reset');
+        self.response = response;
+      }
+    });
+    this.fileIds = [];
+    return self.response;
   }
 
   createLesson($btn, fileId, isLast) {

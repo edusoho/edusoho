@@ -89,11 +89,11 @@ class DefaultController extends BaseController
     {
         $site = $this->getSettingService()->get('site');
         $user = $this->getUser();
-        $token = CurlToolkit::request('POST', 'http://www.edusoho.com/question/get/token', []);
+        $token = CurlToolkit::request('POST', 'https://www.edusoho.com/question/get/token', []);
         $site = ['name' => $site['name'], 'url' => $site['url'], 'token' => $token, 'username' => $user->nickname];
         $site = urlencode(http_build_query($site));
 
-        return $this->redirect('http://www.edusoho.com/question?site='.$site.'');
+        return $this->redirect('https://www.edusoho.com/question?site='.$site.'');
     }
 
     public function infoAction(Request $request)

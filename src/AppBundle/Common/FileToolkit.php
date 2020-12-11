@@ -3,14 +3,14 @@
 namespace AppBundle\Common;
 
 use AppBundle\Common\Exception\FileToolkitException;
+use AppBundle\Common\Exception\InvalidArgumentException;
+use AppBundle\Common\Exception\UnexpectedValueException;
 use Imagine\Image\Box;
 use Imagine\Image\Point;
-use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use AppBundle\Common\Exception\UnexpectedValueException;
-use AppBundle\Common\Exception\InvalidArgumentException;
+use Topxia\Service\Common\ServiceKernel;
 
 class FileToolkit
 {
@@ -60,7 +60,7 @@ class FileToolkit
             $filename = $file->getFilename();
         }
 
-        $errors = array();
+        $errors = [];
         $regex = '/\.('.preg_replace('/ +/', '|', preg_quote($extensions)).')$/i';
         if (!preg_match($regex, $filename)) {
             $errors[] = '只允许上传以下扩展名的文件：'.$extensions;
@@ -99,7 +99,7 @@ class FileToolkit
     {
         $extensions = self::getSecureFileExtensions();
         $extensions = explode(' ', $extensions);
-        $mimeTypes = array();
+        $mimeTypes = [];
         foreach ($extensions as $key => $extension) {
             $mimeTypes[] = self::getMimeTypeByExtension($extension);
         }
@@ -119,7 +119,7 @@ class FileToolkit
 
     public static function getMimeTypeByExtension($extension)
     {
-        $mimes = array(
+        $mimes = [
             'ez' => 'application/andrew-inset',
             'aw' => 'application/applixware',
             'atom' => 'application/atom+xml',
@@ -892,7 +892,7 @@ class FileToolkit
             'jpg' => 'image/jpeg',
             'pps' => 'application/vnd.ms-powerpoint',
             'mov' => 'video/quicktime',
-        );
+        ];
 
         return empty($mimes[$extension]) ? null : $mimes[$extension];
     }
@@ -901,19 +901,19 @@ class FileToolkit
     {
         $extension = strtolower($extension);
 
-        if (in_array($extension, array('vob', 'mp4', 'avi', 'flv', 'f4v', 'wmv', 'mov', 'rmvb', 'mkv', 'mpg', 'm4v', 'webm', 'rm', 'mpeg', 'asf', 'ts', 'mts'))) {
+        if (in_array($extension, ['vob', 'mp4', 'avi', 'flv', 'f4v', 'wmv', 'mov', 'rmvb', 'mkv', 'mpg', 'm4v', 'webm', 'rm', 'mpeg', 'asf', 'ts', 'mts'])) {
             return 'video';
-        } elseif (in_array($extension, array('mp3', 'wma', 'wav'))) {
+        } elseif (in_array($extension, ['mp3', 'wma', 'wav'])) {
             return 'audio';
-        } elseif (in_array($extension, array('jpg', 'jpeg', 'png', 'gif', 'bmp'))) {
+        } elseif (in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'bmp'])) {
             return 'image';
-        } elseif (in_array($extension, array('doc', 'docx', 'pdf', 'xls', 'xlsx', 'txt'))) {
+        } elseif (in_array($extension, ['doc', 'docx', 'pdf', 'xls', 'xlsx', 'txt'])) {
             return 'document';
-        } elseif (in_array($extension, array('ppt', 'pptx'))) {
+        } elseif (in_array($extension, ['ppt', 'pptx'])) {
             return 'ppt';
-        } elseif (in_array($extension, array('swf'))) {
+        } elseif (in_array($extension, ['swf'])) {
             return 'flash';
-        } elseif (in_array($extension, array('srt'))) {
+        } elseif (in_array($extension, ['srt'])) {
             return 'subtitle';
         } else {
             return 'other';
@@ -924,27 +924,27 @@ class FileToolkit
     {
         $extension = strtolower($extension);
 
-        if (in_array($extension, array('mpeg', 'mpg', 'mpe', 'mlv', 'dat', '2v', 'vob', 'rmvb', 'mov', 'qt', 'asf', 'avi', 'wmv', 'mkv', 'mp4', 'flv'))) {
+        if (in_array($extension, ['mpeg', 'mpg', 'mpe', 'mlv', 'dat', '2v', 'vob', 'rmvb', 'mov', 'qt', 'asf', 'avi', 'wmv', 'mkv', 'mp4', 'flv'])) {
             return 'video';
-        } elseif (in_array($extension, array('mp3', 'wma', 'aac', 'cda', 'wav', 'voc', 'cda'))) {
+        } elseif (in_array($extension, ['mp3', 'wma', 'aac', 'cda', 'wav', 'voc', 'cda'])) {
             return 'audio';
-        } elseif (in_array($extension, array('jpg', 'jpeg', 'png', 'gif'))) {
+        } elseif (in_array($extension, ['jpg', 'jpeg', 'png', 'gif'])) {
             return 'image';
-        } elseif (in_array($extension, array('zip', 'zipx', 'rar', '7z', 'dmg', 'tar'))) {
+        } elseif (in_array($extension, ['zip', 'zipx', 'rar', '7z', 'dmg', 'tar'])) {
             return 'package';
-        } elseif (in_array($extension, array('txt'))) {
+        } elseif (in_array($extension, ['txt'])) {
             return 'txt';
-        } elseif (in_array($extension, array('pdf'))) {
+        } elseif (in_array($extension, ['pdf'])) {
             return 'pdf';
-        } elseif (in_array($extension, array('doc', 'docx'))) {
+        } elseif (in_array($extension, ['doc', 'docx'])) {
             return 'doc';
-        } elseif (in_array($extension, array('xls', 'xlsx'))) {
+        } elseif (in_array($extension, ['xls', 'xlsx'])) {
             return 'xls';
-        } elseif (in_array($extension, array('ppt', 'pptx'))) {
+        } elseif (in_array($extension, ['ppt', 'pptx'])) {
             return 'ppt';
-        } elseif (in_array($extension, array('flash'))) {
+        } elseif (in_array($extension, ['flash'])) {
             return 'flash';
-        } elseif (in_array($extension, array('link'))) {
+        } elseif (in_array($extension, ['link'])) {
             return 'link';
         } else {
             return 'other';
@@ -954,7 +954,7 @@ class FileToolkit
     public static function formatFileSize($size)
     {
         $currentValue = $currentUnit = null;
-        $unitExps = array('B' => 0, 'KB' => 1, 'MB' => 2, 'GB' => 3);
+        $unitExps = ['B' => 0, 'KB' => 1, 'MB' => 2, 'GB' => 3];
         foreach ($unitExps as $unit => $exp) {
             $divisor = pow(1024, $exp);
             $currentUnit = $unit;
@@ -976,8 +976,8 @@ class FileToolkit
         }
 
         if (preg_match('#^\+?(0x?)?(.*?)([kmg]?)$#', $max, $match)) {
-            $shifts = array('' => 0, 'k' => 10, 'm' => 20, 'g' => 30);
-            $bases = array('' => 10, '0' => 8, '0x' => 16);
+            $shifts = ['' => 0, 'k' => 10, 'm' => 20, 'g' => 30];
+            $bases = ['' => 10, '0' => 8, '0x' => 16];
 
             return intval($match[2], $bases[$match[1]]) << $shifts[$match[3]];
         }
@@ -1006,7 +1006,7 @@ class FileToolkit
 
         $isRemoved = false;
 
-        $prefixArr = array('data/private_files', 'data/udisk', 'web/files');
+        $prefixArr = ['data/private_files', 'data/udisk', 'web/files'];
         foreach ($prefixArr as $prefix) {
             if (strpos($filepath, trim($prefix))) {
                 $fileSystem = new Filesystem();
@@ -1067,7 +1067,7 @@ class FileToolkit
         $options['x'] = $rate * $options['x'];
         $options['y'] = $rate * $options['y'];
 
-        $filePaths = array();
+        $filePaths = [];
         if (!empty($options['imgs']) && count($options['imgs']) > 0) {
             foreach ($options['imgs'] as $key => $value) {
                 $savedFilePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}_{$key}.{$pathinfo['extension']}";
@@ -1095,9 +1095,9 @@ class FileToolkit
     {
         $extension = strtolower(substr(strrchr($fullPath, '.'), 1));
 
-        $options = array();
+        $options = [];
 
-        if (in_array($extension, array('jpg', 'jpeg'))) {
+        if (in_array($extension, ['jpg', 'jpeg'])) {
             $options['jpeg_quality'] = $level * 10;
         } elseif ('png' == $extension) {
             $options['png_compression_level'] = $level;
@@ -1125,7 +1125,7 @@ class FileToolkit
         $naturalSize = $image->getSize();
         $scaledSize = $naturalSize->widen($width)->heighten($height);
 
-        return array($naturalSize, $scaledSize);
+        return [$naturalSize, $scaledSize];
     }
 
     //将图片旋转正确
