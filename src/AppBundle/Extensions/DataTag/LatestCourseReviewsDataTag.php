@@ -62,8 +62,8 @@ class LatestCourseReviewsDataTag extends CourseBaseDataTag implements DataTag
 
             $goodsId = $courseRelation['targetId'];
             $productId = $goods[$goodsId]['productId'];
-            $courseId = $productsWithIndex[$productId]['targetType'] === 'course' ? $productsWithIndex[$productId]['targetId'] : 0;
-            $classroomId = $productsWithIndex[$productId]['targetType'] === 'classroom' ? $productsWithIndex[$productId]['targetId'] : 0;
+            $courseId = 'course' === $productsWithIndex[$productId]['targetType'] ? $productsWithIndex[$productId]['targetId'] : 0;
+            $classroomId = 'classroom' === $productsWithIndex[$productId]['targetType'] ? $productsWithIndex[$productId]['targetId'] : 0;
 
             $courseRelation['targetType'] = $productsWithIndex[$productId]['targetType'];
             $courseRelation['course'] = $courseId ? $courses[$courseId] : [];
