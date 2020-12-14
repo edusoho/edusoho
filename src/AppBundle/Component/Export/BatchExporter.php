@@ -109,6 +109,10 @@ class BatchExporter
             return new JsonResponse(['success' => 0, 'message' => 'empty file']);
         }
 
+        if (!is_array($fileNames)) {
+            $fileNames = [$fileNames];
+        }
+
         if (1 == count($fileNames)) {
             return $this->exportCsv($name, $fileNames[0]);
         } else {

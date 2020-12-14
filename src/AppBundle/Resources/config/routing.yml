@@ -1845,6 +1845,11 @@ course_manage_lesson_valid_num:
     defaults: { _controller: AppBundle:Course/LessonManage:validLessonNum }
     methods: [POST]
 
+course_manage_lesson_valid_type:
+    path: /course/lesson/valid_type
+    defaults: { _controller: AppBundle:Course/LessonManage:validLessonType }
+    methods: [POST]
+
 course_manage_lesson_update:
     path:  /course/{courseId}/lesson/{lessonId}/update
     defaults: { _controller: AppBundle:Course/LessonManage:update }

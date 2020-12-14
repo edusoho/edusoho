@@ -7,6 +7,7 @@ use AppBundle\Common\CourseToolkit;
 use AppBundle\Common\TimeMachine;
 use Biz\Accessor\AccessorInterface;
 use Biz\Activity\Service\Impl\ActivityServiceImpl;
+use Biz\AppLoggerConstant;
 use Biz\BaseService;
 use Biz\Certificate\Service\CertificateService;
 use Biz\Classroom\Service\ClassroomService;
@@ -309,8 +310,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         );
 
         $newCourse = $this->validateExpiryMode($newCourse);
+        $course = $this->biz['course_copy']->copy($sourceCourse, $newCourse);
 
-        return $this->biz['course_copy']->copy($sourceCourse, $newCourse);
+        $this->getLogService()->info(AppLoggerConstant::COURSE, 'copy_course', "复制教学计划 - 源课程：{$sourceCourse['title']}(#{$sourceCourse['id']}) - 新课程：{$course['title']}(#{$course['id']}) - 成功", ['sourceCourseId' => $sourceCourse['id'], 'newCourseId' => $course['id']]);
+
+        return $course;
     }
 
     public function updateBaseInfo($id, $fields)
