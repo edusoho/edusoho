@@ -12,7 +12,6 @@ use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ThreadService;
 use Biz\Goods\Service\GoodsService;
-use Biz\Product\Service\ProductService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
@@ -218,10 +217,9 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             }
 
             $orderItems = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
+            $goods = $this->findGoodsByOrderItems($orderItems);
 
-            $goods_spec = $this->findGoodsByOrderItems($orderItems);
-
-            $options = ['type' => 'url', 'url' => $this->getOrderTargetDetailUrl($orderItems[0]['target_type'], $goods_spec['targetId'])];
+            $options = ['type' => 'url', 'url' => $this->getOrderTargetDetailUrl($orderItems[0]['target_type'], $goods['targetId'])];
 
             $weChatUser = empty($weChatUser) ? $this->getWeChatService()->getOfficialWeChatUserByUserId($trade['user_id']) : $weChatUser;
             $templates = TemplateUtil::templates();
@@ -784,12 +782,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
     private function findGoodsByOrderItems($orderItems)
     {
         if (in_array($orderItems[0]['target_type'], ['course', 'classroom'])) {
-
-            $goods_spec = $this->getGoodsService()->getGoodsSpecs($orderItems[0]['target_id']);
-
-            file_put_contents('/data/www/try6.edusoho.cn/app/logs/orderItems.log', json_encode($orderItems).PHP_EOL, FILE_APPEND);
-            file_put_contents('/data/www/try6.edusoho.cn/app/logs/goods_specs.log', json_encode($goods_spec).PHP_EOL, FILE_APPEND);
-            return $goods_spec;
+            return $this->getGoodsService()->getGoodsSpecs($orderItems[0]['target_id']);
         } else {
             $orderItems[0]['targetId'] = $orderItems[0]['target_id'];
 
