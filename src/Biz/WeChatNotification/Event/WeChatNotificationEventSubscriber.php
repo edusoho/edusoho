@@ -216,7 +216,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 return;
             }
 
-            $product = $this->findProductByOrder($order['id']);
+            $product = $this->findProductByOrder($order);
             $options = ['type' => 'url', 'url' => $this->getOrderTargetDetailUrl($product['targetType'], $product['targetId'])];
 
             $weChatUser = empty($weChatUser) ? $this->getWeChatService()->getOfficialWeChatUserByUserId($trade['user_id']) : $weChatUser;
