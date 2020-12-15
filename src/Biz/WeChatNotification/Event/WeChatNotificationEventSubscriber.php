@@ -782,15 +782,16 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
     {
         $orderItems = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
 
-        if (in_array($orderItems['target_type'], ['course', 'classroom'])) {
+        if (in_array($orderItems[0]['target_type'], ['course', 'classroom'])) {
             $product = $this->getProductService()->getProductByTargetIdAndType($orderItems[0]['target_id'], $orderItems[0]['target_type']);
             file_put_contents('/data/www/try6.edusoho.cn/app/logs/test2.log', json_encode($product).PHP_EOL, FILE_APPEND);
             return $product;
         } else {
             $orderItems[0]['targetType'] = $orderItems[0]['target_type'];
             $orderItems[0]['targetId'] = $orderItems[0]['target_id'];
+            file_put_contents('/data/www/try6.edusoho.cn/app/logs/test3.log', json_encode($orderItems).PHP_EOL, FILE_APPEND);
 
-            return $orderItems;
+            return $orderItems[0];
         }
     }
 
