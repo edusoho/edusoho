@@ -65,7 +65,7 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
 
     public function onTaskCreate(Event $event)
     {
-        $this->onTaskNumberChange($event, ['taskNum', 'compulsoryTaskNum']);
+        $this->onTaskNumberChange($event, ['taskNum', 'compulsoryTaskNum', 'electiveTaskNum']);
     }
 
     public function onTaskUpdate(Event $event)
@@ -74,7 +74,7 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
         $oldTask = $event->getArguments();
         $isOptionalChange = isset($oldTask['isOptional']) && $newTask['isOptional'] != $oldTask['isOptional'];
         if ($isOptionalChange) {
-            $this->onTaskNumberChange($event, ['taskNum', 'compulsoryTaskNum']);
+            $this->onTaskNumberChange($event, ['taskNum', 'compulsoryTaskNum', 'electiveTaskNum']);
         }
     }
 
@@ -102,7 +102,7 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
     {
         $lesson = $event->getSubject();
         $this->getCourseService()->updateCourseStatistics($lesson['courseId'], [
-            'compulsoryTaskNum', 'publishLessonNum',
+            'compulsoryTaskNum', 'publishLessonNum', 'electiveTaskNum',
         ]);
     }
 
