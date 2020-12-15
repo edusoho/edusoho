@@ -82,7 +82,7 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
     {
         $task = $event->getSubject();
         $this->getTaskResultService()->deleteTaskResultsByTaskId($task['id']);
-        $this->onTaskNumberChange($event, ['taskNum', 'compulsoryTaskNum']);
+        $this->onTaskNumberChange($event, ['taskNum', 'compulsoryTaskNum', 'electiveTaskNum']);
     }
 
     public function onCourseTaskUpdateOptional(Event $event)
