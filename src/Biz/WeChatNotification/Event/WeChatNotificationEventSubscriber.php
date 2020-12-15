@@ -221,7 +221,7 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
 
             $goods_spec = $this->findGoodsByOrderItems($orderItems);
 
-            $options = ['type' => 'url', 'url' => $this->getOrderTargetDetailUrl($orderItems['target_type'], $goods_spec['targetId'])];
+            $options = ['type' => 'url', 'url' => $this->getOrderTargetDetailUrl($orderItems[0]['target_type'], $goods_spec['targetId'])];
 
             $weChatUser = empty($weChatUser) ? $this->getWeChatService()->getOfficialWeChatUserByUserId($trade['user_id']) : $weChatUser;
             $templates = TemplateUtil::templates();
@@ -948,6 +948,6 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
      */
     private function getGoodsService()
     {
-        return $this->service('Goods:GoodsService');
+        return $this->getBiz()->service('Goods:GoodsService');
     }
 }
