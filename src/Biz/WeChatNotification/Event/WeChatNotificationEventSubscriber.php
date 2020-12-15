@@ -11,11 +11,11 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ThreadService;
+use Biz\Product\Service\ProductService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
-use Biz\Product\Service\ProductService;
 use Biz\Util\TextHelper;
 use Biz\WeChat\Service\WeChatService;
 use Codeages\Biz\Framework\Event\Event;
@@ -782,10 +782,8 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         $orderItems = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
 
         if (in_array($orderItems['target_type'], ['course', 'classroom'])) {
-
             return $product = $this->getProductService()->getProductByTargetIdAndType($orderItems[0]['target_id'], $orderItems[0]['target_type']);
         } else {
-
             return $orderItems;
         }
     }
