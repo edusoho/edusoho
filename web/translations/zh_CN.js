@@ -2,7 +2,7 @@
 t.fallback = 'zh_CN';
 t.defaultDomain = 'js';
 // zh_CN
-t.add("site.flash_not_install_hint", "\u60a8\u7684\u6d4f\u89c8\u5668\u53ef\u80fd\u5b58\u5728\u672a\u5b89\u88c5flash\u64ad\u653e\u5668\uff0c\u672a\u5f00\u542fflash\u64ad\u653e\u5668\uff0cflash\u4f4e\u4e8e11\u7248\u672c\u7684\u60c5\u51b5\uff0c\u8bf7\u5148\u786e\u8ba4flash\u64ad\u653e\u5668\u80fd\u591f\u6b63\u5e38\u4f7f\u7528\u3002<a target=\"_blank\" href=\"http:\/\/www.adobe.com\/go\/getflashplayer\">flash\u8bbe\u7f6e\u4e0e\u5b89\u88c5<\/a>", "js", "zh_CN");
+t.add("site.flash_not_install_hint", "\u81ea2021\u5e74\u8d77\uff0c\u4e3b\u6d41\u6d4f\u89c8\u5668\u65b0\u51fa\u7248\u672c\u5df2\u4e0d\u518d\u652f\u6301Flash\u6280\u672f\uff0c\u8bf7\u4f7f\u7528\u4f4e\u7248\u672c\u6d4f\u89c8\u5668\u6216\u68c0\u67e5Flash\u662f\u5426\u5df2\u542f\u7528\uff0c<a target=\"_blank\" href=\"http:\/\/www.adobe.com\/go\/getflashplayer\">flash\u8bbe\u7f6e\u4e0e\u5b89\u88c5<\/a>", "js", "zh_CN");
 t.add("site.date_format_dhis", "%days%\u5929%hours%\u5c0f\u65f6%minutes%\u5206\u949f%seconds%\u79d2", "js", "zh_CN");
 t.add("site.date_format_his", "%hours%\u5c0f\u65f6%minutes%\u5206\u949f%seconds%\u79d2", "js", "zh_CN");
 t.add("site.date_format_is", "%minutes%\u5206\u949f%seconds%\u79d2", "js", "zh_CN");
@@ -134,6 +134,7 @@ t.add("uploader.filelist.head.status", "\u72b6\u6001", "js", "zh_CN");
 t.add("uploader.filelist.head.operation", "\u64cd\u4f5c", "js", "zh_CN");
 t.add("uploader.select_one_file", "\u8bf7\u81f3\u5c11\u9009\u62e9\u4e00\u4e2a\u6587\u4ef6\u4e0a\u4f20", "js", "zh_CN");
 t.add("uploader.file.exist", "\u8fd9\u4e2a\u6587\u4ef6\u5df2\u7ecf\u88ab\u6dfb\u52a0\u8fc7\u4e86", "js", "zh_CN");
+t.add("uploader.file.unsupported.type", "\u4e0d\u652f\u6301\u7684\u6587\u4ef6\u7c7b\u578b", "js", "zh_CN");
 t.add("importer.import_verify_tips_start", "\u6821\u9a8c\u6210\u529f\uff01\u4e00\u5171\u5305\u542b", "js", "zh_CN");
 t.add("importer.import_verify_tips_end", "\u6761\u6570\u636e", "js", "zh_CN");
 t.add("importer.import_back_btn", "\u8fd4\u56de", "js", "zh_CN");
@@ -787,8 +788,8 @@ t.add("oauth.captcha_code_expired_tip", "\u56fe\u5f62\u9a8c\u8bc1\u7801\u5df2\u8
 t.add("oauth.captcha_code_error_tip", "\u56fe\u5f62\u9a8c\u8bc1\u7801\u9519\u8bef", "js", "zh_CN");
 t.add("oauth.register.time_limit", "\u7531\u4e8e\u60a8\u6ce8\u518c\u6b21\u6570\u8fc7\u591a\uff0c\u8bf7\u7a0d\u540e\u5c1d\u8bd5", "js", "zh_CN");
 t.add("oauth.register.error_message", "\u6ce8\u518c\u51fa\u73b0\u5f02\u5e38\uff0c\u8bf7\u8054\u7cfb\u7ba1\u7406\u5458", "js", "zh_CN");
-t.add("admin.user.statistics.data.learn_total_time", "\u5b66\u4e60\u603b\u65f6\u957f", "js", "zh_CN");
-t.add("admin.user.statistics.data.learn_time", "\u5b66\u4e60\u65f6\u957f\/\u5206\u949f", "js", "zh_CN");
+t.add("admin.user.statistics.data.learn_total_time", "\u7d2f\u52a0\u5b66\u4e60\u65f6\u957f\uff08\u5206\uff09", "js", "zh_CN");
+t.add("admin.user.statistics.data.learn_time", "\u7d2f\u52a0\u5b66\u4e60\u65f6\u957f\/\u5206\u949f", "js", "zh_CN");
 t.add("admin.user.statistics.data.time", "\u65f6\u957f", "js", "zh_CN");
 t.add("course.audio.enable.biz.user", "\u542c\u8bfe\u6a21\u5f0f\u9700\u8981\u5148\u7533\u8bf7\u4e3a\u5546\u4e1a\u7528\u6237!", "js", "zh_CN");
 t.add("admin.data.lab.setting.error", "\u53d1\u751f\u5f02\u5e38\u4e86\uff0c\u8bf7\u91cd\u8bd5\uff01", "js", "zh_CN");
@@ -1425,6 +1426,11 @@ t.add("admin_v2.information_collect.chooser.items.hint", "\u8bf7\u9009\u62e9\u91
 t.add("user.fields.gender_label", "\u6027\u522b", "js", "zh_CN");
 t.add("information_collect.form.check_age_invalid", "\u5e74\u9f84\u4e0d\u5728\u6b63\u5e38\u8303\u56f4\u5185", "js", "zh_CN");
 t.add("information_collect.form.check_format_invalid", "%display%\u683c\u5f0f\u9519\u8bef", "js", "zh_CN");
+t.add("admin_v2.video_effective_time_setting.cancel.hint", "\u89c6\u9891\u8bfe\u65f6\u5b66\u4e60\u65f6\u957f\u7edf\u8ba1\u7ef4\u5ea6\u53d8\u66f4\u540e\uff0c\u5168\u7ad9\u6570\u636e\u7edf\u8ba1\u4e2d\u5c06\u6309\u65b0\u7684\u7edf\u8ba1\u89c4\u5219\u751f\u6210\uff0c\u53d8\u66f4\u89c4\u5219\u524d\u5df2\u4ea7\u751f\u7684\u5b66\u4e60\u65f6\u957f\u7edf\u8ba1\u4e0d\u4f1a\u968f\u65b0\u7684\u89c4\u5219\u66f4\u6539\u3002\u5efa\u8bae\u60a8\u4e0d\u8981\u9891\u7e41\u6539\u52a8\u6570\u636e\u7edf\u8ba1\u7ef4\u5ea6\u3002<br\/>\u672c\u6b21\u662f\u5426\u786e\u8ba4\u66f4\u6539\u5b66\u4e60\u65f6\u957f\u7edf\u8ba1\u7ef4\u5ea6\uff1f", "js", "zh_CN");
+t.add("admin_v2.video_effective_time_setting.play_rule.auto_pause.help_block", "\u5f53\u7cfb\u7edf\u68c0\u6d4b\u5230\u7528\u6237\u5904\u4e8e\u975e\u4e13\u6ce8\u5b66\u4e60\u65f6\uff0cPC\u7aef\u5c06\u81ea\u52a8\u6682\u505c\u5f53\u524d\u64ad\u653e", "js", "zh_CN");
+t.add("admin_v2.video_effective_time_setting.play_rule.no_action.help_block", "\u5f53\u7cfb\u7edf\u68c0\u6d4b\u5230\u7528\u6237\u5904\u4e8e\u975e\u4e13\u6ce8\u5b66\u4e60\u65f6\uff0cPC\u7aef\u5c06\u7ee7\u7eed\u7ef4\u6301\u5f53\u524d\u64ad\u653e", "js", "zh_CN");
+t.add("admin_v2.video_effective_time_setting.statistical_dimension.playing.help_block", "\u4ee5\u5b9e\u9645\u64ad\u653e\u65f6\u957f\u4f5c\u4e3a\u5b66\u4e60\u65f6\u957f\u7edf\u8ba1", "js", "zh_CN");
+t.add("admin_v2.video_effective_time_setting.statistical_dimension.page.help_block", "\u4ee5\u9875\u9762\u505c\u7559\u65f6\u957f\u4f5c\u4e3a\u5b66\u4e60\u65f6\u957f\u7edf\u8ba1", "js", "zh_CN");
 t.add("course.marketing_setup", "\u8425\u9500\u8bbe\u7f6e", "js", "zh_CN");
 t.add("site.currency.CNY", "\u5143", "js", "zh_CN");
 t.add("s2b2c.product.cooperation_price", "\u5408\u4f5c\u9762\u989d", "js", "zh_CN");
@@ -1534,4 +1540,7 @@ t.add("goods.show_page.buy_btn", "\u7acb\u5373\u8d2d\u4e70", "js", "zh_CN");
 t.add("classroom.go_inside", "\u8fdb\u53bb\u901b\u901b", "js", "zh_CN");
 t.add("course.base.title.placeholder", "\u8bf7\u8f93\u5165\u8bfe\u7a0b\u6807\u9898", "js", "zh_CN");
 t.add("course.unname_title", "\u672a\u547d\u540d\u8ba1\u5212", "js", "zh_CN");
+t.add("course.task.out_focus_mask.continue_studying", "\u7ee7\u7eed\u5b66\u4e60", "js", "zh_CN");
+t.add("course.task.out_focus_mask.stop.tips", "<p class=\"ineffective-learning\">\u5b66\u7d2f\u4e86\u53ef\u4ee5\u4f11\u606f\u4e00\u4f1a :D<\/p>\n", "js", "zh_CN");
+t.add("course.task.out_focus_mask.anti_brush.tips", "<p class=\"kick-each-other\">\u8bf7\u52ff\u540c\u65f6\u591a\u5f00\u4efb\u52a1\u5b66\u4e60<\/p> <p class=\"kick-each-other\">\u4e0d\u8981\u4e00\u5fc3\u591a\u7528\u54e6\uff01<\/p>", "js", "zh_CN");
 })(Translator);

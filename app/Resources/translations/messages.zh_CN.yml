@@ -3989,6 +3989,7 @@ my.teaching.live_schedule_menu: 教学课表
 my.teaching.hints_block: (当前仅展示直播课程)
 my.teaching.today_courses: 今日课程数
 my.teaching.classroom_menu: 在教%classroom%
+my.teaching.open_course_menu: 公开课
 my.teaching.question_menu: 学员问答
 my.teaching.discussion_menu: 学员话题
 my.teaching.online_review_menu: 在线批阅
@@ -5091,22 +5092,33 @@ admin.course_manage.statistics.watch_course_data: 查看课时数据
 
 ## 任务统计数据
 admin.course_manage.statistics.modal_title: %title%课程的数据
-admin.course_manage.statistics.data.name: %taskName%名
+admin.course_manage.statistics.data.name: 任务名
+admin.course_manage.statistics.data.task_type: 任务类型
 admin.course_manage.statistics.data.study_number: 学习人数
 admin.course_manage.statistics.data.finished_number: 完成人数
-admin.course_manage.statistics.data.average_study_time: 平均学习时长(分)
-admin.course_manage.statistics.data.video_and_music_study_time: 音视频时长(分)
-admin.course_manage.statistics.data.video_and_music_average_study_time: 音视频平均观看时长(分)
-admin.course_manage.statistics.data.average_score: 测试平均得分
+admin.course_manage.statistics.data.average_study_time: 人均学习时长（分）
+admin.course_manage.statistics.data.video_length: 视频长度（分）
+admin.course_manage.statistics.data.task_sum_study_time: 任务被累加学习时长（分）
+admin.course_manage.statistics.data.average_score: 考试平均得分
+admin.course_manage.statistics.data.plan_study_time: 计划被累加学习时长（分）：%mins%
 
 ## 任务统计详细数据
 admin.course_manage.statistics.data_detail.name: 用户名
-admin.course_manage.statistics.data_detail.join_time: 加入课程时间
-admin.course_manage.statistics.data_detail.finished_time: 完成课程时间
-admin.course_manage.statistics.data_detail.study_days: 课程学习天数
-admin.course_manage.statistics.data_detail.study_time: 课程学习时长（分）
+admin.course_manage.statistics.data_detail.join_time: 加入时间
+admin.course_manage.statistics.data_detail.finished_time: 完成时间
+admin.course_manage.statistics.data_detail.study_days: 学习天数
+admin.course_manage.statistics.data_detail.study_time: 累加学习时长（分）
+admin.course_manage.statistics.data_detail.pure_study_time: 去重学习时长（分）
 admin.course_manage.statistics.data_detail.question_number: 提问数
 admin.course_manage.statistics.data_detail.note_number: 笔记数
+admin.course_manage.statistics.data_detail.plan_study_time: 计划被累加学习时长（分）：%mins%
+admin.course_manage.statistics.data_detail.tips: >
+  <span style='font-size:14px'>
+    1. 累加学习时长（分）为用户在课程-计划下产生的所有学习时长累加。<br />
+    2. 去重学习时长（分）为该用户在课程-计划下产生的学习时长去重后累加。<br />
+    3. 其中视频课时学习时长统计维度（播放活跃时长or页面活跃时长）以在系统-课程设置-视频课时学习配置为准。<br />
+    4. 数据统计为昨日及之前数据。
+  </span>
 
 ## 用户数据统计
 admin.user.statistics.data_detail.note_number: 笔记数
@@ -7602,6 +7614,36 @@ admin.setting_course.open_course.open_course_review: 评价
 admin.article_setting.article_comments_manage: 资讯内容管理
 admin.article_setting.message_comments_manage: 私信内容管理
 admin.setting_course.article.article_comment: 评价
+admin.setting_course.video_play_setting: 在线视频课时播放配置
+admin.setting_course.video_play_setting.multiple_open: 多开学习
+admin.setting_course.video_play_setting.multiple_open.allow_tips: 允许用户在一端或多端同时进入课时学习页面学习
+admin.setting_course.video_play_setting.multiple_open.not_allow_tips: 禁止用户在一端或多端同时进入课时学习页面学习
+admin.setting_course.video_play_setting.different_video_multiple: 不同视频课时多开
+admin.setting_course.video_play_setting.multiple_forbidden_effect: 禁止多开效果
+admin.setting_course.video_play_setting.kick_previous_play: 踢掉前次学习页面
+admin.setting_course.video_play_setting.kick_previous_play.tips: >
+  <p>当用户多开时，以后开的学习页面为主，踢掉前次学习页面。</p>
+  <p>作业课时/考试课时/直播课时三类课时在学习时，后开的学习页面将无法踢掉这三类课时。</p>
+  <p>注：需要终端升级至PC端V20.4.6，APP端V4.9.3</p>
+admin.setting_course.video_play_setting.reject_current_play: 拒绝本次进入学习页面
+admin.setting_course.video_play_setting.reject_current_play.tips: 当用户多开时，以先开的学习页面为主，后开学习页面不允许进入。微网校中仅对启航主题生效。
+admin.setting_course.video_play_setting.ineffective_learning: 无效学习时
+admin.setting_course.video_play_setting.play_rule: 非专注学习时播放规则
+admin.setting_course.video_play_setting.play_rule.tips: 当前视频课时的播放窗口不是屏幕活跃窗口（例如在PC端将窗口最小化，切换窗口等），或在PC端当前视频课时播放窗口在20分钟内未检测到用户动作行为。
+admin.setting_course.video_play_setting.play_rule.auto_pause.help_block: 当系统检测到用户处于非专注学习时，PC端将自动暂停当前播放
+admin.setting_course.video_play_setting.play_rule.no_action.help_block: 当系统检测到用户处于非专注学习时，PC端将继续维持当前播放
+admin.setting_course.video_play_setting.play_rule.auto_pause: 自动暂停
+admin.setting_course.video_play_setting.play_rule.no_action: 不做干预
+admin.setting_course.effective_learning_time_rule: 在线视频课时有效学习时长统计规则
+admin.setting_course.learning_time_statistical_dimension: 学习时长统计维度
+admin.setting_course.effective_learning_time.playing.help_block: 以实际播放时长作为学习时长统计
+admin.setting_course.effective_learning_time.page.help_block: 以页面停留时长作为学习时长统计
+admin.setting_course.effective_learning_time.playing_time: 播放活跃时长
+admin.setting_course.effective_learning_time.page_time: 页面活跃时长
+admin.setting_course.effective_learning_time.reweighted_merge: 各处学习时长去重后再合并
+admin.setting_course.effective_learning_time.accumulated_merge: 各处学习时长直接累加合并
+admin.setting_course.effective_learning_time.reweighted_merge.help_block: 同时在多处产生的学习时长自动去重合并
+admin.setting_course.effective_learning_time.accumulated_merge.help_block: 同时在多处产生的学习时长不去重累加合并
 
 #微信授权设置
 admin.setting_wechat_auth.web_scan_login: 网页扫码登录
@@ -8910,12 +8952,21 @@ my.reward_point.mall.search_hint: 输入标题关键字
 
 task.learn_data_detail.nickname: 用户名
 task.learn_data_detail.createdTime: 加入学习时间
+task.learn_data_detail.join_time: 加入时间
 task.learn_data_detail.finishedTime: 完成%taskName%时间
+task.learn_data_detail.finished_time: 完成时间
 task.learn_data_detail.testpaper_firstUsedTime: 首次考试用时（分）
 task.learn_data_detail.testpaper_firstScore: 首次考试得分
 task.learn_data_detail.testpaper_maxScore: 最高分
 task.learn_data_detail.learnTime: %taskName%学习时长（分）
+task.learn_data_detail.learn_total_time: 累加学习时长（分）
+task.learn_data_detail.learn_deWeight_time: 去重学习时长（分）
+task.learn_data_detail.stay_total_time: 页面累加时长（分）
+task.learn_data_detail.stay_de_weight_time: 页面去重时长（分）
+task.learn_data_detail.video_total_time: 播放累加时长（分）
+task.learn_data_detail.video_de_weight_time: 播放去重时长（分）
 task.learn_data_detail.video_and_audio_learnTime: 音视频学习时长（分）
+task.learn_data_detail.popover: 累加时长：任务下A学员产生的所有学习时长总和；<br/>去重时长：任务下A学员产生的学习时长在自然时间内去重后合并；<br/>如学员同时开启2个页面各学习该任务5分钟，则累加时长为10分钟，去重时长为5分钟。累加数据为实时数据。
 task.learn_data_detail.finished_rate: 完成率
 task.learn_data_detail.contact_information: 联系方式
 task.learn_data_detail.task_title: 任务名称
@@ -9009,6 +9060,7 @@ log.action.course.sync_when_task_create: 同步创建任务
 log.action.course.sync_when_task_update: 同步更新任务
 log.action.course.sync_when_task_delete: 同步删除任务
 log.action.course.clone_course_set: 复制课程
+log.action.course.copy_course: 复制教学计划
 log.action.course.unlock_course: 解除课程同步
 log.action.course.create_course: 创建教学计划
 log.action.course.update_course: 修改教学计划
@@ -10007,13 +10059,55 @@ user.learn.statistics.start_time: 起始时间
 user.learn.statistics.end_time: 结束时间
 user.learn.statistics.default.search: 默认排序
 user.learn.statistics.search: 搜索
+user.learn.statistics.learn_statistics.export: 用户数据统计导出
+user.learn.statistics.course_statistics.export: 用户课程学习数据统计导出
+user.learn.statistics.lesson_statistics.export: 用户课时学习数据统计导出
+user.learn.statistics.all.export: 全部文件导出
+user.learn.statistics.export.tips: 数据量较大时，下载较慢，请耐心等待
 user.learn.statistics.nickname: 用户名
+user.learn.statistics.mobile: 手机号
+user.learn.statistics.course: 计划
+user.learn.statistics.course_name: 计划名称
+user.learn.statistics.sum_learn_time: 累加学习时长(分)
+user.learn.statistics.pure_learn_time: 去重学习时长(分)
+user.learn.statistics.task_num: 课时任务总数
+user.learn.statistics.finish_task_num: 完成任务数
+user.learn.statistics.finish_rate: 课程/班级完成率
+user.learn.statistics.lesson_name: 课时任务名称
+user.learn.statistics.lesson_type: 课时类型
+user.learn.statistics.type: 类型
+user.learn.statistics.video_length: 视频长度(分)
+user.learn.statistics.lesson_watch_time: 播放时长(分)
+user.learn.statistics.lesson_stay_time: 页面停留时长(分)
+user.learn.statistics.lesson.finish_rate: 课时完成率
+user.learn.statistics.lesson.video: 视频课时
+user.learn.statistics.lesson.audio: 音频课时
+user.learn.statistics.lesson.live: 直播课时
+user.learn.statistics.lesson.discuss: 讨论课时
+user.learn.statistics.lesson.flash: Flash课时
+user.learn.statistics.lesson.doc: 文档课时
+user.learn.statistics.lesson.ppt: PPT课时
+user.learn.statistics.lesson.testpaper: 考试课时
+user.learn.statistics.lesson.homework: 作业课时
+user.learn.statistics.lesson.exercise: 练习课时
+user.learn.statistics.lesson.download: 下载资料课时
+user.learn.statistics.lesson.text: 图文课时
+user.learn.statistics.lesson.compulsory: 必修
+user.learn.statistics.lesson.optional: 选修
+user.learn.statistics.lesson.finish: 完成
+user.learn.statistics.lesson.un_finish: 未完成
+user.learn.statistics.user_learn_statistics: 用户数据统计
+user.learn.statistics.user_course_statistics: 用户课程学习数据统计
+user.learn.statistics.user_lesson_statistics: 用户课时学习数据统计
 user.learn.statistics.join.classroom.num: 加入班级数
 user.learn.statistics.exit.classroom.num: 退出班级数
 user.learn.statistics.join.course.num: 加入计划数
 user.learn.statistics.exit.course.num: 退出计划数
+user.learn.statistics.join.task.num: 加入任务数
 user.learn.statistics.finished.task.num: 学完任务数
 user.learn.statistics.learned.seconds: 学习时长(分)
+user.learn.statistics.video_playing.seconds: 累加学习时长（分）
+user.learn.statistics.page_stay.seconds: 去重学习时长（分）
 user.learn.statistics.actual.amount: 消费总额(元)
 user.learn.statistics.empty: 暂无用户统计数据
 user.learn.statistics.init: 数据升级中，请稍候（用户量越大，升级时间越久）
@@ -10021,6 +10115,9 @@ user.learn.statistics.manage.describe_tips: >
   <div style='width:250px;'>
     <h5 style='color:blue;margin:5px 0;'>用户数据说明</h5>
     <P style='margin:0;'>用户数据每日00:00-02:00间更新。</p>
+    <P style='margin:0;'>累加学习时长（分）为筛选条件内该用户在网校产生的所有学习时长累加。</p>
+    <P style='margin:0;'>去重学习时长（分）为筛选条件内该用户在网校产生的所有学习时长去重后累加。</p>
+    <P style='margin:0;'>其中视频课时学习时长统计维度（播放活跃时长or页面活跃时长）以在系统-课程设置-视频课时学习配置为准。</p>
   </div>
 
 

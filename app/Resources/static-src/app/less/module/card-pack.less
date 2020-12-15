@@ -32,10 +32,15 @@
   }
   .date {
     color: #fff;
+    @media(max-width:@screen-xs-max) {
+      color: #fff;
+      text-align: left;
+    }
   }
   .price {
     font-size: 16px;
     color: #fff;
+    text-align: left;
     .price__number {
       font-size: 48px;
       font-weight: 600;
@@ -85,7 +90,7 @@
   .price {
     margin-bottom: 18px;
     margin-top: 10px;
-    strong {  
+    strong {
       font-size: 30px;
       font-weight: normal;
     }
@@ -161,6 +166,7 @@
     padding: 30px;
     @media(max-width:@screen-xs-max) {
       padding: 15px;
+      text-align: center;
     }
     .modal-info {
       text-align: center;
@@ -174,6 +180,9 @@
     }
     .coupon-pack-item {
       margin-left: 74px;
+      @media(max-width:@screen-xs-max){
+        margin-left: 0;
+      }
     }
     .modal-action {
       margin-top: 30px;

@@ -2,7 +2,7 @@
 t.fallback = 'en';
 t.defaultDomain = 'js';
 // en
-t.add("site.flash_not_install_hint", "Flash player is not installed or it is disabled or its version is too low in your browser, please make sure the flash player can work properly. <a target=\"_blank\" href=\"http:\/\/www.adobe.com\/go\/getflashplayer\"> Click Install<\/a>", "js", "en");
+t.add("site.flash_not_install_hint", "Since 2021, the new versions of mainstream browsers no longer support Flash technology, please use lower version browsers or check whether Flash is enabled, <a target=\"_blank\" href=\"http:\/\/www.adobe.com\/go\/getflashplayer\"> Click Install<\/a>", "js", "en");
 t.add("site.date_format_dhis", "Days %day% Hours %hour% Minutes %minutes% seconds %seconds%", "js", "en");
 t.add("site.date_format_his", "Hours %hours% Minutes %minutes% Seconds %seconds%", "js", "en");
 t.add("site.date_format_is", "Minutes %minutes% seconds %seconds%", "js", "en");
@@ -844,8 +844,8 @@ t.add("oauth.captcha_code_expired_tip", "The captcha code is expired", "js", "en
 t.add("oauth.captcha_code_error_tip", "The captcha code is error", "js", "en");
 t.add("oauth.register.time_limit", "Register too many times, please try again later.", "js", "en");
 t.add("oauth.register.error_message", "Register error. Please contact the admin for help.", "js", "en");
-t.add("admin.user.statistics.data.learn_total_time", "total study time", "js", "en");
-t.add("admin.user.statistics.data.learn_time", "study time\/minutes", "js", "en");
+t.add("admin.user.statistics.data.learn_total_time", "Length of incremental learning (minutes)", "js", "en");
+t.add("admin.user.statistics.data.learn_time", "accumulated study time\/minutes", "js", "en");
 t.add("admin.user.statistics.data.time", "time", "js", "en");
 t.add("course.audio.enable.biz.user", "To enable the audio mode, please upgrade to business plans.", "js", "en");
 t.add("admin.data.lab.setting.error", "Error. Please try again.", "js", "en");
@@ -1475,6 +1475,11 @@ t.add("admin_v2.information_collect.chooser.items.hint", "Please select form ite
 t.add("user.fields.gender_label", "Gender", "js", "en");
 t.add("information_collect.form.check_age_invalid", "Age Invalid", "js", "en");
 t.add("information_collect.form.check_format_invalid", "%display% Invalid", "js", "en");
+t.add("admin_v2.video_effective_time_setting.cancel.hint", "After the statistical dimension of video class learning time changes, the statistics of the whole station will be generated according to the new statistical rules, and the statistics of learning time generated before the change of rules will not be changed with the new rules.It is suggested that you do not change the statistical dimension of data frequently. <br\/>Do you confirm to change the statistical dimension of learning time this time?", "js", "en");
+t.add("admin_v2.video_effective_time_setting.play_rule.auto_pause.help_block", "When the system detects that the user is not focusing on learning, the PC side will automatically suspend the current play", "js", "en");
+t.add("admin_v2.video_effective_time_setting.play_rule.no_action.help_block", "When the system detects that the user is not focusing on learning, the PC side will continue to maintain the current play", "js", "en");
+t.add("admin_v2.video_effective_time_setting.statistical_dimension.playing.help_block", "The actual playing time was taken as the learning time statistics", "js", "en");
+t.add("admin_v2.video_effective_time_setting.statistical_dimension.page.help_block", "The page stay time is taken as the learning time statistics", "js", "en");
 t.add("course.marketing_setup", "Markets", "js", "en");
 t.add("site.currency.CNY", "CNY", "js", "en");
 t.add("s2b2c.product.cooperation_price", "Cooperation Price", "js", "en");
@@ -1584,4 +1589,7 @@ t.add("goods.show_page.buy_btn", "Buy", "js", "en");
 t.add("classroom.go_inside", "Go to preview", "js", "en");
 t.add("course.base.title.placeholder", "Please insert course title", "js", "en");
 t.add("course.unname_title", "Unnamed plan", "js", "en");
+t.add("course.task.out_focus_mask.continue_studying", "Continue studying", "js", "en");
+t.add("course.task.out_focus_mask.stop.tips", "<p class=\"ineffective-learning\">You can take a break after studying hard :D<\/p>\n", "js", "en");
+t.add("course.task.out_focus_mask.anti_brush.tips", "<p class=\"kick-each-other\">Do not open more tasks to learn at the same time<\/p> <p class=\"kick-each-other\">Don\u2019t multitask !<\/p>", "js", "en");
 })(Translator);

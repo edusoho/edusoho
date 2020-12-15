@@ -1334,6 +1334,39 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $this->getMemberDao()->count($conditions);
     }
 
+    public function recountLearningDataByCourseId($courseId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+        if (empty($course)) {
+            return;
+        }
+
+        $members = ArrayToolkit::index(
+            $this->searchMembers(['courseId' => $courseId, 'role' => 'student'], [], 0, PHP_INT_MAX, ['id', 'userId', 'lastLearnTime']),
+            'userId'
+        );
+        if (empty($members)) {
+            return;
+        }
+
+        $updateMembers = [];
+        $finishedTaskNums = $this->getTaskResultService()->countTaskNumGroupByUserId(['status' => 'finish', 'courseId' => $courseId]);
+        $finishedCompulsoryTaskNums = $this->getTaskResultService()->countFinishedCompulsoryTaskNumGroupByUserId($courseId);
+        foreach ($members as $member) {
+            $learnedNum = empty($finishedTaskNums[$member['userId']]) ? 0 : $finishedTaskNums[$member['userId']]['count'];
+            $learnedCompulsoryTaskNum = empty($finishedCompulsoryTaskNums[$member['userId']]) ? 0 : $finishedCompulsoryTaskNums[$member['userId']]['count'];
+            $updateMembers[] = [
+                'id' => $member['id'],
+                'learnedNum' => $learnedNum,
+                'learnedCompulsoryTaskNum' => $learnedCompulsoryTaskNum,
+                'learnedElectiveTaskNum' => $learnedNum - $learnedCompulsoryTaskNum,
+                'finishedTime' => $course['compulsoryTaskNum'] > 0 && $course['compulsoryTaskNum'] <= $learnedCompulsoryTaskNum ? $member['lastLearnTime'] : 0,
+            ];
+        }
+
+        $this->getMemberDao()->batchUpdate(ArrayToolkit::column($updateMembers, 'id'), $updateMembers);
+    }
+
     protected function createOrder($goodsSpecsId, $userId, $data)
     {
         $courseProduct = $this->getOrderFacadeService()->getOrderProduct('course', ['targetId' => $goodsSpecsId]);

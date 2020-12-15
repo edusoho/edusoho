@@ -1755,6 +1755,10 @@ task_live_entry:
   defaults: {_controller:  AppBundle:Activity/Live:liveEntry}
   h5: true
 
+custom_live_activity_replay_entry:
+  path: /course/{courseId}/activity/{activityId}/replay/{replayId}/custom_entry
+  defaults: { _controller: AppBundle:Activity/Live:customReplayEntry }
+
 live_activity_replay_entry:
   path: /course/{courseId}/activity/{activityId}/replay/{replayId}/entry
   defaults: { _controller: AppBundle:Activity/Live:replayEntry }
@@ -1767,7 +1771,9 @@ task_live_replay_player:
   path: /course/{courseId}/activity/{activityId}/replay
   defaults: {_controller: AppBundle:Activity/Live:liveReplay }
 
-
+task_live_replay_entry_player:
+  path: /task_live/{mediaId}/replay_entry
+  defaults: {_controller: AppBundle:Activity/Live:liveReplayEntry }
 
 # task_liveroom_ticket:
 #     path: /course/{courseId}/activity/{activityId}/liveroom/{roomId}/ticket
@@ -1837,6 +1843,11 @@ course_manage_lesson_batch_create:
 course_manage_lesson_valid_num:
     path: /course/{courseId}/lesson/valid_num
     defaults: { _controller: AppBundle:Course/LessonManage:validLessonNum }
+    methods: [POST]
+
+course_manage_lesson_valid_type:
+    path: /course/lesson/valid_type
+    defaults: { _controller: AppBundle:Course/LessonManage:validLessonType }
     methods: [POST]
 
 course_manage_lesson_update:
@@ -3612,3 +3623,7 @@ information_collect_event_form:
 information_collect_event_modal:
   path: /information_collect/event_modal/{eventId}
   defaults: { _controller: AppBundle:InformationCollect/InformationCollect:indexModal }
+
+drp_info:
+  path: /drp_info/{targetId}/{type}
+  defaults: { _controller: AppBundle:DrpInfo:getDrpInfo }

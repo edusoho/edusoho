@@ -2,6 +2,7 @@
     <div class="product-detail clearfix" v-if="goods.id">
         <div class="product-detail__left detail-left pull-left">
             <div class="detail-left__img">
+                <drp-info v-if="isUserLogin && drpInfo && drpInfo.tagVisible" :drp-info="drpInfo" :drp-recruit-switch="drpRecruitSwitch"></drp-info>
                 <img :src="goods.images ? goods.images.large : null" alt="">
             </div>
             <ul class="detail-left__text clearfix">
@@ -101,15 +102,18 @@
 </template>
 
 <script>
+    import axios from 'axios';
     import Favorite from "./favorite";
     import Share from 'app/js/share/src/share.vue';
     import BuySku from './buy-sku';
+    import DrpInfo from './drp-info';
 
     export default {
         components: {
             Favorite,
             Share,
             BuySku,
+            DrpInfo,
         },
         props: {
             goods: {
@@ -135,6 +139,10 @@
             timestamp: {
                 type: String,
                 default: '',
+            },
+            drpRecruitSwitch: {
+                type: Number,
+                default: 0
             }
         },
         methods: {
@@ -195,6 +203,11 @@
                 }
                 return time;
             },
+            getDrpInfo() {
+                axios.get(`/drp_info/${this.goods.product.target.id}/${this.goods.product.targetType}`).then(res => {
+                        this.drpInfo = res.data;
+                    });
+            }
         },
         filters: {
             formatDate(time, fmt = 'yyyy-MM-dd') {
@@ -234,7 +247,7 @@
             transSpecsTitle(specsTitle, goodsType) {
                 if ('course' === goodsType && '' == specsTitle) {
                     return Translator.trans('course.unname_title');
-                } 
+                }
                 return specsTitle;
             }
         },
@@ -248,10 +261,12 @@
                     'forever': Translator.trans('classroom.expiry_mode_forever'),
                 },
                 discountCountDown: '',
+                drpInfo: [],
             }
         },
         mounted() {
             this.remainTime();
+            this.getDrpInfo();
         },
         watch: {
             currentSku(newVal, oldVal) {

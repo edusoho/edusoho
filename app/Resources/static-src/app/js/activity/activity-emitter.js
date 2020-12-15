@@ -50,6 +50,7 @@ export default class ActivityEmitter {
 
   //发送事件到task
   emit(event, data) {
+    console.log(event, data);
     return new Promise((resolve, reject) => {
       let message = {
         event: event,

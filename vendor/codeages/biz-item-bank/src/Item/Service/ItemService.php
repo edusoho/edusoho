@@ -43,4 +43,6 @@ interface ItemService
     public function findQuestionsByQuestionIds($questionIds);
 
     public function countQuestionsByBankId($bankId);
+
+    public function countQuestionsByCategoryId($categoryId);
 }

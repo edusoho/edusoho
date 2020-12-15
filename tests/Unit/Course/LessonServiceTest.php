@@ -610,6 +610,10 @@ class LessonServiceTest extends BaseTestCase
                 'functionName' => 'updateCourseStatistics',
                 'returnValue' => true,
             ],
+            [
+                'functionName' => 'getCourse',
+                'returnValue' => ['id' => 1],
+            ],
         ]);
     }
 

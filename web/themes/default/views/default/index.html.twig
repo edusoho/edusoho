@@ -322,7 +322,7 @@
           {% endif %}
         </a>
 
-        <div class="course-body">
+        <div class="course-body ellipsis">
 
           <h4 class="course-title"><a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}">{{ courseSet.title }}</a>
 
@@ -339,10 +339,10 @@
               {% endif %}
             </div>
           {% else %}
-            <div class="course-about ellipsis">{{ courseSet.subtitle }}</div>
+            <div class="theme-default-course-about ellipsis">{{ courseSet.subtitle }}</div>
           {% endif %}
 
-          <div class="course-footer clearfix">
+          <div class="default-theme course-footer clearfix">
 
             {% set teacher = courseSet.teachers|first|default(null) %}
             {% if teacher %}
@@ -402,7 +402,7 @@
           {% if course.type == 'liveOpen' %}
             {% set lessons = data('OpenCourseLessons',{courseId:course.id,count:1}) %}
 
-            <div class="live-course-lesson mbs">
+            <div class="theme-default-live-course live-course-lesson mbs">
               {% if lessons %}
                 <span
                   class="text-success fsm mrm">{{ lessons[0].startTime|date('n月j日 H:i') }} ~ {{ lessons[0].endTime|date('H:i') }}</span>
@@ -410,10 +410,10 @@
             </div>
 
           {% else %}
-            <div class="course-about ellipsis">{{ course.subtitle }}</div>
+            <div class="theme-default-course-about ellipsis">{{ course.subtitle }}</div>
           {% endif %}
 
-          <div class="course-footer clearfix">
+          <div class="default-theme course-footer clearfix">
 
             {% set teacher = course.teachers|first|default(null) %}
             {% if teacher %}

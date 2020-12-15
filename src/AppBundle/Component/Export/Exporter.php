@@ -40,10 +40,10 @@ abstract class Exporter implements ExporterInterface
     public function export($name = '')
     {
         if (!$this->canExport()) {
-            return array(
+            return [
                 'success' => 0,
                 'message' => 'export.not_allowed',
-            );
+            ];
         }
         list($start, $limit) = $this->getPageConditions();
 
@@ -62,19 +62,19 @@ abstract class Exporter implements ExporterInterface
 
         $status = $endStatus ? 'finish' : 'continue';
 
-        return array(
+        return [
             'status' => $status,
             'fileName' => $fileName,
             'start' => $endPage,
             'count' => $count,
             'success' => '1',
-        );
+        ];
     }
 
     //获得导出分页参数
     public function buildParameter($conditions)
     {
-        $parameter = array();
+        $parameter = [];
         $start = isset($conditions['start']) ? $conditions['start'] : 0;
         $fileName = isset($conditions['fileName']) ? basename($conditions['fileName']) : '';
 
@@ -86,7 +86,7 @@ abstract class Exporter implements ExporterInterface
 
     protected function addContent($data, $start, $filePath)
     {
-        if ($start == 0) {
+        if (0 == $start) {
             array_unshift($data, $this->transTitles());
         }
         $partPath = $this->updateFilePaths($filePath, $start);
@@ -112,12 +112,12 @@ abstract class Exporter implements ExporterInterface
     protected function getPageConditions()
     {
         $magic = $this->getSettingService()->get('magic');
-        $magic = is_array($magic) ? $magic : array();
+        $magic = is_array($magic) ? $magic : [];
         if (empty($magic['export_limit'])) {
             $magic['export_limit'] = 1000;
         }
 
-        return array($this->parameter['start'], $magic['export_limit']);
+        return [$this->parameter['start'], $magic['export_limit']];
     }
 
     private function transTitles()
@@ -136,12 +136,12 @@ abstract class Exporter implements ExporterInterface
     {
         $biz = $this->getBiz();
         $filesystem = new Filesystem();
-        $rootPath = $biz['topxia.upload.private_directory'].'/';
+        $rootPath = $biz['topxia.upload.private_directory'].'/tmp/';
         if (!$filesystem->exists($rootPath)) {
             $filesystem->mkdir($rootPath);
         }
 
-        return  $rootPath;
+        return $rootPath;
     }
 
     public function getUser()

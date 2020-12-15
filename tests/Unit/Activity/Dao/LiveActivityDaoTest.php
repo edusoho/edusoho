@@ -39,7 +39,7 @@ class LiveActivityDaoTest extends BaseDaoTestCase
         $activity2 = $this->mockDataObject(['liveId' => 2, 'syncId' => 2]);
         $results = $this->getDao()->getBySyncIdGTAndLiveId(1);
 
-        $this->assertEquals(0, count($results['replayStatus']));
+        $this->assertEmpty($results['replayStatus']);
     }
 
     public function testGetBySyncId()

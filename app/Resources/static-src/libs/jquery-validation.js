@@ -225,6 +225,10 @@ $.validator.addMethod('course_title', function(value, element, params) {
   return this.optional(element) || /^[^<>]*$/.test(value);
 }, Translator.trans('validate.course_title.message'));
 
+$.validator.addMethod('classroom_title', function(value, element, params) {
+  return this.optional(element) || /^[^<>]*$/.test(value);
+}, Translator.trans('validate.course_title.message'));
+
 $.validator.addMethod('float', function(value, element) {
   return this.optional(element) || /^(([+-]?[1-9]{1}\d*)|([+-]?[0]{1}))(\.(\d){1,2})?$/i.test(value);
 }, Translator.trans('validate.float_input.message'));
