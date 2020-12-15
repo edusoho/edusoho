@@ -696,11 +696,15 @@ class CourseServiceImpl extends BaseService implements CourseService
                 $updateFields['studentNum'] = $this->countStudentsByCourseId($id);
             } elseif ('taskNum' === $field) {
                 $updateFields['taskNum'] = $this->getTaskService()->countTasks(
-                    ['courseId' => $id, 'isOptional' => 0]
+                    ['courseId' => $id]
                 );
             } elseif ('compulsoryTaskNum' === $field) {
                 $updateFields['compulsoryTaskNum'] = $this->getTaskService()->countTasks(
                     ['courseId' => $id, 'isOptional' => 0]
+                );
+            } elseif ('electiveTaskNum' === $field) {
+                $updateFields['electiveTaskNum'] = $this->getTaskService()->countTasks(
+                    ['courseId' => $id, 'isOptional' => 1]
                 );
             } elseif ('discussionNum' === $field) {
                 $updateFields['discussionNum'] = $this->countThreadsByCourseIdAndType($id, 'discussion');
