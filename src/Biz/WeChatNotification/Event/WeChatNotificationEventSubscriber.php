@@ -11,6 +11,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ThreadService;
+use Biz\Goods\Service\GoodsService;
 use Biz\Product\Service\ProductService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
@@ -216,9 +217,11 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 return;
             }
 
-            $product = $this->findProductByOrder($order);
+            $orderItems = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
 
-            $options = ['type' => 'url', 'url' => $this->getOrderTargetDetailUrl($product['targetType'], $product['targetId'])];
+            $goods_spec = $this->findGoodsByOrderItems($orderItems);
+
+            $options = ['type' => 'url', 'url' => $this->getOrderTargetDetailUrl($orderItems['target_type'], $goods_spec['targetId'])];
 
             $weChatUser = empty($weChatUser) ? $this->getWeChatService()->getOfficialWeChatUserByUserId($trade['user_id']) : $weChatUser;
             $templates = TemplateUtil::templates();
@@ -778,18 +781,17 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         return $biz['qiQiuYunSdk.notification'];
     }
 
-    private function findProductByOrder($order)
+    private function findGoodsByOrderItems($orderItems)
     {
-        $orderItems = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
-
         if (in_array($orderItems[0]['target_type'], ['course', 'classroom'])) {
-            $product = $this->getProductService()->getProductByTargetIdAndType($orderItems[0]['target_id'], $orderItems[0]['target_type']);
-            file_put_contents('/data/www/try6.edusoho.cn/app/logs/test2.log', json_encode($product).PHP_EOL, FILE_APPEND);
-            return $product;
+
+            $goods_spec = $this->getGoodsService()->getGoodsSpecs($orderItems[0]['target_id']);
+
+            file_put_contents('/data/www/try6.edusoho.cn/app/logs/orderItems.log', json_encode($orderItems).PHP_EOL, FILE_APPEND);
+            file_put_contents('/data/www/try6.edusoho.cn/app/logs/goods_specs.log', json_encode($goods_spec).PHP_EOL, FILE_APPEND);
+            return $goods_spec;
         } else {
-            $orderItems[0]['targetType'] = $orderItems[0]['target_type'];
             $orderItems[0]['targetId'] = $orderItems[0]['target_id'];
-            file_put_contents('/data/www/try6.edusoho.cn/app/logs/test3.log', json_encode($orderItems).PHP_EOL, FILE_APPEND);
 
             return $orderItems[0];
         }
@@ -942,10 +944,10 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
     }
 
     /**
-     * @return ProductService
+     * @return GoodsService
      */
-    protected function getProductService()
+    private function getGoodsService()
     {
-        return $this->getBiz()->service('Product:ProductService');
+        return $this->service('Goods:GoodsService');
     }
 }
