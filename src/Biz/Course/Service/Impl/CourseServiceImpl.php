@@ -2272,7 +2272,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $this->getMemberService()->updateMember(
             $member['id'],
-            ['learnedNum' => $learnedNum, 'learnedCompulsoryTaskNum' => $learnedCompulsoryTaskNum]
+            ['learnedNum' => $learnedNum, 'learnedCompulsoryTaskNum' => $learnedCompulsoryTaskNum, 'learnedElectiveTaskNum' => $learnedNum - $learnedCompulsoryTaskNum]
         );
     }
 
