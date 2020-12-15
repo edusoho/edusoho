@@ -195,7 +195,7 @@ export default class Create {
 
   initRegisterVisitIdField() {
     $(document).ready(() => {
-      if ('undefined' !== window._VISITOR_ID) {
+      if (window._VISITOR_ID !== 'undefined') {
         $('[name="registerVisitId"]').val(window._VISITOR_ID);
       }
     });

@@ -31,4 +31,5 @@
 
 {% block footer %}
   {% if oauthUser.isApp()|default() %}{% else %}{{ parent() }}{% endif %}
+  {{ setting('site.analytics')|raw }}
 {% endblock %}
