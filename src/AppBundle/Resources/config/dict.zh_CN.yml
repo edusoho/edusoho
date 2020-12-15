@@ -50,7 +50,7 @@ fileType:
     document: 文档
     image: 图片
     ppt: PPT
-    flash: Flash
+    flash: 其他
     other: 其他
 
 orderStatus:

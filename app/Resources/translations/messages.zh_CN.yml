@@ -3989,6 +3989,7 @@ my.teaching.live_schedule_menu: 教学课表
 my.teaching.hints_block: (当前仅展示直播课程)
 my.teaching.today_courses: 今日课程数
 my.teaching.classroom_menu: 在教%classroom%
+my.teaching.open_course_menu: 公开课
 my.teaching.question_menu: 学员问答
 my.teaching.discussion_menu: 学员话题
 my.teaching.online_review_menu: 在线批阅
@@ -7628,7 +7629,7 @@ admin.setting_course.video_play_setting.reject_current_play: 拒绝本次进入�
 admin.setting_course.video_play_setting.reject_current_play.tips: 当用户多开时，以先开的学习页面为主，后开学习页面不允许进入。微网校中仅对启航主题生效。
 admin.setting_course.video_play_setting.ineffective_learning: 无效学习时
 admin.setting_course.video_play_setting.play_rule: 非专注学习时播放规则
-admin.setting_course.video_play_setting.play_rule.tips: 当前视频课时的播放窗口不是屏幕活跃窗口（例如在PC端将窗口最小化，切换窗口等），或在PC端或微网校端当前视频课时播放窗口在20分钟内未检测到用户动作行为。
+admin.setting_course.video_play_setting.play_rule.tips: 当前视频课时的播放窗口不是屏幕活跃窗口（例如在PC端将窗口最小化，切换窗口等），或在PC端当前视频课时播放窗口在20分钟内未检测到用户动作行为。
 admin.setting_course.video_play_setting.play_rule.auto_pause.help_block: 当系统检测到用户处于非专注学习时，PC端将自动暂停当前播放
 admin.setting_course.video_play_setting.play_rule.no_action.help_block: 当系统检测到用户处于非专注学习时，PC端将继续维持当前播放
 admin.setting_course.video_play_setting.play_rule.auto_pause: 自动暂停
@@ -9059,6 +9060,7 @@ log.action.course.sync_when_task_create: 同步创建任务
 log.action.course.sync_when_task_update: 同步更新任务
 log.action.course.sync_when_task_delete: 同步删除任务
 log.action.course.clone_course_set: 复制课程
+log.action.course.copy_course: 复制教学计划
 log.action.course.unlock_course: 解除课程同步
 log.action.course.create_course: 创建教学计划
 log.action.course.update_course: 修改教学计划
