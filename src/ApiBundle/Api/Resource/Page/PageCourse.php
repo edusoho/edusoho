@@ -39,7 +39,8 @@ class PageCourse extends AbstractResource
             $course,
             $request->getHttpRequest()->isSecure(),
             $request->query->get('fetchSubtitlesUrls', 0),
-            $request->query->get('onlyPublished', 0)
+            $request->query->get('onlyPublished', 0),
+            $request->query->get('showOptionalNum', 1)
         );
 
         $course['allowAnonymousPreview'] = $this->getSettingService()->get('course.allowAnonymousPreview', 1);
