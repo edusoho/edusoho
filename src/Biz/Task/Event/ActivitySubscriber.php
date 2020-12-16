@@ -55,17 +55,17 @@ class ActivitySubscriber extends EventSubscriber implements EventSubscriberInter
         if (empty($task)) {
             return;
         }
-        //如果有duration，不要按照lastTime计算出来的时间作为学习时长
-        if ($event->hasArgument('duration')) {
-            $this->getTaskService()->doTask($task['id'], $event->getArgument('duration'));
-        } elseif ($time > 0) {
-            $this->getTaskService()->doTask($task['id'], $time);
-        }
+//        //如果有duration，不要按照lastTime计算出来的时间作为学习时长
+//        if ($event->hasArgument('duration')) {
+//            $this->getTaskService()->doTask($task['id'], $event->getArgument('duration'));
+//        } elseif ($time > 0) {
+//            $this->getTaskService()->doTask($task['id'], $time);
+//        }
         $this->updateLastLearnTime($task);
-
-        if ($this->getTaskService()->isFinished($task['id'])) {
-            $this->getTaskService()->finishTaskResult($task['id']);
-        }
+//
+//        if ($this->getTaskService()->isFinished($task['id'])) {
+//            $this->getTaskService()->finishTaskResult($task['id']);
+//        }
     }
 
     /**
