@@ -12,9 +12,9 @@ class ItemHelper
 
     private $container;
 
-    private $blankChapter = array('type' => 'chapter', 'isExist' => 0);
+    private $blankChapter = ['type' => 'chapter', 'isExist' => 0];
 
-    private $blankUnit = array('type' => 'unit', 'isExist' => 0);
+    private $blankUnit = ['type' => 'unit', 'isExist' => 0];
 
     public function __construct($biz, ContainerInterface $container)
     {
@@ -28,7 +28,7 @@ class ItemHelper
      */
     public function convertToTree($items)
     {
-        $treeItems = array();
+        $treeItems = [];
 
         if (empty($items)) {
             return $treeItems;
@@ -54,18 +54,18 @@ class ItemHelper
                     if ('chapter' == $lastItem) {
                         ++$nowUnitIndex;
                         $treeItems[$nowChapterIndex]['children'][] = $this->blankUnit;
-                        $treeItems[$nowChapterIndex]['children'][$nowUnitIndex]['children'] = array();
+                        $treeItems[$nowChapterIndex]['children'][$nowUnitIndex]['children'] = [];
                     }
                     ++$nowChapterIndex;
                     $nowUnitIndex = -1; //新章创建后，应重置当前节
                     $treeItems[$nowChapterIndex] = $item;
-                    $treeItems[$nowChapterIndex]['children'] = array();
+                    $treeItems[$nowChapterIndex]['children'] = [];
                     break;
 
                 case 'unit':
                     ++$nowUnitIndex;
                     $treeItems[$nowChapterIndex]['children'][] = $item;
-                    $treeItems[$nowChapterIndex]['children'][$nowUnitIndex]['children'] = array();
+                    $treeItems[$nowChapterIndex]['children'][$nowUnitIndex]['children'] = [];
                     break;
 
                 case 'lesson':
@@ -89,7 +89,7 @@ class ItemHelper
         if ('chapter' == $lastItem) {
             ++$nowUnitIndex;
             $treeItems[$nowChapterIndex]['children'][] = $this->blankUnit;
-            $treeItems[$nowChapterIndex]['children'][$nowUnitIndex]['children'] = array();
+            $treeItems[$nowChapterIndex]['children'][$nowUnitIndex]['children'] = [];
         }
 
         return $treeItems;
@@ -98,11 +98,11 @@ class ItemHelper
     public function convertToLeadingItemsV1($originItems, $course, $isSsl, $fetchSubtitlesUrls, $onlyPublishTask = false)
     {
         $courseId = $course['id'];
-        $newItems = array();
+        $newItems = [];
         $number = 1;
-        $targetUrl = $this->generateUrl('my_course_show', array('id' => $courseId));
+        $targetUrl = $this->generateUrl('my_course_show', ['id' => $courseId]);
         foreach ($originItems as $originItem) {
-            $item = array();
+            $item = [];
             if ('task' == $originItem['itemType']) {
                 $originItem['courseUrl'] = $targetUrl;
                 $item['type'] = 'task';
@@ -118,7 +118,7 @@ class ItemHelper
                 if ('normal' == $course['courseType']) {
                     continue;
                 }
-                $originItem['tasks'] = empty($originItem['tasks']) ? array() : $originItem['tasks'];
+                $originItem['tasks'] = empty($originItem['tasks']) ? [] : $originItem['tasks'];
                 $taskSeq = count($originItem['tasks']) > 1 ? 1 : 0;
                 foreach ($originItem['tasks'] as $task) {
                     $task['courseUrl'] = $targetUrl;
@@ -149,8 +149,8 @@ class ItemHelper
 
     public function convertToLeadingItemsV2($originItems, $course, $isSsl, $fetchSubtitlesUrls, $onlyPublishTask = false)
     {
-        $result = array();
-        $lessonInfos = array();
+        $result = [];
+        $lessonInfos = [];
         foreach ($originItems as $item) {
             if ('lesson' == $item['type']) {
                 unset($item['tasks']);
@@ -169,16 +169,13 @@ class ItemHelper
         $lessonInfos = $onlyPublishTask ? $this->filterUnPublishLessonV2($lessonInfos) : $this->isHiddenUnpublishTasksV2($lessonInfos, $course['id']);
         $lessonInfos = ArrayToolkit::index($lessonInfos, 'id');
 
-        $result = array();
-        $lessonNum = 1;
+        $result = [];
         foreach ($convertedItems as $key => $item) {
             if ('task' == $item['type']) {
                 $lessonId = $item['task']['categoryId'];
                 if (!empty($lessonInfos[$lessonId])) {
                     $lessonItem = $lessonInfos[$lessonId];
-                    $lessonItem['number'] = $lessonNum;
                     $result[] = $lessonItem;
-                    ++$lessonNum;
                     unset($lessonInfos[$item['task']['categoryId']]);
                 }
             } else {
@@ -251,7 +248,7 @@ class ItemHelper
         return $result;
     }
 
-    protected function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_URL)
+    protected function generateUrl($route, $parameters = [], $referenceType = UrlGeneratorInterface::ABSOLUTE_URL)
     {
         return $this->container->get('router')->generate($route, $parameters, $referenceType);
     }
