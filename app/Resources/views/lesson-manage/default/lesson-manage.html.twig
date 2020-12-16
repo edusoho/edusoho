@@ -29,7 +29,7 @@
     {% if course.platform == 'self' %}
       <li>
         <a class='js-set-optional {% if lesson.isOptional == 1 %}hidden{% endif %}' href="javascript:;" data-type="chapter" data-url="{{ path('course_manage_lesson_set_optional', {courseId:course.id, lessonId:lesson.id}) }}">
-          {{'course.lesson_manage.set_optional'|trans}}
+          {{'course.lesson_manage.set_optional'|trans}} <i class="es-icon es-icon-help" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="{{ 'course.lesson_manage.set_optional_tips'|trans|raw }}"></i>
         </a>
       </li>
       <li>
