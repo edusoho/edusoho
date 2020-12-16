@@ -147,7 +147,7 @@ class ItemHelper
         return $fetchSubtitlesUrls ? $this->afterDeal($result, $isSsl) : $result;
     }
 
-    public function convertToLeadingItemsV2($originItems, $course, $isSsl, $fetchSubtitlesUrls, $onlyPublishTask = false)
+    public function convertToLeadingItemsV2($originItems, $course, $isSsl, $fetchSubtitlesUrls, $onlyPublishTask = false, $showOptionalNum = 1)
     {
         $result = [];
         $lessonInfos = [];
@@ -170,12 +170,15 @@ class ItemHelper
         $lessonInfos = ArrayToolkit::index($lessonInfos, 'id');
 
         $result = [];
+        $lessonNum = 1;
         foreach ($convertedItems as $key => $item) {
             if ('task' == $item['type']) {
                 $lessonId = $item['task']['categoryId'];
                 if (!empty($lessonInfos[$lessonId])) {
                     $lessonItem = $lessonInfos[$lessonId];
+                    $lessonItem['number'] = 1 == $showOptionalNum ? $lessonNum : $lessonItem['number'];
                     $result[] = $lessonItem;
+                    ++$lessonNum;
                     unset($lessonInfos[$item['task']['categoryId']]);
                 }
             } else {
