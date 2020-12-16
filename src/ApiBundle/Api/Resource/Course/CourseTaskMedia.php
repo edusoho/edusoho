@@ -13,6 +13,7 @@ use Biz\Classroom\ClassroomException;
 use Biz\Common\CommonException;
 use Biz\Course\MemberException;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\LiveReplayService;
 use Biz\Course\Service\MaterialService;
 use Biz\Course\Service\MemberService;
 use Biz\File\Service\UploadFileService;
@@ -173,7 +174,10 @@ class CourseTaskMedia extends AbstractResource
 
         $version = $request->query->get('version', 'qiqiuyun');
         if ('escloud' == $version) {
-            return $this->getVideoWithEsCloud($file, $course, $task);
+            $options['playAudio'] = $request->query->get('playAudio', 0);
+            $options['watchLimitTime'] = $this->getVideoFreeWatchTime($course, $task);
+
+            return $this->getVideoWithEsCloud($file, $course, $task, $options);
         }
 
         $player = $this->getPlayerService()->getAudioAndVideoPlayerType($file);
@@ -218,9 +222,9 @@ class CourseTaskMedia extends AbstractResource
         return 0;
     }
 
-    protected function getVideoWithEsCloud($file, $course, $task)
+    protected function getVideoWithEsCloud($file, $course, $task, $options = [])
     {
-        $playerContext = $this->getResourceFacadeService()->getPlayerContext($file);
+        $playerContext = $this->getResourceFacadeService()->getPlayerContext($file, '', $options);
         $playerContext['timeLimit'] = $this->getVideoFreeWatchTime($course, $task);
 
         return $playerContext;
@@ -306,7 +310,9 @@ class CourseTaskMedia extends AbstractResource
         }
 
         if ('escloud' == $request->query->get('version', 'qiqiuyun')) {
-            return $this->getAudioWithEsCloud($file, $audio, $activity);
+            $options['playAudio'] = $request->query->get('playAudio', 0);
+
+            return $this->getAudioWithEsCloud($file, $audio, $activity, $options);
         }
 
         $player = $this->getPlayerService()->getAudioAndVideoPlayerType($file);
@@ -326,9 +332,9 @@ class CourseTaskMedia extends AbstractResource
         ];
     }
 
-    protected function getAudioWithEsCloud($file, $audio, $activity)
+    protected function getAudioWithEsCloud($file, $audio, $activity, $options)
     {
-        $context = $this->getResourceFacadeService()->getPlayerContext($file);
+        $context = $this->getResourceFacadeService()->getPlayerContext($file, '', $options);
         $context['hasText'] = $audio['hasText'] ? true : false;
         $context['text'] = $audio['hasText'] ? $activity['content'] : '';
 
@@ -378,12 +384,18 @@ class CourseTaskMedia extends AbstractResource
         $config = $this->getActivityService()->getActivityConfig($activity['mediaType']);
         $live = $config->get($activity['mediaId']);
         if ($live['roomCreated']) {
-            $format = 'Y-m-d H:i';
+            if (LiveReplayService::REPLAY_VIDEO_GENERATE_STATUS == $live['replayStatus'])
+            {
+                $file = $this->getUploadFileService()->getFullFile($live['mediaId']);
+                $playerContext = $this->getResourceFacadeService()->getPlayerContext($file);
+            }
 
             return [
                 'entryUrl' => $this->generateUrl('task_live_entry', ['courseId' => $course['id'], 'activityId' => $activity['id']], UrlGeneratorInterface::ABSOLUTE_URL),
                 'startTime' => date('c', $activity['startTime']),
                 'endTime' => date('c', $activity['endTime']),
+                'token' => empty($playerContext['token']) ? '' : $playerContext['token'],
+                'resNo' => empty($playerContext['resNo']) ? '' : $playerContext['resNo'],
             ];
         }
     }
