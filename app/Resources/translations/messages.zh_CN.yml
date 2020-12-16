@@ -1985,7 +1985,7 @@ course.manage.preview_lesson: 预览课时
 course.lesson_manage.set_optional: 设置选修
 course.lesson_manage.unset_optional: 设置必修
 course.lesson_manage.rename: 重命名
-course.lesson_manage.set_optional_tips: 课时任务数和学习进度<br />将不会统计选修课时
+course.lesson_manage.set_optional_tips: 课时任务数和学习进度将不会统计选修课时
 
 # activity-活动
 activity_manage.finish_tips:

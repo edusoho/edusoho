@@ -29,7 +29,7 @@
     {% if course.platform == 'self' %}
       <li>
         <a class='js-set-optional {% if lesson.isOptional == 1 %}hidden{% endif %}' href="javascript:;" data-type="chapter" data-url="{{ path('course_manage_lesson_set_optional', {courseId:course.id, lessonId:lesson.id}) }}">
-          {{'course.lesson_manage.set_optional'|trans}} <i class="es-icon es-icon-help" data-toggle="tooltip" title="" data-placement="bottom" data-original-title="{{ 'course.lesson_manage.set_optional_tips'|trans|raw }}"></i>
+          {{'course.lesson_manage.set_optional'|trans}}<span class="link-medium es-icon es-icon-help ml5" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="{{ 'course.lesson_manage.set_optional_tips'|trans|raw }}" data-original-title="" title=""></span>
         </a>
       </li>
       <li>
