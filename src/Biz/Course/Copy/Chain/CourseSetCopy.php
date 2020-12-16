@@ -7,14 +7,14 @@ use Biz\Course\Dao\CourseSetDao;
 
 class CourseSetCopy extends AbstractEntityCopy
 {
-    protected function copyEntity($source, $config = array())
+    protected function copyEntity($source, $config = [])
     {
         return $this->doCopyCourseSet($source);
     }
 
     protected function getFields()
     {
-        return array(
+        return [
             'type',
             'title',
             'subtitle',
@@ -30,7 +30,7 @@ class CourseSetCopy extends AbstractEntityCopy
             'discount',
             'orgId',
             'orgCode',
-        );
+        ];
     }
 
     private function doCopyCourseSet($courseSet)
