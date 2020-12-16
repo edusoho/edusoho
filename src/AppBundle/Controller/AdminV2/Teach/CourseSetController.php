@@ -807,7 +807,7 @@ class CourseSetController extends BaseController
     protected function filterCourseSetConditions($filter, $conditions)
     {
         if ('classroom' == $filter) {
-            $conditions['parentId_GT'] = 0;
+            $conditions['isClassroomRef'] = 1;
         } elseif ('vip' == $filter) {
             $conditions['isVip'] = 1;
             $conditions['parentId'] = 0;

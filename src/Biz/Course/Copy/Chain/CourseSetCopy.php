@@ -42,6 +42,7 @@ class CourseSetCopy extends AbstractEntityCopy
         $newCourseSet['creator'] = $this->biz['user']['id'];
         $newCourseSet['locked'] = 1; // 默认锁定
         $newCourseSet['discountId'] = 0; // 商品打折不影响班级内的课程
+        $newCourseSet['isClassroomRef'] = 1;
 
         return $this->getCourseSetDao()->create($newCourseSet);
     }
