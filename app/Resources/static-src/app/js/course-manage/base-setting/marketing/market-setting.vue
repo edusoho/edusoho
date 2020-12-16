@@ -117,7 +117,7 @@
                     </el-radio>
 
                     <div class="course-manage-expiry" :class="{'hidden':marketingForm.expiryMode !== 'days'}"
-                         id="expiry-days">
+                         id="expiry-days" style="max-width: 600px;">
                         <span class="caret"></span>
                         <el-radio v-model="marketingForm.deadlineType"
                                   v-for="(label, value) in deadlineTypeRadio"
@@ -157,20 +157,31 @@
                     </div>
 
                     <div class="course-manage-expiry"
-                         :class="{'hidden': marketingForm.expiryMode !== 'date'}">
+                         :class="{'hidden': marketingForm.expiryMode !== 'date'}" style="max-width: 600px;">
                         <span class="caret"></span>
                         <div class="course-manage-expiry__circle"
                              v-if="marketingForm.expiryMode === 'date' && marketingForm.expiryMode === 'date'">
-                            <el-form-item prop="expiryDateRange">
+                            <el-form-item prop="expiryStartDate" style="display: inline-block; margin-left: -10px">
+                                <span class="demonstration">{{ 'course.plan_task.start_time'|trans }}</span>
                                 <el-date-picker
-                                    v-model="marketingForm.expiryDateRange"
+                                    v-model="marketingForm.expiryStartDate"
+                                    type="date"
+                                    size="small"
+                                    ref="expiryStartDate"
                                     :default-value="today"
-                                    :picker-options="dateOptions"
-                                    type="daterange"
-                                    range-separator="-"
-                                    ref="expiryDateRange"
-                                    :start-placeholder="'course.plan_task.start_time'|trans"
-                                    :end-placeholder="'course.plan_task.start_time'|trans">
+                                    :picker-options="startDateOptions"
+                                    :disabled="(coursePublished && courseSetPublished) || course.platform !== 'self'">
+                                </el-date-picker>
+                            </el-form-item>
+                            <el-form-item prop="expiryEndDate" style="display: inline-block; margin-left: 4px">
+                                <span class="demonstration">{{ 'course.plan_task.end_time'|trans }}</span>
+                                <el-date-picker
+                                    v-model="marketingForm.expiryEndDate"
+                                    type="date"
+                                    size="small"
+                                    ref="expiryEndDate"
+                                    :picker-options="endDateOptions"
+                                    :disabled="(coursePublished && courseSetPublished) || course.platform !== 'self'">
                                 </el-date-picker>
                             </el-form-item>
                         </div>
@@ -240,215 +251,255 @@
 </template>
 
 <script>
-    import * as validation from 'common/element-validation';
+import * as validation from 'common/element-validation';
 
-    export default {
-        name: "market-setting",
-        props: {
+export default {
+    name: "market-setting",
+    props: {
+        course: {},
+        courseSet: {},
+        courseProduct: {},
+        notifies: {},
+        canModifyCoursePrice: true,
+        buyBeforeApproval: false,
+        vipInstalled: false,
+        vipEnabled: false,
+        vipLevels: {},
+        serviceTags: {},
+    },
+    watch: {},
+    methods: {
+        serviceItemClick(event) {
+            let $item = $(event.currentTarget);
+            if (!this.course.services) {
+                this.course.services = [];
+            }
+
+            let code = $item.data('code')
+            if ($item.hasClass('service-primary-item')) {
+                $item.removeClass('service-primary-item');
+                this.course.services.splice(this.course.services.indexOf(code), 1);
+            } else {
+                $item.addClass('service-primary-item');
+
+                if (this.course.services.indexOf(code) < 0) {
+                    this.course.services.push(code);
+                }
+            }
+        },
+        validateForm() {
+            let result = false;
+            let invalids = {};
+            this.$refs.marketSettingForm.clearValidate();
+
+            this.$refs.marketSettingForm.validate((valid, invalidFields) => {
+                if (valid) {
+                    result = true;
+                } else {
+                    invalids = invalidFields;
+                }
+            });
+
+            return {result: result, invalidFields: invalids};
+        },
+        getFormData() {
+            return this.marketingForm;
+        }
+    },
+    data() {
+        this.course.buyExpiryTime = this.course.buyExpiryTime > 0 ? this.course.buyExpiryTime * 1000 : null;
+        let coursePublished = this.course.status ? this.course.status === 'published' : false;
+        let courseClosed = this.course.status ? this.course.status === 'closed' : false;
+        let courseSetPublished = this.courseSet.status ? this.courseSet.status === 'published' : false;
+        let courseSetClosed = this.courseSet.status ? this.courseSet.status === 'closed' : false;
+
+        let max_year = (rule, value, callback) => {
+            value <= 7300 ? callback() : callback(new Error(Translator.trans('validate.max_year.message')));
+        }
+
+        let form = {
+            originPrice: this.course.originPrice,
+            buyable: this.course.buyable,
+            enableBuyExpiryTime: this.course.buyExpiryTime > 0 ? '1' : '0',
+            buyExpiryTime: this.course.buyExpiryTime,
+            approval: this.course.approval,
+            expiryMode: this.course.expiryMode,
+            deadline: this.course.expiryEndDate,
+            deadlineType: this.course.deadlineType ? this.course.deadlineType : 'days',
+            expiryDays: this.course.expiryDays > 0 ? this.course.expiryDays : null,
+            expiryStartDate: this.course.expiryStartDate == 0 ? '' : this.course.expiryStartDate,
+            expiryEndDate: this.course.expiryEndDate == 0 ? '' : this.course.expiryEndDate,
+            services: this.course.services,
+        };
+
+        if (this.vipInstalled && this.vipEnabled) {
+            Object.assign(form, {vipLevelId: this.course.vipLevelId})
+        }
+
+        return {
             course: {},
-            courseSet: {},
             courseProduct: {},
             notifies: {},
             canModifyCoursePrice: true,
             buyBeforeApproval: false,
-            vipInstalled: false,
-            vipEnabled: false,
-            vipLevels: {},
             serviceTags: {},
-        },
-        watch: {},
-        methods: {
-            serviceItemClick(event) {
-                let $item = $(event.currentTarget);
-                if (!this.course.services) {
-                    this.course.services = [];
+            buyableRadios: [
+                {
+                    value: '1',
+                    label: Translator.trans('course.marketing_setup.setup.can_join'),
+                },
+                {
+                    value: '0',
+                    label: Translator.trans('course.marketing_setup.setup.can_not_join'),
                 }
-
-                let code = $item.data('code')
-                if ($item.hasClass('service-primary-item')) {
-                    $item.removeClass('service-primary-item');
-                    this.course.services.splice(this.course.services.indexOf(code), 1);
-                } else {
-                    $item.addClass('service-primary-item');
-
-                    if (this.course.services.indexOf(code) < 0) {
-                        this.course.services.push(code);
-                    }
+            ],
+            buyExpiryTimeEnabledRadios: [
+                {
+                    value: '0',
+                    label: Translator.trans('course.marketing_setup.expiry_date.anytime'),
+                },
+                {
+                    value: '1',
+                    label: Translator.trans('course.marketing_setup.expiry_date.custom'),
+                }
+            ],
+            approvalRadios: [
+                {
+                    value: '1',
+                    label: Translator.trans('site.datagrid.radios.yes'),
+                },
+                {
+                    value: '0',
+                    label: Translator.trans('site.datagrid.radios.no'),
+                }
+            ],
+            today: Date.now(),
+            dateOptions: {
+                disabledDate(time) {
+                    return time.getTime() <= Date.now() - 24 * 60 * 60 * 1000;
                 }
             },
-            validateForm() {
-                let result = false;
-                let invalids = {};
-                this.$refs.marketSettingForm.clearValidate();
-
-                this.$refs.marketSettingForm.validate((valid, invalidFields) => {
-                    if (valid) {
-                        result = true;
+            startDateOptions: {
+                disabledDate: (time) => {
+                    if (this.marketingForm.expiryEndDate !== '' && this.marketingForm.expiryEndDate != null) {
+                        return time.getTime() > this.marketingForm.expiryEndDate || time.getTime() <= Date.now() - 24 * 60 * 60 * 1000;
                     } else {
-                        invalids = invalidFields;
-                    }
-                });
-
-                return {result: result, invalidFields: invalids};
-            },
-            getFormData() {
-                return this.marketingForm;
-            }
-        },
-        data() {
-            this.course.buyExpiryTime = this.course.buyExpiryTime > 0 ? this.course.buyExpiryTime * 1000 : null;
-            let coursePublished = this.course.status ? this.course.status === 'published' : false;
-            let courseClosed = this.course.status ? this.course.status === 'closed' : false;
-            let courseSetPublished = this.courseSet.status ? this.courseSet.status === 'published' : false;
-            let courseSetClosed = this.courseSet.status ? this.courseSet.status === 'closed' : false;
-
-            let max_year = (rule, value, callback) => {
-                value <= 7300 ? callback() : callback(new Error(Translator.trans('validate.max_year.message')));
-            }
-
-            this.course.expiryStartDate = this.course.expiryStartDate == 0 ? '' : this.course.expiryStartDate;
-            this.course.expiryEndDate = this.course.expiryEndDate == 0 ? '' : this.course.expiryEndDate
-            let expiryDateRange = (!this.course.expiryStartDate || !this.course.expiryEndDate) ? null : [
-                this.course.expiryStartDate, this.course.expiryEndDate
-            ]
-
-            let form = {
-                originPrice: this.course.originPrice,
-                buyable: this.course.buyable,
-                enableBuyExpiryTime: this.course.buyExpiryTime > 0 ? '1' : '0',
-                buyExpiryTime: this.course.buyExpiryTime,
-                approval: this.course.approval,
-                expiryMode: this.course.expiryMode,
-                deadline: this.course.expiryEndDate,
-                deadlineType: this.course.deadlineType ? this.course.deadlineType : 'days',
-                expiryDays: this.course.expiryDays > 0 ? this.course.expiryDays : null,
-                expiryDateRange: expiryDateRange,
-                services: this.course.services,
-            };
-
-            if (this.vipInstalled && this.vipEnabled) {
-                Object.assign(form, {vipLevelId: this.course.vipLevelId})
-            }
-
-            return {
-                course: {},
-                courseProduct: {},
-                notifies: {},
-                canModifyCoursePrice: true,
-                buyBeforeApproval: false,
-                serviceTags: {},
-                buyableRadios: [
-                    {
-                        value: '1',
-                        label: Translator.trans('course.marketing_setup.setup.can_join'),
-                    },
-                    {
-                        value: '0',
-                        label: Translator.trans('course.marketing_setup.setup.can_not_join'),
-                    }
-                ],
-                buyExpiryTimeEnabledRadios: [
-                    {
-                        value: '0',
-                        label: Translator.trans('course.marketing_setup.expiry_date.anytime'),
-                    },
-                    {
-                        value: '1',
-                        label: Translator.trans('course.marketing_setup.expiry_date.custom'),
-                    }
-                ],
-                approvalRadios: [
-                    {
-                        value: '1',
-                        label: Translator.trans('site.datagrid.radios.yes'),
-                    },
-                    {
-                        value: '0',
-                        label: Translator.trans('site.datagrid.radios.no'),
-                    }
-                ],
-                today: Date.now(),
-                dateOptions: {
-                    disabledDate(time) {
                         return time.getTime() <= Date.now() - 24 * 60 * 60 * 1000;
                     }
-                },
-                marketingForm: form,
-                formRule: {
-                    deadline: [
-                        {
-                            required: true,
-                            message: Translator.trans('course.manage.deadline_end_date_error_hint'),
-                            trigger: 'blur'
-                        }
-                    ],
-                    expiryDateRange: [
-                        {
-                            required: true,
-                            message: Translator.trans('course.manage.expiry_date.error_hint'),
-                            trigger: 'blur'
-                        }
-                    ],
-                    expiryDays: [
-                        {
-                            required: true,
-                            message: Translator.trans('course.manage.expiry_days_error_hint'),
-                            trigger: 'blur'
+                }
+            },
+            endDateOptions: {
+                disabledDate: (time) => {
+                    if (this.marketingForm.expiryStartDate !== '') {
+                        return time.getTime() < this.marketingForm.expiryStartDate;
+                    }else{
+                        return time.getTime() <= Date.now() - 24 * 60 * 60 * 1000;
+                    }
+                }
+            },
+            marketingForm: form,
+            formRule: {
+                deadline: [
+                    {
+                        required: true,
+                        message: Translator.trans('course.manage.deadline_end_date_error_hint'),
+                        trigger: 'blur'
+                    }
+                ],
+                expiryStartDate: [
+                    {
+                        required: true,
+                        message: Translator.trans('course.manage.expiry_start_date_error_hint'),
+                        trigger: 'blur'
+                    },
+                    {
+                        validator(rule, value, callback) {
+                            new Date(value).getTime() >= Date.now() - 24 * 60 * 60 * 1000 ? callback() : callback(new Error(Translator.trans('validate.after_now_date.message')));
                         },
-                        {
-                            validator: validation.digits,
-                            message: Translator.trans('validate.positive_integer.message'),
-                            trigger: 'blur'
+                        trigger: 'blur',
+                    },
+                    {
+                        validator(rule, value, callback) {
+                            if (!form.expiryEndDate) return;
+                            new Date(value) <= new Date(form.expiryEndDate) ? callback() : callback(new Error(Translator.trans('validate.before_date.message')));
                         },
-                        {
-                            validator: max_year,
-                            message: Translator.trans('course.manage.max_year_error_hint'),
-                            trigger: 'blur'
-                        }
-                    ],
-                    originPrice: [
-                        {
-                            required: true,
-                            message: Translator.trans('validate.required.message', {'display': Translator.trans('site.price')}),
-                            trigger: 'blur'
+                        trigger: 'blur',
+                    }
+                ],
+                expiryEndDate: [
+                    {
+                        required: true,
+                        message: Translator.trans('course.manage.expiry_end_date_error_hint'),
+                        trigger: 'blur'
+                    },
+                    {
+                        validator(rule, value, callback) {
+                            if (!form.expiryStartDate) return;
+                            new Date(value) >= new Date(form.expiryStartDate) ? callback() : callback(new Error(Translator.trans('validate.after_date.message')));
                         },
-                        {validator: validation.positive_price, trigger: 'blur'},
-                    ],
-                    enableBuyExpiryTime: [
-                        {required: true, trigger: 'blur'}
-                    ],
-                    buyExpiryTime: [
-                        {
-                            required: true,
-                            message: Translator.trans('course.manage.deadline_end_date_error_hint'),
-                            trigger: 'blur'
-                        }
-                    ]
-                },
-                deadlineTypeRadio: {
-                    'end_date': Translator.trans('course.teaching_plan.expiry_date.end_date_mode'),
-                    'days': Translator.trans('course.teaching_plan.expiry_date.days_mode')
-                },
-                expiryMode: {
-                    'days': Translator.trans('course.teaching_plan.expiry_date.anywhere_mode'),
-                    'date': Translator.trans('course.teaching_plan.expiry_date.date_mode'),
-                    'forever': Translator.trans('course.teaching_plan.expiry_date.forever_mode')
-                },
-                expiryModeTips: {
-                    'anytime': Translator.trans('course.teaching_plan.expiry_date.anytime'),
-                    'realtime': Translator.trans('course.teaching_plan.expiry_date.real_time'),
-                    'overdue': Translator.trans('course.teaching_plan.expiry_date.overdue_tips'),
-                },
-                courseClosed: courseClosed,
-                courseSetClosed: courseSetClosed,
-                courseSetPublished: courseSetPublished,
-                coursePublished: coursePublished,
-                vipInstalled: false,
-                vipEnabled: false,
-                vipLevels: {}
-            }
+                        trigger: 'blur',
+                    }
+                ],
+                expiryDays: [
+                    {
+                        required: true,
+                        message: Translator.trans('course.manage.expiry_days_error_hint'),
+                        trigger: 'blur'
+                    },
+                    {
+                        validator: validation.digits,
+                        message: Translator.trans('validate.positive_integer.message'),
+                        trigger: 'blur'
+                    },
+                    {
+                        validator: max_year,
+                        message: Translator.trans('course.manage.max_year_error_hint'),
+                        trigger: 'blur'
+                    }
+                ],
+                originPrice: [
+                    {
+                        required: true,
+                        message: Translator.trans('validate.required.message', {'display': Translator.trans('site.price')}),
+                        trigger: 'blur'
+                    },
+                    {validator: validation.positive_price, trigger: 'blur'},
+                ],
+                enableBuyExpiryTime: [
+                    {required: true, trigger: 'blur'}
+                ],
+                buyExpiryTime: [
+                    {
+                        required: true,
+                        message: Translator.trans('course.manage.deadline_end_date_error_hint'),
+                        trigger: 'blur'
+                    }
+                ]
+            },
+            deadlineTypeRadio: {
+                'end_date': Translator.trans('course.teaching_plan.expiry_date.end_date_mode'),
+                'days': Translator.trans('course.teaching_plan.expiry_date.days_mode')
+            },
+            expiryMode: {
+                'days': Translator.trans('course.teaching_plan.expiry_date.anywhere_mode'),
+                'date': Translator.trans('course.teaching_plan.expiry_date.date_mode'),
+                'forever': Translator.trans('course.teaching_plan.expiry_date.forever_mode')
+            },
+            expiryModeTips: {
+                'anytime': Translator.trans('course.teaching_plan.expiry_date.anytime'),
+                'realtime': Translator.trans('course.teaching_plan.expiry_date.real_time'),
+                'overdue': Translator.trans('course.teaching_plan.expiry_date.overdue_tips'),
+            },
+            courseClosed: courseClosed,
+            courseSetClosed: courseSetClosed,
+            courseSetPublished: courseSetPublished,
+            coursePublished: coursePublished,
+            vipInstalled: false,
+            vipEnabled: false,
+            vipLevels: {}
         }
     }
+}
 </script>
 
 <style scoped>

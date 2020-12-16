@@ -327,11 +327,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             $fields['buyExpiryTime'] = 0;
         }
 
-        if (!empty($fields['expiryDateRange'])) {
-            $fields['expiryStartDate'] = $fields['expiryDateRange'][0];
-            $fields['expiryEndDate'] = $fields['expiryDateRange'][1];
-        }
-
         $fields = ArrayToolkit::parts(
             $fields,
             [
