@@ -265,7 +265,7 @@ class GlobalFilePlayerController extends BaseController
             'data' => [
                 'globalId' => $globalId,
             ],
-            'times' => 3,
+            'times' => 30,
             'duration' => 3600,
             'userId' => $this->getCurrentUser()->getId(),
         ];
