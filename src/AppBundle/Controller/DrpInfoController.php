@@ -1,8 +1,6 @@
 <?php
 
-
 namespace AppBundle\Controller;
-
 
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
@@ -16,7 +14,7 @@ class DrpInfoController extends BaseController
 
     public function getDrpInfoAction(Request $request, $targetId, $type)
     {
-        if (!$this->get('kernel')->getPluginConfigurationManager()->isPluginInstalled('Drp')){
+        if (!$this->get('kernel')->getPluginConfigurationManager()->isPluginInstalled('Drp')) {
             return [];
         }
 
@@ -36,7 +34,7 @@ class DrpInfoController extends BaseController
         } else {
             $directRewardRatio = $bindRelation['directRewardRatio'];
         }
-        if ($type == 'course') {
+        if ('course' == $type) {
             $product = $this->getCourseService()->getCourse($targetId);
         } else {
             $product = $this->getClassroomService()->getClassroom($targetId);
@@ -58,7 +56,7 @@ class DrpInfoController extends BaseController
     protected function getVisibleStatus()
     {
         $drpSettings = $this->getSettingService()->get('drp', []);
-        if (empty($drpSettings) || empty($drpSettings['merchantId']) || empty($drpSettings['refreshTime']) || empty($drpSettings['serviceStatus']) || ($drpSettings['serviceStatus'] != 'enable')) {
+        if (empty($drpSettings) || empty($drpSettings['merchantId']) || empty($drpSettings['refreshTime']) || empty($drpSettings['serviceStatus']) || ('enable' != $drpSettings['serviceStatus'])) {
             return false;
         }
 
@@ -67,8 +65,8 @@ class DrpInfoController extends BaseController
 
     protected function tryRefreshAgencyRecruitSetting()
     {
-        $drpSettings = $this->getSettingService()->get('drp', array());
-        if (empty($drpSettings['serviceStatus']) || $drpSettings['serviceStatus'] != 'enable') {
+        $drpSettings = $this->getSettingService()->get('drp', []);
+        if (empty($drpSettings['serviceStatus']) || 'enable' != $drpSettings['serviceStatus']) {
             return true;
         }
         $refreshTime = empty($drpSettings['refreshTime']) ? 0 : $drpSettings['refreshTime'];
@@ -76,20 +74,20 @@ class DrpInfoController extends BaseController
         if (!empty($drpSettings['merchantId']) && (time() - $refreshTime < 60 * 60 * 3)) {
             return true;
         }
-        $storageSetting = $this->getSettingService()->get('storage', array());
+        $storageSetting = $this->getSettingService()->get('storage', []);
         if (empty($storageSetting['cloud_access_key']) || empty($storageSetting['cloud_secret_key'])) {
             return true;
         }
-        $result = $this->getDrpPlatformApi()->getAgencyRecruitBaseSetting(array('accessKey' => $storageSetting['cloud_access_key']));
+        $result = $this->getDrpPlatformApi()->getAgencyRecruitBaseSetting(['accessKey' => $storageSetting['cloud_access_key']]);
         if (!empty($result) && empty($result['error']) && isset($result['minDirectRewardRatio'])) {
-            $fields = array(
+            $fields = [
                 'merchantId' => $result['merchantId'],
                 'recruitSwitch' => empty($result['isOpening']) ? 0 : $result['isOpening'],
                 'minDirectRewardRatio' => $result['minDirectRewardRatio'],
                 'serviceStatus' => $result['serviceStatus'],
                 'refreshTime' => time(),
-            );
-            if ($drpSettings['merchantId'] >0) {
+            ];
+            if ($drpSettings['merchantId'] > 0) {
                 unset($fields['merchantId']);
             }
             $newDrpSettings = array_merge($drpSettings, $fields);
@@ -108,15 +106,15 @@ class DrpInfoController extends BaseController
         if (time() - $agencyBindRelation['updatedTime'] < 60 * 60 * 3) {
             return $agencyBindRelation;
         }
-        $data = array(
+        $data = [
             'merchantId' => $agencyBindRelation['merchantId'],
             'agencyUserId' => $agencyBindRelation['agencyId'],
-        );
+        ];
 
         $result = $this->getDrpPlatformApi()->getAgencyRewardRatio($data);
 
         if (!empty($result) && empty($result['error']) && isset($result['direct_reward_ratio'])) {
-            $agencyBindRelation = $this->getAgencyBindRelationService()->updateRelation($agencyBindRelation['id'], array('directRewardRatio' => $result['direct_reward_ratio']));
+            $agencyBindRelation = $this->getAgencyBindRelationService()->updateRelation($agencyBindRelation['id'], ['directRewardRatio' => $result['direct_reward_ratio']]);
         } else {
             throw new \ErrorException(json_encode($result));
         }
@@ -135,7 +133,7 @@ class DrpInfoController extends BaseController
     /**
      * @return \DrpPlugin\Biz\Drp\Api\DrpPlatformApi
      */
-    protected function  getDrpPlatformApi()
+    protected function getDrpPlatformApi()
     {
         return $this->getBiz()->offsetGet('drp.plugin.platform_api');
     }

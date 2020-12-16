@@ -306,6 +306,11 @@ class TaskResultServiceImpl extends BaseService implements TaskResultService
         return $this->getTaskResultDao()->countFinishedCompulsoryTasksByUserIdAndCourseId($userId, $courseId);
     }
 
+    public function countFinishedCompulsoryTaskNumGroupByUserId($courseId)
+    {
+        return ArrayToolkit::index($this->getTaskResultDao()->countFinishedCompulsoryTaskNumGroupByUserId($courseId), 'userId');
+    }
+
     public function findTaskresultsByTaskId($taskId)
     {
         return $this->getTaskResultDao()->findTaskresultsByTaskId($taskId);

@@ -31,7 +31,8 @@ class CourseItem extends AbstractResource
             $course,
             $request->getHttpRequest()->isSecure(),
             $request->query->get('fetchSubtitlesUrls', 0),
-            $request->query->get('onlyPublished', 0)
+            $request->query->get('onlyPublished', 0),
+            $request->query->get('showOptionalNum', 1)
         );
 
         foreach ($items as &$item) {
@@ -65,9 +66,9 @@ class CourseItem extends AbstractResource
         return $items;
     }
 
-    protected function convertToLeadingItems($originItems, $course, $isSsl, $fetchSubtitlesUrls, $onlyPublishTask = false)
+    protected function convertToLeadingItems($originItems, $course, $isSsl, $fetchSubtitlesUrls, $onlyPublishTask = false, $showOptionalNum = 1)
     {
-        return $this->container->get('api.util.item_helper')->convertToLeadingItemsV1($originItems, $course, $isSsl, $fetchSubtitlesUrls, $onlyPublishTask);
+        return $this->container->get('api.util.item_helper')->convertToLeadingItemsV1($originItems, $course, $isSsl, $fetchSubtitlesUrls, $onlyPublishTask, $showOptionalNum);
     }
 
     protected function convertToTree($items)
