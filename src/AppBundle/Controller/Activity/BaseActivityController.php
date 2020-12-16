@@ -2,18 +2,18 @@
 
 namespace AppBundle\Controller\Activity;
 
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Common\Paginator;
-use AppBundle\Common\ArrayToolkit;
 
 class BaseActivityController extends BaseController
 {
     public function learnDataDetailAction(Request $request, $task)
     {
-        $conditions = array(
+        $conditions = [
             'courseTaskId' => $task['id'],
-        );
+        ];
 
         $paginator = new Paginator(
             $request,
@@ -23,7 +23,7 @@ class BaseActivityController extends BaseController
 
         $taskResults = $this->getTaskResultService()->searchTaskResults(
             $conditions,
-            array('createdTime' => 'ASC'),
+            ['createdTime' => 'ASC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -31,12 +31,12 @@ class BaseActivityController extends BaseController
         $userIds = ArrayToolkit::column($taskResults, 'userId');
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        return $this->render('activity/other-learn-data-detail-modal.html.twig', array(
+        return $this->render('activity/other-learn-data-detail-modal.html.twig', [
             'task' => $task,
             'taskResults' => $taskResults,
             'users' => $users,
             'paginator' => $paginator,
-        ));
+        ]);
     }
 
     protected function getTaskResultService()

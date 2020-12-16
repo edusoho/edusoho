@@ -3,8 +3,8 @@
 namespace Biz\Course\Event;
 
 use Biz\Course\Service\CourseService;
-use Codeages\Biz\Framework\Event\Event;
 use Biz\Course\Service\CourseSetService;
+use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -12,7 +12,7 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
 {
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             'courseSet.maxRate.update' => 'onCourseSetMaxRateUpdate',
             'courseSet.recommend' => 'onCourseSetRecommend',
             'courseSet.recommend.cancel' => 'onCourseSetCancelRecommend',
@@ -21,7 +21,7 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
             'courseSet.courses.sort' => 'onCourseSetCoursesSort',
             'course.publish' => 'onCourseStatusChange',
             'course.close' => 'onCourseStatusChange',
-        );
+        ];
     }
 
     public function onCourseStatusChange(Event $event)
@@ -72,7 +72,9 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
     public function onCourseSetUnlock(Event $event)
     {
         $courseSet = $event->getSubject();
-        $this->getChapterDao()->update(array('courseId' => $courseSet['defaultCourseId']), array('copyId' => 0));
+        $this->getChapterDao()->update(['courseId' => $courseSet['defaultCourseId']], ['copyId' => 0]);
+        $this->getTaskDao()->update(['courseId' => $courseSet['defaultCourseId']], ['copyId' => 0]);
+        $this->getActivityDao()->update(['courseId' => $courseSet['defaultCourseId']], ['copyId' => 0]);
     }
 
     /**
@@ -105,5 +107,15 @@ class CourseSetSubscriber extends EventSubscriber implements EventSubscriberInte
     protected function getChapterDao()
     {
         return $this->getBiz()->dao('Course:CourseChapterDao');
+    }
+
+    protected function getTaskDao()
+    {
+        return $this->getBiz()->dao('Task:TaskDao');
+    }
+
+    protected function getActivityDao()
+    {
+        return $this->getBiz()->dao('Activity:ActivityDao');
     }
 }

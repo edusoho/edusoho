@@ -1,4 +1,4 @@
-site.flash_not_install_hint: Flash player is not installed or it is disabled or its version is too low in your browser, please make sure the flash player can work properly. <a target="_blank" href="http://www.adobe.com/go/getflashplayer"> Click Install</a>
+site.flash_not_install_hint: Since 2021, the new versions of mainstream browsers no longer support Flash technology, please use lower version browsers or check whether Flash is enabled, <a target="_blank" href="http://www.adobe.com/go/getflashplayer"> Click Install</a>
 site.date_format_dhis: 'Days %day% Hours %hour% Minutes %minutes% seconds %seconds%'
 site.date_format_his: 'Hours %hours% Minutes %minutes% Seconds %seconds%'
 site.date_format_is: 'Minutes %minutes% seconds %seconds%'
@@ -983,8 +983,8 @@ oauth.register.time_limit: Register too many times, please try again later.
 oauth.register.error_message: Register error. Please contact the admin for help.
 
 ## 用户数据统计
-admin.user.statistics.data.learn_total_time: total study time
-admin.user.statistics.data.learn_time: study time/minutes
+admin.user.statistics.data.learn_total_time: Length of incremental learning (minutes)
+admin.user.statistics.data.learn_time: accumulated study time/minutes
 admin.user.statistics.data.time: time
 
 course.audio.enable.biz.user: To enable the audio mode, please upgrade to business plans.
@@ -1674,6 +1674,13 @@ admin_v2.information_collect.chooser.items.hint: Please select form item
 user.fields.gender_label: Gender
 information_collect.form.check_age_invalid: Age Invalid
 information_collect.form.check_format_invalid: %display% Invalid
+
+admin_v2.video_effective_time_setting.cancel.hint: After the statistical dimension of video class learning time changes, the statistics of the whole station will be generated according to the new statistical rules, and the statistics of learning time generated before the change of rules will not be changed with the new rules.It is suggested that you do not change the statistical dimension of data frequently. <br/>Do you confirm to change the statistical dimension of learning time this time?
+admin_v2.video_effective_time_setting.play_rule.auto_pause.help_block: When the system detects that the user is not focusing on learning, the PC side will automatically suspend the current play
+admin_v2.video_effective_time_setting.play_rule.no_action.help_block: When the system detects that the user is not focusing on learning, the PC side will continue to maintain the current play
+admin_v2.video_effective_time_setting.statistical_dimension.playing.help_block: The actual playing time was taken as the learning time statistics
+admin_v2.video_effective_time_setting.statistical_dimension.page.help_block: The page stay time is taken as the learning time statistics
+
 course.marketing_setup: 'Markets'
 site.currency.CNY: CNY
 s2b2c.product.cooperation_price: Cooperation Price
@@ -1784,3 +1791,10 @@ goods.show_page.buy_btn: Buy
 classroom.go_inside: Go to preview
 course.base.title.placeholder: Please insert course title
 course.unname_title: Unnamed plan
+
+course.task.out_focus_mask.continue_studying: Continue studying
+course.task.out_focus_mask.stop.tips: >
+  <p class="ineffective-learning">You can take a break after studying hard :D</p>
+course.task.out_focus_mask.anti_brush.tips: >
+  <p class="kick-each-other">Do not open more tasks to learn at the same time</p>
+  <p class="kick-each-other">Don’t multitask !</p>

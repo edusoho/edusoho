@@ -696,7 +696,7 @@ admin_v2_information_collect_update:
 admin_v2_information_collect_event_target_modal:
   path: /information_collect/event/{action}/target/{type}/modal
   defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:targetModal }
-  
+
 admin_v2_information_collect_chooser:
   path: /information_collect/{type}/chooser
   defaults: { _controller: AppBundle:AdminV2/Marketing/InformationCollect:chooser }
@@ -1857,6 +1857,16 @@ admin_v2_setting_default_course_picture_crop:
     defaults: { _controller: AppBundle:AdminV2/System/SystemDefaultSetting:defaultCoursePictureCrop }
     permissions: [admin_v2_setting_course_avatar,admin_v2_setting_avatar,course_manage_picture]
 
+admin_v2_task_multiple_open_setting:
+    path:  /setting/task-multiple-open-setting
+    defaults: { _controller: AppBundle:AdminV2/System/VideoTaskSetting:taskPlaySetting }
+    permissions: [admin_v2_task_multiple_open_setting]
+
+admin_v2_video_task_setting:
+  path:  /setting/video-task-setting
+  defaults: { _controller: AppBundle:AdminV2/System/VideoTaskSetting:videoEffectiveLearningTimeSetting }
+  permissions: [admin_v2_video_task_setting]
+
 # 系统-通用管理-运营设置
 admin_v2_setting_mailer:
     path:  /setting/mailer
@@ -2774,6 +2784,60 @@ admin_v2_plumber_queue:
   path: /plumber/queue
   defaults: { _controller: AppBundle:AdminV2/Developer/Plumber:queue }
 
+# 商品设置
 admin_v2_goods_setting:
   path: /goods/setting
   defaults: { _controller: AppBundle:AdminV2/Operating/GoodsSetting:index }
+
+# 数据可视化老板后台
+admin_v2_data_visualization_activity_learn_flow:
+  path: /data_visualization/activity_vide_watch_record
+  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:activityLearnFlow }
+
+admin_v2_data_visualization_activity_learn_record:
+  path: /data_visualization/activity_learn_record
+  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:activityLearnRecord }
+
+admin_v2_data_visualization_activity_video_watch_record:
+  path: /data_visualization/activity_video_watch_record
+  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:activityVideoWatchRecord }
+
+admin_v2_data_visualization_activity_stay_daily:
+  path: /data_visualization/action/activity_stay_daily
+  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:activityStayDaily }
+
+admin_v2_data_visualization_activity_video_daily_statistics:
+  path: /data_visualization/action/activity_video_daily_statistics
+  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:activityVideoDailyStatistics }
+
+admin_v2_data_visualization_activity_stay_daily_statistics:
+  path: /data_visualization/action/activity_stay_daily_statistics
+  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:activityStayDailyStatistics }
+
+admin_v2_data_visualization_course_plan_video_daily_statistics:
+  path: /data_visualization/action/course_plan_video_daily_statistics
+  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:coursePlanVideoDailyStatistics }
+
+admin_v2_data_visualization_course_plan_stay_daily_statistics:
+  path: /data_visualization/action/course_plan_stay_daily_statistics
+  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:coursePlanStayDailyStatistics }
+
+admin_v2_data_visualization_user_video_daily_statistics:
+  path: /data_visualization/action/user_video_daily_statistics
+  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:userVideoDailyStatistics }
+
+admin_v2_data_visualization_user_stay_statistics:
+  path: /data_visualization/action/user_stay_daily_statistics
+  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:userStayDailyStatistics }
+
+admin_v2_data_visualization_user_learn_daily_statistics:
+  path: /data_visualization/action/user_learn_daily_statistics
+  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:userLearnDailyStatistics }
+
+admin_v2_data_visualization_activity_learn_daily_statistics:
+  path: /data_visualization/action/activity_learn_daily_statistics
+  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:activityLearnDailyStatistics }
+
+admin_v2_data_visualization_course_plan_learn_daily_statistics:
+  path: /data_visualization/action/course_plan_learn_daily_statistics
+  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:coursePlanLearnDailyStatistics }

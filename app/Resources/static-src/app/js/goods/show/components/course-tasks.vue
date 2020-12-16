@@ -14,7 +14,7 @@
             return {
                courseItems: [],
                hasOptional: false,
-               renderUrl: `/course/${this.sku.targetId}/task/list/render/default`,
+               renderUrl: `/course/${this.sku.targetId}/task/list/render/default?showOptional=1`,
             };
         },
         props: {
@@ -33,18 +33,6 @@
         },
         methods: {
             getTasksListInfo() {
-                // axios.get(`/course/${this.sku.targetId}/tasks/list_data`, {
-                //     headers: {'X-Requested-With': 'XMLHttpRequest'}
-                // }).then((res) => {
-                //     if (res.data.dataoptionalTaskCount > 0) {
-                //         this.hasOptional = true;
-                //     }
-                //     this.courseItems = res.data.courseItems;
-                //     console.log(this.courseItems);
-                // });
-                console.log(this.renderUrl);
-
-                this.renderUrl = `/course/${this.sku.targetId}/task/list/render/default`;
                 $('.js-tasks-show').data('url', this.renderUrl);
                 new PagedCourseTask();
             },

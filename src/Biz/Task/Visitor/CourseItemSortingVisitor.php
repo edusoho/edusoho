@@ -140,7 +140,7 @@ class CourseItemSortingVisitor implements CourseStrategyVisitorInterface
             }
         }
 
-        $taskSeqMap = array('preparation' => 2, 'lesson' => 1, 'exercise' => 3, 'homework' => 4, 'extraClass' => 5);
+        $taskSeqMap = ['preparation' => 2, 'lesson' => 1, 'exercise' => 3, 'homework' => 4, 'extraClass' => 5];
         //新增加的task seq不正确，重新排序
         uasort(
             $tasks,
@@ -154,10 +154,10 @@ class CourseItemSortingVisitor implements CourseStrategyVisitorInterface
 
         $subTaskNumber = 1;
         foreach ($tasks as $task) {
-            $fields = array(
+            $fields = [
                 'seq' => $seq,
                 'number' => $this->getTaskNumber($taskNumber, $task, $normalTaskCount, $subTaskNumber),
-            );
+            ];
 
             $this->taskBatchUpdateHelper->add('id', $task['id'], $fields);
             ++$seq;
@@ -216,11 +216,11 @@ class CourseItemSortingVisitor implements CourseStrategyVisitorInterface
                     $this->taskBatchUpdateHelper->add(
                         'id',
                         $chapterIdOrTaskId,
-                        array(
+                        [
                             'seq' => $seq,
                             'number' => $number,
                             'categoryId' => $categoryId,
-                        )
+                        ]
                     );
 
                     ++$seq;
@@ -291,10 +291,10 @@ class CourseItemSortingVisitor implements CourseStrategyVisitorInterface
 
     private function updateChapterSeq($chapter, &$seq, &$chapterNumber, &$unitNumber, &$lessonNumber, &$needResetUnitNumber, &$publishedLessonNumber)
     {
-        $fields = array(
+        $fields = [
             'seq' => $seq,
             'published_number' => 0,
-        );
+        ];
 
         if ($needResetUnitNumber) {
             $unitNumber = 1;
@@ -316,8 +316,12 @@ class CourseItemSortingVisitor implements CourseStrategyVisitorInterface
 
         if ('lesson' == $chapter['type']) {
             ++$seq;
-            $fields['number'] = $lessonNumber;
-            ++$lessonNumber;
+            if ($chapter['isOptional']) {
+                $fields['number'] = 0;
+            } else {
+                $fields['number'] = $lessonNumber;
+                ++$lessonNumber;
+            }
             if ('published' == $chapter['status'] && !$chapter['isOptional']) {
                 $fields['published_number'] = $publishedLessonNumber;
                 ++$publishedLessonNumber;
