@@ -11428,11 +11428,7 @@ exception.goods.forbidden_manage: 无管理商品权限
 exception.s2b2c_product.adopt_failed: 采用失败，内容正在编辑中，请稍后再试
 goods.minimum_price.unit: %price%%unit%起
 goods.origin_price.unit: %price%%unit%
-goods.description: 商品介绍
-
-goods.minimum_price.unit: %price%%unit%起
-goods.origin_price.unit: %price%%unit%
-goods.description: 商品介绍
+goods.description: 简介
 
 admin_v2.information_collect.edit.title_info: 当前版本用户端仅支持新版微网校
 admin_v2.information_collect.edit.title: 采集名称
