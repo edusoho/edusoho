@@ -94,23 +94,28 @@
               {% for review in reviews %}
               {% set author = review.User|default(null) %}
               {% set course = review.course|default(null) %}
-              {% if author and course %}
-            <div class="media media-dynamic">
-              <div class="media-left">
-              {{ web_macro.user_avatar(author,'','avatar-sm',true) }}
-              </div>
-              <div class="media-body">
-                <div class="title text-sm">
-                  {{ web_macro.user_link(author,'link-dark') }}
-                  <span class="score">{{web_macro.star(review.rating) }}</span>
-                    {{ 'homepage.student_comment.from'|trans({'%courseUrl%':path('course_show', {id: course.id }),'%courseTitle%':course.title|default(course.courseSetTitle)|plain_text(10) })|raw }}
+              {% set classroom = review.classroom|default(null) %}
+              {% if author %}
+                <div class="media media-dynamic">
+                  <div class="media-left">
+                    {{ web_macro.user_avatar(author,'','avatar-sm',true) }}
+                  </div>
+                  <div class="media-body">
+                    <div class="title text-sm">
+                      {{ web_macro.user_link(author,'link-dark') }}
+                      <span class="score">{{web_macro.star(review.rating) }}</span>
+                      {% if review.targetType == 'course' and course %}
+                        {{ 'homepage.student_comment.from'|trans({'%courseUrl%':path('course_show', {id: course.id }),'%courseTitle%':course.title|default(course.courseSetTitle)|plain_text(10) })|raw }}
+                      {% elseif review.targetType == 'classroom' and classroom %}
+                        {{ 'homepage.student_comment.from'|trans({'%courseUrl%':path('classroom_show', {id: classroom.id }),'%courseTitle%':classroom.title|plain_text(10) })|raw }}
+                      {% endif %}
+                    </div>
+                    <div class="content gray-darker">
+                      {{ review.content|plain_text(30) }}
+                    </div>
+                    <span class="date">{{review.createdTime|smart_time}}</span>
+                  </div>
                 </div>
-                <div class="content gray-darker">
-                  {{ review.content|plain_text(30) }}
-                </div>
-                <span class="date">{{review.createdTime|smart_time}}</span>
-              </div>
-            </div>
             {% endif %}
             {% endfor %}
             {% else %}
