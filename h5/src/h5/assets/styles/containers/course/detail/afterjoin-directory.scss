@@ -224,7 +224,7 @@
 
 					.ks {
 						display: inline-block;
-						width: vw(220);
+						width: vw(190);
 						vertical-align: top;
 					}
 				}
@@ -241,6 +241,20 @@
 
 				span {
 					margin-right: vw(9);
+				}
+
+				.elective-tag {
+					position: relative;
+					top: vw(-2);
+					display: inline-block;
+					padding: vw(0) vw(2);
+					color: #fff;
+					font-size: vw(12);
+					line-height: vw(18);
+					text-align: center;
+					vertical-align: middle;
+					background: #03c7c4;
+					border-radius: vw(4);
 				}
 			}
 
