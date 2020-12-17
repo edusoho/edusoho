@@ -9,6 +9,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Coupon\Service\CouponBatchService;
 use Biz\Course\Service\CourseService;
 use Biz\Goods\Service\GoodsService;
+use Biz\Product\Service\ProductService;
 use Biz\System\Service\H5SettingService;
 use Biz\User\UserException;
 
@@ -36,8 +37,10 @@ class PageDiscovery extends AbstractResource
             if ('slide_show' == $discoverySetting['type']) {
                 array_walk($discoverySetting['data'], function (&$slide){
                     if (in_array($slide['link']['type'], ['course', 'classroom'])){
-                        $goods = $this->getGoodsService()->searchGoodsSpecs(['targetId' => $slide['link']['target']['id'], 'targetType' => $slide['link']['type']], [], 0, 1);
-                        $slide['link']['target']['goodsId'] = $goods[0]['id'];
+                        $targetId = $slide['link']['type'] === 'classroom' ? $slide['link']['target']['id'] : $slide['link']['target']['courseSetId'];
+                        $product = $this->getProductService()->getProductByTargetIdAndType($targetId, $slide['link']['type']);
+                        $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
+                        $slide['link']['target']['goodsId'] = $goods['id'];
                     }
                 });
             }
@@ -118,5 +121,13 @@ class PageDiscovery extends AbstractResource
     protected function getGoodsService()
     {
         return $this->service('Goods:GoodsService');
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getProductService()
+    {
+        return $this->service('Product:ProductService');
     }
 }
