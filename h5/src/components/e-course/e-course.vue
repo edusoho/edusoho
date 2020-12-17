@@ -154,12 +154,16 @@ export default {
       }
 
       if (isOrder) {
-        if (this.order.status === 'finished') {
-          location.href = this.order.targetUrl;
-        } else {
+        if (this.typeList === 'course' || this.typeList === 'classroom') {
           this.$router.push({
             path: `/goods/${this.order.goodsId}/show`,
+            query: {
+              targetId: this.order.targetId,
+              type: this.typeList + '_list',
+            },
           });
+        } else {
+          location.href = this.order.targetUrl;
         }
         return;
       }
