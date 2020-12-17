@@ -7,7 +7,6 @@
 
 {% block main_body %}
   <div>
-    {#添加admin_v2#}
     {% if not hasCourseManageRole %}
       <span class="color-danger">{{'course.testpaper_check.no_permission_tips'|trans}}</span>
     {% endif %}

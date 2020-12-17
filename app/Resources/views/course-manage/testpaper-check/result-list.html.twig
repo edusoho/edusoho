@@ -29,7 +29,6 @@
 
 {% block main_body %}
   <div>
-    {#添加admin_v2#}
     {% if not hasCourseManageRole %}
       <span class="color-danger">{{'testpaper.check.not_isTeacher.tips'|trans({'%typeName%':typeName}) }}</span>
     {% endif %}
