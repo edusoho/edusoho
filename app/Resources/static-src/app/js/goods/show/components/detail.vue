@@ -2,7 +2,6 @@
     <div class="product-detail clearfix" v-if="goods.id">
         <div class="product-detail__left detail-left pull-left">
             <div class="detail-left__img">
-                {{ currentSku }}
                 <drp-info v-if="isUserLogin && drpInfo && drpInfo.tagVisible" :drp-info="drpInfo" :drp-recruit-switch="drpRecruitSwitch"></drp-info>
                 <img :src="goods.images ? goods.images.large : null" alt="">
             </div>
@@ -203,6 +202,11 @@
                     }
                 }
                 return time;
+            },
+            getDrpInfo() {
+                axios.get(`/drp_info/${this.currentSku.targetId}/${this.goods.type}`).then(res => {
+                        this.drpInfo = res.data;
+                    });
             }
         },
         filters: {
@@ -267,11 +271,7 @@
         watch: {
             currentSku(newVal, oldVal) {
                 this.remainTime();
-            },
-            getDrpInfo() {
-                axios.get(`/drp_info/${this.currentSku.targetId}/${this.goods.type}`).then(res => {
-                    this.drpInfo = res.data;
-                });
+                this.getDrpInfo();
             }
         }
     }
