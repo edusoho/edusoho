@@ -5104,6 +5104,7 @@ admin.course_manage.statistics.data.video_length: 视频长度（分）
 admin.course_manage.statistics.data.task_sum_study_time: 任务被累加学习时长（分）
 admin.course_manage.statistics.data.average_score: 考试平均得分
 admin.course_manage.statistics.data.plan_study_time: 计划被累加学习时长（分）：%mins%
+admin.course_manage.statistics.optional_task: 选修
 
 ## 任务统计详细数据
 admin.course_manage.statistics.data_detail.name: 用户名

@@ -133,8 +133,10 @@ class LearnStatisticsServiceImpl extends BaseService implements LearnStatisticsS
             $userIds = array_unique($conditions['userIds']);
         }
 
+        $electiveTasks = $this->getTaskService()->searchTasks(['isOptional' => 1], [], 0, PHP_INT_MAX, ['id']);
         $statisticMap = [
             'finishedTaskNum' => $this->getTaskResultService()->countTaskNumGroupByUserId([
+                'notCourseTaskIds' => ArrayToolkit::column($electiveTasks, 'id'),
                 'status' => 'finish',
                 'finishedTime_GE' => $conditions['createdTime_GE'],
                 'finishedTime_LT' => $conditions['createdTime_LT'],
