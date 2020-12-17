@@ -17,11 +17,11 @@
   {% for order in orders %}
     <tr id="order-table-{{order.id}}">
       <td>
-        {% if order.item.target_type == 'course' %}
+        {% if order.item.target_type == 'course' and order.targetId %}
           <a class="cd-link-major" href="{{ path('course_show', {id: order.targetId}) }}" target="_blank">{{order.title}}</a>
         {% elseif order.item.target_type == 'vip' %}
           <a class="cd-link-major" href="{{ path('vip', {id:order.item.target_id}) }}" target="_blank">{{order.title}}</a>
-        {% elseif order.item.target_type == 'classroom' %}
+        {% elseif order.item.target_type == 'classroom' order.targetId %}
           <a class="cd-link-major" href="{{ path('classroom_show', {id:order.targetId}) }}" target="_blank">{{order.title}}</a>
         {% else %}
           {{order.title}}
