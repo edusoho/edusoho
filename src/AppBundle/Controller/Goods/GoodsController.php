@@ -17,7 +17,8 @@ class GoodsController extends BaseController
         $goods = $this->container->get('api_resource_kernel')->handleApiRequest($goodsApiRequest);
         $goodsComponentsApiRequest = new ApiRequest("/api/goods/{$id}/components", 'GET');
         $goodsComponents = $this->container->get('api_resource_kernel')->handleApiRequest($goodsComponentsApiRequest);
-        file_put_contents('a.log', 'specs:'.json_encode($goods['specs']) ,FILE_APPEND);
+        file_put_contents('a.log', 'specs:'.json_encode($goods['specs'][0]) ,FILE_APPEND);
+        $goods['specs'][1] && file_put_contents('a.log', 'specs:'.json_encode($goods['specs'][1]) ,FILE_APPE1ND);
         return $this->render(
             'goods/show.html.twig',
             [
