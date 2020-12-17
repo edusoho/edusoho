@@ -217,9 +217,9 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
             }
 
             $orderItems = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
-            $goods = $this->findGoodsByOrderItems($orderItems);
+            $targetId = $this->findTargetIdByOrderItem($orderItems[0]);
 
-            $options = ['type' => 'url', 'url' => $this->getOrderTargetDetailUrl($orderItems[0]['target_type'], $goods['targetId'])];
+            $options = ['type' => 'url', 'url' => $this->getOrderTargetDetailUrl($orderItems[0]['target_type'], $targetId)];
 
             $weChatUser = empty($weChatUser) ? $this->getWeChatService()->getOfficialWeChatUserByUserId($trade['user_id']) : $weChatUser;
             $templates = TemplateUtil::templates();
@@ -779,15 +779,17 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         return $biz['qiQiuYunSdk.notification'];
     }
 
-    private function findGoodsByOrderItems(array $orderItems)
+    private function findTargetIdByOrderItem(array $orderItems)
     {
-        if (in_array($orderItems[0]['target_type'], ['course', 'classroom'])) {
-            return $this->getGoodsService()->getGoodsSpecs($orderItems[0]['target_id']);
-        } else {
-            $orderItems[0]['targetId'] = $orderItems[0]['target_id'];
+        if (in_array($orderItems['target_type'], ['course', 'classroom'])) {
+            $goods = $this->getGoodsService()->getGoodsSpecs($orderItems['target_id']);
 
-            return $orderItems[0];
+            $targetId = $goods['id'];
+        } else {
+            $targetId = $orderItems['target_id'];
         }
+
+        return $targetId;
     }
 
     /**
