@@ -41,8 +41,15 @@ export default {
 
       const itemLinkData = slide.link;
       if (itemLinkData.type === 'classroom' && itemLinkData.target) {
+        // this.$router.push({
+        //   path: `/classroom/${itemLinkData.target.id}`,
+        // });
         this.$router.push({
-          path: `/classroom/${itemLinkData.target.id}`,
+          path: `/goods/${itemLinkData.target.goodsId}/show`,
+          query: {
+            targetId: itemLinkData.target.id,
+            type: 'classroom_list',
+          },
         });
         return;
       }
@@ -53,8 +60,15 @@ export default {
         return;
       }
       if (itemLinkData.type === 'course' && itemLinkData.target) {
+        // this.$router.push({
+        //   path: `/course/${itemLinkData.target.id}`,
+        // });
         this.$router.push({
-          path: `/course/${itemLinkData.target.id}`,
+          path: `/goods/${itemLinkData.target.goodsId}/show`,
+          query: {
+            targetId: itemLinkData.target.id,
+            type: 'course_list',
+          },
         });
       }
     },
