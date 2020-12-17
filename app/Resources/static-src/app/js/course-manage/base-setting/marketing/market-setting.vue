@@ -324,7 +324,7 @@
                 buyExpiryTime: this.course.buyExpiryTime,
                 approval: this.course.approval,
                 expiryMode: this.course.expiryMode,
-                deadline: this.course.expiryEndDate,
+                deadline: this.course.expiryEndDate == 0 ? '' : this.course.expiryEndDate,
                 deadlineType: this.course.deadlineType ? this.course.deadlineType : 'days',
                 expiryDays: this.course.expiryDays > 0 ? this.course.expiryDays : null,
                 expiryStartDate: this.course.expiryStartDate == 0 ? '' : this.course.expiryStartDate,
