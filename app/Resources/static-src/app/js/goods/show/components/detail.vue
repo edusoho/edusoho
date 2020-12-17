@@ -204,7 +204,7 @@
                 return time;
             },
             getDrpInfo() {
-                axios.get(`/drp_info/${this.goods.product.target.id}/${this.goods.product.targetType}`).then(res => {
+                axios.get(`/drp_info/${this.currentsku.targetId}/${this.goods.type}`).then(res => {
                         this.drpInfo = res.data;
                     });
             }
