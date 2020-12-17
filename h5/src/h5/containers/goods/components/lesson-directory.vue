@@ -48,11 +48,11 @@
                 />
                 {{
                   Number(lessonItem.tasks[lessonItem.index].isOptional)
-                    ? '选修 '
+                    ? ''
                     : '课时'
                 }}{{
                   Number(lessonItem.tasks[lessonItem.index].isOptional)
-                    ? ' '
+                    ? lessonItem.title
                     : `${lessonItem.tasks[lessonItem.index].number}:${
                         lessonItem.title
                       }`
@@ -89,11 +89,11 @@
                   />
                   {{
                     Number(lessonItem.tasks[lessonItem.index].isOptional)
-                      ? '选修 '
+                      ? ''
                       : '课时'
                   }}{{
                     Number(lessonItem.tasks[lessonItem.index].isOptional)
-                      ? ' '
+                      ? lessonItem.title
                       : `${lessonItem.tasks[lessonItem.index].number}:${
                           lessonItem.title
                         }`
@@ -114,6 +114,12 @@
 
         <!-- 时长 -->
         <div class="lesson-title-l">
+          <span
+            class="elective-tag"
+            v-if="Number(lessonItem.tasks[lessonItem.index].isOptional)"
+          >
+            选修
+          </span>
           <span v-if="lessonItem.tasks[lessonItem.index].type != 'live'">{{
             lessonItem.tasks[lessonItem.index] | filterTaskTime
           }}</span>
@@ -140,10 +146,10 @@
               <span v-if="isTry(taskItem)" class="tryLes">试看</span>
               <span v-if="isFree(taskItem)" class="freeAdmission">免费</span>
               <i :class="iconfont(taskItem)" class="iconfont" />
-              {{ Number(taskItem.isOptional) ? '选修 ' : '课时'
+              {{ Number(taskItem.isOptional) ? '' : '课时'
               }}{{
                 Number(taskItem.isOptional)
-                  ? ' '
+                  ? taskItem.title
                   : `${taskItem.number}:${taskItem.title}`
               }}
             </div>
