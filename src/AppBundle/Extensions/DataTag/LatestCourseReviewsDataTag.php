@@ -47,7 +47,7 @@ class LatestCourseReviewsDataTag extends CourseBaseDataTag implements DataTag
         $goodsIds = ArrayToolkit::column($courseRelations, 'targetId');
         $goods = ArrayToolkit::index($this->getGoodsService()->findGoodsByIds($goodsIds), 'id');
         $goodsSpecs = ArrayToolkit::group($this->getGoodsService()->findGoodsSpecsByGoodsIds($goodsIds), 'goodsId');
-        array_walk($goodsSpecs, function (&$specs, $goodsId) use($goods, &$classroomIds, &$courseIds){
+        array_walk($goodsSpecs, function (&$specs, $goodsId) use ($goods, &$classroomIds, &$courseIds) {
             $specs = $specs[0];
             $specs['targetType'] = $goods[$goodsId]['type'];
             $specs['targetTitle'] = $goods[$goodsId]['title'];
