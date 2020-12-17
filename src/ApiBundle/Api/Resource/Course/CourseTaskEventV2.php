@@ -116,6 +116,13 @@ class CourseTaskEventV2 extends AbstractResource
         } else {
             list($canDoing, $denyReason) = $this->getLearnControlService()->checkActive($user['id'], $data['sign'], $request->request->get('reActive', 0));
         }
+        if (!empty($data['watchData'])) {
+            $watchData = $data['watchData'];
+            if (isset($watchData['duration']) && $watchData['duration'] > $data['duration']) {
+                $data['originDuration'] = $data['duration'];
+                $data['duration'] = $watchData['duration'];
+            }
+        }
         $flow = $this->getDataCollectService()->getFlowBySign($user['id'], $data['sign']);
         $currentTime = time();
 
@@ -135,6 +142,7 @@ class CourseTaskEventV2 extends AbstractResource
             'flowSign' => $data['sign'],
             'data' => [
                 'userAgent' => $request->headers->get('user-agent'),
+                'data' => $data,
             ],
         ]);
         if (!empty($data['duration'])) {
@@ -264,6 +272,7 @@ class CourseTaskEventV2 extends AbstractResource
             'flowSign' => $data['sign'],
             'data' => [
                 'userAgent' => $request->headers->get('user-agent'),
+                'watchData' => $watchData,
             ],
         ]);
 
