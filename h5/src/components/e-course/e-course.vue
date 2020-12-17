@@ -154,7 +154,13 @@ export default {
       }
 
       if (isOrder) {
-        location.href = this.order.targetUrl;
+        if (this.order.status === 'finished') {
+          location.href = this.order.targetUrl;
+        } else {
+          this.$router.push({
+            path: `/goods/${this.order.goodsId}/show`,
+          });
+        }
         return;
       }
 
