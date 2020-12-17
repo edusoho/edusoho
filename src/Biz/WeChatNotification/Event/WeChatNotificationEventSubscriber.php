@@ -11,6 +11,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Course\Service\ThreadService;
+use Biz\Goods\Service\GoodsService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskService;
@@ -209,12 +210,17 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
                 'keyword4' => ['value' => '无'],
                 'remark' => ['value' => '请前往查看'],
             ];
+
             $order = $this->getOrderService()->getOrderBySn($trade['order_sn']);
             if (empty($order)) {
                 return;
             }
+
             $orderItems = $this->getOrderService()->findOrderItemsByOrderId($order['id']);
-            $options = ['type' => 'url', 'url' => $this->getOrderTargetDetailUrl($orderItems[0]['target_type'], $orderItems[0]['target_id'])];
+            $targetId = $this->findTargetIdByOrderItem($orderItems[0]);
+
+            $options = ['type' => 'url', 'url' => $this->getOrderTargetDetailUrl($orderItems[0]['target_type'], $targetId)];
+
             $weChatUser = empty($weChatUser) ? $this->getWeChatService()->getOfficialWeChatUserByUserId($trade['user_id']) : $weChatUser;
             $templates = TemplateUtil::templates();
             $templateCode = isset($templates['paySuccess']['id']) ? $templates['paySuccess']['id'] : '';
@@ -773,6 +779,19 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         return $biz['qiQiuYunSdk.notification'];
     }
 
+    private function findTargetIdByOrderItem(array $orderItems)
+    {
+        if (in_array($orderItems['target_type'], ['course', 'classroom'])) {
+            $goods = $this->getGoodsService()->getGoodsSpecs($orderItems['target_id']);
+
+            $targetId = $goods['id'];
+        } else {
+            $targetId = $orderItems['target_id'];
+        }
+
+        return $targetId;
+    }
+
     /**
      * @return CourseService
      */
@@ -917,5 +936,13 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
     public function getAssessmentService()
     {
         return $this->getBiz()->service('ItemBank:Assessment:AssessmentService');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    private function getGoodsService()
+    {
+        return $this->getBiz()->service('Goods:GoodsService');
     }
 }
