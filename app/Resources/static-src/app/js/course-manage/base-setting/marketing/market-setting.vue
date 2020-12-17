@@ -117,7 +117,7 @@
                     </el-radio>
 
                     <div class="course-manage-expiry" :class="{'hidden':marketingForm.expiryMode !== 'days'}"
-                         id="expiry-days">
+                         id="expiry-days" style="max-width: 600px;">
                         <span class="caret"></span>
                         <el-radio v-model="marketingForm.deadlineType"
                                   v-for="(label, value) in deadlineTypeRadio"
@@ -157,20 +157,31 @@
                     </div>
 
                     <div class="course-manage-expiry"
-                         :class="{'hidden': marketingForm.expiryMode !== 'date'}">
+                         :class="{'hidden': marketingForm.expiryMode !== 'date'}" style="max-width: 600px;">
                         <span class="caret"></span>
                         <div class="course-manage-expiry__circle"
                              v-if="marketingForm.expiryMode === 'date' && marketingForm.expiryMode === 'date'">
-                            <el-form-item prop="expiryDateRange">
+                            <el-form-item prop="expiryStartDate" style="display: inline-block; margin-left: -10px">
+                                <span class="demonstration">{{ 'course.plan_task.start_time'|trans }}</span>
                                 <el-date-picker
-                                    v-model="marketingForm.expiryDateRange"
+                                    v-model="marketingForm.expiryStartDate"
+                                    type="date"
+                                    size="small"
+                                    ref="expiryStartDate"
                                     :default-value="today"
-                                    :picker-options="dateOptions"
-                                    type="daterange"
-                                    range-separator="-"
-                                    ref="expiryDateRange"
-                                    :start-placeholder="'course.plan_task.start_time'|trans"
-                                    :end-placeholder="'course.plan_task.start_time'|trans">
+                                    :picker-options="startDateOptions"
+                                    :disabled="(coursePublished && courseSetPublished) || course.platform !== 'self'">
+                                </el-date-picker>
+                            </el-form-item>
+                            <el-form-item prop="expiryEndDate" style="display: inline-block; margin-left: 4px">
+                                <span class="demonstration">{{ 'course.plan_task.end_time'|trans }}</span>
+                                <el-date-picker
+                                    v-model="marketingForm.expiryEndDate"
+                                    type="date"
+                                    size="small"
+                                    ref="expiryEndDate"
+                                    :picker-options="endDateOptions"
+                                    :disabled="(coursePublished && courseSetPublished) || course.platform !== 'self'">
                                 </el-date-picker>
                             </el-form-item>
                         </div>
@@ -306,12 +317,6 @@
                 value <= 7300 ? callback() : callback(new Error(Translator.trans('validate.max_year.message')));
             }
 
-            this.course.expiryStartDate = this.course.expiryStartDate == 0 ? '' : this.course.expiryStartDate;
-            this.course.expiryEndDate = this.course.expiryEndDate == 0 ? '' : this.course.expiryEndDate
-            let expiryDateRange = (!this.course.expiryStartDate || !this.course.expiryEndDate) ? null : [
-                this.course.expiryStartDate, this.course.expiryEndDate
-            ]
-
             let form = {
                 originPrice: this.course.originPrice,
                 buyable: this.course.buyable,
@@ -322,7 +327,8 @@
                 deadline: this.course.expiryEndDate,
                 deadlineType: this.course.deadlineType ? this.course.deadlineType : 'days',
                 expiryDays: this.course.expiryDays > 0 ? this.course.expiryDays : null,
-                expiryDateRange: expiryDateRange,
+                expiryStartDate: this.course.expiryStartDate == 0 ? '' : this.course.expiryStartDate,
+                expiryEndDate: this.course.expiryEndDate == 0 ? '' : this.course.expiryEndDate,
                 services: this.course.services,
             };
 
@@ -373,6 +379,24 @@
                         return time.getTime() <= Date.now() - 24 * 60 * 60 * 1000;
                     }
                 },
+                startDateOptions: {
+                    disabledDate: (time) => {
+                        if (this.marketingForm.expiryEndDate !== '' && this.marketingForm.expiryEndDate != null) {
+                            return time.getTime() > this.marketingForm.expiryEndDate || time.getTime() <= Date.now() - 24 * 60 * 60 * 1000;
+                        } else {
+                            return time.getTime() <= Date.now() - 24 * 60 * 60 * 1000;
+                        }
+                    }
+                },
+                endDateOptions: {
+                    disabledDate: (time) => {
+                        if (this.marketingForm.expiryStartDate !== '') {
+                            return time.getTime() < this.marketingForm.expiryStartDate;
+                        }else{
+                            return time.getTime() <= Date.now() - 24 * 60 * 60 * 1000;
+                        }
+                    }
+                },
                 marketingForm: form,
                 formRule: {
                     deadline: [
@@ -382,11 +406,38 @@
                             trigger: 'blur'
                         }
                     ],
-                    expiryDateRange: [
+                    expiryStartDate: [
                         {
                             required: true,
-                            message: Translator.trans('course.manage.expiry_date.error_hint'),
+                            message: Translator.trans('course.manage.expiry_start_date_error_hint'),
                             trigger: 'blur'
+                        },
+                        {
+                            validator(rule, value, callback) {
+                                new Date(value).getTime() >= Date.now() - 24 * 60 * 60 * 1000 ? callback() : callback(new Error(Translator.trans('validate.after_now_date.message')));
+                            },
+                            trigger: 'blur',
+                        },
+                        {
+                            validator(rule, value, callback) {
+                                if (!form.expiryEndDate) return;
+                                new Date(value) <= new Date(form.expiryEndDate) ? callback() : callback(new Error(Translator.trans('validate.before_date.message')));
+                            },
+                            trigger: 'blur',
+                        }
+                    ],
+                    expiryEndDate: [
+                        {
+                            required: true,
+                            message: Translator.trans('course.manage.expiry_end_date_error_hint'),
+                            trigger: 'blur'
+                        },
+                        {
+                            validator(rule, value, callback) {
+                                if (!form.expiryStartDate) return;
+                                new Date(value) >= new Date(form.expiryStartDate) ? callback() : callback(new Error(Translator.trans('validate.after_date.message')));
+                            },
+                            trigger: 'blur',
                         }
                     ],
                     expiryDays: [
@@ -447,8 +498,8 @@
                 vipEnabled: false,
                 vipLevels: {}
             }
-        }
     }
+}
 </script>
 
 <style scoped>
