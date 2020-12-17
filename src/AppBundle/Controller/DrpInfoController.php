@@ -18,36 +18,36 @@ class DrpInfoController extends BaseController
             return [];
         }
 
-        file_put_contents('b.log', 'type: '.$type ,FILE_APPEND);
-        file_put_contents('b.log', 'targetId: '.$targetId ,FILE_APPEND);
+        file_put_contents('a.log', 'type'.$type ,FILE_APPEND);
+        file_put_contents('a.log', 'targetId'.$targetId ,FILE_APPEND);
         $drpSettings = $this->getSettingService()->get('drp', []);
-        file_put_contents('b.log', 'drpSettings: '.json_encode($drpSettings) ,FILE_APPEND);
+        file_put_contents('a.log', 'drpSettings'.json_encode($drpSettings) ,FILE_APPEND);
 
         $recruitUrl = $this->yxDomain.'/distributioncenter.html#/agencyshow?merchant_id='.$drpSettings['merchantId'].'&type='.$type.'&id='.$targetId;
         $generalizeUrl = $this->yxDomain.'/distributioncenter.html#/template/share?type='.$type.'&id='.$targetId.'&merchant_id='.$drpSettings['merchantId'];
 
         $tagVisible = $this->getVisibleStatus();
-        file_put_contents('b.log', 'tagVisible: '.$tagVisible ,FILE_APPEND);
+        file_put_contents('a.log', 'tagVisible'.$tagVisible ,FILE_APPEND);
 
         $this->tryRefreshAgencyRecruitSetting();
 
         $bindRelation = $this->tryRefreshAgencyEquityReward($tagVisible);
-        file_put_contents('b.log', 'bindRelation: '.json_encode($bindRelation) ,FILE_APPEND);
+        file_put_contents('a.log', 'bindRelation'.json_encode($bindRelation) ,FILE_APPEND);
 
         if (empty($bindRelation)) {
             $directRewardRatio = $drpSettings['minDirectRewardRatio'];
         } else {
             $directRewardRatio = $bindRelation['directRewardRatio'];
         }
-        file_put_contents('b.log', 'directRewardRatio: '.$directRewardRatio ,FILE_APPEND);
+        file_put_contents('a.log', 'directRewardRatio'.$directRewardRatio ,FILE_APPEND);
         if ('course' == $type) {
             $product = $this->getCourseService()->getCourse($targetId);
         } else {
             $product = $this->getClassroomService()->getClassroom($targetId);
         }
-        file_put_contents('b.log', 'product: '.json_encode($product) ,FILE_APPEND);
+        file_put_contents('a.log', 'product'.json_encode($product) ,FILE_APPEND);
         $earnings = number_format($product['price'] * $directRewardRatio, 2);
-        file_put_contents('b.log', 'earnings: '.$earnings ,FILE_APPEND);
+        file_put_contents('a.log', 'earnings'.$earnings ,FILE_APPEND);
 
         return $this->createJsonResponse([
             'earnings' => $earnings,
@@ -107,9 +107,9 @@ class DrpInfoController extends BaseController
     protected function tryRefreshAgencyEquityReward($tagVisible)
     {
         $userId = $this->getUser()->getId();
-        file_put_contents('b.log', 'userId: '.$userId ,FILE_APPEND);
+        file_put_contents('a.log', 'userId'.$userId ,FILE_APPEND);
         $agencyBindRelation = $this->getAgencyBindRelationService()->getRelationByUserId($userId);
-        file_put_contents('b.log', 'agencyBindRelation: '.json_encode($agencyBindRelation) ,FILE_APPEND);
+        file_put_contents('a.log', 'agencyBindRelation'.json_encode($agencyBindRelation) ,FILE_APPEND);
         if (!$tagVisible || empty($agencyBindRelation)) {
             return $agencyBindRelation;
         }
@@ -122,7 +122,7 @@ class DrpInfoController extends BaseController
         ];
 
         $result = $this->getDrpPlatformApi()->getAgencyRewardRatio($data);
-        file_put_contents('b.log', 'result: '.json_encode($result) ,FILE_APPEND);
+        file_put_contents('a.log', 'result'.json_encode($result) ,FILE_APPEND);
 
         if (!empty($result) && empty($result['error']) && isset($result['direct_reward_ratio'])) {
             $agencyBindRelation = $this->getAgencyBindRelationService()->updateRelation($agencyBindRelation['id'], ['directRewardRatio' => $result['direct_reward_ratio']]);
