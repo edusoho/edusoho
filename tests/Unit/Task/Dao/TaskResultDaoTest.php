@@ -64,6 +64,8 @@ class TaskResultDaoTest extends BaseDaoTestCase
 
     public function testAnalysisCompletedTaskDataByTime()
     {
+        $this->mockCourseTask(['id' => 3]);
+        $this->mockCourseTask(['id' => 4]);
         $expected = [];
         $expected[] = $this->mockDataObject(['activityId' => 3, 'courseTaskId' => 3, 'finishedTime' => 4000]);
         $expected[] = $this->mockDataObject(['activityId' => 4, 'courseTaskId' => 4, 'finishedTime' => 3000]);

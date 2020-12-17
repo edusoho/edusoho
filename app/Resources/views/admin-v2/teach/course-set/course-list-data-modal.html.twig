@@ -32,7 +32,7 @@
           {% if tasks %}
             {% for task in tasks %}
               <tr>
-                <td>{{ task.title }}</td>
+                <td>{{ task.title }}{% if task.isOptional %}【{{'admin.course_manage.statistics.optional_task'|trans}}】{% endif %}</td>
                 <td>{{ ('course.activity.'~task.type)|trans }}</td>
                 <td>
                   {% if task.type == 'video' %}
