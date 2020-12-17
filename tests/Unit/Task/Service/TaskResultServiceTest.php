@@ -79,6 +79,14 @@ class TaskResultServiceTest extends BaseTestCase
 
     public function testTanalysisCompletedTaskDataByTime()
     {
+        $this->getTaskDao()->create([
+            'id' => 5,
+            'courseId' => 1,
+        ]);
+        $this->getTaskDao()->create([
+            'id' => 6,
+            'courseId' => 1,
+        ]);
         $this->mockTaskResult(['courseTaskId' => 5, 'finishedTime' => strtotime('2017/1/1')]);
         $this->mockTaskResult(['courseTaskId' => 6, 'finishedTime' => strtotime('2017/11/1')]);
         $endTime = strtotime('2017/2/1');
