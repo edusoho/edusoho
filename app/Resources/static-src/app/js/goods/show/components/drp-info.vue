@@ -32,13 +32,6 @@
                 type: Number,
                 default: 0
             }
-        },
-        methods: {
-            getDrpInfo() {
-                axios.get(`/drp_info/${this.currentSku.targetId}/${this.goods.type}`).then(res => {
-                    this.drpInfo = res.data;
-                });
-            }
         }
     }
 </script>

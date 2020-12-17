@@ -272,7 +272,6 @@
         watch: {
             currentSku(newVal, oldVal) {
                 this.remainTime();
-                console.log('currentSku', this.currentSku)
                 this.getDrpInfo();
             }
         }
