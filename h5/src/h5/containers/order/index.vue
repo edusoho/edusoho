@@ -423,12 +423,11 @@ export default {
         data: data,
       })
         .then(res => {
-          if (!this.couponSwitch) {
-            return;
-          }
-          const coupons = res.availableCoupons;
           this.course = res;
-          this.itemData = coupons.length > 0 ? coupons[0] : null;
+          if (this.couponSwitch) {
+            const coupons = res.availableCoupons;
+            this.itemData = coupons.length > 0 ? coupons[0] : null;
+          }
           if (this.IsCollectUserInfoType) {
             this.getInfoCollection();
           }
