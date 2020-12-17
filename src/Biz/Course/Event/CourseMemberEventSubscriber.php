@@ -35,6 +35,9 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
             'classroom.course.copy' => 'onClassroomCourseCopy',
             'course.delete' => ['onCourseDelete', -100],
             'course.task.finish' => 'onTaskFinish',
+            'course.lesson.setOptional' => 'onLessonOptionalChange',
+            'course.task.update.sync' => 'onTaskUpdateSync',
+            'course.lesson.delete' => ['onCourseLessonDelete', -100],
         ];
     }
 
@@ -88,6 +91,23 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
 
         $memberIds = ArrayToolkit::column($members, 'userId');
         $this->getCourseMemberService()->batchBecomeStudents($course['id'], $memberIds, $classroomId);
+    }
+
+    public function onTaskUpdateSync(Event $event)
+    {
+        $task = $event->getSubject();
+
+        $copiedTasks = $this->getCopiedTasks($task);
+        foreach ($copiedTasks as $copiedTask) {
+            $this->getCourseMemberService()->recountLearningDataByCourseId($copiedTask['courseId']);
+        }
+    }
+
+    private function getCopiedTasks($task)
+    {
+        $courses = $this->getCourseService()->findCoursesByParentIdAndLocked($task['courseId'], 1);
+
+        return $this->getTaskDao()->findByCopyIdAndLockedCourseIds($task['id'], ArrayToolkit::column($courses, 'id'));
     }
 
     private function countStudentMember(Event $event)
@@ -175,6 +195,18 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
             ['courseId' => $taskResult['courseId'], 'userId' => $taskResult['userId']],
             ['lastLearnTime' => time(), 'finishedTime' => $finishTime]
         );
+    }
+
+    public function onLessonOptionalChange(Event $event)
+    {
+        $lesson = $event->getSubject();
+        $this->getCourseMemberService()->recountLearningDataByCourseId($lesson['courseId']);
+    }
+
+    public function onCourseLessonDelete(Event $event)
+    {
+        $lesson = $event->getSubject();
+        $this->getCourseMemberService()->recountLearningDataByCourseId($lesson['courseId']);
     }
 
     private function getCourseFinishTime($taskResult)
@@ -325,5 +357,10 @@ class CourseMemberEventSubscriber extends EventSubscriber implements EventSubscr
         $biz = $this->getBiz();
 
         return $biz['goods.entity.factory'];
+    }
+
+    protected function getTaskDao()
+    {
+        return $this->getBiz()->dao('Task:TaskDao');
     }
 }

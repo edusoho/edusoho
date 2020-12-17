@@ -149,6 +149,13 @@ class TaskResultDaoImpl extends AdvancedDaoImpl implements TaskResultDao
         return $this->db()->fetchColumn($sql, [$userId, $courseId]) ?: 0;
     }
 
+    public function countFinishedCompulsoryTaskNumGroupByUserId($courseId)
+    {
+        $sql = 'SELECT ctr.userId, COUNT(ctr.id) AS `count` FROM course_task AS ct INNER JOIN course_task_result ctr ON ct.id = ctr.courseTaskId WHERE ct.courseId = ? AND ctr.status = \'finish\' AND ct.isOptional = 0 GROUP BY ctr.userId';
+
+        return $this->db()->fetchAll($sql, [$courseId]);
+    }
+
     public function sumCourseSetLearnedTimeByTaskIds($taskIds)
     {
         if (empty($taskIds)) {

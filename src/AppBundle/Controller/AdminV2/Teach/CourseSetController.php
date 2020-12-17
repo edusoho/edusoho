@@ -481,13 +481,23 @@ class CourseSetController extends BaseController
         $tasks = ArrayToolkit::group($tasks, 'fromCourseSetId');
 
         foreach ($courseSets as &$courseSet) {
-            // TODO 完成人数目前只统计了默认教学计划
             $courseSetId = $courseSet['id'];
             $defaultCourseId = $courseSet['defaultCourseId'];
-            $courseCount = $this->getCourseService()->searchCourseCount(['courseSetId' => $courseSetId]);
-            $isLearnedNum = empty($defaultCourses[$defaultCourseId]) ? 0 : $this->getMemberService()->countMembers(
-                ['finishedTime_GT' => 0, 'courseId' => $courseSet['defaultCourseId'], 'learnedCompulsoryTaskNumGreaterThan' => $defaultCourses[$defaultCourseId]['compulsoryTaskNum']]
-            );
+            $courses = $this->getCourseService()->searchCourses(['courseSetId' => $courseSetId], [], 0, PHP_INT_MAX, ['id']);
+
+            $isLearnedNum = 0;
+            $courseFinishedMembers = ArrayToolkit::group($this->getMemberService()->searchMembers(
+                ['finishedTime_GT' => 0, 'courseIds' => ArrayToolkit::column($courses, 'id')],
+                [],
+                0,
+                PHP_INT_MAX,
+                ['userId']
+            ), 'userId');
+            foreach ($courseFinishedMembers as $courseFinishedMember) {
+                if (count($courseFinishedMember) == count($courses)) {
+                    ++$isLearnedNum;
+                }
+            }
 
             if (!empty($courseSetIncomes[$courseSetId])) {
                 $courseSet['income'] = $courseSetIncomes[$courseSetId]['income'];
@@ -495,8 +505,14 @@ class CourseSetController extends BaseController
                 $courseSet['income'] = 0;
             }
             $courseSet['isLearnedNum'] = $isLearnedNum;
-            $courseSet['taskCount'] = empty($tasks[$courseSetId]) ? 0 : count($tasks[$courseSetId]);
-            $courseSet['courseCount'] = $courseCount;
+            $courseSet['taskCount'] = $courseSet['compulsorTaskCount'] = $courseSet['electiveTaskNum'] = 0;
+            if (!empty($tasks[$courseSetId])) {
+                $courseSet['taskCount'] = count($tasks[$courseSetId]);
+                $courseSetTasks = ArrayToolkit::group($tasks[$courseSetId], 'isOptional');
+                $courseSet['compulsorTaskCount'] = empty($courseSetTasks['0']) ? 0 : count($courseSetTasks['0']);
+                $courseSet['electiveTaskNum'] = $courseSet['taskCount'] - $courseSet['compulsorTaskCount'];
+            }
+            $courseSet['courseCount'] = count($courses);
             $courseSet['studentNum'] = $this->getMemberService()->countStudentMemberByCourseSetId($courseSetId);
         }
 

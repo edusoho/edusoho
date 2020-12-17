@@ -14,7 +14,7 @@
             return {
                courseItems: [],
                hasOptional: false,
-               renderUrl: `/course/${this.sku.targetId}/task/list/render/default`,
+               renderUrl: `/course/${this.sku.targetId}/task/list/render/default?showOptional=1`,
             };
         },
         props: {
@@ -33,7 +33,6 @@
         },
         methods: {
             getTasksListInfo() {
-                this.renderUrl = `/course/${this.sku.targetId}/task/list/render/default`;
                 $('.js-tasks-show').data('url', this.renderUrl);
                 new PagedCourseTask();
             },
