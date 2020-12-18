@@ -116,8 +116,16 @@ class CourseTaskEventV2 extends AbstractResource
         } else {
             list($canDoing, $denyReason) = $this->getLearnControlService()->checkActive($user['id'], $data['sign'], $request->request->get('reActive', 0));
         }
+        if (!empty($data['watchData'])) {
+            $watchData = $data['watchData'];
+            if (isset($watchData['duration']) && $watchData['duration'] > $data['duration']) {
+                $data['originDuration'] = $data['duration'];
+                $data['duration'] = $watchData['duration'];
+            }
+        }
         $flow = $this->getDataCollectService()->getFlowBySign($user['id'], $data['sign']);
         $currentTime = time();
+
         $record = $this->getDataCollectService()->push([
             'userId' => $user['id'],
             'activityId' => $task['activityId'],
@@ -134,10 +142,17 @@ class CourseTaskEventV2 extends AbstractResource
             'flowSign' => $data['sign'],
             'data' => [
                 'userAgent' => $request->headers->get('user-agent'),
+                'data' => $data,
             ],
         ]);
+        if (!empty($data['duration'])) {
+            $this->getDataCollectService()->updateLearnFlow($flow['id'], ['lastLearnTime' => $record['endTime']]);
+            $this->getTaskService()->doTask($taskId, $record['duration']);
+        }
 
-        $this->getDataCollectService()->updateLearnFlow($flow['id'], ['lastLearnTime' => $record['endTime']]);
+        if ($this->getTaskService()->isFinished($task['id'])) {
+            $this->getTaskService()->finishTaskResult($task['id']);
+        }
         $triggerData = ['duration' => $record['duration'], 'lastTime' => $record['startTime'], 'events' => $request->request->get('events', [])];
         $result = $this->getTaskService()->trigger($taskId, self::EVENT_DOING, $triggerData);
         if (isset($data['lastLearnTime'])) {
@@ -257,6 +272,7 @@ class CourseTaskEventV2 extends AbstractResource
             'flowSign' => $data['sign'],
             'data' => [
                 'userAgent' => $request->headers->get('user-agent'),
+                'watchData' => $watchData,
             ],
         ]);
 
