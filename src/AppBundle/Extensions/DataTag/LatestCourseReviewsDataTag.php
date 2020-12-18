@@ -2,8 +2,6 @@
 
 namespace AppBundle\Extensions\DataTag;
 
-use AppBundle\Common\ArrayToolkit;
-
 class LatestCourseReviewsDataTag extends CourseBaseDataTag implements DataTag
 {
     /**
