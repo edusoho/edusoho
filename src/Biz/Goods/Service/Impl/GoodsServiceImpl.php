@@ -312,11 +312,6 @@ class GoodsServiceImpl extends BaseService implements GoodsService
         return $this->getGoodsSpecsDao()->findByGoodsId($goodsId);
     }
 
-    public function findGoodsSpecsByGoodsIds($goodsIds)
-    {
-        return $this->getGoodsSpecsDao()->findByGoodsIds($goodsIds);
-    }
-
     public function findPublishedGoodsSpecsByGoodsId($goodsId)
     {
         return $this->getGoodsSpecsDao()->findPublishedByGoodsId($goodsId);

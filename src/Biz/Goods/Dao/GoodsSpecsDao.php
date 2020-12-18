@@ -17,6 +17,4 @@ interface GoodsSpecsDao extends GeneralDaoInterface
     public function deleteByGoodsId($goodsId);
 
     public function findByIds(array $ids);
-
-    public function findByGoodsIds(array $goodsIds);
 }

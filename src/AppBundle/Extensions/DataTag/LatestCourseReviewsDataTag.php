@@ -25,7 +25,7 @@ class LatestCourseReviewsDataTag extends CourseBaseDataTag implements DataTag
 
         $defaultConditions = [
             'parentId' => 0,
-            'targetType' => 'goods',
+            'targetType' => 'course',
         ];
 
         if (isset($conditions['courseId'])) {
@@ -39,30 +39,5 @@ class LatestCourseReviewsDataTag extends CourseBaseDataTag implements DataTag
         $courseReviews = $this->getReviewService()->searchReviews($conditions, ['createdTime' => 'DESC'], 0, $arguments['count']);
 
         return $this->getCoursesAndUsers($courseReviews);
-    }
-
-    protected function getCoursesAndUsers($courseRelations)
-    {
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courseRelations, 'userId'));
-        $goodsIds = ArrayToolkit::column($courseRelations, 'targetId');
-        $goods = ArrayToolkit::index($this->getGoodsService()->findGoodsByIds($goodsIds), 'id');
-        $goodsSpecs = ArrayToolkit::group($this->getGoodsService()->findGoodsSpecsByGoodsIds($goodsIds), 'goodsId');
-        array_walk($goodsSpecs, function (&$specs, $goodsId) use ($goods, &$classroomIds, &$courseIds) {
-            $specs = $specs[0];
-            $specs['targetType'] = $goods[$goodsId]['type'];
-            $specs['targetTitle'] = $goods[$goodsId]['title'];
-        });
-
-        foreach ($courseRelations as &$courseRelation) {
-            $userId = $courseRelation['userId'];
-            $user = $users[$userId];
-            unset($user['password']);
-            unset($user['salt']);
-            $courseRelation['User'] = $user;
-
-            $courseRelation['target'] = $goodsSpecs[$courseRelation['targetId']];
-        }
-
-        return $courseRelations;
     }
 }
