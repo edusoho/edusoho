@@ -779,14 +779,14 @@ class WeChatNotificationEventSubscriber extends EventSubscriber implements Event
         return $biz['qiQiuYunSdk.notification'];
     }
 
-    private function findTargetIdByOrderItem(array $orderItems)
+    private function findTargetIdByOrderItem(array $orderItem)
     {
-        if (in_array($orderItems['target_type'], ['course', 'classroom'])) {
-            $goods = $this->getGoodsService()->getGoodsSpecs($orderItems['target_id']);
+        if (in_array($orderItem['target_type'], ['course', 'classroom'])) {
+            $goods = $this->getGoodsService()->getGoodsSpecs($orderItem['target_id']);
 
-            $targetId = $goods['id'];
+            $targetId = $goods['targetId'];
         } else {
-            $targetId = $orderItems['target_id'];
+            $targetId = $orderItem['target_id'];
         }
 
         return $targetId;
