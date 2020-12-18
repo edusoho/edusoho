@@ -80,7 +80,7 @@ class GlobalFilePlayerController extends BaseController
         return $this->render('material-lib/player/global-video-player.html.twig', [
             'file' => $file,
             'context' => $playerContext,
-            'cloudSdk' => 'audio', //webExtension->getCloudSdkUrl
+            'cloudSdk' => 'resource_player', //webExtension->getCloudSdkUrl
         ]);
     }
 
