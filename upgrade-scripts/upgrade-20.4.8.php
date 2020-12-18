@@ -51,6 +51,7 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
+            'processGoodsHitNum'
         );
 
         $funcNames = array();
@@ -83,6 +84,41 @@ class EduSohoUpgrade extends AbstractUpdater
                 'progress' => 0,
             );
         }
+    }
+
+    public function processGoodsHitNum()
+    {
+        if (empty($this->getCacheService()->get('goods_hit_num_is_process'))) {
+            $this->logger('info', '开始处理：GoodsHitNum');
+
+            $this->getConnection()->exec("
+                UPDATE course_set_v8 a
+                    INNER JOIN (
+                        SELECT courseSetId, SUM(hitNum) AS sumHitNum
+                        FROM course_v8
+                        GROUP BY courseSetId
+                    ) b
+                    ON a.id = b.courseSetId
+                SET a.hitNum = a.hitNum + b.sumHitNum;
+            ");
+
+            $this->getConnection()->exec("
+                UPDATE goods
+                    INNER JOIN product
+                    ON product.id = goods.productId AND product.targetType = 'course'
+                    INNER JOIN course_set_v8 ON course_set_v8.id = product.targetId
+                SET goods.hitNum = course_set_v8.hitNum;
+            ");
+            
+            $this->getCacheService()->set('goods_hit_num_is_process', 1);
+        }
+      
+        return 1;
+    }
+
+    protected function getCacheService()
+    {
+        return $this->createService('System:CacheService');
     }
 
     protected function generateIndex($step, $page)
