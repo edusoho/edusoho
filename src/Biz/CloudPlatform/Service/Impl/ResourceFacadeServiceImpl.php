@@ -113,7 +113,6 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
         $paths = [
             'player' => 'js-sdk/sdk-v1.js',
             'newPlayer' => 'js-sdk/sdk-v2.js',
-            'video' => 'js-sdk-v2/sdk-v1.js',
             'uploader' => 'js-sdk-v2/uploader/sdk-2.1.0.js',
             'old_uploader' => 'js-sdk/uploader/sdk-v1.js',
             'old_document' => 'js-sdk/document-player/v7/viewer.html',
