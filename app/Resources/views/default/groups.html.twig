@@ -93,8 +93,7 @@
             {% if reviews %}
               {% for review in reviews %}
               {% set author = review.User|default(null) %}
-              {% set course = review.course|default(null) %}
-              {% set classroom = review.classroom|default(null) %}
+              {% set target = review.target|default(null) %}
               {% if author %}
                 <div class="media media-dynamic">
                   <div class="media-left">
@@ -104,10 +103,10 @@
                     <div class="title text-sm">
                       {{ web_macro.user_link(author,'link-dark') }}
                       <span class="score">{{web_macro.star(review.rating) }}</span>
-                      {% if review.targetType == 'course' and course %}
-                        {{ 'homepage.student_comment.from'|trans({'%courseUrl%':path('course_show', {id: course.id }),'%courseTitle%':course.title|default(course.courseSetTitle)|plain_text(10) })|raw }}
-                      {% elseif review.targetType == 'classroom' and classroom %}
-                        {{ 'homepage.student_comment.from'|trans({'%courseUrl%':path('classroom_show', {id: classroom.id }),'%courseTitle%':classroom.title|plain_text(10) })|raw }}
+                      {% if target.targetType == 'course' %}
+                        {{ 'homepage.student_comment.from'|trans({ '%courseUrl%': path('course_show', {id: target.targetId }),'%courseTitle%': target.targetTitle|default(target.title)|plain_text(10) })|raw }}
+                      {% elseif target.targetType == 'classroom' %}
+                        {{ 'homepage.student_comment.from'|trans({ '%courseUrl%': path('classroom_show', {id: target.targetId }),'%courseTitle%': target.targetTitle|plain_text(10) })|raw }}
                       {% endif %}
                     </div>
                     <div class="content gray-darker">

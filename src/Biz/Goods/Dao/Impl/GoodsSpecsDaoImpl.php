@@ -20,6 +20,7 @@ class GoodsSpecsDaoImpl extends GeneralDaoImpl implements GoodsSpecsDao
             'conditions' => [
                 'id = :id',
                 'goodsId = :goodsId',
+                'goodsId IN (:goodsIds)',
                 'title = :title',
                 'targetId = :targetId',
                 'title LIKE :titleLike',
@@ -39,6 +40,11 @@ class GoodsSpecsDaoImpl extends GeneralDaoImpl implements GoodsSpecsDao
         $sql = "SELECT * FROM {$this->table} WHERE goodsId = ? ORDER BY `seq` ASC;";
 
         return $this->db()->fetchAll($sql, [$goodsId]);
+    }
+
+    public function findByGoodsIds(array $goodsIds)
+    {
+        return $this->findInField('goodsId', $goodsIds);
     }
 
     public function findPublishedByGoodsId($goodsId)
