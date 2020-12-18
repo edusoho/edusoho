@@ -46,13 +46,12 @@ class LatestCourseReviewsDataTag extends CourseBaseDataTag implements DataTag
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courseRelations, 'userId'));
         $goodsIds = ArrayToolkit::column($courseRelations, 'targetId');
         $goods = ArrayToolkit::index($this->getGoodsService()->findGoodsByIds($goodsIds), 'id');
-        $products = $this->getProductService()->findProductsByIds(ArrayToolkit::column($goods, 'productId'));
-        $productsWithIndex = ArrayToolkit::index($products, 'id');
-        $products = ArrayToolkit::group($products, 'targetType');
-        $courseIds = isset($products['course']) ? ArrayToolkit::column($products['course'], 'targetId') : [];
-        $classroomIds = isset($products['classroom']) ? ArrayToolkit::column($products['classroom'], 'targetId') : [];
-        $courses = empty($courseIds) ? [] : $this->getCourseService()->findCoursesByIds($courseIds);
-        $classrooms = empty($classroomIds) ? [] : $this->getClassroomService()->findClassroomsByIds($classroomIds);
+        $goodsSpecs = ArrayToolkit::group($this->getGoodsService()->findGoodsSpecsByGoodsIds($goodsIds), 'goodsId');
+        array_walk($goodsSpecs, function (&$specs, $goodsId) use ($goods, &$classroomIds, &$courseIds) {
+            $specs = $specs[0];
+            $specs['targetType'] = $goods[$goodsId]['type'];
+            $specs['targetTitle'] = $goods[$goodsId]['title'];
+        });
 
         foreach ($courseRelations as &$courseRelation) {
             $userId = $courseRelation['userId'];
@@ -61,14 +60,7 @@ class LatestCourseReviewsDataTag extends CourseBaseDataTag implements DataTag
             unset($user['salt']);
             $courseRelation['User'] = $user;
 
-            $goodsId = $courseRelation['targetId'];
-            $productId = $goods[$goodsId]['productId'];
-            $courseId = 'course' === $productsWithIndex[$productId]['targetType'] ? $productsWithIndex[$productId]['targetId'] : 0;
-            $classroomId = 'classroom' === $productsWithIndex[$productId]['targetType'] ? $productsWithIndex[$productId]['targetId'] : 0;
-
-            $courseRelation['targetType'] = $productsWithIndex[$productId]['targetType'];
-            $courseRelation['course'] = $courseId ? $courses[$courseId] : [];
-            $courseRelation['classroom'] = $classroomId ? $classrooms[$classroomId] : [];
+            $courseRelation['target'] = $goodsSpecs[$courseRelation['targetId']];
         }
 
         return $courseRelations;

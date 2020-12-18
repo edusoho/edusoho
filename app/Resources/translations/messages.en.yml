@@ -4316,6 +4316,7 @@ admin.course_manage.statistics.data.video_length: 'Video Length'
 admin.course_manage.statistics.data.task_sum_study_time: 'The Task Is Accumulated Learning Time(mins)'
 admin.course_manage.statistics.data.average_score: 'Avg Test Points'
 admin.course_manage.statistics.data.plan_study_time: Course Plan Sum Learned Time(mins)：%mins%
+admin.course_manage.statistics.optional_task: Optional
 
 admin.course_manage.statistics.data_detail.name: 'User Name'
 admin.course_manage.statistics.data_detail.join_time: 'Joined At'

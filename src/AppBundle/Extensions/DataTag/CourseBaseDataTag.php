@@ -8,7 +8,6 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Biz\Goods\Service\GoodsService;
-use Biz\Product\Service\ProductService;
 use Biz\Review\Service\ReviewService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
@@ -84,14 +83,6 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
     protected function getGoodsService()
     {
         return $this->getServiceKernel()->getBiz()->service('Goods:GoodsService');
-    }
-
-    /**
-     * @return ProductService
-     */
-    protected function getProductService()
-    {
-        return $this->getServiceKernel()->getBiz()->service('Product:ProductService');
     }
 
     /**

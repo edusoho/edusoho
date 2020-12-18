@@ -23,8 +23,8 @@ class TaskResultDaoImpl extends AdvancedDaoImpl implements TaskResultDao
 
     public function analysisCompletedTaskDataByTime($startTime, $endTime)
     {
-        $sql = "SELECT count(id) AS count, from_unixtime(finishedTime, '%Y-%m-%d') AS date FROM
-            {$this->table} WHERE finishedTime >= ? AND finishedTime < ? GROUP BY date ORDER BY date ASC";
+        $sql = "SELECT count(*) AS count, from_unixtime(finishedTime, '%Y-%m-%d') AS date FROM
+            {$this->table} INNER JOIN course_task ON {$this->table}.courseTaskId = course_task.id WHERE course_task.isOptional = 0 AND finishedTime >= ? AND finishedTime < ? GROUP BY date ORDER BY date ASC";
 
         return $this->db()->fetchAll($sql, [$startTime, $endTime]);
     }
@@ -191,6 +191,7 @@ class TaskResultDaoImpl extends AdvancedDaoImpl implements TaskResultDao
                 'courseId =:courseId',
                 'type =: type',
                 'courseTaskId IN (:courseTaskIds)',
+                'courseTaskId NOT IN (:notCourseTaskIds)',
                 'courseId IN ( :courseIds )',
                 'activityId =:activityId',
                 'courseTaskId = :courseTaskId',
