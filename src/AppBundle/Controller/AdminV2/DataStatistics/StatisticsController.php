@@ -32,16 +32,16 @@ class StatisticsController extends BaseController
 
         return $this->forward(
             "AppBundle:AdminV2/DataStatistics/Statistics:{$analysisDateType}",
-            array(
+            [
                 'request' => $request,
                 'tab' => $tab,
-            )
+            ]
         );
     }
 
     public function registerAction(Request $request, $tab)
     {
-        $data = array();
+        $data = [];
         $count = 0;
         $registerStartDate = '';
 
@@ -55,7 +55,7 @@ class StatisticsController extends BaseController
 
         $registerDetail = $this->getUserService()->searchUsers(
             $timeRange,
-            array('createdTime' => 'DESC'),
+            ['createdTime' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -71,7 +71,7 @@ class StatisticsController extends BaseController
             }
         }
 
-        $registerStartData = $this->getUserService()->searchUsers(array(), array('createdTime' => 'ASC'), 0, 1);
+        $registerStartData = $this->getUserService()->searchUsers([], ['createdTime' => 'ASC'], 0, 1);
 
         if ($registerStartData) {
             $registerStartDate = date('Y-m-d', $registerStartData[0]['createdTime']);
@@ -83,7 +83,7 @@ class StatisticsController extends BaseController
 
         return $this->render(
             'admin-v2/data-statistics/statistics/register.html.twig',
-            array(
+            [
                 'registerDetail' => $registerDetail,
                 'paginator' => $paginator,
                 'tab' => $tab,
@@ -92,22 +92,22 @@ class StatisticsController extends BaseController
                 'registerStartDate' => $registerStartDate,
                 'dataInfo' => $dataInfo,
                 'count' => $count,
-            )
+            ]
         );
     }
 
     public function userSumAction(Request $request, $tab)
     {
-        $data = array();
+        $data = [];
         $userSumStartDate = '';
-        $userSumDetail = array();
+        $userSumDetail = [];
 
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
 
-        $result = array(
+        $result = [
             'tab' => $tab,
-        );
+        ];
 
         if ('trend' == $tab) {
             $registerData = $this->getUserService()->analysisRegisterDataByTime(
@@ -115,7 +115,7 @@ class StatisticsController extends BaseController
                 $timeRange['endTime']
             );
             $userInitCount = $this->getUserService()->countUsers(
-                array('endTime' => $timeRange['startTime'])
+                ['endTime' => $timeRange['startTime']]
             );
             $data = $this->fillAnalysisSum($condition, $registerData, $userInitCount);
             $result['data'] = $data;
@@ -128,7 +128,7 @@ class StatisticsController extends BaseController
 
             $userSumDetail = $this->getUserService()->searchUsers(
                 $timeRange,
-                array('createdTime' => 'DESC'),
+                ['createdTime' => 'DESC'],
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );
@@ -136,7 +136,7 @@ class StatisticsController extends BaseController
             $result['paginator'] = $paginator;
         }
 
-        $userSumStartData = $this->getUserService()->searchUsers(array(), array('createdTime' => 'ASC'), 0, 1);
+        $userSumStartData = $this->getUserService()->searchUsers([], ['createdTime' => 'ASC'], 0, 1);
 
         if ($userSumStartData) {
             $userSumStartDate = date('Y-m-d', $userSumStartData[0]['createdTime']);
@@ -156,7 +156,7 @@ class StatisticsController extends BaseController
 
     public function courseSetSumAction(Request $request, $tab)
     {
-        $data = array();
+        $data = [];
         $courseSetSumStartDate = '';
 
         $condition = $request->query->all();
@@ -187,7 +187,7 @@ class StatisticsController extends BaseController
                 $timeRange['endTime']
             );
             $courseSetInitSum = $this->getCourseSetService()->countCourseSets(
-                array('endTime' => $timeRange['startTime'])
+                ['endTime' => $timeRange['startTime']]
             );
             $data = $this->fillAnalysisSum($condition, $courseSetData, $courseSetInitSum);
         }
@@ -201,8 +201,8 @@ class StatisticsController extends BaseController
         );
 
         $courseSetSumStartData = $this->getCourseSetService()->searchCourseSets(
-            array(),
-            array('createdTime' => 'ASC'),
+            [],
+            ['createdTime' => 'ASC'],
             0,
             1
         );
@@ -215,7 +215,7 @@ class StatisticsController extends BaseController
 
         return $this->render(
             'admin-v2/data-statistics/statistics/course-set-sum.html.twig',
-            array(
+            [
                 'courseSetSumDetail' => $courseSetSumDetail,
                 'paginator' => $paginator,
                 'tab' => $tab,
@@ -224,13 +224,13 @@ class StatisticsController extends BaseController
                 'users' => $users,
                 'courseSetSumStartDate' => $courseSetSumStartDate,
                 'dataInfo' => $dataInfo,
-            )
+            ]
         );
     }
 
     public function courseSumAction(Request $request, $tab)
     {
-        $data = array();
+        $data = [];
         $courseSumStartDate = '';
 
         $condition = $request->query->all();
@@ -259,7 +259,7 @@ class StatisticsController extends BaseController
                 $timeRange['startTime'],
                 $timeRange['endTime']
             );
-            $courseInitSum = $this->getCourseService()->countCourses(array('endTime' => $timeRange['startTime']));
+            $courseInitSum = $this->getCourseService()->countCourses(['endTime' => $timeRange['startTime']]);
             $data = $this->fillAnalysisSum($condition, $courseData, $courseInitSum);
         }
 
@@ -273,7 +273,7 @@ class StatisticsController extends BaseController
             ArrayToolkit::column($courseSumDetail, 'categoryId')
         );
 
-        $courseStartData = $this->getCourseService()->searchCourses(array(), array('createdTime' => 'ASC'), 0, 1);
+        $courseStartData = $this->getCourseService()->searchCourses([], ['createdTime' => 'ASC'], 0, 1);
 
         if ($courseStartData) {
             $courseStartDate = date('Y-m-d', $courseStartData[0]['createdTime']);
@@ -283,7 +283,7 @@ class StatisticsController extends BaseController
 
         return $this->render(
             'admin-v2/data-statistics/statistics/course-sum.html.twig',
-            array(
+            [
                 'courseSumDetail' => $courseSumDetail,
                 'paginator' => $paginator,
                 'tab' => $tab,
@@ -294,13 +294,13 @@ class StatisticsController extends BaseController
                 'courseSumStartDate' => $courseSumStartDate,
                 'dataInfo' => $dataInfo,
                 'count' => count($courseSumDetail),
-            )
+            ]
         );
     }
 
     public function loginAction(Request $request, $tab)
     {
-        $data = array();
+        $data = [];
         $loginStartDate = '';
 
         $condition = $request->query->all();
@@ -311,21 +311,21 @@ class StatisticsController extends BaseController
         $paginator = new Paginator(
             $request,
             $this->getLogService()->searchLogCount(
-                array(
+                [
                     'action' => 'login_success',
                     'startDateTime' => date('Y-m-d H:i:s', $timeRange['startTime']),
                     'endDateTime' => date('Y-m-d H:i:s', $timeRange['endTime']),
-                )
+                ]
             ),
             20
         );
 
         $loginDetail = $this->getLogService()->searchLogs(
-            array(
+            [
                 'action' => 'login_success',
                 'startDateTime' => date('Y-m-d H:i:s', $timeRange['startTime']),
                 'endDateTime' => date('Y-m-d H:i:s', $timeRange['endTime']),
-            ),
+            ],
             'created',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
@@ -346,7 +346,7 @@ class StatisticsController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds($userIds);
 
-        $loginStartData = $this->getLogService()->searchLogs(array('action' => 'login_success'), 'createdByAsc', 0, 1);
+        $loginStartData = $this->getLogService()->searchLogs(['action' => 'login_success'], 'createdByAsc', 0, 1);
 
         if ($loginStartData) {
             $loginStartDate = date('Y-m-d', $loginStartData[0]['createdTime']);
@@ -356,7 +356,7 @@ class StatisticsController extends BaseController
 
         return $this->render(
             'admin-v2/data-statistics/statistics/login.html.twig',
-            array(
+            [
                 'loginDetail' => $loginDetail,
                 'paginator' => $paginator,
                 'tab' => $tab,
@@ -365,13 +365,13 @@ class StatisticsController extends BaseController
                 'loginStartDate' => $loginStartDate,
                 'dataInfo' => $dataInfo,
                 'count' => $count,
-            )
+            ]
         );
     }
 
     public function courseSetAction(Request $request, $tab)
     {
-        $data = array();
+        $data = [];
         $courseSetStartDate = '';
 
         $condition = $request->query->all();
@@ -413,7 +413,7 @@ class StatisticsController extends BaseController
             ArrayToolkit::column($courseSetDetail, 'categoryId')
         );
 
-        $courseSetStartData = $this->getCourseSetService()->searchCourseSets(array(), 'createdTimeByAsc', 0, 1);
+        $courseSetStartData = $this->getCourseSetService()->searchCourseSets([], 'createdTimeByAsc', 0, 1);
 
         if ($courseSetStartData) {
             $courseSetStartDate = date('Y-m-d', $courseSetStartData[0]['createdTime']);
@@ -423,7 +423,7 @@ class StatisticsController extends BaseController
 
         return $this->render(
             'admin-v2/data-statistics/statistics/course-set.html.twig',
-            array(
+            [
                 'courseSetDetail' => $courseSetDetail,
                 'paginator' => $paginator,
                 'tab' => $tab,
@@ -433,22 +433,23 @@ class StatisticsController extends BaseController
                 'courseSetStartDate' => $courseSetStartDate,
                 'dataInfo' => $dataInfo,
                 'count' => $count,
-            )
+            ]
         );
     }
 
     public function taskAction(Request $request, $tab)
     {
-        $data = array();
+        $data = [];
         $taskStartDate = '';
 
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
 
-        $taskDetailConditions = array(
+        $taskDetailConditions = [
+            'isOptional' => 0,
             'createdTime_GE' => $timeRange['startTime'],
             'createdTime_LT' => $timeRange['endTime'],
-        );
+        ];
 
         $paginator = new Paginator(
             $request,
@@ -458,7 +459,7 @@ class StatisticsController extends BaseController
 
         $taskDetail = $this->getTaskService()->searchTasks(
             $taskDetailConditions,
-            array('createdTime' => 'DESC'),
+            ['createdTime' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -483,8 +484,8 @@ class StatisticsController extends BaseController
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         $taskStartData = $this->getTaskService()->searchTasks(
-            array(),
-            array('createdTime' => 'ASC'),
+            [],
+            ['createdTime' => 'ASC'],
             0,
             1
         );
@@ -497,7 +498,7 @@ class StatisticsController extends BaseController
 
         return $this->render(
             'admin-v2/data-statistics/statistics/task.html.twig',
-            array(
+            [
                 'taskDetail' => $taskDetail,
                 'paginator' => $paginator,
                 'tab' => $tab,
@@ -508,24 +509,24 @@ class StatisticsController extends BaseController
                 'taskStartDate' => $taskStartDate,
                 'dataInfo' => $dataInfo,
                 'count' => $count,
-            )
+            ]
         );
     }
 
     public function joinLessonAction(Request $request, $tab)
     {
-        $data = array();
+        $data = [];
         $joinLessonStartDate = '';
 
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
 
-        $detailConditions = array(
+        $detailConditions = [
             'operate_time_GT' => $timeRange['startTime'],
             'operate_time_LT' => $timeRange['endTime'],
             'operate_type' => 'join',
             'target_type' => 'course',
-        );
+        ];
         $count = $this->getMemberOperationService()->countRecords($detailConditions);
         $paginator = new Paginator(
             $request,
@@ -535,7 +536,7 @@ class StatisticsController extends BaseController
 
         $joinLessonDetail = $this->getMemberOperationService()->searchRecords(
             $detailConditions,
-            array('operate_time' => 'DESC'),
+            ['operate_time' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -561,8 +562,8 @@ class StatisticsController extends BaseController
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         $joinLessonStartData = $this->getMemberOperationService()->searchRecords(
-            array('operate_type' => 'join'),
-            array('operate_time' => 'ASC'),
+            ['operate_type' => 'join'],
+            ['operate_time' => 'ASC'],
             0,
             1
         );
@@ -575,7 +576,7 @@ class StatisticsController extends BaseController
 
         return $this->render(
             'admin-v2/data-statistics/statistics/join-lesson.html.twig',
-            array(
+            [
                 'JoinLessonDetail' => $joinLessonDetail,
                 'count' => $count,
                 'paginator' => $paginator,
@@ -586,13 +587,13 @@ class StatisticsController extends BaseController
                 'joinLessonStartDate' => $joinLessonStartDate,
                 'dataInfo' => $dataInfo,
                 'courseSets' => $courseSets,
-            )
+            ]
         );
     }
 
     public function exitLessonAction(Request $request, $tab)
     {
-        $data = array();
+        $data = [];
         $exitLessonStartDate = '';
 
         $condition = $request->query->all();
@@ -601,23 +602,23 @@ class StatisticsController extends BaseController
         $paginator = new Paginator(
             $request,
             $this->getOrderService()->countOrders(
-                array(
+                [
                     'paidStartTime' => $timeRange['startTime'],
                     'paidEndTime' => $timeRange['endTime'],
                     'statusPaid' => 'paid',
                     'statusCreated' => 'created',
-                )
+                ]
             ),
             20
         );
 
         $exitLessonDetail = $this->getOrderService()->searchOrders(
-            array(
+            [
                 'paidStartTime' => $timeRange['startTime'],
                 'paidEndTime' => $timeRange['endTime'],
                 'statusPaid' => 'paid',
                 'statusCreated' => 'created',
-            ),
+            ],
             'latest',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
@@ -650,7 +651,7 @@ class StatisticsController extends BaseController
         $cancelledOrders = ArrayToolkit::index($cancelledOrders, 'id');
 
         $exitLessonStartData = $this->getOrderService()->searchOrders(
-            array('statusPaid' => 'paid', 'statusCreated' => 'created'),
+            ['statusPaid' => 'paid', 'statusCreated' => 'created'],
             'early',
             0,
             1
@@ -664,7 +665,7 @@ class StatisticsController extends BaseController
 
         return $this->render(
             'admin-v2/data-statistics/statistics/exit-lesson.html.twig',
-            array(
+            [
                 'exitLessonDetail' => $exitLessonDetail,
                 'paginator' => $paginator,
                 'tab' => $tab,
@@ -674,13 +675,13 @@ class StatisticsController extends BaseController
                 'exitLessonStartDate' => $exitLessonStartDate,
                 'cancelledOrders' => $cancelledOrders,
                 'dataInfo' => $dataInfo,
-            )
+            ]
         );
     }
 
     public function paidCourseAction(Request $request, $tab)
     {
-        $data = array();
+        $data = [];
         $paidCourseStartDate = '';
         $count = 0;
 
@@ -688,13 +689,13 @@ class StatisticsController extends BaseController
 
         $timeRange = $this->getTimeRange($condition);
 
-        $searchCondition = array(
+        $searchCondition = [
             'pay_time_GT' => $timeRange['startTime'],
             'pay_time_LT' => $timeRange['endTime'],
-            'statuses' => array('success', 'finished'),
+            'statuses' => ['success', 'finished'],
             'pay_amount_GT' => '0',
             'order_item_target_type' => 'course',
-        );
+        ];
 
         $paginator = new Paginator(
             $request,
@@ -706,7 +707,7 @@ class StatisticsController extends BaseController
 
         $paidCourseDetails = $this->getOrderService()->searchOrders(
             $searchCondition,
-            array('created_time' => 'DESC'),
+            ['created_time' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -721,10 +722,10 @@ class StatisticsController extends BaseController
         $paymentTrades = ArrayToolkit::index($orderPaymentTrades, 'order_sn');
 
         foreach ($paidCourseDetails as &$paidCourseDetail) {
-            $paidCourseDetail['item'] = empty($orderItems[$paidCourseDetail['id']]) ? array() : $orderItems[$paidCourseDetail['id']];
+            $paidCourseDetail['item'] = empty($orderItems[$paidCourseDetail['id']]) ? [] : $orderItems[$paidCourseDetail['id']];
             $paidCourseDetail['course_id'] = empty($paidCourseDetail['item']) ? 0 : $paidCourseDetail['item']['target_id'];
-            $paidCourseDetail['trade'] = empty($paymentTrades[$paidCourseDetail['sn']]) ? array() : $paymentTrades[$paidCourseDetail['sn']];
-            $paidCourseDetail = MathToolkit::multiply($paidCourseDetail, array('price_amount', 'pay_amount'), 0.01);
+            $paidCourseDetail['trade'] = empty($paymentTrades[$paidCourseDetail['sn']]) ? [] : $paymentTrades[$paidCourseDetail['sn']];
+            $paidCourseDetail = MathToolkit::multiply($paidCourseDetail, ['price_amount', 'pay_amount'], 0.01);
         }
 
         if ('trend' == $tab) {
@@ -739,7 +740,7 @@ class StatisticsController extends BaseController
         $courseIds = ArrayToolkit::column($paidCourseDetails, 'course_id'); //订单中的课程
 
         $courses = $this->getCourseService()->searchCourses(//订单中的课程再剔除班级中的课程
-            array('courseIds' => $courseIds, 'parentId' => '0'),
+            ['courseIds' => $courseIds, 'parentId' => '0'],
             'latest',
             0,
             count($paidCourseDetails)
@@ -750,8 +751,8 @@ class StatisticsController extends BaseController
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         $paidCourseStartData = $this->getOrderService()->searchOrders(
-            array('statuses' => array('success', 'finished'), 'pay_amount_GT' => '0'),
-            array('created_time' => 'ASC'),
+            ['statuses' => ['success', 'finished'], 'pay_amount_GT' => '0'],
+            ['created_time' => 'ASC'],
             0,
             1
         );
@@ -766,7 +767,7 @@ class StatisticsController extends BaseController
 
         return $this->render(
             'admin-v2/data-statistics/statistics/paid-course.html.twig',
-            array(
+            [
                 'paidCourseDetail' => $paidCourseDetails,
                 'courseSets' => $courseSets,
                 'paginator' => $paginator,
@@ -777,25 +778,25 @@ class StatisticsController extends BaseController
                 'paidCourseStartDate' => $paidCourseStartDate,
                 'dataInfo' => $dataInfo,
                 'count' => $count,
-            )
+            ]
         );
     }
 
     public function paidClassroomAction(Request $request, $tab)
     {
-        $data = array();
+        $data = [];
 
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
         $paidClassroomStartDate = '';
 
-        $searchConditions = array(
+        $searchConditions = [
             'pay_time_GT' => $timeRange['startTime'],
             'pai_time_LT' => $timeRange['endTime'],
-            'statuses' => array('success', 'finished'),
+            'statuses' => ['success', 'finished'],
             'pay_amount_GT' => '0',
             'order_item_target_type' => 'classroom',
-        );
+        ];
         $paginator = new Paginator(
             $request,
             $this->getOrderService()->countOrders(
@@ -805,7 +806,7 @@ class StatisticsController extends BaseController
         );
         $paidClassroomDetails = $this->getOrderService()->searchOrders(
             $searchConditions,
-            array('created_time' => 'DESC'),
+            ['created_time' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -820,10 +821,10 @@ class StatisticsController extends BaseController
         $paymentTrades = ArrayToolkit::index($orderPaymentTrades, 'order_sn');
 
         foreach ($paidClassroomDetails as &$paidClassroomDetail) {
-            $paidClassroomDetail['item'] = empty($orderItems[$paidClassroomDetail['id']]) ? array() : $orderItems[$paidClassroomDetail['id']];
+            $paidClassroomDetail['item'] = empty($orderItems[$paidClassroomDetail['id']]) ? [] : $orderItems[$paidClassroomDetail['id']];
             $paidClassroomDetail['classroom_id'] = empty($paidClassroomDetail['item']) ? 0 : $paidClassroomDetail['item']['target_id'];
-            $paidClassroomDetail['trade'] = empty($paymentTrades[$paidClassroomDetail['sn']]) ? array() : $paymentTrades[$paidClassroomDetail['sn']];
-            $paidClassroomDetail = MathToolkit::multiply($paidClassroomDetail, array('price_amount', 'pay_amount'), 0.01);
+            $paidClassroomDetail['trade'] = empty($paymentTrades[$paidClassroomDetail['sn']]) ? [] : $paymentTrades[$paidClassroomDetail['sn']];
+            $paidClassroomDetail = MathToolkit::multiply($paidClassroomDetail, ['price_amount', 'pay_amount'], 0.01);
         }
 
         $count = 0;
@@ -845,8 +846,8 @@ class StatisticsController extends BaseController
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         $paidClassroomStartData = $this->getOrderService()->searchOrders(
-            array('statuses' => array('success', 'finished'), 'pay_amount_GT' => '0'),
-            array('created_time' => 'ASC'),
+            ['statuses' => ['success', 'finished'], 'pay_amount_GT' => '0'],
+            ['created_time' => 'ASC'],
             0,
             1
         );
@@ -859,7 +860,7 @@ class StatisticsController extends BaseController
 
         return $this->render(
             'admin-v2/data-statistics/statistics/paid-classroom.html.twig',
-            array(
+            [
                 'paidClassroomDetail' => $paidClassroomDetails,
                 'paginator' => $paginator,
                 'tab' => $tab,
@@ -869,24 +870,26 @@ class StatisticsController extends BaseController
                 'paidClassroomStartDate' => $paidClassroomStartDate,
                 'dataInfo' => $dataInfo,
                 'count' => $count,
-            )
+            ]
         );
     }
 
     public function completedTaskAction(Request $request, $tab)
     {
-        $data = array();
+        $data = [];
         $completedTaskStartDate = '';
         $count = 0;
 
         $condition = $request->query->all();
         $timeRange = $this->getTimeRange($condition);
 
-        $detailConditions = array(
+        $electiveTasks = $this->getTaskService()->searchTasks(['isOptional' => 1], [], 0, PHP_INT_MAX, ['id']);
+        $detailConditions = [
+            'notCourseTaskIds' => ArrayToolkit::column($electiveTasks, 'id'),
             'finishedTime_GE' => $timeRange['startTime'],
             'finishedTime_LT' => $timeRange['endTime'],
             'status' => 'finish',
-        );
+        ];
 
         $paginator = new Paginator(
             $request,
@@ -896,7 +899,7 @@ class StatisticsController extends BaseController
 
         $completedTaskDetail = $this->getTaskResultService()->searchTaskResults(
             $detailConditions,
-            array('finishedTime' => 'DESC'),
+            ['finishedTime' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -927,8 +930,8 @@ class StatisticsController extends BaseController
         $users = $this->getUserService()->findUsersByIds($userIds);
 
         $completedTaskStartData = $this->getTaskResultService()->searchTaskResults(
-            array('status' => 'finish'),
-            array('finishedTime' => 'ASC'),
+            ['status' => 'finish'],
+            ['finishedTime' => 'ASC'],
             0,
             1
         );
@@ -941,7 +944,7 @@ class StatisticsController extends BaseController
 
         return $this->render(
             'admin-v2/data-statistics/statistics/completed-task.html.twig',
-            array(
+            [
                 'completedTaskDetail' => $completedTaskDetail,
                 'paginator' => $paginator,
                 'tab' => $tab,
@@ -953,23 +956,23 @@ class StatisticsController extends BaseController
                 'completedTaskStartDate' => $completedTaskStartDate,
                 'dataInfo' => $dataInfo,
                 'count' => $count,
-            )
+            ]
         );
     }
 
     public function videoViewedAction(Request $request, $tab)
     {
-        $data = array();
+        $data = [];
         $count = 0;
         $condition = $request->query->all();
 
         $timeRange = $this->getTimeRange($condition);
 
-        $searchCondition = array(
+        $searchCondition = [
             'fileType' => 'video',
             'startTime' => $timeRange['startTime'],
             'endTime' => $timeRange['endTime'],
-        );
+        ];
 
         $paginator = new Paginator(
             $request,
@@ -979,14 +982,14 @@ class StatisticsController extends BaseController
 
         $videoViewedDetail = $this->getTaskViewLog()->searchViewLogs(
             $searchCondition,
-            array('createdTime' => 'DESC'),
+            ['createdTime' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
         if ('trend' == $tab) {
             $videoViewedTrendData = $this->getTaskViewLog()->searchViewLogsGroupByTime(
-                array('fileType' => 'video'),
+                ['fileType' => 'video'],
                 $timeRange['startTime'],
                 $timeRange['endTime']
             );
@@ -1007,7 +1010,7 @@ class StatisticsController extends BaseController
 
         return $this->render(
             'admin-v2/data-statistics/statistics/video-view.html.twig',
-            array(
+            [
                 'videoViewedDetail' => $videoViewedDetail,
                 'paginator' => $paginator,
                 'tab' => $tab,
@@ -1018,23 +1021,23 @@ class StatisticsController extends BaseController
                 'minCreatedTime' => date('Y-m-d', time()),
                 'showHelpMessage' => 1,
                 'count' => $count,
-            )
+            ]
         );
     }
 
     public function cloudVideoViewedAction(Request $request, $tab)
     {
-        $data = array();
+        $data = [];
         $condition = $request->query->all();
         $count = 0;
         $timeRange = $this->getTimeRange($condition);
 
-        $searchCondition = array(
+        $searchCondition = [
             'fileType' => 'video',
             'fileStorage' => 'cloud',
             'startTime' => $timeRange['startTime'],
             'endTime' => $timeRange['endTime'],
-        );
+        ];
 
         $paginator = new Paginator(
             $request,
@@ -1044,14 +1047,14 @@ class StatisticsController extends BaseController
 
         $videoViewedDetail = $this->getTaskViewLog()->searchViewLogs(
             $searchCondition,
-            array('createdTime' => 'DESC'),
+            ['createdTime' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
         if ('trend' == $tab) {
             $videoViewedTrendData = $this->getTaskViewLog()->searchViewLogsGroupByTime(
-                array('fileType' => 'video', 'fileStorage' => 'cloud'),
+                ['fileType' => 'video', 'fileStorage' => 'cloud'],
                 $timeRange['startTime'],
                 $timeRange['endTime']
             );
@@ -1072,7 +1075,7 @@ class StatisticsController extends BaseController
 
         return $this->render(
             'admin-v2/data-statistics/statistics/cloud-video-view.html.twig',
-            array(
+            [
                 'videoViewedDetail' => $videoViewedDetail,
                 'paginator' => $paginator,
                 'tab' => $tab,
@@ -1083,23 +1086,23 @@ class StatisticsController extends BaseController
                 'minCreatedTime' => date('Y-m-d', time()),
                 'showHelpMessage' => 1,
                 'count' => $count,
-            )
+            ]
         );
     }
 
     public function localVideoViewedAction(Request $request, $tab)
     {
-        $data = array();
+        $data = [];
         $condition = $request->query->all();
         $count = 0;
         $timeRange = $this->getTimeRange($condition);
 
-        $searchCondition = array(
+        $searchCondition = [
             'fileType' => 'video',
             'fileStorage' => 'local',
             'startTime' => $timeRange['startTime'],
             'endTime' => $timeRange['endTime'],
-        );
+        ];
 
         $paginator = new Paginator(
             $request,
@@ -1109,7 +1112,7 @@ class StatisticsController extends BaseController
 
         $videoViewedDetail = $this->getTaskViewLog()->searchViewLogs(
             $searchCondition,
-            array('createdTime' => 'DESC'),
+            ['createdTime' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -1118,7 +1121,7 @@ class StatisticsController extends BaseController
 
         if ('trend' == $tab) {
             $videoViewedTrendData = $this->getTaskViewLog()->searchViewLogsGroupByTime(
-                array('fileType' => 'video', 'fileStorage' => 'local'),
+                ['fileType' => 'video', 'fileStorage' => 'local'],
                 $timeRange['startTime'],
                 $timeRange['endTime']
             );
@@ -1139,7 +1142,7 @@ class StatisticsController extends BaseController
 
         return $this->render(
             'admin-v2/data-statistics/statistics/local-video-view.html.twig',
-            array(
+            [
                 'videoViewedDetail' => $videoViewedDetail,
                 'paginator' => $paginator,
                 'tab' => $tab,
@@ -1150,23 +1153,23 @@ class StatisticsController extends BaseController
                 'minCreatedTime' => date('Y-m-d', time()),
                 'showHelpMessage' => 1,
                 'count' => $count,
-            )
+            ]
         );
     }
 
     public function netVideoViewedAction(Request $request, $tab)
     {
-        $data = array();
+        $data = [];
         $condition = $request->query->all();
         $count = 0;
         $timeRange = $this->getTimeRange($condition);
 
-        $searchCondition = array(
+        $searchCondition = [
             'fileType' => 'video',
             'fileStorage' => 'net',
             'startTime' => $timeRange['startTime'],
             'endTime' => $timeRange['endTime'],
-        );
+        ];
 
         $paginator = new Paginator(
             $request,
@@ -1176,7 +1179,7 @@ class StatisticsController extends BaseController
 
         $videoViewedDetail = $this->getTaskViewLog()->searchViewLogs(
             $searchCondition,
-            array('createdTime' => 'DESC'),
+            ['createdTime' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -1185,7 +1188,7 @@ class StatisticsController extends BaseController
 
         if ('trend' == $tab) {
             $videoViewedTrendData = $this->getTaskViewLog()->searchViewLogsGroupByTime(
-                array('fileType' => 'video', 'fileStorage' => 'net'),
+                ['fileType' => 'video', 'fileStorage' => 'net'],
                 $timeRange['startTime'],
                 $timeRange['endTime']
             );
@@ -1206,7 +1209,7 @@ class StatisticsController extends BaseController
 
         return $this->render(
             'admin-v2/data-statistics/statistics/net-video-view.html.twig',
-            array(
+            [
                 'videoViewedDetail' => $videoViewedDetail,
                 'paginator' => $paginator,
                 'tab' => $tab,
@@ -1217,23 +1220,23 @@ class StatisticsController extends BaseController
                 'dataInfo' => $dataInfo,
                 'showHelpMessage' => 1,
                 'count' => $count,
-            )
+            ]
         );
     }
 
     public function incomeAction(Request $request, $tab, $type = null)
     {
-        $data = array();
+        $data = [];
         $count = 0;
 
         $fields = $request->query->all();
         $timeRange = $this->getTimeRange($fields);
-        $conditions = array(
+        $conditions = [
             'pay_time_GT' => $timeRange['startTime'],
             'pay_time_LT' => $timeRange['endTime'],
-            'statuses' => array('success', 'finished'),
+            'statuses' => ['success', 'finished'],
             'pay_amount_GT' => 0,
-        );
+        ];
 
         if (!empty($type)) {
             $conditions['order_item_target_type'] = $type;
@@ -1247,7 +1250,7 @@ class StatisticsController extends BaseController
 
         $incomeDetails = $this->getOrderService()->searchOrders(
             $conditions,
-            array('created_time' => 'DESC'),
+            ['created_time' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -1259,9 +1262,9 @@ class StatisticsController extends BaseController
         $paymentTrades = ArrayToolkit::index($this->getPayService()->findTradesByOrderSns($orderSns), 'order_sn');
 
         foreach ($incomeDetails as &$incomeDetail) {
-            $incomeDetail['item'] = empty($orderItems[$incomeDetail['id']]) ? array() : $orderItems[$incomeDetail['id']];
+            $incomeDetail['item'] = empty($orderItems[$incomeDetail['id']]) ? [] : $orderItems[$incomeDetail['id']];
             $incomeDetail[$type.'_id'] = empty($incomeDetail['item']) ? 0 : $incomeDetail['item']['target_id'];
-            $incomeDetail['trade'] = empty($paymentTrades[$incomeDetail['sn']]) ? array() : $paymentTrades[$incomeDetail['sn']];
+            $incomeDetail['trade'] = empty($paymentTrades[$incomeDetail['sn']]) ? [] : $paymentTrades[$incomeDetail['sn']];
         }
 
         if ('trend' == $tab) {
@@ -1271,7 +1274,7 @@ class StatisticsController extends BaseController
                 'ASC'
             );
             foreach ($incomeData as &$tmpData) {
-                $tmpData = MathToolkit::multiply($tmpData, array('count'), 0.01);
+                $tmpData = MathToolkit::multiply($tmpData, ['count'], 0.01);
             }
             $data = $this->fillAnalysisData($fields, $incomeData);
             $count = $this->sumTrendDataCount($incomeData);
@@ -1288,7 +1291,7 @@ class StatisticsController extends BaseController
 
         return $this->render(
             'admin-v2/data-statistics/statistics/'.(empty($type) ? 'all' : $type).'-income.html.twig',
-            array(
+            [
                 'orders' => $incomeDetails,
                 'paginator' => $paginator,
                 'tab' => $tab,
@@ -1297,7 +1300,7 @@ class StatisticsController extends BaseController
                 'users' => $users,
                 'dataInfo' => $dataInfo,
                 'count' => $count,
-            )
+            ]
         );
     }
 
@@ -1311,7 +1314,7 @@ class StatisticsController extends BaseController
                 $items = $this->getClassroomService()->findClassroomsByIds($targetIds);
                 break;
             default:
-                $items = array();
+                $items = [];
         }
 
         return $items;
@@ -1321,11 +1324,11 @@ class StatisticsController extends BaseController
     {
         return $this->forward(
             'AppBundle:AdminV2/DataStatistics/Statistics:income',
-            array(
+            [
                 'request' => $request,
                 'tab' => $tab,
                 'type' => 'course',
-            )
+            ]
         );
     }
 
@@ -1333,11 +1336,11 @@ class StatisticsController extends BaseController
     {
         return $this->forward(
             'AppBundle:AdminV2/DataStatistics/Statistics:income',
-            array(
+            [
                 'request' => $request,
                 'tab' => $tab,
                 'type' => 'classroom',
-            )
+            ]
         );
     }
 
@@ -1345,11 +1348,11 @@ class StatisticsController extends BaseController
     {
         return $this->forward(
             'AppBundle:AdminV2/DataStatistics/Statistics:income',
-            array(
+            [
                 'request' => $request,
                 'tab' => $tab,
                 'type' => 'vip',
-            )
+            ]
         );
     }
 
@@ -1370,10 +1373,10 @@ class StatisticsController extends BaseController
             date('Y-m-d', $timeRange['endTime'])
         );
 
-        $initData = array();
+        $initData = [];
 
         foreach ($dateRange as $value) {
-            $initData[] = array('date' => $value, 'count' => $initValue);
+            $initData[] = ['date' => $value, 'count' => $initValue];
         }
 
         for ($i = 0; $i < count($initData); ++$i) {
@@ -1400,7 +1403,7 @@ class StatisticsController extends BaseController
         );
 
         foreach ($dateRange as $key => $value) {
-            $zeroData[] = array('date' => $value, 'count' => 0);
+            $zeroData[] = ['date' => $value, 'count' => 0];
         }
 
         $currentData = ArrayToolkit::index($currentData, 'date');
@@ -1416,7 +1419,7 @@ class StatisticsController extends BaseController
 
     protected function getDataInfo($condition, $timeRange)
     {
-        return array(
+        return [
             'startTime' => date('Y-m-d', $timeRange['startTime']),
             'endTime' => date('Y-m-d', $timeRange['endTime']),
             'currentMonthStart' => date('Y-m-d', strtotime(date('Y-m', time()))),
@@ -1426,7 +1429,7 @@ class StatisticsController extends BaseController
             'lastThreeMonthsStart' => date('Y-m-d', strtotime(date('Y-m', strtotime('-2 month')))),
             'lastThreeMonthsEnd' => date('Y-m-d', time()),
             'analysisDateType' => $condition['analysisDateType'],
-        );
+        ];
     }
 
     protected function getTimeRange($fields)
@@ -1434,10 +1437,10 @@ class StatisticsController extends BaseController
         $startTime = !empty($fields['startTime']) ? $fields['startTime'] : date('Y-m', time());
         $endTime = !empty($fields['endTime']) ? $fields['endTime'] : date('Y-m-d', time());
 
-        return array(
+        return [
             'startTime' => strtotime($startTime),
             'endTime' => strtotime($endTime) + 24 * 3600 - 1,
-        );
+        ];
     }
 
     /**

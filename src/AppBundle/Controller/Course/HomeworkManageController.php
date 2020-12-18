@@ -30,11 +30,13 @@ class HomeworkManageController extends BaseController
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $user = $this->getUser();
         $isTeacher = $this->getCourseMemberService()->isCourseTeacher($course['id'], $user['id']) || $user->isSuperAdmin();
+        $hasCourseManageRole = $this->getCourseService()->hasCourseManagerRole($course['id']);
 
         return $this->render('course-manage/homework-check/check-list.html.twig', [
             'courseSet' => $courseSet,
             'course' => $course,
             'isTeacher' => $isTeacher,
+            'hasCourseManageRole' => $hasCourseManageRole,
         ]);
     }
 

@@ -204,7 +204,8 @@
                 return time;
             },
             getDrpInfo() {
-                axios.get(`/drp_info/${this.goods.product.target.id}/${this.goods.product.targetType}`).then(res => {
+                console.log('getDrpInfo', this.currentSku)
+                axios.get(`/drp_info/${this.currentSku.targetId}/${this.goods.type}`).then(res => {
                         this.drpInfo = res.data;
                     });
             }
@@ -271,6 +272,7 @@
         watch: {
             currentSku(newVal, oldVal) {
                 this.remainTime();
+                this.getDrpInfo();
             }
         }
     }
