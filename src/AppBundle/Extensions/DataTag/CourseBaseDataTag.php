@@ -3,11 +3,9 @@
 namespace AppBundle\Extensions\DataTag;
 
 use AppBundle\Common\ArrayToolkit;
-use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
-use Biz\Goods\Service\GoodsService;
 use Biz\Review\Service\ReviewService;
 use Biz\Task\Service\TaskService;
 use Biz\User\Service\UserService;
@@ -75,22 +73,6 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
     protected function getActivityService()
     {
         return $this->getServiceKernel()->createService('Activity:ActivityService');
-    }
-
-    /**
-     * @return GoodsService
-     */
-    protected function getGoodsService()
-    {
-        return $this->getServiceKernel()->getBiz()->service('Goods:GoodsService');
-    }
-
-    /**
-     * @return ClassroomService
-     */
-    protected function getClassroomService()
-    {
-        return $this->getServiceKernel()->getBiz()->service('Classroom:ClassroomService');
     }
 
     protected function checkUserId(array $arguments)

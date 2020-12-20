@@ -4,8 +4,6 @@ namespace Tests\Unit\AppBundle\Extensions\DataTag;
 
 use AppBundle\Extensions\DataTag\LatestCourseReviewsDataTag;
 use Biz\BaseTestCase;
-use Biz\Goods\Service\GoodsService;
-use Biz\Product\Service\ProductService;
 
 class LatestCourseReviewsDataTagTest extends BaseTestCase
 {
@@ -34,19 +32,6 @@ class LatestCourseReviewsDataTagTest extends BaseTestCase
         $course1 = $this->getCourseService()->createCourse(['title' => 'course title', 'courseSetId' => $courseSet['id'], 'expiryMode' => 'forever', 'learnMode' => 'freeMode', 'courseType' => 'default']);
         $this->getCourseService()->publishCourse($course1['id']);
 
-        $product = $this->getProductService()->createProduct([
-            'targetType' => 'course',
-            'targetId' => $course1['id'],
-            'title' => 'course title',
-        ]);
-
-        $goods = $this->getGoodsService()->createGoods([
-            'productId' => $product['id'],
-            'title' => 'testTitle',
-            'type' => 'course',
-            'images' => ['testImages'],
-        ]);
-
         $user1 = $this->getuserService()->register([
             'email' => '1234@qq.com',
             'nickname' => 'user1',
@@ -67,16 +52,16 @@ class LatestCourseReviewsDataTagTest extends BaseTestCase
         $this->getCourseMemberService()->becomeStudent($course1['id'], $user2['id']);
 
         $review1 = $this->getReviewService()->createReview([
-            'targetType' => 'goods',
-            'targetId' => $goods['id'],
+            'targetType' => 'course',
+            'targetId' => $course1['id'],
             'userId' => $user1['id'],
             'title' => 'review1',
             'content' => 'content1',
             'rating' => 4,
         ]);
         $review2 = $this->getReviewService()->createReview([
-            'targetType' => 'goods',
-            'targetId' => $goods['id'],
+            'targetType' => 'course',
+            'targetId' => $course1['id'],
             'userId' => $user2['id'],
             'title' => 'review2',
             'content' => 'content2',
@@ -84,7 +69,7 @@ class LatestCourseReviewsDataTagTest extends BaseTestCase
         ]);
 
         $datatag = new LatestCourseReviewsDataTag();
-        $reviews = $datatag->getData(['courseId' => $goods['id'], 'count' => 5]);
+        $reviews = $datatag->getData(['courseId' => $course1['id'], 'count' => 5]);
         $this->assertEquals(2, count($reviews));
     }
 
@@ -111,21 +96,5 @@ class LatestCourseReviewsDataTagTest extends BaseTestCase
     protected function getCourseMemberService()
     {
         return $this->createService('Course:MemberService');
-    }
-
-    /**
-     * @return GoodsService
-     */
-    protected function getGoodsService()
-    {
-        return $this->createService('Goods:GoodsService');
-    }
-
-    /**
-     * @return ProductService
-     */
-    protected function getProductService()
-    {
-        return $this->createService('Product:ProductService');
     }
 }
