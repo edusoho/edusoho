@@ -5091,7 +5091,7 @@ admin.course_manage.statistics.classroom.remove: 已从%classroomName%中移除
 admin.course_manage.statistics.watch_task: 查看%taskName%
 admin.course_manage.statistics.watch_course_data: 查看课时数据
 admin.course_manage.statistics.tips: 页面中各个数据以教学计划统计
-admin.course_manage.statistics.task_tips: 仅统计必修课时任务数，括号内数据为选修的课时任务数
+admin.course_manage.statistics.task_tips: 仅统计必修课时任务数，括号内数字为选修的课时任务数
 
 ## 任务统计数据
 admin.course_manage.statistics.modal_title: %title%课程的数据
