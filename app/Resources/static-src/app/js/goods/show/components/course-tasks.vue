@@ -33,6 +33,7 @@
         },
         methods: {
             getTasksListInfo() {
+                this.renderUrl = `/course/${this.sku.targetId}/task/list/render/default?showOptional=1`;
                 $('.js-tasks-show').data('url', this.renderUrl);
                 new PagedCourseTask();
             },

@@ -15,7 +15,7 @@ class DrpInfoController extends BaseController
     public function getDrpInfoAction(Request $request, $targetId, $type)
     {
         if (!$this->get('kernel')->getPluginConfigurationManager()->isPluginInstalled('Drp')) {
-            return [];
+            return $this->createJsonResponse([]);
         }
 
         $drpSettings = $this->getSettingService()->get('drp', []);
