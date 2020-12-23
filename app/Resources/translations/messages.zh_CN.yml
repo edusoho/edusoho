@@ -11485,3 +11485,5 @@ information_collect.title: 用户信息采集
 information_collect.form_items.confirm_submit: 确认提交
 information_collect.form_items.skip: 跳过
 information_collect.select_placeholeder: 请选择
+course.task.notify_message.join_and_buy: 请先加入课程或购买课程
+course.task.notify_message.join_limit: 该课程已限制加入，请联系客服
