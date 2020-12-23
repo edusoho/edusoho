@@ -53,6 +53,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $definedFuncNames = array(
             'processGoodsHitNum',
             'processCourseTaskNum',
+            'processCourseCompulsoryTaskNum',
             'processCourseElectiveTaskNum',
             'addTableIndexJob',
         );
@@ -137,6 +138,25 @@ class EduSohoUpgrade extends AbstractUpdater
         return 1;
     }
 
+    public function processCourseCompulsoryTaskNum()
+    {
+        $this->logger('info', '开始处理：CourseCompulsoryTaskNum');
+        
+        $this->getConnection()->exec("
+            UPDATE course_v8 a
+                INNER JOIN (
+                    SELECT courseId, COUNT(*) AS compulsoryTaskNum2
+                    FROM course_task
+                    WHERE isOptional = 0
+                    GROUP BY courseId
+                ) b
+                ON a.id = b.courseId
+            SET a.compulsoryTaskNum = b.compulsoryTaskNum2;
+        ");
+
+        return 1;
+    }
+
     public function processCourseElectiveTaskNum()
     {
         $this->logger('info', '开始处理：CourseElectiveTaskNum');
@@ -148,7 +168,15 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         $this->getConnection()->exec("
-            UPDATE `course_v8` SET `electiveTaskNum` = `taskNum` - `compulsoryTaskNum`;
+            UPDATE course_v8 a
+                INNER JOIN (
+                    SELECT courseId, COUNT(*) AS electiveTaskNum2
+                    FROM course_task
+                    WHERE isOptional = 1
+                    GROUP BY courseId
+                ) b
+                ON a.id = b.courseId
+            SET a.electiveTaskNum = b.electiveTaskNum2;
         ");
 
         return 1;
