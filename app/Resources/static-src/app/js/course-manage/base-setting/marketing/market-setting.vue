@@ -414,12 +414,6 @@
                         },
                         {
                             validator(rule, value, callback) {
-                                new Date(value).getTime() >= Date.now() - 24 * 60 * 60 * 1000 ? callback() : callback(new Error(Translator.trans('validate.after_now_date.message')));
-                            },
-                            trigger: 'blur',
-                        },
-                        {
-                            validator(rule, value, callback) {
                                 if (!form.expiryEndDate) return;
                                 new Date(value) <= new Date(form.expiryEndDate) ? callback() : callback(new Error(Translator.trans('validate.before_date.message')));
                             },
