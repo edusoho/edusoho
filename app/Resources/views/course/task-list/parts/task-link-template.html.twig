@@ -10,14 +10,15 @@
     <span display-if="{isTaskLocked}" class="title">
       {% include 'course/task-list/parts/list-li-title-template.html.twig' %}
     </span>
-  {% elseif not isOvertime %}
-    {#  此处即使不是学员，也可以显示预览按钮，原因是控制器会报错，然后弹出登陆框提醒客户登陆  #}
-    <a class="title" href="#modal" data-toggle="modal"
+  {% elseif not isOvertime %}{# 不是课程学员，并且课程不过期，此处即使不是学员，也可以显示预览按钮，原因是控制器会报错，然后弹出登陆框提醒客户登陆 #}
+    <a display-if="{isTaskShowModal}"  class="title" href="#modal" data-toggle="modal"
         data-url="{{ path('course_task_preview',{courseId:course.id, id: '{taskId}'}) }}"
         style="margin-top:-6px">{% include 'course/task-list/parts/list-li-title-template.html.twig' %}</a>
-  {% else %}
-    <a class="title" href="javascript:;" data-toggle="modal"
-        style="margin-top:-6px">{% include 'course/task-list/parts/list-li-title-template.html.twig' %}</a>
+    <a hide-if="{isTaskShowModal}" class="title {% if course.parentId|default(0) == 0 %}js-lesson-item-notify{% endif %}" href="javascript:;" data-notify-message="{{ 'course.task.notify_message.join_and_buy'|trans }}"
+       style="margin-top:-6px">{% include 'course/task-list/parts/list-li-title-template.html.twig' %}</a>
+  {% else %}{# 过期了,不管登陆与否，应该提示'该课程已限制加入，请联系客服' #}
+    <a class="title {% if course.parentId|default(0) == 0 %}js-lesson-item-notify{% endif %}" href="javascript:;" data-notify-message="{{ 'course.task.notify_message.join_limit'|trans }}"
+       style="margin-top:-6px">{% include 'course/task-list/parts/list-li-title-template.html.twig' %}</a>
   {% endif %}
 
   {% include 'course/task-list/parts/task-length-template.html.twig' %}
@@ -27,19 +28,6 @@
         <a class="btn btn-primary" href="#modal" data-toggle="modal"
             data-url="{{ path('course_task_preview',{courseId:course.id, id: '{taskId}'}) }}"
             style="margin-top:-6px">{{ 'course.catalogue.task.preview_btn'|trans }}</a>
-      </tmp>
-      <tmp hide-if="{isTaskFree}">
-        {% if course.parentId|default(0) == 0 %}
-          {% if course.isFree %}
-            <a class="btn btn-warning" href="#modal" data-toggle="modal"
-                data-url="{{ path('course_task_preview',{courseId:course.id, id: '{taskId}'}) }}"
-                style="margin-top:-6px">{{ 'course.catalogue.task.join_btn'|trans }}</a>
-          {% else %}
-            <a class="btn btn-warning" href="#modal" data-toggle="modal"
-                data-url="{{ path('course_task_preview',{courseId:course.id, id: '{taskId}'}) }}"
-                style="margin-top:-6px">{{ 'course.catalogue.task.buy_btn'|trans }}</a>
-          {% endif %}
-        {% endif %}
       </tmp>
       <tmp display-if="{isTaskTryLookable}">
         <a class="btn btn-warning" href="#modal" data-toggle="modal"
