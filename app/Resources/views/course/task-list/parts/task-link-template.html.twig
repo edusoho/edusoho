@@ -14,10 +14,10 @@
     <a display-if="{isTaskShowModal}"  class="title" href="#modal" data-toggle="modal"
         data-url="{{ path('course_task_preview',{courseId:course.id, id: '{taskId}'}) }}"
         style="margin-top:-6px">{% include 'course/task-list/parts/list-li-title-template.html.twig' %}</a>
-    <a hide-if="{isTaskShowModal}" class="title js-lesson-item" href="javascript:;" data-notify-message="{{ 'course.task.notify_message.join_and_buy'|trans }}"
+    <a hide-if="{isTaskShowModal}" class="title {% if course.parentId|default(0) == 0 %}js-lesson-item-notify{% endif %}" href="javascript:;" data-notify-message="{{ 'course.task.notify_message.join_and_buy'|trans }}"
        style="margin-top:-6px">{% include 'course/task-list/parts/list-li-title-template.html.twig' %}</a>
   {% else %}{# 过期了,不管登陆与否，应该提示'该课程已限制加入，请联系客服' #}
-    <a class="title js-lesson-item" href="javascript:;" data-notify-message="{{ 'course.task.notify_message.join_limit'|trans }}"
+    <a class="title {% if course.parentId|default(0) == 0 %}js-lesson-item-notify{% endif %}" href="javascript:;" data-notify-message="{{ 'course.task.notify_message.join_limit'|trans }}"
        style="margin-top:-6px">{% include 'course/task-list/parts/list-li-title-template.html.twig' %}</a>
   {% endif %}
 
@@ -29,19 +29,19 @@
             data-url="{{ path('course_task_preview',{courseId:course.id, id: '{taskId}'}) }}"
             style="margin-top:-6px">{{ 'course.catalogue.task.preview_btn'|trans }}</a>
       </tmp>
-{#      <tmp hide-if="{isTaskFree}">#}
-{#        {% if course.parentId|default(0) == 0 %}#}
-{#          {% if course.isFree %}#}
-{#            <a class="btn btn-warning" href="#modal" data-toggle="modal"#}
-{#                data-url="{{ path('course_task_preview',{courseId:course.id, id: '{taskId}'}) }}"#}
-{#                style="margin-top:-6px">{{ 'course.catalogue.task.join_btn'|trans }}</a>#}
-{#          {% else %}#}
-{#            <a class="btn btn-warning" href="#modal" data-toggle="modal"#}
-{#                data-url="{{ path('course_task_preview',{courseId:course.id, id: '{taskId}'}) }}"#}
-{#                style="margin-top:-6px">{{ 'course.catalogue.task.buy_btn'|trans }}</a>#}
-{#          {% endif %}#}
-{#        {% endif %}#}
-{#      </tmp>#}
+      <tmp hide-if="{isTaskFree}">
+        {% if course.parentId|default(0) == 0 %}
+          {% if course.isFree %}
+            <a class="btn btn-warning" href="#modal" data-toggle="modal"
+                data-url="{{ path('course_task_preview',{courseId:course.id, id: '{taskId}'}) }}"
+                style="margin-top:-6px">{{ 'course.catalogue.task.join_btn'|trans }}</a>
+          {% else %}
+            <a class="btn btn-warning" href="#modal" data-toggle="modal"
+                data-url="{{ path('course_task_preview',{courseId:course.id, id: '{taskId}'}) }}"
+                style="margin-top:-6px">{{ 'course.catalogue.task.buy_btn'|trans }}</a>
+          {% endif %}
+        {% endif %}
+      </tmp>
       <tmp display-if="{isTaskTryLookable}">
         <a class="btn btn-warning" href="#modal" data-toggle="modal"
             data-url="{{ path('course_task_preview',{courseId:course.id, id: '{taskId}'}) }}"

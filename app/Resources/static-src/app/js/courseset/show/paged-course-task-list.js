@@ -43,7 +43,7 @@ export default class PagedCourseTaskList extends PagedCourseLesson {
         }
       });
 
-      $('body').on('click','.js-lesson-item', function () {
+      $('body').on('click','.js-lesson-item-notify', function () {
         let $this = $(this);
         cd.message({type: 'warning', message: $this.data('notifyMessage')});
       });
