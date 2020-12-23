@@ -51,7 +51,10 @@ class EduSohoUpgrade extends AbstractUpdater
     private function updateScheme($index)
     {
         $definedFuncNames = array(
-            'processGoodsHitNum'
+            'processGoodsHitNum',
+            'processCourseTaskNum',
+            'processCourseElectiveTaskNum',
+            'addTableIndexJob',
         );
 
         $funcNames = array();
@@ -113,6 +116,83 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->getCacheService()->set('goods_hit_num_is_process', 1);
         }
       
+        return 1;
+    }
+
+    public function processCourseTaskNum()
+    {
+        $this->logger('info', '开始处理：CourseTaskNum');
+
+        $this->getConnection()->exec("
+            UPDATE course_v8 a
+                INNER JOIN (
+                    SELECT courseId, COUNT(*) AS taskNum2
+                    FROM course_task
+                    GROUP BY courseId
+                ) b
+                ON a.id = b.courseId
+            SET a.taskNum = b.taskNum2;
+        ");
+
+        return 1;
+    }
+
+    public function processCourseElectiveTaskNum()
+    {
+        $this->logger('info', '开始处理：CourseElectiveTaskNum');
+
+        if (!$this->isFieldExist('course_v8', 'electiveTaskNum')) {
+            $this->getConnection()->exec("
+                ALTER TABLE `course_v8` ADD COLUMN `electiveTaskNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '选修任务数' AFTER `compulsoryTaskNum`;
+            ");
+        }
+
+        $this->getConnection()->exec("
+            UPDATE `course_v8` SET `electiveTaskNum` = `taskNum` - `compulsoryTaskNum`;
+        ");
+
+        return 1;
+    }
+
+    public function addTableIndexJob()
+    {
+        if ($this->isJobExist('HandlingTimeConsumingUpdateStructuresJob')) {
+            return 1;
+        }
+
+        $currentTime = time();
+        $time = time() + 60;
+
+        $this->getConnection()->exec("INSERT INTO `biz_scheduler_job` (
+              `name`,
+              `expression`,
+              `class`,
+              `args`,
+              `priority`,
+              `pre_fire_time`,
+              `next_fire_time`,
+              `misfire_threshold`,
+              `misfire_policy`,
+              `enabled`,
+              `creator_id`,
+              `updated_time`,
+              `created_time`
+        ) VALUES (
+              'HandlingTimeConsumingUpdateStructuresJob',
+              '',
+              'Biz\\\\UpdateDatabaseStructure\\\\\Job\\\\HandlingTimeConsumingUpdateStructuresJob',
+              '',
+              '200',
+              '0',
+              '{$time}',
+              '300',
+              'executing',
+              '1',
+              '0',
+              '{$currentTime}',
+              '{$currentTime}'
+        )");
+        $this->logger('info', 'INSERT增加索引的定时任务HandlingTimeConsumingUpdateStructuresJob');
         return 1;
     }
 
