@@ -483,20 +483,16 @@ class CourseSetController extends BaseController
         foreach ($courseSets as &$courseSet) {
             $courseSetId = $courseSet['id'];
             $defaultCourseId = $courseSet['defaultCourseId'];
-            $courses = $this->getCourseService()->searchCourses(['courseSetId' => $courseSetId], [], 0, PHP_INT_MAX, ['id']);
+            $courses = $this->getCourseService()->searchCourses(['courseSetId' => $courseSetId], [], 0, PHP_INT_MAX, ['id', 'compulsoryTaskNum']);
 
             $isLearnedNum = 0;
-            $courseFinishedMembers = ArrayToolkit::group($this->getMemberService()->searchMembers(
-                ['finishedTime_GT' => 0, 'courseIds' => ArrayToolkit::column($courses, 'id')],
-                [],
-                0,
-                PHP_INT_MAX,
-                ['userId']
-            ), 'userId');
-            foreach ($courseFinishedMembers as $courseFinishedMember) {
-                if (count($courseFinishedMember) == count($courses)) {
-                    ++$isLearnedNum;
-                }
+            foreach ($courses as $course) {
+                $isLearnedNum = $isLearnedNum + $this->getMemberService()->countMembers([
+                    'finishedTime_GT' => 0,
+                    'courseId' => $course['id'],
+                    'role' => 'student',
+                    'learnedCompulsoryTaskNumGreaterThan' => $course['compulsoryTaskNum'],
+                ]);
             }
 
             if (!empty($courseSetIncomes[$courseSetId])) {
