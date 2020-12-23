@@ -1,5 +1,5 @@
-{# 如果关闭了购买或者加入或者过期 #}
-{% set isOvertime = (course.buyExpiryTime and course.buyExpiryTime < 'now'|date('U')) or (course.expiryEndDate and course.expiryEndDate < 'now'|date('U')) %}
+{# 如果超过学习有效期最后期限 #}
+{% set isOvertime = ((course.expiryEndDate and course.expiryEndDate < 'now'|date('U')) %}
 {% set canBuy = can_buy_course(course) %}
 <tmp hide-if="{isItemDisplayedAsUnpublished}">
   {% if member %}
