@@ -58,6 +58,7 @@
 import Api from '@/api';
 import EDrag from '&/components/e-drag';
 import { mapState } from 'vuex';
+// eslint-disable-next-line no-unused-vars
 import XXTEA from '@/utils/xxtea.js';
 import { Dialog, Toast } from 'vant';
 import rulesConfig from '@/utils/rule-config.js';
@@ -121,6 +122,11 @@ export default {
         return false;
       }
 
+      if (type === 'encrypt_password' && ele.length > 20) {
+        this.errorMessage[type] = '最大输入20个字符';
+        return false;
+      }
+
       this.errorMessage[type] = !rule.validator(ele) ? rule.message : '';
     },
     validatedChecker() {
@@ -157,7 +163,7 @@ export default {
         })
           .then(res => {
             Dialog.alert({
-              message: '验证链接已发送到\ ' + account,
+              message: '验证链接已发送到 ' + account,
             }).then(() => {
               this.$router.replace({
                 name: 'login',
