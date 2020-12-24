@@ -354,6 +354,7 @@ export default {
           width: 30,
           height: 30,
         },
+        rememberLastPos: true,
       };
       this.$store.commit('UPDATE_LOADING_STATUS', true);
       this.initPlayer(options);
@@ -392,6 +393,7 @@ export default {
           height: 30,
         },
         token: media.token,
+        rememberLastPos: true,
       };
 
       if (!canTryLookable) {
