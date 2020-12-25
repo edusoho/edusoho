@@ -60,7 +60,7 @@ class ExerciseMemberServiceTest extends BaseTestCase
             'role' => 'student',
         ]);
 
-        $this->assertEquals('1', count($res));
+        $this->assertEquals(1, $res);
     }
 
     public function testUpdate()
