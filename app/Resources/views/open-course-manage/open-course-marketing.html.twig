@@ -17,7 +17,7 @@
       <div class="col-md-12 controls">
         <ul class="js-course-list-group sortable-list course-wide-list courses-selected" id="course-list-group" data-role="list" >
 
-          {% for recommend in recommends %}
+          {% for recommend in recommends if goodses[recommend.recommendGoodsId]|default(null) %}
             {% set goods = goodses[recommend.recommendGoodsId] %}
             {% set showUrl = path('goods_show',{id: goods.id}) %}
             <li class="course-item item-{{goods.id}} clearfix" data-role="item" >

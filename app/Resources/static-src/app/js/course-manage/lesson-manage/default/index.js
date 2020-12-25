@@ -35,6 +35,9 @@ class DefaultManage extends BaseManage {
     if ($elm.find('.js-item-content').length > 0) {
       $elm.find('.js-item-content').trigger('click');
     }
+    $('[data-toggle="popover"]').popover({
+      html: true
+    });
   }
 }
 

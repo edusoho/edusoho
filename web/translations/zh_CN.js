@@ -1445,6 +1445,7 @@ t.add("course.marketing_setup.rule.expiry_date", "\u5b66\u4e60\u6709\u6548\u671f
 t.add("course.marketing_setup.rule.expiry_date_tips", "\u5728\u6b64\u65e5\u671f\u524d\uff0c\u5b66\u5458\u53ef\u8fdb\u884c\u5b66\u4e60\u3002", "js", "zh_CN");
 t.add("course.marketing_setup.rule.expiry_date.publish_tips", "\u4ece\u52a0\u5165\u5f53\u5929\u8d77\uff0c\u5728\u51e0\u5929\u5185\u53ef\u8fdb\u884c\u5b66\u4e60\u3002", "js", "zh_CN");
 t.add("course.plan_task.start_time", "\u5f00\u59cb\u65e5\u671f", "js", "zh_CN");
+t.add("course.plan_task.end_time", "\u7ed3\u675f\u65e5\u671f", "js", "zh_CN");
 t.add("course.marketing_setup.rule.expiry_date.first_publish_tips", "\u6559\u5b66\u8ba1\u5212\u4e00\u65e6\u53d1\u5e03\uff0c\u6709\u6548\u671f\u7c7b\u578b\u4e0d\u80fd\u4fee\u6539\uff1b\u8bfe\u7a0b\u6216\u6559\u5b66\u8ba1\u5212\u5173\u95ed\u540e\uff0c\u53ef\u4ee5\u4fee\u6539\u65e5\u671f\uff0c\u65b0\u7684\u5b66\u4e60\u6709\u6548\u671f\u4ec5\u5bf9\u4fee\u6539\u540e\u52a0\u5165\u7684\u5b66\u5458\u751f\u6548\u3002", "js", "zh_CN");
 t.add("course.marketing_setup.approval", "\u5b9e\u540d\u8ba4\u8bc1", "js", "zh_CN");
 t.add("course.marketing_setup.approval_tips", "\u8bbe\u7f6e\u8be5\u503c\u540e\uff0c\u5b66\u5458\u8d2d\u4e70\u8bfe\u7a0b\u524d\uff0c\u5fc5\u987b\u5148\u53bb\u7533\u8bf7\u5b9e\u540d\u8ba4\u8bc1\u3002", "js", "zh_CN");
@@ -1506,7 +1507,7 @@ t.add("course.marketing_setup.preview.not.support.try_watch", "\u4e0d\u652f\u630
 t.add("course.info.video.convert.audio.start", "\u5f00\u542f", "js", "zh_CN");
 t.add("course.info.video.convert.audio.close", "\u5173\u95ed", "js", "zh_CN");
 t.add("course.marketing_setup.rule.watch_time_limit.watch_limit_tips", "\u4f8b\uff1a\u8bfe\u7a0b\u89c6\u9891\u603b\u65f6\u957f\u4e3a100\u5206\u949f\uff0c\u8bbe\u7f6e\u4e3a5\u500d\uff0c\u5219\u5b66\u5458\u603b\u5171\u53ef\u89c2\u770b500\u5206\u949f\uff0c\u8d85\u51fa\u65f6\u957f\u5c06\u63d0\u793a\u4e0d\u80fd\u5b66\u4e60\u30020\u8868\u793a\u65e0\u9650\u5236\u3002<br\/> \u5bf9\u4e8e\u624b\u52a8\u4e0a\u4f20\u7684\u56de\u653e\u89c6\u9891\uff0c\u53ef\u9650\u5236\u5176\u89c2\u770b\u65f6\u957f\u3002\u4f46\u5bf9\u4e8e\u76f4\u63a5\u5f55\u5236\u3001\u8df3\u8f6c\u5230\u7b2c\u4e09\u65b9\u76f4\u64ad\u5e73\u53f0\u56de\u653e\u7684\u89c6\u9891\uff0c\u65e0\u6cd5\u9650\u5236\u3002\n", "js", "zh_CN");
-t.add("goods.show_page.tab.intro", "\u5546\u54c1\u4ecb\u7ecd", "js", "zh_CN");
+t.add("goods.show_page.tab.intro", "\u7b80\u4ecb", "js", "zh_CN");
 t.add("goods.show_page.tab.catalogue", "\u5b66\u4e60\u76ee\u5f55", "js", "zh_CN");
 t.add("goods.show_page.tab.reviews", "\u5b66\u5458\u8bc4\u4ef7", "js", "zh_CN");
 t.add("goods.show_page.tab.reviews_empty_tips", "\u6682\u65e0\u8bc4\u4ef7\u54e6~", "js", "zh_CN");

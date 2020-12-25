@@ -1673,8 +1673,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                     return true;
                 }
             }
-
-            return false;
         }
 
         $member = $this->getClassroomMember($id, $user['id']);

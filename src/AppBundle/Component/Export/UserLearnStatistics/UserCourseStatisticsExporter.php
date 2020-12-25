@@ -44,7 +44,7 @@ class UserCourseStatisticsExporter extends Exporter
             [],
             0,
             PHP_INT_MAX,
-            ['courseId', 'userId', 'role', 'learnedNum', 'courseSetId', 'classroomId']
+            ['courseId', 'userId', 'role', 'learnedCompulsoryTaskNum', 'courseSetId', 'classroomId']
         );
 
         $courseMemberData = $this->findCourseMemberData($courseMembers);
@@ -112,9 +112,9 @@ class UserCourseStatisticsExporter extends Exporter
                     'courseName' => empty($course['title']) ? $courseSets[$member['courseSetId']]['title'] : $course['title'],
                     'sumTime' => empty($statistics[$member['courseId']]) ? 0 : round(array_sum(ArrayToolkit::column($statistics[$member['courseId']], 'sumTime')) / 60, 1),
                     'pureTime' => empty($statistics[$member['courseId']]) ? 0 : round(array_sum(ArrayToolkit::column($statistics[$member['courseId']], 'pureTime')) / 60, 1),
-                    'taskNum' => $course['taskNum'],
-                    'finishTaskNum' => $member['learnedNum'],
-                    'finishRate' => empty($course['taskNum']) ? 0 : round($member['learnedNum'] / $course['taskNum'], 2) * 100,
+                    'taskNum' => $course['compulsoryTaskNum'],
+                    'finishTaskNum' => $member['learnedCompulsoryTaskNum'],
+                    'finishRate' => empty($course['compulsoryTaskNum']) ? 1 : round($member['learnedCompulsoryTaskNum'] / $course['compulsoryTaskNum'], 2) * 100,
                 ];
             }
         }
