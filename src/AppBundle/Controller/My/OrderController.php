@@ -83,6 +83,7 @@ class OrderController extends BaseController
             $order['trade'] = empty($paymentTrades[$order['sn']]) ? [] : $paymentTrades[$order['sn']];
             $order['refund'] = empty($orderRefunds[$order['id']]) ? [] : $orderRefunds[$order['id']];
             $order['goodsId'] = empty($goodsSpecs[$order['item']['target_id']]) ? '' : $goodsSpecs[$order['item']['target_id']]['goodsId'];
+            $order['targetId'] = empty($goodsSpecs[$order['item']['target_id']]) ? '' : $goodsSpecs[$order['item']['target_id']]['targetId'];
         }
 
         return $this->render('my-order/order/index.html.twig', [

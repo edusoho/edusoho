@@ -1,4 +1,4 @@
-{% for recommend in recommends %}
+{% for recommend in recommends if recommend.goods|default(null) %}
   {% set goods = recommend.goods %}
   {% set teacherId = goods.creator %}
   {% if teacherId %}

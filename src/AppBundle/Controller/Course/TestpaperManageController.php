@@ -51,11 +51,13 @@ class TestpaperManageController extends BaseController
         $courseSet = $this->getCourseSetService()->getCourseSet($course['courseSetId']);
         $user = $this->getUser();
         $isTeacher = $this->getCourseMemberService()->isCourseTeacher($course['id'], $user['id']) || $user->isSuperAdmin();
+        $hasCourseManageRole = $this->getCourseService()->hasCourseManagerRole($course['id']);
 
         return $this->render('course-manage/testpaper-check/check-list.html.twig', [
             'courseSet' => $courseSet,
             'course' => $course,
             'isTeacher' => $isTeacher,
+            'hasCourseManageRole' => $hasCourseManageRole,
         ]);
     }
 
@@ -77,6 +79,7 @@ class TestpaperManageController extends BaseController
         }
 
         $isTeacher = $this->getCourseMemberService()->isCourseTeacher($course['id'], $user['id']) || $user->isSuperAdmin();
+        $hasCourseManageRole = $this->getCourseService()->hasCourseManagerRole($course['id']);
 
         return $this->render('course-manage/testpaper-check/result-list.html.twig', [
             'course' => $course,
@@ -85,6 +88,7 @@ class TestpaperManageController extends BaseController
             'isTeacher' => $isTeacher,
             'activityId' => $activity['id'],
             'activity' => $activity,
+            'hasCourseManageRole' => $hasCourseManageRole,
         ]);
     }
 

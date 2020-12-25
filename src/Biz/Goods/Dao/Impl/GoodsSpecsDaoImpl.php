@@ -20,6 +20,7 @@ class GoodsSpecsDaoImpl extends GeneralDaoImpl implements GoodsSpecsDao
             'conditions' => [
                 'id = :id',
                 'goodsId = :goodsId',
+                'goodsId IN (:goodsIds)',
                 'title = :title',
                 'targetId = :targetId',
                 'title LIKE :titleLike',

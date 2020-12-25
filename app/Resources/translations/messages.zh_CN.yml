@@ -1985,6 +1985,7 @@ course.manage.preview_lesson: 预览课时
 course.lesson_manage.set_optional: 设置选修
 course.lesson_manage.unset_optional: 设置必修
 course.lesson_manage.rename: 重命名
+course.lesson_manage.set_optional_tips: 课时任务数和学习进度将不会统计选修课时
 
 # activity-活动
 activity_manage.finish_tips:
@@ -5082,13 +5083,15 @@ admin.course_manage.statistics.teach_plan_count: 教学计划数量
 admin.course_manage.statistics.task_count: %taskName%数量
 admin.course_manage.statistics.student: 学员
 admin.course_manage.statistics.student_number: 学员总数
-admin.course_manage.statistics.finished_number: 完成课程人数
+admin.course_manage.statistics.finished_number: 完成人数
 admin.course_manage.statistics.study_time_minute: 课程学习时长(分)
-admin.course_manage.statistics.income_RMB: 课程收入(元)
+admin.course_manage.statistics.income_RMB: 收入(元)
 admin.course_manage.statistics.no_introduce: 未引入
 admin.course_manage.statistics.classroom.remove: 已从%classroomName%中移除
 admin.course_manage.statistics.watch_task: 查看%taskName%
 admin.course_manage.statistics.watch_course_data: 查看课时数据
+admin.course_manage.statistics.tips: 页面中各个数据以教学计划统计
+admin.course_manage.statistics.task_tips: 仅统计必修课时任务数，括号内数字为选修的课时任务数
 
 ## 任务统计数据
 admin.course_manage.statistics.modal_title: %title%课程的数据
@@ -5101,6 +5104,7 @@ admin.course_manage.statistics.data.video_length: 视频长度（分）
 admin.course_manage.statistics.data.task_sum_study_time: 任务被累加学习时长（分）
 admin.course_manage.statistics.data.average_score: 考试平均得分
 admin.course_manage.statistics.data.plan_study_time: 计划被累加学习时长（分）：%mins%
+admin.course_manage.statistics.optional_task: 选修
 
 ## 任务统计详细数据
 admin.course_manage.statistics.data_detail.name: 用户名
@@ -11428,11 +11432,7 @@ exception.goods.forbidden_manage: 无管理商品权限
 exception.s2b2c_product.adopt_failed: 采用失败，内容正在编辑中，请稍后再试
 goods.minimum_price.unit: %price%%unit%起
 goods.origin_price.unit: %price%%unit%
-goods.description: 商品介绍
-
-goods.minimum_price.unit: %price%%unit%起
-goods.origin_price.unit: %price%%unit%
-goods.description: 商品介绍
+goods.description: 简介
 
 admin_v2.information_collect.edit.title_info: 当前版本用户端仅支持新版微网校
 admin_v2.information_collect.edit.title: 采集名称
@@ -11485,3 +11485,5 @@ information_collect.title: 用户信息采集
 information_collect.form_items.confirm_submit: 确认提交
 information_collect.form_items.skip: 跳过
 information_collect.select_placeholeder: 请选择
+course.task.notify_message.join_and_buy: 请先加入课程或购买课程
+course.task.notify_message.join_limit: 该课程已限制加入，请联系客服

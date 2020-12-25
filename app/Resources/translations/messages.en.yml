@@ -1728,6 +1728,7 @@ course.manage.preview_lesson: Preview
 course.lesson_manage.set_optional: Set optional
 course.lesson_manage.unset_optional: Set compulsory
 course.lesson_manage.rename: Rename
+course.lesson_manage.set_optional_tips: The number of class tasks and learning progress will not be counted
 
 course.plan_task.activity_manage.finished_condition: 'Complete conditions'
 course.plan_task.activity_manage.audio: Audio
@@ -4303,6 +4304,8 @@ admin.course_manage.statistics.classroom.remove: Removed from %classroomName%
 admin.course_manage.statistics.watch_task: 'View %taskName%'
 admin.course_manage.statistics.watch_course_data: 'View Course Data'
 admin.course_manage.statistics.modal_title: '%title% Course Data'
+admin.course_manage.statistics.tips: Each data in the page is counted by teaching plan
+admin.course_manage.statistics.task_tips: Only the number of required class tasks is counted, and the data in brackets is the number of elective class tasks
 
 admin.course_manage.statistics.data.name: 'Task Name'
 admin.course_manage.statistics.data.task_type: Task Type
@@ -4313,6 +4316,7 @@ admin.course_manage.statistics.data.video_length: 'Video Length'
 admin.course_manage.statistics.data.task_sum_study_time: 'The Task Is Accumulated Learning Time(mins)'
 admin.course_manage.statistics.data.average_score: 'Avg Test Points'
 admin.course_manage.statistics.data.plan_study_time: Course Plan Sum Learned Time(mins)：%mins%
+admin.course_manage.statistics.optional_task: Optional
 
 admin.course_manage.statistics.data_detail.name: 'User Name'
 admin.course_manage.statistics.data_detail.join_time: 'Joined At'
@@ -10223,5 +10227,6 @@ task.learn_data_detail.stay_de_weight_time: 页面去重时长（分）
 task.learn_data_detail.video_total_time: 播放累加时长（分）
 task.learn_data_detail.video_de_weight_time: 播放去重时长（分）
 task.learn_data_detail.popover: 累加时长：任务下A学员产生的所有学习时长总和；<br/>去重时长：任务下A学员产生的学习时长在自然时间内去重后合并；<br/>如学员同时开启2个页面各学习该任务5分钟，则累加时长为10分钟，去重时长为5分钟。累加数据为实时数据。
-
+course.task.notify_message.join_and_buy: Please join or buy course
+course.task.notify_message.join_limit: Course buy limited
 

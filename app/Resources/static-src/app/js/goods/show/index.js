@@ -20,6 +20,7 @@ new Vue({
       i18n: _toJson($('.js-hidden-i18n').html()),
       goodsSetting: $('#show-product-page').data('goodsSetting'),
       timestamp: $('#js-hidden-current-timestamp').html(),
+      drpRecruitSwitch: $('#show-product-page').data('drpRecruitSwitch'),
     },
   })
 }).$mount('#show-product-page');
