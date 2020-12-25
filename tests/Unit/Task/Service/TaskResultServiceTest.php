@@ -8,7 +8,7 @@ class TaskResultServiceTest extends BaseTestCase
 {
     public function testCountFinishedCompulsoryTaskNumGroupByUserId()
     {
-        $a = $this->mockTaskResult([
+        $this->mockTaskResult([
             'userId' => 1,
             'courseTaskId' => 1,
             'status' => 'finish',
@@ -29,11 +29,17 @@ class TaskResultServiceTest extends BaseTestCase
         $this->getTaskDao()->create([
             'id' => 1,
             'courseId' => 1,
+            'title' => 'task 1',
+            'type' => 'text',
+            'createdUserId' => 1,
         ]);
 
         $this->getTaskDao()->create([
             'id' => 2,
             'courseId' => 1,
+            'title' => 'task 2',
+            'type' => 'text',
+            'createdUserId' => 1,
         ]);
 
         $result = $this->getTaskResultService()->countFinishedCompulsoryTaskNumGroupByUserId(1);
@@ -82,10 +88,16 @@ class TaskResultServiceTest extends BaseTestCase
         $this->getTaskDao()->create([
             'id' => 5,
             'courseId' => 1,
+            'title' => 'task 5',
+            'type' => 'text',
+            'createdUserId' => 1,
         ]);
         $this->getTaskDao()->create([
             'id' => 6,
             'courseId' => 1,
+            'title' => 'task 6',
+            'type' => 'text',
+            'createdUserId' => 1,
         ]);
         $this->mockTaskResult(['courseTaskId' => 5, 'finishedTime' => strtotime('2017/1/1')]);
         $this->mockTaskResult(['courseTaskId' => 6, 'finishedTime' => strtotime('2017/11/1')]);
