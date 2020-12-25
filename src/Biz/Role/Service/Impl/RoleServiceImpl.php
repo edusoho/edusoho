@@ -279,7 +279,7 @@ class RoleServiceImpl extends BaseService implements RoleService
      *
      * 获取老后台权限menus
      */
-    protected function  getAdminRoles($tree)
+    protected function getAdminRoles($tree)
     {
         $getAdminRoles = $tree->find(function ($tree) {
             return 'admin' === $tree->data['code'];
