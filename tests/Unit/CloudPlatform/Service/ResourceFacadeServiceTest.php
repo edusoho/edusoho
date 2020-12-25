@@ -26,10 +26,6 @@ class ResourceFacadeServiceTest extends BaseTestCase
         $this->assertNotFalse(strstr($result, 'js-sdk/sdk-v1.js'));
         $result = $this->getResourceFacadeService()->getFrontPlaySDKPathByType('newPlayer');
         $this->assertNotFalse(strstr($result, 'js-sdk/sdk-v2.js'));
-        $result = $this->getResourceFacadeService()->getFrontPlaySDKPathByType('audio');
-        $this->assertNotFalse(strstr($result, 'js-sdk-v2/sdk-v1.js'));
-        $result = $this->getResourceFacadeService()->getFrontPlaySDKPathByType('video');
-        $this->assertNotFalse(strstr($result, 'js-sdk-v2/sdk-v1.js'));
         $result = $this->getResourceFacadeService()->getFrontPlaySDKPathByType('uploader');
         $this->assertNotFalse(strstr($result, 'js-sdk-v2/uploader/sdk-2.1.0.js'));
         $result = $this->getResourceFacadeService()->getFrontPlaySDKPathByType('old_uploader');
@@ -38,6 +34,8 @@ class ResourceFacadeServiceTest extends BaseTestCase
         $this->assertNotFalse(strstr($result, 'js-sdk/document-player/v7/viewer.html'));
         $result = $this->getResourceFacadeService()->getFrontPlaySDKPathByType('faq');
         $this->assertNotFalse(strstr($result, 'js-sdk/faq/sdk-v1.js'));
+        $result = $this->getResourceFacadeService()->getFrontPlaySDKPathByType('resource_player');
+        $this->assertNotFalse(strstr($result, 'js-sdk-v2/sdk-v1.js'));
     }
 
     public function testGetPlayerContext()
