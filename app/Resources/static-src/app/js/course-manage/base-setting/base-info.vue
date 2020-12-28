@@ -109,7 +109,7 @@
                 this.$nextTick(() => {
                     import('app/js/upload-image/index.js');
                     summaryEditor = CKEDITOR.replace('courseset-summary-field', {
-                        toolbar: 'Detail',
+                        toolbar: 'Simple',
                         filebrowserImageUploadUrl: $('#courseset-summary-field').data('imageUploadUrl')
                     });
                 });
