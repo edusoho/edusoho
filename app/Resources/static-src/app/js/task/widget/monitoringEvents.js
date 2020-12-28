@@ -43,6 +43,7 @@ export default class MonitoringEvents {
       return;
     }
 
+    // safari 进入全屏触发 visibilitychange 事件兼容
     if (Browser.safari) {
       this.safariResetFullScreenState();
     }
@@ -83,6 +84,8 @@ export default class MonitoringEvents {
   initVisibilitychange() {
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'hidden') {
+        // safari 进入全屏触发 visibilitychange 事件兼容
+        // 不是全屏 -->　全屏，不触发无效学习事件
         if (Browser.safari && !this.lastFullScreenState && screenfull.isFullscreen) {
           this.lastFullScreenState = screenfull.isFullscreen;
           return;
@@ -92,6 +95,8 @@ export default class MonitoringEvents {
     });
   }
 
+  // safari 进入全屏触发 visibilitychange 事件兼容
+  // safari 无法监听到全屏的事件, 故用 resize 代替
   safariResetFullScreenState() {
     window.addEventListener('resize', () => {
       if (!this.fullScreenTimer) {
