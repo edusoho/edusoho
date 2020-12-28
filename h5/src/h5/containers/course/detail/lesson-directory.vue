@@ -1,69 +1,33 @@
 <template>
   <div>
-    <div
-      v-for="(lessonItem, lessonIndex) in lesson"
-      v-if="hasLesson"
-      :key="lessonIndex"
-      class="lesson-directory"
-    >
-      <div
-        :id="lessonItem.tasks[lessonItem.index].id"
-        :class="{ 'zb-ks': doubleLine(lessonItem.tasks[lessonItem.index]) }"
-        class="lesson-title"
-        @click="
-          lessonCellClick(
-            lessonItem.tasks[lessonItem.index],
-            lessonIndex,
-            lessonItem.index,
-          )
-        "
-      >
-        <div class="lesson-title-r">
-          <div class="lesson-title-des">
-            <!-- 非直播考试-->
-            <div
-              v-if="!doubleLine(lessonItem.tasks[lessonItem.index])"
-              class="bl l22"
-            >
-              <!-- <span class="tryLes">试听</span> -->
-              <span
-                :class="{
-                  lessonactive:
-                    currentTask == lessonItem.tasks[lessonItem.index].id,
-                }"
-                class="text-overflow ks"
+    <template v-for="(lessonItem, lessonIndex) in lesson">
+      <div v-if="hasLesson" :key="lessonIndex" class="lesson-directory">
+        <div
+          :id="lessonItem.tasks[lessonItem.index].id"
+          :class="{ 'zb-ks': doubleLine(lessonItem.tasks[lessonItem.index]) }"
+          class="lesson-title"
+          @click="
+            lessonCellClick(
+              lessonItem.tasks[lessonItem.index],
+              lessonIndex,
+              lessonItem.index,
+            )
+          "
+        >
+          <div class="lesson-title-r">
+            <div class="lesson-title-des">
+              <!-- 非直播考试-->
+              <div
+                v-if="!doubleLine(lessonItem.tasks[lessonItem.index])"
+                class="bl l22"
               >
-                <i
-                  :class="iconfont(lessonItem.tasks[lessonItem.index])"
-                  class="iconfont"
-                />
-                {{
-                  Number(lessonItem.tasks[lessonItem.index].isOptional)
-                    ? '选修 '
-                    : '课时'
-                }}{{
-                  Number(lessonItem.tasks[lessonItem.index].isOptional)
-                    ? ' '
-                    : `${lessonItem.tasks[lessonItem.index].number}:${
-                        lessonItem.title
-                      }`
-                }}
-              </span>
-            </div>
-
-            <!-- 直播或者考试-->
-            <div
-              v-if="doubleLine(lessonItem.tasks[lessonItem.index])"
-              class="bl"
-            >
-              <!-- <span class="tryLes">试听</span> -->
-              <div class="block-inline">
+                <!-- <span class="tryLes">试听</span> -->
                 <span
                   :class="{
                     lessonactive:
                       currentTask == lessonItem.tasks[lessonItem.index].id,
                   }"
-                  class="bl text-overflow ks"
+                  class="text-overflow ks"
                 >
                   <i
                     :class="iconfont(lessonItem.tasks[lessonItem.index])"
@@ -71,73 +35,113 @@
                   />
                   {{
                     Number(lessonItem.tasks[lessonItem.index].isOptional)
-                      ? '选修 '
+                      ? ''
                       : '课时'
                   }}{{
                     Number(lessonItem.tasks[lessonItem.index].isOptional)
-                      ? ' '
+                      ? lessonItem.title
                       : `${lessonItem.tasks[lessonItem.index].number}:${
                           lessonItem.title
                         }`
                   }}
                 </span>
-                <span class="bl zbtime">
+              </div>
+
+              <!-- 直播或者考试-->
+              <div
+                v-if="doubleLine(lessonItem.tasks[lessonItem.index])"
+                class="bl"
+              >
+                <!-- <span class="tryLes">试听</span> -->
+                <div class="block-inline">
                   <span
-                    :class="[liveClass(lessonItem.tasks[lessonItem.index])]"
-                    >{{
-                      lessonItem.tasks[lessonItem.index] | filterTaskTime
-                    }}</span
+                    :class="{
+                      lessonactive:
+                        currentTask == lessonItem.tasks[lessonItem.index].id,
+                    }"
+                    class="bl text-overflow ks"
                   >
-                </span>
+                    <i
+                      :class="iconfont(lessonItem.tasks[lessonItem.index])"
+                      class="iconfont"
+                    />
+                    {{
+                      Number(lessonItem.tasks[lessonItem.index].isOptional)
+                        ? ''
+                        : '课时'
+                    }}{{
+                      Number(lessonItem.tasks[lessonItem.index].isOptional)
+                        ? lessonItem.title
+                        : `${lessonItem.tasks[lessonItem.index].number}:${
+                            lessonItem.title
+                          }`
+                    }}
+                  </span>
+                  <span class="bl zbtime">
+                    <span
+                      :class="[liveClass(lessonItem.tasks[lessonItem.index])]"
+                      >{{
+                        lessonItem.tasks[lessonItem.index] | filterTaskTime
+                      }}</span
+                    >
+                  </span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- 时长 -->
-        <div class="lesson-title-l">
-          <span v-if="lessonItem.tasks[lessonItem.index].type != 'live'">{{
-            lessonItem.tasks[lessonItem.index] | filterTaskTime
-          }}</span>
-          <i
-            :class="studyStatus(lessonItem.tasks[lessonItem.index])"
-            class="iconfont"
-          />
-        </div>
-      </div>
-
-      <!-- task任务 -->
-      <div v-if="lessonItem.tasks.length > 1" class="lesson-items">
-        <div
-          v-for="(taskItem, taskIndex) in lessonItem.tasks"
-          v-if="showTask(taskItem, taskIndex)"
-          :id="taskItem.id"
-          :key="taskIndex"
-          class="litem"
-          @click="lessonCellClick(taskItem, lessonIndex, taskIndex)"
-        >
-          <div
-            :class="{ lessonactive: currentTask == Number(taskItem.id) }"
-            class="litem-r text-overflow"
-          >
-            <!-- <span class="tryLes">试听</span> -->
-            <i :class="iconfont(taskItem)" class="iconfont" />
-            {{ Number(taskItem.isOptional) ? '选修 ' : '课时'
-            }}{{
-              Number(taskItem.isOptional)
-                ? ' '
-                : `${taskItem.number}:${taskItem.title}`
-            }}
-          </div>
-          <div class="litem-l clearfix">
-            <span :class="[liveClass(taskItem), 'text-overflow']">{{
-              taskItem | filterTaskTime
+          <!-- 时长 -->
+          <div class="lesson-title-l">
+            <span
+              class="elective-tag"
+              v-if="Number(lessonItem.tasks[lessonItem.index].isOptional)"
+            >
+              选修
+            </span>
+            <span v-if="lessonItem.tasks[lessonItem.index].type != 'live'">{{
+              lessonItem.tasks[lessonItem.index] | filterTaskTime
             }}</span>
-            <i :class="studyStatus(taskItem)" class="iconfont" />
+            <i
+              :class="studyStatus(lessonItem.tasks[lessonItem.index])"
+              class="iconfont"
+            />
           </div>
         </div>
+
+        <!-- task任务 -->
+        <div v-if="lessonItem.tasks.length > 1" class="lesson-items">
+          <template v-for="(taskItem, taskIndex) in lessonItem.tasks">
+            <div
+              v-if="showTask(taskItem, taskIndex)"
+              :id="taskItem.id"
+              :key="taskIndex"
+              class="litem"
+              @click="lessonCellClick(taskItem, lessonIndex, taskIndex)"
+            >
+              <div
+                :class="{ lessonactive: currentTask == Number(taskItem.id) }"
+                class="litem-r text-overflow"
+              >
+                <!-- <span class="tryLes">试听</span> -->
+                <i :class="iconfont(taskItem)" class="iconfont" />
+                {{ Number(taskItem.isOptional) ? '' : '课时'
+                }}{{
+                  Number(taskItem.isOptional)
+                    ? taskItem.title
+                    : `${taskItem.number}:${taskItem.title}`
+                }}
+              </div>
+              <div class="litem-l clearfix">
+                <span :class="[liveClass(taskItem), 'text-overflow']">{{
+                  taskItem | filterTaskTime
+                }}</span>
+                <i :class="studyStatus(taskItem)" class="iconfont" />
+              </div>
+            </div>
+          </template>
+        </div>
       </div>
-    </div>
+    </template>
     <div v-if="isNoData" class="noneItem">
       <img src="static/images/none.png" class="notask" />
       <p>暂时还没有课时哦...</p>
@@ -149,7 +153,7 @@ import redirectMixin from '@/mixins/saveRedirect';
 import copyUrl from '@/mixins/copyUrl';
 import { mapState, mapMutations } from 'vuex';
 import * as types from '@/store/mutation-types';
-import { Dialog, Toast } from 'vant';
+import { Toast } from 'vant';
 export default {
   name: 'LessonDirectory',
   mixins: [redirectMixin, copyUrl],
@@ -273,7 +277,10 @@ export default {
             redirect: this.redirect,
           },
         });
-      this.joinStatus ? this.showTypeDetail(task) : '';
+      // this.joinStatus ? this.showTypeDetail(task) : '';
+      if (this.joinStatus) {
+        this.showTypeDetail(task);
+      }
     },
     showTypeDetail(task) {
       if (task.status !== 'published') {
@@ -309,10 +316,9 @@ export default {
             },
           });
           break;
-        case 'live':
+        case 'live': {
           const nowDate = new Date();
           const endDate = new Date(task.endTime * 1000);
-          const startDate = new Date(task.startTime * 1000);
           let replay = false;
           if (nowDate > endDate) {
             if (task.activity.replayStatus == 'videoGenerated') {
@@ -344,7 +350,8 @@ export default {
             },
           });
           break;
-        case 'testpaper':
+        }
+        case 'testpaper': {
           const testId = task.activity.testpaperInfo.testpaperId;
           this.$router.push({
             name: 'testpaperIntro',
@@ -354,6 +361,7 @@ export default {
             },
           });
           break;
+        }
         case 'homework':
           this.$router.push({
             name: 'homeworkIntro',
@@ -387,40 +395,28 @@ export default {
       switch (type) {
         case 'audio':
           return 'icon-yinpin';
-          break;
         case 'doc':
           return 'icon-wendang';
-          break;
         case 'exercise':
           return 'icon-lianxi';
-          break;
         case 'flash':
           return 'icon-flash';
-          break;
         case 'homework':
           return 'icon-zuoye';
-          break;
         case 'live':
           return 'icon-zhibo';
-          break;
         case 'ppt':
           return 'icon-ppt';
-          break;
         case 'discuss':
           return 'icon-taolun';
-          break;
         case 'testpaper':
           return 'icon-kaoshi';
-          break;
         case 'text':
           return 'icon-tuwen';
-          break;
         case 'video':
           return 'icon-shipin';
-          break;
         case 'download':
           return 'icon-xiazai';
-          break;
         default:
           return '';
       }
@@ -434,10 +430,8 @@ export default {
         switch (task.result.status) {
           case 'finish':
             return 'icon-yiwanchengliang';
-            break;
           case 'start':
             return 'icon-weiwancheng';
-            break;
           default:
             return '';
         }
@@ -451,7 +445,6 @@ export default {
         return 'nopublished';
       }
       const now = new Date().getTime();
-      const startTimeStamp = new Date(lesson.startTime * 1000);
       const endTimeStamp = new Date(lesson.endTime * 1000);
       if (now > endTimeStamp) {
         if (lesson.activity.replayStatus === 'ungenerated') {
