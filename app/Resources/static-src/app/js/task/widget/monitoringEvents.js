@@ -1,5 +1,6 @@
 import OutFocusMask from './out-focus-mask';
-import { isMobileDevice } from 'common/utils';
+import { Browser, isMobileDevice } from 'common/utils';
+import screenfull from 'es-screenfull';
 
 export default class MonitoringEvents {
   constructor(params) {
@@ -15,6 +16,9 @@ export default class MonitoringEvents {
     this.videoPlayRule = params.videoPlayRule;
     this.taskType = params.taskType;
     this.taskPipe = params.taskPipe;
+
+    this.lastFullScreenState = screenfull.isFullscreen;
+    this.fullScreenTimer = null;
 
     this.initEvent();
   }
@@ -37,6 +41,10 @@ export default class MonitoringEvents {
 
     if (this.taskType !== 'video') {
       return;
+    }
+
+    if (Browser.safari) {
+      this.safariResetFullScreenState();
     }
 
     this.initMaskElement();
@@ -75,7 +83,23 @@ export default class MonitoringEvents {
   initVisibilitychange() {
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'hidden') {
+        if (Browser.safari && !this.lastFullScreenState && screenfull.isFullscreen) {
+          this.lastFullScreenState = screenfull.isFullscreen;
+          return;
+        }
         this.ineffectiveEvent();
+      }
+    });
+  }
+
+  safariResetFullScreenState() {
+    window.addEventListener('resize', () => {
+      if (!this.fullScreenTimer) {
+        this.fullScreenTimer = setTimeout(() => {
+          this.lastFullScreenState = screenfull.isFullscreen;
+          clearTimeout(this.fullScreenTimer);
+          this.fullScreenTimer = null;
+        }, 66);
       }
     });
   }
