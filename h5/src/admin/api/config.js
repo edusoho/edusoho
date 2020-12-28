@@ -72,6 +72,11 @@ const config = [
     url: '/item_bank_exercises',
   },
   {
+    // 获取题库分类
+    name: 'getItemBankCategories',
+    url: '/item_bank_category',
+  },
+  {
     // 获取优惠券功能开关
     name: 'getCouponSetting',
     url: '/setting/coupon',

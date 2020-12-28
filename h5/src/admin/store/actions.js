@@ -75,6 +75,19 @@ export const getClassCategories = ({ commit }) =>
     return formatedRes;
   });
 
+export const getItemBankCategories = ({ commit }) =>
+  Api.getItemBankCategories().then(res => {
+    res.unshift({ id: '0', children: undefined, name: '全部' });
+    const formatedRes = treeDigger(res, children => {
+      if (!children.length) {
+        children = undefined;
+      }
+      return children;
+    });
+    commit(types.GET_ITEM_BANK_CATEGORIES, formatedRes);
+    return formatedRes;
+  });
+
 // 获取后台配置（草稿／正式）
 export const getDraft = ({ commit }, { portal, type, mode }) =>
   Api.getDraft({
