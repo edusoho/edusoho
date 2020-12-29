@@ -473,16 +473,10 @@ class Setting extends AbstractResource
 
     public function getMail()
     {
-        $cloudMailSwitch = $this->getSettingService()->get('cloud_email_crm', []);
+        $cloudEmailCrm = $this->getSettingService()->get('cloud_email_crm', []);
         $mailer = $this->getSettingService()->get('mailer', []);
 
-        $status = false;
-
-        if ((isset($cloudMailSwitch['status']) && 'enable' === $cloudMailSwitch['status']) || (isset($mailer['enabled']) && $mailer['enabled'])) {
-            $status = true;
-        }
-
-        return ['enabled' => $status];
+        return ['enabled' => (isset($cloudEmailCrm['status']) && 'enable' === $cloudEmailCrm['status']) || (isset($mailer['enabled']) && $mailer['enabled'])];
     }
 
     private function getLoginConnect($clients)
