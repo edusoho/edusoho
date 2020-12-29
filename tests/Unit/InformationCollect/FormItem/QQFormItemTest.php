@@ -15,6 +15,7 @@ class QQFormItemTest extends BaseTestCase
                 "field": "qq",
                 "group": "contact",
                 "value": "543245784",
+                "required": true,
                 "validate": [
                     {
                         "required": true,

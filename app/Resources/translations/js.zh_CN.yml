@@ -1,4 +1,4 @@
-site.flash_not_install_hint: 您的浏览器可能存在未安装flash播放器，未开启flash播放器，flash低于11版本的情况，请先确认flash播放器能够正常使用。<a target="_blank" href="http://www.adobe.com/go/getflashplayer">flash设置与安装</a>
+site.flash_not_install_hint: 自2021年起，主流浏览器新出版本已不再支持Flash技术，请使用低版本浏览器或检查Flash是否已启用，<a target="_blank" href="http://www.adobe.com/go/getflashplayer">flash设置与安装</a>
 site.date_format_dhis: %days%天%hours%小时%minutes%分钟%seconds%秒
 site.date_format_his: %hours%小时%minutes%分钟%seconds%秒
 site.date_format_is: %minutes%分钟%seconds%秒
@@ -154,7 +154,7 @@ uploader.filelist.head.status: 状态
 uploader.filelist.head.operation: 操作
 uploader.select_one_file: 请至少选择一个文件上传
 uploader.file.exist: 这个文件已经被添加过了
-
+uploader.file.unsupported.type: 不支持的文件类型
 
 importer.import_verify_tips_start: 校验成功！一共包含
 importer.import_verify_tips_end: 条数据
@@ -653,6 +653,7 @@ order.create.use_price_coupon_hint: 优惠券可用，您当前使用的是抵�
 order.refund.reason_limit_hint: 退学原因的长度请小于或等于120。
 order.refund.reason_required_hint: 请输入退学原因。
 order.refund.reason_choose_hint: 请选择退学原因
+order.information_collect_error_hint: 请先提交信息后再提交订单
 
 settings.setup.set_success.hint: 设置帐号成功，正在跳转
 settings.setup.set_failed.hint: 设置帐号失败，请重试
@@ -924,8 +925,8 @@ oauth.register.error_message: 注册出现异常，请联系管理员
 
 
 ## 用户数据统计
-admin.user.statistics.data.learn_total_time: 学习总时长
-admin.user.statistics.data.learn_time: 学习时长/分钟
+admin.user.statistics.data.learn_total_time: 累加学习时长（分）
+admin.user.statistics.data.learn_time: 累加学习时长/分钟
 admin.user.statistics.data.time: 时长
 
 course.audio.enable.biz.user: 听课模式需要先申请为商业用户!
@@ -1618,7 +1619,15 @@ admin_v2.information_collect.chooser.target_hint:  请选择课程/班级
 admin_v2.information_collect.chooser.target_course_hint: 请至少选择1个课程
 admin_v2.information_collect.chooser.target_classroom_hint: 请至少选择1个班级
 admin_v2.information_collect.chooser.items.hint: 请选择采集表单
+user.fields.gender_label: 性别
+information_collect.form.check_age_invalid: 年龄不在正常范围内
+information_collect.form.check_format_invalid: %display%格式错误
 
+admin_v2.video_effective_time_setting.cancel.hint: 视频课时学习时长统计维度变更后，全站数据统计中将按新的统计规则生成，变更规则前已产生的学习时长统计不会随新的规则更改。建议您不要频繁改动数据统计维度。<br/>本次是否确认更改学习时长统计维度？
+admin_v2.video_effective_time_setting.play_rule.auto_pause.help_block: 当系统检测到用户处于非专注学习时，PC端将自动暂停当前播放
+admin_v2.video_effective_time_setting.play_rule.no_action.help_block: 当系统检测到用户处于非专注学习时，PC端将继续维持当前播放
+admin_v2.video_effective_time_setting.statistical_dimension.playing.help_block: 以实际播放时长作为学习时长统计
+admin_v2.video_effective_time_setting.statistical_dimension.page.help_block: 以页面停留时长作为学习时长统计
 
 course.marketing_setup: 营销设置
 site.currency.CNY: 元
@@ -1634,6 +1643,7 @@ course.marketing_setup.rule.expiry_date: 学习有效期
 course.marketing_setup.rule.expiry_date_tips: 在此日期前，学员可进行学习。
 course.marketing_setup.rule.expiry_date.publish_tips: 从加入当天起，在几天内可进行学习。
 course.plan_task.start_time: 开始日期
+course.plan_task.end_time: 结束日期
 course.marketing_setup.rule.expiry_date.first_publish_tips: 教学计划一旦发布，有效期类型不能修改；课程或教学计划关闭后，可以修改日期，新的学习有效期仅对修改后加入的学员生效。
 course.marketing_setup.approval: 实名认证
 course.marketing_setup.approval_tips: 设置该值后，学员购买课程前，必须先去申请实名认证。
@@ -1701,7 +1711,7 @@ course.info.video.convert.audio.close: 关闭
 course.marketing_setup.rule.watch_time_limit.watch_limit_tips: >
   例：课程视频总时长为100分钟，设置为5倍，则学员总共可观看500分钟，超出时长将提示不能学习。0表示无限制。<br/>
   对于手动上传的回放视频，可限制其观看时长。但对于直接录制、跳转到第三方直播平台回放的视频，无法限制。
-goods.show_page.tab.intro: 商品介绍
+goods.show_page.tab.intro: 简介
 goods.show_page.tab.catalogue: 学习目录
 goods.show_page.tab.reviews: 学员评价
 goods.show_page.tab.reviews_empty_tips: 暂无评价哦~
@@ -1734,3 +1744,11 @@ goods.show_page.free_join_btn: 免费加入
 goods.show_page.buy_btn: 立即购买
 classroom.go_inside: 进去逛逛
 course.base.title.placeholder: 请输入课程标题
+course.unname_title: 未命名计划
+
+course.task.out_focus_mask.continue_studying: 继续学习
+course.task.out_focus_mask.stop.tips: >
+  <p class="ineffective-learning">学累了可以休息一会 :D</p>
+course.task.out_focus_mask.anti_brush.tips: >
+  <p class="kick-each-other">请勿同时多开任务学习</p>
+  <p class="kick-each-other">不要一心多用哦！</p>

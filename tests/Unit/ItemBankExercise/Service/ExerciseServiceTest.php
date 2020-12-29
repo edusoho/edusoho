@@ -55,7 +55,7 @@ class ExerciseServiceTest extends BaseTestCase
             'questionBankId' => 1,
         ]);
 
-        $this->assertEquals('1', count($res));
+        $this->assertEquals(1, $res);
     }
 
     public function testFindByIds()

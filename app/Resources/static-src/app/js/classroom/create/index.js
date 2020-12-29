@@ -7,7 +7,8 @@ let validator = $form.validate({
     title: {
       required: true,
       minlength: 2,
-      maxlength: 30
+      maxlength: 30,
+      classroom_title: true,
     }
   }
 });

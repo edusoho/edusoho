@@ -355,7 +355,7 @@ class GoodsServiceImpl extends BaseService implements GoodsService
             $discount = $this->getDiscountService()->getDiscount($goods['discountId']);
             if ('discount' === $discount['type']) {
                 $discountItem = $this->getDiscountService()->getItemByDiscountIdAndGoodsId($goods['discountId'], $goods['id']);
-                if (!empty($discount)) {
+                if (!empty($discountItem)) {
                     if ('discount' === $discount['discountType']) {
                         $minDisplayPrice = $goods['minPrice'] * $discountItem['discount'] / 10;
                         $maxDisplayPrice = $goods['maxPrice'] * $discountItem['discount'] / 10;

@@ -121,8 +121,6 @@ export default class UserInfoFieldsItemValidate {
   smsCodeValidate() {
     if ($('.js-captch-num').length > 0) {
       
-      //$('.js-captch-num').find('#getcode_num').attr("src", $("#getcode_num").data("url") + "?" + Math.random());
-
       $('input[name="captcha_num"]').rules('add', {
         required: true,
         alphanumeric: true,

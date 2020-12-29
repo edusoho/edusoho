@@ -48,8 +48,9 @@ class OverviewTaskExporter extends Exporter
         $tasks = $this->getReportService()->getCourseTaskLearnData($tasks, $course['id']);
         $datas = [];
         foreach ($tasks as $task) {
+            $taskTitle = '1' == $task['isOptional'] ? $task['title'].'【选修】' : $task['title'];
             $data = [];
-            $data[] = is_numeric($task['title']) ? $task['title']."\t" : $task['title'];
+            $data[] = is_numeric($taskTitle) ? $taskTitle."\t" : $taskTitle;
             $data[] = $task['finishedNum'];
             $data[] = $task['learnNum'];
             $data[] = $task['notStartedNum'];

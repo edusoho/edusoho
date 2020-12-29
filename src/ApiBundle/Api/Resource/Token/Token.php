@@ -4,9 +4,9 @@ namespace ApiBundle\Api\Resource\Token;
 
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\System\Service\LogService;
 use Biz\User\Service\UserService;
 use Codeages\Biz\Pay\Service\AccountService;
-use Biz\System\Service\LogService;
 
 class Token extends AbstractResource
 {
@@ -37,10 +37,10 @@ class Token extends AbstractResource
             }
         }
 
-        return array(
+        return [
             'token' => $token,
             'user' => $user,
-        );
+        ];
     }
 
     public function remove(ApiRequest $request, $token)
@@ -49,15 +49,15 @@ class Token extends AbstractResource
 
         $device = $this->getPushDeviceService()->getPushDeviceByUserId($user['id']);
         if (!empty($device)) {
-            $device = $this->getPushDeviceService()->updatePushDevice($device['id'], array('userId' => 0));
+            $device = $this->getPushDeviceService()->updatePushDevice($device['id'], ['userId' => 0]);
             $this->getPushDeviceService()->getPushSdk()->setDeviceActive($device['regId'], 0);
         }
 
-        $this->getLogService()->info(self::MOBILE_MODULE, 'user_logout', '用户退出', array('userToken' => $user));
+        $this->getLogService()->info(self::MOBILE_MODULE, 'user_logout', '用户退出', ['userToken' => $user]);
 
         $this->getUserService()->deleteToken(self::TOKEN_TYPE, $user['loginToken']);
 
-        return array('success' => true);
+        return ['success' => true];
     }
 
     private function appendUser(&$user)
@@ -69,12 +69,12 @@ class Token extends AbstractResource
             $vip = $this->service('VipPlugin:Vip:VipService')->getMemberByUserId($user['id']);
             if ($vip) {
                 $level = $this->service('VipPlugin:Vip:LevelService')->getLevel($vip['levelId']);
-                $user['vip'] = array(
+                $user['vip'] = [
                     'levelId' => $vip['levelId'],
                     'vipName' => $level['name'],
                     'deadline' => date('c', $vip['deadline']),
                     'seq' => $level['seq'],
-                );
+                ];
             } else {
                 $user['vip'] = null;
             }

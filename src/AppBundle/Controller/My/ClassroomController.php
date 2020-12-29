@@ -72,6 +72,7 @@ class ClassroomController extends BaseController
             $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
             $coursesCount = count($courses);
             $classrooms[$key]['coursesCount'] = $coursesCount;
+            $classrooms[$key]['canManageClassroom'] = $this->getClassroomService()->canManageClassroom($classroom['id']);
         }
 
         return $this->render('my/teaching/classroom.html.twig', [

@@ -44,7 +44,7 @@ class PlayerController extends BaseController
 
         $params = [
             'file' => $file,
-            'cloudSdk' => $file['type'],
+            'cloudSdk' => 'resource_player',
             'context' => $playerContext,
             'rememberLastPos' => $rememberLastPos,
         ];

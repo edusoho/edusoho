@@ -606,7 +606,7 @@ class AppServiceImpl extends BaseService implements AppService
 
         last :
         $this->_submitRunLogForPackageUpdate('执行升级', $package, $errors);
-        $this->trySystemCrontabInitializer($package);
+//        $this->trySystemCrontabInitializer($package);
 
         if (empty($info)) {
             $result = $errors;

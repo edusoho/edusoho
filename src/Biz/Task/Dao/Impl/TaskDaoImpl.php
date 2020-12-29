@@ -211,6 +211,7 @@ class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
     public function analysisTaskDataByTime($startTime, $endTime)
     {
         $conditions = [
+            'isOptional' => 0,
             'createdTime_GE' => $startTime,
             'createdTime_LT' => $endTime,
         ];

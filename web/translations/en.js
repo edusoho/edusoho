@@ -2,7 +2,7 @@
 t.fallback = 'en';
 t.defaultDomain = 'js';
 // en
-t.add("site.flash_not_install_hint", "Flash player is not installed or it is disabled or its version is too low in your browser, please make sure the flash player can work properly. <a target=\"_blank\" href=\"http:\/\/www.adobe.com\/go\/getflashplayer\"> Click Install<\/a>", "js", "en");
+t.add("site.flash_not_install_hint", "Since 2021, the new versions of mainstream browsers no longer support Flash technology, please use lower version browsers or check whether Flash is enabled, <a target=\"_blank\" href=\"http:\/\/www.adobe.com\/go\/getflashplayer\"> Click Install<\/a>", "js", "en");
 t.add("site.date_format_dhis", "Days %day% Hours %hour% Minutes %minutes% seconds %seconds%", "js", "en");
 t.add("site.date_format_his", "Hours %hours% Minutes %minutes% Seconds %seconds%", "js", "en");
 t.add("site.date_format_is", "Minutes %minutes% seconds %seconds%", "js", "en");
@@ -600,6 +600,7 @@ t.add("order.create.use_price_coupon_hint", "Coupon is available, and you are cu
 t.add("order.refund.reason_limit_hint", "The length of the quit reason should be less than or equal to 120.", "js", "en");
 t.add("order.refund.reason_required_hint", "Please enter the reason of quiting.", "js", "en");
 t.add("order.refund.reason_choose_hint", "Please choose the reason of quiting.", "js", "en");
+t.add("order.information_collect_error_hint", "Please submit the information before submitting the order.", "js", "en");
 t.add("settings.setup.set_success.hint", "Set account successfully, redirecting", "js", "en");
 t.add("settings.setup.set_failed.hint", "Set account failed, please try again", "js", "en");
 t.add("settings.user_profile.save_success_hint", "Saved successfully", "js", "en");
@@ -843,8 +844,8 @@ t.add("oauth.captcha_code_expired_tip", "The captcha code is expired", "js", "en
 t.add("oauth.captcha_code_error_tip", "The captcha code is error", "js", "en");
 t.add("oauth.register.time_limit", "Register too many times, please try again later.", "js", "en");
 t.add("oauth.register.error_message", "Register error. Please contact the admin for help.", "js", "en");
-t.add("admin.user.statistics.data.learn_total_time", "total study time", "js", "en");
-t.add("admin.user.statistics.data.learn_time", "study time\/minutes", "js", "en");
+t.add("admin.user.statistics.data.learn_total_time", "Length of incremental learning (minutes)", "js", "en");
+t.add("admin.user.statistics.data.learn_time", "accumulated study time\/minutes", "js", "en");
 t.add("admin.user.statistics.data.time", "time", "js", "en");
 t.add("course.audio.enable.biz.user", "To enable the audio mode, please upgrade to business plans.", "js", "en");
 t.add("admin.data.lab.setting.error", "Error. Please try again.", "js", "en");
@@ -1471,6 +1472,14 @@ t.add("admin_v2.information_collect.chooser.target_hint", "Please select Course\
 t.add("admin_v2.information_collect.chooser.target_course_hint", "Please select at least 1 Course", "js", "en");
 t.add("admin_v2.information_collect.chooser.target_classroom_hint", "Please select at least 1 Classroom", "js", "en");
 t.add("admin_v2.information_collect.chooser.items.hint", "Please select form item", "js", "en");
+t.add("user.fields.gender_label", "Gender", "js", "en");
+t.add("information_collect.form.check_age_invalid", "Age Invalid", "js", "en");
+t.add("information_collect.form.check_format_invalid", "%display% Invalid", "js", "en");
+t.add("admin_v2.video_effective_time_setting.cancel.hint", "After the statistical dimension of video class learning time changes, the statistics of the whole station will be generated according to the new statistical rules, and the statistics of learning time generated before the change of rules will not be changed with the new rules.It is suggested that you do not change the statistical dimension of data frequently. <br\/>Do you confirm to change the statistical dimension of learning time this time?", "js", "en");
+t.add("admin_v2.video_effective_time_setting.play_rule.auto_pause.help_block", "When the system detects that the user is not focusing on learning, the PC side will automatically suspend the current play", "js", "en");
+t.add("admin_v2.video_effective_time_setting.play_rule.no_action.help_block", "When the system detects that the user is not focusing on learning, the PC side will continue to maintain the current play", "js", "en");
+t.add("admin_v2.video_effective_time_setting.statistical_dimension.playing.help_block", "The actual playing time was taken as the learning time statistics", "js", "en");
+t.add("admin_v2.video_effective_time_setting.statistical_dimension.page.help_block", "The page stay time is taken as the learning time statistics", "js", "en");
 t.add("course.marketing_setup", "Markets", "js", "en");
 t.add("site.currency.CNY", "CNY", "js", "en");
 t.add("s2b2c.product.cooperation_price", "Cooperation Price", "js", "en");
@@ -1485,6 +1494,7 @@ t.add("course.marketing_setup.rule.expiry_date", "Learn expiry date", "js", "en"
 t.add("course.marketing_setup.rule.expiry_date_tips", "Students can Learn before the date", "js", "en");
 t.add("course.marketing_setup.rule.expiry_date.publish_tips", "Students can Learn in several days since the enrollment.", "js", "en");
 t.add("course.plan_task.start_time", "Start date", "js", "en");
+t.add("course.plan_task.end_time", "End date", "js", "en");
 t.add("course.marketing_setup.rule.expiry_date.first_publish_tips", "Once the teaching plan is pubished, the validity period cannot be modified. You can only modify the date when the course or teaching plan is closed, and the new validity period is only valid for the students who have joined after the modification.", "js", "en");
 t.add("course.marketing_setup.approval", "Id verification", "js", "en");
 t.add("course.marketing_setup.approval_tips", "If this is chosen, student must verify their id before enrollment.", "js", "en");
@@ -1579,4 +1589,8 @@ t.add("goods.show_page.free_join_btn", "Free Join", "js", "en");
 t.add("goods.show_page.buy_btn", "Buy", "js", "en");
 t.add("classroom.go_inside", "Go to preview", "js", "en");
 t.add("course.base.title.placeholder", "Please insert course title", "js", "en");
+t.add("course.unname_title", "Unnamed plan", "js", "en");
+t.add("course.task.out_focus_mask.continue_studying", "Continue studying", "js", "en");
+t.add("course.task.out_focus_mask.stop.tips", "<p class=\"ineffective-learning\">You can take a break after studying hard :D<\/p>\n", "js", "en");
+t.add("course.task.out_focus_mask.anti_brush.tips", "<p class=\"kick-each-other\">Do not open more tasks to learn at the same time<\/p> <p class=\"kick-each-other\">Don\u2019t multitask !<\/p>", "js", "en");
 })(Translator);
