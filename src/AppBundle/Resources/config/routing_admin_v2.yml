@@ -2841,3 +2841,7 @@ admin_v2_data_visualization_activity_learn_daily_statistics:
 admin_v2_data_visualization_course_plan_learn_daily_statistics:
   path: /data_visualization/action/course_plan_learn_daily_statistics
   defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:coursePlanLearnDailyStatistics }
+
+admin_v2_api_security_setting:
+  path: /api_security/action/setting
+  defaults: { _controller: AppBundle:AdminV2/Developer/ApiSecurity:setting }
