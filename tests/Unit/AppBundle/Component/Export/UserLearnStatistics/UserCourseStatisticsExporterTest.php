@@ -107,7 +107,7 @@ class UserCourseStatisticsExporterTest extends BaseTestCase
                 [
                     'functionName' => 'findCoursesByCourseSetIds',
                     'returnValue' => [
-                        ['id' => 1, 'title' => 'courseTitle', 'taskNum' => 5],
+                        ['id' => 1, 'title' => 'courseTitle', 'compulsoryTaskNum' => 5],
                     ],
                 ],
             ]
@@ -140,8 +140,8 @@ class UserCourseStatisticsExporterTest extends BaseTestCase
         $exporter = new UserCourseStatisticsExporter(self::$appKernel->getContainer(), [
         ]);
         $courseMembers = [
-            ['userId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'learnedNum' => 3, 'classroomId' => 1],
-            ['userId' => 2, 'courseId' => 1, 'courseSetId' => 1, 'learnedNum' => 0, 'classroomId' => 0],
+            ['userId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'learnedCompulsoryTaskNum' => 3, 'classroomId' => 1],
+            ['userId' => 2, 'courseId' => 1, 'courseSetId' => 1, 'learnedCompulsoryTaskNum' => 0, 'classroomId' => 0],
         ];
         $data = ReflectionUtils::invokeMethod($exporter, 'findCourseMemberData', [$courseMembers]);
 

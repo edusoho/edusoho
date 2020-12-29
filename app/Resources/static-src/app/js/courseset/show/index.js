@@ -83,7 +83,6 @@ function remainTime() {
     });
   }
 }
-
 // 暂时去掉块状
 // let orderLearnSwiper = null;
 // $('.js-task-show-type').on('click', 'a', function() {

@@ -6,6 +6,48 @@ use Biz\BaseTestCase;
 
 class TaskResultServiceTest extends BaseTestCase
 {
+    public function testCountFinishedCompulsoryTaskNumGroupByUserId()
+    {
+        $this->mockTaskResult([
+            'userId' => 1,
+            'courseTaskId' => 1,
+            'status' => 'finish',
+        ]);
+
+        $this->mockTaskResult([
+            'userId' => 1,
+            'courseTaskId' => 2,
+            'status' => 'start',
+        ]);
+
+        $this->mockTaskResult([
+            'userId' => 2,
+            'courseTaskId' => 1,
+            'status' => 'finish',
+        ]);
+
+        $this->getTaskDao()->create([
+            'id' => 1,
+            'courseId' => 1,
+            'title' => 'task 1',
+            'type' => 'text',
+            'createdUserId' => 1,
+        ]);
+
+        $this->getTaskDao()->create([
+            'id' => 2,
+            'courseId' => 1,
+            'title' => 'task 2',
+            'type' => 'text',
+            'createdUserId' => 1,
+        ]);
+
+        $result = $this->getTaskResultService()->countFinishedCompulsoryTaskNumGroupByUserId(1);
+
+        $this->assertEquals(1, $result[1]['count']);
+        $this->assertEquals(1, $result[2]['count']);
+    }
+
     public function testCountTaskNumGroupByUserId()
     {
         $taskResult1 = $this->mockTaskResult([
@@ -43,6 +85,20 @@ class TaskResultServiceTest extends BaseTestCase
 
     public function testTanalysisCompletedTaskDataByTime()
     {
+        $this->getTaskDao()->create([
+            'id' => 5,
+            'courseId' => 1,
+            'title' => 'task 5',
+            'type' => 'text',
+            'createdUserId' => 1,
+        ]);
+        $this->getTaskDao()->create([
+            'id' => 6,
+            'courseId' => 1,
+            'title' => 'task 6',
+            'type' => 'text',
+            'createdUserId' => 1,
+        ]);
         $this->mockTaskResult(['courseTaskId' => 5, 'finishedTime' => strtotime('2017/1/1')]);
         $this->mockTaskResult(['courseTaskId' => 6, 'finishedTime' => strtotime('2017/11/1')]);
         $endTime = strtotime('2017/2/1');
@@ -419,5 +475,10 @@ class TaskResultServiceTest extends BaseTestCase
     protected function getTaskResultDao()
     {
         return $this->createDao('Task:TaskResultDao');
+    }
+
+    protected function getTaskDao()
+    {
+        return $this->createDao('Task:TaskDao');
     }
 }

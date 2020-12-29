@@ -23,8 +23,8 @@ class TaskResultDaoImpl extends AdvancedDaoImpl implements TaskResultDao
 
     public function analysisCompletedTaskDataByTime($startTime, $endTime)
     {
-        $sql = "SELECT count(id) AS count, from_unixtime(finishedTime, '%Y-%m-%d') AS date FROM
-            {$this->table} WHERE finishedTime >= ? AND finishedTime < ? GROUP BY date ORDER BY date ASC";
+        $sql = "SELECT count(*) AS count, from_unixtime(finishedTime, '%Y-%m-%d') AS date FROM
+            {$this->table} INNER JOIN course_task ON {$this->table}.courseTaskId = course_task.id WHERE course_task.isOptional = 0 AND finishedTime >= ? AND finishedTime < ? GROUP BY date ORDER BY date ASC";
 
         return $this->db()->fetchAll($sql, [$startTime, $endTime]);
     }
@@ -149,6 +149,13 @@ class TaskResultDaoImpl extends AdvancedDaoImpl implements TaskResultDao
         return $this->db()->fetchColumn($sql, [$userId, $courseId]) ?: 0;
     }
 
+    public function countFinishedCompulsoryTaskNumGroupByUserId($courseId)
+    {
+        $sql = 'SELECT ctr.userId, COUNT(ctr.id) AS `count` FROM course_task AS ct INNER JOIN course_task_result ctr ON ct.id = ctr.courseTaskId WHERE ct.courseId = ? AND ctr.status = \'finish\' AND ct.isOptional = 0 GROUP BY ctr.userId';
+
+        return $this->db()->fetchAll($sql, [$courseId]);
+    }
+
     public function sumCourseSetLearnedTimeByTaskIds($taskIds)
     {
         if (empty($taskIds)) {
@@ -184,6 +191,7 @@ class TaskResultDaoImpl extends AdvancedDaoImpl implements TaskResultDao
                 'courseId =:courseId',
                 'type =: type',
                 'courseTaskId IN (:courseTaskIds)',
+                'courseTaskId NOT IN (:notCourseTaskIds)',
                 'courseId IN ( :courseIds )',
                 'activityId =:activityId',
                 'courseTaskId = :courseTaskId',

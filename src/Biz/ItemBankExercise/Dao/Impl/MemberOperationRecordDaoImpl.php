@@ -23,6 +23,7 @@ class MemberOperationRecordDaoImpl extends AdvancedDaoImpl implements MemberOper
                 'id = :id',
                 'userId IN (:userIds)',
                 'exerciseId = :exerciseId',
+                'memberType = :memberType',
                 'operateType = :operateType',
             ],
         ];

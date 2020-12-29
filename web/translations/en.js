@@ -1494,6 +1494,7 @@ t.add("course.marketing_setup.rule.expiry_date", "Learn expiry date", "js", "en"
 t.add("course.marketing_setup.rule.expiry_date_tips", "Students can Learn before the date", "js", "en");
 t.add("course.marketing_setup.rule.expiry_date.publish_tips", "Students can Learn in several days since the enrollment.", "js", "en");
 t.add("course.plan_task.start_time", "Start date", "js", "en");
+t.add("course.plan_task.end_time", "End date", "js", "en");
 t.add("course.marketing_setup.rule.expiry_date.first_publish_tips", "Once the teaching plan is pubished, the validity period cannot be modified. You can only modify the date when the course or teaching plan is closed, and the new validity period is only valid for the students who have joined after the modification.", "js", "en");
 t.add("course.marketing_setup.approval", "Id verification", "js", "en");
 t.add("course.marketing_setup.approval_tips", "If this is chosen, student must verify their id before enrollment.", "js", "en");

@@ -20,17 +20,23 @@ class CourseTaskDeleteSyncJob extends AbstractSyncJob
             $copiedTasks = $this->getTaskDao()->findByCopyIdAndLockedCourseIds($taskId, $copiedCourseIds);
             foreach ($copiedTasks as $ct) {
                 $this->deleteTask($ct['id'], $copiedCourseMap[$ct['courseId']]);
+                $this->getCourseMemberService()->recountLearningDataByCourseId($ct['courseId']);
             }
 
-            $this->getLogService()->info(AppLoggerConstant::COURSE, 'sync_when_task_delete', 'course.log.task.delete.sync.success_tips', array('taskId' => $taskId));
+            $this->getLogService()->info(AppLoggerConstant::COURSE, 'sync_when_task_delete', 'course.log.task.delete.sync.success_tips', ['taskId' => $taskId]);
         } catch (\Exception $e) {
-            $this->getLogService()->error(AppLoggerConstant::COURSE, 'sync_when_task_delete', 'course.log.task.delete.sync.fail_tips', array('error' => $e->getMessage()));
+            $this->getLogService()->error(AppLoggerConstant::COURSE, 'sync_when_task_delete', 'course.log.task.delete.sync.fail_tips', ['error' => $e->getMessage()]);
         }
     }
 
     private function deleteTask($taskId, $course)
     {
         return  $this->createCourseStrategy($course)->deleteTask($this->getTaskDao()->get($taskId));
+    }
+
+    private function getCourseMemberService()
+    {
+        return $this->biz->service('Course:MemberService');
     }
 
     /**

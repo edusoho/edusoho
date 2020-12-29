@@ -21,6 +21,7 @@ use AppBundle\Util\CdnUrl;
 use AppBundle\Util\UploadToken;
 use Biz\Account\Service\AccountProxyService;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\CloudPlatform\Service\ResourceFacadeService;
 use Biz\Common\JsonLogger;
 use Biz\Course\Service\CourseSetService;
 use Biz\InformationCollect\FormItem\FormItemFectory;
@@ -2198,6 +2199,9 @@ class WebExtension extends \Twig_Extension
         return $this->createService('ItemBank:Assessment:AssessmentService');
     }
 
+    /**
+     * @return ResourceFacadeService
+     */
     protected function getResourceFacadeService()
     {
         return $this->createService('CloudPlatform:ResourceFacadeService');
