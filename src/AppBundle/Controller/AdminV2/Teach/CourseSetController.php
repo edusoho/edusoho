@@ -921,11 +921,10 @@ class CourseSetController extends BaseController
         }
 
         $tags = $this->getTagService()->findTagsByIds($tags);
-        $allTags = ArrayToolkit::columns($tags, ['id']);
+        $allTagIds = ArrayToolkit::column($tags, 'id');
 
         foreach ($courseSets as &$courseSet) {
-            $courseSet['tags'] = $this->reviseTags($courseSet['tags'], $allTags[0]);
-
+            $courseSet['tags'] = array_intersect($courseSet['tags'], $allTagIds);
             if (!empty($courseSet['tags'])) {
                 $courseSet['displayTag'] = $tags[$courseSet['tags'][0]]['name'];
                 if (count($courseSet['tags']) > 1) {
@@ -948,11 +947,6 @@ class CourseSetController extends BaseController
         }
 
         return trim($tagsNames, $delimiter);
-    }
-
-    private function reviseTags(array $tagIds, array $allTags)
-    {
-        return array_merge(array_intersect($tagIds, $allTags));
     }
 
     protected function removeUnpublishAndNonDefaultCourses($courses)
