@@ -18,6 +18,7 @@ class OrderPayCheckException extends AbstractException
     const COUPON_HAD_BEEN_USED = 5002608;
     const NOTFOUND_PRODUCT = 4042609;
     const INSTANCE_ERROR = 5002610;
+    const UNABLE_PAY = 5002611;
 
     public $messages = [
         5002601 => 'order.pay_check_msg.coin_amount_error',
@@ -30,5 +31,6 @@ class OrderPayCheckException extends AbstractException
         5002608 => 'order.pay_check_msg.coupon_had_been_used',
         4042609 => 'order.pay_check_msg.product_not_found',
         5002610 => 'exception.order_pay_check.instance_error',
+        5002611 => 'exception.order_pay_check.unable_pay',
     ];
 }

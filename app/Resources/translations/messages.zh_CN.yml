@@ -645,6 +645,7 @@ pay_center.pay.coin_input_tips: 本次使用
 pay_center.pay.coin_input_placeholder: 请输入%coin_name%金额
 pay_center.pay.password_input_placeholder: 请输入支付密码
 pay_center.pay.submit_tips: 订单已提交，请在 48 小时内完成支付！逾期订单将被取消。
+pay_center.pay.unable_pay.tips: 您已成功购买该商品，请勿重复支付！该订单将在48小时内关闭。
 pay_center.pay.mode: 支付方式
 pay_center.pay.mode.tips: 选择合适的现金支付方式
 pay_center.pay.cash_card: 储蓄卡
@@ -10556,6 +10557,7 @@ exception.reward_point.account.not_found_pay_password: 支付密码不存在
 exception.reward_point.account.error_pay_password_format: 新支付密码不可用，请尝试其它密码组合
 exception.question_marker.not_found: 弹题不存在
 exception.order_pay_check.instance_error: 不是ProductDealerService实例
+exception.order_pay_check.unable_pay: 您已成功购买该商品，请勿重复支付！该订单将在48小时内关闭。
 exception.live_replay.not_found: 直播回放不存在
 exception.cloud_file.not_found: 云文件不存在
 exception.cloud_file.not_found_player: 云播放器不存在
