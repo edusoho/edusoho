@@ -19,6 +19,7 @@ class Setting extends AbstractResource
         'site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig',
         'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer',
         'user', 'cloud', 'coin', 'coupon', 'mobile', 'appIm', 'cloudVideo', 'goods', 'backstage',
+        'mail',
     ];
 
     /**
@@ -468,6 +469,14 @@ class Setting extends AbstractResource
         $couponSetting = array_merge($default, $couponSetting);
 
         return $couponSetting;
+    }
+
+    public function getMail()
+    {
+        $cloudEmailCrm = $this->getSettingService()->get('cloud_email_crm', []);
+        $mailer = $this->getSettingService()->get('mailer', []);
+
+        return ['enabled' => (isset($cloudEmailCrm['status']) && 'enable' === $cloudEmailCrm['status']) || (isset($mailer['enabled']) && $mailer['enabled'])];
     }
 
     private function getLoginConnect($clients)
