@@ -49,5 +49,5 @@ class SmsType
     /**
      * 课程发布通知短信模板id  同学们，${course_title}现已开始报名！${url}
      */
-    const COURSE_PUBLISH = 291;
+    const COURSE_PUBLISH = 292;
 }
