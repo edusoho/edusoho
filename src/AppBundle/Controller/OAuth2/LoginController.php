@@ -231,6 +231,7 @@ class LoginController extends LoginBindController
             'registeredWay' => $oauthUser->isApp() ? strtolower($oauthUser->os) : 'web',
             'authid' => $oauthUser->authid,
             'createdIp' => $request->getClientIp(),
+            'registerVisitId' => $request->request->get('registerVisitId', ''), // 支持统计分析注册标识,比如:nuwa
         ];
 
         if (OAuthUser::MOBILE_TYPE == $oauthUser->accountType) {

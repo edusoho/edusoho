@@ -97,6 +97,7 @@ class User extends AbstractResource
             'nickname' => $nickname,
             'password' => $this->getPassword($fields['encrypt_password'], $request->getHttpRequest()->getHost()),
             'registeredWay' => $registeredWay,
+            'registerVisitId' => empty($fields['registerVisitId']) ? '' : $fields['registerVisitId'],
             'createdIp' => $request->getHttpRequest()->getClientIp(),
         );
 
