@@ -62,7 +62,7 @@ class MeThreadPost extends AbstractResource
         $posts = ArrayToolkit::group($posts, 'threadId');
 
         foreach ($courseThreads as &$thread) {
-            $thread['lastPost'] = isset($threadPosts[$thread['id']]) ? $threadPosts[$thread['id']] : array();
+            $thread['lastPost'] = isset($threadPosts[$thread['id']]) ? $threadPosts[$thread['id']] : null;
             $thread['notReadPostNum'] = isset($posts[$thread['id']]) ? count($posts[$thread['id']]) : 0;
         }
 

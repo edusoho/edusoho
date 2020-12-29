@@ -1257,7 +1257,7 @@ class UserServiceTest extends BaseTestCase
         $this->getUserService()->follow($user1['id'], $user3['id']);
         $this->getUserService()->follow($user3['id'], $user1['id']);
         $result = $this->getUserService()->countUserFollowers($user1['id'], 0, 20);
-        $this->assertEquals(1, count($result));
+        $this->assertEquals(1, $result);
     }
 
     /**

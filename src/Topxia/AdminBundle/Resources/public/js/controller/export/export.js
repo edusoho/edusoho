@@ -4,6 +4,9 @@ define(function(require, exports, module) {
     exports.run = function() {
         var $exportBtns = $('.js-export-btn');
         var $exportBtn;
+        var exportFileNames = [];
+        var totalCount = 0;
+        var currentCount = 0;
 
         var $modal = $('#modal');
         exportDataEvent();
@@ -26,7 +29,7 @@ define(function(require, exports, module) {
                 var urls = {'preUrl':preUrl, 'url':$exportBtn.data('url')};
                 showProgress();
 
-                exportData(0, '', urls);
+                exportData(0, '', urls, '');
             });
         };
 
@@ -37,10 +40,17 @@ define(function(require, exports, module) {
                 type : "get",
                 url : tryUrl,
                 async : false,
+                data: {
+                  names: $exportBtn.data('fileNames')
+                },
                 success : function(response){
                     if (!response.success) {
                         notifyError(Translator.trans(response.message,response.parameters));
                         can = false;
+                    } else {
+                      response.counts.forEach(function(val) {
+                        totalCount += val;
+                      }, 0);
                     }
                 }
             });
@@ -48,10 +58,12 @@ define(function(require, exports, module) {
             return can;
         }
 
-        function exportData(start, fileName, urls) {
+        function exportData(start, fileName, urls, currentName) {
             var data = {
                 'start': start,
                 'fileName': fileName,
+                'names': $exportBtn.data('fileNames'),
+                'name': currentName,
             }
 
             $.get(urls.preUrl, data, function (response) {
@@ -60,13 +72,19 @@ define(function(require, exports, module) {
                     return;
                 }
 
-                if (response.status === 'continue') {
-                    var process = response.start * 100 / response.count + '%';
+                if (response.name !== '') {
+                    if (response.status === 'finish') {
+                      exportFileNames.push(response.csvName);
+                      currentCount += response.count;
+                    }
+                    var process = (response.start + currentCount) * 100 / totalCount + '%';
+                    console.log(process);
                     $modal.find('#progress-bar').width(process);
-                    exportData(response.start, response.fileName, urls);
+                    exportData(response.start, response.fileName, urls, response.name);
                 } else {
+                  exportFileNames.push(response.csvName);
                     $exportBtn.button('reset');
-                    download(urls, response.fileName) ?  finish() : notifyError('unexpected error, try again');
+                    download(urls, exportFileNames) ?  finish() : notifyError('unexpected error, try again');
                 }
             }).error(function(e){
                 console.log(e);
@@ -80,7 +98,7 @@ define(function(require, exports, module) {
             setTimeout(function(){
                 Notify.success($title.data('success'));
                 $modal.modal('hide');
-            },500)
+            },500);
 
         }
 
@@ -90,10 +108,17 @@ define(function(require, exports, module) {
             $modal.modal({backdrop: 'static', keyboard: false});
         }
 
-        function download(urls, fileName) {
-            if (urls.url && fileName) {
-                window.location.href = urls.url + '?fileName=' + fileName;
-                return true
+        function download(urls, fileNames) {
+            if (urls.url && fileNames) {
+                var url = urls.url + '?';
+                $.each(fileNames, function (index, value) {
+                  url += 'fileNames[]=' + value + '&';
+                });
+                totalCount = 0;
+                currentCount = 0;
+                exportFileNames = [];
+                window.location.href = url;
+                return true;
             }
 
             return false;

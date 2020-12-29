@@ -14,6 +14,56 @@ use Biz\User\Service\UserService;
 
 class MemberServiceTest extends BaseTestCase
 {
+    public function testRecountLearningDataByCourseId()
+    {
+        $time = time();
+        $member = [
+            'id' => 1,
+            'courseId' => 1,
+            'userId' => 1,
+            'courseSetId' => 1,
+            'joinedType' => 'course',
+            'deadline' => time() + 3600,
+            'lastLearnTime' => time(),
+        ];
+
+        $this->getMemberDao()->create($member);
+
+        $this->mockBiz('Task:TaskResultService', [
+            [
+                'functionName' => 'countTaskNumGroupByUserId',
+                'returnValue' => [
+                    '1' => ['count' => 2, 'userId' => 1],
+                ],
+            ],
+            [
+                'functionName' => 'countFinishedCompulsoryTaskNumGroupByUserId',
+                'returnValue' => [
+                    '1' => ['count' => 1, 'userId' => 1],
+                ],
+            ],
+        ]);
+
+        $this->mockBiz('Course:CourseService', [
+            [
+                'functionName' => 'getCourse',
+                'returnValue' => [
+                    'id' => 1,
+                    'compulsoryTaskNum' => 2,
+                ],
+            ],
+        ]);
+
+        $this->getMemberService()->recountLearningDataByCourseId(1);
+
+        $member = $this->getMemberDao()->get(1);
+
+        $this->assertEquals(2, $member['learnedNum']);
+        $this->assertEquals(1, $member['learnedCompulsoryTaskNum']);
+        $this->assertEquals(1, $member['learnedElectiveTaskNum']);
+        $this->assertEquals($time, $member['lastLearnTime']);
+    }
+
     /**
      * @expectedException \Biz\Common\CommonException
      * @expectedExceptionMessage exception.common_parameter_missing

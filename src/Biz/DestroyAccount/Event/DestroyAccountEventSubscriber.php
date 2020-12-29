@@ -2,6 +2,7 @@
 
 namespace Biz\DestroyAccount\Event;
 
+use Biz\Sms\SmsType;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\NotificationService;
 use Codeages\Biz\Framework\Event\Event;
@@ -12,10 +13,10 @@ class DestroyAccountEventSubscriber extends EventSubscriber implements EventSubs
 {
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             'user.destroyed' => 'onUserDestroyed',
             'user.reject.destroy' => 'onUserRejectDestroy',
-        );
+        ];
     }
 
     public function onUserDestroyed(Event $event)
@@ -26,11 +27,11 @@ class DestroyAccountEventSubscriber extends EventSubscriber implements EventSubs
             $site = $this->getSettingService()->get('site');
             $siteName = empty($site['name']) ? '本网校' : $site['name'];
 
-            $smsParams = array(
+            $smsParams = [
                 'mobiles' => $user['verifiedMobile'],
-                'templateId' => 2040,
-                'templateParams' => array('schoolName' => $siteName),
-            );
+                'templateId' => SmsType::USER_DESTROYED,
+                'templateParams' => ['schoolName' => $siteName],
+            ];
 
             try {
                 $this->getSDKSmsService()->sendToOne($smsParams);
@@ -45,18 +46,18 @@ class DestroyAccountEventSubscriber extends EventSubscriber implements EventSubs
         $user = $event->getSubject();
         $reason = $event->getArgument('reason');
 
-        $message = array(
+        $message = [
             'userName' => $user['nickname'],
             'reason' => $reason,
-        );
+        ];
         $this->getNotificationService()->notify($user['id'], 'reject-destroy', $message);
 
         if (!empty($user['verifiedMobile'])) {
-            $smsParams = array(
+            $smsParams = [
                 'mobiles' => $user['verifiedMobile'],
-                'templateId' => 2032,
-                'templateParams' => array('reason' => $reason),
-            );
+                'templateId' => SmsType::USER_REJECT_DESTROYED,
+                'templateParams' => ['reason' => $reason],
+            ];
 
             try {
                 $this->getSDKSmsService()->sendToOne($smsParams);
@@ -96,6 +97,6 @@ class DestroyAccountEventSubscriber extends EventSubscriber implements EventSubs
     {
         $biz = $this->getBiz();
 
-        return $biz['qiQiuYunSdk.sms'];
+        return $biz['ESCloudSdk.sms'];
     }
 }

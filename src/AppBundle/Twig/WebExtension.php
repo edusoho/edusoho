@@ -21,6 +21,7 @@ use AppBundle\Util\CdnUrl;
 use AppBundle\Util\UploadToken;
 use Biz\Account\Service\AccountProxyService;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\CloudPlatform\Service\ResourceFacadeService;
 use Biz\Common\JsonLogger;
 use Biz\Course\Service\CourseSetService;
 use Biz\InformationCollect\FormItem\FormItemFectory;
@@ -1241,7 +1242,7 @@ class WebExtension extends \Twig_Extension
     {
         $imgpath = $path = $this->container->get('assets.packages')->getUrl('assets/img/default/'.$img);
 
-        return sprintf('<img src="%s" alt="%s" class="%s" data-echo="%s" />', $imgpath, $alt, $class, $src);
+        return sprintf('<img src="%s" alt="%s" class="%s" data-echo="%s" />', $imgpath, htmlspecialchars($alt), $class, $src);
     }
 
     public function loadScript($js)
@@ -2198,6 +2199,9 @@ class WebExtension extends \Twig_Extension
         return $this->createService('ItemBank:Assessment:AssessmentService');
     }
 
+    /**
+     * @return ResourceFacadeService
+     */
     protected function getResourceFacadeService()
     {
         return $this->createService('CloudPlatform:ResourceFacadeService');

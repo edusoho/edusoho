@@ -42,6 +42,11 @@ export default class PagedCourseTaskList extends PagedCourseLesson {
           $('.course-tasks-show-more').removeClass('hidden');
         }
       });
+
+      $('body').on('click','.js-lesson-item-notify', function () {
+        let $this = $(this);
+        cd.message({type: 'warning', message: $this.data('notifyMessage')});
+      });
     }
   }
 

@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block header %}
-  {% if oauthUser.isApp() %}{% else %}{{ parent() }}{% endif %}
+  {% if oauthUser.isApp()|default() %}{% else %}{{ parent() }}{% endif %}
 {% endblock %}
 
 {% block full_content %}
@@ -30,5 +30,6 @@
 {% endblock %}
 
 {% block footer %}
-  {% if oauthUser.isApp() %}{% else %}{{ parent() }}{% endif %}
+  {% if oauthUser.isApp()|default() %}{% else %}{{ parent() }}{% endif %}
+  {{ setting('site.analytics')|raw }}
 {% endblock %}

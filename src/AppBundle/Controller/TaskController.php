@@ -19,6 +19,7 @@ use Biz\Task\TaskException;
 use Biz\User\Service\TokenService;
 use Biz\User\TokenException;
 use Biz\User\UserException;
+use Biz\Visualization\Service\LearnControlService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -78,7 +79,7 @@ class TaskController extends BaseController
 
         $activityConfig = $this->getActivityConfigByTask($task);
 
-        if (null !== $member && 'student' === $member['role']) {
+        if (null !== $member && 'student' === $member['role'] && !$this->canManageCourse($courseId)) {
             $wrappedTasks = ArrayToolkit::index($this->getTaskService()->wrapTaskResultToTasks($courseId, $this->getTaskService()->findTasksByCourseId($courseId)), 'id');
             if (!empty($wrappedTasks[$task['id']]) && $wrappedTasks[$task['id']]['lock']) {
                 return $this->createMessageResponse('info', 'message_response.task_locked.message', '', 3, $this->generateUrl('my_course_show', ['id' => $courseId]));
@@ -116,6 +117,8 @@ class TaskController extends BaseController
             }
         }
 
+        $learnControlSetting = $this->getLearnControlService()->getMultipleLearnSetting();
+
         return $this->render(
             'task/show.html.twig',
             [
@@ -128,6 +131,7 @@ class TaskController extends BaseController
                 'finishedRate' => empty($finishedRate) ? 0 : $finishedRate,
                 'allowEventAutoTrigger' => $activityConfig->allowEventAutoTrigger(),
                 'media' => $media,
+                'learnControlSetting' => $learnControlSetting,
             ]
         );
     }
@@ -613,6 +617,17 @@ class TaskController extends BaseController
             );
     }
 
+    private function canManageCourse($courseId)
+    {
+        try {
+            $this->getCourseService()->tryManageCourse($courseId);
+
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
     /**
      * @return CourseService
      */
@@ -704,5 +719,13 @@ class TaskController extends BaseController
     protected function getMaterialService()
     {
         return $this->createService('Course:MaterialService');
+    }
+
+    /**
+     * @return LearnControlService
+     */
+    protected function getLearnControlService()
+    {
+        return $this->createService('Visualization:LearnControlService');
     }
 }

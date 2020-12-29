@@ -6,6 +6,7 @@ use AppBundle\Common\StringToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Sms\Service\SmsService;
+use Biz\Sms\SmsType;
 use Biz\Task\Service\TaskService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
@@ -56,9 +57,8 @@ class TestPaperEventSubscriber extends EventSubscriber implements EventSubscribe
                 );
                 $parameters['lesson_title'] = '《'.$task['title'].'》的试卷';
                 $parameters['course_title'] = '《'.$courseSet['title'].'》';
-                $description = $parameters['course_title'].' '.$parameters['lesson_title'].'批阅提醒';
                 $userId = $answerRecord['user_id'];
-                $this->getSmsService()->smsSend($smsType, [$userId], $description, $parameters);
+                $this->getSmsService()->smsSend($smsType, [$userId], SmsType::EXAM_REVIEW, $parameters);
             }
         }
     }
@@ -80,9 +80,8 @@ class TestPaperEventSubscriber extends EventSubscriber implements EventSubscribe
                 );
                 $parameters['lesson_title'] = '《'.$task['title'].'》的作业';
                 $parameters['course_title'] = '《'.$courseSet['title'].'》';
-                $description = $parameters['course_title'].' '.$parameters['lesson_title'].'批阅提醒';
                 $userId = $answerRecord['user_id'];
-                $this->getSmsService()->smsSend($smsType, [$userId], $description, $parameters);
+                $this->getSmsService()->smsSend($smsType, [$userId], SmsType::EXAM_REVIEW, $parameters);
             }
         }
     }
