@@ -898,12 +898,14 @@ class CourseSetController extends BaseController
         foreach ($courseSets as $courseSet) {
             $tags = array_merge($tags, $courseSet['tags']);
         }
+
         $tags = $this->getTagService()->findTagsByIds($tags);
+        $allTags = ArrayToolkit::columns($tags, ['id']);
 
         foreach ($courseSets as &$courseSet) {
-            $courseSet['tags'] = $this->reviseTagsNumber($courseSet['tags'], $tags);
+            $courseSet['tags'] = $this->reviseTags($courseSet['tags'], $allTags[0]);
 
-            if (!empty($courseSet['tags']) && isset($courseSet['tags'][0]) && !empty($tags[$courseSet['tags'][0]])) {
+            if (!empty($courseSet['tags'])) {
                 $courseSet['displayTag'] = $tags[$courseSet['tags'][0]]['name'];
                 if (count($courseSet['tags']) > 1) {
                     $courseSet['displayTagNames'] = $this->buildTagsDisplayNames($courseSet['tags'], $tags);
@@ -927,12 +929,11 @@ class CourseSetController extends BaseController
         return trim($tagsNames, $delimiter);
     }
 
-    private function reviseTagsNumber(array $tagIds, array $tags)
+    private function reviseTags(array $tagIds, array $allTags)
     {
-        if (!empty($tags) && !empty($tagIds)) {
-            $tags = ArrayToolkit::columns($tags, ['id']);
+        if (!empty($allTags) && !empty($tagIds)) {
 
-            return array_merge(array_intersect($tagIds, $tags[0]));
+            return array_merge(array_intersect($tagIds, $allTags));
         } else {
             return [];
         }
