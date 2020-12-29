@@ -931,12 +931,7 @@ class CourseSetController extends BaseController
 
     private function reviseTags(array $tagIds, array $allTags)
     {
-        if (!empty($allTags) && !empty($tagIds)) {
-
-            return array_merge(array_intersect($tagIds, $allTags));
-        } else {
-            return [];
-        }
+        return array_merge(array_intersect($tagIds, $allTags));
     }
 
     protected function removeUnpublishAndNonDefaultCourses($courses)
