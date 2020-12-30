@@ -3,25 +3,47 @@
 {% set menu = 'admin_v2_api_security_setting' %}
 
 {% block main %}
-  <form id="api-security-form" class="" action="" method="post" novalidate>
-    <br/><br/><br/>
+  <form id="api-security-form" class="form-horizontal" action="" method="post" novalidate>
     <div class="form-group">
       <div class="col-md-2 control-label">
         <label>{{'安全加固等级'|trans}}</label>
       </div>
-      <div class="controls col-md-8 radios">
+      <div class="controls col-md-10 radios">
         <label>
           <input type="radio" name="level" value="close" {% if apiSecuritySetting.level == 'close' %}checked{% endif %}>{{'不校验'|trans}}
         </label>
         <label>
-          <input type="radio" name="level" value="optional" {% if apiSecuritySetting.level == 'optional' %}checked{% endif %}>{{'按需校验'|trans}}
+          <input type="radio" name="level" value="optional" {% if apiSecuritySetting.level == 'optional' %}checked{% endif %}>{{'佛系校验'|trans}}
         </label>
         <label>
           <input type="radio" name="level" value="open" {% if apiSecuritySetting.level == 'open' %}checked{% endif %}>{{'强制校验'|trans}}
         </label>
       </div>
     </div>
-    <br/><br/><br/><br/><br/>
+    <div class="form-group attachement_detail">
+      <div class="col-md-2 control-label">
+        <label>{{ '终端开启强制校验'|trans }}</label>
+      </div>
+      <div class="controls col-md-10 radios">
+        <label class="">
+          <input type="checkbox" name="client[]" value="ios" {% if 'ios' in apiSecuritySetting.client|default([]) %}checked{% endif %}>
+          {{ 'iOS APP'|trans }}
+        </label>
+        <label>
+          <input type="checkbox" name="client[]" value="android" {% if 'android' in apiSecuritySetting.client|default([]) %}checked{% endif %}>
+          {{ 'Android APP'|trans }}
+        </label>
+        <label>
+          <input type="checkbox" name="client[]" value="miniprogram" {% if 'miniprogram' in apiSecuritySetting.client|default([]) %}checked{% endif %}>
+          {{ '小程序'|trans }}
+        </label>
+        <label>
+          <input type="checkbox" name="client[]" value="other" {% if 'other' in apiSecuritySetting.client|default([]) %}checked{% endif %}>
+          {{ '其他'|trans }}
+        </label>
+      </div>
+    </div>
+    <br/><br/><br/>
     <div class="form-group">
       <div class="controls col-md-offset-3 col-md-8">
         <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>

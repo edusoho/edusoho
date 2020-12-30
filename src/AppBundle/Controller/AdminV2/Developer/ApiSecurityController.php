@@ -10,9 +10,12 @@ class ApiSecurityController extends BaseController
 {
     public function settingAction(Request $request)
     {
-        $setting = $this->getSettingService()->get('api_security', ['level' => 'close']);
+        $setting = $this->getSettingService()->get('api_security', ['level' => 'close', 'client' => []]);
         if ('POST' === $request->getMethod()) {
-            $setting = ['level' => $request->request->get('level')];
+            $setting = [
+                'level' => $request->request->get('level'),
+                'client' => $request->request->get('client'),
+            ];
             $this->getSettingService()->set('api_security', $setting);
         }
 
