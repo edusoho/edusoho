@@ -1426,6 +1426,8 @@ admin.item_bank_exercise.exercise.publish_hint: Are you sure you want to publish
 admin.item_bank_exercise.exercise.publish_success_hint: The item bank exercise recommendation has been published!
 admin.item_bank_exercise.exercise.delete_hint: Delete item bank exercises, delete module settings, trainees and other information. Do you really want to delete this exercise bank?
 
+exercise.manage.student_delete_hint: Are you sure you want to delete the student.
+
 task_show.user_login_protect_tip: User unLogin
 admin.course_manage.manage.tags_select.placeholder: Enter the keyword of the tag
 
