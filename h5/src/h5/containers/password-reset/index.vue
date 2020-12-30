@@ -8,7 +8,7 @@
     <van-field
       v-model="resetInfo.account"
       :error-message="errorMessage.account"
-      placeholder="请输入手机号或邮箱号"
+      :placeholder="accountPlaceHolder"
       @blur="validateAccountOrPsw('account')"
       @keyup="validatedChecker()"
     />
@@ -58,6 +58,7 @@
 import Api from '@/api';
 import EDrag from '&/components/e-drag';
 import { mapState } from 'vuex';
+// eslint-disable-next-line no-unused-vars
 import XXTEA from '@/utils/xxtea.js';
 import { Dialog, Toast } from 'vant';
 import rulesConfig from '@/utils/rule-config.js';
@@ -92,7 +93,11 @@ export default {
         num: 120,
         codeBtnDisable: false,
       },
+      isEmail: false,
     };
+  },
+  created() {
+    this.getEmailServiceState();
   },
   computed: {
     ...mapState({
@@ -107,7 +112,14 @@ export default {
       );
     },
     accountType() {
-      return this.resetInfo.account.includes('@') ? 'email' : 'mobile';
+      if (this.isEmail) {
+        return this.resetInfo.account.includes('@') ? 'email' : 'mobile';
+      } else {
+        return 'mobile';
+      }
+    },
+    accountPlaceHolder() {
+      return this.isEmail ? '请输入手机号或邮箱号' : '请输入手机号';
     },
   },
   methods: {
@@ -157,7 +169,7 @@ export default {
         })
           .then(res => {
             Dialog.alert({
-              message: '验证链接已发送到\ ' + account,
+              message: '验证链接已发送到 ' + account,
             }).then(() => {
               this.$router.replace({
                 name: 'login',
@@ -250,6 +262,12 @@ export default {
         }
         this.count.num--;
       }, 1000);
+    },
+    // 是否开启邮箱服务
+    getEmailServiceState() {
+      Api.getEmailServiceState().then(res => {
+        this.isEmail = res.enabled;
+      });
     },
   },
 };
