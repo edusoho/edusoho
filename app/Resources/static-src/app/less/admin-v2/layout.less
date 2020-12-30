@@ -328,17 +328,22 @@ body {
     }
   }
   .cd-group-item {
-    .cd-group-item_link.new:after {
-      content: 'New';
+    .cd-group-item_link.new .item-txt {
       position: relative;
-      padding: 0px 3px;
-      top: -1px;
-      left: 5px;
-      color: #fff;
-      font-size: 12px;
-      background-color: #ed3e3e;
-      border-radius: 20px;
-      z-index: 10;
+      &::after {
+        content: 'New';
+        position: absolute;
+        padding: 0px 3px;
+        top: 0;
+        right: -5px;
+        color: #fff;
+        font-size: 12px;
+        background-color: #ed3e3e;
+        border-radius: 20px;
+        z-index: 10;
+        line-height: 16px;
+        transform: translateX(100%);
+      }
     }
   }
 }
