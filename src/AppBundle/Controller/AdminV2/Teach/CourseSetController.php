@@ -823,8 +823,10 @@ class CourseSetController extends BaseController
         } elseif ('vip' == $filter) {
             $conditions['isVip'] = 1;
             $conditions['parentId'] = 0;
+            $conditions['isClassroomRef'] = 0;
         } else {
             $conditions['parentId'] = 0;
+            $conditions['isClassroomRef'] = 0;
             $conditions = $this->filterCourseSetType($conditions);
         }
 
