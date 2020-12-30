@@ -79,6 +79,7 @@ import activityMixin from '@/mixins/activity';
 import redirectMixin from '@/mixins/saveRedirect';
 import EDrag from '&/components/e-drag';
 import { mapActions, mapState } from 'vuex';
+// eslint-disable-next-line no-unused-vars
 import XXTEA from '@/utils/xxtea.js';
 import { Toast } from 'vant';
 import rulesConfig from '@/utils/rule-config.js';
@@ -152,6 +153,11 @@ export default {
 
       if (ele.length == 0) {
         this.errorMessage[type] = '';
+        return false;
+      }
+
+      if (type === 'encrypt_password' && ele.length > 20) {
+        this.errorMessage[type] = '最大输入20个字符';
         return false;
       }
 

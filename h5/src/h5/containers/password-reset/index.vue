@@ -133,6 +133,11 @@ export default {
         return false;
       }
 
+      if (type === 'encrypt_password' && ele.length > 20) {
+        this.errorMessage[type] = '最大输入20个字符';
+        return false;
+      }
+
       this.errorMessage[type] = !rule.validator(ele) ? rule.message : '';
     },
     validatedChecker() {
