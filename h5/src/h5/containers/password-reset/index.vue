@@ -96,6 +96,9 @@ export default {
       isEmail: false,
     };
   },
+  created() {
+    this.getEmailServiceState();
+  },
   computed: {
     ...mapState({
       isLoading: state => state.isLoading,
@@ -259,6 +262,12 @@ export default {
         }
         this.count.num--;
       }, 1000);
+    },
+    // 是否开启邮箱服务
+    getEmailServiceState() {
+      Api.getEmailServiceState().then(res => {
+        this.isEmail = res.enabled;
+      });
     },
   },
 };
