@@ -2042,13 +2042,9 @@ class WebExtension extends \Twig_Extension
     public function mailSetting()
     {
         $cloudMailSwitch = $this->getSettingService()->get('cloud_email_crm', []);
-        $mailer = $this->getSettingService()->get('mailer' ,[]);
+        $mailer = $this->getSettingService()->get('mailer', []);
 
-        if ((isset($cloudMailSwitch['status']) && 'enable' === $cloudMailSwitch['status']) || (isset($mailer['enabled']) && $mailer['enabled'])) {
-            return true;
-        }
-
-        return false;
+        return (isset($cloudMailSwitch['status']) && 'enable' === $cloudMailSwitch['status']) || (isset($mailer['enabled']) && $mailer['enabled']);
     }
 
     protected function makeToken($type, $fileId, $context = [])
