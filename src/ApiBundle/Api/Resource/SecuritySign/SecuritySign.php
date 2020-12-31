@@ -9,11 +9,13 @@ use ApiBundle\Api\Resource\AbstractResource;
 class SecuritySign extends AbstractResource
 {
     /**
-     * @return string
+     * @return string[]
      * @ApiConf(isRequiredAuth=false)
      */
     public function add(ApiRequest $request)
     {
-        return 'test123456';
+        return [
+            'key' => 'test123456',
+        ];
     }
 }
