@@ -3,6 +3,7 @@
 namespace ApiBundle\Security\Firewall;
 
 use ApiBundle\ApiSecurityException;
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\DeviceToolkit;
 use Biz\System\Service\SettingService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -55,6 +56,22 @@ class ApiSecurityAuthenticationListener implements ListenerInterface
 
     private function checkSignature(Request $request)
     {
+        $params = $request->query->all();
+        $sign = $params['api_signature'];
+        unset($sign['api_signature']);
+        $content = trim($request->getContent());
+        if (!empty($content)) {
+            $params['bodyContent'] = $request->getContent();
+        }
+        $params = ArrayToolkit::flatten($params);
+        $data = [];
+        foreach ($params as $key => $value) {
+            $data[] = $key . '=' . $value;
+        }
+        $data = implode('&', $data);
+        if (md5($data.'test123456') !== $sign) {
+            throw ApiSecurityException::SIGN_ERROR();
+        }
     }
 
     private function getClient(Request $request)
