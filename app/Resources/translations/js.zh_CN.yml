@@ -1371,6 +1371,8 @@ admin.item_bank_exercise.exercise.publish_hint: 确定要发布当前题库练�
 admin.item_bank_exercise.exercise.publish_success_hint: 题库练习发布成功!
 admin.item_bank_exercise.exercise.delete_hint: 删除题库练习，将删除模块设置、学员等信息。真的要删除该题库练习吗？
 
+exercise.manage.student_delete_hint: 是否确定移除该学员
+
 task_show.user_login_protect_tip: 该账号未登录或已被踢
 
 admin.course_manage.manage.tags_select.placeholder: 输入标签名称关键字

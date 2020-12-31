@@ -2,6 +2,7 @@
 
 namespace Biz\Importer;
 
+use Biz\ItemBankExercise\OperateReason;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Symfony\Component\HttpFoundation\Request;
@@ -50,6 +51,8 @@ class ItemBankExerciseMemberImporter extends Importer
                     'price' => $orderData['amount'],
                     'remark' => empty($orderData['remark']) ? '通过批量导入添加' : $orderData['remark'],
                     'source' => 'outside',
+                    'reason' => OperateReason::JOIN_BY_IMPORT,
+                    'reasonType' => OperateReason::JOIN_BY_IMPORT_TYPE,
                 ];
                 $this->getExerciseMemberService()->becomeStudent($exercise['id'], $user['id'], $data);
 
