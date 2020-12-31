@@ -34,6 +34,10 @@ class ApiSecurityAuthenticationListener implements ListenerInterface
 
     public function handle(Request $request)
     {
+        if (0 === stripos($request->getPathInfo(), '/api/security_sign')) {
+            return;
+        }
+
         $apiSecuritySetting = $this->getSettingService()->get('api_security', []);
         if (!isset($apiSecuritySetting['level']) || self::API_SECURITY_CLOSE === $apiSecuritySetting['level']) {
             return;
@@ -66,7 +70,7 @@ class ApiSecurityAuthenticationListener implements ListenerInterface
         $params = ArrayToolkit::flatten($params);
         $data = [];
         foreach ($params as $key => $value) {
-            $data[] = $key . '=' . $value;
+            $data[] = $key.'='.$value;
         }
         $data = implode('&', $data);
         if (md5($data.'test123456') !== $sign) {
