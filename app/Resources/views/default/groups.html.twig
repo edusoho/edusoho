@@ -2,6 +2,7 @@
 <!-- 小组动态 -->
 {% set groups = data('HotGroup',{'count':6}) %}
 {% set reviews = data('LatestCourseReviews',{'count':4}) %}
+{% set goodsReviews = data('LatestGoodsReviews', {'count':4}) %}
 
 <section class="dynamic-section {{config.background|default("")}}">
   <div class="container">
@@ -90,11 +91,11 @@
               </h3>
             </div>
             <div class="panel-body">
-              {% if reviews %}
-                {% for review in reviews %}
+              {% if goodsReviews %}
+                {% for review in goodsReviews %}
                   {% set author = review.User|default(null) %}
-                  {% set course = review.course|default(null) %}
-                  {% if author and course %}
+                  {% set goods = review.goods|default(null) %}
+                  {% if author and goods %}
                     <div class="media media-dynamic">
                       <div class="media-left">
                         {{ web_macro.user_avatar(author,'','avatar-sm',true) }}
@@ -103,7 +104,7 @@
                         <div class="title text-sm">
                           {{ web_macro.user_link(author,'link-dark') }}
                           <span class="score">{{web_macro.star(review.rating) }}</span>
-                          {{ 'homepage.student_comment.from'|trans({'%courseUrl%':path('course_show', {id: course.id }),'%courseTitle%':course.title|default(course.courseSetTitle)|plain_text(10) })|raw }}
+                          {{ 'homepage.student_comment.from'|trans({'%courseUrl%':path('goods_show', {id: goods.id }),'%courseTitle%':goods.title|plain_text(10) })|raw }}
                         </div>
                         <div class="content gray-darker">
                           {{ review.content|plain_text(30) }}
