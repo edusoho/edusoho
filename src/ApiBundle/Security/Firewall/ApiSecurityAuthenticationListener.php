@@ -68,6 +68,7 @@ class ApiSecurityAuthenticationListener implements ListenerInterface
             $params['bodyContent'] = $request->getContent();
         }
         $params = ArrayToolkit::flatten($params);
+        ksort($res);
         $data = [];
         foreach ($params as $key => $value) {
             $data[] = $key.'='.$value;
