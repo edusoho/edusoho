@@ -924,7 +924,7 @@ class CourseSetController extends BaseController
         $allTagIds = ArrayToolkit::column($tags, 'id');
 
         foreach ($courseSets as &$courseSet) {
-            $courseSet['tags'] = array_merge(array_intersect($courseSet['tags'], $allTagIds));
+            $courseSet['tags'] = array_values(array_intersect($courseSet['tags'], $allTagIds));
 
             if (!empty($courseSet['tags'])) {
                 $courseSet['displayTag'] = $tags[$courseSet['tags'][0]]['name'];
