@@ -145,6 +145,9 @@ export default {
       );
     },
   },
+  mounted() {
+    this.registerInfo.registerVisitId = window._VISITOR_ID;
+  },
   methods: {
     ...mapActions(['addUser', 'setMobile', 'sendSmsCenter', 'userLogin']),
     validateMobileOrPsw(type = 'mobile') {
