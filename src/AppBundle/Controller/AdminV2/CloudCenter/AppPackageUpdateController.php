@@ -11,11 +11,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 class AppPackageUpdateController extends BaseController
 {
-    public function protocolAction(Request $request, $id)
+    public function agreementAction(Request $request, $id)
     {
-        $protocol = $this->getAppService()->getProtocol();
+        $agreement = $this->getAppService()->getAgreement();
 
-        if (empty($protocol)) {
+        if (empty($agreement)) {
             return $this->forward('AppBundle:AdminV2/CloudCenter/AppPackageUpdate:modal', ['id' => $id]);
         }
 
@@ -23,8 +23,8 @@ class AppPackageUpdateController extends BaseController
             return $this->forward('AppBundle:AdminV2/CloudCenter/AppPackageUpdate:modal', ['id' => $id]);
         }
 
-        return $this->render('admin-v2/cloud-center/app-package-update/protocol.html.twig', array(
-            'protocol' => $protocol,
+        return $this->render('admin-v2/cloud-center/app-package-update/agreement.html.twig', array(
+            'agreement' => $agreement,
             'id' => $id,
         ));
     }
