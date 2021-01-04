@@ -11,6 +11,24 @@ use Symfony\Component\HttpFoundation\Request;
 
 class AppPackageUpdateController extends BaseController
 {
+    public function protocolAction(Request $request, $id)
+    {
+        $protocol = $this->getAppService()->getProtocol();
+
+        if (empty($protocol)) {
+            return $this->forward('AppBundle:AdminV2/CloudCenter/AppPackageUpdate:modal', ['id' => $id]);
+        }
+
+        if ('POST' == $request->getMethod()) {
+            return $this->forward('AppBundle:AdminV2/CloudCenter/AppPackageUpdate:modal', ['id' => $id]);
+        }
+
+        return $this->render('admin-v2/cloud-center/app-package-update/protocol.html.twig', array(
+            'protocol' => $protocol,
+            'id' => $id,
+        ));
+    }
+
     public function modalAction(Request $request, $id)
     {
         $package = $this->getAppService()->getCenterPackageInfo($id);

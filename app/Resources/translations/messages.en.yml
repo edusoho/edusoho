@@ -7086,6 +7086,13 @@ admin.app_upgrades.package_description_open: Expand
 admin.app_upgrades.package_description_close: Collapse
 admin.app_upgrades.update_btn: Update
 admin.app_upgrades.latest_version_tips: 'This is already the newest version!'
+admin.app_upgrades.protocol.title: 'Upgrade Service Agreement'
+admin.app_upgrades.protocol.content.21.1.2: >
+  <h4>Edusoho Master System version V21.1.2 includes the upgrade of the old backend to the new one.</h4>
+  <h4 class="cd-mt16">Upgrade new version of back office</h4>
+  <p class="color-danger">-This version can only be used in the new version of backend. If you agree to upgrade, you agree to upgrade your backend to the new version, and you know that you cannot switch back to the old version after the upgrade.</p>
+admin.app_upgrades.protocol.agree: 'Have read and agree to the upgrade service agreement'
+admin.app_upgrades.protocol.btn: 'Upgrade'
 admin.cloud_license.info: 'Authorization info'
 admin.cloud_license.business_license: 'Commercial Licence'
 admin.cloud_license.non_business_license: 'Non-commercial Licence'
