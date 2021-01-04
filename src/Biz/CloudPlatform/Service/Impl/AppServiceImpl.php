@@ -91,9 +91,7 @@ class AppServiceImpl extends BaseService implements AppService
 
     public function getAgreement()
     {
-        $version = $this->getMainVersion();
-
-        return UpgradeAgreement::getAgreement($version);
+        return UpgradeAgreement::getAgreement($this->getMainVersion());
     }
 
     public function registerApp($app)

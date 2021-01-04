@@ -9,7 +9,7 @@ class UpgradeAgreement
         $agreements = [
             '21.1.1' => [
                 'trans' => 'admin.app_upgrades.agreement.content.21.1.2',
-            ]
+            ],
         ];
 
         return empty($agreements[$version]) ? [] : $agreements[$version];

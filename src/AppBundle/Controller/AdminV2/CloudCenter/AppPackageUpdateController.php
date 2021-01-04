@@ -23,10 +23,10 @@ class AppPackageUpdateController extends BaseController
             return $this->forward('AppBundle:AdminV2/CloudCenter/AppPackageUpdate:modal', ['id' => $id]);
         }
 
-        return $this->render('admin-v2/cloud-center/app-package-update/agreement.html.twig', array(
+        return $this->render('admin-v2/cloud-center/app-package-update/agreement.html.twig', [
             'agreement' => $agreement,
             'id' => $id,
-        ));
+        ]);
     }
 
     public function modalAction(Request $request, $id)
