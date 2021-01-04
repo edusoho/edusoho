@@ -1308,6 +1308,11 @@ admin_app_logs:
     path:  /app/logs
     defaults: { _controller: AppBundle:Admin/App:logs }
 
+admin_app_package_update_agreement:
+    path:  /app/package_update/{id}/agreement
+    defaults: { _controller: AppBundle:Admin/AppPackageUpdate:agreement }
+    permissions: [admin_app_center,admin_app_installed,admin_app_upgrades]
+
 admin_app_package_update_modal:
     path:  /app/package_update/{id}/modal
     defaults: { _controller: AppBundle:Admin/AppPackageUpdate:modal }

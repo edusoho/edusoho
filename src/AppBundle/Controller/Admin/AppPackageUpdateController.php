@@ -8,6 +8,24 @@ use Symfony\Component\HttpFoundation\Request;
 
 class AppPackageUpdateController extends BaseController
 {
+    public function agreementAction(Request $request, $id)
+    {
+        $agreement = $this->getAppService()->getAgreement();
+
+        if (empty($agreement)) {
+            return $this->forward('AppBundle:Admin/AppPackageUpdate:modal', ['id' => $id]);
+        }
+
+        if ('POST' == $request->getMethod()) {
+            return $this->forward('AppBundle:Admin/AppPackageUpdate:modal', ['id' => $id]);
+        }
+
+        return $this->render('admin/app-package-update/agreement.html.twig', [
+            'agreement' => $agreement,
+            'id' => $id,
+        ]);
+    }
+
     public function modalAction(Request $request, $id)
     {
         $package = $this->getAppService()->getCenterPackageInfo($id);
