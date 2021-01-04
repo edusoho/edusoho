@@ -19,6 +19,7 @@ class Setting extends AbstractResource
         'site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig',
         'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer',
         'user', 'cloud', 'coin', 'coupon', 'mobile', 'appIm', 'cloudVideo', 'goods', 'backstage',
+        'signSecurity',
     ];
 
     /**
@@ -49,6 +50,16 @@ class Setting extends AbstractResource
         }
 
         return $result;
+    }
+
+    public function getSignSecurity()
+    {
+        $apiSecuritySetting = $this->getSettingService()->get('api_security', []);
+
+        return [
+            'level' => empty($apiSecuritySetting['level']) ? 'close' : $apiSecuritySetting['level'],
+            'clients' => empty($apiSecuritySetting['client']) ? null : $apiSecuritySetting['client'],
+        ];
     }
 
     public function getGoods()

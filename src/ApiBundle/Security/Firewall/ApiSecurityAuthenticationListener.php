@@ -34,7 +34,7 @@ class ApiSecurityAuthenticationListener implements ListenerInterface
 
     public function handle(Request $request)
     {
-        if (0 === stripos($request->getPathInfo(), '/api/security_sign')) {
+        if (0 === stripos($request->getPathInfo(), '/api/security_sign') || 0 === stripos($request->getPathInfo(), '/api/setting')) {
             return;
         }
 
@@ -42,7 +42,6 @@ class ApiSecurityAuthenticationListener implements ListenerInterface
         if (!isset($apiSecuritySetting['level']) || self::API_SECURITY_CLOSE === $apiSecuritySetting['level']) {
             return;
         }
-
         if (isset($apiSecuritySetting['client'])
             && is_array($apiSecuritySetting['client'])
             && in_array($this->getClient($request), $apiSecuritySetting['client'], true)) {
@@ -53,7 +52,6 @@ class ApiSecurityAuthenticationListener implements ListenerInterface
             if (self::API_SECURITY_OPEN === $apiSecuritySetting['level'] && empty($request->query->get('api_signature'))) {
                 throw ApiSecurityException::SIGN_ERROR();
             }
-
             $this->checkSignature($request);
         }
     }
@@ -62,13 +60,13 @@ class ApiSecurityAuthenticationListener implements ListenerInterface
     {
         $params = $request->query->all();
         $sign = $params['api_signature'];
-        unset($sign['api_signature']);
+        unset($params['api_signature']);
         $content = trim($request->getContent());
         if (!empty($content)) {
-            $params['bodyContent'] = $request->getContent();
+            $params['bodyContent'] = urlencode(urldecode($request->getContent()));
         }
         $params = ArrayToolkit::flatten($params);
-        ksort($res);
+        ksort($params);
         $data = [];
         foreach ($params as $key => $value) {
             $data[] = $key.'='.$value;
