@@ -10,8 +10,8 @@ use Biz\CloudPlatform\Client\EduSohoAppClient;
 use Biz\CloudPlatform\Dao\CloudAppDao;
 use Biz\CloudPlatform\Dao\CloudAppLogDao;
 use Biz\CloudPlatform\Service\AppService;
+use Biz\CloudPlatform\UpgradeAgreement;
 use Biz\CloudPlatform\UpgradeLock;
-use Biz\CloudPlatform\UpgradeProtocol;
 use Biz\Common\CommonException;
 use Biz\Crontab\SystemCrontabInitializer;
 use Biz\QiQiuYun\Service\QiQiuYunSdkProxyService;
@@ -89,11 +89,9 @@ class AppServiceImpl extends BaseService implements AppService
         return $app['version'];
     }
 
-    public function getProtocol()
+    public function getAgreement()
     {
-        $version = $this->getMainVersion();
-
-        return UpgradeProtocol::getProtocol($version);
+        return UpgradeAgreement::getAgreement($this->getMainVersion());
     }
 
     public function registerApp($app)
