@@ -197,6 +197,8 @@ export default {
     this.getCourseCategories();
     // 获得班级分类列表
     this.getClassCategories();
+    // 获得题库分类列表
+    this.getItemBankCategories();
     // 获得优惠券开关
     this.getCouponSwitch();
     // 获取微营销创建活动地址
@@ -209,6 +211,7 @@ export default {
     ...mapActions([
       'getCourseCategories',
       'getClassCategories',
+      'getItemBankCategories',
       'deleteDraft',
       'saveDraft',
       'getDraft',
