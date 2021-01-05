@@ -34,7 +34,9 @@ class ApiSecurityAuthenticationListener implements ListenerInterface
 
     public function handle(Request $request)
     {
-        if (0 === stripos($request->getPathInfo(), '/api/security_sign') || 0 === stripos($request->getPathInfo(), '/api/setting')) {
+        if (0 === stripos($request->getPathInfo(), '/api/security_sign')
+            || 0 === stripos($request->getPathInfo(), '/api/setting')
+            || 0 === stripos($request->getPathInfo(), '/api/file')) {
             return;
         }
 
