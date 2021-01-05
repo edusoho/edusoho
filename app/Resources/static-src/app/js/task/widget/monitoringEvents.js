@@ -99,7 +99,7 @@ export default class MonitoringEvents {
   // safari 无法监听到全屏的事件, 故用 resize 代替
   safariResetFullScreenState() {
     window.addEventListener('resize', () => {
-      if (!this.fullScreenTimer) {
+      if (!this.fullScreenTimer && this.lastFullScreenState) {
         this.fullScreenTimer = setTimeout(() => {
           this.lastFullScreenState = screenfull.isFullscreen;
           clearTimeout(this.fullScreenTimer);
