@@ -16,11 +16,11 @@ class AppPackageUpdateController extends BaseController
         $agreement = $this->getAppService()->getAgreement();
 
         if (empty($agreement)) {
-            return $this->forward('AppBundle:AdminV2/CloudCenter/AppPackageUpdate:modal', ['id' => $id]);
+            return $this->forward('AppBundle:AdminV2/CloudCenter/AppPackageUpdate:modal', ['id' => $id], ['type' => 'upgrade']);
         }
 
         if ('POST' == $request->getMethod()) {
-            return $this->forward('AppBundle:AdminV2/CloudCenter/AppPackageUpdate:modal', ['id' => $id]);
+            return $this->forward('AppBundle:AdminV2/CloudCenter/AppPackageUpdate:modal', ['id' => $id], ['type' => 'upgrade']);
         }
 
         return $this->render('admin-v2/cloud-center/app-package-update/agreement.html.twig', [
@@ -123,6 +123,13 @@ class AppPackageUpdateController extends BaseController
                 return $this->createJsonResponse([
                     'status' => 'error',
                     'errors' => $errors,
+                ]);
+            }
+
+            $agreement = $this->getAppService()->getAgreement();
+            if (!empty($agreement)) {
+                return $this->createJsonResponse([
+                    'isUpgrade' => false,
                 ]);
             }
 
