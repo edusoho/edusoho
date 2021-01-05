@@ -20,6 +20,8 @@ interface AppService
 
     public function getMainVersion();
 
+    public function getAgreement();
+
     public function registerApp($app);
 
     public function updateAppVersion($id, $version);
