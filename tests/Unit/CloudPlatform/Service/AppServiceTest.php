@@ -48,7 +48,7 @@ class AppServiceTest extends BaseTestCase
         $app2 = $this->_createApp('code2');
         $app3 = $this->_createApp('code3');
 
-        $codes = array($app1['code'], $app3['code']);
+        $codes = [$app1['code'], $app3['code']];
         $apps = $this->getAppService()->findAppsByCodes($codes);
 
         $this->assertArrayEquals($app1, $apps[$app1['code']]);
@@ -61,7 +61,7 @@ class AppServiceTest extends BaseTestCase
         $app2 = $this->_createApp('code2', 'plugin');
         $app3 = $this->_createApp('code3', 'theme');
 
-        $types = array($app1['type'], $app3['type']);
+        $types = [$app1['type'], $app3['type']];
         $apps = $this->getAppService()->findAppsByTypes($types);
 
         $this->assertArrayEquals($app1, $apps[0]);
@@ -101,28 +101,50 @@ class AppServiceTest extends BaseTestCase
         $this->assertEquals($app['version'], $version);
     }
 
+    public function testGetAgreement()
+    {
+        $this->mockBiz('System:SettingService', [
+            [
+                'functionName' => 'get',
+                'returnValue' => ['allow_show_switch_btn' => 1, 'is_v2' => 1],
+            ],
+        ]);
+        $app = [
+            'code' => 'MAIN',
+            'name' => 'phpunit app test',
+            'version' => '21.1.1',
+            'description' => 'app description',
+        ];
+
+        $this->getAppService()->registerApp($app);
+
+        $result = $this->getAppService()->getAgreement();
+
+        $this->assertNotEmpty($result);
+    }
+
     /**
      * @expectedException \Biz\Common\CommonException
      */
     public function testRegisterAppInvalidArgument()
     {
-        $app = array(
+        $app = [
             'code' => 'code1',
             'version' => '1.0.0',
             'description' => 'app description',
-        );
+        ];
 
         $this->getAppService()->registerApp($app);
     }
 
     public function testRegisterAppNotExist()
     {
-        $app = array(
+        $app = [
             'code' => 'code1',
             'name' => 'phpunit app test',
             'version' => '1.0.0',
             'description' => 'app description',
-        );
+        ];
 
         $result = $this->getAppService()->registerApp($app);
 
@@ -134,20 +156,20 @@ class AppServiceTest extends BaseTestCase
 
     public function testRegisterAppExist()
     {
-        $app = array(
+        $app = [
             'code' => 'code1',
             'name' => 'phpunit app test',
             'version' => '1.0.0',
             'description' => 'app description',
-        );
+        ];
         $this->getAppService()->registerApp($app);
 
-        $updateApp = array(
+        $updateApp = [
             'code' => 'code1',
             'name' => 'phpunit app test update',
             'version' => '2.0.0',
             'description' => 'app description update',
-        );
+        ];
         $result = $this->getAppService()->registerApp($updateApp);
 
         $this->assertEquals($updateApp['code'], $result['code']);
@@ -208,7 +230,7 @@ class AppServiceTest extends BaseTestCase
         $this->mockAppClient();
         $errors = $this->getAppService()->checkEnvironmentForPackageUpdate(1);
 
-        $this->assertArrayEquals(array(), $errors);
+        $this->assertArrayEquals([], $errors);
     }
 
     public function testCheckDependsForPackageUpdate()
@@ -216,7 +238,7 @@ class AppServiceTest extends BaseTestCase
         $this->mockAppClient();
         $errors = $this->getAppService()->checkDependsForPackageUpdate(1);
 
-        $this->assertArrayEquals(array(), $errors);
+        $this->assertArrayEquals([], $errors);
     }
 
     public function testBackupDbForPackageUpdate()
@@ -224,7 +246,7 @@ class AppServiceTest extends BaseTestCase
         $this->mockAppClient();
         $errors = $this->getAppService()->backupDbForPackageUpdate(1);
 
-        $this->assertArrayEquals(array(), $errors);
+        $this->assertArrayEquals([], $errors);
     }
 
     public function testBackupDbForPackageUpdateWithBackupDB()
@@ -233,7 +255,7 @@ class AppServiceTest extends BaseTestCase
         $this->mockAppClient($package);
         $errors = $this->getAppService()->backupDbForPackageUpdate(1);
 
-        $this->assertArrayEquals(array(), $errors);
+        $this->assertArrayEquals([], $errors);
     }
 
     public function testBackupFileForPackageUpdate()
@@ -241,7 +263,7 @@ class AppServiceTest extends BaseTestCase
         $this->mockAppClient();
         $errors = $this->getAppService()->backupFileForPackageUpdate(1);
 
-        $this->assertArrayEquals(array(), $errors);
+        $this->assertArrayEquals([], $errors);
     }
 
     public function testBackupFileForPackageUpdateWithNotEmptyBackupFile()
@@ -250,7 +272,7 @@ class AppServiceTest extends BaseTestCase
         $this->mockAppClient($package);
         $errors = $this->getAppService()->backupFileForPackageUpdate(1);
 
-        $this->assertArrayEquals(array(), $errors);
+        $this->assertArrayEquals([], $errors);
     }
 
     public function testDownloadPackageForUpdate()
@@ -258,7 +280,7 @@ class AppServiceTest extends BaseTestCase
         $this->mockAppClient();
         $errors = $this->getAppService()->downloadPackageForUpdate(1);
 
-        $this->assertArrayEquals(array(), $errors);
+        $this->assertArrayEquals([], $errors);
     }
 
     public function testCheckDownloadPackageForUpdate()
@@ -266,84 +288,84 @@ class AppServiceTest extends BaseTestCase
         $this->mockAppClient();
         $errors = $this->getAppService()->checkDownloadPackageForUpdate(1);
 
-        $this->assertArrayEquals(array(), $errors);
+        $this->assertArrayEquals([], $errors);
     }
 
     public function testBeginPackageUpdate()
     {
         $this->mockAppClient();
-        $this->mockBiz('QiQiuYun:QiQiuYunSdkProxyService', array(
-            array(
+        $this->mockBiz('QiQiuYun:QiQiuYunSdkProxyService', [
+            [
                 'functionName' => 'pushEventTracking',
                 'returnValue' => true,
                 'runTimes' => 1,
-            ),
-        ));
+            ],
+        ]);
         $errors = $this->getAppService()->beginPackageUpdate(1, 'upgrade');
 
-        $this->assertArrayEquals(array(), $errors);
+        $this->assertArrayEquals([], $errors);
     }
 
     public function testBeginPackageUpdateWithIndexNotZero()
     {
         $this->mockAppClient();
-        $this->mockBiz('QiQiuYun:QiQiuYunSdkProxyService', array(
-            array(
+        $this->mockBiz('QiQiuYun:QiQiuYunSdkProxyService', [
+            [
                 'functionName' => 'pushEventTracking',
                 'returnValue' => true,
                 'runTimes' => 1,
-            ),
-        ));
+            ],
+        ]);
         $errors = $this->getAppService()->beginPackageUpdate(1, 'upgrade', 1);
 
-        $this->assertArrayEquals(array(), $errors);
+        $this->assertArrayEquals([], $errors);
     }
 
     public function testBeginPackageUpdateWithHasDeleteDir()
     {
         $this->mockAppClient();
-        $this->mockBiz('QiQiuYun:QiQiuYunSdkProxyService', array(
-            array(
+        $this->mockBiz('QiQiuYun:QiQiuYunSdkProxyService', [
+            [
                 'functionName' => 'pushEventTracking',
                 'returnValue' => true,
                 'runTimes' => 1,
-            ),
-        ));
+            ],
+        ]);
         $package = $this->getDefaultPackage();
-        $result = ReflectionUtils::invokeMethod($this->getAppService(), 'makePackageFileUnzipDir', array($package));
+        $result = ReflectionUtils::invokeMethod($this->getAppService(), 'makePackageFileUnzipDir', [$package]);
         $filesystem = new Filesystem();
         $filesystem->mkdir($result.'delete');
         $errors = $this->getAppService()->beginPackageUpdate(1, 'upgrade');
 
-        $this->assertArrayEquals(array(), $errors);
+        $this->assertArrayEquals([], $errors);
     }
 
     public function testCheckPluginDepend()
     {
         $this->_createApp('MAIN');
-        $package = array(
+        $package = [
             'edusohoMaxVersion' => '8.3.3', 'edusohoMinVersion' => '7.0.0', 'fileName' => 'test', 'fromVersion' => '8.0.0', 'backupDB' => '', 'backupFile' => '',
-            'product' => array('code' => 'MAIN', 'name' => 'MAIN', 'description' => '', 'icon' => '', 'developerId' => '1', 'developerName' => ''),
-            'id' => 1, 'productId' => 1, 'type' => 'upgrade', 'toVersion' => '8.0.1', );
-        $result = ReflectionUtils::invokeMethod($this->getAppService(), 'checkPluginDepend', array($package));
+            'product' => ['code' => 'MAIN', 'name' => 'MAIN', 'description' => '', 'icon' => '', 'developerId' => '1', 'developerName' => ''],
+            'id' => 1, 'productId' => 1, 'type' => 'upgrade', 'toVersion' => '8.0.1', ];
+        $result = ReflectionUtils::invokeMethod($this->getAppService(), 'checkPluginDepend', [$package]);
 
         $this->assertEmpty($result);
     }
 
     public function testTryGetProtocolFromFileWithCodeNotMain()
     {
-        $package = array(
+        $package = [
             'edusohoMaxVersion' => '8.3.3', 'edusohoMinVersion' => '7.0.0', 'fileName' => 'test', 'fromVersion' => '8.0.0', 'backupDB' => '', 'backupFile' => '',
-            'product' => array('code' => 'test', 'name' => 'MAIN', 'description' => '', 'icon' => '', 'developerId' => '1', 'developerName' => ''),
-            'id' => 1, 'productId' => 1, 'type' => 'upgrade', 'toVersion' => '8.0.1', );
-        $result = ReflectionUtils::invokeMethod($this->getAppService(), 'tryGetProtocolFromFile', array($package, ''));
+            'product' => ['code' => 'test', 'name' => 'MAIN', 'description' => '', 'icon' => '', 'developerId' => '1', 'developerName' => ''],
+            'id' => 1, 'productId' => 1, 'type' => 'upgrade', 'toVersion' => '8.0.1', ];
+        $result = ReflectionUtils::invokeMethod($this->getAppService(), 'tryGetProtocolFromFile', [$package, '']);
 
         $this->assertEquals(2, $result);
     }
 
     public function testDeleteCache()
     {
-        $result = ReflectionUtils::invokeMethod($this->getAppService(), 'deleteCache', array(4));
+        $result = ReflectionUtils::invokeMethod($this->getAppService(), 'deleteCache', [4]);
 
         $this->assertEmpty($result);
     }
@@ -406,7 +428,7 @@ class AppServiceTest extends BaseTestCase
     public function testGetTokenLoginUrl()
     {
         $this->mockAppClient();
-        $result = $this->getAppService()->getTokenLoginUrl('course', array());
+        $result = $this->getAppService()->getTokenLoginUrl('course', []);
 
         $this->assertEquals('loginUrl', $result);
     }
@@ -421,42 +443,42 @@ class AppServiceTest extends BaseTestCase
 
     public function testSetAppClient()
     {
-        $client = new EduSohoAppClient(array());
+        $client = new EduSohoAppClient([]);
         $mockObject = Mockery::mock($client);
         $this->getAppService()->setAppClient($mockObject);
-        $result = ReflectionUtils::invokeMethod($this->getAppService(), 'createAppClient', array());
+        $result = ReflectionUtils::invokeMethod($this->getAppService(), 'createAppClient', []);
 
         $this->assertNotEmpty($result);
     }
 
     public function testCreateAppClient()
     {
-        $result = ReflectionUtils::invokeMethod($this->getAppService(), 'createAppClient', array());
+        $result = ReflectionUtils::invokeMethod($this->getAppService(), 'createAppClient', []);
 
         $this->assertNotEmpty($result);
     }
 
     public function testGetPackageRootDirectory()
     {
-        $package = array('product' => array('code' => 'test'));
+        $package = ['product' => ['code' => 'test']];
         $packageDir = 'xxx';
-        $result = ReflectionUtils::invokeMethod($this->getAppService(), 'getPackageRootDirectory', array($package, $packageDir));
+        $result = ReflectionUtils::invokeMethod($this->getAppService(), 'getPackageRootDirectory', [$package, $packageDir]);
 
         $this->assertNotEmpty($result);
     }
 
-    private function mockAppClient($package = array())
+    private function mockAppClient($package = [])
     {
         if (empty($package)) {
             $package = $this->getDefaultPackage();
         }
-        $client = new EduSohoAppClient(array());
+        $client = new EduSohoAppClient([]);
         $mockObject = Mockery::mock($client);
 
-        $mockObject->shouldReceive('getApps')->times(1)->andReturn(array(array('name' => 'cloud app', 'code' => 'cloudApp', 'description' => '')));
+        $mockObject->shouldReceive('getApps')->times(1)->andReturn([['name' => 'cloud app', 'code' => 'cloudApp', 'description' => '']]);
         $mockObject->shouldReceive('getBinded')->times(1)->andReturn(1);
         $mockObject->shouldReceive('getPackage')->times(1)->andReturn($package);
-        $mockObject->shouldReceive('checkUpgradePackages')->times(1)->andReturn(array(array('id' => 1, 'code' => 'MAIN', 'userAccess' => true, 'purchased' => 1)));
+        $mockObject->shouldReceive('checkUpgradePackages')->times(1)->andReturn([['id' => 1, 'code' => 'MAIN', 'userAccess' => true, 'purchased' => 1]]);
         $mockObject->shouldReceive('getMessages')->times(1)->andReturn('message');
         $mockObject->shouldReceive('downloadPackage')->times(1)->andReturn('message');
         $mockObject->shouldReceive('repairProblem')->times(1)->andReturn('problem');
@@ -469,25 +491,25 @@ class AppServiceTest extends BaseTestCase
 
     private function getDefaultPackage($backupDB = '', $backupFile = '')
     {
-        return array('edusohoMaxVersion' => '8.3.3', 'edusohoMinVersion' => '7.0.0', 'fileName' => 'test', 'fromVersion' => '8.0.0', 'backupDB' => $backupDB, 'backupFile' => $backupFile, 'product' => array('code' => 'MAIN', 'name' => 'MAIN', 'description' => '', 'icon' => '', 'developerId' => '1', 'developerName' => ''), 'id' => 1, 'productId' => 1, 'type' => 'upgrade', 'toVersion' => '8.0.1');
+        return ['edusohoMaxVersion' => '8.3.3', 'edusohoMinVersion' => '7.0.0', 'fileName' => 'test', 'fromVersion' => '8.0.0', 'backupDB' => $backupDB, 'backupFile' => $backupFile, 'product' => ['code' => 'MAIN', 'name' => 'MAIN', 'description' => '', 'icon' => '', 'developerId' => '1', 'developerName' => ''], 'id' => 1, 'productId' => 1, 'type' => 'upgrade', 'toVersion' => '8.0.1'];
     }
 
     private function _createApp($code, $type = '')
     {
-        $app = array(
+        $app = [
             'code' => $code,
             'name' => 'phpunit app test',
             'version' => '1.0.0',
             'description' => 'app description',
             'type' => $type,
-        );
+        ];
 
         return $this->getAppService()->registerApp($app);
     }
 
     private function _createLog($code)
     {
-        $package = array(
+        $package = [
             'code' => $code,
             'name' => 'main app',
             'fromVersion' => '1.0.0',
@@ -500,7 +522,7 @@ class AppServiceTest extends BaseTestCase
             'createdTime' => time(),
             'dbBackupPath' => '',
             'sourceBackupPath' => '',
-        );
+        ];
 
         $result = $this->getAppLogDao()->create($package, 'SUCCESS', '');
 
