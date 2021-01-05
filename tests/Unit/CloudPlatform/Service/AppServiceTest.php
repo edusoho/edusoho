@@ -101,6 +101,28 @@ class AppServiceTest extends BaseTestCase
         $this->assertEquals($app['version'], $version);
     }
 
+    public function testGetAgreement()
+    {
+        $this->mockBiz('System:SettingService', array(
+            array(
+                'functionName' => 'get',
+                'returnValue' => ['allow_show_switch_btn' => 1, 'is_v2' => 1],
+            ),
+        ));
+        $app = array(
+            'code' => 'MAIN',
+            'name' => 'phpunit app test',
+            'version' => '21.1.1',
+            'description' => 'app description',
+        );
+
+        $this->getAppService()->registerApp($app);
+
+        $result = $this->getAppService()->getAgreement();
+
+        $this->assertNotEmpty($result);
+    }
+
     /**
      * @expectedException \Biz\Common\CommonException
      */
