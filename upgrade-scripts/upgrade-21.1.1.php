@@ -52,6 +52,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = array(
             'processIcpUrl',
+            'courseSetAddIsClassroomRef',
         );
 
         $funcNames = array();
@@ -93,6 +94,19 @@ class EduSohoUpgrade extends AbstractUpdater
             $site['icpUrl'] = 'https://beian.miit.gov.cn';
             $this->getSettingService()->set('site', $site);
         }
+
+        return 1;
+    }
+
+    public function CourseSetAddIsClassroomRef()
+    {
+        if (!$this->isFieldExist('course_set_v8', 'isClassroomRef')) {
+            $this->getConnection()->exec("ALTER TABLE `course_set_v8` ADD COLUMN `isClassroomRef` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否是班级课程' AFTER `parentId`;");
+        }
+
+        $this->getConnection()->exec("
+            update `course_set_v8` set `isClassroomRef` = 1 where `parentId` > 0;        
+        ");
 
         return 1;
     }
