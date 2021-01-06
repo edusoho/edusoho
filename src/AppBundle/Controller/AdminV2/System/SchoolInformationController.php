@@ -21,7 +21,7 @@ class SchoolInformationController extends BaseController
             'seo_description' => '',
             'master_email' => '',
             'icp' => '',
-            'icpUrl' => 'http://www.beian.miit.gov.cn',
+            'icpUrl' => 'https://beian.miit.gov.cn',
             'analytics' => '',
             'status' => 'open',
             'closed_note' => '',
