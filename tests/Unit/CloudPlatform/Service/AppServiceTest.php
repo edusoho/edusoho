@@ -118,7 +118,7 @@ class AppServiceTest extends BaseTestCase
 
         $this->getAppService()->registerApp($app);
 
-        $result = $this->getAppService()->getAgreement();
+        $result = $this->getAppService()->getAgreement('MAIN');
 
         $this->assertNotEmpty($result);
     }
