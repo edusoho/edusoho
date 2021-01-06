@@ -18,6 +18,11 @@
             :type="getType(item)"
             @blur="checkField(index, item.value, item.validate)"
             :label-class="isRequired(item.validate) ? 'info-required' : ''"
+            :rules="
+              item.field == 'idcard'
+                ? [{ validator: idcardValidator, message: '身份证号格式错误' }]
+                : []
+            "
           />
         </template>
         <template v-if="item.type === 'radio'">
@@ -593,6 +598,18 @@ export default {
         this.$toast('提交成功');
         this.laterFillIn();
       });
+    },
+    // 身份证校验
+    idcardValidator(value) {
+      let sum = 0;
+      const weights = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2];
+      const codes = '10X98765432';
+      for (let i = 0; i < value.length - 1; i++) {
+        sum += value[i] * weights[i];
+      }
+      const last = codes[sum % 11];
+
+      return value[value.length - 1] == last;
     },
   },
 };
