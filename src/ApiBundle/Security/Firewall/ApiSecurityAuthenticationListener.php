@@ -34,9 +34,21 @@ class ApiSecurityAuthenticationListener implements ListenerInterface
 
     public function handle(Request $request)
     {
-        if (0 === stripos($request->getPathInfo(), '/api/security_sign')
+        if (
+            0 === stripos($request->getPathInfo(), '/api/security_sign')
             || 0 === stripos($request->getPathInfo(), '/api/setting')
-            || 0 === stripos($request->getPathInfo(), '/api/file')) {
+            || 0 === stripos($request->getPathInfo(), '/api/file')
+            || 0 === stripos($request->getPathInfo(), '/api/app/device')
+            || 0 === stripos($request->getPathInfo(), '/api/im_login')
+            || 0 === stripos($request->getPathInfo(), '/api/app/push_token')
+            || 0 === stripos($request->getPathInfo(), '/api/im_client')
+            || 0 === stripos($request->getPathInfo(), '/api/token')
+            || 0 === stripos($request->getPathInfo(), '/api/login')
+        ) {
+            return;
+        }
+
+        if (empty($request->query->all()) && empty($request->request->all())) {
             return;
         }
 
@@ -63,6 +75,12 @@ class ApiSecurityAuthenticationListener implements ListenerInterface
         $params = $request->query->all();
         $sign = $params['api_signature'];
         unset($params['api_signature']);
+        if (!empty($params['api_init']) && 1 == $params['api_init']) {
+            $signToken = 'edusoho';
+            unset($params['api_init']);
+        } else {
+            $signToken = $this->getApiSecurityToken();
+        }
         $content = trim($request->getContent());
         if (!empty($content)) {
             $params['bodyContent'] = urlencode(urldecode($request->getContent()));
@@ -74,9 +92,19 @@ class ApiSecurityAuthenticationListener implements ListenerInterface
             $data[] = $key.'='.$value;
         }
         $data = implode('&', $data);
-        if (md5($data.'test123456') !== $sign) {
+        if (md5($data.$signToken) !== $sign) {
             throw ApiSecurityException::SIGN_ERROR();
         }
+    }
+
+    private function getApiSecurityToken()
+    {
+        $setting = $this->getSettingService()->get('storage', []);
+        $accessKey = !empty($setting['cloud_access_key']) ? $setting['cloud_access_key'] : '';
+        $secretKey = !empty($setting['cloud_secret_key']) ? $setting['cloud_secret_key'] : '';
+        $beginMonth = mktime(0, 0, 0, date('m'), 1, date('Y'));
+
+        return md5($accessKey.$secretKey.$beginMonth);
     }
 
     private function getClient(Request $request)
