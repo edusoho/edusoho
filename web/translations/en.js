@@ -692,6 +692,7 @@ t.add("validate.user_terms.message", "Check to agree to this service agreement i
 t.add("validate.visible_character.message", "Not allowed to enter invisible characters, such as spaces", "js", "en");
 t.add("validate.tag_required_hint", "Please input tags", "js", "en");
 t.add("validate.tag_required_not_found_hint", "The tag is not found, please call the administrator to set it through [Management Background] - [Teaching] - [Classification Label] - [Label Management].", "js", "en");
+t.add("validate.tag_number_exceeds_limit", "You can only add %limit% items", "js", "en");
 t.add("validate.valid_score_input.message", "Please enter the correct decimals, leaving only ONE decimal places", "js", "en");
 t.add("validate.modify_date", "Please enter the date of modification", "js", "en");
 t.add("validate.modify_days", "Please enter the number of days modified", "js", "en");
@@ -1274,6 +1275,7 @@ t.add("admin.item_bank_exercise.exercise.cancel_recommend_success_hint", "The it
 t.add("admin.item_bank_exercise.exercise.publish_hint", "Are you sure you want to publish the current exercise?", "js", "en");
 t.add("admin.item_bank_exercise.exercise.publish_success_hint", "The item bank exercise recommendation has been published!", "js", "en");
 t.add("admin.item_bank_exercise.exercise.delete_hint", "Delete item bank exercises, delete module settings, trainees and other information. Do you really want to delete this exercise bank?", "js", "en");
+t.add("exercise.manage.student_delete_hint", "Are you sure you want to delete the student.", "js", "en");
 t.add("task_show.user_login_protect_tip", "User unLogin", "js", "en");
 t.add("admin.course_manage.manage.tags_select.placeholder", "Enter the keyword of the tag", "js", "en");
 t.add("exception.common_frequent_operation", "The operation is too frequent, please try again later", "js", "en");
