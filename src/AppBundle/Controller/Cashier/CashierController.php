@@ -45,12 +45,21 @@ class CashierController extends BaseController
 
         $payments = $this->getPayService()->findEnabledPayments();
 
+        try {
+            $unablePay = false;
+            $product = $this->getProduct($order['id']);
+            $product->validate();
+        } catch (\Exception $e) {
+            $unablePay = true;
+        }
+
         return $this->render(
             'cashier/show.html.twig',
             [
                 'order' => $order,
-                'product' => $this->getProduct($order['id']),
+                'product' => $product,
                 'payments' => $payments,
+                'unablePay' => $unablePay,
             ]
         );
     }

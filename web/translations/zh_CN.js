@@ -633,6 +633,7 @@ t.add("validate.character_maxlength", "\u5b57\u6570\u4e0d\u80fd\u8d85\u8fc7%max%
 t.add("validate.choose_item.message", "\u8bf7\u9009\u62e9%display%", "js", "zh_CN");
 t.add("validate.tag_required_hint", "\u8bf7\u8f93\u5165\u6807\u7b7e", "js", "zh_CN");
 t.add("validate.tag_required_not_found_hint", "\u672a\u641c\u7d22\u5230\u6807\u7b7e\uff0c\u8bf7\u7f51\u6821\u7ba1\u7406\u5458\u901a\u8fc7\u3010\u7ba1\u7406\u540e\u53f0\u3011-\u3010\u6559\u5b66\u3011-\u3010\u5206\u7c7b\u6807\u7b7e\u3011-\u3010\u6807\u7b7e\u7ba1\u7406\u3011\u8fdb\u884c\u8bbe\u7f6e\u3002", "js", "zh_CN");
+t.add("validate.tag_number_exceeds_limit", "\u4f60\u53ea\u80fd\u6dfb\u52a0%limit%\u4e2a\u9879\u76ee", "js", "zh_CN");
 t.add("validate.title_required_hint", "\u8bf7\u8f93\u5165\u6807\u9898\uff0c\u4e0d\u80fd\u4e3a\u7a7a\u3002", "js", "zh_CN");
 t.add("validate.email_or_mobile_check.message", "\u4e0d\u5141\u8bb8\u4ee51\u5f00\u5934\u768411\u4f4d\u7eaf\u6570\u5b57", "js", "zh_CN");
 t.add("validate.phone_and_email_input.message", "\u8bf7\u8f93\u5165\u624b\u673a\/\u90ae\u7bb1", "js", "zh_CN");
@@ -1221,6 +1222,7 @@ t.add("admin.item_bank_exercise.exercise.cancel_recommend_success_hint", "\u9898
 t.add("admin.item_bank_exercise.exercise.publish_hint", "\u786e\u5b9a\u8981\u53d1\u5e03\u5f53\u524d\u9898\u5e93\u7ec3\u4e60\u5417\uff1f", "js", "zh_CN");
 t.add("admin.item_bank_exercise.exercise.publish_success_hint", "\u9898\u5e93\u7ec3\u4e60\u53d1\u5e03\u6210\u529f!", "js", "zh_CN");
 t.add("admin.item_bank_exercise.exercise.delete_hint", "\u5220\u9664\u9898\u5e93\u7ec3\u4e60\uff0c\u5c06\u5220\u9664\u6a21\u5757\u8bbe\u7f6e\u3001\u5b66\u5458\u7b49\u4fe1\u606f\u3002\u771f\u7684\u8981\u5220\u9664\u8be5\u9898\u5e93\u7ec3\u4e60\u5417\uff1f", "js", "zh_CN");
+t.add("exercise.manage.student_delete_hint", "\u662f\u5426\u786e\u5b9a\u79fb\u9664\u8be5\u5b66\u5458", "js", "zh_CN");
 t.add("task_show.user_login_protect_tip", "\u8be5\u8d26\u53f7\u672a\u767b\u5f55\u6216\u5df2\u88ab\u8e22", "js", "zh_CN");
 t.add("admin.course_manage.manage.tags_select.placeholder", "\u8f93\u5165\u6807\u7b7e\u540d\u79f0\u5173\u952e\u5b57", "js", "zh_CN");
 t.add("exception.common_frequent_operation", "\u64cd\u4f5c\u8fc7\u4e8e\u9891\u7e41\uff0c\u8bf7\u7a0d\u540e\u91cd\u8bd5", "js", "zh_CN");

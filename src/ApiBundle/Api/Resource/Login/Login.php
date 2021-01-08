@@ -363,7 +363,7 @@ class Login extends AbstractResource
 
     protected function getSDKSmsService()
     {
-        return $this->biz['qiQiuYunSdk.sms'];
+        return $this->biz['ESCloudSdk.sms'];
     }
 
     private function getBizSms()

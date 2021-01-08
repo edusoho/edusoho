@@ -8,12 +8,12 @@ use ApiBundle\Api\Resource\AbstractResource;
 use ApiBundle\Api\Resource\Trade\Factory\BaseTrade;
 use ApiBundle\Api\Resource\Trade\Factory\TradeFactory;
 use Biz\Common\CommonException;
+use Biz\OrderFacade\Exception\OrderPayCheckException;
 use Biz\OrderFacade\Service\OrderFacadeService;
 use Codeages\Biz\Order\Service\OrderService;
+use Codeages\Biz\Pay\Exception\PayGatewayException;
 use Codeages\Biz\Pay\Service\PayService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Biz\OrderFacade\Exception\OrderPayCheckException;
-use Codeages\Biz\Pay\Exception\PayGatewayException;
 
 class Trade extends AbstractResource
 {
@@ -21,11 +21,11 @@ class Trade extends AbstractResource
     {
         $trade = $this->getPayService()->queryTradeFromPlatform($tradeSn);
 
-        return array(
+        return [
             'isPaid' => 'paid' === $trade['status'],
-            'paidSuccessUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $tradeSn)),
-            'paidSuccessUrlH5' => $this->generateUrl('cashier_pay_success_for_h5', array('trade_sn' => $tradeSn)),
-        );
+            'paidSuccessUrl' => $this->generateUrl('cashier_pay_success', ['trade_sn' => $tradeSn]),
+            'paidSuccessUrlH5' => $this->generateUrl('cashier_pay_success_for_h5', ['trade_sn' => $tradeSn]),
+        ];
     }
 
     /**
@@ -35,28 +35,37 @@ class Trade extends AbstractResource
      * coinAmount 使用多少虚拟币
      * payPassword 支付密码
      *
-     * @param \ApiBundle\Api\ApiRequest $request
-     *
      * @return array
      */
     public function add(ApiRequest $request)
     {
         $params = $request->request->all();
-        if (empty($params['gateway']) || empty($params['type'])) {
+        if (empty($params['gateway']) || empty($params['type']) || empty($params['orderSn'])) {
+            throw CommonException::ERROR_PARAMETER_MISSING();
+        }
+
+        $order = $this->getOrderService()->getOrderBySn($params['orderSn']);
+        if (empty($order)) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
         try {
-            $this->fillParams($params);
+            $product = $this->getProduct($order['id']);
+            $product->validate();
+        } catch (\Exception $e) {
+            throw OrderPayCheckException::UNABLE_PAY();
+        }
 
-            if (!empty($params['orderSn']) && $order = $this->getOrderService()->getOrderBySn($params['orderSn'])) {
+        try {
+            $this->fillParams($params);
+            if (!empty($params['orderSn']) && $order) {
                 if ($this->isOrderPaid($order)) {
-                    return array(
+                    return [
                         'tradeSn' => $order['trade_sn'],
                         'isPaid' => true,
-                        'paidSuccessUrl' => $this->generateUrl('cashier_pay_success', array('trade_sn' => $order['trade_sn'])),
-                        'paidSuccessUrlH5' => $this->generateUrl('cashier_pay_success_for_h5', array('trade_sn' => $order['trade_sn'])),
-                    );
+                        'paidSuccessUrl' => $this->generateUrl('cashier_pay_success', ['trade_sn' => $order['trade_sn']]),
+                        'paidSuccessUrlH5' => $this->generateUrl('cashier_pay_success_for_h5', ['trade_sn' => $order['trade_sn']]),
+                    ];
                 } else {
                     $this->getOrderFacadeService()->checkOrderBeforePay($params['orderSn'], $params);
                 }
@@ -65,7 +74,7 @@ class Trade extends AbstractResource
             $trade = $tradeIns->create($params);
 
             if (0 == $trade['cash_amount']) {
-                $trade = $this->getPayService()->notifyPaid('coin', array('trade_sn' => $trade['trade_sn']));
+                $trade = $this->getPayService()->notifyPaid('coin', ['trade_sn' => $trade['trade_sn']]);
             }
         } catch (PayGatewayException $e) {
             throw new BadRequestHttpException($e->getMessage(), $e, ErrorCode::BAD_REQUEST);
@@ -74,6 +83,14 @@ class Trade extends AbstractResource
         }
 
         return $tradeIns->createResponse($trade);
+    }
+
+    private function getProduct($orderId)
+    {
+        $orderItems = $this->getOrderService()->findOrderItemsByOrderId($orderId);
+        $orderItem = reset($orderItems);
+
+        return $this->getOrderFacadeService()->getOrderProductByOrderItem($orderItem);
     }
 
     private function isOrderPaid($order)

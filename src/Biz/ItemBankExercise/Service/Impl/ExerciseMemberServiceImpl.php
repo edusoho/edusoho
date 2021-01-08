@@ -163,7 +163,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
         try {
             $this->beginTransaction();
 
-            $reason = ArrayToolkit::parts($reason, ['reason', 'reason_type']);
+            $reason = ArrayToolkit::parts($reason, ['reason', 'reasonType']);
 
             $this->removeMember($member, $reason);
 
@@ -181,6 +181,15 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
             $this->rollback();
             throw $e;
         }
+    }
+
+    public function removeStudents($exerciseId, $userIds, $reason = [])
+    {
+        foreach ($userIds as $userId) {
+            $this->removeStudent($exerciseId, $userId, $reason);
+        }
+
+        return true;
     }
 
     public function getExerciseMember($exerciseId, $userId)

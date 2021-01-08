@@ -9,7 +9,11 @@
     <div class="alert cd-alert cd-alert-warning alert-dismissible" role="alert">
       {{ ('pay_center.'~product.targetType~'.close')|trans }}
     </div>
-  {% else %}
+    {% elseif unablePay %}
+    <div class="alert cd-alert cd-alert-warning alert-dismissible" role="alert">
+      {{ 'pay_center.pay.unable_pay.tips'|trans }}
+    </div>
+    {% else %}
     <div class="alert cd-alert cd-alert-warning alert-dismissible" role="alert">
       {{ 'pay_center.pay.submit_tips'|trans }}
     </div>
@@ -142,7 +146,7 @@
 
     {% if payments %}
       <div class="text-right">
-        <button class="btn cd-btn cd-btn-primary cd-btn-lg js-pay-btn" type="button" data-loading-text="{{ 'pay_center.pay.confirm_pay_btn_loading'|trans }}">
+        <button class="btn cd-btn cd-btn-primary cd-btn-lg js-pay-btn" type="button" {% if unablePay %}disabled{% endif %} data-loading-text="{{ 'pay_center.pay.confirm_pay_btn_loading'|trans }}">
           {{ 'pay_center.pay.confirm_pay_btn'|trans }}
         </button>
       </div>

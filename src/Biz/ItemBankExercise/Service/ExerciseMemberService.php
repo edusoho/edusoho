@@ -39,4 +39,6 @@ interface ExerciseMemberService
     public function findByUserIdAndRole($userId, $role);
 
     public function updateMasteryRate($exerciseId, $userId);
+
+    public function removeStudents($exerciseId, $userIds, $reason = []);
 }

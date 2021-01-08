@@ -25,6 +25,7 @@ export default class Create {
     this.submitForm();
     this.removeSmsErrorTip();
     this.dragEvent();
+    this.initRegisterVisitIdField();
   }
 
   setValidateRule() {
@@ -154,6 +155,7 @@ export default class Create {
         phrase: $('#captcha_code').val(),
         dragCaptchaToken: $('[name="dragCaptchaToken"]').val(),
         invitedCode: $('#invitedCode').length > 0 ? $('#invitedCode').val() : '',
+        registerVisitId: $('[name="registerVisitId"]').val(),
       };
       const errorTip = Translator.trans('oauth.send.sms_code_error_tip');
       $.post($target.data('url'), data, (response) => {
@@ -187,6 +189,14 @@ export default class Create {
       const $tip = $('.js-password-error');
       if ($tip.length) {
         $tip.remove();
+      }
+    });
+  }
+
+  initRegisterVisitIdField() {
+    $(document).ready(() => {
+      if (window._VISITOR_ID !== 'undefined') {
+        $('[name="registerVisitId"]').val(window._VISITOR_ID);
       }
     });
   }

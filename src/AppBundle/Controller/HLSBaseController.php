@@ -26,6 +26,7 @@ abstract class HLSBaseController extends BaseController
         $token = $this->getTokenService()->verifyToken('hls.playlist', $token);
         $fromApi = isset($token['data']['fromApi']) ? $token['data']['fromApi'] : false;
         $clientIp = $request->getClientIp();
+        $clientPlatform = isset($token['data']['clientPlatform']) ? $token['data']['clientPlatform'] : '';
 
         if (empty($token)) {
             $this->createNewException(TokenException::TOKEN_INVALID());
@@ -58,6 +59,7 @@ abstract class HLSBaseController extends BaseController
                     'data' => [
                         'id' => $file['id'].$level,
                         'fromApi' => $fromApi,
+                        'clientPlatform' => $clientPlatform,
                     ],
                     'times' => $inWhiteList ? 0 : 1,
                     'duration' => 3600,
@@ -150,22 +152,19 @@ abstract class HLSBaseController extends BaseController
     public function streamAction(Request $request, $id, $level, $token)
     {
         $token = $this->getTokenService()->verifyToken('hls.stream', $token);
-        $fromApi = isset($token['data']['fromApi']) ? $token['data']['fromApi'] : false;
-        $clientIp = $request->getClientIp();
         if (empty($token)) {
             $this->createNewException(TokenException::TOKEN_INVALID());
         }
-
+        $fromApi = isset($token['data']['fromApi']) ? $token['data']['fromApi'] : false;
+        $clientPlatform = isset($token['data']['clientPlatform']) ? $token['data']['clientPlatform'] : '';
         $streamToken = $token;
 
         $dataId = is_array($token['data']) ? $token['data']['id'] : $token['data'];
-
         if ($dataId != ($id.$level)) {
             throw $this->createNotFoundException();
         }
 
         $file = $this->getFile($id, $token);
-
         if (empty($file)) {
             $this->createNewException(UploadFileException::NOTFOUND_FILE());
         }
@@ -179,7 +178,7 @@ abstract class HLSBaseController extends BaseController
         $params['key'] = $file[$this->getMediaAttr()][$level]['key'];
         $params['fileId'] = $file['id'];
         $params['fileGlobalId'] = $file['globalId'];
-        $params['clientIp'] = $clientIp;
+        $params['clientIp'] = $request->getClientIp();
 
         if (!empty($token['data']['watchTimeLimit'])) {
             $params['limitSecond'] = $token['data']['watchTimeLimit'];
@@ -191,6 +190,7 @@ abstract class HLSBaseController extends BaseController
                 'id' => $file['id'],
                 'level' => $level,
                 'fromApi' => $fromApi,
+                'clientPlatform' => $clientPlatform,
             ],
             'times' => $inWhiteList ? 0 : 1,
             'duration' => 3600,
@@ -264,15 +264,14 @@ abstract class HLSBaseController extends BaseController
         if (empty($token)) {
             return $this->makeFakeTokenString();
         }
+        $clientPlatform = isset($token['data']['clientPlatform']) ? $token['data']['clientPlatform'] : '';
 
         $dataId = is_array($token['data']) ? $token['data']['id'] : $token['data'];
-
         if ($dataId != $id) {
             return $this->makeFakeTokenString();
         }
 
         $file = $this->getFile($id, $token);
-
         if (empty($file)) {
             return $this->makeFakeTokenString();
         }
@@ -281,7 +280,7 @@ abstract class HLSBaseController extends BaseController
             return $this->makeFakeTokenString();
         }
 
-        if ($this->isHlsEncryptionPlusEnabled() || !$isMobileUserAgent) {
+        if ('mp' != $clientPlatform && ($this->isHlsEncryptionPlusEnabled() || !$isMobileUserAgent)) {
             $api = CloudAPIFactory::create('leaf');
 
             $hlsKey = $file[$this->getMediaAttr()][$token['data']['level']]['hlsKey'];

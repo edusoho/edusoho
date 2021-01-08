@@ -35,6 +35,8 @@
           <a  class="link-primary" href="{{ path('goods_show', {id:sku.goodsId}) }}" target="_blank"><strong>{{order.title}}</strong></a>
         {% elseif order.item.target_type|default('') == 'vip' %}
             <a class="link-primary" href="{{ path('vip', {id:order.item.target_id}) }}" target="_blank"><strong>{{order.title}}</strong></a>
+        {% elseif order.item.target_type|default('') == 'item_bank_exercise' %}
+          <a class="cd-link-major" href="{{ path('item_bank_exercise_show', {id:order.item.target_id}) }}" target="_blank"><strong>{{ order.title }}</strong></a>
         {% else %}
           <strong>{{order.title}}</strong>
         {% endif %}

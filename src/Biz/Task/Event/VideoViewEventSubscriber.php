@@ -20,17 +20,15 @@ class VideoViewEventSubscriber extends EventSubscriber implements EventSubscribe
 
     public function onVideoView(Event $event)
     {
-        $activity = $event->getSubject();
         $task = $event->getArgument('task');
-
+        $activity = $this->getActivityService()->getActivity($task['activityId'], true);
         $user = $this->getBiz()->offsetGet('user');
         if ('video' !== $activity['mediaType']) {
             return false;
         }
 
-        $content = json_decode(json_decode($activity['content'], true), true);
-        if (!empty($content['id'])) {
-            $file = $this->getUploadFileService()->getFile($content['id']);
+        if ('self' == $task['mediaSource']) {
+            $file = $this->getUploadFileService()->getFile($activity['ext']['mediaId']);
         }
 
         $taskViewLog = [
@@ -41,7 +39,7 @@ class VideoViewEventSubscriber extends EventSubscriber implements EventSubscribe
             'fileId' => !empty($file['id']) ? $file['id'] : 0,
             'fileType' => !empty($file['type']) ? $file['type'] : 'video',
             'fileStorage' => !empty($file['storage']) ? $file['storage'] : 'net',
-            'fileSource' => !empty($content['source']) ? $content['source'] : 'self',
+            'fileSource' => $task['mediaSource'],
         ];
 
         $this->getTaskViewLogService()->createViewLog($taskViewLog);
