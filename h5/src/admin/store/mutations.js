@@ -10,6 +10,9 @@ export default {
   [types.GET_CLASS_CATEGORIES](state, payload) {
     state.classCategories = payload;
   },
+  [types.GET_ITEM_BANK_CATEGORIES](state, payload) {
+    state.itemBankCategories = payload;
+  },
   [types.GET_CSRF_TOKEN](state, payload) {
     state.csrfToken = payload;
   },

@@ -10,5 +10,8 @@ export const GET_COURSE_CATEGORIES = 'GET_COURSE_CATEGORIES';
 // 班级分类
 export const GET_CLASS_CATEGORIES = 'GET_CLASS_CATEGORIES';
 
+// 题库分类
+export const GET_ITEM_BANK_CATEGORIES = 'GET_ITEM_BANK_CATEGORIES';
+
 // 草稿配置数据
 export const UPDATE_DRAFT = 'UPDATE_DRAFT';

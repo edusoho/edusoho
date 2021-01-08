@@ -1,26 +1,28 @@
 
-.web-view{
-  &--btn{
-    position: absolute;
-    top:56px;
-    right: vw(8);
-    width: 94px;
-    height: 30px;
-    font-size: vw(14);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color:$primary-color;
-    border-radius: vw(30);
-    border:1px solid  $primary-color;
-    background: #fff;
-    z-index: 999;
-  }
-  .icon-markdone{
-    margin-right: vw(4);
-  }
-  &--activebtn{
-    color: #fff;
-    background: $primary-color;
-  }
+.web-view {
+	&--btn {
+		position: absolute;
+		top: 8px;
+		right: vw(8);
+		z-index: 2000;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 94px;
+		height: 30px;
+		color: $primary-color;
+		font-size: vw(14);
+		background: #fff;
+		border: 1px solid  $primary-color;
+		border-radius: vw(30);
+	}
+
+	.icon-markdone {
+		margin-right: vw(4);
+	}
+
+	&--activebtn {
+		color: #fff;
+		background: $primary-color;
+	}
 }

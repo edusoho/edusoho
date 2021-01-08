@@ -54,7 +54,7 @@
         <setting-cell :title="typeLabel + '分类：'">
           <el-cascader
             v-show="sourceType === 'condition'"
-            :options="courseCategories"
+            :options="itemBankCategories"
             :props="cascaderProps"
             v-model="categoryTempId"
             size="mini"
@@ -232,7 +232,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['courseCategories', 'classCategories']),
+    ...mapState(['courseCategories', 'classCategories', 'itemBankCategories']),
     typeLabel() {
       return '题库';
     },
@@ -352,6 +352,23 @@ export default {
       },
     },
     courseCategories: {
+      handler(tree) {
+        if (!tree || this.categoryDiggered) return;
+        let categoryExist = false;
+        treeDigger(tree, (children, id) => {
+          if (id) {
+            categoryExist = id == this.categoryTempId;
+          }
+          return children;
+        });
+        this.categoryDiggered = true;
+
+        if (categoryExist) return true;
+        // this.categoryTempId = ['0'];
+      },
+      immediate: true,
+    },
+    itemBankCategories: {
       handler(tree) {
         if (!tree || this.categoryDiggered) return;
         let categoryExist = false;

@@ -18,6 +18,11 @@
             :type="getType(item)"
             @blur="checkField(index, item.value, item.validate)"
             :label-class="isRequired(item.validate) ? 'info-required' : ''"
+            :rules="
+              item.field == 'idcard'
+                ? [{ validator: idcardValidator, message: '身份证号格式错误' }]
+                : []
+            "
           />
         </template>
         <template v-if="item.type === 'radio'">
@@ -102,6 +107,7 @@ import { arealist } from '@/utils/arealist';
 import Api from '@/api';
 const defaultType = ['input', 'InputNumber'];
 const selectType = ['select', 'cascader', 'DatePicker'];
+const idcardPattern = /^[1-9]\d{5}(19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/;
 const rule = [
   {
     type: 'input',
@@ -160,7 +166,7 @@ const rule = [
     },
     validate: [
       { required: true, message: '身份证号不能为空' },
-      { pattern: '[0-9]{17}[0-9xX]{1}', message: '身份证号格式错误' },
+      { pattern: idcardPattern, message: '身份证号格式错误' },
     ],
   },
   {
@@ -592,6 +598,18 @@ export default {
         this.$toast('提交成功');
         this.laterFillIn();
       });
+    },
+    // 身份证校验
+    idcardValidator(value) {
+      let sum = 0;
+      const weights = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2];
+      const codes = '10X98765432';
+      for (let i = 0; i < value.length - 1; i++) {
+        sum += value[i] * weights[i];
+      }
+      const last = codes[sum % 11];
+
+      return value[value.length - 1] == last;
     },
   },
 };

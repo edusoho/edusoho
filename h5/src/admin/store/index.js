@@ -10,6 +10,7 @@ const state = {
   isLoading: false,
   courseCategories: [],
   classCategories: [],
+  itemBankCategories: [],
   user: {},
   csrfToken: '',
   draft: {},

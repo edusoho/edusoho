@@ -203,4 +203,9 @@ export default [
     url: '/me/classroom_members/{id}',
     method: 'GET',
   },
+  {
+    name: 'getEmailServiceState',
+    url: '/setting/mail',
+    method: 'GET',
+  },
 ];
