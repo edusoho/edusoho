@@ -2,23 +2,24 @@
 
 namespace AppBundle\Controller\AdminV2;
 
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\SmsToolkit;
+use AppBundle\Common\StringToolkit;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\CloudPlatform\CloudAPIFactory;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Sms\Service\SmsService;
 use Biz\Sms\SmsException;
+use Biz\Sms\SmsType;
 use Biz\System\Service\SettingService;
-use AppBundle\Common\SmsToolkit;
-use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\StringToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Biz\CloudPlatform\CloudAPIFactory;
 
 class SmsController extends BaseController
 {
     public function prepareAction(Request $request, $targetType, $id)
     {
-        $item = array();
+        $item = [];
         $mobileNum = 0;
         $mobileNeedVerified = false;
         $url = '';
@@ -28,10 +29,10 @@ class SmsController extends BaseController
         if ('classroom' == $targetType) {
             $item = $this->getClassroomService()->getClassroom($id);
             $mobileNum = $this->getUserService()->countUserHasMobile($mobileNeedVerified);
-            $url = $this->generateUrl('classroom_show', array('id' => $id));
+            $url = $this->generateUrl('classroom_show', ['id' => $id]);
         } elseif ('course' == $targetType) {
             $item = $this->getCourseSetService()->getCourseSet($id);
-            $url = $this->generateUrl('course_show', array('id' => $item['defaultCourseId']));
+            $url = $this->generateUrl('course_show', ['id' => $item['defaultCourseId']]);
 
             if ($item['parentId']) {
                 $classroomCourse = $this->getClassroomService()->getClassroomCourseByCourseSetId($item['id']);
@@ -46,7 +47,7 @@ class SmsController extends BaseController
 
         $item['title'] = StringToolkit::cutter($item['title'], 20, 15, 4);
 
-        return $this->render('admin-v2/sms/sms-send.html.twig', array(
+        return $this->render('admin-v2/sms/sms-send.html.twig', [
             'item' => $item,
             'targetType' => $targetType,
             'url' => $url,
@@ -54,7 +55,7 @@ class SmsController extends BaseController
             'index' => 1,
             'isOpen' => $this->getSmsService()->isOpen($smsType),
             'smsInfo' => $smsInfo,
-        ));
+        ]);
     }
 
     public function sendAction(Request $request, $targetType, $id)
@@ -64,10 +65,10 @@ class SmsController extends BaseController
         $onceSendNum = 100;
         $url = $request->query->get('url');
         $count = $request->query->get('count');
-        $parameters = array();
+        $parameters = [];
         $mobileNeedVerified = false;
-        $description = '';
-        $courseSet = array();
+        $templateId = '';
+        $courseSet = [];
 
         if ('classroom' == $targetType) {
             $classroom = $this->getClassroomService()->getClassroom($id);
@@ -75,20 +76,20 @@ class SmsController extends BaseController
             $classroomName = isset($classroomSetting['name']) ? $classroomSetting['name'] : '班级';
             $classroom['title'] = StringToolkit::cutter($classroom['title'], 20, 15, 4);
             $parameters['classroom_title'] = $classroomName.'：《'.$classroom['title'].'》';
-            $description = $parameters['classroom_title'].'发布';
+            $templateId = SmsType::CLASSROOM_PUBLISH;
             $students = $this->getUserService()->findUsersHasMobile($index, $onceSendNum, $mobileNeedVerified);
         } elseif ('course' == $targetType) {
             $courseSet = $this->getCourseSetService()->getCourseSet($id);
             $courseSet['title'] = StringToolkit::cutter($courseSet['title'], 20, 15, 4);
             $parameters['course_title'] = '课程'.'：《'.$courseSet['title'].'》';
-            $description = $parameters['course_title'].'发布';
+            $templateId = SmsType::COURSE_PUBLISH;
 
             if ($courseSet['parentId']) {
                 $classroomCourse = $this->getClassroomService()->getClassroomCourseByCourseSetId($courseSet['id']);
 
                 if ($classroomCourse) {
-                    $count = $this->getClassroomService()->searchMemberCount(array('classroomId' => $classroomCourse['classroomId']));
-                    $students = $this->getClassroomService()->searchMembers(array('classroomId' => $classroomCourse['classroomId']), array('createdTime' => 'Desc'), $index, $onceSendNum);
+                    $count = $this->getClassroomService()->searchMemberCount(['classroomId' => $classroomCourse['classroomId']]);
+                    $students = $this->getClassroomService()->searchMembers(['classroomId' => $classroomCourse['classroomId']], ['createdTime' => 'Desc'], $index, $onceSendNum);
                 }
             } else {
                 $students = $this->getUserService()->findUsersHasMobile($index, $onceSendNum, $mobileNeedVerified);
@@ -107,13 +108,13 @@ class SmsController extends BaseController
                 $studentIds = ArrayToolkit::column($students, 'id');
             }
 
-            $this->getSmsService()->smsSend($smsType, $studentIds, $description, $parameters);
+            $this->getSmsService()->smsSend($smsType, $studentIds, $templateId, $parameters);
         }
 
         if ($count > $index + $onceSendNum) {
-            return $this->createJsonResponse(array('index' => $index + $onceSendNum, 'process' => intval(($index + $onceSendNum) / $count * 100)));
+            return $this->createJsonResponse(['index' => $index + $onceSendNum, 'process' => intval(($index + $onceSendNum) / $count * 100)]);
         } else {
-            return $this->createJsonResponse(array('status' => 'success', 'process' => 100));
+            return $this->createJsonResponse(['status' => 'success', 'process' => 100]);
         }
     }
 
@@ -125,7 +126,7 @@ class SmsController extends BaseController
         $shortUrl = SmsToolkit::getShortLink($url);
         $url = empty($shortUrl) ? $url : $shortUrl;
 
-        return $this->createJsonResponse(array('url' => $url.' '));     // 加' '防止因生成的url后跟有字母导致的跳转链接不正确
+        return $this->createJsonResponse(['url' => $url.' ']);     // 加' '防止因生成的url后跟有字母导致的跳转链接不正确
     }
 
     private function getCloudSmsInfo()

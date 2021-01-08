@@ -141,8 +141,7 @@ class BalloonCloudVideoPlayer extends Emitter {
       self.emit('paused', e);
     });
 
-    player.on('exam.answered', function(e) {
-      var data = e.data;
+    player.on('exam.answered', function(data) {
       data['type'] = self.convertQuestionType(data.type, 'cloud');
       self.emit('answered', data);
     });

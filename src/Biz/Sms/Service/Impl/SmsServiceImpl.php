@@ -3,10 +3,11 @@
 namespace Biz\Sms\Service\Impl;
 
 use Biz\BaseService;
-use Biz\Sms\Service\SmsService;
 use Biz\CloudPlatform\CloudAPIFactory;
-use Biz\System\SettingException;
+use Biz\Sms\Service\SmsService;
 use Biz\Sms\SmsException;
+use Biz\Sms\SmsType;
+use Biz\System\SettingException;
 use Biz\User\UserException;
 
 class SmsServiceImpl extends BaseService implements SmsService
@@ -25,7 +26,7 @@ class SmsServiceImpl extends BaseService implements SmsService
         return false;
     }
 
-    public function smsSend($smsType, $userIds, $description, $parameters = array())
+    public function smsSend($smsType, $userIds, $templateId, $parameters = [])
     {
         if (!$this->isOpen($smsType)) {
             $this->createNewException(SmsException::FORBIDDEN_SMS_SETTING());
@@ -35,8 +36,13 @@ class SmsServiceImpl extends BaseService implements SmsService
         $mobiles = $this->getUserService()->findUnlockedUserMobilesByUserIds($userIds);
         $to = implode(',', $mobiles);
         try {
-            $api = $this->createCloudeApi();
-            $result = $api->post('/sms/send', array('mobile' => $to, 'category' => $smsType, 'sendStyle' => 'templateId', 'description' => $description, 'parameters' => $parameters));
+            $smsParams = [
+                'mobiles' => $to,
+                'templateId' => $templateId,
+                'templateParams' => $parameters,
+            ];
+
+            $this->getSDKSmsService()->sendToMany($smsParams);
         } catch (\RuntimeException $e) {
             $this->createNewException(SmsException::FAILED_SEND());
         }
@@ -66,20 +72,13 @@ class SmsServiceImpl extends BaseService implements SmsService
 
         $this->checkSmsType($smsType, $currentUser);
 
-        if (in_array($smsType, array('sms_bind', 'sms_registration'))) {
-            if ('sms_bind' == $smsType) {
-                $description = '手机绑定';
-            } else {
-                $description = '用户注册';
-            }
-
+        if (in_array($smsType, ['sms_bind', 'sms_registration'])) {
             if (!$this->getUserService()->isMobileUnique($to)) {
                 $this->createNewException(UserException::ERROR_MOBILE_REGISTERED());
             }
         }
 
         if ('sms_forget_password' == $smsType) {
-            $description = '登录密码重置';
             $targetUser = $this->getUserService()->getUserByVerifiedMobile($to);
 
             if (empty($targetUser)) {
@@ -96,13 +95,7 @@ class SmsServiceImpl extends BaseService implements SmsService
             $to = $targetUser['verifiedMobile'];
         }
 
-        if (in_array($smsType, array('sms_user_pay', 'sms_forget_pay_password'))) {
-            if ('sms_user_pay' == $smsType) {
-                $description = '网站余额支付';
-            } else {
-                $description = '支付密码重置';
-            }
-
+        if (in_array($smsType, ['sms_user_pay', 'sms_forget_pay_password'])) {
             if ((!isset($currentUser['verifiedMobile']) || (0 == strlen($currentUser['verifiedMobile'])))) {
                 $this->createNewException(SmsException::NOTFOUND_BIND_MOBILE());
             }
@@ -114,12 +107,7 @@ class SmsServiceImpl extends BaseService implements SmsService
             $to = $currentUser['verifiedMobile'];
         }
 
-        if ('system_remind' == $smsType) {
-            $description = '直播公开课';
-        }
-
         if ('sms_login' == $smsType) {
-            $description = '手机快捷登录';
             // FIXME 先兼容教育云，待教育云添加新的类型
             $smsType = 'sms_bind';
         }
@@ -127,20 +115,24 @@ class SmsServiceImpl extends BaseService implements SmsService
         $smsCode = $this->generateSmsCode();
 
         try {
-            $api = $this->createCloudeApi();
-            $result = $api->post("/sms/{$api->getAccessKey()}/sendVerify", array('mobile' => $to, 'category' => $smsType, 'sendStyle' => 'templateId', 'description' => $description, 'verify' => $smsCode));
-            if (isset($result['error'])) {
-                return array('error' => sprintf('发送失败, %s', $result['error']));
-            }
+            $smsParams = [
+                'mobiles' => $to,
+                'templateId' => SmsType::VERIFY_CODE,
+                'templateParams' => ['verify' => $smsCode],
+            ];
+
+            $this->getSDKSmsService()->sendToOne($smsParams);
         } catch (\RuntimeException $e) {
             $message = $e->getMessage();
 
-            return array('error' => sprintf('发送失败, %s', $message));
+            return ['error' => sprintf('发送失败, %s', $message)];
         }
 
-        $result['to'] = $to;
-        $result['smsCode'] = $smsCode;
-        $result['userId'] = $currentUser['id'];
+        $result = [
+            'to' => $to,
+            'smsCode' => $smsCode,
+            'userId' => $currentUser['id'],
+        ];
 
         if (0 != $currentUser['id']) {
             $result['nickname'] = $currentUser['nickname'];
@@ -149,27 +141,27 @@ class SmsServiceImpl extends BaseService implements SmsService
         $this->getLogService()->info(
             'sms', $smsType, sprintf('userId:%s,对%s发送用于%s的验证短信%s', $currentUser['id'], $to, $smsType, $smsCode), $result);
 
-        return array(
+        return [
             'to' => $to,
             'captcha_code' => $smsCode,
             'sms_last_time' => $currentTime,
-        );
+        ];
     }
 
     public function checkVerifySms($actualMobile, $expectedMobile, $actualSmsCode, $expectedSmsCode)
     {
         if (0 == strlen($actualSmsCode) || 0 == strlen($expectedSmsCode)) {
-            return array('success' => false, 'message' => '验证码错误');
+            return ['success' => false, 'message' => '验证码错误'];
         }
 
         if ('' != $actualMobile && !empty($expectedMobile) && $actualMobile != $expectedMobile) {
-            return array('success' => false, 'message' => '验证码和手机号码不匹配');
+            return ['success' => false, 'message' => '验证码和手机号码不匹配'];
         }
 
         if ($expectedSmsCode == $actualSmsCode) {
-            $result = array('success' => true, 'message' => '验证码正确');
+            $result = ['success' => true, 'message' => '验证码正确'];
         } else {
-            $result = array('success' => false, 'message' => '验证码错误');
+            $result = ['success' => false, 'message' => '验证码错误'];
         }
 
         return $result;
@@ -177,11 +169,11 @@ class SmsServiceImpl extends BaseService implements SmsService
 
     protected function checkSmsType($smsType, $user)
     {
-        if (!in_array($smsType, array('sms_bind', 'sms_user_pay', 'sms_registration', 'sms_forget_password', 'sms_forget_pay_password', 'system_remind', 'sms_login'))) {
+        if (!in_array($smsType, ['sms_bind', 'sms_user_pay', 'sms_registration', 'sms_forget_password', 'sms_forget_pay_password', 'system_remind', 'sms_login'])) {
             $this->createNewException(SmsException::ERROR_SMS_TYPE());
         }
 
-        $smsSetting = $this->getSettingService()->get('cloud_sms', array());
+        $smsSetting = $this->getSettingService()->get('cloud_sms', []);
 
         if (!empty($smsSetting["{$smsType}"]) && 'on' != $smsSetting["{$smsType}"] && !$this->getUserService()->isMobileRegisterMode()) {
             $this->createNewException(SettingException::FORBIDDEN_MOBILE_REGISTER());
@@ -249,5 +241,10 @@ class SmsServiceImpl extends BaseService implements SmsService
     protected function getLogService()
     {
         return $this->createService('System:LogService');
+    }
+
+    private function getSDKSmsService()
+    {
+        return $this->biz['ESCloudSdk.sms'];
     }
 }

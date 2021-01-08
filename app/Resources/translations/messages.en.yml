@@ -557,6 +557,7 @@ pay_center.pay.coin_input_tips: 'Current use'
 pay_center.pay.coin_input_placeholder: 'Please input %coin_name% amount'
 pay_center.pay.password_input_placeholder: 'Please input pay password'
 pay_center.pay.submit_tips: 'Order submitted, please pay in 48 hours. Or the order will be cancelled.'
+pay_center.pay.unable_pay.tips: You have successfully purchased the product, please do not pay repeatedly! The order will be closed within 48 hours.
 pay_center.pay.mode: 'Payment methods'
 pay_center.pay.mode.tips: 'Choose the right cash payment method'
 pay_center.pay.cash_card: 'Deposit card'
@@ -7086,6 +7087,13 @@ admin.app_upgrades.package_description_open: Expand
 admin.app_upgrades.package_description_close: Collapse
 admin.app_upgrades.update_btn: Update
 admin.app_upgrades.latest_version_tips: 'This is already the newest version!'
+admin.app_upgrades.agreement.title: 'Upgrade Service Agreement'
+admin.app_upgrades.agreement.content.21.1.2: >
+  <h4>Edusoho Master System version V21.1.2 includes the upgrade of the old backend to the new one.</h4>
+  <h4 class="cd-mt16">Upgrade new version of back office</h4>
+  <p class="color-danger">-This version can only be used in the new version of backend. If you agree to upgrade, you agree to upgrade your backend to the new version, and you know that you cannot switch back to the old version after the upgrade.</p>
+admin.app_upgrades.agreement.agree: 'Have read and agree to the upgrade service agreement'
+admin.app_upgrades.agreement.btn: 'Upgrade'
 admin.cloud_license.info: 'Authorization info'
 admin.cloud_license.business_license: 'Commercial Licence'
 admin.cloud_license.non_business_license: 'Non-commercial Licence'
@@ -9300,6 +9308,7 @@ exception.reward_point.account.not_found_pay_password: pay password not found
 exception.reward_point.account.error_pay_password_format: The new payment password is not available, please try another password combination
 exception.question_marker.not_found: The question marker does not exist
 exception.order_pay_check.instance_error: Not a ProductDealerService instance
+exception.order_pay_check.unable_pay: You have successfully purchased the product, please do not pay repeatedly! The order will be closed within 48 hours.
 exception.live_replay.not_found: Live replay does not exist
 exception.cloud_file.not_found: Cloud file does not exist
 exception.cloud_file.not_found_player: Cloud player does not exist

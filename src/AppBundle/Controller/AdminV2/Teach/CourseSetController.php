@@ -819,12 +819,14 @@ class CourseSetController extends BaseController
     protected function filterCourseSetConditions($filter, $conditions)
     {
         if ('classroom' == $filter) {
-            $conditions['parentId_GT'] = 0;
+            $conditions['isClassroomRef'] = 1;
         } elseif ('vip' == $filter) {
             $conditions['isVip'] = 1;
             $conditions['parentId'] = 0;
+            $conditions['isClassroomRef'] = 0;
         } else {
             $conditions['parentId'] = 0;
+            $conditions['isClassroomRef'] = 0;
             $conditions = $this->filterCourseSetType($conditions);
         }
 
@@ -919,9 +921,14 @@ class CourseSetController extends BaseController
         foreach ($courseSets as $courseSet) {
             $tags = array_merge($tags, $courseSet['tags']);
         }
+
         $tags = $this->getTagService()->findTagsByIds($tags);
+        $allTagIds = ArrayToolkit::column($tags, 'id');
+
         foreach ($courseSets as &$courseSet) {
-            if (!empty($courseSet['tags']) && !empty($tags[$courseSet['tags'][0]])) {
+            $courseSet['tags'] = array_values(array_intersect($courseSet['tags'], $allTagIds));
+
+            if (!empty($courseSet['tags'])) {
                 $courseSet['displayTag'] = $tags[$courseSet['tags'][0]]['name'];
                 if (count($courseSet['tags']) > 1) {
                     $courseSet['displayTagNames'] = $this->buildTagsDisplayNames($courseSet['tags'], $tags);

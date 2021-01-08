@@ -21,15 +21,16 @@
         <div class="clearfix"></div>
       </form>
       {% if students|length > 0 %}
-          <button id="batch-update-expiry-day" type="button" class="cd-btn cd-btn-primary cd-mb16" data-url="{{ path('item_bank_exercise_manage_students_deadline_batch', {exerciseId: exercise.id}) }}">{{'course.members_manage.official_student.batch_upload_deadline'|trans}}</button>
+        <button id="batch-update-expiry-day" type="button" class="cd-btn cd-btn-primary cd-mb16" data-url="{{ path('item_bank_exercise_manage_students_deadline_batch', {exerciseId: exercise.id}) }}">{{'course.members_manage.official_student.batch_upload_deadline'|trans}}</button>
+        <button id="batch-remove" type="button" class="cd-btn cd-btn-primary cd-mb16" data-url="{{ path('item_bank_exercise_manage_remove_students', {exerciseId: exercise.id}) }}">{{ 'course.members_manage.official_student.batch_remove'|trans }}</button>
       {% endif %}
       <table class="table table-striped" id="course-student-list">
         <thead>
           <tr>
             <th><input type="checkbox"  autocomplete="off"  data-role="batch-select"></th>
-            <th width="23%">{{'site.default.student'|trans}}</th>
-            <th width="17%">{{'join.time'|trans}}</th>
-            <th width="17%">{{'course.expiry_date'|trans}}</th>
+            <th>{{'site.default.student'|trans}}</th>
+            <th>{{'join.time'|trans}}</th>
+            <th>{{'course.expiry_date'|trans}}</th>
             <th width="25%">{{'course.members_manage.official_student.operation'|trans}}</th>
           </tr>
         </thead>

@@ -816,6 +816,7 @@ validate.user_terms.message: Check to agree to this service agreement in order t
 validate.visible_character.message: Not allowed to enter invisible characters, such as spaces
 validate.tag_required_hint: Please input tags
 validate.tag_required_not_found_hint: The tag is not found, please call the administrator to set it through [Management Background] - [Teaching] - [Classification Label] - [Label Management].
+validate.tag_number_exceeds_limit: You can only add %limit% items
 validate.valid_score_input.message: Please enter the correct decimals, leaving only ONE decimal places
 validate.modify_date: Please enter the date of modification
 validate.modify_days: Please enter the number of days modified
@@ -1425,6 +1426,8 @@ admin.item_bank_exercise.exercise.cancel_recommend_success_hint: The item bank e
 admin.item_bank_exercise.exercise.publish_hint: Are you sure you want to publish the current exercise?
 admin.item_bank_exercise.exercise.publish_success_hint: The item bank exercise recommendation has been published!
 admin.item_bank_exercise.exercise.delete_hint: Delete item bank exercises, delete module settings, trainees and other information. Do you really want to delete this exercise bank?
+
+exercise.manage.student_delete_hint: Are you sure you want to delete the student.
 
 task_show.user_login_protect_tip: User unLogin
 admin.course_manage.manage.tags_select.placeholder: Enter the keyword of the tag

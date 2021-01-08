@@ -10,6 +10,7 @@ use Biz\CloudPlatform\Client\EduSohoAppClient;
 use Biz\CloudPlatform\Dao\CloudAppDao;
 use Biz\CloudPlatform\Dao\CloudAppLogDao;
 use Biz\CloudPlatform\Service\AppService;
+use Biz\CloudPlatform\UpgradeAgreement;
 use Biz\CloudPlatform\UpgradeLock;
 use Biz\Common\CommonException;
 use Biz\Crontab\SystemCrontabInitializer;
@@ -86,6 +87,13 @@ class AppServiceImpl extends BaseService implements AppService
         $app = $this->getAppDao()->getByCode('MAIN');
 
         return $app['version'];
+    }
+
+    public function getAgreement($code)
+    {
+        $upgradeAgreement = new UpgradeAgreement();
+
+        return $upgradeAgreement->getAgreement($this->getMainVersion(), $code);
     }
 
     public function registerApp($app)

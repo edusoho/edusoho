@@ -188,6 +188,16 @@ class DefaultSdkProvider implements ServiceProviderInterface
 
             return $service;
         };
+
+        $biz['ESCloudSdk.sms'] = function ($biz) use ($that) {
+            $service = null;
+            $sdk = $that->generateEsCloudSdk($biz, []);
+            if (!empty($sdk)) {
+                $service = $sdk->getSmsService();
+            }
+
+            return $service;
+        };
     }
 
     /**
