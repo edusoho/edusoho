@@ -73,6 +73,7 @@ class ApiSecurityAuthenticationListener implements ListenerInterface
     private function checkSignature(Request $request)
     {
         $params = $request->query->all();
+        unset($params['api_timestamp']);
         $sign = $params['api_signature'];
         unset($params['api_signature']);
         if (!empty($params['api_init']) && 1 == $params['api_init']) {
