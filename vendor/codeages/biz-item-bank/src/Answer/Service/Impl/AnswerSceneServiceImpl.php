@@ -105,7 +105,7 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
 
     public function getAnswerSceneReport($id)
     {
-        $this->buildAnswerSceneReport($id);
+//        $this->buildAnswerSceneReport($id);
         $answerReports = $this->getAnswerReportService()->findByAnswerSceneId($id);
         $answerRecords = $this->getAnswerRecordService()->findByAnswerSceneId($id);
         $answerSceneRerport = [
@@ -127,7 +127,7 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
         if (empty($answerScene)) {
             throw new AnswerSceneException('AnswerScene not found.', ErrorCode::ANSWER_SCENE_NOTFOUD);
         }
-        
+
         $answerSceneQuestionReports = $this->getAnswerSceneQuestionReportsByAnswerSceneId($id);
         $oldAnswerSceneQuestionReports  = ArrayToolkit::index($this->getAnswerSceneQuestionReportDao()->findByAnswerSceneId($id), 'question_id');
         $createAnswerSceneQuestionReports = [];
@@ -164,7 +164,7 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
         if (empty($answerReports)) {
             return 0;
         }
-        
+
         $scores = ArrayToolkit::column($answerReports, 'score');
         return sprintf("%.1f", array_sum($scores) / count($answerReports));
     }
@@ -174,7 +174,7 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
         if (empty($answerReports)) {
             return 0;
         }
-        
+
         $scores = ArrayToolkit::column($answerReports, 'score');
         rsort($scores);
         return sprintf("%.1f", $scores[0]);
@@ -185,7 +185,7 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
         if (empty($answerReports)) {
             return 0;
         }
-        
+
         $scores = ArrayToolkit::column($answerReports, 'score');
         sort($scores);
         return sprintf("%.1f", $scores[0]);

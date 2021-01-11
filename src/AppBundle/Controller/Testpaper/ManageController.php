@@ -16,8 +16,10 @@ use Biz\Question\Service\QuestionService;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Task\Service\TaskService;
+use Biz\Testpaper\Job\QuestionItemAnalysisJob;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\Testpaper\TestpaperException;
+use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use http\Exception\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
@@ -254,6 +256,10 @@ class ManageController extends BaseController
         if (empty($activity['ext']['testpaper'])) {
             return $this->createMessageResponse('info', 'Paper not found');
         }
+        $job = $this->getSceneAnalysisJob($activity['ext']['answerScene']['id']);
+        if (empty($job)) {
+            $job = $this->registerSceneAnalysisJob($activity['ext']['answerScene']['id']);
+        }
 
         $answerSceneReport = $this->getAnswerSceneService()->getAnswerSceneReport($activity['ext']['answerScene']['id']);
 
@@ -264,6 +270,27 @@ class ManageController extends BaseController
             'assessment' => $activity['ext']['testpaper'],
             'targetType' => $targetType,
         ]);
+    }
+
+    protected function registerSceneAnalysisJob($sceneId)
+    {
+        $updateRealTimeTestResultStatusJob = [
+            'name' => 'question_item_analysis_'.$sceneId,
+            'expression' => time(),
+            'class' => QuestionItemAnalysisJob::class,
+            'args' => [
+                'sceneId' => $sceneId,
+            ],
+        ];
+
+        return $this->getSchedulerService()->register($updateRealTimeTestResultStatusJob);
+    }
+
+    protected function getSceneAnalysisJob($sceneId)
+    {
+        $name = 'question_item_analysis_'.$sceneId;
+
+        return $this->getSchedulerService()->getJobByName($name);
     }
 
     public function resultGraphAction($activityId)
@@ -838,5 +865,13 @@ class ManageController extends BaseController
     protected function getHomeworkActivityService()
     {
         return $this->getBiz()->service('Activity:HomeworkActivityService');
+    }
+
+    /**
+     * @return SchedulerService
+     */
+    private function getSchedulerService()
+    {
+        return $this->getBiz()->service('Scheduler:SchedulerService');
     }
 }

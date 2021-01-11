@@ -18,6 +18,13 @@
   {% endblock %}
 
   <div class="js-testpaper-container container mt20">
+    <div class="js-data-large-loading cd-alert cd-alert-warning" hidden>
+      {{ 'exam_bank.analysis.data_large_loading'|trans }}
+    </div>
+    <div class="js-data-large-info cd-alert cd-alert-warning"><i class="cd-icon cd-icon-info"></i>{{ 'exam_bank.analysis.data_large_info'|trans({ '%date%': 'now'|date('Y-m-d H:i:s')  }) }}
+      <button data-url="" class="js-data-large-loading-btn cd-btn cd-btn-warning cd-btn-sm pull-right">{{ 'exam_bank.analysis.data_large_loading_btn'|trans }}</button>
+    </div>
+
     <div class="row">
       <div class="col-md-9 prevent-copy">
         {{ render(controller('AppBundle:AnswerEngine/AnswerEngine:sceneReport', {assessmentId:assessment.id, answerSceneId: answerSceneReport.answer_scene_id})) }}
