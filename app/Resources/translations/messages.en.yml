@@ -10238,4 +10238,7 @@ task.learn_data_detail.video_de_weight_time: 播放去重时长（分）
 task.learn_data_detail.popover: 累加时长：任务下A学员产生的所有学习时长总和；<br/>去重时长：任务下A学员产生的学习时长在自然时间内去重后合并；<br/>如学员同时开启2个页面各学习该任务5分钟，则累加时长为10分钟，去重时长为5分钟。累加数据为实时数据。
 course.task.notify_message.join_and_buy: Please join or buy course
 course.task.notify_message.join_limit: Course buy limited
-
+exam_bank.analysis.data_large_loading: Data is too large，loading
+exam_bank.analysis.data_large_loading_finish: Data loading finish
+exam_bank.analysis.data_large_info: refresh date：%date%，do not fresh because of data to large
+exam_bank.analysis.data_large_loading_btn: Force refresh

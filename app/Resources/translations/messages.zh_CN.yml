@@ -11496,3 +11496,7 @@ information_collect.form_items.skip: 跳过
 information_collect.select_placeholeder: 请选择
 course.task.notify_message.join_and_buy: 请先加入课程或购买课程
 course.task.notify_message.join_limit: 该课程已限制加入，请联系客服
+exam_bank.analysis.data_large_loading: 数据量过大，正在刷新
+exam_bank.analysis.data_large_loading_finish: 数据已刷新完成
+exam_bank.analysis.data_large_info: 数据更新时间为：%date%，由于数据量过大，不建议频繁刷新
+exam_bank.analysis.data_large_loading_btn: 强制刷新
