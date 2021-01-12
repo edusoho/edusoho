@@ -200,10 +200,6 @@ class CourseController extends CourseBaseController
             );
         }
 
-        if ('date' == $course['expiryMode'] && $course['expiryStartDate'] >= time()) {
-            return $this->redirectToRoute('course_show', ['id' => $course['id']]);
-        }
-
         $tags = $this->findCourseSetTagsByCourseSetId($course['courseSetId']);
 
         $hasMulCoursePlans = $this->getCourseService()->hasMulCourses($course['courseSetId']);

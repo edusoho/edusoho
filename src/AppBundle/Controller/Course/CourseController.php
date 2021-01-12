@@ -85,8 +85,6 @@ class CourseController extends CourseBaseController
             }
         }
 
-//        print_r($this->isGoods($course));
-//        exit();
         if ($this->isGoods($course)) {
             $product = $this->getProductService()->getProductByTargetIdAndType($courseSet['id'], 'course');
             $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
