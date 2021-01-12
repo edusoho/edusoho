@@ -10312,6 +10312,7 @@ exception.course.not_found_chapter: 章节不存在
 exception.course.chain_not_registered: 访问链未注册
 exception.course.expirymode_invalid: 有效期类型错误
 exception.course.expirydays_required: 有效天数不能为空
+exception.course.expirydays_invalid: 有效天数类型错误
 exception.course.expirystartdate_required: 有效期开始日期不能为空
 exception.course.expiryenddate_required: 有效期结束日期不能为空
 exception.course.expirydate_end_later_than_start: 有效期结束日期不能早于开始日期
@@ -10341,7 +10342,7 @@ exception.classroom.forbidden_take_classroom: 不能在这个班级学习
 exception.classroom.forbidden_handle_classroom: 不能批阅这个班级的作业
 exception.classroom.forbidden_look_classroom: 不能查看这个班级
 exception.classroom.unpublished_classroom: 班级未发布
-exception.classroom.chain_not_registered:
+exception.classroom.chain_not_registered: 访问链未注册
 exception.classroom.unjoin: 未加入班级
 exception.classroom.empty_title: 班级名称不能为空！
 exception.classroom.forbidden_update_expiry_date: 已发布的班级不允许修改班级原先的有效期模式
@@ -10613,7 +10614,6 @@ exception.certificate.audit.forbidden_audit: 审核失败
 exception.certificate.valid.forbidden_audit: 审核发送失败
 exception.certificate.reject.forbidden_audit: 审核驳回失败
 
-exception.information_collect.not_found: 用户信息采集记录不存在
 exception.information_collect.not_found: 用户信息采集记录不存在
 exception.information_collect.closed: 用户信息采集已关闭
 
