@@ -58,6 +58,9 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
             'doing_look_analysis' => ['integer', ['in', [0, 1]]],
             'pass_score' => ['numeric', ['min', 0]],
             'enable_facein' => ['integer', ['in', [0, 1]]],
+            'question_report_job_id' => ['integer'],
+            'last_submit_time' => ['integer'],
+            'question_report_update_time' => ['integer'],
         ]);
 
         if (isset($answerScene['do_times']) && 1 == $answerScene['do_times']) {
@@ -151,6 +154,8 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
             if ($updateAnswerSceneQuestionReports) {
                 $this->getAnswerSceneQuestionReportDao()->batchUpdate(ArrayToolkit::column($updateAnswerSceneQuestionReports, 'id'), $updateAnswerSceneQuestionReports, 'id');
             }
+
+            $this->update($answerScene['id'], ['name' => $answerScene['name'], 'question_report_update_time' => time()]);
 
             $this->commit();
         } catch (\Exception $e) {

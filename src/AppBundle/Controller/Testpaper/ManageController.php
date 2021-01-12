@@ -270,26 +270,53 @@ class ManageController extends BaseController
         $jobSync = 0;
 
         //如果存在新提交的作业
-        if ($answerScene['question_report_update_time'] < $answerScene['last_submit_time']) {
-//            $answerSceneReport = $this->getAnswerSceneService()->getAnswerSceneReport($activity['ext']['answerScene']['id']);
-            $answerCount = $this->getAnswerReportService()->count(['answer_scene_id' => $activity['ext']['answerScene']['id'], 'exclude_review_user_id' => 0]);
-            $needJob = $this->needSyncJob($answerCount, $activity['ext']['testpaper']['question_count']);
-            //如果超出阈值
-            if ($needJob) {
-                //如果大于8个小时
-                if (time() - $answerScene['question_report_update_time'] > self::SYNC_ANALYSIS_TIME_THRESHOLD) {
-                    $job = $this->getSceneAnalysisJob($activity['ext']['answerScene']['id']);
-
-                    if (empty($job)) {
-                        $job = $this->registerSceneAnalysisJob($activity['ext']['answerScene']['id']);
-                    }
-                    $answerScene = $this->getAnswerSceneService()->update($answerScene['id'], ['question_report_job_id' => $job['id']]);
+        if ($answerScene['question_report_update_time'] <= $answerScene['last_submit_time']) {
+            if ($answerScene['question_report_job_id']) {
+                $jobId = $answerScene['question_report_job_id'];
+                $jobFired = $this->getSchedulerService()->findJobFiredsByJobId($jobId);
+                if (empty($jobFired) || 'success' !== $jobFired[0]['status']) {
                     $jobSync = 0;
                 } else {
-                    $jobSync = 1;
+                    $answerCount = $this->getAnswerReportService()->count(['answer_scene_id' => $activity['ext']['answerScene']['id'], 'exclude_review_user_id' => 0]);
+                    $needJob = $this->needSyncJob($answerCount, $activity['ext']['testpaper']['question_count']);
+                    //如果超出阈值
+                    if ($needJob) {
+                        //如果大于8个小时
+                        if (time() - $answerScene['question_report_update_time'] > self::SYNC_ANALYSIS_TIME_THRESHOLD) {
+                            $job = $this->getSceneAnalysisJob($activity['ext']['answerScene']['id']);
+
+                            if (empty($job)) {
+                                $job = $this->registerSceneAnalysisJob($activity['ext']['answerScene']['id']);
+                            }
+                            $answerScene = $this->getAnswerSceneService()->update($answerScene['id'], ['name' => $answerScene['name'], 'question_report_job_id' => $job['id']]);
+                            $jobSync = 0;
+                        } else {
+                            $jobSync = 1;
+                        }
+                    } else {
+                        $this->getAnswerSceneService()->buildAnswerSceneReport($activity['ext']['answerScene']['id']);
+                    }
                 }
             } else {
-                $this->getAnswerSceneService()->buildAnswerSceneReport($activity['ext']['answerScene']['id']);
+                $answerCount = $this->getAnswerReportService()->count(['answer_scene_id' => $activity['ext']['answerScene']['id'], 'exclude_review_user_id' => 0]);
+                $needJob = $this->needSyncJob($answerCount, $activity['ext']['testpaper']['question_count']);
+                //如果超出阈值
+                if ($needJob) {
+                    //如果大于8个小时
+                    if (time() - $answerScene['question_report_update_time'] > self::SYNC_ANALYSIS_TIME_THRESHOLD) {
+                        $job = $this->getSceneAnalysisJob($activity['ext']['answerScene']['id']);
+
+                        if (empty($job)) {
+                            $job = $this->registerSceneAnalysisJob($activity['ext']['answerScene']['id']);
+                        }
+                        $answerScene = $this->getAnswerSceneService()->update($answerScene['id'], ['name' => $answerScene['name'], 'question_report_job_id' => $job['id']]);
+                        $jobSync = 0;
+                    } else {
+                        $jobSync = 1;
+                    }
+                } else {
+                    $this->getAnswerSceneService()->buildAnswerSceneReport($activity['ext']['answerScene']['id']);
+                }
             }
         }
 
@@ -314,7 +341,8 @@ class ManageController extends BaseController
         if (empty($job)) {
             $job = $this->registerSceneAnalysisJob($answerSceneId);
         }
-        $answerScene = $this->getAnswerSceneService()->update($answerSceneId, ['question_report_job_id' => $job['id']]);
+        $answerScene = $this->getAnswerSceneService()->get($answerSceneId);
+        $answerScene = $this->getAnswerSceneService()->update($answerSceneId, ['name' => $answerScene['name'], 'question_report_job_id' => $job['id']]);
 
         return $this->createJsonResponse(true);
     }

@@ -3644,4 +3644,4 @@ exam_result_analysis_job_sync:
 
 exam_result_analysis_job_check:
   path: exam/{answerSceneId}/job_check
-  defaults: { _controller: AppBundle:Testpaper/Manage:syncCheck }
+  defaults: { _controller: AppBundle:Testpaper/Manage:jobCheck }
