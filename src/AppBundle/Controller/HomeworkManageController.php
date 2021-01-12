@@ -9,15 +9,23 @@ use Biz\Question\Service\CategoryService;
 use Biz\Question\Service\QuestionService;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
+use Biz\Testpaper\Job\QuestionItemAnalysisJob;
 use Biz\Testpaper\Service\TestpaperService;
+use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
+use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
+use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Symfony\Component\HttpFoundation\Request;
 
 class HomeworkManageController extends BaseController
 {
+    const SYNC_ANALYSIS_THRESHOLD = 1;
+
+    const SYNC_ANALYSIS_TIME_THRESHOLD = 28800;
+
     public function questionPickerAction(Request $request, $id)
     {
         $this->getCourseSetService()->tryManageCourseSet($id);
@@ -142,6 +150,61 @@ class HomeworkManageController extends BaseController
             return $this->createMessageResponse('info', 'Paper not found');
         }
 
+        $answerScene = $this->getAnswerSceneService()->get($activity['ext']['answerSceneId']);
+
+        $jobSync = 0;
+
+        //如果存在新提交的作业
+        if ($answerScene['question_report_update_time'] <= $answerScene['last_submit_time']) {
+            if ($answerScene['question_report_job_id']) {
+                $jobId = $answerScene['question_report_job_id'];
+                $jobFired = $this->getSchedulerService()->findJobFiredsByJobId($jobId);
+                if (empty($jobFired) || 'success' !== $jobFired[0]['status']) {
+                    $jobSync = 0;
+                } else {
+                    $answerCount = $this->getAnswerReportService()->count(['answer_scene_id' => $activity['ext']['answerSceneId'], 'exclude_review_user_id' => 0]);
+                    $needJob = $this->needSyncJob($answerCount, $activity['ext']['assessment']['question_count']);
+                    //如果超出阈值
+                    if ($needJob) {
+                        //如果大于8个小时
+                        if (time() - $answerScene['question_report_update_time'] > self::SYNC_ANALYSIS_TIME_THRESHOLD) {
+                            $job = $this->getSceneAnalysisJob($activity['ext']['answerScene']['id']);
+
+                            if (empty($job)) {
+                                $job = $this->registerSceneAnalysisJob($activity['ext']['answerSceneId']);
+                            }
+                            $answerScene = $this->getAnswerSceneService()->update($answerScene['id'], ['name' => $answerScene['name'], 'question_report_job_id' => $job['id']]);
+                            $jobSync = 0;
+                        } else {
+                            $jobSync = 1;
+                        }
+                    } else {
+                        $this->getAnswerSceneService()->buildAnswerSceneReport($activity['ext']['answerSceneId']);
+                    }
+                }
+            } else {
+                $answerCount = $this->getAnswerReportService()->count(['answer_scene_id' => $activity['ext']['answerSceneId'], 'exclude_review_user_id' => 0]);
+                $needJob = $this->needSyncJob($answerCount, $activity['ext']['assessment']['question_count']);
+                //如果超出阈值
+                if ($needJob) {
+                    //如果大于8个小时
+                    if (time() - $answerScene['question_report_update_time'] > self::SYNC_ANALYSIS_TIME_THRESHOLD) {
+                        $job = $this->getSceneAnalysisJob($activity['ext']['answerSceneId']);
+
+                        if (empty($job)) {
+                            $job = $this->registerSceneAnalysisJob($activity['ext']['answerSceneId']);
+                        }
+                        $answerScene = $this->getAnswerSceneService()->update($answerScene['id'], ['name' => $answerScene['name'], 'question_report_job_id' => $job['id']]);
+                        $jobSync = 0;
+                    } else {
+                        $jobSync = 1;
+                    }
+                } else {
+                    $this->getAnswerSceneService()->buildAnswerSceneReport($activity['ext']['answerSceneId']);
+                }
+            }
+        }
+
         $answerSceneReport = $this->getAnswerSceneService()->getAnswerSceneReport($activity['ext']['answerSceneId']);
 
         return $this->render('homework/manage/result-analysis.html.twig', [
@@ -150,7 +213,41 @@ class HomeworkManageController extends BaseController
             'answerSceneReport' => $answerSceneReport,
             'assessment' => $activity['ext']['assessment'],
             'targetType' => $targetType,
+            'answerScene' => $answerScene,
+            'jobSync' => $jobSync,
+            'needJob' => !empty($needJob) ? 1 : 0,
         ]);
+    }
+
+    protected function needSyncJob($answerCount, $questionNum)
+    {
+        if ($answerCount * $questionNum > self::SYNC_ANALYSIS_THRESHOLD) {
+            return true;
+        }
+
+        return false;
+    }
+
+    protected function registerSceneAnalysisJob($sceneId)
+    {
+        $updateRealTimeTestResultStatusJob = [
+            'name' => 'question_item_analysis_'.$sceneId,
+            'expression' => time(),
+            'class' => QuestionItemAnalysisJob::class,
+            'args' => [
+                'sceneId' => $sceneId,
+            ],
+        ];
+
+        return $this->getSchedulerService()->register($updateRealTimeTestResultStatusJob);
+    }
+
+    protected function getSceneAnalysisJob($sceneId)
+    {
+        $name = 'question_item_analysis_'.$sceneId;
+        $this->getSchedulerService()->countJobFires(['job_name' => $name, 'status' => '']);
+
+        return $this->getSchedulerService()->getJobByName($name);
     }
 
     public function resultGraphAction($activityId)
@@ -384,13 +481,27 @@ class HomeworkManageController extends BaseController
         return $this->createService('Activity:HomeworkActivityService');
     }
 
+    /**
+     * @return AssessmentService
+     */
     protected function getAssessmentService()
     {
         return $this->createService('ItemBank:Assessment:AssessmentService');
     }
 
+    /**
+     * @return AnswerSceneService
+     */
     protected function getAnswerSceneService()
     {
         return $this->createService('ItemBank:Answer:AnswerSceneService');
+    }
+
+    /**
+     * @return SchedulerService
+     */
+    private function getSchedulerService()
+    {
+        return $this->getBiz()->service('Scheduler:SchedulerService');
     }
 }

@@ -23,7 +23,7 @@
     </div>
     <div class="js-data-large-info cd-alert cd-alert-warning" hidden><i class="cd-icon cd-icon-info"></i>{{ 'exam_bank.analysis.data_large_info'|trans({ '%date%': answerScene.question_report_update_time|date('Y-m-d H:i:s')  }) }}
       <button data-url="{{ path('exam_result_analysis_job_sync', {answerSceneId:answerScene.id}) }}" data-check-url="{{ path('exam_result_analysis_job_check', {answerSceneId:answerScene.id}) }}"
-              class="js-data-large-loading-btn cd-btn cd-btn-warning cd-btn-sm pull-right">{{ 'exam_bank.analysis.data_large_loading_btn'|trans }}</button>
+              class="js-data-large-loading-btn cd-btn cd-btn-warning cd-btn-sm pull-right" style="position: relative;bottom: 5px;">{{ 'exam_bank.analysis.data_large_loading_btn'|trans }}</button>
     </div>
 
     <div class="js-data-large-finish cd-alert cd-alert-warning" hidden>
