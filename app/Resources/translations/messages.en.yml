@@ -9013,6 +9013,7 @@ exception.user.unfollow_error: Unfollow user who you did not follow
 exception.user.idcard_invalid: ID number is invalid
 exception.user.truename_invalid: Truename is invalid
 exception.user.lock_denied: No permission to ban the role
+exception.user.lock: The account is banned, please contact the administrator
 exception.user.not_match_bind_email: Does not match the bound mailbox
 exception.user.login_limit: Login restriction！
 exception.user.datefield_invalid: Date type field is not filled in by date format
@@ -9069,6 +9070,7 @@ exception.course.not_found_chapter: Chapter does not exist
 exception.course.chain_not_registered: Access chain not registered
 exception.course.expirymode_invalid: Validity type error
 exception.course.expirydays_required: Valid days cannot be empty
+exception.course.expirydays_invalid: Valid days type error
 exception.course.expirystartdate_required: Validity period start date cannot be empty
 exception.course.expiryenddate_required: Validity period end date cannot be empty
 exception.course.expirydate_end_later_than_start: Validity period end date cannot be earlier than the start date
@@ -9099,7 +9101,7 @@ exception.classroom.forbidden_take_classroom: Forbidden take classroom
 exception.classroom.forbidden_handle_classroom: Forbidden handle classroom
 exception.classroom.forbidden_look_classroom: Forbidden look classroom
 exception.classroom.unpublished_classroom: Classroom is unpublished
-exception.classroom.chain_not_registered: Chain not registered
+exception.classroom.chain_not_registered: Access chain not registered
 exception.classroom.unjoin: You have not join classroom
 exception.classroom.empty_title: Title is empty
 exception.classroom.forbidden_update_expiry_date: The published class is not allowed to modify the original validity mode of the class.
@@ -9356,6 +9358,9 @@ exception.certificate.record.notfound_record: Certificate not found
 exception.certificate.record.forbidden_cancel: Forbidden cancel
 exception.certificate.record.forbidden_regrant: Forbidden regrant
 exception.certificate_template.forbidden_delete_published: Prohibit the deletion of published certificates
+exception.certificate.audit.forbidden_audit: Audit failure
+exception.certificate.valid.forbidden_audit: Failed to send audit
+exception.certificate.reject.forbidden_audit: Review rejected failure
 
 exception.information_collect.not_found: Collection not found
 exception.information_collect.closed: Collection is closed
@@ -10229,4 +10234,20 @@ task.learn_data_detail.video_de_weight_time: 播放去重时长（分）
 task.learn_data_detail.popover: 累加时长：任务下A学员产生的所有学习时长总和；<br/>去重时长：任务下A学员产生的学习时长在自然时间内去重后合并；<br/>如学员同时开启2个页面各学习该任务5分钟，则累加时长为10分钟，去重时长为5分钟。累加数据为实时数据。
 course.task.notify_message.join_and_buy: Please join or buy course
 course.task.notify_message.join_limit: Course buy limited
+
+exception.exercise.not_found: Practice doesn't exist
+exception.exercise.draft: This exercise is not published. If you have any questions, please contact the teacher!
+exception.exercise.closed: This exercise is closed. If you have any questions, please contact the teacher!
+exception.exercise.forbidden_access_exercise: No access to other students' exercises!
+exception.exercise.forbidden_duplicate_commit_exercise: Exercises have been completed, do not repeat the submission!
+exception.exercise.not_found_result: The result of the exercise does not exist
+
+exception.homework.not_found: Homework does not exist
+exception.homework.draft: This homework has not been published. If you have any questions, please contact the teacher!
+exception.homework.closed: This homework is closed. If you have any questions, please contact the teacher!
+exception.homework.forbidden_access_homework: Access to other students' work is not allowed!
+exception.homework.forbidden_duplicate_commit_homework: Homework has been finished and cannot be submitted again!
+exception.homework.reviewing: Homework is being marked! Can't start over!
+exception.homework.not_found_result: The homework result does not exist
+
 
