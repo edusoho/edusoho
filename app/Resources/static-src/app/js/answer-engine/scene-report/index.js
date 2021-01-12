@@ -30,6 +30,7 @@ if (needJob) {
           setTimeout(() => {
             $('.js-data-large-finish').hide();
           }, 3000);
+          window.location.reload();
         }
       });
     }, 5000);
@@ -49,6 +50,7 @@ $('.js-data-large-loading-btn').on('click', function () {
           setTimeout(() => {
             $('.js-data-large-finish').hide();
           }, 3000);
+          window.location.reload();
         }
       });
     }, 5000);
