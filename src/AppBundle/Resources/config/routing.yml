@@ -3637,3 +3637,11 @@ information_collect_event_modal:
 drp_info:
   path: /drp_info/{targetId}/{type}
   defaults: { _controller: AppBundle:DrpInfo:getDrpInfo }
+
+exam_result_analysis_job_sync:
+  path: exam/{answerSceneId}/job_sync
+  defaults: { _controller: AppBundle:Testpaper/Manage:syncJob }
+
+exam_result_analysis_job_check:
+  path: exam/{answerSceneId}/job_check
+  defaults: { _controller: AppBundle:Testpaper/Manage:syncCheck }
