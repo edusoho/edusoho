@@ -12,6 +12,7 @@ class QuestionItemAnalysisJob extends AbstractJob
         if (empty($this->args['sceneId'])) {
             return;
         }
+        sleep(100);
         $this->getAnswerSceneService()->buildAnswerSceneReport($this->args['sceneId']);
     }
 

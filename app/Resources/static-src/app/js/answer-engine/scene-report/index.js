@@ -11,3 +11,14 @@ if (app.lang == 'en') {
 new Vue({
   render: createElement => createElement(SceneReport)
 }).$mount('#app');
+
+let needJob = $('.js-testpaper-container').data('needJob');
+let jobSync = $('.js-testpaper-container').data('jobSync');
+
+if (needJob) {
+  if (jobSync) {
+    $('.js-data-large-info').show();
+  } else {
+    $('.js-data-large-loading').show();
+  }
+}
