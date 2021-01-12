@@ -12,6 +12,18 @@
              name="titleLike" value="{{ app.request.get('titleLike') }}">
     </div>
 
+    <div class="form-group">
+      <select class="form-control" name="categoryId">
+        {{ select_options(category_choices('classroom'), app.request.query.get('categoryId'), 'admin.classroom_manage.chooser.category'|trans) }}
+      </select>
+    </div>
+
+    <div class="form-group">
+      <select class="form-control" name="status">
+        {{ select_options(dict('classroomStatus'), app.request.query.get('status'), 'admin.classroom_manage.chooser.status'|trans) }}
+      </select>
+    </div>
+
     <button class="btn btn-primary">{{ 'form.btn.search'|trans }}</button>
     {% include 'admin-v2/widget/tooltip-widget.html.twig' with { icon: 'glyphicon-question-sign', content: 'admin.classroom_manage.manage.describe_tips'|trans|raw, placement: 'left'} %}
 
