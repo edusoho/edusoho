@@ -140,6 +140,8 @@
                     this.buyViewMode = 'text';
                     console.log(new Date(parseInt(sku.usageEndTime)).getTime());
                     this.buyViewText = Translator.trans('goods.show_page.usage_expiry_tips');
+                } else if (['date', 'end_date'].includes(sku.usageMode)
+                    && new Date(parseInt(sku.usageEndTime)).getTime() * 1000 < new Date().getTime()) {
                 } else if (sku.vipLevelInfo) {
                     this.buyViewMode = 'btn';
                     if (sku.vipUser && sku.vipLevelInfo.seq <= sku.vipUser.level.seq && parseInt(sku.vipUser.deadline) * 1000 > new Date().getTime()) {
