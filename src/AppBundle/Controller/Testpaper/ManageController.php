@@ -278,7 +278,7 @@ class ManageController extends BaseController
                     $jobSync = 0;
                     $needJob = 1;
                 } else {
-                    $answerCount = $this->getAnswerReportService()->count(['answer_scene_id' => $activity['ext']['answerScene']['id'], 'exclude_review_user_id' => 0]);
+                    $answerCount = $this->getAnswerRecordService()->count(['answer_scene_id' => $activity['ext']['answerScene']['id'], 'status' => 'finished']);
                     $needJob = $this->needSyncJob($answerCount, $activity['ext']['testpaper']['question_count']);
                     //如果超出阈值
                     if ($needJob) {
@@ -299,7 +299,7 @@ class ManageController extends BaseController
                     }
                 }
             } else {
-                $answerCount = $this->getAnswerReportService()->count(['answer_scene_id' => $activity['ext']['answerScene']['id'], 'exclude_review_user_id' => 0]);
+                $answerCount = $this->getAnswerRecordService()->count(['answer_scene_id' => $activity['ext']['answerScene']['id'], 'status' => 'finished']);
                 $needJob = $this->needSyncJob($answerCount, $activity['ext']['testpaper']['question_count']);
                 //如果超出阈值
                 if ($needJob) {
