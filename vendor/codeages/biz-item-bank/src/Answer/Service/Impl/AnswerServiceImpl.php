@@ -79,8 +79,9 @@ class AnswerServiceImpl extends BaseService implements AnswerService
                 ]
             );
 
-//            $this->getAnswerSceneService()->update($answerScene['id'], ['name' => $answerScene['name'], 'last_submit_time' => time()]);
-
+            if ($canFinished) {
+                $this->getAnswerSceneService()->update($answerScene['id'], ['name' => $answerScene['name'], 'last_submit_time' => time()]);
+            }
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
