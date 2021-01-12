@@ -276,6 +276,7 @@ class ManageController extends BaseController
                 $jobFired = $this->getSchedulerService()->findJobFiredsByJobId($jobId);
                 if (empty($jobFired) || 'success' !== $jobFired[0]['status']) {
                     $jobSync = 0;
+                    $needJob = 1;
                 } else {
                     $answerCount = $this->getAnswerReportService()->count(['answer_scene_id' => $activity['ext']['answerScene']['id'], 'exclude_review_user_id' => 0]);
                     $needJob = $this->needSyncJob($answerCount, $activity['ext']['testpaper']['question_count']);
