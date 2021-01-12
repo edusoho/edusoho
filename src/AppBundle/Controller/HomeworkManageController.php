@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class HomeworkManageController extends BaseController
 {
-    const SYNC_ANALYSIS_THRESHOLD = 1;
+    const SYNC_ANALYSIS_THRESHOLD = 10;
 
     const SYNC_ANALYSIS_TIME_THRESHOLD = 28800;
 
