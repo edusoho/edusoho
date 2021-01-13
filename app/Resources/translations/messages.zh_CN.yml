@@ -4764,6 +4764,7 @@ course.member.course.join_btn: 退出并重新加入
 course.member.operation.quit_deadline_reach: 达到有效期，退出课程
 course.member.operation.admin_remove_course_student: 老师手动移除学员
 course.member.operation.reason.join_classroom: 用户加入班级，自动加入班级课程
+course.member.course.expiry_start_date_tips: 学习时间未到，无法学习%taskName%，请在学习有效期内进行学习~
 
 # course/widgets
 course.widgets.belong_classroom.title: 所属%name%
