@@ -30,7 +30,7 @@ class CaptureController extends BaseController
         }
         if (empty($error)) {
             $cloud = $this->getSettingService()->get('storage', []);
-            $token = $this->getSDKFaceInspectionService()->makeToken($user['id'], $cloud['cloud_access_key'], $cloud['cloud_secret_key']);
+            $token = $this->getSDKFaceInspectionService()->makeToken($user['nickname'], $cloud['cloud_access_key'], $cloud['cloud_secret_key']);
         }
 
         return $this->render('face-inspection/index.html.twig', [
@@ -48,7 +48,7 @@ class CaptureController extends BaseController
             $this->createNewException(UserException::UN_LOGIN());
         }
         $cloud = $this->getSettingService()->get('storage', []);
-        $token = $this->getSDKFaceInspectionService()->makeToken($user['id'], $cloud['cloud_access_key'], $cloud['cloud_secret_key']);
+        $token = $this->getSDKFaceInspectionService()->makeToken($user['nickname'], $cloud['cloud_access_key'], $cloud['cloud_secret_key']);
 
         return $this->render('face-inspection/index.html.twig', [
             'token' => empty($token) ? '' : $token,
@@ -137,7 +137,7 @@ class CaptureController extends BaseController
         }
 
         $cloud = $this->getSettingService()->get('storage', []);
-        $token = $this->getSDKFaceInspectionService()->makeToken($user['id'], $cloud['cloud_access_key'], $cloud['cloud_secret_key']);
+        $token = $this->getSDKFaceInspectionService()->makeToken($user['nickname'], $cloud['cloud_access_key'], $cloud['cloud_secret_key']);
 
         return $this->render('face-inspection/inspection.html.twig', [
             'token' => $token,

@@ -4,7 +4,7 @@
   {% if error|default() %}
     <div style="text-align: center; line-height: 400px;font-size: 20px;"> {{ error }}</div>
   {% else %}
-    <script id="escloud-inspection-sdk-script" src="https://edtech.edusoho.net/inspection/inspection-sdk-v2.1.js"></script>
+    <script id="escloud-inspection-sdk-script" src="https://edtech.edusoho.net/exam-supervisor/exam-supervisor-sdk.js"></script>
     {% do script(['app/js/face-inspection/index.js']) %}
     <div class="container">
       <div class="row justify-content-center">
@@ -12,46 +12,11 @@
           <div class="inspection-collect-row">
             <h4>考生头像采集</h4>
           </div>
-          <div class="inspection-collect-row" style="margin-bottom: 20px;">
-            <div class="inspection-collect">
-              <video class="inspection-collect-video" id="inspection-collect-video"></video>
-              <img class="inspection-collect-image" id="inspection-collect-image" style="display: none;" />
-              <img src="{{ asset('assets/img/common/avatar-outline.png') }}" class="inspection-collect-outline" id="inspection-collect-outline" style="display: none;" />
-              <div class="inspection-collect-starting" id="inspection-collect-starting">
-                图像采集区
-              </div>
-            </div>
-
-            <div class="inspection-collect-results">
-              <div class="inspection-collect-result" id="inspection-collect-result-1">
-                <div class="inspection-collect-result-label">采集 1</div>
-              </div>
-              <div class="inspection-collect-result" id="inspection-collect-result-2">
-                <div class="inspection-collect-result-label">采集 2</div>
-              </div>
-              <div class="inspection-collect-result" id="inspection-collect-result-3">
-                <div class="inspection-collect-result-label">采集 3</div>
-              </div>
-            </div>
-
-            <div class="inspection-collect-hint">
-              <div style="padding: 15px;">
-                <p><b>采集提示：</b></p>
-                <p>1. 请确保头像处于虚线框内，脸部无遮挡，画面中无其他人员，人脸清晰。</p>
-                <p>2. 需采集3次，系统自动选用最清晰的头像。</p>
-                <p>3. 如果头像无法采集，请参考 <a href="https://edtech.edusoho.net/inspection/help/index.html" target="_blank">云监考设备调试指南</a> 文档。</p>
-              </div>
-            </div>
-          </div>
-
-          <div id="alert-box" class="text-center" style="height: 70px;"></div>
-
-          <div class="inspection-collect-row inspection-collect-actions js-btn-group" id="inspection-collect-actions">
-            <button type="button" data-upload-url="{{path('facein_capture_upload',{code:code|default()})}}" class="btn btn-primary js-upload-url" id="inspection-collect-btn" style="min-width: 100px;display: none;" disabled>采集</button>
-            <a class="btn btn-success" href="{% if goto|default(null) %}{{ goto }}{% else %}{{path('homepage')}}{% endif %}" id="inspection-collect-finish-btn" style="display: none;">完成采集</a>
+          <div class="inspection-collect-row js-upload-url" style="margin-bottom: 20px;" id="inspection-collect-video" data-upload-url="{{path('facein_capture_upload',{code:code|default()})}}">
           </div>
 
         </div>
+        <input type="hidden" name="token" value="{{ token }}">
       </div>
     </div>
   {% endif %}
