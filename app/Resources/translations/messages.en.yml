@@ -10152,6 +10152,7 @@ classroom.subtitle_label: Subtitle
 classroom.basic_setting: Basic Setting
 classroom.cover_crop.title: Classroom Cover
 exception.s2b2c_product.adopt_failed: Adopt fail,Supplier is editing
+exception.product.not_exist: Product does not exist
 
 
 goods.minimum_price.unit: From %price%%unit%
