@@ -11,10 +11,6 @@ class LearnCourseMemberAccessor extends AccessorAdapter
     {
         $user = $this->getCurrentUser();
 
-        if ($user->isAdmin()) {
-            return null;
-        }
-
         if (null === $user || !$user->isLogin()) {
             return $this->buildResult('user.not_login');
         }
