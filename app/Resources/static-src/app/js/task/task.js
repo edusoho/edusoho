@@ -54,10 +54,17 @@ export default class TaskShow extends Emitter {
     this.eventEmitter.addListener('finish', response => {
       this._receiveFinish(response);
     });
+    this.eventEmitter.addListener('start', response => {
+      this._receiveDoing(response);
+    });
   }
 
   _receiveFinish(response) {
     const nextTaskUrl = this.element.find('#task-content-iframe').data('nextTaskUrl');
+    if ($('.js-finish-tip').length > 0) {
+      $('.js-finish-tip').html(Translator.trans('activity.manage.finished_tips'));
+    }
+
     if ($('input[name="task-result-status"]', $('#js-hidden-data')).val() != 'finish') {
       $.get($('.js-learned-prompt').data('url'), html => {
         $('.js-learned-prompt').attr('data-content', html);
@@ -73,6 +80,12 @@ export default class TaskShow extends Emitter {
     }
     if (nextTaskUrl && response.playerMsg && response.playerMsg.mode == 'sequence') {
       window.location.href = nextTaskUrl;
+    }
+  }
+
+  _receiveDoing(response) {
+    if ($('.js-finish-time').length > 0) {
+      $('.js-finish-time').html(response.learnedTime);
     }
   }
 

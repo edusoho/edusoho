@@ -2,8 +2,28 @@
 
 {% if activity.finishType == 'time' %}
   {{'activity_manage.finish_tips_time'|trans({'%finishDetail%':activity.finishData})|raw}}
+  <p class="mts js-finish-tip">
+    {% if taskResult and taskResult.status == 'finish' %}
+      {{ 'activity_manage.finished_tips'|trans }}
+    {% elseif taskResult %}
+      {% set time = taskResult.time > activity.finishData * 60 ? 0 : (activity.finishData * 60 - taskResult.time) / 60 %}
+      {{ 'activity_manage.time_last_tips'|trans({'%time%':time|round})|raw }}
+    {% else %}
+      {{ 'activity_manage.time_last_tips'|trans({'%time%':(activity.finishData)})|raw }}
+    {% endif %}
+  </p>
 {% elseif activity.finishType == 'watchTime' %}
   {{'activity_manage.finish_tips_watch_time'|trans({'%finishDetail%':activity.finishData})|raw}}
+  <p class="mts js-finish-tip">
+    {% if taskResult and taskResult.status == 'finish' %}
+      {{ 'activity_manage.finished_tips'|trans }}
+    {% elseif taskResult %}
+      {% set time = taskResult.watchTime > activity.finishData * 60 ? 0 : (activity.finishData * 60 - taskResult.watchTime) / 60 %}
+      {{ 'activity_manage.time_last_tips'|trans({'%time%':time|round})|raw }}
+    {% else %}
+      {{ 'activity_manage.time_last_tips'|trans({'%time%':(activity.finishData)})|raw }}
+    {% endif %}
+  </p>
 {% elseif condition.describe|default() %}
   {{ condition.describe|trans }}
 {% else %}

@@ -1995,6 +1995,10 @@ activity_manage.finish_tips_time: >
   至少停留%finishDetail%分钟。
 activity_manage.finish_tips_watch_time: >
   至少播放%finishDetail%分钟。
+activity_manage.time_last_tips: >
+  剩余<span class="color-danger js-finish-time">%time%</span>分完成
+activity_manage.finished_tips: >
+  <span class="color-primary">恭喜！你已完成该任务</span>
 activity_manage.finish_select_tips_time: 页面停留时长
 activity_manage.finish_select_tips_watch_time: 视频播放时长
 activity_manage.finish_select_tips_end: 学习到最后
