@@ -7,7 +7,6 @@ use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Activity\Service\ActivityService;
 use Biz\Common\CommonException;
 use Biz\Course\Service\LearningDataAnalysisService;
-use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
@@ -59,7 +58,7 @@ class CourseTaskEventV2 extends AbstractResource
                     'allowLearn' => false,
                     'denyReason' => $denyReason,
                 ],
-                'learnedTime' => $this->getUserTaskLearnedTime($task),
+                'learnedTime' => $this->getMyLearnedTime($activity),
             ];
         }
         $flow = $this->getDataCollectService()->createLearnFlow($user['id'], $activity['id'], $sign);
@@ -105,7 +104,7 @@ class CourseTaskEventV2 extends AbstractResource
                 'allowLearn' => true,
                 'denyReason' => '',
             ],
-            'learnedTime' => $this->getUserTaskLearnedTime($task),
+            'learnedTime' => $this->getMyLearnedTime($activity),
         ];
     }
 
@@ -186,7 +185,7 @@ class CourseTaskEventV2 extends AbstractResource
                 'allowLearn' => $canDoing,
                 'denyReason' => $denyReason,
             ],
-            'learnedTime' => $this->getUserTaskLearnedTime($task),
+            'learnedTime' => $this->getMyLearnedTime($activity),
         ];
     }
 
@@ -243,7 +242,7 @@ class CourseTaskEventV2 extends AbstractResource
                 'allowLearn' => $canDoing,
                 'denyReason' => $denyReason,
             ],
-            'learnedTime' => $this->getUserTaskLearnedTime($task),
+            'learnedTime' => $this->getMyLearnedTime($activity),
         ];
     }
 
@@ -305,23 +304,16 @@ class CourseTaskEventV2 extends AbstractResource
 //        }
     }
 
-    protected function getUserTaskLearnedTime(array $task)
+    protected function getMyLearnedTime(array $activity)
     {
-        if ('video' !== $task['type']) {
-            $learnedTime = $this->getTaskResultService()->getMyLearnedTimeByActivityId($task['activityId']);
-
-            return (int) $learnedTime;
-        }
-
-        $setting = $this->getSettingService()->get('videoEffectiveTimeStatistics');
-        if (empty($setting) || 'page' == $setting['statistical_dimension']) {
-            $learnedTime = $this->getTaskResultService()->getMyLearnedTimeByActivityId($task['activityId']);
+        if ('watchTime' !== $activity['finishType']) {
+            $learnedTime = $this->getTaskResultService()->getMyLearnedTimeByActivityId($activity['id']);
 
             return (int) $learnedTime;
         }
 
         $watchRecords = $this->getActivityVideoWatchRecordDao()->search(
-            ['taskId' => $task['id'], 'activityId' => $task['activityId'], 'userId' => $this->getCurrentUser()->getId()],
+            ['activityId' => $activity['id'], 'userId' => $this->getCurrentUser()->getId()],
             [],
             0,
             PHP_INT_MAX,
@@ -382,14 +374,6 @@ class CourseTaskEventV2 extends AbstractResource
     protected function getTaskResultService()
     {
         return $this->service('Task:TaskResultService');
-    }
-
-    /**
-     * @return SettingService
-     */
-    protected function getSettingService()
-    {
-        return $this->service('System:SettingService');
     }
 
     /**
