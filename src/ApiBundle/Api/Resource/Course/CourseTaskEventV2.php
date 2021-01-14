@@ -7,6 +7,7 @@ use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Activity\Service\ActivityService;
 use Biz\Common\CommonException;
 use Biz\Course\Service\LearningDataAnalysisService;
+use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
 use Biz\Task\TaskException;
@@ -58,6 +59,7 @@ class CourseTaskEventV2 extends AbstractResource
                     'allowLearn' => false,
                     'denyReason' => $denyReason,
                 ],
+                'learnedTime' => $this->getUserTaskLearnedTime($task),
             ];
         }
         $flow = $this->getDataCollectService()->createLearnFlow($user['id'], $activity['id'], $sign);
@@ -103,6 +105,7 @@ class CourseTaskEventV2 extends AbstractResource
                 'allowLearn' => true,
                 'denyReason' => '',
             ],
+            'learnedTime' => $this->getUserTaskLearnedTime($task),
         ];
     }
 
@@ -183,6 +186,7 @@ class CourseTaskEventV2 extends AbstractResource
                 'allowLearn' => $canDoing,
                 'denyReason' => $denyReason,
             ],
+            'learnedTime' => $this->getUserTaskLearnedTime($task),
         ];
     }
 
@@ -239,6 +243,7 @@ class CourseTaskEventV2 extends AbstractResource
                 'allowLearn' => $canDoing,
                 'denyReason' => $denyReason,
             ],
+            'learnedTime' => $this->getUserTaskLearnedTime($task),
         ];
     }
 
@@ -300,6 +305,32 @@ class CourseTaskEventV2 extends AbstractResource
 //        }
     }
 
+    protected function getUserTaskLearnedTime(array $task)
+    {
+        if ('video' !== $task['type']) {
+            $result = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
+
+            return (int) $result['time'];
+        }
+
+        $setting = $this->getSettingService()->get('videoEffectiveTimeStatistics');
+        if (empty($setting) || 'page' == $setting['statistical_dimension']) {
+            $result = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
+
+            return (int) $result['time'];
+        }
+
+        $watchRecords = $this->getActivityVideoWatchRecordDao()->search(
+            ['taskId' => $task['id'], 'activityId' => $task['activityId'], 'userId' => $this->getCurrentUser()->getId()],
+            [],
+            0,
+            PHP_INT_MAX,
+            ['duration']
+        );
+
+        return (int) array_sum(array_column($watchRecords, 'duration'));
+    }
+
     protected function getKickOutStatus($userId, $sign)
     {
         $this->getLearnControlService()->checkActive($userId, $sign);
@@ -351,5 +382,21 @@ class CourseTaskEventV2 extends AbstractResource
     protected function getTaskResultService()
     {
         return $this->service('Task:TaskResultService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->service('System:SettingService');
+    }
+
+    /**
+     * @return ActivityVideoWatchRecordDao
+     */
+    protected function getActivityVideoWatchRecordDao()
+    {
+        return $this->getBiz()->dao('Visualization:ActivityVideoWatchRecordDao');
     }
 }
