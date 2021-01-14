@@ -306,8 +306,7 @@ class OpenCourseAnalysisController extends BaseController
         $orderLogs = $this->getOrderRefererLogService()->searchOrderRefererLogs(
             $conditions,
             ['buyNum' => 'DESC'],
-            0, 10,
-            'targetId, targetType'
+            0, 10
         );
 
         if (!$orderLogs) {

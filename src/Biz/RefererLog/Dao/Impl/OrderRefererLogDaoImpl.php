@@ -28,18 +28,13 @@ class OrderRefererLogDaoImpl extends GeneralDaoImpl implements OrderRefererLogDa
         ];
     }
 
-    public function searchOrderRefererLogs($conditions, $orderBy, $start, $limit, $groupBy)
+    public function searchOrderRefererLogs($conditions, $orderBy, $start, $limit)
     {
-        $seachFields = '*';
-        if (!empty($groupBy)) {
-            $seachFields = 'targetId,targetType,COUNT(id) AS buyNum';
-        }
-
         $builder = $this->createQueryBuilder($conditions)
-            ->select($seachFields)
+            ->select('targetId,targetType,COUNT(id) AS buyNum')
             ->setFirstResult($start)
             ->setMaxResults($limit)
-            ->addGroupBy($groupBy);
+            ->addGroupBy('targetId,targetType');
 
         foreach ($orderBy ?: [] as $field => $direction) {
             $builder->addOrderBy($field, $direction);
