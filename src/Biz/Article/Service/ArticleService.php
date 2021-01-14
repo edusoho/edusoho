@@ -45,21 +45,8 @@ interface ArticleService
 
     public function countArticles($conditions);
 
-    /**
-     * @param $article
-     *
-     * @return mixed
-     * @Log(module="article",action="create")
-     */
     public function createArticle($article);
 
-    /**
-     * @param $id
-     * @param $article
-     *
-     * @return mixed
-     * @Log(module="article",action="update")
-     */
     public function updateArticle($id, $article);
 
     public function batchUpdateOrg($articleIds, $orgCode);

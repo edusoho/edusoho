@@ -121,6 +121,8 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
         $this->dispatchEvent('article.create', new Event($article, array('tagIds' => $tagIds, 'userId' => $user['id'])));
 
+        $this->getLogService()->info('article', 'create', '新增', $article);
+
         return $article;
     }
 
@@ -152,6 +154,8 @@ class ArticleServiceImpl extends BaseService implements ArticleService
             'userId' => $user['id'],
         ));
         $this->dispatchEvent('article.update', $event);
+
+        $this->getLogService()->info('article', 'update', '修改', $article);
 
         return $article;
     }
