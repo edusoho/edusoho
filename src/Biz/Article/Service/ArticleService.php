@@ -4,8 +4,8 @@ namespace Biz\Article\Service;
 
 use Biz\Article\ArticleException;
 use Biz\Article\CategoryException;
-use Biz\User\UserException;
 use Biz\System\Annotation\Log;
+use Biz\User\UserException;
 
 interface ArticleService
 {
@@ -100,8 +100,6 @@ interface ArticleService
 
     /**
      * batch delete articles at trash.
-     *
-     * @param array $ids
      *
      * @throws ArticleException
      *
