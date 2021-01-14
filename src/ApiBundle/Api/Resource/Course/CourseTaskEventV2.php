@@ -308,16 +308,16 @@ class CourseTaskEventV2 extends AbstractResource
     protected function getUserTaskLearnedTime(array $task)
     {
         if ('video' !== $task['type']) {
-            $result = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
+            $learnedTime = $this->getTaskResultService()->getMyLearnedTimeByActivityId($task['activityId']);
 
-            return (int) $result['time'];
+            return (int) $learnedTime;
         }
 
         $setting = $this->getSettingService()->get('videoEffectiveTimeStatistics');
         if (empty($setting) || 'page' == $setting['statistical_dimension']) {
-            $result = $this->getTaskResultService()->getUserTaskResultByTaskId($task['id']);
+            $learnedTime = $this->getTaskResultService()->getMyLearnedTimeByActivityId($task['activityId']);
 
-            return (int) $result['time'];
+            return (int) $learnedTime;
         }
 
         $watchRecords = $this->getActivityVideoWatchRecordDao()->search(
