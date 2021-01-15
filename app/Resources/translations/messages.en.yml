@@ -4061,6 +4061,7 @@ course.member.course.join_btn: 'Exit and re-Enroll'
 course.member.operation.quit_deadline_reach: 'The user will quit until the deadline'
 course.member.operation.admin_remove_course_student: 'The admin removes it manually'
 course.member.operation.reason.remove_teachers: 'Exit the course when deleting the teacher role'
+course.member.course.expiry_start_date_tips: 'You cannot learn %task Name% before the study time is up. Please study within the valid period of study~'
 
 course.widgets.belong_classroom.title: 'Belong to %name%'
 course.widgets.classroom_price.price: Price
