@@ -1,9 +1,16 @@
 const getDisplayStyle = (data, listObj) => {
-  const showStudentStr = listObj.showStudent
-    ? `<span class="switch-box__state">
-            <p style="color: #B0BDC9">${data.studentNum}人在学</p>
-        </span>`
-    : '';
+  let showStudentStr = '';
+  if (listObj.show_number_data === 'join') {
+    showStudentStr = `<span class="switch-box__state">
+            <p class="iconfont icon-people">${data.studentNum}人</p>
+        </span>`;
+  } else if (listObj.show_number_data === 'visitor') {
+    showStudentStr = `<span class="switch-box__state">e
+            <p class="iconfont icon-visibility">${data.studentNum}人</p>
+        </span>`;
+  } else {
+    showStudentStr = '';
+  }
   const price =
     data.price === '0.00'
       ? '<p style="color: #408FFB">免费</p>'

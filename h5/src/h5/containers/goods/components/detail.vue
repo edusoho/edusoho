@@ -58,9 +58,19 @@
             }}</span></span
           >
         </div>
-        <div class="pull-right study-num">
-          <i class="iconfont icon-renqi"></i>
+        <div
+          v-if="goodsSetting.show_number_data === 'join'"
+          class="pull-right study-num"
+        >
+          <i class="iconfont icon-people"></i>
           {{ goods.product.target.studentNum }}人
+        </div>
+        <div
+          v-else-if="goodsSetting.show_number_data === 'visitor'"
+          class="pull-right study-num"
+        >
+          <i class="iconfont icon-visibility"></i>
+          {{ goods.hitNum }}人
         </div>
       </div>
     </div>
@@ -75,6 +85,10 @@ export default {
       default: () => {},
     },
     currentSku: {
+      type: Object,
+      default: () => {},
+    },
+    goodsSetting: {
       type: Object,
       default: () => {},
     },

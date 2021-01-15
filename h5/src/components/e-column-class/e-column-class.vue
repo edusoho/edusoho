@@ -13,8 +13,12 @@
         <div>
           <span v-show="courseType === 'live'">直播</span>
         </div>
-        <div v-if="course.studentNum">
-          <i class="iconfont icon-renqi" />
+        <div v-if="show_number_data === 'join'">
+          <i class="iconfont icon-people" />
+          {{ course.studentNum }}
+        </div>
+        <div v-if="show_number_data === 'visitor'">
+          <i class="iconfont icon-visibility" />
           {{ course.studentNum }}
         </div>
       </div>
@@ -39,5 +43,11 @@
 import eClassMixins from '@/mixins/eClass';
 export default {
   mixins: [eClassMixins],
+  props: {
+    show_number_data: {
+      type: String,
+      default: 'none',
+    },
+  },
 };
 </script>

@@ -18,6 +18,7 @@
         uiStyle="new"
         class="gray-border-bottom"
         @fetchCourse="fetchCourse"
+        :show_number_data="show_number_data"
       />
       <e-poster
         v-if="part.type === 'poster'"
@@ -119,6 +120,7 @@ export default {
       imageMode: ['responsive', 'size-fit'],
       showFlag: true,
       closeDate: 'closedDate',
+      show_number_data: '',
     };
   },
   computed: {
@@ -164,6 +166,7 @@ export default {
       // 判断用户当天是否手动触发过关闭
       this.showFlag = localStorage.getItem(this.closeDate) !== today;
     }
+    this.getGoodSettings();
   },
   methods: {
     fetchCourse({ params, index, typeList }) {
@@ -183,6 +186,17 @@ export default {
     },
     goSearch() {
       this.$router.push({ name: 'search' });
+    },
+    getGoodSettings() {
+      Api.getSettings({
+        query: {
+          type: 'goods',
+        },
+      }).then(res => {
+        console.log('hahahaha');
+        console.log(res);
+        this.show_number_data = res.show_number_data;
+      });
     },
   },
 };

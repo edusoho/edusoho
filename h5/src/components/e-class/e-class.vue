@@ -79,6 +79,10 @@ export default {
       type: String,
       default: '0',
     },
+    show_number_data: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {

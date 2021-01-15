@@ -60,6 +60,7 @@
             :type="type"
             :is-vip="item.vipLevelId"
             :feedback="feedback"
+            :show_number_data="show_number_data"
           />
         </template>
         <!-- 一行一列  -->
@@ -81,6 +82,7 @@
             :type="type"
             :is-vip="item.vipLevelId"
             :feedback="feedback"
+            :show_number_data="show_number_data"
           />
         </template>
         <!-- 一行两列   -->
@@ -105,6 +107,7 @@
             :type="type"
             :is-vip="item.vipLevelId"
             :feedback="feedback"
+            :show_number_data="show_number_data"
           />
         </div>
       </div>
@@ -177,6 +180,10 @@ export default {
       // 老样式和新样式
       type: String,
       default: 'old',
+    },
+    show_number_data: {
+      type: String,
+      default: 'none',
     },
   },
   data() {
