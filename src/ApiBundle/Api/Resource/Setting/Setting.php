@@ -54,8 +54,7 @@ class Setting extends AbstractResource
 
     public function getGoods()
     {
-        return$goodsSetting = $this->getSettingService()->get('openCourse', []);
-//        $goodsSetting = $this->getSettingService()->get('goods_setting', []);
+        $goodsSetting = $this->getSettingService()->get('goods_setting', []);
 
         return [
             'show_number_data' => empty($goodsSetting['show_number_data']) ? 'join' : $goodsSetting['show_number_data'],
@@ -379,7 +378,7 @@ class Setting extends AbstractResource
             'show_review' => isset($courseSetting['show_review']) ? intval($courseSetting['show_review']) : 1,
             'show_question' => isset($courseSetting['show_question']) ? intval($courseSetting['show_question']) : 1,
             'show_discussion' => isset($courseSetting['show_discussion']) ? intval($courseSetting['show_discussion']) : 1,
-            'show_note' => isset($courseSetting['show_note']) ? intval($courseSetting['show_discussion']) : 1,
+            'show_note' => isset($courseSetting['show_note']) ? intval($courseSetting['show_note']) : 1,
         ];
     }
 
