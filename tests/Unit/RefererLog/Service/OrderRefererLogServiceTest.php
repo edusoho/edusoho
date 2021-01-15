@@ -97,7 +97,7 @@ class OrderRefererLogServiceTest extends BaseTestCase
         $logs = $this->getOrderRefererLogService()->searchOrderRefererLogs($conditions, array('createdTime' => 'DESC'), 0, 1);
 
         $this->assertEquals(1, count($logs));
-        $this->assertEquals($log2['orderId'], $logs[0]['orderId']);
+        $this->assertEquals(1, $logs[0]['buyNum']);
     }
 
     public function testSearchOrderRefererLogCount()
