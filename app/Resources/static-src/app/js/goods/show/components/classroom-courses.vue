@@ -52,7 +52,7 @@
                 this.page += 1;
             },
             clickCourse: function(course) {
-                window.open('/my/course/'+course.id);
+                window.open('/course/'+course.id);
             }
         },
         filters: {
