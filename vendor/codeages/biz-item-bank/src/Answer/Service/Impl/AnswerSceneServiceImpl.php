@@ -2,6 +2,7 @@
 
 namespace Codeages\Biz\ItemBank\Answer\Service\Impl;
 
+use Codeages\Biz\ItemBank\Answer\Dao\AnswerSceneDao;
 use Codeages\Biz\ItemBank\BaseService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\ErrorCode;
@@ -164,6 +165,11 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
         }
     }
 
+    public function findNotStatisticsQuestionsReportScenes($limit = 100)
+    {
+        return $this->getAnswerSceneDao()->findNotStatisticsQuestionsReportScenes($limit);
+    }
+
     protected function getAvgScoreByAnswerReports($answerReports)
     {
         if (empty($answerReports)) {
@@ -300,6 +306,9 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
         return $this->biz->service('ItemBank:Item:ItemService');
     }
 
+    /**
+     * @return AnswerSceneDao
+     */
     protected function getAnswerSceneDao()
     {
         return $this->biz->dao('ItemBank:Answer:AnswerSceneDao');
