@@ -58,6 +58,7 @@ class CourseTaskEventV2 extends AbstractResource
                     'allowLearn' => false,
                     'denyReason' => $denyReason,
                 ],
+                'learnedTime' => $this->getMyLearnedTime($activity),
             ];
         }
         $flow = $this->getDataCollectService()->createLearnFlow($user['id'], $activity['id'], $sign);
@@ -103,6 +104,7 @@ class CourseTaskEventV2 extends AbstractResource
                 'allowLearn' => true,
                 'denyReason' => '',
             ],
+            'learnedTime' => $this->getMyLearnedTime($activity),
         ];
     }
 
@@ -183,6 +185,7 @@ class CourseTaskEventV2 extends AbstractResource
                 'allowLearn' => $canDoing,
                 'denyReason' => $denyReason,
             ],
+            'learnedTime' => $this->getMyLearnedTime($activity),
         ];
     }
 
@@ -239,6 +242,7 @@ class CourseTaskEventV2 extends AbstractResource
                 'allowLearn' => $canDoing,
                 'denyReason' => $denyReason,
             ],
+            'learnedTime' => $this->getMyLearnedTime($activity),
         ];
     }
 
@@ -300,6 +304,25 @@ class CourseTaskEventV2 extends AbstractResource
 //        }
     }
 
+    protected function getMyLearnedTime(array $activity)
+    {
+        if ('watchTime' !== $activity['finishType']) {
+            $learnedTime = $this->getTaskResultService()->getMyLearnedTimeByActivityId($activity['id']);
+
+            return (int) $learnedTime;
+        }
+
+        $watchRecords = $this->getActivityVideoWatchRecordDao()->search(
+            ['activityId' => $activity['id'], 'userId' => $this->getCurrentUser()->getId()],
+            [],
+            0,
+            PHP_INT_MAX,
+            ['duration']
+        );
+
+        return (int) array_sum(array_column($watchRecords, 'duration'));
+    }
+
     protected function getKickOutStatus($userId, $sign)
     {
         $this->getLearnControlService()->checkActive($userId, $sign);
@@ -351,5 +374,13 @@ class CourseTaskEventV2 extends AbstractResource
     protected function getTaskResultService()
     {
         return $this->service('Task:TaskResultService');
+    }
+
+    /**
+     * @return ActivityVideoWatchRecordDao
+     */
+    protected function getActivityVideoWatchRecordDao()
+    {
+        return $this->getBiz()->dao('Visualization:ActivityVideoWatchRecordDao');
     }
 }

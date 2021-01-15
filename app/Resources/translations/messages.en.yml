@@ -10239,3 +10239,7 @@ task.learn_data_detail.popover: 累加时长：任务下A学员产生的所有�
 course.task.notify_message.join_and_buy: Please join or buy course
 course.task.notify_message.join_limit: Course buy limited
 
+activity_manage.finish_tips_time: Stat at least %finishDetail% minutes.
+activity_manage.finish_tips_watch_time: Watch at least %finishDetail% minutes.
++course.plan_task.activity_manage.video.time_at_least: Stay at least
++course.plan_task.activity_manage.video.watch_time_at_least: Watch at least

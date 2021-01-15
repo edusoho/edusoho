@@ -4,8 +4,13 @@
 {% block body %}
   <div class="tab-content" id="iframe-content">
   {% set selectTips = {'time': 'activity_manage.finish_select_tips_time', 'end': 'activity_manage.finish_select_tips_end'} %}
+  {% set timeOptions = ['time', 'watchTime'] %}
   {% set defaultCondition = conditions[0] %}
-
+  {% if activity.mediaType == 'video' %}
+    {% set statisticsSetting = setting('videoEffectiveTimeStatistics') %}
+    {% set defaultCondition = statisticsSetting.statistical_dimension|default('page') == 'page' ? {"type": "time", "value": 1} : {"type": "watchTime", "value": 1}%}
+  {% endif %}
+  
     <div class="tab-pane js-course-tasks-pane active">
         <form class="form-horizontal" id="step3-form" >
           <div class="form-group">
@@ -41,14 +46,15 @@
             </div>
           </div>
           <div class="" id="conditions" >
-            <div id="conditions-time" class="form-group" {% if activity['finishType']|default(defaultCondition['type']) != 'time' %} style="display: none;"{% endif %}>
+            <div id="conditions-time" class="form-group" {% if activity['finishType']|default(defaultCondition['type']) not in timeOptions %} style="display: none;"{% endif %}>
               <div class="col-sm-2 control-label">
                 <label for="watchTime">
-                  至少观看
+                  <span id="timeLabel" class="{% if activity['finishType']|default(defaultCondition['type']) != 'time' %} hidden {% endif %}">{{'course.plan_task.activity_manage.video.time_at_least'|trans}}</span>
+                  <span id="watchTimeLabel" class="{% if activity['finishType']|default(defaultCondition['type']) != 'watchTime' %} hidden {% endif %}">{{'course.plan_task.activity_manage.video.watch_time_at_least'|trans}}</span>
                 </label>
               </div>
               <div class="col-sm-4">
-                <input class="form-control" id="watchTime" type="text"  name="watchTime" value="{% if activity['finishType']|default() == 'time' %}{{ activity['finishData']|default() }}{% elseif defaultCondition['type'] == 'time' %}{{ defaultCondition['value']|default('1') }}{% endif %}">
+                <input class="form-control" id="watchTime" type="text"  name="watchTime" value="{% if activity['finishType']|default() in timeOptions %}{{ activity['finishData']|default() }}{% elseif defaultCondition['type'] in timeOptions %}{{ defaultCondition['value']|default('1') }}{% endif %}">
               </div>
               <div class="col-sm-4">
                 <p class="form-control-static">

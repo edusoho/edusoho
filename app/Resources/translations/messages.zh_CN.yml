@@ -1992,8 +1992,11 @@ course.lesson_manage.set_optional_tips: 课时任务数和学习进度将不会�
 activity_manage.finish_tips:
   <p class="gray-darker mbs">满足以下条件:</p>
 activity_manage.finish_tips_time: >
-  至少学习%finishDetail%分钟。
-activity_manage.finish_select_tips_time: 学习时长
+  至少停留%finishDetail%分钟。
+activity_manage.finish_tips_watch_time: >
+  至少播放%finishDetail%分钟。
+activity_manage.finish_select_tips_time: 页面停留时长
+activity_manage.finish_select_tips_watch_time: 视频播放时长
 activity_manage.finish_select_tips_end: 学习到最后
 
 course.plan_task.activity_manage.finished_condition: 完成条件
@@ -2132,6 +2135,8 @@ course.plan_task.activity_manage.video.last: 学习到最后
 course.plan_task.activity_manage.video.learn_time: 学习时长
 course.plan_task.activity_manage.video.buy_tips: 立刻购买本课程，即可获得全部完整学习内容。
 course.plan_task.activity_manage.video.try_watch_tips: 您可以免费试看前%tryLookLength%分钟,购买后可完整观看。
+course.plan_task.activity_manage.video.time_at_least: 至少停留
+course.plan_task.activity_manage.video.watch_time_at_least: 至少播放
 course.plan_task.activity_manage.create_btn: 前往课程讨论区
 course.plan_task.activity_manage.exercise.questionNum: >
   <span class="color-gray text-sm">共<span role="questionNum" type="%questionType%" >%questionNum%</span>题
