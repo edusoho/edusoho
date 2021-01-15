@@ -312,15 +312,12 @@ class CourseTaskEventV2 extends AbstractResource
             return (int) $learnedTime;
         }
 
-        $watchRecords = $this->getActivityVideoWatchRecordDao()->search(
-            ['activityId' => $activity['id'], 'userId' => $this->getCurrentUser()->getId()],
-            [],
-            0,
-            PHP_INT_MAX,
-            ['duration']
-        );
+        $watchTime = $this->getTaskResultService()->getWatchTimeByActivityIdAndUserId($activity['id'], $this->getCurrentUser()->getId());
+        if (empty($watchTime)) {
+            return 0;
+        }
 
-        return (int) array_sum(array_column($watchRecords, 'duration'));
+        return (int) $watchTime;
     }
 
     protected function getKickOutStatus($userId, $sign)

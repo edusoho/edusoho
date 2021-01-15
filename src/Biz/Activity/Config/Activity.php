@@ -7,7 +7,6 @@ use Biz\Activity\Listener\Listener;
 use Biz\Activity\Service\ActivityLearnLogService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
-use Biz\Visualization\Dao\ActivityVideoWatchRecordDao;
 use Codeages\Biz\Framework\Context\Biz;
 use Codeages\Biz\Framework\Dao\DaoProxy;
 use Codeages\Biz\Framework\Service\Exception\AccessDeniedException;
@@ -94,14 +93,8 @@ class Activity
 
             return !empty($result) && $result >= $activity['finishData'];
         } elseif ('watchTime' === $activity['finishType']) {
-            $watchRecords = $this->getActivityVideoWatchRecordDao()->search(
-                ['activityId' => $activityId, 'userId' => $this->getCurrentUser()->getId()],
-                [],
-                0,
-                PHP_INT_MAX,
-                ['duration']
-            );
-            $result = (int) array_sum(array_column($watchRecords, 'duration'));
+            $result = $this->getTaskResultService()->getWatchTimeByActivityIdAndUserId($activityId, $this->getCurrentUser()->getId());
+
             $result /= 60;
 
             return !empty($result) && $result >= $activity['finishData'];
@@ -238,13 +231,5 @@ class Activity
     protected function createDao($realDao)
     {
         return new DaoProxy($this->biz, $realDao, $this->biz['dao.metadata_reader'], $this->biz['dao.serializer'], $this->biz['dao.cache.array_storage']);
-    }
-
-    /**
-     * @return ActivityVideoWatchRecordDao
-     */
-    protected function getActivityVideoWatchRecordDao()
-    {
-        return $this->getBiz()->dao('Visualization:ActivityVideoWatchRecordDao');
     }
 }
