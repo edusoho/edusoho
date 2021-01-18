@@ -75,8 +75,9 @@ class CourseEntity extends BaseGoodsEntity
             $course['spec'] = $this->getSpecsByTargetId($course['id']);
             $course['goodsId'] = empty($course['spec']) ? 0 : $course['spec']['goodsId'];
             $course['specsId'] = empty($course['spec']) ? 0 : $course['spec']['id'];
-            $course['hitNum'] = $this->getHitNumByGoodId($course['goodsId']);
         }
+
+        $courses = $this->addTargetsHitNum($courses, ArrayToolkit::column($courses, 'goodsId'));
 
         return $courses;
     }
@@ -156,13 +157,6 @@ class CourseEntity extends BaseGoodsEntity
     public function hasCertificate($goods, $specs)
     {
         return $this->getCourseService()->hasCertificate($specs['targetId']);
-    }
-
-    protected function getHitNumByGoodId($goodsId)
-    {
-        $goods = $this->getGoodsService()->getGoods($goodsId);
-
-        return $goods['hitNum'];
     }
 
     /**

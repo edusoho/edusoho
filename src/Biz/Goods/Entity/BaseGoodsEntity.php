@@ -2,6 +2,7 @@
 
 namespace Biz\Goods\Entity;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\Goods\Service\GoodsService;
 use Biz\Product\ProductException;
 use Biz\Product\Service\ProductService;
@@ -51,6 +52,18 @@ abstract class BaseGoodsEntity
     abstract public function buySpecsAccess($goods, $specs);
 
     abstract public function hasCertificate($goods, $specs);
+
+    protected function addTargetsHitNum($targets, $goodsIds)
+    {
+        $goods = $this->getGoodsService()->searchGoods(['ids' => $goodsIds], [], 0, PHP_INT_MAX);
+        $goods = ArrayToolkit::index($goods, 'id');
+
+        foreach ($targets as &$target) {
+            $target['hitNum'] = $goods["{$target['goodsId']}"]['hitNum'];
+        }
+
+        return $targets;
+    }
 
     /**
      * @param $productId
