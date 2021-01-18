@@ -48,9 +48,9 @@ export default {
       type: String,
       default: '0',
     },
-    show_number_data: {
+    showNumberData: {
       type: String,
-      default: 'none',
+      default: '',
     },
     hitNum: {
       type: String,

@@ -14,7 +14,7 @@
       :vip-tag-show="true"
       :type-list="'course_list'"
       @needRequest="sendRequest"
-      :show_number_data="show_number_data"
+      :showNumberData="showNumberData"
     />
     <emptyCourse
       v-if="isEmptyCourse && isRequestCompile"
@@ -60,7 +60,7 @@ export default {
         sort: 'sort',
       },
       dataDefault: CATEGORY_DEFAULT.course_list,
-      show_number_data: '',
+      showNumberData: '',
     };
   },
   computed: {
@@ -191,7 +191,7 @@ export default {
           type: 'goods',
         },
       }).then(res => {
-        this.show_number_data = res.show_number_data;
+        this.showNumberData = res.show_number_data;
       });
     },
   },

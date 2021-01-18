@@ -4,17 +4,16 @@
       <div class="course-detail__plan-price">
         <span :class="{ isFree: isFree }"
           >{{ filterPrice() }}
-          {{ getGoodSettings() }}
           <span v-if="isDiscount" class="original-price ml10"
             >原价：￥{{ details.originPrice }}</span
           >
         </span>
-        <div v-if="show_number_data === 'join'" class="pull-right study-num">
+        <div v-if="showNumberData === 'join'" class="pull-right study-num">
           <i class="iconfont icon-people"></i>
           {{ details.studentNum }}
         </div>
         <div
-          v-else-if="show_number_data === 'visitor'"
+          v-else-if="showNumberData === 'visitor'"
           class="pull-right study-num"
         >
           <i class="iconfont icon-visibility"></i>
@@ -81,8 +80,11 @@ export default {
     return {
       items: [],
       isFree: false,
-      show_number_data: '',
+      showNumberData: '',
     };
+  },
+  created() {
+    this.getGoodSettings();
   },
   watch: {
     selectedPlanId: {
@@ -217,7 +219,7 @@ export default {
           type: 'goods',
         },
       }).then(res => {
-        this.show_number_data = res.show_number_data;
+        this.showNumberData = res.show_number_data;
       });
     },
     filterPrice() {

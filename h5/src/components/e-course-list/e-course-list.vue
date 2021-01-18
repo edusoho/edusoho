@@ -61,7 +61,7 @@
             :type="type"
             :is-vip="item.vipLevelId"
             :feedback="feedback"
-            :show_number_data="show_number_data"
+            :showNumberData="showNumberData"
           />
         </template>
         <!-- 一行一列  -->
@@ -84,7 +84,7 @@
             :type="type"
             :is-vip="item.vipLevelId"
             :feedback="feedback"
-            :show_number_data="show_number_data"
+            :showNumberData="showNumberData"
           />
         </template>
         <!-- 一行两列   -->
@@ -110,7 +110,7 @@
             :type="type"
             :is-vip="item.vipLevelId"
             :feedback="feedback"
-            :show_number_data="show_number_data"
+            :showNumberData="showNumberData"
           />
         </div>
       </div>
@@ -184,9 +184,9 @@ export default {
       type: String,
       default: 'old',
     },
-    show_number_data: {
+    showNumberData: {
       type: String,
-      default: 'none',
+      default: '',
     },
   },
   data() {

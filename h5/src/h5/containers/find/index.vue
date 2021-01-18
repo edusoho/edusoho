@@ -18,7 +18,7 @@
         uiStyle="new"
         class="gray-border-bottom"
         @fetchCourse="fetchCourse"
-        :show_number_data="show_number_data"
+        :showNumberData="showNumberData"
       />
       <e-poster
         v-if="part.type === 'poster'"
@@ -120,7 +120,7 @@ export default {
       imageMode: ['responsive', 'size-fit'],
       showFlag: true,
       closeDate: 'closedDate',
-      show_number_data: '',
+      showNumberData: '',
     };
   },
   computed: {
@@ -193,9 +193,7 @@ export default {
           type: 'goods',
         },
       }).then(res => {
-        console.log('hahahaha');
-        console.log(res);
-        this.show_number_data = res.show_number_data;
+        this.showNumberData = res.show_number_data;
       });
     },
   },

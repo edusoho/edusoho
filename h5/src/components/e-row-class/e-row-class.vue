@@ -28,14 +28,14 @@
     </div>
 
     <div
-      v-if="show_number_data === 'join'"
+      v-if="showNumberData === 'join'"
       class="pull-right switch-box__state"
       style="margin-top: 50px"
     >
       <i class="iconfont icon-people">{{ course.studentNum }}</i>
     </div>
     <div
-      v-else-if="show_number_data === 'visitor'"
+      v-else-if="showNumberData === 'visitor'"
       class="pull-right switch-box__state"
       style="margin-top: 50px"
     >

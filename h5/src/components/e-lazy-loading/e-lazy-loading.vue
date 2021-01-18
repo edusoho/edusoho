@@ -29,7 +29,7 @@
       :discount="discount(course)"
       :course-type="courseType(course)"
       :course="course | courseListData(listObj)"
-      :show_number_data="show_number_data"
+      :showNumberData="showNumberData"
     />
   </van-list>
 </template>
@@ -67,7 +67,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    show_number_data: {
+    showNumberData: {
       type: String,
       default: '',
     },
@@ -97,7 +97,7 @@ export default {
         showStudent: this.courseSettings
           ? Number(this.courseSettings.show_student_num_enabled)
           : true,
-        show_number_data: this.show_number_data,
+        showNumberData: this.showNumberData,
       };
     },
   },
