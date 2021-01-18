@@ -52,6 +52,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = array(
             'answerSceneColumnChange',
+            'updateAdminV2Setting',
         );
 
         $funcNames = array();
@@ -99,6 +100,23 @@ class EduSohoUpgrade extends AbstractUpdater
         if (!$this->isFieldExist('biz_answer_scene', 'question_report_job_id')) {
             $this->getConnection()->exec("ALTER TABLE `biz_answer_scene` ADD COLUMN `question_report_job_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '场次分析JOB ID' AFTER `updated_user_id`;");
         }
+
+        return 1;
+    }
+
+    public function updateAdminV2Setting()
+    {
+        $setting = $this->getSettingService()->get('backstage', ['is_v2' => 1]);
+
+        if (isset($setting['allow_show_switch_btn'])) {
+            unset($setting['allow_show_switch_btn']);
+        }
+
+        if (empty($setting['is_v2'])) {
+            $setting['is_v2'] = 1;
+        }
+
+        $this->getSettingService()->set('backstage', $setting);
 
         return 1;
     }
