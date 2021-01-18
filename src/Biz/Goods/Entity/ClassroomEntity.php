@@ -69,6 +69,7 @@ class ClassroomEntity extends BaseGoodsEntity
             $classroom['spec'] = $this->getSpecsByTargetId($classroom['id']);
             $classroom['goodsId'] = empty($classroom['spec']) ? 0 : $classroom['spec']['goodsId'];
             $classroom['specsId'] = empty($classroom['spec']) ? 0 : $classroom['spec']['id'];
+            $course['hitNum'] = $this->getHitNumByGoodId($classroom['goodsId']);
         }
 
         return $classrooms;
@@ -144,6 +145,13 @@ class ClassroomEntity extends BaseGoodsEntity
     public function isSpecsMember($goods, $specs, $userId)
     {
         return $this->isSpecsStudent($goods, $specs, $userId);
+    }
+
+    protected function getHitNumByGoodId($goodsId)
+    {
+        $goods = $this->getGoodsService()->getGoods($goodsId);
+
+        return $goods['hitNum'];
     }
 
     /**
