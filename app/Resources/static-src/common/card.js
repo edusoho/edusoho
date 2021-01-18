@@ -1,6 +1,6 @@
 if (!navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)) {
   bindCardEvent('.js-card-content');
-  $('.js-user-card').on('mouseenter', function () {
+  $(document).on('mouseenter','.js-user-card', function () {
 
     var _this = $(this);
     var userId = _this.data('userId');
