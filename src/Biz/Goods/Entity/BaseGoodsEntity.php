@@ -55,10 +55,10 @@ abstract class BaseGoodsEntity
 
     protected function addTargetsHitNum($targets, $goodsIds)
     {
-        $goods = ArrayToolkit::index($this->getGoodsService()->searchGoods(['ids' => $goodsIds], [], 0, PHP_INT_MAX), 'id');
+        $goods = ArrayToolkit::index($this->getGoodsService()->findGoodsByIds($goodsIds), 'id');
 
         foreach ($targets as &$target) {
-            $target['hitNum'] = $goods["{$target['goodsId']}"]['hitNum'];
+            $target['hitNum'] = $goods[$target['goodsId']]['hitNum'];
         }
 
         return $targets;
