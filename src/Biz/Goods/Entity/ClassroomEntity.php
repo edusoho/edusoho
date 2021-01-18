@@ -70,7 +70,7 @@ class ClassroomEntity extends BaseGoodsEntity
             $classroom['goodsId'] = empty($classroom['spec']) ? 0 : $classroom['spec']['goodsId'];
             $classroom['specsId'] = empty($classroom['spec']) ? 0 : $classroom['spec']['id'];
             $goods = $this->getGoodsService()->getGoods($classroom['goodsId']);
-            $classroom['hitNum'] = $goods['hitNum'];
+            $classroom['hitNum'] = empty($goods['hitNum']) ? 0 : $goods['hitNum'];
         }
 
         return $classrooms;
