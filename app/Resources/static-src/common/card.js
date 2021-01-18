@@ -76,7 +76,7 @@ if (!navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)) {
 
     _this.data('timerId', timer);
 
-  }).on('mouseleave', function () {
+  }).on('mouseleave','.js-user-card', function () {
 
     var _this = $(this);
 
