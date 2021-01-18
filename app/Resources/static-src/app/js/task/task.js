@@ -24,6 +24,7 @@ export default class TaskShow extends Emitter {
       this.initTaskPipe();
       this.initLearnBtn();
     }
+    this.initLearnContent();
   }
 
   initPlugin() {
@@ -45,6 +46,10 @@ export default class TaskShow extends Emitter {
           $nextBtn.removeClass('disabled').attr('href', $nextBtn.data('url'));
         }
         this.ui.learned();
+        if ($('.js-learn-content').find('.js-finish-tip').length > 0) {
+          $('.js-learn-content').find('.js-finish-tip').html(Translator.trans('activity.manage.finished_tips'));
+          this.initLearnContent();
+        }
       });
     });
   }
@@ -61,9 +66,6 @@ export default class TaskShow extends Emitter {
 
   _receiveFinish(response) {
     const nextTaskUrl = this.element.find('#task-content-iframe').data('nextTaskUrl');
-    if ($('.js-finish-tip').length > 0) {
-      $('.js-finish-tip').html(Translator.trans('activity.manage.finished_tips'));
-    }
 
     if ($('input[name="task-result-status"]', $('#js-hidden-data')).val() != 'finish') {
       $.get($('.js-learned-prompt').data('url'), html => {
@@ -84,9 +86,16 @@ export default class TaskShow extends Emitter {
   }
 
   _receiveDoing(response) {
-    if ($('.js-finish-time').length > 0) {
-      $('.js-finish-time').html(response.learnedTime);
+    if ($('.js-learn-content').find('.js-finish-time').length > 0) {
+      let time = $('.js-learn-content').find('.js-finish-tip').data('time');
+      let remainTime = time > response.learnedTime ? Math.ceil((time - response.learnedTime) / 60) : 0;
+      $('.js-learn-content').find('.js-finish-time').html(remainTime);
+      this.initLearnContent();
     }
+  }
+
+  initLearnContent() {
+    $('.js-learn-prompt').attr('data-content', $('.js-learn-content').html());
   }
 
   initSidebar() {
