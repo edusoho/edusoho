@@ -35,8 +35,7 @@ class ClassroomEntity extends BaseGoodsEntity
 
     public function getSpecsByTargetId($targetId)
     {
-        $target = $this->getClassroomService()->getClassroom($targetId);
-        $product = $this->getProductService()->getProductByTargetIdAndType($target['id'], 'classroom');
+        $product = $this->getProductService()->getProductByTargetIdAndType($targetId, 'classroom');
 
         return $this->getGoodsService()->getGoodsSpecsByProductIdAndTargetId($product['id'], $targetId);
     }
@@ -70,9 +69,9 @@ class ClassroomEntity extends BaseGoodsEntity
             $classroom['spec'] = $this->getSpecsByTargetId($classroom['id']);
             $classroom['goodsId'] = empty($classroom['spec']) ? 0 : $classroom['spec']['goodsId'];
             $classroom['specsId'] = empty($classroom['spec']) ? 0 : $classroom['spec']['id'];
+            $goods = $this->getGoodsService()->getGoods($classroom['goodsId']);
+            $classroom['hitNum'] = $goods['hitNum'];
         }
-
-        $classrooms = $this->addTargetsHitNum($classrooms, ArrayToolkit::column($classrooms, 'goodsId'));
 
         return $classrooms;
     }

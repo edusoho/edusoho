@@ -75,9 +75,9 @@ class CourseEntity extends BaseGoodsEntity
             $course['spec'] = $this->getSpecsByTargetId($course['id']);
             $course['goodsId'] = empty($course['spec']) ? 0 : $course['spec']['goodsId'];
             $course['specsId'] = empty($course['spec']) ? 0 : $course['spec']['id'];
+            $goods = $this->getGoodsService()->getGoods($course['goodsId']);
+            $course['hitNum'] = $goods['hitNum'];
         }
-
-        $courses = $this->addTargetsHitNum($courses, ArrayToolkit::column($courses, 'goodsId'));
 
         return $courses;
     }
