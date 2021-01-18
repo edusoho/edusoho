@@ -11,17 +11,15 @@
         </span>
         <div v-if="show_number_data === 'join'" class="pull-right study-num">
           <i class="iconfont icon-people"></i>
-          {{ details.studentNum }}人
+          {{ details.studentNum }}
         </div>
         <div
           v-else-if="show_number_data === 'visitor'"
           class="pull-right study-num"
         >
           <i class="iconfont icon-visibility"></i>
-          {{ details.studentNum }}人
+          {{ details.hitNum }}
         </div>
-        <!--        <span v-if="showStudent" class="plan-price__student-num"-->
-        <!--          >{{ details.studentNum }}人在学</span>-->
       </div>
     </e-panel>
 

@@ -2,11 +2,11 @@ const getDisplayStyle = (data, listObj) => {
   let showStudentStr = '';
   if (listObj.show_number_data === 'join') {
     showStudentStr = `<span class="switch-box__state">
-            <p class="iconfont icon-people">${data.studentNum}人</p>
+            <p class="iconfont icon-people">${data.studentNum}</p>
         </span>`;
   } else if (listObj.show_number_data === 'visitor') {
-    showStudentStr = `<span class="switch-box__state">e
-            <p class="iconfont icon-visibility">${data.studentNum}人</p>
+    showStudentStr = `<span class="switch-box__state">
+            <p class="iconfont icon-visibility">${data.hitNum}</p>
         </span>`;
   } else {
     showStudentStr = '';

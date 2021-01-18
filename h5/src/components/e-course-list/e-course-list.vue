@@ -46,6 +46,7 @@
           <e-class
             v-for="item in courseList.items"
             :key="item.id"
+            :hitNum="item.hitNum"
             :course="item | courseListData(listObj)"
             :discountType="
               typeList === 'course_list' ? item.courseSet.discountType : ''
@@ -68,6 +69,7 @@
           <e-row-class
             v-for="item in courseList.items"
             :key="item.id"
+            :hitNum="item.hitNum"
             :course="item | courseListData(listObj, uiStyle, platform)"
             :discountType="
               typeList === 'course_list' ? item.courseSet.discountType : ''
@@ -93,6 +95,7 @@
           <e-column-class
             v-for="item in courseList.items"
             :key="item.id"
+            :hitNum="item.hitNum"
             :course="item | courseListData(listObj, uiStyle, platform)"
             :discountType="
               typeList === 'course_list' ? item.courseSet.discountType : ''

@@ -19,7 +19,7 @@
         </div>
         <div v-if="show_number_data === 'visitor'">
           <i class="iconfont icon-visibility" />
-          {{ course.studentNum }}
+          {{ hitNum }}
         </div>
       </div>
     </div>
@@ -43,11 +43,5 @@
 import eClassMixins from '@/mixins/eClass';
 export default {
   mixins: [eClassMixins],
-  props: {
-    show_number_data: {
-      type: String,
-      default: 'none',
-    },
-  },
 };
 </script>
