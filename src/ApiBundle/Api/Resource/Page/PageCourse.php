@@ -53,7 +53,7 @@ class PageCourse extends AbstractResource
         $course = $this->getCourseService()->appendSpecInfo($course);
 
         $goods = $this->getGoodsService()->getGoods($course['goodsId']);
-        $course['hitNum'] = $goods['hitNum'];
+        $course['hitNum'] = empty($goods['hitNum']) ? 0 : $goods['hitNum'];
 
         if ($this->isPluginInstalled('vip') && $course['vipLevelId'] > 0) {
             $apiRequest = new ApiRequest('/api/plugins/vip/vip_levels/'.$course['vipLevelId'], 'GET', []);
