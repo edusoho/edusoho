@@ -321,6 +321,8 @@ activity.video_manage.media_error_hint: 请上传或选择视频文件
 activity.video.try_watch_finish_hint: 免费试看结束，购买后可完整观看
 
 activity.manage.choose_teacher_hint: 请选择老师
+activity.manage.finished_tips: >
+  <span class="color-primary">恭喜！你已完成该任务</span>
 
 announcement.delete_hint: 真的要删除该公告吗?
 
