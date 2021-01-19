@@ -6,7 +6,6 @@ use AppBundle\Common\SettingToolkit;
 use AppBundle\Component\MediaParser\ParserProxy;
 use Biz\Accessor\AccessorInterface;
 use Biz\Course\Service\CourseService;
-use Biz\User\UserException;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
@@ -29,8 +28,6 @@ class Lesson extends BaseResource
         $isTrail = false;
 
         if (!(AccessorInterface::SUCCESS == $access['code'] || $isTrail = 'allow_trial' == $access['code'])) {
-            $access['code'] = 'user.not_login' == $access['code'] ? UserException::NOTFOUND_TOKEN : $access['code'];
-
             return $this->error($access['code'], $access['msg']);
         }
 
