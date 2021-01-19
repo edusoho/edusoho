@@ -17,7 +17,7 @@
     {% if showHeader %}{{ parent() }}{% endif %}
   {% endblock %}
 
-  <div class="js-testpaper-container container mt20" data-need-job="{{ needJob }}" data-job-sync="{{ jobSync }}" data-job-id="{{ answerScene.question_report_job_id }}">
+  <div class="js-testpaper-container container mt20" data-need-job="{{ needJob }}" data-job-sync="{{ jobSync }}" data-job-id="{{ answerScene.question_report_job_name }}">
 
     <div class="js-data-large-loading cd-alert cd-alert-warning" hidden>
       {{ 'exam_bank.analysis.data_large_loading'|trans }}
