@@ -10,6 +10,14 @@
         <div>
           <span v-show="courseType === 'live'">直播</span>
         </div>
+        <div v-if="showNumberData === 'join'">
+          <i class="iconfont icon-people" />
+          {{ course.studentNum }}
+        </div>
+        <div v-if="showNumberData === 'visitor'">
+          <i class="iconfont icon-visibility" />
+          {{ hitNum }}
+        </div>
       </div>
     </div>
 
@@ -25,21 +33,6 @@
         class="row-class-right__bottom text-overflow"
         v-html="course.bottom.html"
       />
-    </div>
-
-    <div
-      v-if="showNumberData === 'join'"
-      class="pull-right switch-box__state"
-      style="margin-top: 50px"
-    >
-      <i class="iconfont icon-people">{{ course.studentNum }}</i>
-    </div>
-    <div
-      v-else-if="showNumberData === 'visitor'"
-      class="pull-right switch-box__state"
-      style="margin-top: 50px"
-    >
-      <i class="iconfont icon-visibility">{{ hitNum }}</i>
     </div>
   </div>
 </template>
