@@ -156,9 +156,9 @@ class HomeworkManageController extends BaseController
 
         //如果存在新提交的作业
         if ($answerScene['question_report_update_time'] < $answerScene['last_submit_time']) {
-            if ($answerScene['question_report_job_id']) {
-                $jobId = $answerScene['question_report_job_id'];
-                $jobFired = $this->getSchedulerService()->findJobFiredsByJobId($jobId);
+            if ($answerScene['question_report_job_name']) {
+                $jobName = $answerScene['question_report_job_name'];
+                $jobFired = $this->getSchedulerService()->findJobFiredByJobName($jobName);
                 if (empty($jobFired) || 'success' !== $jobFired[0]['status']) {
                     $jobSync = 0;
                     $needJob = 1;
@@ -174,7 +174,7 @@ class HomeworkManageController extends BaseController
                             if (empty($job)) {
                                 $job = $this->registerSceneAnalysisJob($activity['ext']['answerSceneId']);
                             }
-                            $answerScene = $this->getAnswerSceneService()->update($answerScene['id'], ['name' => $answerScene['name'], 'question_report_job_id' => $job['id']]);
+                            $answerScene = $this->getAnswerSceneService()->update($answerScene['id'], ['name' => $answerScene['name'], 'question_report_job_name' => $job['name']]);
                             $jobSync = 0;
                         } else {
                             $jobSync = 1;
@@ -195,7 +195,7 @@ class HomeworkManageController extends BaseController
                         if (empty($job)) {
                             $job = $this->registerSceneAnalysisJob($activity['ext']['answerSceneId']);
                         }
-                        $answerScene = $this->getAnswerSceneService()->update($answerScene['id'], ['name' => $answerScene['name'], 'question_report_job_id' => $job['id']]);
+                        $answerScene = $this->getAnswerSceneService()->update($answerScene['id'], ['name' => $answerScene['name'], 'question_report_job_name' => $job['name']]);
                         $jobSync = 0;
                     } else {
                         $jobSync = 1;
@@ -232,7 +232,7 @@ class HomeworkManageController extends BaseController
     protected function registerSceneAnalysisJob($sceneId)
     {
         $updateRealTimeTestResultStatusJob = [
-            'name' => 'question_item_analysis_'.$sceneId,
+            'name' => 'question_item_analysis_'.$sceneId.'_'.time(),
             'expression' => time(),
             'class' => QuestionItemAnalysisJob::class,
             'args' => [
@@ -245,7 +245,8 @@ class HomeworkManageController extends BaseController
 
     protected function getSceneAnalysisJob($sceneId)
     {
-        $name = 'question_item_analysis_'.$sceneId;
+        $scene = $this->getAnswerSceneService()->get($sceneId);
+        $name = $scene['question_report_job_name'];
         $this->getSchedulerService()->countJobFires(['job_name' => $name, 'status' => '']);
 
         return $this->getSchedulerService()->getJobByName($name);

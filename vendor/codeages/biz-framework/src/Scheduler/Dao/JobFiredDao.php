@@ -10,6 +10,8 @@ interface JobFiredDao extends GeneralDaoInterface
 
     public function findByJobId($jobId);
 
+    public function findByJobName($jobName);
+
     public function findByJobIdAndStatus($jobId, $status);
 
     public function deleteUnacquiredBeforeCreatedTime($time);
