@@ -27,6 +27,7 @@
           :is-request-compile="course.isRequestCompile"
           :type-list="'course_list'"
           @needRequest="sendRequestCourse"
+          :showNumberData="showNumberData"
         />
         <emptyCourse
           v-if="isEmptyCourse && course.isRequestCompile"
@@ -46,6 +47,7 @@
             :is-request-compile="classroom.isRequestCompile"
             :type-list="'classroom_list'"
             @needRequest="sendRequestClassroom"
+            :showNumberData="showNumberData"
           />
           <emptyCourse
             v-if="isEmptyClassroom && classroom.isRequestCompile"
@@ -119,6 +121,10 @@ export default {
         offset: 0,
         limit: 10,
       },
+      showNumberData: {
+        type: String,
+        default: '',
+      },
     };
   },
   methods: {
@@ -132,6 +138,7 @@ export default {
 
       this.initItemBankList();
       this.requestItemBanks();
+      this.getGoodSettings();
     },
     onCancel() {
       this.isSearch = false;
@@ -272,6 +279,15 @@ export default {
 
     sendRequestItemBank() {
       if (!this.isAllItemBank) this.requestItemBanks();
+    },
+    getGoodSettings() {
+      Api.getSettings({
+        query: {
+          type: 'goods',
+        },
+      }).then(res => {
+        this.showNumberData = res.show_number_data;
+      });
     },
   },
 };
