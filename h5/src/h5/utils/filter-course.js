@@ -34,10 +34,7 @@ const getDisplayStyle = (data, listObj) => {
       },
       bottom: {
         value: data.price || data.studentNum,
-        html: `<span class="switch-box__price">${price}</span>
-                  <span class="switch-box__state"><p style="color: #B0BDC9">
-                    ${data.studentNum}人在学</p>
-                  </span>`,
+        html: `<span class="switch-box__price">${price}</span>${showStudentStr}`,
       },
     };
   }
