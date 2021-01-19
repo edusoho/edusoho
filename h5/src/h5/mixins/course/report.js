@@ -21,6 +21,7 @@ export default {
       sign: '',
       record: {},
       absorbed: 0, // 是否无效学习
+      learnedTime: 0,
     };
   },
   beforeRouteLeave(to, from, next) {
@@ -200,6 +201,7 @@ export default {
      */
     handleReportResult(res) {
       this.reportResult = res;
+      this.learnedTime = res.learnedTime;
       if (res.taskResult && res.taskResult.status === 'finish') {
         this.isFinish = true;
         this.$store.commit(types.SET_TASK_SATUS, 'finish');
