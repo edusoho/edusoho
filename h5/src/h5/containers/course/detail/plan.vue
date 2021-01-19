@@ -8,9 +8,17 @@
             >原价：￥{{ details.originPrice }}</span
           >
         </span>
-        <span v-if="showStudent" class="plan-price__student-num"
-          >{{ details.studentNum }}人在学</span
+        <div v-if="showNumberData === 'join'" class="pull-right study-num">
+          <i class="iconfont icon-people"></i>
+          {{ details.studentNum }}
+        </div>
+        <div
+          v-else-if="showNumberData === 'visitor'"
+          class="pull-right study-num"
         >
+          <i class="iconfont icon-visibility"></i>
+          {{ details.hitNum }}
+        </div>
       </div>
     </e-panel>
 
@@ -72,7 +80,11 @@ export default {
     return {
       items: [],
       isFree: false,
+      showNumberData: '',
     };
+  },
+  created() {
+    this.getGoodSettings();
   },
   watch: {
     selectedPlanId: {
@@ -200,6 +212,15 @@ export default {
             },
           });
         });
+    },
+    getGoodSettings() {
+      Api.getSettings({
+        query: {
+          type: 'goods',
+        },
+      }).then(res => {
+        this.showNumberData = res.show_number_data;
+      });
     },
     filterPrice() {
       const details = this.details;

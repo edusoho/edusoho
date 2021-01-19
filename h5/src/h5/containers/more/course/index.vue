@@ -14,6 +14,7 @@
       :vip-tag-show="true"
       :type-list="'course_list'"
       @needRequest="sendRequest"
+      :showNumberData="showNumberData"
     />
     <emptyCourse
       v-if="isEmptyCourse && isRequestCompile"
@@ -30,7 +31,6 @@ import treeSelect from '&/components/e-tree-select/e-tree-select.vue';
 import lazyLoading from '&/components/e-lazy-loading/e-lazy-loading.vue';
 import emptyCourse from '../../learning/emptyCourse/emptyCourse.vue';
 import { mapState, mapActions } from 'vuex';
-import * as types from '@/store/mutation-types';
 import CATEGORY_DEFAULT from '@/config/category-default-config.js';
 
 export default {
@@ -60,6 +60,7 @@ export default {
         sort: 'sort',
       },
       dataDefault: CATEGORY_DEFAULT.course_list,
+      showNumberData: '',
     };
   },
   computed: {
@@ -90,10 +91,6 @@ export default {
     window.scroll(0, 0);
     this.selectedData = this.transform(this.$route.query);
     // 合并参数
-    const config = Object.assign({}, this.selectedData, {
-      offset: this.offset,
-      limit: this.limit,
-    });
 
     // 获取班级分类数据
     Api.getCourseCategories().then(data => {
@@ -104,6 +101,7 @@ export default {
       this.dataDefault[0].data = data;
       this.selectItems = this.dataDefault;
     });
+    this.getGoodSettings();
   },
   methods: {
     ...mapActions('course', ['setCourseList']),
@@ -186,6 +184,15 @@ export default {
       }
 
       return true;
+    },
+    getGoodSettings() {
+      Api.getSettings({
+        query: {
+          type: 'goods',
+        },
+      }).then(res => {
+        this.showNumberData = res.show_number_data;
+      });
     },
   },
 };

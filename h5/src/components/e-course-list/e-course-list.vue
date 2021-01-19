@@ -46,6 +46,7 @@
           <e-class
             v-for="item in courseList.items"
             :key="item.id"
+            :hitNum="item.hitNum"
             :course="item | courseListData(listObj)"
             :discountType="
               typeList === 'course_list' ? item.courseSet.discountType : ''
@@ -60,6 +61,7 @@
             :type="type"
             :is-vip="item.vipLevelId"
             :feedback="feedback"
+            :showNumberData="showNumberData"
           />
         </template>
         <!-- 一行一列  -->
@@ -67,6 +69,7 @@
           <e-row-class
             v-for="item in courseList.items"
             :key="item.id"
+            :hitNum="item.hitNum"
             :course="item | courseListData(listObj, uiStyle, platform)"
             :discountType="
               typeList === 'course_list' ? item.courseSet.discountType : ''
@@ -81,6 +84,7 @@
             :type="type"
             :is-vip="item.vipLevelId"
             :feedback="feedback"
+            :showNumberData="showNumberData"
           />
         </template>
         <!-- 一行两列   -->
@@ -91,6 +95,7 @@
           <e-column-class
             v-for="item in courseList.items"
             :key="item.id"
+            :hitNum="item.hitNum"
             :course="item | courseListData(listObj, uiStyle, platform)"
             :discountType="
               typeList === 'course_list' ? item.courseSet.discountType : ''
@@ -105,6 +110,7 @@
             :type="type"
             :is-vip="item.vipLevelId"
             :feedback="feedback"
+            :showNumberData="showNumberData"
           />
         </div>
       </div>
@@ -177,6 +183,10 @@ export default {
       // 老样式和新样式
       type: String,
       default: 'old',
+    },
+    showNumberData: {
+      type: String,
+      default: '',
     },
   },
   data() {
