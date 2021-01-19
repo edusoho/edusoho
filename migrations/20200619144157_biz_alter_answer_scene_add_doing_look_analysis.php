@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class AlterAnswerSceneAddDoingLookAnalysis extends Migration
+class BizAlterAnswerSceneAddDoingLookAnalysis extends Migration
 {
     /**
      * Do the migration

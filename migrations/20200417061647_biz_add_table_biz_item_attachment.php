@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class AddTableBizItemAttachment extends Migration
+class BizAddTableBizItemAttachment extends Migration
 {
     /**
      * Do the migration

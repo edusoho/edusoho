@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class AlterItemCategoryAddQuestionNumItemNum extends Migration
+class BizAlterItemCategoryAddQuestionNumItemNum extends Migration
 {
     /**
      * Do the migration
