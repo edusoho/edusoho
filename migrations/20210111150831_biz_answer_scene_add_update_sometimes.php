@@ -23,6 +23,6 @@ class BizAnswerSceneAddUpdateSometimes extends Migration
         $biz = $this->getContainer();
         $biz['db']->exec('ALTER TABLE `biz_answer_scene` DROP COLUMN `last_submit_time`;');
         $biz['db']->exec('ALTER TABLE `biz_answer_scene` DROP COLUMN `question_report_update_time`;');
-        $biz['db']->exec('ALTER TABLE `biz_answer_scene` DROP COLUMN `question_report_job_id`;');
+        $biz['db']->exec('ALTER TABLE `biz_answer_scene` DROP COLUMN `question_report_job_name`;');
     }
 }
