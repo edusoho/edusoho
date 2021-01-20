@@ -94,7 +94,7 @@ class OrderRefererLogServiceTest extends BaseTestCase
         $conditions = [
             'targetType' => 'openCourse',
         ];
-        $logs = $this->getOrderRefererLogService()->searchOrderRefererLogs($conditions, ['createdTime' => 'DESC'], 0, 1);
+        $logs = $this->getOrderRefererLogService()->searchOrderRefererLogs($conditions, ['buyNum' => 'DESC'], 0, 1);
 
         $this->assertEquals(1, count($logs));
         $this->assertEquals(1, $logs[0]['buyNum']);
