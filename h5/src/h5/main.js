@@ -200,7 +200,7 @@ Api.getSettings({
     type: 'site',
   },
 }).then(res => {
-  if (!res.analytics) return;
+  if (!res.analytics || /document.write/.test(res.analytics)) return;
   let funStr = res.analytics.replace(/<\/?script[^>]*?>/gi, '');
   funStr = funStr.replace(/<noscript[^>]*?>.*?<\/noscript>/gis, '');
   const script = document.createElement('script');
