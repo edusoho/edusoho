@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class AddTableBizAnswerSceneQuestionReport extends Migration
+class BizAddTableBizAnswerSceneQuestionReport extends Migration
 {
     /**
      * Do the migration

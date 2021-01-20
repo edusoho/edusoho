@@ -60,7 +60,7 @@ class AnswerSceneServiceImpl extends BaseService implements AnswerSceneService
             'pass_score' => ['numeric', ['min', 0]],
             'enable_facein' => ['integer', ['in', [0, 1]]],
             'question_report_job_name' => [['lengthMax', 128]],
-            'last_submit_time' => ['integer'],
+            'last_review_time' => ['integer'],
             'question_report_update_time' => ['integer'],
         ]);
 

@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class AddIndexAnswerSceneIdBizAnswerReport extends Migration
+class BizAddIndexAssessmentIdSeqBizAssessmentSectionItem extends Migration
 {
     /**
      * Do the migration
@@ -10,7 +10,7 @@ class AddIndexAnswerSceneIdBizAnswerReport extends Migration
     public function up()
     {
         $this->getContainer()->offsetGet('db')->exec('
-            ALTER TABLE `biz_answer_report` ADD INDEX(`answer_scene_id`);
+            ALTER TABLE `biz_assessment_section_item` ADD INDEX assessmentId_seq(`assessment_id`, `seq`);
         ');
     }
 
