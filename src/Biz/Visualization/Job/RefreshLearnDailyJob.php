@@ -27,7 +27,7 @@ class RefreshLearnDailyJob extends AbstractJob
         $count = $this->getActivityLearnDailyDao()->count(['mediaType' => 'video']);
         $limit = self::LIMIT;
         $totalPage = $count / $limit;
-        for ($page = 0; $page <= $totalPage; $page++) {
+        for ($page = 0; $page <= $totalPage; ++$page) {
             $start = $page * $limit;
             $sql = "select  
                       ald.id as id,  

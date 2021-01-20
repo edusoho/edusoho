@@ -83,14 +83,14 @@ class VideoTaskSettingController extends BaseController
 
     protected function createRefreshDataJob()
     {
-        $job = array(
+        $job = [
             'name' => 'RefreshLearnDailyJob-'.time(),
             'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
             'expression' => intval(time()),
             'misfire_policy' => 'executing',
             'class' => 'Biz\Visualization\Job\RefreshLearnDailyJob',
             'args' => [],
-        );
+        ];
 
         $job = $this->getSchedulerService()->register($job);
 
