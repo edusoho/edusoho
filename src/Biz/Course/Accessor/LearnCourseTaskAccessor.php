@@ -19,7 +19,6 @@ class LearnCourseTaskAccessor extends AccessorAdapter
         $learnCourseChain = $this->biz['course.learn_chain'];
         $course = $this->getCourseService()->getCourse($task['courseId']);
         $courseLearnResult = $learnCourseChain->process($course);
-
         if (AccessorInterface::SUCCESS == $courseLearnResult['code']) {
             return null;
         } else {
@@ -48,7 +47,7 @@ class LearnCourseTaskAccessor extends AccessorAdapter
 
     private function canAnonymousPreview()
     {
-        return $this->getSettingService()->get('course.allowAnonymousPreview', 1);
+        return (int) $this->getSettingService()->node('course.allowAnonymousPreview', 1);
     }
 
     /**
