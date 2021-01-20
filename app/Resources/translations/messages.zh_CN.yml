@@ -7652,8 +7652,8 @@ admin.setting_course.effective_learning_time_rule: 在线视频课时有效学�
 admin.setting_course.learning_time_statistical_dimension: 学习时长统计维度
 admin.setting_course.effective_learning_time.playing.help_block: 以实际播放时长作为学习时长统计
 admin.setting_course.effective_learning_time.page.help_block: 以页面停留时长作为学习时长统计
-admin.setting_course.effective_learning_time.playing_time: 播放活跃时长
-admin.setting_course.effective_learning_time.page_time: 页面活跃时长
+admin.setting_course.effective_learning_time.playing_time: 视频播放时长
+admin.setting_course.effective_learning_time.page_time: 页面停留时长
 admin.setting_course.effective_learning_time.reweighted_merge: 各处学习时长去重后再合并
 admin.setting_course.effective_learning_time.accumulated_merge: 各处学习时长直接累加合并
 admin.setting_course.effective_learning_time.reweighted_merge.help_block: 同时在多处产生的学习时长自动去重合并

@@ -3,7 +3,9 @@
 namespace AppBundle\Controller\AdminV2\System;
 
 use AppBundle\Controller\AdminV2\BaseController;
+use Biz\Crontab\SystemCrontabInitializer;
 use Biz\System\Service\SettingService;
+use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Symfony\Component\HttpFoundation\Request;
 
 class VideoTaskSettingController extends BaseController
@@ -46,12 +48,53 @@ class VideoTaskSettingController extends BaseController
         if ('POST' == $request->getMethod()) {
             $set = $request->request->all();
 
-            $effectiveTimeSetting = array_merge($effectiveTimeSetting, $set);
-
             $this->getSettingService()->set('videoEffectiveTimeStatistics', $set);
+
+            if ($set['statistical_dimension'] != $effectiveTimeSetting['statistical_dimension']) {
+                $this->createRefreshDataJob();
+            }
+
+            $effectiveTimeSetting = array_merge($effectiveTimeSetting, $set);
         }
 
         return $this->render('admin-v2/system/course-setting/video-effective-learning-time-setting.html.twig', ['effectiveTimeSetting' => $effectiveTimeSetting]);
+    }
+
+    public function refreshJobCheckAction(Request $request)
+    {
+        $jobName = $this->getSettingService()->get('refreshLearnDailyJob', '');
+        if (empty($jobName)) {
+            return $this->createJsonResponse(true);
+        }
+
+        $jobCount = $this->getSchedulerService()->countJobs(['name' => $jobName]);
+        $jobFiredCount = $this->getSchedulerService()->countJobFires(['job_name' => $jobName]);
+        if (empty($jobFiredCount) && empty($jobCount)) {
+            return $this->createJsonResponse(true);
+        }
+
+        $jobFired = $this->getSchedulerService()->searchJobFires(['job_name' => $jobName], ['id' => 'desc'], 0, $jobFiredCount);
+        if (!empty($jobFired) && in_array($jobFired[0]['status'], ['success', 'missed', 'failure'])) {
+            return $this->createJsonResponse(true);
+        }
+
+        return $this->createJsonResponse(false);
+    }
+
+    protected function createRefreshDataJob()
+    {
+        $job = array(
+            'name' => 'RefreshLearnDailyJob-'.time(),
+            'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
+            'expression' => intval(time()),
+            'misfire_policy' => 'executing',
+            'class' => 'Biz\Visualization\Job\RefreshLearnDailyJob',
+            'args' => [],
+        );
+
+        $job = $this->getSchedulerService()->register($job);
+
+        $this->getSettingService()->set('refreshLearnDailyJob', $job['name']);
     }
 
     /**
@@ -60,5 +103,13 @@ class VideoTaskSettingController extends BaseController
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return SchedulerService
+     */
+    protected function getSchedulerService()
+    {
+        return $this->createService('Scheduler:SchedulerService');
     }
 }
