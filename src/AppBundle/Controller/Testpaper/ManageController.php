@@ -270,7 +270,7 @@ class ManageController extends BaseController
         $jobSync = 0;
 
         //如果存在新提交的作业
-        if ($answerScene['question_report_update_time'] < $answerScene['last_submit_time']) {
+        if ($answerScene['question_report_update_time'] < $answerScene['last_review_time']) {
             if ($answerScene['question_report_job_name']) {
                 $jobName = $answerScene['question_report_job_name'];
                 $jobFired = $this->getSchedulerService()->findJobFiredByJobName($jobName);

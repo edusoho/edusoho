@@ -34,7 +34,7 @@ class ItemBankServiceProvider implements ServiceProviderInterface
         $biz['autoload.aliases']['ItemBank'] = 'Codeages\Biz\ItemBank';
 
         $biz['console.commands'][] = function () use ($biz) {
-            return new \Codeages\Biz\ItemBank\Command\TableCommand($biz);
+            return new \Codeages\Biz\ItemBank\ItemBank\Command\TableCommand($biz);
         };
 
         $biz['item_bank_html_helper'] = function ($biz) {

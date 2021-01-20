@@ -80,7 +80,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
             );
 
             if ($canFinished) {
-                $this->getAnswerSceneService()->update($answerScene['id'], ['name' => $answerScene['name'], 'last_submit_time' => time()]);
+                $this->getAnswerSceneService()->update($answerScene['id'], ['name' => $answerScene['name'], 'last_review_time' => time()]);
             }
             $this->commit();
         } catch (\Exception $e) {
@@ -302,7 +302,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
                 'comment' => empty($reviewReport['comment']) ? '' : $reviewReport['comment'],
             ]);
 
-            $this->getAnswerSceneService()->update($answerScene['id'], ['name' => $answerScene['name'], 'last_submit_time' => time()]);
+            $this->getAnswerSceneService()->update($answerScene['id'], ['name' => $answerScene['name'], 'last_review_time' => time()]);
 
             $this->commit();
         } catch (\Exception $e) {

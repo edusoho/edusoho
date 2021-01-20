@@ -1,3 +1,7 @@
+# es-ckeditor 4.7.2-patch16 (2020-12-31)
+
+* 移除 flash 文件上传功能
+
 # es-ckeditor 4.7.2-patch15 (2020-09-16)
 
 * 兼容IE不能上传图片问题

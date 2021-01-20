@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class InitItemBank extends Migration
+class BizInitItemBank extends Migration
 {
     /**
      * Do the migration

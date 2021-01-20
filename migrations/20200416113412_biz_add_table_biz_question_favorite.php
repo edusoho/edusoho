@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class AddTableBizQuestionFavorite extends Migration
+class BizAddTableBizQuestionFavorite extends Migration
 {
     /**
      * Do the migration

@@ -32,7 +32,7 @@ class AnswerSceneDaoImpl extends AdvancedDaoImpl implements AnswerSceneDao
      */
     public function findNotStatisticsQuestionsReportScenes($limited = 100)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE question_report_update_time < last_submit_time ORDER BY `question_report_update_time` ASC limit ?;";
+        $sql = "SELECT * FROM {$this->table} WHERE question_report_update_time < last_review_time ORDER BY `question_report_update_time` ASC limit ?;";
         return $this->db()->fetchAll($sql, [$limited]);
     }
 }
