@@ -217,12 +217,17 @@ export default {
    */
   methods: {
     toToast() {
-      if (this.finishCondition) {
-        this.$toast({
-          message: this.finishCondition.text,
-          position: 'bottom',
-        });
+      const condition = this.finishCondition;
+      if (!condition) return;
+      let message = '';
+      if (condition.type === 'time') {
+        const minute = Math.ceil((condition.data * 60 - this.learnedTime) / 60);
+        message = `\n剩余 ${minute} 分完成`;
       }
+      this.$toast({
+        message: `完成条件：${condition.text}${message}`,
+        position: 'bottom',
+      });
     },
     isAndroid() {
       return !!navigator.userAgent.match(new RegExp('android', 'i'));
