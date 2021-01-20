@@ -29,6 +29,24 @@
         {% endif %}
       </div>
 
+      <div class="mlm">
+        <a class="license-picture">
+          <img src="{% if setting('site.recordPicture') %}{{ asset(setting('site.recordPicture')) }}
+                    {% else %}{{ filepath('','gongan.png' ) }}{% endif %}" style="width: 20px;height: 20px;">
+        </a>
+        <a class="mlm" {% if setting('site.recordUrl') %}
+          href="{{ setting('site.recordUrl') }}{{ setting('site.recordCode')|default('') }}"
+        {% endif %}
+           target="_blank">
+        </a>
+        <a class="mlm" {% if setting('site.recordUrl') %}
+          href="{{ setting('site.recordUrl') }}{{ setting('site.recordNum')|default('') }}"
+        {% endif %}
+           target="_blank">
+          {{ setting('site.recordCode') |default('') }}
+        </a>
+      </div>
+
       {% if setting('license.license_picture') and setting('license.license_name') %}
         {% if setting('license.license_url') %}
           <a id="license-picture" href={{ setting('license.license_url')| default('/') }} target="_blank">
@@ -47,8 +65,10 @@
         <div>
           {% if permit.name and permit.record_number %}
             {% if permit.picture %}
-              <a class="mlm" href={{ fileurl('../'~permit.picture, null) |default('/') }} target="_blank">{{ permit.name }}</a>
-              <a class="mlm" href={{ fileurl('../'~permit.picture, null) |default('/') }} target="_blank">{{ permit.record_number }}</a>
+              <a class="mlm"
+                 href={{ fileurl('../'~permit.picture, null) |default('/') }} target="_blank">{{ permit.name }}</a>
+              <a class="mlm"
+                 href={{ fileurl('../'~permit.picture, null) |default('/') }} target="_blank">{{ permit.record_number }}</a>
             {% else %}
               <a class="mlm">{{ permit.name }}</a>
               <a class="mlm">{{ permit.record_number }}</a>

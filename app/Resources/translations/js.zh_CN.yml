@@ -1254,6 +1254,9 @@ admin.site.upload_favicon_success_hint: 上传网站浏览器图标成功！
 admin.site.delete_favicon_success_hint: 删除网站浏览器图标成功！
 admin.site.delete_favicon_fail_hint: 删除网站浏览器图标失败！
 admin.site.delete_hint: 确认要删除吗？
+admin.site.upload_record_picture_success_hint: 上传公安备案图标成功！
+admin.site.delete_record_picture_success_hint: 删除公安备案图标成功！
+admin.site.delete_record_picture_fail_hint: 删除公安备案图标失败！
 admin.setting.upload_license_picture_success_hint: 上传电子营业执照图片成功！
 admin.setting.delete_license_picture_success_hint: 删除电子营业执照图片成功！
 admin.setting.delete_license_picture_fail_hint: 删除电子营业执照图片失败！

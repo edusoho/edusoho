@@ -246,6 +246,33 @@ class SettingController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function recordPictureUploadAction(Request $request)
+    {
+        $fileId = $request->request->get('id');
+
+        $site = $this->getSettingService()->get('site', []);
+        $site['recordPicture'] = $this->replaceFile('recordPicture', $fileId);
+
+        $this->getSettingService()->set('site', $site);
+
+        $response = [
+            'path' => $site['recordPicture'],
+            'url' => $this->container->get('assets.packages')->getUrl($site['recordPicture']),
+        ];
+
+        return $this->createJsonResponse($response);
+    }
+
+    public function recordPictureRemoveAction(Request $request)
+    {
+        $site = $this->getSettingService()->get('site');
+        $site['recordPicture'] = '';
+
+        $this->getSettingService()->set('site', $site);
+
+        return $this->createJsonResponse(true);
+    }
+
     public function adminSyncAction(Request $request)
     {
         $currentUser = $this->getUser();
