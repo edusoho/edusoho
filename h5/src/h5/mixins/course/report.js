@@ -171,6 +171,14 @@ export default {
       if (param.reActive) {
         data.reActive = param.reActive;
       }
+      if (param.watchTime) {
+        let watchData = {
+          watchData: {
+            duration: param.watchTime,
+          },
+        };
+        data = Object.assign(data, watchData);
+      }
       this.learnTime = 0;
       Api.reportTaskEvent({
         query: {
