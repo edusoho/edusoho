@@ -10784,19 +10784,20 @@ wechat.notification.template_name.buy_success: '购买成功通知'
 # 移动端使用：课时任务(task)完成条件文案
 mobile.task.finish_tips.audio.end: 听完音频
 mobile.task.finish_tips.discuss.join: 在本课程下发表或者回复一个话题
-mobile.task.finish_tips.doc.time: 至少学习 %finishData% 分钟
+mobile.task.finish_tips.doc.time: 至少停留 %finishData% 分钟
 mobile.task.finish_tips.download.download: 下载过资料
 mobile.task.finish_tips.exercise.submit: 提交过练习
-mobile.task.finish_tips.flash.time: 至少学习 %finishData% 分钟
+mobile.task.finish_tips.flash.time: 至少停留 %finishData% 分钟
 mobile.task.finish_tips.homework.submit: 提交作业
 mobile.task.finish_tips.live.join: 进入参加过直播
 mobile.task.finish_tips.ppt.end: 需要学习到最后一页
-mobile.task.finish_tips.ppt.time: 至少学习 %finishData% 分钟
+mobile.task.finish_tips.ppt.time: 至少停留 %finishData% 分钟
 mobile.task.finish_tips.testpapaer.submit: 提交试卷
 mobile.task.finish_tips.testpapaer.score: 考试分数通过 %finishData% 分
-mobile.task.finish_tips.text.time: 至少学习 %finishData% 分钟
+mobile.task.finish_tips.text.time: 至少停留 %finishData% 分钟
 mobile.task.finish_tips.video.end: 学习到最后
-mobile.task.finish_tips.video.time: 至少学习 %finishData% 分钟
+mobile.task.finish_tips.video.time: 至少停留 %finishData% 分钟
+mobile.task.finish_tips.video.watchTime: 至少播放 %finishData% 分钟
 
 classroom.joining_date.expired_tips: 班级已过有效期！
 
