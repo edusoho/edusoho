@@ -266,7 +266,7 @@ class ManageController extends BaseController
             $needJob = $this->needSyncJob($answerCount, $activity['ext']['testpaper']['question_count']);
             if (!$needJob) {
                 //判断当前阈值不需要定时任务来异步处理
-                $this->getAnswerSceneService()->buildAnswerSceneReport($activity['ext']['answerScene']['id']);
+                !empty($answerCount) ? $this->getAnswerSceneService()->buildAnswerSceneReport($activity['ext']['answerScene']['id']) : null;
             } else {
                 $jobSync = $this->handleJob($answerScene); //是否在次请求加载过程中存在同步执行中的Job
             }

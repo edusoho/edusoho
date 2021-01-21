@@ -150,7 +150,7 @@ class HomeworkManageController extends BaseController
             $needJob = $this->needSyncJob($answerCount, $activity['ext']['assessment']['question_count']);
             if (!$needJob) {
                 //判断当前阈值不需要定时任务来异步处理
-                $this->getAnswerSceneService()->buildAnswerSceneReport($activity['ext']['answerSceneId']);
+                !empty($answerCount) ? $this->getAnswerSceneService()->buildAnswerSceneReport($activity['ext']['answerSceneId']) : null;
             } else {
                 $jobSync = $this->handleJob($answerScene); //是否在次请求加载过程中存在同步执行中的Job
             }

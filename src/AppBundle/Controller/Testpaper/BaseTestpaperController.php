@@ -102,7 +102,6 @@ class BaseTestpaperController extends BaseController
     protected function getSceneAnalysisJob($sceneId)
     {
         $scene = $this->getAnswerSceneService()->get($sceneId);
-        $this->getSchedulerService()->countJobFires(['job_name' => $scene['question_report_job_name'], 'status' => '']);
 
         return $this->getSchedulerService()->getJobByName($scene['question_report_job_name']);
     }
