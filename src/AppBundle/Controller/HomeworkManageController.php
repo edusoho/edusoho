@@ -4,17 +4,12 @@ namespace AppBundle\Controller;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
+use AppBundle\Controller\Testpaper\BaseTestpaperController as BaseController;
 use Biz\Common\CommonException;
-use Biz\Question\Service\CategoryService;
-use Biz\Question\Service\QuestionService;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
-use Biz\Testpaper\Job\QuestionItemAnalysisJob;
-use Biz\Testpaper\Service\TestpaperService;
-use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
@@ -22,10 +17,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class HomeworkManageController extends BaseController
 {
-    const SYNC_ANALYSIS_THRESHOLD = 10;
-
-    const SYNC_ANALYSIS_TIME_THRESHOLD = 28800;
-
     public function questionPickerAction(Request $request, $id)
     {
         $this->getCourseSetService()->tryManageCourseSet($id);
@@ -220,38 +211,6 @@ class HomeworkManageController extends BaseController
         ]);
     }
 
-    protected function needSyncJob($answerCount, $questionNum)
-    {
-        if ($answerCount * $questionNum > self::SYNC_ANALYSIS_THRESHOLD) {
-            return true;
-        }
-
-        return false;
-    }
-
-    protected function registerSceneAnalysisJob($sceneId)
-    {
-        $updateRealTimeTestResultStatusJob = [
-            'name' => 'question_item_analysis_'.$sceneId.'_'.time(),
-            'expression' => time(),
-            'class' => QuestionItemAnalysisJob::class,
-            'args' => [
-                'sceneId' => $sceneId,
-            ],
-        ];
-
-        return $this->getSchedulerService()->register($updateRealTimeTestResultStatusJob);
-    }
-
-    protected function getSceneAnalysisJob($sceneId)
-    {
-        $scene = $this->getAnswerSceneService()->get($sceneId);
-        $name = $scene['question_report_job_name'];
-        $this->getSchedulerService()->countJobFires(['job_name' => $name, 'status' => '']);
-
-        return $this->getSchedulerService()->getJobByName($name);
-    }
-
     public function resultGraphAction($activityId)
     {
         $activity = $this->getActivityService()->getActivity($activityId, true);
@@ -398,22 +357,6 @@ class HomeworkManageController extends BaseController
     }
 
     /**
-     * @return CategoryService
-     */
-    protected function getQuestionCategoryService()
-    {
-        return $this->createService('Question:CategoryService');
-    }
-
-    /**
-     * @return QuestionService
-     */
-    protected function getQuestionService()
-    {
-        return $this->createService('Question:QuestionService');
-    }
-
-    /**
      * @return ItemService
      */
     protected function getItemService()
@@ -427,11 +370,6 @@ class HomeworkManageController extends BaseController
     protected function getItemCategoryService()
     {
         return $this->createService('ItemBank:Item:ItemCategoryService');
-    }
-
-    protected function getQuestionAnalysisService()
-    {
-        return $this->createService('Question:QuestionAnalysisService');
     }
 
     protected function getCourseSetService()
@@ -489,21 +427,5 @@ class HomeworkManageController extends BaseController
     protected function getAssessmentService()
     {
         return $this->createService('ItemBank:Assessment:AssessmentService');
-    }
-
-    /**
-     * @return AnswerSceneService
-     */
-    protected function getAnswerSceneService()
-    {
-        return $this->createService('ItemBank:Answer:AnswerSceneService');
-    }
-
-    /**
-     * @return SchedulerService
-     */
-    private function getSchedulerService()
-    {
-        return $this->getBiz()->service('Scheduler:SchedulerService');
     }
 }

@@ -6,6 +6,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Activity\Service\ActivityService;
 use Biz\Common\CommonException;
+use Biz\Course\Service\CourseService;
 use Biz\Course\Service\LearningDataAnalysisService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
@@ -190,6 +191,7 @@ class CourseTaskEventV2 extends AbstractResource
     {
         $user = $this->getCurrentUser();
         $task = $this->getTaskService()->getTask($taskId);
+        $course = $this->getCourseService()->getCourse($courseId);
         $activity = $this->getActivityService()->getActivity($task['activityId']);
         list($canDoing, $denyReason) = $this->getLearnControlService()->checkActive($user['id'], $data['sign'], $request->request->get('reActive', 0));
         $flow = $this->getDataCollectService()->getFlowBySign($user['id'], $data['sign']);
@@ -220,6 +222,9 @@ class CourseTaskEventV2 extends AbstractResource
             ],
         ];
         $result = $this->getTaskService()->trigger($taskId, self::EVENT_FINISH, $triggerData);
+        if ($course['enableFinish']) {
+            $result = $this->getTaskService()->finishTaskResult($taskId);
+        }
 
         if (self::EVENT_FINISH === $result['status']) {
             $nextTask = $this->getTaskService()->getNextTask($taskId);
@@ -351,5 +356,13 @@ class CourseTaskEventV2 extends AbstractResource
     protected function getTaskResultService()
     {
         return $this->service('Task:TaskResultService');
+    }
+
+    /**
+     * @return CourseService
+     */
+    protected function getCourseService()
+    {
+        return $this->service('Course:CourseService');
     }
 }

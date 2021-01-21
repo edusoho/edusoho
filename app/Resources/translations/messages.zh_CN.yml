@@ -7761,6 +7761,8 @@ admin.magic_setting.watch_time_sec_tip: 秒为单位
 admin.magic_setting.site_trace_enable: piwik跟踪的开关
 admin.magic_setting.live_entry_time: 直播开始前可进入时间
 admin.magic_setting.live_entry_time_tip: 秒为单位
+admin.magic_setting.biz_answer_scene_report_threshold: 考试、作业人数*场次的试卷答案分数阈值
+admin.magic_setting.biz_answer_scene_report_threshold_tip: 默认值15000
 
 admin.magic_setting.one_for_open: 1为启用
 admin.magic_setting.one_for_close: 1为关闭
