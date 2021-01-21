@@ -171,10 +171,12 @@ export default {
       if (param.reActive) {
         data.reActive = param.reActive;
       }
-      if (param.watchTime) {
+      if (this.sourceType && this.sourceType === 'video') {
+        const watchTime = parseInt(this.nowWatchTime - this.lastWatchTime);
+        this.lastWatchTime = this.nowWatchTime;
         let watchData = {
           watchData: {
-            duration: param.watchTime,
+            duration: watchTime,
           },
         };
         data = Object.assign(data, watchData);
@@ -246,7 +248,8 @@ export default {
       if (!this.reportFinishCondition) {
         return;
       }
-      if (this.reportFinishCondition.type === 'time') {
+
+      if (['time', 'watchTime'].includes(this.reportFinishCondition.type)) {
         if (
           parseInt(this.learnTime / 60, 10) >=
           parseInt(this.reportFinishCondition.data, 10)

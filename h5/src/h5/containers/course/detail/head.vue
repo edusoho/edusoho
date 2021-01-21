@@ -220,7 +220,7 @@ export default {
       const condition = this.finishCondition;
       if (!condition) return;
       let message = '';
-      if (condition.type === 'time' || condition.type === 'watchTime') {
+      if (['time', 'watchTime'].includes(condition.type)) {
         const minute = Math.ceil((condition.data * 60 - this.learnedTime) / 60);
         message =
           minute > 0 ? `\n剩余 ${minute} 分完成` : '\n恭喜！你已完成该任务';
@@ -439,12 +439,9 @@ export default {
         player.on('paused', e => {
           this.isPlaying = false;
           this.clearComputeWatchTime();
-          const watchTime = parseInt(this.nowWatchTime - this.lastWatchTime);
-          this.lastWatchTime = this.nowWatchTime;
           this.reprtData({
             eventName: 'doing',
             ContinuousReport: true,
-            watchTime: watchTime,
           });
         });
         player.on('ended', () => {
