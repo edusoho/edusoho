@@ -217,12 +217,18 @@ export default {
    */
   methods: {
     toToast() {
-      if (this.finishCondition) {
-        this.$toast({
-          message: this.finishCondition.text,
-          position: 'bottom',
-        });
+      const condition = this.finishCondition;
+      if (!condition) return;
+      let message = '';
+      if (['time', 'watchTime'].includes(condition.type)) {
+        const minute = Math.ceil((condition.data * 60 - this.learnedTime) / 60);
+        message =
+          minute > 0 ? `\n剩余 ${minute} 分完成` : '\n恭喜！你已完成该任务';
       }
+      this.$toast({
+        message: `完成条件：${condition.text}${message}`,
+        position: 'bottom',
+      });
     },
     isAndroid() {
       return !!navigator.userAgent.match(new RegExp('android', 'i'));
@@ -433,13 +439,10 @@ export default {
         player.on('paused', e => {
           this.isPlaying = false;
           this.clearComputeWatchTime();
-          // const watchTime = parseInt(this.nowWatchTime - this.lastWatchTime);
-          this.lastWatchTime = this.nowWatchTime;
-          // this.reprtData({
-          //   eventName: 'doing',
-          //   ContinuousReport: true,
-          //   watchTime: watchTime,
-          // });
+          this.reprtData({
+            eventName: 'doing',
+            ContinuousReport: true,
+          });
         });
         player.on('ended', () => {
           this.clearComputeWatchTime();
