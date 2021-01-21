@@ -301,23 +301,6 @@ class CourseSetController extends BaseController
             }
         }
 
-        // for ($i = 15; $i <= 20; $i += 1) {
-        //     $time = strtotime('2021-01-' . $i);
-        //     $this->createService('Visualization:ActivityDataDailyStatisticsService')->statisticsPageStayDailyData($time, $time + 86400);
-        //     $this->createService('Visualization:ActivityDataDailyStatisticsService')->statisticsVideoDailyData($time, $time + 86400);
-        //     $this->createService('Visualization:ActivityDataDailyStatisticsService')->statisticsLearnDailyData($time, $time + 86400);
-
-        //     $this->createService('Visualization:ActivityDataDailyStatisticsService')->statisticsCoursePlanStayDailyData($time, $time + 86400);
-        //     $this->createService('Visualization:ActivityDataDailyStatisticsService')->statisticsCoursePlanVideoDailyData($time, $time + 86400);
-        //     $this->createService('Visualization:ActivityDataDailyStatisticsService')->statisticsCoursePlanLearnDailyData($time, $time + 86400);
-
-        //     $this->createService('Visualization:ActivityDataDailyStatisticsService')->statisticsUserStayDailyData($time, $time + 86400);
-        //     $this->createService('Visualization:ActivityDataDailyStatisticsService')->statisticsUserVideoDailyData($time, $time + 86400);
-        //     $this->createService('Visualization:ActivityDataDailyStatisticsService')->statisticsUserLearnDailyData($time, $time + 86400);
-        // }
-
-        // $this->createService('Visualization:ActivityDataDailyStatisticsService')->refreshUserPlanLearnDailyData();
-
         $courseSets = $this->statsCourseSetData($courseSets);
 
         return $this->render(

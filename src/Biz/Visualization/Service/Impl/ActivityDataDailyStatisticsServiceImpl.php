@@ -377,7 +377,7 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
                         'id' => $taskResult['id'],
                         'sumTime' => array_sum(ArrayToolkit::column($learnRecords[$record['taskId']], 'sumTime')),
                         'stayTime' => array_sum(ArrayToolkit::column($stayRecords[$record['taskId']], 'sumTime')),
-//                        'watchTime' => empty($watchRecords[$record['taskId']]) ? 0 : array_sum(ArrayToolkit::column($watchRecords[$record['taskId']], 'sumTime')),
+                        //                        'watchTime' => empty($watchRecords[$record['taskId']]) ? 0 : array_sum(ArrayToolkit::column($watchRecords[$record['taskId']], 'sumTime')),
                         'pureTime' => array_sum(ArrayToolkit::column($learnRecords[$record['taskId']], 'pureTime')),
                         'pureStayTime' => array_sum(ArrayToolkit::column($stayRecords[$record['taskId']], 'pureTime')),
                         'pureWatchTime' => empty($watchRecords[$record['taskId']]) ? 0 : array_sum(ArrayToolkit::column($watchRecords[$record['taskId']], 'pureTime')),
@@ -433,90 +433,6 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
         }
 
         return $statisticsSetting;
-    }
-
-    public function refreshCoursePlanLearnDailyData()
-    {
-        $setting = $this->getVideoEffectiveTimeStatisticsSetting();
-
-        $pageSize = 1;
-        $pageCount = ceil($this->biz['db']->fetchColumn('SELECT COUNT(id) FROM `course_plan_learn_daily`') / $pageSize);
-
-        for ($offset = 0; $offset < $pageCount; ++$offset) {
-            $ids = $this->biz['db']->fetchAll("SELECT `id` FROM `course_plan_learn_daily` LIMIT $offset, $pageSize");
-            $ids = array_column($ids, 'id');
-            $marks = str_repeat('?,', count($ids) - 1).'?';
-
-            if ('page' == $setting['statistical_dimension']) {
-                $this->biz['db']->executeUpdate("
-                    UPDATE `course_plan_learn_daily` l INNER JOIN (
-                        SELECT userId, dayTime, courseId, sum(sumTime) AS sumTime
-                        FROM `course_plan_stay_daily` GROUP BY userId, courseId, dayTime) AS s
-                        ON l.dayTime = s.dayTime AND l.userId = s.userId AND l.courseId = s.courseId AND l.id IN ({$marks})
-                    SET l.sumTime = s.sumTime;
-                ", $ids);
-                continue;
-            }
-
-            $this->biz['db']->executeUpdate("UPDATE `course_plan_learn_daily` SET sumTime = 0 WHERE id IN ({$marks});", $ids);
-            $this->biz['db']->executeUpdate("
-                UPDATE `course_plan_learn_daily` l INNER JOIN (
-                    SELECT userId, dayTime, courseId, sum(sumTime) AS sumTime
-                    FROM `course_plan_video_daily` GROUP BY userId, courseId, dayTime) AS s
-                    ON l.dayTime = s.dayTime AND l.userId = s.userId AND l.courseId = s.courseId AND l.id IN ({$marks})
-                SET l.sumTime = s.sumTime;
-            ", $ids);
-
-            $this->biz['db']->executeUpdate("
-                UPDATE `course_plan_learn_daily` l INNER JOIN (
-                    SELECT userId, dayTime, courseId, sum(sumTime) AS sumTime
-                    FROM `activity_stay_daily` WHERE mediaType != 'video' GROUP BY userId, courseId, dayTime) AS s
-                    ON l.dayTime = s.dayTime AND l.userId = s.userId AND l.courseId = s.courseId AND l.id IN ({$marks})
-                SET l.sumTime = l.sumTime + s.sumTime;
-            ", $ids);
-        }
-    }
-
-    public function refreshUserPlanLearnDailyData()
-    {
-        $setting = $this->getVideoEffectiveTimeStatisticsSetting();
-
-        $pageSize = 1;
-        $pageCount = ceil($this->biz['db']->fetchColumn('SELECT COUNT(id) FROM `user_learn_daily`') / $pageSize);
-
-        for ($offset = 0; $offset < $pageCount; ++$offset) {
-            $ids = $this->biz['db']->fetchAll("SELECT `id` FROM `user_learn_daily` LIMIT $offset, $pageSize");
-            $ids = array_column($ids, 'id');
-            $marks = str_repeat('?,', count($ids) - 1).'?';
-
-            if ('page' == $setting['statistical_dimension']) {
-                $this->biz['db']->executeUpdate("
-                    UPDATE `user_learn_daily` l INNER JOIN (
-                        SELECT userId, dayTime, sum(sumTime) AS sumTime
-                        FROM `user_stay_daily` GROUP BY userId, dayTime) AS s
-                        ON l.dayTime = s.dayTime AND l.userId = s.userId AND l.id IN ({$marks})
-                    SET l.sumTime = s.sumTime;
-                ", $ids);
-                continue;
-            }
-
-            $this->biz['db']->executeUpdate("UPDATE `user_learn_daily` SET sumTime = 0 WHERE id IN ({$marks});", $ids);
-            $this->biz['db']->executeUpdate("
-                UPDATE `user_learn_daily` l INNER JOIN (
-                    SELECT userId, dayTime, sum(sumTime) AS sumTime
-                    FROM `user_video_daily` GROUP BY userId, dayTime) AS s
-                    ON l.dayTime = s.dayTime AND l.userId = s.userId AND l.id IN ({$marks})
-                SET l.sumTime = s.sumTime;
-            ", $ids);
-
-            $this->biz['db']->executeUpdate("
-                UPDATE `user_learn_daily` l INNER JOIN (
-                    SELECT userId, dayTime, sum(sumTime) AS sumTime
-                    FROM `activity_stay_daily` WHERE mediaType != 'video' GROUP BY userId, dayTime) AS s
-                    ON l.dayTime = s.dayTime AND l.userId = s.userId AND l.id IN ({$marks})
-                SET l.sumTime = l.sumTime + s.sumTime;
-            ", $ids);
-        }
     }
 
     private function analysisCondition($conditions)
