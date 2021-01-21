@@ -42,10 +42,6 @@ class LearnCourseTaskAccessor extends AccessorAdapter
             }
         }
 
-        if ($task['isFree'] && $this->getCurrentUser()->isLogin()) {
-            return null;
-        }
-
         return $this->buildResult($previousCode);
     }
 

@@ -377,7 +377,7 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
                         'id' => $taskResult['id'],
                         'sumTime' => array_sum(ArrayToolkit::column($learnRecords[$record['taskId']], 'sumTime')),
                         'stayTime' => array_sum(ArrayToolkit::column($stayRecords[$record['taskId']], 'sumTime')),
-                        //                        'watchTime' => empty($watchRecords[$record['taskId']]) ? 0 : array_sum(ArrayToolkit::column($watchRecords[$record['taskId']], 'sumTime')),
+//                        'watchTime' => empty($watchRecords[$record['taskId']]) ? 0 : array_sum(ArrayToolkit::column($watchRecords[$record['taskId']], 'sumTime')),
                         'pureTime' => array_sum(ArrayToolkit::column($learnRecords[$record['taskId']], 'pureTime')),
                         'pureStayTime' => array_sum(ArrayToolkit::column($stayRecords[$record['taskId']], 'pureTime')),
                         'pureWatchTime' => empty($watchRecords[$record['taskId']]) ? 0 : array_sum(ArrayToolkit::column($watchRecords[$record['taskId']], 'pureTime')),
