@@ -81,8 +81,10 @@ define(function (require, exports, module) {
     $('#record-picture-remove').on('click', function () {
       if (!confirm(Translator.trans('admin.site.delete_hint'))) return false;
       var $btn = $(this);
+      var $recordContainer = $('#record-picture-container');
       $.post($btn.data('gotoUrl'), function () {
-        $('#record-picture-container').html('');
+        $recordContainer.html('');
+        $recordContainer.append('<img src="/assets/img/default/gongan.png">');
         $form.find('[name=recordPicture]').val('');
         $btn.hide();
         Notify.success(Translator.trans('admin.site.delete_record_picture_success_hint'));
