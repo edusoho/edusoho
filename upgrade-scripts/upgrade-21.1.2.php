@@ -89,16 +89,16 @@ class EduSohoUpgrade extends AbstractUpdater
 
     public function answerSceneColumnChange()
     {
-        if (!$this->isFieldExist('biz_answer_scene', 'last_submit_time')) {
-            $this->getConnection()->exec("ALTER TABLE `biz_answer_scene` ADD COLUMN `last_submit_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '考题最后提交时间' AFTER `updated_user_id`;");
+        if (!$this->isFieldExist('biz_answer_scene', 'last_review_time')) {
+            $this->getConnection()->exec("ALTER TABLE `biz_answer_scene` ADD COLUMN `last_review_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '考题最后批阅时间' AFTER `updated_user_id`;");
         }
 
         if (!$this->isFieldExist('biz_answer_scene', 'question_report_update_time')) {
             $this->getConnection()->exec("ALTER TABLE `biz_answer_scene` ADD COLUMN `question_report_update_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '场次题目分析最后生成时间' AFTER `updated_user_id`;");
         }
 
-        if (!$this->isFieldExist('biz_answer_scene', 'question_report_job_id')) {
-            $this->getConnection()->exec("ALTER TABLE `biz_answer_scene` ADD COLUMN `question_report_job_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '场次分析JOB ID' AFTER `updated_user_id`;");
+        if (!$this->isFieldExist('biz_answer_scene', 'question_report_job_name')) {
+            $this->getConnection()->exec("ALTER TABLE `biz_answer_scene` ADD COLUMN `question_report_job_name` varchar(256) DEFAULT '' COMMENT '场次分析JOB Name';");
         }
 
         return 1;
