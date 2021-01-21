@@ -63,6 +63,42 @@ class BaseTestpaperController extends BaseController
         return $this->getSchedulerService()->register($updateRealTimeTestResultStatusJob);
     }
 
+    public function handleJob($answerScene)
+    {
+        $jobSync = 0;
+        if (!empty($answerScene['question_report_job_name'])) {
+            $jobFired = $this->getSchedulerService()->findJobFiredByJobName($answerScene['question_report_job_name']);
+            if (!empty($jobFired) && 'success' === $jobFired[0]['status']) {
+                $handleSyncJob = $this->handleSyncJob($answerScene);
+                $jobSync = $handleSyncJob['jobSync'];
+            }
+        } else {
+            $handleSyncJob = $this->handleSyncJob($answerScene);
+            $jobSync = $handleSyncJob['jobSync'];
+        }
+
+        return $jobSync;
+    }
+
+    public function handleSyncJob($answerScene)
+    {
+        //如果大于8个小时
+        if (time() - $answerScene['question_report_update_time'] > self::SYNC_ANALYSIS_TIME_THRESHOLD) {
+            $job = $this->getSceneAnalysisJob($answerScene['id']);
+            if (empty($job)) {
+                $job = $this->registerSceneAnalysisJob($answerScene['id']);
+            }
+            $this->getAnswerSceneService()->update($answerScene['id'], ['name' => $answerScene['name'], 'question_report_job_name' => $job['name']]);
+            $jobSync = 1;
+        } else {
+            $jobSync = 0;
+        }
+
+        return [
+            'jobSync' => $jobSync,
+        ];
+    }
+
     protected function getSceneAnalysisJob($sceneId)
     {
         $scene = $this->getAnswerSceneService()->get($sceneId);

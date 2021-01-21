@@ -259,56 +259,16 @@ class ManageController extends BaseController
         }
 
         $answerScene = $this->getAnswerSceneService()->get($activity['ext']['answerScene']['id']);
-
-        //如果存在新提交的作业
-        if ($answerScene['question_report_update_time'] < $answerScene['last_review_time']) {
-            if ($answerScene['question_report_job_name']) {
-                $jobName = $answerScene['question_report_job_name'];
-                $jobFired = $this->getSchedulerService()->findJobFiredByJobName($jobName);
-                if (empty($jobFired) || 'success' !== $jobFired[0]['status']) {
-                    $jobSync = 0;
-                    $needJob = 1;
-                } else {
-                    $answerCount = $this->getAnswerRecordService()->count(['answer_scene_id' => $activity['ext']['answerScene']['id'], 'status' => 'finished']);
-                    $needJob = $this->needSyncJob($answerCount, $activity['ext']['testpaper']['question_count']);
-                    //如果超出阈值
-                    if ($needJob) {
-                        //如果大于8个小时
-                        if (time() - $answerScene['question_report_update_time'] > self::SYNC_ANALYSIS_TIME_THRESHOLD) {
-                            $job = $this->getSceneAnalysisJob($activity['ext']['answerScene']['id']);
-
-                            if (empty($job)) {
-                                $job = $this->registerSceneAnalysisJob($activity['ext']['answerScene']['id']);
-                            }
-                            $answerScene = $this->getAnswerSceneService()->update($answerScene['id'], ['name' => $answerScene['name'], 'question_report_job_name' => $job['name']]);
-                            $jobSync = 0;
-                        } else {
-                            $jobSync = 1;
-                        }
-                    } else {
-                        $this->getAnswerSceneService()->buildAnswerSceneReport($activity['ext']['answerScene']['id']);
-                    }
-                }
+        $needJob = 0; //是否要通过Job更新默认不需要
+        //判断如果存在新提交的内容
+        if (empty($answerScene['question_report_update_time']) || $answerScene['question_report_update_time'] < $answerScene['last_review_time']) {
+            $answerCount = $this->getAnswerRecordService()->count(['answer_scene_id' => $activity['ext']['answerScene']['id'], 'status' => 'finished']);
+            $needJob = $this->needSyncJob($answerCount, $activity['ext']['testpaper']['question_count']);
+            if (!$needJob) {
+                //判断当前阈值不需要定时任务来异步处理
+                $this->getAnswerSceneService()->buildAnswerSceneReport($activity['ext']['answerScene']['id']);
             } else {
-                $answerCount = $this->getAnswerRecordService()->count(['answer_scene_id' => $activity['ext']['answerScene']['id'], 'status' => 'finished']);
-                $needJob = $this->needSyncJob($answerCount, $activity['ext']['testpaper']['question_count']);
-                //如果超出阈值
-                if ($needJob) {
-                    //如果大于8个小时
-                    if (time() - $answerScene['question_report_update_time'] > self::SYNC_ANALYSIS_TIME_THRESHOLD) {
-                        $job = $this->getSceneAnalysisJob($activity['ext']['answerScene']['id']);
-
-                        if (empty($job)) {
-                            $job = $this->registerSceneAnalysisJob($activity['ext']['answerScene']['id']);
-                        }
-                        $answerScene = $this->getAnswerSceneService()->update($answerScene['id'], ['name' => $answerScene['name'], 'question_report_job_name' => $job['name']]);
-                        $jobSync = 0;
-                    } else {
-                        $jobSync = 1;
-                    }
-                } else {
-                    $this->getAnswerSceneService()->buildAnswerSceneReport($activity['ext']['answerScene']['id']);
-                }
+                $jobSync = $this->handleJob($answerScene); //是否在次请求加载过程中存在同步执行中的Job
             }
         }
 
@@ -321,7 +281,7 @@ class ManageController extends BaseController
             'assessment' => $activity['ext']['testpaper'],
             'targetType' => $targetType,
             'answerScene' => $answerScene,
-            'jobSync' => $jobSync,
+            'jobSync' => !empty($jobSync) ? 1 : 0,
             'needJob' => !empty($needJob) ? 1 : 0,
         ]);
     }

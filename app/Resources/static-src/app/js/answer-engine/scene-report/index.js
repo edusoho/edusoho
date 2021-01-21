@@ -18,8 +18,6 @@ let jobSync = $('.js-testpaper-container').data('jobSync');
 //需要Job
 if (needJob) {
   if (jobSync) {
-    $('.js-data-large-info').show();
-  } else {
     $('.js-data-large-loading').show();
     let internal = setInterval(() => {
       $.get($('.js-data-large-loading-btn').data('checkUrl'), function (resp) {
@@ -31,10 +29,11 @@ if (needJob) {
             $('.js-data-large-finish').hide();
             window.location.reload();
           }, 3000);
-
         }
       });
     }, 5000);
+  } else {
+    $('.js-data-large-info').show();
   }
 }
 
