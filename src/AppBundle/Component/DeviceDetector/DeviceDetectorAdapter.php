@@ -3,8 +3,8 @@
 namespace AppBundle\Component\DeviceDetector;
 
 use DeviceDetector\DeviceDetector;
-use Topxia\Service\Common\ServiceKernel;
 use Doctrine\Common\Cache\PhpFileCache;
+use Topxia\Service\Common\ServiceKernel;
 
 class DeviceDetectorAdapter implements DeviceDetectorInterface
 {
@@ -54,7 +54,6 @@ class DeviceDetectorAdapter implements DeviceDetectorInterface
 
     protected function getCachePath()
     {
-        return ServiceKernel::instance()->getParameter('kernel.root_dir') . '/cache/device_detector';
+        return ServiceKernel::instance()->getParameter('kernel.root_dir').'/cache/device_detector';
     }
-
 }
