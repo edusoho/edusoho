@@ -301,6 +301,23 @@ class CourseSetController extends BaseController
             }
         }
 
+        // for ($i = 15; $i <= 20; $i += 1) {
+        //     $time = strtotime('2021-01-' . $i);
+        //     $this->createService('Visualization:ActivityDataDailyStatisticsService')->statisticsPageStayDailyData($time, $time + 86400);
+        //     $this->createService('Visualization:ActivityDataDailyStatisticsService')->statisticsVideoDailyData($time, $time + 86400);
+        //     $this->createService('Visualization:ActivityDataDailyStatisticsService')->statisticsLearnDailyData($time, $time + 86400);
+
+        //     $this->createService('Visualization:ActivityDataDailyStatisticsService')->statisticsCoursePlanStayDailyData($time, $time + 86400);
+        //     $this->createService('Visualization:ActivityDataDailyStatisticsService')->statisticsCoursePlanVideoDailyData($time, $time + 86400);
+        //     $this->createService('Visualization:ActivityDataDailyStatisticsService')->statisticsCoursePlanLearnDailyData($time, $time + 86400);
+
+        //     $this->createService('Visualization:ActivityDataDailyStatisticsService')->statisticsUserStayDailyData($time, $time + 86400);
+        //     $this->createService('Visualization:ActivityDataDailyStatisticsService')->statisticsUserVideoDailyData($time, $time + 86400);
+        //     $this->createService('Visualization:ActivityDataDailyStatisticsService')->statisticsUserLearnDailyData($time, $time + 86400);
+        // }
+
+        // $this->createService('Visualization:ActivityDataDailyStatisticsService')->refreshUserPlanLearnDailyData();
+
         $courseSets = $this->statsCourseSetData($courseSets);
 
         return $this->render(
@@ -754,7 +771,6 @@ class CourseSetController extends BaseController
             $limit
         );
         $usersLearnedTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByCourseIdGroupByUserId($courseId, ArrayToolkit::column($students, 'userId'));
-        $usersPureLearnedTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumPureLearnedTimeByCourseIdGroupByUserId($courseId, ArrayToolkit::column($students, 'userId'));
 
         $exportMembers = [];
         foreach ($students as $key => $student) {
@@ -774,9 +790,6 @@ class CourseSetController extends BaseController
             $learnTime = empty($usersLearnedTime[$student['userId']]) ? 0 : $usersLearnedTime[$student['userId']]['learnedTime'];
             $exportMember['learnTime'] = $learnTime > 0 ? round($learnTime / 60, 1) : '--';
 
-            $pureLearnTime = empty($usersPureLearnedTime[$student['userId']]) ? 0 : $usersPureLearnedTime[$student['userId']]['learnedTime'];
-            $exportMember['pureLearnTime'] = $pureLearnTime > 0 ? round($pureLearnTime / 60, 1) : '--';
-
             $questionCount = $this->getThreadService()->countThreads(
                 ['courseId' => $courseId, 'type' => 'question', 'userId' => $user['id']]
             );
@@ -793,7 +806,6 @@ class CourseSetController extends BaseController
             $this->trans('admin.course_manage.statistics.data_detail.finished_time'),
             $this->trans('admin.course_manage.statistics.data_detail.study_days'),
             $this->trans('admin.course_manage.statistics.data_detail.study_time'),
-            $this->trans('admin.course_manage.statistics.data_detail.pure_study_time'),
             $this->trans('admin.course_manage.statistics.data_detail.question_number'),
             $this->trans('admin.course_manage.statistics.data_detail.note_number'),
         ];

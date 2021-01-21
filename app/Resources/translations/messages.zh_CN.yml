@@ -5129,9 +5129,8 @@ admin.course_manage.statistics.data_detail.plan_study_time: 计划被累加学�
 admin.course_manage.statistics.data_detail.tips: >
   <span style='font-size:14px'>
     1. 累加学习时长（分）为用户在课程-计划下产生的所有学习时长累加。<br />
-    2. 去重学习时长（分）为该用户在课程-计划下产生的学习时长去重后累加。<br />
-    3. 其中视频课时学习时长统计维度（播放活跃时长or页面活跃时长）以在系统-课程设置-视频课时学习配置为准。<br />
-    4. 数据统计为昨日及之前数据。
+    2. 其中视频课时学习时长统计维度（播放活跃时长or页面活跃时长）以在系统-课程设置-视频课时学习配置为准。<br />
+    3. 数据统计为昨日及之前数据。
   </span>
 
 ## 用户数据统计
@@ -10137,7 +10136,6 @@ user.learn.statistics.manage.describe_tips: >
     <h5 style='color:blue;margin:5px 0;'>用户数据说明</h5>
     <P style='margin:0;'>用户数据每日00:00-02:00间更新。</p>
     <P style='margin:0;'>累加学习时长（分）为筛选条件内该用户在网校产生的所有学习时长累加。</p>
-    <P style='margin:0;'>去重学习时长（分）为筛选条件内该用户在网校产生的所有学习时长去重后累加。</p>
     <P style='margin:0;'>其中视频课时学习时长统计维度（播放活跃时长or页面活跃时长）以在系统-课程设置-视频课时学习配置为准。</p>
   </div>
 
@@ -10784,19 +10782,20 @@ wechat.notification.template_name.buy_success: '购买成功通知'
 # 移动端使用：课时任务(task)完成条件文案
 mobile.task.finish_tips.audio.end: 听完音频
 mobile.task.finish_tips.discuss.join: 在本课程下发表或者回复一个话题
-mobile.task.finish_tips.doc.time: 至少学习 %finishData% 分钟
+mobile.task.finish_tips.doc.time: 至少停留 %finishData% 分钟
 mobile.task.finish_tips.download.download: 下载过资料
 mobile.task.finish_tips.exercise.submit: 提交过练习
-mobile.task.finish_tips.flash.time: 至少学习 %finishData% 分钟
+mobile.task.finish_tips.flash.time: 至少停留 %finishData% 分钟
 mobile.task.finish_tips.homework.submit: 提交作业
 mobile.task.finish_tips.live.join: 进入参加过直播
 mobile.task.finish_tips.ppt.end: 需要学习到最后一页
-mobile.task.finish_tips.ppt.time: 至少学习 %finishData% 分钟
+mobile.task.finish_tips.ppt.time: 至少停留 %finishData% 分钟
 mobile.task.finish_tips.testpapaer.submit: 提交试卷
 mobile.task.finish_tips.testpapaer.score: 考试分数通过 %finishData% 分
-mobile.task.finish_tips.text.time: 至少学习 %finishData% 分钟
+mobile.task.finish_tips.text.time: 至少停留 %finishData% 分钟
 mobile.task.finish_tips.video.end: 学习到最后
-mobile.task.finish_tips.video.time: 至少学习 %finishData% 分钟
+mobile.task.finish_tips.video.time: 至少停留 %finishData% 分钟
+mobile.task.finish_tips.video.watchTime: 至少播放 %finishData% 分钟
 
 classroom.joining_date.expired_tips: 班级已过有效期！
 
