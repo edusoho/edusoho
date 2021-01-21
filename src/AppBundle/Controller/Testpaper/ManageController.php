@@ -4,7 +4,7 @@ namespace AppBundle\Controller\Testpaper;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
-use AppBundle\Controller\BaseController;
+use AppBundle\Controller\Testpaper\BaseTestpaperController as BaseController;
 use Biz\Activity\Service\ActivityService;
 use Biz\Activity\Service\HomeworkActivityService;
 use Biz\Activity\Service\TestpaperActivityService;
@@ -16,24 +16,17 @@ use Biz\Question\Service\QuestionService;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
 use Biz\Task\Service\TaskService;
-use Biz\Testpaper\Job\QuestionItemAnalysisJob;
 use Biz\Testpaper\Service\TestpaperService;
 use Biz\Testpaper\TestpaperException;
 use Biz\User\Service\TokenService;
-use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerReportService;
-use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\ItemBank\Assessment\Service\AssessmentService;
 use http\Exception\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 
 class ManageController extends BaseController
 {
-    const SYNC_ANALYSIS_THRESHOLD = 10;
-
-    const SYNC_ANALYSIS_TIME_THRESHOLD = 28800;
-
     public function indexAction(Request $request, $id)
     {
         $courseSet = $this->getCourseSetService()->tryManageCourseSet($id);
@@ -267,8 +260,6 @@ class ManageController extends BaseController
 
         $answerScene = $this->getAnswerSceneService()->get($activity['ext']['answerScene']['id']);
 
-        $jobSync = 0;
-
         //如果存在新提交的作业
         if ($answerScene['question_report_update_time'] < $answerScene['last_review_time']) {
             if ($answerScene['question_report_job_name']) {
@@ -333,65 +324,6 @@ class ManageController extends BaseController
             'jobSync' => $jobSync,
             'needJob' => !empty($needJob) ? 1 : 0,
         ]);
-    }
-
-    public function syncJobAction(Request $request, $answerSceneId)
-    {
-        $job = $this->getSceneAnalysisJob($answerSceneId);
-
-        if (empty($job)) {
-            $job = $this->registerSceneAnalysisJob($answerSceneId);
-        }
-        $answerScene = $this->getAnswerSceneService()->get($answerSceneId);
-        $answerScene = $this->getAnswerSceneService()->update($answerSceneId, ['name' => $answerScene['name'], 'question_report_job_name' => $job['name']]);
-
-        return $this->createJsonResponse(true);
-    }
-
-    public function jobCheckAction(Request $request, $answerSceneId)
-    {
-        $answerScene = $this->getAnswerSceneService()->get($answerSceneId);
-        $jobName = $answerScene['question_report_job_name'];
-        $jobFired = $this->getSchedulerService()->findJobFiredByJobName($jobName);
-        if (empty($jobFired)) {
-            return $this->createJsonResponse(false);
-        }
-        if ('success' === $jobFired[0]['status']) {
-            return $this->createJsonResponse(true);
-        }
-
-        return $this->createJsonResponse(false);
-    }
-
-    protected function needSyncJob($answerCount, $questionNum)
-    {
-        if ($answerCount * $questionNum > self::SYNC_ANALYSIS_THRESHOLD) {
-            return true;
-        }
-
-        return false;
-    }
-
-    protected function registerSceneAnalysisJob($sceneId)
-    {
-        $updateRealTimeTestResultStatusJob = [
-            'name' => 'question_item_analysis_'.$sceneId.'_'.time(),
-            'expression' => time(),
-            'class' => QuestionItemAnalysisJob::class,
-            'args' => [
-                'sceneId' => $sceneId,
-            ],
-        ];
-
-        return $this->getSchedulerService()->register($updateRealTimeTestResultStatusJob);
-    }
-
-    protected function getSceneAnalysisJob($sceneId)
-    {
-        $scene = $this->getAnswerSceneService()->get($sceneId);
-        $this->getSchedulerService()->countJobFires(['job_name' => $scene['question_report_job_name'], 'status' => '']);
-
-        return $this->getSchedulerService()->getJobByName($scene['question_report_job_name']);
     }
 
     public function resultGraphAction($activityId)
@@ -957,14 +889,6 @@ class ManageController extends BaseController
     }
 
     /**
-     * @return AnswerSceneService
-     */
-    protected function getAnswerSceneService()
-    {
-        return $this->createService('ItemBank:Answer:AnswerSceneService');
-    }
-
-    /**
      * @return AnswerReportService
      */
     protected function getAnswerReportService()
@@ -978,13 +902,5 @@ class ManageController extends BaseController
     protected function getHomeworkActivityService()
     {
         return $this->getBiz()->service('Activity:HomeworkActivityService');
-    }
-
-    /**
-     * @return SchedulerService
-     */
-    private function getSchedulerService()
-    {
-        return $this->getBiz()->service('Scheduler:SchedulerService');
     }
 }

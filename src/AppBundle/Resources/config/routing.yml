@@ -3640,8 +3640,8 @@ drp_info:
 
 exam_result_analysis_job_sync:
   path: exam/{answerSceneId}/job_sync
-  defaults: { _controller: AppBundle:Testpaper/Manage:syncJob }
+  defaults: { _controller: AppBundle:Testpaper/BaseTestpaper:syncJob }
 
 exam_result_analysis_job_check:
   path: exam/{answerSceneId}/job_check
-  defaults: { _controller: AppBundle:Testpaper/Manage:jobCheck }
+  defaults: { _controller: AppBundle:Testpaper/BaseTestpaper:jobCheck }
