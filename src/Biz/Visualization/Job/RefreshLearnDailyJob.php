@@ -23,7 +23,7 @@ class RefreshLearnDailyJob extends AbstractJob
 
     protected function refreshActivityLearnDaily()
     {
-        $table = $this->setting == 'page' ? 'activity_stay_daily' : 'activity_video_daily';
+        $table = 'page' == $this->setting ? 'activity_stay_daily' : 'activity_video_daily';
         $count = $this->getActivityLearnDailyDao()->count(['mediaType' => 'video']);
         $limit = 10000;
         $totalPage = $count / $limit;
