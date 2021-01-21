@@ -220,9 +220,10 @@ export default {
       const condition = this.finishCondition;
       if (!condition) return;
       let message = '';
-      if (condition.type === 'time') {
+      if (condition.type === 'time' || condition.type === 'watchTime') {
         const minute = Math.ceil((condition.data * 60 - this.learnedTime) / 60);
-        message = `\n剩余 ${minute} 分完成`;
+        message =
+          minute > 0 ? `\n剩余 ${minute} 分完成` : '\n恭喜！你已完成该任务';
       }
       this.$toast({
         message: `完成条件：${condition.text}${message}`,
