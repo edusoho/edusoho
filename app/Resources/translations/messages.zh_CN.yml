@@ -4773,6 +4773,7 @@ course.member.course.join_btn: 退出并重新加入
 course.member.operation.quit_deadline_reach: 达到有效期，退出课程
 course.member.operation.admin_remove_course_student: 老师手动移除学员
 course.member.operation.reason.join_classroom: 用户加入班级，自动加入班级课程
+course.member.course.expiry_start_date_tips: 学习时间未到，无法学习%taskName%，请在学习有效期内进行学习~
 
 # course/widgets
 course.widgets.belong_classroom.title: 所属%name%
@@ -7768,6 +7769,8 @@ admin.magic_setting.watch_time_sec_tip: 秒为单位
 admin.magic_setting.site_trace_enable: piwik跟踪的开关
 admin.magic_setting.live_entry_time: 直播开始前可进入时间
 admin.magic_setting.live_entry_time_tip: 秒为单位
+admin.magic_setting.biz_answer_scene_report_threshold: 考试、作业人数*场次的试卷答案分数阈值
+admin.magic_setting.biz_answer_scene_report_threshold_tip: 默认值15000
 
 admin.magic_setting.one_for_open: 1为启用
 admin.magic_setting.one_for_close: 1为关闭
@@ -11504,3 +11507,7 @@ information_collect.form_items.skip: 跳过
 information_collect.select_placeholeder: 请选择
 course.task.notify_message.join_and_buy: 请先加入课程或购买课程
 course.task.notify_message.join_limit: 该课程已限制加入，请联系客服
+exam_bank.analysis.data_large_loading: 数据量过大，正在刷新
+exam_bank.analysis.data_large_loading_finish: 数据已刷新完成
+exam_bank.analysis.data_large_info: 数据更新时间为：%date%，由于数据量过大，不建议频繁刷新
+exam_bank.analysis.data_large_loading_btn: 强制刷新

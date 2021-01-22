@@ -79,6 +79,9 @@ class AnswerServiceImpl extends BaseService implements AnswerService
                 ]
             );
 
+            if ($canFinished) {
+                $this->getAnswerSceneService()->update($answerScene['id'], ['name' => $answerScene['name'], 'last_review_time' => time()]);
+            }
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
@@ -299,6 +302,8 @@ class AnswerServiceImpl extends BaseService implements AnswerService
                 'comment' => empty($reviewReport['comment']) ? '' : $reviewReport['comment'],
             ]);
 
+            $this->getAnswerSceneService()->update($answerScene['id'], ['name' => $answerScene['name'], 'last_review_time' => time()]);
+
             $this->commit();
         } catch (\Exception $e) {
             $this->rollback();
@@ -315,7 +320,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         if (empty($reviewQuestionReport) || empty($assessmentQuestion)) {
             return [0, AnswerQuestionReportService::STATUS_NOANSWER];
         }
-        
+
         if (0 == $answerScene['need_score']) {
             if (empty($reviewQuestionReport['status'])) {
                 $status = AnswerQuestionReportService::STATUS_RIGHT;
@@ -351,7 +356,7 @@ class AnswerServiceImpl extends BaseService implements AnswerService
         if (!empty($answerQuestionReports)) {
             $answerQuestionReports = $this->getAnswerReportService()->wrapperAnswerQuestionReports($answerRecord['id'], $answerQuestionReports);
         }
-       
+
         $attachments = $this->getAttachmentService()->findAttachmentsByTargetIdsAndTargetType(
             ArrayToolkit::column($answerQuestionReports, 'id'),
             AttachmentService::ANSWER_TYPE

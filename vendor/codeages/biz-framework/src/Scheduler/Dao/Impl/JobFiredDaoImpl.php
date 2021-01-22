@@ -25,6 +25,13 @@ class JobFiredDaoImpl extends GeneralDaoImpl implements JobFiredDao
         ));
     }
 
+    public function findByJobName($jobName)
+    {
+        return $this->findByFields(array(
+            'job_name' => $jobName,
+        ));
+    }
+
     public function findByJobIdAndStatus($jobId, $status)
     {
         return $this->findByFields(array(

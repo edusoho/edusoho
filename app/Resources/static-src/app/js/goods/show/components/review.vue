@@ -1,6 +1,14 @@
 <template>
   <div class="reviews-item">
-    <img class="reviews-item__img" :src="review.user.largeAvatar" alt="">
+    <a :href="`/user/${review.user.id}`" target="_blank">
+        <img class="reviews-item__img js-user-card "
+             :src="review.user.largeAvatar"
+             :data-user-id="review.user.id"
+             :data-card-url="`/user/${review.user.id}/card/show`"
+             alt=""
+        >
+    </a>
+
     <div class="reviews-item__text reviews-text">
       <div class="reviews-text__nickname">
         <a class="link-dark" href="javascript:;" target="_blank">{{ review.user.nickname }}</a>
