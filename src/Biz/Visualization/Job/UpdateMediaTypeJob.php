@@ -27,6 +27,12 @@ class UpdateMediaTypeJob extends AbstractJob
     protected function updateActivityStayDaily($data)
     {
         $count = $this->biz['db']->fetchAssoc('select count(*) from activity_stay_daily;');
+        $noTypeCount = $this->biz['db']->fetchAssoc("select count(*) from activity_stay_daily where mediaType = '';");
+        //存在activity被删除导致mediaType为空
+        if ($noTypeCount / $count < 0.1 || $noTypeCount < 1000) {
+            return ;
+        }
+
         $limit = self::LIMIT;
         $totalPage = $count / $limit;
         $page = empty($data[self::STAY_TABLE_REFRESH_PAGE]) ? 0 : $data[self::STAY_TABLE_REFRESH_PAGE];
@@ -42,6 +48,11 @@ class UpdateMediaTypeJob extends AbstractJob
     protected function updateActivityLearnDaily($data)
     {
         $count = $this->biz['db']->fetchAssoc('select count(*) from activity_learn_daily;');
+        $noTypeCount = $this->biz['db']->fetchAssoc("select count(*) from activity_learn_daily where mediaType = '';");
+        if ($noTypeCount / $count < 0.1 || $noTypeCount < 1000) {
+            return ;
+        }
+
         $limit = self::LIMIT;
         $totalPage = $count / $limit;
         $page = empty($data[self::LEARN_TABLE_REFRESH_PAGE]) ? 0 : $data[self::LEARN_TABLE_REFRESH_PAGE];
