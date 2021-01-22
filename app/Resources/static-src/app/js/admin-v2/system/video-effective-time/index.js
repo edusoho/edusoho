@@ -6,7 +6,7 @@ $('.js-setting-submit').click(function () {
   let value = element.data('value');
   let checkedValue = $('input:radio[name="statistical_dimension"]:checked').val();
 
-  if (value == checkedValue) {
+  if (value === checkedValue) {
     $.post($form.data('url'), $form.serialize())
       .success(function(response) {
         notify('success', Translator.trans('site.save_success_hint'));
@@ -27,6 +27,7 @@ $('.js-setting-submit').click(function () {
       if (res) {
         $.post($form.data('url'), $form.serialize())
           .success(function(response) {
+            $('.js-check-radio').data('value', checkedValue);
             notify('success', Translator.trans('site.save_success_hint'));
           }).fail(function (xhr, status, error){
           notify('danger', xhr.responseJSON.error.message);
