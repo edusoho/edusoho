@@ -48,6 +48,14 @@ export default {
       type: String,
       default: '0',
     },
+    showNumberData: {
+      type: String,
+      default: '',
+    },
+    hitNum: {
+      type: String,
+      default: 0,
+    },
   },
   data() {
     return {

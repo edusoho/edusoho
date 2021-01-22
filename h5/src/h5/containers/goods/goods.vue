@@ -11,7 +11,11 @@
           :currentSku="currentSku"
           :goods="goods"
         />
-        <detail :goods="goods" :currentSku="currentSku" />
+        <detail
+          :goods="goods"
+          :currentSku="currentSku"
+          :goods-setting="goodsSetting"
+        />
         <specs :goods="goods" :currentSku="currentSku" @changeSku="changeSku" />
         <certificate
           v-if="currentSku.hasCertificate"

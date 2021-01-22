@@ -13,9 +13,13 @@
         <div>
           <span v-show="courseType === 'live'">直播</span>
         </div>
-        <div v-if="course.studentNum">
-          <i class="iconfont icon-renqi" />
+        <div v-if="showNumberData === 'join'">
+          <i class="iconfont icon-people" />
           {{ course.studentNum }}
+        </div>
+        <div v-if="showNumberData === 'visitor'">
+          <i class="iconfont icon-visibility" />
+          {{ hitNum }}
         </div>
       </div>
     </div>
