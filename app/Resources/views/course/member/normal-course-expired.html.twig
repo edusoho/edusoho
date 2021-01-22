@@ -13,7 +13,9 @@
       {% else %}
         {{ 'course.member.course.allow_buy.tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
       {% endif %}
-    {% elseif message|trim is not empty  %}
+    {% elseif course.expiryMode == 'date' and course.expiryStartDate > timestamp() %}
+      {{ 'course.member.course.expiry_start_date_tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
+    {% elseif message|trim is not empty %}
        {{ message|raw }}
     {% endif %}
   </div>

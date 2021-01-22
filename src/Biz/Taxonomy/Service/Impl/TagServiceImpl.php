@@ -16,11 +16,11 @@ use Topxia\Service\Common\ServiceKernel;
 class TagServiceImpl extends BaseService implements TagService
 {
     private $allowFields
-        = array(
+        = [
             'name',
             'scope',
             'tagNum',
-        );
+        ];
 
     public function getTag($id)
     {
@@ -73,7 +73,7 @@ class TagServiceImpl extends BaseService implements TagService
 
     public function findTagGroupsByTagId($tagId)
     {
-        $tagRelations = $this->findTagRelationsByTagIds(array($tagId));
+        $tagRelations = $this->findTagRelationsByTagIds([$tagId]);
 
         $groupIds = ArrayToolkit::column($tagRelations, 'groupId');
 
@@ -173,7 +173,7 @@ class TagServiceImpl extends BaseService implements TagService
 
     public function addTag(array $tag)
     {
-        $tag = ArrayToolkit::parts($tag, array('name'));
+        $tag = ArrayToolkit::parts($tag, ['name']);
         $tag = $this->filterTagFields($tag);
         $tag['createdTime'] = time();
         $tag = $this->setTagOrg($tag);
@@ -192,7 +192,7 @@ class TagServiceImpl extends BaseService implements TagService
             $this->createNewException(TagException::DUPLICATE_GROUP_NAME());
         }
 
-        $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
+        $tagIds = empty($fields['tagIds']) ? [] : $fields['tagIds'];
 
         $fields = $this->filterTagGroupFields($fields);
 
@@ -202,10 +202,10 @@ class TagServiceImpl extends BaseService implements TagService
 
         foreach ($tagIds as $tagId) {
             $this->getTagGroupTagDao()->create(
-                array(
+                [
                     'tagId' => $tagId,
                     'groupId' => $tagGroup['id'],
-                )
+                ]
             );
         }
 
@@ -257,7 +257,7 @@ class TagServiceImpl extends BaseService implements TagService
             $this->createNewException(TagException::NOTFOUND_TAG());
         }
 
-        $fields = ArrayToolkit::parts($fields, array('name'));
+        $fields = ArrayToolkit::parts($fields, ['name']);
         $this->filterTagFields($fields, $tag);
 
         return $this->getTagDao()->update($id, $fields);
@@ -274,10 +274,10 @@ class TagServiceImpl extends BaseService implements TagService
         if (!empty($fields['tagIds'])) {
             $this->getTagGroupTagDao()->deleteByGroupId($id);
 
-            $tagIds = empty($fields['tagIds']) ? array() : $fields['tagIds'];
+            $tagIds = empty($fields['tagIds']) ? [] : $fields['tagIds'];
 
             foreach ($tagIds as $tagId) {
-                $this->getTagGroupTagDao()->create(array('groupId' => $id, 'tagId' => $tagId));
+                $this->getTagGroupTagDao()->create(['groupId' => $id, 'tagId' => $tagId]);
             }
 
             $fields = $this->filterTagGroupFields($fields);
@@ -306,13 +306,13 @@ class TagServiceImpl extends BaseService implements TagService
 
                 $tagNum = $tagGroup['tagNum'] - 1;
 
-                $this->updateTagGroup($tagGroupRelation['groupId'], array('tagNum' => $tagNum));
+                $this->updateTagGroup($tagGroupRelation['groupId'], ['tagNum' => $tagNum]);
             }
         }
 
         $this->getTagDao()->delete($id);
 
-        $this->dispatchEvent('tag.delete', array('tagId' => $id));
+        $this->dispatchEvent('tag.delete', ['tagId' => $id]);
     }
 
     public function deleteTagGroup($id)
@@ -340,7 +340,7 @@ class TagServiceImpl extends BaseService implements TagService
 
     public function findOwnerIdsByTagIdsAndOwnerType($tagIds, $ownerType)
     {
-        $ownerIds = array();
+        $ownerIds = [];
         if (empty($tagIds)) {
             return $ownerIds;
         }
@@ -369,6 +369,11 @@ class TagServiceImpl extends BaseService implements TagService
         $tagIds = ArrayToolkit::column($tagOwnerRelations, 'tagId');
 
         return $tagIds;
+    }
+
+    public function findDistinctOwnerIdByOwnerTypeAndTagIdsAndExcludeOwnerId($ownerType, array $tagIds, $excludeOwnerId, $count)
+    {
+        return $this->getTagOwnerDao()->findDistinctOwnerIdByOwnerTypeAndTagIdsAndExcludeOwnerId($ownerType, $tagIds, $excludeOwnerId, $count);
     }
 
     protected function filterTagFields(&$tag, $relatedTag = null)

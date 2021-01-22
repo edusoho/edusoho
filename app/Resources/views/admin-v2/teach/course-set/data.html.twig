@@ -22,6 +22,7 @@
         <input class="form-control" type="text" placeholder="{{'admin.course_manage.creator_placeholer'|trans}}" name="creatorName" value="{{ app.request.get('creatorName') }}">
       </div>
       <button class="btn btn-primary">{{ 'form.btn.search'|trans }}</button>
+      {% include 'admin-v2/widget/tooltip-widget.html.twig' with { icon: 'glyphicon-question-sign', content: 'admin.course_manage.statistics.tips'|trans|raw, placement: 'left'} %}
     </form>
     <div class="table-responsive">
         <table class="table table-bordered" style="word-break:break-all;text-align:center;">
@@ -33,10 +34,17 @@
             </td>
              {% endif %}
             <td>{{ 'admin.course_manage.statistics.teach_plan_count'|trans }}</td>
-            <td>{{ 'admin.course_manage.statistics.task_count'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}</td>
+            <td>
+              {{ 'admin.course_manage.statistics.task_count'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
+              <div class="js-tooltip-twig-widget" style="display:inline-block;">
+                <span class="glyphicon glyphicon-question-sign text-muted js-twig-widget-tips" data-placement="right" href="javascript:;" data-original-title="" title=""></span>
+                <div class="js-twig-widget-html" style="display:none;">
+                  {{ 'admin.course_manage.statistics.task_tips'|trans }}
+                </div>
+              </div>
+            </td>
             <td>{{'admin.course_manage.statistics.student_number'|trans }}</td>
             <td>{{'admin.course_manage.statistics.finished_number'|trans}}</td>
-            <td>{{'admin.course_manage.statistics.study_time_minute'|trans}}</td>
             <td>{{'admin.course_manage.statistics.income_RMB'|trans}}</td>
             <td>{{'admin.course_manage.operater'|trans}}</td>
           </tr>
@@ -58,10 +66,9 @@
               </td>
               {% endif %}
               <td>{{courseSet.courseCount|default()}}</td>
-              <td>{{courseSet.taskCount|default()}}</td>
+              <td>{{courseSet.compulsorTaskCount|default()}}{% if courseSet.electiveTaskNum %}（{{courseSet.electiveTaskNum}}）{% endif %}</td>
               <td>{{courseSet.studentNum|default()}}</td>
               <td>{{courseSet.isLearnedNum|default(0)}}</td>
-              <td>{{courseSet.learnedTime}}</td>
               <td>{{courseSet.income|default()}}</td>
               <td>
                 <a data-toggle="modal" data-target="#modal" data-url="{{path('admin_v2_courses_data',{courseSetId:courseSet.id})}}" href="javascript:;">{{'admin.course_manage.statistics.watch_task'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}</a>

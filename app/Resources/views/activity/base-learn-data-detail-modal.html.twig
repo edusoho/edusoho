@@ -21,9 +21,16 @@
       'showDownLoadText': 0,
     }
   %}
+  <span data-toggle="popover" data-trigger="hover" data-placement="top" title="" data-html="true" data-content="{{ 'task.learn_data_detail.popover'|trans }}" class="link-medium es-icon es-icon-help ml5"></span>
   <form id="course-overview-task-detail" class="hide">
     <input type="hidden" name="courseTaskId" value="{{ task.id }}">
   </form>
+  <script>
+    $('[data-toggle="popover"]').popover({
+      html: true,
+      trigger: 'hover',
+    });
+  </script>
 {% endblock %}
 
 {% set hide_footer = true %}

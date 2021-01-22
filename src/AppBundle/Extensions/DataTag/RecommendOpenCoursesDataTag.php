@@ -2,6 +2,8 @@
 
 namespace AppBundle\Extensions\DataTag;
 
+use Biz\OpenCourse\Service\OpenCourseRecommendedService;
+
 class RecommendOpenCoursesDataTag extends BaseDataTag implements DataTag
 {
     /**
@@ -17,17 +19,18 @@ class RecommendOpenCoursesDataTag extends BaseDataTag implements DataTag
      */
     public function getData(array $arguments)
     {
-        $marktingCourses = $this->getOpenCourseRecommendService()->searchRecommends(
-            array('openCourseId' => $arguments['courseId']),
-            array('seq' => 'ASC'),
+        $marktingRecommends = $this->getOpenCourseRecommendService()->searchRecommends(
+            ['openCourseId' => $arguments['courseId']],
+            ['seq' => 'ASC'],
             0, $arguments['count']
         );
 
-        $recommendCourses = $this->getOpenCourseRecommendService()->recommendedCoursesSort($marktingCourses);
-
-        return $recommendCourses;
+        return $this->getOpenCourseRecommendService()->recommendedGoodsSort($marktingRecommends);
     }
 
+    /**
+     * @return OpenCourseRecommendedService
+     */
     protected function getOpenCourseRecommendService()
     {
         return $this->getServiceKernel()->getBiz()->service('OpenCourse:OpenCourseRecommendedService');

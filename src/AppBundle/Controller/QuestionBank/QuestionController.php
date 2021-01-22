@@ -27,6 +27,12 @@ class QuestionController extends BaseController
 
         $conditions = $request->query->all();
         $conditions['bank_id'] = $questionBank['itemBankId'];
+        if (!empty($conditions['category_id'])) {
+            $childrenIds = $this->getItemCategoryService()->findCategoryChildrenIds($conditions['category_id']);
+            $childrenIds[] = $conditions['category_id'];
+            $conditions['category_ids'] = $childrenIds;
+            unset($conditions['category_id']);
+        }
 
         $paginator = new Paginator(
             $request,
@@ -358,7 +364,7 @@ class QuestionController extends BaseController
             $this->createNewException(QuestionBankException::NOT_FOUND_BANK());
         }
 
-        return str_replace(',', '', $questionBank['name']).'-题目.docx';
+        return  rawurlencode("{$questionBank['name']}-题目.docx");
     }
 
     protected function convertCategoryTreeToArray($categoryTree)

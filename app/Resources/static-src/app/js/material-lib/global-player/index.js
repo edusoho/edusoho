@@ -6,7 +6,7 @@ const $element = $('#global-player');
 const globalPlayer = () => {
   const play = new QiQiuYun.Player({
     id: 'global-player',
-    playServer: app.cloudPlayServer,
+    // playServer: app.cloudPlayServer,
     sdkBaseUri: app.cloudSdkBaseUri,
     disableDataUpload: app.cloudDisableLogReport,
     disableSentry: app.cloudDisableLogReport,

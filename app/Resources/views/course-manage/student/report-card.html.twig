@@ -41,7 +41,7 @@
                 {{ record.score }}
               {% endif %}
             </span>
-            <span class="reviews hidden-xs pull-right" data-toggle="tooltip" data-placement="top"
+            <span class="hidden-xs pull-right" data-toggle="tooltip" data-placement="top"
               title="{% if record.comment|default('') %}{{ record.comment }}{% else %}{{ 'student.report_card.teacherSay.empty'|trans }}{% endif %}">{{ 'student.report_card.teacherSay'|trans }}</span>
           </li>
         {% endfor %}

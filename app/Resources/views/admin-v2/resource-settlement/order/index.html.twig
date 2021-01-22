@@ -64,7 +64,11 @@
         <td>{{ item.sn }}</td>
         <td>{{ item.coop_price|default(0) / 100|currency }}</td>
         <td><span class="text-warning">{{ item.pay_amount|default(0) / 100|currency }}</span></td>
-        <td><span class="text-danger">{{ item.debt_amount|default(0) / 100|currency }}</span></td>
+        <td>
+          <span class="text-danger">
+            {% if item.status == 'refunded' %}0{% else %}{{ item.debt_amount|default(0) / 100|currency }}{% endif %}
+          </span>
+        </td>
         <td>{{ dict_text('s2b2cSettlementOrderStatus', item.status) }}</td>
         <td>{{ item.created_time|date_format('Y-m-d H:i:s') }}</td>
         <td>

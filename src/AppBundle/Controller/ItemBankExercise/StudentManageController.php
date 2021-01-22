@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
 use AppBundle\Controller\BaseController;
 use Biz\ItemBankExercise\ItemBankExerciseMemberException;
+use Biz\ItemBankExercise\OperateReason;
 use Biz\ItemBankExercise\Service\ExerciseMemberService;
 use Biz\ItemBankExercise\Service\ExerciseService;
 use Biz\QuestionBank\Service\QuestionBankService;
@@ -77,6 +78,8 @@ class StudentManageController extends BaseController
         if ($request->isMethod('POST')) {
             $data = $request->request->all();
             $user = $this->getUserService()->getUserByLoginField($data['queryfield'], true);
+            $data['reason'] = OperateReason::JOIN_BY_IMPORT;
+            $data['reasonType'] = OperateReason::JOIN_BY_IMPORT_TYPE;
             $data['source'] = 'outside';
 
             $this->getExerciseMemberService()->becomeStudent($exerciseId, $user['id'], $data);
@@ -204,6 +207,28 @@ class StudentManageController extends BaseController
         }
 
         return $this->createJsonResponse(false);
+    }
+
+    public function removeStudentAction(Request $request, $exerciseId, $userId)
+    {
+        $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
+
+        $this->getExerciseMemberService()->removeStudent($exerciseId, $userId, ['reason' => OperateReason::EXIT_REMOVE_BY_MANUAL, 'reasonType' => OperateReason::EXIT_REMOVE_TYPE]);
+
+        return $this->createJsonResponse(['success' => true]);
+    }
+
+    public function removeStudentsAction(Request $request, $exerciseId)
+    {
+        $exercise = $this->getExerciseService()->tryManageExercise($exerciseId);
+
+        $userIds = $request->request->get('userIds', []);
+        if (empty($this->getUserService()->findUsersByIds($userIds))) {
+            return $this->createJsonResponse(['success' => false]);
+        }
+        $this->getExerciseMemberService()->removeStudents($exerciseId, $userIds, ['reason' => OperateReason::EXIT_REMOVE_BY_MANUAL, 'reasonType' => OperateReason::EXIT_REMOVE_TYPE]);
+
+        return $this->createJsonResponse(['success' => true]);
     }
 
     /**

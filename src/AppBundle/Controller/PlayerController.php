@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Common\FileToolkit;
 use Biz\CloudPlatform\CloudAPIFactory;
+use Biz\CloudPlatform\Service\ResourceFacadeService;
 use Biz\File\Service\UploadFileService;
 use Biz\File\UploadFileException;
 use Biz\MaterialLib\Service\MaterialLibService;
@@ -30,16 +31,20 @@ class PlayerController extends BaseController
         if (!in_array($file['type'], ['audio', 'video'])) {
             $this->createNewException(PlayerException::NOT_SUPPORT_TYPE());
         }
+        $options = [];
+        if (!empty($context['watchTimeLimit'])) {
+            $options['watchLimitTime'] = $context['watchTimeLimit'];
+        }
 
         // 获取播放必须的token和resNo，以及一些个性化播放器参数
-        $playerContext = $this->getResourceFacadeService()->getPlayerContext($file);
+        $playerContext = $this->getResourceFacadeService()->getPlayerContext($file, '', $options);
         if (is_array($context)) {
             $playerContext = array_merge($playerContext, $context);
         }
 
         $params = [
             'file' => $file,
-            'cloudSdk' => $file['type'],
+            'cloudSdk' => 'resource_player',
             'context' => $playerContext,
             'rememberLastPos' => $rememberLastPos,
         ];
@@ -277,6 +282,9 @@ class PlayerController extends BaseController
         return $this->getBiz()->service('Player:PlayerService');
     }
 
+    /**
+     * @return ResourceFacadeService
+     */
     protected function getResourceFacadeService()
     {
         return $this->getBiz()->service('CloudPlatform:ResourceFacadeService');

@@ -5,7 +5,7 @@
     "require": {
         "php": ">=5.5.0",
         "ext-json": "*",
-        "codeages/biz-framework": "^0.9.33",
+        "codeages/biz-framework": ">=0.9.33",
         "codeages/exam-parser": "dev-master",
         "ezyang/htmlpurifier": "4.12.0",
         "vlucas/valitron": "^1.4",

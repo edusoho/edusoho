@@ -36,13 +36,12 @@ define(function (require, exports, module) {
             learnTime = [];
           for (var value of resp) {
             dateArr.push(value.date);
-            learnTime.push(parseInt(value.learnedTime/60));
-            totalTime += parseInt(value.learnedTime/60);
+            learnTime.push((parseInt(value.learnedTime)/60).toFixed(1));
+            totalTime += parseInt(value.learnedTime)/60;
           }
           self.dateArr = dateArr;
           self.learnTime = learnTime;
-          totalTime = (Math.floor(totalTime/60) + Translator.trans('site.date.hour') + (totalTime%60) + Translator.trans('site.date.minute') );
-          self.totalTime = totalTime;
+          self.totalTime = totalTime.toFixed(1);
           self.show(self.learnTime, self.dateArr);
         }
       });
@@ -79,7 +78,7 @@ define(function (require, exports, module) {
             data: data
           },
           yAxis: {
-            name: Translator.trans('admin.user.statistics.data.learn_time'),
+            name: Translator.trans('admin.user.statistics.data.learn_total_time'),
             type: 'value',
             min: 0,
             splitNumber: 1,

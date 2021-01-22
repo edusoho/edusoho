@@ -2,12 +2,12 @@
 
 namespace Biz\Group\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\Content\Service\FileService;
 use Biz\Group\Dao\GroupDao;
 use Biz\Group\Dao\MemberDao;
-use AppBundle\Common\ArrayToolkit;
 use Biz\Group\GroupException;
 use Biz\Group\Service\GroupService;
 use Codeages\Biz\Framework\Event\Event;
@@ -71,12 +71,12 @@ class GroupServiceImpl extends BaseService implements GroupService
         $group['memberNum'] = 1;
         $group['createdTime'] = time();
         $group = $this->getGroupDao()->create($group);
-        $member = array(
+        $member = [
             'groupId' => $group['id'],
             'userId' => $user['id'],
             'createdTime' => time(),
             'role' => 'owner',
-        );
+        ];
         $this->getGroupMemberDao()->create($member);
 
         return $group;
@@ -84,12 +84,12 @@ class GroupServiceImpl extends BaseService implements GroupService
 
     public function addOwner($groupId, $userId)
     {
-        $member = array(
+        $member = [
             'groupId' => $groupId,
             'userId' => $userId,
             'createdTime' => time(),
             'role' => 'owner',
-        );
+        ];
 
         $member = $this->getGroupMemberDao()->create($member);
 
@@ -100,21 +100,21 @@ class GroupServiceImpl extends BaseService implements GroupService
 
     public function openGroup($id)
     {
-        return $this->updateGroup($id, array(
+        return $this->updateGroup($id, [
             'status' => 'open',
-        ));
+        ]);
     }
 
     public function closeGroup($id)
     {
-        return $this->updateGroup($id, array(
+        return $this->updateGroup($id, [
             'status' => 'close',
-        ));
+        ]);
     }
 
     public function changeGroupImg($id, $field, $data)
     {
-        if (!in_array($field, array('logo', 'backgroundLogo'))) {
+        if (!in_array($field, ['logo', 'backgroundLogo'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
@@ -130,13 +130,13 @@ class GroupServiceImpl extends BaseService implements GroupService
 
         $fileIds = ArrayToolkit::index($data, 'type');
 
-        $fields = array(
+        $fields = [
             $field => $files[$fileIds[$field]['id']]['uri'],
-        );
+        ];
 
-        $oldAvatars = array(
+        $oldAvatars = [
             $field => $group[$field] ? $group[$field] : null,
-        );
+        ];
         $fileService = $this->getFileService();
         array_map(function ($oldAvatar) use ($fileService) {
             if (!empty($oldAvatar)) {
@@ -158,11 +158,11 @@ class GroupServiceImpl extends BaseService implements GroupService
             $this->createNewException(GroupException::DUPLICATE_JOIN());
         }
 
-        $member = array(
+        $member = [
             'groupId' => $groupId,
             'userId' => $user['id'],
             'createdTime' => time(),
-        );
+        ];
         $member = $this->getGroupMemberDao()->create($member);
 
         $this->reCountGroupMember($groupId);
@@ -201,7 +201,7 @@ class GroupServiceImpl extends BaseService implements GroupService
             return $this->getGroupDao()->findByIds($ids);
         }
 
-        return array();
+        return [];
     }
 
     public function findGroupByTitle($title)
@@ -227,7 +227,7 @@ class GroupServiceImpl extends BaseService implements GroupService
     {
         $member = $this->getGroupMemberDao()->getByGroupIdAndUserId($groupId, $userId);
 
-        return $member['role'] == 'admin' ? true : false;
+        return $member && 'admin' === $member['role'] ? true : false;
     }
 
     public function isMember($groupId, $userId)
@@ -239,7 +239,7 @@ class GroupServiceImpl extends BaseService implements GroupService
 
     public function getMembersCountByGroupId($id)
     {
-        return $this->getGroupMemberDao()->count(array('groupId' => $id));
+        return $this->getGroupMemberDao()->count(['groupId' => $id]);
     }
 
     public function getMemberByGroupIdAndUserId($groupid, $userId)
@@ -249,13 +249,13 @@ class GroupServiceImpl extends BaseService implements GroupService
 
     protected function reCountGroupMember($groupId)
     {
-        $groupMemberNum = $this->getGroupMemberDao()->count(array('groupId' => $groupId));
-        $this->getGroupDao()->update($groupId, array('memberNum' => $groupMemberNum));
+        $groupMemberNum = $this->getGroupMemberDao()->count(['groupId' => $groupId]);
+        $this->getGroupDao()->update($groupId, ['memberNum' => $groupMemberNum]);
     }
 
     public function waveGroup($id, $field, $diff)
     {
-        return $this->getGroupDao()->wave(array($id), array($field => $diff));
+        return $this->getGroupDao()->wave([$id], [$field => $diff]);
     }
 
     public function waveMember($groupId, $userId, $field, $diff)
@@ -263,7 +263,7 @@ class GroupServiceImpl extends BaseService implements GroupService
         $member = $this->getGroupMemberDao()->getByGroupIdAndUserId($groupId, $userId);
 
         if ($member) {
-            return $this->getGroupMemberDao()->wave(array($member['id']), array($field => $diff));
+            return $this->getGroupMemberDao()->wave([$member['id']], [$field => $diff]);
         }
     }
 
@@ -278,7 +278,7 @@ class GroupServiceImpl extends BaseService implements GroupService
 
     protected function prepareGroupConditions($conditions)
     {
-        if (isset($conditions['ownerName']) && $conditions['ownerName'] !== '') {
+        if (isset($conditions['ownerName']) && '' !== $conditions['ownerName']) {
             $owner = $this->getUserService()->getUserByNickname($conditions['ownerName']);
 
             if (!empty($owner)) {
@@ -288,7 +288,7 @@ class GroupServiceImpl extends BaseService implements GroupService
             }
         }
         if (isset($conditions['status'])) {
-            if ($conditions['status'] == '') {
+            if ('' == $conditions['status']) {
                 unset($conditions['status']);
             }
         }

@@ -241,7 +241,8 @@ class UserController extends BaseController
 
         $conditions = [
             'userId' => $user['id'],
-            'targetTypes' => ['course', 'openCourse'],
+            'targetTypes' => ['goods'],
+            'goodsType' => $request->query->get('goodsType', 'course'),
         ];
 
         $paginator = new Paginator(
@@ -259,7 +260,7 @@ class UserController extends BaseController
 
         return $this->render('user/courses_favorited.html.twig', [
             'user' => $user,
-            'courseFavorites' => $favorites,
+            'favorites' => $favorites,
             'paginator' => $paginator,
             'type' => 'favorited',
         ]);
@@ -514,9 +515,19 @@ class UserController extends BaseController
          */
         $courseId = $request->request->get('courseId', 0);
         if ($courseId) {
+            $beforeEvent = $this->needInformationCollection('buy_before', $courseId);
+            if (!empty($beforeEvent)) {
+                return $this->createJsonResponse(['url' => $beforeEvent['url']]);
+            }
+
             $this->getCourseService()->tryFreeJoin($courseId);
             $member = $this->getCourseMemberService()->getCourseMember($courseId, $user['id']);
             if ($member) {
+                $afterEvent = $this->needInformationCollection('buy_after', $courseId);
+                if (!empty($afterEvent)) {
+                    return $this->createJsonResponse(['url' => $afterEvent['url']]);
+                }
+
                 return $this->createJsonResponse([
                     'url' => $this->generateUrl('my_course_show', ['id' => $courseId]),
                 ]);
@@ -531,6 +542,34 @@ class UserController extends BaseController
         return $this->createJsonResponse([
             'msg' => 'success',
         ]);
+    }
+
+    protected function needInformationCollection($action, $targetId)
+    {
+        $location = ['targetType' => 'course', 'targetId' => $targetId];
+        if ('0' != $targetId) {
+            $course = $this->getCourseService()->getCourse($targetId);
+            $location['targetId'] = $course['courseSetId'];
+        }
+
+        $event = $this->getInformationCollectEventService()->getEventByActionAndLocation($action, $location);
+
+        if (empty($event)) {
+            return [];
+        }
+
+        $goto = 'buy_before' === $action ? $this->generateUrl('course_buy', ['id' => $targetId]) : $this->generateUrl('my_course_show', ['id' => $targetId]);
+        $url = $this->generateUrl('information_collect_event', [
+            'eventId' => $event['id'],
+            'goto' => $goto,
+        ]);
+
+        return [$event['id'], 'url' => $url];
+    }
+
+    protected function getInformationCollectEventService()
+    {
+        return $this->createService('InformationCollect:EventService');
     }
 
     public function stickCourseSetAction(Request $request, $courseSetId)

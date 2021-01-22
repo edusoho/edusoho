@@ -5,7 +5,12 @@ namespace ApiBundle\Api\Resource\Page;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use Biz\Classroom\Service\ClassroomService;
 use Biz\Coupon\Service\CouponBatchService;
+use Biz\Course\Service\CourseService;
+use Biz\Goods\Service\GoodsService;
+use Biz\Product\Service\ProductService;
+use Biz\System\Service\H5SettingService;
 use Biz\User\UserException;
 
 class PageDiscovery extends AbstractResource
@@ -15,7 +20,7 @@ class PageDiscovery extends AbstractResource
      */
     public function search(ApiRequest $request, $portal)
     {
-        if (!in_array($portal, array('h5', 'miniprogram', 'apps'))) {
+        if (!in_array($portal, ['h5', 'miniprogram', 'apps'])) {
             throw PageException::ERROR_PORTAL();
         }
         $params = $request->query->all();
@@ -29,17 +34,29 @@ class PageDiscovery extends AbstractResource
         }
         $discoverySettings = $this->getH5SettingService()->getDiscovery($portal, $mode);
         foreach ($discoverySettings as &$discoverySetting) {
+            if ('slide_show' == $discoverySetting['type']) {
+                array_walk($discoverySetting['data'], function (&$slide){
+                    if (in_array($slide['link']['type'], ['course', 'classroom'])){
+                        $targetId = $slide['link']['type'] === 'classroom' ? $slide['link']['target']['id'] : $slide['link']['target']['courseSetId'];
+                        $product = $this->getProductService()->getProductByTargetIdAndType($targetId, $slide['link']['type']);
+                        $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
+                        $slide['link']['target']['goodsId'] = $goods['id'];
+                    }
+                });
+            }
             if ('course_list' == $discoverySetting['type']) {
-                $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('creator', 'teacherIds'));
-                $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('courseSetId'), 'courseSet');
-                $discoverySetting['data']['source'] = array(
+                $this->getOCUtil()->multiple($discoverySetting['data']['items'], ['creator', 'teacherIds']);
+                $this->getOCUtil()->multiple($discoverySetting['data']['items'], ['courseSetId'], 'courseSet');
+                $discoverySetting['data']['items'] = $this->getCourseService()->appendSpecsInfo($discoverySetting['data']['items']);
+                $discoverySetting['data']['source'] = [
                     'category' => $discoverySetting['data']['categoryId'],
                     'courseType' => 'all',
                     'sort' => $discoverySetting['data']['sort'],
-                );
+                ];
             }
             if ('classroom_list' == $discoverySetting['type']) {
-                $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('creator', 'teacherIds', 'assistantIds', 'headTeacherId'));
+                $this->getOCUtil()->multiple($discoverySetting['data']['items'], ['creator', 'teacherIds', 'assistantIds', 'headTeacherId']);
+                $discoverySetting['data']['items'] = $this->getClassroomService()->appendSpecsInfo($discoverySetting['data']['items']);
             }
             if ('coupon' == $discoverySetting['type']) {
                 foreach ($discoverySetting['data']['items'] as &$couponBatch) {
@@ -49,7 +66,7 @@ class PageDiscovery extends AbstractResource
             }
 
             if ('open_course_list' == $discoverySetting['type']) {
-                $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('userId', 'teacherIds'));
+                $this->getOCUtil()->multiple($discoverySetting['data']['items'], ['userId', 'teacherIds']);
             }
         }
 
@@ -64,11 +81,17 @@ class PageDiscovery extends AbstractResource
         return $this->service('Coupon:CouponBatchService');
     }
 
+    /**
+     * @return CourseService
+     */
     protected function getCourseService()
     {
         return $this->service('Course:CourseService');
     }
 
+    /**
+     * @return H5SettingService
+     */
     protected function getH5SettingService()
     {
         return $this->service('System:H5SettingService');
@@ -82,5 +105,29 @@ class PageDiscovery extends AbstractResource
     protected function getUserService()
     {
         return $this->service('User:UserService');
+    }
+
+    /**
+     * @return ClassroomService
+     */
+    protected function getClassroomService()
+    {
+        return $this->service('Classroom:ClassroomService');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->service('Goods:GoodsService');
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getProductService()
+    {
+        return $this->service('Product:ProductService');
     }
 }

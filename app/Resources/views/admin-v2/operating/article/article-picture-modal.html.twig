@@ -30,7 +30,9 @@
         <a id="article-upload-btn"
         data-goto-url="{{ path('admin_v2_article_picture_crop') }}"
         data-upload-token="{{ upload_token('tmp', 'image') }}"
-        class="">{{'admin.article_setting.image.choose_btn'|trans}}</a>
+        class="" style="display: inline-block;">
+          {{'admin.article_setting.image.choose_btn'|trans}}
+        </a>
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
       </div>
     </div>

@@ -6,7 +6,7 @@ use Codeages\Biz\Framework\Dao\GeneralDaoInterface;
 
 interface OrderRefererLogDao extends GeneralDaoInterface
 {
-    public function searchOrderRefererLogs($conditions, $orderBy, $start, $limit, $groupBy);
+    public function searchOrderRefererLogs($conditions, $orderBy, $start, $limit);
 
     public function countOrderRefererLogs($conditions, $groupBy);
 

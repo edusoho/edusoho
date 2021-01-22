@@ -14,37 +14,40 @@
 {% endblock %}
 
 {% block footer %}
-  <span class="es-qrcode bottom mrl" data-url="{{ path('course_task_qrcode',{courseId: task.courseId,id: task.id}) }}">
-    <i class="es-icon es-icon-qrcode"></i>
-    <span class="qrcode-popover">
-      <img src="" alt="">
-      {{ 'site.tips.scan_qrcode_tips'|trans }}
-    </span>
-  </span>
-  {% if course.buyable %}
-    {% if task.status == 'published' and course.parentId == '0' %}
+  <button type="button" class="btn btn-primary" data-dismiss="modal">
+    {{ 'form.btn.close'|trans }}
+  </button>
+{#  <span class="es-qrcode bottom mrl" data-url="{{ path('course_task_qrcode',{courseId: task.courseId,id: task.id}) }}">#}
+{#    <i class="es-icon es-icon-qrcode"></i>#}
+{#    <span class="qrcode-popover">#}
+{#      <img src="" alt="">#}
+{#      {{ 'site.tips.scan_qrcode_tips'|trans }}#}
+{#    </span>#}
+{#  </span>#}
+{#  {% if course.buyable %}#}
+{#    {% if task.status == 'published' and course.parentId == '0' %}#}
 
-      {% if course.price == '0.00' %}
-        <a id="js-buy-btn" type="button" class="btn btn-primary js-buy-btn js-task-preview-buy-btn" href="javascript:" data-url="{{ path('course_buy', {id:course.id}) }}">
-          {% if user.id|default(null) %}
-            {{ 'course.task.preview.free_join_tips'|trans }}
-          {% else %}
-            {{ 'course.task.preview.login_and_learn_tips'|trans }}
-          {% endif %}
-        </a>
-      {% else %}
-        <a id="js-buy-btn" type="button" class="btn btn-primary js-buy-btn js-task-preview-buy-btn" data-url="{{ path('course_buy', {id:course.id}) }}">
-          {% if user.id|default(null) %}
-            {% if vipStatus|default(null) == 'ok' %}
-              {{ 'course.task.preview.free_join_tips'|trans }}
-            {% else %}
-              {{ 'course.task.preview.buy_tips'|trans({'%price%':course.price}) }}
-            {% endif %}
-          {% else %}
-            {{ 'course.task.preview.login_and_buy_tips'|trans }}
-          {% endif %}
-        </a>
-      {% endif %}
-    {% endif %}
-  {% endif %}
+{#      {% if course.price == '0.00' %}#}
+{#        <a id="js-buy-btn" type="button" class="btn btn-primary js-buy-btn js-task-preview-buy-btn" href="javascript:" data-url="{{ path('course_buy', {id:course.id}) }}">#}
+{#          {% if user.id|default(null) %}#}
+{#            {{ 'course.task.preview.free_join_tips'|trans }}#}
+{#          {% else %}#}
+{#            {{ 'course.task.preview.login_and_learn_tips'|trans }}#}
+{#          {% endif %}#}
+{#        </a>#}
+{#      {% else %}#}
+{#        <a id="js-buy-btn" type="button" class="btn btn-primary js-buy-btn js-task-preview-buy-btn" data-url="{{ path('course_buy', {id:course.id}) }}">#}
+{#          {% if user.id|default(null) %}#}
+{#            {% if vipStatus|default(null) == 'ok' %}#}
+{#              {{ 'course.task.preview.free_join_tips'|trans }}#}
+{#            {% else %}#}
+{#              {{ 'course.task.preview.buy_tips'|trans({'%price%':course.price}) }}#}
+{#            {% endif %}#}
+{#          {% else %}#}
+{#            {{ 'course.task.preview.login_and_buy_tips'|trans }}#}
+{#          {% endif %}#}
+{#        </a>#}
+{#      {% endif %}#}
+{#    {% endif %}#}
+{#  {% endif %}#}
 {% endblock %}

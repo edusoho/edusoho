@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Course\Service;
 
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\ReflectionUtils;
 use Biz\BaseTestCase;
 use Biz\Course\Dao\CourseMemberDao;
@@ -13,6 +14,56 @@ use Biz\User\Service\UserService;
 
 class MemberServiceTest extends BaseTestCase
 {
+    public function testRecountLearningDataByCourseId()
+    {
+        $time = time();
+        $member = [
+            'id' => 1,
+            'courseId' => 1,
+            'userId' => 1,
+            'courseSetId' => 1,
+            'joinedType' => 'course',
+            'deadline' => time() + 3600,
+            'lastLearnTime' => time(),
+        ];
+
+        $this->getMemberDao()->create($member);
+
+        $this->mockBiz('Task:TaskResultService', [
+            [
+                'functionName' => 'countTaskNumGroupByUserId',
+                'returnValue' => [
+                    '1' => ['count' => 2, 'userId' => 1],
+                ],
+            ],
+            [
+                'functionName' => 'countFinishedCompulsoryTaskNumGroupByUserId',
+                'returnValue' => [
+                    '1' => ['count' => 1, 'userId' => 1],
+                ],
+            ],
+        ]);
+
+        $this->mockBiz('Course:CourseService', [
+            [
+                'functionName' => 'getCourse',
+                'returnValue' => [
+                    'id' => 1,
+                    'compulsoryTaskNum' => 2,
+                ],
+            ],
+        ]);
+
+        $this->getMemberService()->recountLearningDataByCourseId(1);
+
+        $member = $this->getMemberDao()->get(1);
+
+        $this->assertEquals(2, $member['learnedNum']);
+        $this->assertEquals(1, $member['learnedCompulsoryTaskNum']);
+        $this->assertEquals(1, $member['learnedElectiveTaskNum']);
+        $this->assertEquals($time, $member['lastLearnTime']);
+    }
+
     /**
      * @expectedException \Biz\Common\CommonException
      * @expectedExceptionMessage exception.common_parameter_missing
@@ -499,12 +550,12 @@ class MemberServiceTest extends BaseTestCase
         $member = [
             'courseId' => $course['id'],
             'userId' => $user['id'],
-            'courseSetId' => 1,
+            'courseSetId' => $course['courseSetId'],
             'joinedType' => 'course',
         ];
         $this->getMemberDao()->create($member);
 
-        $this->getMemberService()->lockStudent(1, $user['id']);
+        $this->getMemberService()->lockStudent($course['id'], $user['id']);
 
         $member = $this->getMemberService()->getCourseMember($course['id'], $user['id']);
 
@@ -548,10 +599,10 @@ class MemberServiceTest extends BaseTestCase
             'joinedType' => 'course',
             'role' => 'teacher',
         ];
-        $this->getMemberDao()->create($member);
+        $member = $this->getMemberDao()->create($member);
 
-        $result = $this->getMemberService()->findCourseSetTeachers($course['id']);
-        $this->assertEquals('teacher', $result[0]['role']);
+        $result = ArrayToolkit::index($this->getMemberService()->findCourseSetTeachers($course['courseSetId']), 'id');
+        $this->assertEquals('teacher', $result[$member['id']]['role']);
     }
 
     public function testIsCourseTeacher()
@@ -1140,9 +1191,13 @@ class MemberServiceTest extends BaseTestCase
 
     protected function mockNewCourse($fields = [])
     {
+        $courseSet = $this->getCourseSetService()->createCourseSet([
+            'title' => 'new CourseSet',
+            'type' => 'normal',
+        ]);
         $course = [
             'title' => 'test Course',
-            'courseSetId' => 1,
+            'courseSetId' => $courseSet['id'],
             'learnMode' => 'lockMode',
             'expiryDays' => 0,
             'expiryMode' => 'forever',

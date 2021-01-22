@@ -35,7 +35,7 @@ class FavoriteServiceImpl extends BaseService implements FavoriteService
             return $existed;
         }
 
-        $favorite = $this->getFavoriteDao()->create(ArrayToolkit::parts($favorite, ['userId', 'targetType', 'targetId']));
+        $favorite = $this->getFavoriteDao()->create(ArrayToolkit::parts($favorite, ['userId', 'targetType', 'targetId', 'goodsType']));
         $this->dispatch('favorite.create', $favorite);
 
         return $favorite;

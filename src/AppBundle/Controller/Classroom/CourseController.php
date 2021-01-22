@@ -11,6 +11,8 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
+use Biz\Goods\Service\GoodsService;
+use Biz\Product\Service\ProductService;
 use Biz\S2B2C\Service\S2B2CFacadeService;
 use Biz\System\Service\SettingService;
 use Biz\Taxonomy\Service\TagService;
@@ -123,6 +125,12 @@ class CourseController extends BaseController
         }
 
         $member = $this->previewAsMember($previewAs, $member, $classroom);
+        if (!$member || $member['locked']) {
+            $product = $this->getProductService()->getProductByTargetIdAndType($classroom['id'], 'classroom');
+            $goods = $this->getGoodsService()->getGoodsByProductId($product['id']);
+
+            return $this->redirect($this->generateUrl('goods_show', ['id' => $goods['id'], 'preview' => 'guest' == $request->query->get('previewAs', '') ? 1 : 0]));
+        }
 
         $layout = 'classroom/layout.html.twig';
         $isCourseMember = false;
@@ -358,5 +366,21 @@ class CourseController extends BaseController
     protected function getS2B2CFacadeService()
     {
         return $this->createService('S2B2C:S2B2CFacadeService');
+    }
+
+    /**
+     * @return ProductService
+     */
+    protected function getProductService()
+    {
+        return $this->createService('Product:ProductService');
+    }
+
+    /**
+     * @return GoodsService
+     */
+    protected function getGoodsService()
+    {
+        return $this->createService('Goods:GoodsService');
     }
 }

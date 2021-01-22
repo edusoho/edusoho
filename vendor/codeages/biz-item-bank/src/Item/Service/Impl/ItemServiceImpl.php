@@ -41,13 +41,12 @@ class ItemServiceImpl extends BaseService implements ItemService
 
             $this->createQuestions($item['id'], $questions);
 
-            $this->getItemBankService()->updateItemNumAndQuestionNum($item['bank_id'], 1, $item['question_num']);
-
             if (!empty($item['category_id']) && 0 < $item['category_id']) {
-                $this->getItemCategoryService()->updateItemNumAndQuestionNum($item['category_id'], 1, $item['question_num']);
+                $this->getItemCategoryService()->updateItemNumAndQuestionNum($item['category_id']);
             }
 
             if (!$isBatch) {
+                $this->getItemBankService()->updateItemNumAndQuestionNum($item['bank_id']);
                 $this->dispatch('item.create', $item, ['argument' => $arguments]);
             }
 
@@ -74,7 +73,8 @@ class ItemServiceImpl extends BaseService implements ItemService
                     $savedItems[] = array_merge($savedItems, $savedItem);
                 }
             }
-
+            $this->getItemBankService()->updateItemNumAndQuestionNum($bankId);
+            $this->getItemCategoryService()->buildItemNumAndQuestionNumBybankId($bankId);
             $this->dispatch('item.import', $savedItems);
 
             $this->commit();
@@ -126,18 +126,18 @@ class ItemServiceImpl extends BaseService implements ItemService
                 $this->updateAttachments($arguments['attachments'], $id, AttachmentService::ITEM_TYPE);
             }
 
-            $this->getItemBankService()->updateItemNumAndQuestionNum($item['bank_id'], 0, -$originItem['question_num'] + $item['question_num']);
-            
+            $this->getItemBankService()->updateItemNumAndQuestionNum($item['bank_id']);
+
             if ($originItem['category_id'] != $item['category_id']) {
                 if (0 < $originItem['category_id']) {
-                    $this->getItemCategoryService()->updateItemNumAndQuestionNum($originItem['category_id'], -1, -$originItem['question_num']);
+                    $this->getItemCategoryService()->updateItemNumAndQuestionNum($originItem['category_id']);
                 }
                 if (0 < $item['category_id']) {
-                    $this->getItemCategoryService()->updateItemNumAndQuestionNum($item['category_id'], 1, $item['question_num']);
+                    $this->getItemCategoryService()->updateItemNumAndQuestionNum($item['category_id']);
                 }
             } else {
                 if (0 < $originItem['category_id']) {
-                    $this->getItemCategoryService()->updateItemNumAndQuestionNum($item['category_id'], 0, -$originItem['question_num'] + $item['question_num']);
+                    $this->getItemCategoryService()->updateItemNumAndQuestionNum($item['category_id']);
                 }
             }
 
@@ -236,13 +236,13 @@ class ItemServiceImpl extends BaseService implements ItemService
 
             $result = $this->getItemDao()->delete($id);
             $this->getAttachmentService()->batchDeleteAttachment(['target_id' => $id, 'target_type' => 'item']);
-           
+
             $this->deleteQuestions(['item_id' => $id]);
 
-            $this->getItemBankService()->updateItemNumAndQuestionNum($item['bank_id'], -1, -$item['question_num']);
-            
+            $this->getItemBankService()->updateItemNumAndQuestionNum($item['bank_id']);
+
             if (0 < $item['category_id']) {
-                $this->getItemCategoryService()->updateItemNumAndQuestionNum($item['category_id'], -1, -$item['question_num']);
+                $this->getItemCategoryService()->updateItemNumAndQuestionNum($item['category_id']);
             }
 
             if (!$isBatch) {
@@ -268,7 +268,7 @@ class ItemServiceImpl extends BaseService implements ItemService
         foreach ($ids as $id) {
             $this->deleteItem($id, true);
         }
-        
+
         $this->dispatch('item.batchDelete', $deleteItems);
 
         return true;
@@ -343,6 +343,16 @@ class ItemServiceImpl extends BaseService implements ItemService
         $questions = $this->getQuestionDao()->findQuestionsByQuestionIds($questionIds);
 
         return ArrayToolkit::index($questions, 'id');
+    }
+
+    public function countQuestionsByBankId($bankId)
+    {
+        return $this->getItemDao()->countItemQuestionNumByBankId($bankId);
+    }
+
+    public function countQuestionsByCategoryId($categoryId)
+    {
+        return $this->getItemDao()->countItemQuestionNumByCategoryId($categoryId);
     }
 
     protected function createQuestions($itemId, $questions)

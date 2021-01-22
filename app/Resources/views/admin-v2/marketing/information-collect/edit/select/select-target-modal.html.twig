@@ -1,0 +1,53 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% do script([ 'app/js/admin-v2/marketing/information-collect/edit/select/index.js']) %}
+
+{% block title %}
+	{% if type == 'course' %}
+		{{ 'admin_v2.information_collect.selecte_course'|trans }}
+	{% else %}
+		{{ 'admin_v2.information_collect.selecte_classroom'|trans }}
+	{% endif %}
+	<div class="text-md pts">
+		{{ 'admin_v2.information_collect.selecte_count'|trans }}
+		<span class="js-selected-count text-primary">0</span>
+		<button class="btn btn-sm btn-primary pull-right" data-url="{{ path('admin_v2_information_collect_chooser', {type: type, eventId: eventId|default(0)}) }}" data-toggle="modal" data-dismiss="modal" data-target="#attachment-modal">
+			{{ 'form.field.create'|trans }}
+		</button>
+	</div>
+
+{% endblock %}
+
+{% set modal_class = "modal-lg select-target-modal" %}
+
+{% block body %}
+	<div id="information-collect-select-table" data-type="{{ type }}" data-selected-url="{{ path('admin_v2_information_collect_chooser_selected', {type:type, excludeEventId: eventId|default(0)}) }}">
+		<table class="table">
+			<thead>
+				<tr>
+					<th width="50%">
+						{% if type == 'course' %}
+							{{ 'site.default.course'|trans }}
+						{% else %}
+							{{ setting('classroom.name')|default('site.default.classroom'|trans) }}
+						{% endif %}
+					</th>
+					<th>
+						<span class="pull-right">{{ 'operation'|trans }}</span>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td colspan="20">
+						<div class="empty">{{ 'admin_v2.information_collect.chooser.empty'|trans }}</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+{% endblock %}
+{% block footer %}
+	<div class="row">
+		<button type="button" class="btn btn-primary js-save-selected-target col-md-4 col-md-offset-4" data-target-count="selected-{{ action }}-{{ type }}-count" data-target-input="{{ type }}Ids" data-target-checkbox=".js-target-{{ action }}-{{ type }}">{{ 'form.btn.save'|trans }}</button>
+	</div>
+{% endblock %}

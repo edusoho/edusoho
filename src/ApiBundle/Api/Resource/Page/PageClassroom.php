@@ -6,6 +6,7 @@ use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Classroom\ClassroomException;
+use Biz\Classroom\Service\ClassroomService;
 
 class PageClassroom extends AbstractResource
 {
@@ -36,16 +37,19 @@ class PageClassroom extends AbstractResource
 
         $classroom['access'] = $this->getClassroomService()->canJoinClassroom($classroomId);
         $classroom['courses'] = $this->getClassroomService()->findCoursesByClassroomId($classroomId);
+        $classroom = $this->getClassroomService()->appendSpecInfo($classroom);
 
         $this->getOCUtil()->multiple($classroom['courses'], ['courseSetId'], 'courseSet');
         $this->getOCUtil()->multiple($classroom['courses'], ['creator', 'teacherIds']);
+
+        $classroom['myReview'] = $this->getMyReview($classroom, $user);
 
         $reviewResult = $this->invokeResource(new ApiRequest(
             '/api/review',
             'GET',
             [
-                'targetType' => 'classroom',
-                'targetId' => $classroomId,
+                'targetType' => 'goods',
+                'targetId' => $classroom['goodsId'],
                 'parentId' => 0,
                 'offset' => 0,
                 'limit' => self::DEFAULT_DISPLAY_COUNT,
@@ -62,12 +66,36 @@ class PageClassroom extends AbstractResource
         return $classroom;
     }
 
+    private function getMyReview($classroom, $user)
+    {
+        if (empty($user['id'])) {
+            return null;
+        }
+        $myReviewResult = $this->invokeResource(new ApiRequest(
+            '/api/review',
+            'GET',
+            [
+                'targetType' => 'goods',
+                'targetId' => $classroom['goodsId'],
+                'userId' => $user['id'],
+                'parentId' => 0,
+                'offset' => 0,
+                'limit' => self::DEFAULT_DISPLAY_COUNT,
+            ]
+        ));
+
+        return empty($myReviewResult['data']) ? null : reset($myReviewResult['data']);
+    }
+
     private function mergeProfile(&$user)
     {
         $profile = $this->getUserService()->getUserProfile($user['id']);
         $user = array_merge($profile, $user);
     }
 
+    /**
+     * @return ClassroomService
+     */
     private function getClassroomService()
     {
         return $this->service('Classroom:ClassroomService');

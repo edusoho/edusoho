@@ -33,14 +33,6 @@ class StudentAdd {
       }
     };
 
-    if ($('#min-price').length) {
-      rules.price = Object.assign({
-        required: true,
-        min: parseFloat($('#min-price').data('price'))
-      }, rules.price);
-      messages.price = Object.assign({min: Translator.trans('course_manage.student_create.price_min_error_hint')}, messages.price);
-    }
-
     let validator = $form.validate({
       onkeyup: false,
       currentDom: '#student-add-submit',

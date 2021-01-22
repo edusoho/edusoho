@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\Task\Job;
 
-use Biz\Task\Job\CourseTaskUpdateSyncJob;
-use Biz\BaseTestCase;
 use AppBundle\Common\ReflectionUtils;
+use Biz\BaseTestCase;
+use Biz\Task\Job\CourseTaskUpdateSyncJob;
 use Tests\Unit\Task\Job\Tools\MockedText;
 
 class CourseTaskUpdateSyncJobTest extends BaseTestCase
@@ -13,124 +13,137 @@ class CourseTaskUpdateSyncJobTest extends BaseTestCase
     {
         $job = new CourseTaskUpdateSyncJob();
         ReflectionUtils::setProperty($job, 'biz', $this->biz);
-        $job->args = array('taskId' => 110);
+        $job->args = ['taskId' => 110];
 
         $this->biz['activity_type.text'] = new MockedText($this->biz);
         $this->mockBiz(
             'Task:TaskService',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'getTask',
-                    'withParams' => array(110),
-                    'returnValue' => array(
+                    'withParams' => [110],
+                    'returnValue' => [
                         'id' => 110,
                         'courseId' => 3330,
-                    ),
-                ),
-            )
+                    ],
+                ],
+            ]
         );
         $this->mockBiz(
             'Course:CourseDao',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'findCoursesByParentIdAndLocked',
-                    'withParams' => array(3330, 1),
-                    'returnValue' => array(
-                        array('id' => 3331),
-                        array('id' => 3332),
-                    ),
-                ),
-            )
+                    'withParams' => [3330, 1],
+                    'returnValue' => [
+                        ['id' => 3331],
+                        ['id' => 3332],
+                    ],
+                ],
+            ]
         );
         $this->mockBiz(
             'Task:TaskDao',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'findByCopyIdAndLockedCourseIds',
-                    'withParams' => array(110, array(3331, 3332)),
-                    'returnValue' => array(
-                        array('id' => 20, 'activityId' => 44441, 'fromCourseSetId' => 55551, 'courseId' => 3331, 'mediaType' => 'text'),
-                        array('id' => 21, 'activityId' => 44442, 'fromCourseSetId' => 55552, 'courseId' => 3332, 'mediaType' => 'text'),
-                    ),
-                ),
-                array(
+                    'withParams' => [110, [3331, 3332]],
+                    'returnValue' => [
+                        ['id' => 20, 'activityId' => 44441, 'fromCourseSetId' => 55551, 'courseId' => 3331, 'mediaType' => 'text'],
+                        ['id' => 21, 'activityId' => 44442, 'fromCourseSetId' => 55552, 'courseId' => 3332, 'mediaType' => 'text'],
+                    ],
+                ],
+                [
                     'functionName' => 'batchUpdate',
-                    'withParams' => array(
-                        array(20, 21),
-                        array(
-                            20 => array('id' => 20, 'activityId' => 44441, 'fromCourseSetId' => 55551, 'courseId' => 3331, 'mediaType' => 'text'),
-                            21 => array('id' => 21, 'activityId' => 44442, 'fromCourseSetId' => 55552, 'courseId' => 3332, 'mediaType' => 'text'),
-                        ),
+                    'withParams' => [
+                        [20, 21],
+                        [
+                            20 => ['id' => 20, 'activityId' => 44441, 'fromCourseSetId' => 55551, 'courseId' => 3331, 'mediaType' => 'text'],
+                            21 => ['id' => 21, 'activityId' => 44442, 'fromCourseSetId' => 55552, 'courseId' => 3332, 'mediaType' => 'text'],
+                        ],
                         'id',
-                    ),
-                    'returnValue' => array(
-                        array('id' => 20, 'activityId' => 44441, 'fromCourseSetId' => 55551, 'courseId' => 3331, 'mediaType' => 'text'),
-                        array('id' => 21, 'activityId' => 44442, 'fromCourseSetId' => 55552, 'courseId' => 3332, 'mediaType' => 'text'),
-                    ),
-                ),
-            )
+                    ],
+                    'returnValue' => [
+                        ['id' => 20, 'activityId' => 44441, 'fromCourseSetId' => 55551, 'courseId' => 3331, 'mediaType' => 'text'],
+                        ['id' => 21, 'activityId' => 44442, 'fromCourseSetId' => 55552, 'courseId' => 3332, 'mediaType' => 'text'],
+                    ],
+                ],
+            ]
+        );
+        $this->mockBiz(
+            'Course:CourseService',
+            [
+                [
+                    'functionName' => 'findCoursesByParentIdAndLocked',
+                    'withParams' => [3330, 1],
+                    'returnValue' => [
+                        ['id' => 3331],
+                        ['id' => 3332],
+                    ],
+                ],
+            ]
         );
         $this->mockBiz(
             'Activity:ActivityDao',
-            array(
-                array(
+            [
+                [
                     'functionName' => 'get',
-                    'withParams' => array(44441),
-                    'returnValue' => array(
+                    'withParams' => [44441],
+                    'returnValue' => [
                         'id' => 44441,
                         'copyId' => 44451,
                         'mediaType' => 'text',
-                    ),
-                ),
-                array(
+                    ],
+                ],
+                [
                     'functionName' => 'get',
-                    'withParams' => array(44442),
-                    'returnValue' => array(
+                    'withParams' => [44442],
+                    'returnValue' => [
                         'id' => 44442,
                         'copyId' => 44452,
                         'mediaType' => 'text',
-                    ),
-                ),
-                array(
+                    ],
+                ],
+                [
                     'functionName' => 'get',
-                    'withParams' => array(44451),
-                    'returnValue' => array(
+                    'withParams' => [44451],
+                    'returnValue' => [
                         'id' => 44451,
                         'copyId' => 0,
                         'mediaType' => 'text',
-                    ),
-                ),
-                array(
+                    ],
+                ],
+                [
                     'functionName' => 'get',
-                    'withParams' => array(44452),
-                    'returnValue' => array(
+                    'withParams' => [44452],
+                    'returnValue' => [
                         'id' => 44452,
                         'copyId' => 0,
                         'mediaType' => 'text',
-                    ),
-                ),
-                array(
+                    ],
+                ],
+                [
                     'functionName' => 'update',
-                    'withParams' => array(
+                    'withParams' => [
                         44441,
-                        array('id' => 44441, 'copyId' => 44451, 'mediaType' => 'text', 'mediaId' => 2222222),
-                    ),
-                ),
-                array(
+                        ['id' => 44441, 'copyId' => 44451, 'mediaType' => 'text', 'mediaId' => 2222222],
+                    ],
+                ],
+                [
                     'functionName' => 'update',
-                    'withParams' => array(
+                    'withParams' => [
                         44442,
-                        array('id' => 44442, 'copyId' => 44452, 'mediaType' => 'text', 'mediaId' => 2222222),
-                    ),
-                ),
-            )
+                        ['id' => 44442, 'copyId' => 44452, 'mediaType' => 'text', 'mediaId' => 2222222],
+                    ],
+                ],
+            ]
         );
 
         $job->execute();
 
         $this->getTaskService()->shouldHaveReceived('getTask')->times(1);
         $this->getCourseDao()->shouldHaveReceived('findCoursesByParentIdAndLocked')->times(1);
-        $this->getTaskDao()->shouldHaveReceived('findByCopyIdAndLockedCourseIds')->times(1);
+        $this->getTaskDao()->shouldHaveReceived('findByCopyIdAndLockedCourseIds')->times(2);
         $this->getTaskDao()->shouldHaveReceived('batchUpdate')->times(1);
         $this->getActivityDao()->shouldHaveReceived('get')->times(4);
         $this->getActivityDao()->shouldHaveReceived('update')->times(2);
@@ -138,12 +151,12 @@ class CourseTaskUpdateSyncJobTest extends BaseTestCase
         $mockedText = $this->biz['activity_type.text'];
 
         $this->assertArrayEquals(
-            array('id' => 44452, 'copyId' => 0, 'mediaType' => 'text'),
+            ['id' => 44452, 'copyId' => 0, 'mediaType' => 'text'],
             $mockedText->getSourceActivity()
         );
 
         $this->assertArrayEquals(
-            array('id' => 44442, 'copyId' => 44452, 'mediaType' => 'text'),
+            ['id' => 44442, 'copyId' => 44452, 'mediaType' => 'text'],
             $mockedText->getSyncActivity()
         );
     }

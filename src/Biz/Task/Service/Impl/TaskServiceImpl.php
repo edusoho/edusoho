@@ -446,8 +446,7 @@ class TaskServiceImpl extends BaseService implements TaskService
                     $task['watchLimitRemaining'] = $course['watchLimit'] * $task['length'];
                 }
             }
-
-            $isTryLookable = $course['tryLookable'] && 'video' == $task['type'] && !empty($task['ext']['file']) && 'cloud' === $task['ext']['file']['storage'];
+            $isTryLookable = $course['tryLookable'] && 'video' == $task['type'] && !empty($task['activity']['ext']['file']) && 'cloud' === $task['activity']['ext']['file']['storage'];
             if ($isTryLookable) {
                 $task['tryLookable'] = 1;
             } else {
@@ -587,6 +586,10 @@ class TaskServiceImpl extends BaseService implements TaskService
 
         if (empty($taskResult)) {
             $this->createNewException(TaskException::CAN_NOT_DO());
+        }
+
+        if (empty($watchTime)) {
+            return;
         }
 
         $this->getTaskResultService()->waveWatchTime($taskResult['id'], $watchTime);
@@ -1020,6 +1023,7 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         $task = $this->getTask($id);
         $data['task'] = $task;
+        $data['taskId'] = $task['id'];
         $this->getActivityService()->trigger($task['activityId'], $eventName, $data);
 
         return $this->getTaskResultService()->getUserTaskResultByTaskId($id);

@@ -510,7 +510,7 @@ admin_v2.course.item_bank_exercise.basic_tab.publish_submit_btn: 发布题库练
 admin_v2.course.item_bank_exercise.basic_tab.delete_submit_btn: 删除题库练习
 
 # 教学-课程管理-公开课模块
-admin_v2.course.open_course_menu: 公开课管理
+admin_v2.course.open_course_menu: 常规公开课
 admin_v2.course.open_course.basic_tab: 公开课管理
 admin_v2.course.open_course.basic_tab.create_btn: 创建公开课
 admin_v2.course.open_course.recommend_list_tab: 公开课推荐
@@ -658,6 +658,8 @@ admin_v2.operation.sensitive_words.sensitive_words_list_tab.create_btn: 添加�
 admin_v2.operation.sensitive_words.banlogs_tab: 屏蔽记录
 
 
+#营销-公开课管理
+admin_v2.open_course.basic_group: 公开课
 
 #营销-营销管理
 admin_v2.marketing.basic_group: 营销管理
@@ -683,6 +685,16 @@ admin_v2.operation.invite.coupon_tab: 奖励查询
 
 #营销-营销管理-微营销
 admin_v2.micromarketing.menu: 微营销
+
+#营销-营销管理-用户信息采集
+
+admin_v2.information_collect.menu: 用户信息采集
+admin_v2.information_collect.tab: 用户信息采集
+admin_v2.information_collect.operate.update_tab: 编辑
+admin_v2.information_collect.operate.close_tab: 关闭采集
+admin_v2.information_collect.operate.open_tab: 开启采集
+admin_v2.information_collect.export_excel_tab: 导出Excel文件
+admin_v2.information_collect.detail: 用户信息采集 > 详情
 
 #运营-内容运营-小组管理
 admin_v2.operation.group_menu: 小组管理
@@ -872,6 +884,8 @@ admin_v2.system.course.questions_tab: 题库
 admin_v2.system.course.avatar_tab: 默认图片
 admin_v2.system.course.classroom_tab: 班级
 admin_v2.system.course.open_course_tab: 公开课
+admin_v2.system.course.task_multiple_open_tab: 课时多开配置
+admin_v2.system.course.video_task_tab: 视频课时学习配置
 
 admin_v2.system.roles_menu: 角色权限
 admin_v2.system.roles.basic_tab: 角色权限
@@ -958,5 +972,8 @@ admin_v2.developer.mobile_iap_product.basic_tab: iOS内购商品设置iOS Purcha
 
 admin_v2.course.basic.basic_tab.go_to_choose_btn: 去内容市场选择
 
-exception.goods.not_found: 商品未找到
+admin_v2.operating.goods_setting: 商品页管理
 
+admin_v2.information_collect.menu: 用户信息采集
+admin_v2.information_collect.tab: 用户信息采集
+admin_v2.information_collect.create: 新建

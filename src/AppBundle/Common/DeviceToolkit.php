@@ -24,12 +24,12 @@ class DeviceToolkit
 
         //判断手机发送的客户端标志,兼容性有待提高
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
-            $clientkeywords = array(
+            $clientkeywords = [
                 'nokia', 'sony', 'ericsson', 'mot', 'samsung', 'htc', 'sgh', 'lg', 'sharp',
                 'sie-', 'philips', 'panasonic', 'alcatel', 'lenovo', 'iphone', 'ipod', 'blackberry', 'meizu',
                 'android', 'netfront', 'symbian', 'ucweb', 'windowsce', 'palm', 'operamini', 'operamobi',
                 'openwave', 'nexusone', 'cldc', 'midp', 'wap', 'mobile',
-            );
+            ];
 
             // 从HTTP_USER_AGENT中查找手机浏览器的关键字
             if (preg_match('/('.implode('|', $clientkeywords).')/i', strtolower($_SERVER['HTTP_USER_AGENT']))) {
@@ -53,9 +53,9 @@ class DeviceToolkit
     {
         //判断手机发送的客户端标志,兼容性有待提高
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
-            $clientkeywords = array(
+            $clientkeywords = [
                 'iphone', 'ipod',
-            );
+            ];
 
             // 从HTTP_USER_AGENT中查找手机浏览器的关键字
             if (preg_match('/('.implode('|', $clientkeywords).')/i', strtolower($_SERVER['HTTP_USER_AGENT']))) {
@@ -66,11 +66,16 @@ class DeviceToolkit
         return false;
     }
 
+    /**
+     * @param $userAgent
+     *
+     * @return string
+     */
     public static function getMobileDeviceType($userAgent)
     {
         $userAgent = strtolower($userAgent);
 
-        $ios = array('iphone', 'ipad', 'ipod');
+        $ios = ['iphone', 'ipad', 'ipod'];
         foreach ($ios as $keyword) {
             if (strpos($userAgent, $keyword) > -1) {
                 return 'ios';
@@ -79,6 +84,36 @@ class DeviceToolkit
 
         if (strpos($userAgent, 'android') > -1) {
             return 'android';
+        }
+
+        return 'unknown';
+    }
+
+    /**
+     * @param $userAgent
+     *
+     * @return string
+     *                iOS UA：EduSoho/4.9.1 (iPhone; iOS 13.5.1; Scale/3.00)|【EduSoho/App版本号（设备机型；系统版本；屏幕缩放尺寸）】
+     *                Android UA：TNY-AL100 Android-kuozhi 29
+     */
+    public static function getClient($userAgent)
+    {
+        $userAgent = strtolower($userAgent);
+        $userAgent = strtolower($userAgent);
+
+        $ios = ['iphone', 'ipad', 'ipod'];
+        foreach ($ios as $keyword) {
+            if (strpos($userAgent, $keyword) > -1 && strpos($userAgent, 'edusoho/') > -1) {
+                return 'ios';
+            }
+        }
+
+        if (strpos($userAgent, 'android-kuozhi')) {
+            return 'android';
+        }
+
+        if ('unknown' !== self::getMobileDeviceType($userAgent) && strpos($userAgent, 'micromessenger') > -1) {
+            return 'miniprogram';
         }
 
         return 'unknown';

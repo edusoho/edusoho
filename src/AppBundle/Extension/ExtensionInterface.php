@@ -17,4 +17,6 @@ interface ExtensionInterface
     public function getCourseTypes();
 
     public function getWeChatTemplates();
+
+    public function getFavoriteTypes();
 }

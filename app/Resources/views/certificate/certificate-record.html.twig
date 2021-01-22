@@ -23,7 +23,7 @@
                 </div>
                 <div class="cd-card mycart-message-card">
                     <div class="mycart-message-card-left pull-left">
-                        <p class="cd-link-major">{{ 'user.certificates.cert_titile'|trans }}：{{ certificate.name }}</p>
+                        <p class="cd-link-major">{{ 'user.certificates.cert_titile'|trans }}：{{ certificate.name|default('-') }}</p>
                         <p class="cd-link-major">{{ 'user.certificates.cert_code'|trans }}：{{ record.certificateCode }}</p>
                         <p class="cd-link-major">{{ 'user.certificates.issue_time'|trans }}：{{ record.issueTime|date('Y/m/d') }}</p>
                         <p class="cd-link-major">

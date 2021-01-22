@@ -10,7 +10,11 @@ class Reset {
     this.event();
     this.dragHtml = $('.js-drag-box').html();
     $('.js-drag-box').remove();
-    $('#password-reset-form').prepend(this.dragHtml);
+    if ($('#password-reset-form').css('display') == 'none'){
+      $('#password-reset-by-mobile-form').prepend(this.dragHtml);
+    } else {
+      $('#password-reset-form').prepend(this.dragHtml);
+    }
     this.drag = new Drag($('#drag-btn'), $('.js-jigsaw'), {
       limitType: 'reset_password',
     });

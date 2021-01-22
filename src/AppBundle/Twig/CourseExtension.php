@@ -68,7 +68,37 @@ class CourseExtension extends \Twig_Extension
             new \Twig_SimpleFunction('next_task', [$this, 'getNextTask']),
             new \Twig_SimpleFunction('latest_live_task', [$this, 'getLatestLiveTask']),
             new \Twig_SimpleFunction('can_obtain_certificates', [$this, 'canObtainCertificates']),
+            new \Twig_SimpleFunction('can_buy_course', [$this, 'canBuyCourse']),
         ];
+    }
+
+    /**
+     * @param $course
+     * @param $userId
+     * 是否可以购买课程
+     */
+    public function canBuyCourse($course)
+    {
+        $user = $this->biz['user'];
+        if (!$course['buyable']) {
+            if (!$user->isLogin()) {
+                return false;
+            }
+            if (!$this->isPluginInstalled('vip')) {
+                return false;
+            }
+            //会员免费学满足免费学条件，无视课程是否允许购买
+            $status = $this->createService('VipPlugin:Vip:VipService')->checkUserInMemberLevel($user['id'], $course['vipLevelId']);
+
+            return 'ok' === $status;
+        }
+        $currentTime = time();
+        //是否超过有效期，超过有效期也不允许
+        return !(
+            ($course['buyExpiryTime'] && $course['buyExpiryTime'] < $currentTime)
+            ||
+            ($course['expiryEndDate'] && $course['expiryEndDate'] < $currentTime)
+        );
     }
 
     public function getLatestLiveTask()
@@ -170,6 +200,7 @@ class CourseExtension extends \Twig_Extension
                     'activityEndTime' => empty($item['activity']['endTime']) ? '' : $item['activity']['endTime'],
                     'fileStorage' => empty($item['activity']['ext']['file']['storage']) ? '' : $item['activity']['ext']['file']['storage'],
                     'isTaskTryLookable' => $item['tryLookable'],
+                    'isTaskShowModal' => $item['tryLookable'] || $item['isFree'],
                     'isSingleTaskLesson' => empty($item['isSingleTaskLesson']) ? false : $item['isSingleTaskLesson'],
                 ];
             }
@@ -499,5 +530,15 @@ class CourseExtension extends \Twig_Extension
     protected function getCertificateService()
     {
         return $this->biz->service('Certificate:CertificateService');
+    }
+
+    protected function isPluginInstalled($name)
+    {
+        return $this->container->get('kernel')->getPluginConfigurationManager()->isPluginInstalled($name);
+    }
+
+    protected function createService($alias)
+    {
+        return $this->biz->service($alias);
     }
 }

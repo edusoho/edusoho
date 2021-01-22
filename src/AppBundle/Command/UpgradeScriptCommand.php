@@ -3,11 +3,11 @@
 namespace AppBundle\Command;
 
 use Biz\Util\PluginUtil;
-use Topxia\Service\Common\ServiceKernel;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Filesystem;
+use Topxia\Service\Common\ServiceKernel;
 
 class UpgradeScriptCommand extends BaseCommand
 {
@@ -33,8 +33,7 @@ class UpgradeScriptCommand extends BaseCommand
         $this->executeScript($code, $version, $index);
         $output->writeln('<info>执行脚本</info>');
 
-        $this->removeCache();
-        $output->writeln('<info>删除缓存</info>');
+        PluginUtil::refresh();
 
         $this->updateApp($code, $version);
         $output->writeln('<info>元数据更新</info>');
@@ -66,22 +65,18 @@ class UpgradeScriptCommand extends BaseCommand
             )->getEnvironment();
         $filesystem = new Filesystem();
         $filesystem->remove($cachePath);
-
-        if (empty($errors)) {
-            PluginUtil::refresh();
-        }
     }
 
     protected function updateApp($code, $version)
     {
         $app = $this->getAppService()->getAppByCode($code);
 
-        $newApp = array(
+        $newApp = [
             'code' => $code,
             'version' => $version,
             'fromVersion' => $app['version'],
             'updatedTime' => time(),
-        );
+        ];
 
         $this->getLogService()->info('system', 'update_app_version', "命令行更新应用「{$app['name']}」版本为「{$version}」");
 

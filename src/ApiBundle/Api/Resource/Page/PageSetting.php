@@ -2,12 +2,11 @@
 
 namespace ApiBundle\Api\Resource\Page;
 
-use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Annotation\ApiConf;
+use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
-use Biz\User\UserException;
-use ApiBundle\Api\Annotation\Access;
 use ApiBundle\Api\Resource\Filter;
+use Biz\User\UserException;
 
 class PageSetting extends AbstractResource
 {
@@ -18,15 +17,15 @@ class PageSetting extends AbstractResource
     {
         $mode = $request->query->get('mode', 'published');
 
-        if (!in_array($mode, array('draft', 'published'))) {
+        if (!in_array($mode, ['draft', 'published'])) {
             throw PageException::ERROR_MODE();
         }
         $type = 'course' == $type ? 'courseCondition' : $type;
-        if (!in_array($type, array('courseCondition', 'discovery'))) {
+        if (!in_array($type, ['courseCondition', 'discovery'])) {
             throw PageException::ERROR_TYPE();
         }
 
-        if (!in_array($portal, array('h5', 'miniprogram', 'apps'))) {
+        if (!in_array($portal, ['h5', 'miniprogram', 'apps'])) {
             throw PageException::ERROR_PORTAL();
         }
         $method = 'get'.ucfirst($type);
@@ -35,50 +34,68 @@ class PageSetting extends AbstractResource
     }
 
     /**
-     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN")
+     * @ApiConf(isRequiredAuth=true)
      */
     public function add(ApiRequest $request, $portal)
     {
         $mode = $request->query->get('mode');
-        if (!in_array($mode, array('draft', 'published'))) {
+        if (!in_array($mode, ['draft', 'published'])) {
             throw PageException::ERROR_MODE();
         }
         $type = $request->query->get('type');
-        if (!in_array($type, array('discovery'))) {
+        if (!in_array($type, ['discovery'])) {
             throw PageException::ERROR_TYPE();
         }
 
-        if (!in_array($portal, array('h5', 'miniprogram', 'apps'))) {
+        if (!in_array($portal, ['h5', 'miniprogram', 'apps'])) {
             throw PageException::ERROR_PORTAL();
         }
+
+        $this->checkPermissionByPortal($portal);
         $content = $request->request->all();
         $method = 'add'.ucfirst($type);
 
         return $this->$method($portal, $mode, $content);
     }
 
-    /**
-     * @Access(roles="ROLE_ADMIN,ROLE_SUPER_ADMIN")
-     */
     public function remove(ApiRequest $request, $portal, $type)
     {
         $mode = $request->query->get('mode');
         if ('draft' != $mode) {
             throw PageException::ERROR_MODE();
         }
-        if (!in_array($type, array('discovery'))) {
+        if (!in_array($type, ['discovery'])) {
             throw PageException::ERROR_TYPE();
         }
 
-        if (!in_array($portal, array('h5', 'miniprogram', 'apps'))) {
+        if (!in_array($portal, ['h5', 'miniprogram', 'apps'])) {
             throw PageException::ERROR_PORTAL();
         }
+
+        $this->checkPermissionByPortal($portal);
         $method = 'remove'.ucfirst($type);
 
         return $this->$method($portal, $mode);
     }
 
-    protected function addDiscovery($portal, $mode = 'draft', $content = array())
+    private function checkPermissionByPortal($portal)
+    {
+        if ('h5' === $portal && ($this->getCurrentUser()->hasPermission('admin_v2_h5_set') || $this->getCurrentUser()->hasPermission('admin_h5_set'))) {
+            return true;
+        }
+
+        if ('miniprogram' === $portal && ($this->getCurrentUser()->hasPermission('admin_v2_wechat_app_manage') || $this->getCurrentUser()->hasPermission('admin_wechat_app_manage'))) {
+            return true;
+        }
+
+        if ('apps' === $portal && ($this->getCurrentUser()->hasPermission('admin_v2_setting_mobile') || $this->getCurrentUser()->hasPermission('admin_setting_mobile'))) {
+            return true;
+        }
+
+        throw UserException::PERMISSION_DENIED();
+    }
+
+    protected function addDiscovery($portal, $mode = 'draft', $content = [])
     {
         $this->getSettingService()->set("{$portal}_{$mode}_discovery", $this->paramFilter($content));
 
@@ -89,7 +106,7 @@ class PageSetting extends AbstractResource
     {
         $this->getSettingService()->delete("{$portal}_{$mode}_discovery");
 
-        return array('success' => true);
+        return ['success' => true];
     }
 
     protected function getDiscovery($portal, $mode = 'published')
@@ -120,11 +137,11 @@ class PageSetting extends AbstractResource
     protected function handleSetting($discoverySetting)
     {
         if ('course_list' == $discoverySetting['type']) {
-            $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('creator', 'teacherIds'));
-            $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('courseSetId'), 'courseSet');
+            $this->getOCUtil()->multiple($discoverySetting['data']['items'], ['creator', 'teacherIds']);
+            $this->getOCUtil()->multiple($discoverySetting['data']['items'], ['courseSetId'], 'courseSet');
         }
         if ('classroom_list' == $discoverySetting['type']) {
-            $this->getOCUtil()->multiple($discoverySetting['data']['items'], array('creator', 'teacherIds', 'assistantIds', 'headTeacherId'));
+            $this->getOCUtil()->multiple($discoverySetting['data']['items'], ['creator', 'teacherIds', 'assistantIds', 'headTeacherId']);
         }
         if ('coupon' == $discoverySetting['type']) {
             foreach ($discoverySetting['data']['items'] as &$couponBatch) {

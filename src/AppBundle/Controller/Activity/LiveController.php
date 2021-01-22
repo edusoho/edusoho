@@ -5,13 +5,13 @@ namespace AppBundle\Controller\Activity;
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\LiveroomController;
 use Biz\Activity\Service\ActivityService;
-use Biz\Course\LiveReplayException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\LiveReplayService;
 use Biz\Course\Service\MemberService;
 use Biz\File\Service\UploadFileService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
+use Biz\Task\TaskException;
 use Symfony\Component\HttpFoundation\Request;
 
 class LiveController extends BaseActivityController implements ActivityActionInterface
@@ -90,6 +90,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         }
 
         $activity = $this->getActivityService()->getActivity($activityId, $fetchMedia = true);
+        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
 
         $params = [];
         if ($this->getCourseMemberService()->isCourseTeacher($courseId, $user['id'])) {
@@ -133,8 +134,10 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         return $this->forward('AppBundle:Liveroom:_entry', [
             'roomId' => $activity['ext']['liveId'],
             'params' => [
+                'triggerEvent' => true,
                 'courseId' => $courseId,
                 'activityId' => $activityId,
+                'taskId' => $task['id'],
                 'provider' => $provider,
                 'startTime' => $activity['startTime'],
                 'endTime' => $activity['endTime'],
@@ -142,14 +145,39 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         ], $params);
     }
 
+    /**
+     * @param $courseId
+     * @param $activityId
+     *
+     * @return \Symfony\Component\HttpFoundation\Response|null
+     *                                                         自己上传的回放播放入口
+     */
     public function liveReplayAction($courseId, $activityId)
     {
         $this->getCourseService()->tryTakeCourse($courseId);
         $activity = $this->getActivityService()->getActivity($activityId);
         $live = $this->getActivityService()->getActivityConfig('live')->get($activity['mediaId']);
+        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
 
         return $this->render('activity/live/replay-player.html.twig', [
+            'courseId' => $courseId,
+            'activityId' => $activityId,
+            'taskId' => $task['id'],
             'live' => $live,
+            'mediaId' => $live['mediaId'],
+        ]);
+    }
+
+    /**
+     * @param $mediaId
+     *
+     * @return \Symfony\Component\HttpFoundation\Response|null
+     *                                                         自己上传的视频回放链接
+     */
+    public function liveReplayEntryAction(Request $request, $mediaId)
+    {
+        return $this->render('activity/live/replay-player-show.html.twig', [
+            'mediaId' => $mediaId,
         ]);
     }
 
@@ -193,6 +221,26 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         return $this->render('activity/live/finish-condition.html.twig', []);
     }
 
+    /**
+     * @param $courseId
+     * @param $activityId
+     * @param $replayId
+     * 第三方供应商的直播播放
+     *
+     * @return \Symfony\Component\HttpFoundation\Response|null
+     */
+    public function customReplayEntryAction(Request $request, $courseId, $activityId, $replayId)
+    {
+        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
+
+        return $this->render('live-course/entry.html.twig', [
+            'courseId' => $courseId,
+            'replayId' => $replayId,
+            'activityId' => $activityId,
+            'task' => $task,
+        ]);
+    }
+
     public function replayEntryAction(Request $request, $courseId, $activityId, $replayId)
     {
         $this->getCourseService()->tryTakeCourse($courseId);
@@ -211,14 +259,25 @@ class LiveController extends BaseActivityController implements ActivityActionInt
     public function replayUrlAction(Request $request, $courseId, $activityId, $replayId)
     {
         $this->getCourseService()->tryTakeCourse($courseId);
-        $activity = $this->getActivityService()->getActivity($activityId);
-        $replay = $this->getLiveReplayService()->getReplay($replayId);
 
-        if ((bool) $replay['hidden']) {
-            $this->createNewException(LiveReplayException::NOTFOUND_LIVE_REPLAY());
+        $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
+        if (empty($task)) {
+            $this->createNewException(TaskException::NOTFOUND_TASK());
         }
 
+        if (false === $this->getTaskService()->canLearnTask($task['id'])) {
+            $this->createNewException(TaskException::CAN_NOT_DO());
+        }
+
+        $activity = $this->getActivityService()->getActivity($activityId);
+
         $sourceActivityId = empty($activity['copyId']) ? $activity['id'] : $activity['copyId'];
+
+        $replay = $this->getLiveReplayService()->getReplay($replayId);
+        if (empty($replay) || $replay['lessonId'] != $sourceActivityId || (bool) $replay['hidden']) {
+            $this->createNewException(TaskException::LIVE_REPLAY_NOT_FOUND());
+        }
+
         $sourceActivity = $this->getActivityService()->getActivity($sourceActivityId, true);
         $result = $this->getLiveReplayService()->entryReplay($replay['id'], $sourceActivity['ext']['liveId'], $sourceActivity['ext']['liveProvider'],
             $request->isSecure());
@@ -306,7 +365,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
 
             $self = $this;
             $replays = array_map(function ($replay) use ($activity, $self) {
-                $replay['url'] = $self->generateUrl('live_activity_replay_entry', [
+                $replay['url'] = $self->generateUrl('custom_live_activity_replay_entry', [
                     'courseId' => $activity['fromCourseId'],
                     'activityId' => $activity['id'],
                     'replayId' => $replay['id'],

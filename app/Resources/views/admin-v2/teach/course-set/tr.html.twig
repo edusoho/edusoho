@@ -12,7 +12,7 @@
        target="_blank"><strong>{{ courseSet.title }}</strong></a>
     {% if filter == 'classroom' %}
       {% set classroom = classrooms[courseSet.id]|default(null) %}
-      {% if not classroom %}
+      {% if not classroom or courseSet.parentId == 0 %}
         <span class="label label-danger live-label mls">{{ 'admin.course_manage.manage.classroom_course_removed'|trans }}</span>
       {% endif %}
     {% endif %}

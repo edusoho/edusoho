@@ -1,3 +1,6 @@
+
+import notify from 'common/notify';
+
 class Order {
   constructor(props) {
     this.$element = $(props.element);
@@ -64,7 +67,13 @@ class Order {
 
   validate() {
     this.$element.submit( event => {
+      if ('' !=  this.$element.find('[name="informationCollectEventId"]').val() && '1' != this.$element.find('[name="informationCollectIsSubmited"]').val()) {
+        notify('danger', Translator.trans('order.information_collect_error_hint'));
+        $('.order-center-information-collect-content').addClass('error');
+        return false;
+      }
       $('#order-create-btn').button('loading');
+      $('.order-center-information-collect-content').removeClass('error');
       return true;
     });
   }
