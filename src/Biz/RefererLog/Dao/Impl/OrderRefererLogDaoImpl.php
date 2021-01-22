@@ -2,8 +2,8 @@
 
 namespace Biz\RefererLog\Dao\Impl;
 
-use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 use Biz\RefererLog\Dao\OrderRefererLogDao;
+use Codeages\Biz\Framework\Dao\GeneralDaoImpl;
 
 class OrderRefererLogDaoImpl extends GeneralDaoImpl implements OrderRefererLogDao
 {
@@ -11,10 +11,10 @@ class OrderRefererLogDaoImpl extends GeneralDaoImpl implements OrderRefererLogDa
 
     public function declares()
     {
-        return array(
-            'timestamps' => array('createdTime'),
-            'orderbys' => array('createdTime', 'recommendedSeq', 'studentNum', 'hitNum'),
-            'conditions' => array(
+        return [
+            'timestamps' => ['createdTime'],
+            'orderbys' => ['createdTime', 'recommendedSeq', 'studentNum', 'hitNum'],
+            'conditions' => [
                 'id IN ( :ids )',
                 'refererLogId = :refererLogId',
                 'refererLogId IN (:refererLogIds)',
@@ -24,28 +24,23 @@ class OrderRefererLogDaoImpl extends GeneralDaoImpl implements OrderRefererLogDa
                 'sourceTargetType = :sourceTargetType',
                 'createdTime >= :startTime',
                 'createdTime <= :endTime',
-            ),
-        );
+            ],
+        ];
     }
 
-    public function searchOrderRefererLogs($conditions, $orderBy, $start, $limit, $groupBy)
+    public function searchOrderRefererLogs($conditions, $orderBy, $start, $limit)
     {
-        $seachFields = '*';
-        if (!empty($groupBy)) {
-            $seachFields = 'id,orderId,targetId,targetType,COUNT(id) AS buyNum';
-        }
-
         $builder = $this->createQueryBuilder($conditions)
-            ->select($seachFields)
+            ->select('targetId,targetType,COUNT(id) AS buyNum')
             ->setFirstResult($start)
             ->setMaxResults($limit)
-            ->addGroupBy($groupBy);
+            ->addGroupBy('targetId,targetType');
 
-        foreach ($orderBy ?: array() as $field => $direction) {
+        foreach ($orderBy ?: [] as $field => $direction) {
             $builder->addOrderBy($field, $direction);
         }
 
-        return $builder->execute()->fetchAll() ?: array();
+        return $builder->execute()->fetchAll() ?: [];
     }
 
     public function countOrderRefererLogs($conditions, $groupBy)
@@ -59,7 +54,7 @@ class OrderRefererLogDaoImpl extends GeneralDaoImpl implements OrderRefererLogDa
 
     public function countDistinctOrderRefererLogs($conditions, $distinctField)
     {
-        $builder = $this->createQueryBuilder($conditions, array())
+        $builder = $this->createQueryBuilder($conditions, [])
             ->select("COUNT(DISTINCT({$distinctField}))");
 
         return $builder->execute()->fetchColumn(0);

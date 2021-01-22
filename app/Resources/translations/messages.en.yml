@@ -4061,6 +4061,7 @@ course.member.course.join_btn: 'Exit and re-Enroll'
 course.member.operation.quit_deadline_reach: 'The user will quit until the deadline'
 course.member.operation.admin_remove_course_student: 'The admin removes it manually'
 course.member.operation.reason.remove_teachers: 'Exit the course when deleting the teacher role'
+course.member.course.expiry_start_date_tips: 'You cannot learn %task Name% before the study time is up. Please study within the valid period of study~'
 
 course.widgets.belong_classroom.title: 'Belong to %name%'
 course.widgets.classroom_price.price: Price
@@ -6475,6 +6476,8 @@ admin.magic_setting.watch_time_sec_tip: second
 admin.magic_setting.site_trace_enable: enable site trace
 admin.magic_setting.live_entry_time: Time to enter before live broadcast begins
 admin.magic_setting.live_entry_time_tip: second
+admin.magic_setting.biz_answer_scene_report_threshold: Testpaper and Homework Threshold
+admin.magic_setting.biz_answer_scene_report_threshold_tip: Default 15000
 
 admin.magic_setting.one_for_open: '1 To enable'
 admin.magic_setting.one_for_close: '1 Is off'
@@ -10153,6 +10156,7 @@ classroom.subtitle_label: Subtitle
 classroom.basic_setting: Basic Setting
 classroom.cover_crop.title: Classroom Cover
 exception.s2b2c_product.adopt_failed: Adopt fail,Supplier is editing
+exception.product.not_exist: Product does not exist
 
 
 goods.minimum_price.unit: From %price%%unit%
@@ -10248,3 +10252,7 @@ activity_manage.time_last_tips: >
   Remaining<span class="color-danger js-finish-time">%time%</span>minutes completed
 activity_manage.finished_tips: >
   <span class="color-primary">Congratulations! You have completed this task</span>
+exam_bank.analysis.data_large_loading: Data is too large，loading
+exam_bank.analysis.data_large_loading_finish: Data loading finish
+exam_bank.analysis.data_large_info: refresh date：%date%，do not fresh because of data to large
+exam_bank.analysis.data_large_loading_btn: Force refresh
