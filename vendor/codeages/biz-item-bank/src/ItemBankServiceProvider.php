@@ -28,10 +28,14 @@ class ItemBankServiceProvider implements ServiceProviderInterface
                 'safeDomains' => empty($biz['item_bank.html_helper.options']['safeDomains']) ? [] : $biz['item_bank.html_helper.options']['safeDomains'],
             ];
         };
-        
+
         $biz['migration.directories'][] = dirname(__DIR__).'/migrations';
 
         $biz['autoload.aliases']['ItemBank'] = 'Codeages\Biz\ItemBank';
+
+        $biz['console.commands'][] = function () use ($biz) {
+            return new \Codeages\Biz\ItemBank\ItemBank\Command\TableCommand($biz);
+        };
 
         $biz['item_bank_html_helper'] = function ($biz) {
             return new HTMLHelper($biz);

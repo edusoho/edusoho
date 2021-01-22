@@ -9,7 +9,7 @@ class OrderRefererLogServiceTest extends BaseTestCase
 {
     public function testGetOrderRefererLog()
     {
-        $fields = array(
+        $fields = [
             'refererLogId' => 1,
             'orderId' => 1,
             'sourceTargetType' => 'openCourse',
@@ -17,7 +17,7 @@ class OrderRefererLogServiceTest extends BaseTestCase
             'targetType' => 'course',
             'targetId' => 1,
             'createdTime' => time(),
-        );
+        ];
 
         $orderRerfererLog = $this->getOrderRefererLogService()->addOrderRefererLog($fields);
 
@@ -29,7 +29,7 @@ class OrderRefererLogServiceTest extends BaseTestCase
 
     public function testAddOrderRefererLog()
     {
-        $fields = array(
+        $fields = [
             'refererLogId' => 1,
             'orderId' => 1,
             'sourceTargetType' => 'openCourse',
@@ -37,7 +37,7 @@ class OrderRefererLogServiceTest extends BaseTestCase
             'targetType' => 'course',
             'targetId' => 1,
             'createdTime' => time(),
-        );
+        ];
 
         $orderRerfererLog = $this->getOrderRefererLogService()->addOrderRefererLog($fields);
 
@@ -49,9 +49,9 @@ class OrderRefererLogServiceTest extends BaseTestCase
     {
         $orderRerfererLog = $this->_createOrderRerfererLog();
 
-        $updateFields = array(
+        $updateFields = [
             'createdUserId' => 5,
-        );
+        ];
         $updateLog = $this->getOrderRefererLogService()->updateOrderRefererLog($orderRerfererLog['id'], $updateFields);
 
         $this->assertEquals($updateFields['createdUserId'], $updateLog['createdUserId']);
@@ -69,7 +69,7 @@ class OrderRefererLogServiceTest extends BaseTestCase
 
     public function testSearchOrderRefererLogs()
     {
-        $fields1 = array(
+        $fields1 = [
             'refererLogId' => 1,
             'orderId' => 1,
             'sourceTargetType' => 'openCourse',
@@ -77,10 +77,10 @@ class OrderRefererLogServiceTest extends BaseTestCase
             'targetType' => 'course',
             'targetId' => 1,
             'createdTime' => time(),
-        );
+        ];
         $log1 = $this->getOrderRefererLogService()->addOrderRefererLog($fields1);
 
-        $fields2 = array(
+        $fields2 = [
             'refererLogId' => 1,
             'orderId' => 2,
             'sourceTargetType' => 'openCourse',
@@ -88,21 +88,21 @@ class OrderRefererLogServiceTest extends BaseTestCase
             'targetType' => 'openCourse',
             'targetId' => 1,
             'createdTime' => time(),
-        );
+        ];
         $log2 = $this->getOrderRefererLogService()->addOrderRefererLog($fields2);
 
-        $conditions = array(
+        $conditions = [
             'targetType' => 'openCourse',
-        );
-        $logs = $this->getOrderRefererLogService()->searchOrderRefererLogs($conditions, array('createdTime' => 'DESC'), 0, 1);
+        ];
+        $logs = $this->getOrderRefererLogService()->searchOrderRefererLogs($conditions, ['buyNum' => 'DESC'], 0, 1);
 
         $this->assertEquals(1, count($logs));
-        $this->assertEquals($log2['orderId'], $logs[0]['orderId']);
+        $this->assertEquals(1, $logs[0]['buyNum']);
     }
 
     public function testSearchOrderRefererLogCount()
     {
-        $fields1 = array(
+        $fields1 = [
             'refererLogId' => 1,
             'orderId' => 1,
             'sourceTargetType' => 'openCourse',
@@ -110,10 +110,10 @@ class OrderRefererLogServiceTest extends BaseTestCase
             'targetType' => 'course',
             'targetId' => 1,
             'createdTime' => time(),
-        );
+        ];
         $log1 = $this->getOrderRefererLogService()->addOrderRefererLog($fields1);
 
-        $fields2 = array(
+        $fields2 = [
             'refererLogId' => 1,
             'orderId' => 2,
             'sourceTargetType' => 'openCourse',
@@ -121,12 +121,12 @@ class OrderRefererLogServiceTest extends BaseTestCase
             'targetType' => 'openCourse',
             'targetId' => 1,
             'createdTime' => time(),
-        );
+        ];
         $log2 = $this->getOrderRefererLogService()->addOrderRefererLog($fields2);
 
-        $conditions = array(
+        $conditions = [
             'targetType' => 'openCourse',
-        );
+        ];
 
         $logCount = $this->getOrderRefererLogService()->searchOrderRefererLogCount($conditions);
 
@@ -135,7 +135,7 @@ class OrderRefererLogServiceTest extends BaseTestCase
 
     public function testSearchDistinctOrderRefererLogCount()
     {
-        $fields1 = array(
+        $fields1 = [
             'refererLogId' => 1,
             'orderId' => 1,
             'sourceTargetType' => 'openCourse',
@@ -143,10 +143,10 @@ class OrderRefererLogServiceTest extends BaseTestCase
             'targetType' => 'course',
             'targetId' => 1,
             'createdTime' => time(),
-        );
+        ];
         $log1 = $this->getOrderRefererLogService()->addOrderRefererLog($fields1);
 
-        $fields2 = array(
+        $fields2 = [
             'refererLogId' => 2,
             'orderId' => 1,
             'sourceTargetType' => 'openCourse',
@@ -154,14 +154,14 @@ class OrderRefererLogServiceTest extends BaseTestCase
             'targetType' => 'course',
             'targetId' => 1,
             'createdTime' => time(),
-        );
+        ];
         $log2 = $this->getOrderRefererLogService()->addOrderRefererLog($fields2);
 
-        $conditions = array(
+        $conditions = [
             'targetId' => 1,
             'sourceTargetType' => 'openCourse',
             'sourceTargetId' => 1,
-        );
+        ];
 
         $count = $this->getOrderRefererLogService()->searchDistinctOrderRefererLogCount($conditions, 'orderId');
 
@@ -170,7 +170,7 @@ class OrderRefererLogServiceTest extends BaseTestCase
 
     private function _createOrderRerfererLog()
     {
-        $fields = array(
+        $fields = [
             'refererLogId' => 1,
             'orderId' => 1,
             'sourceTargetType' => 'openCourse',
@@ -178,7 +178,7 @@ class OrderRefererLogServiceTest extends BaseTestCase
             'targetType' => 'course',
             'targetId' => 1,
             'createdTime' => time(),
-        );
+        ];
 
         return $this->getOrderRefererLogService()->addOrderRefererLog($fields);
     }
