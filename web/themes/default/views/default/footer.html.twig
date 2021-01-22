@@ -19,17 +19,17 @@
 
     <div class="pull-right mhs"><a href="{{ path('course_set_archive') }}">{{ '课程存档'|trans }}</a></div>
     <div class="text-gray" data-role="default-foot-bar" id="license-footer">
-      {% if setting('site.recordCode') %}
+      {% if setting('site.recordCode') |default('') %}
         <div class="mlm">
           <a class="license-picture">
             <img src="{% if setting('site.recordPicture') %}{{ asset(setting('site.recordPicture')) }}
                     {% else %}{{ filepath('','gongan.png' ) }}{% endif %}" style="width: 20px;height: 20px;">
           </a>
-          <a class="mlm" {% if setting('site.recordUrl') %}
-            href="{{ setting('site.recordUrl')|default('') }}"
+          <a class="mlm" {% if setting('site.recordUrl') |default('') %}
+            href="{{ setting('site.recordUrl') }}"
           {% endif %}
              target="_blank">
-            {{ setting('site.recordCode') |default('') }}
+            {{ setting('site.recordCode') }}
           </a>
         </div>
       {% endif %}
