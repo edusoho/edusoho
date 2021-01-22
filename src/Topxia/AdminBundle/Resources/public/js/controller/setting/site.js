@@ -82,15 +82,10 @@ define(function (require, exports, module) {
       if (!confirm(Translator.trans('admin.site.delete_hint'))) return false;
       var $btn = $(this);
       var $recordContainer = $('#record-picture-container');
-      $.post($btn.data('gotoUrl'), function () {
-        $recordContainer.html('');
-        $recordContainer.append('<img src="/assets/img/default/gongan.png">');
-        $form.find('[name=recordPicture]').val('');
-        $btn.hide();
-        Notify.success(Translator.trans('admin.site.delete_record_picture_success_hint'));
-      }).error(function () {
-        Notify.danger(Translator.trans('admin.site.delete_record_picture_fail_hint'));
-      });
+      $recordContainer.html('');
+      $recordContainer.append('<img src="/assets/img/default/gongan.png">');
+      $form.find('[name=recordPicture]').val('');
+      $btn.hide();
     });
 
     $('#save-site').on('click', function () {
