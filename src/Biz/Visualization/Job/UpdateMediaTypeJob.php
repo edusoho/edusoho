@@ -30,7 +30,7 @@ class UpdateMediaTypeJob extends AbstractJob
         $noTypeCount = $this->biz['db']->fetchAssoc("select count(*) from activity_stay_daily where mediaType = '';");
         //存在activity被删除导致mediaType为空
         if ($noTypeCount / $count < 0.1 || $noTypeCount < 1000) {
-            return ;
+            return;
         }
 
         $limit = self::LIMIT;
@@ -50,7 +50,7 @@ class UpdateMediaTypeJob extends AbstractJob
         $count = $this->biz['db']->fetchAssoc('select count(*) from activity_learn_daily;');
         $noTypeCount = $this->biz['db']->fetchAssoc("select count(*) from activity_learn_daily where mediaType = '';");
         if ($noTypeCount / $count < 0.1 || $noTypeCount < 1000) {
-            return ;
+            return;
         }
 
         $limit = self::LIMIT;

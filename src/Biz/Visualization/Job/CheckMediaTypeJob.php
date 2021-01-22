@@ -22,7 +22,6 @@ class CheckMediaTypeJob extends AbstractJob
                 'args' => [],
             ];
 
-
             $this->getSchedulerService()->register($job);
         }
     }
