@@ -53,7 +53,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $definedFuncNames = array(
             'alterActivityLearnDailyAddMediaType',
             'checkJobFinish',
-            'updateMediaType',
+            'addUpdateMediaTypeJob',
         );
 
         $funcNames = array();
@@ -119,7 +119,7 @@ class EduSohoUpgrade extends AbstractUpdater
         return $page;
     }
 
-    public function updateMediaType()
+    public function addUpdateMediaTypeJob()
     {
         $currentTime = time();
         $time = strtotime(date('Y-m-d', $currentTime) . '01:00:00');
@@ -146,6 +146,37 @@ class EduSohoUpgrade extends AbstractUpdater
               'UpdateMediaTypeJob',
               '',
               'Biz\\\\Visualization\\\\\Job\\\\UpdateMediaTypeJob',
+              '',
+              '200',
+              '0',
+              '{$time}',
+              '300',
+              'executing',
+              '1',
+              '0',
+              '{$currentTime}',
+              '{$currentTime}'
+        )");
+
+        $time = $time + 3600;
+        $this->getConnection()->exec("INSERT INTO `biz_scheduler_job` (
+              `name`,
+              `expression`,
+              `class`,
+              `args`,
+              `priority`,
+              `pre_fire_time`,
+              `next_fire_time`,
+              `misfire_threshold`,
+              `misfire_policy`,
+              `enabled`,
+              `creator_id`,
+              `updated_time`,
+              `created_time`
+        ) VALUES (
+              'CheckMediaTypeJob',
+              '',
+              'Biz\\\\Visualization\\\\\Job\\\\CheckMediaTypeJob',
               '',
               '200',
               '0',
