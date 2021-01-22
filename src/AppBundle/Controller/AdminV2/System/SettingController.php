@@ -259,16 +259,6 @@ class SettingController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    public function recordPictureRemoveAction(Request $request)
-    {
-        $site = $this->getSettingService()->get('site');
-        $site['recordPicture'] = '';
-
-        $this->getSettingService()->set('site', $site);
-
-        return $this->createJsonResponse(true);
-    }
-
     public function adminSyncAction(Request $request)
     {
         $currentUser = $this->getUser();
