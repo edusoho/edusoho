@@ -26,11 +26,11 @@ class UpdateMediaTypeJob extends AbstractJob
 
     protected function updateActivityStayDaily($data)
     {
-        $count = $this->biz['db']->fetchAssoc("select count(*) from activity_stay_daily;");
+        $count = $this->biz['db']->fetchAssoc('select count(*) from activity_stay_daily;');
         $limit = self::LIMIT;
         $totalPage = $count / $limit;
         $page = empty($data[self::STAY_TABLE_REFRESH_PAGE]) ? 0 : $data[self::STAY_TABLE_REFRESH_PAGE];
-        for (;$page <= $totalPage; ++$page) {
+        for (; $page <= $totalPage; ++$page) {
             $this->getCacheService()->set(self::STAY_TABLE_REFRESH_PAGE, $page);
             $start = $page * $limit;
             $sql = "update activity_stay_daily asd left join activity a on asd.activityId = a.id set asd.mediaType = case when a.mediaType is null then '' else a.mediaType limit {$start}, {$limit}";
@@ -41,11 +41,11 @@ class UpdateMediaTypeJob extends AbstractJob
 
     protected function updateActivityLearnDaily($data)
     {
-        $count = $this->biz['db']->fetchAssoc("select count(*) from activity_learn_daily;");
+        $count = $this->biz['db']->fetchAssoc('select count(*) from activity_learn_daily;');
         $limit = self::LIMIT;
         $totalPage = $count / $limit;
         $page = empty($data[self::LEARN_TABLE_REFRESH_PAGE]) ? 0 : $data[self::LEARN_TABLE_REFRESH_PAGE];
-        for (;$page <= $totalPage; ++$page) {
+        for (; $page <= $totalPage; ++$page) {
             $this->getCacheService()->set(self::LEARN_TABLE_REFRESH_PAGE, $page);
             $start = $page * $limit;
             $sql = "update activity_learn_daily ald left join activity a on ald.activityId = a.id set ald.mediaType = case when a.mediaType is null then '' else a.mediaType limit {$start}, {$limit}";
