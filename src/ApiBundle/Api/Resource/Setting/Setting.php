@@ -379,6 +379,7 @@ class Setting extends AbstractResource
             'show_question' => isset($courseSetting['show_question']) ? intval($courseSetting['show_question']) : 1,
             'show_discussion' => isset($courseSetting['show_discussion']) ? intval($courseSetting['show_discussion']) : 1,
             'show_note' => isset($courseSetting['show_note']) ? intval($courseSetting['show_note']) : 1,
+            'allow_anonymous_preview' => isset($courseSetting['allowAnonymousPreview']) ? intval($courseSetting['allowAnonymousPreview']) : 1,
         ];
     }
 
@@ -493,7 +494,7 @@ class Setting extends AbstractResource
 
     public function getArticle()
     {
-        $articleSetting = $this->getSettingService()->get('article', array());
+        $articleSetting = $this->getSettingService()->get('article', []);
 
         return [
             'show_comment' => isset($articleSetting['show_comment']) ? intval($articleSetting['show_comment']) : 1,
@@ -502,7 +503,7 @@ class Setting extends AbstractResource
 
     public function getGroup()
     {
-        $groupSetting = $this->getSettingService()->get('group', array());
+        $groupSetting = $this->getSettingService()->get('group', []);
 
         return [
             'group_show' => isset($groupSetting['group_show']) ? intval($groupSetting['group_show']) : 1,
