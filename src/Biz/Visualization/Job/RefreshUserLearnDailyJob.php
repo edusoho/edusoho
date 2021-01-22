@@ -3,11 +3,12 @@
 namespace Biz\Visualization\Job;
 
 use Biz\System\Service\SettingService;
-use Biz\Visualization\Dao\CoursePlanLearnDailyDao;
+use Biz\Visualization\Dao\UserLearnDailyDao;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 
-class RefreshCoursePlanLearnDailyDataJob extends AbstractJob
+class RefreshUserLearnDailyJob extends AbstractJob
 {
+    const TYPE = 'user';
     const LIMIT = 10000;
 
     public function execute()
@@ -18,6 +19,10 @@ class RefreshCoursePlanLearnDailyDataJob extends AbstractJob
         } else {
             $this->refreshByStayDaily();
         }
+
+        $jobSetting = $this->getSettingService()->get('refreshLearnDailyJob', []);
+        unset($jobSetting[self::TYPE]);
+        empty($jobSetting) ? $this->getSettingService()->delete('refreshLearnDailyJob') : $this->getSettingService()->set('refreshLearnDailyJob', $jobSetting);
     }
 
     protected function refreshByStayDaily()
@@ -28,16 +33,16 @@ class RefreshCoursePlanLearnDailyDataJob extends AbstractJob
             $start = $page * $limit;
 
             $updateFields = $this->biz['db']->fetchAll("
-                SELECT l.id AS id, s.sumTime AS sumTime FROM `course_plan_learn_daily` l LEFT JOIN (
-                    SELECT userId, dayTime, courseId, sum(sumTime) AS sumTime
-                    FROM `course_plan_stay_daily` GROUP BY userId, dayTime, courseId
-                ) AS s ON l.dayTime = s.dayTime AND l.userId = s.userId AND l.courseId = s.courseId LIMIT {$start}, {$limit};
+                SELECT l.id AS id, s.sumTime AS sumTime FROM `user_learn_daily` l LEFT JOIN (
+                    SELECT userId, dayTime, sum(sumTime) AS sumTime
+                    FROM `user_stay_daily` GROUP BY userId, dayTime
+                ) AS s ON l.dayTime = s.dayTime AND l.userId = s.userId LIMIT {$start}, {$limit};
             ");
 
             if (empty($updateFields)) {
                 continue;
             }
-            $this->getCoursePlanLearnDailyDao()->batchUpdate(array_column($updateFields, 'id'), $updateFields);
+            $this->getUserLearnDailyDao()->batchUpdate(array_column($updateFields, 'id'), $updateFields);
         }
     }
 
@@ -48,18 +53,17 @@ class RefreshCoursePlanLearnDailyDataJob extends AbstractJob
         for ($page = 0; $page <= $totalPage; ++$page) {
             $start = $page * $limit;
             $watchData = $this->biz['db']->fetchAll("
-                SELECT l.id AS id, s.sumTime AS sumTime FROM course_plan_learn_daily l INNER JOIN (
-                    SELECT userId, dayTime, courseId, sum(sumTime) AS sumTime FROM course_plan_video_daily GROUP BY userId, dayTime, courseId
-                ) AS s ON l.dayTime = s.dayTime AND l.userId = s.userId AND l.courseId = s.courseId LIMIT {$start}, {$limit}
-            ");
-
+                SELECT l.id AS id, s.sumTime AS sumTime FROM user_learn_daily l INNER JOIN (
+                    SELECT userId, dayTime, sum(sumTime) AS sumTime FROM user_video_daily GROUP BY userId, dayTime
+                ) AS s ON l.dayTime = s.dayTime AND l.userId = s.userId LIMIT {$start}, {$limit}
+        ");
             $watchData = array_column($watchData, null, 'id');
 
             $stayData = $this->biz['db']->fetchAll("
-                SELECT l.id AS id, s.sumTime AS sumTime FROM course_plan_learn_daily l INNER JOIN (
-                    SELECT userId, dayTime, courseId, sum(sumTime) AS sumTime FROM activity_stay_daily WHERE mediaType != 'video' GROUP BY userId, dayTime, courseId
-                ) AS s ON l.dayTime = s.dayTime AND l.userId = s.userId AND l.courseId = s.courseId LIMIT {$start}, {$limit}
-            ");
+                SELECT l.id AS id, s.sumTime AS sumTime FROM user_learn_daily l INNER JOIN (
+                    SELECT userId, dayTime, sum(sumTime) AS sumTime FROM activity_stay_daily WHERE mediaType != 'video' GROUP BY userId, dayTime
+                ) AS s ON l.dayTime = s.dayTime AND l.userId = s.userId LIMIT {$start}, {$limit}
+        ");
             $stayData = array_column($stayData, null, 'id');
             array_walk($stayData, function (&$data) use (&$watchData) {
                 $data['sumTime'] += empty($watchData[$data['id']]) ? 0 : $watchData[$data['id']]['sumTime'];
@@ -67,12 +71,11 @@ class RefreshCoursePlanLearnDailyDataJob extends AbstractJob
             });
 
             $updateFields = array_merge($stayData, $watchData);
-
             if (empty($updateFields)) {
                 continue;
             }
 
-            $this->getCoursePlanLearnDailyDao()->batchUpdate(array_column($updateFields, 'id'), $updateFields);
+            $this->getUserLearnDailyDao()->batchUpdate(array_column($updateFields, 'id'), $updateFields);
         }
     }
 
@@ -85,10 +88,10 @@ class RefreshCoursePlanLearnDailyDataJob extends AbstractJob
     }
 
     /**
-     * @return CoursePlanLearnDailyDao
+     * @return UserLearnDailyDao
      */
-    protected function getCoursePlanLearnDailyDao()
+    protected function getUserLearnDailyDao()
     {
-        return $this->biz->dao('Visualization:CoursePlanLearnDailyDao');
+        return $this->biz->dao('Visualization:UserLearnDailyDao');
     }
 }
