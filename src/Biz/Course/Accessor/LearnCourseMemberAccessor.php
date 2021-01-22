@@ -11,16 +11,12 @@ class LearnCourseMemberAccessor extends AccessorAdapter
     {
         $user = $this->getCurrentUser();
 
-        if ($user->isAdmin()) {
-            return null;
-        }
-
         if (null === $user || !$user->isLogin()) {
             return $this->buildResult('user.not_login');
         }
 
         if ($user['locked']) {
-            return $this->buildResult('user.locked', array('userId' => $user['id']));
+            return $this->buildResult('user.locked', ['userId' => $user['id']]);
         }
 
         $member = $this->getMemberService()->getCourseMember($course['id'], $user['id']);
@@ -30,7 +26,7 @@ class LearnCourseMemberAccessor extends AccessorAdapter
         }
 
         if ($member['deadline'] > 0 && $member['deadline'] < time()) {
-            return $this->buildResult('member.expired', array('userId' => $user['id']));
+            return $this->buildResult('member.expired', ['userId' => $user['id']]);
         }
 
         return null;

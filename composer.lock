@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "86d5a23b9b4a31687cff818eb1c00fa2",
+    "content-hash": "a6caff6daaf5ae1cca288513ba3f89ac",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -397,16 +397,16 @@
         },
         {
             "name": "codeages/biz-framework",
-            "version": "v0.9.36",
+            "version": "v0.9.37",
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-framework.git",
-                "reference": "63a92464c90111be53b4cc4188eaaf4f5e4e6ecf"
+                "reference": "cd9c4e96e7c079771794b3da4837aad6182385ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/63a92464c90111be53b4cc4188eaaf4f5e4e6ecf",
-                "reference": "63a92464c90111be53b4cc4188eaaf4f5e4e6ecf",
+                "url": "https://api.github.com/repos/codeages/biz-framework/zipball/cd9c4e96e7c079771794b3da4837aad6182385ff",
+                "reference": "cd9c4e96e7c079771794b3da4837aad6182385ff",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -456,7 +456,11 @@
                 "MIT"
             ],
             "description": "A service layer framework.",
-            "time": "2020-06-11T12:37:50+00:00"
+            "support": {
+                "issues": "https://github.com/codeages/biz-framework/issues",
+                "source": "https://github.com/codeages/biz-framework/tree/v0.9.37"
+            },
+            "time": "2021-01-21T00:44:26+00:00"
         },
         {
             "name": "codeages/biz-item-bank",
@@ -464,12 +468,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/codeages/biz-item-bank.git",
-                "reference": "f413e115734b42d16c58403c283e291a00599a24"
+                "reference": "ee271315e4b71ec86d2cc167eb52f47326029eca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/codeages/biz-item-bank/zipball/f413e115734b42d16c58403c283e291a00599a24",
-                "reference": "f413e115734b42d16c58403c283e291a00599a24",
+                "url": "https://api.github.com/repos/codeages/biz-item-bank/zipball/ee271315e4b71ec86d2cc167eb52f47326029eca",
+                "reference": "ee271315e4b71ec86d2cc167eb52f47326029eca",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -492,6 +496,7 @@
                 "mockery/mockery": "^0.9.9",
                 "phpunit/phpunit": "^5|^6"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -503,7 +508,11 @@
                 "MIT"
             ],
             "description": "item bank with biz-framework",
-            "time": "2020-11-27T06:41:15+00:00"
+            "support": {
+                "issues": "https://github.com/codeages/biz-item-bank/issues",
+                "source": "https://github.com/codeages/biz-item-bank/tree/master"
+            },
+            "time": "2021-01-21T00:49:55+00:00"
         },
         {
             "name": "codeages/biz-order-pay",
@@ -9122,70 +9131,6 @@
             "time": "2020-01-31T09:56:34+00:00"
         },
         {
-            "name": "symfony/polyfill-php54",
-            "version": "v1.14.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/polyfill-php54.git",
-                "reference": "a8076ba7fd176d773d0e4aadb5b3cc7680a1c0a6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php54/zipball/a8076ba7fd176d773d0e4aadb5b3cc7680a1c0a6",
-                "reference": "a8076ba7fd176d773d0e4aadb5b3cc7680a1c0a6",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.14-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Polyfill\\Php54\\": ""
-                },
-                "files": [
-                    "bootstrap.php"
-                ],
-                "classmap": [
-                    "Resources/stubs"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nicolas Grekas",
-                    "email": "p@tchwork.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Symfony polyfill backporting some PHP 5.4+ features to lower PHP versions",
-            "homepage": "https://symfony.com",
-            "keywords": [
-                "compatibility",
-                "polyfill",
-                "portable",
-                "shim"
-            ],
-            "time": "2020-01-13T11:15:53+00:00"
-        },
-        {
             "name": "symfony/polyfill-php72",
             "version": "v1.14.0",
             "source": {
@@ -9263,5 +9208,6 @@
         "php": ">=5.5.9",
         "ext-json": "*"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "2.0.0"
 }

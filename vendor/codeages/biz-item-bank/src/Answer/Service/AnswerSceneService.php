@@ -72,4 +72,11 @@ interface AnswerSceneService
      * @return AnswerSceneReport
      */
     public function getAnswerSceneReport($id);
+
+    /**
+     * @param int $limit
+     * @return mixed
+     * 获取没有执行过的记录
+     */
+    public function findNotStatisticsQuestionsReportScenes($limit = 100);
 }
