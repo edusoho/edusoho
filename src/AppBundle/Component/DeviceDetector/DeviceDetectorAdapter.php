@@ -13,8 +13,8 @@ class DeviceDetectorAdapter implements DeviceDetectorInterface
     public function __construct($userAgent)
     {
         $this->deviceDetector = new DeviceDetector($userAgent);
-        $cachePath = $this->getCachePath();
-        $this->deviceDetector->setCache(new PhpFileCache($cachePath));
+        $cacheDir = $this->getCacheDir();
+        $this->deviceDetector->setCache(new PhpFileCache($cacheDir));
         $this->deviceDetector->parse();
     }
 
@@ -52,8 +52,16 @@ class DeviceDetectorAdapter implements DeviceDetectorInterface
         return $this->deviceDetector->getClient();
     }
 
-    protected function getCachePath()
+    protected function getCacheDir()
     {
-        return ServiceKernel::instance()->getParameter('kernel.root_dir').'/cache/device_detector';
+        $biz = $this->getServiceKernel()->getBiz();
+        $activeTheme = $biz['pluginConfigurationManager']->getActiveThemeName() ?: 'Jianmo';
+
+        return $this->getServiceKernel()->getParameter('kernel.root_dir').'/cache/'.$this->getServiceKernel()->getEnvironment().'/'.$activeTheme.'/device_detector';
+    }
+
+    protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
     }
 }
