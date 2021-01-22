@@ -36,12 +36,7 @@
                     {% else %}{{ filepath('','gongan.png' ) }}{% endif %}" style="width: 20px;height: 20px;">
           </a>
           <a class="mlm" {% if setting('site.recordUrl') %}
-            href="{{ setting('site.recordUrl') }}{{ setting('site.recordNum')|default('') }}"
-          {% endif %}
-             target="_blank">
-          </a>
-          <a class="mlm" {% if setting('site.recordUrl') %}
-            href="{{ setting('site.recordUrl') }}{{ setting('site.recordNum')|default('') }}"
+            href="{{ setting('site.recordUrl')|default('') }}"
           {% endif %}
              target="_blank">
             {{ setting('site.recordCode') |default('') }}

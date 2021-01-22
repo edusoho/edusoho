@@ -30,7 +30,6 @@ class SchoolInformationController extends BaseController
             'copyright' => '',
             'recordPicture' => '',
             'recordCode' => '',
-            'recordNum' => '',
             'recordUrl' => 'http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=',
         ];
         $site = array_merge($default, $site);
@@ -47,11 +46,6 @@ class SchoolInformationController extends BaseController
         if (!empty($site['analytics'])) {
             $helper = new HTMLHelper($this->getBiz());
             $site['analytics'] = $helper->closeTags($site['analytics']);
-        }
-
-        if (!empty($site['recordCode'])) {
-            preg_match('/\d+/', $site['recordCode'], $CodeNum);
-            $site['recordNum'] = $CodeNum[0];
         }
 
         $this->getSettingService()->set('site', $site);
