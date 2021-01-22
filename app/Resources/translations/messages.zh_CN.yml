@@ -5737,7 +5737,14 @@ admin.setting.permit.picture: 证件图片
 admin.setting.permit.picture.help_block: 请上传jpg,gif,png格式的图片。图片大小建议不超过5MB。网校证件图片设置后将显示在首页底栏。
 admin.setting.permit.setting.add: 新增一栏
 admin.setting.permit.setting.remove: 删除整栏
-
+admin.setting.record.picture: 公安备案图标
+admin.setting.record.code: 公安备案号
+admin.setting.record.url: 公安备案号链接
+admin.setting.record.picture.help_block: >
+  图标尺寸建议不超过50×50px，图标尺寸建议不超过2MB。
+  <a href="http://www.qiqiuyu.com/faq/1028/detail" target="_blank">如何获取公安备案图标？</a>
+admin.setting.record.code.help_block: >
+    <a href="http://www.qiqiuyu.com/faq/1028/detail" target="_blank">如何添加公安备案号及链接？</a>
 admin.setting.mailer.is_trial.tips: >
   当前版本为试⽤版,不能进⾏邮件服务设置。如需购买授权版,请联系销售人员。
   电话：4008041114 或

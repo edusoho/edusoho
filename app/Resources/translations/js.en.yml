@@ -1310,6 +1310,9 @@ admin.site.upload_favicon_success_hint: Upload site favicon successfully!
 admin.site.delete_favicon_success_hint: Delete site favicon successfully!
 admin.site.delete_favicon_fail_hint: Delete site favicon failed!
 admin.site.delete_hint: Are you sure you want to delete?
+admin.site.upload_record_picture_success_hint: Uploaded the public security record icon successfully!
+admin.site.delete_record_picture_success_hint: Successfully deleted the public security record icon!
+admin.site.delete_record_picture_fail_hint: Failed to delete the public security record icon!
 admin.setting.upload_license_picture_success_hint: Successfully uploaded the electronic business license picture!
 admin.setting.delete_license_picture_success_hint: Successfully delete the electronic business license picture!
 admin.setting.delete_license_picture_fail_hint: Failed to delete electronic business license picture!

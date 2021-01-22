@@ -12,6 +12,7 @@ class SchoolInformationController extends BaseController
     public function siteAction(Request $request)
     {
         $site = $this->getSettingService()->get('site', []);
+
         $default = [
             'name' => '',
             'slogan' => '',
@@ -27,6 +28,9 @@ class SchoolInformationController extends BaseController
             'closed_note' => '',
             'favicon' => '',
             'copyright' => '',
+            'recordPicture' => '',
+            'recordCode' => '',
+            'recordUrl' => 'http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=',
         ];
         $site = array_merge($default, $site);
 
@@ -43,6 +47,7 @@ class SchoolInformationController extends BaseController
             $helper = new HTMLHelper($this->getBiz());
             $site['analytics'] = $helper->closeTags($site['analytics']);
         }
+
         $this->getSettingService()->set('site', $site);
 
         return $this->createJsonResponse([
