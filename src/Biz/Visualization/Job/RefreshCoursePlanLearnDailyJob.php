@@ -4,9 +4,8 @@ namespace Biz\Visualization\Job;
 
 use Biz\System\Service\SettingService;
 use Biz\Visualization\Dao\CoursePlanLearnDailyDao;
-use Codeages\Biz\Framework\Scheduler\AbstractJob;
 
-class RefreshCoursePlanLearnDailyJob extends AbstractJob
+class RefreshCoursePlanLearnDailyJob extends BaseRefreshJob
 {
     const TYPE = 'course_plan';
 
@@ -40,10 +39,11 @@ class RefreshCoursePlanLearnDailyJob extends AbstractJob
                 ) AS s ON l.dayTime = s.dayTime AND l.userId = s.userId AND l.courseId = s.courseId LIMIT {$start}, {$limit};
             ");
 
-            if (empty($updateFields)) {
-                continue;
+            if (!empty($updateFields)) {
+                $this->getCoursePlanLearnDailyDao()->batchUpdate(array_column($updateFields, 'id'), $updateFields);
             }
-            $this->getCoursePlanLearnDailyDao()->batchUpdate(array_column($updateFields, 'id'), $updateFields);
+
+            $this->getLogger()->addInfo("从{$start}刷新course_plan_learn_daily结束");
         }
     }
 
@@ -74,11 +74,11 @@ class RefreshCoursePlanLearnDailyJob extends AbstractJob
 
             $updateFields = array_merge($stayData, $watchData);
 
-            if (empty($updateFields)) {
-                continue;
+            if (!empty($updateFields)) {
+                $this->getCoursePlanLearnDailyDao()->batchUpdate(array_column($updateFields, 'id'), $updateFields);
             }
 
-            $this->getCoursePlanLearnDailyDao()->batchUpdate(array_column($updateFields, 'id'), $updateFields);
+            $this->getLogger()->addInfo("从{$start}刷新course_plan_learn_daily结束");
         }
     }
 

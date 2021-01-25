@@ -4,9 +4,8 @@ namespace Biz\Visualization\Job;
 
 use Biz\System\Service\SettingService;
 use Biz\Visualization\Dao\UserLearnDailyDao;
-use Codeages\Biz\Framework\Scheduler\AbstractJob;
 
-class RefreshUserLearnDailyJob extends AbstractJob
+class RefreshUserLearnDailyJob extends BaseRefreshJob
 {
     const TYPE = 'user';
     const LIMIT = 10000;
@@ -39,10 +38,10 @@ class RefreshUserLearnDailyJob extends AbstractJob
                 ) AS s ON l.dayTime = s.dayTime AND l.userId = s.userId LIMIT {$start}, {$limit};
             ");
 
-            if (empty($updateFields)) {
-                continue;
+            if (!empty($updateFields)) {
+                $this->getUserLearnDailyDao()->batchUpdate(array_column($updateFields, 'id'), $updateFields);
             }
-            $this->getUserLearnDailyDao()->batchUpdate(array_column($updateFields, 'id'), $updateFields);
+            $this->getLogger()->addInfo("从{$start}刷新user_learn_daily结束");
         }
     }
 
@@ -71,11 +70,11 @@ class RefreshUserLearnDailyJob extends AbstractJob
             });
 
             $updateFields = array_merge($stayData, $watchData);
-            if (empty($updateFields)) {
-                continue;
+            if (!empty($updateFields)) {
+                $this->getUserLearnDailyDao()->batchUpdate(array_column($updateFields, 'id'), $updateFields);
             }
 
-            $this->getUserLearnDailyDao()->batchUpdate(array_column($updateFields, 'id'), $updateFields);
+            $this->getLogger()->addInfo("从{$start}刷新user_learn_daily结束");
         }
     }
 
