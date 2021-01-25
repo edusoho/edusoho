@@ -10263,3 +10263,4 @@ exam_bank.analysis.data_large_loading: Data is too large，loading
 exam_bank.analysis.data_large_loading_finish: Data loading finish
 exam_bank.analysis.data_large_info: refresh date：%date%，do not fresh because of data to large
 exam_bank.analysis.data_large_loading_btn: Force refresh
+activity_manage.video.finish_tips: The completion conditions of video playback time and page stay time are subject to cumulative learning time
