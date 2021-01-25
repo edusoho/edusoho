@@ -16,7 +16,7 @@ abstract class BaseRefreshJob extends AbstractJob
         if (!$this->logger instanceof Logger) {
             $biz = $this->biz;
             $logger = new Logger('RefreshLearnData');
-            $logger->pushHandler(new StreamHandler($biz['log_directory'].'/refresh-data.log', Logger::DEBUG));
+            $logger->pushHandler(new StreamHandler($biz['log_directory'].'/refresh-data.log', Logger::INFO));
             $this->logger = $logger;
         }
 
