@@ -3,7 +3,14 @@
 namespace AppBundle\Controller\AdminV2\System;
 
 use AppBundle\Controller\AdminV2\BaseController;
+use Biz\Crontab\SystemCrontabInitializer;
+use Biz\System\Service\CacheService;
 use Biz\System\Service\SettingService;
+use Biz\Visualization\Job\RefreshActivityLearnDailyJob;
+use Biz\Visualization\Job\RefreshCoursePlanLearnDailyJob;
+use Biz\Visualization\Job\RefreshLearnDailyJob;
+use Biz\Visualization\Job\RefreshUserLearnDailyJob;
+use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Symfony\Component\HttpFoundation\Request;
 
 class VideoTaskSettingController extends BaseController
@@ -46,12 +53,57 @@ class VideoTaskSettingController extends BaseController
         if ('POST' == $request->getMethod()) {
             $set = $request->request->all();
 
-            $effectiveTimeSetting = array_merge($effectiveTimeSetting, $set);
-
             $this->getSettingService()->set('videoEffectiveTimeStatistics', $set);
+
+            if ($set['statistical_dimension'] != $effectiveTimeSetting['statistical_dimension']) {
+                $this->createRefreshDataJob();
+            }
+
+            $effectiveTimeSetting = array_merge($effectiveTimeSetting, $set);
         }
 
         return $this->render('admin-v2/system/course-setting/video-effective-learning-time-setting.html.twig', ['effectiveTimeSetting' => $effectiveTimeSetting]);
+    }
+
+    public function refreshJobCheckAction(Request $request)
+    {
+        $cacheName = $this->getCacheService()->get(RefreshLearnDailyJob::CACHE_NAME, []);
+        if (!empty($cacheName)) {
+            return $this->createJsonResponse(false);
+        }
+
+        $cacheName = $this->getCacheService()->get(RefreshActivityLearnDailyJob::CACHE_NAME, []);
+        if (!empty($cacheName)) {
+            return $this->createJsonResponse(false);
+        }
+
+        $cacheName = $this->getCacheService()->get(RefreshUserLearnDailyJob::CACHE_NAME, []);
+        if (!empty($cacheName)) {
+            return $this->createJsonResponse(false);
+        }
+
+        $cacheName = $this->getCacheService()->get(RefreshCoursePlanLearnDailyJob::CACHE_NAME, []);
+        if (!empty($cacheName)) {
+            return $this->createJsonResponse(false);
+        }
+
+        return $this->createJsonResponse(true);
+    }
+
+    protected function createRefreshDataJob()
+    {
+        $job = [
+            'name' => 'RefreshLearnDailyJob',
+            'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
+            'expression' => intval(time()),
+            'misfire_policy' => 'executing',
+            'class' => RefreshLearnDailyJob::class,
+            'args' => [],
+        ];
+
+        $job = $this->getSchedulerService()->register($job);
+
+        $this->getCacheService()->set(RefreshLearnDailyJob::CACHE_NAME, ['enabled' => 1], time() + 86400);
     }
 
     /**
@@ -60,5 +112,21 @@ class VideoTaskSettingController extends BaseController
     protected function getSettingService()
     {
         return $this->createService('System:SettingService');
+    }
+
+    /**
+     * @return SchedulerService
+     */
+    protected function getSchedulerService()
+    {
+        return $this->createService('Scheduler:SchedulerService');
+    }
+
+    /**
+     * @return CacheService
+     */
+    protected function getCacheService()
+    {
+        return $this->createService('System:CacheService');
     }
 }
