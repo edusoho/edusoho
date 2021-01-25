@@ -29,11 +29,6 @@ class UpdateMediaTypeJob extends AbstractJob
     protected function updateActivityStayDaily($data)
     {
         $count = $this->biz['db']->fetchColumn('select count(*) from activity_stay_daily;');
-        $noTypeCount = $this->biz['db']->fetchColumn("select count(*) from activity_stay_daily where mediaType = '';");
-        //存在activity被删除导致mediaType为空
-        if ($noTypeCount / $count < 0.1 || $noTypeCount < 1000) {
-            return;
-        }
 
         $limit = self::LIMIT;
         $totalPage = $count / $limit;
@@ -41,7 +36,7 @@ class UpdateMediaTypeJob extends AbstractJob
         for (; $page <= $totalPage; ++$page) {
             $this->getCacheService()->set(self::STAY_TABLE_REFRESH_PAGE, $page);
             $start = $page * $limit;
-            $sql = "select asd.id as id, if(a.mediaType, a.mediaType, '') as mediaType from activity_stay_daily asd left join activity a on asd.activityId = a.id limit {$start}, {$limit}";
+            $sql = "select asd.id as id, if(a.mediaType is not null, a.mediaType, '') as mediaType from activity_stay_daily asd left join activity a on asd.activityId = a.id limit {$start}, {$limit}";
             $data = $this->biz['db']->fetchAll($sql);
             empty($data) ? null : $this->getActivityStayDailyDao()->batchUpdate(array_column($data, 'id'), $data);
         }
@@ -51,10 +46,6 @@ class UpdateMediaTypeJob extends AbstractJob
     protected function updateActivityLearnDaily($data)
     {
         $count = $this->biz['db']->fetchColumn('select count(*) from activity_learn_daily;');
-        $noTypeCount = $this->biz['db']->fetchColumn("select count(*) from activity_learn_daily where mediaType = '';");
-        if ($noTypeCount / $count < 0.1 || $noTypeCount < 1000) {
-            return;
-        }
 
         $limit = self::LIMIT;
         $totalPage = $count / $limit;
@@ -62,7 +53,7 @@ class UpdateMediaTypeJob extends AbstractJob
         for (; $page <= $totalPage; ++$page) {
             $this->getCacheService()->set(self::LEARN_TABLE_REFRESH_PAGE, $page);
             $start = $page * $limit;
-            $sql = "select ald.id as id, if(a.mediaType, a.mediaType, '') as mediaType from activity_learn_daily ald left join activity a on ald.activityId = a.id limit {$start}, {$limit}";
+            $sql = "select ald.id as id, if(a.mediaType is not null, a.mediaType, '') as mediaType from activity_learn_daily ald left join activity a on ald.activityId = a.id limit {$start}, {$limit}";
             $data = $this->biz['db']->fetchAll($sql);
             empty($data) ? null : $this->getActivityLearnDailyDao()->batchUpdate(array_column($data, 'id'), $data);
         }
