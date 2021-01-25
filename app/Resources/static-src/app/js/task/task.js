@@ -95,7 +95,7 @@ export default class TaskShow extends Emitter {
     if ($('.js-learn-content').find('.js-finish-time').length > 0) {
       let time = $('.js-learn-content').find('.js-finish-tip').data('time');
       let remainTime = time > response.learnedTime ? Math.ceil((time - response.learnedTime) / 60) : 0;
-      $('.js-learn-content').find('.js-finish-time').html(remainTime);
+      $('.js-learn-content').find('.js-finish-time').html(remainTime + Translator.trans('activity.live.minute'));
       this.initLearnContent();
     }
   }
