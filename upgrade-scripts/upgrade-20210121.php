@@ -90,11 +90,13 @@ class EduSohoUpgrade extends AbstractUpdater
 
     public function alterActivityLearnDailyAddMediaType()
     {
+        if ($this->isFieldExist('activity_learn_daily', 'mediaType')) {
+            return 1;
+        }
+
         $count = $this->getTableCount('activity_learn_daily');
         if ($count < 100000) {
-            if (!$this->isFieldExist('activity_learn_daily', 'mediaType')) {
-                $this->getConnection()->exec("ALTER TABLE `activity_learn_daily` ADD COLUMN `mediaType` varchar(32) NOT NULL DEFAULT '' COMMENT '教学活动类型' AFTER `courseSetId`;");
-            }
+            $this->getConnection()->exec("ALTER TABLE `activity_learn_daily` ADD COLUMN `mediaType` varchar(32) NOT NULL DEFAULT '' COMMENT '教学活动类型' AFTER `courseSetId`;");
         } else {
             $this->createAddMediaTypeJob();
         }
@@ -105,10 +107,12 @@ class EduSohoUpgrade extends AbstractUpdater
     public function checkJobFinish($page)
     {
         if ($this->isFieldExist('activity_learn_daily', 'mediaType')) {
+            $this->logger('info', 'mediaType字段已添加');
             return 1;
         }
 
         if ($page > 60) {
+            $this->logger('info', 'mediaType字段超过60次未添加成功，新增定时任务添加');
             $this->createAddMediaTypeJob();
             return 1;
         }
