@@ -7,7 +7,7 @@
     {% if taskResult %}
       {% set resultTime = (activity.finishType == 'time') ? taskResult.time : taskResult.watchTime %}
       {% set time = taskResult.time > activity.finishData * 60 ? 0 : (activity.finishData * 60 - resultTime) / 60 %}
-      {{ 'activity_manage.time_last_tips'|trans({'%time%':time|round})|raw }}
+      {{ 'activity_manage.time_last_tips'|trans({'%time%':time|round(0, 'ceil')})|raw }}
     {% else %}
       {{ 'activity_manage.time_last_tips'|trans({'%time%':(activity.finishData)})|raw }}
     {% endif %}

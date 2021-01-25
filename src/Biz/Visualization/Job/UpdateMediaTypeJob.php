@@ -3,6 +3,8 @@
 namespace Biz\Visualization\Job;
 
 use Biz\System\Service\CacheService;
+use Biz\Visualization\Dao\ActivityLearnDailyDao;
+use Biz\Visualization\Dao\ActivityStayDailyDao;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 
 class UpdateMediaTypeJob extends AbstractJob
@@ -26,8 +28,8 @@ class UpdateMediaTypeJob extends AbstractJob
 
     protected function updateActivityStayDaily($data)
     {
-        $count = $this->biz['db']->fetchAssoc('select count(*) from activity_stay_daily;');
-        $noTypeCount = $this->biz['db']->fetchAssoc("select count(*) from activity_stay_daily where mediaType = '';");
+        $count = $this->biz['db']->fetchColumn('select count(*) from activity_stay_daily;');
+        $noTypeCount = $this->biz['db']->fetchColumn("select count(*) from activity_stay_daily where mediaType = '';");
         //存在activity被删除导致mediaType为空
         if ($noTypeCount / $count < 0.1 || $noTypeCount < 1000) {
             return;
@@ -39,16 +41,17 @@ class UpdateMediaTypeJob extends AbstractJob
         for (; $page <= $totalPage; ++$page) {
             $this->getCacheService()->set(self::STAY_TABLE_REFRESH_PAGE, $page);
             $start = $page * $limit;
-            $sql = "update activity_stay_daily asd left join activity a on asd.activityId = a.id set asd.mediaType = case when a.mediaType is null then '' else a.mediaType limit {$start}, {$limit}";
-            $this->biz['db']->exec($sql);
+            $sql = "select asd.id as id, if(a.mediaType, a.mediaType, '') as mediaType from activity_stay_daily asd left join activity a on asd.activityId = a.id limit {$start}, {$limit}";
+            $data = $this->biz['db']->fetchAll($sql);
+            empty($data) ? null : $this->getActivityStayDailyDao()->batchUpdate(array_column($data, 'id'), $data);
         }
         $this->getCacheService()->clear(self::STAY_TABLE_REFRESH_PAGE);
     }
 
     protected function updateActivityLearnDaily($data)
     {
-        $count = $this->biz['db']->fetchAssoc('select count(*) from activity_learn_daily;');
-        $noTypeCount = $this->biz['db']->fetchAssoc("select count(*) from activity_learn_daily where mediaType = '';");
+        $count = $this->biz['db']->fetchColumn('select count(*) from activity_learn_daily;');
+        $noTypeCount = $this->biz['db']->fetchColumn("select count(*) from activity_learn_daily where mediaType = '';");
         if ($noTypeCount / $count < 0.1 || $noTypeCount < 1000) {
             return;
         }
@@ -59,8 +62,9 @@ class UpdateMediaTypeJob extends AbstractJob
         for (; $page <= $totalPage; ++$page) {
             $this->getCacheService()->set(self::LEARN_TABLE_REFRESH_PAGE, $page);
             $start = $page * $limit;
-            $sql = "update activity_learn_daily ald left join activity a on ald.activityId = a.id set ald.mediaType = case when a.mediaType is null then '' else a.mediaType limit {$start}, {$limit}";
-            $this->biz['db']->exec($sql);
+            $sql = "select ald.id as id, if(a.mediaType, a.mediaType, '') as mediaType from activity_learn_daily ald left join activity a on ald.activityId = a.id limit {$start}, {$limit}";
+            $data = $this->biz['db']->fetchAll($sql);
+            empty($data) ? null : $this->getActivityLearnDailyDao()->batchUpdate(array_column($data, 'id'), $data);
         }
         $this->getCacheService()->clear(self::LEARN_TABLE_REFRESH_PAGE);
     }
@@ -68,7 +72,7 @@ class UpdateMediaTypeJob extends AbstractJob
     protected function isFieldExist($table, $filedName)
     {
         $sql = "DESCRIBE `{$table}` `{$filedName}`;";
-        $result = $this->getConnection()->fetchAssoc($sql);
+        $result = $this->biz['db']->fetchAssoc($sql);
 
         return empty($result) ? false : true;
     }
@@ -79,5 +83,21 @@ class UpdateMediaTypeJob extends AbstractJob
     protected function getCacheService()
     {
         return $this->biz->service('System:CacheService');
+    }
+
+    /**
+     * @return ActivityLearnDailyDao
+     */
+    protected function getActivityLearnDailyDao()
+    {
+        return $this->biz->dao('Visualization:ActivityLearnDailyDao');
+    }
+
+    /**
+     * @return ActivityStayDailyDao
+     */
+    protected function getActivityStayDailyDao()
+    {
+        return $this->biz->dao('Visualization:ActivityStayDailyDao');
     }
 }
