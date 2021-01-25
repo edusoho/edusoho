@@ -48,6 +48,7 @@ class SchoolInformationController extends BaseController
             $site['analytics'] = $helper->closeTags($site['analytics']);
         }
 
+        $site['recordCode'] = trim($site['recordCode']);
         $this->getSettingService()->set('site', $site);
 
         return $this->createJsonResponse([
