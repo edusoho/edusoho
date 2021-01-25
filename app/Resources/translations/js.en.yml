@@ -1680,7 +1680,7 @@ user.fields.gender_label: Gender
 information_collect.form.check_age_invalid: Age Invalid
 information_collect.form.check_format_invalid: %display% Invalid
 
-admin_v2.video_effective_time_setting.cancel.hint: When the statistical dimension of video lesson learning hours is changed, the data will be generated according to the new rules, which may lead to a large change in the data, which is a normal data phenomenon. Data will be updated in about 3 hours, we do not recommend you to change the statistical dimension frequently. <br/>Do you confirm to change the statistical dimension of learning time this time?
+admin_v2.video_effective_time_setting.cancel.hint: When the statistical dimension of video lesson learning hours is changed, the data will be generated according to the new rules, which may lead to a large change in the data, which is a normal phenomenon. Data will be updated in about 3 hours, we do not recommend you to change the statistical dimension frequently. <br/>Do you confirm to change the statistical dimension of learning time?
 admin_v2.video_effective_time_setting.play_rule.auto_pause.help_block: When the system detects that the user is not focusing on learning, the PC side will automatically suspend the current play
 admin_v2.video_effective_time_setting.play_rule.no_action.help_block: When the system detects that the user is not focusing on learning, the PC side will continue to maintain the current play
 admin_v2.video_effective_time_setting.statistical_dimension.playing.help_block: The actual playing time was taken as the learning time statistics
