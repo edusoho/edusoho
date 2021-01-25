@@ -65,19 +65,15 @@ class RefreshActivityLearnDailyJob extends BaseRefreshJob
     protected function refreshCourseTaskResultWhenPageSetting()
     {
         $count = $this->biz['db']->fetchColumn("SELECT COUNT(*) FROM course_task_result ctr LEFT JOIN activity a ON ctr.activityId = a.id WHERE a.mediaType = 'video';");
-        $limit = 1000;
+        $limit = self::LIMIT;
         $totalPage = $count / $limit;
         for ($page = 0; $page <= $totalPage; ++$page) {
             $start = $page * $limit;
-            $updateData = [];
-            $sql = "SELECT ctr.id AS id, ctr.activityId AS activityId, ctr.userId AS userId, IF (ctr.stayTime, ctr.stayTime, 0) AS stayTime FROM course_task_result ctr LEFT JOIN activity a ON ctr.activityId = a.id WHERE a.mediaType = 'video' LIMIT  {$start}, {$limit};";
+            $sql = "SELECT ctr.id AS id, IF (ctr.stayTime, ctr.stayTime, 0) AS sumTime FROM course_task_result ctr LEFT JOIN activity a ON ctr.activityId = a.id WHERE a.mediaType = 'video' LIMIT  {$start}, {$limit};";
             $data = $this->biz['db']->fetchAll($sql);
-            foreach ($data as $result) {
-                $updateData[] = ['id' => $result['id'], 'sumTime' => $result['stayTime']];
-            }
 
-            if (!empty($updateData)) {
-                $this->getActivityLearnDailyDao()->batchUpdate(array_column($updateData, 'id'), $updateData);
+            if (!empty($data)) {
+                $this->getActivityLearnDailyDao()->batchUpdate(array_column($data, 'id'), $data);
             }
             $this->getLogger()->addInfo("从{$start}刷新course_task_result结束");
         }
@@ -88,22 +84,16 @@ class RefreshActivityLearnDailyJob extends BaseRefreshJob
         $users = $this->biz['db']->fetchAll('select id from user;');
         foreach ($users as $user) {
             $updateData = [];
-            $sql = 'SELECT id, activityId, userId, sumTime FROM activity_video_daily WHERE userId = ?';
-            $records = $this->biz['db']->fetchAll($sql, [$user['id']]);
+            $records = $this->biz['db']->fetchAll('SELECT id, activityId, userId, sumTime FROM activity_video_daily WHERE userId = ?', [$user['id']]);
             $results = $this->biz['db']->fetchAll('select id, userId, activityId from course_task_result where userId = ?', [$user['id']]);
-            $records = ArrayToolkit::group($records, 'userId');
+            $records = ArrayToolkit::group($records, 'activityId');
             foreach ($results as $result) {
-                if (empty($records[$result['userId']])) {
+                if (empty($records[$result['activityId']])) {
                     continue;
                 }
 
-                $userRecords = ArrayToolkit::group($records[$result['userId']], 'activityId');
-                if (empty($userRecords[$result['activityId']])) {
-                    continue;
-                }
-
-                $sumTime = array_sum(array_column($userRecords[$result['activityId']], 'sumTime'));
-                $updateData[] = ['id' => $result['id'], 'sumTime' => $sumTime ? $sumTime : 0];
+                $sumTime = array_sum(array_column($records[$result['activityId']], 'sumTime'));
+                $updateData[] = ['id' => $result['id'], 'sumTime' => $sumTime];
             }
             if (!empty($updateData)) {
                 $this->getActivityLearnDailyDao()->batchUpdate(array_column($updateData, 'id'), $updateData);
