@@ -4,8 +4,12 @@ namespace AppBundle\Controller\AdminV2\System;
 
 use AppBundle\Controller\AdminV2\BaseController;
 use Biz\Crontab\SystemCrontabInitializer;
+use Biz\System\Service\CacheService;
 use Biz\System\Service\SettingService;
+use Biz\Visualization\Job\RefreshActivityLearnDailyJob;
+use Biz\Visualization\Job\RefreshCoursePlanLearnDailyJob;
 use Biz\Visualization\Job\RefreshLearnDailyJob;
+use Biz\Visualization\Job\RefreshUserLearnDailyJob;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -63,12 +67,27 @@ class VideoTaskSettingController extends BaseController
 
     public function refreshJobCheckAction(Request $request)
     {
-        $jobName = $this->getSettingService()->get('refreshLearnDailyJob', '');
-        if (empty($jobName)) {
-            return $this->createJsonResponse(true);
+        $cacheName = $this->getCacheService()->get(RefreshLearnDailyJob::CACHE_NAME, []);
+        if (!empty($cacheName)) {
+            return $this->createJsonResponse(false);
         }
 
-        return $this->createJsonResponse(false);
+        $cacheName = $this->getCacheService()->get(RefreshActivityLearnDailyJob::CACHE_NAME, []);
+        if (!empty($cacheName)) {
+            return $this->createJsonResponse(false);
+        }
+
+        $cacheName = $this->getCacheService()->get(RefreshUserLearnDailyJob::CACHE_NAME, []);
+        if (!empty($cacheName)) {
+            return $this->createJsonResponse(false);
+        }
+
+        $cacheName = $this->getCacheService()->get(RefreshCoursePlanLearnDailyJob::CACHE_NAME, []);
+        if (!empty($cacheName)) {
+            return $this->createJsonResponse(false);
+        }
+
+        return $this->createJsonResponse(true);
     }
 
     protected function createRefreshDataJob()
@@ -84,7 +103,7 @@ class VideoTaskSettingController extends BaseController
 
         $job = $this->getSchedulerService()->register($job);
 
-        $this->getSettingService()->set('refreshLearnDailyJob', $job['name']);
+        $this->getCacheService()->set(RefreshLearnDailyJob::CACHE_NAME, ['enabled' => 1], time() + 86400);
     }
 
     /**
@@ -101,5 +120,13 @@ class VideoTaskSettingController extends BaseController
     protected function getSchedulerService()
     {
         return $this->createService('Scheduler:SchedulerService');
+    }
+
+    /**
+     * @return CacheService
+     */
+    protected function getCacheService()
+    {
+        return $this->createService('System:CacheService');
     }
 }

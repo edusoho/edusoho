@@ -4,37 +4,45 @@ namespace Biz\Visualization\Job;
 
 use Biz\Crontab\SystemCrontabInitializer;
 use Biz\System\Service\SettingService;
-use Codeages\Biz\Framework\Scheduler\AbstractJob;
 
-class RefreshLearnDailyJob extends AbstractJob
+class RefreshLearnDailyJob extends BaseRefreshJob
 {
+    const CACHE_NAME = 'refresh_learn_daily';
+
     public function execute()
     {
-        $jobSetting = [];
-
-        foreach ($this->getRefreshDataType() as $jobType => $jobClass) {
+        foreach ($this->getRefreshDataType() as $jobType => $jobSetting) {
             $job = [
                 'name' => 'RefreshLearnDailyJob_'.$jobType,
                 'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
                 'expression' => intval(time()),
                 'misfire_policy' => 'executing',
-                'class' => $jobClass,
+                'class' => $jobSetting['className'],
                 'args' => [],
             ];
 
             $job = $this->getSchedulerService()->register($job);
-            $jobSetting[$jobType] = $job['name'];
+            $this->getCacheService()->set($jobSetting['cacheName'], ['enabled' => 1], time() + 86400);
         }
 
-        $this->getSettingService()->set('refreshLearnDailyJob', $jobSetting);
+        $this->getCacheService()->clear(self::CACHE_NAME);
     }
 
     protected function getRefreshDataType()
     {
         return  [
-            RefreshActivityLearnDailyJob::TYPE => RefreshActivityLearnDailyJob::class,
-            RefreshUserLearnDailyJob::TYPE => RefreshUserLearnDailyJob::class,
-            RefreshCoursePlanLearnDailyJob::TYPE => RefreshCoursePlanLearnDailyJob::class,
+            RefreshActivityLearnDailyJob::REFRESH_TYPE => [
+                'className' => RefreshActivityLearnDailyJob::class,
+                'cacheName' => RefreshActivityLearnDailyJob::CACHE_NAME,
+            ],
+            RefreshUserLearnDailyJob::REFRESH_TYPE => [
+                'className' => RefreshUserLearnDailyJob::class,
+                'cacheName' => RefreshUserLearnDailyJob::CACHE_NAME,
+            ],
+            RefreshCoursePlanLearnDailyJob::REFRESH_TYPE => [
+                'className' => RefreshCoursePlanLearnDailyJob::class,
+                'cacheName' => RefreshCoursePlanLearnDailyJob::CACHE_NAME,
+            ],
         ];
     }
 

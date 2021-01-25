@@ -2,6 +2,7 @@
 
 namespace Biz\Visualization\Job;
 
+use Biz\System\Service\CacheService;
 use Codeages\Biz\Framework\Scheduler\AbstractJob;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -20,5 +21,13 @@ abstract class BaseRefreshJob extends AbstractJob
         }
 
         return $this->logger;
+    }
+
+    /**
+     * @return CacheService
+     */
+    protected function getCacheService()
+    {
+        return $this->biz->service('System:CacheService');
     }
 }

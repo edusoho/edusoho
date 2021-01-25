@@ -10,7 +10,9 @@ use Biz\Visualization\Service\ActivityDataDailyStatisticsService;
 
 class RefreshActivityLearnDailyJob extends BaseRefreshJob
 {
-    const TYPE = 'activity';
+    const REFRESH_TYPE = 'activity';
+
+    const CACHE_NAME = 'refresh_activity';
 
     const LIMIT = 10000;
 
@@ -23,9 +25,7 @@ class RefreshActivityLearnDailyJob extends BaseRefreshJob
         $this->refreshActivityLearnDaily();
         $this->refreshCourseTaskResult();
 
-        $jobSetting = $this->getSettingService()->get('refreshLearnDailyJob', []);
-        unset($jobSetting[self::TYPE]);
-        empty($jobSetting) ? $this->getSettingService()->delete('refreshLearnDailyJob') : $this->getSettingService()->set('refreshLearnDailyJob', $jobSetting);
+        $this->getCacheService()->clear(self::CACHE_NAME);
     }
 
     protected function refreshActivityLearnDaily()
@@ -70,7 +70,7 @@ class RefreshActivityLearnDailyJob extends BaseRefreshJob
         for ($page = 0; $page <= $totalPage; ++$page) {
             $start = $page * $limit;
             $updateData = [];
-            $sql = "SELECT ctr.id AS id, ctr.activityId AS activityId, ctr.userId AS userId, IF (ctr.stayTime, ctr.stayTime, 0) AS stayTime FROM course_task_result ctr LEFT JOIN activity a ON ctr.activityId = a.id WHERE a.mediaType = 'video' LIMIT {$start}, {$limit};";
+            $sql = "SELECT ctr.id AS id, ctr.activityId AS activityId, ctr.userId AS userId, IF (ctr.stayTime, ctr.stayTime, 0) AS stayTime FROM course_task_result ctr LEFT JOIN activity a ON ctr.activityId = a.id WHERE a.mediaType = 'video' LIMIT  {$start}, {$limit};";
             $data = $this->biz['db']->fetchAll($sql);
             foreach ($data as $result) {
                 $updateData[] = ['id' => $result['id'], 'sumTime' => $result['stayTime']];
@@ -88,9 +88,9 @@ class RefreshActivityLearnDailyJob extends BaseRefreshJob
         $users = $this->biz['db']->fetchAll('select id from user;');
         foreach ($users as $user) {
             $updateData = [];
-            $sql = "SELECT id, activityId, userId, sumTime FROM activity_video_daily WHERE userId = {$user['id']}";
-            $records = $this->biz['db']->fetchAll($sql);
-            $results = $this->biz['db']->fetchAll("select id, userId, activityId from course_task_result where userId = {$user['id']}");
+            $sql = 'SELECT id, activityId, userId, sumTime FROM activity_video_daily WHERE userId = ?';
+            $records = $this->biz['db']->fetchAll($sql, [$user['id']]);
+            $results = $this->biz['db']->fetchAll('select id, userId, activityId from course_task_result where userId = ?', [$user['id']]);
             $records = ArrayToolkit::group($records, 'userId');
             foreach ($results as $result) {
                 if (empty($records[$result['userId']])) {
