@@ -153,6 +153,11 @@ class CourseTaskEventV2 extends AbstractResource
             $this->getTaskService()->doTask($taskId, $record['duration']);
         }
 
+        $watchResult = null;
+        if (!empty($data['watchData'])) {
+            $watchResult = $this->watching($request, $courseId, $taskId, $data, $record);
+        }
+
         if ($this->getTaskService()->isFinished($task['id'])) {
             $this->getTaskService()->finishTaskResult($task['id']);
         }
@@ -160,11 +165,6 @@ class CourseTaskEventV2 extends AbstractResource
         $result = $this->getTaskService()->trigger($taskId, self::EVENT_DOING, $triggerData);
         if (isset($data['lastLearnTime'])) {
             $this->getTaskResultService()->updateTaskResult($result['id'], ['lastLearnTime' => $data['lastLearnTime']]);
-        }
-
-        $watchResult = null;
-        if (!empty($data['watchData'])) {
-            $watchResult = $this->watching($request, $courseId, $taskId, $data, $record);
         }
 
         if (self::EVENT_FINISH === $result['status']) {

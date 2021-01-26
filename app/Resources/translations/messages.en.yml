@@ -4832,6 +4832,14 @@ admin.setting.permit.picture: ID picture
 admin.setting.permit.picture.help_block: Please upload pictures in jpg, gif, png format. The recommended image size should not exceed 5 MB. After the online school ID picture is set, it will be displayed in the bottom column of the homepage.
 admin.setting.permit.setting.add: Add a column
 admin.setting.permit.setting.remove: Delete entire column
+admin.setting.record.picture: Public security filing icon
+admin.setting.record.code: Public Security Record Number
+admin.setting.record.url: Public security record number link
+admin.setting.record.picture.help_block: >
+  The recommended icon size should not exceed 50×50 px, and the recommended icon size should not exceed 2 MB.
+  <a href="http://www.qiqiuyu.com/faq/1028/detail" target="_blank">How to obtain the public security filing icon?</a>
+admin.setting.record.code.help_block: >
+  <a href="http://www.qiqiuyu.com/faq/1028/detail" target="_blank">How to add the public security record number and link?</a>
 
 admin.setting.mailer.is_trial.tips: "You are running on the trail version which cannot set the Email service.If you want to buy the verified version ,please contact our sales agent Tel：4008041114 or\n"
 admin.setting.mailer.cloud_email_crm: 'Cloud Email'
@@ -10248,10 +10256,11 @@ activity_manage.finish_tips_watch_time: Watch at least %finishDetail% minutes.
 +course.plan_task.activity_manage.video.time_at_least: Stay at least
 +course.plan_task.activity_manage.video.watch_time_at_least: Watch at least
 activity_manage.time_last_tips: >
-  Remaining<span class="color-danger js-finish-time">%time%</span>minutes completed
+  Remaining<span class="color-danger js-finish-time">%time% minutes</span> completed
 activity_manage.finished_tips: >
   <span class="color-primary">Congratulations! You have completed this task</span>
 exam_bank.analysis.data_large_loading: Data is too large，loading
 exam_bank.analysis.data_large_loading_finish: Data loading finish
 exam_bank.analysis.data_large_info: refresh date：%date%，do not fresh because of data to large
 exam_bank.analysis.data_large_loading_btn: Force refresh
+activity_manage.video.finish_tips: The completion conditions of video playback time and page stay time are subject to cumulative learning time

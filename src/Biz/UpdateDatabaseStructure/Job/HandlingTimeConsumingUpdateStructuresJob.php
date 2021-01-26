@@ -22,6 +22,12 @@ class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
          *  Column learnedElectiveTaskNum
          */
         $this->createField('course_member', 'learnedElectiveTaskNum', "ALTER TABLE `course_member` ADD COLUMN `learnedElectiveTaskNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '已学习的选修任务数量' AFTER `learnedCompulsoryTaskNum`;");
+
+        /*
+         *  Table  activity_learn_daily
+         *  Column mediaType
+         */
+        $this->createField('activity_learn_daily', 'mediaType', "ALTER TABLE `activity_learn_daily` ADD COLUMN `mediaType` varchar(32) NOT NULL DEFAULT '' COMMENT '教学活动类型' AFTER `courseSetId`;");
     }
 
     protected function addTableIndex()

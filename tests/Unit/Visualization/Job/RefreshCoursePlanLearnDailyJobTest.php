@@ -20,12 +20,13 @@ class RefreshCoursePlanLearnDailyJobTest extends BaseTestCase
         $mockedJobDao = $this->mockBiz('Visualization:CoursePlanLearnDailyDao', [
             ['functionName' => 'batchUpdate'],
         ]);
-        $before = $this->getSchedulerService()->countJobs(['name' => 'refresh']);
 
         $job = new RefreshCoursePlanLearnDailyJob([], $this->biz);
         $job->execute();
 
         $mockedCacheService->shouldHaveReceived('clear')->times(1);
+        $mockedJobDao->shouldHaveReceived('batchUpdate')->times(1);
+        $mockedSettingService->shouldHaveReceived('get')->andReturn(['statistical_dimension' => 'playing']);
     }
 
     /**

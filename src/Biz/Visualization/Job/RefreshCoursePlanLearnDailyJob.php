@@ -16,7 +16,7 @@ class RefreshCoursePlanLearnDailyJob extends BaseRefreshJob
     public function execute()
     {
         $statisticsSetting = $this->getSettingService()->get('videoEffectiveTimeStatistics', []);
-        $totalPage = ceil($this->biz['db']->fetchColumn('SELECT COUNT(*) FROM `user_learn_daily`') / self::LIMIT);
+        $totalPage = ceil($this->biz['db']->fetchColumn('SELECT COUNT(*) FROM `course_plan_learn_daily`') / self::LIMIT);
 
         for ($page = 0; $page <= $totalPage; ++$page) {
             $start = $page * self::LIMIT;
