@@ -15,12 +15,13 @@
       :is-request-compile="isRequestCompile"
       :type-list="'classroom_list'"
       @needRequest="sendRequest"
+      :showNumberData="showNumberData"
     />
     <emptyCourse
       v-if="isEmptyCourse && isRequestCompile"
       :has-button="false"
       :type="'classroom_list'"
-      　text="暂无班级"
+      text="暂无班级"
     />
   </div>
 </template>
@@ -30,8 +31,7 @@ import Api from '@/api';
 import treeSelect from '&/components/e-tree-select/e-tree-select.vue';
 import lazyLoading from '&/components/e-lazy-loading/e-lazy-loading.vue';
 import emptyCourse from '../../learning/emptyCourse/emptyCourse.vue';
-import { mapState, mapMutations, mapActions } from 'vuex';
-import * as types from '@/store/mutation-types';
+import { mapState, mapActions } from 'vuex';
 import CATEGORY_DEFAULT from '@/config/category-default-config.js';
 
 export default {
@@ -62,6 +62,7 @@ export default {
         sort: 'sort',
       },
       dataDefault: CATEGORY_DEFAULT.classroom_list,
+      showNumberData: '',
     };
   },
   computed: {
@@ -93,10 +94,6 @@ export default {
     window.scroll(0, 0);
     this.selectedData = this.transform(this.$route.query);
     // 合并参数
-    const config = Object.assign({}, this.selectedData, {
-      offset: this.offset,
-      limit: this.limit,
-    });
 
     // 获取班级分类数据
     Api.getClassCategories().then(data => {
@@ -107,6 +104,7 @@ export default {
       this.dataDefault[0].data = data;
       this.selectItems = this.dataDefault;
     });
+    this.getGoodSettings();
   },
   methods: {
     ...mapActions('classroom', ['setClassRoomList']),
@@ -192,6 +190,15 @@ export default {
       }
 
       return true;
+    },
+    getGoodSettings() {
+      Api.getSettings({
+        query: {
+          type: 'goods',
+        },
+      }).then(res => {
+        this.showNumberData = res.show_number_data;
+      });
     },
   },
 };

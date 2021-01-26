@@ -5,8 +5,14 @@
         <span :class="{ isFree: Number(details.price) === 0 }">{{
           details.price | filterPrice
         }}</span>
-        <span class="plan-price__student-num"
-          >{{ details.studentNum }}人在学</span
+        <span v-if="showNumberData === 'join'" class="plan-price__student-num">
+          <i class="iconfont icon-people" />{{ details.studentNum }}</span
+        >
+        <span
+          v-else-if="showNumberData === 'visitor'"
+          class="plan-price__student-num"
+        >
+          <i class="iconfont icon-visibility" />{{ details.hitNum }}</span
         >
       </div>
     </e-panel>
@@ -58,6 +64,10 @@ export default {
     },
     joinStatus: {
       default: false,
+    },
+    showNumberData: {
+      type: String,
+      default: '',
     },
   },
   watch: {

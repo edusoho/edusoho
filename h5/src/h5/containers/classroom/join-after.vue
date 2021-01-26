@@ -14,7 +14,11 @@
 
       <!-- 班级介绍 -->
       <div v-show="active == 0">
-        <detail-plan :details="planDetails" :join-status="details.joinStatus" />
+        <detail-plan
+          :details="planDetails"
+          :join-status="details.joinStatus"
+          :showNumberData="showNumberData"
+        />
         <div class="segmentation" />
         <e-panel ref="about" title="班级介绍" class="about">
           <div v-html="details.summary" />
@@ -125,6 +129,7 @@ export default {
         targetType: 'classroom',
         targetId: this.details.classId,
       },
+      showNumberData: '',
     };
   },
   mixins: [collectUserInfo],
@@ -141,6 +146,7 @@ export default {
     }).catch(err => {
       console.error(err);
     });
+    this.getGoodSettings();
   },
   watch: {
     currentJoin: {
@@ -299,6 +305,15 @@ export default {
     onCancelForm() {
       this.setCurrentJoin(false);
       this.isShowForm = false;
+    },
+    getGoodSettings() {
+      Api.getSettings({
+        query: {
+          type: 'goods',
+        },
+      }).then(res => {
+        this.showNumberData = res.show_number_data;
+      });
     },
   },
 };

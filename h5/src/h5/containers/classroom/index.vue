@@ -45,6 +45,7 @@ export default {
         expiryMode: 'forever',
         expiryValue: '0',
         vipLevel: null,
+        hitNum: '0',
       },
       currentComp: '',
     };
@@ -104,6 +105,7 @@ export default {
         service,
         goodsId,
         specsId,
+        hitNum,
       } = res;
       const cover = res.cover.large;
       const classId = res.id;
@@ -115,6 +117,7 @@ export default {
         expiryMode,
         expiryValue,
         vipLevel,
+        hitNum,
       };
 
       this.planDetails = planDetails;
