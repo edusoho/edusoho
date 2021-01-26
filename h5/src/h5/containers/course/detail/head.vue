@@ -313,10 +313,22 @@ export default {
     },
     getData() {
       Api.getMedia(this.getParams())
-        .then(res => {
+        .then(async res => {
           if (res.mediaType === 'audio') {
             this.formateAudioData(res);
           } else if (res.mediaType === 'video') {
+            if (res.media.jsPlayer === 'local-video-player') {
+              const media = await Api.getLocalMediaLive({
+                query: {
+                  taskId: this.taskId,
+                },
+                params: {
+                  hls_encryption: 1,
+                },
+              });
+              delete res.media.resNo;
+              res.media.url = media.mediaUri;
+            }
             this.formateVedioData(res);
           }
         })
@@ -400,6 +412,7 @@ export default {
         },
         token: media.token,
         rememberLastPos: true,
+        playlist: media.url,
       };
 
       if (!canTryLookable) {
