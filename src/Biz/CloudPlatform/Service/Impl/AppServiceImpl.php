@@ -222,7 +222,7 @@ class AppServiceImpl extends BaseService implements AppService
         $errors = [];
 
         if (PHP_VERSION_ID < 50600) {
-            $errors[] = 'EduSoho要求PHP版本为5.6.0以上，'.PHP_VERSION.',请先升级您的PHP版本';
+            $errors[] = 'EduSoho要求PHP版本为5.6.0以上，您当前的PHP版本为'.PHP_VERSION.',请先升级您的PHP版本';
         }
 
         if (!class_exists('ZipArchive')) {
