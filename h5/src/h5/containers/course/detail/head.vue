@@ -419,7 +419,6 @@ export default {
         delete options.pluck;
       }
       this.$store.commit('UPDATE_LOADING_STATUS', true);
-      console.log(options);
       this.initPlayer(options);
     },
     initPlayer(options) {
