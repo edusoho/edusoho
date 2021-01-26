@@ -28,7 +28,7 @@ class RefreshCoursePlanLearnDailyJob extends BaseRefreshJob
     protected function refreshByStayDaily()
     {
         $limit = self::LIMIT;
-        $totalPage = ceil($this->biz['db']->fetchColumn('SELECT COUNT(*) FROM `user_learn_daily`') / $limit);
+        $totalPage = ceil($this->biz['db']->fetchColumn('SELECT COUNT(*) FROM `course_plan_learn_daily`') / $limit);
         for ($page = 0; $page <= $totalPage; ++$page) {
             $start = $page * $limit;
 
@@ -50,7 +50,7 @@ class RefreshCoursePlanLearnDailyJob extends BaseRefreshJob
     protected function refreshByWatchDaily()
     {
         $limit = self::LIMIT;
-        $totalPage = ceil($this->biz['db']->fetchColumn('SELECT COUNT(*) FROM `user_learn_daily`') / $limit);
+        $totalPage = ceil($this->biz['db']->fetchColumn('SELECT COUNT(*) FROM `course_plan_learn_daily`') / $limit);
         for ($page = 0; $page <= $totalPage; ++$page) {
             $start = $page * $limit;
             $watchData = $this->biz['db']->fetchAll("
