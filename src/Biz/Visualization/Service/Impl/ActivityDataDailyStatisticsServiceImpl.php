@@ -95,30 +95,34 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
     {
         $statisticsSetting = $this->getSettingService()->get('videoEffectiveTimeStatistics', []);
         $conditions = ['dayTime' => $dayTime];
-        $columns = ['userId', 'activityId', 'taskId', 'courseId', 'courseSetId', 'dayTime', 'sumTime', 'pureTime', 'mediaType'];
+        $columns = ['userId', 'activityId', 'taskId', 'courseId', 'courseSetId', 'dayTime', 'sumTime', 'pureTime'];
         if (empty($statisticsSetting) || 'playing' === $statisticsSetting['statistical_dimension']) {
             $stayData = $this->getActivityStayDailyDao()->search(
                 $conditions,
                 [],
                 0,
                 PHP_INT_MAX,
-                ['userId', 'activityId', 'taskId', 'courseId', 'courseSetId', 'dayTime', 'sumTime', 'pureTime', 'mediaType']
+                array_merge($columns, ['mediaType'])
             );
             $videoData = $this->getActivityVideoDailyDao()->search($conditions, [], 0, PHP_INT_MAX, $columns);
             $data = [];
-            foreach ($stayData as $record) {
-                if ('video' != $record['mediaType']) {
-                    $data[] = ArrayToolkit::parts($record, $columns);
+
+            foreach (array_merge($stayData, $videoData) as $dailyData) {
+                if (isset($dailyData['mediaType']) && 'video' !== $dailyData['mediaType']) {
+                    $data[] = $dailyData;
+                }
+
+                if (!isset($dailyData['mediaType'])) {
+                    $data[] = array_merge($dailyData, ['mediaType' => 'video']);
                 }
             }
-            $data = array_merge($data, $videoData);
         } else {
             $data = $this->getActivityStayDailyDao()->search(
                 $conditions,
                 [],
                 0,
                 PHP_INT_MAX,
-                $columns
+                array_merge($columns, ['mediaType'])
             );
         }
 
