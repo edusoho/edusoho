@@ -412,20 +412,14 @@ export default {
         },
         token: media.token,
         rememberLastPos: true,
+        playlist: media.url,
       };
-
-      if (media.resNo) {
-        options.resNo = media.resNo;
-      }
-
-      if (media.url) {
-        options.playlist = media.url;
-      }
 
       if (!canTryLookable) {
         delete options.pluck;
       }
       this.$store.commit('UPDATE_LOADING_STATUS', true);
+      console.log(options);
       this.initPlayer(options);
     },
     initPlayer(options) {
