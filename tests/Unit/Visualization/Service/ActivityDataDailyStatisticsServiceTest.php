@@ -70,8 +70,8 @@ class ActivityDataDailyStatisticsServiceTest extends BaseTestCase
                 ['userId' => 1, 'activityId' => 2, 'taskId' => 2, 'courseId' => 1, 'courseSetId' => 1, 'dayTime' => 1604793600, 'sumTime' => 540, 'pureTime' => 320, 'mediaType' => 'text'],
             ], 'runTimes' => 1],
             ['functionName' => 'search', 'returnValue' => [
-                ['userId' => 1, 'activityId' => 1, 'taskId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'dayTime' => 1604793600, 'sumTime' => 440, 'pureTime' => 220],
-                ['userId' => 1, 'activityId' => 2, 'taskId' => 2, 'courseId' => 1, 'courseSetId' => 1, 'dayTime' => 1604793600, 'sumTime' => 540, 'pureTime' => 320],
+                ['userId' => 1, 'activityId' => 1, 'taskId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'dayTime' => 1604793600, 'sumTime' => 440, 'pureTime' => 220, 'mediaType' => 'video'],
+                ['userId' => 1, 'activityId' => 2, 'taskId' => 2, 'courseId' => 1, 'courseSetId' => 1, 'dayTime' => 1604793600, 'sumTime' => 540, 'pureTime' => 320, 'mediaType' => 'text'],
             ], 'runTimes' => 1],
         ]);
 
