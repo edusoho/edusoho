@@ -115,4 +115,11 @@ export default [
     method: 'PATCH',
     disableLoading: true,
   },
+  {
+    // 获取本地视频资源
+    // 由于是老的 api 接口, 不需要添加 headers.Accept = 'application/vnd.edusoho.v2+json', 于是在 name 里面添加 Live 过滤掉
+    name: 'getLocalMediaLive',
+    url: '/lessons/{taskId}',
+    method: 'GET',
+  },
 ];
