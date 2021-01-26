@@ -18,7 +18,7 @@
     ]
   },
   "require": {
-    "php": ">=5.5.9",
+    "php": ">=5.6.0",
     "ext-json": "*",
     "twig/twig": "1.42.5",
     "symfony/symfony": "3.4.38",
