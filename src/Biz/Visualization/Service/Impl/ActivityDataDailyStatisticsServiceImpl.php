@@ -95,7 +95,7 @@ class ActivityDataDailyStatisticsServiceImpl extends BaseService implements Acti
     {
         $statisticsSetting = $this->getSettingService()->get('videoEffectiveTimeStatistics', []);
         $conditions = ['dayTime' => $dayTime];
-        $columns = ['userId', 'activityId', 'taskId', 'courseId', 'courseSetId', 'dayTime', 'sumTime', 'pureTime'];
+        $columns = ['userId', 'activityId', 'taskId', 'courseId', 'courseSetId', 'dayTime', 'sumTime', 'pureTime', 'mediaType'];
         if (empty($statisticsSetting) || 'playing' === $statisticsSetting['statistical_dimension']) {
             $stayData = $this->getActivityStayDailyDao()->search(
                 $conditions,

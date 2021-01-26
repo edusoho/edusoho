@@ -62,13 +62,6 @@ class RefreshUserLearnDailyJobTest extends BaseTestCase
         $this->assertNotEquals($before['sumTime'], $after['sumTime']);
     }
 
-    protected function prepareData()
-    {
-        $this->createUserStayDaily();
-        $this->createUserLearnDaily();
-        $this->createActivityStayDaily();
-    }
-
     protected function createUserLearnDaily($data = [])
     {
         return $this->getUserLearnDailyDao()->create(array_merge([

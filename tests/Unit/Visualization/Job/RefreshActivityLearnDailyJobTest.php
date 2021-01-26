@@ -3,33 +3,32 @@
 namespace Tests\Unit\Visualization\Job;
 
 use Biz\BaseTestCase;
+use Biz\Visualization\Dao\ActivityLearnDailyDao;
 use Biz\Visualization\Dao\ActivityStayDailyDao;
-use Biz\Visualization\Dao\CoursePlanLearnDailyDao;
-use Biz\Visualization\Dao\CoursePlanStayDailyDao;
-use Biz\Visualization\Dao\CoursePlanVideoDailyDao;
-use Biz\Visualization\Job\RefreshCoursePlanLearnDailyJob;
+use Biz\Visualization\Dao\ActivityVideoDailyDao;
+use Biz\Visualization\Job\RefreshActivityLearnDailyJob;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 
-class RefreshCoursePlanLearnDailyJobTest extends BaseTestCase
+class RefreshActivityLearnDailyJobTest extends BaseTestCase
 {
     public function testExecuteWithSettingByPlaying()
     {
-        $videoDaily = $this->createCoursePlanVideoDaily();
-        $stayDaily = $this->createCoursePlanStayDaily();
+        $videoDaily = $this->createActivityVideoDaily();
+        $stayDaily = $this->createActivityStayDaily();
 
-        $before = $this->createCoursePlanLearnDaily($stayDaily);
+        $before = $this->createActivityLearnDaily($stayDaily);
 
         $mockedCacheService = $this->mockBiz('System:CacheService', [
-            ['functionName' => 'clear', 'withParams' => ['refresh_course_plan']],
+            ['functionName' => 'clear', 'withParams' => ['refresh_activity']],
         ]);
 
         $this->mockBiz('System:SettingService', [
             ['functionName' => 'get', 'withParams' => ['videoEffectiveTimeStatistics', []], 'returnValue' => ['statistical_dimension' => 'playing']],
         ]);
 
-        $job = new RefreshCoursePlanLearnDailyJob([], $this->biz);
+        $job = new RefreshActivityLearnDailyJob([], $this->biz);
         $job->execute();
-        $after = $this->getCoursePlanLearnDailyDao()->get($before['id']);
+        $after = $this->getActivityLearnDailyDao()->get($before['id']);
 
         $mockedCacheService->shouldHaveReceived('clear')->times(1);
         $this->assertEquals($stayDaily['sumTime'], $before['sumTime']);
@@ -39,22 +38,22 @@ class RefreshCoursePlanLearnDailyJobTest extends BaseTestCase
 
     public function testExecuteWithSettingByPage()
     {
-        $videoDaily = $this->createCoursePlanVideoDaily();
-        $stayDaily = $this->createCoursePlanStayDaily();
+        $videoDaily = $this->createActivityVideoDaily();
+        $stayDaily = $this->createActivityStayDaily();
 
-        $before = $this->createCoursePlanLearnDaily($videoDaily);
+        $before = $this->createActivityLearnDaily($videoDaily);
 
         $mockedCacheService = $this->mockBiz('System:CacheService', [
-            ['functionName' => 'clear', 'withParams' => ['refresh_course_plan']],
+            ['functionName' => 'clear', 'withParams' => ['refresh_activity']],
         ]);
 
         $this->mockBiz('System:SettingService', [
             ['functionName' => 'get', 'withParams' => ['videoEffectiveTimeStatistics', []], 'returnValue' => ['statistical_dimension' => 'page']],
         ]);
 
-        $job = new RefreshCoursePlanLearnDailyJob([], $this->biz);
+        $job = new RefreshActivityLearnDailyJob([], $this->biz);
         $job->execute();
-        $after = $this->getCoursePlanLearnDailyDao()->get($before['id']);
+        $after = $this->getActivityLearnDailyDao()->get($before['id']);
 
         $mockedCacheService->shouldHaveReceived('clear')->times(1);
         $this->assertEquals($videoDaily['sumTime'], $before['sumTime']);
@@ -62,39 +61,18 @@ class RefreshCoursePlanLearnDailyJobTest extends BaseTestCase
         $this->assertNotEquals($before['sumTime'], $after['sumTime']);
     }
 
-    protected function createCoursePlanLearnDaily($data = [])
+    protected function createActivityLearnDaily($data = [])
     {
-        return $this->getCoursePlanLearnDailyDao()->create(array_merge([
+        return $this->getActivityLearnDailyDao()->create(array_merge([
             'userId' => 1,
+            'activityId' => 1,
+            'taskId' => 1,
             'courseId' => 1,
             'courseSetId' => 1,
+            'mediaType' => 'video',
             'dayTime' => strtotime(date('Y-m-d 0:0:0')),
-            'sumTime' => 100,
+            'sumTime' => 120,
             'pureTime' => 60,
-        ], $data));
-    }
-
-    protected function createCoursePlanStayDaily($data = [])
-    {
-        return $this->getCoursePlanStayDailyDao()->create(array_merge([
-            'userId' => 1,
-            'courseId' => 1,
-            'courseSetId' => 1,
-            'dayTime' => strtotime(date('Y-m-d 0:0:0')),
-            'sumTime' => 200,
-            'pureTime' => 60,
-        ], $data));
-    }
-
-    protected function createCoursePlanVideoDaily($data = [])
-    {
-        return $this->getCoursePlanVideoDailyDao()->create(array_merge([
-            'userId' => 1,
-            'courseId' => 1,
-            'courseSetId' => 1,
-            'dayTime' => strtotime(date('Y-m-d 0:0:0')),
-            'sumTime' => 60,
-            'pureTime' => 30,
         ], $data));
     }
 
@@ -107,6 +85,20 @@ class RefreshCoursePlanLearnDailyJobTest extends BaseTestCase
             'courseId' => 1,
             'courseSetId' => 1,
             'mediaType' => 'video',
+            'dayTime' => strtotime(date('Y-m-d 0:0:0')),
+            'sumTime' => 120,
+            'pureTime' => 60,
+        ], $data));
+    }
+
+    protected function createActivityVideoDaily($data = [])
+    {
+        return $this->getActivityVideoDailyDao()->create(array_merge([
+            'userId' => 1,
+            'activityId' => 1,
+            'taskId' => 1,
+            'courseId' => 1,
+            'courseSetId' => 1,
             'dayTime' => strtotime(date('Y-m-d 0:0:0')),
             'sumTime' => 60,
             'pureTime' => 30,
@@ -122,27 +114,19 @@ class RefreshCoursePlanLearnDailyJobTest extends BaseTestCase
     }
 
     /**
-     * @return CoursePlanLearnDailyDao
+     * @return ActivityVideoDailyDao
      */
-    protected function getCoursePlanLearnDailyDao()
+    protected function getActivityVideoDailyDao()
     {
-        return $this->biz->dao('Visualization:CoursePlanLearnDailyDao');
+        return $this->biz->dao('Visualization:ActivityVideoDailyDao');
     }
 
     /**
-     * @return CoursePlanStayDailyDao
+     * @return ActivityLearnDailyDao
      */
-    protected function getCoursePlanStayDailyDao()
+    protected function getActivityLearnDailyDao()
     {
-        return $this->biz->dao('Visualization:CoursePlanStayDailyDao');
-    }
-
-    /**
-     * @return CoursePlanVideoDailyDao
-     */
-    protected function getCoursePlanVideoDailyDao()
-    {
-        return $this->biz->dao('Visualization:CoursePlanVideoDailyDao');
+        return $this->biz->dao('Visualization:ActivityLearnDailyDao');
     }
 
     /**
