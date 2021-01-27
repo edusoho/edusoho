@@ -5678,6 +5678,7 @@ admin.setting.site.website_status.open: 开放
 admin.setting.site.website_status.closed: 关闭
 admin.setting.site.closed_note: 网站关闭公告
 admin.setting.site.closed_note.help_block: 网站处于关闭状态时，用户访问网站将显示此公告，支持HTML代码
+admin.setting.site.recordUrl.help_block: 以"http://"开头，以备案号结尾，请填写完整的公安备案号链接。示例：http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=33010802004377
 admin.setting.theme.name: 名称
 admin.setting.theme.version: 主题版本
 admin.setting.theme.author: 作者
@@ -5741,9 +5742,9 @@ admin.setting.record.code: 公安备案号
 admin.setting.record.url: 公安备案号链接
 admin.setting.record.picture.help_block: >
   图标尺寸建议不超过50×50px，图标尺寸建议不超过2MB。
-  <a href="http://www.qiqiuyu.com/faq/1028/detail" target="_blank">如何获取公安备案图标？</a>
+  <a href="http://www.qiqiuyu.com/faq/1239/detail" target="_blank">如何获取公安备案图标？</a>
 admin.setting.record.code.help_block: >
-    <a href="http://www.qiqiuyu.com/faq/1028/detail" target="_blank">如何添加公安备案号及链接？</a>
+    <a href="http://www.qiqiuyu.com/faq/1239/detail" target="_blank">如何添加公安备案号及链接？</a>
 admin.setting.mailer.is_trial.tips: >
   当前版本为试⽤版,不能进⾏邮件服务设置。如需购买授权版,请联系销售人员。
   电话：4008041114 或
