@@ -52,7 +52,6 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = array(
             'alterActivityLearnDailyAddMediaType',
-            'checkJobFinish',
             'addUpdateMediaTypeJob',
         );
 
@@ -102,25 +101,6 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         return 1;
-    }
-
-    public function checkJobFinish($page)
-    {
-        if ($this->isFieldExist('activity_learn_daily', 'mediaType')) {
-            $this->logger('info', 'mediaType字段已添加');
-            return 1;
-        }
-
-        if ($page > 60) {
-            $this->logger('info', 'mediaType字段超过60次未添加成功，新增定时任务添加');
-            $this->createAddMediaTypeJob();
-            return 1;
-        }
-
-        sleep(10);
-
-        $page = $page + 1;
-        return $page;
     }
 
     public function addUpdateMediaTypeJob()
@@ -193,12 +173,20 @@ class EduSohoUpgrade extends AbstractUpdater
               '{$currentTime}'
         )");
 
+        $this->getCacheService()->set('update_media_type', ['enabled' => 1]);
+
         return 1;
     }
 
     protected function createAddMediaTypeJob()
     {
-        $currentTime = time();
+        $currentTime = $time = time();
+        $startTime = strtotime(date('Y-m-d', $currentTime) . '07:00:00');
+        $endTime = strtotime(date('Y-m-d', $currentTime) . '23:00:00');
+
+        if ($currentTime > $startTime && $currentTime < $endTime) {
+            $time = strtotime(date('Y-m-d', $currentTime) . '23:00:00');
+        }
         $this->getConnection()->exec("INSERT INTO `biz_scheduler_job` (
               `name`,
               `expression`,
@@ -220,7 +208,7 @@ class EduSohoUpgrade extends AbstractUpdater
               '',
               '200',
               '0',
-              '{$currentTime}',
+              '{$time}',
               '300',
               'executing',
               '1',
@@ -228,6 +216,14 @@ class EduSohoUpgrade extends AbstractUpdater
               '{$currentTime}',
               '{$currentTime}'
         )");
+    }
+
+    /**
+     * @return \Biz\System\Service\CacheService
+     */
+    protected function getCacheService()
+    {
+        return $this->createService('System:CacheService');
     }
 
     /**
