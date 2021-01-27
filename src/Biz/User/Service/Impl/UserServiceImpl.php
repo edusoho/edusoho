@@ -453,6 +453,12 @@ class UserServiceImpl extends BaseService implements UserService
         $fileIds = ArrayToolkit::column($data, 'id');
         $files = $this->getFileService()->getFilesByIds($fileIds);
 
+        foreach ($files as $file) {
+            if ($file['userId'] != $userId) {
+                $this->createNewException(UserException::PERMISSION_DENIED());
+            }
+        }
+
         $files = ArrayToolkit::index($files, 'id');
         $fileIds = ArrayToolkit::index($data, 'type');
 
