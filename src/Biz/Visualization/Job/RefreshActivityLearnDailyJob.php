@@ -4,6 +4,7 @@ namespace Biz\Visualization\Job;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\SettingService;
+use Biz\Task\Dao\TaskResultDao;
 use Biz\Task\Service\TaskResultService;
 use Biz\Visualization\Dao\ActivityLearnDailyDao;
 use Biz\Visualization\Service\ActivityDataDailyStatisticsService;
@@ -73,7 +74,7 @@ class RefreshActivityLearnDailyJob extends BaseRefreshJob
             $data = $this->biz['db']->fetchAll($sql);
 
             if (!empty($data)) {
-                $this->getActivityLearnDailyDao()->batchUpdate(array_column($data, 'id'), $data);
+                $this->getTaskResultDao()->batchUpdate(array_column($data, 'id'), $data);
             }
             $this->getLogger()->addInfo("从{$start}刷新course_task_result结束");
         }
@@ -96,7 +97,7 @@ class RefreshActivityLearnDailyJob extends BaseRefreshJob
                 $updateData[] = ['id' => $result['id'], 'sumTime' => $sumTime];
             }
             if (!empty($updateData)) {
-                $this->getActivityLearnDailyDao()->batchUpdate(array_column($updateData, 'id'), $updateData);
+                $this->getTaskResultDao()->batchUpdate(array_column($updateData, 'id'), $updateData);
             }
             $this->getLogger()->addInfo("刷新{$user['id']}的course_task_result结束");
         }
@@ -132,5 +133,13 @@ class RefreshActivityLearnDailyJob extends BaseRefreshJob
     protected function getTaskResultService()
     {
         return $this->biz->service('Task:TaskResultService');
+    }
+
+    /**
+     * @return TaskResultDao
+     */
+    protected function getTaskResultDao()
+    {
+        return $this->biz->dao('Task:TaskResultDao');
     }
 }
