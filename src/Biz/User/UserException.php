@@ -92,7 +92,7 @@ class UserException extends AbstractException
 
     const LOCK_SELF_DENIED = 4030142;
 
-    const FILE_PERMISSION_DENIED = 4030143;
+    const FILE_PERMISSION_DENIED = 4030145;
 
     const DATEFIELD_INVALID = 5000143;
 

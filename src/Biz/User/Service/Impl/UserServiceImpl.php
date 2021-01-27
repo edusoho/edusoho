@@ -460,7 +460,7 @@ class UserServiceImpl extends BaseService implements UserService
         // #72812 修复越权删除头像漏洞
         foreach ($files as $file) {
             if ($file['userId'] != $userId) {
-                $this->createNewException(UserException::PERMISSION_DENIED());
+                $this->createNewException(UserException::FILE_PERMISSION_DENIED());
             }
         }
 
