@@ -193,6 +193,8 @@ class EduSohoUpgrade extends AbstractUpdater
               '{$currentTime}'
         )");
 
+        $this->getCacheService()->set('update_media_type', ['enabled' => 1], time() + 86400);
+
         return 1;
     }
 
@@ -228,6 +230,14 @@ class EduSohoUpgrade extends AbstractUpdater
               '{$currentTime}',
               '{$currentTime}'
         )");
+    }
+
+    /**
+     * @return \Biz\System\Service\CacheService
+     */
+    protected function getCacheService()
+    {
+        return $this->createService('System:CacheService');
     }
 
     /**
