@@ -2,6 +2,8 @@
 
 namespace Biz\Content\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\FileToolkit;
 use Biz\BaseService;
 use Biz\Common\CommonException;
 use Biz\Content\Dao\FileDao;
@@ -11,11 +13,9 @@ use Biz\Content\Service\FileService;
 use Biz\Course\Service\CourseService;
 use Biz\System\Service\SettingService;
 use Biz\User\UserException;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\FileToolkit;
-use Symfony\Component\Filesystem\Filesystem;
 
 class FileServiceImpl extends BaseService implements FileService
 {
@@ -30,7 +30,7 @@ class FileServiceImpl extends BaseService implements FileService
 
         $group = $this->getGroupDao()->getByCode($group);
         if (empty($group)) {
-            return array();
+            return [];
         }
 
         return $this->getFileDao()->findByGroupId($group['id'], $start, $limit);
@@ -80,7 +80,7 @@ class FileServiceImpl extends BaseService implements FileService
         }
         $group = $this->getGroupDao()->getByCode($group);
 
-        $record = array();
+        $record = [];
         $user = $this->getCurrentUser();
         $record['userId'] = empty($user) || !$user->isLogin() ? 0 : $user['id'];
 
@@ -106,7 +106,7 @@ class FileServiceImpl extends BaseService implements FileService
         } else {
             $filename = $file->getFilename();
         }
-        $errors = array();
+        $errors = [];
         $regex = '/\.('.preg_replace('/ +/', '|', preg_quote($extensions)).')$/i';
         if (!preg_match($regex, $filename)) {
             $errors[] = '只允许上传以下扩展名的文件：'.$extensions;
@@ -117,7 +117,7 @@ class FileServiceImpl extends BaseService implements FileService
 
     protected function validateFileNameLength(File $file)
     {
-        $errors = array();
+        $errors = [];
 
         if (!$file->getFilename()) {
             $errors[] = '文件名为空，请给文件取个名吧。';
@@ -241,7 +241,7 @@ class FileServiceImpl extends BaseService implements FileService
      */
     public function parseFileUri($uri)
     {
-        $parsed = array();
+        $parsed = [];
         $parts = explode('://', $uri);
         if (empty($parts) || 2 != count($parts)) {
             $this->createNewException(FileException::FILE_PARSE_URI_FAILED());
@@ -288,7 +288,7 @@ class FileServiceImpl extends BaseService implements FileService
 
     public function thumbnailFile(array $file, array $options)
     {
-        $options = array('quality' => 90, 'mode' => 'outbound') + $options;
+        $options = ['quality' => 90, 'mode' => 'outbound'] + $options;
 
         $imagine = new Imagine();
 
@@ -301,7 +301,7 @@ class FileServiceImpl extends BaseService implements FileService
 
         $imagine->open($file['file']->getRealPath())
             ->thumbnail($size, $options['mode'])
-            ->save($savePath.'.jpg', array('quality' => $options['quality']));
+            ->save($savePath.'.jpg', ['quality' => $options['quality']]);
 
         $file = new File($savePath.'.jpg');
 
@@ -332,7 +332,12 @@ class FileServiceImpl extends BaseService implements FileService
 
         list($naturalSize, $scaledSize) = FileToolkit::getImgInfo($parsed['fullpath'], $scaledWidth, $scaledHeight);
 
-        return array($parsed['path'], $naturalSize, $scaledSize);
+        return [$parsed['path'], $naturalSize, $scaledSize];
+    }
+
+    public function findFilesByUris(array $uris)
+    {
+        return $this->getFileDao()->findByUris($uris);
     }
 
     /**
