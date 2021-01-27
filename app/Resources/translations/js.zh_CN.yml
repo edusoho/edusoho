@@ -1631,7 +1631,7 @@ user.fields.gender_label: 性别
 information_collect.form.check_age_invalid: 年龄不在正常范围内
 information_collect.form.check_format_invalid: %display%格式错误
 
-admin_v2.video_effective_time_setting.cancel.hint: 视频课时学习时长统计维度变更后，将按新的规则统计生成数据，可能导致数据有较大幅度变动，属正常现象。数据将在3小时左右完成更新，不建议您频繁更改配置。<br/>是否确认更改学习时长统计维度？
+admin_v2.video_effective_time_setting.cancel.hint: 统计维度变更后，将按新的维度生成数据。可能导致数据有较大幅度变动，属正常现象。如无必要，不建议您频繁更改配置。如若需要，建议您晚上更改，更改后预计3小时完成更新。<br/>是否确认更改学习时长统计维度？
 admin_v2.video_effective_time_setting.play_rule.auto_pause.help_block: 当系统检测到用户处于非专注学习时，PC端将自动暂停当前播放
 admin_v2.video_effective_time_setting.play_rule.no_action.help_block: 当系统检测到用户处于非专注学习时，PC端将继续维持当前播放
 admin_v2.video_effective_time_setting.statistical_dimension.playing.help_block: 以实际播放时长作为学习时长统计
