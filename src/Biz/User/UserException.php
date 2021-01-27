@@ -143,6 +143,6 @@ class UserException extends AbstractException
         4030142 => 'exception.user.lock_self_denied',
         5000143 => 'exception.user.datefield_invalid',
         5000144 => 'exception.user.weixin_invalid',
-        4030143 => 'exception.user.file_permission_denied',
+        4030145 => 'exception.user.file_permission_denied',
     ];
 }
