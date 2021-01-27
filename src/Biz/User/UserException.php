@@ -92,6 +92,8 @@ class UserException extends AbstractException
 
     const LOCK_SELF_DENIED = 4030142;
 
+    const FILE_PERMISSION_DENIED = 4030143;
+
     const DATEFIELD_INVALID = 5000143;
 
     const WEIXIN_INVALID = 5000144;
@@ -141,5 +143,6 @@ class UserException extends AbstractException
         4030142 => 'exception.user.lock_self_denied',
         5000143 => 'exception.user.datefield_invalid',
         5000144 => 'exception.user.weixin_invalid',
+        4030143 => 'exception.user.file_permission_denied',
     ];
 }
