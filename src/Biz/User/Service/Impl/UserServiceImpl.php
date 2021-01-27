@@ -479,12 +479,15 @@ class UserServiceImpl extends BaseService implements UserService
             'largeAvatar' => $user['largeAvatar'] ? $user['largeAvatar'] : null,
         ];
 
-        $fileService = $this->getFileService();
-        array_map(function ($oldAvatar) use ($fileService) {
-            if (!empty($oldAvatar)) {
-                $fileService->deleteFileByUri($oldAvatar);
+        $oldAvatarFiles = $this->getFileService()->findFilesByUris(array_values($oldAvatars));
+
+        foreach ($oldAvatarFiles as $oldAvatarFile) {
+            if (!empty($oldAvatarFile) && $this->canManageAvatarFile($userId, $oldAvatarFile)) {
+                $this->getFileService()->deleteFileByUri($oldAvatarFile['uri']);
+            } else {
+                $this->createNewException(UserException::FILE_PERMISSION_DENIED());
             }
-        }, $oldAvatars);
+        }
 
         $user = $this->getUserDao()->update($userId, $fields);
         $this->dispatchEvent('user.change_avatar', new Event($user));
@@ -2221,6 +2224,16 @@ class UserServiceImpl extends BaseService implements UserService
         unset($conditions['keyword']);
 
         return $conditions;
+    }
+
+    // #72812 修复越权删除头像漏洞
+    protected function canManageAvatarFile($userId, $file)
+    {
+        if ($userId != $file['userId']) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
