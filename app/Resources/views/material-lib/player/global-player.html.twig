@@ -9,6 +9,8 @@
          data-user-id="{{app.user.id|default(0)}}"
          data-user-name="{{app.user.username|default('')}}"
          data-file-type="{{ file.type }}"
-    ></div>
+         data-enable-playback-rates="{{ setting('storage.enable_playback_rates') }}"
+    >
+    </div>
 {% endblock %}
 
