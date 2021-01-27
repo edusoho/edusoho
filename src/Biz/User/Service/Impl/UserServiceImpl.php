@@ -453,6 +453,10 @@ class UserServiceImpl extends BaseService implements UserService
         $fileIds = ArrayToolkit::column($data, 'id');
         $files = $this->getFileService()->getFilesByIds($fileIds);
 
+        if (empty($files)) {
+            $this->createNewException(FileException::FILE_NOT_FOUND());
+        }
+
         $files = ArrayToolkit::index($files, 'id');
         $fileIds = ArrayToolkit::index($data, 'type');
 
@@ -471,10 +475,11 @@ class UserServiceImpl extends BaseService implements UserService
         $oldAvatarFiles = $this->getFileService()->findFilesByUris(array_values($oldAvatars));
 
         foreach ($oldAvatarFiles as $oldAvatarFile) {
+            if (!$this->canManageAvatarFile($userId, $oldAvatarFile)) {
+                $this->createNewException(UserException::FILE_PERMISSION_DENIED());
+            }
             if (!empty($oldAvatarFile) && $this->canManageAvatarFile($userId, $oldAvatarFile)) {
                 $this->getFileService()->deleteFileByUri($oldAvatarFile['uri']);
-            } else {
-                $this->createNewException(UserException::FILE_PERMISSION_DENIED());
             }
         }
 
