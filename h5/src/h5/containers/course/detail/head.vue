@@ -447,6 +447,7 @@ export default {
         });
         player.on('playing', () => {
           this.isPlaying = true;
+          this.clearComputeWatchTime();
           this.computeWatchTime();
         });
         player.on('paused', e => {
@@ -523,6 +524,7 @@ export default {
     // 清除计时器
     clearComputeWatchTime() {
       clearInterval(this.intervalWatchTime);
+      this.intervalWatchTime = null;
     },
     closeFinishDialog() {
       this.finishDialog = false;
