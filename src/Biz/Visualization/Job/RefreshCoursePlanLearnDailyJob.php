@@ -32,10 +32,9 @@ class RefreshCoursePlanLearnDailyJob extends BaseRefreshJob
     protected function refreshByStayDaily($start, $limit)
     {
         $updateFields = $this->biz['db']->fetchAll("
-            SELECT l.id AS id, IF(s.sumTime, s.sumTime, 0) AS sumTime FROM `course_plan_learn_daily` l LEFT JOIN (
-                SELECT userId, dayTime, courseId, sum(sumTime) AS sumTime
-                FROM `course_plan_stay_daily` GROUP BY userId, dayTime, courseId
-            ) AS s ON l.dayTime = s.dayTime AND l.userId = s.userId AND l.courseId = s.courseId LIMIT {$start}, {$limit};
+            SELECT l.id AS id, IF(s.sumTime, s.sumTime, 0) AS sumTime FROM `course_plan_learn_daily` l 
+                LEFT JOIN `course_plan_stay_daily` s 
+                ON l.dayTime = s.dayTime AND l.userId = s.userId AND l.courseId = s.courseId LIMIT {$start}, {$limit};
         ");
 
         if (!empty($updateFields)) {
@@ -48,9 +47,9 @@ class RefreshCoursePlanLearnDailyJob extends BaseRefreshJob
     protected function refreshByWatchDaily($start, $limit)
     {
         $watchData = $this->biz['db']->fetchAll("
-            SELECT l.id AS id, IF(s.sumTime, s.sumTime, 0) AS sumTime FROM course_plan_learn_daily l INNER JOIN (
-                SELECT userId, dayTime, courseId, sum(sumTime) AS sumTime FROM course_plan_video_daily GROUP BY userId, dayTime, courseId
-            ) AS s ON l.dayTime = s.dayTime AND l.userId = s.userId AND l.courseId = s.courseId LIMIT {$start}, {$limit};
+            SELECT l.id AS id, IF(s.sumTime, s.sumTime, 0) AS sumTime FROM course_plan_learn_daily l 
+                INNER JOIN course_plan_video_daily s 
+                ON l.dayTime = s.dayTime AND l.userId = s.userId AND l.courseId = s.courseId LIMIT {$start}, {$limit};
         ");
 
         $watchData = array_column($watchData, null, 'id');
