@@ -15,6 +15,8 @@ class UpdateMediaTypeJob extends AbstractJob
 
     const LEARN_TABLE_REFRESH_PAGE = 'learn_refresh_page';
 
+    const CACHE_NAME = 'update_media_type';
+
     public function execute()
     {
         if (!$this->isFieldExist('activity_learn_daily', 'mediaType')) {
@@ -24,6 +26,8 @@ class UpdateMediaTypeJob extends AbstractJob
         $data = $this->getCacheService()->gets([self::STAY_TABLE_REFRESH_PAGE, self::LEARN_TABLE_REFRESH_PAGE]);
         $this->updateActivityStayDaily($data);
         $this->updateActivityLearnDaily($data);
+
+        $this->getCacheService()->clear(self::CACHE_NAME);
     }
 
     protected function updateActivityStayDaily($data)

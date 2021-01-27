@@ -10,6 +10,7 @@ use Biz\Visualization\Job\RefreshActivityLearnDailyJob;
 use Biz\Visualization\Job\RefreshCoursePlanLearnDailyJob;
 use Biz\Visualization\Job\RefreshLearnDailyJob;
 use Biz\Visualization\Job\RefreshUserLearnDailyJob;
+use Biz\Visualization\Job\UpdateMediaTypeJob;
 use Codeages\Biz\Framework\Scheduler\Service\SchedulerService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -83,6 +84,11 @@ class VideoTaskSettingController extends BaseController
         }
 
         $cacheName = $this->getCacheService()->get(RefreshCoursePlanLearnDailyJob::CACHE_NAME, []);
+        if (!empty($cacheName)) {
+            return $this->createJsonResponse(false);
+        }
+
+        $cacheName = $this->getCacheService()->get(UpdateMediaTypeJob::CACHE_NAME, []);
         if (!empty($cacheName)) {
             return $this->createJsonResponse(false);
         }
