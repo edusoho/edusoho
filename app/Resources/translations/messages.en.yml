@@ -4774,6 +4774,7 @@ admin.setting.site.website_status.open: Enable
 admin.setting.site.website_status.closed: Disable
 admin.setting.site.closed_note: 'Announcement of website shutdown'
 admin.setting.site.closed_note.help_block: 'Users will see this announcement when the website is shutdown'
+admin.setting.site.recordUrl.help_block: Start with "http://" and end with the record number. Please fill in the complete link to the public security record number. Example:http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=33010802004377
 admin.setting.theme.name: Name
 admin.setting.theme.version: Version
 admin.setting.theme.author: Author
@@ -4836,9 +4837,9 @@ admin.setting.record.code: Public Security Record Number
 admin.setting.record.url: Public security record number link
 admin.setting.record.picture.help_block: >
   The recommended icon size should not exceed 50×50 px, and the recommended icon size should not exceed 2 MB.
-  <a href="http://www.qiqiuyu.com/faq/1028/detail" target="_blank">How to obtain the public security filing icon?</a>
+  <a href="http://www.qiqiuyu.com/faq/1239/detail" target="_blank">How to obtain the public security filing icon?</a>
 admin.setting.record.code.help_block: >
-  <a href="http://www.qiqiuyu.com/faq/1028/detail" target="_blank">How to add the public security record number and link?</a>
+  <a href="http://www.qiqiuyu.com/faq/1239/detail" target="_blank">How to add the public security record number and link?</a>
 
 admin.setting.mailer.is_trial.tips: "You are running on the trail version which cannot set the Email service.If you want to buy the verified version ,please contact our sales agent Tel：4008041114 or\n"
 admin.setting.mailer.cloud_email_crm: 'Cloud Email'
