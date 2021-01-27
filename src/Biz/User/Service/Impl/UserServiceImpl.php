@@ -453,17 +453,6 @@ class UserServiceImpl extends BaseService implements UserService
         $fileIds = ArrayToolkit::column($data, 'id');
         $files = $this->getFileService()->getFilesByIds($fileIds);
 
-        if (empty($files)) {
-            return UserSerialize::unserialize($user);
-        }
-
-        // #72812 修复越权删除头像漏洞
-        foreach ($files as $file) {
-            if ($file['userId'] != $userId) {
-                $this->createNewException(UserException::FILE_PERMISSION_DENIED());
-            }
-        }
-
         $files = ArrayToolkit::index($files, 'id');
         $fileIds = ArrayToolkit::index($data, 'type');
 
