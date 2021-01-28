@@ -16,6 +16,7 @@ class CheckMediaTypeJob extends AbstractJob
             $job = [
                 'name' => 'UpdateMediaTypeJob',
                 'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
+                'pool' => 'dedicated',
                 'expression' => intval(time()),
                 'misfire_policy' => 'executing',
                 'class' => 'Biz\Visualization\Job\UpdateMediaTypeJob',

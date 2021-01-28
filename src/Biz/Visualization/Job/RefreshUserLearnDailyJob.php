@@ -49,12 +49,14 @@ class RefreshUserLearnDailyJob extends BaseRefreshJob
                 INNER JOIN user_video_daily s 
                 ON l.dayTime = s.dayTime AND l.userId = s.userId LIMIT {$start}, {$limit};
         ");
+
         $watchData = array_column($watchData, null, 'id');
 
         $stayData = $this->biz['db']->fetchAll("
-            SELECT l.id AS id, IF(s.sumTime, s.sumTime, 0) AS sumTime FROM user_learn_daily l INNER JOIN (
-                SELECT userId, dayTime, sum(sumTime) AS sumTime FROM activity_stay_daily WHERE mediaType != 'video' GROUP BY userId, dayTime
-            ) AS s ON l.dayTime = s.dayTime AND l.userId = s.userId LIMIT  {$start}, {$limit};
+            SELECT l.id AS id, IF(sum(s.sumTime), sum(s.sumTime), 0) AS sumTime FROM user_learn_daily l 
+                INNER JOIN activity_stay_daily s 
+                ON l.dayTime = s.dayTime AND l.userId = s.userId AND s.mediaType != 'video' 
+                GROUP BY l.userId, l.dayTime ORDER BY l.userId, l.dayTime LIMIT {$start}, {$limit};
         ");
         $stayData = array_column($stayData, null, 'id');
         array_walk($stayData, function (&$data) use (&$watchData) {
