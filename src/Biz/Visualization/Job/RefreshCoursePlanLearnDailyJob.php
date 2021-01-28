@@ -46,17 +46,17 @@ class RefreshCoursePlanLearnDailyJob extends BaseRefreshJob
 
     protected function refreshByWatchDaily($start, $limit)
     {
-        $watchData = $this->biz['db']->fetchAll("
-            SELECT l.id AS id, IF(s.sumTime, s.sumTime, 0) AS sumTime FROM course_plan_learn_daily l 
-                INNER JOIN course_plan_video_daily s 
-                ON l.dayTime = s.dayTime AND l.userId = s.userId AND l.courseId = s.courseId LIMIT {$start}, {$limit};
-        ");
-
-        $watchData = array_column($watchData, null, 'id');
-
         $coursePlanLearnDailyIds = $this->biz['db']->fetchAll("SELECT id FROM course_plan_learn_daily LIMIT {$start}, {$limit}");
         $coursePlanLearnDailyIds = array_column($coursePlanLearnDailyIds, 'id');
         $marks = empty($coursePlanLearnDailyIds) ? '' : str_repeat('?,', count($coursePlanLearnDailyIds) - 1).'?';
+
+        $watchData = empty($marks) ? [] : $this->biz['db']->fetchAll("
+            SELECT l.id AS id, IF(s.sumTime, s.sumTime, 0) AS sumTime FROM course_plan_learn_daily l 
+                INNER JOIN course_plan_video_daily s 
+                ON l.dayTime = s.dayTime AND l.userId = s.userId AND l.courseId = s.courseId AND l.id IN ({$marks});
+        ", $coursePlanLearnDailyIds);
+
+        $watchData = array_column($watchData, null, 'id');
 
         $stayData = empty($marks) ? [] : $this->biz['db']->fetchAll("
             SELECT id, cld1.sumTime FROM course_plan_learn_daily cld INNER JOIN (
