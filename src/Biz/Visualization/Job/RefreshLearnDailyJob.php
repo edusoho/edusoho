@@ -43,6 +43,10 @@ class RefreshLearnDailyJob extends BaseRefreshJob
                 'className' => RefreshCoursePlanLearnDailyJob::class,
                 'cacheName' => RefreshCoursePlanLearnDailyJob::CACHE_NAME,
             ],
+            RefreshCourseTaskResultJob::REFRESH_TYPE => [
+                'className' => RefreshCourseTaskResultJob::class,
+                'cacheName' => RefreshCourseTaskResultJob::CACHE_NAME,
+            ],
         ];
     }
 

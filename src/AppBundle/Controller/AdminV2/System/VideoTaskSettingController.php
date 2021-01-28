@@ -8,6 +8,7 @@ use Biz\System\Service\CacheService;
 use Biz\System\Service\SettingService;
 use Biz\Visualization\Job\RefreshActivityLearnDailyJob;
 use Biz\Visualization\Job\RefreshCoursePlanLearnDailyJob;
+use Biz\Visualization\Job\RefreshCourseTaskResultJob;
 use Biz\Visualization\Job\RefreshLearnDailyJob;
 use Biz\Visualization\Job\RefreshUserLearnDailyJob;
 use Biz\Visualization\Job\UpdateMediaTypeJob;
@@ -68,32 +69,26 @@ class VideoTaskSettingController extends BaseController
 
     public function refreshJobCheckAction(Request $request)
     {
-        $cacheName = $this->getCacheService()->get(RefreshLearnDailyJob::CACHE_NAME, []);
-        if (!empty($cacheName)) {
-            return $this->createJsonResponse(false);
-        }
-
-        $cacheName = $this->getCacheService()->get(RefreshActivityLearnDailyJob::CACHE_NAME, []);
-        if (!empty($cacheName)) {
-            return $this->createJsonResponse(false);
-        }
-
-        $cacheName = $this->getCacheService()->get(RefreshUserLearnDailyJob::CACHE_NAME, []);
-        if (!empty($cacheName)) {
-            return $this->createJsonResponse(false);
-        }
-
-        $cacheName = $this->getCacheService()->get(RefreshCoursePlanLearnDailyJob::CACHE_NAME, []);
-        if (!empty($cacheName)) {
-            return $this->createJsonResponse(false);
-        }
-
-        $cacheName = $this->getCacheService()->get(UpdateMediaTypeJob::CACHE_NAME, []);
-        if (!empty($cacheName)) {
-            return $this->createJsonResponse(false);
+        foreach ($this->getJobCacheNames() as $cache) {
+            $cacheName = $this->getCacheService()->get($cache);
+            if (!empty($cacheName)) {
+                return $this->createJsonResponse(false);
+            }
         }
 
         return $this->createJsonResponse(true);
+    }
+
+    protected function getJobCacheNames()
+    {
+        return [
+            RefreshLearnDailyJob::CACHE_NAME,
+            RefreshActivityLearnDailyJob::CACHE_NAME,
+            RefreshUserLearnDailyJob::CACHE_NAME,
+            RefreshCoursePlanLearnDailyJob::CACHE_NAME,
+            RefreshCourseTaskResultJob::CACHE_NAME,
+            UpdateMediaTypeJob::CACHE_NAME,
+        ];
     }
 
     protected function createRefreshDataJob()
