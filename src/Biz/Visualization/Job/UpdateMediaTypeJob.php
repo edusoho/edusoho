@@ -40,7 +40,7 @@ class UpdateMediaTypeJob extends AbstractJob
         for (; $page <= $totalPage; ++$page) {
             $this->getCacheService()->set(self::STAY_TABLE_REFRESH_PAGE, $page);
             $start = $page * $limit;
-            $learnData = $this->biz['db']->fetchAll("select id from activity_stay_daily limit {$start}, {$limit}");
+            $learnData = $this->biz['db']->fetchAll("select id from activity_stay_daily order by id ASC limit {$start}, {$limit}");
             if (empty($learnData)) {
                 continue;
             }
@@ -63,7 +63,7 @@ class UpdateMediaTypeJob extends AbstractJob
         for (; $page <= $totalPage; ++$page) {
             $this->getCacheService()->set(self::LEARN_TABLE_REFRESH_PAGE, $page);
             $start = $page * $limit;
-            $learnData = $this->biz['db']->fetchAll("select id from activity_learn_daily limit {$start}, {$limit}");
+            $learnData = $this->biz['db']->fetchAll("select id from activity_learn_daily order by id ASC limit {$start}, {$limit}");
             if (empty($learnData)) {
                 continue;
             }
