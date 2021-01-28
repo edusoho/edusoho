@@ -18,7 +18,7 @@ class RefreshCoursePlanLearnDailyJob extends BaseRefreshJob
         $statisticsSetting = $this->getSettingService()->get('videoEffectiveTimeStatistics', []);
         $totalPage = ceil($this->biz['db']->fetchColumn('SELECT COUNT(*) FROM `course_plan_learn_daily`') / self::LIMIT);
 
-        for ($page = 0; $page <= $totalPage; ++$page) {
+        for ($page = 0; $page < $totalPage; ++$page) {
             $start = $page * self::LIMIT;
             if (empty($statisticsSetting) || 'playing' == $statisticsSetting['statistical_dimension']) {
                 $this->refreshByWatchDaily($start, self::LIMIT);
@@ -54,11 +54,19 @@ class RefreshCoursePlanLearnDailyJob extends BaseRefreshJob
 
         $watchData = array_column($watchData, null, 'id');
 
-        $stayData = $this->biz['db']->fetchAll("
-            SELECT l.id AS id, IF(s.sumTime, s.sumTime, 0) AS sumTime FROM course_plan_learn_daily l INNER JOIN (
-                SELECT userId, dayTime, courseId, sum(sumTime) AS sumTime FROM activity_stay_daily WHERE mediaType != 'video' GROUP BY userId, dayTime, courseId
-            ) AS s ON l.dayTime = s.dayTime AND l.userId = s.userId AND l.courseId = s.courseId LIMIT {$start}, {$limit};
-        ");
+        $coursePlanLearnDailyIds = $this->biz['db']->fetchAll("SELECT id FROM course_plan_learn_daily LIMIT {$start}, {$limit}");
+        $coursePlanLearnDailyIds = array_column($coursePlanLearnDailyIds, 'id');
+        $marks = empty($coursePlanLearnDailyIds) ? '' : str_repeat('?,', count($coursePlanLearnDailyIds) - 1).'?';
+
+        $stayData = empty($marks) ? [] : $this->biz['db']->fetchAll("
+            SELECT id, cld1.sumTime FROM course_plan_learn_daily cld INNER JOIN (
+                SELECT l.userId AS userId, l.dayTime AS dayTime, l.courseId AS courseId, IF(sum(s.sumTime), sum(s.sumTime), 0) AS sumTime 
+                    FROM course_plan_learn_daily l INNER JOIN activity_stay_daily s 
+                    ON l.dayTime = s.dayTime AND l.userId = s.userId AND l.courseId = s.courseId 
+                    WHERE s.mediaType != 'video' AND l.id IN ({$marks}) 
+                    GROUP BY l.userId, l.dayTime, l.courseId
+            ) AS cld1 ON cld.dayTime = cld1.dayTime AND cld.userId = cld1.userId AND cld.courseId = cld1.courseId;
+        ", $coursePlanLearnDailyIds);
 
         $stayData = array_column($stayData, null, 'id');
         array_walk($stayData, function (&$data) use (&$watchData) {

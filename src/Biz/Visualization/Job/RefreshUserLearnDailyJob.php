@@ -16,7 +16,7 @@ class RefreshUserLearnDailyJob extends BaseRefreshJob
         $statisticsSetting = $this->getSettingService()->get('videoEffectiveTimeStatistics', []);
 
         $totalPage = ceil($this->biz['db']->fetchColumn('SELECT COUNT(*) FROM `user_learn_daily`') / self::LIMIT);
-        for ($page = 0; $page <= $totalPage; ++$page) {
+        for ($page = 0; $page < $totalPage; ++$page) {
             $start = $page * self::LIMIT;
             if (empty($statisticsSetting) || 'playing' == $statisticsSetting['statistical_dimension']) {
                 $this->refreshByWatchDaily($start, self::LIMIT);
@@ -49,13 +49,23 @@ class RefreshUserLearnDailyJob extends BaseRefreshJob
                 INNER JOIN user_video_daily s 
                 ON l.dayTime = s.dayTime AND l.userId = s.userId LIMIT {$start}, {$limit};
         ");
+
         $watchData = array_column($watchData, null, 'id');
 
-        $stayData = $this->biz['db']->fetchAll("
-            SELECT l.id AS id, IF(s.sumTime, s.sumTime, 0) AS sumTime FROM user_learn_daily l INNER JOIN (
-                SELECT userId, dayTime, sum(sumTime) AS sumTime FROM activity_stay_daily WHERE mediaType != 'video' GROUP BY userId, dayTime
-            ) AS s ON l.dayTime = s.dayTime AND l.userId = s.userId LIMIT  {$start}, {$limit};
-        ");
+        $userLearnDailyIds = $this->biz['db']->fetchAll("SELECT id FROM user_learn_daily LIMIT {$start}, {$limit}");
+        $userLearnDailyIds = array_column($userLearnDailyIds, 'id');
+        $marks = empty($userLearnDailyIds) ? '' : str_repeat('?,', count($userLearnDailyIds) - 1).'?';
+
+        $stayData = empty($marks) ? [] : $this->biz['db']->fetchAll("
+            SELECT id, uld1.sumTime FROM user_learn_daily uld INNER JOIN (
+                SELECT l.userId AS userId, l.dayTime AS dayTime, IF(sum(s.sumTime), sum(s.sumTime), 0) AS sumTime 
+                    FROM user_learn_daily l INNER JOIN activity_stay_daily s 
+                    ON l.dayTime = s.dayTime AND l.userId = s.userId 
+                    WHERE s.mediaType != 'video' AND l.id IN ({$marks}) 
+                    GROUP BY l.userId, l.dayTime
+            ) AS uld1 ON uld.dayTime = uld1.dayTime AND uld.userId = uld1.userId;
+        ", $userLearnDailyIds);
+
         $stayData = array_column($stayData, null, 'id');
         array_walk($stayData, function (&$data) use (&$watchData) {
             $data['sumTime'] += empty($watchData[$data['id']]) ? 0 : $watchData[$data['id']]['sumTime'];
