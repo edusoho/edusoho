@@ -22,8 +22,8 @@ class RefreshLearnDailyJobTest extends BaseTestCase
         $result = $this->getSchedulerService()->countJobs(['name' => 'RefreshLearnDailyJob']);
 
         $this->assertEquals(0, $before);
-        $this->assertEquals(3, $result);
-        $mockedService->shouldHaveReceived('set')->times(3);
+        $this->assertEquals(4, $result);
+        $mockedService->shouldHaveReceived('set')->times(4);
         $mockedService->shouldHaveReceived('clear')->times(1);
     }
 

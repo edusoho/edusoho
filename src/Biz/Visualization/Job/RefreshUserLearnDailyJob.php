@@ -44,17 +44,17 @@ class RefreshUserLearnDailyJob extends BaseRefreshJob
 
     protected function refreshByWatchDaily($start, $limit)
     {
-        $watchData = $this->biz['db']->fetchAll("
-            SELECT l.id AS id, IF(s.sumTime, s.sumTime, 0) AS sumTime FROM user_learn_daily l 
-                INNER JOIN user_video_daily s 
-                ON l.dayTime = s.dayTime AND l.userId = s.userId LIMIT {$start}, {$limit};
-        ");
-
-        $watchData = array_column($watchData, null, 'id');
-
         $userLearnDailyIds = $this->biz['db']->fetchAll("SELECT id FROM user_learn_daily LIMIT {$start}, {$limit}");
         $userLearnDailyIds = array_column($userLearnDailyIds, 'id');
         $marks = empty($userLearnDailyIds) ? '' : str_repeat('?,', count($userLearnDailyIds) - 1).'?';
+
+        $watchData = empty($marks) ? [] : $this->biz['db']->fetchAll("
+            SELECT l.id AS id, IF(s.sumTime, s.sumTime, 0) AS sumTime FROM user_learn_daily l 
+                INNER JOIN user_video_daily s 
+                ON l.dayTime = s.dayTime AND l.userId = s.userId AND l.id IN ({$marks});
+        ", $userLearnDailyIds);
+
+        $watchData = array_column($watchData, null, 'id');
 
         $stayData = empty($marks) ? [] : $this->biz['db']->fetchAll("
             SELECT id, uld1.sumTime FROM user_learn_daily uld INNER JOIN (
@@ -73,6 +73,7 @@ class RefreshUserLearnDailyJob extends BaseRefreshJob
         });
 
         $updateFields = array_merge($stayData, $watchData);
+
         if (!empty($updateFields)) {
             $this->getUserLearnDailyDao()->batchUpdate(array_column($updateFields, 'id'), $updateFields);
         }
