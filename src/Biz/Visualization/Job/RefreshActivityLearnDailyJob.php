@@ -33,6 +33,12 @@ class RefreshActivityLearnDailyJob extends BaseRefreshJob
         $totalPage = $count / $limit;
         for ($page = 0; $page <= $totalPage; ++$page) {
             $start = $page * $limit;
+            $learnData = $this->biz['db']->fetchAll("select id from activity_learn_daily order by id ASC limit {$start}, {$limit}");
+            if (empty($learnData)) {
+                continue;
+            }
+
+            $marks = str_repeat('?,', count($learnData) - 1).'?';
             $sql = "
                 SELECT  ald.id AS id,  
                     IF(t.sumTime, t.sumTime, 0) AS sumTime, 
@@ -40,9 +46,9 @@ class RefreshActivityLearnDailyJob extends BaseRefreshJob
                 FROM activity_learn_daily ald
                 LEFT JOIN {$table} t 
                 ON ald.activityId  =  t.activityId  AND  ald.userId  =  t.userId  AND  ald.dayTime = t.dayTime 
-                WHERE ald.mediaType = 'video' LIMIT {$start}, {$limit};
+                WHERE ald.mediaType = 'video' and ald.id in ({$marks});
             ";
-            $data = $this->biz['db']->fetchAll($sql);
+            $data = $this->biz['db']->fetchAll($sql, array_column($learnData, 'id'));
             if (!empty($data)) {
                 $this->getActivityLearnDailyDao()->batchUpdate(array_column($data, 'id'), $data);
             }
