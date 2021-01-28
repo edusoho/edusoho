@@ -1,0 +1,33 @@
+{% extends 'activity/activity-layout.html.twig' %}
+{% set doc = activity.ext|default(null) %}
+{% do script(['libs/ltc-sdk-client.js', cloud_sdk_url('uploader'), 'docactivity/js/create/index.js']) %}
+{% block  activity_step %}
+  <div class="tab-pane js-course-tasks-pane active js-step2-view">
+    <form class="form-horizontal" id="step2-form" data-media-id="{{ doc.mediaId|default(null) }}" >
+      <div class="form-group">
+        <div class="col-sm-2 control-label">
+          <label for="title" class="control-label-required">{{ 'course.plan_task.activity_manage.title_name'|trans }}</label>
+        </div>
+        <div class="col-sm-10">
+          <input id="title" class="form-control" type="text" name="title" value="{{ activity.title|default('') }}" >
+          <div class="help-block">{{ 'course.plan_task.activity_manage.help_block'|trans }}</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-2 control-label">
+          <label for="media" class="style control-label-required">{{'course.plan_task.activity_manage.doc'|trans}}</label>
+        </div>
+        <div class="col-sm-10">
+          {% include 'file-chooser/file-choose.html.twig' with {
+            'courseId': activity.fromCourseId,
+            mediaType: 'document',
+            fileType:'document',
+            file: doc.file|default(null),
+            placeholder: 'course.plan_task.activity_manage.doc'|trans
+          } %}
+          <div id="file-choose-type" class="hidden" data-type="doc"></div>
+        </div>
+      </div>
+    </form>
+  </div>
+{% endblock %}

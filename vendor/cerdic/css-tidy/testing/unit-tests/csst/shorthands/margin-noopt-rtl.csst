@@ -1,0 +1,22 @@
+--TEST--
+Test margin optimization
+--CSS--
+a { 
+    margin-left: 10px;
+    margin-right: 11px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+--EXPECT--
+array (
+  'a' => 
+  array (
+    'margin-right' => '10px',
+    'margin-left' => '11px',
+    'margin-top' => '10px',
+    'margin-bottom' => '10px',
+  ),
+)
+--SETTINGS--
+optimise_shorthands=0
+reverse_left_and_right=true

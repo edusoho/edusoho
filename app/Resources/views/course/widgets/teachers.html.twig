@@ -1,0 +1,30 @@
+{% if not teachers is empty %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">{{ 'course.teacher.content_title'|trans }}</h3>
+    </div>
+    <div class="panel-body">
+      {% for teacher in teachers %}
+        <div class="media media-default">
+          <div class="media-left">
+            <a class="{% if not teacher.destroyed|default(0) %}js-user-card{% endif %}" href="{{ path('user_show', {'id': teacher.id}) }}"
+               data-card-url="{{ path('user_card_show', {'userId': teacher.id}) }}"
+               data-user-id="{{ teacher.id }}"
+               data-original-title="" title="">
+              <img class="avatar-md" src="{{ filepath(teacher.mediumAvatar, 'avatar.png') }}"></a>
+          </div>
+          <div class="media-body">
+            <div class="title">
+              {% if not teacher.destroyed|default(0) %}
+              <a class="link-dark link-dark" href="{{ path('user_show', {'id': teacher.id}) }}">{{ teacher.nickname }}</a>
+              {% else %}
+                <a class="link-dark link-dark">{{ 'user.user_had_destroyed'|trans }}</a>
+              {% endif %}
+            </div>
+            <div class="content">{{ teacher.title }}</div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}

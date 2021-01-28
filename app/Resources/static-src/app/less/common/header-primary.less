@@ -1,0 +1,26 @@
+@import '~common/variable.less';
+
+.es-header {
+  background-color: @brand-primary;
+  .nav.navbar-nav > li {
+    >a {
+      color: @gray-lighter;
+    }
+    &.open.active >a,
+    &.open>a:hover, 
+    &.open>a:focus,
+    &.open>a,
+    &.active >a,
+    >a:hover, 
+    >a:focus {
+      color: #fff;
+    }
+  }
+  .nav.user-nav > li > a {
+    color: @gray-lighter;
+    &:hover,
+    &:focus {
+      color: #fff;
+    }
+  }
+}

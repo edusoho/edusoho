@@ -1,0 +1,128 @@
+{% extends 'activity/activity-layout.html.twig' %}
+
+{% do script(['libs/ltc-sdk-client.js', 'libs/jquery-nouislider.js', 'libs/bootstrap-datetimepicker.js', 'libs/select2.js', 'testpaperactivity/js/manage/index.js'], 300) %}
+
+{% block activity_step %}
+  <div class="tab-pane js-course-tasks-pane active js-step2-view">
+    <form class="form-horizontal" id="step2-form">
+      {% set course = get_course(activity.fromCourseId) %}
+      {% set testpaper = activity.ext.testpaper|default('') %}
+      {% set questionBankTree = data('QuestionBankTree', {selectId: testpaper.bankId|default(0)}) %}
+      {% set features = get_features() %}
+      {% set testMode = activity.ext.answerScene.start_time|default(0) > 0 ? 'realTime' : 'normal' %}
+      <div class="form-group">
+        <div class="col-sm-2 control-label">
+          <label for="title" class="control-testpaper-medialabel-required">{{ 'course.plan_task.activity_manage.title_name'|trans }}</label>
+        </div>
+        <div class="col-sm-10">
+          <input id="title" class="form-control" type="text" name="title" value="{{ activity.title|default('') }}" >
+          <div class="help-block">{{ 'course.plan_task.activity_manage.help_block'|trans }}</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-2 control-label">
+          <label for="testpaper-media" class="control-label-required">{{'course.plan_task.activity_manage.testpaper'|trans}}</label>
+        </div>
+        <div class="col-sm-5 controls">
+          <select id="question-bank" class="form-control" name="questionBankId" data-url="{{ path('question_bank_manage_testpaper_json', {id:0}) }}">
+            {% if questionBankTree %}
+              <option value="0">{{ 'question.select_question_bank'|trans }}</option>
+              {% for bank in questionBankTree %}
+                {% if bank.selected is defined %}
+                  <option class="hidden" value={{ bank.id }} {% if testpaper.bank_id|default(0) == bank.itemBankId %}selected{% endif %}>{{ bank.name }}</option>
+                {% else %}
+                <option {% if bank.categoryId is not defined %} value disabled="disabled" {% else %} value="{{ bank.id }}" {% if testpaper.bank_id|default(0) == bank.itemBankId %}selected{% endif %}{% endif %}>{% for i in 1..(bank.depth-1) if bank.depth > 1 %}　{% endfor %}{{ bank.name }}</option>
+                {% endif %}
+              {% endfor %}
+            {% else %}
+              <option value="0">{{'question_bank.empty.no_auth'|trans}}</option>
+            {% endif %}
+          </select>
+          <div class="help-block hidden js-help-block"></div>
+        </div>
+        <div class="col-sm-5 controls">
+          <input id="testpaper-media" class="form-control hidden" name="testpaperId" value="{{ testpaper.id|default(0) }}" data-url="{% if testpaper %}{{ path('question_bank_manage_testpaper_json', {id:testpaper.bank_id}) }}{% endif %}" data-get-testpaper-items="{{ path('course_set_manage_testpaper_info',{id:course.courseSetId}) }}">
+          {% if testpaper|default() %}
+            <input type="hidden" id="testPaperName" value="{{ testpaper.name }}">
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="form-group" id="questionItemShowDiv" style="display:none;">
+          <div class="col-sm-2 control-label"></div>
+          <div class="col-sm-10 controls" id="questionItemShowTable"></div>
+      </div>
+
+      <div class="form-group js-score-form-group" id="score-condition" data-pass="{{ activity.finishData|default('0.6') }}" data-score="{{ testpaper.total_score|default(0) }}" {% if activity.finishData is not defined %}style="display:none" {% endif %} >
+        <div class="col-sm-2 control-label">
+          <label for="testpaper-media" class="control-label-required">{{'course.plan_task.activity_manage.testpaper.qualified_score'|trans}}</label>
+        </div>
+        <div class="col-sm-10 color-gray">
+          <span>0</span>
+          <div class="js-slider-content inline-block vertical-middle mlm mrl" id="score-slider">
+          </div>
+          <span class="js-score-total"></span>{{'site.question.attr.score.unit'|trans}}
+          <input type="hidden" id="finishData" name="finishData" value="{{ activity.finishData|default('0.6') }}">
+          {% if activity.finishType|default('') %}
+            <input type="hidden" name="finishType" value="{{ activity.finishType }}">
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="form-group">
+          <div class="col-sm-2 control-label"><label for="length">{{'course.plan_task.activity_manage.testpaper.time_limit'|trans}}</label></div>
+          <div class="col-sm-10 controls radios">
+              <input id="length" class="form-control inline-block width-150" type="text" name="length" value="{{ activity.length|default(0)}}"> {{'site.date.minute'|trans}}
+              <div class="help-block">{{'course.plan_task.activity_manage.testpaper.time_length_tips'|trans}}</div>
+          </div>
+      </div>
+
+      <div class="form-group">
+          <div class="col-sm-2 control-label"><label>{{'course.plan_task.activity_manage.testpaper.times'|trans}}</label></div>
+          <div class="col-sm-10 controls radios">
+              {{ radios('doTimes', {'0':'course.plan_task.activity_manage.testpaper.times.always'|trans, '1':'course.plan_task.activity_manage.testpaper.times.once'|trans}, activity.ext.answerScene.do_times|default('0')) }}
+          </div>
+      </div>
+
+      <div class="form-group" {% if activity.ext.answerScene.do_times|default('0') == 1 %}style="display:none;" {% endif %}>
+          <div class="col-sm-2 control-label"><label for="lesson-redo-interval-field">{{'course.plan_task.activity_manage.testpaper.redo_interval'|trans}}</label></div>
+          <div class="col-sm-10 controls">
+              <input id="lesson-redo-interval-field" class="form-control inline-block width-150" type="text" name="redoInterval" value="{{ activity.ext.answerScene.redo_interval|default('0') / 60 }}"> {{'site.date.hour'|trans}}
+              <i class="es-icon es-icon-help color-gray" data-toggle="tooltip" data-placement="right" data-original-title="{{'course.plan_task.activity_manage.testpaper.redo_interval_tips'|trans}}"></i>
+              <div class="help-block">{{'course.plan_task.activity_manage.testpaper.time_limit_tips'|trans}}</div>
+          </div>
+      </div>
+
+      <div class="form-group starttime-check-div" {% if activity.ext.answerScene.do_times|default('0') == 0 %}style="display:none;" {% endif %}>
+          <div class="col-sm-2 control-label">
+              <label for="startTime">{{'course.plan_task.activity_manage.testpaper.start_time'|trans}}</label>
+          </div>
+          <div class="col-sm-10 controls radios">
+              {{ radios('testMode', {'normal':'course.plan_task.activity_manage.testpaper.mode.always'|trans, 'realTime':'course.plan_task.activity_manage.testpaper.mode.realTime'|trans}, testMode) }}
+          </div>
+          <div class="col-sm-10 mtm starttime-input pull-right {% if testMode == 'normal' %} hidden {% endif %}">
+              <input class="form-control width-input width-input-large mr0" id="startTime" type="text" name="startTime" autocomplete="off" value="{% if activity|default(null) and activity.startTime|default(0) != 0 %}{{ activity.startTime|date('Y-m-d H:i') }}{% else %}0{% endif %}" >
+          </div>
+      </div>
+      {{ slot('course.task.facein.settings', {'activity': activity|default([])}) }}
+      {% if is_facein_open() %}
+        <div class="form-group">
+          <div class="col-sm-2 control-label"><label>{{'course.task.enable_facein'|trans}}</label></div>
+          <div class="col-sm-10 controls radios">
+            {{ radios('enable_facein', {'1':'form.radio_btn.open'|trans, '0':'form.radio_btn.close'|trans}, activity.ext.answerScene.enable_facein|default(0)) }}
+          </div>
+        </div>
+      {% endif %}
+
+    </form>
+  </div>
+  {% if 'lesson_credit' in features %}
+      <div class="form-group">
+          <div class="col-sm-2 control-label"><label for="lesson-title-field">{{'course.plan_task.activity_manage.testpaper.mode.require_credit'|trans}}</label></div>
+          <div class="col-sm-10 controls">
+              <input class="form-control widt-input width-150" type="text" name="requireCredit" value="{{ lesson.requireCredit|default(0) }}"> {{'site.data.score'|trans}}
+              <div class="help-block">{{'course.plan_task.activity_manage.testpaper.mode.require_credit_tips'|trans}}</div>
+          </div>
+      </div>
+  {% endif %}
+{% endblock %}

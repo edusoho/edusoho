@@ -1,0 +1,31 @@
+<div class="panel panel-default">
+	<div class="panel-heading">
+          <h3 class="panel-title">{{'cloud_search.teacher.recommend.content_title'|trans}}</h3>
+        </div>
+    <div class="panel-body  media-list">
+    	{% set teachers = data('RecommendTeachers',{'count':5}) %}
+		{% if teachers %}
+			{% for teacher in teachers %}
+			<div class="media media-default">
+				<div class="media-left prl">
+					<a class="js-user-card" href="{{path('user_show',{id:teacher.id})}}" data-card-url="{{path('user_card_show',{userId:teacher.id})}}" data-user-id="{{teacher.id}}" data-original-title="" title="">
+						<img class="avatar-md" src="{{ filepath(teacher.largeAvatar, 'avatar.png') }}" alt=""></a>
+				</div>
+				<div class="media-body media-middle">
+					<div class="title">
+					{% if not teacher.destroyed|default(0) %}
+					  <a class="link-dark link-dark" href="{{path('user_show',{id:teacher.id})}}">{{ teacher.nickname }}</a>
+				    {% else %}
+					  <a class="link-dark link-dark">{{ 'user.user_had_destroyed'|trans }}</a>
+                    {% endif %}
+					</div>
+					<div class="content">{{ teacher.title}}
+					</div>
+				</div>
+			</div>
+			{% endfor %}
+		{% else %}
+			<div class="empty">{{'cloud_search.teacher.recommend.empty'|trans}}</div>
+		{% endif %}
+    </div>
+</div>

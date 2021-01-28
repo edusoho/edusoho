@@ -1,0 +1,22 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set nav = 'edu-cloud' %}
+
+{% block content %}
+  <div class="col-md-2">
+    {% block sidebar %}
+      <div class="panel panel-default">
+        <div class="list-group">
+          <a href="{{ path('admin_edu_cloud') }}" class="list-group-item {% if menu == 'overview' %}active{% endif %}">{{'admin.edu_cloud.side_bar.introduction'|trans}}</a>
+        </div>
+
+        <div class="list-group">
+          <a href="{{ path('admin_edu_cloud_sms') }}" class="list-group-item {% if menu == 'sms' %}active{% endif %}">{{'admin.edu_cloud.edu_sms'|trans}}</a>
+        </div>
+      </div>
+    {% endblock %}
+  </div>
+  <div class="col-md-10">
+    {% block main %}{% endblock %}
+  </div>
+{% endblock %}

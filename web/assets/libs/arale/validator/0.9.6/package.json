@@ -1,0 +1,29 @@
+{
+    "family": "arale",
+    "name": "validator",
+    "version": "0.9.6",
+    "author": "Shawn <shaoshuai0102@gmail.com>",
+    "maintainers": [
+        "余化 <shaoshuai0102@gmail.com>",
+        "乔花 <shengyan1985@gmail.com>"
+    ],
+    "keywords": ["widget"],
+    "description": "最合适的表单校验组件。",
+    "license": "MIT",
+    "tests": ["rules", "core", "core2", "validator"],
+    "spm": {
+        "output": ["core.js", "validator.js"],
+        "alias": {
+            "$": "$",
+            "widget": "arale/widget/1.1.1/widget"
+        }
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/aralejs/validator"
+    },
+    "bugs": {
+        "email": "shaoshuai0102@gmail.com",
+        "url": "https://github.com/aralejs/validator/issues"
+    }
+}

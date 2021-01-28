@@ -1,0 +1,69 @@
+{% extends 'user/layout.html.twig' %}
+
+{% block title %}{{ parent() }}{% endblock %}
+
+{% set pageNav = 'friend' %}
+
+{% block main %}
+
+
+<ul class="nav nav-pills mbl">
+  <li {% if friendNav == 'following' %}class="active"{% endif %}><a href="{{ path('user_following', {id:user.id}) }}">{{'user.fields.following'|trans}}</a></li>
+  <li {% if friendNav == 'follower' %}class="active"{% endif %}><a href="{{ path('user_follower', {id:user.id}) }}">{{'user.fields.fan'|trans}}</a></li>
+</ul>
+
+<div class="row">
+  {% for friend in friends if friends %}
+    {% set isFollowed = (friend.id in myfollowings)|default(false) %}
+    <div class="col-md-3">
+      <div class="teacher-item">
+        <div class="teacher-top">
+          <a class="teacher-img" href="{{ path('user_show', {id:friend.id}) }}">
+            <img class="avatar-lg" src="{{ filepath(friend.largeAvatar, 'avatar.png') }}" alt="">
+          </a>
+          <h3 class="title">
+            {% if not friend.destroyed|default(0) %}
+              <a class="link-dark" href="{{ path('user_show', {id:friend.id}) }}">{{ friend.nickname }}</a>
+            {% else %}
+              <a class="link-dark">{{ 'user.user_had_destroyed'|trans }}</a>
+            {% endif %}
+          </h3>
+          <div class="position">
+            {% if friend.title %}
+              {{ friend.title|sub_text(12) }}
+            {% else %}
+              {{'user.fields.no_title'|trans}}
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="teacher-bottom">
+          <div class="about">
+            {% if allUserProfile[friend.id]|default('') %}
+              {{ allUserProfile[friend.id].about|sub_text(30) }}
+            {% endif %}
+          </div>
+          <div class="metas">
+            {% if not app.user or (friend.id != app.user.id) %}
+              {% set messageSetting = setting('message') %}
+              <a class="btn btn-primary btn-sm follow-btn" href="javascript:;" data-url="{{ path('user_follow', {id:friend.id}) }}" {% if isFollowed %} style="display:none;"{% endif %} data-loggedin={% if app.user and app.user.isLogin() %}"1"{% else %}"0"{% endif %}>{{'user.btn.following'|trans}}</a>
+              <a class="btn btn-default btn-sm unfollow-btn" href="javascript:;" data-url="{{ path('user_unfollow', {id:friend.id}) }}" {% if not isFollowed %} style="display:none;" {% endif %}>{{'user.btn.followed'|trans}}</a>
+              {% if can_send_message(friend.id) and messageSetting.showable|default('1') != 0 %}
+                <a class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-backdrop="static"  data-url="{{path('message_create', {toId:friend.id})}}">{{'user.btn.send_message'|trans}}</a>
+              {% endif %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  {% else %}
+    {% if friendNav == 'following' %}
+      <div class="empty">{{'user.fields.following_empty'|trans}}</div>
+    {% elseif friendNav == 'follower' %}
+      <div class="empty">{{'user.fields.fan_empty'|trans}}</div>
+    {% endif %}
+  {% endfor %}
+</div>
+{{ web_macro.paginator(paginator) }}
+
+{% endblock %}

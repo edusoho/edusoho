@@ -1,0 +1,100 @@
+{% set tagMarks = data('TagMarks', {tags:tags}) %}
+{% set categoryMarks = data('CategoryMarks', {selectedCategory:selectedCategory, selectedSubCategory:selectedSubCategory, selectedthirdLevelCategory:selectedthirdLevelCategory}) %}
+{% set selectedTagGroups = data('SelectedTagGroups', {tags:tags}) %}
+{% set filter = request.query.get('filter')|default(null) %}
+
+{% if group == 'classroom' %}
+  {% set path = 'classroom_explore' %}
+  {% set orderByDefault = 'createdTime' %}
+{% elseif group == 'open_course' %}
+  {% set path = 'open_course_explore' %}
+  {% set group = 'course' %}
+{% else %}
+  {% set path = 'course_set_explore' %}
+  {% set orderByDefault = 'latest' %}
+{% endif %}
+{% set orderBy = request.query.get('orderBy', orderByDefault|default(null)) %}
+
+<div class="tabs-wrapper">
+  <div class="tabs-mark-group plm ptm clearfix">
+    <div class="title">{{'explore.course.category.all'|trans}}</div>
+
+    <ul class="content list-unstyled list-inline">
+      <li class="classify">
+        {% if categoryMarks[0]|default('') %}
+          <a href="{{ path(path, {tag:{tags:tags}, filter:filter,orderBy:orderBy}) }}">{{ categoryMarks[0].name|default('') }}<i class="es-icon es-icon-chevronright"></i></a>
+        {% endif %}
+      </li>
+
+      <li class="classify">
+        {% if categoryMarks[1]|default('') %}
+          <a href="{{ path(path, {category:selectedCategory, tag:{tags:tags}, filter:filter,orderBy:orderBy}) }}">{{ categoryMarks[1].name|default('') }}<i class="es-icon es-icon-chevronright"></i></a>
+        {% endif %}
+      </li>
+
+      <li class="classify">
+        {% if categoryMarks[2]|default('') %}
+          <a href="{{ path(path, {category:selectedCategory, subCategory:selectedSubCategory, tag:{tags:tags}, filter:filter,orderBy:orderBy}) }}">{{ categoryMarks[2].name|default('') }}<i class="es-icon es-icon-chevronright"></i></a>
+        {% endif %}
+      </li>
+
+      {% for tagMark in tagMarks|default('') %}
+        <li class="tabs-mark">
+          <a class="btn btn-link" href="{{ path(path, {category:selectedCategory, subCategory:selectedSubCategory, selectedthirdLevelCategory:selectedthirdLevelCategory, tag:{tags:tags, selectedTag:{group:tagMark.groupId, tag:tagMark.tagId}}, filter:filter, orderBy:orderBy}) }}">{{ tagMark.tagName }}<i class="glyphicon glyphicon-remove"></i></a>
+        </li>     
+      {% endfor %}
+    </ul>
+
+  </div>
+
+  <div class="tabs-group">
+    <div class="title">{{'category'|trans}}:</div>
+      <ul class="content clearfix">
+        <li class="{% if not selectedCategory %}active{% endif %}"><a class="nav-link" href="{{ path(path, {tag:{tags:tags}, filter:filter,orderBy:orderBy}) }}">{{'category.all_category'|trans}}</a></li>
+        {% for category in categories %}
+          <li class="{% if category.code == selectedCategory %}active{% endif %}"><a class="nav-link" href="{{ path(path, {category:category.code, tag:{tags:tags}, filter:filter,orderBy:orderBy}) }}">{{ category.name }}</a></li>
+        {% endfor %}
+      </ul>
+  </div>
+
+  {% if subCategories|default(null) %}
+    <div class="tabs-group" >
+     <div class="title"></div>
+      <ul class="content clearfix">
+        <li class="{% if not selectedSubCategory %}active{% endif %}"><a class="nav-link" href="{{ path(path, {category:selectedCategory, tag:{tags:tags}, filter:filter,orderBy:orderBy}) }}">{{'category.all_category'|trans}}</a></li>   
+        {% for subCategory in subCategories %}
+          <li class="{% if subCategory.code == selectedSubCategory %}active{% endif %}"><a class="nav-link" href="{{ path(path, {category:selectedCategory, subCategory:subCategory.code, tag:{tags:tags}, filter:filter,orderBy:orderBy}) }}">{{ subCategory.name }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+
+
+  {% if thirdLevelCategories|default(null) %}
+    <div class="tabs-group" >
+     <div class="title"></div>
+      <ul class="content clearfix">
+        <li class="{% if not selectedthirdLevelCategory %}active{% endif %}"><a class="nav-link" href="{{ path(path, {category:selectedCategory, subCategory:selectedSubCategory, tag:{tags:tags}, filter:filter,orderBy:orderBy}) }}">{{'category.all_category'|trans}}</a></li>   
+        {% for category in thirdLevelCategories %}
+          <li class="{% if category.code == selectedthirdLevelCategory %}active{% endif %}"><a class="nav-link" href="{{ path(path, {category:selectedCategory, subCategory:selectedSubCategory, selectedthirdLevelCategory:category.code, tag:{tags:tags}, filter:filter,orderBy:orderBy}) }}">{{ category.name }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+  {% for tagGroup in tagGroups %}
+    {% if group in tagGroup.scope %}
+      {% if tagGroup.id not in selectedTagGroups %}
+        <div class="tabs-group">
+          <div class="title">{{ tagGroup.name }}:</div>
+          <ul class="content clearfix">
+            {% for sub in tagGroup.subs %}
+              <li class="{% if tag_equal(tags, sub.id, tagGroup.id) %}active{% endif %}" ><a class="nav-link tag" href="{{ path(path, {category:selectedCategory, subCategory:selectedSubCategory, selectedthirdLevelCategory:selectedthirdLevelCategory, tag:{tags:tags, selectedTag:{group:tagGroup.id, tag:sub.id}}, filter:filter, orderBy:orderBy}) }}">{{ sub.name }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+</div>
+
+

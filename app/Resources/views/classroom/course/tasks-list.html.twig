@@ -1,0 +1,8 @@
+{{ render(controller('AppBundle:Course/Course:tasks', {course: course, member: member, paged: false})) }}
+
+<div class="text-center pt10 pb10 border-top-gray-lighter js-all-courses-link course-tasks-show-more hidden">
+  <a href="{{ path('course_show',{id: course.id, tab:'tasks'}) }} "
+     class="link-dark">{{ 'course.catalogue.view_all_btn'|trans }}</a>
+</div>
+
+<div class="js-only-display-one-page"></div>

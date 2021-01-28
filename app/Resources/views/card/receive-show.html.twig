@@ -1,0 +1,71 @@
+{% import "macro.html.twig" as web_macro %}
+{% do script(['app/js/card/card-receive/index.js'])%}
+{% set coin = setting('coin') %}
+<style>
+  .modal-backdrop.in {
+    opacity: 0.5;
+  }
+</style>
+{#登录后#}
+{% if app.user %}
+  <div class="modal-dialog modal-card-pack modal-logined">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="modal-info">
+          {% if cardType is defined and cardType == "coupon" %}
+            {{'card.isLogin.type.coupon.tips'|trans}}
+          {% endif %}
+          {% if cardType is defined and cardType == "moneyCard" %}
+            {{'card.isLogin.type.moneyCard.tips'|trans({'%coinName%': coin.coin_name|default('finance.coin'|trans) })}}
+          {% endif %}
+        </div>
+        {#卡券内容#}
+        {% if cardId is not null and cardDetail is not null and cardType == "coupon" %}
+          {% include 'card/coupon-useable.html.twig' with {'modal': 1}%}
+          <div class="modal-action">
+            {# 指定多资源跳转#}
+            <a class="btn btn-ghost-white btn-xlg hidden"
+              {% if cardDetail.targetType == "course" and cardDetail.targetId != 0 %}href="{{ path('course_show',{ id : cardDetail.targetId }) }}"
+              {% elseif cardDetail.targetType == "course" and cardDetail.targetId == 0 %}href="{{ path('course_set_explore') }}"
+              {% elseif cardDetail.targetType == "vip" %}href="{{ path('vip') }}"
+              {% elseif cardDetail.targetType == "classroom" and cardDetail.targetId == 0 %}href="{{ path('classroom_explore') }}"
+              {% elseif cardDetail.targetType == "classroom" and cardDetail.targetId != 0 %}href="{{ path('classroom_show',{ id : cardDetail.targetId }) }}"
+              {% else %}href="{{ path('course_set_explore') }}"
+              {% endif %}
+            >{{ 'card.info.moneycard.use_btn'|trans }}</a>
+          </div>
+        {% endif %}
+        {% if cardId is not null and cardDetail is not null and cardType == "moneyCard" %}
+          {% include 'card/moneycard-useable.html.twig' %}
+          <div class="modal-action">
+            <a class="btn btn-ghost-white btn-xlg money-card-use" href="javascript:;"
+              data-url="{{ path('money_card_use_without_password',{ id:cardDetail.id,filter:app.request.query.get('filter') }) }}"
+              data-coin-name="{{ coin.coin_name|default('finance.coin'|trans) }}"
+              data-target-url="{{ path('my_cards', {cardType:'moneyCard', filter:app.request.query.get('filter')}) }}">{{ 'card.info.moneycard.use_btn'|trans }}</a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% else %}
+
+  {#登录前#}
+  <div class="modal-dialog modal-card-pack">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="modal-info">
+          {{ 'card.notLogin.receive.tips'|trans }}
+        </div>
+        {% if cardId is not null and cardDetail is not null and cardType == "coupon" %}
+          {% include 'card/coupon-useable.html.twig' with {'modal': 1} %}
+        {% endif %}
+        {% if cardId is not null and cardDetail is not null and cardType == "moneyCard" %}
+          {% include 'card/moneycard-useable.html.twig' %}
+        {% endif %}
+        <div class="modal-action">
+          <a href="javascript:;" class="btn btn-ghost-white btn-xlg" data-dismiss="modal">{{ 'card.receive.login_view_btn'|trans }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}

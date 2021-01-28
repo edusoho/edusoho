@@ -1,0 +1,24 @@
+<div class="js-current-live-course hidden" data-position="{{ setting('homepage_live_notify.position') }}">
+  {% set liveEntryUrl = path('task_live_entry',{courseId:task.courseId, activityId:task.activityId}) %}
+  <div class="js-live-notify-title">
+    <div><i class="es-icon es-icon-entry-live cd-mr8"></i>{{ 'homepage.live_notify.header'|trans }}</div>
+  </div>
+  <div class="js-live-notify-body">
+    <div class="clearfix notification-live-item">
+      <div class="notification-item-dom"><a class="js-live-notify-link" href="{{ liveEntryUrl }}" target="_blank"><img src="{{ filepath(course_set_cover(task.courseSet, 'middle'), 'course.png') }}" alt="course-cover" class="img-responsive"></a></div>
+      <div class="notification-live-info notification-item-dom">
+        <a class="notification-live-info__title text-overflow js-live-notify-link" href="{{ liveEntryUrl }}" target="_blank">{{ task.title }}</a>
+        {% if task.startTime > timestamp() %}
+          <div class="notification-live-info__ing start">
+            <span class="live-time">{{ task.startTime|date('H:i') }}</span>
+            <span class="live-divider">|</span>
+            <span class="color-success">{{'homepage.live_notify.start_while'|trans}}</span>
+          </div>
+        {% else %}
+          <div class="notification-live-info__ing">{{'homepage.live_notify.living'|trans}}<i class="es-icon es-icon-living cd-ml8"></i></div>
+        {% endif %}
+        <div class="notification-live-info__link bg-primary js-live-notify-link"><a href="{{ liveEntryUrl}}" target="_blank">{{ 'homepage.live_notify.entry_live_room'|trans }}</a></div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,12 @@
+{% extends 'question-manage/question-form-layout.html.twig' %}
+
+{% block question_extra_fields %}
+
+  <div class="form-group">
+    <div class="col-md-2 control-label"><label for="question-answer-field" class="control-label-required">{{'course.question_manage.manage.answer'|trans}}</label></div>
+    <div class="col-md-8 controls">
+      <textarea class="form-control" id="question-answer-field" name="answer[]" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}" style="height:150px;">{{question.answer|default('')|join}}</textarea>
+    </div>
+  </div>
+
+{% endblock %}

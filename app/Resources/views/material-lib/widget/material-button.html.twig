@@ -1,0 +1,17 @@
+{% if s2b2c_has_behaviour_permission('canManageCourseSetFiles')  %}{#S2B2C#}
+  <div class="row">
+    <div class="material-btn-group  js-material-btn-group cd-mb8">
+      <button class="cd-btn cd-btn-primary js-upload-file-btn material-btn-group__btn" data-toggle="modal" data-backdrop="static"  data-target="#modal"
+        data-url="{{ path('uploader_batch_upload', {token:uploaderToken }) }}" title="{{'material_lib.btn.upload_files'|trans}}"  type="button" data-placement="bottom" >{{'material_lib.btn.upload_files'|trans}}
+      </button>
+      <button class="cd-btn cd-btn-primary material-btn-group__btn js-batch-download" disabled type="button">{{ 'course.activity.download'|trans }}</button>
+      {% if type|default('') != 'courseFile' %}
+        <button class="cd-btn cd-btn-primary material-btn-group__btn js-batch-share-btn" disabled type="button" data-role="batch-share" data-url="{{ path('material_batch_share') }}">{{ 'material_lib.btn.share'|trans }}
+        </button>
+        <button class="cd-btn cd-btn-primary material-btn-group__btn js-batch-tag-btn" disabled type="button" data-role="batch-tag">{{'material_lib.btn.add_tag'|trans}}</button>
+      {% endif %}
+      <button class="cd-btn cd-btn-danger material-btn-group__btn js-batch-delete-btn"  disabled type="button" data-role="batch-delete" data-url="{{ path }}">{{ 'material_lib.btn.delete'|trans }}
+      </button>
+    </div>
+  </div>
+{% endif %}

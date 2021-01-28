@@ -1,0 +1,69 @@
+{
+    "live_top_banner":
+    {
+        "title": "直播频道 - 首页 - 头部轮播图",
+        "category": "system",
+        "templateName": "block/live-top-banner.template.html.twig",
+        "items": {
+            "posters":
+            {
+                "title": "轮播图",
+                "desc": "建议使用1920x300大小的图片，最多可设置５张图片。",
+                "count": 5,
+                "type": "poster",
+                "default": [
+                    {
+                        "src": "\/assets\/img\/placeholder\/live-slide-1.jpg",
+                        "alt" : "海报1",
+                        "layout" : "limitWide",
+                        "background" : "#1d75ed",
+                        "href" : "",
+                        "html" : "",
+                        "status" : "1",
+                        "mode" : "img"
+                    },
+                    {
+                        "src": "\/assets\/img\/placeholder\/live-slide-1.jpg",
+                        "alt" : "海报2",
+                        "layout" : "limitWide",
+                        "background" : "#1d75ed",
+                        "href" : "",
+                        "html" : "",
+                        "status" : "1",
+                        "mode" : "img"
+                    },
+                    {
+                        "src": "\/assets\/img\/placeholder\/live-slide-1.jpg",
+                        "alt" : "海报3",
+                        "layout" : "limitWide",
+                        "background" : "#1d75ed",
+                        "href" : "",
+                        "html" : "",
+                        "status" : "1",
+                        "mode" : "img"
+                    },
+                    {
+                        "src": "\/assets\/img\/placeholder\/live-slide-1.jpg",
+                        "alt" : "海报4",
+                        "layout" : "limitWide",
+                        "background" : "#1d75ed",
+                        "href" : "",
+                        "html" : "",
+                        "status" : "1",
+                        "mode" : "img"
+                    },
+                    {
+                        "src": "\/assets\/img\/placeholder\/live-slide-1.jpg",
+                        "alt" : "海报5",
+                        "layout" : "limitWide",
+                        "background" : "#1d75ed",
+                        "href" : "",
+                        "html" : "",
+                        "status" : "1",
+                        "mode" : "img"
+                    }
+                ]
+            }
+        }
+    }
+}

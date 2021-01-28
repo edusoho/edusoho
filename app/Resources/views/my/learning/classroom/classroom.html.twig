@@ -1,0 +1,79 @@
+{% extends 'my/layout.html.twig' %}
+
+{% block title %}{{'my.learning.classroom'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'my-classroom' %}
+
+{% block main %}
+<style>
+.classroom-footer{
+
+  margin-top: 50px;
+}
+</style>
+<div class="panel panel-default panel-col lesson-manage-panel">
+  <div class="panel-heading">
+   {{'my.learning.classroom'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}
+  </div>
+
+  <div class="panel-body">
+    <ul class="course-wide-list">
+      {% for classroom in classrooms if classroom %}
+        <li class="my-course-item my-course-item--classroom cd-mb16 clearfix">
+          <a class="my-course-item__link" href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">
+            <img class="my-course-item__picture" src="{{ filepath(classroom.middlePicture, 'classroom.png') }}" alt="{{ classroom.title }}">
+            {% if classroom.status == "draft" %}
+              <span class="cd-tag cd-tag-orange my-course-item__label">{{'my.learning.classroom.unpublish'|trans}}</span>
+              {% elseif classroom.status == "closed" %}
+              <span class="cd-tag cd-tag-red my-course-item__label">{{'my.learning.classroom.closed'|trans}}</span>
+            {% endif %}
+          </a>
+          <div class="my-course-item__info">
+            <div class="my-course-item__title text-overflow">
+              {% if can_obtain_certificates(classroom.id, 'classroom') %}
+                <a style="margin-top: 5px" class="certificate-tag" tabindex="0" role="button" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-html="true" title="{{ 'explore.classroom.certificate_tag'|trans }}" data-content="{{ 'classroom.certificate_obtain'|trans }}">{{ 'explore.classroom.certificate_tag_short'|trans }}</a>
+              {% endif %}
+              <a class="cd-link-major" href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">{{classroom.title}}</a>
+            </div>
+
+            {% if 'assistant' in members[classroom.id].role %}
+              <div class="my-course-item__classroom"><span>{{'my.learning.classroom.study_days'|trans({'%day%':classroom.day})}}</span></div>
+            {% elseif "student" in members[classroom.id].role %}
+              <div class="my-course-item__classroom"><span>{{'my.learning.classroom.study_days'|trans({'%day%':classroom.day})}}</span></div>
+            {% else %}
+              <div class="my-course-item__classroom"><span>{{'my.learning.classroom.auditor'|trans}}</span></div>
+            {% endif %}
+
+
+            {% if "student" in members[classroom.id].role %}
+              <div class="my-course-item__progress cd-mt32 cd-clearfix">
+                <span class="my-course-item__progress__text">{{ 'course.members_manage.official_student.progress'|trans }}</span>
+                <div class="cd-progress cd-progress-sm">
+                  <div class="progress-bar">
+                    <div class="progress-outer">
+                      <div class="progress-inner" style="width: {{ classroom.learningProgressPercent }}%;"></div> 
+                    </div>
+                  </div>
+                  <div class="progress-text">{{ classroom.learningProgressPercent }}%</div>
+                </div>
+              </div>
+            {% endif %}
+          </div>
+          <div class="my-course-item__btn">
+            {% if 'assistant' in members[classroom.id].role %}
+              <a class="btn cd-btn cd-btn-primary mts" href="{{ path('classroom_manage_testpaper',{id:classroom.id}) }}" target="_blank">{{ 'my.teaching.classroom.manage_btn'|trans({'%classroom%':setting('classroom.name')|default('site.default.classroom'|trans)}) }}</a>
+            {% elseif "student" in members[classroom.id].role %}
+              <a class="btn cd-btn cd-btn-primary mts" href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">{{'my.learning.classroom.contiune_study'|trans}}</a>
+            {% else %}
+              <a class="btn cd-btn cd-btn-primary mts" href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">{{'my.learning.classroom.join_classroom'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}</a>
+            {% endif %}
+          </div>
+        </li>
+      {% else %}
+        <div class="empty">{{'my.learning.classroom.not_join_classroom'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}</div>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+{% endblock %}

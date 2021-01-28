@@ -1,0 +1,31 @@
+<table id="user-table" class="table table-striped table-hover" data-search-form="#user-search-form" style="word-break:break-all;">
+  <thead>
+  <tr>
+    <th>{{ 'admin.operation_analysis.task.study_task'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}</th>
+    <th>{{ 'admin.operation_analysis.task.type'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}</th>
+    <th>{{ 'admin.operation_analysis.task.creator'|trans }}</th>
+  </tr>
+  </thead>
+  <tbody>
+  {% if taskDetail %}
+    {% for data in taskDetail %}
+      <tr>
+        <td style="width:50%"><strong>{{ data.title }}</strong><br><span
+            class="text-muted text-sm">{{ 'admin.operation_analysis.task.belong_to_course'|trans({'%courseTitle%': courseSets[courses[data.courseId].courseSetId].title}) }} &raquo; {{ courses[data.courseId].title }}</span>
+        </td>
+        <td>{% if data.type=="text" %}{{ 'admin.operation_analysis.task.text'|trans }}
+          {% elseif data.type=="video" %}{{ 'admin.operation_analysis.task.video'|trans }}
+          {% elseif data.type=="audio" %}{{ 'admin.operation_analysis.task.audio'|trans }}
+          {% elseif data.type=="ppt" %}{{ 'admin.operation_analysis.task.ppt'|trans }}
+          {% elseif data.type=="testpaper" %}{{ 'admin.operation_analysis.task.testpaper'|trans }}
+          {% elseif data.type=="live" %}{{ 'admin.operation_analysis.task.live'|trans }}
+          {% elseif data.type=="flash" %}{{ 'admin.operation_analysis.task.flash'|trans }}
+          {% elseif data.type=="doc" %}{{ 'admin.operation_analysis.task.doc'|trans }}
+          {% endif %}</td>
+        <td>{{ admin_macro.user_link(users[courses[data.courseId].creator]) }}<br>{{ data.createdTime|date("Y-m-d H:i:s") }}</td>
+      </tr>
+    {% endfor %}
+  {% endif %}
+  </tbody>
+</table>
+{{ admin_macro.paginator(paginator) }}

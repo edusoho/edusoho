@@ -1,0 +1,12 @@
+{
+  "apiList": [
+    "getCourse",
+    "getAnnouncement",
+    "getCourseDraft",
+    "saveCourseDraft",
+    "getActivity",
+    "getActivityResource",
+    "saveActivityResource",
+    "updateActivityResource"
+  ]
+}

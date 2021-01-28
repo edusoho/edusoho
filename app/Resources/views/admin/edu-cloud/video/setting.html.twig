@@ -1,0 +1,458 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_cloud_setting_video' %}
+{% set script_controller = 'setting/cloud' %}
+{#{% block tabs %}{% endblock %}#}
+
+{% block page_title %}
+  {% if setting('cloud_status.locked') == true %}
+    <div class="alert alert-warning" role="alert">{{'admin.edu_cloud.edu_video.locked_tips'|trans}}</div>
+    {{ currentMenu.code|parent_permission.name|trans }}
+  {% elseif video.status|default() == 'stoped' %}
+    <div class="alert alert-warning" role="alert">{{'admin.edu_cloud.edu_video.stoped_tips'|trans}}</div>
+    {{ currentMenu.code|parent_permission.name|trans }}
+  {% else %}
+    {{ parent() }}
+  {% endif %}
+{% endblock %}
+
+{% block main %}
+  <style>
+    .webuploader-container {
+      position: relative;
+    }
+
+    .webuploader-element-invisible {
+      position: absolute !important;
+      clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+      clip: rect(1px, 1px, 1px, 1px);
+    }
+
+    .webuploader-pick {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+      background: #fff;
+      padding: 5px 10px;
+      color: #333;
+      text-align: center;
+      border-radius: 3px;
+      border: 1px solid #ccc;
+      overflow: hidden;
+    }
+
+    .webuploader-pick-hover {
+      background: #e6e6e6;
+      border-color: #adadad;
+    }
+
+    .webuploader-pick-disable {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    .balloon-uploader {
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .balloon-uploader-heading {
+      background-color: #f5f5f5;
+      color: #333;
+      padding: 10px 15px;
+      border-bottom: 1px solid #ddd;
+      display: none;
+    }
+
+    .balloon-uploader-footer {
+      background-color: #f5f5f5;
+      color: #333;
+      padding: 10px 15px;
+      border-top: 1px solid #ddd;
+      text-align: right;
+    }
+
+    .balloon-filelist {
+      width: 100%;
+    }
+
+    .balloon-filelist-heading {
+      padding: 8px 10px;
+      position: relative;
+      font-weight: bold;
+      border-bottom: 2px solid #ddd;
+    }
+
+    .balloon-uploader-body {
+      position: relative;
+
+    }
+
+    .balloon-filelist .file-name,
+    .balloon-filelist .file-size,
+    .balloon-filelist .file-status,
+    .balloon-filelist .file-manage {
+      display: inline-block;
+    }
+
+    .balloon-filelist .file-name {
+      width:40%
+    }
+
+    .balloon-filelist .file-size {
+      width: 20%;
+    }
+
+    .balloon-filelist .file-status {
+      width: 18%;
+    }
+
+    .balloon-filelist .file-manage {
+      width: 20%;
+      z-index: 9999;
+
+      position: relative;
+      z-index: 1;
+    }
+
+    .balloon-filelist ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      min-height: 100px;
+      max-height: 300px;
+      overflow-y: scroll;
+    }
+
+    .balloon-filelist ul li {
+      position: relative;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .balloon-dnd {
+      visibility: hidden;
+    }
+
+    .balloon-uploader-none .balloon-uploader-footer,
+    .balloon-uploader-none .balloon-uploader-body {
+      visibility: hidden;
+    }
+
+    .balloon-uploader-none .balloon-dnd {
+      visibility: visible;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .balloon-nofile {
+      position: absolute;
+      top: 40px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      line-height: 100px;
+      text-align: center;
+      color: #999;
+    }
+
+    .balloon-uploader .file-pick-btn {
+      display: inline-block;
+    }
+
+    .balloon-uploader .start-upload-btn {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+      background: #5bc0de;
+      padding: 5px 10px;
+      color: #fff;
+      text-align: center;
+      border-radius: 3px;
+      border: 1px solid #46b8da;
+      overflow: hidden;
+    }
+
+    .balloon-uploader .start-upload-btn:hover {
+      background: #31b0d5;
+      border-color: #269abc;
+    }
+
+    .balloon-filelist .file-progress {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+
+    .balloon-filelist .file-progress-bar {
+      background: rgb(219, 242, 215);
+      background: rgba(59, 181, 33, 0.18);
+      float: left;
+      height: 100%;
+    }
+
+  </style>
+  {{ web_macro.flash_messages() }}
+  <div class="page-heading">
+    {{'admin.edu_cloud.edu_video.switch'|trans}}
+  </div>
+  <form class="form-horizontal" method="post" action="{{ path('admin_cloud_video_switch') }}">
+    <div class="row form-group">
+      <label for="" class="col-sm-3 control-label">{{'admin.edu_cloud.edu_video.open'|trans}}：</label>
+      <div class="controls col-md-9 radios">
+        <div>
+          <span class="text-success">{{ 'admin.edu_cloud.edu_video.open_btn'|trans }}</span>
+          <button type="submit" class="btn btn-default btn-sm mlm" name="upload_mode" value="local"><span class="text-muted">{{ 'admin.edu_cloud.edu_video.close_btn'|trans }}</span></button>
+        </div>
+        <div class="help-block">
+          {{'admin.edu_cloud.edu_video.switch_tips'|trans({'%cloudShow%': path('admin_cloud_show',{'type': 'video'})})|raw}}
+        </div>
+      </div>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+  <div class="page-heading">
+    {{'admin.edu_cloud.edu_video.base_setting'|trans}}
+  </div>
+  <form class="form-horizontal" id="cloud-setting-form" method="post" novalidate>
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label for="support_mobile">{{ 'admin.edu_cloud.edu_video.support_mobile'|trans }}：</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('support_mobile', {'1':'admin.edu_cloud.edu_video.normal_mode'|trans, '0':'admin.edu_cloud.edu_video.encryption_mode'|trans}, storageSetting.support_mobile) }}
+        {% if storageSetting.support_mobile|default(0) == 0 %}
+          <button type="button" class="btn btn-sm btn-default js-delete-video-btn {% if storageSetting.delete_mp4_status|default('') == 'waiting' %}disabled{% endif %}" data-url="{{ path('admin_cloud_normal_video_delete') }}" data-target="#modal", data-toggle="modal">{{ 'admin.edu_cloud.edu_video.delete_btn'|trans }}</button>
+        {% endif %}
+
+        <div class="help-block js-normal-mode-tip {% if storageSetting.support_mobile|default(0) == 0 %}hidden{% endif %}">
+          {{'admin.edu_cloud.edu_video.normal_mode_tips'|trans|raw}}
+        </div>
+        <div class="help-block js-encryption-mode-tip {% if storageSetting.support_mobile|default(0) == 1 %}hidden{% endif %}">
+          {{'admin.edu_cloud.edu_video.encryption_mode_tips'|trans|raw}}
+        </div>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <label for="" class="col-sm-3 control-label">{{'admin.edu_cloud.edu_video.transcode_quality'|trans}}：</label>
+      <div class="controls col-sm-7 radios">
+        {{ radios('video_quality', {'low':'admin.edu_cloud.edu_video.transcode_quality_low'|trans({'%<span class="text-muted">%':'<span class="text-danger">','%</span>%':'</span>'})|raw, 'normal':'admin.edu_cloud.edu_video.transcode_quality_normal'|trans({'%<span class="text-muted">%':'<span class="text-danger">','%</span>%':'</span>'})|raw, 'high': 'admin.edu_cloud.edu_video.transcode_quality_high'|trans({'%<span class="text-muted">%':'<span class="text-danger">','%</span>%':'</span>'})|raw,'super': 'admin.edu_cloud.edu_video.transcode_quality_super'|trans({'%<span class="text-muted">%':'<span class="text-danger">','%</span>%':'</span>'})|raw}, storageSetting.video_quality) }}
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <label for="" class="col-sm-3 control-label">{{'admin.edu_cloud.edu_video.audio_transcode_quality'|trans}}</label>
+      <div class="controls col-sm-9 radios">
+        {{ radios('video_audio_quality', {'low':'admin.edu_cloud.edu_video.low'|trans, 'normal':'admin.edu_cloud.edu_video.normal'|trans, 'high': 'admin.edu_cloud.edu_video.high'|trans}, storageSetting.video_audio_quality) }}
+      </div>
+    </div>
+
+    <div class="row form-group hidden">
+      <div class="col-md-3 control-label">
+        <label for="enable_playback_rates">{{'admin.edu_cloud.edu_video.h5_enable_label'|trans}}</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('video_h5_enable', {'1':'form.radio_btn.open'|trans, '0':'form.radio_btn.close'|trans}, storageSetting.video_h5_enable) }}
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label for="enable_playback_rates">{{'admin.edu_cloud.edu_video.play_speed'|trans}}</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('enable_playback_rates', {'1':'admin.edu_cloud.edu_video.open_radio'|trans, '0':'admin.edu_cloud.edu_video.close_radio'|trans}, storageSetting.enable_playback_rates) }}
+        <div class="text-muted mts">
+          {{'admin.edu_cloud.edu_video.play_speed_tips'|trans}}{{'admin.edu_cloud.edu_video.not_support_play_speed_tips'|trans}}
+        </div>
+      </div>
+    </div>
+
+    <div class="upload-mode">
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label for="video_auto_play">{{'admin.edu_cloud.edu_video.auto_play'|trans}}：</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('video_auto_play', {'true':'admin.edu_cloud.edu_video.open_radio'|trans, 'false':'admin.edu_cloud.edu_video.close_radio'|trans}, storageSetting.video_auto_play|default(0) ) }}
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label>{{ 'admin.edu_cloud.edu_video.video_header'|trans }}</label>
+      </div>
+
+      <div class="controls col-md-8 radios">
+        {{ radios('video_header', {'1':'admin.edu_cloud.edu_video.open_radio'|trans, '0':'admin.edu_cloud.edu_video.close_radio'|trans}, storageSetting.video_header|default(0)) }}
+      </div>
+    </div>
+    <div class="row form-group" id="upload-panel" data-params-url="{{ path('admin_uploadfile_head_leader_params', {storage:storageSetting.upload_mode}) }}" data-hls-encrypted="1">
+      <div class="col-md-3">
+      </div>
+      <div class="controls col-md-8">
+        <div class="head-leader-edit" {% if not headLeader|default(null) %} style="display:none;" {% endif %}>
+          <span data-role="placeholder">{{ headLeader.filename|default('') }}</span>
+          <button class="btn btn-link btn-sm edit-btn" type="button"><i class="glyphicon glyphicon-edit"></i> {{ 'admin.edu_cloud.edu_video.video_header_edit_btn'|trans }}</button>
+          {% if headLeader.convertStatus|default(null) != 'success' %}
+            <div class="alert alert-warning" data-role="waiting-tip">
+              {{'admin.edu_cloud.edu_video.video_header_tips'|trans|raw}}
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="file-chooser-main"
+            {% if headLeader|default(null) %}
+              style="display:none;"
+            {% endif %}
+        >
+          {% set token = uploader_token('headLeader', 0, 'private') %}
+          <div id="balloon-uploader"
+               data-init-url="{{ path('uploader_init', {uploaderToken:token}) }}"
+               data-finish-url="{{ path('uploader_finished', {uploaderToken:token}) }}"
+               data-upload-auth-url="{{ path('uploader_auth', {token:token}) }}"
+               data-accept="{{ uploader_accept('attachment', 'video')|json_encode }}"
+               data-process="{{ uploader_process('headLeader') }}">
+          </div>
+
+          <div class="alert alert-info">
+            <ul>
+              {{'admin.edu_cloud.edu_video.upload_video_tips'|trans|raw}}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="page-heading">
+      {{'admin.edu_cloud.edu_video.security_setting'|trans}}
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label>{{ 'admin.edu_cloud.edu_video.water_mark'|trans }}：</label>
+      </div>
+      <div class="controls col-md-8 radios " data-content="123">
+        {# {{ radios('video_watermark', {'0':'关闭', '1':'开启播放器水印', '2':'开启内嵌水印'}, storageSetting.video_watermark) }} #}
+
+        <label>
+          <input type="radio" name="video_watermark" value="0" {% if storageSetting.video_watermark == 0 %}checked="checked"{% endif %}> {{ 'admin.edu_cloud.edu_video.close_radio'|trans }}
+        </label>
+        <label class="video-watermark-property-tips" data-content="{{'admin.edu_cloud.edu_video.play_water_mark_tips'|trans}}">
+          <input type="radio" name="video_watermark" value="1" {% if storageSetting.video_watermark == 1 %}checked="checked"{% endif %}> {{ 'admin.edu_cloud.edu_video.open_play_water_mark'|trans }}
+        </label>
+        <label class="video-watermark-property-tips" data-content="{{'admin.edu_cloud.edu_video.open_embed_watermark_tips'|trans}}">
+          <input type="radio" name="video_watermark" value="2"
+            {% if storageSetting.video_watermark == 2 %}checked="checked"{% endif %}> {{ 'admin.edu_cloud.edu_video.open_embed_watermark'|trans }}
+        </label>
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label>{{ 'admin.edu_cloud.edu_video.play_water_mark_picture'|trans }}</label>
+      </div>
+      <div class="controls col-md-8 radios">
+
+        <button class="btn btn-primary" id="cloud-video-watermark-upload" type="button" data-url="{{ path('admin_setting_cloud_video_watermark_upload') }}">{{ 'admin.edu_cloud.edu_video.picture_upload_btn'|trans }}</button>
+        <button class="btn btn-primary" id="cloud-video-watermark-remove" type="button" data-url="{{ path('admin_setting_cloud_video_watermark_remove') }}"
+        {% if not storageSetting.video_watermark_image %}style="display:none;"{% endif %}>{{ 'admin.edu_cloud.edu_video.picture_delete_btn'|trans }}</button>
+        <div id="cloud-video-watermark-container">{% if storageSetting.video_watermark_image %}<img src="{{ filepath(storageSetting.video_watermark_image) }}">{% endif %}</div>
+        <div class="text-muted mts">{{ 'admin.edu_cloud.edu_video.play_water_mark_picture_tips'|trans|raw }}</div>
+        <input type="hidden" name="video_watermark_image" value="{{ storageSetting.video_watermark_image }}">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label>{{ 'admin.edu_cloud.edu_video.play_embed_watermark'|trans }}：</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        <button class="btn btn-primary" id="cloud-video-embed-watermark-upload" type="button" data-url="{{ path('admin_setting_cloud_video_embed_watermark_upload') }}">{{ 'admin.edu_cloud.edu_video.picture_upload_btn'|trans }}</button>
+        <button class="btn btn-primary" id="cloud-video-embed-watermark-remove" type="button" data-url="{{ path('admin_setting_cloud_video_embed_watermark_remove') }}" {% if not storageSetting.video_embed_watermark_image %}style="display:none;"{% endif %}>{{ 'admin.edu_cloud.edu_video.picture_delete_btn'|trans }}</button>
+        <div id="cloud-video-embed-watermark-container">{% if storageSetting.video_embed_watermark_image %}<img  src="{{ filepath(storageSetting.video_embed_watermark_image) }}">{% endif %}</div>
+
+        <div class="text-muted mts">{{ 'admin.edu_cloud.edu_video.play_embed_watermark_picture_tips'|trans|raw }}</div>
+        <input type="hidden" name="video_embed_watermark_image" value="{{ storageSetting.video_embed_watermark_image }}">
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label>{{ 'admin.edu_cloud.edu_video.finger_print_embed'|trans }}：</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('video_fingerprint', {'0':'admin.edu_cloud.edu_video.close_radio'|trans, '1':'admin.edu_cloud.edu_video.open_radio'|trans}, storageSetting.video_fingerprint) }}
+        <div class="help-block"> {{'admin.edu_cloud.edu_video.finger_print_embed_tips'|trans}}
+        </div>
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label>{{'admin.edu_cloud.edu_video.finger_print_time_label'|trans}}</label>
+      </div>
+      <div class="controls col-md-8">
+        <input type="text" id="video_fingerprint_time" class="form-control width-input width-input-small" name="video_fingerprint_time" value="{{ storageSetting.video_fingerprint_time }}"> {{'admin.edu_cloud.edu_video.finger_print_time'|trans}}
+        <div class="text-muted mts">{{'admin.edu_cloud.edu_video.finger_print_time_tips'|trans}}</div>
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label>{{ 'admin.edu_cloud.edu_video.enable_hls_encryption_plus'|trans }}：</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('enable_hls_encryption_plus', {'0':'admin.edu_cloud.edu_video.close_radio'|trans, '1':'admin.edu_cloud.edu_video.open_radio'|trans}, storageSetting.enable_hls_encryption_plus|default(0)) }}
+        <div class="help-block">{{ 'admin.edu_cloud.edu_video.enable_hls_encryption_plus_tips'|trans }}</div>
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label"></div>
+      <div class="controls col-md-8">
+        <button type="submit" id="cloud-video-form-btn" class="btn btn-primary" data-submiting-text="{{ 'form.btn.submit.submiting'|trans }}">{{ 'form.btn.save'|trans }}</button>
+      </div>
+    </div>
+
+    <input type="hidden" name="isDeleteMP4" value="0" />
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+
+  <div id="delete-video-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">{{ 'admin.edu_cloud.edu_video_setting.delete_modal_title'|trans }}</h4>
+        </div>
+        <div class="modal-body">
+          {{ 'admin.edu_cloud.edu_video_setting.delete_modal_content'|trans }}
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-link gray-darker" type="button" data-delete="0">{{ 'form.btn.not_delete'|trans }}</button>
+          <button type="button" class="btn btn-link js-confirm-submit" data-loading-text="{{'form.btn.save.submiting'|trans}}" data-delete="1">{{ 'form.btn.delete'|trans }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="change-normal-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">{{ 'admin.edu_cloud.edu_video_setting.change_normal_title'|trans }}</h4>
+        </div>
+        <div class="modal-body">
+          {{ 'admin.edu_cloud.edu_video_setting.change_normal_content'|trans|raw }}
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-link gray-darker" data-dismiss="modal" type="button">{{ 'form.btn.cancel'|trans }}</button>
+          <button type="button" class="btn btn-link js-confirm-submit" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{ 'form.btn.yes'|trans }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

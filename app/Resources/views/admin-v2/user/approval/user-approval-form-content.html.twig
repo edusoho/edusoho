@@ -1,0 +1,50 @@
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="nickname">{{'user.fields.username_label'|trans}}</label>
+    </div>
+    <div class="mtm">
+    {{ user.nickname }}
+    </div>
+  </div>
+
+   <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="truename">{{'user.fileds.realname'|trans}}</label>
+    </div>
+    <div class="mtm">
+      {{userApprovalInfo.truename}}
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="idcard">{{'admin.user.fields.idcard'|trans}}</label>
+    </div>
+    <div class="mtm">
+      {{userApprovalInfo.idcard}}
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="faceImg">{{'admin.user.approval.fields.idcard_face_img_label'|trans}}</label>
+    </div>
+    <div>
+     <a href="{{ url('admin_v2_show_idcard', {userId: user.id, type:'face', status:status})}}" target="_blank">
+     <img src="{{url('admin_v2_show_idcard', {userId: user.id, type:'face', status:status})}}" width="400" />
+     </a>
+    </div>
+  </div>
+
+    <div class="row form-group">
+    <div class="col-md-3 control-label">
+      <label for="faceImg">{{'admin.user.approval.fields.idcard_back_img_label'|trans}}</label>
+    </div>
+    <div>
+     <a href="{{url('admin_v2_show_idcard', {userId: user.id, type: 'back', status:status})}}" target="_blank">
+          <img src="{{url('admin_v2_show_idcard', {userId: user.id, type: 'back', status:status})}}" width="400" />
+      </a>
+    </div>
+  </div>
+
+

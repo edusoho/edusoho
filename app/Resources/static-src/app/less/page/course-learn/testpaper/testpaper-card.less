@@ -1,0 +1,143 @@
+.testpaper-card {
+  .panel-card  {
+    position: relative;
+    max-height: 270px;
+    overflow: hidden;
+  }
+  .marking-card {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .testpaper-card__body {
+    max-height: 270px;
+    overflow-y: scroll;
+  }
+}
+
+.testpaper-timer {
+  position: relative;
+  background-color: #fff;
+  padding: 9px 44px 9px 20px;
+  margin-bottom: 10px;
+  line-height: 1;
+  .btn-pause {
+    position: absolute;
+    right: 0;
+    top:0;
+    height: 32px;
+    width: 32px;
+    text-align: center;
+    background-color: @brand-primary;
+    color: #fff;
+    i {
+      line-height: 32px;
+    }
+    .pause {
+      display: block;
+    }
+    .play {
+      display: none;
+    }
+    &.open {
+      .pause {
+        display: none;
+      }
+      .play {
+        display: block;
+      }
+    }
+  }
+}
+
+.testpaper-card-explain {
+  small {
+    margin-right: 8px;
+  }
+}
+
+.testpaper-card.affix {
+  position: static;
+  top: 0
+}
+
+@media (max-width: @screen-xs-max) {
+  .testpaper-card.affix,
+  .testpaper-card.affix-bottom {
+    position: relative !important;
+    top: 0 !important;
+  }
+}
+
+@media (min-width: @screen-md-min) {
+  .testpaper-card.affix {
+    position: fixed;
+    top: 0px;
+    width: 220px;
+  }
+  .testpaper-card.affix-bottom {
+    position: absolute;
+    width: 220px;
+  }
+}
+
+@media (min-width: @screen-lg-min) {
+  .testpaper-card.affix,
+  .testpaper-card.affix-bottom {
+    width: 270px;
+  }
+}
+
+// 右侧数据统计块
+.testpaper-card-panel {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  padding: 10px 20px !important;
+  .border-radius(2px);
+  .es-box-shadow;
+  border: none;
+  &:after {
+    position: absolute;
+    content: '';
+    top: 0;
+    right: -80px;
+    width: 158px;
+    height: 158px;
+    z-index: -1;
+    background: url("@{img-src}testpaper/icon_testpaper.png") no-repeat;
+    background-image: -webkit-image-set(url("@{img-src}testpaper/icon_testpaper.png") 1x,url("@{img-src}testpaper/icon_testpaper@2x.png") 2x);
+  }
+}
+
+.homework-card-panel {
+  &:after {
+    background: url("@{img-src}testpaper/icon_homework.png") no-repeat;
+    background-image: -webkit-image-set(url("@{img-src}testpaper/icon_homework.png") 1x,url("@{img-src}testpaper/icon_homework@2x.png") 2x);
+  }
+}
+
+.testpaper-card-info {
+  &:first-child {
+    margin-top: 10px;
+  }
+  margin-top: -5px;
+  margin-bottom: 10px;
+}
+
+.testpaper-card-info__text {
+  width: 100px;
+  display: inline-block;
+  color: @gray;
+  text-align: right;
+}
+
+.testpaper-card-info__number {
+  display: inline-block;
+  color: @gray-darker;
+  font-size: 22px;
+}
+
+.testpaper-card-info__icon {
+  color: @gray;
+}

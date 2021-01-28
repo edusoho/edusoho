@@ -1,0 +1,16 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_edu_cloud_search_overview' %}
+{% block tabs %}{% endblock %}
+{% block main %}
+<div class="row form-group">
+  <div class="help-block">
+    </br></br>
+    <p style="text-align:center;font-size:16px">
+      {{'admin.edu_cloud.edu_search.search_service_provider'|trans({'%url%': 'http://open.edusoho.com/educloud'})|raw}}
+    </p>
+    </br>
+  </div>
+</div>
+<hr>
+{% endblock %}

@@ -1,0 +1,97 @@
+{% extends 'v2/layout.html.twig' %}
+
+{% block title %}{{'user.account.invite_code'|trans}} - {{ parent() }}{% endblock %}
+
+{% do script(['app/js/coin/invite-code/index.js']) %}
+
+{% set side_nav = 'my-invite-code' %}
+
+{% block page_title %}
+  {{ 'user.account.invite_code'|trans }}
+{% endblock %}
+
+{% block main_body %}
+  <div class="alert cd-alert cd-alert-warning">
+    {{ 'user.account.my_invite_code.no_reward_tips'|trans }}
+    {% if setting('invite')|default(false) %}
+      {% if setting('invite.promoted_user_value')|default(false)  %}
+        {{'user.account.my_invite_code.reward_after_register_tips'|trans({'%promoted_user_value%':inviteSetting.promoted_user_value})}}
+      {% endif %}
+      {% if setting('invite.promote_user_value')|default(false) %}
+        {% if setting('invite.get_coupon_setting')|default(false) %}
+            {{'user.account.my_invite_code.reward_after_consume_tips'|trans({'%promote_user_value%':inviteSetting.promote_user_value})}}
+        {% else %}
+          {{'user.account.my_invite_code.reward_after_register_reward_tips'|trans({'%promote_user_value%':inviteSetting.promote_user_value})}}
+        {% endif %}
+      {% endif %}
+    {% endif %}
+  </div>
+  <div class="row cd-row">
+    <div class="col-md-7">
+      <div class="es-colorful-card es-colorful-card-info">
+        <div class="card-icon"><i class="es-icon es-icon-coupon"></i></div>
+        <div class="card-body">
+          <p>{{'user.account.my_invite_code'|trans}}</p>
+          <p><span class="cd-text-medium" style="color: #fff; font-size: 32px">{{code}}</span></p>
+        </div>
+        <div class="card-action">
+          <a href="javascript:;" class="btn cd-btn btn-card-info js-copy-link" data-clipboard-text="{{inviteInfomation_template}}">
+            {{'user.account.my_invite_code.invite.copy_btn'|trans}}
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-5">
+      <div class="es-data-card">
+        <div class="card-item">
+          <div class="card-item-label">{{'user.account.my_invite_code.invited'|trans}}</div>
+          <div class="card-item-value">
+            <span>{{ recordCount }}</span>
+            {{'site.data.people'|trans}}
+          </div>
+        </div>
+        <div class="card-item">
+          <div class="card-item-label">{{'user.account.my_invite_code.has_received_coupons'|trans}}</div>
+          <div class="card-item-value">
+            <span>{{ couponRateSum|default(0) }}</span>
+            {{'site.currency.CNY'|trans}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-responsive cd-table-responsive">
+    <table class="table cd-table">
+      <thead>
+        <tr>
+          <th>{{'user.account.my_invite_code.invitees'|trans}}</th>
+          <th>{{'user.account.my_invite_code.invite_time'|trans}}</th>
+          <th>{{'user.account.my_invite_code.invite_rewords'|trans}}</th>
+          <th>{{'user.account.my_invite_code.invite_rewords_time'|trans}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for record in records %}
+          {% set user = invitedUsers[record.invitedUserId] %}
+          {% set coupon = coupons[record.inviteUserCardId]|default() %}
+          <tr>
+            <td>{{ web_macro.user_link(user) }}</td>
+            <td>{{record.inviteTime|date('Y-m-d H:i:s')}}</td>
+            <td>{{coupon.rate|default('-')}}</td>
+            <td>
+            {% if coupon.createdTime|default() %}
+                {{coupon.createdTime|date('Y-m-d H:i:s')}}
+            {% else %}
+              -
+            {% endif %}
+            </td>
+          </tr>
+        {% else %}
+          <tr><td colspan="20"><div class="cd-empty">{{'site.datagrid.empty'|trans}}</div></td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {{ web_macro.paginator(paginator) }}
+  </div>
+{% endblock %}

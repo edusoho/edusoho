@@ -1,0 +1,42 @@
+{% import "admin/macro.html.twig" as admin_macro %}
+{% set target = 'recommend_list' %}
+
+{% set showUrl = path('course_show',{id: courseSet.defaultCourseId}) %}
+{% set cancelUrl = path('admin_course_set_cancel_recommend', {id:courseSet.id,target:target}) %}
+{% set recommendUrl = path('admin_course_set_recommend', {id:courseSet.id, ref:'recommendList'}) %}
+
+<tr id="course-tr-{{ courseSet.id }}" data-sort="{{ courseSet.recommendedSeq }}">
+  <td>{{ courseSet.recommendedSeq }}</td>
+  <td>
+    <a href="{{ showUrl }}" target="_blank"><strong>{{ courseSet.title }}</strong></a>
+    <br>
+    <span class="text-muted text-sm">{{'admin.course_manage.recommend.category'|trans}}：{{ category.name|default('--') }}</span>
+  </td>
+  {% include 'org/parts/table-body-td.html.twig' with {orgCode: courseSet.orgCode}%}
+  <td>
+    {{ admin_macro.user_link(user) }}
+    <br>
+    <span class="text-muted text-sm">{{ courseSet.createdTime|date('Y-n-d H:i') }}</span>
+  </td>
+  <td>
+    {{ courseSet.recommendedTime|date('Y-m-d') }}
+  </td>
+  <td>
+
+    <div class="btn-group">
+      <a class="btn btn-default btn-sm" href="#modal" data-toggle="modal" data-url="{{ recommendUrl }}">{{ 'admin.course_manage.recommend.set_seq_btn'|trans }}</a>
+
+      <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu pull-right">
+
+        <li>
+          <a class="cancel-recommend-course" href="javascript:" data-url="{{ cancelUrl }}">
+          <span class="glyphicon glyphicon-hand-right"></span> {{ 'admin.course_manage.recommend.cancel_seq_btn'|trans }}</a>
+        </li>
+    
+      </ul>
+    </div>
+  </td>
+</tr>

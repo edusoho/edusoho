@@ -1,0 +1,28 @@
+<div class="media topic-header">
+  <div class="media-left media-middle">
+    {{ web_macro.user_avatar(author, '', 'avatar-sm')}}
+  </div>
+  <div class="media-body">
+    <div class="title">
+      {% if thread.sticky %}
+        <span class="label label-danger" title="{{'thread.stick'|trans}}">{{'thread.status.stick'|trans}}</span>
+      {% endif %}
+      {% if thread.nice %}
+        <span class="label label-warning" title="{{'thread.essence'|trans}}">{{'thread.status.essence'|trans}}</span>
+      {% endif %}
+      {{ thread.title }}
+    </div>
+    <div class="metas">
+        {% if not author.destroyed|default(0) %}
+          <a href="{{ path('user_show', {id:author.id}) }}">{{ author.nickname }}</a>
+        {% else %}
+          <a>{{ 'user.user_had_destroyed'|trans }}</a>
+        {% endif %}
+      {{'thread.create_thread'|trans({'%dict_text%': dict_text('threadType', thread.type)})}}<span>{{ thread.createdTime|smart_time }}</span>
+    </div>
+  </div>
+  <div class="media-data">
+    <span><span class="thread-post-num">{{ thread.postNum }}</span><br>{{'thread.reply'|trans}}</span>
+    <span>{{ thread.hitNum }}<br>{{'thread.browse'|trans}}</span>
+  </div>
+</div>

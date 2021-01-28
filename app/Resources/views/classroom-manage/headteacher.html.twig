@@ -1,0 +1,31 @@
+{% extends 'classroom-manage/layout.html.twig' %}
+{% block title %}{{'classroom.set_head_teacher'|trans}} - {{ parent() }}{% endblock %}
+{% set side_nav = 'headTeacher' %}
+{% do script(['app/js/classroom-manage/set-head-teacher/index.js']) %}
+
+{% block main %}
+<div class="panel panel-default" role="classroom-manage-head-teacher">
+  <div class="panel-heading">{{'classroom.set_head_teacher'|trans}}</div>
+  <div class="panel-body">
+
+    <form id="teachers-form" class="form-horizontal" method="post">
+      {{ web_macro.flash_messages() }}
+
+      <div class="form-group" id="teachers-form-group">
+        <label class="col-md-2 control-label">{{'classroom.set_head_teacher'|trans}}</label>
+        <div class="col-md-8 controls">
+          {% set url = path('classroom_headteacher_match', {classroomId:classroom.id})%}
+          <div id="classroom-head-teacher" data-url="{{ url }}" data-teacher="{{ headTeacher|json_encode }}"></div>
+          <p class="help-block">{{'classroom.set_head_teacher_tips'|trans({'%name%':setting('classroom.name','classroom'|trans)})}}</p>
+        </div>  
+      </div>
+      <div class="form-group">
+        <div class="col-md-offset-2 col-md-8 controls">
+          <button type="submit" class="btn btn-fat btn-primary">{{'form.btn.save'|trans}}</button>
+        </div>  
+      </div>
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    </form>
+  </div>
+</div>
+{% endblock %}

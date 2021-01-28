@@ -1,0 +1,11 @@
+{% extends 'course-manage/layout.html.twig' %}
+
+{% block title %}{{'course.dashboard.content_title'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
+{% set course_side_nav = 'overview' %}
+
+{% block page_title %}{{ 'course.plan_overview'|trans }}{% endblock %}
+{% block main_body %}
+  <div class="course-statictics">
+    {% block overview %}{% endblock %}
+  </div>
+{% endblock %}

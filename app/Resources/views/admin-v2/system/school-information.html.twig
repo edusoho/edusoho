@@ -1,0 +1,201 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_school_information' %}
+
+{% set script_controller = 'setting/site' %}
+
+{% block main %}
+
+  {{ web_macro.flash_messages() }}
+
+  <form class="form-horizontal" id="site-form" method="post"
+        data-save-url="{{ path('admin_v2_school_information_save') }}">
+
+    <fieldset>
+
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="name">{{ 'admin.setting.site.name'|trans }}</label>
+        </div>
+        <div class="col-md-8 controls">
+          {% if s2b2c_has_behaviour_permission('canModifySiteName') %}
+            <input type="text" id="name" name="name" class="form-control" value="{{ site.name }}">
+          {% else %}
+            <div class="form-control form-control-unset-bg">{{ site.name }}</div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="slogan">{{ 'admin.setting.site.slogan'|trans }}</label>
+        </div>
+        <div class="col-md-8 controls">
+          <input type="text" id="slogan" name="slogan" class="form-control" value="{{ site.slogan }}">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="url">{{ 'admin.setting.site.url'|trans }}</label>
+        </div>
+        <div class="col-md-8 controls">
+          {% if s2b2c_has_behaviour_permission('canModifySiteUrl') %}
+            <input type="text" id="url" name="url" class="form-control" value="{{ site.url }}">
+            <p class="help-block">{{ 'admin.setting.site.url.help_block'|trans({'%http%':app.request.getScheme()}) }}</p>
+          {% else %}
+            <div class="form-control form-control-unset-bg">{{ site.url }}</div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="logo">{{ 'admin.setting.site.logo'|trans }}</label>
+        </div>
+        <div class="col-md-8 controls">
+          {% if s2b2c_has_behaviour_permission('canModifySiteLogo') %}
+            <div id="site-logo-container">{% if site.logo %}<img src="{{ asset(site.logo) }}">{% endif %}</div>
+            <a class="btn btn-default" id="site-logo-upload"
+               data-upload-token="{{ upload_token('system', 'image') }}"
+               data-goto-url="{{ path('admin_v2_setting_logo_upload') }}">{{ 'form.btn.upload'|trans }}</a>
+            <button class="btn btn-default" id="site-logo-remove" type="button"
+                    data-url="{{ path('admin_v2_setting_logo_remove') }}"
+                    {% if not site.logo %}style="display:none;"{% endif %}>{{ 'form.btn.delete'|trans }}</button>
+            <p class="help-block">{{ 'admin.setting.site.logo.help_block'|trans|raw }}<a href="{{ path('homepage') }}"
+                                                                                         target="_blank">{{ 'admin.setting.site.logo.view_btn'|trans }}</a>
+            </p>
+            <input type="hidden" name="logo" value="{{ site.logo }}">
+          {% else %}
+            <div id="site-logo-container">{% if site.logo %}<img src="{{ asset(site.logo) }}">{% endif %}</div>
+            <a class="btn btn-default hidden" id="site-logo-upload">{{ 'form.btn.upload'|trans }}</a>
+            <button class="btn btn-default hidden" id="site-logo-remove" disabled>{{ 'form.btn.delete'|trans }}</button>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="favicon">{{ 'admin.setting.site.favicon'|trans }}</label>
+        </div>
+        <div class="col-md-8 controls">
+          {% if s2b2c_has_behaviour_permission('canModifySiteFavicon') %}
+            <div id="site-favicon-container">{% if site.favicon %}<img src="{{ asset(site.favicon) }}">{% endif %}</div>
+            <a class="btn btn-default"
+               id="site-favicon-upload"
+               data-upload-token="{{ upload_token('system', 'image') }}"
+               data-goto-url="{{ path('admin_v2_setting_favicon_upload') }}">{{ 'form.btn.upload'|trans }}</a>
+            <button class="btn btn-default"
+                    id="site-favicon-remove"
+                    type="button" data-url="{{ path('admin_v2_setting_favicon_remove') }}"
+                    {% if not site.favicon %}style="display:none;"{% endif %}>{{ 'form.btn.delete'|trans }}</button>
+            <p class="help-block">{{ 'admin.setting.site.favicon.help_block'|trans|raw }}</p>
+            <input type="hidden" name="favicon" value="{{ site.favicon }}">
+          {% else %}
+            <div id="site-favicon-container">{% if site.favicon %}<img src="{{ asset(site.favicon) }}">{% endif %}</div>
+            <a class="btn btn-default hidden" id="site-favicon-upload">{{ 'form.btn.upload'|trans }}</a>
+            <button class="btn btn-default hidden" id="site-favicon-remove" disabled>{{ 'form.btn.delete'|trans }}</button>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="seo_keywords">{{ 'admin.setting.site.seo_keywords'|trans }}</label>
+        </div>
+        <div class="col-md-8 controls">
+          <input type="text" id="seo_keywords" name="seo_keywords" class="form-control" value="{{ site.seo_keywords }}">
+          <p class="help-block">{{ 'admin.setting.site.seo_keywords.help_block'|trans }}</p>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="seo_description">{{ 'admin.setting.site.seo_description'|trans }}</label>
+        </div>
+        <div class="col-md-8 controls">
+          <input type="text" id="seo_description" name="seo_description" class="form-control"
+                 value="{{ site.seo_description }}">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="copyright">{{ 'admin.setting.site.copyright'|trans }}</label>
+        </div>
+        <div class="col-md-8 controls">
+          <input type="text" id="copyright" name="copyright" class="form-control" value="{{ site.copyright }}">
+          <div class="help-block">{{ 'admin.setting.site.copyright.help_block'|trans }}</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="icp">{{ 'admin.setting.site.icp'|trans }}</label>
+        </div>
+        <div class="col-md-8 controls">
+          <input type="text" id="icp" name="icp" class="form-control" value="{{ site.icp }}">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="icpUrl">{{ 'admin.setting.site.icp_url'|trans }}</label>
+        </div>
+        <div class="col-md-8 controls">
+          <input type="text" id="icpUrl" name="icpUrl" class="form-control" value="{{ site.icpUrl }}">
+        </div>
+      </div>
+
+    </fieldset>
+
+    <br>
+
+    <fieldset>
+      <legend>{{ 'admin.setting.site.website_statistics_analysis'|trans }}</legend>
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="analytics">{{ 'admin.setting.site.analytics'|trans }}</label>
+        </div>
+        <div class="col-md-8 controls">
+
+          <textarea id="analytics" name="analytics" class="form-control" rows="4">{{ site.analytics }}</textarea>
+          {{ 'admin.setting.site.analytics.help_block'|trans|raw }}
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset style="display:none;">
+      <legend>{{ 'admin.setting.site.website_status'|trans }}</legend>
+
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label>{{ 'admin.setting.site.website_status'|trans }}</label>
+        </div>
+        <div class="col-md-8 controls radios">
+          {{ radios('status', {open:'admin.setting.site.website_status.open'|trans, closed:'admin.setting.site.website_status.closed'|trans}, site.status) }}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label>{{ 'admin.setting.site.closed_note'|trans }}</label>
+        </div>
+        <div class="col-md-8 controls">
+          <textarea id="closed_note" name="closed_note" class="form-control" rows="4">{{ site.closed_note }}</textarea>
+          <p class="help-block">{{ 'admin.setting.site.closed_note.help_block'|trans }}。</p>
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="row form-group">
+      <div class="controls col-md-offset-2 col-md-8">
+        <button type="button" class="btn btn-primary" id="save-site">{{ 'form.btn.submit'|trans }}</button>
+      </div>
+    </div>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+  </form>
+
+{% endblock %}

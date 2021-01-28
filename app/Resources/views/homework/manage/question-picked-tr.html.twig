@@ -1,0 +1,25 @@
+<tr id="testpaper-item-{{ question.id }}" data-id="{{ question.id }}" data-type="{{ question.type }}" class="is-question is-question--homework">
+  <td><span class="glyphicon glyphicon-resize-vertical sort-handle"></span></td>
+  <td>
+    <input class="notMoveHandle" type="checkbox" value="{{question.id}}" data-role="batch-item" >
+    <input type="hidden" name="questionIds[]" value="{{ question.id }}">
+  </td>
+  <td class="seq"></td>
+  <td>
+    {% if question.includeImg|default('') %}<span class="glyphicon glyphicon-picture"></span>{% endif %}
+    {{ question.material|fill_question_stem_text|plain_text(40) }}
+
+    <div>
+      {% include 'question-manage/part/belong.html.twig' with {question:question,categories:categories} %}
+    </div>
+  </td>
+  <td>{{ dict_text('questionType', question.type)|default('--') }}</td>
+  <td>{{ dict_text('difficulty', question.difficulty) }}</td>
+
+  <td>
+    <div class="btn-group">
+      <a class="mrm" data-role="preview-btn" href="javascript:" data-url="{{ path('question_bank_manage_question_preview', { id:questionBank.id, questionId:question.id, isNew:true }) }}" >{{'course.testpaper_manage.question.operation.preview_btn'|trans}}</a>
+      <a data-role="item-delete-btn" href="javascript:">{{'course.testpaper_manage.question.operation.delete_btn'|trans}}</a>
+    </div>
+  </td>
+</tr>

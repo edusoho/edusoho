@@ -1,0 +1,25 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{'notification.site_notification'|trans}}{% endblock %}
+
+{% set notification = notification|default(null) %}
+
+{% block body %}
+<div class="row">
+  <div class="col-md-10 col-md-offset-1">
+    {% if batchnotification %}
+      <h2 class="mt0">
+        {{ batchnotification.title|raw }}
+      </h2>
+      <p class="color-gray">
+        {{'notification.site_notification.publish_time'|trans}} ：{{ batchnotification.sendedTime|date_format }}
+      </p>
+      <div class="editor-text">
+        {{ batchnotification.content|cdn|raw }}
+      </div>
+    {% else %}
+      <div class="empty">{{'notification.site_notification.empty'|trans}}</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+<div class="nav-filter clearfix">
+
+  <div class="btn-group">
+    <a class="btn btn-default btn-sm" href="{{ path('course_thread_create', {courseId:course.id, type:type}) }}">{% if type == 'discussion' %}{{'thread.create_discussion_btn'|trans}}{% else %}{{'thread.create_question_btn'|trans}}{% endif %}</a>
+  </div>
+
+
+  <ul class="nav nav-pills nav-pills-sm">
+    <li{% if filters.type == type and filters.isElite != 1 %} class="active"{% endif %}><a data-target="#thread-pane" href="{{ path('my_course_show', {id: course.id, tab:type}|merge({type:type})) }}">{{'course.thread.nav.all_btn'|trans}}</a></li>
+    <li{% if filters.isElite == 1 %} class="active"{% endif %}><a data-target="#thread-pane" href="{{ path('my_course_show', {id: course.id, tab:type}|merge(filters)|merge({isElite:1})) }}">{{'course.thread.nav.nice_btn'|trans}}</a></li>
+
+    <li class="dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+        <span>{{'course.thread.nav.seq'|trans}}</span>
+        {% if filters.sort == 'posted' %}
+          {{'course.thread.nav.posted'|trans}}
+        {% elseif filters.sort == 'created'%}
+          {{'course.thread.nav.created'|trans}}
+        {% endif %}
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu hidden-xs">
+        <li class="{% if filters.sort == 'posted' %}active{% endif %}"><a class="js-nav" href="{{ path('my_course_show', {id: course.id, tab:type}|merge(filters)|merge({sort:'posted'})) }}">{{'course.thread.nav.posted'|trans}}</a></li>
+        <li class="{% if filters.sort == 'created' %}active{% endif %}"><a href="{{ path('my_course_show', {id: course.id, tab:type}|merge(filters)|merge({sort:'created'})) }}">{{'course.thread.nav.created'|trans}}</a></li>
+      </ul>
+    </li>
+  </ul>
+
+</div>

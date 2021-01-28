@@ -1,0 +1,53 @@
+{% extends 'default/base-index.html.twig' %}
+{% do script(['{{name}}theme/js/index/index.js']) %}
+
+{% block content %}
+  {{ block_show('{{name}}:top_banner') }}
+  <div class="text-line pvl">
+    <h5>最新课程<div class="line"></div></h5>
+  </div>
+  {% set freeCourseSets = data('FreeCourseSets',{count:6}) %}
+  <div class="free-course mtl container">
+    <div class="course-list">
+      <div class="row">
+        {% for freeCourseSet in freeCourseSets %}
+          <div class="col-lg-3 col-md-4 col-xs-6">
+            {% include 'course/widgets/course-grid.html.twig' with {courseSet: freeCourseSet} %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <div class="text-line pvl">
+    <h5>最新老师<div class="line"></div></h5>
+  </div>
+  {% set teachers = data('LatestTeachers',{count:6}) %}
+  <div class="free-course mtl container">
+    <div class="course-list">
+      <div class="row">
+        {% for teacher in teachers %}
+          <div class="col-md-3 col-xs-6">
+            <div class="teacher-item">
+              <div class="teacher-top">
+                <a class="teacher-img" href="{{ path('user_show', {id:teacher.id}) }}">
+                  <img class="avatar-lg" src="{{ filepath(teacher.largeAvatar, 'avatar.png') }}" alt="">
+                </a>
+                <h3 class="title">
+                  <a class="link-dark" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+                </h3>
+                <div class="position">
+                  {% if teacher.title %}
+                    {{ teacher.title }}
+                  {% else %}
+                    {{'user.fields.no_title'|trans}}
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

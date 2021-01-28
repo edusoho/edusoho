@@ -1,0 +1,41 @@
+<div class="course-detail-section-responsive visible-xs visible-sm clearfix">
+  <ul class="clearfix">
+    <!--营销页显示-->
+    {% if marketingPage %}
+    <li class="js-unfavorite-btn" id="unfavorite-btn" data-target-type="course" data-target-id="{{ course.courseSetId }}"
+      {% if not isUserFavorite %}style="display: none" {% endif %}>
+      <a class="color-primary" href="javascript:;" data-toggle="tooltip" data-placement="top" title="{{ 'course.status.followed'|trans }}"
+        data-trigger="hover">
+        <i class="es-icon es-icon-bookmark color-primary"></i>
+        <br/>
+        {{ 'course.status.followed'|trans }}
+      </a>
+    </li>
+    <li class="js-favorite-btn" id="favorite-btn" data-target-type="course" data-target-id="{{ course.courseSetId }}"
+    {% if isUserFavorite %}style="display: none"{% endif %}>
+    <a class="" href="javascript:;" data-toggle="tooltip" data-placement="top" title="{{ 'course.status.follow'|trans }}"
+        data-trigger="hover">
+        <i class="es-icon es-icon-bookmarkoutline"></i>
+        <br/>
+        {{ 'course.status.follow'|trans }}
+    </a>
+    </li>
+    {% endif %}
+    <li class="es-share top  js-es-share{% if not marketingPage %} learn-es-share {% endif %}">
+      <a class=" dropdown-toggle" href="" data-toggle="dropdown" title="{{ 'course.share'|trans }}">
+        <i class="es-icon es-icon-share"></i>
+        <br/>
+        {{ 'course.share'|trans }}
+      </a>
+      {% include 'common/share-dropdown.html.twig' with {type:'courseSet'} %}
+    </li>
+    {{ slot('course.header-marketing-btn.extension', {'course': course,'mobile': true}) }}
+  </ul>
+</div>
+<div class="text-right buy-btn-group visible-xs visible-sm">
+  <span class="mr20">{{ 'my.course.free_mode_plan.task_progress'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}{{ taskResultCount }} / {{ taskCount }}</span>
+
+  {% if showLearnBtn|default(1) %}
+    {% include 'course/header/free-mode-member-learn-btn.html.twig' %}
+  {% endif %}
+</div>

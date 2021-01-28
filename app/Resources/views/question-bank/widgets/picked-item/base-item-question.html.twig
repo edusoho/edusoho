@@ -1,0 +1,46 @@
+{% set questionTypesDict = getQuestionTypes() %}
+{% set question = item.questions[0] %}
+
+<tr id="testpaper-item-{{ item.id }}" data-id="{{ item.id }}" data-question-id="{{ question.id|default(0) }}" data-type="{{ item.type }}"
+    class="js-item is-question {% if item.type == 'material' %}have-sub-questions js-have-sub{% endif %}">
+  <td><span class="glyphicon glyphicon-resize-vertical sort-handle"/></td>
+  <td>
+    {% if item.type != 'material' %}
+      <input class="notMoveHandle" type="checkbox" value="{{item.id}}" data-role="batch-item" >
+    {% endif %}
+    <input type="hidden" name="itemIds[]" value="{{ item.id }}">
+  </td>
+  <td class="seq">{{ item.seq|default('') }}</td>
+  <td>
+    <a class="color-info" href="#modal" data-toggle="modal" data-url="{{ path('question_bank_manage_question_preview', {id: questionBank.id, questionId: item.id}) }}">
+      {% if item.includeImg|default('') %}<span class="glyphicon glyphicon-picture"/>{% endif %}
+      {{item.material|plain_text(40) }}
+    </a>
+    <br/>
+    <span class="color-gray text-sm">{{ 'category'|trans }}：
+      {% if item.category_id %}
+        {{ itemCategories[item.category_id].name }}
+      {% else %}
+        {{ 'site.data.empty'|trans }}
+      {% endif %}
+    </span>
+  </td>
+  <td class="js-question-score" data-score="{{ question.score|default(0)|score_text }}">
+    {% if item.type != 'material' %}
+      {{ question.score|default(0)|score_text }}
+    {% endif %}
+  </td>
+  {% if item.type in ['choice', 'uncertain_choice'] %}
+    <td class="js-miss-score" data-miss-score="{{ question.miss_score|default(0)|score_text }}">
+      {{ question.miss_score|default(0)|score_text }}
+    </td>
+  {% elseif item.type == 'material' %}
+    <td></td>
+  {% endif %}
+  <td>{{ dict_text('difficulty', item.difficulty)}}</td>
+  <td>
+    <div class="btn-group">
+      <a class="color-info mrl" href="javascript:" class="notMoveHandle mrm" data-role="item-delete-btn">{{'form.btn.remove'|trans}}</a>
+    </div>
+  </td>
+</tr>

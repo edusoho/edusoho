@@ -1,0 +1,63 @@
+<div class="task-list-header clearfix js-task-list-header">
+  <span data-toggle="popover" data-trigger="hover" data-placement="top" title="" data-html="true" data-content="{{ 'course.plan_task.published_lessons'|trans }}{{ course.publishLessonNum }}<br/>{{ 'course.plan_task.unpublished_lessons'|trans }}{{ course.lessonNum - course.publishLessonNum }}" class="js-lessons-publish-status">{{'course.plan_task.total_lessons'|trans}}<span class="cd-mr16 cd-ml8" id="task-num">{{ course.lessonNum }}</span></span>
+  {% set taskPerDay = course_daily_tasks_num(course.id) %}
+  {% if taskPerDay|default(false) %}
+  {{'course.plan_task.everyday_finish_tasks'|trans({'%taskPerDay%':taskPerDay})|raw}}
+  {% endif %}
+  {#<span class="cd-dark-assist cd-mr8 cd-ml8">#}
+    {#{{ 'course.plan_lesson.hidden'|trans }}#}
+  {#</span>#}
+  <label id="isHideUnPublish" class="cd-switch task-list-header__switch {% if course.isHideUnpublish == 1 %}checked{% endif %} hidden">
+    <input type="checkbox" class="js-switch" name="isHideUnpublish" id="isHideUnpublish" data-url="{{ path('course_manage_change_lesson_show_status', {courseId:course.id}) }}">
+  </label>
+
+  <div class="pull-right {% if course.platform == 'supplier' %}hidden{% endif %}">
+    <button class="cd-btn cd-btn-primary cd-btn-sm cd-mr16 js-lesson-create-btn" id="step-3" data-url="{{ path('course_manage_lesson_create', {courseId:course.id}) }}">
+      {{ 'course.manage.create_lesson'|trans }}
+    </button>
+
+    {% if courseSet.type|default('') == 'normal' %}
+      <button class="cd-btn cd-btn-default cd-btn-sm cd-mr16 js-batch-add {% if setting('storage.upload_mode', 'local') == 'local' %}btn-default-popover{% endif %}"
+        {% if setting('storage.upload_mode', 'local') == 'local' %}
+          data-toggle="popover" data-placement="top" data-trigger="hover" data-container=".js-batch-add"
+          data-content="{{'course.plan_task.batch_create_tips'|trans}}"
+        {% else %}
+          data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false"
+          data-url="{{ path('course_manage_lesson_batch_create', {courseId:course.id, mode:taskMode|default(''), token:uploader_token('course-task', app.user.id, 'private')}) }}"
+        {% endif %}>
+        {{'course.plan_task.batch_create_btn'|trans}}
+      </button>
+    {% endif %}
+
+    <div class="cd-dropdown" data-toggle="cd-dropdown">
+      <button class="cd-btn cd-btn-default cd-btn-sm">
+        {{ 'form.field.create'|trans }}{{ course_chapter_alias('chapter')|trans }} / {{ course_chapter_alias('unit')|trans }}<span class="caret"></span>
+      </button>
+
+      <ul class="dropdown-menu task-list-header__dropdown" role="menu">
+        <li>
+          <a href="javascript:;" id="chapter-create-btn" data-position data-toggle="modal" data-target="#modal" data-backdrop="static"
+            data-keyboard="false" data-url="{{ path('course_manage_chapter_manage', {courseId:course.id}) }}">
+            {{ 'course.plan_task.add_chapter_btn'|trans({'%chapter_name%': course_chapter_alias('chapter')|trans}) }}
+          </a>
+        </li>
+        <li>
+          <a href="javascript:;" id="chapter-create-btn" data-position data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('course_manage_chapter_manage', {courseId:course.id, type:'unit'}) }}">
+            {{ 'course.plan_task.add_part_btn'|trans({'%part_name%': course_chapter_alias('unit')|trans}) }}
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div  id="js-intro" class="modal fade text-center" aria-hidden="true" data-backdrop="static"  tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="cd-icon cd-icon-close"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

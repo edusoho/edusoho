@@ -1,0 +1,35 @@
+{% set courseSet = data('CourseSet', {id: course.courseSetId}) %}
+
+{% if not isMarketingPage|default(null) and course.courseNum|default(1) > 1 %}
+  <div class="es-piece">
+    <div class="piece-body">
+      {{ 'course.introduction.more_teaching_plan'|trans({'%courseUrl%':path('course_show', {id: course.id})})|raw }}
+    </div>
+  </div>
+{% endif %}
+
+<div class="es-piece">
+  <div class="piece-header">{{ 'course.introduction.course_introduction'|trans }}</div>
+  <div class="piece-body p-lg clearfix">
+    {{ course.summary|cdn|default(courseSet.summary|cdn)|raw }}
+  </div>
+</div>
+
+</section>
+
+
+{% if  isMarketingPage|default(null)  and course.courseItemNum > 0 %}
+
+  <div class="panel panel-default hidden-xs">
+    <div class="panel-heading ">
+      <h3 class="panel-title">{{ 'course.catalogue.content_title'|trans }}</h3>
+    </div>
+    <div class="panel-body">
+      {% include dyn_url('course/tabs/tasks.html.twig', {type:course.type, optionalTaskCount:optionalTaskCount|default(0)}) with {limitCount : 2} %}
+      <div class="js-only-display-one-page"></div>
+        <div class="text-center pt10 border-top-gray-lighter course-tasks-show-more hidden">
+          <a href="{{path('course_show',{id: course.id, tab:'tasks'})}} " class="link-dark">{{ 'course.catalogue.view_all_btn'|trans }}</a>
+        </div>
+    </div>
+  </div>
+{% endif %}

@@ -1,0 +1,150 @@
+{% extends 'layout.html.twig' %}
+{% block title %}{{'user.register'|trans}} - {{ parent() }}{% endblock %}
+{% set bodyClass = 'register' %}
+{% set parameter = get_parameters_from_url(app.request.uri) %}
+{% do script(['libs/bootstrap-datetimepicker.js','libs/jquery-validation.js','app/js/auth/register/index.js'])%}
+
+{% block content %}
+	<div class="es-section login-section">
+		<div class="logon-tab clearfix">
+			<a href="{{ path('login', {goto:_target_path}) }}">{{'user.register.login_account'|trans}}</a>
+			<a class="active">{{'user.register.register_account'|trans}}</a>
+		</div>
+		<div class="login-main">
+			{% if isRegisterEnabled %}
+				<form id="register-form" method="post" action="">
+					{{ web_macro.flash_messages() }}
+
+					{% if inviteUser %}
+						<div class="alert alert-info alert-sm">{{'user.register.register_through_inviter'|trans({'%inviteUser%': inviteUser.nickname})|raw}}</div>
+					{% endif %}
+
+					{% if setting('auth.register_mode') == 'email' %}
+						<div class="form-group mbl">
+							<label class="control-label required" for="register_email">{{'user.settings.security.password_reset.email'|trans}}</label>
+							<div class="controls">
+								<input type="email" id="register_email" name="email"  class="form-control input-lg" data-url="{{path('register_email_check')}}" placeholder="{{'user.register.account_with_email_placeholder'|trans}}" onkeydown="if(event.keyCode==13) return false;">
+								<p class="help-block"></p>
+							</div>
+						</div>
+					{% elseif setting('auth.register_mode') == 'mobile' %}
+						<div class="form-group mbl">
+							<label class="control-label required" for="register_mobile">{{'user.settings.security.password_reset.mobile'|trans}}</label>
+							<div class="controls">
+								<input type="tel" id="register_mobile" name="verifiedMobile"  class="form-control input-lg" data-url="{{path('register_mobile_check')}}" placeholder="{{'user.register.account_with_mobile_placeholder'|trans}}" onkeydown="if(event.keyCode==13) return false;">
+								<p class="help-block"></p>
+							</div>
+						</div>
+					{% else %}
+						<div class="form-group mbl">
+							<label class="control-label required" for="register_emailOrmobile">{{'user.register.account_with_mobile_or_email_label'|trans}}</label>
+							<div class="controls">
+								<input type="text" id="register_emailOrMobile" name="emailOrMobile"  class="form-control input-lg" data-url="{{path('register_email_or_mobile_check')}}" placeholder="{{'user.register.account_with_mobile_or_email_placeholder'|trans}}" onkeydown="if(event.keyCode==13) return false;">
+								<p class="help-block"></p>
+							</div>
+						</div>
+					{% endif %}
+
+					<div class="form-group mbl">
+						<label class="control-label required" for="register_nickname">{{'user.register.username_label'|trans}}</label>
+						<div class="controls">
+							<input type="text" id="register_nickname" name="nickname" required="required" class="form-control input-lg" data-url="{{path('register_nickname_check')}}" placeholder="{{'user.register.username_label_placeholder'|trans}}" onkeydown="if(event.keyCode==13) return false;">
+							<p class="help-block"></p>
+						</div>
+					</div>
+
+					<div class="form-group mbl">
+						<label class="control-label required" for="register_password">{{'user.register.password_label'|trans}}</label>
+						<div class="controls">
+							<input type="password" id="register_password" name="password" required="required" class="form-control input-lg {% if setting('auth.password_level')|default('low') != 'low' %}cd-text-sm{% endif %}" placeholder="{{('user.register.password_label_placeholder.'~setting('auth.password_level')|default('low'))|trans}}" onkeydown="if(event.keyCode==13) return false;">
+							<p class="help-block"></p>
+						</div>
+					</div>
+          {% if (setting('auth.captcha_enabled')|default(0)) == 1 %}
+            <div class="form-group cd-mb32 js-drag-jigsaw {% if setting('auth.register_mode') == 'mobile' %}hidden{% endif%}">
+              {% include 'common/drag.html.twig' with { auth: true } %}
+            </div>
+          {% endif %}
+					{% if setting('auth.register_mode') == 'email_or_mobile' or setting('auth.register_mode') == 'mobile' %}
+						<div class="form-group mbl {% if setting('auth.register_mode') != 'mobile' %}hidden{% endif %} email_mobile_msg">
+							<label class="control-label required" for="sms_code">{{'user.settings.security.sms_code'|trans}}</label>
+							<div class="controls cd-row">
+								<div class="col-xs-6">
+									<input type="text" maxlength="6" class="form-control input-lg" id="sms_code" name="sms_code" placeholder="{{'user.settings.security.input_sms_code'|trans}}" data-url="{{path('edu_cloud_sms_check',{type:'sms_registration'})}}" onkeydown="if(event.keyCode==13) return false;">
+									<p class="help-block"> </p>
+								</div>
+								<div class="col-xs-6">
+									<a href="javascript:;" class="btn btn-default sms-send-btn js-sms-send-btn disabled" data-sms-url="{{ path('edu_cloud_sms_send_registration') }}">
+										<span id="js-time-left"></span>
+										<span id="js-fetch-btn-text">{{'user.settings.security.get_sms_code_btn'|trans}}</span>
+									</a>
+								</div>
+							</div>
+						</div>
+					{% endif %}
+
+					{% if (setting('invite.invite_code_setting')|default(0) == 1) and not inviteUser %}
+						<div class="form-group mbl">
+							<label class="control-label required" for="invitedCode">{{'user.register.invite_code_label'|trans}}<span class="color-success">（{{'form.field.optional'|trans}}）</span></label>
+							<div class="controls">
+								<input type="text" name="invitedCode" class="form-control input-lg invitecode" data-url="{{path('invitecode_check')}}" placeholder="{{'user.register.invite_code_placeholder'|trans}}" onkeydown="if(event.keyCode==13) return false;">
+							</div>
+						</div>
+					{% endif %}
+        
+					<div class="form-group mbl">
+						<div class="controls">
+							<button type="submit" id="register-btn" data-submiting-text="{{'form.btn.submit.submiting'|trans}}" class="btn btn-primary btn-lg btn-block">{{'form.btn.register'|trans}}</button>
+						</div>
+					</div>
+
+					{% if setting('auth.user_terms') == 'opened' and setting('auth.privacy_policy') == 'opened' %}
+						<div class="form-group mbl">
+							<div class="controls">
+								<input type="checkbox" name="agree_policy" checked="checked"> {{ 'user.register.read_agree'|trans }}
+								<a href="{{ path('user_terms') }}" target="_blank">《{{'user.register.user_service_protocol'|trans}}》</a>
+								{{ 'site.default.and'|trans }}
+								<a href="{{ path('privacy_policy') }}" target="_blank">《{{'user.register.privacy_policy'|trans}}》</a>
+							</div>
+						</div>
+					{% elseif setting('auth.user_terms') == 'opened' %}
+						<div class="form-group mbl">
+							<div class="controls">
+								<input type="checkbox" name="agree_policy" checked="checked"> {{ 'user.register.read_agree'|trans }}
+								<a href="{{ path('user_terms') }}" target="_blank">《{{'user.register.user_service_protocol'|trans}}》</a>
+							</div>
+						</div>
+					{% elseif setting('auth.privacy_policy') == 'opened' %}
+						<div class="form-group mbl">
+							<div class="controls">
+								<input type="checkbox" name="agree_policy" checked="checked"> {{ 'user.register.read_agree'|trans }}
+								<a href="{{ path('privacy_policy') }}" target="_blank">《{{'user.register.privacy_policy'|trans}}》</a>
+							</div>
+						</div>
+					{% endif %}
+
+          <input type="hidden" id="password_level" value="{{ setting('auth.password_level')|default('low') }}">
+					<input type="hidden" name="captcha_enabled" value="{{ setting('auth.captcha_enabled') }}" />
+					<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+					<input type="hidden" name="registerVisitId" value="">
+				</form>
+
+				{% if setting('login_bind.enabled') %}
+					<div class="social-login">
+
+            <span>
+              {{ render(controller('AppBundle:Login:oauth2LoginsBlock', {targetPath:_target_path})) }}
+            </span>
+						<div class="line"></div>
+					</div>
+				{% endif %}
+			{% else %}
+				<div class="empty">{{'user.register.system_close_tips'|trans}}</div>
+			{% endif %}
+		</div>
+	</div>
+{% endblock %}
+
+{% block bottom %}
+	{% include 'mobile/footer-tool-bar.html.twig' with { mobile_tool_bar: 'register' } %}
+{% endblock %}

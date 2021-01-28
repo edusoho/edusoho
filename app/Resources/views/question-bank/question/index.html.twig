@@ -1,0 +1,33 @@
+{% extends 'my/my-teaching.html.twig' %}
+
+{% block title %}{{ 'my.teaching.question_bank.question.manage'|trans }} - {{ parent() }}{% endblock %}
+{% set side_nav = 'my-question-bank' %}
+{% set active_tab = 'question-list' %}
+
+{% do script(['libs/select2.js', 'app/js/question-bank/question/index.js'])  %}
+
+{% block main %}
+  <div class="panel panel-default panel-col">
+    <div class="question-bank-heading">{{ questionBank.name }}</div>
+  </div>
+
+  <div>
+    {% include 'question-bank/header-navbar.html.twig' %}
+    {% block container %}
+      <div class="panel panel-default panel-col">
+        <div class="panel-body question-list-container js-question-container">
+          <div class="mtl category-list-content js-category-content">
+            {% include 'question-bank/question/category-list.html.twig' %}
+          </div>
+          <div class="mtl question-list-content">
+            {% include 'question-bank/question/question-list.html.twig' %}
+          </div>
+        </div>
+      </div>
+    {% endblock %}
+  </div>
+
+  {% block question_category_modal %}
+    {% include 'question-bank/question/category-set-modal.html.twig' %}
+  {% endblock %}
+{% endblock %}

@@ -1,0 +1,42 @@
+<li id="chapter-{{chapter.id}}" class="task-manage-item drag js-task-manage-{{chapter.type}} task-manage-{{ chapter.type }} clearfix">
+  {% if chapter.type == 'unit' %}
+    <div class="item-line"></div>
+  {% endif %}
+  {% if chapter.title %}
+    {% set colon = '：' %}
+  {% endif %}
+  <div class="item-content">
+    <a class="js-toggle-show js-toggle-{{ chapter.type }} cd-link-assist" href="javascript:;">
+      <i class="es-icon es-icon-keyboardarrowdown cd-mr16"></i></a>{{'course.plan_task.which_chapter'|trans({'%chapterNumber%':chapter.number, '%chapter%':course_chapter_alias(chapter.type)|trans, '%colon%':colon|default(), '%title%':chapter.title|sub_text(30)})|raw }}
+  </div>
+  {# 章可以创建课时，节
+  节只能创建课时 #}
+  {#S2B2C课程不允许更改章节#}
+  <div class="item-actions {% if course.platform == 'supplier' %}hidden{% endif %}">
+    {% if chapter.type == 'chapter' %}
+      <div class="cd-dropdown cd-mr24" data-toggle="cd-dropdown" data-trigger="hover">
+        <a class="cd-link-assist" href="javascript:;">
+          <i class="cd-icon cd-icon-add"></i>
+        </a>
+        <ul class="dropdown-menu task-manage-item__dropdown">
+          <li>
+            <a href="javascript:;" data-toggle="modal" data-target="#modal" data-position="{{ chapter.id }}" data-type="chapter" data-url="{{ path('course_manage_chapter_manage', {courseId:course.id, type:'unit'}) }}">
+              {{'course.plan_task.create_part'|trans({'%partName%': course_chapter_alias('unit')|trans}) }}
+            </a>
+          </li>
+          <li>
+            <a href="javascript:;" class="js-lesson-create-btn" data-position="{{ chapter.id }}" data-type="chapter" data-url="{{ path('course_manage_lesson_create', {courseId:course.id}) }}">
+              {{'course.manage.create_lesson'|trans }}
+            </a>
+          </li>
+        </ul>
+      </div>
+    {% else %}
+      <a class="cd-mr24 js-lesson-create-btn" data-position="{{ chapter.id }}" data-type="lesson" href="javascript:;" data-url="{{ path('course_manage_lesson_create', {courseId:course.id}) }}">
+        <i class="cd-icon cd-icon-add" data-toggle="tooltip" title="{{ 'course.manage.create_lesson'|trans }}" data-placement="top"></i>
+      </a>
+    {% endif %}
+
+    {% include 'lesson-manage/chapter/action.html.twig' with {course: course, chapter: chapter} %}
+  </div>
+</li>

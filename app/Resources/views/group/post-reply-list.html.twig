@@ -1,0 +1,70 @@
+<div class="well">
+  <div class="reply-post-list-{{postMain.id}}">
+    <ul class="media-list">
+      {% for post in posts %}
+        <li class="media li-reply-{{postMain.id}}" {% if loop.index > 5 %}style="display:none;"{% endif %}>
+          <a href="{{ path('user_show', {id:post.userId}) }}" class="pull-left">
+            <img src="{{ filepath(users[post.userId].smallAvatar, 'avatar.png') }}" class="avatar-md">
+          </a>
+          <div class="media-body">
+            <div class="metas">
+              <strong>{{ web_macro.user_link(postReplyMembers[post.userId]) }}</strong>
+              <span class="mhm">{{post.createdTime|smart_time}}</span>
+            </div>
+            <div class="content">{{post.content|raw}}</div>
+            <div class="color-gray text-normal pull-right">
+              <a href="javascript:" class="li-reply" postId="{{postMain.id}}" postName="{% if not users[post.userId].destroyed|default(0) %}{{users[post.userId].nickname}}{% else %}{{ 'user.user_had_destroyed'|trans }}{% endif %}" data-from-user-id= "{{ users[post.userId].id }}"> {{'group.thread.reply_btn'|trans}}</a>
+            </div>
+          </div>
+        </li>
+      {% endfor %}
+    <div class="actions">
+      <a class="replyToo btn btn-default btn-xs pull-right" data-status="hidden" postId="{{post.id}}" href="javascript:;">{{'group.thread.reply_too_btn'|trans}}</a>
+      {% if posts|length > 5 %}
+      <div class="lookOver-{{postMain.id}}">
+
+
+        <span class="color-gray ">{{'group.thread.post_reply_num'|trans({'%postReplyCount%':postReplyCount[post.id]-5})}}，</span><a href="javascript:" postId="{{postMain.id}}" class="lookOver">{{'group.thread.view_post_btn'|trans}}</a>
+
+      </div>
+      {% endif %}
+      <span class="color-gray">&nbsp;</sapn>
+    </div>
+    </ul>
+
+    <div class="text-center">
+    {% if postReplyPaginator[postMain.id].lastPage > 1 %}
+      <ul  class="paginator-{{postMain.id}} pagination pagination-sm" style="display:none;">
+        {% if postReplyPaginator[postMain.id].currentPage == postReplyPaginator[postMain.id].firstPage %}
+          <li class="disabled "><span>{{'paginator.lastPage'|trans}}</span></li>
+        {% else %}
+          <li class="postReply-page"  postId="{{postMain.id}}"  data-url="{{path('group_thread_post_reply',{postId:postMain.id,page:postReplyPaginator[postMain.id].previousPage})}}"><a  href="javascript:;">{{'paginator.lastPage'|trans}}</a></li>
+        {% endif %}
+        {% for page in postReplyPaginator[postMain.id].pages %}
+          <li {% if page == postReplyPaginator[postMain.id].currentPage %}class="active"{% endif %} class="postReply-page"  postId="{{postMain.id}}"  data-url="{{path('group_thread_post_reply',{postId:postMain.id,page:page})}}"><a href="javascript:;">{{ page }}</a></li>
+        {% endfor %}
+
+        {% if postReplyPaginator[postMain.id].currentPage == postReplyPaginator[postMain.id].lastPage %}
+          <li class="disabled"><span>{{'paginator.nextPage'|trans}}</span></li>
+        {% else %}
+          <li class="postReply-page"  postId="{{postMain.id}}" data-url="{{path('group_thread_post_reply',{postId:postMain.id,page:postReplyPaginator[postMain.id].nextPage})}}"><a href="javascript:;">{{'paginator.nextPage'|trans}}</a></li>
+        {% endif %}
+      </ul>
+    {% endif %}
+    </div>
+  </div>
+  <div id="li-{{post.id}}" style="display:none;">
+  <form  class="thread-post-reply-form reply-{{post.id}}" method="post"  action="{{path('group_thread_post',{groupId:groupinfo.id,threadId:threadMain.id})}}">
+    <div class="form-group">
+      <label class="control-label hide" for="reply-content-{{post.id}}">{{'group.thread.reply_content'|trans}}</label>
+      <div class="controls">
+      <textarea id="reply-content-{{post.id}}" name="reply-content-{{post.id}}"  class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}"></textarea>
+      </div>
+    <div id="fromUserIdDiv"></div>
+    </div>
+    <div class="form-group">
+      <button postId="{{postMain.id}}" class="reply-btn btn btn-xs btn-primary pull-right"  style="margin-top:-10px;"data-submiting-text="{{'form.btn.reply_publish.submiting'|trans}}">{{'form.btn.reply'|trans}}</button>
+    </div>
+  </form>
+</div>
+</div>

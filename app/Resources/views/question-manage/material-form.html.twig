@@ -1,0 +1,12 @@
+{% extends 'question-manage/question-form-layout.html.twig' %}
+
+{% set question_stem_label = 'question_bank.question_manage.manage.material'|trans %}
+
+{% block question_buttons %}
+  {% if not question|default(null) %}
+    <button type="button" data-role="submit" class="btn btn-primary" data-submission="continue_sub" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{'form.btn.save_and_continue_add'|trans}}</button>
+  {% else %}
+    <button type="button" data-role="submit" class="btn btn-primary" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{'form.btn.save'|trans}}</button>
+  {% endif %}
+
+{% endblock %}

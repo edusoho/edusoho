@@ -1,0 +1,82 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_edu_cloud_facein_overview' %}
+
+{% block main %}
+  <style>
+    .capture {
+      position: relative;
+      top: 10px;
+    }
+  </style>
+  <div class="well well-sm mtl">
+    <form id="user-search-form" class="form-inline" action="" method="get" novalidate>
+      <div class="mbm">
+        <div class="form-group">
+          <input class="form-control" type="text" placeholder="{{ '用户名'|trans }}" name="nickname" value="{{ app.request.get('nickname') }}">
+        </div>
+        <div class="form-group">
+          <select class="form-control" name="faceStatus">
+            {{ select_options(dict('userFaceStatus'), app.request.query.get('faceStatus'), '--是否采集--'|trans) }}
+          </select>
+        </div>
+        <button class="btn btn-primary">{{'form.btn.search'|trans}}</button>
+      </div>
+    </form>
+  </div>
+
+
+  <table class="table" >
+    <thead>
+    <tr>
+      <th width="35%">{{ 'user.fields.username_label'|trans }}</th>
+      <th width="15%">{{ 'admin.edu_cloud.edu_facein.list.status'|trans }}</th>
+      <th width="30%">{{ 'admin.edu_cloud.edu_facein.list.time'|trans }}</th>
+      <th width="20%">{{ 'admin.user.fields.operation_label'|trans }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for user in users %}
+      {% set isCapture = userFaces[user.id]|default() %}
+      <tr>
+        <td>
+          <strong {% if isCapture %} class="capture" {% endif %}>{{ admin_macro.user_link(user) }}</strong>
+        </td>
+        <td>
+          {% if isCapture %}
+            <span class="capture">是</span>
+          {% else %}
+            否
+          {% endif %}
+        </td>
+        <td>
+          {% if isCapture %}
+            {{ userFaces[user.id].updated_time|date('Y-n-d H:i:s') }}
+            <br>
+            <span class="text-muted text-sm">
+              <a class="text-muted text-sm" href="http://www.baidu.com/s?wd={{ user.loginIp }}" target="_blank">{{ user.loginIp }}</a>
+              {{convert_ip(user.loginIp)}}
+            </span>
+          {% else %}
+            --
+          {% endif %}
+        </td>
+        <td>
+          {% if isCapture %}
+            <a href="javascript:;" data-url="{{path('admin_v2_edu_cloud_facein_useface_detail',{'userId':user.id})}}" {% if isCapture %} class="capture" {% endif %} data-toggle="modal" data-target="#modal">查看详情</a>
+          {% else %}
+            --
+          {% endif %}
+        </td>
+      </tr>
+    {% else %}
+      <tr>
+        <td colspan="20">
+          <div class="empty">{{'admin.edu_cloud.edu_facein.list.empty'|trans}}</div>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {{ admin_macro.paginator(paginator) }}
+{% endblock %}

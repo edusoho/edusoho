@@ -1,0 +1,31 @@
+{% set nextCode = '' %}
+<div class="es-tabs article-list-header">
+  <div class="tab-header">
+    <ul class="clearfix">
+      <li class="{% if categoryCode is empty %}active{% endif %}"><a
+          href="{{ path('article_show') }}">{{ setting('article.name')|default('article'|trans) }}</a></li>
+      {% for cateogory in rootCategories %}
+        {% if cateogory.parentId == 0 %}
+          <li class="{% if cateogory.id in activeIds %}{% set nextCode = cateogory.code %}active{% endif %}"><a
+              href="{{ path('article_category', {categoryCode:cateogory.code}) }}">{{ cateogory.name }}</a></li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </div>
+
+  {% if categories %}
+    <div class="tab-body">
+      {% for l,cs in categories if cs %}
+        <ul class="clearfix">
+          {% for c in cs %}
+            {% if loop.index == 1 %}
+              <li class="all"><a href="{{ path('article_category', {categoryCode:nextCode}) }}">{{ 'category.all_category'|trans }}</a></li>
+            {% endif %}
+            <li class="{% if c.id in activeIds %}{% set nextCode = c.code %}active{% endif %}"><a
+                href="{{ path('article_category', {categoryCode:c.code}) }}">{{ c.name }}</a></li>
+          {% endfor %}
+        </ul>
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>

@@ -1,0 +1,49 @@
+.nav > li.nav-more {
+  .open > a,
+  .open.active >a,
+  .open > a:hover, 
+  .open > a:focus {
+    background: @brand-primary !important;
+  }
+}
+
+.es-header {
+  .nav.user-nav {
+    > li {
+      .dropdown-menu {
+        > li > a {
+          &:hover {
+            .num {
+              color: @brand-primary;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.es-nav-white {
+  .es-header {
+    .nav.user-nav {
+      .user-manage-li {
+        .user-manage-toggle {
+          .cd-btn-raised(@brand-primary);
+          &:hover,
+          &:focus {
+            background-color: @brand-primary !important;
+            border-color: @brand-primary !important;
+          }
+        }
+      }
+    }
+  }
+}
+
+.inform-dropdown-head__tab {
+  &:focus,
+  &:hover,
+  &.active {
+    color: @brand-primary;
+  }
+}

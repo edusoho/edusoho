@@ -1,0 +1,26 @@
+{% if sortedCourses %}
+	<table class="table table-condensed table-striped table-hover" style="word-break: break-all;">
+	  <thead>
+	    <tr>
+	      <th>{{'admin.course.popular_course.name'|trans}}</th>
+	      <th>{{'admin.course.popular_course.add_student_num'|trans}}</th>
+	      <th>{{'admin.course.popular_course.total_student_num'|trans}}</th>
+	      <th>{{'admin.course.popular_course.add_income'|trans}}</th>
+	    </tr>
+	  </thead>
+		<tbody>
+			{% for sortedcourse in sortedCourses %}
+				<tr>
+					<td>
+						<a href="{{ path('course_show', {id: sortedcourse.courseId}) }}" target="_blank">{{ sortedcourse.title }}</a>
+					</td>
+					<td>{{ sortedcourse['addedStudentNum'] }} {{ 'site.data.people'|trans }} </td>
+					<td>{{ sortedcourse['studentNum'] }} {{ 'site.data.people'|trans }}</td>
+					<td class="money-text">{{sortedcourse['addedMoney'] }} {{'site.currency.CNY'|trans}} </td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% else %}
+  <div class="empty">{{'admin.course.popular_course.empty_tips'|trans}}</div>
+{% endif %}

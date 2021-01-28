@@ -1,0 +1,214 @@
+//公用
+@gray:#666666;
+@brand-primary:#428bca;
+.link-gray {
+  color: @gray !important;
+  .es-transition;
+  &:hover {
+    color: @brand-primary !important;
+    .es-transition;
+  }
+}
+
+.color-gray {color: @gray !important;}
+a,a:hover {
+  text-decoration: none;
+}
+.es-transition(@time:.3s) {
+  -webkit-transition: all @time ease;
+     -moz-transition: all @time ease;
+       -o-transition: all @time ease;
+          transition: all @time ease;
+}
+.text-overflow {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.page-heading {
+  font-size: 16px;
+  padding: 10px 20px;
+  border-bottom: 1px solid #dddddd;
+  background-color: #fafafa;
+  margin-bottom: 10px;
+}
+
+//教育云概览
+.edu-user {
+  border: 1px solid #dddddd;
+  margin-bottom: 20px;
+  .user-part {
+    text-align: center;
+    width: 33.3%;
+    margin: 28px 0;
+    border-right: 1px solid #dddddd;
+    height: 100px;
+    &:last-child {
+      border-right: 0;
+    }
+    .img-circle {
+      width: 64px;
+      height: 64px;
+      margin-top: 5px;
+    }
+    .money {
+      font-size: 22px;
+      color: #DD4646;
+      padding: 5px 0;
+    } 
+  }
+}
+.edu-combo {
+  .my-products-item {
+    display: block;
+    padding: 6px 0;
+    margin-bottom: 15px;
+    text-align: center;
+    background-color: #f1f1f1;
+    color: #666666;
+    border-radius: 2px;
+    font-weight: normal;
+    text-decoration: none;
+    .es-transition;
+    i {
+      font-size: 20px;
+    }
+    &:hover {
+      color: #fff;
+      text-decoration: none;
+      background-color: #428BCA;
+    }
+  }
+}
+.update-list {
+  padding-left: 0;
+}
+
+//云视频概览
+.buy-cloud-video{
+  padding: 30px 0 30px 200px;
+  margin-bottom: 20px;
+  border: 1px solid #dddddd;
+  .buy-section {
+    padding-top: 10px;
+    padding-left: 45px;
+    a {
+      text-decoration: underline;
+      font-size: 18px;
+    }
+  }
+}
+.notice-panel {
+  text-align: center;
+  i {
+    font-size: 80px;
+  }
+  .notice-desc {
+    margin-bottom: 40px;
+  }
+  .notice-btn {
+    margin-bottom: 50px;
+  }
+}
+
+.search-part-table {
+  margin-bottom: 0;
+  tbody>tr{
+    border-bottom: 1px dashed #dddddd;
+    &:last-child {
+      border-bottom: 0px;
+    }
+    &>td {
+      padding: 10px;
+      border-top: 0;
+      .part-num {
+        width: 20px;
+        height: 20px;
+        text-align: center;
+      }
+      .num-red {
+        color: #fff;
+        background-color: #e30918;
+      }
+      .part-name {
+        width: 190px;
+        .text-overflow;
+      }
+      .part-total {
+        text-align: right;
+      }
+    }
+  }
+}
+
+// 云短信表格
+.sms-table {
+  color: @gray;
+  tbody>tr>td:nth-child(3) {
+    color: #999999;
+  }
+}
+
+//视频片头
+.head-leader-edit {
+  .file-name {
+    display: inline-block;
+    padding: 10px;
+    margin-top: 10px;
+    color: @gray;
+    border:1px solid #dddddd;
+    background-color: #fafafa
+  }
+}
+
+//进度条
+.cloud-progress {
+  border-radius: 10px;
+  height: 16px;
+  .progress-bar {
+    border-radius: 10px;
+  }
+}
+
+//未接入
+.cloud-banner-top {
+  position: relative;
+  .access-btn {
+    display: inline-block;
+    position: absolute;
+    right: 264px;
+    bottom: 70px;
+    padding: 12px 50px;
+    color: #fff;
+    border:1px solid #fff;
+    .es-transition;
+    &:hover {
+      background-color: #428af0;
+    }
+  }
+}
+.cloud-banner {
+  &.banner-bg-blue {
+    padding-left: 80px;
+    background-color: #F6F9FF;
+  }
+  &.banner-bg-gray {
+    padding-right: 100px;
+    background-color: #F5F5F5;
+  }
+  .title {
+    padding-top: 100px;
+    font-size: 26px;
+    font-weight: bold;
+  }
+  .subtitle {
+    font-size: 26px;
+  }
+}
+
+.edu-cloud-search-intro {
+  p {
+    text-indent: 14px;
+  }
+}

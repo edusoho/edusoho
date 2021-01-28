@@ -1,0 +1,7 @@
+	 <ul class="nav nav-pills">
+      <li {% if tab_nav == 'index' %} class="active"{% endif %}><a href="{{path('my_group_member_center')}}">{{'my.learning.group.homepage'|trans}}</a></li>
+      <li {% if tab_nav == 'join' %} class="active"{% endif %}><a href="{{path('my_group_member_join')}}">{{'my.learning.group.join'|trans}}</a></li>
+      <li {% if tab_nav == 'thread' %} class="active"{% endif %}><a href="{{path('my_group_member_threads')}}">{{'my.learning.group.post_thread'|trans}}</a></li>
+      <li {% if tab_nav == 'post' %} class="active"{% endif %}><a href="{{path('my_group_member_posts')}}">{{'my.learning.gruop.answer_thread'|trans}}</a></li>
+       <li {% if tab_nav == 'collect' %} class="active"{% endif %}><a href="{{path('my_group_thread_collecting')}}">{{'my.learning.group.favorit_thread'|trans}}</a></li>
+    </ul>

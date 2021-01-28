@@ -1,0 +1,47 @@
+{% import "macro.html.twig" as web_macro %}
+  <div class="reply-post-list-{{postMain.id}}">
+    <ul class="media-list">
+      {% for post in postReply %}
+        <li class="media li-reply-{{postMain.id}}">
+          <a href="{{ path('user_show', {id:post.userId}) }}" class="pull-left">
+            <img src="{{ filepath(postReplyMembers[post.userId].smallAvatar, 'avatar.png') }}" class="avatar-md">
+          </a>
+          <div class="media-body">
+            <div class="metas">
+              <strong>{{ web_macro.user_link(postReplyMembers[post.userId]) }}</strong>
+              <span class="mhm">{{post.createdTime|smart_time}}</span>
+            </div>
+            <div class="content">{{post.content|raw}}</div>
+            <div class="color-gray text-normal pull-right">
+              <a href="javascript:" class="li-reply" postId="{{postMain.id}}" postName="{% if not postReplyMembers[post.userId].destroyed|default(0) %}{{postReplyMembers[post.userId].nickname}}{% else %}{{ 'user.user_had_destroyed'|trans }}{% endif %}"> {{'group.thread.reply_btn'|trans}}</a>
+            </div>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+
+    <div class="actions">
+      <a class="replyToo btn btn-default btn-xs pull-right" data-status="hidden" postId="{{postMain.id}}" href="javascript:;">{{'group.thread.reply_too_btn'|trans}}</a>
+    </div>
+    <div class="text-center">
+    {% if postReplyPaginator.lastPage > 1 %}
+      <ul  class="paginator-{{postMain.id}} pagination pagination-sm">
+        {% if postReplyPaginator.currentPage == postReplyPaginator.firstPage %}
+          <li class="disabled "><span>{{'paginator.lastPage'|trans}}</span></li>
+        {% else %}
+          <li class="postReply-page"  postId="{{postMain.id}}"  data-url="{{path('group_thread_post_reply',{postId:postMain.id,page:postReplyPaginator.previousPage})}}"><a  href="javascript:;">{{'paginator.lastPage'|trans}}</a></li>
+        {% endif %}
+        {% for page in postReplyPaginator.pages %}
+          <li {% if page == postReplyPaginator.currentPage %}class="active"{% endif %} class="postReply-page"  postId="{{postMain.id}}"  data-url="{{path('group_thread_post_reply',{postId:postMain.id,page:page})}}"><a href="javascript:;">{{ page }}</a></li>
+        {% endfor %}
+
+        {% if postReplyPaginator.currentPage == postReplyPaginator.lastPage %}
+          <li class="disabled"><span>{{'paginator.nextPage'|trans}}</span></li>
+        {% else %}
+          <li class="postReply-page"  postId="{{postMain.id}}" data-url="{{path('group_thread_post_reply',{postId:postMain.id,page:postReplyPaginator.nextPage})}}"><a href="javascript:;">{{'paginator.nextPage'|trans}}</a></li>
+        {% endif %}
+      </ul>
+    {% endif %}
+    </div>
+  </div>
+

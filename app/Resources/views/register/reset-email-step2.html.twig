@@ -1,0 +1,37 @@
+{% extends 'layout.html.twig' %}
+{% block title %}{{ 'user.register.reset_email'|trans }} - {{ parent() }}{% endblock %}
+{% do script(['libs/jquery-validation.js','app/js/user/email-reset/index.js'])%}
+
+{% block content %}
+  <div class="es-section login-section">
+    <div class="login-main">
+      <form id="reset-email-form" method="post" action="{{ path('register_reset_email_verify') }}">
+        {{ web_macro.flash_messages() }}
+        <div class="form-group mbl">
+          <label class="control-label required" for="reset_email">{{ 'user.register.reset_email.new_email'|trans }}</label>
+          <div class="controls">
+            <input type="email" id="reset_email" name="email" autocomplete="off" required="required" class="form-control input-lg"
+                   data-url="{{ path('register_email_check') }}" placeholder="{{ 'user.register.reset_email.new_email_tips'|trans }}" data-display="Email">
+            <p class="help-block"></p>
+          </div>
+        </div>
+
+        {% if (setting('auth.captcha_enabled')|default(0)) == 1 %}
+          <div class="form-group cd-mb32 js-drag-jigsaw">
+            {% include 'common/drag.html.twig' with { auth: true } %}
+          </div>
+        {% endif %}
+
+        <input type="hidden" name="token" value="{{ token }}">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        <div class="form-group mbl">
+          <div class="controls text-right">
+            <a href="{{ path('login') }}" class="btn btn-link btn-lg">{{ 'form.btn.cancel'|trans }}</a>
+            <button type="submit" id="next-btn" data-submiting-text="{{ 'form.btn.submit.submiting'|trans }}"
+                    class="btn btn-primary btn-lg">{{ 'form.btn.verify'|trans }}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

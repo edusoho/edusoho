@@ -1,0 +1,52 @@
+{% set messageSetting = setting('message') %}
+{% set newMessageNum = app.user.newMessageNum %}
+{% if messageSetting.showable|default('1') == 0 %}
+  {% set newMessageNum = 0 %}
+{% endif %}
+<li class="user-inform-li js-user-inform hidden-xs hidden-sm cd-ml24 cd-dropdown" data-toggle="cd-dropdown">
+  <a class="inform-dropdown-toggle"><i class="cd-icon cd-icon-bell"></i>{% if app.user.newNotificationNum > 0 or newMessageNum > 0 %}<span class="inform-dropdown-toggle__num cd-badge cd-badge-danger {% if app.user.newNotificationNum + newMessageNum > 9 %} inform-dropdown-toggle__num--big {% endif %}">{{ app.user.newNotificationNum + newMessageNum }}</span>{% endif %}</a>
+  <div class="dropdown-menu inform-dropdown js-user-nav-dropdown" role="menu">
+    <div class="clearfix inform-dropdown-head" role="tablist">
+      <a class="{% if messageSetting.showable|default('1') != 0 %}inform-dropdown-head__tab active{% else %}inform-dropdown-head__one_tab{% endif %} js-inform-tab" href="#notification" role="tab" data-toggle="tab" data-type="newNotification">{{ 'notification.user_notification'|trans }}{% if app.user.newNotificationNum > 0 %}<span class="inform-dropdown-dot"></span>{% endif %}</a>
+      {% if messageSetting.showable|default('1') != 0 %}
+        <a class="inform-dropdown-head__tab js-inform-tab" href="#message" role="tab" data-toggle="tab" data-type="conversation">{{ 'user.btn.send_message'|trans }}{% if newMessageNum > 0 %}<span class="inform-dropdown-dot"></span>{% endif %}</a>
+      {% endif %}
+    </div>
+    <div class="tab-content">
+      <div class="notification-content tab-pane active" role="tabpanel" id="notification">
+        <div class="inform-dropdown-body js-inform-dropdown-body">
+          {% if app.user.newNotificationNum > 0 %}
+            <div class="inform-loading js-inform-loading"></div>
+            <div class="js-inform-newNotification"></div>
+          {% else %}
+            <div class="inform-empty-status js-inform-empty">
+              <img class="cd-mb24" src="{{ asset('static-dist/app/img/notice/null-notice.png') }}"
+            srcset="{{ asset('static-dist/app/img/notice/null-notice.png') }} 1x, {{ asset('static-dist/app/img/notice/null-notice@2x.png') }} 2x"/>
+              <div class="inform-empty-status__tip">{{ 'homepage.header.no_new_notifications'|trans }}</div>
+            </div>
+          {% endif %}
+        </div>
+        <div class="inform-dropdown-foot">
+          <a class="cd-link-minor" href="{{ path('notification') }}">{{ 'homepage.header.check_all_notifications'|trans }}</a>
+        </div>
+      </div>
+      <div class="message-content tab-pane" role="tabpanel" id="message">
+        <div class="inform-dropdown-body js-inform-dropdown-body">
+          {% if newMessageNum > 0 %}
+            <div class="inform-loading js-inform-loading"></div>
+            <div class="js-inform-conversation"></div>
+          {% else %}
+            <div class="inform-empty-status js-inform-empty">
+              <img class="cd-mb24" src="{{ asset('static-dist/app/img/notice/null-message.png') }}"
+          srcset="{{ asset('static-dist/app/img/notice/null-message.png') }} 1x, {{ asset('static-dist/app/img/notice/null-message@2x.png') }} 2x"/>
+              <div class="inform-empty-status__tip">{{ 'homepage.header.no_new_messages'|trans }}</div>
+            </div>
+          {% endif %}
+        </div>
+        <div class="inform-dropdown-foot">
+          <a class="cd-link-minor" href="{{ path('message') }}">{{ 'homepage.header.check_all_messages'|trans }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</li>

@@ -1,0 +1,59 @@
+<div class="media topic-item">
+  <div class="media-left media-middle">
+    {{ web_macro.user_avatar(author, 'pull-left', 'avatar-sm', true)}}
+  </div>
+  {% if thread.title == '' %}
+    {% if thread.questionType == 'video' %}
+      {% set questionType = 'course.thread.question_type.video'|trans %}
+    {% elseif thread.questionType == 'image' %}
+      {% set questionType = 'course.thread.question_type.image'|trans %}
+    {% elseif thread.questionType == 'audio' %}
+      {% set questionType = 'course.thread.question_type.audio'|trans %}
+    {% else %}
+      {% set questionType = 'course.thread.question_type.content'|trans %}
+    {% endif %}
+  {% endif %}
+  <div class="media-body">
+    <div class="title">
+      {% if thread.type == 'question'%}
+        <i class="es-icon es-icon-help color-danger" data-toggle="tooltip" data-placement="top" title="{{'thread.hover_tips.question'|trans}}"></i>
+      {% endif %}
+      {% if thread.type == 'event'%}
+        <i class="es-icon es-icon-locationcircle color-primary" data-toggle="tooltip" data-placement="top" title="{{'thread.hover_tips.activity'|trans}}"></i>
+      {% endif %}
+
+      {% if thread.type == 'discussion' %}
+        <i class="es-icon es-icon-chatcircle color-info" data-toggle="tooltip" data-placement="top" title="{{'thread.hover_tips.thread'|trans}}"></i>
+      {% endif %}
+      <a  href="{{ path(target.type ~ '_thread_show', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}">{{ thread.title|default('course.thread.question.title'|trans({'%questionType%':questionType|default('course.thread.question_type.content'|trans)})) }}
+      </a>
+
+      {% if thread.sticky %}
+        <span class="label label-primary" title="{{'thread.status.stick'|trans}}">{{'thread.status.stick'|trans}}</span>
+      {% endif %}
+      {% if thread.nice %}
+        <span class="label label-danger" title="{{'thread.status.essence'|trans}}">{{'thread.status.essence'|trans}}</span>
+      {% endif %}
+    </div>
+
+    <div class="metas text-sm">
+      {% if not author.destroyed|default(0) %}
+        <a href="{{ path('user_show', {id:author.id}) }}" class="color-gray">{{ author.nickname }}</a>
+      {% else %}
+        <a class="color-gray">{{ 'user.user_had_destroyed'|trans }}</a>
+      {% endif %}
+      <span>{{'thread.create_thread'|trans({'%dict_text%':dict_text('threadType', thread.type)})}}</span>
+      {% if thread.postNum > 0 and users[thread.lastPostUserId] is defined %}
+        {% set poster = users[thread.lastPostUserId] %}
+        •
+        <span>{{'thread.last_reply'|trans}} {{ web_macro.user_link(poster, 'link-primary') }}</span>
+      {% endif %}
+
+      • <span>{{ thread.lastPostTime|smart_time }}</span>
+    </div>
+  </div>
+  <div class="media-data hidden-xs">
+    <span>{{ thread.postNum }}<br>{{'thread.reply'|trans}}</span>
+    <span>{{ thread.hitNum }}<br>{{'thread.browse'|trans}}</span>
+  </div>
+</div>

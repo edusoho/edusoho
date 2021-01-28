@@ -1,0 +1,19 @@
+{% extends 'layout.html.twig' %}
+{% set menu = 'admin_operation_coupon_manage' %}
+{% set typeTitles = {info:'site.message.info'|trans, warning:'site.message.warning'|trans, error: 'site.message.error'|trans} %}
+{% set title = title|default(typeTitles[type]) %}
+{% block title %}{{ title|trans }} - {{ parent() }}{% endblock %}
+{% block head_scripts %}{{ script|default('')|raw }}{% endblock %}
+
+{% block content %}
+  <div id="page-message-container" class="page-message-container">
+    <div class="page-message-panel">
+      <div class="page-message-heading">
+        <h2 class="page-message-title">{{ title|trans }}</h2>
+      </div>
+      <div class="page-message-body">{{ 'coupon.setting.close'|trans }}
+        <a href="{{ path('admin_coupon_setting') }}">  {{ 'coupon.setting.permission.goto_open'|trans }}</a>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="./Tests/bootstrap.php">
+  <php>
+    <!-- <server name="CONTAINER_CONFIG" value="Tests/Resources/config/services.xml" /> -->
+  </php>
+  <testsuites>
+    <testsuite name="OAuth2ServerBundle Test Suite">
+      <directory suffix="Test.php">./Tests</directory>
+    </testsuite>
+  </testsuites>
+  <filter>
+    <whitelist>
+      <directory>./</directory>
+      <exclude>
+        <directory>./Tests</directory>
+      </exclude>
+    </whitelist>
+  </filter>
+</phpunit>

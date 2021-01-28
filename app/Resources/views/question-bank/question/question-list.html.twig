@@ -1,0 +1,45 @@
+{% set questionTypes = getQuestionTypes() %}
+
+<div>
+  <form class="form-inline js-search-form" novalidate>
+    <div class="form-group">
+      <select class="form-control" name="difficulty" data-role="search-conditions">
+        <option value="" {% if not app.request.get('difficulty', '') %}selected{% endif %}>{{'course.question_manage.manage.difficulty'|trans}}</option>
+        <option value="simple" {% if app.request.get('difficulty', '') == 'simple' %}selected{% endif %}>{{ 'course.question_manage.manage.easy_difficulty'|trans }}</option>
+        <option value="normal" {% if app.request.get('difficulty', '') == 'normal' %}selected{% endif %}>{{ 'course.question_manage.manage.normal_difficulty'|trans }}</option>
+        <option value="difficulty" {% if app.request.get('difficulty','') == 'difficulty' %}selected{% endif %}>{{ 'course.question_manage.manage.hard_difficulty'|trans }}</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <select class="form-control" name="type" data-role="search-conditions">
+        {{ select_options(questionTypes, app.request.query.get('type'), 'course.question_manage.filter.question_type'|trans) }}
+      </select>
+    </div>
+
+    <div class="form-group">
+      <input type="text" id="keyword" name="keyword" data-role="search-conditions" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="{{'course.question_manage.filter.keywords'|trans}}">
+    </div>
+    <div class="form-group">
+      <button class="cd-btn cd-btn-primary js-search-btn">{{'form.btn.search'|trans}}</button>
+      <a class="cd-btn cd-btn-primary js-export-btn" href="javascript:" data-url="{{ path('question_bank_manage_question_export', {id: questionBank.id}) }}">
+        {{ 'course.question_manage.export_btn'|trans }}
+      </a>
+    </div>
+  </form>
+
+  <div class="mtl">
+    <div>
+      <a class="cd-btn cd-btn-primary cd-btn-sm js-import-btn" data-url="{{ path('question_bank_manage_question_import', {id: questionBank.id}) }}" data-toggle="modal" data-target="#modal">
+        <i class="cd-icon cd-icon-add cd-text-sm"></i>{{ 'course.question_manage.import.btn'|trans }}
+      </a>
+      {% include 'question-bank/question/create-question-btn-group.html.twig' %}
+    </div>
+  </div>
+
+  <div role="courseset-manage-question">
+    <div id="quiz-table-container" class="js-question-html" data-url="{{ path('question_bank_manage_question_show_ajax', {id: questionBank.id}) }}">
+      {% include 'question-bank/question/question-list-table.html.twig' %}
+    </div>
+  </div>
+</div>

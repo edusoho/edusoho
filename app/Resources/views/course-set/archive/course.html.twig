@@ -1,0 +1,92 @@
+{% extends 'layout.html.twig' %}
+{% block title %}
+  {{ course.title }} -{{ parent() }}
+{% endblock %}
+
+{% block keywords %}
+  {% for tag in tags %}{{ tag.name }}
+    {% if not loop.last %}{{ ',' }}
+    {% endif %}
+  {% endfor %}
+{% endblock %}
+
+{% block description %}
+  {{ courseDescription|default('') }}
+{% endblock %}
+
+{% block content %}
+  <div class="es-row-wrap container-gap">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="page-header"><h1>{{ courseSet.title }}</h1></div>
+      </div>
+    </div>
+    <div class="row article-row">
+      <div class="col-md-8 mbl">
+        <dl class="course-infos">
+          <dt class="thread-title">{{ 'course_set.course.about'|trans }}</dt>
+          <dd class="thread-body">{{ course.about|cdn|raw }}</dd>
+          {% if category %}
+            <dt>{{ 'course_set.course.category'|trans }}</dt>
+            <dd class="mbm">
+              <a href="{{ path('course_set_explore', {category:category.code|default(category.id)}) }}"
+                target="_blank">{{ category.name }}</a>
+            </dd>
+          {% endif %}
+          {% if course.goals %}
+            <dt>{{ 'course_set.course.goals'|trans }}</dt>
+            <dd>
+              <ul>
+                {% for goal in course.goals %}
+                  <li>{{ goal }}</li>
+                {% endfor %}
+              </ul>
+            </dd>
+          {% endif %}
+          {% if course.audiences %}
+            <dt>{{ 'course_set.course.audiences'|trans }}</dt>
+            <dd>
+              <ul>
+                {% for audience in course.audiences %}
+                  <li>{{ audience }}</li>
+                {% endfor %}
+              </ul>
+            </dd>
+          {% endif %}
+        </dl>
+        {% if tags %}
+          <div class="mtm">{{ 'course_set.course.tags'|trans }}
+            {% for tag in tags %}
+              <a href="{{ path('tag_show', {name:tag.name}) }}" class="mrs"><span
+                  class="label label-info">{{ tag.name }}</span></a>
+            {% endfor %}
+          </div>
+        {% endif %}
+        <a class="btn btn-primary mtl nav-btn" href="{{ path('course_show',{id:course.id}) }}"><span
+            class="glyphicon glyphicon-play"></span> {{ 'course_set.course.show_btn'|trans }}</a>
+      </div>
+      <div class="col-md-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">{{ 'course_set.course.task_list'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}</h3>
+          </div>
+          <div class="panel-body">
+            {% if tasks %}
+              <ul class="media-list">
+                {% for task in tasks %}
+                  <li class="media">
+                    <div class="media-body"><a
+                        href="{{ path('course_set_archive_task',{ courseSetId: courseSet.id, taskId: task.id }) }}">{{ 'course_set.course.taskNumber'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%number%': task.number,'%title%': task.title })|raw }}</a>
+                    </div>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <div class="empty">{{ 'course_set.course.empty'|trans }}</div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

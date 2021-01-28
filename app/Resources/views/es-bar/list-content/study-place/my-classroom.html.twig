@@ -1,0 +1,29 @@
+{% extends 'es-bar/list-content/study-place.html.twig' %}
+
+{% set esBarMenu = 'classroom' %}
+{% block myStudyPlace %}
+
+{% if classrooms %}
+  <!-- 班级 -->
+  <div class="recommend-class-list">
+    {% set classroomCount = 15 %}
+    {% for classroom in classrooms %}
+      {% set classroomCount = loop.length %}
+      <div class="class-item">
+        <div class="class-img-wrap">
+          <a class="class-img" href="{{ path('classroom_show', {id:classroom.id}) }}">
+            <img class="img-responsive" src="{{ filepath(classroom.middlePicture, 'classroom.png') }}" alt="{{ classroom.title }}">
+          </a>
+        </div>
+        <h3 class="cd-mb8"><a class="link-darker" href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a></h3>
+        <div class="class-item-metas text-center cd-pb8">{{'es_bar.study_place.classroom_course_num'|trans({'%courseNum%':classroom.courseNum})}}</div>
+      </div>
+    {% endfor %}
+    {% if classroomCount >= 15 %}
+      <p class="text-center"><a class="link-dark" href="{{ path('my_classrooms') }}" target="_blank">{{'site.default.more'|trans}}<i class="es-icon es-icon-angledoubleright"></i></a></p>
+    {% endif %}
+  </div>
+{% else %}
+  <div class="empty">{{'es_bar.study_place.empty_classroom_tips'|trans({'%name%': setting('classroom.name')|default('classroom'|trans)}) }}</div>
+{% endif %}
+{% endblock %}

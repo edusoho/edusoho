@@ -1,0 +1,80 @@
+<?php
+namespace Topxia\AdminBundle\Controller;
+
+use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Common\ArrayToolkit;
+use AppBundle\Common\Paginator;
+
+class  {{bigName}}Controller extends BaseController
+{
+
+    public function indexAction (Request $request)
+    {
+        $fields = $request->query->all();
+        $conditions = array(
+            '...'=>'',
+            'keywordType'=>'',
+            'keyword'=>''
+        );
+
+        if(!empty($fields)){
+            $conditions =$fields;
+        }
+
+        $paginator = new Paginator(
+            $request,
+            $this->get{{bigName}}Service()->search{{bigName}}sCount($conditions),
+            20
+        );
+
+        ${{smallName}}s = $this->get{{bigName}}Service()->search{{bigName}}s(
+            $conditions,
+            array('createdTime', 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+        return $this->render('TopxiaAdminBundle:{{bigName}}:index.html.twig', array(
+            '{{smallName}}s' => ${{smallName}}s ,
+            'paginator' => $paginator
+        ));
+    }
+
+
+    public function createAction(Request $request)
+    {
+        if ($request->getMethod() == 'POST') {
+            $formData = $request->request->all();
+            ${{smallName}}Data['email'] = $formData['email'];
+            return $this->redirect($this->generateUrl('admin_{{smallName}}'));
+        }
+        return $this->render('TopxiaAdminBundle:{{bigName}}:create-modal.html.twig');
+    }
+
+    public function editAction(Request $request, $id)
+    {
+        ${{smallName}} = $this->get{{bigName}}Service()->getUser($id);
+
+        if ($request->getMethod() == 'POST') {
+        }
+
+        return $this->render('TopxiaAdminBundle:{{bigName}}:edit-modal.html.twig', array(
+            '{{smallName}}' => ${{smallName}}
+        ));
+    }
+
+    public function showAction(Request $request, $id)
+    {
+        ${{smallName}} = $this->get{{bigName}}Service()->get{{bigName}}($id);
+        return $this->render('TopxiaAdminBundle:{{bigName}}:show-modal.html.twig', array(
+            '{{smallName}}' => ${{smallName}}
+            ));
+    }
+
+
+    protected function get{{bigName}}Service()
+    {
+        return $this->getServiceKernel()->createService('{{service}}.{{bigName}}Service');
+    }
+
+
+}

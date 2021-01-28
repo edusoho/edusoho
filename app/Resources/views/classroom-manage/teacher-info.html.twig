@@ -1,0 +1,10 @@
+
+{% if user %}
+  <div class="col-md-7 col-md-offset-2">
+    <img src="{{ filepath(user.smallAvatar, 'avatar.png') }}" style="width: 50px;height: 50px;">
+    <span class="nickname mlm">{{user.nickname}}</span>
+    <input type="hidden" name="headTeacherId" value="{{user.id}}" />
+  <div>
+{% else %}
+  <div class="col-md-7 col-md-offset-2" style="color:#a94442;">{{'classroom.manage.teacher_info.empty'|trans}}</div>
+{% endif %}

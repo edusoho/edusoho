@@ -1,0 +1,120 @@
+{% extends 'group/layout.html.twig' %}
+{% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js','app/js/group/thread-add/index.js']) %}
+{% block group_body %}
+
+  {% if thread|default(null) and attachs %}
+    <div id="hasAttach"></div>
+  {% endif %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      {% if thread|default(null) %}
+        <h3 class="panel-title">{{ 'group.thread.edit.content_title'|trans }}</h3>
+      {% else %}
+        <h3 class="panel-title">{{ 'group.thread.create.content_title'|trans }}</h3>
+      {% endif %}
+    </div>
+    <div class="panel-body">
+      <form id="user-thread-form" class="form-horizontal thread-form" method="post">
+
+        <div class="form-group">
+          <label class="col-xs-2 control-label" for="thread_title">{{ 'group.thread.title'|trans }}</label>
+          <div class="col-xs-7 col-xs-10 controls">
+            <input type="text" id="thread_title" name="thread[title]" class="form-control"
+                   value="{{ thread.title|default('') }}">
+            <div class="help-block" style="display:none;"></div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-xs-2 control-label" for="{% if is_feature_enabled('group_reward') %}thread_content1{% else %}thread_content{% endif %}">{{ 'group.thread.content'|trans }}</label>
+          <div class="col-sm-7 col-xs-10 controls">
+            {% if is_feature_enabled('group_reward') %}
+              <textarea name="thread[content]" rows="10" id="thread_content1" class="form-control"
+                        data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{ thread.content|default('') }}</textarea>
+            {% else %}
+              <textarea name="thread[content]" rows="10" id="thread_content" class="form-control"
+                        data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}"
+                        data-image-download-url="{{ path('editor_download', {token:upload_token('default')}) }}">{{ thread.content|default('') }}</textarea>
+            {% endif %}
+          </div>
+        </div>
+
+        {{ render(controller('AppBundle:File/Attachment:formFields',{targetType: 'group.thread', targetId: thread.id|default(0)})) }}
+
+        <div class="form-group">
+          <div class="col-sm-7 col-xs-10 col-xs-offset-2">
+            {% if thread|default(null) %}
+              <button id="groupthread-save-btn" data-loading-text="{{ 'form.btn.modify.submiting'|trans }}" type="button"
+                      class="btn btn-primary">{{ 'form.btn.modify'|trans }}</button>
+            {% else %}
+              <button id="groupthread-save-btn" data-loading-text="{{ 'form.btn.publish.submiting'|trans }}" type="button"
+                      class="btn btn-primary">{{ 'form.btn.publish'|trans }}</button>
+            {% endif %}
+          </div>
+        </div>
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        <input type="hidden" name="files">
+      </form>
+
+    </div>
+  </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                class="sr-only">Close</span></button>
+          <h4 class="modal-title" id="myModalLabel">{{ 'group.thread.insert_hide_content'|trans }}</h4>
+        </div>
+        <div class="modal-body">
+
+          <form class="form-horizontal" method="post">
+
+            <div class="row form-group">
+              <div class="col-md-4 control">
+                <label class="control-label"> {{ 'group.thread.insert_hide_content_title'|trans }}:</label>
+              </div>
+              <div class="col-md-7 controls">
+                <textarea class="form-control" rows="3" id="text"> </textarea>
+              </div>
+
+            </div>
+
+            <div class="form-group">
+              <div class="controls">
+                <div class="col-md-4 control">
+                  <input type="radio" id="type0" name="type" required="required" value="coin" checked=true>
+                  <label for="amount"
+                         class="control-label"> {{ 'group.thread.check_need'|trans }}{{ setting('coin').coin_name|default('') }}:</label>
+                </div>
+                <div class="col-md-3 controls">
+                  <input name="amount" class="form-control" tyoe="text" id="amount"/>
+                </div>
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <div class="col-md-4 control">
+                <input type="radio" id="type1" name="type" required="required" value="reply">
+                <label for="amount" class="control-label"> {{ 'group.thread.check_need_tips'|trans }}</label>
+              </div>
+
+            </div>
+
+          </form>
+        </div>
+        <div class="modal-footer">
+          <div class="pull-left color-gray">{{'group.thread.insert_hide_content_tips'|trans({'%coin_name%':setting('coin').coin_name|default('')})}}
+          </div>
+          <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
+          <button type="button" class="btn btn-primary" id="insert">{{ 'form.btn.insert'|trans }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% include 'group/upload-modal.html.twig' %}
+
+{% endblock %}

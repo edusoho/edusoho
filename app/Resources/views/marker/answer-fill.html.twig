@@ -1,0 +1,30 @@
+<div class="question"  data-question-id="{{ question.id }}">
+	<div class="question-heading editor-text">
+		{{'question.type.fill'|trans}}<a type="button" class="close" data-dismiss="modal" aria-hidden="true">×</a>
+	</div>
+	<div class="question-body clearfix">
+	  <div class="gray-darker mbl">{{ question.stem|fill_question_stem_html|bbCode2Html|raw }}
+	  </div>
+		{% if answer|default(null) %}
+		{% set fileItemResultAnswer = answer[0] %}
+		{% endif %}
+		<div class="homework-question-fill question-fill-inputs">
+		{% for index,value in selfAnswer %}
+		  	<div class="fill-answer {% if selfAnswer[index] in answer[index] %}correct{% else %}error{% endif %}">
+		    {{selfAnswer[index]}}<span class="type">{% if selfAnswer[index] in answer[index] %}{{'question.answer_correct'|trans}}{% else %}{{'question.answer_wrong'|trans}}{% endif %}</span>
+		   	</div>
+		{% endfor %}
+		  <p class="answer-title mtl">{{'question.correct_answer_tips'|trans}}</p>
+		  <div class="fill-answer">
+		  {% for index,value in answer %}
+		    <p>{{'question.fill_correct_answer'|trans({'%index%':index+1})}}<strong class="color-success">{% for i,answerValue in value %} {% if i %}{{'site.default.or'|trans}}{% endif %} {{answerValue}}{% endfor %}</strong></p>
+		  {% endfor %}
+		  </div>
+		</div>
+	</div>
+	<div class="question-footer clearfix">
+		<input id="data" data-markerid="{{markerId}}"data-type="{{question.type}}" data-questionid="{{question.id}}" data-url="{{ path('course_lesson_question_marker_next',{markerId:markerId,questionId:question.id}) }}" hidden="hidden">
+		{% include 'marker/answer-progress.html.twig' %}
+		<button id="continue" class="btn btn-primary btn-lg pull-right">{% if compelete %}{{'question.compelete'|trans}}{% else %}{{'question.next'|trans}} {% endif %}</button>
+	</div>
+</div>

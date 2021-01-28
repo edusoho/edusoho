@@ -1,0 +1,39 @@
+{
+    "autumn:home_top_banner":
+    {
+        "title": "清秋主题：首页头部图片轮播",
+        "category": "autumn",
+        "templateName": "@theme/autumn/block/carousel.template.html.twig",
+        "items": {
+            "carousel":
+            {
+                "title": "轮播图",
+                "desc": "建议图片尺寸为1920×300px，最多可设置５张图片。",
+                "count": 5,
+                "type": "imglink",
+                "default": [
+                    {
+                        "src": "\/static-dist\/autumntheme\/img\/slide-1.jpg",
+                        "alt": "图片１的描述",
+                        "href": "#",
+                        "target": "_blank"
+                    },
+                    {
+                        "src": "\/static-dist\/autumntheme\/img\/slide-2.jpg",
+                        "alt": "图片２的描述",
+                        "href": "#",
+                        "target": "_self"
+                    },
+                    {
+                        "src": "\/static-dist\/autumntheme\/img\/slide-3.jpg",
+                        "alt": "图片３的描述",
+                        "href": "#",
+                        "target": "_blank"
+                    }
+                ]
+
+            }
+        }
+    }
+ 
+}

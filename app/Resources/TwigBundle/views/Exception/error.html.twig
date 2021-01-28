@@ -1,0 +1,25 @@
+{% extends 'TwigBundle:Exception:layout.html.twig' %}
+{% block title %}出错啦 - {{ parent() }}{% endblock %}
+
+{% block body %}
+  <div class="container">
+    <div class="panel panel-default error-panel">
+      <div class="panel-heading">
+         <span class="error-title">{{ status_code }}</span>
+        {% if exception.code > 0 %} 
+          {{ exception.message|trans|default(status_text) }}
+        {% else %}
+          {{ status_text }}
+        {% endif %}
+      </div>
+      <div class="panel-body">
+        <div class="well">
+          <p>如果你看到该提示，说明服务器出现了问题。</p>
+          <p>刚从被窝中努力爬起来的程序员哥哥正拼命修复中。</p>
+          <p><a href="{{ path('homepage', {ref:500}) }}">返回首页 ></a></p>
+          <span class="error-500-icon hidden-xs"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

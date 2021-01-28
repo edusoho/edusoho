@@ -1,0 +1,38 @@
+{
+  "name": "lokielse/omnipay-wechatpay",
+  "type": "library",
+  "description": "Wechat gateway for Omnipay payment processing library",
+  "keywords": [
+    "wechat",
+    "gateway",
+    "php",
+    "omnipay",
+    "pay",
+    "sdk",
+    "app",
+    "payment",
+    "purchase",
+    "微信支付"
+  ],
+  "homepage": "https://github.com/lokielse/omnipay-wechatpay",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Loki Else",
+      "email": "lokielse@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Omnipay\\WechatPay\\": "src/"
+    }
+  },
+  "require": {
+    "omnipay/common": "^3.0",
+    "php-http/guzzle6-adapter": "*"
+  },
+  "require-dev": {
+    "omnipay/tests": "^3.0",
+    "squizlabs/php_codesniffer": "3.*"
+  }
+}

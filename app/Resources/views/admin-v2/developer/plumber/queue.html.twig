@@ -1,0 +1,36 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_plumber_queue' %}
+
+{% block main %}
+
+  {% if logs %}
+    <table class="table table-striped table-hover">
+      <thead>
+      <tr>
+        <th>{{'admin_v2.plumber.job_id'|trans}}</th>
+        <th>{{'admin_v2.plumber.job_time'|trans}}</th>
+        <th>{{'admin_v2.plumber.job_worker'|trans}}</th>
+        <th>{{'admin_v2.plumber.job_status'|trans}}</th>
+        <th>{{'admin_v2.plumber.job_body'|trans}}</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for log in logs %}
+        <tr id="job-log-table-tr-{{ log.id }}">
+          <td>{{ log.id }}</td>
+          <td>{{ log.createdTime|date('Y-m-d H:i:s') }}</td>
+          <td>{{ log.worker }}</td>
+          <td>{{ log.status }}</td>
+          <td>{{ log.body|json_encode }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+
+    </table>
+  {% else %}
+    <div class="empty">{{'admin_v2.plumber.job_empty_hint'|trans}}</div>
+  {% endif %}
+  {{ admin_macro.paginator(paginator) }}
+
+{% endblock %}

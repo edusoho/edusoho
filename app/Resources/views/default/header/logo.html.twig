@@ -1,0 +1,32 @@
+<div class="navbar-header">
+  <div class="visible-xs  navbar-mobile">
+    <a href="javascript:;" class="navbar-more js-navbar-more">
+      <i class="es-icon es-icon-menu"></i>
+    </a>
+    <div class="html-mask"></div>
+    <div class="nav-mobile">
+      <form class="navbar-form" action="{{ path('search') }}" method="get">
+        <div class="form-group">
+          <input class="form-control" placeholder="{{'homepage.header.search'|trans}}" name="q">
+          <button class="button es-icon es-icon-search"></button>
+        </div>
+      </form>
+
+      <ul class="nav navbar-nav">
+        {% include 'default/top-navigation.html.twig' with {navigations: navigations,siteNav: siteNav|default(null), isMobile: true} %}
+      </ul>
+    </div>
+  </div>
+  {% if mobile %}
+    <div class="M_header-back js-back">
+      <a><i class="es-icon es-icon-chevronleft"></i></a>
+    </div>
+  {% endif %}
+  <a href="{{ path('homepage') }}" class="navbar-brand">
+    {% if setting('site.logo') %}
+      <img src="{{ asset(setting('site.logo')) }}">
+    {% else %}
+      {{ setting('site.name', 'EDUSOHO') }}
+    {% endif %}
+  </a>
+</div>

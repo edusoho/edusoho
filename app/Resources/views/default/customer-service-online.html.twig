@@ -1,0 +1,63 @@
+
+  {% if customerServiceSetting.customer_service_mode|default(null) == 'opened' %}
+    <div class="customer-service-online">
+
+      <div class="float-left">
+        <a style="display: block" id="aFloatTools_Show" class="btn-open" title="{{'customer_service.content_title'|trans}}"
+        onClick="javascript:
+          $('#divFloatToolsView').animate({width: 'show', opacity: 'show'}, 'normal',function(){
+            $('#divFloatToolsView').show();
+          });
+          $('#aFloatTools_Show').attr('style','display:none');
+          $('#aFloatTools_Hide').attr('style','display:block');"
+          href="javascript:void(0);
+          "> {{'customer_service.open_btn'|trans}}
+        </a>
+
+        <a style="display: none" id="aFloatTools_Hide" class="btn-ctn" title="{{'customer_service.close_content_title'|trans}}"
+        onClick="javascript:
+          $('#divFloatToolsView').animate({width: 'hide', opacity: 'hide'}, 'normal',function(){
+            $('#divFloatToolsView').hide();
+          });
+          $('#aFloatTools_Show').attr('style','display:block');
+          $('#aFloatTools_Hide').attr('style','display:none');"
+          href="javascript:void(0);"
+          > {{'customer_service.close_btn'|trans}}
+        </a>
+
+      </div>
+
+      <div id="divFloatToolsView" class="float-right" style="display: none">
+        <div class="service-category">
+
+          <h3>QQ</h3>
+          <ul>
+            <li><span>{{'customer_service.QQ'|trans}}</span>
+              <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin={{customerServiceSetting.customer_of_qq}}&site=qq&menu=yes">
+                <img border="0" src="http://wpa.qq.com/pa?p=2:{{customerServiceSetting.customer_of_qq}}:51" alt="{{'customer_service.QQ'|trans}}" title="{{'customer_service.QQ'|trans}}" />
+              </a>
+            </li>
+          </ul>
+
+          <h3>{{'customer_service.mobile'|trans}}</h3>
+          <ul>
+            <li><span>{{'customer_service.customer_mobile'|trans}}</span>
+              <a target="_blank" href="javascript:;">
+                {{customerServiceSetting.customer_of_phone}}
+              </a>
+            </li>
+          </ul>
+
+          <h3>{{'customer_service.email'|trans}}</h3>
+          <ul>
+            <li>
+              <span>{{'customer_service.feedback_email'|trans}}</span>
+              <a target="_blank" href="mailto:{{customerServiceSetting.customer_of_mail}}">
+              {{customerServiceSetting.customer_of_mail}}</a>
+            </li>
+          </ul>
+
+        </div>
+      </div>
+    </div>
+  {% endif %}

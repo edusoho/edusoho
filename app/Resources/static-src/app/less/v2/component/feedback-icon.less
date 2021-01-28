@@ -1,0 +1,38 @@
+.es-feedback-icon {
+  padding: 8px;
+  margin: auto;
+  width: 80px;
+  height: 80px;
+  border-radius: 100%;
+  text-align: center;
+  .es-feedback-icon__inner {
+    width: 64px;
+    height: 64px;
+    border-radius: 100%;
+  }
+  i {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 64px;
+    color: #fff;
+  }
+
+  &.es-feedback-success {
+    background-color: #eaf9f2;
+    .es-feedback-icon__inner {
+      background-color: #46cd90;
+    }
+  }
+
+  &.es-feedback-danger {
+    background-color: #ffebe9;
+    .es-feedback-icon__inner {
+      background-color: #ff555f;
+    }
+  }
+}
+
+
+.es-dark-assist {
+  color: @tip-color;
+}

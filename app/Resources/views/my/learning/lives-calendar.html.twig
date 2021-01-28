@@ -1,0 +1,27 @@
+{% extends 'v2/layout.html.twig' %}
+
+{% block title %}{{ 'my.learning.live_schedule_menu'|trans }} - {{ parent() }}{% endblock %}
+
+{% do script(['libs/fullcalendar.js', 'app/js/my/learning-calendar/index.js'])  %}
+
+{% block full_content %}
+  <div class="container cd-container">
+    <ol class="breadcrumb breadcrumb-o">
+      <li><a href="{{ path('my_courses_learning') }}">{{ 'my.learning.menu_heading'|trans }}</a></li>
+      <li class="active">{{ 'my.learning.live_schedule_menu'|trans }}</li>
+    </ol>
+    <div class="cd-content mt0">
+      <div class="cd-panel schedule-panel">
+        <div class="cd-panel-heading schedule-panel__heading clearfix">
+          <span class="pull-right">
+            <a class="btn cd-btn cd-btn-info cd-btn-sm" href="{{ path('my_courses_learning') }}">{{ 'my.learning.course'|trans }}</a>
+          </span>
+        </div>
+        <div class="cd-panel-body schedule-panel__body">
+          <div class="js-calendar" id='calendar'></div>
+          <div id="todayDateStr" class="hidden">{{"now"|date('Y-m-d H:i:s')}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

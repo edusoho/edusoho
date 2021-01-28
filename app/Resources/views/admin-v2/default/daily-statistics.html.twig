@@ -1,0 +1,18 @@
+<div class="row">
+  <div class="col-md-3 text-center">
+    <div class="admin-data__value">{{ loginCount|default('0') }}</div>
+    <div class="admin-data__explain">{{ 'admin_v2.homepage.today_login_user'|trans }}</div>
+  </div>
+  <div class="col-md-3 text-center">
+    <div class="admin-data__value">{{ registerNum|default('0') }}</div>
+    <div class="admin-data__explain">{{ 'admin_v2.homepage.today_register_user'|trans }}</div>
+  </div>
+  <div class="col-md-3 text-center">
+    <div class="admin-data__value">{{ newPaidOrderCount|default('0') }}</div>
+    <div class="admin-data__explain">{{ 'admin_v2.homepage.today_new_paid_order'|trans }}</div>
+  </div>
+  <div class="col-md-3 text-center">
+    <div class="admin-data__value">{{ newOrderCount|default('0') }}</div>
+    <div class="admin-data__explain">{{ 'admin_v2.homepage.today_new_order'|trans }}</div>
+  </div>
+</div>

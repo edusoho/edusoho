@@ -1,0 +1,84 @@
+{# modal的形式 #}
+{# 这里需要加一个判断是直接modal还是跳转链接 #}
+{% set batch = data('CouponBatch',{'batchId': cardDetail.batchId|default(0)}) %}
+{% if cardDetail.targetType == "course" and cardDetail.targetId != 0 %}
+ {% set courseSet = data('CourseSet', {id : cardDetail.targetIds[0]|default()}) %}
+{% endif %}
+{# 指定多资源跳转#}
+<a class="coupon-pack-item coupon-item"
+  {% if cardDetail.status != 'using' %}
+    {% if batch.couponContent|default('') == 'multi' %}
+      {% if modal|default(0) ==0 %}data-toggle="modal" data-target="#modal"{% endif %}
+       href="javascript:;" data-role="coupon-pack" data-url="{{ path('coupon_resource_list',{'batchId':batch.id}) }}"
+    {% else %}
+      {% if cardDetail.targetType == "course" and cardDetail.targetId == 0 %}
+         href="{{ path('course_set_explore') }}"
+      {% elseif cardDetail.targetType == "course" and cardDetail.targetId != 0 %}
+        href="{{ path('course_show',{ id : courseSet.defaultCourseId|default(0) }) }}"
+      {% elseif cardDetail.targetType == "classroom" and cardDetail.targetId == 0 %}
+         href="{{ path('classroom_explore') }}"
+      {% elseif cardDetail.targetType == "classroom" and cardDetail.targetId != 0 %}
+         href="{{ path('classroom_show',{ id : cardDetail.targetIds[0]|default() }) }}"
+      {% elseif cardDetail.targetType == "vip" %}
+         href="{{ path('vip') }}"
+      {% else %}
+         href="{{ path('course_set_explore') }}"
+      {% endif %}
+    {% endif %}
+  {% else %}
+     href="{{ path('course_set_explore') }}"
+  {% endif %}
+>
+
+  {# 课程 #}
+	{% if cardDetail.targetType == "course" %}
+		{% if cardDetail.targetId == 0 %}
+			 <p class="title range">{{ 'coupon.for_any_course'|trans }}</p>
+		{% else %}
+      {% if batch.couponContent|default('') == 'multi' %}
+        <p class="title range">{{ 'coupon.for_multi_courses'|trans }}</p>
+      {% else %}
+        <p class="title range">{{'coupon.for_specified_courses'|trans}}</p>
+      {% endif %}
+		{% endif %}
+  {% endif %}
+  {# 班级 #}
+	{% if cardDetail.targetType == "classroom" %}
+		{% if cardDetail.targetId == 0 %}
+			<p class="title range">{{ 'coupon.for_any_classroom'|trans }}</p>
+		{% else %}
+      {% if batch.couponContent|default('') == 'multi' %}
+        <p class="title range">{{ 'coupon.for_multi_classrooms'|trans }}</p>
+      {% else %}
+        <p class="title range">{{'coupon.for_specified_classrooms'|trans}}</p>
+      {% endif %}
+		{% endif %}
+  {% endif %}
+  {# 会员 #}
+	{% if cardDetail.targetType == "vip" %}
+		{% if cardDetail.targetId == 0 %}
+			<p class="title range">{{ 'coupon.for_any_level_of_VIP_membership'|trans }}</p>
+		{% else %}
+			<p class="title range">{{ 'coupon.for_specified_level_of_VIP_membership'|trans }}</p>
+		{% endif %}
+  {% endif %}
+
+  {# all是 全站；fullDiscount 暂时忽略 #}
+	{% if cardDetail.targetType == "all" or cardDetail.targetType == "fullDiscount" %}
+		<p class="title range">{{ 'coupon.for_any_purchase_on_our_web_site'|trans }}</p>
+	{% endif %}
+	<p class="price">
+		{% if cardDetail.type == "minus" %}￥{% endif %}
+		<strong class="price__number">{{ cardDetail.rate }}</strong>
+		{% if cardDetail.type == "discount" %}{{ 'coupon.discount'|trans }}{% endif %}
+  </p>
+  <p class="tip">{{ 'coupon.buy_something_btn'|trans }}</p>
+	<p class="cd-mt16 date">{{ 'coupon.expired_on'|trans }}
+		<span>{{ 'coupon.deadline_year'|trans({'%deadline%': cardDetail.deadline|date('Y')}) }}{{ 'coupon.deadline_month'|trans({'%deadline%': cardDetail.deadline|date('n')}) }}{{ 'coupon.deadline_day'|trans({'%deadline%': cardDetail.deadline|date('d')}) }}</span>
+	</p>
+	{% if cardDetail.targetType == 'fullDiscount' and cardDetail.fullDiscountPrice %}
+		<p>
+			{{'coupon.Requirements'|trans({'%fullDiscountPrice%': cardDetail.fullDiscountPrice|default('coupon.Accessible'|trans)})}}
+		</p>
+	{% endif %}
+  </a>

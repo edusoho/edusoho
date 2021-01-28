@@ -1,0 +1,42 @@
+<?php
+
+namespace {{ namespace }}\Controller;
+
+{% block use_statements %}
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+{% if 'annotation' == format.routing -%}
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+{% endif %}
+{% endblock use_statements %}
+
+{% block class_definition %}
+class {{ controller }}Controller extends Controller
+{% endblock class_definition %}
+{
+{% block class_body %}
+{% for action in actions %}
+    {% if 'annotation' == format.routing -%}
+    /**
+     * @Route("{{ action.route }}")
+     */
+    {% endif -%}
+    public function {{ action.name }}(
+        {%- if action.placeholders|length > 0 -%}
+            ${{- action.placeholders|join(', $') -}}
+        {%- endif -%})
+    {
+        {% if 'default' == action.template -%}
+        return $this->render('{{ bundle }}:{{ controller }}:{{ action.name|slice(0, -6) }}.html.{{ format.templating }}', array(
+            // ...
+        ));
+        {%- else -%}
+        return $this->render('{{ action.template }}', array(
+            // ...
+        ));
+        {%- endif %}
+
+    }
+
+{% endfor -%}
+{% endblock class_body %}
+}

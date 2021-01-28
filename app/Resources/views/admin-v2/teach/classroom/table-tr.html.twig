@@ -1,0 +1,74 @@
+{% import 'admin-v2/macro.html.twig' as admin_macro %}
+<tr id="classroom-table-tr-{{ classroom.id }}">
+    {% include 'org/parts/table-body-checkbox.html.twig' %}
+    <td>{{ classroom.id }}</td>
+
+    <td>
+    <strong>
+      <a target="_blank" href="{{ path('classroom_manage', {id:classroom.id}) }}">{{ classroom.title}}</a>
+    </strong>
+    <br>
+    <span class="text-muted text-sm">{{'admin.classroom_manage.manage.category'|trans}}：{{ category.name|default('--') }}</span>
+    {% if classroom.recommended %}
+      <span class="label label-default">{{ 'admin.classroom_manage.manage.recommend'|trans({'%recommendedTime%': classroom.recommendedTime|date('Y-m-d'), '%recommendedSeq%': classroom.recommendedSeq}) }}</span>
+    {% endif %}
+    </td>
+    {% include 'org/parts/table-body-td.html.twig' with {orgCode: classroom.orgCode}%}
+    <td>
+    {{ classroomCoursesNum[classroom.id] }}
+
+    {% if classroomCoursesNum[classroom.id] > 0 %}
+    <strong>
+      <a target="_blank" href="{{ path('classroom_manage_courses', {id:classroom.id}) }}">{{'admin.classroom_manage.manage.course_detail'|trans}}</a>
+    </strong>
+    {% endif %}
+    </td>
+
+    <td>
+    {{ classroom.studentNum }}
+    </td>
+
+    <td>
+    <span style="color: #F40; ">
+            {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+              {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
+            {% else %}
+              {{ 'admin.classroom_manage.manage.price'|trans({'%price%': classroom.price})}}
+            {% endif %}
+     </span>
+    &nbsp;
+
+
+    <span style="font-size: 13px;color: #666;">
+      {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+        {{'admin.classroom_manage.manage.coin_price'|trans({'%coinPriceAll%':coinPriceAll[classroom.id|default(0)],'%coinname%':setting('coin.coin_name')})}}
+      {% else %}
+        {{'admin.classroom_manage.manage.origin_price'|trans({'%priceAll%':priceAll[classroom.id|default(0)]})}}
+      {% endif %}
+    </span>
+
+
+    </td>
+
+    <td>
+    {% if classroom.status=='published' %}
+    <span class="text-success">{{'admin.classroom_manage.manage.published'|trans}}</span>
+    {% elseif classroom.status=='closed'%}
+
+    <span class="text-danger">{{'admin.classroom_manage.manage.closed'|trans}}</span>
+    {% else %}
+     {{'admin.classroom_manage.manage.unpublished'|trans}}
+    {% endif %}
+    </td>
+
+    <td>
+
+  <div class="btn-group">
+      {% if has_permission('admin_v2_classroom_content_manage') %}
+        <a href="{{ path('classroom_manage', {id:classroom.id}) }}" target="_blank" class="btn btn-default btn-sm">{{ 'admin.classroom_manage.manage.manage_btn'|trans }}</a>
+      {% endif %}
+
+      {% include 'admin-v2/widget/group-button.html.twig' with {parentCode: 'admin_v2_classroom_manage', group:'groupButton', classroom: classroom} %}
+  </div>
+ </td>
+</tr>

@@ -1,0 +1,16 @@
+{% if app.session.flashBag.has('currentThrowedException')|default() %}
+  <div class="js-hidden-exception hidden">
+    {% set currentThrowedException = app.session.flashBag.get('currentThrowedException')[0] %}
+    {
+      "statusCode": "{{ currentThrowedException['statusCode'] }}",
+      "code": "{{ currentThrowedException['code'] }}",
+      "message": "{{ currentThrowedException['message']|trans }}"
+    }
+  </div>
+
+  {% if 'dev' == app.environment %}
+    <div class="js-hidden-exception-trace hidden">
+        {{ currentThrowedException['trace'] }}
+    </div>
+  {% endif %}
+{% endif %}

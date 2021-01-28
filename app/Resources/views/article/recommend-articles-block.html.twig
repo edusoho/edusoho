@@ -1,0 +1,23 @@
+<div class="panel panel-default recommend-article">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      <i class="es-icon es-icon-language"></i>{{ 'article.recommend_article'|trans }}
+    </h3>
+  </div>
+  <div class="panel-body">
+    {% if articles %}
+      {% for key,article in articles %}
+        <div class="media media-number">
+          <div class="media-left">
+            <span class="num">{{ key+1 }}</span>
+          </div>
+          <div class="media-body">
+            <a class="link-dark" href="{{ path('article_detail', { id:article.id }) }}" title="{{ article.title }}">{{ article.title|plain_text(20) }}</a>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty">{{ 'article.recommend_article_empty'|trans }}</div>
+    {% endif %}
+  </div>
+</div>

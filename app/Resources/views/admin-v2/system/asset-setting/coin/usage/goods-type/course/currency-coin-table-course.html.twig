@@ -1,0 +1,32 @@
+<tr>
+  <th width="60%">{{'course'|trans}}</th>
+  <th>{{'finance.RMB_price'|trans}}</th>
+  <th>{{ setting('coin.coin_name') }}{{'price'|trans}}</th>
+</tr>
+{% if items %}
+  {% for item in items %}
+    <tr>
+      <td>
+        <div class="clearfix">
+          <img class="pull-left mrl" src="{{ filepath(item.images.small|default(''),'course.png') }}" style="width:100px;"/>
+          <a class="pull-left" href="{{ path('goods_show', {id: item.id}) }}" target="_blank" >{{item.title}}
+          </a>
+        </div>
+      </td>
+      <td>
+        {% if item.minPrice == item.maxPrice %}
+          {{item.minPrice}}
+        {% else %}
+          {{item.minPrice}} ~ {{item.maxPrice}}
+        {% endif %}
+      </td>
+      <td>
+        {% if item.minPrice == item.maxPrice %}
+          {{item.minPrice * set.cash_rate}}
+        {% else %}
+          {{item.minPrice * set.cash_rate}} ~ {{item.maxPrice * set.cash_rate}}
+        {% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+{% endif %}

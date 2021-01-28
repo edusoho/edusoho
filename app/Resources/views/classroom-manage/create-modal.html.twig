@@ -1,0 +1,67 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% do script(['libs/jquery-validation.js','app/js/classroom-manage/students-create/index.js'])%}
+{% set modalSize = 'large' %}
+
+{% block title %}{{'classroom.add_student_title'|trans}}{% endblock %}
+{% block body %}
+
+<form id="student-create-form" class="form-horizontal" method="post" action="{{ path('classroom_manage_student_create', {id:classroom.id}) }}">
+  {% if classroom.status == 'published' %}
+  	<div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="student-nickname">{{'classroom.student'|trans}}</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="text" id="student-nickname" name="queryfield" class="form-control"
+        data-url="{{ path('classroom_manage_student_check',{id:classroom.id})}}" placeholder="{{'classroom.student_placeholder'|trans}}" >
+      	<div class="help-block">{{'classroom.add_student_tips'|trans}}</div>
+    	</div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="buy-price">{{'classroom.buy_price_label'|trans}}</label>
+      </div>
+      <div class="col-md-7 controls">
+        <div class="input-group">
+          <input type="text" id="buy-price" name="price" value="{{ classroom.price }}" data-price="{{ classroom.price|currency }}" class="form-control">
+          <div class="input-group-addon">{{ 'site.currency.CNY'|trans }}</div>
+        </div>
+        <div class="help-block">
+          {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+            {% set price = classroom.price * setting('coin.cash_rate') %}
+            {% set price_unit = setting('coin.coin_name') %}
+          {% else %}
+            {% set price = classroom.price %}
+            {% set price_unit = 'site.currency.CNY'|trans %}
+          {% endif %}
+          {{'classroom.buy_price_tips'|trans({'%classroomName%': setting('classroom.name', 'classroom'|trans), '%price%': price})}}{{ price_unit }}
+        </div>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-2 control-label">
+        <label for="student-remark">{{'classroom.remark'|trans}}</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="text" id="student-remark" name="remark" class="form-control">
+        <div class="help-block">{{'classroom.remark_tips'|trans}}</div>
+      </div>
+    </div>
+  {% else %}
+    <div class="empty">{{'classroom.publish_add_student_tips'|trans({'%status%':dict_text('classroomStatus', classroom.status),'%name%':setting('classroom.name')|default('classroom'|trans),'%classroomName%':setting('classroom.name')|default('classroom'|trans)})}}</div>
+  {% endif %}
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+
+{% endblock %}
+
+{% block footer %}
+  {% if classroom.status == 'published' %}
+    <button id="student-create-form-submit" type="button" class="btn btn-primary pull-right">{{'form.btn.save'|trans}}</button>
+  {% endif %}
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
+{% endblock %}

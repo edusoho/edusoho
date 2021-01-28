@@ -1,0 +1,50 @@
+{% extends 'my/layout.html.twig' %}
+
+{% block title %}{{'my.learning.live'|trans}} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'my-learning-live' %}
+
+{% block main %}
+
+  <div class="panel panel-default panel-col">
+    <div class="panel-heading">{{'my.learning.live'|trans}}</span></div>
+    <div class="panel-body">
+      {% if courseSets %}
+        <ul class="course-wide-list live-course-list">
+          {% for courseSet in courseSets %}
+            {% set task = courseSet['task'] %}
+            <li class="course-item clearfix">
+              <a class="course-picture-link" href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" target="_blank">
+                <img class="course-picture" src="{{ filepath(course_set_cover(courseSet, 'middle'), 'courseSet.png') }}" alt="{{ courseSet.title }}">
+              </a>
+              <div class="course-body">
+                {% if can_obtain_certificates(courseSet.id, 'courseSet') %}
+                  <a style="margin-top: 2px" class="certificate-tag" tabindex="0" role="button" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-html="true" title="{{ 'explore.classroom.certificate_tag'|trans }}" data-content="{{ 'course.catalogue.certificate_obtain'|trans }}">{{ 'explore.classroom.certificate_tag_short'|trans }}</a>
+                {% endif %}
+                <h4 class="course-title"><a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" target="_blank">{{ courseSet.title }}</a>
+                  {% if courseSet.serializeMode =='serialized' %}
+                    <span class="label label-success ">{{'my.learning.live.course_updating'|trans}}</span>
+                  {% elseif courseSet.serializeMode =='finished' %}
+                    <span class="label label-warning ">{{'my.learning.live.course_finished'|trans}}</span>
+                  {% endif %}
+                </h4>
+                <div class="course-about ellipsis text-sm">{{ courseSet.subtitle }}</div>
+                <div class="live-course-lesson mtm mb0">
+                  <span class="color-success fsl mrl">{{ task.startTime|date('site.date_format'|trans) }} ~ {{ task.endTime|date('H:i') }}</span>
+                  <span class="color-gray fsl mrl">{{'my.learning.live.course_number'|trans({'%number%': task.number})}}</span>
+                </div>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+        {{ web_macro.paginator(paginator) }}
+      {% else %}
+        <div class="empty">{{'my.learning.live.empty'|trans}}</div>
+      {% endif %}
+    </div>
+  </div>
+
+{% endblock %}
+
+
+

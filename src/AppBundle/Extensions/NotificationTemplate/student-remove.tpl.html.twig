@@ -1,0 +1,16 @@
+
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+      {% set data = notification.content %}
+      {% set course = '<a href="' ~ path('course_show', {id:data.courseId}) ~ '" target="_blank"><strong> ' ~ data.courseTitle ~ '</strong></a>' %}
+      {{ 'notification.student-remove'|trans({'%course%':course,'%student_name%':setting('default.user_name')|default('site.default.student'|trans)})|raw }}
+    </div>
+    <div class="notification-footer">
+     {{ notification.createdTime|date_format }}  
+    </div>
+  </div>
+</li>

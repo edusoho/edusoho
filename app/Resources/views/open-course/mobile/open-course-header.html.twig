@@ -1,0 +1,30 @@
+{% do script(['app/js/open-course/header/index.js']) %}
+
+<div class="open-course-title open-course-mobile-title">
+  {{ course.title }}
+  <p><a href="{{ path('homepage') }}" target="_blank">{{ setting('site.name', 'my.teaching.open_course.show.edusoho_school'|trans) }}</a></p>
+</div>
+<div class="open-course-mask  modal fade" id="open-course-ad-modal" tabindex="-1" role="dialog" aria-labelledby="openCourseADModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content open-course-content" data-dismiss="modal" aria-label="Close">
+        <img class="img-responsive" src="{{ asset('assets/v2/img/mobile/opencourse-share.png') }}">
+        <div class="metas">
+          <p>{{ 'my.teaching.open_course.header.tips'|trans }}</p>
+          <a href="javascript:;" class="btn btn-lg open-course-btn">{{ 'my.teaching.open_course.header.understand_btn'|trans }}</a>
+        </div>
+    </div>
+  </div>
+</div>
+{% if course.type == 'open' %}
+  <div class="open-course-views open-course-mobile-views" data-get-recommend-course-url="{{ path('open_course_ad_modal_recommend_course', {id: course.id, num: 3}) }}">
+    {% include 'open-course/lesson-play.html.twig' %}
+  </div>
+{% elseif course.type == 'liveOpen' %}
+  <div class="open-course-views open-course-wechat-views">
+    {% include 'open-course/live-open-course-header.html.twig' %}
+  </div>
+  
+{% endif %}
+
+
+

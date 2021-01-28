@@ -1,0 +1,76 @@
+.fc-month-view {
+  .fc-day-header {
+    padding-left: 24px;
+    height: 60px;
+    line-height: 60px;
+    text-align: left;
+    span {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1;
+      color: @cd-dark-major;
+    }
+  }
+
+  .fc-day-number {
+    padding: 8px;
+    font-size: 24px;
+    line-height: 1;
+    color: @cd-dark-major;
+  }
+
+  .fc-content {
+    padding-right: 16px;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: normal;
+  }
+
+  .fc-more {
+    margin-left: 8px;
+    font-size: 12px;
+    line-height: 1;
+    color: @cd-dark-minor;
+    text-decoration: none;
+    .cd-transition;
+    &:hover {
+      .cd-transition;
+      opacity: 0.8;
+      text-decoration: none;
+    }
+  }
+
+  .fc-more-popover {
+    padding: 16px 4px 16px 6px;
+    .cd-border-radius;
+    .cd-box-shadow-z(12px);
+    border: none;
+    .fc-header {
+      background-color: #fff;
+      .fc-title {
+        color: @cd-dark-major;
+        font-size: 24px;
+        line-height: 1;
+      }
+      .fc-close {
+        font-size: 16px;
+        color: @cd-dark-minor;
+      }
+    }
+  }
+
+  .fc-day-grid-event {
+    margin-top: 0 !important;
+    margin-left: 0;
+    margin-bottom: 4px;
+  }
+
+  .fc-day-top.fc-other-month {
+    opacity: 1;
+    .fc-day-number {
+      color: @cd-dark-assist;
+    }
+  }
+}

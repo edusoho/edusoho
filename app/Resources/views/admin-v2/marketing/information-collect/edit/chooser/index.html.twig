@@ -1,0 +1,49 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% set modal_class = 'modal-lg' %}
+{% do script(['app/js/admin-v2/marketing/information-collect/edit/chooser/index.js']) %}
+
+{% block title %}
+	{% if type == 'course' %}
+		{{'admin_v2.information_collect.selecte_course'|trans}}
+	{% else %}
+		{{'admin_v2.information_collect.selecte_classroom'|trans}}
+	{% endif %}
+{% endblock %}
+{% block body %}
+	<form id="search-form" data-type="{{ type }}" class="form-inline well well-sm" action="{{ path('admin_v2_information_collect_chooser_ajax', {type: type, eventId: event.id|default(0)}) }}" method="get">
+		{% if type == 'course' %}
+			{% include "admin-v2/marketing/information-collect/edit/chooser/course-search-form.html.twig" %}
+		{% else %}
+			{% include "admin-v2/marketing/information-collect/edit/chooser/classroom-search-form.html.twig" %}
+		{% endif %}
+		<a class="btn btn-primary" id="search">{{'form.btn.search'|trans}}</a>
+	</form>
+	<div>
+		<label class="">
+			{{'admin_v2.information_collect.selected'|trans}}<i id="selected-count" class="text-success">0</i>
+		</label>
+		<input id="courseSets" type="hidden" value="">
+		<a id="clear-storage" href="javascript:;">{{'admin_v2.information_collect.selected.clear'|trans}}</a>
+		<span class="mll">
+			{{'admin_v2.information_collect.chooser.limit'|trans}}
+			{% if type == 'course' %}
+				{{ 'site.default.course'|trans }}
+			{% else %}
+				{{ setting('classroom.name')|default('site.default.classroom'|trans) }}
+			{% endif %}
+		</span>
+	</div>
+
+	<div class="search-list">
+		{% if type == 'course' %}
+			{% include 'admin-v2/marketing/information-collect/edit/chooser/course-table.html.twig' %}
+		{% else %}
+			{% include 'admin-v2/marketing/information-collect/edit/chooser/classroom-table.html.twig' %}
+		{% endif %}
+	</div>
+{% endblock %}
+{% block footer %}
+	<button id="chooser-items" data-url="{{ path('admin_v2_information_collect_chooser_selected', {type: type, excludeEventId: eventId|default(0)}) }}" data-submiting-text="{{ 'form.btn.submit.submiting'|trans }}" type="submit" class="btn btn-primary pull-right">{{ 'form.btn.confirm'|trans }}
+	</button>
+	<button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
+{% endblock %}

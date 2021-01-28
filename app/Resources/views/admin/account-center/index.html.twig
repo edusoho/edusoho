@@ -1,0 +1,88 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}{{ 'admin.account_center'|trans }}{% endblock %}
+
+{% set menu = 'admin_account_center' %}
+{% set script_controller = 'account-center/index' %}
+
+{% block main %}
+  {{ render(controller('AppBundle:Admin/Default:validateDomain')) }}
+  <div class="panel panel-default">
+    <div class="panel-heading clearfix">
+      <h3 class="panel-title">
+        {{ 'admin.account_center.this_week_data'|trans }} 
+        {{ 'admin.account_center.income_unit'|trans }}
+        ：
+        {{ 'admin.account_center.RMB'|trans }} 
+    <div class="panel-body" id="site-overview-table" data-url="{{path('admin_account_analysis')}}">
+      <div class="empty">{{ 'admin.account_center.loading_data'|trans }}</div>
+    </div>
+  </div>
+  <div class="panel panel-default panel-420">
+    <div class="panel-heading">
+      <div class="pull-right">
+        <span class="mrl text-sm js-data-switch-time">{{ dates.monthDate|date('Y-m-d') }}~{{ 'now'|date('Y-m-d') }} </span>
+        <div class="btn-group btn-group-xs">
+          <button type="button" class="btn btn-primary js-finance-switch-button"
+                  data-time="{{ dates.monthDate|date('Y-m-d') }}~{{ 'now'|date('Y-m-d') }}"
+                  data-url="{{ path('admin_account_statistic', {period: 'month'}) }}">{{ 'admin.account_center.month'|trans }}
+          </button>
+           <button type="button" class="btn btn-default js-finance-switch-button"
+                  data-time="{{ dates.seasonDate|date('Y-m-d') }}~{{ 'now'|date('Y-m-d') }}"
+                  data-url="{{ path('admin_account_statistic', {period: 'quarter'}) }}">{{ 'admin.account_center.quarter'|trans }}
+          </button>
+           <button type="button" class="btn btn-default js-finance-switch-button"
+                  data-time="{{ dates.yearDate|date('Y-m-d') }}~{{ 'now'|date('Y-m-d') }}"
+                  data-url="{{ path('admin_account_statistic', {period: 'year'}) }}">{{ 'admin.account_center.year'|trans }}
+          </button>
+        </div>
+      </div>
+      <h3 class="panel-title">{{ 'admin.account_center.financial_statistics'|trans }}
+      </h3>
+    </div>
+    <div class="panel-body js-statistic-areas" id="finance-count-statistic"
+         data-url="{{ path('admin_account_statistic', {period: 'month'}) }}" style="height:320px;">
+
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="panel panel-default panel-420">
+        <div class="panel-heading">
+          <div class="text-center">
+            <div class="btn-group btn-group-xs clearfix">
+              <button type="button" class="btn btn-primary js-pay-switch-button"
+                      data-url="{{path('admin_payment_rank',{type:'cash'})}}">{{ 'admin.account_center.cash_this_month_btn'|trans }}</button>
+              <button type="button" class="btn btn-default  js-pay-switch-button"
+                      data-url="{{path('admin_payment_rank',{type:'coin'})}}">{{ 'admin.account_center.coin_this_month_btn'|trans }}</button>
+            </div>
+          </div>
+        </div>
+        <div class="panel-body js-statistic-areas" id="user-pay-list"
+             data-url="{{path('admin_payment_rank',{type:'cash'})}}">  
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="panel panel-default panel-420">
+        <div class="panel-heading">
+          <div class="text-center">
+            <div class="btn-group btn-group-xs clearfix">
+              <button type="button" class="btn btn-primary js-product-switch-button"
+                data-url="{{path('admin_account_rank',{type:'all'})}}">{{ 'admin.account_center.top10_this_month_btn'|trans }}</button>
+              <button type="button" class="btn btn-default  js-product-switch-button"
+                data-url="{{path('admin_account_rank',{type:'Course'})}}">{{ 'admin.account_center.top10_this_course_btn'|trans }}</button>
+              <button type="button" class="btn btn-default  js-product-switch-button"
+                data-url="{{path('admin_account_rank',{type:'Classroom'})}}">{{ 'admin.account_center.top10_this_classroom_btn'|trans }}</button>
+              <button type="button" class="btn btn-default  js-product-switch-button"
+                data-url="{{path('admin_account_rank',{type:'Vip'})}}">{{ 'admin.account_center.top10_this_vip_btn'|trans }}</button>
+            </div>
+          </div>
+        </div>
+        <div class="panel-body js-statistic-areas" id="product-consume-list"
+             data-url="{{path('admin_account_rank',{type:'all'})}}">
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

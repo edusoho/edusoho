@@ -1,0 +1,15 @@
+{% extends 'testpaper/subject/type/question-edit-layout.html.twig' %}
+
+{% block subject %}
+  <div class="edit-subject-item edit-subject-item--judge cd-mb24 cd-mt24 form-group">
+    <label class="cd-radio cd-mt8 mlm sb-block {% if question.answer|default('') == 'true' %}checked{% endif %}">
+      <input type="radio" data-toggle="cd-radio" name="answer" value="true" {% if question.answer|default('') == 'true' %}checked{% endif %}><span class="cd-dark-major">{{ 'course.testpaper_manage.import.re_edit.correct'|trans }}</span>
+    </label>
+    <label class="cd-radio cd-mt24 mlm {% if question.answer|default('') == 'false' %}checked{% endif %}">
+      <input type="radio" data-toggle="cd-radio" name="answer" value="false" {% if question.answer|default('') == 'false' %}checked{% endif %}><span class="cd-dark-major">{{ 'course.testpaper_manage.import.re_edit.wrong'|trans }}</span>
+    </label>
+  </div>
+{% endblock %}
+
+{% block change %}
+{% endblock %}

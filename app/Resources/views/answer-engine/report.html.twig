@@ -1,0 +1,23 @@
+{% extends 'layout.html.twig' %}
+
+{% set lang = app.request.getLocale() %}
+
+{% if lang == 'en' %}
+  {% do script(['libs/vue.js','libs/item-bank/lib/itemBank.umd.min.js', 'libs/item-bank/lib/locale/en-US.js', 'app/js/answer-engine/report/index.js']) %}
+{% else %}
+  {% do script(['libs/vue.js','libs/item-bank/lib/itemBank.umd.min.js','app/js/answer-engine/report/index.js']) %}
+{% endif %}
+
+{% block body %}
+  <style>
+    html, body {
+      -webkit-overflow-scrolling: touch;
+    }  
+  </style>
+{% include 'answer-engine/common.html.twig' %}
+{% include 'attachment-upload/upload-data.html.twig' %}
+<input type="hidden" name="answer_record_id" value='{{ answerRecordId }}'>
+<input type="hidden" name="restart_url" value='{{ restartUrl }}'>
+<input type="hidden" name="answer_show" value='{{ answerShow }}'>
+<input type="hidden" name="collect" value='{{ collect }}'>
+{% endblock %}

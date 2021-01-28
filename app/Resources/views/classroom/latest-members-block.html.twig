@@ -1,0 +1,24 @@
+{% import "macro.html.twig" as web_macro %}
+{% if students %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title"><i class="es-icon es-icon-personadd"></i>{{'classroom.latest_join_member'|trans}}</h3>
+    </div>
+    <div class="panel-body">
+      <ul class="user-avatar-list clearfix">
+        {% for  student in students %}
+          {% set user = users[student.userId] %}
+          {% if loop.index < 16%}
+            <li>
+              <a class="user-dropdown-info__avatar {% if not user.destroyed|default(0) %}js-user-card{% endif %}" href="{{ path('user_show', {'id': user.id}) }}" data-card-url="{{ path('user_card_show', {userId: user.id}) }}"
+                data-user-id="{{ user.id }}" data-original-title="" title="">
+                <img class="avatar-sm" src="{{ avatar_path(user, 'small') }}">
+                {{ slot('header.user.logo', {user: user}) }}
+              </a>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+{% endif %}

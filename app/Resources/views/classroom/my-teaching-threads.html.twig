@@ -1,0 +1,91 @@
+{% extends 'my/my-teaching.html.twig' %}
+{% block title %}
+  {% if type == 'question' %}
+    {{'classroom.member_question'|trans}}
+    {% set side_nav = 'my-teaching-questions' %}
+  {% elseif type == 'discussion' %}
+    {{'classroom.member_discussion'|trans}}
+    {% set side_nav = 'my-teaching-discussions' %}
+  {% endif %}
+  - {{ parent() }}
+{% endblock %}
+{% if type == 'question' %}
+  {% set side_nav = 'my-teaching-questions' %}
+{% elseif type == 'discussion' %}
+  {% set side_nav = 'my-teaching-discussions' %}
+{% endif %}
+{% block main %}
+  <div class="panel panel-default panel-col">
+    <div class="panel-heading">
+      {% if type == 'question' %}
+       {{'classroom.member_question'|trans}}
+      {% elseif type == 'discussion' %}
+        {{'classroom.member_discussion'|trans}}
+      {% endif %}
+    </div>
+    <div class="panel-body">
+      {% include 'my/teaching/tab.html.twig'%}
+      {% if threads %}
+
+        {% set type = type|default('discussion') %}
+        <ul class="media-list">
+          {% for thread in threads %}
+            {% if classrooms %}
+              {% set classroom = classrooms[thread.targetId]|default(null) %}
+              <li class="media">
+                <div class="media-body">
+                  {% if thread.postNum > 0 %}
+                    <span class="badge pull-right" style="margin-top:15px;">{{ thread.postNum }}</span>
+                  {% endif %}
+                  <div class="mbm">
+                    {% if thread.type == 'question' %}
+                      <span class="label label-info" title="{{'classroom.question'|trans}}">{{'classroom.question_label'|trans}}</span>
+                    {% endif  %}
+                    <a href="{{ path('classroom_thread_show', {classroomId:thread.targetId, threadId:thread.id}) }}" target="_blank"><strong>{{ thread.title }}</strong></a>
+                    {% if thread.nice %}
+                      <span class="label label-warning" title="{{'classroom.nice_thread'|trans}}">{{'classroom.nice_thread_label'|trans}}</span>
+                    {% endif %}
+                  </div>
+                  <div class="color-gray text-normal">
+                    {% if classroom %}
+                      <span>{{'classroom.thread_post'|trans({'%name%':setting('classroom.name')|default('classroom'|trans) })}}<a href="{{ path('classroom_show', {id:classroom.id}) }}" class="link-primary" target="_blank">{{ classroom.title }}</a></span>
+                    {% else %}
+                      <span>{{'classroom.deleted_tips'|trans({'%name%':setting('classroom.name')|default('classroom'|trans) })}}</span>
+                    {% endif %}
+                    <span class="bullet">•</span>
+                    {% if thread.postNum > 0 and users[thread.lastPostUserId]|default(null) %}
+                      {% set poster = users[thread.lastPostUserId] %}
+                      <span>{{'classroom.last_post'|trans}} {{ web_macro.user_link(poster, 'link-primary') }}</span>
+                      ,
+                      <span>{{ thread.lastPostTime|smart_time }}</span>
+                      <span class="bullet">•</span>
+                    {% endif %}
+                    <span>{{ thread.hitNum }}{{'classroom.thread_browse'|trans}}</span>
+                  </div>
+                </div>
+              </li>
+            {% else %}
+              {% if type == 'question' %}
+                <li class="empty">{{'classroom.member_question_empty_tips'|trans}}</li>
+              {% else %}
+                <li class="empty">{{'classroom.member_discussion_empty_tips'|trans}}</li>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        </ul>
+        <nav class="text-center">
+          {{ web_macro.paginator(paginator) }}
+        </nav>
+
+      {% else %}
+
+        {% if type == 'question' %}
+          <div class="empty">{{'classroom.member_question_post_empty_tips'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}</div>
+        {% elseif type == 'discussion' %}
+          <div class="empty">{{'classroom.member_discussion_post_empty_tips'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}</div>
+        {% endif %}
+
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

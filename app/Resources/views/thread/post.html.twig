@@ -1,0 +1,28 @@
+{% if app.user %}
+  {% if service.canAccess('post.create', thread) %}
+    <form class="thread-post-form" id="thread-post-form" method="post" action="{{path('thread_post', {threadId:thread.id})}}">
+      <div class="form-group">
+        <div class="controls">
+          <textarea
+            id="thread-{{ thread.id }}-post-form"
+            name="content" value="" rows="10" id="post_content" class="form-control" data-display="{{'thread.reply.content'|trans}}"
+            data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"
+          ></textarea>
+        </div>
+      </div>
+      {% if thread.type != 'event' %}
+        {{ render(controller('AppBundle:File/Attachment:formFields', {targetType: 'classroom.thread.post', targetId: thread.id|default(0)}, {'showLabel':false})) }}
+     {% endif %}
+      <div class="form-group clearfix">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        <button class="btn btn-primary pull-right" data-loading-text="{{'thread.replying'|trans}}">{{'form.btn.reply'|trans}}</button>
+      </div>  
+    </form>
+  {% else %}
+    <div class="empty">{{'thread.reply.student_allowed_tips'|trans}}</div>
+  {% endif %}
+{% else %}
+  <div class="empty">
+    {{ 'user.not_login.tips'|trans({'%login%':path('login', {goto:app.request.server.get('REQUEST_URI')}), '%register%': path('register', {goto:app.request.server.get('REQUEST_URI') }) })|raw }}
+  </div>
+{% endif %}

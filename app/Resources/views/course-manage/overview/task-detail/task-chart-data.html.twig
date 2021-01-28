@@ -1,0 +1,61 @@
+{% import "macro.html.twig" as web_macro %}
+<div class="row">
+    <div class="legend clearfix">
+        <div class="col-10">
+            {{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}
+        </div>
+        <div class="col-80">
+            {% include 'course-manage/overview/task-detail/chart-data-legend.html.twig' %}
+        </div>
+        <div class="col-10">{{ 'course.task.rate.finish'|trans }}</div>
+    </div>
+    {% for task in tasks %}
+        <div class="chart-item clearfix">
+            <div class="col-10 color-gray">
+                {% if task.number %}
+                    {{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}{{ task.number }}
+                {% else %}
+                    {{ 'course.plan_task.is_optional_task'|trans }}{{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}
+                {% endif %}
+            </div>
+            <div class="col-80">
+                <div class="progress"
+                     data-toggle="popover"
+                     data-trigger="hover"
+                     data-placement="top"
+                     data-html="true"
+                     data-delay="100"
+                     data-content="
+                        <div><p class='mbs'>{{ task.title }}</p>
+                        <span class='legend-icon finish'></span>{{ 'course.member_learn_status.learned'|trans }} : {{ task.finishedNum }}<br/>
+                        <span class='legend-icon start'></span>{{ 'course.member_learn_status.learning'|trans }} : {{ task.learnNum }}<br/>
+                        <span class='legend-icon learn'></span>{{ 'course.member_learn_status.none'|trans }} : {{ task.notStartedNum }}<br/>
+                    </div>">
+
+                    <div class="progress-bar finish-color" style="width: {{ task.rate}}%">
+                    </div>
+                    <div class="progress-bar start-color" style="width: {{ percent(task.learnNum, course.studentNum) }}">
+                    </div>
+                    <div class="progress-bar learn-color" style="width: {{ percent(task.notStartedNum, course.studentNum) }}%">
+                    </div>
+                </div>
+            </div>
+            <div class="col-10">
+                <span class="color-gray">{{ "%d"|format(task.rate) }}% </span>
+                <a class="js-task-chart-detail more"
+                   data-toggle="modal"
+                   data-target="#modal"
+                   data-url="{{ path('course_manage_task_learn_detail',{courseId:course.id,taskId:task.id}) }}"
+                   href="javascript:;" >{{ 'site.btn.detail'|trans }}</a>
+            </div>
+        </div>
+    {% endfor %}
+    {% if not tasks %}
+        <div class="empty">
+            {{ 'site.datagrid.empty'|trans }}
+        </div>
+    {% endif %}
+</div>
+<div class="pull-right mtm">
+    {{ web_macro.paginator(paginator) }}
+</div>

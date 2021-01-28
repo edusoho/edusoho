@@ -1,0 +1,28 @@
+
+{% macro menu_link_html(_context, menu, class) %}
+  <a 
+    title="{{menu.name|trans({}, 'menu')}}"
+  {% if class %}
+    class="{{ class }}"
+  {% endif %}
+
+  {% if menu.mode|default(null) == 'modal' %}
+    data-url="{{ permission_path(menu) }}"
+    data-toggle="modal"
+    data-target="#modal"
+    href="#modal"
+  {% elseif menu.mode|default(null) == 'none' %}
+    data-url="{{ permission_path(menu) }}"
+    href="javascript:;"
+  {% else %}
+    href="{{ permission_path(menu) }}"
+  {% endif %}
+  
+  {% if menu.blank|default(false) %}
+    target="_blank"
+  {% endif %}
+  >
+  {% if menu.icon|default(false) %}<span class="{{menu.icon}}"></span>{% endif %} 
+    {{ menu.name|trans({}, 'menu') }}
+  </a>
+{% endmacro %}

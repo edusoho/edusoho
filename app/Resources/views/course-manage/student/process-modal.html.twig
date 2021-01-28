@@ -1,0 +1,112 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% set modal_class= "modal-lg" %}
+
+{% block title %}
+    {{ user.nickname|default('') }}{{ 'course.members_manage.official_student.detail.study_process'|trans }}
+{% endblock %}
+
+{% block body %}
+<div class="class-detail-content">
+	{#先隐藏，数据不准确#}
+  <div class="es-piece hidden">
+	<div class="piece-header">{{'course.members_manage.official_student.detail.process'|trans}}</div>
+	<div class="study-process-list row">
+	  <div class="col-md-4 col-sm-4">
+	    <div class="study-process-item well">
+	      <div class="title">{{'course.members_manage.official_student.detail.total_days'|trans}}</div>
+	      <div class="content">
+	        <span class="current">{{'course.members_manage.official_student.detail.days'|trans({'%daysCount%':daysCount})}}</span>
+	      </div> <i class="es-icon es-icon-column"></i>
+	    </div>
+	  </div>
+	  <div class="col-md-4 col-sm-4">
+	    <div class="study-process-item well">
+	      <div class="title">{{'course.members_manage.official_student.detail.total_time'|trans}}</div>
+	      <div class="content">
+	        <span class="current">{{'course.members_manage.official_student.detail.total_hours'|trans({'%learnedTime%':learnedTime})}}</span>
+	      </div> <i class="es-icon es-icon-target"></i>
+	    </div>
+	  </div>
+	  <div class="col-md-4 col-sm-4">
+	    <div class="study-process-item well bg-success">
+	      <div class="title">{{'course.members_manage.official_student.detail.per_day_time'|trans}}</div>
+	      <div class="content">
+	        <span class="current">{{'course.members_manage.official_student.detail.per_day_hours'|trans({'%learnedTimePerDay%':learnedTimePerDay})}}</span>
+	      </div>
+	      <i class="es-icon es-icon-speed" style="font-size:90px"></i>
+	    </div>
+	  </div>
+	</div>
+	<div class="well process-table hidden">
+	  <div class="reference">
+	    <span class="reference-item item-one">
+	      <i class="color-lump lump-xs"></i>
+	      {{ 'course.members_manage.official_student.detail.status.unfinished'|trans }}
+	    </span>
+	    <span class="reference-item item-two">
+	      <i class="color-lump lump-xs lump-success"></i>
+	      {{ 'course.members_manage.official_student.detail.status.finished'|trans }}
+	    </span>
+	    <span class="reference-item item-three">
+	      <i class="color-lump lump-xs lump-warning"></i>
+	      {{ 'course.members_manage.official_student.detail.status.overdue'|trans }}
+	    </span>
+	    <span class="reference-item item-four">
+	      <i class="color-lump lump-xs lump-danger"></i>
+	      {{ 'course.members_manage.official_student.detail.status.serious_overdue'|trans }}
+	    </span>
+	  </div>
+	  <div class="lump-list">
+	    <a class="color-lump lump-danger" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content='<div class="process-popover"'>
+	      <div class="process-popover-title bg-danger"> <i class="es-icon es-icon-assignment-turned-in mrs"></i>
+	        {{ 'course.members_manage.official_student.detail.task_sleep'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
+	      </div>
+	      <div class="process-popover-score">1 天</div>
+	      <div class="process-popover-date">计划完成日期：2016-03-08</div>
+	      <div class="process-popover-date">实际完成日期：2016-11-29</div>
+	    </a>
+	  </div>
+	</div>
+	</div>
+
+	{{ render(controller('AppBundle:Course/StudentManage:reportCard',{course:course,user:user})) }}
+
+	<div class="es-piece" style="margin-bottom:-20px">
+	<div class="piece-header">{{'course.members_manage.official_student.detail.datas'|trans}}</div>
+	<div class="study-data row">
+	  <div class="col-md-3 col-sm-6">
+	    <div class="well">
+	      <p>{{'course.members_manage.official_student.detail.create_question'|trans}}</p>
+	      <p class="number">{{questionCount}}</p>
+	      <i class="es-icon es-icon-comment1"></i>
+	    </div>
+	  </div>
+	  <div class="col-md-3 col-sm-6">
+	    <div class="well">
+	      <p>{{'course.members_manage.official_student.detail.join_activity'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}</p>
+	      <p class="number">{{activityCount}}</p>
+	      <i class="es-icon es-icon-activity"></i>
+	    </div>
+	  </div>
+	  <div class="col-md-3 col-sm-6">
+	    <div class="well">
+	      <p>{{'course.members_manage.official_student.detail.create_article'|trans}}</p>
+	      <p class="number">{{discussionCount}}</p>
+	      <i class="es-icon es-icon-topic"></i>
+	    </div>
+	  </div>
+	  <div class="col-md-3 col-sm-6">
+	    <div class="well">
+	      <p>{{'course.members_manage.official_student.detail.reply_article'|trans}}</p>
+	      <p class="number">{{postCount}}</p>
+	      <i class="es-icon es-icon-answer"></i>
+	    </div>
+	  </div>
+
+	</div>
+  </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

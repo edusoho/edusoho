@@ -1,0 +1,73 @@
+{% extends 'courseset-manage/layout.html.twig' %}
+{% block title %}
+  {{ 'course.plan_task.manage'|trans }} - {{ parent() }}
+{% endblock %}
+
+{% set hasMulCourses = has_mul_courses(courseSet.id) %}
+{% set side_nav =  hasMulCourses ? 'plan' : 'default-course-info' %}
+
+{% set courseProduct = course.platform|default('self') == 'self' ? null : data('S2b2cProduct', { id:course.id, type:'course' }) %}
+{% set hasLessonChanged = 0 %}
+{% set hasBaseInfoChanged = 0 %}
+{% set hasFreeTaskChanged = 0 %}
+{% for changelog in courseProduct.changelog|default() if course.isDefault|default(0) %}
+  {% for log in changelog.lessons|default() %}
+    {% set hasLessonChanged = 1 %}
+  {% else %}
+    {% if changelog.lessons|default() %}
+      {% set hasLessonChanged = 1 %}
+    {% endif %}
+  {% endfor %}
+  {% if changelog.courseSetImg|default() %}
+    {% set hasBaseInfoChanged = 1 %}
+  {% endif %}
+  {% if changelog.freeTasks|default() %}
+    {% set hasFreeTaskChanged = 1 %}
+  {% endif %}
+{% endfor %}
+
+
+{% block breadcrumb %}
+  <ol class="breadcrumb breadcrumb-o">
+    <li class="text-overflow"><a
+        href="{{ path('my_teaching_course_sets') }}">{{ 'my.teaching.course_set_menu'|trans }}</a></li>
+    <li class="text-overflow courseset-header-section__breadcrumb">
+      <a class="active" title="{{ courseSet.title }}">{{ courseSet.title }}</a>
+    </li>
+  </ol>
+{% endblock %}
+
+{% block courseset_header %}
+  {{ render(controller('AppBundle:Course/CourseSetManage:header', {courseSet:courseSet, course: course|default(null), foldType: 1})) }}
+{% endblock %}
+
+
+{% block paddingClass %}course-manage-body {% endblock %}
+
+{% block course_header %}
+  {% if hasMulCourses %}
+    <div class="course-manage-header-wrap">
+      {{ render(controller('AppBundle:Course/CourseManage:header', {courseSet:courseSet, course: course, manage: true})) }}
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block sidebar %}
+  {{ render(controller('AppBundle:Course/CourseSetManage:sidebar', {courseSetId:courseSet.id, curCourse: course|default(null), courseSideNav: course_side_nav|default(null)})) }}
+{% endblock %}
+
+{% block main %}
+  <div class="cd-main">
+    <div class="cd-main__heading {% block main_heading_class %}{% endblock %}">
+      {% block main_heading %}
+        <div class="cd-main__title">
+          {% block page_title %}{% endblock %}
+        </div>
+      {% endblock %}
+    </div>
+    <div class="cd-main__body">
+      {% block main_body %}
+      {% endblock %}
+    </div>
+  </div>
+{% endblock %}

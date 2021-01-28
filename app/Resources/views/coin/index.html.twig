@@ -1,0 +1,85 @@
+{% extends 'v2/layout.html.twig' %}
+
+{% block title %}{{ 'user.account.my_coin'|trans({'%coin_name%' : setting('coin.coin_name')}) }} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'my-coin' %}
+
+{% block page_title %}
+  {{ 'user.account.my_coin'|trans({'%coin_name%' : setting('coin.coin_name')}) }}
+{% endblock %}
+
+{% block main_body %}
+  <div class="row cd-row">
+    <div class="col-md-7">
+      <div class="es-colorful-card es-colorful-card-danger">
+        <div class="card-icon"><i class="es-icon es-icon-money"></i></div>
+        <div class="card-body">
+          <p>{{'finance.balance'|trans}}</p>
+          <p><span class="card-money">{{ balance.amount|default(0)|to_coin(0) }}</span></p>
+        </div>
+        {% if setting('coin.coin_enabled') %}
+          <div class="card-action">
+            {{ slot('my.coin.card_action', {}) }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="col-md-5">
+      <div class="es-data-card">
+        <div class="card-item">
+          <div class="card-item-label">{{'finance.total_income'|trans}}</div>
+          <div class="card-item-value"><span>{% if amountInflow %}+{% endif %}{{ amountInflow|to_coin(0) }}</span></div>
+        </div>
+        <div class="card-item">
+          <div class="card-item-label">{{'finance.total_expense'|trans}}</div>
+          <div class="card-item-value"><span>{% if amountOutflow %}-{% endif %}{{ amountOutflow|to_coin(0) }}</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="table-responsive cd-table-responsive">
+    <table class="table cd-table">
+      <thead>
+        <tr>
+          <th width="30%">{{'cashflow.title'|trans}}</th>
+          <th>{{'order.sn'|trans}}</th>
+          <th>{{'order.id'|trans}}</th>
+          <th>{{'admin.money_records.transaction_time'|trans}}</th>
+          <th class="text-right">{{'finance.income_expense'|trans}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if cashes %}
+          {% for cash in cashes %}
+            <tr>
+              <td>{{cash.title}}</td>
+              <td>{{cash.sn}}</td>
+              <td>
+                {% if cash.order_sn %}
+                  {{cash.order_sn}}
+                {% else %}
+                  --
+                {% endif %}
+              </td>
+              <td>{{cash.created_time|date('Y-m-d H:i:s')}}</td>
+              <td class="text-right">
+                {% if cash.type == "inflow" %}
+                  +{{ cash.amount|to_coin(0) }}
+                {% elseif cash.type == "outflow" %}
+                  -{{ cash.amount|to_coin(0) }}
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="20">
+              <div class="cd-empty">{{'user.account.empty'|trans}}</div>
+            </td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+    {{ web_macro.paginator(paginator) }}
+  </div>
+{% endblock %}

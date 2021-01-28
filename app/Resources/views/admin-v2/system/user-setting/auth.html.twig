@@ -1,0 +1,308 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_user_auth' %}
+
+{% set script_controller = 'setting/auth_v2' %}
+{% set script_arguments = { emailVerified: app.user.emailVerified} %}
+{% block main %}
+{{ web_macro.flash_messages() }}
+
+<form  id="auth-form" class="form-horizontal" method="post" novalidate>
+
+  <fieldset>
+    <legend>{{'admin.user_auth.sign_up_settings'|trans}}</legend>
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label >{{'admin.user_auth.User_sign_up_type'|trans}}</label>
+      </div>
+      <div class="controls col-md-8">
+        <div class="btn-group">
+          <button type="button" class="btn btn-default {% if auth.register_mode =="email" %}btn-primary{% endif %} model" data-modle="email">{{'admin.user_auth.email'|trans}}</button>
+          <button type="button" class="btn btn-default {% if auth.register_mode =="mobile" %}btn-primary{% endif %} model" data-modle="mobile">{{'admin.user_auth.phone'|trans}}</button>
+          <button type="button" class="btn btn-default {% if auth.register_mode =="email_or_mobile" %}btn-primary{% endif %} model" data-modle="email_or_mobile">{{'admin.user_auth.email_or_mobile'|trans}}</button>
+          <button type="button" class="btn btn-default {% if auth.register_mode =="closed" %}btn-primary{% endif %} model" data-modle="closed">{{'admin.user_auth.closed'|trans}}</button>
+        </div>
+        <input type="hidden" value="{{ auth.register_mode|default('none') }}" name="register_mode" />
+        <div class="help-block" >{{'admin.user_auth.User_sign_up_type.help_block'|trans}}</div>
+
+      </div>
+      <div class="controls col-md-8 col-md-offset-3">
+        <div class="well">&nbsp; &nbsp; &nbsp; &nbsp;{{'admin.user_auth.mobile_bind_tips'|trans|raw}}</div>
+      </div>
+    </div>
+
+    
+    <div class="email-content {% if auth.register_mode == 'mobile' or auth.register_mode == 'closed' %}hidden{% endif %}">
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label >{{'admin.user_auth.Email_verification_sign'|trans}}</label>
+        </div>
+        <div class="controls col-md-8 radios">
+          {{ radios('email_enabled', {'opened':'admin.user_auth.Email_verification_sign.open'|trans, 'closed':'admin.user_auth.Email_verification_sign.closed'|trans}, auth.email_enabled) }}
+         <button type="button" class="btn btn-primary btn-sm js-email-send-check hidden"  data-url="{{ path('admin_v2_report_status_email_send') }}">{{ 'admin.user_auth.Verify_email_address_btn'|trans }}</button>
+         <div class="alert alert-info js-email-status hidden"  data-url="{{path('admin_v2_setting_mailer')}}"role="alert" style="padding: 5px;margin-bottom: 0">{{ 'admin.user_auth.Verifying'|trans }}</div>
+         <div class="help-block">{{ 'admin.user_auth.Verify_email_address_btn.help_block'|trans }}</div>
+        </div>
+      </div>
+
+      <input type="hidden" name="setting_time"  value="{{setting('auth.setting_time') }}" >
+
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label for="email_activation_title" >{{'admin.user_auth.active_email_title'|trans}}</label>
+        </div>
+        <div class="controls col-md-8">
+          <input type="text" id="email_activation_title" name="email_activation_title" class="form-control" value="{{auth.email_activation_title}}">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label for="email_activation_body">{{'admin.user_auth.active_email_content'|trans}}</label>
+        </div>
+        <div class="controls col-md-8">
+          <textarea id="email_activation_body" name="email_activation_body" class="form-control" rows="5">{{auth.email_activation_body}}</textarea>
+          <div class="help-block">
+            <div>{{'admin.user_auth.active_email_content.Variables'|trans}}</div>
+            <ul>
+              <li>{% verbatim %}{{nickname}}{% endverbatim %} {{'admin.user_auth.active_email_content.Nickname_of_recipient'|trans}}</li>
+              <li>{% verbatim %}{{sitename}}{% endverbatim %} {{'admin.user_auth.active_email_content.as_site_name'|trans}}</li>
+              <li>{% verbatim %}{{siteurl}}{% endverbatim %} {{'admin.user_auth.active_email_content.as_site_url'|trans}}</li>
+              <li>{% verbatim %}{{verifyurl}}{% endverbatim %} {{'admin.user_auth.active_email_content.as_verify_url'|trans}}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label >{{'admin.user_auth.Protection'|trans}}</label>
+      </div>
+
+      <div class="controls col-md-8 radios">
+        <label>
+          <input type="radio" name="register_protective" id="none" value="none" {% if auth.register_protective|default(null) == "none" %}checked="checked"{% endif %}> {{'admin.user_auth.Protection.none'|trans}}
+        </label>
+        <label>
+          <input type="radio" name="register_protective" id="low" value="low" {% if  auth.register_protective|default(null) == "low" %}checked="checked"{% endif %}> {{'admin.user_auth.Protection.low'|trans}}
+        </label>
+        <label>
+          <input type="radio" name="register_protective" id="middle" value="middle" {% if  auth.register_protective|default("middle") == "middle" %}checked="checked"{% endif %}> {{'admin.user_auth.Protection.middle'|trans}}
+        </label>
+        <label>
+          <input type="radio" name="register_protective" id="high" value="high"{% if auth.register_protective|default(null) == "high" %}checked="checked"{% endif %}> {{'admin.user_auth.Protection.high'|trans}}
+        </label>
+        <div class="help-block js-mobile-tip {% if auth.register_mode == 'email' or auth.register_mode == 'closed' %}hidden{% endif %}">为了避免云短信被盗刷，建议开启注册防护机制</div>
+      </div>
+      <button type="button" class="hiddenJsAction" style="display: none"></button>
+
+      <div class="controls col-md-8 col-md-offset-3 dync_visible not_closed_mode low_protective" {% if  auth.register_protective|default(null) == "low" %}{% else %}style="display:none;"{% endif %}>
+        <div class="well">
+          {{'admin.user_auth.Protection.Explaination'|trans}}
+          <p class="mll mtm dync_visible low_protective_email low_protective_email_or_mobile">{{'admin.user_auth.Protection.low.Verification_code.email'|trans}}</p>
+          <p class="mll mtm dync_visible low_protective_mobile low_protective_email_or_mobile">{{'admin.user_auth.Protection.low.Verification_code.mobile.tip1'|trans}}</p>
+          <p class="mll mtm dync_visible low_protective_mobile low_protective_email_or_mobile">{{'admin.user_auth.Protection.low.Verification_code.mobile.tip2'|trans}}</p>
+        </div>
+      </div>
+
+      <div class="controls col-md-8 col-md-offset-3 dync_visible not_closed_mode middle_protective" {% if  auth.register_protective|default(null) == "middle" %}{% else %}style="display:none;"{% endif %}>
+        <div class="well">
+          {{'admin.user_auth.Protection.Explaination'|trans}}
+          <p class="mll mtm dync_visible middle_protective_email middle_protective_email_or_mobile">{{'admin.user_auth.Protection.low.Verification_code.email'|trans}}</p>
+          <p class="mll mtm dync_visible middle_protective_mobile middle_protective_email_or_mobile">{{'admin.user_auth.Protection.low.Verification_code.mobile.tip1'|trans}}</p>
+          <p class="mll mtm dync_visible middle_protective_mobile middle_protective_email_or_mobile">{{'admin.user_auth.Protection.low.Verification_code.mobile.tip2'|trans}}</p>
+          <p class="mll mtm">{{'admin.user_auth.Protection.middle.30_times'|trans}}</p>
+        </div>
+      </div>
+
+      <div class="controls col-md-8 col-md-offset-3 dync_visible not_closed_mode high_protective" {% if  auth.register_protective|default(null) == "high" %}{% else %}style="display:none;"{% endif %}>
+        <div class="well">
+          {{'admin.user_auth.Protection.Explaination'|trans}}
+          <p class="mll mtm dync_visible high_protective_email high_protective_email_or_mobile">{{'admin.user_auth.Protection.low.Verification_code.email'|trans}}</p>
+          <p class="mll mtm dync_visible high_protective_mobile high_protective_email_or_mobile">{{'admin.user_auth.Protection.high.Verification_code.mobile'|trans}}</p>
+          <p class="mll mtm">{{'admin.user_auth.Protection.high.10_times'|trans}}</p>
+          <p class="mll mtm">{{'admin.user_auth.Protection.high.sign_up_count'|trans}}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label >{{'admin.user_auth.Password_level'|trans}}</label>
+      </div>
+
+      <div class="controls col-md-8 radios">
+        <label>
+          <input type="radio" name="password_level" value="low" {% if auth.password_level|default('low') == 'low' %}checked="checked"{% endif %}> {{'admin.user_auth.Protection.low'|trans}}
+        </label>
+        <label>
+          <input type="radio" name="password_level" value="middle" {% if auth.password_level|default(null) == 'middle' %}checked="checked"{% endif %}> {{'admin.user_auth.Protection.middle'|trans}}
+        </label>
+        <label>
+          <input type="radio" name="password_level" value="high" {% if auth.password_level|default(null) == 'high' %}checked="checked"{% endif %}> {{'admin.user_auth.Protection.high'|trans}}
+        </label>
+      </div>
+
+      <div class="controls col-md-8 col-md-offset-3 dync_visible not_closed_mode low_password_level" {% if auth.password_level|default('low') == 'low' %}{% else %}style="display:none;"{% endif %}>
+        <div class="well">
+          {{'admin.user_auth.Protection.Explaination'|trans}}
+          <p class="mll mtm">{{'admin.user_auth.Password_level.low.explaination'|trans}}</p>
+        </div>
+      </div>
+
+      <div class="controls col-md-8 col-md-offset-3 dync_visible not_closed_mode middle_password_level" {% if auth.password_level|default(null) == 'middle' %}{% else %}style="display:none;"{% endif %}>
+        <div class="well">
+          {{'admin.user_auth.Protection.Explaination'|trans}}
+          <p class="mll mtm">{{'admin.user_auth.Password_level.middle.explaination'|trans}}</p>
+          <p class="mll mtm">{{'admin.user_auth.Password_level.middle.explaination_2'|trans}}</p>
+        </div>
+      </div>
+
+      <div class="controls col-md-8 col-md-offset-3 dync_visible not_closed_mode high_password_level" {% if auth.password_level|default(null) == 'high' %}{% else %}style="display:none;"{% endif %}>
+        <div class="well">
+          {{'admin.user_auth.Protection.Explaination'|trans}}
+          <p class="mll mtm">{{'admin.user_auth.Password_level.high.explaination'|trans}}</p>
+          <p class="mll mtm">{{'admin.user_auth.Password_level.high.explaination_2'|trans}}</p>
+        </div>
+      </div>
+    </div>
+
+  </fieldset>
+
+  <fieldset>
+    <legend>{{'admin.user_auth.Setup_welcome_message'|trans}}</legend>
+
+    <div class="form-group" style="display:none;">
+      <div class="col-md-3 control-label">
+        <label>{{'admin.user_auth.Setup_welcome_message.send'|trans}}</label>
+      </div>
+      <div class="controls col-md-8 checkboxs">
+        {{ checkboxs('welcome_methods', {'message':'admin.user_auth.Setup_welcome_message.In_site_message'|trans, 'email':'admin.user_auth.Setup_welcome_message.email'|trans}, auth.welcome_methods) }}
+        <div class="help-block">{{'admin.user_auth.Setup_welcome_message.help_block'|trans}}。</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="welcome_title">{{'admin.user_auth.Setup_welcome_message.send'|trans}}</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('welcome_enabled', {'opened':'admin.user_auth.Setup_welcome_message.send.closed'|trans, 'closed':'admin.user_auth.Setup_welcome_message.send.open'|trans}, auth.welcome_enabled) }}
+        <div class="help-block">{{'admin.user_auth.Setup_welcome_message.send.help_block'|trans}}</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="welcome_sender">{{'admin.user_auth.Setup_welcome_message.sender'|trans}}</label>
+      </div>
+      <div class="controls col-md-8">
+        <input type="text" id="welcome_sender" name="welcome_sender" class="form-control" value="{{auth.welcome_sender}}">
+        <div class="help-block">{{'admin.user_auth.Setup_welcome_message.sender.help_block'|trans}}</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="welcome_title">{{'admin.user_auth.Setup_welcome_message.title'|trans}}</label>
+      </div>
+      <div class="controls col-md-8">
+        <input type="text" id="welcome_title" name="welcome_title" class="form-control" value="{{auth.welcome_title}}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="welcome_body">{{'admin.user_auth.Setup_welcome_message.content'|trans}}</label>
+      </div>
+      <div class="controls col-md-8">
+        <textarea id="welcome_body" name="welcome_body" class="form-control" rows="5">{{auth.welcome_body}}</textarea>
+        <div class="help-block">
+          <div>{{'admin.user_auth.Setup_welcome_message.warning.help_block'|trans}}</div>
+          <div>{{'admin.user_auth.active_email_content.Variables'|trans}}</div>
+          <ul>
+            <li>{% verbatim %}{{nickname}}{% endverbatim %} {{'admin.user_auth.Setup_welcome_message.as_recipient.help_block'|trans}}</li>
+            <li>{% verbatim %}{{sitename}}{% endverbatim %} {{'admin.user_auth.active_email_content.as_site_name'|trans}}</li>
+            <li>{% verbatim %}{{siteurl}}{% endverbatim %} {{'admin.user_auth.active_email_content.as_site_url'|trans}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>{{'admin.user_auth.protocol_settings'|trans}}</legend>
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="user_terms">{{'admin.user_auth.Term_service_settings.Enable'|trans}}</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('user_terms', {'opened':'admin.user_auth.Term_service_settings.open'|trans, 'closed':'admin.user_auth.Term_service_settings.closed'|trans}, auth.user_terms) }}
+        <div class="help-block">{{'admin.user_auth.Term_service_settings.Enable.help_block'|trans}}</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="user_terms_body">{{'admin.user_auth.Term_service_settings.details'|trans}}</label>
+      </div>
+      <div class="controls col-md-8">
+        <textarea class="form-control" id="user_terms_body" rows="16" name="user_terms_body" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{ auth.user_terms_body }}</textarea>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="privacy_policy">{{'admin.user_auth.privacy_policy_settings.Enable'|trans}}
+          {% include 'admin-v2/widget/tooltip-widget.html.twig' with { icon: 'glyphicon-question-sign', content: 'admin.user_auth.privacy_policy_settings.tooltip'|trans|raw, placement: 'top'} %}
+        </label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('privacy_policy', {'opened':'admin.user_auth.privacy_policy_settings.open'|trans, 'closed':'admin.user_auth.privacy_policy_settings.closed'|trans}, auth.privacy_policy) }}
+        <div class="help-block">{{'admin.user_auth.privacy_policy_settings.Enable.help_block'|trans}}</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="privacy_policy_body">{{'admin.user_auth.privacy_policy_settings.details'|trans}}</label>
+      </div>
+      <div class="controls col-md-8">
+        <textarea class="form-control" id="privacy_policy_body" rows="16" name="privacy_policy_body" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{ auth.privacy_policy_body }}</textarea>
+      </div>
+    </div>
+  </fieldset>
+
+
+  {% if setting('magic.username_setting')|default(false) %}
+    <fieldset>
+      <legend>{{'admin.user_auth.Name_setting'|trans}}</legend>
+      <div class="row form-group">
+          <div class="col-md-2 col-md-offset-2 control-label">
+              <label for="user_name">{{'admin.user_auth.Name_setting.user_name'|trans}}</label>
+          </div>
+          <div class="controls col-md-4">
+            <input  type="text" id="user_name" name="user_name" class="form-control" {% if defaultSetting.user_name %}value="{{defaultSetting.user_name|default('site.default.student'|trans)}}" {% endif %}>
+          </div>
+      </div>
+
+      <div class="alert alert-info deduction text-center">
+        <p><strong> {{'admin.user_auth.Name_setting.help_block'|trans}}
+        </strong></p>
+      </div>
+    </fieldset> 
+  {% endif %}
+  
+  <div class="form-group">
+    <div class="col-md-3 control-label"></div>
+    <div class="controls col-md-8">
+      <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>  
+    </div>
+  </div>
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  <input type="hidden" name='_cloud_sms'  value= "{{setting('cloud_sms.sms_enabled')}}">
+</form>
+
+{% endblock %}

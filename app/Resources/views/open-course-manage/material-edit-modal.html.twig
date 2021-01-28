@@ -1,0 +1,25 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% set modal_class = 'modal-lg' %}
+{% block title %}{{ 'my.teaching.open_course.lesson.add_material.title'|trans }}{% endblock %}
+
+
+{% do script([cloud_sdk_url('uploader'), 'libs/jquery-validation.js', 'libs/select2.js', 'app/js/open-course-manage/add-material/index.js']) %}
+
+{% block body %}
+
+  {% set uploadUrl = path('open_course_manage_material_upload', {courseId:course.id, lessonId:lesson.id}) %}
+
+  <form class="form-horizontal" id="course-material-form" action="{{ uploadUrl }}" enctype="multipart/form-data" method="post">
+
+    <ul class="download-list" id="material-list">
+      {% for material in materials|default(null) %}
+        {% include 'open-course-manage/material-list-item.html.twig' %}
+      {% endfor %}
+    </ul>
+
+    {% include 'file-chooser/file-choose.html.twig' with { mediaType: 'download', fileType: 'all', file: null , courseId: course.id } %}
+    <input id="materials" type="hidden" name="fileId">
+  </form>
+
+{% endblock %}
+{% set hide_footer = true %}

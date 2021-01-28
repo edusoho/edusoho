@@ -1,0 +1,10 @@
+{% import 'macro.html.twig' as web_macro %}
+
+
+<div class="row">
+  {% set deletePath = path('material_delete_modal_show') %}
+  {% set subtitlePath = path('material_lib_browsing') %}
+  {% include 'material-lib/widget/material-table.html.twig' with { path: deletePath, subtitlePath: subtitlePath } %}
+</div>
+{{ web_macro.ajax_paginator(paginator) }}
+

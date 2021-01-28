@@ -1,0 +1,23 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}{{ content.title }} - {{ parent() }}{% endblock %}
+{% block keywords %}{{ content.title }} {{ setting('site.name') }}{% endblock %}
+{% block description %}{{ content.body|plain_text(100) }}{% endblock %}
+
+{% set siteNav = 'page/' ~ content.alias|default(content.id) %}
+
+{% set bodyClass = 'custompage' %}
+{% block content %}
+<div class="es-section">
+
+  <div class="section-header"><h1>{{ content.title }}</h1></div>
+
+  {% if content.body %}
+    <div class="editor-text">
+  	  {{ content.body|cdn|raw }}
+    </div>
+  {% else %}
+    <div class="empty">{{'custom_page.empty'|trans}}</div>
+  {% endif %}
+</div>
+{% endblock %}

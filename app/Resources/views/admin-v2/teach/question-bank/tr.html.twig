@@ -1,0 +1,27 @@
+<tr>
+  <td>
+    {{ questionBank.name }}
+  </td>
+  <td>
+    <span class="mrl">{{ 'admin.question_bank.manage.testpaper'|trans }}：{{ questionBank.itemBank.assessment_num|default(0) }}</span>
+    <span>{{ 'admin.question_bank.manage.question'|trans }}：{{ questionBank.itemBank.item_num|default(0) }}</span>
+  </td>
+  {% include 'org/parts/table-body-td.html.twig' with {orgCode: questionBank.orgCode}%}
+  <td>{{ category.name|default('') }}</td>
+  <td>
+    <div class="btn-group">
+      <a href="{{ path('question_bank_manage_question_list', {id:questionBank.id}) }}" class="btn btn-default btn-sm" target="_blank">{{'site.default.manage'|trans}}</a>
+      <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu">
+        <li>
+          <a href="javascript:" data-role="edit-item" data-url="{{ path('admin_v2_question_bank_manage_edit', {id:questionBank.id}) }}" data-toggle="modal" data-target="#modal">{{'form.btn.edit'|trans}}</a>
+        </li>
+        <li>
+          <a href="javascript:" class="delete-btn" data-role="delete-item" data-url="{{ path('admin_v2_question_bank_manage_delete', {id:questionBank.id}) }}" data-testpaper-num="{{ questionBank.itemBank.assessment_num|default(0) }}" data-question-num="{{ questionBank.itemBank.item_num|default(0) }}">{{'site.btn.delete'|trans}}</a>
+        </li>
+      </ul>
+    </div>
+  </td>
+</tr>

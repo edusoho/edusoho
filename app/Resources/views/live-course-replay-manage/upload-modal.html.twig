@@ -1,0 +1,36 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'modal-lg' %}
+
+{% do script([cloud_sdk_url('uploader'), 'libs/perfect-scrollbar.js', 'libs/jquery-validation.js','libs/select2.js', 'app/js/course-manage/live-replay/upload/index.js']) %}
+
+{% block title %}
+  {% if lesson.replayStatus == 'videoGenerated' %}{{ 'course.live.replay_manage.lesson_edit_content_title'|trans }}{% else %}{{'course.live.replay_manage.lesson_add_content_title'|trans}}{% endif %}
+{% endblock %}
+
+{% block body %}
+  {% set uploadUrl = path('live_open_course_lesson_replay_upload', {courseId:course.id, lessonId:lesson.id}) %}
+
+  <form id="replay-material-form" class="form-horizontal" action="{{ uploadUrl }}" enctype="multipart/form-data" method="post">
+
+    {% set targetType = targetType|default('courselesson') %}
+    {% set courseId   = course.id %}
+    <div class="form-group">
+      <div class="col-md-10 col-md-offset-1 controls" id="material-file-chooser">
+        {% include 'file-chooser/file-choose.html.twig' with {mediaType: 'video', fileType: 'video', file: lesson.media|default(null), hideImportVideo: true } %}
+        <input type="hidden" name="fileId">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-10 col-md-offset-1 controls">
+        <button class="btn btn-primary" id="material-upload-btn" data-loading-text="{{'form.btn.save.submiting'|trans}}" type="submit">{{'course.live.replay_manage.lesson_add_btn'|trans}}</button>
+      </div>
+    </div>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+  </form>
+{% endblock %}
+
+{% set hide_footer = true %}

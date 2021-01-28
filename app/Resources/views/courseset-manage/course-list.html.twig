@@ -1,0 +1,86 @@
+{% extends 'course-manage/header.html.twig' %}
+{% block js %}
+{% endblock %}
+
+{% block title %}
+  {% if hasMulCourses %}
+    <a class="cd-link-major" href="{{ path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id}) }}" target="_blank">
+      {{ course.title }}
+    </a>
+  {% endif %}
+{% endblock %}
+
+{% block planType %}
+  {% if course.courseType == 'default' %}
+    <span class="cd-tag cd-tag-blue cd-ml8 {% if course.title is empty %} default-single-span {% endif %}">{{ 'course.teaching_default_plan'|trans }}</span>
+  {% endif %}
+{% endblock %}
+
+{% block action %}
+  <a class="pull-right cd-btn cd-btn-ghost-primary visible-xs" href="{{ path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id}) }}">{{ 'course.teaching_plan.manage'|trans }}</a>
+  <div class="pull-right hidden-xs courses-operation js-plan-operation">
+    {% if courseSet.canManage|default() or course.canManage|default()  %}
+      <div class="js-plan-icon">
+        <a class="cd-mr32 cd-link-major" href="{{ path('course_set_manage_course_info', {courseSetId: courseSet.id, courseId: course.id}) }}">
+          <i class="es-icon es-icon-setting" data-toggle="tooltip" data-placement="top" title="{{ 'course.teaching_plan.manage'|trans }}"></i>
+        </a>
+
+        <div class="cd-dropdown" data-toggle="cd-dropdown" data-trigger="hover">
+          <a class="cd-link-major" href="javascript:;">
+            <i class="es-icon es-icon-morehoriz"></i>
+          </a>
+          <ul class="dropdown-menu courses-operation-dropdown">
+            <li>
+              <a href={% if course.status|default('') == 'published' %}"{{basepath}}"{% else %}"{{ path('course_show', { id: course.id, previewAs: 'guest' }) }}"{% endif %} target="_blank">{% if course.status|default('') == 'published' %}{{ 'course.check.plan'|trans }}{% else %}{{ 'course.preview.plan'|trans }}{% endif %}</a>
+            </li>
+            {% if course.status|default('') == 'published' %}
+              {% if courseSet.platform|default('self') == 'self' %}
+                <li>
+                  <a class="js-copy-plan" href="javascript:;"
+                    data-url="{{ path('course_set_manage_course_copy', {courseSetId: courseSet.id, courseId: course.id}) }}">
+                    {{ 'course.teaching_plan.copy_btn'|trans }}
+                  </a>
+                </li>
+              {% endif %}
+              <li>
+                <a href="javascript:;"
+                  data-check-url="{{ path('course_set_manage_course_close_check', {courseSetId: courseSet.id, courseId: course.id}) }}"
+                  data-url="{{ path('course_set_manage_course_close', {courseSetId: courseSet.id, courseId: course.id}) }}"
+                  class="js-close-course">
+                  {{ 'form.btn.close'|trans }}
+                </a>
+              </li>
+            {% else %}
+              <li>
+                <a href="javascript:;"
+                  data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}"
+                  data-pre-url="{{ path('course_set_manage_course_pre_publish', {courseSetId: courseSet.id, courseId: course.id}) }}"
+                  data-save-url="{{ path('course_set_manage_course_publish_set_title', {courseSetId: courseSet.id, courseId: course.id}) }}"
+                  class="js-publish-course">{{ 'course.teaching_plan.publish_btn'|trans }}</a><!-- 已发布的不能删除，可关闭 -->
+              </li>
+              {% if courseSet.platform|default('self') == 'self' %}
+                <li>
+                  <a class="js-copy-plan" href="javascript:;"
+                    data-url="{{ path('course_set_manage_course_copy', {courseSetId: courseSet.id, courseId: course.id}) }}">
+                    {{ 'course.teaching_plan.copy_btn'|trans }}
+                  </a>
+                </li>
+                <li>
+                  <a href="javascript:;"
+                    data-url="{{ path('course_set_manage_course_delete', {courseSetId: courseSet.id, courseId: course.id}) }}"
+                    class="js-delete-course">{{ 'course.teaching_plan.delete_btn'|trans }}</a>
+                </li>
+              {% endif %}
+            {% endif %}
+
+          </ul>
+        </div>
+      </div>
+      <div class="js-plan-dragged-icon hidden">
+        <a class="cd-link-assist" href="javascript:;"><i class="es-icon es-icon-sort"></i></a>
+      </div>
+    {% else %}
+      <span class="color-gray">{{ 'course.teaching_plan.no_permission'|trans }}</span>
+    {% endif %}
+  </div>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends 'admin-v2/layout.html.twig' %}
+{% set panel = 'dashboard' %}
+{% set nav = 'system' %}
+{% set menu = 'admin_v2_data_statistics_basic_tab' %}
+
+{% block main %}
+  <link href="{{ asset('assets/libs/gallery/morris/0.5.0/morris.css') }}" rel="stylesheet"/>
+  <div class="row">
+    <div class="col-md-12">
+      {% block analysisHead %}
+        <div class="col-md-12">
+          {{ web_macro.flash_messages() }}
+          <form class="well well-sm form-inline" action="{{ path("admin_v2_data_statistics_index",{tab:tab}) }}" method="get" id="operation-form"
+            role="form">
+            <div class="form-group">
+              <select class="form-control" name="analysisDateType">
+                {{ select_options(dict('analysisDateType'), dataInfo.analysisDateType, 'admin.operation_analysis.data_type_placeholder'|trans) }}
+              </select>
+            </div>
+            <div class="form-group">
+              <a type="button" class="btn btn-default" id="btn-month" currentMonthStart="{{ dataInfo.currentMonthStart }}"
+                currentMonthEnd="{{ dataInfo.currentMonthEnd }}">{{ 'admin.operation_analysis.this_month'|trans }}</a>
+            </div>
+            <div class="form-group">
+              <a type="button" class="btn btn-default " id="btn-lastMonth" lastMonthStart="{{ dataInfo.lastMonthStart }}"
+                lastMonthEnd="{{ dataInfo.lastMonthEnd }}">{{ 'admin.operation_analysis.last_month'|trans }}</a>
+            </div>
+
+            <div class="form-group">
+              <a type="button" class="btn btn-default " id="btn-lastThreeMonths" lastThreeMonthsStart="{{ dataInfo.lastThreeMonthsStart }}"
+                lastThreeMonthsEnd="{{ dataInfo.lastThreeMonthsEnd }}">{{ 'admin.operation_analysis.recent_three_month'|trans }}</a>
+            </div>
+
+            <div class="form-group mll">
+              <label class="ptm">{{ 'admin.operation_analysis.start_time'|trans }}</label>
+              <input type="text" class="form-control analysis-input mls" name="startTime" value="{{ dataInfo.startTime }}">
+            </div>
+
+            <div class="form-group mls">
+              <label class="ptm">{{ 'admin.operation_analysis.end_time'|trans }}</label>
+              <input type="text" class="form-control analysis-input mls" name="endTime" value="{{ dataInfo.endTime }}">
+            </div>
+
+            <button class="btn btn-primary pull-right" id="btn-search">{{ 'admin.operation_analysis.search'|trans }}</button>
+          </form>
+
+          {% if showHelpMessage|default(null ) == 1 %}
+            <div class="help-block">{{ 'admin.operation_analysis.help_tips'|trans }}</div>
+          {% endif %}
+        </div>
+        <div class="col-md-12">
+          {% if tab == "trend" and dataInfo.analysisDateType not in ['courseSetSum', 'userSum', 'courseSum'] %}
+            <p class="text-muted">
+              <span class="mrl">{{ 'admin.operation_analysis.total_count'|trans }}：<strong class="inflow-num">{{ count|default(0) }}</strong></span>
+            </p>
+          {% endif %}
+        </div>
+        <div class="col-md-12">
+          <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation"{% if tab=="trend" %} class="active"{% endif %} ><a
+                href="{{ path('admin_v2_data_statistics_index',{tab:"trend",startTime:dataInfo.startTime,endTime:dataInfo.endTime,analysisDateType:dataInfo.analysisDateType}) }}">{{ 'admin.operation_analysis.thrend'|trans }}</a>
+            </li>
+            <li role="presentation" {% if tab=="detail" %} class="active"{% endif %}><a
+                href="{{ path('admin_v2_data_statistics_index',{tab:"detail",startTime:dataInfo.startTime,endTime:dataInfo.endTime,analysisDateType:dataInfo.analysisDateType}) }}">{{ 'admin.operation_analysis.detail'|trans }}</a>
+            </li>
+          </ul>
+        </div>
+      {% endblock %}
+      {% block analysisBody %}
+      {% endblock %}
+    </div>
+  </div>
+
+{% endblock %}

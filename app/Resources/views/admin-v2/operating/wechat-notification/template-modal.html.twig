@@ -1,0 +1,13 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{'admin.wechat_notification.template_content'|trans}}{% endblock %}
+
+{% set hide_footer = true %}
+
+{% block body %}
+
+  <div class="clearfix well">
+    <div>{{ template.content|trans|raw }}</div>
+  </div>
+
+{% endblock %}

@@ -1,0 +1,76 @@
+.nav.nav-tabs {
+  position: relative;
+  margin-bottom: 25px;
+  border-color: @gray-lighter;
+  .highlight {
+    position: absolute;
+    bottom: -1px;
+    border-bottom: 2px solid @brand-primary;
+    @media (max-width: @screen-xs-max) {
+      display: none;
+    }
+  }
+  > li {
+    margin-bottom: 0;
+  }
+  > li > a {
+    border: none;
+    margin-right: 0;
+    color: @gray-darker;
+    font-size: 16px;
+    font-weight: 500;
+    .es-transition;
+    padding: 5px 30px 15px;
+    @media (max-width: @screen-md-max) {
+      padding: 5px 10px 10px;
+      font-size: 14px;
+    }
+    @media (max-width: @screen-xs-max) {
+      padding: 8px;
+    }
+    &:hover,
+    &:focus {
+      background: none;
+    }
+    small {
+      color: @gray;
+    }
+  }
+  > li.active > a,
+  > li:hover > a {
+    border: none;
+    background: none;
+    color: @brand-primary;
+    .es-transition;
+    small {
+      color: @brand-primary;
+    }
+    .badge {
+      background-color: @brand-primary;
+      .es-transition;
+    }
+  }
+  .badge {
+    margin-left: 5px;
+    background-color: @gray;
+    .es-transition;
+  }
+}
+
+.nav-btn-tab {
+  position: relative;
+  border-bottom: 1px solid @gray-lighter;
+  margin-bottom: 20px;
+  @media (max-width: @screen-xs-max) {
+    padding-right: 0;
+  }
+  .nav.nav-tabs {
+    border: none;
+    margin-bottom: 0;
+  }
+  .btnbar {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+}

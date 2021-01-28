@@ -1,0 +1,61 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}{{ 'my.teaching.course_set.create_btn'|trans }} - {{ parent() }}{% endblock %}
+
+{% do script(['libs/jquery-validation.js','app/js/courseset/create/index.js']) %}
+
+{% set liveAccount = get_live_account() %}
+{% if defaultType == 'live' and (liveAccount.error is defined or not setting('live-course.live_course_enabled') or liveAccount.isExpired) %}
+  {% set defaultType = 'normal' %}
+{% endif %}
+
+{% block content %}
+  <div class="row">
+    <div class="panel panel-default panel-page panel-create-course">
+      <div class="panel-heading">
+        <h2>{{ 'my.teaching.course_set.create_btn'|trans }}</h2>
+      </div>
+      {% if not app.user.largeAvatar or not app.user.title or not userProfile.about %}
+        {% include 'settings/user-profile.html.twig' %}
+      {% else %}
+        <form id="courseset-create-form" class="form-horizontal" action="{{ path('course_set_manage_create') }}"
+              method="post">
+          {{ web_macro.flash_messages() }}
+          <div class="course-piece">{{ 'my.teaching.course_set.select_type'|trans }}</div>
+          <div class="form-group cd-row mb0">
+            {% set typeCount = courseTypes|length %}
+            {% for key,type in courseTypes %}
+              <div class="{% if typeCount <= 4 %}col-md-3 {% else %}col-md-2 course-five-types {% endif %}">
+                {% include type.template with {type: key, defaultType: defaultType} %}
+              </div>
+            {% endfor %}
+          </div>
+          
+            {% include 'org/course-create-org-tree-select.html.twig' %}
+            <div class="course-title form-group">
+              <div class="mlm pull-left controls-label text-lg">
+                <div class="course-piece title">{{ 'my.teaching.course_set.select_type.course_title'|trans }}</div>
+              </div>
+              <div class="col-md-10 controls course-title-input">
+                <input type="text" id="course_title" name="title" required="required" class="form-control"
+                       data-widget-cid="widget-1" data-explain="">
+              </div>
+            </div>
+            <div class="text-center">
+              {% if not setting('copyright.owned') %}
+                <span class="mrm">
+              <a href="http://www.qiqiuyu.com/course/22" class="color-gray" target="_blank">{{ 'my.teaching.course_set.select_type.how_do_create'|trans }}</a>
+            </span>
+              {% endif %}
+              <button id="courseset-create-btn" data-loading-text="{{ 'form.btn.create.submiting'|trans }}"
+                     class="cd-btn cd-btn-primary" type="submit">{{ 'form.btn.create'|trans }}</button>
+              <a class="btn btn-fat btn-link link-gray course-cancel-btn" href="{{ app.request.headers.get('Referer') }}">{{ 'form.btn.cancel'|trans }}</a>
+            </div>
+            <input type="hidden" name="type" value="{{ defaultType }}"/>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}"></div>
+        </div>
+      </form>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

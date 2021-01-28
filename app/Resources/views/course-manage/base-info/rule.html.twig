@@ -1,0 +1,86 @@
+<div class="form-group">
+  <label for="" class="col-sm-2 control-label">{{ 'course.plan_setup.mode'|trans }}
+    <a class="es-icon es-icon-help course-mangae-info__help text-normal" data-trigger="hover" data-toggle="popover"
+       data-container="body" data-placement="top"
+       data-content="{{ 'course.plan_setup.mode.tips'|trans }}">
+    </a></label>
+  <div class="col-sm-8 cd-radio-group mb0">
+    {% set courseDraft = course.status|default('draft') == 'draft' and course.platform|default('self') == 'self' %}
+    {{ cd_radios('learnMode',
+      { 'freeMode': 'course.plan_setup.mode.free'|trans,
+        'lockMode':'course.plan_setup.mode.locked'|trans },
+      course.learnMode|default('freeMode'), courseDraft ? '' : 'disabled') }}
+  </div>
+</div>
+
+{% include 'course-manage/marketing/set-rule.html.twig' %}
+
+<div class="form-group">
+  <label for=""
+         class="col-sm-2 control-label mbs">{{ 'course.plan_setup.finish_rule'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}</label>
+  <div class="col-sm-8 cd-radio-group mb0">
+    <label class="cd-radio {% if course.enableFinish|default('0') == 1 %}checked{% endif %}"
+           {% if course.platform|default('self') == 'supplier' %}disabled{% endif %}>
+      <input type="radio" data-toggle="cd-radio" name="enableFinish" value="1"
+             {% if course.platform|default('self') == 'supplier' %}disabled{% endif %}>
+      {{ 'course.plan_setup.finish_rule.nothing'|trans }}
+    </label>
+    <label class="cd-radio {% if course.enableFinish|default('0') == 0 %}checked{% endif %}"
+           {% if course.platform|default('self') == 'supplier' %}disabled{% endif %}>
+      <input type="radio" data-toggle="cd-radio" name="enableFinish" value="0"
+             {% if course.platform|default('self') == 'supplier' %}disabled{% endif %}>
+      {{ 'course.plan_setup.finish_rule.depend_on_finish_condition'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
+      <a class="es-icon es-icon-help course-mangae-info__help" data-trigger="hover" data-toggle="popover"
+         data-container="body" data-placement="top"
+         data-content="{{ 'course.plan_setup.finish_rule.depend_on_finish_condition_tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}"></a>
+    </label>
+  </div>
+</div>
+{% if courseSet.type == 'live' %}
+  {% include 'course-manage/marketing/set-live-capacity.html.twig' %}
+{% else %}
+  {% include 'course-manage/marketing/set-preview.html.twig' %}
+{% endif %}
+<div class="form-group js-services">
+  <label class="col-sm-2 control-label">{{ 'course.marketing_setup.services.provide_services'|trans }}</label>
+  <div class="col-sm-8 form-control-static">
+    {% set serviceTags = services(course.services | default([])) %}
+    {% for tag in serviceTags %}
+      <span class="service-item js-service-item {% if tag.active %}service-primary-item{% endif %}"
+            data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top"
+            data-content="{{ tag.summary|trans }}" data-code="{{ tag.code }}">{{ tag.fullName|trans }}</span>
+    {% endfor %}
+    <input type="hidden" id="course_services" name="services"
+           value="{{ course.services|default([])|json_encode_utf8() }}">
+  </div>
+</div>
+
+{% if audioServiceStatus != 'needOpen' and course.type == 'normal' %}
+  <div class="form-group" id="audio-modal-id">
+    <label for="" class="col-sm-2 control-label">{{ 'course.info.video.convert.audio.enable'|trans }}</label>
+    <div class="col-sm-8 cd-radio-group" data-value="{{ audioServiceStatus }}" id="course-audio-mode">
+      <label class="cd-radio {% if course.enableAudio|default('0') == 1 %}checked{% endif %}"
+             {% if course.platform|default('self') == 'supplier' %}disabled{% endif %}>
+        <input type="radio" data-toggle="cd-radio" name="enableAudio" value="1"
+               {% if course.platform|default('self') == 'supplier' %}disabled{% endif %}>
+        {{ 'course.info.video.convert.audio.start'|trans }}
+      </label>
+      <label class="cd-radio {% if course.enableAudio|default('0') == 0 %}checked{% endif %}"
+             {% if course.platform|default('self') == 'supplier' %}disabled{% endif %}>
+        <input type="radio" data-toggle="cd-radio" name="enableAudio" value="0"
+               {% if course.platform|default('self') == 'supplier' %}disabled{% endif %}>
+        {{ 'course.info.video.convert.audio.close'|trans }}
+      </label>
+      <div>
+        <div class="course-mangae-info__tip">1.{{ 'course.enable.video.convert.audio.benefit'|trans }}</div>
+        <div class="course-mangae-info__tip">2.{{ 'course.video.convert.audio.status'|trans }}
+          ：{{ video_convert_completion(course.id) }} <a class="ml5 link-primary"
+                                                        href="{{ path('course_set_manage_files', { id: courseSet['id'] }) }}"
+                                                        target="__blank">{{ 'course.video.convert.audio.detail'|trans }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+{% include 'course-manage/marketing/set-reward-point.html.twig' %}

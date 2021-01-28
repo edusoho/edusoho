@@ -1,0 +1,13 @@
+{% set data = notification.content %}
+
+ {% if data.thread %}
+   {% set who = data.user.nickname %}
+   {% set thread = data.thread.title %}
+   {{ 'notification.thread.post_create'|trans({'%who%':who, '%thread%':thread})|raw }}
+{% else %}
+  {% include 'notification/widget/item-article.post_create.html.twig' %}
+  {% set article = data('Article', {id:data.post.targetId})%}
+
+  {{'article.reply_tips'|trans({'%jumpUrl%':'', '%title%':article.title}) }}
+
+{% endif %}

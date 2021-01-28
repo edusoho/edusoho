@@ -1,0 +1,9 @@
+{% extends 'layout.html.twig' %}
+
+{% do script(['app/js/material-lib/flash-player/index.js']) %}
+
+{% block body %}
+  <div class="iframe-parent-content">
+    <div id="flash-player" data-params="{{ player|json_encode() }}"></div>
+  </div>
+{% endblock %}

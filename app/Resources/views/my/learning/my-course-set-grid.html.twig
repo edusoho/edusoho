@@ -1,0 +1,24 @@
+<div class="my-course-item cd-mb16 clearfix">
+  <a class="my-course-item__link" href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}">
+    {{ lazy_img(filepath(course_set_cover(courseSet, 'large'), 'courseSet.png'), 'my-course-item__picture', courseSet.title) }}
+    {% include 'my/learning/course/courses-block-label.html.twig' %}
+  </a>
+
+  <div class="my-course-item__info">
+    <div class="my-course-item__title text-overflow">
+      {% if can_obtain_certificates(course.id, 'course') %}
+        <a style="margin-top: 6px" class="certificate-tag" tabindex="0" role="button" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-html="true" title="{{ 'explore.classroom.certificate_tag'|trans }}" data-content="{{ 'course.catalogue.certificate_obtain'|trans }}">{{ 'explore.classroom.certificate_tag_short'|trans }}</a>
+      {% endif %}
+      <a class="cd-link-major" href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}">{{ courseSet.title }}</a>
+    </div>
+
+    <div class="my-course-item__status">
+      {% include 'course/widgets/course-set-price.html.twig' with {shows: 'price'} %}
+    </div>
+  </div>
+
+  <div class="my-course-item__btn">
+    <a class="btn cd-btn cd-btn-primary" href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" target="_blank">{{ 'course.block_grid.view_course_btn'|trans }}</a>
+  </div>
+
+</div>

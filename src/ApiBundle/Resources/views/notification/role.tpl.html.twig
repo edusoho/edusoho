@@ -1,0 +1,4 @@
+{% set data = notification.content %}
+{% set who = data.userName %}
+{{ 'notification.role'|trans({'%role%':data.role, '%who%':who})|raw }}
+

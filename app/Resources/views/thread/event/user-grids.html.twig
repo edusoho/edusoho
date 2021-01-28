@@ -1,0 +1,24 @@
+{% if myFriends|default(null) %}
+  <div class="topic-num">
+    <div class="page-header">{{'thread.other_event.my_friends'|trans}}</div>
+    <div class="num-list">
+      {% include 'thread/event/user-grids-li.html.twig' with {members:myFriends} %}
+    </div>
+  </div>
+{% endif %}
+
+{% if members|default(null) %}
+  <div class="topic-num" id="event-member" data-sum="{{ membersCount|default(0) }}">
+    <div class="page-header">{{'thread.other_event.my_friends.newest_member'|trans({'%membersCount%':membersCount|default(0)})}}</div>
+    <div class="num-list js-join-members">
+      {% include 'thread/event/user-grids-li.html.twig' %}
+    </div>
+    <div class="num-more">
+    {% if membersCount|default(0) > 16 %}
+      {% do script(['app/js/thread/event-member/index.js']) %}
+      <span class="glyphicon glyphicon-chevron-down js-members-expand" style="cursor: pointer;" data-url="{{ path('ajax_thread_member_show', {threadId:threadId}) }}"></span>
+      <span class="glyphicon glyphicon-chevron-up js-members-collapse" style="cursor: pointer; display:none"></span>
+    {% endif %}
+    </div>
+  </div>
+{% endif %}

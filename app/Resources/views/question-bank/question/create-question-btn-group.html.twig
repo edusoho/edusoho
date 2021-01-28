@@ -1,0 +1,17 @@
+{% set questionTypes = getQuestionTypes() %}
+
+{% for type, name in questionTypes if questionTypes %}
+  {% if loop.index <= 3 %}
+    <a href="{{ path('question_bank_manage_question_create', {id:questionBank.id, type:type, goto:app.request.server.get('REQUEST_URI')}) }}" class="cd-btn cd-btn-primary cd-btn-sm"><i class="cd-icon cd-icon-add cd-text-sm"></i>{{ name|trans }}</a>
+  {% endif %}
+{% endfor %}
+<div class="btn-group">
+  <a href="#" type="button" class="cd-btn cd-btn-default cd-btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+  <ul class="dropdown-menu pull-right">
+    {% for type, name in questionTypes if questionTypes %}
+      {% if loop.index > 3 %}
+        <li><a href="{{ path('question_bank_manage_question_create', {id:questionBank.id, type:type, goto:app.request.server.get('REQUEST_URI')}) }}"><span class="es-icon es-icon-anonymous-iconfont"></span> {{ name|trans }}</a></li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+</div>

@@ -1,0 +1,13 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}{{'admin.edu_cloud.edu_facein.detail.title'|trans}}{% endblock %}
+
+{% block body %}
+  <img style="width: 480px; margin-left: 40px;" src="{{ filepath(userFace.picture, 'avatar.png') }}">
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
+{% endblock %}

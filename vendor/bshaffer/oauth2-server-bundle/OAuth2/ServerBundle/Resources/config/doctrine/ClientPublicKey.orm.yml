@@ -1,0 +1,19 @@
+OAuth2\ServerBundle\Entity\ClientPublicKey:
+    type: entity
+    table: oauth_client_public_key
+    id:
+        client_id:
+            type:       string
+            length:     50
+    fields:
+        public_key:
+            type:       text
+    oneToOne:
+      client:
+        targetEntity: OAuth2\ServerBundle\Entity\Client
+        joinColumn:
+          name: client_id
+          referencedColumnName: client_id
+          onDelete: CASCADE
+          onUpdate: CASCADE
+    lifecycleCallbacks: {  }

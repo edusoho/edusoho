@@ -1,0 +1,195 @@
+// 即将舍弃背景层
+.class-bg-layer {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  height: 100%;
+  background-color: #fff;
+  .border-radius;
+  .es-box-shadow;
+  z-index: -1;
+  @media (max-width: @screen-xs-max) {
+    top: 2px;
+    left: 2px;
+  }
+}
+  
+// 班级头部
+.class-header {
+  .class-bg-layer {
+    top: 8px;
+  }
+  .class-header-mian {
+    position: relative;
+
+    .class-header-bg {
+      background-color: #fff;
+      .border-radius;
+      .box-shadow(0 1px 3px 0 rgba(0,0,0,0.1));
+    }
+
+    // 右上角管理退出图标
+    .class-setting {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      i {
+        font-size: 18px;
+      }
+      color: @tip-color;
+      .es-transition;
+      &:hover,
+      &:focus {
+        color: @gray-dark;
+      }
+      & + .class-setting  {
+        right: 42px;
+      }
+    }
+    // 右上角提示
+    .class-deadline {
+      position: absolute;
+      width: 100%;
+    }
+
+    .auditor-rule {
+      line-height: 30px;
+    }
+
+    &.class-header-main--new {
+      .class-bg-layer {
+        display: none;
+      }
+    }
+  }
+
+  .class-img {
+    float: left;
+    img {
+      .img-responsive;
+      width: 100%;
+      .border-top-left-radius();
+      @media (min-width: @screen-sm-min) {
+        .border-bottom-left-radius();
+      }
+      @media (max-width: @screen-xs-max) {
+        .border-top-right-radius();
+      }
+    }
+    .class-img__tag {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+    }
+  }
+  .class-info {
+    float: left;
+    .class-info__title {
+      margin-top: 15px;
+      color: @gray-darker;
+      font-size: 16px;
+      i {
+        font-size: 20px;
+      }
+    }
+
+    // 有效期
+    .class-info__label {
+      width: 72px;
+      margin-right: 16px;
+      color: @gray;
+    }
+
+    .class-info__metas {
+      min-height: 40px;
+      margin-bottom: 20px;
+      color: @gray;
+      @media (max-width: @screen-md-max) {
+        min-height: 30px;
+        margin-bottom: 8px;
+      }
+      @media (max-width: @screen-sm-max) {
+        margin-bottom: 10px;
+      }
+      .price {
+        span {
+          font-size: 24px;
+          color: @gray-darker;
+          @media (max-width: @screen-md-max) {
+            font-size: 20px;
+          }
+        }
+      }
+    }
+  }
+
+  .class-serve {
+    position: relative;
+    height: auto;
+    border: none;
+    .serve-label {
+      float: left;
+      width: 72px;
+      color: @gray;
+      font-size: 12px;
+    }
+    // 暂时不知道在哪里使用到了
+    .serve-frame {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 30px;
+      padding: 5px;
+      font-size: 12px;
+      line-height: 15px;
+      text-align: center;
+      background-color: @gray-lighter;
+    }
+    .list-unstyled {
+      padding: 0;
+    }
+    > ul {
+      padding: 25px 10px 25px 40px;
+    }
+  }
+
+  .class-data {
+    margin-bottom: 0;
+    padding: 11px 0;
+    list-style-type: none;
+    background-color: @bg-color;
+    > li {
+      float: left;
+      margin: 10px 0;
+      color: @gray;
+      text-align: center;
+      line-height: 30px;
+      border-left: 1px solid @gray-lighter;
+      @media (max-width: @screen-md-max) {
+        padding: 8px 0;
+        line-height: 25px;
+      }
+      @media (max-width: @screen-md-max) {
+        padding: 5px 0;
+        line-height: 20px;
+      }
+      &:first-child {
+        border: none;
+      }
+      p {
+        margin-bottom: 0;
+      }
+      i {
+        font-size: 26px;
+      }
+      .dropdown-toggle {
+        color:@gray;
+        &:hover {
+          color: @brand-primary;
+        } 
+      }
+    }
+  }
+}

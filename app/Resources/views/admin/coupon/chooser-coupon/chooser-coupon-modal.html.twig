@@ -1,0 +1,81 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+{% import "admin/macro.html.twig" as web_macro %}
+{% set modal_class = 'modal-lg' %}
+{% block title %}{{ 'admin.setting.invite.chooser_coupon'|trans }}{% endblock %}
+{% block body %}
+  <a  href="{{ path('admin_coupon') }}" class="btn btn-default" target="_blank">{{ 'admin.setting.invite.chooser_coupon.manage_btn'|trans }}</a>
+  <a id="refresh" href="javascript:;" class="mlm" style="color: #333">{{ 'admin.setting.invite.chooser_coupon.refresh_btn'|trans }}</a>
+  <form id="coupon-search-form" class="form-inline pull-right" action="{{ path('admin_coupon_chooser',{'type':type}) }}" method="get" novalidate>
+    <div class="form-group">
+        <input class="form-control" type="text" placeholder="{{ 'coupon.name'|trans }}" name="nameLike" value="{{ app.request.get('nameLike') }}">
+      </div>
+      <button type="submit" class="btn btn-primary">{{ 'form.btn.search'|trans }}</button>
+  </form>
+
+  <table class="table table-striped" id="coupon-list">
+    <thead>
+    <tr>
+      <th width="15%">{{ 'coupon.name'|trans }}</th>
+      <th width="12%">{{ 'coupon.batch.prefix'|trans }}</th>
+      <th width="13%">{{ 'coupon.content'|trans }}</th>
+      <th>{{ 'coupon.status.used'|trans }}/{{ 'coupon.status.receive'|trans }}/{{ 'coupon.total_count'|trans }}</th>
+      <th>{{ 'coupon.expiry_date'|trans }}</th>
+      <th>{{ 'coupon.operation'|trans }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for batch in batchs %}
+      {% if batch.type=='discount' %}
+        {% set content =  'coupon.type.discount_tip'|trans({'%rate%': batch.rate|number_format(2)}) %}
+      {% elseif batch.type=='minus' %}
+        {% set content =  'coupon.type.minus_tip'|trans({'%rate%': batch.rate}) %}
+      {% endif %}
+
+      <tr>
+        <td>
+          {{  batch.name }}
+        </td>
+        <td>
+          {{ batch.prefix }}
+        </td>
+        <td class="text-danger">
+            <span>{{ content }}</span>
+          <br>
+          {% if batch.couponContent == 'multi' %}
+            <a href="javascript:;" class="js-resource-list" data-url="{{ path('admin_coupon_chooser_resource_list',{'batchId': batch.id}) }}">
+            {% if batch.targetType == 'course' %}
+              {% set couponContent =  'coupon.target_type.multi_course'|trans%}
+            {% elseif batch.targetType == 'classroom' %}
+              {% set couponContent =  'coupon.target_type.multi_classroom'|trans%}
+            {% endif %}
+            {{ couponContent }}>></a>
+          {% else %}
+            {% set couponContent =  batch.couponContent %}
+            <span class="text-muted text-sm">{{ couponContent }}</span>
+          {% endif %}
+        </td>
+        <td>{{ batch.usedNum }}/{{ batch.generatedNum-batch.unreceivedNum }}/{{ batch.generatedNum }}</td>
+        <td>
+          {{ (batch.createdTime )|date('Y-n-d') }}
+          {% if batch.deadlineMode == 'time' %}
+            ~<br />{{ (batch.deadline )|date('Y-n-d') }}
+          {% else %}
+            {{ 'coupon.deadline_mode.day.help_block'|trans({'%day%': batch.fixedDay})|raw }}
+          {% endif %}
+        </td>
+        <td>
+          <a class="btn btn-primary mtm js-chooser" data-name="{{ batch.name }}" data-batch-id="{{ batch.id }}" data-coupon-content="{{ couponContent }}" data-unreceived-num="{{ batch.unreceivedNum }}" data-content="{{ content }}" data-type="{{ type|default('promoted') }}">{{ 'admin.setting.invite.chooser_btn'|trans }}</a>
+        </td>
+      </tr>
+    {% else %}
+      <tr class="empty"><td colspan="20">{{ 'coupon.no_coupon_tip'|trans }}</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {{ web_macro.paginator(paginator) }}
+
+{% endblock %}
+{% block footer %}
+  <button type="button" class="btn btn-default pull-right" data-dismiss="modal">{{ 'form.btn.close'|trans }}</button>
+  <script>app.load('coupon/chooser');</script>
+{% endblock %} 

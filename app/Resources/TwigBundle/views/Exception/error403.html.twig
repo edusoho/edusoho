@@ -1,0 +1,27 @@
+{% extends 'TwigBundle:Exception:layout.html.twig' %}
+{% block title %}访问被拒绝 - {{ parent() }}{% endblock %}
+
+{% block body %}
+  {% set code =  exception.code|default(0) %}
+  <div class="container">
+    <div class="panel panel-default error-panel">
+      <div class="panel-heading">
+        <span class="error-title">403</span>访问被拒绝
+      </div>
+      <div class="panel-body">
+        <div class="well">
+          <p>
+            {% if code > 0 %}
+              {{ exception.message|trans|default('你没有权限访问该页面！') }} {{ code }}
+            {% else %}
+              你没有权限访问该页面！
+            {% endif %}
+          </p>
+          <p>请确认您的来源链接是否正确？是否拥有该权限？</p>
+          <p><a href="{{ path('homepage', {ref:403}) }}">返回首页 ></a></p>
+          <span class="error-403-icon hidden-xs"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends 'layout.html.twig' %}
+{% block content %}
+<div class="panel panel-default panel-col" style="font-size:18px;padding: 20px 110px 100px 150px; min-height: 515px;">
+  <div style="text-align:center;font-size:30px;">{{ 'testpaper.course.rule'|trans }}</div>
+  <div class="panel-body">
+    {{ 'testpaper.course.rule.tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})|raw }}
+  </div>
+</div>
+{% endblock %}

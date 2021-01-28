@@ -1,0 +1,30 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% block title %}
+  {{ 'user.settings.avatar.crop'|trans }}
+{% endblock %}
+
+{% set modal_class = 'cd-modal-dialog' %}
+
+{% do script(['app/js/settings/profile-avatar-crop-modal/index.js']) %}
+
+{% block body %}
+  <img class="img-full" src="" id="avatar-crop"/>
+  <div class="text-center cd-dark-major cd-mt16 cd-mb16">
+    {{'user.settings.avatar.crop_hint'|trans}}
+  </div>
+{% endblock %}
+
+{% block footer %}
+  <div class="text-center">
+    <button type="button" class="btn cd-btn cd-btn-ghost-default cd-btn-lg" id="select-btn">
+      {{'user.settings.profile.choose_again'|trans}}
+    </button>
+
+    <button type="button" class="btn cd-btn cd-btn-primary cd-btn-lg" id="save-btn" 
+      dat-url="{{ path('settings_profile_avatar_crop_modal')}}"  
+      data-loading-text="{{ 'form.btn.submit.submiting'|trans }}">
+      {{'user.settings.profile.save_avatar'|trans}}
+    </button>
+  </div>
+{% endblock %}

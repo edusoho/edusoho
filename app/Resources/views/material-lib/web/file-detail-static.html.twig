@@ -1,0 +1,25 @@
+<form class="form-horizontal" id="info-form">
+  <div class="form-group">
+    <label for="name" class="col-md-2 control-label">{{'material_lib.detail.title'|trans}}</label>
+    <div class="col-md-6" style="padding:6px;">
+      {{ material.filename }}
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="tags" class="col-md-2 control-label">{{'material_lib.detail.tag'|trans}}</label>
+    <div class="col-md-6 controls" style="padding:7px;">
+        {{ material.tags|default('site.default.none'|trans)|join('  ') }}
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-md-2 control-label">{{'material_lib.detail.description'|trans}}</label>
+    <div class="col-md-6 controls" style="padding:6px;">
+      {{ material.description|default('site.default.none'|trans) }}
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-md-offset-2 col-md-6">
+      <a class="btn btn-primary js-back">{{'material_lib.btn.back'|trans}}</a>
+    </div>
+  </div>
+</form>

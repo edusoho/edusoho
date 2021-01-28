@@ -1,0 +1,15 @@
+imports:
+    - { resource: merge_import.yml }
+
+security:
+    providers:
+        default: { id: foo }
+
+    firewalls:
+        main:
+            form_login: false
+            http_basic: ~
+            logout_on_user_change: true
+
+    role_hierarchy:
+        FOO: [MOO]

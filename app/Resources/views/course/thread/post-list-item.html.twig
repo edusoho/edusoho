@@ -1,0 +1,33 @@
+{% import "macro.html.twig" as web_macro %}
+<li id="post-{{ post.id }}" name="post-{{ post.id }}" class="thread-post media clearfix">
+  {{ web_macro.user_avatar(author, 'pull-left media-object') }}
+
+  {% if isManager or app.user.id == author.id %}
+  <div class="thread-post-dropdown">
+    <a href="javascript:" class="dropdown-toggle color-gray" data-toggle="dropdown"><i class="glyphicon glyphicon-collapse-down"></i></a>
+    <ul class="dropdown-menu pull-right">
+      <li><a href="{{ path('course_thread_post_edit', {courseId:course.id,threadId:thread.id, postId:post.id}) }}"><i class="glyphicon glyphicon-edit"></i> {{'thread.edit_btn'|trans}}</a></li>
+      {% if isManager %}
+        <li><a href="javascript:" data-action="post-delete" data-url="{{ path('course_thread_post_delete', {courseId:course.id,threadId:thread.id, postId:post.id}) }}" data-for="#post-{{ post.id }}"><i class="glyphicon glyphicon-remove"></i> {{'thread.delete_btn'|trans}}</a></li>
+      {% endif %}
+    </ul>
+  </div>
+  {% endif %}
+
+  <div class="thread-post-body media-body" style="word-break:break-all;">
+    <div class="media-heading">
+      {% if not author.destroyed|default(0) %}
+        <a href="javascript:">{{ author.nickname }}</a>
+      {% else %}
+        {{ 'user.user_had_destroyed'|trans }}
+      {% endif %}
+      <span class="bullet">•</span>
+      <span class="color-gray">{{ post.createdTime|smart_time }}</span>
+    </div>
+    <div class="editor-text">{{ post.content|cdn|raw }}</div>
+    {% include 'attachment/widget/list.html.twig' with {targetType:'course.thread.post', targetId:post.id|default(0)} %}
+    {% if app.user.id != author.id and thread.type != 'question' %}
+    <div class="thread-post-action" data-user="{% if not author.destroyed|default(0) %}{{ author.nickname }}{% else %}{{ 'user.user_had_destroyed'|trans }}{% endif %}"><a class="js-call-username" href="#thread-post-form" >{{'thread.reply'|trans}}</a></div>
+    {% endif %}
+  </div>
+</li>

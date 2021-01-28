@@ -1,0 +1,207 @@
+// 待删
+.order-detail-bg {
+  margin-bottom: 20px;
+  border: 1px solid @gray-lighter;
+  &.checkout {
+    .order-info {
+      padding-top: 30px;
+      width: 70%;
+      @media (max-width: @screen-xs-max) {
+        width: 100%;
+        padding: 15px;
+      }
+      >p {
+        margin-bottom: 15px;
+        font-size: 14px;
+      }
+      .pay-rmb {
+        font-size: 18px;
+      }
+    }
+  }
+  // 订单头部
+  .order-detail {
+    position: relative;
+    height: 150px;
+    width: auto;
+    background-color: @bg-color;
+    @media(max-width:@screen-xs-max) {
+      height: auto;
+    }
+  }
+  .order-img  {
+    float: left;
+    width: 30%;
+    img {
+      height: 150px;
+    }
+  }
+  .order-info {
+    float: left;
+    width: 50%;
+    padding: 60px 0 0 50px;
+    font-size: 18px;
+    color: @gray-dark;
+    @media (max-width: @screen-xs-max) {
+      float: none;
+      width: 100%;
+      padding: 15px 15px 0 15px;
+    }
+  }
+  .order-price {
+    float: right;
+    font-size: 24px;
+    width: 20%;
+    text-align: right;
+    padding: 60px 30px 0 0;
+    @media (max-width: @screen-xs-max) {
+      float: none;
+      width: 100%;
+      padding: 0 0 10px 15px;
+      text-align: left;
+    }
+  }
+}
+
+// 购买过的课程
+.order-detail-item {
+  line-height: 30px;
+  padding: 15px 20px;
+}
+.paid-courses .course-item {
+  padding: 5px;
+  &:nth-child(odd) {
+    background-color: @bg-color;
+  }
+  .course-img {
+    float: left;
+    img {
+      width: 112px;
+      height: auto;
+    }
+  }
+  .course-title {
+    float: left;
+    padding: 10px 20px;
+    margin: 0;
+    // h4 {
+    //   font-size: 16px;
+    // }
+  }
+  .course-info {
+    padding: 16px 20px;
+    float: right;
+  }
+  .more {
+    position: relative;
+    &:hover {
+      cursor: pointer;
+      .more-info {
+        display: block;
+      }
+    }
+    .more-info {
+      position: absolute;
+      display: none;
+      z-index: 1;
+      top: 100%;
+      right: 0;
+      background-color: #fef7ed;
+      border: 1px solid #ffd183;
+      padding: 5px 10px;
+      white-space: nowrap;
+      .border-radius;
+    }
+  }
+}
+
+// 优惠券和虚拟币
+.order-item {
+  border-bottom: 0;
+  padding: 50px 30px 50px 40px;
+  line-height: 33px;
+  @media (max-width: @screen-sm-max) {
+    padding: 15px;
+  }
+  .order-item-title {
+    float: left;
+    width: 36%;
+    color: @gray;
+    @media (max-width: @screen-xs-max) {
+      width: 100% !important;
+    }
+    .title {
+      font-size: 18px;
+      color: @gray-darker;
+      margin: 0 15px;
+      @media (max-width: @screen-md-max) {
+        margin: 0;
+      }
+    }
+    .es-icon {
+      font-size: 22px;
+      color: @gray-darker;
+    }
+  }
+  .order-item-detail {
+    float: left;
+    width: 45%;
+    @media (max-width: @screen-xs-max) {
+      width: 100%;
+    }
+    .help-block {
+      display: none;
+      .text-danger {
+        display: inline-block;
+        color: #d85030;
+        width: 130px;
+        margin-top: 10px;
+        padding: 0 15px;
+        line-height: 20px;
+        font-size: 12px;
+        background-color: #fff1f0;
+        border: 1px solid #f0c7bd;
+      }
+    }
+  }
+  .order-item-price {
+    float: right;
+    width: 19%;
+    font-size: 14px;
+    text-align: right;
+    color: @gray-dark;
+    @media (max-width: @screen-xs-max) {
+      width: 100% !important;
+      text-align: left;
+    }
+  }
+  .form-control {
+    background-color: #fafafa;
+    border: 1px solid #f5f5f5;
+  }
+}
+
+// 总价和价格
+.order-pay {
+  .total-price {
+    text-align: right;
+    margin-bottom: 20px;
+    font-size: 16px;
+    @media (max-width: @screen-xs-max) {
+      margin-bottom: 15px;
+    }
+  }
+  .pay-rmb {
+    color: @brand-danger;
+    font-size: 24px;   
+  }
+}
+
+.order-center-coupon {
+  @media (max-width: @screen-xs-min) {
+    .popover-content {
+      padding: 0 4px;
+    }
+  }
+}
+

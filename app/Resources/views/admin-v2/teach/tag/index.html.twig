@@ -1,0 +1,41 @@
+{% extends 'admin-v2/layout.html.twig' %}
+{% set menu = 'admin_v2_tag' %}
+{% set script_controller = 'tag/list' %}
+{% block page_buttons %}
+<div class="pull-right">
+    <a class="btn btn-success btn-sm" data-url="{{path('admin_v2_tag_create')}}" data-toggle="modal" data-target="#modal">{{'admin_v2.tag_manage.tag.create.modal_title'|trans}}</a>
+</div>
+{% endblock %}
+{% block main %}
+
+<div class="btn-group mbm">
+	<a href=" {{ path('admin_v2_tag') }}" type="button" class="btn btn-default btn-sm btn-primary">{{'admin_v2.course.tag'|trans}}</a>
+	<a href=" {{ path('admin_v2_tag_group') }}" type="button" class="btn btn-default btn-sm">{{'admin_v2.course.tag.group'|trans}}</a>
+</div>
+<table id="tag-table" class="table table-striped">
+    <thead>
+        <th width="10%">{{ 'admin.tag_manage.tag.id_th'|trans }}</th>
+        <th width="30%">{{ 'admin.tag_manage.tag.name_th'|trans }}</th>
+        <th width="30%">{{ 'admin.tag_manage.tag.group_th'|trans }}</th>
+        <th width="20%">{{ 'admin.tag_manage.tag.create_time_th'|trans }}</th>
+        <th width="10%">{{ 'admin.tag_manage.tag.operate_th'|trans }}</th>
+    </thead>
+    
+    <tbody>
+      {% if tags %}
+        {% for tag in tags %}
+          {% include 'admin-v2/teach/tag/list-tr.html.twig' %}
+        {% endfor %}
+      {% else %}
+       <tr><td colspan="20"><div class="empty">{{ 'admin.tag_manage.tag.empty'|trans }}</div></td></tr>
+      {% endif %}
+    </tbody>
+</table>
+
+{{ admin_macro.paginator(paginator) }}
+<div class="alert alert-info">
+  <p>{{ 'admin.tag_manage.tag.footer_one_tips'|trans }}</p>
+  <p>{{ 'admin.tag_manage.tag.footer_two_tips'|trans({'%courseSet%': path('admin_v2_course_set')})|raw }}</p>
+</div>
+
+{% endblock %}

@@ -1,0 +1,96 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'modal-lg' %}
+{% set lesson = lesson|default(null) %}
+
+{% block title %}
+  {% if lesson %}{{'my.teaching.open_course.lesson.modal.edit'|trans}}{{ lesson.number }}{% else %}{{'my.teaching.open_course.lesson.modal.add'|trans}}{% endif %}
+{% endblock %}
+
+{% do script([cloud_sdk_url('uploader'), 'libs/jquery-validation.js', 'libs/select2.js', 'app/js/open-course-manage/lesson-modal/index.js']) %}
+
+{% block body %}
+  <form class="form-horizontal" id="lesson-create-form"
+    {% if lesson %}
+      action = "{{ path('open_course_manage_lesson_edit', {courseId: course.id, lessonId: lesson.id}) }}"
+    {% else %}
+      action = "{{ path('open_course_manage_lesson_create', {id: course.id}) }}"
+    {% endif %}
+    >
+  
+    <div class="form-group" style="display:none;">
+      <div class="col-md-2 control-label"><label>{{'my.teaching.open_course.lesson.modal.lesson_type'|trans}}</label></div>
+      <div class="col-md-9 controls">
+        <div class="radios">
+          <label><input type="radio" name="type" value="video" checked="checked" /> {{'my.teaching.open_course.lesson.video'|trans}}</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-2 control-label">
+      <label for="title" class="control-label-required">{{ 'my.teaching.open_course.lesson.modal.lesson_title'|trans }}</label>
+      </div>
+      <div class="col-sm-10">
+        <input id="title" class="form-control" type="text" name="title" value="{{ lesson.title|default('') }}">
+        <div class="help-block">{{ 'course.plan_task.activity_manage.help_block'|trans }}</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-2 control-label">
+        <label for="mediaSource" class="style control-label-required">{{ 'my.teaching.open_course.lesson.video'|trans }}</label>
+      </div>
+      <div class="col-sm-10">
+        {% include 'file-chooser/file-choose.html.twig' with {mediaType: 'video', fileType:'video', file: file|default(null), link: lesson.mediaSource|default(null), courseType:'openCourse' } %}
+        <input type="hidden" id="mediaSource" name="mediaSource"
+              value="{{ lesson.mediaSource|default(null) }}">
+      </div>
+    </div>
+
+    <div class="form-group for-video-type" id="lesson-length-form-group">
+      <div class="col-sm-2 control-label for-video-type">
+        <label class="control-label-required">{{ 'my.teaching.open_course.lesson.modal.video_length'|trans }}</label>
+      </div>
+      <div class="col-sm-10">
+        <input class="form-control width-150 js-length" id="minute" type="text" name="minute"
+              value="{{ lesson.minute|default(null) }}">
+        <span class="mhs">{{ 'site.default.minute'|trans }}</span>
+        <input
+            class="form-control width-150 js-length" id="second" type="text" name="second"
+            value="{{ lesson.second|default(null) }}">
+        <span class="mhs">{{ 'site.default.second'|trans }}</span>
+        <input type="hidden" id="mediaId" name="mediaId" value="{{ lesson.mediaId|default(null) }}">
+        <input type="hidden" id="mediaUri" name="mediaUri" value="{{ lesson.mediaUri|default(null) }}">
+        <input type="hidden" id="mediaName" name="mediaName" value="{{ lesson.mediaName|default(null) }}">
+        <input type="hidden" id="length" name="length" value="{{ lesson.length|default(0) }}">
+      </div>
+    </div>
+
+    {% if setting('storage.upload_mode', 'local') == 'cloud' and lesson.mediaSource|default('self') == 'self' %}
+      <div class="form-group for-video-subtitle" id="video-subtitle-form-group">
+        <div class="col-sm-2 control-label for-video-subtitle">
+          <label class="control-label">{{ 'my.teaching.open_course.lesson.modal.media_dialog'|trans }}</label>
+        </div>
+
+        <div class="col-sm-10 controls js-subtitle-list" data-dialog-url="{{ path('media_subtitle_manage_dialog') }}">
+          <p style="margin-top:6px;color:#a1a1a1">{{ 'my.teaching.open_course.lesson.modal.upload.tips'|trans }}</p>
+        </div>
+        <div class="col-sm-offset-2 help-block">
+          <p style="margin-left:10px;">{{ 'my.teaching.open_course.lesson.modal.media_dialog.help_block'|trans|raw }}</p>
+        </div>
+
+        <input id="ext_mediaId_for_subtitle" class="form-control" type="hidden" value={{ lesson.mediaId|default(null) }}>
+      </div>
+    {% endif %}
+    
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+{% endblock %}
+
+{% block footer %}
+<button type="button" class="btn btn-link" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
+<button id="form-submit" type="button" class="btn btn-primary" data-loading-text="{{ 'form.btn.submit.submiting'|trans }}">
+  {% if lesson %}{{'form.btn.save'|trans}}{% else %}{{'form.field.create'|trans}}{% endif %}
+</button>
+{% endblock %}

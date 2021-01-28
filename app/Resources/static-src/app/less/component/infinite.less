@@ -1,0 +1,44 @@
+// waypoints 插件
+.infinite-loading {
+  &:after {
+    animation: circle 1s infinite linear;
+    -webkit-animation: circle 1s infinite linear;
+    font-family: 'es-icon';
+    content: "\e688";
+    display: block;
+    color: @gray;
+    font-size: 20px;
+    padding: 0 10px;
+    text-align: center;
+  }
+}
+
+@keyframes circle {
+  0% {
+    -webkit-transform-origin: center;
+    transform-origin: center;
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform-origin: center;
+    transform-origin: center;
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes circle {
+  0% {
+    -webkit-transform-origin: center;
+    transform-origin: center;
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform-origin: center;
+    transform-origin: center;
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}

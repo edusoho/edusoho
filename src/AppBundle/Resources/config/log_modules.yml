@@ -1,0 +1,430 @@
+course:
+    create:
+        templateParam:
+            %url%:
+                type: url
+                path: course_set_show
+                param:
+                    id: id
+    update:
+        templateParam:
+            %url%:
+                type: url
+                path: course_set_show
+                param:
+                    id: id
+        modalField: all
+    update_picture:
+        templateParam:
+            %url%:
+                type: url
+                path: course_set_show
+                param:
+                    id: id
+    create_course:
+        templateParam:
+            %url%:
+                type: url
+                path: course_show
+                param:
+                    id: id
+    update_course:
+        templateParam:
+            %url%:
+                type: url
+                path: course_show
+                param:
+                    id: id
+        modalField:
+            ["title", "subtitle", "originPrice", "buyExpiryTime", "expiryMode", "expiryDays", "expiryStartDate", "expiryEndDate", "enableFinish", "enableAudio", "buyable", "tryLookable", "tryLookLength", "serializeMode"]
+    publish_course:
+        templateParam:
+            %url%:
+                type: url
+                path: course_show
+                param:
+                    id: id
+    close_course:
+        templateParam:
+            %url%:
+                type: url
+                path: course_show
+                param:
+                    id: id
+    lesson_set_optional:
+        templateParam:
+            %url%:
+                type: url
+                path: course_show
+                param:
+                    id: courseId
+    lesson_unset_optional:
+        templateParam:
+            %url%:
+                type: url
+                path: course_show
+                param:
+                    id: courseId
+    publish_lesson:
+        templateParam:
+            %url%:
+                 type: url
+                 path: course_show
+                 param:
+                     id: courseId
+    unpublish_lesson:
+        templateParam:
+            %url%:
+                 type: url
+                 path: course_show
+                 param:
+                     id: courseId
+    update_thread:
+        modalField: all
+    add_student:
+        templateParam:
+            %url%:
+                type: url
+                path: course_show
+                param:
+                    id: courseId
+            %nickname%: nickname
+            %remark%: remark
+    remove_student:
+        templateParam:
+            %url%:
+                type: url
+                path: course_show
+                param:
+                    id: courseId
+            %nickname%: nickname
+    join_course:
+        templateParam:
+            %url%:
+                type: url
+                path: course_show
+                param:
+                    id: courseId
+    publish:
+        templateParam:
+            %url%:
+                type: url
+                path: course_set_show
+                param:
+                    id: id
+    close:
+        templateParam:
+            %url%:
+                type: url
+                path: course_set_show
+                param:
+                    id: id
+    create_lesson:
+        templateParam:
+            %url%:
+                type: url
+                path: course_show
+                param:
+                    id: 0.courseId
+            %title%: 0.title
+    add_task:
+        templateParam:
+            %url%:
+                type: url
+                path: course_show
+                param:
+                    id: courseId
+    update_task_optional:
+        templateParam:
+            %url%:
+                type: url
+                path: course_show
+                param:
+                    id: courseId
+    update_teacher:
+        templateParam:
+            %url%:
+                type: url
+                path: course_show
+                param:
+                    id: id
+classroom:
+    create:
+        templateParam:
+            %url%:
+                type: url
+                path: classroom_show
+                param:
+                    id: id
+    update:
+        templateParam:
+            %url%:
+                type: url
+                path: classroom_show
+                param:
+                    id: id
+        modalField: all
+    add_student:
+        templateParam:
+            %url%:
+                type: url
+                path: classroom_show
+                param:
+                    id: classroomId
+            %nickname%: nickname
+            %remark%: remark
+    remove_student:
+        templateParam:
+            %url%:
+                type: url
+                path: classroom_show
+                param:
+                    id: classroomId
+            %nickname%: nickname
+    join_classroom:
+        templateParam:
+            %url%:
+                type: url
+                path: classroom_show
+                param:
+                    id: classroomId
+    add_course:
+        templateParam:
+            %url%:
+                type: url
+                path: classroom_show
+                param:
+                    id: classroomId
+            %courseSetTitle%: courseSetTitle
+    delete_course:
+        templateParam:
+            %url%:
+                type: url
+                path: classroom_show
+                param:
+                    id: classroomId
+            %courseSetTitle%: courseSetTitle
+    recommend:
+        templateParam:
+            %url%:
+                type: url
+                path: classroom_show
+                param:
+                    id: id
+    cancel_recommend:
+        templateParam:
+            %url%:
+                type: url
+                path: classroom_show
+                param:
+                    id: id
+    publish:
+        templateParam:
+            %url%:
+                type: url
+                path: classroom_show
+                param:
+                    id: id
+    close:
+        templateParam:
+            %url%:
+                type: url
+                path: classroom_show
+                param:
+                    id: id
+article:
+    create:
+        templateParam:
+            %url%:
+                type: url
+                path: article_detail
+                param:
+                    id: id
+    update:
+        templateParam:
+            %url%:
+                type: url
+                path: article_detail
+                param:
+                    id: id
+    update_property:
+        templateParam:
+            %url%:
+                type: url
+                path: article_detail
+                param:
+                    id: id
+    cancel_property:
+        templateParam:
+            %url%:
+                type: url
+                path: article_detail
+                param:
+                    id: id
+open_course:
+    create_course:
+        templateParam:
+            %url%:
+                type: url
+                path: open_course_show
+                param:
+                    courseId: id
+    update_course:
+        templateParam:
+            %url%:
+                type: url
+                path: open_course_show
+                param:
+                    courseId: id
+        modalField: all
+    add_lesson:
+        templateParam:
+            %url%:
+                type: url
+                path: open_course_show
+                param:
+                    courseId: courseId
+group:
+    create_thread:
+        templateParam:
+            %url%:
+                type: url
+                path: group_thread_show
+                param:
+                    id: groupId
+                    threadId: id
+thread:
+    update:
+        modalField: all
+user:
+    verifiedMobile-changed:
+        modalField: all
+    email-changed:
+        modalField: all
+    update:
+        modalField:
+            0: title
+            1: truename
+            2: gender
+            3: qq
+            4: signature
+            5: about
+            6: company
+            7: job
+            8: weibo
+            9: weixin
+            10: site
+    nickname_change:
+        modalField: all
+    change_role:
+        modalField: all
+system:
+    update_settings.site:
+        modalField: all
+    update_settings.theme:
+        modalField: all
+    update_settings.cloud_email_crm:
+        modalField: all
+    update_settings.mailer:
+        modalField:
+            ["use_cloud_email_crm", "enabled", "send_email", "host", "port", "username", "password", "from", "name"]
+    update_settings.esBar:
+        modalField: all
+    update_settings.default:
+        modalField: all
+    update_settings.security:
+        modalField: all
+    update_settings.login_bind:
+        modalField: all
+    update_settings.user_partner:
+        modalField: all
+    update_settings.auth:
+        modalField: all
+    update_settings.course:
+        modalField: all
+    update_settings.message:
+        modalField: all
+    update_settings.course_default:
+        modalField: all
+    update_settings.questions:
+        modalField: all
+    update_settings.classroom:
+        modalField: all
+    update_settings.article:
+        modalField: all
+    update_settings.group:
+        modalField: all
+    update_settings.invite:
+        modalField: all
+    update_settings.payment:
+        modalField: all
+    update_settings.coin:
+        modalField: all
+    update_settings.refund:
+        modalField: all
+    update_settings.blacklist_ip:
+        modalField: all
+    update_settings.post_num_rules:
+        modalField: all
+    update_settings.cloud_consult:
+        modalField:
+            ["cloud_consult_setting_enabled", "cloud_consult_expired_time"]
+    update_settings.storage:
+        modalField:
+            ["upload_mode","support_mobile","video_quality","video_audio_quality","video_audio_quality","enable_playback_rates","video_auto_play","video_header","video_watermark","video_embed_watermark_image","video_fingerprint","video_fingerprint_time","enable_hls_encryption_plus",]
+    update_settings.live-course:
+        modalField: all
+    update_settings.cloud_sms:
+        modalField: all
+    update_settings.cloud_search:
+        modalField: all
+    update_settings.app_im:
+        modalField: all
+    update_settings.cloud_attachment:
+        modalField: all
+    update_settings.xapi:
+        modalField: all
+    update_settings.wap:
+        modalField: all
+    update_settings.developer:
+        modalField: all
+    update_settings.mobile:
+        modalField:
+            ["enabled", "about", "logo"]
+    update_settings.meCount:
+        notDisplay: 1
+    update_settings.magic:
+        notDisplay: 1
+order:
+    adjust_price:
+        modalField:
+            ["pay_amount"]
+live:
+    generate_live_replay:
+        templateParam:
+            %title%: 0.subject
+mobile:
+    regist_device:
+        notDisplay: 1
+
+push:
+    course_thread_create:
+        modalField: all
+    course_thread_post_create:
+        modalField: all
+
+
+destroy_account_record:
+    create:
+        modalField:
+          ["nickname", "reason"]
+    pass:
+        templateParam:
+          %nickname%: nickname
+        modalField:
+          ["destroyedAccountId", "nickname", "reason", "auditUserNickname"]
+    reject:
+        templateParam:
+          %nickname%: nickname
+        modalField:
+          ["nickname", "reason", "auditUserNickname", "rejectedReason"]

@@ -1,0 +1,68 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_operation_invite_record' %}
+{% set script_controller = 'invite/record' %}
+
+{% block main %}
+    <form id="invite-record" class="form-inline well well-sm" action="{{path('admin_invite_record')}}" method="get" novalidate>
+        <input id="nickname" class="form-control" type="text" name="nickname" placeholder="{{'admin.operation_invite.nickname.placeholer'|trans}}" value="{{ app.request.query.get('nickname')}}">
+        <div class="form-group ">
+            <input class="form-control" type="text" id="startDate" name="startDate"
+                   value="{{ app.request.query.get('startDate') }}" placeholder="{{ 'admin.user.form.input_placeholder.startDate'|trans }}">
+            -
+            <input class="form-control" type="text" id="endDate" name="endDate"
+                   value="{{ app.request.query.get('endDate') }}" placeholder="{{ 'admin.user.form.input_placeholder.endDate'|trans }}">
+        </div>
+        <button class="btn btn-primary" type="submit">{{'form.btn.search'|trans}}</button>
+        {% include 'export/export-btn.html.twig' with
+        {
+            'exportFileName' : 'invite-records',
+            'targetFormId' : 'invite-record',
+        } %}
+    </form>
+
+    <table class="table table-hover table-striped" >
+        <thead>
+        <tr>
+            <th width="10%">{{'admin.operation_invite.invite_code_owner'|trans}}</th>
+            <th width="10%">{{'admin.operation_invite.register_user'|trans}}</th>
+            <th width="15%">{{ 'admin.operation_invite.payingUserTotalPrice_th'|trans }}</th>
+            <th width="15%">{{ 'admin.operation_invite.coinAmountPrice_th'|trans }}</th>
+            <th width="15%">{{ 'admin.operation_invite.amountPrice_th'|trans }}</th>
+            <th width="10%">{{ 'user.register.invite_code_label'|trans }}</th>
+            <th width="15%">{{'user.account.my_invite_code.invite_time'|trans}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if records|default() %}
+            {% for record in records|default() %}
+                {% set inviteUser = users[record.inviteUserId] %}
+                {% set invitedUser = users[record.invitedUserId] %}
+               <tr>
+                   <td>{{ inviteUser.nickname }}</td>
+                   <td>{{ invitedUser.nickname }}</td>
+                   <td>{{ record.amount }}</td>
+                   <td>{{ record.coinAmount }}</td>
+                   <td>{{ record.cashAmount }}</td>
+                   <td>{{ inviteUser.inviteCode|default('-') }}</td>
+                   <td width="10%">{{ record.inviteTime|date('Y-m-d H:i:s') }}</td>
+               </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="20">
+                    <div class="empty">
+                        {% if error|default() %}
+                            {{ error|default() }}
+                        {% else %}
+                            {{'site.datagrid.empty'|trans}}
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
+
+    {{ admin_macro.paginator(paginator|default()) }}
+{% endblock %}

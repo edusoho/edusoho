@@ -1,0 +1,44 @@
+{
+  "api": [
+    {
+      "name": "getCourse",
+      "path": "/api/course_sets/:id",
+      "method": "GET"
+    },
+    {
+      "name": "getAnnouncements",
+      "method": "GET",
+      "path": "/api/announcements"
+    },
+    {
+      "name": "getCourseDraft",
+      "method": "GET",
+      "path": "/api/course_draft/:id"
+    },
+    {
+      "name": "saveCourseDraft",
+      "method": "POST",
+      "path": "/api/course_draft"
+    },
+    {
+      "name": "getActivity",
+      "method": "GET",
+      "path": "/api/activities/:id"
+    },
+    {
+      "name": "getActivityResource",
+      "method": "GET",
+      "path": "/api/activity_resource/:id"
+    },
+    {
+      "name": "saveActivityResource",
+      "method": "POST",
+      "path": "/api/activity_resource"
+    },
+    {
+      "name": "updateActivityResource",
+      "method": "PATCH",
+      "path": "/api/activity_resource/:id"
+    }
+  ]
+}

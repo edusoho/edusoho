@@ -1,0 +1,30 @@
+
+<tr id="keyword-table-tr-{{ keyword.id }}">
+  <td>{{ keyword.id }}</td>
+  <td>{{ keyword.name }}</td>
+  <td>
+    {% if keyword.state == "banned" %}{{'admin.sensitive_manage.banned'|trans}}
+    {% elseif  keyword.state == "replaced" %}{{'admin.sensitive_manage.replaced'|trans}}
+    {% endif %}
+  </td>
+  <td>{{ keyword.bannedNum }}</td>
+  <td>{{ keyword.createdTime|date('Y-n-d H:i:s') }}</td>
+  <td>
+    <div class="btn-group">
+      <a href="javascript:;" data-url="{{ path('admin_keyword_delete', {id:keyword.id}) }}" class="delete-btn btn btn-default btn-sm">{{'admin.sensitive_manage.delete_btn'|trans}}</a>
+      <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu">
+        {% if keyword.state == "banned" %}
+          <li><a href="javascript:;" class="replaced-btn" data-url="{{ path('admin_keyword_change', {id:keyword.id,state:keyword.state}) }}">{{'admin.sensitive_manage.change_banned'|trans}}</a></li>
+        {% elseif keyword.state == "replaced" %}
+          <li><a href="javascript:;" class="banned-btn" data-url="{{ path('admin_keyword_change', {id:keyword.id,state:keyword.state}) }}">{{'admin.sensitive_manage.change_disabled'|trans}}</a></li>
+        {% else %}
+          <li><a href="javascript:;" class="replaced-btn" data-url="{{ path('admin_keyword_change', {id:keyword.id,state:keyword.state}) }}">{{'admin.sensitive_manage.change_banned'|trans}}</a></li>
+          <li><a href="javascript:;" class="banned-btn" data-url="{{ path('admin_keyword_change', {id:keyword.id,state:keyword.state}) }}">{{'admin.sensitive_manage.change_disabled'|trans}}</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </td>
+</tr>

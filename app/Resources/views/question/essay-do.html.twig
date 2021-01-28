@@ -1,0 +1,122 @@
+<div class="testpaper-question testpaper-question-essay js-testpaper-question {% if setting('magic.testpaper_watermark') %}js-testpaper-watermark{% endif %}" data-watermark-url="{{ path('cloud_testpaper_watermark') }}" id="question{{ question.id }}">
+	<div class="testpaper-question-body">
+	  {% include 'question/part/question-stem.html.twig' %}
+  </div>
+	{% if not question.isDeleted|default(0) and paperResult.status|default(null) in ['reviewing', 'finished'] %}
+
+		{% if role|default(null) == 'teacher' %}
+
+			<div class="testpaper-question-footer clearfix">
+			  <div class="testpaper-question-result">
+					<ul class="nav nav-pills nav-mini mbm">
+						<li class="active"><a href="#studentAnswer{{ question.id }}" data-toggle="tab">{{'site.default.student'|trans}} {{'course.question_manage.finial_answer'|trans}}</a></li>
+						<li><a href="#teacherAnswer{{ question.id }}" data-toggle="tab">{{'course.question_manage.manage.refer_answer'|trans}}</a></li>
+					</ul>
+					<div class="tab-content mbl">
+						<div class="tab-pane active" id="studentAnswer{{ question.id }}">
+							{% if question.testResult.answer[0]|default('') or question.testResult.attachment|default('') is not empty %}
+								{{ question.testResult.answer[0]|default('')|bbCode2Html|raw }}
+
+								{% include 'attachment/question-answer-attachment.html.twig' with {targetType: 'question.answer', targetId: question.testResult.id|default(0), showList:1} %}
+
+							{% else %}
+								<span class="color-gray">{{ 'course.question_manage.you_no_answer'|trans }}</span>
+							{% endif %}
+						</div>
+						<div class="tab-pane" id="teacherAnswer{{ question.id }}">
+							{{ question.answer[0]|bbCode2Html|raw }}
+						</div>
+					</div>
+
+					
+
+					{% include 'question/part/show-teacher-comment.html.twig' with {showScore:showScore|default(1)} %}
+				</div>
+			</div>
+
+		{% elseif setting('questions.testpaper_answers_show_mode') == 'submitted' or paperResult.status in ['finished','reviewing'] %}
+			<div class="testpaper-question-footer clearfix">
+			  <div class="testpaper-question-result">
+			    <div class="mbl">
+				    <div class="mbs">{{'course.question_manage.manage.refer_answer'|trans}}</div>
+				    <div>{{ question.answer[0]|bbCode2Html|raw }}</div>
+			    </div>
+			    <div class="testpaper-question-result-your">
+				    <div class="mbs">{{'course.question_manage.your_answer'|trans}}</div>
+						<div>
+							{% if question.testResult.answer[0]|default('') or question.testResult.attachment|default('') is not empty %}
+								{{ question.testResult.answer[0]|default('')|bbCode2Html|raw }}
+
+								{% include 'attachment/question-answer-attachment.html.twig' with {targetType: 'question.answer', targetId: question.testResult.id|default(0), showList:1} %}
+							{% else %}
+								{{ 'course.question_manage.you_no_answer'|trans }}
+							{% endif %}
+						</div>
+			    </div>
+			    
+			  {% if paperResult.status == 'finished' %}
+			  	<div class="testpaper-question-result-score mtl">
+			  		{% if showScore|default(1) %}
+			  			<div class="mbs">{{'course.question_manage.score'|trans}} <strong>{{question.testResult.score|default(0) }}</strong></div>
+			  		{% endif %}
+			  	</div>
+			  	{% if question.testResult.teacherSay|default('') != '' %}
+			  		<div class="testpaper-question-teacherSay mtl">
+							<div class="mbs">{{'course.question_manage.comment'|trans}}</div>
+							<div>{{ question.testResult.teacherSay|default('')|bbCode2Html|raw }}</div>
+						</div>
+					{% endif %}
+			  {% else %}
+			  	<div class="testpaper-question-score mtl">
+            <div class="pvs phs">{{'course.question_manage.teacher_reviewing'|trans}}</div>
+			  	</div>
+			  {% endif %}
+			  </div>
+
+				<div class="testpaper-question-actions pull-right mts">
+					{% include 'question/part/flag.html.twig' with { flags:['favorite', 'analysis'] } %}
+				</div>
+			</div>
+
+			{% include 'question/part/show-analysis.html.twig' with {showAnalysis:1} %}
+		{% endif %}
+
+	{% elseif not question.isDeleted|default(0) %}
+
+		<div class="testpaper-question-footer clearfix">
+		  <div class="mbm" data-role='js-answer-div-{{ question.id }}'>
+		  	<textarea class="form-control essay-input-short" rows="1" style="overflow:hidden;line-height:20px;">{% if question.testResult.answer[0]|default(null) %}{{ question.testResult.answer[0]|bbCode2Html|raw }}{% endif %}</textarea>
+
+				<textarea id="question-input-long-{{ question.id }}" class="form-control essay-input-long" data-type="essay" name="{{ question.id }}" style="display:none;" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}">{% if question.testResult.answer[0]|default(null) %}{{ question.testResult.answer[0]|default(null)|bbCode2Html|raw }}{% endif %}</textarea>
+
+				<a class="btn btn-link color-gray btn-sm essay-input-btn" style="display:none"><span class="glyphicon glyphicon-chevron-up color-gray"></span> {{'site.btn.collapse'|trans}}</a>
+
+				<br/>
+
+				{% if paperResult.id|default(0) > 0 %}
+					{% include 'attachment/question-answer-attachment.html.twig' with {targetType: 'question.answer', targetId: question.testResult.id|default(0), showLabel:false, useType: true, currentTarget:'js-answer-div-' ~ question.id} %}
+				{% endif %}
+
+		  </div>
+
+		  <div class="testpaper-question-actions pull-right mts">
+		  	{% include 'question/part/flag.html.twig' with { flags:['mark', 'favorite'],resultStatus:paperResult.status|default(null) } %}
+		  </div>
+	  </div>
+
+	  {% if showAnswer|default(0) %}
+		  <div class="testpaper-preview-answer clearfix mtl mbl">
+		  	<div class="testpaper-question-result">
+			    <div class="mbl">
+				    <div class="mbs">{{'course.question_manage.manage.refer_answer'|trans}}</div>
+				    <div>{{ question.answer[0]|bbCode2Html|raw }}</div>
+			    </div>
+				</div>
+		  </div>
+	  {% endif %}
+
+		{% include 'question/part/show-analysis.html.twig' with {showAnalysis:showAnalysis|default(0)} %}
+
+	{% endif %}
+
+</div>

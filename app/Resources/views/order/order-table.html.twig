@@ -1,0 +1,68 @@
+{#
+    mode的取值有:
+      admin:该模式下详情无下拉菜单
+      course:该模式下详情无下拉菜单
+#}
+{% import "macro.html.twig" as web_macro %}
+  <thead>
+    <tr>
+      <th width="30%">{{'order.product_name'|trans}}</th>
+      <th>{{'order.status'|trans}}</th>
+      <th>{{'order.product_price'|trans }}</th>
+      <th>{{'order.price'|trans}}</th>
+      <th width="10%">{{'order.buyers'|trans}}</th>
+      <th style="min-width:100px">{{'user.orders.operation'|trans}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for order in orders %}
+      {% set buyer = users[order.user_id]|default(null) %}
+        <tr id="order-table-{{order.id}}" style="word-break: break-all;word-wrap: break-word;">
+          <td>
+            {% if order.item.target_type|default('') == 'course' %}
+              {% set sku = goodsSpecs[order.item.target_id]|default() %}
+              <a  class="link-primary" href="{{ path('goods_show', {id:sku.goodsId, targetId:sku.targetId}) }}" target="_blank"><strong>{{order.title}}</strong></a>
+            {% elseif order.item.target_type|default('') == 'vip' %}
+              <a class="link-primary" href="{{ path('vip', {id:order.item.target_id}) }}" target="_blank"><strong>{{order.title}}</strong></a>
+            {% elseif order.item.target_type|default('') == 'classroom' %}
+              {% set sku = goodsSpecs[order.item.target_id]|default() %}
+              <a class="link-primary" href="{{ path('goods_show', {id:sku.goodsId}) }}" target="_blank"><strong>{{order.title}}</strong></a>
+            {% else %}
+              <strong>{{order.title}}</strong>
+            {% endif %}
+            <br>
+            <span class="color-gray text-sm">{{'user.orders.order_id'|trans({'%sn%':order.sn})}}</span>
+            <br>
+            <span class="color-gray text-sm">{{'order.created_time'|trans}}：{{ order.created_time|date('Y-n-d H:i:s') }}</span>
+          </td>
+          <td>{{ display_order_status(order.status, 0) }}</td>
+          <td><span class="color-warning">{{ order.price_amount|to_cash(0) }}</span></td>
+          <td><span class="color-warning">{{ order.pay_amount|to_cash(0) }}</span></td>
+          {#添加admin_v2#}
+          {% if has_permission('admin_user_manage') or has_permission('admin_v2_user_manage')%}
+            <td>
+              {#添加admin_v2#}
+              {% if setting('backstage.is_v2',0)  == 0 %}
+                {% set dataUrl = path('admin_user_show', {id:buyer.id}) %}
+              {% else %}
+                {% set dataUrl=  path('admin_v2_user_show', {id:buyer.id}) %}
+              {% endif %}
+              <a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ dataUrl }}">{{ buyer.nickname|default('--') }}</a>
+            </td>
+          {% else %}
+            <td>
+              {% if not buyer.destroyed|default(0) %}
+                <span><a target="_blank" href="{{ path('user_show', {id: buyer.id}) }}">{{ buyer.nickname|default('--') }}</a></span>
+              {% else %}
+                <span>{{ 'user.user_had_destroyed'|trans }}</span>
+              {% endif %}
+            </td>
+          {% endif %}
+          <td>
+            <a href="javascript:;" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('order_detail', {id:order.id}) }}">{{'form.btn.detail'|trans}}</a>
+          </td>
+        </tr>
+    {% else %}
+      <tr><td colspan="20"><div class="empty">{{'site.datagrid.empty'|trans}}</div></td></tr>
+    {% endfor %}
+  </tbody>

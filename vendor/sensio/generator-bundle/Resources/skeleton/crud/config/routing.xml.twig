@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<routes xmlns="http://symfony.com/schema/routing"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+
+{% block body %}
+    <route id="{{ route_name_prefix }}_index" path="/" methods="GET">
+        <default key="_controller">{{ bundle }}:{{ entity }}:index</default>
+    </route>
+
+    <route id="{{ route_name_prefix }}_show" path="/{{ '{' ~ identifier ~ '}' }}/show" methods="GET">
+        <default key="_controller">{{ bundle }}:{{ entity }}:show</default>
+    </route>
+
+{% if 'new' in actions %}
+    <route id="{{ route_name_prefix }}_new" path="/new" methods="GET|POST">
+        <default key="_controller">{{ bundle }}:{{ entity }}:new</default>
+    </route>
+{% endif %}
+
+{% if 'edit' in actions %}
+    <route id="{{ route_name_prefix }}_edit" path="/{{ '{' ~ identifier ~ '}' }}/edit" methods="GET|POST">
+        <default key="_controller">{{ bundle }}:{{ entity }}:edit</default>
+    </route>
+{% endif %}
+
+{% if 'delete' in actions %}
+    <route id="{{ route_name_prefix }}_delete" path="/{{ '{' ~ identifier ~ '}' }}/delete" methods="DELETE">
+        <default key="_controller">{{ bundle }}:{{ entity }}:delete</default>
+    </route>
+{% endif %}
+{% endblock body %}
+
+</routes>

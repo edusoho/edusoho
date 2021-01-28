@@ -1,0 +1,31 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+
+{% block title %}{{'admin.operation_invite.modal.detail_title'|trans}}{% endblock %}
+
+{% block body %}
+
+  <table class="table table-hover table-striped" >
+  <thead>
+  	<tr>
+  	<th>{{'admin.operation_invite.nickname_th'|trans}}</th>
+  	<th>{{'admin.operation_invite.modal.totalPrice_th'|trans}}</th>
+    <th>{{'admin.operation_invite.modal.coinAmountTotalPrice_th'|trans}}</th>
+    <th>{{'admin.operation_invite.modal.amountTotalPrice_th'|trans}}</th>
+  	</tr>
+  </thead>
+  <tbody>
+  	{% for invitedRecord in invitedRecords %}
+    {% set user = users[invitedRecord.invitedUserId] %}
+		  <tr>
+  		<td>{{user.nickname}}</td>
+  		<td>{{invitedRecord.amount}}</td>
+      <td>{{invitedRecord.coinAmount}}</td>
+      <td>{{invitedRecord.cashAmount}}</td>
+  		</tr>
+  	{% endfor %}	
+  </tbody>
+  </table>
+    
+
+{% endblock %}

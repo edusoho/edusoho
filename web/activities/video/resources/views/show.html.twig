@@ -1,0 +1,9 @@
+{% extends 'activity/content-layout.html.twig' %}
+
+{% block body %}
+  {% if app.request.query.get('preview') == 1 %}
+    {% include '@activity/video/resources/views/show/preview.html.twig' %}
+  {% else %}
+    {% include '@activity/video/resources/views/show/index.html.twig' %}
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,25 @@
+<li class="media" data-url="{{ path('message_conversation_show', {conversationId:conversation.id })}}">
+  {{ web_macro.user_avatar(fromUser, 'pull-left media-object') }}
+  <div class="media-body">
+    <h4 class="media-heading">
+      {% if conversation.latestMessageUserId == app.user.id %}
+        {{'message.chat.send_for'|trans}}
+      {% endif  %}
+      {{ web_macro.user_link(fromUser) }}:
+      {{conversation.latestMessageContent|plain_text(40)}}
+
+      {% if conversation.unreadNum > 0 %}
+        <span class="text-warning">({{'message.chat.unread_number'|trans({'%unreadNum%':conversation.unreadNum})}})</span>
+      {% endif %}
+    </h4>
+
+    <div class="conversation-footer clearfix">
+      <span class="pull-left">{{ conversation.latestMessageTime|smart_time }}</span>
+      <span class="pull-right">{{'message.chat.total_number'|trans({'%messageNum%':conversation.messageNum})}}</span>
+      <div class="actions pull-right">
+        <a class="delete-conversation-btn color-gray" href="javascript:" data-url="{{ path('message_conversation_delete', {conversationId:conversation.id })}}">{{'message.btn.delete'|trans}}</a>
+        <span class="color-gray mhm">|</span>
+      </div>
+    </div>
+  </div>
+</li>

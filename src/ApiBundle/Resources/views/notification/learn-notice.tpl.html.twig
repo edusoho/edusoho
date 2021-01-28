@@ -1,0 +1,11 @@
+{% set data = notification.content %}
+
+{% if data.type == 'classroom' %}
+  {% set name = get_classroom_name() %}
+{% elseif data.type == 'course' %}
+  {% set name = 'site.default.course'|trans %}
+{% endif %}
+
+{% set what = data.title|purify_html %}
+{{ 'notification.learn-notice'|trans({'%name%':name, '%what%':what})|raw }}
+

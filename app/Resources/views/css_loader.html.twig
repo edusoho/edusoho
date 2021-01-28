@@ -1,0 +1,7 @@
+{% for path in css() %}
+  {% if path starts with 'http://' %}
+    <link href="{{ path }}" rel="stylesheet" />
+  {% else %}
+    <link href="{{ asset('static-dist/' ~ path) }}" rel="stylesheet" />
+  {% endif %}
+{% endfor %}

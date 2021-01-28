@@ -1,0 +1,11 @@
+{% extends 'course-manage/layout.html.twig' %}
+
+{% block title %}{{'course.student_manage'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
+{% set course_side_nav = 'students' %}
+
+{% block page_title %}{{ 'course.student_manage'|trans }}{% endblock %}
+
+{% block main_body %}
+  {% include 'course-manage/student/panel-nav.html.twig' with {'panelNav': type} %}
+  {{ render(controller('AppBundle:MemberOperationRecord:showRecord', {request:app.request, targetType: 'course', targetId: course.id, operatType: type})) }}
+{% endblock %}

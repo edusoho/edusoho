@@ -1,0 +1,26 @@
+.breadcrumb {
+  background-color: @gray-lighter;
+  &.breadcrumb-o {
+    background: none;
+    margin: 12px auto;
+    padding: 8px 0;
+    > li {
+      max-width: 100%;
+    }
+  }
+  > li {
+    max-width: 100%;
+  }
+
+  li.active {
+    color: @gray;
+  }
+  a {
+    color: @gray;
+    .es-transition;
+    &:hover {
+      color: @brand-primary;
+      .es-transition;
+    }
+  }
+}

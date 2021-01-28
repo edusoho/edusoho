@@ -1,0 +1,98 @@
+{% extends 'testpaper/testpaper-layout.html.twig' %}
+
+{% do script(['libs/jquery-validation.js','libs/es-ckeditor/ckeditor.js','app/js/testpaper-manage/check/index.js']) %}
+
+{% set role = 'teacher' %}
+{% set showHeader = 1 %}
+{% set isIframeBody = 0 %}
+{% set isTeacher = 1 %}
+
+{% block paper_result_bar %}
+  {% include 'testpaper/part/paper-result-objective.html.twig' %}
+{% endblock %}
+
+{% block paper_warning %}
+  <div class="alert alert-warning">{{'course.homework_check.review.teacher_check_tips'|trans}}</div>
+{% endblock %}
+
+{% block paper_sidebar %}
+
+  <div class="testpaper-card {{testpaperCardClass|default('')}}" data-spy="affix" data-offset-top="200">
+    <div class="panel panel-default">
+      <div class="panel-body testpaper-card__body">
+        {% for type in questionTypes|default([]) if questions[type] is defined %}
+
+          {% for question in questions[type] %}
+            {% if question.type == 'material' %}
+              {% for questionSub in question.subs|default([]) %}
+                <a href="javascript:;" data-anchor="#question{{ questionSub.id }}" class="js-btn-index color-lump lump-card cd-mb8">{{ questionSub.seq }}</a>
+              {% endfor %}
+            {% else %}
+              <a href="javascript:;" data-anchor="#question{{ question.id }}" class="js-btn-index color-lump lump-card cd-mb8">{{ question.seq }}</a>
+            {% endif %}
+          {% endfor %}
+        {% endfor %}
+
+      </div>
+      <div class="panel-footer">
+        <button class="btn btn-success btn-block" data-role="check-submit">{{'testpaper.result.finish_reviewing'|trans}}</button>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block testpaper_checked_dialog %}
+  <div id="testpaper-checked-dialog" class="modal in" aria-hidden="false" style="display: none;">
+    <div class="modal-dialog modal-dialog-small">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title">{{'testpaper.result.finish_reviewing'|trans}}</h4>
+        </div>
+        <div class="modal-body">
+
+          <div class="form-group">
+            <div class="controls">
+              <div class="testpaper-check-score-content">
+                <div class="testpaper-check-score-content_well">
+                  <div class="testpaper-check-score-title mbm">{{ 'course.testpaper_check.student_score'|trans }}</div>
+                  <span class="testpaper-check-score js-student-score" data-objective-score="{{ paperResult.objectiveScore|default(0) }}"></span>
+                </div>
+              </div>
+              <div class="testpaper-check-detail-content">
+                <div class="testpaper-check-detail-content_well">
+                  <div class="testpaper-check-detail mbm">{{ 'course.testpaper_check.testpaper_total_score'|trans }}：{{ paper.score|default('0') }}</div>
+                  <div class="testpaper-check-detail js-pass-score" data-pass-score="{{ passScore|default('0') }}">{{ 'course.plan_task.activity_manage.testpaper.qualified_score'|trans }}：{{ passScore|default('0') }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="controls">
+              <textarea class="form-control" rows='4' id="testpaper-teacherSay-input" placeholder="{{'course.homework_check.review.input_comment'|trans}}"></textarea>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="controls">
+              <select class="form-control" id="teacher-say-select" data-role="teacher-say">
+                {{'course.homework_check.review.common_comments'|trans|raw}}
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          {% if source|default('course') == 'classroom' %}
+            {% set postUrl = path('classroom_manage_testpaper_check', {id:targetId,resultId:paperResult.id}) %}
+          {% else %}
+            {% set postUrl = path('course_manage_testpaper_check', {id:targetId,resultId:paperResult.id}) %}
+          {% endif %}
+          <a href="javascript:;" class="btn btn-default" data-dismiss="modal">{{'form.btn.cancel'|trans}}</a>
+          <button type="button" class="btn btn-info" id="testpaper-teacher-say-btn" data-post-url="{{ postUrl }}" data-goto="{{ app.request.server.get('HTTP_REFERER') }}" data-role="finish-check" data-loading-text="{{'form.btn.submit.submiting'|trans}}">{{'testpaper.result.finish_reviewing'|trans}}</button>
+          <button type="button" class="btn btn-success js-next-check" data-post-url="{{ postUrl }}" data-loading-text="{{'form.btn.submit.submiting'|trans}}">{{'form.btn.continue'|trans}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

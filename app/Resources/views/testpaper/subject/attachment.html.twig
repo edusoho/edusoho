@@ -1,0 +1,28 @@
+{% if setting('cloud_attachment.enable') and setting('cloud_attachment.question' ) and setting('storage.upload_mode') == 'cloud' %}
+  <div class="cd-mt24">
+    <div class="js-attachment-list js-attachment-list-{{ target }}">
+      {% if attachment|default(null) %}
+        <div class="cd-mt24">
+          <span class="cd-dark-major cd-mr16 js-attachment-name">{{attachment.fileName}}</span>
+          <a class="color-primary" href="javascript:;" data-url="{{ path('attachment_delete',{id:attachment.fileIds, type:'file'}) }}" data-role="delte-item"><i class="es-icon es-icon-shanchu text-md mrs"></i>{{ 'course.testpaper_manage.import.re_edit.delete_attachment'|trans }}</a>
+        </div>
+      {% endif %}
+    </div>
+    <a class="cd-btn cd-btn-ghost-primary js-upload-file" {% if attachment|default()|length %}style="display: none;"{% endif %} data-toggle="modal" data-backdrop="static" data-target="#attachment-modal" data-url="{{ path('attachment_upload', {useSeajs: false, idsClass: 'js-attachment-ids-'~target, listClass : 'js-attachment-list-'~target, token:uploader_token('attachment', app.user.id, 'private'), currentTarget:'', module: 'simple'}) }}" stitle="{{ 'attachments.upload'|trans }}" data-placement="bottom" data-title="{{ 'attachments.upload'|trans }}">{{btnTitle}}</a>
+
+    <input class="js-attachment-ids-{{ target }}" 
+      value="{{ attachment.fileIds|default('') }}"
+      name="attachment[{{target}}][fileIds]"
+      type="hidden" data-role="fileId">
+
+    <input class="js-file-target-type" 
+      value="quesiton.{{ target }}" 
+      name="attachment[{{target}}][targetType]"
+      type="hidden">
+
+    <input class="js-file-type" 
+      value="attachment" 
+      name="attachment[{{target}}][type]"
+      type="hidden">
+  </div>
+{% endif %}

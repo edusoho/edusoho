@@ -1,0 +1,25 @@
+{% set questionType = question.type %}
+{% extends 'question/analysis/analysis-layout.html.twig' %}
+
+{% block analysis_content %}
+  <ul class="testpaper-question-fill">
+    {% for index, answer in question.answer %}
+      {% set itemKeyAnalysis = questionAnalysis[index]|default(null) %}
+      <li class="testpaper-question-fill-item testpaper-question-body-item">
+        <span class="testpaper-question-body-item__index">{{'question.multiple_choice.answer'|trans({'%index%': index+1})}}</span>
+        <div class="testpaper-question-body-item__content"><strong class="color-success">{{ answer|join('site.default.or'|trans) }}</strong></div>
+        <span class="label testpaper-question-body-item__label label-success hidden-xs">
+          {% if itemKeyAnalysis and firstCount != 0 %}
+            {% set firstAnswerPercent = (itemKeyAnalysis.firstAnswerCount / firstCount * 100)|number_format(1,'.') %}
+            {{ firstAnswerPercent }}%
+          {% else %}
+            0%
+          {% endif %}
+        </span>
+        <span class="testpaper-question-body-item__count">
+          {% if itemKeyAnalysis %}{{ itemKeyAnalysis.firstAnswerCount }}{% else %}0{% endif %}{{ 'course.testpaper_check.number'|trans }}
+        </span>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

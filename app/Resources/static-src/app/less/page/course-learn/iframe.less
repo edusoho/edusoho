@@ -1,0 +1,108 @@
+.iframe-parent-content {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top:0;
+  overflow: auto;
+  background: #fff;
+  img {
+    max-width: 100%;
+  }
+  &.iframe-parent-full {
+    //全屏
+    overflow: hidden;
+    @media(max-width:@screen-xs-max) {
+      -webkit-overflow-scrolling: touch;
+      overflow-y: scroll;
+    }
+  }
+  .text-activity-content {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    text-align: justify;
+    @media(min-width: 1091px) {
+      width: 992px;
+      margin: auto;
+    }
+    @media(max-width: 1090px) {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+  }
+
+  &.iframe-parent-content--discuss {
+    padding: 20px;
+    .lesson-content-text-body {
+      @media (max-width: @screen-xs-max) {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.text-iframe-wrap {
+  padding-top: 0;
+  padding-bottom: 0;
+  height: 100%;
+  overflow: scroll;
+}
+.iframe-scroll {
+  @media (max-width: @screen-xs-max) {
+    -webkit-overflow-scrolling: touch;
+    overflow-y: scroll;
+    z-index: 1;
+  }
+}
+
+.ppt-player-change-btn {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  z-index: 100;
+  @media (max-width: @screen-xs-min) {
+    left: 0;
+  }
+}
+
+.task-preview-modal-content {
+  position: relative;
+  height: 400px;
+}
+
+.ios-full-screen {
+  object-fit: contain;
+  position: fixed !important;
+  top: 0px !important;
+  right: 0px !important;
+  bottom: 0px !important;
+  left: 0px !important;
+  box-sizing: border-box !important;
+  min-width: 0px !important;
+  max-width: none !important;
+  min-height: 0px !important;
+  max-height: none !important;
+  width: 100% !important;
+  height: 100% !important;
+  transform: none !important;
+  margin: 0px !important;
+  z-index: 10000;
+}
+
+.ios-ppt-full-screen {
+  position: fixed !important;
+  top: 0px !important;
+  right: 0px !important;
+  bottom: 0px !important;
+  left: 0px !important;
+  box-sizing: border-box !important;
+  min-width: 0px !important;
+  max-width: none !important;
+  min-height: 0px !important;
+  max-height: none !important;
+  width: 100% !important;
+  height: 100% !important;
+  transform: none !important;
+  margin: 0px !important;
+  z-index: 10000;
+}

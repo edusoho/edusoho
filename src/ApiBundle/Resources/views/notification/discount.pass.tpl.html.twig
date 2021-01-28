@@ -1,0 +1,3 @@
+{% set data = notification.content %}
+{% set discount = '<span class="text-danger">「' ~ data.name ~ '」</span>' %}
+{{ 'notification.discount.pass'|trans({'%discount%':discount}) }}

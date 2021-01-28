@@ -1,0 +1,48 @@
+<div class="cd-dropdown" data-toggle="cd-dropdown" data-trigger="hover">
+  {#S2B2C#}
+  {% if course.platform == 'self' %}
+    <a class="cd-link-assist" href="javascript:;">
+      <i class="es-icon es-icon-morehoriz"></i>
+    </a>
+  {% endif %}
+  <ul class="dropdown-menu task-manage-item__dropdown">
+    {% include 'lesson-manage/common/marker-manage-btn.html.twig' with {course: course, task: task} %}
+
+    {% if lesson.status|default('create') == 'published' %}
+      {% set isPublish = true %}
+    {% else %}
+      {% set isPublish = 0 %}
+    {% endif %}
+    <li>
+      <a class='js-unpublish-item {% if not isPublish %}hidden{% endif %}' href="javascript:;"
+        data-url="{{ path('course_manage_lesson_unpublish', {lessonId:lesson.id, courseId:task.courseId}) }}">
+        {{'course.plan_task.unpublish_btn'|trans}}
+      </a>
+    </li>
+    <li>
+      <a class='js-publish-item {% if isPublish %}hidden{% endif %}' href="javascript:;"
+        data-url="{{ path('course_manage_lesson_publish', {lessonId:lesson.id, courseId:task.courseId}) }}">
+        {{'course.plan_task.publish_btn'|trans}}{{ 'course.lesson'|trans }}
+      </a>
+    </li>
+    {#S2B2C#}
+    {% if course.platform == 'self' %}
+      <li>
+        <a class='js-set-optional {% if lesson.isOptional == 1 %}hidden{% endif %}' href="javascript:;" data-type="chapter" data-url="{{ path('course_manage_lesson_set_optional', {courseId:course.id, lessonId:lesson.id}) }}">
+          {{'course.lesson_manage.set_optional'|trans}}
+        </a>
+      </li>
+      <li>
+        <a class='js-unset-optional {% if lesson.isOptional != 1 %}hidden{% endif %}' href="javascript:;" data-type="chapter" data-url="{{ path('course_manage_lesson_unset_optional', {courseId:course.id, lessonId:lesson.id}) }}">
+          {{'course.lesson_manage.unset_optional'|trans}}
+        </a>
+      </li>
+      <li>
+        <a class='js-delete {% if isPublish %}hidden{% endif %}' href="javascript:;" data-name="{{ ('site.data.lesson')|trans }}" data-url="{{ path('course_manage_lesson_delete', {lessonId:lesson.id, courseId:task.courseId}) }}">
+          {{'course.plan_task.delete_btn'|trans}}{{ 'course.lesson'|trans }}
+        </a>
+      </li>
+    {% endif %}
+    {{ slot('task.menu.extension', {'task': task}) }}
+  </ul>
+</div>

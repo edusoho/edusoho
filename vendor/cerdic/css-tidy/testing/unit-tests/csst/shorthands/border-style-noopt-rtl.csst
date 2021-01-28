@@ -1,0 +1,29 @@
+--TEST--
+Test general border-style optimization
+--CSS--
+a {
+    border-top-style: none;
+    border-right-style: solid;
+    border-bottom-style: dotted;
+    border-left-style: dashed;
+}
+b {
+    border-style: none solid dotted dashed;
+}
+--EXPECT--
+array (
+  'a' =>
+  array (
+    'border-top-style' => 'none',
+    'border-left-style' => 'solid',
+    'border-bottom-style' => 'dotted',
+    'border-right-style' => 'dashed',
+  ),
+  'b' =>
+  array (
+    'border-style' => 'none dashed dotted solid',
+  ),
+)
+--SETTINGS--
+optimise_shorthands=0
+reverse_left_and_right=true

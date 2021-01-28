@@ -1,0 +1,23 @@
+{% set courseSets = data('CourseSetRankByStudent',{'count':5}) %}
+
+{% if courseSets %}
+  <div class="panel panel-autumn panel-autumn-primary">
+    <div class="panel-heading">
+      <h2 class="panel-title">{{ '课程排行榜'|trans }} /
+        <small>Course Ranking</small>
+      </h2>
+    </div>
+    <div class="panel-body">
+      <ul class="media-list courses-rank">
+        {% for courseSet in courseSets if courseSet %}
+          <li class="media">
+            <a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}">
+              <img src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}" class="img-responsive pull-left">
+              <h5 class="course-title">{{ courseSet.title }}</h5>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+{% endif %}

@@ -1,0 +1,33 @@
+{% set errors = item.errors|default([]) %}
+<div class="subject-item subject-sub-item js-subject-item" id="sub{% if seq is defined %}{{seq - 1}}{% else %}{{ subKey }}{% endif %}" data-material-token="{{ token|default('') }}" data-key="{% if seq is defined %}{{seq - 1}}{% else %}{{ subKey }}{% endif %}">
+  <div class="subject-item__title subject-sub-item__title">
+    <span class="subject-sub-item__number">
+      {% if seq|default(null) %}
+        {{ '(' ~ seq ~ ')'  }}
+      {% else %}
+        {{ '(' ~ loop.index ~ ')'  }}
+      {% endif %}
+    </span>
+    {% if errors.stem is not defined %}
+      <div class="subject-sub-item__stem">{{ item.stemShow|striptags('<br><img>')|bbCode2Html|raw|nl2br }}</div>
+    {% elseif errors.stem.code == 100001 %}
+      <span class="single-item__text--danger">{{ 'course.testpaper_manage.import.re_edit.error_no_stem'|trans }}</span>
+    {% endif %}
+  </div>
+  <div class="subject-item__body">
+    <div class="subject-sub-item__answer">
+      <span class="subject-sub-item__label">{{ 'course.testpaper_manage.import.re_edit.answer'|trans }}：</span>
+        {% for answer_key,answer in item.answers %}
+          {% if errors['answers_'~answer_key] is not defined %}
+            {{ item.answers[answer_key] }}
+          {% elseif errors['answers_'~answer_key].code == 100003 %}
+            <span class="single-item__text--danger">{{ 'course.testpaper_manage.import.re_edit.error_no_answer'|trans }}</span>
+          {% endif %}
+        {% endfor %}
+    </div>
+    {% if item.analysis is not empty %}
+      <div class="subject-sub-item__explain cd-mt8"><span class="subject-explain-label">{{ 'course.testpaper_manage.import.re_edit.explain'|trans }}：</span>{{ item.analysis|striptags('<br><img>')|bbCode2Html|raw|nl2br }}</div>
+    {% endif %}
+  </div>
+  {% include 'testpaper/subject/common.html.twig' with {position:'sub', type: item.type, difficulty: item.difficulty, score: item.score } %}
+</div>

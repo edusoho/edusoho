@@ -1,0 +1,242 @@
+<style>
+  .webuploader-container {
+    position: relative;
+  }
+  .webuploader-element-invisible {
+    position: absolute !important;
+    clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+    clip: rect(1px,1px,1px,1px);
+  }
+  .webuploader-pick {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    background: #fff;
+    padding: 5px 10px;
+    color: #333;
+    text-align: center;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    overflow: hidden;
+  }
+  .webuploader-pick-hover {
+    background: #e6e6e6;
+    border-color: #adadad;
+  }
+  .webuploader-pick-disable {
+    opacity: 0.6;
+    pointer-events:none;
+  }
+  .balloon-uploader {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  .balloon-uploader-heading {
+    background-color: #f5f5f5;
+    color: #333;
+    padding: 10px 15px;
+    border-bottom: 1px solid #ddd;
+    display: none;
+  }
+  .balloon-uploader-footer {
+    background-color: #f5f5f5;
+    color: #333;
+    padding: 10px 15px;
+    border-top: 1px solid #ddd;
+    text-align: right;
+  }
+  .balloon-filelist {
+    width: 100%;
+  }
+  .balloon-filelist-heading {
+    padding: 8px 10px;
+    font-weight: bold;
+    border-bottom: 2px solid #ddd;
+  }
+  .balloon-uploader-body {
+    position: relative;
+  }
+  .balloon-filelist .file-name,
+  .balloon-filelist .file-size,
+  .balloon-filelist .file-status,
+  .balloon-filelist .file-manage {
+    position: relative;
+    z-index: 1;
+  }
+  .balloon-filelist .file-name {
+    display: inline-block;
+    width: 40%;
+  }
+  .balloon-filelist .file-size {
+    display: inline-block;
+    width: 20%;
+  }
+  .balloon-filelist .file-status {
+    display: inline-block;
+    width: 18%;
+  }
+  .balloon-filelist .file-manage {
+    display: inline-block;
+    width: 20%;
+    z-index: 9999;
+    position: absolute;
+  }
+  .balloon-filelist ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    min-height: 100px;
+    max-height: 300px;
+    overflow-y: scroll;
+  }
+  .balloon-filelist ul li {
+    position: relative;
+    border-bottom: 1px solid #ddd;
+    padding: 8px 10px;
+  }
+  .balloon-dnd {
+    visibility: hidden;
+  }
+  .balloon-uploader-none .balloon-uploader-footer,
+  .balloon-uploader-none .balloon-uploader-body {
+    visibility: hidden;
+  }
+  .balloon-uploader-none .balloon-dnd {
+    visibility: visible;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    text-align: center;
+    vertical-align: middle;
+  }
+  .balloon-nofile {
+    position: absolute;
+    top: 40px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    line-height: 100px;
+    text-align: center;
+    color: #999;
+  }
+  .balloon-uploader .file-pick-btn {
+    display: inline-block;
+  }
+  .balloon-uploader .start-upload-btn {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    background: #5bc0de;
+    padding: 5px 10px;
+    color: #fff;
+    text-align: center;
+    border-radius: 3px;
+    border: 1px solid #46b8da;
+    overflow: hidden;
+  }
+  .balloon-uploader .start-upload-btn:hover {
+    background: #31b0d5;
+    border-color: #269abc;
+  }
+  .balloon-filelist .file-progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+  .balloon-filelist .file-progress-bar {
+    background: rgb(219,242,215);
+    background: rgba(59, 181, 33, 0.18);
+    float: left;
+    height: 100%;
+  }
+</style>
+{% set showCourseMaterialPane = showCourseMaterialPane|default(1) %}
+{% set showLinkPane = showLinkPane|default(1) %}
+{% set courseType = courseType|default('course') %}
+<div class="file-chooser">
+  <div class="file-chooser-bar" style="display:none;">
+    <span data-role="placeholder"></span>
+    <button class="btn btn-link btn-sm" type="button" data-role="trigger"><i class="glyphicon glyphicon-edit"></i> {{'open_course.choose_again:'|trans}}</button>
+  </div>
+  <div class="file-chooser-main">
+    <ul class="nav nav-pills nav-pills-sm mbs file-chooser-tabs">
+      <li><a class="file-chooser-uploader-tab" href="#file-chooser-upload-pane" data-toggle="tab">{{'upload.content_title'|trans}}</a></li>
+      <li><a href="#file-chooser-browser-pane" data-toggle="tab">{{'open_course.chooser_from_material'|trans}}</a></li>
+      {% if showCourseMaterialPane %}
+        <li><a href="#file-chooser-course-pane" data-toggle="tab">{{'open_course.upload_form_course_file'|trans}}</a></li>
+      {% endif %}
+      {% if showLinkPane %}
+        <li><a class="file-chooser-link-tab" href="#file-chooser-link-pane" data-toggle="tab">{{'open_course.link'|trans}}</a></li>
+      {% endif %}
+    </ul>
+    <div class="tab-content">
+      <div class="tab-pane" id="file-chooser-upload-pane">
+        {% set token = uploader_token(targetType, course.id, 'private') %}
+        <div class="balloon-uploader" id="batch-uploader"
+          data-init-url="{{ path('uploader_init', {token:token}) }}"
+          data-finish-url="{{ path('uploader_finished', {token:token}) }}"
+          data-upload-auth-url = "{{ path('uploader_auth', {token:token}) }}"
+          data-accept="{{ uploader_accept(targetType)|json_encode }}"
+          data-process="{{ uploader_process(targetType) }}"
+        >
+          <div class="balloon-uploader-heading">{{'upload.content_title'|trans}}</div>
+          <div class="balloon-uploader-body">
+            <div class="balloon-nofile">{{'upload.upload_tips'|trans}}</div>
+            <div class="balloon-filelist">
+              <div class="balloon-filelist-heading">
+                <div class="file-name">{{'upload.file.name'|trans}}</div>
+                <div class="file-size">{{'upload.file.size'|trans}}</div>
+                <div class="file-status">{{'upload.file.status'|trans}}</div>
+              </div>
+              <ul>
+              </ul>
+            </div>
+          </div>
+          <div class="alert alert-info">
+            <ul>
+              <li>{{'open_course.coursematerial.tips'|trans}}</li>
+              {% if storageSetting.upload_mode == 'cloud' %}
+                {{ 'open_course.coursematerial.cloud_tips'|trans|raw }}
+              {% else %}
+                {{ 'courseset_manage.batch_upload.coursematerial.not_cloud.tips'|trans({'%EduSoho%':'EduSoho'|copyright_less})|raw }}
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane" id="file-chooser-browser-pane">
+        <div id="file-browser" data-role="file-browser"
+          data-base-url="{{ path('uploadfile_browser', {source:'upload'}) }}"
+          data-default-url="{{ path('uploadfile_browser', {source:'upload'}) }}"
+          data-my-sharing-contacts-url="{{ path('material_lib_my_sharing_contacts') }}"
+          data-empty="{{'open_course.empty_file_hint'|trans}}">
+          <div class="file-browser-list-container"></div>
+        </div>
+      </div>
+      {% if course.type in ['open','liveOpen'] %}
+        {% set materialBrowserUrl = path('open_course_manage_material_browser', {courseId:targetId,courseType:courseType}) %}
+      {% else %}
+        {% set materialBrowserUrl = path('course_manage_material_browser', {courseId:targetId,courseType:courseType}) %}
+      {% endif %}
+      <div class="tab-pane" id="file-chooser-course-pane">
+        <div id="file-browser" data-role="course-file-browser"
+          data-url="{{ materialBrowserUrl }}"
+          data-empty="{{'open_course.empty_file_hint'|trans}}">
+        </div>
+      </div>
+      <div class="tab-pane" id="file-chooser-link-pane">
+        <div class="form-group" style="margin-bottom:0px;">
+          <div class="col-md-12 controls">
+            <input type="text" class="form-control" name="link" placeholder="{{'open_course.material_link'|trans}}">
+            <div class="help-block"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,28 @@
+{
+  "family": "jquery-plugin",
+  "name": "sortable",
+  "version": "0.9.10",
+  "description": "A flexible, opinionated sorting plugin for jQuery.",
+  "homepage": "http://johnny.github.io/jquery-sortable/",
+  "author": {
+    "name": "Jonas von Andrian"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/johnny/jquery-sortable.git"
+  },
+  "bugs": "https://github.com/johnny/jquery-sortable/issues",
+  "licenses": [
+    {
+      "type": "BSD-3",
+      "url": "https://github.com/johnny/jquery-sortable/blob/0.9.10/LICENSE"
+    }
+  ],
+  "keywords": [ "list", "sort", "sortable", "drag", "drop" ],
+  "spm": {
+    "alias": {
+      "$": "$"
+    },
+    "output": [ "sortable.js" ]
+  }
+}

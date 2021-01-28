@@ -1,0 +1,79 @@
+<div class="subject-item subject-edit-item js-subject-edit-item {% if isSub == '1' %}js-sub-edit-item{% endif %}" id="{% if method == 'add' %}{{ seq }}{% else %}{{ token }}{% endif %}">
+  <form class="form-horizontal js-edit-form" data-url="{{ path('subject_show_template', {type: type}) }}">
+    <div class="row">
+      <div class="col-sm-8 js-choose-item">
+        {% if isSub == '1' %}
+          <div class="subject-sub-item__number subject-sub-item__number--edit">(<span class="js-edit-form-seq">{{ seq }}</span>)</div>
+        {% else %}
+          <div class="subject-edit-item__order js-edit-form-seq">{{ seq }}</div>
+        {% endif %}
+        <input type="hidden" name="token" value="{{ token|default('') }}" class="js-hidden-token">
+        <input type="hidden" name="isSub" value="{{ isSub }}" class="js-sub-judge">
+        <input type="hidden" name="method" value="{{ method }}" class="js-hidden-method">
+        <div class="cd-ml32">
+          <input type="text" class="form-control" value="{{ question_html_filter(question.stem|default('')) }}" data-role="edit" style="display: none;">
+          <textarea class="form-control" style="height:190px;" id="question-stem-field" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}" data-edit="stem" name="stem">{{ question.stem|default('') }}</textarea>
+        </div>
+        <div class="cd-ml32">
+          {% include 'testpaper/subject/attachment.html.twig' with { target: 'stem', btnTitle:'course.testpaper_manage.import.re_edit.upload_stem_attachment'|trans, attachment: question.attachment.stem|default([]) } %}
+        </div>
+        <div class="cd-ml32 cd-mt24">
+          {% block subject %}
+          {% endblock %}
+        </div>
+      </div>
+      <div class="col-sm-4 js-setting-item">
+        {% if isSub == '0' %}
+          {% set categoryId = question.categoryId|default(0) %}
+          <div class="form-group">
+            <label class="col-sm-2 control-label ph0 edit-form-group__label" for="categoryId">{{'course.question_manage.manage.category'|trans}}</label>
+            <div class="col-sm-10">
+              <select id="categoryId" data-edit="categoryId" name="categoryId" required="required" class="form-control width-input width-input-large">
+                <option value="0">{{ 'site.data.empty'|trans }}</option>
+                <option value="0"{% if not categoryId %} selected{% endif %}>{{ 'site.data.empty'|trans }}</option>
+                {% set question_category_choices = question_category_choices(questionBankId) %}
+                {{ select_options(question_category_choices, categoryId) }}
+              </select>
+            </div>
+          </div>
+        {% endif %}
+
+        <div class="form-group edit-form-group cd-mb24">
+          <label class="col-sm-2 control-label ph0 edit-form-group__label">{{ 'course.question_manage.manage.difficulty'|trans }}</label>
+          <div class="col-sm-10 cd-radio-group">
+            <label class="cd-radio mtm {% if question.difficulty|default('normal') == 'simple' %}checked{% endif %}"><input type="radio" name="difficulty" value="simple" data-toggle="cd-radio" {% if question.difficulty|default('normal') == 'simple' %}checked{% endif %}>{{ 'course.question_manage.manage.easy_difficulty'|trans }}</label>
+            <label class="cd-radio mtm cd-ml16 {% if question.difficulty|default('normal') == 'normal' %}checked{% endif %}"><input type="radio" name="difficulty" value="normal" data-toggle="cd-radio" {% if question.difficulty|default('normal') == 'normal' %}checked{% endif %}>{{ 'course.question_manage.manage.normal_difficulty'|trans }}</label>
+            <label class="cd-radio mtm cd-ml16 {% if question.difficulty|default('normal') == 'difficulty' %}checked{% endif %}"><input type="radio" name="difficulty" value="difficulty" data-toggle="cd-radio" {% if question.difficulty|default('normal') == 'difficulty' %}checked{% endif %}>{{ 'course.question_manage.manage.hard_difficulty'|trans }}</label>
+          </div>
+        </div>
+        {% if type != 'material' %}
+          <div class="form-group edit-form-group cd-mb24">
+            <label class="col-sm-2 control-label ph0 edit-form-group__label">{{ 'course.question_manage.manage.score'|trans }}</label>
+            <div class="col-sm-10">
+              <input class="form-control edit-form-group__input" type="text" data-edit="score" name="score" value="{{ question.score|default('') }}">
+            </div>
+          </div>
+        {% endif %}
+        {% block miss_score %}{% endblock %}
+        {% if type != 'material' %}
+          <div class="form-group edit-form-group">
+            <label class="col-sm-2 control-label ph0 edit-form-group__label">{{ 'course.question_manage.manage.analysis'|trans }}</label>
+            <div class="col-sm-10">
+              <div class="cd-dark-major pts js-analysis-content edit-form-group__explain">{{ question_html_filter(question.analysis|default('')) }}</div>
+              <input type="hidden" data-edit="analysis" name="analysis" value="{{ question.analysis|default('') }}">
+              <a class="color-primary cd-mt24 edit-form-group__operate js-analysis-edit" href="javascript:;"><i class="es-icon es-icon-exam text-md mrs"></i>{{ 'course.testpaper_manage.import.re_edit.edit_analysis'|trans }}</a>
+              {% include 'testpaper/subject/attachment.html.twig' with { target: 'analysis', btnTitle:'course.testpaper_manage.import.re_edit.upload_analysis_attachment'|trans, attachment: question.attachment.analysis|default([]) } %}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+    {% block change %}
+      {% if isSub == '0' and method != 'add' %}
+        {% include 'testpaper/subject/type/change-subject.html.twig' with { type: type|default('') } %}
+      {% endif %}
+    {% endblock %}
+    <input type="hidden" name="type" data-edit="type" value="{{ type|default('') }}">
+    <div class="text-center"><button class="cd-btn cd-btn-primary cd-mt24 cd-mb8 subject-button js-finish-edit" type="button">{{ 'course.testpaper_manage.import.re_edit.finish_edit'|trans }}</button></div>
+  </form>
+</div>

@@ -1,0 +1,84 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_bill' %}
+
+{% block main %}
+
+    <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+      <div class="form-group">
+        <select class="form-control" name="lastHowManyMonths"  onchange="submit();">
+          {% set options = {'':'admin.bill.time_option.default'|trans,'oneWeek':'admin.bill.time_option.last_one_week'|trans,'twoWeeks':'admin.bill.time_option.last_two_week'|trans,'oneMonth':'admin.bill.time_option.last_one_month'|trans,'twoMonths':'admin.bill.time_option.last_two_month'|trans,'threeMonths':'admin.bill.time_option.last_three_month'|trans} %}
+          {{ select_options(options, app.request.get('lastHowManyMonths')) }}
+        </select>
+      </div>
+    <div class="form-group">
+        <input type="text" id="nickname" name="nickname" class="form-control" value="{{ app.request.query.get('nickname') }}" placeholder="{{'form.placeholder.nickname'|trans}}">
+    </div>
+
+    <button class="btn btn-primary">{{'form.btn.search'|trans}}</button>
+    <a class="btn btn-primary" href="{{ path('admin_bill_export_csv',{
+    lastHowManyMonths:app.request.get('lastHowManyMonths'),
+    cashType:cashType,
+    nickname:app.request.query.get('nickname'),
+    })}}">{{'form.btn.export_result'|trans}}</a>
+
+    </form>
+
+    <p class="text-muted">
+      <span class="mrl">{{'finance.income'|trans}}：<strong class="inflow-num">{{ math_format(amountInflow, 0.01) }}</strong> {{ 'site.currency.CNY'|trans }}</span>
+      <span class="mrl">{{'finance.expense'|trans}}：<strong class="outflow-num">{{ math_format(amountOutflow, 0.01) }}</strong> {{ 'site.currency.CNY'|trans }}</span>
+    </p>
+
+    <div class="table-responsive">
+      <table class="table table-striped">
+        {% if cashes %}
+        <tr>
+          <th><span class="text-sm">{{'order.sn'|trans}}</span></th>
+          <th><span class="text-sm">{{'name'|trans}}</span></th>  
+          <th><span class="text-sm">{{'user.fields.username_label'|trans}}</span></th>             
+          <th><span class="text-sm">{{'order.paid_time'|trans}}</span></th>
+          <th class="text-right" style="padding-right: 60px;"><span class="text-sm">{{'finance.income_expense'|trans}}</span></th>
+          
+          <th><span class="text-sm">{{'order.payment_pattern'|trans}}</span></th>
+        </tr>
+        {% for cash in cashes %}
+           <tr>
+            <td><span class="text-sm">{{cash.sn}}</span></td>
+            <td><span class="text-sm">{{cash.title}}</span><br>
+                <span class="text-muted text-sm">{{'order.id'|trans}}：{{cash.order_sn}}</span></td>
+            <td><span class="text-sm"><a href="{{ path('user_show', {id:cash.user_id}) }}">
+            {{users[cash.user_id].nickname}}</a></span></td>
+            <td><span class="text-sm">{{cash.created_time|date('Y-m-d H:i:s')}}</span></td>
+
+            {% if cash.type =="inflow" %}
+            <td class="text-right" style="color:#1bb974;padding-right: 50px;">
+               {{cash.amount}} 
+            </td>
+            {% endif %}
+            {% if cash.type =="outflow" %}
+            <td  class="text-right" style="color:#ff7b0e;padding-right: 50px;">
+               -&nbsp;{{cash.amount}}               
+            </td>
+            {% endif %}
+           
+            <td>
+              <span class="text-sm">
+                {% if cash.type =="inflow" %}
+                  {#platform 字典#}
+                  {{ dict_text('payment', cash.platform) }}
+                {% else %}
+                  {{'order.payment_pattern.school'|trans}}
+                {% endif %}
+              </span>
+            </td> 
+          </tr>
+        {% endfor %}
+        {% else %}
+        <div class="empty">{{'site.datagrid.empty'|trans}}</div>
+        {% endif %}
+      </table>
+    </div>
+ {{ admin_macro.paginator(paginator) }}
+
+
+{% endblock %}

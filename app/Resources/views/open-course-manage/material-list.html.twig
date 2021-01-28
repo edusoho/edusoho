@@ -1,0 +1,38 @@
+{% extends 'open-course-manage/layout.html.twig' %}
+
+{% do script(['libs/jquery-validation.js','libs/select2.js', 'app/js/course-manage-file/index/index.js']) %}
+
+{% block title %}{{'course.course_files'|trans}} - {{ parent() }}{% endblock %}
+
+{% block paddingClass %}open-course-file-padding{% endblock %}
+{% set side_nav = 'files' %}
+{% set tab = 'courseLesson' %}
+
+{% set targetType = 'opencoursematerial' %}
+  
+{% block page_title %}
+
+  <style type="text/css">
+    .tooltip-inner{
+      max-width: 600px;
+    }
+  </style>
+  {{'course.course_files.content_title'|trans}}
+{% endblock %}
+
+{% block main_body %}
+<div id="file-manage-panel" data-file-status-url="{{path('course_set_manage_file_status')}}">
+  {% set uploaderToken = uploader_token(targetType, courseSet.id, 'private') %}
+  {% set path = path('open_course_manage_delete_materials_show', {id:courseSet.id, type:tab}) %}
+  {% include 'material-lib/widget/material-button.html.twig' with { uploaderToken: uploaderToken, path: path, type: 'courseFile' } %}
+  {% set subtitlePath = path('open_course_manage_files', {id:courseSet.id}) %}
+  {% include 'material-lib/widget/material-table.html.twig' with { type: 'openCourseFile', path: path, subtitlePath: subtitlePath, size: 'sm' } %}
+
+  <nav class="text-center">
+    {{ web_macro.paginator(paginator) }}
+  </nav>
+  {% include 'material-lib/widget/error-modal.html.twig' %}
+  {% include 'material-lib/widget/tag-modal.html.twig' with {tagPath : path('open_course_manage_files_batch_tag_add', {id:courseSet.id})} %}
+
+</div>
+{% endblock %}

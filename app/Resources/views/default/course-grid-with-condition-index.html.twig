@@ -1,0 +1,114 @@
+<section class="course-list-section {{ config.background|default("") }}" id="course-list-section">
+
+  {% set count = config.count|default(12) %}
+  {% set categoryId = config.categoryId|default(0) %}
+  {% set orderBy = config.orderBy|default('latest') %}
+  {% if orderBy == 'latest' %}
+    {% set courseSets = data('LatestCourseSets',{'count':count, 'categoryId':categoryId}) %}
+  {% elseif orderBy == 'recommendedSeq' %}
+    {% set courseSets = data('RecommendCourseSets',{'count':count, 'categoryId':categoryId}) %}
+  {% elseif orderBy == 'studentNum' %}
+    {% set courseSets = data('PopularCourseSets',{'count':count, 'categoryId':categoryId,'type':'studentNum'}) %}
+  {% elseif orderBy == 'hotSeq' %}
+    {% set courseSets = data('PopularCourseSets',{'count':count, 'categoryId':categoryId,'type':'hotSeq'}) %}
+  {% endif %}
+  {% set categoriesFirst = data('Categories',{'group':'course', 'parentId':0}) %}
+  {% set moreCategories =  categoriesFirst[config.categoryCount|default(4):] %}
+  <div class="container">
+    <div class="text-line">
+      <h5><span>{{ config.title|default(config.defaultTitle) }}</span>
+        <div class="line"></div>
+      </h5>
+      <div class="subtitle">{{ config.subTitle|default(config.defaultSubTitle) }}</div>
+    </div>
+    <div class="course-filter" id="course-filter">
+      <ul class="nav nav-pills hidden-xs" role="tablist">
+        <li role="presentation" class="{% if (categoryId|default(0) == 0) %}active {% endif %} js-course-filter"
+            data-url="{{ path('homepage_category',{orderBy : orderBy|default('latest')}) }}" data-type="course"><a
+              href="javascript:;">{{ 'site.datagrid.filter.all_course'|trans }}</a></li>
+        {% if categoriesFirst %}
+          {% for category in categoriesFirst %}
+            {% if ( loop.index0 < config.categoryCount|default(4) ) %}
+              <li role="presentation"
+                  class="{% if (categoryId|default(0) == category.id) %}active {% endif %} js-course-filter"
+                  data-url="{{ path('homepage_category',{categoryId : category.id, orderBy : orderBy|default('latest')}) }}"
+                  data-type="course"><a href="javascript:;">{{ category.name }}</a></li>
+            {% endif %}
+          {% endfor %}
+          {% if  moreCategories %}
+            <li class="dropdown nav-hover">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;">
+                <i class="es-icon es-icon-morehoriz"></i>
+              </a>
+              <ul class="dropdown-menu">
+                {% for moreCategory in moreCategories %}
+                  <li role="presentation"
+                      class="{% if (categoryId|default(0) == moreCategory.id) %}active {% endif %} js-course-filter"
+                      data-url="{{ path('homepage_category',{categoryId : moreCategory.id, orderBy : orderBy|default('latest')}) }}"
+                      data-type="course"><a href="javascript:;">{{ moreCategory.name }}</a></li>
+                {% endfor %}
+              </ul>
+            </li>
+          {% endif %}
+        {% endif %}
+      </ul>
+      <div class="btn-group visible-xs">
+        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
+                aria-expanded="false">{{ 'site.datagrid.filter.all_course'|trans }} <span class="caret"></span></button>
+        <ul class="dropdown-menu" role="menu">
+          <li role="presentation" class="js-course-filter {% if (categoryId|default(0) == 0) %}active {% endif %}"
+              data-url="{{ path('homepage_category',{orderBy : orderBy|default('latest')}) }}" data-type="course"><a
+                href="javascript:;">{{ 'site.datagrid.filter.all_course'|trans }}</a></li>
+          {% if categoriesFirst %}
+            {% for category in categoriesFirst  if (category.parentId == 0) %}
+              {% if ( loop.index0 < config.categoryCount|default(4) ) %}
+                <li role="presentation"
+                    class="js-course-filter {% if (categoryId|default(0) == category.id) %}active {% endif %}"
+                    data-url="{{ path('homepage_category',{categoryId : category.id, orderBy : orderBy|default('latest')}) }}"
+                    data-type="course"><a href="javascript:;">{{ category.name }}</a></li>
+              {% endif %}
+            {% endfor %}
+            {% if  moreCategories %}
+              <li role="presentation" class="js-course-filteractive" data-type="course"><a
+                    href="{{ path('course_set_explore') }}">{{ 'site.datagrid.filter.category_more'|trans }}</a></li>
+            {% endif %}
+          {% endif %}
+        </ul>
+      </div>
+      <div class="course-sort btn-group">
+        <a href="javascript:;"
+           class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'latest') %} active {% endif %}js-course-filter"
+           data-url="{{ path('homepage_category',{categoryId : categoryId|default(0), orderBy : 'latest'}) }}"
+           data-type='course'>
+          {{ 'site.datagrid.filter.latest'|trans }}
+        </a>
+        <a href="javascript:;"
+           class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'hotSeq') %} active {% endif %}js-course-filter"
+           data-url="{{ path('homepage_category',{categoryId : categoryId|default(0), orderBy : 'hotSeq'}) }}"
+           data-type='course'>
+          {{ 'site.datagrid.filter.hotest'|trans }}
+        </a>
+        <a href="javascript:;"
+           class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'recommendedSeq') %} active {% endif %}js-course-filter"
+           data-url="{{ path('homepage_category',{categoryId : categoryId|default(0), orderBy : 'recommendedSeq'}) }}"
+           data-type='course'>
+          {{ 'site.datagrid.filter.recommended'|trans }}
+        </a>
+      </div>
+    </div>
+    <div class="course-list course-list-new">
+      <div class="row">
+        {% for courseSet in courseSets %}
+          <div class="col-lg-3 col-md-4 col-xs-6 course-item-wrap">
+            {% include 'course/widgets/course-grid-new.html.twig' with {courseSet: courseSet} %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="section-more-btn">
+      <a href="{{ path('course_set_explore') }}" class="btn btn-default btn-lg">
+        {{ 'site.datagrid.filter.course_more'|trans }} <i class="mrs-o es-icon es-icon-chevronright"></i>
+      </a>
+    </div>
+  </div>
+</section>

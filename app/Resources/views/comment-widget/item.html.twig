@@ -1,0 +1,14 @@
+<li class="media comment {% if (app.user and app.user.id == comment.userId) or is_granted('ROLE_ADMIN') %}comment-operated{% endif %}" data-id="{{ comment.id }}">
+  <a class="pull-left" href="javascript:">
+    <img class="media-object media-object-small" src="{{ filepath(user.smallAvatar, 'avatar.png') }}">
+  </a>
+  <div class="media-body">
+    <div class="media-heading">
+      <a href="javascript:" class="pull-right comment-delete-btn" data-url="{{ path('comment_widget_delete', {id:comment.id}) }}">x</a>
+      <a href="javascript:">{% if not user.destroyed|default(0) %}{{ user.nickname }}{% else %}{{ 'user.user_had_destroyed'|trans }}{% endif %}</a>
+      <span class="bullet">•</span>
+      <span>{{ comment.createdTime|smart_time }}</span>
+    </div>
+    {{ comment.content|nl2br }}
+  </div>
+</li>

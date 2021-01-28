@@ -1,0 +1,71 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% do script(['libs/bootstrap-datetimepicker.js', 'libs/jquery-validation.js', 'app/js/classroom-manage/student-expiryday/index.js'])%}
+{% set modalSize = 'large' %}
+
+{% block title %}{{'classroom.edit_expiry_mode'|trans}}{% endblock %}
+{% block body %}
+
+<form id="expiryday-set-form" class="form-horizontal" method="post" action="{{ path('classroom_manage_member_deadline', { classroomId: classroom.id, userIds: userIds }) }}">
+  {% if classroom.status == 'published' %}
+    <div class="row form-group">
+      <div class="col-sm-2 control-label width-100">
+        <label for="classroom-title">{{'classroom.title_label'|trans}}</label>
+      </div>
+      <div class="col-sm-7 controls">
+        <div style="margin-top: 7px;">
+          {{ classroom.title }}
+        </div>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-sm-2 control-label width-100">
+        <label for="student-nickname">{{ 'classroom.student'|trans }}{{'classroom.username'|trans}}</label>
+      </div>
+      <div class="col-sm-7 controls">
+        <div style="margin-top: 7px;">
+          {% for user in users %}
+            {{ user.nickname|default() }}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <div class="row form-group cd-mb32">
+      <div class="col-sm-2 control-label">
+        <label>{{'course.members_manage.official_student.add_expiry_day.update'|trans}}</label>
+      </div>
+      <div class="col-sm-2 control-label width-100">
+        <label><input type="radio" name="updateType" value="day" {% if 'forever' == classroom.expiryMode %} disabled {% else %} checked="checked" {% endif %}
+          > {{'course.members_manage.official_student.add_expiry_day.update.days'|trans}}</label>
+      </div>
+      <div class="col-sm-2 controls width-100 pl0">
+        <select class="form-control" name="waveType" {% if 'forever' == classroom.expiryMode %} disabled {% endif %}>
+          {{ select_options(dict('waveType'), app.request.query.get('waveType')) }}
+        </select>
+      </div>
+      <div class="col-sm-5 controls expiry-date-change">
+        <input type="text" {% if 'forever' == classroom.expiryMode %} disabled {% endif %} id="day" name="day" value="0" data-url="{{ path('classroom_manage_member_deadline_check_day', {classroomId: classroom.id, userIds: userIds}) }}" class="form-control width-input">
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-sm-offset-2 col-sm-2 control-label width-100">
+        <label><input type="radio" name="updateType" value="date" {% if 'forever' == classroom.expiryMode %} checked="checked" {% endif %}> {{'course.members_manage.official_student.add_expiry_day.update.date'|trans}}</label>
+      </div>
+      <div class="col-sm-7 controls pl0 pr0">
+        <input type="text" id="deadline" name="deadline" autocomplete="off" {% if 'forever' != classroom.expiryMode %} disabled {% endif %} data-url="{{ path('classroom_manage_member_deadline_check_deadline', {classroomId: classroom.id, userIds: userIds}) }}" class="form-control width-input">
+      </div>
+    </div>
+  {% else %}
+    <div class="empty">{{dict_text('classroomStatus', classroom.status)}}{{'classroom.not_edit'|trans}}{{ 'classroom.student'|trans }}{{'classroom.publish_tips'|trans}}</div>
+  {% endif %}
+</form>
+
+{% endblock %}
+
+{% block footer %}
+  <button class="btn btn-primary pull-right js-save-deadline-set-form" id="submit" type="button" data-loading-text="{{'form.btn.save.submiting'|trans}}" data-user="{{ 'site.default.student'|trans }}">{{'form.btn.save'|trans}}</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
+{% endblock %}

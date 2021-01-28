@@ -1,0 +1,73 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+{% import "admin-v2/macro.html.twig" as web_macro %}
+{% set modal_class = 'modal-lg' %}
+{% block title %}{{ batch.name }}-{{ 'coupon.usage_detail_title'|trans }}{% endblock %}
+{% block body %}
+
+<table class="table table-striped" id="coupon-list">
+    <thead>
+      <tr>
+        <th>{{ 'coupon.id'|trans }}</th>
+        {% if batch.codeEnable %}
+          <th>{{ 'coupon.code'|trans }}</th>
+        {% endif %}
+        <th>{{ 'coupon.status'|trans }}</th>
+        <th>{{ 'coupon.user'|trans }}</th>
+        <th>{{ 'coupon.order'|trans }}</th>
+        <th>{{ 'coupon.origin_price'|trans }}</th>
+        <th>{{ 'coupon.pay_amount'|trans }}</th>
+        <th>{{ 'coupon.receive_time'|trans }}</th>
+        <th>{{ 'coupon.used_time'|trans }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for coupon in coupons %}
+      	{% set user = users[coupon.userId]|default(null) %}
+      	{% set order = orders[coupon.orderId]|default(null) %}
+		<tr>
+		  <td>{{ coupon.id }}</td>
+      {% if batch.codeEnable %}
+		    <td>{{ coupon.code }}</td>
+      {% endif %}
+		  <td>
+        {{ dict_text('couponStatus', coupon.status) }}  
+      </td> 
+		  <td>{% if user %}{{ web_macro.user_link(user) }}{% else %}-{% endif %}</td>
+		  <td class="text-danger">{{ order.title|default('-') }}</td>
+      
+      <td class="text-danger">
+        {% if order %}
+          {{ order.price_amount|to_cash }}
+        {% else %}
+          -
+        {% endif %}
+      </td>
+		  <td class="text-danger">
+        {% if order %} 
+          {{ order.pay_amount|to_cash }}
+        {% else %}-{% endif %}
+      </td>
+      <td>
+        {% if user  and  coupon.receiveTime != 0 %}
+          {{ coupon.receiveTime|date('Y-m-d H:i:s') }}
+        {% else %}
+          -
+        {% endif %}
+      </td>
+		  <td>
+		  	{% if user and coupon.status == 'used' %}
+			  	{{ coupon.orderTime|date('Y-m-d H:i:s') }}
+  			{% else %}
+  				-
+  			{% endif %}
+		  </td> 
+		</tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {{ web_macro.paginator(paginator) }}
+
+{% endblock %}
+{% block footer %}
+  <button type="button" class="btn btn-default pull-right" data-dismiss="modal">{{ 'form.btn.close'|trans }}</button>
+{% endblock %} 

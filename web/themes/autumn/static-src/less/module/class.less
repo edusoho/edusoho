@@ -1,0 +1,197 @@
+
+// 栏目
+.panel-autumn {
+  background: transparent;
+  .panel-heading {
+    padding: 0;
+    border-bottom: 2px solid #ddd;
+  }
+  .panel-title {
+    display: inline-block;
+    padding: 10px 0;
+  }
+}
+
+.panel-autumn .panel-heading-important .panel-title {
+  margin: 0;
+  padding: 12px 10px 10px;
+  font-size: 20px;
+  @media (max-width: 767px) {
+    font-size: 16px;
+  }
+}
+
+.panel-autumn .panel-body {
+  padding: 15px 0 0 0;
+}
+
+.panel-autumn-primary .panel-heading {
+  border-bottom-color: @brand-primary;
+}
+
+.panel-autumn-primary .panel-title {
+  color: @brand-primary;
+}
+
+.panel-autumn-primary .panel-title small {
+  color: @brand-primary;
+}
+
+.panel-autumn-primary .panel-heading-important .panel-title {
+  background: @brand-primary;
+  color: #fff;
+}
+
+.panel-autumn-primary .panel-heading-important .panel-title small {
+  color: #fff;
+}
+
+.panel-autumn-default .panel-heading {
+  border-bottom-color: #f78a4b;
+}
+.panel-autumn-default .panel-heading-important .panel-title {
+  background: #f78a4b;
+  color: #fff;
+}
+
+
+
+
+
+// 首页班级
+.home-class-list {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+@media (max-width: 767px) {
+  .home-class-list {
+    background: #fff;
+    padding-top: 10px;
+  }
+}
+.home-class-list .class-item {
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid #e2e2e2;
+  background-color: #fff;
+}
+@media (max-width: 767px) {
+  .home-class-list .class-item {
+      float: left;
+      width: 50%;
+      padding: 0 5px;
+      margin-bottom: 10px;
+      border: none;
+  }
+}
+.home-class-list .class-body {
+  padding: 10px 0;
+}
+@media (max-width: 767px) {
+  .home-class-list .class-body{
+    border:1px solid #e2e2e2;
+    padding:5px;
+  }
+}
+.home-class-list .class-picture-link {
+  float: left;
+  margin-right: 25px;
+}
+@media (max-width: 767px) {
+  .home-class-list .class-picture-link {
+    float: none;
+    display: block;
+    margin-right: 0;
+  }
+}
+.home-class-list .class-picture-link > img {
+  width: 213px;
+  @media (min-width: 768px) {
+    height: 120px;
+  }
+}
+
+@media (max-width: 767px) {
+  .home-class-list .class-picture-link {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56%;
+    img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+  }
+}
+
+.home-class-list .class-title {
+  margin-bottom: 15px;
+  margin-top: 0;
+  font-size: 16px;
+  line-height: 24px;
+  color: #222;
+  overflow: hidden;
+}
+@media (max-width: 767px) {
+  .home-class-list .class-title {
+    margin-bottom: 0;
+    height: 20px;
+    line-height: 20px;
+    font-size: 14px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: normal;
+  }
+}
+.home-class-list .class-metas {
+  margin-bottom: 20px;
+  color: #999;
+}
+@media (max-width: 767px) {
+  .home-class-list .class-metas {
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+}
+.home-class-list .class-metas .fa {
+  margin-right: 5px;
+  font-size: 18px;
+}
+@media (max-width: 767px) {
+  .home-class-list .class-metas .fa {
+    font-size: 14px;
+  }
+}
+.home-class-list .class-teacher {
+  margin-right: 20px;
+}
+@media (max-width: 767px) {
+  .home-class-list .class-teacher {
+    display: none;
+  }
+  .home-class-list .class-price{
+    font-size: 14px!important;
+  }
+}
+.home-class-list .class-teacher span {
+  margin-right: 10px;
+}
+
+.home-class-list .class-price {
+  float: right;
+  font-size: 18px;
+}
+@media (min-width: 1200px) {
+  .home-class-list .class-price {
+    margin-right: 50px;
+  }
+}
+
+
+
+
+

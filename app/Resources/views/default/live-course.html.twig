@@ -1,0 +1,64 @@
+{% set RecentLiveCourseSets = data('RecentLiveCourseSets',{ 'count':4}) %}
+{% if RecentLiveCourseSets %}
+  <section class="live-course-section {{config.background|default("")}}">
+    <div class="container">
+      <div class="text-line gray">
+        <h5><span>{{ config.title|default(config.defaultTitle) }}</span><div class="line"></div></h5>
+        <div class="subtitle">{{ config.subTitle|default(config.defaultSubTitle) }}</div>
+      </div>
+      <div class="course-list course-list-new">
+        <div class="row">
+          {% for courseSet in RecentLiveCourseSets %}
+            <div class="col-lg-3 col-md-4 col-xs-6 course-item-wrap">
+              {% include 'course/widgets/course-grid-new.html.twig' with {courseSet: courseSet} %}
+              {% set task = courseSet['task']|default(null) %}
+              {% if task and "now"|date("U") >= task.startTime and "now"|date("U") <= task.endTime %}
+                <div class="course-date visible-lg">
+                  <div class="btn-circle btn-live  btn-circle-md">
+                    <i class="es-icon es-icon-videocam"></i>
+                  </div>
+                  <div class="date">
+                    {{'homepage.live_course.living'|trans}}
+                  </div>
+                </div>
+              {% else %}
+                <div class="course-date visible-lg">
+                  <div class="btn-circle btn-circle-md">
+                    <i class="es-icon es-icon-videocam"></i>
+                  </div>
+                  <div class="date">
+                    {{ task.startTime|date('site.date_format'|trans) }}
+                  </div>
+                </div>
+              {% endif %}
+
+            </div>
+          {% endfor %}
+
+          {% set emptyCourseNum = 4 - RecentLiveCourseSets|length %}
+          {% if emptyCourseNum > 0 %}
+            {% for i in range(1, emptyCourseNum) %}
+              <div class="col-lg-3 col-md-4 col-sm-6 visible-lg">
+                <div class="course-item course-default">
+                  <i class="es-icon es-icon-videocam"></i>
+                  <br>
+                  {{'homepage.live_course.expect'|trans}}
+                </div>
+                <div class="course-date">
+                  <div class="btn-circle btn-circle-md">
+                    <i class="es-icon es-icon-accesstime"></i>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          {% endif %}
+        </div>
+      </div>
+      <div class="section-more-btn">
+        <a href="{{  path('live_course_set_explore') }}" class="btn btn-default btn-lg">
+          {{'homepage.live_course.more'|trans}} <i class="mrs-o es-icon es-icon-chevronright"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+{% endif %}

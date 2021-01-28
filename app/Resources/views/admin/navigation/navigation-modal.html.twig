@@ -1,0 +1,108 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+{% set block = block|default(null) %}
+
+{% block title %}
+  {% if navigation.id == 0 and navigation.type =='top' %}
+    {{ 'admin.setting.navigation.top.add'|trans }}
+  {% elseif navigation.id > 0 and navigation.type =='top' %}
+    {{ 'admin.setting.navigation.top.edit'|trans }}
+  {% elseif navigation.id == 0 and navigation.type =='foot' %}
+    {{ 'admin.setting.navigation.foot.add'|trans }}
+  {% elseif navigation.id > 0 and navigation.type =='foot' %}
+    {{ 'admin.setting.navigation.foot.edit'|trans }}
+  {% elseif navigation.id == 0 and navigation.type =='friendlyLink' %}
+    {{ 'admin.setting.navigation.friendlyLink.add'|trans }}
+  {% elseif navigation.id > 0 and navigation.type =='friendlyLink' %}
+    {{ 'admin.setting.navigation.friendlyLink.edit'|trans }}
+  {% endif %}
+
+{% endblock %}
+
+{% block body %}
+
+  <form class="form-horizontal" id="navigation-form"
+      {% if navigation.id == 0 %}
+        action="{{ path('admin_navigation_create') }}"
+      {% else %}
+        action="{{ path('admin_navigation_update', {id:navigation.id}) }}"
+      {% endif %}
+        method="post">
+
+    {% if parentNavigation %}
+      <div class="row form-group">
+        <div class="col-md-3 control-label"><label>{{ 'admin.setting.navigation.parentNavigation'|trans }}</label></div>
+        <div class="col-md-8 controls">
+          {{ parentNavigation.name }}
+          <div class="help-block">{{ 'admin.setting.navigation.parentNavigation.help_block'|trans }}</div>
+        </div>
+      </div>
+    {% endif %}
+
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label for="name">{{ 'admin.setting.navigation.name'|trans }}</label></div>
+      <div class="col-md-8 controls">
+        <input class="form-control" type="text" id="name" value="{{ navigation.name }}" name="name"></div>
+    </div>
+    <p></p>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label for="url">{{ 'admin.setting.navigation.url'|trans }}</label></div>
+      <div class="col-md-8 controls">
+        <input class="form-control width-input width-input-large" type="text" id="url" {% if navigation.url %} value="{{navigation.url}}" {% else %} value="{{ app.request.getScheme() }}://" {% endif %} name="url" >
+      </div>
+    </div>
+
+    <p></p>
+
+    <input type="hidden" name="type" value="{{ navigation.type }}">
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label>{{ 'admin.setting.navigation.new_windows'|trans }}</label></div>
+      <div class="col-md-8 controls radios">
+        <div id="isNewWin">
+          <input type="radio" name="isNewWin" value="0"
+              {% if navigation.isNewWin == 0 %} checked="checked" {% endif %}>
+          <label>{{ 'admin.setting.navigation.isNewWin.no'|trans }}</label>
+          <input type="radio" name="isNewWin" value="1"
+              {% if navigation.isNewWin == 1 %} checked="checked" {% endif %}>
+          <label>{{ 'admin.setting.navigation.isNewWin.yes'|trans }}</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label>{{ 'admin.setting.navigation.status'|trans }}</label>
+      </div>
+      <div class="col-md-8 controls radios">
+        <div id="isOpen">
+          <input type="radio" name="isOpen" value="1"
+              {% if navigation.isOpen == 1 %} checked="checked" {% endif %}>
+          <label>{{ 'admin.setting.navigation.status.open'|trans }}</label>
+          <input type="radio" name="isOpen" value="0"
+              {% if navigation.isOpen == 0 %} checked="checked" {% endif %}>
+          <label>{{ 'admin.setting.navigation.status.closed'|trans }}</label>
+        </div>
+      </div>
+    </div>
+    <input type="hidden" name="parentId" value="{{ parentNavigation.id|default(0) }}">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+  </form>
+
+  <script type="text/javascript">
+    {% if navigation.id  == 0 %}
+      app.load('navigation/create-modal')
+    {% else %}
+      app.load('navigation/edit-modal')
+    {% endif %}
+  </script>
+
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-link" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
+  <button id="navigation-save-btn" data-submiting-text="{{ 'form.btn.submit.submiting'|trans }}" type="submit" class="btn btn-primary"
+          data-toggle="form-submit" data-target="#navigation-form">{{ 'form.btn.save'|trans }}</button>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{ 'admin.edu_cloud.edu_search.rebuild_index.sure_tips'|trans }}{% endblock %}
+
+{% block body %}
+  <form id="search-clause-form" class="form-horizontal" method="post"
+        action="{{ path('admin_v2_edu_cloud_search_reapply') }}">
+    <div class="item">
+      <h3 class="text-center">{{ 'admin.edu_cloud.edu_search.rebuild_index.modal.content_title'|trans }}</h3>
+      <p>
+        {{ 'admin.edu_cloud.edu_search.rebuild_index.rebuild_tips'|trans|raw }}
+      </p>
+    </div>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+{% endblock %}
+
+{% block footer %}
+  <button id="search-clause-form" data-submiting-text="{{ 'form.btn.submit.submiting'|trans }}" type="submit"
+          class="btn btn-primary pull-right" data-toggle="form-submit"
+          data-target="#search-clause-form">{{ 'form.btn.confirm'|trans }}</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
+{% endblock %}

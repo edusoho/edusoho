@@ -1,0 +1,88 @@
+{% import "macro.html.twig" as web_macro %}
+{% do script(['libs/jquery-raty.js','libs/jquery-validation.js','app/js/review/list/index.js'])%}
+
+{% if member|default(false) and not ('auditor' in member.role) %}
+  <div class="clearfix">
+     <button class="btn btn-primary btn-sm pull-right js-show-review-form" {% if not userReview or (hideRereview|default(false)) %}style="display:none;"{% endif %}>{{'course.reviews.review_again'|trans}}</button>
+  </div>
+  {% include 'review/widget/review-form.html.twig' with { userReview:userReview, targetType:targetType|default('course'), targetId:targetId|default() } %}
+{% endif %}
+
+{% set canAccess = canAccess|default(false) %}
+
+{% for review in reviews if users[review.userId]|default(false) %}
+  {% set user = users[review.userId] %}
+  {% set posts = data('ReviewPosts',{reviewId:review.id, targetType:targetType|default('course'), start:0,limit:5})|default(null) %}
+
+  <div class="js-reviews">
+    <div class="media media-evaluate">
+      <div class="media-left">
+        {{ web_macro.user_avatar_link(user,'small', ['card']) }}
+      </div>
+      <div class="media-body thread-post">
+        <div class="title">{{ web_macro.user_link(user) }}
+          {% if review.meta %}<span>{{(courseMap[review.targetId].title|default('course.reviews.teaching_plan')|trans) ~ ' ' ~ ('course.reviews.teaching_plan_progress'|trans)}}:{{ review.meta.learnedNum }}/{{ review.meta.lessonNum}}</span>{% endif %}&nbsp;&nbsp;
+          {{ review.createdTime|date('Y-m-d') }}
+        </div>
+        <div class="score">
+          {{ web_macro.star(review.rating) }}
+        </div>
+        <div class="content">
+          <div class="short-content">{{ review.content|sub_text(100) }}
+            {% if review.updatedTime != review.createdTime and review.updatedTime is not null %}<span class="label label-success">{{'course.reviews.additional_reviews_btn'|trans}}</span>{% endif %}
+          </div>
+          <div class="full-content" style="display:none;">{{ review.content|nl2br }}
+            {% if review.updatedTime != review.createdTime and review.updatedTime is not null %}<span class="label label-success">{{'course.reviews.additional_reviews_btn'|trans}}</span>{% endif %}
+          </div>
+        </div>
+        <div class="actions clearfix">
+          <a href="javascript:;" class="show-full-btn" style="display:none;">[{{'course.reviews.expand_btn'|trans}}]</a>
+          <a href="javascript:;" class="show-short-btn" style="display:none;">[{{'course.reviews.collapse_btn'|trans}}]</a>
+          {% if canAccess %}
+            <a href="javascript:;" class="js-reply pull-right">{% if posts is empty %}{{'course.reviews.reply_btn'|trans}}{% else %}{{'course.reviews.cancel_reply_btn'|trans}}{% endif %}</a>
+          {% endif %}
+        </div>
+
+        {% set goto = goto|default(path('homepage')) %}
+
+        <div class="thread-subpost-container subcomments clearfix {% if posts is empty %}hide{% endif %}">
+          <div class="thread-subpost-content">
+            {% include 'review/widget/subposts.html.twig' with {posts:posts,targetType:targetType|default('course'),canAccess:canAccess|default(false)} %}
+          </div>
+
+          {% if canAccess %}
+            <div class="thread-subpost-morebar clearfix {% if posts is empty %}hide{% endif %}">
+              <button class="btn btn-default btn-xs pull-right js-toggle-subpost-form">{{'course.reviews.reply_btn'|trans}}</button>
+            </div>
+          {% endif %}
+
+          {% if app.user %}
+            <form method="post" class="thread-subpost-form {% if posts %}hide{% endif %}">
+              <div class="form-group">
+                <div class="controls">
+                  <textarea class="form-control" name="content" data-display="{{'course.reviews.content'|trans}}"></textarea>
+                </div>
+              </div>
+              <div class="form-group">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+                <a href="javascript:;" class="btn btn-primary btn-sm pull-right js-btn-save-post" data-target-id="{{ review.id }}" data-loading-text="{{'form.btn.reply.submiting'|trans}}">{{'form.btn.save'|trans}}</a>
+              </div>
+            </form>
+          {% else %}
+            <div class="empty">
+              {{ 'user.not_login.tips'|trans({'%login%':path('login', {goto:app.request.server.get('REQUEST_URI')}), '%register%': path('register', {goto:app.request.server.get('REQUEST_URI') }) })|raw }}
+            </div>
+          {% endif %}
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+{% else %}
+  <div class="empty">{{'course.reviews.empty'|trans}}</div>
+{% endfor %}
+
+{% if paginator|default(null) %}
+  {{ web_macro.paginator(paginator) }}
+{% endif  %}

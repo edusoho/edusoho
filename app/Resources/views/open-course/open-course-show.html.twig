@@ -1,0 +1,76 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+  {{ course.title }} - {{ parent() }}
+{% endblock %}
+
+{% block keywords %}
+  {% set tags = data('Tags', {tagIds: tagIds}) %}
+  {% for tag in tags %}{{tag.name}}{% if not loop.last%},{% endif %}{% else %}{{ parent() }}{% endfor %}
+{% endblock %}
+
+{% block description %}
+  {% if course.about %}
+    {{ course.about|purify_and_trim_html|default('')|plain_text(100) }}
+  {% else %}
+    {{ parent() }}
+  {% endif %}
+{% endblock %}
+
+{% do  script(['libs/jquery-validation.js', 'app/js/open-course/index.js']) %}
+
+{% block content %}
+  <ol class="breadcrumb open-course-breadcrumb">
+    <li><a href="{{ path('homepage') }}">{{ 'homepage'|trans }}</a></li>
+    <li><a href="{{ path('open_course_explore') }}" >{{ 'open_course'|trans }}</a></li>
+    <li>{{ course.title }}</li>
+  </ol>
+  <div class="open-course-header">
+    <div class="row">
+
+      {{ render(controller('AppBundle:OpenCourse:header',{course:course, lessonId:lessonId|default(null)})) }}
+
+      <div class="col-md-3 open-course-tab js-open-course-tab">
+        <ul class="clearfix">
+          <li class="tab-header active"><i class="es-icon es-icon-staroutline prm"></i>{{ 'my.teaching.open_course.show.recommend_course'|trans }}</li>
+        </ul>
+        <div id="content">
+          <ul id="recommand-tab">
+            {% include 'open-course/recommend-course-list.html.twig' %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  {# {% endcache %} #}
+
+  {{ render(controller('AppBundle:OpenCourse:infoBar',{courseId:course.id, as:app.request.get('as')|default('')})) }}
+
+  <div class="open-course-detail row">
+    <div class="col-md-9">
+      <div class="es-section gray-darker editor-text">
+        {% if course.about %}
+          {{ course.about|cdn|raw }}
+        {% else %}
+          <div class="empty">{{ 'my.teaching.open_course.show.about_empty'|trans }}</div>
+        {% endif %}
+      </div>
+      {{ render(controller('AppBundle:OpenCourse:comment',{request:app.request,courseId:course.id, as:app.request.get('as')|default('')})) }}
+    </div>
+
+    <div class="col-md-3 hidden-sm hidden-xs">
+      {{ render(controller('AppBundle:OpenCourse:teachers',{courseId:course.id})) }}
+	    {% if app.user and app.user.id %}
+		    {{ render(controller('AppBundle:OpenCourse:materialList',{id:course.id})) }}
+	    {% endif %}
+    </div>
+    {# {% endcache %} #}
+  </div>
+  {% include 'common/weixin-share.html.twig' with {
+    'title': course.title,
+    'desc': course.about|striptags|purify_and_trim_html,
+    'link': app.request.uri,
+    'imgUrl': fileurl(course.largePicture,'course.png'),
+  } %}
+{% endblock %}
+    

@@ -1,0 +1,12 @@
+<div class="thread-post-interaction">
+  <a href="javascript:;" class="js-post-up interaction color-gray"
+    data-url="{{ path('thread_post_up', {threadId:post.threadId, postId: post.id}) }}">
+    <span class="glyphicon glyphicon-thumbs-up"></span> (<span class="post-up-num">{{ post.ups }}</span>)
+  </a>
+  <a href="javascript:;" class="js-reply interaction color-gray"><span class="glyphicon glyphicon-comment hide"></span>
+    {{'thread.reply'|trans}}
+    {% if not post.parentId %}
+      <span class="subposts-num-wrap {% if not post.subposts %}hide{% endif %}">(<span class="subposts-num">{{ post.subposts }}</span>)</span>
+    {% endif %}
+  </a>
+</div>

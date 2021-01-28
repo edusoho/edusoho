@@ -1,0 +1,44 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% do script(['app/js/admin-v2/operating/certificate-record/detail/index.js']) %}
+
+{% block title %}
+  {% if model == 'grant' %}
+    {{ 'admin.operation_certificate.certificate.record.grant'|trans }}
+  {% else %}
+    {{ 'admin.operation_certificate.certificate.record.detail'|trans }}
+  {% endif %}
+{% endblock %}
+
+{% block body %}
+  <h5 class="mll fsl"><b>{{ 'admin.operation_certificate.certificate.record.user'|trans }}</b></h5><br>
+  <p class="mll">{{ 'user.fields.truename_label'|trans }}：{{ user.truename|default('--') }}</p><br>
+  <p class="mll">{{ 'user.fields.username_label'|trans }}：{{ user.nickname }}</p><br>
+
+  <h5 class="mll fsl"><b>{{ 'admin.operation_certificate.certificate.record.information'|trans }}</b></h5><br>
+  <p class="mll">{{ 'admin.operation_certificate.certificate.record.certificate_target'|trans }}：{{ record.targetType|trans }}"{{ target.title|default('') }}"</p><br>
+  <p class="mll">{{ ('admin.operation_certificate.certificate.record.finish_status.'~record.targetType)|trans }}：{{ 'admin.operation_certificate.certificate.record.finish_status'|trans }} {{ record.createdTime|date('Y-m-d H:i:s') }}</p><br>
+
+  <h5 class="mll fsl"><b>{{ 'admin.operation_certificate.certificate.record.certificate_information'|trans }}</b></h5><br>
+  <div class="img-responsive js-certificate-image">
+    <span class="el-loading-text js-loading-text mll" data-url="{{ path('certificate_image_show', {id: record.id}) }}">{{ 'admin.operation_certificate.certificate.record.img_loading'|trans }}</span>
+  </div>
+  <br>
+  <p class="mll">{{ 'admin.operation_certificate.certificate.record.code'|trans }}： {{ record.certificateCode|default('') }}</p><br>
+  <p class="mll">{{ 'admin.operation_certificate.certificate.record.issue_date'|trans }}：{{ record.issueTime|date('Y-m-d') }}</p><br>
+  <p class="mll">{{ 'admin.operation_certificate.certificate.expiry_day'|trans }}：
+    {% if record.expiryTime|default(0) != 0 %}
+      {{ 'admin.operation_certificate.certificate.record.days_expiry'|trans({'%deadline%':record.expiryTime|date('Y-m-d')}) }}
+    {% else %}
+      {{ 'admin.operation_certificate.certificate.expiry_day.forever'|trans }}
+    {% endif %}
+  </p><br>
+
+  <br>
+{% endblock %}
+{% block footer %}
+  {% if record.status|default('') == 'valid'%}
+    <button id="cancel-certificate" type="button" class="btn btn-primary pull-left" data-loading-text="{{ 'form.btn.submit.submiting'|trans }}" data-url="{{ path('admin_v2_certificate_record_cancel', {id: record.id}) }}">{{ 'admin.operation_certificate.certificate.record.cancel'|trans }}</button>
+  {% endif %}
+  <button type="button" class="btn btn-default btn-link pull-right" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
+{% endblock %}

@@ -1,0 +1,218 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set script_controller = 'system/user-fields' %}
+
+{% set menu = 'admin_setting_user_fields' %}
+{% block page_buttons %}
+<button type="button" class="btn btn-success btn-sm pull-right" data-toggle="modal" data-target="#myModal">{{'admin.user_fields.add_field_btn'|trans}}</button>
+{% endblock %}
+{% block main %}
+
+{{ web_macro.flash_messages() }}
+<form action="" class="form-horizontal" method="post">
+  <fieldset>
+    <legend>{{'admin.user_fields.customer_fields_setting'|trans}}</legend>
+    <table class="table table-striped table-hover" id="course-table">
+      <thead>
+      <tr>
+        <th>{{'admin.user_fields.fields_title'|trans}}</th>
+        <th>{{'admin.user_fields.fields_fieldName'|trans}}</th>
+        <th>{{'admin.user_fields.fields_enabled'|trans}}</th>
+        <th>{{'admin.user_fields.fields_seq'|trans}}</th>
+        <!-- <th>创建时间</th> -->
+        <th>{{'admin.user_fields.operation'|trans}}</th>
+      </tr>
+      </thead>
+      <tbody>
+        {% include 'admin/system/user-fields.table.tr.html.twig' %}
+      </tbody>
+    </table>
+  </fieldset>
+  
+  
+  <fieldset>
+    <legend>{{'admin.user_fields.Personal_info_configiration'|trans}}</legend>
+
+    {% set commonFields = dict('userInfoFields')|default(null) %}
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label >{{'admin.user_fields.Require_personal'|trans}}</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('buy_fill_userinfo', {1:'admin.user_fields.Personal_info_configiration.open'|trans, 0:'admin.user_fields.Personal_info_configiration.closed'|trans}, courseSetting.buy_fill_userinfo|default(0)) }}
+        <p class="help-block">{{ 'admin.user_fields.Personal_info_configiration.help_block'|trans }}</p>
+      </div>
+
+      <div class="controls col-md-8 col-md-offset-3" id="show-list">
+        <div class="pull-left">
+          {% for sort in courseSetting.userinfoFields|default([]) %}
+            {% set userCustomField = userFields[sort]|default(null) %}
+            {% set userInfoFieldsDict = dict_text('userInfoFields', sort)|default(null) %}
+            {% if userCustomField %}
+              <button type="button" class="btn btn-default btn-xs">
+                {{ userCustomField.title }}
+              </button>
+            {% elseif userInfoFieldsDict %}
+              <button type="button" class="btn btn-default btn-xs">
+                {{ userInfoFieldsDict }}
+              </button>
+            {% endif %}
+          {% endfor %}
+        </div>
+          
+        <div class="pull-right ">
+          <a href="javascript:" id="show-list-btn">{{'admin.user_fields.edit_btn'|trans}} 
+            <span class="glyphicon glyphicon-chevron-down"></span>
+          </a>
+        </div>
+      </div>
+
+      <div class="controls col-md-8 col-md-offset-2" id="show-register-list" style="display:none">
+        <div class="form-group">
+          <ul class="register-list sortable-list list-unstyled col-md-12" data-role="list">
+            {% set checkedFieldsKeys = courseSetting.userinfoFields|default([]) %}
+            {% for key,field in commonFields if commonFields %}
+              <li class="list-group-item clearfix" data-role="item" >
+                <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>&nbsp;
+                <input type="checkbox" name="userinfoFields[]" value="{{ key }}" {% if key in checkedFieldsKeys %}checked=true{% endif %} />
+                <input type="hidden"  name="userinfoFieldNameArray[]" value="{{ key }}" /> 
+                {{ field }}
+                {% if key == 'email' or key == 'mobile' %}<span class="text-muted">  ({{'admin.user_fields.Formart_verifcation'|trans}})</span>{% endif %}
+              </li>
+            {% endfor %}
+
+            {% for field in userFields if userFields|default(null) %}
+              <li class="list-group-item clearfix" data-role="item" >
+                <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>&nbsp;
+                <input type="checkbox" name="userinfoFields[]" value="{{field.fieldName}}" {% if field.fieldName in checkedFieldsKeys %}checked=true{% endif %} />
+                <input type="hidden"  name="userinfoFieldNameArray[]" value="{{field.fieldName}}" /> {{field.title}}
+              </li>
+            {% endfor %}
+          </ul>
+
+          <div class="help-block col-md-12"><span class="text-success">{{'admin.user_fields.Formart_verifcation.help_block'|trans}}</span></div>
+
+        </div>
+        <div class="mbl" style="text-align:center;">
+          <a href="javascript:" id="hide-list-btn">{{'admin.user_fields.Formart_verifcation.hide'|trans}}
+            <span class="glyphicon glyphicon-chevron-up"></span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label >{{'admin.user_fields.Require_personal_information'|trans}}</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('fill_userinfo_after_login', {1:'admin.login_connect.open'|trans, 0:'admin.login_connect.closed'|trans}, setting('auth.fill_userinfo_after_login')|default(0)) }}
+        <p class="help-block">{{ 'admin.user_fields.Require_personal_information.help_block'|trans }}</p>
+      </div>
+
+      <div class="controls col-md-8 col-md-offset-3" id="show-checked-fields-list">
+        <div class="pull-left">
+          {% for sort in authSetting.registerSort|default([]) %}
+            {% if sort == 'emailOrMobile' %}{% set sort = 'email' %}{% endif %}
+            {% set userCustomField = userFields[sort]|default(null) %}
+            {% set userInfoFieldsDict = dict_text('userInfoFields', sort)|default(null) %}
+            {% if userCustomField %}
+              <button type="button" class="btn btn-default btn-xs">
+                {{ userCustomField.title }}
+              </button>
+            {% elseif userInfoFieldsDict %}
+              <button type="button" class="btn btn-default btn-xs">
+                {{ userInfoFieldsDict }}{% if sort == 'mobile' and authSetting.mobileSmsValidate|default(0) %}({{ 'admin.user_fields.verified_mobile_tip'|trans }}){% endif %}
+              </button>
+            {% endif %}
+          {% endfor %}
+        </div>
+          
+        <div class="pull-right ">
+          <a href="javascript:" id="show-fields-list-btn">{{'admin.user_fields.edit_btn'|trans}}
+            <span class="glyphicon glyphicon-chevron-down"></span>
+          </a>
+        </div>
+      </div>
+
+      <div class="controls col-md-8 col-md-offset-2" id="show-fields-list" style="display:none">
+        <div class="form-group">
+          <ul class="fill-userinfo-list sortable-list list-unstyled col-md-12" data-role="list">
+            {% set checkedUserFieldsKeys = authSetting.registerSort|default([]) %}
+
+            {% for key,field in commonFields if commonFields %}
+              <li class="list-group-item clearfix" data-role="item" >
+                <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>&nbsp;
+                <input type="checkbox" name="registerSort[]" value="{{ key }}" {% if key in checkedUserFieldsKeys and (key != 'mobile' or (key == 'mobile' and not authSetting.mobileSmsValidate|default(0))) %}checked=true{% endif %} {% if key == 'mobile' %}data-sms-validate="0"{% endif %} />
+                <input type="hidden" name="registerFieldNameArray[]" value="{{ key }}" /> 
+                {{ field }}
+                {% if key in ['email', 'mobile'] %}<span class="text-muted">  ({{'admin.user_fields.Formart_verifcation'|trans}})</span>{% endif %}
+              </li>
+
+              {% if key == 'mobile' %}
+                <li class="list-group-item clearfix" data-role="item" >
+                  <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>&nbsp;
+                  <input type="checkbox" name="registerSort[]" value="mobile" {% if key in checkedUserFieldsKeys and authSetting.mobileSmsValidate|default(0) %}checked=true{% endif %} data-sms-validate="1" />
+                  <input type="hidden" name="registerFieldNameArray[]" value="mobile" /> 
+                  {{ field }}
+                  <span class="text-muted">  ({{'admin.user_fields.Formart_mobile_verifcation'|trans}})</span>
+                </li>
+              {% endif %}
+            {% endfor %}
+
+            {% for field in userFields if userFields|default(null) %}
+              <li class="list-group-item clearfix" data-role="item" >
+                <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>&nbsp;
+                <input type="checkbox" name="registerSort[]" value="{{field.fieldName}}" {% if field.fieldName in checkedUserFieldsKeys %}checked=true{% endif %} />
+                <input type="hidden"  name="registerFieldNameArray[]" value="{{field.fieldName}}" /> {{field.title}}
+              </li>
+            {% endfor %}
+          </ul>
+
+          <div class="help-block col-md-12"><span class="text-success">{{'admin.user_fields.Formart_verifcation.help_block'|trans}}</span></div>
+
+        </div>
+        <div class="mbl" style="text-align:center;">
+          <a href="javascript:" id="hide-fields-list-btn">{{'admin.user_fields.Formart_verifcation.hide'|trans}}
+            <span class="glyphicon glyphicon-chevron-up"></span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>{{'admin.user_fields.other_setting'|trans}}</legend>
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>{{'admin.user_fields.other_setting.avatar'|trans}}</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('avatar_alert', {'open':'admin.login_connect.open'|trans, 'close':'admin.login_connect.closed'|trans}, setting('user_partner.avatar_alert')|default('close')) }}
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>{{'admin.user_fields.other_setting.edit_user_name'|trans}}</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('nickname_enabled', {1:'admin.login_connect.open'|trans, 0:'admin.login_connect.closed'|trans}, setting('user_partner.nickname_enabled')|default(0)) }}
+      </div>
+    </div>
+  </fieldset>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label"></div>
+    <div class="controls col-md-8">
+      <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>  
+    </div>
+  </div>
+  <input type="hidden" name="mobileSmsValidate" value="{{ authSetting.mobileSmsValidate|default(0) }}">
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  <input type="hidden" name='_cloud_sms'  value= "{{setting('cloud_sms.sms_enabled')}}">
+</form>
+
+{% include 'admin/system/user-fields.modal.html.twig' %}
+
+{% endblock %}

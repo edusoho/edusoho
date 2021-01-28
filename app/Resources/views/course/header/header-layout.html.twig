@@ -1,0 +1,115 @@
+{% import "macro.html.twig" as web_macro %}
+{% do script('app/js/course/header-top/index.js') %}
+
+<!-- 3、加入后：任务式学习 -->
+<div class="container cd-container">
+  <ol class="breadcrumb breadcrumb-o">
+    <li><a href="{{ path('homepage') }}">{{'homepage'|trans}}</a></li>
+    {% for breadcrumb in breadcrumbs|default() %}
+      <li><a href="{{ path('course_set_explore',{'category':breadcrumb.code}) }}">{{ breadcrumb.name }}</a></li>
+    {% endfor %}
+    {% if page_type|default('guest') == 'member' %}
+      <li><a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}">{{ courseSet.title }} </a></li>
+    {% else %}
+      <li class="active">{{ courseSet.title }} </li>
+    {% endif %}
+  </ol>
+
+  {% block course_header_info %}{% endblock %}
+  <div class="es-section course-detail-section {% if not marketingPage %}course-detail-section--normal {% endif %} clearfix">
+    {% block course_header_top %}
+      <div class="course-detail-top clearfix">
+        {# 已完成，更新中标志 tags #}
+        <span class="tags mrm">
+          {% if courseSet.serializeMode == 'serialized' %}
+            <span class="tag-serialing"></span>
+          {% elseif courseSet.serializeMode == 'finished' %}
+            <span class="tag-finished"></span>
+          {% endif %}
+        </span>
+        <span class="course-detail-heading">
+          {% if not marketingPage and course.title %}
+            {{ course.title }}
+          {% else %}
+            {{ courseSet.title }}
+          {% endif %}
+          {# 二维码标志 #}
+          {% block course_header_qrcode %}
+            <span class="es-qrcode top pt5 hidden-xs" data-url="{{ path('course_qrcode', { id: course.id }) }}">
+              <i class="es-icon es-icon-qrcode"></i>
+              <span class="qrcode-popover">
+                <img src="" alt="">
+                {{ 'site.tips.scan_qrcode_tips'|trans }}
+              </span>
+            </span>
+          {% endblock %}
+        </span>
+        {# 副标题显示 #}
+        {% block course_header_subtitle %}{% endblock %}
+        {# 图标操作栏 #}
+        <ul class="course-operation {% if not marketingPage %} course-operation--normal  {% endif %} hidden-xs hidden-sm clearfix">
+          <!--非营销页显示-->
+          {% block course_header_people_num %}
+            {% if setting('course.show_student_num_enabled', '1') == 1 %}
+              <li>
+                <span class="btn btn-xs cursor-default">
+                  <i class="es-icon es-icon-people text-16"></i>
+                  <span class="mls">{% block course_member_count %}{{ 'course.course_member_count'|trans({'%studentsNum%':course.studentNum}) }} {% endblock %}</span>
+                </span>
+              </li>
+            {% endif %}
+          {% endblock %}
+
+          <!--营销页显示-->
+          {% if marketingPage and course.parentId > 0 %}
+            <li class="js-unfavorite-btn" id="unfavorite-btn" data-target-type="course" data-target-id="{{ course.courseSetId }}"
+                {% if not isUserFavorite %}style="display: none" {% endif %}>
+              <a class="btn btn-default btn-xs" href="javascript:;" data-toggle="tooltip" data-placement="top" title="{{ 'course.status.followed'|trans }}"
+                data-trigger="hover"> <i class="es-icon es-icon-bookmark color-primary"></i>
+              </a>
+            </li>
+            <li class="js-favorite-btn" id="favorite-btn" data-target-type="course" data-target-id="{{ course.courseSetId }}"
+                {% if isUserFavorite %}style="display: none"{% endif %}>
+              <a class="btn btn-default btn-xs" href="javascript:;" data-toggle="tooltip" data-placement="top" title="{{ 'course.status.follow'|trans }}"
+                data-trigger="hover"> <i class="es-icon es-icon-bookmarkoutline"></i>
+              </a>
+            </li>
+          {% endif %}
+
+          <li class="es-share top js-es-share">
+            <a class="btn btn-default btn-xs dropdown-toggle" href="" data-toggle="dropdown" title="{{ 'course.share'|trans }}">
+              <i class="es-icon es-icon-share"></i>
+            </a>
+            {% include 'common/share-dropdown.html.twig' with {type:'courseSet'} %}
+          </li>
+
+          {{ slot('course.header-marketing-btn.extension', {'course': course}) }}
+          {#添加admin_v2#}
+          {% set canManage =  member.role|default('') == 'teacher' or has_permission('admin_course_content_manage') or has_permission('admin_v2_course_content_manage') %}
+          {% if canManage %}
+            <li>
+              {% if page_type|default('guest') == 'member' %}
+                <a class="btn btn-default btn-xs "
+                  href="{{ path('course_set_manage_course_tasks', {courseSetId: course.courseSetId, courseId: course.id }) }}"
+                  data-toggle="tooltip" data-placement="top" title="{{ 'course.course_manage'|trans }}"
+                  data-trigger="hover">
+                  <i class="es-icon es-icon-setting"></i>
+                </a>
+              {% else %}
+                <a class="btn btn-default btn-xs "
+                  href="{{ path('course_set_manage_base', {id: course.courseSetId}) }}"
+                  data-toggle="tooltip" data-placement="top" title="{{ 'course.course_manage'|trans }}"
+                  data-trigger="hover">
+                  <i class="es-icon es-icon-setting"></i>
+                </a>
+              {% endif %}
+            </li>
+          {% endif %}
+          {% block course_member_exit %}{% endblock %}
+        </ul>
+
+      </div>
+    {% endblock %}
+    {% block course_heard_content %}{% endblock %}
+  </div>
+</div>

@@ -1,0 +1,27 @@
+{% set errors = item.errors|default([]) %}
+<div class="subject-item js-subject-item js-subject-main-item" id="{% if token|default(null) %}{{token}}{% else %}{{ key }}{% endif %}">
+  <div class="subject-item__title">
+    <span class="subject-item__number js-subject-item-number {% if errors is not empty %}subject-item__number--danger{% endif %}">
+      {% if seq|default(null) %}
+        {{ seq }}
+      {% else %}
+        {{ loop.index }}
+      {% endif %}
+    </span>
+    <div class="subject-item__stem"> {{ item.stemShow|striptags('<br><img>')|bbCode2Html|raw|nl2br }}</div>
+  </div>
+  <div class="subject-item__body">
+    <span class="subject-table-label">{{ 'course.testpaper_manage.import.re_edit.answer'|trans }}：</span>
+    {% for answer_key,answer in item.answers %}
+      {% if errors['answers_'~answer_key] is not defined %}
+        {{ item.answers[answer_key] }}
+      {% elseif errors['answers_'~answer_key].code == 100003 %}
+        <span class="single-item__text--danger">{{ 'course.testpaper_manage.import.re_edit.error_fill_no_answer'|trans }}</span>
+      {% endif %}
+    {% endfor %}
+    {% if item.analysis is not empty %}
+      <div class="subject-item__explain cd-mt8"><span class="subject-explain-label">{{ 'course.testpaper_manage.import.re_edit.explain'|trans }}：</span>{{ item.analysis|striptags('<br><img>')|bbCode2Html|raw|nl2br }}</div>
+    {% endif %}
+  </div>
+  {% include 'testpaper/subject/common.html.twig' with { type: 'fill', difficulty: item.difficulty, score: item.score, category: item.category|default() } %}
+</div>

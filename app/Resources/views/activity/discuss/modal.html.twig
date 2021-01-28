@@ -1,0 +1,24 @@
+{% extends 'activity/activity-form-layout.html.twig' %}
+{% do script(['libs/es-ckeditor/ckeditor.js', 'app/js/activity-manage/discuss/index.js']) %}
+
+{% block activity_content %}
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label for="text-content-field" class="style1 control-label-required">{{ 'course.plan_task.activity_manage.discuss'|trans }}</label>
+    </div>
+    <div class="col-sm-10">
+      <textarea class="form-control type-hidden" id="text-content-field" name="content" rows="10" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-flash-upload-url="{{ path('editor_upload', {token:upload_token('course', 'flash')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"
+    >{{ activity.content|default('') }}</textarea>
+    </div>
+    <p class="col-sm-offset-2 col-sm-10 mt10 color-warning">{{'course.plan_task.activity_manage.discuss.tips'|trans}}</p>
+  </div>
+{% endblock %}
+
+{% block activity_finish %}
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label for="condition">{{ 'course.plan_task.activity_manage.finished_condition'|trans }}</label>
+    </div>
+    <div class="col-sm-10"><p class="form-control-static">{{'course.plan_task.activity_manage.discuss.publish_article_tips'|trans}}</p></div>
+  </div>
+{% endblock %}

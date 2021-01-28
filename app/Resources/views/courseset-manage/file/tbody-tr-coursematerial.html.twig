@@ -1,0 +1,31 @@
+{% import "macro.html.twig" as web_macro %}
+{% set quality = "" %}
+
+<tr id="upload-file-tr-{{uploadFile.id}}" data-role="item" data-convertHash="{{uploadFile.convertHash}}">
+
+  <td><input value="{{uploadFile.id}}" type="checkbox" data-role="batch-item" ></td>
+
+  <td>
+    {% if uploadFile.storage == 'cloud' %}
+      <span class="glyphicon glyphicon-cloud color-gray" title="{{'my.teaching.open_course.files.cloud_file'|trans}}"></span>
+    {% endif %}
+    <a href="{{ path('course_set_manage_file_show', {id:course.id, fileId:uploadFile.id}) }}" target="_blank" rel="tooltip" title data-original-title="{{ uploadFile.filename }}"  >{{ uploadFile.filename|sub_text(30) }}</a>
+    <br/>
+  </td>
+  <td>
+    {{ dict_text('fileType', uploadFile.type) }}
+  </td>
+  <td>{{ web_macro.bytesToSize(uploadFile.fileSize) }}</td>
+  <td>
+    <span class="text-sm">{{ web_macro.user_link(users[uploadFile.updatedUserId]|default(null)) }}</span>
+    <br>
+    <span class="color-gray text-sm">
+      {% if not uploadFile.updatedTime %}
+        {{ uploadFile.createdTime|date('Y-n-d H:i')}}
+      {% else %}
+        {{ uploadFile.updatedTime|date('Y-n-d H:i')}}
+      {% endif %}
+    </span>
+  </td>
+
+</tr>

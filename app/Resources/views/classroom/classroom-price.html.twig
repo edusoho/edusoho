@@ -1,0 +1,12 @@
+{% set classroom = classroom|wrap('classroom.price') %}
+
+<span class="pull-right">
+  <span class="
+    {% if classroom.price == 0 %}
+          color-success
+    {% else %}
+          color-danger
+    {% endif %}">
+    {{ classroom.priceWrapper.priceText }}
+  </span>
+</span>

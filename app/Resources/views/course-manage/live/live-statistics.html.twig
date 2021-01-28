@@ -1,0 +1,90 @@
+{% extends 'course-manage/layout.html.twig' %}
+
+{% block title %}{{ 'course.live_statistics'|trans }} - {{ course.title }} - {{ parent() }}{% endblock %}
+{% set course_side_nav = 'live-statistics' %}
+
+{% block page_title %}{{ 'course.live_statistics'|trans }}{% endblock %}
+{% block main_body %}
+  <form class="form-inline cd-form-inline" id="live-statistics" action="" method="get">
+    <div class="form-group cd-form-group cd-form-group-button">
+      <input class="form-control form-control-md" value="{{ app.request.get('title') }}" type="text" name="title"
+             placeholder="{{ 'course.live_statistics.task_name_placeholder'|trans }}">
+      <input name="courseId" type="hidden" value="{{ course.id }}">
+      <input name="courseSetId" type="hidden" value="{{ courseSet.id }}">
+      <button type="submit">
+        <i class="cd-icon cd-icon-search"></i>
+      </button>
+    </div>
+    {% include 'export/export-btn.html.twig' with
+      {
+        'exportFileName' : 'course-live-statistics-list',
+        'targetFormId': 'live-statistics',
+        'exportClass': 'cd-btn-sm pull-right cd-btn-primary',
+        'exportWebpack': 'ture'
+      }
+    %}
+
+    <div id="export-modal" class="hide">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title" data-success="{{ 'file.download.finish'|trans }}">{{ 'file.download.start'|trans }}</h4>
+          </div>
+          <div class="modal-body">
+            <div class="progress progress-striped active">
+              <div id="progress-bar" class="progress-bar progress-bar-success" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div class="table-responsive cd-table-responsive">
+    <table class="table cd-table">
+      <thead>
+      <tr>
+        <th width="25%">{{ 'course.task'|trans }}</th>
+        <th>{{ 'course.live_statistics.live_start_time'|trans }}</th>
+        <th>{{ 'course.live_statistics.live_time_long'|trans }}</th>
+        <th>{{ 'course.live_statistics.max_participate_count'|trans }}</th>
+        <th>{{ 'course.live_statistics.live_status'|trans }}</th>
+        <th>{{ 'course.live_statistics.operation'|trans }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for liveTask in liveTasks %}
+        <tr>
+          {% set lessonUrl = path('course_task_show', {courseId:liveTask.courseId, id:liveTask.id}) %}
+          <td>
+            <a href="{{ lessonUrl }}" target="_blank">{{ liveTask.title }}</a>
+          </td>
+          <td>{{ liveTask.startTime|date('Y-m-d H:i') }}</td>
+          <td>{{ liveTask.length }}</td>
+          <td>
+            {{ course.maxStudentNum }}
+          </td>
+          <td>
+            {% if liveTask.startTime > timestamp() %}
+              <i class="es-icon es-icon-dot color-gray"></i>{{ 'course.live_statistics.live_coming'|trans }}
+            {% elseif liveTask.endTime < timestamp() %}
+              <i class="es-icon es-icon-dot color-danger"></i>{{ 'course.live_statistics.live_finished'|trans }}
+            {% else %}
+              <i class="es-icon es-icon-dot color-success"></i>{{ 'course.live_statistics.live_playing'|trans }}
+            {% endif %}
+          </td>
+          <td><a href="{{ path('course_set_manage_live_statistics_detail', {courseId: course.id, taskId: liveTask.id}) }}">{{ 'site.btn.detail'|trans }}</a></td>
+        </tr>
+      {% else %}
+        <tr>
+          <td colspan="20">
+            <div class="empty">{{ 'admin.live_manage.empty'|trans }}</div>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {{ web_macro.paginator(paginator) }}
+  </div>
+{% endblock %}

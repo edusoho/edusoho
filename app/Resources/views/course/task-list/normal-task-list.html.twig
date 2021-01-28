@@ -1,0 +1,8 @@
+<div class="course-detail-content js-course-detail-content">
+
+  {% include 'course/task-list/parts/task-list-template.html.twig' with {showOptional:showOptional|default(false)} %}
+
+  <ul class="task-list task-list-md task-list-hover js-task-list-ul infinite-container"></ul>
+
+  <div class="js-down-loading-more" style="min-height: 1px"></div>
+</div>

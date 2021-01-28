@@ -1,0 +1,38 @@
+{
+    "default-b:home_top_banner":
+    {
+        "title": "默认主题b：首页头部图片轮播",
+        "category": "default-b",
+        "templateName": "@theme/default-b/block/home_top_banner.template.html.twig",
+        "items": {
+            "carousel":
+            {
+                "title": "轮播图",
+                "desc": "建议图片尺寸为1200x256px，最多可添加５张图片。",
+                "count": 5,
+                "type": "imglink",
+                "default": [
+                    {
+                        "src": "/assets/img/placeholder/carousel-1200x256-1.png",
+                        "alt": "轮播图1描述",
+                        "href": "#",
+                        "target": "_blank"
+                    },
+                    {
+                        "src": "/assets/img/placeholder/carousel-1200x256-2.png",
+                        "alt": "轮播图2描述",
+                        "href": "#",
+                        "target": "_blank"
+                    },
+                    {
+                        "src": "/assets/img/placeholder/carousel-1200x256-3.png",
+                        "alt": "轮播图3描述",
+                        "href": "#",
+                        "target": "_blank"
+                    }
+                ]
+            }
+        }
+    }
+ 
+}

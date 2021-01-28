@@ -1,0 +1,10 @@
+{% set single_file_size = setting('cloud_attachment.fileSize',0) %}
+<input type="hidden" name="upload_init_url" value="{{ url('item_attachment_init_upload', {uploaderToken: attachment_uploader_token()}, true) }}">
+<input type="hidden" name="upload_finish_url" value="{{ url('item_attachment_finish_upload', {uploaderToken: attachment_uploader_token()}, true) }}">
+<input type="hidden" name="delete-attachment-url" value="{{ path('item_attachment_delete') }}">
+<input type="hidden" name="preview-attachment-url" value="{{ path('item_attachment_preview') }}">
+<input type="hidden" name="download-attachment-url" value="{{ path('item_attachment_download') }}">
+<input type="hidden" name="upload_accept" value="{{ uploader_accept('attachment', '')|json_encode }}">
+<input type="hidden" name="upload_size_limit" value="{{ single_file_size == 0  ? 2048 * 1024 * 1024 : single_file_size * 1024 * 1024 }}">
+<input type="hidden" name="show_attachment" value="{{ setting('cloud_attachment.enable') and setting('cloud_attachment.question' ) and setting('storage.upload_mode') == 'cloud' }}">
+<input type="hidden" name="cdn_host" value="{{ setting('developer.cloud_sdk_cdn', '') == '' ? 'service-cdn.qiqiuyun.net' : setting('developer.cloud_sdk_cdn', '') }}">

@@ -1,0 +1,9 @@
+<div class="card-pack-item card-item useless">
+  <h4>{{'card.info.moneycard'|trans}}</h4>
+  <p class="title">{{'card.info.moneycard.tips'|trans}}</p>
+  <p class="price">
+    <strong>{{ cardDetail.coin }}</strong>{{ coin.coin_name|default('finance.coin'|trans) }}
+  </p>
+  <p>{{'coupon.expired_on'|trans}}<span>{{ cardDetail.deadline|date('card.info.moneycard.date_format'|trans) }}</span></p>
+  <div class="stamp stamp-used"></div>
+</div>

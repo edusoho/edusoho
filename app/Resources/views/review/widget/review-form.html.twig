@@ -1,0 +1,20 @@
+{% set userReview = userReview|default(null) %}
+
+<form id="review-form" method="post" {% if userReview %}style="display:none;"{% endif %}>
+  <div class="form-group controls">
+    {{'course.reviews.mark'|trans}} <span data-rating="{{ userReview.rating|default(0) }}" data-img-path="{{ app.request.basePath ~ '/assets/img/raty'}}" class="rating-btn"></span>
+    <input type="hidden" name="rating" value="{{ userReview.rating|default(0) }}">
+  </div>
+
+  <div class="form-group controls">
+    <textarea class="form-control" rows="8" data-display="{{'course.reviews.detail'|trans}}" name="content">{{ userReview.content|default('') }}</textarea>
+  </div>
+
+  <div class="form-group clearfix">
+    <span class="color-success pull-left js-review-remind" style="display: none;">{{'course.reviews.success_tips'|trans}}</span>
+    <a href="javascript:;" class="btn btn-primary pull-right js-btn-save" data-target-type="{{ targetType|default('course') }}" data-target-id="{{ targetId|default() }}" data-loading-text="{{'form.btn.save.submiting'|trans}}" autocomplete="off">{{'form.btn.save'|trans}}</a>
+    <a href="javascript:;" class="btn btn-link pull-right js-hide-review-form" {% if userReview %}style="display:none;"{% endif %}>{{'form.btn.cancel'|trans}}</a>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>

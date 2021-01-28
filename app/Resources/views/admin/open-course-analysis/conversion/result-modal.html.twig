@@ -1,0 +1,18 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+{% set modal_class = 'modal-lg' %}
+
+{% block title %}
+  {{ 'admin.open_manage.analysis.conversion.result.modal_title'|trans({'%title%': course.title, '%startTime%': app.request.get('startTime'), '%endTime%': app.request.get('endTime')})|raw }}
+{% endblock %}
+{% block body %}
+  {% include 'admin/open-course-analysis/conversion/order-list.html.twig' %}
+
+  <!-- 以下是来源详情 -->
+ {# {{ render(controller('AppBundle:Admin/OpenCourseAnalysis:detailGraph',{request:app.request, id:course.id })) }}#}
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{ 'form.btn.close'|trans }}</button>
+{% endblock %}

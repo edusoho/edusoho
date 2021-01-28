@@ -1,0 +1,11 @@
+{
+    "code": "jianmo",
+    "name": "简墨",
+    "author": "EduSoho官方",
+    "version": "1.0.0",
+    "support_version": "8.0.0+",
+    "support_config": true,
+    "protocol": "3",
+    "date": "2015-6-1",
+    "thumb": "img/theme.jpg"
+}

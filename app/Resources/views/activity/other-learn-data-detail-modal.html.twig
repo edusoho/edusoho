@@ -1,0 +1,47 @@
+{% extends 'activity/base-learn-data-detail-modal.html.twig' %}
+
+{% block body %}
+  <table class="table table-hover table-bordered">
+    <thead>
+      <tr class="active">
+        <th>{{ 'task.learn_data_detail.nickname'|trans }}</th>
+        <th>{{ 'task.learn_data_detail.join_time'|trans }}</th>
+        <th>{{ 'task.learn_data_detail.finished_time'|trans }}</th>
+        <th>{{ 'task.learn_data_detail.stay_total_time'|trans }}</th>
+        {% if task.type == 'video' %}
+          <th>{{ 'task.learn_data_detail.video_total_time'|trans }}</th>
+        {% endif %}
+        <th>{{ 'task.learn_data_detail.stay_de_weight_time'|trans }}</th>
+        {% if task.type == 'video' %}
+          <th>{{ 'task.learn_data_detail.video_de_weight_time'|trans }}</th>
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for taskResult in taskResults if taskResult %}
+        {% set user = users[taskResult.userId] %}
+        <tr>
+          <td>{{ user.nickname }}</td>
+          <td>{{ taskResult.createdTime|date("Y-m-d H:i:s") }}</td>
+          {% if taskResult.status == 'finish'%}
+            <td>{{ taskResult.finishedTime|date("Y-m-d H:i:s") }}</td>
+          {% else %}
+            <td>-</td>
+          {% endif %}
+          <td>{% if taskResult.time > 0 %}{{ (taskResult.time / 60)|number_format(1) }}{% else %}0.0{% endif %}</td>
+          {% if task.type == 'video' %}
+            <td>{% if taskResult.watchTime > 0 %}{{ (taskResult.watchTime / 60)|number_format(1) }}{% else %}0.0{% endif %}</td>
+          {% endif %}
+          <td>{% if taskResult.pureStayTime > 0 %}{{ (taskResult.pureStayTime / 60)|number_format(1) }}{% else %}0.0{% endif %}</td>
+          {% if task.type == 'video' %}
+            <td>{% if taskResult.pureWatchTime > 0 %}{{ (taskResult.pureWatchTime / 60)|number_format(1) }}{% else %}0.0{% endif %}</td>
+          {% endif %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <nav class="text-center">
+    {{ web_macro.paginator(paginator) }}
+  </nav>
+
+{% endblock %}

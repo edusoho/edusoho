@@ -1,0 +1,16 @@
+{% extends 'classroom-manage/layout.html.twig' %}
+
+{% block title %}{{'classroom.testpaper_check'|trans}} - {{ parent() }}{% endblock %}
+{% set side_nav = 'testpaper-check' %}
+
+{% block main %}
+<div class="panel panel-default panel-col">
+
+  <div class="panel-heading">
+    {{'classroom.my_check'|trans}}
+  </div>
+  <div class="panel-body">
+    {{ render(controller('AppBundle:Testpaper/Manage:checkList',{request:app.request,targetId:classroom.id,targetType:'classroom',type:'testpaper'})) }}
+  </div>
+</div>
+{% endblock %}

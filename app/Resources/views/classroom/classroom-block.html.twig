@@ -1,0 +1,29 @@
+
+{% if classroom %}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">{{'classroom.block_content_title'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}</h3>
+  </div>
+  <div class="panel-body classroom-block">
+    <div class="classroom-img img-responsive">
+      <a href="{{path('classroom_show',{id:classroom.id})}}">
+        <img class="img-responsive" src="{{ filepath(classroom.middlePicture, 'classroom.png') }}" alt="{{ classroom.title }}" href="{{path('classroom_show',{id:classroom.id})}}">
+      </a>
+    </div>
+        
+    <div class="classroom-info">
+      <div class="title">
+        <a href="{{path('classroom_show',{id:classroom.id})}}">
+          {{classroom.title}}
+        </a>
+      </div>
+      <span class="stars-{{ classroom.rating|number_format }}">&nbsp;</span>
+      <div class="content">
+        <span class="es-icon es-icon-groupadd mrs"></span>{{classroom.studentNum + classroom.auditorNum }}
+        <span class="es-icon es-icon-book mrs mll"></span>{{classroom.courseNum}}
+      </div>
+    </div>
+    
+  </div>
+</div>
+{% endif %}

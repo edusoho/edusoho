@@ -1,0 +1,12 @@
+{% set courseSet = courseSet|wrap('courseSet.price') %}
+
+<span class="course-price-widget">
+      <span class="
+            {% if courseSet.maxCoursePrice == 0 %}
+                  free
+            {% else %}
+                  price
+            {% endif %}">
+          {{ courseSet.priceWrapper.priceText }}
+      </span>
+</span>

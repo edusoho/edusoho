@@ -1,0 +1,58 @@
+{% extends 'open-course-manage/layout.html.twig' %}
+{% block title %}{{'my.teaching.open_course.liveTimeSet.title'|trans}} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'liveTimeSet' %}
+{% do script(['libs/jquery-validation.js',
+'libs/bootstrap-datetimepicker.js',
+'app/js/open-course-manage/live-open-time-set/index.js']) %}
+
+{% block main %}
+
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">{{'my.teaching.open_course.liveTimeSet.title'|trans}}</div>
+  <div class="panel-body">
+    <form class="form-horizontal" id="live-open-course-form" method="post" data-update = "{{ canUpdateStartTime }}">
+
+      {{ web_macro.flash_messages() }}
+
+      <div class="form-group">
+        <label class="col-md-2 control-label" for="live-startTime">{{'my.teaching.open_course.liveTimeSet.start_time'|trans}}</label>
+        <div class="col-md-8 controls" style="z-index:2000;">
+          <input type="text" id="live-startTime"  name="startTime" class="form-control width-input width-input-large" value="{% if openLiveLesson %}{{ openLiveLesson.startTime|date('Y-m-d H:i:s') }}{% endif %}" data-url="{{ path('client_time_check') }}">
+          <div class="help-block" id="starttime-help-block">
+            {{'my.teaching.open_course.liveTimeSet.start_time.help_block'|trans}}
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-md-2 control-label" for="live-length-field">{{'my.teaching.open_course.liveTimeSet.live_length'|trans}}</label>
+        <div class="col-md-8 controls">
+          <input type="text"  name="timeLength" id="live-length-field" class="form-control width-input width-input-large" value="{{ openLiveLesson.length|default(60) }}" placeholder="{{'my.teaching.open_course.liveTimeSet.live_length.placeholer'|trans}}" data-calculate-left-capacity-url="" data-max-Student-Num = ""  data-url="{% spaceless %}
+            {% if openLiveLesson|default(null) %}
+              {{path('live_open_lesson_time_check',{courseId:course.id,lessonId:openLiveLesson.id}) }}
+            {% else %}
+              {{path('live_open_lesson_time_check',{courseId:course.id})}}
+            {% endif %}
+          {% endspaceless %}">
+            {{'my.teaching.open_course.liveTimeSet.live_length.minute'|trans}}
+          <div class="help-block" id="timelength-help-block"></div>
+        </div>
+
+        <input type="hidden" id="live_lesson_time_check" data-url="{% if openLiveLesson|default(null) %}{{path('live_open_lesson_time_check',{courseId:course.id,lessonId:openLiveLesson.id}) }}{% else %}{{path('live_open_lesson_time_check',{courseId:course.id})}}{% endif %}" />
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-offset-2 col-md-8 controls">
+            <button class="btn btn-fat btn-primary" id="live-open-course-form-btn" type="submit"
+            data-loading-text="{{'form.btn.save.submiting'|trans}}">{{'form.btn.save'|trans}}</button>
+        </div>
+      </div>
+
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+    </form>
+  </div>
+</div>
+
+{% endblock %}

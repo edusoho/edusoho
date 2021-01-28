@@ -1,0 +1,16 @@
+{% extends "activity/content-layout.html.twig" %}
+
+{% do script(['app/js/activity/flash/index.js']) %}
+
+{% block body %}
+  <div class="iframe-parent-content iframe-parent-full">
+    {% if flash.file|default(null) %}
+      <div  id="flash-player" data-uri="{{ flashMedia.uri }}" data-finish-type="{{ flash.finishType }}" data-finish-detail="{{ flash.finishDetail }}">
+      </div>
+    {% else %}
+      {% include 'activity/file-not-found.html.twig' with {type:'flash'} %}
+    {% endif %}
+    
+  </div>
+
+{% endblock %}

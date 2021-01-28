@@ -1,0 +1,18 @@
+
+<div class="form-group {% if setting('default.defaultCoursePicture') == 0 %}hide{% endif %}" id="course-picture-class">
+  <div class="controls col-md-8 controls">
+    <img src="{{ filepath(defaultSetting['course.png']|default(''), 'course.png') }}" class="img-responsive">
+    <a id="default-course-picture-btn"
+      data-upload-token="{{ upload_token('system', 'image') }}"
+      data-goto-url="{{path('admin_setting_default_course_picture_crop')}}"
+      class="btn btn-default btn-sm mtm">{{'form.btn.upload'|trans}}
+    </a>
+  </div>
+</div>
+
+<div class="form-group {% if setting('default.defaultCoursePicture') == 1 %}hide{% endif %}" id="system-course-picture-class" >
+  <div class="controls col-md-8 controls">
+    <img src="{{ asset('assets/img/default/course.png') }}" class="img-responsive">
+  </div>
+</div>
+

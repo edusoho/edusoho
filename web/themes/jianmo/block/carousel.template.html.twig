@@ -1,0 +1,19 @@
+<section class="es-poster swiper-container">
+  <div class="swiper-wrapper">
+    {% for poster in posters %}
+      {% if poster.status == 1 %}
+        {% if poster.mode == "img" %}
+          <div class="swiper-slide swiper-hidden" style="background: {{poster.background}};">
+            <div {% if poster.layout == 'limitWide' %}class="container"{% endif %}>
+              <a href="{{ poster.href|default('') }}" target="_blank" ><img class="img-responsive" src="{{ poster.src|default('') }}">
+              </a>
+            </div>
+          </div>
+        {% elseif poster.mode == "html"%}
+            {{ poster.html|raw }}
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+  </div>
+  <div class="swiper-pager"></div>
+</section>

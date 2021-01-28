@@ -1,0 +1,7 @@
+{% set questionTypesDict = getQuestionTypes() %}
+{% for type, name in questionTypesDict %}
+  <div class="subject-data__item clearfix" data-type="{{ type }}">
+    <span>{{ name|slice(0,3) }}</span>
+    <span class="pull-right subject-data__num">{{ 'course.testpaper_manage.import.re_edit.total_count'|trans({'%count%': questionAnalysis[type]}) }}</span>
+  </div>
+{% endfor %}

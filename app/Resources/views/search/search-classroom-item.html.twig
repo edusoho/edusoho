@@ -1,0 +1,20 @@
+<div class="course-item clearfix">
+  {% set classroom_show_url = path('classroom_show',{id : classroom.id}) %}
+  <div class="course-img classroom-search-img">
+    <a class="classroom-search-img__link" href="{{ classroom_show_url }}" target="_blank">
+      <img class="img-responsive" src="{{ filepath(classroom.middlePicture, 'classroom.png') }}" alt="">
+    </a>
+  </div>
+  <div class="course-info">
+    <h3 class="title">
+      <a href="{{ classroom_show_url }}" target="_blank">
+        {{ classroom.title|raw }}
+      </a>
+    </h3>
+    <div class="score">
+      {{ web_macro.star(classroom.rating|default(0)) }}
+      <span>{{'cloud_search.classroom.evaluate'|trans({'%ratingNum%':classroom.ratingNum|default(0)})}}{% if setting('classroom.show_student_num_enabled', '1') == 1 %}{{ 'cloud_search.classroom.learned'|trans({'%studentNum%':classroom.studentNum|default(0)}) }}{% endif %}</span>
+    </div>
+    <div class="content editor-text">{{ classroom.about|cdn|raw }}</div>
+  </div>
+</div>

@@ -1,0 +1,28 @@
+{% extends 'order/layout.html.twig' %}
+{% block title %} {{'pay_center.finish'|trans}} - {{ parent() }}{% endblock %}
+
+{% do script(['app/js/pay/success-redirect/index.js'])%}
+
+{% set step = '3' %}
+{% set weChatNotify = setting('wechat.wechat_notification_enabled')|default(false)  %}
+{% set weChatUser = data('WeChatUser', {userId: app.user.id|default(null)}) %}
+{% set informPlatform =  is_mobile_client() == false or (is_mobile_client() and (app.request.headers.get('User-Agent') matches '/MicroMessenger/')) %}
+{% set informProduct = product.targetType|default('null') in ['course', 'classroom'] %}
+{% block order_body %}
+  {% if weChatNotify and not weChatUser.isSubscribe|default(false) and informPlatform and informProduct %}
+    {% if product.targetType|default('null') == 'course' %}
+      {% set btnText = 'course.task.learning.back_course_btn'|trans %}
+    {% elseif product.targetType|default('null') == 'classroom' %}
+      {% set btnText = 'classroom.back_btn_text'|trans %}
+    {% endif %}
+    {% include 'wechat-inform-common.html.twig' with {'type': 'pay', 'weChatUser' : weChatUser, 'btnText': btnText} %}
+  {% else %}
+    <div class="cd-feedback js-feedback">
+      <div class="feedback-icon"><i class="cd-icon cd-icon-check cd-text-success"></i></div>
+      <div class="feedback-title"><span class="cd-text-success">{{'pay_center.finish_title'|trans}}</span></div>
+      <div class="feedback-content js-turn" data-url='{{ goto }}'>
+        {{'pay_center.finish_tips'|trans|raw}}
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}

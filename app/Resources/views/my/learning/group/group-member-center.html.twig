@@ -1,0 +1,76 @@
+{% extends 'my/layout.html.twig' %}
+
+{% block title %}{{'my.learning.group'|trans}} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'my-group' %}
+{% set tab_nav = 'index' %}
+{% block main %}
+    {% embed "bootstrap/panel.html.twig" with {class:'panel-col'} %}
+      {% block heading %}
+        {{'my.learning.group'|trans}}
+      {% endblock %}
+
+      {% block body %}
+          <div class="row">
+
+            <div class="col-md-12">
+
+              {% include 'my/learning/group/group-member-nav-pill.html.twig' %}
+
+              <div class="page-header">
+                <h4> {{'my.learning.group.joined'|trans}}<a class="badge pull-right badge-primary" href="{{path('my_group_member_join',{type:'myGroup'})}}">{{groupsCount}}</a></h4>
+              </div>
+
+              {% include 'my/learning/group/groups-ul.html.twig' with {
+              'groups':groups,  }
+              %}
+
+            </div>
+
+            <div class="col-md-12">
+
+              <div class="page-header">
+                <h4>{{'my.learning.group.post_thread'|trans}}<a class="badge pull-right badge-primary" href="{{path('my_group_member_threads')}}">{{threadsCount}}</a></h4>
+              </div>
+
+              {% include 'my/learning/group/groups-threads-ul.html.twig' with {
+              'threads':ownThreads,
+              'groups':groupsAsOwnThreads, }
+              %}
+
+            </div>
+
+            <div class="col-md-12">
+
+              <div class="page-header">
+                <h4>{{'my.learning.gruop.answer_thread'|trans}}<a class="badge pull-right badge-primary" href="{{path('my_group_member_posts')}}">{{postsCount}}</a></h4>
+              </div>
+
+              {% include 'my/learning/group/groups-threads-ul.html.twig' with {
+              'lastPostMembers':postLastPostMembers,
+              'groups':groupsAsPostThreads,
+              'threads':threads,
+              'user':user,}
+              %}
+
+            </div>
+
+            <div class="col-md-12">
+
+              <div class="page-header">
+                <h4>{{'my.learning.group.favorit_thread'|trans}}<a class="badge pull-right badge-primary" href="{{path('my_group_thread_collecting')}}">{{collectCount}}</a></h4>
+              </div>
+
+              {% include 'my/learning/group/groups-threads-ul.html.twig' with {
+              'lastPostMembers':collectLastPostMembers,
+              'groups':groupsAsCollectThreads,
+              'threads':collectThreads,
+              'user':user,}
+              %}
+
+            </div>
+
+          </div>
+      {% endblock %}
+    {% endembed %}
+{% endblock %}

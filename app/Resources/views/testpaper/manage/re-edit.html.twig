@@ -1,0 +1,20 @@
+{% extends 'testpaper/subject/layout.html.twig' %}
+
+{% block subtitle %}
+  <div class="subject-data__subtitle mts clearfix">
+    <span class="js-total-num">{{ 'course.testpaper_manage.import.re_edit.total_count'|trans({'%count%': questions|length}) }}</span>
+    <span class="pull-right js-total-score">{{ 'course.testpaper_manage.import.re_edit.total_score'|trans({'%totalScore%': totalScore}) }}</span>
+  </div>
+{% endblock %}
+
+{% block testpaper %}
+  <div class="subject-title"><input name="testpaperTitle" class="js-testpaper-title" value="{{ filename }}" placeholder="{{ 'course.testpaper_manage.import.re_edit.edit_title_hint'|trans }}" autocomplete="off"></div>
+  <input type="hidden" name="isTestpaper" value="1">
+  {% for key,item in questions if item.type in ['choice', 'determine', 'essay', 'fill', 'single_choice', 'uncertain_choice', 'material'] %}
+    {% include 'testpaper/subject/item/show/' ~ item.type ~ '.html.twig' %}
+  {% endfor %}
+{% endblock %}
+{% block save_btn %}
+  <button class="cd-btn cd-btn-primary subject-button js-import-btn" data-redirect-url="{{ path('question_bank_manage_testpaper_list', {id:questionBankId}) }}" data-url="{{ path('testpaper_import_save', {token: app.request.get('token')}) }}" data-loading-text="{{ 'form.btn.import.submiting'|trans }}" type="button">{{ 'course.testpaper_manage.import.re_edit.finish_import'|trans }}</button>
+{% endblock %}
+{% block edit %}{% endblock %}

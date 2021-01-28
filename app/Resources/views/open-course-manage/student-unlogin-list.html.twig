@@ -1,0 +1,50 @@
+{% import "macro.html.twig" as web_macro %}
+
+{% if setting('cloud_sms.sms_enabled') and (setting('cloud_sms.sms_live_play_one_day') == 'on' or setting('cloud_sms.sms_live_play_one_hour') == 'on') %}
+  <form class="form-inline well well-sm " action="{{ path('open_course_manage_students',{id:course.id}) }}" method="get" novalidate>
+    <div class="form-group col-md-7">
+      <input type="hidden" name="userType" value="unlogin"/>
+      <select class="form-control" name="isNotified">
+        {{ select_options({0:'my.teaching.open_course.student_setting.all_student'|trans, 1: 'my.teaching.open_course.student_setting.setting_remind_student'|trans }, app.request.get('isNotified')) }}
+      </select>&nbsp;&nbsp;
+      <button class="cd-btn cd-btn-primary">{{ 'form.btn.search'|trans }}</button>
+    </div>
+    <div class="clearfix"></div>
+  </form>
+{% endif %}
+
+<table class="table table-striped" id="course-student-list">
+  <thead>
+    <tr>
+      <th width="30%">IP</th>
+      <th width="20%">{{'my.teaching.open_course.student_setting.recent_login'|trans}}</th>
+      {% if course.type == 'liveOpen' and setting('cloud_sms.sms_enabled') and (setting('cloud_sms.sms_live_play_one_day') == 'on' or setting('cloud_sms.sms_live_play_one_hour') == 'on') %}
+        <th width="20%">{{'my.teaching.open_course.student_setting.phone_number'|trans}}</th>
+        <th width="20%">{{ 'my.teaching.open_course.student_setting.whether_remind'|trans }}</th>
+      {% endif %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for student in students %}
+      <tr id="student-tr">
+        <td class="media" style="vertical-align: middle;">
+          {{ student.ip }}
+        </td>
+        <td style="vertical-align: middle;">
+          {{ student.lastEnterTime|date('Y-m-d H:i:s') }}
+        </td>
+
+        {% if course.type == 'liveOpen' and setting('cloud_sms.sms_enabled') and (setting('cloud_sms.sms_live_play_one_day') == 'on' or setting('cloud_sms.sms_live_play_one_hour') == 'on') %}
+          <td>{{ student.mobile }}</td>
+          <td style="vertical-align: middle;">
+            {% if student.isNotified %}{{ 'my.teaching.open_course.student_setting.whether_remind.yes'|trans }}{% else %}{{ 'my.teaching.open_course.student_setting.whether_remind.no'|trans }}{% endif %}
+          </td>
+        {% endif %}
+        
+      </tr>
+    {% else %}
+      <tr class="empty"><td colspan="20">{{'site.datagrid.empty'|trans}}</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+

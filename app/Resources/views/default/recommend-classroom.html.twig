@@ -1,0 +1,28 @@
+
+<!-- 推荐班级 -->
+{% set classrooms = data('RecommendClassrooms',{'count':config.count|default(4)})%}
+{% if classrooms %}
+  <section class="class-section {{config.background|default("")}}">
+    <div class="container">
+      <div class="text-line">
+        <h5>
+          <span>{{config.title|default("homepage.recommend_classroom.content_title"|trans)}}</span>
+          <div class="line"></div>
+        </h5>
+        <div class="subtitle">{{ config.subTitle|default(config.defaultSubTitle) }}</div>
+      </div>
+      <div class="recommend-class-list row">
+        {% for classroom in classrooms %}
+          <div class="col-md-3 col-xs-6 prm plm">
+             {% include 'classroom/class-grid.html.twig' %}
+          </div>
+        {% endfor %}
+      </div>
+      <div class="section-more-btn">
+        <a href="{{ path('classroom_explore') }}" class="btn btn-default btn-lg">
+          {{ 'homepage.recommend_classroom.more'|trans({'%moreClassrooms%':setting('classroom.name')|default('site.default.classroom'|trans)}) }} <i class="mrs-o es-icon es-icon-chevronright"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+{% endif %}

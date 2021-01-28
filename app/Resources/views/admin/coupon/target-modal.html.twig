@@ -1,0 +1,81 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+{% import 'admin/macro.html.twig' as web_macro %}
+{% import 'common/data-dict-macro.html.twig' as dict_macro %}
+{% block title %}
+  {% if targetType == 'course' %}{{ 'admin.course_manage.chooser.title'|trans }}
+  {% elseif targetType == 'classroom' %}{{ 'admin.classroom_manage.chooser.classroom'|trans }}{% endif %}
+{% endblock %}
+{% block body %}
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>{{ 'admin.course_manage.chooser.num'|trans }}</th>
+        <th width="30%">{{ 'admin.course_manage.chooser.name'|trans }}</th>
+        <th>{{ 'admin.course_manage.chooser.student_num'|trans }}</th>
+        {% if targetType == 'course' %}
+          <th>{{ 'admin.course_manage.chooser.status'|trans }}</th>
+          <th>{{ 'admin.course_manage.chooser.creator'|trans }}</th>
+        {% elseif targetType == 'classroom' %}
+          <th>{{ 'admin.classroom_manage.chooser.price'|trans }}</th>
+          <th>{{ 'admin.classroom_manage.chooser.status'|trans }}</th>
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody>
+    {% for target in targets %}
+      {% set user = users[target.creator]|default(null) %}
+      {% set category = categories[target.categoryId]|default(null) %}
+      {% if targetType == 'course' %}
+        {% set pathname = 'course_set_show' %}
+      {% elseif targetType == 'classroom' %}
+        {% set pathname = 'classroom_show' %}
+      {% endif %}
+      <tr>
+        <td>{{ target.id }}</td>
+        <td>
+          <a href="{{ path(pathname, {id: target.id}) }}" target="_blank"><strong>{{ target.title }}</strong></a>
+          {% if targetType == 'classroom' %}
+            <br>
+            <span class="text-muted text-sm">{{ 'admin.classroom_manage.manage.category'|trans }}：{{ category.name|default('--') }}</span>
+            {% if target.recommended %}
+              <span class="label label-default">{{ 'admin.classroom_manage.chooser.recommend'|trans }}：{{ target.recommendedTime|date('Y-m-d') }}</span>
+            {% endif %}
+          {% endif %}
+        </td>
+        <td>{{ target.studentNum }}</td>
+        {% if targetType == 'course' %}
+          <td>{{ dict_macro.courseStatus(target.status) }}</td>
+          <td>
+            {{ user.nickname|default('-') }}
+            <br>
+            <span class="text-muted text-sm">{{ target.createdTime|date('Y-n-d H:i') }}</span>
+          </td>
+        {% elseif targetType == 'classroom' %}
+          <td class="text-danger">
+            {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+              {% if target.price > 0 %}
+                {{ target.price * setting('coin.cash_rate') }}{{ setting('coin.coin_name') }}
+              {% else %}
+                {{ 'admin.classroom_manage.chooser.free'|trans }}
+              {% endif %}
+            {% else %}
+              {% if target.price > 0 %}
+                {{ target.price }}{{ 'site.currency.CNY'|trans }}
+              {% else %}
+                {{ 'admin.classroom_manage.chooser.free'|trans }}
+              {% endif %}
+            {% endif %}
+          </td>
+          <td>{{ dict_macro.classroomStatus(target.status) }}</td>
+        {% endif %}
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {{ web_macro.paginator(paginator) }}
+
+{% endblock %}
+{% block footer %}
+  <button type="button" class="btn btn-default pull-right" data-dismiss="modal">{{ 'form.btn.close'|trans }}</button>
+{% endblock %}

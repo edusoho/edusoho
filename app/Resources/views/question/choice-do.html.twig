@@ -1,0 +1,88 @@
+<div class="testpaper-question testpaper-question-choice  js-testpaper-question {% if setting('magic.testpaper_watermark') %}js-testpaper-watermark{% endif %}" data-watermark-url="{{ path('cloud_testpaper_watermark') }}" id="question{{ question.id }}">
+	{% set keys = [] %}
+	{% set keys_answer = [] %}
+	<div class="testpaper-question-body">
+    {% include 'question/part/question-stem.html.twig' %}
+
+		<ul class="testpaper-question-choices js-testpaper-question-list">
+			{% for key, choice in question.metas.choices|default() %}
+			  {% set itemClass = '' %}
+			  {% if paperResult.status|default(null) in ['reviewing', 'finished'] %}
+				{% if key in question.answer %}
+				  {% set itemClass = 'testpaper-question-choice-item--right' %}
+				{% elseif key in question.testResult.answer|default([]) %}
+				  {% set itemClass = 'testpaper-question-choice-item--wrong' %}
+				{% endif %}
+			  {% endif %}
+
+			  {% set choiceIndex = (65+key)|chr %}
+
+				<li class="{{ itemClass }} testpaper-question-body-item testpaper-question-choice-item"><span class="testpaper-question-body-item__index">{{ choiceIndex }}.</span> {{ choice|bbCode2Html|raw }}</li>
+				{% if key in question.answer %}
+					{% set keys = keys|merge([choiceIndex]) %}
+				{% endif  %}
+				{% if key in question.testResult.answer|default([]) %}
+					{% set keys_answer = keys_answer|merge([choiceIndex]) %}
+				{% endif %}
+			{% endfor %}
+		</ul>
+	</div>
+	{% if not question.isDeleted|default(0) %}
+
+	  {% if show_answers(paperResult|default(null)) %}
+		{% set questionResult = question.testResult.status|default('noAnswer') %}
+
+		<div class="testpaper-question-footer clearfix">
+		  <div class="testpaper-question-result">
+		  	{{'course.question_manage.question.true_answer'|trans}} <strong class="color-success">{{ keys|join(',') }}</strong>，
+			{% if questionResult == 'right' %}
+			  {{'course.question_manage.question.answer_right'|trans}}
+			{% elseif questionResult == 'partRight' %}
+              {{ 'course.question_manage.question.answer_part_right'|trans({'%keyAnswer%':keys_answer|join(',')})|raw }}
+			  {% if showScore|default(1) %}
+			    {{'course.question_manage.question.score'|trans({'%testResult.score%': question.testResult.score})}}
+			  {% endif %}
+			{% elseif questionResult == 'wrong' %}
+			  {{'course.question_manage.question.your_answer'|trans}} <strong class="color-danger">{{ keys_answer|join(',') }}</strong>。{{'course.question_manage.question.answer_wrong'|trans}}
+			{% elseif questionResult == 'noAnswer' %}
+			  {{'course.question_manage.question.answer_empty'|trans}}
+			{% endif %}
+		  </div>
+
+			<div class="testpaper-question-actions pull-right mts">
+				{% include 'question/part/flag.html.twig' with { flags:['favorite', 'analysis'] } %}
+			</div>
+		</div>
+		{% include 'question/part/show-analysis.html.twig' with {showAnalysis:1} %}
+
+	  {% else %}
+		<div class="testpaper-question-footer clearfix">
+
+		  <div class="testpaper-question-footer__input pull-left js-testpaper-question-label">
+				{% for key, choice in question.metas.choices|default() %}
+					{% set choiceIndex = (65+key)|chr %}
+
+					<label class="{% if question.type == 'single_choice' %}radio{% else %}checkbox{% endif %}-inline {% if choiceIndex in keys_answer %}active{% endif %}">
+						<input type="{% if question.type == 'single_choice' %}radio{% else %}checkbox{% endif %}" data-type="{{ question.type }}" name="{{ question.id }}" value="{{ key }}" {% if choiceIndex in keys_answer %}checked{% endif %} >
+						{{ choiceIndex }}
+					</label>
+				{% endfor %}
+		  </div>
+
+		  <div class="testpaper-question-actions pull-right mts">
+		    {% include 'question/part/flag.html.twig' with { flags:['mark', 'favorite'],resultStatus:paperResult.status|default(null) } %}
+		  </div>
+		</div>
+
+		{% if showAnswer|default(0) %}
+			<div class="testpaper-preview-answer clearfix mtl mbl">
+				<div class="testpaper-question-result">
+				{{'course.question_manage.question.true_answer'|trans}} <strong class="color-success">{{ keys|join(',') }}</strong>
+				</div>
+			</div>
+		{% endif %}
+	  {% endif %}
+	{% endif %}
+
+	{% include 'question/part/show-analysis.html.twig' with {showAnalysis:showAnalysis|default(0)} %}
+</div>

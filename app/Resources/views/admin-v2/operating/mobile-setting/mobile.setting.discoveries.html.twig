@@ -1,0 +1,8 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_mobile_discoveries_settings' %}
+
+{% block main %}
+  <div style="padding:10px 20px;" class="help-block">{{ 'admin.mobile_setting.discovery_tips'|trans }}</div>
+  <iframe src="/h5/admin/index.html#/app" frameborder="0" style="width: 100%;height: 700px;border: none;"></iframe>
+{% endblock %}

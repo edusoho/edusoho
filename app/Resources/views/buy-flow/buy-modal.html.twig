@@ -1,0 +1,69 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% do script(['libs/bootstrap-datetimepicker.js', 'libs/jquery-validation.js', 'app/js/course/buy-modal/index.js']) %}
+
+{% if is_plugin_installed('Vip') %}
+  {% set vipStatus = data('VipStatus', {'userId': user.id, 'levelId': course.vipLevelId})%}
+{% endif %}
+
+{% block title %}
+  {% if course.isFree %}
+    {{'course.btn.join'|trans}}
+  {% else %}
+    {{'course.btn.buy'|trans}}
+  {% endif %}
+{% endblock %}
+
+{% block body %}
+  <form id="course-buy-form" class="form-horizontal" method="post"
+  action="{{ path('user_info_fill',{id: user.id}) }}"
+  >
+    <div class="form-group">
+      <div class="col-sm-3 control-label">{{'course.name'|trans}}</div>
+      <div class="col-sm-9 form-control-static ">
+        <span class="form-control-static color-gray">《{{ courseSet.title }}》 {% if course.title is not empty %}- {{ course.title }} {% endif %}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-3 control-label">{{'course.price'|trans}}</div>
+      <div class="col-sm-9 form-control-static color-warning">
+        <span>
+          {% if course.isFree or vipStatus|default(0) %}
+            <strong class="money">{{ 'course.price.free'|trans }}</strong>
+          {% else %}
+            {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+              <strong class="money">{{ course.price * setting('coin.cash_rate')}}</strong>
+              <span class="color-gray">{{setting('coin.coin_name')}}</span>
+            {% else %}
+              <strong class="money">{{ course.price }}</strong>
+              <span class="color-gray">{{'site.currency.CNY'|trans}}</span>
+            {% endif %}
+          {% endif %}
+      	</span>
+      </div>
+    </div>
+    <input type="hidden" name="targetUrl" value=
+      {% if vipStatus|default(0) %}
+        {{ path('vip_course_join',{'courseId': course.id}) }}
+      {% else %}
+        {{ path('order_show',{'targetId': course.id,'targetType': 'course'}) }}
+      {% endif %}
+    />
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+    {% set isBuyFillUserinfo = setting('course.buy_fill_userinfo')|default(false) %}
+    {% set userinfoFieldsSetting = setting('course.userinfoFields')|default([]) %}
+    {% include 'user/fill-userinfo-fields-block.html.twig' with {isBuyFillUserinfo:isBuyFillUserinfo, userinfoFieldsSetting:userinfoFieldsSetting, userFields:userFields, user:user, showNavTip:1} %}
+
+  </form>
+{% endblock %}
+
+{% block footer %}
+  <button id="form-submit-btn" class="btn btn-primary" type="button" data-loading-text="{{'course.btn.pay_tips'|trans}}" data-toggle="form-submit" data-target="#course-buy-form">
+    {% if course.isFree or vipStatus|default(0) %}
+      {{'course.btn.free_join'|trans}}
+    {% else%}
+      {{'course.btn.pay'|trans}}
+    {% endif %}
+  </button>
+{% endblock %}

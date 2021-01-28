@@ -1,0 +1,16 @@
+{% extends 'layout.html.twig' %}
+{% block title %}{{ 'user.register.email_verify.success'|trans }} - {{ parent() }}{% endblock %}
+{% do script(['app/js/auth/email-verify/index.js']) %}
+{% block content %}
+	
+	<div class="es-section login-section">
+		<div class="section-header">
+			<h3>{{ 'user.register.email_verify.success'|trans }}</h3>
+		</div>
+		<input type="hidden" name="verifyUrl" value="{{ path('register_email_verify', {token:token.token}) }}">
+		<p>
+			{{ 'user.register.email_verify.jump_tips'|trans({'%homepage%':path('homepage')})|raw }}
+		</p>
+	</div>
+{% endblock %}
+

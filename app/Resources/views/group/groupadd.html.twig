@@ -1,0 +1,41 @@
+{% extends 'group/layout.html.twig' %}
+{% block title %}{{'group.add.content_title'|trans}} - {{ parent() }}{% endblock %}
+{% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js','app/js/group/add/index.js']) %}
+{% set side_nav = 'group' %}
+
+{% block content %}
+  <div class="panel panel-default">
+    <div class="panel-heading"><h3 class="panel-title">{{'group.add.content_title'|trans}}</h3></div>
+    <div class="panel-body">
+      <form id="user-group-form" class="form-horizontal" method="post" action="{{path ('group_add')}}">
+        {{ web_macro.flash_messages() }}
+
+        <div class="form-group">
+          <label class="col-md-2 control-label" for="group_grouptitle">{{'group.name'|trans}}</label>
+          <div class="col-md-7 controls">
+            <input type="text" id="group_grouptitle" name="group[grouptitle]" class="form-control"
+            >
+            <div class="help-block" style="display:none;"></div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-md-2 control-label" for="group_about">{{'group.about'|trans}}</label>
+          <div class="col-md-7 controls">
+            <textarea name="group[about]" rows="10" id="groupIntroduce" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('default')}) }}" ></textarea>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-7 col-md-offset-2">
+            <button class="btn btn-primary" id="group-save-btn" data-loading-text="{{'form.btn.create.submiting'|trans}}" type="button" >{{'form.btn.create'|trans}}</button>
+          </div>
+        </div>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      </form>
+    </div>
+  </div>
+
+
+
+{% endblock %}

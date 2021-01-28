@@ -1,0 +1,152 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_mobile_banner_manage' %}
+
+{% set script_controller = 'operation/mobile' %}
+
+
+{% block main %}
+<style>
+
+#mobile-banner1-container img ,
+#mobile-banner2-container img ,
+#mobile-banner3-container img ,
+#mobile-banner4-container img ,
+#mobile-banner5-container img
+{max-width: 80%; margin-bottom: 10px;}
+
+.course-grids {
+  margin:0 -15px 0 0;
+  padding:0;
+  list-style: none;
+}
+
+.course-grid {
+  display: inline-block;
+  vertical-align: top;
+  margin: 15px 15px 15px 0;
+  border: 1px solid #e1e1e1;
+  border-radius: 4px;
+}
+
+.banner-course .course-grid {
+  margin: 0 0 0 0;
+  margin-left: 10px;
+}
+
+.course-grid .series-mode-label {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 12px;
+}
+
+.course-grid .grid-body {
+  position: relative;
+  width: 170px;
+  display: block;
+  overflow: hidden;
+  border-radius: 4px;
+  color: #353535;
+}
+
+.grid-body a{
+  text-decoration: none;
+}
+
+.course-grid .title {
+  display: block;
+  padding: 10px;
+  min-height: 52px;
+  color: #555;
+  font-weight: bold;
+}
+
+.course-grid .add-course {
+  font-size: 80px;
+  height: 148px;
+  text-align: center;
+  padding-top: 30px;
+}
+
+
+</style>
+{% if setting("mobile.enabled") == 1 %}
+
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" id="mobile-form" method="post">
+
+  <fieldset>
+    <div class="help-block">{{'admin.mobile_manage.head_tips'|trans|raw}}</div>
+    {% for i in 1..5 %}
+      {% set banner = 'banner'~ i %}
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="{{ banner }}">{{'admin.mobile_manage.banner_label'|trans~i}}</label>
+        </div>
+        <div class="col-md-8 controls">
+          {% set moobileId = 'mobile-banner' ~ i %}
+          <div id="{{ moobileId }}-container">
+              {% if mobile[banner] %}
+                <img src="{{ asset(mobile[banner]) }}">
+              {% endif %}
+          </div>
+
+          <a class="btn btn-default btn-sm" id="{{ moobileId }}-upload" data-url="{{ path('admin_v2_mobile_picture_upload', {type:banner}) }}" data-upload-token="{{ upload_token('system', 'image') }}">{{'admin.mobile_manage.upload_btn'|trans}}</a>
+          <button class="btn btn-default btn-sm" id="{{ moobileId }}-remove" type="button" data-url="{{ path('admin_v2_mobile_picture_remove', {type:banner}) }}" {% if not mobile[banner] %}style="display:none;"{% endif %}>{{'admin.mobile_manage.delete_btn'|trans}}</button>
+
+          <p class="help-block">{{'admin.mobile_manage.img_tips'|trans}}</p>
+            {% set bannerClick  = 'bannerClick' ~ i%}
+          <div class="banner-setting" role="{{ 'banner'~i~'-setting' }}" {% if not mobile[banner] %}style="display:none;"{% endif %}>
+            <input type="radio" role="{{ bannerClick }}" name="{{ bannerClick }}" {% if not mobile[bannerClick] %}checked="checked"{% endif %} value="0"/>{{'admin.mobile_manage.default_click_radio'|trans}}
+            <input type="radio" role="{{ bannerClick }}" name="{{ bannerClick }}" value="1" {% if mobile[bannerClick] == "1" %}checked="checked"{% endif %}/>{{'admin.mobile_manage.goto_link_radio'|trans}}
+            <input type="radio" role="{{ bannerClick }}" name="{{ bannerClick }}" value="2" {% if mobile[bannerClick] == "2" %}checked="checked"{% endif %}/>{{'admin.mobile_manage.goto_inside_course_radio'|trans}}
+
+            <div class="row">
+              <div class="col-xs-11">
+                  {% set bannerUrl  = 'bannerUrl' ~ i%}
+                <input type="text" id="{{ bannerUrl }}" name="{{ bannerUrl }}" class="form-control" value="{{mobile[bannerUrl]}}" placeholder="{{'admin.mobile_manage.link_url_placeholder'|trans}}" {% if mobile[bannerClick] != "1" %}style="display:none"{% endif %}/>
+              </div>
+            </div>
+
+            <div class="row" id="{{ 'selectBannerCourse' ~ i}}" data-role="selectBannerCourse" {% if mobile[bannerClick] != "2" %}style="display:none"{% endif %}>
+              <a data-role="selectCourse" class="btn btn-sm btn-primary pull-left" data-toggle="modal" data-target="#modal" data-url="{{path('admin_v2_course_search_to_fill_banner')}}" >
+                  {{'admin.mobile_manage.selete_course_btn'|trans}}
+              </a>
+              <div name="{{ 'bannerCourseShow' ~ i}}">
+                <ul class="banner-course" role="bannerCourse">
+                    {% include 'admin-v2/teach/course/course-item.html.twig' with {course:bannerCourses[i]} %}
+                </ul>
+              </div>
+              {% set bannerJumpToCourseId  = 'bannerJumpToCourseId' ~ i%}
+              <input type="text" name="{{ bannerJumpToCourseId }}" class="form-control" value="{{mobile[bannerJumpToCourseId]}}" placeholder="{{'admin.mobile_manage.inside_course_id_placeholder'|trans}}" style="display:none;"/>
+            </div>
+          </div>
+
+
+          <input type="hidden" name="{{banner}}" value="{{ mobile[banner] }}">
+        </div>
+      </div>
+    {% endfor %}
+
+  </fieldset>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+  <div class="row form-group">
+    <div class="controls col-md-offset-2 col-md-8">
+      <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
+    </div>
+  </div>
+
+</form>
+
+{% else %}
+<div class="well" style="text-align:center;">
+
+{{ 'admin_v2.mobile_manage.open_tips'|trans({'%openUrl%': path('admin_v2_setting_mobile')})|raw }}
+</div>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,460 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_cloud_sms' %}
+{% set script_controller = 'educloud/sms-setting' %}
+{% block page_flash_message %}
+  {{ web_macro.flash_messages() }}
+{% endblock %}
+{% block page_title %}
+  {% if setting('cloud_status.locked') == true %}
+    <div class="alert alert-warning" role="alert">{{ 'admin.edu_cloud.edu_sms.locked_tips'|trans }}：4008041114。</div>
+    {{ currentMenu.code|parent_permission.name|trans }}
+  {% elseif smsInfo.status == 'stoped' %}
+    <div class="alert alert-warning" role="alert">{{ '
+    admin.edu_cloud.edu_sms.service_suspend_tips'|trans }}：4008041114。
+    </div>
+    {{ currentMenu.code|parent_permission.name|trans }}
+  {% else %}
+    {{ parent() }}
+  {% endif %}
+{% endblock %}
+
+{% block main %}
+  <div class="btn-group mbm">
+    <a href=" {{ path('admin_v2_edu_cloud_sms_overview') }}" type="button"
+       class="btn btn-default btn-sm ">{{ 'admin.edu_cloud.side_bar.introduction'|trans }}</a>
+    <a href=" {{ path('admin_v2_edu_cloud_sms_setting') }}" type="button"
+       class="btn btn-default btn-sm btn-primary">{{ 'admin.edu_cloud.side_bar.setup'|trans }}</a>
+  </div>
+  {% if smsInfo.usedSmsSign.name is defined and smsInfo.usedSmsSign.status == 'success' %}
+    {% set sms_sign_school_name = smsInfo.usedSmsSign.name %}
+  {% else %}
+    {% set sms_sign_school_name = smsInfo.name | default('') %}
+  {% endif %}
+  <div class="page-heading">
+    {{ 'admin.edu_cloud.edu_sms.switch_title'|trans }}
+  </div>
+  <form class="form-horizontal" method="post" action="{{ path('admin_v2_edu_cloud_sms_status') }}">
+    <div class="form-group">
+      <label for="" class="col-sm-3 control-label">{{ 'admin.edu_cloud.edu_sms.enable'|trans }}：</label>
+      <div class="controls col-md-9 radios">
+        <div>
+          <span class="text-success">{{ 'admin.edu_cloud.edu_sms.enable_btn'|trans }}</span>
+          <button class="btn btn-default btn-sm mlm" name="sms-close">
+            <span class="text-muted">{{ 'admin.edu_cloud.edu_sms.close_btn'|trans }}</span>
+          </button>
+        </div>
+        <div class="help-block">
+          {{ 'admin.edu_cloud.edu_sms.enable_tips'|trans({'%showUrl%': path('admin_v2_cloud_show',{'type': 'sms'})})|raw }}
+        </div>
+      </div>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+  <div class="page-heading">
+    {{ 'admin.edu_cloud.edu_sms.base_setting'|trans }}
+  </div>
+  <form class="form-horizontal" role="form">
+    <div class="form-group">
+      <label for="" class="col-sm-3 control-label">{{ 'admin.edu_cloud.edu_sms.sms_sign'|trans }}</label>
+      <div class="controls col-md-9 radios">
+        {{ sms_sign_school_name }}
+        <a href="{{ path('admin_v2_cloud_sms_sign') }}" class="plm"
+           target="_blank">{{ 'admin.edu_cloud.edu_sms.to_set'|trans }}</a>
+        <div class="help-block">
+          {{ 'admin.edu_cloud.edu_sms.sms_sign_tips'|trans }}
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="page-heading">
+    {{ 'admin.edu_cloud.edu_sms.warn_setting'|trans }}
+  </div>
+  <form class="form-horizontal" role="form">
+    <div class="form-group">
+      <label for="" class="col-sm-3 control-label">{{ 'admin.edu_cloud.edu_sms.singel_day_send_max_count'|trans }}
+        ：</label>
+      <div class="controls col-md-9 radios">
+        {% if isBinded.smsThreshold is defined and isBinded.smsThreshold != 0 %}
+          {{ isBinded.smsThreshold }}
+        {% else %}
+          {{ 'admin.edu_cloud.edu_sms.no_set'| trans }}
+        {% endif %}
+        <a href="{{ path('admin_v2_cloud_sms_setting') }}" target="_blank"
+           class="plm">{{ 'admin.edu_cloud.edu_sms.goto_set'|trans }}</a>
+        <div class="help-block">
+          {{ 'admin.edu_cloud.edu_sms.singel_day_send_max_count_tips'|trans }}
+        </div>
+      </div>
+    </div>
+  </form>
+  {% if smsInfo.name | default('') %}
+    <div class="page-heading">
+      {{ 'admin.edu_cloud.edu_sms.template_setting'|trans }}
+    </div>
+    <form class="form-horizontal" method="post" id="sms-form" novalidate="">
+      <div class="table-responsive sms-table mtl">
+        <table class="table table-striped table-hover table-bordered ">
+          <thead>
+          <tr>
+            <th>{{ 'admin.edu_cloud.edu_sms.sms_type'|trans }}</th>
+            <th width="12%">{{ 'admin.edu_cloud.edu_sms.application_scenarios'|trans }}</th>
+            <th width="40%">{{ 'admin.edu_cloud.edu_sms.content'|trans }}</th>
+            <th>{{ 'admin.edu_cloud.edu_sms.send_object'|trans }}</th>
+            <th>{{ 'admin.edu_cloud.edu_sms.send_way'|trans }}</th>
+            <th>{{ 'admin.edu_cloud.edu_sms.operation'|trans }}</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>{{ 'admin.edu_cloud.edu_sms.validation_type'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.login'|trans }}</td>
+            <td>
+              【<span id="js-sms-school-name">
+                {{ sms_sign_school_name }}
+              </span>】
+              {{ 'admin.edu_cloud.edu_sms.verification_code_tips'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.singel_user'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.auto_singel_send'|trans }}</td>
+            <td><input type="hidden" name="sms_login" value="on">{{ 'admin.edu_cloud.edu_sms.default_open'|trans }}</td>
+          </tr>
+          <tr>
+            <td>{{ 'admin.edu_cloud.edu_sms.validation_type'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.bind_mobile'|trans }}</td>
+            <td>
+              【<span id="js-sms-school-name">
+              {{ sms_sign_school_name }}
+            </span>】
+              {{ 'admin.edu_cloud.edu_sms.verification_code_tips'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.singel_user'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.auto_singel_send'|trans }}</td>
+            <td><input type="hidden" name="sms_bind" value="on">{{ 'admin.edu_cloud.edu_sms.default_open'|trans }}</td>
+          </tr>
+          <tr>
+            <td>{{ 'admin.edu_cloud.edu_sms.validation_type'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.login_password_reset'|trans }}</td>
+            <td>
+              【<span id="js-sms-school-name">
+              {{ sms_sign_school_name }}
+            </span>】
+              {{ 'admin.edu_cloud.edu_sms.verification_code_tips'|trans }}
+            </td>
+            <td>{{ 'admin.edu_cloud.edu_sms.singel_user'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.auto_singel_send'|trans }}</td>
+            <td><input type="hidden" name="sms_forget_password"
+                       value="on">{{ 'admin.edu_cloud.edu_sms.default_open'|trans }}</td>
+          </tr>
+          {% if is_plugin_installed('UserImporter') %}
+            <tr>
+              <td>{{ 'admin.edu_cloud.edu_sms.notify_type'|trans }}</td>
+              <td>{{ 'admin.edu_cloud.edu_sms.user_importer'|trans }}</td>
+              <td>
+                【<span id="js-sms-school-name">
+                {{ sms_sign_school_name }}
+              </span>】
+                {{ 'admin.edu_cloud.edu_sms.import_user_tips'|trans() }}
+              </td>
+              <td>{{ 'admin.edu_cloud.edu_sms.singel_user'|trans }}</td>
+              <td>{{ 'admin.edu_cloud.edu_sms.auto_singel_send'|trans }}</td>
+              <td>
+                <label>
+                  <input type="radio" name="sms_import_user" value="on"
+                         {% if (setting('cloud_sms.sms_import_user')|default('off')) == 'on' %}checked="checked"{% endif %}> {{ 'admin.edu_cloud.edu_sms.open_radio'|trans }}
+                </label>
+                <label>
+                  <input type="radio" name="sms_import_user" value="off"
+                         {% if (setting('cloud_sms.sms_import_user')|default('off')) != 'on' %}checked="checked"{% endif %}> {{ 'admin.edu_cloud.edu_sms.close_radio'|trans }}
+                </label>
+              </td>
+            </tr>
+          {% endif %}
+          <tr>
+            <td>{{ 'admin.edu_cloud.edu_sms.validation_type'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.pay_password_reset'|trans }}</td>
+            <td>
+              【<span id="js-sms-school-name">
+              {{ sms_sign_school_name }}
+            </span>】
+              {{ 'admin.edu_cloud.edu_sms.verification_code_tips'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.singel_user'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.auto_singel_send'|trans }}</td>
+            <td><input type="hidden" name="sms_forget_pay_password"
+                       value="on">{{ 'admin.edu_cloud.edu_sms.default_open'|trans }}</td>
+          </tr>
+          <tr>
+            <td>{{ 'admin.edu_cloud.edu_sms.notify_type'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.classroom_publish'|trans }}</td>
+            <td>
+              【<span id="js-sms-school-name">
+              {{ sms_sign_school_name }}
+            </span>】
+              {{ 'admin.edu_cloud.edu_sms.register_classroom_tips'|trans({'%classrommName%': setting('classroom.name')|default('site.default.classroom'|trans)}) }}
+            </td>
+            <td>{{ 'admin.edu_cloud.edu_sms.all_user'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.manual_send'|trans }}</td>
+            <td>
+              <label>
+                <input type="radio" name="sms_classroom_publish" value="on"
+                       {% if (setting('cloud_sms.sms_classroom_publish')|default('off')) == 'on' %}checked="checked"{% endif %}> {{ 'admin.edu_cloud.edu_sms.open_radio'|trans }}
+              </label>
+              <label>
+                <input type="radio" name="sms_classroom_publish" value="off"
+                       {% if (setting('cloud_sms.sms_classroom_publish')|default('off')) != 'on' %}checked="checked"{% endif %}> {{ 'admin.edu_cloud.edu_sms.close_radio'|trans }}
+              </label>
+            </td>
+          </tr>
+          <tr>
+            <td>{{ 'admin.edu_cloud.edu_sms.notify_type'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.course_publish'|trans }}</td>
+            <td>
+              【<span id="js-sms-school-name">
+              {{ sms_sign_school_name }}
+            </span>】
+              {{ 'admin.edu_cloud.edu_sms.register_course_tips'|trans }}
+            </td>
+            <td>{{ 'admin.edu_cloud.edu_sms.all_user'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.manual_send'|trans }}</td>
+            <td>
+              <label>
+                <input type="radio" name="sms_course_publish" value="on"
+                    {% if (setting('cloud_sms.sms_course_publish')|default('off')) == 'on' %}
+                  checked="checked"{% endif %}> {{ 'admin.edu_cloud.edu_sms.open_radio'|trans }}
+              </label>
+              <label>
+                <input type="radio" name="sms_course_publish" value="off"
+                    {% if (setting('cloud_sms.sms_course_publish')|default('off')) != 'on' %}
+                  checked="checked"{% endif %}> {{ 'admin.edu_cloud.edu_sms.close_radio'|trans }}
+              </label>
+            </td>
+          </tr>
+          <tr>
+            <td>{{ 'admin.edu_cloud.edu_sms.notify_type'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.study_task_notify_normal_course'|trans }}</td>
+            <td>
+              【<span id="js-sms-school-name">
+              {{ sms_sign_school_name }}
+            </span>】
+              {{ 'admin.edu_cloud.edu_sms.study_task_tips'|trans }}
+            </td>
+            <td>{{ 'admin.edu_cloud.edu_sms.course_classroom_student'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.auto_mass_send'|trans }}</td>
+            <td>
+              <label>
+                <input type="radio" name="sms_normal_lesson_publish" value="on"
+                       {% if (setting('cloud_sms.sms_normal_lesson_publish')|default('off')) == 'on' %}checked="checked"{% endif %}> {{ 'admin.edu_cloud.edu_sms.open_radio'|trans }}
+              </label>
+              <label>
+                <input type="radio" name="sms_normal_lesson_publish" value="off"
+                       {% if (setting('cloud_sms.sms_normal_lesson_publish')|default('off')) != 'on' %}checked="checked"{% endif %}> {{ 'admin.edu_cloud.edu_sms.close_radio'|trans }}
+              </label>
+            </td>
+          </tr>
+          <tr>
+            <td>{{ 'admin.edu_cloud.edu_sms.notify_type'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.study_task_notify_live'|trans }}</td>
+            <td>
+              【<span id="js-sms-school-name">
+              {{ sms_sign_school_name }}
+            </span>】
+              {{ 'admin.edu_cloud.edu_sms.study_task_notify_tips'|trans }}
+            </td>
+            <td>{{ 'admin.edu_cloud.edu_sms.course_classroom_student'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.auto_mass_send'|trans }}</td>
+            <td>
+              <label>
+                <input type="radio" name="sms_live_lesson_publish" value="on"
+                       {% if (setting('cloud_sms.sms_live_lesson_publish')|default('off')) == 'on' %}checked="checked"{% endif %}> {{ 'admin.edu_cloud.edu_sms.open_radio'|trans }}
+              </label>
+              <label>
+                <input type="radio" name="sms_live_lesson_publish" value="off"
+                       {% if (setting('cloud_sms.sms_live_lesson_publish')|default('off')) != 'on' %}checked="checked"{% endif %}> {{ 'admin.edu_cloud.edu_sms.close_radio'|trans }}
+              </label>
+            </td>
+          </tr>
+          <tr>
+            <td>{{ 'admin.edu_cloud.edu_sms.notify_type'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.live_broadcast_advance_one_day_notify'|trans }}</td>
+            <td>
+              【<span id="js-sms-school-name">
+              {{ sms_sign_school_name }}
+            </span>】
+              {{ 'admin.edu_cloud.edu_sms.live_broadcast_notify_tips'|trans }}
+            </td>
+            <td>{{ 'admin.edu_cloud.edu_sms.course_classroom_student'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.auto_mass_send'|trans }}</td>
+            <td>
+              <label>
+                <input type="radio" name="sms_live_play_one_day" value="on"
+                       {% if (setting('cloud_sms.sms_live_play_one_day')|default('off')) == 'on' %}checked="checked"{% endif %}> {{ 'admin.edu_cloud.edu_sms.open_radio'|trans }}
+              </label>
+              <label>
+                <input type="radio" name="sms_live_play_one_day" value="off"
+                       {% if (setting('cloud_sms.sms_live_play_one_day')|default('off')) != 'on' %}checked="checked"{% endif %}> {{ 'admin.edu_cloud.edu_sms.close_radio'|trans }}
+              </label>
+            </td>
+          </tr>
+          <tr>
+            <td>{{ 'admin.edu_cloud.edu_sms.notify_type'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.live_broadcast_advance_one_hour_notify'|trans }}</td>
+            <td>
+              【<span id="js-sms-school-name">
+              {{ sms_sign_school_name }}
+            </span>】
+              {{ 'admin.edu_cloud.edu_sms.live_broadcast_notify_tips'|trans }}
+            </td>
+            <td>{{ 'admin.edu_cloud.edu_sms.course_classroom_student'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.auto_mass_send'|trans }}</td>
+            <td>
+              <label>
+                <input type="radio" name="sms_live_play_one_hour" value="on"
+                       {% if (setting('cloud_sms.sms_live_play_one_hour')|default('off')) == 'on' %}checked="checked"{% endif %}> {{ 'admin.edu_cloud.edu_sms.open_radio'|trans }}
+              </label>
+              <label>
+                <input type="radio" name="sms_live_play_one_hour" value="off"
+                       {% if (setting('cloud_sms.sms_live_play_one_hour')|default('off')) != 'on' %}checked="checked"{% endif %}> {{ 'admin.edu_cloud.edu_sms.close_radio'|trans }}
+              </label>
+            </td>
+          </tr>
+          <tr>
+            <td>{{ 'admin.edu_cloud.edu_sms.notify_type'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.homework_checked'|trans }}</td>
+            <td>
+              【<span id="js-sms-school-name">
+              {{ sms_sign_school_name }}
+            </span>】
+              {{ 'admin.edu_cloud.edu_sms.homework_checked_tips'|trans }}
+            </td>
+            <td>{{ 'admin.edu_cloud.edu_sms.singel_user'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.auto_singel_send'|trans }}</td>
+            <td>
+              <label>
+                <input type="radio" name="sms_homework_check" value="on"
+                       {% if (setting('cloud_sms.sms_homework_check')|default('off')) == 'on' %}checked="checked"{% endif %}> {{ 'admin.edu_cloud.edu_sms.open_radio'|trans }}
+              </label>
+              <label>
+                <input type="radio" name="sms_homework_check" value="off"
+                       {% if (setting('cloud_sms.sms_homework_check')|default('off')) != 'on' %}checked="checked"{% endif %}> {{ 'admin.edu_cloud.edu_sms.close_radio'|trans }}
+              </label>
+            </td>
+          </tr>
+          <tr>
+            <td>{{ 'admin.edu_cloud.edu_sms.notify_type'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.testpaper_checked'|trans }}</td>
+            <td>
+              【<span id="js-sms-school-name">
+              {{ sms_sign_school_name }}
+            </span>】
+              {{ 'admin.edu_cloud.edu_sms.testpaper_checked_tips'|trans }}
+            </td>
+            <td>{{ 'admin.edu_cloud.edu_sms.singel_user'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.auto_singel_send'|trans }}</td>
+            <td>
+              <label>
+                <input type="radio" name="sms_testpaper_check" value="on"
+                       {% if (setting('cloud_sms.sms_testpaper_check')|default('off')) == 'on' %}checked="checked"{% endif %}> {{ 'admin.edu_cloud.edu_sms.open_radio'|trans }}
+              </label>
+              <label>
+                <input type="radio" name="sms_testpaper_check" value="off"
+                       {% if (setting('cloud_sms.sms_testpaper_check')|default('off')) != 'on' %}checked="checked"{% endif %}> {{ 'admin.edu_cloud.edu_sms.close_radio'|trans }}
+              </label>
+            </td>
+          </tr>
+          <tr>
+            <td>{{ 'admin.edu_cloud.edu_sms.notify_type'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.invite_rewards_not_enough'|trans }}</td>
+            <td>
+              【<span id="js-sms-school-name">
+              {{ sms_sign_school_name }}
+            </span>】
+              {{ 'admin.edu_cloud.edu_sms.coupon_not_enough_tips'|trans }}
+            </td>
+            <td>{{ 'admin.edu_cloud.edu_sms.singel_user'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.auto_singel_send'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.default_open'|trans }}</td>
+          </tr>
+          <tr>
+            <td>{{ 'admin.edu_cloud.edu_sms.notify_type'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.invite_rewards_is_exhausted'|trans }}</td>
+            <td>
+              【<span id="js-sms-school-name">
+              {{ sms_sign_school_name }}
+            </span>】
+              {{ 'admin.edu_cloud.edu_sms.coupon_is_exhausted_tips'|trans }}
+            </td>
+            <td>{{ 'admin.edu_cloud.edu_sms.singel_user'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.auto_singel_send'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.default_open'|trans }}</td>
+          </tr>
+          <tr>
+            <td>{{ 'admin.edu_cloud.edu_sms.receipt_type'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.course_buy_receipt'|trans }}</td>
+            <td>
+              【<span id="js-sms-school-name">
+              {{ sms_sign_school_name }}
+            </span>】
+              {{ 'admin.edu_cloud.edu_sms.course_buy_receipt_tips'|trans }}
+            </td>
+            <td>{{ 'admin.edu_cloud.edu_sms.singel_user'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.auto_singel_send'|trans }}</td>
+            <td rowspan="4" style="vertical-align:middle;">
+              <label>
+                <input type="radio" name="sms_order_pay_success" value="on"
+                       {% if (setting('cloud_sms.sms_order_pay_success')|default('off')) == 'on' %}checked="checked"{% endif %}> {{ 'admin.edu_cloud.edu_sms.open_radio'|trans }}
+              </label>
+              <label>
+                <input type="radio" name="sms_order_pay_success" value="off"
+                       {% if (setting('cloud_sms.sms_order_pay_success')|default('off')) != 'on' %}checked="checked"{% endif %}> {{ 'admin.edu_cloud.edu_sms.close_radio'|trans }}
+              </label>
+            </td>
+          </tr>
+          <tr>
+            <td>{{ 'admin.edu_cloud.edu_sms.receipt_type'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.classroom_buy_receipt'|trans }}</td>
+            <td>
+              【<span id="js-sms-school-name">
+              {{ sms_sign_school_name }}
+            </span>】
+              {{ 'admin.edu_cloud.edu_sms.classroom_buy_receipt_tips'|trans }}
+            </td>
+            <td>{{ 'admin.edu_cloud.edu_sms.singel_user'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.auto_singel_send'|trans }}</td>
+          </tr>
+          <tr>
+            <td>{{ 'admin.edu_cloud.edu_sms.receipt_type'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.vip_buy_receipt'|trans }}</td>
+            <td>
+              【<span id="js-sms-school-name">
+              {{ sms_sign_school_name }}
+            </span>】
+              {{ 'admin.edu_cloud.edu_sms.vip_buy_receipt_tips'|trans }}
+            </td>
+            <td>{{ 'admin.edu_cloud.edu_sms.singel_user'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.auto_singel_send'|trans }}</td>
+          </tr>
+          <tr>
+            <td>{{ 'admin.edu_cloud.edu_sms.receipt_type'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.virtual_money_buy_receipt'|trans }}</td>
+            <td>
+              【<span id="js-sms-school-name">
+              {{ sms_sign_school_name }}
+            </span>】
+              {{ 'admin.edu_cloud.edu_sms.virtual_money_buy_receipt_tips'|trans }}
+            </td>
+            <td>{{ 'admin.edu_cloud.edu_sms.singel_user'|trans }}</td>
+            <td>{{ 'admin.edu_cloud.edu_sms.auto_singel_send'|trans }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <input type="hidden" name="register-mode" value="{{ setting('auth.register_mode') }}">
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      <input type="hidden" name="strategy_overwrite" value="true">
+      <input type="hidden" name="system_remind" value="on">
+      <div class="form-group">
+        <div class="controls col-md-offset-10">
+          <button type="submit" class="btn btn-primary">{{ 'form.btn.submit'|trans }}</button>
+        </div>
+      </div>
+    </form>
+  {% endif %}
+{% endblock %}

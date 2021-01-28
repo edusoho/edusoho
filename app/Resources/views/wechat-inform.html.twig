@@ -1,0 +1,31 @@
+{% if setting('wechat.wechat_notification_enabled')|default(false) %}
+  {% do script(['app/js/wechat-inform/index.js']) %}
+  {% set switchLanguage = setting('developer.show_switch_locale')|default(0) %}
+  {% set weChatUser = data('WeChatUser', {userId: app.user.id|default(null)}) %}
+
+  {% if not weChatUser.isSubscribe|default(false) %}
+    <div class="js-wechat-inform hidden {% if switchLanguage  == 1 %}js-switch-language{% endif %}" data-url="{{ path('settings_binds')}}" data-user-id="{{ app.user.id|default(null) }}">
+      <div class="wechat-pendant js-wechat-pendant" data-toggle="tooltip" data-placement="bottom" data-container=".wechat-pendant" title="开启课程通知"
+           {% if not weChatUser %}data-url="{{ path('login_wechat_qrcode') }}"{% endif %}>
+        <div class="wechat-pendant__outer">
+          <div class="wechat-pendant__inner">
+            <i class="es-icon es-icon-qr-code"></i>
+          </div>
+        </div>
+        <i class="cd-icon cd-icon-close wechat-pendant__close js-wechat-close-btn"></i>
+      </div>
+
+      <div class="wechat-inform-qrcode js-wechat-qrcode hidden">
+        <div class="wechat-inform-qrcode__close js-wechat-close-btn"><i class="cd-icon cd-icon-close"></i></div>
+        {% if weChatUser and weChatUser.isSubscribe != 1 %}
+          <div class="wechat-inform-qrcode__tip">{{'wechat.notification.open_notification_tip'|trans}}</div>
+          <img class="wechat-inform-qrcode__img" src="{{ setting('wechat.account_code') }}">
+        {% elseif not weChatUser %}
+          <div class="wechat-inform-qrcode__tip text-left">{{'wechat.notification.scan_and_bind'|trans}}</div>
+          <img class="wechat-inform-qrcode__img" src="">
+        {% endif %}
+      </div>
+      <div class="wechat-inform-qrcode-mask js-wechat-mask"></div>
+    </div>
+  {% endif %}
+{% endif %}

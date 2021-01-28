@@ -1,0 +1,34 @@
+{
+    "name":"codeception/module-db",
+    "description":"WebDriver module for Codeception",
+    "keywords":["codeception", "browser-testing", "acceptance-testing"],
+    "homepage":"http://codeception.com/",
+    "type":"library",
+    "license":"MIT",
+    "authors":[
+        {
+            "name": "Michael Bodnarchuk"
+        },
+        {
+            "name": "Gintautas Miselis"
+        }
+    ],
+    "minimum-stability": "RC",
+
+    "require": {
+        "php": ">=5.6.0 <8.0",
+        "codeception/codeception": "*@dev"
+    },
+    "require-dev": {
+        "codeception/util-robohelpers": "dev-master"
+    },
+    "conflict": {
+        "codeception/codeception": "<4.0"
+    },
+    "autoload":{
+        "classmap": ["src/"]
+    },
+    "config": {
+        "classmap-authoritative": true
+    }
+}

@@ -1,0 +1,36 @@
+<div class="course-item">
+  <div class="course-img">
+    <a href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank" target="{{ course.title }}">
+      {% if course.type == 'liveOpen' %}
+        <span class="tags">
+          <span class="tag-open-live"></span>
+        </span>
+      {% endif %}
+      {{ lazy_img(filepath(course.largePicture, 'course.png'), 'img-responsive', course.title) }}
+    </a>
+    {% set lessons = data('OpenCourseLessons',{courseId:course.id,count:1}) %}
+    {% if course.type == 'liveOpen' %}
+      <div class="open-starttime">{{'open_course.live'|trans({'%live%' : lessons[0].startTime|date('Y-m-d H:i') })}}</div>
+    {% endif %}
+  </div>
+  <div class="course-info">
+    <div class="title">
+      {% if course.type == 'liveOpen' %}
+        {% if "now"|date("U") >= lessons[0].startTime and "now"|date("U") <= lessons[0].endTime %}
+          <span class="label label-primary mrm">{{'open_course.status.live'|trans}}</span>
+        {% elseif "now"|date("U") < lessons[0].startTime %}
+          <span class="label label-warning mrm">{{'open_course.status.living'|trans}}</span>
+        {% endif %}
+      {% endif %}
+      <a class="link-darker" href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank" title="{{ course.title }}">
+        {{ course.title }}
+      </a>
+    </div>
+    <div class="metas clearfix">
+      <span class="num"><i class="es-icon es-icon-removeredeye"></i>{{ course.hitNum }}</span>
+      {% if setting('openCourse.show_comment', '1') == 1 %}
+        <span class="comment"><i class="es-icon es-icon-textsms"></i>{{ course.postNum }}</span>
+      {% endif %}
+    </div>
+  </div>
+</div>

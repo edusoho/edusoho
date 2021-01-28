@@ -1,0 +1,24 @@
+{% extends 'layout.html.twig' %}
+{% block title %}{{'user.settings.security.password_reset'|trans}} - {{ parent() }}{% endblock %}
+
+{% block content %}
+<div class="row row-6">
+  <div class="col-md-6 col-md-offset-3 ptl">
+    <div class="panel panel-default panel-page">
+      <div class="panel-heading"><h2>{{'user.settings.security.password_reset.email.step_two.content_title'|trans}}</h2></div>
+      {% if email %}  
+      <p>
+        {{'user.settings.security.password_reset.email.step_two.goto'|trans}} <span class="color-success">{{ user.email }}</span> {{'user.settings.security.password_reset.email.step_two.email_tips'|trans({'%site.name%': setting('site.name')})}}
+      </p>
+      <p>
+        <a class="btn btn-primary" href="{{ get_login_email_address(user.email) }}" target="_blank">{{'user.settings.security.password_reset.email.step_two.check_email_btn'|trans}}</a>
+      </p>
+      {% else %}
+        <p>
+          {{ 'user.settings.security.password_reset.success_hint'|trans({'%loginUrl%': path('login')})|raw }}
+        </p>   
+      {% endif %}  
+    </div>
+  </div>
+</div>
+{% endblock %}

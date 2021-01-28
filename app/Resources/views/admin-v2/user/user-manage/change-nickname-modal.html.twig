@@ -1,0 +1,44 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{ 'admin_v2.user.manage.change_nickname.heading_title'|trans }}{% endblock %}
+
+{% block body %}
+
+  <form class="form-horizontal" id="change-nickname-form"
+        action="{{ path('admin_v2_user_change_nickname', {userId:user.id}) }}" method="post">
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label for="nickname">{{ 'user.fields.username_label'|trans }}</label></div>
+      <div class="col-md-8 controls">
+        <input class="form-control" type="nickname" id="nickname" value="{{ user.nickname }}" name="nickname"
+               data-url="{{ path('admin_v2_user_update_nickname_check', {userId:user.id}) }}">
+        <p class="help-block"></p>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label"><label for="code">{{ 'admin.user.fields.user_email'|trans }}</label></div>
+      <div class="col-md-8 controls">
+        <div style="margin-top: 7px;">
+          {% if not is_system_generated_email(user.email) %}
+            {{ user.email }}
+          {% else %}
+            --
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+
+{% endblock %}
+
+{% block footer %}
+  <button id="change-nickname-btn" data-submiting-text="{{ 'form.btn.submit.submiting'|trans }}"
+          class="btn btn-primary pull-right" data-toggle="form-submit"
+          data-target="#change-nickname-form">{{ 'form.btn.submit'|trans }}</button>
+  <button type="button" class="btn btn-link" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
+
+  <script>app.load('user/change-nickname');</script>
+{% endblock %}

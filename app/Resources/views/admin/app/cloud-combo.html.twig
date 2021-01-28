@@ -1,0 +1,26 @@
+            <div class="col-md-6">
+              <div class="panel panel-default">
+                <div class="panel-body">
+                  <h4 class="eduyun-title">{{'admin.cloud_combo.info'|trans}}</h4>
+                  {% if user.level|default("none") == "none" %}
+                    <div class="text-danger text-sm" role="alert">
+                      <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>{{ 'admin.cloud_combo.info_tips'|trans|raw }}
+                    </div>
+                  {% else %}
+                  <p class="text-muted">{{'admin.cloud_combo.user_use_version'|trans}}：{{content.user.levelName|default('')}}</p>
+                  <p class="text-muted">{{'admin.cloud_combo.user_use_expiry_date'|trans}}：{{ startDate|default('') }}~{{ endDate|default('') }}</p>
+                  {% endif %}
+                  {% if packageDate|default(31)  == 0 %}
+                  <p class="text-danger text-sm">{{ 'admin.cloud_combo.service_tomorrow_deadline'|trans|raw }}</p> 
+                  {% endif %}
+                  <!--已到期-->
+                  {% if packageDate|default(31)  < 0 %}
+                  <p class="text-danger text-sm">{{ 'admin.cloud_combo.service_over_deadline'|trans|raw }}</p>
+                  {% endif %}
+                  <!--30天提醒-->
+                  {% if 30 >= packageDate|default(31)  and packageDate|default(31)   > 0 %}
+                  <p class="text-danger text-sm">{{ 'admin.cloud_combo.service_deadline_tips'|trans({'%packageDate%': packageDate})|raw }}</p> 
+                  {% endif %}
+                </div>  
+              </div>
+            </div>

@@ -1,0 +1,66 @@
+<div class="form-group">
+  <div class="col-md-1 control-label">
+    <label for="testpaper-percentage-field">{{'course.testpaper_manage.create.build_mode'|trans}}</label>
+  </div>
+  <div class="col-md-11 controls radios">
+    {{ radios('mode', {'rand':'course.testpaper_manage.create.build_mode.rand'|trans, 'difficulty':'course.testpaper_manage.create.build_mode.difficulty'|trans}, 'rand') }}
+  </div>
+</div>
+
+<div class="form-group hidden" id="difficulty-form-group">
+  <div class="col-md-1 control-label">
+    <label for="testpaper-percentage-field">{{'course.testpaper_manage.create.difficulty'|trans}}</label>
+  </div>
+  <div class="col-md-11 controls mtm">
+    <div class="mbm" id="difficulty-percentage-slider"></div>
+    <p class="help-block mbm">
+      <span class="js-simple-percentage-text"></span>
+      <span class="js-normal-percentage-text"></span>
+      <span class="js-difficulty-percentage-text"></span>
+    </p>
+    <span class="color-warning">{{'course.testpaper_manage.create.difficulty.tips'|trans}}</span>
+  </div>
+</div>
+
+<div class="form-group">
+  <div class="col-md-1 control-label"><label for="testpaper-range-field">{{'course.testpaper_manage.create.range'|trans}}</label></div>
+  <div class="col-md-11 controls">
+    <select class="form-control width-150" name="ranges[categoryId]" data-bank-id="{{ questionBank.id }}" data-check-num-url="{{ path('question_bank_manage_question_check_num') }}">
+      <option value="" selected>{{ 'my.teaching.question_bank.question.all'|trans }}</option>
+      <option value="">{{ 'my.teaching.question_bank.question.all'|trans }}</option>
+      <option value="0">{{ 'my.teaching.question_bank.question.no_category'|trans }}</option>
+      {{ select_options(item_category_choices(questionBank.itemBank.id)) }}
+    </select>
+  </div>
+</div>
+
+<div class="form-group">
+  <style>.testpaper-question-option-item{margin-left:-12px;margin-bottom:5px;list-style: none;}</style>
+  <div class="col-md-1 control-label"><label class="control-label-required">{{'course.testpaper_manage.create.questions_setup'|trans}}</label></div>
+  <ul class="col-md-11 controls" id="testpaper-question-options">
+    {% for type,config in types %}
+      <li class="testpaper-question-option-item">
+        <button type="button" class="btn btn-link question-type-sort-handler"><span class="glyphicon glyphicon-move"></span></button>
+        <span style="min-width:85px;display:inline-block;_display:inline;">{{ config.name|trans }}</span>
+        <span class="mlm">{{'course.testpaper_manage.create.questions_setup.number'|trans}}:</span>
+        <input type="text" class="form-control width-input width-input-mini item-number" name="sections[{{ type }}][count]" data-role="count"  value="0" {% if typesNum[type].itemNum|default(0) == 0  %} disabled {% endif %} />/
+        <span class="text-info question-num" role="questionNum" type="{{ type }}" style="display:inline-block;min-width: 45px;">{{ typesNum[type].itemNum|default(0) }}</span>
+        <span class="mlm">{{'course.testpaper_manage.create.questions_setup.score'|trans}}:</span>
+        <input type="text" class="form-control width-input width-input-mini item-score" name="scores[{{ type }}]"  value="2" data-role="score" />
+        <input class="hidden" name="sections[{{ type }}][name]" value="{{ config.name|trans }}" {% if typesNum[type].itemNum|default(0) == 0  %} disabled {% endif %}>
+
+        {% if config.hasMissScore|default(null) %}
+          <span class="mlm">{{'course.testpaper_manage.create.questions_setup.missing_score'|trans}}:</span>
+          <input type="text" class="form-control width-input width-input-mini item-miss-score" name="missScores[{{ type }}]"  value="0" data-role="missScore" />
+        {% endif %}
+      </li>
+    {% endfor %}
+    <input type="hidden" name="questioncount">
+    <span class="help-block color-danger js-build-check"></span>
+  </ul>
+
+</div>
+
+<input type="hidden" name="percentages[simple]">
+<input type="hidden" name="percentages[normal]">
+<input type="hidden" name="percentages[difficulty]">

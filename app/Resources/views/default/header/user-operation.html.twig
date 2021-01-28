@@ -1,0 +1,23 @@
+<div class="navbar-user {% if setting('esBar.enabled', 0) %} left {% endif %}">
+  <ul class="nav user-nav">
+    {% set show_switch_locale = setting('developer.show_switch_locale')|default(0) %}
+    {% if app.user %}
+      {% include 'default/header/part/user-role-manage.html.twig' %}
+      {% include 'default/header/part/user-inform.html.twig' %}
+      {% include 'default/header/part/user-avatar.html.twig' %}
+    {% else %}
+      {% include 'default/header/part/visitor-login.html.twig' %}
+    {% endif %}
+
+    {% if show_switch_locale == 1 %}
+      {% if app.user %}{% set langClass = 'visitor-li visible-lg' %}{% else %}{% set langClass = 'visitor-li hidden-xs' %}{% endif %}
+      {% include 'default/switch-language.html.twig' with {langClass: langClass} %}
+    {% endif %}
+  </ul>
+  <form class="navbar-form navbar-right hidden-xs" action="{{ path('search') }}" method="get">
+    <div class="form-group">
+      <input class="form-control js-search" value="{{ app.request.get('q')|default() }}" name="q" placeholder="{{ 'homepage.header.search'|trans }}">
+      <button class="button es-icon es-icon-search"></button>
+    </div>
+  </form>
+</div>

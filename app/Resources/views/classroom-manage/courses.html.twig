@@ -1,0 +1,166 @@
+{% extends 'classroom-manage/layout.html.twig' %}
+{% block title %}{{'classroom.course_manage'|trans}} - {{ parent() }}{% endblock %}
+{% set side_nav = 'courses' %}
+{% do script(['app/js/classroom-manage/course-manage/index.js']) %}
+
+{% block main %}
+<style>
+.sort{
+    padding-top: 50px;
+    padding-right: 20px;
+    padding-left: 20px;
+}
+</style>
+
+{% set url = path('classroom_courses_select',{id:classroom.id}) %}
+
+<div class="panel panel-default" role="classroom-manage-course-manage">
+  <div class="panel-heading">{{'classroom.course_manage'|trans}}
+    <button class="btn btn-primary btn-sm panel-bar" data-toggle="modal" data-target="#modal" data-url="{{path('classroom_courses_pick',{classroomId:classroom.id})}}">{{'classroom.create_course_btn'|trans}}</button>
+  </div>
+  <div class="panel-body">
+      <form id="courses-form" class="form-horizontal" method="post">
+        {{ web_macro.flash_messages() }}
+        <div class="form-group" id="courses-form-group">
+          <div class="col-md-12 controls">
+            <ul class="js-course-list-group sortable-list course-wide-list courses-selected" id="course-list-group" data-role="list" data-sort-url="{{path('classroom_manage_items_sort',{id:classroom.id})}}">
+
+              {% for course in courses %}
+
+              <li class="course-item item-{{course.id}} clearfix" data-role="item" >
+              <input type="hidden" name="courseIds[]" value="{{course.id}}" />
+              <span class="glyphicon glyphicon-resize-vertical sort-handle sort"></span>
+              <a class="course-picture-link" href="{{ path('course_show', {id:course.id}) }}" target="_blank">
+              {% if course.type == 'live' %}
+                <span class="tags">
+                  <span class="tag-live"></span>
+                </span>
+              {% endif %}
+                <img class="course-picture" src="{{ filepath(course_cover(course, 'middle'), 'courseSet.png') }}" alt="{{ course.title }}">
+              </a>
+              <button class="close course-close-btn js-delete-btn mrl mts mll"
+                      data-role="item-delete" type="button"
+                      title="{{'classroom.delete_btn'|trans}}"
+                      data-id="{{course.id}}"
+                      data-url="{{path('classroom_manage_course_remove', {id: classroom.id, courseId: course.id})}}"
+                      {% if has_permission('admin_v2_course_manage') %}
+                      data-del-url="{{path('classroom_manage_course_delete', {courseSetId: course.courseSet.id, classroomId: classroom.id, courseId: course.id}) }}"
+                      {% endif %}
+              >× </button>
+                  <div class="course-body clearfix">
+                   <div class="color-gray mls pull-right cd-mr40">
+                      {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                          <span class="course-price course-price-{{course.id}}" style="display:inline" data-price="{{ course.originPrice * setting('coin.cash_rate')}}">
+                            {% if course.originPrice > 0 %}
+                              {{ course.originPrice * setting('coin.cash_rate')}}
+                              {{setting('coin.coin_name')}}
+                            {% else %}
+                              {{'classroom.free_course'|trans}}
+                            {% endif %}
+                          </span>
+
+                      {% else %}
+                        <span class="course-price course-price-{{course.id}}" data-price="{{ course.originPrice }}">
+                          {% if course.originPrice > 0 %}
+                            {{ course.originPrice }} {{'site.currency.CNY'|trans}}
+                          {% else %}
+                            {{'classroom.free_course'|trans}}
+                          {% endif %}
+                        </span>
+                      {% endif %}
+                    </div>
+
+                    <h4 class="course-title text-overflow mv0">
+                      {% if course.serializeMode=='serialized' %}
+                        <span class="label label-success ">{{'course.status.serialized'|trans}}</span>
+                      {% elseif course.serializeMode=='finished' %}
+                        <span class="label label-warning ">{{'course.status.finished'|trans}}</span>
+                      {% endif %}
+                      <a href="{{ path('course_show', {id:course.id}) }}" target="_blank">{{ course.courseSet.title }}</a>
+
+                      {% if course.title %}<div class="course-title__plan">{{'classroom.teach_plan'|trans}}：{{ course.title|sub_text(20) }}</div>{% endif %}
+                    </h4>
+                    <div class="course-manage-btn"><a class="cd-btn cd-btn-ghost-primary cd-btn-sm" href="{{ path('course_set_manage_sync', {id: course.courseSet.id, sideNav: 'info'}) }}" target="_blank">{{ 'course.manage_btn'|trans }}</a></div>
+
+                    <div class="course-footer clearfix">
+                      {% set teacher = users[course.teacherIds|first]|default(null) %}
+                      {% if teacher %}
+                        <div class="teacher">
+                          <a href="{{ path('user_show', {id:teacher.id}) }}" target="_blank"><img src="{{ filepath(teacher.smallAvatar, 'avatar.png') }}" class="teacher-avatar"></a>
+                          <a class="teacher-nickname ellipsis" target="_blank"  href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+                          <span class="teacher-title ellipsis">{{ teacher.title }}</span>
+                        </div>
+                      {% endif %}
+
+                      <div class="course-metas">
+
+                        {% if setting('course.show_student_num_enabled', '1') == 1  %}
+                        <span class="color-gray text-sm">{{ course.studentNum }} {{'site.default.student'|trans}}</span>
+                        <span class="divider"></span>
+                        {% endif %}
+
+                          <span class="color-gray text-sm">
+                              {{'classroom.total_task_count'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%taskNum%':course.taskNum})}}
+                          </span>
+                          <span class="divider"></span>
+                          <span class="color-gray text-sm">
+                              {{'classroom.expiry_mode'|trans}}：
+                              {% if course.expiryMode|default(null) == 'date' %}
+                                {{course.expiryStartDate|date('Y-m-d H:i') ~ '~' ~ course.expiryEndDate|date('Y-m-d H:i')}}
+                              {% else %}
+                                {% if course.expiryDays %}
+                                  {{course.expiryDays}}{{'site.date.day'|trans}}
+                                {% else %}
+                                  {% if course.expiryMode|default(null) == 'end_date' %}
+                                    {{ 'classroom.end_date'|trans ~ '-' ~ course.expiryEndDate|date('Y-m-d') }}
+                                  {% else %}
+                                    {{'classroom.forever'|trans}}
+                                  {% endif %}
+                                {% endif %}
+                              {% endif %}
+                          </span>
+                      </div>
+
+                    </div>
+
+                  </div>
+              </li>
+
+              {% endfor %}
+
+            </ul>
+          </div>
+        </div>
+
+        {% if courses %}
+        <div class="alert alert-warning">{{'classroom.course_tips'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}</div>
+        <div class="form-group">
+          <div class="col-md-offset-9 col-md-3 controls">
+            <div class="mbl pull-right">{{'classroom.total_price'|trans}}： &nbsp; &nbsp;
+                {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                  <span class="price" style="display:inline">
+                      <span  id="price">{{ coinPrice }}</span>{{setting('coin.coin_name')}}
+                  </span>
+
+                {% else %}
+                  <span class="price">
+                      <span id="price">{{ price }}</span>{{'site.currency.CNY'|trans}}
+                  </span>
+                {% endif %}
+
+            </div>
+
+          </div>
+        </div>
+        {% else %}
+        <div class="empty">{{'classroom.course_empty'|trans}}</div>
+        {% endif %}
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+      </form>
+
+  </div>
+</div>
+
+{% endblock %}

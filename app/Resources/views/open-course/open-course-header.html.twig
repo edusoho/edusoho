@@ -1,0 +1,37 @@
+<div class="col-md-9 open-course-views" data-get-recommend-course-url="{{ path('open_course_ad_modal_recommend_course', {id: course.id, num: 3}) }}">
+  {% if course.type == 'liveOpen' %}
+    {% include 'open-course/live-open-course-header.html.twig' %}
+  {% else %}
+    {% include 'open-course/lesson-play.html.twig' %}
+  {% endif %}
+
+  <div class="mask modal fade" id="open-course-ad-modal" tabindex="-1" role="dialog" aria-labelledby="openCourseADModal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="open-course-ad-modal-title">{{ 'my.teaching.open_course.lesson.header.lesson_finished'|trans }}</h4>
+        </div>
+        <div class="modal-body">
+          <div class='empty'>{{ 'my.teaching.open_course.lesson.header.lesson_share'|trans }}</div>
+        </div>
+        <div class="modal-footer">
+          <div class="es-share top js-es-share">
+            <a href="javascript:;" class="btn-link color-gray prl js-player-replay"><i class="es-icon es-icon-refresh prs"></i>{{ 'my.teaching.open_course.lesson.header.reply_btn'|trans }}</a>
+            <a href="" class="btn btn-lg share-btn dropdown-toggle mrm" data-toggle="dropdown">
+              <i class="es-icon es-icon-share prs"></i>{{'my.teaching.open_course.lesson.header.lesson_share_btn'|trans}}</a>
+            {% include 'common/share-dropdown.html.twig' with {type:'open_course'} %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% do script(['app/js/open-course/header/index.js']) %}
+
+
+
+
+
+

@@ -1,0 +1,45 @@
+{
+    "name": "cerdic/css-tidy",
+    "description": "CSSTidy is a CSS minifier",
+    "license": "LGPL-2.1-or-later",
+    "authors": [
+        {
+            "name": "Cédric MORIN",
+            "email": "changeme@mailinator.com"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/pear/Text_Diff",
+            "no-api": true
+        }
+    ],
+    "autoload": {
+        "classmap": [
+            "class.csstidy_optimise.php",
+            "class.csstidy_print.php",
+            "class.csstidy.php"
+        ]
+    },
+    "autoload-dev": {
+        "classmap": [
+            "testing"
+        ]
+    },
+    "require": {
+        "php": "^5.4.0 || ^7"
+    },
+    "require-dev": {
+        "pear/text_diff": "^1.2",
+        "simpletest/simpletest": "^1.1"
+    },
+    "bin": ["bin/pcsstidy"],
+    "archive": {
+        "exclude": [
+            "/.gitignore",
+            "/.travis.yml",
+            "/testing"
+        ]
+    }
+}

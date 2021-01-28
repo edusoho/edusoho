@@ -1,0 +1,38 @@
+<div class="teacher-item">
+  <div class="teacher-top">
+    <a class="teacher-img" href="{{ path('user_show', {id:teacher.id}) }}" target="_blank">
+      <img class="avatar-lg" src="{{ filepath(teacher.largeAvatar, 'avatar.png') }}" alt="">
+    </a>
+    <h3 class="title">
+      {% if not teacher.destroyed|default(0) %}
+        <a class="link-dark" href="{{ path('user_show', {id:teacher.id}) }}" target="_blank">{{ teacher.nickname|raw }}</a>
+      {% else %}
+        <a class="link-dark">{{ 'user.user_had_destroyed'|trans }}</a>
+      {% endif %}
+    </h3>
+    <div class="position">
+      {% if teacher.title %}
+        {{ teacher.title|raw }}
+      {% else %}
+        {{'user.fields.no_title'|trans}}
+      {% endif %}
+    </div>
+  </div>
+  <div class="teacher-bottom">
+    <div class="about">
+      {% if profile.about|default(false) %}
+        {{ profile.about|plain_text(30) }}
+      {% else %}
+        {{'user.fields.no_introduction'|trans}}
+      {% endif %}
+    </div>
+    <div class="metas">
+      {% if not app.user or (teacher.id != app.user.id) %}
+        {% set messageSetting = setting('message') %}
+        <a class="btn btn-primary btn-sm follow-btn" href="javascript:;" data-url="{{ path('user_follow', {id:teacher.id}) }}" {% if isFollowed %} style="display:none;"{% endif %} data-loggedin={% if app.user and app.user.isLogin() %}"1"{% else %}"0"{% endif %}>{{'user.btn.following'|trans}}</a>
+        <a class="btn btn-default btn-sm unfollow-btn" href="javascript:;" data-url="{{ path('user_unfollow', {id:teacher.id}) }}" {% if not isFollowed %} style="display:none;" {% endif %}>{{'user.btn.followed'|trans}}</a>
+        {% if messageSetting.showable|default('1') != 0 %}<a class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:teacher.id})}}">{{'user.btn.send_message'|trans}}</a>{% endif %}
+      {% endif %}
+    </div>
+  </div>
+</div>

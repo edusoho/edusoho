@@ -1,0 +1,40 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_group_set' %}
+
+{% block main %}
+
+      {{ web_macro.flash_messages() }}
+            <form class="form-horizontal" method="post" id="member-zone-form" novalidate>
+           
+            <div class="row form-group">
+              <div class="col-md-2 control-label">
+                <label >{{'admin.group_settings.homepage_show_group'|trans}}</label>
+              </div>
+              <div class="controls col-md-7 radios">
+                {{ radios('group_show', {1:'form.radio_btn.show'|trans, 0:'form.radio_btn.hidden'|trans}, setting('group').group_show|default(1)) }}
+                <div class="help-block">{{'admin.group_settings.homepage_show_group_hint'|trans}}</div>
+              </div>
+            </div>
+
+           <div class="row form-group">
+              <div class="col-md-2 control-label">
+                <label >{{'admin.group_settings.hot_thread_show_time_range'|trans}}</label>
+              </div>
+              <div class="controls col-md-7 radios">
+                {{ radios('threadTime_range', {'1':'form.radio_btn.one_day'|trans, '7':'form.radio_btn.one_week'|trans,'14':'form.radio_btn.two_week'|trans,'30':'form.radio_btn.one_month'|trans}, setting('group').threadTime_range|default('7')) }}
+                <div class="help-block"></div>
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <div class="col-md-2 control-label"></div>
+              <div class="controls col-md-8">
+                <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>  
+              </div>
+            </div>
+
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+          </form>
+      {% endblock %}
+

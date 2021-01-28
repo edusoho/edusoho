@@ -1,0 +1,90 @@
+{% import "common/data-dict-macro.html.twig" as dict_macro %}
+{% import "macro.html.twig" as web_macro %}
+{% set mode = mode|default(['my']) %}
+
+<thead>
+  <tr>
+    <th width="25%">{{'order.product_name'|trans}}</th>
+    <th>{{'order.id'|trans}}</th>
+    <th class="text-right">{{'order.price'|trans}}</th>
+    <th>{{'order.created_time'|trans}}</th>
+    <th>{{'order.status'|trans}}</th>
+    <th style="min-width:100px">{{'user.orders.operation'|trans}}</th>
+  </tr>
+</thead>
+
+<tbody>
+  {% for order in orders %}
+    <tr id="order-table-{{order.id}}">
+      <td>
+        {% if order.item.target_type in ['course', 'classroom'] and order.goodsId %}
+          <a class="cd-link-major" href="{{ path('goods_show', {id: order.goodsId}) }}" target="_blank">{{order.title}}</a>
+        {% elseif order.item.target_type == 'vip' %}
+          <a class="cd-link-major" href="{{ path('vip', {id:order.item.target_id}) }}" target="_blank">{{order.title}}</a>
+        {% elseif order.item.target_type == 'classroom' %}
+          <a class="cd-link-major" href="{{ path('classroom_show', {id:order.item.target_id}) }}" target="_blank">{{order.title}}</a>
+        {% else %}
+          {{order.title}}
+        {% endif %}
+      </td>
+      <td>{{order.sn}}</td>
+      <td class="text-right">{{ order.pay_amount|to_cash(0) }}  {{ 'site.currency.CNY'|trans }}</td>
+      <td>{{ order.created_time|date('Y-n-d') }}</td>
+      <td>
+        {{ display_order_status(order.status, 0) }}
+
+      </td>
+      <td>
+        <div class="table-action">
+          {% if order.status in ['created', 'paying'] %}
+            <div class="table-action__item">
+              {% set product = data('OrderProduct',{'orderItem':order.item|default()}) %}
+              {% if product.productEnable|default('') %}
+                <a href="{{path('cashier_show', {sn:order.sn})}}" class="cd-link-primary">{{'user.orders.pay'|trans}}</a>
+              {% else %}
+                <a href="javascript:;" class="js-pay" data-type="{{ order.item.target_type }}" data-url="{{ path('cashier_show', {sn:order.sn}) }}">{{'user.orders.pay'|trans}}</a>
+              {% endif %}
+            </div>
+            <div class="table-action__item cd-dropdown" data-toggle="cd-dropdown">
+              <a href="javascript:;" class="cd-link-primary">
+                {{ 'site.default.more'|trans }}<i class="cd-text-sm cd-icon cd-icon-arrow-down"></i>
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a href="javascript:;" class="cd-link-primary" data-toggle="modal" data-target="#modal" data-url="{{ path('web_user_order_detail', {id:order.id}) }}">{{'order.content_title'|trans}}</a>
+                </li>
+                <li>
+                  <a href="javascript:;" class="js-cancel" data-url="{{ path('my_order_cancel', {id:order.id}) }}">{{'user.orders.cancel_order'|trans}}</a>
+                </li>
+              </ul>
+            </div>
+          {% endif %}
+          {% if order.status in ['paid', 'refunding', 'refunded', 'closed', 'success', 'finished'] %}
+            <div class="table-action__item">
+              <a href="javascript:;" class="cd-link-primary" data-toggle="modal" data-target="#modal" data-url="{{ path('web_user_order_detail', {id:order.id}) }}">{{'order.content_title'|trans}}</a>
+            </div>
+
+            {% if order.pay_amount != 0 and order.status in ['success'] and order.refund.status|default('') in ['cancel', ''] %}
+              {% if order.refund_deadline != 0 and order.item.target_type in ['course', 'classroom'] %}
+                {% if order.refund_deadline > date().timestamp %}
+                  <br>
+                  <div class="table-action__item">
+                    <a href="javascript:;" class="cd-link-minor" data-toggle="modal" data-target="#modal" data-url="{{ path('my_order_refund_apply', {id:order.id}) }}">{{'order.refund.apply_for_btn'|trans}}</a>
+                  </div>
+                {% endif %}
+              {% endif %}
+            {% endif %}
+            {% if order.status in ['refunded', 'refunding', 'success', 'closed', 'finished'] and order.refund.status|default('') in ['auditing', 'refunding', 'refunded', 'refused'] %}
+              <br>
+              <div class="table-action__item">
+                <a href="javascript:;" class="cd-link-minor" data-toggle="modal" data-target="#modal" data-url="{{ path('my_order_refund_detail', {id:order['refund'].id}) }}">{{'order.show_refund_detail'|trans}}</a>
+              </div>
+            {% endif %}
+          {% endif %}
+        </div>
+      </td>
+    </tr>
+  {% else %}
+    <tr><td colspan="20"><div class="cd-empty">{{'site.datagrid.empty'|trans}}</div></td></tr>
+  {% endfor %}
+</tbody>

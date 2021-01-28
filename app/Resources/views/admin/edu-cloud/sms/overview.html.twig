@@ -1,0 +1,53 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_edu_cloud_sms_overview' %}
+{% set script_controller = 'educloud/sms-overview' %}
+{% set script_arguments = {chartData: chartData}  %}
+{% block page_flash_message %}
+  {{ web_macro.flash_messages() }}
+{% endblock %}
+{% block page_title %}
+  {% if setting('cloud_status.locked') == true %}
+    <div class="alert alert-warning" role="alert">{{'admin.edu_cloud.edu_sms.locked_tips'|trans}}</div>
+    {{ currentMenu.code|parent_permission.name|trans }}
+  {% elseif smsInfo.status == 'stoped' %}
+    <div class="alert alert-warning" role="alert">
+    {{'admin.edu_cloud.edu_sms.service_suspend_tips'|trans}}</div>
+    {{ currentMenu.code|parent_permission.name|trans }}
+  {% else %}
+    {{ parent() }}
+  {% endif %}
+{% endblock %}
+
+{% block main %}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    {{'admin.edu_cloud.edu_sms.basic_info'|trans}}
+  </div>
+  <div class="panel-body">
+    <div class="pll pbl">
+      {{'admin.edu_cloud.edu_sms.sms_balance'|trans}}：
+      <span class="h3 text-primary plm prs">{{account.remainCount}}</span>{{'site.default.bar'|trans}}
+      <span class="color-gray">{{'admin.edu_cloud.edu_sms.sms_remaining'|trans({'%creditLimit%':account.creditLimit})}}</span>
+      <a href="{{ path('admin_cloud_buy', {type:'sms'}) }}" target="_blank" class="btn btn-sm btn-primary">{{'admin.edu_cloud.edu_sms.buy_btn'|trans}}</a>
+      <div class="text-danger pts">
+      {{account.message}}
+      </div>
+    </div>
+    <div class="pll pbm">
+      {{'admin.edu_cloud.edu_sms.remain_count'|trans({'%span_first%': '<span class="color-gray phm text-md">','%remainCount%': account.todayUsed, '%span_last%': '</span>'})|raw }}
+      <a href="{{path('admin_cloud_sms_account')}}" target="_blank">{{'admin.edu_cloud.edu_sms.send_record_btn'|trans}}</a>｜<a href="{{path('admin_cloud_sms_detail')}}" target="_blank">{{'admin.edu_cloud.edu_sms.send_detail_btn'|trans}}</a>
+    </div>
+  </div>
+</div>
+<div class="panel panel-default panel-chart">
+  <div class="panel-heading">
+    {{'admin.edu_cloud.edu_sms.sms_send_trend'|trans}}
+    <span class="text-muted">{{'admin.edu_cloud.edu_sms.rencent_week'|trans}}</span>
+    <a class="pull-right" href="{{path('admin_cloud_sms_statistics')}}" target="_blank">{{'admin.edu_cloud.edu_sms.more_btn'|trans}}&ensp;></a>
+  </div>
+  <div class="panel-body">
+    <div id="smsSendChart" style="width: 100%;height:400px;"></div>
+  </div>
+</div>
+{% endblock %}

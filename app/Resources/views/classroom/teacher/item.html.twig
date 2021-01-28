@@ -1,0 +1,41 @@
+<div class="col-lg-4 col-md-6 col-sm-6">
+  <div class="teacher-item">
+    <div class="teacher-top">
+      <a class="teacher-img" href="{{ path('user_show', {id:teacher.id}) }}">
+        <img class="avatar-lg" src="{{ filepath(teacher.largeAvatar, 'avatar.png') }}" alt="">
+      </a>
+      <div class="title">
+        <a class="link-dark" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+        {% if 'teacher' in member.role %}
+          <i class="es-icon es-icon-school color-danger" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{'classroom.teacher'|trans}}"></i>
+        {% elseif 'assistant' in member.role %}
+          <i class="es-icon es-icon-school color-info" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{'classroom.assistant'|trans}}"></i>
+        {% endif %}
+
+      </div>
+      <div class="position">
+        {% if teacher.title %}
+          {{ teacher.title }}
+        {% else %}
+          {{'classroom.teacher_title_empty'|trans}}
+        {% endif %}
+      </div>
+    </div>
+    <div class="teacher-bottom">
+      <div class="about">
+        {% if profiles[teacher.id].about %}
+          {{ profiles[teacher.id].about|plain_text(30) }}
+        {% else %}
+          {{'classroom.teacher_about_empty'|trans}}
+        {% endif %}
+      </div>
+      <div class="metas">
+        {% if not app.user or (teacher.id != app.user.id) %}
+          <a class="btn btn-primary btn-sm follow-btn" href="javascript:;" data-url="{{ path('user_follow', {id:teacher.id}) }}" {% if isFollowed %} style="display:none;"{% endif %} data-loggedin="{% if app.user and app.user.isLogin() %}1{% else %}0{% endif %}">{{'user.btn.following'|trans}}</a>
+          <a class="btn btn-default btn-sm unfollow-btn" href="javascript:;" data-url="{{ path('user_unfollow', {id:teacher.id}) }}" {% if not isFollowed %} style="display:none;" {% endif %}>{{'user.btn.followed'|trans}}</a>
+          <a class="btn btn-default btn-sm text-center" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:teacher.id})}}">{{'user.btn.send_message'|trans}}</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,65 @@
+{% import "macro.html.twig" as web_macro %}
+
+{% block js %}
+  {% do script(['app/js/course-manage/header/index.js']) %}
+{% endblock %}
+
+{% set basepath = path('course_show', {id: course.id}) %}
+
+<div class="course-manage-header clearfix">
+
+  {% if course.status=='closed' %}
+    <span class="course-publish-status course-publish-status--closed">{{'course.status.closed'|trans}}</span>
+  {% elseif course.status=='draft' %}
+    <span class="course-publish-status course-publish-status--unpublished">{{'course.status.unpublished'|trans}}</span>
+  {% elseif course.status=='published' %}
+    <span class="course-publish-status course-publish-status--published">{{'course.status.published'|trans}}</span>
+  {% endif %}
+
+  <div class="course-manage-header-info">
+    <h1 class="course-manage-header-info__title text-overflow" {% if course.title|length > 10 %}data-toggle="tooltip" data-container="body" title="{{ course.title }}" {% endif %}>
+      {% block title %}
+        <span class="cd-dark-major">{{ course.title }}</span>
+      {% endblock %}
+    </h1>
+    <div class="course-manage-header-info__type">
+      {% if 'freeMode' == course.learnMode %}{{'course.teaching_plan.free_mode'|trans}}{% else %}{{'course.teaching_plan.locked_mode'|trans}}{% endif %}
+      {% block planType %}
+      {% endblock %}
+    </div>
+    <span class="visible-xs color-danger">{% include 'common/price.html.twig' with {'productPrice': course.price} %}</span>
+  </div>
+
+
+  {% block action %}
+    <div class="pull-right course-manage-header-btns">
+      {# 未发布状态 #}
+      {% if course.status != 'published' %}
+        <a class="cd-btn cd-btn-default" target="_blank" href="{{ path('course_show', {id: course.id, 'previewAs':'guest'}) }}">{{ 'course.preview.plan'|trans }}</a>
+        <button class="cd-btn cd-btn-primary js-course-publish-btn cd-ml16" 
+          data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}" 
+          data-pre-url="{{ path('course_set_manage_course_pre_publish', {courseSetId: courseSet.id, courseId: course.id}) }}" 
+          data-save-url="{{ path('course_set_manage_course_publish_set_title', {courseSetId: courseSet.id, courseId: course.id}) }}">{{'course.btn.publish_task'|trans}}</button>
+      {% else %}
+        <a class="cd-btn cd-btn-default" target="_blank" href="{{basepath}}">{{ 'course.check.plan'|trans }}</a>
+      {% endif %}
+    </div>
+  {% endblock %}
+
+  <div class="clearfix courseset-manage-data {% if course.status != 'published' %}courseset-manage-data--unpublished{% endif %} hidden-xs">
+    <div class="courseset-manage-header-data course-manage-header__price mt0">
+      <span class="cd-text-medium">{{ 'course.teach_plan_price'|trans }}</span>
+      <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num color-danger">{% include 'common/price.html.twig' with {'productPrice': course.price} %}</span></div>
+    </div>
+
+    <div class="courseset-manage-header-data mt0">
+      <span class="cd-text-medium">{{ 'course.plan_total_members'|trans }}</span>
+      <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{{ course.studentNum|default() }} </span></div>
+    </div>
+
+    <div class="courseset-manage-header-data mt0">
+      <span class="cd-text-medium">{{ 'course.plan_task.total_lessons'|trans }}</span>
+      <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{{ course.lessonNum|default() }} </span></div>
+    </div>
+  </div>
+</div>

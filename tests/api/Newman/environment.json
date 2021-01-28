@@ -1,0 +1,88 @@
+{
+  "id": "9d5d6374-a22b-e7a8-ed5e-af3842d941eb",
+  "name": "app4.0",
+  "values": [
+    {
+      "enabled": true,
+      "key": "url",
+      "type": "text",
+      "value": "http://127.0.0.1:8000"
+    },
+    {
+      "enabled": true,
+      "key": "token",
+      "type": "text",
+      "value": "699Nc4cLw4YIMnNCmK7KrMZOZABawg3W"
+    },
+    {
+      "enabled": true,
+      "key": "vipLevelId",
+      "type": "text",
+      "value": "4"
+    },
+    {
+      "enabled": true,
+      "key": "orderId",
+      "type": "text",
+      "value": "582"
+    },
+    {
+      "enabled": true,
+      "key": "live_ticket",
+      "type": "text",
+      "value": "599523549c802406151639"
+    },
+    {
+      "enabled": true,
+      "key": "random_email",
+      "type": "text",
+      "value": "20170817272@zfq.com"
+    },
+    {
+      "enabled": true,
+      "key": "teacherToken",
+      "type": "text",
+      "value": "r8t9u8e63wgw848ck4go0800gs0wsgs"
+    },
+    {
+      "enabled": true,
+      "key": "randomTitle",
+      "type": "text",
+      "value": "classroom discussion标题：2017-08-17 13:02:26-793"
+    },
+    {
+      "enabled": true,
+      "key": "randomContent",
+      "type": "text",
+      "value": "回复内容：2017-08-17 13:02:27-10"
+    },
+    {
+      "enabled": true,
+      "key": "testResultId",
+      "type": "text",
+      "value": "47"
+    },
+    {
+      "enabled": true,
+      "key": "homeworkResultId",
+      "type": "text",
+      "value": "48"
+    },
+    {
+      "enabled": true,
+      "key": "articleId",
+      "type": "text",
+      "value": "5"
+    },
+    {
+      "enabled": true,
+      "key": "schoolToken",
+      "type": "text",
+      "value": "tUqPFbBJ3LPxcQCUhCPIXB8ImB6FQVva"
+    }
+  ],
+  "timestamp": 1502946165508,
+  "_postman_variable_scope": "environment",
+  "_postman_exported_at": "2017-08-17T11:25:54.950Z",
+  "_postman_exported_using": "Postman/5.1.3"
+}

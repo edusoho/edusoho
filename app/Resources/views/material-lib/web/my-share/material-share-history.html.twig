@@ -1,0 +1,52 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% import "macro.html.twig" as web_macro %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}{{ 'material_lib.sharing_history'|trans }}{% endblock %}
+
+{% set side_nav = 'material-lib' %}
+{% set parentId = parentId | default(null) %}
+
+{% do script(['libs/jquery-validation.js', 'libs/select2.js', 'app/js/material-lib/share-history/index.js'])%}
+
+{% block body %}
+
+  <div id="share-history-table-container" class="materials-modal-body">
+    {#<form id="share-materials-form" class="form-horizontal" method="post"
+      action="{{ path('material_lib_save_sharing') }}">
+      <div class="form-group">
+        <label class="control-label col-md-3" for="login_username">{{ 'material_lib.sharing_history.share_to'|trans }}</label>
+        <div class="controls col-md-8">
+          <input class="width-full select2-offscreen" name="targetUserIds"
+          id="target-teachers-input" placeholder="{{'material_lib.sharing_history.share_to.input_placeholder'|trans}}">
+        </div>
+      </div>
+      <div class="hidden" id="target-teachers-data" data-value="{{ teacherData|json_encode }}"></div>
+    </form>#}
+
+    <div class="nav-btn-tab">
+      <ul class="nav nav-tabs" role="tablist">
+        <li data-target="#user-tab" class="active">
+          <a href="javascript:;" data-url="{{ path('material_lib_my_sharing_users') }}"
+            class="js-share-tab">{{ 'material_lib.sharing_history.share_user_btn'|trans }}</a>
+        </li>
+        <li data-target="#detail-tab">
+          <a href="javascript:;" class="js-share-tab"
+            data-url="{{ path('material_lib_my_sharing_detail') }}">{{ 'material_lib.sharing_history.history_detail_btn'|trans }}</a>
+        </li>
+      </ul>
+    </div>
+    <div id="share-history-table">
+      {% include 'material-lib/web/my-share/material-share-history-users.html.twig' %}
+    </div>
+  </div>
+{% endblock %}
+
+{% block footer %}
+  {#<button id="form-submit" type="button"
+          class="btn btn-primary pull-right" data-toggle="form-submit"
+          data-target="#share-materials-form" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{ 'form.btn.save'|trans }}</button>#}
+  <button type="button" class="btn btn-primary"
+          data-dismiss="modal">{{ 'form.btn.close'|trans }}</button>
+{% endblock %}

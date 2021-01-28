@@ -1,0 +1,54 @@
+{% extends 'my/layout.html.twig' %}
+
+{% block title %}{{'my.learning.course'|trans}} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'notes' %}
+
+{% do script(['app/js/my/learn/notebook/index.js']) %}
+
+{% block main %}
+<style>
+.notebook-body img{
+  width: 100%;
+}
+</style>
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">{{'my.learning.note'|trans}}</div>
+  <div class="panel-body">
+    <div class="notebook" id="notebook">
+      <div class="notebook-heading">
+        <a class="btn btn-default btn-sm pull-right notebook-back-btn" href="{{ path('my_notebooks') }}" >{{'my.learning.note.go_back'|trans}}</a>
+        <img class="notebook-icon" src="{{ filepath(course_cover(course, 'large'), 'courseSet.png') }}" />
+        {{'my.learning.note.target_course'|trans({'%title%':course.title})}}
+      </div>
+      <div class="notebook-body">
+        {% for note in notes %}
+          {% set task = tasks[note.taskId]|default(null) %}
+          <div class="notebook-note notebook-note-collapsed">
+            <div class="notebook-note-heading">
+              {% if task %}
+                <a href="{{ path('course_task_show', {id:note.taskId, courseId: note.courseId}) }}" target="_blank">
+                  {{'my.learning.note.course_task_number'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%number%': task.number,'%title%': task.title})}}
+                </a>
+              {% else %}
+                <span>{{'my.learning.note.course_task_empty'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}</span>
+              {% endif %}
+              <span class="pull-right notebook-note-length">{{'my.learning.note.total_length'|trans({'%length%':note.length})}}</span>
+            </div>
+            <div class="notebook-note-summary">{{ note.content|plain_text(97) }}</div>
+            <div class="notebook-note-body">
+                {{ note.content|cdn|raw}}
+              <div class="notebook-note-actions clearfix">
+                <a href="javascript:" data-url="{{ path('my_note_delete', {id:note.id}) }}" class="pull-right notebook-note-delete" title="{{'my.learning.note.delete'|trans}}">
+                  <span class="glyphicon glyphicon-trash"></span>
+                </a>
+              </div>
+              <div class="notebook-note-collapse-bar"><span class="glyphicon glyphicon-chevron-up"></span></div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

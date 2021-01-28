@@ -1,0 +1,251 @@
+@import '~common/variable.less';
+@import '~common/mixins.less';
+@import './module/header-avatar.less';
+@import './module/header-manage.less';
+@import './module/header-inform.less';
+
+.navbar {
+  margin-bottom: 0;
+  z-index: 99;
+  .cd-border-radius(0);
+}
+
+.navbar-collapse {
+  border-top: none;
+}
+
+.es-header {
+  padding: 0 20px;
+  height: 56px;
+  background: #212121;
+  border: none;
+  .cd-box-shadow;
+
+  .container {
+    position: relative;
+  }
+  .collapse {
+    display: block;
+  }
+  .navbar-header {
+    @media (max-width: @screen-xs-max) {
+      text-align: center;
+      float: none;
+      .navbar-brand {
+        display: inline-block;
+        float: none;
+      }
+    }
+    .navbar-brand {
+      padding: 3px 20px 3px 0;
+      @media (max-width: @screen-md-max) {
+        padding-right: 10px;
+      }
+      @media (max-width: @screen-sm-max) {
+        padding-right: 8px;
+      }
+      @media (max-width: @screen-xs-max) {
+        padding: 8px 0;
+        line-height: 40px;
+      }
+      height: 56px;
+      line-height: 50px;
+      color: #fff;
+      img {
+        height: 50px;
+        width: auto;
+        @media (max-width: @screen-xs-max) {
+          height: 40px;
+        }
+      }
+    }
+  }
+
+  // 导航栏
+  .nav.navbar-nav {
+    @media (max-width: @screen-sm-max) {
+      margin-left: 0;
+      margin-right: 0;
+    }
+    > li {
+      > a {
+        padding: 22px 20px 20px;
+        font-size: 14px;
+        line-height: 1;
+        background: none;
+        color: @gray-medium;
+        .es-transition;
+        @media (max-width: @screen-md-max) {
+          padding-left: 10px;
+          padding-right: 10px;
+        }
+        @media (max-width: @screen-sm-max) {
+          padding-left: 8px;
+          padding-right: 8px;
+        }
+
+      }
+      &.open.active >a,
+      &.open>a:hover,
+      &.open>a:focus,
+      &.open>a,
+      &.active >a,
+      >a:hover,
+      >a:focus {
+        background: none;
+        color: #fff;
+        .es-transition;
+      }
+    }
+  }
+
+  // 用户
+  .nav.user-nav {
+    float: right;
+    > li {
+      float: left;
+      height: 56px;
+      .dropdown-menu {
+        left: auto;
+        right: 0;
+        > li {
+          > a {
+            &:hover {
+              .num {
+                background: #fff;
+                color: @brand-primary;
+                .es-transition;
+              }
+            }
+          }
+          .num {
+            background: #999;
+            padding: 0 10px;
+            border-radius: 20px;
+            color: #fff;
+            .es-transition;
+          }
+          i {
+            padding: 0 10px;
+          }
+        }
+      }
+      > a {
+        color: @gray-medium;
+        .es-transition;
+        &:hover,
+        &:focus {
+          color: #fff;
+          background: none;
+          .es-transition;
+        }
+      }
+    }
+
+    // 未登录状态
+    .visitor-li {
+      &.visitor-login-li {
+        margin-left: 24px;
+        margin-right: 24px;
+        @media (max-width: @screen-md-max) {
+          margin-left: 20px;
+          margin-right: 20px;
+        }
+        @media (max-width: @screen-sm-max) {
+          margin-left: 16px;
+          margin-right: 16px;
+        }
+      }
+      > a {
+        padding: 20px 15px;
+        line-height: 1;
+      }
+    }
+  }
+}
+
+
+// 导航栏更多...
+.nav > li.nav-more {
+  height: 56px;
+  li .dropdown-menu {
+    left: 100%;
+    top: 0;
+  }
+  &.open li:hover .dropdown-menu {
+    display: block;
+  }
+  .open > a,
+  .open.active >a,
+  .open > a:hover,
+  .open > a:focus {
+    background: @brand-primary !important;
+    color: #fff !important;
+  }
+  > a > i {
+    font-size: 14px;
+  }
+}
+
+
+// 头部用户信息
+.navbar-user {
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  right: 20px;
+  @media(max-width: @screen-xs-max) {
+    right: 5px;
+  }
+  &.left {
+    @media(min-width: @screen-sm-min) {
+      right: 50px;
+    }
+  }
+}
+
+// 搜索框
+.navbar-form {
+  margin: 11px 0;
+  padding-left: 0;
+  padding-right: 0;
+  .box-shadow(none);
+  .form-group {
+    position: relative;
+  }
+  .form-control {
+    padding: 10px 28px 10px 8px;
+    @media (min-width: @screen-lg-min) {
+      width: 180px;
+    }
+    @media (min-width: @screen-md-min) and (max-width: @screen-md-max) {
+      width: 150px;
+    }
+    @media (max-width: @screen-sm-max) {
+      width: 60px;
+    }
+    height: 34px;
+    font-size: 12px;
+    line-height: 1;
+    background-color: #fafafa;
+    color: @gray-dark;
+    border: none;
+  }
+  .button {
+    position: absolute;
+    top: 7px;
+    right: 8px;
+    height: 16px;
+    color: @cd-dark-assist;
+    border: none;
+    background: none;
+    &:before {
+      position: absolute;
+      top: 1px;
+      right: 0;
+    }
+    &:focus {
+      outline: none;
+    }
+  }
+}

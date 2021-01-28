@@ -1,0 +1,46 @@
+{% import "macro.html.twig" as web_macro %}
+
+<ul class="media-list">
+  {% for material in materials %}
+    {% set task = tasks[material.lessonId]|default(null) %}
+
+    <li class="media">
+      <div class="media-body">
+        <div class="mbs">
+          {% if task and task.status != 'published' %}
+            {{ material.title }} <span class="color-gray text-sm">({{'course.material.unpublished_tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}})</span>
+          {% else %}
+            {% if material.link %}
+              <a href="{{ material.link }}" target="_blank">{{ material.title }}</a>
+              <span class="glyphicon glyphicon-new-window color-gray text-sm" title="{{'course.material.links'|trans}}"></span>
+            {% else %}
+              <a href="{{ path('course_material_download', {courseId:course.id, materialId:material.id}) }}" target="_blank">{{ material.title }}</a>
+            {% endif %}
+          {% endif %}
+        </div>
+
+        {% if material.description and not material.link %}
+          <div class="color-gray text-sm mbs">
+            {{ material.description|plain_text(100) }}
+          </div>
+        {% endif %}
+
+        <div class="text-sm">
+          {% if material.fileId > 0  %}
+            <span class="color-gray">{{ material.fileSize|file_size }}</span>
+            <span class="bullet">•</span>
+          {% endif %}
+          {% if task %}
+            <a class="link-primary" href="{{ path('course_task_show', {courseId:course.id, id:task.id }) }}" title="{{ task.title }}">{{'course.thread.mission_number'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%number%': task.number })}}</a>
+            <span class="bullet">•</span>
+          {% endif %}
+          <span class="color-gray">{{ 'course.material.upload_time'|trans({'%createdTime%':material.createdTime|smart_time}) }}</span>
+        </div>
+
+      </div>
+    </li>
+  {% else %}
+    <li class="empty tac color-gray mvl">{{'course.material.empty'|trans}}</li>
+  {% endfor %}
+</ul>
+{{ web_macro.paginator(paginator) }}

@@ -1,0 +1,37 @@
+{% extends 'es-bar/list-content/study-place.html.twig' %}
+{% set esBarMenu = 'course' %}
+{% block myStudyPlace %}
+{% if courses %}
+  <!-- 课程 -->
+  <div class="course-list">
+    {% set courseCount = 15 %}
+    {% for course in courses %}
+      {% set courseCount = loop.length %}
+      {% set courseSet = data('CourseSet',{id:course.courseSetId}) %}
+      <div class="course-item">
+        <a href="{{ path('course_show', {id:course.id}) }}" class="grid-body" style="width: auto">
+          <div class="course-img">
+            <img src="{{ filepath(course_set_cover(courseSet, 'middle'), 'courseSet.png') }}" class="img-responsive thumb">
+          </div>
+          <div class="progress progress-sm mb0">
+            <div class="progress-bar" role="progressbar" aria-valuenow="{{ course.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ course.percent }}%" data-toggle="tooltip" data-placement="right" title="" data-original-title="40%">
+            </div>
+          </div>
+          <div class="title">
+             {{ courseSet.title|sub_text(6) }}
+             <span class="pull-right color-primary text-12" >
+              <span class="gray-light mrs">|</span>
+              {{ course.title|sub_text(6) }}
+            </span>
+          </div>
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+  {% if courseCount >= 15 %}
+    <p class="text-center"><a class="link-dark" href="{{ path('my_courses_learning') }}" target="_blank">{{'my.course.more'|trans}}<i class="es-icon es-icon-angledoubleright"></i></a></p>
+  {% endif %}
+{% else %}
+  <div class="empty">{{'course.empty_tips'|trans}}</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,20 @@
+{% if setting('reward_point.enable', 0) and setting('reward_point.allowTeacherSet', 0) %}
+  <div class="es-piece">
+    <div class="form-group form-inline">
+      <label class="col-sm-2 control-label">
+        {{ 'course.marketing_setup.study_award'|trans }}
+      </label>
+      <div class="col-sm-8">
+        {{ 'course.marketing_setup.task_award'|trans }}
+        <input class="form-control" type="text" name="taskRewardPoint" value="{{ course.taskRewardPoint }}">   / {{'site.default.times'|trans}}
+      </div>
+    </div>
+    <div class="form-group form-inline">
+      <label class="col-sm-2 control-label display"></label>
+      <div class="col-sm-8">
+        {{ 'course.marketing_setup.course_award'|trans }}  <input class="form-control" type="text" name="rewardPoint" value="{{ course.rewardPoint }}">   / {{'site.default.times'|trans}}
+      </div>
+    </div>
+  </div>
+  <hr class="mb30 bg-border-color">
+{% endif %}

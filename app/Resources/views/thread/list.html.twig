@@ -1,0 +1,14 @@
+{% import "macro.html.twig" as web_macro %}
+
+<div class="topic-list">
+  {% for thread in threads %}
+    {% set author = users[thread.userId] %}
+    {% include 'thread/part/list-item.html.twig' %}
+  {% else %}
+    <div class="empty">{% if type|default('') == 'question' %}{{ 'question.empty'|trans }}{% else %}{{ 'discussion.empty'|trans }}{% endif %}</div>
+  {% endfor %}
+</div>
+
+<nav class="text-center">
+  {{ web_macro.paginator(paginator) }}
+</nav>

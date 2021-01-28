@@ -1,0 +1,32 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% block title %}{{'classroom.select_course'|trans}}{% endblock %}
+{% set modal_class= "modal-lg" %}
+{% do script(['app/js/classroom-manage/course-manage-pick/index.js']) %}
+
+{% block body %}
+<div class="alert alert-info" role="alert">{{'classroom.select_course_tips'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}
+</div>
+
+<form class="form-inline form-search" role="search-form">
+      <div class="form-group ">
+        <input type="text" class="form-control js-enter-search" name="key" id="enterSearch" value="" placeholder="{{'classroom.course_name_placeholder'|trans}}" data-url="{{path('classroom_course_search',{classroomId:classroomId})}}">
+      </div>
+      <button type="button" class="btn btn-primary"  id="search"  data-url="{{path('classroom_course_search',{classroomId:classroomId})}}">{{'form.btn.search'|trans}}</button>
+      <a class="btn btn-primary" id="all-courses" data-url="{{path('classroom_courses_pick',{classroomId:classroomId, page:1})}}">{{'classroom.all_courses'|trans}}</a>
+</form>
+
+<div class="row mtl">
+    <div class="col-md-12">
+      <div class="courses-list">
+        {% include('course/course-select-list.html.twig') %}
+      </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block footer %}
+  <button id="sure" class="btn btn-primary pull-right" data-url="{{ path('classroom_courses_select', {id:classroomId})}}" data-loading-text="{{'form.btn.submit.submiting'|trans}}">{{'classroom.add_course_btn'|trans}}</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
+  <p id="tip" class="color-danger pull-right mts mbs hide" >{{'classroom.add_course_tips'|trans}}</p>
+{% endblock %}

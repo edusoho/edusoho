@@ -1,0 +1,47 @@
+{% set questionTypesDict = getQuestionTypes() %}
+
+<tr id="testpaper-item-{{ item.id }}" data-id="{{ item.id }}" data-seq="{{ item.seq }}" data-question-id="{{ question.id|default(0) }}" data-type="{{ item.type }}" class="{% if item.question_num > 1 %} have-sub-questions js-have-sub{% endif %}">
+  <td>{% if question is not defined %}<span class="glyphicon glyphicon-resize-vertical sort-handle"></span>{% endif %}</td>
+  <td>
+    <input {% if item.type == 'material'  %} class="hidden" {% endif %} class="notMoveHandle" type="checkbox" value="{{item.id}}" data-role="batch-item" >
+    <input type="hidden" name="itemIds[]" value="{{ item.id }}">
+  </td>
+  <td class="seq">{% if item.question_num > 1 %}<span class="color-gray">~</span>{% else %}{{ item.seq|default(' ') }}{% endif %}</td>
+  <td>
+    <a class="color-info" href="#modal" data-toggle="modal" data-url="{{ path('question_bank_manage_question_preview', {id: itemBank.id, questionId: item.id}) }}">
+      {% if item.includeImg|default('') %}<span class="glyphicon glyphicon-picture"/>{% endif %}
+      {{item.material|plain_text(40) }}
+    </a>
+    <br/>
+    <span class="color-gray text-sm">{{ 'category'|trans }}：
+      {% if item.category_id %}
+        {{ itemCategories[item.category_id].name }}
+      {% else %}
+        {{ 'site.data.empty'|trans }}
+      {% endif %}
+    </span>
+  </td>
+  {% if type == 'material' %}
+    <td>{{ questionTypesDict[item.type]|default('--') }}</td>
+  {% endif %}
+  <td class="js-question-score" data-score="{{ item.score|default(0)|score_text }}">
+    {% if item.type != 'material' %}
+      {{ item.score|default(0)|score_text }}
+    {% endif %}
+  </td>
+  {% if item.type in ['choice', 'uncertain_choice'] %}
+    <td class="js-miss-score" data-miss-score="{{ item.missScore|default(0)|score_text }}">
+      {{ item.missScore|default(0)|score_text }}
+    </td>
+  {% elseif type == 'material' %}
+    <td></td>
+  {% endif %}
+  <td>{{ dict_text('difficulty', item.difficulty)}}</td>
+  <td>
+    <div class="btn-group">
+      {% if question is not defined %}
+        <a class="color-info mrl" href="javascript:" class="notMoveHandle mrm" data-role="item-delete-btn">{{'form.btn.remove'|trans}}</a>
+      {% endif %}
+    </div>
+  </td>
+</tr>

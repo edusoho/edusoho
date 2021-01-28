@@ -1,0 +1,60 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% block title %}Feature Magic Setting - {{ parent() }}{% endblock %}
+
+{% set menu = 'admin_v2_setting_developer_magic' %}
+
+{% block main %}
+
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" method="post" novalidate>
+
+  <div class="form-group">
+    <div class="controls col-md-12">
+      <textarea class="form-control" rows="10" name="setting">{{ setting }}</textarea>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="controls col-md-12">
+      <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+
+<div class="alert alert-danger">
+
+    <h4>{{'admin.magic_setting.need_careful_tips'|trans}}</h4>
+    <ul>
+      <li>{{ 'admin.magic_setting.developer_use_tips'|trans }}</li>
+      <li>{{ 'admin.magic_setting.video_fingerprint'|trans }}： {% verbatim %}"video_fingerprint": "{{company}} {{truename}} {{mobile}}"{% endverbatim %}</li>
+      <li>{{ 'admin.magic_setting.doc_watermark'|trans }}： {% verbatim %}"doc_watermark": "{{company}} {{truename}} {{mobile}}"{% endverbatim %}</li>
+      <li>{{ 'admin.magic_setting.ppt_watermark'|trans }}： {% verbatim %}"ppt_watermark": "{{company}} {{truename}} {{mobile}}"{% endverbatim %}</li>
+      <li>{{ 'admin.magic_setting.testpaper_watermark'|trans }}： {% verbatim %}"testpaper_watermark": "{{company}} {{truename}} {{mobile}}"{% endverbatim %}</li>
+      <li>{{ 'admin.magic_setting.lesson_watch_limit'|trans }}： {% verbatim %}"lesson_watch_limit": true{% endverbatim %}</li>
+      <li>{{ 'admin.magic_setting.buy_before_approval'|trans }}： {% verbatim %}"buy_before_approval": true{% endverbatim %}</li>
+      <li>{{ 'admin.magic_setting.disable_web_crontab'|trans }}： {% verbatim %}"disable_web_crontab": 0{% endverbatim %}（{{ 'admin.magic_setting.one_for_close'|trans }}，{{ 'admin.magic_setting.zero_for_open'|trans }}）</li>
+      <li>{{ 'admin.magic_setting.cloud_search'|trans }}： {% verbatim %}"cloud_search": 0{% endverbatim %}（{{ 'admin.magic_setting.one_for_open'|trans }}，{{ 'admin.magic_setting.zero_for_close'|trans }}）</li>
+      <li>{{ 'admin.magic_setting.ios_vip_close'|trans }}： {% verbatim %}"ios_vip_close": 0{% endverbatim %}（{{ 'admin.magic_setting.one_for_close'|trans }}，{{ 'admin.magic_setting.zero_for_open'|trans }}）</li>
+      <li>{{ 'admin.magic_setting.ios_buy_disable'|trans }}： {% verbatim %}"ios_buy_disable": 0{% endverbatim %}（{{ 'admin.magic_setting.one_for_close'|trans }}，{{ 'admin.magic_setting.zero_for_open'|trans }}）</li>
+      <li>{{ 'admin.magic_setting.ios_exchange_coupon_close'|trans }}： {% verbatim %}"ios_exchange_coupon_close": 0{% endverbatim %}（{{ 'admin.magic_setting.one_for_close'|trans }}，{{ 'admin.magic_setting.zero_for_open'|trans }}）</li>
+      <li>{{ 'admin.magic_setting.export_limit'|trans }}： {% verbatim %}"export_limit": 10000{% endverbatim %}（{{ 'admin.magic_setting.max_limit_tips'|trans({'%number%': 20000}) }}）</li>
+      <li>{{ 'admin.magic_setting.export_allow_count'|trans }}： {% verbatim %}"export_allow_count": 100000{% endverbatim %}（{{ 'admin.magic_setting.max_limit_tips'|trans({'%number%': 20000}) }}）</li>
+      <li>{{ 'admin.magic_setting.enable_org'|trans }}： {% verbatim %}"enable_org": 0{% endverbatim %}（{{ 'admin.magic_setting.zero_for_close'|trans }}，{{ 'admin.magic_setting.one_for_open'|trans }}）</li>
+      <li>{{ 'admin.magic_setting.quick_pay'|trans }}： {% verbatim %}"quickpay": false{% endverbatim %}（{{ 'admin.magic_setting.false_for_close'|trans }}，{{ 'admin.magic_setting.true_for_open'|trans }}）</li>
+      <li>{{ 'admin.magic_setting.uc_phpwind'|trans }}： {% verbatim %}"uc_phpwind": 0{% endverbatim %}（{{ 'admin.magic_setting.zero_for_close'|trans }}，{{ 'admin.magic_setting.one_for_open'|trans }}）</li>
+      <li>{{ 'admin.magic_setting.login_limit'|trans }}： {% verbatim %}"login_limit": 0{% endverbatim %}（{{ 'admin.magic_setting.zero_for_close'|trans }}，{{ 'admin.magic_setting.one_for_open'|trans }}）</li>
+      <li>{{ 'admin.magic_setting.file_single_size_limit'|trans }}： {% verbatim %}"file_single_size_limit": 10{% endverbatim %}（{{ 'admin.magic_setting.file_single_size_limit_tip'|trans }}）</li>
+      <li>{{ 'admin.magic_setting.sync_user_data'|trans }}： {% verbatim %}"user_sync_learn_total_data_limit": 30{% endverbatim %}（{{ 'admin.magic_setting.max_limit_tips'|trans({'%number%': 200}) }}）</li>
+      <li>{{ 'admin.magic_setting.learn_time_sec'|trans }}： {% verbatim %}"learn_time_sec": 60{% endverbatim %}（{{ 'admin.magic_setting.learn_time_sec_tip'|trans }}）</li>
+      <li>{{ 'admin.magic_setting.watch_time_sec'|trans }}： {% verbatim %}"watch_time_sec": 120{% endverbatim %}（{{ 'admin.magic_setting.watch_time_sec_tip'|trans }}）</li>
+      <li>{{ 'admin.magic_setting.site_trace_enable'|trans }}： {% verbatim %}"site_trace_enable": 1{% endverbatim %}（{{ 'admin.magic_setting.one_for_close'|trans }}，{{ 'admin.magic_setting.zero_for_open'|trans }}）</li>
+      <li>{{ 'admin.magic_setting.live_entry_time'|trans }}： {% verbatim %}"live_entry_time": 7200{% endverbatim %} ({{ 'admin.magic_setting.live_entry_time_tip'|trans }})</li>
+    </ul>
+</div>
+
+{% endblock %}

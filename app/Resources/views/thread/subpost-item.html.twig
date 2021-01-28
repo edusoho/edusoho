@@ -1,0 +1,21 @@
+{% import "macro.html.twig" as web_macro %}
+<li id="post-{{ post.id }}" data-user-id="{{ author.id }}" class="thread-post thread-subpost media user-id-{{author.id}} {% if less|default(false) and loop.index > 5 %}hide{% endif %}"
+  data-author-name="{% if not author.destroyed|default(0) %}{{ author.nickname }}{% else %}{{ 'user.user_had_destroyed'|trans }}{% endif %}">
+  <div class="media-left">
+    {{ web_macro.user_avatar(author, 'user-avatar', 'avatar-sm', true) }}
+  </div>
+  <div class="media-body">
+    <div class="metas">
+      {% include 'thread/post-manage-menu.html.twig' %}
+      {% if not author.destroyed|default(0) %}
+        <a href="{{ path('user_show', {id:author.id}) }}">{{ author.nickname }}</a>
+      {% else %}
+        {{ 'user.user_had_destroyed'|trans }}
+      {% endif %}
+      <span class="bullet">•</span>
+      <span class="color-gray">{{post.createdTime|smart_time}} </span>
+    </div>
+    <div class="editor-text">{{ post.content|at(post.ats)|cdn|raw }}</div>
+    {% include 'thread/post-interaction.html.twig' %}
+  </div>
+</li>

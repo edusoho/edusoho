@@ -1,0 +1,150 @@
+
+.link-dark {
+  cursor: pointer;
+  color: @gray-dark !important;
+  &:hover {
+    color: @brand-primary !important;
+  }
+}
+.cloud-banner-top {
+  img {
+    width: 100%;
+  }
+}
+
+.resource-cloud-top {
+  float: left;
+  font-size: 16px;
+
+  .resource-cloud-top-logo {
+    float: left;
+    padding: 0 1rem;
+    border-right: 1px solid #EBEBEB;
+  }
+
+  .resource-cloud-top-name {
+    font-size: 26px;
+    float: left;
+    margin: 8px 1rem;
+    width: 15em;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
+
+//deprecated
+#explore-card {
+  margin-top: 1rem;
+
+  .course-item {
+    border-radius: 4px;
+    border: 1px solid #ebeef5;
+    background-color: #fff;
+    overflow: hidden;
+    color: #303133;
+    transition: .3s;
+
+    .img-responsive {
+      padding: 0;
+    }
+
+    .title {
+      white-space: normal;
+      height: 40px;
+
+      .link-dark {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+      }
+    }
+
+    .course-info {
+      .form-group {
+        font-size: 12px;
+        margin-bottom: 0;
+
+        .control-label {
+          width: 6em;
+          padding: 0 10px;
+
+          &.cooperation {
+            color: #999;
+          }
+
+          &.retail {
+            color: #333;
+          }
+        }
+
+        .cooperation-price {
+          color: #999;
+        }
+
+        .retail-price {
+          color: #dc2d2d;
+        }
+
+        .el-form-item__label,
+        .el-form-item__content {
+          line-height: 20px;
+        }
+      }
+    }
+
+    .selected_btn {
+      margin-top: -10px;
+      padding: 0 10px 10px;
+      text-align: center;
+
+      button {
+        width: 100%;
+        color: #fff;
+        background-color: #409eff;
+        border-color: #409eff;
+      }
+    }
+  }
+}
+
+.tabs-wrapper {
+  a {
+    text-decoration:none;
+  }
+}
+.course-list .course-item {
+  .title {
+    height: 40px;
+    margin-top: 10px;
+    padding: 0 10px;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: normal;
+  }
+
+  .metas {
+    position: relative;
+    padding: 10px;
+    color: #c1c1c1;
+  }
+  .course-info {
+    .form-group .control-label {
+      width: 6em;
+      padding: 0 10px;
+    }
+    .form-group.row {
+      margin-right: -10px;
+      margin-left: -10px;
+    }
+  }
+
+  #explore-card .course-item .title .link-dark {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+}

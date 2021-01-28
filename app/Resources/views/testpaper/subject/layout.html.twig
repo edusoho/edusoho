@@ -1,0 +1,44 @@
+{% extends 'layout.html.twig' %}
+
+{% do script(['libs/es-ckeditor/ckeditor.js', 'libs/jquery-validation.js', 'libs/select2.js', 'app/js/subject/index.js']) %}
+
+{% block content %}
+  <div class="hidden js-cached-data">{{ questions|json_encode }}</div>
+  <input type="hidden" name="questionBankId" value="{{ questionBankId }}" id="questionBankId">
+  <div class="row">
+    <div class="col-sm-3">
+      <div class="subject-data subject-rect js-subject-data">
+        <div class="subject-rect__title">{{ 'course.testpaper_manage.import.re_edit.question_statistics'|trans }}
+          {% block subtitle %}{% endblock %}
+        </div>
+        {% include 'testpaper/subject/subject-num.html.twig' %}
+      </div>
+      {% include 'testpaper/subject/subject-list.html.twig' %}
+    </div>
+    <div class="col-sm-9 js-item-list">
+      {% block testpaper %}
+      {% endblock %}
+      <div class="text-center cd-mt24 js-subject-main-item js-subject-item-btn">
+        {% block save_btn %}{% endblock %}
+      </div>
+    </div>
+  </div>
+
+  {% block question_difficulty_modal %}
+    {% include 'testpaper/subject/question-difficulty-modal.html.twig' %}
+  {% endblock %}
+
+  {% block batch_set_score_modal %}
+    {% include 'testpaper/subject/batch-set-score-modal.html.twig' %}
+  {% endblock %}
+
+  {% block batch_set_belong_modal %}
+    {% include 'testpaper/subject/batch-set-category-modal.html.twig' %}
+  {% endblock %}
+
+  {% include 'testpaper/subject/create-subject-modal.html.twig' %}
+
+  {% block analysis_edit_modal %}
+    {% include 'testpaper/subject/analysis-edit-modal.html.twig' %}
+  {% endblock %}
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'activity/content-layout.html.twig' %}
+
+{# {% do script(['app/js/activity/audio/index.js']) %} #}
+
+{% block body %}
+  <div class="audio-content" id="audio-content" data-role="audio-content">
+    {% if audio.file|default(null) %}
+      {% if audio.hasText %}
+        {% set activityContent = activity.content|default('')|convert_absolute_url|raw %}
+      {% endif %}
+      {{ render(controller('AppBundle:Player:show', {id: audio.mediaId, isPart: true, context: {content:activityContent|default(''), disableModeSelection:disableModeSelection|default(false)}})) }}
+    {% else %}
+      {% include 'activity/file-not-found.html.twig' with {type:'audio'} %}
+    {% endif %}
+  </div>
+{% endblock %}

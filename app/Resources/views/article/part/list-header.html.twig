@@ -1,0 +1,55 @@
+{% if not featuredArticles and not promotedArticles %}
+  {% if is_granted('ROLE_ADMIN') %}
+    <div class="alert alert-warning">
+      {#添加admin_v2#}
+      {% if setting('backstage.is_v2',0)  == 0 %}
+        {% set dataUrl = path('admin_article') %}
+      {% else %}
+        {% set dataUrl=  path('admin_v2_article') %}
+      {% endif %}
+      {{ 'article.banner_tips'|trans({'%articleUrl%':dataUrl})|raw }}
+    </div>
+  {% endif %}
+{% else %}
+  <div class="article-list-header mbl row">
+    <!-- 轮播图 -->
+    <div class="aricle-carousel col-md-8">
+      <div class="swiper-container">
+        <div class="swiper-wrapper">
+          {% for index,featuredArticle in featuredArticles %}
+          <div class="swiper-slide {% if loop.index > 1 %} swiper-hidden {% endif %}">
+            <a href="{{ path('article_detail', {id:featuredArticle.id}) }}">
+              {% if featuredArticle.thumb %}
+                <img class="img-responsive" src="{{ filepath(featuredArticle.thumb, '') }}" alt="{{ featuredArticle.title }}">
+              {% else %}
+                <img class="img-responsive" src="{{ asset("assets/v2/img/article/article_banner_" ~ loop.index ~ ".jpg" ) }}"  alt="{{ featuredArticle.title }}">
+              {% endif %}
+              <div class="swiper-cat">{{ featuredCategories[featuredArticle['id']].name|default() }}</div>
+              <div class="swiper-caption">{{ featuredArticle.title }}</div>
+              <div class="image-overlay"></div>
+            </a>
+          </div>
+          {% endfor %}
+        </div>
+        <div class="swiper-pager"></div>
+      </div>
+    </div>
+    <div class="col-md-4 hidden-sm hidden-xs">
+      {% for index,promotedArticle in promotedArticles %}
+      <a href="{{ path('article_detail', {id:promotedArticle.id}) }}" class="topic-post-small"
+        {% if loop.index > 1 %}style="margin-top:12px;"{% endif %}>
+        {% if promotedArticle.thumb %}
+          <img class="img-responsive" src="{{ filepath(promotedArticle.thumb, '') }}" alt="{{ promotedArticle.title }}">
+        {% else %}
+          <img class="img-responsive" src="{{ asset("assets/v2/img/article/article_banner_" ~ ( 8 - loop.index ) ~ ".jpg" ) }}"  alt="{{ promotedArticle.title }}">
+        {% endif %}
+        <div class="content">
+          <p>{{ promotedCategories[promotedArticle['id']].name|default('') }}</p>
+          <h4 class="title">{{ promotedArticle.title|plain_text(125) }}</h4>
+        </div>
+        <div class="image-overlay"></div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}

@@ -1,0 +1,272 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% block title %}{{'admin.developer_setting.content_title'|trans}} - {{ parent() }}{% endblock %}
+
+{% set menu = 'admin_v2_develop_debug_setting' %}
+
+{% block main %}
+
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" method="post" novalidate>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{'admin.developer_setting.debug_label'|trans}}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('debug', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, developerSetting.debug) }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{'admin.developer_setting.app_center_api_address'|trans}}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="app_api_url" value="{{ developerSetting.app_api_url|default('') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{'admin.developer_setting.cloud_api_server_address'|trans}}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="cloud_api_server" value="{{ developerSetting.cloud_api_server|default('') }}">
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{'admin.developer_xapi_address'|trans}}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="xapi_url" value="{{ developerSetting.xapi_url|default('') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{'admin.developer_face_address'|trans}}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="ai_face_url" value="{{ developerSetting.ai_face_url|default('') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{'admin.developer_push_address'|trans}}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="push_url" value="{{ developerSetting.push_url|default('') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>Push API{{'admin.developer_setting.address'|trans}}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="cloud_api_tui_server" value="{{ developerSetting.cloud_api_tui_server|default('') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>Event API{{ 'admin.developer_setting.address'|trans }}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="cloud_api_event_server" value="{{ developerSetting.cloud_api_event_server|default('') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{ 'admin.developer_setting.im_api_address'|trans }}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="cloud_api_im_server" value="{{ developerSetting.cloud_api_im_server|default('http://imapi.edusoho.net/v1/') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{'admin.developer_setting.market_address'|trans}}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="marketing_domain" value="{{ developerSetting.marketing_domain|default('') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{'admin.developer_setting.distributor_address'|trans}}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="distributor_server" value="{{ developerSetting.distributor_server|default('') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{ 'admin.developer_setting.mp_service_url_label'|trans }}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="mp_service_url" value="{{ developerSetting.mp_service_url|default('') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>ES OP Server</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="cloud_api_es_op_server" value="{{ developerSetting.cloud_api_es_op_server|default('') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{ 'admin.developer_setting.cloud_notification_api'|trans }}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="cloud_api_notification_server" value="{{ developerSetting.cloud_api_notification_server|default('') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{ 'admin.developer_setting.cloud_wechat_api'|trans }}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="cloud_api_wechat_server" value="{{ developerSetting.cloud_api_wechat_server|default('') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{ 'admin.developer_setting.s2b2c_api'|trans }}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="s2b2c_server" value="{{ developerSetting.s2b2c_server|default('') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{ 'admin.developer_setting.s2b2c_supplier_api'|trans }}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="s2b2c_supplier_server" value="{{ developerSetting.s2b2c_supplier_server|default('') }}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{ 'admin.developer_setting.hls_encrypted'|trans }}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('hls_encrypted', {1:'site.datagrid.radios.open'|trans, 0:'site.datagrid.radios.close'|trans}, developerSetting.hls_encrypted) }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{'admin.developer_setting.without_outer_network'|trans}}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('without_network', {1:'site.datagrid.radios.yes'|trans, 0:'site.datagrid.radios.no'|trans}, developerSetting.without_network|default(0)) }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{'admin.developer_setting.default_locale'|trans}}
+        {% include 'admin-v2/widget/tooltip-widget.html.twig' with { icon: 'glyphicon-question-sign', content: 'admin.developer_setting.default_locale.tips'|trans|raw, placement: 'left'} %}
+      </label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('default_locale', {'zh_CN':'admin.developer_setting.default_locale.zh_CN'|trans, 'en':'admin.developer_setting.default_locale.en'|trans}, developerSetting.default_locale|default('zh_CN')) }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{'admin.developer_setting.show_switch_locale'|trans}}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('show_switch_locale', {0:'admin.developer_setting.show_switch_locale.0'|trans, 1:'admin.developer_setting.show_switch_locale.1'|trans}, developerSetting.show_switch_locale|default(0)) }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>私有云模式</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <div class="controls col-md-8 radios">
+        {{ radios('private_cloud_mode', {1: '开启', 0:'关闭'}, developerSetting.private_cloud_mode|default(0)) }}
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{ 'admin_v2.developer_setting.platform_news_api_server'|trans }}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <input class="form-control" type="text" name="platform_news_api_server" value="{{ developerSetting.platform_news_api_server|default('') }}">
+      <div class="help-block">{{ 'admin_v2.developer_setting.platform_news_api_server.info'|trans }}</div>
+    </div>
+  </div>
+
+  <fieldset>
+    <legend>云平台播放器配置</legend>
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>{{ 'admin.developer_setting.cloud_sdk_cdn_address'|trans }}</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        <input class="form-control" type="text" name="cloud_sdk_cdn" value="{{ developerSetting.cloud_sdk_cdn|default('') }}">
+        <div class="help-block">请不要携带 http(s):// ；默认为 service-cdn.qiqiuyun.net 。</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>云资源播放SDK的API地址</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        <input class="form-control" type="text" name="cloud_play_server" value="{{ developerSetting.cloud_play_server|default('') }}">
+        <div class="help-block">默认为 //play1.qiqiuyun.net (or //play2.qiqiuyun.net) </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>SDK日志上报</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        <div class="controls col-md-8 radios">
+          {{ radios('disable_log_report', {0: '开启', 1:'关闭'}, developerSetting.disable_log_report|default(0)) }}
+        </div>
+      </div>
+    </div>
+  </fieldset>
+
+  <div class="form-group">
+    <div class="controls col-md-offset-3 col-md-8">
+      <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+
+<div class="alert alert-warning">
+  {{ 'admin.developer_setting.tips'|trans|raw }}
+</div>
+
+{% endblock %}

@@ -1,0 +1,20 @@
+<div class="visible-xs cd-mb24 clearfix">
+  <div class="pull-right">
+    {% if s2b2c_has_behaviour_permission('canAddCourse') %}{#S2B2C#}
+      <a class="cd-btn cd-btn-primary" id="create-course" href="{{ path('course_set_manage_create') }}" >{{ 'my.teaching.course_set.create'|trans }}</a>
+    {% endif %}
+  </div>
+</div>
+<div class="cd-mb24">
+  <div class="pull-right hidden-xs">
+    {% if s2b2c_has_behaviour_permission('canAddCourse') %}{#S2B2C#}
+      <a class="cd-btn cd-btn-primary" id="create-course" href="{{ path('course_set_manage_create') }}" >{{ 'my.teaching.course_set.create'|trans }}</a>
+    {% endif %}
+  </div>
+  <ul class="courseset-type-list nav nav-pills">
+    <li class="{% if filter == 'normal' %}active{% endif %}"><a href="{{path('my_teaching_course_sets', {filter:'normal'}) }}">{{'my.teaching.course_set.normal'|trans}}</a></li>
+    <li class="{% if filter == 'live' %}active{% endif %}"><a href="{{path('my_teaching_course_sets', {filter:'live'}) }}">{{'my.teaching.course_set.live'|trans}}</a></li>
+    <li class="{% if filter == 'itemBankExercise' %}active{% endif %}"><a href="{{ path('my_teaching_item_bank_exercise', {filter:'itemBankExercise'}) }}">{{'my.teaching.item_bank_exercise.item'|trans}}</a></li>
+    {{ slot('my.teaching.menu', {'side_nav': side_nav}) }}
+  </ul>
+</div>

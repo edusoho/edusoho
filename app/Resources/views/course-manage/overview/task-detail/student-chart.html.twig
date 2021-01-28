@@ -1,0 +1,37 @@
+<form class="js-student-from" id="overview-student-detail">
+    <span class="select-content bottom-border">
+        <select name="orderBy" class="select-time-select">
+          <option value="createdTimeDesc">{{ 'join.time'|trans }} ↓</option>
+          <option value="createdTimeAsc">{{ 'join.time'|trans }} ↑</option>
+          <option value="learnedCompulsoryTaskNumDesc">{{ 'course.task.rate.finish'|trans }} ↓</option>
+          <option value="learnedCompulsoryTaskNumAsc">{{ 'course.task.rate.finish'|trans }} ↑</option>
+        </select>
+        <i class="es-icon es-icon-arrowdropdown"></i>
+    </span>
+    <span class="select-content bottom-border">
+        <select class="select-time-select" name="range">
+          <option value ="">{{ 'course.dashboard.student_chart.time_select_all'|trans }}</option>
+          <option value ="unFinished">{{ 'course.dashboard.student_chart.time_select_unFinished'|trans }}</option>
+          <option value="unLearnedSevenDays">{{ 'course.dashboard.student_chart.time_select_seven_days'|trans }}</option>
+        </select>
+        <i class="es-icon es-icon-arrowdropdown"></i>
+    </span>
+    <span class="select-content">
+        <input class="select-time-input js-name-search" type="text" name="nameOrMobile" placeholder="{{ 'course.dashboard.student_chart.name_or_mobile_placeholder'|trans }}">
+        <i class="es-icon es-icon-search"></i>
+    </span>
+    <input type="hidden" name="courseId" value="{{ course.id }}">
+    {% include 'export/export-btn.html.twig' with
+        {
+            'exportFileName' : 'course-overview-student-list',
+            'targetFormId': 'overview-student-detail',
+            'exportClass': 'cd-btn-sm pull-right cd-btn-primary',
+            'exportWebpack': 'ture'
+        }
+    %}
+</form>
+<button class="btn btn-primary pull-right hide">{{ 'form.btn.export'|trans }}</button>
+<div id="student-detail-chart"
+     data-form=".js-student-from"
+     class="detail-chart-container chart-container mtl text-sm clearfix" data-url="{{ path('course_set_manage_student_detail',{courseId: course.id}) }}">
+</div>

@@ -1,0 +1,10 @@
+{% extends 'courseset-manage/courseset-layout.html.twig' %}
+{% import 'macro.html.twig' as macro %}
+
+{% block title %}{{'course.question_manage'|trans}} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'question' %}
+
+{% block main %}
+  {% include 'testpaper/manage/move-tip.html.twig' %}
+{% endblock %}

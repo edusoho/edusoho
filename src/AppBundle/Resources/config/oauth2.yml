@@ -1,0 +1,7 @@
+parameters:
+    oauth2.user_provider.class: 'Biz\User\UserProvider'
+
+services:
+    oauth2.storage.user_credentials:
+        class: 'AppBundle\Component\OAuthServer\Storage\UserCredentials'
+        arguments: ['@service_container']

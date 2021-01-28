@@ -1,0 +1,110 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_wap_set' %}
+
+{% do load_script('h5-admin/index.js') %}
+
+{% block main %}
+<div class="h5-find-body">
+    <ul class="nav nav-tabs setting-nav-tab js-nav-tab">
+      <li class="active"><a href="#find-page" data-toggle="tab">{{'admin.wap_setting.mini_school'|trans}}</a></li>
+      <li ><a href="#theme-page" data-toggle="tab">{{'admin.wap_setting.theme'|trans}}</a></li>
+      <li ><a href="#site-page" data-toggle="tab">{{'admin.wap_setting.site'|trans}}</a></li>
+    </ul>
+    <div class="tab-content h5-tab-content">
+      {# 发现页设置 #}
+      <div class="tab-pane fade in active h5-mtl" id="find-page">
+        {% if template and 2 == wapSetting.version %}
+          <iframe src="/h5/admin/index.html?template={{ template }}" frameborder="0" style="width: 100%;height: 700px;border: none;"></iframe>
+        {% else %}
+          <div class="row h5-clearfix ">
+            <div class="find-page__left">
+              <img class="find-page__left--img" src="{{ asset('static-dist/app/img/admin/h5/iPhoneX.png') }}" alt="{{ 'admin.wap_setting.new'|trans|raw }}" />
+              <div class="find-page__left--scroll">
+                <iframe src="/h5/index.html#/" frameborder="0" style="width: 100%;height:100%;border: none;"></iframe>
+              </div>
+            </div>
+            <div class=" find-page__right">
+              <p class="find-page__right--text">
+                {{'admin.wap_setting.edit.tip'|trans}}
+              </p>
+              {% if 2 == wapSetting.version %}
+                <a class="btn-h5-open js-site-edit" href="javascript:">{{ 'admin.wap_setting.edit'|trans|raw }}</a>
+              {% else %}
+                <a class="btn-h5-open js-site-set old-site-set" href="#theme-page" data-toggle="tab">{{ 'admin.wap_setting.edit'|trans|raw }}</a>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+      {# 站点页设置 #}
+      <div class="tab-pane fade " id="site-page">
+        <div class="help-block-container">
+          {{'admin.wap_setting.open.tip'|trans|raw}}
+        </div>
+      </div>
+
+      {# 装修主题 #}
+      <div class="tab-pane fade h5-mtl" id="theme-page">
+        <form class="form-horizontal" method="post" id="wap-setting-form" novalidate>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="row theme-bg h5-mr5">
+                <div class="theme-recomend"><div><i class="es-icon es-icon-thumbup"></i>{{ 'admin.wap_setting.subject_name.recommend'|trans }}</div></div>
+                <div class="col-md-5   theme-left">
+                  <img class="theme-default-img" src="{{ asset('static-dist/app/img/admin/h5/new_default_img.png') }}" alt="{{ 'admin.wap_setting.new'|trans|raw }}" />
+                </div>
+                <div class="col-md-7 theme-right ">
+                  <div class="theme-right__title">{{ 'admin.wap_setting.subject_name'|trans }}: {{ 'admin.wap_setting.subject_name.template_name.sail'|trans }}</div>
+                  <div >
+                    <p class="mbm theme-right__title">{{ 'admin.wap_setting.subject_name.template.feature'|trans }}:<p>
+                    <div class="theme-right__content">
+                      {{'admin.wap_setting.subject_name.template.sail.feature'|trans|raw}}
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-h5-save js-site-save" data-version="2" data-template="sail">{{'admin.wap_setting.subject_name.template.use'|trans}}</button>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-10 col-xs-12">
+              <div class="row theme-bg h5-ml5">
+                <div class="col-md-5  theme-left">
+                  <img class="theme-default-img" src="{{ asset('static-dist/app/img/admin/h5/old_default_img.png') }}" alt="{{ 'admin.wap_setting.old'|trans|raw }}"/>
+                </div>
+                <div class="col-md-7  theme-right">
+                  <div class="theme-right__title">{{ 'admin.wap_setting.subject_name'|trans }}: {{ currentTheme.name|default('') }}</div>
+                  <div >
+                    <p class="mbm theme-right__title">{{ 'admin.wap_setting.subject_name.template.feature'|trans }}:<p>
+                    <div class="theme-right__content">
+                      {{'admin.wap_setting.subject_name.template.jane_mo.feature'|trans|raw}}
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-h5-save js-site-save" data-version="1" data-template="jianmoOn">{{'admin.wap_setting.subject_name.template.use'|trans}}</button>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="row theme-bg h5-mr5">
+                <div class="col-md-5 theme-left">
+                  <img class="theme-default-img" src="{{ asset('static-dist/app/img/admin/h5/no_default_img.png') }}" alt="{{ 'admin.wap_setting.old'|trans|raw }}"/>
+                </div>
+                <div class="col-md-7  theme-right">
+                  <div class="theme-right__title">{{ 'admin.wap_setting.subject_name'|trans }}: {{ currentTheme.name|default('') }}</div>
+                  <div >
+                    <p class="mbm theme-right__title">{{ 'admin.wap_setting.subject_name.template.feature'|trans }}:<p>
+                    <div class="theme-right__content">
+                      {{'admin.wap_setting.subject_name.template.jane_mo_off.feature'|trans|raw}}
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-h5-save js-site-save" data-version="0" data-template="jianmoOff">{{'admin.wap_setting.subject_name.template.use'|trans}}</button>
+                </div>
+              </div>
+            </div>
+            <input type="hidden" name="template" value="{{ wapSetting.template }}">
+            <input type="hidden" name="version" value="{{ wapSetting.version }}">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

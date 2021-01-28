@@ -1,0 +1,23 @@
+{% extends 'v2/layout.html.twig' %}
+
+{% block title %}{{ 'user.orders.content_title'|trans }} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'my-orders' %}
+
+{% block page_title %}
+  {{ 'user.orders.content_title'|trans }}
+{% endblock %}
+
+{% block main_body %}
+  <ul class="cd-tabs">
+    <li {% if my_order_side_nav == 'order_list' %}class="active"{% endif %}>
+      <a href="{{path('my_orders',{display_status:''})}}">{{'user.order.order_list'|trans}}</a>
+    </li>
+    <li {% if my_order_side_nav == 'refund_list' %}class="active"{% endif %}>
+      <a href="{{path('my_order_refunds',{display_status:'no_paid'})}}">{{'user.order.refund_list'|trans}}
+        {#{% if createdOrderCount > 0 %}<span class="number">{{createdOrderCount}}</span>{% endif %}#}
+      </a>
+    </li>
+  </ul>
+  {% block myorder_content %}{% endblock %}
+{% endblock %}

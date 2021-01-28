@@ -1,0 +1,99 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set script_controller = 'review/list' %}
+
+{% set menu = 'admin_classroom_review_tab' %}
+
+{% block main %}
+
+  <form id="review-search-form" class="form-inline well well-sm" action="" method="get" novalidate> 
+
+    <div class="form-group">
+      <select class="form-control" name="rating">
+        {{ select_options({1:'1'~'admin.course_review.star'|trans, 2:'2'~'admin.course_review.star'|trans, 3:'3'~'admin.course_review.star'|trans, 4:'4'~'admin.course_review.star'|trans, 5:'5'~'admin.course_review.star'|trans}, app.request.get('rating'), 'admin.course_review.rate_option'|trans) }}
+      </select>
+    </div>
+
+    <div class="form-group">
+      <input class="form-control" type="text" placeholder="{{'admin.course_review.classroom_title.placeholer'|trans({'%classroomName%':setting('classroom.name')|default('admin.classroom_default_name'|trans)})}}" name="classroomTitle" value="{{ app.request.get('classroomTitle') }}">
+    </div>
+
+    <div class="form-group">
+      <input class="form-control" type="text" placeholder="{{'admin.course_thread.form.input.author.placeholer'|trans}}" name="author" value="{{ app.request.get('author') }}">
+    </div>
+
+    <div class="form-group">
+      <input class="form-control" type="text" placeholder="{{'admin.course_review.form.input.content.placeholer'|trans}}" name="content" value="{{ app.request.get('content') }}">
+    </div>
+
+    <button class="btn btn-primary">{{'form.btn.search'|trans}}</button>
+  </form>
+
+  <div id="review-table-container">
+    <table class="table table-striped table-hover" id="review-table">
+      <thead>
+        <tr>
+          <th width="4%"><input type="checkbox"  data-role="batch-select"></th>
+          <th width="60%">{{'admin.course_review.content_th'|trans}}</th>
+          <th width="8">{{'admin.course_review.content'|trans}}</th>
+          <th width="20%">{{'admin.course_thread.author_th'|trans}}</th>
+          <th width="8%">{{'admin.course_thread.operation_th'|trans}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for review in reviews %}
+          {% set author = users[review.userId]|default(null) %}
+          {% set classroom = classrooms[review.targetId]|default(null) %}
+          <tr id="review-table-tr-{{review.id}}" data-role="item">
+            <td><input type="checkbox" value="{{review.id}}" data-role="batch-item"></td>
+            <td>
+              <div class="short-long-text">
+                <div class="short-text">
+                  {{ review.content|plain_text(60) }} <span class="color-gray trigger">({{'admin.course_thread.expand_td'|trans}})</span>
+                </div>
+                <div class="long-text">{{ review.content|nl2br }} <span class="color-gray trigger">({{'admin.course_thread.collapse_td'|trans}})</span></div>
+              </div>
+              <div class="mts">
+                {% if classroom %}
+                  <a class="color-success text-sm" href="{{ path('classroom_show', {id:review.targetId}) }}" target="_blank">{{ classrooms[review.targetId].title }}</a>
+                {% else %}
+                  <span class="color-gray text-sm">{{'admin.course_review.classroom_deleted'|trans({'%classroomName%':setting('classroom.name')|default('admin.classroom_default_name'|trans)})}}</span>
+                {% endif %}
+              </div>
+            </td>
+            <td>{{ review.rating }}{{'admin.course_review.star'|trans}}</td>
+            <td>
+              {{ admin_macro.user_link(author) }}<br>
+              <span class="color-gray">{{review.createdTime|date('Y-n-d H:i')}}</span>
+            </td>
+            <td>
+              {#添加admin_v2#}
+              {% if setting('backstage.is_v2',0)  == 0 %}
+                {% set dataDeleteUrl = path('admin_classroom_review_delete', {id:review.id}) %}
+              {% else %}
+                {% set dataDeleteUrl=  path('admin_v2_classroom_review_delete', {id:review.id}) %}
+              {% endif %}
+              <button class="btn btn-default btn-sm" data-role="item-delete" data-name="{{'admin.course_review.content'|trans}}" data-url="{{ dataDeleteUrl }}">{{'form.btn.delete'|trans}}</button>
+            </td>
+          </tr>
+        {% else %}
+          <tr><td colspan="20"><div class="empty">{{'site.datagrid.empty'|trans}}</div></td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div>
+      <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> {{'admin.course_thread.select_all_btn'|trans}}</label>
+      {#添加admin_v2#}
+      {% if setting('backstage.is_v2',0)  == 0 %}
+        {% set dataDeleteUrl = path('admin_classroom_review_batch_delete') %}
+      {% else %}
+        {% set dataDeleteUrl=  path('admin_v2_classroom_review_batch_delete') %}
+      {% endif %}
+      <button class="btn btn-default btn-sm mlm" data-url="{{ dataDeleteUrl }}" data-role="batch-delete" data-name="{{'admin.course_review.content'|trans}}">{{'form.btn.delete'|trans}}</button>
+    </div>
+  </div>
+
+  {{ web_macro.paginator(paginator) }}
+
+{% endblock %}

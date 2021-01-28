@@ -1,0 +1,209 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_setting_mobile_settings' %}
+
+{% set script_controller = 'setting/mobile' %}
+
+
+{% block main %}
+<style>
+#mobile-splash1-container img ,
+#mobile-splash2-container img ,
+#mobile-splash3-container img ,
+#mobile-splash4-container img ,
+#mobile-splash5-container img ,
+#mobile-logo-container img ,
+#site-appcover-container img,
+#site-applogo-container img
+{max-width: 80%; margin-bottom: 10px;}
+</style>
+
+{% if appDiscoveryVersion|default(0)  == 0 %}
+  <style>
+    .nav.nav-tabs.mbm{ display:none; }
+  </style>
+{% endif %}
+
+{{ web_macro.flash_messages() }}
+
+{% include 'admin/system/mobile-discovery-upgrade.modal.html.twig' %}
+
+<form class="form-horizontal" id="mobile-form" method="post">
+
+  <div class="form-group">
+    <div class="col-md-2 control-label">
+      <label >{{'admin.mobile_setting.client_open_or_close'|trans}}</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('enabled', {1:'form.radio_btn.open'|trans, 0:'form.radio_btn.close'|trans}, mobile.enabled) }}
+      <div class="help-block">{{ 'admin.mobile_setting.mobile_homepage_set_hint'|trans({'%mobileHomepage%': path('mobile')})|raw }}</div>
+      {% if 0 == appDiscoveryVersion|default(0) %}
+      <div class="help-block">{{ 'admin.mobile_setting.mobile_operation_hint'|trans({'%operationUrl%': path('admin_operation_mobile')})|raw }}</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-2 control-label">
+      <label for="mobile_about">{{'site.online_school_about'|trans}}</label>
+    </div>
+    <div class="controls col-md-8">
+      <textarea class="form-control" id="mobile_about" rows="10" name="about" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{ mobile.about }}</textarea>
+      <div class="help-block">{{'admin.mobile_setting.online_school_about_hint'|trans}}</div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-2 control-label">
+      <label for="logo">{{'site.online_school_logo'|trans}}</label>
+    </div>
+    <div class="col-md-8 controls">
+      <div id="mobile-logo-container">{% if mobile.logo %}<img src="{{ asset(mobile.logo) }}">{% endif %}</div>
+      <a class="btn btn-default btn-sm" id="mobile-logo-upload" data-upload-token="{{ upload_token('system', 'image') }}" data-goto-url="{{ path('admin_setting_mobile_picture_upload', {type:'logo'}) }}">{{'form.btn.upload'|trans}}</a>
+      <button class="btn btn-default btn-sm" id="mobile-logo-remove" type="button" data-url="{{ path('admin_setting_mobile_picture_remove', {type:'logo'}) }}" {% if not mobile.logo %}style="display:none;"{% endif %}>{{'form.btn.delete'|trans}}</button>
+      <p class="help-block">{{'admin.mobile_setting.online_school_logo_hint'|trans|raw}}</p>
+      <input type="hidden" name="logo" value="{{ mobile.logo }}">
+    </div>
+  </div>
+
+  <fieldset>
+    <legend>{{ 'admin.mobile_setting.study_center_entrance'|trans }}</legend>
+    <div class="col-md-1"></div>
+    <div class="col-md-6 ptl radios">
+      <div class="form-group">
+        <label for="studyCenter_1">
+          <input type="radio" id="studyCenter_1" name="liveScheduleEnabled"
+                 value="1" {% if mobile.studyCenter.liveScheduleEnabled|default(0) == 1 %} checked{% endif %}>
+          {{ 'admin.mobile_setting.study_center_entrance.has_live'|trans }}
+          <div class="help-block">
+            <img style="width: 70%;"
+                 src="{{ asset('static-dist/app/img/admin-v2/study_center_entrance_has_live.png') }}">
+            <div>{{ 'admin.mobile_setting.study_center_entrance.has_live.notice'|trans }}</div>
+          </div>
+        </label>
+      </div>
+      <div class="form-group">
+        <label for="studyCenter_0">
+          <input type="radio" id="studyCenter_0" name="liveScheduleEnabled"
+                 value="0" {% if mobile.studyCenter.liveScheduleEnabled|default(0) == 0 %} checked{% endif %}>
+          {{ 'admin.mobile_setting.study_center_entrance.has_no_live'|trans }}
+          <div class="help-block">
+            <img style="width: 70%;"
+                 src="{{ asset('static-dist/app/img/admin-v2/study_center_entrance_has_no_live.png') }}">
+            <div class="help-block">{{ 'admin.mobile_setting.study_center_entrance.has_no_live.notice'|trans }}</div>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <div class="col-md-4 text-center study-center-entrance-preview">
+      <img style="width: 50%;"
+           class="img-has-no-live {% if mobile.studyCenter.liveScheduleEnabled|default(0) == 1 %} hidden {% endif %}"
+           src="{{ asset('static-dist/app/img/admin-v2/app_study_center_entrance_has_no_live.png') }}">
+      <img style="width: 50%;"
+           class="img-has-live {% if mobile.studyCenter.liveScheduleEnabled|default(0) == 0 %} hidden {% endif %}"
+           src="{{ asset('static-dist/app/img/admin-v2/app_study_center_entrance_has_live.png') }}">
+      <div>学习中心</div>
+    </div>
+
+  </fieldset>
+
+{% if mobileCode != 'edusoho' and mobileCode != 'edusohov3' %}
+  <fieldset>
+    <legend>{{'admin.mobile_setting.app_custom_setting_option'|trans}}</legend>
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="appname">{{'admin.mobile_setting.app_custom_name'|trans}}</label>
+        </div>
+        <div class="col-md-8 controls">
+        <input type="text" class="form-control" name="appname" value="{{mobile.appname}}" >
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label>{{ 'iOS'|trans }}{{'admin.mobile_setting.app_ios_bundle_id'|trans}}</label>
+        </div>
+        <div class="controls col-md-8">
+          <input class="form-control" name="bundleId" value="{{ mobile.bundleId|default() }}">
+          <p class="help-block">{{ 'admin.mobile_setting.app_ios_bundle_id_hint'|trans }}</p>
+        </div>
+        <div class="help-block"><a target="_blank" href="http://www.qiqiuyu.com/faq/805/detail">{{ 'admin.mobile_setting.app_ios_bundle_id'|trans}}{{ 'admin.mobile_setting.app_ios_bundle_id_tutorials'|trans }}</a></div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="appabout">{{'admin.mobile_setting.app_custom_about'|trans}}</label>
+        </div>
+        <div class="col-md-8 controls">
+        <input type="text" class="form-control" name="appabout" value="{{mobile.appabout}}">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="applogo">{{'admin.mobile_setting.app_custom_logo'|trans}}</label>
+        </div>
+        <div class="col-md-8 controls">
+
+         <div id="site-applogo-container" class="mbl">{% if mobile.applogo %}<img src="{{ asset(mobile.applogo) }}">{% endif %}</div>
+          <a class="btn btn-default btn-sm" id="site-applogo-upload" data-upload-token="{{ upload_token('system', 'image') }}"
+          data-goto-url="{{ path('admin_setting_mobile_picture_upload', {type:'applogo'}) }}">{{'form.btn.upload'|trans}}</a>
+          <button class="btn btn-default btn-sm" id="site-applogo-remove" type="button"
+          data-url="{{ path('admin_setting_mobile_picture_remove', {type:'applogo'}) }}" {% if not mobile.applogo %}style="display:none;"{% endif %}>{{'form.btn.delete'|trans}}</button>
+          <p class="help-block">{{'admin.mobile_setting.app_custom_logo_hint'|trans}}</p>
+           <input type="hidden" name="applogo" value="{{ mobile.applogo }}">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="appcover">{{'admin.mobile_setting.app_custom_cover'|trans}}</label>
+        </div>
+        <div class="col-md-8 controls">
+         <div id="site-appcover-container" class="mbl">{% if mobile.appcover %}<img src="{{ asset(mobile.appcover) }}">{% endif %}</div>
+          <a class="btn btn-default btn-sm" id="site-appcover-upload" data-upload-token="{{ upload_token('system', 'image') }}"
+          data-goto-url="{{ path('admin_setting_mobile_picture_upload', {type:'appcover'}) }}">{{'form.btn.upload'|trans}}</a>
+          <button class="btn btn-default btn-sm" id="site-appcover-remove" type="button"
+          data-url="{{ path('admin_setting_mobile_picture_remove', {type:'appcover'}) }}" {% if not mobile.appcover %}style="display:none;"{% endif %}>{{'form.btn.delete'|trans}}</button>
+          <p class="help-block">{{'admin.mobile_setting.app_custom_cover_hint'|trans}}</p>
+          <input type="hidden" name="appcover" value="{{ mobile.appcover }}">
+        </div>
+
+      </div>
+  </fieldset>
+{% endif %}
+
+ <fieldset>
+  <legend>{{'admin.mobile_setting.app_custom_setting_option'|trans}}</legend>
+  <div class="help-block">{{'admin.mobile_setting.splash_setting_hint'|trans}}</div>
+  {% for i in 1..5 %}
+     {% set splash = 'splash' ~ i %}
+      <div class="form-group">
+          <div class="col-md-2 control-label">
+              <label for="{{ splash }}">{{ 'admin.mobile_setting.splash'|trans({ '%splashNum%':i }) }}</label>
+          </div>
+          <div class="col-md-8 controls">
+              {% set mobileId = 'mobile-splash'~i %}
+              <div id="{{ mobileId }}-container">{% if mobile[splash] %}<img src="{{ asset(mobile[splash]) }}">{% endif %}</div>
+              <a class="btn btn-default btn-sm" id="{{ mobileId }}-upload" data-upload-token="{{ upload_token('system', 'image') }}"data-goto-url="{{ path('admin_setting_mobile_picture_upload', {type: splash}) }}">{{'form.btn.upload'|trans}}</a>
+              <button class="btn btn-default btn-sm" id="{{ mobileId }}-remove" type="button" data-url="{{ path('admin_setting_mobile_picture_remove', {type:splash}) }}" {% if not mobile[splash] %}style="display:none;"{% endif %}>{{'form.btn.delete'|trans}}</button>
+              <p class="help-block">{{'admin.mobile_setting.splash_pic_setting_hint'|trans}}</p>
+              <input type="hidden" name="{{ splash }}" value="{{ mobile[splash] }}">
+          </div>
+      </div>
+  {% endfor %}
+  </fieldset>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+  <input type="hidden" name="appDiscoveryVersion" value="{{ appDiscoveryVersion|default(0) }}">
+
+  <div class="row form-group">
+    <div class="controls col-md-offset-2 col-md-8">
+      <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
+    </div>
+  </div>
+
+</form>
+{% endblock %}

@@ -1,0 +1,25 @@
+<div class="statictic-body">
+    <div class="statictic-header">
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="active">
+                <a href="#student-data-detail" data-toggle="tab">
+                    {{ 'course.dashboard.student_detail'|trans }}
+                </a>
+            </li>
+            <li>
+                <a href="#task-data-detail" data-toggle="tab">
+                    {{ 'course.dashboard.task_detail'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="tab-content">
+        <div class="tab-pane fade in active" id="student-data-detail">
+            {% include 'course-manage/overview/task-detail/student-chart.html.twig' %}
+        </div>
+        <div class="tab-pane fade clearfix" id="task-data-detail">
+            {% include 'course-manage/overview/task-detail/task-chart.html.twig' %}
+        </div>
+    </div>
+</div>
+

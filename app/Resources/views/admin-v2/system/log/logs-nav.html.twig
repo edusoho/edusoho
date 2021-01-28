@@ -1,0 +1,10 @@
+<ul class="nav nav-tabs mbl">
+  <li class="{% if tab == 'logs' %}active{% endif %}">
+    <a href="{{ url('admin_v2_logs') }}">{{'admin.system_log.syatem_operation_log'|trans}}
+    </a>
+  </li>
+  <li class="{% if tab == 'prod' %}active{% endif %}">
+    <a href="{{ url('admin_v2_logs_prod') }}">{{'admin.system_log.code_run_log'|trans}}
+    </a>
+  </li>
+</ul>

@@ -1,0 +1,16 @@
+{% import "macro.html.twig" as web_macro %}
+<li class="media thread-item" data-id="{{ thread.id }}">
+  <div class="media-body thread-item-body">
+    <div class="mbm">
+      <a href="javascript:;" class="js-redirect-question-detail" data-url="{{ path('course_task_plugin_thread_show', {courseId: task.courseId, taskId: task.id, threadId: thread.id }) }}">
+        <span class="title-icon"><i class="es-icon es-icon-help mrm"></i></span>
+        {{ thread.title }}
+      </a>
+    </div>
+    <div class="metas">
+      {{ web_macro.user_link(user, 'link-dark mll') }}{{'course.plan_task.post_time'|trans({'%createdTime%':thread.createdTime|smart_time})}}
+      <span class="bullet">•</span>
+      <a href="#">{{'course.plan_task.post_num'|trans({'%postNum%':thread.postNum})}}</a>
+    </div>
+  </div>
+</li>

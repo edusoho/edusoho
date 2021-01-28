@@ -1,0 +1,27 @@
+{% if answerRecords %}
+
+<table class="table table-striped">
+  <tbody>
+    {% for answerRecord in answerRecords %}
+      {% set assessment = assessments[answerRecord.assessment_id] %}
+      {% set student = users[answerRecord.user_id] %}
+      {% set answerReport = answerReports[answerRecord.answer_report_id] %}
+      {% set teacher = users[answerReport.review_user_id]|default(null) %}
+      {% set activity = activities[testpeaperActivities[answerRecord['answer_scene_id']]['id']]|default(null) %}
+      {% set course = courses[activity.fromCourseId]|default(null) %}
+      {% set courseSet = courseSets[activity.fromCourseId]|default(null) %}
+      
+      {% include 'my/testpaper/check-list-tr.html.twig' %}
+
+    {% endfor %}
+  </tbody>
+</table>
+{{ web_macro.paginator(paginator) }}
+
+{% else %}
+  {% if status == 'reviewing' %}
+    <div class="empty">{{'my.teaching.testpaper.reviewing_empty'|trans}}</div>
+  {% elseif status == 'finished' %}
+    <div class="empty">{{'my.teaching.testpaper.check_finished_empty'|trans}}</div>
+  {% endif %}
+{% endif %}

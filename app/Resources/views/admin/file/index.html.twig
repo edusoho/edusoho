@@ -1,0 +1,66 @@
+{% extends 'admin/content/layout.html.twig' %}
+
+{% block title %}{{'admin.file_manage.content_title'|trans}} - {{ parent() }}{% endblock %}
+
+{% set script_controller = 'file/list' %}
+
+{% set menu = 'file' %}
+
+{% block main %}
+
+<div class="page-header clearfix">
+  <h1 class="pull-left">{{'admin.file_manage.file'|trans}}</h1>
+</div>
+
+<div class="well btn-small">
+  <form>
+    <div class="col-md-2">
+    {{ form_widget(form.group) }}
+    </div>
+    <input type="submit" class="btn btn-primary" value="{{'admin.file_manage.search_btn'|trans}}">
+  </form>
+</div>
+<div id="files">
+  <div class="rows clearfix">
+    {% for file in files %}
+      {% set user = object_load('user', file.userId) %}
+      {% set fileGroup = object_load('file_group', file.groupId) %}
+      {% set fileUri = file_uri_parse(file.uri) %}
+      <div class="col-md-3 mbl">
+        <div class="thumbnail file-thumbnail">
+          {% if 'image/' in file.mime %}
+            <img src="{{ filepath(file.uri) }}" style="max-height:160px;">
+          {% else %}
+            <i class="glyphicon glyphicon-file"></i>
+          {% endif %}
+          <div class="caption">
+            <p><a href="{{ filepath(file.uri) }}" target="_blank">{{ fileUri.name }}</a></p>
+            <p>
+              <span class="text-muted">{{ file.size|file_size }}</span>
+              <a href="javascript:" class="delete pull-right btn btn-danger btn-sm" data-url="{{ path('admin_file_delete', {id:file.id}) }}">{{'admin.file_manage.delete_btn'|trans}}</a>
+            </p>
+            <p>
+              <span class="text-muted"><i class="glyphicon glyphicon-time"></i> {{ file.createdTime|date('Y-n-d H:i:s') }}</span>
+            </p>
+            <p>
+              {% if user %}
+                <i class="text-muted glyphicon glyphicon-user"></i>
+                <a href="{{ path('user_show', {userId:user.id}) }}">{{ user.nickname }}</a>
+              {% else %}
+                <span class="label label-danger">{{'admin.file_manage.student_empty_tips'|trans}}</span>
+              {% endif %}
+            </p>
+            <p>
+              <span class="text-success">
+                <i class="glyphicon glyphicon-folder-open"></i> 
+                {{ fileGroup.name|default('admin.file_manage.file_group_empty_tips'|trans) }}
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+      {% if loop.index % 4  == 0 %}</div><div class="rows clearfix">{% endif %}
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

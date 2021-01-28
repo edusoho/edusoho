@@ -1,0 +1,57 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_coin_orders' %}
+
+{% set script_controller = 'manage/list' %}
+
+{% block main %}
+
+  <form id="coin-orders-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+    <div class="mbm">
+    <div class="form-group">
+      <label class="ptm" >{{'order.created_time'|trans}}:</label>
+        <input class="form-control" type="text" id="startDate" name="startDateTime" value="{{request.get('startDateTime')}}" placeholder="{{'form.placeholder.start_date'|trans}}">
+        -
+        <input class="form-control" type="text" id="endDate" name="endDateTime" value="{{request.get('endDateTime')}}" placeholder="{{'form.placeholder.end_date'|trans}}">
+    </div>
+    </div>
+    <div class="mbm">
+    <div class="form-group">
+     <label class="ptm" >{{'admin.order.screen_condition'|trans}}</label>
+      <select class="form-control" name="status">
+        {{ select_options({ paid: 'admin.order.paid'|trans,created:'admin.order.created'|trans,cancelled:'admin.order.cancelled'|trans}, request.get('status'), 'order.status'|trans) }}
+      </select>
+      <select class="form-control" name="payment">
+        {{ select_options(dict('paymentSelect'), app.request.get('payment'), 'order.payment_pattern'|trans) }}
+      </select>
+    </div>
+   
+
+    <div class="form-group">
+     <label class="ptm" >{{'admin.order.keyword'|trans}}</label>
+        <select class="form-control" name="keywordType">
+        {{ select_options(dict('coinOrderType'), app.request.query.get('keywordType'), 'admin.order.coin_order_type.default'|trans) }}
+        </select>
+  
+    <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="{{'form.placeholder.keyword'|trans}}">
+    </div>
+
+    <button class="btn btn-primary">{{'form.btn.search'|trans}}</button>
+    <a class="btn btn-primary" href="{{ path('admin_order_manage_export_coin_csv',
+    {startTime:request.get('startDateTime'),
+    endTime:request.get('endDateTime'),
+    status:request.get('status'),
+    payment:request.get('payment'),
+    keywordType:request.get('keywordType'),
+    keyword:request.get('keyword')
+    })}}">{{'form.btn.export_result'|trans}}</a>
+     </div>
+  </form>
+  {% include 'coin/coin-table.html.twig'  %}
+
+  <div class="paginator">
+    {{ admin_macro.paginator(paginator) }} 
+  </div>
+
+
+{% endblock %}

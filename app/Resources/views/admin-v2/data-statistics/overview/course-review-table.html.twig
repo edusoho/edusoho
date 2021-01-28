@@ -1,0 +1,27 @@
+<table class="table table-condensed table-noborder table-overflow">
+  <thead>
+  <tr>
+    <th width="63%">{{ 'admin.homepage.latest_review.review_content_th'|trans }}</th>
+    <th width="15%">{{ 'admin.homepage.latest_review.review_rating_th'|trans }}</th>
+    <th width="22%">{{ 'admin.homepage.latest_review.operation_th'|trans }}</th>
+  </tr>
+  </thead>
+  <tbody>
+
+  {% for review in reviews %}
+    {% set author = users[review.userId]|default(null) %}
+    <tr>
+      <td>
+        <a class="link-primary" target="_blank" href="{{ path('course_show',{id:review.targetId, tab: 'reviews'}) }}">  {{ review.content|plain_text(60) }}</a>
+      </td>
+      <td class="pull-right prl">{{ review.rating }}{{'admin.homepage.latest_review.rating_start'|trans}}</td>
+      <td>
+        <a target="_blank" href="{{ path('course_show',{id:review.targetId, tab: 'reviews'}) }}" class="btn btn-default btn-xs">{{ 'admin.homepage.latest_review.view_btn'|trans }}</a>
+      </td>
+    </tr>
+  {% else %}
+    <tr><td><div class="empty">{{'admin.homepage.latest_review.empty'|trans}}</div></td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+

@@ -1,0 +1,106 @@
+{% extends 'activity/content-layout.html.twig' %}
+{#{% do script(['libs/jquery-countdown.js','app/js/activity/live/index.js']) %} #}
+{% set endLeftSeconds = activity.endTime - activity.nowDate %}
+{% set startLeftSeconds = activity.startTime - activity.nowDate %}
+{% set replayGuid = activity.ext.liveProvider == 1 ? 'activity.live.replay_guid_1'|trans : 'activity.live.replay_guid'|trans %}
+{% set isFinished = is_live_finished(activity.id, 'course') %}
+{% set limitTime = is_teacher(activity.fromCourseId) ? setting('magic.live_entry_time', 7200) : 7200 %}
+
+{% block body %}
+  <div class="iframe-parent-content ph20 pv20">
+    {% if roomCreated %}
+      <div class="lesson-content lesson-content-text" data-role="lesson-content">
+        <div class="lesson-content-text-body">
+          {% if startLeftSeconds > 0  %}
+            <div class="live-show-item">
+              <p class="title">
+                  {{ 'homepage.live_course.start_time'|trans }}
+              </p>
+              {{'activity.live.default_notice'|trans({
+                '%startTimeFormat%': activity.startTimeFormat,
+                '%endTimeFormat%': activity.endTimeFormat,
+                '%limitTimeFormat%': limitTime/3600
+              })|raw }}
+            </div>
+            <div class='live-show-item'>
+              <p class='title'>
+                  {{ 'testpaper.answer.count_donw_timer'|trans }}
+              </p>
+              <span class="color-warning" id="countdown" data-time-remain ="{{ activity.startTime - activity.nowDate }}">
+              </span>
+            </div>
+            <div class='live-show-item cke_editable cke_contents_ltr'>
+              <p class='title'>{{ 'course.plan_task.activity_manage.live.info'|trans }}</p>
+                {{ summary|raw }}
+            </div>
+              {% if startLeftSeconds < limitTime %}
+                <div class='live-show-item'>
+                  <a target="_blank" class='btn btn-primary js-start-live' data-finish="{{ path("task_live_trigger",{courseId: activity.fromCourseId, activityId: activity.id}) }}" href="{{ path('task_live_entry',{courseId:activity.fromCourseId, activityId:activity.id}) }}">
+                      {{ 'homepage.live_course.join_btn'|trans }}
+                  </a>
+                </div>
+                {% if activity.isTeacher|default() %}
+                <div class='live-show-item'>
+                    {{ replayGuid|raw }}
+                </div>
+                {% endif %}
+              {% endif %}
+          {% elseif startLeftSeconds < 0  and not isFinished  %}
+
+              <div class='live-show-item'>
+                  <p class="title">{{ 'homepage.live_course.start_time'|trans }}</p>
+                  {{ 'my.teaching.open_course.lesson.header.content.tips'|trans }}
+                  {{ activity.endTimeFormat }}
+                  {{ 'my.teaching.open_course.lesson.header.content.end.tips'|trans }}
+              </div>
+              <div class='live-show-item cke_editable cke_contents_ltr'>
+                  <p class='title'>{{ 'course.plan_task.activity_manage.live.info'|trans }}</p>
+                  {{ summary|raw }}
+              </div>
+              <div class='live-show-item'>
+                  <a target="_blank" class='btn btn-primary js-start-live' data-finish="{{ path("task_live_trigger",{courseId: activity.fromCourseId, activityId: activity.id}) }}" href="{{ path('task_live_entry',{courseId:activity.fromCourseId, activityId:activity.id}) }}">
+                     {{ 'homepage.live_course.join_btn'|trans }}
+                  </a>
+              </div>
+
+              {% if activity.isTeacher|default() %}
+                  <div class='live-show-item'>
+                     {{ replayGuid|raw }}
+                  </div>
+              {% endif %}
+
+          {% elseif isFinished %}
+
+              <div class='live-show-item'>
+                  <i class='es-icon es-icon-xinxi color-danger icon-live-end'></i>
+                  {{ 'my.teaching.open_course.lesson.header.live_course_end'|trans }}
+              </div>
+              <div class='live-show-item cke_editable cke_contents_ltr'>
+                  <p class='title'>{{ 'course.plan_task.activity_manage.live.info'|trans }}</p>
+                  {{ summary|raw }}
+              </div>
+              {% if activity.replays %}
+                  <div class='live-show-item'>
+                      {% for btn in activity.replays %}
+                          <a class="btn btn-primary btn-replays js-replay" data-finish="{{ path("task_live_trigger",{courseId: activity.fromCourseId, activityId: activity.id}) }}" href="{{ btn.url }}"  target='_blank'>
+                              {{ btn.title }}
+                          </a>
+                      {% endfor %}
+                  </div>
+              {% endif %}
+
+          {% endif %}
+        </div>
+      </div>
+    {% else %}
+      <div class="lesson-content lesson-content-text" id="lesson-live-content"  data-role="lesson-content">
+        <div class="lesson-content-text-body">
+          <div class='live-show-item'>
+            <p class='title'>{{ 'course.plan_task.activity_manage.live.info'|trans}}</p>
+            <p>{{'activity.live.not_created_notice'|trans}}</p>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

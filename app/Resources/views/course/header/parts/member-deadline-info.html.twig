@@ -1,0 +1,43 @@
+{#<li class="mll">#}
+  {% if member.role == 'teacher' %}
+    {% if course.expiryMode == 'forever' %}
+      {{ 'course.expiry_date.forever_mode'|trans }}
+    {% elseif course.expiryMode == 'days' %}
+      {{ 'course.expiry_date.days_mode.total_days'|trans({'%expiryDays%':course.expiryDays}) }}
+    {% else %}
+      {{ course.expiryEndDate|date('Y-m-d') }}
+    {% endif %}
+  {% else %}
+    {% if course.expiryMode == 'forever' and member.deadline == 0 %}
+      {{ 'course.expiry_date.forever_mode'|trans }}
+    {% elseif course.expiryMode in ['end_date', 'date'] %}
+      {{member.deadline|date('Y-m-d') }}
+      {% if date('now').timestamp > member.deadline %}
+        <span class="color-danger text-12">{{ 'course.expiry_date.overdue'|trans }}</span>
+      {% else %}
+        {% set lastDays = member.deadline|time_diff %}
+        {% if lastDays == 0 %}
+          <span class="color-warning text-12">{{ 'course.expiry_date.today_will_overdue'|trans }}</span>
+        {% elseif lastDays == 1 %}
+          <span class="color-warning text-12">{{ 'course.expiry_date.tomorrow_will_overdue'|trans }}</span>
+        {% elseif lastDays < 31 %}
+          <span class="color-warning text-12">{{ 'course.expiry_date.days_remaining'|trans({'%lastDays%':lastDays}) }}</span>
+        {% endif %}
+      {% endif %}
+    {% else %}
+      {{ member.deadline|date('Y-m-d') }}
+      {% if date('now').timestamp > member.deadline %}
+        <span class="color-danger text-12">{{ 'course.expiry_date.overdue'|trans }}</span>
+      {% else %}
+        {% set lastDays = member.deadline|time_diff %}
+        {% if lastDays == 0 %}
+          <span class="color-warning text-12">{{ 'course.expiry_date.today_will_overdue'|trans }}</span>
+        {% elseif lastDays == 1 %}
+          <span class="color-warning text-12">{{ 'course.expiry_date.tomorrow_will_overdue'|trans }}</span>
+        {% elseif lastDays < 31 %}
+          <span class="color-warning text-12">{{ 'course.expiry_date.days_remaining'|trans({'%lastDays%':lastDays}) }}</span>
+        {% endif %}
+      {% endif %}
+    {% endif %}
+  {% endif %}
+{#</li>#}

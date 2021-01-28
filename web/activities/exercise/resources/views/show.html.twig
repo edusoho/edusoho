@@ -1,0 +1,16 @@
+{% set exercise = activity.ext %}
+{% set questionLack = is_question_lack(activity)|default(false) %}
+{% if app.request.get('preview') == 1 %}
+  {% include '@activity/exercise/resources/views/show/preview.html.twig' %}
+{% else %}
+  {% set latestAnswerRecord = data('LatestAnswerRecord', {answerSceneId: activity.ext.answerSceneId}) %}
+  
+  {% if not latestAnswerRecord %}
+    {% include('@activity/exercise/resources/views/show/index.html.twig') with { questionLack: questionLack } %}
+  {% elseif latestAnswerRecord and  (latestAnswerRecord.status == 'finished' or latestAnswerRecord.status == 'reviewing') %}
+    {{ render(controller('AppBundle:Exercise:showResult', {answerRecordId: latestAnswerRecord.id})) }}
+  {% else %} 
+    {% include('@activity/exercise/resources/views/show/do-exercise.html.twig') %}
+  {% endif %}
+
+{% endif %}

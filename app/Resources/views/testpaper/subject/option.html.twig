@@ -1,0 +1,18 @@
+{% if type == 'single_choice' %}
+  {% set selectType = 'radio' %}
+{% else %}
+  {% set selectType = 'checkbox' %}
+{% endif %}
+<div class="edit-subject-item cd-mb24 form-group">
+  <label class="cd-{{ selectType }} col-sm-1 cd-mt8 mlm">
+    <input type="{{ selectType }}" data-toggle="cd-{{ selectType }}" name="right" value="{{ order }}">
+    <span class="cd-dark-major edit-subject-item__order">{{ (order+65)|chr }}. </span>
+  </label>
+  <div class="col-sm-6 ph0">
+    <input class="form-control edit-subject-item__input js-item-option-edit" type="text" value="">
+    <textarea class="form-control hidden" style="height:190px;" id="{{ uniqid() }}" name="options"
+              data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}"
+              data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"></textarea>
+  </div>
+  <a class="col-sm-1 edit-subject-item__delete cd-link-assist js-item-option-delete" href="javascript:;"><i class="es-icon es-icon-shanchu"></i></a>
+</div>

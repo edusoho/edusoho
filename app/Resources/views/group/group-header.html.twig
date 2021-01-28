@@ -1,0 +1,38 @@
+{% do script(['app/js/group/header/index.js']) %}
+
+{% set groupNav = groupNav|default(null) %}
+<ol class="breadcrumb breadcrumb-o" style="margin-top:-18px">
+  <li><a href="{{path('homepage')}}">{{ homepage.name|default('homepage'|trans) }}</a></li>
+  <li><a href="{{path('group')}}">{{ group.name|default('group'|trans) }}</a></li>
+  <li><a href="{{path('group_show',{id:groupinfo.id})}}">{{groupinfo.title}}</a></li>
+</ol>
+<div class="group-header js-group-header" style="background:url({{filepath(groupinfo.backgroundLogo, 'background_group.jpg')}});background-repeat: no-repeat;background-size: 100% 100%;">
+  <div class="media">
+    <div class="media-left">
+      <a href="{{path('group_show',{id:groupinfo.id})}}">
+        <img src="{{filepath(groupinfo.logo, 'group.png')}}" alt="{{groupinfo.title}}" class="avatar-square-md" >
+      </a>
+    </div>
+    <div class="media-body">
+      <h2 class="media-heading">
+        {{groupinfo.title}}
+        {% if is_groupmember == 0 %}
+          <a id="add-btn" class="btn btn-success btn-sm mlm" data-url="{{path('group_join',{id:groupinfo.id})}}">{{'group.detail.join_group_btn'|trans}}</a>
+        {% endif %}
+        {% if is_groupmember == 1 or is_groupmember == 3 %}
+          <a id="exit-btn" class="btn btn-default btn-sm mlm" data-url="{{path('group_exit',{id:groupinfo.id})}}">{{'group.detail.quit_group_btn'|trans}}</a>
+        {% endif %}
+
+      </h2>
+      <div class="media-metas">
+
+        {{'group.detail.member_number'|trans({'%memberNum%':groupinfo.memberNum})}}
+        <span class="mlm">{{'group.detail.thread_number'|trans({'%threadNum%':groupinfo.threadNum})}}</span>
+        <span class="fsn mlm">{{'group.detail.created_time'|trans({'%createdTime%':groupinfo.createdTime|date('Y-m-d')})}}</span>
+
+      </div>
+    </div>
+  </div>
+  <div class="image-overlay image-overlay-o"></div>
+</div>
+

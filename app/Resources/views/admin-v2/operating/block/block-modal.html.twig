@@ -1,0 +1,84 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+
+{% set modal_class = 'modal-lg' %}
+{% set block = block|default(null) %}
+
+{% block title %}
+  {% if editBlock.id == 0 %}{{'admin.block_manage.create'|trans}}{% else %}{{'admin.block_manage.set_up'|trans}}{% endif %}{{'admin.block_manage.edit_block'|trans}}
+{% endblock %}
+
+{% if editBlock.id == 0 %}
+  {% set checkCodeUrl = path('admin_v2_block_code_check_forcreate') %}
+{% else %}
+  {% set checkCodeUrl = path('admin_v2_block_code_check_foredit', {id:editBlock.id}) %}
+{% endif %}
+
+{% block body %}
+  <form class="form-horizontal" data-id = {{ editBlock.id }} id="block-form"  
+  {% if editBlock.id == 0 %}
+    action="{{ path('admin_v2_block_create') }}"
+  {% else %}
+    action="{{ path('admin_v2_block_template_edit', {blockTemplateId:editBlock.id}) }}"
+  {% endif %}  method="post">
+
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label"><label for="code">{{'admin.block_manage.code_label'|trans}}</label></div>
+    <div class="col-md-8 controls"> 
+    <input class="form-control" type="text" id="code" value="{{editBlock.code}}" data-url="{{checkCodeUrl}}" name="code"></div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label"><label for="title">{{'admin.block_manage.title_label'|trans}}</label></div>
+    <div class="col-md-8 controls"> 
+    <input class="form-control" type="text" id="title" value="{{editBlock.title}}" name="title"></div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label"><label for="mode">{{'admin.block_manage.edit_mode_label'|trans}}</label></div>
+    <div class="col-md-8 controls"> 
+      <div class="controls col-md-8 radios">
+        <label><input type="radio" name="mode" value="html" {% if editBlock.mode == 'html' %}checked{% endif %}>{{'admin.block_manage.mode_html_radio'|trans}}</label>
+        <label><input type="radio" name="mode" value="template" {% if editBlock.mode == 'template' %}checked{% endif %}>{{'admin.block_manage.mode_template_radio'|trans}}</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="row form-group" style="display:none;" id="template">
+    <div class="col-md-3 control-label"><label for="template">{{'admin.block_manage.template_content'|trans}}</label></div>
+    <div class="col-md-8 controls">
+      <textarea id="template" name="template" class="form-control" rows="8">{{ editBlock.template }}</textarea>
+      <div class="help-block">
+        {{'admin.block_manage.template_tips'|trans}}
+        <ul>
+          <li>{{'admin.block_manage.template_link_tips'|trans|raw}}</li>
+          <li>{{'admin.block_manage.template_text_tips'|trans|raw}}</li>
+          <li>{{'admin.block_manage.template_img_tips'|trans|raw}}</li>
+        </ul>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-md-3 control-label"><label for="tips">{{'admin.block_manage.edit_content_help'|trans}}</label></div>
+    <div class="col-md-8 controls">
+      <textarea id="tips" name="tips" class="form-control" rows="4"></textarea>
+      <div class="help-block">{{'admin.block_manage.edit_content_help_tips'|trans}}</div>
+    </div>
+  </div>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+  </form>
+
+  <script type="text/javascript">
+    app.load('block/save-modal');
+  </script>
+{% endblock %}
+
+{% block footer %}
+    <button type="button" class="btn btn-link" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
+    <button id="block-save-btn" data-submiting-text="{{'form.btn.submit.submiting'|trans}}" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#block-form">{{'form.btn.save'|trans}}</button>
+{% endblock %}

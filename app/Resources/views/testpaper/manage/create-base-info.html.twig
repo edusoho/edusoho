@@ -1,0 +1,13 @@
+<div class="form-group">
+  <div class="col-md-2 control-label"><label for="name-field" class="control-label-required">{{'course.testpaper_manage.create.name'|trans}}</label></div>
+  <div class="col-md-8 controls">
+    <input class="form-control" value="{% if testpaper.name | default(null)%}{{testpaper.name }}{% endif %}" name="name" id="name-field"/>
+  </div>
+</div>
+
+<div class="form-group">
+  <div class="col-md-2 control-label"><label for="description-field">{{'course.testpaper_manage.create.description'|trans}}</label></div>
+  <div class="col-md-8 controls">
+    <textarea class="form-control" id="description-field" name="description" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}">{% if testpaper.description | default(null)%}{{testpaper.description }}{% endif %}</textarea>
+  </div>
+</div>

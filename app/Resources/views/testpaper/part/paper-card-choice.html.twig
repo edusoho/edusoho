@@ -1,0 +1,17 @@
+<span href="javascript:;" data-anchor="#question{{ question.id }}" class="js-btn-index color-lump mrm mbm
+  {% if paperResult.status|default('null') == 'reviewing' and question.type == 'essay' %}
+    bg-warning js-answer-notwrong
+  {% elseif paperResult.status|default('null') == 'doing' and question.testResult|default(null) %}
+    lump-card
+    {% if question.testResult.status|default('noAnswer') not in ['none','noAnswer'] %}
+      done  
+    {% endif %}
+    js-answer-notwrong
+  {% elseif question.testResult.status|default('noAnswer') == 'right' %}
+    bg-success js-answer-notwrong
+  {% elseif question.testResult.status|default('noAnswer') == 'noAnswer' %}
+    lump-card js-answer-notwrong
+  {% else %}
+    bg-danger 
+  {% endif %}
+" ><i class="text-12 glyphicon glyphicon-bookmark marking-card js-marking-card hidden"></i>{{ seq|default(0) }}</span>

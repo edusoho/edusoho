@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="renderer" content="webkit">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+  <title>移动客户端下载</title>
+  <style>
+    .weixin_bg {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #00c776;
+      background-repeat: no-repeat;
+      background-image: url("{{ asset('assets/img/mobile/weixin_bg.png') }}");
+    }
+
+    .shard_bg {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      background: rgba(0,0,0,0.6);
+    }
+
+    .shard_bg img {
+      float: right;
+    }
+  </style>
+</head>
+
+<body class="weixin_bg">
+  <div class="shard_bg">
+    <img src="{{ asset('assets/img/mobile/weixin_arrow.png') }}" />
+  </div>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{% macro paginator(paginator) %}
+<ul  class="pagination">
+  <li {% if paginator.currentPage == paginator.firstPage %}class="disabled"{% endif %}><a  href="{{ paginator.getPageUrl(paginator.previousPage) }}">{{'paginator.lastPage'|trans}}</a></li>
+  {% for page in paginator.pages %}
+    <li {% if page == paginator.currentPage %}class="active"{% endif %}><a href="{{ paginator.getPageUrl(page) }}">{{ page }}</a></li>
+  {% endfor %}
+  <li {% if paginator.currentPage == paginator.lastPage %}class="disabled"{% endif %}><a  href="{{ paginator.getPageUrl(paginator.nextPage) }}">{{'paginator.nextPage'|trans}}</a></li>
+</ul>
+{% endmacro %}

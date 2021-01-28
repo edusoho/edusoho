@@ -1,0 +1,84 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'modal-lg' %}
+{% block title %}{{ 'admin.classroom_manage.chooser.classroom'|trans }}{% endblock %}
+{% block body %}
+
+<form id="message-search-form" class="form-inline well well-sm" action="{{ path('admin_classroom_chooser') }}" method="get" novalidate>
+	<div class="form-group">
+	  <select class="form-control" name="categoryId">
+	    {{ select_options(category_choices('classroom'), app.request.query.get('categoryId'), 'admin.classroom_manage.chooser.category'|trans) }}
+	  </select>
+	</div>
+	<div class="form-group">
+	  <select class="form-control" name="status">
+	    {{ select_options(dict('courseStatus'), app.request.query.get('status'), 'admin.classroom_manage.chooser.status'|trans) }}
+	  </select>
+	</div>
+	<div class="form-group">
+	  <input class="form-control" type="text" placeholder="{{ 'admin.classroom_manage.chooser.title_placeholder'|trans }}" name="titleLike" value="{{ app.request.get('titleLike') }}">
+	</div>
+	<button class="btn btn-primary">{{ 'form.btn.search'|trans }}</button>
+</form>
+
+<table class="table table-striped table-hover" id="classroom-table">
+	<thead>
+		<tr>
+		 <th>{{ 'admin.classroom_manage.chooser.num'|trans }}</th>
+	     <th width="30%">{{ 'admin.classroom_manage.chooser.name'|trans }}</th>
+	     <th>{{'admin.classroom_manage.chooser.student_num'|trans }}</th>
+	     <th>{{ 'admin.classroom_manage.chooser.price'|trans }}</th>
+	     <th>{{ 'admin.classroom_manage.chooser.status'|trans }}</th>
+	     <th>{{ 'admin.classroom_manage.chooser.operation'|trans }}</th>
+		</tr>
+	</thead>
+	<tbody>
+	  {% for classroom in classrooms %}
+	    {% set category = categories[classroom.categoryId]|default(null) %}
+		{% import "admin/macro.html.twig" as admin_macro %}
+		<tr id="course-tr-{{ classroom.id }}">
+		  <td>{{ classroom.id }}</td>
+		  <td>
+		    <a href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank"><strong>{{ classroom.title }}</strong></a>
+		    <br>
+		    <span class="text-muted text-sm">{{ 'admin.classroom_manage.manage.category'|trans }}：{{ category.name|default('--') }}</span>
+		    {% if classroom.recommended %}
+		      <span class="label label-default">{{ 'admin.classroom_manage.chooser.recommend'|trans }}：{{ classroom.recommendedTime|date('Y-m-d') }}</span>
+		    {% endif %}
+		  </td>
+		  <td>{{ classroom.studentNum }}</td>
+		  <td class="text-danger">
+		   	{% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+            	{% if classroom.price > 0 %}
+                    {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
+                {% else %}
+                     {{ 'admin.classroom_manage.chooser.free'|trans }}
+                {% endif %}
+            {% else %}
+                {% if classroom.price > 0 %}
+                 	{{ classroom.price }}{{ 'site.currency.CNY'|trans }}
+                {% else %}
+                    {{ 'admin.classroom_manage.chooser.free'|trans }}
+                {% endif %}
+            {% endif %}
+		  </td>
+		  <td>{{ dict_text('courseStatus:html', classroom.status) }}</td>
+		  
+		  <td>
+		 	<button type="button" class="btn btn-primary btn-sm choose-classroom" data-target="{{ classroom.id }}" data-name="{{ classroom.title}}">{{ 'admin.classroom_manage.chooser.select_btn'|trans }}</button>
+		  </td>
+		</tr>
+	  {% else %}
+	    <tr><td colspan="20"><div class="empty">{{ 'admin.classroom_manage.chooser.empty'|trans({'%classroomName%':setting('classroom.name','classroom'|trans)}) }}</div></td></tr>
+	  {% endfor %}
+	</tbody>
+</table>
+
+{{ admin_macro.paginator(paginator) }}
+
+{% endblock %}
+{% block footer %}
+  <button type="button" class="btn btn-default pull-right" data-dismiss="modal">{{ 'form.radio_btn.close'|trans }}</button>
+  
+  <script>app.load('topxiaadminbundle/controller/classroom/chooser');</script>
+{% endblock %}

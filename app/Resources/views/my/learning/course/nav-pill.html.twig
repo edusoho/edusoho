@@ -1,0 +1,5 @@
+<ul class="cd-tabs">
+	<li{% if tab_nav == 'learning' %} class="active"{% endif %}><a href="{{ path('my_courses_learning') }}">{{'my.learning.course.learning'|trans}}</a></li>
+	<li{% if tab_nav == 'learned' %} class="active"{% endif %}><a href="{{ path('my_courses_learned') }}">{{'my.learning.course.learned'|trans}}</a></li>
+	<li{% if tab_nav == 'favorited' %} class="active"{% endif %}><a href="{{ path('my_course_sets_favorite') }}">{{'my.learning.course.favorite'|trans}}</a></li>
+</ul>

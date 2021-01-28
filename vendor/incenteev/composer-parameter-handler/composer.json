@@ -1,0 +1,30 @@
+{
+    "name": "incenteev/composer-parameter-handler",
+    "description": "Composer script handling your ignored parameter file",
+    "keywords": ["parameters management"],
+    "homepage": "https://github.com/Incenteev/ParameterHandler",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Christophe Coevoet",
+            "email": "stof@notk.org"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "symfony/yaml": "^2.3 || ^3.0 || ^4.0"
+    },
+    "require-dev": {
+        "composer/composer": "^1.0@dev",
+        "symfony/filesystem": "^2.3 || ^3 || ^4",
+        "symfony/phpunit-bridge": "^4.0"
+    },
+    "autoload": {
+        "psr-4": { "Incenteev\\ParameterHandler\\": "" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.1.x-dev"
+        }
+    }
+}

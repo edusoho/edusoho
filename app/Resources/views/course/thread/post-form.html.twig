@@ -1,0 +1,59 @@
+{% extends 'course/course-show.html.twig' %}
+
+{% set nav = 'threads' %}
+
+{% set post = post|default(null) %}
+
+{% block title %}{% if post %}{{'course.thread.post_form.edit'|trans}}{% else %}{{'course.thread.post_form.post'|trans}}{% endif %} - {{ parent() }}{% endblock %}
+
+{% do script(['libs/es-ckeditor/ckeditor.js', 'libs/jquery-validation.js', 'app/js/course/thread-post-form/index.js']) %}
+
+{% block detail_content %}
+
+<form id="thread-post-form" method="post"
+  {% if post %}
+    action="{{ path('course_thread_post_edit', {courseId:course.id, threadId:post.threadId, postId:post.id}) }}"
+  {% else %}
+    action="{{ path('course_thread_post', {courseId:course.id, postId:post.id}) }}"
+  {% endif %}
+  >
+  <div class="form-group">
+    <div class="controls">
+      {{
+        form_widget(
+          form.content, {
+            attr:{
+              class:'form-control',
+              rows:15,
+              'data-display':'course.thread.post_form.content'|trans,
+              'data-image-upload-url': path(
+                'editor_upload', {
+                  token:upload_token('course')
+                }
+              ),
+              'data-image-download-url': path(
+                'editor_download', {
+                  token:upload_token('course')
+                }
+              )
+            }
+          }
+        )
+      }}
+    </div>
+  </div>
+
+  {{ render(controller('AppBundle:File/Attachment:formFields', {targetType: 'course.thread.post', targetId: post.id|default(0)}, {'showLabel':false})) }}
+
+  <div class="form-group">
+    <div class="controls clearfix">
+      {{ form_rest(form) }}
+      <button type="button" class="btn btn-primary pull-right js-btn-thread-save" data-loading-text="{{'course.thread.post_form.create_tips'|trans}}">{{'course.thread.post_form.create_btn'|trans}}</button>
+      <a href="{{ path('my_course_show', {id: course.id, tab: thread.type, type: thread.type}) }}" class="btn btn-link pull-right">{{'form.btn.cancel'|trans}}</a>
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+
+{% endblock %}

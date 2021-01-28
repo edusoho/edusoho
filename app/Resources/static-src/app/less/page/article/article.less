@@ -1,0 +1,226 @@
+// 轮播
+.aricle-carousel {
+  overflow: hidden;
+  .swiper-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    .border-radius;
+  }
+  .swiper-slide {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    img {
+      width: 100%;
+      .border-radius;
+    }
+    .image-overlay {
+      .border-radius;
+    }
+  }
+  .swiper-cat {
+    position: absolute;
+    bottom: 80px;
+    left: 20px;
+    right: 20px;
+    .opacity(0.7);
+    color: #fff;
+    z-index: 1;
+  }
+  .swiper-caption {
+    position: absolute;
+    font-size: 24px;
+    left: 20px;
+    right: 20px;
+    bottom: 40px;
+    color: #ffffff;
+    z-index: 1;
+    .text-overflow;
+    @media (max-width: @screen-md-max) {
+      font-size: 20px;
+    }
+    @media (max-width: @screen-sm-max) {
+      font-size: 18px;
+    }
+    @media (max-width: @screen-xs-max) {
+      font-size: 16px;
+      bottom: 10px;
+    }
+  }
+  .swiper-pager {
+    position: absolute;
+    bottom: 10px;
+    z-index: 100;
+    width: 100%;
+    text-align: center;
+    @media (max-width: @screen-xs-max) {
+      display: none;
+    }
+    span {
+      font-size: 0;
+      margin: 0 5px;
+      width: 10px;
+      height: 10px;
+      display: inline-block;
+      background: none;
+      border: 1px solid #fff;
+      .border-radius(50%);
+      &:hover,
+      &.swiper-active-switch {
+        background: #fff;
+        color: @brand-primary;
+        .opacity(1);
+      }
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.topic-post-small {
+  position: relative;
+  color: #fff;
+  border-collapse: collapse; 
+  display: block;
+  color: #fff;
+  + .topic-post-small {
+    margin-top: 12px;
+  }
+  &:hover {
+    color: #fff;
+    .es-transition;
+    .image-overlay {
+      .es-transition;
+      .opacity(0.2);
+    }
+  }
+  img {
+    .border-radius;
+  }
+  .content {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 20px;
+    z-index: 1;
+    .title {
+      margin: 0;
+      line-height: 25px;
+      .text-overflow;
+    }
+    p {
+      margin-bottom: 5px;
+      font-size: 12px;
+      .opacity(0.7);
+    }
+  }
+}
+
+.article-list {
+  .article-item {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid @gray-lighter;
+    @media (max-width: @screen-xs-max) {
+      .media-left {
+        width: 100%;
+        display: block;
+        padding-right: 0;
+        margin-bottom: 10px;
+      }
+      .media .thumb-img {
+        width: 100%;
+      }
+    }
+    .content {
+      margin-top: 15px;
+      color: @gray;
+    }
+  }
+  .media {
+    color: @gray;
+    .media-body {
+      padding-left: 10px;
+      line-height: 25px;
+    }
+    .thumb-img {
+      width: 260px;
+      .border-radius;
+    }
+  }
+  .pager {
+    margin: 40px 0 20px 0;
+  }
+}
+
+.article-metas {
+  overflow: hidden;
+  .date {
+    height: 45px;
+    width: 45px;
+    // margin-top: 10px;
+    text-align: center;
+    color: @gray;
+    background-color: @gray-lighter;
+    border-radius: 50%;
+    .day {
+      padding-top: 5px;
+      font-size: 16px;
+      line-height: 1.2;
+    }
+    .month {
+      font-size: 12px;
+    }
+  }
+  .metas-body {
+    padding-left: 60px;
+    p {
+      margin-bottom: 0;
+      // margin-top: 10px;
+      font-size: 12px;
+    }
+    .title {
+      margin: 0;
+      line-height: 32px;
+      @media (max-width: @screen-md-max) {
+        font-size: 20px;
+        line-height: 30px;
+      }
+      @media (max-width: @screen-xs-max) {
+        font-size: 16px;
+        line-height: 20px;
+      }
+      a {
+        color: @gray-dark;
+        .es-transition;
+        &:hover {
+          color: @brand-primary;
+          .es-transition;
+        }
+      }
+    }
+    .sns {
+      color: @gray;
+      margin: 10px auto;
+      span {
+        margin-right: 10px;
+        i {
+          margin-right: 5px;
+        }
+      }
+    }
+  }
+}
+
+.article-sns {
+  a.love,
+  .es-share > a {
+    &:hover {
+      color: @brand-primary;
+    }
+  }
+}
+

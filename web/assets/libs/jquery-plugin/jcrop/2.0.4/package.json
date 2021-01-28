@@ -1,0 +1,29 @@
+{
+  "family": "jquery-plugin",
+  "name": "jcrop",
+  "version": "0.9.12",
+  "description": " Image Cropping Plugin for jQuery!",
+  "homepage": "http://deepliquid.com/content/Jcrop.html",
+  "author": {
+    "name": "tapmodo",
+    "url": "https://github.com/tapmodo"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tapmodo/Jcrop.git"
+  },
+  "bugs": "https://github.com/tapmodo/Jcrop/issues",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://raw.github.com/tapmodo/Jcrop/master/MIT-LICENSE.txt"
+    }
+  ],
+  "keywords": [ "jquery", "crop", "jcrop"],
+  "spm": {
+    "alias": {
+      "$": "$"
+    },
+    "output": [ "jcrop.js", "jcrop.css", "jcrop.gif" ]
+  }
+}

@@ -1,0 +1,71 @@
+.open-course-lesson,
+.live-course-lesson {
+  margin: 0 10px 0 40px;
+  padding: 0;
+  list-style: none;
+  border-left: 2px solid #f1f1f1;
+}
+
+.open-course-lesson-item,
+.live-course-lesson-item {
+  margin-left: 24px;
+  .item-line {
+    float: left;
+    margin-top: 8px;
+    margin-left: -24px;
+    height: 21px;
+    width: 24px;
+    vertical-align: top;
+    display: inline-block;
+    border-bottom: 2px solid #f1f1f1;
+  }
+  .item-content {
+    float: left;
+    margin-left: 0;
+    padding: 0 24px;
+    width: 100%;
+    height: 56px;
+    line-height: 56px;
+    background: @cd-bg-light;
+    .cd-border-radius;
+    color: @cd-dark-major;
+    overflow: hidden;
+  }
+  .item-actions {
+    position: absolute;
+    right: 56px;
+    padding-right: 0;
+    height: 56px;
+    line-height: 56px;
+    font-size: 16px;
+    &:hover {
+      cursor: pointer;
+    }
+    .item-actions__btn {
+      vertical-align: middle;
+    }
+  }
+
+  .open-course-lesson-item__dropdown {
+    top: 31px;
+    text-align: center;
+  }
+}
+
+.open-course-heading {
+  padding: 16px 32px;
+  .open-course-heading__title {
+    line-height: 32px;
+  }
+}
+
+.course-manage-info {
+  .start-form-group {
+    .form-error-message {
+      position: inherit;
+      margin-top: 5px;
+      height: 22px;
+      line-height: 22px;
+    }
+  }
+}

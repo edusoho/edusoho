@@ -1,0 +1,11 @@
+{% extends 'layout.html.twig' %}
+
+{%- block title -%}
+  {{ lesson.title }}
+{%- endblock -%}
+
+{% do script(['app/js/live-course/classroom/index.js']) %}
+
+{% block body %}
+  <div id="classroom-url" data-url="{{ url }}" class="well well-lg text-center color-success">{{'course.live.enter_classroom_tips'|trans}}...</div>
+{% endblock %}

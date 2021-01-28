@@ -1,0 +1,13 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{'announcement.modal.classroom_nojoin.title'|trans}}{% endblock %}
+
+{% block body %}
+	<h4>{{'announcement.modal.classroom_nojoin.tips'|trans({'%classroomName%': targetObject.name|default('site.default.classroom'|trans) })}}</h4>
+{% endblock %}
+
+{% block footer %}
+    {% if not targetObject.private %}
+      <a href="{{ path('classroom_become_auditor', {id:targetObject.id}) }}" class="btn btn-primary">{{'announcement.modal.classroom_nojoin.become_auditor'|trans}}</a>
+   {% endif %}
+{% endblock %}

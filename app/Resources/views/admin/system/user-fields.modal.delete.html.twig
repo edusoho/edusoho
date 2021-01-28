@@ -1,0 +1,27 @@
+<div  id="modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">{{'admin.user_fields.modal.delete_field'|trans}}</h4>
+      </div>
+      <form method="post" class="form-horizontal" id="field-save-form" action="{{url('admin_user_fields_delete',{id:field.id})}}">
+      <div class="modal-body">
+
+            <div class="form-group ">
+             <label class="col-md-10 col-md-offset-2" for=
+             "title">
+              {{'admin.user_fields.modal.delete_field_tips'|trans({'%title%':field.title})|raw}}
+            </label>
+            </div>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+       </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
+        <button type="submit" class="btn btn-primary" id="save-btn">{{'admin.user_fields.modal.confirm_delete_btn'|trans}}</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>

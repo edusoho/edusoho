@@ -1,0 +1,22 @@
+--TEST--
+Test padding optimization (no optimization)
+--CSS--
+a { 
+    padding-left: 10px;
+    padding-right: 11px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+--EXPECT--
+array (
+  'a' => 
+  array (
+    'padding-right' => '10px',
+    'padding-left' => '11px',
+    'padding-top' => '10px',
+    'padding-bottom' => '10px',
+  ),
+)
+--SETTINGS--
+optimise_shorthands=0
+reverse_left_and_right=true

@@ -1,0 +1,12 @@
+{% do script(['app/js/default/header/index.js']) %}
+{% set navigations = data('NavigationsTree', {}) %}
+
+<header class="es-header navbar">
+  {% include 'default/header/logo.html.twig' %}
+  <nav class="collapse navbar-collapse">
+    <ul class="nav navbar-nav clearfix hidden-xs " id="nav">
+      {% include 'default/top-navigation.html.twig' with {navigations: navigations,siteNav: siteNav|default(null), isMobile: false} %}
+    </ul>
+    {% include 'default/header/user-operation.html.twig' %}
+  </nav>
+</header>

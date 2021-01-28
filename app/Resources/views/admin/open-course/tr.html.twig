@@ -1,0 +1,62 @@
+{% import "admin/macro.html.twig" as admin_macro %}
+{% import "common/data-dict-macro.html.twig" as dict_macro %}
+{% set target = ''~filter~'_index' %}
+<tr id="course-tr-{{ course.id }}">
+  {% include 'org/parts/table-body-checkbox.html.twig' %}
+  <td>{{ course.id }}</td>
+  <td>
+    <a href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank"><strong>{{ course.title }}</strong></a>
+    
+    {% if course.type == 'liveOpen' %}
+      <span class="label label-success live-label mls">{{ 'admin.open_manage.manage.live_course'|trans }}</span>
+    {% endif %}
+
+    <br>
+    <span class="text-muted text-sm">{{ 'admin.open_manage.category'|trans({'%categoryName%': category.name|default('--')}) }}</span> 
+    {% if course.recommended %}
+      <span class="label label-default">{{ 'admin.open_manage.manage.recommend'|trans({'%recommendedTime%': course.recommendedTime|date('Y-m-d'), '%recommendedSeq%': course.recommendedSeq}) }}</span>
+    {% endif %}
+  </td>
+    
+  <td>{{ dict_macro.courseStatus(course.status) }}</td>
+  {% include 'org/parts/table-body-td.html.twig' with {orgCode: course.orgCode} %}
+  <td>
+    {{ admin_macro.user_link(user) }}
+    <br>
+    <span class="text-muted text-sm">{{ course.createdTime|date('Y-m-d H:i') }}</span>
+  </td>
+  <td>
+    <div class="btn-group">
+      <a class="btn btn-default btn-sm" href="{{ path('open_course_manage', {id:course.id,filter:filter}) }}" target="_blank">{{ 'admin.open_manage.manage.manage_btn'|trans }}</a>
+
+      <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu pull-right">
+    
+        {% if not course.recommended %}
+          <li><a class="recommend-course" href="#modal" data-toggle="modal" data-url="{{ path('admin_open_course_recommend', {id:course.id, ref:'courseList', filter:filter}) }}"><span class="glyphicon glyphicon-hand-up"></span> {{ 'admin.open_manage.manage.recommend_course_btn'|trans }}</a></li>
+        {% endif %}
+
+        {% if course.recommended %}
+          <li><a class="cancel-recommend-course" href="javascript:" data-url="{{ path('admin_open_course_cancel_recommend', {id:course.id, filter:filter,target:target}) }}"><span class="glyphicon glyphicon-hand-right"></span> {{ 'admin.open_manage.cancel_recommend_btn'|trans }}</a></li>
+        {% endif %}
+
+        {% if course.status == 'published' %}
+          <li class="divider"></li>
+          <li><a class="close-course" href="javascript:" data-url="{{ path('admin_open_course_close', {id:course.id, filter:filter}) }}" data-user="{{default.user_name|default('admin.open_manage.manage.student'|trans)}}"><span class="glyphicon glyphicon-ban-circle"></span> {{ 'admin.open_manage.manage.closed_course_btn'|trans }}</a></li>
+        {% endif %}
+
+        {% if course.status != 'published' %}
+          <li class="divider"></li>
+          <li><a class="publish-course" href="javascript:" data-url="{{ path('admin_open_course_publish', {id:course.id, filter:filter}) }}"><span class="glyphicon glyphicon-ok-circle"></span> {{ 'admin.open_manage.manage.publish_course_btn'|trans }}</a></li>
+        {% endif %}
+
+        {% if course.status != 'published' and app.user.isSuperAdmin() %}
+          <li class="divider"></li>
+          <li><a class="delete-course" href="javascript:;" data-url="{{ path('admin_open_course_delete', {courseId:course.id,type:'',filter:filter}) }}"  data-chapter="{{default.chapter_name|default('admin.open_manage.chapter'|trans)}}" data-part="{{default.part_name|default('admin.open_manage.section'|trans)}}" data-user="{{default.user_name|default('admin.open_manage.student'|trans)}}"><span class="glyphicon glyphicon-trash"></span> {{ 'admin.open_manage.manage.delete_course_btn'|trans }}</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </td>
+</tr>

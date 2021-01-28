@@ -1,0 +1,83 @@
+{% macro user_link(user, class) %}
+  {% if user %}
+		<a {% if class %}class="{{ class }}"{% endif %} href="javascript:;" role="show-user" data-toggle="modal" data-target="#modal" data-url="{{ url('admin_user_show', {id:user.id}) }}">{{ user.nickname }}</a>
+	{% else %}
+	  <span class="text-muted">{{'admin.macro.user_link.user_empty'|trans}}</span>
+	{% endif %}
+{% endmacro %}
+
+{% macro bytesToSize(bytes) %}
+	{% spaceless %}
+	    
+	    {% set kilobyte = 1024 %}
+	    {% set megabyte = kilobyte * 1024 %}
+	    {% set gigabyte = megabyte * 1024 %}
+	    {% set terabyte = gigabyte * 1024 %}
+
+	    {% if bytes < kilobyte %}
+	        {{ bytes ~ ' B' }}
+	    {% elseif bytes < megabyte %}
+	        {{ (bytes / kilobyte)|number_format(2, '.') ~ ' KB' }}
+	    {% elseif bytes < gigabyte %}
+	        {{ (bytes / megabyte)|number_format(2, '.') ~ ' MB' }}
+	    {% elseif bytes < terabyte %}
+	        {{ (bytes / gigabyte)|number_format(2, '.') ~ ' GB' }}
+	    {% else %}
+	        {{ (bytes / terabyte)|number_format(2, '.') ~ ' TB' }}
+	    {% endif %}
+
+	{% endspaceless %}
+{% endmacro %}
+
+{% macro paginator(paginator, class) %}
+  {% if paginator.lastPage|default() > 1 %}
+    <nav class="admin-pagination {{ class|default('text-center') }}">
+      <ul class="pagination">
+        {% if paginator.currentPage != paginator.firstPage %}
+          <li><a  href="{{ paginator.getPageUrl(paginator.firstPage) }}">{{ 'paginator.firstPage'|trans }}</a></li>
+          <li><a  href="{{ paginator.getPageUrl(paginator.previousPage) }}"><i class="es-icon es-icon-chevronleft"></i></a></li>
+        {% endif %}
+        {% for page in paginator.pages %}
+          <li {% if page == paginator.currentPage %}class="active"{% endif %}><a href="{{ paginator.getPageUrl(page) }}">{{ page }}</a></li>
+        {% endfor %}
+
+        {% if paginator.currentPage != paginator.lastPage %}
+          <li><a  href="{{ paginator.getPageUrl(paginator.nextPage) }}"><i class="es-icon es-icon-chevronright"></i></a></li>
+          <li><a  href="{{ paginator.getPageUrl(paginator.getLastPage()) }}">{{ 'paginator.endPage'|trans }}</a></li>
+        {% endif %}
+      </ul>
+      <span class="page-num">
+				{{ (paginator.currentPage - 1) * paginator.perPageCount + 1 }}
+      	-
+	      {% if paginator.currentPage == paginator.lastPage %}
+	        {{ paginator.itemCount }}
+	      {% else %}
+	        {{ paginator.currentPage * paginator.perPageCount }}
+	      {% endif %}
+	      / {{ paginator.itemCount }}
+	    </span>
+    </nav>
+    
+  {% endif %}
+{% endmacro %}
+
+{% macro ajax_paginator(paginator, class)  %}
+  {% if paginator.lastPage > 1 %}
+    <nav class="admin-pagination {{ class|default('text-center') }}">
+      <ul class="pagination">
+        {% if paginator.currentPage != paginator.firstPage %}
+          <li data-url="{{ paginator.getPageUrl(paginator.firstPage) }}" data-page="{{paginator.firstPage}}"><span style="cursor:pointer;">{{ 'paginator.firstPage'|trans }}</span></li>
+          <li data-url="{{ paginator.getPageUrl(paginator.previousPage) }}" data-page="{{paginator.previousPage}}"><span style="cursor:pointer;"><i class="es-icon es-icon-chevronleft"></i></span></li>
+        {% endif %}
+        {% for page in paginator.pages %}
+          <li {% if page == paginator.currentPage %}class="active"{% endif %} data-url="{{ paginator.getPageUrl(page) }}" data-page="{{page}}"><span style="cursor:pointer;">{{ page }}</span></li>
+        {% endfor %}
+
+        {% if paginator.currentPage != paginator.lastPage %}
+          <li data-url="{{ paginator.getPageUrl(paginator.nextPage) }}" data-page="{{paginator.nextPage}}"><span style="cursor:pointer;"><i class="es-icon es-icon-chevronright"></i></span></li>
+          <li data-url="{{ paginator.getPageUrl(paginator.getLastPage) }}" data-page="{{paginator.getLastPage}}"><span style="cursor:pointer;">{{ 'paginator.endPage'|trans }}</span></li>
+        {% endif %}
+      </ul>
+    </nav>
+  {% endif %}
+{% endmacro %}

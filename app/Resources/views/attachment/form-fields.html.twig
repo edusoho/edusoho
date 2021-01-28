@@ -1,0 +1,54 @@
+{% if setting('cloud_attachment.enable') and setting('cloud_attachment.' ~ target ) and setting('storage.upload_mode') == 'cloud' %}
+  {% set ids_class  = (useType == true) ? 'js-attachment-ids-'~fileType  : 'js-attachment-ids'%}
+  {% set list_class  = (useType == true) ? 'js-attachment-list-'~fileType  : 'js-attachment-list'%}
+  {% set reupload = attachments|default()|length %}
+
+  {% if bundle_namespace|default(null) == 'admin' %}
+    {% include 'seajs_loader_compatible.html.twig' with {topxiaadminbundle: true } %}
+  {% else %}
+    {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true } %}
+  {% endif %}  
+  
+  <div class="form-group">
+    {% if showLabel|default(false) %}
+      <label class="col-xs-2 control-label" for="thread_title">{% if targetType == 'question.stem' %}{{ 'group.thread.create.question_stem_attachment'|trans }}{% elseif targetType == 'question.analysis' %}{{ 'group.thread.create.analysis_attachment'|trans }}{% else %}{{ 'group.thread.create.attachments'|trans }}{% endif %}</label>
+      <div class="col-xs-7 controls">
+    {% else %}
+      <div class="controls"> 
+    {% endif %}
+      <div class="js-attachment-list {{list_class}}" style="line-height:60px">
+        {% for attachment in attachments  if attachment.file %}
+          <div class="well well-sm">
+            <img class="mrm" src="{{ asset('assets/img/default/cloud_' ~ attachment.file.type ~ '.png') }}" height="60px" width="107px">
+            {{ attachment.file.filename }}
+            <button class="btn btn-link js-attachment-delete pull-right" data-url="{{path('attachment_delete',{id:attachment.id})  }}" type="button" style="margin-top:13px" data-role="delte-item" data-loading-text="{{'form.btn.delete.submiting'|trans}}">{{ 'form.btn.delete'|trans }}</button> 
+            <a class="btn btn-link pull-right" href="javascript:;" style="margin-top:13px" data-url="{{ path('attachment_preview', {'id': attachment.id}) }}" data-toggle="modal" data-target="#modal">{{ 'group.thread.create.preview'|trans }}</a>
+          </div>
+        {% endfor %}
+      </div>
+      
+      <a class="cd-btn cd-btn-primary js-upload-file" {% if reupload %}style="display: none;"{% endif %} data-toggle="modal" data-backdrop="static"
+         data-target="#attachment-modal"
+         data-url="{{ path('attachment_upload', {useSeajs: useSeajs|default(false), idsClass: ids_class, listClass : list_class, token:uploader_token('attachment', app.user.id, 'private'), currentTarget:currentTarget}) }}"
+         title="{{ 'attachments.upload'|trans }}" data-placement="bottom" data-title="{{ 'attachments.upload'|trans }}">
+         {{ 'attachments.upload'|trans }}
+      </a>
+    </div>
+    {# 应该标记该附件是否新增,或者修改 #}
+    
+    <input class="{{ids_class}}" 
+      value="{{ attachments|array_column('fileId')|join(',') }}" 
+      name="{% if useType|default(false)%}attachment[{{fileType}}][fileIds]{% else %}attachment[fileIds]{% endif %}" 
+      type="hidden" data-role="fileId">
+
+    <input class="js-file-target-type" 
+      value="{{ targetType }}" 
+      name="{% if useType|default(false)%}attachment[{{fileType}}][targetType]{% else %}attachment[targetType]{% endif %}"
+      type="hidden">
+
+    <input class="js-file-type" 
+      value="{{ type }}" 
+      name="{% if useType|default(false)%}attachment[{{fileType}}][type]{% else %}attachment[type]{% endif %}"
+      type="hidden">
+  </div>
+  {% endif %}

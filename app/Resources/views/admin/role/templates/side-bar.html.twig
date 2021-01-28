@@ -1,0 +1,26 @@
+{% for groupedPermissions in grouped_permissions(menu|parent_permission.code|parent_permission.code|default(null)) %}
+  <div class="list-group left-navbar">
+
+    {# 兼容菜单配置中单词错误拼写：visable 正确为：visible  等插件全部更新完毕删除此代码 #}
+    {% set groupedPermissions = arrays_key_convert(groupedPermissions, 'visable', 'visible') %}
+    {# 兼容代码结束 #}
+
+    {% for m in groupedPermissions if not m.visible is defined or (m.visible is defined and eval_expression(m.visible)) %}
+      {% set menuClass = (m.code == menu|parent_permission.code|default(null) ? 'list-group-item active' : 'list-group-item') %}
+
+      {% set tabMenu = first_child_permission(m) %}
+      {% if tabMenu.mode|default('') == 'capsules' %}
+        {% set tabMenu = first_child_permission(tabMenu) %}
+      {% endif %}
+
+      <a
+          id="menu_{{ m.code|default() }}"
+          title="{{ m.name|trans({}, 'menu') }}"
+          class="{{ menuClass }}"
+          href="{{ permission_path(tabMenu) }}"
+      >
+        {{ m.name|trans({}, 'menu') }}
+      </a>
+    {% endfor %}
+  </div>
+{% endfor %}

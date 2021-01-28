@@ -1,0 +1,41 @@
+{% extends 'layout.html.twig' %}
+{% block title %}{{'auth.email-change.title'|trans}} - {{ parent() }}{% endblock %}
+{% do script(['libs/jquery-validation.js']) %}
+{% block content %}
+<div class="row">
+  <div class="col-md-6 col-md-offset-3 ptl">
+    <div class="panel panel-default panel-page">
+      <div class="panel-heading"><h2>{{'auth.email-change.title'|trans}}</h2></div>
+
+      <form id="setting-email-form" class="form-horizontal" method="post" >
+        {{ web_macro.flash_messages() }}
+
+        <div class="form-group">
+          <div class="col-md-3 control-label"><label>{{'auth.email-change.new_email'|trans}}</label></div>
+          <div class="col-md-9 controls">
+            <span class="form-control-static">{{ newEmail }}</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-3 control-label"><label for="password-field">{{'auth.email-change.password_field'|trans}}</label></div>
+          <div class="col-md-9 controls">
+            <input type="password" name="password" class="form-control" id="password-field" />
+            <p class="help-block">{{'auth.email-change.password_field.help_block'|trans}}</p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-3 control-label"></div>
+          <div class="col-md-9 controls">
+            <button type="submit" id="set-email-btn" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
+          </div>
+        </div>
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      </form>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

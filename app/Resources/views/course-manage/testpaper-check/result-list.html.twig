@@ -1,0 +1,38 @@
+{% extends 'course-manage/layout.html.twig' %}
+
+{% block title %}{{ testpaper.name }} - {{'course.testpaper_check'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
+{% import 'macro.html.twig' as macro %}
+{% block main_heading_class %}course-main-header{% endblock %}
+{% block main_heading %}
+  <div class="cd-main__title">
+    {% if course.title is empty() %}{{ courseSet.title }}{% else %}{{ course.title }}{% endif %}<span class="mh5">／</span>{{ testpaper.name }}
+  </div>
+  {% if course.status != 'published' %}
+    <div class="course-main-header__operation">
+      <button class="cd-btn cd-btn-success cd-btn-sm pull-right js-publish-course"
+        data-url="{{ path('course_set_manage_course_publish', {courseSetId: courseSet.id, courseId: course.id}) }}"
+        data-pre-url="{{ path('course_set_manage_course_pre_publish', {courseSetId: courseSet.id, courseId: course.id}) }}"
+        data-save-url="{{ path('course_set_manage_course_publish_set_title', {courseSetId: courseSet.id, courseId: course.id}) }}">
+        {{ 'testpaper.check.course.publish_btn'|trans }}
+      </button>
+    </div>
+  {% endif %}
+{% endblock %}
+{% set course_side_nav = 'testpaper-check' %}
+{% if activity.mediaType|default('') == 'homework' %}
+  {% set course_side_nav = 'homework-check' %}
+  {% set typeName = 'testpaper.check.homework'|trans %}
+{% else %}
+  {% set course_side_nav = 'testpaper-check' %}
+  {% set typeName = 'testpaper.check.testpaper'|trans %}
+{% endif %}
+
+{% block main_body %}
+  <div>
+    {#添加admin_v2#}
+    {% if isTeacher is defined and not isTeacher and (not has_permission('admin_course_manage') or not has_permission('admin_v2_course_manage')) %}
+      <span class="color-danger">{{'testpaper.check.not_isTeacher.tips'|trans({'%typeName%':typeName}) }}</span>
+    {% endif %}
+    {{ render(controller('AppBundle:Testpaper/Manage:resultList',{request:app.request,testpaperId:testpaper.id,source:'course',targetId:course.id, activityId: activityId})) }}
+  </div>
+{% endblock %}

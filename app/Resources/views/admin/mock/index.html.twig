@@ -1,0 +1,17 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_setting_message' %}
+{% set script_controller = 'mock/index' %}
+
+{% block content %}
+  <select class="tagContentSelector">
+    <option value="distributor">分销模拟</option>
+    <option value="marketing">微营销模拟</option>
+    <option value="other">其他模拟</option>
+  </select>
+  <br>
+
+  {% include 'admin/mock/content-distributor.html.twig' %}
+  {% include 'admin/mock/content-marketing.html.twig' %}
+  {% include 'admin/mock/content-other.html.twig' %}
+{% endblock %}

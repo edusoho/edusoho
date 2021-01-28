@@ -1,0 +1,72 @@
+{% import 'macro.html.twig' as macro %}
+{% autoescape false %}
+  <li class="media">
+    <div class="pull-left">
+      <span class="glyphicon glyphicon-volume-down media-object"></span>
+    </div>
+    <div class="media-body">
+      <div class="notification-body">
+        {% set data = notification.content %}
+
+        {% if data.userId|default(false) %}
+          {% set who = macro.link(data.userName, path('user_show', {id:data.userId})) %}
+        {% endif %}
+
+        {% if data.type == 'at' %}
+          {% set thread = dict_text('threadType', data.threadType|default('discussion'))~macro.link(data.title, path('course_thread_show', {courseId:data.courseId,threadId:data.id})~'#post-'~data.postId) %}
+          {{ 'notification.course-thread.at'|trans({'%who%':who, '%thread%':thread}) }}
+
+        {% elseif data.type == 'reply' %}
+          {% set thread = dict_text('threadType', data.threadType|default('discussion'))~macro.link(data.title, path('course_thread_show', {courseId:data.courseId,threadId:data.id})~'#post-'~data.postId) %}
+          {{ 'notification.course-thread.reply'|trans({'%who%':who, '%thread%':thread}) }}
+
+        {% elseif data.type == 'replayat' %}
+          {% set thread = dict_text('threadType', data.threadType|default('discussion'))~macro.link(data.title, path('course_thread_show', {courseId:data.courseId,threadId:data.id})~'#post-'~data.postId) %}
+          {{ 'notification.course-thread.replayat'|trans({'%who%':who, '%thread%':thread}) }}
+
+        {% elseif data.type == 'modify-thread' %}
+          {% set thread = dict_text('threadType', data.threadType|default('discussion'))~macro.link(data.title, path('course_thread_show', {courseId:data.courseId,threadId:data.id})~'#post-'~data.postId) %}
+          {{ 'notification.course-thread.modify-thread'|trans({'%thread%':thread}) }}
+
+        {% elseif data.type == 'modify-post' %}
+          {% set thread = dict_text('threadType', data.threadType|default('discussion'))~macro.link(data.title, path('course_thread_show', {courseId:data.courseId,threadId:data.id})~'#post-'~data.postId) %}
+          {{ 'notification.course-thread.modify-post'|trans({'%thread%':thread}) }}
+
+        {% elseif data.type == 'delete' %}
+          {% set thread = dict_text('threadType', data.threadType|default('discussion'))~'<strong class="color-primary">'~data.title~'</strong>' %}
+          {{ 'notification.course-thread.delete'|trans({'%thread%':thread}) }}
+
+        {% elseif data.type == 'delete-post' %}
+          {% set thread = dict_text('threadType', data.threadType|default('discussion'))~macro.link(data.title, path('course_thread_show', {courseId:data.courseId,threadId:data.id})) %}
+          {{ 'notification.course-thread.delete-post'|trans({'%thread%':thread}) }}
+
+        {% elseif data.type == 'modify' %}
+          {% set thread = dict_text('threadType', data.threadType|default('discussion'))~macro.link(data.title, path('course_thread_show', {courseId:data.courseId,threadId:data.id})) %}
+          {{ 'notification.course-thread.modify'|trans({'%thread%':thread}) }}
+
+        {% elseif data.type == 'top' %}
+          {% set thread = dict_text('threadType', data.threadType|default('discussion'))~macro.link(data.title, path('course_thread_show', {courseId:data.courseId,threadId:data.id})) %}
+          {{ 'notification.course-thread.top'|trans({'%thread%':thread}) }}
+
+        {% elseif data.type == 'untop' %}
+          {% set thread = dict_text('threadType', data.threadType|default('discussion'))~macro.link(data.title, path('course_thread_show', {courseId:data.courseId,threadId:data.id})) %}
+          {{ 'notification.course-thread.untop'|trans({'%thread%':thread}) }}
+
+        {% elseif data.type == 'elite' %}
+          {% set thread = dict_text('threadType', data.threadType|default('discussion'))~macro.link(data.title, path('course_thread_show', {courseId:data.courseId,threadId:data.id})) %}
+          {{ 'notification.course-thread.elite'|trans({'%thread%':thread}) }}
+
+        {% elseif data.type == 'unelite' %}
+          {% set thread = dict_text('threadType', data.threadType|default('discussion'))~macro.link(data.title, path('course_thread_show', {courseId:data.courseId,threadId:data.id})) %}
+          {{ 'notification.course-thread.unelite'|trans({'%thread%':thread}) }}
+
+        {% endif %}
+
+        <div class="notification-footer">
+          {{ notification.createdTime|date_format }}
+        </div>
+      </div>
+    </div>
+  </li>
+{% endautoescape %}
+

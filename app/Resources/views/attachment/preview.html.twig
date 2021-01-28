@@ -1,0 +1,19 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% set closeClear = 1 %}
+{% set modal_class = 'modal-lg' %}
+
+{% block title %}
+  {{ 'attachments.preview'|trans }}
+{% endblock %}
+
+{% block body %}
+  <div style="height: 500px; overflow: hidden">
+    <iframe src="{{ path('attachment_player', {id: id}) }}" allowfullscreen webkitallowfullscreen height="100%" width="100%" style="border: 0"></iframe>
+  </div>
+
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-primary" data-dismiss="modal">{{ 'attachments.modal.upload.close_btn'|trans }}</button>
+{% endblock %}

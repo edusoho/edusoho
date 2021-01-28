@@ -1,0 +1,29 @@
+{% extends 'my/learning/course/layout.html.twig' %}
+
+{% block title %}{{ 'my.learning.course.learned'|trans }} - {{ parent() }}{% endblock %}
+
+{% set tab_nav = 'learned' %}
+
+{% block main %}
+  <div class="panel panel-default panel-col">
+    <div class="panel-heading">{{ 'my.learning.course'|trans }}</div>
+
+    <div class="panel-body">
+      {% include 'my/learning/course/nav-pill.html.twig' %}
+      {% set type = 'learned' %}
+      
+      {% for courseSet in courseSets if courseSet %}
+        {% set currentCourses = courses[courseSet.id]|default(null) %}
+        {% set classroom = courseSet['classroom']|default(null) %}
+
+        {% if currentCourses %}
+          {% include 'my/learning/course/courses-block-item.html.twig' %}
+        {% endif %}
+      {% else %}
+        <div class="cd-empty">{{ 'my.learning.course.learned_empty'|trans }}</div>
+      {% endfor %}
+      {{ web_macro.paginator(paginator) }}
+    </div>
+  </div>
+{% endblock %}
+

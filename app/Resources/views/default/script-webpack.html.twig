@@ -1,0 +1,5 @@
+{% do script(['libs/base.js','app/js/common.js','app/js/main.js'], 1000) %}
+
+{{ slot('script.webpack.extension') }}
+
+{% include 'script/script-custom.html.twig' %}

@@ -1,0 +1,39 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{%  set modal_class ="task-state-modal task-finish-modal modal-sm"%}
+
+{% block title %}
+  <i class="es-icon es-icon-iccheckcircleblack24px color-success mrs" style="font-size:20px"></i>
+  {{'course.plan_task.finish_task_title'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}
+{% endblock %}
+
+{% block body %}
+  <div class="content">
+    <div class="content-title">
+      {{'course.plan_task.congratulation_finish'|trans}}
+      <b class="mlm">《 {{task.title}} 》</b>
+    </div>
+    <div class="progress progress-radius progress-md content-progress">
+      <div class="progress-bar progress-bar-left progress-bar-success "  role="progressbar" aria-valuenow="{{finishedRate}}" aria-valuemin="0" aria-valuemax="100" style="width:{{finishedRate}}%;min-width: 15%;">{{finishedRate}}%</div>
+    </div>
+    <span class="color-success">
+      {% if finishedRate == 100 %}
+        {{'course.plan_task.finish_all_course'|trans}}
+      {% else %}
+        {{'course.plan_task.finish_rate_course'|trans({'%finishedRate%': finishedRate})}}
+      {% endif %}
+    </span>
+  </div>
+{% endblock %}
+
+{% block footer %}
+  <div class="es-share top js-es-share">
+    <a class="btn btn-info dropdown-toggle" href="" data-toggle="dropdown">
+      <i class="es-icon es-icon-share mr5"></i>{{'course.plan_task.share'|trans}}
+    </a>
+    {% set courseSet = data('CourseSet',{ id: task.fromCourseSetId })  %}
+    {% include 'common/share-dropdown.html.twig' with {type:'courseSet' , courseSet:courseSet} %}
+  </div>
+  {% if nextTask|default(false) %}
+  <a class="btn btn-primary" href="{{path('course_task_show', {courseId:nextTask.courseId, id:nextTask.id})}}">{{'course.plan_task.next_task'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}</a>
+  {% endif %}
+{% endblock %}

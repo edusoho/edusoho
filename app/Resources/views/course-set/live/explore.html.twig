@@ -1,0 +1,34 @@
+{% extends 'course-set/live/layout.html.twig' %}
+
+{% block title %}{{'course_set.live.title'|trans}} - {{ parent() }}{% endblock %}
+{% do script(['app/js/live-course/explore/index.js'])%}
+
+{% block top_content %}
+  {% cache 'live/top/banner' 600 %}
+    <section class="es-live-poster swiper-container">
+      <div class="swiper-wrapper">
+        {{ block_show('live_top_banner') }}
+      </div>
+      <div class="swiper-pager"></div>
+    </section>
+  {% endcache %}
+{% endblock %}
+{% block live_main %}
+  {% cache 'live/liveTab' 600 %}
+    {{ render(controller('AppBundle:Course/LiveCourseSet:liveTab')) }}
+  {% endcache %}
+
+  {% cache 'live/recommend/course/list' 600 %}
+    {% include 'course-set/live/recommend-course-list.html.twig' %}
+  {% endcache %}
+
+  {% cache 'live/recommend/course/replay/list' 600 %}
+  {{ render(controller('AppBundle:Course/LiveCourseSet:replayList')) }}
+  {% endcache %}
+{% endblock %}
+
+{% block live_side %}
+
+  {{ render(controller('AppBundle:Course/LiveCourseSet:liveCourseSets',{ request:app.request })) }}
+
+{% endblock %}

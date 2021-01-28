@@ -1,0 +1,47 @@
+parameters:
+    session.service_id: session.handler.pdo
+    cookie_domain: ~
+    role_hierarchy:
+        ROLE_TEACHER:     ROLE_USER
+        ROLE_BACKEND:     ROLE_USER
+        ROLE_ADMIN:       [ROLE_TEACHER, ROLE_BACKEND]
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
+    security_disabled_uri_prefixs:
+        - anon
+        - callback
+        - api
+
+    route_white_list:
+        - '/crontab'
+        - '/passport/notify'
+        - '/oauth/v2/token'
+        - '/oauth/token'
+        - '/login/oauth/access_token'
+        - '/uploader/upload_callback'
+        - '/uploader/process_callback'
+        - '/coin/pay/return/alipay'
+        - '/coin/pay/notify/alipay'
+        - '/coin/pay/notify/wxpay'
+        - '/pay/center/pay/alipay/return'
+        - '/pay/center/pay/wxpay/notify'
+        - '/pay/center/pay/alipay/notify'
+        - '/live/verify'
+        - '/course/order/pay/alipay/notify'
+        - '/vip/pay_notify/alipay'
+        - '/uploadfile/upload'
+        - '/disk/upload'
+        - '/file/upload'
+        - '/editor/upload'
+        - '/disk/convert/callback'
+        - '/partner/discuz/api/notify'
+        - '/live/auth'
+        - '/edu_cloud/sms_callback'
+        - '/bddServer/callback'
+        - '/pay/center/pay/llpay/return'
+        - '/pay/center/pay/llpay/notify'
+        - '/cashier/wechat/notify'
+
+    qrcode_protocol_whitelist_default:
+        - 'weixin'
+        - 'alipays'

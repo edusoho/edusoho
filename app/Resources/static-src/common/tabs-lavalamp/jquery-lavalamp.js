@@ -1,0 +1,4 @@
+/* eslint-disable */
+import './jquery-easing.js';
+(function($){$.fn.lavaLamp=function(o){o=$.extend({fx:"easein",speed:200,click:function(){}},o||{});return this.each(function(){var b=$(this),noop=function(){},$back=$('<li class="highlight"></li>').appendTo(b),$li=$("li",this),curr=$("li.active",this)[0]||$($li[0]).addClass("active")[0];$li.not(".highlight").hover(function(){move(this)},noop);$(this).hover(noop,function(){move(curr)});$li.click(function(e){setCurr(this);return o.click.apply(this,[e,this])});setCurr(curr);function setCurr(a){$back.css({"left":a.offsetLeft+"px","width":a.offsetWidth+"px"});curr=a};function move(a){$back.each(function(){$(this).dequeue()}).animate({width:a.offsetWidth,left:a.offsetLeft},o.speed,o.fx)}})}})(jQuery);
+/* eslint-enable */

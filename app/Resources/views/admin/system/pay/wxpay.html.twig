@@ -1,0 +1,27 @@
+<fieldset>
+  <legend>{{ 'admin.payment_setting.wxpay'|trans }}</legend>
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>{{ 'admin.payment_setting.api_status'|trans }}</label>
+    </div>
+    <div class="controls col-md-1">
+      <p class="form-control-static">
+        {% if payment.wxpay_enabled %}
+          {{ 'admin.payment_setting.api_open'|trans }}
+        {% else %}
+          {{ 'admin.payment_setting.api_close'|trans }}
+        {% endif %}
+      </p>
+    </div>
+    <div class="controls col-md-2 form-control-static">
+      <a target="_blank" href="{{ path('admin_setting_wechat_auth') }}">
+      {% if payment.wxpay_enabled %}
+        {{ 'admin.payment_setting.api_close.direct'|trans }}
+      {% else %}
+        {{ 'admin.payment_setting.api_open.direct'|trans }}
+      {% endif %}
+      </a>
+    </div>
+  </div>
+
+</fieldset>

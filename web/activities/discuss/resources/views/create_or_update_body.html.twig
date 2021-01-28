@@ -1,0 +1,28 @@
+{% extends 'activity/activity-layout.html.twig' %}
+{% do script(['libs/ltc-sdk-client.js','libs/es-ckeditor/ckeditor.js', 'libs/bootstrap-datetimepicker.js','discussactivity/js/manage/index.js']) %}
+
+{% block activity_step %}
+  <div class="tab-pane js-course-tasks-pane active js-step2-view">
+    <form class="form-horizontal" id="step2-form" >
+      <div class="form-group">
+        <div class="col-sm-2 control-label">
+        <label for="title" class="control-label-required">{{ 'course.plan_task.activity_manage.title_name'|trans }}</label>
+        </div>
+        <div class="col-sm-10">
+          <input id="title" class="form-control" type="text" name="title" value="{{ activity.title|default('') }}" >
+          <div class="help-block">{{ 'course.plan_task.activity_manage.help_block'|trans }}</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-2 control-label">
+          <label for="text-content-field" class="style1 control-label-required">{{ 'course.plan_task.activity_manage.discuss'|trans }}</label>
+        </div>
+        <div class="col-sm-10">
+          <textarea class="form-control type-hidden" id="text-content-field" name="content" rows="10" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-flash-upload-url="{{ path('editor_upload', {token:upload_token('course', 'flash')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"
+        >{{ activity.content|default('') }}</textarea>
+        </div>
+        <p class="col-sm-offset-2 col-sm-10 mt10 color-warning">{{'course.plan_task.activity_manage.discuss.tips'|trans}}</p>
+      </div>
+    </form>
+  </div>
+{% endblock %}

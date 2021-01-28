@@ -1,0 +1,44 @@
+
+{% set questionTypeDict = getQuestionTypes() %}
+{% set resultStatus = paperResult.status|default(null) %}
+
+{% if show_answers(paperResult|default(null)) or resultStatus == 'doing' or not paperResult|default(null) %}
+
+  <form id='teacherCheckForm' autocomplete="off">
+
+    {% for type in questionTypes|default([]) if questions[type]|default(null) %}
+      <div class="panel panel-default js-testpaper-question-block" id="testpaper-questions-{{ type }}">
+        <div class="panel-heading">
+          <strong class="">{{ questionTypeDict[type] }}</strong>
+          <small class="color-gray">
+            {% if total[type].missScore > 0 %}
+              {{'testpaper.answer.missing_score_tips'|trans({'%missScore%': total[type].missScore, '%number%': total[type].number,'%score%': total[type].score})}}
+            {% else %}
+              {{'testpaper.answer.question_score_total_tips'|trans({'%number%': total[type].number,'%score%': total[type].score})}}
+            {% endif %}
+          </small>
+        </div>
+        <div class="panel-body">
+          {% for question in questions[type]|default(null) %}
+            {% if question.isDeleted|default(null) %}
+              {% include 'question/part/question-delete.html.twig' with {showScore:1,question:question}%}
+            {% else %}
+              {% set questionTemplate = getQuestionTypeTemplate(question.type,'do') %}
+              {% if questionTemplate %}
+                {% include questionTemplate %}
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    {% endfor %}
+
+    {% if paperResult.status|default(null) == 'reviewing' %}
+      <textarea name="teacherSay" id="teacherSay" style="display:none"></textarea>
+      <input type="hidden" id="passedStatus" name="passedStatus" value="" />
+    {% endif %}
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+
+{% endif %}

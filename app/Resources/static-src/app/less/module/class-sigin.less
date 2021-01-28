@@ -1,0 +1,56 @@
+// 签到组件，属于老的样式，之后可能会调整
+
+.sign_main {
+  position: absolute;
+  // left: 50px;
+  right: 0;
+  width: 280px;
+  background: #fbfefe;
+  display: none;
+  margin-top: 10px;
+  z-index: 9999;
+  border: 1px #ccc solid;
+}
+.sign_main .disabled-next {
+  cursor: not-allowed;
+  color: #999;
+}
+.sign_main table {
+  width: 278px;
+  border: 1px solid #e3e3e3;
+  border-width: 1px 0;
+  background: #fff;
+  color: #666;
+}
+.sign_main thead {
+  color: #999;
+}
+.sign_main table tr td {
+  border-bottom: 1px solid #e3e3e3;
+}
+.sign_main table tbody td {
+  border-right: 1px solid #e3e3e3;
+  border-left: 1px solid #e3e3e3;
+}
+.sign_main .calendar_title_month {
+  height: 40px;
+}
+.sign_main .today-rank,
+.sign_main .signed-number,
+.sign_main .keep-days {
+  color: #ff7f3e;
+}
+.sign_main .calendar_title_month span:hover {
+  cursor: pointer;
+}
+.sign_main .title-month {
+  font-size: 14px;
+  color: #656565;
+}
+.sign_main .title-margin {
+  margin: 10px;
+}
+.sign_main .signed_day,
+.sign_main .signed_anime_day {
+  background: url('@{img-src}sign_have_anime.gif') center no-repeat;
+}

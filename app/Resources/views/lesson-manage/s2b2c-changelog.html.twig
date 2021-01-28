@@ -1,0 +1,17 @@
+{% set lessonChangelog = '' %}
+{% for key, changelog in courseProduct.changelog|default() %}
+  {% if changelog['lessons']|default() %}
+    {% set lessonChangelog = lessonChangelog ~ 'merchant.content_resource.product_version'|trans ~ key ~': <br>' %}
+    {% for index,log in changelog['lessons']|default() %}
+      {% set lessonChangelog = lessonChangelog ~ (index+1) ~ '.' ~ log ~ '<br>' %}
+    {% else %}
+      {% if changelog['lessons']|default() %}
+        {% set lessonChangelog = lessonChangelog ~ '1.' ~ changelog['lessons'] ~ '<br>' %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+{% endfor %}
+{% if lessonChangelog %}
+  <i class="es-icon es-icon-tip admin-update__icon" data-container="body" data-toggle="popover" data-trigger="hover"
+     data-placement="right" data-content="{{ lessonChangelog }}" style="color: red!important;"></i>
+{% endif %}

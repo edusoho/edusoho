@@ -1,0 +1,30 @@
+{% extends 'classroom-manage/layout.html.twig' %}
+{% block title %}{{'classroom.set_assistant'|trans}} - {{ parent() }}{% endblock %}
+{% set side_nav = 'assistant' %}
+{% do script(['app/js/classroom-manage/set-assistants/index.js']) %}
+
+{% block main %}
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">{{'classroom.set_assistant'|trans}}</div>
+  <div class="panel-body">
+    <form id="teachers-form" class="form-horizontal" method="post">
+      {{ web_macro.flash_messages() }}
+      <div class="form-group" id="teachers-form-group">
+        <label class="col-md-2 control-label">{{'classroom.set_assistant'|trans}}</label>
+        <div class="col-md-8 controls">
+          {% set url = path('classroom_assistants_match', {classroomId:classroom.id}) %}
+          <div id="classroom-manage-set-assistant" data-url = {{url}} data-assistants = {{ assistants|json_encode }}></div>
+          <div class="help-block">{{ 'classroom.set_assistant_tip'|trans }}</div>
+        </div>  
+      </div>
+      <div class="form-group">
+        <div class="col-md-offset-2 col-md-8 controls">
+          <button type="submit" class="btn btn-fat btn-primary">{{'form.btn.save'|trans}}</button>
+        </div>  
+      </div>
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    </form>
+  </div>
+</div>
+
+{% endblock %}

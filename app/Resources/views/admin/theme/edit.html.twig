@@ -1,0 +1,18 @@
+
+{% extends 'admin/theme/base-edit.html.twig' %}
+{% block theme_nav %}
+  <li class="active"><a href="#left" role="tab" data-toggle="tab">{{'admin.setting.theme.manage.components'|trans}}</a></li>
+  <li><a href="#top" role="tab" data-toggle="tab">{{'admin.setting.theme.manage.top'|trans}}</a></li>
+  <li><a href="#maincolor" role="tab" data-toggle="tab">{{'admin.setting.theme.manage.coloring_scheme_btn'|trans}}</a></li>
+{% endblock %}
+
+{% block theme_panes %}
+  {% include 'admin/theme/tab-panel/components.html.twig' with {
+    allBlockConfig: allConfig.blocks.left|default(),  
+    blockConfig: themeConfig.blocks.left|default(),
+    configKey: 'left',
+    isActive: true,
+  }%}
+  {% include 'admin/theme/tab-panel/nav.html.twig' with {navigation: themeConfig.navigation|default() }%}
+  {% include 'admin/theme/tab-panel/maincolor.html.twig' with {maincolor: themeConfig.maincolor, navigationcolor: themeConfig.navigationcolor} %}
+{% endblock %}

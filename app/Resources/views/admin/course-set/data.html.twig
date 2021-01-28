@@ -1,0 +1,75 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_course_set_data' %}
+
+{% set script_controller = 'course/data' %}
+
+{% block main %}
+  {% include 'admin/course/tab-data.html.twig' %}
+
+    <form id="message-search-form" class="form-inline well well-sm mtl" action="" method="get" novalidate>
+      {% include 'org/org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
+      
+      <div class="form-group">
+        <select style="width:150px;" class="form-control" name="categoryId">
+          {{ select_options(category_choices('course'), app.request.query.get('categoryId'), 'admin.course_manage.category_placeholder'|trans) }}
+        </select>
+      </div>
+      <div class="form-group">
+        <input class="form-control" type="text" placeholder="{{'admin.course_manage.title_placeholder'|trans}}" name="title" value="{{ app.request.get('title') }}">
+      </div>
+      <div class="form-group">
+        <input class="form-control" type="text" placeholder="{{'admin.course_manage.creator_placeholer'|trans}}" name="creatorName" value="{{ app.request.get('creatorName') }}">
+      </div>
+      <button class="btn btn-primary">{{ 'form.btn.search'|trans }}</button>
+    </form>
+    <div class="table-responsive">
+        <table class="table table-bordered" style="word-break:break-all;text-align:center;">
+          <tr class="active">
+            <td width="30%">{{'admin.course_manage.statistics.name'|trans}}</td>
+             {% if filter == 'classroom' %}
+            <td>
+              {{ 'admin.course_manage.statistics.classroom'|trans({'%classroom%': setting("classroom.name")|default('classroom'|trans)}) }}
+            </td>
+             {% endif %}
+            <td>{{ 'admin.course_manage.statistics.teach_plan_count'|trans }}</td>
+            <td>{{ 'admin.course_manage.statistics.task_count'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}</td>
+            <td>{{'admin.course_manage.statistics.student_number'|trans }}</td>
+            <td>{{'admin.course_manage.statistics.finished_number'|trans}}</td>
+            <td>{{'admin.course_manage.statistics.study_time_minute'|trans}}</td>
+            <td>{{'admin.course_manage.statistics.income_RMB'|trans}}</td>
+            <td>{{'admin.course_manage.operater'|trans}}</td>
+          </tr>
+          
+          {% if courseSets %}
+            {% for courseSet in courseSets %}
+            <tr>
+              <td>
+                <a data-toggle="modal" data-target="#modal" data-url="{{path('course_set_detail_data',{id:courseSet.id})}}" href="javascript:;">{{courseSet.title}}</a>
+              </td>
+              {% if filter == 'classroom' %}
+              <td>
+                {% set classroom = classrooms[courseSet.id]|default(null) %}
+                {% if classroom %}
+                  <a href="{{path('classroom_show',{id:classroom.classroomId})}}" target="_blank">{{classroom.classroomTitle}}</a>
+                {% elseif not classroom %}
+                  <span class="label label-danger live-label mls">{{'admin.course_manage.statistics.no_introduce'|trans}}</span> 
+                {% endif %}
+              </td>
+              {% endif %}
+              <td>{{courseSet.courseCount|default()}}</td>
+              <td>{{courseSet.taskCount|default()}}</td>
+              <td>{{courseSet.studentNum|default()}}</td>
+              <td>{{courseSet.isLearnedNum|default(0)}}</td>
+              <td>{{courseSet.learnedTime}}</td>
+              <td>{{courseSet.income|default()}}</td>
+              <td>
+                <a data-toggle="modal" data-target="#modal" data-url="{{path('admin_courses_data',{courseSetId:courseSet.id})}}" href="javascript:;">{{'admin.course_manage.statistics.watch_task'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}</a>
+              </td>
+            </tr>
+            {% endfor %}
+          {% endif %}   
+        </table>
+     {{ admin_macro.paginator(paginator) }}
+      </div>
+{% endblock %}

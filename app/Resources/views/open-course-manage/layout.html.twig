@@ -1,0 +1,40 @@
+{% extends 'courseset-manage/layout.html.twig' %}
+
+{% block title %}{{'my.teaching.open_course.course_manage'|trans}} - {{ parent() }}{% endblock %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb breadcrumb-o">
+    <li class="text-overflow"><a href="{{ path('my_teaching_course_sets') }}">{{ 'my.teaching.course_set_menu'|trans }}</a></li>
+    <li class="active text-overflow courseset-header-section__breadcrumb" title="{{ course.title }}">{{ course.title }}</li>
+  </ol>
+{% endblock %}
+
+{% block courseset_header %}
+  {% include 'open-course-manage/header.html.twig' %}
+{% endblock %}
+
+{% block navbar %}
+{% endblock %}
+
+{% block sidebar %}
+  {% include 'open-course-manage/sidebar.html.twig' %}
+{% endblock %}
+
+{% block paddingClass %}{% endblock %}
+
+{% block main %}
+  <div class="cd-main">
+    <div class="cd-main__heading open-course-heading {% block main_heading_class %}{% endblock %}">
+      {% block main_heading %}
+        <div class="cd-main__title open-course-heading__title">
+          {% block page_title %}{% endblock %}
+        </div>
+      {% endblock %}
+    </div>
+    <div class="cd-main__body">
+      {% block main_body %}
+      {% endblock %}
+    </div>
+  </div>
+{% endblock %}
+

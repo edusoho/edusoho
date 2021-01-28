@@ -1,0 +1,19 @@
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+      {% set data = notification.content %}
+      {% set who = macro.link(data.user.nickname, path('user_show', {id:data.user.id})) %}
+      {% set thread = macro.link(data.thread.title, path('thread_jump', {threadId:data.id})) %}
+      {{ 'notification.thread.at'|trans({'%who%':who, '%thread%':thread})|raw }}
+      <blockquote>
+        {{ data.content }}
+      </blockquote>
+    </div>
+    <div class="notification-footer">
+     {{ notification.createdTime|date_format }}  
+    </div>
+  </div>
+</li>

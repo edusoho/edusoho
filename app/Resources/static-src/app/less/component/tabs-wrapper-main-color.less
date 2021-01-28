@@ -1,0 +1,33 @@
+.tabs-wrapper {
+  .tabs-mark-group {
+    .classify {
+      a {
+        &:hover,
+        &:focus {
+          color: @brand-primary;
+        }
+      }
+    }
+  } 
+  .tabs-mark {
+    &:hover,
+    &:focus,
+    &.active {
+      a {
+        color: @brand-primary;
+        border: 1px solid @brand-primary;        
+      }
+    }
+  }
+  .tabs-group {
+    .content {
+      > li {
+        &:hover, &:focus, &.active {
+          > a {
+            color: @brand-primary;
+          }
+        }
+      }
+    }
+  }
+}

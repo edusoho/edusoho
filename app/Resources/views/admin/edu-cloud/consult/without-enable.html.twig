@@ -1,0 +1,29 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_cloud_consult_setting' %}
+{% set bodyClass = 'cloud-consult' %}
+{% block tabs %}{% endblock %}
+{% block main %}
+  {{ web_macro.flash_messages() }}
+  <div class="panel panel-default notice-panel">
+    <div class="panel-body">
+      <i class="es-icon es-icon-infooutline text-primary"></i>
+      <div class="text-md mbl">{{ 'admin.cloud_consult.closed'|trans }}</div>
+      <form  role="form" method="post" action="">
+        <button type="submit" class="btn btn-primary btn-lg notice-btn" {% if not cloud_consult.cloud_consult_is_buy %}disabled="disabled"{% endif %}  name="cloud_consult_setting_enabled"
+                value="1">{{ 'admin.cloud_consult.open_btn'|trans }}</button>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      </form>
+      {% if not cloud_consult.cloud_consult_is_buy %}
+        <div class="text-md mbl consult-text">
+          <div class="color-danger">
+            {{ 'admin.cloud_consult.not_purchased_tips'|trans|raw }}
+          </div>
+          <div class="color-gray">
+            {{ 'admin.cloud_consult.tips'|trans|raw }}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

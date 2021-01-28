@@ -1,0 +1,26 @@
+{% if not characteristicData is empty %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">{{ 'course.characteristic.content_title'|trans }}</h3>
+    </div>
+    <div class="panel-body pt0">
+      <div class="course-features pl0">
+        {% for data in characteristicData %}
+          {% if loop.index % 2 == 1 %}
+            <div class="course-features-item clearfix">
+          {% endif %}
+          <div class="media">
+            <div class="media-left prm">
+                <span class="color-lump bg-primary"> <i class="es-icon {{ data.icon }} media-logo"></i>
+                </span>
+            </div>
+            <div class="media-body media-middle">{{ data.name|trans }}({{ data.num }})</div>
+          </div>
+          {% if loop.index % 2 == 0 or loop.index == characteristicData|length %}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endif %}

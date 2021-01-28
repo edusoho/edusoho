@@ -1,0 +1,53 @@
+{% import "macro.html.twig" as web_macro %}
+
+{% if materials %}
+  <div class="open-course-teacher panel panel-default">
+    <div class="panel-heading"> 
+      <h3 class="panel-title">
+        {{'my.teaching.open_course.material.title'|trans}}
+      </h3>
+    </div>
+    <div class="panel-body">
+      <ul class="media-list">
+        {% for material in materials %}
+          {% set lesson = lessons[material.lessonId]|default(null) %}
+          <li class="media">
+            <div class="media-body">
+              <div class="mbs">
+                {% if lesson and lesson.status != 'published' %}
+                {{ material.title }} <span class="color-gray text-sm">({{'my.teaching.open_course.material.tips'|trans}})</span>
+              {% else %}
+                {% if material.link %}
+                  <a href="{{ material.link }}" target="_blank">{{ material.title }}</a>
+                  <span class="glyphicon glyphicon-new-window color-gray text-sm" title="{{'my.teaching.open_course.material.web_connect'|trans}}"></span>
+                {% else %}
+                  <a href="{{ path('open_course_material_download', {courseId:course.id, materialId:material.id}) }}" target="_blank">{{ material.title }}</a>
+                {% endif %}
+              {% endif %}
+              </div>
+
+              {% if material.description and not material.link %}
+                <div class="color-gray text-sm mbs">
+                  {{ material.description|plain_text(100) }}
+                </div>
+              {% endif %}
+
+              <div class="text-sm">
+                {% if material.fileId > 0  %}
+                  <span class="color-gray">{{ material.fileSize|file_size }}</span>
+                  <span class="bullet">•</span>
+                {% endif %}
+                {% if lesson %}
+                  <a class="link-primary" href="javascript:;" title="{{ lesson.title }}">{{'my.teaching.open_course.material.lesson'|trans}}{{ lesson.number }}</a>
+                  <span class="bullet">•</span>
+                {% endif %}
+                <span class="color-gray">{{'my.teaching.open_course.material.upload_time'|trans}}{{ material.createdTime|smart_time }}</span>
+              </div>
+
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+{% endif %}

@@ -1,0 +1,8 @@
+<div class="alert alert-blank alert-sm">
+  {{ 'cloud_search.course.result'|trans({'%counts%':counts|default(0)})|raw }}
+</div>
+<div class="search-course-list" id="search-course">
+  {% for course in resultSet %}
+    {% include 'search/search-course-item.html.twig' %}
+  {% endfor %}
+</div>

@@ -1,0 +1,18 @@
+--TEST--
+issues #48
+--CSS--
+@keyframes blink {
+  0% { background: #7e7; }
+  50% { background: none; }
+  100% { background: #7e7; }
+}
+--PRINT--
+@keyframes blink {
+0%{background:#7e7}
+50%{background:none}
+100%{background:#7e7}
+}
+--SETTINGS--
+template='high'
+sort_properties=false
+sort_selectors=false

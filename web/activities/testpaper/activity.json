@@ -1,0 +1,34 @@
+{
+  "name": "course.activity.testpaper",
+  "type": "testpaper",
+  "description": "",
+  "authors": [
+    {
+      "name": "EduSoho",
+      "email": "edusoho@howzhi.com"
+    }
+  ],
+  "version": "1.0.0",
+  "ltc_version": "1.0.0",
+  "icon": {
+    "type": "font",
+    "value": "es-icon es-icon-graphicclass"
+  },
+  "routes": {
+    "content": "create_or_update_content.html.twig",
+    "show": "show.html.twig",
+    "finish_tip": "finish_tip.html.twig"
+  },
+  "finish_condition": [
+    {
+      "type": "submit",
+      "describe": "course.plan_task.activity_manage.testpaper.submit"
+    },
+    {
+      "type": "score",
+      "describe": "course.plan_task.activity_manage.testpaper.score_pass",
+      "html": "conditions.html.twig",
+      "value": "0.6"
+    }
+  ]
+}

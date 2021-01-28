@@ -1,0 +1,16 @@
+{% extends 'oauth2/layout.html.twig' %}
+{% do script(['app/js/oauth2/message/index.js']) %}
+
+{% block page_title %}
+  {% if isNewAccount|default('') %}{{ 'user.oauth.register_success'|trans }}{% else %}{{ 'user.oauth.bind_account_success'|trans }}{% endif %}
+{% endblock %}
+
+{% set duration = 3 %}
+
+{% block panel_body %}
+  <div class="cd-feedback third-party-feedback cd-mb32" data-token="{{ token }}" data-goto="{{ path('homepage') }}" data-duration="{{ duration }}" id="page-message-container" data-os="{{ oauthUser.os }}" data-h5-goto="{{ app.request.session.get('_target_path', '/') }}">
+    <div class="feedback-icon"><i class="cd-icon cd-icon-check"></i></div>
+    <div class="feedback-title">{% if isNewAccount|default('') %}{{ 'user.oauth.register_account_success'|trans }}{% else %}{{ 'user.oauth.bind_success'|trans }}{% endif %}</div>
+    <div class="feedback-content"><span class="js-count-down">{{ duration }}</span>{{ 'user.oauth.page.closed'|trans }}</div>
+  </div>
+{% endblock %}

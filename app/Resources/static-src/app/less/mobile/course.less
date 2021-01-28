@@ -1,0 +1,90 @@
+//全局
+.course-dashboard-page {
+  background-color: #fff;
+  .breadcrumb-o, .es-footer-link, .es-footer, .progress-sm {
+    display: none;
+  }
+  .course-detail-header .es-section {
+    margin: 10px 0;
+  }
+  #content-container {
+    margin: 10px auto;
+    min-height: auto;
+  }
+  .course-sidebar {
+    display: none;
+  }
+  .course-operation {
+    width: auto;
+    float: none;
+  }
+  //营销页面
+  .course-detail-section {
+    margin: 10px 0;
+  }
+  .course-detail-section-responsive  {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    z-index: 998;
+    right: 0;
+    margin: 0;
+    padding: 8px 0;
+    .es-share.top.learn-es-share .dropdown-menu {
+      left: 0;
+      margin-left: 0px;
+      &:after {
+        left: 25px;
+      }
+    }
+  }
+  .buy-btn-group {
+    position: fixed;
+    right: 15px !important;
+    bottom: 7px !important;
+    z-index: 998;
+    .btn-lg {
+      padding: 8px 10px;
+    }
+    &.course-classroom-tip {
+      @media (max-width: @screen-xs-min) {
+        padding-left: 5px;
+        .classroom-tip-wrap {
+          height: 60px;
+        }
+      }
+    }
+  }
+  .course-progress {
+    margin-bottom: 10px;
+  }
+}
+.next-class, .es-piece .piece-header {
+  display: none;
+}
+.es-mobile-nav li {
+  width: 33.33%;
+  text-align: center;
+  a {
+    font-weight: normal;
+  }
+  &.active {
+    border-bottom: 1px solid @brand-primary;
+    a {
+      color: @brand-primary;
+    }
+  }
+  &.active.navs {
+    width: auto;
+    border: none;
+    a {
+      color: @gray-darker;
+    }
+  }
+}
+.modal {
+  z-index: 9999;
+}
+.notify-content{
+  z-index: 10001
+}

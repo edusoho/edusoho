@@ -1,0 +1,66 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% do script(['libs/jquery-validation.js', 'app/js/open-course/member-sms/index.js']) %}
+
+{% block title %} {{'my.teaching.open_course.live_remind'|trans}} {% endblock %}
+
+{% block body %}
+    <form id="sms-modal-form" class="open-course-sms-form" method="post" action="{{ path('open_course_member_sms',{id:course.id}) }}">
+      <div class="form-group">
+        <div class="controls row" >
+          <div class="col-md-2 col-md-offset-2">
+            <label class="control-label mtm" for="mobile">{{'form.mobile'|trans}} </label>
+          </div>
+          {% if app.user and app.user.verifiedMobile %}
+            <div class="col-md-4">
+              <input type="text" class="form-control" name="mobile" value="{{ app.user.verifiedMobile }}" readonly="readonly" placeholder="{{'form.input_mobile'|trans}}" data-url="{{path('open_course_mobile_check',{courseId:course.id})}}"  />
+            </div>
+            <div class="col-md-4 mts">
+              <a class="text-sm color-gray js-modify-mobile" href="javascript:;">{{'form.change_mobile'|trans}}</a>
+            </div>
+          {% else %}
+            <div class="col-md-4">
+              <input type="text" class="form-control" placeholder="{{'form.input_mobile'|trans}}" name="mobile" data-url="{{path('open_course_mobile_check',{courseId:course.id})}}" />
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="form-group" {% if app.user and app.user.verifiedMobile %}style="display:none;"{% endif %}>
+        <div class="controls row" >
+          <div class="col-md-2 col-md-offset-2" >
+            <label class="control-label mtm" for="captcha_code">{{'form.captcha_code'|trans}} </label>
+          </div>
+          <div class="col-md-4 open-course-form-control">
+            <input type="text" class="form-control" name="captcha_code" maxlength="5" placeholder="{{'form.input_captcha_code'|trans}}" data-url="{{path('register_captcha_check')}}">
+          </div>
+          <div class="col-md-3 open-course-form-btn">
+            <img class="js-get-code" src="{{ path('register_captcha_num') }}" data-url="{{ path('register_captcha_num') }}"  title="{{'form.change_captcha_code'|trans}}" style="cursor:pointer;height:40px;width:100%">
+           </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group" {% if app.user and app.user.verifiedMobile %}style="display:none;"{% endif %}>
+        <div class="controls row" >
+          <div class="col-md-2 col-md-offset-2" >
+            <label class="control-label mtm" for="sms_code_modal">{{'form.sms_code'|trans}} </label>
+          </div>
+          <div class ="col-md-4  open-course-form-control">
+            <input type="text" class="form-control" name="sms_code_modal" placeholder="{{'form.input_sms_code'|trans}}" data-url="{{path('edu_cloud_sms_check',{type:'system_remind'})}}">
+          </div>
+          <div class="open-course-form-btn">
+            <button type="button" class="btn btn-default btn-md js-sms-send" data-url="{{ path('edu_cloud_sms_send') }}">
+              <span id="js-time-left"></span>
+              <span id="js-fetch-btn-text">{{'form.get_sms_code'|trans}}{# 秒后重新获取 #}</span>
+           </button>
+          </div>
+        </div>
+      </div>
+    </form>
+{% endblock %}
+
+{% block footer %}
+  <button id="form-submit" class="btn btn-primary pull-right" type="submit" data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{'form.btn.save'|trans}}</button>
+{% endblock %}
+

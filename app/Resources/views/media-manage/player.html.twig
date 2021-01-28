@@ -1,0 +1,19 @@
+<div class="manage-player-body">
+  <div class="manage-player-header">
+    <a href="{{ goto }}" class=" title-link"><i class="es-icon es-icon-chevronleft"></i>{{'form.btn.return'|trans}}</a>
+    <ol class="breadcrumb breadcrumb-o">
+      <li class="active">{{media.filename|plain_text(50) }}</li>
+    </ol>
+  </div>
+  <div class="manage-player-content" id="lesson-video-content" data-role="lesson-content" 
+    {% if setting('storage.video_watermark') > 0 and setting('storage.video_watermark_image') %}
+      data-watermark="{{ filepath(setting('storage.video_watermark_image'), null) }}"
+    {% endif %}
+    {% if setting('storage.video_fingerprint') and app.user %}
+      data-fingerprint="{{ finger_print() }}"
+    {% endif %}
+      data-user-id="{{ app.user.id }}"
+  ></div>
+  <div class="mask hidden" data-role="player-mask"></div>
+  <div class="watermarkEmbedded"></div>
+</div>

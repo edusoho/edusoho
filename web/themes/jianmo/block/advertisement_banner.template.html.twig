@@ -1,0 +1,11 @@
+<section class="feature-banner" style="background: {{middleBackground[0].value}}">
+  {% if middleImg[0].href|default(false) %}
+    <a href="{{ asset(middleImg[0].href|default('')) }}" target="{{ middleImg[0].target|default('') }}">
+  {% endif %}
+  {% if (middleImg[0].src|default('')) %}
+    <img class="img-responsive" src="{{ asset(middleImg[0].src|default('')) }}" alt="{{ middleImg[0].alt|default('') }}">
+  {% endif %}
+  {% if middleImg[0].href|default(false) %}
+    </a>
+  {% endif %}
+</section>

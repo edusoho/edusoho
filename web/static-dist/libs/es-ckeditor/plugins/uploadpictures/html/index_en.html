@@ -1,0 +1,26 @@
+<head>
+  <title>Upload Picture</title>
+  <meta charset="UTF-8">
+</head>
+<div class="balloon-uploader ckeditor-balloon-uploader">
+    <div class="balloon-uploader-body">
+        <div class="balloon-nofile">Please click the Add File button</div>
+        <div class="balloon-filelist">
+            <div class="balloon-filelist-heading">
+                <div class="file-name">filename</div>
+                <div class="file-size">size</div>
+                <div class="file-status">satus</div>
+            </div>
+            <ul></ul>
+        </div>
+    </div>
+    <div class="balloon-uploader-footer">
+        <div class="ckeditor-uploadpictures-pick-btn file-pick-btn mrs">add files</div>
+        <div class="start-upload-btn js-start-upload-btn">Start uploading</div>
+    </div>
+</div>
+
+<script>
+  var outerHtml = document.getElementsByTagName('div')[0].outerHTML;
+  window.parent.postMessage({eventName:'es-ckeditor.post', html:outerHtml }, '*');
+</script>

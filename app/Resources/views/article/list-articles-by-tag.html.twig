@@ -1,0 +1,23 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}{{ setting('article.name')|default('article'|trans) }} - {{ parent() }}{% endblock %}
+
+{% set bodyClass = 'artcile-tag-page' %}
+
+{% block content %}
+
+  <div class="article-list-body row">
+
+    <!-- list主内容-->
+    <div class="col-md-8 article-list-main">
+      {% include 'article/part/tag-header.html.twig' %}
+      {% include 'article/part/list-main.html.twig' %}
+    </div>
+
+    <aside class="col-md-4 article-sidebar">
+      {% include 'article/widget/tag-sidebar.html.twig' %}
+    </aside>
+  </div>
+
+
+{% endblock %}

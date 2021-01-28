@@ -1,0 +1,21 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% import "admin/macro.html.twig" as admin_macro %}
+{% set modalSize = 'large' %}
+{% set modalType = 'course' %}
+
+{% block title %}{{'order.detail'|trans}}{% endblock %}
+{% block body %}
+<ul class="nav nav-tabs mbl">
+  <li class="active"><a href="#detail" data-toggle="tab">{{'order.detail'|trans}}</a></li>
+  <li class=""><a href="#log" data-toggle="tab">{{'order.log'|trans}}</a></li>
+</ul>
+{% include 'my-order/detail-order.html.twig' %}
+
+{% endblock %}
+
+{% block footer %}
+  <div>
+    <button type="button" class="btn btn-primary" data-dismiss="modal">{{'form.btn.close'|trans}}</button>
+  </div>
+
+{% endblock %}

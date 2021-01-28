@@ -1,0 +1,85 @@
+{% extends 'layout.html.twig' %}
+{% set bodyClass = 'bg-blank open-course-list' %}
+{% set mobile = is_show_mobile_page() %}
+{% set siteNav = 'open/course/explore' %}
+
+{% block title %} {{'explore.open_course.title'|trans}} - {{ parent() }}{% endblock %}
+{% block top_content %}
+  <div class="es-banner">
+    <div class="container">
+      <div class="title">
+        {{ 'explore.open_course.list'|trans }}
+      </div>
+      <div class="more">
+        <a class="btn btn-primary btn-lg" href="{{ path('course_set_explore') }}">
+          {{ 'explore.view_course_btn'|trans }}
+        </a>
+        <a class="btn btn-primary btn-lg" href="{{ path('classroom_explore') }}">
+          {{ 'explore.view_classroom_btn'|trans }}
+        </a>
+      </div>
+    </div>
+  </div>
+  {% if mobile %}
+    {% include 'course-set/search-mobile.html.twig'%}
+  {% endif %}
+{% endblock %}
+{% block content %}
+  {{ render(controller('AppBundle:Category:treeNav',{request:app.request, category:category, tags:tags, group:'open_course'})) }}
+
+  <div class="open-course-list">
+    <div class="row course-list es-open-course-list">
+      {% for course in courses if course %}
+        {% set lessons = data('OpenCourseLessons',{courseId:course.id,count:1}) %}
+        <div class="col-md-4 col-xs-6">
+          <div class="course-item">
+            <div class="course-img">
+              <a href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank"
+                target="{{ course.title }}">
+                {% if course.type == 'liveOpen' %}
+                  <span class="tags">
+            <span class="tag-live"></span>
+          </span>
+                {% endif %}
+                {{ lazy_img(filepath(course.largePicture, 'course.png'), 'img-responsive', course.title) }}
+              </a>
+              {% if course.type == 'liveOpen' and lessons %}
+                <div class="mask">
+                  {% if lessons[0].startTime|date('Y-m-d') == "now"|date('Y-m-d') %}
+                    <i class="es-icon es-icon-videocam prs hidden-xs"></i>{{ lessons[0].startTime|date('H:i') }} {{ 'explore.open_course.live'|trans }}
+                  {% else %}
+                    <i class="es-icon es-icon-videocam prs hidden-xs"></i>{{ lessons[0].startTime|date('Y-m-d H:i') }} {{ 'explore.open_course.live'|trans }}
+                  {% endif %}
+                </div>
+              {% endif %}
+            </div>
+            <div class="course-info clearfix">
+              <div class="title">
+                <a class="link-dark" href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank"
+                  title="{{ course.title }}">
+                  {{ course.title }}
+                </a>
+              </div>
+              <div class="metas pull-right">
+                <span class="num"><i class="es-icon es-icon-removeredeye"></i>{{ course.hitNum }}</span>
+                {% if setting('openCourse.show_comment', '1') == 1 %}
+                  <span class="comment"><i class="es-icon es-icon-textsms"></i>{{ course.postNum }}</span>
+                {% endif %}
+              </div>
+            </div>
+
+          </div>
+        </div>
+      {% else %}
+        <div class="empty">{{ 'explore.open_course.empty'|trans }}</div>
+      {% endfor %}
+    </div>
+    {% if not mobile %}
+      {{ web_macro.paginator(paginator) }}
+    {% endif %}
+  </div>
+{% endblock %}
+
+{% block bottom %}
+  {% include 'mobile/footer-tool-bar.html.twig' with { mobile_tool_bar: 'course' } %}
+{% endblock %}

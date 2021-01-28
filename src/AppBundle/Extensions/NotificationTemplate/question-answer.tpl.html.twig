@@ -1,0 +1,17 @@
+{% import 'macro.html.twig' as macro %}
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+      {% set data = notification.content %}
+        {% set who = macro.link(data.user.nickname, path('user_show', {id:data.user.id})) %}
+        {% set thread = macro.link(data.thread.title, path('course_thread_show', {courseId: data.courseId, threadId: data.thread.id})) %}
+        {{ 'notification.question.post_create'|trans({'%who%':who, '%thread%':thread})|raw }}
+    </div>
+    <div class="notification-footer">
+      {{ notification.createdTime|date_format }}
+    </div>
+  </div>
+</li>

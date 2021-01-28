@@ -1,0 +1,25 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% block title %}
+  {{ 'merchant.content_resource.course_product_update'|trans }}
+{% endblock %}
+
+{% block body %}
+  <form method="post" id="version-update-form" action="{{path(path, {productId:productId})}}">
+
+    <div class="form-group">
+      <div class="col-sm-10 controls">
+        {{'merchant.content_resource.course_product_update_tips'|trans}}
+      </div>
+    </div>
+    <input type="hidden" name="productId" value="{{ productId }}">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+{% endblock %}
+
+{% block footer %}
+  <button class="btn cd-btn cd-btn-flat-default cd-btn-lg" type="button" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
+  <button id="version-update-btn" class="btn cd-btn cd-btn-primary cd-btn-lg" type="button" data-loading-text="{{ 'form.btn.submit.submiting'|trans }}">{{ 'form.btn.confirm'|trans }}</button>
+  <script>app.load('content-resource/product-version/version-update-modal');</script>
+{% endblock %}
+

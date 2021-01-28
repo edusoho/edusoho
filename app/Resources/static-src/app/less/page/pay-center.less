@@ -1,0 +1,154 @@
+// 支付方式
+.form-paytype  {
+  .order-detail-bg {
+    padding: 50px;
+    @media (max-width: @screen-xs-max) {
+      padding: 15px; 
+    } 
+  }
+  .pay-type-label  {
+    display: inline-block;
+    margin-right: 10%;
+    font-size: 18px;
+    @media(max-width: @screen-md-max) {
+      font-size: 16px;
+    }
+    @media (max-width: @screen-xs-max) {
+      display: block;
+      margin-bottom: 10px;
+    }
+  }
+}
+
+.form-paytype .check {
+  cursor: pointer;
+  width: 144px;
+  height: 54px;
+  border: 2px solid @gray-lighter;
+  position: relative;
+  text-align: center;
+  font-size: 16px;
+  display: inline-block;
+  margin-right: 15px;
+  .es-transition;
+  @media(max-width: @screen-md-max) {
+    margin-right: 5px;
+    width: 100px;
+    height: 40px;
+    line-height: 32px;
+    margin-bottom: 10px;
+    img {
+      width: 80%;
+      height: auto;
+    }
+  }
+  &:hover {
+    border-color: @gray-medium;
+    .es-transition;
+  }
+  &.active {
+    border: 2px solid @brand-success;
+    .icon {
+      display: block;
+    }
+  }
+  &.disabled {
+    .opacity(0.2);
+    cursor: default;
+    &:hover {
+      border-color: @gray-lighter;
+    }
+  }
+  .icon {
+    display: none;
+    background: url('@{img-src}old/pay_check_status.png') no-repeat;
+    top: -2px;
+    right: -2px;
+    width: 23px;
+    height: 23px;
+    background-position: 0 0;
+    position: absolute;
+    overflow: hidden;
+  }
+}
+
+.pay-agreement-list {
+  margin-top: 30px;
+  padding-left: 0;
+  li {
+    list-style-type: none;
+    &.checked {
+      .pay-bank {
+        border-color: @brand-success;
+        &:after {
+          position: absolute;
+          content: "";
+          background: url('@{img-src}old/pay_check_status.png') no-repeat;
+          top: -2px;
+          right: -2px;
+          width: 23px;
+          height: 23px;
+          background-position: 0 0;
+          z-index: -1;
+        }
+      }
+    }
+  }
+  .pay-bank {
+    position: relative;
+    margin-bottom: 10px;
+    padding: 18px;
+    border: 2px solid @bg-color;
+    z-index: 1;
+    background-color: @bg-color;
+    .es-transition;
+    color: @gray-darker;
+    @media(max-width: @screen-md-max) {
+      padding: 10px;
+    }
+    &:hover {
+      border-color: @gray-medium;
+      cursor: pointer;
+      .es-transition;
+      .closed {
+        .opacity(1);
+      }
+    }
+    input {
+      margin-top: 0;
+    }
+    .closed {
+      float: right;
+      display: block;
+      color: @gray-medium;
+      z-index: 1;
+      .opacity(0);
+      .es-transition;
+      // span {
+      //   font-size: 12px;
+      //   visibility: hidden;
+      // }
+      &:hover {
+        color: @brand-danger;
+        .es-transition;
+        // span {
+        //   visibility: visible;
+        // }
+      }
+    }
+    .name {
+      display: inline-block;
+      width: 200px;
+      @media(max-width: @screen-xs-max) {
+        width: 150px;
+      }
+    }
+    .number {
+      margin-right: 50px;
+      @media(max-width: @screen-xs-max) {
+        margin-right: 20px;
+      }
+    }
+  }
+}
+

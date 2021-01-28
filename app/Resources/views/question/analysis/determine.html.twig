@@ -1,0 +1,30 @@
+{% set questionType = question.type %}
+{% extends 'question/analysis/analysis-layout.html.twig' %}
+
+{% block analysis_content %}
+  <div class="testpaper-question-determines">
+    {% for index in [1,0] %}
+      {% set itemKeyAnalysis = questionAnalysis[index]|default(null) %}
+      <div class="pl0 mbm testpaper-question-body-item">
+        <label class="radio-inline {% if question.answer[0] == index %} active{% endif %}">
+          <input type="radio" data-type="determine" name="{{ question.id }}" value="{{ index }}" {% if question.answer[0] == index %}checked{% endif %} disabled>
+          {% if index == 1 %}{{ 'testpaper.result.true'|trans }}{% else %}{{ 'testpaper.result.wrong'|trans }}{% endif %}
+        </label>
+        <span class="label testpaper-question-body-item__label {% if index == 0 %}label-danger{% else %}label-success{% endif %} hidden-xs">
+          {% if itemKeyAnalysis and firstCount != 0 %}
+            {% set firstAnswerPercent = (itemKeyAnalysis.firstAnswerCount / firstCount * 100)|number_format(1,'.') %}
+            {{ firstAnswerPercent }}%
+          {% else %}
+            0%
+          {% endif %}
+        </span>
+        <span class="testpaper-question-body-item__count">
+          {% if itemKeyAnalysis %}
+            {{ itemKeyAnalysis.firstAnswerCount }}
+          {% else %}0{% endif %}
+          {{ 'course.testpaper_check.number'|trans }}
+        </span>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

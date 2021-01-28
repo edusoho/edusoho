@@ -1,0 +1,54 @@
+<li class="user-avatar-li cd-dropdown cd-ml24"  data-toggle="cd-dropdown">
+  <a class="user-avatar-toggle" href="javascript:;">
+    <img class="cd-avatar cd-avatar-xs" src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
+  </a>
+  <div class="dropdown-menu user-dropdown hidden-sm hidden-xs hidden-md js-user-nav-dropdown">
+    <div class="user-dropdown-info cd-mb24">
+      <a class="user-dropdown-info__avatar cd-mr24" href="{{ path('user_show', {id:app.user.id}) }}">
+        <img class="cd-avatar" src="{{ filepath(app.user.largeAvatar, 'avatar.png') }}">
+        {{ slot('header.user.logo', {user: app.user}) }}
+      </a>
+      <div class="user-dropdown-profile">
+        <div class="user-dropdown-profile__nickname">
+          <span>{{ app.user.nickname }}</span>
+        </div>
+        {{ slot('header.user.info', {user: app.user}) }}
+      </div>
+    </div>
+    <div class="user-dropdown__link cd-mb24">
+      <a class="cd-link-minor" href="{{ path('my_orders') }}"><i class="cd-icon cd-icon-payment"></i>{{ 'homepage.header.account_menu'|trans }}</a>
+      <a class="cd-link-minor" href="{{ path('settings') }}"><i class="es-icon es-icon-setting"></i>{{ 'homepage.header.settings_menu'|trans }}</a>
+    </div>
+    <div class="user-dropdown__logout"><a class="cd-link-minor" href="{{ path('logout') }}">{{ 'homepage.header.logout'|trans }}</a></div>
+  </div>
+  <ul class="dropdown-menu hidden-lg" role="menu">
+    <div class="dropdown-header"><a class="cd-link-minor" href="{{ path('user_show', {id:app.user.id}) }}">{{ app.user.nickname }}</a></div>
+    <li><a href="{{path('my_orders')}}"><i class="es-icon es-icon-accountwallet"></i>{{'homepage.header.account_menu'|trans}}</a></li>
+    <li><a href="{{ path('settings') }}"><i class="es-icon es-icon-setting"></i>{{'homepage.header.settings_menu'|trans}}</a></li>
+
+    {% if has_permission('admin') or has_permission('admin_v2') %}<li><a href="{{ path('admin') }}"><i class="es-icon es-icon-dashboard"></i>{{'homepage.header.admin_menu'|trans}}</a></li>
+    {% endif %}
+    {% if 'ROLE_TEACHER' in app.user.roles %}<li class="user-nav-li-my"><a href="{{ path('my') }}"><i class="es-icon es-icon-event"></i>{{'homepage.header.my_teaching_menu'|trans}}</a></li>
+    {% endif %}
+    <li class="user-nav-li-my">
+      <a href="{{ path('my_courses_learning') }}">
+        <i class="es-icon es-icon-book"></i>{{'homepage.header.my_learning_menu'|trans}}
+      </a>
+    </li>
+    {{ slot('user.nav.menu.extension', {mobile: mobile}) }}
+    <li class="hidden-md"><a href="{{ path('notification') }}"><span class="pull-right num">{% if app.user.newNotificationNum > 0 %}{{ app.user.newNotificationNum }}{% endif %}</span><i class="es-icon es-icon-notificationson"></i>{{'homepage.header.notice'|trans}}</a></li>
+    <li class="hidden-md"><a href="{{ path('message') }}"><span class="pull-right num">{% if app.user.newMessageNum > 0 %}{{ app.user.newMessageNum }}{% endif %}</span><i class="es-icon es-icon-mail"></i>{{'homepage.header.message'|trans}}</a></li>
+    {% if mobile %}
+      <li class="mobile-switch js-switch-pc visible-xs"><a href="javascript:;">
+        <i class="es-icon es-icon-qiehuan"></i>{{'homepage.header.switch_pc'|trans}}</a></li>
+    {% elseif setting('wap.version') == 1  %}
+      <li class="mobile-switch js-switch-mobile visible-xs"><a href="javascript:;">
+        <i class="es-icon es-icon-qiehuan"></i>{{'homepage.header.switch_mobile'|trans}}</a>
+      </li>
+    {% endif %}
+    {% if show_switch_locale == 1 %}
+      {% include 'default/switch-language.html.twig' with { langClass: 'text-center user-nav-li-logout' } %}
+    {% endif %}
+    <li class="user-nav-li-logout"><a href="{{ path('logout') }}"><i class="es-icon es-icon-power"></i>{{'homepage.header.logout'|trans}}</a></li>
+  </ul>
+</li>

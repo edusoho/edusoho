@@ -1,0 +1,12 @@
+{% extends 'es-bar/layout.html.twig' %}
+{% block esBarTitle %}
+    {{'es_bar.notification.content_title'|trans}}
+{% endblock %}
+
+{% block esBarBody %}
+  <ul class="bar-message">
+    {% block myMessage %}
+
+    {% endblock %}
+  </ul>
+{% endblock %}

@@ -1,0 +1,66 @@
+
+{% set bodyClass = 'course-dashboard-page' %}
+
+{% block full_content %}
+  {# 除了顶部，完整使用了中台页面，暂不删除#}
+  <link href="{{ asset('static-dist/app/css/bootstrap.css') }}" rel="stylesheet" />
+  <link href="{{ asset('static-dist/app/css/main.css') }}" rel="stylesheet" />
+
+  {% include 'admin-v2/cloud-center/content-resource/market/course-set/header/header-for-guest.html.twig' %}
+
+  <div class="container cd-container" data-label="body">
+    <div class="row cd-row">
+      <div class="col-lg-9 col-md-8 course-detail-content">
+        <section class="es-section">
+          <div class="nav-btn-tab">
+            <ul class="nav nav-tabs nav-tabs--course " role="tablist">
+              <li role="presentation" id="summary" class="active">
+                <a href="javascript:0;">
+                  {{ 'course.introduction.course_introduction'|trans }}
+                </a>
+              </li>
+              <li role="presentation" id="tasks" class="">
+                <a href="javascript:0;">
+                  {{ 'course.task_toolbar.tasks'|trans }}
+                  {% if tab.number|default(false) %}
+                    {% if course[tab.number]|default(0) %}
+                      <small>({{ course[tab.number]|default(0) }})</small>
+                    {% else %}
+                      <small>({{ course_set[tab.number]|default(0) }})</small>
+                    {% endif %}
+                  {% endif %}
+                </a>
+              </li>
+            </ul>
+          </div>
+          {% block detail_content %}
+
+          {# 课程介绍 #}
+          <div class="es-piece" data-label="summary">
+            <div class="piece-header">{{ 'course.introduction.course_introduction'|trans }}</div>
+            <div class="piece-body p-lg clearfix">
+              {{ course.summary|cdn|default(courseSet.summary|cdn)|raw }}
+            </div>
+          </div>
+
+          <div class="es-piece" style="display: none; visibility: hidden; " data-label="tasks">
+            <div class="piece-header">{{ 'course.catalogue.content_title'|trans }}</div>
+            <div class="panel-body">
+              {% include 'admin-v2/cloud-center/content-resource/market/course-set/task-list/task-list.html.twig' with {limitCount : 2} %}
+              <div class="js-only-display-one-page"></div>
+            </div>
+          </div>
+        </section>
+        {% endblock %}
+      </div>
+
+      {# 学员动态 #}
+      <div class="col-lg-3 col-md-4 course-sidebar">
+        <div class="panel panel-default other-courses" style="height: 200px">
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

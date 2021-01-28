@@ -1,0 +1,8 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{ 'course.member.tips.title'|trans }}{% endblock %}
+{% block body %}
+  <div class="alert">
+      {{ 'course.member.classroom.tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
+  </div>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% if targetType == 'classroom'%}
+  {% set maxRate = classroom.maxRate %}
+{% elseif targetType == 'course' %}
+  {% set maxRate = course.maxRate %}
+{% elseif targetType == 'vip' %}
+  {% set maxRate = level.maxRate %}
+{% else %}
+  {% set maxRate = 0 %}
+{% endif %}
+
+<div class="order-item clearfix">
+  <div class="order-item-title" style="width:30%">
+    <i class="es-icon es-icon-money"></i>
+    <span class="title">{{ setting("coin.coin_name") }}</span>
+    <span>{{'order.confirm.exchange_rate'|trans({'%cashRate%':cashRate,'%coin_name%':setting('coin.coin_name')})}}</span>
+  </div>
+  <div class="order-item-detail">
+    {% if hasPayPassword %}
+    {{'order.confirm.use_tips'|trans}}
+    <input  {% if maxRate == 0 and priceType|default("RMB") == "RMB" %}readonly="true"{% endif %} id="coinPayAmount" class="form-control text-center inline-block width-input-small mhm" role="coinNum" type="text" name="coinPayAmount" value="">
+    {{setting("coin.coin_name")}}
+    {% endif %}
+    <span class="coin-detail hidden-xs hidden-sm">
+      （{{'order.confirm.account_cash'|trans}}<span class="color-danger" role="accountCash">{{account.cash|default(0)}}</span> {{setting("coin.coin_name")}}）
+    </span>
+    <input style="display:none">{# Prevent autocompleting #}
+    <input type="password" style="display:none">{# Prevent autocompleting #}
+    {% if not hasPayPassword %}
+    <div  class="alert cd-alert cd-alert-warning inline-block">
+        {% if hasPassword %}
+          {{'order.confirm.setup_pay_password_tips'|trans({'%setupUrl%':path('settings_pay_password')})|raw}}
+        {% else %}
+          {{'order.confirm.setup_login_password_tips'|trans({'%setupUrl%':path('settings_set_password')})|raw}}
+        {% endif %}
+    </div>
+    {% else %}
+    <div role="password-input" style="display:none">
+      <div class="controls mtm">
+        <input id="payPassword" class="form-control width-input-large inline-block" name="payPassword" type="password" placeholder="{{'order.confirm.input_pay_password_tips'|trans}}" data-url="{{path('pay_password_check')}}" autocomplete="off" data-type="get" data-display="{{'order.confirm.forget_password_tips'|trans}}" />
+        <a href="{{path('settings_find_pay_password')}}" target='_blank' class="btn-link">{{'order.confirm.forget_password_btn'|trans}}</a>
+        <br>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+  <div class="order-item-price" style="width:25%">
+    <span class="mrs">{{'plugin.coupon.minus'|trans}}</span>
+     {% if priceType|default("RMB") == "RMB" %}<span>￥</span>{% endif %}
+    <span role="cash-discount" style="font-size: 24px" data-default-value="0.00"></span>
+    <span>
+      {% if priceType|default("RMB") == "RMB" %} {% else %} {{ setting("coin.coin_name") }} {% endif %}
+    </span>
+    {% if priceType|default("RMB") == "RMB" %}
+      <p style="font-size:13px;" class="hidden-xs hidden-sm">({{'order.confirm.top_use_tips'|trans}}<span id= "maxCoin" role="maxCoin">{{maxCoin|default(0)}}</span>{{setting("coin.coin_name")}})</p>
+    {% endif %}
+  </div>
+</div>

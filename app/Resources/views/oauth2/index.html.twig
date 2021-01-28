@@ -1,0 +1,43 @@
+{% extends 'oauth2/layout.html.twig' %}
+{% do script(['libs/jquery-validation.js','app/js/oauth2/login/index.js']) %}
+
+{% block page_title %}
+  {{ 'user.oauth.bind_account'|trans }}
+{% endblock %}
+
+{% block panel_body %}
+  <div class="alert cd-alert cd-alert-warning cd-mb32">
+    {% if oauthUser.mode == 'mobile' %}{% set accountType = 'user.oauth.login_by_mobile'|trans %} {% elseif oauthUser.mode == 'email' %} {% set accountType = 'user.oauth.login_by_email'|trans %} {% else %}{% set accountType = 'user.oauth.login_by_mobile_or_email_tip'|trans %}{% endif %}
+    {{ 'user.oauth.bind_account.tip'|trans({ '%accountType%':accountType }) }}
+  </div>
+
+  <div class="text-center cd-mb32">
+    <img class="third-party-avatar" src="{% if oauthUser.avatar %}{{ asset(oauthUser.avatar) }}{% else %}{{ filepath('', 'avatar.png') }}{% endif %}">
+  </div>
+
+  <form class="third-party-form" id="third-party-login-form" method="post" action="{{ path('oauth2_login_bind_account') }}">
+    {% if oauthUser.mode == 'mobile' %}
+      <div class="form-group cd-form-group">
+        <label class="third-party-form__label" for="mobile">{{ 'user.oauth.login_by_mobile'|trans }}</label>
+        <input class="form-control" type="number" id="mobile" name="account" required>
+      </div>
+    {% elseif oauthUser.mode == 'email' %}
+      <div class="form-group cd-form-group">
+        <label class="third-party-form__label" for="email">{{ 'user.oauth.login_by_email'|trans }}</label>
+        <input class="form-control" type="email" id="email" name="account" required>
+      </div>
+    {% else %}
+      <div class="form-group cd-form-group">
+        <label class="third-party-form__label" for="mobileOrEmail">{{ 'user.oauth.login_by_mobile_or_email'|trans }}</label>
+        <input class="form-control" type="text" id="mobileOrEmail" name="account" required>
+      </div>
+    {% endif %}
+
+    <button class="btn cd-btn cd-btn-primary cd-btn-lg btn-block js-submit-btn" data-loading-text="{{ 'form.btn.submit.submiting'|trans }}" type="button">{{ 'form.btn.next'|trans }}</button>
+
+    <input class="form-control" id="accountType" type="hidden" name="accountType">
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+  <input class="js-third-party-type" type="hidden" name="mode" data-type="{{ oauthUser.mode }}">
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'layout.html.twig' %}
+
+{% block body %}
+    <script src="{{ cloud_sdk_url('player') }}"></script>
+    {% do script(['app/js/material-lib/global-player/index.js']) %}
+    <div class="iframe-parent-content" id="global-player"
+         data-res-no="{{ file.globalId }}"
+         data-token="{{ player.token }}"
+         data-user-id="{{app.user.id|default(0)}}"
+         data-user-name="{{app.user.username|default('')}}"
+         data-file-type="{{ file.type }}"
+    ></div>
+{% endblock %}
+

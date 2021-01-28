@@ -1,0 +1,97 @@
+{% do script(['app/js/float-consult/index.js'])  %}
+
+{% set consult = setting('consult') %}
+<div id="float-consult" class="float-consult hidden-xs">
+  <div class="btn-group-vertical">
+
+    {% set break = 0 %}
+    {% for qq in consult.qq if qq.name is not empty and qq.number is not empty and break == 0 %}
+      <span class="btn btn-consult-{{consult.color}} float-consult-qq-btn" data-container=".float-consult-qq-btn" data-title="{{'customer_service.qq_customer_service'|trans}}" data-content-element="#consult-qq-content"><span class="es-icon es-icon-qq"></span></span>
+      {% set break = 1 %}
+    {% endfor %}
+
+    {% set break = 0 %}
+    {% for qqgroup in consult.qqgroup if qqgroup.name is not empty and qqgroup.number is not empty and break == 0 %}
+      <span class="btn btn-consult-{{consult.color}} float-consult-qqgroup-btn" data-container=".float-consult-qqgroup-btn" data-title="{{'customer_service.qq_group'|trans}}" data-content-element="#consult-qqgroup-content"><span class="es-icon es-icon-friends"></span></span>
+      {% set break = 1 %}
+    {% endfor %}
+
+    {% set break = 0 %}
+    {% for phone in consult.phone if phone.name is not empty and break == 0 %}
+      <span class="btn btn-consult-{{consult.color}} float-consult-phone-btn" data-container=".float-consult-phone-btn" data-title="{{'customer_service.mobile_group'|trans}}" data-content-element="#consult-phone-content"><span class="es-icon es-icon-phone"></span></span>
+      {% set break = 1 %}
+    {% endfor %}
+
+    {% if consult.webchatURI is not empty %}
+      <span class="btn btn-consult-{{consult.color}} float-consult-weixin-btn" data-container=".float-consult-weixin-btn" data-title="{{'customer_service.weixin-content'|trans}}" data-content-element="#consult-weixin-content"><span class="es-icon es-icon-weixin"></span></span>
+    {% endif %}
+
+    {% if consult.email is not empty %}
+      <span class="btn btn-consult-{{consult.color}} float-consult-email-btn" data-container=".float-consult-email-btn" data-title="{{'customer_service.email'|trans}}" data-content-element="#consult-email-content"><span class="es-icon es-icon-mail"></span></span>
+    {% endif %}
+  </div>
+
+  <div class="consult-contents">
+    <div id="consult-qq-content">
+      {% for qq in consult.qq if qq.name is not empty and qq.number is not empty %}
+        {% if not qq.url|default(false) %}
+        <p>
+
+          <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin={{ qq.number }}&site=qq&menu=yes" >
+            <img class="mrs" src="{{asset("assets/v2/img/bar_qq.png")}}" alt="" title="{{'customer_service.send_message'|trans}}" alt="">
+
+            {{ qq.name }}
+          </a>
+        </p>
+        {% else %}
+          <p>
+            <a href="{{ qq.url|raw }}" target="_blank">
+            <img class="mrs" src="{{asset("assets/v2/img/bar_qq.png")}}" alt="" title="{{'customer_service.send_message'|trans}}" alt="">
+              {{ qq.name }}
+            </a>
+          </p>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <div id="consult-qqgroup-content">
+      {% for qqgroup in consult.qqgroup if qqgroup.name is not empty and qqgroup.number is not empty %}
+        <p>
+          <span class="icon icon-qqgroup color-gray" style="font-size:14px;"></span>
+          {{qqgroup.name}}
+           <br> {# <span class="text-info" style="margin-left:20px;">{{qqgroup.number}}</span> #}
+
+            {% if  qqgroup.url|default('') %}
+              <p class="text-overflow">
+                {{ qqgroup.url|raw }}
+              </p>
+            {% else %}
+              <p class="text-overflow">
+                {{ qqgroup.number }}
+              </p>
+            {% endif %}
+
+        </p>
+      {% endfor %}
+    </div>
+    <div id="consult-phone-content">
+      <p>
+        <strong>{{'customer_service.time'|trans}}</strong> {{ consult.worktime }}
+      </p>
+
+      {% for phone in consult.phone if phone.name is not empty %}
+        <p>
+          {{ phone.name }}： {{ phone.number }}
+        </p>
+      {% endfor %}
+    </div>
+
+
+    <div id="consult-weixin-content">
+      <img src="{{ asset(consult.webchatURI) }}" class="qrcode center-block">
+    </div>
+    <div id="consult-email-content">
+      <a href="mailto:{{consult.email}}">{{ consult.email }}</a>
+    </div>
+  </div>
+</div>

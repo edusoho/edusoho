@@ -1,0 +1,50 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+  {{ setting('site.name', 'my.teaching.open_course.show.edusoho_school'|trans) }}
+{% endblock %}
+
+{% block description %}
+  {% if course.about %}
+    {{ course.about|purify_and_trim_html|default('')|plain_text(100) }}
+  {% else %}
+    {{ parent() }}
+  {% endif %}
+{% endblock %}
+
+{% do  script(['libs/jquery-validation.js', 'app/js/open-course/index.js']) %}
+
+{% block full_content %}
+  {% block top_content %}{% endblock %}
+
+  {% if app.request.get('previewType') == 'wx' %}
+    {% block header %}{% endblock %}
+    <div class="open-course-wechat-preview js-open-course-wechat-preview">
+      <div class="container open-course-container">
+        {% include 'open-course/mobile/open-course.html.twig' %}
+        <div class="open-course-wechat-qrcode hidden-md hidden-sm hidden-xs">
+          {# 二维码地址去掉url的query部分 #}
+          <img src="{{ qrcode_data_uri(wxPreviewUrl) }}">
+          <p class="text-center">{{ 'my.teaching.open_course.show.tips'|trans|raw }}</p>
+        </div>
+      </div>
+    </div>
+    {% block footer %}
+        {{ setting('site.analytics')|raw }}
+        {% if setting('siteTrace.enabled')|default(false) %}
+          {{ setting('siteTrace.script')|raw }}
+        {% endif %}
+    {% endblock %}
+  {% else %}
+  <div class="container open-course-container">
+    {% include 'open-course/mobile/open-course.html.twig' %}
+  </div>
+  {% endif %}
+  {% block bottom_content %}{% endblock %}
+  {% include 'common/weixin-share.html.twig' with {
+  'title': course.title,
+  'desc': course.about|striptags|purify_and_trim_html,
+  'link': app.request.uri,
+  'imgUrl': fileurl(course.largePicture,'course.png'),
+  }%}
+{% endblock %}

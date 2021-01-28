@@ -1,0 +1,25 @@
+<div class="task-state-modal task-state-modal-xs">
+  <div class="title cd-mb16">
+    <i class="es-icon es-icon-iccheckcircleblack24px color-success"></i>{{'course.plan_task.finish_task_title'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}
+  </div>
+  <div class="content">
+    {# 因为手机视频劫持导致的遮挡问题多做的判断，视频任务手机端不显示任务名 #}
+    {% if task.type in ['video'] %}
+      <div class="content-title hidden-xs">{{'course.plan_task.task_title'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%taskTitle%': task.title})}}</div>
+    {% else %}
+      <div class="content-title">{{'course.plan_task.task_title'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%taskTitle%': task.title})}}</div>
+    {% endif %}
+    {{'course.plan_task.study_rate'|trans}}
+    <div class="content-progress">
+      <div class="progress progress-radius mts mb0">
+        <div class="progress-bar  progress-bar-success" role="progressbar" aria-valuenow="{{finishedRate}}" aria-valuemin="0" aria-valuemax="100" style="width:{{finishedRate}}%;min-width: 20%">{{finishedRate}}%</div>
+      </div>
+    </div>
+  </div>
+
+  {% if nextTask %}
+    <div class="text-right cd-mt8">
+      <a class="cd-btn cd-btn-primary cd-btn-sm" href="{{path('course_task_show', {courseId: task.courseId, id: nextTask.id})}}">{{'course.plan_task.next_task'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}</a>
+    </div>
+  {% endif %}
+</div>

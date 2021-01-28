@@ -1,0 +1,81 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_coin_records' %}
+
+{% block main %}
+
+    <form id="coin-orders-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+
+        <div class="form-group"> 
+          <select class="form-control" name="type" onchange="submit();"> 
+               {% set options = {'inflow':'admin.coin.type_option.inflow'|trans,'outflow':'admin.coin.type_option.outflow'|trans,'':'admin.coin.type_option.default'|trans} %}
+            {{ select_options(options, app.request.get('type')) }} 
+          </select> 
+        </div> 
+        <div class="form-group"> 
+          <select class="form-control" name="createdTime" onchange="submit();"> 
+               {% set options = {'oneWeek':'admin.coin.created_time_option.oneWeek'|trans,'oneMonth':'admin.coin.created_time_option.oneMonth'|trans,'threeMonths':'admin.coin.created_time_option.threeMonths'|trans,'all':'admin.coin.created_time_option.all'|trans,} %}
+            {{ select_options(options, app.request.get('createdTime')) }} 
+          </select> 
+        </div> 
+
+        <div class="form-group">
+            <select class="form-control" name="keywordType">
+          {{ select_options(dict('coinRecordType'), app.request.query.get('keywordType'), 'admin.coin.keyword_type_option.default'|trans) }}
+        </select>
+        </div>
+
+        <div class="form-group">
+            <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="{{'form.placeholder.keyword'|trans}}">
+        </div>
+
+      <button class="btn btn-primary">{{'form.btn.search'|trans}}</button>
+      <a class="btn btn-primary" href="{{ path('admin_bill_export_csv',{
+      cashType:cashType,
+      createdTime:app.request.get('createdTime'),
+      type:app.request.get('type'),      
+      keywordType:app.request.query.get('keywordType'),
+      keyword:app.request.query.get('keyword'),
+      })}}">{{'form.btn.export_result'|trans}}</a>
+    </form>
+  
+    <p class="text-muted">
+      <span class="mrl">{{'coin.online_school_balance'|trans}}：<strong class="amount-num">{{math_format(amounts, 0.01)|default(0)}}</strong> {{ setting('coin.coin_name') }}</span>
+      <span class="mrl">{{'coin.recharge'|trans}}：<strong class="inflow-num">{{ math_format(inflow, 0.01) |default(0)}}</strong> {{ setting('coin.coin_name') }}</span>
+      <span class="mrl">{{'coin.consume'|trans}}：<strong class="outflow-num">{{ math_format(outflow, 0.01)|default(0)}}</strong> {{ setting('coin.coin_name') }}</span>
+    </p>
+    <div class="table-responsive">
+      <table class="table table-striped" style="word-wrap: break-word;
+word-break: break-all;">
+        <tr>
+          <th width="15%">{{'coin.sn'|trans}}</th>
+          <th width="30%">{{'name'|trans}}</th>
+          <th>{{'user'|trans}}</th>
+          <th >{{'coin.paid_time'|trans}}</th>
+          <th class="text-right" style="padding-right: 50px;">{{'coin.income_expense'|trans}}</th>
+        </tr>
+       {% for cash in cashes %}
+       <tr>
+            <td>{{cash.sn}}</td>
+            <td>{{cash.title}}<br>
+                <span class="text-muted text-sm">{{'coin.order_sn'|trans}}：{{cash.order_sn}}</span></td>
+            <td>   <a target="_blank" href="{{ path('user_show', {id:cash.user_id}) }}">
+            {{users[cash.user_id].nickname}}</a></td>
+            <td>{{cash.created_time|date('Y-m-d H:i:s')}}</td>
+            {% if cash.type =="inflow" %}
+            <td class="text-right" style="color:#1bb974;padding-right: 50px;">
+               {{cash.amount}} 
+            </td>
+            {% endif %}
+            {% if cash.type =="outflow" %}
+            <td  class="text-right" style="color:#ff7b0e;padding-right: 50px;">
+               -&nbsp;{{cash.amount}}               
+            </td>
+            {% endif %}
+       </tr>
+       {% endfor %}
+      </table>
+    </div>
+ {{ admin_macro.paginator(paginator) }}
+
+{% endblock %}

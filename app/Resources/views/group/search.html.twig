@@ -1,0 +1,36 @@
+{% extends 'group/layout.html.twig' %}
+{% block title %}{{'group.search'|trans}} - {{ parent() }}{% endblock %}
+{% block content %}
+  <ol class="breadcrumb breadcrumb-o" style="margin-top:-18px">
+    <li><a href="{{path('homepage')}}">{{ homepage.name|default('homepage'|trans) }}</a></li>
+    <li><a href="{{path('group')}}">{{ group.name|default('group.search.homepage'|trans) }}</a></li>
+    <li><a href="{{path('group_search_group')}}">{{ search.name|default('group.search.search_group_name'|trans) }}</a></li>
+  </ol>
+
+  <div class="row">
+    <div class="col-md-9 group-main">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">{{'group.search.content_title'|trans}}</h3>
+        </div>
+
+        <div class="panel-body">
+          {% if groups %}
+          <div class="row">
+            {% for group in groups %}
+              {% include 'group/group-media-small.html.twig'  %}
+            {% endfor %}
+          </div>
+          <div class="text-center">
+            {{ web_macro.paginator(paginator) }}
+          </div>
+          {% else %}
+          <div class="empty">{{'group.hot_group.empty'|trans}}</div>
+          {% endif %}
+
+        </div>
+      </div>
+    </div>
+    {% include 'group/sidebar.html.twig' %}
+  </div>
+{% endblock %}

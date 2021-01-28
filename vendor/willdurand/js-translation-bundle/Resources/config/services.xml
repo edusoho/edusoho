@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="bazinga.jstranslation.translation_finder.class">Bazinga\Bundle\JsTranslationBundle\Finder\TranslationFinder</parameter>
+        <parameter key="bazinga.jstranslation.translation_dumper.class">Bazinga\Bundle\JsTranslationBundle\Dumper\TranslationDumper</parameter>
+    </parameters>
+
+    <services>
+        <service id="bazinga.jstranslation.translation_finder" class="%bazinga.jstranslation.translation_finder.class%" public="true">
+            <argument type="collection"></argument> <!-- all resource files paths from the framework bundle -->
+        </service>
+        <service id="bazinga.jstranslation.translation_dumper" class="%bazinga.jstranslation.translation_dumper.class%" public="true">
+            <argument type="service" id="twig" />
+            <argument type="service" id="bazinga.jstranslation.translation_finder" />
+            <argument type="service" id="filesystem" />
+            <argument></argument> <!-- fallback (locale) -->
+            <argument></argument> <!-- default domain    -->
+            <argument></argument> <!-- active locales -->
+            <argument></argument> <!-- active domains -->
+        </service>
+        <service id="bazinga.jstranslation.dump_command" class="Bazinga\Bundle\JsTranslationBundle\Command\DumpCommand" public="true">
+            <argument type="service" id="bazinga.jstranslation.translation_dumper" />
+            <argument>%kernel.root_dir%</argument>
+            <tag name="console.command" command="bazinga:js-translation:dump" />
+        </service>
+    </services>
+</container>

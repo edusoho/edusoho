@@ -1,0 +1,11 @@
+{% do script(['app/js/mobile/download/index.js']) %}
+
+<div class="app-download">
+  <i class="es-icon es-icon-icon_close_circle js-app-download-close"></i>
+  <div class="slogan">
+    {{ 'mobile.app_download_tips'|trans|raw }}
+  </div>
+  <a class="app-download-button" href="{{ url }}">
+    {{ 'mobile.app_download_btn'|trans }}
+  </a>
+</div>

@@ -1,0 +1,22 @@
+{% set isUpdate = isUpdate|default(false) %}
+{% set thread = thread|default(null) %}
+{% set type = type|default('discussion') %}
+<ul class="breadcrumb">
+  <li><a href="{{ path(target.type ~ '_threads', {(target.type ~ 'Id'):target.id}) }}">
+    {% if target.type == "classroom" %}
+    {{'classroom.thread.create.classroom_thread'|trans({'%classroom.name%': setting('classroom.name')|default('site.default.classroom'|trans)})}}
+    {% else %}
+    {{'classroom.thread.create.Discussion'|trans}}
+    {% endif %}
+  </a></li>
+  {% if thread and isUpdate %}
+    <li>
+        <a href="{{ path(target.type ~ '_thread_show', {(target.type ~ 'Id'):target.id, threadId:thread.id}) }}" title="{{ thread.title }}">{{ thread.title|sub_text(10) }}</a>
+    </li>
+    <li class="active">{{'classroom.thread.create.edit_btn'|trans}}{{ dict_text('threadType',thread.type) }}</li>
+  {% elseif thread and not isUpdate%}
+  	<li class="active">{{ dict_text('threadType',thread.type) }}</li>
+  {% else %}
+    <li class="active">{{'classroom.thread.create.publish'|trans}}{{ dict_text('threadType',type) }}</li>
+  {% endif %}
+</ul>

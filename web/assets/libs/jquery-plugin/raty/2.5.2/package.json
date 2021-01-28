@@ -1,0 +1,35 @@
+{
+  "family": "jquery-plugin",
+  "name": "raty",
+  "version": "2.5.2",
+  "description": "jQuery Raty is a plugin that generates a customizable star rating.",
+  "homepage": "http://wbotelhos.com/raty",
+  "author": {
+    "name": "Washington Botelho"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/wbotelhos/raty.git"
+  },
+  "bugs": "https://github.com/wbotelhos/raty/issues",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/wbotelhos/raty/blob/master/README.md"
+    }
+  ],
+  "keywords": [ "rating", "raty" ],
+  "spm": {
+    "alias": {
+      "$": "$"
+    },
+    "output": [ 
+      "raty.js",
+      "img/cancel-off.png",
+      "img/cancel-on.png",
+      "img/star-half.png",
+      "img/star-off.png",
+      "img/star-on.png"
+    ]
+  }
+}

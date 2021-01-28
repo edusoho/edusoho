@@ -1,0 +1,137 @@
+{% macro courseStatus(status) %}
+    {% if status == 'draft' %}
+        <span class="color-gray">{{ 'common.courseStatus.draft'|trans }}</span>
+    {% elseif  status == 'published' %}
+        <span class="color-success">{{ 'common.courseStatus.published'|trans }}</span>
+    {% elseif status == 'closed' %}
+        <span class="color-danger">{{ 'common.courseStatus.closed'|trans }}</span>
+    {% endif %}
+{% endmacro %}
+{% macro goodsStatus(status) %}
+  {% if status == 'created' %}
+    <span class="color-gray">{{ 'common.courseStatus.draft'|trans }}</span>
+  {% elseif  status == 'published' %}
+    <span class="color-success">{{ 'common.courseStatus.published'|trans }}</span>
+  {% elseif status == 'unpublished' %}
+    <span class="color-danger">{{ 'common.courseStatus.closed'|trans }}</span>
+  {% endif %}
+{% endmacro %}
+{% macro fileType(type) %}
+    {% if type == 'video' %}
+        <span class="glyphicon glyphicon-facetime-video color-success">{{ 'common.fileType.video'|trans }}</span>
+    {% elseif type == 'audio' %}
+        <span class="glyphicon glyphicon-music color-success">{{ 'common.fileType.audio'|trans }}</span>
+    {% elseif type == 'document' %}
+        <span class="glyphicon glyphicon-briefcase color-success">{{ 'common.fileType.document'|trans }}</span>
+    {% elseif type == 'image' %}
+        <span class="glyphicon glyphicon-picture color-success">{{ 'common.fileType.image'|trans }}</span>
+    {% elseif type == 'other' %}
+        <span class="glyphicon glyphicon-question-sign color-success">{{ 'common.fileType.other'|trans }}</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro refundStatus(status) %}
+    {% if status == 'created' %}
+        <span class="cd-status cd-status-info">{{ 'common.orderStatus.created'|trans }}</span>
+    {% elseif status == 'paid' %}
+        <span class="cd-status cd-status-success">{{ 'common.orderStatus.paid'|trans }}</span>
+    {% elseif status == 'refunding' %}
+        <span class="cd-status cd-status-warning">{{ 'common.orderStatus.refunding'|trans }}</span>
+    {% elseif status == 'refunded' %}
+        <span class="cd-status cd-status-danger">{{ 'common.orderStatus.refunded'|trans }}</span>
+    {% elseif status == 'cancelled' %}
+        <span class="cd-status cd-status-disabled">{{ 'common.orderStatus.cancelled'|trans }}</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro adminRefundStatus(status) %}
+    {% if status == 'auditing' %}
+        <span class="text-warning">{{ 'common.refundStatus.created'|trans }}</span>
+    {% elseif status == 'refunded' %}
+        <span class="color-success">{{ 'common.refundStatus.success'|trans }}</span>
+    {% elseif status == 'refused' %}
+        <span class="color-danger">{{ 'common.refundStatus.failed'|trans }}</span>
+    {% elseif status == 'cancel' %}
+        <span class="color-gray">{{ 'common.refundStatus.cancelled'|trans }}</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro logLevel(level) %}
+    {% if level == 'info' %}
+        <span class="color-success">{{ 'common.logLevel.info'|trans }}</span>
+    {% elseif level == 'warning' %}
+        <span class="text-warning">{{ 'common.logLevel.warning'|trans }}</span>
+    {% elseif level == 'error' %}
+        <span class="color-danger">{{ 'common.logLevel.error'|trans }}</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro contentStatus(status) %}
+    {% if status == 'published' %}
+        <span class="color-success">{{ 'common.contentStatus.published'|trans }}</span>
+    {% elseif status == 'unpublished' %}
+        <span class="color-gray">{{ 'common.contentStatus.unpublished'|trans }}</span>
+    {% elseif status == 'trash' %}
+        <span class="text-warning">{{ 'common.contentStatus.trash'|trans }}</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro articleStatus(status) %}
+    {% if status == 'published' %}
+        <span class="color-success">{{ 'common.articleStatus.published'|trans }}</span>
+    {% elseif status == 'unpublished' %}
+        <span class="color-gray">{{ 'common.articleStatus.unpublished'|trans }}</span>
+    {% elseif status == 'trash' %}
+        <span class="text-warning">{{ 'common.articleStatus.trash'|trans }}</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro discountStatus(status) %}
+    {% if status == 'unstart' %}
+        <span class="color-gray">{{ 'common.discountStatus.unstart'|trans }}</span>
+    {% elseif status == 'running' %}
+        <span class="color-success">{{ 'common.discountStatus.running'|trans }}</span>
+    {% elseif status == 'finished' %}
+        <span class="color-gray">{{ 'common.discountStatus.finished'|trans }}</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro  video_quality(option) %}
+     {% if option == 'low' %}
+       {{'common.video_quality.low'|trans}} <span class="color-gray">({{'common.video_quality.low.tips'|trans}})</span>
+    {% elseif option == 'normal' %}
+      {{'common.video_quality.normal'|trans}} <span class="color-gray">({{'common.video_quality.normal.tips'|trans}})</span>
+    {% elseif option == 'high' %}
+      {{'common.video_quality.high'|trans}} <span class="color-gray">({{'common.video_quality.high.tips'|trans}})</span>
+    {% elseif option == 'super' %}
+      {{'common.video_quality.super'|trans}} <span class="color-gray">({{'common.video_quality.super.tips'|trans}})</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro classroomStatus(status) %}
+  {% if status == 'draft' %}
+    <span class="color-gray">{{ 'common.classroomStatus.draft'|trans }}</span>
+  {% elseif status == 'published' %}
+    <span class="color-success">{{ 'common.classroomStatus.published'|trans }}</span>
+  {% elseif status == 'closed' %}
+    <span class="color-danger">{{ 'common.classroomStatus.closed'|trans }}</span>
+  {% endif %}
+{% endmacro %}
+
+{% macro certificateTypes(targetType) %}
+  {% if targetType == 'course' %}
+    <span class="color-gray">{{ 'common.certificate_type.course'|trans }}</span>
+  {% elseif targetType == 'classroom' %}
+    <span class="color-gray">{{ 'common.certificate_type.classroom'|trans }}</span>
+  {% endif %}
+{% endmacro %}
+
+{% macro certificateStatus(status) %}
+  {% if status == 'draft' %}
+    <span class="color-gray">{{ 'common.certificate_status.draft'|trans }}</span>
+  {% elseif status == 'published' %}
+    <span class="color-success">{{ 'common.certificate_status.published'|trans }}</span>
+  {% elseif status == 'closed' %}
+    <span class="color-danger">{{ 'common.certificate_status.closed'|trans }}</span>
+  {% endif %}
+{% endmacro %}

@@ -1,0 +1,15 @@
+<div class="modal access-intercept-modal" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">{{'site.tips'|trans}}</h4>
+      </div>
+      <div class="modal-body">
+        <h4>{{'announcement.modal.classroom_nojoin.tips'|trans({'%classroomName%':setting('classroom.name')|default('site.default.classroom'|trans),'%classroom.name%':setting('classroom.name')|default('site.default.classroom'|trans)})}}</h4>
+      </div>
+      <div class="modal-footer">
+        <a href="{{ path('classroom_become_auditor', {id:classroom.id}) }}" class="btn btn-primary">{{'announcement.modal.classroom_nojoin.become_auditor_btn'|trans}}</a>
+      </div>
+    </div>
+  </div>
+</div>

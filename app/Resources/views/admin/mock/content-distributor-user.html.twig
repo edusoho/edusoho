@@ -1,0 +1,19 @@
+<div class="distributor-user subTagContent">
+  token伪造
+  <form class="tokenGeneratorForm" action="{{ path('admin_mocked_distributor_token', {type:'user'})}}">
+    <div>
+      优惠券金额(分): <input type="text" name="couponPrice" value="10000"></input>
+    </div>
+    <div>
+      优惠卷有效期(天): <input type="text" name="couponExpiryDay" value="{{couponExpireDateStr}}"></input>
+    </div>
+    <div>
+      token有效期: <input type="text" name="tokenExpireDateStr" value="{{tokenExpireDateStr}}"></input>
+    </div>
+  </form>
+
+  生成的二维码地址: <textarea type="text" class="distributorGeneratorUrl" data-base-url="distributor_register" readonly style="width: 800px"></textarea>
+  <div>
+    <input type="button" value="提交" class="tokenGeneratorBtn"></input>
+  </div>
+</div>

@@ -1,0 +1,59 @@
+{
+    "name": "symfony/twig-bundle",
+    "type": "symfony-bundle",
+    "description": "Symfony TwigBundle",
+    "keywords": [],
+    "homepage": "https://symfony.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Fabien Potencier",
+            "email": "fabien@symfony.com"
+        },
+        {
+            "name": "Symfony Community",
+            "homepage": "https://symfony.com/contributors"
+        }
+    ],
+    "require": {
+        "php": "^5.5.9|>=7.0.8",
+        "symfony/config": "~3.2|~4.0",
+        "symfony/debug": "~2.8|~3.0|~4.0",
+        "symfony/twig-bridge": "^3.4.3|^4.0.3",
+        "symfony/http-foundation": "~2.8|~3.0|~4.0",
+        "symfony/http-kernel": "^3.3|~4.0",
+        "symfony/polyfill-ctype": "~1.8",
+        "twig/twig": "~1.41|~2.10"
+    },
+    "require-dev": {
+        "symfony/asset": "~2.8|~3.0|~4.0",
+        "symfony/stopwatch": "~2.8|~3.0|~4.0",
+        "symfony/dependency-injection": "~3.4.24|^4.2.5",
+        "symfony/expression-language": "~2.8|~3.0|~4.0",
+        "symfony/finder": "~2.8|~3.0|~4.0",
+        "symfony/form": "~2.8|~3.0|~4.0",
+        "symfony/routing": "~2.8|~3.0|~4.0",
+        "symfony/templating": "~2.8|~3.0|~4.0",
+        "symfony/yaml": "~2.8|~3.0|~4.0",
+        "symfony/framework-bundle": "^3.3.11|~4.0",
+        "symfony/web-link": "~3.3|~4.0",
+        "doctrine/annotations": "~1.7",
+        "doctrine/cache": "~1.0"
+    },
+    "conflict": {
+        "symfony/dependency-injection": "<3.4",
+        "symfony/event-dispatcher": "<3.3.1"
+    },
+    "autoload": {
+        "psr-4": { "Symfony\\Bundle\\TwigBundle\\": "" },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "3.4-dev"
+        }
+    }
+}

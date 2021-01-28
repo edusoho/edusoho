@@ -1,0 +1,33 @@
+{% extends 'classroom-manage/layout.html.twig' %}
+
+{% block title %}{{ setting('classroom.name')|default("site.default.classroom"|trans) }}{{ 'classroom.manage'|trans }} - {{ parent() }}{% endblock %}
+{% do script(['libs/es-ckeditor/ckeditor.js','libs/select2.js', 'libs/vue.js', 'app/js/classroom-manage/base-setting/index.js', 'libs/element-ui.js']) %}
+
+{% set side_nav = 'main' %}
+
+{% block main %}
+  {% set unsetted = "" %}
+  <div class="cd-main__heading">
+    <div class="cd-main__title">{{ 'classroom.basic_setting'|trans }}</div>
+  </div>
+  <div id="app"
+       data-classroom="{{ classroom|json_encode }}"
+       data-tags="{{ tags|default(null)|json_encode }}"
+       data-cover="{{ filepath(classroom.largePicture, 'classroom.png') }}"
+       data-cover-crop-url="{{ path('classroom_manage_picture_crop', {id:classroom.id}) }}"
+       data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}"
+       data-flash-upload-url="{{ path('editor_upload', {token:upload_token('default', 'flash')}) }}"
+       data-classroom-label="{{ setting('classroom.name')|default('classroom'|trans) }}"
+       data-classroom-expiry-rule-url="{{ path('classroom_expiry_date_rule') }}"
+       data-service-tags="{{ classroom_services(classroom.services|default([]))|json_encode }}"
+       data-vip-installed="{{ vipInstalled|default(false) }}"
+       data-vip-enabled="{{ setting('vip.enabled', '0') }}"
+       data-vip-levels="{{ vipLevels|default([])|json_encode }}"
+       data-course-num="{{ courseNum|default(0) }}"
+       data-coin-setting="{{ setting('coin',[])|json_encode }}"
+       data-course-price="{{ coursePrice|default(0) }}"
+       data-info-save-url="{{ path('classroom_manage_set_info', {'id': classroom.id}) }}"
+       data-enable-org="{{ setting('magic.enable_org', 0) }}"
+  >
+  </div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% set mobile = is_show_mobile_page() %}
+{% if mobile %}
+<div class="footer-tool-bar">
+  <div class="{% if mobile_tool_bar == 'index' %}active{% endif %}">
+    <a href="{{ path('homepage') }}">
+      <i class="es-icon es-icon-home1"></i><br>
+      {{ 'homepage'|trans }}
+    </a>
+  </div>
+  <div class="{% if mobile_tool_bar == 'course' %}active{% endif %}">
+    <a href="{{ path('course_set_explore') }}">
+      <i class="es-icon es-icon-newshot"></i><br>
+      {{ 'course'|trans }}
+    </a>
+  </div>
+  <div class="{% if mobile_tool_bar == 'learning' %}active{% endif %}">
+    <a href="{{ path('my_courses_learning') }}">
+      <i class="es-icon es-icon-write"></i><br>
+      {{ 'homepage.footer.learning'|trans }}
+    </a>
+  </div>
+</div>
+{% endif %}

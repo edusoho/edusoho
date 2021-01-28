@@ -1,0 +1,24 @@
+{% extends 'my/my-teaching.html.twig' %}
+
+{% block title %}{{'material_lib'|trans}} - {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <link rel="stylesheet" media="screen" href="{{ asset('assets/css/colorbox/colorbox.css') }}" />
+{% endblock %}
+
+{% set side_nav = 'material-lib' %}
+
+{% block main %}
+<div class="panel panel-default panel-col">
+
+	<div class="panel-heading">
+		{{'material_lib.content_title'|trans}}
+	</div>
+
+	<div class="panel-body material-body">
+	{% block page_body %}
+	{% endblock %}
+	</div>
+</div>
+{% endblock %}

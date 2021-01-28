@@ -1,0 +1,12 @@
+{% if courses|length > 1%}
+  <ul class="nav nav-pills nav-pills-sm hidden-xs mb20" role="tablist">
+    <li role="presentation" {% if 0 == selectedCourseId %}class="active"{% endif %}>
+      <a href="{{ path(currentRoute, {id: currentCourse.id, tab: tab, selectedCourse: 0 }) }}#{{ tab }}">{{ 'course.reviews.all_catagory'|trans }}</a>
+    </li>
+    {% for selectCourse in courses if selectCourse.status == 'published' or previewAs|default(null) %}
+      <li role="presentation" {% if selectCourse.id == selectedCourseId %}class="active"{% endif %}>
+        <a href="{{ path(currentRoute, {id: currentCourse.id, selectedCourse: selectCourse.id, tab: tab}) }}#{{ tab }}">{{ selectCourse.title|sub_text(12)|default('course.unname_title'|trans) }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}

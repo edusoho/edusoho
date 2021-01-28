@@ -1,0 +1,43 @@
+{% extends 'layout.html.twig' %}
+{% block title %}{{ 'classroom.task_num'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%number%':currentTask.number}) }}：{{ courseSet.title }} -{{ parent() }}{% endblock %}
+{% block keywords %}{{ courseSet.title }}{% endblock %}
+{% block description %}{{ course.about }}{% endblock %}
+{% block content %}
+  <div class="es-row-wrap container-gap">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="page-header"><h1>{{ courseSet.title }}</h1></div>
+      </div>
+    </div>
+    <div class="row article-row">
+      <div class="col-md-8 mbl">
+        {% if currentTask %}
+          <div class="color-success"><h4>{{ 'course_set.task.taskNumber'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%taskNumber%':currentTask.number, '%taskTitle%':currentTask.title}) }}</h4></div>
+        {% else %}
+          <div class="empty">{{ 'course_set.task.empty'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}</div>
+        {% endif %}
+        <a class="btn btn-primary mtl nav-btn" href="{{ path('course_show',{id:course.id})}}"><span class="glyphicon glyphicon-play"></span> {{ 'course_set.course.show_btn'|trans }}</a>
+      </div>
+      <div class="col-md-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">{{ 'course_set.course.task_list'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}</h3>
+          </div>
+          <div class="panel-body">
+            {% if tasks %}
+              <ul class="media-list">
+                {% for task in tasks %}
+                  <li class="media">
+                    <div class="media-body"><a href="{{ path('course_set_archive_task',{ courseSetId:courseSet.id,taskId:task.id })}}">{{ 'course_set.task.taskNumber'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%taskNumber%':task.number, '%taskTitle%':task.title}) }}</a></div>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <div class="empty">{{ 'course_set.course.empty'|trans }}</div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

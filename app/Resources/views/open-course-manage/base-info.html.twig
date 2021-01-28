@@ -1,0 +1,124 @@
+{% extends 'open-course-manage/layout.html.twig' %}
+
+{% block title %}{{ 'my.teaching.open_course.Basic_Info'|trans }} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'base' %}
+{% set script_arguments = {
+categoryUrl: path('category_all'),
+tagMatchUrl: path('tag_match')
+} %}
+{% do script(['libs/es-ckeditor/ckeditor.js','libs/bootstrap-datetimepicker.js','libs/jquery-validation.js', 'libs/select2.js','libs/bootstrap-datetimepicker.js', 'app/js/open-course-manage/base/index.js'])%}
+{% block paddingClass %}course-manage-body course-manage-info{% endblock %}
+{% block main_heading_class %} course-manage-info__title {% endblock %}
+
+{% block page_title %}
+  {{ 'my.teaching.open_course.Basic_Info'|trans }}
+{% endblock %}
+
+{% block main_body %}
+  <div class="course-manage-subltitle cd-mb40">{{ 'my.teaching.open_course.Basic_Info'|trans }}</div>
+  <form class="form-horizontal" id="course-form" method="post" data-update = "{{ canUpdateStartTime }}">
+
+    <div class="form-group">
+      <div class="col-md-2 control-label"><label class="control-label-required" for="course_title">{{ 'my.teaching.open_course.Basic_Info.title'|trans }}</label></div>
+      <div class="col-md-8 controls">
+        <input type="text" id="course_title" name="title" class="form-control" value="{{ course.title|default('') }}">
+        <div class="help-block cd-text-sm" style="display:none;"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">{{ 'my.teaching.open_course.Basic_Info.tags'|trans }}</label>
+      <div class="col-md-8 controls">
+        <input type="text" id="course_tags" name="tags" class="width-full select2-offscreen" tabindex="-1"
+               value="{{ tags|join(',') }}" data-explain="{{ 'my.teaching.open_course.Basic_Info.tags.explain'|trans }}">
+        <div class="help-block cd-text-sm">{{ 'my.teaching.open_course.Basic_Info.tags.help_block'|trans }}</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label">{{ 'my.teaching.open_course.Basic_Info.category'|trans }}</label>
+      <div class="col-md-8 controls">
+        <select id="course_categoryId" name="categoryId" class="form-control width-input width-input-large">
+          {{ select_options(category_choices('course'), course.categoryId, {0:'my.teaching.open_course.Basic_Info.category'|trans}) }}
+        </select>
+        <div class="help-block cd-text-sm" style="display:none;"></div>
+      </div>
+    </div>
+
+    {% include 'org/org-tree-select-webpack.html.twig' with {orgCode: course.orgCode, inputClass: 'width-input width-input-large' } %}
+
+    <!-- 封面图片 -->
+    <div class="form-group">
+      <label class="col-md-2 control-label" for="cover"><b>{{'course.cover_image.content_title'|trans}}</b></label>
+      <div class="col-md-8 controls">
+        {% include 'common/upload-image.html.twig' with {
+        saveUrl: path('open_course_manage_picture_crop', {id: course.id}),
+        targetImg: 'picture',
+        cropWidth: '480',
+        cropHeight: '270',
+        uploadToken: 'tmp',
+        imageClass: 'course-manage-cover',
+        imageText: 'course.cover.change'|trans,
+        imageSrc: filepath(course.largePicture, 'course.png'),
+        } %}
+        <div class="courseset-manage-body__tip">{{ 'course.cover_image.upload_tips'|trans|raw }}</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-2 control-label"><label>{{ 'my.teaching.open_course.Basic_Info.about'|trans }}</label></div>
+      <div class="col-md-8 controls">
+        <textarea name="about" rows="10" id="course-about-field" class="form-control"
+          data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}">{{ course.about }}</textarea>
+        <div class="help-block cd-text-sm">{{ 'my.teaching.open_course.Basic_Info.about.help_block'|trans }}</div>
+      </div>
+    </div>
+
+    {% if course.type == 'liveOpen' %}
+    <div class="course-manage-subltitle cd-mb40">{{ 'my.teaching.open_course.liveTimeSet.title'|trans }}</div>
+
+      <div class="form-group start-form-group cd-mb8">
+        <label class="col-md-2 control-label" for="live-startTime">{{'my.teaching.open_course.liveTimeSet.start_time'|trans}}</label>
+        <div class="col-md-8 controls" style="z-index:2000;">
+          <input type="text" id="live-startTime"  name="startTime" class="form-control width-input width-input-large" autocomplete="off" value="{% if openLiveLesson %}{{ openLiveLesson.startTime|date('Y-m-d H:i:s') }}{% endif %}" data-url="{{ path('client_time_check') }}">
+          <div class="help-block cd-text-sm js-time-help-tip">
+            {{'my.teaching.open_course.liveTimeSet.start_time.help_block'|trans}}
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-md-2 control-label" for="live-length-field">{{'my.teaching.open_course.liveTimeSet.live_length'|trans}}</label>
+        <div class="col-md-8 controls">
+          <input type="text" name="timeLength" id="live-length-field" class="form-control width-input width-input-large" value="{{ openLiveLesson.length|default(60) }}" placeholder="{{'my.teaching.open_course.liveTimeSet.live_length.placeholer'|trans}}" data-calculate-left-capacity-url="" data-max-Student-Num = ""  data-url="
+          {% spaceless %}
+            {% if openLiveLesson|default(null) %}
+              {{path('live_open_lesson_time_check',{courseId:course.id,lessonId:openLiveLesson.id}) }}
+            {% else %}
+              {{path('live_open_lesson_time_check',{courseId:course.id})}}
+            {% endif %}
+          {% endspaceless %}">
+          <span class="cd-dark-minor cd-ml8 cd-text-medium">{{'my.teaching.open_course.liveTimeSet.live_length.minute'|trans}}</span>
+          <div class="help-block cd-text-sm js-time-help-tip"></div>
+        </div>
+
+        <input type="hidden" id="live_lesson_time_check" data-url="{% if openLiveLesson|default(null) %}{{path('live_open_lesson_time_check',{courseId:course.id,lessonId:openLiveLesson.id}) }}{% else %}{{path('live_open_lesson_time_check',{courseId:course.id})}}{% endif %}" />
+      </div>
+    {% endif %}
+
+
+    <div class="form-group">
+      <div class="col-md-offset-2 col-md-8 controls">
+        <button class="cd-btn cd-btn-primary" id="course-create-btn" type="button" data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.save'|trans }}</button>
+      </div>
+    </div>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+  </form>
+{% endblock %}
+
+
+
+

@@ -1,0 +1,55 @@
+{% extends 'group/layout.html.twig' %}
+{% block title %}{{'group.page_title'|trans}} {{ parent() }}{% endblock %}
+{% block content %}
+  <ol class="breadcrumb breadcrumb-o" style="margin-top:-18px">
+    <li><a href="{{path('homepage')}}">{{ homepage.name|default('homepage'|trans) }}</a></li>
+    <li class="active"><a href="{{path('group')}}">{{ group.name|default ('group.homepage'|trans)}}</a></li>
+  </ol>
+  <div class="row">
+    <div class="col-md-9">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">{{'group.hot_group.content_title'|trans}}</h3>
+          <a href="{{path('group_search_group')}}" class="more"><i class="es-icon es-icon-morehoriz"></i></a>
+        </div>
+        <div class="panel-body">
+          <div class="row media-group-list">
+            {% for group in activeGroup %}
+              <div class="media media-group col-md-4 col-sm-4">
+                <div class="media-left">
+                  <a href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">
+                    <img src="{{filepath(group.logo, 'group.png')}}" alt="{{group.title}}" class="avatar-square-md">
+                  </a>
+                </div>
+                <div class="media-body">
+                  <div class="title">
+                    <a class="gray-darker" href="{{ path('group_show',{id:group.id}) }}" title="{{group.title}}">
+                      {{ group.title|sub_text(9) }}
+                    </a>
+                  </div>
+                  <div class="metas">
+                    <span><i class="es-icon es-icon-people"></i>{{ group.memberNum }}</span>
+                    <span><i class="es-icon es-icon-textsms"></i>{{ group.threadNum }}</span>
+                  </div>
+                </div>
+              </div>
+            {% else %}
+              <div class="empty">{{'group.hot_group.empty'|trans}}</div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading"><h3 class="panel-title">{{'group.recent_article.content_title'|trans}}</h3></div>
+        <div class="panel-body">
+          {% include 'my/learning/group/groups-threads-ul.html.twig' with {
+          threads:recentlyThread,
+          groups:groupinfo,
+          users:owners,
+          }%}
+        </div>
+      </div>
+    </div>
+    {% include 'group/sidebar.html.twig' %}
+  </div>
+{% endblock %}

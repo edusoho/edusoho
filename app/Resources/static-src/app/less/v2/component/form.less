@@ -1,0 +1,34 @@
+.cd-form-group {
+  .form-control {
+    .form-control-base();
+  }
+  textarea.form-control {
+    .form-control-textarea();
+  }
+  &.has-error {
+    margin-bottom: 32px;
+    .form-control {
+      .cd-box-shadow-general(inset 0 -1px 0 0 @brand-danger);
+      &:focus {
+        .cd-box-shadow-general(inset 0 -2px 0 0 @brand-danger);
+      }
+    }
+    textarea.form-control {
+      .cd-box-shadow-general(none);
+      border-color: @brand-danger;
+      &:focus {
+        .cd-box-shadow-general(none);
+        border-color: @brand-danger;
+      }
+    }
+  }
+  .form-error-message {
+    position: absolute;
+    font-size: 12px;
+    line-height: 20px;
+    color: @brand-danger;
+  }
+  .cke {
+    margin-top: 8px;
+  }
+}

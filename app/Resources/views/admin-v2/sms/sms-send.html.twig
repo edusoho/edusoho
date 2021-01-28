@@ -1,0 +1,68 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}{{'user.register.sms.sms_send'|trans}}{% endblock %}
+{% block body %}
+
+    <lable id="smsSend-form" class="form-horizontal"  data-url = "{{ path('admin_v2_generate_short_link',{url:url})}}" style="display:none;">
+        <div class="row form-group">
+            <div class="col-md-3 control-label">
+                <label for="title">{{'user.register.sms.sms_send_to'|trans}}:</label>
+            </div>
+            <div class="col-md-7 controls">
+                <p class="help-block">{% if targetType == 'course' and item.parentId %}{{'user.register.sms.in_classroom'|trans({'%classroom.name%': classroom.name|default('site.default.classroom'|trans)})}} {% else %}{{'site.default.all'|trans}}{% endif %}{{'site.default.user'|trans}}</p>
+            </div>
+        </div>
+
+        <div class="row form-group">
+            <div class="col-md-3 control-label">
+                <label for="title">{{'user.register.sms.send_sms_nums'|trans}}:</label>
+            </div>
+            <div class="col-md-7 controls">
+                <p class="help-block">{{count}}</p>
+            </div>
+        </div>
+
+        <div class="row form-group">
+            <div class="col-md-3 control-label">
+                <label for="startTime">{{'user.register.sms.send_content'|trans}}:</label>
+            </div>
+            <div style="z-index:2000;">
+                <p class="help-block">
+                    {% if smsInfo.usedSmsSign.name|default()  %}
+                        【{{ smsInfo.usedSmsSign.name }}】
+                    {% endif %}
+                    {% if targetType == 'classroom' %}{{ classroom.name|default('site.default.classroom'|trans) }}{% else %}{{'site.default.course'|trans}}{% endif %}：《{{item.title}}》{{'user.register.sms.start_regist'|trans}} ! <a href ='{{url}}' target="_blank">{{'user.register.sms.link_address'|trans}}</a>
+                </p>
+            </div>
+        </div>
+    </lable>
+
+    <form id="smsSend-ready" class="form-horizontal">
+        <input type="hidden" name="sms_open" value={{isOpen}}>
+        <div class="row form-group">
+            <div class="col-md-8 control-label">
+                <p>{% if isOpen %}{{'user.register.sms.prepare_sending'|trans}}{% else %}{{'user.register.sms.cloud_sms_open_tips'|trans}}{% endif %}</p>
+            </div>
+        </div>
+    </form>
+    <div id="smsSend-progress" class="package-update-progress" style="display:none;">
+        <div class="progress progress-striped active">
+            <div class="progress-bar progress-bar-success" style="width: 0%"></div>
+        </div>
+        <div class="color-success progress-text"></div>
+    </div>
+
+{% endblock %}
+
+{% block footer %}
+    <button id = 'begin-smsSend' data-url="{{ path('admin_v2_publish_sms_send',{targetType:targetType,id:item.id,count:count,index:0,url:url}) }}" data-submiting-text="{{'form.btn.submit.submiting'|trans}}" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#smsSend-form" style="display:none;">{{'form.btn.send'|trans}}</button>
+    <strong class="text color-danger" id="updating-hint" style="display:none;">{{'register.sms.not_close_window_tips'|trans}}...</strong>
+    <button id = 'cancle-smsSend'type="button" class="btn btn-link pull-right" data-dismiss="modal" style="display:none;">{{'form.btn.cancel'|trans}}</button>
+    <button id="finish-smsSend" data-loading-text="{{'user.register.sms.wait_tips'|trans}}..." class="btn btn-primary" style="display:none">{{'user.register.sms.send_success'|trans}}</button>
+
+    {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+    <script> app.lazyLoad = function() { app.load('topxiaadminbundle/controller/sms/sms-send') }; </script>
+
+{% endblock %}

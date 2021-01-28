@@ -1,0 +1,10 @@
+{% extends 'layout.html.twig' %}
+{% block title %}{{ 'pay_center.pay.weixin_pay'|trans }} - {{ parent() }}{% endblock %}
+{% do script(['app/js/pay/wxpay-redirect/index.js'])%}
+{% block body %}
+  <div class="panel panel-default panel-wxpay ">
+    <div id="jsWebViewPay" data-goto="{{ mwebUrl }}">
+    </div>
+    <a id="openApp" style="display: none;" href="kuozhi://objc://wxpayCallback?{% if trade.status == 'paid' %}1{% else %}0{% endif %}">redirect APP</a>
+  </div>
+{% endblock %}

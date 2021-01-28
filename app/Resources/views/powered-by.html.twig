@@ -1,0 +1,8 @@
+{% if setting('copyright.owned') and setting('copyright.thirdCopyright')|default(0) != 2 and setting('copyright.licenseDomains') and app.request.server.get('HTTP_HOST') in setting('copyright.licenseDomains')|split(';') %}
+  {% if setting('copyright.name') %}
+    Powered by <a href="{{ path('homepage') }}" target="_blank">{{ setting('copyright.name') }}</a>
+  {% endif %}
+{% else %}
+  Powered by <a href="http://www.edusoho.com/" target="_blank">EduSoho v{{ constant('\\AppBundle\\System::VERSION') }}</a>
+  ©2014-{{ null|date('Y') }}
+{% endif %}

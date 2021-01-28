@@ -1,0 +1,38 @@
+{% extends 'classroom-manage/students.html.twig' %}
+
+{% block title %}{{'classroom.auditor_manage'|trans}} - {{ parent() }}{% endblock %}
+
+{% set submenu = 'aduitor' %}
+{% do script(['app/js/classroom-manage/students-manage/index.js']) %}
+
+{% block maincontent %}
+ <div class="alert alert-info "><i class="es-icon es-icon-infooutline mrm"></i>{{'classroom.auditor_buy_tips'|trans({'%name%':setting('classroom.name')|default('classroom'|trans),'%classroomName%':setting('classroom.name')|default('classroom'|trans)})}}</div>
+  <form class="form-inline well well-sm " action="" method="get" novalidate>
+    <div class="form-group col-md-7">
+      <input class="form-control " style="width:45%" type="text" placeholder="{{'classroom.student_placeholder'|trans}}" name="keyword" value="{{ app.request.get('keyword') }}">
+
+      <button class="btn btn-primary">{{'form.btn.search'|trans}}</button>
+    </div>
+    <div class="clearfix"></div>
+  </form>
+
+  <table class="table table-striped" id="course-student-list">
+    <thead>
+      <tr>
+        <th width="40%">{{'classroom.auditor'|trans}}</th>
+         <th width="30%"></th>
+        <th width="30%">{{'classroom.student_opertion'|trans}}</th>
+      </tr>
+    </thead>
+    <tbody>
+       {% for student in students %}
+        {% set user = users[student.userId] %}
+        {% include ('classroom-manage/auditor.tr.html.twig') %}
+      {% else %}
+        <tr class="empty"><td colspan="20">{{'classroom.student_empty'|trans}}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {{ web_macro.paginator(paginator) }}
+
+{% endblock %}

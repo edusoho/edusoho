@@ -1,0 +1,28 @@
+{% if course %}
+  <div class="es-box">
+    <div class="es-box-heading">
+      <h2>{{'在学课程'|trans}}</h2>
+    </div>
+    <div class="es-box-body user-learn clearfix">
+      <a href="{{ path('course_show', {id:course.id}) }}">
+        <img src="{{ filepath(course.largePicture, 'avatar.png') }}"  class="img-responsive thumb pull-left">
+      </a>
+      <p>《{{ course.title }}》</p>
+      {% set teacher = teachers|first %}
+      <p class="teacher-name">{{'教师：'|trans}}{{ teacher.nickname|default("") }}</p>
+      <div class="progress-block clearfix">
+        <div class="progress" style="width:90%">
+          <span class="progress-bar" style="width: {{ progress.percent }};"></span>
+        </div>  
+        <div class="percentage clearfix">{{'完成%progressPercent%'|trans({'%progressPercent%': progress.percent}) }}</div>
+
+        {% if nextLearnLesson %}
+          <div class="continue">
+            <a href="{{ path('course_learn', {id:course.id}) }}#lesson/{{nextLearnLesson.id}}" title="{{'继续学习：%nextLearnLessonTitle%'|trans({'%nextLearnLessonTitle%': nextLearnLesson.title})}}" class="btn btn-success pull-right">{{'继续学习'|trans}}</a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endif %}
+        

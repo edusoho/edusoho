@@ -1,0 +1,19 @@
+{% extends 'testpaper/testpaper-layout.html.twig' %}
+
+{% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-timer.js','libs/perfect-scrollbar.js','app/js/testpaper/do-test/normal/index.js']) %}
+
+{% block paper_description %}
+  <div class="testpaper-description cke_editable cke_contents_ltr">{{ paper.description|bbCode2Html|raw }}</div>
+{% endblock %}
+
+{#{% block paper_question_type_bar %}
+  {% include 'testpaper/part/paper-type-bar.html.twig' with {showTypeBar:showTypeBar|default(1), questionTypes:questionTypes} %}
+{% endblock %}#}
+
+{% block paper_sidebar %}
+  {% if showCard|default(1) %}
+    <div class="testpaper-card {{ testpaperCardClass|default('') }}" >
+      {% include 'testpaper/testpaper-card.html.twig' %}
+    </div>
+  {% endif %}
+{% endblock %}

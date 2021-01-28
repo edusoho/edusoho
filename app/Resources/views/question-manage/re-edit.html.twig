@@ -1,0 +1,51 @@
+{% extends 'layout.html.twig' %}
+
+{% set lang = app.request.getLocale() %}
+
+{% if lang == 'en' %}
+  {% do script(['libs/vue.js','libs/item-bank/lib/itemBank.umd.min.js', 'libs/item-bank/lib/locale/en-US.js', 'app/js/re-edit/index.js']) %}
+{% else %}
+  {% do script(['libs/vue.js','libs/item-bank/lib/itemBank.umd.min.js','app/js/re-edit/index.js']) %}
+{% endif %}
+
+{% block title %}{{ 'course.testpaper_manage.import.re_edit.title'|trans }} - {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  {% if maincolor != 'default' and setting('theme.code', 'jianmo') == 'jianmo' %}
+    <link href="{{ asset('static-dist/libs/item-bank/lib/styles/item-bank-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
+  {% else %}
+    <link href="{{ asset('static-dist/libs/item-bank/lib/styles/item-bank.css') }}" rel="stylesheet" />
+  {% endif %}
+{% endblock %}
+
+{% block body %}
+
+  {% set showHeader = 1 %}
+  {% block header %}
+    {% if showHeader %}{{ parent() }}{% endif %}
+  {% endblock %}
+  
+  <div id="app"></div>
+  <input type="hidden" name="filename" value='{{ filename }}'>
+  <input type="hidden" name="items" value='{{ items|json_encode }}'>
+  <input type="hidden" name="bankId" value='{{ questionBankId }}'>
+  <input type="hidden" name="categoryTree" value='{{ categoryTree|json_encode }}'>
+  <input type="hidden" name="type" value="{{ type }}">
+  <input type="hidden" name="ckeditor_path" value="{{ asset('static-dist/libs/es-ckeditor/ckeditor.js') }}">
+  <input type="hidden" name="jquery_path" value="{{ asset('static-dist/libs/jquery/dist/jquery.min.js') }}">
+  <input type="hidden" name="ckeditor_image_upload_url" value="{{ path('editor_upload', {token:upload_token('course')}) }}">
+  <input type="hidden" name="ckeditor_image_download_url" value="{{ path('editor_download', {token:upload_token('course')}) }}">
+  <input type="hidden" name="saveUrl" value="
+    {% if type == 'item' %}
+      {{ path('questions_import_save', {token: app.request.get('token')}) }}
+    {% else %}
+      {{ path('testpaper_import_save', {token: app.request.get('token')}) }}
+    {% endif %}
+  ">
+  {% include 'attachment-upload/upload-data.html.twig' %}
+
+  {% block footer %}
+    {% if showHeader|default(1) %}{{ parent() }}{% endif %}
+  {% endblock %}
+{% endblock %}

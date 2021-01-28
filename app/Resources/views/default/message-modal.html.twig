@@ -1,0 +1,21 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% set typeTitles = {info:'site.message.info'|trans, warning:'site.message.warning'|trans, error: 'site.message.error'|trans} %}
+
+{% set title = title|default(typeTitles[type]) %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block body %}
+
+ <div id="page-message-container" class="page-message-container" data-goto="{{ goto }}" data-duration={{ duration }}>
+  <div class="page-message-panel">
+    <div class="page-message-body">{{ message|default('') }}</div>
+  </div>
+</div>
+
+
+{% endblock %}
+
+{% block footer %}
+  <button class="btn btn-primary" type="button" data-dismiss="modal">{{'form.btn.close'|trans}}</button>
+{% endblock %}

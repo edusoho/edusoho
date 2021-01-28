@@ -1,0 +1,49 @@
+.homepage-feature {
+  width: 100%;
+  .border-radius;
+  border: 1px solid @border-color;
+}
+
+.homepage-feature a,
+.homepage-feature img {
+  display: block;
+  width: 100%;
+}
+
+.homepage-feature-slides {
+  z-index: 0;
+}
+
+.homepage-feature-slides a,
+.homepage-feature-slides img {
+  display: none;
+}
+
+.homepage-feature-slides a img {
+  display: block;
+}
+
+.homepage-feature .cycle-pager {
+  text-align: center;
+  width: 100%;
+  z-index: 500;
+  position: absolute;
+  bottom: 10px;
+  overflow: hidden;
+}
+
+.homepage-feature .cycle-pager span {
+  font-family: arial;
+  font-size: 40px;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  color: #ddd;
+  color: rgba(221, 221, 221, 0.7);
+  cursor: pointer;
+  line-height: 18px;
+}
+
+.homepage-feature span.cycle-pager-active {
+  color: #096;
+}

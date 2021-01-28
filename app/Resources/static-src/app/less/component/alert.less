@@ -1,0 +1,146 @@
+.alert {
+  > i {
+    margin-right: 10px;
+  }
+  &.alert-lg {
+    padding: 30px 20px;
+  }
+  &.alert-xs {
+    font-size: 12px;
+    padding: 5px 10px;
+    margin-bottom: 0;
+  }
+  &.alert-sm {
+    padding: 8px 10px;
+  }
+  a {
+    text-decoration: none;
+  }
+}
+
+.alert-success {
+  border-color: #cddfb4;
+  background-color: #f2fae3;
+  color: #659f13;
+  .close,
+  .alert-link {
+    color: #659f13;
+  }
+  hr {
+    border-top-color: darken(#cddfb4, 5%);
+  }
+}
+
+.alert-info {
+  border-color: #d6ebfa;
+  background-color: #edf6fd;
+  color: #54b3e8;
+  .close,
+  .alert-link {
+    color: #54b3e8;
+  }
+  hr {
+    border-top-color: darken(#d6ebfa, 5%);
+  }
+}
+
+.alert-warning {
+  border-color: #ffd0b7;
+  background-color: #fff9cd;
+  color: #ff5e06;
+  .close,
+  .alert-link {
+    color: #ff5e06;
+  }
+  hr {
+    border-top-color: darken(#ffd0b7, 5%);
+  }
+}
+
+.alert-danger {
+  border-color: #f0c7bd;
+  background-color: #fff1f0;
+  color: #e74c3c;
+  .close,
+  .alert-link {
+    color: #e74c3c;
+  }
+  hr {
+    border-top-color: darken(#f0c7bd, 5%);
+  }
+}
+
+.alert-blank {
+  color: #000;
+  background-color: @bg-color;
+}
+
+// 之后需要移出-应属于具体业务
+.alert-default {
+  border-color: @gray-light;
+  background-color: @gray-lighter;
+  .close,
+  .alert-link {
+    color: @gray;
+  }
+  // 用于班级、课程公告
+  &.alert-edit {
+    &:hover {
+      .es-transition;
+      .alert-warning();
+      .editor {
+        >a {
+          color: @brand-warning - #333;
+        }
+      }
+      .details {
+        border-color: @brand-warning + #0c1957;
+      }
+    }
+    .alert-header {
+      position: relative;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+    .icon-click {
+      position: absolute;
+      top: 0;
+      left: 5px;
+    }
+    .title {
+      .text-overflow;
+      padding: 0 150px 0 30px;
+    }
+    .editor,
+    .data {
+      position: absolute;
+      top: 0;
+      right: 5px;
+    }
+    .editor {
+      >a {
+        color: @gray;
+      }
+    }
+    .details {
+      display: none;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid @gray-light; 
+    }
+  }
+}
+
+// 待删
+.set-email-alert {
+  font-size: 12px;
+  text-align: center;
+  margin-bottom: 0px;
+  border-radius: 0px; 
+  padding: 5px;
+  .close {
+    font-size: 16px;
+  }
+}
+

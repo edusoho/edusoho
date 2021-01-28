@@ -1,0 +1,87 @@
+.modal .testpaper-question {
+  border-top: none;
+  padding-top: 0;
+}
+
+.testpaper-question {
+  position: relative;
+  margin-bottom: 50px;
+  font-size: 14px;
+  border-top: 1px solid #ccc;
+  padding-top: 20px;
+  &:first-child {
+    border-top: none;
+  }
+}
+
+.testpaper-question-seq {
+  font-size: 20px;
+  color: #3a87ad;
+}
+
+.testpaper-question-seq-wrap {
+  float: left;
+  width: 40px;
+  margin-right: 10px;
+  text-align: center;
+}
+
+.testpaper-question-stem {
+  margin-bottom: 10px;
+  border-bottom: 1px dashed #ddd;
+  overflow: hidden;
+  zoom: 1;
+  img {
+    max-width: 100%;
+  }
+  p {
+    margin-bottom: 0;
+  }
+}
+
+// 材料题
+.testpaper-question-stem-material {
+  img {
+    max-width: 100%;
+  }
+}
+
+.testpaper-question-score {
+  font-size: 12px;
+  color: #aaa;
+  border: 1px solid #ccc;
+  padding: 0px 1px;
+  border-radius: 5px;
+  background: #f6f6f6;
+  display: inline-block;
+}
+
+
+.testpaper-question-footer {
+  padding-left: 50px;
+}
+
+.testpaper-question-footer__input {
+  label {
+    padding: 8px 20px 8px 30px;
+    display: inline-block;
+    &:hover,
+    &.active {
+      background: #eee;
+    }
+    @media (max-width: @screen-xs-max) {
+      padding: 6px 5px 6px 25px;
+    }
+  }
+}
+
+.testpaper-question-actions {
+  @media(max-width: @screen-xs-max) {
+    width: 100%;
+    text-align: right;
+  }
+}
+
+.testpaper-preview-answer {
+  margin-left: 50px;
+}

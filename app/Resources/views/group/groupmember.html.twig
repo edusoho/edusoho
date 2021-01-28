@@ -1,0 +1,221 @@
+{% extends 'group/layout.html.twig' %}
+{% block title %}{{groupinfo.title}}{{ 'group.page_title'|trans }} - {{ parent() }}{% endblock %}
+{% do script(['app/js/group/member/index.js']) %}
+{% set groupNav = 'member' %}
+
+{% block group_main %}
+  <div class="panel panel-default">
+    <div class="panel-heading"><h3 class="panel-title">{{'group.detail.introduction'|trans}}</h3></div>
+    <div class="panel-body">
+      {% if paginator.currentPage == paginator.firstPage %}
+        <div class="well editor-text cke_editable cke_contents_ltr">
+          {% if groupinfo.about%} {{groupinfo.about|cdn|raw}} {% else %} {{'group.detail.introduction.empty'|trans}} {% endif %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+  <div class="es-section js-group-section">
+    <ul class="nav nav-tabs">
+      <li {% if groupNav=="index" %}class="active"{% endif %}><a href="{{path('group_show',{id:groupinfo.id})}}">{{'group.detail.group_homepage'|trans}}</a></li>
+      <li {% if groupNav=="member" %}class="active"{% endif %}><a href="{{path('group_member',{id:groupinfo.id})}}">{{'group.detail.group_members'|trans}}</a></li>
+      {% if is_groupmember==2 or is_granted('ROLE_ADMIN') or is_groupmember==3%}
+        <li {% if groupNav=="setting" %}class="active" {% endif %}><a  href="{{path('group_set',{id:groupinfo.id})}}">{{'group.detail.group_settings'|trans}}</a></li>
+      {% endif %}
+    </ul>
+
+    {{ web_macro.flash_messages() }}
+    <div class="es-piece">
+      <div class="piece-header">{{'group.detail.group_members.leader'|trans}}</div>
+      <div class="piece-body clearfix">
+        <div class="grouplist">
+          {% if not owner_info.destroyed|default(0) %}
+          <a href="{{path('user_show',{id:owner_info.id})}}" title="{{owner_info.nickname}}"  >
+            <img src="{{ filepath(owner_info.largeAvatar, 'avatar.png') }}" alt="{{owner_info.nickname}}" class="avatar-md">
+          </a>
+          {% else %}
+            {{ 'user.user_had_destroyed'|trans }}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="es-piece">
+      <div class="piece-header">{{'group.detail.group_members.vice_leader'|trans}}</div>
+      <div class="piece-body clearfix">
+        <form action="{{path('group_remove_admin',{id:groupinfo.id})}}" method="post" id="admin-form">
+          {% if groupAdmin %}
+            {% if is_groupmember==2 or is_granted('ROLE_ADMIN')  %}
+              <button id="remove-admin-btn" type="button" class="btn btn-default btn-sm pull-right">{{'group.detail.group_members.cancel_vice_leader_btn'|trans}}</button>
+            {% endif %}
+            {% for member in groupAdmin %}
+              <div class="grouplist"  style="width: 82px;">
+                <p>{{ web_macro.user_avatar(usersLikeAdmin[member.userId] , '','avatar-md') }}</p>
+
+                {% if is_groupmember==2 or is_granted('ROLE_ADMIN') %}
+                  <input type="checkbox" value="{{member.userId}}" name="adminId[]"class="checkboxs">
+                {% endif %}
+                <br>
+              </div>
+            {% endfor %}
+          {% else %}
+            <p><span class="color-gray">{{'group.detail.group_members.vice_leader.empty'|trans}}</span></p>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+
+    <div class="btn-group pull-right">
+      {% if groupmember_info %}
+        {% if is_groupmember==2 or is_granted('ROLE_ADMIN') or is_groupmember==3 %}
+          <button  id="delete-btn" type="button" class="btn btn-default btn-sm ">{{'group.detail.group_members.vice_leader.cancel_member_btn'|trans}}</button>
+        {% endif %}
+        {% if is_groupmember==2 or is_granted('ROLE_ADMIN') %}
+          <button  id="set-admin-btn" type="button" class="btn btn-default btn-sm ">{{'group.detail.group_members.vice_leader.setup_btn'|trans}}</button>
+          <input id="set-admin-url" type="hidden" value="{{path('group_set_admin',{id:groupinfo.id})}}">
+        {% endif %}
+      {% endif %}
+    </div>
+
+    <div class="es-piece">
+      <div class="piece-header">{{'group.detail.group_members.members'|trans}}</div>
+      <div class="piece-body">
+        <form action="{{path('group_member_delete',{id:groupinfo.id})}}" method="post" id="member-form" class="clearfix">
+          {% if groupmember_info %}
+            {% for member in groupmember_info %}
+              <div class="grouplist">
+                <p>{{ web_macro.user_avatar(members[member.userId] , '','avatar-md') }}</p>
+
+                {% if is_groupmember==2 or is_granted('ROLE_ADMIN') or is_groupmember==3%}
+                  <input type="checkbox" value="{{member.userId}}" name="memberId[]"class="checkboxs">
+                {% endif %}<br>
+              </div>
+            {% endfor %}
+
+            {% if is_groupmember==2 or is_granted('ROLE_ADMIN') or is_groupmember==3 %}
+              <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+            {% endif %}
+
+          {% else %}
+            <p><span class="color-gray">{{'group.detail.group_members.members.empty'|trans}}</span></p>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+
+    <nav class="text-center">
+      {{ web_macro.paginator(paginator) }}
+    </nav>
+  </div>
+{% endblock %}
+
+{% block group_side %}
+  {% if is_groupmember != 0 %}
+    <div class="mbm"><a href="{{path('group_thread_add',{id:groupinfo.id})}}" class="btn btn-success btn-xlg btn-block" role="button"><i class="es-icon es-icon-comment mrs text-xlg"></i>{{'group.detail.create_article'|trans}}</a>
+    </div>
+  {% endif %}
+  <form class="mbl" action="{{path('group_search',{id:groupinfo.id})}}" method="get">
+    <div class="search-with-btn">
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      <input type="text" class="form-control" placeholder="{{'group.detail.search_input_placeholder'|trans}}" name="keyWord">
+      <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+    </div>
+  </form>
+  {% if is_groupmember in [1, 2, 3] %}
+    <div class="panel panel-default">
+      <div class="panel-body group-user-info">
+        <div class="media group-item">
+          <div class="media-left">
+            {{ web_macro.user_avatar(user, '' ,'avatar-md') }}
+          </div>
+          <div class="media-body">
+            <p>{{ web_macro.user_link(user , '') }}
+
+              {% if is_groupmember==1%}
+              <span class="label label-primary">{{'group.detail.member'|trans}}</span>
+              {% endif %}
+
+              {% if is_groupmember==2%}
+              <span class="label label-primary">{{'group.detail.leader'|trans}}</span>
+              {% endif %}
+
+              {% if is_groupmember==3%}
+              <span class="label label-primary">{{'group.detail.vice_leader'|trans}}</span>
+              {% endif %}
+            </p>
+            <a href="{{ path ('my_group_member_center') }}" class="btn btn-default btn-sm" role="button">{{'group.detail.my_group_btn'|trans}}</a>
+          </div>
+          <hr>
+           <p class="group-message clearfix">
+              <span><strong>{{userIsGroupMember.threadNum}}</strong>{{'group.detail.articles'|trans}}</span>
+              <span><strong>{{userIsGroupMember.postNum}}</strong>{{'group.detail.replies'|trans}}</span>
+            </p>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  <div class="panel panel-default">
+    <div class="panel-heading"><h3 class="panel-title">{{'group.detail.group_leader'|trans}}</h3></div>
+    <div class="panel-body">
+      <div class="media group-item">
+        <div class="media-left">
+          {{ web_macro.user_avatar(groupOwner, '') }}
+        </div>
+        <div class="media-body">
+          {% if not groupOwner.destroyed|default(0) %}
+            <div><a class="gray-darker" href="{{path('user_show',{id:groupOwner.id})}}" title="{{groupOwner.nickname}}">{{groupOwner.nickname}}</a></div>
+          {% else %}
+            <div><a class="gray-darker">{{ 'user.user_had_destroyed'|trans }}</a></div>
+          {% endif %}
+          <span class="text-sm gray-medium">{{ groupOwner.title|default('group.detail.group_leader.empty'|trans) }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading"><h3 class="panel-title">{{'group.detail.new_group_members'|trans}}</h3></div>
+    <div class="panel-body">
+      {% if recentlyJoinMember %}
+        <ul class="user-avatar-list clearfix">
+          {% for member in recentlyJoinMember %}
+            <li>
+              {{ web_macro.user_avatar(recentlyMembers[member.userId] ,'', 'avatar-sm') }}
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <div class="empty">{{'group.detail.new_group_members.empty'|trans}}</div>
+      {% endif %}
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading"><h3 class="panel-title">{{'group.detail.hot_group'|trans}}</h3></div>
+    <div class="panel-body">
+      <div class="media-group-list">
+      {% set hotGroups = data('HotGroup',{'count':3}) %}
+      {% for group in hotGroups %}
+        <div class="media media-group">
+          <div class="media-left prm">
+            <a href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">
+              <img src="{{filepath(group.logo, 'group.png')}}" alt="{{group.title}}" class="avatar-square-md">
+            </a>
+          </div>
+          <div class="media-body">
+            <div class="title">
+              <a class="gray-darker" href="{{ path('group_show',{id:group.id}) }}" title="{{group.title}}">
+                {{group.title}}
+              </a>
+            </div>
+            <div class="metas">
+              <span><i class="es-icon es-icon-people"></i>{{group.memberNum}}</span>
+              <span><i class="es-icon es-icon-textsms"></i>{{group.threadNum}}</span>
+            </div>
+          </div>
+        </div>
+      {% else %}
+        <div class="empty">{{'group.detail.hot_group_empty'|trans}}</div>
+      {% endfor %}
+      </div>
+
+    </div>
+  </div>
+{% endblock %}

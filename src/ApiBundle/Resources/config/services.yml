@@ -1,0 +1,102 @@
+services:
+    api_oauth2_authentication_listener:
+        class: ApiBundle\Security\Firewall\OAuth2AuthenticationListener
+        arguments: ['@service_container']
+
+    api_basic_authentication_listener:
+        class: ApiBundle\Security\Firewall\BasicAuthenticationListener
+        arguments: ['@service_container']
+
+    api_session_authentication_listener:
+        class: ApiBundle\Security\Firewall\SessionAuthenticationListener
+        arguments: ['@service_container']
+
+    api_third_party_oauth2_authentication_listener:
+        class: ApiBundle\Security\Firewall\ThirdPartyOAuth2AuthenticationListener
+        arguments: ['@service_container']
+
+    api_h5_third_party_oauth2_authentication_listener:
+        class: ApiBundle\Security\Firewall\H5ThirdPartyOAuth2AuthenticationListener
+        arguments: ['@service_container']
+
+    api_token_header_listener:
+        class: ApiBundle\Security\Firewall\XAuthTokenAuthenticationListener
+        arguments: ['@service_container']
+
+    api_old_token_header_listener:
+        class: ApiBundle\Security\Firewall\OldTokenAuthenticationListener
+        arguments: ['@service_container']
+
+    api_anonymous_listener:
+        class: ApiBundle\Security\Firewall\AnonymousListener
+        arguments: ['@security.token_storage']
+
+    api_web_lib_listener:
+        class: ApiBundle\Security\Firewall\WebLibAuthenticationListener
+        arguments: ['@service_container']
+
+    api_default_authentication:
+        class: ApiBundle\Security\Authentication\DefaultResourceAuthenticationProvider
+        arguments: ['@service_container']
+
+    api_authentication_manager:
+        class: ApiBundle\Security\Authentication\ResourceAuthenticationProviderManager
+        arguments:
+            - '@service_container'
+            - ['@api_default_authentication']
+
+    api_firewall:
+        class: ApiBundle\Security\Firewall\Firewall
+        arguments:
+            - ['@api_basic_authentication_listener', '@api_token_header_listener', '@api_old_token_header_listener', '@api_h5_third_party_oauth2_authentication_listener', '@api_third_party_oauth2_authentication_listener', '@api_session_authentication_listener', '@api_web_lib_listener', '@api_anonymous_listener']
+
+    api_resource_kernel:
+        class: ApiBundle\Api\ResourceKernel
+        arguments: ['@service_container']
+
+    api_exception_listener:
+        class: ApiBundle\EventListener\ExceptionListener
+        arguments: ['@service_container']
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, priority: 1024 }
+
+    api_authenticate_listener:
+        class: ApiBundle\EventListener\AuthenticateListener
+        arguments: ['@service_container']
+        tags:
+            - { name: kernel.event_listener, event: 'api.before_authenticate', priority: 1024, method: onAuthenticate }
+
+    api_biz_ratelimit_listener:
+        class: ApiBundle\EventListener\BizRateLimitListener
+        arguments: ['@biz']
+        tags:
+            - { name: kernel.event_listener, event: api.after_authenticate, priority: 1024, method: handle }
+
+    api_response_viewer:
+        class: ApiBundle\Viewer
+        arguments: ['@service_container']
+
+    api.resource.manager:
+        class: ApiBundle\Api\Resource\ResourceManager
+        arguments: ['@service_container']
+
+    api.path.parser:
+        class: ApiBundle\Api\PathParser
+
+    api.plugin.config.manager:
+        class: Codeages\PluginBundle\System\PluginConfigurationManager
+        arguments: ['%kernel.root_dir%']
+
+    api.util.oc:
+        class: ApiBundle\Api\Util\ObjectCombinationUtil
+        arguments: ['@biz']
+
+    api.field.filter.factory:
+        class: ApiBundle\Api\Resource\FieldFilterFactory
+        arguments: ['@annotation_reader']
+
+    api.util.item_helper:
+        class: ApiBundle\Api\Util\ItemHelper
+        arguments: ['@biz','@service_container']
+
+

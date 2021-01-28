@@ -1,0 +1,92 @@
+<div class="text-line gray small">
+  <h5><span>{{ 'es_bar.study_center.study_mission'|trans({'%taskName%': setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}</span></h5>
+  <div class="line"></div>
+</div>
+
+{% if app.user.id|default(0) %}
+  {% set studyMissions = data('StudyCenterMissions', {userId: app.user.id, count: 5, missionCount: 3}) %}
+  {% set classrooms = studyMissions.classrooms|default(null) %}
+  {% set courses = studyMissions.courses|default(null) %}
+{% endif %}
+
+{% if classrooms|default(false) or courses|default(false) %}
+  {% for classroom in classrooms if classrooms %}
+    <div class="bar-task">
+      <div class="bar-task-header">
+        <div class="title">
+          {{ setting('classroom.name')|default('classroom'|trans) }}:{{ classroom.title }}
+          <span>{{ classroom.learnedTaskNum ~ '/' ~ classroom.allTaskNum }}</span>
+        </div>
+      </div>
+
+      <ul class="bar-time-line">
+        {% for task in classroom.tasks if task %}
+          {% set lock  = task.lock|default(false) %}
+          <li>
+            <span class="es-icon
+              {% if lock %}
+                es-icon-lock
+              {% elseif  not task.result|default(null) %}
+                es-icon-undone-check
+              {% elseif task.result.status == 'start' %}
+                es-icon-doing
+              {% elseif task.result.status == 'finish' %}
+                es-icon-iccheckcircleblack24px
+              {% endif %}
+            "></span>
+
+            {% if  lock %}
+              {{ 'es_bar.study_center.mission_number_and_title'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%number%': task.number,'%title%': task.title}) }}
+            {% else %}
+              <a class="link-dark"
+                {% if not lock %} href="{{ path('course_task_show', {courseId:task.courseId, id:task.id}) }}" {% endif %}
+                 title="{{ task.title }}"
+                 target="_blank">{{ 'es_bar.study_center.mission_number_and_title'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%number%': task.number,'%title%': task.title}) }}</a>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endfor %}
+  {% for course in courses|default(null) %}
+    {% if course['tasks'] %}
+      <div class="bar-task">
+        <div class="bar-task-header">
+          <div class="title">
+            {% set courseSet = data('CourseSet',{id: course.courseSetId}) %}
+            {{ 'es_bar.study_center.course_title'|trans({'%title%': courseSet.title}) }}
+            <span>{{ course.finishTaskNum ~ '/' ~ course.taskNum }}</span>
+          </div>
+        </div>
+
+        <ul class="bar-time-line">
+
+          {% for task in course['tasks'] %}
+            {% set task_lock =  (course.learnMode  == 'lockMode')  and (  loop.index != 1 and  task.lock  ) %}
+            <li><span class="es-icon
+            {% if task_lock %}
+            es-icon-lock
+            {% elseif  not task.result|default(null) %}
+            es-icon-undone-check
+            {% elseif task.result.status == 'start' %}
+            es-icon-doing
+            {% elseif task.result.status == 'finish' %}
+            es-icon-iccheckcircleblack24px
+            {% endif %}
+            left-menu"></span>
+            {% if task_lock is empty %}
+              <a class="link-dark" href="{{ path('course_task_show', {courseId:task.courseId, id:task.id}) }}"
+                 title="{{ task.title }}"
+                 target="_blank">{{ 'es_bar.study_center.mission_number_and_title'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%number%': task.number,'%title%': task.title}) }}</a></li>
+            {% else %}
+              {{ 'es_bar.study_center.mission_number_and_title'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%number%': task.number,'%title%': task.title}) }}</li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+  {% endfor %}
+{% else %}
+  <span class=""></span>{{ 'es_bar.study_center.mission_empty_tips'|trans({'%courseSetExplore%': path('course_set_explore')})|raw }}>></a>
+
+{% endif %}

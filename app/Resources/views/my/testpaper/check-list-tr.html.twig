@@ -1,0 +1,30 @@
+<tr>
+  <td class="vertical-middle">
+    {{ assessment.name|plain_text(60) }}
+    <div>
+      <small class="color-gray">
+        {{ 'come.from'|trans }}<a class="link-primary" href="{{ path('course_show',{id:course.id}) }}" target="_blank">《{{get_formated_course_title(course)}}》</a>
+      </small>
+      <small class="color-gray mhs">•</small>
+      <small class="color-gray" title="{{'my.learning.homework.begin_time'|trans}}">{{'my.teaching.testpaper.detail'|trans({'%score%':assessment.total_score,'%itemCount%':assessment.question_count})}}</small>
+    </div>
+  </td>
+  <td class="vertical-middle">
+    {{ web_macro.user_link(student) }} <br>
+    <small class="color-gray">{{ answerRecord.end_time|date("Y-n-d H:i") }} {{'my.teaching.testpaper.submit'|trans}}</small>
+  </td>
+  {% if status == 'finished'%}
+  <td class="vertical-middle">
+      <div class="text-warning">
+        {{'my.teaching.testpaper.answer_detail'|trans({'%totalCount%': answerReport.score, '%objectiveScore%': answerReport.objective_score, '%subjectiveScore%': answerReport.subjective_score, '%teacherName%': teacher.nickname|default('my.teaching.testpaper.default_teacher'|trans), '%checkTime%': answerReport.review_time|date('site.date_format_H_i'|trans)})|raw}}
+      </div>
+  </td>
+  {% endif %}
+  <td class="vertical-middle">
+    {% if status == 'reviewing' and (not isTeacher is defined or isTeacher) %}
+      <a class="link-primary" href="{{ path('course_manage_testpaper_check', {id:course.id,answerRecordId:answerRecord.id,source:source|default('course'),targetId:targetId|default(0)}) }}" target="_blank">{{'my.teaching.testpaper.check'|trans}}</a>
+    {% else %}
+      <a class="link-primary" href="{{ path('testpaper_result_show', {action:'check',id:course.id,answerRecordId:answerRecord.id,source:source|default('course'),targetId:targetId|default(0)}) }}" target="_blank">{{'my.teaching.testpaper.watch_result'|trans}}</a>
+    {% endif %}
+  </td>
+</tr>

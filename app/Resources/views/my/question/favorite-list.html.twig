@@ -1,0 +1,49 @@
+{% extends 'my/layout.html.twig' %}
+{% set side_nav = 'my-testpaper' %}
+{% do script(['app/js/quiz-question/my-favorite/index.js']) %}
+
+{% block main %}
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+  <div class="panel panel-default panel-col">
+    <div class="panel-heading">{{'my.learning.testpaper'|trans}}</span></div>
+    <div class="panel-body">
+      <ul class="nav nav-pills mb15">
+        <li class="{% if nav == 'testpaper' %}active{% endif %}"><a href="{{ path('my_testpaper_list') }}">{{'my.learning.testpaper.record'|trans}}</a></li>
+        <li class="{% if nav == 'questionFavorite'%}active{% endif %}"><a href="{{ path('my_favorite_question_list') }}">{{'my.learning.testpaper.favorit_question'|trans}}</a></li>
+      </ul>
+
+      {% if favoriteQuestions %}
+        <table class="table table-striped table-hover">
+          <tbody>
+          {% for favoriteQuestion in favoriteQuestions %}
+            {% set assessment = assessments[favoriteQuestion.target_id]|default(null) %}
+            {% set question = questions[favoriteQuestion.question_id]|default(null) %}
+            {% if question.id|default(0) > 0  %}
+            <tr>
+              <td>
+                <a class="link-primary" href="#modal" data-toggle="modal" data-url="{{ path('my_favorite_question_preview', {id:question.item_id}) }}">{{ question.stem|plain_text(40) }}</a>
+                <div class="color-gray">
+                  {% if assessment.id|default(0) > 0  %}
+                    <small>{{'my.learning.testpaper.target_testpaper'|trans({'%name%':assessment.name })}}</small>
+                    <small class="mhs">•</small>
+                  {% endif %}
+                  <small>{{'my.learning.testpaper.favorite_time'|trans({'%time%': favoriteQuestion.created_time|date('Y-n-d H:i:s')})}}</small>
+                </div>
+              </td>
+              <td class="vertical-middle">
+                <button data-url="{{ path('my_question_unfavorite', {id:favoriteQuestion.id}) }}" class="btn btn-default btn-sm pull-right js-cancel-btn"><span class="glyphicon glyphicon-star-empty"></span> {{'my.learning.testpaper.cancel_favorite_btn'|trans}}</button>
+              </td>
+            </tr>
+            {% endif %}
+          {% endfor %}
+          </tbody>
+        </table>
+        {{ web_macro.paginator(paginator) }}
+      {% else %}
+        <div class="empty">{{'my.learning.testpaper,favorit_empty'|trans}}</div>
+      {% endif %}
+
+    </div>
+  </div>
+  
+{% endblock %}

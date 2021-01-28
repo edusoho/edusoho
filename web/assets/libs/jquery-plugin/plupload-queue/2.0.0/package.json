@@ -1,0 +1,45 @@
+{
+  "family": "jquery-plugin",
+  "name": "plupload-queue",
+  "version": "2.0.0",
+  "description": "Plupload is a JavaScript API for dealing with file uploads it supports features like multiple file selection, file type filtering, request chunking, client side image scaling and it uses different runtimes to achieve this such as HTML 5, Silverlight and Flash.",
+  "homepage": "http://plupload.com",
+  "author": {
+    "name": "Moxiecode Systems AB <support@moxiecode.com>"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/moxiecode/plupload.git"
+  },
+  "bugs": "https://github.com/moxiecode/plupload/issues",
+  "licenses": [
+    {
+      "type": "GPLv2",
+      "url": "https://github.com/moxiecode/plupload/blob/master/license.txt"
+    }
+  ],
+  "keywords": ["plupload"],
+  "spm": {
+    "alias": {
+      "$": "$"
+    },
+    "output": [
+       "css/queue.css",
+       "i18n/en.js",
+       "i18n/zh-cn.js",
+       "img/backgrounds.gif",
+       "img/buttons-disabled.png",
+       "img/buttons.png",
+       "img/delete.png",
+       "img/done.png",
+       "img/error.png",
+       "img/throbber.gif",
+       "img/transp50.png",
+       "Moxie.swf",
+       "Moxie.xap",
+       "moxie.js",
+       "plupload.js",
+       "queue.js"
+     ]
+  }
+}

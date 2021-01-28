@@ -1,0 +1,23 @@
+{% extends 'course-manage/layout.html.twig' %}
+
+{% block title %}{{ 'course.replay_manage'|trans }} - {{ parent() }}{% endblock %}
+
+{% set course_side_nav = 'replay' %}
+{% do script(['app/js/course-manage/live-replay/index.js']) %}
+
+{% block page_title %}{{ 'course.replay_manage.content_title'|trans }}{% endblock %}
+
+{% block main_body %}
+  <div class="lesson-manage-section">
+    {% if tasks is empty %}
+      <div class="empty">{{ 'course.replay_manage.empty'|trans }}</div>
+    {% endif %}
+
+    <ul class="live-course-lesson sortable-list ml0" id="course-item-list">
+      {% for task in tasks %}
+        {% include 'course-manage/live-replay/list-item.html.twig' with {course: course, task: task, activity: task.activity } %}
+      {% endfor %}
+    </ul>
+    <div class="color-warning">{% if course.platform == 'self' %}{{'course.replay_manage.tips'|trans|raw}}{% else %}{{'purchase.course.replay_manage.tips'|trans|raw}}{% endif %}</div>
+  </div>
+{% endblock %}

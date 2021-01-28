@@ -1,0 +1,28 @@
+{% extends 'admin-v2/operating/wechat-notification/setting-modal/layout.html.twig' %}
+
+{% block custom %}
+  <div class="row form-group">
+    <label class="col-md-2 controls-label text-right">{{ 'wechat.notification.send_days'|trans }}</label>
+    <div class="col-md-10 controls">
+      <input class="hidden" name="key" value="{{ key }}" />
+      <input class="hidden" name="sendDays" value="" />
+      {% for key, day in dict('weekDays') %}
+        <div class="btn btn-small js-days-item {% if key in template.sendDays|default([]) %}btn-primary{% else %}btn-default{% endif %}">{{ day|trans }}
+          <input class="hidden" type="checkbox" name="sendDays[]" value="{{ key }}" {% if key in template.sendDays|default([]) %} checked='checked'{% endif %}>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-2 control-label"><label for="send-time">{{ 'wechat.notification.send_time'|trans }}</label></div>
+    <div class="col-sm-4 controls mts"><input class="form-control" type="text" id="send-time" name="sendTime" {% if template.sendTime|default(0) %}data-date="{{ template.sendTime|default('00:00') }}" {% endif %} autocomplete="off"></div>
+  </div>
+{% endblock %}
+{% block footer %}
+  <div class="pull-right">
+    <a href="{{ path('admin_v2_wechat_notification_manage') }}" class="btn btn-link">{{ 'form.btn.cancel'|trans }}</a>
+    <button type="submit" class="btn btn-primary submit-btn" data-toggle="form-submit" data-target="#notification-setting-form" data-submiting-text="{{ 'wechat.notification.saving'|trans }}">{{ 'wechat.notification.save'|trans }}</button>
+  </div>
+  <script>app.load('wechat-notification/course-remind-setting');</script>
+{% endblock %}

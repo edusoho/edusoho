@@ -1,0 +1,22 @@
+{% if setting('magic.enable_org', '0') %}
+
+  {% do script(['libs/select2.js', 'app/js/org/org-tree-select/index.js']) %}
+
+  {% set currentOrgCode = orgCode|default(app.user.orgCode) %}
+  {% set currentOrgTree = data('OrgTree',{orgCode: ('ROLE_SUPER_ADMIN' in app.user.roles) ? null : currentOrgCode }) %}
+  <div class="course-title form-group">
+    <div class="mlm course-org-title controls-label text-lg">
+      <div class="course-piece title">
+        {{'site.org'|trans}}
+      </div>
+    </div>
+    <div class="col-md-10 course-title-input">
+      <select data-role="tree-select" name="orgCode" class="form-control js-org-tree-select">
+        <option value={{ currentOrgTree.0.orgCode }}>{{ currentOrgTree.0.name }}</option>
+        {% for org in currentOrgTree %}
+          <option value={{ org.orgCode }} {% if org.orgCode == currentOrgCode  %}selected{% endif %}>{% for i in 1..(org.depth-1) if org.depth > 1 %}　{% endfor %}{{ org.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+ {% endif %}

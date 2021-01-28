@@ -1,0 +1,249 @@
+
+//卡包优惠劵
+.card-pack-list {
+  .card-pack-item  {
+    margin: 0 auto 30px auto;
+  }
+}
+
+.coupon-pack-item {
+  position: relative;
+  display: inline-block;
+  width: 330px;
+  height: 190px;
+  margin-bottom: 16px;
+  padding-left: 30px;
+  color: #fff;
+  background: url('@{img-src}coupon.png') no-repeat;
+  .range {
+    padding-top: 26px;
+    text-align: left;
+    font-size: 14px;
+    line-height: 20px;
+    color: #fff;
+  }
+  .tip {
+    position: absolute;
+    top: 84px;
+    right: 26px;
+    font-size: 14px;
+    line-height: 20px;
+    color: #fff;
+  }
+  .date {
+    color: #fff;
+    @media(max-width:@screen-xs-max) {
+      color: #fff;
+      text-align: left;
+    }
+  }
+  .price {
+    font-size: 16px;
+    color: #fff;
+    text-align: left;
+    .price__number {
+      font-size: 48px;
+      font-weight: 600;
+      line-height: 67px;
+      vertical-align: sub;
+      color: #fff;
+    }
+  }
+  .stamp {
+    position: absolute;
+    left: 14px;
+    bottom: 16px;
+    display: inline-block;
+    width: 122px;
+    height: 122px;
+    &.stamp-outdate {
+      background: url('@{img-src}coupon.png') no-repeat -183px -384px;
+    }
+    &.stamp-used {
+      background: url('@{img-src}coupon.png') no-repeat -30px -384px;
+    }
+  }
+  &.useless {
+    background: url('@{img-src}coupon.png') no-repeat 0 -190px;
+  }
+}
+
+.card-pack-item {
+  position: relative;
+  width: 254px;
+  height: 172px;
+  margin: 0 auto;
+  text-align: center;
+  color: #fff;
+  font-size: 12px;
+  h4 {
+    position: absolute;
+    font-size: 18px;
+    left: 18px;
+  }
+  p {
+    margin-bottom: 0;
+  }
+  .title {
+    .text-overflow;
+  }
+  .price {
+    margin-bottom: 18px;
+    margin-top: 10px;
+    strong {
+      font-size: 30px;
+      font-weight: normal;
+    }
+    a {
+      color: #fff;
+      padding-left: 8px;
+    }
+  }
+  .stamp {
+    position: absolute;
+    display: inline-block;
+    width: 132px;
+    height: 132px;
+    bottom: 8px;
+    left: 15px;
+    &.stamp-outdate {
+      background: url('@{img-src}card.png') no-repeat 0 -349px;
+    }
+    &.stamp-cancel {
+      background: url('@{img-src}card.png') no-repeat -410px -351px;
+    }
+  }
+  &.coupon-item {
+    background: url('@{img-src}card.png') no-repeat;
+    &.useless {
+      background: url('@{img-src}card.png') no-repeat 0 -174px;
+    }
+    .title {
+      padding-top: 38px;
+    }
+    .stamp-used {
+      background: url('@{img-src}card.png') no-repeat -140px -349px;
+    }
+  }
+
+  &.card-item {
+    background: url('@{img-src}card.png') no-repeat -260px 0;
+    &.useless {
+      background: url('@{img-src}card.png') no-repeat -260px -174px;
+    }
+    .title {
+      padding-top: 58px;
+    }
+    .stamp-used {
+      background: url('@{img-src}card.png') no-repeat -275px -351px;
+    }
+  }
+}
+
+
+// 卡包modal框
+.modal-card-pack {
+  &.modal-logined {
+    .modal-content:after {
+      position: absolute;
+      width: 96px;
+      height: 97px;
+      top: 105px;
+      right: 90px;
+      content: '';
+      background: url('@{img-src}card_user.png') center center no-repeat;
+      @media(max-width:@screen-xs-max) {
+        display: none;
+      }
+    }
+  }
+  .modal-content {
+    position: relative;
+    background: url('@{img-src}card_bg.png') #feba37 center center no-repeat;
+    .border-radius(20px);
+  }
+  .modal-body {
+    padding: 30px;
+    @media(max-width:@screen-xs-max) {
+      padding: 15px;
+      text-align: center;
+    }
+    .modal-info {
+      text-align: center;
+      color: #fff;
+      font-size: 22px;
+      margin-bottom: 30px;
+      @media(max-width:@screen-xs-max) {
+        margin-bottom: 20px;
+        font-size: 18px;
+      }
+    }
+    .coupon-pack-item {
+      margin-left: 74px;
+      @media(max-width:@screen-xs-max){
+        margin-left: 0;
+      }
+    }
+    .modal-action {
+      margin-top: 30px;
+      text-align: center;
+      @media(max-width:@screen-xs-max) {
+        margin-top: 20px;
+      }
+    }
+  }
+}
+
+
+.coupon-modal {
+  .modal-header {
+    border: none;
+  }
+  .modal-body {
+    padding-top: 0;
+    padding-bottom: 24px;
+  }
+  .modal-footer {
+    border: none;
+    display: none;
+  }
+  .coupon-modal-paginator {
+    text-align: center;
+    .pagination {
+      margin-bottom: 0;
+    }
+  }
+}
+.coupon-modal-item {
+  margin-top: 0;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  border-top: 1px solid #ebebeb;
+  &:last-child {
+    border-bottom: 1px solid #ebebeb;
+  }
+
+  .classroom-cover-img {
+    width: 68px;
+    height: 45px;
+    max-width: 68px;
+  }
+
+  .course-cover-img {
+    width: 80px;
+    height: 45px;
+    max-width: 80px;
+  }
+  .coupon-modal-item__title {
+    margin-bottom: 4px;
+    color: @gray-darker;
+    line-height: 20px;
+  }
+
+  .coupon-modal-item__price {
+    font-size: 18px;
+    line-height: 25px;
+    font-weight: bold;
+  }
+  
+}

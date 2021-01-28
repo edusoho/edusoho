@@ -1,0 +1,75 @@
+{% extends 'activity/activity-layout.html.twig' %}
+{% do script(['libs/ltc-sdk-client.js','libs/es-ckeditor/ckeditor.js', 'libs/bootstrap-datetimepicker.js','liveactivity/js/manage/index.js']) %}
+
+{% if activity.id|default(false) %}
+    {% set checkUrl = path('course_manage_task_pre_update_check', {courseId:activity.fromCourseId, activityId: activity.id}) %}
+{% else %}
+    {% set checkUrl = path('course_manage_task_pre_create_check', {courseId:activity.fromCourseId}) %}
+{% endif %}
+
+{% set timeDisabled = (activity.startTime|default(0) > 0 and activity.startTime|default(0) <= timestamp() and activity.ext.roomCreated|default() ) ? 1 : 0 %}
+
+
+{% block activity_step %}
+  <div class="tab-pane js-course-tasks-pane active js-step2-view">
+    <form class="form-horizontal" id="step2-form" >
+      <div class="form-group">
+        <div class="col-sm-2 control-label">
+        <label for="title" class="control-label-required">{{ 'course.plan_task.activity_manage.title_name'|trans }}</label>
+        </div>
+        <div class="col-sm-10">
+          <input id="title" class="form-control" type="text" name="title" value="{{ activity.title|default('') }}" >
+          <div class="help-block">{{ 'course.plan_task.activity_manage.help_block'|trans }}</div>
+        </div>
+      </div>
+
+      {% set roomTypes = get_live_room_type() %}
+      {% if roomTypes %}
+        <div class="form-group">
+          <div class="col-sm-2 control-label">
+            <label for="roomType">{{ 'course.live_activity.room_type'|trans }}</label>
+          </div>
+          <div class="col-sm-10">
+            <select class="form-control width-input" name="roomType" {% if not canUpdateRoomType|default(1) or activity.ext.roomCreated|default(false) %}disabled{% endif %}>
+              {% for key, roomType in roomTypes if roomTypes %}
+                <option value="{{ key }}" {% if activity.ext.roomType|default('large') == key %}selected{% endif %}>{{ roomType|trans }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+      {% endif %}
+      <div class="form-group expiry-day-js">
+          <div class="col-sm-2 control-label">
+              <label for="startTime" class="control-label-required">{{ 'course.plan_task.activity_manage.live.start_time'|trans }}</label>
+          </div>
+          <div class="col-sm-10">
+              <input id="startTime" autocomplete="off" class="form-control inline-block width-150" type="text" name="startTime" value="{% if activity.startTime|default('') %}{{ activity.startTime|date('Y-m-d H:i') }}{% endif %}" {% if timeDisabled %}disabled{% endif %} data-url="{{ path('client_time_check') }}">
+              {% if not activity.ext.roomCreated|default(true) %}
+                  <div class="color-warning">{{'course.plan_task.activity_manage.live.create_tips'|trans}}</div>
+              {% endif %}
+          </div>
+      </div>
+      <div class="form-group">
+          <div class="col-sm-2 control-label">
+              <label for="length" class="control-label-required">{{ 'course.plan_task.activity_manage.live.live_time'|trans }}</label>
+          </div>
+          <div class="col-sm-10">
+              <input id="length" class="form-control width-150 mrs" type="text" name="length" value="{{ activity.length|default(60) }}" {% if activity.timeDisabled|default(0) %}disabled{% endif %} data-url="{{ checkUrl }}">{{'site.date.minute'|trans}}
+          </div>
+      </div>
+      <div class="form-group">
+          <div class="col-sm-2 control-label">
+              <label for="text-content-field" class="style1">{{ 'course.plan_task.activity_manage.live.info'|trans }}</label>
+          </div>
+          <div class="col-sm-10">
+        <textarea class="form-control type-hidden" id="text-content-field" name="remark" rows="10" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-flash-upload-url="{{ path('editor_upload', {token:upload_token('course', 'flash')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"
+        >{{ activity.remark|default('') }}</textarea>
+              {% set course=data('Course',{'courseId':activity.fromCourseId}) %}
+              {% if course.expiryMode=='days' %}
+                  <p class="help-block color-warning">{{'course.plan_task.activity_manage.live.expiry_tips'|trans}}</p>
+              {% endif %}
+          </div>
+      </div>
+    </form>
+  </div>
+{% endblock %}

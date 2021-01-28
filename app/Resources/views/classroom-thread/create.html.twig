@@ -1,0 +1,9 @@
+{% extends 'classroom/content-layout.html.twig' %}
+{% block title %}{% if thread %}{{'classroom.thread.create.edit_btn'|trans}}{{ dict_text('threadType', type) }}{% else %}{{'classroom.thread.create.publish_btn'|trans}}{{ dict_text('threadType', type) }}{% endif %} - {{ parent() }}{% endblock %}
+{% set thread = thread|default(null) %}
+{% set nav = 'thread' %}
+{% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js','libs/bootstrap-datetimepicker.js','app/js/classroom/thread-form/index.js'])%}
+
+{% block main %}
+  {{ render(controller('AppBundle:Thread:create', {request:app.request, target:{type:'classroom', id:classroom.id}, thread:thread, type:type})) }}
+{% endblock %}

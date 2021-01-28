@@ -1,0 +1,94 @@
+{% set questionTypesDict = getQuestionTypes() %}
+{% set questionTypesSeq = getQuestionTypeSeq() %}
+{% set questionTypesDict = sortQuestionTypes(questionTypesDict, sections|default([])) %}
+<div class="panel-col" id="testpaper-items-manager">
+  <div class="clearfix">
+    <div class="clearfix mbm">
+      <button type="button" data-url="{{ path('question_bank_manage_question_pick', {id: questionBank.id}) }}" data-pick-url="{{ path('question_bank_manage_question_picked', {id: questionBank.id}) }}" class="cd-btn cd-btn-primary cd-btn-sm pull-right pbs js-pick-modal">{{'course.testpaper_manage.question.create_btn'|trans}}</button>
+      <ul class="nav nav-pills nav-mini" id="testpaper-question-nav">
+        {% for type, name in questionTypesDict %}
+          <li class="question-type-table{% if loop.index == 1 %} active{% endif %}">
+            <a href="javascript:" data-type="{{ type }}" data-name="{{ questionTypesDict[type] }}" class="testpaper-nav-link"><span class="js-move-icon mrm"><i class="es-icon es-icon-yidong"></i></span><span class="mlm">{{ questionTypesDict[type] }}</span>
+              <span class="js-count-{{ type }}">
+                ({{ sections[type]['question_count']|default(0) }})
+              </span>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div id="testpaper-stats" class="color-success"></div>
+    {% for type, name in questionTypesDict if questionTypesDict %}
+      <div class="js-question-table {% if loop.index != 1 %}hide{% endif %}" id="testpaper-table-{{ type }}">
+        <table class="table table-striped table-hover tab-content">
+          <thead>
+          <tr>
+            <th></th>
+            <th><input type="checkbox" data-role="batch-select"></th>
+            <th width="8%">{{'course.testpaper_manage.question.seq'|trans}}</th>
+            <th width="35%">{{'course.testpaper_manage.question.stem'|trans}}</th>
+            {% if type in ['choice', 'uncertain_choice', 'material'] %}
+              <th width="10%">{{'course.testpaper_manage.question.score'|trans}}</th>
+              <th width="10%">{{'course.testpaper_manage.create.questions_setup.missing_score'|trans}}</th>
+            {% else %}
+              <th width="20%">{{'course.testpaper_manage.question.score'|trans}}</th>
+            {% endif %}
+            <th width="10%">{{'course.testpaper_manage.question.difficulty'|trans}}</th>
+            <th width="20%">{{'course.testpaper_manage.question.operation'|trans}}</th>
+          </tr>
+          </thead>
+          <tbody data-type="{{ type }}" class="testpaper-table-tbody" data-role="question-body">
+          {% for item in sections[type].items|default([]) if sections %}
+            {% if item.type == 'material' %}
+              {% include 'question-bank/widgets/picked-item/material-question-item.html.twig' %}
+            {% else %}
+              {% include 'question-bank/widgets/picked-item/question-item.html.twig' %}
+            {% endif %}
+          {% endfor %}
+          </tbody>
+        </table>
+        <p>
+          <label class="inline-block vertical-top checkbox-inline"><input type="checkbox" data-role="batch-select">{{'course.testpaper_manage.question.select_all'|trans}}</label>
+          {% if type != 'material' %}
+            <button type="button" class="cd-btn cd-btn-default cd-btn-sm mlm mts" data-role="batch-delete-btn"  data-name="{{'course.testpaper_manage.question.content'|trans}}">{{'course.testpaper_manage.delete_btn'|trans}}</button>
+          {% endif %}
+          <button type="button" class="cd-btn cd-btn-default cd-btn-sm mlm mts" data-role="set-score-btn" data-name="{{'course.testpaper_manage.question.content'|trans}}">{{'my.teaching.question_bank.question.set_score'|trans}}</button>
+        </p>
+      </div>
+    {% endfor %}
+    <p class="text-center"><button type="button" class="cd-btn cd-btn-primary testpaper-save-btn js-request-save">{{'course.testpaper_manage.question.save_btn'|trans}}</button></p>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </div>
+
+  <div id="testpaper-confirm-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">{{'course.testpaper_manage.question.save_modal.content_title'|trans}}</h4>
+        </div>
+        <div class="modal-body">
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th>{{'course.testpaper_manage.question.save_modal.type'|trans}}</th>
+              <th>{{'course.testpaper_manage.question.save_modal.number'|trans}}</th>
+              <th>{{'course.testpaper_manage.question.save_modal.total_score'|trans}}</th>
+            </tr>
+            </thead>
+            <tbody class="detail-tbody"></tbody>
+          </table>
+
+          <p class="js-subjective-remask">
+{#            {{ 'course.testpaper_manage.question.subjective_remask_tips'|trans({'%passedScoreDefault%': passedScoreDefault})|raw }}#}
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-link" data-dismiss="modal" type="button">{{'form.btn.close'|trans}}</button>
+          <button type="button" class="btn btn-primary js-confirm-submit" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{'form.btn.confirm'|trans}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

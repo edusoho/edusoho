@@ -1,0 +1,61 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_batch_notification' %}
+
+{% set script_controller = 'batchnotification/list' %}
+
+{% block main %}
+<table id="batchnotification-table" class="table table-striped">
+    <thead>
+        <tr>
+            <th width="40%">{{'admin.batch_notification.title'|trans}}</th>
+            <th>{{'admin.batch_notification.sendedTime'|trans}}</th>
+            <th>{{'admin.batch_notification.createdTime'|trans}}</th>
+            <th>{{'admin.batch_notification.nickname'|trans}}</th>
+            <th>{{'admin.batch_notification.status'|trans}}</th>
+            <th>{{'admin.batch_notification.operation'|trans}}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if batchnotifications %}
+            {% for batchnotification in batchnotifications %}
+                <tr>
+                    <td><a href="javascript:;" data-url="{{ path('batch_notification_show',{ id:batchnotification.id }) }}"data-toggle="modal" data-target="#modal">{{batchnotification.title|raw}}</a></td>
+                    {% if batchnotification.sendedTime == 0 %}
+                    <td>--</td>
+                    {% else %}
+                    <td>{{batchnotification.sendedTime|date('Y-m-d H:i')}}</td>
+                    {% endif %}
+                    <td>{{batchnotification.createdTime|date('Y-m-d H:i')}}</td>
+                    <td>{{users[batchnotification.fromId].nickname}}</td>
+                    {% if batchnotification.published %}<td class="text-success">{{'admin.batch_notification.status.published'|trans}}</td>{% else %}<td>{{'admin.batch_notification.status.unpublished'|trans}}</td>{% endif %}
+                    <td>
+                        <div class="btn-group">
+                            {% if batchnotification.published %}
+                                <a  href="javascript:" data-url="{{ path('admin_batch_notification_delete',{id:batchnotification.id}) }}" data-role="delete-item" class="btn btn-default btn-sm" >{{'admin.batch_notification.delete_btn'|trans}}</a>
+                            {% else %}
+                                <a  href="{{ path('admin_batch_notification_edit',{id:batchnotification.id}) }}" class="btn btn-default btn-sm" >{{'admin.batch_notification.edit_btn'|trans}}</a>
+                                <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                                <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="javascript:" data-role="publish-item" data-url="{{ path('admin_batch_notification_send', {id:batchnotification.id}) }}">{{'admin.batch_notification.publish_btn'|trans}}</a></li>
+                                    <li><a href="javascript:" data-role="delete-item" data-url="{{ path('admin_batch_notification_delete', {id:batchnotification.id}) }}">{{'admin.batch_notification.delete_btn'|trans}}</a></li>
+                                </ul>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+          {% endif %}
+    </tbody>
+</table>
+  {% if not batchnotifications %}
+    <div class="empty">{{'site.datagrid.empty'|trans}}</div>
+  {% endif %}
+  <div class="alert alert-info text-center">
+    {{ 'admin.batch_notification.empty_tips'|trans }}
+  </div>
+
+  {{ admin_macro.paginator(paginator) }}
+{% endblock %}

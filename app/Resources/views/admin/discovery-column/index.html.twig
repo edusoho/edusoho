@@ -1,0 +1,34 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_discovery_column_index' %}
+
+{% set script_controller = 'topxiaadminbundle/controller/discovery-column/index' %}
+
+
+{% block main %}
+
+{% include 'admin/system/mobile-discovery-upgrade.modal.html.twig' %}
+
+{% if setting("mobile.enabled") == 1 %}
+<table class="table table-hover" id="category-table">
+  <thead>
+    <tr>
+      <th width="25%">{{'admin.mobile_manage.discovery_column.column_name'|trans}}</th>
+      <th width="15%">{{'admin.mobile_manage.discovery_column.content_type'|trans}}</th>
+      <th width="10%">{{'admin.mobile_manage.discovery_column.sort_type'|trans}}</th>
+      <th width="15%">{{'admin.mobile_manage.discovery_column.set_show_count'|trans}}</th>
+      <th width="15%">{{'admin.mobile_manage.discovery_column.real_show_count'|trans}}</th>
+      <th width="20%">{{'admin.mobile_manage.discovery_column.operation'|trans}}</th>
+    </tr>
+  </thead>
+  {% include 'admin/discovery-column/discovery-column-tr.html.twig' %}
+</table>
+
+{% else %}
+<div class="well" style="text-align:center;">
+
+{{ 'admin.mobile_manage.open_tips'|trans({'%openUrl%': path('admin_setting_mobile')})|raw }}
+</div>
+{% endif %}
+
+{% endblock %}

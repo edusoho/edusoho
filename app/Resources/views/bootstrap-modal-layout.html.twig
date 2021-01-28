@@ -1,0 +1,27 @@
+{% import "macro.html.twig" as web_macro %}
+{% if setting('backstage.is_v2',0)  == 0 %}
+  {% import "admin/macro.html.twig" as admin_macro %}
+{% else %}
+  {% import "admin-v2/macro.html.twig" as admin_macro %}
+{% endif %}
+{% include 'css_loader.html.twig' %}
+
+<div class="modal-dialog {% if modal_class|default('') %} {{ modal_class }}{% endif %}" data-clear="{{ closeClear|default(0) }}">
+  {% block modal_content %}
+    <div class="modal-content">
+      {% block modal_header %}
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            <i class="cd-icon cd-icon-close"></i>
+          </button>
+          <h4 class="modal-title">{% block title %}{% endblock %}</h4>
+        </div>
+      {% endblock %}
+      <div class="modal-body">{% block body %}{% endblock %}</div>
+      {% if not hide_footer|default(false) %}
+        <div class="modal-footer">{% block footer %}{% endblock %}</div>
+      {% endif %}
+    </div>
+  {% endblock %}
+  {% include 'js_loader_async.html.twig' %}
+</div>

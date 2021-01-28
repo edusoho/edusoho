@@ -1,0 +1,27 @@
+<div class="other tagContent" style="display:none">
+  <select class='selectedType'>
+    {% for item in typeSamples %}
+        <option value='{{item.key}}'>{{item.key}}</option>
+    {% endfor %}
+  </select>
+
+  <input class='sendOtherBtn' type='button' value='发送' data-url-version-3="{{path('admin_mocked_post_data_version_3')}}"></input>
+  左边为提交的内容, 右边为相应的解释
+  <b>api-url</b>: <input class='api-url' type='text' name='api-url'></input>
+  <b>api-user-id</b>: <input class='api-user-id' type='text' name='api-user-id'></input>
+  <div class="generatedToken" data-url="{{path('admin_mocked_download_token')}}"></div>
+
+  {% for item in typeSamples %}
+    <div class='{{item.key}} hidden'>{{item.value}}</div>
+    <div class='{{item.key}}_doc hidden'>{{comment}}{{item.doc}}</div>
+    <div class='{{item.key}}_apiInfo hidden'>{{item.apiInfo|json_encode}}</div>
+  {% endfor %}
+
+  <div></div>
+  <textarea class='sendOtherMsg' style='width: 400px; height: 500px;'></textarea>
+  <textarea disabled class='doc' style='width: 600px; height: 500px;'></textarea>
+
+  <div></div>
+
+  <div class='result'></div>
+</div>

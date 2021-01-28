@@ -1,0 +1,93 @@
+{% set testpaper = testpaper|default(null) %}
+{% set targetResultInfo = targetResultInfo|default(null) %}
+{% set resultListRout = resultListRout|default('course_manage_testpaper_result_list') %}
+
+{% set taskTitle = task.isOptional ? 'course.testpaper_check.optional_task_title'|trans({'%title%':task.title}) : 'course.catalogue.task_status.task'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%taskNumber%':task.number, '%taskTitle%':task.title}) %}
+{% if targetType == 'classroom' %}
+  {% set checkUrl = path('classroom_manage_exam_next_result_check', {id:targetId,activityId:task.activityId}) %}
+  {% set graphUrl = path('classroom_manage_testpaper_result_graph', {id:targetId, activityId:task.activityId})%}
+  {% set analysisUrl = path('classroom_manage_exam_result_anlysis', {id:targetId, activityId:task.activityId}) %}
+  {% set taskTitle = courses[task.courseId].title|default(null) ~ ' ' ~ taskTitle %}
+{% else %}
+  {% set checkUrl = path('course_manage_exam_next_result_check', {id:targetId,activityId:task.activityId}) %}
+  {% set graphUrl = path('course_manage_testpaper_result_graph', {id:targetId, activityId:task.activityId})%}
+  {% set analysisUrl = path('course_manage_exam_result_anlysis', {id:targetId, activityId:task.activityId}) %}
+{% endif %}
+
+<div class="clearfix testpaper-mark-list">
+  <div class="testpaper-mark-info col-md-8">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="testpaper-mark-info__title text-overflow" title="{{ taskTitle }}">{{ taskTitle }}</div>
+        <div class="testpaper-mark-info__name">
+          <span class="text-overflow">
+            {% if testpaper %}{{'course.testpaper_manage.create.name'|trans}}： {{ testpaper.name }}{% else %}{{ 'course.testpaper_check.testpaper_delete'|trans }}{% endif %}
+          </span>
+          {% if courseSets[task.fromCourseSetId] is defined and courseSets[task.fromCourseSetId].parentId|default(0) %}
+            <div class="mbm mtm color-gray">
+              <span class="mrl text-overflow">{{'user.orders.target_course'|trans}}：
+                {% set course=data('Course',{'courseId':task.courseId}) %}
+                {{ courseSets[task.fromCourseSetId].title|default('')}}{% if courseSets[task.courseId]|default() %}-{{ courseSets[task.courseId].title|default('')|plain_text(8) }}{% endif %}
+              </span>
+            </div>
+          {% endif %}
+          <div class="mbm color-gray">
+            <span class="mrl">{{'course.testpaper_check.start_date'|trans}}
+              {% if task.startTime %}
+                {{ task.startTime|date('Y-m-d H:i') }}
+              {% else %}
+                {{ task.createdTime|date('Y-m-d H:i') }}
+              {% endif %}
+            </span>
+          </div>
+        </div>
+      </div>
+      {% if testpaper %}
+        <div class="col-md-4">
+          <div class="testpaper-mark-operation testpaper-mark-inspection-{{task.activityId}}">
+            <div class="col-xs-3 text-center mt10">
+              <a class="testpaper-mark-operation__link" href="#modal" data-toggle="modal" data-url="{{ graphUrl }}" data-tooltip="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_score_distribution'|trans }}"><i class="es-icon es-icon-chart"></i></a>
+            </div>
+            <div class="col-xs-3 text-center mt10"><a class="testpaper-mark-operation__link" href="{{ analysisUrl }}" target="_blank" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_question_distribution'|trans }}"><i class="es-icon es-icon-list"></i></a></div>
+            
+            <div class="col-xs-3 text-center mt10">
+              {% if targetResultInfo.reviewing|default(0) > 0 %}
+                <a class="testpaper-mark-operation__link" href="{{ checkUrl }}" target="_blank" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_check'|trans }}" ><i class="es-icon es-icon-double-check"></i></a>
+              {% else %}
+                <a class="testpaper-mark-operation__link testpaper-mark-operation__link--disabled" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'course.testpaper_check.btn_check'|trans }}" ><i class="es-icon es-icon-double-check gray-medium"></i></a>
+              {% endif %}
+            </div>
+            {% if is_scene_facein_open(task.answerSceneId) %}
+              <div class="col-xs-3 text-center mt10"><a class="testpaper-mark-operation__link" href="{{ path('facein_inspection_results', {activityId:task.activityId}) }}" target="_blank" data-toggle="tooltip" data-container="body" data-placement="top" title="{{ 'facein.capture_face.inspection_result'|trans }}"><i class="es-icon es-icon-inspection-result"></i></a></div>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="testpaper-mark-status col-md-4 text-center">
+    {% if testpaper %}
+      <div class="row">
+        <div class="col-xs-4">
+          <a class="testpaper-mark-success-status" href="{{ path(resultListRout,{id:targetId,testpaperId:testpaper.id, activityId:task.activityId,status:'finished'}) }}">
+            <span class="testpaper-mark-status__text">{{'course.testpaper_check.status.check'|trans}}</span><br>
+            <p class="mtm pts">{{ targetResultInfo.finished|default(0) }}</p>
+          </a>
+        </div>
+        <div class="col-xs-4">
+          <a class="testpaper-mark-warning-status" href="{{ path(resultListRout,{id:targetId,testpaperId:testpaper.id,activityId:task.activityId,status:'reviewing'}) }}">
+            <span class="testpaper-mark-status__text">{{'course.testpaper_check.status.not_check'|trans}}</span><br>
+            <p class="mtm pts">{{ targetResultInfo.reviewing|default(0) }}</p>
+          </a>
+        </div>
+        <div class="col-xs-4">
+          <a class="testpaper-mark-danger-status" href="{{ path(resultListRout,{id:targetId,testpaperId:testpaper.id,activityId:task.activityId,status:'doing'}) }}">
+            <span class="testpaper-mark-status__text">{{'course.testpaper_check.status.not_submit'|trans}}</span><br>
+            <p class="mtm pts">{{ targetResultInfo.doing|default(0) }}</p>
+          </a>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>

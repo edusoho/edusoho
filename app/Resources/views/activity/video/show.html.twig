@@ -1,0 +1,35 @@
+{% extends 'activity/content-layout.html.twig' %}
+
+{% do script(['app/js/activity/video/index.js']) %}
+
+{% block body %}
+  {% if video.mediaSource|default('self') == 'self' %}
+    {% if video.file|default(null) %}
+      <div class="iframe-parent-content iframe-parent-full" id="video-content"
+           data-role="lesson-content"
+           data-watch-url="{{ path('course_acitvity_watch',{courseId: activity.fromCourseId, id: activity.id}) }}"
+           data-id="{{ activity.id }}"
+           data-watch-time-sec="{{ setting('magic.watch_time_sec')|default(120) }}">
+        {#  如果用户上次观看过视频，需要请求上次的视频时长 作为参数 starttime= xxx #}
+        {{ render(controller('AppBundle:Player:show', {id: video.mediaId, isPart: true})) }}
+      </div>
+    {% else %}
+      <div class="iframe-parent-content iframe-parent-full" id="video-content" data-role="lesson-content">
+        {% include 'activity/file-not-found.html.twig' with {type:'video'} %}
+      </div>
+    {% endif %}
+  {% elseif video.mediaSource|default('self') == 'iframe' %}
+    <div id="task-preview-iframe" class="iframe-parent-content iframe-parent-full">
+      <iframe src="{{ video.mediaUri }}" style="height:100%; width:100%; border:0px; overflow: hidden"
+              scrolling="no"></iframe>
+    </div>
+  {% else %}
+    <div class="dashboard-body">
+      <div class="iframe-parent-content iframe-parent-full" id="video-content" data-role="lesson-content"
+           data-media-source="{{ video.mediaSource }}">
+        <div id="swf-player" data-url="{{ video.mediaUri }}"></div>
+      </div>
+    </div>
+  {% endif %}
+
+{% endblock %}

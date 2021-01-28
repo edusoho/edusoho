@@ -1,0 +1,77 @@
+{% import 'macro.html.twig' as web_macro %}
+
+{% set resultStatus = [] %}
+{% include 'testpaper/manage/result-list-search-form.html.twig' %}
+
+{% if answerRecords %}
+
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th>{{'course.homework_check.review.name'|trans}}</th>
+      <th>{{'course.homework_check.review.score'|trans}}</th>
+      <th>{{'course.homework_check.review.submit_time'|trans}}</th>
+      <th>{{'course.homework_check.review.status'|trans}}</th>
+      <th>{{'course.homework_check.review.reviewer'|trans}}</th>
+      <th>{{'course.homework_check.review.operation'|trans}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for answerRecord in answerRecords %}
+      {% set student = users[answerRecord.user_id]|default(null) %}
+      <tr>
+        <td>{% if student %}{{ student.nickname }}{% else %}{{'site.data.empty'|trans}}{% endif %}</td>
+        <td>
+          {% if answerRecord.status == 'finished' %}
+            {% if activity.mediaType == 'testpaper' %}
+              {{ answerReports[answerRecord.answer_report_id].score }}/{{ assessment.total_score }}
+            {% else %}
+              {{ dict_text('passedStatus', answerReports[answerRecord.answer_report_id].grade) }}
+            {% endif %}
+          {% else %} -- {% endif %}
+        </td>
+        <td>{% if answerRecord.status != 'doing' %}{{ answerRecord.end_time|date('Y-m-d H:i:s') }}{% else %}--{% endif %}</td>
+        <td>
+          {% if answerRecord.status == 'doing' %}
+            <span class="color-danger">{{'site.default.doing'|trans}}</span>
+          {% elseif answerRecord.status == 'reviewing' %}
+            <span class="color-warning">{{'site.default.unreviewing'|trans}}</span>
+          {% else %}
+            <span class="color-primary">{{'site.default.reviewing'|trans}}</span>
+          {% endif %}
+        </td>
+        {% if answerRecord.status == 'finished' %}
+          {% set teacher = users[answerReports[answerRecord.answer_report_id].review_user_id]|default(null) %}
+          <td>{% if teacher %}{{ teacher.nickname }}{% else %}{{ 'course.homework_check.review.system_review'|trans }}{% endif %}</td>
+        {% else %}
+          <td> -- </td>
+        {% endif %}
+
+        <td>
+          {% if answerRecord.status == 'finished' %}
+            <a class="link-primary" href="{{ path(activity.mediaType ~ '_result_show',{answerRecordId:answerRecord.id,action:'check'}) }}" id="show_testpaper_result" target="_blank">{{'course.homework_check.review.view_result_btn'|trans}}</a>
+          {% elseif answerRecord.status == 'reviewing' %}
+            {% if isTeacher is defined and isTeacher %}
+              {% if source == 'classroom' %}
+                {% set checkUrl = path('classroom_manage_' ~ activity.mediaType ~ '_check', {id:targetId,answerRecordId:answerRecord.id,action:'check'}) %}
+              {% else %}
+                {% set checkUrl = path('course_manage_' ~ activity.mediaType ~ '_check', {id:targetId,answerRecordId:answerRecord.id,action:'check'}) %}
+              {% endif %}
+              <a class="btn btn-default btn-sm " href="{{ checkUrl }}"  target="_blank">{{'course.homework_check.review_btn'|trans}}</a>
+            {% else %}
+              <a class="btn btn-default btn-sm disabled" href="javascript;;">{{'course.homework_check.review_btn'|trans}}</a>
+            {% endif %}
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% else %}
+  <div class="empty">{{'course.homework_check.review.empty'|trans}}</div>
+{% endif %}
+
+<nav class="text-center">
+  {{ web_macro.paginator(paginator) }}
+</nav>

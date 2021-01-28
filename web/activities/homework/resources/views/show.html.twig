@@ -1,0 +1,15 @@
+{% set homework = activity.ext %}
+{% if app.request.get('preview') == 1 %}
+  {% include '@activity/homework/resources/views/show/preview.html.twig' %}
+{% else %}
+  {% set latestAnswerRecord = data('LatestAnswerRecord', {answerSceneId: activity.ext.answerSceneId}) %}
+  
+  {% if not latestAnswerRecord %}
+    {% include('@activity/homework/resources/views/show/index.html.twig') %}
+  {% elseif latestAnswerRecord and  (latestAnswerRecord.status == 'finished' or latestAnswerRecord.status == 'reviewing') %}
+    {{ render(controller('AppBundle:Homework:showResult', {answerRecordId: latestAnswerRecord.id})) }}
+  {% else %}
+    {% include('@activity/homework/resources/views/show/do-homework.html.twig') %}
+  {% endif %}
+
+{% endif %}

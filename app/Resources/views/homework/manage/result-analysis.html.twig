@@ -1,0 +1,34 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}{{ assessment.name }} - {{ parent() }}{% endblock %}
+{% set showHeader = 1 %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  {% if maincolor != 'default' and setting('theme.code', 'jianmo') == 'jianmo' %}
+    <link href="{{ asset('static-dist/libs/item-bank/lib/styles/item-bank-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
+  {% else %}
+    <link href="{{ asset('static-dist/libs/item-bank/lib/styles/item-bank.css') }}" rel="stylesheet" />
+  {% endif %}
+{% endblock %}
+
+{% block body %}
+  {% block header %}
+    {% if showHeader %}{{ parent() }}{% endif %}
+  {% endblock %}
+
+  <div class="js-testpaper-container container mt20">
+    <div class="row">
+      <div class="col-md-9 prevent-copy">
+        {{ render(controller('AppBundle:AnswerEngine/AnswerEngine:sceneReport', {assessmentId:assessment.id, answerSceneId: answerSceneReport.answer_scene_id})) }}
+      </div>
+      <div class="col-md-3">
+        {% include 'testpaper/analysis-card.html.twig' %}
+      </div>
+    </div>
+  </div>
+
+  {% block footer %}
+    {% if showHeader|default(1) %}{{ parent() }}{% endif %}
+  {% endblock %}
+{% endblock %}

@@ -1,0 +1,22 @@
+{% set settings = setting('login_bind', []) %}
+{% set otherClients = [] %}
+
+{% for type, client in clients if (settings[type ~ '_enabled']|default(false) and type != 'weixinmob' and client.icon_class|default(null)) %}
+  {% if type in ['weibo', 'renren', 'qq', 'weixinweb'] %}
+    <a href="{{ path('login_bind', {type: type, _target_path:targetPath|default(''),inviteCode:app.request.get('inviteCode', '')}) }}" class="social-icon social-{{ client.icon_class }}">
+      <i class="es-icon es-icon-{{ client.icon_class }}"></i>
+    </a>
+  {% else %}
+    {% set otherClients = otherClients|merge({(type):client}) %}
+  {% endif %}
+
+{% endfor %}
+
+{% if otherClients %}
+  <a href="javascript:;" class="social-icon social-more" data-toggle="dropdown"><i class="es-icon es-icon-morehoriz"></i></a>
+  <div class="dropdown-menu pull-right">
+    {% for type, client in otherClients %}
+      <li><a href="{{ path('login_bind', {type: type, _target_path:targetPath|default(''),inviteCode:app.request.get('inviteCode', '')}) }}">{{ client.name }}</a></li>
+    {% endfor %}
+  </div>
+{% endif %}

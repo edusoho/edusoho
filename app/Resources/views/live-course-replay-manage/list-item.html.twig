@@ -1,0 +1,59 @@
+<li class="open-course-lesson-item clearfix" id="lesson-{{ lesson.id }}">
+	<div class="item-line"></div>
+	<div class="item-content">
+
+		{{ 'course.lesson'|trans }} <span class="number">{{ lesson.number }}</span>： {{ lesson.title }}
+
+		{% if lesson.type in ['live','liveOpen'] %}
+		  <span class="mhs">{{ lesson.startTime|date_format }}</span>
+		{% endif %}
+
+    {# 直播课时的发布状态 #}
+		{% if lesson.status == 'unpublished' %}
+		  <span class="text-warning">({{'course.live.replay_manage.lesson_status.unpublished'|trans}})</span>
+		{% endif %}
+
+		{% if lesson.status == 'published' and not lesson.isEnd %}
+		  <span class="text-warning">({{'course.live.replay_manage.lesson_status.published'|trans}})</span>
+		{% endif %}
+
+    {# 录播状态的判断 #}
+		{% if lesson.status == 'published' and lesson.isEnd and lesson.type in ['live','liveOpen'] %}
+			{% if lesson.replayStatus == 'ungenerated' %}
+				<span class="text-warning">({{'course.live.replay_manage.lesson_replay_status.ungenerated'|trans}})</span>
+			{% elseif lesson.replayStatus == 'generated' %}
+				<span class="text-warning">({{'course.live.replay_manage.lesson_replay_status.generated'|trans}})</span>
+			{% elseif lesson.replayStatus == 'videoGenerated' %}
+				{% if lesson.file %}
+					<span class="text-warning">({{'course.live.replay_manage.lesson_replay_status.videoGenerated'|trans}})</span>
+				{% else %}
+					<span class="text-warning">({{'course.live.replay_manage.lesson_replay_status.videoGenerated_and_file_empty'|trans}})</span>
+				{% endif %}
+			{% endif %}
+		{% endif %}
+	</div>
+	<div class="item-actions">
+		{% set editUrl = path('open_course_manage_lesson_replays_edit',{ lessonId:lesson.id ,courseId:course.id}) %}
+		{% set createUrl = path('live_open_course_lesson_replay_create', {courseId:course.id, lessonId:lesson.id}) %}
+		{% set uploadUrl = path('live_open_course_lesson_replay_upload', {courseId:course.id, lessonId:lesson.id}) %}
+
+		{% if lesson.status == 'published' and lesson.isEnd and lesson.replayStatus == 'generated' and lesson.type in ['live','liveOpen'] %}
+			<a href="#modal" class="cd-link-assist cd-mr24 js-tip-show" title="{{'course.live.replay_manage.lesson_edit_btn'|trans}}" data-toggle="modal" data-url="{{ editUrl }}" ><i class="es-icon es-icon-list"></i></a>
+		{% endif %}
+
+		{% if lesson.status == 'published' and lesson.type in ['live','liveOpen'] and lesson.isEnd  %}
+			{% if lesson.canRecord|default(false) and lesson.replayStatus != 'videoGenerated' %}
+				<a class="cd-link-assist cd-mr24 js-generate-replay js-tip-show"
+				{% if lesson.replayStatus == 'ungenerated' %}
+				title="{{'course.live.replay_manage.record'|trans}}"
+				{% else %}
+				title="{{'course.live.replay_manage.re_record'|trans}}"
+				{% endif %}
+				 data-url="{{ createUrl }}" href="javascript:;"><span class="es-icon es-icon-videocam"></span>
+				</a>
+			{% endif %}
+
+			<a class="cd-link-assist item-actions__btn cd-mr16 js-tip-show" href="#modal" data-container="body" title="{{'course.live.replay_manage.upload_btn'|trans}}" data-toggle="modal" data-url="{{ uploadUrl }}" ><i class="glyphicon glyphicon-paperclip"></i></a>
+		{% endif %}
+	</div>
+</li>

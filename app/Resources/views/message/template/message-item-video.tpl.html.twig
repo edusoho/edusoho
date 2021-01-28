@@ -1,0 +1,27 @@
+{% set messageFrom = message.fromId == app.user.id ? 'me' : 'she' %}
+<li class="media message-{{ messageFrom }}" parent-url="{{ path('message')}}">
+  {{ web_macro.user_avatar(message.createdUser, (messageFrom == 'me' ? 'pull-right' : 'pull-left') ~ ' media-object', '', false) }}
+  <div class="media-body">
+    <div class="popover {% if message.fromId == app.user.id %}left{% else %}right{% endif %}">
+      <div class="arrow"></div>
+      <div class="popover-content">
+        <div class="message-content">
+          {% if messageFrom == 'me' %}
+            <strong>{{'user.fileds.me'|trans}}:</strong>
+          {% else %}
+            <strong>{{ web_macro.user_link(message.createdUser) }}：</strong>
+          {% endif %}
+          {{ message.content|raw }}
+        </div>
+        <div class="message-footer">
+          <span class="color-gray">{{ message.createdTime|smart_time }}</span>
+          <div class="message-actions">
+            <a class="color-gray delete-message" href="javascript:" data-url="{{ path('message_delete',{conversationId:conversation.id, messageId:message.id })}}"
+            >{{'message.btn.delete'|trans}}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</li>
+

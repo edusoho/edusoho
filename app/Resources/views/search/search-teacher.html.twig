@@ -1,0 +1,12 @@
+<div class="alert alert-blank alert-sm">
+  {{ 'cloud_search.teacher.result'|trans({'%counts%':counts|default(0)})|raw }}
+</div>
+<div class="teacher-list row">
+  {% for teacher in resultSet %}
+  {% set profile = teacher.profile %}
+  {% set isFollowed = teacher.isFollowed|default(false) %}
+    <div class="col-lg-4 col-md-6 col-xs-6">
+      {% include 'search/search-teacher-item.html.twig' %}
+    </div>
+  {% endfor %}
+</div>

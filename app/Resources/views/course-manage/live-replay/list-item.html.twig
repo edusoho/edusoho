@@ -1,0 +1,75 @@
+<li class="live-course-lesson-item cd-mb16 clearfix" id="lesson-{{ task.id }}">
+	<div class="item-line"></div>
+	<div class="item-content">
+	  {% set mediaStatus = task.mediaStatus|default(null) %}
+  
+		{% if task.type in ['video', 'live'] %}
+		  {% if mediaStatus == 'waiting' %}
+			<span class="es-icon es-icon-videocam text-warning"></span>
+		  {% elseif mediaStatus == 'doing' %}
+			<span class="es-icon es-icon-videocam text-info"></span>
+		  {% elseif mediaStatus == 'error' %}
+			<span class="es-icon es-icon-videocam color-danger"></span>
+		  {% else %}
+			<span class="es-icon es-icon-videocam color-success"></span>
+		  {% endif %}
+		{% endif %}
+    <span class="mls">{{ 'course.lesson'|trans }} {{ lessons[task.categoryId].number }}： {{ lessons[task.categoryId].title|sub_text(20) }}</span>
+
+		<span class="mls">{{'course.activity'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}</span><span class="number mls">{{ task.number }}</span>
+    <span class="mhs">{{ task.startTime|date_format }}</span>
+
+		{% if task.status == 'unpublished' %}
+		  <span class="text-warning">({{'course.replay_manage.unpublished'|trans}})</span>
+		{% endif %}
+
+		{% if task.status == 'published' and not task.isEnd %}
+		  <span class="text-warning">({{'course.replay_manage.live_not_stop'|trans}})</span>
+		{% endif %}
+
+		{% if task.status == 'published' and task.isEnd %}
+			{% if activity.ext.replayStatus == 'ungenerated' %}
+				<span class="text-warning">({{'course.replay_manage.ungenerated'|trans}})</span>
+			{% elseif activity.ext.replayStatus == 'generated' %}
+				<span class="text-warning">({{'course.replay_manage.generated'|trans}})</span>
+			{% elseif activity.ext.replayStatus == 'videoGenerated' %}
+				{% if task.file %}
+					<span class="text-warning">({{'course.replay_manage.video_generated.file_exsist'|trans}})</span>
+				{% else %}
+					<span class="text-warning">({{'course.replay_manage.video_generated.file_not_exsist'|trans}})</span>
+				{% endif %}
+			{% endif %}
+		{% endif %}
+
+	</div>
+	<div class="item-actions">
+    <a class="cd-link-assist cd-mr24" title="{{'course.replay_manage.preview_btn'|trans}}" href="{{ path('course_task_show', {courseId:course.id, id: task.id, preview:1}) }}" target="_blank"><span class="es-icon es-icon-removeredeye" data-toggle="tooltip" title="{{'course.replay_manage.preview_btn'|trans}}"></span></a>
+
+    {% set editUrl = path('course_manage_task_replay_edit',{ courseId: course.id, taskId:task.id}) %}
+    {% set createUrl = path('course_manage_task_replay_create', {courseId:course.id, taskId:task.id}) %}
+    {% set uploadUrl = path('course_manage_task_replay_upload', {courseId:course.id, taskId:task.id}) %}
+
+		{% if task.status == 'published' and task.isEnd and activity.ext.replayStatus == 'generated' %}
+			<a href="#modal" class="cd-link-assist cd-mr24" title="{{'course.replay_manage.edit_btn'|trans}}" data-toggle="modal" data-url="{{ editUrl }}" ><span class="glyphicon glyphicon-th-list" data-toggle="tooltip" title="{{'course.replay_manage.edit_btn'|trans}}"></span></a>
+		{% endif %}
+
+		{% if task.status == 'published' and task.isEnd  %}
+			{% if live_can_record(activity.ext.liveId, activity.syncId) and activity.ext.replayStatus != 'videoGenerated' %}
+				<a class="cd-link-assist cd-mr24 js-generate-replay"
+				{% if activity.ext.replayStatus == 'ungenerated' %}
+				title="{{'course.replay_manage.record'|trans}}"
+				{% else %}
+				title="{{'course.replay_manage.record_again'|trans}}"
+				{% endif %}
+				 data-url="{{ createUrl }}"><span class="es-icon es-icon-videocam" data-toggle="tooltip" title="{% if activity.ext.replayStatus == 'ungenerated' %}
+				{{'course.replay_manage.record'|trans}}{% else %}{{'course.replay_manage.record_again'|trans}}{% endif %}"></span>
+				</a>
+			{% endif %}
+
+      {% if activity.syncId == 0 %}
+        <a class="cd-link-assist cd-mr16 item-actions__btn" href="#modal" title="{{'course.replay_manage.replay'|trans}}" data-toggle="modal" data-url="{{ uploadUrl }}" ><i class="glyphicon glyphicon-paperclip" data-toggle="tooltip" title="{{'course.replay_manage.replay'|trans}}" data-container="body"></i></a>
+      {% endif %}
+    {% endif %}
+
+	</div>
+</li>

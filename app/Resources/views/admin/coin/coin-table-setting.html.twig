@@ -1,0 +1,29 @@
+{% if set.cash_model =="deduction" %}
+  <ul class="nav nav-pills mbl">
+    <li role="presentation" class = "js-type-filter 
+    {% if (type|default('course') == 'course') %}active {% endif %}" 
+    data-url="{{path('admin_coin_model_ajax',{type:'course'|default('course'), set:set})}}" id="course">
+    <a href="javascript:;">{{'course'|trans}}</a>
+    </li>
+    <li role="presentation" class = "js-type-filter 
+    {% if (type|default('course') == 'classroom') %}active {% endif %}" 
+    data-url="{{path('admin_coin_model_ajax',{type:'classroom'|default('course'), set:set})}}" id="classroom">
+    <a href="javascript:;">{{'classroom'|trans}}</a>
+    </li>
+    {% if is_plugin_installed('vip') %}
+      <li role="presentation" class = "js-type-filter 
+      {% if (type|default('course') == 'vip') %}active {% endif %}" 
+      data-url="{{path('admin_coin_model_ajax',{type:'vip'|default('course'), set:set})}}" id="vip">
+      <a href="javascript:;">{{'vip'|trans}}</a>
+      </li>
+    {% endif %}
+  </ul>
+{% endif %}
+<div id="help-message" class="alert alert-danger mtl hidden" >{{'admin.coin_setting.price_set_tips'|trans}}</div>
+{% if type|default('course') == 'course' %}
+  {% include 'admin/coin/coin-table-course.html.twig' %}
+{% elseif type == 'classroom' %}
+  {% include 'admin/coin/coin-table-classroom.html.twig' %}
+{% elseif type == 'vip' %}
+  {% include 'admin/coin/coin-table-vip.html.twig' %}
+{% endif %}

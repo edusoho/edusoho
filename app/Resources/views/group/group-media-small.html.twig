@@ -1,0 +1,18 @@
+<div class="col-md-4 col-sm-6">
+  <div class="media media-group group-media-sm">
+    <div class="media-left">
+      <a href="{{path('group_show',{id:group.id})}}" title="{{group.title}}" class="pull-left ">
+        <img src="{{filepath(group.logo, 'group.png')}}" alt="{{group.title}}" class="avatar-square-md" >
+      </a>
+    </div>
+    <div class="media-body">
+      <div class="title">
+        <a class="gray-darker" href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">{{group.title|sub_text(10)}}</a>
+      </div>
+      <div class="metas">
+        <span><i class="es-icon es-icon-people"></i>{{group.memberNum}}</span>
+        <span><i class="es-icon es-icon-textsms"></i>{{group.threadNum}}</span>
+      </div>
+    </div> 
+  </div>
+</div>

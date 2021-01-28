@@ -1,0 +1,39 @@
+{% set coinSetting = setting('coin') %}
+{% set coinEnabled = coinSetting.coin_enabled|default(false) and coinSetting.price_type == 'Coin'  %}
+{% set onDiscount =  is_discount(course) %}
+{% set showPrice =  course.parentId == 0 ? course.price : course.originPrice %}
+<span class="course-detail__label vertical-sub">{{'course.price'|trans}}</span>
+<span class="course-detail-price-money vertical-sub mrm">
+  {% if course.price == 0 and courseSet.discountId <= 0 %}
+    <b class="pirce-num color-success">{{'course.price.free'|trans}}</b>
+  {% else %}
+    {% if coinEnabled %}
+      <b class="pirce-num">{{ course.price * coinSetting.cash_rate }}{{ coinSetting.coin_name|default('finance.coin'|trans) }}</b>
+    {% else %}
+      <b class="pirce-num"><span class="cd-text-lg">¥&nbsp;</span>{{ showPrice }}</b>
+    {% endif %}
+  {% endif %}
+</span>
+
+{% if onDiscount %}
+  <span class="original-price">
+    {% if coinEnabled %}
+      <span class="price">
+        {{ course.originPrice * coinSetting.cash_rate }}{{ coinSetting.coin_name|default('finance.coin'|trans) }}
+      </span>
+    {% else %}
+      ¥<span class="price">{{ course.originPrice }}</span>
+    {% endif %}
+  </span>
+  {% if courseSet.discount != 0 and courseSet.discountType == 'discount' %}
+    <span class="tag-discount">
+        <span class="discount-font">
+          {% if courseSet.discount*10%10 > 0 %}
+            {{'course.price.discount'|trans({'%discount%':"%.1f"|format(courseSet.discount)})}}
+          {% else %}
+            {{'course.price.discount'|trans({'%discount%':"%d"|format(courseSet.discount)})}}
+          {% endif %}
+        </span>
+    </span>
+  {% endif %}
+{% endif %}

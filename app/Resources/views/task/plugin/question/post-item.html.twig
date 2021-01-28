@@ -1,0 +1,10 @@
+<li class="cd-mt16 post-item task-question-plugin-pane-thread__item js-post-answer-item">
+  <div class="task-question-plugin-pane-thread__info cd-mb8">
+    <a class="cd-mr8 nickname" href="{{ path('user_show', {id:user.id}) }}" target="_blank">{{ user.nickname }}</a>{{ 'course.reviews.reply_btn'|trans }}<span class="gray-medium cd-ml8 cd-mr8">•</span><span class="time cd-text-sm">{{ post.createdTime|smart_time }}</span>
+  </div>
+  <div class="task-question-plugin-pane-thread__content editor-text">{{ post.content|raw }}</div>
+  <a href="javascript:;" class="more js-more-show">
+    <span class="js-change-btn">{{ 'course.note.expand_btn'|trans|raw }}</span>
+    <span class="js-change-btn" style="display: none;">{{ 'course.note.collapse_btn'|trans|raw }}</span>
+  </a>
+</li>

@@ -1,0 +1,23 @@
+{% import "macro.html.twig" as web_macro %}
+{% do script(['app/js/courseset/show/notes/index.js']) %}
+
+{% if notes %}
+<div class="note-list" id="note-list">
+  {% for note in notes %}
+    {% set user = users[note.userId]|default(null) %}
+    {% set userLike = noteLikes[note.id]|default(null) %}
+    {% include 'classroom/note/list-item.html.twig'%}
+  {% else %}
+    <div class="empty">{{'classroom.note_empty'|trans}}</div>
+  {% endfor %}
+</div>
+
+<nav class="text-center">
+  {{ web_macro.paginator(paginator) }}
+</nav>
+{% else %}
+	<div class="note-list" id="note-list">
+		<div class="empty">{{'classroom.note_empty'|trans}}</div>
+	</div>
+{% endif %}
+

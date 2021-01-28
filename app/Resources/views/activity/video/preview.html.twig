@@ -1,0 +1,48 @@
+{% extends 'activity/content-layout.html.twig' %}
+{% do script(['app/js/activity/video/preview/index.js']) %}
+
+{% block body %}
+  {% if activity.ext.mediaSource|default('self') == 'self' %}
+    {% if activity.ext.file|default(null) %}
+      <div class="task-preview-modal-content" id="task-preview-player">
+        <div class="iframe-parent-content iframe-parent-full" id="video-content" data-role="task-content">
+          {#如果用户上次观看过视频，需要请求上次的视频时长 作为参数 starttime= xxx#}
+          {{ render(controller('AppBundle:Player:show', {id: activity.ext.mediaId, isPart: true, context: context})) }}
+        </div>
+      </div>
+    {% else %}
+      <div class="iframe-parent-content iframe-parent-full" id="video-content" data-role="lesson-content">
+        {% include 'activity/file-not-found.html.twig' with {type:'video'} %}
+      </div>
+    {% endif %}
+  {% elseif activity.ext.mediaSource == 'iframe' %}
+	  <div id="task-preview-iframe">
+		  <iframe src="{{ activity.ext.mediaUri }}" style="height:400px; width:100%; border:0px; overflow: hidden"
+		          scrolling="no"></iframe>
+	  </div>
+  {% else %}
+	  <div class="task-preview-modal-content">
+		  <div class="iframe-parent-content iframe-parent-full" id="video-content" data-role="task-content"
+		       data-media-source="{{ activity.ext.mediaSource }}">
+			  <div id="swf-player" data-url="{{ activity.ext.mediaUri }}"></div>
+		  </div>
+	  </div>
+   
+  {% endif %}
+
+  <div class="js-time-limit-dev hidden">
+    <div style="height:400px;background-color:black;" class="text-center">
+      <br><br><br><br>
+      <br><br><br><br>
+      <div style="font-size:20px;color:#fff;">
+        {{ 'course.plan_task.activity_manage.video.buy_tips'|trans }}
+      </div>
+    </div>
+    <div class="js-buy-text hidden">
+    <span class="text-success">
+      {{ 'course.plan_task.activity_manage.video.try_watch_tips'|trans({'%tryLookLength%': course.tryLookLength }) }}
+    </span>
+    </div>
+  </div>
+
+{% endblock %}

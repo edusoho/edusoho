@@ -1,0 +1,52 @@
+{% import "macro.html.twig" as web_macro %}
+{% include 'member-record/form.html.twig' %}
+<table class="table table-striped" id="quit-record-list">
+  <thead>
+    <tr>
+      <th>{{'course.members_manage.records.name'|trans}}</th>
+      <th>{{'course.members_manage.quit_records.date'|trans}}</th>
+      <th>{{'course.members_manage.quit_type'|trans}}</th>
+      <th width="30%">{{'course.members_manage.quit_records.reason'|trans}}</th>
+      <th>{{'course.members_manage.is_refunded'|trans}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for record in records %}   
+      {% set user = users[record['user_id']] %}
+      {% set order = orders[record['order_id']]|default() %}
+      <tr class="vertical-middle">
+        <td class="media vertical-middle">
+          {{ web_macro.user_avatar(user, 'pull-left', 'avatar-sm') }}
+          <a class="link-primary" target="_blank" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a><br/>
+          {# <span class="text-sm text-grey">{{ 'order.sn'|trans }}: {{ order.sn|default('--') }}<span> #}
+        </td>
+        <td class="vertical-middle">
+            {{ record.created_time|date('Y-n-d H:i') }}
+        </td>
+        <td class="vertical-middle">
+          {{ dict_text('exit_reason', record.reason_type) }}
+        </td>
+        <td class="vertical-middle">
+          {% set operator = users[record['operator_id']]|default() %}
+            {% if record.user_id != record.operator_id  and operator %}
+                ({{ operator.nickname }})
+            {% endif %}{{ record.reason|trans }}
+        </td>
+        <td class="vertical-middle">
+           {% if record.refund_id > 0 %}
+              {{ 'site_yes'|trans }}
+           {% elseif order['pay_amount']|default() > 0 %}
+              {{ 'site_no'|trans }}
+           {% else %}
+              --
+           {% endif %}
+        </td>
+      </tr>
+    {% else %}
+      <tr class="empty"><td colspan="20">{{'course.members_manage.quit_records.empty'|trans}}</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+<nav class="text-center">
+  {{ web_macro.paginator(paginator) }}
+</nav>

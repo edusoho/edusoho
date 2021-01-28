@@ -1,0 +1,43 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_setting_course_avatar' %}
+
+{% set script_controller = 'setting/default-course-picture-crop' %}
+
+{% block main %}
+
+<meta http-equiv="pragma" content="no-cache" />
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">
+    {{'admin.setting_course.course_avatar.customer_default_avatar'|trans}}
+  </div>
+
+  <div class="panel-body">
+
+      <div class="form-group clearfix">
+        <div class="col-md-offset-2 col-md-8 controls">
+          <img class="img-responsive"src="{{ filepath(pictureUrl) }}"
+          id="default-course-picture-crop"
+          width="{{scaledSize.width}}" height="{{scaledSize.height}}" data-natural-width="{{ naturalSize.width }}" data-natural-height="{{ naturalSize.height }}" />
+          <div class="help-block">{{'admin.user.manage.avatar_crop.crop_hint'|trans}}</div>
+        </div>
+      </div>
+
+      <div class="form-group clearfix">
+        <div class="col-md-offset-2 col-md-8 controls">
+          <a class="btn btn-fat btn-primary"
+          data-url="{{path('admin_setting_default_course_picture_crop')}}"
+          data-goto-url="{{path('admin_setting_course_avatar')}}"
+          id="upload-course-picture-btn" >{{'form.btn.save'|trans}}</a>
+          <a id="default-course-picture-btn"
+            data-upload-token="{{ upload_token('system', 'image') }}"
+            data-goto-url="{{path('admin_setting_default_course_picture_crop')}}"
+            class="btn btn-default btn-sm">{{'admin.user.manage.avatar_crop.select_again_btn'|trans}}</a>
+        </div>
+      </div>
+
+  </div>
+</div>
+
+
+{% endblock %}

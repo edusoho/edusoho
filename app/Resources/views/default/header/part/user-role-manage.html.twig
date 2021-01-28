@@ -1,0 +1,22 @@
+{#添加admin_v2#}
+{% if has_permission('admin') or has_permission('admin_v2') or 'ROLE_TEACHER' in app.user.roles %}
+  <li class="user-manage-li cd-dropdown cd-dropdown-right visible-lg cd-ml24"  data-toggle="cd-dropdown">
+    <a class="btn cd-btn user-manage-toggle" href="javascript:;">{% if has_permission('admin') or has_permission('admin_v2') %}{{'homepage.header.admin_menu'|trans}}{% elseif 'ROLE_TEACHER' in app.user.roles %}{{ 'homepage.header.my_course'|trans }}{% endif %}<i class="cd-icon cd-icon-arrow-down cd-text-sm"></i></a>
+    <ul class="dropdown-menu user-manage-dropdown" role="menu">
+      {#添加admin_v2#}
+      {% if has_permission('admin') or has_permission('admin_v2')%}
+        <li><a href="{{ path('admin') }}">{{'homepage.header.admin_menu'|trans}}</a></li>
+      {% endif %}
+      {% if app.user.isTeacher() %}
+        <li><a href="{{ path('my') }}">{{ 'homepage.header.my_course'|trans }}</a></li>
+      {% endif %}
+      <li><a href="{{ path('my_courses_learning') }}">{{ 'homepage.header.my_learning'|trans }}</a></li>
+    </ul>
+  </li>
+{% else %}
+  <li class="user-manage-li visible-lg cd-ml24">
+    <a class="btn cd-btn user-manage-toggle" href="{{ path('my_courses_learning') }}">{{ 'homepage.header.my_learning'|trans }}</a>
+  </li>
+{% endif %}
+
+

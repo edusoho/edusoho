@@ -1,0 +1,153 @@
+{% extends 'admin-v2/layout.html.twig' %}
+{% block title %}{{ 'admin.hompage.html_head_title'|trans }}{% endblock %}
+{% set panel = 'dashboard' %}
+{% set adminV2Homepage = 1 %}
+{% do script(['app/js/admin-v2/default/index.js', 'app/js/admin-v2/default/quick-entrance/index.js']) %}
+
+{% set bodyClass = "admin-v2-page" %}
+
+{% block container %}
+  <div class="container admin-v2-container">
+    {# S2B2C 通知提示 #}
+    {% include 'admin-v2/default/s2b2c-notice.html.twig' %}
+    <div class="alert-list">
+      {# 插件、主题升级提示 #}
+      {{ render(controller('AppBundle:AdminV2/Default:validateUpgrade')) }}
+      {% if not is_s2b2c_enabled() %}{#S2B2C#}
+        {# 域名检查提示,分课模式下不需要提示域名不一致的问题 #}
+        {{ render(controller('AppBundle:AdminV2/Default:validateDomain')) }}
+      {% endif %}
+      {% if not (setting('copyright.thirdCopyright')|default(0) == 1) and is_trial() %}
+        {# 教育云推送通知 #}
+        {{ render(controller('AppBundle:AdminV2/Default:getCloudNotices')) }}
+      {% endif %}
+    </div>
+
+    <div class="row cd-mt24">
+      <div class="col-md-9">
+        {# 任务助手 #}
+        {% if not isNewcomerTaskAllDone %}
+        <div class="admin-v2-section admin-v2-section--step">
+          <div class="admin-v2-section__header">{{ 'admin_v2.newcomer_task.helper'|trans }}<span class="admin-v2-section__tip">{{ 'admin_v2.newcomer_task.helper_tip'|trans }}</span><span class="admin-v2-section__more js-show-toggle"><span class="js-toggle-text">{{ 'admin_v2.newcomer_task.collapse'|trans }}</span><i class="es-icon es-icon-keyboardarrowup"></i></span></div>
+          <div class="admin-v2-section__body js-steps" data-url="{{ path('admin_v2_homepage_newcomer_task') }}">
+            <div class="row text-center" style="line-height: 160px;">
+              {{ 'admin_v2.homepage.loading_data_tips'|trans }}
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
+        {# 数据概览 #}
+        <div class="admin-v2-section cd-pb24">
+          <div class="admin-v2-section__header cd-mb16">{{ 'admin_v2.homepage.data_overview'|trans }}<a class="admin-v2-section__more" href="{{ path('admin_v2_data_statistics_overview') }}">{{ 'admin_v2.homepage.more_btn'|trans }}<i class="es-icon es-icon-chevronright"></i></a></div>
+          <div class="admin-v2-section__body admin-data js-data-overview" data-url="{{ path('admin_v2_homepage_daily_statistics') }}">
+            <div class="row text-center" style="line-height: 56px;">
+              {{ 'admin_v2.homepage.loading_data_tips'|trans }}
+            </div>
+          </div>
+        </div>
+
+        {# 常用入口 #}
+        <div class="admin-v2-section cd-pb16">
+          <div class="admin-v2-section__header cd-mb16">{{ 'admin_v2.homepage.quick_entrance'|trans }}</div>
+          <div class="admin-v2-section__body js-quick-entrance" data-url="{{ path('admin_v2_quick_entrance') }}">
+            <div class="row text-center" style="line-height: 192px" >
+              {{ 'admin_v2.homepage.loading_data_tips'|trans }}
+            </div>
+          </div>
+        </div>
+
+        {# 应用推荐（高级去版权不显示） #}
+        {% if not setting('copyright.thirdCopyright', false) == 1 %}
+        <div class="admin-v2-section cd-pb24 application-intro js-application-intro"
+             {% if not is_without_network() %}data-url="{{ path('admin_v2_homepage_application_intro') }}" {% endif %}>
+          <div class="admin-v2-section__header cd-mb16">{{ 'admin_v2.homepage.application_intro'|trans }}
+            <a class="admin-v2-section__more js-no-network"
+               href="javascript:;">{{ 'admin_v2.homepage.application_intro.more_btn'|trans }}</a>
+          </div>
+          <div class="admin-v2-section__body">
+            <div class="row">
+              {% for i in 0..3 %}
+                <div class="col-md-3">
+                  <div class="text-center admin-application">
+                    <i class="es-icon es-icon-entry-application"></i>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
+        {# 经营建议（高级去版权不显示）#}
+        {% if not setting('copyright.thirdCopyright', false) == 1 %}
+        <div class="admin-v2-section cd-pb16 cd-mb0">
+          <div class="admin-v2-section__header cd-mb16">{{ 'admin_v2.business_advice.title'|trans }}<a {% if is_without_network() %}class="admin-v2-section__more js-no-network" href="javascript:;" {% else %}class="admin-v2-section__more" href="http://www.qiqiuyu.com" target="_blank"{% endif %}>{{ 'admin_v2.buiness_advice.goto_qiqiuyu'|trans }}</a></div>
+          <div class="admin-v2-section__body admin-advice js-admin-advice" data-url="{{ path('admin_v2_homepage_business_advice') }}">
+            <div class="row text-center" style="line-height: 120px">
+              {% for i in 0..3 %}
+                <div class="col-md-3">
+                  <div class=" admin-advice__item">
+                    <div class="admin-advice__placeholder"><i class="es-icon es-icon-placeholder"></i></div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="col-md-3">
+        {# 网校信息 #}
+        <div class="admin-info-section js-admin-info" data-url="{{ path('admin_v2_homepage_school_info') }}">
+          <div class="text-center" style="line-height: 400px">
+            {{ 'admin_v2.homepage.loading_data_tips'|trans }}
+          </div>
+        </div>
+
+        {# 网校公告（高级去版权不显示） #}
+        {% if not setting('copyright.thirdCopyright', false) == 1 %}
+        <div class="admin-sidebar-section cd-pb16">
+          <div class="admin-sidebar-section__header">{{ 'admin_v2.homepage.announcement_from_platform'|trans }}</div>
+          <div class="announcement-from-platform js-announcement"{% if not is_without_network() %} data-url="{{ path('admin_v2_announcement_from_platform') }}"{% endif %}>
+            <div class="admin-notice">
+              <img src="{{ asset('static-dist/app/img/admin-v2/announcement-from-platform.png') }}">
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
+        {# changelog #}
+        <div class="admin-sidebar-section js-admin-changelog" data-url="{{ path('admin_v2_homepage_changelog') }}">
+          <div class="admin-sidebar-section__header">{{ 'admin_v2.default_page.changelog_title'|trans }}<a class="admin-sidebar-section__more" href="{{ path('changelog_list') }}" target="_blank">{{ 'site.datagrid.filter.category_more'|trans }}<i class="es-icon es-icon-chevronright"></i></a></div>
+          <div class="admin-sidebar-section__body">
+            <div class="text-center" style="line-height: 100px">
+              {{ 'admin_v2.homepage.loading_data_tips'|trans }}
+            </div>
+          </div>
+        </div>
+
+        {# 公众号（高级去版权不显示） #}
+        {% if not setting('copyright.thirdCopyright', false) == 1 %}
+        <div class="admin-sidebar-section js-admin-qrcode" data-url="{{ path('admin_v2_homepage_qrcode') }}">
+          <div class="admin-sidebar-section__header">{{ 'admin_v2.wechat_official_account.title'|trans }}</div>
+          <div class="admin-sidebar-section__body">
+            <div class="text-center" style="line-height: 120px">
+              {{ 'admin_v2.homepage.loading_data_tips'|trans }}
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div  id="cloud-ad" class="admin-cloud-ad modal fade text-center" aria-hidden="true" data-backdrop="static"  tabindex="-1" role="dialog" data-url ="{{ path('admin_v2_cloud_ad') }}">
+      <div class="modal-dialog">
+          <a href="" target="_blank">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+          </a>
+      </div>
+    </div>
+  </div>
+{% endblock %}

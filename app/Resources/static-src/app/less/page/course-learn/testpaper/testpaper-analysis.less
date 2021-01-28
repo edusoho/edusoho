@@ -1,0 +1,124 @@
+.testpaper-question-panel {
+  .es-box-shadow;
+  border: none;
+  .border-radius(2px);
+}
+
+.testpaper-question-body__label {
+  position: relative;
+  margin-bottom: 10px;
+  height: 30px;
+  line-height: 30px;
+  span {
+    position: absolute;
+    top: 0;
+    right: 80px;
+  }
+}
+
+.testpaper-question-body-item {
+  position: relative;
+}
+
+.testpaper-question-body-item__index {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+}
+
+.testpaper-question-body-item__content {
+  width: 82%;
+  @media (min-width: @screen-sm-min) and (max-width: @screen-md-max) {
+    width: 78%;
+  }
+}
+
+.testpaper-question-body-item__label {
+  position: absolute;
+  top: 6px;
+  right: 80px;
+  height: 16px;
+  line-height: 100%;
+}
+
+.testpaper-question-body-item__count {
+  position: absolute;
+  top: 5px;
+  right: 0;
+}
+
+// 填空题
+.testpaper-question-fill-item {
+  padding: 6px 0 6px 125px;
+  list-style-type: none;
+  margin-bottom: 10px;
+}
+
+// 填空题填入内容样式
+.question-stem-fill-blank {
+  padding-left: 15px;
+  padding-right: 15px;
+  border-bottom: 1px solid #999;
+  color: #aaa;
+}
+
+// 判断题
+.testpaper-question-determines {
+  margin-left: 50px;
+  label {
+    padding: 8px 20px 8px 30px;
+    display: inline-block;
+    &:hover,
+    &.active {
+      background: #eee;
+    }
+  }
+}
+
+// 选择题
+.testpaper-question-choices {
+  margin-left: 50px;
+  padding-left: 0;
+  list-style: none;
+  border-bottom: 1px dashed #ddd;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  img {
+    max-width: 100%;
+  }
+  li {
+    &:hover {
+      background: #eee;
+    }
+    p {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.testpaper-question-choice-item {
+  padding: 6px 0 6px 36px;
+  .testpaper-question-body-item__index {
+    color: @gray;
+  }
+  &.testpaper-question-choice-item--right {
+    color: #3c763d;
+    .testpaper-question-body-item__index {
+      color: #3c763d;
+    }
+  }
+  &.testpaper-question-choice-item--wrong {
+    color: #ed3e3e;
+    .testpaper-question-body-item__index {
+      color: #ed3e3e;
+    }
+  }
+}
+
+// 问答题
+.testpaper-question-essay__answer {
+  margin: 20px 0 20px 50px;
+  img {
+    max-width: 100%;
+  }
+}

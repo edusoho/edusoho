@@ -1,0 +1,48 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'cd-modal-dialog' %}
+
+{% do script(['libs/jquery-validation.js','app/js/settings/email/index.js']) %}
+
+{% block title %}
+  {{'user.settings.email'|trans}}
+{% endblock %}
+
+{% block body %}
+  {% if mailer.enabled == 1 or cloudEmail.status|default(null) == 'enable' %}
+    <form id="setting-email-form" method="post" action="{{path('settings_email')}}">
+      {% if not is_system_generated_email(app.user.email) %}
+        <div class="form-group cd-form-group">
+          <label class="readonly">{{'user.settings.email.current_email'|trans}}</label>
+          <input type="text" class="form-control" value="{{ blur_number(app.user.email) }}" readonly>
+        </div>
+      {% endif %}
+      <div class="form-group cd-form-group">
+        <label for="email">{{'user.settings.email.new_email'|trans}}</label>
+        <input type="email" class="form-control" name="email">
+      </div>
+      <div class="form-group cd-form-group cd-mb24">
+        <label for="password">{{'user.fields.login_password'|trans}}</label>
+        <input type="password" class="form-control" name="password" id="password">
+      </div>
+      {% if (setting('auth.captcha_enabled')|default(0)) == 1 %}
+        <div class="form-group cd-mb24 js-drag-jigsaw">
+          {% include 'common/drag.html.twig' with { auth: true } %}
+        </div>
+      {% endif %}
+    </form>
+  {% else %}
+    <div class="alert cd-alert cd-alert-warning">
+      {{'user.settings.email.no_change_email_tips'|trans}}
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block footer %}
+  {% if mailer.enabled == 1 or cloudEmail.status|default(null) == 'enable' %}
+    <button type="button" class="btn cd-btn cd-btn-flat-default cd-btn-lg" data-dismiss="modal">
+      {{'form.btn.cancel'|trans}}
+    </button>
+    <button id="submit-btn" type="button" class="btn cd-btn cd-btn-primary cd-btn-lg" data-toggle="form-submit"  data-target="#setting-email-form" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{'form.btn.submit'|trans}}</button>
+  {% endif %}
+{% endblock %}

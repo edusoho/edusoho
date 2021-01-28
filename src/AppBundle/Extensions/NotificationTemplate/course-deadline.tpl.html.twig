@@ -1,0 +1,15 @@
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+      {% set data = notification.content %}
+      {% set course = '<a href="' ~ path('course_show', {id:data.courseId}) ~ '" target="_blank"><strong> ' ~ data.courseTitle ~ '</strong></a>' %}
+      {{ 'notification.course-deadline'|trans({'%course%':course, '%deadline%':data.endtime})|raw }}
+    </div>
+    <div class="notification-footer">
+     {{ notification.createdTime|date_format }}  
+    </div>
+  </div>
+</li>

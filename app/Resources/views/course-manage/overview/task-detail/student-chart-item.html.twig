@@ -1,0 +1,24 @@
+{% for task in tasks %}
+    {% set taskResult = userTaskResults[task.id]|default() %}
+
+    <li  data-toggle="popover"
+         data-trigger="hover"
+         data-placement="top"
+         data-html="true"
+         data-delay="100"
+         data-content="
+                    <div><p class='mbs'>{{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}{{ task.number }} : {{ task.title }}</p>
+                    {% if taskResult.createdTime|default() %}
+                        {{ 'course.task.start_time'|trans }} : {{ taskResult.createdTime|date('Y-m-d H:i:s') }}<br/>
+                    {% endif %}
+                    {% if taskResult.finishedTime|default() %}
+                        {{ 'course.task.finish_time'|trans }} : {{ taskResult.finishedTime|date('Y-m-d H:i:s') }}<br/>
+                    {% endif %}
+                    </div>">
+        {% if taskResult %}
+            <i class="{{ taskResult.status }}-color"></i>
+        {% else %}
+            <i class="learn-color"></i>
+        {% endif %}
+    </li>
+{% endfor %}

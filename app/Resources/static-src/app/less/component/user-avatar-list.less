@@ -1,0 +1,19 @@
+.user-avatar-list {
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+  li {
+    float: left;
+    width: 20%;
+    margin-bottom: 10px;
+    text-align: center;
+    @media (max-width: @screen-sm-max) and (min-width: @screen-sm-min) {
+      width: 10%;
+    }
+  }
+  .name {
+    margin-top: 10px;
+    .text-overflow;
+    height: 20px;
+  }
+}

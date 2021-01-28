@@ -1,0 +1,24 @@
+{% extends 'courseset-manage/courseset-layout.html.twig' %}
+
+{% block title %}{{ 'course.base'|trans }} - {{ parent() }}{% endblock %}
+
+{% do script(['libs/es-ckeditor/ckeditor.js', 'libs/jquery-validation.js', 'libs/select2.js', 'app/js/courseset-manage/base/index.js']) %}
+{% set side_nav = 'base' %}
+{% block paddingClass %} courseset-manage-padding course-manage-info {% endblock %}
+
+{% block main %}
+  <div class="courseset-manage-body__title">{{ 'course.base.content_title'|trans }}</div>
+  <div class="courseset-manage-body__content cd-mt32">
+    <form class="form-horizontal" id="courseset-form" data-value="{{ isCoursesSummaryEmpty }}" action="{{path('course_set_manage_base', {id: courseSet.id})}}" method="post">
+      {% include 'courseset-manage/base-info/info.html.twig' with {form: 'courseset-form', button:'courseset-base-submit'} %}
+
+      <div class="form-group cd-mt40">
+        <div class="col-md-offset-2 col-sm-8">
+          <button id="courseset-base-submit" type="button" class="cd-btn cd-btn-primary" data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.save'|trans }}</button>
+        </div>
+      </div>
+
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    </form>
+  </div>
+{% endblock %}

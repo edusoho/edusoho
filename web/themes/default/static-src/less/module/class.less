@@ -1,0 +1,126 @@
+.home-class-list {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+  @media (max-width: 767px) {
+    margin: 0 -5px;
+  }
+  .class-item {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+    @media (max-width: 767px) {
+      width: 50%;
+      float: left;
+      padding: 0 5px;
+      border:none;
+      margin-bottom: 10px;
+    }
+    &:hover{
+      background: #f9f9f9;
+      @media (max-width: 767px) {
+        background: transparent;
+      }
+    }
+  }
+  .class-body{
+    padding: 10px 0;
+    &:hover{
+      @media (max-width: 767px) {
+        background: #f9f9f9;
+      }
+    }
+    @media (max-width: 767px) {
+      padding: 10px ;
+      border:1px solid #ddd;
+    }
+  }
+  .class-picture-link {
+    float: left;
+    margin-right: 25px;
+    @media (max-width: 767px) {
+      float: none;
+      display: block;
+      margin-right: 0;
+      position: relative;
+      width: 100%;
+      padding-bottom: 56%;
+    }
+    >img{
+      width: 213px;
+      @media (max-width: 767px) {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      @media (min-width: 768px) {
+        height: 120px;
+      }
+    }
+  }
+  .class-title{
+    margin-bottom: 15px;
+    margin-top: 0;
+    font-size: 16px;
+    line-height: 24px;
+    color: #222;
+    overflow: hidden;
+    @media (max-width: 767px) {
+      margin-bottom: 5px;
+      height: auto;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      word-wrap: normal;
+    }
+    a{
+      font-weight: bold;
+      color: #555;
+      @media (max-width: 767px) {
+        font-weight: normal;
+        font-size: 14px;
+      }
+    }
+  }
+  .class-metas{
+    margin-bottom: 20px;
+    color: #999;
+    @media (max-width: 767px) {
+      margin-bottom: 10px;
+    }
+    .fa{
+      margin-right: 5px;
+      font-size: 18px;
+      @media (max-width: 767px) {
+       font-size: 13px;
+     }
+    }
+    a{
+      color: #555;
+    }
+    .class-teacher{
+      margin-right: 20px;
+      @media (max-width: 767px) {
+       display: none;
+      }
+      span{
+        margin-right: 10px;
+      }
+    }
+  }
+  .class-price{
+    float: right;
+    font-size: 18px;
+    @media (min-width: 1200px) {
+      margin-right: 50px
+    }
+    @media (max-width: 767px) {
+      font-size: 14px;
+    }
+  }
+}

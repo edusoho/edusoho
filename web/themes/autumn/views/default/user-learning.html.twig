@@ -1,0 +1,41 @@
+{% set courseSet = data('MemberRecentlyLearned',{'user':app.user}) %}
+
+{% if courseSet %}
+  {% set course = courseSet.course %}
+  <div class="panel panel-autumn panel-autumn-primary">
+    <div class="panel-heading side-autumn-primary">
+      <h2 class="panel-title">{{ '在学课程'|trans }} /
+        <small>Learning</small>
+      </h2>
+    </div>
+    <div class="panel-body">
+      <div class="user-learn clearfix">
+        <a href="{{ path('course_show', {id:course.id}) }}">
+          <img src="{{ filepath(course_set_cover(courseSet, 'large'), 'courseSet.png') }}"
+            class="img-responsive thumb pull-left">
+        </a>
+        <p>《{{ courseSet.title }}》</p>
+        {% set teacher = course.teachers|first %}
+        {% set progress = course.progress %}
+        <p class="teacher-name">{{ '教师：'|trans }}{{ teacher.nickname|default("") }}</p>
+        <div class="progress-block clearfix">
+          <div class="progress" style="width:90%">
+            <span class="progress-bar" style="width: {{ progress.percent }}%;"></span>
+          </div>
+          <div class="percentage clearfix">{{ '完成'|trans }}{{ progress.percent }}%</div>
+          {% set nextLearnTask = course.nextLearnTask %}
+          {% if nextLearnTask %}
+            <div class="continue">
+              <a href="{{ path('course_task_show', {courseId: course.id, id:nextLearnTask.id, }) }}"
+                title="{{ '继续学习：'|trans }}{{ nextLearnTask.title }}" class="btn btn-success pull-right">
+                {{ '继续学习'|trans }}
+              </a>
+            </div>
+          {% endif %}
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+{% endif %}

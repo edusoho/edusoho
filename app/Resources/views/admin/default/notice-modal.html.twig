@@ -1,0 +1,90 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+{% set modal_class = 'modal-reset' %}
+
+{% set hide_footer = true %}
+
+{% block body %}
+  <style>
+  .modal-reset{
+    /*width: 468px;*/
+    width: 500px;
+  }
+  .modal-reset img {
+    margin: 0 auto;
+  }
+  .modal-header{
+    border-bottom: none;
+    display: inline-block;
+    padding: 0;
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    z-index: 999;
+  }
+  .modal-header .close{
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    color: #fff;
+    opacity: 0.8;
+    filter: alpha(opacity=80);
+  }
+  .modal-header .close:hover {
+    opacity: 1;
+    filter: alpha(opacity=100);
+  }
+  .modal-footer{
+    border-top: none;
+    padding: 0;
+    margin: 0;
+  }
+  .modal-body{
+    text-align: center;
+    border-radius: 4px;
+    padding: 40px;
+    background: url('/bundles/topxiaadmin/img/es7-modal-bg.jpg');
+  }
+  .modal-body .title {
+    margin-bottom: 20px;
+  }
+  .modal-body .content p{
+    color: #fff;
+    line-height: 18px;
+    margin-top: 15px;
+    margin-bottom: 28px;
+    letter-spacing: 2px;
+  }
+  .modal-body .btn-look{
+    padding: 10px 30px;
+    font-size: 18px;
+    color: #ffdb16;
+    border: 1px solid #ffdb16;
+    border-radius: 4px;
+    display: inline-block;
+    letter-spacing: 5px;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;   
+  }
+  .modal-body .btn-look:hover{
+    text-decoration: none;
+    background-color: #ffdb16;
+    color: #fff;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+  }
+</style>
+  <div class="title">
+    <img class="img-responsive" src="{{asset('bundles/topxiaadmin/img/es7-modal-title.png')}}">
+  </div>
+  <div class="content text-center">
+    <img class="img-responsive" src="{{asset('bundles/topxiaadmin/img/es7-modal-qrcode.jpg')}}" alt="">
+    <p>{{ 'site.tips.weixin_scan'|trans }}</p>
+    <a href="http://www.edusoho.com/info/496/show" class="btn-look" target="_blank">{{ 'site.btn.upgrade_info'|trans }}</a>
+  </div>
+{% endblock %}

@@ -1,0 +1,85 @@
+parameters:
+    database_driver:   pdo_mysql
+    database_host:     127.0.0.1
+    database_port:     3306
+    database_name:     edusoho
+    database_user:     root
+    database_password: ~
+    locale:            zh_CN
+    secret:            ThisTokenIsNotSoSecretChangeIt
+
+    #    school_mode: #网校模式（默认不需要设置）
+    #        type: default/merchant #default,默认缺省值EduSoho网校；merchant,经销商网校
+    #        business_mode: dealer/franchisee #如果是经销商，则分为经销模式（dealer）和加盟模式（franchisee）
+    #        supplier: #如果是S2B2C，则存在供应商信息
+    #            id: 1 #供应商ID
+    #            domain: test41.supplier-admin.edusoho.cn #供应商URL
+
+    # redis_host: 127.0.0.1:6379
+    # redis_timeout: 1
+    # redis_reserved: null
+    # redis_retry_interval: 100
+    # redis_password: ~
+
+    #扩展参数
+    #oauth2_clients: #oauth2客户端配置
+    #    third_party_oauth:
+    #        name: 前台登录显示名称
+    #        admin_name: 后台显示名称
+    #        class: AnywhereClient\Component\AnywhereOAuthClient #oauth客户端类
+    #        icon_class: anywhere #图标的class
+    #        icon_img: bundles/anywhereclient/images/anywhere-icon.png //图标
+    #        large_icon_img: bundles/anywhereclient/images/anywhere-large-icon.png #大不图标
+    #        key_setting_label: 'App Key' # 后台显示
+    #        secret_setting_label: 'App Secret' #后台显示
+
+    #连连支付签名方式， MD5 | RSA
+    #  payment_sign_type: MD5
+
+    #sentry_dsn: "http://9697ef7b0b1b4bc793886d50eb7e96c9:fe6e85725c3d4b72ba432d2d1d7601c1@sentry.codeages.net/2"
+
+    #sentry_app_path: "/var/www/edusoho”
+
+    #二维码协议白名单，APP内扫码用
+    #qrcode_protocol_whitelist: ['mqqwpa']
+
+    #二维码域名白名单,填写例子：www.edusoho.com
+    #qrcode_site_whitelist: []
+
+    #运行plumber时使用的php
+    # php_bash: '/usr/local/opt/php@7.3/bin/php'
+
+    #plumber配置
+    #plumber_queues_options:
+    #    default:
+    #        type: beanstalk
+    #        host: 127.0.0.1
+    #        port: 11300
+    #        password: ~
+    #        persistent: true
+    #        timeout: 2
+    #        socket_timeout: 20
+    #        logger: null
+    #    redis_default:
+    #        type: redis
+    #        host: 127.0.0.1
+    #        port: 6380
+    #        password: ~
+    #        reserved: null
+    #        timeout: 1
+    #        dbindex: null
+
+    #plumber_worker_rate_limits:
+    #    default_rate_limit:
+    #        storage: redis
+    #        redis:
+    #            host: 127.0.0.1
+    #            port: 6380
+    #            password: null
+    #        allowance: 5
+    #        period: 60
+
+    #plumber_worker_hour_limits:
+    #      default_hour_limit:
+    #        start: 23
+    #        end: 7

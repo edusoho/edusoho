@@ -1,0 +1,35 @@
+{% set favorites = favorites|default([]) %}
+{% set resultStatus = resultStatus|default(null) %}
+{% set favoriteId = 0 %}
+{% if question.id in favorites|keys %}
+  {% set favoriteId = favorites[question.id].id %}
+{% endif %}
+
+{% if 'mark' in flags and resultStatus == 'doing'   %}
+  <a class="link-gray js-marking">
+    <i class="glyphicon glyphicon-bookmark mr5"></i>{{'course.question_manage.question.mark_btn'|trans}}
+  </a>
+  <a class="link-gray js-marking hidden">
+    <i class="glyphicon glyphicon-bookmark mr5"></i>{{'course.question_manage.question.cancel_mark_btn'|trans}}
+  </a>
+{% endif %}
+
+{% if 'favorite' in flags and resultStatus and resultStatus == 'finished' %}
+  <a class="link-gray js-favorite {% if favoriteId != 0 %} hidden {% endif %}" data-url="{{ path('my_question_favorite', {questionId:question.id}) }}" data-target-type="testpaper" data-target-id="{{ paper.id|default(0) }}" data-question-id="{{ question.id }}">
+    <span class="glyphicon glyphicon-star-empty"></span>
+     {{'course.question_manage.question.favorite_btn'|trans}}
+  </a>
+  <a class="link-gray js-favorite {% if favoriteId == 0 %} hidden {% endif %}" data-url="{{ path('my_question_unfavorite', {id:favoriteId}) }}" data-target-type="testpaper" data-target-id="{{ paper.id|default(0) }}" data-question-id="{{ question.id }}">
+    <span class="glyphicon glyphicon-star"></span>
+    {{'course.question_manage.question.cancel_favorite_btn'|trans}}
+  </a>
+{% endif %}
+
+{% if 'analysis' in flags %}
+  {% if not question.analysis == '' %}
+  <span class="view-toggle js-analysis-toggle">
+    <a class="btn link-gray view-show js-analysis"><span class="glyphicon glyphicon-chevron-down"></span> {{'course.question_manage.question.analysis_expand_btn'|trans}}</a>
+    <a class="btn link-gray view-hide js-analysis hidden"><span class="glyphicon glyphicon-chevron-up"></span> {{'course.question_manage.question.analysis_collapse_btn'|trans}}</a>
+  </span>
+  {% endif %}
+{% endif %}

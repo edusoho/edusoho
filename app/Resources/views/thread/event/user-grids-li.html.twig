@@ -1,0 +1,5 @@
+{% import "macro.html.twig" as web_macro %}
+
+{% for member in members %}
+<span>{{ web_macro.user_avatar(member, '', 'avatar-sm', true) }}</span>
+{% endfor %}

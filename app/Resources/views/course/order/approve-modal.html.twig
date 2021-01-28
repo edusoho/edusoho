@@ -1,0 +1,10 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{'site.tips'|trans}}{% endblock %}
+{% block body %}
+  <div class="alert alert-info">{{'course.approve_tips'|trans}}</div>
+{% endblock %}
+
+{% block footer %}
+	<a href="{{ path('setting_approval_submit') }}" class="btn btn-primary" target="_blank">{{'form.btn.approve'|trans}}</a>
+{% endblock %}

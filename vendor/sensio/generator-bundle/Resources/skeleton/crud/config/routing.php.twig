@@ -1,0 +1,76 @@
+<?php
+
+{% block use_statements %}
+use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\Routing\Route;
+{% endblock use_statements %}
+
+{% block definition %}
+$collection = new RouteCollection();
+{% endblock definition %}
+
+{% block body %}
+{% if 'index' in actions %}
+$collection->add('{{ route_name_prefix }}_index', new Route(
+    '/',
+    array('_controller' => '{{ bundle }}:{{ entity }}:index'),
+    array(),
+    array(),
+    '',
+    array(),
+    array('GET')
+));
+{% endif %}
+
+{% if 'show' in actions %}
+$collection->add('{{ route_name_prefix }}_show', new Route(
+    '/{{ '{' ~ identifier ~ '}' }}/show',
+    array('_controller' => '{{ bundle }}:{{ entity }}:show'),
+    array(),
+    array(),
+    '',
+    array(),
+    array('GET')
+));
+{% endif %}
+
+{% if 'new' in actions %}
+$collection->add('{{ route_name_prefix }}_new', new Route(
+    '/new',
+    array('_controller' => '{{ bundle }}:{{ entity }}:new'),
+    array(),
+    array(),
+    '',
+    array(),
+    array('GET', 'POST')
+));
+{% endif %}
+
+{% if 'edit' in actions %}
+$collection->add('{{ route_name_prefix }}_edit', new Route(
+    '/{{ '{' ~ identifier ~ '}' }}/edit',
+    array('_controller' => '{{ bundle }}:{{ entity }}:edit'),
+    array(),
+    array(),
+    '',
+    array(),
+    array('GET', 'POST')
+));
+{% endif %}
+
+{% if 'delete' in actions %}
+$collection->add('{{ route_name_prefix }}_delete', new Route(
+    '/{{ '{' ~ identifier ~ '}' }}/delete',
+    array('_controller' => '{{ bundle }}:{{ entity }}:delete'),
+    array(),
+    array(),
+    '',
+    array(),
+    array('DELETE')
+));
+{% endif %}
+{% endblock body %}
+
+{% block return %}
+return $collection;
+{% endblock return %}

@@ -1,0 +1,109 @@
+{% do script('app/js/course/header-top/index.js') %}
+
+<div class="container cd-container">
+  <div class="es-section course-detail-section course-detail-section--normal clearfix">
+
+    <div class="course-detail-bottom">
+      <div class="course-detail-img">
+        <img class="img-responsive" src="{{ courseSet.cover.large }}"
+             alt="{{ course.title }} ">
+        <div class="image-overlay"></div>
+        {# 是否支持试看 #}
+        {% if previewTask | default(null) %}
+          <a href="#modal" data-toggle="modal"
+             data-url="{{ path('course_task_preview',{courseId:course.id, id:previewTask.id}) }}"
+             class="course-img-cover">
+            <i class="es-icon es-icon-playcircleoutline"></i>
+          </a>
+        {% endif %}
+      </div>
+
+      <div class="course-detail-info">
+        <div class="course-detail-info__text js-course-detail-info">
+          <div>
+            <div class="course-detail-info__title">
+              {% if marketingPage %}{{ courseSet.title }}{% else %}{{ course.title }}{% endif %}
+            </div>
+          </div>
+
+          <div class="course-detail-gray course-detail-gray--market">
+            <div class="course-detail-content">
+              <span class="course-detail-title vertical-middle">{{ 'course.teaching_plan'|trans }}</span>
+              <ul class="nav nav-pills nav-pills-sm nav-pills-transparent course-detail-nav">
+                {% for c in courses if c.status == 'published' %}
+                  <li class="mb5 mrs {{ c.id ==  course.id ? 'active': ''}}">
+                    <a href="{{ path('admin_v2_content_resource_product_detail', {productType: 'courseSet', s2b2cProductId: product.id, courseId:c.id}) }}"
+                       data-toggle="tooltip"
+                       data-placement="top"
+                       data-container="body"
+                       title="{{ c.subtitle }}"
+                       data-trigger="hover"
+                       title="{{ c.title }}">{{ c.title|sub_text(10)|default('course.unname_title'|trans) }}
+                    </a>
+                    <i class="es-icon es-icon-done done-icon"></i>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+            <div class="hidden-xs common-line-height">
+              <span class="course-detail-title">{{ 'course.expiry_date'|trans }}</span>
+              {% if course.expiryMode == 'days'  %}
+                <span class="gray-dark course-detail-expiry">
+                {{ 'course.expiry_date.days_mode'|trans({'%expiryDays%':course.expiryDays})|raw }}
+              </span>
+              {% elseif course.expiryMode == 'end_date' %}
+                <span class="gray-dark course-detail-expiry">
+                {{ 'course.expiry_date.end_date_mode'|trans({'%expiryEndDate%':course.expiryEndDate|date('Y-m-d ')})|raw }}
+              </span>
+              {% elseif course.expiryMode == 'date' %}
+                <span class="gray-dark course-detail-expiry">
+                {{ 'course.expiry_date.date_mode'|trans({'%expiryStartDate%':course.expiryStartDate|date('Y-m-d '), '%expiryEndDate%':course.expiryEndDate|date('Y-m-d ')})|raw }}
+              </span>
+              {% elseif course.expiryMode == 'forever' %}
+                <span class="gray-dark course-detail-expiry mrl">{{ 'course.expiry_date.forever_mode'|trans }}</span>
+              {% endif %}
+            </div>
+
+          </div>
+
+          <div data-label="{{ 'price'|trans }}" style="margin-top: 40px; font-size:13px">
+            <div class="form-group">
+              <label> {{ 's2b2c.product.cooperation_price'|trans }} </label>
+              {% set courseSet = courseSet|wrap('courseSet.price') %}
+              <span style="margin-left:20px; font-size: 80%; color: #999;">
+                {{ course.cooperationPrice|number_format(2) }}
+              </span>
+            </div>
+
+            <div class="form-group">
+              <label>{{ 's2b2c.product.suggestion_price'|trans }}</label>
+              <span style="margin-left:20px; font-size: 80%; color: #999;">{{ course.suggestionPrice }}</span>
+            </div>
+          </div>
+        </div>
+
+        {% set canChoose = (merchant.coop_status|default('') != 'cooperation' or hasChosen or courseSet.wholeEditStatus|default() == 'unpublished') %}
+        <div class="course-detail-info__btn js-course-header-operation">
+          <div class="text-right buy-btn-group course-operation-btn ">
+            <a href="{{ path('admin_v2_purchase_market') }}" style="margin-right: 30px;">{{'s2b2c.resource.return_market'|trans }}</a>
+              <button id="js-course-select-btn"
+                      data-id="{{ courseSet.id }}"
+                      class="btn btn-fat btn-primary course-v2-btn{% if canChoose %} disabled {% endif %}"
+                      data-course-set="{{ courseSet|json_encode() }}"
+                      data-choose-url="{{ path('admin_v2_content_resource_choose_product', {productType: 'course_set', productId: product.id}) }}"
+                      style="{% if canChoose %} background-color: #ccc; border-color: #ccc;{% else %} border-color: #409eff; background-color: #409eff; {% endif %}">
+                {% if hasChosen %}
+                  {{ 'merchant.content_resource.has_chosen'|trans }}
+                {% elseif courseSet.wholeEditStatus|default() == 'unpublished' %}
+                  {{ 'merchant.content_resource.editing'|trans }}
+                {% else %}
+                  {{ 's2b2c.resource.all_choose'|trans }}
+                {% endif %}
+              </button>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

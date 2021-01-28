@@ -1,0 +1,61 @@
+<div class="course-item clearfix">
+  {% set is_open_course = 'public_' in course.type %}
+
+  {% if is_open_course %}
+    {% set course_show_url = path('open_course_show', { courseId: course.id }) %}
+  {% else %}
+    {% set course_show_url = path('course_show',{id : course.id}) %}
+  {% endif %}
+
+  <div class="course-img">
+    <a href="{{ course_show_url }}" target="_blank">
+      {% if course.type == 'live' or course.type == 'public_liveOpen' %}
+        <span class="tags-left">
+          <span class="tag-live"></span>
+        </span>
+      {% endif %}
+      {% if is_open_course %}
+        <span class="tags-right">
+          <span class="tag-public"></span>
+        </span>
+      {% endif %}
+      <img class="img-responsive" src="{{ filepath(course.middlePicture, 'course.png') }}" alt="">
+    </a>
+  </div>
+  <div class="course-info">
+    <h3 class="title">
+      <a href="{{ course_show_url }}" target="_blank">
+        {{ course.title|raw }}
+        {% if course.learning|default(false) %}
+          <small class="label label-primary label-xs">{{ 'cloud_search.course.learning'|trans }}</small>
+        {% endif %}
+      </a>
+    </h3>
+    <div class="score">
+      {% if not is_open_course %}
+        {{ web_macro.star(course.rating|default(0)) }}
+       <span>
+        {{'cloud_search.course.evaluate'|trans({'%ratingNum%':course.ratingNum|default(0)})}}
+        {% if setting('course.show_student_num_enabled', '1') == 1  %}
+          {{ 'cloud_search.course.learned'|trans({'%studentNum%':course.studentNum|default(0)}) }}
+        {% endif %}
+        </span> 
+      {% endif %}
+    </div>
+    <div class="content editor-text">{{ course.about|cdn|raw }}</div>
+    {# 云搜索任务直接取前三个会造成与搜索结果不匹配，暂时先隐藏 #}
+    {#{% if not is_open_course and course.lessons|default(null) %}
+      <ul class="ul-lesson">
+        {% for task in course.lessons|slice(0, 3) %}
+          <li>
+            <i class="es-icon es-icon-arrowdropleft"></i>
+            {% set course_show_url = path('course_show', {id : task.courseId}) %}
+            <a class="link-dark" href="{{ course_show_url }}" target="_blank">
+              {{ 'cloud_search.course.task'|trans }} {{ task.number }}: {{ task.title|raw }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}#}
+  </div>
+</div>

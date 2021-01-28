@@ -1,0 +1,83 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'cd-modal-dialog' %}
+
+{% set questionOptions = dict('secureQuestion') %}
+{% if not hasSecurityQuestions %}
+  {% do script(['libs/jquery-validation.js','app/js/settings/security-questions/index.js']) %}
+{% endif %}
+
+{% block title %}
+  {{'user.settings.security.questions'|trans}}
+{% endblock %}
+
+{% block body %}
+  <style>
+  .cd-select .select-options {
+    max-height: 176px;
+  }
+  </style>
+  {% if not hasSecurityQuestions %}
+  <div class="alert cd-alert cd-alert-warning">
+    {{'user.settings.security.questions.setting.warning'|trans}}
+  </div>
+  <form id="settings-security-questions-form" method="post" action="{{ path('settings_security_questions') }}">
+    <div class="form-group cd-form-group">
+      <label for="question-2">{{'user.settings.security.questions.first_question'|trans}}</label>
+      {{ web_macro.cd_select(questionOptions, question1|default('parents'), 'question-1', 'js-cd-select') }}
+    </div>
+    <div class="form-group cd-form-group">
+      <label for="answer-1">{{'user.settings.security.questions.answer'|trans}}</label>
+      <input type="text" id="answer-1" name="answer-1" class="form-control" placeholder="{{'user.settings.security.questions.setting.first_question_answer'|trans}}">
+    </div>
+
+    <div class="form-group cd-form-group">
+      <label for="question-2">{{'user.settings.security.questions.second_question'|trans}}</label>
+      {{ web_macro.cd_select(questionOptions, question2|default('teacher'), 'question-2', 'js-cd-select') }}
+    </div>
+    <div class="form-group cd-form-group">
+      <label for="answer-2">{{'user.settings.security.questions.answer'|trans}}</label>
+      <input type="text" id="answer-2" name="answer-2" class="form-control" placeholder="{{'user.settings.security.questions.setting.second_question_answer'|trans}}">
+    </div>
+
+    <div class="form-group cd-form-group">
+      <label for="question-3">{{'user.settings.security.questions.third_question'|trans}}</label>
+      {{ web_macro.cd_select(questionOptions, question3|default('lover'), 'question-3', 'js-cd-select') }}
+    </div>
+    <div class="form-group cd-form-group">
+      <label for="answer-3">{{'user.settings.security.questions.answer'|trans}}</label>
+      <input type="text" id="answer-3" name="answer-3" class="form-control" placeholder="{{'user.settings.security.questions.setting.third_question_answer'|trans}}">
+    </div>
+
+    <div class="form-group cd-form-group cd-mb24">
+      <label for="userLoginPassword">{{'user.settings.security.login_password'|trans}}</label>
+      <input type="text" id="userLoginPassword" name="userLoginPassword" class="form-control" onfocus="this.type='password'" autocomplete="false" value="">
+    </div>
+
+    <input type="password" style="display:none">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+  {% else %}
+    <div class="cd-plain-text">
+      <div class="plain-label">{{'user.settings.security.questions.first_question'|trans}}</div>
+      <div class="plain-content">{{ questionOptions[question1] }}</div>
+      <div class="plain-label">{{'user.settings.security.questions.second_question'|trans}}</div>
+      <div class="plain-content">{{ questionOptions[question2] }}</div>
+      <div class="plain-label">{{'user.settings.security.questions.third_question'|trans}}</div>
+      <div class="plain-content">{{ questionOptions[question3] }}</div>
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block footer %}
+  {% if not hasSecurityQuestions %}
+    <button type="button" class="btn cd-btn cd-btn-flat-default cd-btn-lg" data-dismiss="modal">
+      {{'form.btn.cancel'|trans}}
+    </button>
+    <button id="password-save-btn" type="button" class="btn cd-btn cd-btn-primary cd-btn-lg" data-toggle="form-submit"  data-target="#settings-security-questions-form" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{'form.btn.submit'|trans}}</button>
+  {% else %}
+    <button type="button" class="btn cd-btn cd-btn-primary cd-btn-lg" data-dismiss="modal">
+      {{'form.btn.close'|trans}}
+    </button>
+  {% endif %}
+{% endblock %}

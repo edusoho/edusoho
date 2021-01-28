@@ -1,0 +1,6 @@
+{% set data = notification.content %}
+{% if data.type == 'add_by_admin' %}
+  {{ 'notification.vip.add_by_admin'|trans({'%vipName%':data.vipName}) }}
+{% elseif data.type == 'remove_by_admin' %}
+  {{ 'notification.vip.remove_by_admin'|trans({'%vipName%':data.vipName}) }}
+{% endif %}

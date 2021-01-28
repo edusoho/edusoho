@@ -1,0 +1,34 @@
+{% import "macro.html.twig" as web_macro %}
+<div class="panel panel-autumn panel-autumn-primary">
+  <div class="panel-heading side-autumn-primary">
+    <h2 class="panel-title">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}{{'评价'|trans}} / <small>Student Evaluation</small></h2>
+  </div>
+  <div class="panel-body">
+    <ul class="media-list latest-review-list">
+      {% for review in reviews %}
+        {% set author = users[review.userId]|default(null) %}
+        {% set course = courses[review.courseId]|default(null) %}
+        {% set courseSet = courseSets[review.courseSetId]|default(null) %}
+        {% if author and course %}
+          <li class="media">
+            <div class="media-left">
+              {{ web_macro.user_avatar(author,'','avatar-md') }}
+            </div>
+            <div class="media-body">
+              {{ web_macro.user_link(author, 'author-nickname')}}
+              <span class="text-muted">{{'说：'|trans}}</span> <br>
+              <div class="review-content">{{ review.content|plain_text(50) }}</div>
+              <div class="review-footer">
+                <a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" class="course-title"> 《 {{ courseSet.title }} 》</a>
+                <span class="divider"></span>
+                <span class="stars-{{review.rating }}">&nbsp;</span>
+              </div>
+            </div>
+          </li>
+        {% endif %}
+      {% else %}
+        <li class="empty">{{'还没有评价'|trans}}</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>

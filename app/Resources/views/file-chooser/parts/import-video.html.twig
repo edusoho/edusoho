@@ -1,0 +1,24 @@
+<div class="tab-pane" id="video-chooser-import-pane">
+  {% if lesson|default(null) %}
+    <div>{{'file_chooser.import_video.mediaUri'|trans}}{{ lesson.mediaUri }}</div>
+  {% endif %}
+  <div class="import-content">
+    <div class="input-group">
+      <input class="form-control border-gray mb0" type="text" placeholder="{{ 'site.media.import.input_placeholder'|trans }}"
+             data-role="import-url" value="{{ activity.ext.mediaUri|default(null) }}">
+      <span class="input-group-btn">
+        <button type="button" class="btn btn-default js-video-import" data-role="import"
+                data-url="{{ path('media_video_import', {courseId:courseId}) }}"
+                data-loading-text="{{ 'form.btn.import.submiting'|trans }}">{{ 'form.btn.import'|trans }}</button>
+      </span>
+    </div>
+    <div class="text-warning mts">
+      <div>
+        * {{ 'file_chooser.import_video.not_support_tips'|trans }}
+      </div>
+      <div>
+        * {{ 'file_chooser.import_video.not_support_tips2'|trans }}
+      </div>
+    </div>
+  </div>
+</div>

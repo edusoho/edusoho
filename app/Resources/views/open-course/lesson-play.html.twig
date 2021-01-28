@@ -1,0 +1,39 @@
+{% if lesson|default(null) %}
+  <div class="watermarkEmbedded" ></div>
+  <div id="lesson-preview-iframe" class="lesson-content embed-responsive embed-responsive-16by9" style="display:none;"></div>
+  <div id="lesson-preview-player" class="lesson-content embed-responsive embed-responsive-16by9" style="display:none;"
+    data-balloon-player="1"
+    {% if setting('storage.video_watermark') and setting('storage.video_watermark_image') %}
+      data-watermark="{{ file_url(setting('storage.video_watermark_image'), null) }}"
+    {% endif %}
+    {% if setting('storage.video_fingerprint') and app.user %}
+      data-fingerprint="{{ url('cloud_video_fingerprint', {userId:app.user.id}) }}"
+    {% endif %}
+  >
+  </div>
+  {% if lesson.mediaSource == 'NeteaseOpenCourse'%}
+    <div id="lesson-video-content" class="local-video-player " style="height: 100%"></div>
+  {% endif %}
+
+  <div id="lesson-preview-swf-player" class="lesson-content embed-responsive embed-responsive-16by9" style="display:none;height:100%;"></div>
+
+  <input type="hidden" id="firstLesson" data-url="{{ path('open_course_lesson_show',{courseId:lesson.courseId,lessonId:lesson.id}) }}">
+{% endif %}
+
+<div class="mask" {% if lesson %}style="display:none"{% endif %} id="media-error-dialog">
+  <div class="modal-dialog" style="width:230px;margin:22% auto;">
+    <div class="modal-content">
+
+      <div class="modal-body clearfix">
+        <i class="es-icon es-icon-info" style="font-size: 22px;"></i>
+        {% if not lesson %}
+          {% set info = 'my.teaching.open_course.header.not_lesson.tips'|trans %}
+        {% else %}
+          {% set info = 'my.teaching.open_course.header.lesson.tips'|trans %}
+        {% endif %}
+        <span class="media-error">{{ info }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+

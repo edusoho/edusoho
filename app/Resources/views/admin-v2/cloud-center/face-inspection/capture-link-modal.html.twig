@@ -1,0 +1,26 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}{{'admin.edu_cloud.edu_facein.capture_link.title'|trans}}{% endblock %}
+{% block body %}
+  <div class="form-group">
+    <label class="col-sm-3 control-label" style="position: relative;top: 17px;">{{ 'admin.edu_cloud.edu_facein.capture_link.title'|trans }}:</label>
+    <div class="col-sm-9" style="margin-left: -50px;">
+      <textarea class="form-control" id='content' style="width: 400px">{{url}}</textarea>
+      <button class="btn btn-link pull-right " style="position: relative;top: -45px; right:-60px" id='copy'>{{ 'coupon.copy.btn'|trans }}</button>
+    </div>
+    <div class="mtl" style="margin-left: 90px">
+      <button type="button" class="btn mlm btn-default btn-primary js-generate-btn" data-url="{{ path('admin_v2_edu_cloud_facein_generate_link') }}" >{{'重新生成链接'|trans}}</button>
+      <p class="text-muted mtm mlm">{{'admin.edu_cloud.edu_facein.capture_link.tips1'|trans}}</p>
+      <p class="text-muted" style="margin-left: 55px">{{ 'admin.edu_cloud.edu_facein.capture_link.tips2'|trans }}</p>
+      <p class="text-muted" style="margin-left: 55px">{{ 'admin.edu_cloud.edu_facein.capture_link.tips3'|trans }}</p>
+    </div>
+
+  </div>
+  <script type="text/javascript">app.load('face-inspection/generate'); </script>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
+{% endblock %}

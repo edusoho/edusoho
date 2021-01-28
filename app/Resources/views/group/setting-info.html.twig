@@ -1,0 +1,29 @@
+{% extends 'group/setting-layout.html.twig' %}
+{% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js','app/js/group/add/index.js']) %}
+{% block title %}{{'group.detail.group_name'|trans({'%title%': groupinfo.title})}} - {{ parent() }}{% endblock %}
+{% set settingNav = 'info' %}
+
+{% block group_setting_body %}
+  <form id="user-group-form" class="form-horizontal" method="post" action="{{path('group_edit',{id:groupinfo.id})}}">
+    <div class="form-group">
+      <label class="col-md-2 control-label" for="group_grouptitle">{{'group.detail.group_settings.group_edit.name'|trans}}</label>
+      <div class="col-md-9 controls">
+        <input type="text" id="group_grouptitle" name="group[grouptitle]" class="form-control"
+        value="{{groupinfo.title}}" >
+        <div class="help-block" style="display:none;"></div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-md-2 control-label" for="group">{{'group.detail.group_settings.group_edit.introduction'|trans}}</label>
+      <div class="col-md-9 controls">
+        <textarea name="group[about]" rows="10" id="groupIntroduce" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('default')}) }}">{{groupinfo.about}}</textarea>
+      </div>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    <div class="row">
+      <div class="col-xs-7 col-xs-offset-2">
+        <button class="btn btn-primary" id="group-save-btn" data-loading-text="{{'form.btn.modify.submiting'|trans}}"  >{{'form.btn.modify'|trans}}</button>
+      </div>
+    </div>
+  </form>
+{% endblock %}

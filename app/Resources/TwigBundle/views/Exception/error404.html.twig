@@ -1,0 +1,26 @@
+{% extends 'TwigBundle:Exception:layout.html.twig' %}
+{% block title %}页面找不到 - {{ parent() }}{% endblock %}
+
+{% block body %}
+  <div class="container">
+    <div class="panel panel-default error-panel">
+      <div class="panel-heading">
+        <span class="error-title">404</span>
+      </div>
+      <div class="panel-body">
+        <div class="well">
+          <p>
+            {% if exception.code|default(0) > 0 %}
+              {{ exception.message|trans|default('该内容不存在或已被删除！') }} {{ exception.code }}
+            {% else %}
+              该内容不存在或已被删除！
+            {% endif %}
+          </p>
+          <p>请确认您的来源链接是否正确？</p>
+          <p><a href="{{ path('homepage', {ref:404}) }}">返回首页 ></a></p>
+          <span class="error-404-icon hidden-xs"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

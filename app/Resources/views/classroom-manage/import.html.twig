@@ -1,0 +1,54 @@
+{% extends 'importer/layout.html.twig' %}
+{% block title %}{{'classroom.batch_add_student'|trans}}{% endblock %}
+
+{% do script(['libs/handlebars.js', 'libs/jquery-validation.js', 'app/js/classroom-manage/student-import/index.js']) %}
+
+{% block form_data %}
+	<div class="form-group" id="teachers-form-group">
+		<label class="col-sm-2 control-label">
+			{{ 'classroom.select_import_file'|trans }}
+		</label>
+		<div class="col-sm-8 controls">
+      <div class="input-group uploader-btn-group">
+        <input type="text" class="js-filename form-control" />
+        <input type="file" size="30" name="excel" class="file-input" />
+        <div class="input-group-addon">
+          {{ 'classroom.import_file_preview'|trans }}
+        </div>
+      </div>
+			<br>
+			{{ 'classroom.support_excel_import'|trans }}
+			<a href="{{ asset('assets/files/classmember_import_example.xls') }}">
+				{{ 'classroom.download_example_file'|trans }}
+			</a>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<div class="col-sm-2 control-label">
+			<label for="buy-price">{{'classroom.import_buy_price'|trans}}</label>
+		</div>
+		<div class="col-sm-8 controls">
+			<div class="input-group" style="width: 160px">
+				<input type="text" id="buy-price" name="price" value="{{ classroom.price }}" class="form-control">
+				<div class="input-group-addon">{{'site.currency.CNY'|trans}}</div>
+			</div>
+			<div class="help-block">
+        {{'classroom.buy_price_tips'|trans({'%classroomName%': setting('classroom.name')|default('site.default.classroom'|trans), '%price%': classroom.price})}}
+        {{'site.currency.CNY'|trans}}
+      </div>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<div class="col-sm-2 control-label">
+			<label for="student-remark">{{'classroom.remark'|trans}}</label>
+		</div>
+		<div class="col-sm-10 controls">
+			<input type="text" id="student-remark" name="remark" class="form-control">
+			<div class="help-block">{{'classroom.remark_tips'|trans}}</div>
+		</div>
+	</div>
+
+	<input type="hidden" name="classroomId" value="{{ classroom.id }}">
+{% endblock %}

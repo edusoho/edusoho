@@ -1,0 +1,48 @@
+.es-status {
+  position: relative;
+  display: inline-block;
+  line-height: 1;
+  font-size: 12px;
+  padding-left: 12px;
+  &:before {
+    position: absolute;
+    top: 3px;
+    left: 0;
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 4px;
+  }
+  > span {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 1;
+  }
+  &.es-status-danger {
+    &:before {
+      background: @brand-danger;
+    }
+  }
+  &.es-status-info {
+    &:before {
+      background: @brand-info;
+    }
+  }
+  &.es-status-warning {
+    &:before {
+      background: @brand-warning;
+    }
+  }
+  &.es-status-success {
+    &:before {
+      background: @brand-success;
+    }
+  }
+  &.es-status-disabled {
+    &:before {
+      background: @cd-bg-dark;
+    }
+  }
+}

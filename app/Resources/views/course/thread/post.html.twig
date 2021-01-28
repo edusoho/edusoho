@@ -1,0 +1,38 @@
+<form id="thread-post-form" class="form-vertical" method="post" action="{{ path('course_thread_post', {courseId:course.id, threadId:thread.id}) }}" data-auto-submit="false" novalidate>
+  <div class="form-group">
+    <div class="controls">
+      {{
+        form_widget(
+          form.content, {
+            attr:{
+              class:'form-control',
+              rows:8,
+              'data-display':'thread.content'|trans,
+              'data-image-upload-url': path(
+                'editor_upload', {
+                  token:upload_token('course')
+                }
+              ),
+              'data-image-download-url': path(
+                'editor_download', {
+                  token:upload_token('course')
+                }
+              )
+            }
+          }
+        )
+      }}
+    </div>
+  </div>
+
+  {{ render(controller('AppBundle:File/Attachment:formFields', {targetType: 'course.thread.post', targetId: 0}, {'showLabel':false})) }}
+
+  <div class="form-group">
+    <div class="controls clearfix">
+      {{ form_rest(form) }}
+      <button type="button" class="btn btn-primary pull-right js-btn-thread-post-form-save">{{'thread.add_btn'|trans}}{% if thread.type == 'question' %}{{'thread.answer'|trans}}{% else %}{{'thread.reply'|trans}}{% endif %}</button>
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>

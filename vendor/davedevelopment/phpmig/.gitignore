@@ -1,0 +1,8 @@
+vendor/
+build/
+composer.lock
+
+
+.project
+.settings
+.idea

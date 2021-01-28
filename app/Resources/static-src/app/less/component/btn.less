@@ -1,0 +1,238 @@
+a.btn.disabled, fieldset[disabled] a.btn {
+  pointer-events: none;
+}
+
+// 按钮组件
+.btn {
+  .es-transition;
+  &:hover,
+  &:focus,
+  &.focus,
+  &.active {
+    .es-transition;
+    text-decoration: none;
+  }
+  &.btn-sm {
+    font-size: 12px;
+    padding: 5px;
+    >i{
+      font-size: 12px;
+    }
+  }
+  &.btn-md {
+    // padding: 10px 16px;
+  }
+  &.btn-lg {
+    font-size: 14px;
+    padding: 12px 35px;
+  }
+  &.btn-xlg {
+    font-size: 14px;
+    padding: 11px 35px;
+  }
+  > i {
+    font-size: 14px;
+  }
+}
+
+.btn-ghost-white {
+  color: #fff;
+  border: 1px solid #fff;
+  background-color: @gray-medium;
+  background-color: rgba(255, 255, 255, 0.3);
+  &:hover, 
+  &:focus,
+  &.focus {
+    color: #fff;
+    background-color: @gray;
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+}
+
+.btn-link {
+  color: @gray-darker;
+  &:hover, 
+  &:focus,
+  &.focus {
+    text-decoration: none;
+  }
+}
+
+.btn-gray {
+  color: @gray;
+  &:hover, 
+  &:focus,
+  &.focus {
+    color: @brand-primary;
+    text-decoration: none;
+  }
+}
+
+.btn-default {
+  color: @gray-dark;
+  background-color: #f5f5f5;
+  border-color: darken(#f5f5f5, 10%);
+  &.disabled:hover,
+  &[disabled]:hover {
+    color: @gray-dark;
+    background-color: #f5f5f5;
+    border-color: darken(#f5f5f5, 10%);
+  }
+  &:hover,
+  &:focus,
+  &.focus,
+  &.active {
+    color: @gray-dark;
+    background-color: darken(#f5f5f5, 8%);
+  }
+}
+
+.btn-primary {
+  border-color: darken(@brand-primary, 10%);
+  background-color: @brand-primary;
+  color: #fff;
+  &:hover,
+  &:focus,
+  &.focus,
+  &.active {
+    color: #fff;
+    background-color: darken(@brand-primary, 8%);
+  }
+}
+
+.btn-success {
+  border-color: darken(@brand-success, 10%);
+  background-color: @brand-success;
+  color: #fff;
+  &:hover,
+  &:focus,
+  &.focus,
+  &.active {
+    color: #fff;
+    background-color: darken(@brand-success, 8%);
+  }
+}
+
+.btn-info {
+  border-color: darken(@brand-info, 10%);
+  background-color: @brand-info;
+  color: #fff;
+  &:hover,
+  &:focus,
+  &.focus,
+  &.active {
+    color: #fff;
+    background-color:darken(@brand-info, 8%);
+  }
+}
+
+.btn-warning {
+  border-color: darken(@brand-warning, 10%);
+  background-color: @brand-warning;
+  color: #fff;
+  &:hover,
+  &:focus,
+  &.focus,
+  &.active {
+    color: #fff;
+    background-color:darken(@brand-warning, 8%);
+  }
+}
+
+.btn-danger {
+  border-color: darken(@brand-danger,10%);
+  background-color: @brand-danger;
+  color: #fff;
+  &:hover,
+  &:focus,
+  &.focus,
+  &.active {
+    color: #fff;
+    background-color:darken( @brand-danger, 8%);
+  }
+}
+
+.btn-tag {
+  display: inline-block;
+  padding: 6px 10px;
+  margin: 5px 5px 5px 0;
+  color: @brand-primary;
+  font-size: 12px;
+  background-color: lighten(@brand-primary, 35%);
+  .es-transition;
+  &.active,
+  &:hover {
+    color: #fff;
+    background-color: @brand-primary;
+    .es-transition;
+  }
+}
+
+.btn-ghost {
+  border-color: #fff;
+  color: #fff;
+  border-radius: 20px;
+  .es-transition;
+  &:hover {
+    color: @brand-primary;
+    background-color: #fff;
+    .es-transition;
+  }
+}
+
+.btn-transparent {
+  position: relative;
+  border-color: @brand-primary;
+  color: @brand-primary;
+  background-color: transparent;
+  &:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top:0;
+    height: 100%;
+    width: 0;
+    background-color: @brand-primary;
+    .es-transition;
+  }
+  &:hover,
+  &.active {
+    color: #fff;
+    &:after {
+      z-index: -1;
+      width: 100%;
+      .es-transition;
+    }
+  }
+}
+
+// 将会弃用
+.btn-fat {
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+// 禁止按钮hover效果且popover中有相关操作
+.btn-disabled-popover-base(@color) {
+  background: rgba(red(@color), green(@color), blue(@color), .4) !important;
+  border-color: rgba(red(@color), green(@color), blue(@color), .4) !important;
+  color: rgba(0, 0, 0, 0.32) !important;
+}
+
+.btn-popover-operation(@color) {
+  .btn-disabled-popover-base(@color);
+  box-shadow: none !important;
+  &:hover {
+    .btn-disabled-popover-base(@color);
+    box-shadow: none;
+    cursor: not-allowed;
+    .opacity(1) !important;
+  }
+  .popover {
+    cursor: default;
+  }
+}
+
+.btn-default-popover {
+  .btn-popover-operation(#ececec);
+}

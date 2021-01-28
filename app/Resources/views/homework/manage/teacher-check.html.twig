@@ -1,0 +1,93 @@
+{% extends 'testpaper/testpaper-layout.html.twig' %}
+
+{% do script(['libs/jquery-validation.js','libs/es-ckeditor/ckeditor.js','app/js/testpaper-manage/check/index.js']) %}
+
+{% set role = 'teacher' %}
+{% set showHeader = 1 %}
+{% set isIframeBody = 0 %}
+
+{% block paper_description %}
+  <div class="testpaper-description cke_editable cke_contents_ltr">{{ paper.description|bbCode2Html|raw }}</div>
+{% endblock %}
+
+{% block paper_body %}
+  <form id='teacherCheckForm' autocomplete="off">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        {{ 'course.homework_check.need_check_item'|trans({'%itemCount%': questions|length})|raw }}
+      </div>
+
+      <div class="panel-body">
+        <div class="question-set-items">
+          {% for question in questions %}
+            {% if question.isDelete|default(false) %}
+              {% include 'question/part/question-delete.html.twig' with {showScore:0,question:question}%}
+            {% else %}
+              {% set questionTemplate = getQuestionTypeTemplate(question.type,'do') %}
+              {% if questionTemplate %}
+                {% include questionTemplate with {showScore:0} %}
+              {% endif %}
+            {% endif %}
+
+          {% endfor %}
+        </div>
+      </div>
+
+    </div>
+  </form>
+{% endblock %}
+
+{% block paper_sidebar %}
+  {% include 'homework/part/paper-card.html.twig' %}
+{% endblock %}
+
+
+
+{% block testpaper_checked_dialog %}
+  <div id="testpaper-checked-dialog" class="modal in" aria-hidden="false" style="display: none;">
+    <div class="modal-dialog modal-dialog-small">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title">{{'course.homework_check.finish_check'|trans}}</h4>
+        </div>
+        <div class="modal-body">
+
+          <div class="form-group">
+            <div class="controls">
+              <textarea class="form-control" rows='4' id="testpaper-teacherSay-input" placeholder="{{'course.homework_check.teacher_say.input_placeholder'|trans}}"></textarea>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="controls">
+              <select class="form-control" id="teacher-say-select" data-role="teacher-say">
+                <option value="">---{{'course.homework_check.teacher_say.default'|trans}}---</option>
+                <option value="1">{{'course.homework_check.teacher_say.option_one'|trans}}</option>
+                <option value="2">{{'course.homework_check.teacher_say.option_two'|trans}}</option>
+                <option value="3">{{'course.homework_check.teacher_say.option_three'|trans}}</option>
+                <option value="4">{{'course.homework_check.teacher_say.option_four'|trans}}</option>
+                <option value="5">{{'course.homework_check.teacher_say.option_five'|trans}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-4 controls"></div>
+            <div class="col-md-8 controls radios">
+              {{ radios('passedStatus', dict('passedStatus'), 'passed' ) }}
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          {% if source|default('course') == 'classroom' %}
+            {% set postUrl = path('classroom_manage_testpaper_check', {id:targetId,resultId:paperResult.id}) %}
+          {% else %}
+            {% set postUrl = path('course_manage_homework_check', {id:targetId,resultId:paperResult.id}) %}
+          {% endif %}
+          <a href="javascript:;" class="btn btn-default" data-dismiss="modal">{{'form.btn.cancel'|trans}}</a>
+          <button type="button" class="btn btn-info" id="testpaper-teacher-say-btn" data-post-url="{{ postUrl }}" data-goto="{{ app.request.server.get('HTTP_REFERER') }}" data-role="finish-check" data-loading-text="{{'course.homework_check.finish_check_submiting'|trans}}...">{{'course.homework_check.finish_check'|trans}}</button>
+          <button type="button" class="btn btn-success js-next-check" data-post-url="{{ postUrl }}" data-loading-text="{{'form.btn.submit.submiting'|trans}}">{{'form.btn.continue'|trans}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

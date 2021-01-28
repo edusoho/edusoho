@@ -1,0 +1,14 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{'announcement'|trans}}{% endblock %}
+
+{% set hide_footer = true %}
+
+{% block body %}
+
+    <div class="announcement-detail clearfix">
+    	<div>{{ announcement.content|cdn|raw }}</div>
+  		<div class="color-gray pull-right mtm">{{'announcement.modal.global.publish_time'|trans({'%createdTime%':announcement.createdTime|date('Y-m-d H:i')})}}</div>
+  	</div>
+
+{% endblock %}

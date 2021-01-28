@@ -1,0 +1,263 @@
+@import './footer.less';
+@import './header.less';
+
+
+
+body { 
+  background: @bg-new-color;
+  word-wrap: break-word;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  &.bg-blank {
+    background-color: #fff;
+  }
+}
+
+html {
+  height: 100%;
+}
+
+html.nav-active,
+html.nav-active body {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+
+.es-wrap {
+  &.nav-active {
+    .es-transition();
+    transform: translate3d(250px, 0, 0);
+    -webkit-transform: translate3d(250px, 0, 0);
+    -o-transform: translate3d(250px, 0, 0);
+    -moz-transform: translate3d(250px, 0, 0);
+  }
+}
+
+.html-mask.active {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.2);
+  -webkit-backface-visibility: hidden;
+}
+
+#content-container {
+  margin: 30px auto;
+  min-height: 400px;
+  @media(max-width:@screen-xs-max) {
+    min-height: 250px;
+  }
+}
+
+//用于隐藏又需要验证的的控件
+.type-hidden {
+  display: block !important;
+  height: 0px !important;
+  border:0;
+  .opacity(0);
+  padding: 0px !important;
+  margin: 0px !important;
+}
+
+// html,body {
+//   height: 100%;//导致任务创建的iframe样式问题
+// }
+
+.border-radius-none {
+  border-radius: 0 !important;
+}
+
+.es-icon {
+  line-height: 1;
+}
+
+// input:-webkit-autofill, 
+// textarea:-webkit-autofill, 
+// select:-webkit-autofill {
+//   -webkit-box-shadow: 0 0 0 100px @bg-color inset;
+// }
+
+.caret {
+  border-top: 4px solid;
+}
+
+.tooltip {
+  min-width: 40px;
+}
+
+.affix,
+.affix-bottom {
+  z-index: 1;
+}
+
+// 富文本
+.cke_inner {
+  border-radius: 4px;
+}
+
+.cke_top {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
+.cke_reset {
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+// 富文本编辑器
+.cke_chrome {
+  .border-radius();
+  border-color: @gray-light !important;
+  .box-shadow(none) !important;
+}
+
+.cke_bottom {
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+// 富文本编辑器blockquote样式
+.cke_editable {
+  font-size: 13px;
+  line-height: 1.6;
+  word-wrap: break-word;
+  img {
+    max-width: 100%;
+  }
+
+  blockquote {
+    padding: 2px 0;
+    font-style: italic;
+    font-family: Georgia, Times, "Times New Roman", serif;
+    font-size: 13px;
+    border-style: solid;
+    border-color: #ccc;
+    border-width: 0;
+    p {
+      margin: 10px 0;
+    }
+  }
+
+  &.cke_contents_ltr blockquote {
+    font-size: 13px;
+    color: #000;
+    padding-left: 20px;
+    padding-right: 8px;
+    border-left-width: 5px;
+  }
+
+  &.cke_contents_rtl blockquote {
+    padding-left: 8px;
+    padding-right: 20px;
+    border-right-width: 5px;
+  }
+}
+
+// 富文本编辑器样式统一处理
+.editor-text {
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+}
+
+.webuploader-element-invisible {
+  position: absolute !important;
+  clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+  clip: rect(1px,1px,1px,1px);
+}
+
+
+//目前发现很多地方调用到，先移过来
+.short-long-text .short-text {
+  cursor: pointer;
+}
+.short-long-text .long-text {
+  cursor: pointer;
+  display: none;
+}
+
+//for minx
+.section-gray {
+  background-color: @bg-new-color !important;
+  .text-line h5 > span {
+    background-color: @bg-new-color !important;
+  }
+}
+
+.section-wihte {
+  background-color: #fff !important;
+  .text-line h5 > span {
+    background-color: #fff !important;
+  }
+}
+
+// 分割线
+.divider-line {
+  border-bottom: 1px solid #f5f5f5;
+}
+
+// 限制最小高度
+.h400 {
+  min-height: 400px;
+}
+
+// table-cell引起的兼容问题 小图标发引起问题
+// .media-body .editor-text img {
+//   width: 100% \9;
+//   @media screen and (min--moz-device-pixel-ratio:0) {
+//     width: 100%;
+//   }
+// }
+
+
+// 用于空数据
+.empty {
+  text-align: center;
+  color: @gray-medium;
+  padding: 20px 0;
+}
+
+a {
+  color: @brand-primary;
+  &:focus, 
+  &:hover {
+    color: darken(@brand-primary, 10%);
+  }
+}
+
+// 动画效果
+a.transition {
+  .es-transition;
+  &:hover {
+    .es-transition;
+  }
+}
+
+// 元素下划线
+.underline {
+  text-decoration: underline;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// 字符串截取 推荐用text-overflow
+.ellipsis,
+.text-overflow {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+} 

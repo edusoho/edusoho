@@ -1,0 +1,13 @@
+<div class="js-tasks-list">
+  {% if optionalTaskCount|default(0) %}
+    <div class="mbs">
+      <input type="checkbox" name="showOptional" id="showOptional"><label for="showOptional">{{ 'task.show_optional_tips'|trans }}</label>
+    </div>
+  {% endif %}
+
+  <div class="js-tasks-show"
+       data-url="{{ path('course_task_list_render', {courseId:course.id, type:course.courseType,paged:paged|default(false),previewAs:app.request.query.get('previewAs')}) }}">
+  </div>
+</div>
+
+{% do script(['app/js/courseset/show/tasks/index.js']) %}

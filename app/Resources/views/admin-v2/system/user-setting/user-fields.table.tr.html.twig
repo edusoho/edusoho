@@ -1,0 +1,12 @@
+{% for field in fields %}
+  <tr id="field-tr-{{ field.id }}">
+    <td>{{field.title}}</td>
+    <td>{{field.fieldName}}</td>
+    <td>{% if field.enabled %}{{'admin.user_fields.fields_enabled.yes'|trans}}{% else %}{{'admin.user_fields.fields_enabled.no'|trans}}{% endif %}</td>
+    <td>{{field.seq}}</td>
+    <!-- <td>{{field.createdTime|date('Y-m-d H:i:s')}}</td> -->
+    <td><a type="button" class="btn btn-default btn-sm " href="javascript:;" data-url="{{url('admin_v2_user_fields_edit',{id:field.id})}}" data-toggle="modal"  data-target="#modal">{{'admin.user_fields.edit_btn'|trans}}</a>&nbsp;<a type="button" class="btn btn-default btn-sm " href="javascript:;" data-url="{{url('admin_v2_user_fields_delete',{id:field.id})}}" data-toggle="modal"  data-target="#modal">{{'form.btn.delete'|trans}}</a></td>
+  </tr>
+{% else %}
+  <tr><td colspan="20"><div class="empty">{{'site.datagrid.empty'|trans}}</div></td></tr>
+{% endfor %}

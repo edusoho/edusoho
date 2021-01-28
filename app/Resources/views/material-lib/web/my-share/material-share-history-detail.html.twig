@@ -1,0 +1,42 @@
+<table class="table table-hover table-striped">
+  <tr>
+    <th width="50%" class="text-center">{{'material_lib.sharing_history.time'|trans}}</th>
+    <th width="50%" class="text-center">{{'material_lib.sharing_history.description'|trans}}</th>
+  </tr>
+
+  {% for history in shareHistories %}
+  <tr>
+    <td class="text-center">{{ history['createdTime']|date('Y-n-d H:i') }}</td>
+    <td class="text-center">
+      {% if history['isActive'] %}
+        {{'material_lib.sharing_history.share_with_friend'|trans({'%nickname%':(targetUsers[history['targetUserId']])['nickname']})}}
+      {% else %}
+        {{'material_lib.sharing_history.cancel_share_with_friend'|trans({'%nickname%':(targetUsers[history['targetUserId']])['nickname']})}}
+      {% endif %}
+    </td>
+  </tr>
+  {% else %}
+  <tr class="empty"><td colspan="3">{{'material_lib.sharing_history.empty'|trans}}</td></tr>
+  {% endfor %}
+</table>
+
+<input class="js-page" type="hidden" name="page" value="{{ paginator.currentPage|default(1) }}">
+
+{% if paginator.lastPage > 1 %}
+<nav class=" {{ class|default('text-center') }}">
+  <ul class="pagination" data-url="{{ path('material_lib_my_sharing_detail') }}">
+    {% if paginator.currentPage != paginator.firstPage %}
+      <li data-page="{{paginator.firstPage}}"><a  href="javascript:;">{{'paginator.firstPage'|trans}}</a></li>
+      <li data-page="{{paginator.previousPage}}"><a  href="javascript:;"><i class="es-icon es-icon-chevronleft"></i></a></li>
+    {% endif %}
+    {% for page in paginator.pages %}
+      <li {% if page == paginator.currentPage %}class="active"{% endif %} data-page="{{ page }}"><a href="javascript:;">{{ page }}</a></li>
+    {% endfor %}
+
+    {% if paginator.currentPage != paginator.lastPage %}
+      <li data-page="{{paginator.nextPage}}"><a  href="javascript:;"><i class="es-icon es-icon-chevronright"></i></a></li>
+      <li data-page="{{paginator.getLastPage}}"><a  href="javascript:;">{{'paginator.endPage'|trans}}</a></li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}

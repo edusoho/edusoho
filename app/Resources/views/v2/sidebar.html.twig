@@ -1,0 +1,57 @@
+<div class="cd-sidebar">
+  <ul class="cd-sidebar__list">
+    <li class="cd-sidebar__heading">
+      {{ 'user.account_center'|trans }}
+    </li>
+    <li class="cd-sidebar__item {% if side_nav == 'my-orders' %} active {% endif %}">
+      <a href="{{path('my_orders')}}">{{'user.order_menu'|trans}}</a>
+    </li>
+    {% if setting('coin.coin_enabled', 0) %}
+      <li class="cd-sidebar__item  {% if side_nav == 'my-coin' %} active {% endif %}">
+        <a href="{{ path('my_coin') }}">{{ 'user.account.my_coin'|trans({'%coin_name%' : setting('coin.coin_name')}) }}</a>
+      </li>
+    {% endif %}
+    {% if setting('invite.invite_code_setting', 0) %}
+      <li class="cd-sidebar__item {% if side_nav == 'my-invite-code' %} active {% endif %}">
+        <a href="{{path('my_invite_code')}}">{{'user.account.invite_code'|trans}}</a>
+      </li>
+    {% endif %}
+    {% if setting('coupon.enabled', 0) %}
+      <li class="cd-sidebar__item {% if side_nav == 'my-coupon' %} active {% endif %}">
+        <a href="{{path('my_cards')}}">{{'plugin.coupon'|trans}}</a>
+      </li>
+    {% endif %}
+
+    {{ slot('my.account.menu.extension', {'sideNav': side_nav}) }}
+    {{ slot('my.account.menu.extension.invoice', {'sideNav': side_nav}) }}
+
+    {% if is_plugin_installed('BusinessDrainage') %}
+      <li class="cd-sidebar__item {% if side_nav == 'my-exchange' %} active {% endif %}">
+        <a href="{{path('business_drainage_ecard_my_exchange')}}">{{'兑换卡券'|trans}}</a>
+      </li>
+    {% endif %}
+
+    <li class="cd-sidebar__heading">
+      {{'user.settings.menu_heading'|trans}}
+    </li>
+    <li class="cd-sidebar__item {% if side_nav == 'profile' %}active{% endif %}">
+      <a href="{{ path('settings') }}">{{'user.settings.personal_info_menu'|trans}}</a>
+    </li>
+    <li class="cd-sidebar__item {% if side_nav == 'approval' %}active{% endif %}">
+      <a href="{{ path('setting_approval_submit') }}">{{'user.settings.verification_menu'|trans}}</a>
+    </li>
+    <li class="cd-sidebar__item {% if side_nav == 'security' %}active{% endif %}">
+      <a href="{{ path('settings_security') }}">{{'user.settings.security_menu'|trans}}</a>
+    </li>
+    {% if is_plugin_installed('TeacherAudit') %}   
+    <li class="cd-sidebar__item {% if side_nav == 'teacheraudit' %}active{% endif %}">
+      <a href="{{ path('teacher_audit_submit') }}">{{'user.settings.teachers_qualification_menu'|trans}}</a>
+    </li>
+    {% endif %}
+    {% if setting('login_bind', []).enabled|default(false) %}
+      <li class="cd-sidebar__item {% if side_nav == 'binds' %}active{% endif %}" >
+        <a href="{{ path('settings_binds') }}">{{'user.settings.oauth_menu'|trans}}</a>
+      </li>
+    {% endif %}
+  </ul>
+</div>

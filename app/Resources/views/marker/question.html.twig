@@ -1,0 +1,68 @@
+{% set file = video.ext.file|default(null) %}
+{% set questionBankTree = data('QuestionBankTree', {}) %}
+<div class="pane-question-content js-pane-question-content show-introhelp"
+  data-marker-metas-url="{{ path('course_task_marker_metas', {'mediaId': file.id}) }}"
+  data-queston-marker-add-url="{{path('course_task_question_marker_add',{'courseId':course.id,'taskId':task.id})}}"
+  data-queston-marker-delete-url="{{path('course_task_question_marker_delete',{'courseId':course.id,'taskId':task.id})}}"
+  data-marker-merge-url="{{path('course_task_marker_merge',{'courseId':course.id,'taskId':task.id})}}"
+  data-marker-update-url="{{path('course_task_marker_update',{'courseId':course.id,'taskId':task.id})}}"
+  data-queston-marker-sort-url="{{path('course_task_question_marker_sort',{'courseId':course.id,'taskId':task.id})}}"
+  >
+    <form class="form-horizontal js-mark-form" action="{{path('course_task_question_marker_search',{courseId:course.id,taskId:task.id})}}" method="post" novalidate>
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      <div class="form-group cd-mb16">
+        <div class="col-xs-6">
+          <select class="form-control" name="bankId" id="mark-form-bankId" data-url="{{ path('question_bank_manage_question_category_show') }}">
+            {% if questionBankTree %}
+              <option value="0">{{ 'question.select_question_bank'|trans }}</option>
+              {% for bank in questionBankTree %}
+                <option {% if bank.categoryId is not defined %} value disabled="disabled" {% else %} value="{{ bank.id }}" {% endif %}>{% for i in 1..(bank.depth-1) if bank.depth > 1 %}　{% endfor %}{{ bank.name }}</option>
+              {% endfor %}
+            {% else %}
+              <option value="0">{{'question_bank.empty.no_auth'|trans}}</option>
+            {% endif %}
+          </select>
+        </div>
+        <div class="col-xs-6">
+          <select class="form-control" name="categoryId" id="mark-form-categoryId">
+            <option value="0">{{ 'question.marker_question.select_question_category'|trans }}</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-xs-8">
+          <input type="text" id="mark-form-keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="{{'form.placeholder.search_keyword'|trans}}"  >
+          <button id="mark-form-submit" type="button" class="es-icon es-icon-search btn-search"></button>
+        </div>
+      </div>
+		</form>
+		<div class="question-difficulty hidden">
+			{{ 'question.marker_question.difficulty_control_tips'|trans }}
+			<ul class="nav nav-pills nav-pills-difficulty  " >
+				<li class="active">
+					<a data-toggle="tab">{{ 'question.marker_question.difficulty.strong'|trans }}</a>
+				</li>
+				<li >
+					<a data-toggle="tab">{{ 'question.marker_question.difficulty.middle'|trans }}</a>
+				</li>
+				<li >
+					<a data-toggle="tab">{{ 'question.marker_question.difficulty.weak'|trans }}</a>
+				</li>
+			</ul>
+		</div>
+		<div class="question-remask ">
+			<i class="es-icon es-icon-xinxi remask-icon"></i>{{ 'question.marker_question.select_tips'|trans }}
+		</div>
+		<div class="popover left">
+			<div class="arrow"></div>
+			<div class="popover-content clearfix">
+				{{ 'question.marker_question.add_practice_tips'|trans|raw }}
+				<span class="close-introhelp js-close-introhelp">{{ 'question.marker_question.understand_btn'|trans }}</span>
+				<div class="introhelp-img js-introhelp-img">
+					<img src="{{ asset('assets/v2/img/marksintro_1.png') }}" class="">
+					「{{ 'question.marker_question.video_edit_block'|trans }}」
+				</div>
+			</div>
+		</div>
+		<ul class="lesson-list gruop-lesson-list " id="subject-lesson-list" data-intro-img=  ></ul>
+</div>

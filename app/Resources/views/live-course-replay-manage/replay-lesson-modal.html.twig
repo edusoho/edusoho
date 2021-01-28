@@ -1,0 +1,33 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% do script(['app/js/live-course-manage/replay-lesson-modal/index.js']) %}
+
+{% set modalSize = 'large' %}
+{% block title %}{{'course.live.replay_manage.replay_lesson.content_title'|trans}}{% endblock %}
+{% block body %}
+	{% if lesson.type == 'live' %}
+		{% set editUrl = path('live_course_manage_lesson_replay_edit',{ lessonId:lesson.id ,courseId:courseId}) %}
+	{% elseif lesson.type == 'liveOpen' %}
+		{% set editUrl = path('open_course_manage_lesson_replays_edit',{ lessonId:lesson.id ,courseId:courseId}) %}
+	{% endif %}
+	<form class="form-inline" id="replay_manage_form" method="POST" action="{{ editUrl }}">
+    {% for replayLesson in replayLessons %}
+      {% if lesson.type == 'live' %}
+        {% set titleUpdateUrl = path('live_course_manage_lesson_replay_title_update', {courseId:replayLesson.courseId, lessonId:replayLesson.lessonId, replayId:replayLesson.id}) %}
+      {% elseif lesson.type == 'liveOpen' %}
+        {% set titleUpdateUrl = path('open_course_manage_replay_title_update', {courseId:replayLesson.courseId, lessonId:replayLesson.lessonId, replayId:replayLesson.id}) %}
+      {% endif %}
+      <div class="form-group mbm" style="position: relative; padding-left:20px;height: 40px;line-height:40px">
+        <label style="position: absolute; top:0;left:0"><input type="checkbox" name="visibleReplaies[]" {% if replayLesson.hidden == 0 %}checked="checked" {% endif %} value="{{replayLesson.id}}"></label>
+        <a class="link-dark text-overflow" style="width:150px" href="javascript:;" id="replay-name-span-{{replayLesson.id}}" role='replay-name-span' data-replay-id="{{replayLesson.id}}" >{{ replayLesson.title }}</a>
+        <input class="form-control" style="width:150px; display:none" id="replay-name-input-{{replayLesson.id}}" data-replay-id="{{replayLesson.id}}" role='replay-name-input' data-url="{{ titleUpdateUrl }}" type="text" name="name" value="{{ replayLesson.title }}">
+      </div>
+    {% endfor %}
+	  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+	</form>
+{% endblock %}
+
+{% block footer %}
+	<button id="server-create-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#replay_manage_form">{{'form.btn.submit'|trans}}</button>
+	<button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
+{% endblock %}

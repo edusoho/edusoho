@@ -1,0 +1,10 @@
+{% set data = notification.content %}
+{% set who = data.userName %}
+{% set course = data.courseTitle %}
+
+{% if data.type == 'create' %}
+  {{ 'notification.course-student.add'|trans({'%who%':who, '%course%':course}) }}
+{% elseif data.type == 'remove'%}
+  {{ 'notification.course-student.remove'|trans({'%who%':who, '%course%':course}) }}
+{% endif %}
+

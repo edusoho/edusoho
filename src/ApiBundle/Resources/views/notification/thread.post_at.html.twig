@@ -1,0 +1,10 @@
+{% set data = notification.content %}
+{% if data.thread %}
+  {% set who = data.user.nickname %}
+  {% set thread = data.thread.title %}
+  {{ 'notification.thread.post_at'|trans({'%who%':who, '%thread%':thread}) }}
+{% else %}
+  {% set article = data('Article', {id:data.post.targetId})%}
+
+  {{'article.reply_tips'|trans({'%jumpUrl%':'', '%title%':article.title}) }}
+{% endif %}

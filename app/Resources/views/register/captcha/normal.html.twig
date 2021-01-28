@@ -1,0 +1,14 @@
+{% if (setting('auth.captcha_enabled')|default(0)) == 1 and setting('auth.register_mode') != 'mobile' %}
+  <div class="form-group mbl js-captcha">
+    <label class="control-label required" for="captcha_code">{{'user.register.account_with_sms_code_label'|trans}}</label>
+    <div class="controls row">
+      <div class = "col-xs-7">
+        <input type="text" class="form-control input-lg" id="captcha_code" name="captcha_code" maxlength="5" placeholder="{{'user.register.account_with_sms_code_label'|trans}}" data-url="{{path('register_captcha_check')}}" >
+        <p class="help-block"></p>
+      </div>
+      <div class="col-xs-5">
+        <img src="{{ path('register_captcha_num') }}" data-url="{{ path('register_captcha_num') }}" id="getcode_num" title="{{'user.settings.security.change_captcha_code'|trans}}" style="cursor:pointer;height:40px;width:100%">
+      </div>
+    </div>
+  </div>
+{% endif %}

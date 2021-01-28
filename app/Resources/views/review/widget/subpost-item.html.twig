@@ -1,0 +1,27 @@
+{% import "macro.html.twig" as web_macro %}
+<li id="post-{{ post.id }}" data-user-id="{{ author.id }}" class="thread-post thread-subpost media user-id-{{author.id}} {% if less|default(false) and loop.index > 5 %}hide{% endif %}"
+  data-author-name="{{ author.nickname }}">
+  <div class="media-left">
+    {{ web_macro.user_avatar(author, 'user-avatar', 'avatar-sm', true) }}
+  </div>
+  <div class="media-body">
+    <div class="metas">
+      {% if canAccess|default(false) %}
+        <div class="thread-post-manage-dropdown dropdown pull-right">
+          <a href="javascript:;" class="dropdown-toggle color-gray" data-toggle="dropdown"><span class="glyphicon glyphicon-collapse-down"></span></a>
+          <ul class="dropdown-menu">
+            <li>
+              <a href="javascript:" class="js-delete-post" data-review-id="{{ post.id }}" data-for="#post-{{ post.id }}">{{'course.reviews.delete_btn'|trans}}</a>
+            </li>
+          </ul>
+        </div>
+      {% endif %}
+
+      <a href="{{ path('user_show', {id:author.id}) }}">{{ author.nickname }}</a>
+      <span class="bullet">•</span>
+      <span class="color-gray">{{post.createdTime|smart_time}} </span>
+    </div>
+    <div class="editor-text">{{ post.content|cdn|raw }}</div>
+    <div class="thread-post-interaction">&nbsp;</div>
+  </div>
+</li>

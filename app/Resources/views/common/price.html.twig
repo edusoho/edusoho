@@ -1,0 +1,15 @@
+{# 必须传递参数 productPrice， 如  {% include 'common/price.html.twig' with {'productPrice': course.price} %} #}
+
+{% if currentCoinSetting|default() is empty %}
+    {% set currentCoinSetting = setting('coin') %}
+    {% set coinEnabled = currentCoinSetting.coin_enabled|default(false) and currentCoinSetting.price_type == 'Coin'  %}
+{% endif %}
+
+{% if coinEnabled %}
+    <span class="coin">
+      {{ productPrice * currentCoinSetting.cash_rate }}
+      <span class="cd-text-sm">{{ currentCoinSetting.coin_name|default('finance.coin'|trans) }}</span>
+    </span>
+{% else %}
+    <span class="money-symbol cd-text-sm">¥</span><span class="pure-price">{{ productPrice }}</span>
+{% endif %}

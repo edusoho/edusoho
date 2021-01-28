@@ -1,0 +1,491 @@
+{
+    "jianmo:home_top_banner":
+    {
+        "title": "简墨主题：首页顶部.轮播图 ",
+        "category": "jianmo",
+        "templateName": "@theme/jianmo/block/carousel.template.html.twig",
+        "items": {
+            "posters":{
+                "title":"海报",
+                "desc":"首页海报",
+                "count":1,
+                "type":"poster",
+                "default":[
+                    {
+                        "src" : "\/themes\/jianmo\/img\/banner_net.jpg",
+                        "alt" : "海报1",
+                        "layout" : "limitWide",
+                        "background" : "#3ec768",
+                        "href" : "",
+                        "html" : "",
+                        "status" : "1",
+                        "mode" : "img"
+                    },
+                    {
+                        "src" : "\/themes\/jianmo\/img\/banner_app.jpg",
+                        "alt" : "海报2",
+                        "layout" : "limitWide",
+                        "background" : "#0984f7",
+                        "href" : "",
+                        "html" : "",
+                        "status" : "1",
+                        "mode" : "img"
+                    },
+                    {
+                        "src" : "\/themes\/jianmo\/img\/banner_eweek.jpg",
+                        "alt" : "海报3",
+                        "layout" : "limitWide",
+                        "background" : "#3b4250",
+                        "href" : "",
+                        "html" : "",
+                        "status" : "1",
+                        "mode" : "img"
+                    },
+                    {
+                        "src" : "\/themes\/jianmo\/img\/banner_net.jpg",
+                        "alt" : "海报4",
+                        "layout" : "limitWide",
+                        "background" : "#3ec768",
+                        "href" : "",
+                        "html" : "",
+                        "status" : "0",
+                        "mode" : "img"
+                    },
+                    {
+                        "src" : "\/themes\/jianmo\/img\/banner_net.jpg",
+                        "alt" : "海报5",
+                        "layout" : "limitWide",
+                        "background" : "#3ec768",
+                        "href" : "",
+                        "html" : "",
+                        "status" : "0",
+                        "mode" : "img"
+                    },
+                    {
+                        "src" : "\/themes\/jianmo\/img\/banner_net.jpg",
+                        "alt" : "海报6",
+                        "layout" : "limitWide",
+                        "background" : "#3ec768",
+                        "href" : "",
+                        "html" : "",
+                        "status" : "0",
+                        "mode" : "img"
+                    },
+                    {
+                        "src" : "\/themes\/jianmo\/img\/banner_net.jpg",
+                        "alt" : "海报7",
+                        "layout" : "limitWide",
+                        "background" : "#3ec768",
+                        "href" : "",
+                        "html" : "",
+                        "status" : "0",
+                        "mode" : "img"
+                    },
+                    {
+                        "src" : "\/themes\/jianmo\/img\/banner_net.jpg",
+                        "alt" : "海报8",
+                        "layout" : "limitWide",
+                        "background" : "#3ec768",
+                        "href" : "",
+                        "html" : "",
+                        "status" : "0",
+                        "mode" : "img"
+                    }
+                ]
+            }
+        }
+    },
+    "jianmo:middle_banner":
+    {
+        "title": "简墨主题：首页中部.横幅",
+        "category": "jianmo",
+        "templateName": "@theme/jianmo/block/middle_banner.template.html.twig",
+        "items": {
+            "icon1":
+            {   
+                "title": "中部图标１",
+                "desc": "建议图片尺寸为130×130px",
+                "count": 1,
+                "type": "imglink",
+                "default": [
+                    {
+                        "src": "\/assets\/v2\/img\/icon_introduction_1.png",
+                        "alt": "中部横幅",
+                        "href": "#",
+                        "target": "_blank"
+                    }
+                ]
+            },
+            "icon1title": {
+                "title": "图标１标题",
+                "desc": "",
+                "count": 1,
+                "type": "text",
+                "default":[
+                    {
+                        "value": "网校功能强大"
+                    }
+                ]
+            },
+            "icon1introduction": {
+                "title": "图标１介绍",
+                "desc": "",
+                "count": 1,
+                "type": "textarea",
+                "default":[
+                    {
+                        "value": "一万多家网校共同选择，值得信赖"
+                    }
+                ]
+            },
+            "icon2":
+            {   
+                "title": "中部图标２",
+                "desc": "建议图片尺寸为130×130px",
+                "count": 1,
+                "type": "imglink",
+                "default": [
+                    {
+                        "src": "\/assets\/v2\/img\/icon_introduction_2.png",
+                        "alt": "中部横幅",
+                        "href": "#",
+                        "target": "_blank"
+                    }
+                ]
+            },
+            "icon2title": {
+                "title": "图标２标题",
+                "desc": "",
+                "count": 1,
+                "type": "text",
+                "default":[
+                    {
+                        "value": "响应式页面技术"
+                    }
+                ]
+            },
+            "icon2introduction": {
+                "title": "图标２介绍",
+                "desc": "",
+                "count": 1,
+                "type": "textarea",
+                "default":[
+                    {
+                        "value": "采用响应式技术，完美适配任意终端"
+                    }
+                ]
+            },
+            "icon3":
+            {   
+                "title": "中部图标３",
+                "desc": "建议图片尺寸为130×130px",
+                "count": 1,
+                "type": "imglink",
+                "default": [
+                    {
+                        "src": "\/assets\/v2\/img\/icon_introduction_3.png",
+                        "alt": "中部横幅",
+                        "href": "#",
+                        "target": "_blank"
+                    }
+                ]
+            },
+            "icon3title": {
+                "title": "图标３标题",
+                "desc": "",
+                "count": 1,
+                "type": "text",
+                "default":[
+                    {
+                        "value": "教育云服务支持"
+                    }
+                ]
+            },
+            "icon3introduction": {
+                "title": "图标３介绍",
+                "desc": "",
+                "count": 1,
+                "type": "textarea",
+                "default":[
+                    {
+                        "value": "强力教育云支持，免除你的后顾之忧"
+                    }
+                ]
+            }
+        }
+    },
+     "jianmo:advertisement_banner":
+    {
+        "title": "简墨主题：中部广告",
+        "category": "jianmo",
+        "templateName": "@theme/jianmo/block/advertisement_banner.template.html.twig",
+        "items": {
+            "middleImg": {
+                "title": "广告图片",
+                "desc": "建议图片尺寸为1920×400px",
+                "count": "1",
+                "type": "imglink",
+                "default": [
+                    {
+                        "src": "\/themes\/jianmo\/img\/banner_poster.jpg",
+                        "alt": "图片１的描述",
+                        "href": "#",
+                        "target": "_blank"
+                    }
+                ]
+            },
+            "middleBackground": {
+                "title": "背景填充色",
+                "desc": "填写颜色值,例如#ffffff",
+                "count": "1",
+                "type": "text",
+                "default": [
+                    {
+                        "value": "#e2133a"
+                    }
+                ]
+            }                                                                                                                       
+        }
+    },
+    "jianmo:bottom_info":
+    {
+        "title": "简墨主题: 首页底部.链接区域",
+        "category": "jianmo",
+        "templateName": "@theme/jianmo/block/bottom_info.template.html.twig",
+        "items": {
+            "firstColumnText": {
+                "title": "第１列链接标题",
+                "desc": "",
+                "count": 1,
+                "type": "text",
+                "default": [
+                    {
+                        "value": "我是学生"
+                    }
+                ]
+            },
+            "firstColumnLinks": {
+                "title": "第１列链接",
+                "desc": "",
+                "count": 5,
+                "type": "link",
+                "default": [
+                    {
+                        "value": "如何注册",
+                        "href": "http:\/\/www.qiqiuyu.com\/course\/347\/learn#lesson\/673",
+                        "target": "_blank"
+                    },
+                    {
+                        "value": "如何学习",
+                        "href": "http:\/\/www.qiqiuyu.com\/course\/347\/learn#lesson\/705",
+                        "target": "_blank"
+                    },
+                    {
+                        "value": "如何互动",
+                        "href": "http:\/\/www.qiqiuyu.com\/course\/347\/learn#lesson\/811",
+                        "target": "_blank"
+                    }
+                ]
+            },
+            "secondColumnText": {
+                "title": "第２列链接标题",
+                "desc": "",
+                "count": 1,
+                "type": "text",
+                "default": [
+                    {
+                        "value": "我是老师"
+                    }
+                ]
+            },
+            "secondColumnLinks": {
+                "title": "第２列链接",
+                "desc": "",
+                "count": 5,
+                "type": "link",
+                "default": [
+                    {
+                        "value": "发布课程",
+                        "href": "http:\/\/www.qiqiuyu.com\/course\/22",
+                        "target": "_blank"
+                    },
+                    {
+                        "value": "使用题库",
+                        "href": "http:\/\/www.qiqiuyu.com\/course\/147",
+                        "target": "_blank"
+                    },
+                    {
+                        "value": "教学资料库",
+                        "href": "http:\/\/www.qiqiuyu.com\/course\/372",
+                        "target": "_blank"
+                    }
+                ]
+            },
+            "thirdColumnText": {
+                "title": "第３列链接标题",
+                "desc": "",
+                "count": 1,
+                "type": "text",
+                "default": [
+                    {
+                        "value": "我是管理员"
+                    }
+                ]
+            },
+            "thirdColumnLinks": {
+                "title": "第３列链接",
+                "desc": "",
+                "count": 5,
+                "type": "link",
+                "default": [
+                    {
+                        "value": "系统设置",
+                        "href": "http:\/\/www.qiqiuyu.com\/course\/340",
+                        "target": "_blank"
+                    },
+                    {
+                        "value": "课程设置",
+                        "href": "http:\/\/www.qiqiuyu.com\/course\/341",
+                        "target": "_blank"
+                    },
+                    {
+                        "value": "用户管理",
+                        "href": "http:\/\/www.qiqiuyu.com\/course\/343",
+                        "target": "_blank"
+                    }
+                ]
+            },
+            "fourthColumnText": {
+                "title": "第４列链接标题",
+                "desc": "",
+                "count": 1,
+                "type": "text",
+                "default": [
+                    {
+                        "value": "商业应用"
+                    }
+                ]
+            },
+            "fourthColumnLinks": {
+                "title": "第４列链接标题",
+                "desc": "",
+                "count": 5,
+                "type": "link",
+                "default": [
+                    {
+                        "value": "会员专区",
+                        "href": "http:\/\/www.qiqiuyu.com\/course\/232\/learn#lesson\/358",
+                        "target": "_blank"
+                    },
+                    {
+                        "value": "题库增强版",
+                        "href": "http:\/\/www.qiqiuyu.com\/course\/232\/learn#lesson\/467",
+                        "target": "_blank"
+                    },
+                    {
+                        "value": "用户导入导出",
+                        "href": "http:\/\/www.qiqiuyu.com\/course\/380",
+                        "target": "_blank"
+                    }
+                ]
+            },
+            "fifthColumnText": {
+                "title": "第５列链接标题",
+                "desc": "",
+                "count": 1,
+                "type": "text",
+                "default": [
+                    {
+                        "value": "关于我们"
+                    }
+                ]
+            },
+            "fifthColumnLinks": {
+                "title": "第５列链接标题",
+                "desc": "",
+                "count": 5,
+                "type": "link",
+                "default": [
+                    {
+                        "value": "ES官网",
+                        "href": "http:\/\/www.edusoho.com\/",
+                        "target": "_blank"
+                    },
+                    {
+                        "value": "官方微博",
+                        "href": "http:\/\/weibo.com\/qiqiuyu\/profile?rightmod=1&wvr=6&mod=personinfo",
+                        "target": "_blank"
+                    },
+                    {
+                        "value": "加入我们",
+                        "href": "http:\/\/www.edusoho.com\/abouts\/joinus",
+                        "target": "_blank"
+                    }
+                ]
+            },
+            "bottomLogo": {
+                "title": "底部Logo",
+                "desc": "建议图片尺寸为233×64px",
+                "count": 1,
+                "type": "imglink",
+                "default": [
+                    {
+                        "src": "\/assets\/v2\/img\/bottom_logo.png",
+                        "alt": "建议图片尺寸为233×64px",
+                        "href": "http:\/\/www.edusoho.com",
+                        "target": "_blank"
+                    }
+                ]
+            },
+            "weibo": {
+                "title": "底部微博链接",
+                "desc": "填入网校的微博首页地址",
+                "count": 1,
+                "type": "link",
+                "default": [
+                    {
+                        "value": "微博首页",
+                        "href": "http:\/\/weibo.com\/edusoho",
+                        "target": "_blank"
+                    }
+                ]
+            },
+            "weixin": {
+                "title": "底部微信公众号",
+                "desc": "上传网校的微信公众号的二维码",
+                "count": 1,
+                "type": "img",
+                "default": [
+                    {
+                        "src": "\/assets\/img\/default\/weixin.png",
+                        "alt": "微信公众号"
+                    } 
+                ]
+            },
+            "apple": {
+                "title": "底部iOS版APP下载二维码",
+                "desc": "上传网校的iOS版APP下载二维码",
+                "count": 1,
+                "type": "img",
+                "default": [
+                    {
+                        "src": "\/assets\/img\/default\/apple.png",
+                        "alt": "网校的iOS版APP"
+                    } 
+                ]
+            },
+            "android": {
+                "title": "底部Android版APP下载二维码",
+                "desc": "上传网校的Android版APP下载二维码",
+                "count": 1,
+                "type": "img",
+                "default": [
+                    {
+                        "src": "\/assets\/img\/default\/android.png",
+                        "alt": "网校的Android版APP"
+                    }
+                ]
+            }
+        }
+    }
+}

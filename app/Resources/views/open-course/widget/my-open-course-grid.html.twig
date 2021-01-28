@@ -1,0 +1,34 @@
+<div class="my-course-item cd-mb16 clearfix">
+  <a class="my-course-item__link" href="{{ path('open_course_show', {courseId:course.id}) }}">
+    {{ lazy_img(filepath(open_course_cover(course, 'large'), 'course.png'), 'my-course-item__picture', course.title) }}
+    <span class="my-course-item__label">
+      {% if course.status == 'draft' %}
+        <span class="label label-warning">{{'course.status.unpublished'|trans}}</span>
+      {% elseif course.status == 'closed' %}
+        <span class="label label-danger">{{'course.status.closed'|trans}}</span>
+      {% endif %}
+
+      {% if course.type == 'liveOpen' %}
+        {% set lesson = course['lesson']|default(null) %}
+        {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
+          <span class="label label-warning">{{'open_course.status.live'|trans}}</span>
+        {% else %}
+          <span class="label label-success">{{'open_course.live_label'|trans}}</span>
+        {% endif %}
+      {% endif %}
+    </span>
+  </a>
+  <div class="my-course-item__info">
+    <div class="my-course-item__title cd-mb24 text-overflow">
+      <a class="cd-link-major" href="{{ path('open_course_show', {courseId:course.id}) }}">{{ course.title }}</a>
+    </div>
+
+    <div class="my-course-item__status">
+      <span class="color-success">{{ 'open_course'|trans }}</span>
+    </div>
+  </div>
+
+  <div class="my-course-item__btn">
+    <a class="btn cd-btn cd-btn-primary" href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank">{{ 'course.block_grid.view_course_btn'|trans }}</a>
+  </div>
+</div>

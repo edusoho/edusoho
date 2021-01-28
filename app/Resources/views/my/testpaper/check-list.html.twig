@@ -1,0 +1,17 @@
+{% extends 'my/my-teaching.html.twig' %}
+
+{% block title %}{{ 'my.teaching.testpaper.check_title'|trans }} - {{ parent() }}{% endblock %}
+{% set side_nav = 'my-online-review' %}
+{% set type = 'testpaper' %}
+{% block main %}
+  <div class="panel panel-default panel-col">
+    <div class="panel-heading">
+      {{ 'my.teaching.online.review.title'|trans }}
+    </div>
+    <div class="panel-body">
+      {% include 'my/online-review/review-type-select.html.twig' %}
+      {% include 'my/online-review/search-form.html.twig' %}
+      {% include 'my/testpaper/check-table.html.twig' %}
+    </div>
+  </div>
+{% endblock %}

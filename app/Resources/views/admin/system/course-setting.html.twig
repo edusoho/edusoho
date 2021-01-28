@@ -1,0 +1,258 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_setting_course' %}
+{% set script_controller = 'setting/course' %}
+
+{% block main %}
+
+
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" method="post" id="course-form" novalidate>
+
+  <fieldset>
+    <legend>{{ 'admin.setting_course.course_rule'|trans }}</legend>
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label >
+          {{ 'admin.setting_course.send_welcome_messages'|trans }}
+        </label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('welcome_message_enabled', {1:'admin.setting_course.open'|trans, 0:'admin.setting_course.closed'|trans}, courseSetting.welcome_message_enabled) }}
+      <p class="help-block">
+        {{ 'admin.setting_course.course_rule.help_block'|trans }}
+      </p>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="welcome_message_body">{{'admin.setting_course.welcome_messages_content'|trans}}</label>
+      </div>
+      <div class="controls col-md-8">
+        <textarea id="welcome_message_body" name="welcome_message_body" class="form-control" rows="5">{{ courseSetting.welcome_message_body }}</textarea>
+        <div class="help-block">
+
+          <div>{{'admin.setting_course.welcome_messages_content.Variables'|trans}}</div>
+          <ul>
+            <li>{% verbatim %}{{nickname}}{% endverbatim %} {{'admin.setting_course.welcome_messages_content.as_recipient_user_name'|trans}}</li>
+            <li>{% verbatim %}{{course}}{% endverbatim %} {{'admin.setting_course.welcome_messages_content.as_course_name'|trans}}</li>
+          </ul>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>{{'admin.setting_course.course_detail_show_relevant_course'|trans}}</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('relatedCourses', {1:'admin.setting_course.open'|trans, 0:'admin.setting_course.closed'|trans}, courseSetting.relatedCourses) }}
+        <div class="help-block">{{'admin.setting_course.course_detail_show_relevant_course.help_block'|trans}}</div>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>{{ 'admin.setting_course.authority_and_copyright'|trans }}</legend>
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label >{{'admin.setting_course.allow_teacher_manage_course_marketing'|trans}}</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('teacher_manage_marketing', {1:'admin.setting_course.yes'|trans, 0:'admin.setting_course.no'|trans}, courseSetting.teacher_manage_marketing) }}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label >{{'admin.setting_course.allow_teacher_search_course_order'|trans}}</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('teacher_search_order', {1:'admin.setting_course.yes'|trans, 0:'admin.setting_course.no'|trans}, courseSetting.teacher_search_order) }}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label >{{'admin.setting_course.allow_teacher_add_or_remove'|trans}}{{'site.default.student'|trans}}</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('teacher_manage_student', {1:'admin.setting_course.yes'|trans, 0:'admin.setting_course.no'|trans}, courseSetting.teacher_manage_student) }}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label >{{ 'admin.setting_course.allow_teacher_export_material'|trans }}</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('teacher_export_student', {1:'admin.setting_course.yes'|trans, 0:'admin.setting_course.no'|trans}, courseSetting.teacher_export_student) }}
+      </div>
+    </div>
+    {% set smsSetting = setting('cloud_sms') %}
+    {% if smsSetting.sms_enabled|default(0) and (smsSetting.sms_normal_lesson_publish|default('off') == 'on' or smsSetting.sms_live_lesson_publish|default('off') == 'on')%}
+    {% endif %}
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label >{{'admin.setting_course.course_list_page_seq'|trans}}</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('explore_default_orderBy', {latest:'site.datagrid.filter.latest'|trans, hotSeq:'site.datagrid.filter.hotest'|trans,recommendedSeq:'site.datagrid.filter.recommended'|trans}, courseSetting.explore_default_orderBy) }}
+        <p class="help-block"><a target="_blank" href="{{ path('course_set_explore') }}">{{ 'admin.setting_course.course_list_page.help_block'|trans }}</a>{{ 'admin.setting_course.course_list_page_seq.help_block'|trans }}</p>
+      </div>
+    </div>
+
+     <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>{{'admin.setting_course.Prevent_copying_rich_text_doc'|trans}}</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('copy_enabled', {1:'admin.setting_course.open'|trans, 0:'admin.setting_course.closed'|trans}, courseSetting.copy_enabled) }}
+        <div class="help-block"></div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>{{'admin.setting_course.Prevent_copying_test_paper'|trans}}</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('testpaperCopy_enabled', {1:'admin.setting_course.open'|trans, 0:'admin.setting_course.closed'|trans}, courseSetting.testpaperCopy_enabled) }}
+        <div class="help-block"></div>
+      </div>
+    </div>
+
+  </fieldset>
+
+  <fieldset>
+    <legend>{{ 'admin.setting_course.course_operation_mode'|trans }}</legend>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>{{ 'admin.setting_course.course_operation_mode.free_try_view'|trans }}</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        {{ radios('allowAnonymousPreview', {1:'admin.setting_course.allow'|trans, 0:'admin.setting_course.not_allow'|trans}, courseSetting.allowAnonymousPreview) }}
+        <div class="help-block">{{ 'admin.setting_course.course_operation_mode.free_try_view.help_block'|trans }}</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-3 control-label">{{ 'admin.setting_course.course_operation_mode.allow_show_user_count'|trans }}</label>
+      <div class="col-md-8 controls radios">
+        <label>
+          <input id="show-student-num-open" type="radio" name="show_student_num_enabled" value="1" data-showable="{{ courseSetting.show_student_num_enabled|default('1') }}"> {{ 'admin.setting_course.open'|trans }}
+        </label>
+        <label>
+          <input id="show-student-num-close" type="radio" name="show_student_num_enabled" value="0"> {{ 'admin.setting_course.closed'|trans }}
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group" id='show_cover_num_mode'>
+      <label class="col-md-3 control-label">{{ 'admin.setting_course.course_operation_mode.course_set_number'|trans }}</label>
+      <div class="col-md-8 controls radios">
+        <label>
+          <input id="show-student-num" type="radio" name="show_cover_num_mode" value="studentNum" data-showmode="{{ courseSetting.show_cover_num_mode|default("studentNum") }}"> {{ 'admin.setting_course.cover_number.student_num'|trans }}
+        </label>
+        <label>
+          <input id="show-hit-num" type="radio" name="show_cover_num_mode" value="hitNum"> {{ 'admin.setting_course.cover_number.hit_num'|trans }}
+        </label>
+        <div class="help-block">{{ 'admin.setting_course.course_operation_mode.course_set_number.help_block'|trans }}</div>
+      </div>
+    </div>
+
+    <div id="show-course-comments">
+      <div class="form-group">
+        <label class="col-md-3 control-label">{{ 'admin.setting_course.course_comments_manage'|trans }}</label>
+        <div class="col-md-1 control-label">{{ 'admin.setting_course.course_review'|trans }}：</div>
+        <div class="col-md-5 controls radios pls">
+          {{ radios('show_review', {1:'admin.setting_course.open'|trans, 0:'admin.setting_course.closed'|trans}, courseSetting.show_review|default('1')) }}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-md-3 control-label"></label>
+        <div class="col-md-2 control-label" style="margin-left: -25px">{{ 'admin.setting_course.course_question'|trans }}：</div>
+        <div class="col-md-5 controls radios pls">
+          {{ radios('show_question', {1:'admin.setting_course.open'|trans, 0:'admin.setting_course.closed'|trans}, courseSetting.show_question|default('1')) }}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-md-3 control-label"></label>
+        <div class="col-md-1 control-label">{{ 'admin.setting_course.course_thread'|trans }}：</div>
+        <div class="col-md-6 controls radios pls">
+          {{ radios('show_discussion', {1:'admin.setting_course.open'|trans, 0:'admin.setting_course.closed'|trans}, courseSetting.show_discussion|default('1')) }}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-md-3 control-label"></label>
+        <div class="col-md-1 control-label">{{ 'admin.setting_course.course_note'|trans }}：</div>
+        <div class="col-md-6 controls radios pls">
+          {{ radios('show_note', {1:'admin.setting_course.open'|trans, 0:'admin.setting_course.closed'|trans}, courseSetting.show_note|default('1')) }}
+        </div>
+      </div>
+    </div>
+
+  </fieldset>
+
+  <fieldset>
+    <legend>{{ 'admin.setting_course.customer_chapter_section_name'|trans }}</legend>
+    {# 默认章节为自定义 #}
+    <input type="hidden" name="custom_chapter_enabled" value="1">
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+          <label for="chapter_name">{{'admin.setting_course.task_chapter_name'|trans}}</label>
+      </div>
+      <div class="controls col-md-4">
+        <input  type="text" id="chapter_name" name="chapter_name" class="form-control" data-before-value="{{ defaultSetting.chapter_name|default('admin.setting_course.chapter'|trans) }}" value="{{ defaultSetting.chapter_name|default('admin.setting_course.chapter'|trans) }}">
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+          <label for="part_name">{{'admin.setting_course.task_section_name'|trans}}</label>
+      </div>
+      <div class="controls col-md-4">
+        <input  type="text" id="part_name" name="part_name" class="form-control" data-before-value="{{ defaultSetting.part_name|default('admin.setting_course.section'|trans) }}" value="{{ defaultSetting.part_name|default('admin.setting_course.section'|trans) }}">
+      </div>
+    </div>
+    <div class="alert alert-info deduction text-center">
+    <p><strong>
+    {{'admin.setting_course.customer_chapter_section_name.tips'|trans}}
+    </strong></p>
+    </div>
+
+  </fieldset>
+
+  {#<fieldset>#}
+    {#<legend>{{ 'admin.setting_course.customer_task_name'|trans }}</legend>#}
+    {#<div class="row form-group">#}
+      {#<div class="col-md-3 control-label">#}
+        {#<label for="part_name">{{'admin.setting_course.task_name'|trans}}</label>#}
+      {#</div>#}
+      {#<div class="controls col-md-4">#}
+        {#<input type="text" id="task_name" name="task_name" class="form-control" data-before-value="{{ defaultSetting.task_name|default('admin.setting_course.task'|trans) }}" value="{{ defaultSetting.task_name|default('admin.setting_course.task'|trans) }}">#}
+      {#</div>#}
+    {#</div>#}
+    {#<div class="alert alert-info deduction text-center">#}
+      {#<p><strong>#}
+          {#{{'admin.setting_course.customer_task_name.tips'|trans}}#}
+        {#</strong></p>#}
+    {#</div>#}
+  {#</fieldset>#}
+
+  <div class="form-group">
+    <div class="controls col-md-offset-3 col-md-8">
+      <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
+    </div>
+  </div>
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+
+{% endblock %}

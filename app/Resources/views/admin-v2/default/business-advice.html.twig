@@ -1,0 +1,16 @@
+<div class="row">
+  {% for i in 0..3 %}
+    <div class="col-md-3">
+      {% if advice.details[i] is defined %}
+        {% set item = advice.details[i] %}
+        <a class="admin-advice__item" href="{{ item.url|default() }}" target="_blank">
+          <img src="{{ item.image|default() }}"/>
+        </a>
+      {% else %}
+        <div class=" admin-advice__item">
+          <div class="admin-advice__placeholder"><i class="es-icon es-icon-placeholder"></i></div>
+        </div>
+      {% endif %}
+    </div>
+  {% endfor %}
+</div>

@@ -1,0 +1,87 @@
+<div>
+
+  <div class="js-infinite-item-template hidden">
+    <li display-if="{isChapter}" class="task-item bg-gray-lighter js-task-chapter infinite-item">
+      <i class="es-icon es-icon-menu left-menu"></i>
+      <span class="title">{getChapterName}</span>
+      <i class="right-menu es-icon es-icon-remove js-remove-icon"></i>
+    </li>
+
+    <li display-if="{isUnit}" class="task-item color-gray bg-gray-lighter infinite-item">
+      <span class="title">{getUnitName}</span>
+    </li>
+
+    <li class="task-item infinite-item {lessonContainerClass}"
+      display-if="{isLesson}">
+      <span class="title">
+        <tmp display-if="{isOptional}">
+          <span class="label label-info mrm">{{'course.plan_task.is_optional_task'|trans}}</span>
+        </tmp>
+        {getLessonName}
+
+        <tmp display-if="{isItemDisplayedAsUnpublished}">
+          <span class="right-menu ">{{'course.catalogue.task_status.looking_forward'|trans}}</span>
+        </tmp>
+      </span>
+    </li>
+
+    <li display-if="{isTask}" class="task-item task-content {highlightTaskClass} {lessonContainerClass} mouse-control infinite-item">
+      <i class="{taskClass}"></i>
+      <a display-if="{isPublishedTaskUnlocked}" class="title"
+          href="{{ path('course_task_show', {id: '{taskId}',courseId: course.id}) }}">
+        <tmp display-if="{isItemDisplayedAsOptional}">
+          <span class="label label-info mrm">{{'course.plan_task.is_optional_task'|trans}}</span>
+        </tmp>
+        
+        <tmp hide-if="{isItemDisplayedAsOptional}">
+          {getTaskName}
+        </tmp>
+
+        <tmp display-if="{isItemDisplayedAsOptional}">
+          {title}
+        </tmp>
+      </a>
+
+      <div hide-if="{isPublishedTaskUnlocked}" class="title"
+            data-url="{{ path('course_task_show', {id: '{taskId}', courseId: course.id}) }}">
+        <tmp display-if="{isItemDisplayedAsOptional}">
+          <span class="label label-info mrm">{{'course.plan_task.is_optional_task'|trans}}</span>
+        </tmp>
+
+        <tmp hide-if="{isItemDisplayedAsOptional}">
+          {getTaskName}
+        </tmp>
+        <tmp display-if="{isItemDisplayedAsOptional}">
+          {title}
+        </tmp>
+      </div>
+
+      <tmp display-if="{isItemDisplayedAsUnpublished}">
+        <span class="right-menu ">{{'course.catalogue.task_status.looking_forward'|trans}}</span>
+      </tmp>
+      
+      <tmp display-if="{isPublished}">
+        <tmp display-if="{isTaskLocked}">
+          <span class="right-menu mouse-leave">{activityLength}
+            <i class="es-icon {getMetaIcon} ml5"></i>
+          </span>
+          <span class="right-menu mouse-enter color-warning">{{'course.plan_task.locked.task_locked'|trans({'%taskName%':'{title}'})}}</span>
+        </tmp>
+
+        <tmp hide-if="{isTaskLocked}">
+          <span class="right-menu">{activityLength}
+            <i class="es-icon {getMetaIcon} ml5" data-toggle="tooltip"
+                data-placement="top" title="{getMetaName}{{'course.plan_task.task'|trans}}">
+            </i>
+          </span>
+        </tmp>
+      </tmp>
+    </li>
+  </div>
+
+  <ul class="task-list task-show infinite-container"></ul>
+
+  <div class="infinite-more-link js-down-loading-more" style="min-height: 1px"></div>
+</div>
+
+{% include 'course/task-list/parts/task-course-data.html.twig' with {showOptional: true} %}

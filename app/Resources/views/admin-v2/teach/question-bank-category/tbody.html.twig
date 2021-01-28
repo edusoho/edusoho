@@ -1,0 +1,62 @@
+<li id="category-table-body" data-sort-url="{{ path('admin_v2_question_bank_category_sort') }}">
+  {% if categories is not empty %}
+    {{ _self.showCategoryTree(categories, false, selectOrg) }}
+  {% else %}
+    <div class="row empty">{{'admin.category_manage.empty'|trans}}</div>
+  {% endif %}
+</li>
+
+{% do load_script('category/tbody') %}
+
+{% macro showCategoryTree(categories, isCollapseChildren, selectOrg) %}
+  <ul class="list-table sortable-list" data-group-id="{{ categories[0]['parentId'] }}">
+    {% for category in categories %}
+      {% set isParent = category.children|default(null) is not empty %}
+      {% set isRoot = category.depth == 1 %}
+      {% if not selectOrg or category.orgCode starts with selectOrg %}
+        <li id="{{ category.id }}" class="tr" data-name="{{ category.name }}" data-id="{{ category.id }}" data-parent-id="{{ category.parentId }}" style="display: {{ (not isRoot and isCollapseChildren) ? 'none' : 'block' }}">
+          <div class="row{{ (isParent and isCollapseChildren) ? ' row-collapse' : ' row-expand' }}">
+            <div class="td {% if setting('magic.enable_org', 0) %}col-md-4{% else %}col-md-7{% endif %} name sort-handle" style="padding-left: {{ 24 * (category.depth - 1 ) }}px; overflow: hidden">
+              {% if isParent %}
+                <i class="list-table-tree-icon glyphicon glyphicon-chevron-{{ isCollapseChildren ? 'right' : 'down' }}"></i>
+              {% else %}
+                <i class="list-table-tree-icon"></i>
+              {% endif %}
+              {{ category.name }}
+            </div>
+            {% if setting('magic.enable_org', 0) %}
+              {% set org = data('Org', {orgCode: category.orgCode}) %}
+              <div class="td col-md-3 org" style="line-height: unset">
+                {{ org.name|default('--')}}
+                <br><span class="color-gray text-sm">{{ 'site.org.code'|trans }} {{ org.code }}</span>
+              </div>
+            {% endif %}
+            <div class="td col-md-2 code">{{'admin.question_bank.category_manage.bank'|trans}}：{{ category.bankNum }}</div>
+            <div class="td col-md-3 operation" style="overflow: unset;">
+              {% if category.depth < 2 %}
+                <a href="javascript:;" class="btn btn-default btn-sm" data-url="{{ path('admin_v2_question_bank_category_manage_create', {parentId: category.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-plus"></i> {{'admin.category_manage.create_sub_category_btn'|trans}}</a>
+              {% endif %}
+              <div class="btn-group">
+                <a href="javascript:;" class="btn btn-default btn-sm" data-url="{{ path('admin_v2_question_bank_category_manage_edit', {id:category.id}) }}" data-toggle="modal" data-target="#modal">
+                  <i class="glyphicon glyphicon-edit"></i> {{'admin.category_manage.edit_btn'|trans}}
+                </a>
+                <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                  <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href="javascript:;" data-url="{{ path('admin_v2_question_bank_category_manage_delete', {id:category.id}) }}"
+                       class="delete-btn"><span class="glyphicon glyphicon-trash"></span>{{'admin.operation_announcement.delete_btn'|trans}}</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          {% if isParent %}
+            {{ _self.showCategoryTree(category.children, isCollapseChildren) }}
+          {% endif %}
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+{% endmacro %}

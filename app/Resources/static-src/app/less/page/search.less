@@ -1,0 +1,222 @@
+.course-filter.search-filter {
+  padding-right: 0;
+  .nav-pills {
+    float: right;
+    > li {
+      margin: 0 0 10px 20px;
+      a {
+        @media (max-width: @screen-xs-min) {
+          padding-top: 6px;
+          padding-bottom: 6px;
+        }
+      }
+    }
+  }
+  .btn-group {
+    > .btn-primary {
+      float: right;
+    }
+    > .dropdown-menu {
+      left: inherit;
+      right:0;
+      > li > a {
+        text-align: center;
+      }
+    }
+  }
+}
+
+.cloud-search-box {
+  position: absolute;
+  padding-left: 90px;
+  height: 100%;
+  width: 100%;
+  left : 0;
+  top: 0;
+  @media (max-width: @screen-sm-max) {
+    padding-left: 10%;
+    padding-right: 10%;
+  }
+}
+
+// 教育云搜索
+.search-banner {
+  background: url('@{img-src}banner_search.jpg') top center no-repeat;
+  height: 200px;
+  .search-input-group {
+    margin: 75px 20%;
+    height: 50px;
+    @media(max-width:@screen-sm-max) {
+      margin-left: 0;
+      margin-right: 0;
+    }
+    .form-control {
+      height: 50px;
+      border: none;
+      padding-right: 50px;
+      font-size: 16px;
+      color: #000;
+      border-top-left-radius: 4px !important;
+      border-bottom-left-radius: 4px !important;
+    }
+    .input-wrap {
+      position: relative;
+    }
+    .es-icon {
+      display: none;
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 20px;
+      z-index: 3;
+      color: @gray-light;
+      .es-transition;
+      &:hover {
+        cursor: pointer;
+        color: @gray-medium;
+        .es-transition;
+      }
+    }
+    .btn {
+      height: 50px;
+      width: 120px;
+      border: none;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      @media(max-width:@screen-sm-max){
+        width: 80px;
+      }
+      &:hover {
+        z-index: 1;
+      }
+    }
+  }
+}
+
+.search-course-list {
+  margin-top: -25px;
+  .course-item {
+    padding: 25px 0;
+    border-bottom: 1px solid @gray-lighter;
+    .course-img {
+      position: relative;
+      float: left;
+      width: 35%;
+      @media(max-width: @screen-xs-max) {
+        width: 100%;
+        float: none;
+      }
+      .tags-left {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        .tag-live {
+          display: inline-block;
+          width: 40px;
+          height: 50px;
+          background: url("@{img-src}tag_live.png") no-repeat;
+          background-image: -webkit-image-set(url("@{img-src}tag_live.png") 1x,url("@{img-src}tag_live@2x.png") 2x);
+        }
+      }
+      .tags-right {
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        .tag-public {
+          display: inline-block;
+          width: 68px;
+          height: 68px;
+          background: url("@{img-src}tag_public.png") no-repeat;
+          background-image: -webkit-image-set(url("@{img-src}tag_public.png") 1x,url("@{img-src}tag_public@2x.png") 2x);
+        }
+      }
+    }
+
+    .classroom-search-img {
+      .classroom-search-img__link {
+        display: block;
+        position: relative;
+        width: 100%;
+        padding-bottom: 56%;
+        img {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+
+    .course-info {
+      float: left;
+      width: 65%;
+      padding-left: 15px;
+      @media(max-width: @screen-xs-max) {
+        width: 100%;
+        float: none;
+        padding-left: 0;
+        margin-top: 10px;
+      }
+    }
+    .content {
+      color: @gray-darker;
+    }
+    .title {
+      margin-top: 0;
+      >a {
+        color: @gray-darker;
+        .es-transition;
+        &:hover {
+          color: @brand-primary;
+          .es-transition;
+        }
+      }
+    }
+    .ul-lesson {
+      margin-top: 10px;
+      padding: 0;
+      li {
+        font-size: 12px;
+        list-style-type: none;
+        margin-bottom: 10px;
+        i {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+
+.search-result {
+  em {
+    color: @brand-danger;
+    font-style: inherit;
+  }
+  .loading {
+    padding: 50px;
+    margin: 0 auto;
+    text-align: center;
+    >i {
+      font-size: 40px;
+    }
+  }
+}
+
+.local-search-class-list {
+  .local-search-class-item {
+    .local-search-class-item__serve {
+      height: 36px;
+      ul {
+        padding-top: 8px;
+        padding-bottom: 8px;
+      }
+    }
+    .local-search-class-item__data {
+      padding: 0;
+      li {
+        line-height: 32px;
+      }
+    }
+  }
+}

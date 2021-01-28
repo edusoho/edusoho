@@ -1,0 +1,122 @@
+<div class="form-group mb0">
+  <label class="col-sm-2 control-label">
+    {{ 'course.marketing_setup.rule.expiry_date'|trans }}
+    <a class="es-icon es-icon-help course-mangae-info__help text-normal" data-trigger="hover" data-toggle="popover"
+       data-container="body" data-placement="top"
+       data-content="<ul class='pl10 list-unstyled'>
+      <li class='mb10'>{{ 'course.teaching_plan.expiry_date.anytime'|trans|raw }}</li>
+      <li class='mb10'>{{ 'course.teaching_plan.expiry_date.real_time'|trans|raw }}</li>
+      <li>{{ 'course.teaching_plan.expiry_date.overdue_tips'|trans }}</li>
+    </ul>">
+    </a>
+  </label>
+  <div class="col-sm-10 cd-radio-group mbm">
+    {% set coursePublished = course.status|default('draft') == 'published' %}
+    {% set courseClosed = course.status|default('draft') == 'closed' %}
+    {% set courseSetPublished = courseSet.status|default('draft') == 'published' %}
+    {% set courseSetClosed = courseSet.status|default('draft') == 'closed' %}
+    {{ cd_radios('expiryMode',
+      { 'days': 'course.teaching_plan.expiry_date.anywhere_mode'|trans, 'date': 'course.teaching_plan.expiry_date.date_mode'|trans,'forever':'course.teaching_plan.expiry_date.forever_mode'|trans },
+      course.expiryMode|default('days'), coursePublished or courseClosed or course.platform|default('self') != 'self' ? 'disabled' : '') }}
+
+    {% if courseClosed or (courseSetClosed and course.expiryMode|default('days') == 'days') and course.status|default('draft') != 'draft' %}
+      <input type="hidden" name="expiryMode" value="{{ course.expiryMode|default('days') }}">
+    {% endif %}
+    {#随到随学#}
+    <div class="course-manage-expiry {% if course.expiryMode|default('days') in ['date', 'forever'] %}hidden{% endif %}"
+         id="expiry-days">
+      <span class="caret"></span>
+      {{ cd_radios('deadlineType',
+        { 'end_date': 'course.teaching_plan.expiry_date.end_date_mode'|trans, 'days': 'course.teaching_plan.expiry_date.days_mode'|trans},
+        course.deadlineType|default('days'),  coursePublished or courseClosed or course.platform|default('self') != 'self' ? 'disabled' : '') }}
+
+      {% if coursePublished or courseClosed %}
+        <input type="hidden" name="deadlineType" value="{{ course.deadlineType|default('days') }}">
+      {% endif %}
+
+      <div class="cd-mt16 {% if course.deadlineType|default('days') != 'end_date' %}hidden{% endif %}"
+           id="deadlineType-date">
+        <input {% if course.platform|default('self') != 'self' %} disabled {% endif %}
+          autocomplete="off" class="form-control course-mangae-info__input js-expiry-input cd-mr8" id="deadline"
+          name="deadline"
+          value="{% if course.expiryEndDate|default(0) %}{{ course.expiryEndDate|default(0) }}{% endif %}" {% if coursePublished and courseSetPublished %} disabled {% endif %}>{{ 'course.marketing_setup.rule.expiry_date_tips'|trans }}
+      </div>
+      <div class="cd-mt16 {% if course.deadlineType|default('days') != 'days' %}hidden{% endif %}"
+           id="deadlineType-days">
+        <input {% if course.platform|default('self') != 'self' %} disabled {% endif %}
+          class="form-control course-mangae-info__input js-expiry-input cd-mr8" type="text" id="expiryDays"
+          name="expiryDays"
+          value="{% if course.expiryDays|default(1) %}{{ course.expiryDays|default(1) }}{% endif %}" {% if coursePublished and courseSetPublished %}disabled {% endif %}>
+        {{ 'course.marketing_setup.rule.expiry_date.publish_tips'|trans }}
+      </div>
+    </div>
+    {#固定周期#}
+    <div class="course-manage-expiry {% if course.expiryMode|default('days') in ['days', 'forever'] %}hidden{% endif %}"
+         id="expiry-date">
+      <span class="caret"></span>
+      <div class="course-manage-expiry__circle">
+        {{ 'course.plan_task.start_time'|trans }}
+        <input {% if course.platform|default('self') != 'self' %} disabled {% endif %}
+          class="form-control cd-ml16 cd-mr32 course-mangae-info__input js-expiry-input" id="expiryStartDate"
+          type="text" name="expiryStartDate"
+          value="{% if course.expiryStartDate|default(0) == 0 %}{{ 'now'|date('Y-m-d') }}{% else %}{{ course.expiryStartDate|default('now'|date('Y-m-d')) }}{% endif %}" {% if coursePublished and courseSetPublished %} disabled {% endif %}>{{ 'course.plan_task.end_time'|trans }}
+        <input {% if course.platform|default('self') != 'self' %} disabled {% endif %}
+          class="form-control cd-ml16 course-mangae-info__input js-expiry-input" type="text" id="expiryEndDate"
+          name="expiryEndDate"
+          value="{% if course.expiryEndDate|default(0) != 0 %}{{ course.expiryEndDate|default(0) }}{% endif %}"
+          {% if coursePublished and courseSetPublished %}disabled {% endif %} >
+      </div>
+    </div>
+    <div
+      class="course-mangae-info__tip js-expiry-tip {% if course.expiryMode|default('days') == 'forever' %} ml0 {% endif %}">{{ 'course.marketing_setup.rule.expiry_date.first_publish_tips'|trans }}</div>
+  </div>
+</div>
+{% if setting('magic.lesson_watch_limit') %}
+  <div class="form-group mtl">
+    <label class="col-sm-2 control-label">
+      {{ 'course.marketing_setup.rule.watch_time_limit'|trans }}
+    </label>
+    <div class="col-sm-8">
+      <input class="form-control course-mangae-info__input mrs" type="text" name="watchLimit"
+             value="{{ course.watchLimit|default(0) }}">
+      {{ 'course.marketing_setup.rule.watch_time_limit.watch_limit'|trans }}
+      <a class="es-icon es-icon-help text-normal course-mangae-info__help" data-container="body" data-toggle="popover"
+         data-trigger="hover" data-placement="top"
+         data-content="{{ 'course.marketing_setup.rule.watch_time_limit.watch_limit_tips'|trans|raw }}">
+      </a>
+    </div>
+  </div>
+{% endif %}
+{% if is_granted('ROLE_ADMIN') %}
+  <div class="form-group mtl">
+    {#添加admin_v2#}
+    {% if setting('backstage.is_v2',0)  == 0 %}
+      {% set dataWechatUrl = path('admin_wechat_notification_manage') %}
+    {% else %}
+      {% set dataWechatUrl=  path('admin_v2_wechat_notification_manage') %}
+    {% endif %}
+    <label class="col-sm-2 control-label">
+      {{ 'course.setting.course_remind'|trans }}
+    </label>
+    <div class="col-sm-8">
+      {% set wechatSetting = setting('wechat')|default([]) %}
+      {% if wechatSetting.templates.courseRemind|default('') and  wechatSetting.templates.courseRemind.status|default(0) %}
+        {% set days = get_days(wechatSetting.templates.courseRemind.sendDays) %}
+        <div
+          class="help-block course-mange-space">{{ 'course.setting.course_remind_tip'|trans({'%D%': days, '%H%': wechatSetting.templates.courseRemind.sendTime }) }}
+          {% if has_permission('admin_operation_wechat_notification_manage') or has_permission('admin_v2_operation_wechat_notification_manage') %}
+            <a class="" data-container="body" data-toggle="popover" data-trigger="hover" href="{{ dataWechatUrl }}"
+               target="_blank">{{ 'course.setting.course_remind_change'|trans }}</a>
+          {% endif %}
+        </div>
+      {% else %}
+        <div class="help-block course-mange-space">{{ 'course.setting.course_remind_not_open'|trans }}
+          {% if has_permission('admin_operation_wechat_notification_manage') or has_permission('admin_v2_operation_wechat_notification_manage') %}
+            <a class="" data-container="body" data-toggle="popover" data-trigger="hover" href="{{ dataWechatUrl }}"
+               target="_blank">{{ 'course.setting.course_remind_go_to_open'|trans }}</a>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endif %}

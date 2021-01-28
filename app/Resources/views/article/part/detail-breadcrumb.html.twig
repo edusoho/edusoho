@@ -1,0 +1,7 @@
+<ol class="breadcrumb">
+  <li><a href="{{path('article_show')}}">{{ setting('article.name')|default('article'|trans) }}</a></li>
+  {% for breadcrumb in breadcrumbs %}
+    <li><a href="{{path('article_category',{categoryCode:breadcrumb.code})}}">{{breadcrumb.name}}</a></li>
+  {% endfor %}
+  <li class="active">{{'article.detail.text'|trans}}</li>
+</ol>

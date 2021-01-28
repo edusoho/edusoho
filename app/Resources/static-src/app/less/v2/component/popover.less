@@ -1,0 +1,27 @@
+.popover {
+  border-color: @cd-bg;
+  padding: 0;
+  .cd-box-shadow(8px, 0.01, 0.04);
+  &.top > .arrow {
+    border-top-color: @cd-bg;
+  }
+  &.right > .arrow {
+    border-right-color: @cd-bg;
+  }
+  &.bottom > .arrow {
+    border-bottom-color: @cd-bg;
+  }
+  &.left > .arrow {
+    border-left-color: @cd-bg;
+  }
+  .popover-title {
+    color: @cd-dark-major;
+    font-weight: 500;
+    border: none;
+    background: none;
+    .cd-box-shadow-inset(0 -1px 0 0);
+  }
+  .popover-content {
+    color: @cd-dark-major;
+  }
+}

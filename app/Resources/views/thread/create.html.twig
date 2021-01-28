@@ -1,0 +1,114 @@
+{% import "macro.html.twig" as web_macro %}
+
+{% set thread = thread|default(null) %}
+{% set isUpdate = thread ? 1 : 0 %}
+
+{% include 'thread/part/thread-crumbs.html.twig' with {target:target, thread:thread,type:type, isUpdate:isUpdate} %}
+
+<form id="thread-form" class="form-vertical {% if type == 'event' %}form-horizontal{% endif %}" method="post"
+  {% if thread %}
+    action="{{ path(target.type ~ '_thread_update', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}"
+  {% else %}
+    action="{{ path(target.type ~ '_thread_create', {(target.type ~ 'Id'): target.id, type:type}) }}"
+    {% endif %}
+  >
+
+  {% if type =='question' %}
+    <div class="form-group">
+      <div class="controls">
+        <input type="type" id="title" class="form-control" placeholder="{{'classroom.thread.create.question'|trans}}" data-display="{{'classroom.thread.create.question'|trans}}" name= "title" value="{{ thread.title|default('') }}">
+        </div>
+    </div>
+  {% endif %}
+
+  {% if type =='discussion' %}
+    <div class="form-group">
+      <div class="controls">
+        <input type="type" id="title" class="form-control" placeholder="{{'classroom.thread.create.discussion'|trans}}" data-display="{{'classroom.thread.create.discussion'|trans}}" name= "title" value="{{ thread.title|default('') }}">
+      </div>
+    </div>
+  {% endif %}
+
+  {% if type == 'event' %}
+    <div class="form-group">
+      <label for="title" class="col-sm-2 control-label">{{'classroom.thread.create.event'|trans}}</label>
+      <div class="col-sm-7">
+        <input type="type" id="title" class="form-control" placeholder="{{'classroom.thread.create.event'|trans}}" data-display="{{'classroom.thread.create.title'|trans}}" name= "title" value="{{ thread.title|default('') }}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-2 control-label">
+        <label for="startTime">{{'classroom.thread.create.event_time'|trans}}</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="text" id="startTime" class="form-control" placeholder="{{'classroom.thread.create.event_start_time'|trans}}" name="startTime" value="{% if thread.startTime|default(null) %}{{ thread.startTime|date('Y-m-d H:i') }}{% endif %}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-2 control-label">
+        <label for="location">{{'classroom.thread.create.event_location'|trans}}</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="text" id="location" class="form-control" placeholder="{{'classroom.thread.create.event_location'|trans}}" name= "location" value="{{ thread.location|default('') }}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="inputTitle" class="col-sm-2 control-label">{{'classroom.thread.create.cover_image'|trans}}</label>
+      <div class="col-md-7 controls">
+        <input type="text" class="form-control" name="actvityPicture" value="{{ thread.actvityPicture|default('') }}" placeholder="{{'classroom.thread.create.cover_image.placeholder'|trans}}">
+      </div>
+      <div class="col-sm-2">
+        <a class="btn btn-default btn-block" id="js-activity-uploader" data-upload-token="{{ upload_token('classroom', 'image') }}">{{'classroom.thread.create.views_btn'|trans}}</a>
+      </div>
+    </div>
+
+    {% set maxUsers = thread.maxUsers|default(null) %}
+    <div class="form-group">
+      <div class="col-md-2 control-label">
+        <label for="maxUsers">{{'classroom.thread.create.maxUsers'|trans}}</label>
+      </div>
+      <div class="col-md-7 controls">
+        <input type="text" id="maxUsers" class="form-control" placeholder="{{'classroom.thread.create.maxUsers.placeholder'|trans}}" name="maxUsers" value="{% if maxUsers and maxUsers != 0 %}{{ maxUsers }}{% endif %}">
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="form-group">
+    {% if type == 'event' %}
+      <div class="controls col-md-2"></div>
+      <div class="controls col-md-7">
+        <textarea id="thread_content" class="form-control" rows="15" data-display="{{'classroom.thread.create.content'|trans}}" name="content"
+          data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}">{{ thread.content|default('') }}
+        </textarea>
+      </div>
+    {% else %}
+      <div class="controls">
+        <textarea id="thread_content" class="form-control" rows="15" data-display="{{'classroom.thread.create.content'|trans}}" name="content"
+          data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}">{{ thread.content|default('') }}
+        </textarea>
+      </div>
+    {% endif %}
+  </div>
+
+  {% if type != 'event' %}
+    {{ render(controller('AppBundle:File/Attachment:formFields', {targetType: 'classroom.thread', targetId: thread.id|default(0)}, {'showLabel':false})) }}
+  {% endif %}
+  
+  <div class="clearfix">
+    {% if thread %}
+      <button type="submit" class="btn btn-primary pull-right" data-loading-text="{{'form.btn.submit.submiting'|trans}}">{{'form.btn.submit'|trans}}</button>
+      <a href="{{ path(target.type ~ '_thread_show', {(target.type ~ 'Id'): target.id, threadId:thread.id}) }}" class="btn btn-link pull-right color-gray">{{'form.btn.cancel'|trans}}</a>
+    {% else %}
+      <button type="submit" class="btn btn-primary pull-right" data-loading-text="{{'form.btn.submit.submiting'|trans}}">
+        {{'classroom.thread.create.publish_btn'|trans}}
+      </button>
+      <a href="{{ path(target.type ~ '_threads', {(target.type ~ 'Id'): target.id}) }}" class="btn btn-link pull-right color-gray">{{'form.btn.cancel'|trans}}</a>
+    {% endif  %}
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  <input type="hidden" name="type" value="{{ type }}">
+</form>

@@ -1,0 +1,16 @@
+{% extends 'admin/theme/edit-modal-layout.html.twig' %}
+
+{% block custom_category_count %}{% endblock %}
+
+{% block custom_orderby %}
+  <div class="form-group">
+    <label class="col-md-3 control-label">{{'admin.setting.theme.manage.modal.setting_custom_orderby'|trans}}</label>
+    <div class="col-md-4 controls">
+    {% set selectOptions = {'latest': 'site.datagrid.filter.latest'|trans, 'hitNum': 'site.datagrid.filter.hotest'|trans, 'recommendedSeq': 'site.datagrid.filter.recommended'|trans} %}
+      <select id="orderBy" name="orderBy" required="required" class="form-control width-input width-input-large">
+        {{ select_options(selectOptions, config.orderBy|default('latest')) }}
+      </select>
+      <div class="help-block" style="display:none;"></div>
+    </div>
+  </div>
+{% endblock %}

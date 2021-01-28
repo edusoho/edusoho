@@ -1,0 +1,286 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{'admin.user.manage.user_show.fields.heading_title'|trans}}{% endblock %}
+
+{% block body %}
+
+<table class="table table-striped table-condenseda table-bordered">
+  <tr>
+    <th width="25%">{{'user.fields.username_label'|trans}}</th>
+    <td width="75%">
+      <a class="pull-right" href="{{ path('user_show', {id:user.id}) }}" target="_blank">{{'admin.user.fields.personal_menu_label'|trans}}</a>
+      {{ user.nickname }}
+    </td>
+  </tr>
+
+  <tr>
+    <th>Email</th>
+    <td>
+      {% if not is_system_generated_email(user.email) %}
+        {{ user.email }}
+      {% else %}
+        {{'admin.user.fields.empty'|trans}}
+      {% endif %}
+    </td>
+  </tr>
+  {% if setting('magic.enable_org','0') %}
+    <tr>
+      <th>{{'admin.user.manage.user_show.fields.user_org_label'|trans}}</th>
+      <td>
+        {% set orgName = data('OrgDisplay',{id: user.orgId}) %}
+        {% if orgName %}
+          {{ orgName }}
+        {% else %}
+          {{ 'admin.user.fields.empty'|trans }}
+        {% endif %}
+      </td>
+    </tr>
+  {% endif  %}
+
+  <tr>
+    <th>{{'admin.user.manage.user_show.fields.user_role_label'|trans}}</th>
+    <td>
+      {% for role in user.roles %}
+        {% set userRole = data('Role', {code: role}) %}
+        {% if userRole|default(false) %}
+          {{userRole.name|default('')}}
+        {% else %}
+          {{ dict_text('userRole', role) }}
+        {% endif %}
+      {% endfor %}
+    </td>
+  </tr>
+
+  <tr>
+    <th>{{'admin.user.fields.register_date_label'|trans}}/IP</th>
+    <td>
+      {{ user.createdTime|date('Y-n-d H:i:s') }}
+      /
+      {{ user.createdIp }} {{convert_ip(user.createdIp)}}
+    </td>
+  </tr>
+
+  <tr>
+    <th>{{'admin.user.manage.user_show.fields.recent_login_date_and_ip_label'|trans}}</th>
+    <td> 
+      {% if user.loginTime == 0 %}
+          --
+      {% else %}
+          {{ user.loginTime|date('Y-n-d H:i:s') }}
+      {% endif %}
+      {% if user.loginIp|default is not empty %}
+           / {{ user.loginIp }} {{convert_ip(user.loginIp)}}
+      {% endif %}
+     </td>
+  </tr>
+
+  <tr>
+    <th>{{'user.fields.truename_label'|trans}}</th>
+    <td>
+      {% if profile.truename %}
+        {{ profile.truename }}
+      {% else %}
+        {{'admin.user.fields.empty'|trans}}
+      {% endif %}
+    </td>
+  </tr>
+
+  <tr>
+    <th>{{'user.fields.gender_label'|trans}}</th>
+    <td>
+      {% if profile.gender %}
+        {% if profile.gender == 'male' %}{{'admin.user.manage.user_show.fields.gender_male_label'|trans}}{% endif %}
+        {% if profile.gender == 'female' %}{{'admin.user.manage.user_show.fields.gender_female_label'|trans}}{% endif %}
+        {% if profile.gender == 'secret' %}{{'admin.user.manage.user_show.fields.gender_secret_label'|trans}}{% endif %}
+      {% else %}
+        {{'admin.user.fields.empty'|trans}}
+      {% endif %}
+    </td>
+  </tr>
+
+{#   <tr>
+    <th>类型</th>
+    <td>
+      {% if profile.iam %}
+        {{ profile.iam }}
+      {% else %}
+        暂无
+      {% endif %}
+    </td>
+  </tr> #}
+ 
+   <tr>
+    <th>{{'user.fields.idcard_label'|trans}}</th>
+    <td>
+      {% if profile.idcard %}
+        {{ profile.idcard }}
+      {% else %}
+        {{'admin.user.fields.empty'|trans}}
+      {% endif %}
+    </td>
+  </tr>
+
+  <tr>
+    <th>{{'user.fields.mobile_label'|trans}}</th>
+    <td>
+      {% if user.verifiedMobile %}
+        {{ user.verifiedMobile|default('')}}<span class="text-success">({{'user.fields.mobile_label.bind'|trans}})</span> 
+      {% elseif profile.mobile %}
+        {{ profile.mobile }}<span class="text-danger">({{'user.fields.mobile_label.no_bind'|trans}})</span>
+      {% else %}
+        {{ profile.mobile|default('admin.user.fields.empty'|trans) }}
+      {% endif %}
+    </td>
+  </tr>
+
+{#   <tr>
+    <th>学校</th>
+    <td>
+      {% if profile.school %}
+        {{ profile.school }}
+      {% else %}
+        暂无
+      {% endif %}
+    </td>
+  </tr>
+
+  <tr>
+    <th>班级</th>
+    <td>
+      {% if profile.class %}
+        {{ profile.class }}
+      {% else %}
+        暂无
+      {% endif %}
+    </td>
+  </tr> #}
+
+  <tr>
+    <th>{{'user.fields.company_label'|trans}}</th>
+    <td>
+      {% if profile.company %}
+        {{ profile.company }}
+      {% else %}
+        {{'admin.user.fields.empty'|trans}}
+      {% endif %}
+    </td>
+  </tr>
+
+  <tr>
+    <th>{{'admin.user.fields.job_label'|trans}}</th>
+    <td>
+      {% if profile.job %}
+        {{ profile.job }}
+      {% else %}
+        {{'admin.user.fields.empty'|trans}}
+      {% endif %}
+    </td>
+  </tr>
+
+
+  <tr>
+    <th>{{'admin.user.fields.title_label'|trans}}</th>
+    <td>
+    {% if profile.title %}
+        {{ profile.title }}
+      {% else %}
+        {{'admin.user.fields.empty'|trans}}
+      {% endif %}
+    </td>
+  </tr>
+
+  <tr>
+    <th>{{'admin.user.fields.signature_label'|trans}}</th>
+    <td>
+    {% if profile.signature %}
+        {{ profile.signature }}
+      {% else %}
+        {{'admin.user.fields.empty'|trans}}
+      {% endif %}
+    </td>
+  </tr>
+
+  <tr>
+    <th>{{'admin.user.fields.about_label'|trans}}</th>
+    <td>
+    {% if profile.about %}
+      <div class="editor-text">
+        {{ profile.about|cdn|raw }}
+      </div>
+      {% else %}
+        {{'admin.user.fields.empty'|trans}}
+      {% endif %}
+    </td>
+  </tr>
+
+  <tr>
+    <th>{{'admin.user.manage.user_show.fields.personal_website_label'|trans}}</th>
+    <td>
+      {% if profile.site %}
+        {{ profile.site }}
+      {% else %}
+        {{'admin.user.fields.empty'|trans}}
+      {% endif %}
+    </td>
+  </tr>
+
+  <tr>
+    <th>{{'user.fileds.microblog'|trans}}</th>
+    <td>
+      {% if profile.weibo %}
+        {{ profile.weibo }}
+      {% else %}
+        {{'admin.user.fields.empty'|trans}}
+      {% endif %}
+    </td>
+  </tr>
+
+  <tr>
+    <th>{{'user.fileds.wechat'|trans}}</th>
+    <td>
+      {% if profile.weixin %}
+        {{ profile.weixin }}
+      {% else %}
+        {{'admin.user.fields.empty'|trans}}
+      {% endif %}
+    </td>
+  </tr>
+
+  <tr>
+    <th>{{ 'user.fileds.qq'|trans }}</th>
+    <td>
+      {% if profile.qq %}
+        {{ profile.qq }}
+      {% else %}
+        {{'admin.user.fields.empty'|trans}}
+      {% endif %}
+    </td>
+  </tr>
+
+</table>
+<hr>
+<table class="table table-striped table-condenseda table-bordered">
+    {% if fields %}
+  {% for field in fields %}
+    <tr>
+        <th width="25%">{{field.title}}</th>
+        <td>
+          {% if profile[field.fieldName] %}
+            {% if field.type=="date"%}
+            {{ profile[field.fieldName]|date("Y-m-d") }}
+            {% else %}
+            {{ profile[field.fieldName]|space2nbsp|purify_html|raw|nl2br }}
+            {% endif %}
+          {% else %}
+            {{'admin.user.fields.empty'|trans}}
+          {% endif %}
+        </td>
+    </tr>
+  {% endfor %}
+  {% endif %}
+  </table>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-primary" data-dismiss="modal">{{'form.btn.close'|trans}}</button>
+{% endblock %}

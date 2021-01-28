@@ -1,0 +1,59 @@
+{% import "macro.html.twig" as web_macro %}
+<li id="post-{{ post.id }}" data-user-id="{{ author.id }}" class="thread-post thread-post-{{ post.id }} media media-comment user-id-{{author.id}}">
+  <div class="media-left">
+    {{ web_macro.user_avatar(author, 'user-avatar', 'avatar-sm', true) }}
+  </div>
+
+  <div class="media-body">
+    <div class="metas title">
+      {% include 'thread/post-manage-menu.html.twig' %}
+        {% if not author.destroyed|default(0) %}
+          <a href="{{ path('user_show', {id:author.id}) }}" class="nickname">{{ author.nickname }}</a>
+        {% else %}
+          <a class="color-gray">{{ 'user.user_had_destroyed'|trans }}</a>
+        {% endif %}
+      <span class="bullet">•</span>
+      <span class="color-gray">{{post.createdTime|smart_time}} </span>
+      {% if author.badgeTitle|default(null) %}<span class="mll color-danger">({{ dict_text('classroomRoles', author.badgeTitle) }}) </span>{% endif %}
+    </div>
+    <div class="editor-text">{{ post.content|at(post.ats)|cdn|raw }}</div>
+    {% include 'attachment/widget/list.html.twig' with {targetType:'classroom.thread.post', targetId:post.id} %}
+    <div class="comment-sns">
+      {% include 'thread/post-interaction.html.twig' %}
+    </div>
+    <div class="thread-subpost-container subcomments clearfix {% if not post.subposts %}hide{% endif %}">
+      <div class="thread-subpost-content">
+        {{ render(controller('AppBundle:Thread:subposts', {threadId: post.threadId|default(0), postId:post.id, less:true})) }}
+      </div>
+      <div class="thread-subpost-morebar clearfix {% if not post.subposts %}hide{% endif %}">
+        {% if service.canAccess('post.create', post) %}
+          <button class="btn btn-default btn-xs pull-right js-toggle-subpost-form">{{'my.teaching.open_course.comment.posted_btn'|trans}}</button>
+        {% endif %}
+        <span class="thread-subpost-moretext {% if post.subposts <= 5 %}hide{% endif %}"><span class="color-gray">{{'my.teaching.open_course.comment.posted_nun'|trans({'%post.subposts%': post.subposts - 5})}}</span><a href="javascript:;" class="js-post-more">{{'my.teaching.open_course.comment.view_post_btn'|trans}}</a></span>
+      </div>
+
+      {% set goto = goto|default(path('homepage')) %}
+      {% if service.canAccess('post.create', post) and app.user %}
+
+        {% set postReplyUrl =  postReplyUrl|default(path('thread_post_reply', {threadId:post.threadId, postId:post.id})) %}
+        <form method="post" action="{{ postReplyUrl }}" class="thread-subpost-form {% if post.subposts %}hide{% endif %}">
+          <div class="form-group">
+            <div class="controls">
+              <textarea class="form-control" name="content" data-display="{{'my.teaching.open_course.comment.content'|trans}}"></textarea>
+            </div>
+          </div>
+          <div class="form-group">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+            <button type="submit" data-loading-text="{{'form.btn.reply.submiting'|trans}}" class="btn btn-primary btn-sm pull-right">{{'form.btn.reply'|trans}}</button>
+          </div>
+        </form>
+      {% else %}
+        <div class="empty">
+          {% set loginUrl = path('login',{goto:goto}) %}
+          {% set registerUrl = path('register',{goto:goto}) %}
+          {{ 'my.teaching.open_course.comment.un_login.tips'|trans({'%loginUrl%':loginUrl,'%registerUrl%':registerUrl})|raw }}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</li>

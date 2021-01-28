@@ -1,0 +1,86 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% set modal_class= "cd-modal-dialog modal-lg" %}
+
+{% block title %}
+  {{ task.title }}
+  {% if type == 'visitor' %}
+    {% set exportFileName = 'course-live-statistics-visitor-list' %}
+    {{ 'course.live_statistics.visitor_list'|trans }}
+  {% else %}
+    {% set exportFileName = 'course-live-statistics-checkin-list' %}
+    {{ 'course.live_statistics.checkin_list'|trans }}
+  {% endif %}
+  {% include 'export/export-btn.html.twig' with
+    {
+      'exportFileName' : exportFileName,
+      'targetFormId': 'export-form',
+      'exportClass': 'cd-icon-download',
+      'exportWebpack': 'ture',
+      'showDownLoadText': 0,
+    } %}
+{% endblock %}
+
+{% block body %}
+  <form id="export-form" class="hidden">
+    <input type="hidden" name="liveId" value="{{ liveId }}">
+    <input type="hidden" name="taskId" value="{{ task.id }}">
+    <input type="hidden" name="courseId" value="{{ task.courseId }}">
+  </form>
+  {% if type =='checkin' %}
+    <ul class="cd-tabs" id="cd-tabs">
+      <li class="{% if status|default('all') == 'all' %}active{% endif %}">
+        <a href="javascript:;"
+           data-url="{{ path('live_statistics_modal',{taskId:task.id,liveId:liveId,type:type}) }}"
+           data-toggle="cd-tabs">{{ 'course.live_statistics.checkin_status.all'|trans }}</a>
+      </li>
+      <li class="{% if status|default('all') == 'unchecked' %}active{% endif %}">
+        <a href="javascript:;"
+           data-url="{{ path('live_statistics_modal',{taskId:task.id,liveId:liveId,type:type,status:'unchecked'}) }}"
+           data-toggle="cd-tabs"> {{ 'course.live_statistics.checkin_status.not_checked'|trans }}</a>
+      </li>
+      <li class="{% if status|default('all') == 'checked' %}active{% endif %}">
+        <a href="javascript:;"
+           data-url="{{ path('live_statistics_modal', {taskId:task.id,liveId:liveId,type:type,status:'checked'}) }}"
+           data-toggle="cd-tabs">{{ 'course.live_statistics.checkin_status.checked'|trans }}</a>
+      </li>
+    </ul>
+    <div id="checkin-tabs-panel" class="table-responsive cd-table-responsive">
+      {% include 'course-manage/live/checkin-data.html.twig' with {statistics:statistics} %}
+    </div>
+  {% else %}
+    <div class="table-responsive cd-table-responsive">
+      <table class="table cd-table">
+        <thead>
+        <tr>
+          <th>{{ 'user.fields.username_label'|trans }}</th>
+          <th>{{ 'course.live_statistics.first_join'|trans }}</th>
+          <th>{{ 'course.live_statistics.last_leave'|trans }}</th>
+          <th>{{ 'course.live_statistics.learn_time'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in statistics %}
+          <tr>
+            <td>{{ user.nickname|default('') }}</td>
+            <td>{{ user.firstJoin|date('Y-m-d H:i:s')|default('') }}</td>
+            <td>{{ user.lastLeave|date('Y-m-d H:i:s')|default('') }}</td>
+            <td>{{ (user.learnTime/60)|round(0, 'ceil')|default(0) }}</td>
+          </tr>
+        {% else %}
+          <tr>
+            <td colspan="20">
+              <div class="empty">{{ 'course.live_statistics.empty_data'|trans }}</div>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
+  {{ web_macro.paginator(paginator) }}
+{% endblock %}
+
+{% block footer %}
+  {% do script(['app/js/course-manage/live/modal/index.js']) %}
+  <button id="course-title-cancel" type="button" class="cd-btn cd-btn-link-default" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
+{% endblock %}

@@ -1,0 +1,23 @@
+<div class="row">
+  {% for entrance in userQuickEntrances %}
+    {% set tabMenu = first_child_permission_by_code(entrance.code, false) %}
+    {% if tabMenu.mode|default('') == 'capsules' %}
+      {% set tabMenu = first_child_permission(tabMenu) %}
+    {% endif %}
+    <div class="col-md-3">
+      <a class="{{ 'text-center admin-function ' ~ entrance.class }}" href="{{ permission_path(tabMenu) }}"
+         target="{{ entrance.target|default('_self') }}">
+        <div class="admin-function__icon"><i class="{{ 'es-icon es-icon-entry-' ~ entrance.icon }}"></i></div>
+        <div class="admin-function__name">{{ entrance.text }}</div>
+      </a>
+    </div>
+  {% endfor %}
+  <div class="col-md-3">
+    <div class="admin-function-choose">
+      <a class="admin-function-btn" data-toggle="modal" data-target="#functionModal">
+        <i class="es-icon es-icon-add"></i><span>{{ 'admin_v2.edit_quick_entrance.btn'|trans }}</span>
+      </a>
+    </div>
+  </div>
+  {% include 'admin-v2/default/quick-entrance/modal.html.twig' %}
+</div>

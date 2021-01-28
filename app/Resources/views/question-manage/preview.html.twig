@@ -1,0 +1,30 @@
+{% extends 'layout.html.twig' %}
+
+{% set lang = app.request.getLocale() %}
+
+{% if lang == 'en' %}
+  {% do script(['libs/vue.js','libs/item-bank/lib/itemBank.umd.min.js', 'libs/item-bank/lib/locale/en-US.js', 'app/js/question-manage/preview/index.js']) %}
+{% else %}
+  {% do script(['libs/vue.js','libs/item-bank/lib/itemBank.umd.min.js','app/js/question-manage/preview/index.js']) %}
+{% endif %}
+
+{% block title %}{{'course.question_manage.preview'|trans}}{% endblock %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  {% if maincolor != 'default' and setting('theme.code', 'jianmo') == 'jianmo' %}
+    <link href="{{ asset('static-dist/libs/item-bank/lib/styles/item-bank-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
+  {% else %}
+    <link href="{{ asset('static-dist/libs/item-bank/lib/styles/item-bank.css') }}" rel="stylesheet" />
+  {% endif %}
+{% endblock %}
+
+{% block body %}
+  {% verbatim %}
+    <div id="app">
+    </div>
+  {% endverbatim %}
+
+  <input type="hidden" name="item" value="{{ item|json_encode }}">
+  {% include 'attachment-upload/upload-data.html.twig'  %}
+{% endblock %}

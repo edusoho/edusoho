@@ -1,0 +1,102 @@
+{% extends 'v2/layout.html.twig' %}
+
+{% block title %}{{'user.settings.verification'|trans}} - {{ parent() }}{% endblock %}
+
+{% if app.user.approvalStatus in ['unapprove', 'approve_fail'] %}
+	{% do script(['libs/jquery-validation.js', 'app/js/settings/approval/index.js']) %}
+{% endif %}
+
+{% set side_nav = 'approval' %}
+
+{% block page_title %}
+  {{'user.settings.verification.content_title'|trans}}
+{% endblock %}
+
+{% block main_body %}
+  {% if app.user.approvalStatus == 'approving' %}
+    <div class="cd-feedback cd-feedback-info">
+      <div class="feedback-icon"><i class="cd-icon cd-icon-info"></i></div>
+      <div class="feedback-title">{{ 'user.settings.verification.approving_title_tips'|trans}}</div>
+      <div class="feedback-content">{{ 'user.settings.verification.approving_content_tips'|trans}}</div>
+      <div class="approval-info">
+        <p>{{'user.fileds.realname'|trans}}：{{ blur_user_name(approval.truename) }}</p>
+        <p>{{'user.fields.idcard_label'|trans}}：{{ blur_idcard_number(approval.idcard) }}</p>
+      </div>
+    </div>
+  {% elseif  app.user.approvalStatus == 'approved' %}
+    <div class="cd-feedback cd-feedback-info">
+      <div class="feedback-icon"><i class="cd-icon cd-icon-info"></i></div>
+      <div class="feedback-title">{{'user.settings.verification.approved_title_tips'|trans}}</div>
+      <div class="feedback-content">{{'user.settings.verification.approved_content_tips'|trans}}</div>
+      <div class="approval-info">
+        <p>{{'user.fileds.realname'|trans}}：{{profile.truename}}</p>
+        <p>{{'user.fields.idcard_label'|trans}}：{{profile.idcard}}</p>
+      </div>
+    </div>
+  {% elseif  app.user.approvalStatus == 'unapprove' %}
+    <div class="alert cd-alert cd-alert-warning">
+      {{'user.settings.verification.unapprove_tips'|trans}}
+    </div>
+  {% elseif app.user.approvalStatus == 'approve_fail' %}
+    <div class="alert cd-alert cd-alert-danger">
+      {% if approval.note|default() %}
+        {{'user.settings.verification.approve_failed_reason_tips'|trans({'%reason%':  approval.note})}}
+      {% else %}
+        {{'user.settings.verification.approve_failed_tips'|trans}}
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% if app.user.approvalStatus in ['unapprove', 'approve_fail'] %}
+    <form id="approval-form" class="row cd-row" method="post" enctype="multipart/form-data">
+      <div class="col-md-5">
+        <div class="form-group cd-form-group">
+          <label class="required" for="truename">{{'user.fileds.realname'|trans}}</label>
+          <input type="text" id="truename" name="truename" class="form-control js-input-val" value="">
+        </div>
+      </div>
+      <div class="col-md-5 col-md-offset-1">
+        <div class="form-group cd-form-group">
+          <label class="required" for="idcard">{{'user.fields.idcard_label'|trans}}</label>
+          <input type="text" id="idcard" name="idcard" class="form-control js-input-val" value="">
+        </div>
+      </div>
+      <div class="col-md-5">
+        <div class="es-id-card" id="id-card-front">
+          <div class="card-icon">
+            <i class="cd-icon cd-icon-id-front"></i>
+          </div>
+          <div class="card-title">{{'user.fields.idcard_front_title'|trans }}</div>
+          <label for="faceImg" class="card-label">
+            <input id="faceImg" type="file" name="faceImg" accept="image/bmp,image/jpeg,image/png"
+            class="js-upload-input" data-target="#id-card-front">
+          </label>
+          <p class="card-img-tip cd-text-sm cd-dark-minor">{{ 'user.settings.upload.img.tip'|trans }}</p>
+        </div>
+      </div>
+      <div class="col-md-5 col-md-offset-1">
+        <div class="es-id-card" id="id-card-back">
+          <div class="card-icon">
+            <i class="cd-icon cd-icon-id-back"></i>
+          </div>
+          <div class="card-title">{{'user.fields.idcard_back_title'|trans }}</div>
+          <label for="backImg" class="card-label">
+            <input id="backImg" type="file" name="backImg" accept="image/bmp,image/jpeg,image/png"
+            class="js-upload-input" data-target="#id-card-back">
+          </label>
+          <p class="card-img-tip cd-text-sm cd-dark-minor">{{ 'user.settings.upload.img.tip'|trans }}</p>
+        </div>
+      </div>
+      <div class="col-md-11 cd-mt16">
+        <div class="cd-mb16 cd-text-medium cd-dark-major">{{'user.settings.verification.notice'|trans}}</div>
+        <div class="cd-text-sm cd-dark-minor cd-mb32" style="line-height: 20px">
+          {{'user.settings.verification.notice_content'|trans|raw}}
+        </div>
+      </div>
+      <div class="col-md-5">
+        <button type="submit" class="btn cd-btn cd-btn-primary cd-btn-lg" data-loading-text="{{ 'form.btn.submit.submiting'|trans }}">{{'form.btn.submit'|trans}}</button>
+      </div>
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    </form>
+  {% endif %}
+{% endblock %}

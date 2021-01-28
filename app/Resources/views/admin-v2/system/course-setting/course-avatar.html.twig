@@ -1,0 +1,27 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_setting_course_avatar' %}
+{% set script_controller = 'setting/default-course-picture' %}
+
+{% block main %}
+
+
+{{ web_macro.flash_messages() }}
+<form class="form-horizontal" method="post" id="course-form" novalidate>
+  <div class="form-group">
+    <div class="controls col-md-offset-1 radios clearfix" id="defaultCoursePicture">
+      {{ radios('defaultCoursePicture', {1:'admin.setting_course.course_avatar.customer_default_avatar'|trans, 0:'admin.setting_course.course_avatar.system_default_avatar'|trans}, defaultSetting.defaultCoursePicture|default(0)) }}
+      <p>{{'admin.setting_course.course_avatar.tips'|trans|raw}}</p>
+      {% include 'admin-v2/system/course-setting/default-course-picture.html.twig' %}
+      <div>
+        <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
+      </div>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </div> 
+</form>
+
+{% endblock %}
+
+
+

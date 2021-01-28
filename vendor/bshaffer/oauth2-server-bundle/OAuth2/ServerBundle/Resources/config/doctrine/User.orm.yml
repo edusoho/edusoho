@@ -1,0 +1,21 @@
+OAuth2\ServerBundle\Entity\User:
+    type: entity
+    table: oauth_user
+    id:
+        username:
+            type:       string
+            length:     255
+    fields:
+        password:
+            type:       string
+            length:     255
+        salt:
+            type:       string
+            length:     255
+        roles:
+            type:       simple_array
+            nullable:   true
+        scopes:
+            type:       simple_array
+            nullable:   true
+    lifecycleCallbacks: {  }

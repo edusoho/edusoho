@@ -1,0 +1,117 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_invite_set' %}
+{% set script_controller = 'invite/setting' %}
+
+{% block main %}
+  {{ web_macro.flash_messages() }}
+    <form class="form-horizontal" method="post"  action="{{ path('admin_v2_invite_set') }}" id="invite-form">
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label>{{'admin.invite_setting'|trans}}</label>
+        </div>
+        <div class="controls col-md-7 radios">
+          {{ radios('invite_code_setting', {1:'form.radio_btn.open'|trans, 0:'form.radio_btn.close'|trans}, setting('invite').invite_code_setting|default(0)) }}
+        </div>
+      </div>
+
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label for="promoted_user_batchId">{{'admin.invite_setting.promoted_user_award'|trans}}</label>
+        </div>
+        <div class="controls col-md-7">
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" name="promoted_user_enable" value="{{ inviteSetting.promoted_user_enable|default(0) }}"  {% if inviteSetting.promoted_user_enable|default(0) %}checked {% endif %}> {{ 'admin.setting.invite.promoted_user_enable'|trans }}
+            </label>
+          </div>
+          <div class="{% if not inviteSetting.promoted_user_enable|default(0) %}hidden {% endif %}  js-promoted-user-content user-content" style="padding-top: 5px;padding-bottom: 5px">
+            <a class="btn btn-sm btn-default mtm mll" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_coupon_chooser',{'type': 'promoted'}) }}">{{ 'admin.setting.invite.promoted_user_enable'|trans }}</a>
+            <input type="text" class="hidden js-user-batchId" id="promoted_user_batchId" name="promoted_user_batchId" value="{{ inviteSetting.promoted_user_batchId|default('')}}">
+            {% include 'admin-v2/marketing/invite/coupon-batch-table.html.twig' with {'type': 'promoted', 'batchId': inviteSetting.promoted_user_batchId|default('')}%}
+          </div>
+        </div>
+      </div>
+
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label for="promote_user_batchId">{{'admin.invite_setting.promote_user_award'|trans}}</label>
+        </div>
+        <div class="controls col-md-7">
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" name="promote_user_enable" value="{{ inviteSetting.promote_user_enable|default(0) }}"  {% if inviteSetting.promote_user_enable|default(0) %}checked {% endif %}> 发放优惠券
+            </label>
+          </div>
+          <div class="{% if not inviteSetting.promote_user_enable|default(0) %}hidden {% endif %} js-promote-user-content user-content" style="padding-top: 5px;padding-bottom: 5px">
+            <a class="btn btn-sm btn-default mtm mll" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_coupon_chooser',{'type': 'promote'}) }}">选择优惠劵</a>
+            <input type="text" class="hidden js-user-batchId" id="promote_user_batchId" name="promote_user_batchId" value="{{ inviteSetting.promote_user_batchId|default('')}}">
+            {% include 'admin-v2/marketing/invite/coupon-batch-table.html.twig' with {'type': 'promote','batchId': inviteSetting.promote_user_batchId|default('')}%}
+          </div>
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-md-2 control-label">
+          <label for="get_coupon_setting">{{'admin.setting.invite.get_coupon_setting'|trans}}</label>
+        </div>
+
+        <div class="col-md-7 radios " style="margin-top: 5px">
+          {{ radios('get_coupon_setting', {0:'admin.setting.invite.get_coupon_setting.register'|trans, 1:'admin.setting.invite.get_coupon_setting.pay'|trans}, inviteSetting.get_coupon_setting|default('1')) }}
+        </div>
+      </div>
+
+      <div class="row form-group">
+        <div class="col-md-2 control-label" style="white-space:nowrap;">
+          <label>{{'admin.invite_setting.invite_infomation_template'|trans}}</label>
+        </div>
+        <div class="controls col-md-7 radios">
+          <textarea class="form-control" rows="5" name="inviteInfomation_template">{{inviteInfomation_template}} </textarea>
+        </div>
+      </div>
+
+      <div class="alert alert-info">
+        <p><strong>{{'admin.invite_setting.notification_variable_description'|trans}}：</strong></p>
+        <ul>
+          <li>{% verbatim %}{{siteName}}:{% endverbatim %}{{'site.online_school_name'|trans}}</li>
+          <li>{% verbatim %}{{registerUrl}}:{% endverbatim %}{{'site.register_link_url'|trans}}</li>
+        </ul>
+      </div>
+
+      <fieldset>
+        <legend>{{ 'admin.invite_setting.coupon_limit_remind'|trans }}</legend>
+        <div class="form-group">
+          <div class="controls col-md-8">
+            <span class="text-muted">{{ 'admin.invite_setting.coupon_limit_remind_hint'|trans }}</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="controls col-md-8 col-md-offset-1">
+            {{ 'admin.invite_setting.rewards_not_reach'|trans }}
+            <input type="text" name="remain_number" class="form-control width-input width-input-large" placeholder="{{ 'admin.invite_setting.rewards_count_required'|trans }}" value="{{ inviteSetting.remain_number|default('') }}">
+            {{ 'admin.invite_setting.send_remind_sms_to_admin'|trans }}
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="controls col-md-8 col-md-offset-1">
+            {{ 'admin.invite_setting.mobile_for_receive'|trans }}
+            <input type="text" name="mobile" class="form-control width-input width-input-large" placeholder="{{ 'admin.invite_setting.mobile_required'|trans }}" value="{{ inviteSetting.mobile|default('') }}">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="controls col-md-8">
+            <span class="text-muted">{{ 'admin.invite_setting.sms_enable_hint'|trans }}</span>
+          </div>
+        </div>
+      </fieldset>
+
+      <div class="row form-group">
+        <div class="col-md-2 control-label"></div>
+        <div class="controls col-md-8">
+          <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>  
+        </div>
+      </div>
+
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    </form>
+
+{% endblock %}

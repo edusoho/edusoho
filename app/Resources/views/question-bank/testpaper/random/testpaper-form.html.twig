@@ -1,0 +1,49 @@
+{% extends 'my/my-teaching.html.twig' %}
+
+{% block title %}
+  {{ 'my.teaching.question_bank.testpaper.automatic_create'|trans }} - {{ parent() }}
+{% endblock %}
+{% set side_nav = 'my-question-bank' %}
+{% set active_tab = 'testpaper-list' %}
+
+{% do script(['libs/select2.js', 'libs/jquery-nouislider.js', 'libs/jquery-validation.js','libs/es-ckeditor/ckeditor.js','app/js/question-bank/testpaper/random-create/index.js'])  %}
+
+{% block main %}
+  <div class="panel panel-default panel-col">
+    <div class="panel-heading">{{ questionBank.name }}</div>
+  </div>
+
+  <div>
+    {% include 'question-bank/header-navbar.html.twig' %}
+    <div class="panel panel-default panel-col">
+      {% block panel_body %}
+      <div class="panel-body question-list-container js-testpaper-container">
+        <div class="mtl">
+          <form id="testpaper-form" class="form-horizontal" method="post" data-auto-submit="false" data-have-base-fields="true" data-have-build-fields="true">
+            <div id="colorpicker">
+              <div class="sliders" id="red"></div>
+              <div class="sliders" id="green"></div>
+              <div class="sliders" id="blue"></div>
+              <div class="result"></div>
+            </div>
+
+            {% include 'question-bank/testpaper/manage/base-info.html.twig' %}
+            {% include 'question-bank/testpaper/random/questions-info.html.twig'%}
+
+            <div class="form-group mbm">
+              <div class="col-md-8 col-md-offset-1 controls">
+                <button id="testpaper-create-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" type="button" class="cd-btn cd-btn-primary" data-role="submit" data-check-url="{{ path('question_bank_manage_random_testpaper_build_check', {id: questionBank.id, type: 'random_testpaper'}) }}">{{'course.testpaper_manage.create.questions_setup.save_btn'|trans}}</button>
+                <a href="{{ path('question_bank_manage_testpaper_list',{id:questionBank.id}) }}" class="btn btn-link  ">{{'form.btn.return'|trans}}</a>
+              </div>
+            </div>
+
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+          </form>
+        </div>
+      </div>
+      {% endblock %}
+    </div>
+
+  </div>
+{% endblock %}

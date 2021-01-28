@@ -1,0 +1,20 @@
+{% extends "activity/content-layout.html.twig" %}
+
+{% do script(['flashactivity/js/show/index.js']) %}
+
+{% set flash = activity.ext|default(null) %}
+{% set flashFile = flash.file|default(null) %}
+
+{% block body %}
+    <div class="iframe-parent-content iframe-parent-full">
+        {% if flashFile|default(null) %}
+          {% set flashPlayer = flash_player(flashFile, app.request.secure) %}
+            <div  id="flash-player" data-uri="{{ flashPlayer.url|default('') }}" data-finish-type="{{ flash.finishType }}" data-finish-detail="{{ flash.finishDetail }}">
+            </div>
+        {% else %}
+            {% include 'activity/file-not-found.html.twig' with {type:'flash'} %}
+        {% endif %}
+
+    </div>
+
+{% endblock %}

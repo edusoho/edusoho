@@ -1,0 +1,122 @@
+.es-intro-help {
+  padding: 0;
+  &.multistep {
+    margin-top: 128px !important;
+    .introjs-nextbutton,
+    .done-button {
+      margin: 24px 24px 24px 16px;
+      padding: 12px 18px;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1;
+      .border-radius;
+    }
+    .introjs-skipbutton {
+      i {
+        font-size: 34px;
+        color: #fff;
+      }
+    }
+    &:not(.es-intro-normal-tip) {
+      .introjs-nextbutton {
+        position: absolute;
+        right: 0;
+        bottom: 10px;
+      }
+    }
+  }
+}
+
+.es-intro-single {
+  position: relative;
+  margin-top: 128px !important;
+  width: 822px;
+  .introjs-skipbutton {
+    background: transparent;
+    border: none;
+    position: absolute;
+    right: 0;
+    top: -4px;
+    i {
+      font-size: 34px;
+      color: #fff;
+    }
+    &:hover {
+      background: transparent;
+      border: none;
+    }
+  }
+}
+
+.es-intro-normal-tip {
+  .introjs-tooltiptext {
+    padding: 24px 24px 0 24px;
+  }
+  &.multistep {
+    margin-top: auto !important;
+    .introjs-skipbutton {
+      top: 10px;
+      i {
+        font-size: 14px;
+        color: @gray;
+      }
+    }
+    .introjs-prevbutton {
+      color: @cd-dark-major;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1;
+      .es-transition;
+      &:hover {
+        .es-transition;
+        color: @cd-dark-minor;
+      }
+    }
+  }
+}
+
+.course-manage-spread {
+  min-width: 822px;
+  min-height: 1169px;
+  background-image: url("@{img-src}spread.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-image: -webkit-image-set(url("@{img-src}spread.png") 1x,url("@{img-src}spread@2x.png") 2x);
+}
+
+
+.course-manage-intro {
+  position: fixed;
+  bottom: 30px;
+  z-index: 1000;
+  .course-manage-intro__outer {
+    padding: 0 15px;
+    width: 72px;
+  }
+  .course-manage-intro__inner {
+    width: 42px;
+    height: 42px;
+    text-align: center;
+    .border-radius(50%);
+    color: #fff;
+    background-color: @brand-primary;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  i {
+    line-height: 42px;
+    font-size: 16px;
+  }
+  .course-manage-intro__tip {
+    font-size: 12px;
+    line-height: 1;
+    color: @tip-color;
+  }
+}
+
+.course-manage-intro-float {
+  position: absolute;
+  bottom: 40px;
+  right: 44px !important;
+}

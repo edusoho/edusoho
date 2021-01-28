@@ -1,0 +1,97 @@
+.fc-agenda-view {
+  .week {
+    padding-top: 11px;
+    padding-left: 11px;
+    text-align: left;
+    font-size: 12px;
+    line-height: 1;
+    font-weight: 400;
+    color: @cd-dark-major;
+  }
+
+  .day {
+    padding-right: 16px;
+    padding-bottom: 11px;
+    text-align: right;
+    font-size: 24px;
+    line-height: 1;
+    font-weight: 400;
+    color: @cd-dark-major;
+  }
+
+  .fc th {
+    height: 60px;
+  }
+
+  .fc-time-grid .fc-slats .fc-minor td {
+    border-top-style: none;
+  }
+
+  .fc-time-grid .fc-slats td {
+    height: 20px;
+  }
+
+  .fc-time-grid-event {
+    min-height: 20px;
+    .fc-content {
+      padding-left: 2px;
+    }
+    .es-transition;
+    &:hover {
+      .es-transition;
+      z-index: 10 !important;
+    }
+  }
+
+  .fc-short {
+    .fc-content {
+      .fc-title {
+        display: inline-block;
+        width: 70%;
+        @media (max-width: @screen-sm-max) {
+          width: 47%;
+        }
+      }
+      .fc-time {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .fc-content {
+    .fc-title {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      word-wrap: normal;
+    }
+  }
+
+  .fc-time-grid {
+    .fc-event-container {
+      margin-left: 0;
+    }
+  }
+
+  .fc-slats {
+    tbody > tr {
+      &:first-child {
+        .fc-axis span {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .fc-axis {
+    position: relative;
+    border-top: 0 !important;
+    span {
+      position: absolute;
+      top: -5px;
+      left: 5px;
+      color: @cd-dark-minor;
+    }
+  }
+}

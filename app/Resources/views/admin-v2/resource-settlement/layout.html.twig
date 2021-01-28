@@ -1,0 +1,47 @@
+{% extends 'admin-v2/layout.html.twig' %}
+{% import "admin-v2/macro.html.twig" as admin_macro %}
+
+{% set script_controller = 'cloud-center/resource-settlement' %}
+
+{% set menu = menu %}
+
+{% block content_header %}
+  <div class="jumbotron">
+    <div class="container">
+      <div class="row ptm pbm">
+        <div class="col-md-6">
+          <strong>{{ 'admin_v2.app_center.resource_settlement.supplier_name'|trans }}
+            ：{{ merchant.supplier_name }}</strong>
+        </div>
+      </div>
+      <div class="row ptm pbm">
+        <div class="col-md-6">
+          {{ 'admin_v2.app_center.resource_settlement.supplier_contact_name'|trans }}
+          ：{{ merchant.supplier_contact_name }}
+        </div>
+        {% if merchant.coop_level_name %}
+          <div class="col-md-6">
+            {{ 'admin_v2.app_center.resource_settlement.coop_level_name'|trans }}：{{ merchant.coop_level_name }}
+          </div>
+        {% endif %}
+      </div>
+      <div class="row ptm pbm">
+        <div class="col-md-6">
+          {{ 'admin_v2.app_center.resource_settlement.supplier_mobile'|trans }}：{{ merchant.supplier_mobile }}
+        </div>
+      </div>
+      <div class="row ptm pbm">
+        <div class="col-md-6">
+          {{ 'admin_v2.app_center.resource_settlement.supplier_email'|trans }}：{{ merchant.supplier_email }}
+        </div>
+      </div>
+      <div class="row ptm pbm">
+        <div class="col-md-6">
+          {{ 'admin_v2.app_center.resource_settlement.address'|trans }}
+          ：{{ merchant.supplier_province }}{{ merchant.supplier_city }}{{ merchant.supplier_area }}{{ merchant.supplier_address }}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+

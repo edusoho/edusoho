@@ -1,0 +1,73 @@
+.btn-gray {
+  &:hover, 
+  &:focus,
+  &.focus {
+    color: @brand-primary;
+  }
+}
+
+.btn-graylight {
+  &:hover, 
+  &:focus,
+  &.focus {
+    color: @brand-primary;
+  }
+}
+
+.btn-primary {
+  border-color: darken(@brand-primary, 10%);
+  background-color: @brand-primary;
+  &:hover,
+  &:focus,
+  &.focus,
+  &.active {
+    background: darken(@brand-primary, 8%);
+  }
+}
+
+.btn-circle {
+  &:hover {
+    color: @brand-primary;
+    border-color: @brand-primary;
+  }
+  &.active {
+    background: @brand-primary;
+    border-color: @brand-primary;
+  }
+  &.primary {
+    color: #fff;
+    border-color: @brand-primary;
+    background: @brand-primary;
+  }
+}
+
+.btn-ghost {
+  &:hover {
+    color: @brand-primary;
+  }
+}
+
+.btn-transparent {
+  border-color: @brand-primary;
+  color: @brand-primary;
+  &:after {
+    background-color: @brand-primary;
+  }
+}
+
+.btn-tag {
+  color: @brand-primary;
+  background-color: lighten(@brand-primary, 35%);
+  &.active,
+  &:hover {
+    background-color: @brand-primary;
+  }
+}
+
+.btn-link {
+  &:hover, 
+  &:focus,
+  &.focus {
+    color: @brand-primary;
+  }
+}

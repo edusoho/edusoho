@@ -1,0 +1,74 @@
+{#
+  mode的取值有：
+    full：该模式下显示折扣价、原价、打折
+    price: 该模式下如有打折活动则显示折扣价，没有打折活动就显示为原价
+    originPrice：该模式下只显示原价
+    discount：该模式下只显示折扣
+#}
+
+{% set shows = shows|default(['full']) %}
+{% set priceType = (setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin') ? 'coin' : 'default'  %}
+
+<span class="course-price-widget">
+
+  {% if courseSet.discountId and courseSet.locked == 0 %}
+
+    {% if 'full' in shows or 'price' in shows %}
+      {% if priceType == 'coin' %}
+        <span >{{ course.price * setting('coin.cash_rate')}} {{setting('coin.coin_name', 'finance.coin'|trans)}}</span>
+      {% else %}
+        <span >{{'course.price.RMB'|trans({'%price%': course.price})}}</span>
+      {% endif %}
+    {% endif %}
+
+    {% if 'full' in shows or 'originPrice' in shows %}
+      {% if priceType == 'coin' %}
+        <span class="origin-price"><del>{{course.originPrice * setting('coin.cash_rate')}} {{setting('coin.coin_name', 'finance.coin'|trans)}}</del></span>
+      {% else %}
+        <span class="origin-price"><del>{{'course.origin_price.RMB'|trans({'%originPrice%': course.originPrice})}}</del></span>
+      {% endif %}
+    {% endif %}
+
+    {% if 'full' in shows or 'discount' in shows %}
+
+      <span class="discount">
+        {% if (courseSet.discount == 0) or (priceType == 'coin' and course.originPrice == 0) or (priceType == 'default' and course.originPrice == 0) %}
+          {{'course.price.limited_time_free'|trans}}
+        {% else  %}
+          {{'course.price.discount'|trans({'%discount%': courseSet.discount|round(2, 'common') })}}
+        {% endif %}
+      </span>
+
+    {% endif %}
+
+  {% else %}
+
+    {% if 'full' in shows or 'price' in shows %}
+      <span class="price">
+        {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+          {% if course.price > 0 %} 
+            {{ course.price * setting('coin.cash_rate')}}
+            {{setting('coin.coin_name', 'finance.coin'|trans)}} 
+          {% else %} 
+            <span class="color-success">{{'course.price.free'|trans}}</span> 
+          {% endif  %}
+        {% else %}
+          {% if course.price > 0 %}
+            {{'course.price.RMB'|trans({'%price%': course.price})}}
+          {% else %} 
+            <span class="color-success">{{'course.price.free'|trans}}</span> 
+          {% endif %} 
+        {% endif %}
+      </span>
+    {% endif %}
+
+    {% if 'originPrice' in shows %}
+      {% if priceType == 'coin' %}
+        <span class="origin-price">{{course.originPrice * setting('coin.cash_rate')}}{{setting('coin.coin_name', 'finance.coin'|trans)}}</span>
+      {% else %}
+        ¥<span class="origin-price">{{course.originPrice}}</span>
+      {% endif %}
+    {% endif %}
+
+  {% endif %}
+</span>

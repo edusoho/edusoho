@@ -1,0 +1,32 @@
+<li class="user-avatar-li nav-hover visible-xs">
+  <a href="javascript:;" class="user-avatar-toggle">
+    <img class="cd-avatar cd-avatar-xs" src="{{ asset('assets/img/default/avatar.png') }}">
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="user-nav-li-login">
+      <a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">
+        <i class="es-icon es-icon-denglu"></i>{{'homepage.header.login'|trans}}
+      </a>
+    </li>
+    <li class="user-nav-li-register">
+      <a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">
+        <i class="es-icon es-icon-zhuce"></i>{{'homepage.header.register'|trans}}
+      </a>
+    </li>
+    {% if mobile %}
+      <li class="mobile-switch js-switch-pc"><a href="javascript:;">
+        <i class="es-icon es-icon-qiehuan"></i>{{'homepage.header.switch_pc'|trans}}</a>
+      </li>
+    {% elseif setting('wap.version') == 1  %}
+      <li class="mobile-switch js-switch-mobile"><a href="javascript:;">
+        <i class="es-icon es-icon-qiehuan"></i>{{'homepage.header.switch_mobile'|trans}}</a>
+      </li>
+     {% endif %}
+    {% if show_switch_locale == 1 %}
+      {% include 'default/switch-language.html.twig' with {langClass: 'text-center visible-xs'} %}
+    {% endif %}
+  </ul>
+</li>
+
+<li class="visitor-li hidden-xs"><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{'homepage.header.login'|trans}}</a></li>
+<li class="visitor-li hidden-xs"><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{'homepage.header.register'|trans}}</a></li>

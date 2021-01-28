@@ -1,0 +1,9 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_crontab' %}
+
+{% block main %}
+
+  <div class="empty">{{ 'admin.crontab_job.error_hint'|trans|raw }}</div>
+
+{% endblock %}

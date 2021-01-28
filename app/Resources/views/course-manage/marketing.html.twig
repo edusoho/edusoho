@@ -1,0 +1,43 @@
+{% extends 'course-manage/layout.html.twig' %}
+
+{% block title %}
+  {{ 'course.marketing_setup'|trans }} - {{ course.title }} - {{ parent() }}
+{% endblock %}
+
+{% set course_side_nav = 'marketing' %}
+
+{% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js', 'libs/perfect-scrollbar.js', 'libs/bootstrap-datetimepicker.js', 'app/js/course-manage/marketing/index.js']) %}
+
+{% block page_title %}{{ 'course.marketing_setup'|trans }}{% endblock %}
+
+{% block main_body %}
+  <div>
+    {{ web_macro.flash_messages() }}
+    <form id="course-marketing-form" class="form-horizontal" action="{{ path('course_set_manage_course_marketing', {courseSetId: courseSet.id, courseId: course.id}) }}" method="post">
+      {% include 'course-manage/marketing/set-base-info.html.twig' %}
+
+      {% if 'ROLE_SUPER_ADMIN' in app.user.roles or 'ROLE_ADMIN' in app.user.roles or ('ROLE_TEACHER' in app.user.roles and setting('course.teacher_manage_marketing', 0) == 1) %}
+        {% include 'course-manage/marketing/set-join.html.twig' %}
+        <hr class="mb30  bg-border-color">
+        {% include 'course-manage/marketing/set-reward-point.html.twig' %}
+        {% include 'course-manage/marketing/set-rule.html.twig' %}
+        <hr class="mb30  bg-border-color">
+
+        {% if courseSet.type != 'live' %}
+          {% include 'course-manage/marketing/set-preview.html.twig' %}
+          <hr class="mb30  bg-border-color">
+        {% endif %}
+
+        {% include 'course-manage/marketing/set-service.html.twig' %}
+
+      {% endif %}
+
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-8">
+          <button id="course-submit" type="button" class="btn btn-primary" data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.save'|trans }}</button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+{% endblock %}

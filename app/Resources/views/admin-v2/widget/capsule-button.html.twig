@@ -1,0 +1,13 @@
+{% import "admin-v2/widget/macro.html.twig" as self_macro %}
+
+{% set subTabMenus = sub_permissions(currentMenu.code, 'capsule') %}
+
+{% if subTabMenus|default(null) %}
+	<ul class="nav nav-pills mbl small">
+    {% for m in subTabMenus %}
+		<li {% if m.code == capsule|default(null) %}class="active"{% endif %}>
+			{{ self_macro.menu_link_html(_context, m) }}
+		</li>
+    {% endfor %}
+	</ul>
+{% endif %}

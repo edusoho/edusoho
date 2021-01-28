@@ -1,0 +1,66 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}{{ assessment.name }} - {{ parent() }}{% endblock %}
+
+{% if app.request.query.get('action') is not empty %}
+  {% set showHeader = 1 %}
+{% else %}
+  {% set showHeader = 0 %}
+{% endif %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  {% if maincolor != 'default' and setting('theme.code', 'jianmo') == 'jianmo' %}
+    <link href="{{ asset('static-dist/libs/item-bank/lib/styles/item-bank-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
+  {% else %}
+    <link href="{{ asset('static-dist/libs/item-bank/lib/styles/item-bank.css') }}" rel="stylesheet" />
+  {% endif %}
+{% endblock %}
+
+{% block body %}
+  {% block header %}
+    {% if showHeader %}{{ parent() }}{% endif %}
+  {% endblock %}
+
+
+
+
+  {% if answerRecord.status == 'finished' %}
+    <div class="ibs-vue">
+      <div class="ant-row">
+        <div class="ant-col ant-col-offset-2 ibs-resutl-item">
+          <div class="item-bank-result">
+            <div class="clearfix item-bank-result-content">
+              {% if passedStatus == true %}
+                <img class="pull-left" src="{{ asset('static-dist/app/img/item-bank/passed.png') }}" srcset="{{ asset('static-dist/app/img/item-bank/passed.png') }} 1x, {{ asset('static-dist/app/img/item-bank/passed@2x.png') }} 2x">
+              {% else %}
+                <img class="pull-left" src="{{ asset('static-dist/app/img/item-bank/unpassed.png') }}" srcset="{{ asset('static-dist/app/img/item-bank/unpassed.png') }} 1x, {{ asset('static-dist/app/img/item-bank/unpassed@2x.png') }} 2x">
+              {% endif %}
+              <div class="item-bank-result-info text-left">
+                {% if passedStatus == true %}
+                <div class="color-success item-bank-result-info__text">{{ 'testpaper.result.passed'|trans }}</div>
+                {% else %}
+                <div class="ibs-color-warning item-bank-result-info__text">
+                {{ 'testpaper.result.unpassed'|trans }}
+                </div>
+                {% endif %}
+                <div class="color-gray item-bank-result__comment">{{ 'testpaper.result.comment'|trans }}：{{ answerReport.comment|default('-') }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  {% endif %}
+
+  {% if app.request.query.get('action', '') == 'check' %}
+    {{ render(controller('AppBundle:AnswerEngine/AnswerEngine:assessmentResult', {answerRecordId: answerRecord.id})) }}
+  {% else %}
+    {{ render(controller('AppBundle:AnswerEngine/AnswerEngine:report', {answerRecordId: answerRecord.id, restartUrl:restartUrl, answerShow:answerShow})) }}
+  {% endif %}
+
+  {% block footer %}
+    {% if showHeader|default(1) %}{{ parent() }}{% endif %}
+  {% endblock %}
+{% endblock %}

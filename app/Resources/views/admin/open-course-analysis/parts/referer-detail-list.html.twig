@@ -1,0 +1,45 @@
+{% import "macro.html.twig" as web_macro %}
+
+{% set showPaginator = showPaginator|default(1) %}
+{% set showRefererName = showRefererName|default(0) %}
+<style type="text/css">
+.overflow-hidden{
+	height: 24px;
+    overflow: hidden;
+    display: inline-block;
+}
+</style>
+<table class="table table-hover" style="word-break:break-all;table-layout: fixed;">
+	<thead>
+		<tr>
+			<th width="50%">{{ 'admin.open_manage.analysis.referer.referer_th'|trans }}</th>
+			<th width="30%">{{ 'admin.open_manage.analysis.referer.referer_number_th'|trans }}</th>
+			<th width="20%">{{ 'admin.open_manage.analysis.referer.proportion_th'|trans }}</th>
+		{#	<th>购买转化数</th>
+			<th>购买转化率</th>#}
+		</tr>
+	</thead>
+	<tbody>
+		{% for refererlog in refererloglist %}
+			<tr>
+				<th scope="row">
+					{% if showRefererName %}{{ refererlog.refererName }} {% else %}
+            <a class="overflow-hidden" href="javascript:;" id="help" data-toggle="popover" 
+            data-trigger="click" data-placement="top" title="" data-html="true" data-content="<a>{{ refererlog.refererUrl }}</a>" data-original-title="{{ 'admin.open_manage.analysis.referer.summary_list.referer_url'|trans }}">{{ refererlog.refererUrl }}</a>
+				  {% endif %}
+				</th>
+				<th>{{refererlog.count}}</th>
+				<th>{{refererlog.percent}}</th>
+				{#<th>{{refererlog.orderCount}}</th>
+				<th>{{refererlog.orderPercent}}</th>#}
+			</tr>
+			{% else %} 
+			  <tr><td colspan="20"><div class="empty">{{ 'admin.open_manage.analysis.referer.empty'|trans }}</div></td></tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+{% if showPaginator %}
+	{{admin_macro.paginator(paginator)}}
+	<input id="pageinator-url"  type="hidden" value="{{path('admin_opencourse_analysis_referer_detail_list',{id:targetId})}}">
+{% endif %}

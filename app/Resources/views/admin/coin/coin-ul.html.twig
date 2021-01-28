@@ -1,0 +1,6 @@
+<ul class="nav nav-tabs mbl">
+  <li class="{% if submenu == 'settings' %}active{% endif %}"> <a href="{{ url('admin_coin_settings') }}">{{'admin.coin.setting'|trans}}</a></li>
+  <li class="{% if submenu == 'model' %}active{% endif %}"> <a href="{{ url('admin_coin_model') }}">{{'admin.coin.model_setting'|trans}}</a></li>
+  <li class="{% if submenu == 'user-records' %}active{% endif %}"> <a href="{{ url('admin_coin_user_records') }}">{{'admin.coin.user_coin'|trans}}</a></li>
+  <li class="{% if submenu == 'orders' %}active{% endif %}"> <a href="{{ url('admin_coin_orders') }}">{{'admin.coin.recharge_orders'|trans}}</a></li>
+</ul>

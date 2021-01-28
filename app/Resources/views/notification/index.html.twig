@@ -1,0 +1,33 @@
+{% extends 'layout.html.twig' %}
+{% block title %}{{'notification.user_notification'|trans}} - {{ parent() }}{% endblock %}
+{% do script(['app/js/message/notification-list/index.js'])%}
+
+{% block content %}
+<div class="row row-8">
+  <div class="col-md-8 col-md-offset-2">
+    <div class="panel panel-default panel-page">
+      <div class="panel-heading">
+        <h2> {{'notification.user_notification.content_title'|trans}} </h2>
+      </div>
+
+      <ul class="media-list notification-list">
+        {% for notification in notifications %}
+          {% set notification = render_notification(notification) %}
+          {% if notification.highLight|default(false)%}
+            <div class="notification-list__media active">
+              {{ notification.message|raw }}
+            </div>
+          {% else %}
+            {{ notification.message|raw }}
+          {% endif %}
+        {% else %}
+          <li class="empty">{{'site.datagrid.empty'|trans}}</li>
+        {% endfor %}
+      </ul>
+
+      {{ web_macro.paginator(paginator) }}
+
+    </div><!-- /panel -->
+  </div>
+</div>
+{% endblock %}

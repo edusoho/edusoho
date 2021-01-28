@@ -1,0 +1,120 @@
+{
+  "name": "topxia/edusoho",
+  "type": "project",
+  "description": "Edusoho",
+  "autoload": {
+    "psr-0": {
+      "": [
+        "src/",
+        "plugins/"
+      ]
+    },
+    "psr-4": {
+      "Topxia\\Api\\": "api/src/Topxia/Api",
+      "Tests\\": "tests"
+    },
+    "files": [
+      "app/AppKernel.php"
+    ]
+  },
+  "require": {
+    "php": ">=5.5.9",
+    "ext-json": "*",
+    "twig/twig": "1.42.5",
+    "symfony/symfony": "3.4.38",
+    "symfony/twig-bundle": "3.4.38",
+    "symfony/assetic-bundle": "2.8.2",
+    "symfony/monolog-bundle": "3.2.0",
+    "symfony/security-acl": "3.0.4",
+    "symfony/swiftmailer-bundle": "2.6.7",
+    "incenteev/composer-parameter-handler": "2.1.3",
+    "sensio/distribution-bundle": "5.0.25",
+    "sensio/framework-extra-bundle": "5.2.4",
+    "silex/silex": "2.2.4",
+    "doctrine/orm": "2.5.14",
+    "doctrine/common": "2.6.2",
+    "doctrine/annotations": "1.2.7",
+    "doctrine/doctrine-bundle": "1.10.3",
+    "endroid/qrcode": "1.9.3",
+    "ezyang/htmlpurifier": "4.12.0",
+    "gregwar/captcha": "1.1.8",
+    "imagine/imagine": "1.2.3",
+    "phpoffice/phpexcel": "1.8.2",
+    "willdurand/js-translation-bundle": "2.6.6",
+    "asm89/twig-cache-extension": "1.4.0",
+    "bshaffer/oauth2-server-bundle": "v0.4",
+    "xxtea/xxtea": "1.0.2",
+    "cerdic/css-tidy": "1.7.1",
+    "codeages/biz-framework": "0.9.36",
+    "codeages/plugin-bundle": "dev-master",
+    "codeages/rest-api-client": "0.3.1",
+    "codeages/biz-rate-limiter": "0.1.11",
+    "sentry/sentry-symfony": "0.8.8",
+    "piwik/device-detector": "3.12.3",
+    "codeages/web-lib": "^0.1.1",
+    "tiben/crontab-manager": "1.3.0",
+    "codeages/qiqiuyun-php-sdk": "dev-master",
+    "phpdocumentor/reflection-docblock": "3.2.2",
+    "ramsey/uuid": "^3.9",
+    "codeages/exam-parser": "dev-master",
+    "doctrine/cache": "1.6.2",
+    "codeages/biz-order-pay": "dev-master",
+    "codeages/escloud-php-sdk": "^1.1.5",
+    "codeages/plumber2": "dev-master",
+    "vlucas/valitron": "^1.4",
+    "firebase/php-jwt": "^5.1",
+    "codeages/biz-item-bank": "dev-master",
+    "omnipay/paypal": "^3.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "5.7.27",
+    "sensio/generator-bundle": "3.1.7",
+    "symfony/phpunit-bridge": "4.4.4",
+    "mockery/mockery": "0.9.11",
+    "friendsofphp/php-cs-fixer": "^2.16.3",
+    "codeception/codeception": "^4.1",
+    "codeception/module-db": "^1.0",
+    "codeception/module-rest": "^1.2",
+    "codeception/module-phpbrowser": "^1.0"
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+      "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+      "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+      "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+      "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
+      "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
+    ],
+    "post-update-cmd": [
+      "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+      "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+      "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+      "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+      "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
+      "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
+    ]
+  },
+  "config": {
+    "bin-dir": "bin"
+  },
+  "extra": {
+    "symfony-app-dir": "app",
+    "symfony-web-dir": "web",
+    "symfony-assets-install": "relative",
+    "incenteev-parameters": {
+      "file": "app/config/parameters.yml"
+    },
+    "branch-alias": {
+      "dev-master": "2.8-dev"
+    }
+  },
+  "prefer-stable": true,
+  "repositories": {
+    "packagist": {
+      "type": "composer",
+      "url": "https://mirrors.aliyun.com/composer/"
+    }
+  },
+  "minimum-stability": "dev"
+}

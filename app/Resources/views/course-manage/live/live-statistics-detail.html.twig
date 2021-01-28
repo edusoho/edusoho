@@ -1,0 +1,42 @@
+{% extends 'course-manage/layout.html.twig' %}
+
+{% block title %}{{ 'course.live_statistics'|trans }} - {{ course.title }} - {{ parent() }}{% endblock %}
+{% set course_side_nav = 'live-statistics' %}
+{% do script(['app/js/course-manage/live/index.js']) %}
+
+{% block page_title %}{% if not course.title %}{{ course.courseSetTitle }}{% else %}{{ course.title }}{% endif %} / {{ task.title }}{% endblock %}
+{% block main_body %}
+  <div class="help-block mbl">{{ 'course.live_statistics.detail_notice'|trans }}</div>
+  <div id="detail-data" data-showable="{% if "now"|date('U') >= task.endTime %}1{% else %}0{% endif %}" data-url="{{ path('live_statistics_json_data', {taskId:task.id,liveId:activity.ext.liveId}) }}">
+    <span class="hidden" id="course-student-number">{{ course.studentNum }}</span>
+    <div class="cd-panel mb0 border-radius-none">
+      <div class="cd-panel-heading">
+        <div class="cd-panel-title">
+          <h3>{{ 'course.live_statistics.detail.checkin'|trans }}</h3>
+        </div>
+      </div>
+      <div class="cd-panel-body">
+        <div class="row" id="checkin-detail">
+          <h4 class="col-md-4"><strong>{{ 'course.live_statistics.detail.checkin_time'|trans }}：</strong><span id="checkin-time">{{ '-' }}</span></h4>
+          <h4 class="col-md-4">
+            <strong>{{ 'course.live_statistics.check_in_status'|trans }}：</strong><span id="checkin-data">{{ '-' }}</span>/{{ course.studentNum }}
+          </h4>
+          <a class="pull-right"  href="#modal" data-toggle="modal" data-url="{{ path('live_statistics_modal', {taskId: task.id, liveId: activity.ext.liveId, type:'checkin'}) }}">{{ 'course.live_statistics.detail.checkin_detail'|trans }}</a>
+        </div>
+      </div>
+    </div>
+    <div class="cd-panel mb0  border-radius-none">
+      <div class="cd-panel-heading">
+        <div class="cd-panel-title">
+          <h3>{{ 'course.live_statistics.detail.total_learn_time'|trans }}</h3>
+        </div>
+      </div>
+      <div class="cd-panel-body">
+        <div class="row">
+          <h4 class="col-md-4"><strong>{{ 'course.live_statistics.average_learn_time'|trans }}：</strong><span id="visitor-learn-time">{{ '-' }}</span></h4>
+          <a class="pull-right"  href="#modal" data-toggle="modal" data-url="{{ path('live_statistics_modal', {taskId: task.id, liveId: activity.ext.liveId, type:'visitor'}) }}">{{ 'course.live_statistics.detail.learn_time_detail'|trans }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,223 @@
+{% if isBuyFillUserinfo|default(false) %}
+  {% if userinfoFieldsSetting %}
+    {% if showNavTip|default(true) %}
+      <div class="help-block">{{ 'user.approve_tips'|trans }}</div>
+      <hr>
+    {% endif %}
+
+    {% for field in userinfoFieldsSetting %}
+      {% set defaultFields = dict('userInfoFields') %}
+      {% if field == 'truename' %}
+        <div class="form-group">
+          <label class="col-sm-3 control-label" for="truename">{{ defaultFields.truename }}</label>
+          <div class="col-sm-6 controls">
+            {% if app.user.approvalStatus == 'approved' and user.truename %}
+              <div class="form-control-static">{{ user.truename }}
+                <small class="color-success">({{ 'user.approved'|trans }})</small>
+              </div>
+            {% elseif app.user.approvalStatus == 'approving' and user.truename %}
+              <div class="form-control-static">{{ user.truename }}
+                <small class="text-warning">({{ 'user.approving'|trans }})</small>
+              </div>
+            {% else %}
+              <input class="form-control" id="truename" type="text" name="truename" value="{{ user.truename }}">
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+
+      {% if field == 'email' %}
+        <div class="form-group">
+          <label class="col-sm-3 control-label" for="email">{{ defaultFields.email }}</label>
+          <div class="col-sm-6 controls">
+            {% if not is_system_generated_email(app.user.email) %}
+              <div class="form-control-static">{{ app.user.email }}</div>
+            {% else %}
+              <input class="form-control" id="email" type="text" name="email" value=""
+                     data-url="{{ path('register_email_check') }}"/>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+
+      {% if field == 'mobile' %}
+        <div class="form-group {% if app.user.verifiedMobile|default('') is empty and setting('auth.mobileSmsValidate')|default(0) and setting('auth.fill_userinfo_after_login')|default(0) %}mbm{% endif %}">
+          <label class="col-sm-3 control-label" for="mobile">{{ defaultFields.mobile }}</label>
+          <div class="col-sm-6 controls">
+            {% if app.user.verifiedMobile|default('') %}
+              <div class="form-control-static">{{ blur_phone_number(app.user.verifiedMobile) }}
+                <small class="color-success">({{ 'user.mobile_bind'|trans }})</small>
+              </div>
+            {% else %}
+              <input class="form-control" id="mobile" type="text" name="mobile" value="{{ user.mobile }}" data-url="{{ path('register_mobile_check') }}">
+            {% endif %}
+          </div>
+        </div>
+        {% if app.user.verifiedMobile|default('') is empty and setting('auth.fill_userinfo_after_login')|default(0) and setting('auth.mobileSmsValidate')|default(0) %}
+          <div class="form-group mbs js-captch-num">
+            <label class="col-sm-3 control-label"></label>
+            <div class="col-sm-3 controls">
+              <input type="text" class="form-control input-md" id="captcha_num" name="captcha_num" maxlength="5" placeholder="{{'user.register.account_with_sms_code_label'|trans}}" required="required"  data-url="{{path('register_captcha_check')}}" >
+              <div class="help-block"></div>
+            </div>
+            <div class="col-sm-2 controls">
+              <img src="{{ path('register_captcha_num') }}" data-url="{{ path('register_captcha_num') }}" id="getcode_num" title="{{'user.settings.security.change_captcha_code'|trans}}" style="cursor:pointer;height:34px;width:100%">
+            </div>
+          </div>
+          <div class="form-group js-sms-code">
+            <label class="col-sm-3 control-label"></label>
+            <div class="col-sm-3 controls">
+              <input type="text" id="sms-code" name="sms_code" class="form-control" value="" data-url="{{ path('edu_cloud_sms_check', {type:'sms_bind'}) }}">
+            </div>
+            <div class="col-sm-3 controls">
+              <a class="btn btn-default btn-sm js-sms-send disabled" data-sms-url="{{ path('edu_cloud_sms_send') }}">
+                <span id="js-time-left"></span>
+                <span id="js-fetch-btn-text">{{ 'user.settings.security.get_sms_code_btn'|trans }}</span>
+              </a>
+            </div>
+          </div>
+        {% endif %}
+      {% endif %}
+
+      {% if field == 'qq' %}
+        <div class="form-group">
+          <label class="col-sm-3 control-label" for="qq">{{ defaultFields.qq }}</label>
+          <div class="col-sm-6 controls">
+            <input class="form-control" id="qq" type="text" name="qq" value="{{ user.qq }}">
+          </div>
+        </div>
+      {% endif %}
+
+      {% if field == 'company' %}
+        <div class="form-group">
+          <label class="col-sm-3 control-label" for="company">{{ defaultFields.company }}</label>
+          <div class="col-sm-6 controls">
+            <input class="form-control" id="company" type="text" name="company" value="{{ user.company }}">
+          </div>
+        </div>
+      {% endif %}
+
+      {% if field == 'job' %}
+        <div class="form-group">
+          <label class="col-sm-3 control-label" for="job">{{ defaultFields.job }}</label>
+          <div class="col-sm-6 controls">
+            <input class="form-control" id="job" type="text" name="job" value="{{ user.job }}">
+          </div>
+        </div>
+      {% endif %}
+
+      {% if field == 'idcard' %}
+        <div class="form-group">
+          <label class="col-sm-3 control-label required" for="idcard">{{ defaultFields.idcard }}</label>
+          <div class="col-sm-6 controls">
+            {% if app.user.approvalStatus == 'approved' and user.idcard %}
+              <div class="form-control-static">{{ blur_idcard_number(user.idcard) }}
+                <small class="color-success">({{ 'user.approved'|trans }})</small>
+              </div>
+            {% elseif app.user.approvalStatus == 'approving' and user.idcard %}
+              <div class="form-control-static">{{ blur_idcard_number(user.idcard) }}
+                <small class="text-warning">({{ 'user.approving'|trans }})</small>
+              </div>
+            {% else %}
+              <input type="text" id="idcard" name="{{ field }}" class="form-control" value="{{ user.idcard }}">
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+
+      {% if field == 'gender' %}
+        <div class="form-group">
+          <label class="col-sm-3 control-label required" for="gender">{{ defaultFields.gender }}</label>
+          <div class="col-sm-6">
+            <div class="checkbox-inline" style="padding-left: 0">
+              <input type="radio" id="gender_0" name="gender" value="male"
+                     {% if user.gender=="male" %}checked=true{% endif %}>
+              <span for="profile_gender_0" class="required mrl">{{ 'user.fields.gender.male'|trans }}</span>
+              <input type="radio" id="gender_1" name="gender" value="female"
+                     {% if user.gender=="female" %}checked=true{% endif %}>
+              <span for="profile_gender_1" class="required">{{ 'user.fields.gender.female'|trans }}</span>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+      {% if field == 'weixin' %}
+        <div class="form-group">
+          <label class="col-sm-3 control-label required" for="weixin">{{ defaultFields.weixin }}</label>
+          <div class="col-sm-6 controls">
+            <input type="text" id="weixin" name="{{ field }}" class="form-control" value="{{ user.weixin }}">
+          </div>
+        </div>
+      {% endif %}
+
+      {% if field == 'weibo' %}
+        <div class="form-group">
+          <label class="col-sm-3 control-label required" for="weibo">{{ defaultFields.weibo }}</label>
+          <div class="col-sm-6 controls">
+            <input type="text" id="weibo" name="{{ field }}" class="form-control" value="{{ user.weibo }}">
+          </div>
+        </div>
+      {% endif %}
+
+      {% for userField in userFields %}
+        {% if field == userField.fieldName %}
+          {% if userField.type=="text" %}
+            <div class="form-group">
+              <label for="{{ userField.fieldName }}" class="col-sm-3 control-label ">{{ userField.title }}</label>
+              <div class="col-sm-6 controls">
+                  <textarea id="{{ userField.fieldName }}" name="{{ userField.fieldName }}"
+                            class="field-{{ userField.type }} form-control"
+                            data-image-upload-url="{{ path('editor_upload', {token:upload_token('user')}) }}">{{ user[userField.fieldName]|default('') }}</textarea>
+                <div class="help-block" style="display:none;"></div>
+              </div>
+            </div>
+
+          {% elseif userField.type=="int" %}
+            <div class="form-group">
+              <label for="{{ userField.fieldName }}" class="col-sm-3 control-label">{{ userField.title }}</label>
+              <div class="col-sm-6 controls">
+                <input type="text" id="{{ userField.fieldName }}" placeholder="{{ 'site.validate_rules.max_int'|trans }}"
+                       name="{{ userField.fieldName }}" class="{{ userField.type }}  form-control"
+                       data-widget-cid="widget-5" data-explain="" value="{{ user[userField.fieldName]|default('') }}">
+                <div class="help-block" style="display:none;"></div>
+              </div>
+            </div>
+
+          {% elseif userField.type=="float" %}
+            <div class="form-group">
+              <label for="{{ userField.fieldName }}" class="col-sm-3 control-label">{{ userField.title }}</label>
+              <div class=" col-sm-6 controls">
+                <input type="text" id="{{ userField.fieldName }}" placeholder="{{ 'site.validate_rules.two_decimal_places'|trans }}"
+                       name="{{ userField.fieldName }}" class="{{ userField.type }} form-control"
+                       data-widget-cid="widget-5" data-explain="" value="{{ user[userField.fieldName]|default('') }}">
+                <div class="help-block" style="display:none;"></div>
+              </div>
+            </div>
+
+          {% elseif userField.type=="date" %}
+            <div class="form-group">
+              <label for="{{ userField.fieldName }}" class="col-sm-3 control-label">{{ userField.title }}</label>
+              <div class=" col-sm-6 controls">
+                <input type="text" id="{{ userField.fieldName }}" name="{{ userField.fieldName }}"
+                       class="{{ userField.type }}  form-control" data-widget-cid="widget-5" data-explain=""
+                       value="{{ user[userField.fieldName]|default('') }}">
+                <div class="help-block" style="display:none;"></div>
+              </div>
+            </div>
+
+          {% elseif userField.type=="varchar" %}
+            <div class="form-group">
+              <label for="{{ userField.fieldName }}" class="col-sm-3 control-label">{{ userField.title }}</label>
+              <div class="col-sm-6  controls">
+                <input type="text" id="{{ userField.fieldName }}" name="{{ userField.fieldName }}" class="form-control"
+                       data-widget-cid="widget-5" data-explain="" value="{{ user[userField.fieldName]|default('') }}">
+                <div class="help-block" style="display:none;"></div>
+              </div>
+            </div>
+          {% endif %}
+
+        {% endif %}
+      {% endfor %}
+    {% endfor %}
+  {% endif %}
+{% endif %}

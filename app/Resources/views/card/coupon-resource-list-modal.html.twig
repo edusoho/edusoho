@@ -1,0 +1,73 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class= "modal-lg coupon-modal" %}
+
+{% block title %}
+{{ 'coupon.resource_list.title'|trans }}
+{% endblock %}
+
+{% block body %}
+  <style>
+    .modal-backdrop.in {
+      opacity: 0.5;
+    }
+  </style>
+<div class="coupon-modal-list">
+  {% for resource in resources %}
+    {% if batch.targetType == 'course' %}
+      <div class="media coupon-modal-item">
+        <div class="media-left">
+          <img class="course-cover-img" src="{{ filepath(resource.cover.middle|default(), 'course.png') }}">
+        </div>
+        <div class="media-body">
+          <div class="coupon-modal-item__title">{{ resource.title|sub_text(30)}}</div>
+          <div class="gray-dark">{{ 'site.price'|trans }}：<span class="color-danger coupon-modal-item__price">
+              {% if resource.minCoursePrice == resource.maxCoursePrice %}
+                {% include 'common/price.html.twig' with {'productPrice': resource.minCoursePrice} %}
+              {% else %}
+                {% include 'common/price.html.twig' with {'productPrice': resource.minCoursePrice} %}
+                <span class="cd-text-sm">～</span>
+                {% include 'common/price.html.twig' with {'productPrice': resource.maxCoursePrice} %}
+              {% endif %}
+            </span>
+          </div>
+        </div>
+        <div class="media-right">
+          <a href="{{ path('course_show',{ id : resource.defaultCourseId }) }}" class="cd-btn cd-btn-ghost-primary cd-mt8">{{ 'coupon.buy_something_btn'|trans }}</a>
+        </div>
+      </div>
+    {% elseif batch.targetType == 'classroom'%}
+      <div class="media coupon-modal-item">
+        <div class="media-left">
+          <img class="classroom-cover-img" src="{{ filepath(resource.smallPicture|default(), 'classroom.png') }}">
+        </div>
+        <div class="media-body">
+          <div class="coupon-modal-item__title">{{ resource.title|sub_text(30)}}</div>
+          <div class="gray-dark">{{ 'site.price'|trans }}：<span class="coupon-modal-item__price">
+            {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+              {% if resource.price > 0 %}
+                <span class="color-danger">{{resource.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}</span>
+              {% else %}
+                <span class="color-success">{{ 'admin.classroom_manage.chooser.free'|trans }}</span>
+              {% endif %}
+            {% else %}
+            <span class="color-danger"> ¥ {{ resource.price }}</span>
+            {% endif %}
+
+        </span>
+        </div>
+        </div>
+        <div class="media-right">
+          <a href="{{ path('classroom_show',{ id : resource.id }) }}" class="cd-btn cd-btn-ghost-primary cd-mt8">{{ 'coupon.buy_something_btn'|trans }}</a>
+        </div>
+      </div>
+    {% endif %}
+  {% endfor %}
+</div>
+
+
+{% if paginator|default(null) %}
+    {{ web_macro.paginator(paginator|default(null), 'coupon-modal-paginator') }}
+{% endif %}
+
+{% endblock %}

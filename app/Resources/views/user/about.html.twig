@@ -1,0 +1,15 @@
+{% extends 'user/layout.html.twig' %}
+
+{% block title %}{{ parent() }}{% endblock %}
+
+{% set pageNav = type %}
+
+{% block main %}
+  <div class="editor-text">
+	{% if userProfile.about %}
+    {{userProfile.about|cdn|raw}}
+  {% else %}
+    <div class="empty">{{'user.homepage.introductions.empty'|trans}}</div>
+  {% endif %}
+  </div>
+{% endblock %}

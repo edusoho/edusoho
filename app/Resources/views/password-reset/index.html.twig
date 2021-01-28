@@ -1,0 +1,83 @@
+{% extends 'layout.html.twig' %}
+{% block title %}{{'user.settings.security.password_reset'|trans}} - {{ parent() }}{% endblock %}
+{% do script(['libs/jquery-validation.js','app/js/auth/password-reset/index.js'])%}
+
+{% block content %}
+  <div class="" style="max-width: 450px; margin:auto;">
+    <div class="panel panel-default panel-page">
+      <div class="panel-heading"><h2>{{'user.settings.security.password_reset.content_title'|trans}}</h2></div>
+      <ul class="nav nav-tabs mbl js-find-password">
+        <li class="active js-find-by-email" data-target="#password-reset-form">
+          <a style="cursor: pointer;">{{'user.settings.security.password_reset.email'|trans}}
+          </a>
+        </li>
+        <li class="js-find-by-mobile" data-target="#password-reset-by-mobile-form">
+          <a style="cursor: pointer;">{{'user.settings.security.password_reset.mobile'|trans}}
+          </a>
+        </li>
+      </ul>
+      <form id="password-reset-form" class="form-vertical password-reset-form" method="post" data-success="{{ path('password_reset_by_email_success') }}">
+        <div class="form-group mtl ptm">
+          <label class="control-label required" for="form_email" aria-required="true">{{ 'user.settings.security.password_reset.email'|trans }}</label>
+          <div class="controls">
+            <input type="email" id="form_email" name="email" required="required" class="form-control" aria-required="true">
+            <p class="help-block">{{'user.settings.security.password_reset.email.step_one.email_tips'|trans({'%name%': setting('site.name')})}}</p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="controls">
+            <button type="submit" class="btn btn-primary" data-loading-text="{{'user.settings.security.password_reset.email.step_one.send_email_submiting'|trans}}...">{{'form.btn.reset_password'|trans}}</button>
+          </div>
+        </div>
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      </form>
+       <form id="password-reset-by-mobile-form" class="form-vertical password-reset-form" action="{{ path('password_reset_by_sms') }}" method="post" style="display: none;" data-success="{{ path('password_reset_by_email_success') }}">
+        <div class="form-group mtl ptm">
+          <label class="control-label required" for="mobile">{{'user.settings.security.mobile'|trans}}</label>
+          <div class="controls">
+            <input type="text" id="mobile" name="mobile" data-url="{{path('password_reset_check_mobile')}}" class="form-control" data-role="mobile">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label required" for="reset_password" aria-required="true">{{ 'user.settings.security.password_modify.new_password'|trans }}</label>
+          <div class="controls">
+            <input type="password" id="reset_password" name="reset_password" required="required" class="form-control" aria-required="true">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label required" for="sms-code">{{'user.settings.security.sms_code'|trans}}</label>
+          <div class="controls row" >
+            <div class = "col-md-8" >
+              <input type="text" class="form-control" id="sms-code" name="sms_code" data-explain="{{'user.settings.security.sms_code_tips'|trans}}" required="required">
+            </div>
+            <div class="col-md-4">
+              <a class="btn btn-default btn-sm js-sms-send disabled" href="javascript:;" data-sms-url="{{ path('edu_cloud_sms_send') }}" data-sms-type="sms_forget_password">
+                <span id="js-time-left"></span>
+                <span id="js-fetch-btn-text">{{'user.settings.security.get_sms_code_btn'|trans}}</span>
+             </a>
+            </div>
+            <div class="col-md-12 help-block"></div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="controls">
+            <button type="submit" class="btn btn-primary" data-loading-text="{{'form.btn.submit.submiting'|trans}}">{{'form.btn.reset_password'|trans}}</button>
+          </div>
+        </div>
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      </form> 
+
+      <div class="js-drag-box hidden">
+        <div class="js-drag form-group">
+          {% include 'common/drag.html.twig' with {auth: true}%}        
+        </div>
+      </div>
+    </div><!-- /panel -->
+  </div>
+{% endblock %}

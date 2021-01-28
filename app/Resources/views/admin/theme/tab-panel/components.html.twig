@@ -1,0 +1,38 @@
+{# 主题管理-分类挂件管理 #}
+
+{% set orginAllConfig = array_index(allBlockConfig, 'id') %}
+{% set blockConfig = array_index(blockConfig, 'id')  %}
+{% set allBlockConfig = orginAllConfig|merge(blockConfig) %}
+
+<div class="hide js-componet-setting" data-key="{{ configKey }}">
+  {{ allBlockConfig|json_encode|raw }}
+</div>
+
+<div class="tab-pane {% if isActive|default() %} active {% endif %} js-theme-component" id="{{ configKey }}">
+    <div class="panel panel-default">
+      <!-- Default panel contents -->
+      <div class="panel-heading clearfix">
+        <div class="col-md-4 ">
+          {{'admin.setting.theme.manage.component_name'|trans}}
+        </div>
+        <div class="col-md-4">
+          {{'admin.setting.theme.manage.custom_name'|trans}}
+        </div>
+      </div>
+      <!-- List group -->
+      <ul class="list-group module-item-list theme-edit-block theme-custom-left-block">
+        {% for key, pendant in blockConfig %}
+          {% if orginAllConfig[key]|default() %}
+            {% include 'admin/theme/theme-edit-config-li.html.twig' with {isChoiced: true} %}
+          {% endif %}
+        {% endfor %}
+        
+        {% for key, pendant in allBlockConfig %}
+          {% if not blockConfig[key]|default() %}
+            {% include 'admin/theme/theme-edit-config-li.html.twig' with {isChoiced: false} %}
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+</div>
+{% do load_script('topxiaadminbundle/controller/theme/theme-setting/components.js') %}

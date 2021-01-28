@@ -1,0 +1,48 @@
+{% extends 'activity/activity-form-layout.html.twig' %}
+{% do script([cloud_sdk_url('uploader'), 'app/js/activity-manage/ppt/index.js']) %}
+{% set mediaType = 'ppt' %}
+{% block activity_content %}
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label for="mediaId" class="style control-label-required">PPT</label>
+    </div>
+    <div class="col-sm-10">
+
+      {% include 'file-chooser/file-choose.html.twig' with {
+      mediaType: 'ppt',
+      fileType:'ppt',
+      file: ppt.media|default(null),
+      placeholder: 'PPT'
+      } %}
+      <input type="hidden" value="{{ ppt.mediaId|default(null) }}" name="mediaId" id="mediaId"/>
+      <div id="file-choose-type" class="hidden" data-type="ppt"></div>
+    </div>
+  </div>
+{% endblock %}
+
+
+{% block activity_finish %}
+  <div class=" form-group">
+    <div class="col-sm-2 control-label">
+      <label for="condition-select">{{ 'course.plan_task.activity_manage.finished_condition'|trans }}</label>
+    </div>
+
+    <div class="col-xs-4 controls">
+      <select class="form-control" id="condition-select" name="finishType">
+        <option value="end" {% if ppt.finishType|default('end') == 'end' %}selected{% endif %}>{{'course.plan_task.activity_manage.ppt.learn_to_last_page_tips'|trans}}</option>
+        <option value="time" {% if ppt.finishType|default('end') == 'time' %}selected{% endif %}>{{'course.plan_task.activity_manage.ppt.time'|trans}}</option>
+      </select>
+    </div>
+  </div>
+  <div class=" form-group {% if ppt.finishType|default('end') != 'time' %}hidden{% endif %}" id="condition-group">
+    <div class="col-sm-2 control-label">
+      <label for="condition-detail">{{ 'course.plan_task.activity_manage.ppt.lear_at_least_time'|trans }}</label>
+    </div>
+    <div class="col-xs-4 controls">
+      <input id="condition-detail" class="form-control" type="text" name="finishDetail" value="{{ ppt.finishDetail|default(1) }}">
+    </div>
+    <div class="col-xs-4 controls">
+      <p class="form-control-static">{{'site.date.minute'|trans}}</p>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <parameters>
+        <parameter key="oauth2.server.class">OAuth2\Server</parameter>
+        <parameter key="oauth2.request.class">OAuth2\HttpFoundationBridge\Request</parameter>
+        <parameter key="oauth2.request_factory.class">OAuth2\HttpFoundationBridge\Request</parameter>
+        <parameter key="oauth2.response.class">OAuth2\HttpFoundationBridge\Response</parameter>
+        <parameter key="oauth2.storage.client_credentials.class">OAuth2\ServerBundle\Storage\ClientCredentials</parameter>
+        <parameter key="oauth2.storage.access_token.class">OAuth2\ServerBundle\Storage\AccessToken</parameter>
+        <parameter key="oauth2.storage.authorization_code.class">OAuth2\ServerBundle\Storage\AuthorizationCode</parameter>
+        <parameter key="oauth2.storage.user_credentials.class">OAuth2\ServerBundle\Storage\UserCredentials</parameter>
+        <parameter key="oauth2.storage.refresh_token.class">OAuth2\ServerBundle\Storage\RefreshToken</parameter>
+        <parameter key="oauth2.storage.scope.class">OAuth2\ServerBundle\Storage\Scope</parameter>
+        <parameter key="oauth2.storage.public_key.class">OAuth2\Storage\Memory</parameter>
+        <parameter key="oauth2.storage.user_claims.class">OAuth2\Storage\Memory</parameter>
+        <parameter key="oauth2.grant_type.client_credentials.class">OAuth2\GrantType\ClientCredentials</parameter>
+        <parameter key="oauth2.grant_type.authorization_code.class">OAuth2\GrantType\AuthorizationCode</parameter>
+        <parameter key="oauth2.grant_type.refresh_token.class">OAuth2\GrantType\RefreshToken</parameter>
+        <parameter key="oauth2.grant_type.user_credentials.class">OAuth2\GrantType\UserCredentials</parameter>
+        <parameter key="oauth2.user_provider.class">OAuth2\ServerBundle\User\OAuth2UserProvider</parameter>
+        <parameter key="oauth2.client_manager.class">OAuth2\ServerBundle\Manager\ClientManager</parameter>
+        <parameter key="oauth2.scope_manager.class">OAuth2\ServerBundle\Manager\ScopeManager</parameter>
+        <parameter key="oauth2.server.config" type="collection" />
+    </parameters>
+    <services>
+        <service id="oauth2.server" class="%oauth2.server.class%">
+            <argument type="collection">
+                <argument key="client_credentials" type="service" id="oauth2.storage.client_credentials" />
+                <argument key="access_token" type="service" id="oauth2.storage.access_token" />
+                <argument key="authorization_code" type="service" id="oauth2.storage.authorization_code" />
+                <argument key="user_credentials" type="service" id="oauth2.storage.user_credentials" />
+                <argument key="refresh_token" type="service" id="oauth2.storage.refresh_token" />
+                <argument key="scope" type="service" id="oauth2.storage.scope" />
+                <argument key="public_key" type="service" id="oauth2.storage.public_key" />
+                <argument key="user_claims" type="service" id="oauth2.storage.user_claims" />
+            </argument>
+            <argument>%oauth2.server.config%</argument>
+        </service>
+        <service id="oauth2.request" class="%oauth2.request.class%">
+            <factory class="OAuth2\HttpFoundationBridge\Request" method="createFromRequestStack" />
+            <argument type="service" id="request_stack"/>
+        </service>
+        <service id="oauth2.response" class="%oauth2.response.class%"/>
+        <service id="oauth2.user_provider" class="%oauth2.user_provider.class%">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="security.encoder_factory"/>
+        </service>
+        <service id="oauth2.scope_manager" class="%oauth2.scope_manager.class%">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+        </service>
+        <service id="oauth2.storage.client_credentials" class="%oauth2.storage.client_credentials.class%">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+        </service>
+        <service id="oauth2.storage.authorization_code" class="%oauth2.storage.authorization_code.class%">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+        </service>
+        <service id="oauth2.storage.user_credentials" class="%oauth2.storage.user_credentials.class%">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="oauth2.user_provider"/>
+            <argument type="service" id="security.encoder_factory"/>
+        </service>
+        <service id="oauth2.storage.access_token" class="%oauth2.storage.access_token.class%">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+        </service>
+        <service id="oauth2.storage.refresh_token" class="%oauth2.storage.refresh_token.class%">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+        </service>
+        <service id="oauth2.storage.scope" class="%oauth2.storage.scope.class%">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="oauth2.scope_manager"/>
+        </service>
+        <service id="oauth2.storage.public_key" class="%oauth2.storage.public_key.class%" />
+        <service id="oauth2.storage.user_claims" class="%oauth2.storage.user_claims.class%" />
+        <service id="oauth2.grant_type.client_credentials" class="%oauth2.grant_type.client_credentials.class%">
+            <argument type="service" id="oauth2.storage.client_credentials"/>
+        </service>
+        <service id="oauth2.grant_type.authorization_code" class="%oauth2.grant_type.authorization_code.class%">
+            <argument type="service" id="oauth2.storage.authorization_code"/>
+        </service>
+        <service id="oauth2.grant_type.user_credentials" class="%oauth2.grant_type.user_credentials.class%">
+            <argument type="service" id="oauth2.storage.user_credentials"/>
+        </service>
+        <service id="oauth2.grant_type.refresh_token" class="%oauth2.grant_type.refresh_token.class%">
+            <argument type="service" id="oauth2.storage.refresh_token"/>
+            <argument type="collection">
+                <argument key="always_issue_new_refresh_token">false</argument>
+            </argument>
+        </service>
+        <service id="oauth2.client_manager" class="%oauth2.client_manager.class%">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="oauth2.scope_manager"/>
+        </service>
+    </services>
+</container>

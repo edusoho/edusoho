@@ -1,0 +1,72 @@
+{% import "macro.html.twig" as web_macro %}
+{% set quality = "" %}
+{% if courseSet.type in ['open','liveOpen'] %}
+  {% set fileShowUrl = path('open_course_manage_file_show',{id:courseSet.id,fileId:uploadFile.id}) %}
+  {% set convertUrl = path('open_course_manage_file_convert',{id:courseSet.id, fileId:uploadFile.id})%}
+{% else %}
+  {% set fileShowUrl = path('course_set_manage_file_show',{id:courseSet.id,fileId:uploadFile.id}) %}
+  {% set convertUrl = path('course_set_manage_file_convert',{id:courseSet.id, fileId:uploadFile.id})%}
+{% endif %}
+
+{% set canRetryTranscode = (uploadFile.storage == 'cloud' and uploadFile.type == 'video') and (uploadFile.audioConvertStatus in ['error', 'none'] or uploadFile.convertStatus in ['error', 'none']) %}
+
+<tr id="upload-file-tr-{{uploadFile.id}}" data-role="item" data-convertHash="{{uploadFile.convertHash}}">
+  <td><input value="{{uploadFile.id}}" type="checkbox" data-role="batch-item" ></td>
+  <td>
+    <a class="link-dark" href="{{ fileShowUrl }}" rel="tooltip" title data-original-title="{{ uploadFile.filename }}"  >
+      {% if uploadFile.storage == 'cloud' %}
+        <i class="glyphicon glyphicon-cloud color-gray" title="{{'course.course_files.cloud_file'|trans}}"></i>
+      {% endif %}
+      {{ uploadFile.filename|sub_text(30) }}
+    </a>
+    {% if setting('developer.debug') and uploadFile.storage == 'cloud' and uploadFile.type in ['video', 'ppt', 'document'] %}
+      <a href="javascript:;" data-url="{{ convertUrl }}" class="convert-file-btn ml5">{{'course.course_files.reconvert_btn'|trans}}</a>
+    {% endif %}
+    <br>
+    
+    {% if subtitles[uploadFile.id]|default() %}
+      <span class='label label-success mr5 tip'>{{ 'course.course_files.subtitle_manage.subtitle'|trans }}</span> 
+    {% endif %}
+
+    {% if uploadFile.storage == 'cloud' and uploadFile.type == 'video' and courseSet.enableAudio|default(true) %}
+      <span class='label {{ uploadFile.audioConvertStatus == 'success' ? 'label-success' : 'label-warning' }} mr5 tip'>{{dict_text('audioConvertStatus', uploadFile.audioConvertStatus)}}</span>
+    {% endif %}
+  </td>
+  <td>
+    {{ dict_text('fileType', uploadFile.type) }}
+  </td>
+  <td>{{ web_macro.bytesToSize(uploadFile.fileSize) }}</td>
+  <td>
+    {% set fileQuotes = filesQuote[uploadFile.id]|default(null) %}
+    {% if uploadFile.targetType == 'coursematerial' and uploadFile.usedCount <= 1 or uploadFile.targetType != 'coursematerial' and uploadFile.usedCount < 1 %}
+      <span class="label label-default tip">{{'course.course_files.use_status.unused'|trans}}</span>
+    {% else %}
+      <span class="label label-success tip">{{'course.course_files.use_status.using'|trans}}</span>
+    {% endif %}
+  </td>
+  <td>
+    <span class="text-sm">{{ web_macro.user_link(users[uploadFile.updatedUserId]|default(null)) }}</span>
+    <br>
+    <span class="color-gray text-sm">
+      {% if not uploadFile.updatedTime %}
+        {{ uploadFile.createdTime|date('Y-n-d H:i')}}
+      {% else %}
+        {{ uploadFile.updatedTime|date('Y-n-d H:i')}}
+      {% endif %}
+    </span>
+  </td>
+  <td>
+    {% if uploadFile.storage == "cloud" and uploadFile.type == 'video' %}
+      {% if courseSet.type == 'open' %}
+        {% set goto = path('open_course_manage_files', {id:courseSet.id}) %}
+      {% else %}
+        {% set goto = path('course_set_manage_files', {id:courseSet.id}) %}
+      {% endif %}
+    <a href="{{ path('media_subtitle_manage', {mediaId:uploadFile.id, goto:goto}) }}">{{'course.course_files.subtitle_manage_btn'|trans}}</a>
+      {% if courseSet.enableAudio|default(true) and canRetryTranscode %}
+        <a href="javascript:;" class="convert-file-btn" data-url="{{ path('course_set_manage_retry_transcode', {id:courseSet.id, fileId:uploadFile.id}) }}">{{'course.course_files.re_try_convert_video_to_audio'|trans}}</a>
+      {% endif %}
+    {% endif %}
+  </td>
+
+</tr>

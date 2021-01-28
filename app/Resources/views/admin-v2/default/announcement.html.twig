@@ -1,0 +1,8 @@
+{% if announcement|default('') %}
+<a class="admin-sidebar-section__body admin-notice" href="{{ announcement.url|default('') }}" target="_blank">
+  <img src="{{ announcement.image|default(asset('static-dist/app/img/admin-v2/announcement-from-platform.png')) }}">
+  <div class="admin-notice__text">{{ announcement.subtitle|default('') }}</div>
+</a>
+{% else %}
+<img src="{{ asset('static-dist/app/img/admin-v2/announcement-from-platform.png') }}">
+{% endif %}

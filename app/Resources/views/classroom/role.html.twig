@@ -1,0 +1,59 @@
+{% if  'auditor' in member.role %}
+  <div class="panel panel-default class-join-header-bottom">
+    <div class="panel-body">
+
+      <div class="hint">
+        {% if classroom.price > 0 %}{{'classroom.not_join_tips'|trans}}{% else %}{{'classroom.not_join_tips_for_free'|trans}}
+        {% endif %}
+      </div>
+
+      {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+        <div class="class-price">{% if classroom.price > 0 %}{{set_price(classroom.price * setting('coin.cash_rate') )}}<span>{{setting('coin.coin_name')}}</span>{% else %}{{'classroom.price_free'|trans}}{% endif %}<del>{{coinPrice}}{{setting('coin.coin_name')}}</del></div>
+      {% else %}
+        <div class="class-price">{% if classroom.price > 0 %}¥{{classroom.price}}{% else %}{{'classroom.price_free'|trans}}{% endif %} <del>¥{{price}}</del></div>
+      {% endif %}
+
+      {% if classroom.status == "published" or app.request.get('previewAs')|default("") %}
+        <div class="row">
+          <div class="col-md-6 col-sm-6 class-freebuy">
+            {% if classroomMemberLevel %}
+              {% if checkMemberLevelResult == 'not_login' %}
+                <a href="{{ path('login') }}" >{{'classroom.member_level_study_tips'|trans({'%memberLevel%':classroomMemberLevel.name})}}</a>  
+              {% elseif checkMemberLevelResult in ['not_member', 'member_expired'] %}
+                <a href="{{ path('vip_buy') }}">{{'classroom.member_level_study_tips'|trans({'%memberLevel%':classroomMemberLevel.name})}}</a>  
+              {% elseif checkMemberLevelResult == 'level_low' %}
+                <a href="{{ path('vip_upgrade', {level:classroomMemberLevel.id}) }}" >{{'classroom.member_level_study_tips'|trans({'%memberLevel%':classroomMemberLevel.name})}}</a>
+              {% elseif checkMemberLevelResult == 'ok' %}
+                <a href="{{ path('classroom_vip_buy', {id:classroom.id}) }}" >{{'classroom.member_level_study_tips'|trans({'%memberLevel%':classroomMemberLevel.name})}}</a>
+              {% endif %}
+            {% endif %}
+          </div>
+          {% if classroomMemberLevel %}
+            {% if classroom.price > 0 %}
+            <div class="col-md-6 col-sm-6 class-buy">
+              <a class="btn btn-primary btn-block btn-lg" href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}">{{'classroom.buy_btn'|trans}}</a>
+            </div>
+            {% else %}
+            <div class="col-md-6 col-sm-6 class-buy">
+              <a class="btn btn-primary btn-block btn-lg" href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}">{{'classroom.free_join_btn'|trans}}</a>
+            </div>
+            {% endif %}
+          {% endif %}
+
+          {% if not classroomMemberLevel %}
+            {% if classroom.price > 0 %}
+            <div class="class-buy">
+              <a class="btn btn-primary btn-block btn-lg" href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}">{{'classroom.buy_btn'|trans}}</a>
+            </div> 
+            {% else %}
+            <div class="class-buy">
+              <a class="btn btn-primary btn-block btn-lg" href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}">{{'classroom.free_join_btn'|trans}}</a>
+            </div>
+            {% endif %}
+          {% endif %}
+        </div>
+      {% endif %}
+      
+    </div>
+  </div>
+{% endif %}

@@ -1,0 +1,124 @@
+body.homepage,
+body.course-list-page,
+body.open-course-list,
+body.course-dashboard-page,
+body.login,
+body.register,
+body.my-course {
+  &.has-app .es-wrap {
+    padding-top: 106px;
+  }
+  .es-wrap {
+    padding-top: 56px;
+    padding-bottom: 50px;
+  }
+  .es-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    .navbar-mobile {
+      display: none !important;
+    }
+    .M_header-back {
+      display: block;
+    }
+  }
+  .footer-tool-bar {
+    display: block;
+  }
+  .course-list-section .course-filter,
+  .dynamic-section,
+  .es-footer-link,
+  .es-footer,
+  {
+    display: none;
+  }
+  .es-friend-link{
+    display: none;
+  }
+}
+body.course-list-page {
+  background-color: white;
+  .es-banner {
+    display: none;
+  }
+  #content-container {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    .tabs-wrapper,
+    .es-filter {
+      display: none;
+    }
+    .panel.panel-default {
+      border: none;
+      margin-top: -15px;
+      margin-bottom: -15px;
+    }
+  }
+}
+body.my-course {
+  background-color: white;
+  #content-container {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    .my-layout {
+      display: none;
+    }
+  }
+}
+body.open-course-list {
+  .es-banner {
+    display: none;
+  }
+  #content-container {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+body.homepage {
+  .M_header-back {
+    display: none !important;
+  }
+  .feature-banner,
+  .class-section,
+  .recommend-teacher {
+    display: none;
+  }
+}
+body.course-dashboard-page {
+  .es-footer-mobile {
+    display: none;
+  }
+}
+.navbar-user {
+  .user-avatar-li {
+    ul li {
+      display: none;
+      &.user-nav-li-my,
+      &.mobile-switch,
+      &.user-nav-li-logout,
+      &.user-nav-li-login,
+      &.user-nav-li-register {
+        display: block;
+      }
+    }
+  }
+}
+
+.M_header-back {
+  padding: 14px 0;
+  display: none;
+  position: absolute;
+  height: 100%;
+  width: 40px;
+  text-align: center;
+  left: -5px;
+  top: 0;
+  a {
+    color: white;
+    i {
+      font-size: 24px;
+    }
+  }
+}

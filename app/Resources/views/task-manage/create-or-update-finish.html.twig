@@ -1,0 +1,69 @@
+{% extends 'layout.html.twig' %}
+{% do script(['libs/jquery-validation.js', 'libs/ltc-sdk-client.js', 'app/js/task-manage/finish/index.js'], 500) %}
+{% set bodyClass = 'task-iframe-body' %}
+{% block body %}
+  <div class="tab-content" id="iframe-content">
+  {% set selectTips = {'time': 'activity_manage.finish_select_tips_time', 'end': 'activity_manage.finish_select_tips_end'} %}
+  {% set defaultCondition = conditions[0] %}
+
+    <div class="tab-pane js-course-tasks-pane active">
+        <form class="form-horizontal" id="step3-form" >
+          <div class="form-group">
+            <div class="col-sm-2 control-label">
+              <label for="condition-select">
+                {{ 'course.plan_task.activity_manage.finished_condition'|trans }}
+              </label>
+            </div>
+            <div class="col-sm-4 {% if conditions|length == 1 %}form-control-static{% endif %}">
+            {% if conditions|length == 1 %}
+              {{ defaultCondition['describe']|default(selectTips[defaultCondition['type']]|default(''))|trans }}
+              <input type="hidden" id="finish-type" value="{{ defaultCondition['type'] }}" name="finishType">
+            {% else %}
+              {% if activity.mediaType == 'testpaper' %}
+                <div class="cd-radio-group mts">
+                  {% for condition in conditions %}
+                    <label class="cd-radio {% if activity.finishType|default(defaultCondition.type) == condition.type|default() %}checked{% endif %}">
+                      <input type="radio" id="finish-type-select" name="finishType" value="{{ condition.type }}" data-toggle="cd-radio" {% if activity.finishType|default(defaultCondition.type) == condition.type|default() %}checked="checked"{% endif %}>
+                      {{ condition['describe']|default(selectTips[condition['type']]|default(''))|trans }}
+                    </label>
+                  {% endfor %}
+                </div>
+              {% else %}
+                <select id="finish-type" name="finishType" class="form-control">
+                  {% for condition in conditions %}
+                    <option data-value="{{ condition.value|default('') }}" value="{{ condition.type }}" {% if activity.finishType|default(defaultCondition.type) == condition.type|default() %} selected {% endif %}>
+                      {{ condition['describe']|default(selectTips[condition['type']]|default(''))|trans }}
+                    </option>
+                  {% endfor %}
+                </select>
+              {% endif %}
+            {% endif %}
+            </div>
+          </div>
+          <div class="" id="conditions" >
+            <div id="conditions-time" class="form-group" {% if activity['finishType']|default(defaultCondition['type']) != 'time' %} style="display: none;"{% endif %}>
+              <div class="col-sm-2 control-label">
+                <label for="watchTime">
+                  至少观看
+                </label>
+              </div>
+              <div class="col-sm-4">
+                <input class="form-control" id="watchTime" type="text"  name="watchTime" value="{% if activity['finishType']|default() == 'time' %}{{ activity['finishData']|default() }}{% elseif defaultCondition['type'] == 'time' %}{{ defaultCondition['value']|default('1') }}{% endif %}">
+              </div>
+              <div class="col-sm-4">
+                <p class="form-control-static">
+                  分
+                </p>
+              </div>
+            </div>
+            {% for condition in conditions %}
+              {% if condition['html']|default() %}
+                {% include("@activity/"~ activity.mediaType ~"/resources/views/" ~ condition['html']) with {condition: condition} %}
+              {% endif %}
+            {% endfor %}
+          </div>
+          <input type="hidden" id="finish-data" name="finishData" value="{{ activity['finishData']|default(defaultCondition['value']|default()) }}">
+        </form>
+    </div>
+  </div>
+{% endblock %}

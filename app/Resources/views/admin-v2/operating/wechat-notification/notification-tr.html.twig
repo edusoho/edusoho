@@ -1,0 +1,22 @@
+{% import 'admin-v2/macro.html.twig' as admin_macro %}
+<tr id="notification-table-tr-{{ notification.id }}">
+  <td>{{ event.content|sub_text(20) }}</td>
+  <td>{{ notification.createdTime|date('Y-m-d H:i:s') }}</td>
+  <td>
+    {% if event.status == 'finish' %}
+      {{ "wechat.notification.status.finish"|trans }}
+    {% else %}
+      {{ "wechat.notification.status.sending"|trans }}
+    {% endif %}
+  </td>
+  <td>
+    {% if event.status == 'sending' %}
+      {{ '--' }}
+    {% else %}
+      {{ event.succeedCount }}/{{ event.totalCount }}
+    {% endif %}
+  </td>
+  <td>
+    <a href="#modal" class="btn btn-sm btn-default" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_v2_wechat_notification_record_detail', {'id':event.id}) }}">{{'site.btn.detail'|trans}}</a>
+  </td>
+</tr>

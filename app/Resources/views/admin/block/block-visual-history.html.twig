@@ -1,0 +1,41 @@
+{% extends 'admin/block/block-visual-layout.html.twig' %}
+
+{% set menu = menu|default('admin_block') %}
+{% set currentPage = 'admin_block_visual_edit_history' %}
+{% block page_title %} {{ 'admin.block_manage.visual_edit_history'|trans }} {% endblock %}
+
+
+{% block blockVisual %}
+  {{ web_macro.flash_messages() }}
+
+  {% if blockHistorys|default() %}
+    <table id="block-history-table" class="visual-block-history-table table table-striped table-condensed">
+      <thead>
+      <th>{{ 'admin.block_manage.visual_edit_history.edit_time'|trans }}</th>
+      <th>{{ 'admin.block_manage.visual_edit_history.edit_user'|trans }}</th>
+      <th>{{ 'admin.block_manage.visual_edit_history.operation'|trans }}</th>
+      </thead>
+      <tbody>
+      {% for blockHistory in blockHistorys %}
+        <tr id="{{ blockHistory.id }}">
+          <td>{{ blockHistory.createdTime |date('Y-n-d H:i:s') }}</td>
+          <td>{{ historyUsers[blockHistory.userId].nickname|default('admin.block_manage.visual_edit_history.user_deleted'|trans) }}</td>
+          <td>
+            <a class="btn btn-xs btn-default edit-btn"
+               href="{{ path('admin_blockhistory_preview', {id:blockHistory.id}) }}"
+               target="_blank"> {{ 'admin.block_manage.visual_edit_history.preview'|trans }} </a>
+
+            {% if blockHistory.data %}
+              <a class="btn btn-xs btn-default edit-btn"
+                 href="{{ path('admin_block_recovery', {blockTemplateId:block.blockTemplateId, historyId:blockHistory.id}) }}">{{ 'admin.block_manage.visual_edit_history.recovery_content'|trans }}</a>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {{ admin_macro.paginator(paginator) }}
+  {% else %}
+    <div class="empty">{{ 'admin.block_manage.visual_edit_history.empty'|trans }}</div>
+  {% endif %}
+{% endblock %}

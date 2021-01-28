@@ -1,0 +1,33 @@
+//课程管理头部
+.classroom-manage-header {
+  position: relative;
+  .picture {
+    float: left;
+    height: 60px;
+    margin-right: 10px;
+  }
+  .title {
+    margin: 5px 170px 10px 0;
+    line-height: 1.2;
+    font-size: 18px;
+    font-weight: bold;
+    word-break: break-all;
+    @media (max-width: @screen-xs-max) {
+      margin-right: 10px;
+    }
+  }
+  .teachers {
+    color: @gray;
+    font-size: 13px;
+    a {
+      margin-right: 10px;
+      color: @gray-dark;
+    }
+  }
+  .toolbar {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    margin-top: -15px;
+  }
+}

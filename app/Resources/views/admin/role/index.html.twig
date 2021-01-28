@@ -1,0 +1,68 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_role_manage' %}
+
+{% set script_controller = 'topxiaadminbundle/controller/role/index' %}
+{% set notUpdateRoles = ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_TEACHER', 'ROLE_USER'] %}
+{% block main %}
+
+{{ web_macro.flash_messages() }}
+
+<form class="well well-sm form-inline">
+
+  <div class="form-group">
+    <select id="keywordType" class="form-control" name="keywordType">
+          {% set options = {'':'admin.role_manage.keyword_type'|trans,'nameLike':'admin.role_manage.nameLike'|trans,'codeLike':'admin.role_manage.codeLike'|trans} %}
+          {{ select_options(options, app.request.get('keywordType')) }}
+    </select>
+  </div>
+  <div class="form-group">
+    <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="{{ 'admin.role_manage.keyword.placeholer'|trans }}">
+  </div>
+
+  <button class="btn btn-primary">{{ 'form.btn.search'|trans }}</button>
+
+</form>
+
+  <table class="table table-hover" id="log-table">
+    <tr>
+      <th width="25%">{{ 'admin.role_manage.nameLike'|trans }}</th>
+      <th width="25%">{{ 'admin.role_manage.codeLike'|trans }}</th>
+      <th width="20%">{{ 'admin.role_manage.createdTime'|trans }}</th>
+      <th width="20%">{{ 'admin.role_manage.nickname'|trans }}</th>
+      <th>{{ 'admin.role_manage.operation'|trans }}</th>
+    </tr>   
+    {% for role in roles %}
+      <tr>
+        <td>
+          {{ role.name }}
+        <td>
+          {{ role.code }}
+        </td>
+        <td>
+          {{ role.createdTime|date('Y-m-d H:i:s') }}        </td>
+        <td>
+          {{ users[role.createdUserId].nickname|default('--') }}
+        </td>
+        <td>
+          <div class="btn-group">
+            <a href="#modal" data-toggle="modal" data-url="{{ path('admin_role_show', {id:role.id}) }}" data-url="" class="btn btn-default btn-sm">{{ 'form.btn.view'|trans }}</a>
+            {% if role.code not in notUpdateRoles %}
+              {% include 'admin/role/templates/group-button.html.twig' with {parentCode: 'admin_role_manage', group:'groupBtn', role: role} %}
+            {% endif %}
+          </div>
+        </td>
+      </tr>
+    {% else %}
+      <tr><td class="empty" colspan="20">{{ 'admin.role_manage.role.empty'|trans }}</tr>
+    {% endfor %}
+  </table>
+
+  <div class="alert alert-info" role="alert">
+    {{ 'admin.role_manage.help_block'|trans|raw }}
+  </div>
+
+
+  {{ admin_macro.paginator(paginator) }}
+
+{% endblock %}

@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <imports>
+        <import resource="../../../Resources/config/services.xml"/>
+    </imports>
+    <parameters>
+        <parameter key="doctrine.db.driver">pdo_mysql</parameter>
+        <parameter key="doctrine.db.username">root</parameter>
+        <parameter key="doctrine.db.password"></parameter>
+        <parameter key="doctrine.db.dbname">oauth2_server_bundle</parameter>
+        <parameter key="doctrine.db.host">localhost</parameter>
+        <parameter key="doctrine.config_paths" type="collection">
+            <parameter key="%bundle_root_dir%/Resources/config/doctrine">OAuth2\ServerBundle\Entity</parameter>
+        </parameter>
+    </parameters>
+    <services>
+        <service id="doctrine.orm.entity_manager" class="Doctrine\ORM\EntityManager">
+            <factory class="Doctrine\ORM\EntityManager" method="create" />
+            <argument type="collection">
+                <argument key="driver">%doctrine.db.driver%</argument>
+                <argument key="user">%doctrine.db.username%</argument>
+                <argument key="password">%doctrine.db.password%</argument>
+                <argument key="dbname">%doctrine.db.dbname%</argument>
+                <argument key="host">%doctrine.db.host%</argument>
+            </argument>
+            <argument type="service" id="doctrine.entity_manager.config" />
+        </service>
+        <service id="doctrine.entity_manager.config" class="Doctrine\ORM\Tools\Setup">
+            <factory class="Doctrine\ORM\Tools\Setup" method="createConfiguration" />
+            <argument>true</argument>
+            <call method="setMetadataDriverImpl">
+                <argument type="service" id="doctrine.entity_manager.driver.yaml" />
+            </call>
+            <call method="setEntityNamespaces">
+                <argument type="collection">
+                    <argument key="OAuth2ServerBundle">OAuth2\ServerBundle\Entity</argument>
+                </argument>
+            </call>
+        </service>
+        <service id="doctrine.entity_manager.driver.yaml" class="Doctrine\ORM\Mapping\Driver\SimplifiedYamlDriver">
+            <argument>%doctrine.config_paths%</argument>
+        </service>
+    </services>
+</container>

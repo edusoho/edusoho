@@ -1,0 +1,32 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class= "modal-lg" %}
+
+{% do script(['app/js/courseset-manage/unlock/index.js']) %}
+
+{% block title %}{{'courseset_manage.unlock_confrim'|trans}}{% endblock %}
+{% block body %}
+<style>
+  .courseSync-text{
+    padding:10px 50px;
+    text-align:center;
+  }
+</style>
+  <form id="courseSync-form" class="form-horizontal" method="post" action="{{path('course_set_manage_unlock', {id: id})}}">
+    <div style="text-align:center;">
+    	<span class="es-icon es-icon-warning" style="font-size:60px;color:#e83d2c;"></span>
+	</div>
+    <h5>
+    	<p class="courseSync-text">
+    		<font color="#e83d2c">{{'courseset_manage.unlock_confrim.tips'|trans}}</font>
+    	</p>
+    </h5>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    {# <input type="hidden" name="courseId" value="{{course.id}}"> #}
+    {# <input type="hidden" name="url" value="{% if type == 'question' or type == 'testpaper' %}{{path(url,{courseId:course.id})}}{% elseif type == 'question_plumber' %}{{path(url,{courseId:course.id,type:'import'})}}{% else %}{{path(url,{id:course.id})}}{% endif %}"> #}
+  </form>
+{% endblock %}
+{% block footer %}
+    <button id="courseSync-btn" type="button" class="btn btn-primary pull-right" >{{'form.btn.confirm'|trans}}</button>
+    <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
+{% endblock %}

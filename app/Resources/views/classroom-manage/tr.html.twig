@@ -1,0 +1,40 @@
+{% import "macro.html.twig" as web_macro %}
+<tr id="student-{{ user.id }}-tr">
+  <td>
+    <input value="{{ user.id }}" type="checkbox" autocomplete="off" data-role="batch-item">
+  </td>
+  <td class="media" style="vertical-align: middle;">
+    {{ web_macro.user_avatar(user, 'pull-left', 'avatar-sm') }}
+    <a target="_blank" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>
+    {% if student.remark %}
+      <span class="color-gray text-sm" title="{{ student.remark|trans }}">({{ student.remark|trans|plain_text(16) }})</span>
+    {% endif %}
+    <div class="color-gray text-sm">{{'classroom.join_course_time'|trans}}：{{ student.createdTime|date('Y-n-d H:i') }}</div>
+  </td>
+  <td class="color-gray vertical-middle">
+  {% if role == 'student' %}
+    {{ student.learningProgressPercent }}%
+  {% endif %}
+  </td>
+  <td style="vertical-align: middle;">{% if student.deadline|default(0) %}{{student.deadline|date('Y-n-d H:i')}}{% else %}{{'course.expiry_date.forever_mode'|trans}}{% endif %}</td>
+  <td style="vertical-align: middle;">
+    <div class="btn-group">
+      {% if app.user.id != user.id %}
+        <a class="mr10 link-primary" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">{{'classroom.send_private_message'|trans}}</a>
+      {% endif %}
+      {% if app.user.isAdmin() %}
+        <a class="mr10 link-primary" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_show', {courseSetId: 0, courseId:classroom.id, userId:user.id})}}">{{'classroom.watch_data'|trans}}</a>
+      {% endif %}
+      <a  class=" dropdown-toggle link-primary" href="javascript:;" type="button" data-toggle="dropdown">{{'classroom.manage_btn'|trans}}
+        <span class="caret ml5"></span>
+      </a>
+      <ul class="dropdown-menu pull-right">
+        <li><a class="" href="" data-toggle="modal" data-target="#modal" data-url="{{path('classroom_manage_student_remark', {classroomId:classroom.id, userId:user.id})}}">{{'classroom.remark'|trans}}</a></li>
+        <li><a class="student-remove" href="javascript:;" data-url="{{path('classroom_manage_student_remove', {classroomId:classroom.id, userId:user.id})}}" data-user="{{default.user_name|default('classroom.student'|trans)}}">{{'classroom.remove'|trans}}</a></li>
+        {% if (app.user.isAdmin() or app.user.isTeacher()) %}
+          <li><a data-toggle="modal" data-target="#modal" data-url="{{path('classroom_manage_member_deadline', {classroomId:classroom.id, userIds:user.id})}}">{{'classroom.edit_expiry_mode'|trans}}</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </td>
+</tr>

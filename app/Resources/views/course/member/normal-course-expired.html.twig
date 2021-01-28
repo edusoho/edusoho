@@ -1,0 +1,28 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{ 'course.member.tips.title'|trans }}{% endblock %}
+{% block body %}
+  <div class="alert">
+    {% set message = slot('course.expired.message', {
+      course: course,
+      member: member
+    }) %}
+    {% if member.deadline < timestamp() and member.deadline != 0 %}
+      {% if course.expiryMode == 'date' %}
+        {{ 'course.member.course.tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
+      {% else %}
+        {{ 'course.member.course.allow_buy.tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
+      {% endif %}
+    {% elseif message|trim is not empty  %}
+       {{ message|raw }}
+    {% endif %}
+  </div>
+{% endblock %}
+
+{% set hide_footer = course.expiryMode != 'days' %}
+
+{% block footer %}
+  <a href="{{ path('course_member_deadline_reach',{id: course.id}) }}" class="btn btn-primary">
+    {{'course.member.course.join_btn'|trans }}
+  </a>
+{% endblock %}

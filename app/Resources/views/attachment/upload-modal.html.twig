@@ -1,0 +1,59 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'modal-lg' %}
+
+{% block title %}{{ 'attachments.modal.upload_file'|trans }}{% endblock %}
+
+{% do script([cloud_sdk_url('uploader'), 'app/js/attachment/index.js']) %}
+
+{% block body %}
+  {% set currentTarget = app.request.query.get('currentTarget')|default('') %}
+  {% set single_file_size = setting('cloud_attachment.fileSize',0) %}
+  <input type="hidden" name="media" id="media">
+  <div class="file-chooser-bar {% if not  file|default(null) %}hidden {% endif %}">
+    <span data-role="placeholder">{{ file.filename|default(null) }}</span>
+    <button class="btn btn-link btn-sm js-choose-trigger" type="button"><i
+          class="glyphicon glyphicon-edit"></i> {{ 'attachments.modal.upload.edit_btn'|trans }}</button>
+    <div class="alert alert-warning" data-role="waiting-tip"
+         style="display:none;">
+           {{ 'attachments.modal.upload.tips'|trans|raw }}
+         </div>
+  </div>
+
+  <div id="chooser-upload-panel">
+    {% set targetType = targetType|default('attachment') %}
+    {% set token = uploader_token(targetType, targetId, 'private') %}
+    {% set fileSize = fileSize|default(500) %}
+    <div class="uploader-content">
+      <div class="uploader-container" id="uploader-container"
+           data-init-url="{{ url('uploader_init_v2', {uploaderToken: token}, true) }}"
+           data-finish-url="{{ url('uploader_finished_v2', {uploaderToken: token}, true) }}"
+           data-accept="{{ uploader_accept(targetType, fileType|default(''))|json_encode }}"
+           data-process="{{ uploader_process(targetType) }}"
+           data-file-single-size-limit="{{ single_file_size == 0  ? 2048 * 1024 * 1024 : single_file_size * 1024 * 1024 }}">
+      </div>
+      <div class="uploader-bottom">
+        <ul>
+          {% if fileSize > 1024 %}
+            {% set fileSize = fileSize / 1024 ~ 'GB'  %}
+          {% else %}
+            {% set fileSize = fileSize ~ 'MB' %}
+          {% endif %}
+          {{ 'attachments.modal.uploader.tips'|trans({'%fileSize%':fileSize})|raw }}
+        </ul>
+      </div>
+    </div>
+    <input type="hidden" data-role="metas" data-ids-class="{{ idsClass }}" data-list-class="{{ listClass }}"
+           data-url="" data-current-target="{{ currentTarget }}" />
+    <input type="hidden" data-role="metas" data-ids-class="{{ idsClass }}" data-list-class="{{ listClass }}"
+           data-file-single-size-limit="{{ single_file_size == 0  ? 2048 * 1024 * 1024 : single_file_size * 1024 * 1024 }}"
+           data-url=""/>
+    <input type="hidden" name="module" value="{{ module|default('') }}">
+  </div>
+
+
+{% endblock %}
+{% block footer %}
+  <button type="button" class="btn btn-primary" data-dismiss="modal">{{ 'attachments.modal.upload.close_btn'|trans }}</button>
+{% endblock %}
+

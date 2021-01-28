@@ -1,0 +1,9 @@
+<li class="download-item" data-id="{{ material.link|default(material.id) }}">
+  {% if material.link %}
+    <a href="{{ material.link }}" target="_blank">{{ material.title }}</a>
+    <span class="glyphicon glyphicon-new-window color-gray text-sm" title="{{ 'course.plan_task.activity_manage.download.link_file'|trans }}"></span>
+  {% else %}
+    <a href="{{ path('open_course_material_download', {courseId:material.courseId, materialId:material.id}) }}">{{ material.title }}</a>
+  {% endif %}
+  <a class="gray-primary phm btn-delete js-btn-delete" href="javascript:;" data-toggle="tooltip" data-placement="top" data-url="{{ path('open_course_manage_material_delete', {courseId:material.courseId,  materialId:material.id}) }}" title="{{ 'course.plan_task.activity_manage.download.delete_btn'|trans }}"><i class="es-icon es-icon-delete"></i></a>
+</li>

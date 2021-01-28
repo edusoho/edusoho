@@ -1,0 +1,15 @@
+{% extends 'activity/content-layout.html.twig' %}
+
+{% do script(['app/js/activity/video/index.js']) %}
+
+{% block body %}
+  {% if watchStatus.status == 'error' %}
+    <div class="iframe-parent-content pv20 ph20">
+      <div class="alert alert-danger">
+        <i class="es-icon es-icon-info"></i>
+        {#{{ watchStatus.watchLimitTime|duration_text }}#}
+        {{'course.plan_task.activity_manage.video.failed_tips'|trans}}
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,7 @@
+{% extends 'layout.html.twig' %}
+
+{% do script(['app/js/material-lib/ppt-player/index.js']) %}
+
+{% block body %}
+  <div id="ppt-player" data-params="{{ player|json_encode() }}"></div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% block title %}
+  {{ 'admin.operation_certificate.template.preview_th'|trans }}
+{% endblock %}
+
+{% set modal_class = 'modal-lg' %}
+
+{% do script(['app/js/admin-v2/operating/certificate-template/preview/index.js']) %}
+
+{% block body %}
+  <form class="form-horizontal">
+    <div class="row text-center">
+      <span class="el-loading-text js-loading-text">{{ 'admin.operation_certificate.certificate.record.img_loading'|trans }}</span>
+      <img class="hidden" id="certificateImg" src="" alt="certificate template preview" {% if 'horizontal' == template.styleType %}width="720" height="520" {% else %}width="520" height="720"{% endif %}>
+      <input type="hidden" name="certificateBase64Url" value="{{ path('admin_v2_certificate_template_img_show', {id:template.id}) }}">
+    </div>
+  </form>
+{% endblock %}
+
+{% block footer %}
+  <a type="button" class="btn btn-link pull-right" data-dismiss="modal">{{ 'form.btn.close'|trans }}</a>
+{% endblock %}

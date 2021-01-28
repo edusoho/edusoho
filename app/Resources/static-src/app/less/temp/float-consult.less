@@ -1,0 +1,84 @@
+// 暂时需要
+.float-consult {
+  position: fixed;
+  right: 0;
+  top: 50%;
+  visibility: hidden;
+  z-index: 999;
+}
+
+.float-consult .popover {
+  width: 250px;
+  color: #444;
+  cursor: default;
+  -webkit-user-select: text;
+     -moz-user-select: text;
+      -ms-user-select: text;
+          user-select: text;
+}
+
+.float-consult .popover .qrcode {
+  max-width: 220px;
+}
+
+.float-consult .consult-contents {
+  display: none;
+}
+
+.float-consult .es-icon {
+  font-size:20px;
+  font-style:normal;
+}
+
+#float-consult h3.popover-title {
+  padding: 8px 14px;
+}
+
+.float-consult-qq-btn .popover img {
+  width: 25px;
+  height: 25px;
+}
+
+.float-consult-qq-btn .popover p {
+  margin: 0 0 6px;
+}
+
+.float-consult {
+  .btn {
+    padding: 6px 12px;
+    .border-radius(0);
+    color: #fff;
+    &:first-child {
+      .border-top-left-radius();
+      .border-top-right-radius();
+    }
+    &:last-child {
+      .border-bottom-left-radius();
+      .border-bottom-right-radius();
+    }
+  }
+  .btn-consult-warning {
+    background: @brand-warning;
+    border-color: @brand-warning - #111;
+    &:hover {
+      background: @brand-warning - #111;
+      border-color: @brand-warning - #222;
+    }
+  }
+  .btn-consult-danger {
+    background: @brand-danger;
+    border-color: @brand-danger - #111;
+    &:hover {
+      background: @brand-danger - #111;
+      border-color: @brand-danger - #222;
+    }
+  }
+  .btn-consult-default {
+    background: @brand-primary;
+    border-color: @brand-primary - #111;
+    &:hover {
+      background: @brand-primary - #111;
+      border-color: @brand-primary - #222;
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{% extends 'course-manage/layout.html.twig' %}
+
+{% set modal_class= "modal-sm" %}
+
+{% block title %}{{ 'classroom.course.base'|trans }} - {{ parent() }}{% endblock %}
+
+{% do script(['libs/jquery-validation.js', 'libs/select2.js']) %}
+{% set side_nav = sideNav %}
+{% set course_side_nav = sideNav %}
+
+{% block main_heading %}
+  {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: course_side_nav, btnGroup:0} %}
+{% endblock %}
+
+{% block main_body %}
+  <div class="panel-body">
+    <div class="panel-locked text-center">
+      <h5>
+        <p class="mt20 mb20">
+          {{'classroom.course.content'|trans({'%menuPath%':menuPath, '%courseTitle%':copyCourseSet.title})|raw }}
+        </p>
+      </h5>
+      <h5>
+        <p class="panel-margin mt20 mb20">
+          {{ 'classroom.course.unlock_tips'|trans|raw }}
+        </p>
+      </h5>
+      <p class="panel-margin mt20 mb20">
+        <a href="#modal" data-toggle="modal" data-url="{{path('course_set_manage_unlock_confirm', {id: id})}}" class="btn btn-danger">{{'form.btn.unlock'|trans}}</a></p>
+    </div>
+  </div>
+{% endblock %}

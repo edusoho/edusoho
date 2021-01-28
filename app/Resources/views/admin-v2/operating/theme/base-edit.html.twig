@@ -1,0 +1,93 @@
+{% extends 'admin-v2/layout.html.twig' %}
+{% set script_controller = 'topxiaadminbundle/controller/theme/edit' %}
+{% block title %}
+    {{ 'admin.setting.theme.manage'|trans }}
+{% endblock %}
+{% block body %}
+  <style>
+    body {
+      padding-bottom: 0
+    }
+    .list-group {
+      height: 244px;
+      overflow:auto;
+    }
+
+    .iframe-box {
+      z-index: 1024;
+      position: relative;
+      border: 1px solid #ccc;
+    }
+
+    .iframe-box:after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+    }
+
+    .radios, .checkboxs {
+      padding-top: 20px;
+      vertical-align: middle;
+    }
+
+    .mod-cpanel-basic-color {
+      width: 85px;
+      height: 25px;
+      border: 1px solid #aaa;
+      cursor: pointer;
+    }
+
+    .edit-sort {
+      color: #aaa;
+      margin-right: 20px;
+    }
+
+    .edit-sort:hover {
+      color: #444;
+    }
+  </style>
+  <body style="background: #eeeff0">
+    <script id="theme-config" type="text/x-handlebars-template">{{ themeConfig|json_encode|raw }}</script>
+    <script id="theme-all-config" type="text/x-handlebars-template">{{ allConfig|json_encode|raw }}</script>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="col-md-12">
+          <a class="navbar-brand">{{'admin.setting.theme.manage.theme_edit'|trans}}</a>
+          <ul class="nav navbar-nav navbar-right">
+          <li><a href="{{ path('admin_v2_setting_theme') }}"><i class="glyphicon glyphicon-remove"></i>{{'admin.setting.theme.manage.theme_cancel'|trans}}</a></li>
+          <li><a href="{{ path('admin_v2_confirm_themes_config',{uri:themeUri}) }}"><i class="glyphicon glyphicon-ok"></i> {{'admin.setting.theme.manage.theme_ok'|trans}}</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+      <div class="col-md-12">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          {% block theme_nav %}
+          {% endblock %}
+          <a href="{{ path('admin_v2_reset_currentTheme_config', {uri:themeUri}) }}" class="btn btn-primary pull-right">{{'admin.setting.theme.manage.all_reset'|trans}}</a>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content" id="theme-edit-content" data-url="{{ path('admin_v2_save_themes_config') }}">
+          {% block theme_panes %}
+          {% endblock %}
+        </div>
+        
+      </div>
+    </div>
+
+    {% set iframeUrl = path('admin_v2_themes_show') %}
+    <div class="iframe-box">
+      <iframe src="{{ iframeUrl }}" marginheight="0" marginwidth="0" frameborder="0" scrolling="no" width="100%" id="iframepage" name="iframepage">
+      </iframe>
+    </div>
+    {% include 'old-script_boot.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app.js')} %}
+    <div id="modal" class="modal" ></div>
+  </body>
+{% endblock %}

@@ -1,0 +1,8 @@
+/vendor
+/public
+/.idea
+composer.lock
+composer.phar
+phpunit.xml
+.php_cs
+

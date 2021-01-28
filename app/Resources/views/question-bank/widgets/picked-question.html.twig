@@ -1,0 +1,7 @@
+{% for item in items|default(null) if items %}
+  {% if item.type == 'material' %}
+    {% include 'question-bank/widgets/picked-item/material-question-item.html.twig' %}
+  {% else %}
+    {% include 'question-bank/widgets/picked-item/question-item.html.twig' %}
+  {% endif %}
+{% endfor %}

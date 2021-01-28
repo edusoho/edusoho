@@ -1,0 +1,97 @@
+{% do script(['app/js/classroom-manage/publish/index.js']) %}
+
+{% set unsetted = "" %}
+{% if not classroom.about %}
+  {% set unsetted = unsetted ~ ',' ~ 'classroom.about'|trans %}
+{% endif %}
+{% if not classroom.smallPicture %}
+  {% set unsetted = unsetted ~ ',' ~ 'classroom.small_picture'|trans %}
+{% endif %}
+{% if classroom.price == 0 %}
+  {% set unsetted = unsetted ~ ',' ~ 'classroom.price'|trans %}
+{% endif %}
+{% if classroom.courseNum == 0 %}
+  {% set unsetted = unsetted ~ ',' ~ 'classroom.course'|trans %}
+{% endif %}
+
+
+<div class="es-section classroom-manage-header clearfix">
+  <div class="col-md-6 pl0">
+    <img class="picture" src="{{ filepath(classroom.smallPicture, 'classroom.png') }}">
+    {% if classroom.status == "draft" %}
+      <span class="classroom-publish-status label-warning ">{{ 'classroom.unpublish'|trans }}</span>
+    {% elseif classroom.status == "closed" %}
+      <span class="classroom-publish-status label-danger">{{ 'classroom.closed'|trans }}</span>
+    {% endif %}
+    {% if classroom.status == "published" %}
+      <span class="classroom-publish-status label-success"> {{ 'classroom.published'|trans }}</span>
+    {% endif %}
+
+    <h1 class="title text-overflow mr0">
+      <a href="{{ path('classroom_show',{id:classroom.id}) }}">
+        {{ classroom.title }}
+      </a>
+
+    </h1>
+    <div class="color-danger">
+      {% include 'common/price.html.twig' with {'productPrice': classroom.price} %}
+    </div>
+  </div>
+
+  <div class="pull-right ptl mtm">
+    {% if classroom.status == 'published' %}
+      <a class="cd-btn cd-btn-primary" href="{{ path('classroom_show', {id:classroom.id}) }}">
+        {{ 'explore.view_classroom_btn'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)}) }}
+      </a>
+    {% else %}
+      <a class="cd-btn cd-btn-default"
+         href="{{ path('classroom_courses',{classroomId:classroom.id,previewAs:'guest'}) }}">
+        {{ 'classroom.preview_btn'|trans }}
+      </a>
+
+      <button type="button" class="cd-btn cd-btn-primary cd-ml16" data-toggle="modal" data-target="#classroomConfirm">
+        {{ 'classroom.publish_btn'|trans }}
+      </button>
+      <div id="classroomConfirm" class="modal fade">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                  aria-hidden="true">&times;</span>
+              </button>
+              <h4
+                class="modal-title">{{ 'classroom.publish_name'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)}) }}</h4>
+            </div>
+            <div class="modal-body">
+              <p>
+                {% if unsetted|length > 0 %}
+                  {% set unsetted = sub_str(unsetted, 1, unsetted|length - 1 )|split(',') %}
+                  <span class="color-danger">
+                          {{ 'classroom.unsetted'|trans({'%unsetted%':unsetted|join("，")}) }}
+                      </span>
+                {% endif %}
+                &nbsp;{{ 'classroom.whether_confirm_publish'|trans }}
+              </p>
+            </div>
+            <div class="modal-footer">
+              <a data-dismiss="modal" href="">{{ 'form.btn.cancel'|trans }}</a>&nbsp;
+              <button type="button" class="btn btn-success" id="publishSure"
+                      data-url="{{ path('classroom_manage_publish',{id:classroom.id}) }}">{{ 'form.btn.confirm'|trans }}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="pull-right prl mrl mtl">
+    <div class="pull-right pll prl">
+      <span class="cd-text-medium">{{ 'classroom.member_number'|trans }}</span>
+      <div class="mtm cd-dark-major text-center"><span class="">{{ studentCount|default(0) }} </span></div>
+    </div>
+    <div class="pull-right pll prl">
+      <span class="cd-text-medium ">{{ 'classroom.courses'|trans }}</span>
+      <div class="mtm cd-dark-major text-center"><span class="">{{ classroom.courseNum|default(0) }} </span></div>
+    </div>
+  </div>
+</div>

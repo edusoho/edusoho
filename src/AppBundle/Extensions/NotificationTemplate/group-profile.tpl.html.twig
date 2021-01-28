@@ -1,0 +1,32 @@
+{% import 'macro.html.twig' as macro %}
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+      {% set data = notification.content %}
+      {% set group = macro.link(data.title, path('group_show',{id:data.id})) %}
+       {% if data.type == 'chownout'%}
+         {% set who = macro.link(data.userName, path('user_show',{id:data.userId})) %}
+          {{ 'notification.group-profile.chownout'|trans({'%group%':group, '%who%':who})|raw }}
+
+       {% elseif data.type =='chownin'%}
+          {{ 'notification.group-profile.chownin'|trans({'%group%':group})|raw }}
+
+        {% elseif data.type == 'remove'%}
+         {{ 'notification.group-profile.remove'|trans({'%group%':group})|raw }}
+
+        {% elseif data.type == 'setAdmin' %}
+         {{ 'notification.group-profile.setAdmin'|trans({'%group%':group})|raw }}
+
+        {% elseif data.type == 'removeAdmin'%}
+          {{ 'notification.group-profile.removeAdmin'|trans({'%group%':group})|raw }}
+
+       {% endif %}
+    </div>
+    <div class="notification-footer">
+     {{ notification.createdTime|date_format }}  
+    </div>
+  </div>
+</li>

@@ -1,0 +1,17 @@
+<?php
+namespace {{name}}Plugin\Biz\{{name}}\Service\Impl;
+
+/**
+ * EduSoho系统可引用以下BaseService
+ * Biz\BaseService
+ */
+use Codeages\Biz\Framework\Service\BaseService;
+use {{name}}Plugin\Biz\{{name}}\Service\{{name}}Service;
+
+class {{name}}ServiceImpl extends BaseService implements {{name}}Service
+{
+    protected function get{{name}}Dao()
+    {
+        return $this->createDao('{{name}}Plugin:{{name}}:{{name}}Dao');
+    }
+}

@@ -1,0 +1,7 @@
+api.notification.cash_account.recharge: 您已成功充值 %value% %coin_name%
+api.notification.cash_account.deduction: 您被扣除 %value% %coin_name%
+api.notification.cash_account.exchange: 您已成功兑换 %value% %coin_name%
+api.notification.test-paper.perusal: 【完成】%who% 刚刚完成了%what%，请及时批阅
+api.notification.test-paper.read: 【批阅】%who% 刚刚批阅了%what%
+api.notification.materialLib.share: %who% 已将资料分享给你
+api.notification.homework-submit.perusal: 【完成】%who% 刚刚完成了作业，请及时批阅

@@ -1,0 +1,34 @@
+{% extends 'classroom-manage/layout.html.twig' %}
+{% import 'macro.html.twig' as macro %}
+
+{% block title %}{{'classroom.check_list'|trans}} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'testpaper-check' %}
+  
+{% if activity.mediaType == 'homework' %}
+  {% set side_nav = 'homework-check' %}
+  {% set typeName = 'classroom.homework'|trans %}
+{% else %}
+  {% set side_nav = 'testpaper-check' %}
+  {% set typeName = 'classroom.testpaper'|trans %}
+{% endif %}
+
+{% block main %}
+
+<div class="panel panel-default panel-col">
+
+  <div class="panel-heading">
+    {{ testpaper.name }}
+  </div>
+  <div class="panel-body">
+
+    {% if isTeacher is defined and not isTeacher %}
+      <span class="color-danger">{{'classroom.testpaper_check_tips'|trans({'%typeName%':typeName}) }}</span>
+    {% endif %}
+
+    {{ render(controller('AppBundle:Testpaper/Manage:resultList',{request:app.request,testpaperId:testpaper.id,source:'classroom',targetId:classroom.id, activityId: activityId})) }}
+
+  </div>
+</div>
+
+{% endblock %}

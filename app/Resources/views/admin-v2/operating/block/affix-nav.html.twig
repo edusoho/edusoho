@@ -1,0 +1,22 @@
+<nav class="block-affix-nav hidden-print hidden-xs hidden-sm affix" id="block-nav-affix">
+  <ul class="nav bs-docs-sidenav">
+  {% for code,item in block.meta.items|default(null) %}       
+    <li>
+      <a href="#js-affix-{{ code }}" style="padding:5px;">
+      {% if item.title|default(null) %}
+        {{ item.title }}
+      {% else %}
+        {{ code }}
+      {% endif %}
+      </a>
+    </li>
+  {% endfor %}
+    <li>
+      <a class="back-to-top" href="#top" style="padding:5px;">
+        {{'admin.block_manage.visual_edit.goto_top'|trans}}
+      </a>
+    </li>
+  </ul>
+
+  
+</nav>

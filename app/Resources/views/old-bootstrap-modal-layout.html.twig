@@ -1,0 +1,26 @@
+{% import "macro.html.twig" as web_macro %}
+
+{% if setting('backstage.is_v2',0)  == 0 %}
+  {% import "admin/macro.html.twig" as admin_macro %}
+{% else %}
+  {% import "admin-v2/macro.html.twig" as admin_macro %}
+{% endif %}
+
+<div class="modal-dialog {% if modal_class|default('') %} {{ modal_class }}{% endif %}">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h4 class="modal-title">{% block title %}{% endblock %}</h4>
+    </div>
+    <div class="modal-body">{% block body %}{% endblock %}</div>
+    {% if not hide_footer|default(false) %}
+      <div class="modal-footer">{% block footer %}{% endblock %}</div>
+    {% endif %}
+    {% block script %}{% endblock %}
+  </div>
+</div>
+
+<script type="text/javascript">
+  window.seajsBoot && window.seajsBoot();
+  $("[data-toggle='popover']").popover();
+</script>

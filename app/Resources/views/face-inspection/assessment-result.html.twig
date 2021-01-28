@@ -1,0 +1,46 @@
+{% extends 'layout.html.twig' %}
+{% import "macro.html.twig" as web_macro %}
+{% block content %}
+  <div class="container">
+    <div class="inspection-result-container row">
+      <div class="col-md-9 col-xs-12">
+        <div class="panel panel-default panel-result">
+          <div class="panel-body">
+            <div class="title">{{ 'facein.capture_face.inspection_result.title'|trans }}</div>
+            <div class="img-container">
+              {% for userFace in userFaces%}
+                {% set user = data('User', {userId:userFace.user_id}) %}
+                <a class="col-md-2 col-xs-4  list-item " href="" data-toggle="modal" data-target="#modal" data-url="{{ path('facein_inspection_results_detail', {userId:user.id,activityId:activityId}) }}">
+                  <img src="{{ filepath(userFace.picture|default(), 'avatar.png') }}">
+                  <div class="item-title">{{user.nickname}}</div>
+                </a>
+              {% else %}
+                <div class="result-empty">暂无疑似作弊考生</div>
+              {% endfor %}
+            </div>
+          </div>
+          <div class="result-paginator">
+            {{ web_macro.paginator(paginator) }}
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3 col-xs-12" >
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            {{ 'facein.capture_face.inspection_data.title'|trans }}
+          </div>
+          <div class="panel-body" >
+            <p>{{'facein.capture_face.inspection_data.course_count'|trans}}：<span class="num">{{memberCount}}</span></p>
+            <p>{{ 'facein.capture_face.inspection_data.result_count'|trans }}：<span class="num">{{recordUserCount}}</span></p>
+            <p>{{'facein.capture_face.inspection_data.no_cheating_count'|trans}}：<span class="num">{{noCheatingUserCount}}</span></p>
+            <p>{{'facein.capture_face.inspection_data.inspection_count'|trans}}：<span class="num">{{InspectionUserCount}}</span></p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+{% endblock %}

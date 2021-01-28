@@ -1,0 +1,18 @@
+{% extends 'es-bar/list-content/notification.html.twig' %}
+
+{% block myMessage %}
+
+  {% if notifications %}
+    {% set notificationsCount = 15  %}
+    {% for notification in notifications %}
+      {% set notificationsCount = loop.length  %}
+      {% set notification = render_notification(notification) %}
+      {{ notification.message|raw }}
+    {% endfor %}
+    {% if notificationsCount >= 15 %}
+      <li class="text-center"><a class="link-dark" href="{{ path('notification') }}" target="_blank">{{'site.datagrid.filter.category_more'|trans}}<i class="es-icon es-icon-angledoubleright"></i></a></li>
+    {% endif %}
+  {% else %}
+    <li class="empty">{{'es_bar.notification.empty_tips'|trans}}</li>
+  {% endif %}
+{% endblock %}

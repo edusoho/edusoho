@@ -1,0 +1,243 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_report_status_list' %}
+{% set script_controller = 'system/report-status' %}
+
+{% block main %}
+  <table class="table table-striped table-bordered">
+    <thead>
+    <tr>
+      <th width="40%">{{ 'admin.reports_status.environmental_detection'|trans }}</th>
+      <th width="20%">{{ 'admin.reports_status.recommend_config'|trans }}</th>
+      <th width="20%">{{ 'admin.reports_status.current_status'|trans }}</th>
+      <th width="20%">{{ 'admin.reports_status.min_require'|trans }}</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <tr>
+      <td>{{ 'admin.reports_status.operate_system'|trans }}</td>
+      <td>Linux</td>
+      <td>
+        <span class="text-success">√ {{ env.os }}</span>
+      </td>
+      <td>--</td>
+    </tr>
+
+    <tr>
+      <td>{{ 'admin.reports_status.php_version'|trans }} （<a href="{{ path('admin_report_status_php') }}">{{ 'admin.reports_status.more_info'|trans }}</a>）</td>
+      <td>7.1.x</td>
+      <td>
+        {% if env.phpVersionOk %}
+          <span class="text-success">√ {{ env.phpVersion }}</span>
+        {% else %}
+          <span class="text-danger">X {{ env.phpVersion }}</span>
+        {% endif %}
+      </td>
+      <td>5.5.9</td>
+    </tr>
+
+    <tr>
+      <td>{{ 'admin.reports_status.php_run_user'|trans }}</td>
+      <td>-</td>
+      <td>
+        <span class="text-success">√ {{ env.user }}</span>
+      </td>
+      <td>-</td>
+    </tr>
+
+    <tr>
+      <td>{{ 'admin.reports_status.safe_mode'|trans }}</td>
+      <td>{{ 'admin.reports_status.closed'|trans }}</td>
+      <td>
+        {% if env.safemode == 'Off' %}
+          <span class="text-danger">X {{ 'admin.reports_status.open'|trans }}</span>
+        {% else %}
+          <span class="text-success">√ {{ 'admin.reports_status.closed'|trans }}</span>
+        {% endif %}
+      </td>
+      <td>{{ 'admin.reports_status.closed'|trans }}</td>
+    </tr>
+
+    <tr>
+      <td>PDO_MySQL</td>
+      <td>{{ 'admin.reports_status.must'|trans }}</td>
+      <td>
+        {% if env.pdoMysqlOk %}
+          <span class="text-success">√ {{ 'admin.reports_status.alerday_install'|trans }}</span>
+        {% else %}
+          <span class="text-danger">X {{ 'admin.reports_status.no_install_mysql_pdo'|trans }}</span>
+        {% endif %}
+      </td>
+      <td>{{ 'admin.reports_status.must'|trans }}</td>
+    </tr>
+
+    <tr>
+      <td>
+        {{ 'admin.reports_status.upload_file_size'|trans }}
+        <div class="text-muted">{{ 'admin.reports_status.upload_file_size_tips'|trans }}</div>
+      </td>
+      <td>{{ 'admin.reports_status.upload_file_size_greater_than_200m'|trans }}</td>
+      <td>
+        {% if env.uploadMaxFilesizeOk %}
+          <span class="text-success">√ {{ env.uploadMaxFilesize }}</span>
+        {% else %}
+          <span class="text-danger">X {{ env.uploadMaxFilesize }}</span>
+        {% endif %}
+      </td>
+      <td>2M</td>
+    </tr>
+
+    <tr>
+      <td>
+        {{ 'admin.reports_status.form_data_size'|trans }}
+        <div class="text-muted">{{ 'admin.reports_status.form_data_size_tips'|trans }}</div>
+      </td>
+      <td>{{ 'admin.reports_status.upload_file_size_greater_than_200m'|trans }}</td>
+      <td>
+        {% if env.postMaxsizeOk %}
+          <span class="text-success">√ {{ env.postMaxsize }}</span>
+        {% else %}
+          <span class="text-danger">X {{ env.postMaxsize }}</span>
+        {% endif %}
+      </td>
+      <td>8M</td>
+    </tr>
+
+    <tr>
+      <td>
+        {{ 'admin.reports_status.php_max_run_time'|trans }}
+        <div class="text-muted">{{ 'admin.reports_status.php_max_run_time_tips'|trans }}</div>
+      </td>
+      <td>{{ 'admin.reports_status.upload_file_size_greater_than_300m'|trans }}</td>
+      <td>
+        {% if env.maxExecutionTimeOk %}
+          <span class="text-success">√ {{'admin.reports_status.php_max_execution_time'|trans({'%maxExecutionTime%': env.maxExecutionTime})}}</span>
+        {% else %}
+          <span class="text-danger">X {{'admin.reports_status.php_max_execution_time'|trans({'%maxExecutionTime%': env.maxExecutionTime})}}</span>
+        {% endif %}
+      </td>
+      <td>{{ 'admin.reports_status.upload_file_execution_time_30s'|trans }}</td>
+    </tr>
+
+    <tr>
+      <td>
+        {{ 'admin.reports_status.php_extend'|trans }}：mbstring
+        <div class="text-muted">{{ 'admin.reports_status.php__mbstring_extend_tips'|trans }}</div>
+      </td>
+      <td>{{ 'admin.reports_status.must'|trans }}</td>
+      <td>
+        {% if env.mbstringOk %}
+          <span class="text-success">√ {{ 'admin.reports_status.alerday_install'|trans }}</span>
+        {% else %}
+          <span class="text-danger">X {{ 'admin.reports_status.no_install'|trans }}</span>
+        {% endif %}
+      </td>
+      <td>{{ 'admin.reports_status.must'|trans }}</td>
+    </tr>
+
+    <tr>
+      <td>
+        {{ 'admin.reports_status.php_extend'|trans }}：curl
+        <div class="text-muted">{{ 'admin.reports_status.php__curl_extend_tips'|trans }}</div>
+      </td>
+      <td>{{ 'site.default.must'|trans }}</td>
+      <td>
+        {% if env.curlOk %}
+          <span class="text-success">√ {{ 'admin.reports_status.alerday_install'|trans }}</span>
+        {% else %}
+          <span class="text-danger">X {{ 'admin.reports_status.no_install'|trans }}</span>
+        {% endif %}
+      </td>
+      <td>{{ 'admin.reports_status.must'|trans }}</td>
+    </tr>
+
+    <tr>
+      <td>
+        {{ 'admin.reports_status.php_extend'|trans }}：GD
+        <div class="text-muted">{{ 'admin.reports_status.php__gd_extend_tips'|trans }}</div>
+      </td>
+      <td>{{ 'site.default.must'|trans }}</td>
+      <td>
+        {% if env.gdOk %}
+          <span class="text-success">√ {{ 'admin.reports_status.alerday_install'|trans }}</span>
+        {% else %}
+          <span class="text-danger">X {{ 'admin.reports_status.no_install'|trans }}</span>
+        {% endif %}
+      </td>
+      <td>{{ 'admin.reports_status.must'|trans }}</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <table class="table table-hover table-striped table-bordered">
+    <thead>
+    <tr>
+      <th width="60%">{{ 'admin.reports_status.system_communication'|trans }}</th>
+      <th width="40%">{{ 'admin.reports_status.system_status'|trans }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>{{ 'admin.reports_status.system_communication_with_discuz'|trans }}</td>
+      <td><span class="text-muted js-ucenter-check" data-url="{{ path('admin_report_status_ucenter') }}">{{ 'admin.reports_status.system_checking'|trans }}</span></td>
+    </tr>
+    {% if setting("cloud_email.status")|default("disable") == "disable" %}
+      <tr>
+        <td>{{ 'admin.reports_status.system_email_send'|trans }} <i class="glyphicon glyphicon-info-sign text-info" data-toggle="tooltip" data-placement="top" title="{{ 'admin.reports_status.system_email_send_tips'|trans }}"></i></td>
+        <td><span class="text-muted js-email-send-check" data-url="{{ path('admin_report_status_email_send') }}">{{ 'admin.reports_status.system_checking'|trans }}</span>
+        </td>
+      </tr>
+    {% endif %}
+    </tbody>
+  </table>
+
+  <div style="overflow:auto;max-height:400px;word-break:break-all;">
+    <table class="table table-hover table-striped table-bordered" id="direcory-check-table"
+           data-url="{{ path('admin_report_status_directory') }}">
+      <thead>
+      <tr>
+        <th width="60%">{{ 'admin.reports_status.system_file_and_catalog_authority'|trans }}</th>
+        <th width="20%">{{ 'admin.reports_status.current_status'|trans }}</th>
+        <th width="20%">{{ 'admin.reports_status.need_status'|trans }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td colspan="6" style="text-align: center;color: #c1c1c1;padding: 50px;">{{ 'admin.reports_status.system_scanning_file'|trans }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div style="overflow:auto;max-height:400px;word-break:break-all;">
+    <table class="table table-hover table-striped table-bordered" id="direcory-check-table"
+           data-url="{{ path('admin_report_status_directory') }}">
+      <thead>
+      <tr>
+        <th width="30%">{{ 'admin.reports_status.system_space_occupancy'|trans }}</th>
+        <th width="20%">{{ 'admin.reports_status.system_available_space'|trans }}</th>
+        <th width="25%">{{ 'admin.reports_status.system_total_space'|trans }}</th>
+        <th width="25%">{{ 'admin.reports_status.system_surplus_space'|trans }}</th>
+      </tr>
+      </thead>
+      <tbody>
+        {% for diskUsage in systemDiskUsage %}
+          <tr>
+            <td>
+              {{ diskUsage.name }}
+              <a class="glyphicon glyphicon-question-sign text-muted pull-center" data-toggle="popover"
+                 data-trigger="hover" data-placement="top" data-content="{{ diskUsage.title }}">
+              </a>
+            </td>
+            <td> {{ diskUsage.free }} </td>
+            <td> {{ diskUsage.total }} </td>
+            <td> {{ diskUsage.rate }} </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+
+{% endblock %}

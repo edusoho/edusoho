@@ -1,0 +1,18 @@
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+      {% set data = notification.content %}
+      {% if data.type == 'receive_minus' %}
+        {{ 'notification.coupon.receive_minus'|trans({'%rate%':data.rate}) }}
+      {% elseif data.type == 'receive_discount' %}
+        {{ 'notification.coupon.receive_discount'|trans({'%rate%':data.rate}) }}
+      {% endif %}
+    </div>
+    <div class="notification-footer">
+      {{ notification.createdTime|date_format }}
+    </div>
+  </div>
+</li>

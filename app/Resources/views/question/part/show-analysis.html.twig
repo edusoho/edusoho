@@ -1,0 +1,8 @@
+{% if showAnalysis|default(0) %}
+	<div class="testpaper-question-analysis js-testpaper-question-analysis" {% if analysisCssHide|default(1) %}style="display: none;"{% endif %}>
+    <div class="well mb0">
+		{{ question.analysis|default('course.question_manage.question.analysis.empty'|trans)|bbCode2Html|raw }}
+		{% include 'attachment/widget/list.html.twig' with {targetType:'question.analysis', targetId:question.id  } %}
+    </div>
+	</div>
+{% endif %}

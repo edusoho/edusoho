@@ -1,0 +1,31 @@
+<div class="modal-dialog modal-lg">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h4 class="modal-title">{{'admin.article_setting.image.content_title'|trans}}</h4>
+    </div>
+    <div class="modal-body">
+      <form id="article-pic-crop-form" method="post" >
+        <div class="form-group clearfix">
+          <div class="col-md-offset-2 col-md-8 controls">
+            <img class="img-responsive" src="{{ filepath(pictureUrl) }}" id="article-pic-crop"
+             width="{{scaledSize.width}}" height="{{scaledSize.height}}" data-natural-width="{{ naturalSize.width }}" data-natural-height="{{ naturalSize.height }}" />
+            <div class="help-block">{{'admin.article_setting.image.tips'|trans}}</div>
+          </div>
+        </div>
+        <div class="form-group clearfix">
+          <div class="col-md-offset-2 col-md-8 controls">
+            <a class="btn btn-fat btn-primary"
+            id="upload-picture-crop-btn"
+            data-goto="{{ path('admin_v2_article_show_upload')}}"
+            data-goto-url="{{ path('admin_v2_article_picture_crop')}}">{{'form.btn.save'|trans}}</a>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
+      <script>app.load('article/picture-crop-modal');</script>
+     </div>
+  </div>
+</div>

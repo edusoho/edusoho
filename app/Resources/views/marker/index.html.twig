@@ -1,0 +1,49 @@
+{% extends 'layout.html.twig' %}
+{% block title %}{{'question.marker_manage.content_title'|trans}}{% endblock %}
+
+{% set bodyClass="marker-manage" %}
+{% set file = activity.ext.file|default(null) %}
+{% set context = {hideBeginning:true ,hideQuestion:1, hideSubtitle:1} %}
+
+{% do script(['libs/jquery-sortable.js', 'libs/jquery-validation.js', 'libs/select2.js', 'app/js/marker/index.js']) %}
+
+{% block body %}
+  <div class="marker-manage-content js-marker-manage-content" id="task-dashboard"
+    data-course-id="{{ course.id }}"
+    data-task-id="{{ task.id }}"
+    data-task-mediaid="{{ file.id }}"
+    data-hide-media-task-learn-btn="{{ is_feature_enabled('hide_media_task_learn_btn') }}"
+    data-marker-metas-url="{{path('course_task_marker_metas',{'mediaId':file.id})}}"
+    data-media-player="{{ path('media_play', {mediaId:file.id,context: context}) }}">
+    {% include 'marker/player.html.twig' %}
+    <div class="manage-edit-body">
+      <ul class="nav nav-tabs nav-tabs-edit" role="tablist">
+        <li role="presentation" class="active"><a href="#practice" aria-controls="practice" role="tab" data-toggle="tab">{{ 'question.marker_manage.practice'|trans }}</a></li>
+        <li class="static" role="presentation">
+          <a>
+            <!-- border show-introhelp-->
+            <span class=" show-introhelp">
+              <i class="es-icon es-icon-xinxi introhelp-icon-help color-warning" id="step-1" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-content="{{ 'question.marker_manage.tips'|trans }}"></i>
+              <div class="popover bottom" >
+                <div class="arrow"></div>
+                <div class="popover-content clearfix">
+                  <p>{{ 'question.marker_manage.tips'|trans }}</p>
+                  <span class="close-introhelp js-close-introhelp">{{ 'question.marker_manage.understand_btn'|trans }}</span>
+                </div>
+              </div>
+            </span>
+          </a>
+        </li>
+      </ul>
+      <a href="{{ path('course_task_marker_manage_preview', {courseId:course.id,taskId:task.id}) }}" class="btn btn-info btn-preview" target="_blank"  >{{'question.marker_manage.preview_btn'|trans}}</a>
+      <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active pane-question">
+          {{ render(path('course_task_question_marker_list', {courseId:course.id,taskId:task.id})) }}
+        </div>
+      </div>
+    </div>
+    {% include 'marker/coord.html.twig' %}
+  </div>
+  <div id="modal" class="modal"></div>
+  <div class="introhelp-overlay js-introhelp-overlay hidden"></div>
+{% endblock %}

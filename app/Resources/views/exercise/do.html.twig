@@ -1,0 +1,67 @@
+{% extends 'testpaper/testpaper-layout.html.twig' %}
+
+{% block paper_header %}{% endblock %}
+
+{% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-timer.js','libs/perfect-scrollbar.js','app/js/testpaper/do-test/exercise/index.js']) %}
+
+{% if action|default('') is not empty %}
+  {% set showHeader = 1 %}
+  {% set isIframeBody = 0 %}
+{% else %}
+  {% set showHeader = 0 %}
+{% endif %}
+
+{% block paper_body %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      {{ 'course.plan_task.practice'|trans }}{{'course.question_manage.question'|trans}} <small class="color-gray">{{ 'course.plan_task.activity_manage.exercise.total_questions'|trans({'%itemCount%':paper.itemCount }) }}</small>
+    </div>
+
+    <div class="panel-body">
+      <div class="question-set-items">
+        {% for question in questions %}
+          {% if question.isDelete|default(false) %}
+            {% include 'question/part/question-delete.html.twig' with {showScore:0,question:question}%}
+          {% else %}
+            {% set questionTemplate = getQuestionTypeTemplate(question.type,'do') %}
+            {% if questionTemplate %}
+              {% include questionTemplate with {showScore:0} %}
+            {% endif %}
+          {% endif %}
+
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+{% endblock %}
+
+{% block testpaper_finished_dialog %}
+  <div id="testpaper-finished-dialog" class="modal in" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body task-state-modal">
+          <div class="title font-blod">
+            <i class="es-icon es-icon-zanting1 color-warning"></i>
+            {{'course.plan_task.activity_manage.exercise.confirm_submit'|trans}}
+          </div>
+          <div class="content">
+            <div class="text-16">
+              {{'course.plan_task.activity_manage.exercise.confirm_submit_tips'|trans}}
+            </div>
+          </div>
+          <div class="text-right mt20">
+            <a href="javascript:;" class="btn btn-link" data-dismiss="modal">{{'form.btn.cancel'|trans}}</a>
+            <button class="btn btn-primary" id="testpaper-finish-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" data-role="paper-submit" data-url="{{ path('exercise_finish', { resultId: paperResult.id|default(0) }) }}" data-goto="{{ path('exercise_result_show', { resultId: paperResult.id|default(0) }) }}">
+            {{'course.plan_task.activity_manage.exercise.confirm_submit'|trans}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+
+{% block paper_sidebar %}
+  {% include 'exercise/part/paper-card.html.twig' %}
+{% endblock %}

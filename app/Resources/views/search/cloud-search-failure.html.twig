@@ -1,0 +1,31 @@
+{% extends 'search/cloud-search.html.twig' %}
+
+{% block content %}
+
+  <div class="row">
+    <div class="col-md-8">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">{{'cloud_search.result'|trans}}</h3>
+        </div>
+        <div class="panel-body color-gray">
+         {{errorMessage|default('')}}
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      {% if type %}
+          {% include 'search/search-hot-' ~ type|lower ~ '.html.twig' %}
+      {% else %}
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">{{'cloud_search.common_keywords'|trans}}</h3>
+        </div>
+        <div class="panel-body">
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+{% endblock %}

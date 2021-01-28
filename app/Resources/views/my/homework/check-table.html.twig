@@ -1,0 +1,47 @@
+<table class="table table-striped table-hover">
+  <tbody>
+    {% if answerRecords|default(null) %}
+      {% for key,answerRecord in answerRecords %}
+        {% set user = users[answerRecord.user_id]|default(null) %}
+        {% set assessment = assessments[answerRecord.assessment_id]|default(null) %}
+        {% set activity = activities[homeworkActivities[answerRecord['answer_scene_id']]['id']]|default(null) %}
+        {% set task = tasks[activity.id]|default(null) %}
+        {% set course = courses[task.courseId]|default(null) %}
+        {% set answerReport = answerReports[answerRecord['answer_report_id']]|default(null) %}
+        {% set course = courses[activity.fromCourseId]|default(null) %}
+        {% set courseSet = courseSets[activity.fromCourseSetId]|default(null) %}
+        <tr>
+          <td class="vertical-middle">
+            {{ task.title|default(null)|plain_text(60) }}
+            <div>
+              <small class="color-gray">
+                {{ 'come.from'|trans }}<a class="link-primary" href="{{ path('course_show',{id:course.id}) }}" target="_blank">《{{get_formated_course_title(course)}}》</a>
+              </small>
+              <small class="color-gray mhs">•</small>
+              <small class="color-gray">{{ answerRecord.begin_time|date('site.date_format'|trans) }}</small>
+            </div>
+          </td>
+          <td class="vertical-middle">
+            {{ web_macro.user_link(user) }} <br>
+            <small class="color-gray">{{ answerRecord.end_time|date("Y-n-d H:i") }} {{'my.learning.homework.submit_paper'|trans}}</small>
+          </td>
+
+          <td class="vertical-middle">
+            {% if status == 'reviewing' %}
+              <a class="link-primary" href="{{ path('course_manage_homework_check', {id:course.id,answerRecordId:answerRecord.id,source:source|default('course'),targetId:targetId|default(0),action:'check' }) }}" target="_blank">{{'my.learning.homework.check_paper'|trans}}</a>
+            {% else %}
+              <a class="link-primary" href="{{ path('homework_result_show',{answerRecordId:answerRecord.id,action:'check' }) }}" target="_blank" >{{'my.teaching.testpaper.watch_result'|trans}}</a>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    {% else %}
+      {% if status == 'reviewing' %}
+        <div class="empty">{{'my.learning.homework.reviewing_empty'|trans}}</div>
+      {% else %}
+        <div class="empty">{{'my.learning.homework.check_finished_empty'|trans}}</div>
+      {% endif %}
+    {% endif  %}
+  </tbody>
+</table>
+{{ web_macro.paginator(paginator) }}

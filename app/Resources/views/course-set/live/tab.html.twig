@@ -1,0 +1,65 @@
+<div class="panel panel-default es-live-list">
+    <div class="panel-body">
+      <ul class="clearfix">
+      	{% for dateTab in dateTabs %}
+	        <li {% if dateTab == 'today' %}class="active"{% endif %} >
+	          <a href="#{{ dateTab }}" data-toggle="tab">{% if dateTab == 'today' %}{{'course_set.live.today_live'|trans}}{% else %}{{ dateTab }}{% endif %}</a>
+	        </li>
+        {% endfor %}
+
+      </ul>
+      <div class="tab-content">
+      	{% for date,liveList in liveTabs %}
+	        <div class="tab-pane {% if date == 'today' %}active{% endif %}" id="{{ date }}">
+	        	{% if not liveList.current|default(null) and not liveList.future|default(null) %}
+							<div class="empty">{{'course_set.live.today_live.empty'|trans}}</div>
+						{% else %}
+							<div class="es-live-item">
+	          	{% if date == 'today' %}
+		           	<div class="live-content living mbl">
+									{% if liveList.current|default(null) %}
+			              <div class="timeline">
+			               <span class="time-icon"><em></em></span>
+			               <span class="label label-success">{{'course_set.live.status.onlive'|trans}}</span>
+			              </div>
+			              <ul class="live-courses">
+			              	{% for list in liveList.current %}
+			                	<li>
+                          <a href="{{ path('course_task_show', {courseId: list.courseId, id: list.id}) }}"><span>{{ list.startTime|date('H:i') }}</span>
+                            {{ list.title }}
+                          </a>
+                        </li>
+			                {% endfor %}
+			              </ul>
+			            {% endif %}
+		            </div>
+		          {% endif %}
+
+	            <div class="live-content live">
+	            	{% if liveList.future|default(null) %}
+		              <div class="timeline">
+		                <span class="time-icon"><em></em></span>
+		                {% if date == 'today' %}
+		               		<span class="label label-info">{{'course_set.live.status.live_soon'|trans}}</span>
+		                {% endif %}
+		              </div>
+		              <ul class="live-courses">
+		                {% for list in liveList.future %}
+		                	<li>
+                        <a href="{{ path('course_task_show', {courseId:list.courseId, id: list.id}) }}" target="_blank"><span>{{ list.startTime|date('H:i') }}</span>
+                          {{ list.title }}
+                        </a>
+                      </li>
+		                {% endfor %}
+		              </ul>
+		            {% endif %}
+	            </div>
+	          </div>
+	        	{% endif %}
+
+	        </div>
+		{% endfor %}
+
+      </div>
+    </div>
+  </div>

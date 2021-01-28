@@ -1,0 +1,28 @@
+<div class="page-header"><h1>{{'admin.user.approval'|trans}}</h1>
+</div>
+<ul class="nav nav-tabs">
+  <li {% if submenu == 'approving' %} class="active" {% endif %} >
+    <a  href="{{ path('admin_approval_approving') }}">{{'admin.user.approval.approving_tab'|trans}}</a>
+  </li>
+  <li {% if submenu == 'approved' %} class="active" {% endif %} >
+    <a  href="{{ path('admin_approval_approved') }}">{{'admin.user.approval.approved_tab'|trans}}</a>
+  </li>
+</ul>
+<br>
+
+<form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>  
+  <div class="form-group">
+    <select id="keywordType" class="form-control" name="keywordType">
+          {% set options = {'':'admin.user.approval.keyword_type'|trans,'nickname':'user.fields.username_label'|trans,'email':'admin.user.approval.email'|trans} %}
+          {{ select_options(options, app.request.get('keywordType')) }}
+    </select>
+
+  </div>
+
+  <div class="form-group">
+    <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="{{'form.placeholder.keyword'|trans}}">
+  </div>
+
+  <button class="btn btn-primary">{{'form.btn.search'|trans}}</button>
+
+</form>

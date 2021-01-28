@@ -1,0 +1,35 @@
+<div class="task-question-plugin-pane">
+
+  <div class="task-question-plugin-pane-header clearfix">
+    <a class="back-to-list task-question-plugin-pane-header__btn" href="javascript:;">{{'course.plan_task.go_back_btn'|trans}}</a>
+  </div>
+
+  <div class="task-question-plugin-pane-thread">
+    <div class="task-question-plugin-pane-thread__title cd-mb16"><span class="cd-tag cd-tag-blue">{{ 'thread.status.question'|trans }}</span><a class="vertical-middle cd-link-major cd-ml8" href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}" target="_blank">{{ thread.title }}</a></div>
+    <div class="task-question-plugin-pane-thread__info cd-mb16">{{'course.plan_task.question_author'|trans}}<a href="{{ path('user_show', {id:threader.id}) }}" target="_blank">{{ threader.nickname }}</a><span class="gray-medium cd-ml8 cd-mr8">•</span><span data-role="post-number">{{ thread.postNum }}</span> {{'course.plan_task.question_answer'|trans}}</div>
+    <div class="task-question-plugin-pane-thread__content editor-text">{{ thread.content|cdn|raw }}</div>
+  </div>
+
+  <ul class="task-question-plugin-pane-thread js-task-thread-list media-list cd-mt16" data-role="post-list">
+    <div class="task-question-plugin-pane-thread__title js-answer-title cd-mt8 {% if posts is empty %}hidden{% endif %}"><span class="cd-tag post-tag-success">{{ 'thread.status.answer'|trans }}</span><span class="vertical-middle cd-link-major cd-ml8">{{ 'thread.status.all.answer'|trans }}</span></div>
+    {% for post in posts %}
+      {% set user = users[post.userId] %}
+      {% include 'task/plugin/question/post-item.html.twig' %}
+    {% endfor %}
+  </ul>
+
+  <form class="task-question-plugin-pane-post-form post-form" data-role="post-form" method="post" action="{{ path('course_task_plugin_thread_answer', {courseId:thread.courseId, taskId: thread.taskId, threadId: thread.id}) }}" novalidate>
+    <div class="form-group">
+      <div class="controls">
+        {{ form_widget(form.content, {attr:{class:'form-control', rows:4, 'data-display':'course.plan_task.question_content'|trans}}) }}
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="controls clearfix">
+        {{ form_rest(form) }}
+        <button type="submit" class="btn btn-primary pull-right" data-type="question">{{'course.plan_task.add_answer_btn'|trans}}</button>
+      </div>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+</div>

@@ -1,0 +1,22 @@
+<span class="my-course-item__label">
+  {% if courseSet.status == constant('Biz\\Course\\Service\\CourseSetService::DRAFT_STATUS') %}
+    <span class="cd-tag cd-tag-orange">{{'course.block_grid.DRAFT_STATUS'|trans}}</span>
+  {% elseif courseSet.status == constant('Biz\\Course\\Service\\CourseSetService::CLOSE_STATUS') %}
+    <span class="cd-tag cd-tag-red">{{'course.block_grid.CLOSE_STATUS'|trans}}</span>
+  {% endif %}
+  {% if courseSet.status != constant('Biz\\Course\\Service\\CourseSetService::CLOSE_STATUS') %}
+    {% if courseSet.serializeMode == constant('Biz\\Course\\Service\\CourseSetService::SERIALIZE_SERIALIZE_MODE') %}
+      <span class="cd-tag cd-tag-green">{{'course.block_grid.SERIALIZE_SERIALIZE_MODE'|trans}}</span>
+    {% elseif courseSet.serializeMode == constant('Biz\\Course\\Service\\CourseSetService::FINISH_SERIALIZE_MODE') %}
+      <span class="cd-tag cd-tag-orange">{{'course.block_grid.FINISH_SERIALIZE_MODE'|trans}}</span>
+    {% endif %}
+  {% endif %}
+  {% if courseSet.type == 'live' %}
+    {% set task = course['task']|default(null) %}
+    {% if task and "now"|date("U") >= task.startTime and "now"|date("U") <= task.endTime %}
+      <span class="cd-tag cd-tag-orange">{{'course.block_grid.onlive'|trans}}</span>
+    {% else %}
+      <span class="cd-tag cd-tag-green">{{'course.block_grid.live'|trans}}</span>
+    {% endif %}
+  {% endif %}
+</span>

@@ -1,0 +1,56 @@
+{% import "macro.html.twig" as web_macro %}
+
+<div id="user-card-{{ user.id }}" class="js-card-content" data-user-id="{{ user.id }}">
+  <div class="card-header media-middle">
+    <div class="media">
+      <div class="media-left">
+        <div class="user-avatar">
+          {{ web_macro.user_avatar(user, '', 'avatar-md', false) }}
+          {% if is_plugin_installed('vip') %}
+            {% set userVip = get_user_vip_level(user.id) %}
+            {% if userVip and levels and userVip.deadline|date('Y-m-d') > nowTime|date('Y-m-d')%}
+              <span class="icon-user-vip"><img src="{{levels[userVip.levelId].icon|default(asset('assets/v2/img/vip/vip_icon_bronze.png'))}}" alt=""></span>
+            {% endif %}
+          {% endif %}
+        </div>
+      </div>
+      <div class="media-body">
+        <div class="title">
+          {{ web_macro.user_link(user, '', false) }}
+        </div>
+        <div class="content">
+          {% if 'ROLE_TEACHER' in user.roles %}
+            <span class="icon-user-teacher icon-user-teacher--sm"><i class="es-icon es-icon-school"></i></span>
+          {% endif %}
+          {% if user.title %}
+            {{ user.title }}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% if not app.user or (app.user.id != user.id) %}
+      {% set messageSetting = setting('message') %}
+      <div class="metas">
+        <a class="btn btn-primary btn-xs follow-btn" href="javascript:;" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowed %} style="display:none;"{% endif %} data-loggedin={% if app.user and app.user.isLogin() %}"1"{% else %}"0"{% endif %}>{{'user.card_show_following'|trans}}</a>
+        <a class="btn btn-default btn-xs unfollow-btn" href="javascript:;"  data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if not isFollowed %}style="display:none;"{% endif %}>{{'user.card_show_followed'|trans}}</a>
+        {% if can_send_message(user.id) and messageSetting.showable|default('1') != 0 %}
+          <a class="btn btn-default btn-xs direct-message-btn" herf="javascript:;" data-toggle="modal" data-backdrop="static" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">{{'user.card_show_message'|trans}}</a>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+  <div class="card-body">
+    {% if profile.signature %}
+      {{ profile.signature }}
+    {% else %}
+      {{'user.card_show_sign_tips'|trans}}
+    {% endif %}
+  </div>
+  <div class="card-footer clearfix">
+    <span><a class="link-dark" href="{{ path('user_learn',{id:user.id}) }}">{{ user.learningNum }}<br>{{'user.card_show_learn'|trans}}</a></span>
+    <span><a class="link-dark" href="{{ path('user_following',{id:user.id}) }}">{{ user.followingNum }}<br>{{'user.card_show_following'|trans}}</a></span>
+    <span><a class="link-dark" href="{{ path('user_follower',{id:user.id}) }}">{{ user.followerNum }}<br>{{'user.card_show_fans'|trans}}</a></span>
+  </div>
+
+</div>
+

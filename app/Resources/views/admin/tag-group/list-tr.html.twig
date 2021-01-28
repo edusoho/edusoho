@@ -1,0 +1,18 @@
+<tr id="tag-group-tr-{{ tagGroup.id }}">
+  <td>{{ tagGroup.id }}</td>
+  <td>{{ tagGroup.name }}</td>
+  <td>
+    {% for scope in tagGroup.scope %}
+      {% if scope == 'classroom' %}
+        {{ 'admin.tag_manage.tag_group.classroom_filter'|trans }}
+      {% elseif scope == 'course'%}
+        {{ 'admin.tag_manage.tag_group.course_filter'|trans }}
+      {% endif %}
+    {% endfor %}
+  </td>
+  <td>{{ tagGroup.tagNum }}</td>
+  <td>{{ tagGroup.createdTime|date('Y-m-d H:i') }}</td>
+  <td>
+    <button class="btn btn-default btn-sm" data-url="{{ path('admin_tag_group_update', {groupId: tagGroup.id}) }}" data-toggle="modal" data-target="#modal">{{ 'admin.tag_manage.tag_group.edit_btn'|trans }}</button>
+  </td>
+</tr>

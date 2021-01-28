@@ -1,0 +1,24 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% block title %}<span class="color-gray">{{'site.tips'|trans}}</span>{% endblock %}
+
+{% block body %}
+	{% if not classroom %}
+		<div style="height: 50px;text-align: center;">
+	        <p style="line-height: 50px;">
+	        	{{'course.delete_from_classroom_tips'|trans({'%classroomName%':setting("classroom.name")|default('site.default.classroom'|trans)})}}
+	        </p>
+	    </div>
+	{% else %}
+	    <div style="height: 50px;text-align: center;">
+	        <p style="line-height: 50px;">
+            {{ 'course.not_member_in_classroom_tips'|trans({'%classroomName%':setting('classroom.name')|default('site.default.classroom'|trans),'%classroomUrl%':path('classroom_show', {id:classroom.id})})|raw }}
+	        </p>
+	    </div>
+	{% endif %}
+
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-primary" data-dismiss="modal">{{'form.btn.close'|trans}}</button>
+{% endblock %}

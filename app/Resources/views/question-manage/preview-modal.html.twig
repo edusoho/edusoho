@@ -1,0 +1,35 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% set lang = app.request.getLocale() %}
+
+{% if lang == 'en' %}
+  {% do script(['libs/vue.js','libs/item-bank/lib/itemBank.umd.min.js', 'libs/item-bank/lib/locale/en-US.js', 'app/js/question-manage/preview/index.js']) %}
+{% else %}
+  {% do script(['libs/vue.js','libs/item-bank/lib/itemBank.umd.min.js','app/js/question-manage/preview/index.js']) %}
+{% endif %}
+
+{% block title %}{{'course.question_manage.preview'|trans}}{% endblock %}
+{% set currentTheme = current_theme() %}
+{% set themeConfig = app.request.get('themeEditing')|default(false) ? currentTheme.config  : currentTheme.confirmConfig %}
+{% set maincolor = themeConfig.maincolor|default('default') %}
+{% set modal_class = 'modal-lg' %}
+
+{% if maincolor != 'default' and setting('theme.code', 'jianmo') == 'jianmo' %}
+  {% do css(['libs/item-bank/lib/styles/item-bank-' ~ maincolor ~ '.css']) %}
+{% else %}
+  {% do css(['libs/item-bank/lib/styles/item-bank.css']) %}
+{% endif %}
+
+{% block body %}
+
+  {% verbatim %}
+    <div id="app">
+    </div>
+  {% endverbatim %}
+
+  <input type="hidden" name="item" value="{{ item|json_encode }}">
+  {% include 'attachment-upload/upload-data.html.twig'  %}
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-default" data-dismiss="modal">{{'form.btn.close'|trans}}</button>
+{% endblock %}

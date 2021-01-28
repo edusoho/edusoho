@@ -1,0 +1,66 @@
+{% if consultEnabled %}
+  <div class="bar-popover-content" style="display:none;">
+    <div id="bar-qq-content">
+    {% if consultQqs %}
+      <div class="row mtm">
+        {% for qq in consultQqs %}
+            <div class="mbm text-overflow {% if loop.last and (loop.length % 2 == 1) %}col-xs-12{% else %}col-xs-6{% endif %}">
+            {% if qq.url|default(false) %}
+              <a class="link-dark" href="{{ qq.url|raw }}" target="_blank">
+            {% else %}
+              <a class="link-dark" href="http://wpa.qq.com/msgrd?v=3&uin={{ qq.number }}&site=qq&menu=yes" target="_blank">
+            {% endif %}
+                <img class="mrs" src="{{asset("assets/v2/img/bar_qq.png")}}" alt="" title="{{'es_bar.consult.click_to_send_msg_tips'|trans}}" alt="">
+                <span alt="" title="{{qq.name}}">{{ qq.name }}</span>
+              </a>
+            </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+      <hr>
+    {% if consultQqGroups %}
+      <div class="row">
+        {% for qqgroup in consultQqGroups %}
+          <div class="mbm {% if loop.last and (loop.length % 2 == 1) %}col-xs-12{% else %}col-xs-6{% endif %}">
+            <p class="text-overflow">
+              <img class="mrs" src="{{asset("assets/v2/img/bar_qq_group.png")}}" alt="">
+              <span alt="" title="{{ qqgroup.name }}">{{ qqgroup.name }}</span>
+            </p>
+
+            {% if not qqgroup.url|default(false) %}
+              <p class="text-overflow">
+                <span alt="" title="{{ qqgroup.number }}">{{ qqgroup.number }}</span>
+              </p>
+            {% endif %}
+
+            {% if qqgroup.url|default(false) %}
+              <p class="text-overflow">
+                {{ qqgroup.url|raw }}
+              </p>
+            {% endif %}
+
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+    </div>
+
+    <div id="bar-phone-content">
+      {% if consult.worktime is not empty %}
+        <p class="mtm"><i class="es-icon es-icon-accesstime mrm"></i>{{'es_bar.consult.work_time'|trans({'%worktime%': consult.worktime}) }}</p>
+      {% endif %}
+      {% for phone in consultPhones %}
+        <p class="mtm"><i class="es-icon es-icon-phone mrm"></i>{{ phone.name }}：{{ phone.number }}</p>
+      {% endfor %}
+      {% if consult.email is not empty %}
+        <p class="mtm"><i class="es-icon es-icon-mail mrm"></i>{{'es_bar.consult.email'|trans}} <a class="link-dark" href="mailto:{{consult.email}}">{{consult.email}}</a></p>
+      {% endif %}
+    </div>
+
+    {% if consult.webchatURI is not empty %}
+      <div id="bar-weixin-content">
+        <img width="110" class="img-responsive" src="{{ asset(consult.webchatURI) }}" alt="">
+      </div>
+    {% endif %}
+  </div>
+{% endif %}

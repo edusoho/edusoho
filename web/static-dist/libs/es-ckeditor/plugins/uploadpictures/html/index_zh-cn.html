@@ -1,0 +1,26 @@
+<head>
+  <title>图片上传</title>
+  <meta charset="UTF-8">
+</head>
+<div class="balloon-uploader ckeditor-balloon-uploader">
+    <div class="balloon-uploader-body">
+        <div class="balloon-nofile">请点击添加文件按钮</div>
+        <div class="balloon-filelist">
+            <div class="balloon-filelist-heading">
+                <div class="file-name">文件名</div>
+                <div class="file-size">大小</div>
+                <div class="file-status">状态</div>
+            </div>
+            <ul></ul>
+        </div>
+    </div>
+    <div class="balloon-uploader-footer">
+        <div class="ckeditor-uploadpictures-pick-btn file-pick-btn mrs">添加文件</div>
+        <div class="start-upload-btn js-start-upload-btn">开始上传</div>
+    </div>
+</div>
+
+<script>
+  var outerHtml = document.getElementsByTagName('div')[0].outerHTML;
+  window.parent.postMessage({eventName:'es-ckeditor.post', html:outerHtml }, '*');
+</script>

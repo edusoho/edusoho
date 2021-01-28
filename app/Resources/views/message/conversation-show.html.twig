@@ -1,0 +1,39 @@
+{% extends 'layout.html.twig' %}
+{% block title %}{{'message.chat'|trans}} - {{ parent() }}{% endblock %}
+{% do script(['app/js/message/show/index.js']) %}
+
+{% block content %}
+<div class="row row-8">
+  <div class="col-md-8 col-md-offset-2">
+    <div class="panel panel-default panel-page">
+      <div class="panel-heading">
+        <a href="{{ path('message')}}" class="btn btn-default pull-right">{{'message.btn.back'|trans}}</a>
+        {% set nickname = (receiver.destroyed == 0) ? receiver.nickname : 'user.user_had_destroyed'|trans %}
+        <h2>{{'message.chat.content_title'|trans({'%nickname%':nickname})}}</h2>
+      </div>
+
+      <form id="message-reply-form" class="message-reply-form clearfix" method="post"
+      action="{{ path('message_conversation_show', {conversationId:conversation.id}) }}" style="margin-bottom: 30px;">
+        <div class="form-group">
+          <textarea id="message_reply_content" name="message_reply[content]" required="required" class="form-control" rows="3" placeholder="{{'message.chat.content_tips' |trans }}" {% if receiver.destroyed == 1%}disabled{% endif %}></textarea>
+        </div>
+
+        <div class="form-group">
+          <button id="course-reply-btn" class="btn btn-primary pull-right" {% if receiver.destroyed == 1%}disabled{% endif %}>{{'form.btn.send'|trans}}</button>
+        </div>
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      </form>
+
+      <ul class="media-list message-list">
+        {% for message in messages %}
+          {% include 'message/template/message-item-' ~ message.type ~ '.tpl.html.twig' %}
+        {% endfor %}
+      </ul>
+
+      {{ web_macro.paginator(paginator) }}
+
+    </div><!-- /panel -->
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends 'classroom-manage/layout.html.twig' %}
+
+{% block title %}{{'classroom.student_manage'|trans}} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'students' %}
+
+{% block main %}
+
+<div class="panel panel-default" role="classroom-manage-students-manage">
+  <div class="panel-heading">{{'classroom.student_manage'|trans}}
+  {% if role|default() == 'auditor'%}
+    <a class="btn btn-info btn-sm panel-bar mhs" id="export-students-btn" href="javascript:;" data-url="{{ path('classroom_manage_student_export_csv', {id:classroom.id,role:role}) }}" data-datas-url="{{ path('classroom_manage_student_export_datas', {id:classroom.id,role:role}) }}" data-loading-text="{{'classroom.student_exporting'|trans}}"><i class="glyphicon glyphicon-export"></i> {{'classroom.student_export_auditor'|trans}}</a>
+  {% elseif role|default() == 'student' %}
+    <div class="panel-bar">
+      {% if classroom.status == 'published' %}
+        <button class="btn btn-info btn-sm mhs" id="student-add-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('classroom_manage_student_create', {id:classroom.id}) }}"><i class="glyphicon glyphicon-plus"></i> {{'classroom.add_student_btn'|trans}}</button>
+        <a class="btn btn-info btn-sm mhs" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{{ path('importer_index', {type: 'classroom-member',classroomId:classroom.id}) }}"><i class="glyphicon glyphicon-import"></i> {{'classroom.student_batch_import'|trans}}</a>
+      {% else %}
+        <a class="btn btn-info btn-sm mhs" disabled data-toggle="tooltip" data-placement="top" title="{{'classroom.student_add_tips'|trans}}"><i class="glyphicon glyphicon-plus"></i> {{'classroom.add_student_btn'|trans}}</a>
+        <a class="btn btn-info pull-right btn-sm mhs" disabled data-toggle="tooltip" data-placement="top" title="{{'classroom.student_import_tips'|trans}}"><i class="glyphicon glyphicon-import"></i> {{'classroom.student_batch_import'|trans}}</a>
+      {% endif %}
+      <a class="btn btn-info btn-sm mhs" id="export-students-btn" href="javascript:;" data-url="{{ path('classroom_manage_student_export_csv', {id:classroom.id,role:role}) }}" data-datas-url="{{ path('classroom_manage_student_export_datas', {id:classroom.id,role:role}) }}" data-loading-text="{{'classroom.student_exporting'|trans}}"><i class="glyphicon glyphicon-export"></i> {{'classroom.student_export'|trans}}</a>
+    </div>
+   {% endif %}
+
+  </div>
+  <div class="panel-body">
+
+    <ul class="nav nav-pills mbl">
+      <li class="{% if submenu == 'student' %}active{% endif %}">
+        <a href="{{ path('classroom_manage_students', {id:classroom.id}) }}">{{'classroom.member'|trans}}
+        </a>
+      </li>
+
+      <li class="{% if submenu == 'aduitor' %}active{% endif %}">
+        <a href="{{ path('classroom_manage_aduitor', {id:classroom.id}) }}">{{'classroom.auditor'|trans}}
+        </a>
+      </li>
+
+      <li class="{% if submenu == 'join_record' %}active{% endif %}">
+        <a href="{{ path('classroom_manage_record', {id:classroom.id, type: 'join'}) }}">{{ 'course.members_manage.join_records'|trans }}
+        </a>
+      </li>
+
+      <li class="{% if submenu == 'exit_record' %}active{% endif %}">
+        <a href="{{ path('classroom_manage_record', {id:classroom.id, type: 'exit'}) }}">{{ 'classroom.exit_record'|trans }}
+        </a>
+      </li>     
+    </ul>
+  {% block maincontent %}{% endblock %}
+  </div>
+</div>
+
+{% endblock %}

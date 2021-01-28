@@ -1,0 +1,18 @@
+{% extends 'classroom-manage/layout.html.twig' %}
+
+{% block title %}{{'classroom.homework_check'|trans}} - {{ parent() }}{% endblock %}
+{% set side_nav = 'homework-check' %}
+
+{% block main %}
+  <div class="panel panel-default panel-col">
+    <div class="panel-heading">{{'classroom.homework_check'|trans}}</div>
+    <div class="panel-body">
+      {% if isTeacher is defined and not isTeacher %}
+        <span class="color-danger">{{'classroom.homework_check_tips'|trans}}</span>
+      {% endif %}
+
+      {{ render(controller('AppBundle:Testpaper/Manage:checkList',{request:app.request,targetId:classroom.id,targetType:'classroom',type:'homework'})) }}
+
+    </div>
+  </div>
+{% endblock %}

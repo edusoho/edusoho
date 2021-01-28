@@ -1,0 +1,17 @@
+
+
+<div class="cd-dropdown" data-toggle="cd-dropdown" data-trigger="hover">
+  <a class="cd-link-assist" href="javascript:;">
+    <i class="es-icon es-icon-morehoriz"></i>
+  </a>
+  <ul class="dropdown-menu task-manage-item__dropdown">
+    <li>
+      <a href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_chapter_manage', {chapterId:chapter.id, courseId:course.id}) }}">{{ 'course.lesson_manage.rename'|trans }}</a>
+    </li>
+    <li>
+      <a class="js-delete" href="javascript:;" data-name="{{ course_chapter_alias(chapter.type)|trans }}" data-type="chapter" data-url="{{ path('course_manage_chapter_delete', {chapterId:chapter.id, courseId:course.id}) }}">
+        {{ 'form.btn.delete'|trans }}
+      </a>
+    </li>
+  </ul>
+</div>

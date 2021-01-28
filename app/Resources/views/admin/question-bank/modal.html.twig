@@ -1,0 +1,47 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{% if questionBank.id %}{{'admin.question_bank.manage.edit_title'|trans}}{% else %}{{'admin.question_bank.manage.add_title'|trans}}{% endif %}{% endblock %}
+
+
+{% block body %}
+<div id="bank-creater-widget">
+
+	<form id="bank-form" class="form-horizontal" action="{% if questionBank.id %}{{ path('admin_question_bank_manage_edit', {id:questionBank.id}) }}{% else %}{{ path('admin_question_bank_manage_create') }}{% endif %}" method="post">
+		<div class="form-group">
+			<label class="col-md-2 control-label" for="bank-name">{{'admin.question_bank.manage.name_label'|trans}}</label>
+			<div class="col-md-8 controls">
+				<input class="form-control" id="bank-name" type="text" name="name" value="{{ questionBank.name|default('') }}" tabindex="1">
+			</div>
+		</div>
+
+    <div class="form-group">
+			<label class="col-md-2 control-label" for="bank-category">{{'admin.question_bank.manage.category_label'|trans}}</label>
+			<div class="col-md-8 controls">
+				<select style="width:150px;" class="form-control" name="categoryId" required="required" id="bank-category">
+          <option value="">{{'admin.question_bank.manage.category'|trans}}</option>
+          {% for tree in categoryTree %}
+            <option value={{ tree.id }} {% if tree.id == questionBank.categoryId  %}selected{% endif%}>{% for i in 1..(tree.depth-1) if tree.depth > 1 %}　{% endfor %}{{ tree.name }}</option>
+          {% endfor %}
+        </select>
+			</div>
+		</div>
+
+    <div class="form-group">
+			<label class="col-md-2 control-label" for="bank-members">{{'admin.question_bank.manage.manager_label'|trans}}</label>
+			<div class="col-md-8 controls">
+				<input type="form-control" id="bank-members" name="members" required="required" class="width-full select2-offscreen" tabindex="-1" value="{{ bankMembers|default('') }}" data-match-url="{{ path('question_bank_member_match') }}">
+        <div class="help-block" style="display:none;"></div>
+			</div>
+		</div>
+
+		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+	</form>
+</div>
+
+<script type="text/javascript"> app.load('question-bank/create'); </script>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-link" data-dismiss="modal" tabindex="6">{{'form.btn.cancel'|trans}}</button>
+	<button id="create-btn" data-submiting-text="{{'form.btn.submit.submiting'|trans}}" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#bank-form" tabindex="4">{{'form.btn.save'|trans}}</button>
+{% endblock %}

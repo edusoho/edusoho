@@ -1,0 +1,41 @@
+<div id="material-detail" class="material-detail-widget">
+  <div class="page-header clearfix">
+    <h1 class="pull-left">{{'material_lib.detail.content_title'|trans}}</h1>
+  </div>
+  <div class="content">
+    <ul class="nav nav-tabs">
+      <li role="presentation" class="active js-info" data-target="#info-tab">
+        <a href="javascript:;">{{'material_lib.detail.base_info'|trans}}</a>
+      </li>
+    </ul>
+    <div class="tab-content">
+      <div class="tab-pane active" id="info-tab">
+        {% if app.user.id == material.createdUserId %}
+          {% include 'material-lib/web/edit-detail-form.html.twig' %}
+        {% else %}
+          {% include 'material-lib/web/file-detail-static.html.twig' %}
+        {% endif %}
+      </div>
+
+      {% if material.type == 'video' %}
+        <div class="tab-pane" id="cover-tab">
+          {% if material.convertStatus|default('none') == 'success' %}
+          <form class="form-horizontal" id="cover-form">
+            <div class="form-group">
+              <label for="name" class="col-md-2 control-label">{{'material_lib.detail.cover_image'|trans}}</label>
+              <div class="col-md-4">
+                <img class="js-cover-img" src="{{ asset(material.thumbnail|default('assets/img/default/cloud_' ~ material.type ~ '.png')) }}">
+              </div>
+            </div>
+          </form>
+          {% else %}
+            <div class="empty color-gray">
+              {{'material_lib.detail.converting_tips'|trans}}
+            </div>
+          {% endif %}
+        </div>
+      {% endif %}
+
+    </div>
+  </div>
+</div>

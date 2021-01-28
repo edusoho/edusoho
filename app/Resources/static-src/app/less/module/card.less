@@ -1,0 +1,81 @@
+// 名片组件
+
+.js-user-card {
+  display: inline-block;
+}
+.es-card {
+  width: 330px;
+  max-width: 330px;
+  z-index: 999;
+  .popover-content {
+    padding: 0;
+  }
+  .card-header {
+    position: relative;
+    padding: 15px;
+    min-height: 95px;
+    .border-top-left-radius();
+    .border-top-right-radius();
+    background-color: @gray-lighter;
+  }
+  .media {
+    padding-right: 70px;
+  }
+  .media-left {
+    position: relative;
+  }
+  .avatar-md {
+    border: 2px solid #fff;
+  }
+  .user-avatar {
+    position: relative;
+    .icon-user-status,
+    .icon-user-vip {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    }
+  }
+  .content {
+    font-size: 12px;
+    margin-top: 6px;
+    color: @gray;
+    .icon-user-vip {
+      margin-right: 4px;
+      width: 16px;
+      height: 16px;
+    }
+  }
+  .metas {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 70px;
+    text-align: right;
+    .btn {
+      margin-bottom: 12px;
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+  .card-body {
+    line-height: 24px;
+    padding: 20px;
+    color: @gray;
+  }
+  .card-footer {
+    border-top: 1px solid @gray-lighter;
+    span {
+      float: left;
+      width: 33.33%;
+      margin: 5px auto;
+      text-align: center;
+      line-height: 24px;
+      border-right: 1px solid @gray-lighter;
+      &:last-child {
+        border: none;
+      }
+    }
+  }
+}

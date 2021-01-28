@@ -1,0 +1,38 @@
+{% for task in tasks|default() %}
+  {% if task.tasks|default() %}
+    {% set isLesson = task.tasks[0].isLesson|default(false) %}
+  {% else %}
+    {% set isLesson = task.isLesson|default(false) %}
+  {% endif %}
+  <li class="task-manage-item js-task-manage-item {{ isLesson ? 'hidden' : 'drag' }} clearfix {% if task.isOptional %}js-optional-task{% endif %}" id="task-{{ task.id }}" >
+    <div class="item-content js-item-content text-overflow">
+      {% include 'lesson-manage/normal/task-content.html.twig' with {task: task, taskNum: loop.index - 1, displayAllInfo: true, isShowText: false, isLesson: isLesson} %}
+    </div>
+    <div class="item-actions">
+      {% if course.platform == 'self' %}
+      <a class="cd-mr24" data-role='update-task' href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_task_update', {id:task.id,courseId:task.courseId}) }}">
+        <i class="es-icon es-icon-edit" data-toggle="tooltip" title="{{ 'course.plan_task.activity_manage.modify'|trans({'%taskName%':setting('course.task_name')|default('site.data.learning_task'|trans)}) }}" data-placement="top"></i>
+      </a>
+      {% endif %}{#S2B2C#}
+      <a class="cd-mr24" href="{{ path('course_task_show', {id:task.id,courseId:task.courseId,preview:1}) }}" target="_blank">
+        <i class="es-icon es-icon-removeredeye" data-toggle="tooltip" title="{{ 'course.plan_task.activity_manage.preview'|trans({'%taskName%':setting('course.task_name')|default('site.data.learning_task'|trans)}) }}" data-placement="top"></i>
+      </a>
+      {% if course.platform == 'self' %} {#S2B2C#}
+        <div class="cd-dropdown" data-toggle="cd-dropdown" data-trigger="hover">
+          <a  class="cd-link-assist" href="javascript:;">
+            <i class="es-icon es-icon-morehoriz"></i>
+          </a>
+          <ul class="dropdown-menu task-manage-item__dropdown">
+            <li>
+              <a class='js-delete' href="javascript:;" data-type="task" data-url="{{ path('course_manage_task_delete', {taskId:task.id,courseId:task.courseId}) }}" data-name="{{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}">
+                {{'course.plan_task.delete_btn'|trans}}{{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}
+              </a>
+            </li>
+            {% include 'lesson-manage/common/marker-manage-btn.html.twig' with {course: course, task: task} %}
+            {{ slot('task.menu.extension', {'task': task}) }}
+          </ul>
+        </div>
+      {% endif %}
+    </div>
+  </li>
+{% endfor %}

@@ -1,0 +1,32 @@
+{% if otherCourses %}
+    <div class="panel panel-default other-courses">
+        <div class="panel-heading">
+            <h3 class="panel-title">其他计划</h3>
+            <a class="more link-gray" href="{{ path('course_show',{id: course.id})}}">
+                <i class="es-icon es-icon-morehoriz"></i>
+            </a>
+        </div>
+        <div class="panel-body">
+            <ul class="list-group">
+                {% for course in otherCourses %}
+                    <li class="pvs text-overflow">
+                        <a class="link-gray"
+                            {% if course.id in purchasedCourseIds %}
+                                href="{{ path('my_course_show', {id: course.id}) }}"
+                            {% else %}
+                                href="{{ path('course_show', {id: course.id}) }}"
+                            {% endif %}
+                        >
+                            {% if course.status  != 'published'%}<span class="text-sm">({{ 'course.status.unpublished'|trans }})</span>{% endif %} {{ course.title }}
+                        </a>
+                        {% if course.id in purchasedCourseIds %}
+                            <span class="label label-primary color-white text-sm">{{ 'course.joined'|trans }}</span>
+                        {% else %}
+                            <span class="label label-default color-white text-sm">{{ 'course.not_joined'|trans }}</span>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endif %}

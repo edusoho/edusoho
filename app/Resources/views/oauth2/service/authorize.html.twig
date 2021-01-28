@@ -1,0 +1,56 @@
+{% extends 'layout.html.twig' %}
+{% do script(['libs/jquery-validation.js','app/js/auth/login/index.js']) %}
+{% set bodyClass = 'login' %}
+
+{% block title %}{{ 'user.login.content_title'|trans }} - {{ parent() }}{% endblock %}
+
+{% block content %}
+  <div class="es-section login-section">
+    <div class="login-main js-login-main">
+      <form id="login-form" class="form-vertical" method="post" action="{{ path('login_check') }}">
+
+        {% if error %}
+          <div class="alert alert-danger">
+            {% if error.message == 'Bad credentials.' %}
+              {{ 'site.user_password.error_tips'|trans }}
+            {% elseif error.message == 'User account is locked.' %}
+              {{ 'exception.user_lock'|trans }}
+            {% else %}
+              {{ error.message|trans }}
+            {% endif %}
+          </div>
+        {% endif %}
+        {{ web_macro.flash_messages() }}
+        <div class="form-group mbl">
+          <label class="control-label" for="login_username">{{ 'user.login.account_label'|trans }}</label>
+          <div class="controls">
+            <input class="form-control input-lg" id="login_username" type="text" name="_username" value="{% if app.request.query.get('account') %}{{ app.request.query.get('account') }}{% else %}{% endif %}" required
+                   placeholder='{{ 'user.login.account_placeholder'|trans }}'/>
+            <div class="help-block"></div>
+          </div>
+        </div>
+        <div class="form-group mbl">
+          <label class="control-label" for="login_password">{{ 'user.login.password_label'|trans }}</label>
+          <div class="controls">
+            <input class="form-control input-lg" id="login_password" type="password" name="_password" required placeholder='{{ 'user.login.password_placeholder'|trans }}'/>
+          </div>
+        </div>
+
+        <div class="form-group mbl">
+          <div class="controls">
+            <input type="checkbox" name="_remember_me" checked="checked"> {{ 'user.login.remember_me'|trans }}
+          </div>
+        </div>
+        <div class="form-group mbl">
+          <button type="button" class="btn btn-primary btn-lg btn-block js-btn-login">{{ 'user.login.submit_button'|trans }}</button>
+        </div>
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      </form>
+    </div>
+  </div>
+{% endblock %}
+
+{% block bottom %}
+  {% include 'mobile/footer-tool-bar.html.twig' with { mobile_tool_bar: 'login' } %}
+{% endblock %}

@@ -1,0 +1,148 @@
+.caption-uploader{
+  height: 34px;
+  background: transparent;
+  display: inline-block;
+}
+.caption-notify{
+  line-height: 28px;
+}
+.text-track-overview{
+  overflow-y: auto;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  p {
+    font-size: 14px;
+    line-height: 30px;
+    color: #919191;
+    &.active{
+      color: #f5f5f5;
+    }
+  }
+}
+.text-track-select-form-group{
+  margin-bottom: 0px !important;
+}
+
+.track-select-parent{
+  position: relative;
+  .track-select-show{
+    width: 100%;
+    background: white;
+    border: 1px solid #CCC;
+    color: #919191;
+    font-size: 14px;
+    line-height: 32px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 2px;
+    overflow:hidden;
+    &.active{
+      border-color: @brand-primary;
+    }
+    .data-show{
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      min-height: 32px;
+      padding-right: 20px;
+    }
+    .track-selcet-open-arrow,.track-selcet-close-arrow{
+      position: absolute;
+      top: 0px;
+      right: 10px;
+    }
+  }
+  .track-selcet-list{
+    padding-left: 0px;
+    position: absolute;
+    top: 34px;
+    width: 100%;
+    background: white;
+    border-radius: 2px;
+    border: 1px solid #CCC;
+    li {
+      position: relative;
+      list-style: none;
+      padding-left: 10px;
+      padding-right: 10px;
+      color: #919191;
+      line-height: 34px;
+      .value{
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        padding-right: 110px;
+      }
+      .convertStatus{
+        position: absolute;
+        line-height: 1.2;
+        padding: 2px 10px;
+        border-radius: 5px;
+        right: 40px;
+        top: 8px;
+        color: white;
+        &.convert-success{
+          background: @brand-success;
+        }
+        &.convert-error{
+          background: red;
+        }
+        &.convert-doing{
+          background: blue;
+        }
+        &.convert-waiting{
+          background: #AAA;
+        }
+        &.convert-none{
+          background: #AAA;
+        }
+      }
+      &:hover{
+        background: #f5f5f5;
+        .delete{
+          display: inline;
+        }
+      }
+      .delete{
+        display: none;
+        position: absolute;
+        top: 8px;
+        right: 10px;
+      }
+      &.active{
+        color: @brand-primary;
+      }
+    }
+  }
+}
+
+//新建课时页面，添加视频资料之后，字幕列表样式
+.subtitle-transcode-status {
+  color: white;
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 3px;
+  line-height: 1;
+  text-align: center;
+  min-width: 72px;
+  &.waiting,
+  &.none{
+    background: @gray;
+  }
+  &.doing{
+    background: @brand-info;
+  }
+  &.success{
+    background: @brand-success;
+  }
+  &.error{
+    background: @brand-danger;
+  }
+}
+.subtitle-name{
+  width: 300px;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

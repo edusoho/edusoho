@@ -1,0 +1,19 @@
+{% set props = status.properties %}
+
+{% if mode == 'simple' %}
+	{% if status.objectType == 'course' %}
+	    {% set courseSet = data('CourseSetByCourse', { 'courseId': props.course.id }) %}
+	    {% if courseSet %}
+			{{ 'status.become_student.course.simple'|trans }}
+		{% endif %}
+	{% else %}
+		{{ 'status.become_student.classroom.simple'|trans }}
+	{% endif %}
+  
+{% elseif mode == 'full' %}
+	{% if status.objectType == 'course' %}
+		
+	{% else %}
+		
+	{% endif %}
+{% endif %}

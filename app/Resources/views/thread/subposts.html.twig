@@ -1,0 +1,18 @@
+{% import "macro.html.twig" as web_macro %}
+
+<ul class="media-list thread-post-list thread-subpost-list">
+  {% for post in posts if users[post.userId]|default(null)  %}
+    {% set author = users[post.userId] %}
+    {% include 'thread/subpost-item.html.twig' %}
+  {% endfor %}
+</ul>
+
+{% if less %}
+  <div class="text-center">
+    {{ web_macro.paginator(paginator, 'pagination-sm hide') }}
+  </div>
+{% else %}
+  <div class="text-center">
+    {{ web_macro.paginator(paginator, 'pagination-sm') }}
+  </div>
+{% endif %}

@@ -1,0 +1,44 @@
+{% set options = item.options %}
+{% set answers = item.answers %}
+{% set errors = item.errors|default([]) %}
+
+<div class="subject-item js-subject-item js-subject-main-item" id="{% if token|default(null) %}{{token}}{% else %}{{ key }}{% endif %}">
+  <div class="subject-item__title">
+    <span class="subject-item__number js-subject-item-number {% if errors is not empty %}subject-item__number--danger{% endif %}">
+      {% if seq|default(null) %}
+        {{ seq }}
+      {% else %}
+        {{ loop.index }}
+      {% endif %}
+    </span>
+    {% if errors.stem is not defined %}
+      <div class="subject-item__stem">{{ item.stem|striptags('<br><img>')|bbCode2Html|raw|nl2br }}</div>
+    {% elseif errors.stem.code == 100001 %}
+      <span class="single-item__text--danger">{{ 'course.testpaper_manage.import.re_edit.error_no_stem'|trans }}</span>
+    {% endif %}
+  </div>
+  <div class="subject-item__body">
+    {% for option_key, option in options %}
+      <label class="cd-checkbox single-item subject-forbid {% if option_key in answers %}checked{% endif %}">
+        <input type="checkbox" data-toggle="cd-checkbox" name="rightAnswers" value="{{'option' ~ loop.index }}">
+        <div class="subject-table">
+          <span>{{ dict_text('questionOption', option_key) }}. </span>
+          <div class="single-item__text subject-table-cell {% if errors['options_'~option_key] is defined %}single-item__text--danger{% endif %}">
+            {% if errors['options_'~option_key] is not defined %}
+              {{ option|striptags('<br><img>')|bbCode2Html|raw|nl2br }}
+            {% elseif errors['options_'~option_key].code == 100002 %}
+              {{ 'course.testpaper_manage.import.re_edit.error_no_option'|trans }}
+            {% endif %}
+          </div>
+        </div>
+      </label>
+    {% endfor %}
+    {% if errors.answers is defined and errors.answers.code == 100003 %}
+      <span class="single-item__text--danger">{{ 'course.testpaper_manage.import.re_edit.error_no_answer'|trans }}</span>
+    {% endif %}
+    {% if item.analysis is not empty %}
+      <div class="subject-item__explain">{{ 'course.testpaper_manage.import.re_edit.explain'|trans }}：{{ item.analysis|striptags('<br><img>')|bbCode2Html|raw|nl2br }}</div>
+    {% endif %}
+  </div>
+  {% include 'testpaper/subject/common.html.twig' with { type: item.type, difficulty: item.difficulty, score: item.score, category: item.category|default() } %}
+</div>

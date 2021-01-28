@@ -1,0 +1,74 @@
+{% extends 'admin-v2/resource-settlement/layout.html.twig' %}
+
+{% set menu="admin_v2_resource_settlement_product" %}
+
+{% block main %}
+  <form class="form-inline well well-sm mbm" action="" method="get" novalidate>
+    <div class="form-group">
+      <label for="title"
+             class="control-label">{{ 'merchant.content_resource.product_title'|trans }}</label>
+      <input class="form-control" type="text" id="title" name="title" value="{{ app.request.query.get('title') }}">
+    </div>
+
+    <button class="btn btn-primary">{{ 'admin.operation_analysis.search'|trans }}</button>
+  </form>
+
+  <table class="table">
+    <thead>
+    <tr>
+      <th>{{ 'admin_v2.app_center.resource_settlement.product.id'|trans }}</th>
+      <th>{{ 'admin_v2.app_center.resource_settlement.product.time'|trans }}</th>
+      <th>{{ 'merchant.content_resource.product_title'|trans }}</th>
+      <th>{{ 'admin_v2.app_center.resource_settlement.product.order_count'|trans }}</th>
+      <th>{{ 'admin_v2.app_center.resource_settlement.product.max_course_price'|trans }}</th>
+      <th>{{ 'admin_v2.app_center.resource_settlement.product.suggestion_price'|trans }}</th>
+      <th>{{ 'admin_v2.app_center.resource_settlement.product.cooperation_price'|trans }}</th>
+      <th>{{ 'admin_v2.app_center.resource_settlement.product.item_status'|trans }}</th>
+      <th>{{ 'admin_v2.app_center.resource_settlement.product.choosen_status'|trans }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for item in items %}
+      {% set product = item.product %}
+      <tr>
+        <td>{{ item.id }}</td>
+        <td>{{ item.created_time|date('Y-m-d H:i:s') }}</td>
+        <td>{{ product.name|default('') }}</td>
+        <td>{{ item.order_count|default(0) }}</td>
+        <td>
+          {{ item.min_selling_price|default(0) == item.max_selling_price|default(0) ? '￥' ~ item.min_selling_price|currency : '￥' ~ item.min_selling_price|currency ~ '~ ￥' ~ item.max_selling_price|currency }}
+        </td>
+        <td>
+          {{ product.minSuggestionPrice|default(0) == product.maxSuggestionPrice|default(0) ? '￥' ~ product.minSuggestionPrice|currency : '￥' ~ product.minSuggestionPrice|currency ~ '~ ￥' ~ product.maxSuggestionPrice|currency }}
+        </td>
+        <td>
+          {{ product.minCooperationPrice|default(0) == product.maxCooperationPrice|default(0) ? '￥' ~ product.minCooperationPrice|currency : '￥' ~ product.minCooperationPrice|currency ~ '~ ￥' ~ product.maxCooperationPrice|currency }}
+        </td>
+        <td>
+          {% if product.status == 'published' %}
+            {{ 'admin_v2.app_center.resource_settlement.product.item_status.published'|trans }}
+          {% elseif item.course_set_status =='closed' %}
+            {{ 'admin_v2.app_center.resource_settlement.product.item_status.closed'|trans }}
+          {% endif %}
+        </td>
+        <td>
+          {% if item.status == 'chosen' %}
+            {{ 'admin_v2.app_center.resource_settlement.product.choosen_status.chosen'|trans }}
+          {% elseif item.status == 'removed' %}
+            {{ 'admin_v2.app_center.resource_settlement.product.choosen_status.removed'|trans }}
+          {% endif %}
+        </td>
+      </tr>
+    {% else %}
+      <tr>
+        <td colspan="20">
+          <div class="empty">{{ 'admin_v2.app_center.resource_settlement.empty'|trans }}</div>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  {{ admin_macro.paginator(paginator) }}
+
+{% endblock %}

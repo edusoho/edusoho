@@ -1,0 +1,48 @@
+{% extends 'layout.html.twig' %}
+{% block title %}{{ 'message.send'|trans }} - {{ parent() }}{% endblock %}
+
+{% do script(['libs/jquery-validation.js', 'app/js/message/create/index.js']) %}
+
+{% block content %}
+  <div class="row row-8">
+    <div class="col-md-8 col-md-offset-2">
+      <div class="panel panel-default panel-page">
+        <div class="panel-heading">
+          <a href="{{ path('message') }}" class="btn btn-default pull-right">{{ 'message.btn.back'|trans }}</a>
+          <h2>{{ 'message.send.content_title'|trans }}</h2>
+        </div>
+
+        <form id="message-create-form" class="form-horizontal" method="post">
+
+          <div class="form-group">
+            <div class="col-md-12 controls">
+              <input type="text" id="message_receiver" name="message[receiver]" required="required" class="form-control"
+                placeholder="{{ 'message.send.receiver_name'|trans }}" data-auto-url="{{ path('following_match_bynickname') }}"
+                data-url="{{ path('message_check_receiver') }}" data-display="{{ 'message.send.receiver_name'|trans }}"
+                data-widget-cid="widget-2" data-explain=""
+                autocomplete="off">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-md-12 controls">
+              <textarea id="message_content" name="message[content]" required="required" class="form-control" rows="5"
+                placeholder="{{ 'message.send.message_content'|trans }}" data-display="{{ 'message.send.message_content'|trans }}" data-widget-cid="widget-3" data-explain=""></textarea>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-md-12 controls">
+              <button id="message-create-btn" class="btn btn-primary pull-right"
+                data-loading-text="{{ 'form.btn.send.submiting'|trans }}" type="submit" value="">{{ 'form.btn.send'|trans }}</button>
+            </div>
+          </div>
+
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        </form>
+
+      </div>
+    </div>
+  </div>
+{% endblock %}
+

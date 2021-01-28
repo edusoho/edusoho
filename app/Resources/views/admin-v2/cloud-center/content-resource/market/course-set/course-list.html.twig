@@ -1,0 +1,15 @@
+{% import "macro.html.twig" as web_macro %}
+<div class="course-list">
+  <div class="row">
+    {% if products %}
+      {% for product in products %}
+        <div class="col-lg-3 col-md-4 col-xs-6">
+          {% include 'admin-v2/cloud-center/content-resource/market/course-set/course-gird.html.twig' with {products: products, chosenCourses: chosenCourses, merchant: merchant} %}
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty">{{ 'explore.course.empty'|trans }}</div>
+    {% endif %}
+  </div>
+</div>
+{{ web_macro.ajax_paginator(paginator) }}

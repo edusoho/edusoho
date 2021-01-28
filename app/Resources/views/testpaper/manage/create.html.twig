@@ -1,0 +1,44 @@
+{% extends 'courseset-manage/courseset-layout.html.twig' %}
+{% import 'macro.html.twig' as web_macro %}
+
+{% block title %}{{'course.testpaper_manage.create'|trans}} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'testpaper' %}
+
+{% do script(['libs/jquery-validation.js','libs/es-ckeditor/ckeditor.js','libs/jquery-nouislider.js','app/js/testpaper-manage/create/index.js']) %}
+
+{% block main %}
+
+<div class="test-creator">
+  <div class="courseset-manage-body__title">{{'course.testpaper_manage.create.content_title'|trans}}</div>
+
+
+    {% include 'testpaper/manage/form-breadcrumb.html.twig' with {title:'course.testpaper_manage.create'} %}
+
+    {#<form id="testpaper-form" class="form-horizontal" method="post" data-build-check-url="{{ path('course_manage_testpaper_build_check',{courseId:courseSet.id})}}" data-auto-submit="false" data-have-base-fields="true" data-have-build-fields="true" data-course-id="{{courseSet.id}}">#}
+    <form id="testpaper-form" class="form-horizontal" method="post" data-auto-submit="false" data-have-base-fields="true" data-have-build-fields="true" data-course-id="{{courseSet.id}}">
+      {{ web_macro.flash_messages() }}
+
+      <div id="colorpicker">
+        <div class="sliders" id="red"></div>
+        <div class="sliders" id="green"></div>
+        <div class="sliders" id="blue"></div>
+        <div class="result"></div>
+      </div>
+
+      {% include 'testpaper/manage/create-base-info.html.twig'%}
+      {% include 'testpaper/manage/create-build-info.html.twig'%}
+
+      <div class="form-group mbm">
+        <div class="col-md-8 col-md-offset-2 controls">
+          <button id="testpaper-create-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" type="button" class="cd-btn cd-btn-primary" data-role="submit" data-check-url="{{ path('course_set_manage_testpaper_build_check',{courseSetId:courseSet.id,type:'testpaper'})}}">{{'course.testpaper_manage.create.questions_setup.save_btn'|trans}}</button>
+          <a href="{{ path('course_set_manage_testpaper',{id:courseSet.id}) }}" class="btn btn-link  ">{{'form.btn.return'|trans}}</a>
+        </div>
+      </div>
+
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+    </form>
+
+</div>
+{% endblock %}

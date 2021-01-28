@@ -1,0 +1,54 @@
+<div class="user-center-header" data-href="{{ filepath(user.largeAvatar, 'avatar.png') }}" data-sharpness="40">
+  <div class="container clearfix">
+    <div class="user-avatar">
+      <div class="avatar-wrap user-dropdown-info__avatar user-center-avatar">
+        <img class="avatar-lg" src="{{ filepath(user.largeAvatar, 'avatar.png') }}">
+        {{ slot('header.user.logo', {user: user}) }}
+      </div>
+      <div class="name">
+        {% if not user.destroyed|default(0) %}
+          {{user.nickname}}
+        {% else %}
+          {{ 'user.user_had_destroyed'|trans }}
+        {% endif %}
+      </div>
+      <div class="position">
+        {% if 'ROLE_TEACHER' in user.roles %}
+          <span class="icon-user-teacher cd-mr8"><i class="es-icon es-icon-school"></i></span>
+        {% endif %}
+        <span class="mrm">{% if user.title %}{{ user.title }}{% else %}{{'user.fields.no_title'|trans}}{% endif %}</span>
+        {% if user.site %}
+          <a href="{{ user.site }}" target="_blank"><i class="es-icon es-icon-link"></i></a>
+        {% endif %}
+        {% if user.weibo and user.isWeiboPublic %}
+          <a  href="{{ user.weibo }}" target="_blank"><i class="es-icon es-icon-weibo"></i></a>
+        {% endif %}
+        {% if user.qq and user.isQQPublic %}
+          <a data-toggle="tooltip" data-placement="top" title="{{ user.qq }}"><i class="es-icon es-icon-qq"></i></a>
+        {% endif %}
+        {% if user.weixin and user.isWeixinPublic %}
+          <a data-toggle="tooltip" data-placement="top" title="{{ user.weixin }}"><i class="es-icon es-icon-weixin"></i></a>
+        {% endif %}
+      </div>
+      <div class="mates">
+        <span class="mrm">{{follower|default(0)}}</span>{{'user.fields.fan'|trans}}<span class="mlm mrm">｜</span><span class="mrm">{{following|default(0)}}</span>{{'user.fields.following'|trans}}
+      </div>
+      {% set messageSetting = setting('message') %}
+      {% if (not app.user) or (app.user.id != user.id) %}
+        <div class="actions">
+          <a class="btn btn-primary follow-btn mrl" href="javascript:;" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowed %} style="display:none;"{% endif %}>{{'user.btn.following'|trans}}</a>
+          <a class="btn btn-default unfollow-btn mrl" href="javascript:;" data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if not isFollowed %} style="display:none;" {% endif %}>{{'user.btn.followed'|trans}}</a>
+          {% if can_send_message(user.id) and messageSetting.showable|default('1') != 0 %}
+            <button class="btn btn-ghost-white" data-toggle="modal" data-backdrop="static" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">{{'user.btn.send_message'|trans}}</button>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+    <div class="user-about hidden-sm hidden-xs">
+      <div class="user-about-content">
+        {% if user.signature %}{{ user.signature}}{% else %}{{'user.fields.no_sign'|trans}}{% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="mask"></div>
+</div>

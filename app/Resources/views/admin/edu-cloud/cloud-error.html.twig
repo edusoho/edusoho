@@ -1,0 +1,8 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_my_cloud_overview' %}
+{% set submenu = 'service-information' %}
+
+{% block main %}
+  <p class="text-center text-muted alert alert-danger">{{'admin.edu_cloud.connect_failed_tips'|trans({'%EduSoho%': 'EduSoho'|copyright_less })}}</p>
+{% endblock %}

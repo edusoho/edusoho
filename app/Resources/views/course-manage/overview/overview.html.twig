@@ -1,0 +1,16 @@
+{% extends 'course-manage/overview/layout.html.twig' %}
+
+{% block title %}{{'course.plan_setup'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
+{% do script(['libs/echarts.js','app/js/course-manage/overview/index.js']) %}
+
+{% block overview %}
+
+{% include 'course-manage/overview/dashboard.html.twig' %}
+
+{% include 'course-manage/overview/student-trendency.html.twig' %}
+
+{% include 'course-manage/overview/finished-rate-trend.html.twig' %}
+
+{% include 'course-manage/overview/task-detail.htm.twig' %}
+  
+{% endblock %}

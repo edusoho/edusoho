@@ -1,0 +1,72 @@
+{% if file is not empty %}
+  {% set selectedFile = {'id': file.id, 'name': file.filename, 'status': file.convertStatus, 'source': 'self', 'length': file.length, 'size': file.fileSize} %}
+{% endif %}
+{% set courseType = courseType|default('course') %}
+
+<input type="hidden" name="media" id="media" value="{% if file|default(null) %}{{ selectedFile|default()|json_encode }}{% endif %}">
+<div class="file-chooser-bar {% if not file|default(null) %}hidden {% endif %}">
+  <span data-role="placeholder">{{ file.filename|default(null) }}</span>
+  <button class="btn btn-link btn-sm js-choose-trigger" type="button">
+    <i class="glyphicon glyphicon-edit"></i>
+    {{ 'course.plan_task.activity_manage.download.edit'|trans }}
+  </button>
+
+  <div class="alert alert-warning" data-role="waiting-tip"
+       style="display:none;">{{'course.plan_task.activity_manage.download.converting_tips'|trans|raw}}
+  </div>
+</div>
+<div class="file-chooser-main {% if file|default(null) %}hidden {% endif %}">
+  <div class="file-chooser-nav">
+    <ul class="nav nav-pills nav-pills-sm  nav-pills-gray mb0" id="material">
+      <li role="presentation" class="active"><a
+            href="#chooser-upload-panel">{{'course.plan_task.activity_manage.download.upload_files'|trans}}</a></li>
+      <li role="presentation"><a href="#chooser-material-panel">{{'course.plan_task.activity_manage.download.chooser_from_material'|trans}}</a></li>
+      <li role="presentation"><a href="#chooser-course-panel">{{'course.plan_task.activity_manage.download.chooser_from_course'|trans}}</a></li>
+      {% if mediaType == 'video' and not hideImportVideo|default(false) %}
+        <li role="presentation" >
+          <a class="js-import-video" href="#import-video-panel" data-link="{% if link|default(null) and link != 'self' %} {{ link }}{% endif %}">{{'course.plan_task.activity_manage.download.import_video'|trans}}</a>
+        </li>
+      {% endif %}
+      {% if mediaType == 'download' %}
+        <li role="presentation"><a href="#import-link-panel">{{'course.plan_task.activity_manage.download.link'|trans}}</a>
+        </li>
+      {% endif %}
+    </ul>
+  </div>
+  <div class="tab-content ">
+    <div class="tab-pane file-chooser-tab active" id="chooser-upload-panel">
+      {% include 'file-chooser/parts/upload-file.html.twig' %}
+    </div>
+
+    <div class="tab-pane " id="chooser-material-panel">
+      {% include 'file-chooser/parts/materiallib-choose.html.twig' %}
+    </div>
+
+    <div class="tab-pane file-chooser-tab" id="chooser-course-panel">
+      {% include 'file-chooser/parts/course-file-choose.html.twig' %}
+    </div>
+
+    {% if mediaType == 'video' and not hideImportVideo|default(false) %}
+      <div class="tab-pane file-chooser-tab" id="import-video-panel">
+        {% include 'file-chooser/parts/import-video.html.twig' %}
+      </div>
+    {% endif %}
+
+    {% if mediaType == 'download' %}
+      <div class="tab-pane file-chooser-tab" id="import-link-panel">
+        {% include 'file-chooser/parts/import-link.html.twig' %}
+      </div>
+    {% endif %}
+  </div>
+
+</div>
+
+{% if mediaType == 'download' %}
+  <p class="mbl mtl"><label>{{'course.plan_task.activity_manage.download.file_name'|trans}}</label><span class="js-current-file">{{'course.plan_task.activity_manage.download.upload_btn'|trans}}</span></p>
+  <div class="row">
+    <div class="col-sm-10"><input class="form-control " type="text" id="file-summary" name="description" placeholder="{{'course.plan_task.activity_manage.download.input_placeholder'|trans}}"></div>
+    <div class="col-sm-2"><a class="btn btn-primary btn-block js-add-file-list">{{'course.plan_task.activity_manage.download.add_btn'|trans}}</a></div>
+  </div>
+  <span class="color-success js-success-redmine"></span>
+  <span class="color-danger js-danger-redmine"></span>
+{% endif %}

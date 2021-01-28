@@ -1,0 +1,13 @@
+{
+    "Version": "36",
+    "Names": {
+        "ARS": [
+            "$",
+            "peso argentino"
+        ],
+        "USD": [
+            "US$",
+            "dólar estadounidense"
+        ]
+    }
+}

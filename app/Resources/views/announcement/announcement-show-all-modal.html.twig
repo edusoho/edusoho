@@ -1,0 +1,38 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{'announcement.modal.view_all.title'|trans}}{% endblock %}
+
+{% block body %}
+
+<table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>{{'announcement.modal.view_all.user_name'|trans}}</th>
+            <th>{{'announcement.modal.view_all.content'|trans}}</th>
+            <th>{{'announcement.modal.view_all.createdTime'|trans}}</th>
+            <th>{{'announcement.modal.view_all.updatedTime'|trans}}</th>
+          </tr>
+        </thead>
+        <tbody>
+        	{% for announcement in announcements %}
+		          <tr>
+		            <td > {{ users[announcement.userId].nickname}} </td>
+		            <td>{{ announcement.content | raw }}</td>
+		            <td>{{ announcement.createdTime|date('Y-n-d H:i:s')}}</td>
+		            {% if announcement.updatedTime == 0 %}
+		               <td> {{'announcement.modal.view_all.notUpdate'|trans}}</td>
+		            {% else %}
+		            <td>{{ announcement.createdTime|date('Y-n-d H:i:s')}}</td>
+		            {% endif %}
+		          </tr>
+			{% endfor %}
+        </tbody>
+</table>
+
+{% endblock %}
+
+{% block footer %}
+    <button type="button" class="btn btn-default" data-dismiss="modal">{{'announcement.modal.view_all.quit_btn'|trans}}</button>
+{% endblock %}
+
+{% set hideFooter = true %}

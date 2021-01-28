@@ -1,0 +1,88 @@
+.error-panel {
+  margin-top: 10%;
+  .panel-heading {
+    text-align: center;
+    font-size: 22px;
+    @media (max-width: @screen-xs-max) {
+      font-size: 16px;
+    }
+  }
+  .panel-body {
+    padding: 60px 0;
+    @media (max-width: @screen-xs-max) {
+      padding: 30px 0;
+    }
+  }
+  .well {
+    position: relative;
+    width: 60%;
+    margin-left: 20%;
+    @media (max-width: @screen-md-max) {
+      width: 80%;
+      margin-left: 10%;
+    }
+    @media (max-width: @screen-sm-max) {
+      width: 90%;
+      margin-left: 5%;
+    }
+    @media (max-width: @screen-sm-max) {
+      width: 100%;
+      margin-left: 0;
+    }
+    p {
+      margin: 30px 20px;
+      @media (max-width: @screen-xs-max) {
+        margin: 10px 0;
+      }
+    }
+    .error-404-icon {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      width: 191px;
+      height: 241px;
+      background: url('@{img-src}icon_search.png') no-repeat;
+    }
+    .error-403-icon {
+      position: absolute;
+      right: -44px;
+      bottom: -28px;
+      width: 245px;
+      height: 248px;
+      background: url('@{img-src}icon_lock.png') no-repeat;
+      @media (max-width: @screen-md-max) {
+        right: -30px;
+      }
+    }
+    .error-500-icon {
+      position: absolute;
+      top: 20px;
+      right: -140px;
+      width: 297px;
+      height: 219px;
+      background: url('@{img-src}icon_server.png') no-repeat;
+      @media (max-width: @screen-md-max) {
+        right: -80px;
+      }
+      @media (max-width: @screen-sm-max) {
+        right: -20px;
+      }
+    }
+  }
+}
+.error-title {
+  font-family: "Phosphate";
+  font-size: 200px;
+  text-transform: uppercase;
+  color: #9a9a9a;
+  margin-right: 30px;
+  @media (max-width: @screen-md-max) {
+    font-size: 180px;
+  }
+  @media (max-width: @screen-sm-max) {
+    height: 120px;
+  }
+  @media (max-width: @screen-xs-max) {
+    font-size: 40px;
+  }
+}

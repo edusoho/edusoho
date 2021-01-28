@@ -1,0 +1,5 @@
+{% extends 'admin/layout.html.twig' %}
+{% set menu = 'admin_setting_mobile_settings' %}
+{% block main %}
+  <p class="text-center text-muted alert alert-danger">{{'admin.edu_cloud.connect_failed_tips'|trans({'%EduSoho%': 'EduSoho'|copyright_less })}}</p>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% do script(['libs/bootstrap-datetimepicker.js', 'libs/jquery-validation.js', 'app/js/course/buy-modal/index.js']) %}
+
+{% block title %}
+  {{ 'site.fill_user_info_tip'|trans }}
+{% endblock %}
+
+{% block body %}
+  <form id="course-buy-form" class="form-horizontal" method="post" action="{{ path('user_info_fill',{id: app.user.id}) }}">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    {% set isBuyFillUserinfo = setting('course.buy_fill_userinfo')|default(false) %}
+    {% set userinfoFieldsSetting = setting('course.userinfoFields')|default([]) %}
+    {% include 'user/fill-userinfo-fields-block.html.twig' with {isBuyFillUserinfo:isBuyFillUserinfo, userinfoFieldsSetting:userinfoFieldsSetting, userFields:userFields, user:user, showNavTip:1} %}
+
+  </form>
+{% endblock %}
+
+{% block footer %}
+  <button id="form-submit-btn" class="btn btn-primary" type="button" data-loading-text="{{ 'form.btn.save.submiting'|trans }}" data-toggle="form-submit" data-target="#course-buy-form">
+    {{ 'form.btn.save'|trans }}
+  </button>
+{% endblock %}

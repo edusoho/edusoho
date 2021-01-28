@@ -1,0 +1,22 @@
+{
+    "name": "codeages/beanstalk-client",
+    "description": "含断线重连机制的Beanstalk PHP客户端。",
+    "keywords": ["beanstalk"],
+    "homepage": "https://github.com/codeages/beanstalk-client",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": { 
+            "Codeages\\Beanstalk\\": "src/",
+            "Codeages\\Beanstalk\\Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Codeages Team",
+            "email": "team@codeages.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.1"
+    }
+}

@@ -1,0 +1,16 @@
+<div class="order-detail-bg  checkout" style="border:none">
+  <div class="order-detail  clearfix">
+    <div class="order-img hidden-xs">
+      <a href="{{ path('course_show', {id:course.id}) }}">
+        <img class="img-responsive" src="{{ filepath(course_set_cover(courseSet, 'middle'), 'courseSet.png') }}"alt="{{'course.widgets.course_order.not_free'|trans}}"></a>
+    </div>
+    <div class="order-info">
+      <p>{{'course.widgets.course_order.order_title'|trans({'%title%': order.title })}}</p>
+      <p>{{'course.widgets.course_order.order_sn'|trans({'%sn%': order.sn})}}</p>
+      <p>
+        {{'course.widgets.course_order.order_price'|trans}}
+        <span class="pay-rmb">￥{{order.amount}}</span>
+      </p>
+    </div>
+  </div>
+</div>

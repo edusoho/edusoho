@@ -1,0 +1,15 @@
+{% set testpaper = activity.ext.testpaper %}
+{% if app.request.get('preview') %}
+  {{ render(controller('AppBundle:Activity/Testpaper:preview', {task: {courseId: activity.fromCourseId, activityId: activity.id}})) }}
+{% else %}
+    {% set latestAnswerRecord = data('LatestAnswerRecord', {answerSceneId: activity.ext.answerSceneId}) %}
+
+    {% if not latestAnswerRecord %}
+      {% include('@activity/testpaper/resources/views/show/index.html.twig') %}
+    {% elseif latestAnswerRecord and  (latestAnswerRecord.status == 'finished' or latestAnswerRecord.status == 'reviewing') %}
+      {{ render(controller('AppBundle:Testpaper/Testpaper:showResult', {answerRecordId: latestAnswerRecord.id})) }}
+    {% else %}
+      {% include('@activity/testpaper/resources/views/show/do-testpaper.html.twig') %}
+    {% endif %}
+    
+{% endif %}

@@ -1,0 +1,161 @@
+.class-header.before {
+
+  // 班级封面
+  .class-img {
+    position: relative;
+    width: 50%;
+    @media (max-width: @screen-sm-max) {
+      width: 40%;
+    }
+    @media (max-width: @screen-xs-max) {
+      width: 100%;
+    }
+    // 感觉可以舍弃
+    .label {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+    }
+  }
+
+  // 班级介绍
+  .class-info {
+    width: 50%;
+    @media (max-width: @screen-sm-max) {
+      width: 60%;
+    }
+    @media (max-width: @screen-xs-max) {
+      width: 100%;
+    }
+  }
+
+  .unpublish-tip {
+    line-height: 36px;
+  }
+
+  .class-info__title {
+    margin: 20px 24px 24px 24px;
+    @media (max-width: @screen-md-max) {
+      margin: 8px 16px;
+    }
+  }
+
+  .class-info__metas {
+    min-height: 60px;
+    padding-left: 24px;
+    @media (max-width: @screen-md-max) {
+      padding-left: 16px;
+      .score {
+        line-height: 1;
+      }
+    }
+    .price {
+      font-size: 12px;
+    }
+  }
+
+  .class-info__expiry {
+    margin-bottom: 8px;
+    margin-left: 24px;
+    font-size: 18px;
+    @media (max-width: @screen-md-max) {
+      margin-left: 16px;
+      font-size: 12px;
+      line-height: 1;
+    }
+  }
+
+  .class-info__bottom {
+    margin-top: 24px;
+    padding: 0 24px;
+    @media (max-width: @screen-md-max) {
+      margin-top: 8px;
+      padding: 10px 16px;
+    }
+    @media (max-width: @screen-xs-max) {
+      padding: 0 10px;
+    }
+    .btn-buy {
+      float: right;
+      width: 50%;
+      text-align: right;
+      @media (max-width: @screen-xs-max) {
+        width: 100%;
+        height: 60px;
+        line-height: 60px;
+      }
+      .btn-link {
+        color: @gray;
+        &:hover {
+          color: @brand-primary;
+          text-decoration: none;
+        }
+      }
+    }
+    @media (max-width: @screen-sm-max) and (min-width: @screen-sm-min){
+      padding: 0 16px 0 0;
+      // .btn-buy {
+      //   height: 40px;
+      //   line-height: 40px;
+      // }
+    }
+  }
+  .class-info__serve {
+    float: left;
+    width: 50%;
+    @media (max-width: @screen-xs-max) {
+      width: 100%;
+    }
+    > ul > li {
+      margin-top: 7px;
+    }
+    .serve-label {
+      width: 64px;
+      line-height: 34px;
+    }
+    .list-unstyled {
+      padding-left: 64px;
+    }
+  }
+
+  .class-info__data {
+    margin-left: 24px;
+    margin-right: 24px;
+    padding: 22px 0;
+    > li {
+      width: 33.33%;
+    }
+    &.active {
+      >li {
+        width: 25%;
+      }
+    }
+    @media (max-width: @screen-md-max) {
+      margin-left: 16px;
+      margin-right: 16px;
+      padding: 7px 0;
+    }
+  }
+  
+  // 16:9 封面样式
+  .class-header-main--new {
+    .class-info {
+      .class-info__title {
+        margin-bottom: 8px;
+      }
+      .class-info__metas {
+        margin-bottom: 0;
+      }
+      .class-info__data {
+        padding: 11px 0;
+        @media (max-width: @screen-md-max) and (min-width: @screen-sm-min){
+          li {
+            padding: 0;
+            margin: 0;
+          }
+        }
+      }
+    }
+  }
+
+}

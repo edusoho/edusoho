@@ -1,0 +1,7 @@
+{% extends 'layout.html.twig' %}
+
+{% do script(['app/js/material-lib/image-player/index.js']) %}
+
+{% block body %}
+  <div id="image-player" data-params="{{ player|json_encode() }}"></div>
+{% endblock %}

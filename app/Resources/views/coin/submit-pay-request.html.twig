@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta content="{{ csrf_token('site') }}" name="csrf-token" />
+  <title>{{'coin.pay.submit.request'|trans}}...</title>
+<body>
+
+  <form action="{{ form.action }}"  method="{{ form.method }}" name="form">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    {% if form.params %}
+      {% for key, value in form.params %}
+        <input type="hidden" name="{{ key }}" value="{{ value }}">
+      {% endfor %}
+    {% endif %}
+  </form>
+
+  <script>
+    //document.all.form.submit();
+  </script>
+
+</body>
+</html>

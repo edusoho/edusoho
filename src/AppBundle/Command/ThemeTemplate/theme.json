@@ -1,0 +1,11 @@
+{
+  "code": "{{name}}",
+  "name": "示例主题",
+  "description": "一个简单的示例主题",
+  "author": "EduSoho官方",
+  "version": "1.0.0",
+  "support_version": "8.0.0+",
+  "date": "{{time}}",
+  "thumb": "theme.jpg",
+  "protocol": "3"
+}

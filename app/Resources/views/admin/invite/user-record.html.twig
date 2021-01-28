@@ -1,0 +1,55 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_operation_invite_user' %}
+
+{% block main %}
+	<form  id="user-record" class="form-inline well well-sm" action="{{path('admin_invite')}}" method="get" novalidate>
+    	<input class="form-control" type="text" name="nickname" placeholder="{{'admin.operation_invite.nickname.placeholer'|trans}}" value="{{ app.request.query.get('nickname')}}">
+    	<button class="btn btn-primary" type="submit">{{'form.btn.search'|trans}}</button>
+        {% include 'export/export-btn.html.twig' with
+        {
+        'exportFileName' : 'user-invite-records',
+        'targetFormId' : 'user-record'
+        } %}
+	</form>
+
+  <table class="table table-hover table-striped" >
+		<thead>
+			<tr>
+				<th width="10%">{{'admin.operation_invite.nickname_th'|trans}}</th>
+				<th width="10%">{{'admin.operation_invite.count_th'|trans}}</th>
+				<th width="15%">{{'admin.operation_invite.payingUserCount_th'|trans}}</th>
+				<th width="20%">{{'admin.operation_invite.payingUserTotalPrice_th'|trans}}</th>
+				<th width="15%">{{'admin.operation_invite.coinAmountPrice_th'|trans}}</th>
+				<th width="15%">{{'admin.operation_invite.amountPrice_th'|trans}}</th>
+				<th width="10%">{{'admin.operation_group.operation_th'|trans}}</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% if records %}
+				{% for record in records %}
+        
+					<tr>
+					<td>{{record.invitedUserNickname}}</td>
+					<td>{{record.countInvitedUserId}}</td>
+					<td>{{record.premiumUserCounts}}</td>
+					<td>{{record.amount}}</td>
+					<td>{{record.coinAmount}}</td>
+					<td>{{record.cashAmount}}</td>
+					<td>
+						 <a href="#modal" data-toggle="modal" class="btn btn-default"
+						   data-url="{{path('admin_invite_detail',{inviteUserId:record.inviteUserId} )}}
+							">
+							{{'admin.operation_invite.detail_btn'|trans}}
+						</a> 
+					</td>
+					</tr>
+				{% endfor %}
+			{% else %}
+				<tr><td colspan="20"><div class="empty">{{'site.datagrid.empty'|trans}}</div></td></tr>
+			{% endif %}
+		</tbody>
+	</table>
+
+{{ admin_macro.paginator(paginator) }}
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'cd-modal-dialog' %}
+
+{% block title %}
+  {{ 'user.settings.security.scene_not_open'|trans }}
+{% endblock %}
+
+{% block body %}
+  <div class="alert cd-alert cd-alert-warning">
+    {{ 'user.settings.security.use_scene_not_open'|trans }}
+  </div>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
+
+

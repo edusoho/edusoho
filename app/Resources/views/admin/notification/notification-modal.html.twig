@@ -1,0 +1,61 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_batch_notification' %}
+
+{% set script_controller = 'batchnotification/notification-modal' %}
+
+{% set batchnotification = batchnotification|default(null) %}
+
+{% block page_title %}{{'admin.batch_notification.modal.title'|trans}}{% endblock %}
+
+{% block main %}
+
+<style>
+  #notification-form .popover {
+  	max-width: 400px;
+  	width: 400px;
+  }	
+
+</style>
+
+
+<form class="two-col-form" id="notification-form" method="post" enctype="multipart/form-data"
+	{% if batchnotification %}
+		action="{{ path('admin_batch_notification_edit', {id:batchnotification.id}) }}"
+	{% else %}
+		action="{{ path('admin_batch_notification_create') }}"
+	{% endif %}
+		>
+	<div class="row">
+		<div class="col-md-8">
+			<div class="form-group">
+			  	<label for="article-title-field" class="control-label">{{'admin.batch_notification.modal.title_field'|trans}}</label>
+			  	<div class="controls">
+			  		<input class="form-control" id="article-title-field" type="text" name="title" value="{{ batchnotification.title|default('') }}">
+			  	</div>
+			</div>
+			<div class="form-group">
+				<label for="richeditor-body-field" class="control-label">{{'admin.batch_notification.modal.body_field'|trans}}</label>
+				<div class="controls">
+					<textarea class="form-control" id="richeditor-body-field" rows="16" name="content"
+					  data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}"
+					  data-flash-upload-url="{{ path('editor_upload', {token:upload_token('default', 'flash')}) }}"
+					 >{{ batchnotification.content|default('') }}</textarea>
+				</div>
+				<div class="controls">
+			  		<input class="form-control hidden" id="hidden" type="text" name="mode" value="">
+			  	</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+	    <button id="notification-operate-save" class="btn btn-primary" data-toggle="form-submit" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{'form.btn.save'|trans}}</button>
+	    <button id="notification-operate-publish" class="btn btn-primary" data-toggle="form-submit" data-loading-text="{{'form.btn.publish.submiting'|trans}}">{{'form.btn.save_and_publish'|trans}}</button>
+			<a class="btn btn-link" href="{{ path('admin_batch_notification') }}">{{'form.btn.return'|trans}}</a>
+		</div>		
+	</div>
+</form>
+
+{% endblock %}

@@ -1,0 +1,51 @@
+{% set course = data('PublishedCourseByCourseSet', {courseSetId: courseSet.id }) %}
+{% if course %}
+ <li class="autumn-grid autumn-course-grid">
+  <a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" class="course-picture">
+    {{ lazy_img(filepath(course_set_cover(courseSet, 'middle'), 'courseSet.png'), 'img-responsive', '') }}
+    <div class="course-label">
+    {% if courseSet.status == 'draft' %}
+      <span class="label  label-warning">{{'未发布'|trans}}</span>
+    {% elseif courseSet.status == 'closed' %}
+      <span class="label label-danger">{{'已关闭'|trans}}</span>
+    {% endif %} 
+
+    {% if courseSet.serializeMode == 'serialize' %}
+      <span class="label label-success">{{'更新中'|trans}}</span>
+    {% elseif courseSet.serializeMode == 'finished' %}
+      <span class="label label-warning">{{'已完结'|trans}}</span>
+    {% endif %}
+
+    {% if courseSet.type == 'live' %}
+      {% set task = course['task']|default(null) %}
+      {% if task and "now"|date("U") >= task.startTime and "now"|date("U") <= task.endTime %}
+        <span class="label label-warning">{{'正在直播中'|trans}}</span>
+      {% else %}
+        <span class="label label-success">{{'直播'|trans}}</span>
+      {% endif %}
+    {% endif %}
+    </div>
+  </a>
+  <div class="course-body">
+    <h3 class="course-name"><a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}">{{ courseSet.title }}</a></h3>
+    <div class="course-about">{{ course.about|plain_text(60) }}</div>
+    
+    <div class="course-price-info">
+      {% if setting('course.coursesPrice') == 0 %}
+        {% include "course/widgets/course-set-price.html.twig" %}
+      {% endif %}
+    </div>
+
+    <div class="course-metas">
+      <span class="teachers">
+         {{'主讲:'|trans}}
+        {% for teacher in courseSet.teachers|default(null) %}
+         {% if loop.index <= 1 %}
+          {{ web_macro.user_link(teacher, 'text-muted') }}
+         {% endif %}
+        {% endfor %}
+      </span>
+    </div>
+  </div>  
+</li>
+{% endif %}

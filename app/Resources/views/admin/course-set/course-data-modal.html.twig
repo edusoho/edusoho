@@ -1,0 +1,60 @@
+{% set modal_class= "modal-lg" %}
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{ 'admin.course_manage.statistics.modal_title'|trans({'%title%': '《' ~ courseSet.title ~ '》'}) }}{% endblock %}
+{% block body %}
+  <div class="clearfix mbl">
+    {% if courses|default()|length > 1 %}
+      <select style="width:200px;" class="form-control pull-left" name="categoryId" tabindex="-1" id="course-select">
+        {% for course in courses %}
+          <option value="{{ course.id }}" {% if courseId == course.id %} selected {% endif %}
+                  data-url="{{ path('course_set_detail_data',{id:courseSet.id,courseId:course.id}) }}">{{ course.title }}</option>
+        {% endfor %}
+      </select>
+    {% endif %}
+    <div class="pull-right">
+      {% set course = courses[0]|default() %}
+      <a class="btn btn-primary btn-sm task-export"
+         data-prepare-url="{{ path("admin_course_set_detail_data_export_prepare",{courseId: courseId}) }}"
+         data-export-url="{{ path('admin_course_set_detail_data_export',{courseId: courseId}) }}"
+         href="javascript:;">{{ 'form.btn.export'|trans }}</a>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-bordered" style="word-break:break-all;text-align:center;">
+      <tr class="active">
+        <td>{{ 'admin.course_manage.statistics.data_detail.name'|trans }}</td>
+        <td>{{ 'admin.course_manage.statistics.data_detail.join_time'|trans }}</td>
+        <td>{{ 'admin.course_manage.statistics.data_detail.finished_time'|trans }}</td>
+        <td>{{ 'admin.course_manage.statistics.data_detail.study_days'|trans }}</td>
+        <td>{{ 'admin.course_manage.statistics.data_detail.study_time'|trans }}</td>
+        <td>{{ 'admin.course_manage.statistics.data_detail.question_number'|trans }}</td>
+        <td>{{ 'admin.course_manage.statistics.data_detail.note_number'|trans }}</td>
+      </tr>
+
+      {% if students %}
+        {% for student in students %}
+          <tr>
+            <td>{{ student.nickname }}</td>
+            <td>{{ student.createdTime|date('Y-m-d H:i:s') }}</td>
+            <td>{% if student.finishedTime|default(null) %}{{ student.finishedTime|date('Y-m-d H:i:s') }}{% else %}----{% endif %}</td>
+            <td>{{ student.fininshDay|default() }}</td>
+            <td>
+              {% if student.learnTime > 0 %}
+                {{ (student.learnTime|default(0)/60)|round(0, 'floor') }}
+              {% else %}
+                ----
+              {% endif %}
+            </td>
+            <td>{{ student.questionCount|default() }}</td>
+            <td>{{ student.noteNum }}</td>
+          </tr>
+        {% endfor %}
+      {% endif %}
+    </table>
+    {{ admin_macro.paginator(paginator) }}
+  </div>
+
+  <script>app.load('course-set/data-detail.js');</script>
+{% endblock %}

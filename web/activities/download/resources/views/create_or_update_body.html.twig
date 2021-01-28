@@ -1,0 +1,44 @@
+{% extends 'activity/activity-layout.html.twig' %}
+{% do script(['libs/ltc-sdk-client.js', cloud_sdk_url('uploader'), 'downloadactivity/js/create/index.js']) %}
+{% block activity_step %}
+  {% set optionalDefault = 1 %}
+  {% set mediaType = activity.mediaType|default('download') %}
+  {% set medias = find_materials_by_activity_id_and_source(activity.id|default(0), 'coursematerial') %}
+  <div class="tab-pane js-course-tasks-pane active js-step2-view">
+    <form class="form-horizontal" id="step2-form" >
+      <div class="form-group">
+        <div class="col-sm-2 control-label">
+          <label for="title" class="control-label-required">{{ 'course.plan_task.activity_manage.title_name'|trans }}</label>
+        </div>
+        <div class="col-sm-10">
+          <input id="title" class="form-control" type="text" name="title" value="{{ activity.title|default('') }}" >
+          <div class="help-block">{{ 'course.plan_task.activity_manage.help_block'|trans }}</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-2 control-label">
+          <label for="materials" class="style control-label-required">{{ 'course.plan_task.activity_manage.download.choose_file'|trans }}</label>
+        </div>
+        <div class="col-sm-10">
+          <ul class="download-list" id="material-list">
+            {% for media in medias|default() %}
+              <li class="download-item" data-id="{{ media.link|default(media.fileId) }}">
+                {% if media.link|default(null) %}
+                  <a href="{{ media.link }}" target="_blank">{{ media.title }}</a>
+                  <span class="glyphicon glyphicon-new-window color-gray text-sm" title="{{ 'course.plan_task.activity_manage.download.link_file'|trans }}"></span>
+                {% else %}
+                  <a class="gray-primary" href="{{ path('material_download',{ fileId:media.fileId }) }}" target="_blank">{{ media.title }}</a>
+                {% endif %}
+                <a class="gray-primary phm btn-delete js-btn-delete" href="javascript:;" data-url="" data-toggle="tooltip" data-placement="top" title="{{ 'course.plan_task.activity_manage.download.delete_btn'|trans }}"><i class="es-icon es-icon-delete"></i></a>
+              </li>
+            {% endfor %}
+          </ul>
+          {% include 'file-chooser/file-choose.html.twig' with {courseId: activity.fromCourseId, mediaType: mediaType, fileType:'all',file: null } %}
+          <input id="materials" class="form-control" type="hidden" name="materials"
+            {% if medias|default() %} value="{{ medias|default()|json_encode }}" {% endif %} >
+        </div>
+        <p class="col-sm-offset-2 col-sm-10 mt10 color-warning">{{'course.plan_task.activity_manage.download.file_tips'|trans}}</p>
+      </div>
+    </form>
+  </div>
+{% endblock %}

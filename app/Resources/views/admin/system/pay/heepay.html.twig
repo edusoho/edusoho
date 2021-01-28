@@ -1,0 +1,39 @@
+<fieldset>
+  <legend>{{ 'admin.payment_setting.heepay'|trans }}</legend>
+  {% if setting('magic.quickpay', false) %}
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>{{ 'admin.payment_setting.api_status'|trans }}</label>
+      </div>
+      <div class="controls col-md-3 radios">
+        {{ radios('heepay_enabled', {1:'form.radio_btn.open'|trans, 0:'form.radio_btn.close'|trans}, payment.heepay_enabled) }}
+      </div>
+      <div class="controls col-md-4 radios">
+        <a href="http://www.edusoho.com/files/heepay.zip">{{ 'admin.payment_setting.heepay_api_application_word'|trans }}</a>
+      </div>
+    </div>
+    <div data-sub="heepay" {% if not payment.heepay_enabled %} class="hidden" {% endif %}>
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label for="heepay_key">PID</label>
+        </div>
+        <div class="controls col-md-8">
+          <input type="text" id="heepay_key" name="heepay_key" class="form-control" value="{{payment.heepay_key}}">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label for="heepay_secret">{{ 'admin.payment_setting.heepay_secret'|trans }}</label>
+        </div>
+        <div class="controls col-md-8">
+          <input type="text" id="heepay_secret" name="heepay_secret" class="form-control" value="{{payment.heepay_secret}}">
+        </div>
+      </div>
+    <div>
+  {% else %}
+    <div class="alert alert-info text-center" role="alert">
+      {{ 'admin.payment_setting.heepay_tips'|trans }}
+    </div>
+  {% endif %}
+</fieldset>

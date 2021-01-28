@@ -1,0 +1,47 @@
+EndroidQrCodeBundle:
+    resource: "@EndroidQrCodeBundle/Controller/"
+    type:     annotation
+    prefix:   /qrcode
+api:
+    resource: "@ApiBundle/Controller/"
+    type:     annotation
+    prefix:   /api
+
+tbazinga_jstranslation:
+    resource: "@BazingaJsTranslationBundle/Resources/config/routing/routing.yml"
+
+topxia_mobile_v2:
+    resource: "@TopxiaMobileBundleV2/Resources/config/routing.yml"
+    prefix:   /mapi_v2
+
+app:
+    resource: "@AppBundle/Resources/config/routing.yml"
+    prefix:   /
+
+app_admin:
+    resource: "@AppBundle/Resources/config/routing_admin.yml"
+    prefix:   /admin
+
+app_admin_v2:
+    resource: "@AppBundle/Resources/config/routing_admin_v2.yml"
+    prefix:   /admin/v2
+
+_plugins:
+   resource: routing_plugins.yml
+
+custom:
+    resource: "@CustomBundle/Resources/config/custom_routing.yml"
+    prefix:   /
+
+custom_admin:
+    resource: "@CustomBundle/Resources/config/custom_admin_routing.yml"
+    prefix:   /admin
+
+custom_admin_v2:
+    resource: "@CustomBundle/Resources/config/custom_admin_routing_v2.yml"
+    prefix:   /admin/v2
+
+# Internal routing configuration to handle ESI
+# _internal:
+#    resource: "@FrameworkBundle/Resources/config/routing/internal.xml"
+#    prefix:   /_internal

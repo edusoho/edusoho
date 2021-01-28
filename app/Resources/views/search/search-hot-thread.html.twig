@@ -1,0 +1,33 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">{{'cloud_search.thread.recommend.content_title'|trans}}</h3>
+  </div>
+  <div class="panel-body">
+    <div class="media-group-list">
+      
+        {% set hotGrops = data('HotGroup',{'count':5}) %}
+        {% for group in hotGrops %}
+        <div class="media media-group">
+          <div class="media-left">
+            <a href="{{path('group_show',{'id':group.id})}}" title="{{group.title}}">
+              <img src="{{filepath(group.logo, 'group.png')}}" alt="{{group.title}}" class="avatar-square-md"></a>
+          </div>
+          <div class="media-body">
+            <div class="title">
+              <a class="gray-darker" href="{{path('group_show',{'id':group.id})}}" title="{{group.title}}">{{group.title}}</a>
+            </div>
+            <div class="metas">
+              <span> <i class="es-icon es-icon-people"></i>
+                {{group.memberNum}}
+              </span>
+              <span> <i class="es-icon es-icon-textsms"></i>
+                {{group.threadNum}}
+              </span>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+      
+    </div>
+  </div>
+</div>

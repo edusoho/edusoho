@@ -1,0 +1,40 @@
+{% set batch = data('CouponBatch',{'batchId': batchId|default(0)}) %}
+<div class="coupon-pack-item coupon-item useless">
+  {% if cardDetail.targetType == "course" %}
+    {% if cardDetail.targetId == 0 %}
+       <p class="title range">{{'coupon.for_any_course'|trans}}</p>
+    {% else %}
+      {% if batch.couponContent|default('') == 'multi' %}
+        <p class="title range">{{ 'coupon.for_multi_courses'|trans }}</p>
+      {% else %}
+        <p class="title range">{{'coupon.for_specified_courses'|trans}}</p>
+      {% endif %}
+    {% endif %}
+  {% endif %}
+
+  {% if cardDetail.targetType == "classroom" or cardDetail.targetType == "fullDiscount" %}
+    <p class="title range">{{'coupon.for_any_classroom'|trans}}</p>
+  {% endif %}
+
+  {% if cardDetail.targetType == "vip" %}
+    {% if cardDetail.targetId == 0 %}
+      <p class="title range">{{'coupon.for_any_level_of_VIP_membership'|trans}}</p>
+    {% else %}
+      <p class="title range">{{'coupon.for_specified_level_of_VIP_membership'|trans}}</p>
+    {% endif %}
+  {% endif %}
+  {% if cardDetail.targetType == "all" %}
+    <p class="title range">{{'coupon.for_any_purchase_on_our_web_site'|trans}}</p>
+    <p class="title range"></p>
+  {% endif %}
+  <p class="price">
+    {% if cardDetail.type == "minus" %}￥{% endif %}<strong class="price__number">{{ cardDetail.rate }}</strong>{% if cardDetail.type == "discount" %}{{'coupon.discount'|trans}}{% endif %}
+  </p>
+  <p class="tip">{{ 'coupon.buy_something_btn'|trans }}</p>
+  <p class="cd-mt16">{{'coupon.expired_on'|trans}}<span>{{'coupon.deadline_year'|trans({'%deadline%': cardDetail.deadline|date('Y')})}}{{'coupon.deadline_month'|trans({'%deadline%': cardDetail.deadline|date('n')}) }}{{'coupon.deadline_day'|trans({'%deadline%': cardDetail.deadline|date('d')}) }}</span></p>
+  {% if cardDetail.targetType == 'fullDiscount' and cardDetail.fullDiscountPrice %}
+    <p>{{'coupon.Requirements'|trans({'%fullDiscountPrice%': cardDetail.fullDiscountPrice|default('coupon.Accessible'|trans)})}}<span></span></p>
+  {% endif %}
+  <div class="stamp stamp-outdate"></div>
+</div>
+ 

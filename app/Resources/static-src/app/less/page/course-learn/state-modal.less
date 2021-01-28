@@ -1,0 +1,70 @@
+.task-state-modal {
+  .title {
+    text-align: center;
+    font-size: 22px;
+    color: @gray-darker;
+    margin-bottom: 20px;
+    line-height: 1;
+    i {
+      font-size: 22px;
+      margin-right: 10px;
+    }
+  }
+  .content {
+    font-size: 12px;
+    background-color: #fafafa;
+    padding: 30px 70px;
+    text-align: center;
+    .content-title {
+      line-height: 1;
+      font-size: 16px;
+      color: @gray-darker;
+      margin-bottom: 40px;
+    }
+    .content-progress {
+      margin-bottom: 15px;
+    }
+  }
+  &.task-state-modal-xs {
+    padding: 6px 0;
+    .title {
+      font-size: 12px;
+      text-align: left;
+      i {
+        font-size: 14px;
+      }
+    }
+    .content {
+      padding: 0;
+      background-color: transparent;
+      text-align: left;
+      margin-bottom: 13px;
+      color: @gray;
+      .content-title {
+        font-size: 12px;
+        color: @gray-dark;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+        font-weight: normal;
+        border-bottom: 1px solid @border-color;
+      }
+      .content-progress {
+        padding-bottom: 14px;
+        border-bottom: 1px solid @border-color;
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+.task-finish-modal {
+  .modal-header {
+    border-bottom: 0;
+    padding-bottom: 0;
+    text-align: center;
+  }
+  .modal-footer {
+    border-top: 0;
+    padding-top: 0;
+  }
+}

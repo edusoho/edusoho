@@ -1,0 +1,67 @@
+services:
+    codeages_plugin.dict_collector:
+        class: Codeages\PluginBundle\System\DictCollector
+        arguments:
+            - []
+            - "%kernel.cache_dir%"
+            - "%kernel.debug%"
+            - "%locale%"
+
+    codeages_plugin.slot_collector:
+        class: Codeages\PluginBundle\System\Slot\SlotInjectionCollector
+        arguments:
+            - []
+            - "%kernel.cache_dir%"
+            - "%kernel.debug%"
+
+    codeages_plugin.slot_manager:
+        class: Codeages\PluginBundle\System\Slot\SlotManager
+        arguments:
+            - "@codeages_plugin.slot_collector"
+            - "@service_container"
+
+    codeages_plugin.html_twig_extension:
+        class: Codeages\PluginBundle\Twig\HtmlExtension
+        public: false
+        tags:
+            - { name: twig.extension }
+
+    codeages_plugin.slot_twig_extension:
+        class: Codeages\PluginBundle\Twig\SlotExtension
+        public: false
+        arguments:
+            - "@codeages_plugin.slot_manager"
+        tags:
+            - { name: twig.extension }
+
+    codeages_plugin.dict_twig_extension:
+        class: Codeages\PluginBundle\Twig\DictExtension
+        public: true
+        arguments:
+            - "@codeages_plugin.dict_collector"
+            - "@service_container"
+
+        tags:
+            - { name: twig.extension }
+
+    codeages_plugin.theme.file_locator:
+        class:          Codeages\PluginBundle\Locator\ThemeFileLocator
+        arguments:      ['@kernel', '%kernel.root_dir%/Resources']
+
+    codeages_plugin.theme.twig_loader:
+        class: Codeages\PluginBundle\Loader\ThemeTwigLoader
+        arguments: ['@kernel']
+        tags:
+            - { name: twig.loader, priority: 255 }
+
+    codeages_plugin.theme.templating.locator:
+        class:          Symfony\Bundle\FrameworkBundle\Templating\Loader\TemplateLocator
+        arguments:      ['@codeages_plugin.theme.file_locator', '%kernel.cache_dir%']
+
+    codeags_plugin.event.lazy_subscribers:
+        class: Codeages\PluginBundle\Event\LazySubscribers
+        arguments: ['@service_container']
+        public: true
+
+    templating.locator:
+        alias:          codeages_plugin.theme.templating.locator

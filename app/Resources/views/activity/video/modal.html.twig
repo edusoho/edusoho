@@ -1,0 +1,78 @@
+{% extends 'activity/activity-form-layout.html.twig' %}
+
+{% do script([cloud_sdk_url('uploader'), 'libs/perfect-scrollbar.js','libs/select2.js', 'app/js/activity-manage/video/index.js']) %}
+
+{% block activity_content %}
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label for="media" class="style control-label-required">{{ 'course.plan_task.activity_manage.video'|trans }}</label>
+    </div>
+    <div class="col-sm-10">
+      {% if activity.ext.mediaSource|default(null) and activity.ext.mediaSource != 'self' %}
+        {% set selectedFile = {'status': 'none', 'source': activity.ext.mediaSource, 'uri': activity.ext.mediaUri } %}
+      {% endif %}
+      {% include 'file-chooser/file-choose.html.twig' with {mediaType: 'video',fileType:'video', file: activity.ext.file|default(null), link: activity.ext.mediaSource|default(null), selectedFile: selectedFile|default(null) } %}
+    </div>
+  </div>
+  <div class="form-group for-video-type" id="lesson-length-form-group">
+    <div class="col-sm-2 control-label for-video-type">
+      <label class="control-label-required">{{ 'course.plan_task.activity_manage.video.time'|trans }}</label>
+    </div>
+    <div class="col-sm-10">
+      <input id="mediaId" class="form-control" type="hidden" name="mediaId" value={{ activity.mediaId|default(null) }}>
+      <!-- todo:mediaId 和 ext_mediaId的字段整改 -->
+      <input class="form-control width-150 js-length" id="minute" type="text" name="minute"
+             value="{{ activity.minute|default(null) }}"><span class="mhs">{{ 'site.date.minute'|trans }}</span><input
+          class="form-control width-150 js-length" id="second" type="text" name="second"
+          value="{{ activity.second|default(null) }}">{{ 'site.date.second'|trans }}
+      <input type="hidden" id="length" name="length" value="{{ activity.length|default(0) }}">
+    </div>
+  </div>
+
+  {% if setting('storage.upload_mode', 'local') == 'cloud' and activity.ext.mediaSource|default('self') == 'self' %}
+    <div class="form-group for-video-subtitle" id="video-subtitle-form-group">
+      <div class="col-sm-2 control-label for-video-subtitle">
+        <label class="control-label">{{ 'course.plan_task.activity_manage.video.subtitle'|trans }}</label>
+      </div>
+
+      <div class="col-sm-10 controls js-subtitle-list" data-dialog-url="{{ path('media_subtitle_manage_dialog') }}">
+        <p style="margin-top:6px;color:#a1a1a1">{{'course.plan_task.activity_manage.video.add_subtitle_tips'|trans}}</p>
+      </div>
+      <div class="col-sm-offset-2 help-block">
+        <p style="margin-left:10px;">
+          {{'course.plan_task.activity_manage.video.code_convert_tips'|trans|raw}}
+        </p>
+      </div>
+
+      <input id="ext_mediaId_for_subtitle" class="form-control" type="hidden" value={{ activity.ext.mediaId|default(null) }}>
+    </div>
+  {% endif %}
+
+{% endblock %}
+
+{% block activity_finish %}
+  <div class=" form-group">
+    <div class="col-sm-2 control-label">
+      <label>{{ 'course.plan_task.activity_manage.finished_condition'|trans }}</label>
+    </div>
+    <div class="col-sm-4">
+      <select id="finish-condition" name="finishType" class="form-control">
+        {% set finishType = activity.ext.finishType|default('end') %}
+        <option value="end" {% if finishType == 'end' %} selected {% endif %}>{{'course.plan_task.activity_manage.video.last'|trans}}</option>
+        <option value="time" {% if finishType == 'time' %} selected {% endif %}>{{'course.plan_task.activity_manage.video.learn_time'|trans}}</option>
+      </select>
+    </div>
+  </div>
+
+  <div class=" form-group hidden viewLength">
+    <div class="col-sm-2 control-label">
+      <label>{{ 'course.plan_task.activity_manage.ppt.lear_at_least_time'|trans }}</label>
+    </div>
+    <div class="col-sm-4 controls">
+      <input id="condition-detail" class="form-control" type="text" name="finishDetail" value="{% if activity.ext.finishDetail|default(1) != 0  %}{{ activity.ext.finishDetail|default(1) }}{% else %}1{% endif %}">
+    </div>
+    <div class="col-sm-4 controls">
+      <p class="form-control-static">{{'site.date.minute'|trans}}</p>
+    </div>
+  </div>
+{% endblock %}

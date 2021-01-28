@@ -1,0 +1,167 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% set modal_class= "modal-lg" %}
+
+{% block title %}{{ 'admin_v2.app_center.resource_settlement.order.detail'|trans }}{% endblock %}
+
+{% block body %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">{{ 'admin_v2.app_center.resource_settlement.product.information'|trans }}</div>
+    </div>
+    <div class="panel-body">
+      <table class="table table-hover">
+        <thead>
+        <tr>
+          <th>{{ 'merchant.content_resource.product_title_simple'|trans }}</th>
+          <th>{{ 'merchant.content_resource.product_no'|trans }}</th>
+          <th>{{ 'merchant.content_resource.product_count'|trans }}</th>
+          <th>{{ 'merchant.content_resource.product_specifications'|trans }}</th>
+          <th>{{ 'merchant.content_resource.product_sales_unit'|trans }}</th>
+          <th>{{ 'merchant.content_resource.product_price'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in detail.orderItems|default() %}
+          <tr>
+            <td>{{ item.title|default() }}</td>
+            <td>--</td>
+            <td>{{ item.num|default(0) }}</td>
+            <td>--</td>
+            <td>--</td>
+            <td class="text-danger">{{ detail.order.price_amount/100|default(0)|currency }}</td>
+          </tr>
+        {% else %}
+          <tr>
+            <td colspan="20">
+              <div class="empty">{{ 'admin_v2.app_center.resource_settlement.empty'|trans }}</div>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="panel-footer text-right">
+      {{ 'order.confirm.pay_total'|trans }}: <span class="text-danger text-lg">{{ detail.order.price_amount/100|default(0)|currency }}</span>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">{{ 'admin_v2.app_center.resource_settlement.balance.order.detail'|trans }}</div>
+    </div>
+    <div class="panel-body">
+      <table class="table table-hover">
+        <thead>
+        <tr>
+          <th>{{ 'admin_v2.app_center.resource_settlement.order.sn'|trans }}（{{ 'order.id'|trans }}）</th>
+          <th>{{ 'order.created_time'|trans }}</th>
+          <th>{{ 'admin.course_manage.chooser.creator'|trans }}</th>
+          <th>{{ 'admin_v2.app_center.resource_settlement.order.status'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ detail.order.sn }}</td>
+            <td>{{ detail.order.created_time|date_format('Y-m-d H:i:s') }}</td>
+            <td>{{ 'merchant.content_resource.system'|trans }}</td>
+            <td>{{ dict_text('s2b2cSettlementOrderStatus', detail.order.status) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">{{ 'admin_v2.app_center.resource_settlement.order.detail.price_settlement'|trans }}</div>
+    </div>
+    <div class="panel-body">
+      <table class="table table-hover">
+        <thead>
+        <tr>
+          <th>{{ 'merchant.content_resource.product_sum'|trans }}</th>
+          <th>{{ 'admin_v2.app_center.resource_settlement.order.detail.deduct'|trans }}</th>
+          <th>{{ 'admin_v2.app_center.resource_settlement.order.pay_amount'|trans }}</th>
+          <th>{{ 'admin_v2.app_center.resource_settlement.balance.order.debt'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-danger">{{ detail.order.price_amount/100|default(0)|currency }}</td>
+            <td class="text-danger">{{ (detail.order.price_amount - detail.order.pay_amount)/100|default(0)|currency }}</td>
+            <td class="text-danger">{{ detail.order.pay_amount/100|default(0)|currency }}</td>
+            <td class="text-danger">{{ (detail.order.pay_amount - detail.order.paid_coin_amount)/100|default(0)|currency }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">{{ 'admin_v2.app_center.resource_settlement.order.detail.pay_information'|trans }}</div>
+    </div>
+    <div class="panel-body">
+      <table class="table table-hover">
+        <thead>
+        <tr>
+          <th>{{ 'admin_v2.app_center.resource_settlement.balance.action'|trans }}</th>
+          <th>{{ 'admin_v2.app_center.resource_settlement.balance.sn'|trans }}</th>
+          <th>{{ 'admin_v2.app_center.resource_settlement.order.detail.paid_amount'|trans }}</th>
+          <th>{{ 'admin_v2.app_center.resource_settlement.order.detail.pay_time'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for flow in detail.outFlows %}
+        <tr>
+          <td>{{ 'admin_v2.app_center.resource_settlement.balance.balance_payment'|trans }}</td>
+          <td>{{ flow.sn }}</td>
+          <td class="text-danger">{{ flow.amount/100|default(0)|currency }}</td>
+          <td>{{ flow.created_time|date_format('Y-m-d H:i:s') }}</td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="20">
+            <div class="empty">{{ 'admin_v2.app_center.resource_settlement.empty'|trans }}</div>
+          </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">{{ 'merchant.content_resource.product_buyer_information'|trans }}</div>
+    </div>
+    <div class="panel-body">
+      <table class="table table-hover">
+        <thead>
+        <tr>
+          <th>{{ 'merchant.content_resource.product_customer_name'|trans }}</th>
+          <th>{{ 'merchant.content_resource.product_customer_id'|trans }}</th>
+          <th>{{ 'merchant.content_resource.product_payer'|trans }}</th>
+          <th>{{ 'merchant.content_resource.product_order_title'|trans }}</th>
+          <th>{{ 'admin_v2.app_center.resource_settlement.order.detail.order_sn'|trans }}</th>
+          <th>{{ 'admin_v2.app_center.resource_settlement.order.detail.order_user'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>{{ detail.buyer.name }}</td>
+          <td>{{ detail.buyer.id }}</td>
+          <td>{{ 'merchant.content_resource.system'|trans }}</td>
+          <td>{{ detail.order.title }}</td>
+          <td>{{ detail.order.create_extra.merchant_order.sn }}</td>
+          <td>{{ detail.buyer.name }} - {{ detail.order.create_extra.merchant_order.nickname }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-primary pull-right" data-dismiss="modal">{{'form.btn.confirm'|trans}}</button>
+{% endblock %}

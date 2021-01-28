@@ -1,0 +1,44 @@
+{% extends 'my/my-teaching.html.twig' %}
+
+{% block title %}
+  {% if testpaper is defined %}
+    {{ 'my.teaching.question_bank.testpaper.edit'|trans }} - {{ parent() }}
+  {% else %}
+    {{ 'my.teaching.question_bank.testpaper.manual_create'|trans }} - {{ parent() }}
+  {% endif %}
+{% endblock %}
+{% set side_nav = 'my-question-bank' %}
+{% set active_tab = 'testpaper-list' %}
+
+{% do script(['libs/jquery-validation.js','libs/es-ckeditor/ckeditor.js','app/js/question-bank/testpaper/create/index.js'])  %}
+
+{% block main %}
+  <div class="panel panel-default panel-col">
+    <div class="panel-heading">{{ questionBank.name }}</div>
+  </div>
+
+  <div>
+    {% include 'question-bank/header-navbar.html.twig' %}
+    <div class="panel panel-default panel-col">
+      {% block panel_body %}
+        <div class="panel-body question-list-container js-testpaper-container">
+          <div class="mtl">
+            <form id="testpaper-form" class="form-horizontal" method="post" data-url="
+              {% if testpaper is defined %}
+                {{ path('question_bank_manage_testpaper_edit', {id: questionBank.id, assessmentId: testpaper.id}) }}
+              {% else %}
+                {{ path('question_bank_manage_testpaper_create', {id: questionBank.id}) }}
+              {% endif %}
+            ">
+              {% if showBaseInfo == '1' %}
+                {% include 'question-bank/testpaper/manage/base-info.html.twig' %}
+              {% endif %}
+              {% include 'question-bank/testpaper/manage/questions-info.html.twig' %}
+            </form>
+            {% include 'question-bank/testpaper/manage/set-score-modal.html.twig' %}
+          </div>
+        </div>
+      {% endblock %}
+    </div>
+  </div>
+{% endblock %}

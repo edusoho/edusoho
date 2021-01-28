@@ -1,0 +1,8 @@
+<div class="alert alert-blank alert-sm">
+    {{ 'cloud_search.classroom.result'|trans({'%counts%':counts|default(0), '%classroom%':setting('classroom.name')|default('site.default.classroom'|trans)})|raw }}
+</div>
+<div class="search-course-list" id="search-course">
+    {% for classroom in resultSet %}
+        {% include 'search/search-classroom-item.html.twig' %}
+    {% endfor %}
+</div>

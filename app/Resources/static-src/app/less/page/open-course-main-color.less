@@ -1,0 +1,31 @@
+.open-course-panel {
+  .panel-heading {
+    &:before {
+      background: @brand-primary;
+    }
+  }
+}
+.open-course-tab {
+  .tab-recommand {
+    .open-course-info {
+      .title {
+        &:hover {
+          color: @brand-primary;
+        }
+      }
+    }
+  }
+  .tab-live a {
+    &:hover,&:active,&.active {
+      background-color: @brand-primary;
+    }
+  }
+}
+.open-course-mobile-tab {
+  ul {
+    .tab-header.active {
+      border-bottom: 2px solid @brand-primary;
+      color: @brand-primary;
+    }
+  }
+}

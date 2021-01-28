@@ -1,0 +1,152 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_operation_article_manage' %}
+
+{% set script_controller = 'article/article-modal' %}
+
+{% set article = article|default(null) %}
+
+{% block page_title %}{% if article %}{{'admin.article_setting.edit'|trans}}{% else %}{{parent()}}{% endif %}{% endblock %}
+
+{% block main %}
+
+<style>
+  #article-form .popover {
+    max-width: 400px;
+    width: 400px;
+  }
+</style>
+
+
+<form class="two-col-form" id="article-form" method="post" enctype="multipart/form-data"
+  {% if article %}
+    action="{{ path('admin_article_edit', {id:article.id}) }}"
+  {% else %}
+    action="{{ path('admin_article_create') }}"
+  {% endif %}
+  >
+  <div class="row">
+    <div class="col-md-8">
+      <div class="form-group">
+        <label for="article-title-field" class="control-label">{{'admin.article_setting.title'|trans}}</label>
+        <div class="controls">
+          <input class="form-control" id="article-title-field" type="text" name="title" value="{{ article.title|default('') }}">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="categoryId" class="control-label">{{'admin.article_setting.category'|trans}}</label>
+        <div class="controls">
+          <select class="form-control" id="categoryId" type="text" name="categoryId" required="required" tabindex="2">
+            {% if not article|default(false) %}
+              <option></option>
+            {% endif %}
+          {% for tree in categoryTree %}
+            <option value={{ tree.id }} {% if tree.id == category.id|default()  %}selected{% endif %}>{% for i in 1..(tree.depth-1) if tree.depth > 1 %}　{% endfor %}{{ tree.name }}</option>
+          {% endfor %}
+            </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="article-tagIds"　class="control-label">{{'admin.article_setting.tag'|trans}}</label>
+        <div class="controls">
+          <input type="form-control" id="article-tags" name="tags" required="required" class="width-full select2-offscreen" tabindex="-1" value="{{ tagNames|default([])|join(',') }}" data-match-url="{{ path('tag_match') }}">
+          <div class="help-block" style="display:none;"></div>
+        </div>
+      </div>
+
+      {% include 'org/org-tree-select.html.twig' with {orgCode: article.orgCode|default(null), nocolmd:true} %}
+
+      <div class="form-group">
+        <label for="richeditor-body-field" class="control-label">{{'admin.article_setting.content'|trans}}</label>
+        <div class="controls">
+          <textarea class="form-control" id="richeditor-body-field" rows="16" name="body"
+            data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}"
+            data-flash-upload-url="{{ path('editor_upload', {token:upload_token('default', 'flash')}) }}"
+           >{{ article.body|default('') }}</textarea>
+        </div>
+      </div>
+
+      {{ render(controller('AppBundle:File/Attachment:formFields', {targetType: 'article', targetId: article.id|default(0)}, { 'showLabel':false, 'useSeajs': true  })) }}
+
+      <div class="form-group">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        <button id="article-operate-save" class="btn btn-primary" data-toggle="form-submit" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{'form.btn.confirm'|trans}}</button>
+        <a class="btn btn-link" href="{{ path('admin_article') }}">{{'form.btn.return'|trans}}</a>
+      </div>
+
+    </div>
+    <div class="col-md-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">{{'admin.article_setting.property'|trans}}</div>
+        <div class="panel-body">
+            <label class="checkbox-inline">
+            <input type="checkbox" name="sticky" value="1" {% if field_value(article, 'sticky') %} checked="checked" {% endif %}> {{'thread.status.stick'|trans}}
+          </label>
+          <label class="checkbox-inline">
+            <input type="checkbox" name="featured" value="1" {% if field_value(article, 'featured') %} checked="checked" {% endif %}> {{'thread.status.top'|trans}}
+          </label>
+          <label class="checkbox-inline">
+            <input type="checkbox" name="promoted" value="1" {% if field_value(article, 'promoted') %} checked="checked" {% endif %}> {{'thread.status.recommend'|trans}}
+          </label>
+          <a class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="">
+          </a>
+          <div id="article-property-tips-html" style="display:none;">
+            {{ 'admin.article_setting.property_tooltip'|trans|raw }}
+          </div>
+        </div>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">{{'admin.article_setting.source_setting'|trans}}</div>
+        <div class="panel-body">
+            <div class="form-group">
+              <label for="article-source-field">{{'admin.article_setting.source_name'|trans}}</label>
+              <div class="controls">
+                <input class="form-control" id="article-source-field" type="text" name="source" value="{{ field_value(article, 'source') }}">
+              </div>
+            </div>
+
+            <div class="form-group">
+                <label for="article-sourceUrl-field">{{'admin.article_setting.source_address'|trans}}</label>
+              <div class="controls">
+                  <input class="form-control" id="article-sourceUrl-field" type="text" name="sourceUrl" value="{{ field_value(article, 'sourceUrl') }}">
+              </div>
+            </div>
+        </div>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">{{'admin.article_setting.thumb_setting'|trans}}</div>
+        <div class="panel-body">
+          <div id="article-thumb-container">
+              {% if article.thumb|default(null) %}
+                <img class="img-responsive" src='{{ filepath(article.thumb) }}'>
+              {% endif %}
+            </div>
+            <br>
+            <a href="#modal" data-toggle="modal" data-url="{{path('admin_article_show_upload')}}" class="btn btn-default">{{'admin.article_setting.thumb_setting.upload_btn'|trans}}</a>
+          <a id="article_thumb_remove"  class="btn btn-default" data-url="{{ path('admin_article_thumb_remove',{id:article.id|default(0)}) }}" {% if not article.thumb|default(null) %}style="display:none;" {% endif %}>{{'form.btn.delete'|trans}}</a>
+          <input type="hidden" name="thumb" value="{{article.thumb |default()}}" id="article-thumb">
+          <input type="hidden" name="originalThumb" value="{{article.originalThumb |default()}}" id="article-originalThumb">
+          {{'admin.article_setting.thumb_setting.upload_tips'|trans|raw}}
+        </div>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">{{'admin.article_setting.publish_time'|trans}}</div>
+        <div class="panel-body">
+          <div class="form-group">
+            <div class="controls">
+              <input class="form-control" type="text" name="publishedTime" value=" {{ field_value(article, 'publishedTime', app.request.server.get('REQUEST_TIME'))|date('Y-m-d H:i:s') }}">
+              <div class="help-block">{{'admin.article_setting.publish_time_tips'|trans}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+{% endblock %}

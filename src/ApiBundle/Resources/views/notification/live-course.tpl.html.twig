@@ -1,0 +1,3 @@
+{% set data = notification.content %}
+{{ 'notification.live-course'|trans({'%noticeDay%':data.noticeDay, '%minStartTime%':data.minStartTime}) }}
+

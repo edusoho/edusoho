@@ -1,0 +1,17 @@
+{% extends "activity/content-layout.html.twig" %}
+
+{% block body %}
+	<div class="iframe-parent-content ph20 pv20">
+    <div class="lesson-content-text-body">
+      <div class="live-show-item cke_editable cke_contents_ltr">
+        <p class="title">
+          {{'course.plan_task.activity_manage.discuss.content'|trans}}
+        </p>
+        {{activity.content|raw}}
+      </div>
+      <div class="live-show-item">
+        <a class="btn btn-primary" href="{{path('course_thread_create', {courseId: activity.fromCourseId, type: 'discussion'})}}" target="_blank">{{ 'course.plan_task.activity_manage.create_btn'|trans }}</a>
+      </div>
+    </div>
+	</div>
+{% endblock %}

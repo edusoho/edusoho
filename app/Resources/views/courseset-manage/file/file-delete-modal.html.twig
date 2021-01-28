@@ -1,0 +1,37 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{'admin.course_manage.file.remove'|trans}}{% endblock %}
+
+{% do script(['app/js/course-manage-file/delete/index.js']) %}
+
+{% block body %}
+  {% if courseSet.type in ['open','liveOpen'] %}
+    {% set deleteUrl = path('open_course_manage_files_delete', {id:courseSet.id}) %}
+  {% else %}
+    {% set deleteUrl = path('course_set_manage_delete_materials', {id:courseSet.id}) %}
+  {% endif %}
+	<form id="material-delete-form" class="form-horizontal" method="post" action="{{ deleteUrl }}" onsubmit="return false">
+    <div class="form-group">
+      <div class="controls mll">
+        <span>{{'admin.course_manage.file.remove_course_contact'|trans}}</span>
+      </div>
+      <div class="controls mll mtl">
+				<input type="checkbox" name="isDeleteFile" value="1" />
+      	{{'admin.course_manage.file.remove_material_lib'|trans}}
+      </div>
+
+      {% include 'courseset-manage/file/file-used-in-material-list.html.twig' %}
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    {% for id in ids if id %}
+      <input type="hidden" name="ids[]" value="{{ id }}" />
+    {% endfor %}
+  </form>
+{% endblock %}
+
+{% block footer %}
+  <div class="pull-left pts">
+    <span class="color-danger">{{'admin.course_manage.file.remove_tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}</span>
+  </div>
+  <button class="btn btn-danger material-delete-form-btn" type="submit" data-toggle="form-submit" data-target="#material-delete-form" data-loading-text="{{'form.btn.delete.submiting'|trans}}">{{'admin.course_manage.file.remove_confirm'|trans}}</button>
+{% endblock %}

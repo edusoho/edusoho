@@ -1,0 +1,38 @@
+{% extends 'oauth2/layout.html.twig' %}
+{% do script(['libs/jquery-validation.js','app/js/oauth2/bind/index.js']) %}
+
+{% block page_title %}
+  {{ 'user.oauth.validate_password'|trans }}
+{% endblock %}
+
+{% block panel_body %}
+
+  <div class="text-center cd-mb32">
+    <div class="third-party-avatar-wrap">
+      <img class="third-party-avatar-md" src="{{ asset(oauthUser.avatar) }}">
+    </div>
+    <div class="third-party-avatar-wrap">
+      <img class="third-party-avatar" src="{{ filepath(esUser.largeAvatar, 'avatar.png') }}">
+    </div>
+  </div>
+
+  <div class="text-center cd-mb32">
+    <div class="third-party-bind-tip">{{ 'user.oauth.binding_web_user'|trans }}</div>
+    <div class="third-party-user color-primary">{{ esUser.nickname }}</div>
+  </div>
+
+  <form class="third-party-form clearfix" id="third-party-bind-form" method="post" action="{{ path('oauth2_login_bind_login') }}">
+    <div class="form-group cd-form-group third-party-form-group">
+      <label class="third-party-form-group__info">{% if oauthUser.accountType == 'email' %}{{ 'user.oauth.login_by_email'|trans }}{% else %}{{ 'user.oauth.login_by_mobile'|trans }}{% endif %}</label>
+      <div class="third-party-form-group__info">{{ oauthUser.account }}</div>
+    </div>
+    <div class="form-group cd-form-group">
+      <label class="third-party-form__label" for="password">{{ 'user.oauth.web_account_password'|trans }}</label>
+      <input class="form-control" type="password" id="password" name="password">
+    </div>
+    <button class="btn cd-btn cd-btn-primary cd-btn-lg btn-block cd-mb16 js-submit-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" type="submit">{{ 'user.oauth.bind_account_and_go_continue'|trans }}</button>
+    <a class="pull-right third-party-link" href="{{ path('oauth2_login_index') }}">{{ 'user.oauth.bind_other_account'|trans }}</a>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+{% endblock %}

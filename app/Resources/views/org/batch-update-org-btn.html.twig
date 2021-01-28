@@ -1,0 +1,19 @@
+{% if setting('magic.enable_org','0') %}
+	{% do load_script('topxiaadminbundle/controller/org/batch-org-btn') %}
+
+	{% set generate = generate|default('generate') != 'no-generate' %}
+	{#添加admin_v2#}
+	{% if setting('backstage.is_v2',0)  == 0 %}
+		{% set dataUrl = path('admin_batch_update_org',{module:module}) %}
+	{% else %}
+		{% set dataUrl=  path('admin_v2_batch_update_org',{module:module}) %}
+	{% endif %}
+	{% if generate %}
+		<div>
+	    <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> {{ 'site.btn.all_select'|trans }}</label>
+	{% endif %}
+  	<a class="btn btn-default btn-sm {% if generate %} mlm {% endif %}" id="batch-update-org" data-form-id="{{formId}}" data-toggle="modal" data-generate="{{generate|default(false)}}" data-target="#modal" data-url="{{dataUrl}}">{{ 'site.org.setup'|trans }}</a>
+	{% if generate %}
+	  </div>
+	{% endif %}
+{% endif %}

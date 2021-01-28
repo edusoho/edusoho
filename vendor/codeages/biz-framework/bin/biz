@@ -1,0 +1,20 @@
+#!/usr/bin/env php
+<?php
+$autoloader = require dirname(__DIR__).'/composer_autoload.php';
+if (!$autoloader) {
+    die('class autoloader not found.');
+}
+
+$biz = require getcwd().'/biz.php';
+
+use Symfony\Component\Console\Application;
+
+$version = trim(file_get_contents(dirname(__DIR__).'/VERSION'));
+
+$application = new Application("Biz Framework Console", $version);
+
+foreach ($biz['console.commands'] as $creatorFunc) {
+    $application->add($creatorFunc());
+}
+
+$application->run();

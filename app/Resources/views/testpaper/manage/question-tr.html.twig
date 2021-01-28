@@ -1,0 +1,38 @@
+{% set questionTypesDict = getQuestionTypes() %}
+
+<tr id="testpaper-item-{{ question.id }}" data-id="{{ question.id }}" data-type="{{ question.type }}" {% if question.parentId >0 %}data-parent-id="{{ question.parentId }}"{% endif %} class="{% if question.subCount > 0 %} have-sub-questions js-have-sub{% endif %}{% if question.parentId > 0 %} is-sub-question{% else %} is-question{% endif %}">
+  <td><span class="glyphicon glyphicon-resize-vertical sort-handle"></span></td>
+  <td>
+    <input {% if question.parentId != 0 %} class="hidden" {% endif %} class="notMoveHandle" type="checkbox" value="{{question.id}}" data-role="batch-item" >
+    <input type="hidden" name="questionId[]" value="{{ question.id }}">
+  </td>
+  <td class="seq">{% if question.subCount > 0 %}<span class="color-gray">~</span>{% else %}{{ item.seq|default(' ') }}{% endif %}</td>
+  <td>
+    {% if question.includeImg|default('') %}<span class="glyphicon glyphicon-picture"></span>{% endif %}
+    {{ question['stem']|plain_text(40) }}
+    <div class="color-gray text-sm">
+      {{'course.question_manage.manage.category'|trans}}：
+      {% if question.target == 'course-' ~ courseSet.id %}
+        {{'course.question_manage.manage.default_belong'|trans}}
+      {% else %}
+        {{ targets[question.target].simple_name|default('--') }}
+      {% endif %}
+    </div>
+  </td>
+  <td>{{ questionTypesDict[question.type] }}</td>
+  <td>{{ dict_text('difficulty', question.difficulty)}}</td>
+  <td>
+    <input name="scores[]" class="notMoveHandle form-control input-sm"
+      {% if question.subCount > 0 %}type="hidden"{% else %}type="text"{% endif %} value="{{ item.score|default(question.score)|score_text }}" data-miss-score="{{ testpaper.metas.missScore[type]|default(0) }}" >
+  </td>
+
+  <td>
+    <div class="btn-group">
+      {% if question.parentId == 0 %}
+        <a href="#modal" data-toggle="modal" data-url="{{ path('course_manage_question_preview', {id:question.id, courseId:courseSet.id}) }}" class="notMoveHandle mrm">{{'course.testpaper_manage.question.operation.preview_btn'|trans}}</a>
+        <a href="javascript:" class="notMoveHandle mrm item-delete-btn">{{'course.testpaper_manage.question.operation.delete_btn'|trans}}</a>
+        <a href="javascript:" class="notMoveHandle " data-role="pick-item" data-url="{{ path('course_manage_testpaper_item_picker', {courseId:courseSet.id, testpaperId:testpaper.id, replace: question.id }) }}" >{{'course.testpaper_manage.question.operation.replace_btn'|trans}}</a>
+      {% endif %}
+    </div>
+  </td>
+</tr>

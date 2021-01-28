@@ -1,0 +1,27 @@
+{# 兼容菜单配置中单词错误拼写：visable 正确为：visible  等插件全部更新完毕删除此代码 #}
+  {% set tabMenus = arrays_key_convert(sub_permissions(menu|parent_permission.code|default(null)), 'visable', 'visible')|visible_menus %}
+{# 兼容代码结束 #}
+
+{% if tabMenus|default(null) and tabMenus|length > 1 %}
+  <ul class="nav nav-tabs mbm">
+    {% for m in tabMenus %}
+      {% if not m.mode|default('') == 'capsules' %}
+        {% set path = permission_path(m) %}
+      {% else %}
+        {% set path = permission_path(first_child_permission(m)) %}
+      {% endif %}
+
+      <li {% if m.code == menu|default(null) %}class="active"{% endif %}>
+        <a
+          title="{{ m.name|trans({}, 'menu') }}"
+          class="{{ m.class|default('') }}"
+          href="{{ path }}"
+          id="{{ 'tab_'~menu }}"
+        >
+          {{ m.name|trans({}, 'menu') }}
+        </a>
+      </li>
+
+    {% endfor %}
+  </ul>
+{% endif %}

@@ -1,0 +1,41 @@
+<div class="material-common-table">
+  <div class="table-responsive">
+    <table class="table table-striped table-hover mtl" id="materials-table" data-url="{{ path('admin_cloud_file_render_table')}}">
+      <thead>
+        <tr>
+          <th><input type="checkbox" data-role="batch-select"></th>
+          <th width="25%">{{ 'material.common_table.th.file_name'|trans }}</th>
+          <th>{{ 'type'|trans }}</th>
+          <th>{{ 'material.common_table.th.file_size_time'|trans }}</th>
+          <th>{{ 'cloud_file.upload_time'|trans }}</th>
+          {% if pageType == 'attachment'%}
+            <th>{{ 'cloud_file.application'|trans }}</th>
+          {% endif %}
+          <th width="24%">{{ 'material.common_table.th.transcode_status'|trans }}<a class="es-icon es-icon-help text-normal mls js-table-popover"></a></th>
+          <th {% if pageType == 'attachment'%}width="10%"{% endif %}>{{ 'operation'|trans }}</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <div class="error-modal modal fade" id="error-modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">{{ 'material.common_table.transcode_error_tip'|trans }}</h4>
+          </div>
+          <div class="modal-body js-error-tip">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary error-modal__btn" data-dismiss="modal">{{ 'form.btn.confirm'|trans }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <input class="js-page" type="hidden" name="page" value="1">
+
+  <div data-role="paginator" class="text-center">
+
+  </div>
+</div>

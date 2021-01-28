@@ -1,0 +1,14 @@
+(function (t) {
+{% if include_config %}
+t.fallback = '{{ fallback }}';
+t.defaultDomain = '{{ defaultDomain }}';
+{% endif %}
+{% for locale, domains in translations %}
+// {{ locale }}
+{% for domain, messages in domains %}
+{% for key, message in messages %}
+t.add({{ key|json_encode|raw }}, {{ message|json_encode|raw }}, "{{ domain }}", "{{ locale }}");
+{% endfor %}
+{% endfor %}
+{% endfor %}
+})(Translator);

@@ -1,0 +1,150 @@
+.es-header {
+  .nav.user-nav {
+    .user-inform-li {
+      .inform-dropdown-toggle {
+        padding: 16px 0;
+        color: rgba(255, 255, 255, 0.7);
+        position: relative;
+        cursor: pointer;
+        &:hover {
+          color: #fff;
+        }
+        i {
+          font-size: 24px;
+        }
+      }
+      .inform-dropdown {
+        padding: 0;
+        width: 280px;
+        height: 400px;
+        .cd-border-radius;
+        .cd-box-shadow-z(8px);
+      }
+    }
+  }
+}
+
+.inform-dropdown-toggle__num {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 1px 4px;
+}
+
+.inform-dropdown-toggle__num--big {
+  padding: 2px;
+}
+
+.inform-dropdown-dot {
+  margin-left: 4px;
+  display: inline-block;
+  vertical-align: middle;
+  width: 4px;
+  height: 4px;
+  .cd-border-radius(50%);
+  background-color: @brand-danger;
+}
+
+.inform-dropdown-head {
+  .cd-box-shadow-inset(0 -1px 0 0);
+}
+
+.inform-dropdown-head__tab {
+  float: left;
+  padding: 16px 0px;
+  width: 140px;
+  font-size: 14px;
+  text-align: center;
+  line-height: 1;
+  font-weight: 500;
+  color: @cd-dark-minor;
+  &:first-child {
+    .cd-box-shadow-inset(-1px 0 0 0);
+  }
+  .es-transition;
+  &:focus,
+  &:hover,
+  &.active {
+    color: @brand-primary;
+    .es-transition;
+  }
+}
+
+.inform-dropdown-head__one_tab {
+  float: left;
+  padding: 16px 120px;
+  font-size: 14px;
+  text-align: center;
+  line-height: 1;
+  font-weight: 500;
+  color: @cd-dark-minor;
+  .es-transition;
+  &:focus,
+  &:hover,
+  &.active {
+    color: @brand-primary;
+    .es-transition;
+  }
+}
+
+.inform-dropdown-body {
+  height: 310px;
+  overflow-y: auto;
+}
+
+.inform-dropdown-body__item {
+  padding: 16px 24px;
+  display: inline-block;
+  width: 100%;
+  cursor: pointer;
+  .cd-box-shadow-inset(0 -1px 0 0);
+  &:hover {
+    background-color: @cd-bg-light;
+  }
+}
+
+.inform-notification-item {
+  font-size: 12px;
+  line-height: 20px;
+  color: @cd-dark-minor;
+}
+
+.inform-message-item__info {
+  font-size: 12px;
+  line-height: 1;
+}
+
+.inform-message-item__avatar {
+  float: left;
+  margin-right: 16px;
+  display: inline-block;
+  img {
+    width: 32px;
+    height: 32px;
+    .cd-border-radius(50%);
+  }
+}
+
+.inform-dropdown-foot {
+  padding: 16px 0;
+  z-index: 10;
+  font-size: 12px;
+  line-height: 1;
+  text-align: center;
+  .cd-box-shadow-inset(0 1px 0 0);
+}
+
+.inform-empty-status {
+  padding: 64px 0;
+  text-align: center;
+}
+
+.inform-empty-status__tip {
+  font-size: 14px;
+  line-height: 16px;
+  color: @cd-dark-assist;
+}
+
+.inform-loading {
+  padding: 85px 0;
+}

@@ -1,0 +1,33 @@
+{
+  "family": "gallery2",
+  "name": "video-js",
+  "version": "4.2.1",
+  "description": "An HTML5 and Flash video player with a common API and skin for both.",
+  "homepage": "http://videojs.com",
+  "author": {
+    "name": "Steve Heffernan"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/videojs/video.js.git"
+  },
+  "bugs": "https://github.com/videojs/video.js/issues",
+  "licenses": [
+    {
+      "type": "Apache",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    }
+  ],
+  "keywords": [ "html5", "flash", "video", "player" ],
+  "spm": {
+    "output": [
+       "video-js.js",
+       "video-js.css",
+       "video-js.swf",
+       "font/vjs.eot",
+       "font/vjs.svg",
+       "font/vjs.ttf",
+       "font/vjs.woff"
+     ]
+  }
+}

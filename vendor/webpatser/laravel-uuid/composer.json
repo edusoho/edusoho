@@ -1,0 +1,42 @@
+{
+	"name" : "webpatser/uuid",
+	"description" : "Class to generate a UUID according to the RFC 4122 standard. Support for version 1, 3, 4 and 5 UUID are built-in.",
+	"authors" : [{
+			"name" : "Christoph Kempen",
+			"email" : "christoph@downsized.nl"
+		}
+	],
+	"keywords" : [
+		"UUID RFC4122"
+	],
+	"homepage" : "https://github.com/webpatser/uuid",
+	"license" : [
+		"MIT"
+	],
+	"require" : {
+		"php" : ">=5.3.0"
+	},
+    "require-dev" : {
+      "phpunit/phpunit": "4.7.*",
+      "fzaninotto/faker": "1.5.*"
+    },
+	"autoload" : {
+		"psr-0" : {
+			"Webpatser\\Uuid" : "src/"
+		}
+	},
+	"support" : {
+		"source" : "https://github.com/webpatser/uuid",
+		"issues" : "https://github.com/webpatser/uuid/issues"
+	},
+	"suggest" : {
+		"paragonie/random_compat": "A random_bytes Php 5.x polyfill."
+	},
+    "extra": {
+        "laravel": {
+            "aliases": {
+                "Uuid": "Webpatser\\Uuid\\Uuid"
+            }
+        }
+    }
+}

@@ -1,0 +1,17 @@
+{% set showScore = showScore|default(1) %}
+<div class="testpaper-question testpaper-question-choice" id="question{{ question.id }}">
+  <div class="testpaper-question-body">
+    <div class="clearfix">
+		  <div class="testpaper-question-seq-wrap">
+		    <div class="testpaper-question-seq">{{ question.seq|default('') }}</div>
+		    <div class="testpaper-question-score">
+		    	{% if showScore %}0{{'site.data.score'|trans}}{% endif %}
+		    </div>
+			</div>
+		</div>
+
+		<div class="testpaper-question-stem">
+    	{{'testpaper.answer.question_delete_tips'|trans}}
+    </div>
+  </div>
+</div>

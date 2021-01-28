@@ -1,0 +1,13 @@
+<div class="buyer-btn">
+	{% if userVipStatus %}
+		{% if userVipStatus == 'not_login' %}
+			<a href="{{ path('login') }}" class="btn btn-warning" >{{courseVip.name}}{{'mobile.vip_free_study'|trans}}</a>
+		{% elseif userVipStatus in ['not_member', 'member_expired'] %}
+			<a href="{{ path('vip_buy') }}" class="btn btn-warning">{{courseVip.name}}{{'mobile.vip_free_study'|trans}}</a>
+		{% elseif userVipStatus == 'level_low' %}
+			<a href="{{ path('vip_upgrade', {level:level.id}) }}" class="btn btn-warning" >{{courseVip.name}}{{'mobile.vip_free_study'|trans}}</a>
+		{% elseif userVipStatus == 'ok' %}
+			<a href="javascript:;" class="btn btn-warning">{{courseVip.name}}{{'mobile.vip_free_study'|trans}}</a>
+		{% endif %}
+	{% endif %}
+</div>

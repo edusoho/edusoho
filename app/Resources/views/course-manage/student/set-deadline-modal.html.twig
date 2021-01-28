@@ -1,0 +1,68 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{ 'course.members_manage.official_student.modify_expiry_day'|trans }}{% endblock %}
+{% do script(['libs/jquery-validation.js', 'libs/bootstrap-datetimepicker.js', 'app/js/course-manage/student-expiryday/index.js'])%}
+
+{% block body %}
+<form id="deadline-set-form" class="form-horizontal" method="post" action="{{ path('course_set_manage_course_students_deadline_batch', { courseSetId: course.courseSetId, courseId:course.id, ids:ids }) }}">
+  {% if course.status == 'published' %}
+    <div class="row form-group">
+      <div class="col-sm-2 control-label">
+        <label for="course-title">{{'course.members_manage.official_student.add_expiry_day.title'|trans}}</label>
+      </div>
+      <div class="col-sm-10 controls">
+        <div class="course-mange-space">
+          {{ course.title }}
+        </div>
+      </div>
+    </div>
+  	<div class="row form-group">
+      <div class="col-sm-2 control-label">
+        <label for="student-nickname">{{ 'site.default.student'|trans }}{{'course.members_manage.official_student.add_expiry_day.username'|trans}}</label>
+      </div>
+      <div class="col-sm-10 controls">
+        <div class="course-mange-space">
+          {% for user in users %}
+            {{ user.nickname }}&nbsp;
+          {% endfor %}
+        </div>
+    	</div>
+    </div>
+    <div class="row form-group cd-mb32">
+      <div class="col-sm-2 control-label">
+        <label>{{'course.members_manage.official_student.add_expiry_day.update'|trans}}</label>
+      </div>
+      <div class="col-sm-2 control-label width-100">
+        <label><input type="radio" name="updateType" value="day" checked="checked"{% if 'forever' == course.expiryMode %} disabled {% else %} checked="checked" {% endif %}> {{'course.members_manage.official_student.add_expiry_day.update.days'|trans}}</label>
+      </div>
+      <div class="col-sm-2 controls width-100 pl0">
+        <select class="form-control" name="waveType" {% if 'forever' == course.expiryMode %} disabled {% endif %}>
+          {{ select_options(dict('waveType'), app.request.query.get('waveType')) }}
+        </select>
+      </div>
+      <div class="col-sm-5 controls expiry-date-change">
+        <input type="text" id="day" name="day" value="0" {% if 'forever' == course.expiryMode %} disabled {% endif %} data-url="{{path('course_set_manage_course_students_deadline_batch_day_check', { courseSetId: course.courseSetId, courseId:course.id, ids:ids })}}" class="form-control width-input">
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-sm-offset-2 col-sm-2 control-label width-100">
+        <label><input type="radio" name="updateType" value="date" {% if 'forever' == course.expiryMode %} checked="checked" {% endif %}> {{'course.members_manage.official_student.add_expiry_day.update.date'|trans}}</label>
+      </div>
+      <div class="col-sm-7 controls pl0 pr0">
+        <input type="text" id="deadline" name="deadline" {% if 'forever' != course.expiryMode %} disabled {% endif %} data-url="{{path('course_set_manage_course_students_deadline_batch_deadline_check', { courseSetId: course.courseSetId, courseId:course.id, ids:ids })}}" class="form-control width-input">
+      </div>
+    </div>
+  {% else %}
+    <div class="empty">{{dict_text('courseStatus', course.status)}}{{'course.members_manage.official_student.add_expiry_day.failed_tips'|trans}}{{ 'site.default.student'|trans }} {{'course.members_manage.official_student.add_expiry_day.publish_tips'|trans}}</div>
+  {% endif %}
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+{% endblock %}
+
+{% block footer %}
+  {% if course.status == 'published' %}
+    <button type="button" id="submit" class="cd-btn cd-btn-primary pull-right js-save-deadline-set-form" data-target="#deadline-set-form" data-user="{{ 'site.default.student'|trans }}">{{'form.btn.save'|trans}}</button>
+  {% endif %}
+  <button type="button" class="cd-btn cd-btn-link-default cd-mr16 pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
+{% endblock %}

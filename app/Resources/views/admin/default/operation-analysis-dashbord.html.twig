@@ -1,0 +1,49 @@
+<ul class="subfield-list
+{% if is_plugin_installed('Vip') and setting('vip.enabled') %}
+six-subfield
+{% else %}
+five-subfield
+{% endif %}
+clearfix">
+  <li>
+    <div class="title">{{ 'admin.homepage.todays_data.login_users'|trans }}</div>
+    <span class="number"><a href="{{ path('admin_online', {type:'logined'}) }}" target="_blank">{{ loginCount| default('0') }}</a></span>
+    <p>{{ 'admin.homepage.todays_data.login_users.online_total'|trans }}: <a href="{{ path('admin_online', {type:'online'}) }}" target="_blank">{{ onlineCount }}</a></p>
+  </li>
+  <li>
+    <div class="title">{{ 'admin.homepage.todays_data.new_registration'|trans }}</div>
+    <span class="number">{{ todayRegisterNum }}</span>
+    <p>{{ 'admin.homepage.todays_data.total'|trans }}: {{ totalRegisterNum }}</p>
+  </li>
+  <li>
+    <div class="title">{{ 'admin.homepage.todays_data.new_course_members'|trans }}</div>
+    <span class="number"> {{ todayCourseMemberNum }}</span>
+    <p>{{ 'admin.homepage.todays_data.total_number'|trans }}: {{ totalCourseMemberNum }}</p>
+  </li>
+  <li>
+    <div class="title">{{ 'admin.homepage.todays_data.new_classroom_members'|trans }}</div>
+    <span class="number"> {{ todayClassroomMemberNum }}</span>
+    <p>{{ 'admin.homepage.todays_data.total_number'|trans }}: {{ totalClassroomMemberNum }}</p>
+  </li>
+  {% if is_plugin_installed('Vip') and setting('vip.enabled') %}
+    <li>
+      <div class="title">{{ 'admin.homepage.todays_data.new_vip_members'|trans }}</div>
+      <span class="number">{{ todayVipNum }}</span>
+      <p>{{ 'admin.homepage.todays_data.total'|trans }}: {{ totalVipNum }}</p>
+    </li>
+  {% endif %}
+  {% if is_plugin_installed('Invoice') and setting('invoice.enabled') %}
+    <li>
+      <div class="title">{{ 'admin.invoice_import.to_invoice_num'|trans }}</div>
+      <span class="number"><a href="{{ path('admin_invoice_manage') }}" target="_blank">{{ toInvoiceNum }}</a></span>
+      <p>{{ 'admin.invoice_import.total_invoice_num'|trans }}: {{ totalInvoiceNum }}</p>
+    </li>
+  {% endif %}
+  <li>
+    <div class="title">{{ 'admin.homepage.todays_data.thread_un_answer'|trans }}</div>
+    <span class="number">
+      {{ todayThreadUnAnswerNum }}
+    </span>
+    <p>{{ 'admin.homepage.todays_data.total'|trans }}: {{ totalThreadNum }}</p>
+  </li>
+</ul>

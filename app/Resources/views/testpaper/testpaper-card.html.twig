@@ -1,0 +1,54 @@
+{% set questionTypeDict = getQuestionTypes() %}
+{% if testpaperActivity.limitedTime|default(0) > 0 and showTimer|default(1)  %}
+	<div class="testpaper-timer">
+		<span class="pull-left">{{'testpaper.answer.count_donw_timer'|trans}}：</span><span class="timer js-testpaper-timer" data-time="{{ limitedTime }}">00:00:00</span>
+		<a class="btn-pause js-btn-pause" href="javascript:;">
+			<i class="es-icon es-icon-zanting pause"></i>
+			<i class="es-icon es-icon-bofang play"></i>
+		</a>
+	</div>
+{% endif %}
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		{{'testpaper.answer.answer_card'|trans}}
+		{% if target|default(null) and target.doTimes|default('0') %}
+			<span class="color-danger">{{'testpaper.answer.answer_card.one_chance_tips'|trans}}</span>
+		{% endif %}
+		<a class="pull-right link-medium" href="javascript:;" data-container="body" data-toggle="popover" data-placement="bottom" data-trigger="hover" data-content='
+		{{ 'testpaper.answer.answer_card.exam_tips'|trans({'%itemCount%':paper.itemCount, '%score%':paper.score})|raw }}
+		{% if testpaperActivity.finishCondition.type|default(null) == 'score' %}
+      {{ 'testpaper.answer.answer_card.exam_with_pass_score_tips'|trans({'%finishScore%':testpaperActivity.finishCondition.finishScore|default(0) })|raw }}
+		{% endif %}
+		{% if testpaperActivity.limitedTime|default(0) > 0 %}
+      {{ 'testpaper.answer.answer_card.limited_time_tips'|trans({'%limitedTime%':limitedTime|time_formatter})|raw }}
+		{% endif %}</div>'><i class="es-icon es-icon-info"></i></a>
+	</div>
+	<div class="panel-body">
+		<div class="js-panel-card panel-card">
+		{% for type in questionTypes|default([]) if questions[type]|default(null) %}
+			<p>{{ questionTypeDict[type] }}</p>
+			{% for question in questions[type]|default(null) %}
+				{% if question.type == 'material' %}
+					{% for subQuestion in question.subs|default([]) %}
+						{% include 'testpaper/part/paper-card-choice.html.twig' with {paperResult:paperResult,question:subQuestion,seq:(question.seq + loop.index - 1)} %}
+					{% endfor %}
+				{% else %}
+					{% include 'testpaper/part/paper-card-choice.html.twig' with {paperResult:paperResult,question:question,seq:question.seq} %}
+				{% endif %}
+			{% endfor %}
+		{% endfor %}
+		</div>
+	</div>
+	<div class="panel-footer text-right">
+		{% if paperResult.id|default(0) > 0 %}
+			<input type="hidden" data-url="{{ path('testpaper_do_suspend', {resultId:paperResult.id}) }}" data-role="test-suspend">
+			{{ slot('course.task.facein.testpaper_card_add_button',{activity:activity|default([]),paperResult:paperResult|default([])}) }}
+
+			<button class="btn btn-primary do-test" id="finishPaper" data-ajax="{{ path('testpaper_result_submit', { resultId: paperResult.id|default(0) }) }}"  data-toggle="modal" data-target="#testpaper-finished-dialog">{{'testpaper.answer.answer_card.submit_btn'|trans}}</button>
+		{% else %}
+			<button class="btn btn-primary" disabled="disabled">{{'testpaper.answer.answer_card.submit_btn'|trans}}</button>
+		{% endif %}
+	</div>
+</div>
+{{ slot('course.task.facein.inspection',{activity:activity|default([]),paperResult:paperResult|default([])}) }}

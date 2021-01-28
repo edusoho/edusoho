@@ -1,0 +1,7 @@
+{% extends 'activity/content-layout.html.twig' %}
+
+{% block body %}
+  <div class="iframe-parent-content ph20 pv20" id="text-activity">
+    {{'course.plan_task.task_edit_tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}
+  </div>
+{% endblock %}

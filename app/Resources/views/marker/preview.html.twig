@@ -1,0 +1,16 @@
+{% extends 'layout.html.twig' %}
+{% block title %}{{'question.marker_preview.content_title'|trans}}{% endblock %}
+{% set bodyClass="marker-preview" %}
+{% set file = activity.ext.file|default(null) %}
+{% do script(['app/js/marker/preview/index.js']) %}
+
+{% block body %}
+	<div  class="marker-preview-content " id="task-dashboard"  data-course-id="{{ course.id }}"
+    data-task-id="{{ task.id }}"
+    data-task-mediaid="{{ file.id }}"
+		data-media-player="{{ path('media_play', {mediaId:file.id}) }}"
+    data-hide-media-lesson-learn-btn="{{ is_feature_enabled('hide_media_lesson_learn_btn') }}">
+  	<p class="title">{{ 'question.marker_preview.video_preview'|trans }}</p>
+  	<div class="marker-preview-player" id="task-video-content"></div>
+	</div>
+{% endblock %}

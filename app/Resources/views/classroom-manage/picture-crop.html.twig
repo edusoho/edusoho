@@ -1,0 +1,31 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% block title %}
+  {{ 'classroom.cover_crop.title'|trans }}
+{% endblock %}
+
+{% set modal_class = 'cd-modal-dialog' %}
+{% do script(['app/js/classroom-manage/set-picture-crop/index.js']) %}
+
+{% block body %}
+  <img class="img-full" src="" id="classroom-crop"/>
+  <div class="help-block">{{ 'classroom.set_picture_tips'|trans }}</div>
+{% endblock %}
+
+{% block footer %}
+  <div class="text-center">
+    <button type="button" class="btn cd-btn cd-btn-ghost-default cd-btn-lg" id="select-btn">
+      {{ 'classroom.again_select_picture'|trans }}
+    </button>
+
+    <button type="button" class="btn cd-btn cd-btn-primary cd-btn-lg" id="save-btn"
+            data-loading-text="{{ 'form.btn.submit.submiting'|trans }}">
+      {{ 'form.btn.save'|trans }}
+    </button>
+  </div>
+{% endblock %}
+
+
+
+
+

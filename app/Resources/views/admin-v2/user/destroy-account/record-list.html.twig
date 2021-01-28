@@ -1,0 +1,70 @@
+{% extends 'admin-v2/layout.html.twig' %}
+{% import 'admin-v2/macro.html.twig' as admin_macro %}
+
+{% set menu = 'admin_v2_destroy_account_record_manage' %}
+
+{% block main %}
+  <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+    <div class="form-group">
+      <input type="text" name="nickname" class="form-control" value="{{ app.request.query.get('nickname') }}" placeholder="{{'admin.user.teacher.fields.nickname.input_placeholder'|trans}}">
+    </div>
+    <button class="btn btn-primary">{{'admin.user.form.btn.search_submit_btn'|trans}}</button>
+  </form>
+    <table id="teacher-table" class="table table-striped table-hover" data-search-form="#user-search-form">
+      <thead>
+        <tr>
+          <th width="15%">{{'admin_v2.user.destroy_account_record.nickname'|trans}}</th>
+          <th width="15%">{{'admin_v2.user.destroy_account_record.createdTime'|trans}}</th>
+          <th width="30%">{{'admin_v2.user.destroy_account_record.reason'|trans}}</th>
+          <th width="15%">{{'admin_v2.user.destroy_account_record.auditTime'|trans}}</th>
+          <th width="15%">{{'admin_v2.user.destroy_account_record.status'|trans}}</th>
+          <th width="10%">{{'admin_v2.user.destroy_account_record.manage'|trans}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if records %}
+          {% for record in records %}
+            <tr>
+              <td width="15%">{{ record.nickname }}</td>
+              <td width="15%">
+                <span class="text-sm">{{ record.createdTime|date('Y-n-d H:i:s') }}</span>
+                <br>
+                <a class="text-muted text-sm" href="http://www.baidu.com/s?wd={{ record.ip }}" target="_blank">{{ record.ip }}</a>
+              </td>
+              <td width="30%" title="{{ record.reason|default('') }}">{{ record.reason|default('')|sub_text(20) }}</td>
+              <td width="15%">
+                {% if record.auditTime|default(0) %}
+                  {{ record.auditTime|date('Y-n-d H:i:s') }}
+                  <br>
+                    {% set user = data('User', {userId:record.auditUserId }) %}
+                  <span class="text-muted text-sm">{{ 'admin_v2.user.destroy_account_record.auditUser'|trans }}{{ user.nickname }}</span>
+                {% else %}
+                  --
+                {% endif %}
+              </td>
+              <td width="15%">
+                {% if record.status == 'audit' %}
+                  <span class="color-info">{{ 'admin_v2.user.destroy_account_record.status_audit'|trans }}</span>
+                {% elseif record.status == 'rejected' %}
+                  <span class="color-danger">{{ 'admin_v2.user.destroy_account_record.status_rejected'|trans }}</span>
+                {% elseif record.status == 'cancel' %}
+                <span class="color-gray">{{ 'admin_v2.user.destroy_account_record.status_cancel'|trans }}
+                {% elseif record.status == 'passed' %}
+                  <span class="color-success">{{ 'admin_v2.user.destroy_account_record.status_passed'|trans }}</span>
+                {% endif %}
+              </td>
+              <td width="10%">
+                {% if record.status == 'audit' %}
+                  <a href="#modal" data-toggle="modal" data-url="{{ path('admin_v2_destroy_account_record_audit', {id:record.id}) }}" class="btn btn-default btn-sm">{{ 'admin_v2.user.destroy_account_record.audit'|trans }}</a>
+                {% endif %}
+                <a href="#modal" data-toggle="modal" data-url="{{ path('admin_v2_destroy_account_record_detail', {id:record.id}) }}"class="btn btn-default btn-sm">{{ 'admin_v2.user.destroy_account_record.show'|trans }}</a>
+              </td>
+            </tr>
+          {% endfor %}
+        {% else %}
+          <tr><td colspan="20"><div class="empty">{{'admin_v2.user.destroy_account_record.empty'|trans}}</div></td></tr>
+        {% endif %}
+      </tbody>
+    </table>
+    {{ admin_macro.paginator(paginator) }}
+{% endblock %}

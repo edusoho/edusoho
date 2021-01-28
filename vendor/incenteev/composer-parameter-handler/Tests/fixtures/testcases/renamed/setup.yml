@@ -1,0 +1,9 @@
+title: Key can be renamed and the value is reused
+
+config:
+    rename-map:
+        new: old
+        new2: old2
+        new3: old3
+        new4: old4
+        new5: new4 # Cascade renaming

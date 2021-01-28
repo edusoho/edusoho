@@ -1,0 +1,97 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_course_note_manage' %}
+
+{% set script_controller = 'course/note' %}
+
+{% block main %}
+
+<div class="well well-sm">
+  <form class="form-inline">
+
+    <div class="form-group">
+      <select class="form-control" name="keywordType">
+        {{ select_options({content: 'admin.course_thread.form.keyword_type.content_option'|trans, courseSetId:'admin.course_thread.form.keyword_type.courseId_option'|trans, courseTitle:'admin.course_thread.form.keyword_type.courseTitle_option'|trans }, app.request.get('keywordType')) }}
+      </select>
+    </div>
+
+    <div class="form-group">
+      <input class="form-control" type="text" name="keyword" value="{{ app.request.get('keyword') }}" placeholder="{{'admin.course_thread.form.input.keyword.placeholer'|trans}}">
+    </div>
+
+    <span class="divider"></span>
+
+    <div class="form-group">
+      <input class="form-control" type="text" name="author" value="{{ app.request.get('author') }}" placeholder="{{'admin.course_thread.form.input.author.placeholer'|trans}}">
+    </div>
+
+    <button class="btn btn-primary" type="submit">{{'form.btn.search'|trans}}</button>
+  </form>
+</div>
+
+<div id="note-table-container">
+
+  <table class="table table-striped table-hover" id="note-table">
+
+    <thead>
+      <tr>
+        <th width="3%"><input type="checkbox" data-role="batch-select"></th>
+        <th width="75%">{{'admin.course_note.content_th'|trans}}</th>
+        <th width="15%">{{'admin.course_thread.author_th'|trans}}</th>
+        <th width="7%">{{'admin.course_thread.operation_th'|trans}}</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      {% for note in notes %}
+        {% set course = courses[note.courseId]|default(null) %}
+        {% set courseSet = courseSets[note.courseSetId]|default(null) %}
+        {% set task = tasks[note.taskId]|default(null) %}
+        <tr data-role="item">
+          <td><input value="{{ note.id }}" type="checkbox"  data-role="batch-item" ></td>
+          <td>
+              <div class="short-long-text">
+                <div class="short-text">{{ note.content|plain_text(100) }} <span class="trigger">({{ 'admin.course_thread.expand_td'|trans }})</span></div>
+                <div class="long-text">{{ note.content|raw }} <span class="trigger">({{ 'admin.course_thread.collapse_td'|trans }})</span></div>
+              </div>
+
+              <div class="text-sm mts">
+                {% if course and courseSet %}
+                  <a href="{{ path('course_show', {id: courseSet.defaultCourseId}) }}" class="text-success" target="_blank">{{ courseSet.title }}</a>
+                  <span class="text-muted mhs">&raquo;</span>
+                  <a href="{{ path('course_show', {id:course.id}) }}" class="text-success" target="_blank">{{ course.title }}</a>
+                {% endif %}
+
+                {% if task %}
+                  <span class="text-muted mhs">&raquo;</span>
+                  <a class="text-success"  href="{{ path('course_task_show', {courseId:note.courseId, id:task.id}) }}" target="_blank">{{ setting('course.task_name')|default('admin.setting_course.task'|trans) }}{{ task.number }}：{{ task.title }}</a>
+                {% endif %}
+              </div>
+          </td>
+          <td>
+            {{ admin_macro.user_link(users[note.userId]) }}
+            <br>
+            <span class="text-muted text-sm">{{ note.createdTime|date('Y-n-d H:i') }}</span>
+          </td>
+          <td>
+            <button class="btn btn-default btn-sm" data-role="item-delete" data-name="{{ 'admin.course_note.note'|trans }}" data-url="{{ path('admin_note_delete', {id:note.id}) }}">{{ 'form.btn.delete'|trans }}</button>
+          </td>
+        </tr>
+      {% else %}
+        <tr><td colspan="20"><div class="empty">{{'site.datagrid.empty'|trans}}</div></td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div>
+    <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> {{'admin.course_thread.select_all_btn'|trans}}</label>
+    <button class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="{{'admin.course_note.content_th'|trans}}" data-url="{{ path('admin_note_batch_delete') }}">{{'form.btn.delete'|trans}}</button>
+  </div>
+
+</div>
+
+  <div>
+    {{ admin_macro.paginator(paginator) }}
+  </div>
+{% endblock %} 

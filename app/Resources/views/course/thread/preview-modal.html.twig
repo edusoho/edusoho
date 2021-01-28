@@ -1,0 +1,20 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% do script(['app/js/course/thread-question/index.js']) %}
+{% set closeClear = 1 %}
+{% set modal_class = 'modal-lg' %}
+
+{% block title %}
+    {{ 'attachments.preview'|trans }}
+{% endblock %}
+
+{% block body %}
+    <div style="height: 500px; overflow: hidden">
+        <iframe id="js-task-iframe" data-user-id="{{ userId|default(0) }}" data-file-id="{{ fileId|default(0) }}" data-video-ask-time="{{ videoAskTime|default(0) }}" src="{{ path('course_thread_player_show',{id:fileId}) }}" allowfullscreen webkitallowfullscreen height="100%" width="100%" style="border: 0"></iframe>
+    </div>
+
+{% endblock %}
+
+{% block footer %}
+    <button type="button" class="btn btn-primary" data-dismiss="modal">{{ 'attachments.modal.upload.close_btn'|trans }}</button>
+{% endblock %}

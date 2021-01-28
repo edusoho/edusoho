@@ -1,0 +1,52 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+{% set modalSize = 'large' %}
+{% block title %}{% if org.id|default(null) %}{{ 'admin.org_manage.modal.edit_org'|trans }}{% else %}{{ 'admin.org_manage.modal.add_org'|trans }}{% endif %}{% endblock %}
+
+{% block body %}
+  <form id="org-manage-form" class="form-horizontal"
+        action="{% if org.id|default(null) %}{{ path('admin_v2_org_update', {id:org.id}) }}{% else %}{{ path('admin_v2_org_create') }}{% endif %}"
+        method="post">
+    <div class="form-group">
+      <label class="col-md-2 control-label" for="org-name-field">{{ 'admin.org_manage.modal.org_name'|trans }}</label>
+      <div class="col-md-8 controls">
+        <input class="form-control" id="org-name-field" type="text" name="name" value="{{ org.name|default('') }}"
+               data-url="{{ path('admin_v2_org_check_name',{parentId: org.parentId|default(0),exclude:org.id|default(null)}) }}"
+               tabindex="1">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label" for="org-code-field">{{ 'admin.org_manage.modal.org_code'|trans }}</label>
+      <div class="col-md-8 controls">
+        <input class="form-control" id="org-code-field" type="text" name="code" value="{{ org.code|default('') }}"
+               data-url="{{ path('admin_v2_org_check_code', {exclude:org.code|default(null)}) }}" tabindex="3">
+        <div class="help-block">{{ 'admin.org_manage.modal.org_code.help_block'|trans }}</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-2 control-label" for="org-description-field">{{ 'admin.org_manage.modal.org_description'|trans }}</label>
+      <div class="col-md-8 controls">
+        <textarea class="form-control" id="org-description-field" style="height:100px;"
+                  name="description">{{ org.description |default('') }}</textarea>
+        <div class="help-block">{{ 'admin.org_manage.modal.org_description.help_block'|trans }}</div>
+      </div>
+    </div>
+    <input type="hidden" name="parentId" value="{{ org.parentId|default(0) }}">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+{% endblock %}
+{% block footer %}
+  {% if org.id|default(null) %}
+    <button type="button" class="btn btn-default pull-left delete-org"
+            data-url="{{ path('admin_v2_org_delete', {id:org.id}) }}" tabindex="5"><i
+          class="glyphicon glyphicon-trash"></i> {{ 'form.btn.delete'|trans }}
+    </button>
+    <span class="pull-left pts plm" style="color: #999;">{{ 'admin.org_manage.modal.delete.tips'|trans }}</span>
+  {% endif %}
+  
+  <script>app.load('topxiaadminbundle/controller/orgManage/save-modal');</script>
+  <button type="button" class="btn btn-link" data-dismiss="modal" tabindex="6">{{ 'form.btn.cancel'|trans }}</button>
+  <button id="org-create-btn" data-submiting-text="{{ 'form.btn.submit.submiting'|trans }}" type="submit" class="btn btn-primary"
+          data-toggle="form-submit" data-target="#org-manage-form" tabindex="4">{{ 'form.btn.save'|trans }}</button>
+{% endblock %}

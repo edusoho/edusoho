@@ -1,0 +1,10 @@
+{% extends 'layout.html.twig' %}
+{% do script(['libs/jquery-validation.js','libs/select2.js', 'libs/iframe-resizer-contentWindow.js'], 500) %}
+
+{% block bodyClass %}{{ 'es-main-' ~ maincolor }} {{ 'es-nav-' ~ navigationcolor }} {% if bodyClass|default('') %}{{ bodyClass }}{% endif %} {{ 'task-iframe-body' }}{% endblock %}
+{% block body %}
+  <div class="tab-content" id="iframe-content" {% if activity.id|default(0) %}data-status="edit"{% endif %}>
+    {% block activity_step %}
+    {% endblock %}
+  </div>
+{% endblock %}

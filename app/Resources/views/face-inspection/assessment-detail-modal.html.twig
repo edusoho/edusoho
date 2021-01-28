@@ -1,0 +1,26 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% set modal_class= "cd-modal-dialog modal-md" %}
+
+{% block modal_content %}
+  <div class="modal-content inspection-result-detail-container">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+        <i class="cd-icon cd-icon-close"></i>
+      </button>
+      <h4 class="modal-title">{{ 'facein.capture_face.inspection_result_modal.title'|trans }}</h4>
+    </div>
+    <div class="modal-body">
+      {% for inspectionResult in inspectionResults %}
+        <div class="col-sm-4 list-item">
+          <img src="{{ filepath(inspectionResult.picture_path|default(), 'avatar.png') }}">
+          <div class="item-time">{{inspectionResult.created_time|date('Y-n-d H:i:s')}}</div>
+          <div class="item-title">类型：{{ inspectionResult.msg|default('--') }}</div>
+        </div>
+      {% endfor %}
+    </div>
+    <div class="inspection-paginator">
+      {{ web_macro.paginator(paginator) }}
+    </div>
+    <button type="button" class="btn btn-primary close-btn" data-dismiss="modal">{{'form.btn.close'|trans}}</button>
+  </div>
+{% endblock %}

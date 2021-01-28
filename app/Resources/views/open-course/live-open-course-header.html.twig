@@ -1,0 +1,85 @@
+{% set isLiveFinished = is_live_finished(lesson.id, 'openCourse') %}
+
+{% if lesson is empty or lesson.startTime is empty or lesson.endTime is empty %}
+  <div class="mask">
+    <div class="modal-dialog" style="width:200px;margin:22% auto;">
+      <div class="modal-content">
+        <div class="modal-body clearfix">
+          <i class="es-icon es-icon-info" style="font-size: 22px;"></i>
+          <span class="media-error">{{ 'my.teaching.open_course.lesson.empty'|trans }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+{% else %}
+  {% set refererUrl = app.request.server.get('HTTP_REFERER') %}
+  <div class="mask js-live-header-mask">
+    {% if lesson.startTime > ("now"|date("U")) %}
+      <div class="mask-content">
+        <h2>{{ 'my.teaching.open_course.lesson.content.tips'|trans }}<span
+            class="phm">{{ lesson.startTime|date('m') }}{{ 'date.month'|trans }}{{ lesson.startTime|date('d') }}{{ 'date.day'|trans }} {{ lesson.startTime|date('H:i') }}</span>{{ 'my.teaching.open_course.lesson.content.statrt.tips'|trans }}
+        </h2>
+
+        {% if lesson.startTimeLeft <= 3600 %}
+          <a class="btn btn-info btn-lg mask-btn" href="{{ path('live_open_course_play',{courseId:course.id,lessonId:lesson.id}) }}"
+            target="_blank">{{ 'my.teaching.open_course.lesson.header.live_open_course_play_btn'|trans }}</a>
+        {% else %}
+          <button id="alerted-btn" class="btn btn-info btn-lg active {% if not member or (member and not member.isNotified ) %}hidden{% endif %}">
+            {{ 'my.teaching.open_course.lesson.header.remind_btn'|trans }}<i class="es-icon es-icon-alarmon"></i>
+          </button>
+
+          {% if setting('cloud_sms.sms_enabled') and (setting('cloud_sms.sms_live_play_one_day') == 'on' or setting('cloud_sms.sms_live_play_one_hour') == 'on') %}
+            {% if app.request.get('as')|default('') == 'preview' %}
+              <a href="javascript:;" class="btn btn-info btn-lg mask-btn" disabled="disabled">
+                {{ 'my.teaching.open_course.lesson.header.remind_me_btn'|trans }}<i class="es-icon es-icon-alarmon"></i>
+              </a>
+            {% else %}
+              <a id="alert-btn" class="btn btn-info btn-lg mask-btn {% if member and member.isNotified %}hidden{% endif %}"
+                data-url="{{ path('open_course_member_sms',{id:course.id}) }}" data-toggle="modal" data-target="#modal">
+                {{ 'my.teaching.open_course.lesson.header.remind_me_btn'|trans }}<i class="es-icon es-icon-alarmon"></i>
+              </a>
+            {% endif %}
+          {% endif %}
+        {% endif %}
+
+        {% if setting('cloud_sms.sms_enabled') and (setting('cloud_sms.sms_live_play_one_day') == 'on' or setting('cloud_sms.sms_live_play_one_hour') == 'on') %}
+          <div class="color-gray mtl js-member-num">{{ 'my.teaching.open_course.lesson.header.remind.tips'|trans({'%notifyNum%':notifyNum})|raw }}</div>
+        {% endif %}
+      </div>
+    {% elseif ("now"|date("U")) > lesson.startTime and not isLiveFinished %}
+      <div class="mask-content">
+        <h2>{{ 'my.teaching.open_course.lesson.header.content.tips'|trans }}<span
+            class="phm">{{ lesson.endTime|date('m') }}{{ 'date.month'|trans }}{{ lesson.endTime|date('d') }}{{ 'date.day'|trans }} {{ lesson.endTime|date('H:i') }}</span>{{ 'my.teaching.open_course.lesson.header.content.end.tips'|trans }}
+        </h2>
+        <a class="btn btn-info btn-lg mask-btn"
+          href="{{ path('live_open_course_play',{courseId:course.id,lessonId:lesson.id, refererUrl:refererUrl}) }}"
+          target="_blank">{{ 'my.teaching.open_course.lesson.header.live_open_course_play_btn'|trans }}</a>
+
+      </div>
+    {% else %}
+      <div class="mask-content">
+        <h2>{{ 'my.teaching.open_course.lesson.header.live_course_end'|trans }}</h2>
+        {% if lesson.replayStatus == 'videoGenerated' %}
+          <button class="btn btn-info btn-lg mask-btn js-live-video-replay-btn hidden" data-referer="{{ refererUrl }}">{{ 'my.teaching.open_course.lesson.header.view_replay_btn'|trans }}</button>
+        {% elseif lesson.replayStatus == 'generated' %}
+          {% for replay in lesson.replays if replay %}
+            {% if lesson.liveProvider == 5 %}
+              <a class="btn btn-info btn-lg mask-btn js-play-es-live"
+                data-url="{{ path('es_live_room_replay_show',{ targetType: constant("AppBundle\\Controller\\LiveroomController::LIVE_OPEN_COURSE_TYPE"), targetId: lesson.courseId, lessonId: lesson.id, replayId:replay.id}) }}"
+                target="_blank">{{ 'my.teaching.open_course.lesson.header.view_replay_btn'|trans }}</a>
+            {% else %}
+              <a class="btn btn-info btn-lg mask-btn"
+                href="{{ path('live_open_course_live_replay_entry',{courseId:lesson.courseId,lessonId:lesson.id,replayId:replay.id, refererUrl:refererUrl}) }}"
+                target="_blank">{{ 'my.teaching.open_course.lesson.header.view_replay_btn'|trans }}</a>
+            {% endif %}
+          {% endfor %}
+        {% else %}
+          <p class="mask-content__tip">{{'my.teaching.open_course.lesson.header.view_replay.tips'|trans}} ）</p>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+  {% if isLiveFinished and lesson.replayStatus == 'videoGenerated' %}
+    {% include 'open-course/lesson-play.html.twig' %}
+  {% endif %}
+{% endif %}

@@ -1,0 +1,17 @@
+<div class="panel panel-default">
+  <div class="panel-heading"><h3 class="panel-title">{{'group.detail.new_group_members'|trans}}</h3></div>
+  <div class="panel-body">
+    {% if activeMembers %}
+      <ul class="user-avatar-list">
+        {% for member in activeMembers %}
+          <li>
+            {{ web_macro.user_avatar(members[member.userId])}}
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      {{'group.detail.new_group_members.empty'|trans}}
+    {% endif %}
+    <br>
+  </div>
+</div>

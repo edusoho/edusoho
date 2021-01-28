@@ -1,0 +1,38 @@
+{
+    "name": "codeages/plumber2",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "L1 L31",
+            "email": "wellming.li@howzhi.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Codeages\\Plumber\\" : "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Codeages\\Plumber\\Example\\" : "example/",
+            "Codeages\\Plumber\\Tests\\" : "tests/"
+        }
+    },
+    "require": {
+        "php": ">=5.6.0",
+        "ext-posix": "*",
+        "ext-pcntl": "*",
+        "docopt/docopt": "^1.0",
+        "monolog/monolog": "^1.24",
+        "psr/container": "^1.0",
+        "codeages/rate-limiter": "^0.2.2",
+        "codeages/beanstalk-client": "^0.1.4"
+    },
+    "require-dev": {
+        "ext-redis": "*",
+        "swoft/swoole-ide-helper": "^4.2",
+        "phpunit/phpunit": "^5 || ^6 || ^7 || ^8"
+    },
+    "bin": ["bin/plumber"]
+}

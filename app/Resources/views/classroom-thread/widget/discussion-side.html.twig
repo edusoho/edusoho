@@ -1,0 +1,17 @@
+<div class="panel panel-default">
+    <div class="panel-heading">{{'my.teaching.classroom.threads_discussion.nickname'|trans}}</div>
+    <div class="panel-body">
+      <div class="media">
+        <a href="{{ path('user_show', {id:author.id}) }}" class="pull-left user-avatar">
+          <img class="media-object" src="{{ filepath(author.smallAvatar, 'avatar.png') }}" width=48>
+        </a>
+        <div class="media-body">
+          <a href="{{ path('user_show', {id:author.id}) }}" class="nickname">{{ author.nickname }}</a>
+          <div class="color-gray"><small>{{ author.title }}</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {{ render(controller('AppBundle:Thread:userOtherThreadsBlock', {thread:thread, userId:author.id})) }}
+  {{ render(controller('AppBundle:Thread:zeroPostThreadsBlock', {thread:thread, userId:author.id})) }}

@@ -1,0 +1,35 @@
+{% extends 'v2/layout.html.twig' %}
+{#{% set needJsMessages = 1 %}#}
+
+{% block full_content %}
+  {% block top_content %}
+    <div class="{% block sectionClass %} courseset-header-section {% endblock %}">
+      <div class="container cd-container">
+        {% block breadcrumb %}
+          {# 面包屑courseset 和 course 分开 #}
+        {% endblock %}
+        {% block courseset_header %}
+        {% endblock %}
+        {% block navbar %}
+          {% include 'courseset-manage/navbar.html.twig' %}
+        {% endblock %}
+        {% block course_header %}
+        {% endblock %}
+      </div>
+    </div>
+  {% endblock %}
+  <div class="container cd-container">
+    <div class="cd-content courseset-manage-body {% block paddingClass %} courseset-manage-padding {% endblock %}">
+      {% block sidebar %}
+      {% endblock %}
+
+      {% block main %}
+      {% endblock %}
+    </div>
+  </div>
+{% endblock %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <link href="/static-dist/libs/element-ui/dist/index.css" rel="stylesheet">
+{% endblock %}

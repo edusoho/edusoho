@@ -1,0 +1,81 @@
+<div class="navbar navbar-inverse site-navbar" id="site-navbar"  data-counter-url="{{ path('user_remind_counter') }}">
+
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      {% if setting('site.logo') %}
+        <a class="navbar-brand-logo" href="{{ path('homepage') }}"><img src="{{ asset(setting('site.logo')) }}"></a>
+      {% else %}
+        <a class="navbar-brand" href="{{ path('homepage') }}">{{ setting('site.name', 'EDUSOHO') }}</a>
+      {% endif %}
+    </div>
+    <div class="navbar-collapse collapse">
+      {{ render(controller('AppBundle:Default:topNavigation', {siteNav:siteNav|default(null)})) }}
+      <ul class="nav navbar-nav navbar-right">      
+        {% if app.user %}
+          <li class="hidden-xs hidden-sm hidden-md"><a href="{{ path('my') }}"> {% if 'ROLE_TEACHER' in app.user.roles %}{{'我的教学'|trans}}{% else %}{{'我的学习'|trans}}{% endif %} </a></li>
+          {% if setting('mobile.enabled') %}
+            <li class="hidden-xs hidden-sm hidden-md"><a href="{{ path('mobile') }}" class="mobile-badge-container">
+              <span class="glyphicon glyphicon-phone"></span>
+            </a></li>
+          {% endif %}
+          
+          <li class="hidden-xs hidden-sm">
+            <form class="navbar-form navbar-right" action="/search" method="get">
+              <div class="form-group">
+                <input class="form-control" name="q" placeholder="{{'搜索'|trans}}">
+                <button class="button es-icon es-icon-search"></button>
+              </div>
+            </form>
+          </li>
+
+          <li class="hidden-xs hidden-sm hidden-md"><a href="{{ path('notification') }}" class="badge-container notification-badge-container">
+            <span class="glyphicon glyphicon-bullhorn"></span>
+            {% if app.user.newNotificationNum > 0 %}<span class="badge">{{ app.user.newNotificationNum }}</span>{% endif %}</a></li>
+          <li class="hidden-xs hidden-sm hidden-md">
+            <a href="{{ path('message') }}" class="badge-container message-badge-container">
+            <span class="glyphicon glyphicon-envelope"></span>
+            {% if app.user.newMessageNum > 0 %}<span class="badge">{{ app.user.newMessageNum }}</span>{% endif %}
+            </a>
+            </li>
+          <li class="hidden-xs hidden-sm hidden-md"><a href="{{path('my_orders')}}">
+            <img src="{{default_path('qiandai.png')}}" width="14" style="margin-top: -2px" />
+          </a>
+          </li>
+          <li class="dropdown">
+            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">{{ app.user.nickname }} <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li><a href="{{ path('user_show', {id:app.user.id}) }}"><i class="glyphicon glyphicon-home"></i> {{'我的主页'|trans}}</a></li>
+              <li><a href="{{ path('settings') }}"><i class="glyphicon glyphicon-cog"></i> {{'个人设置'|trans}}</a></li>
+              <li class="hidden-lg"><a href="{{ path('my') }}"><i class="glyphicon glyphicon-book"></i> {% if 'ROLE_TEACHER' in app.user.roles %}{{'我的教学'|trans}}{% else %}{{'我的学习'|trans}}{% endif %} </a></li>
+              <li class="divider"></li>
+              {% if is_granted('ROLE_BACKEND') %}
+                <li><a href="{{ path('admin') }}"><i class="glyphicon glyphicon-dashboard"></i> {{'管理后台'|trans}}</a></li>
+                <li class="divider"></li>
+              {% endif %}
+              <li><a href="{{ path('logout') }}"><i class="glyphicon glyphicon-off"></i> {{'退出'|trans}}</a></li>
+            </ul>
+          </li>
+        {% else %}
+          {% if setting('mobile.enabled') %}
+            <li class="hidden-xs hidden-sm"><a href="{{ path('mobile') }}"><span class="glyphicon glyphicon-phone"></span> {{'手机版'|trans}}</a></li>
+          {% endif %}
+          <li class="hidden-xs hidden-sm">
+            <form class="navbar-form navbar-right" action="/search" method="get">
+              <div class="form-group">
+                <input class="form-control" name="q" placeholder="{{'搜索'|trans}}">
+                <button class="button es-icon es-icon-search"></button>
+              </div>
+            </form>
+          </li>
+          <li><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{'登录'|trans}}</a></li>
+          <li><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{'注册'|trans}}</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</div>

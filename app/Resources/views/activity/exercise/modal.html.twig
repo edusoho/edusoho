@@ -1,0 +1,81 @@
+{% extends 'activity/activity-form-layout.html.twig' %}
+
+{% do script(['app/js/activity-manage/exercise/index.js'], 300) %}
+{% set optionalDefault = 1 %}
+
+{% block activity_content %}
+  <form id="#step2-form" class="form-horizontal lesson-form" method="post">
+
+    <div class="form-group">
+      <div class="col-sm-2 control-label">
+      <label for="questionCount" class="control-label-required">{{'course.plan_task.exercise.question_numbers'|trans}}</label>
+      </div>
+      <div class="col-sm-10 controls">
+        <input type="text" id="itemCount" name="itemCount" required="required" class="form-control width-input width-input-large" value="{{ activity.itemCount|default(1) }}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">{{'course.plan_task.exercise.question_sourse'|trans}}</label>
+      <div class="col-sm-10 controls radios">
+        <select class="form-control width-150" name="range[courseId]" data-url="{{ path('course_set_manage_show_tasks',{courseSetId:courseSetId})}}" data-check-num-url="{{ path('course_set_manage_question_check_num',{courseSetId:courseSetId}) }}">
+          <option value="0" {% if not range.courseId|default(0) %}selected{% endif %}>{{'course.plan_task.exercise.question_sourse.course'|trans}}</option>
+          <option value="{{ course.id }}" {% if range.courseId|default(0) == course.id %}selected{% endif %}>{{ get_course_title(course) }}</option>
+        </select>
+        <select class="form-control width-150" {% if not courseTasks|default(null) %}style="display:none;"{% endif %} name="range[lessonId]" data-check-num-url="{{ path('course_set_manage_question_check_num',{courseSetId:courseSetId}) }}">
+          <option value="0" {% if not range.lessonId|default(0) %}selected{% endif %}>{{'course.plan_task.exercise.question_sourse.choose'|trans}}</option>
+          {% for task in courseTasks|default([]) if task %}
+            <option value="{{ task.id }}" {% if range.lessonId|default(0) == task.id %}selected{% endif %}>{{ task.title }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-2 control-label"><label>{{'course.plan_task.exercise.difficulty'|trans}}</label></div>
+      <div class="col-sm-10 controls">
+        <select id="course_categoryId" class="form-control width-input width-input-large" name="difficulty"  data-url="{{ path('course_set_manage_show_tasks',{courseSetId:courseSetId})}}" data-check-num-url="{{ path('course_set_manage_question_check_num',{courseSetId:courseSetId}) }}">
+          {{ select_options(dict('difficulty'), activity.metas.difficulty|default('0'),{'0':'course.plan_task.exercise.default_difficulty'|trans}) }}
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-2 control-label">
+      <label class="control-label-required">{{'course.plan_task.exercise.question_type_range'|trans}}</label>
+      </div>
+      <div class="col-sm-10 controls">
+        {% set range = activity.metas.questionTypes|default(null) %}
+        {% set questionTypes = getQuestionTypes() %}
+        {% for questionType,name in questionTypes %}
+          {% set questionNum = questionNums[questionType]|default(null) %}
+          <label class="checkbox-inline ml0 width-200 js-question-type">
+            <input type="checkbox" class="questionTypes" name="questionTypes[]" value="{{ questionType }}" {% if questionType in range %} checked=checked {% endif %}>{{ name }}
+            （{{ 'course.plan_task.activity_manage.exercise.questionNum'|trans({'%questionType%':questionType, '%questionNum%':questionNum.questionNum|default(0)})|raw }}）
+
+          </label>
+        {% endfor %}
+        <input type="hidden" name="checkQuestion" value="false" data-check-url="{{ path('course_manage_exercise_check',{courseId:courseId}) }}" />
+        <p class="help-block mtl">{{'course.plan_task.exercise.question_type_range_tips'|trans}}</p>
+      </div>
+    </div>
+  </form>
+{% endblock %}
+
+{% block activity_finish %}
+  <div class="row form-group">
+    <div class="col-sm-2 control-label">
+      <label for="condition-select">{{ 'course.plan_task.activity_manage.finished_condition'|trans }}</label>
+    </div>
+    <div class="col-xs-4 form-control-static">
+      {{'course.plan_task.exercise.submit_btn'|trans}}
+      <select class="form-control hidden" id="condition-select" name="finishCondition">
+        {{ select_options({'submit':'course.plan_task.exercise.submit_btn'|trans}, activity.finishCondition['type']|default('score')) }}
+      </select>
+      <input type="hidden" name="mediaType" value="exercise" />
+      <input type="hidden" name="courseSetId" value="{{courseSetId}}" />
+    </div>
+  </div>
+
+
+{% endblock %}

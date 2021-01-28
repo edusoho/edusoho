@@ -1,0 +1,55 @@
+<div class="footer-autumn">
+  <div class="container">
+
+    <div class="footer-links">
+      {{ render(controller('AppBundle:Default:footNavigation')) }}
+    </div>
+
+    <div class="footer-copyright">
+      {% include "powered-by.html.twig" %}
+      {{ setting('site.analytics')|raw }}
+      {% if setting('siteTrace.enabled')|default(false) %}
+        {{ setting('siteTrace.script')|raw }}
+      {% endif %}
+      <a class="mlm" href="{{ path('course_set_archive') }}">{{ '课程存档'|trans }}</a>
+      <div class="mts">
+        {% if setting('site.copyright') %}{{ '课程内容版权均归'|trans }}
+        <a href="/">{{ setting('site.copyright') }}</a>{{ '所有'|trans }}
+        {% endif %}&nbsp;
+        {% if setting('site.icp') %}
+          <a href={{ setting('site.icpUrl')|default('http://www.beian.miit.gov.cn') }} target="_blank">
+            {{ setting('site.icp') }}
+          </a>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if setting('license.license_picture') and setting('license.license_name') %}
+      {% if setting('license.license_url') %}
+        <a id="license-picture" href={{ setting('license.license_url')| default('/') }} target="_blank">
+          <img src="{{ asset(setting('license.license_picture')) }}">
+        </a>
+        <a class="mlm" href={{ setting('license.license_url')|default('/') }} target="_blank">
+          {{ setting('license.license_name') }}
+        </a>
+      {% else %}
+        <a id="license-picture"><img src="{{ asset(setting('license.license_picture')) }}"></a>
+        <a>{{ setting('license.license_name') }}</a>
+      {% endif %}
+    {% endif %}
+
+    {% for permit in setting('license.permits') %}
+      <div>
+        {% if permit.name and permit.record_number %}
+          {% if permit.picture %}
+            <a class="mlm" href={{ fileurl('../'~permit.picture, null) |default('/') }} target="_blank">{{ permit.name }}</a>
+            <a class="mlm" href={{ fileurl('../'~permit.picture, null) |default('/') }} target="_blank">{{ permit.record_number }}</a>
+          {% else %}
+            <a class="mlm">{{ permit.name }}</a>
+            <a class="mlm">{{ permit.record_number }}</a>
+          {% endif %}
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</div>

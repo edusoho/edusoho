@@ -1,0 +1,62 @@
+{% extends 'course-manage/layout.html.twig' %}
+
+{% block title %}{{'course.question_marker_statistics'|trans}} - {{ parent() }}{% endblock %}
+
+{% set course_side_nav = 'question_marker' %}
+
+{% do script(['app/js/course-manage/question-marker/index.js'])%}
+
+{% block page_title %}{{ 'course.question_marker_statistics'|trans }}{% endblock %}
+
+{% block main_body %}
+    <div class="course-data">
+      <form class="form-inline well well-sm" action method="get">
+        <div class="form-group ">
+          <select class="form-control js-switch-lesson width-input-large" data-url="{{ path('course_manage_question_marker', {courseSetId:course.courseSetId, courseId:course.id}) }}">
+            {% for task in stats.tasks %}
+              <option value="{{ task.id }}" {% if task.id == stats.taskId %}selected="selected"{% endif %}>{{ task.title }}</option>
+            {% else %}
+              <option value="0">{{ 'course.question_marker.no_task'|trans }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </form>
+      <table class="table table-hover table-striped">
+        <thead>
+        <tr>
+          <th>{{ 'course.question_marker.make_time'|trans }}</th>
+          <th width="32%" >{{ 'course.question_marker.stem'|trans }}</th>
+          <th>{{ 'course.question_marker.join_num'|trans }}</th>
+          <th>{{ 'course.question_marker.answer_num'|trans }}</th>
+          <th>{{ 'course.question_marker.right_num'|trans }}</th>
+          <th class="js-sort-btn" style="cursor: pointer">{{ 'question.correct_rate'|trans }}
+            <span class="sort-operation">
+                <i class="es-icon es-icon-arrowdropup {% if app.request.query.get('order')=='asc' %} active {% endif %}" data-val="asc"></i>
+                <i class="es-icon es-icon-arrowdropdown {% if app.request.query.get('order')=='desc' %} active {% endif %}" data-val="desc"></i>
+              </span>
+          </th>
+          <th>{{ 'course.question_marker.operation'|trans }}</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for questionMarker in stats.questionMarkers %}
+          <tr>
+            <td>{{ questionMarker.markTime|duration }}</td>
+            <td >{{ questionMarker.stem|fill_question_stem_text|raw|plain_text(40) }}</td>
+            <td>{{ questionMarker.userNum }}</td>
+            <td>{{ questionMarker.answerNum }}</td>
+            <td>{{ questionMarker.rightNum }}</td>
+            <td>{{ questionMarker.pct }}%</td>
+            <td><a href="#modal" data-toggle="modal" data-url="{{ path('course_manage_question_marker_analysis', {courseSetId:course.courseSetId, courseId:course.id, taskId:stats.taskId, questionMarkerId:questionMarker.id}) }}">{{ 'course.question_marker.btn_question_distribution'|trans }}</a></td>
+          </tr>
+        {% else %}
+          <tr ><td colspan="7"><div class="empty">{{ 'course.question_marker.empty_question_marker_hint'|trans }}</div></td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      <p class="text-sm">
+        {{ 'course.question_marker.total_answer_num'|trans({'%totalAnswerNum%': stats.totalAnswerNum})|raw }}，{{ 'course.question_marker.total_user_num'|trans({'%totalUserNum%': stats.totalUserNum})|raw }}
+      </p>
+    </div>
+{% endblock %}

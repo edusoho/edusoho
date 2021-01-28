@@ -1,0 +1,52 @@
+{% extends 'importer/layout.html.twig' %}
+
+{% block title %}{{'import.user_import.content_title'|trans}}{% endblock %}
+
+{% do script(['libs/handlebars.js', 'libs/jquery-validation.js', 'app/js/course-manage/student-import/index.js']) %}
+
+{% block form_data %}
+  <div class="form-group" id="teachers-form-group">
+    <label class="col-sm-2 control-label">
+      {{ 'import.user_import.choose_file'|trans }}
+    </label>
+    <div class="col-sm-8 controls">
+      <div class="input-group uploader-btn-group">
+        <input type="text" class="js-filename form-control" />
+        <input type="file" size="30" name="excel" class="file-input" />
+        <div class="input-group-addon">
+          {{ 'import.user_import.browser_btn'|trans }}
+        </div>
+      </div>
+      <br>
+      {{ 'import.user_import.download_example_tips'|trans }}
+      <a href="{{ asset('assets/files/coursemember_import_example.xls') }}">
+        {{ 'import.user_import.download_example_btn'|trans }}
+      </a>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label for="buy-price">{{'import.user_import.price'|trans}}</label>
+    </div>
+    <div class="col-sm-8 controls">
+      <div class="input-group" style="width: 160px">
+        <input type="text" id="buy-price" name="price" value="{{ course.price }}" class="form-control">
+        <div class="input-group-addon">{{'site.currency.CNY'|trans}}</div>
+      </div>
+      <div class="help-block">{{'import.user_import.price_tips'|trans}}{{course.price}}{{'site.currency.CNY'|trans}}</div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label for="student-remark">{{'import.user_import.remark_btn'|trans}}</label>
+    </div>
+    <div class="col-sm-10 controls">
+      <input type="text" id="student-remark" name="remark" class="form-control">
+      <div class="help-block">{{'import.user_import.remark_tips'|trans}}</div>
+    </div>
+  </div>
+
+  <input type="hidden" name="courseId" value="{{ course.id }}">
+{% endblock %}

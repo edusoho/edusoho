@@ -1,0 +1,50 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% set modal_class= "modal-lg" %}
+{% do script(['libs/ltc-sdk-server.js']) %}
+
+{% block title %}
+  {% if customTitle|default('') != '' %}
+    {{customTitle}}
+  {% else %}
+    {% if task|default(false) %}
+      {{ 'course.plan_task.activity_manage.modify'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
+    {% else %}
+      {% if categoryId|default(0) %}
+        {{ 'course.plan_task.activity_manage.create'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
+      {% else %}
+        {{ 'course.manage.create_lesson'|trans }}
+      {% endif %}
+    {% endif %}
+  {% endif %}
+{% endblock %}
+
+{% block body %}
+  <div class="task-create-editor" id="task-create-editor">
+    <ul class="es-step es-step-3 clearfix" id="task-create-step">
+      <li class="doing">
+        {{'course.plan_task.activity_manage.choose_teach_way'|trans|raw }}
+      </li>
+      <li>
+        {{'course.plan_task.activity_manage.setup_content'|trans|raw }}
+      </li>
+      <li>
+        {{'course.plan_task.activity_manage.setup_finish_condition'|trans|raw }}
+      </li>
+    </ul>
+    {% block task_create_type %}{% endblock %}
+    {% block task_create_content %}{% endblock %}
+    {% block task_create_finish %}{% endblock %}
+  </div>
+{% endblock %}
+{% block footer %}
+  {% if task|default(false) and taskMode|default('') and taskMode != 'lesson' %}
+    <button id="course-tasks-delete" type="submit" class="btn btn-danger pull-left delete-task"
+            data-url="{{ path('course_manage_task_delete', {taskId:task.id, courseId:task.courseId}) }}">
+      <i class="es-icon es-icon-delete"></i>{{ 'form.btn.delete'|trans }}</button>
+  {% endif %}
+  <button id="course-tasks-prev" type="submit" class="btn btn-default hidden">{{ 'form.btn.back'|trans }}</button>
+  <button id="course-tasks-next" type="submit" class="btn btn-default hidden">{{ 'form.btn.next'|trans }}</button>
+  <button id="course-tasks-submit" type="submit" class="btn btn-primary hidden"
+          data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.save'|trans }}</button>
+{% include 'activity/ltc-server/js-loader.html.twig' with {taskId: task.id|default(0), courseId: course.id} %}
+{% endblock %}

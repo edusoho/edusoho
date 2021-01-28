@@ -1,0 +1,14 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block main %}
+  <ul class="nav nav-pills mbl small">
+    <li {% if currentPage == 'admin_block_visual_edit' %}class="active"{% endif %}>
+      <a href="{{ path('admin_block_visual_edit',{blockTemplateId:block.blockTemplateId}) }}">{{'admin.block_manage.visual_edit'|trans}}</a>
+
+    </li>
+    <li {% if currentPage == 'admin_block_visual_edit_history' %}class="active"{% endif %}>
+      <a href="{{ path('admin_block_visual_edit_history',{blockTemplateId: block.blockTemplateId}) }}">{{'admin.block_manage.visual_edit_history'|trans}}</a>
+    </li>
+  </ul>
+  {% block blockVisual %} {% endblock %}
+{% endblock %}

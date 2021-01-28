@@ -1,0 +1,60 @@
+
+{% import "macro.html.twig" as web_macro %}
+{% import "common/data-dict-macro.html.twig" as dict_macro %}
+
+<table class="table table-striped table-hover" id="order-table">
+  <thead>
+    <tr>
+      <th>{{'order.name'|trans}}</th>
+      <th>{{'order.created_time'|trans}}</th>
+      <th>{{'status'|trans}}</th>
+      <th>{{'price'|trans}}<small class="color-gray">({{'site.currency.CNY'|trans}})</small></th>
+      <th>{{'order.buyers'|trans}}</th>
+      <th>{{'order.payment_pattern'|trans}}</th>
+
+      {# <th>查看</th> #}
+    </tr>
+  </thead>
+  <tbody>
+  {% for order in orders %}
+    <tr style="word-break: break-all;word-wrap: break-word;">
+      <td ><strong>{{order.title}}</strong>
+        <br>
+        <span class="color-gray text-sm">{{'order.id'|trans}}：{{order.sn}}</span>
+      </td>
+       <td>
+        <span class="color-gray text-sm">{{order.createdTime|date('Y-m-d H:i:s')}}</span>
+      </td>
+      <td>
+      {{ dict_macro.orderStatus(order.status) }}
+      </td>
+      <td>
+        <span class="color-warning">{{order.amount}}</span>
+      </td>
+      <td>
+        {% if not users[order.userId].destroyed|default(0) %}
+        <a target="_blank" href="{{ path('user_show', {id:order.userId}) }}">
+        {{users[order.userId].nickname}}</a>
+        {% else %}
+          {{ 'user.user_had_destroyed'|trans }}
+        {% endif %}
+      </td>
+      <td>
+        {{dict_text('payment',order.payment)}}
+        <br>
+        <span class="color-gray text-sm">{% if order.paidTime %}{{order.paidTime|date('Y-m-d H:i:s')}}{% else %}-{% endif %}</span>
+      </td>
+
+    {#           <td>
+        <a href="javascript:;" class="btn btn-sm btn-default" data-toggle="modal" data-target="#modal" data-url="{{path('admin_coin_orders_log',{id:order.id})}}">详情</a>
+      </td> #}
+    </tr>
+  {% else %}
+    <tr>
+      <td colspan="6">
+        <div class="empty">{{'order.coin.empty_hint'|trans}}</div>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>

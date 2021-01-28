@@ -1,0 +1,26 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% set modal_class= "modal-lg" %}
+
+{% do script(['libs/echarts.js','app/js/testpaper-manage/result/index.js']) %}
+
+{% block title %}
+  {% if task.isOptional %}
+    {{ 'course.testpaper_check.optional_task_title'|trans({'%title%':task.title}) }}
+  {% else %}
+    {{ 'course.catalogue.task_status.task'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%taskNumber%':task.number, '%taskTitle%':task.title}) }}
+  {% endif %}
+{% endblock %}
+
+{% block body %}
+  <div class="testpaper-mark-graph">
+    <div class="testpaper-mark-graph__data">
+      <span>{{ 'course.testpaper_check.graph_avg_score'|trans({'%avgScore%':analysis.avg|default(0)}) }}</span>
+      <span class="mhm">{{ 'course.testpaper_check.graph_max_score'|trans({'%maxScore%':analysis.maxScore|default(0)}) }}</span>
+      <span>{{ 'course.testpaper_check.graph_passed_percent'|trans({'%percent%':analysis.passPercent|default(0)}) }}</span>
+    </div>
+    <div class="testpaper-mark-graph__chart" id="line-data"></div>
+    <input id="data" type="hidden" value='{% if data %}{{data}}{% endif %}'>
+  </div>
+{% endblock %}
+
+{% block footer %}{% endblock %}

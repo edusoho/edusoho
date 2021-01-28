@@ -1,0 +1,49 @@
+{% extends 'activity/activity-form-layout.html.twig' %}
+{% do script([cloud_sdk_url('uploader'), 'app/js/activity-manage/flash/index.js']) %}
+
+{% set mediaType = 'flash' %}
+{% block activity_content %}
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label for="mediaId" class="style control-label-required">Flash</label>
+    </div>
+    <div class="col-sm-10">
+      {% include 'file-chooser/file-choose.html.twig' with {
+      mediaType: 'flash',
+      fileType:'flash',
+      file: flash.media|default(null),
+      placeholder: 'Flash'
+      } %}
+      <input type="hidden" value="{{ flash.mediaId|default(null) }}" name="mediaId" id="mediaId"/>
+    </div>
+    <p class="col-sm-offset-2 col-sm-10 mt10 color-warning">{{'course.plan_task.activity_manage.flash.play_tips'|trans}}</p>
+  </div>
+{% endblock %}
+
+
+{% block activity_finish %}
+  <div class=" form-group">
+    <div class="col-sm-2 control-label">
+      <label for="condition-select">{{ 'course.plan_task.activity_manage.finished_condition'|trans }}</label>
+    </div>
+    <div class="col-xs-4 form-control-static">
+      {{'course.plan_task.activity_manage.doc.watch_time'|trans}}
+      <select class="form-control hidden" id="condition-select" name="finishType">
+        <option value="time" selected>{{'course.plan_task.activity_manage.doc.watch_time'|trans}}</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group" id="condition-group">
+    <div class="col-sm-2 control-label">
+      <label for="condition-detail">{{ 'course.plan_task.activity_manage.doc.watch_time_at_least'|trans }}</label>
+    </div>
+    <div class="col-xs-4 controls">
+      <input id="finishDetail" class="form-control" type="text" name="finishDetail"
+             value="{{ flash.finishDetail|default(1) }}">
+    </div>
+
+    <div class="col-xs-4 controls">
+      <p class="form-control-static">{{'site.date.minute'|trans}}</p>
+    </div>
+  </div>
+{% endblock %}

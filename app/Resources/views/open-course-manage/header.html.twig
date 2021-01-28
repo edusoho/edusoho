@@ -1,0 +1,46 @@
+{% import "macro.html.twig" as web_macro %}
+{% block js %}
+  {% do script(['app/js/open-course-manage/header/index.js'])%}
+{% endblock %}
+
+<div class="courseset-manage-header cd-mb32 clearfix">
+  {% block coursesetImg %}
+    <img class="courseset-manage-header__img" src="{{ filepath(course.largePicture, 'course.png') }}" />
+  {% endblock %}
+
+  {% if course.status =='closed' %}
+    <span class="course-publish-status course-publish-status--closed">{{'course.status.closed'|trans}}</span>
+  {% elseif course.status =='draft' %}
+    <span class="course-publish-status course-publish-status--unpublished">{{'course.status.unpublished'|trans}}</span>
+  {% elseif course.status =='published' %}
+    <span class="course-publish-status course-publish-status--published">{{'course.status.published'|trans }}</span>
+  {% endif %}
+
+  <div class="courseset-manage-header-info">
+    <div class="courseset-manage-header-info__title text-overflow" {% if course.title|length > 21 %}data-toggle="tooltip" title="{{ course.title }}" data-container="body" {% endif %}>
+    {% block coursesetTitle %}
+      <span class="cd-dark-major">{{ course.title }}</span>
+    {% endblock %}
+    </div>
+    {% block liveTag %}
+      <span class="cd-tag cd-tag-orange">{{ dict('courseType')[course.type] }}</span>
+    {% endblock %}
+  </div>
+
+  <div class="courseset-manage-header-btn">
+    {% block btn %}
+      {% if course.status == 'published' %}
+        <a class="cd-btn cd-btn-primary" target="_blank" href="{{ path('open_course_show',{courseId:course.id}) }}">{{'my.learning.course.watch'|trans}}</a>
+      {% else %}
+        <button class="cd-btn cd-btn-primary js-course-publish-btn" data-url="{{ path('open_course_manage_publish', {id:course.id}) }}">{{'course.btn.publish'|trans}}</button>
+      {% endif %}
+      <a class="cd-btn cd-btn-default cd-ml16 hidden-xs" href="{{ path('open_course_show',{courseId:course.id,as:'preview'}) }}" target="_blank">{{ 'open_course.preview'|trans }}</a>
+      <a class="cd-btn cd-btn-default cd-ml16 hidden-xs" href="{{ path('open_course_show',{courseId:course.id,as:'preview', previewType: 'wx'}) }}" target="_blank">{{ 'open_course.preview_in_wechat'|trans }}</a>
+    {% endblock %}
+  </div>
+
+  <div class="courseset-manage-header-data hidden-xs">
+    <span class="cd-text-medium">{{ 'my.teaching.open_course.hit_num'|trans }}</span>
+    <div class="cd-mt16 cd-dark-major"><span class="courseset-manage-header-data__num">{{ course.hitNum }}</span>{{ 'site.default.times'|trans }}</div>
+  </div>
+</div>

@@ -1,0 +1,7 @@
+{% if media.finishType|default(null) == 'time' %}
+  {{'course.plan_task.activity_manage.ppt.finished_condition_tips.time'|trans({'%finishDetail%':media.finishDetail|default(0)})|raw}}
+{% endif %}
+
+{% if media.finishType|default(null) == 'end' %}
+	{{'course.plan_task.activity_manage.ppt.finished_condition_tips.end'|trans}}
+{% endif %}

@@ -1,0 +1,66 @@
+services:
+    kernel.listener.exception_listener:
+        class: AppBundle\Listener\ExceptionListener
+        arguments:    ['@service_container']
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority:255 }
+
+    kernel.listener.kernel_request_listener:
+        class: AppBundle\Listener\KernelRequestListener
+        arguments:    ['@service_container']
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority:255 }
+
+    kernel.listener.kernel_h5_request_listener:
+        class: AppBundle\Listener\KernelH5RequestListener
+        arguments:    ['@service_container']
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority:254 }
+
+    kernel.listener.kernel_response_listener:
+        class: AppBundle\Listener\KernelResponseListener
+        arguments:    ['@service_container']
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority:255 }
+
+    kernel.controller.permission_listener:
+        class: AppBundle\Listener\PermissionKernelControllerListener
+        arguments:    ['@service_container', '%permission.path_regular_expression%']
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority:255 }
+
+    kernel.response.permission_listener:
+        class: AppBundle\Listener\PermissionKernelResponseListener
+        arguments:    ['@service_container']
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority:255 }
+
+    kernel.listener.user_login_token_listener:
+        class: AppBundle\Listener\UserLoginTokenListener
+        arguments:    ['@service_container']
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onGetUserLoginListener}
+
+    app.locale_listener:
+        class: AppBundle\Listener\LocaleListener
+        arguments: ['@service_container', '%kernel.default_locale%']
+        tags:
+            - { name: kernel.event_subscriber }
+
+    app.user_locale_listener:
+        class: AppBundle\Listener\UserLocaleListener
+        arguments: ['@session']
+        tags:
+            - { name: kernel.event_listener, event: security.interactive_login, method: onInteractiveLogin }
+            
+    kernel.listener.kernel_admin_request_intercept_listener:
+        class: AppBundle\Listener\AdminRequestInterceptListener
+        arguments:    ['@service_container']
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority:255 }
+
+    #    kernel.listener.kernel_org_controller_listener:
+    #        class: Org\OrgBundle\Listener\OrgControllerListener
+    #        arguments:    ['@service_container']
+    #        tags:
+    #            - { name: kernel.event_listener, event: kernel.controller, method: onOrgController, priority:255 }

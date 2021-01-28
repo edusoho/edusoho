@@ -1,0 +1,43 @@
+{% import 'macro.html.twig' as web_macro %}
+  <!-- 热门资讯 -->
+    {{ render(controller('AppBundle:Article:popularArticlesBlock')) }}
+
+  <!-- 热门标签 -->
+  {% include 'article/widget/tag-sidebar.html.twig' %}
+
+  <!-- 热门评论 -->
+  {% if isShowComment %}
+  <div class="panel panel-default hot-comments">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+        <i class="es-icon es-icon-textsms"></i>{{'article.popular_comments'|trans}}
+      </h3>
+    </div>
+    <div class="panel-body">
+
+    {% set posts = data('PopularArticlePosts',{'count':10}) %}
+    {% for post in posts %}
+      <div class="media media-hot-comment">
+        <div class="media-body">
+          <div class="pull-left">
+            {{ web_macro.user_avatar(post.user, '','avatar-sm') }}
+          </div>
+          <div class="comments-info">
+            {{ web_macro.user_link(post.user, '') }}
+            <span class="mhs">{{'article.comment_target'|trans}}</span>
+            <a class="link-dark" href="{{ path('article_detail', { id:post.article.id }) }}">{{ post.article.title }}</a>
+          </div>
+          <div class="comments-content">
+           {{ post.content|at(post.ats)|sub_text(60) }}
+          </div>
+        </div>
+      </div>
+  {% else %}
+    <div class="empty">{{'article.popular_comments_empty'|trans}}</div>
+  {% endfor %}
+
+    </div>
+  </div>
+{% endif %}
+<!-- 推荐资讯 -->
+{{ render(controller('AppBundle:Article:recommendArticlesBlock')) }}

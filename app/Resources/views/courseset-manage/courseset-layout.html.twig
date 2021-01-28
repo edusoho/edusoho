@@ -1,0 +1,11 @@
+{% extends 'courseset-manage/layout.html.twig' %}
+
+{% block breadcrumb %}
+  <ol class="breadcrumb breadcrumb-o">
+    <li class="text-overflow"><a href="{{ path('my_teaching_course_sets') }}">{{ 'my.teaching.course_set_menu'|trans }}</a></li>
+    <li class="active text-overflow courseset-header-section__breadcrumb" title="{{ courseSet.title }}">{{ courseSet.title }}</li>
+  </ol>
+{% endblock %}
+{% block courseset_header %}
+  {{ render(controller('AppBundle:Course/CourseSetManage:header', {courseSet:courseSet, course: course|default(null), foldType: 0})) }}
+{% endblock %}

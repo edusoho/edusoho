@@ -1,0 +1,95 @@
+{% import "macro.html.twig" as web_macro %}
+<style>
+.course-wide-list .enabled:hover{
+    background: #eee;
+    border-color: #ddd;
+}
+
+.course-wide-list .enabled{
+    cursor: default;
+    background: #eee;
+}
+
+</style>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th width="5%" ></th>
+      <th width="30%">{{ 'classroom.classroom_manage.course_select.courseTitle'|trans }}</th>
+      <th width="30%">{{ 'classroom.classroom_manage.course_select.teach_plan'|trans }}</th>
+      <th>{{ 'classroom.classroom_manage.course_select.teacher_name'|trans }}</th>
+      <th>{{ 'classroom.classroom_manage.course_select.price'|trans }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% if courseSets|default(null) %}
+    {% for courseSet in courseSets %}
+    <tr>
+      <td class='text-center' data-id="{{courseSet.id}}">
+        <input class="course-item-cbx" type="checkbox" name="course-{{courseSet.id}}">
+      </td>
+      <td>
+        <a class="pull-left mr5 link-primary" href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}" target="_blank">
+          <img class="course-picture" src="{{ filepath(course_set_cover(courseSet, 'middle'), 'courseSet.png') }}" alt="{{ courseSet.title }}" width="100">
+        </a>
+        <div class="mlm">
+          <a class="link-primary" href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}">{{ courseSet.title }}</a>
+          {% if courseSet.serializeMode == 'serialized' %}
+            <span class="label label-success ">{{'course.status.serialized'|trans}}</span>
+          {% elseif courseSet.serializeMode == 'finished' %}
+            <span class="label label-warning ">{{'course.status.finished'|trans}}</span>
+          {% endif %}
+        </div>
+      </td>
+      <td>
+        {% if courseSet.courses|default(null)|length == 1 %}
+          {% for course in courseSet.courses %}
+            {{course.title}}
+          {% endfor %}
+          <select class="form-control js-course-select width-150 hidden" id="course-select-{{courseSet.id}}" style="width:80%;display: inline-block;">
+            {% if courseSet.courses %}
+              {% for course in courseSet.courses %}
+                  {{course.title}}
+                  <option value="{{course.id}}">{{course.title}}</option>
+              {% endfor %}
+            {% endif %}
+          </select>
+        {% else %}
+          <select class="form-control js-course-select width-150" id="course-select-{{courseSet.id}}" style="width:80%;display: inline-block;">
+            {% if courseSet.courses|default(null) %}
+              {% for course in courseSet.courses %}
+                  {{course.title}}
+                  <option value="{{course.id}}" 
+                    data-price="{% include 'course/widgets/classroom-course-price.html.twig' with { price : course.price } %}">
+                    {{course.title}}
+                  </option>
+              {% endfor %}
+            {% endif %}
+          </select>
+          <a class="color-gray" data-toggle="tooltip" data-trigger="hover" data-placement="top" title="{{'classroom.classroom_manage.course_select.tips'|trans}}"><i class="es-icon es-icon-help"></i></a>
+        {% endif %}
+      </td>
+      <td>
+        {% set teacher = users[courseSet.creator]|default(null) %}
+        {% if teacher %}
+          <div class="teacher">
+            <a class="teacher-nickname ellipsis link-primary" target="_blank"  href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+          </div>
+        {% endif %}
+      </td>
+      <td>
+          <span class="course-price js-price-{{courseSet.id}}" style="display:inline">
+          {% include 'course/widgets/classroom-course-price.html.twig' with { price : courseSet.courses[0].originPrice } %}
+          </span>
+      </td>
+    </tr>
+    {% endfor %}
+    {% endif %}
+  </tbody>
+</table>
+
+{% if type|default('') == 'ajax_pagination' %}
+{{ web_macro.ajax_paginator(paginator) }}
+{% else %}
+{{ web_macro.paginator(paginator) }}
+{% endif %}

@@ -1,0 +1,51 @@
+.notify-content {
+  text-align: center;
+}
+
+.notify {
+  position: relative;
+  display: inline-block;
+  color: #fff;
+  line-height: 1;
+  font-size: 14px;
+  padding: 14px 16px;
+  border-radius: 4px;
+  font-weight: 500;
+  border: none;
+  
+  &.notify-danger {
+    background: @brand-danger;
+    .notify-box-shadow(@brand-danger);
+  }
+  &.notify-success {
+    background: @brand-success;
+    .notify-box-shadow(@brand-success);
+  }
+  &.notify-info {
+    background: @brand-info;
+    .notify-box-shadow(@brand-info);
+  }
+  &.notify-warning {
+    background: @brand-warning;
+    .notify-box-shadow(@brand-warning);
+  }
+  .notify-action {
+    text-align: right;
+    margin-left: 8px;
+    color: #fff;
+    font-weight: 400;
+    &:hover {
+      color: #fff;
+    }
+  }
+  .cd-icon {
+    color: #fff !important;
+    margin-right: 4px !important; 
+  }
+}
+
+.notify-box-shadow(@color) {
+  -webkit-box-shadow: 0 0 8px 0 rgba(red(@color), green(@color), blue(@color), 0.1), 0 8px 8px 0 rgba(red(@color), green(@color), blue(@color), 0.2);
+  -moz-box-shadow: 0 0 8px 0 rgba(red(@color), green(@color), blue(@color), 0.1), 0 8px 8px 0 rgba(red(@color), green(@color), blue(@color), 0.2);
+  box-shadow: 0 0 8px 0 rgba(red(@color), green(@color), blue(@color), 0.1), 0 8px 8px 0 rgba(red(@color), green(@color), blue(@color), 0.2);
+}

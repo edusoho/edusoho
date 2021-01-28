@@ -1,0 +1,15 @@
+{% extends 'admin/operation-analysis/analysis-base-layout.html.twig' %}
+{% set script_controller = 'analysis/user-sum' %}
+{% set href="admin_operation_analysis_user_sum" %}
+{% set menu = 'user-sum' %}
+{% block analysisBody %}
+  <div class="col-md-12">
+		{% if tab=="trend" %}
+			<div id="line-data"></div>
+			<input id="data"  type="hidden" value='{% if data %}{{data}}{% endif %}'>
+			<input id="userSumStartDate"  type="hidden" value='{% if userSumStartDate %}{{userSumStartDate}}{% endif %}'>
+		{% elseif tab=="detail" %}
+			{% include 'admin/operation-analysis/user-sum.table.html.twig' %}
+		{% endif %}
+  </div>
+{% endblock %}

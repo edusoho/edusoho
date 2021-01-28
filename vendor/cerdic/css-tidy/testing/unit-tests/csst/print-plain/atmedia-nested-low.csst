@@ -1,0 +1,39 @@
+--TEST--
+Test @media nesting
+--CSS--
+@media print {
+  #navigation { display: none }
+  @media (max-width: 12cm) {
+    .note { float: none }
+  }
+  .red { color: red }
+}
+#yellow {
+  color:yellow;
+}
+--PRINT--
+@media print {
+	#navigation
+	{
+		display:none
+	}
+
+	@media (max-width: 12cm) {
+		.note
+		{
+			float:none
+		}
+	}
+
+	.red
+	{
+		color:red
+	}
+}
+
+#yellow
+{
+	color:#ff0
+}
+--SETTINGS--
+template='low'

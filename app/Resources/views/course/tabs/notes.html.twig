@@ -1,0 +1,134 @@
+{% do script(['app/js/courseset/show/notes/index.js']) %}
+{% import "macro.html.twig" as web_macro %}
+{% set nav = 'note' %}
+
+{% block detail_content %}
+  {{ render(controller('AppBundle:Course/Course:renderCourseChoice')) }}
+
+  {% set sort = currentRequest.query.get('sort', 'latest') %}
+  {% set selectedTaskId = currentRequest.query.get('task', 0) %}
+  {% set selectedCourseId = currentRequest.query.get('selectedCourse', 0) %}
+
+  <div class="note-filter nav-filter clearfix">
+    <div class="btn-group">
+      <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+        {% set task = tasks[selectedTaskId]|default(null) %}
+        {% if task is empty %}
+          {{ 'course.note.all_task'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
+        {% else %}
+          {{ task.title }}
+        {% endif %}
+        <span class="caret"></span>
+      </button>
+      {% if tasks %}
+        <ul class="dropdown-menu" role="menu">
+          <li class="{% if selectedTaskId == 0  %}active{% endif %}">
+            <a href="{{ path(currentRoute, {id: course.id, tab: 'notes', sort: sort, task: 0, selectedCourse: selectedCourseId }) }}#notes">
+              {{ 'course.note.all_task'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
+            </a>
+          </li>
+          {% for task in tasks %}
+            <li class="{% if task.id == selectedTaskId %} active {% endif %}">
+              <a href="{{ path(currentRoute, {id: course.id, tab: 'notes', sort: sort, task: task.id, selectedCourse: selectedCourseId }) }}#notes" title="{{ task.title }}">
+                {{ task.title|sub_text(16) }}
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+
+    <ul class="nav nav-pills nav-pills-sm">
+      <li class="dropdown hidden-xs">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+          <span>{{'course.note.seq'|trans}}</span>
+          {% if sort == 'latest' %}
+            {{ 'course.note.latest'|trans }}
+          {% else %}
+            {{ 'course.note.not_latest'|trans }}
+          {% endif %}
+          <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu hidden-xs">
+          <li class="{% if sort == 'latest' %}active{% endif %}">
+            <a href="{{ path('course_show', {id: course.id, tab: 'notes', sort: 'latest', task: selectedTaskId, selectedCourse: selectedCourseId }) }}#notes">
+              {{ 'course.note.latest'|trans }}
+            </a>
+          </li>
+          <li class="{% if sort == 'like' %}active{% endif %}">
+            <a href="{{ path('course_show', {id: course.id, tab: 'notes', sort: 'like', task: selectedTaskId, selectedCourse: selectedCourseId }) }}#notes">
+              {{ 'course.note.not_latest'|trans }}
+            </a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+
+  </div>
+
+  <div class="note-list" id="note-list">
+    {% for note in notes %}
+      {% set author = users[note.userId] %}
+      {% set task = tasks[note.taskId]|default(null) %}
+      <div class="media note-item">
+        <div class="media-left">
+          <a class="{% if not author.destroyed|default(0) %}js-user-card{% endif %}" href="{{ path('user_show', {'id': author.id }) }}"
+            data-card-url="{{ path('user_card_show', {'userId': author.id}) }}" data-user-id="{{ author.id }}">
+            <img class="avatar-sm" src="{{ filepath(author.smallAvatar, 'avatar.png') }}">
+          </a>
+        </div>
+        <div class="media-body">
+          <div class="content">
+            <div class="editor-text">
+                {{ note.content|cdn|raw }}
+            </div>
+          </div>
+          <a href="javascript:;" class="more js-more-show">
+            <span class="js-change-btn">{{ 'course.note.expand_btn'|trans|raw }}</span>
+            <span class="js-change-btn" style="display: none;">{{ 'course.note.collapse_btn'|trans|raw }}</span>
+          </a>
+          <div class="metas clearfix">
+            {% if not author.destroyed|default(0) %}
+              <a class="link-dark name" href="{{ path('user_show', {'id': author.id }) }}">{{ author.nickname }}</a>
+            {% else %}
+              <a class="link-dark name">{{ 'user.user_had_destroyed'|trans }}</a>
+            {% endif %}
+            · <span>{{ note.updatedTime|smart_time }}</span>
+            {% if task %}
+              · {% if member %}
+              <a href="{{ path('course_task_show', {'courseId': course.id, 'id': note.taskId}) }}" class="period"
+                target="_blank">
+                {{ task.title }}
+              </a>
+            {% else %}
+              <a href="javascript:;" class="period">
+                {{ task.title }}
+              </a>
+            {% endif %}
+            {% else %}
+              {{ 'course.note.mission_delete_tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
+            {% endif %}
+            <span class="metas-sns">
+              <span class="icon-favour">
+                <a href="javascript:;" class="js-like {% if note.id in likeNoteIds %}color-primary{% endif %}"
+                  data-like-url="{{ path('note_like', {id: note.id}) }}"
+                  data-cancel-like-url="{{ path('note_cancel_like', {id: note.id}) }}">
+                  <i class="es-icon es-icon-thumbup"></i>
+                  <span class="js-like-num">{{ note.likeNum }}</span>
+                </a>
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="empty">{{ 'course.note.empty'|trans }}</div>
+    {% endfor %}
+
+    {% if paginator|default(null) %}
+      {{ web_macro.paginator(paginator) }}
+    {% endif  %}
+
+  </div>
+
+{% endblock %}

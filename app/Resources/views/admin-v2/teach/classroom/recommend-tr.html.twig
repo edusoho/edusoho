@@ -1,0 +1,26 @@
+<tr id="classroom-tr-{{ classroom.id }}" data-sort="{{ classroom.recommendedSeq }}">
+  <td>{{ classroom.recommendedSeq }}</td>
+  <td>
+    <a href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank"><strong>{{ classroom.title }}</strong></a>
+  </td>
+  <td>
+    <span class="text-muted text-sm">{{ classroom.createdTime|date('Y-n-d H:i') }}</span>
+  </td>
+  <td>
+    {{ classroom.recommendedTime|date('Y-m-d') }}
+  </td>
+  <td>
+    <div class="btn-group">
+      <a class="btn btn-default btn-sm" href="#modal" data-toggle="modal" data-url="{{ path('admin_v2_classroom_set_recommend', {id:classroom.id,ref:'recommendList'}) }}">{{'admin.classroom_manage.recommend.set_seq_btn'|trans}}</a>
+
+      <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu pull-right">
+
+        <li><a class="cancel-recommend-classroom" href="javascript:" data-url="{{ path('admin_v2_classroom_cancel_recommend', {id:classroom.id,ref:'recommendList'}) }}" title="{{'admin.classroom_manage.recommend.cancel_recommend_classroom_btn'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}"><span class="glyphicon glyphicon-hand-right"></span> {{'admin.classroom_manage.recommend.cancel_recommend_btn'|trans}}</a></li>
+
+      </ul>
+    </div>
+  </td>
+</tr>

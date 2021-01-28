@@ -1,0 +1,15 @@
+{% set tags = data('Tags',{'count':12}) %}
+{% if tags %}
+  <div class="panel panel-default hot-tag">
+    <div class="panel-heading">
+      <h3 class="panel-title"><i class="es-icon es-icon-loyalty"></i>{{'tag.popular_tag'|trans}}</h3>
+    </div>
+    <div class="panel-body">
+      {% for tag in tags %}
+        {% if tag %}
+          <a class="btn-tag" href="{{ path('article_tag_show', {name:tag.name}) }}"> {{ tag.name }}</a>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}

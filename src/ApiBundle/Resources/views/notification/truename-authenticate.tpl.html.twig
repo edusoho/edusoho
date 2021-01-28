@@ -1,0 +1,8 @@
+{% set data = notification.content %}
+	{% if data.type == 'through'%}
+	 	{{'notification.truename-authenticate.pass'|trans}}
+	{% elseif data.type == 'reject'%}
+    {{'notification.truename-authenticate.reject'|trans}}
+{% endif %}
+{{data.note}}
+

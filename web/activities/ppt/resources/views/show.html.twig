@@ -1,0 +1,24 @@
+{% extends 'activity/content-layout.html.twig' %}
+
+{% set ppt = activity.ext|default(null) %}
+{% set file = ppt.file|default(null)|s2b2c_file_convert %}
+{% set playerContext = resource_player_context(file) %}
+
+{% block body %}
+  <div class="iframe-parent-content iframe-parent-full" id="activity-ppt-content"
+      data-finish-type="{{ activity.ext.finishType }}"
+      data-finish-detail="{{ activity.ext.finishDetail }}"
+      data-res-no="{{ playerContext.resNo }}"
+      data-token="{{ playerContext.token }}"
+      data-user-id="{{app.user.id|default(0)}}"
+      data-user-name="{{app.user.username|default('')}}"
+      {# data-image-info="{{ pptPlayer.result.images|json_encode() }}" #}
+      {# data-token-url="{{ path('activity_ppt_token', {mediaId: activity.mediaId}) }}" #}
+      {% if setting('magic.ppt_watermark') %}
+        data-watermark-url="{{ path('cloud_ppt_watermark') }}"
+      {% endif %}>
+  </div>
+  <button class="hidden cd-btn cd-btn-primary ppt-player-change-btn js-change-ppt-btn" type="button">{{ 'course.plan_task.activity_ppt_animation_btn'|trans }}</button>
+  <input type="hidden" class="js-cloud-url" data-url="{{ cloud_sdk_url('resource_player') }}">
+  {% do script(['libs/base.js','app/js/common.js','app/js/main.js','pptactivity/js/show/index.js'], 1000) %}
+{% endblock %}

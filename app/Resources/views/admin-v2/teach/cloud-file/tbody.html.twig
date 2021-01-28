@@ -1,0 +1,33 @@
+{% for material in materials %}
+  {% set createdUser = createdUsers[material.createdUserId|default(0)]|default(null) %}
+  {% if pageType == 'attachment'%}
+    {% include 'admin-v2/teach/cloud-file/res-table-tr.html.twig' with {createdUser:createdUser, cloudFile:material, type:'attachment'} %}
+  {% else %}
+    {% include 'admin-v2/teach/cloud-file/res-table-tr.html.twig' with {createdUser:createdUser, cloudFile:material} %}
+  {% endif %}
+{% else %}
+  <tr>
+    <td class="empty" colspan="10" style="color:#999;padding:80px;">{{ 'cloud_file.search_empty'|trans }}</td>
+  </tr>
+{% endfor %}
+
+<tr class="hide">
+  <td class="js-paginator">
+    {% if paginator.lastPage > 1 %}
+      <ul class="pagination">
+        {% if paginator.currentPage != paginator.firstPage %}
+          <li data-page="{{paginator.firstPage}}"><a  href="javascript:;">{{ 'paginator.firstPage'|trans }}</a></li>
+          <li data-page="{{paginator.previousPage}}"><a  href="javascript:;"><i class="es-icon es-icon-chevronleft"></i></a></li>
+        {% endif %}
+        {% for page in paginator.pages %}
+          <li {% if page == paginator.currentPage %}class="active"{% endif %} data-page="{{ page }}"><a href="javascript:;">{{ page }}</a></li>
+        {% endfor %}
+
+        {% if paginator.currentPage != paginator.lastPage %}
+          <li data-page="{{paginator.nextPage}}"><a  href="javascript:;"><i class="es-icon es-icon-chevronright"></i></a></li>
+          <li data-page="{{paginator.getLastPage}}"><a  href="javascript:;">{{ 'paginator.endPage'|trans }}</a></li>
+        {% endif %}
+      </ul>
+    {% endif %}
+  </td>
+</tr>

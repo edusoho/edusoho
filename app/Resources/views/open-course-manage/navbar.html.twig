@@ -1,0 +1,53 @@
+{% set side_nav = side_nav|default(null) %}
+
+<ul class="nav-header-section nav nav-tabs">
+  <li class="nav-header-section__item {% if side_nav == 'base' %}active{% endif %}">
+    <a href="{{ path('open_course_manage_base', {id:course.id}) }}">
+      <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'my.teaching.open_course.Basic_Info'|trans}}
+    </a>
+  </li>
+
+  {% if course.type == 'liveOpen' %}
+    <li class="nav-header-section__item {% if side_nav == 'liveTimeSet' %}active{% endif %}">
+      <a href="{{ path('open_course_manage_live_time_set', {id:course.id}) }}">
+        <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'my.teaching.open_course.lesson.manage'|trans}}
+      </a>
+    </li>
+    <li class="nav-header-section__item {% if side_nav == 'replay' %}active{% endif %}" >
+      <a href="{{ path('live_open_course_manage_replay', {id:course.id}) }}">
+      <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>{{'my.teaching.open_course.live_manage'|trans}}</a>
+    </li>
+  {% endif %}
+  {% if course.type == 'open' %}
+    <li class="nav-header-section__item {% if side_nav == 'lesson' %}active{% endif %}">
+      <a href="{{ path('open_course_manage_lesson', {id:course.id}) }}">
+        <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'my.teaching.open_course.lesson.manage'|trans}}
+      </a>
+    </li>
+  {% endif %}
+
+
+  <li class="nav-header-section__item {% if side_nav == 'marketing' %}active{% endif %}">
+    <a href="{{ path('open_course_manage_marketing', {id:course.id}) }}">
+      <span></span>{{'my.teaching.open_course.liveTimeSet.recommend_setting'|trans}}
+    </a>
+  </li>
+  <li class="nav-header-section__item {% if side_nav == 'teachers' %}active{% endif %}">
+    <a href="{{ path('open_course_manage_teachers', {id:course.id}) }}">
+      <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>{{'my.teaching.open_course.teachers_setting.title'|trans}}
+    </a>
+  </li>
+  <li class="nav-header-section__item {% if side_nav == 'students' %}active{% endif %}">
+    <a {% if course.type == 'open' %}class="nav-header-section__link"{% endif %} href="{{ path('open_course_manage_students', {id:course.id,userType:'login'}) }}">
+      <span></span>{{'site.default.student'|trans}}{{'my.teaching.open_course.student_setting.manage_btn'|trans}}
+    </a>
+  </li>
+
+  {% if course.type == 'open' %}
+    <li class="nav-header-section__item {% if side_nav == 'files' %}active{% endif %}">
+      <a href="{{ path('open_course_manage_files', {id:course.id}) }}">
+        <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'my.teaching.open_course.file_manage_btn'|trans}}
+      </a>
+    </li>
+  {% endif %}
+</ul>

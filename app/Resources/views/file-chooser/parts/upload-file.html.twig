@@ -1,0 +1,67 @@
+{% set targetType = targetType|default('course-activity') %}
+{% if token|default('') %}
+  {% set token = token %}
+{% else %}
+  {% set token = uploader_token(targetType, courseId, 'private') %}
+{% endif %}
+{% set storageSetting = setting('storage') %}
+<div class="uploader-content">
+  <div class="uploader-container" id="uploader-container"
+  data-init-url="{{ url('uploader_init_v2', {uploaderToken: token}, true) }}"
+  data-finish-url="{{ url('uploader_finished_v2', {uploaderToken: token}, true) }}"
+  data-accept="{{ uploader_accept(targetType, fileType|default(''))|json_encode }}"
+  data-process="{{ uploader_process(targetType) }}"
+  data-upload-type="{{ fileType|default('') }}"
+  data-num-limit="{{ enableLessonCount|default(null) }}">
+  </div>
+  {% if (mediaType|default(null) == 'video' or showVideoQuality|default(0)) and setting('storage.upload_mode', 'local') != 'local' %}
+    <div class="uploader-bottom">
+      <div class="row">
+        <div class="col-xs-8">
+          {{'file_chooser.upload_file.video_quality'|trans}}
+          <select class="form-control border-gray mrl js-upload-params" name="videoQuality">
+            {{ select_options({'low':'file_chooser.upload_file.video_quality.low'|trans, 'normal':'file_chooser.upload_file.video_quality.normal'|trans, 'high':'file_chooser.upload_file.video_quality.high'|trans,'super':'file_chooser.upload_file.video_quality.super'|trans}, setting('storage.video_quality')) }}
+          </select>
+          {{'file_chooser.upload_file.audio_quality'|trans}}
+          <select class="form-control border-gray js-upload-params" name="audioQuality">
+            {{ select_options({'low':'file_chooser.upload_file.audio_quality.low'|trans, 'normal':'file_chooser.upload_file.audio_quality.normal'|trans, 'high':'file_chooser.upload_file.audio_quality.high'|trans}, setting('storage.video_audio_quality')) }}
+          </select>
+        </div>
+        <input type="hidden" name="support_mobile" value="{{ setting('storage.support_mobile', 0) }}" />
+        <div class="col-xs-4 text-xs text-center">
+          <a class="btn-gray" href="javascript:;" data-container="body" data-toggle="popover" data-placement="top" data-trigger="hover" data-content="{{'file_chooser.upload_file.convert_tips'|trans}}">{{'file_chooser.upload_file.convert'|trans}}</a>
+          ｜
+          <a class="btn-gray" href="javascript:;" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{% if showVideoQuality|default(0) %}{{'upload.cloud_upload_tips'|trans|raw}}{% else %}{{'file_chooser.upload_file.suopprt_audio_tips'|trans|raw}}{% endif %}">{{'file_chooser.upload_file.upload_tips'|trans}}</a>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if mediaType|default(null) == 'audio' and setting('storage.upload_mode', 'local') != 'local'  %}
+    <div class="uploader-bottom text-right">
+      <a class="btn-gray" href="javascript:;" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{'file_chooser.upload_file.upload_audio_tips'|trans|raw}}">{{'file_chooser.upload_file.upload_tips'|trans}}
+    </a>
+    </div>
+  {% endif %}
+
+  {% if mediaType|default(null) == 'flash' and setting('storage.upload_mode', 'local') != 'local'  %}
+    <div class="uploader-bottom text-right">
+      <a class="btn-gray" href="javascript:;" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{'file_chooser.upload_file.upload_flash_tips'|trans|raw}}">{{'file_chooser.upload_file.upload_tips'|trans}}
+    </a>
+    </div>
+  {% endif %}
+
+  {% if mediaType|default(null) == 'document' and setting('storage.upload_mode', 'local') != 'local'  %}
+    <div class="uploader-bottom text-right">
+      <a class="btn-gray" href="javascript:;" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{'file_chooser.upload_file.upload_doc_tips'|trans|raw}}">{{'file_chooser.upload_file.upload_tips'|trans}}
+    </a>
+    </div>
+  {% endif %}
+
+  {% if mediaType|default(null) == 'ppt' and setting('storage.upload_mode', 'local') != 'local'  %}
+    <div class="uploader-bottom text-right">
+      <a class="btn-gray" href="javascript:;" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{'file_chooser.upload_file.upload_ppt_tips'|trans|raw}}">{{'file_chooser.upload_file.upload_tips'|trans}}</a>
+    </div>
+  {% endif %}
+
+</div>

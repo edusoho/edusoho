@@ -1,0 +1,74 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'question-modal-lg' %}
+
+{% block title %}{{'my.teaching.question_bank.question.add'|trans}}{% endblock %}
+
+{% do script(['libs/select2.js', 'app/js/question-bank/widgets/index.js']) %}
+
+{% set questionTypes = getQuestionTypes() %}
+
+{% block body %}
+<div class="question-add js-select-container">
+  {% if isSelectBank|default(0) %}
+    <div class="width-150" id="question-bank-field">
+      <select class="form-control js-question-bank" name="questionBankId" data-url="{{ path('question_bank_manage_question_pick', {id: 0}) }}">
+        {% set questionBankTree = data('QuestionBankTree', {}) %}
+        {% if questionBankTree %}
+          <option value="0">{{ 'question.select_question_bank'|trans }}</option>
+          {% for bank in questionBankTree %}
+            <option {% if bank.categoryId is not defined %} value disabled="disabled" {% else %} value="{{ bank.id }}" {% if questionBank.id|default(0) == bank.id %}selected{% endif %}{% endif %}>{% for i in 1..(bank.depth-1) if bank.depth > 1 %}　{% endfor %}{{ bank.name }}</option>
+          {% endfor %}
+        {% else %}
+          <option value="0">{{'question_bank.empty.no_auth'|trans}}</option>
+        {% endif %}
+      </select>
+    </div>
+  {% endif %}
+  {% if questionBank is defined %}
+    <div class="question-add__content clearfix">
+      <div class="question-add__line"></div>
+      <div class="question-add__left js-category-list">
+        {% include 'question-bank/question/category-list.html.twig' %}
+      </div>
+      <div class="question-add__right">
+        {% include 'question-bank/widgets/search-form.html.twig' %}
+        <input class="js-excludeIds" type="hidden" name="exclude_ids" value="{{ excludeIds|join(',')|default() }}">
+        <div class="js-select-table" data-url="{{ path('question_bank_manage_question_search', {id: questionBank.id}) }}">
+          {% include 'question-bank/widgets/question-pick-body.html.twig' %}
+        </div>
+      </div>
+    </div>
+  {% else %}
+    <div class="question-add__content">
+      <div class="cd-feedback cd-mb0">
+        <div class="text-muted">{{ 'question_bank.to_select.hint'|trans }}</div>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="question-add__content question-add__footer">
+    <div class="clearfix">
+      <div class="question-add__footer--title">{{ 'my.teaching.question_bank.question.selected'|trans }}：<span class="cd-link-primary js-select-number">0</span></div>
+      <div class="question-add__footer--btn">
+        <button class="cd-btn cd-btn-default cd-btn-sm js-clear-select">清空已选</button>
+      </div>
+    </div>
+
+    <div class="question-add__list">
+      {% for type,name in questionTypes %}
+        <div class="question-add__list__item js-list-item" data-type="{{ type }}">
+          <div>{{ name }}</div>
+          <div class="js-select-{{ type }}">0</div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+<button type="button" class="btn btn-link js-close-modal" data-dismiss="modal" tabindex="6">{{'form.btn.cancel'|trans}}</button>
+<button id="pick-btn" data-submiting-text="{{'form.btn.submit.submiting'|trans}}" type="submit" class="btn btn-primary js-pick-btn"
+  data-toggle="form-submit" data-name="{{'course.question_manage.question'|trans}}" tabindex="4">{{'form.btn.save'|trans}}</button>
+{% endblock %}

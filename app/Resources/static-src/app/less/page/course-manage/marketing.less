@@ -1,0 +1,39 @@
+.task-price-setting-group {
+  position: relative;
+  padding-bottom: 5px;
+  overflow: hidden;
+  border: 1px solid @gray-medium;
+  .border-radius;
+  .task-price-setting-group__item {
+    &:first-child {
+      border-top: none;
+    }
+    position: relative;
+    display: block;
+    padding: 2px 15px;
+    margin-bottom: -1px;
+    background-color: #fff;
+    border-top: 1px solid #ddd;
+  }
+  .price {
+    visibility: hidden;
+  }
+  .title {
+    max-width: 80%;
+  }
+  li.open {
+    .price {
+      visibility: visible;
+    }
+  }
+}
+
+.price-from-control-unset-bg {
+  background-color: unset;
+  border: none;
+  border-radius: unset;
+  box-shadow: unset;
+  padding-left: unset;
+  width: auto !important;
+  padding-right: unset;
+}

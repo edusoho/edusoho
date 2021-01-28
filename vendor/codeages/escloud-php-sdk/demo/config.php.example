@@ -1,0 +1,6 @@
+<?php
+
+return array(
+    'access_key' => '__YOUR_ACCESS_KEY__',
+    'secret_key' => '__YOUR_SECRET_KEY__',
+);

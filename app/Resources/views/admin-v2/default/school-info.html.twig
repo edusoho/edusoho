@@ -1,0 +1,57 @@
+{% set currentTheme = current_theme() %}
+{% set mobileEnabled = setting('mobile.enabled', 0) %}
+{% set isWithoutNetwork = is_without_network() %}
+
+<div class="admin-info-section">
+  <div class="admin-website text-center">
+    {% if setting('site.logo') %}
+      <a class="admin-website__logo" href="{{ path('admin_v2_school_information') }}">
+        <img src="{{ asset(setting('site.logo')) }}">
+      </a>
+    {% endif %}
+    <div class="admin-website__name"><a class="admin-website__text text-overflow" href="{{ path('admin_v2_school_information') }}">{{ setting('site.name') }}</a></div>
+    {# 三种颜色的客户等级 #}
+    <div class="">
+      <div class="rank-tag {% if schoolLevel == 'saas' %}rank-tag--yellow{% elseif schoolLevel == 'license' %}{% elseif schoolLevel == 'none' %}rank-tag--green{% endif %}">
+        <span class="rank-tag__icon"><i class="cd-icon cd-icon-star"></i></span><div class="rank-tag__text">{{ ('admin_v2.homepage.school_info.level.'~schoolLevel)|trans }}</div>
+      </div>
+      <div class="theme-tag">{{ currentTheme.name }}</div>
+    </div>
+  </div>
+</div>
+{# 网校版本信息、云服务开启情况（高级去版权不显示）#}
+{% if not setting('copyright.thirdCopyright', false) == 1 %}
+<div class="admin-update clearfix">
+  <div class="admin-update__cell clearfix">
+    <div class="admin-update__label pull-left">{{ 'admin_v2.homepage.school_info.cloud_service'|trans }}：</div>
+    {% if isWithoutNetwork %}
+      <div class="cdv2-light-minor pull-right"><div class="admin-update__number"></div>{{ 'admin_v2.homepage.school_info.cloud_service_status.not_open'|trans }}<i class="es-icon es-icon-tip admin-update__icon v2-color-gray"></i></div>
+    {% elseif disabledCloudServiceCount == 0 %}
+      <div class="cdv2-light-minor pull-right"><div class="admin-update__number"></div>{{ 'admin_v2.homepage.school_info.cloud_service_status.open'|trans }}<i class="es-icon es-icon-markdown admin-update__icon v2-color-success"></i></div>
+    {% else %}
+      <div class="admin-update__link pull-right"><div class="admin-update__number">{{ disabledCloudServiceCount }}个</div><a class="admin-update__link"  href="{{ path('admin_v2_my_cloud_overview') }}">{{ 'admin_v2.homepage.school_info.cloud_service_status.not_open'|trans }}</a><i class="es-icon es-icon-tip admin-update__icon v2-color-warning"></i></div>
+    {% endif %}
+  </div>
+  <div class="admin-update__cell clearfix">
+    <div class="admin-update__label pull-left">{{ 'admin_v2.homepage.school_info.app_center'|trans }}：</div>
+    {% if upgradeAppCount == 0 or isWithoutNetwork %}
+      <div class="cdv2-light-minor pull-right"><div class="admin-update__number"></div>{{ 'admin_v2.homepage.school_info.app_status.upgraded'|trans }}<i class="es-icon es-icon-markdone admin-update__icon v2-color-success"></i></div>
+    {% else %}
+      <div class="admin-update__link pull-right"><div class="admin-update__number">{{ upgradeAppCount }}个</div><a class="admin-update__link" href="{{ path('admin_v2_app_upgrades') }}">{{ 'admin_v2.homepage.school_info.app_status.has_upgrade'|trans }}</a><i class="es-icon es-icon-tip admin-update__icon v2-color-warning"></i></div>
+    {% endif %}
+  </div>
+  <div class="admin-update__cell clearfix">
+    <div class="admin-update__label pull-left">{{ 'admin_v2.homepage.school_info.system_upgrade'|trans }}：</div>
+    {% if mainAppUpgrade and not isWithoutNetwork %}
+      <div class="admin-update__link pull-right"><div class="admin-update__version">{{ version }}</div><a class="admin-update__link" href="{{ path('admin_v2_app_upgrades') }}">{{ 'admin_v2.homepage.school_info.system_status.has_upgrade'|trans }}</a><i class="es-icon es-icon-tip admin-update__icon v2-color-warning"></i></div>
+    {% else %}
+      <div class="cdv2-light-minor pull-right"><div class="admin-update__version">{{ version }}</div>{{ 'admin_v2.homepage.school_info.system_status.upgraded'|trans }}<i class="es-icon es-icon-markdone admin-update__icon v2-color-success"></i></div>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+<div class="admin-link">
+  <a class="admin-link__btn" href="{{ path('homepage') }}" target="_blank"><i class="es-icon es-icon-site"></i>{{ 'admin_v2.homepage.school_info.access_web'|trans }}</a>
+  <a {% if mobileEnabled %}class="admin-link__btn" href="{{ path('mobile') }}" target="_blank" {% else %}class="admin-link__btn admin-link__btn--disabled" href="{{ path('admin_v2_setting_mobile') }}"{% endif %}>{% if not mobileEnabled %}<span class="closed-tag"></span>{% endif %}<i class="es-icon es-icon-app"></i>{{ 'admin_v2.homepage.school_info.access_mobile_app'|trans }}</a>
+  <a {% if wechatAppStatus.installed|default(false) %}class="admin-link__btn js-mini-program mb0" href="javascript:;" data-src="{{ miniProgramCodeImg.img_url|default() }}" {% else %}class="admin-link__btn admin-link__btn--disabled" href="{{ path('admin_v2_wechat_app') }}"{% endif %}>{% if not wechatAppStatus.installed %}<span class="closed-tag"></span>{% endif %}<i class="es-icon es-icon-entry-miniprogram"></i>{{ 'admin_v2.homepage.school_info.access_wechat_app'|trans }}</a>
+</div>

@@ -1,0 +1,17 @@
+<div class="subject-item__operation {% if position|default(null) == 'sub' %}cd-ml32{% endif %}" data-url="{{ path('subject_edit_template', {type: type}) }}">
+  <span class="js-item-edit"><i class="es-icon es-icon-exam"></i>{{ 'course.testpaper_manage.import.re_edit.edit_item'|trans }}</span>
+  <span class="js-item-delete"><i class="es-icon es-icon-shanchu"></i>{{ 'course.testpaper_manage.import.re_edit.delete_item'|trans }}</span>
+  {% if type == 'material' %}
+    <span class="js-item-add-sub"><i class="es-icon es-icon-tianjia"></i>{{ 'course.testpaper_manage.import.re_edit.add_sub_item'|trans }}</span>
+  {% endif %}
+  {% if position|default(null) != 'sub' %}
+  	<span class="js-item-add"><i class="es-icon es-icon-tianjia"></i>{{ 'course.testpaper_manage.import.re_edit.add_item'|trans }}</span>
+  {% endif %}
+</div>
+<div class="subject-item__footer">
+  {% if position|default(null) != 'sub' %}
+    <span>{{ 'question_reedit.category_text'|trans }}：</span><span class="cd-mr24 color-primary js-category" data-toggle="tooltip" data-placement="top" title="{{ category.name|default('question_reedit.category_empty'|trans) }}">{{ category.name|default('question_reedit.category_empty'|trans)|plain_text(8) }}</span>
+  {% endif %}
+  <span>{{ 'course.testpaper_manage.question.difficulty'|trans }}：</span><span class="cd-mr24 color-primary js-difficulty">{{ dict_text('difficulty', difficulty) }}</span>
+  <span>{{ 'site.question.attr.score'|trans }}：</span><span class="color-primary js-score">{% if type == 'material' %}{{ 'course.testpaper_manage.import.re_edit.material_score_hint'|trans }}{% else %}{{ score }}{{ 'site.question.attr.score.unit'|trans }}{% endif %}</span>
+</div>

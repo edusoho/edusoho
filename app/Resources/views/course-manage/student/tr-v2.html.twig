@@ -1,0 +1,54 @@
+{% import "macro.html.twig" as web_macro %}
+
+<tr id="student-{{user.id}}-tr" class="students-item js-students-item">
+  <td>
+    <input value="{{user.id}}" type="checkbox"  autocomplete="off" data-role="batch-item" >
+  </td>
+  <td class="media media-middle" >
+    <a class="pull-left js-user-card" href="/user/{{student.userId}}" data-card-url="/user/{{student.userId}}/card/show" data-user-id="{{student.userId}}">
+      {{ web_macro.user_avatar(user, 'pull-left', 'avatar-sm') }}
+    </a>
+    <a target="_blank" href="/user/{{student.userId}}">{{ user.nickname }}</a>
+
+    {% if student.remark %}
+      <span class="color-gray text-sm js-remark" title="{{ student.remark|trans }}">({{ student.remark|trans|plain_text(16) }})</span>
+    {% endif %}
+  </td>
+  <td style="vertical-align: middle;">
+    {{ student.learningProgressPercent }}%<a class="" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_process', {'courseSetId': courseSet.id, 'courseId': course.id, 'userId': student.userId})}}">{{'course.members_manage.official_student.detail'|trans}}</a>
+  </td>
+  <td style="vertical-align: middle;">{{student.createdTime|date('Y-n-d H:i')}}</td>
+  <td style="vertical-align: middle;">{% if student.deadline|default(0) %}{{student.deadline|date('Y-n-d H:i')}}{% else %}{{'course.expiry_date.forever_mode'|trans}}{% endif %}</td>
+  <td style="vertical-align: middle;">
+    <a class="mrm link-primary" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="/message/create/{{student.userId}}">{{'course.members_manage.official_student.send_message_btn'|trans}}</a>
+    {% if app.user.isAdmin() %}
+      <a class="mrm link-primary" href="javascript:;"  data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_show', {'courseSetId': courseSet.id, 'courseId': course.id, 'userId': student.userId})}}">{{'course.members_manage.official_student.show'|trans}}</a>
+    {% endif %}
+    <div class="btn-group vertical-top">
+      <a href="#" class="mrm link-primary dropdown-toggle" data-toggle="dropdown">
+        {{'course.members_manage.official_student.more'|trans}}
+        <span class="caret mls"></span>
+      </a>
+      <ul class="dropdown-menu pull-right">
+        <li>
+          <a class="" href="" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_remark', {courseSetId: courseSet.id, courseId: course.id, userId: student.userId})}}">{{'course.members_manage.official_student.remark'|trans}}</a>
+        </li>
+        <li>
+          <a class="unfollow-student-btn" href="javascript:;" data-url="{{path('user_unfollow', {id : student.userId})}}" {% if not followings[student.userId]|default(null) %} style="display: none;"{% endif %}>{{'course.members_manage.official_student.cancel_follow_btn'|trans}}</a>
+          <a class="follow-student-btn" href="javascript:;" data-url="{{path('user_follow', {id : student.userId})}}" {% if followings[student.userId]|default(null) %} style="display: none;"{% endif %}>{{'course.members_manage.official_student.follow_btn'|trans}}</a>
+        </li>
+        {% if (app.user.isAdmin() or  app.user.isTeacher()) %}
+          <li>
+            <a class="" href="" data-toggle="modal" data-target="#modal" data-url="{{path('course_set_manage_course_students_deadline_batch', {courseSetId: course.courseSetId, courseId: course.id, ids: student.userId})}}">{{'course.members_manage.official_student.update_expiry_day_btn'|trans}}</a>
+          </li>
+        {% endif %}
+        {% if app.user.isAdmin() or setting('course.teacher_manage_student', 0) %}
+          <li>
+            <a class="js-remove-student" href="javascript:;" data-url="{{path('course_set_manage_course_students_remove', {courseSetId: courseSet.id, courseId: course.id, userId: student.userId})}}" data-user="{{'site.default.student'|trans}}">{{'course.members_manage.official_student.remove_btn'|trans}}</a>
+          </li>
+        {% endif %}
+
+      </ul>
+    </div>
+  </td>
+</tr>

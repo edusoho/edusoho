@@ -1,0 +1,28 @@
+{% import 'admin/macro.html.twig' as admin_macro %}
+<tr id="user-table-tr-{{ user.id }}">
+  <td>
+    <strong>{{ admin_macro.user_link(user) }}</strong>
+    {% if user.locked %}
+      <label class="label label-danger">{{'admin.user.teacher.basic_tab.fields.forbid_label'|trans}}</label>
+    {% endif %}
+  </td>
+   {% include 'org/parts/table-body-td.html.twig' with {orgCode: user.orgCode}%}
+  <td>
+    {% if user.promoted %}
+      <span class="label label-default">{{'admin.user.teacher.basic_tab.fields.recommend_label'|trans}}{{ user.promotedTime|date('Y-m-d') }} / {{'admin.user.teacher.basic_tab.fields.serial_num_label'|trans}}{{ user.promotedSeq }}</span>
+    {% else %}
+      <span class="text-muted">{{'admin.user.teacher.basic_tab.fields.deny_label'|trans}}</span>
+    {% endif %}
+  </td>
+  <td>
+    <span class="text-sm">{% if user.loginTime %}{{ user.loginTime|date('Y-n-d H:i:s') }}{% else %}--{% endif %}</span>
+    <br>
+    <a class="text-muted text-sm" href="http://www.baidu.com/s?wd={{ user.loginIp }}" target="_blank">{{ user.loginIp }}</a>
+  </td>
+  <td>
+    <div class="btn-group">
+      <a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_show', {id:user.id}) }}" data-url="" class="btn btn-default btn-sm">{{ 'admin.user.btn.show_btn'|trans }}</a>
+      {% include 'admin/role/templates/group-button.html.twig' with {parentCode: 'admin_teacher_manage', group:'groupButton', user: user} %}
+    </div>
+  </td>
+</tr>

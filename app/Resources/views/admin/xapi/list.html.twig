@@ -1,0 +1,44 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_xapi_statement_list' %}
+
+{% set script_controller='xapi/index' %}
+
+{% block main %}
+  {% import "macro.html.twig" as web_macro %}
+  <table class="table table-striped table-hover" id="order-table">
+    <thead>
+    <tr>
+      <th width="25%">{{ 'admin.xapi.id'|trans }}</th>
+      <th>{{ 'admin.xapi.status'|trans }}</th>
+      <th>{{ 'admin.xapi.verb'|trans }} </th>
+      <th>{{ 'admin.xapi.target_type'|trans }}</th>
+      <th>{{ 'admin.xapi.version'|trans }}</th>
+      <th>{{ 'admin.xapi.time'|trans }}</th>
+      <th>{{ 'admin.xapi.created_time'|trans }}</th>
+      <th>{{ 'admin.xapi.operation'|trans }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for statement in statements %}
+    <tr id="xapi-{{statement.id}}" style="word-break: break-all;word-wrap: break-word;">
+      <td>{{ statement.uuid  }}</td>
+      <td>{{ statement.status }}</td>
+      <td>{{ statement.verb }}</td>
+      <td>{{ statement.target_type }}</td>
+      <td>{{ statement.version }}</td>
+      <td>{{ statement.push_time|date('Y-m-d H:i:s') }}</td>
+      <td>{{ statement.created_time|date('Y-m-d H:i:s') }}</td>
+      <td><a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_xapi_statement_detail', {id: statement.id}) }}">{{'form.btn.detail'|trans}}</a></td>
+    </tr>
+    {% else %}
+      <tr><td colspan="20"><div class="empty">{{'site.datagrid.empty'|trans}}</div></td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  <div class="paginator">
+    {{ admin_macro.paginator(paginator) }}
+  </div>
+
+
+{% endblock %}

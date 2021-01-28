@@ -1,0 +1,59 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+  {% if error|default() %}
+    <div style="text-align: center; line-height: 400px;font-size: 20px;"> {{ error }}</div>
+  {% else %}
+    <script>
+      // 初始化sdk
+      window.onESCloudSDKReady = function (SDK) {
+        if (SDK.TYPE != 'Inspection') {
+          return ;
+        }
+        window.esCaptureSdk = new SDK({
+          id: "real-face-capture",
+          apiServer: "//inspection-service.qiqiuyun.net",
+        });
+        window.esCaptureSdk.on('initialized', function () {
+          console.log('云监考初始化成功.');
+        });
+      };
+    </script>
+    <script id="escloud-inspection-sdk-script" src="https://service-cdn-ali.qiqiuyun.net/inspection-sdk/1.0.1/escloud-inspection-sdk.js" async></script>
+    {% do script(['app/js/face-inspection/index.js']) %}
+    <div class="container init-container" style="">
+      <div class="row mb-4">
+        <h4>{{'facein.capture_face.title'|trans}}</h4>
+        <div class="col-sm-4">
+          <div class="row face-title js-tip-title">
+            {{'facein.capture_face.face_title'|trans}}
+          </div>
+          <div id="real-face-capture" name="real-face-capture" class="face-capture"></div>
+          <div class="face-capture-tips">
+            {{'facein.capture_face.face_title.tips'|trans}}
+          </div>
+        </div>
+        <div class="col-sm-2">
+          <div class="js-loading-container"></div>
+        </div>
+        <div class="col-sm-4">
+          <div class="row img-title js-tip-title">
+            {{'facein.capture_face.img_title'|trans}}
+          </div>
+          <div id="real-face-imgs"  class="face-capture">
+
+          </div>
+        </div>
+
+      </div>
+      <input type="text" name="token" class="hidden" value="{{token}}"/>
+
+      <div class="js-btn-group capture-btn-group">
+        <button id="capture-btn" data-url="{{path('facein_capture_upload',{code:code|default()})}}" class="btn btn-primary">{{'facein.capture_face.capture_btn'|trans}}</button>
+        <a id="capture-finish-btn" href="{{path('homepage')}}" class="btn btn-primary hidden">{{'facein.capture_face.capture_finish_btn'|trans}}</a>
+      </div>
+    </div>
+  {% endif %}
+
+
+{% endblock %}

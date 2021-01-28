@@ -1,0 +1,37 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{'message.create.content_title'|trans}}{% endblock %}
+
+{% do script(['libs/jquery-validation.js', 'app/js/user/message/index.js']) %}
+
+{% block body %}
+  <form id="message-create-form" class="form-horizontal" method="post" action="{{ path('message_create', {toId:userId}) }}">
+    <div class="form-group">
+      <div class="col-md-2 control-label">
+        <label for="message_receiver" class="required">{{ 'course.members_manage.official_student.send_message.receiver'|trans }}</label>
+      </div>
+      <div class="col-md-8 controls">
+        <input type="text" id="message_receiver" name="message[receiver]" required="required" class="form-control" rows="1" data-url="{{ path('message_check_receiver') }}" value="{{ message.receiver }}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-2 control-label">
+        <label for="message_content" class="required">{{ 'course.members_manage.official_student.send_message.content'|trans }}</label>
+      </div>
+      <div class="col-md-8 controls">
+        <textarea id="message_content" name="message[content]" required="required" class="form-control" rows="5"></textarea>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-offset-2 col-md-8 controls">
+        <button class="btn btn-primary" type="submit" data-loading-text="{{'form.btn.send.submiting'|trans}}">{{'form.btn.send'|trans}}</button>
+      </div>
+    </div>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+{% endblock %}
+
+{% set hide_footer = true %}

@@ -1,0 +1,19 @@
+<table class="table table-bordered mb0">
+  <th>
+    {% for section in assessment.sections %}
+    <td>{{ section.name }}</td>
+    {% endfor %}
+  </th>
+  <tr>
+    <td width="10%">{{'question.nums'|trans}}</td>
+    {% for section in assessment.sections %}
+    <td >{{ section.item_count|default(0) }}</td>
+    {% endfor %}
+  </tr>
+  <tr>
+    <td>{{'site.question.attr.score'|trans}}</td>
+    {% for section in assessment.sections %}
+    <td >{{ section.total_score|default(0) }}</td>
+    {% endfor %}
+  </tr>
+</table>

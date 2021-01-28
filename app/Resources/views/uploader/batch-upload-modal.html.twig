@@ -1,0 +1,16 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% set modal_class = 'modal-lg' %}
+
+{% block title %}{{'upload.content_title'|trans}}{% endblock %}
+
+{% do script([cloud_sdk_url('uploader'), 'libs/jquery-sortable.js', 'app/js/batch-upload/index.js']) %}
+
+{% block body %}
+  {% set mediaType = 'video' %}
+  {% set showVideoQuality = 1 %}
+  {% include 'file-chooser/parts/upload-file.html.twig' %}
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-primary" data-dismiss="modal">{{'form.btn.close'|trans}}</button>
+{% endblock %}

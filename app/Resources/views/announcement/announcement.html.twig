@@ -1,0 +1,30 @@
+{% set announcements = data('Announcement',{ count:3 }) %}
+{% if announcements and not app.request.cookies.get('close_announcements_alert') %}
+<div class="alert cd-alert cd-alert-warning alert-notice hidden-xs" id="announcements-alert" role="alert">
+  <div class="container swiper-container">
+    <div class="swiper-wrapper">
+      {% for announcement in announcements %}
+        {% if announcement.url %}
+        <div class="swiper-slide">
+          <i class="es-icon es-icon-infooutline mrm"></i>
+          <a style="color:#ffa51f" class="alert-link" href="{{announcement.url}}" target="_blank">
+            {{announcement.content|sub_text(50)}}
+          </a>
+        </div>
+        {% else %}
+          <div class="swiper-slide">
+            <i class="es-icon es-icon-infooutline"></i>
+            <a style="color:#ffa51f" class="alert-link" href="#modal" data-toggle="modal" data-url="{{ path('announcement_global_show', {id:announcement.id}) }}" >
+              {{announcement.content|sub_text(50)}}
+            </a>
+          </div>
+        {% endif %}
+      {% endfor %}
+
+    </div>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close" data-cookie="close_announcements_alert">
+      <span aria-hidden="true">×</span>
+    </button> 
+  </div>
+</div>
+{% endif %}

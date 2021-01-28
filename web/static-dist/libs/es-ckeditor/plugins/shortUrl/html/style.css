@@ -1,0 +1,9 @@
+.cke_button__shorturl_label {
+  display: inline;
+}
+.cke_button__shorturl_icon {
+  background: url(../../../skins/moono/icons.png) no-repeat 0 -1248px !important;
+}
+.cke_shorturl__help-block {
+  color: #ed3e3e
+}

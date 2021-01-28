@@ -1,0 +1,21 @@
+<script id="script-loader-async" type="text/javascript">
+  "use strict";
+  (function() {
+    var paths = [
+      {% for path in script() %}
+        {% if '//' in path %}
+          "{{ path ~ '?' ~ asset_version('')}}",
+        {% else %}
+          "{{ asset('static-dist/' ~ path) }}",
+        {% endif %}
+      {% endfor %}
+    ];
+
+    esScript(paths, function() {
+      var node = document.getElementById('script-loader-async');
+      if(node) {
+        node.parentNode.removeChild(node);
+      }
+    }, document.getElementById('modal'));
+  })();
+</script>

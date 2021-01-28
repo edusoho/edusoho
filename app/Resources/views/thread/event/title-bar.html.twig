@@ -1,0 +1,37 @@
+{% import "macro.html.twig" as web_macro %}
+
+  {% include 'thread/part/common-header.html.twig' %}
+
+  <div class="media topic-body">
+    {% if thread.actvityPicture %}
+      <div class="media-left">
+        <img src="{{ thread.actvityPicture }}" alt="">
+      </div>
+    {% endif %}
+    <div class="media-body">
+      <p>{{'thread.other_event.apply.time'|trans}}：{{ thread.startTime|date('date.format'|trans)}} {{'site.date.week'|trans}}{{dict_text('week',thread.startTime|date('N'))}} {{ thread.startTime|date('H:i') }}</p>
+      {% if thread.location %}
+        <p>{{'thread.other_event.apply.location'|trans }} {{thread.location}}</p>
+      {% endif %}
+      <p>{{'thread.other_event.apply.people_number'|trans}}：
+        {% if thread.maxUsers == 0 %}
+          {{'thread.other_event.apply.people_number.no_limit'|trans({'%memberNum%':thread.memberNum})}}
+        {% else %}
+          {{'thread.other_event.apply.people_number.less'|trans({'%memberNum%':thread.memberNum,'%num%':thread.maxUsers - thread.memberNum})}}
+        {% endif %}
+      </p>
+    </div>
+    <div class="metas">
+      {% if thread.maxUsers == thread.memberNum and thread.maxUsers != 0 %}
+        <a class="btn btn-danger btn-sm disabled">{{'thread.other_event.apply.people_number.full'|trans}}</a>
+        {% if member %}
+          <a class="btn btn-link btn-sm js-event-cancel"  href="javascript:;" data-url="{{ path(thread.targetType ~ '_thread_members_quit', {memberId: member.id, threadId:thread.id, (thread.targetType ~ 'Id'):thread.targetId}) }}">{{'thread.other_event.apply.people_number.cancel_apply_btn'|trans}}</a>
+        {% endif %}
+      {% elseif member is empty %}
+        <a class="btn btn-primary js-event-apply" data-toggle="modal" data-target="#modal" data-url="{{ path(thread.targetType ~ '_thread_members_become', {threadId:thread.id, (thread.targetType ~ 'Id'):thread.targetId}) }}">{{'thread.other_event.apply.people_number.apply_btn'|trans}}</a>
+      {% else %}
+        <a class="btn btn-success btn-sm js-event-apply disabled" data-toggle="modal" data-target="#modal" style="right:100px;">{{'thread.other_event.apply.people_number.applyed_btn'|trans}}</a>
+        <a class="btn btn-link btn-sm js-event-cancel" href="javascript:;" data-url="{{ path(thread.targetType ~ '_thread_members_quit', {memberId: member.id, threadId:thread.id, (thread.targetType ~ 'Id'):thread.targetId}) }}">{{'thread.other_event.apply.people_number.cancel_apply_btn'|trans}}</a>
+      {% endif %}
+    </div>
+  </div>

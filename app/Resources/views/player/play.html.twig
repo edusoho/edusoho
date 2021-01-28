@@ -1,0 +1,70 @@
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<meta content="telephone=no" name="format-detection" />
+
+{% if is_mobile_client() and context.isEncryptionPlus|default(false) %}
+  <div class=""><br>&nbsp;&nbsp;&nbsp;&nbsp;{{'site.not_support_cloud_video'|trans({'%mobileUrl%':path('mobile')})|raw}}</div>
+{% else %}
+  {% if file|default(null) %}
+    {% if file.storage == 'cloud' and file.type in ['ppt', 'document','video'] and file.convertStatus == 'error' %}
+      <div class="alert alert-danger">{{'site.cloud.file.convert_failed_tips'|trans}}</div>
+      {% elseif file.storage == 'cloud' and file.type in ['ppt', 'document','video'] and file.convertStatus != 'success' %}
+      <div class="alert alert-danger">{{'site.cloud.file.converting_tips'|trans}}</div>
+    {% else %}
+      <div style="position:absolute;top:0;bottom:0;left:0;right:0;text-align:center;">
+        <div id="lesson-video-content"
+          data-disable-mode-selection="{{context.disableModeSelection|default(false)}}"
+          data-content="{{context.content|default('')}}"
+          data-user-id="{{app.user.id|default(0)}}"
+          data-user-name="{{app.user.username|default('')}}"
+          data-file-global-id="{{file.globalId}}"
+          data-file-id="{{file.id}}"
+          data-file-storage="{{ file.storage }}"
+          data-file-type="{{file.type}}"
+          data-file-length="{{ file.length|default(0) }}"
+          data-url="{% if file.storage == 'local' %}{{url('player_local_media', {id: file.id, token: make_local_media_file_token(file), ext: file.ext})}}{% endif %}"
+          data-token="{{ context.token }}"
+          data-video-h5="{{ setting('storage.video_h5_enable')|default(1) }}"
+          data-enable-playback-rates="{{ setting('storage.enable_playback_rates')|default(false) }}"
+          data-agentInWhiteList="{{ context.agentInWhiteList|default('') }}"
+          data-strict="{{setting('storage.support_mobile', 0)}}"
+          data-js-player="{{ context.jsPlayer|default('balloon-cloud-video-player') }}"
+          data-autoplay="{{ context.autoplay|default(setting('storage.video_auto_play', true)) }}"
+          {% if not file.convertParams.hasVideoWatermark|default(0) and setting('storage.video_watermark') > 0 and setting('storage.video_watermark_image') %}
+            data-watermark="{{ fileurl(setting('storage.video_watermark_image'), null) }}"
+          {% endif %}
+          {% if setting('storage.cloud_access_key') %}
+            data-access-key="{{ setting('storage.cloud_access_key') }}"
+          {% endif %}
+          {% if setting('storage.video_fingerprint') and app.user %}
+            data-fingerprint="{{ finger_print() }}"
+            data-fingerprint-src="{{ url('cloud_video_fingerprint', {userId:app.user.id}) }}"
+            data-fingerprint-time="{{ setting('storage.video_fingerprint_time')|default(0.5) * 1000 }}"
+          {% endif %}
+          class="ballon-video-player"
+          {% if context.hideQuestion|default(0) == 0 %}
+            data-markerurl="{{ path('course_task_question_markers_show', {mediaId: file.id}) }}"
+            data-finish-question-marker-url="{{ path('course_task_question_marker_finish') }}"
+          {% endif %}
+          {% if context.subtitles is defined and context.hideSubtitle|default(0) == 0%}
+            data-subtitles="{{ context.subtitles|json_encode }}"
+          {% endif %}
+          data-remember-last-pos="{{ rememberLastPos|default(true) }}"
+          data-timelimit="{{ context.watchTimeLimit|default('')}}"
+          data-starttime="{{ context.starttime|default('')}}"
+          data-lesson-id="{{ context.lessonId|default(0)}}"
+          style="height:100%"
+        ></div>
+      </div>
+      {% if cloudSdk %}
+        <script src="{{ cloud_sdk_url(cloudSdk) }}"></script>
+      {% endif %}
+      {% do script(['libs/base.js','app/js/common.js','app/js/player/index.js'], 1000) %}
+    {% endif %}
+    {% include 'script_boot.html.twig' %}
+  {% else %}
+    <div class=""><br>&nbsp;&nbsp;&nbsp;&nbsp;{{'site.cloud.file.not_find_tips'|trans}}</div>
+  {% endif %}
+{% endif %}
+
+

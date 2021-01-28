@@ -1,0 +1,29 @@
+{% set classroomName = setting('classroom.name')|default('site.default.classroom'|trans) %}
+<div class="panel panel-default live-course-body">
+    <div class="panel-heading">
+        <h3 class="panel-title">{{'cloud_search.classroom.recommend.content_title'|trans({'%classroom%':classroomName }) }}</h3>
+    </div>
+    <div class="panel-body es-live-recommend">
+      {% set recommendClassrooms = data('RecommendClassrooms',{'count':10,'notFill':true}) %}
+      {% for classroom in recommendClassrooms if recommendClassrooms %}
+          <div class="media">
+              <div class="media-left">
+                  <a href="{{ path('classroom_show', {id: classroom.id}) }}" title="{{ classroom.title }}" target="_blank">
+                    {{ lazy_img(filepath(classroom.largePicture, 'classroom.png'), 'img-responsive es-live-recommend__img', classroom.title) }}
+                  </a>
+
+              </div>
+              <div class="media-body">
+                  <div class="title">
+                      <a href="{{ path('classroom_show', {id: classroom.id}) }}" class="gray-darker" title="{{ classroom.title }}" target="_blank">{{ classroom.title|plain_text(20) }}</a>
+                  </div>
+                  <div class="metas">
+                      <span class="classroom-course-num color-gray">{{ 'es_bar.study_place.classroom_course_num'|trans({'%courseNum%': classroom.courseNum}) }}</span>
+                  </div>
+              </div>
+          </div>
+      {% else %}
+          <div class="empty">{{'cloud_search.classroom.recommend.empty'|trans({'%classroom%':classroomName}) }}</div>
+      {% endfor %}
+    </div>
+</div>

@@ -1,0 +1,112 @@
+{% extends 'oauth2/layout.html.twig' %}
+{% do script(['libs/jquery-validation.js','app/js/oauth2/create/index.js']) %}
+
+{% block page_title %}
+  {{ 'user.oauth.register_account'|trans }}
+{% endblock %}
+
+
+{% set registerClass = 'third-party-register-panel' %}
+
+{% block panel_body %}
+
+  {% if inviteUser|default() %}
+    <div class="alert alert-info alert-sm">{{'user.register.register_through_inviter'|trans({'%inviteUser%': inviteUser.nickname})|raw}}</div>
+  {% endif %}
+
+  {% if oauthUser.mode != 'closed' %}
+    {% if oauthUser.accountType == "email" %} {% set accountType = 'user.oauth.login_by_email'|trans %}{% else %}{% set accountType = 'user.oauth.login_by_mobile'|trans %}{% endif %}
+    <div class="third-party-user-section clearfix">
+        <div class="cd-mb24 pull-left cd-mr16">
+          <img class="third-party-avatar" src="{{ asset(oauthUser.avatar) }}">
+        </div>
+        <div class="cd-mt16">
+          <div class="third-party-bind-tip">{{ 'user.oauth.register_account_by_ways'|trans({ '%accountType%': accountType }) }}</div>
+          <div class="third-party-user color-primary js-account">{{ oauthUser.account }}</div>
+        </div>
+    </div>
+
+    <form class="third-party-form clearfix" id="third-party-create-account-form" method="post">
+
+      <div class="form-group cd-form-group">
+        <label class="third-party-form__label" for="username">{{ 'user.register.username_label'|trans }}</label>
+        <input class="form-control" type="text" id="username" name="username" placeholder="{{ 'user.oauth.register.nickname_placeholder'|trans }}" data-url="{{ path('register_nickname_check') }}" value="{{ oauthUser.name }}">
+      </div>
+
+      <div class="form-group cd-form-group">
+        <label class="third-party-form__label" for="password">{{ 'user.register.password_label'|trans }}</label>
+        <input class="form-control" type="password" id="password" name="password" placeholder="{{ 'user.oauth.register.password__placeholder'|trans }}">
+      </div>
+
+      <div class="form-group cd-form-group">
+        <label class="third-party-form__label" for="confirmPassword">{{ 'user.oauth.register.confirm_password_label'|trans }}</label>
+        <input class="form-control" type="password" id="confirmPassword" name="confirmPassword" placeholder="{{ 'user.oauth.register.confirm_password_placeholder'|trans }}">
+      </div>
+
+      <div class="form-group cd-form-group js-drag-jigsaw {% if oauthUser.accountType == "mobile" or setting('auth.register_protective')|default('none') == 'none'  %} hidden {% endif %}">
+        {% include 'common/drag.html.twig' with { oauth2: true } %}
+      </div>
+
+      {% if oauthUser.accountType == "mobile" %}
+        <div class="form-group cd-form-group third-party-sms-form-group">
+          <label for="sms_code">{{ 'user.oauth.register.input_sms_code_tips'|trans }}</label>
+          <input class="form-control" type="text" maxlength="6" id="sms-code" name="sms_code" placeholder="{{ 'user.oauth.register.input_sms_code_placeholder'|trans }}">
+          <div class="third-part-action-button">
+            <button type="button" class="btn cd-btn cd-btn-ghost-primary btn-block js-sms-send">
+              <span class="js-time-left"></span>
+              <span class="js-fetch-btn-text">{{ 'user.oauth.register.send_sms'|trans }}</span>
+            </button>
+          </div>
+        </div>
+      {% endif %}
+
+      {% if (setting('invite.invite_code_setting')|default(0) == 1) and not inviteUser|default() %}
+        <div class="form-group cd-form-group">
+          <label class="control-label" for="invitedCode">{{'user.register.invite_code_label'|trans}}<span class="color-success">（{{'form.field.optional'|trans}}）</span></label>
+          <div class="controls">
+            <input type="text" name="invitedCode" id="invitedCode" class="form-control input-lg invitecode" data-url="{{path('invitecode_check')}}" placeholder="{{'user.register.invite_code_placeholder'|trans}}">
+          </div>
+        </div>
+      {% endif %}
+
+      <button class="btn cd-btn cd-btn-primary cd-btn-lg btn-block cd-mb16 js-submit-btn" id="submit-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" type="button" data-url="{{ path('oauth2_login_create') }}">{{ 'form.btn.register'|trans }}</button>
+
+      {% if setting('auth.user_terms') == 'opened' and setting('auth.privacy_policy') == 'opened' %}
+        <div class="form-group mbl">
+          <div class="controls">
+            <input type="checkbox" name="agree_policy" checked="checked"> {{ 'user.register.read_agree'|trans }}
+            <a href="{{ path('user_terms') }}" target="_blank">《{{'user.register.user_service_protocol'|trans}}》</a>
+            {{ 'site.default.and'|trans }}
+            <a href="{{ path('privacy_policy') }}" target="_blank">《{{'user.register.privacy_policy'|trans}}》</a>
+          </div>
+        </div>
+
+        <div class="controls text-center">
+          <a class="third-party-link" href="{{ path('oauth2_login_index') }}">{{ 'user.oauth.bind_existed_account'|trans }}</a>
+        </div>
+      {% elseif setting('auth.user_terms') == 'opened' %}
+        <div class="form-group mbl">
+          <div class="controls">
+            <input type="checkbox" name="agree_policy" checked="checked"> {{ 'user.register.read_agree'|trans }}
+            <a href="{{ path('user_terms') }}" target="_blank">《{{'user.register.user_service_protocol'|trans}}》</a>
+            <a class="pull-right third-party-link" href="{{ path('oauth2_login_index') }}">{{ 'user.oauth.bind_existed_account'|trans }}</a>
+          </div>
+        </div>
+      {% elseif setting('auth.privacy_policy') == 'opened' %}
+        <div class="form-group mbl">
+          <div class="controls">
+            <input type="checkbox" name="agree_policy" checked="checked"> {{ 'user.register.read_agree'|trans }}
+            <a href="{{ path('privacy_policy') }}" target="_blank">《{{'user.register.privacy_policy'|trans}}》</a>
+            <a class="pull-right third-party-link" href="{{ path('oauth2_login_index') }}">{{ 'user.oauth.bind_existed_account'|trans }}</a>
+          </div>
+        </div>
+      {% endif %}
+
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    </form>
+
+  {% else %}
+    <h1 class="text-center cd-dark-major">{{ 'user.oauth.register.closed'|trans }}</h1>
+  {% endif %}
+
+{% endblock %}

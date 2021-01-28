@@ -1,0 +1,28 @@
+<!-- 见 app/Resources/static-src/app/js/courseset/show/index.js -->
+
+<div class="js-infinite-item-template hidden">
+  {# 章隐藏/显示状态 #}
+  <li class="task-item bg-gray-lighter js-task-chapter infinite-item" display-if="{isChapter}">
+    <i class="es-icon es-icon-menu left-menu"></i>
+    <a href="javascript:" class="title gray-dark">{getChapterName}</a>
+    <i class="right-menu es-icon es-icon-remove js-remove-icon"></i>
+  </li>
+  {# 节标题 #}
+  <li class="task-item color-gray bg-gray-lighter infinite-item" display-if="{isUnit}">
+    <span class="title">{getUnitName}</span>
+  </li>
+
+  <li class="task-item task-content mouse-control infinite-item {lessonContainerClass}" display-if="{isTask}">
+    <i display-if="{isTaskLocked}" class="{taskClass}" data-toggle="tooltip" data-trigger="hover"
+       data-placement="top" title="{{ 'course.task.lock_tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}">
+    </i>
+
+    <i hide-if="{isTaskLocked}" class="{taskClass}"></i>
+
+    {% include 'admin-v2/cloud-center/content-resource/market/course-set/task-list/parts/task-link-template.html.twig' %}
+
+  </li>
+
+</div>
+
+{% include 'course/task-list/parts/task-course-data.html.twig' %}

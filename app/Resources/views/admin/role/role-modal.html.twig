@@ -1,0 +1,69 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% set topxiawebbundle = true %}
+  {% block title %}
+  {% if model == 'show' %}
+    {{ 'admin.role_manage.modal.show_modal'|trans }}
+  {% elseif model == 'edit' %}
+    {{ 'admin.role_manage.modal.edit_modal'|trans }}
+  {% else %}
+    {{ 'admin.role_manage.modal.create_modal'|trans }}
+  {% endif %}
+{% endblock %}
+{% set role = role|default(null) %}
+{% set modal = modal|default('create') %}
+
+{% block body %}
+  {{ web_macro.flash_messages() }}
+
+  <form class="form-horizontal" id="role-form" method="post"
+        action="{% if model == 'create' %} {{ path('admin_role_create') }} {% elseif model == 'edit' %} {{ path('admin_role_edit',{id:role.id}) }} {% endif %}">
+    <div class="form-group">
+      <div class="col-md-2 control-label">
+        <label for="name">{{ 'admin.role_manage.modal.role_name'|trans }}</label>
+      </div>
+      <div class="col-md-8 controls">
+        <input type="text" id="name" name="name" {% if model == 'show' %} readOnly="true" {% endif %}
+               class="form-control" value="{{ role.name|default('') }}" placeholder="{{ 'admin.role_manage.modal.name.placeholer'|trans }}"
+               data-url="{{ path('admin_role_check_name', {exclude:role.name|default('')}) }}">
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-md-2 control-label">
+        <label for="code">{{ 'admin.role_manage.modal.role_code'|trans }}</label>
+      </div>
+      <div class="col-md-8 controls">
+        <input type="text" id="code" name="code" {% if model == 'show' or model == 'edit' %}readOnly="true"{% endif %} class="form-control"
+               value="{{ role.code|default('') }}" placeholder="ROLE_ADMIN"
+               data-url="{{ path('admin_role_check_code', {exclude:role.code|default('')}) }}">
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-md-2 control-label">
+        <label>{{ 'admin.role_manage.modal.role_tree'|trans }}</label>
+      </div>
+      <div class="col-md-8">
+        <ul id="tree" class="ztree">
+          <textarea style="display:none">{{ menus }}</textarea>
+        </ul>
+      </div>
+    </div>
+
+    <input type="text" id="menus" name="data" class="hide" value="">
+    <input type="text" id="permissions" name="permissions" class="hide" value="">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+  </form>
+
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-link" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
+  {% if model != 'show' %}
+    <button id="role-submit" data-submiting-text="{{ 'form.btn.submit.submiting'|trans }}" type="submit" class="btn btn-primary" data-toggle="form-submit"
+            data-target="#role-form">{{ 'admin.role_manage.modal.add_btn'|trans }}
+    </button>
+  {% endif %}
+
+  <script>app.load('topxiaadminbundle/controller/role/create')</script>
+{% endblock %}

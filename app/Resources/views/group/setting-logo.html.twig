@@ -1,0 +1,36 @@
+{% extends 'group/setting-layout.html.twig' %}
+
+{% do script(['libs/jquery-validation.js','app/js/group/logo/index.js']) %}
+
+{% block title %}{{'group.detail.group_name'|trans({'%title%':groupinfo.title})}} - {{ parent() }}{% endblock %}
+
+{% set settingNav = 'logo' %}
+
+{% block group_setting_body %}
+  <form class="form-horizontal">
+    <div class="form-group">
+      <label class="col-md-2 control-label">{{'group.detail.group_settings.logo_setup.current_logo'|trans }}</label>
+      <div class="controls col-md-8 controls">
+        <img class="avatar-square-md" src="{{ filepath(logo, 'group.png')}}">
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-md-2 control-label">
+      </div>
+      <div class="controls col-md-8 controls">
+        <p class="help-block">
+          {{ 'group.detail.group_settings.logo_setup.tips'|trans|raw }}
+        </p>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-md-2 control-label"></div>
+      <div class="controls col-md-8 controls">
+        <a id="group-save-btn"
+        data-upload-token="{{ upload_token('tmp', 'image') }}"
+        data-goto-url="{{path('group_setLogoCrop', {id: id, page:'logoCrop'})}}"
+        class="btn btn-primary">{{'group.detail.group_settings.logo_setup.upload_btn'|trans}}</a>
+      </div>
+    </div>
+  </form>
+{% endblock %}

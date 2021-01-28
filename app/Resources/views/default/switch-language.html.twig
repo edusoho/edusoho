@@ -1,0 +1,6 @@
+<li class="{{ langClass }}">
+  <a href="{{ path('switch_language', {language: 'zh_CN', _target_path: _target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{ 'homepage.switch_language.chinese'|trans }}</a>
+</li>
+<li class="{{ langClass }}">
+  <a href="{{ path('switch_language', {language: 'en', _target_path: _target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{ 'homepage.switch_language.english'|trans }}</a>
+</li>

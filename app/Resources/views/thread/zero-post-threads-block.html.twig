@@ -1,0 +1,18 @@
+{% if threads|length > 1 or (threads|length == 1 and threads[0].id != currentThread.id) %}
+  <div class="panel panel-default">
+    <div class="panel-heading">{{'thread.not_reply_thread'|trans}}</div>
+    <div class="panel-body">
+      <ul class="media-list">
+        {% for thread in threads %}
+          {% if thread.id != currentThread.id %}
+            <li class="media">
+              <div class="media-body">
+                <a href="{{ path( thread.targetType~'_thread_show', {(thread.targetType~'Id'):thread.targetId, threadId: thread.id}) }}">{{ thread.title }}</a>
+              </div>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+{% endif %}

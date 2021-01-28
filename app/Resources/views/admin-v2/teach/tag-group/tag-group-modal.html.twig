@@ -1,0 +1,50 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'modal-lg' %}
+
+{% block title %}
+  {% if tagGroup.name|default(null) %}{{ 'admin.tag_manage.tag_group.edit.modal_title'|trans }}{% else %}{{ 'admin.tag_manage.tag_group.create.modal_title'|trans }}{% endif %}
+{% endblock %}
+{% block body %}
+  
+  <form class="form-horizontal" id="tag-group-form" action="{% if tagGroup.name|default(null) %}{{ path('admin_v2_tag_group_update',{groupId:tagGroup.id|default(null)}) }}{% else %}{{ path('admin_v2_tag_group_create') }}{% endif %}" method="post">
+    <div class="form-group">
+      <label class="col-md-3 control-label" for="tag-group-name-field">{{ 'admin.tag_manage.tag_group.name_label'|trans }}</label>
+      <div class="col-md-8 controls">
+        <input class="form-control" id="tag-group-name-field" type="text" name="name" value="{{ tagGroup.name|default(null) }}" data-url="{{ path('admin_v2_tag_group_checkname', {exclude:tagGroup.name|default(null)}) }}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-md-3 control-label">{{ 'admin.tag_manage.tag_group.apply_label'|trans }}</label>
+      <div class="col-md-6 controls" style="padding-top: 7px;">
+      <label class="required"><input type="checkbox" data-role="batch-select" name="scope[]" value="course" {% if 'course' in tagGroup.scope|default('') %}checked="checked"{% endif %}>{{ 'admin.tag_manage.tag_group.course_filter_checkbox'|trans }}</label>
+      
+      <label class="required"><input type="checkbox" data-role="batch-select" name="scope[]" value="classroom" {% if 'classroom' in tagGroup.scope|default('') %}checked="checked"{% endif %}>
+        {{ 'admin.tag_manage.tag_group.classroom_filter_checkbox'|trans }}</label>
+      </div>
+    </div>
+  
+    <div class="form-group">
+      <label class="col-md-3 control-label">{{ 'admin.tag_manage.tag_group.contain_label'|trans }}</label>
+      <div class="col-md-8 controls">
+        <input class="form-control" id="tags" type="text" name="tags" value="{{ tags|default('')|join(',') }}" data-url="{{ path('tag_match') }}">
+        <div class="help-block">
+          {{ 'admin.tag_manage.tag_group.contain_tips'|trans }}
+        </div>
+      </div>
+    </div>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+  <script type="text/javascript">app.load('tag-group/save-modal');</script>
+{% endblock %}
+
+{% block footer %}
+  {% if tagGroup.name|default(null) %}
+    <button class="btn btn-default pull-left delete-tag-group" data-url="{{ path('admin_v2_tag_group_delete', {tagId:tagGroup.id}) }}" data-target="{{ tagGroup.id }}" data-tag-group-id="{{ tagGroup.id }}"><i class="glyphicon glyphicon-trash"></i> {{ 'form.btn.delete'|trans }}</button>
+  {% endif %}
+
+  <button type="button" class="btn btn-link" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
+  <button id="tag-group-create-btn" data-submiting-text="{{ 'form.btn.submit.submiting'|trans }}" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#tag-group-form">{{ 'form.btn.save'|trans }}</button>
+{% endblock %}

@@ -1,0 +1,81 @@
+<script>
+    if (typeof app === 'undefined') {
+        var app = {};
+    }
+
+    if (!app.lazyPool) {
+        app.lazyPool = [];
+    }
+
+    if(!app.lazyLoads){
+        app.lazyLoads = function() {
+            for (var index in app.lazyPool) {
+                app.lazyPool[index]();
+            }
+            app.lazyLoad && app.lazyLoad();
+        }
+    }
+
+    var script = function (scripts, fn, target) {
+        if (!scripts.length) return;
+        target = !target ? document.getElementsByTagName('body')[0] : target;
+        (function callback(s) {
+            s = scripts.shift();
+            !scripts.length ? loadJs(s, fn, target) : loadJs(s, callback, target);
+        }());
+    }
+
+    var loadJs = function (path, fn, target) {
+        var elem = document.createElement('script'),
+            loaded;
+        elem.onload = elem.onerror = elem.onreadystatechange = function () {
+            if ((elem.readyState && !(/^c|loade/.test(elem.readyState))) || loaded) {
+                return;
+            }
+            elem.onload = elem.onreadystatechange = null;
+            loaded = 1;
+            fn();
+        }
+        elem.async = 1;
+        elem.src = path;
+        target.appendChild(elem);
+    }
+
+    window.seajsBoot = function() {
+
+        if (typeof seajs !== 'undefined') {
+            app.lazyLoads&&app.lazyLoads();
+            return ;
+        }
+
+        app.debug = {% if app.debug %} true {% else %} false {% endif %};
+        app.jsPaths = {{ js_paths()|json_encode|raw }};
+
+        window.CKEDITOR_BASEPATH = app.basePath + '/assets/libs/ckeditor/4.6.7/';
+
+        app.arguments = {};
+        {% if script_controller is defined %}
+        app.controller = '{{ script_controller }}';
+        {% endif %}
+        {% if script_arguments is defined %}
+        app.arguments = {{ script_arguments|json_encode|raw }};
+        {% endif %}
+
+        app.scripts = {{ export_scripts()|default(null)|json_encode|raw }};
+        app.mainScript = '{{ script_main }}';
+
+        var paths = [
+            "{{ asset('assets/libs/seajs/seajs/2.2.1/sea.js') }}",
+            "{{ asset('assets/libs/seajs/seajs-style/1.0.2/seajs-style.js') }}",
+            "{{ asset('assets/libs/seajs/seajs-text/1.1.1/seajs-text.min.js') }}",
+            "{{ asset('assets/libs/seajs-global-config.js') }}"
+        ];
+
+        script(paths, function() {
+            seajs.use(app.mainScript, function() {
+                app.lazyLoads();
+            });
+        });
+    }
+
+</script>

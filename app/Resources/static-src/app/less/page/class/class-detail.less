@@ -1,0 +1,315 @@
+@import './class-detail-header.less';
+@import './class-detail-before.less';
+@import './class-detail-after.less';
+
+// 班级-课程列表
+.class-course-list {
+  .course-item {
+    margin-top: 30px;
+    background-color: #fff;
+    border: 1px solid @gray-light;
+    .border-radius;
+    .media {
+      position: relative;
+      background-color: @gray-lighter;
+      padding: 10px;
+      .media-left {
+        padding-right: 35px;
+        @media (min-width: @screen-xs-max) and (max-width: @screen-md-max) {
+          padding-right: 15px;
+        }
+        img {
+          width: 160px;
+          height: auto;
+        }
+        @media (max-width: @screen-xs-max) {
+          display: block;
+          padding-right: 0;
+          img {
+            width: 100%;
+          }
+        }
+      }
+      .title {
+        font-size: 18px;
+        margin-bottom: 10px;
+        @media(min-width:@screen-xs-max) {
+          margin-right: 72px;
+        }
+        @media (min-width: @screen-xs-max) and (max-width: @screen-md-max) {
+          margin-right: 24px;
+        }
+        > a {
+          color: @gray-darker;
+        }
+      }
+      .price {
+        position: absolute;
+        top: 35px;
+        right: 80px;
+        span {
+          font-size: 24px;
+          color: @gray-darker;
+        }
+        @media (max-width: @screen-md-max) {
+          right: 60px;
+          span {
+            font-size: 20px;
+          }
+        }
+      }
+      .course-show {
+        position: absolute;
+        top: 40px;
+        right: 30px;
+        .es-transition;
+        @media (max-width: @screen-md-max) {
+          right: 20px;
+        }
+        @media (max-width: @screen-xs-max) {
+          top: auto;
+          bottom: 30px;
+        }
+        i {
+          font-size: 24px;
+        }
+        &:hover {
+          cursor: pointer;
+          color: @brand-primary;
+          .es-transition;
+        }
+      }
+    }
+    .class-course-score {
+      @media (min-width: @screen-xs-min) {
+        position: absolute;
+        right: 80px;
+        bottom: 10px;
+        margin-bottom: 0;
+      }
+    }
+    .class-course-price {
+      position: absolute;
+      bottom: 10px;
+      line-height: 1;
+      color: #666;
+      .origin-price {
+        margin-left: 4px;
+        font-size: 18px;
+        color: #151515;
+      }
+    }
+  }
+}
+
+// 班级tab内容
+.class-detail-content {
+  min-height: 300px;
+  .class-about {
+    p {
+      line-height: 30px;
+      margin-bottom: 30px;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  }
+}
+
+.topic-detail {
+  .topic-header {
+    position: relative;
+    margin-bottom: 30px;
+    .media-body {
+      padding-right: 100px;
+    }
+    .title {
+      font-size: 16px;
+      margin-bottom: 10px;
+      > a {
+        color: @gray-dark;
+        .es-transition;
+        &:hover {
+          color: @brand-primary;
+          .es-transition;
+        }
+      }
+    }
+    .metas {
+      color: @gray;
+      > a {
+        color: @gray-dark;
+        margin-right: 5px;
+        .es-transition;
+        &:hover {
+          color: @brand-primary;
+          .es-transition;
+        }
+      }
+      span {
+        margin-left: 5px;
+      }
+    }
+    .media-data {
+      position: absolute;
+      top: 10px;
+      right: 0;
+      text-align: center;
+      color: @gray;
+      span {
+        padding: 0 10px;
+        display: inline-block;
+        + span {
+          border-left: 1px solid @gray-light;
+        }
+      }
+
+    }
+  }
+  .topic-body {
+    position: relative;
+    background-color: @gray-lighter;
+    padding: 15px;
+    margin-bottom: 30px;
+    border: 1px solid @gray-light;
+    .border-radius;
+    .media-left {
+      padding-right: 30px;
+      @media (max-width: @screen-md-max) {
+        padding-right: 20px;
+      }
+      @media (max-width: @screen-xs-max) {
+        display: block;
+        padding-right: 0;
+        margin-bottom: 20px;
+      }
+      img {
+        width: 200px;
+        height: auto;
+        @media (max-width: @screen-xs-max) {
+          width: 100%;
+        }
+      }
+    }
+    .media-body {
+      padding-right: 180px;
+      @media (max-width: @screen-xs-max) {
+        padding-right: 0;
+      }
+      p {
+        color: @gray;
+        margin-bottom: 18px;
+        text-indent: 0;
+        @media (max-width: @screen-md-max) {
+          margin-bottom: 10px;
+        }
+      }
+    }
+    .metas {
+      position: absolute;
+      top: 50%;
+      margin-top: -20px;
+      right: 20px;
+      @media (max-width: @screen-md-max) {
+        right: 10px;
+      }
+      @media (max-width: @screen-xs-max) {
+        position: relative;
+        margin-top: 10px;
+      }
+      .btn {
+        margin-left: 10px;
+      }
+    }
+  }
+  .topic-num {
+    .num-list {
+      height: 50px;
+      overflow: hidden;
+      .es-transition;
+      a {
+        display: inline-block;
+        margin: 5px 3px;
+      }
+      &.active {
+        height: 100%;
+        .es-transition;
+      }
+    }
+    .num-more {
+      padding-top: 20px;
+      text-align: center;
+      i {
+        font-size: 24px;
+        color: @gray-dark;
+        .es-transition;
+        &:hover {
+          color: @brand-primary;
+          cursor: pointer;
+          .es-transition;
+        }
+      }
+    }
+  }
+  .topic-action {
+    padding-bottom: 20px;
+    border-bottom: 1px solid @gray-lighter;
+    text-align: right;
+    a {
+      margin: 0 10px;
+      @media (max-width: @screen-xs-max) {
+        margin: 0;
+      }
+    }
+    i {
+      margin-right: 5px;
+    }
+  }
+}
+
+.comment-list {
+  list-style-type: none;
+  padding-left: 0;
+  .comment .comment-delete-btn {
+    visibility: hidden;
+  }
+  .comment-operated:hover .comment-delete-btn {
+    visibility: visible;
+  }
+}
+
+// 签到
+.class-signin {
+  position: relative;
+  padding: 0;
+  color: @gray;
+  .panel-body {
+    padding: 23px 15px;
+  }
+  i {
+    font-size: 24px;
+    margin: 0 10px 0 0;
+  }
+  .date {
+    font-size: 22px;
+  }
+  .btn-signin {
+    position: absolute;
+    padding: 20px 10px;
+    min-width: 110px;
+    line-height: 40px;
+    text-align: center;
+    font-size: 16px;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    color: #fff;
+    background-color: @brand-primary;
+    .border-top-right-radius();
+    .border-bottom-right-radius();
+    &.after {
+      line-height: 20px;
+    }
+  }
+}

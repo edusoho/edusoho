@@ -1,0 +1,32 @@
+{% extends 'task/plugin/base.html.twig' %}
+
+{% do script(['app/js/task/plugin/note/index.js']) %}
+
+{% block content %}
+  <form id="task-note-plugin-form" method="post"
+        action="{{ path('course_task_note_save', {courseId: task.courseId, taskId: task.id}) }}">
+    <div class="form-group note-content">
+      <div class="controls">
+        <textarea class="form-control type-hidden" id="note-content-field" name="content"
+          data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}">
+          {{ note.content|default('') }}
+        </textarea>
+      </div>
+    </div>
+
+    <input type="hidden" value="{{ note.taskId|default(task.id) }}" name="taskId">
+    <input type="hidden" value="{{ note.courseId|default(task.courseId) }}" name="courseId">
+
+    <div class="form-group note-actions">
+      <div class="controls clearfix">
+        <button id="note-save-btn" class="btn btn-primary pull-right" type="submit">{{'course.note.save_btn'|trans}}</button>
+        <label class="color-gray mts">
+          <input type="checkbox" name="status" {% if note.status|default(1) %}checked {% endif %}>
+          {{'course.note.share_btn'|trans}}
+        </label>
+        <p class="color-gray mt10 text-right" data-role="saved-message"></p>
+      </div>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+{% endblock %}

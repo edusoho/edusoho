@@ -1,0 +1,24 @@
+{
+  "family": "gallery",
+  "name": "raphael",
+  "version": "2.1.2",
+  "homepage": "http://raphaeljs.com",
+  "description": "Raphaël: Cross-browser vector graphics the easy way.",
+  "author": [
+    "Dmitry Baranovskiy <dmitry@baranovskiy.com>"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DmitryBaranovskiy/raphael.git"
+  },
+  "bugs": {
+    "url": "https://github.com/DmitryBaranovskiy/raphael/issues"
+  },
+  "spm": {
+    "alias": {
+    },
+    "output": [
+      "raphael.js"
+    ]
+  }
+}

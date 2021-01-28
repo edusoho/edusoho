@@ -1,0 +1,20 @@
+{% if not students is empty %}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">{{ 'course.newest_students.content_title'|trans }}</h3>
+  </div>
+  <div class="panel-body">
+    <ul class="user-avatar-list clearfix">
+      {% for student in students %}
+        <li>
+          <a class="user-dropdown-info__avatar {% if not student.destroyed|default(0) %}js-user-card{% endif %}" href="{{ path('user_show', {'id': student.id}) }}" data-card-url="{{ path('user_card_show', {userId: student.id}) }}"
+            data-user-id="{{ student.id }}" data-original-title="" title="">
+            <img class="avatar-sm" src="{{ filepath(student.smallAvatar, 'avatar.png') }}">
+            {{ slot('header.user.logo', {user: student}) }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endif %}

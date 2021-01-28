@@ -1,0 +1,49 @@
+{% import 'admin/macro.html.twig' as admin_macro %}
+<tr id="job-table-tr-{{ job.id }}">
+    <td>
+        {{ job.name }}
+    </td>
+
+    <td>
+        {{ job.class }}
+    </td>
+
+    <td>
+        {{ job.source }}
+    </td>
+
+    <td>
+        {{ job.pre_fire_time|date('Y-m-d H:i:s') }}
+    </td>
+
+    <td>
+        {{ job.next_fire_time|date('Y-m-d H:i:s') }}
+    </td>
+
+    <td>
+        {% if job.enabled %}
+            {{ 'admin.crontab_job.enable'|trans }}
+        {% else %}
+            {{ 'admin.crontab_job.disable'|trans }}
+        {% endif %}
+    </td>
+
+    <td>
+        <div class="btn-group">
+            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                {{'admin.crontab_job.operation'|trans}}
+                <span class="caret"></span>
+            </button>
+
+            <ul class="dropdown-menu">
+                <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_job_fires', {'id': job.id}) }}" ><span class="glyphicon"></span> {{'admin.crontab_job.run_log'|trans}}</a></li>
+                {% if job.enabled %}
+                    <li><a class="job-enabled" data-url="{{ path('admin_job_disabled', {'id': job.id}) }}" target="_blank"><span class="glyphicon"></span> {{'admin.crontab_job.disable'|trans}}</a></li>
+                    <li><a href="#modal" data-url="{{ path('admin_job_set_next_exec_time', {id:job.id}) }}" data-toggle="modal"><span>{{ 'admin.crontab_job.set_next_fire_time'|trans }}</span></a></li>
+                {% else %}
+                    <li><a class="job-enabled" data-url="{{ path('admin_job_enabled', {'id': job.id})}}" target="_blank"><span class="glyphicon"></span> {{'admin.crontab_job.enable'|trans}}</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </td>
+</tr>

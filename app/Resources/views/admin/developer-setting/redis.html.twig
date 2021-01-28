@@ -1,0 +1,74 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Redis Setting - {{ parent() }}{% endblock %}
+
+{% set menu = 'admin_setting_message' %}
+
+{% block content %}
+<div class="page-header"><h1>Redis Setting</h1></div>
+
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" method="post" novalidate>
+
+  <div class="form-group">
+    <div class="controls col-md-10 radios">
+      {{ radios('opened', {'1':'site.datagrid.radios.open'|trans, '0':'site.datagrid.radios.close'|trans}, redis.opened|default('0')) }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="controls col-md-12">
+      <textarea class="form-control" rows="10" name="setting">{{ redis.setting }}</textarea>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="controls col-md-12">
+      <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+
+<div class="alert alert-danger">
+  {% verbatim %}
+    <h4>{{'admin.redis_setting.need_careful_tips'|trans}}</h4>
+    <ul>
+      <li>
+        {{'admin.redis_setting.redis_config_case'|trans}}{
+          "default" :{
+            "host": "127.0.0.1",
+            "port": 6379,
+            "timeout": 1,
+            "reserved": null,
+            "retry_interval": 100
+          }
+        }
+      </li>
+      <li>
+        {{'admin.redis_setting.redis_cluster_config_case'|trans}}{
+          "default" :{"servers": [{
+            "host": "127.0.0.1",
+            "port": 6379,
+            "timeout": 1,
+            "reserved": null,
+            "retry_interval": 100
+          },
+          {
+            "host": "127.0.0.1",
+            "port": 6379,
+            "timeout": 1,
+            "reserved": null,
+            "retry_interval": 100
+          }]
+          }
+        }
+      </li>
+    </ul>
+  {% endverbatim %}
+</div>
+
+{% endblock %}

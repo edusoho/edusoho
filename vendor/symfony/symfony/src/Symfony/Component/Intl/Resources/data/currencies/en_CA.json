@@ -1,0 +1,13 @@
+{
+    "Version": "36",
+    "Names": {
+        "CAD": [
+            "$",
+            "Canadian Dollar"
+        ],
+        "VES": [
+            "VES",
+            "Venezuelan Bolívar"
+        ]
+    }
+}

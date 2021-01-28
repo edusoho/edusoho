@@ -1,0 +1,22 @@
+{% set showScore = showScore|default(1) %}
+<div class="clearfix">
+  <div class="testpaper-question-seq-wrap">
+    <div class="testpaper-question-seq">
+      {{ question.seq|default(null) }}
+    </div>
+    {% if showScore %}
+      <div class="testpaper-question-score">
+        {{ question.score|default('0.0') }}{{'site.question.attr.score.unit'|trans}}
+      </div>
+    {% endif %}
+  </div>
+    <div class="testpaper-question-stem">
+      {% if question.type == 'fill' %}
+        {{ question.stem|fill_question_stem_html|bbCode2Html|raw|nl2br }}
+      {% else %}
+        {{ question.stem|bbCode2Html|raw|nl2br }}
+      {% endif %}
+    	
+      {% include 'attachment/widget/list.html.twig' with {targetType:'question.stem', targetId:question.id|default(null)  } %}
+    </div>
+</div>

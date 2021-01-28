@@ -1,0 +1,35 @@
+.es-piece {
+  margin-bottom: 30px;
+  .piece-header {
+    position: relative;
+    margin: 5px auto 20px auto;
+    padding: 0 30px 0 15px;
+    color: @gray-darker;
+    font-size: 16px;
+    &:after {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 3px;
+      width: 4px;
+      height: 16px;
+      background-color: @brand-primary;
+    }
+    .more {
+      position: absolute;
+      right: 0;
+      top: 5px;
+    }
+  }
+  .piece-body {
+    .piece-body-list {
+      list-style-type: none;
+      padding: 0;
+      margin-bottom: 0;
+      > li {
+        padding: 15px 0;
+        border-bottom: 1px solid @gray-lighter;
+      }
+    }
+  }
+}

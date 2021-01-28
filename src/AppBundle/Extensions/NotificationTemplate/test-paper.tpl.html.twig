@@ -1,0 +1,51 @@
+{% import 'macro.html.twig' as macro %}
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+      {% set data = notification.content %}
+
+      {% set who = macro.link(data.userName, path('user_show',{id:data.userId})) %}
+      {% set what = data.name %}
+
+      {# do #}
+      {% if data.testpaperType|default('testpaper') == 'homework'%}
+
+        {% if data.type == 'perusal' %}
+          {% set do = macro.link('notification.test-paper.perusal.do'|trans, path('course_manage_homework_check',{id:data.courseId,answerRecordId:data.id})) %}
+        {% elseif data.type == 'read' %}
+          {% set do = macro.link('notification.test-paper.read.do'|trans, path('homework_result_show',{answerRecordId:data.id,action:'my'})) %}
+        {% endif %}
+
+      {% else %}
+
+        {% if data.type == 'perusal' %}
+          {% if data.courseId|default(0) %}
+            {% set do = macro.link('notification.test-paper.perusal.do'|trans, path('course_manage_testpaper_check',{id:data.courseId,answerRecordId:data.id})) %}
+          {% else %}
+            {% set do = macro.link('notification.test-paper.perusal.do'|trans, path('testpaper_check',{answerRecordId:data.id})) %}
+          {% endif %}
+        {% elseif data.type == 'read' %}
+          {% set do = macro.link('notification.test-paper.read.do'|trans, path('testpaper_result_show',{answerRecordId:data.id,action:'my'})) %}
+        {% endif %}
+
+      {% endif %}
+
+      {% if data.type == 'perusal' %}
+        {{ 'notification.test-paper.perusal'|trans({'%who%':who, '%what%':what, '%do%':do})|raw }}
+      {% endif %}
+
+      {% if data.type == 'read' %}
+        {{ 'notification.test-paper.read'|trans({'%who%':who, '%what%':what, '%do%':do})|raw }}
+      {% endif %}
+
+
+    </div>
+    <div class="notification-footer">
+     {{ notification.createdTime|date_format }}  
+    </div>
+  </div>
+</li>
+

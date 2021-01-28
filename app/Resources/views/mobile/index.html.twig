@@ -1,0 +1,85 @@
+{% extends 'layout.html.twig' %}
+{% block title %}{{'mobile.page_title'|trans}} - {{ parent() }}{% endblock %}
+{% set isEsApp = (mobileCode == 'edusohov3') %}
+
+{% set bodyClass="mobile-page" %}
+
+{% do script(['libs/jquery-waypoints.js','app/js/mobile/index.js']) %}
+
+{% block full_content %}
+  <div class="js-mobile-item mobile-first">
+    <div class="container">
+      <img class="img-one hidden-xs" src="{{asset("assets/v2/img/mobile/phone_black.png")}}" alt="">
+      <div class="img-two hidden-xs">
+        <img class="img-two-bg" src="{{asset("assets/v2/img/mobile/phone_white_bg.png")}}" alt="">
+        {% if setting('mobile.appcover') %}
+        <img class="img-two-content" src="{{asset(setting('mobile.appcover'))}}" alt="">
+        {% else %}
+        <img class="img-two-content" src="{{asset("assets/v2/img/mobile/phone_white_content.png")}}" alt="">
+        {% endif %}
+      </div>
+      <div class="mobile-content">
+        <div class="title clearfix">
+          {% if setting('mobile.applogo') %}
+            <img src="{{asset(setting('mobile.applogo'))}}" alt="">
+          {% else %}
+            <img src="{{asset("assets/v2/img/mobile/app_logo.png")}}" alt="">
+          {% endif %}
+          <span class="visible-xs-inline-block">{% if not isEsApp %}{{mobileSetting.appname|default('mobile.app_name'|trans)}}{% else %}{{'mobile.app_name'|trans}}{% endif %}</span>
+          <div class="title__text hidden-xs">{% if not isEsApp %}{{mobileSetting.appname|default('mobile.app_name'|trans)}}{% else %}{{'mobile.app_name'|trans}}{% endif %}</div>
+        </div>
+        <div class="subtitle">
+          {% if not isEsApp %}
+            {{mobileSetting.appabout|default('mobile.app_tips'|trans)}}
+          {% else %}
+              {{'mobile.app_tips'|trans}}
+          {% endif %}
+        </div>
+        <a class="btn-mobile js-btn-mobile" href="javascript:;" data-url=".mobile-second">{{'mobile.app_download_btn'|trans}}<i class="es-icon es-icon-filedownload"></i></a>
+
+        {% if isEsApp %}
+        <a class="btn-mobile js-btn-mobile" href="javascript:;" data-url=".mobile-third">{{'mobile.app_login_btn'|trans}}<i class="es-icon es-icon-phone1"></i></a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <div class=" mobile-second">
+    <div class="container">
+      <div class="step">
+        {% if mobileCode == 'edusohov3' %}
+          {{ 'mobile.step_one'|trans|raw }}
+        {% endif %}
+          {{'mobile.step_one_tips'|trans}}
+      </div>
+      <div class="row">
+        <div class="col-sm-6 text-center">
+          <img class="qrcode" src="{{ path('mobile_download_qrcode',{code:mobileCode}) }}" alt="">
+        </div>
+        <div class="col-sm-6 text-center">
+          <a href="{{ path('mobile_download', {client:'android',code:mobileCode}) }}" class="btn-android"><i class='es-icon es-icon-android'></i>{{ 'mobile.Android_client'|trans }}</a>
+          <a href="{{ path('mobile_download', {client:'iphone',code:mobileCode}) }}" class="btn-apple"><i class='es-icon es-icon-apple'></i>{{ 'mobile.iPhone_client'|trans }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% if isEsApp %}
+  <div class="js-mobile-item mobile-third">
+    <div class="container">
+      <div class="step">
+        {{ 'mobile.step_two'|trans|raw }}
+      </div>
+      <div class="row">
+        <div class="col-sm-6 text-center">
+          <img class="thumb" src="{{asset("assets/v2/img/mobile/phone_gui.png")}}" alt="">
+        </div>
+        <div class="col-sm-6 text-center">
+          <div class="qrcode">
+            <p>{{'mobile.app_login_tips'|trans}}</p>
+            <img src="{{ path('mobile_qrcode') }}" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+{% endblock %}

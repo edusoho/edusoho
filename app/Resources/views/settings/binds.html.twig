@@ -1,0 +1,67 @@
+{% extends 'v2/layout.html.twig' %}
+
+{% block title %} {{ 'user.settings.oauth'|trans }} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'binds' %}
+
+{% set settings = setting('login_bind', []) %}
+
+{% set weChatUser = data('WeChatUser', {userId: app.user.id|default(-1)}) %}
+
+{% do script(['libs/jquery-intro.js', 'app/js/settings/binds/index.js']) %}
+
+{% block page_title %}
+  {{ 'user.settings.oauth.content_title'|trans }}
+{% endblock %}
+
+{% block main_body %}
+  {{ web_macro.flash_messages(true) }}
+  {% for type, client in clients %}
+    {% if (settings[type ~ '_enabled']|default(false) and type != 'weixinmob') or type == 'apple' %}
+      <div class="es-setting">
+        <span class="setting-icon">
+          {% if type == 'apple' %}
+            <i class="es-icon es-icon-{{ client.icon_class }}" style="color: black"></i>
+          {% else %}
+            <i class="cd-icon cd-icon-{{ client.icon_class }}"></i>
+          {% endif %}
+        </span>
+        <span class="setting-title">{% if type == 'weixinweb' %}{{ 'user.settings.oauth.weixin'|trans }}{% else %}{{ client.name }}{% endif %}</span>
+        <span class="setting-action">
+          {% if client.status|default(null) == 'bind' %}
+            <span class="es-setting-status es-setting-status-done">{{ 'user.fields.mobile_label.bind'|trans }}</span>
+            <a class="btn cd-btn cd-btn-ghost-default js-unbind-btn" data-url="{{ path('settings_binds_unbind', {'type':type}) }}" href="javascript:;">{{ 'form.btn.bind_cancel'|trans }}</a>
+          {% elseif client.status|default(null) != 'bind' and type == 'apple' %}
+            <span class="es-setting-status">{{'user.fields.mobile_label.no_bind'|trans}}</span>
+            <a class="btn cd-btn cd-btn-ghost-default" href="javascript:" disabled="disabled" data-toggle="tooltip" data-placement="top" title="{{'user.fields.mobile_label.apple_tip'|trans}}">{{ 'form.btn.bind_account'|trans }}</a>
+          {% else %}
+            <span class="es-setting-status">{{'user.fields.mobile_label.no_bind'|trans}}</span>
+            <a class="btn cd-btn cd-btn-ghost-default {% if type == 'weixinweb' %}js-wechat-btn{% endif %}" href="{{ path('settings_binds_bind', {'type':type}) }}">{{ 'form.btn.bind_account'|trans }}</a>
+          {% endif %}
+        </span>
+      </div>
+      <input type="hidden" data-status="{% if type == 'weixinweb' and client.status|default(null) == 'bind' %}bind{% endif %}" name="wechat_notification_enabled" id="wechat_notification_enabled" value="{{setting('wechat.wechat_notification_enabled')|default(false)}}">
+
+      {% if type == 'weixinweb' and client.status|default(null) == 'bind' and setting('wechat.wechat_notification_enabled')|default(false) and not weChatUser.isSubscribe|default(false) %}
+        <div class="wechat-inform-section text-center">
+          <div class="wechat-inform-title">{{ 'wechat.notification.open_notification_hint_title'|trans }}</div>
+          <div class="wechat-inform-subtitle cd-text-danger">{{ 'wechat.notification.open_notification_hint_content'|trans }}</div>
+          <div class="wechat-inform-content cd-mt40 row">
+            <div class="wechat-inform-content__qcode col-xs-offset-2 col-xs-4">
+              {% if weChatUser %}
+                <img src="{{ setting('wechat.account_code') }}">
+              {% else %}
+                <img id="wechat-login-qrcode" data-url="{{ path('login_wechat_qrcode') }}" src="">
+              {% endif %}
+            </div>
+            <div class="wechat-inform-content__img col-xs-offset-1 col-xs-4">
+              <img src="{{ asset('static-dist/app/img/wechat-inform/wechat-follow.png') }}" srcset="{{ asset('static-dist/app/img/wechat-inform/wechat-follow.png') }} 1x, {{ asset('static-dist/app/img/wechat-inform/wechat-follow@2x.png') }} 2x">
+              <div class="wechat-inform-content__tip">{{ 'wechat.notification.account_qrcode_scan'|trans }}</div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    {% endif %}
+
+  {% endfor %}
+{% endblock %}

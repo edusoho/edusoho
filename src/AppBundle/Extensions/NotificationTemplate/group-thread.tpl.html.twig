@@ -1,0 +1,63 @@
+{% import 'macro.html.twig' as macro %}
+{% autoescape false %}
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+      {% set data = notification.content %}
+      {% set groupId = data.groupId|default(0) ? data.groupId: data.id|default(0)%}
+
+      {% if data.userId|default(false) %}
+        {% set who = macro.link(data.userName, path('user_show',{id:data.userId})) %}
+      {% endif %}
+
+      {% if data.type == 'delete' %}
+        {% set thread = '<strong>“' ~ data.title ~ '”</strong>' %}
+      {% elseif data.type == 'reply' %}
+        {% set thread = macro.link(data.title, path('group_thread_show', {id:data.id, threadId:data.threadId})~'?page='~data.page~'#post-'~data.post) %}
+      {% elseif data.type == 'type-modify' %}
+        {% set url = data.targetType~'_thread_show' %}
+        {% set urlId = data.targetType~'Id'%}
+        {% set thread = macro.link(data.title, path(data.targetType~'_thread_show' ,{(data.targetType~'Id'):data.targetId,threadId:data.targetId})) %}
+      {% elseif data.type == 'modify' or data.type == 'collect' %}
+        {% set thread = macro.link(data.title, path('group_thread_show',{id:data.id, threadId:data.threadId})) %}
+      {% else %}
+        {% set thread = macro.link(data.title, path('group_thread_show',{id: groupId, threadId:data.threadId})) %}
+      {% endif %}
+
+       {% if data.type == 'delete'%}
+         {{ 'notification.group-thread.delete'|trans({'%thread%':thread, '%who%':who}) }}
+       {% elseif data.type == 'elite' %}
+         {{ 'notification.group-thread.elite'|trans({'%thread%':thread}) }}
+       {% elseif data.type == 'unelite' %}
+         {{ 'notification.group-thread.unelite'|trans({'%thread%':thread}) }}
+       {% elseif data.type == 'top' %}
+         {{ 'notification.group-thread.top'|trans({'%thread%':thread}) }}
+       {% elseif data.type == 'untop' %}
+         {{ 'notification.group-thread.untop'|trans({'%thread%':thread}) }}
+       {% elseif data.type == 'close' %}
+         {{ 'notification.group-thread.close'|trans({'%thread%':thread}) }}
+       {% elseif data.type == 'open' %}
+         {{ 'notification.group-thread.open'|trans({'%thread%':thread}) }}
+       {% elseif data.type == 'modify' %}
+         {{ 'notification.group-thread.modify'|trans({'%thread%':thread}) }}
+       {% elseif data.type == 'collect'%}
+         {{ 'notification.group-thread.collect'|trans({'%thread%':thread, '%who%':who}) }}
+       {% elseif data.type == 'uncollect'%}
+         {{ 'notification.group-thread.uncollect'|trans({'%thread%':thread, '%who%':who}) }}
+       {% elseif data.type == 'reply' %}
+         {{ 'notification.group-thread.reply'|trans({'%thread%':thread, '%who%':who}) }}
+       {% elseif data.type == 'delete-post'%}
+         {{ 'notification.group-thread.delete-post'|trans({'%thread%':thread}) }}
+       {% elseif data.type == 'type-modify'%}
+         {{ 'notification.group-thread.type-modify'|trans({'%thread%':thread, '%who%':who}) }}
+       {% endif %}
+    </div>
+    <div class="notification-footer">
+     {{notification.createdTime|date_format }}  
+    </div>
+  </div>
+</li>
+{% endautoescape %}

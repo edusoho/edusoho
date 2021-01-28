@@ -1,0 +1,70 @@
+{% extends 'search/local-search.html.twig' %}
+
+{% set classroomName = setting('classroom.name')|default('site.default.classroom'|trans) %}
+{% block searchType %}
+  <li role="presentation" class="{% if not filter %}active{% endif %}"><a href="{{ path('search', {q:keywords,type:type}) }}">{{ 'search.all_classrooms'|trans({'%classroom%':classroomName}) }}</a></li>
+  <li role="presentation" class="{% if filter == 'free' %}active{% endif %}">
+    <a href="{{ path('search',{filter:'free', q:keywords,type:type}) }}">{{ 'search.free_classrooms'|trans({'%classroom%':classroomName}) }}</a>
+  </li>
+{% endblock %}
+
+{% block mobileType %}
+   <button type="button" class="cd-btn cd-btn-primary pull-right dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{ dict_text('searchClassroomType',filter|default('all')) }}
+  <span class="caret"></span></button>
+  <ul class="dropdown-menu" role="menu">
+    <li role="presentation" class="{% if not filter %}active{% endif %}"><a href="{{ path('search', {q:keywords,type:type}) }}">{{ 'search.all_classrooms'|trans({'%classroom%':classroomName}) }}</a></li>
+    <li role="presentation" class="{% if filter == 'free' %}active{% endif %}">
+      <a href="{{ path('search',{filter:'free', q:keywords,type:type}) }}">{{ 'search.free_classrooms'|trans({'%classroom%':classroomName}) }}</a>
+    </li>
+  </ul>
+{% endblock %}
+
+{% block tip %}
+  <div class="cd-mb8">
+    {% if keywords %}
+      {{'search.relative_classrooms_result'|trans({'%count%': count, '%keywords%': keywords, '%classroom%':classroomName})|raw}}
+    {% else %}
+      {{'search.result_classrooms_copy'|trans({'%count%': count, '%classroom%':classroomName})|raw}}
+    {% endif %}
+  </div>
+{% endblock %}
+
+{% block content %}
+  <!-- 班级列表 -->
+  <div class="class-list local-search-class-list cd-mt8">
+    <div class="row">
+      {% if classrooms %}
+        {% for classroom in classrooms %}
+          <div class="col-md-3 col-sm-6">
+            <div class="class-item local-search-class-item class-item--tag">
+              <div class="class-img local-search-class-item__img">
+                {% if is_plugin_installed('Vip') and setting('vip.enabled') and classroom.vipLevelId|default(0) > 0 %}
+                  <span class="tag-vip-free"></span>
+                {% endif %}
+                <a href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">
+                  {{ lazy_img(filepath(classroom.middlePicture, 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}
+                  <h3>{{ classroom.title }}</h3>
+                  <div class="image-overlay"></div>
+                </a>
+              </div>
+              <div class="class-serve local-search-class-item__serve">
+                {% include 'classroom/service-block.html.twig' with {'services':classroom.service} %}
+              </div>
+              <ul class="class-data local-search-class-item__data clearfix">
+                <li><i class="es-icon es-icon-book"></i>{{classroom.courseNum}}</li>
+                <li><i class="es-icon es-icon-people"></i>{{classroom.studentNum + classroom.auditorNum }}</li>
+                <li><i class="es-icon es-icon-textsms"></i>{{classroom.threadNum}}</li>
+              </ul>
+            </div>
+          </div>
+        {% endfor %}
+
+      {% else %}
+        <div class="empty">{{'search.empty'|trans({'%name%':classroomName})}}</div>
+      {% endif %}
+    </div>
+  </div>
+  <nav class="text-center">
+    {{ web_macro.paginator(paginator) }}
+  </nav>
+{% endblock %}

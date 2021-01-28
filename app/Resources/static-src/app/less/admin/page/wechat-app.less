@@ -1,0 +1,100 @@
+.wechat-app-banner {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  background: -webkit-image-set(url("@{img-src}wechat-app/banner.jpg") 1x,url("@{img-src}wechat-app/banner@2x.jpg") 2x) no-repeat;
+  background-size: cover;
+  padding-bottom: 33%;
+  width: 100%;
+  .banner-content {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    margin-left: 82px;
+    margin-top: auto;
+    margin-bottom: auto;
+    height: 146px;
+    .banner-title {
+      margin-top: 0;
+      color: #ffffff;
+      letter-spacing: 1px;
+      line-height: 30px;
+      top: 67px;
+      left: 82px;
+    }
+    .banner-introduce {
+      font-size: 16px;
+      color: #ffffff;
+      line-height: 26px;
+      letter-spacing: 1px;
+      font-weight: lighter;
+      width: 434px;
+    }
+    .button {
+      text-decoration: none;
+      margin-top: 10px;
+      margin-right: 30px;
+      width: 89px;
+      height: 34px;
+      display: inline-block;
+      text-align: center;
+      line-height: 34px;
+      font-size: 12px;
+      color: #ffffff;
+      letter-spacing: 0;
+      border-radius: 2px;
+      border: 1px solid @brand-primary;
+      -webkit-transition: all 0.2s;
+      -moz-transition: all 0.2s;
+      -o-transition: all 0.2s;
+      transition: all 0.2s;
+    }
+    .request-button {
+      background-color: @brand-primary;
+      &:hover {
+        background-color: #3276b1;
+        border-color: #3276b1;
+      }
+    }
+    .more-button {
+      border: 1px solid #ffffff;
+      &:hover {
+        background-color: @brand-primary;
+        border: 1px solid @brand-primary;
+        color: #ffffff;
+      }
+    }
+  }
+}
+
+.wechat-app-introduction {
+  .introduction-box {
+    margin-top: 20px;
+    text-align: center;
+    padding: 36px 31px;
+    border: 1px solid #e1e1e1;
+    height: 278px;
+    .introduction-icon {
+      width: 64px;
+      height: 64px;
+    }
+    .introduction-title {
+      margin-top: 20px;
+      margin-bottom: 10px;
+      font-size: 16px;
+      color: #313131;
+      letter-spacing: 0;
+      line-height: 16px;
+    }
+    .introduction-content {
+      font-size: 14px;
+      color: #616161;
+      letter-spacing: 0;
+      line-height: 21px;
+      font-weight: 200;
+    }
+  }
+}

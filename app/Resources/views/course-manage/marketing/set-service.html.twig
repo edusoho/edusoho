@@ -1,0 +1,19 @@
+<div class="es-piece">
+  <div class="piece-header">{{'course.marketing_setup.services'|trans}}</div>
+  <div class="form-group">
+    <label class="col-sm-2 control-label">{{ 'course.marketing_setup.services.show_services'|trans }}</label>
+    <div class="col-sm-8 radios">
+      {{ radios('showServices', {'1': 'site.datagrid.radios.yes'|trans,'0': 'site.datagrid.radios.no'|trans}, course.showServices|default(1)) }}
+    </div>
+  </div>
+  <div class="form-group js-services {% if course.showServices|default(1) == 0 %}hidden{% endif %}">
+    <label class="col-sm-2 control-label">{{ 'course.marketing_setup.services.provide_services'|trans }}</label>
+    <div class="col-sm-8 form-control-static">
+      {% set serviceTags = services(course.services | default([])) %}
+      {% for tag in serviceTags %}
+        <a class="label label-md js-service-item mr10 mb10 inline-block {% if tag.active %}label-primary{% else %}label-default{% endif %}" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{ tag.summary|trans }}" data-code="{{ tag.code }}">{{ tag.fullName|trans }}</a>
+      {% endfor %}
+      <input type="hidden" id="course_services" name="services" value="{{ course.services|default([])|json_encode_utf8() }}">
+    </div>
+  </div>
+</div>

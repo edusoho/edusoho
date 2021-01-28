@@ -1,0 +1,4 @@
+{% include 'thread/part/common-header.html.twig' %}
+<div class="editor-text">
+  {{ thread.content|at(thread.ats)|cdn|raw }}
+</div>

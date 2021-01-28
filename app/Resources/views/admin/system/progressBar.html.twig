@@ -1,0 +1,20 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{'admin.process_bar'|trans}}{% endblock %}
+
+{% block body %}
+  <div id="optimize-files-progress" class="optimize-files-progress" style="display:none;">
+    <div class="progress progress-striped active">
+      <div class="progress-bar progress-bar-success" style="width: 0%"></div>
+    </div>
+    <div class="text-success progress-text"></div>
+  </div>
+  <div id="optimize-url" data-url="{{ url('admin_optimize_remove_upload_files')}}"></div>
+{% endblock %}
+
+{% block footer %}
+   <strong class="text text-danger" id="optimize-hint">{{'admin.process_bar.keep_window_tips'|trans}}</strong>
+  <button id="finish-optimize-btn" data-loading-text="{{'admin.process_bar.wait_tips'|trans}}" class="btn btn-primary" style="display:none;"data-dismiss="modal">{{'admin.process_bar.finish_btn'|trans}}</button>
+
+  <script>app.load('optimize/optimize-modal');</script>
+{% endblock %}

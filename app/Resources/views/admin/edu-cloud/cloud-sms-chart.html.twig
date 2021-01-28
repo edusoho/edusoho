@@ -1,0 +1,25 @@
+
+<div class="col-md-6">
+  <input id="smsUsedInfo"  type="hidden" value='{% if chartInfo.smsUsedInfo and setting('cloud_sms.sms_enabled') == '1' and overview.service.sms.status|default(null) != 'stoped' %}{{chartInfo.smsUsedInfo}}{% else %}{{"[]"}}{% endif %}'>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <p class="pull-right"><a href="{{path('admin_cloud_sms_account')}}" target="_blank">{{'site.default.detail'|trans}}</a></p>
+      <h3 class="panel-title">{{'admin.edu_cloud.edu_sms.use_info'|trans}}</h3>
+    </div>
+    <div class="panel-body" id="sms-data-tab" style="height: 250px;">
+    {% if overview.service.sms.status|default(null) == 'stoped' %}
+      <div class="edu-verticalmiddle">
+        <div class="edu-verticalmiddle-content text-muted">
+            {{'admin.edu_cloud.edu_sms.service_forbidden_tips'|trans|raw}}
+        </div>
+      </div>
+    {% elseif setting('cloud_sms.sms_enabled')|default('0') == '0' %}
+      <div class="edu-verticalmiddle">
+        <div class="edu-verticalmiddle-content text-muted">
+          {{'admin.edu_cloud.edu_sms.open_btn'|trans({'%sms%':path('admin_edu_cloud_sms')})|raw}}
+        </div>
+      </div>
+    {% endif %}
+    </div>
+  </div>
+</div>

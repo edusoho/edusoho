@@ -1,0 +1,78 @@
+<div class="course-item">
+  <div class="course-img">
+    <a href="{{ path('admin_v2_content_resource_product_detail', {productType: 'courseSet',s2b2cProductId: product.id}) }}" target="_blank">
+      {% if product.serializeMode == 'serialized' %}
+        <span class="tags"><span class="tag-serialing"></span></span>
+      {% elseif product.serializeMode == 'finished' %}
+        <span class="tags"><span class="tag-finished"></span></span>
+      {% endif %}
+      {% if product.type|default() == 'live' %}
+        <span class="tags">
+          <span class="tag-live"></span>
+        </span>
+      {% endif %}
+      {% if product.type|default() == 'reservation' %}
+        <span class="tags">
+          <span class="tag-reservation"></span>
+        </span>
+      {% endif %}
+      <img src="{{ filepath(course_set_cover(product, 'large'), 'courseSet.png') }}" alt="{{ product.name }}"
+           class="img-responsive" data-echo="{{ filepath(course_set_cover(product, 'large'), 'courseSet.png') }}"/>
+    </a>
+  </div>
+  <div class="course-info">
+    <div class="title">
+      <a class="link-dark" href="{{ path('admin_v2_content_resource_product_detail', {productType: 'courseSet',s2b2cProductId: product.id}) }}" target="_blank">
+        {{ product.name }}
+      </a>
+    </div>
+    <div class="metas clearfix">
+      <div class="form-group row">
+        <label class="coopertion control-label" style="width: auto">
+          {{ '合作面额'|trans }}:
+        </label>
+        <span class="cooperation-price" style="color: #dc2d2d">
+          {% if product.maxCooperationPrice == product.minCooperationPrice %}
+            ￥{{ product.maxCooperationPrice|default(0) | number_format(2) }}
+          {% else %}
+            ￥{{ product.minCooperationPrice | number_format(2) }} - ￥{{ product.maxCooperationPrice|default(0) | number_format(2) }}
+          {% endif %}
+        </span>
+
+      </div>
+
+      <div class="form-group row">
+        <label class="retail control-label" style="width: auto">
+          {{ '建议售价'|trans }}:
+        </label>
+        <span class="retail-price">
+          {% if product.minSuggestionPrice == product.maxSuggestionPrice %}
+            ￥{{ product.minSuggestionPrice | number_format(2) }}
+          {% else %}
+            ￥{{ product.minSuggestionPrice | number_format(2) }} - ￥{{ product.maxSuggestionPrice | number_format(2) }}
+          {% endif %}
+        </span>
+
+      </div>
+    </div>
+
+    <div class="selected_btn">
+      {% set hasChosen = chosenCourses[product.id]|default() %}
+      {% set canChoose = (merchant.coop_status|default('') != 'cooperation' or hasChosen or product.wholeEditStatus|default() == 'unpublished' ) %}
+      <button id="course_selected_{{ product.id }}"
+              data-course-set="{{ product|json_encode() }}"
+              data-choose-url="{{ path('admin_v2_content_resource_choose_product', {productType: 'course_set', productId: product.id}) }}"
+              class="btn btn-fat btn-primary course-v2-btn{% if canChoose %} disabled {% endif %}"
+              style="{% if canChoose %} background-color: #ccc; border-color: #ccc;{% else %} border-color: #409eff; background-color: #409eff;{% endif %}">
+        {% if hasChosen %}
+          {{ 'merchant.content_resource.has_chosen'|trans }}
+        {% elseif product.wholeEditStatus|default() == 'unpublished' %}
+          {{ 'merchant.content_resource.editing'|trans }}
+        {% else %}
+          {{ 'merchant.content_resource.choose'|trans }}
+        {% endif %}
+      </button>
+    </div>
+  </div>
+</div>
+

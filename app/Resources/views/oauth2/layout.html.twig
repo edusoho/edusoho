@@ -1,0 +1,34 @@
+{% extends 'v2/layout.html.twig' %}
+
+{% block meta %}
+  {{ parent() }}
+  <meta name="format-detection" content="telephone=no">
+{% endblock %}
+
+{% block header %}
+  {% if oauthUser.isApp() %}{% else %}{{ parent() }}{% endif %}
+{% endblock %}
+
+{% block full_content %}
+  <div class="third-party-login-section">
+    <div class="cd-panel third-party-panel {% if registerClass|default('') %}{{ registerClass }}{% endif %}">
+      {% block panel %}
+        <div class="cd-panel-heading third-party-panel__heading">
+          {% block panel_heading %}
+            <div class="cd-panel-title">
+              {% block page_title %}{% endblock %}
+            </div>
+          {% endblock %}
+        </div>
+        <div class="cd-panel-body third-party-panel__body">
+          {% block panel_body %}
+          {% endblock %}
+        </div>
+      {% endblock %}
+    </div>
+  </div>
+{% endblock %}
+
+{% block footer %}
+  {% if oauthUser.isApp() %}{% else %}{{ parent() }}{% endif %}
+{% endblock %}

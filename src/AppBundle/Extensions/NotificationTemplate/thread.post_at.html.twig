@@ -1,0 +1,24 @@
+{% import 'macro.html.twig' as macro %}
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+      {% set data = notification.content %}
+      {% if data.thread %}
+        {% set who = macro.link(data.user.nickname, path('user_show', {id:data.user.id})) %}
+        {% set thread = macro.link(data.thread.title, path('thread_post_jump', {threadId:data.thread.id, postId:data.id})) %}
+        {{ 'notification.thread.post_at'|trans({'%who%':who, '%thread%':thread})|raw }}
+        <blockquote>
+          {{ data.content }}
+        </blockquote>
+      {% else %}
+        {% include 'notification/widget/item-article.post_at.html.twig' %}
+      {% endif %}
+    </div>
+    <div class="notification-footer">
+      {{ notification.createdTime|date('Y-n-d H:i:s') }}
+    </div>
+  </div>
+</li>

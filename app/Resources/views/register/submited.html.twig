@@ -1,0 +1,33 @@
+{% extends 'layout.html.twig' %}
+{% block title %}{{'form.btn.register'|trans}} - {{ parent() }}{% endblock %}
+{% do script(['app/js/auth/register-submited/index.js'])%}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-6 col-md-offset-3 ptl">
+    <div class="panel panel-default panel-page">
+      <div class="panel-heading"><h2>{{'user.register.success'|trans}}</h2></div>
+
+      <div id="email-sending" class="alert alert-info" style="display:none;">{{'user.register.send_email_tips'|trans}}</div>
+
+      <div id="email-send-success">
+        <p class="color-success">
+          {{ 'user.register.email_verify_tips'|trans({'%email%':user.email})|trans }}
+        </p>
+
+        <p class="mvl">
+          <a class="btn btn-primary" href="{{ emailLoginUrl }}" target="_blank">{{'user.register.receive_email_btn'|trans}}</a>
+        </p>
+
+        <div class="alert">
+          {{'user.register.not_receive_email_tips'|trans({'%logout%':path('logout',{goto:'register'}), '%send%':path('register_email_send', {id:user.id, hash:hash})})|raw}}
+        </div>
+        <p class="mtl">
+          {{'user.register.verify_success_tips'|trans({'%path%':_target_path, '%homepage%':path('homepage')})|raw}}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

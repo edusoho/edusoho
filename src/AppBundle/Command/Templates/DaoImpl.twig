@@ -1,0 +1,66 @@
+<?php
+
+namespace Topxia\Service\{{service}}\Dao\Impl;
+
+use Topxia\Service\Common\BaseDao;
+use Topxia\Service\{{service}}\Dao\{{bigName}}Dao;
+
+class {{bigName}}DaoImpl extends BaseDao implements {{bigName}}Dao
+{
+    protected $table = '{{smallName}}';
+
+    public function get{{bigName}}($id)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+    }
+
+    public function add{{bigName}}(array ${{smallName}})
+    {
+        $affected = $this->getConnection()->insert($this->table, ${{smallName}});
+        if ($affected <= 0) {
+            throw $this->createDaoException('Insert {{smallName}} error.');
+        }
+        return $this->get{{bigName}}($this->getConnection()->lastInsertId());
+    }
+
+    public function update{{bigName}}($id, array ${{smallName}})
+    {
+        $this->getConnection()->update($this->table, ${{smallName}}, array('id' => $id));
+        return $this->get{{bigName}}($id);
+    }
+
+    public function delete{{bigName}}($id)
+    {
+        return $this->getConnection()->delete($this->table, array('id' => $id));
+    }
+
+    // public function search{{bigName}}s($conditions, $oderBy, $start, $limit)
+    // {
+    //     $this->filterStartLimit($start, $limit);
+    //     $builder = $this->createDynamicQueryBuilder($conditions)
+    //         ->select('*')
+    //         ->from($this->table, $this->table)
+    //         ->andWhere('courseId = :courseId')
+    //         ->andWhere('postNum > :postNumLargerThan')
+    //         ->andWhere('title LIKE :title')
+    //         ->andWhere('content LIKE :content')
+    //         ->addOrderBy($orderBy[0], $orderBy[1])
+    //         ->setFirstResult($start)
+    //         ->setMaxResults($limit);
+    //     return $builder->execute()->fetchAll() ? : array(); 
+    // }
+
+    // public function search{{bigName}}sCount($conditions)
+    // {
+    //     $builder = $this->createDynamicQueryBuilder($conditions)
+    //         ->select('COUNT(id)')
+    //         ->from($this->table, $this->table)
+    //         ->andWhere('courseId = :courseId')
+    //         ->andWhere('postNum > :postNumLargerThan')
+    //         ->andWhere('title LIKE :title')
+    //         ->andWhere('content LIKE :content');
+    //     return $builder->execute()->fetchColumn(0);
+    // }
+
+}

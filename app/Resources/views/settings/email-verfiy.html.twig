@@ -1,0 +1,28 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'cd-modal-dialog' %}
+
+{% block title %}
+  {{'user.settings.email.verifiy'|trans}}
+{% endblock %}
+
+{% block body %}
+  <div class="cd-feedback">
+    <div class="feedback-icon">
+      <i class="cd-icon cd-icon-info cd-text-info"></i>
+    </div>
+    <div class="feedback-title">{{'user.settings.email.verifiy_send'|trans}}</div>
+    <div class="feedback-content">
+      {{message|trans|raw}}
+    </div>        
+  </div>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn cd-btn cd-btn-flat-default cd-btn-lg" data-dismiss="modal">
+    {{'user.settings.email.not_verifiy'|trans}}
+  </button>
+  <a href="{{ get_login_email_address(data.email) }}" target="_blank"  class="btn cd-btn cd-btn-primary cd-btn-lg">
+    {{'user.settings.email.goto_verifiy'|trans}}
+  </a>
+{% endblock %}

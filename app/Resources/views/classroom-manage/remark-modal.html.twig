@@ -1,0 +1,21 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% block title %}{{'classroom.student_remark'|trans}}{% endblock %}
+{% do script(['libs/jquery-validation.js','app/js/course-manage/student-remark/index.js'])%}
+{% set modalSize = 'large' %}
+
+{% block body %}
+<form id="student-remark-form" method="post" action="{{ path('classroom_manage_student_remark', {classroomId:classroom.id, userId:user.id}) }}" data-user="{{default.user_name|default('site.default.student'|trans)}}">
+  <div class="form-group">
+    <div class="controls">
+    	<input class="form-control" id="student-remark" name="remark" value="{{ member.remark|trans }}" >
+      <div class="help-block">{{'classroom.student_remark_tips'|trans}}</div>
+    </div>
+  </div>
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-primary pull-right js-student-remark-save-btn" >{{'form.btn.save'|trans}}</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
+{% endblock %}

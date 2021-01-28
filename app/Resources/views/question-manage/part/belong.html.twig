@@ -1,0 +1,5 @@
+{% set category = categories[question.category_id]|default(null) %}
+<small class="text-muted">
+  {{'course.question_manage.question.belong'|trans}}:
+  {% if category|default(null) %}{{ category.name }}{% else %}{{'site.data.empty'|trans}}{% endif %}
+</small>

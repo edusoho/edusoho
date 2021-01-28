@@ -1,0 +1,25 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% block title %}{{ 'user.settings.avatar.crop'|trans }}{% endblock %}
+{% set modal_class= 'modal-lg' %}
+{% do script(['app/js/settings/avatar-crop-modal/index.js']) %}
+
+{% block body %}
+  <form id="avatar-crop-form" method="post">
+    <div class="form-group clearfix">
+      <div class="col-md-offset-2 col-md-8 controls">
+        <img class="img-responsive" src="{{ filepath(pictureUrl) }}"
+          id="avatar-crop"
+          width="{{ scaledSize.width }}" height="{{ scaledSize.height }}"
+          data-natural-width="{{ naturalSize.width }}" data-natural-height="{{ naturalSize.height }}"/>
+        <div class="help-block">{{ 'classroom.set_picture_tips'|trans }}</div>
+      </div>
+    </div>
+  </form>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-primary pull-right" id="upload-avatar-btn"
+    data-url="{{ path('settings_avatar_crop_modal') }}" data-toggle="form-submit"
+    data-target="#avatar-crop-form" data-loading-text="{{ 'form.btn.save.submiting'|trans }}">{{ 'form.btn.save'|trans }}</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
+{% endblock %}

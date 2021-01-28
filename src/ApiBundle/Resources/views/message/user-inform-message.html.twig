@@ -1,0 +1,12 @@
+{% for conversation in conversations %}
+  {% set fromUser = users[conversation.fromId]|default(null) %}
+  <a class="inform-dropdown-body__item clearfix inform-message-item" href="{{ path('message_conversation_show', {conversationId:conversation.id })}}">
+    <div class="inform-message-item__avatar">
+      <img src="{{ filepath(fromUser.smallAvatar, 'avatar.png') }}">
+    </div>
+    <div class="inform-message-item__info">
+      <div class="cd-mb8 cd-dark-minor">{% if not fromUser.destroyed %}{{ fromUser.nickname }}{% else %}{{ 'user.user_had_destroyed'|trans }}{% endif %}</div>
+      <div class="cd-dark-major">{{ conversation.latestMessageContent|sub_text(13) }}</div>
+    </div>
+  </a>
+{% endfor %}

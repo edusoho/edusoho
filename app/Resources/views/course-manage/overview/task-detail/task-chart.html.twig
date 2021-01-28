@@ -1,0 +1,20 @@
+<span class="select-content">
+  <form class="js-task-detail" id="overview-task-list">
+    <input class="select-time-input" type="text" name="titleLike" placeholder="{{ 'course.dashboard.study_detail.name'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}">
+    <i class="es-icon es-icon-search cursor-pointer js-task-detail-search"></i>
+    <input type="hidden" name="courseId" value="{{ course.id }}">
+  </form>
+</span>
+{% include 'export/export-btn.html.twig' with
+  {
+    'exportFileName' : 'course-overview-task-list',
+    'targetFormId': 'overview-task-list',
+    'exportClass': 'cd-btn-sm pull-right cd-btn-primary',
+    'exportWebpack': 'ture'
+  }
+%}
+<div id="task-data-chart"
+  data-url="{{ path('course_set_manage_task_detail',{courseId:course.id}) }}"
+  data-form=".js-task-detail"
+  class="mtl detail-chart-container chart-container text-sm">
+</div>

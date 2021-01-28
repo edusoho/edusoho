@@ -1,0 +1,51 @@
+{% set isAuditor = isAuditor|default(false) %}
+{% if classroom.status|default('draft') != 'published' %}
+  <div class="text-12 color-gray unpublish-tip">{{'classroom.unpublish_tips'|trans}}</div>
+{% else %}
+  {% if classroom.expiryMode == 'date' and date(classroom.expiryValue) < date() %}
+    <button type="button" style="pointer-events:auto" class="btn btn-default disabled cd-btn cd-btn-default" data-toggle="tooltip" data-placement="top">
+      {% if classroom.buyable == 1 %}
+        {{ 'classroom.expiry_day_not_buy'|trans }}
+      {% else %}
+        {{ 'classroom.expiry_day_not_join'|trans }}
+      {% endif %}
+    </button>
+  {% else %}
+      {% if checkMemberLevelResult == 'ok' %}
+        <a class="cd-btn cd-btn-primary js-classroom-buy-btn btn-vip-free" href="javascript:" data-url="{{ path('classroom_buy',{id:classroom.id}) }}">{{ 'classroom.free_study'|trans({'%memberLevel%':classroomMemberLevel.name}) }}</a>
+      {% else %}
+        {% if classroom.price > 0 and ( ( not canFreeJoin and not classroomMemberLevel) or checkMemberLevelResult in ['not_member', 'not_login', 'member_expired', 'level_low']) %}
+          {% if classroom.buyable == 1 %}
+            {% if not isAuditor %}
+              <a class="btn btn-link" href="{{ path('classroom_become_auditor',{id:classroom.id}) }}">{{ 'classroom.go_inside'|trans }}</a>
+            {% endif %}
+            <a class="cd-btn cd-btn-primary js-classroom-buy-btn" href="javascript:" data-url="{{ path('classroom_buy',{id:classroom.id}) }}">{{ 'classroom.join_buy'|trans }}</a>
+          {% elseif classroomMemberLevel %}
+            {% if checkMemberLevelResult in ['not_member', 'member_expired', 'not_login'] %}
+              <a class="cd-btn cd-btn-primary btn-vip-free" href="{{ path('vip_buy') }}">{{ 'classroom.free_study'|trans({'%memberLevel%':classroomMemberLevel.name}) }}</a>
+
+            {% elseif checkMemberLevelResult == 'level_low' %}
+              <a class="cd-btn cd-btn-primary btn-vip-free" href="{{ path('vip_upgrade', {level:classroomMemberLevel.id}) }}">{{ 'classroom.free_study'|trans({'%memberLevel%':classroomMemberLevel.name}) }}</a>
+            {% endif %}
+          {% else %}
+            <button type="button" style="pointer-events:auto" class="btn btn-default disabled cd-btn cd-btn-default" data-toggle="tooltip" data-placement="top"
+              title="{{ 'classroom.not_online_buy_tips'|trans({'%name%':setting('classroom.name')|default('classroom')}) }}">{{ 'classroom.not_buy'|trans }}</button>
+          {% endif %}
+        {% elseif checkMemberLevelResult in ['not_member', 'member_expired', 'not_login'] and classroomMemberLevel %}
+          <a class="cd-btn cd-btn-primary btn-vip-free" href="{{ path('vip_buy') }}">{{ 'classroom.free_study'|trans({'%memberLevel%':classroomMemberLevel.name}) }}</a>
+
+        {% elseif checkMemberLevelResult == 'level_low' %}
+          <a class="cd-btn cd-btn-primary btn-vip-free"
+            href="{{ path('vip_upgrade', {level:classroomMemberLevel.id}) }}">{{ 'classroom.free_study'|trans({'%memberLevel%':classroomMemberLevel.name}) }}</a>
+
+        {% else %}
+          {% if classroom.buyable == 1 %}
+            <a class="cd-btn cd-btn-primary js-classroom-buy-btn" href="javascript:" data-url="{{ path('classroom_buy',{id:classroom.id}) }}">{{ 'classroom.free_join'|trans }}</a>
+          {% else %}
+            <button type="button" style="pointer-events:auto" class="btn btn-default cd-btn cd-btn-default disabled" data-toggle="tooltip" data-placement="top"
+              title="{{ 'classroom.not_online_buy_tips'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)}) }}">{{ 'classroom.not_buy'|trans }}</button>
+          {% endif %}
+        {% endif %}
+      {% endif %}
+  {% endif %}
+{% endif %}

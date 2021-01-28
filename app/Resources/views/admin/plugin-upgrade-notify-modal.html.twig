@@ -1,0 +1,39 @@
+{% set current_route = app.request.get('_route') %}
+
+{% if current_route != 'admin_app_upgrades' and app.user and app.user.isSuperAdmin() %}
+  {% set notifies = plugin_update_notify() %}
+
+  {% set dispalys = {plugin: 'admin.plugin.upgrades.plugin'|trans, theme: 'admin.plugin.upgrades.theme'|trans} %}
+  {% if not notifies is empty %}
+    <div class="modal js-update-modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">{{ 'admin.plugin.upgrades.upgrade_guide'|trans }}</h4>
+          </div>
+          <div class="modal-body">
+            <div class="update-redmine-body">
+              <img class="pbm img-responsive" src='{{ asset('bundles/topxiaadmin/img/course-8-update.jpg') }}'>
+              <div class="mll mtl mrl clearfix">
+                {% for type, apps in notifies %}
+                  <p class="color-primary mbl mtl">{{ 'admin.plugin.upgrades.upgrade.tips'|trans({'%displayType%':dispalys[type]}) }}</p>
+                  <div class="clearfix">
+                    {% for app in apps %}
+                      <p class="color-dark" style="float:left;width:33.33%"><span class="mrm">●</span>{{ app }}</p>
+                    {% endfor  %}
+                  </div>
+                {% endfor %}
+                <p class="color-primary mbl mtl">{{ 'admin.plugin.upgrades.not_upgrade.tips'|trans }}</p>
+
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <a type="button" class="btn btn-primary" href="{{ path('admin_app_upgrades') }}">{{ 'admin.plugin.upgrades_btn'|trans }}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endif %}

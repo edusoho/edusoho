@@ -1,0 +1,63 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_coin_user_records' %}
+
+{% block main %}
+
+  <form id="coin-orders-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+    <div class="mbm">
+      <div class="form-group">
+        <label class="ptm">{{ 'form.placeholder.keyword'|trans }}:</label>
+        <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="{{'form.placeholder.nickname'|trans}}">
+
+        <button class="btn btn-primary">{{'form.btn.search'|trans}}</button>
+      </div>
+    </div>
+  </form>
+  
+  <p class="text-muted">
+    <span class="mrl">{{ 'admin.coin.school_out_amount'|trans }}：<strong class="color-success">{{ schoolBalance.purchase_amount|to_coin(0) }}</strong></span>
+    <span class="mrl">{{ 'admin.coin.school_in_amount'|trans }}：<strong class="color-warning">{{ schoolBalance.recharge_amount|to_coin(0) }}</strong></span>
+    <span class="mrl">{{ 'admin.coin.school_wait_in_amount'|trans }}：<strong class="color-info">{{ (schoolBalance.purchase_amount-schoolBalance.recharge_amount)|to_coin(0) }}</strong></span>
+  </p>
+  <div class="table-responsive">
+    <table class="table table-striped">
+      {% set querySort = app.request.query.get('sort', 'amount') %}
+      {% set direction = app.request.query.get('direction', 'desc') %}
+      <tr>
+        <th width="30%">{{'user'|trans}}</th>
+        <th>{% include 'list-sort-status.html.twig' with {title: 'coin.recharge'|trans, sort: 'recharge_amount', path: 'admin_coin_user_records'} %}</th>
+        <th>{% include 'list-sort-status.html.twig' with {title: 'coin.consume'|trans, sort: 'purchase_amount', path: 'admin_coin_user_records'} %}</th>
+        <th>{% include 'list-sort-status.html.twig' with {title: 'finance.balance'|trans, sort: 'amount', path: 'admin_coin_user_records'} %}</th>
+        <th>{{'admin.coin.operation'|trans}}</th>
+      </tr>
+
+      {% if balances %}
+        {% for balance in balances %}
+          <tr>
+            {% if has_permission('admin_user_manage') %}
+              <td><a href="javascript:" class="" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_user_show', {id:balance.user_id}) }}">{{ users[balance['user_id']].nickname|default('--') }}</a></td>
+            {% else %}
+              <td><span><a target="_blank" href="{{ path('user_show', {id: balance.user_id}) }}">{{ users[balance['user_id']].nickname|default('--') }}</a></span></td>
+            {% endif %}
+            <td class="color-success"> {{ balance.recharge_amount|to_coin(0) }}</td>
+            <td class="color-warning"> {{ balance.purchase_amount|default(0)|to_coin(0) }}</td>
+            <td style="color:blue;"> {{ balance.amount|default(0)|to_coin(0) }}</td>
+            <td>
+              <a {% if balance.amount <= 0 %}class="disabled"{% endif %}
+              data-toggle="modal" data-target="#modal"
+              data-url="{{ path('admin_coin_flow_detail',{userId:balance.user_id}) }}"
+              href="javascript:;">{{'form.btn.view'|trans}}</a>
+            </td>
+          </tr>
+        {% endfor %}
+      {% endif %}
+
+    </table>
+    {% if not balances %}
+      <div class="empty">{{'site.datagrid.empty'|trans}}</div>{% endif %}
+    {% if paginator|default(null) %}
+      {{ admin_macro.paginator(paginator) }}
+    {% endif %}
+  </div>
+{% endblock %}

@@ -1,0 +1,26 @@
+<div class="article-metas">
+  <div class="pull-left">
+    <div class="date">
+      <div class="day">{{ article.publishedTime|date('d') }}</div>
+      <div class="month">{{ article.publishedTime|date('m')}}{{ 'site.date.month'|trans }}</div>
+    </div>
+  </div>
+  <div class="metas-body">
+    <h2 class="title">
+      {{ article.title }}
+    </h2>
+    <div class="sns">
+      <span class="views-num">
+        <i class="es-icon es-icon-visibility"></i>{{ article.hits }}
+      </span>
+      {% if setting('article.show_comment', '1') == 1 %}
+        <span class="comment-num">
+          <i class="es-icon es-icon-textsms"></i>{{ article.postNum }}
+        </span>
+      {% endif %}
+      <span class="love-num">
+        <i class="es-icon es-icon-favorite"></i><span class="js-like-num">{{ article.upsNum }}</span>
+      </span>
+    </div>
+  </div>
+</div>

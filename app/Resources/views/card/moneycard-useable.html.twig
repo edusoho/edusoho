@@ -1,0 +1,15 @@
+<div class="card-pack-item card-item">
+  <h4>{{'card.info.moneycard'|trans}}</h4>
+  <p class="title">{{'card.info.moneycard.tips'|trans}}</p>
+  <p class="price">
+    <strong>{{ cardDetail.coin }}</strong> {{ coin.coin_name|default('finance.coin'|trans) }}
+    <a class="money-card-use" href="javascript:;" 
+      data-url="{{ path('money_card_use_without_password',{ id:cardDetail.id,filter:app.request.query.get('filter') }) }}" 
+      data-coin-name="{{ coin.coin_name|default('finance.coin'|trans) }}"
+      data-target-url="{{ path('my_cards', {cardType:'moneyCard', filter:app.request.query.get('filter')}) }}">
+      {{'card.info.moneycard.use_btn'|trans}}
+    </a>
+    <input class="card-coin-val" type="hidden" value="{{ cardDetail.coin }}"></input>
+  </p>
+  <p>{{'coupon.expired_on'|trans}}<span>{{ cardDetail.deadline|date('card.info.moneycard.date_format'|trans) }}</span></p>
+</div>

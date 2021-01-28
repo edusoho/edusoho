@@ -1,0 +1,20 @@
+{% set classroom = data('Classroom', {courseId: course.id}) %}
+{% if classroom|default(null) %}
+  <div class="panel panel-default belongs-class">
+    <div class="panel-heading">
+      <h3 class="panel-title"> <i class="es-icon es-icon-locallibrary"></i>
+        {{'course.widgets.belong_classroom.title'|trans({'%name%': setting('classroom.name')|default('site.default.classroom'|trans)})}}
+      </h3>
+    </div>
+    <div class="panel-body">
+        <div class="media">
+          <div class="media-left">
+            <a href="{{ path('classroom_show', {id: classroom.id}) }}"><img src="{{ filepath(classroom.smallPicture, 'classroom.png') }}" alt=""></a>
+          </div>
+          <div class="media-body">
+            <a href="{{ path('classroom_show', {id: classroom.id}) }}">{{ classroom.title }}</a>
+          </div>
+        </div>
+    </div>
+  </div>
+{% endif %}

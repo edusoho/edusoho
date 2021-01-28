@@ -1,0 +1,41 @@
+mapi_order_submit_pay_request:
+    path:  /order/{id}/submit_pay_request
+    defaults: { _controller: TopxiaMobileBundleV2:MobileOrder:submitPayRequest }
+    methods: [GET, POST]
+
+mapi_mobile_teacher_app:
+    path:  /teacherApp
+    defaults: { _controller: TopxiaMobileBundleV2:TeacherApp:index }
+
+topxia_mobile_alipay_notify:
+    path:  /pay/{name}/alipay_notify
+    defaults: { _controller: TopxiaMobileBundleV2:MobileAlipay:payNotify }
+
+topxia_mobile_alipay_pay:
+    path:  /alipay_pay
+    defaults: { _controller: TopxiaMobileBundleV2:MobileAlipay:pay }
+
+topxia_mobile_alipay_merchant:
+    path:  /pay/{name}/alipay_merchant
+    defaults: { _controller: TopxiaMobileBundleV2:MobileAlipay:payMerchant}
+
+topxia_mobile_alipay_callback:
+    path:  /pay/{name}/alipay_callback
+    defaults: { _controller: TopxiaMobileBundleV2:MobileAlipay:payCallBack }
+
+mapi_mobile_esmobile_app:
+    path:  /mobile/main
+    defaults: { _controller: TopxiaMobileBundleV2:MobileApp:index }
+
+mapi_mobile_esmobile_app_version:
+    path:  /mobile/main/version
+    defaults: { _controller: TopxiaMobileBundleV2:MobileApp:version }
+
+mapi_mobile_esmobile_app_resource:
+    path:  /mobile/{code}/resource
+    defaults: { _controller: TopxiaMobileBundleV2:MobileApp:resource }
+
+mapi_mobile_api:
+    path:  /{service}/{method}
+    defaults: { _controller: TopxiaMobileBundleV2:MobileApi:index }
+    methods: [GET, POST]

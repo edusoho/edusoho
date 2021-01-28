@@ -1,0 +1,34 @@
+{% extends 'testpaper/subject/type/question-edit-layout.html.twig' %}
+
+{% set type = 'choice' %}
+
+{% block subject %}
+  {% for option in question.options|default([]) %}
+    <div class="edit-subject-item cd-mb24 form-group">
+      <label class="cd-checkbox col-sm-1 cd-mt8 mlm{% if loop.index-1 in question.answers|default([]) %} checked{% endif %}">
+        <input type="checkbox" data-toggle="cd-checkbox" name="right" value="{{ loop.index-1 }}">
+        <span class="cd-dark-major edit-subject-item__order">{{ (loop.index+64)|chr }}. </span>
+      </label>
+      <div class="col-sm-6 ph0">
+        <input class="form-control edit-subject-item__input js-item-option-edit" type="text" value="{{ question_html_filter(option) }}">
+        <textarea class="form-control hidden" style="height:190px;" id="{{ uniqid() }}" name="options"
+                  data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}"
+                  data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}">{{ option }}</textarea>
+      </div>
+      <a class="col-sm-1 edit-subject-item__delete cd-link-assist js-item-option-delete" href="javascript:;"><i class="es-icon es-icon-shanchu"></i></a>
+    </div>
+  {% endfor %}
+  <div class="color-primary cd-mv24">
+    <a class="cd-link-primary js-item-option-add" href="javascript:;"><i class="es-icon es-icon-tianjia text-md"></i><span class="text-md mls">{{ 'course.testpaper_manage.import.re_edit.add_option'|trans }}</span></a>
+  </div>
+{% endblock %}
+{% block miss_score %}
+  {% if isTestpaper|default(true) %}
+    <div class="form-group edit-form-group cd-mb24">
+      <label class="col-sm-2 control-label ph0 edit-form-group__label edit-form-group__label--miss">{{ 'course.testpaper_manage.import.re_edit.miss_score'|trans }}</label>
+      <div class="col-sm-10">
+        <input class="form-control edit-form-group__input" type="text" name="missScore" value="{{ question.missScore|default('') }}">
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}

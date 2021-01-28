@@ -1,0 +1,19 @@
+{% extends 'classroom/content-layout.html.twig' %}
+{% block title %}{{ parent() }}{% endblock %}
+{% set nav = 'introduction' %}
+
+{% block description %}{{ classroomDescription|default('')|plain_text(100) }}{% endblock %}
+{% block keywords %}{{ parent() }}{% endblock %}
+
+{% block main %}
+  <div class="class-about">
+    {% set eventReportParams = {'user-id': app.user.id|default(0)} %}
+    {% include 'event_report.html.twig' with{ 'eventName':'classroom.view', 'subjectType':'classroom', 'subjectId': classroom.id, 'eventReportParams':eventReportParams} %}
+    {% if introduction is empty %}
+      <p class="mvl tac color-gray">{{ 'classroom.description_empty_tips'|trans }}</p>
+    {% else %}
+      {{ introduction|cdn|raw }}
+    {% endif %}
+  </div>
+
+{% endblock %}

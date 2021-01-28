@@ -1,0 +1,219 @@
+{% extends 'admin/layout.html.twig' %}
+{% block title %}{{ 'admin.hompage.html_head_title'|trans }}{% endblock %}
+{% set panel = 'dashboard' %}
+{% set script_controller = 'default/index' %}
+{% block container %}
+  <div class="alert alert-warning" role="alert">
+      <span>{{ 'admin_v2.upgrade_v2_setting.alert'|trans }}</span>
+    {% set canAccess = 'ROLE_SUPER_ADMIN' in app.user.roles|default([]) or 'ROLE_ADMIN' in app.user.roles|default([]) %}
+    {% if canAccess %}
+      <a href="javascript:;" data-url="{{ path('admin_upgrade_v2_setting') }}" data-loading-text="{{ 'admin_v2.switch_version.btn_loading'|trans }}" class="btn btn-primary pull-right prl js-upgrade-admin-v2" style="margin-top: -5px">{{ 'admin_v2.upgrade_v2_setting.setting_btn'|trans }}</a>
+    {% else %}
+      <a href="javascript:;" class="btn btn-primary pull-right prl js-no-permission-btn" style="margin-top: -5px">{{ 'admin_v2.upgrade_v2_setting.setting_btn'|trans }}</a>
+    {% endif %}
+  </div>
+  {# 域名检查提示#}
+  {{ render(controller('AppBundle:Admin/Default:validateDomain')) }}
+  <div class="row">
+    {% if not (setting('copyright.thirdCopyright')|default(0) == 1) %}
+      {{ render(controller('AppBundle:Admin/Default:getCloudNotices')) }}
+    {% endif %}
+
+    <div class="
+      {% if not (setting('copyright.thirdCopyright')|default(0) == 1) %}
+        col-md-6
+      {% else %}
+        col-md-12
+      {% endif %}
+      ">
+      <div class="panel panel-default panel-150">
+        <div class="panel-heading">
+          <h3 class="panel-title">{{ 'admin.homepage.status_bar.content_title'|trans }}</h3>
+        </div>
+        <div class="panel-body" id="system-status" data-url="{{ path('admin_system_status') }}">
+          <div class="empty">{{ 'admin.homepage.loadig_data_tips'|trans }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading clearfix">
+      <h3 class="panel-title">
+        {{ 'admin.homepage.todays_data_title'|trans }}
+        <span data-toggle="popover" class="glyphicon glyphicon-question-sign color-gray text-sm js-today-data-popover"></span>
+        {{ 'admin.homepage.todays_data.tooltips'|trans|raw }}
+      </h3>
+
+    </div>
+    <div class="panel-body" id="site-overview-table" data-url="{{ path('admin_operation_analysis') }}">
+      <div class="empty">{{ 'admin.homepage.loadig_data_tips'|trans }}</div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="panel panel-default panel-380">
+        <div class="panel-heading">
+          <div class="pull-right">
+            <span class="mrl text-sm js-data-switch-time">{{ dates.weekDate }}~{{ 'now'|date('Y-m-d') }} </span>
+            <div class="btn-group btn-group-xs">
+              <button type="button" class="btn btn-primary js-study-switch-button"
+                      data-time="{{ dates.weekDate }}~{{ 'now'|date('Y-m-d') }}"
+                      data-url="{{ path('admin_study_statistic', {period: 'week'}) }}">{{ 'admin.homepage.statistic.week'|trans }}
+              </button>
+              <button type="button" class="btn btn-default js-study-switch-button"
+                      data-time="{{ dates.monthDate }}~{{ 'now'|date('Y-m-d') }}"
+                      data-url="{{ path('admin_study_statistic', {period: 'month'}) }}">{{ 'admin.homepage.statistic.month'|trans }}
+              </button>
+            </div>
+          </div>
+          <h3 class="panel-title">{{ 'admin.homepage.order_statistic_title'|trans }}
+            <span data-toggle="popover"
+                  class="glyphicon glyphicon-question-sign color-gray text-sm js-data-popover"></span>
+            {{ 'admin.homepage.order_statistic.tips'|trans|raw }}
+          </h3>
+        </div>
+        <div class="panel-body js-statistic-areas" id="study-count-statistic"
+             data-url="{{ path('admin_study_statistic', {period: 'week'}) }}" style="height:320px;">
+
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="panel panel-default panel-380">
+        <div class="panel-heading">
+          <div class="pull-right">
+            <span class="mrl text-sm js-data-switch-time">{{ dates.weekDate }}~{{ 'now'|date('Y-m-d') }} </span>
+            <div class="btn-group btn-group-xs">
+              <button type="button" class="btn btn-primary js-order-switch-button"
+                      data-time="{{ dates.weekDate }}~{{ 'now'|date('Y-m-d') }}"
+                      data-url="{{ path('admin_order_statistic', {period: 'week'}) }}">{{ 'admin.homepage.statistic.week'|trans }}</button>
+              <button type="button" class="btn btn-default js-order-switch-button"
+                      data-time="{{ dates.monthDate }}~{{ 'now'|date('Y-m-d') }}"
+                      data-url="{{ path('admin_order_statistic',{period: 'month'}) }}">{{ 'admin.homepage.statistic.month'|trans }}</button>
+            </div>
+          </div>
+          <h3 class="panel-title">{{ 'admin.homepage.pay_order_statistic_title'|trans }}</h3>
+        </div>
+        <div class="panel-body js-statistic-areas" id="pay-order-statistic"
+             data-url="{{ path('admin_order_statistic', {period: 'week'}) }}" style="height:320px;">
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-8">
+      <div class="panel panel-default panel-420">
+        <div class="panel-heading">
+          <div class="pull-right">
+            <span class="mrl text-sm js-data-switch-time">{{ dates.weekDate }}~{{ 'now'|date('Y-m-d') }} </span>
+            <div class="btn-group btn-group-xs">
+              <button type="button" class="btn btn-primary js-task-switch-button"
+                      data-time="{{ dates.weekDate }}~{{ 'now'|date('Y-m-d') }}"
+                      data-url="{{ path('admin_task_learn_statistic', {period: 'week'}) }}">{{ 'admin.homepage.statistic.week'|trans }}</button>
+              <button type="button" class="btn btn-default js-task-switch-button"
+                      data-time="{{ dates.monthDate }}~{{ 'now'|date('Y-m-d') }}"
+                      data-url="{{ path('admin_task_learn_statistic', {period: 'month'}) }}">{{ 'admin.homepage.statistic.month'|trans }}</button>
+            </div>
+          </div>
+          <h3 class="panel-title">{{ 'admin.homepage.task_finish_statistic_title'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
+            <span data-toggle="popover"
+                  class="glyphicon glyphicon-question-sign color-gray text-sm js-data-popover"></span>
+            <div class="popover-content hidden">
+              <div class="popover-item">
+                <div class="content">
+                  {{ 'admin.homepage.task_finish_statistic.tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
+                </div>
+              </div>
+            </div>
+          </h3>
+        </div>
+        <div class="panel-body js-statistic-areas" id="study-task-count-statistic"
+             data-url="{{ path('admin_task_learn_statistic', {period: 'week'}) }}" style="height:360px;">
+
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="panel panel-default panel-420">
+        <div class="panel-heading">
+          <div class="pull-right">
+            <div class="btn-group btn-group-xs">
+              <button type="button" class="btn btn-primary js-course-switch-button"
+                      data-time="{{ dates.weekDate }}~{{ 'now'|date('Y-m-d') }}"
+                      data-url="{{ path('admin_course_explore', {period: 'week'}) }}">{{ 'admin.homepage.statistic.week'|trans }}</button>
+              <button type="button" class="btn btn-default  js-course-switch-button"
+                      data-time="{{ dates.monthDate }}~{{ 'now'|date('Y-m-d') }}"
+                      data-url="{{ path('admin_course_explore', {period: 'month'}) }}">{{ 'admin.homepage.statistic.month'|trans }}</button>
+            </div>
+          </div>
+          <h3 class="panel-title">{{ 'admin.homepage.course_ranking_title'|trans }}</h3>
+        </div>
+        <div class="panel-body js-statistic-areas" id="course-explore-list"
+             data-url="{{ path('admin_course_explore', {period: 'week'}) }}">
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4">
+
+      <div class="panel panel-default panel-420 js-course-question-list">
+        <div class="panel-heading">
+          <a class="pull-right" href="{{ url('admin_question', {postStatus: 'unPosted'}) }}"
+          >{{ 'admin.homepage.more_btn'|trans }}</a>
+          <h3 class="panel-title">{{ 'admin.homepage.latest_question_title'|trans }}</h3>
+        </div>
+        <div class="panel-body">
+          {{ render(controller('AppBundle:Admin/Default:unsolvedQuestionsBlock')) }}
+        </div>
+      </div>
+
+    </div>
+    <div class="col-md-4">
+      <div class="panel panel-default panel-420">
+        <div class="panel-heading">
+          <a href="{{ path('admin_review') }}" class="pull-right">{{ 'admin.homepage.more_btn'|trans }}</a>
+          <h3 class="panel-title">
+            {{ 'admin.homepage.latest_review_title'|trans }}
+          </h3>
+        </div>
+        <div class="panel-body">
+          {{ render(controller('AppBundle:Admin/Default:courseReview')) }}
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="panel panel-default search-panel panel-420">
+        <div class="panel-heading">
+          {# <a href="" class="pull-right">{{ '更多'|trans }}</a>#}
+          <h3 class="panel-title">
+            {{ 'admin.homepage.top_search_title'|trans }}
+            <small>{{ 'admin.homepage.statistic.week'|trans }}</small>
+          </h3>
+        </div>
+        <div class="panel-body">
+          {% if not setting('cloud_search.search_enabled') %}
+            <div class="empty">
+              <a target="_blank" href="{{ path('admin_edu_cloud_search') }}">{{ 'admin.homepage.free_access_edu_cloud_search_btn'|trans }}</a>
+            </div>
+          {% else %}
+            {{ render(controller('AppBundle:Admin/Default:cloudSearchRanking')) }}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div  id="cloud-ad" class="admin-cloud-ad modal fade text-center" aria-hidden="true" data-backdrop="static"  tabindex="-1" role="dialog" data-url ="{{ path('admin_cloud_ad') }}">
+    <div class="modal-dialog">
+        <a href="" target="_blank">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+        </a>
+    </div>
+  </div>
+{% endblock %}

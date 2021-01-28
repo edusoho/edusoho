@@ -1,0 +1,25 @@
+{% import 'admin/macro.html.twig' as admin_macro %}
+<tr id="user-table-tr-{{ user.id }}">
+  <td>
+    <strong>{{ admin_macro.user_link(user) }}</strong>
+  </td>
+  {% include 'org/parts/table-body-td.html.twig' with {orgCode: user.orgCode}%}
+  <td>
+    {% if not is_system_generated_email(user.email) %}
+      {{ user.email }}
+    {% else %}
+      {{'admin.user.fields.empty'|trans}}
+    {% endif %}
+  </td>
+  <td>
+    <span class="text-sm">{{ logRecord.createdTime|date('Y-n-d H:i:s') }}</span>
+    <br>
+    <a class="text-muted text-sm" href="http://www.baidu.com/s?wd={{ logRecord.ip }}" target="_blank">{{ logRecord.ip }}</a>
+  </td>
+  <td>
+    {{ logRecord.location }}
+  </td>
+  <td>
+    <a href="#modal" data-toggle="modal" data-url="{{ path('admin_login_record_details', {id:user.id}) }}" data-url="" class="btn btn-default btn-sm">{{'admin.user.btn.show_btn'|trans}}</a>
+  </td>
+</tr>

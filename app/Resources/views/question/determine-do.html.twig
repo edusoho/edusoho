@@ -1,0 +1,52 @@
+<div class="testpaper-question testpaper-question-determine js-testpaper-question {% if setting('magic.testpaper_watermark') %}js-testpaper-watermark{% endif %}" data-watermark-url="{{ path('cloud_testpaper_watermark') }}" id="question{{ question.id }}">
+	<div class="testpaper-question-body">
+	  {% include 'question/part/question-stem.html.twig' %}
+  </div>
+
+  {% if not question.isDeleted|default(0) %}
+
+	{% if show_answers(paperResult|default(null)) %}
+		<div class="testpaper-question-footer clearfix">
+		  <div class="testpaper-question-result">
+		  	{{'course.question_manage.manage.right_answer'|trans}} <strong class="color-success">
+		  		{% if question.answer[0] == 1 %} {{'site.question.determine.true'|trans}} {% else %} {{'site.question.determine.false'|trans}} {% endif %}</strong>，
+				{% if question.testResult.status|default('noAnswer') == 'right' %}
+					{{'course.question_manage.right'|trans}}
+				{% elseif question.testResult.status|default('noAnswer') == 'wrong' %}
+					{{'course.question_manage.wrong'|trans|raw}}
+				{% elseif question.testResult.status|default('noAnswer') == 'noAnswer' %}
+					{{'course.question_manage.no_answer'|trans}}
+				{% endif %}
+		  </div>
+
+		  <div class="testpaper-question-actions pull-right mts">
+				{% include 'question/part/flag.html.twig' with { flags:['favorite', 'analysis'] } %}
+		  </div>
+		</div>
+
+		{% include 'question/part/show-analysis.html.twig' with {showAnalysis:1} %}
+	{% else %}
+		<div class="testpaper-question-footer clearfix">
+		  <div class="testpaper-question-footer__input pull-left js-testpaper-question-label">
+				<label class="radio-inline {% if question.testResult.answer[0]|default(0) == 1 %} active{% endif %}"><input type="radio" data-type="determine" name="{{ question.id }}" value="1" {% if question.testResult.answer[0]|default(0) == 1 %}checked{% endif %}> {{'site.question.determine.true'|trans}}</label>
+		 		<label class="radio-inline {% if question.testResult.answer[0]|default(1) == 0 %} active{% endif %}"><input type="radio" data-type="determine" name="{{ question.id }}" value="0" {% if question.testResult.answer[0]|default(1) == 0 %}checked{% endif %}>{{'site.question.determine.false'|trans}}</label>
+	 		</div>
+
+	 		<div class="testpaper-question-actions pull-right mts">
+		  	{% include 'question/part/flag.html.twig' with { flags:['mark', 'favorite'],resultStatus:paperResult.status|default(null) } %}
+		  </div>
+		</div>
+
+	  {% if showAnswer|default(0) %}
+			<div class="testpaper-preview-answer clearfix mtl mbl">
+			  <div class="testpaper-question-result">
+				  {{'course.question_manage.answer'|trans}} <strong class="color-success">{% if question.answer[0] == 1 %} {{'site.question.determine.true'|trans}} {% else %} {{'site.question.determine.false'|trans}} {% endif %}</strong class="color-success">
+				</div>
+		  </div>
+	  {% endif %}
+
+	{% endif %}
+  {% endif %}
+
+	{% include 'question/part/show-analysis.html.twig' with {showAnalysis:showAnalysis|default(0)} %}
+</div>

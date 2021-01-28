@@ -1,0 +1,48 @@
+<!-- 
+  接受参数 showOptional, 表示是否显示选修课程
+-->
+
+<div class="hidden js-hidden-course-info">
+  {
+    "id": "{{course.id}}",
+    "isDefault": "{{course.isDefault}}",
+    "learnMode": "{{course.learnMode}}",
+    "isMember": "{{member.id|default('')}}",
+    "status": "{{course.status}}",
+    "currentTaskId": "{{currentTaskId|default('')}}",
+    "isHideUnpublish": "{{course.isHideUnpublish}}"
+  }
+</div>
+
+<div class="hidden js-hidden-current-task-id">{{currentTaskId|default('')}}</div>
+
+<div class="hidden js-hidden-i18n">
+  {
+    "i18nChapterName": "{{course_chapter_alias('chapter')|trans}}",
+    "i18nUnitName": "{{course_chapter_alias('part')|trans}}",
+    "i18nLessonName": "{{'site.data.lesson'|trans}}",
+    "i18nTaskName":"{{ course_chapter_alias('task')|trans}}"
+  }
+</div>
+
+<div class="hidden js-hidden-cached-data">
+  {{ task_list_json_data(courseItems, showOptional|default(false)) }}
+</div>
+
+<div class="hidden js-hidden-activity-metas">
+  {
+    {% set allMetas = activity_meta() %}
+    {% for key, item in allMetas %}
+      {% if not loop.first %}
+        ,
+      {% endif %}
+      
+      "{{key}}": {
+        "icon": "{{item.icon}}",
+        "name": "{{item.name}}"
+      }
+    {% endfor %}
+  }
+</div>
+
+<div class="hidden js-hidden-current-timestamp">{{ date().timestamp }}</div>

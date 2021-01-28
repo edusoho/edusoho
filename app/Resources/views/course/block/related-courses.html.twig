@@ -1,0 +1,8 @@
+{% if setting('course.relatedCourses')|default(0) %}
+  {% set relatedCourseSets = data('RelatedCourseSets', { courseSetId: courseSetId, count: 4 }) %}
+  {% if relatedCourseSets is not empty %}
+    <div class="panel panel-default hidden-xs pt10">
+      {% include 'course-set/block/course-block-list.html.twig' with { courseSets: relatedCourseSets , ref:'relatedCourseSets'} %}
+    </div>
+  {% endif %}
+{% endif %}

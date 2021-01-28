@@ -1,0 +1,13 @@
+<div class="user-center-header" data-href="{{ filepath(user.largeAvatar, 'avatar.png') }}" data-sharpness="40">
+  <div class="container clearfix">
+    <div class="user-avatar">
+      <div class="avatar-wrap user-dropdown-info__avatar user-center-avatar">
+        <img class="avatar-lg" src="{{ filepath(user.largeAvatar, 'avatar.png') }}">
+        {{ slot('header.user.logo', {user: user}) }}
+      </div>
+      <div class="name" style="font-size: 30px; padding-top: 50px; color: #000;">
+        <b>{{ 'user.user_had_destroyed'|trans }}</b>
+      </div>
+    </div>
+  </div>
+</div>

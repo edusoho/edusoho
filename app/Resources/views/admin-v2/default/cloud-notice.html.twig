@@ -1,0 +1,34 @@
+{% if trialTime %}
+  {% import "admin-v2/macro.html.twig" as admin_macro %}
+
+  {% if trialTime.endTime is defined %}
+    {% set endTime = trialTime.endTime|date("Y-m-d") %}
+  {% else %}
+    {% set endTime = 'admin_v2.homepage.cloud_notice.unknown_time'|trans %}
+  {% endif %}
+
+  {% if trialTime.remainDays is defined %}
+    {% set remainDays = trialTime.remainDays %}
+  {% else %}
+    {% set remainDays = 'admin_v2.homepage.cloud_notice.unknown_days'|trans %}
+  {% endif %}
+
+  <script>
+    var _hmt = _hmt || [];
+  </script>
+  <script charset="utf-8" src="http://wpa.b.qq.com/cgi/wpa.php"></script>
+  <div class="alert alert-warning alert-border-none" role="alert">
+    <span>{{ 'admin_v2.homepage.cloud_notice'|trans({'%endTime%':endTime, '%remainDays%':remainDays})|raw }}
+      <a id="BizQQWPA" target="javascript:;" onclick="_hmt.push(['_trackEvent', 'advisory', 'click', 'qq'])">
+        {{ 'QQ：800023860 ' }}
+      </a>
+    </span>
+    <a class="alert-link" href="http://open.edusoho.com/login" target="_blank">
+      {{ 'admin_v2.homepage.renewal_btn'|trans }}<i class="es-icon es-icon-guide"></i>
+    </a>
+  </div>
+
+  <script type="text/javascript">
+    BizQQWPA.addCustom({aty: '0', a: '0', nameAccount: 800023860, selector: 'BizQQWPA'});
+  </script>
+{% endif %}

@@ -1,0 +1,300 @@
+.media-list {
+  .media {
+    border-bottom: 1px solid @gray-lighter;
+    padding-bottom: 15px;
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+  .media-body .bullet {
+    padding: 0 3px;
+    font-size: 75%;
+    color: #ccc;
+    line-height: 1.4;
+  }
+  .empty-item {
+    text-align: center;
+    color: #999;
+  }
+}
+
+.media-body {
+  word-break: break-all;
+}
+
+.media-left {
+  padding-right: 15px;
+}
+
+// 即将弃用
+.media .media-object-small img {
+  width: 48px;
+  height: 48px;
+  .border-radius();
+}
+
+
+// 默认
+.media-default {
+  .media-body {
+    >.title {
+      margin-bottom: 10px;
+    }
+    >.content {
+      color: @gray;
+    }
+  }
+}
+
+// 用于热门资讯等
+.media {
+  &.media-number-o {
+    .media-body {
+      color: @gray;
+    }
+  }
+  &.media-number,
+  &.media-number-o {
+    // border-bottom: 1px solid @gray-lighter;
+    padding-bottom: 5px;
+    .media-left {
+      position: relative;
+      color: @gray;
+      .num {
+        display: block;
+        width: 20px;
+        height: 20px;
+        line-height: 18px;
+        text-align: center;
+        border: 1px solid @gray;
+        border-radius: 50%;
+      }
+    }
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}
+
+// 用于热门评论等
+.media-hot-comment {
+  .comments-info {
+    margin-top: 5px;
+    padding-left: 50px;
+    font-size: 12px;
+    color: @gray-medium;
+    min-height: 34px;
+  }
+  .comments-content {
+    padding: 10px;
+    margin: 10px 0;
+    background: @gray-lighter;
+    color: @gray;
+    line-height: 25px;
+    border: 1px solid #f1f1f1;
+  }
+}
+
+// 多级回复等
+.media-comment,
+.media-subcomment {
+  .media-left img {
+    width: 48px;
+    height: 48px;
+    .border-radius(50%);
+  }
+  .media-body {
+    position: relative;
+    padding-bottom: 15px;
+  }
+  // &:hover {
+  //   .reply-link {
+  //     visibility: visible;
+  //   }
+  // }
+  .reply-link {
+    position: absolute;
+    top: 28px;
+    right: 10px;
+    font-size: 12px;
+    color: @gray;
+    // visibility: hidden;
+    .es-transition;
+    &:hover {
+      color: @brand-primary;
+      .es-transition;
+    }
+  }
+  .title {
+    color: @gray;
+    margin-bottom: 5px;
+    a {
+      margin-right: 5px;
+    }
+    .date {
+      margin-left: 5px;
+    }
+  }
+  // p {
+  //   padding-right: 30px;
+  // }
+  .comment-sns {
+    i {
+      margin-right: 5px;
+    }
+    a {
+      color: @gray;
+      .es-transition;
+      margin-right: 10px;
+      &:hover {
+        color: @brand-primary;
+        .es-transition;
+      }
+    }
+  }
+}
+
+.media-comment {
+  .media-body {
+    border-bottom: 1px solid @gray-lighter;
+  }
+}
+
+.subcomments {
+  margin-left: 20px;
+  padding-left: 10px;
+  background-color: @gray-lighter;
+}
+
+
+// 课程评价等
+.media-evaluate {
+  .media-body {
+    padding-bottom: 15px;
+    border-bottom: 1px solid @gray-lighter;
+  }
+  .title {
+    color: @gray;
+    margin-bottom: 5px;
+    a {
+      margin-right: 5px;
+    }
+    .date {
+      margin-left: 5px;
+    }
+  }
+  .actions {
+    margin-top: 10px;
+    .show-full-btn,
+    .show-short-btn {
+      visibility: hidden;
+    }
+  }
+  &:hover {
+    .actions .show-full-btn,
+    .actions .show-short-btn {
+      visibility: visible;
+    }
+  }
+}
+
+// 小组
+.media-group-list {
+  margin-top: -20px;
+}
+.media-group {
+  margin-top: 20px;
+  @media(max-width:@screen-xs-max) {
+    margin-top: 15px;
+  }
+  &:first-child {
+    margin-top: 20px;
+    @media(max-width:@screen-xs-max) {
+      margin-top: 15px;
+    }
+  }
+  .avatar-square-md {
+    @media(max-width:@screen-xs-max) {
+      width: 40px !important;
+      height: 40px !important;
+    }
+  }
+  .title {
+    height: 20px;
+    overflow: hidden;
+    margin: 5px 0;
+    @media(max-width:@screen-xs-max) {
+      margin: 0;
+    }
+  }
+  .metas {
+    color: @gray-medium;
+    span {
+      margin-right: 10px;
+    }
+    i {
+      margin-right: 5px;
+      font-size: 14px;
+    }
+  }
+}
+
+// 动态
+.media-dynamic {
+  &:first-child {
+    margin-top: 0;
+  }
+  margin-top: 8px;
+  &:last-child .media-body {
+    border: none;
+  }
+  .media-body {
+    position: relative;
+    padding-right: 80px;
+    padding-bottom: 8px;
+    // border-bottom: 1px solid @gray-lighter;
+    @media(max-width:@screen-xs-max) {
+      padding-right: 0;
+    }
+    .title {
+      .text-overflow;
+      font-size: 12px;
+    }
+    .content { 
+      height: 20px;
+      overflow: hidden;
+      display: block;
+      color: @gray;
+    }
+  }
+  .date {
+    position: absolute;
+    right: 0px;
+    top: 9px;
+    // font-size: 16px;
+    color: @gray-medium;
+    @media(max-width:@screen-xs-max) {
+      display: none;
+    }
+  }
+}
+
+// 用于搜索页面
+.media-search {
+  .reply {
+    background-color: @gray-lighter;
+    color: @gray;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    padding: 5px;
+    .border-radius;
+  }
+  .title {
+    font-size: 16px;
+    margin-bottom: 10px;
+    @media( max-width: @screen-xs-max) {
+      font-size: 14px;
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{% import "macro.html.twig" as web_macro %}
+  {% for item in items %}
+    <li class=" item-lesson {% if item.exist|default(false) %}disdragg {% else %} drag {% endif %}" id="" question-id="{{item.id}}" data-role="scale-blue-item" data-url="{{ path('course_question_marker_preview', {id:item.id, courseId:course.id}) }}"  data-toggle="modal" data-target=".modal">
+      <span class="sqe-number"><i class="question-remove es-icon es-icon-icon_close_circle" data-role="question-remove"></i><span data-role="sqe-number">1</span>、</span>
+      <span class="title">
+        <i class="icon-drag es-icon es-icon-yidong {% if loop.index == 1 %}introhelp-icon-drag{% endif %}"></i>
+        <span class="color-primary text-xs" data-role="question-type">[{{ dict('questionType')[item.type] }}]</span>
+      </span>
+      <span class="info text-overflow">{{item.material|fill_question_stem_text|plain_text() }}</span>
+      <a class="link-gray btn-preview js-question-preview" href="javascript:" data-toggle="modal" data-target="#modal" data-url="{{ path('course_question_marker_preview', {id:item.id, courseId:course.id}) }}"><i class="es-icon es-icon-visibility" ></i></a>
+    </li>
+  {% else %}
+    <div class="empty">{{'question.marker_search.empty_tips'|trans}}</div>
+  {% endfor %}
+  {% if paginator.lastPage > 1 %}
+  <li class="more-questions" data-last-page="{{ paginator.lastPage }}" data-current-page="{{ paginator.currentPage }}" data-url="{{ path('course_task_question_marker_search',{courseId: course.id, taskId: task.id, page: ''}) }}">
+    <span class="loading hidden">
+      <img src="{{ asset('assets/img/default/loading.gif') }} ">{{ 'question.marker_search.submiting'|trans }}
+    </span>
+    <a class="js-more-questions link-gray" href="javascript:">
+      {{ 'question.marker_search.more_questions'|trans }} <i class="es-icon es-icon-chevronright"></i>
+    </a>
+  </li>
+  {% endif %}

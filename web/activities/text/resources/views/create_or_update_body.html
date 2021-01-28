@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>text create or update</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/activities/text/static-dist/css/text.css" rel="stylesheet" />
+</head>
+<style>
+  .ckeditor-uploadpictures-pick-btn.file-pick-btn {
+    position: relative;
+  }
+  .ckeditor-uploadpictures-pick-btn.file-pick-btn  >div:nth-child(2){
+    width:100%!important;
+    height:100%!important;
+  }
+
+  .help-block {
+    color: #a1a1a1;
+    margin-bottom: 0;
+  }
+</style>
+<body>
+<script src="/static-dist/libs/ltc-sdk-client.js"></script>
+<div class="tab-content" id="iframe-content">
+    <div class="tab-pane js-course-tasks-pane active js-step2-view">
+        <form class="form-horizontal" id="step2-form" >
+            <div class="form-group">
+                <div class="col-sm-2 control-label">
+                    <label for="title" class="control-label-required">
+                        标题名称
+                    </label>
+                </div>
+                <div class="col-sm-10">
+                  <input id="title" class="form-control" type="text" name="title" value="" >
+                  <div class="help-block">{{ 'course.plan_task.activity_manage.help_block'|trans }}</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">
+                    <label for="text-content-field" class="control-label-required">
+                      内容
+                    </label>
+                </div>
+                <div class="col-sm-10">
+                  <a id="see-draft-btn" class="activity-link text-12 js-continue-edit hidden" data-content="">
+                    您有一段自动保存内容，请点击继续编辑
+                  </a>
+                    <textarea class="form-control type-hidden js-text" id="text-content-field" name="content"></textarea>
+                    <div class="help-block">{{ 'editor.iframe_tips'|trans }}</div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="/activities/text/static-dist/js/create/index.js"></script>
+</body>
+</html>

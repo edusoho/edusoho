@@ -1,0 +1,35 @@
+<div class="col-lg-3 col-sm-4 col-xs-6 materials-list{% if source|default('') == 'my' %} my-materials-list {% endif %}" data-file-id="{{uploadFile.id}}">
+  <ul class="materials-ul clearfix">
+    <li class="img-li">
+      {% include 'material-lib/web/widget/thumbnail.html.twig' %}
+    </li>
+    <li class="caption">
+      <p class="title text-overflow" data-toggle="tooltip" data-placement="top" title="{{uploadFile.filename}}">{% if uploadFile.storage == 'cloud' %}
+        <span class="glyphicon glyphicon-cloud"></span>
+      {% endif %}{{ uploadFile.filename }}</p>
+
+      <p class="status-parent">
+      {% if uploadFile.storage == 'cloud' and uploadFile.type in ['video', 'ppt', 'document'] %}
+        {% if uploadFile.convertStatus == 'error' %}
+          <span class="status label label-danger">{{'material_lib.upload_file.convert_status.error'|trans}}</span>
+        {% elseif uploadFile.convertStatus in ['doing','waiting'] %}
+          <span class="status label label-info">{{'material_lib.upload_file.convert_status.doing'|trans}}</span>
+        {% endif %}
+      {% endif %}
+
+      {% if uploadFile.usedCount|default(0) == 0 %}
+        <span class="label label-default">{{'material_lib.upload_file.not_used'|trans}}</span>
+      {% endif %}
+      </p>
+      {#<p class="color-gray use-time text-overflow">热度： {{ uploadFile.usedCount|default(0) }}次</p>#}
+      <p class="color-gray text-overflow text-sm mb0" title="{{ uploadFile.createdTime|date('Y/m/d H:i') }}">
+        {{ 'material_lib.upload_file.time'|trans }}  {{ uploadFile.createdTime|date('Y/m/d H:i') }}
+      </p>
+      {% if source in ['public','sharing','favorite'] %}
+      <p class="color-gray text-overflow text-sm" title="{{ createdUsers[uploadFile.createdUserId|default(0)].nickname|default('') }}">
+        {{ 'material_lib.upload_file.creator'|trans }}  {{ createdUsers[uploadFile.createdUserId|default(0)].nickname|default('') }}
+      </p>
+      {% endif %}
+    </li>
+  </ul>
+</div>

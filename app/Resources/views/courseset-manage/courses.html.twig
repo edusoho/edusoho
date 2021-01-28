@@ -1,0 +1,48 @@
+{% extends 'courseset-manage/courseset-layout.html.twig' %}
+
+{% block title %}{{ 'course.teach_plan_manage'|trans }} - {{ parent() }}{% endblock %}
+{% set side_nav = 'plan' %}
+{% set hasMulCourses = has_mul_courses(courseSet.id) %}
+{% do script(['app/js/course-manage/index.js']) %}
+
+{% block main %}
+  <div role="courseset-manage-courses">
+    <div class="cd-mb24 clearfix">
+      <div class="pull-right">
+        <div class="js-sort-group hidden-xs">
+          {% if courseSet.platform|default('self') == 'self' %}
+            <a class="cd-btn cd-btn-primary js-create-plan" {% if courses|length > 9 %} disabled data-toggle="tooltip" data-placement="top" title={{ 'course.teaching_plan.create.max_plan_number'|trans }} {% else %}data-toggle="modal" data-target="#modal"
+              data-url="{{ path('course_set_manage_course_create', {courseSetId: courseSet.id}) }}" {% endif %}>{{ 'course.teaching_plan.create'|trans }}</a>
+          {% endif %}
+          {% if hasMulCourses %}<button class="cd-btn cd-btn-default cd-ml16 js-sort-btn">{{ 'course.teaching_plan.sort'|trans }}</button>{% endif %}
+        </div>
+        <div class="js-sort-group hidden-xs hide">
+          <button class="cd-btn cd-btn-primary cd-mr16 js-save-sort-btn">{{ 'course.teaching_plan.sort.save'|trans }}</button>
+          <button class="cd-btn cd-btn-default js-cancel-sort-btn">{{ 'course.teaching_plan.sort.cancel'|trans }}</button>
+        </div>
+      </div>
+      <div class="cd-select teaching-type-select" id="select-single">
+        <div class="select-value">{{ 'course.filter.all_plan'|trans }}</div>
+        <ul class="select-options">
+          <li class="checked" data-value="">{{ 'course.filter.all_plan'|trans }}</li>
+          <li data-value="published">{{ 'course.status.published'|trans }}</li>
+          <li data-value="draft">{{ 'course.status.unpublished'|trans }}</li>
+          <li data-value="closed">{{ 'course.status.closed'|trans }}</li>
+        </ul>
+      </div>
+    </div>
+    <ul class="js-plan-list courses-manage-list sortable-list" data-sort-url="{{ path('course_sort', {courseSetId: courseSet.id}) }}">
+      {% for course in courses %}
+        <li class="cd-mb24 js-plan-item courses-manage-item js-status-{{ course.status }}" id="course-plan-{{ course.id }}" data-course-id="{{ course.id }}">
+          {% include 'courseset-manage/course-list.html.twig' with { hasMulCourses: hasMulCourses }%}
+        </li>
+    {% endfor %}
+    </ul>
+    {% if not hasMulCourses %}
+      <div class="courses-manage-plan-info">
+        {{ 'course.plan_info'|trans|raw }}
+      </div>
+    {% endif %}
+    <nav class="text-center">{{ web_macro.paginator(paginator) }}</nav>
+  </div>
+{% endblock %}

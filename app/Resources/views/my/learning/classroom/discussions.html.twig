@@ -1,0 +1,78 @@
+{% extends 'my/layout.html.twig' %}
+
+{% block title %}{{'my.learning.thread'|trans}} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'my-discussions' %}
+
+{% block main %}
+
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">{{'my.learning.thread'|trans}}</div>
+
+  <div class="panel-body">
+    {% include 'my/learning/thread/tab.html.twig'%}
+    {% if threads %}
+
+    {% set type = type|default('discussion') %}
+
+    <ul class="media-list">
+      {% for thread in threads %}
+       {% if classrooms %}
+        {% set classroom = classrooms[thread.targetId]|default(null) %}
+        <li class="media">
+            <div class="media-body">
+              {% if thread.postNum > 0 %}
+                <span class="badge pull-right" style="margin-top:15px;">{{ thread.postNum }}</span>
+              {% endif %}
+              <div class="mbm">
+                {% if thread.type == 'question' %}
+                  <span class="label label-info" title="{{'my.learning.thread.question_tips'|trans}}">{{'my.thread.question'|trans}}</span>
+                {% endif  %}
+
+                <a href="{{ path('classroom_thread_show', {classroomId:thread.targetId, threadId:thread.id}) }}" target="_blank"><strong>{{ thread.title }}</strong></a>
+
+                {% if thread.nice %}
+                  <span class="label label-warning" title="{{'my.learning.thread.essence_tips'|trans}}">{{'my.learning.thread.essence'|trans}}</span>
+                {% endif %}
+
+              </div>
+              <div class="color-gray text-normal">
+                {% if classroom %}
+                  <span>{{'my.learning.thread.target_classroom'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}<a href="{{ path('classroom_show', {id:classroom.id}) }}" class="link-primary" target="_blank">{{ classroom.title }}</a></span>
+                {% else %}
+                  <span>{{ setting('classroom.name')|default("classroom") }}{{'my.learning.thread.deleted'|trans}}</span>
+                {% endif %}
+                <span class="bullet">•</span>
+                {% if thread.postNum > 0 %}
+                  {% set poster = users[thread.lastPostUserId] %}
+                  <span>{{'my.learning.thread.last_post'|trans}} {{ web_macro.user_link(poster, 'link-primary') }}</span>
+                  ,
+                  <span>{{ thread.lastPostTime|smart_time }}</span>
+                  <span class="bullet">•</span>
+                {% endif %}
+                <span>{{ thread.hitNum }}{{'my.learning.thread.browse'|trans}}</span>
+              </div>
+            </div>
+          </li>
+        {% else %}
+          {% if type == 'question' %}
+            <li class="empty">{{'my.learning.thread.question_empty'|trans}}</li>
+          {% else %}
+            <li class="empty">{{'my.learning.thread.empty'|trans}}</li>
+          {% endif %}
+
+        {% endif %}
+
+      {% endfor %}
+
+    </ul>
+    <nav class="text-center">
+      {{ web_macro.paginator(paginator) }}
+    </nav>
+
+    {% else %}
+      <div class="empty">{{'my.learning.thread.empty'|trans}}</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

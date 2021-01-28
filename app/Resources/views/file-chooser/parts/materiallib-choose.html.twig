@@ -1,0 +1,54 @@
+<div class="chooser-content">
+	<div class="row ">
+		<select class="form-control col-sm-2 inline-block" id="materialType" data-sharing-contacts-url="{{ path('media_materiallib_contacts') }}">
+			<option data-type="my" value="my" data-url="{{ path('media_materiallib_contacts') }}">{{'file_chooser.materiallib_choose.from_upload'|trans}}</option>
+			<option data-type="sharing" value="sharing"  data-url="{{ path('media_materiallib_contacts') }}">{{'file_chooser.materiallib_choose.from_share'|trans}}</option>
+			<option data-type="public" value="public" data-url="{{ path('media_materiallib_contacts') }}">{{'file_chooser.materiallib_choose.from_public'|trans}}</option>
+		</select>
+		<div class="col-sm-4 controls material-tags">
+			<input type="text" id="materialTags" name="material-tags" class="width-200 select2-offscreen" tabindex="-1"
+						 data-url="{{ path('tag_match') }}"
+						 data-explain="{{ 'course.base.tag_tips'|trans }}">
+		</div>
+		<div class="col-sm-6 material-search-form hidden-xs pll">
+      <span class="input-group js-file-name-group">
+        <input name="file-filter-by-name" class="form-control  js-file-name" type="text"
+               placeholder="{{'file_chooser.course_file.input_placeholder'|trans({'%placeholder%':placeholder|default(null)})}}">
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-default js-browser-search"
+                  data-url="{{ path('media_materiallib_choose') }}" data-loading-text="{{'form.btn.search.submiting'|trans}}">{{'form.btn.search'|trans}}</button>
+        </span>
+      </span>
+		</div>
+		<div class="col-sm-6 material-search-form visible-xs mtm">
+      <span class="input-group js-file-name-group">
+        <input name="file-filter-by-name" class="form-control width-150 js-file-name" type="text"
+               placeholder="{{'file_chooser.course_file.input_placeholder'|trans({'%placeholder%':placeholder|default(null)})}}">
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-default js-browser-search mbm"
+                  data-url="{{ path('media_materiallib_choose') }}" data-loading-text="{{'form.btn.search.submiting'|trans}}">{{'form.btn.search'|trans}}</button>
+        </span>
+      </span>
+		</div>
+		<div class="js-file-owner-group col-sm-offset-6 col-sm-6 mtm hidden ">
+      <span class="file-filter-by-owner-container" style="">
+        <select name="file-filter-by-owner" class="js-file-owner form-control">
+          <option value="">{{'file_chooser.materiallib_choose.choose_teacher'|trans}}</option>
+        </select>
+      </span>
+		</div>
+	</div>
+</div>
+
+<div class="js-material-lib-search-form">
+	<input type="hidden" name="sourceFrom" value="my">
+	<input type="hidden" name="tagId" value="">
+	<input type="hidden" name="page" value="1">
+	<input type="hidden" name="currentUserId">
+	<input type="hidden" name="type" value="{{ fileType|default('') }}">
+	<input type="hidden" name="keyword">
+  <input type="hidden" name="batch" value="{{ batch|default(0) }}">
+</div>
+<div class="js-material-list chooser-list-parent">
+	<div class="empty">{{'file_chooser.materiallib_choose.wating'|trans}}</div>
+</div>

@@ -1,0 +1,34 @@
+{% import "admin/macro.html.twig" as admin_macro %}
+<tr id="blockitem{{ blockTemplate.id }}">
+    <td>
+        {{ blockTemplate.title }}
+        <br>
+        <span class="text-muted text-sm">{{'admin.block_manage.code'|trans({'%code%': blockTemplate.code})}}</span>
+    </td>
+    <td>
+        {% if latestHistory.userId|default(null) %}
+        {{ admin_macro.user_link(latestUpdateUser|default(null)) }}
+        {% else %}
+        <span class="text-muted">{{'admin.block_manage.no_edit'|trans}}</span>
+        {% endif %}
+        <br>
+        {% if latestHistory.createdTime|default(null) %}
+        <span class="text-muted text-sm">{{ latestHistory.createdTime|date('Y-n-d H:i:s') }}</span>
+        {% endif %}
+    </td>
+    <td>
+        {% if blockTemplate.mode == 'html' %}
+            <button class="btn btn-sm btn-primary update-btn" data-url="{{ path('admin_block_update', {blockTemplateId:blockTemplate.id}) }}" data-toggle="modal" data-target="#modal">{{'admin.block_manage.edit_html'|trans}}</button>
+        {% endif %}
+
+        {% if blockTemplate.mode == 'template' %}
+            <a class="btn btn-sm btn-primary update-btn" href="{{ path('admin_block_visual_edit', {blockTemplateId:blockTemplate.id}) }}">{{'admin.block_manage.edit_content'|trans}}</a>
+        {% endif %}
+
+        {% if setting('developer.debug') %}
+        
+        <button class="btn btn-sm btn-default edit-btn hidden" data-url="{{ path('admin_block_edit', {blockTemplateId:blockTemplate.id}) }}" data-toggle="modal" data-target="#modal" >{{'admin.block_manage.set_up'|trans}}</button>
+        <button class="btn btn-sm btn-default delete-btn" data-url="{{ path('admin_block_delete', {id:blockTemplate.id}) }}" data-target="{{ blockTemplate.id }}">{{'admin.block_manage.delete'|trans}}</button>
+        {% endif %}
+    </td>
+</tr>

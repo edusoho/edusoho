@@ -1,0 +1,98 @@
+// 课程侧边栏
+.belongs-class {
+  .media-left {
+    img {
+      width: 100px;
+      height: auto;
+      border: 3px solid @border-color;
+      .border-radius;
+    }
+  }
+  .media-body {
+    vertical-align: middle;
+    > a {
+      color: @gray-dark;
+      .es-transition;
+      &:hover {
+        color: @brand-primary;
+        .es-transition;
+      }
+    }
+  }
+}
+
+.other-courses{
+  ul{
+    margin: -5px 0;
+    li{
+      position: relative;
+      padding-right: 48px;
+    }
+  }
+  .label{
+    position: absolute;
+    padding: 2px 2px;
+    right: 0;
+  }
+}
+
+// 推荐班级
+.panel-class {
+  .arrow-prev,
+  .arrow-next {
+    position: absolute;
+    top: 35%;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    .border-radius(50%);
+    background-color: #7f7f7f;
+    background-color: rgba(127, 127, 127, 0.5);
+    color: #fff;
+    text-align: center;
+    .es-transition;
+    visibility: hidden;
+    &:hover {
+      background-color: rgba(127, 127, 127, 0.8);
+      .es-transition;
+    }
+  }
+  .arrow-prev {
+    left: 5px;
+  }
+  .arrow-next {
+    right: 5px;
+  }
+  &:hover {
+    .arrow-prev,
+    .arrow-next {
+      visibility: visible;
+    }
+  }
+}
+
+.course-detail {
+  margin-top: -10px; 
+}
+.course-detail-content {
+
+  .nav-tabs--course > li > a {
+    @media (min-width: @screen-md-max) {
+      padding: 5px 20px 15px ;
+    }
+  }
+
+  .es-piece {
+    margin-bottom: 50px;
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+    .piece-body p {
+      line-height: 30px;
+      margin-bottom: 0px;
+      margin-left: 15px;
+      margin-right: 15px;
+    }
+  }
+}

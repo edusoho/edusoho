@@ -1,0 +1,25 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = menu|default('admin_v2_course_category') %}
+{% block page_buttons %}
+<div class="pull-right">
+    <a class="btn btn-success btn-sm" data-url="{{path('admin_v2_category_create',{groupId:group.id})}}" data-toggle="modal" data-target="#modal">{{'admin_v2.category_manage.add_title'|trans}}</a>
+</div>
+{% endblock %}
+{% block main %}
+<div class="btn-group mbm">
+	<a href=" {{ path('admin_v2_course_category') }}" type="button" class="btn btn-default btn-sm {% if group.code == 'course' %}btn-primary{% endif %}">{{'admin_v2.course.category.course_category_tab'|trans}}</a>
+	<a href=" {{ path('admin_v2_classroom_category') }}" type="button" class="btn btn-default btn-sm {% if group.code == 'classroom' %}btn-primary{% endif %}">{{'admin_v2.course.category.classroom_category_tab'|trans}}</a>
+</div>
+
+  <ul class="list-table" id="category-table" style="margin-bottom: 0">
+    <li class="th">
+      <div class="row">
+        <div class="td col-md-7">{{'admin.category_manage.name_th'|trans}}</div>
+        <div class="td col-md-2">{{'admin.category_manage.code_th'|trans}}</div>
+        <div class="td col-md-3">{{'admin.category_manage.operate_th'|trans}}</div>
+      </div>
+    </li>
+    {% include 'admin-v2/teach/category/tbody.html.twig' %}
+  </ul>
+{% endblock %}

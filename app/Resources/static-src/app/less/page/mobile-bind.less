@@ -1,0 +1,117 @@
+.mobile-bind-modal {
+  position: relative;
+  left: 50%;
+  margin-left: -379px;
+
+  @media(max-width: @screen-xs-max) {
+    width: 408px;
+    margin-left: -180px !important;
+  }
+
+  @media(max-width: @screen-xs-min) {
+    margin-left: -150px !important;
+  }
+
+  .modal-content {
+    width: 758px;
+    height: 358px;
+    padding: 24px;
+    border-radius: 2px;
+    display: table;
+    @media(max-width: @screen-xs-max) {
+      width: 408px;
+      height: 604px;
+    }
+
+    @media(max-width: @screen-xs-min) {
+      width: 300px;
+    }
+
+    .modal-header {
+      padding: 0;
+      border: none;
+      .mobile-bind__title {
+        font-size: 16px;
+        line-height: 1;
+      }
+
+      .close {
+        padding-top: 2px;
+        font-size: 12px;
+        line-height: 16px;
+        opacity: 1;
+        &:hover {
+          opacity: 0.8;
+        }
+      }
+    }
+
+    .modal-body {
+      padding: 32px 0 0;
+    }
+  }
+
+  .mobile-bind-form {
+    float: left;
+    width: 360px;
+    height: auto;
+    @media(max-width: @screen-xs-min) {
+      width: 252px;
+    }
+  }
+
+  .mobile-bind-form__divider {
+    float: left;
+    width: 2px;
+    height: 100%;
+    margin-left: 24px;
+    border: 1px dashed @brand-primary;
+  }
+
+  .mobile-bind-form__btn {
+    width: 360px;
+    margin-top: -4px;
+    @media(max-width: @screen-xs-min) {
+      width: 252px;
+    }
+  }
+
+  .mobile-bind-reasons {
+    float: right;
+    @media(max-width: @screen-xs-max) {
+      float: left;
+      margin-top: 70px;
+    }
+    i {
+      color: @brand-primary;
+    }
+    .mobile-bind-reasons__title {
+      font-size: 14px;
+      color: #313131;
+      line-height: 14px;
+    }
+    .mobile-bind-reasons__contents {
+      width: 300px;
+      height: 184px;
+      margin-top: 16px;
+      padding: 16px;
+      background-color: rgba(red(@brand-primary), green(@brand-primary), blue(@brand-primary), .1);
+      border-radius: 4px;
+      @media(max-width: @screen-xs-max) {
+        width: 360px;
+      }
+
+      @media(max-width: @screen-xs-min) {
+        width: 252px;
+      }
+      p {
+        margin: 0;
+        font-size: 12px;
+        color: #616161;
+        text-align: justify;
+        line-height: 20px;
+      }
+    }
+  }
+
+}

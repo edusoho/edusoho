@@ -1,0 +1,17 @@
+{% extends 'v2/layout.html.twig' %}
+
+{% block title %}{{'user.account.invite_code'|trans}} - {{ parent() }}{% endblock %}
+
+{% do script(['app/js/coin/invite-code/index.js']) %}
+
+{% set side_nav = 'my-invite-code' %}
+
+{% block page_title %}
+  {{ 'user.account.invite_code'|trans }}
+{% endblock %}
+
+{% block main_body %}
+  <div class="well" style="text-align:center;">
+    {{'user.account.my_invite_code.close'|trans}}
+  </div>
+{% endblock %}

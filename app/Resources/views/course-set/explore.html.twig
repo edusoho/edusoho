@@ -1,0 +1,146 @@
+{% extends 'layout.html.twig' %}
+
+{% set mobile = is_show_mobile_page() %}
+{% set bodyClass = 'course-list-page ' %}
+{% set siteNav = 'course/explore' %}
+
+{% do script(['app/js/course/explore/index.js']) %}
+
+{% block keywords %}
+  {{ categoryArray.name|default('category.all_category'|trans) }}
+  {% if categoryParent %}{{ ","}}{{ categoryParent.name|default('') }}{% endif %}
+{% endblock %}
+
+{% block description %}
+  {{ categoryArray.description|default('')|striptags|trim|plain_text(100) }}
+{% endblock %}
+
+{% block title %}{{ categoryArray.name|default('category.all_category'|trans) }} - {{ setting('site.name') }}{% if setting('site.slogan') %}{{ ' - ' }}{{ setting('site.slogan') }}{% endif %}{% if not setting('copyright.owned') %} - Powered By EduSoho{% endif %}
+{% endblock %}
+
+{% block top_content %}
+  <div class="es-banner">
+    <div class="container">
+      <div class="title">
+        <i class="es-icon es-icon-viewcomfy"></i>
+        {{ 'explore.course.list'|trans }}
+      </div>
+
+      {% set classrooms = data('Classrooms',{count:1}) %}
+      <div class="more">
+        {% if classrooms|default(null) %}
+          <a class="btn btn-primary btn-lg" href="{{ path('classroom_explore') }}">
+            {{ 'explore.course.view_name_btn'|trans({'%name%': setting('classroom.name')|default('classroom'|trans)}) }}
+          </a>
+        {% endif %}
+        <a class="btn btn-primary btn-lg" href="{{ path('open_course_explore') }}">
+          {{ 'explore.view_open_course_btn'|trans }}
+        </a>
+      </div>
+    </div>
+  </div>
+
+  {% if mobile %}
+    {% include 'course-set/search-mobile.html.twig' %}
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  {% set type = filter.type|default('all') %}
+  {% set price = filter.price|default('all') %}
+  {% set orderBy = app.request.query.get('orderBy')|default('latest')%}
+  {% set currentLevelId = filter.currentLevelId|default('all') %}
+  {% set path = app.request.get('_route') %}
+  {% set subCategory = app.request.query.get('subCategory', '') %}
+  {% set thirdLevelCategory = app.request.query.get('selectedthirdLevelCategory', '') %}
+
+  {{ render(controller('AppBundle:Category:treeNav',{request:app.request, category:category, tags:tags, group:'course'})) }}
+
+  <div class="es-filter">
+    <ul class="nav nav-sort clearfix">
+      <li>
+        <a
+          href="{{ path('course_set_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: 'latest'}) }}"
+          class="{% if (orderBy == 'latest') %}active{% endif %}">
+          {{ 'site.datagrid.filter.latest'|trans }}
+        </a>
+      </li>
+      <li>
+        <a
+          href="{{ path('course_set_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: 'hotSeq'}) }}"
+          class="{% if (orderBy == 'hotSeq') %}active{% endif %}">
+          {{ 'site.datagrid.filter.hotest'|trans }}
+        </a>
+      </li>
+      <li>
+        <a
+          href="{{ path('course_set_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: 'recommendedSeq'}) }}"
+          class="{% if (orderBy == 'recommendedSeq') %}active{% endif %}">
+          {{ 'site.datagrid.filter.recommended'|trans }}
+        </a>
+      </li>
+    </ul>
+    <div class="filter hidden-xs">
+      {% if is_plugin_installed('vip') %}
+        <div class="btn-group">
+          <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i
+              class="es-icon es-icon-crown text-warning"></i>
+            {% if (currentLevelId == 'all') %}{{ 'search.vip_courses'|trans }}{% endif %}
+            {% for level in levels %}{% if (level.id == currentLevelId) %}{{ level.name|sub_text(4) }}{% endif %}{% endfor %}
+          </button>
+          <ul class="dropdown-menu" role="menu">
+            <li role="presentation" class="{% if (currentLevelId == 'all') %}active {% endif %}"><a
+                href="{{ path('course_set_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags},  filter: {type: type,price: price,currentLevelId: 'all'},orderBy: orderBy}) }}">{{ 'category.all_category'|trans }}</a>
+            </li>
+            {% for level in levels %}
+              <li role="presentation" class="{% if (level.id == currentLevelId) %}active {% endif %}"><a
+                  href="{{ path('course_set_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags},  filter: {type: type,price: price,currentLevelId: level.id},orderBy: orderBy}) }}">{{ level.name }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+      <label class="checkbox-inline">
+        <input type="checkbox" class="js-search-type" {% if type == 'live' %}checked="true" {% endif %} id="live" value="
+        {% if type == 'live' %}
+          {{ path('course_set_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {type: 'all',price: price,currentLevelId: currentLevelId},orderBy: orderBy}) }}
+        {% else %}
+          {{ path('course_set_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {type: 'live',price: price,currentLevelId: currentLevelId},orderBy: orderBy}) }}
+        {% endif %}"> {{ 'search.live_courses'|trans }}
+      </label>
+
+      <label class="checkbox-inline">
+        <input type="checkbox" class="js-search-type" {% if price == 'free' %}checked="true" {% endif %} id="free" value="
+        {% if price == 'all' %}
+          {{ path('course_set_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {type: type,price: 'free',currentLevelId: currentLevelId},orderBy: orderBy}) }}
+        {% else %}
+          {{ path('course_set_explore', {category:category, subCategory:subCategory, selectedthirdLevelCategory:thirdLevelCategory, tag:{tags:tags}, filter: {type: type,price: 'all',currentLevelId: currentLevelId},orderBy: orderBy}) }}
+        {% endif %}
+        "> {{ 'search.free_courses'|trans }}
+      </label>
+
+      {{ slot('course.list.search', {request:app.request, filter:filter, category:category, tags:tags}) }}
+    </div>
+  </div>
+
+  <div class="course-list course-list-new">
+    <div class="row">
+      {% if courseSets %}
+        {% for courseSet in courseSets %}
+          <div class="col-lg-3 col-md-4 col-xs-6 course-item-wrap">
+            {% include 'course/widgets/course-grid-new.html.twig' with {courseSet: courseSet} %}
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="empty">{{ 'explore.course.empty'|trans }}</div>
+      {% endif %}
+    </div>
+  </div>
+  {% if not mobile %}
+    <nav class="text-center">{{ web_macro.paginator(paginator) }}</nav>
+  {% endif %}
+{% endblock %}
+
+{% block bottom %}
+  {% include 'mobile/footer-tool-bar.html.twig' with { mobile_tool_bar: 'course' } %}
+{% endblock %}

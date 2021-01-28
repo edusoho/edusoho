@@ -1,0 +1,38 @@
+<div class="es-piece">
+  <div class="piece-header">{{'基础信息'|trans}}</div>
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+    <label for="title" class="control-label-required">{{'course.plan_setup.name'|trans}}</label>
+    </div>
+    <div class="col-sm-8">
+      <input class="form-control" type="text" id="title" name="title" value="{{course.title|default('')}}">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-2 control-label">
+      <label>{{'course.plan_setup.summary'|trans}}</label>
+    </div>
+    <div class="col-md-8 controls">
+      <textarea class="form-control invisible" name="summary" rows="10" id="summary" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}">{{ field_value(course, 'summary') }}</textarea>
+    </div>
+  </div>
+
+  <div class="form-group dynamic-collection" id="course-goals-form-group">
+    <div class="col-md-2 control-label">
+      <label>{{'course.plan_setup.target'|trans}}</label>
+    </div>
+    <div class="col-md-8 controls">
+      <div id="course-goals" data-field-name="goals" data-init-value="{{course.goals|default([])|json_encode_utf8()}}"></div>
+    </div>
+  </div>
+
+  <div class="form-group" id="course-audiences-form-group">
+    <div class="col-md-2 control-label">
+      <label>{{'course.plan_setup.audiences'|trans}}</label>
+    </div>
+    <div class="col-md-8 controls">
+      <div id="intended-students" data-field-name="audiences" data-init-value="{{course.audiences|default([])|json_encode_utf8()}}"></div>
+    </div>
+  </div>
+</div>

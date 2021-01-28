@@ -1,0 +1,117 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}{{ 'course.task.learning'|trans }} - {{ parent() }}{% endblock %}
+
+{% set bodyClass = "" %}
+{% do script(['libs/perfect-scrollbar.js','libs/es-ckeditor/ckeditor.js','app/js/task/index.js']) %}
+
+{% block body %}
+  {% set preview = app.request.query.get('preview')  %}
+
+  {% if member.role|default('student') == 'teacher' %}
+    {% set preview = true %}
+  {% endif %}
+
+  <div id="js-hidden-data">
+    <input type="hidden" name="course-id" value="{{ task.courseId }}">
+    <input type="hidden" name="task-id" value="{{ task.id }}">
+    <input type="hidden" name="task-result-status" value="{{ taskResult.status }}">
+    <input type="hidden" name="mode" value="{% if preview %}preview{% else %}learn{% endif %}">
+    <input type="hidden" name="plugins_url" value="{{ path('course_task_show_plugins', {courseId: task.courseId, taskId: task.id}) }}">
+  </div>
+
+  <div class="task-dashboard-page js-task-dashboard-page">
+    <div class="dashboard-content" id="dashboard-content">
+      <div class="dashboard-header">
+        <a class="back-link" href="{{ path('my_course_show',{id:course.id}) }}">
+          <i class="es-icon es-icon-chevronleft"></i>{{ 'course.task.learning.back_course_btn'|trans }}
+        </a>
+        {{ 'course.task'|trans }}{{ task.number }}：{{ task.title }}
+      </div>
+      <div class="dashboard-body">
+        <div class="{% if task.type in ['exercise' , 'homework' ,'testpaper'] %} mobile-scroll-wrapper {% endif %} all-wrapper">
+          <iframe id="task-content-iframe" class="task-content-iframe"
+                  data-event-enable="{% if allowEventAutoTrigger %}1{% else %}0{% endif %}"
+                  data-event-url="{{ path('course_task_trigger', {courseId: task.courseId, id: task.id}) }}"
+                  data-last-time="{{ date().timestamp }}"
+                  src="http://www.esdev.com/ltc/dist/index.html"
+                  style="width:100%;height:100%;border:0px"
+                  allowfullscreen webkitallowfullscreen>
+          </iframe>
+        </div>
+      </div>
+
+      <div class="dashboard-footer">
+        <div class="pull-left js-audio-convert-box">
+          {% if media is not empty and setting('mobile.enabled')|default(false) and media.type == 'video' and media.storage == 'cloud' and media.audioConvertStatus == 'success' and not app.request.cookies.get('close-convert-audio-ad', false) %}
+            {{ 'course.task.show.video.convert.client.try'|trans }}
+            <a href="{{ path('mobile') }}">{{ 'course.video.convert.client.try'|trans }}</a>
+            <a class="js-audio-convert-ad" href="javascript:;" data-cookie="close-convert-audio-ad"><i class="es-icon es-icon-icon_close_circle text-xlg"></i>{{ 'course.task.show.video.convert.client.notify'|trans }}</a>
+          {% endif %}
+        </div>
+        <div class="btn-group pull-left visible-xs js-mobile-btn" role="group">
+          <a class="btn btn-default  {% if not  previousTask|default(null) %} disabled {% endif  %}"
+                  {% if  previousTask|default(null) %} href="{{ path('course_task_show',{courseId: course.id, id: previousTask.id}) }}" {% endif  %}><strong class="es-icon es-icon-chevronleft text-xlg"></strong></a>
+          {% set task_disable = course.learnMode == 'lockMode'  and  taskResult.status != 'finish' %}
+          <a class="btn btn-default js-next-mobile-btn  {% if not nextTask|default(null) %} disabled  {% endif %}"
+                  {% if task_disable %}
+                    data-toggle="popover"
+                    data-trigger="hover"
+                    data-placement="top"
+                    data-content='请先学完当前课程'
+                  {% endif  %}
+                  {% if  nextTask|default(null) %}
+            {% if  course.learnMode == 'lockMode'  and taskResult.status != 'finish' %}
+              data-url="{{ path('course_task_show',{courseId: course.id, id: nextTask.id}) }}"
+            {% else %}
+              href="{{ path('course_task_show',{courseId: course.id, id: nextTask.id}) }}"
+            {% endif %}
+                  {% endif  %}><strong class="es-icon es-icon-chevronright text-xlg"></strong></a>
+        </div>
+        <div class="state-opration js-state-opration" data-learnmode="{{course.learnMode|default('freeMode')}}">
+          <a class="btn btn-gray text-sm {% if task.type == 'video' %} hidden-xs{% endif %} js-learn-prompt {% if taskResult.status != 'finish' %}open{% endif %}"
+             href="javascript:;"
+             data-toggle="popover"
+             data-trigger="hover"
+             data-placement="top"
+             data-content='{{ render(controller('AppBundle:Task:finishCondition', {task: task})) }}'>
+            <i class="es-icon es-icon-help mrs text-md"></i>{{ 'course.task.learning.finish_condition'|trans }}
+          </a>
+          <span class="btn text-sm{% if task.type == 'video' %} hidden-xs{% endif %} js-learned-prompt color-primary {% if taskResult.status == 'finish' %}open{% endif %}"
+                href="javascript:;"
+                data-toggle="popover"
+                data-trigger="hover"
+                data-placement="top"
+                data-container=".js-learned-prompt"
+                data-content='{% include "task/task-finished-prompt.html.twig" %}'
+                data-url="{{ path('course_task_finished_prompt', {courseId: course.id, id: task.id}) }}">
+              <i class="es-icon es-icon-iccheckcircleblack24px mrs text-md"></i>{{ 'course.task.learning.finish_btn'|trans }}
+          </span>
+        </div>
+        {% if course.enableFinish|default(0) == 1 %}
+          <a type="button" href="javascript:;"
+                  {% if taskResult.status != 'finish' %}
+            class="btn btn-transparent btn-learn js-btn-learn"
+            id='learn-btn'
+            data-url='{{ path("course_task_finish",{courseId: task.courseId, id: task.id}) }}'
+          {% else %}
+            class="btn btn-transparent btn-learn js-btn-learn active"
+                  {% endif %}>
+            <i class="es-icon es-icon--check-circle done"></i>
+            <i class="es-icon es-icon-undone-check doing"></i>
+            {{ 'course.task.learning.learned_btn'|trans }}
+          </a>
+        {% endif %}
+
+      </div>
+    </div>
+    <div class="dashboard-sidebar hidden-xs" id="dashboard-sidebar">
+
+    </div>
+  </div>
+
+  <div id="login-modal" class="modal" data-url="{{ path('login_ajax') }}"></div>
+  <div id="modal" class="modal"></div>
+  <div id="attachment-modal" class="modal"></div>
+  {% include 'event_report.html.twig' with{ 'eventName':'task.view', 'subjectType':'courseMember', 'subjectId': course.id, 'eventReportParams':{}} %}
+{% endblock %}

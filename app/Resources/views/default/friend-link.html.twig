@@ -1,0 +1,12 @@
+{% if friendlyLinks %}
+<div class="es-friend-link">
+  <div class="container">
+    <div class="title">{{'homepage.friend-link.content_title'|trans}}</div>
+    <ul>
+      {% for friendLink in friendlyLinks %}
+      <li><a class="link-dark text-sm" href="{{ friendLink.url }}" {% if friendLink.isNewWin%}target="_blank"{% endif %}>{{friendLink.name}}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endif %}

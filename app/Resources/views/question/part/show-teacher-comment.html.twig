@@ -1,0 +1,23 @@
+<div class="form-horizontal">
+
+	<div class="form-group {% if not showScore|default(1) %}hidden{% endif %}">
+		<label class="col-sm-2 control-label">{{'course.question_manage.score'|trans}}</label>
+		<div class="col-sm-8 controls">
+			<input type="text" class="form-control width-150" placeholder="{{'course.question_manage.score'|trans}}" name="score_{{ question.id }}" data-score="{{ question.score }}" data-type="{{ question.type }}" data-id="{{ question.id }}" value="{% if question.testResult.answer[0]|default(null) is empty %}0{% endif %}">
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-2 control-label">{{'course.question_manage.comment'|trans}}</label>
+		<div class="col-sm-9">
+			<div class="testpaper-result-essay-teacherSay">
+			  <textarea class="form-control essay-teacher-say-short" rows="1" style="overflow:hidden;line-height:20px;"></textarea>
+
+				<textarea id="essay-teacher-say-long-{{ question.id }}" class="form-control essay-teacher-say-long" name="teacherSay_{{ question.id }}" data-role="teacher-say" style="display:none;" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"></textarea>
+
+				<a class="btn btn-link color-gray btn-sm essay-teacher-say-btn" style="display:none"><span class="glyphicon glyphicon-chevron-up color-gray"></span> {{'site.btn.collapse'|trans}}</a>
+			</div>
+		</div>
+	</div>
+
+</div>

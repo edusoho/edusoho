@@ -1,0 +1,29 @@
+ <div class="media note-item">
+  <div class="media-left">
+    {{ web_macro.user_avatar(user, '', 'avatar-sm', true) }}
+  </div>
+  <div class="media-body">
+    <div class="content">
+      <div class="editor-text">
+        {{ note.content|raw }}
+      </div>
+    </div>
+
+    <a href="javascript:;" class="more js-more-show">
+      <span class="js-change-btn">{{ 'course.note.expand_btn'|trans|raw }}</span>
+      <span class="js-change-btn" style="display: none;">{{ 'course.note.collapse_btn'|trans|raw }}</span>
+    </a>
+    <div class="metas clearfix">
+      {{ web_macro.user_link(user, 'name', false) }} · <span>{{ note.updatedTime|smart_time }}</span>
+      {% include 'classroom/note/note-mates.html.twig' %}
+      <span class="metas-sns">
+        <span class="icon-favour">
+          <a href="javascript:;" class="js-like {% if userLike %}color-primary{% endif %}" data-like-url="{{ path('note_like', {id:note.id}) }}" data-cancel-like-url="{{ path('note_cancel_like', {id:note.id}) }}">
+            <i class="es-icon es-icon-thumbup"></i>
+            <span class="js-like-num">{{ note.likeNum }}</span>
+          </a>
+        </span>
+      </span>
+    </div>
+  </div>
+</div>

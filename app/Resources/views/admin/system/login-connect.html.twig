@@ -1,0 +1,206 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set script_controller = 'system/login_bind' %}
+
+{% set menu = 'admin_setting_login_bind' %}
+
+{% block main %}
+
+  {{ web_macro.flash_messages() }}
+
+  <form class="form-horizontal" method="post" id="login_bind-form" novalidate>
+
+    <fieldset>
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label>{{ 'admin.login_connect.User_login_restrictions'|trans }}</label>
+        </div>
+        <div class="controls col-md-8 radios">
+          {{ radios('login_limit', {1:'admin.login_connect.open'|trans, 0:'admin.login_connect.closed'|trans}, loginConnect.login_limit) }}
+          <p class="help-block">{{ 'admin.login_connect.User_login_restrictions.help_block'|trans }}</p>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label>{{ 'admin.login_connect.Third_party_login'|trans }}</label>
+        </div>
+        <div class="controls col-md-8 radios">
+          {{ radios('enabled', {1:'admin.login_connect.open'|trans, 0:'admin.login_connect.closed'|trans}, loginConnect.enabled) }}
+        </div>
+      </div>
+    </fieldset>
+
+
+    <fieldset>
+      <div class="form-group">
+        <div class="col-md-3 control-label">
+          <label>{{ 'admin.login_connect.User_login_protection'|trans }}</label>
+        </div>
+        <div class="controls col-md-8 radios">
+          {{ radios('temporary_lock_enabled', {1:'admin.login_connect.open'|trans, 0:'admin.login_connect.closed'|trans}, loginConnect.temporary_lock_enabled) }}
+          <p class="help-block">{{ 'admin.login_connect.Third_party_login.help_block'|trans }}</p>
+        </div>
+
+        <div id="times_and_minutes" class="col-md-8 col-md-offset-3"
+          {% if not loginConnect.temporary_lock_enabled|default(false) %}style="display:none"{% endif %}>
+          <div class="row">
+            <div class="col-md-4 lock-user-text-right">
+              {{ 'admin.login_connect.User_login_protection.enter_wrong_password'|trans }}
+            </div>
+            <div class="controls col-md-2 form-group">
+              <input type="text" id="temporary_lock_allowed_times" name="temporary_lock_allowed_times" class="form-control"
+                value="{{ loginConnect.temporary_lock_allowed_times }}">
+            </div>
+            <div class="col-md-3 lock-user-text-left">
+              {{ 'admin.login_connect.User_login_protection.enter_wrong_password.banned'|trans }}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4 lock-user-text-right">
+              {{ 'admin.login_connect.User_login_protection.some_IP_enter_wrong_password'|trans }}
+            </div>
+            <div class="controls col-md-2 form-group">
+              <input type="text" id="temporary_lock_allowed_times" name="ip_temporary_lock_allowed_times" class="form-control"
+                value="{{ loginConnect.ip_temporary_lock_allowed_times }}">
+            </div>
+            <div class="col-md-3 lock-user-text-left">
+              {{ 'admin.login_connect.User_login_protection.some_IP_enter_wrong_password.banned'|trans }}
+            </div>
+          </div>
+
+
+          <div class="row">
+            <div class="col-md-4 lock-user-text-right">
+              {{ 'admin.login_connect.User_login_protection.after'|trans }}
+            </div>
+            <div class="controls col-md-2 form-group">
+              <input type="text" id="temporary_lock_minutes" name="temporary_lock_minutes" class="form-control"
+                value="{{ loginConnect.temporary_lock_minutes }}">
+            </div>
+            <div class="col-md-3 lock-user-text-left">
+              {{ 'admin.login_connect.User_login_protection.after.unblock'|trans }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+    <fieldset id="third_login" {% if loginConnect.enabled|default(null) == 0 %} style="display:none"{% endif %}>
+      {% for type, client in clients if type not in ['weixinmob', 'weixinweb']%}
+        <fieldset data-role="oauth2-setting" data-type="{{ type }}">
+          <legend>{{ client.admin_name }}</legend>
+          <div class="form-group">
+            <div class="col-md-3 control-label">
+              <label>{{ client.admin_name }}</label>
+            </div>
+            <div class="controls col-md-8 radios">
+              {{ radios( type ~ '_enabled', {1:'admin.login_connect.open'|trans, 0:'admin.login_connect.closed'|trans}, loginConnect[type ~ '_enabled']) }}
+              {% if client.apply_url|default(null) %}
+              {% if type =='weixinmob' %}
+              <div class="help-block">{{ 'admin.login_connect.weixinmob.frist.help_block'|trans }}</div>
+              <div class="help-block">
+                {{ 'admin.login_connect.weixinmob.help_block'|trans|raw }}
+                {% elseif type == 'weixinweb' %}
+                <div class="help-block">{{ 'admin.login_connect.weixin.help_block'|trans|raw }}
+                </div>
+                <div class="help-block">
+                  {{ 'admin.login_connect.weixin.frist.help_block'|trans }}
+                  {% else %}
+                  <div class="help-block"><a href="{{ client.apply_url }}" target="_blank">{{ 'admin.login_connect.other.apply_btn'|trans }}{{ client.admin_name }}</a>
+                    {% endif %}
+                    {% if type == "qq" %}
+                      <a class="pll" href="javascript:;" id="help" data-toggle="popover" data-trigger="click" data-placement="top"
+                        title="{{ 'admin.login_connect.other.qq.help_title'|trans }}" data-html="true"
+                        data-content="{{ 'admin.login_connect.other.qq.data_content'|trans|raw }}">{{ 'admin.login_connect.other.qq.help_btn'|trans }}</a>
+                    {% endif %}
+                  </div>
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="col-md-3 control-label">
+                  <label for="{{ type }}_key">{{ client.key_setting_label }}</label>
+                </div>
+                <div class="controls col-md-8">
+                  <input type="text" id="{{ type }}_key" name="{{ type }}_key" class="form-control" value="{{ loginConnect[type ~ '_key'] }}">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="col-md-3 control-label">
+                  <label for="{{ type }}_secret">{{ client.secret_setting_label }}</label>
+                </div>
+                <div class="controls col-md-8">
+                  <input type="text" id="{{ type }}_secret" name="{{ type }}_secret" class="form-control"
+                    value="{{ loginConnect[type ~ '_secret'] }}">
+                </div>
+              </div>
+              {% if type == 'weibo' %}
+                <div class="form-group">
+                  <div class="col-md-3 control-label">
+                    <label for=""></label>
+                  </div>
+                  <div class="controls col-md-8 radios">
+                    <div class="help-block"><a href="#port">{{ 'admin.login_connect.type.weibo.help_block'|trans }}></a></div>
+                  </div>
+                </div>
+              {% endif %}
+        </fieldset>
+      {% endfor %}
+
+      {% for type, client in clients if type in ['weixinmob', 'weixinweb']%}
+        <fieldset>
+          <legend>{{ client.admin_name }}</legend>
+          <div class="form-group">
+            <div class="col-md-3 control-label">
+              <label>{{ client.admin_name }}</label>
+            </div>
+            <div class="controls col-md-1">
+              <p class="form-control-static">
+                {% if loginConnect[type ~ '_enabled'] %}
+                  {{ 'admin.payment_setting.api_open'|trans }}
+                {% else %}
+                  {{ 'admin.payment_setting.api_close'|trans }}
+                {% endif %}
+              </p>
+            </div>
+            <div class="controls col-md-2 form-control-static">
+              <a target="_blank" href="{{ path('admin_setting_wechat_auth') }}">
+              {% if loginConnect[type ~ '_enabled'] %}
+                {{ 'admin.payment_setting.api_close.direct'|trans }}
+              {% else %}
+                {{ 'admin.payment_setting.api_open.direct'|trans }}
+              {% endif %}
+              </a>
+            </div>
+          </div>
+
+        </fieldset>
+      {% endfor %}
+
+      <fieldset>
+        <legend id="port">{{ 'admin.login_connect.verifcation_loging_interface'|trans }}</legend>
+        <div class="form-group">
+          <div class="col-md-3 control-label">
+            <label for="verify_code">{{ 'admin.login_connect.verifcation_code'|trans }}</label>
+          </div>
+          <div class="controls col-md-8">
+            <textarea id="verify_code" name="verify_code" class="form-control" rows="5">{{ loginConnect.verify_code }}</textarea>
+            <div class="help-block">{{ 'admin.login_connect.verifcation_code.help_block'|trans }}</div>
+          </div>
+        </div>
+      </fieldset>
+    </fieldset>
+    <div class="form-group">
+      <div class="controls col-md-offset-3 col-md-8">
+        <button type="submit" class="btn btn-primary">{{ 'form.btn.submit'|trans }}</button>
+      </div>
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+  </form>
+
+{% endblock %}

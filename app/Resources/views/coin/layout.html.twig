@@ -1,0 +1,48 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}{{'user.account_center'|trans}} - {{ parent() }}{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-3">
+    {% block side %}
+
+      <div class="sidenav">
+        <ul class="list-group">
+          <li class="list-group-heading">{{'user.menu_heading'|trans}}</li>
+          <li class="list-group-item {% if side_nav in ['my-bill', 'my-coin', 'my-invite-code'] %} active {% endif %}">
+            <a href="
+              {% if setting('coin.coin_enabled') %}
+                {{path('my_coin')}}
+              {% else %}
+                {{path('my_bill')}}
+              {% endif %}
+              ">{{'user.account_menu'|trans}}
+            </a>
+          </li>
+          <li class="list-group-item {% if side_nav == 'my-orders' %} active {% endif %}">
+            <a href="{{path('my_orders')}}">{{'user.order_menu'|trans}}</a>
+          </li>
+          <li class="list-group-item {% if side_nav == 'my-cards' %} active {% endif %}">
+            <a href="{{path('my_cards')}}">{{'user.cards_menu'|trans}}</a>
+          </li>
+           {% if setting('reward_point').enable|default(0)%}
+            <li class="list-group-item {% if side_nav == 'my-reward-point' %} active {% endif %}">
+              <a href="{{path('my_reward_point')}}">{{'my.reward_point'|trans({'%name%':setting('reward_point').name|default('admin.reward_point'|trans)})}}</a>
+            </li>
+          {% endif %}
+          {% if is_plugin_installed('Vip')%}
+          <li class="list-group-item {% if side_nav == 'my-vip-record' %} active {% endif %}">
+            <a href="{{path('vip_history')}}">{{'user.vip_history_menu'|trans}}</a>
+          </li>
+          {% endif %}
+          {{ slot('my.account.menu.extension', {'sideNav': side_nav}) }}
+        </ul>
+      </div>
+    {% endblock %}
+  </div>
+  <div class="col-md-9">
+    {% block main %}{% endblock %}
+  </div>
+</div>
+{% endblock %}

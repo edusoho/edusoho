@@ -1,0 +1,10 @@
+{
+    "code": "default-b",
+    "name": "默认主题(B)",
+    "author": "EduSoho官方",
+    "version": "1.0",
+    "support_version": "8.0.0+",
+    "date": "2013-11-07",
+    "protocol": "3",
+    "thumb": "static-src/img/theme.jpg"
+}

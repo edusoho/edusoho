@@ -1,0 +1,59 @@
+{% if courseSet.type == 'open' or courseSet.type == 'liveOpen' %}
+  {% set layout = 'open-course-manage/layout.html.twig' %}
+{% else %}
+  {% set layout = 'courseset-manage/courseset-layout.html.twig' %}
+{% endif %}
+{% extends layout %}
+
+{% do script(['libs/jquery-validation.js', 'libs/select2.js','app/js/course-manage-file/index/index.js']) %}
+
+{% block title %}{{'course.course_files'|trans}} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'files' %}
+{% set tab = 'courseLesson' %}
+
+{% block paddingClass %}
+  material-table-padding
+{% endblock %}
+
+
+
+{% block main %}
+  {% if courseSet.type in ['open','liveOpen'] %}
+    {% set targetType = 'opencoursematerial' %}
+  {% else %}
+    {% set targetType = 'coursematerial' %}
+  {% endif %}
+  {{ web_macro.flash_messages() }}
+  <div role="courseset-manage-file">
+    <div class="courseset-manage-body__title">
+      {{'course.course_files.content_title'|trans}}
+    </div>
+
+    <div id="file-manage-panel" data-file-status-url="{{path('course_set_manage_file_status')}}">
+    {% set uploaderToken = uploader_token(targetType, courseSet.id, 'private') %}
+    {% if courseSet.type == 'normal' or courseSet.type =='live'  %}
+      {% set path = path('course_set_manage_delete_materials_show', {id:courseSet.id, type:tab}) %}
+    {% else %}
+      {% set path = path('open_course_manage_delete_materials_show', {id:courseSet.id, type:tab}) %}
+    {% endif %}
+    {% if courseSet.type == 'open' %}
+      {% set goto = path('open_course_manage_files', {id:courseSet.id}) %}
+    {% else %}
+      {% set goto = path('course_set_manage_files', {id:courseSet.id}) %}
+    {% endif %}
+
+     {% include 'material-lib/widget/material-button.html.twig' with { uploaderToken: uploaderToken, path: path, type: 'courseFile' } %}
+      
+     {% include 'material-lib/widget/material-table.html.twig' with { path: path, subtitlePath: goto, type: 'courseFile' } %}
+
+      <div class="color-gray mtl">{{ 'course.files_manage.tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})|raw }}</div>
+      <nav class="text-center">
+        {{ web_macro.paginator(paginator) }}
+      </nav>
+
+    </div>
+    {% include 'material-lib/widget/error-modal.html.twig' %}
+    {% include 'material-lib/widget/tag-modal.html.twig' with {tagPath : path('course_set_manage_files_batch_tag_add', {id:courseSet.id})} %}
+  </div>
+{% endblock %}

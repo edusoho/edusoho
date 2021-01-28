@@ -1,0 +1,22 @@
+{% set wxconfig = wx_js_sdk_config() %}
+{% if wxconfig|default(null) %}
+  {% do script(['app/js/weixin-share/index.js']) %}
+  <div class="hidden jweixin-data" 
+    data-config="{{wxconfig}}"
+    data-title="{{title}}" 
+    data-desc='{{desc}}'
+    data-link="{{link}}" 
+    data-img-url="{{imgUrl}}" 
+    data-type="{{type|default('')}}" 
+    data-data-url="{{dataUrl|default('')}}">
+  </div>
+{% endif %}
+
+{# 	
+	title: '', // 分享标题
+	desc: '', // 分享描述
+	link: '', // 分享链接
+	imgUrl: '', // 分享图标
+	type: 'link', // 分享类型,music、video或link，不填默认为link
+	dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空 
+#}

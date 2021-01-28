@@ -1,0 +1,66 @@
+{% import "common/data-dict-macro.html.twig" as dict_macro %}
+<tr id="article-{{ article.id }}">
+  <td><input value="{{ article.id }}" type="checkbox" data-role="batch-item"> {{ article.id }}</td>
+  <td>
+    <span class="text-muted">
+      <a href="{{ path('article_detail',{id:article.id}) }}" target="_blank">{{ article.title | slice(0,22) }}{% if article.title|length >22 %}...{% endif %}</a>
+    </span>
+  </td>
+  {% include 'org/parts/table-body-td.html.twig' with {orgCode: article.orgCode}%}
+  <td>
+    {% if category %}
+      <span class="text-muted"><a href="{{ path('article_category',{categoryCode:category.code}) }}" target="_blank">{{ category.name }}</a></span>
+    {% else %}
+      <span class="text-muted">{{'admin.operation_article.not_category'|trans}}</span>
+    {% endif %}
+  </td>
+  <td>{{ article.updatedTime|date('Y-n-d H:i') }}</td>
+  <td>
+    <a href="javascript:;" class="featured-label" data-toggle="tooltip" data-placement="top"
+       title="{{ 'admin.operation_article.Headline.tips'|trans }}"
+       data-set-url="{{ path('admin_v2_article_set_property', {id:article.id,property:'featured'}) }}"
+       data-cancel-url="{{ path('admin_v2_article_cancel_property', {id:article.id,property:'featured'}) }}">
+      <span class="label {% if article.featured == 1 %}label-success{% else %}label-default{% endif %}">{{'admin.operation_article.Headline'|trans}}</span></a>
+    <a href="javascript:;" class="promoted-label" data-toggle="tooltip" data-placement="top"
+       title="{{ 'admin.operation_article.recommend.tips'|trans }}"
+       data-set-url="{{ path('admin_v2_article_set_property', {id:article.id,property:'promoted'}) }}"
+       data-cancel-url="{{ path('admin_v2_article_cancel_property', {id:article.id,property:'promoted'}) }}">
+      <span class="label {% if article.promoted == 1 %}label-success{% else %}label-default{% endif %}">{{'admin.operation_article.recommend'|trans}}</span></a>
+
+    <a href="javascript:;" class="sticky-label" data-toggle="tooltip" data-placement="top"
+       title="{{ 'admin.operation_article.Sticky.tips'|trans }}"
+       data-set-url="{{ path('admin_v2_article_set_property', {id:article.id,property:'sticky'}) }}"
+       data-cancel-url="{{ path('admin_v2_article_cancel_property', {id:article.id,property:'sticky'}) }}">
+      <span class="label {% if article.sticky == 1 %}label-success{% else %}label-default{% endif %}">{{'admin.operation_article.Sticky'|trans}}</span></a>
+
+  </td>
+
+  <td>{{ dict_macro.articleStatus(article.status) }}</td>
+
+  <td>
+    <div class="btn-group">
+      <a href="{{ path('admin_v2_article_edit',{id:article.id}) }}" class="btn btn-default btn-sm">{{'admin.operation_article.edit_btn'|trans}}</a>
+      <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu">
+        {% if article.status != 'published' %}
+          <li><a href="javascript:" data-role="publish-item"
+                 data-url="{{ path('admin_v2_article_publish', {id:article.id}) }}">{{'admin.operation_article.publish_btn'|trans}}</a></li>
+        {% endif %}
+        {% if article.status == 'published' %}
+          <li><a href="javascript:" data-role="unpublish-item"
+                 data-url="{{ path('admin_v2_article_unpublish', {id:article.id}) }}">{{'admin.operation_article.unpublish_btn'|trans}}</a></li>
+        {% endif %}
+        {% if article.status != 'trash' %}
+          <li><a href="javascript:" data-role="trash-item"
+                 data-url="{{ path('admin_v2_article_trash', {id:article.id}) }}">{{'admin.operation_article.trash_btn'|trans}}</a></li>
+        {% endif %}
+        {% if article.status == 'trash' %}
+          <li><a href="javascript:" data-role="delete-item"
+                 data-url="{{ path('admin_v2_article_delete', {id:article.id}) }}">{{'admin.operation_article.delete_btn'|trans}}</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </td>
+</tr>

@@ -1,0 +1,7 @@
+{% import 'admin/macro.html.twig' as admin_macro %}
+<tr>
+  <td width="20%"><img src="{{ filepath(fan.profilePicture, 'avatar.png') }}" style="height: 50px"></td>
+  <td width="40%" class="ptl">{{ fan.nickname|url_decode|default('--') }}</td>
+  <td width="20%" class="ptl">{{ fan.username|default('--') }}</td>
+  <td width="20%" class="ptl">{{ fan.subscribeTime|default(0)|date('Y-m-d H:i:s') }}</td>
+</tr>

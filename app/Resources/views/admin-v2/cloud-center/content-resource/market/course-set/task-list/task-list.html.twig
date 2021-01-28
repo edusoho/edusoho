@@ -1,0 +1,12 @@
+<div class="course-detail-content js-course-detail-content">
+
+  {% include 'admin-v2/cloud-center/content-resource/market/course-set/task-list/parts/task-list-template.html.twig' %}
+
+  {% if course.courseType=='default' %}
+  <ul class="task-list task-list-md task-list-hover infinite-container">
+    {% elseif  course.courseType=='normal' %}
+    <ul class="task-list task-list-md task-list-hover js-task-list-ul infinite-container">
+      {% endif %}
+    </ul>
+    <div class="js-down-loading-more" style="min-height: 1px"></div>
+</div>

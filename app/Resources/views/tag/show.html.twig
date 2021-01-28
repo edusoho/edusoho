@@ -1,0 +1,33 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}{{'tag'|trans}}{% if tag %}:{{ tag.name }}{% endif %} - {{ parent() }}{% endblock %}
+{% block keywords %}{% if tag %}{{ tag.name }}{% endif %},{{ setting('site.seo_keywords') }}{% endblock %}
+{% block content %}
+
+
+
+<div class="es-section">
+  <div class="section-header">
+    <h1>{{'tag'|trans}}{% if tag %}:{{ tag.name }}{% endif %}</h1>
+    <a href="{{ path('tag') }}" class="more"><i class="es-icon es-icon-morehoriz"></i></a>
+  </div>
+  {% if tag %}
+    {% if courseSets %}
+	    <div class="course-list course-list-new">
+		    <div class="row">
+				    {% for courseSet in courseSets %}
+					    <div class="col-lg-3 col-md-4 col-xs-6 course-item-wrap">
+						    {% include 'course/widgets/course-grid-new.html.twig' with {courseSet: courseSet} %}
+					    </div>
+				    {% endfor %}
+		    </div>
+	    </div>
+      {{ web_macro.paginator(paginator) }}
+    {% else %}
+      <div class="empty">{{'tag.change_tag'|trans}}</div>
+    {% endif %}
+  {% else %}
+    <div class="empty">{{'tag.not_exist'|trans}}</div>
+  {% endif %}
+</div>
+{% endblock %}

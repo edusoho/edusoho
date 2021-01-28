@@ -1,0 +1,11 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% do script(['app/js/admin-v2/developer/plumber/index.js']) %}
+
+{% set menu = 'admin_v2_plumber' %}
+
+{% block main %}
+  <div id="plumber-info" data-url="{{ path('admin_v2_plumber') }}">
+    {% include 'admin-v2/developer/plumber/info.html.twig' %}
+  </div>
+{% endblock %}

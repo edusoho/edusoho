@@ -1,0 +1,14 @@
+<div class="distributor-course-order subTagContent" style="display: none">
+  token伪造
+  <form class="tokenGeneratorForm" action="{{ path('admin_v2_mocked_distributor_token', {type:'courseOrder'})}}">
+    <div>
+      计划id: <input type="text" name="courseId" value="1"></input> (跳转后的地址 http://域名/course/{id})
+    </div>
+  </form>
+
+  生成的二维码地址: <textarea type="text" class="distributorGeneratorUrl" data-base-url="distributor_product" readonly style="width: 800px"></textarea>
+  <div>
+    <input type="button" value="提交" class="tokenGeneratorBtn"></input>
+  </div>
+
+</div>

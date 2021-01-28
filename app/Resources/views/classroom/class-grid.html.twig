@@ -1,0 +1,29 @@
+<div class="class-item class-item--tag">
+  {% if is_plugin_installed('Vip') and setting('vip.enabled') and classroom.vipLevelId|default(0) > 0 %}
+    <span class="tag-vip-free"></span>
+  {% endif %}
+  <div class="class-img-wrap">
+    <a class="class-img" href="{{ path('classroom_show', {id:classroom.id}) }}">
+      {{ lazy_img(filepath(classroom.middlePicture, 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}
+    </a>
+    <div class="mask">
+      {% set classroomMember = data('ClassroomMember', {classroomId:classroom.id, userId: app.user.id|default(0)}) %}
+
+      {% if classroomMember|default(false) %}
+        <a href="{{ path('classroom_show', {id:classroom.id}) }}" class="btn btn-warning">{{ 'classroom.continue_learning_btn'|trans }}</a>
+      {% else %}
+        <a href="{{ path('classroom_show', {id:classroom.id}) }}" class="btn btn-warning">{{ 'classroom.join_btn'|trans }}</a>
+      {% endif %}
+    </div>
+  </div>
+  <h3 class="text-left class-item-title">
+    {% if can_obtain_certificates(classroom.id, 'classroom') %}
+      <a class="certificate-tag" tabindex="0" role="button" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-html="true" title="{{ 'explore.classroom.certificate_tag'|trans }}" data-content="{{ 'classroom.certificate_obtain'|trans }}">{{ 'explore.classroom.certificate_tag_short'|trans }}</a>
+    {% endif %}
+    <a class="link-darker" href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a>
+  </h3>
+  <div class="class-item-metas text-overflow">
+    {{ 'classroom.courses_count'|trans({'%courseNum%': '<span>%d</span>'|format(classroom.courseNum) })|raw }}
+    {% include 'classroom/classroom-price.html.twig' %}
+  </div>
+</div>

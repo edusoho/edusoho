@@ -1,0 +1,37 @@
+
+<thead>
+<tr>
+  <th width="25%">{{'order.product_name'|trans}}</th>
+  <th>{{'order.id'|trans}}/{{ 'admin.order_refund.sn'|trans }}</th>
+  <th class="text-right">{{ 'admin.order_refund.order_amount'|trans }}</th>
+  <th>{{ 'admin.order_refund.refund_created_time'|trans}}</th>
+  <th>{{'status'|trans}}</th>
+  <th style="min-width:100px">{{'user.orders.operation'|trans}}</th>
+</tr>
+</thead>
+
+<tbody>
+{% for orderRefund in orderRefunds %}
+  <tr id="order_refund-table-{{orderRefund.id}}">
+    <td>{{ orderRefund.title }}</td>
+    <td>{{ orders[orderRefund.order_id].sn }}<br>{{ orderRefund.sn }}</td>
+    <td class="text-right">{{ orderRefund.amount|to_cash(0) }}  {{ 'site.currency.CNY'|trans }}</td>
+    <td>{{ orderRefund.created_time|date('Y-n-d') }}</td>
+    <td>{{ dict_text('refundStatus', orderRefund.status) }}</td>
+    <td>
+      <div class="table-action">
+        <div class="table-action__item">
+          <a href="javascript:;" class="cd-link-primary" data-toggle="modal" data-target="#modal" data-url="{{ path('my_order_refund_detail', {id:orderRefund.id}) }}">{{'form.btn.detail'|trans}}</a>
+        </div>
+        {% if orderRefund.status in ['refunding', 'auditing'] %}
+          <div class="table-action__item">
+            <a href="javascript:;" class="js-cancel-refund" data-url="{{ path('order_cancel_refund', {orderId:orderRefund.order_id}) }}">{{'user.orders.cancel_refund'|trans}}</a>
+          </div>
+        {% endif %}
+      </div>
+    </td>
+  </tr>
+{% else %}
+  <tr><td colspan="20"><div class="cd-empty">{{'site.datagrid.empty'|trans}}</div></td></tr>
+{% endfor %}
+</tbody>

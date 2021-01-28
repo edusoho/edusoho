@@ -1,0 +1,11 @@
+/migrations
+/app/cache
+/vendor
+/composer.lock
+/composer.phar
+/phpunit.xml
+.DS_Store
+.php_cs.cache
+.sonar/
+.idea/
+/var

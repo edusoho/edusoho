@@ -1,0 +1,105 @@
+{% extends 'admin/edu-cloud/layout.html.twig' %}
+
+{% set submenu = 'key' %}
+
+{% set script_controller = 'setting/cloud-key' %}
+
+{% block maincontent %}
+  {% if is_trial() %}
+    <div class="row form-group">
+      <div class="help-block">
+        </br></br>
+        <script>
+            var _hmt = _hmt || [];
+        </script>
+        <script charset="utf-8" src="http://wpa.b.qq.com/cgi/wpa.php"></script>
+
+        <p style="text-align:center;font-size:16px">{{ 'admin.cloud_setting.trial_hint'|trans }}{{ 'customer_service.mobile'|trans }}
+          ：4008041114 {{ 'or'|trans }}
+          <span id="BizQQWPA" onclick="_hmt.push(['_trackEvent', 'advisory', 'click', 'qq'])"><a id="BizQQWPA"
+                                                                                                 href="javascript:;"
+                                                                                                 style='text-decoration:none;'>QQ：800023860 </a>。</span>
+        </p>
+        <script type="text/javascript">
+            BizQQWPA.addCustom({aty: '0', a: '0', nameAccount: 800023860, selector: 'BizQQWPA'});
+        </script>
+        </br>
+      </div>
+    </div>
+    <hr>
+  {% else %}
+    {{ web_macro.flash_messages() }}
+    <div class="page-header clearfix">
+      <h1 class="pull-left">{{ 'admin.cloud_setting.package_info'|trans }}</h1>
+    </div>
+    {% if info.level|default(null) %}
+      <form class="form-horizontal" id="cloud-edition-form" method="post" novalidate>
+        <div class="form-group">
+          <label class="col-md-3 control-label">{{ 'admin.cloud_setting.package_name'|trans }}：</label>
+          <div class="col-md-6">
+            <p class="form-control-static">{{ info.levelName|default(null) }}
+            </p>
+          </div>
+        </div>
+        {% if info.startDate|default(null) and info.endDate|default(null) %}
+          <div class="form-group">
+            <label class="col-md-3 control-label">{{ 'admin.cloud_setting.service_deadline'|trans }}：</label>
+            <div class="col-md-6">
+              <p class="form-control-static">
+                {{ info.startDate|date('Y.m.d') }} - {{ info.endDate|date('Y.m.d') }}
+              </p>
+            </div>
+          </div>
+        {% endif %}
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      </form>
+    {% elseif info.error|default(null) == 'error' %}
+      <div class="alert alert-danger">
+        {{ 'admin.edu_cloud.connect_failed_tips'|trans({'%EduSoho%': 'EduSoho'|copyright_less }) }}
+      </div>
+    {% else %}
+      {{ 'admin.cloud_setting.buy_package_hint'|trans({'%servicePriceUrl%': 'http://www.edusoho.com/services/price?type=price'})|raw }}
+    {% endif %}
+
+    <div class="page-header clearfix">
+      <h1 class="pull-left">{{ 'admin.cloud_setting.access_key'|trans }}</h1>
+    </div>
+    <form class="form-horizontal" id="cloud-setting-form" method="post" novalidate>
+      <div class="form-group">
+        <label class="col-md-3 control-label">AccessKey</label>
+        <div class="col-md-6">
+          <p class="form-control-static">{{ setting('storage.cloud_access_key') }}</p>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-md-3 control-label">SecretKey</label>
+        <div class="col-md-6">
+          <p class="form-control-static">
+            {{ setting('storage.cloud_secret_key') }}
+          </p>
+        </div>
+      </div>
+      {% if setting("developer.debug")|default(0) or info.level|default() == 'none' %}
+        <div class="form-group">
+          <div class="col-md-6 col-md-offset-3">
+            <a href="{{ path('admin_setting_cloud_key_update') }}"
+               class="btn btn-sm btn-default">{{ 'admin.cloud_setting.key_update_btn'|trans }}</a>
+          </div>
+        </div>
+      {% endif %}
+
+      <div class="form-group" id="loading-text">
+        <div class="col-md-6 col-md-offset-3">
+          <p class="text-warning"><strong>{{ 'admin.cloud_setting.authorization_info_hint'|trans }}</strong></p>
+        </div>
+      </div>
+
+      <div id="key-license-info" data-url="{{ path('admin_setting_cloud_key_info') }}">
+
+      </div>
+
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    </form>
+  {% endif %}
+{% endblock %}

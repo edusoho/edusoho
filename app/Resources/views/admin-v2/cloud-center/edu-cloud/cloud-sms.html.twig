@@ -1,0 +1,28 @@
+<div class="col-md-6">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">{{ 'admin.edu_cloud.edu_sms.package_status'|trans }}</h3>
+    </div>
+    <div class="panel-body" style="height: 250px; padding:40px">
+      {% if overview.service.sms.enableBuy|default(0) != 1 %}
+        <div class="edu-verticalmiddle">
+          <div class="edu-verticalmiddle-content text-muted"><i class="glyphicon glyphicon-info-sign"
+                                                                aria-hidden="true"></i>
+            {{ 'admin.edu_cloud.edu_sms.buy_package'|trans({'%buy%':path('admin_v2_cloud_buy',{type:'sms'})})|raw }}
+          </div>
+        </div>
+      {% else %}
+        <p class="text-muted">{{ 'admin.edu_cloud.edu_sms.sms_remain_count'|trans({'%remainCount%': overview.service.sms.remainCount|default(0) }) }}
+          <a href="{{ path('admin_v2_cloud_buy',{type:'sms'}) }}" target="_blank"
+             style="margin-left:20px">{{ 'admin.edu_cloud.edu_sms.buy_btn'|trans }}</a>
+        </p>
+        {% if overview.service.sms.status|default(null) == 'used' and 0 < overview.service.sms.remainCount and  overview.service.sms.remainCount < 100 %}
+          <p class="text-warning text-sm">{{ 'admin.edu_cloud.edu_sms.package_renew_tips'|trans }}</p>
+        {% endif %}
+        {% if overview.service.sms.status|default(null) == 'used' and overview.service.sms.remainCount <= 0 %}
+          <p class="text-danger text-sm">{{ 'admin.edu_cloud.edu_sms.package_none_renew_tips'|trans }}</p>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+</div>

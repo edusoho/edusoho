@@ -1,0 +1,23 @@
+{% extends 'layout.html.twig' %}
+{% block title %}- {{ parent() }}{% endblock %}
+{% set bodyClass = 'group-page' %}
+{% block content %}
+  {% include 'group/group-header.html.twig' with {'groupinfo':groupinfo,'is_groupmember':is_groupmember|default('')} %}
+  {% block group_body %}
+    <div class="row">
+      <div class="col-md-9 group-main">
+        {% block group_main %}{% endblock %}
+      </div>
+
+      <div class="col-md-3 group-side">
+        {% block group_side %}{% endblock %}
+      </div>
+    </div>
+  {% endblock %}
+  {% include 'common/weixin-share.html.twig' with {
+  'title': groupinfo.title,
+  'desc': groupinfo.about|striptags|purify_and_trim_html,
+  'link': app.request.uri,
+  'imgUrl': fileurl(groupinfo.logo,'course.png'),
+  } %}
+{% endblock %}

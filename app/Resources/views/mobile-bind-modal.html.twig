@@ -1,0 +1,71 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'mobile-bind-modal' %}
+{% set hide_footer = true %}
+{% do script(['libs/jquery-validation.js', 'app/js/mobile-bind/index.js'])%}
+
+{% block modal_content %}
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close cd-link-assist" data-dismiss="modal" aria-hidden="true">
+        {{'site.mobile_bind.ignore'|trans}}
+      </button>
+      <h4 class="modal-title mobile-bind__title">{{ 'site.mobile_bind.title'|trans }}</h4>
+    </div>
+
+    <form id="mobile-bind-form" class="mobile-bind-form cd-mt24" method="post" action="{{ path('settings_bind_mobile')}}" data-user-id="{{app.user.id}}">
+      <div class="form-group cd-form-group">
+        <label class="control-label" for="password">{{'site.mobile_bind.login_password'|trans}}</label>
+        <div class="controls">
+          <input class="form-control" type="password" id="password" name="password" data-url="{{ path('settings_check_login_password') }}"/>
+        </div>
+      </div>
+
+      <div class="form-group cd-form-group">
+        <label class="control-label" for="mobile">{{'site.mobile_bind.phone_number'|trans}}</label>
+        <div class="controls">
+          <input class="form-control" type="text" id="mobile" name="mobile" data-url="{{path('register_email_or_mobile_check')}}"/>
+        </div>
+      </div>
+
+      {% if (setting('auth.captcha_enabled')|default(0)) == 1 %}
+        <div class="form-group cd-mb24 js-drag-jigsaw hidden">
+          {% include 'common/drag.html.twig' with { auth: true } %}
+        </div>
+      {% endif %}
+
+      <div class="form-group cd-form-group">
+        <label class="control-label" for="sms_code">{{'form.sms_code'|trans}}</label>
+        <div class="controls cd-row">
+          <div class="col-xs-6">
+            <input type="text" maxlength="6" class="form-control input-lg" id="sms_code" name="sms_code" placeholder="{{'user.settings.security.input_sms_code'|trans}}" data-url="{{path('edu_cloud_sms_check',{type:'sms_bind'})}}">
+            <p class="help-block"> </p>
+          </div>
+          <div class="col-xs-6">
+            <button type="button" class="btn cd-btn cd-btn-ghost-primary btn-block js-sms-send sms-send-btn" disabled  data-url="{{ path('edu_cloud_sms_send_check_captcha') }}">
+              <span id="js-time-left"></span>
+              <span id="js-fetch-btn-text">{{'user.settings.security.get_sms_code_btn'|trans}}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+      <button id="submit-btn" type="submit" class="btn cd-btn cd-btn-lg mobile-bind-form__btn cd-btn-primary" data-toggle="form-submit"  data-target="#mobile-bind-form" data-loading-text="{{'form.btn.save.submiting'|trans}}">
+        {{'form.btn.submit'|trans}}
+      </button>
+    </form>
+
+    <div class="mobile-bind-form__divider hidden-xs"></div>
+
+    <div class="mobile-bind-reasons">
+      <h4 class="mobile-bind-reasons__title"><i class="es-icon es-icon-attention cd-mr8"></i>{{ 'site.mobile_bind.reasons'|trans }}</h4>
+      <div class="mobile-bind-reasons__contents">
+        <p>{{ 'site.mobile_bind.reasons.network_office_regulations'|trans }}</p>
+        <p class="cd-mv16">{{ 'site.mobile_bind.reasons.login_while_third_party_fail'|trans }}</p>
+        <p>{{ 'site.mobile_bind.reasons.login_while_forget_password'|trans }}</p>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+

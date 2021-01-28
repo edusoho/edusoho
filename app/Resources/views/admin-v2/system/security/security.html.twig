@@ -1,0 +1,28 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_security_setting' %}
+
+{% block main %}
+
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" method="post">
+  <fieldset>
+    <div class="form-group">
+      <div class="col-md-2 control-label">
+        <label >{{'admin_v2.system.security_setting'|trans}}</label>
+      </div>
+      <div class="controls col-md-9">
+        <textarea name="safe_iframe_domains" rows="8" class="form-control">{{ security.safe_iframe_domains|join("\n") }}</textarea>
+        <div class="help-block">{{'admin.setting.security.help_block'|trans}}</div>
+    </div>
+    <div class="col-md-2 control-label"></div>
+      <div class="controls col-md-9">
+        <button type="submit" class="btn btn-primary">{{'form.btn.submit'|trans}}</button>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      </div>
+    </div>
+  </fieldset>
+</form>
+
+{% endblock %}

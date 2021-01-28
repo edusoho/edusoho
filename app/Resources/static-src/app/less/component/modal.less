@@ -1,0 +1,66 @@
+.modal-title {
+  word-break:break-all;
+  color: @gray-darker;
+  font-size: 18px;
+}
+
+.modal-header {
+  padding: 15px 20px;
+}
+
+.modal-body {
+  word-wrap: break-word;
+  overflow: hidden;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.modal-body img {
+  max-width: 100%;
+  height: auto;
+}
+
+.modal-backdrop.in {
+  .opacity(0.8);
+}
+
+.modal-dialog {
+  &.modal-lg {
+    @media (min-width: @screen-md-min) {
+      width: 900px;
+      margin-top: 10%;
+    }
+  }
+
+  &.modal-md {
+    @media (min-width: @screen-md-min) {
+      width: 800px;
+    }
+  }
+
+  &.modal-sm {
+    @media (min-width: @screen-md-min) {
+      width: 520px;
+    }
+  }
+}
+
+
+.modal-md {
+  @media(min-width: @screen-md-min) {
+    width: 800px;
+  }
+}
+
+.modal-sm {
+  @media(min-width: @screen-md-min) {
+    width: 520px;
+  }
+}
+
+
+
+
+
+
+

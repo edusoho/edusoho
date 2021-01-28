@@ -1,0 +1,19 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}
+    {{'admin.user.approval.approved_tab.approval_info.heading_title'|trans}}
+{% endblock %}
+
+{% block body %}
+  <div class="form-horizontal">
+  {% include 'admin-v2/user/approval/user-approval-form-content.html.twig' with {'status':'approved'} %}
+  </div>
+{% endblock %}
+
+{% block footer %}
+  <div class="pull-right">
+    <button type="button" class="btn btn-primary " data-dismiss="modal">{{'form.btn.close'|trans}}</button>    
+  </div>
+{% endblock %}

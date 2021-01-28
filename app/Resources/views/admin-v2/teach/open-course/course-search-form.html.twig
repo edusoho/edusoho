@@ -1,0 +1,28 @@
+<form id="message-search-form" class="form-inline well well-sm" action="{{ actionUrl|default('')}}" method="get" novalidate>
+  {% include 'org/org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}
+  <div class="form-group">
+    <select style="max-width:150px;" class="form-control" name="categoryId">
+      {{ select_options(category_choices('course'), app.request.query.get('categoryId'), 'admin.open_manage.category_placeholder'|trans) }}
+    </select>
+  </div>
+  {% if showStatusSelect|default(null) %}
+    <div class="form-group">
+      <select class="form-control" name="status">
+        {{ select_options(dict('courseStatus'), app.request.query.get('status'), 'admin.open_manage.manage.status_option'|trans) }}
+      </select>
+    </div>
+  {% endif %}
+  <div class="form-group">
+      <select class="form-control" name="type">
+        {{ select_options(dict('openCourseCategory'), app.request.query.get('type'), 'type'|trans) }}
+      </select>
+    </div>
+  <div class="form-group">
+    <input class="form-control" type="text" placeholder="{{ 'admin.open_manage.title_placeholder'|trans }}" name="titleLike" value="{{ app.request.get('title') }}">
+  </div>
+  <div class="form-group">
+    <input class="form-control" type="text" placeholder="{{ 'admin.open_manage.creator_placeholer'|trans }}" name="creator" value="{{ app.request.get('creator') }}">
+  </div>
+  <button class="btn btn-primary">{{ 'form.btn.search'|trans }}</button>
+  {% include 'admin-v2/widget/tooltip-widget.html.twig' with { icon: 'glyphicon-question-sign', content: 'admin.open_manage.open_tips'|trans|raw, placement: 'left'} %}
+</form>

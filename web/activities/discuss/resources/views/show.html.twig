@@ -1,0 +1,26 @@
+{% extends 'activity/content-layout.html.twig' %}
+
+{% block head_scripts %}
+  {{ parent() }}
+  <base target="_blank">
+{% endblock %}
+
+{% do script(['discussactivity/js/show/index.js']) %}
+
+{% block body %}
+  <div class="iframe-parent-content iframe-parent-content--discuss js-parent-content">
+    <div class="lesson-content-text-body">
+      <div class="live-show-item cke_editable cke_contents_ltr">
+        <p class="title">
+          {{'course.plan_task.activity_manage.discuss.content'|trans}}
+        </p>
+        <div class="text-activity-content cke_editable cke_contents_ltr">
+          {{activity.content|raw}}
+        </div>
+      </div>
+      <div class="live-show-item">
+        <a class="btn btn-primary" href="{{path('course_thread_create', {courseId: activity.fromCourseId, type: 'discussion'})}}" target="_blank">{{ 'course.plan_task.activity_manage.create_btn'|trans }}</a>
+      </div>
+    </div>
+	</div>
+{% endblock %}

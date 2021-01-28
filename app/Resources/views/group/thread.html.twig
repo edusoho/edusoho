@@ -1,0 +1,273 @@
+{% extends 'group/layout.html.twig' %}
+{% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js','app/js/group/index.js']) %}
+{% block title %}{{threadMain.title}} - {{ groupinfo.title }} {{ parent() }}{% endblock %}
+{% block keywords %}{{groupinfo.title}}{% endblock %}
+{% block description %}{{threadMainContent|plain_text(100)}}{% endblock %}
+
+{% block group_main %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+        {{ threadMain.title }}
+        {% if threadMain.isStick %}
+          <span class="label label-primary">{{'group.thread.stick_label'|trans}}</span>
+        {% endif %}
+        {% if threadMain.isElite %}
+          <span class="label label-danger">{{'group.thread.essence_label'|trans}}</span>
+        {% endif %}
+        {% if is_feature_enabled('group_reward') %}
+          {% if threadMain.type == 'reward' and threadMain.rewardCoin > 0 %}
+            <span class="label label-danger">{{'group.thread.reward_label'|trans}}</span>
+
+            <span style="color:#d9534f;" class="mll"> {{'group.thread.wanted'|trans({'%rewardCoin%':threadMain.rewardCoin,'%coin_name%':setting('coin').coin_name})}}</span>
+
+          {% endif %}
+        {% endif %}
+      </h3>
+    </div>
+    <div class="panel-body clearfix" id="post-action">
+      <div class="well well-sm text-sm color-gray clearfix" style="line-height:20px">
+        <div class="es-share dropdown pull-right js-es-share">
+          <span class="es-share top" style="font-size:14px;">
+            <a href="javascript:;" class="gray-dark" data-toggle="dropdown"><i class="es-icon es-icon-share"></i> {{'group.thread.share_label'|trans}}</a>
+            {% include 'common/share-dropdown.html.twig' with {type:'group_thread', thread:threadMain, group:groupinfo} %}
+          </span>
+        </div>
+        <div class="pull-right mrm" id="thread-list">
+          {% if threadMain.userId != user.id %}
+            <a href="javascript:;" class="uncollect-btn link-dark" data-target-type="thread" data-target-id="{{ threadMain.id }}" {% if isCollected == false %} style="display:none;"{% endif %}><i class="es-icon es-icon-favorite mrs"></i> {{'group.thread.favorited_btn'|trans}}</a>
+            <a href="javascript:;" class="collect-btn link-dark" data-target-type="thread" data-target-id="{{ threadMain.id }}" {% if isCollected == true %} style="display:none;"{% endif %}><i class="es-icon es-icon-favoriteoutline mrs"></i>{{'group.thread.favorite_btn'|trans}}</a>
+          {% endif %}
+        </div>
+        {{'group.thread.created_time'|trans({'%createdTime%':threadMain.createdTime|smart_time})}}
+        <span class="mll"> {{'group.thread.hit_num'|trans({'%hitNum%':threadMain.hitNum})}}</span>
+      </div>
+      <div class="editor-text">
+        {{threadMain.content|cdn|raw}}
+      </div>
+
+      {% include 'attachment/widget/list.html.twig' with {targetType:'group.thread', targetId:threadMain.id} %}
+
+      <div class="mtl text-right">
+        {% if is_feature_enabled('group_reward') and threadMain.count == 1 %}
+          {% if user.id==owner.id or is_granted('ROLE_ADMIN') or user.id==groupinfo.ownerId or is_groupmember==3 %}
+          {% else %}
+            {% if app.user %}
+            <a class="btn btn-default btn-sm mrm" href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{path('group_thread_hide',{threadId:threadMain.id})}}">{{'group.thread.check_hide_content'|trans}}</a>
+            {% endif %}
+          {% endif %}
+        {% endif %}
+
+        {% if user.id==owner.id or is_granted('ROLE_ADMIN') or user.id==groupinfo.ownerId or is_groupmember==3 %}
+          <a class="btn btn-default btn-sm mrm" href="{{path('group_thread_update',{id:groupinfo.id,threadId:threadMain.id})}}"> {{'thread.edit_btn'|trans}}</a>
+        {% endif %}
+
+        {% if is_groupmember==2 or is_granted('ROLE_ADMIN') or is_groupmember==3 %}
+          {% if threadMain.isElite==1 %}
+            <a id="elite"  title="{{'thread.cancel_essence_btn'|trans}}" class="btn btn-default btn-sm mrm"
+              href="javascript:"
+            data-url="{{path('group_thread_removeElite',{threadId:threadMain.id})}}">{{'thread.cancel_essence_btn'|trans}}</a>
+          {% else %}
+            <a id="elite"  title="{{'thread.set_essence_btn'|trans}}" class="btn btn-default btn-sm mrm"
+            href="javascript:" data-url="{{path('group_thread_setElite',{threadId:threadMain.id})}}">{{'thread.set_essence_btn'|trans}}</a>
+          {% endif %}
+
+          {% if threadMain.isStick==1 %}
+             <a id="stick" title="{{'thread.stick_cancel_btn'|trans}}" class="btn btn-default btn-sm mrm"
+            href="javascript:" data-url="{{path('group_thread_removeStick',{threadId:threadMain.id})}}"> {{'thread.stick_cancel_btn'|trans}}</a>
+          {% else %}
+            <a id="stick"  title="{{'thread.stick_btn'|trans}}" class="btn btn-default btn-sm mrm"
+            href="javascript:" data-url="{{path('group_thread_setStick',{threadId:threadMain.id})}}">{{'thread.stick_btn'|trans}}</a>
+          {% endif %}
+
+        {% endif %}
+        {% if filters.type=='onlyOwner' %}
+          <a class="btn btn-default btn-sm mrm" href="{{path('group_thread_show',{id:groupinfo.id,threadId:threadMain.id,type:'all',sort:filters.sort})}}" %}><span class="glyphicon glyphicon-filter"></span> {{'group.thread.view_all_btn'|trans}}</a>
+        {% else %}
+          <a class="btn btn-default btn-sm mrm" href="{{path('group_thread_show',{id:groupinfo.id,threadId:threadMain.id,type:'onlyOwner',sort:filters.sort})}}">{{'group.thread.view_owner_btn'|trans}}</a>
+        {% endif %}
+
+        {% if filters.sort=='desc' %}
+          <a type="button" class="btn btn-default btn-sm mrm" href="{{path('group_thread_show',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'asc'})}}">{{'group.thread.asc_see_btn'|trans}}</a>
+        {% else %}
+          <a type="button" class="btn btn-default btn-sm mrm" href="{{path('group_thread_show',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'desc'})}}">{{'group.thread.desc_see_btn'|trans}}</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+
+  {% if threadMain.postNum %}
+  <div class="panel panel-default group-post-list">
+    <div class="panel-heading">
+      {{'group.thread.reply_numbers'|trans({'%postNum%': threadMain.postNum})}}
+    </div>
+    <div class="panel-body">
+      <ul class="media-list">
+        {% for post in post %}
+          {% set subPosts = postReply[post.id]|default(null) %}
+          <li id="post-{{post.id}}" class="media">
+            <a href="{{ path('user_show', {id:post.userId}) }}" class="pull-left"><img src="{{ filepath(postMember[post.userId].smallAvatar, 'avatar.png') }}" class="avatar-sm"></a>
+            <div class="media-body">
+              <div class="metas">
+                <span class="floor">
+                  {% if filters.sort=='desc' %}
+                    {{'group.thread.desc_floor'|trans({'%postCount%':(postCount+1)-paginator.getPerPageCount()*(paginator.currentPage-1)-loop.index0})}}
+                  {% else %}
+                    {{'group.thread.asc_floor'|trans({'%loop.index%':(loop.index+1)+paginator.getPerPageCount()*(paginator.currentPage-1)})}}
+                  {% endif %}
+                </span>
+                <strong>{{ web_macro.user_link(postMember[post.userId]) }}</strong>
+                <span class="divider mhm">•</span>
+                <span >{{post.createdTime|smart_time}} </span>
+              </div>
+
+              <div class="content editor-text">
+                {{post.content|cdn|raw}}
+                  {% include 'attachment/widget/list.html.twig' with {targetType:'group.thread.post', targetId:post.id} %}
+              </div>
+
+              <div class="actions">
+                {% if user.id==post.userId or is_granted('ROLE_ADMIN')  or is_groupmember==3  or is_groupmember==2 %}
+                  <a title="{{'group.thread.delete_tips'|trans}}" class="mhm post-delete-btn" href="javascript:" data-url="{{path('group_thread_deletePost',{postId:post.id})}}">{{'thread.delete_btn'|trans}}</a>
+                {% endif %}
+
+                {% if is_feature_enabled('group_reward') %}
+                  {% if not isAdopt and threadMain.type == "reward" %}
+                    {% if is_granted('ROLE_ADMIN')  or is_groupmember==3  or is_groupmember==2 %}
+                      <a title="{{'group.thread.accept_tips'|trans}}" class="mhm post-adopt-btn" href="javascript:" data-url="{{path('group_thread_adopt',{postId:post.id})}}">{{'group.thread.accept_btn'|trans}}</a>
+                    {% endif %}
+                  {% endif %}
+                {% endif %}
+
+                {% if not subPosts %}
+                  <a href="javascript:" class="reply" id="reply-{{post.id}}"  postId="{{post.id}}" postName="{% if not postMember[post.userId].destroyed|default(0) %}{{postMember[post.userId].nickname}}{% else %}{{ 'user.user_had_destroyed'|trans }}{% endif %}" data-from-user-id-nosub="{{postMember[post.userId].id}}">{{'group.thread.reply_btn'|trans}}</a>
+                  <a href="javascript:" class="unreply" id="unreply-{{post.id}}" postId="{{post.id}}" style="display:none;">{{'group.thread.collapse_btn'|trans}}</a>
+                {% else %}
+                  <a style="display:none;" href="javascript:" class="reply" id="reply-{{post.id}}"  postId="{{post.id}}" postName="{% if not postMember[post.userId].destroyed|default(0) %}{{postMember[post.userId].nickname}}{% else %}{{ 'user.user_had_destroyed'|trans }}{% endif %}" data-from-user-id-nosub="">{{'group.thread.reply_btn'|trans}}({{postReplyCount[post.id]}})</a>
+                  <a href="javascript:" class="unreply" id="unreply-{{post.id}}" postId="{{post.id}}" >{{'group.thread.collapse_btn'|trans}}</a>
+                {% endif %}
+              </div>
+              <div class="reply-{{post.id}}">
+                {% if subPosts %}
+                  {% include 'group/post-reply-list.html.twig' with {posts:subPosts, users:postReplyMembers,postMain:post} %}
+                {% else %}
+                  <div class="reply-{{post.id}}" style="display:none;">
+                    <form  class="thread-post-reply-form reply-{{post.id}}" method="post"  action="{{path('group_thread_post',{groupId:groupinfo.id,threadId:threadMain.id})}}">
+                      <div class="form-group">
+                        <label class="control-label hide" for="reply-content-{{post.id}}">{{'group.thread.reply_content'|trans}}</label>
+                        <div class="controls">
+                        <textarea class="form-control" id="reply-content-{{post.id}}"  name="reply-content-{{post.id}}" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}"></textarea>
+                      </div>
+                      </div>
+                      <div id="fromUserIdNoSubDiv"></div>
+                      <div class="form-group">
+                        <button postId="{{post.id}}" class=" btn btn-xs btn-primary pull-right reply-btn" data-loading-text="{{'form.btn.reply.submiting'|trans}}">{{'form.btn.reply'|trans}}</button>
+                      </div>
+                    </form>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+
+      {{ web_macro.paginator(paginator) }}
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="panel panel-default">
+    <div class="panel-heading">{{'group.thread.reply'|trans}}</div>
+
+    <div class="panel-body">
+
+      {% if app.user %}
+        <form id="post-thread-form" class="post-thread-form thread-form" method="post" action="{{path('group_thread_post',{groupId:groupinfo.id,threadId:threadMain.id})}}">
+
+          <div class="form-group">
+            <label class="control-label hide" for="post_content">{{'group.thread.reply.content_title'|trans}}</label>
+            <div class="controls">
+              <textarea name="content" value="" rows="10" id="post_content" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('default')}) }}"></textarea>
+            </div>
+          </div>
+
+            <div class="form-group">
+                {{ render(controller('AppBundle:File/Attachment:formFields', {targetType: 'group.thread.post', targetId: thread.id|default(0)}, {'showLabel':false})) }}
+            </div>
+
+          <div class="form-group">
+            <div class="controls">
+            <button id="post-thread-btn" data-loading-text="{{'form.btn.save.submiting'|trans}}"  class="post-thread-btn btn btn-primary pull-right">{{'form.btn.reply'|trans}}</button>
+            </div>
+          </div>
+           {% if is_feature_enabled('group_reward') %}
+            <input type="hidden" name="group_reward" id="group_reward">
+           {% endif %}
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        </form>
+      {% else %}
+        <div class="empty">
+          {{ 'user.not_login.tips'|trans({'%login%':path('login', {goto:app.request.server.get('REQUEST_URI')}), '%register%': path('register', {goto:app.request.server.get('REQUEST_URI') }) })|raw }}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+  {% include 'group/upload-modal.html.twig' %}
+{% endblock %}
+
+{% block group_side %}
+  <div class="panel panel-default">
+    <div class="panel-heading">{{'group.thread.owner'|trans}}</div>
+    <div class="panel-body">
+      <div class="media">
+        <div class="media-left prm">
+          <a class="" href="{{ path('user_show', {id:owner.id}) }}">
+            <img src="{{ filepath(owner.smallAvatar, 'avatar.png') }}" class="avatar-md">
+          </a>
+        </div>
+        <div class="media-body ptm">
+          <div>
+            <a class="gray-darker">{{ web_macro.user_link(owner)}}</a>
+          </div>
+          <span class="text-sm gray-medium">{{ owner.title|default('group.thread.owner.empty'|trans) }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% if activeMembers %}
+    {% include 'group/active-member-list.html.twig' with {activeMembers:activeMembers} %}
+  {% endif %}
+
+  <div class="panel panel-default">
+    <div class="panel-heading">{{'group.detail.hot_group'|trans}}</div>
+    <div class="panel-body">
+      {% set hotGroups = data('HotGroup',{'count':3}) %}
+      {% for group in hotGroups %}
+        <div class="media media-group">
+          <div class="media-left">
+            <a href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">
+              <img src="{{filepath(group.logo, 'group.png')}}" alt="{{group.title}}" class="avatar-square-md">
+            </a>
+          </div>
+          <div class="media-body">
+            <div class="title">
+              <a class="gray-darker" href="{{ path('group_show',{id:group.id}) }}" title="{{group.title}}">
+                {{group.title}}
+              </a>
+            </div>
+            <div class="metas">
+              <span><i class="es-icon es-icon-people"></i>{{group.memberNum}}</span>
+              <span><i class="es-icon es-icon-textsms"></i>{{group.threadNum}}</span>
+            </div>
+          </div>
+        </div>
+      {% else %}
+        <div class="empty">{{'group.detail.hot_group.empty'|trans}}</div>
+      {% endfor %}
+    </div>
+  </div>
+
+{% endblock %}

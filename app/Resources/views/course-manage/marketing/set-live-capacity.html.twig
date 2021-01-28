@@ -1,0 +1,13 @@
+<div class="form-group">
+  <div class="col-sm-2 control-label">
+    <label class="control-label-required" for="maxStudentNum-field">{{'course.plan_setup.member_numbers'|trans}}</label>
+  </div>
+  <div class="col-sm-10 controls">
+    <input type="text" id="maxStudentNum-field" name="maxStudentNum" class="form-control width-input width-input-large"
+      value="{% if course.maxStudentNum|default('') %}{{ course.maxStudentNum|default('') }}{% endif %}" data-live-capacity-url="{{ path('course_set_live_capacity', {courseSetId: courseSet.id, courseId: course.id}) }}" data-explain=""> {{'site.data.people'|trans}}
+      <a class="cd-text-sm cd-link-primary" href="{{ path('content_course_rule') }}" target="_blank">{{'course.plan_setup.member_numbers.view_rule_btn'|trans}}</a>
+  </div>
+  <div class="col-sm-offset-2 col-sm-10 js-course-rule">
+    <p class="color-warning cd-text-sm mb0 form-error-message"></p>
+  </div>
+</div>

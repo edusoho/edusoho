@@ -1,0 +1,20 @@
+dist: precise
+language: php
+
+php:
+ - 5.3
+ - 5.4
+ - 5.5
+ - 5.6
+ - 7.0
+ - 7.1
+
+services:
+ - redis-server
+
+before_script:
+ - cat .travis.php.ini >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini ; echo "Loading additional config for version $TRAVIS_PHP_VERSION" ;
+ - composer self-update || true
+ - composer install
+
+script: vendor/bin/phpunit

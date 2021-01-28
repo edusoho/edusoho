@@ -1,0 +1,73 @@
+<div class="form-group">
+  <label
+    class="col-sm-2 control-label mbs">{{ 'course.marketing_setup.preview.set_task'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}</label>
+  <div class="col-sm-8">
+    <ul
+      class="list-group mb0 pb0 {% if canFreeTasks|length > 0 %}task-price-setting-group{% endif %} js-task-price-setting-scroll {% if course.platform|default('self') == 'self' %}js-task-price-setting{% endif %}">
+
+      {% for task in canFreeTasks %}
+        <li class="task-price-setting-group__item
+           {% if freeTasks[task.id]|default(null) %} open {% endif %}
+           {% if loop.index == canFreeTasks|length %} mb5 {% endif %}">
+          <input type="checkbox" class="mr10" name="freeTaskIds[]" value="{{ task.id }}"
+            {% if freeTasks[task.id]|default(null) %} checked {% endif %}
+            {% if course.platform|default('self') != 'self' %}disabled{% endif %}>
+
+          {% set meta = activity_meta(task.type) %}
+          <i class="{{ meta.icon }} color-gray" data-toggle="tooltip" data-placement="top" title=""
+             data-container="body"
+             data-original-title="{{ 'course.marketing_setup.preview.set_task.task_name'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%name%':meta.name}) }}"></i>
+          <span class="inline-block vertical-middle text-overflow title">
+            {{ setting('course.task_name')|default('admin.setting_course.task'|trans) }} {{ task.number }}：{{ task.title }}
+          </span>
+          <span class="cd-tag cd-tag-orange pull-right price">
+            {{ 'course.marketing_setup.preview.set_task.free'|trans }}
+          </span>
+        </li>
+      {% endfor %}
+    </ul>
+    {% set can_free_activity_types = can_free_activity_types() %}
+    <div class="help-block course-mange-space">
+      {{ 'course.marketing_setup.preview.set_task.free_tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}{{ can_free_activity_types|join('word.seperator'|trans) }}
+      {% set freeTaskChangelog = '' %}
+      {% for key, changelog in courseProduct.changelog|default() %}
+        {% if changelog['freeTasks']|default() %}
+          {% if freeTaskChangelog %}{% set freeTaskChangelog = freeTaskChangelog ~ '<br>' %}{% endif %}
+          {% set freeTaskChangelog = freeTaskChangelog ~ 'merchant.content_resource.product_version'|trans ~ key ~ '-' ~ 's2b2c.course_product.free_tasks'|trans ~ ':<br>' %}
+          {% set freeTaskChangelog = freeTaskChangelog~ changelog['freeTasks'] %}
+        {% endif %}
+      {% endfor %}
+      {% if freeTaskChangelog %}
+        <i class="es-icon es-icon-tip admin-update__icon color-danger" data-container="body" data-toggle="popover"
+           data-trigger="hover" data-placement="right" data-content="{{ freeTaskChangelog }}"></i>
+      {% endif %}
+    </div>
+
+  </div>
+</div>
+{% if setting('storage.upload_mode', 'local') != 'local' %}
+  <div class="form-group">
+    <label class="col-sm-2 control-label">
+      {{ 'course.marketing_setup.preview.try_watch'|trans }}
+      <a class="es-icon es-icon-help text-normal course-mangae-info__help" data-container="body"
+         data-toggle="popover"
+         data-trigger="hover"
+         data-placement="top"
+         data-content="{{ 'course.marketing_setup.preview.try_watch_tips'|trans }}">
+      </a>
+    </label>
+    <div class="col-sm-8">
+      <select {% if course.platform|default('self') != 'self' %}disabled{% endif %}
+              class="form-control course-mange-info__select mh5" id="tryLookLength" name="tryLookLength">
+        <option value="0">{{ 'course.marketing_setup.preview.not.support.try_watch'|trans }}</option>
+        {% for i in 1..10 %}
+          {% if course.tryLookLength|default(1) == i %}
+            <option value="{{ i }}" selected>{{ i ~ 'course.marketing_setup.preview.minutes.try_watch'|trans }}</option>
+          {% else %}
+            <option value="{{ i }}">{{ i ~ 'course.marketing_setup.preview.minutes.try_watch'|trans }}</option>
+          {% endif %}
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+{% endif %}

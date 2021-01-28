@@ -1,0 +1,7 @@
+{{ render(controller('AppBundle:Thread/Event:showEventTitle', {request:app.request, thread:thread})) }}
+
+<div class="editor-text">
+  {{ thread.content|at(thread.ats)|cdn|raw }}
+</div>
+
+{{ render(controller('AppBundle:Thread/Member:showMembers', {request:app.request, thread:thread})) }}

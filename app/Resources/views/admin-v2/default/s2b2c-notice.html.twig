@@ -1,0 +1,41 @@
+{% if is_s2b2c_enabled() %}
+  {% set notice = data('S2B2CNotice', {}) %}
+  {% if notice.noticeNum > 0 %}
+    <div class="notify-container">
+      <input class="hidden" type="checkbox" checked id="listUnfold" />
+      {% if notice.noticeNum > 2 %}
+        <label for="listUnfold" class="notify-list-toggle"><i class="es-icon"></i></label>
+      {% endif %}
+      {% if notice.noticeNum >=6 %}
+        {% set rowNum = 6 %}
+      {% else %}
+        {% set rowNum = notice.noticeNum %}
+      {% endif %}
+      <div class="alert-list notify-List">
+        {% if notice.notEnoughBalance %}
+          <div class="alert alert-warning clearfix" role="alert">
+            <span>{{ 's2b2c.resource.no_fee_notice_hint'|trans({'%supplierName%':notice.supplierName, '%balance%':notice.balance|default(0) / 100}) }}</span>
+          </div>
+        {% endif %}
+        {% if notice.hasNewVersionProducts %}
+          <div class="alert alert-warning clearfix" role="alert">
+            <span>{{ 's2b2c.resource.has_new_notice_hint'|trans }}</span>
+            <a class="alert-link" href="{{ path('admin_v2_content_resource_products_version', {type: 'courseSet'}) }}" target="_blank">{{ '前去更新>>'|trans }}</a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+  <div class="notify-container">
+    <div class="alert-list notify-List">
+      {% set notifies = data('S2B2CProductUpdateNotify', {}) %}
+      {% for notify in notifies %}
+        <div class="alert alert-warning clearfix" role="alert">
+          <span>您采购的 《{{  notify.title |default('') }}》 {{ notify.eventName }}</span>
+          <a class="alert-link" href="{{ path(notify.path, notify.pathParams) }}" target="_blank">{{ 'course.testpaper_manage.transfer_btn'|trans }}</a>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+{% endif %}

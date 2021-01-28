@@ -1,0 +1,31 @@
+<article class="article-item">
+  <div class="article-metas clearfix">
+    <div class="pull-left">
+      <div class="date">
+        <div class="day">{{ article.publishedTime|date('d') }}</div>
+        <div class="month">{{ article.publishedTime|date('m') }}{{'site.date.month'|trans}}</div>
+      </div>
+    </div>
+    <div class="metas-body">
+      <p>
+        <a class="link-dark" href="{{ path('article_category', {categoryCode:category.code}) }}">{{ category.name }}</a>
+      </p>
+      <h2 class="title">
+        <a class="link-dark" href="{{ path('article_detail', {id:article.id}) }}">{{ article.title }}</a>
+      </h2>
+    </div>
+  </div>
+  {% if article.thumb %}
+  <div class="media">
+    <div class="media-left">
+      <a href="{{ path('article_detail', { id:article.id }) }}">
+        <img class="thumb-img"  src="{{ filepath(article.thumb, '') }}" alt="{{ article.title }}"></a>
+    </div>
+    <div class="media-body">{{ article.body|plain_text(150) }}</div>
+  </div>
+  {% else %}
+    <div class="content">
+      {{ article.body|plain_text(150)}}
+    </div>
+  {% endif %}
+</article>

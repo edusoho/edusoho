@@ -1,0 +1,38 @@
+.footer-tool-bar {
+  display: none;
+  position: fixed;
+  border-top: 1px solid #ECECEC;
+  height: 50px;
+  padding-top: 8px;
+  width: 100%;
+  bottom: 0px;
+  background-color: @gray-lighter;
+  overflow: hidden;
+  z-index: 10;
+  > div {
+    a {
+      color: #919191;
+    }
+    display: inline-block;
+    width: 33.33333333333333%;
+    float: left;
+    text-align: center;
+    font-size: 10px;
+    line-height: 1;
+    i {
+      font-size: 24px;
+    }
+    &.active a {
+      color: @brand-primary;
+      .es-icon-home1::before {
+        content: "\e6d1";
+      }
+      .es-icon-newshot::before {
+        content: "\e7c4";
+      }
+      .es-icon-write::before {
+        content: "\e760";
+      }
+    }
+  }
+}

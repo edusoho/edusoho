@@ -1,0 +1,20 @@
+--TEST--
+Test @import directive
+--CSS--
+@import url("my.css");
+@import url('my.css');
+@import url(my.css);
+@import "my.css";
+@import 'my.css';
+--PRINT--
+@import "my.css";
+
+@import "my.css";
+
+@import "my.css";
+
+@import "my.css";
+
+@import "my.css";
+--SETTINGS--
+template='low'

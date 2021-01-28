@@ -1,0 +1,102 @@
+{% extends 'course/course-show.html.twig' %}
+{% block title %} {{thread.title}} - {{ parent() }}{% endblock %}
+{% do script(['libs/es-ckeditor/ckeditor.js','libs/jquery-validation.js','app/js/course/thread-show/index.js'])%}
+
+{% set nav = thread['type'] %}
+
+{% block detail_content %}
+
+  <div class="thread">
+    <div class="thread-header">
+      {{ web_macro.user_avatar(author, 'pull-right') }}
+      <h2 class="thread-title">
+        {% if thread.type == 'question' %}
+        <span class="label label-info">{{'thread.status.question'|trans}}</span>
+        {% endif %}
+          {% if thread.title == '' %}
+            {% if thread.questionType == 'video' %}
+              {% set questionType = 'course.thread.question_type.video'|trans %}
+            {% elseif thread.questionType == 'image' %}
+              {% set questionType = 'course.thread.question_type.image'|trans %}
+            {% elseif thread.questionType == 'audio' %}
+              {% set questionType = 'course.thread.question_type.audio'|trans %}
+            {% else %}
+              {% set questionType = 'course.thread.question_type.content'|trans %}
+            {% endif %}
+        {% endif %}
+        {{ thread.title|default('course.thread.question.title'|trans({'%questionType%':questionType|default('course.thread.question_type.content'|trans)})) }}
+      </h2>
+      <div class="thread-metas">
+        By {{  web_macro.user_link(author, 'link-primary') }}
+        <span class="bullet mhs">•</span>
+        {{ thread.createdTime|smart_time }}
+        <span class="bullet mhs">•</span>
+        {{'course.thread.hit_times'|trans({'%hitNum%': thread.hitNum})}}
+        {% if task|default(null) %}
+          <span class="bullet mhs">•</span>
+          <a class="link-primary" href="{{ path('course_task_show', {courseId: thread.courseId, id:thread.taskId}) }}" title="{{task.title}}">{{'course.thread.mission_number'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%number%': task.number})}}</a>
+        {% endif %}
+
+      </div>
+    </div>
+    <div class="thread-body">{{ thread.content|cdn|raw }}</div>
+
+    {% include 'attachment/widget/list.html.twig' with {targetType:'course.thread', targetId:thread.id} %}
+    {% if thread.type == 'question' and thread.videoId|default(0) %}
+      {% include 'course/thread/question-video.html.twig' %}
+    {% endif %}
+
+    {% if isManager or app.user.id == author.id %}
+      <div class="thread-footer" >
+        {% if thread.source == 'app' %}
+          <a class="btn color-gray" title="{{ 'course.thread.edit_hint'|trans }}"><span class="glyphicon glyphicon-edit"></span> {{'thread.edit_btn'|trans}} </a>
+        {% else %}
+          <a href="{{ path('course_thread_edit', {courseId:thread.courseId, threadId:thread.id}) }}" class="btn btn-link"><span class="glyphicon glyphicon-edit"></span> {{'thread.edit_btn'|trans}}</a>
+        {% endif %}
+        {% if isManager %}
+          <a href="javascript:;" class="btn btn-link" data-url="{{ path('course_thread_delete', {courseId:course.id, threadId:thread.id}) }}" data-after-url="{{ path('my_course_show', {id:course.id, tab: thread.type, type: thread.type|default('tasks')}) }}" data-role="confirm-btn" data-confirm-message="{{'thread.delete_confirm_message'|trans}}"><span class="glyphicon glyphicon-remove-sign"></span> {{'thread.delete_btn'|trans}}</a>
+          {% if thread.isStick %}
+            <a href="javascript:" class="btn btn-link" data-url="{{ path('course_thread_unstick', { courseId:course.id, threadId:thread.id}) }}" data-role="confirm-btn" data-confirm-message="{{'thread.stick_cancel_confirm_message'|trans}}"><span class="glyphicon glyphicon-minus-sign"></span> {{'thread.stick_cancel_btn'|trans}}</a>
+          {% else %}
+            <a href="javascript:" class="btn btn-link" data-url="{{ path('course_thread_stick', {courseId:course.id, threadId:thread.id}) }}" data-role="confirm-btn" data-confirm-message="{{'thread.stick_confirm_message'|trans}}"><span class="glyphicon glyphicon-circle-arrow-up"></span> {{'thread.stick_btn'|trans}}</a>
+          {% endif %}
+
+          {% if thread.isElite %}
+            <a href="javascript:" class="btn btn-link" data-url="{{ path('course_thread_unelite', {courseId:course.id, threadId:thread.id}) }}"data-role="confirm-btn" data-confirm-message="{{'thread.cancel_essence_confirm_message'|trans}}"><span class="glyphicon glyphicon-hand-right"></span> {{'thread.cancel_essence_btn'|trans}}</a>
+          {% else %}
+            <a href="javascript:" class="btn btn-link" data-url="{{ path('course_thread_elite', {courseId:course.id, threadId:thread.id}) }}"data-role="confirm-btn" data-confirm-message="{{'thread.set_essence_confirm_message'|trans}}"><span class="glyphicon glyphicon-thumbs-up"></span>  {{'thread.set_essence_btn'|trans}}</a>
+          {% endif %}
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="thread-posts">
+    <h3 class="thread-posts-heading">
+      <span class="glyphicon glyphicon-share-alt"></span>
+      <span id="thread-post-num">{{ thread.postNum }}</span>{{'thread.reply'|trans}}
+    </h3>
+
+    <ul class="thread-post-list media-list">
+      {% for post in posts %}
+        {% set author = users[post.userId] %}
+        {% include 'course/thread/post-list-item.html.twig' %}
+      {% else %}
+        {% if thread.type == 'question' %}
+          <li class="empty">{{ 'course.thread.empty'|trans({'%thread%': 'thread.answer'|trans }) }}</li>
+        {% else %}
+          <li class="empty">{{ 'course.thread.empty'|trans({'%thread%': 'thread.reply'|trans }) }}</li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+
+    {{ web_macro.paginator(paginator) }}
+
+    {% if isMemberNonExpired %}
+      <h3 class="thread-posts-heading"><span class="glyphicon glyphicon-plus"></span> {{'thread.add_btn'|trans}}{{'thread.reply'|trans}}</h3>
+      {{ render(controller('AppBundle:Course/Thread:post', {courseId:course.id, threadId:thread.id})) }}
+    {% endif %}
+
+  </div>
+
+{% endblock %}

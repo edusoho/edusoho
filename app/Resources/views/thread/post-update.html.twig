@@ -1,0 +1,21 @@
+<form id="post-thread-form" method="post"
+  {% if post %}
+    action="{{ path(target.type ~ '_thread_post_update', {(target.type ~ 'Id'): target.id, threadId: thread.id, postId:post.id}) }}"
+  {% else %}
+    action="{{ path(target.type ~ '_thread_post', {(target.type ~ 'Id'): target.id, threadId: thread.id}) }}"
+  {% endif %}
+  >
+  <div class="form-group">
+    <div class="controls">
+      <textarea id="post-content-field" class="form-control" name="content" data-display="{{'thread.content'|trans}}" rows="15">{{ post.content|default('') }}</textarea>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="controls clearfix">
+      <button type="submit" class="btn btn-primary pull-right">{{'form.btn.reply'|trans}}</button>
+      <a href="{{ path(target.type ~ '_threads', {(target.type ~ 'Id'): target.id}) }}" class="btn btn-link pull-right">{{'form.btn.cancel'|trans}}</a>
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>

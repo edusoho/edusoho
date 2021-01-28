@@ -1,0 +1,21 @@
+  {% import "macro.html.twig" as web_macro %}
+<table id="block-history-table" class="table table-striped table-condensed">
+    <tbody>
+      {% for blockHistory in blockHistorys %}
+      {% set templateData = blockHistory.templateData %}
+        <tr id="{{ blockHistory.id }}">
+          <td>{{ blockHistory.createdTime |date('Y-n-d H:i:s') }}</td>
+          <td>{{ historyUsers[blockHistory.userId].nickname|default('admin.block_manage.visual_edit_history.user_deleted') }}</td>
+          <td>
+            <a class="btn btn-xs btn-default edit-btn" 
+            href="{{ path('admin_v2_blockhistory_preview', {id:blockHistory.id}) }}" target="_blank">{{ 'admin.block_manage.visual_edit_history.preview'|trans }}</a>
+          </td>
+          <td>
+            <button class="btn-recover-content btn btn-xs btn-default edit-btn">{{ 'admin.block_manage.visual_edit_history.recovery_content'|trans }}</button>
+            <div class="data-role-content" style="display:none"> {{ blockHistory.content }} </div>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+   {{ admin_macro.paginator(paginator) }} 

@@ -1,0 +1,8 @@
+<script src="{{ asset('translations/translator.min.js') }}"></script>
+
+{% set locales = app.request.session.get('_locale',app.request.locale)|default() %}
+{% if app.debug %}
+    <script src="{{ path('jstranslation_js', {'domain': 'js'}) }}?locales={{ locales }}"></script>
+{% else %}
+    <script src="{{ asset('translations/' ~ locales ~ '.js') }}"></script>
+{% endif %}

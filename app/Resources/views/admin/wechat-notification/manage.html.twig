@@ -1,0 +1,96 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set script_controller = 'wechat-notification/index.js' %}
+
+{% set menu = 'admin_operation_wechat_notification_manage' %}
+
+{% block main %}
+  {% if not isCloudOpen %}
+    <div class="alert alert-danger js-click-enable">
+      {{ 'wechat.notification.cloud.tips'|trans }}
+      <a href="{{ path('admin_my_cloud_overview') }}">{{ 'wechat.notification.cloud_open'|trans }}</a>
+    </div>
+  {% endif %}
+  <div class="form-horizontal js-wechat-template-list" data-enabled="{% if wechatSetting.wechat_notification_enabled|default('') %}1{% else %}0{% endif %}">
+    <fieldset>
+      <legend>{{'admin.wechat_notification.switch'|trans}}</legend>
+      {% if not wechatSetting.wechat_notification_enabled|default('') %}
+      <div class="form-group">
+        <div class="mll">
+          {{ 'admin.wechat.notification.open_wechat_notify_tip'|trans }}
+        </div>
+        <div class="" align="center">
+          <img class="pbl ptl img-responsive" src='{{ asset('bundles/topxiaadmin/img/weixin-notify-intro.png') }}'>
+          <a class="btn btn-primary" href="{{ path('admin_setting_wechat_auth') }}" target="_blank">{{ 'admin.wechat.notification.go_to_open'|trans }}</a>
+        </div>
+      </div>
+      {% else %}
+        {% if not wechatSetting.is_authorization|default(0) %}
+          <div class="setting-comment alert alert-warning">
+            <div class="setting-comment-block">{{'admin.wechat.notification.un_authorized_after_open_tip'|trans}}</div>
+            <div class="pull-right" style="margin-top: -26px">
+              <a href="{{ path('admin_setting_wechat_auth') }}" type="button" class="btn btn-default btn-large btn-primary" target="blank">{{'前往授权'|trans}}</a>
+            </div>
+          </div>
+        {% else %}
+          <div class="form-group">
+            <div class="col-md-3 control-label">
+              <label>{{ 'admin.setting_wechat_auth.wechat_notification'|trans }}</label>
+            </div>
+            <div class="controls col-md-1">
+              <p class="form-control-static">
+                {{ 'admin.payment_setting.api_open'|trans }}
+              </p>
+            </div>
+            <div class="controls col-md-2 form-control-static">
+              <a target="_blank" href="{{ path('admin_setting_wechat_auth') }}">
+              {% if wechatSetting.wechat_notification_enabled %}
+                {{ 'admin.payment_setting.api_close.direct'|trans }}
+              {% else %}
+                {{ 'admin.payment_setting.api_open.direct'|trans }}
+              {% endif %}
+              </a>
+            </div>
+          </div>
+        {% endif %}
+      {% endif %}
+    </fieldset>
+
+    <fieldset>
+      <legend>{{'admin.wechat_notification.template'|trans}}</legend>
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th width="20%">{{ 'admin.wechat_notification.template_name'|trans }}</th>
+            <th width="50%">{{ 'admin.wechat_notification.template_content_sample'|trans }}</th>
+            <th width="15%">{{ 'admin.wechat_notification.send_object'|trans }}</th>
+            <th width="10%">{{ 'admin.wechat_notification.template_status'|trans }}</th>
+            <th width="5%">{{ 'admin.wechat_notification.operation'|trans }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for key,template in templates %}
+            <tr>
+              <td width="20%">{{ template.name|trans|raw }}</td>
+              <td width="50%"><a class="alert-link" href="#modal" data-toggle="modal" data-url="{{ path('admin_wechat_notification_show', {key: key}) }}">{{ template.content|trans|sub_text(30)|raw }}</td>
+              <td width="15%">{{ template.object }}</td>
+              <td width="10%">
+                {% if template.status == 1 %}
+                  <span class="text-success">已开启</span>
+                {% else %}
+                  <span>未开启</span>
+                {% endif %}
+              </td>
+              <td width="5%">
+                <a class="js-wechat-notification-setting alert-link" {% if isCloudOpen and wechatSetting.wechat_notification_enabled %} href="#modal" data-toggle="modal" data-url="{{ path('admin_wechat_notification_setting_modal', {key: key})}}"{% else %}href="javascript:;" {% endif %}>
+                 {{ 'admin.wechat_notification.template_setting'|trans }}
+                </a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </fieldset>
+  </div>
+    <div id="test" class="hidden"></div>
+{% endblock %}

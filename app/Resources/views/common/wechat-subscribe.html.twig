@@ -1,0 +1,6 @@
+{% extends 'layout.html.twig' %}
+
+{% set weChatUser = data('WeChatUser', {userId: app.user.id|default(null)}) %}
+{% block content %}
+  {% include 'wechat-inform-common.html.twig' with {type: '', 'goto' : '', 'weChatUser': weChatUser} %}
+{% endblock %}

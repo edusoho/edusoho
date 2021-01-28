@@ -1,0 +1,54 @@
+{% extends 'my/my-teaching.html.twig' %}
+
+{% block title %}
+
+{% if type == 'question' %}
+	{{'role.student'|trans}}{{'my.teaching.course_set.question'|trans}}
+{% set side_nav = 'my-teaching-questions' %}
+
+{% elseif type == 'discussion' %}
+	{{'role.student'|trans}}{{'my.teaching.course_set.threasd'|trans}}
+{% set side_nav = 'my-teaching-discussions' %}
+
+{% endif %}
+
+{{ parent() }}
+
+{% endblock %}
+
+
+{% if type == 'question' %}
+	{% set side_nav = 'my-teaching-questions' %}
+{% elseif type == 'discussion' %}
+	{% set side_nav = 'my-teaching-discussions' %}
+{% endif %}
+
+{% block main %}
+
+<div class="panel panel-default panel-col">
+  	<div class="panel-heading">
+		{% if type == 'question' %}
+			{{'role.student'|trans}}{{'my.teaching.course_set.question'|trans}}
+		{% elseif type == 'discussion' %}
+			{{'role.student'|trans}}{{'my.teaching.course_set.threasd'|trans}}
+		{% endif %}
+	</div>
+
+  <div class="panel-body">
+
+    {% include 'my/teaching/tab.html.twig' with {type: type} %}
+
+    {% if threads %}
+	    {% include 'my/learning/thread/thread-list.html.twig'  with {type: type} %}
+	  {% else %}
+
+	  	{% if type == 'question' %}
+	  		<div class="empty">{{'my.teaching.course_set.question_empty'|trans|raw}}</div>
+		{% elseif type == 'discussion' %}
+			<div class="empty">{{'my.teaching.course_set.thread_empty'|trans|raw}}</div>
+		{% endif %}
+
+	  {% endif %}
+  </div>
+</div>
+{% endblock %}

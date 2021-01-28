@@ -1,0 +1,8 @@
+<ul class="media-list thread-list-small" data-role="list">
+  {% for thread in threads %}
+    {% set user = users[thread.userId] %}
+    {% include 'task/plugin/question/item.html.twig' %}
+  {% else %}
+    <li class="empty-item">{{'question_task.empty_tips'|trans}}</li>
+  {% endfor %}
+</ul>

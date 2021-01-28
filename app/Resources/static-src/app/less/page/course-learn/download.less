@@ -1,0 +1,23 @@
+.download-activity-list {
+    padding-left: 0;
+    list-style: none;
+    > li {
+      &:nth-of-type(odd) {
+        background-color: @bg-color;
+      }
+      > a {
+        display: block;
+        padding: 20px;
+        .download-icon {
+          float: right;
+          color: @gray-medium;
+        }
+        &:hover {
+          .download-icon {
+            color: @brand-primary;
+          }
+          color: @brand-primary;
+        }
+      }
+    }
+  }

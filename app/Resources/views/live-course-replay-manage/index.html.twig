@@ -1,0 +1,26 @@
+{% extends 'open-course-manage/layout.html.twig' %}
+
+{% block title %}{{'course.live.replay_manage.content_title'|trans}} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'replay' %}
+{% do script(['app/js/open-course-manage/replay-lesson/index.js'])%}
+
+  {% block page_title %}{{'course.live.replay_manage.content_title'|trans}}{% endblock %}
+  {% block main_body %}
+
+  {% if items is empty %}
+    <div class="empty">{{'course.live.replay_manage.lesson_empty_tips'|trans}}</div>
+  {% endif %}
+
+  <div>
+    <ul class="open-course-lesson ml0" id="course-item-list">
+      {% for id, item in items %}
+        {% if 'lesson' in id %}
+          {% include 'live-course-replay-manage/list-item.html.twig' with {lesson: item} %}
+        {% endif %}
+      {% endfor %}
+    </ul>
+    <div class="cd-mt16 color-warning">{{ 'course.live.replay_manage.upload_tips'|trans|raw }}</div>
+  </div>
+
+  {% endblock %}

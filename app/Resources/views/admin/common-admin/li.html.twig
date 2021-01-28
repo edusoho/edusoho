@@ -1,0 +1,7 @@
+<li class="shortcut-item clearfix">
+  <a href="{{admin.url}}">
+    <i class="glyphicon glyphicon-bookmark text-info"></i>
+    {{admin.title}}
+  </a>
+  <span class="glyphicon glyphicon-remove-circle text-muted" data-url="{{ path('admin_common_remove', {id:admin.id}) }}" title="{{'admin.navbar.header.often_used.delete_tips'|trans}}"></span>
+</li>

@@ -1,0 +1,156 @@
+{% import "macro.html.twig" as web_macro %}
+<!-- 小组动态 -->
+{% set groups = data('HotGroup',{'count':6}) %}
+{% set reviews = data('LatestCourseReviews',{'count':4}) %}
+
+<section class="dynamic-section {{config.background|default("")}}">
+  <div class="container">
+    <div class="text-line gray">
+      <h5><span>{{ config.title|default(config.defaultTitle) }}</span><div class="line"></div></h5>
+      <div class="subtitle">{{ config.subTitle|default(config.defaultSubTitle) }}</div>
+    </div>
+    <div class="dynamic-section-main row">
+      {% if config.select1 =='checked'%}
+      <div class="col-md-6">
+        <div class="panel panel-default index-group">
+          <div class="panel-heading">
+            <a href="{{ path('group') }}" class="more"><i class="es-icon es-icon-morehoriz"></i></a>
+            <h3 class="panel-title"><i class="es-icon es-icon-whatshot pull-left"></i>{{ 'group.hot_group.content_title'|trans }}</h3>
+          </div>
+          <div class="panel-body row">
+            <div class="media-group-list">
+              {% for group in groups %}
+                <div class="media media-group col-md-6 col-sm-4">
+                  <div class="media-left">
+                    <a href="{{ path('group_show',{id:group.id}) }}">
+                      {{ lazy_img(filepath(group.logo, 'group.png'), 'avatar-square-md', group.title, 'group.png') }}
+                    </a>
+                  </div>
+                  <div class="media-body">
+                    <div class="title">
+                      <a class="link-dark" href="{{ path('group_show',{id:group.id}) }}">
+                        {{ group.title }}
+                      </a>
+                    </div>
+                    <div class="metas">
+                      <span><i class="es-icon es-icon-people"></i>{{ group.memberNum }}</span>
+                      <span><i class="es-icon es-icon-textsms"></i>{{ group.threadNum }}</span>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      {% if config.select2 =='checked'%}
+      <div class="col-md-6">
+        <div class="panel panel-default index-article">
+          <div class="panel-heading">
+            <a class="more" href="{{ path('article_show') }}"><i class="es-icon es-icon-morehoriz"></i></a>
+            <h3 class="panel-title">
+              {{ 'homepage.article.content_title'|trans({'%article_name%': setting('article.name')|default('article'|trans)}) }}
+            </h3>
+          </div>
+          <div class="panel-body clearfix">
+            {% set featuredArticles = data('LatestArticles',{'type':'featured','count':2}) %}
+            {% if featuredArticles %}
+            <ul class="index-recommend-aricle clearfix">
+              {% for article in featuredArticles %}
+                <li class="{% if loop.index == 2 %}last{% endif %}">
+                  <a href="{{ path('article_detail', {id:article.id}) }}">
+                    {% set defaultImg = '../../v2/img/article/article_banner_' ~ loop.index ~ '.jpg' %}
+                    {{ lazy_img(filepath(article.thumb,defaultImg), 'img-responsive', article.title, defaultImg) }}
+                    <div class="image-overlay"></div>
+                    <div class="title">{{ article.title }}</div>
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+            <ul class="index-new-article {% if not featuredArticles|default(false) %}full{% endif %}">
+              {% set articles = data('LatestArticles',{'count':5}) %}
+              {% if articles %}
+                {% for article in articles %}
+                  <li class="{% if loop.index == 5 %}last{% endif %} clearfix"><i class="es-icon es-icon-dot color-primary mrs"></i><a class="link-dark" href="{{ path('article_detail', {id:article.id}) }}" title="{{ article.title }}">{{ article.title }}</a> <span class="date">{{ article.createdTime|smart_time }}</span></li>
+                {% endfor %}
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      {% if config.select3 =='checked'%}
+      <div class="col-md-6">
+        <div class="panel panel-default index-evaluate">
+          <div class="panel-heading">
+            <h3 class="panel-title">
+              {{ 'homepage.student_comment.content_title'|trans }}
+            </h3>
+          </div>
+          <div class="panel-body">
+            {% if reviews %}
+              {% for review in reviews %}
+              {% set author = review.User|default(null) %}
+              {% set course = review.course|default(null) %}
+              {% if author and course %}
+            <div class="media media-dynamic">
+              <div class="media-left">
+              {{ web_macro.user_avatar(author,'','avatar-sm',true) }}
+              </div>
+              <div class="media-body">
+                <div class="title text-sm">
+                  {{ web_macro.user_link(author,'link-dark') }}
+                  <span class="score">{{web_macro.star(review.rating) }}</span>
+                    {{ 'homepage.student_comment.from'|trans({'%courseUrl%':path('course_show', {id: course.id }),'%courseTitle%':course.title|default(course.courseSetTitle)|plain_text(10) })|raw }}
+                </div>
+                <div class="content gray-darker">
+                  {{ review.content|plain_text(30) }}
+                </div>
+                <span class="date">{{review.createdTime|smart_time}}</span>
+              </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% else %}
+              <div class="empty">{{ 'homepage.student_comment.empty'|trans }}</div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      {% if config.select4 =='checked'%}
+      <div class="col-md-6">
+        <div class="panel panel-default index-dynamic">
+          <div class="panel-heading">
+            <h3 class="panel-title">
+              {{ 'homepage.student_dynamic.content_title'|trans }}
+            </h3>
+          </div>
+          <div class="panel-body">
+            {% set statuses = data('LatestStatuses', {mode:'simple', count: 4,private:0}) %}
+
+            {% for status in statuses %}
+              <div class="media media-dynamic">
+                <div class="media-left">
+                  {{ web_macro.user_avatar(status.user, '', 'avatar-sm') }}
+                </div>
+                <div class="media-body">
+                  <div class="title">
+                    {{ web_macro.user_link(status.user) }}
+                  </div>
+                  <div class="content">
+                    {{ status.message|raw }}
+                  </div>
+                  <span class="date">{{status.createdTime | smart_time}}</span>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>

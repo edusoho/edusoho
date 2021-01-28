@@ -1,0 +1,19 @@
+{% extends 'es-bar/layout.html.twig' %}
+
+
+{% block esBarTitle %}
+    {{'es_bar.study_center.content_title'|trans}}
+{% endblock %}
+
+{% block esBarBody %}
+  <!-- 用户 -->
+  {% include 'es-bar/list-content/study-center/user.html.twig' %}
+
+
+  <!-- 直播预告 -->
+  {% include 'es-bar/list-content/study-center/live.html.twig' %}
+
+  <!-- 学习任务 -->
+  {% include 'es-bar/list-content/study-center/study-mission.html.twig' %}
+{% endblock %}
+

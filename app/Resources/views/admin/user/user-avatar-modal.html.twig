@@ -1,0 +1,58 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'modal-lg' %}
+
+{% block title %}{{'admin.user.manage.user_avatar.fields.heading_title'|trans}}{% endblock %}
+{% block body %}
+
+  <form id="user-avatar-form" class="form-horizontal" method="post" enctype="multipart/form-data" action="{{ path('admin_user_avatar', {id:user.id}) }}">
+
+    {{ web_macro.flash_messages() }}
+
+    <div class="form-group">
+      <div class="col-md-2 control-label"><b>{{'admin.user.manage.user_avatar.fields.current_avatar'|trans}}</b></div>
+      <div class="controls col-md-8 controls">
+      	<img src="{{ filepath(user.largeAvatar, 'avatar.png') }}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-2 control-label">
+      </div>
+      <div class="controls col-md-8 controls">
+        <p class="help-block">{{'admin.user.manage.user_avatar.upload_hint'|trans|raw}}</p>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-2 control-label"></div>
+      <div class="controls col-md-8 controls">
+        <a id="upload-picture-btn" 
+        class="btn btn-primary upload-picture-btn"
+        data-upload-token="{{ upload_token('tmp', 'image') }}"
+        data-goto-url="{{ path('admin_user_avatar_crop', {id:user.id}) }}"
+        >{{'admin.user.manage.user_avatar.upload_btn'|trans}}</a>
+        
+      </div>
+    </div>
+
+    {% if partnerAvatar %}
+      <div class="form-group">
+        <div class="col-md-2 control-label"><b>{{'admin.user.manage.user_avatar.fields.partner_avatar'|trans}}</b></div>
+        <div class="controls col-md-8 controls">
+          <img src="{{ partnerAvatar }}" class="mrm">
+          <button class="btn btn-default use-partner-avatar" type="button" data-url="{{ path('settings_avatar_fetch_partner') }}" data-goto="{{ path('settings') }}">{{'admin.user.manage.user_avatar.using_current_avatar_btn'|trans}}</button>
+        </div>
+      </div>
+    {% endif %}
+
+  </form>
+
+{% endblock %}
+
+
+{% block footer %}
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.close'|trans}}</button>
+  
+  <script>app.load('user/avatar-modal');</script>
+{% endblock %}

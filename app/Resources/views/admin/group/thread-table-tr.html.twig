@@ -1,0 +1,78 @@
+{% import 'admin/macro.html.twig' as admin_macro %}
+<tr id="thread-table-tr-{{ thread.id }}">
+  <td>
+    <input name="ID[]" data-role="batch-item" type="checkbox" value="{{thread.id}}"/> {{ thread.id}}
+  </td>
+
+  <td style="word-break:break-all;">
+    <strong ><a target="_blank" href="{{path('group_thread_show',{id:thread.groupId,threadId:thread.id})}}">{{ thread.title|plain_text(50)}}</a></strong>
+    {% if thread.status=='close'%}
+      <label class="label label-danger">{{'admin.operation_group.thread.thread_status.close'|trans}}</label>
+    {% endif %}
+  </td>
+
+  <td nowrap="nowrap">
+    {% if thread.isElite %}
+      <a href="javascript:;" data-url="{{ path('admin_group_thread_cancel_elite',{threadId:thread.id}) }}" class="promoted-label">
+        <span class="label label-success">{{'admin.operation_group.thread.isElite'|trans}}</span>
+      </a>
+    {% else %}
+      <a href="javascript:;" data-url="{{ path('admin_group_thread_set_elite',{threadId:thread.id}) }}" class="promoted-label">
+        <span class="label label-default">{{'admin.operation_group.thread.isElite'|trans}}</span>
+      </a>
+    {% endif %}
+  
+    {% if thread.isStick %}
+      <a href="javascript:;" data-url="{{ path('admin_group_thread_cancel_stick',{threadId:thread.id}) }}" class="promoted-label">
+        <span class="label label-success">{{'admin.operation_group.thread.isStick'|trans}}</span>
+      </a>
+    {% else %}
+      <a href="javascript:;" data-url="{{ path('admin_group_thread_set_stick',{threadId:thread.id}) }}" class="promoted-label">
+        <span class="label label-default">{{'admin.operation_group.thread.isStick'|trans}}</span>
+    </a>
+    {% endif %}
+  </td>
+
+  <td><a target="_blank" href="{{ path('user_show', {id:owners[thread.userId].id}) }}">
+    {{ owners[thread.userId].nickname}}</a>
+  </td>
+
+  <td>
+    <a target="_blank" href="{{ path('group_show', {id:group[thread.groupId].id}) }}">
+    {{ group[thread.groupId].title}}</a>
+  </td>
+
+  <td>
+    {{ thread.postNum}}
+  </td>
+
+  <td>
+    {% if thread.status=='open' %}
+      {{'admin.operation_group.thread.thread_status.open'|trans}}
+    {% else %}
+      {{'admin.operation_group.thread.thread_status.close'|trans}}
+    {% endif %}
+  </td>
+
+  <td>
+    <div class="btn-group">
+      <a type="button" class="btn btn-default btn-sm" target="_blank" href="{{path('group_thread_show',{id:thread.groupId,threadId:thread.id})}}" {% if thread.status=='close' %}disabled="disabled"{% endif %}>{{'admin.operation_group.thread.view_btn'|trans}}</a>
+      <button type="button" class="btn btn-default dropdown-toggle btn-sm " data-toggle="dropdown">
+        <span class="caret"></span>
+        <span class="sr-only">Toggle Dropdown</span>
+      </button>
+      <ul class="dropdown-menu" role="menu">
+        {% if thread.status=='open' %}
+          <li><a href="javascript:" class="close-thread" title="{{'admin.operation_group.thread.close_btn'|trans }}({{thread.title}})" data-url="{{path('admin_group_thread_close',{threadId:thread.id})}}"><span class="glyphicon glyphicon-off"></span> {{'admin.operation_group.thread.close_btn'|trans}}</a></li>
+        {% else %}
+          <li><a href="javascript:" class="open-thread" title="{{ 'admin.operation_group.thread.open_btn'|trans }}({{thread.title}})" data-url="{{path('admin_group_thread_open',{threadId:thread.id})}}">
+            <span class="glyphicon glyphicon-ok"></span> {{'admin.operation_group.thread.open_btn'|trans }}</a>
+          </li>
+          <li><a href="javascript:" class="delete-thread" title="{{'admin.operation_group.thread.delete_title'|trans }}({{thread.title}})" data-url="{{path('admin_group_thread_delete',{threadId:thread.id})}}">
+            <span class="glyphicon glyphicon-trash"></span> {{'admin.operation_group.thread.delete_btn'|trans }}</a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </td>
+</tr>

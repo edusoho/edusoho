@@ -1,0 +1,75 @@
+{% extends 'admin/layout.html.twig' %}
+{% set menu = 'admin_classroom_thread_manage' %}
+{% set script_controller='topxiaadminbundle/controller/classroom/classroom-thread' %}
+{% block main %}
+  <div class="well well-sm">
+    <form class="form-inline">
+      <div class="form-group">
+        <select class="form-control" name="keywordType">
+          {{ select_options({title:'admin.course_thread.form.keyword_type.title_option'|trans, content: 'admin.course_thread.form.keyword_type.content_option'|trans}, app.request.get('keywordType')) }}
+        </select>
+      </div>
+      <div class="form-group">
+        <input class="form-control" type="text" placeholder="{{'admin.course_thread.form.input.keyword.placeholer'|trans}}" name="keyword" value="{{ app.request.get('keyword') }}">
+      </div>
+      <div class="form-group">
+        <input class="form-control" type="text" placeholder="{{'admin.course_thread.form.input.author.placeholer'|trans}}" name="author" value="{{ app.request.get('author') }}">
+      </div>
+      <button class="btn btn-primary" type="submit">{{'form.btn.search'|trans}}</button>
+    </form>
+  </div>
+  <div id="thread-table-container">
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th width="5%"><input type="checkbox" data-role="batch-select"></th>
+          <th width="60%">{{'admin.course_thread.post_th'|trans}}</th>
+          <th width="10%">{{'admin.course_thread.reply_or_review_th'|trans}}</th>
+          <th width="15%">{{'admin.course_thread.author_th'|trans}}</th>
+          <th width="10%">{{'admin.course_thread.operation_th'|trans}}</th>
+        </tr>
+      </thead>
+      <body>
+        {% for thread in threads %}
+          {% set author = users[thread.userId]|default(null) %}
+          {% set classroom = classrooms[thread.targetId]|default(null) %}
+          <tr data-role="item">
+            <td><input value="{{thread.id}}" type="checkbox" data-role="batch-item"> </td>
+            <td>
+              {% if thread.type == 'question' %}
+                <span class="label label-info">{{'admin.course_thread.question_td_label'|trans}}</span>
+              {% endif %}
+              <a href="{{ path('classroom_thread_show', {classroomId:thread.targetId, threadId:thread.id}) }}" target="_blank"><strong>{{ thread.title }}</strong></a>
+              <div class="short-long-text">
+                <div class="short-text text-sm text-muted">{{ thread.content|plain_text(60) }} <span class="trigger">({{'admin.course_thread.expand_td'|trans}})</span></div>
+                <div class="long-text">{{ thread.content|raw }} <span class="trigger">({{'admin.course_thread.collapse_td'|trans}})</span></div>
+              </div>
+              
+              <div class="text-sm mts">
+                {% if classroom %}
+                  <a href="{{ path('classroom_show', {id:classroom.id}) }}" class="text-success" target="_blank">{{ classroom.title }}</a>
+                {% endif %}
+              </div>
+            </td>
+            <td><span class="text-sm">{{ thread.postNum }} / {{ thread.hitNum }}</span></td>
+            <td>
+              {{ admin_macro.user_link(author) }} <br />
+              <span class="text-muted text-sm">{{ thread.createdTime|date('Y-n-d H:i:s') }}</span>
+            </td>
+            <td><button class="btn btn-default btn-sm" data-role="item-delete" data-name="{{'admin.course_thread.post_th'|trans}}" data-url="{{ path('admin_classroom_thread_delete', {threadId:thread.id}) }}">{{'form.btn.delete'|trans}}</button></td>
+          </tr>
+        {% else %}
+          <tr><td colspan="20"><div class="empty">{{'site.datagrid.empty'|trans}}</div></td></tr>
+        {% endfor %}
+      </body>
+    </table>
+    <div class="mbm">
+      <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> {{'admin.course_thread.select_all_btn'|trans}}</label>
+      <button class="btn btn-default btn-sm mlm" data-role="batch-delete" data-name="{{'admin.course_thread.post_th'|trans}}" data-url="{{ path('admin_classroom_thread_batch_delete') }}">{{'form.btn.delete'|trans}}</button>
+    </div>
+  </div>
+  <nav class="text-center">
+    {{ admin_macro.paginator(paginator) }} 
+  </nav>
+  
+{% endblock %}

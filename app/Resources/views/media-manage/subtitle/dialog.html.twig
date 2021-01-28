@@ -1,0 +1,23 @@
+<div class="js-subtitle-dialog" data-media-id={{media.id}}>
+  <ul class="list-unstyled plm js-media-subtitle-list">
+    {% for subtitle in subtitles %}
+      <li class="pvs mtm">
+        <span class="subtitle-name prl pull-left">{{ subtitle.name }}</span>
+        <span class="subtitle-transcode-status {{ subtitle.convertStatus }}">
+        {{ dict_text('convertStatus', subtitle.convertStatus) }}</span>
+        <a href="javascript:;" class="btn-link pll color-primary js-subtitle-delete" 
+        data-subtitle-delete-url="{{path('media_subtitle_delete',{mediaId:media.id,id:subtitle.id})}}"
+        >{{ 'course.course_files.subtitle_dialog.delete_btn'|trans }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+  {% set token = uploader_token('subtitle', media.id, 'private') %}
+  <div class="col-md-2  caption-uploader js-select-file" id="subtitle-uploader" style="width: 130px;border: none;{% if subtitles|length > 3 %} display:none;{% endif %}"
+  data-media-id="{{ media.id }}"
+  data-media-global-id="{{ media.globalId }}"
+  data-subtitle-create-url="{{ url('media_subtitle_create', {mediaId: media.id}) }}"
+  data-init-url="{{ url('uploader_init', {uploaderToken:token}) }}"
+  data-finish-url="{{ url('uploader_finished', {uploaderToken:token}) }}"
+  >
+  </div>
+</div>

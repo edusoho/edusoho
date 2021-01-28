@@ -1,0 +1,17 @@
+ <div class="order-detail-bg  checkout" style="border:none">
+   <div class="order-detail  clearfix">
+     <div class="order-img hidden-xs">
+        <a href="{{ path('classroom_show', {id:classroom.id}) }}">
+          <img class="img-responsive" src="{{ filepath(classroom.middlePicture, 'classroom.png')|default(asset('assets/img/default/classroom-default-213-142.png')) }}"alt="{{ 'order.charge'|trans }}">
+        </a>
+     </div>
+     <div class="order-info">
+       <p>{{'order.name'|trans}}：{{ order.title }}</p>
+       <p>{{'order.id'|trans}}：{{order.sn}}</p>
+       <p>
+         {{'order.price'|trans}}：
+         <span class="pay-rmb">￥{{order.amount}}</span>
+       </p>
+     </div>
+   </div>
+ </div>

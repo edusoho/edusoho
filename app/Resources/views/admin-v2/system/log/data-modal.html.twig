@@ -1,0 +1,27 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{% endblock %}
+{% block body %}
+  <div class="table-responsive">
+    <table class="table table-bordered" style="word-break:break-all;text-align:center;">
+      {% for key,value in data %}
+
+        {% if value.old is defined %}
+          {#显示日志记录新旧比较#}
+          <tr class="active">
+            <td>{{ key }}</td>
+            <td>{{ 'log.field.change.detail'|trans({'%old%': value.old, '%new%': value.new })|raw }}</td>
+          </tr>
+        {% else %}
+          {#根据日志记录显示#}
+          <tr class="active">
+            <td>{{ key }}</td>
+            <td>{{ value }}</td>
+          </tr>
+        {% endif %}
+
+
+      {% endfor %}
+    </table>
+  </div>
+{% endblock %}

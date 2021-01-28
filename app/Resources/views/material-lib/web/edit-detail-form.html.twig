@@ -1,0 +1,45 @@
+<form class="form-horizontal" id="info-form" method="post" action="{{ editUrl }}">
+  <div class="form-group">
+    <label for="name" class="col-sm-2 control-label">{{'material_lib.detail.title'|trans}}</label>
+    <div class="col-sm-8">
+      <input type="text" class="form-control" id="name" name="name" required="true" placeholder="{{'material_lib.detail.title'|trans}}" value="{{ material.filename }}">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="tags" class="col-sm-2 control-label">{{'material_lib.detail.tag'|trans}}</label>
+    <div class="col-sm-8">
+      <input type="text" class="width-full select2-offscreen" id="tags" name="tags" value="{{ material.tags|default('')|join(',') }}" placeholder="{{'material_lib.detail.tag'|trans}}" data-url="{{ path('tag_match') }}">
+      <div class="help-block">{{'material_lib.detail.tag_tips'|trans}}</div>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-sm-2 control-label">{{'material_lib.detail.description'|trans}}</label>
+    <div class="col-sm-8 controls">
+      <textarea id="description" name="description" class="form-control" rows="6">{{ material.description|default('') }}</textarea>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-sm-2 control-label">{{'material_lib.detail.share'|trans}}</label>
+    <div class="col-sm-8 controls">
+      <div class="radio">
+        <label>
+          <input type="radio" name="isPublic" value="1" {% if material.isPublic|default(0) %}checked{% endif %}>
+          {{'material_lib.detail.share.share_to_public'|trans}}<span class="color-gray">{{'material_lib.detail.share.share_to_public_tips'|trans}}</span>
+        </label>
+      </div>
+      <div class="radio">
+        <label>
+          <input type="radio" name="isPublic" value="0" {% if not material.isPublic|default(0) %}checked{% endif %}>
+          {{'material_lib.detail.share.only_myself'|trans}}
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-8 controls">
+      <button class="btn btn-fat btn-primary" id="info-save-btn" data-loading-text="{{'form.btn.save.submiting'|trans}}" type="submit">{{'form.btn.save'|trans}}</button>
+      <a class="btn btn-link js-back" style="color:#555">{{'material_lib.btn.back'|trans}}</a>
+    </div>
+  </div>
+</form>

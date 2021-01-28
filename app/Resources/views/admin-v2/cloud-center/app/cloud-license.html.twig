@@ -1,0 +1,11 @@
+            <div class="col-md-6">
+              <div class="panel panel-default">
+                <div class="panel-body">
+                  <h4 class="eduyun-title">{{'admin.cloud_license.info'|trans}}</h4>
+                  <p class="text-muted">{% if user.hasLicense|default("0") == "0" %}{{'admin.cloud_license.non_business_license'|trans}}{% else %}{{'admin.cloud_license.business_license'|trans}}{% endif %}</p>
+                  <p class="text-muted">{{'admin.cloud_license.license_domain'|trans}}: {% if info.licenseDomainCount|default(1) == 1 %}{{ info.licenseDomains|default(1) }}{% else %}<span class="license-domain" data-toggle="tooltip" data-placement="bottom" title="{% for doman in info.licenseDomains|split(';') %}{{doman}}
+        {% endfor %}">{{info.licenseDomainCount}}{{'site.data.num'|trans}}</span>{% endif %}</p>
+                </div>
+              </div>
+            </div>
+

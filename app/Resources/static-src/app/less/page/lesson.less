@@ -1,0 +1,321 @@
+.lesson-question-plugin-pane-header {
+  background: #f5f5f5;
+  border-bottom: 1px solid #e9e9e9;
+  padding: 10px;
+  position: relative;
+}
+
+.lesson-question-plugin-pane-header .back-to-list {
+  float: left;
+}
+
+.lesson-question-plugin-pane-header h4 {
+  margin: 0;
+  padding: 0 70px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 34px;
+}
+
+.lesson-question-plugin-pane-header h4 i {
+  font-weight: normal;
+  color: #777;
+  font-size: 14px;
+}
+
+.lesson-question-plugin-pane-thread {
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.lesson-question-plugin-pane-thread h5 {
+  margin: 0 0 10px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.lesson-question-plugin-pane-posts .posts-header {
+  margin: 10px 10px;
+  border-top: 1px solid #ddd;
+  position: relative;
+  height: 20px;
+}
+
+.lesson-question-plugin-pane-posts .posts-header h5 {
+  position: absolute;
+  top: -18px;
+  left: 10px;
+  background: #fff;
+  padding: 0 5px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.lesson-question-plugin-pane .posts {
+  list-style: none;
+  margin:10px;
+  padding: 0;
+}
+
+.lesson-question-plugin-pane .post-item {
+  margin-bottom: 20px;
+}
+
+.lesson-question-plugin-pane .post-item-heading {
+  border-bottom: 1px solid #e3e3e3;
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+}
+
+.lesson-question-plugin-pane .post-item-heading .avatar {
+  float: left;
+  width: 32px;
+  height: 32px;
+}
+
+.lesson-question-plugin-pane .post-item-heading .infos {
+  margin-left: 42px;
+}
+
+.lesson-question-plugin-pane .post-item-heading .infos .time {
+  font-size: 12px;
+  color: #999;
+}
+
+.lesson-question-plugin-pane .post-item-heading .infos .teacher-flag {
+  background: #5cb85c;
+  font-size: 12px;
+  color: #fff;
+  float: right;
+  padding: 1px 5px;
+  border-radius: 2px;
+}
+
+.lesson-question-plugin-pane .post-item-body {
+  color: #444;
+}
+
+.lesson-question-plugin-pane .post-form {
+  margin: 10px;
+}
+
+// 课时资料
+.toolbar-pane-list {
+  font-size: 13px;
+}
+
+.toolbar-pane-list .list-item-body {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.toolbar-pane-list .meta,
+.toolbar-pane-list .summary {
+  color: #999;
+  font-size: 12px;
+}
+
+// 课时作业
+.homework-pane, .material-pane {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  overflow: hidden;
+}
+.homework-pane h5, .material-pane h5 {
+  font-weight: bold;
+  font-size: 13px;
+  color: #999;
+  margin: 10px;
+}
+
+.homework-pane .lesson-about, .material-pane .lesson-about {
+  color: #999;
+  font-size: 12px;
+  margin: 10px;
+  margin-bottom: 30px;
+}
+
+// 课时
+.course-item-list-in-toolbar-pane {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+
+// ppt课时
+.ppt-dashboard {
+  width: 100%;
+  position: fixed;
+  top: 56px;
+  bottom: 0px;
+  left: 0;
+  right: 0;
+  background: #e5e5e5;
+}
+
+.slide-player {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+}
+
+.slide-player-full-window {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+}
+
+.slide-player-fullscreen {
+  position: fixed;
+  overflow: hidden;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.modal-body .lesson-preview-ppt {
+  position: relative;
+  min-height: 500px;
+}
+
+.loading-background  {
+  @media(min-width: @screen-sm-min) {
+    background: #fff url('@{img-src}old/loader.gif') no-repeat center center;
+  }
+}
+
+.slide-player-watermark {
+  position: absolute;
+  width: 100%;
+  bottom: 50px;
+  text-align: center;
+  font-size: 14px;
+  padding: 10px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -khtml-user-select: none;
+  user-select: none;
+  cursor: default;  
+}
+
+.slide-player-control {
+  position: absolute;
+  width: 100%;
+  bottom: 0px;
+  text-align: center;
+  font-size: 20px;
+  padding: 10px;
+  background: #fff;
+  border-top: 1px solid #e2e2e2;
+}
+
+.slide-player-control a {
+  color: #666;
+}
+
+.slide-player-control a:hover {
+  color: #333;
+}
+
+.slide-player-control .fullscreen {
+  float: right;
+  margin-left: 15px;
+}
+
+.slide-player-control .goto-first {
+  margin-left: 100px;
+  @media(max-width:@screen-xs-min) {
+    margin-left: 0;
+  }
+}
+
+.slide-player-control .goto-page,
+.slide-player-control .goto-index {
+  width: 65px;
+  display: inline-block;
+  @media(max-width:@screen-xs-min) {
+    width: 42px;
+    padding: 0;
+    text-align: center;
+  }
+} 
+
+.slide-player-control .goto-page-input,
+.slide-player-control .goto-index-input {
+  float: right;
+  font-size: 16px;
+}
+
+.slide-player-control .glyphicon {
+  padding-left: 10px;
+  padding-right: 10px;
+  @media(max-width:@screen-xs-min) {
+    padding-left: 0;
+    padding-right: 5px;
+  }
+}
+
+.slide-player-body {
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  top: 0px;
+  @media(max-width: @screen-xs-min) {
+    top: 25%;
+  }
+  bottom: 50px;
+}
+
+.slide-player-body .slide {
+  display: none;
+  position: relative;
+  max-height: 100%;
+  width: auto;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.slide-player-body .slide.active {
+  display: inline-block;
+}
+
+.slide-notice {
+  display: none;
+  border-bottom: 1px solid #e5e5e5;
+  -webkit-box-shadow: 0 5px 15px rgba(0,0,0,.5);
+  box-shadow: 0 5px 15px rgba(0,0,0,.5);
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #999;
+  border: 1px solid rgba(0,0,0,.2);
+  border-radius: 6px;
+  outline: 0;
+  -webkit-box-shadow: 0 3px 9px rgba(0,0,0,.5);
+  box-shadow: 0 3px 9px rgba(0,0,0,.5);
+  filter:alpha(opacity=50);
+  -moz-opacity:0.5;
+  opacity:0.5;
+  z-index: 1000;
+  text-align: center;
+  margin: 100px auto;
+  position: relative;
+  width: 300px;
+}
+
+.slide-notice .header {
+  padding: 15px;
+  min-height: 16px;
+}

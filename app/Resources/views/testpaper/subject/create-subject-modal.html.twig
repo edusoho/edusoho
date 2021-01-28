@@ -1,0 +1,24 @@
+<div id="cd-modal" class="cd-modal cd-fade cd-in modal" data-index="" data-sub="">
+  <div class="cd-modal-dialog" id="cd-modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="cd-icon cd-icon-close"></i>
+        </button>
+        <h4 class="modal-title">{{ 'course.testpaper_manage.import.re_edit.new_question_title'|trans }}</h4>
+      </div>
+      <div class="modal-body create-subject-body">
+        <div class="cd-dark-major create-subject-label">{{ 'course.testpaper_manage.import.re_edit.select_type'|trans }}</div>
+        <div class="create-subject-list">
+          <button class="cd-btn cd-btn-ghost-primary create-subject-btn js-create-btn" type="button" data-type="single_choice" data-url="{{ path('subject_edit_template', {type:'single_choice' })}}">{{ 'question.type.single_choice'|trans }}</button>
+          <button class="cd-btn cd-btn-ghost-primary create-subject-btn js-create-btn" type="button" data-type="choice" data-url="{{ path('subject_edit_template', {type:'choice' })}}">{{ 'question.type.multiple_choice'|trans }}</button>
+          <button class="cd-btn cd-btn-ghost-primary create-subject-btn js-create-btn" type="button" data-type="uncertain_choice" data-url="{{ path('subject_edit_template', {type:'uncertain_choice' })}}">{{ 'course.testpaper_manage.import.re_edit.uncertain_choice'|trans }}</button>
+          <button class="cd-btn cd-btn-ghost-primary create-subject-btn js-create-btn" type="button" data-type="determine" data-url="{{ path('subject_edit_template', {type:'determine' })}}">{{ 'question.type.determine'|trans }}</button>
+          <button class="cd-btn cd-btn-ghost-primary create-subject-btn js-create-btn" type="button" data-type="fill" data-url="{{ path('subject_edit_template', {type:'fill' })}}">{{ 'question.type.fill'|trans }}</button>
+          <button class="cd-btn cd-btn-ghost-primary create-subject-btn js-create-btn" type="button" data-type="essay" data-url="{{ path('subject_edit_template', {type:'essay' })}}">{{ 'question.type.essay'|trans }}</button>
+          <button class="cd-btn cd-btn-ghost-primary create-subject-btn js-create-btn" type="button" data-type="material" data-url="{{ path('subject_edit_template', {type:'material' })}}">{{ 'question.type.material'|trans }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

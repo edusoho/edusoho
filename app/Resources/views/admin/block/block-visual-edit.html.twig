@@ -1,0 +1,46 @@
+{% extends 'admin/block/block-visual-layout.html.twig' %}
+
+{% set menu = menu|default('admin_block') %}
+{% set currentPage = 'admin_block_visual_edit' %}
+
+{% block page_title %} {{'admin.block_manage.visual_edit.title'|trans}} {% endblock %}
+
+{% set script_controller = 'block/visual-edit' %}
+
+{% block blockVisual %}
+  <style type="text/css">
+    .sortable-list .placeholder {
+      margin: 10px 0;
+      width: 100%;
+      height: 40px;
+      background: #FCFFC0;
+      border: 1px dashed #ccc;
+      list-style: none;
+    }
+    .nav.sortable-list .placeholder {
+      width: 80px;
+      padding: 10px 15px;
+      background: #eee;
+      margin: 0;
+    }
+    .nav.nav-pills .dragged{
+      position: absolute!important;
+    }
+  </style>
+  {% if app.debug %}
+    <a class="btn btn-default btn-sm pull-right" href="{{ path('admin_block_visual_view_data', {blockTemplateId:block.blockTemplateId}) }}" target="_blank">{{'admin.block_manage.visual_edit.watch_json_config'|trans}}</a>
+  {% endif %}
+
+    <!-- 以下是简墨新版的样式 -->
+    <h4>{{ block.title }}</h4>
+    <form id="block-edit-form" class="visual-edit-form form-horizontal" method="POST" action="">
+      {{ web_macro.flash_messages() }}
+      {% include 'admin/block/block-visual-items.html.twig' %}
+    </form>
+    <!-- 以上是新版的样式 -->
+
+  <!-- <div class="col-md-4">
+    {% include 'admin/block/affix-nav.html.twig' %}
+  </div> -->
+
+{% endblock %}

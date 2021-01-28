@@ -1,0 +1,30 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}{{'admin.user.teacher.basic_tab.promote.heading_title'|trans}}{% endblock %}
+{% block body %}
+
+<form id="teacher-promote-form" class="form-horizontal" method="post" action="{{ path('admin_teacher_promote', {id:user.id}) }}">
+  
+
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label for="number">{{'admin.user.teacher.basic_tab.promote.fields.serial_num_label'|trans}}</label>
+    </div>
+    <div class="col-md-7 controls">
+      <input type="text" id="number" name="number" class="form-control" value="" data-widget-cid="widget-1" data-explain="{{'admin.user.teacher.basic_tab.promote.number_input_data_explain'|trans}}">
+    <div class="help-block">{{'admin.user.teacher.basic_tab.promote.number_hint'|trans}}</div></div>
+    <input type="hidden" name="type" value="{{type}}">
+  </div>
+
+</form>
+{% endblock %}
+
+
+{% block footer %}
+  <button id = "teacher-promote-btn" data-submiting-text="{{'form.btn.submit.submiting'|trans}}" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#teacher-promote-form">{{'form.btn.save'|trans}}</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
+  
+  <script>app.load('teacher/promote-modal');</script>
+{% endblock %}

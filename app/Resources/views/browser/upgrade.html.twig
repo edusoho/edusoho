@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class=""> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>{{'upgrade.browser.title'|trans}} -  {{ setting('site.name') }}{% if not setting('copyright.owned') %} - Powered by EduSoho{% endif %}</title>
+  <link rel="stylesheet" media="screen" href="{{ asset('bundles/topxiaweb/css/browser-upgrade.css') }}" />
+</head>
+
+<body>
+  <div class="container">
+    <div class="title">{{ setting('site.name') }}</div>
+    <div class="message">{{'upgrade.browser.message'|trans({ '%name%':site.name })}}</div>
+    <div class="browsers">
+      <div class="head">{{'upgrade.browser.recommend_browsers'|trans}}</div>
+      <div>
+        <a href="http://www.google.cn/intl/zh-CN/chrome/browser/" target="_blank"><i class="browser-chrome"></i></a>
+        <a href="http://firefox.com.cn/download/" target="_blank"><i class="browser-firefox"></i></a>
+        <a href="http://windows.microsoft.com/zh-CN/internet-explorer/downloads/ie"  target="_blank"><i class="browser-ie"></i></a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

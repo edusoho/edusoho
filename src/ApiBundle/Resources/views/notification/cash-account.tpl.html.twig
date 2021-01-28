@@ -1,0 +1,11 @@
+{% set data = notification.content %}
+{% set coin_name = setting('coin.coin_name', '虚拟币') %}
+
+{% if data.type == 'changeOk' %}
+ {{ 'api.notification.cash_account.recharge'|trans({'%value%':data.value, '%coin_name%':coin_name}) }}
+{% elseif data.type == 'deduct' %}
+ {{ 'api.notification.cash_account.deduction'|trans({'%value%':data.value, '%coin_name%':coin_name}) }}
+{% elseif data.type == 'changing' %}
+ {{ 'api.notification.cash_account.exchange'|trans({'%value%':data.value, '%coin_name%':coin_name}) }}
+{% endif %}
+

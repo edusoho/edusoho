@@ -1,0 +1,53 @@
+<div class="my-course-section mobile">
+  <h4 class="title">{{'my.learning.course'|trans}}</h4>
+  <div class="row my-course-list">
+    {% for course in courses %}
+      {% set courseSet = data('CourseSet', { id: course.courseSetId }) %}
+     
+      <div class="col-xs-6 course-list">
+        <div class="course-item">
+          <div class="course-img">
+            <a href="{{ path('course_show', {id:course.id}) }}" target="_blank">
+              {% if courseSet.discountId > 0 %}
+                {% if courseSet.discount == 0 %}
+                  <!-- 限免 -->
+                  <span class="tag-discount free"></span>
+                {% else %}
+                  <!-- 折扣 -->
+                  <span class="tag-discount"></span>
+                {% endif %}
+              {% endif %}
+              {% if courseSet.serializeMode == 'serialized' %}
+                <span class="tags"><span class="tag-serialing"></span></span>
+              {% elseif courseSet.serializeMode == 'finished' %}
+                <span class="tags"><span class="tag-finished"></span></span>
+              {% endif %}
+              {% if courseSet.type == 'live' %}
+                <span class="tags">
+                  <span class="tag-live"></span>
+                </span>
+              {% endif %}
+              {{ lazy_img(filepath(course_set_cover(courseSet, 'middle'), 'course.png'), 'img-responsive', courseSet.title) }}
+            </a>
+          </div>
+          <div class="course-info">
+            <div class="title">
+              <a class="link-dark" href="{{ path('course_show', {id:course.id}) }}" target="_blank">
+                 {{ get_formated_course_title(course) }}
+              </a>
+            </div>
+            <div class="metas clearfix">
+              <span class="finished-percentage text-sm color-gray">{{'my.learning.course.finish_task'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}} : <span class="gray-dark">{{ course.memberLearnedNum }}/{{ course.taskNum }}</span></span>
+              <a href="{{ path('my_course_show', {id:course.id}) }}" target="_blank"><span class="btn btn-primary btn-xs pull-right">{{'my.learning.course.contiune_study'|trans}}</span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="empty">{{'my.learning.course.learning_empty'|trans}}</div>
+    {% endfor %}
+    {{ web_macro.paginator(paginator) }}
+  </div>
+</div>
+
+

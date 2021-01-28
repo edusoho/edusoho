@@ -1,0 +1,75 @@
+<div class="form-group">
+  <div class="col-md-2 control-label courseset-manage-body__lable">
+    <label class="control-label-required" for="title">{{ 'course.base.title'|trans }}</label>
+  </div>
+  <div class="col-md-8">
+    <input type="text" id="title" name="title" required="required" class="form-control js-courseset-title" value="{{ courseSet.title|default('') }}">
+    <div class="help-block" style="display:none;"></div>
+  </div>
+</div>
+
+<div class="form-group">
+  <label class="col-md-2 control-label" for="subtitle">{{ 'course.base.sub_title'|trans }}</label>
+  <div class="col-md-8">
+    <textarea id="subtitle" name="subtitle" class="form-control js-courseset-subtitle">{{ courseSet.subtitle|default('') }}</textarea>
+    <div class="help-block" style="display:none;"></div>
+  </div>
+</div>
+
+<div class="form-group">
+  <label class="col-md-2 control-label" for="tags">{{ 'course.base.tag'|trans }}</label>
+  <div class="col-md-8 controls">
+    <input type="text" id="tags" name="tags" class="width-full select2-offscreen"tabindex="-1" value="{{tags|default('')|join(',')}}"
+      data-url="{{ path('tag_match') }}"
+      data-explain="{{ 'course.base.tag_tips'|trans }}">
+    <div class="help-block courseset-manage-body__tip">{{ 'course.base.tag_tips'|trans }}</div>
+  </div>
+</div>
+
+<div class="form-group">
+  <label class="col-md-2 control-label" for="categoryId">{{ 'course.base.category'|trans }}</label>
+  <div class="col-md-8 controls">
+    <select id="categoryId" name="categoryId" class="form-control width-input width-input-large">
+      {% set course_category_choices = { 0: 'course.base.category'|trans } + category_choices('course') %}
+      {{ select_options(course_category_choices, courseSet.categoryId) }}
+    </select>
+    <div class="help-block" style="display:none;"></div>
+  </div>
+</div>
+{% include 'org/org-tree-select-webpack.html.twig' with {orgCode: courseSet.orgCode, inputClass: 'width-input width-input-large' } %}
+
+<div class="form-group">
+  <label class="col-md-2 control-label">{{ 'course.base.serialize_mode'|trans }}</label>
+  <div class="col-md-8 cd-radio-group">
+    {{ cd_radios('serializeMode', {'none':'course.base.serialize_mode.none'|trans, 'serialized':'course.base.serialize_mode.serialized'|trans, 'finished':'course.base.serialize_mode.finished'|trans}, courseSet.serializeMode|default('none') ) }}
+  </div>
+</div>
+
+<!-- 封面图片 -->
+<div class="form-group">
+  <label class="col-md-2 control-label" for="cover"><b>{{'course.cover_image.content_title'|trans}}</b></label>
+  <div class="col-md-8 controls">
+    {% include 'common/upload-image.html.twig' with {
+      saveUrl: path('course_set_manage_cover_crop', {id: courseSet.id}),
+      targetImg: 'course-cover',
+        cropWidth: '480',
+        cropHeight: '270',
+        uploadToken: 'tmp',
+        imageClass: 'course-manage-cover',
+        imageText: 'course.cover.change'|trans,
+        imageSrc: filepath(course_set_cover(courseSet, 'large'), 'courseSet.png'),
+      } 
+    %}
+    <div class="courseset-manage-body__tip">
+      {{ 'course.cover_image.upload_tips'|trans|raw }}
+    </div>
+  </div>
+</div>
+
+<div class="form-group">
+  <label class="col-md-2 control-label">{{'course.detail.summary'|trans}}</label>
+  <div class="col-md-8 controls">
+    <textarea name="summary" rows="10" data-form="{{ form }}" data-button="{{ button }}" id="courseset-summary-field" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}">{{ field_value(courseSet, 'summary') }}</textarea>
+    <div class="help-block">{{ 'editor.iframe_tips'|trans }}</div>
+  </div>
+</div>

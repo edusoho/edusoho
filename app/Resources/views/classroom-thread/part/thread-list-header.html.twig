@@ -1,0 +1,50 @@
+<div class="nav-filter clearfix">
+
+  {% if service.canAccess('thread.create', {targetType:'classroom', targetId:classroom.id}) %}
+    {% if member %}
+      {% if member.deadline == 0 or member.deadline > 'now'|date('U') %}
+        <div class="btn-group">
+          <button type="button" class="btn btn-default btn-sm dropdown-toggle
+          " data-toggle="dropdown" aria-expanded="false">{{'classroom.thread.send_btn'|trans}} <span class="caret"></span></button>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="{{ path('classroom_thread_create', {classroomId:classroom.id, type: 'discussion'}) }}">{{'classroom.thread.send_btn'|trans}}</a></li>
+            <li><a href="{{ path('classroom_thread_create', {classroomId:classroom.id, type: 'question'}) }}">{{'classroom.thread.question_btn'|trans}}</a></li>
+            {% if service.canAccess('thread.event.create', {targetType:'classroom', targetId:classroom.id}) %}
+              <li><a href="{{ path('classroom_thread_create', {classroomId:classroom.id, type: 'event'}) }}">{{'classroom.thread.event_btn'|trans}}</a></li>
+            {% endif %}
+          </ul>
+        </div>
+      {% else %}
+        <div class="btn-group">
+          <button type="button" class="btn btn-default btn-sm disabled" data-toggle="tooltip" data-placement="bottom" title="{{'classroom.status.expired'|trans}}">{{'classroom.thread.send_btn'|trans}}
+          </button>
+        </div>
+      {% endif %}
+    {% endif %}
+  {% endif %}
+
+  <ul class="nav nav-pills nav-pills-sm">
+    <li{% if filters.type == 'all' %} class="active"{% endif %}><a data-target="#thread-pane" href="{{ path('classroom_threads', {classroomId:classroom.id}|merge(filters)|merge({type:'all'})) }}">{{'classroom.thread.nav.all_btn'|trans}}</a></li>
+    
+    <li{% if filters.type == 'question' %} class="active"{% endif %}><a data-target="#thread-pane" href="{{ path('classroom_threads', {classroomId:classroom.id}|merge(filters)|merge({type:'question'})) }}">{{'classroom.thread.nav.question_btn'|trans}}</a></li>
+
+    <li{% if filters.type == 'nice' %} class="active"{% endif %}><a data-target="#thread-pane" href="{{ path('classroom_threads', {classroomId:classroom.id}|merge(filters)|merge({type:'nice'})) }}">{{'classroom.thread.nav.nice_btn'|trans}}</a></li>
+
+    <li class="dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+        <span>{{'classroom.thread.nav.seq'|trans}}</span>
+        {% if filters.sort == 'posted' %}
+          {{'classroom.thread.nav.posted'|trans}}
+        {% elseif filters.sort == 'created'%}
+          {{'classroom.thread.nav.created'|trans}}
+        {% endif %}
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu hidden-xs">
+        <li class="{% if filters.sort == 'posted' %}active{% endif %}"><a  href="{{ path('classroom_threads', {classroomId:classroom.id}|merge(filters)|merge({sort:'posted'})) }}">{{'classroom.thread.nav.posted_btn'|trans}}</a></li>
+        <li class="{% if filters.sort == 'created' %}active{% endif %}"><a href="{{ path('classroom_threads', {classroomId:classroom.id}|merge(filters)|merge({sort:'created'})) }}">{{'classroom.thread.nav.created_btn'|trans}}</a></li>
+      </ul>
+    </li>
+  </ul>
+
+</div>

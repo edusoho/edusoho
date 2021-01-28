@@ -1,0 +1,45 @@
+{% import "macro.html.twig" as web_macro %}
+<div class="legend clearfix">
+    <div class="col-10">
+        {{ 'site.default.student'|trans }}
+    </div>
+    <div class="col-80">
+        {% include 'course-manage/overview/task-detail/chart-data-legend.html.twig' %}
+    </div>
+    <div class="col-10">{{ 'course.task.rate.finish'|trans }}</div>
+</div>
+{% for member in members if tasks %}
+    {% set user = users[member.userId] %}
+    {% set userTaskResults = taskResults[user.id]|default() %}
+    <div class="chart-item clearfix">
+        <div class="col-10 color-gray text-overflow" data-toggle="popover" data-trigger="hover" data-placement="top" data-delay="100" data-content="{{ user.nickname }}">
+           {{ user.nickname }}
+        </div>
+        <ul class="col-80 student-detail">
+            {% include 'course-manage/overview/task-detail/student-chart-item.html.twig' %}
+        </ul>
+        <div class="col-10">
+            <span class="color-gray">
+                {{ percent(member.learnedCompulsoryTaskNum, course.compulsoryTaskNum) }}
+            </span>
+            {% if taskCount > 20 %}
+                <a class="js-task-chart-detail more"
+                   data-toggle="modal"
+                   data-target="#modal"
+                   data-url="{{ path('course_manage_student_learn_detail_modal',{courseId:course.id, userId:user.id}) }}"
+                   href="javascript:;" >{{ 'site.btn.detail'|trans }}</a>
+            {% endif %}
+        </div>
+    </div>
+{% endfor %}
+{% if not members or not tasks %}
+    <div class="empty">
+        {{ 'site.datagrid.empty'|trans }}
+    </div>
+{% endif %}
+
+{% if tasks %}
+    <div class="pull-right mtm">
+      {{ web_macro.paginator(paginator) }}
+    </div>
+{% endif %}

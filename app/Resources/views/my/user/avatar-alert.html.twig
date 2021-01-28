@@ -1,0 +1,6 @@
+{% if avatarAlert %}
+  <div class="alert cd-alert cd-alert-warning cd-alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"><i class="cd-icon cd-icon-close"></i></button>
+    {{'user.settings.avatar'|trans({'%setAvatar%': path('settings')})|raw}}
+  </div>
+{% endif %}

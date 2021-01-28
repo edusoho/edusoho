@@ -1,0 +1,27 @@
+<div class="order-center-deduction">
+  <span class="order-center-deduction__title">
+    {{ 'order.paid_course.title'|trans }}
+  </span>
+  <span class="order-center-deduction__content">
+    {{ 'order.paid_course.content'|trans }}
+  </span>
+</div>
+
+{% for paidCourse in paidCourses %}
+  {% set courseSet = data('CourseSet', {id: paidCourse.courseSetId}) %}
+  <div class="order-center-paid-course clearfix js-order-center-paid-course">
+    <div class="order-center-paid-course__img">
+      <a href="{{ path("course_show", {id:paidCourse.id}) }}" target="_blank">
+        <img class="img-responsive" src="{{ filepath(courseSet.cover.middle|default(null), 'course.png') }}" alt="">
+      </a>
+    </div>
+    <div class="order-center-paid-course__title text-overflow">
+      {{ paidCourse.title }}
+    </div>
+    <div class="order-center-paid-course__price">
+      {{ 'order.paid_course.minus'|trans }} {{ paidCourse.paidPrice|price_format }}
+    </div>
+  </div>
+{% endfor %}
+
+<div class="order-center-line"></div>

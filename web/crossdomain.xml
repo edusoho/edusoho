@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<cross-domain-policy>
+  <allow-access-from domain="cdn.staticfile.org" />
+  <allow-access-from domain="*.edusoho.net" />
+  <allow-access-from domain="*.qiqiuyun.net" />
+  <allow-access-from domain="oilgb9e2p.qnssl.com" />
+  <allow-access-from domain="service-cdn.cg-dev.cn" />
+  <allow-access-from domain="*.codeages.net" />
+</cross-domain-policy>

@@ -1,0 +1,42 @@
+{% do script(['app/js/order/coupon-item/index.js']) %}
+
+<div class="order-center-deduction">
+  <span class="order-center-deduction__title">
+    {{'order.confirm.coupon'|trans}}
+  </span>
+  <span class="order-center-deduction__content">
+    {{'order.confirm.coupon.hint'|trans}}
+  </span>
+</div>
+<div class="order-center-coupon" id="order-coupon">
+  <div class="order-center-coupon__select" id="order-center-coupon__select">
+    <div class="form-group cd-form-group cd-form-group-inline cd-form-group-action" id="coupon-form-group">
+      <input type="text" class="form-control form-control-sm" name="couponCode" value=""  
+        data-display="{{'plugin.coupon.use.input_display'|trans}}"  placeholder="{{'plugin.coupon.use.input_placeholder'|trans}}">
+      <div class="action-button">
+        <button type="button" data-loading-text="{{'order.confirm.coupon.use_loading'|trans}}" class="btn cd-btn cd-btn-sm cd-btn-ghost-primary" data-url="{{ path('coupon_check') }}" id="use-coupon-btn">{{'form.btn.use'|trans}}</button>
+      </div>
+      <div id="coupon-error-message" class="form-error-message" style="display:none"></div>
+    </div>
+    {% if product.availableDeducts.coupon|default() %}
+      <a href="javascript:;" id="select-coupon-btn" class=" cd-text-sm" data-toggle="popover" data-placement="{% if is_mobile_client()|default(null) == 1 %}top{% else %}right{% endif %}" data-html="true" data-content='
+        {% for deduct in product.availableDeducts.coupon %}
+          <label for="existing-coupon-{{ loop.index }}" class="cd-radio cd-radio-sm cd-mv16">
+            <input id="existing-coupon-{{ loop.index }}" type="radio" class="js-existing-coupon" data-code="{{ deduct.code }}" data-deduct-amount="{{ deduct.deduct_amount|price_format }}">
+            {{'plugin.coupon.minus'|trans}} {{ deduct.deduct_amount|price_format }}
+            <span class="cd-dark-minor">{{'order.confirm.coupon.expiry_date_hint'|trans}} {{deduct.deadline|date("Y-m-d")}}</span>
+          </label>
+        {% endfor %}
+      '>{{'order.confirm.coupon.select_existed'|trans}}</a>
+    {% endif %}
+  </div>
+  <div class="order-center-coupon__selected" style="display:none"  id="order-center-coupon__selected">
+    <span class="cd-dark-major">
+      {{'order.confirm.coupon.used_coupon'|trans}} <span id="coupon-code-label"></span> {{'order.confirm.coupon.deduction'|trans}} <span id="deduct-amount-label"></span>
+    </span> 
+    <a href="javascript:;" class="cd-link-primary" id="cancel-use-coupon-btn">{{'form.btn.cancel'|trans}}</a>
+  </div>
+</div>
+
+<div class="order-center-line"></div>
+

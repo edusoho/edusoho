@@ -1,0 +1,38 @@
+.ckeditor-balloon-uploader .balloon-filelist ul {
+ //创建任务中的富文本编辑器中的图片上传组件
+  max-height: 200px!important;
+}
+@media (max-width: @screen-xs-max) {
+  .ckeditor-balloon-uploader {
+    .balloon-uploader-body {
+      .balloon-filelist {
+        .balloon-filelist-heading,
+        ul li {
+          overflow: hidden;
+        }
+        .file-name,
+        .file-size,
+        .file-status,
+        .file-remove {
+          padding: 4px!important;
+          float: left;
+          margin-right: 0;
+        }
+        .file-name {
+          width: 30%;
+        }
+        .file-size {
+          width: 30%;
+          position: static;
+        }
+        .file-status {
+          width: 25%;
+          position: static;
+        }
+        .file-remove {
+          width: 15%;
+        }
+      }
+    }
+  }  
+}

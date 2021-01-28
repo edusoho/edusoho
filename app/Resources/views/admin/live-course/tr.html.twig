@@ -1,0 +1,24 @@
+<tr id="tag-tr-{{ liveTask.id }}">
+  {% set lessonUrl = path('course_task_show', {courseId:liveTask.courseId, id:liveTask.id}) %}
+  <td>
+    <a href="{{ lessonUrl }}" target="_blank">{{ liveTask.title }}</a>
+    <div class="mts">
+      {% if courseSet %}
+        <a class="text-success text-sm" href="{{ path('course_show',{id: courseSet.defaultCourseId}) }}" target="_blank">{{ courseSet.title }}</a>
+      {% else %}
+        <span class="text-muted text-sm">{{'admin.live_manage.deleted'|trans}}</span>
+      {% endif %}
+    </div>
+  </td>
+  {% include 'org/parts/table-body-td.html.twig' with {orgCode: courseSet.orgCode}%}
+  <td>{{ liveTask.startTime|date('Y-m-d H:i') }}</td>
+  <td>{{ liveTask.length }}</td>
+  <td>
+    {% if courseSet %}
+      {{ courseSet.maxStudentNum }}
+    {% else %}
+      <span class="text-muted">{{'admin.live_manage.deleted'|trans}}</span>
+    {% endif %}
+  </td>
+  <td><a href="{{ path('course_set_manage_live_statistics_detail', {courseId: liveTask.courseId, taskId: liveTask.id}) }}">{{ 'site.btn.detail'|trans }}</a></td>
+</tr>

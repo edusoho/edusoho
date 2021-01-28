@@ -1,0 +1,64 @@
+.es-qrcode {
+  position: relative;
+  text-align: center;
+  @media(max-width: @screen-xs-max) {
+    display: none;
+  }
+  > i {
+    font-size: 24px;
+    color: @gray;
+  }
+  .qrcode-popover {
+    position: absolute;
+    padding: 5px 10px;
+    font-size: 12px;
+    background: #fff;
+    color: @gray-darker;
+    .es-box-shadow;
+    .opacity(0);
+    .es-transform(0,0);
+    .es-transition;
+    z-index: 1;
+    img {
+      margin-bottom: 10px;
+      width: 110px;
+      height: 110px;
+    }
+  }
+  &.toolbar-qrcode {
+    color: #ccc;
+    .qrcode-popover {
+      top: 0;
+      right: 100%;
+      transform-origin: 100% 0;
+      -webkit-transform-origin: 100% 0;
+      -moz-transform-origin: 100% 0;
+      -o-transform-origin: 100% 0;
+    }
+  }
+  &.top .qrcode-popover {
+    top: 0;
+    left: 0;
+    transform-origin: 0 0;
+    -webkit-transform-origin: 0 0;
+    -moz-transform-origin: 0 0;
+    -o-transform-origin: 0 0;
+  }
+  &.bottom .qrcode-popover {
+    bottom: 0;
+    right: 0;
+    transform-origin: 100% 100%;
+    -webkit-transform-origin: 100% 100%;
+    -moz-transform-origin: 100% 100%;
+    -o-transform-origin: 100% 100%;
+  }
+  &:hover {
+    cursor: pointer;
+  }
+  &.open {
+    .qrcode-popover {
+      .es-transform(1,1);
+      .opacity(1);
+    }
+  }
+}

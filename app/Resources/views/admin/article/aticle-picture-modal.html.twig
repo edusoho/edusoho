@@ -1,0 +1,47 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'modal-lg' %}
+
+{% block title %}{{'admin.article_setting.image.content_title'|trans}}{% endblock %}
+{% block body %}
+
+  <form id="aticel-picture-form" class="form-horizontal" method="post" enctype="multipart/form-data" action="{{ path('admin_article_show_upload') }}">
+
+    {% if pictureUrl %}
+    <div class="form-group">
+      <div class="col-md-2 control-label"><b>{{'admin.article_setting.image'|trans}}</b></div>
+      <div class="controls col-md-8 controls">
+      	<img src="{{ asset(pictureUrl) }}" id="article-pic-crop" width="{{scaledSize.width}}" height="{{scaledSize.height}}" data-natural-width="{{ naturalSize.width }}" data-natural-height="{{ naturalSize.height }}" />
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="form-group">
+      <div class="col-md-2 control-label">
+      </div>
+      <div class="controls col-md-8 controls">
+        <p class="help-block">{{'admin.article_setting.image.upload_tips'|trans|raw}}</p>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-2 control-label"></div>
+      <div class="controls col-md-8 controls">
+        <a id="article-upload-btn"
+        data-goto-url="{{ path('admin_article_picture_crop') }}"
+        data-upload-token="{{ upload_token('tmp', 'image') }}"
+        class="">{{'admin.article_setting.image.choose_btn'|trans}}</a>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      </div>
+    </div>
+
+  </form>
+
+{% endblock %}
+
+
+{% block footer %}
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
+
+  <script>app.load('article/picture-upload-modal');</script>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "activity/content-layout.html.twig" %}
+
+{% set enableCopy  = setting('course.copy_enabled') %}
+{% set doc = activity.ext|default(null) %}
+{% set file = doc.file|default(null)|s2b2c_file_convert %}
+{% set docPlayer = doc_player(doc, app.request.secure) %}
+{% block body %}
+  {% if not docPlayer.error is empty %}
+    <div class="iframe-parent-content pv20 ph20">
+      <div class="alert alert-danger"><i class="es-icon es-icon-info"></i>{{ docPlayer.error.message|raw }}</div>
+    </div>
+  {% else %}
+    <div class="iframe-parent-content iframe-parent-full" id="document-content" data-res-no="{{ file.globalId }}"
+         data-token="{{ docPlayer.result.token }}"
+         data-user-id="{{app.user.id|default(0)}}"
+         data-user-name="{{app.user.username|default('')}}"
+      {% if setting('magic.doc_watermark') %}
+      data-watermark-url="{{ path('cloud_doc_watermark') }}"
+      {% endif %}>
+    </div>
+    <input type="hidden" class="js-cloud-url" data-url="{{ cloud_sdk_url('player') }}">
+    {% do script(['libs/base.js','app/js/common.js','app/js/main.js','docactivity/js/show/index.js'], 1000) %}
+  {% endif %}
+{% endblock %}

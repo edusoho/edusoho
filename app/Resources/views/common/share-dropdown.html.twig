@@ -1,0 +1,69 @@
+{% if useSeajs|default(false) == true %}
+  {% do load_script('common/share-dropdown.js') %}
+  {% include 'seajs_loader_compatible.html.twig' with {topxiawebbundle: true} %}
+{% else %}
+  {% do script(['app/js/share/index.js']) %}
+{% endif %}
+
+{% if type == 'courseSet' %}
+  {% set title = courseSet.title %}
+  {% set summary = courseSet.summary|plain_text(50) %}
+  {% set message = setting('default.courseShareContent')|replace({'{{':'《%','}}':'%》'})|default('share.course_set_message')|trans({'%course%':courseSet.title}) %}
+  {% set url = url('course_show', {id:courseSet.defaultCourseId}) %}
+  {% set picture = fileurl(courseSet.cover.large|default(null), 'course.png') %}
+  {% set id = courseSet.id%}
+{% elseif type == 'classroom' %}
+  {% set title = classroom.title %}
+  {% set summary = classroom.description|plain_text(50) %}
+  {% set message = setting('default.classroomShareContent')|replace({'{{':'「%','}}':'%」'})|default('share.classroom_message')|trans({'%classroom%':classroom.title}) %}
+  {% set url = url('classroom_show', {id:classroom.id}) %}
+  {% set picture = fileurl(classroom.largePicture, 'classroom.png') %}
+  {% set id = classroom.id%}
+{% elseif type ==  'article' %}
+  {% set title = article.title %}
+  {% set summary = article.body|plain_text(50) %}
+  {% set message = setting('default.articleShareContent')|replace({'{{':'「%','}}':'%」'})|default('share.article_message')|trans({'%articletitle%':article.title,'%sitename%':setting('site.name')}) %}
+  {% set url = url('article_detail', {id:article.id}) %}
+  {% set picture = '' %}
+  {% set id = article.id%}
+{% elseif type == 'group_thread' %}
+  {% set title = thread.title %}
+  {% set summary = thread.content|plain_text(50) %}
+  {% set message = setting('default.groupShareContent')|replace({'{{':'「%','}}':'%」'})|default('share.group_thread_message')|trans({'%groupname%':group.title,'%threadname%':thread.title}) %}
+  {% set url = url('group_thread_show', {id:group.id, threadId:thread.id}) %}
+  {% set picture = '' %}
+  {% set id = group.id%}
+{% elseif type == 'open_course' %}
+  {% set title = course.title %}
+  {% set summary = course.summary|default('')|plain_text(50) %}
+  {% set message = setting('default.courseShareContent')|replace({'{{':'《%','}}':'%》'})|default('share.open_course_message')|trans({'%course%':course.title}) %}
+  {% set url = url('open_course_show', {courseId:course.id}) %}
+  {% set picture = fileurl(course.largePicture, 'course.png') %}
+  {% set id = course.id%}
+{% elseif type == 'task' %}
+  {% set url = url('course_task_show', {courseId: task.courseId, id: task.id}) %}
+  {% set title = task.title %}
+  {% set summary = '' %}
+  {% set message = setting('default.courseShareContent')|replace({'{{':'《%','}}':'%》'})|default('share.task_message')|trans({'%course%': task.title}) %}
+  {% set picture = '' %}
+  {% set id = task.id%}
+{% elseif type == 'item_bank_exercise' %}
+  {% set title = exercise.title %}
+  {% set summary = '' %}
+  {% set message = setting('default.courseShareContent')|replace({'{{':'《%','}}':'%》'})|default('share.course_set_message')|trans({'%course%':exercise.title}) %}
+  {% set url = url('item_bank_exercise_show', {id:exercise.id}) %}
+  {% set picture = fileurl(exercise.cover.large|default(null), 'course.png') %}
+  {% set id = exercise.id%}
+{% endif %}
+
+<div class="dropdown-menu {% if right|default(false) %}pull-right{% endif %} js-social-share-params" data-title="{{ title }}" data-summary="{{ summary|default('') }}" data-message="{{ message }}" data-url="{{ url }}" data-picture="{{ picture|default('') }}">
+  {% if is_plugin_installed('Point') %}
+   {#  <input type="hidden" class="point-share-url" value="{{ path('share_point',{ id:id, title:title, type:type}) }}"> #}
+  {% endif %}
+
+  <a href="javascript:;" class="js-social-share" data-cmd="weixin" title="{{'share.weixin_share'|trans}}" data-share="weixin" data-qrcode-url="{{ path('common_qrcode',{text:url}) }}"><i class="es-icon es-icon-weixin"></i></a>
+  <a href="javascript:;" class="js-social-share" data-cmd="tsina" title="{{'share.tsina_share'|trans}}" data-share="weibo"><i class="es-icon es-icon-weibo"></i></a>
+  <a href="javascript:;" class="js-social-share" data-cmd="qq" title="{{'share.qq_share'|trans}}" data-share="qq"><i class="es-icon es-icon-qq"></i></a>
+  <a href="javascript:;" class="js-social-share" data-cmd="qzone" title="{{'share.qzone_share'|trans}}" data-share="qzone"><i class="es-icon es-icon-qzone"></i></a>
+
+</div>

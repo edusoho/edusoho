@@ -1,0 +1,19 @@
+{% import "macro.html.twig" as web_macro %}
+
+<div class="topic-detail">
+  
+  {% include 'thread/part/thread-crumbs.html.twig' with {target:target, thread:thread,type:thread.type, isUpdate:false} %}
+
+  {% include 'thread/part/' ~ thread.type ~ '-header.html.twig' %}
+  
+  {% include 'attachment/widget/list.html.twig' with {targetType:'classroom.thread', targetId:thread.id} %}
+  
+  {% include 'thread/part/thread-action.html.twig' %}
+
+  {% include 'thread/part/good-post.html.twig' with {posts:goodPosts} %}
+  
+  {% include 'thread/part/all-post.html.twig' %}
+  
+  {% include 'thread/part/post-form.html.twig' %}
+
+</div>

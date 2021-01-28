@@ -1,0 +1,125 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% if classroom.price > 0 %}
+  {% set billable = true %}
+{% else %}
+  {% set billable = false %}
+{% endif %}
+
+{% if is_plugin_installed('Vip') %}
+  {% set vipStatus = data('VipStatus', {'userId': user.id, 'levelId': classroom.vipLevelId})%}
+{% endif %}
+
+{% block title %}
+  {% if billable %}
+    {{'classroom.buy_classroom'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}
+  {% else %}
+    {{'classroom.buy_classroom.join'|trans}}
+  {% endif %}
+{% endblock %}
+
+{% do script(['libs/bootstrap-datetimepicker.js', 'libs/jquery-validation.js', 'app/js/classroom/buy-modal/index.js']) %}
+
+{% block body %}
+
+  {% if billable %}
+    <div class="alert alert-info">{{'classroom.buy_classroom.purchase_timeout_tips'|trans}}</div>
+  {% endif %}
+
+  <form id="classroom-buy-form" class="form-horizontal" method="post"
+  action="{{ path('user_info_fill',{id: user.id}) }}"
+  >
+    <div class="form-group">
+      <div class="col-sm-3 control-label">{{'classroom.classroom_name'|trans({'%name%':setting('classroom.name')|default('classroom'|trans)})}}</div>
+      <div class="col-sm-9 form-control-static">
+      	《{{ classroom.title }}》
+      </div>
+    </div>
+
+    {% if billable %}
+      <div class="form-group">
+        <div class="col-sm-3 control-label">{{'classroom.price'|trans}}</div>
+        <div class="col-sm-9 form-control-static color-warning">
+          <span>
+            {% if vipStatus|default(0) %}
+              {{'classroom.buy_classroom.vip_free'|trans}}
+            {% else %}
+              {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                <strong class="money">{{classroom.price * setting('coin.cash_rate') }}</strong>
+                <span class="color-gray">{{setting('coin.coin_name')}}</span>
+              {% else %}
+                <strong class="money">{{ classroom.price }}</strong>
+                <span class="color-gray">{{'site.currency.CNY'|trans}}</span>
+              {% endif %}
+            {% endif %}
+          </span>
+        </div>
+      </div>
+    {% endif %}
+
+    {% if billable %}
+      {% if not payments %}
+        <div class="alert alert-info">{{ setting('payment.disabled_message')|default('classroom.buy_classroom.payments_disabled_tips'|trans)|raw }}</div>
+      {% endif %}
+    {% else %}
+      {% if avatarAlert|default(null) %}
+        <div class="alert alert-warning">{{ 'classroom.buy_classroom.no_avatar_tips'|trans({'%avatarSettingUrl%': path('settings')})|raw }}</div>
+      {% else %}
+        <div class="alert alert-info">{{'classroom.buy_classroom.classroom_free_tips'|trans({'%name%':setting('classroom.name')|default('classroom'|trans),'%classroomName%':setting('classroom.name')|default('classroom'|trans)})}}</div>
+      {% endif %}
+    {% endif %}
+
+    <input type="hidden" name="targetUrl" value=
+      {% if vipStatus|default(0) %}
+        {{ path('vip_classroom_join',{'classroomId': classroom.id}) }}
+      {% else %}
+        {{ path('order_show',{'targetId': classroom.id,'targetType': 'classroom'}) }}
+      {% endif %}
+    />
+
+    <input type="hidden" name="payment" value="alipay" />
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+    {% include 'user/fill-userinfo-fields-block.html.twig' with {
+      isBuyFillUserinfo: courseSetting.buy_fill_userinfo,
+      userinfoFieldsSetting: courseSetting.userinfoFields,
+      userFields: userFields,
+      user: user,
+      showNavTip: 1
+    } %}
+
+  </form>
+{% endblock %}
+
+{% block footer %}
+  {% set priceType = setting("coin.price_type") %}
+
+  {% if billable and classroom.price > 0 %}
+    {% if payments %}
+      {% if member and (member.role == 'student' or member.role == 'teacher') %}
+        <span class="color-gray">{{'classroom.preview.buy_classroom_tips'|trans({'%role%':member.role})}}</span>
+        <button class="btn btn-primary" disabled="disabled">{{'classroom.buy_classroom.to_pay'|trans}}</button>
+      {% else %}
+        {% if vipStatus|default(0) %}
+          <button id="form-submit-btn" class="btn btn-primary" data-loading-text="{{'classroom.buy_classroom.join_submiting'|trans}}" type="submit" data-toggle="form-submit" data-target="#classroom-buy-form">{{'classroom.buy_classroom.join'|trans}}</button>
+        {% else %}
+          <button id="form-submit-btn" class="btn btn-primary" type="submit" data-loading-text="{{'classroom.buy_classroom.join_submiting'|trans}}" data-toggle="form-submit" data-target="#classroom-buy-form">{{'classroom.buy_classroom.to_pay'|trans}}</button>
+        {% endif %}
+      {% endif %}
+    {% elseif not payments and vipStatus|default(0) %}
+     <button {% if classroom.status != 'published'%} disabled="disabled" {% endif %}
+     id="form-submit-btn" class="btn btn-primary" data-loading-text="{{'classroom.buy_classroom.join_submiting'|trans}}" type="submit" data-toggle="form-submit" data-target="#classroom-buy-form">{{'classroom.buy_classroom.join'|trans}}</button>
+    {% endif %}
+  {% else %}
+    {% if member and (member.role == 'student' or member.role == 'teacher') %}
+      <span class="color-gray">{{'classroom.preview.buy_classroom_tips'|trans({'%role%':member.role})}}</span>
+      <button class="btn btn-primary" disabled="disabled">{{'classroom.buy_classroom.join'|trans}}</button>
+    {% else %}
+      {% if not avatarAlert|default(null) and  classroom.showable and classroom.status != 'closed' %}
+        <button id="form-submit-btn" class="btn btn-primary" data-loading-text="{{'classroom.buy_classroom.join_submiting'|trans}}" type="submit" data-toggle="form-submit" data-target="#classroom-buy-form">{{'classroom.buy_classroom.join'|trans}}</button>
+      {% endif %}
+    {% endif %}
+
+  {% endif %}
+
+{% endblock %}

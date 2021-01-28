@@ -1,0 +1,438 @@
+  // 课程管理页面头部
+.upload-height {
+  line-height: 25px;
+}
+
+.lesson-list {
+  margin: 0 10px 0 40px;
+  padding: 0;
+  list-style: none;
+  border-left: 2px solid #ccc;
+}
+
+.lesson-list .item-chapter,
+.lesson-list .item-lesson  {
+  border: 1px solid #ccc;
+  background: #fff;
+  line-height: 40px;
+  margin-bottom: 15px;
+}
+
+.lesson-list .item-chapter {
+  position: relative;
+  margin-left: -30px;
+}
+
+.lesson-list .item-chapter-unit {
+  margin-left: -15px;
+}
+
+.lesson-list .item-lesson {
+  margin-left: 20px;
+  cursor: move;
+}
+
+.lesson-list .item-line {
+  border-bottom: 2px solid #ccc;
+  vertical-align: top;
+  display: inline-block;
+  height: 20px;
+  width: 20px;
+  margin-left: -21px;
+  float: left;
+}
+
+.lesson-list .item-content {
+  margin-left: 10px;
+  overflow: hidden;
+  height: 40px;
+  line-height: 40px;
+  float: left;
+  width: 99%;
+}
+
+.lesson-list .item-actions {
+  visibility: hidden;
+  background: #f3f3f3;
+  border-left: 1px solid #ddd;
+  position: absolute;
+  right: 15px;
+  padding-right: 35px;
+}
+
+.lesson-manage-section {
+  .lesson-list .item-actions {
+    right: 40px;
+    background-color: transparent;
+  }
+}
+
+.lesson-list .item-actions .btn,
+.lesson-list .item-actions .dropdown-menu > li > a {
+  -webkit-transition: none;
+  -o-transition: none;
+  -moz-transition: none;
+  transition: none;
+}
+
+.lesson-list .item-actions a.dropdown-toggle:hover,
+.lesson-list .item-actions a.dropdown-toggle:focus,
+.lesson-list .item-actions .btn-link:hover,
+.lesson-list .item-actions .btn-link:hover {
+  text-decoration: none;
+}
+
+.lesson-list .item-chapter:hover .item-actions, .lesson-list .item-lesson:hover .item-actions  {
+  visibility: visible;
+}
+
+.lesson-list .item-chapter:hover, .lesson-list .item-lesson:hover {
+  background: #f3f3f3;
+}
+
+.lesson-form .for-video-type,
+.lesson-form .for-audio-type,
+.lesson-form .for-text-type,
+.lesson-form .for-ppt-type,
+.lesson-form .for-document-type,
+.lesson-form .for-flash-type,
+.lesson-form .for-none-type {
+  display: none;
+}
+
+.lesson-form-video .for-video-type,
+.lesson-form-document .for-document-type,
+.lesson-form-flash .for-flash-type,
+.lesson-form-audio .for-audio-type,
+.lesson-form-text .for-text-type,
+.lesson-form-ppt .for-ppt-type {
+  display: block;
+}
+
+.file-chooser-uploader {
+  padding: 20px;
+  background: #f9f9f9;
+  border: 1px solid #e6e6e6;
+}
+
+.file-chooser-uploader-label {
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.file-chooser-uploader-control {
+  margin-bottom: 10px;
+}
+
+.file-chooser-uploader .alert-info {
+  margin-bottom: 0;
+}
+
+.file-browser {
+  padding: 10px;
+  background: #f9f9f9;
+  border: 1px solid #e6e6e6;
+  height: 210px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.file-browser-list-container {
+  height: 110px;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+.file-browser-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.file-browser-list li {
+  padding: 5px 10px;
+}
+
+.file-browser-list li:hover {
+  background: #eee;
+}
+
+.file-browser-list .filename {
+  float: left;
+  width: 50%;
+  cursor: default;
+}
+
+.file-browser-list .filesize {
+  float: left;
+  width: 20%;
+  color: #777;
+  cursor: default;
+}
+
+.file-browser-list .filetime {
+  float: left;
+  width: 30%;
+  color: #777;
+  cursor: default;
+}
+
+// 教师设置
+.teacher-list-group .nickname {
+  display: inline-block;
+  width: 160px;
+  margin-left: 6px;
+}
+
+.teacher-list-group .visible-checkbox {
+  font-weight: normal;
+
+}
+
+.teacher-list-group .delete-btn {
+  margin-top: 12px;
+}
+
+.teacher-list-group li .sort-handle {
+  font-size: 18px;
+  padding: 15px 10px 5px 5px;
+  cursor: pointer;
+}
+
+.course-statictics {
+  .dashboard {
+    background: #fff;
+    box-shadow: 0 0 30px 0 rgba(0,0,0,0.03);
+    border-radius: 4px;
+    margin: 10px;
+    text-align: center;
+    margin-bottom: 20px;
+    .item {
+      padding-top: 30px;
+      height: 120px;
+      border-right: 1px solid rgba(0,0,0,0.06);
+      &.no-right-border{
+        border-right: none;
+      }
+      &.bottom-border {
+        border-bottom: 1px solid rgba(0,0,0,0.06);
+      }
+      .number {
+        position: relative;
+        opacity: 0.88;
+        font-size: 32px;
+        color: #000;
+        letter-spacing: 1px;
+        line-height: 32px;
+        @media (max-width: @screen-xs-max) {
+          font-size: 22px;
+        }
+        .incre {
+          position: absolute;
+          right: -60px;
+          top: -3px;
+          width: 60px;
+          text-align: left;
+          color: @brand-primary;
+          font-size: 12px;
+        }
+      }
+      .title {
+        opacity: 0.56;
+        font-size: 12px;
+        color: #000;
+        letter-spacing: 0;
+        line-height: 12px;
+        padding-top: 10px;
+      }
+    }
+  }
+
+  .legend-icon{
+    cursor: pointer;
+    color: #999;
+    position: relative;
+    padding-left: 20px;
+    &:before{
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      left: 5px;
+      top: 4px;
+      content:'';
+    }
+    &.learn:before{
+      background-color: #D3D3D3;
+    }
+    &.finish:before{
+      background-color: #92D178;
+    }
+    &.start:before{
+      background-color: #FECF7D;
+    }
+    &.unpass:before{
+      background-color: #fe7d81;
+    }
+    &.active{
+      color: #ccc;
+      &:before{
+        background-color: #ccc!important;
+      }
+    }
+  }
+  .legend{
+    color: #333;
+    margin-bottom: 20px;
+  }
+  .col-10,
+  .col-80{
+    float: left;
+    padding: 0 10px;
+  }
+  .col-10{
+    width: 10%;
+  }
+  .col-80{
+    width: 80%;
+  }
+  .col-10{
+    width: 10%;
+  }
+  .student-detail{
+    padding: 0 7px;
+    margin-bottom: 0;
+    &.sm li{
+      width: 4%;
+      margin-bottom: 15px;
+    }
+    li{
+      width: 5%;
+      height: 16px;
+      padding:0 3px;
+      float: left;
+      list-style: none;
+      cursor: pointer;
+      i{
+        display: block;
+        height: 100%;
+        border-radius: 3px;
+      }
+    }
+  }
+  .chart-item{
+    margin-bottom: 15px;
+    position: relative;
+    .popover{
+      min-width: 150px;
+    }
+    &:hover{
+      .more{
+        display:inline;
+      }
+    }
+    .progress{
+      height: 18px;
+      margin-bottom: 0;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    .more{
+      position: absolute;
+      right: 10px;
+      color: @brand-primary;
+      display: none;
+    }
+  }
+  .start-color {
+    background-color: #FECF7D;
+  }
+  .finish-color{
+    background-color:#92D178;
+  }
+  .learn-color{
+    background-color: #D3D3D3;
+  }
+  .unpass-color{
+    background-color: #fe7d81;
+  }
+  .width-hide{
+    width: 0!important;
+  }
+  .statictic-body{
+    margin: 0 10px 20px 10px;
+    .select-content {
+      display: inline-block;
+      position: relative;
+      margin-right: 20px;
+      .select-time-input, .select-time-select {
+        padding: 6px 12px;
+        width: 189px;
+        height: 34px;
+        border: 0;
+        opacity: 0.4;
+        font-size: 14px;
+        color: #000;
+        letter-spacing: 0;
+        line-height: 16px;
+        background: #fff;
+        &:focus {
+          outline: 0;
+        }
+      }
+      .select-time-input {
+        border-bottom: 1px solid #ccc;
+      }
+      .es-icon {
+        position: absolute;
+        right: 0;
+        top: 8px;
+        color: rgba(0, 0, 0, 0.3);
+        background: #fff;
+        font-size: 18px;
+      }
+      &.bottom-border {
+        border-bottom: 1px solid rgba(0,0,0,0.06);
+      }
+    }
+    .date-change {
+      color: rgba(0,0,0,0.3);
+      padding-left: 15px;
+      .es-transition;
+      &:hover,&:focus {
+        color: #000;
+        .es-transition;
+      }
+    }
+    .chart-container {
+      width: 100%;
+      min-height: 250px;
+    }
+    .nav.nav-tabs {
+      border-bottom: 0;
+      margin-bottom: 0;
+      > li {
+        margin-right: 40px;
+        &.active{
+          >a{
+            color: #616161;
+          }
+        }
+        > a {
+          font-size: 14px;
+          color: #999;
+          padding: 0 0 10px 0;
+        }
+      }
+    }
+  }
+  .statictic-header {
+    font-size: 14px;
+    //color: #000;
+    letter-spacing: 0;
+    line-height: 14px;
+    padding: 40px 0 10px 0;
+    font-weight: 500;
+  }
+}
+

@@ -1,0 +1,26 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+{% block title %}{{'wechat.notification.template_detail'|trans}}{% endblock %}
+
+{% block body %}
+<form class="form-horizontal" id="notification-setting-form" action="{{ path('admin_wechat_notification_template_status', {key: key}) }}">
+  <div class="form-group">
+    <div class="col-sm-2 control-label"><label>{{'wechat.notification.homework_or_testpaper_setting_conditions_label'|trans}}</label></div>
+    <div class="col-sm-10 controls mts">{{ 'wechat.notification.homework_or_testpaper_setting_conditions'|trans }}</div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-2 control-label"><label for="send-time">{{ 'wechat.notification.send_time'|trans }}</label></div>
+    <div class="col-sm-4 controls mts"><input class="form-control" type="text" id="send-time" name="sendTime" {% if sendTime|default(0) %}data-date="{{ sendTime|default('00:00') }}" {% endif %} autocomplete="off"></div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+
+{% endblock %}
+
+{% block footer %}
+  <div class="pull-right">
+    <a href="{{ path('admin_wechat_notification_manage') }}" class="btn btn-link">{{ 'form.btn.cancel'|trans }}</a>
+    <button type="submit" class="btn btn-primary save-btn" data-toggle="form-submit" data-target="#notification-setting-form" data-submiting-text="{{ 'wechat.notification.saving'|trans }}">{{ 'wechat.notification.save'|trans }}</button>
+  </div>
+  <script>app.load('wechat-notification/homework-review-setting');</script>
+{% endblock %}

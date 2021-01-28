@@ -1,0 +1,30 @@
+{% extends 'group/layout.html.twig' %}
+
+{% block title %}{{'group.detail.group_settings'|trans}} - {{ parent() }}{% endblock %}
+
+{% set settingNav = settingNav|default(null) %}
+
+{% set groupNav = 'setting' %}
+
+{% block group_body %}
+
+<div class="panel panel-default">
+  <div class="panel-body">
+    <ul class="nav nav-tabs">
+      <li {% if groupNav=="index" %}class="active"{% endif %}><a href="{{path('group_show',{id:groupinfo.id})}}">{{'group.detail.group_homepage'|trans}}</a></li>
+      <li {% if groupNav=="member" %}class="active"{% endif %}><a href="{{path('group_member',{id:groupinfo.id})}}">{{'group.detail.group_members'|trans}}</a></li>
+      {% if is_groupmember==2 or is_granted('ROLE_ADMIN') or is_groupmember==3%}
+        <li {% if groupNav=="setting" %}class="active" {% endif %}><a  href="{{path('group_set',{id:groupinfo.id})}}">{{'group.detail.group_settings'|trans}}</a></li>
+      {% endif %}
+    </ul>
+    <ul class="nav nav-pills nav-pills-sm mbl">
+      <li  {% if settingNav == 'info' %}class="active"{% endif %}><a href="{{path('group_set',{id:groupinfo.id})}}">{{'group.detail.group_settings.group_edit'|trans}} </a></li>
+      <li {% if settingNav == 'logo' %}class="active"{% endif %}> <a  href="{{path('group_logo_set',{id:groupinfo.id})}}">{{'group.detail.group_settings.logo_setup'|trans}}</a></li>
+      <li {% if settingNav == 'background' %}class="active"{% endif %}>  <a  href="{{path('group_backgroundlogo_set',{id:groupinfo.id})}}">{{'group.detail.group_settings.background_image_setup'|trans}}</a></li>
+    </ul>
+    {{ web_macro.flash_messages() }}
+    {% block group_setting_body %}{% endblock %}
+  </div>
+</div>
+
+{% endblock %}

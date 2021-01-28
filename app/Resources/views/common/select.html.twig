@@ -1,0 +1,11 @@
+{% do script(['libs/bootstrap-treeview.js', 'app/js/tree-view/index.js'], 900) %}
+
+<div class="js-treeview-select-wrap {{ classNames|default('') }}" id="{{ id|default() }}" data-check-column-name="{% if treeName|default() == 'orgCode' %}orgCode{% else %}id{% endif %}">
+  <div class="treeview-select js-treeview-select">
+    {% set defaultPlaceholder = 'org.all.orgs'|trans %}
+    <input class="form-control js-treeview-text department-manage-search-form-group__tree" placeholder="{{ placeholder|default(defaultPlaceholder)|trans }}" type="text" autocomplete="off">
+    <div  class="treeview-select-menu js-treeview-select-menu"></div>
+    <input class="hide js-treeview-ipt" type="text" {{ required|default('') }} name="{{ treeName|default('') }}" value="{{ ids|default() }}">
+    <div class="hide js-treeview-data">{{ data|default() }}</div>
+  </div>
+</div>

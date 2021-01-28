@@ -1,0 +1,36 @@
+<div class="panel panel-default testpaper-card-panel {% if activity.mediaType == 'homework' %}homework-card-panel{% endif %}">
+  <div class="panel-body">
+    <div class="testpaper-card-info">
+      <span class="testpaper-card-info__text">
+        {% if targetType|default('classroom') == 'course'%}
+          {{ 'course.testpaper_manage.analysis_card.course_total_person'|trans }}
+        {% else %}
+          {{ 'course.testpaper_manage.analysis_card.classroom_total_person'|trans }}
+        {% endif %}
+      </span>
+      <span class="testpaper-card-info__number">{{ studentNum }}</span>
+    </div>
+    <div class="testpaper-card-info">
+      <span class="testpaper-card-info__text">
+        {{ 'course.testpaper_manage.analysis_card.join_person'|trans }}</span>
+      <span class="testpaper-card-info__number">{{ answerSceneReport.joined_user_num }}</span>
+    </div>
+    <div class="testpaper-card-info">
+      <span class="testpaper-card-info__text">
+        {{ 'course.testpaper_manage.analysis_card.complete_person'|trans }}</span>
+      <span class="testpaper-card-info__number">{{ answerSceneReport.finished_user_num }}</span>
+    </div>
+    {% if activity.mediaType == 'testpaper' %}
+      <div class="testpaper-card-info">
+        <span class="testpaper-card-info__text">
+          {{ 'course.testpaper_manage.analysis_card.total_score'|trans }}</span>
+        <span class="testpaper-card-info__number">{{ assessment.total_score }}</span>
+      </div>
+      <div class="testpaper-card-info">
+        <span class="testpaper-card-info__text">
+          {{ 'course.testpaper_manage.analysis_card.avg_score'|trans }}</span>
+        <span class="testpaper-card-info__number">{{ answerSceneReport.avg_score }}</span>
+      </div>
+    {% endif %}
+  </div>
+</div>

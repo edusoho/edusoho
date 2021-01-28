@@ -1,0 +1,11 @@
+{% set data = notification.content %}
+
+{% if data.targetType == 'classroom' %}
+    {% set classroom = get_classroom_name() ~ data.title %}
+    {% set url = path('classroom_reviews',{id:data.targetId}) %}
+    {{ 'notification.comment-post.classroom_review_reply'|trans({'%classroom%':classroom, '%url%':url})|raw }}
+{% else %}
+  {% set url = path('course_show',{id:data.targetId, tab:'reviews'}) %} }
+  {{ 'notification.comment-post.course_review_reply'|trans({'%course%':data.title, '%url%':url})|raw }}
+{% endif %}
+

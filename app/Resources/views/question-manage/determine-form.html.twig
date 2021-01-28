@@ -1,0 +1,12 @@
+{% extends 'question-manage/question-form-layout.html.twig' %}
+
+{% block question_extra_fields %}
+
+  <div class="form-group">
+    <div class="col-md-2 control-label"><label class="control-label-required">{{'course.question_manage.manage.answer'|trans}}</label></div>
+    <div class="col-md-8 controls radios ">
+      {{ radios('answer[]', {'1':'site.question.determine.true'|trans, '0':'site.question.determine.false'|trans}, question.answer|default(['-1'])|join) }}
+    </div>
+  </div>
+
+{% endblock %}

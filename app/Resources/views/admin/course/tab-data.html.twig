@@ -1,0 +1,7 @@
+<div class="btn-group">
+
+	<a href=" {{ url('admin_course_set_data', {filter: 'normal'}) }}" type="button" class="btn btn-default btn-sm {% if filter == 'normal'%}btn-primary{% endif %}">{{'admin.course_manage.manage.normal_course'|trans}}</a>
+
+
+	<a href=" {{ url('admin_course_set_data', {filter: 'classroom'}) }}" type="button" class="btn btn-default btn-sm {% if filter == 'classroom' %}btn-primary{% endif %}">{{'admin.course_manage.manage.classroom_course'|trans({'%classroomName%': setting("classroom.name")|default('classroom'|trans)})}}</a>
+</div>

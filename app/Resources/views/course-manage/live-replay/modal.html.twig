@@ -1,0 +1,25 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% do script(['app/js/live-course-manage/replay-lesson-modal/index.js']) %}
+
+{% set modalSize = 'large' %}
+{% block title %}{{'course.replay_manage.live_show.edit'|trans}}{% endblock %}
+{% block body %}
+  {% set editUrl = path('course_manage_task_replay_edit',{ taskId: task.id ,courseId: course.id }) %}
+	<form class="form-inline" id="replay_manage_form" method="POST" action="{{ editUrl }}">
+    {% for replay in replays %}
+      {% set titleUpdateUrl = path('course_manage_task_replay_title_update', {courseId: replay.courseId, taskId: replay.lessonId, replayId: replay.id}) %}
+      <div class="form-group mbm" style="position: relative; padding-left:20px;height: 40px;line-height:40px">
+        <label style="position: absolute; top:0;left:0"><input type="checkbox" name="visibleReplays[]" {% if replay.hidden == 0 %}checked="checked" {% endif %} value="{{ replay.id }}"></label>
+        <a class="link-dark text-overflow" style="width:150px" href="javascript:;" id="replay-name-span-{{replay.id}}" role='replay-name-span' data-replay-id="{{replay.id}}" >{{ replay.title }}</a>
+        <input class="form-control" style="width:150px; display:none" id="replay-name-input-{{replay.id}}" data-replay-id="{{replay.id}}" role='replay-name-input' data-url="{{ titleUpdateUrl }}" type="text" name="name" value="{{ replay.title }}">
+      </div>
+    {% endfor %}
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+	</form>
+{% endblock %}
+
+{% block footer %}
+	<button id="server-create-btn" data-loading-text="{{'form.btn.submit.submiting'|trans}}" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#replay_manage_form">{{'form.btn.submit'|trans}}</button>
+	<button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
+{% endblock %}

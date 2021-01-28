@@ -1,0 +1,68 @@
+{% extends 'admin/cloud-file/layout.html.twig' %}
+
+{% set menu = 'admin_cloud_file' %}
+{% do load_script('cloudfile/manage') %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <style>
+    .batch-item {
+      position: absolute;
+      left: 6px;
+      top: 3px;
+      z-index: 101;
+    }
+  </style>
+{% endblock %}
+
+{% block main %}
+
+  
+
+  <div class="eduyun-main">
+
+    <form class="form-inline es-materials-manage" id="materials-form">
+      {% include 'admin/cloud-file/form/nav.html.twig' %}
+      {% include 'admin/cloud-file/form/tags.html.twig' %}
+      {% include 'admin/cloud-file/form/res-filter.html.twig' with {'pageType': 'file'} %}
+      {% include 'admin/cloud-file/form/sort.html.twig' %}
+      {% include 'admin/cloud-file/form/batch.html.twig' %}
+      {% include 'admin/cloud-file/resource-table.html.twig'  with {'pageType': 'file'} %}
+    </form>
+  </div>
+
+  <div id="tag-modal" class="modal in" aria-hidden="false" data-backdrop="static" style="display: none;">
+    <div class="modal-dialog ">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title">{{ 'tag.setting'|trans }}</h4>
+        </div>
+        <div class="modal-body">
+          <form class="form-horizontal" id="tag-form" action="{{ path('admin_cloud_file_tag_show') }}" method="post">
+            <div class="form-group" id="form">
+
+
+              <label class="col-md-2 control-label">{{ 'tag'|trans }}</label>
+              <div class="col-md-8 controls">
+                <input type="text" id="tags" data-url="{{ path('material_tag_show_match') }}" name="tags"
+                       required="required" class="width-full" tabindex="-1" value=""
+                       data-explain="{{ 'admin.cloud_file.material_tag_show_match_tips'|trans }}">
+                <div class="help-block">{{ 'admin.cloud_file.material_tag_show_match_hint'|trans }}</div>
+              </div>
+
+            </div>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+            <input id="select-tag-items" name="fileIds" type="hidden" value="">
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-link" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
+          <button id="tag-create-btn" data-submiting-text="{{ 'form.btn.submit.submiting'|trans }}" type="submit" class="btn btn-primary"
+                  data-toggle="form-submit" data-target="#tag-form ">{{ 'form.btn.save'|trans }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

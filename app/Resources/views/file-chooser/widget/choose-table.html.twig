@@ -1,0 +1,56 @@
+{% import 'macro.html.twig' as web_macro %}
+{% if files %}
+  {% if batch %}
+    <div class="js-table-list">
+      <div>
+        <label class="checkbox-inline mlm mbm mtm"><input type="checkbox" data-role="batch-select"> {{ 'site.btn.all_select'|trans }}</label>
+      </div>
+      <div class="chooser-list"><table class="table table-striped table-hover">
+          <tbody>
+          {% for file in files %}
+            <tr id="material-table-tr-{{ file.id }}" class="file-browser-item"
+                data-id="{{ file.id }}"
+                data-name="{{ file.filename }}"
+                data-status="{{ file.convertStatus }}"
+                data-source="self"
+                data-length="{{ file.length }}"
+                data-size="{{ file.fileSize }}">
+              <td><input type="checkbox"  data-role="batch-item"></td>
+              <td> {{ file.filename }}</td>
+              <td> {{ file.fileSize|file_size }}</td>
+              <td> {{ file.createdTime|date('Y-m-d') }}</td>
+            </tr>
+          {% else %}
+
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% else %}
+      <div class="chooser-list"><table class="table table-striped table-hover">
+          <tbody>
+          {% for file in files %}
+            <tr id="material-table-tr-{{ file.id }}" class="file-browser-item"
+                data-id="{{ file.id }}"
+                data-name="{{ file.filename }}"
+                data-status="{{ file.convertStatus }}"
+                data-source="self"
+                data-length="{{ file.length }}"
+                data-size="{{ file.fileSize }}">
+              <td class="mlm"> {{ file.filename }}</td>
+              <td> {{ file.fileSize|file_size }}</td>
+              <td> {{ file.createdTime|date('Y-m-d') }}</td>
+            </tr>
+          {% else %}
+
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+  {% endif %}
+{% else %}
+  <div class="empty">{{'file_chooser.empty'|trans}}</div>
+{% endif %}
+
+{{ web_macro.paginator(paginator) }}

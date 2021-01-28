@@ -1,0 +1,14 @@
+{% if materials and ids|length > 1 %}
+  <div class="controls mll mtl">
+    <ul>
+      {% for fileId,material in materials %}
+        {% if  material|length > 0 and loop.index <= 3 %}
+          <li>{{'admin.course_manage.file.use'|trans({'%filename%':files[fileId].filename})}}</li>
+        {% endif %}
+      {% endfor %}
+      {% if materials|length > 3 %}
+        ......
+      {% endif %}
+    </ul>
+  </div>
+{% endif %}

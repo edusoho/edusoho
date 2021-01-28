@@ -1,0 +1,18 @@
+{% extends 'layout.html.twig' %}
+{% do script([]) %}
+
+{% block title %}
+	{{ 'information_collect.title'|trans }}
+	-
+	{{ parent() }}
+{% endblock %}
+
+{% block content %}
+	<div style="max-width: 600px; margin:auto;">
+		<div class="cd-panel">
+			<div class="cd-panel-body">
+				{{ render(controller('AppBundle:InformationCollect/InformationCollect:eventForm', { request:app.request, eventId: eventId })) }}
+			</div>
+		</div>
+	</div>
+{% endblock %}

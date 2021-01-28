@@ -1,0 +1,40 @@
+{% extends 'layout.html.twig' %}
+{% set bodyClass = 'bg-gray' %}
+
+{% block full_content %}
+  <style type="text/css">
+    .reset-pwd-mes {
+      min-height: 700px;
+      padding-top: 70px;
+    }
+    .reset-pwd-mes-header {
+      margin-bottom: 20px;
+    }
+
+    .reset-pwd-mes-header .es-icon {
+      font-size: 60px;
+      line-height: 1;
+    }
+
+    .reset-pwd-mes-body {
+      margin-bottom: 30px;
+      font-size: 18px;
+      color: #313131;
+    }
+
+    .reset-pwd-mes-footer {
+
+    }
+  </style>
+  <div class="reset-pwd-mes text-center">
+    <div class="reset-pwd-mes-header">
+      <i class="es-icon es-icon-iccheckcircleblack24px color-success"></i>
+    </div>
+    <div class="reset-pwd-mes-body">
+      {{'user.settings.password_reset.success_tips'|trans}}
+    </div>
+    <div class="reset-pwd-mes-footer">
+      <a class="btn btn-success btn-lg" href="{{ path('login') }}"> {{'user.settings.password_reset.login_btn'|trans}}</a>
+    </div>
+  </div>
+{% endblock %}

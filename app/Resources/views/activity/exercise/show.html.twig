@@ -1,0 +1,31 @@
+{% extends 'layout.html.twig' %}
+
+{% block body %}
+<div  class="modal show iframe-modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body task-state-modal">
+        <div class="title font-blod">
+          <i class="es-icon es-icon-xinxi color-info"></i>
+          {{'course.plan_task.activity_manage.exercise.info'|trans}}
+        </div>
+        <div class="content">
+          <div class="text-16">
+            {% if questionLack|default(false) %}
+            {{'course.plan_task.activity_manage.exercise.info_tips.question_lack'|trans|raw}}
+            {% else %}
+            {{'course.plan_task.activity_manage.exercise.info_tips'|trans({'%itemCount%':exercise.itemCount})|raw}}
+            {% endif %}
+          </div>
+        </div>
+        {% if not questionLack %}
+        <div class="text-right mt20">
+          <a class="btn btn-primary" href="{{ path('exercise_start_do',{lessonId:activity.id,exerciseId:exercise.id})}}">{{'course.plan_task.activity_manage.exercise.start_btn'|trans}}</a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop in"></div>
+{% endblock %}

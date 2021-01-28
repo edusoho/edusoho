@@ -1,0 +1,36 @@
+language: php
+
+sudo: false
+
+cache:
+    directories:
+        - $HOME/.composer/cache/files
+        - $HOME/.phpunit-bridge
+
+env:
+    global:
+        - SYMFONY_PHPUNIT_DIR=$HOME/.phpunit-bridge
+        - SYMFONY_PHPUNIT_REMOVE='' # don't remove prophecy
+
+php: [7.2, 7.1, 7.0, 5.6, 5.5, 5.4]
+
+matrix:
+    include:
+        - php: 7.2
+          env: COMPOSER_FLAGS='--prefer-lowest --prefer-stable'
+        - php: 5.3
+          dist: precise
+        - php: 7.2
+          env: STABILITY=dev
+
+before_install:
+    - if [[ -v $STABILITY ]]; then composer config minimum-stability $STABILITY; fi;
+
+install:
+    - composer update --prefer-dist --no-interaction $COMPOSER_FLAGS
+    - vendor/bin/simple-phpunit install
+
+script: vendor/bin/simple-phpunit --coverage-text --coverage-clover=coverage.clover
+
+after_script:
+    - wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover coverage.clover

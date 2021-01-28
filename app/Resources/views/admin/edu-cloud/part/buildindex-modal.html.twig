@@ -1,0 +1,20 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'small' %}
+
+{% block title %}
+  {{'admin.edu_cloud.edu_search.rebuild_index.modal.content_title'|trans}}
+{% endblock %}
+
+{% block body %}
+  <ul>
+    {{'admin.edu_cloud.edu_search.rebuild_index.modal.tips'|trans|raw}}
+  </ul>
+{% endblock %}
+
+{% block footer %}
+  <button id="announcement-create-btn" class="btn btn-primary" data-target="">{{'form.btn.confirm'|trans}}</button>
+  <button type="button" class="btn btn-link" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
+
+  <script>app.load('announcement/create-modal');</script>
+{% endblock %}

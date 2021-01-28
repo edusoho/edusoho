@@ -1,0 +1,54 @@
+<!-- 概览 -->
+<div class="dashboard row">
+    <div class="col-xs-4 item bottom-border">
+    <span class="number">{{ summary.studentNum }}
+        {% if summary.studentNumToday %}
+            <span class="incre">+{{ summary.studentNumToday }}</span>
+        {% endif %}
+    </span>
+        <div class="title">{{ 'course.dashboard.stunents_numbers'|trans }}</div>
+    </div>
+    <div class="col-xs-4 item bottom-border">
+    <span class="number">{{ summary.finishedNum }}
+        {% if summary.finishedNumToday %}
+            <span class="incre">+{{ summary.finishedNumToday }}</span>
+        {% endif %}
+    </span>
+        <div class="title">{{ 'course.dashboard.finished_numbers'|trans }}</div>
+    </div>
+    <div class="col-xs-4 item bottom-border no-right-border">
+    <span class="number">{{ summary.tryViewNum }}
+        {% if summary.tryViewNumToday %}
+            <span class="incre">+{{ summary.tryViewNumToday }}</span>
+        {% endif %}
+    </span>
+        <div class="title">{{ 'course.dashboard.free_view_numbers'|trans }}
+            <span class="link-medium es-icon es-icon-help ml5" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="{{ 'course.dashboard.free_view_numbers_tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)})}}">
+            </span>
+        </div>
+    </div>
+    <div class="col-xs-4 item">
+    <span class="number">{{ summary.noteNum }}
+        {% if  summary.noteNumToday %}
+            <span class="incre">+{{ summary.noteNumToday }}</span>
+        {% endif %}
+    </span>
+        <div class="title">{{ 'course.dashboard.notes_numbers'|trans }}</div>
+    </div>
+    <div class="col-xs-4 item">
+    <span class="number">{{ summary.askNum }}
+        {% if summary.askNumToday  %}
+            <span class="incre">+{{ summary.askNumToday }}</span>
+        {% endif %}
+    </span>
+        <div class="title">{{ 'course.dashboard.questions_numbers'|trans }}</div>
+    </div>
+    <div class="col-xs-4 item no-right-border">
+    <span class="number">{{ summary.discussionNum }}
+        {% if summary.discussionNumToday %}
+            <span class="incre">+{{ summary.discussionNumToday }}</span>
+        {% endif %}
+    </span>
+        <div class="title">{{ 'course.dashboard.discussions_numbers'|trans }}</div>
+    </div>
+</div>

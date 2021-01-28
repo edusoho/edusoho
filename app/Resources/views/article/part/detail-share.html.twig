@@ -1,0 +1,9 @@
+<div class="article-sns">
+  <a href="javascript:;" class="love js-article-like {% if userLike %}color-primary{% endif %}" data-like-url="{{ path('article_like', {articleId:article.id}) }}" data-cancel-like-url="{{ path('article_cancel_like', {articleId:article.id}) }}"><i class="es-icon es-icon-favorite"></i><span class="js-like-num">{{ article.upsNum }}</span></a>
+  <span class="es-share right js-es-share">
+    <a class="dropdown-toggle" href="javascript:;" data-toggle="dropdown">
+      <i class="es-icon es-icon-share"></i>
+    </a>
+    {% include 'common/share-dropdown.html.twig' with {type:'article'} %}
+  </span>
+</div>

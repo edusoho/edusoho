@@ -1,0 +1,47 @@
+{% set data = notification.content %}
+
+{% if data.userId|default(false) %}
+{% set who = data.userName %}
+{% endif %}
+
+{% if data.type == 'delete' %}
+  {% set thread = '<strong>“' ~ data.title ~ '”</strong>' %}
+{% elseif data.type == 'reply' %}
+  {% set thread = data.title %}
+{% elseif data.type == 'type-modify' %}
+  {% set url = data.targetType~'_thread_show' %}
+  {% set urlId = data.targetType~'Id'%}
+  {% set thread = data.title %}
+{% elseif data.type == 'modify' %}
+  {% set thread = data.title %}
+{% else %}
+  {% set thread = data.title %}
+{% endif %}
+
+{% if data.type == 'delete'%}
+ {{ 'notification.group-thread.delete'|trans({'%thread%':thread, '%who%':who}) }}
+{% elseif data.type == 'elite' %}
+ {{ 'notification.group-thread.elite'|trans({'%thread%':thread}) }}
+{% elseif data.type == 'unelite' %}
+ {{ 'notification.group-thread.unelite'|trans({'%thread%':thread}) }}
+{% elseif data.type == 'top' %}
+ {{ 'notification.group-thread.top'|trans({'%thread%':thread}) }}
+{% elseif data.type == 'untop' %}
+ {{ 'notification.group-thread.untop'|trans({'%thread%':thread}) }}
+{% elseif data.type == 'close' %}
+ {{ 'notification.group-thread.close'|trans({'%thread%':thread}) }}
+{% elseif data.type == 'open' %}
+ {{ 'notification.group-thread.open'|trans({'%thread%':thread}) }}
+{% elseif data.type == 'modify' %}
+ {{ 'notification.group-thread.modify'|trans({'%thread%':thread}) }}
+{% elseif data.type == 'collect'%}
+ {{ 'notification.group-thread.collect'|trans({'%thread%':thread, '%who%':who}) }}
+{% elseif data.type == 'uncollect'%}
+ {{ 'notification.group-thread.uncollect'|trans({'%thread%':thread, '%who%':who}) }}
+{% elseif data.type == 'reply' %}
+ {{ 'notification.group-thread.reply'|trans({'%thread%':thread, '%who%':who}) }}
+{% elseif data.type == 'delete-post'%}
+ {{ 'notification.group-thread.delete-post'|trans({'%thread%':thread}) }}
+{% elseif data.type == 'type-modify'%}
+ {{ 'notification.group-thread.type-modify'|trans({'%thread%':thread, '%who%':who}) }}
+{% endif %}

@@ -1,0 +1,69 @@
+{% extends 'v2/layout.html.twig' %}
+{% do script(['app/js/card/index/index.js']) %}
+
+{% set cardType = app.request.query.get('cardType') %}
+{% set filter = app.request.query.get('filter') %}
+{% set isCoupon = (cardType == '' or cardType == 'coupon') %}
+{% set isMoneyCard = (cardType == 'moneyCard') %}
+{% set coin = setting('coin') %}
+
+{% block title %}
+  {% if isCoupon %}
+    {{ 'plugin.coupon'|trans }} - {{ parent() }}
+  {% elseif isMoneyCard %}
+    {{ 'plugin.money_card'|trans }} - {{ parent() }}
+  {% endif %}
+{% endblock %}
+
+{% if isCoupon %}
+  {% set side_nav = 'my-coupon' %}
+{% elseif isMoneyCard %}
+  {% set side_nav = 'my-money-card' %}
+{% endif %}
+
+{% block page_title %}
+  {% if isCoupon %}
+    {{ 'plugin.coupon'|trans }}
+  {% elseif isMoneyCard %}
+    {{ 'plugin.money_card'|trans }}
+  {% endif %}
+{% endblock %}
+
+{% block main_body %}
+  {% if app.request.cookies.get('modalOpened') == 1 %}
+    <a href="#modal" class="receive-modal hidden" data-toggle="modal" data-url="{{ path('card_info',{'cardType':cardType,'cardId':app.request.query.get('cardId')}) }}" ><span></span></a>
+  {% endif %}
+
+  <ul class="cd-tabs">
+    <li class="{% if filter == '' or filter == 'all' %}active{% endif %}"><a href="javascript:;" role="filter-change" data-url="{{ path('my_cards',{cardType:cardType,filter:''}) }}">{{'user.cards.all'|trans}}</a></li>
+    <li class="{% if filter == 'useable' %}active{% endif %}"><a href="javascript:;" role="filter-change" data-url="{{ path('my_cards',{cardType:cardType,filter:'useable'}) }}">{{'user.cards.useable'|trans}}</a></li>
+    <li class="{% if filter == 'used' %}active{% endif %}"><a href="javascript:;" role="filter-change" data-url="{{ path('my_cards',{cardType:cardType,filter:'used'}) }}">{{'user.cards.used'|trans}}</a></li>
+    <li class="{% if filter == 'outdate' %}active{% endif %}"><a href="javascript:;" role="filter-change" data-url="{{ path('my_cards',{cardType:cardType,filter:'outdate'}) }}">{{'user.cards.outdate'|trans}}</a></li>
+
+    {% if is_plugin_installed('MoneyCard') and cardType == 'moneyCard' %}
+      <li class="{% if filter == 'invalid' %}active{% endif %}"><a  href="javascript:;" role="filter-change"  data-url='{{ path('my_cards',{cardType:cardType,filter:'invalid'}) }}'>{{'user.cards.invalid'|trans}}</a></li>
+    {% endif %}
+  </ul>
+
+  <div class="card-pack-list row cd-row">
+    {% if setting('coin.coin_enabled') != 0 or cardType != 'moneyCard' %}
+      {% if cards is not null %}
+        {% for card in cards %}
+          <div class="col-lg-5 col-md-6 col-sm-6">
+            {% if cardDetails[card.cardId] is defined %}{# this if condition is to be delete #}
+              {% if card.cardType == 'coupon' %}
+                {% include 'card/coupon-'~card.status~'.html.twig' with {cardDetail:cardDetails[card.cardId]} %}
+              {% elseif card.cardType == 'moneyCard' and is_plugin_installed('moneyCard') %}
+                {% include 'card/moneycard-'~card.status~'.html.twig' with {cardDetail:cardDetails[card.cardId]} %}
+              {% endif %}
+            {% endif %}
+          </div>
+        {% endfor %}
+      {% else %}
+      <div class="cd-empty">{{'site.datagrid.empty'|trans}}{% if isCoupon %}{{'plugin.coupon'|trans}}{% elseif isMoneyCard %}{{'plugin.money_card'|trans}}{% endif %}</div>
+      {% endif %}
+    {% else %}
+    <div class="cd-empty">{{'user.cards.moneycard_not_install_tips'|trans({'%coin_name%': coin.coin_name|default('finance.coin'|trans)})}}</div>
+    {% endif %}
+  </div>
+{% endblock %}

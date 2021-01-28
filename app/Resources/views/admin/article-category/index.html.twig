@@ -1,0 +1,18 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% set menu = 'admin_operation_article_category' %}
+
+{% block main %}
+
+<ul class="list-table" id="category-table" style="margin-bottom: 0">
+    <li class="th">
+        <div class="row">
+            <div class="td col-md-3">{{'admin.operation_article.category_title'|trans}}</div>
+            <div class="td col-md-4">{{'admin.operation_article.category_addr'|trans}}</div>
+            <div class="td col-md-3">{{'admin.operation_article.category_code'|trans}}</div>
+            <div class="td col-md-2">{{'admin.operation_article.operation_th'|trans}}</div>
+        </div>
+    </li>
+    {% include 'admin/article-category/tbody.html.twig' %}
+</ul>
+{% endblock %}

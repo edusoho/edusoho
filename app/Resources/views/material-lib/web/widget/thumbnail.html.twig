@@ -1,0 +1,106 @@
+<input class="batch-item" value="{{uploadFile.id}}" type="checkbox" data-role="batch-item"
+    data-link-count="{{ uploadFile.usedCount }}"
+    data-file-name="{{ uploadFile.filename }}" style="display:none;">
+{% if uploadFile.storage == 'local' or (uploadFile.storage == 'cloud' and uploadFile.type in ['video', 'ppt', 'document'] and uploadFile.convertStatus != "success") %}
+  <img class="img-responsive" src="{{ asset(uploadFile.thumbnail|default('assets/img/default/cloud_' ~ uploadFile.type ~ '.png')) }}">
+{% else %}
+  <img class="img-responsive" src="{{ asset(uploadFile.thumbnail|default('assets/img/default/cloud_' ~ uploadFile.type ~ '.png')) }}">
+{% endif %}
+
+<div class="mask">
+{# 收藏和取消收藏 #}
+  <div class="icon-operation">
+    <i
+      class="glyphicon glyphicon-star js-collect-btn left {% if collections[uploadFile.id]|default(0) %} material-collection {% endif %}"
+      data-toggle="tooltip"
+      data-placement="bottom"
+      title="{{'material_lib.btn.collect'|trans}}"
+      data-url="{{ path('material_lib_save_collection', {fileId:uploadFile.id}) }}"
+    ></i>
+    <i
+      href="javascript:;"
+      class="glyphicon glyphicon-option-vertical"
+      data-toggle="dropdown"
+      aria-haspopup="true"
+      aria-expanded="false"
+    ></i>
+    <ul class="dropdown-menu">
+    {# 编辑 #}
+      {% if uploadFile.createdUserId == app.user.id %}
+        <li>
+          <a href="javascript:;" class="js-detail-btn" data-toggle="tooltip" data-placement="bottom" data-url="{{ path('material_lib_file_detail', {fileId:uploadFile.id}) }}">
+            <i class="glyphicon glyphicon-pencil prm"></i>{{'material_lib.btn.edit'|trans}}
+          </a>
+        </li>
+      {% endif %}
+
+      {% if uploadFile.storage == "cloud" and uploadFile.createdUserId != app.user.id %}
+        <li>
+          <a href="javascript:;" class="js-detail-btn" data-toggle="tooltip" data-placement="bottom" data-url="{{ path('material_lib_file_detail', {fileId:uploadFile.id}) }}">
+            <i class="glyphicon glyphicon-eye-open prm"></i>{{'material_lib.btn.view'|trans}}
+          </a>
+        </li>
+      {% endif %}
+      {# 字幕管理 #}
+      {% if uploadFile.storage == "cloud" and uploadFile.type == 'video' %}
+        <li>
+          <a href="{{ path('media_subtitle_manage', {mediaId:uploadFile.id, goto:path('material_lib_browsing')}) }}" data-toggle="tooltip" data-placement="bottom">
+            <i class="glyphicon glyphicon-cog prm"></i>{{'material_lib.btn.subtitle_manage'|trans}}
+          </a>
+        </li>
+      {% endif %}
+      {# 下载 #}
+      <li>
+        <a href="javascript:;"  data-url="{{ path('material_download', {fileId:uploadFile.id}) }}" class="js-download-btn" data-toggle="tooltip" data-placement="bottom" >
+          <i class="glyphicon glyphicon-save prm"></i>{{'material_lib.btn.download'|trans}}
+        </a>
+      </li>
+
+      {% if uploadFile.createdUserId == app.user.id %}
+        {# 共享和取消共享 #}
+        {% if uploadFile.isPublic %}
+          <li>
+            <a href="javascript:;" class="js-unshare-btn" data-toggle="tooltip" data-placement="bottom" data-url="{{ path('material_unshare', {fileId:uploadFile.id}) }}">
+              <i class="es-icon es-icon-share prm"></i>{{'material_lib.btn.cancel_share'|trans}}
+            </a>
+          </li>
+        {% else %}
+            <li>
+            <a href="javascript:;" class="js-share-btn" data-toggle="tooltip" data-placement="bottom" data-file-id="{{ uploadFile.id }}" data-url="{{ path('material_batch_share') }}">
+              <i class="es-icon es-icon-share prm"></i>{{'material_lib.btn.share'|trans}}
+            </a>
+          </li>
+        {% endif %}
+        {# 删除判断 #}
+        {% if source != 'public' %}
+          <li>
+            <a href="javascript:;"  class="js-delete-btn" data-toggle="tooltip" data-placement="bottom" data-url="{{ path('material_delete_modal_show') }}" data-id="{{uploadFile.id }}">
+              <i class="glyphicon glyphicon-trash prm"></i>{{'material_lib.btn.delete'|trans}}
+            </a>
+          </li>
+        {% endif %}
+      {% endif %}
+    </ul>
+  </div>
+  {# 资料预览 #}
+  <div class="btn-operation">
+      <!-- 选择一种状态 -->
+
+      <a class="btn btn-info" href="#modal" data-toggle="modal" data-url="{{ path('material_lib_file_preview', {fileId: uploadFile.id}) }}" >{{'material_lib.btn.preview'|trans}}
+      </a>
+
+      {% if uploadFile.convertStatus == 'error' %}
+        {% if setting("developer.debug")|default(0) %}
+        <a class="js-reconvert-btn btn btn-warning" data-url='{{path("material_reconvert", {globalId: uploadFile.globalId})}}'>{{'material_lib.btn.convert_again'|trans}}</a>
+        {% endif %}
+      {% endif %}
+
+  </div>
+  <div class="time">
+    {% if uploadFile.type in ['video', 'audio'] and uploadFile.storage == 'cloud' %}
+      {{ uploadFile.length|activity_length_format }}
+    {% else %}
+      {{ uploadFile.ext|upper }}
+    {% endif %}
+  </div>
+</div>

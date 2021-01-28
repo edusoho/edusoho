@@ -1,0 +1,28 @@
+<div class="alert alert-blank alert-sm">
+	{{ 'cloud_search.thread.result'|trans({'%counts%':counts|default(0)})|raw }}
+</div>
+
+<div class="media-list">
+	{% for thread in resultSet%}
+		<div class="media media-search">
+			<div class="media-left">
+				<div class="reply">
+					{{thread.postNum}}<br>
+					<span class="text-sm">{{'cloud_search.thread.reply'|trans}}</span>
+				</div>
+			</div>
+			<div class="media-body">
+				<div class="title">
+          <a class="link-dark" href="{{path('group_thread_show',{id:thread.targetId,threadId:thread.id})}}" target="_blank">
+            {{thread.title|raw}}
+          </a>
+        </div>
+				<div class="text-sm color-gray">{{'cloud_search.thread.from'|trans}}
+					{% set group = data('Group',{'groupId':thread.targetId|default(0)}) %}
+					<a class="mls" href="{{path('group_show',{id:thread.targetId})}}" target="_blank">{{group.title|default('')}}</a>
+					<span class="mlm">{{thread.createdTime|smart_time}}</span>
+				</div>
+			</div>
+		</div>
+	{% endfor %}
+</div>

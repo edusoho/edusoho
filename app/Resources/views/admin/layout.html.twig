@@ -1,0 +1,195 @@
+{% import "macro.html.twig" as web_macro %}
+{% import "admin/macro.html.twig" as admin_macro %}
+{% import _self as self_macro %}
+
+{% set menu = menu|default(null) %}
+{% set currentMenu = permission(menu) %}
+{% set cloudSmsInfo = isOldSmsUser()|default(false) %}
+{% set lang = app.request.getLocale() %}
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html> <!--<![endif]-->
+{# returns app.request.locale if available and app.request.defaultLocale if app.request.locale is not set#}
+<html lang="{{ lang }}" class="{% if lang == 'en' %}es-en-admin{% endif %}">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="renderer" content="webkit">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta content="{{ csrf_token('site') }}" name="csrf-token" />
+  <title>
+
+    {% block title %}
+      {{ currentMenu.name|trans({}, 'menu') }} - {{ menu|parent_permission.name|trans({}, 'menu') }} - {{ menu|parent_permission.code|parent_permission.name|trans({}, 'menu')  }}
+    {% endblock %}
+    {% if not setting('copyright.owned') %} | EduSoho{% endif %}
+  </title>
+
+  {% if setting('site.favicon') %}
+    <link rel="icon" href="{{ asset(setting('site.favicon')) }}" type="image/x-icon" />
+    <link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
+  {% endif %}
+  
+  {% block stylesheets %}
+  <link href="{{ asset('assets/libs/gallery2/bootstrap/3.1.1/css/bootstrap.css') }}" rel="stylesheet" />
+  <link href="{{ asset('static-dist/app/css/admin.css') }}" rel="stylesheet" />
+  {% endblock %}
+
+  {% block javascripts %}{% endblock %}
+  <!--[if lt IE 9]>
+    <script src="{{ asset('assets/libs/html5shiv.js') }}"></script>
+    <script src="{{ asset('assets/libs/respond.min.js') }}"></script>
+  <![endif]-->
+</head>
+{% block body %}
+  <body {% if bodyClass|default('') %}class="{{ bodyClass }}"{% endif %}>
+    <!--[if lt IE 9]>
+      {% include 'default/ie8-alert.html.twig' %}
+    <![endif]-->
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+    {% if cloudSmsInfo %}
+      <div class="alert alert-danger es-admin-alert" role="alert"><div class="text-center"><strong>{{ 'admin.new_layout.cloudSmsInfo.tips'|trans({'%remainCount%':cloudSmsInfo.remainCount|default(0)}) }}</strong></div></div>
+    {% endif %}
+      <div class="phl">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="{{ url('admin') }}">{% if not setting('copyright.owned') %}EduSoho{% endif %}{{'admin.navbar.header.console_btn'|trans}}</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          {% include 'admin/role/templates/navigation.html.twig' with {parentCode:'admin'} %}
+
+          <ul class="nav navbar-nav navbar-right">
+            <li data-url="{{path('admin_common_admin')}}">
+              <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" ><span class="glyphicon glyphicon-list admin-star"></span> {{'admin.navbar.header.often_used_btn'|trans}}</a>
+              <ul class="dropdown-menu shortcuts">
+                {{ render(controller('AppBundle:Admin/CommonAdmin:commonAdmin')) }}
+              </ul>
+            </li>
+            <li><a href="{{ path('homepage') }}"><i class="glyphicon glyphicon-home"></i> {{'admin.navbar.header.home_btn'|trans}}</a></li>
+            <li class="dropdown">
+              <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i> {{ app.user.nickname }} <span class="glyphicon glyphicon-chevron-down"></span></a>
+              <ul class="dropdown-menu main-list">
+                {% if 'ROLE_TEACHER' in app.user.roles %}
+                  <li><a href="{{ path('my') }}"><i class="es-icon es-icon-event mrs" style="vertical-align: middle;"></i>{{ 'homepage.header.my_course'|trans }}</a></li>
+                {% endif %}
+                <li><a href="{{ path('my_courses_learning') }}"><i class="es-icon es-icon-book mrs"></i>{{ 'homepage.header.my_learning'|trans }}</a></li>
+                <li><a href="{{ path('logout') }}"><i class="glyphicon glyphicon-off"></i> {{'admin.navbar.header.dropdown_menu.exit_btn'|trans}}</a></li>
+              </ul>
+            </li>
+          </ul>
+
+        </div><!--/.navbar-collapse -->
+      </div>
+    </div>
+
+    <div class="container {% if cloudSmsInfo %}es-admin-container-down{% endif %}">
+
+      {% include 'admin/plugin-upgrade-notify-modal.html.twig' %}
+
+      {% block container %}
+        <div class="row">
+          {% block content %}
+            <div class="col-md-2">
+              {% block sidebar %}
+                {% include 'admin/role/templates/side-bar.html.twig' %}
+              {% endblock %}
+            </div>
+
+            <div class="col-md-10">
+              <div class="page-header clearfix">
+                {% block page_flash_message %}
+
+                {% endblock %}
+                <h1 class="pull-left">
+                  {% block page_title %}
+                    {{ currentMenu.code|parent_permission.name|trans({}, 'menu') }}
+                  {% endblock %}
+                </h1>
+                <div class="pull-right">
+
+                  {% block page_buttons %}
+
+                    {% if currentMenu.mode|default('') == 'capsules' and capsule|default(false) %}
+                      {% for m in sub_permissions(permission(capsule).code,'topBtn') %}
+                        {{ self_macro.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
+                      {% endfor %}
+                    {% else %}
+                      {% for m in sub_permissions(currentMenu.code,'topBtn') %}
+                        {{ self_macro.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
+                      {% endfor %}
+                    {% endif %}
+                  {% endblock %}
+
+                </div>
+              </div>
+
+              {% block content_header %}{% endblock %}
+
+              {% block tabs %}{% include 'admin/role/templates/tabs.html.twig' %}{% endblock %}
+
+              {% block capsule %}{% endblock %}
+
+              {% block main %}{% endblock %}
+            </div>
+
+          {% endblock %}
+        </div>
+      {% endblock %}
+
+    </div>
+
+    {% block footer %}
+      {{ setting('site.analytics')|raw }}
+
+      {% if setting('siteTrace.enabled')|default(false) %}
+        {{ setting('siteTrace.script')|raw }}
+      {% endif %}
+    {% endblock %}
+
+    {% block scriptBoot %}
+      {% include 'old-script_boot.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app.js')} %}
+      {% include 'admin/default/script-webpack.html.twig' %}
+    {% endblock %}
+    
+    <div id="modal" class="modal" ></div>
+    <div id="attachment-modal" class="modal" ></div>
+    {% if setting('copyright.thirdCopyright') != 1 %}
+      <div class="fixed-bar">
+        <a href="{{path('admin_feedback')}}"  target='_blank' class="icon-question-text feedback">
+          <i class="es-icon es-icon-help"></i>
+          <span>{{ 'admin.fixed_bar.product_feedback'|trans|raw }}</span>
+        </a>
+      </div>
+    {% endif %}
+
+    {% block faqSDK %}
+      {% include 'admin/faq/sdk.html.twig' %}
+    {% endblock %}
+  </body>
+{% endblock %}
+</html>
+
+{% macro menu_link_html(_context, menu, class) %}
+  <a
+  {% if class %}
+    class="{{ class }}"
+  {% endif %}
+  {% if menu.mode|default(null) == 'modal' %}
+    data-url="{{ permission_path(menu) }}"
+    data-toggle="modal"
+    data-target="#modal"
+  {% else %}
+    href="{{ permission_path(menu) }}"
+  {% endif %}
+  {% if menu.blank|default(false) %}
+    target="blank"
+  {% endif %}
+  >{{ menu.name|trans({}, 'menu') }}</a>
+{% endmacro %}

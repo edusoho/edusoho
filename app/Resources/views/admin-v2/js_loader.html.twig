@@ -1,0 +1,7 @@
+{% for path in script()  %}
+    {% if '//' in path %}
+        <script src="{{ path ~ '?' ~ asset_version('')}}"></script>
+    {% else %}
+        <script src="{{ asset('static-dist/' ~ path) }}"></script>
+    {% endif %}
+{% endfor %}

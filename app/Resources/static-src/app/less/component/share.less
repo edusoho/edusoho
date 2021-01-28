@@ -1,0 +1,82 @@
+.es-share {
+  position: relative;
+  display: inline-block;
+  &.top .dropdown-menu {
+    top: auto;
+    bottom: 100%;
+    left: 0;
+    margin-left: -60px;
+    margin-bottom: 10px;
+    &:after {
+      top: 100%;
+      left: 50%;
+      border: solid transparent;
+      content: " ";
+      height: 0;
+      width: 0;
+      position: absolute;
+      pointer-events: none;
+      border-color: rgba(64, 64, 64, 0);
+      border-top-color: #404040;
+      border-width: 8px;
+      margin-left: -8px;
+    }
+  }
+  &.right .dropdown-menu {
+    top: -5px;
+    left: 40px;
+    &:after {
+      right: 100%;
+      top: 50%;
+      border: solid transparent;
+      content: " ";
+      height: 0;
+      width: 0;
+      position: absolute;
+      pointer-events: none;
+      border-color: rgba(64, 64, 64, 0);
+      border-right-color: #404040;
+      border-width: 8px;
+      margin-top: -8px;
+    }
+  }
+  .dropdown-menu {
+    min-width: 146px !important;
+    padding: 3px 10px !important;
+    background-color: #404040 !important;
+    .box-shadow(none);
+    line-height: 30px !important;
+    a {
+      margin: 3px 2px 2px 6px !important;
+      color: #fff !important;
+    }
+    i {
+      font-size: 20px !important;
+    }
+  }
+
+  i[class*="es-icon"] {
+    .es-transition;
+  }
+
+  .es-icon-weixin:hover {
+    color: @brand-success;
+  }
+
+  .es-icon-weibo:hover {
+    color: @brand-danger;
+  }
+
+  .es-icon-qzone:hover {
+    color: @brand-warning;
+  }
+
+  .es-icon-qq:hover {
+    color: @brand-info;
+  }
+
+  &.es-share-item .dropdown-menu {
+    margin-left: -50px;
+  }
+
+}

@@ -1,0 +1,26 @@
+{% set subQuestions = item.subQuestions|default([]) %}
+{% set errors = item.errors|default([]) %}
+{% set key = (token is defined) ? (seq - 1) : key %}
+<div class="subject-item js-subject-item js-subject-main-item" id="{% if token is defined %}{{token}}{% else %}{{ key }}{% endif %}">
+  <div class="subject-item__title">
+    <span class="subject-item__number js-subject-item-number">
+    {% if seq is defined %}
+      {{ seq }}
+    {% else %}
+      {{ loop.index }}
+    {% endif %}
+    </span>
+    {% if errors.stem is not defined %}
+      <div class="subject-item__stem">{{ item.stem|striptags('<br><img>')|bbCode2Html|raw|nl2br }}</div>
+    {% elseif errors.stem.code == 100001 %}
+      <span class="single-item__text--danger">{{ 'course.testpaper_manage.import.re_edit.error_no_stem'|trans }}</span>
+    {% endif %}
+  </div>
+  {% include 'testpaper/subject/common.html.twig' with { type: item.type, difficulty: item.difficulty, score: item.score|default(''), category: item.category|default() } %}
+</div>
+
+{% if token is not defined %}
+  {% for subKey,subQuestion in subQuestions %}
+    {% include 'testpaper/subject/item/show/sub-' ~ subQuestion.type ~ '.html.twig' with {'item' : subQuestion, 'position' : 'sub', 'key' : key, 'subKey' : subKey} %}
+  {% endfor %}
+{% endif %}

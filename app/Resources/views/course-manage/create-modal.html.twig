@@ -1,0 +1,112 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+{% set modal_class= "modal-lg cd-modal-dialog" %}
+
+{% do script(['libs/jquery-validation.js','libs/bootstrap-datetimepicker.js', 'app/js/course-manage/create/index.js']) %}
+
+{% block title %}
+  {% if course|default(false) %}
+    {% if course.title is empty() %}
+      {{'course.teaching_plan.edit.copy'|trans({'%title%':'"' ~ courseSet.title ~ '"'})}}
+    {% else %}
+      {{'course.teaching_plan.edit.copy'|trans({'%title%':'"' ~ course.title ~ '"'})}}
+    {% endif %}
+  {% else %}
+    {{ 'course.teaching_plan.create'|trans }}
+  {% endif %}
+{% endblock %}
+
+{% block body %}
+  <div class="course-create-editor" id="course-create-editor">
+      <form class="form-horizontal" id="course-create-form"
+      {% if course|default(false) %}
+        action="{{path('course_set_manage_course_copy', {courseSetId: courseSet.id})}}"
+      {% else %}
+        action="{{path('course_set_manage_course_create', {courseSetId: courseSet.id})}}"
+      {% endif %}
+        method="post">
+        <div class="form-group mbl">
+          <div class="col-sm-2 control-label">
+            <label for="title" class="control-label-required">{{'course.teaching_plan.create.new_plan_name'|trans}}</label>
+          </div>
+          <div class="col-sm-8">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+            <input type="hidden" name="courseSetId" value="{{courseSet.id}}">
+            <input type="hidden" name="serializeMode" value="{{courseSet.serializeMode}}">
+            <input type="hidden" name="copyCourseId" value="{{course.id|default(0)}}">
+            <input type="hidden" name="courseType" value="normal">
+            <input type="text" id="title" name="title" class="form-control" placeholder="">
+          </div>
+        </div>
+        <div class="form-group cd-mb8">
+          <label for="learnMode" class="col-sm-2 control-label">
+            {{'course.teaching_plan.create.mode'|trans}}
+            <a class="es-icon es-icon-help ml5 cd-link-assist cd-text-sm text-normal" data-trigger="hover"
+              data-toggle="popover" data-container="body" data-placement="top"
+              data-content="<ul class='pl10 list-unstyled'>
+              {{'course.teaching_plan.create.mode.free'|trans|raw}}
+              {{'course.teaching_plan.create.mode.limit'|trans|raw}}</ul>">
+            </a>
+          </label>
+          <div class="col-sm-8 cd-radio-group mb0">
+            {{ cd_radios('learnMode', { 'freeMode': 'course.teaching_plan.free'|trans, 'lockMode': 'course.teaching_plan.locked'|trans }, course.learnMode|default('freeMode')) }}
+            <div class="cd-text-sm course-mangae-info__tip">{{'course.teaching_plan.create.create_tips'|trans}}</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">
+              {{'course.teaching_plan.expiry_date'|trans}}
+              <a class="es-icon es-icon-help ml5 cd-link-assist cd-text-sm text-normal" data-trigger="hover" data-toggle="popover" data-container="body" data-placement="top"
+                data-content="<ul class='pl10 list-unstyled'>
+                  <li class='mb10'>{{'course.teaching_plan.expiry_date.anytime'|trans|raw}}</li>
+                  <li class='mb10'>{{'course.teaching_plan.expiry_date.real_time'|trans|raw}}</li>
+                  <li>{{'course.teaching_plan.expiry_date.overdue_tips'|trans}}</li>
+                </ul>">
+              </a>
+            </label>
+            <div class="col-sm-8 cd-radio-group">
+                {{
+                  cd_radios(
+                    'expiryMode',
+                    {  'days': 'course.teaching_plan.expiry_date.anywhere_mode'|trans, 'date': 'course.teaching_plan.expiry_date.date_mode'|trans, 'forever':'course.teaching_plan.expiry_date.forever_mode'|trans },
+                    'forever'
+                  )
+                }}
+                {#随到随学#}
+                <div class="course-manage-expiry hidden" id="expiry-days">
+                  <span class="caret"></span>
+                  {{
+                    cd_radios(
+                      'deadlineType',
+                      { 'end_date': 'course.teaching_plan.expiry_date.end_date_mode'|trans, 'days': 'course.teaching_plan.expiry_date.days_mode'|trans}, course.deadlineType|default('days')
+                    )
+                  }}
+                  <div class="cd-mt16 hidden" id="deadlineType-date">
+                    {{'course.plan_task.deadline_learn_tips'|trans|raw}}
+                  </div>
+                  <div class="cd-mt16" id="deadlineType-days">
+                    {{'course.plan_task.expiry_days_learn_tips'|trans|raw}}
+                  </div>
+                </div>
+                {#固定周期#}
+                <div class="course-manage-expiry hidden" id="expiry-date">
+                  <span class="caret"></span>
+                  <div class="course-manage-expiry__circle">
+                    {{'course.plan_task.start_time'|trans}}
+                    <input class="form-control mh10 width-150 js-expiry-input" id="expiryStartDate" type="text" name="expiryStartDate" value="">
+                    {{'course.plan_task.end_time'|trans}}
+                    <input class="form-control ml5 width-150 js-expiry-input" type="text" id="expiryEndDate" name="expiryEndDate"
+                    value="">
+                  </div>
+                </div>
+                <div class="cd-text-sm course-mangae-info__tip js-expiry-tip ml0">{{'course.teaching_plan.expiry_date.not_change_tips'|trans}}</div>
+            </div>
+          </div>
+      </form>
+    </div>
+{% endblock %}
+
+{% block footer %}
+  <button id="course-cancel" type="button" class="cd-btn cd-btn-link-default" data-dismiss="modal">{{ 'form.btn.cancel'|trans }}</button>
+  <button id="course-submit" type="button" class="cd-btn cd-btn-primary" data-loading-text="{{ 'form.btn.create.submiting'|trans }}">{{ 'form.btn.create'|trans }}</button>
+{% endblock %}

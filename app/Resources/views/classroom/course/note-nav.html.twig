@@ -1,0 +1,43 @@
+<div class="note-filter nav-filter clearfix">
+  <div class="btn-group">
+    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+      {% if filters.courseId|default('') == '' %}
+        {{'classroom.all_courses'|trans}}
+      {% else %} 
+        {{ courses[filters.courseId]['title']|sub_text(10) }}
+      {% endif %}
+       
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+      <li class="{% if filters.courseId|default('') == '' %}active{% endif %}">
+        <a href="{{ path('classroom_course_notes_list', {classroomId:classroom.id}|merge(filters)|merge({courseId:''})) }}">{{'classroom.all_courses'|trans}}</a>
+      </li>
+      {% for course in courses %}
+        {% set courseSet = courseSets[course.courseSetId]|default(null) %}
+        <li class="{% if filters.courseId == course.id %}active{% endif %}">
+          <a href="{{ path('classroom_course_notes_list', {classroomId:classroom.id}|merge(filters)|merge({courseId:course.id})) }}" title="{{ course.title }}">{% if courseSet|default(null) %}{{ courseSet.title }}-{% endif %}{{ course.title|sub_text(10) }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <ul class="nav nav-pills nav-pills-sm">
+    <li class="dropdown hidden-xs">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+        <span>{{'classroom.course_sort'|trans}}：</span>
+        {% if filters.sort == 'latest' %}
+          {{'classroom.latest_note'|trans}}
+        {% elseif filters.sort == 'likeNum'%} 
+          {{'classroom.max_like'|trans}}
+        {% endif %}
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu hidden-xs">
+        <li class="{% if filters.sort == 'latest' %}active{% endif %}"><a  href="{{ path('classroom_course_notes_list', {classroomId:classroom.id}|merge(filters)|merge({sort:'latest'})) }}">{{'classroom.latest_note'|trans}}</a></li>
+        <li class="{% if filters.sort == 'likeNum' %}active{% endif %}"><a href="{{ path('classroom_course_notes_list', {classroomId:classroom.id}|merge(filters)|merge({sort:'likeNum'})) }}">{{'classroom.max_like'|trans}}</a></li>
+      </ul>
+    </li>
+  </ul>
+
+</div>

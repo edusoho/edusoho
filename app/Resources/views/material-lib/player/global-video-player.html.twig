@@ -1,0 +1,57 @@
+{% extends 'layout.html.twig' %}
+
+{% block body %}
+  <body style="overflow:hidden;border:0px;">
+    {% if file|default(null) %}
+      <div style="position:absolute;top:0;bottom:0;left:0;right:0;">
+        <div id="lesson-video-content"
+        data-user-id="{{app.user.id|default(0)}}"
+        data-user-name="{{app.user.username|default('')}}"
+        data-file-global-id="{{file.globalId|default('')}}"
+        data-token="{{ context.token }}"
+        data-file-id="{{file.id}}"
+        data-file-type="{{file.type}}"
+        data-js-player="{{ context.jsPlayer|default('balloon-cloud-video-player') }}"
+        data-agent-in-white-list="{{context.agentInWhiteList}}"
+        data-balloon-video-player="1"
+        {% if not params.watermarkOpened|default(false) == 'hidden' and not file.directives.watermarks|default(0) and setting('storage.video_watermark') > 0 and setting('storage.video_watermark_image') %}
+          data-watermark="{{ fileurl(setting('storage.video_watermark_image'), null) }}"
+        {% endif %}
+        {% if setting('storage.cloud_access_key') %}
+          data-access-key="{{ setting('storage.cloud_access_key') }}"
+        {% endif %}
+        {% if setting('storage.video_auto_play') %}
+            data-autoplay="{{ setting('storage.video_auto_play') }}"
+        {% endif %}
+        {% if setting('storage.video_fingerprint') and app.user %}
+          data-fingerprint="{{ finger_print() }}"
+          data-fingerprint-src="{{ url('cloud_video_fingerprint', {userId:app.user.id}) }}"
+        {% endif %}
+        {% if file.type == 'video' %}
+          {% if file.storage == 'local' %}
+          class="local-video-player "
+          {% else %}
+          class="ballon-video-player"
+          data-disable-volume-button="{{ params.disableVolumeButton|default(false) }}"
+          data-disable-playback-button="{{ params.disablePlaybackButton|default(false) }}"
+          data-disable-resolution-switcher="{{ params.disableResolutionSwitcher|default(false) }}"
+          {% endif %}
+        {% elseif file.type == 'audio' %}
+          class="local-video-player local-audio-player"
+        {% endif %}
+        style="height:100%"
+        ></div>
+      </div>
+
+      {% do script(['libs/base.js','app/js/common.js','app/js/main.js'], 1000) %}
+      {% if cloudSdk %}
+        <script src="{{ cloud_sdk_url(cloudSdk) }}"></script>
+      {% endif %}
+      {% do script(['app/js/player/index.js']) %}
+    {% else %}
+      <div class="">
+        {{'site.not_support_cloud_video'|trans({'%mobileUrl%':path('mobile')})|raw}}
+      </div>
+    {% endif %}
+  </body>
+{% endblock %}

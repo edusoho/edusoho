@@ -1,0 +1,29 @@
+--TEST--
+Test left/right inversion
+--CSS--
+a { 
+    float:left;
+}
+b {
+    float:right;
+}
+c {
+    filter: brightness(50%);
+}
+--EXPECT--
+array (
+  'a' => 
+  array (
+    'float' => 'right',
+  ),
+  'b' =>
+  array (
+    'float' => 'left',
+  ),
+  'c' =>
+  array (
+    'filter' => 'brightness(50%)',
+  ),
+)
+--SETTINGS--
+reverse_left_and_right=true

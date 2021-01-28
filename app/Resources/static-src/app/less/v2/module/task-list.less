@@ -1,0 +1,152 @@
+.task-manage-list {
+  margin-left: 6px;
+  margin-right: 0;
+  padding: 0;
+  list-style: none;
+  border-left: 2px solid #f1f1f1;
+  .item-content {
+    float: left;
+    padding: 0 24px;
+    width: 100%;
+    height: 56px;
+    line-height: 56px;
+    background: @cd-bg-light;
+    .cd-border-radius;
+    color: @cd-dark-major;
+    overflow: hidden;
+  }
+  .task-manage-chapter {
+    position: relative;
+    margin-left: -8px;
+    .item-content {
+      font-size: 14px;
+      color: @cd-dark-minor;
+    }
+    .item-actions {
+      top: 0;
+      right: 24px;
+    }
+  }
+  .task-manage-unit {
+    margin-left: 16px;
+    .item-line {
+      margin-left: -16px;
+      width: 16px;
+    }
+    .item-actions {
+      right: 56px;
+    }
+  }
+  .task-manage-lesson {
+    margin-left: 40px;
+    .cd-box-shadow-z(3px);
+    .cd-border-radius;
+    .item-line {
+      margin-left: -40px;
+      width: 40px;
+    }
+    .item-content {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
+  .task-manage-lesson-tasks {
+    padding: 16px 0 20px;
+    list-style-type: none;
+    background-color: #fff;
+    .task-manage-item {
+      margin-bottom: 4px;
+      &:hover {
+        cursor: move;
+      }
+      opacity: 1 !important;
+      &.dragged {
+        .cd-box-shadow-z(3px);
+        .transform(rotate(1deg));
+      }
+    }
+    .item-content {
+      padding-left: 24px;
+      padding-right: 24px;
+      height: 28px;
+      line-height: 28px;
+      color: @cd-dark-minor;
+      background-color: #fff;
+      i {
+        color: @cd-dark-assist;
+      }
+    }
+    .item-actions {
+      height: 28px;
+      line-height: 28px;
+      .task-manage-item__dropdown {
+        top: 16px;
+      }
+    }
+  }
+  .task-manage-item {
+    margin-bottom: 15px;
+    border: none;
+  }
+  .task-manage-item__dropdown {
+    top: 31px;
+    text-align: center;
+  }
+  .item-actions {
+    position: absolute;
+    right: 56px;
+    padding-right: 0;
+    height: 56px;
+    line-height: 56px;
+    font-size: 16px;
+    a {
+      color: @cd-dark-assist;
+      i {
+        font-size: 16px;
+      }
+    }
+  }
+  .item-line {
+    float: left;
+    border-bottom: 2px solid #f1f1f1;
+    margin-top: 8px;
+    vertical-align: top;
+    display: inline-block;
+    height: 21px;
+  }
+}
+
+.task-list-header {
+  position: relative;
+  margin-bottom: 24px;
+  padding: 0 6px 0 24px;
+  height: 56px;
+  line-height: 56px;
+  .cd-box-shadow-z(2px);
+  color: @cd-dark-minor;
+  font-size: 14px;
+}
+
+.task-list-header__switch {
+  position: absolute;
+  top: 18px;
+}
+
+.task-list-header__dropdown {
+  top: 43px !important;
+  width: 90px;
+  text-align: center !important;
+}
+
+.task-manage-chapter,
+.task-manage-unit,
+.task-manage-lesson {
+  &.dragged {
+    opacity: 1 !important;
+    .cd-box-shadow-z(3px);
+    .transform(rotate(2deg));
+  }
+  &:hover {
+    cursor: move;
+  }
+}

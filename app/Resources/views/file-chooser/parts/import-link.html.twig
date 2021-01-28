@@ -1,0 +1,11 @@
+<div class="tab-pane" id="video-chooser-import-pane">
+  <div class="import-content">
+    <div class="input-group">
+      <input class="form-control border-gray" id="link"  name="link" type="text" placeholder="{{ 'file_chooser.import_link.intpu_placeholder'|trans }}">
+      <input class="form-control border-gray" id="verifyLink"  name="verifyLink" type="hidden" placeholder="{{ 'file_chooser.import_link.intpu_placeholder'|trans }}">
+      <span class="input-group-btn">
+        <button type="button" class="btn btn-default js-video-import" data-role="import" data-url="{{ path('media_video_import', {courseId:courseId}) }}" data-loading-text="{{ 'form.btn.import.submiting'|trans }}">{{ 'form.btn.import'|trans }}</button>
+      </span>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,82 @@
+<div class="item-content">
+  <span class="lesson-unpublish-status js-lesson-unpublish-status {% if lesson.status == 'published' %}hidden{% endif %}">
+  {{'course.plan_task.task_unpublished'|trans}}</span>
+
+  <span class="cd-tag cd-tag-blue mrm js-lesson-option-tag {% if not lesson.isOptional %}hidden{% endif %}">{{'course.plan_task.is_optional_task'|trans}}</span>
+  {% set displayText = '' %}
+  {% if course['isHideUnpublish']|default(false) %}
+    {% if lesson.status == 'published' %}
+      {% set displayedLessonNum = lesson.published_number %}
+    {% else %}
+      {% set displayedLessonNum = '' %}
+    {% endif %}
+  {% else %}
+    {% set displayedLessonNum = lesson.number %}
+  {% endif %}
+
+  {% set displayText = 'course.lesson'|trans %}
+
+  {% set displayText = displayText ~ '<span class="number mls">' ~ displayedLessonNum ~ '</span>' %}
+  {% set displayText = displayText ~ '：' %}
+
+  {% set customTitle = displayText ~ lesson.title|sub_text(30) %}
+  {% set shouldDisplayTask = count(lesson.tasks|default()) > 1 %}  <!-- 单任务课时，不显示任务 -->
+
+  {% set task = lesson.tasks[0] %}
+  {% include 'lesson-manage/normal/task-content.html.twig' with {task: lesson, taskNum: 1, displayText: displayText, isLesson: true, shouldDisplayTaskAsLesson: shouldDisplayTask, isShowText: isShowText|default(false)} %}
+</div>
+<div class="item-actions">
+  {% if course.platform == 'self' %}
+    <a href="javascript:;" class="js-lesson-edit-btn cd-mr24" >
+      <i class="es-icon es-icon-edit" data-toggle="tooltip" title="{{ 'course.plan_task.activity_manage.modify'|trans({'%taskName%':setting('course.task_name')|default('site.data.lesson'|trans)}) }}" data-placement="top"></i>
+    </a>
+    <a class="cd-mr24 js-create-task-btn" href="javascript:;" data-type="task" data-position="{{lesson.id}}" data-url="{{ path('course_manage_task_create', {courseId:course.id, categoryId: lesson.id}) }}">
+      <i class="cd-icon cd-icon-add" data-toggle="tooltip" title="{{ 'course.plan_task.activity_manage.create'|trans({'%taskName%':setting('course.task_name')|default('site.data.learning_task'|trans)}) }}" data-placement="top" ></i>
+    </a>
+  {% endif %}
+  <a href="javascript:;" class="js-lesson-preview-btn cd-mr24">
+    <i class="es-icon es-icon-removeredeye" data-toggle="tooltip" title="{{ 'course.plan_task.activity_manage.preview'|trans({'%taskName%':setting('course.task_name')|default('site.data.lesson'|trans)}) }}" data-placement="top"></i>
+  </a>
+
+  <div class="cd-dropdown" data-toggle="cd-dropdown" data-trigger="hover">
+    {% if course.platform == 'self' %}
+      <a class="cd-link-assist" href="javascript:;">
+        <i class="es-icon es-icon-morehoriz"></i>
+      </a>
+    {% endif %}
+    {% set status = lesson.status|default('create') == 'published' ? 1 : 0 %}
+    <ul class="dropdown-menu task-manage-item__dropdown">
+      <li>
+        <a class='js-publish-item {% if status == 1 %}hidden{% endif %}' href="javascript:;" data-type="chapter" data-url="{{ path('course_manage_lesson_publish', {courseId:course.id, lessonId:lesson.id}) }}">
+          {{'course.plan_task.publish_btn'|trans}}{{ 'course.lesson'|trans }}
+        </a>
+      </li>
+      <li>
+        <a class='js-unpublish-item {% if status != 1 %}hidden{% endif %}' href="javascript:;" data-type="chapter" data-url="{{ path('course_manage_lesson_unpublish', {courseId:course.id, lessonId:lesson.id}) }}">
+          {{'course.plan_task.unpublish_btn'|trans}}
+        </a>
+      </li>
+      <li class="hidden">
+        <a href="javascript:;" class="js-hidden-lesson-edit-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_task_update', {id:'{taskId}',courseId:task.courseId}) }}?customTitle={{ 'course.manage.edit_lesson'|trans }}"></a>
+      </li>
+      <li class="hidden">
+        <a href="javascript:;" class="js-hidden-lesson-preview-btn" data-url="{{ path('course_task_show', {id:'{taskId}',courseId:task.courseId,preview:1}) }}" target="_blank"></a>
+      </li>
+      <li>
+        <a class='js-set-optional {% if lesson.isOptional == 1 %}hidden{% endif %}' href="javascript:;" data-type="chapter" data-url="{{ path('course_manage_lesson_set_optional', {courseId:course.id, lessonId:lesson.id}) }}">
+          {{'course.lesson_manage.set_optional'|trans}}
+        </a>
+      </li>
+      <li>
+        <a class='js-unset-optional {% if lesson.isOptional != 1 %}hidden{% endif %}' href="javascript:;" data-type="chapter" data-url="{{ path('course_manage_lesson_unset_optional', {courseId:course.id, lessonId:lesson.id}) }}">
+          {{'course.lesson_manage.unset_optional'|trans}}
+        </a>
+      </li>
+      <li>
+        <a class="js-delete {% if status == 1 %}hidden{% endif %}" href="javascript:;" data-type="chapter" data-name="{{ ('site.data.' ~ lesson.type)|trans }}" data-url="{{ path('course_manage_lesson_delete', {courseId:course.id, lessonId:lesson.id}) }}">
+          {{ 'form.btn.delete'|trans }}{{ 'course.lesson'|trans }}
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>

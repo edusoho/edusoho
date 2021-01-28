@@ -1,0 +1,52 @@
+{% extends 'course-manage/layout.html.twig' %}
+
+{% block title %}{{'course.members_manage'|trans}} - {{ course.title }} - {{ parent() }}{% endblock %}
+{% do script(['app/js/course-manage/students/index.js']) %}
+{% set course_side_nav = 'students' %}
+{% block main_heading_class %}course-main-header{% endblock %}
+{% block main_heading %}
+  {% include 'course-manage/panel-header/course-publish-header.html.twig' with {code: course_side_nav, btnGroup:1} %}
+{% endblock %}
+
+{% block main_body %}
+    <div id="student-table-container" role="course-manage-student-index">
+      {{ web_macro.flash_messages() }}
+      {% include 'course-manage/student/panel-nav.html.twig' with {'panelNav': 'manage'} %}
+
+      <form class="form-inline well well-sm" action="{{path('course_set_manage_course_students', {courseSetId: courseSet.id, courseId: course.id})}}" method="get" novalidate>
+        <div class="form-group col-md-7">
+          <input class="form-control" type="text" style="width:45%" placeholder="{{'course.members_manage.official_student.input_placeholder'|trans}}" name="keyword" value="{{ app.request.get('keyword') }}">
+          <button type="submit" class="cd-btn cd-btn-primary">{{'course.members_manage.official_student.search'|trans}}</button>
+        </div>
+        <div class="clearfix"></div>
+      </form>
+      {% if students|length > 0 %}
+          <button id="batch-update-expiry-day" type="button" class="cd-btn cd-btn-primary cd-mb16" data-url="{{ path('course_set_manage_course_students_deadline_batch', {courseSetId: course.courseSetId, courseId: course.id}) }}">{{'course.members_manage.official_student.batch_upload_deadline'|trans}}</button>
+        <button id="batch-remove" type="button" class="cd-btn cd-btn-primary cd-mb16" data-url="{{ path('course_set_manage_course_students_remove_students', {courseSetId: course.courseSetId, courseId: course.id}) }}">{{ 'course.members_manage.official_student.batch_remove'|trans }}</button>
+      {% endif %}
+      <table class="table table-striped" id="course-student-list">
+        <thead>
+          <tr>
+            <th><input type="checkbox"  autocomplete="off"  data-role="batch-select"></th>
+            <th width="23%">{{'site.default.student'|trans}}</th>
+            <th width="18%">{{'course.members_manage.official_student.progress'|trans}}</th>
+            <th width="17%">{{'join.time'|trans}}</th>
+            <th width="17%">{{'course.expiry_date'|trans}}</th>
+            <th width="25%">{{'course.members_manage.official_student.operation'|trans}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for student in students if student %}
+            {% set user = users[student.userId]|default(null) %}
+            {% include 'course-manage/student/tr-v2.html.twig' %}
+          {% else %}
+            <tr class="empty"><td colspan="20">{{'course.members_manage.official_student.empty'|trans}}</td></tr>
+          {% endfor %}
+
+        </tbody>
+      </table>
+      <nav class="text-center">
+        {{ web_macro.paginator(paginator) }}
+      </nav>
+    </div>
+{% endblock %}

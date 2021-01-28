@@ -1,0 +1,19 @@
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+      {% set data = notification.content %}
+      {% set who = 'site.default.user'|trans ~ ' <a href="' ~ path('user_show',{id:data.userId}) ~ '" target="_blank">' ~ data.userName ~ '</a>' %}
+        {% if data.opration == 'follow' %}
+          {{ 'notification.user-follow.follow'|trans({'%who%':who})|raw }}
+        {% elseif data.opration == 'unfollow'%}
+          {{ 'notification.user-follow.unfollow'|trans({'%who%':who})|raw }}
+        {% endif %}
+    </div>
+    <div class="notification-footer">
+     {{ notification.createdTime|date_format }}  
+    </div>
+  </div>
+</li>

@@ -1,0 +1,27 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_edu_cloud_sms_overview' %}
+{% block tabs %}{% endblock %}
+{% block main %}
+<div class="row form-group">
+  <div class="help-block">
+    </br></br>
+    <script>
+      var _hmt = _hmt || [];
+    </script>
+    <script charset="utf-8" src="http://wpa.b.qq.com/cgi/wpa.php"></script>
+    <p style="text-align: center;font-size:16px">
+      {{'admin.edu_cloud.edu_sms.sms_send_tips'|trans({'%url%': 'http://open.edusoho.com/educloud'})|raw}}
+    </p>
+
+    <p style="text-align:center;font-size:16px">
+      {{'admin.edu_cloud.edu_sms.sms_auth_tips'|trans({'%span_first%': '<span id="BizQQWPA" onclick="_hmt.push(["_trackEvent", "advisory", "click", "qq"])"><a id="BizQQWPA"  href="javascript:" style="text-decoration:none;"">', '%span_last%': '</a>。</span>'})|raw}}
+    </p>
+
+    <script type="text/javascript">
+      BizQQWPA.addCustom({aty: '0', a: '0', nameAccount: 800023860, selector: 'BizQQWPA'});
+    </script>
+    </br></br>
+  </div>
+</div>
+{% endblock %}

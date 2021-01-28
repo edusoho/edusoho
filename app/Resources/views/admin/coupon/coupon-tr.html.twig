@@ -1,0 +1,55 @@
+{% import "admin/macro.html.twig" as web_macro %}
+<tr>
+  <td>{{ coupon.id }}</td>
+  <td>
+    {% if batch.codeEnable|default() %}
+      {{ coupon.code }}
+    {% else %}
+      --
+    {% endif %}
+  </td>
+  <td>
+    {% if coupon.targetType == "classroom" %}
+      {{ 'coupon.target_type.classroom'|trans }}
+    {% elseif coupon.targetType == "vip" %}
+      {{ 'coupon.target_type.vip'|trans }}
+    {% elseif coupon.targetType == "course" %}
+      {{ 'coupon.target_type.course'|trans }}
+    {% endif %}
+  </td>
+  <td>
+    {% if coupon.status == "unused" %}{{ 'coupon.status.unused'|trans }}{% elseif coupon.status == "receive" %}{{ 'coupon.status.receive'|trans }}{% elseif coupon.status == "used" %}{{ 'coupon.status.used'|trans }}{% endif %}
+  </td>
+  <td>{% if user %}{{ web_macro.user_link(user) }}{% else %}-{% endif %}</td>
+  <td>
+    {% if coupon.status == "used" and order %}
+      {{ order.title }}
+    {% else %}
+      -
+    {% endif %}
+  </td>
+  <td class="text-danger">
+    {% if coupon.status == "used" %}
+      {% if coupon.type == 'minus' %}
+        {{ 'coupon.type.minus'|trans }}{{ coupon.rate }}{{ 'coupon.type.minus_rate_unit'|trans }}
+      {% else %}
+        {{ 'coupon.type.discount'|trans }}{{ coupon.rate|number_format(1) }}{{ 'coupon.type.discount_rate_unit'|trans }}
+      {% endif %}
+    {% else %}
+      -
+    {% endif %}
+  </td>
+  <td class="text-danger">
+    {% if order %}
+      {{ order.price_amount|to_cash }}
+    {% else %}-{% endif %}
+  </td>
+  <td class="text-danger">
+    {% if order %}
+      {{ order.pay_amount|to_cash }}
+    {% else %}-{% endif %}
+  </td>
+  <td>{% if batch|default() %}<a href="#modal" data-toggle="modal" data-url="{{ path('admin_coupon_show', { batchId:batch.id|default(0) }) }}">{{ batch.name|default('') }}</a>{% else %} -- {% endif %}</td>
+  <td>{% if coupon.receiveTime %}{{coupon.receiveTime|date('Y-m-d H:i')}}{% else %}--{% endif %}</td>
+  <td>{% if coupon.orderTime %}{{ coupon.orderTime|date('Y-m-d H:i')}}{% else %}--{% endif %}</td>
+</tr>

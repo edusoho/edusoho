@@ -1,0 +1,18 @@
+{% if sameTagArticles %}
+<div class="related-article">
+  <div class="row">
+    {% for sameTagArticle in sameTagArticles%}
+    <a class="col-sm-4" href="{{ path('article_detail', { id:sameTagArticle.id }) }}">
+      <div class="related-item">
+        <div class="title">
+          {{ sameTagArticle.title }}
+        </div>
+        <img class="img-responsive" src="{{ filepath(sameTagArticle.thumb) }}" alt="{{ sameTagArticle.title }}">
+        <div class="image-overlay"></div>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+</div>
+
+{% endif %}

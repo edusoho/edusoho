@@ -1,0 +1,5 @@
+{% set data = notification.content %}
+
+{% set course = data.courseTitle %}
+{{ 'notification.course-deadline'|trans({'%course%':course, '%deadline%':data.endtime}) }}
+

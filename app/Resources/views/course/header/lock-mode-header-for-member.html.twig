@@ -1,0 +1,128 @@
+<section class=" course-orderlearn-section">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="course-progress">
+        {% if taskPerDay %}
+          <div class="cricle-progress" id="orderprogress-plan" data-percent="{{ planProgressProgress }}"></div>
+        {% endif %}
+        <div class="cricle-progress" id="orderprogress" data-percent="{{ progress }}">
+          <span class="percent"></span>
+        </div>
+      </div>
+      <ul class="progress-info hidden-xs hidden-sm">
+        <li class="mb10">
+          <i class="es-icon es-icon-dot color-primary"></i>
+          {{ 'my.course.lock_mode_plan.task_progress'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans),'%spanHtml%':"<span class='mhs'><span class='color-primary'>" ~ taskResultCount ~ "</span> / " ~ taskCount ~ "</span>"})|raw }}
+        </li>
+        {% if taskPerDay and planProgressProgress - progress  > 0 %}
+          <li class="mb10">
+            <i class="es-icon es-icon-dot color-warning"></i>
+            {# 今日预计完成<span class="mhs">{{ planStudyTaskCount }}</span>个任务 #}
+            <span>{{ 'my.course.lock_mode_plan.behind_plan'|trans }} {{ planProgressProgress - progress }}%</span>
+          </li>
+        {% endif %}
+        <li class="pt30 mb10 mll">
+          {{ 'my.course.lock_mode_plan.expiry_date'|trans }}
+          {% include 'course/header/parts/member-deadline-info.html.twig' %}
+        </li>
+        {% if setting('mobile.enabled')|default(false) and is_support_enable_audio(course.enableAudio|default(0)) and course.type == 'normal' %}
+          <li class="pt30 mb10 mll">
+            <span class="lump-sm color-lump bg-primary">{{ 'course.video.convert.client.listen'|trans }}</span>
+            {{ 'course.video.convert.client.click.listen'|trans }}
+            <a href="{{ path('mobile') }}" target="__blank">{{ 'course.video.convert.client.try'|trans }}</a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+    <div class="col-md-6 hidden-xs hidden-sm">
+      {% if toLearnTasks %}
+        {% set teams = toLearnTasks|batch(2 , " ") %}
+        {#暂时去掉块状显示#}
+        {#<div class="orderlearn-poster  hidden">
+          <a class="arrow-left link-medium es-icon es-icon-chevronleft" href="javascript:;"></a>
+          <a class="arrow-right link-medium es-icon es-icon-chevronright" href="javascript:;"></a>
+          <div class="swiper-container">
+            <div class="swiper-wrapper ">
+              {% for task in teams %}
+                {% set teamsLoop = loop.index %}
+                {% set meta = activity_meta(task.activity.mediaType|default(null)) %}
+                <div class="swiper-slide">
+                  <ul class="task-list task-chart task-list-md task-list-hover clearfix">
+                    {% for task in task %}
+                      {% if task != " " %}
+                        {% set task_lock =  (course.learnMode  == 'lockMode')  and ( not ( teamsLoop == 1 and loop.index ==1)  and  task.lock  ) %}
+                        <li class="task-item task-content half mouse-control">
+                          <i class="es-icon
+                          {% if task_lock %}
+                          es-icon-lock
+                          {% elseif  not task.result|default(null) %}
+                          es-icon-undone-check
+                          {% elseif task.result.status == 'start' %}
+                          es-icon-doing
+                          {% elseif task.result.status == 'finish' %}
+                          es-icon-iccheckcircleblack24px
+                          {% endif %}
+                          left-menu"></i>
+                          {% if  task_lock is empty %}
+                            <a class="title"
+                              href="{{ path('course_task_show', {courseId:course.id, id:task.id}) }}">
+                              <span class="ml5">{{ task.title }}</span>
+                            </a>
+                          {% else %}
+                            <span class="title"><span
+                                  class="ml5">{{ task.title }}</span></span>
+                          {% endif %}
+                          {% set meta =  activity_meta(task.activity.mediaType) %}
+                          <span class="es-icon es-icon {{ meta.icon }} right-menu task-type-icon "
+                                data-toggle="tooltip" data-placement="top" title=""
+                                data-original-title="{{ meta.name }}{{ '任务'|trans }}"></span>
+                        </li>
+                      {% endif %}
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+          <div class="swiper-pager"></div>
+        </div>#}
+      {% endif %}
+      <ul class="task-list task-list-md task-list-hover task-list-gray js-task-list-ul hidden-xs">
+        {% for task in toLearnTasks %}
+          {% set meta = activity_meta(task.activity.mediaType|default(null)) %}
+          {% set task_lock =  (course.learnMode  == 'lockMode')  and ( loop.index !=1 and  task.lock  ) %}
+          <li class="task-item task-content mouse-control">
+            <i class="es-icon
+            {% if task_lock %}
+            es-icon-lock
+            {% elseif  not task.result|default(null) %}
+            es-icon-undone-check
+            {% elseif task.result.status == 'start' %}
+            es-icon-doing
+            {% elseif task.result.status == 'finish' %}
+            es-icon-iccheckcircleblack24px
+            {% endif %}
+            left-menu"
+            {% if  task_lock  %}
+              data-toggle="tooltip" data-trigger="hover" data-placement="top" title="{{ 'course.task.lock_tips'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}"
+            {% endif %}
+            ></i>
+            {% if task_lock is empty %}
+              <a class="title"
+                href="{{ path('course_task_show', {courseId:course.id, id:task.id}) }}">{{ task.title }}</a>
+            {% else %}
+              <span class="title">{{ task.title }}</span>
+            {% endif %}
+            <span class="right-menu">
+              {{ task.activity.length|activity_length_format(task.activity.mediaType) }}
+              <i class="es-icon es-icon {{ meta.icon|default('') }} mlm"
+                data-toggle="tooltip" data-placement="top"
+                title="{{ meta.name|default(null) }}{{ 'course.task'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}"></i>
+            </span>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  {% include 'course/header/header-for-member-responsive.html.twig' %}
+</section>

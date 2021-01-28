@@ -1,0 +1,169 @@
+{% extends 'layout.html.twig' %}
+{% block title %}{% if paperResult|default(null) %}{{ paperResult.paperName }}{% else %}{{ paper.name }}{% endif %} - {{ parent() }}{% endblock %}
+
+{% if isIframeBody|default(1) %}
+  {% set bodyClass = 'task-testpaper-body-iframe js-task-testpaper-body js-task-testpaper-body-iframe' %}
+  {% set testpaperCardClass = 'js-testpaper-card affix mt20' %}
+  {% set testpaperBodyClass = "mt20" %}
+{% else %}
+  {% set bodyClass = 'js-task-testpaper-body' %}
+  {% set containerClass = 'mt20' %}
+  {% set testpaperCardClass = 'js-testpaper-card' %}
+{% endif %}
+
+{% set isDone = isDone|default(false) %}
+{% set paperName = paperResult|default(null) ? paperResult.paperName : paper.name %}
+
+{% block body %}
+
+  {% block header %}
+    {% if showHeader|default(1) %}{{ parent() }}{% endif %}
+  {% endblock %}
+
+
+  <div class="{% if isIframeBody|default(1) %} iframe-parent-content {% endif %}">
+
+    <div class="js-testpaper-container container {{containerClass|default('')}}">
+      {% block paper_content %}
+        <div class="row">
+          <div class="col-md-9 prevent-copy">
+            <div class="testpaper-body js-testpaper-body {{ testpaperBodyClass|default('') }} " data-copy="{{setting('course.testpaperCopy_enabled',0)}}">
+              {% block paper_header %}
+                <div class="es-section js-testpaper-heading">
+                  <div class="testpaper-titlebar clearfix">
+                    <h1 class="testpaper-title">
+                      <p class="testpaper-title__content" title="{{ paperName }}">{{ paperName }}</p>
+                      <small class="text-sm">
+                        {% if paperResult.status|default('doing') in ['reviewing','finished'] %}
+                          {{'testpaper.answer.student'|trans}}{{ student.nickname }}
+                          {{'testpaper.answer.endtime'|trans}}{{ paperResult.endTime|date('Y-n-d H:i') }}
+                          {% if paperResult.beginTime != paperResult.usedTime %}
+                            {{'testpaper.answer.used_time'|trans}}{{ paperResult.usedTime|duration_text }}
+                          {% endif %}
+                        {% endif %}
+                      </small>
+                    </h1>
+                    <div class="testpaper-status">
+                      {% if paperResult.status|default('doing') == 'doing' %}
+                        <div class="label label-primary">{{'testpaper.answer.status.dong'|trans}}</div>
+                      {% elseif paperResult.status|default('doing') == 'reviewing' %}
+                        <div class="label label-info">{{'testpaper.answer.status.reviewing'|trans}}</div>
+                      {% else %}
+                        <div class="label label-success">{{'testpaper.answer.status.finish'|trans}}</div>
+                      {% endif %}
+                    </div>
+                  </div>
+
+                  {% block paper_description %}{% endblock %}
+                  {% block paper_result_bar %}{% endblock %}
+                  {% block paper_warning %}{% endblock %}
+                  {% block paper_question_type_bar %}{% endblock %}
+                </div>
+              {% endblock %}
+
+              {% block paper_body %}
+                {% include 'testpaper/do-test.html.twig' %}
+              {% endblock %}
+            </div>
+          </div>
+          <div class="col-md-3">
+            <input type="hidden" value="{{ paperResult.usedTime|default(0) }}" class="js-used-time">
+            {% block paper_sidebar %}{% endblock %}
+          </div>
+        </div>
+      {% endblock %}
+      {% block testpaper_finished_dialog %}
+        <div id="testpaper-finished-dialog" class="modal in" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-body task-state-modal">
+                <div class="title font-blod">
+                  <i class="es-icon es-icon-zanting1 color-warning"></i>
+                  {{'testpaper.answer.confirm_hand_in_btn'|trans}}
+                </div>
+                <div class="content">
+                  <div class="text-16">
+                    {{'testpaper.answer.confirm_hand_in_tips'|trans}}
+                  </div>
+                </div>
+                <div class="text-right mt20">
+                  <a href="javascript:;" class="btn btn-link" data-dismiss="modal">{{'form.btn.cancel'|trans}}</a>
+                  {% block finish_dialog_btn %}
+                    <button class="btn btn-primary" id="testpaper-finish-btn" data-loading-text="{{'form.btn.hand_in.submiting'|trans}}.." data-role="paper-submit" data-url="{{ path('testpaper_finish', { resultId: paperResult.id|default(0) }) }}" data-goto="{{ path('testpaper_result_show', { resultId: paperResult.id|default(0) }) }}">
+                    {{'testpaper.answer.confirm_hand_in_btn'|trans}}</button>
+                  {% endblock %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      {% endblock %}
+      {% block timeout_dialog %}
+        <div id="time-finish-dialog" class="modal fade" data-backdrop="static" tabindex="-1" role="dialog"  aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-body task-state-modal">
+                <div class="title font-blod">
+                  <i class="es-icon es-icon-zanting1 color-warning"></i>{{'testpaper.answer.finish'|trans}}
+                </div>
+                <div class="content">
+                  <div class="text-16">
+                    {{'testpaper.answer.view_result_tips'|trans}}
+                  </div>
+                </div>
+                <div class="text-right mt20">
+                  {% if paperResult.id|default(0) > 0 %}
+                    <a href="{{ path('testpaper_result_show', {resultId:paperResult.id|default(0)} ) }}" class="btn btn-info">{{'testpaper.answer.view_result_btn'|trans}}</a>
+                  {% else %}
+                    <a href="javascript:;" class="btn btn-info" disabled="disabled">{{'testpaper.answer.view_result_btn'|trans}}</a>
+                  {% endif %}
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endblock %}
+      {% block testpaper_checked_dialog %}{% endblock %}
+      {% block time_pause_dialog %}
+        <div id="time-pause-dialog" class="modal fade" data-backdrop="static" tabindex="-1" role="dialog"  aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-body task-state-modal">
+                <div class="title font-blod">
+                  <i class="es-icon es-icon-zanting1 color-warning"></i>{{'testpaper.answer.pause_btn'|trans}}
+                </div>
+                <div class="content">
+                  <div class="text-16">
+                    {{'testpaper.answer.pause_tips'|trans}}
+                  </div>
+                </div>
+                <div class="text-right mt20">
+                  <a class="btn btn-primary js-btn-resume" href="javascript:;">{{'testpaper.answer.resume_btn'|trans}}</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endblock %}
+    </div>
+
+  </div>
+
+
+  {% block footer %}
+    {% if showHeader|default(1) %}{{ parent() }}{% endif %}
+  {% endblock %}
+
+  {% if paperResult.id|default(0) > 0  and paperResult.status|default(null) == 'doing' %}
+    <input type="hidden" name="testSuspend" data-url="{{ path('testpaper_do_suspend',{resultId:paperResult.id}) }}" />
+  {% endif %}
+  {% if not paperResult.id|default(0) %}
+    <input type="hidden" name="preview" value="1" />
+  {% endif %}
+  <div id="login-modal" class="modal" data-url="{{ path('login_ajax') }}"></div>
+  <div id="modal" class="modal"></div>
+  <div id="attachment-modal" class="modal"></div>
+  {{ slot('course.task.facein.init',{activity:activity|default([]),paperResult:paperResult|default([])}) }}
+{% endblock %}

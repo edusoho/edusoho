@@ -1,0 +1,83 @@
+{% if not role|default(null) == 'teacher' %}
+
+<div class="testpaper-question testpaper-question-fill js-testpaper-question {% if setting('magic.testpaper_watermark') %}js-testpaper-watermark{% endif %}" data-watermark-url="{{ path('cloud_testpaper_watermark') }}" id="question{{ question.id }}">
+  <div class="testpaper-question-body">
+	  {% include 'question/part/question-stem.html.twig' %}
+  </div>
+
+  {% if not question.isDeleted|default(0) %}
+
+	{% if show_answers(paperResult|default(null)) %}
+		<div class="testpaper-question-footer clearfix">
+		  <div class="testpaper-question-result">
+		    <ul>
+		      {% for index, answer in question.answer %}
+		        {% set userAnswer = question.testResult.answer[index]|default(null) %}
+			    	<li>
+			    		{{'question.multiple_choice.answer'|trans({'%index%': index+1})}} <strong class="color-success">{{ answer|join('site.default.or'|trans) }}</strong>
+			    	  {% if userAnswer == '' %}
+			    	  	{{'question.your_answer'|trans}}
+			    	  {% elseif question.testResult.status|default('noAnswer') == "right" %}
+			    	  	{{'question.answer'|trans}}　<strong class="color-success">{{ userAnswer }}</strong>。
+			    	  {% elseif question.testResult.status|default('noAnswer') == "partRight" %}
+			    	  	{{'question.answer'|trans}}　<strong class="text-warning">{{ userAnswer }}</strong>。
+			    	  {% else %}
+			    	  	{{'question.answer'|trans}}　<strong class="color-danger">{{ userAnswer }}</strong>。
+			    	  {% endif %}
+			    	</li>
+		      {% endfor %}
+		    </ul>
+
+		    {% if question.testResult.status|default('noAnswer') == "right" %}
+			    <p class="color-success">{{'question.answer.true'|trans}}</p>
+			{% elseif question.testResult.status|default('noAnswer') == "partRight" %}
+			    <p class="text-warning">{{'question.answer.part_true'|trans}}
+				    {% if showScore|default(1) %}
+							{{'question.score'|trans({'%testResult.score%': question.testResult.score|default(0)})}}
+				    {% endif %}
+			    </p>
+			{% else %}
+			    <p class="color-danger">{{'question.answer.wrong'|trans}}</p>
+			{% endif %}
+		  </div>
+
+			<div class="testpaper-question-actions pull-right mts">
+				{% include 'question/part/flag.html.twig' with { flags:['favorite', 'analysis'] } %}
+			</div>
+		</div>
+		{% include 'question/part/show-analysis.html.twig' with {showAnalysis:1} %}
+
+	{% else %}
+	  <div class="testpaper-question-footer clearfix">
+			{% set input_index = 1 %}
+			{% for answer in question.answer %}
+				<input class="form-control mbm" type="text" data-type="fill" name="{{ question.id }}" placeholder="{{'question.multiple_choice.check_answer'|trans({'%input_index%': input_index})}}" {% if question.testResult.answer[input_index - 1]|default(null) %}value="{{ question.testResult.answer[input_index - 1] }}"{% endif %} />
+				{% set input_index = input_index + 1 %}
+			{% endfor %}
+
+			<div class="testpaper-question-actions pull-right mts">
+		  	{% include 'question/part/flag.html.twig' with { flags:['mark', 'favorite'],resultStatus:paperResult.status|default(null) } %}
+		  </div>
+	  </div>
+
+	  {% if showAnswer|default(false) %}
+		  <div class="testpaper-preview-answer clearfix mtl mbl">
+		  	<div class="testpaper-question-result">
+			    <ul>
+			      {% for index, answer in question.answer %}
+			    	<li>
+			    		{{'question.multiple_choice.answer'|trans({'%index%': index+1})}} <strong class="color-success">{{ answer|join('site.default.or'|trans) }}</strong>
+			    	</li>
+			      {% endfor %}
+			    </ul>
+				</div>
+		  </div>
+	  {% endif %}
+
+	{% endif %}
+  {% endif %}
+
+	{% include 'question/part/show-analysis.html.twig' with {showAnalysis:showAnalysis|default(0)} %}
+</div>
+
+{% endif %}

@@ -1,0 +1,15 @@
+<div class="row">
+  {% for newcomerTask in newcomerTasks %}
+    <div class="col-md-2">
+      <div class="task-step{% if newcomerTask.status %} task-step--done{% endif %}">
+          {% if newcomerTask.status %}<span class="task-step__tag"></span>{% endif %}
+        <div class="task-step__title">{{ newcomerTask.name|trans }}</div>
+        <div class="task-step__tip">{{ newcomerTask.description|trans }}</div>
+        <a class="task-step__btn"
+           {% if newcomerTask.status %}href="{{ newcomerTask.doneUrl|default(newcomerTask.url) }}"{% else %}href="{{ newcomerTask.url }}"{% endif %}>{% if newcomerTask.status %}{{ 'admin_v2.newcomer_task.done'|trans }}{% else %}{{ 'admin_v2.newcomer_task.todo'|trans }}{% endif %}</a>
+        <a class="task-step__link" href="{{ newcomerTask.guideUrl }}"
+           target="_blank">{{ 'admin_v2.newcomer_task.check_guide'|trans }}</a>
+      </div>
+    </div>
+  {% endfor %}
+</div>

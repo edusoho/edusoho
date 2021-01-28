@@ -1,0 +1,57 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_purchase_market_tab' %}
+{% do script(['app/js/admin-v2/edu-cloud/content-resource/market/course-set/explore/index.js']) %}
+
+{% block page_title %}
+  {% if merchant.coop_status|default('') != 'cooperation'%}
+    <div style="background-color: #fd9e0d;color: white;font-size: 16px;" class="alert">{{ 'merchant.content_resource.supplier.no_cooperation_hint'|trans({'%supplierName%': supplier.name|default('') }) }}</div>
+  {% endif %}
+  {{ parent() }}
+{% endblock %}
+{% block main %}
+  <div class="page-header clearfix pvm">
+    <div class="pull-left">
+      <div id="" class="resource-cloud-top pull-left">
+        <div class="resource-cloud-top-logo">
+          {% if supplierSiteSetting.logo|default() %}
+            <img src="//{{ supplierSiteSetting.logo|default() }}" alt="" width="250" height="50">
+          {% endif %}
+        </div>
+        <div class="resource-cloud-top-name">
+          {% if supplierSiteSetting.name|default() %}
+            {{ supplierSiteSetting.name|default() }}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% if merchant.status|default('') == 'active' %}
+      <div class="pull-right">
+        <div class="input-group pull-right">
+          <input id="title" name="title" style="width: 300px;" class="form-control"
+                 placeholder="{{ 'form.placeholder.search_keyword'|trans }}">
+          <span class="mlm">
+          <button class="btn btn-primary js-search-product"
+                  data-url="{{ path('admin_v2_purchase_market_products_list') }}" type="submit">
+            {{ 'form.btn.search'|trans }}
+          </button>
+        </span>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+
+
+  {% if merchant.status|default('') == 'active' %}
+{#    <link href="{{ asset('static-dist/app/css/bootstrap.css') }}" rel="stylesheet"/>#}
+{#    <link href="{{ asset('static-dist/app/css/main.css') }}" rel="stylesheet"/>#}
+    <div id="explore-card">
+      {{ render(controller('AppBundle:AdminV2/CloudCenter/ResourcePurchase:categories',{request:app.request, category:'category', type:'courseSet'})) }}
+      <div data-role="market">
+        {{ render(controller('AppBundle:AdminV2/CloudCenter/ResourcePurchase:products',{request:app.request, type:'courseSet'})) }}
+      </div>
+    </div>
+  {% else %}
+    <div class="text-center">{{ 'merchant.content_resource.no_supplier'|trans }}</div>
+  {% endif %}
+{% endblock %}

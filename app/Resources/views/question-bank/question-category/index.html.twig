@@ -1,0 +1,39 @@
+{% extends 'my/my-teaching.html.twig' %}
+
+{% block title %}{{ 'my.teaching.question_bank.question_category.manage'|trans }} - {{ parent() }}{% endblock %}
+{% set side_nav = 'my-question-bank' %}
+{% set active_tab = 'category-list' %}
+
+{% do script(['app/js/question-category/index.js'])  %}
+
+{% block main %}
+  <div class="panel panel-default panel-col">
+    <div class="question-bank-heading">{{ questionBank.name }}</div>
+  </div>
+
+  <div>
+    {% include 'question-bank/header-navbar.html.twig' %}
+    <div class="panel panel-default panel-col">
+      <div class="panel-body">
+        <div class="row">
+          <button class="cd-btn cd-btn-primary pull-right mrm" data-toggle="modal" data-backdrop="static"  data-target="#modal" 
+            data-url="{{ path('question_bank_manage_question_category_batch_create',{id: questionBank.id}) }}"  type="button" data-placement="bottom" >{{'my.teaching.question_bank.question_category.create'|trans}}
+          </button>
+        </div>
+
+        <div>
+          <table class="table table-striped">
+            <thead>
+              <tr class="cd-dark-major cd-text-medium">
+                <th width="42%">{{ 'my.teaching.question_bank.question_category.title'|trans }}</th>
+                <th width="34%">{{ 'my.teaching.question_bank.question_category.latest_update'|trans }}</th>
+                <th>{{ 'my.teaching.question_bank.question_category.operation'|trans }}</th>
+              </tr>
+            </thead>
+          </table>
+          {% include 'question-bank/question-category/tbody.html.twig' %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

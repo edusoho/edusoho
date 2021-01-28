@@ -1,0 +1,93 @@
+.es-header {
+  .nav.user-nav {
+    .user-avatar-li {
+      .user-avatar-toggle {
+        padding: 12px 0;
+      }
+      .user-dropdown {
+        padding-top: 24px;
+        padding-bottom: 0;
+        .cd-border-radius;
+        .cd-box-shadow-z(8px);
+      }
+      .user-nav-li-my {
+        i {
+          vertical-align: middle;
+        }
+      }
+    }
+  }
+}
+
+.user-dropdown-info {
+  padding: 0 32px;
+  height: 80px;
+  display: table;
+}
+
+.user-dropdown-info__avatar {
+  display: inline-block;
+  position: relative;
+}
+
+.user-dropdown-profile {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.user-dropdown-profile__nickname {
+  width: 106px;
+  font-size: 18px;
+  line-height: 1;
+  font-weight: 500;
+  color: @cd-dark-major;
+  span {
+    vertical-align: text-top;
+  }
+}
+.user-center-avatar {
+  .user-dropdown-profile__vip-icon {
+    right: -6px;
+    bottom: -4px;
+  }
+}
+
+.user-dropdown-profile__vip-icon {
+  position: absolute;
+  right: 0;
+  bottom: 2px;
+  width: 30%;
+  height: 30%;
+}
+
+.user-dropdown-profile__rank {
+  width: 108px;
+  font-size: 12px;
+  line-height: 1;
+  color: @cd-dark-minor;
+}
+
+.user-dropdown__link {
+  padding: 0 32px;
+  font-size: 12px;
+  line-height: 1;
+  i {
+    margin-right: 4px;
+    font-size: 12px;
+  }
+  a:first-child {
+    padding-right: 34px;
+  }
+  a:last-child {
+    padding-left: 34px;
+    .cd-box-shadow-inset;
+  }
+}
+
+.user-dropdown__logout {
+  padding: 16px 0;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1;
+  .cd-box-shadow-inset(0 1px 0 0);
+}

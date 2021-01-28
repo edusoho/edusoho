@@ -1,0 +1,31 @@
+{% extends 'open-course-manage/layout.html.twig' %}
+{% block title %}{{ 'site.default.student'|trans }}{{ 'my.teaching.open_course.student_setting.manage_btn'|trans }} - {{ parent() }}{% endblock %}
+{% set side_nav = 'students' %}
+{% do script(['app/js/classroom-manage/students-manage/index.js']) %}
+
+{% block page_title %}
+  {{ 'site.default.student'|trans }}{{ 'my.teaching.open_course.student_setting.manage_btn'|trans }}
+  {% if app.user.isAdmin() or setting('course.teacher_export_student', false) %}
+    <a class="cd-btn cd-btn-info cd-btn-sm pull-right mhs" id="export-students-btn" href="javascript:;" data-url="{{ path('open_course_manage_student_export_csv', {id:course.id,userType:app.request.get('userType'),isNotified:app.request.get('isNotified')}) }}" data-datas-url="{{ path('open_course_manage_student_export_datas', {id:course.id,userType:app.request.get('userType'),isNotified:app.request.get('isNotified')}) }}" data-loading-text="{{ 'form.btn.export.submiting'|trans }}"><i
+          class="glyphicon glyphicon-export"></i> {{ 'form.btn.export'|trans }}{{ 'site.default.student'|trans }}</a>
+  {% endif %}
+{% endblock %}
+
+{% block main_body %}
+  <ul class="cd-tabs cd-mb16">
+    <li {% if app.request.get('userType') == 'login' %}class="active"{% endif %}>
+      <a href="{{ path('open_course_manage_students',{id:course.id,userType:'login'}) }}">{{ 'my.teaching.open_course.student_setting.login'|trans }}</a>
+    </li>
+    <li {% if app.request.get('userType') == 'unlogin' %}class="active"{% endif %}>
+      <a href="{{ path('open_course_manage_students',{id:course.id,userType:'unlogin'}) }}">{{ 'my.teaching.open_course.student_setting.unLogin'|trans }}</a>
+    </li>
+  </ul>
+
+  {% if app.request.get('userType') == 'unlogin' %}
+    {% include 'open-course-manage/student-unlogin-list.html.twig' %}
+  {% else %}
+    {% include 'open-course-manage/student-login-list.html.twig' %}
+  {% endif %}
+
+  {{ web_macro.paginator(paginator) }}
+{% endblock %}

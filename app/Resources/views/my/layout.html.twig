@@ -1,0 +1,83 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}
+  {{ 'my.learning.menu_heading'|trans }} - {{ parent() }}
+{% endblock %}
+
+{% block content %}
+
+  {{ render(controller('AppBundle:My/User:avatarAlert')) }}
+
+  <div class="row row-3-9 my-layout">
+    <div class="col-md-3">
+      <div class="sidenav">
+        {% if is_plugin_installed('Point') %}
+          <ul class="list-group">
+            <li class="list-group-heading">{{ 'plugin.point'|trans }}</li>
+            <li class="list-group-item
+           {% if side_nav == 'growth' %} active {% endif %}">
+              <a href="{{ path('my') }}">{{ 'plugin.point.growth'|trans }}</a>
+            </li>
+          </ul>
+        {% endif %}
+        <ul class="list-group">
+          <li class="list-group-heading">{{ 'my.learning.menu_heading'|trans }}</li>
+          <li class="list-group-item {% if side_nav == 'my-learning' %} active {% endif %}">
+            <a href="{{ path('my_courses_learning') }}">{{ 'my.learning.course_set_menu'|trans }}</a>
+          </li>
+
+          <li class="list-group-item {% if side_nav == 'my-classroom' %} active {% endif %}">
+            <a href="{{ path('my_classrooms') }}">
+              {{ 'my.learning.classroom_menu'|trans({'%classroom%':setting('classroom.name')|default('site.default.classroom'|trans)}) }}
+            </a>
+          </li>
+
+          {% if setting('course.live_course_enabled') %}
+            <li class="list-group-item
+          {% if side_nav == 'my-learning-live' %} active {% endif %}">
+              <a href="{{ path('my_live_courses_learning') }}">{{ 'my.learning.live_menu'|trans }}</a>
+            </li>
+          {% endif %}
+
+          <li class="list-group-item
+        {% if side_nav == 'my-question-bank' %} active {% endif %}">
+            <a href="{{ path('my_question_bank') }}">{{ 'my.learning.question_bank_menu'|trans }}</a>
+          </li>
+          <li class="list-group-item
+        {% if side_nav == 'my-questions' %} active {% endif %}">
+            <a href="{{ path('my_questions') }}">{{ 'my.learning.question_menu'|trans }}</a>
+          </li>
+          <li class="list-group-item
+        {% if side_nav == 'my-discussions' %} active {% endif %}">
+            <a href="{{ path('my_discussions') }}">{{ 'my.learning.discussion_menu'|trans }}</a>
+          </li>
+          <li class="list-group-item
+        {% if side_nav == 'my-notes' %} active {% endif %}">
+            <a href="{{ path('my_notebooks') }}">{{ 'my.learning.notebook_menu'|trans }}</a>
+          </li>
+
+          <li class="list-group-item {% if side_nav == 'my-homework' %} active {% endif %}">
+            <a href="{{ path('my_homework_list') }}">{{ 'my.learning.homework_menu'|trans }}</a>
+          </li>
+
+          <li class="list-group-item {% if side_nav == 'my-testpaper' %} active {% endif %}">
+            <a href="{{ path('my_testpaper_list') }}">{{ 'my.learning.testpaper_menu'|trans }}</a>
+          </li>
+          <li class="list-group-item
+        {% if side_nav == 'my-group' %} active {% endif %}">
+            <a href="{{ path('my_group_member_center') }}">{{ 'my.learning.group_menu'|trans }}</a>
+          </li>
+          <li class="list-group-item {% if side_nav == 'my-certificates' %} active {% endif %}">
+            <a href="{{path('my_certificates')}}">{{'user.certificate_menu'|trans}}</a>
+          </li>
+
+          {{ slot('my.learning.menu', {'side_nav': side_nav}) }}
+        </ul>
+      </div>
+    </div>
+    <div class="col-md-9">{% block main %}{% endblock %}</div>
+  </div>
+
+  {% block main_mobile %}{% endblock %}
+
+{% endblock %}

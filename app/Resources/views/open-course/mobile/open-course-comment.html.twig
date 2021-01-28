@@ -1,0 +1,46 @@
+{% import 'macro.html.twig' as web_macro %}
+{% set openCourseSetting = setting('openCourse') %}
+{% if openCourseSetting.show_comment|default('1') != 0 %}
+<div class="panel panel-default open-course-panel">
+  <div class="panel-heading">{{ 'my.teaching.open_course.comment.user_comment'|trans }}</div>
+  <div class="panel-body">
+    <div id="open-course-comment">
+      {% if app.user %}
+        <div class="open-course-user clearfix">
+          <div class="open-course-img">
+            <a href="{{ path('user_show', {id:app.user.id}) }}"><img class="avatar-sm" src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}"></a>
+          </div>
+          <form class="es-commet open-course-comment" id="thread-post-form" method="POST" action="{{ path('open_course_post',{id:course.id}) }}" onsubmit="return false">
+            <textarea class="form-control form-control-o" rows="2" placeholder="{{'my.teaching.open_course.comment.placeholder'|trans}}" {% if not app.user %}disabled{% endif %} name="content"></textarea>
+            <div class="form-group clearfix mtm">
+              <button type="submit" class="btn btn-primary btn-sm pull-right {% if not app.user or app.request.get('as')|default('') == 'preview' %}disabled{% endif %}" data-loading-text="{{'form.btn.save.submiting'|trans}}">{{'form.btn.comment'|trans}}</button>
+            </div>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+          </form>
+        </div>
+      {% else %}
+        <div class="empty">
+          {% set loginUrl = path('login') %}
+          {% set registerUrl = path('register') %}
+          {{ 'my.teaching.open_course.comment.un_login.tips'|trans({'%loginUrl%':loginUrl, '%registerUrl%':registerUrl})|raw }}
+        </div>
+      {% endif %}
+
+      <ul class="comment-list thread-pripost-list">
+        {% for post in posts %}
+          {% set author = users[post.userId] %}
+          {% set postReplyUrl = path('open_course_post_reply', {id:course.id, postId:post.id, targetType:'openCourse'}) %}
+          {% include 'thread/part/post-item.html.twig' %}
+        {% else %}
+          <li class="empty">{{'my.teaching.open_course.comment.empty'|trans}}</li>
+        {% endfor %}
+      </ul>
+
+      <nav class="text-center">
+        {{ web_macro.paginator(paginator) }}
+      </nav>
+    </div>
+  </div>
+</div>
+{% endif %}
+

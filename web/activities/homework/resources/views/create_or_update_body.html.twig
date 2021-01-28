@@ -1,0 +1,72 @@
+{% extends 'activity/activity-layout.html.twig' %}
+{% do script(['libs/ltc-sdk-client.js', 'libs/es-ckeditor/ckeditor.js','libs/jquery-sortable.js','homeworkactivity/js/create/index.js'], 300) %}
+{% block  activity_step %}
+  <div class="tab-pane js-course-tasks-pane active js-step2-view">
+    <form class="form-horizontal" id="step2-form" >
+      <div class="form-group">
+        <div class="col-sm-2 control-label">
+          <label for="title" class="control-label-required">{{ 'course.plan_task.activity_manage.title_name'|trans }}</label>
+        </div>
+        <div class="col-sm-10">
+          <input id="title" class="form-control" type="text" name="title" value="{{ activity.title|default('') }}" >
+          <div class="help-block">{{ 'course.plan_task.activity_manage.help_block'|trans }}</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-2 control-label"><label for="homework-about-field" class="control-label-required">{{'course.plan_task.activity_manage.homework.info'|trans}}</label></div>
+        <div class="col-sm-10 controls">
+          <textarea name="description" rows="10" id="homework-about-field" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}">{{ activity.ext.assessment.description|default('') }}</textarea>
+        </div>
+      </div>
+
+      {% if not activity.id|default(null) %}
+        <div class="form-group">
+          <div class="col-sm-2 control-label"><label for="homework-about-field" class="control-label-required">{{'course.plan_task.activity_manage.homework.choose_question'|trans}}</label></div>
+          <div class="col-sm-8">
+            <a id="picker_homework_items" data-url="{{ path('course_set_manage_homework_question_picker',{id:activity.fromCourseSetId,targetType:'homework'}) }}" data-pick-url="{{ path('course_set_manage_homework_question_picked', {courseSetId:activity.fromCourseSetId}) }}" class="btn btn-info btn-sm js-pick-modal" data-role="pick-item"><i class="es-icon es-icon-anonymous-iconfont"></i>
+              {{'course.plan_task.activity_manage.homework.choose_question'|trans}}
+            </a>
+            <input type="hidden" name="questionLength" value="{% if questions|default(null) %} questionItems.lenght {% endif %}">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-10 col-sm-offset-2">
+            <table class="table" id="question-table">
+              <thead>
+              <tr>
+                <th></th>
+                <th><input type="checkbox" data-role="batch-select"></th>
+                <th width="10%">{{'course.testpaper_manage.question.seq'|trans}}</th>
+                <th width="25%">{{'course.testpaper_manage.question.stem'|trans}}</th>
+                <th width="15%">{{'course.testpaper_manage.question.type'|trans}}</th>
+                <th width="10%">{{'course.testpaper_manage.question.difficulty'|trans}}</th>
+                <th width="25%">{{'course.testpaper_manage.question.operation'|trans}}</th>
+              </tr>
+              </thead>
+              <tbody class="js-homework-table" id="question-table-tbody">
+              {% if questions|default(null) %}
+                {% for key,questionItem in questionItems %}
+                  {% set questionId = questionItem.questionId %}
+                  {% set question = questions[questionId] %}
+                  {% include 'question-manage/question-tr.html.twig'%}
+                {% endfor %}
+              {% endif %}
+              </tbody>
+            </table>
+            <div class="js-cached-question hidden"></div>
+            <input type="hidden" class="js-origin-bank">
+            <input type="hidden" class="js-current-bank">
+            <div class="mbl">
+              <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> {{'course.testpaper_manage.question.select_all'|trans}}</label>
+              <button type="button" class="btn btn-default btn-sm mlm" data-role="batch-delete-btn" data-name="{{'course.testpaper_manage.question.content'|trans}}">{{'course.testpaper_manage.question.operation.delete_btn'|trans}}</button>
+            </div>
+            <span class="color-danger js-help-redmine"></span>
+            <p class="js-subjective-remask" data-type="homework">
+            </p>
+            <p class="help-block color-warning">{{'course.plan_task.activity_manage.homework.save_tips'|trans}}</p>
+          </div>
+        </div>
+      {% endif %}
+    </form>
+  </div>
+{% endblock %}
