@@ -114,6 +114,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $this->getConnection()->exec("INSERT INTO `biz_scheduler_job` (
               `name`,
+              `pool`,
               `expression`,
               `class`,
               `args`,
@@ -128,6 +129,7 @@ class EduSohoUpgrade extends AbstractUpdater
               `created_time`
         ) VALUES (
               'UpdateMediaTypeJob',
+              'dedicated',
               '',
               'Biz\\\\Visualization\\\\\Job\\\\UpdateMediaTypeJob',
               '',
