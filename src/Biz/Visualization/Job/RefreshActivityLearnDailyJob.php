@@ -82,24 +82,34 @@ class RefreshActivityLearnDailyJob extends BaseRefreshJob
 
     protected function refreshCourseTaskResultWhenPlayingSetting()
     {
-        $users = $this->biz['db']->fetchAll('select id from user;');
-        foreach ($users as $user) {
+        $limit = 100;
+        $count = $this->biz['db']->fetchColumn('select count(*) from user;');
+        $totalPage = $count / $limit;
+        for ($page = 0; $page <= $totalPage; ++$page) {
             $updateData = [];
-            $records = $this->biz['db']->fetchAll('SELECT id, activityId, userId, sumTime FROM activity_video_daily WHERE userId = ?', [$user['id']]);
-            $results = $this->biz['db']->fetchAll('select id, userId, activityId from course_task_result where userId = ?', [$user['id']]);
-            $records = ArrayToolkit::group($records, 'activityId');
+            $start = $page * $limit;
+            $users = $this->biz['db']->fetchAll("select id from user limit {$start}, {$limit};");
+            $marks = str_repeat('?,', count($users) - 1).'?';
+            $results = $this->biz['db']->fetchAll("select id, userId, activityId from course_task_result where userId in ({$marks})", array_column($users, 'id'));
+            $records = $this->biz['db']->fetchAll("SELECT id, activityId, userId, sumTime FROM activity_video_daily WHERE userId in ({$marks})", array_column($users, 'id'));
+            $records = ArrayToolkit::group($records, 'userId');
             foreach ($results as $result) {
-                if (empty($records[$result['activityId']])) {
+                if (empty($records[$result['userId']])) {
                     continue;
                 }
 
-                $sumTime = array_sum(array_column($records[$result['activityId']], 'sumTime'));
+                $userRecords = ArrayToolkit::group($records[$result['userId']], 'activityId');
+                if (empty($userRecords[$result['activityId']])) {
+                    continue;
+                }
+
+                $sumTime = array_sum(array_column($userRecords[$result['activityId']], 'sumTime'));
                 $updateData[] = ['id' => $result['id'], 'sumTime' => $sumTime];
             }
             if (!empty($updateData)) {
                 $this->getTaskResultDao()->batchUpdate(array_column($updateData, 'id'), $updateData);
             }
-            $this->getLogger()->addInfo("刷新{$user['id']}的course_task_result结束");
+            $this->getLogger()->addInfo("刷新从{$start}开始的user的course_task_result结束");
         }
     }
 
