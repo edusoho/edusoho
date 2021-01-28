@@ -54,9 +54,9 @@ class RefreshUserLearnDailyJob extends BaseRefreshJob
 
         $userLearnDailyIds = $this->biz['db']->fetchAll("SELECT id FROM user_learn_daily LIMIT {$start}, {$limit}");
         $userLearnDailyIds = array_column($userLearnDailyIds, 'id');
-        $marks = str_repeat('?,', count($userLearnDailyIds) - 1).'?';
+        $marks = empty($userLearnDailyIds) ? '' : str_repeat('?,', count($userLearnDailyIds) - 1).'?';
 
-        $stayData = $this->biz['db']->fetchAll("
+        $stayData = empty($marks) ? [] : $this->biz['db']->fetchAll("
             SELECT id, uld1.sumTime FROM user_learn_daily uld INNER JOIN (
                 SELECT l.userId AS userId, l.dayTime AS dayTime, IF(sum(s.sumTime), sum(s.sumTime), 0) AS sumTime 
                     FROM user_learn_daily l INNER JOIN activity_stay_daily s 

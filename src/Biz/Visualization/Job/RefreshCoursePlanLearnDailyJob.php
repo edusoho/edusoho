@@ -54,18 +54,11 @@ class RefreshCoursePlanLearnDailyJob extends BaseRefreshJob
 
         $watchData = array_column($watchData, null, 'id');
 
-        $stayData = $this->biz['db']->fetchAll("
-            SELECT l.id AS id, IF(sum(s.sumTime), sum(s.sumTime), 0) AS sumTime FROM course_plan_learn_daily l 
-                INNER JOIN activity_stay_daily s 
-                ON l.dayTime = s.dayTime AND l.userId = s.userId AND l.courseId = s.courseId AND s.mediaType != 'video' 
-                GROUP BY l.userId, l.dayTime, l.courseId ORDER BY l.userId, l.dayTime, l.courseId LIMIT {$start}, {$limit};
-        ");
-
         $coursePlanLearnDailyIds = $this->biz['db']->fetchAll("SELECT id FROM course_plan_learn_daily LIMIT {$start}, {$limit}");
         $coursePlanLearnDailyIds = array_column($coursePlanLearnDailyIds, 'id');
-        $marks = str_repeat('?,', count($coursePlanLearnDailyIds) - 1).'?';
+        $marks = empty($coursePlanLearnDailyIds) ? '' : str_repeat('?,', count($coursePlanLearnDailyIds) - 1).'?';
 
-        $stayData = $this->biz['db']->fetchAll("
+        $stayData = empty($marks) ? [] : $this->biz['db']->fetchAll("
             SELECT id, cld1.sumTime FROM course_plan_learn_daily cld INNER JOIN (
                 SELECT l.userId AS userId, l.dayTime AS dayTime, l.courseId AS courseId, IF(sum(s.sumTime), sum(s.sumTime), 0) AS sumTime 
                     FROM course_plan_learn_daily l INNER JOIN activity_stay_daily s 
