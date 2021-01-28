@@ -33,8 +33,14 @@ class RefreshCourseTaskResultJob extends BaseRefreshJob
         $totalPage = $count / $limit;
         for ($page = 0; $page <= $totalPage; ++$page) {
             $start = $page * $limit;
-            $sql = "SELECT ctr.id AS id, IF (ctr.stayTime, ctr.stayTime, 0) AS sumTime FROM course_task_result ctr LEFT JOIN activity a ON ctr.activityId = a.id WHERE a.mediaType = 'video' LIMIT  {$start}, {$limit};";
-            $data = $this->biz['db']->fetchAll($sql);
+            $results = $this->biz['db']->fetchAll("select id from course_task_result order by id ASC limit {$start}, {$limit};");
+            if (empty($results)) {
+                continue;
+            }
+
+            $marks = str_repeat('?,', count($results) - 1).'?';
+            $sql = "SELECT ctr.id AS id, IF (ctr.stayTime, ctr.stayTime, 0) AS sumTime FROM course_task_result ctr LEFT JOIN activity a ON ctr.activityId = a.id WHERE a.mediaType = 'video' and ctr.id in ({$marks});";
+            $data = $this->biz['db']->fetchAll($sql, array_column($results, 'id'));
 
             if (!empty($data)) {
                 $this->getTaskResultDao()->batchUpdate(array_column($data, 'id'), $data);
@@ -51,7 +57,11 @@ class RefreshCourseTaskResultJob extends BaseRefreshJob
         for ($page = 0; $page <= $totalPage; ++$page) {
             $updateData = [];
             $start = $page * $limit;
-            $users = $this->biz['db']->fetchAll("select id from user limit {$start}, {$limit};");
+            $users = $this->biz['db']->fetchAll("select id from user order by id ASC limit {$start}, {$limit};");
+            if (empty($users)) {
+                continue;
+            }
+
             $marks = str_repeat('?,', count($users) - 1).'?';
             $results = $this->biz['db']->fetchAll("select id, userId, activityId from course_task_result where userId in ({$marks})", array_column($users, 'id'));
             $records = $this->biz['db']->fetchAll("SELECT id, activityId, userId, sumTime FROM activity_video_daily WHERE userId in ({$marks})", array_column($users, 'id'));
