@@ -48,17 +48,6 @@ class ActivityFilter extends Filter
             }
         }
 
-        // 老数据 以下三种类型不返回 完成条件
-        $finishConditionWhiteList = ['audio', 'download', 'live'];
-        if (in_array($data['mediaType'], $finishConditionWhiteList)) {
-            unset($data['finishDetail']);
-            unset($data['finishType']);
-        }
-        // 老数据文档
-        if (in_array($data['mediaType'], ['text', 'doc'])) {
-            unset($data['finishType']);
-        }
-
         unset($data['ext']);
         unset($data['mediaType']);
     }
