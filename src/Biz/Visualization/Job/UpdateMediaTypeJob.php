@@ -40,8 +40,14 @@ class UpdateMediaTypeJob extends AbstractJob
         for (; $page <= $totalPage; ++$page) {
             $this->getCacheService()->set(self::STAY_TABLE_REFRESH_PAGE, $page);
             $start = $page * $limit;
-            $sql = "select asd.id as id, if(a.mediaType is not null, a.mediaType, '') as mediaType from activity_stay_daily asd left join activity a on asd.activityId = a.id limit {$start}, {$limit}";
-            $data = $this->biz['db']->fetchAll($sql);
+            $learnData = $this->biz['db']->fetchAll("select id from activity_stay_daily limit {$start}, {$limit}");
+            if (empty($learnData)) {
+                continue;
+            }
+
+            $marks = str_repeat('?,', count($learnData) - 1).'?';
+            $sql = "select asd.id as id, if(a.mediaType is not null, a.mediaType, '') as mediaType from activity_stay_daily asd left join activity a on asd.activityId = a.id where asd.id in ({$marks})";
+            $data = $this->biz['db']->fetchAll($sql, array_column($learnData, 'id'));
             empty($data) ? null : $this->getActivityStayDailyDao()->batchUpdate(array_column($data, 'id'), $data);
         }
         $this->getCacheService()->clear(self::STAY_TABLE_REFRESH_PAGE);
@@ -57,8 +63,14 @@ class UpdateMediaTypeJob extends AbstractJob
         for (; $page <= $totalPage; ++$page) {
             $this->getCacheService()->set(self::LEARN_TABLE_REFRESH_PAGE, $page);
             $start = $page * $limit;
-            $sql = "select ald.id as id, if(a.mediaType is not null, a.mediaType, '') as mediaType from activity_learn_daily ald left join activity a on ald.activityId = a.id limit {$start}, {$limit}";
-            $data = $this->biz['db']->fetchAll($sql);
+            $learnData = $this->biz['db']->fetchAll("select id from activity_learn_daily limit {$start}, {$limit}");
+            if (empty($learnData)) {
+                continue;
+            }
+
+            $marks = str_repeat('?,', count($learnData) - 1).'?';
+            $sql = "select ald.id as id, if(a.mediaType is not null, a.mediaType, '') as mediaType from activity_learn_daily ald left join activity a on ald.activityId = a.id where ald.id in ({$marks})";
+            $data = $this->biz['db']->fetchAll($sql, array_column($learnData, 'id'));
             empty($data) ? null : $this->getActivityLearnDailyDao()->batchUpdate(array_column($data, 'id'), $data);
         }
         $this->getCacheService()->clear(self::LEARN_TABLE_REFRESH_PAGE);
