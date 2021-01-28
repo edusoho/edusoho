@@ -383,18 +383,18 @@ class FileServiceTest extends BaseTestCase
 
     public function testFindFilesByUris()
     {
-        $FileUris = ['public://tmp/2020/12-17/101734e86bbf660892.png', 'private://course_private/2020/12-17/1609448d1fe8430856.docx'];
+        $fileUris = ['public://tmp/2020/12-17/101734e86bbf660892.png', 'private://course_private/2020/12-17/1609448d1fe8430856.docx'];
         $this->mockBiz(
             'Content:FileDao',
             [
                 [
                     'functionName' => 'findByUris',
                     'returnValue' => [['id' => 1], ['id' => 2]],
-                    'withParams' => [$FileUris],
+                    'withParams' => [$fileUris],
                 ],
             ]
         );
-        $result = $this->getFileService()->findFilesByUris($FileUris);
+        $result = $this->getFileService()->findFilesByUris($fileUris);
 
         $this->assertEquals([['id' => 1], ['id' => 2]], $result);
     }
