@@ -5,9 +5,6 @@ namespace Biz\Visualization\Job;
 use AppBundle\Common\ArrayToolkit;
 use Biz\System\Service\SettingService;
 use Biz\Task\Dao\TaskResultDao;
-use Biz\Task\Service\TaskResultService;
-use Biz\Visualization\Dao\ActivityLearnDailyDao;
-use Biz\Visualization\Service\ActivityDataDailyStatisticsService;
 
 class RefreshCourseTaskResultJob extends BaseRefreshJob
 {

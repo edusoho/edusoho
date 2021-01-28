@@ -87,7 +87,7 @@ class VideoTaskSettingController extends BaseController
             RefreshUserLearnDailyJob::CACHE_NAME,
             RefreshCoursePlanLearnDailyJob::CACHE_NAME,
             RefreshCourseTaskResultJob::CACHE_NAME,
-            UpdateMediaTypeJob::CACHE_NAME
+            UpdateMediaTypeJob::CACHE_NAME,
         ];
     }
 
