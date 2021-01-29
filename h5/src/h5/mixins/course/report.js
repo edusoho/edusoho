@@ -21,6 +21,7 @@ export default {
       sign: '',
       record: {},
       absorbed: 0, // 是否无效学习
+      learnedTime: 0,
     };
   },
   beforeRouteLeave(to, from, next) {
@@ -170,6 +171,16 @@ export default {
       if (param.reActive) {
         data.reActive = param.reActive;
       }
+      if (this.sourceType && this.sourceType === 'video') {
+        const watchTime = parseInt(this.nowWatchTime - this.lastWatchTime);
+        this.lastWatchTime = this.nowWatchTime;
+        let watchData = {
+          watchData: {
+            duration: watchTime,
+          },
+        };
+        data = Object.assign(data, watchData);
+      }
       this.learnTime = 0;
       Api.reportTaskEvent({
         query: {
@@ -200,6 +211,7 @@ export default {
      */
     handleReportResult(res) {
       this.reportResult = res;
+      this.learnedTime = res.learnedTime;
       if (res.taskResult && res.taskResult.status === 'finish') {
         this.isFinish = true;
         this.$store.commit(types.SET_TASK_SATUS, 'finish');
@@ -236,7 +248,8 @@ export default {
       if (!this.reportFinishCondition) {
         return;
       }
-      if (this.reportFinishCondition.type === 'time') {
+
+      if (['time', 'watchTime'].includes(this.reportFinishCondition.type)) {
         if (
           parseInt(this.learnTime / 60, 10) >=
           parseInt(this.reportFinishCondition.data, 10)
