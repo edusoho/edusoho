@@ -59,6 +59,7 @@ class CourseTaskEventV2 extends AbstractResource
                     'allowLearn' => false,
                     'denyReason' => $denyReason,
                 ],
+                'learnedTime' => $this->getMyLearnedTime($activity),
             ];
         }
         $flow = $this->getDataCollectService()->createLearnFlow($user['id'], $activity['id'], $sign);
@@ -104,6 +105,7 @@ class CourseTaskEventV2 extends AbstractResource
                 'allowLearn' => true,
                 'denyReason' => '',
             ],
+            'learnedTime' => $this->getMyLearnedTime($activity),
         ];
     }
 
@@ -151,6 +153,11 @@ class CourseTaskEventV2 extends AbstractResource
             $this->getTaskService()->doTask($taskId, $record['duration']);
         }
 
+        $watchResult = null;
+        if (!empty($data['watchData'])) {
+            $watchResult = $this->watching($request, $courseId, $taskId, $data, $record);
+        }
+
         if ($this->getTaskService()->isFinished($task['id'])) {
             $this->getTaskService()->finishTaskResult($task['id']);
         }
@@ -158,11 +165,6 @@ class CourseTaskEventV2 extends AbstractResource
         $result = $this->getTaskService()->trigger($taskId, self::EVENT_DOING, $triggerData);
         if (isset($data['lastLearnTime'])) {
             $this->getTaskResultService()->updateTaskResult($result['id'], ['lastLearnTime' => $data['lastLearnTime']]);
-        }
-
-        $watchResult = null;
-        if (!empty($data['watchData'])) {
-            $watchResult = $this->watching($request, $courseId, $taskId, $data, $record);
         }
 
         if (self::EVENT_FINISH === $result['status']) {
@@ -184,6 +186,7 @@ class CourseTaskEventV2 extends AbstractResource
                 'allowLearn' => $canDoing,
                 'denyReason' => $denyReason,
             ],
+            'learnedTime' => $this->getMyLearnedTime($activity),
         ];
     }
 
@@ -244,6 +247,7 @@ class CourseTaskEventV2 extends AbstractResource
                 'allowLearn' => $canDoing,
                 'denyReason' => $denyReason,
             ],
+            'learnedTime' => $this->getMyLearnedTime($activity),
         ];
     }
 
@@ -305,6 +309,22 @@ class CourseTaskEventV2 extends AbstractResource
 //        }
     }
 
+    protected function getMyLearnedTime(array $activity)
+    {
+        if ('watchTime' !== $activity['finishType']) {
+            $learnedTime = $this->getTaskResultService()->getMyLearnedTimeByActivityId($activity['id']);
+
+            return (int) $learnedTime;
+        }
+
+        $watchTime = $this->getTaskResultService()->getWatchTimeByActivityIdAndUserId($activity['id'], $this->getCurrentUser()->getId());
+        if (empty($watchTime)) {
+            return 0;
+        }
+
+        return (int) $watchTime;
+    }
+
     protected function getKickOutStatus($userId, $sign)
     {
         $this->getLearnControlService()->checkActive($userId, $sign);
@@ -358,7 +378,7 @@ class CourseTaskEventV2 extends AbstractResource
         return $this->service('Task:TaskResultService');
     }
 
-    /**
+    /*
      * @return CourseService
      */
     protected function getCourseService()

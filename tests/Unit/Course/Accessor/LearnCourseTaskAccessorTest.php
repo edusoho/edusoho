@@ -20,7 +20,7 @@ class LearnCourseTaskAccessorTest extends BaseTestCase
             'System:SettingService',
             [
                 [
-                    'functionName' => 'get',
+                    'functionName' => 'node',
                     'returnValue' => true,
                     'withParams' => ['course.allowAnonymousPreview', 1],
                     'runTimes' => 1,

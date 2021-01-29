@@ -147,6 +147,47 @@
         </div>
       </div>
 
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="license-picture">{{ 'admin.setting.record.picture' | trans }}</label>
+        </div>
+        <div class="col-md-8 controls">
+          <div id="record-picture-container">
+            <img src="{% if site.recordPicture %}{{ asset(site.recordPicture) }}
+                    {% else %}{{ filepath('','gongan.png' ) }}{% endif %}">
+          </div>
+          <a class="btn btn-default" id="record-picture-upload"
+             data-upload-token="{{ upload_token('system', 'image') }}"
+             data-goto-url="{{ path('admin_v2_setting_record_upload') }}">{{ 'form.btn.upload'|trans }}</a>
+          <button class="btn btn-default" id="record-picture-remove" type="button"
+                  {% if not site.recordPicture %}style="display:none;"{% endif %}>
+            {{ 'form.btn.delete'|trans }}</button>
+          <p class="help-block">{{ 'admin.setting.record.picture.help_block'|trans|raw }}</p>
+          <input type="hidden" name="recordPicture" value="{{ site.recordPicture|default('') }}">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="name">{{ 'admin.setting.record.code' | trans }}</label>
+        </div>
+        <div class="col-md-8 controls">
+          <input type="text" name="recordCode" class="form-control"
+                 value="{{ site.recordCode|default('') }}">
+          <p class="help-block">{{ 'admin.setting.record.code.help_block'|trans|raw }}</p>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="name">{{ 'admin.setting.record.url' | trans }}</label>
+        </div>
+        <div class="col-md-8 controls">
+          <input type="text" name="recordUrl" class="form-control"
+                 value="{{ site.recordUrl|default('') }}">
+          <p class="help-block">{{ 'admin.setting.site.recordUrl.help_block'|trans }}</p>
+        </div>
+      </div>
     </fieldset>
 
     <br>

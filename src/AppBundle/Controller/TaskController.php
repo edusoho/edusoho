@@ -457,10 +457,12 @@ class TaskController extends BaseController
             }
 
             $conditions = empty($installedActivity['finish_condition']) ? [] : ArrayToolkit::index($installedActivity['finish_condition'], 'type');
+            $taskResult = $this->getTaskResultService()->getTaskResultByTaskIdAndUserId($task['id'], $this->getCurrentUser()->getId());
 
             return $this->render('task/finish-tip.html.twig', [
                 'activity' => $activity,
                 'conditions' => $conditions,
+                'taskResult' => $taskResult,
             ]);
         }
 

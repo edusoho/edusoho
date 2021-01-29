@@ -15,6 +15,12 @@ class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
      */
     public function execute()
     {
+        /*
+         *  Table  activity_learn_daily
+         *  Column mediaType
+         */
+        $this->createField('activity_learn_daily', 'mediaType', "ALTER TABLE `activity_learn_daily` ADD COLUMN `mediaType` varchar(32) NOT NULL DEFAULT '' COMMENT '教学活动类型' AFTER `courseSetId`;");
+
         $this->addTableIndex();
 
         /*
