@@ -33,6 +33,7 @@ class AnswerReportFilter extends Filter
                     foreach ($questionReport['response'] as &$response) {
                         $response = $this->convertAbsoluteUrl($response);
                     }
+                    $questionReport['comment'] = $this->convertAbsoluteUrl($questionReport['comment']);
                 }
             }
         }

@@ -88,7 +88,7 @@
             data-trigger="hover"
             data-placement="top"
             {% if task.type in ['video'] and is_mobile_client() and not is_ios_client() %}data-container="body"{% endif %}
-            data-content='{{ 'activity_manage.finish_tips'|trans }}{{ render(controller('AppBundle:Task:finishCondition', {task: task})) }}'>
+            data-content=''>
             <i class="es-icon es-icon-help mrs text-md"></i>{{ 'course.task.learning.finish_condition'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
           </a>
           <span class="btn text-sm js-learned-prompt color-primary {% if task.type in ['video'] %} js-learned-video-prompt {% endif %}{% if task.type in ['video'] and nextTask %} js-next-task{% endif %} {% if taskResult.status == 'finish' %}open{% endif %}"
@@ -101,6 +101,9 @@
               data-url="{{ path('course_task_finished_prompt', {courseId: course.id, id: task.id}) }}">
               <i class="es-icon es-icon-iccheckcircleblack24px mrs text-md"></i>{{ 'course.task.learning.finish_btn'|trans({'%taskName%':setting('course.task_name')|default('admin.setting_course.task'|trans)}) }}
           </span>
+        </div>
+        <div class="hidden js-learn-content">
+          {{ 'activity_manage.finish_tips'|trans|raw }}{{ render(controller('AppBundle:Task:finishCondition', {task: task})) }}
         </div>
         {% if course.enableFinish|default(0) == 1 %}
           <a type="button" href="javascript:;"
