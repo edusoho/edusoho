@@ -8938,6 +8938,7 @@ exception.user.register_error: 'User data is wrong, and failed to register!'
 exception.user.mobile_registered: 'This number has been used.'
 exception.user.register_limit: The number of registrations has reached the maximum limit!
 exception.user.not_match_auth: 'User is not match auth'
+exception.user.mobile_not_found: 'User mobile is not found'
 exception.sensitive.words: 'The content contains sensitive words!'
 exception.thread.frequent: 'Reply too many times, please try it later!'
 exception.thread.not_found: Topic does not exist

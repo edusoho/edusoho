@@ -13,8 +13,6 @@ class PasswordResetController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $user = $this->getCurrentUser();
-
         return $this->render('password-reset/index.html.twig');
     }
 
