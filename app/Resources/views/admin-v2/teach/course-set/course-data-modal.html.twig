@@ -39,7 +39,6 @@
         <td>{{ 'admin.course_manage.statistics.data_detail.finished_time'|trans }}</td>
         <td>{{ 'admin.course_manage.statistics.data_detail.study_days'|trans }}</td>
         <td>{{ 'admin.course_manage.statistics.data_detail.study_time'|trans }}</td>
-        <td>{{ 'admin.course_manage.statistics.data_detail.pure_study_time'|trans }}</td>
         <td>{{ 'admin.course_manage.statistics.data_detail.question_number'|trans }}</td>
         <td>{{ 'admin.course_manage.statistics.data_detail.note_number'|trans }}</td>
       </tr>
@@ -54,13 +53,6 @@
             <td>
               {% if student.learnTime > 0 %}
                 {{ (student.learnTime|default(0)/60)|number_format(1) }}
-              {% else %}
-                ----
-              {% endif %}
-            </td>
-            <td>
-              {% if student.pureLearnTime > 0 %}
-                {{ (student.pureLearnTime|default(0)/60)|number_format(1) }}
               {% else %}
                 ----
               {% endif %}

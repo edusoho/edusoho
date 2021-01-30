@@ -246,6 +246,19 @@ class SettingController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function recordPictureUploadAction(Request $request)
+    {
+        $fileId = $request->request->get('id');
+        $path = $this->replaceFile('recordPicture', $fileId);
+
+        $response = [
+            'path' => $path,
+            'url' => $this->container->get('assets.packages')->getUrl($path),
+        ];
+
+        return $this->createJsonResponse($response);
+    }
+
     public function adminSyncAction(Request $request)
     {
         $currentUser = $this->getUser();

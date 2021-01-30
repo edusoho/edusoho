@@ -16,7 +16,7 @@ class LearnStatisticsServiceTest extends BaseTestCase
         ]);
         $result = $this->getLearnStatisticsService()->searchDailyStatistics([], [], 0, \PHP_INT_MAX);
 
-        $this->assertEquals(1, $result[0]['id']);
+        $this->assertEquals(1, $result[0]['userId']);
     }
 
     public function testSearchLearnData()
@@ -24,7 +24,6 @@ class LearnStatisticsServiceTest extends BaseTestCase
         $this->mockData();
         $result = $this->getLearnStatisticsService()->searchLearnData(['createdTime_GE' => 1, 'createdTime_LT' => 10], []);
         $this->assertArrayEquals([
-            'learnedSeconds' => 3,
             'paidAmount' => 4,
             'refundAmount' => 4,
             'finishedTaskNum' => 5,
@@ -121,7 +120,6 @@ class LearnStatisticsServiceTest extends BaseTestCase
         $result = $this->getLearnStatisticsService()->batchCreateTotalStatistics(['createdTime_GE' => 1, 'createdTime_LT' => 10]);
         $result = $this->getLearnStatisticsService()->searchTotalStatistics([], [], 0, \PHP_INT_MAX);
         $this->assertArrayEquals([
-            'learnedSeconds' => 3,
             'paidAmount' => 4,
             'refundAmount' => 4,
             'finishedTaskNum' => 5,
@@ -141,7 +139,6 @@ class LearnStatisticsServiceTest extends BaseTestCase
         $result = $this->getLearnStatisticsService()->batchCreatePastDailyStatistics(['createdTime_GE' => 1, 'createdTime_LT' => 10]);
         $result = $this->getLearnStatisticsService()->searchDailyStatistics([], [], 0, \PHP_INT_MAX);
         $this->assertArrayEquals([
-            'learnedSeconds' => 3,
             'paidAmount' => 4,
             'refundAmount' => 4,
             'finishedTaskNum' => 5,
@@ -161,7 +158,6 @@ class LearnStatisticsServiceTest extends BaseTestCase
         $result = $this->getLearnStatisticsService()->batchCreateDailyStatistics(['createdTime_GE' => 1, 'createdTime_LT' => 10]);
         $result = $this->getLearnStatisticsService()->searchDailyStatistics([], [], 0, \PHP_INT_MAX);
         $this->assertArrayEquals([
-            'learnedSeconds' => 3,
             'paidAmount' => 4,
             'refundAmount' => 4,
             'finishedTaskNum' => 5,

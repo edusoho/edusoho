@@ -84,7 +84,6 @@
           <th>{{'user.learn.statistics.exit.course.num'|trans}}</th>
           <th>{{'user.learn.statistics.finished.task.num'|trans}}</th>
           <th>{{'user.learn.statistics.video_playing.seconds'|trans}}</th>
-          <th>{{'user.learn.statistics.page_stay.seconds'|trans}}</th>
           <th>{{'user.learn.statistics.actual.amount'|trans}}</th>
           <th>{{ 'operation'|trans }}</th>
         </tr>
@@ -108,7 +107,6 @@
               <td>{{ statistic.exitCourseNum|default(0) }}</td>
               <td>{{ statistic.finishedTaskNum|default(0) }}</td>
               <td>{{ (userLearnRecords[user.id].userSumTime|default(0)/60)|number_format(1) }}</td>
-              <td>{{ (userLearnRecords[user.id].userPureTime|default(0)/60)|number_format(1) }}</td>
               <td>{{ statistic.actualAmount|default(0)|to_cash(0) }}</td>
               <td><a href="{{ path('admin_v2_user_learn_detail', {userId:user.id}) }}">{{ 'site.btn.detail'|trans }}</a></td>
             </tr>
