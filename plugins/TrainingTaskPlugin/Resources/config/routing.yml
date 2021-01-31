@@ -1,0 +1,3 @@
+training_task_homepage:
+    path:     /
+    defaults: { _controller: TrainingTaskPlugin:Activity:Training:preview }

@@ -1,0 +1,7 @@
+services:
+    plugin.activity.extension:
+        class: TrainingTaskPlugin\Extension\ActivityExtension
+        calls:
+            - [setBiz, ['@biz']]
+        tags:
+            - { name: extension }
