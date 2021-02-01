@@ -27,7 +27,7 @@ if (isOldApiCall()) {
 }
 
 
-fix_gpc_magic();
+// fix_gpc_magic();
 
 $loader = require_once __DIR__.'/../app/autoload.php';
 Debug::enable();
