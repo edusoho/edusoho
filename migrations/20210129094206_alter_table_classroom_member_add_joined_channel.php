@@ -2,7 +2,7 @@
 
 use Phpmig\Migration\Migration;
 
-class AlterTableClassroomAddJoinedChannel extends Migration
+class AlterTableClassroomMemberAddJoinedChannel extends Migration
 {
     /**
      * Do the migration
