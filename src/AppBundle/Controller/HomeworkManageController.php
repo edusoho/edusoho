@@ -4,7 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\Paginator;
-use AppBundle\Controller\Testpaper\BaseTestpaperController as BaseController;
+use AppBundle\Controller\Testpaper\BaseTestpaperController;
 use Biz\Common\CommonException;
 use Biz\QuestionBank\QuestionBankException;
 use Biz\QuestionBank\Service\QuestionBankService;
@@ -15,7 +15,7 @@ use Codeages\Biz\ItemBank\Item\Service\ItemCategoryService;
 use Codeages\Biz\ItemBank\Item\Service\ItemService;
 use Symfony\Component\HttpFoundation\Request;
 
-class HomeworkManageController extends BaseController
+class HomeworkManageController extends BaseTestpaperController
 {
     public function questionPickerAction(Request $request, $id)
     {
