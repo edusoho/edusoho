@@ -16,7 +16,7 @@ define(function(require, exports, module) {
           Notify.success(Translator.trans('admin.item_bank_exercise.exercise.recommend_success_hint'));
           window.location.reload();
         }).error(function(){
-          Notify.danger(Translator.trans('admin.item_bank_exercise.exercise.recommend_success_hint'));
+          Notify.danger(Translator.trans('admin.item_bank_exercise.exercise.recommend_fail_hint'));
         });
       }
 
