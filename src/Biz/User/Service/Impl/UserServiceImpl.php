@@ -478,9 +478,7 @@ class UserServiceImpl extends BaseService implements UserService
             if (!$this->canManageAvatarFile($userId, $oldAvatarFile)) {
                 $this->createNewException(UserException::FILE_PERMISSION_DENIED());
             }
-            if (!empty($oldAvatarFile) && $this->canManageAvatarFile($userId, $oldAvatarFile)) {
-                $this->getFileService()->deleteFileByUri($oldAvatarFile['uri']);
-            }
+            $this->getFileService()->deleteFileByUri($oldAvatarFile['uri']);
         }
 
         $user = $this->getUserDao()->update($userId, $fields);
