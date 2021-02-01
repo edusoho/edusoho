@@ -1095,11 +1095,12 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         ]);
 
         $refundSetting = $this->getSettingService()->get('refund', []);
+        $reason = $this->buildJoinReason($info, $order);
         $fields = [
             'classroomId' => $classroomId,
             'userId' => $userId,
             'orderId' => empty($order) ? 0 : $order['id'],
-            'levelId' => empty($info['becomeUseMember']) ? 0 : $userMember['levelId'],
+            'joinedChannel' => $reason['reason_type'],
             'role' => ['student'],
             'remark' => empty($info['note']) ? '' : $info['note'],
             'deadline' => $deadline,
@@ -1123,7 +1124,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $member = $this->getClassroomMemberDao()->create($fields);
         }
 
-        $reason = $this->buildJoinReason($info, $order);
         $this->createOperateRecord($member, 'join', $reason);
 
         $params = [
