@@ -10,9 +10,9 @@ class AlterTableCourseMemberDropColumnLevelId extends Migration
     public function up()
     {
         $biz = $this->getContainer();
-        $biz['db']->exec("
+        $biz['db']->exec('
             ALTER TABLE `course_member` DROP `levelId`;
-        ");
+        ');
     }
 
     /**
