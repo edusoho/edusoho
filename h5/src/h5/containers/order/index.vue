@@ -228,18 +228,28 @@ export default {
   computed: {
     ...mapState(['wechatSwitch', 'isLoading', 'couponSwitch']),
     total() {
-      const totalNumber = this.course.totalPrice;
+      let price;
+      const { priceType, coinName, totalPrice } = this.course;
+
       if (!this.itemData) {
-        return totalNumber ? Number(this.course.totalPrice).toFixed(2) : '';
+        price = totalPrice ? Number(totalPrice).toFixed(2) : '';
+      } else {
+        const { type, rate } = this.itemData;
+
+        // 抵价 (minus) or 打折 (discount)
+        if (type === 'minus') {
+          price = Math.max(totalPrice - rate, 0).toFixed(2);
+        } else {
+          price = totalPrice ? Number(totalPrice * rate * 0.1).toFixed(2) : '';
+        }
       }
-      const minusType = this.itemData.type === 'minus';
-      const couponRate = this.itemData.rate;
-      if (minusType) {
-        return Math.max(totalNumber - couponRate, 0).toFixed(2);
+
+      if (priceType === 'Coin') {
+        price = `${price} ${coinName}`;
+      } else if (priceType === 'RMB') {
+        price = `¥ ${price}`;
       }
-      return totalNumber
-        ? Number(totalNumber * couponRate * 0.1).toFixed(2)
-        : '';
+      return price;
     },
     couponMoney() {
       if (!this.itemData) {

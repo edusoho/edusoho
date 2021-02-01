@@ -15,7 +15,9 @@
     <div v-if="type === 'order'" class="switch-box">
       <span class="switch-box__price">
         <p v-if="isFree" class="free">免费</p>
-        <p v-if="!isFree" class="price">¥ {{ order.pay_amount / 100 }}</p>
+        <p v-if="!isFree" class="price">
+          {{ displayPrice(order.priceConvert) }}
+        </p>
       </span>
       <span class="switch-box__state">
         <p
@@ -36,7 +38,7 @@
     <!-- confirm order -->
     <div v-if="type === 'confirmOrder'" class="switch-box">
       <span class="switch-box__price">
-        <p class="price">¥ {{ order.totalPrice | numFilter }}</p>
+        <p class="price">{{ displayPrice(order) }}</p>
       </span>
     </div>
 
@@ -61,11 +63,15 @@ export default {
     },
     course: {
       type: Object,
-      default: {},
+      default() {
+        return {};
+      },
     },
     order: {
       type: Object,
-      default: {},
+      default() {
+        return {};
+      },
     },
   },
   data() {
@@ -115,6 +121,30 @@ export default {
       //     targetType: this.order.targetType
       //   }
       // });
+    },
+    displayPrice(priceConvert) {
+      let price;
+      const type = this.type;
+
+      if (type === 'order') {
+        const { currency, coinAmount, coinName, amount } = priceConvert;
+        if (currency === 'coin') {
+          price = `${coinAmount / 100} ${coinName}`;
+        } else if (currency === 'RMB') {
+          price = `¥ ${amount / 100}`;
+        }
+        return price;
+      }
+
+      if (type === 'confirmOrder') {
+        const { priceType, coinPayAmount, coinName, totalPrice } = priceConvert;
+        if (priceType === 'Coin') {
+          price = `${coinPayAmount} ${coinName}`;
+        } else if (priceType === 'RMB') {
+          price = `¥ ${totalPrice}`;
+        }
+        return price;
+      }
     },
   },
 };
