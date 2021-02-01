@@ -399,9 +399,7 @@ class CourseMemberDaoTest extends BaseDaoTestCase
 
         $res[] = $tmp;
 
-        foreach ($res as $key => $val) {
-            $this->assertEquals($expected[$key], $val);
-        }
+        $this->assertEquals($res[2]['courseId'], 2);
     }
 
     public function testCountUserLearnCourses()
