@@ -8,6 +8,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\LessonService;
 use Biz\File\Service\UploadFileService;
+use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\Request;
 
 class LessonManageController extends BaseController
@@ -39,10 +40,19 @@ class LessonManageController extends BaseController
     {
         $activityConfigManager = $this->get('activity_config_manager');
         $activityConfig = $activityConfigManager->getInstalledActivity($mediaType);
+
         if (empty($activityConfig['finish_condition'])) {
             return [];
         }
-        $finishCondition = reset($activityConfig['finish_condition']);
+
+        if ('video' === $mediaType) {
+            $setting = $this->getSettingService()->get('videoEffectiveTimeStatistics');
+            $finishType = empty($setting) ? 'end' : ('playing' === $setting['statistical_dimension'] ? 'watchTime' : 'time');
+            $activityFinishConditions = array_column($activityConfig['finish_condition'], null, 'type');
+            $finishCondition = $activityFinishConditions[$finishType];
+        } else {
+            $finishCondition = reset($activityConfig['finish_condition']);
+        }
 
         return [
             'finishType' => $finishCondition['type'],
@@ -256,5 +266,13 @@ class LessonManageController extends BaseController
     protected function getUploadFileService()
     {
         return $this->createService('File:UploadFileService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 }

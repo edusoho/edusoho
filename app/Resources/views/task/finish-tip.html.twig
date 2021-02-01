@@ -1,9 +1,19 @@
 {% set condition = conditions[activity.finishType]|default() %}
 
-{% if activity.finishType == 'time' %}
-  {{'activity_manage.finish_tips_time'|trans({'%finishDetail%':activity.finishData})|raw}}
+{% if activity.finishType in ['time', 'watchTime'] %}
+  {% set tips = (activity.finishType == 'time') ? 'activity_manage.finish_tips_time' : 'activity_manage.finish_tips_watch_time' %}
+  {{ tips|trans({'%finishDetail%':activity.finishData})|raw }}
+  <p class="mts js-finish-tip" data-time="{{ activity.finishData * 60 }}">
+    {% if taskResult %}
+      {% set resultTime = (activity.finishType == 'time') ? taskResult.time : taskResult.watchTime %}
+      {% set time = taskResult.time > activity.finishData * 60 ? 0 : (activity.finishData * 60 - resultTime) / 60 %}
+      {{ 'activity_manage.time_last_tips'|trans({'%time%':time|round(0, 'ceil')})|raw }}
+    {% else %}
+      {{ 'activity_manage.time_last_tips'|trans({'%time%':(activity.finishData)})|raw }}
+    {% endif %}
+  </p>
 {% elseif condition.describe|default() %}
   {{ condition.describe|trans }}
 {% else %}
-    {{ 'activity_manage.finish_select_tips_end'|trans }}
+  {{ 'activity_manage.finish_select_tips_end'|trans }}
 {% endif %}

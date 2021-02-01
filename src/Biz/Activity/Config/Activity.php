@@ -61,7 +61,7 @@ class Activity
      *
      * @return mixed
      */
-    public function copy($activity, $config = array())
+    public function copy($activity, $config = [])
     {
         return null;
     }
@@ -92,6 +92,12 @@ class Activity
             $result /= 60;
 
             return !empty($result) && $result >= $activity['finishData'];
+        } elseif ('watchTime' === $activity['finishType']) {
+            $result = $this->getTaskResultService()->getWatchTimeByActivityIdAndUserId($activityId, $this->getCurrentUser()->getId());
+
+            $result /= 60;
+
+            return !empty($result) && $result >= $activity['finishData'];
         } else {
             $log = $this->getActivityLearnLogService()->getMyRecentFinishLogByActivityId($activityId);
 
@@ -101,17 +107,17 @@ class Activity
 
     public function get($targetId)
     {
-        return array();
+        return [];
     }
 
     public function find($targetIds, $showCloud = 1)
     {
-        return array();
+        return [];
     }
 
     public function findWithoutCloudFiles($targetIds)
     {
-        return array();
+        return [];
     }
 
     public function allowEventAutoTrigger()
@@ -129,7 +135,7 @@ class Activity
      */
     protected function registerListeners()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -144,7 +150,7 @@ class Activity
             return null;
         }
         $reflection = new \ReflectionClass($map[$eventName]);
-        $listener = $reflection->newInstanceArgs(array($this->getBiz()));
+        $listener = $reflection->newInstanceArgs([$this->getBiz()]);
 
         if (!$listener instanceof Listener) {
             throw new UnexpectedValueException('listener class must be Listener Derived Class');
