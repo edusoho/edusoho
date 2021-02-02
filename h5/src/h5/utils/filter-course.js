@@ -11,10 +11,12 @@ const getDisplayStyle = (data, listObj) => {
   } else {
     showStudentStr = '';
   }
-  const price =
-    data.price === '0.00'
-      ? '<p style="color: #408FFB">免费</p>'
-      : `<p style="color: #ff5353">¥ ${data.price}</p>`;
+  // const price =
+  //   data.price === '0.00'
+  //     ? '<p style="color: #408FFB">免费</p>'
+  //     : `<p style="color: #ff5353">¥ ${data.price}</p>`;
+
+  const price = getPriceDisplay(data, 'h5');
 
   if (listObj.typeList === 'classroom_list') {
     return {

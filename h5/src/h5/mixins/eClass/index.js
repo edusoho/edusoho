@@ -53,7 +53,7 @@ export default {
       default: '',
     },
     hitNum: {
-      type: String,
+      type: [Number, String],
       default: 0,
     },
   },
