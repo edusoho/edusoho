@@ -546,6 +546,10 @@ class CourseManageController extends BaseController
                 $this->getCourseService()->batchConvert($course['id']);
             }
 
+            if ($this->isPluginInstalled('Vip') && version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')) {
+                $this->setVipRight($course, $data);
+            }
+
             return $this->createJsonResponse(true);
         }
 
@@ -576,6 +580,10 @@ class CourseManageController extends BaseController
 
         if ($this->isPluginInstalled('Vip')) {
             $vipLevels = $this->createService('VipPlugin:Vip:LevelService')->findEnabledLevels();
+            if (version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')) {
+                $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode('course', $course['id']);
+                $course['vipLevelId'] = empty($vipRight) ? '0' : $vipRight['vipLevelId'];
+            }
         }
 
         return $this->render(
@@ -592,6 +600,27 @@ class CourseManageController extends BaseController
                 'vipLevels' => empty($vipLevels) ? [] : array_values($vipLevels),
             ]
         );
+    }
+
+    protected function setVipRight($course, $data)
+    {
+        $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode('course', $course['id']);
+        if ($vipRight) {
+            if (empty($data['vipLevelId'])) {
+                $this->getVipRightService()->deleteVipRight($vipRight['id']);
+            } else {
+                $this->getVipRightService()->updateVipLevelId($vipRight['id'], $data['vipLevelId']);
+            }
+        } else {
+            if (!empty($data['vipLevelId'])) {
+                $this->getVipRightService()->createVipRight([
+                    'vipLevelId' => $data['vipLevelId'],
+                    'supplierCode' => 'course',
+                    'uniqueCode' => $course['id'],
+                    'title' => empty($course['title']) ? $course['courseSetTitle'] : $course['courseSetTitle'].'-'.$course['title'],
+                ]);
+            }
+        }
     }
 
     public function headerAction($courseSet, $course)
@@ -1320,5 +1349,10 @@ class CourseManageController extends BaseController
     protected function getGoodsService()
     {
         return $this->createService('Goods:GoodsService');
+    }
+
+    protected function getVipRightService()
+    {
+        return $this->createService('VipPlugin:Marketing:VipRightService');
     }
 }

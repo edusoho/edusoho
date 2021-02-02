@@ -454,7 +454,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'about',
             'description',
             'price',
-            'vipLevelId',
             'smallPicture',
             'middlePicture',
             'largePicture',

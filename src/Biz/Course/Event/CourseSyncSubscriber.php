@@ -58,10 +58,6 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
         if (empty($courses)) {
             return;
         }
-
-        foreach ($courses as $course) {
-            $this->getCourseDao()->update($course['id'], ['vipLevelId' => $classroom['vipLevelId']]);
-        }
     }
 
     public function onCourseSetUpdate(Event $event)
