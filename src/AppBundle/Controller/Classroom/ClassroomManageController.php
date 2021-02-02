@@ -45,6 +45,10 @@ class ClassroomManageController extends BaseController
 
         if ($this->isPluginInstalled('Vip')) {
             $vipLevels = $this->createService('VipPlugin:Vip:LevelService')->findEnabledLevels();
+            if (version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')) {
+                $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode('classroom', $classroom['id']);
+                $classroom['vipLevelId'] = empty($vipRight) ? '0' : $vipRight['vipLevelId'];
+            }
         }
 
         $coursePrice = 0;
@@ -640,7 +644,32 @@ class ClassroomManageController extends BaseController
 
         $this->getClassroomService()->updateClassroomInfo($id, $class);
 
+        if ($this->isPluginInstalled('Vip') && version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')) {
+            $this->setVipRight($id, $class);
+        }
+
         return $this->createJsonResponse(true);
+    }
+
+    protected function setVipRight($id, $data)
+    {
+        $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode('classroom', $id);
+        if ($vipRight) {
+            if (empty($data['vipLevelId'])) {
+                $this->getVipRightService()->deleteVipRight($vipRight['id']);
+            } else {
+                $this->getVipRightService()->updateVipLevelId($vipRight['id'], $data['vipLevelId']);
+            }
+        } else {
+            if (!empty($data['vipLevelId'])) {
+                $this->getVipRightService()->createVipRight([
+                    'vipLevelId' => $data['vipLevelId'],
+                    'supplierCode' => 'classroom',
+                    'uniqueCode' => $id,
+                    'title' => $data['title'],
+                ]);
+            }
+        }
     }
 
     public function expiryDateRuleAction()
@@ -1229,5 +1258,10 @@ class ClassroomManageController extends BaseController
     protected function getHomeworkActivityService()
     {
         return $this->getBiz()->service('Activity:HomeworkActivityService');
+    }
+
+    protected function getVipRightService()
+    {
+        return $this->createService('VipPlugin:Marketing:VipRightService');
     }
 }
