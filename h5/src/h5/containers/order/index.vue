@@ -160,8 +160,9 @@
     </div>
     <div class="order-footer">
       <div class="order-footer__text">
-        实付：
-        <div class="price">{{ total }}</div>
+        <div>
+          实付：<span class="price">{{ total }}</span>
+        </div>
         <div v-show="itemData" class="discount">已优惠{{ couponMoney }}</div>
       </div>
       <div
