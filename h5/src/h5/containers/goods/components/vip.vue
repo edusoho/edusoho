@@ -9,18 +9,12 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-
 export default {
   props: {
     currentSku: {
       type: Object,
       default: () => {},
     },
-  },
-
-  computed: {
-    ...mapState(['vipSwitch']),
   },
 
   methods: {
