@@ -10,6 +10,7 @@ class AlterTableClassroomMemberAddJoinedChannel extends Migration
     public function up()
     {
         $biz = $this->getContainer();
+
         $biz['db']->exec("ALTER TABLE `classroom_member` ADD `joinedChannel` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '加入来源' AFTER `orderId`;");
     }
 

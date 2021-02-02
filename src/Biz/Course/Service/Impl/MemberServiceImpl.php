@@ -714,20 +714,20 @@ class MemberServiceImpl extends BaseService implements MemberService
             $order = null;
         }
 
+        $reason = $this->buildJoinReason($info, $order);
+
         $fields = [
             'courseId' => $courseId,
             'userId' => $userId,
             'courseSetId' => $course['courseSetId'],
             'orderId' => empty($order) ? 0 : $order['id'],
             'deadline' => $deadline,
-            'levelId' => empty($info['levelId']) ? 0 : $info['levelId'],
+            'joinedChannel' => $reason['reason_type'],
             'role' => 'student',
             'remark' => empty($info['remark']) ? '' : $info['remark'],
             'createdTime' => time(),
             'refundDeadline' => $this->getRefundDeadline(),
         ];
-
-        $reason = $this->buildJoinReason($info, $order);
         $member = $this->addMember($fields, $reason);
 
         $this->refreshMemberNoteNumber($courseId, $userId);
