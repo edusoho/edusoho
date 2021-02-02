@@ -66,11 +66,12 @@ const getDisplayStyle = (data, listObj) => {
 
 const getNewDisplayStyle = (data, listObj, platform) => {
   const price = getPriceDisplay(data, platform);
+  const type = listObj.typeList;
 
-  if (listObj.typeList === 'classroom_list') {
+  if (type === 'classroom_list') {
     return getClassRoomDisplay(data, listObj, price);
   }
-  if (listObj.typeList === 'item_bank_exercise') {
+  if (type === 'item_bank_exercise') {
     return getItemBankDisplay(data, listObj, price);
   }
   return getCourseDisplay(data, listObj, price);
