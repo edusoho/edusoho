@@ -39,13 +39,13 @@
 
       <div class="plan-popup__other">
         <!-- 学习有效期 -->
-        <div class="popup-other clearfix">
+        <!-- <div class="popup-other clearfix">
           <div class="pull-left popup-other__left">学习有效期</div>
           <div
             class="pull-left popup-other__right"
             v-html="buyableModeHtml"
           ></div>
-        </div>
+        </div> -->
         <!-- 承诺服务 -->
         <div
           class="popup-other clearfix"
@@ -81,10 +81,10 @@
       </div>
     </div>
 
-    <div class="detail-plan__plan clearfix">
+    <!-- <div class="detail-plan__plan clearfix">
       <div class="pull-left plan-left">学习有效期</div>
       <div class="pull-left plan-right" v-html="buyableModeHtml"></div>
-    </div>
+    </div> -->
 
     <div
       class="detail-plan__plan clearfix"
