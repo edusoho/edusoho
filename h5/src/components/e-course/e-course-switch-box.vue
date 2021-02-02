@@ -129,9 +129,11 @@ export default {
       if (type === 'order') {
         const { currency, coinAmount, coinName, amount } = priceConvert;
         if (currency === 'coin') {
-          price = `${coinAmount / 100} ${coinName}`;
+          price = coinAmount ? (coinAmount / 100).toFixed(2) : '';
+          price = `${price} ${coinName}`;
         } else if (currency === 'RMB') {
-          price = `¥ ${amount / 100}`;
+          price = amount ? (amount / 100).toFixed(2) : '';
+          price = `¥ ${price}`;
         }
         return price;
       }
