@@ -81,7 +81,13 @@
     </div>
 
     <!-- 学习有效期 -->
-    <div>学习有效期<span v-html="buyableModeHtml"></span></div>
+    <div class="detail-info__validity">
+      学习有效期
+      <span
+        class="detail-info__validity__content"
+        v-html="buyableModeHtml"
+      ></span>
+    </div>
   </div>
 </template>
 

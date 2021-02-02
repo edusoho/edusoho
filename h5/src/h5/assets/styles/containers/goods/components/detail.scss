@@ -113,6 +113,17 @@
 			font-size: vw(12);
 		}
 	}
+
+	.detail-info__validity {
+		margin-top: vw(8);
+		color: #999;
+		font-size: vw(14);
+
+		.detail-info__validity__content {
+			margin-left: vw(8);
+			color: #333;
+		}
+	}
 }
 // 教学计划
 .detail-plan {
