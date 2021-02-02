@@ -139,7 +139,8 @@ export default {
       if (type === 'confirmOrder') {
         const { priceType, coinPayAmount, coinName, totalPrice } = priceConvert;
         if (priceType === 'Coin') {
-          price = `${coinPayAmount} ${coinName}`;
+          price = coinPayAmount ? parseFloat(coinPayAmount).toFixed(2) : '';
+          price = `${price} ${coinName}`;
         } else if (priceType === 'RMB') {
           price = `¥ ${totalPrice}`;
         }
