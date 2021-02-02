@@ -1,13 +1,14 @@
 const getDisplayStyle = (data, listObj) => {
   let showStudentStr = '';
-  if (listObj.showNumberData === 'join') {
+  const status = listObj.showNumberData;
+  if (status === 'join') {
     showStudentStr = `<span class="switch-box__state">
-            <p class="iconfont icon-people">${data.studentNum}</p>
-        </span>`;
-  } else if (listObj.showNumberData === 'visitor') {
+      <p class="iconfont icon-people">${data.studentNum}</p>
+    </span>`;
+  } else if (status === 'visitor') {
     showStudentStr = `<span class="switch-box__state">
-            <p class="iconfont icon-visibility">${data.hitNum}</p>
-        </span>`;
+      <p class="iconfont icon-visibility">${data.hitNum}</p>
+    </span>`;
   } else {
     showStudentStr = '';
   }
@@ -76,16 +77,17 @@ const getNewDisplayStyle = (data, listObj, platform) => {
 };
 
 const getPriceDisplay = (data, platform) => {
-  const dataPrice = Number(data.price2.amount);
+  const { amount, currency, coinAmount, coinName } = data.price2;
+  const dataPrice = Number(amount);
   const primaryColor = {
     app: '#20B573',
     h5: '#408FFB',
   };
   let price;
-  if (dataPrice > 0 && data.price2.currency === 'coin') {
-    price = `<span style="color: #ff5353">${data.price2.coinAmount} ${data.price2.coinName}</span>`;
-  } else if (dataPrice > 0 && data.price2.currency === 'RMB') {
-    price = `<span style="color: #ff5353">¥ ${data.price2.amount}</span>`;
+  if (dataPrice > 0 && currency === 'coin') {
+    price = `<span style="color: #ff5353">${coinAmount} ${coinName}</span>`;
+  } else if (dataPrice > 0 && currency === 'RMB') {
+    price = `<span style="color: #ff5353">¥ ${amount}</span>`;
   } else {
     price = `<span style="color:${primaryColor[platform]}">免费</span>`;
   }
