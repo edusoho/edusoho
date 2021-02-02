@@ -79,6 +79,9 @@
         </div>
       </div>
     </div>
+
+    <!-- 学习有效期 -->
+    <div>学习有效期<span v-html="buyableModeHtml"></span></div>
   </div>
 </template>
 
@@ -108,7 +111,72 @@ export default {
       return (Math.round(input * 100) / 100).toFixed(2);
     },
   },
+  computed: {
+    buyableModeHtml() {
+      const memberInfo = this.goods.member;
+      const {
+        usageMode,
+        usageEndTime,
+        usageDays,
+        usageStartTime,
+      } = this.currentSku;
+
+      if (!memberInfo) {
+        switch (usageMode) {
+          case 'forever':
+            return '长期有效';
+          case 'end_date':
+            return (
+              this.formatDate(usageEndTime.slice(0, 10)) + '&nbsp;之前可学习'
+            );
+          case 'days':
+            return usageDays + '天内可学习';
+          case 'date':
+            return (
+              this.formatDate(usageStartTime.slice(0, 10)) +
+              '&nbsp;~&nbsp;' +
+              this.formatDate(usageEndTime.slice(0, 10))
+            );
+          default:
+            return '';
+        }
+      } else {
+        if (usageMode == 'forever' || memberInfo.deadline == 0) {
+          return '长期有效';
+        }
+        return memberInfo.deadline.slice(0, 10) + '之前可学习';
+      }
+    },
+  },
   methods: {
+    formatDate(time, fmt = 'yyyy-MM-dd') {
+      time = time * 1000;
+      const date = new Date(time);
+      if (/(y+)/.test(fmt)) {
+        fmt = fmt.replace(
+          RegExp.$1,
+          (date.getFullYear() + '').substr(4 - RegExp.$1.length),
+        );
+      }
+      const o = {
+        'M+': date.getMonth() + 1,
+        'd+': date.getDate(),
+        'h+': date.getHours(),
+        'm+': date.getMinutes(),
+        's+': date.getSeconds(),
+      };
+      for (const k in o) {
+        if (new RegExp(`(${k})`).test(fmt)) {
+          const str = o[k] + '';
+          fmt = fmt.replace(
+            RegExp.$1,
+            RegExp.$1.length === 1 ? str : ('00' + str).substr(str.length),
+          );
+        }
+      }
+      return fmt;
+    },
+
     onShare() {
       // 分享
     },
