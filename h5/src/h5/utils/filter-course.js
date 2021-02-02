@@ -62,6 +62,7 @@ const getDisplayStyle = (data, listObj) => {
     },
   };
 };
+
 const getNewDisplayStyle = (data, listObj, platform) => {
   const price = getPriceDisplay(data, platform);
 
@@ -73,6 +74,7 @@ const getNewDisplayStyle = (data, listObj, platform) => {
   }
   return getCourseDisplay(data, listObj, price);
 };
+
 const getPriceDisplay = (data, platform) => {
   const dataPrice = Number(data.price2.amount);
   const primaryColor = {
@@ -89,6 +91,7 @@ const getPriceDisplay = (data, platform) => {
   }
   return price;
 };
+
 const getClassRoomDisplay = (data, listObj, price) => {
   return {
     id: data.id,
@@ -112,6 +115,7 @@ const getClassRoomDisplay = (data, listObj, price) => {
     },
   };
 };
+
 const getCourseDisplay = (data, listObj, price) => {
   return {
     id: data.id,
@@ -134,6 +138,7 @@ const getCourseDisplay = (data, listObj, price) => {
     },
   };
 };
+
 const getItemBankDisplay = (data, listObj, price) => {
   return {
     id: data.id,
@@ -174,6 +179,7 @@ const getstudyItemBankDisplay = data => {
     },
   };
 };
+
 const courseListData = (data, listObj, uiStyle = 'old', platform = 'h5') => {
   // h5和app用了新版ui,小程序还是用旧版ui
   switch (listObj.type) {
@@ -253,4 +259,5 @@ const courseListData = (data, listObj, uiStyle = 'old', platform = 'h5') => {
       return 'empty data';
   }
 };
+
 export default courseListData;
