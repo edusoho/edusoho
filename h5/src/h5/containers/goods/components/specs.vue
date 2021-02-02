@@ -65,7 +65,7 @@
       <!--      <div class="plan-popup__buy">立即购买</div>-->
     </van-popup>
 
-    <div
+    <!-- <div
       v-if="currentSku.vipLevelInfo && vipSwitch"
       class="detail-plan__plan clearfix"
     >
@@ -79,7 +79,7 @@
           {{ currentSku.vipLevelInfo.name }}免费学</router-link
         >
       </div>
-    </div>
+    </div> -->
 
     <!-- <div class="detail-plan__plan clearfix">
       <div class="pull-left plan-left">学习有效期</div>
