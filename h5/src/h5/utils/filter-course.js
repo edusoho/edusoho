@@ -3,12 +3,12 @@ const getDisplayStyle = (data, listObj) => {
   const status = listObj.showNumberData;
   if (status === 'join') {
     showStudentStr = `<span class="switch-box__state">
-      <p class="iconfont icon-people">${data.studentNum}</p>
-    </span>`;
+                        <p class="iconfont icon-people">${data.studentNum}</p>
+                      </span>`;
   } else if (status === 'visitor') {
     showStudentStr = `<span class="switch-box__state">
-      <p class="iconfont icon-visibility">${data.hitNum}</p>
-    </span>`;
+                        <p class="iconfont icon-visibility">${data.hitNum}</p>
+                      </span>`;
   } else {
     showStudentStr = '';
   }
