@@ -1,3 +1,9 @@
 training_task_homepage:
     path:     /
     defaults: { _controller: TrainingTaskPlugin:Activity:Training:preview }
+training_task_container_picker:
+  path: /training_task/picker
+  defaults: { _controller: TrainingTaskPlugin:Activity\Training:test }
+course_task_training_dataset:
+  path: /training_task/get_dataset
+  defaults: {_controller: TrainingTaskPlugin:Dataset\Index:index}

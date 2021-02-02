@@ -29,7 +29,6 @@ class ActivityController extends BaseController
             $activity['preview'] = $preview;
             return $container->show($activity);
         }
-
         $actionConfig = $this->getActivityConfig($activity['mediaType']);
 
         return $this->forward($actionConfig['controller'].':show', array(

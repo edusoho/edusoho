@@ -1,4 +1,5 @@
 var load = window.ltc.load('bootstrap.css', 'jquery', 'validate', 'editor');
+import Create from './training';
 load.then(function(){
   var context = window.ltc.getContext();
   var contentCache = '',
@@ -52,7 +53,6 @@ load.then(function(){
     });
 
     if (context.activityId) {
-      console.log(123);
       window.ltc.api({
         name: 'getActivity',
         pathParams: {
@@ -130,3 +130,5 @@ load.then(function(){
     });
   }
 });
+
+new Create($('#iframe-content'));

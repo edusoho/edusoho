@@ -5,6 +5,7 @@ namespace TrainingTaskPlugin\Extension;
 use AppBundle\Extension\Extension;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use Symfony\Component\HttpFoundation\Request;
 use TrainingTaskPlugin\Biz\Activity\Type\Training;
 
 class ActivityExtension extends Extension implements ServiceProviderInterface
@@ -18,6 +19,17 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
             return new Training($biz);
         };
     }
+
+    // public function getTaskToolbars()
+    // {
+    //         // $taskToolBars[] = array(
+    //         //     'code' => 'questionxxxx',
+    //         //     'name' => '数据集',
+    //         //     'icon' => 'es-icon-help',
+    //         //     'action' => 'course_task_training_dataset',
+    //         // );
+    //     return $taskToolBars;
+    // }
 
     public function getActivities()
     {

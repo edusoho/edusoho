@@ -1,0 +1,3 @@
+group_task_homepage:
+    path:     /
+    defaults: { _controller: GroupTaskPlugin:Default:index }

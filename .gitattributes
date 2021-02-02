@@ -1,0 +1,5 @@
+# git diff 临时忽略某些文件
+#使用前：git config diff.nodiff.command usr/bin/true
+#使用后：git config --unset diff.nodiff.command
+#docs：https://git-scm.com/docs/gitattributes
+/vendor/* diff=nodiff

@@ -564,7 +564,6 @@ class TaskController extends BaseController
         if ($task['courseId'] != $courseId) {
             $this->createNewException(TaskException::ACCESS_DENIED());
         }
-
         return $task;
     }
 

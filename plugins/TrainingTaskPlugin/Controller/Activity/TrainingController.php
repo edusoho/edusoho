@@ -4,12 +4,18 @@ namespace TrainingTaskPlugin\Controller\Activity;
 
 use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Controller\Activity\ActivityActionInterface;
 
 class TrainingController extends BaseController implements ActivityActionInterface
 {
+    public function testAction(){
+        return $this->render('TrainingTaskPlugin:Activity:Admin/modal.html.twig', array(
+            'activity' => [1,2,3],
+        ));
+    }
     public function showAction(Request $request, $activity)
     {
-        return $this->render('TrainingTaskPlugin:Activity/Training/show.html.twig', array(
+        return $this->render('TrainingTaskPlugin:Activity:Home/show.html.twig', array(
             'activity' => $activity,
             // other params
         ));
@@ -51,9 +57,10 @@ class TrainingController extends BaseController implements ActivityActionInterfa
 
     public function finishConditionAction(Request $request, $activity)
     {
+
         $media = $this->getActivityService()->getActivityConfig('training')->get($activity['mediaId']);
 
-        return $this->render('TrainingTaskPlugin:Activity/Training/finish-condition.html.twig', array(
+        return $this->render('TrainingTaskPlugin:Activity:Home/finish-condition.html.twig', array(
             'media' => $media,
         ));
     }
