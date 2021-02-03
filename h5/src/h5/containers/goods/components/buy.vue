@@ -94,18 +94,17 @@ export default {
   computed: {
     ...mapState(['vipSwitch']),
 
+    // 会员是否有效
     vipAccessToJoin() {
       let vipAccess = false;
-      if (!this.currentSku.vipLevelInfo || !this.currentSku.vipUser) {
+      const { vipLevelInfo, vipUser } = this.currentSku;
+      if (!vipLevelInfo || !vipUser) {
         return false;
       }
 
-      if (
-        this.currentSku.vipLevelInfo.seq <= this.currentSku.vipUser.level.seq
-      ) {
+      if (vipLevelInfo.seq <= vipUser.level.seq) {
         const vipExpired =
-          parseInt(this.currentSku.vipUser.deadline) * 1000 <
-          new Date().getTime();
+          parseInt(vipUser.deadline) * 1000 < new Date().getTime();
         vipAccess = !vipExpired;
       }
       return vipAccess;
