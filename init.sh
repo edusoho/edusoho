@@ -1,6 +1,7 @@
 #!/usr/bin/env sh
-git clean -fdx
+#git clean -fdx
 cp -n app/config/parameters.yml.dist app/config/parameters.yml
+rm -rf app/cache app/logs app/data web/files node_modules
 mkdir -p app/cache app/logs app/data web/files
 chmod 777 app/cache app/logs app/data web/files
 
