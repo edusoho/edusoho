@@ -200,4 +200,18 @@ class BaseService extends \Codeages\Biz\Framework\Service\BaseService
 
         return $kernel->getPluginConfigurationManager()->isPluginInstalled($pluginCode);
     }
+
+    protected function getPluginVersion($name)
+    {
+        global $kernel;
+        $plugins = $kernel->getPlugins();
+
+        foreach ($plugins as $plugin) {
+            if (strtolower($plugin['code']) == strtolower($name)) {
+                return $plugin['version'];
+            }
+        }
+
+        return null;
+    }
 }

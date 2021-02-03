@@ -123,7 +123,7 @@ class ExploreController extends BaseController
         return $this->render(
             'course-set/explore.html.twig',
             array(
-                'courseSets' => $this->filterVipSupplierData($courseSets, 'course'),
+                'courseSets' => $this->getCourseService()->filterCoursesVipRight($courseSets),
                 'category' => $category,
                 'filter' => $filter,
                 'paginator' => $paginator,
@@ -134,24 +134,6 @@ class ExploreController extends BaseController
                 'tags' => $tags,
             )
         );
-    }
-
-    protected function filterVipSupplierData($supplierData, $supplierCode)
-    {
-        if($this->isPluginInstalled('Vip') && version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')){
-            $vipRights = $this->getVipRightService()->searchVipRights(['supplierCode' => $supplierCode], [], 0, PHP_INT_MAX);
-            $vipRights = empty($vipRights) ? [] : ArrayToolkit::index($vipRights, 'uniqueCode');
-
-            foreach ($supplierData as &$data){
-                if ($supplierCode == 'course'){
-                    $data['course']['vipLevelId'] = isset($vipRights[$data['course']['id']]['vipLevelId']) ? $vipRights[$data['course']['id']]['vipLevelId'] : 0;
-                }else{
-                    $data['vipLevelId'] = isset($vipRights[$data['id']]['vipLevelId']) ? $vipRights[$data['id']]['vipLevelId'] : 0;
-                }
-            }
-        }
-
-        return $supplierData;
     }
 
     public function openCourseAction(Request $request, $category)
@@ -318,7 +300,7 @@ class ExploreController extends BaseController
             'classroom/explore.html.twig',
             array(
                 'paginator' => $paginator,
-                'classrooms' => $this->filterVipSupplierData($classrooms, 'classroom'),
+                'classrooms' => $this->getClassroomService()->filterClassroomsVipRight($classrooms),
                 'category' => $category,
                 'categoryArray' => $categoryArray,
                 'categoryParent' => $categoryParent,

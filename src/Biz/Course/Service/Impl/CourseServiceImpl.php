@@ -2879,6 +2879,25 @@ class CourseServiceImpl extends BaseService implements CourseService
         return !empty($this->getCertificateService()->count($conditions));
     }
 
+    public function filterCoursesVipRight($supplierData)
+    {
+        if($this->isPluginInstalled('Vip') && version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')){
+            $vipRights = $this->getVipRightService()->searchVipRights(['supplierCode' => 'course'], [], 0, PHP_INT_MAX);
+            $vipRights = empty($vipRights) ? [] : ArrayToolkit::index($vipRights, 'uniqueCode');
+
+            foreach ($supplierData as &$data){
+                $data['course']['vipLevelId'] = isset($vipRights[$data['course']['id']]['vipLevelId']) ? $vipRights[$data['course']['id']]['vipLevelId'] : 0;
+            }
+        }
+
+        return $supplierData;
+    }
+
+    protected function getVipRightService()
+    {
+        return $this->createService('VipPlugin:Marketing:VipRightService');
+    }
+
     /**
      * @return CertificateService
      */

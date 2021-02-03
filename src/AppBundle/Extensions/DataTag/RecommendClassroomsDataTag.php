@@ -50,7 +50,7 @@ class RecommendClassroomsDataTag extends CourseBaseDataTag implements DataTag
             $classroom['users'] = $teachers;
         }
 
-        return $classrooms;
+        return $this->getClassroomService()->filterClassroomsVipRight($classrooms);
     }
 
     protected function getClassroomService()

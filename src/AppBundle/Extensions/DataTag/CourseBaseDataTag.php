@@ -3,6 +3,7 @@
 namespace AppBundle\Extensions\DataTag;
 
 use AppBundle\Common\ArrayToolkit;
+use AppBundle\Twig\WebExtension;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
@@ -197,7 +198,7 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
 
         $courseSets = $this->fillCourseTryLookVideo($courseSets);
 
-        return $courseSets;
+        return $this->getCourseService()->filterCoursesVipRight($courseSets);
     }
 
     protected function getCourseTeachersAndCategories($courses)
@@ -327,5 +328,19 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
         });
 
         return $courseSets;
+    }
+
+    public function filterCoursesVipRight($supplierData)
+    {
+        if($this->isPluginInstalled('Vip') && version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')){
+            $vipRights = $this->getVipRightService()->searchVipRights(['supplierCode' => 'course'], [], 0, PHP_INT_MAX);
+            $vipRights = empty($vipRights) ? [] : ArrayToolkit::index($vipRights, 'uniqueCode');
+
+            foreach ($supplierData as &$data){
+                $data['course']['vipLevelId'] = isset($vipRights[$data['course']['id']]['vipLevelId']) ? $vipRights[$data['course']['id']]['vipLevelId'] : 0;
+            }
+        }
+
+        return $supplierData;
     }
 }

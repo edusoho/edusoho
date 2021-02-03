@@ -1,7 +1,6 @@
 
 <!-- 推荐班级 -->
 {% set classrooms = data('RecommendClassrooms',{'count':config.count|default(4)})%}
-{% set classrooms = filter_vip_supplier_data(classrooms, 'classroom') %}
 {% if classrooms %}
   <section class="class-section {{config.background|default("")}}">
     <div class="container">
