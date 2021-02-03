@@ -34,10 +34,7 @@
       v-else-if="currentSku.displayPrice != 0"
       @click="handleJoin"
     >
-      {{
-        currentSku.access.code
-          | filterGoodsBuyStatus(goods.type, vipAccessToJoin)
-      }}
+      {{ currentSku | filterGoodsBuyStatus(goods.type, vipAccessToJoin) }}
     </div>
     <div
       @click="handleJoin"
@@ -47,10 +44,7 @@
     >
       <span v-if="accessToJoin">免费加入</span>
       <span v-else>
-        {{
-          currentSku.access.code
-            | filterGoodsBuyStatus(goods.type, vipAccessToJoin)
-        }}
+        {{ currentSku | filterGoodsBuyStatus(goods.type, vipAccessToJoin) }}
       </span>
     </div>
   </div>

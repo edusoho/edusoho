@@ -232,7 +232,8 @@ const filters = [
   },
   {
     name: 'filterGoodsBuyStatus',
-    handler(code, type = 'course', vipAccessToJoin) {
+    handler(currentSku, type = 'course', vipAccessToJoin) {
+      let code = currentSku.access.code;
       if (
         vipAccessToJoin &&
         code !== 'member.member_exist' &&
@@ -280,7 +281,7 @@ const filters = [
           break;
         case `${type}.only_vip_join_way`:
         case 'course.only_vip_join_way': // type 为班级时，code显示为 'course.only_vip_join_way', 此处临时处理
-          code = '只能通过VIP加入';
+          code = `${currentSku.vipLevelInfo.name}免费`;
           break;
         default:
       }
