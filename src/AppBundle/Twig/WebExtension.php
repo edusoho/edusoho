@@ -210,33 +210,26 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('information_collect_location_info', [$this, 'informationCollectLocationInfo']),
             new \Twig_SimpleFunction('information_collect_form_items', [$this, 'informationCollectFormItems']),
             new \Twig_SimpleFunction('cloud_mail_settings', [$this, 'mailSetting']),
-            new \Twig_SimpleFunction('courses_fill_vip_right', [$this, 'coursesFillVipRight']),
-            new \Twig_SimpleFunction('classrooms_fill_vip_right', [$this, 'classroomsFillVipRight']),
+            new \Twig_SimpleFunction('filter_vip_supplier_data', [$this, 'filterVipSupplierData']),
         ];
     }
 
-    public function coursesFillVipRight($courseSets)
+    public function filterVipSupplierData($supplierData, $supplierCode)
     {
-        $vipRightCourses = $this->getVipRightService()->searchVipRights(['supplierCode' => 'course'], [], 0, PHP_INT_MAX);
-        $vipRightCourses = empty($vipRightCourses) ? [] : ArrayToolkit::index($vipRightCourses, 'uniqueCode');
+        if($this->isPluginInstalled('Vip') && version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')){
+            $vipRights = $this->getVipRightService()->searchVipRights(['supplierCode' => $supplierCode], [], 0, PHP_INT_MAX);
+            $vipRights = empty($vipRights) ? [] : ArrayToolkit::index($vipRights, 'uniqueCode');
 
-        foreach ($courseSets as &$courseSet){
-            $courseSet['course']['vipLevelId'] = isset($vipRightCourses[$courseSet['course']['id']]['vipLevelId']) ? $vipRightCourses[$courseSet['course']['id']]['vipLevelId'] : 0;
+            foreach ($supplierData as &$data){
+                if ($supplierCode == 'course'){
+                    $data['course']['vipLevelId'] = isset($vipRights[$data['id']]['vipLevelId']) ? $vipRights[$data['id']]['vipLevelId'] : 0;
+                }else{
+                    $data['vipLevelId'] = isset($vipRights[$data['id']]['vipLevelId']) ? $vipRights[$data['id']]['vipLevelId'] : 0;
+                }
+            }
         }
 
-        return $courseSets;
-    }
-
-    public function classroomsFillVipRight($classrooms)
-    {
-        $vipRightClassrooms = $this->getVipRightService()->searchVipRights(['supplierCode' => 'classroom'], [], 0, PHP_INT_MAX);
-        $vipRightClassrooms = empty($vipRightClassrooms) ? [] : ArrayToolkit::index($vipRightClassrooms, 'uniqueCode');
-
-        foreach ($classrooms as &$classroom){
-            $classroom['vipLevelId'] = isset($vipRightClassrooms[$classroom['id']]['vipLevelId']) ? $vipRightClassrooms[$classroom['id']]['vipLevelId'] : 0;
-        }
-
-        return $classrooms;
+        return $supplierData;
     }
 
     /**

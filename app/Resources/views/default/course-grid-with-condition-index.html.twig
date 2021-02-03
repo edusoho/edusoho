@@ -12,7 +12,7 @@
   {% elseif orderBy == 'hotSeq' %}
     {% set courseSets = data('PopularCourseSets',{'count':count, 'categoryId':categoryId,'type':'hotSeq'}) %}
   {% endif %}
-  {% set courseSets = courses_fill_vip_right(courseSets) %}
+  {% set courseSets = filter_vip_supplier_data(courseSets, 'course') %}
   {% set categoriesFirst = data('Categories',{'group':'course', 'parentId':0}) %}
   {% set moreCategories =  categoriesFirst[config.categoryCount|default(4):] %}
   <div class="container">
