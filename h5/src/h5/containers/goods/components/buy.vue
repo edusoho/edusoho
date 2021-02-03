@@ -25,7 +25,7 @@
       </template>
     </div>
 
-    <div @click="handleJoin" v-if="currentSku.isMember" class="info-buy__btn">
+    <div class="info-buy__btn" v-if="currentSku.isMember" @click="handleJoin">
       去学习
     </div>
     <div
@@ -37,10 +37,10 @@
       {{ currentSku | filterGoodsBuyStatus(goods.type, vipAccessToJoin) }}
     </div>
     <div
-      @click="handleJoin"
-      v-else
-      :class="!accessToJoin ? 'disabled' : ''"
       class="info-buy__btn"
+      :class="!accessToJoin ? 'disabled' : ''"
+      v-else
+      @click="handleJoin"
     >
       <span v-if="accessToJoin">免费加入</span>
       <span v-else>
