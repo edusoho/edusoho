@@ -9,6 +9,8 @@ use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
 use Biz\Goods\Service\GoodsService;
+use VipPlugin\Biz\Marketing\Service\VipRightService;
+use VipPlugin\Biz\Marketing\VipRightSupplier\CourseVipRightSupplier;
 
 class PageCourse extends AbstractResource
 {
@@ -55,9 +57,12 @@ class PageCourse extends AbstractResource
         $goods = $this->getGoodsService()->getGoods($course['goodsId']);
         $course['hitNum'] = empty($goods['hitNum']) ? 0 : $goods['hitNum'];
 
-        if ($this->isPluginInstalled('vip') && $course['vipLevelId'] > 0) {
-            $apiRequest = new ApiRequest('/api/plugins/vip/vip_levels/'.$course['vipLevelId'], 'GET', []);
-            $course['vipLevel'] = $this->invokeResource($apiRequest);
+        if ($this->isPluginInstalled('vip')) {
+            $vipRights = $this->getVipRightService()->findVipRightsBySupplierCodeAndUniqueCode(CourseVipRightSupplier::CODE, $course['id']);
+            if (!empty($vipRights)) {
+                $apiRequest = new ApiRequest('/api/plugins/vip/vip_levels/'.$vipRights[0]['vipLevelId'], 'GET');
+                $course['vipLevel'] = $this->invokeResource($apiRequest);
+            }
         }
         $course['reviews'] = $this->searchCourseReviews($course);
         $course['myReview'] = $this->getMyReview($course, $user);
@@ -156,5 +161,13 @@ class PageCourse extends AbstractResource
     private function getLearningDataAnalysisService()
     {
         return $this->service('Course:LearningDataAnalysisService');
+    }
+
+    /**
+     * @return VipRightService
+     */
+    private function getVipRightService()
+    {
+        return $this->service('VipPlugin:Marketing:VipRightService');
     }
 }

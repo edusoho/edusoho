@@ -9,6 +9,9 @@ use ApiBundle\Api\Util\AssetHelper;
 use ApiBundle\Api\Util\Converter;
 use ApiBundle\Api\Util\Money;
 use AppBundle\Common\ServiceToolkit;
+use Topxia\Service\Common\ServiceKernel;
+use VipPlugin\Biz\Marketing\Service\VipRightService;
+use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
 
 class ClassroomFilter extends Filter
 {
@@ -54,6 +57,13 @@ class ClassroomFilter extends Filter
             $specsFilter->setMode(Filter::SIMPLE_MODE);
             $specsFilter->filter($data['spec']);
         }
+
+        if ($this->isPluginInstalled('vip')) {
+            $vipRights = $this->getVipRightService()->findVipRightsBySupplierCodeAndUniqueCode(ClassroomVipRightSupplier::CODE, $data['id']);
+            $data['vipLevelId'] = empty($vipRights) ? 0 : $vipRights[0]['vipLevelId'];
+        } else {
+            $data['vipLevelId'] = 0;
+        }
     }
 
     private function transformCover(&$data)
@@ -70,5 +80,13 @@ class ClassroomFilter extends Filter
         unset($data['smallPicture']);
         unset($data['middlePicture']);
         unset($data['largePicture']);
+    }
+
+    /**
+     * @return VipRightService
+     */
+    private function getVipRightService()
+    {
+        return ServiceKernel::instance()->createService('VipPlugin:Marketing:VipRightService');
     }
 }

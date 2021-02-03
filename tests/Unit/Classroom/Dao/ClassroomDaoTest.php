@@ -17,14 +17,13 @@ class ClassroomDaoTest extends BaseDaoTestCase
         $expected[5] = $this->mockDataObject(array('recommended' => 1));
         $expected[6] = $this->mockDataObject(array('showable' => 0));
         $expected[7] = $this->mockDataObject(array('buyable' => 0));
-        $expected[8] = $this->mockDataObject(array('vipLevelId' => 1));
-        $expected[9] = $this->mockDataObject(array('orgCode' => '0'));
-        $expected[10] = $this->mockDataObject(array('headTeacherId' => 1));
+        $expected[8] = $this->mockDataObject(array('orgCode' => '0'));
+        $expected[9] = $this->mockDataObject(array('headTeacherId' => 1));
         $testCondition = array(
             array(
                 'condition' => array(),
                 'expectedResults' => $expected,
-                'expectedCount' => 11,
+                'expectedCount' => 10,
                 ),
             array(
                 'condition' => array('status' => 'closed'),
@@ -77,18 +76,13 @@ class ClassroomDaoTest extends BaseDaoTestCase
                 'expectedCount' => 1,
                 ),
             array(
-                'condition' => array('vipLevelId' => 1),
+                'condition' => array('orgCode' => '0'),
                 'expectedResults' => array($expected[8]),
                 'expectedCount' => 1,
                 ),
             array(
-                'condition' => array('orgCode' => '0'),
-                'expectedResults' => array($expected[9]),
-                'expectedCount' => 1,
-                ),
-            array(
                 'condition' => array('headTeacherId' => 1),
-                'expectedResults' => array($expected[10]),
+                'expectedResults' => array($expected[9]),
                 'expectedCount' => 1,
                 ),
             );
@@ -145,7 +139,6 @@ class ClassroomDaoTest extends BaseDaoTestCase
             'recommended' => 0,
             'showable' => 1,
             'buyable' => 1,
-            'vipLevelId' => 0,
             'orgCode' => '1',
             'headTeacherId' => 0,
             );

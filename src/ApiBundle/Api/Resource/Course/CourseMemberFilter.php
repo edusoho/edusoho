@@ -4,6 +4,8 @@ namespace ApiBundle\Api\Resource\Course;
 
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\User\UserFilter;
+use Topxia\Service\Common\ServiceKernel;
+use VipPlugin\Biz\Vip\Service\VipService;
 
 class CourseMemberFilter extends Filter
 {
@@ -29,7 +31,22 @@ class CourseMemberFilter extends Filter
         $data['lastLearnTime'] = date('c', $data['lastLearnTime']);
         $data['lastViewTime'] = date('c', $data['lastViewTime']);
 
+        if ($this->isPluginInstalled('vip')) {
+            $vipMember = $this->getVipService()->getMemberByUserId($data['user']['id']);
+            $data['levelId'] = empty($vipMember) ? 0 : $vipMember['levelId'];
+        } else {
+            $data['levelId'] = 0;
+        }
+
         $userFilter = new UserFilter();
         $userFilter->filter($data['user']);
+    }
+
+    /**
+     * @return VipService
+     */
+    private function getVipService()
+    {
+        return ServiceKernel::instance()->createService('VipPlugin:Vip:VipService');
     }
 }

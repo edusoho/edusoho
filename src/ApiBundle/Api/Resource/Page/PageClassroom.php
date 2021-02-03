@@ -7,6 +7,8 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use Biz\Classroom\ClassroomException;
 use Biz\Classroom\Service\ClassroomService;
+use VipPlugin\Biz\Marketing\Service\VipRightService;
+use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
 
 class PageClassroom extends AbstractResource
 {
@@ -63,6 +65,14 @@ class PageClassroom extends AbstractResource
             $classroom['vipLevel'] = $this->invokeResource($apiRequest);
         }
 
+        if ($this->isPluginInstalled('vip')) {
+            $vipRights = $this->getVipRightService()->findVipRightsBySupplierCodeAndUniqueCode(ClassroomVipRightSupplier::CODE, $classroom['id']);
+            if (!empty($vipRights)) {
+                $apiRequest = new ApiRequest('/api/plugins/vip/vip_levels/'.$vipRights[0]['vipLevelId'], 'GET');
+                $course['vipLevel'] = $this->invokeResource($apiRequest);
+            }
+        }
+
         return $classroom;
     }
 
@@ -104,5 +114,13 @@ class PageClassroom extends AbstractResource
     private function getUserService()
     {
         return $this->service('User:UserService');
+    }
+
+    /**
+     * @return VipRightService
+     */
+    private function getVipRightService()
+    {
+        return $this->service('VipPlugin:Marketing:VipRightService');
     }
 }
