@@ -217,3 +217,30 @@
 		top: vw(2);
 	}
 }
+
+.goods-vip {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-top: vw(8);
+	padding: vw(14);
+	background-color: #fff;
+
+	.goods-vip__left {
+		display: flex;
+		align-items: center;
+		color: #ff8922;
+		font-weight: 500;
+		font-size: vw(14);
+
+		img {
+			width: vw(24);
+			height: vw(24);
+			margin-right: vw(4);
+		}
+	}
+
+	i {
+		color: #666;
+	}
+}

@@ -16,6 +16,12 @@
           :currentSku="currentSku"
           :goods-setting="goodsSetting"
         />
+
+        <vip
+          v-if="currentSku.vipLevelInfo && vipSwitch"
+          :currentSku="currentSku"
+        />
+
         <specs :goods="goods" :currentSku="currentSku" @changeSku="changeSku" />
         <certificate
           v-if="currentSku.hasCertificate"
@@ -129,6 +135,7 @@ import Discount from './components/discount';
 import Detail from './components/detail';
 import Specs from './components/specs';
 import Certificate from './components/certificate';
+import Vip from './components/vip';
 import EnterLearning from './components/enter-learning';
 
 import Teacher from './components/teacher';
@@ -142,7 +149,7 @@ import initShare from '@/utils/weiixn-share-sdk';
 
 import Api from '@/api';
 import { Toast } from 'vant';
-import { mapActions } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   data() {
@@ -172,8 +179,11 @@ export default {
     ClassroomCourses,
     Certificate,
     EnterLearning,
+    Vip,
   },
   computed: {
+    ...mapState(['vipSwitch']),
+
     summary() {
       if (!this.goods.summary) return '暂无简介~';
       return this.goods.summary;
