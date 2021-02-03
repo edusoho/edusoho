@@ -6,7 +6,14 @@
             <create-review :target-id="targetId" :target-type="targetType" :can-create="canCreate"
                            :current-user-id="currentUserId"></create-review>
             <div class="reviews-item" v-for="review in reviews" :key="review.id" :class="'reviews-item-'+ review.id">
-                <img class="reviews-item__img" :src="review.user.avatar.large" alt="">
+                <a :href="`/user/${review.user.id}`"  target="_blank">
+                    <img class="js-user-card reviews-item__img"
+                         :src="review.user.avatar.large"
+                         :data-user-id="review.user.id"
+                         :data-card-url="`/user/${review.user.id}/card/show`"
+                         alt=""
+                    >
+                </a>
                 <div class="reviews-item__text reviews-text">
                     <div class="reviews-text__nickname">
                         <a class="link-dark" href="javascript:;" target="_blank">{{ review.user.nickname }}</a>
@@ -39,7 +46,14 @@
                             <li class="thread-post media" :class="'thread-subpost-'+post.id"
                                 v-for="post in review.posts" :key="post.id">
                                 <div class="media-left">
-                                    <img class="avatar-sm" :src="post.user.avatar.large" alt="">
+                                    <a :href="`/user/${review.user.id}`" target="_blank">
+                                        <img class="avatar-sm js-user-card"
+                                             :src="review.user.avatar.large"
+                                             :data-user-id="review.user.id"
+                                             :data-card-url="`/user/${review.user.id}/card/show`"
+                                             alt=""
+                                        >
+                                    </a>
                                 </div>
                                 <div class="media-body">
                                     <div class="metas">
@@ -239,7 +253,14 @@
             generateReviewPostLi(post) {
                 let html = '<li class="thread-post thread-subpost-' + post.id + ' media">\n' +
                     '  <div class="media-left">\n' +
-                    '    <img class="avatar-sm" src="' + post.user.avatar.large + '" alt="">\n' +
+                    `<a href="/user/${post.user.id}" target="_blank">
+                        <img class="avatar-sm js-user-card"
+                             src="${post.user.avatar.large}"
+                             data-user-id="${post.user.id}"
+                             data-card-url="/user/${post.user.id}/card/show"
+                             alt=""
+                        >
+                    </a>` +
                     '  </div>\n' +
                     '  <div class="media-body">\n' +
                     '    <div class="metas">\n';

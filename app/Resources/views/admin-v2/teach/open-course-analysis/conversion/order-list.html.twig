@@ -13,7 +13,7 @@
       <tr>
         <td>
           {% if target %}
-            {{ target.title }}
+            {{ target.title|default('course.teaching_default_plan'|trans) }}
           {% else %}
             -
           {% endif %}

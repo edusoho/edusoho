@@ -26,6 +26,7 @@ class Lesson extends BaseResource
         $access = $this->getCourseService()->canLearnTask($task['id']);
 
         $isTrail = false;
+
         if (!(AccessorInterface::SUCCESS == $access['code'] || $isTrail = 'allow_trial' == $access['code'])) {
             return $this->error($access['code'], $access['msg']);
         }

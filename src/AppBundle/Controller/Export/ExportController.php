@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Export;
 
+use AppBundle\Common\FileToolkit;
 use AppBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -72,8 +73,11 @@ class ExportController extends BaseController
             return $this->createJsonResponse(['success' => 0, 'message' => 'empty file']);
         }
 
+        $filenameParts = explode('.', $name);
+        $ext = array_pop($filenameParts);
+
         $headers = [
-            'Content-Type' => 'application/msword',
+            'Content-Type' => FileToolkit::getMimeTypeByExtension($ext),
             'Content-Disposition' => 'attachment; filename='.$name,
         ];
 

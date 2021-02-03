@@ -4061,6 +4061,7 @@ course.member.course.join_btn: 'Exit and re-Enroll'
 course.member.operation.quit_deadline_reach: 'The user will quit until the deadline'
 course.member.operation.admin_remove_course_student: 'The admin removes it manually'
 course.member.operation.reason.remove_teachers: 'Exit the course when deleting the teacher role'
+course.member.course.expiry_start_date_tips: 'You cannot learn %task Name% before the study time is up. Please study within the valid period of study~'
 
 course.widgets.belong_classroom.title: 'Belong to %name%'
 course.widgets.classroom_price.price: Price
@@ -4774,6 +4775,7 @@ admin.setting.site.website_status.open: Enable
 admin.setting.site.website_status.closed: Disable
 admin.setting.site.closed_note: 'Announcement of website shutdown'
 admin.setting.site.closed_note.help_block: 'Users will see this announcement when the website is shutdown'
+admin.setting.site.recordUrl.help_block: Start with "http://" and end with the record number. Please fill in the complete link to the public security record number. Example:http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=33010802004377
 admin.setting.theme.name: Name
 admin.setting.theme.version: Version
 admin.setting.theme.author: Author
@@ -4831,6 +4833,14 @@ admin.setting.permit.picture: ID picture
 admin.setting.permit.picture.help_block: Please upload pictures in jpg, gif, png format. The recommended image size should not exceed 5 MB. After the online school ID picture is set, it will be displayed in the bottom column of the homepage.
 admin.setting.permit.setting.add: Add a column
 admin.setting.permit.setting.remove: Delete entire column
+admin.setting.record.picture: Public security filing icon
+admin.setting.record.code: Public Security Record Number
+admin.setting.record.url: Public security record number link
+admin.setting.record.picture.help_block: >
+  The recommended icon size should not exceed 50×50 px, and the recommended icon size should not exceed 2 MB.
+  <a href="http://www.qiqiuyu.com/faq/1239/detail" target="_blank">How to obtain the public security filing icon?</a>
+admin.setting.record.code.help_block: >
+  <a href="http://www.qiqiuyu.com/faq/1239/detail" target="_blank">How to add the public security record number and link?</a>
 
 admin.setting.mailer.is_trial.tips: "You are running on the trail version which cannot set the Email service.If you want to buy the verified version ,please contact our sales agent Tel：4008041114 or\n"
 admin.setting.mailer.cloud_email_crm: 'Cloud Email'
@@ -6386,8 +6396,8 @@ admin.setting_course.effective_learning_time_rule: Statistical rules of effectiv
 admin.setting_course.learning_time_statistical_dimension: Statistical dimension of learning time
 admin.setting_course.effective_learning_time.playing.help_block: The actual playing time was taken as the learning time statistics
 admin.setting_course.effective_learning_time.page.help_block: The page stay time is taken as the learning time statistics
-admin.setting_course.effective_learning_time.playing_time: Active playing time
-admin.setting_course.effective_learning_time.page_time: Page active duration
+admin.setting_course.effective_learning_time.playing_time: Video playing time
+admin.setting_course.effective_learning_time.page_time: Page stay time
 admin.setting_course.effective_learning_time.accumulated_merge: The learning hours are directly accumulated and combined
 admin.setting_course.effective_learning_time.reweighted_merge: The learning hours were reweighted and then merged
 admin.setting_course.effective_learning_time.reweighted_merge.help_block: The learning time generated in multiple places at the same time is automatically de-merged
@@ -6475,6 +6485,8 @@ admin.magic_setting.watch_time_sec_tip: second
 admin.magic_setting.site_trace_enable: enable site trace
 admin.magic_setting.live_entry_time: Time to enter before live broadcast begins
 admin.magic_setting.live_entry_time_tip: second
+admin.magic_setting.biz_answer_scene_report_threshold: Testpaper and Homework Threshold
+admin.magic_setting.biz_answer_scene_report_threshold_tip: Default 15000
 
 admin.magic_setting.one_for_open: '1 To enable'
 admin.magic_setting.one_for_close: '1 Is off'
@@ -7089,9 +7101,9 @@ admin.app_upgrades.update_btn: Update
 admin.app_upgrades.latest_version_tips: 'This is already the newest version!'
 admin.app_upgrades.agreement.title: 'Upgrade Service Agreement'
 admin.app_upgrades.agreement.content.21.1.2: >
-  <h4>Edusoho Master System version V21.1.2 includes the upgrade of the old backend to the new one.</h4>
-  <h4 class="cd-mt16">Upgrade new version of back office</h4>
-  <p class="color-danger">-This version can only be used in the new version of backend. If you agree to upgrade, you agree to upgrade your backend to the new version, and you know that you cannot switch back to the old version after the upgrade.</p>
+  <p class="agreement-content-title">Edusoho Master System version V21.1.2 includes the upgrade of the old backend to the new one.</p>
+  <p class="agreement-content-title cd-mt16">Upgrade new version of back office</p>
+  <p>&nbsp&nbsp&nbsp&nbsp This version can only be used in the new version of backend. If you agree to upgrade, <b>you agree to upgrade your backend to the new version, and you know that you cannot switch back to the old version after the upgrade.</b></p>
 admin.app_upgrades.agreement.agree: 'Have read and agree to the upgrade service agreement'
 admin.app_upgrades.agreement.btn: 'Upgrade'
 admin.cloud_license.info: 'Authorization info'
@@ -8878,7 +8890,6 @@ user.learn.statistics.manage.describe_tips: >
     <h5 style='color:blue;margin:5px 0;'>User data instruction</h5>
     <P style='margin:0;'>User data update daily from 00:00-02:00.</p>
     <P style='margin:0;'>The cumulative learning hours (minutes) are the sum of all learning hours generated by the user in the online school within the screening criteria.</p>
-    <P style='margin:0;'>The de-weighted learning hours (minutes) are the de-weighted total of all the learning hours generated by the user in the online school within the filtering criteria.</p>
     <P style='margin:0;'>The statistic of video lesson learning duration (active duration of playback or active duration of page) is based on the system - course settings - video lesson learning configuration.</p>
   </div>
 
@@ -9509,19 +9520,20 @@ wechat.notification.template_name.buy_success: 'Buy Success'
 # 移动端使用：课时任务(task)完成条件文案
 mobile.task.finish_tips.audio.end: audio end
 mobile.task.finish_tips.discuss.join: Post or respond to a topic in this course
-mobile.task.finish_tips.doc.time: 'At least learn %finishData% minutes'
+mobile.task.finish_tips.doc.time: 'At least stay %finishData% minutes'
 mobile.task.finish_tips.download.download: Downloaded materials
 mobile.task.finish_tips.exercise.submit: submitted an exercise
-mobile.task.finish_tips.flash.time: 'At least learn %finishData% minutes'
+mobile.task.finish_tips.flash.time: 'At least stay %finishData% minutes'
 mobile.task.finish_tips.homework.submit: Submit
 mobile.task.finish_tips.live.join: participated in the live broadcast
 mobile.task.finish_tips.ppt.end: Learn at the end page
-mobile.task.finish_tips.ppt.time: 'At least learn %finishData% minutes'
+mobile.task.finish_tips.ppt.time: 'At least stay %finishData% minutes'
 mobile.task.finish_tips.testpapaer.submit: Submit
 mobile.task.finish_tips.testpapaer.score: 'Test score %finishData% points'
-mobile.task.finish_tips.text.time: 'At least learn %finishData% minutes'
+mobile.task.finish_tips.text.time: 'At least stay %finishData% minutes'
 mobile.task.finish_tips.video.end: Learning to the end
-mobile.task.finish_tips.video.time: 'At least learn %finishData% minutes'
+mobile.task.finish_tips.video.time: 'At least stay %finishData% minutes'
+mobile.task.finish_tips.video.watchTime: 'At least watch %finishData% minutes'
 classroom.joining_date.expired_tips: Classroom joining date expired
 
 # 富文本
@@ -10152,6 +10164,7 @@ classroom.subtitle_label: Subtitle
 classroom.basic_setting: Basic Setting
 classroom.cover_crop.title: Classroom Cover
 exception.s2b2c_product.adopt_failed: Adopt fail,Supplier is editing
+exception.product.not_exist: Product does not exist
 
 
 goods.minimum_price.unit: From %price%%unit%
@@ -10239,3 +10252,16 @@ task.learn_data_detail.popover: 累加时长：任务下A学员产生的所有�
 course.task.notify_message.join_and_buy: Please join or buy course
 course.task.notify_message.join_limit: Course buy limited
 
+activity_manage.finish_tips_time: Stat at least %finishDetail% minutes.
+activity_manage.finish_tips_watch_time: Watch at least %finishDetail% minutes.
++course.plan_task.activity_manage.video.time_at_least: Stay at least
++course.plan_task.activity_manage.video.watch_time_at_least: Watch at least
+activity_manage.time_last_tips: >
+  Remaining<span class="color-danger js-finish-time">%time% minutes</span> completed
+activity_manage.finished_tips: >
+  <span class="color-primary">Congratulations! You have completed this task</span>
+exam_bank.analysis.data_large_loading: Data is too large，loading
+exam_bank.analysis.data_large_loading_finish: Data loading finish
+exam_bank.analysis.data_large_info: refresh date：%date%，do not fresh because of data to large
+exam_bank.analysis.data_large_loading_btn: Force refresh
+activity_manage.video.finish_tips: The completion conditions of video playback time and page stay time are subject to cumulative learning time
