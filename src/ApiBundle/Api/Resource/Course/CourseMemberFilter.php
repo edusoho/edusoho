@@ -31,11 +31,9 @@ class CourseMemberFilter extends Filter
         $data['lastLearnTime'] = date('c', $data['lastLearnTime']);
         $data['lastViewTime'] = date('c', $data['lastViewTime']);
 
-        if ($this->isPluginInstalled('vip')) {
+        if (version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')) {
             $vipMember = $this->getVipService()->getMemberByUserId($data['user']['id']);
             $data['levelId'] = empty($vipMember) ? 0 : $vipMember['levelId'];
-        } else {
-            $data['levelId'] = 0;
         }
 
         $userFilter = new UserFilter();

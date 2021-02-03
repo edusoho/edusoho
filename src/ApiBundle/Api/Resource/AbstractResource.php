@@ -156,6 +156,20 @@ abstract class AbstractResource
         return $this->container->get('api.plugin.config.manager')->isPluginInstalled($code);
     }
 
+    public function getPluginVersion($code)
+    {
+        $plugins = $this->container->get('kernel')->getPluginConfigurationManager()->getInstalledPlugins();
+
+        foreach ($plugins as $plugin) {
+            if (strtolower($plugin['code']) == strtolower($code)) {
+                return $plugin['version'];
+            }
+        }
+
+        return null;
+    }
+
+
     public function getClientIp()
     {
         return $this->container->get('request_stack')->getMasterRequest()->getClientIp();

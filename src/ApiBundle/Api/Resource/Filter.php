@@ -119,10 +119,18 @@ abstract class Filter
         return $url;
     }
 
-    protected function isPluginInstalled($code)
+    protected function getPluginVersion($code)
     {
         $pluginManager = new PluginConfigurationManager(ServiceKernel::instance()->getParameter('kernel.root_dir'));
 
-        return $pluginManager->isPluginInstalled($code);
+        $plugins = $pluginManager->getInstalledPlugins();
+
+        foreach ($plugins as $plugin) {
+            if (strtolower($plugin['code']) == strtolower($code)) {
+                return $plugin['version'];
+            }
+        }
+
+        return null;
     }
 }

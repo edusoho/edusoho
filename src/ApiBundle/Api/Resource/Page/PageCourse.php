@@ -58,16 +58,27 @@ class PageCourse extends AbstractResource
         $course['hitNum'] = empty($goods['hitNum']) ? 0 : $goods['hitNum'];
 
         if ($this->isPluginInstalled('vip')) {
-            $vipRights = $this->getVipRightService()->findVipRightsBySupplierCodeAndUniqueCode(CourseVipRightSupplier::CODE, $course['id']);
-            if (!empty($vipRights)) {
-                $apiRequest = new ApiRequest('/api/plugins/vip/vip_levels/'.$vipRights[0]['vipLevelId'], 'GET');
-                $course['vipLevel'] = $this->invokeResource($apiRequest);
+            if (version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')) {
+                $vipRights = $this->getVipRightService()->findVipRightsBySupplierCodeAndUniqueCode(CourseVipRightSupplier::CODE, $course['id']);
+                if (!empty($vipRights)) {
+                    $course['vipLevel'] = $this->getVipLevel($vipRights[0]['vipLevelId']);
+                }
+            } else if ($course['vipLevelId'] > 0) {
+                $course['vipLevel'] = $this->getVipLevel($course['vipLevelId']);
             }
         }
+
         $course['reviews'] = $this->searchCourseReviews($course);
         $course['myReview'] = $this->getMyReview($course, $user);
 
         return $course;
+    }
+
+    protected function getVipLevel($levelId)
+    {
+        $apiRequest = new ApiRequest('/api/plugins/vip/vip_levels/'.$levelId, 'GET', []);
+
+        return $this->invokeResource($apiRequest);
     }
 
     protected function searchCourseReviews($course)

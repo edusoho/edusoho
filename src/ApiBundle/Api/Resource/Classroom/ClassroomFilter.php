@@ -58,11 +58,9 @@ class ClassroomFilter extends Filter
             $specsFilter->filter($data['spec']);
         }
 
-        if ($this->isPluginInstalled('vip')) {
+        if (version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')) {
             $vipRights = $this->getVipRightService()->findVipRightsBySupplierCodeAndUniqueCode(ClassroomVipRightSupplier::CODE, $data['id']);
             $data['vipLevelId'] = empty($vipRights) ? 0 : $vipRights[0]['vipLevelId'];
-        } else {
-            $data['vipLevelId'] = 0;
         }
     }
 
