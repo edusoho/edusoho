@@ -117,16 +117,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         $params['nickname'] = $user['nickname'].'_'.$user['id'];
 
         /**
-         * @var int
-         *          last record: 2017-12-12
-         *          '1'=>'vhall',
-         *          '2'=>'soooner',
-         *          '3'=>'sanmang',
-         *          '4'=>'gensee',
-         *          '5'=>'longinus',
-         *          '6'=>'training',
-         *          '7'=>'talkFun',
-         *          '8'=>'athena', //ES直播
+         * provider code in wiki
          */
         $provider = empty($activity['ext']['liveProvider']) ? 0 : $activity['ext']['liveProvider'];
         $this->freshTaskLearnStat($request, $activity['id']);
@@ -279,8 +270,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
         }
 
         $sourceActivity = $this->getActivityService()->getActivity($sourceActivityId, true);
-        $result = $this->getLiveReplayService()->entryReplay($replay['id'], $sourceActivity['ext']['liveId'], $sourceActivity['ext']['liveProvider'],
-            $request->isSecure());
+        $result = $this->getLiveReplayService()->entryReplay($replay['id'], $sourceActivity['ext']['liveId'], $sourceActivity['ext']['liveProvider'], $request->isSecure());
 
         if (!empty($result) && !empty($result['resourceNo'])) {
             $result['url'] = $this->generateUrl('es_live_room_replay_show', [
