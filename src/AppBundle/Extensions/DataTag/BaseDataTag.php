@@ -4,7 +4,6 @@ namespace AppBundle\Extensions\DataTag;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\Common\CommonException;
-use Codeages\PluginBundle\System\PluginConfigurationManager;
 use Topxia\Service\Common\ServiceKernel;
 
 abstract class BaseDataTag
