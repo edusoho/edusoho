@@ -97,8 +97,11 @@ const filters = [
           }
           return `${formatTimeByNumber(task.length)}`;
         case 'live':
+          // eslint-disable-next-line no-case-declarations
           const now = new Date().getTime();
+          // eslint-disable-next-line no-case-declarations
           const startTimeStamp = new Date(task.startTime * 1000);
+          // eslint-disable-next-line no-case-declarations
           const endTimeStamp = new Date(task.endTime * 1000);
           // 直播未开始
           if (now <= startTimeStamp) {
@@ -139,8 +142,11 @@ const filters = [
       }
       switch (task.type) {
         case 'live':
+          // eslint-disable-next-line no-case-declarations
           const now = new Date().getTime();
+          // eslint-disable-next-line no-case-declarations
           const startTimeStamp = new Date(task.startTime);
+          // eslint-disable-next-line no-case-declarations
           const endTimeStamp = new Date(task.endTime);
           // 直播未开始
           if (now <= startTimeStamp) {
@@ -263,7 +269,8 @@ const filters = [
           code = `${targetType[type]}已关闭`;
           break;
         case `${type}.not_buyable`:
-          code = `${targetType[type]}不可加入`;
+          // code = `${targetType[type]}不可加入`;
+          code = `抱歉，该商品为限制商品，请联系客服`;
           break;
         case `${type}.buy_expired`:
           code = '购买有效期已过';
@@ -324,9 +331,13 @@ const filters = [
         case 'audio':
           return `时长: ${formatTimeByNumber(target.task.length)}`;
         case 'live':
+          // eslint-disable-next-line no-case-declarations
           const now = new Date().getTime();
+          // eslint-disable-next-line no-case-declarations
           const time = formatSimpleHour(new Date(target.task.startTime * 1000));
+          // eslint-disable-next-line no-case-declarations
           const startTimeStamp = new Date(target.task.startTime * 1000);
+          // eslint-disable-next-line no-case-declarations
           const endTimeStamp = new Date(target.task.endTime * 1000);
           // 直播未开始
           if (now <= startTimeStamp) {

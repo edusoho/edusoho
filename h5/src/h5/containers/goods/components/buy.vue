@@ -13,6 +13,7 @@
         @submitForm="freeJoin"
       ></info-collection>
     </van-action-sheet>
+
     <div class="info-buy__collection" @click="onFavorite">
       <template v-if="isFavorite">
         <i class="iconfont icon-aixin1" style="color: #FF7E56;"></i>
@@ -23,14 +24,15 @@
         <span>收藏</span>
       </template>
     </div>
+
     <div @click="handleJoin" v-if="currentSku.isMember" class="info-buy__btn">
       去学习
     </div>
     <div
-      @click="handleJoin"
-      v-else-if="currentSku.displayPrice != 0"
-      :class="!accessToJoin ? 'disabled' : ''"
       class="info-buy__btn"
+      :class="!accessToJoin ? 'disabled' : ''"
+      v-else-if="currentSku.displayPrice != 0"
+      @click="handleJoin"
     >
       {{
         currentSku.access.code
@@ -43,11 +45,13 @@
       :class="!accessToJoin ? 'disabled' : ''"
       class="info-buy__btn"
     >
-      <span v-if="accessToJoin">免费加入</span
-      ><span v-else>{{
-        currentSku.access.code
-          | filterGoodsBuyStatus(goods.type, vipAccessToJoin)
-      }}</span>
+      <span v-if="accessToJoin">免费加入</span>
+      <span v-else>
+        {{
+          currentSku.access.code
+            | filterGoodsBuyStatus(goods.type, vipAccessToJoin)
+        }}
+      </span>
     </div>
   </div>
 </template>
