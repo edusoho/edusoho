@@ -1,6 +1,7 @@
 
 <!-- 推荐班级 -->
 {% set classrooms = data('RecommendClassrooms',{'count':config.count|default(4)})%}
+{% set classrooms = classrooms_fill_vip_right(classrooms) %}
 {% if classrooms %}
   <section class="class-section {{config.background|default("")}}">
     <div class="container">
