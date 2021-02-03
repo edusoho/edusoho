@@ -1,7 +1,6 @@
 #!/usr/bin/env sh
 git clean -fdx
 cp -n app/config/parameters.yml.dist app/config/parameters.yml
-rm -rf app/cache app/logs app/data web/files
 mkdir -p app/cache app/logs app/data web/files
 chmod 777 app/cache app/logs app/data web/files
 
