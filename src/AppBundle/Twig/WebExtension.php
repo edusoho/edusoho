@@ -216,14 +216,14 @@ class WebExtension extends \Twig_Extension
 
     public function filterVipSupplierData($supplierData, $supplierCode)
     {
-        if($this->isPluginInstalled('Vip') && version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')){
+        if ($this->isPluginInstalled('Vip') && version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')) {
             $vipRights = $this->getVipRightService()->searchVipRights(['supplierCode' => $supplierCode], [], 0, PHP_INT_MAX);
             $vipRights = empty($vipRights) ? [] : ArrayToolkit::index($vipRights, 'uniqueCode');
 
-            foreach ($supplierData as &$data){
-                if ($supplierCode == 'course'){
+            foreach ($supplierData as &$data) {
+                if ('course' == $supplierCode) {
                     $data['course']['vipLevelId'] = isset($vipRights[$data['id']]['vipLevelId']) ? $vipRights[$data['id']]['vipLevelId'] : 0;
-                }else{
+                } else {
                     $data['vipLevelId'] = isset($vipRights[$data['id']]['vipLevelId']) ? $vipRights[$data['id']]['vipLevelId'] : 0;
                 }
             }
