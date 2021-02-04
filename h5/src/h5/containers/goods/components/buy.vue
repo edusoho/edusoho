@@ -237,15 +237,10 @@ export default {
         return '会员免费兑换';
       }
 
-      // 不免费
-      if (displayPrice != 0) {
-        return status[code];
-      }
-
-      // 免费
-      if (this.accessToJoin) {
+      if (displayPrice == 0 && this.accessToJoin) {
         return '免费加入';
       }
+
       return status[code];
     },
   },
