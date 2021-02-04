@@ -29,7 +29,7 @@
       </button>
     {% endif %}
 
-    <div class="cd-dropdown" data-toggle="cd-dropdown">
+    <div class="cd-dropdown cd-mr16" data-toggle="cd-dropdown">
       <button class="cd-btn cd-btn-default cd-btn-sm">
         {{ 'form.field.create'|trans }}{{ course_chapter_alias('chapter')|trans }} / {{ course_chapter_alias('unit')|trans }}<span class="caret"></span>
       </button>
@@ -48,8 +48,16 @@
         </li>
       </ul>
     </div>
+
+    <button class="cd-btn cd-btn-default cd-btn-sm js-batch-operate-switch">
+      操作
+    </button>
+    <button class="cd-btn cd-btn-danger cd-btn-sm js-batch-operate-switch hidden">
+      取消操作
+    </button>
   </div>
 </div>
+<div class="task-list-header js-task-list-header__slot hidden"></div>
 <div  id="js-intro" class="modal fade text-center" aria-hidden="true" data-backdrop="static"  tabindex="-1" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">

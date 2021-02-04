@@ -10,10 +10,15 @@
 
 <li id="chapter-{{ lesson.id }}" class="task-manage-item task-manage-{{lesson.type}} js-task-manage-item drag clearfix "
     show-num="{% if isShowText %}0{% else %}1{% endif %}">
-
   <div class="item-default-header clearfix">
     <div class="item-line"></div>
     <div class="item-content text-overflow js-item-content">
+      <label 
+        class="cd-checkbox chapter-operation js-chapter-operation hidden" 
+        data-id="{{lesson.id}}"
+        data-type="{{lesson.type}}">
+        <input type="checkbox" value="1" data-toggle="cd-checkbox">
+      </label>
       <span class="lesson-unpublish-status js-lesson-unpublish-status
         {% if lesson.status == 'published' %}
           hidden
