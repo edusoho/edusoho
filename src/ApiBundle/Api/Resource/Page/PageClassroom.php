@@ -62,10 +62,10 @@ class PageClassroom extends AbstractResource
 
         if ($this->isPluginInstalled('vip')) {
             if (version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')) {
-                $vipRights = $this->getVipRightService()->findVipRightsBySupplierCodeAndUniqueCode(ClassroomVipRightSupplier::CODE, $classroom['id']);
-                if (!empty($vipRights)) {
-                    $classroom['vipLevel'] = $this->getVipLevel($vipRights[0]['vipLevelId']);
-                    $classroom['vipLevelId'] = $vipRights[0]['vipLevelId']; //新版本classroom已删除该字段，兼容需加上
+                $vipRight = $this->getVipRightService()->getVipRightsBySupplierCodeAndUniqueCode(ClassroomVipRightSupplier::CODE, $classroom['id']);
+                if (!empty($vipRight)) {
+                    $classroom['vipLevel'] = $this->getVipLevel($vipRight['vipLevelId']);
+                    $classroom['vipLevelId'] = $vipRight['vipLevelId']; //新版本classroom已删除该字段，兼容需加上
                 }
             } else if ($classroom['vipLevelId'] > 0) {
                 $classroom['vipLevel'] = $this->getVipLevel($classroom['vipLevelId']);

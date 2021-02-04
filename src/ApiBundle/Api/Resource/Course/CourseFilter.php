@@ -58,8 +58,8 @@ class CourseFilter extends Filter
         $data['summary'] = $this->convertAbsoluteUrl($data['summary']);
 
         if (version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')) {
-            $vipRights = $this->getVipRightService()->findVipRightsBySupplierCodeAndUniqueCode(CourseVipRightSupplier::CODE, $data['id']);
-            $data['vipLevelId'] = empty($vipRights) ? 0 : $vipRights[0]['vipLevelId'];
+            $vipRight = $this->getVipRightService()->getVipRightsBySupplierCodeAndUniqueCode(CourseVipRightSupplier::CODE, $data['id']);
+            $data['vipLevelId'] = empty($vipRight) ? 0 : $vipRight['vipLevelId'];
         }
     }
 
