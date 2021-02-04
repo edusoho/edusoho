@@ -203,7 +203,6 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
         $courseSets = $this->fillCourseTryLookVideo($courseSets);
 
         return $this->getWebExtension()->filterCoursesVipRight($courseSets);
-        return $this->getCourseService()->filterCoursesVipRight($courseSets);
     }
 
     protected function getCourseTeachersAndCategories($courses)
