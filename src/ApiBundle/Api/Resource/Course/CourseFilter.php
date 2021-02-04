@@ -2,6 +2,7 @@
 
 namespace ApiBundle\Api\Resource\Course;
 
+use ApiBundle\Api\Resource\Classroom\ClassroomFilter;
 use ApiBundle\Api\Resource\CourseSet\CourseSetFilter;
 use ApiBundle\Api\Resource\Filter;
 use ApiBundle\Api\Resource\Good\GoodSpecsFilter;
@@ -26,7 +27,7 @@ class CourseFilter extends Filter
         'goals', 'audiences', 'isDefault', 'maxStudentNum', 'status', 'creator', 'isFree', 'price', 'originPrice',
         'vipLevelId', 'buyable', 'tryLookable', 'tryLookLength', 'watchLimit', 'services', 'ratingNum', 'rating',
         'taskNum', 'compulsoryTaskNum', 'studentNum', 'teachers', 'parentId', 'createdTime', 'updatedTime', 'enableFinish',
-        'buyExpiryTime', 'access', 'isAudioOn', 'hasCertificate', 'goodsId', 'specsId', 'spec', 'hitNum',
+        'buyExpiryTime', 'access', 'isAudioOn', 'hasCertificate', 'goodsId', 'specsId', 'spec', 'hitNum', 'classroom',
     ];
 
     protected function publicFields(&$data)
@@ -60,6 +61,12 @@ class CourseFilter extends Filter
         if (version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')) {
             $vipRight = $this->getVipRightService()->getVipRightsBySupplierCodeAndUniqueCode(CourseVipRightSupplier::CODE, $data['id']);
             $data['vipLevelId'] = empty($vipRight) ? 0 : $vipRight['vipLevelId'];
+        }
+
+        if (!empty($data['classroom'])) {
+            $classroomFilter = new ClassroomFilter();
+            $classroomFilter->setMode(Filter::SIMPLE_MODE);
+            $classroomFilter->filter($data['classroom']);
         }
     }
 
