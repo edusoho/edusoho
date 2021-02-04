@@ -14,7 +14,9 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
 {
     protected function getWebExtension()
     {
-        return $this->getServiceKernel()->getParameter('container')->get('web.twig.extension');
+        global $kernel;
+
+        return $kernel->getContainer()->get('web.twig.extension');
     }
 
     /**
