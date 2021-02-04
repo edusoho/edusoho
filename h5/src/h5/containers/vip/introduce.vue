@@ -91,6 +91,7 @@ export default {
           },
         },
       },
+      timer: null,
     };
   },
   computed: {
@@ -100,7 +101,9 @@ export default {
   },
   watch: {
     activeIndex(index) {
-      setTimeout(() => {
+      clearTimeout(this.tiemr);
+      this.timer = null;
+      this.tiemr = setTimeout(() => {
         this.swiper.slideTo(index, 1000, false);
       }, 100);
     },
@@ -112,6 +115,10 @@ export default {
     setActiveIndex(index) {
       this.$emit('update:activeIndex', index);
     },
+  },
+  destroyed() {
+    clearTimeout(this.tiemr);
+    this.timer = null;
   },
 };
 </script>
