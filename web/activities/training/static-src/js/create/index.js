@@ -12,7 +12,6 @@ new BatchSelect($from);
 var load = window.ltc.load('bootstrap.css', 'jquery', 'validate', 'editor');
 load.then(function(){
   var context = window.ltc.getContext();
-
   var contentCache = '',
     draftId = 0,
     $content = $('#text-content-field'),
@@ -32,6 +31,9 @@ load.then(function(){
           maxlength: 50,
           trim: true,
           course_title: true,
+        },
+        lab_type:{
+          required:true,
         },
         content: {
           required: true,
@@ -53,7 +55,6 @@ load.then(function(){
     window.ltc.on('getValidate', function(msg){
       window.ltc.emit('returnValidate', {valid: validate.form()});
     });
-
     window.ltc.on('getActivity', function(msg){
       if (!validate.form()) {
         window.ltc.emit('returnActivity', { valid:false });
@@ -91,11 +92,16 @@ load.then(function(){
         }
       });
     }
-
-
     ////////新增
     $("#lab_type").on("change",function(val){
         divShow($(this).val());
+    })
+
+    $("#picker_images_items").on("click",function(){
+      // 编辑的时候传递选中id
+      $.get($btn.data('url'), {}, html => {
+        this.$imagesPickedModal.html(html);
+      });
     })
   }
 
@@ -115,6 +121,8 @@ load.then(function(){
         break;
     }
   }
+
+  
 
   function _initDraft() {
     window.ltc.api({

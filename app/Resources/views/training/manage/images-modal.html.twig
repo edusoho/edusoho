@@ -15,16 +15,44 @@
     </ul>
 
     <!-- Tab panes -->
-    <div class="tab-content">
-        <div role="tabpanel" class="tab-pane active" id="private">个人</div>
-        <div role="tabpanel" class="tab-pane" id="public">公共</div>
+    <div class="tab-content" style="margin-left:30px;">
+        <div role="tabpanel" class="tab-pane active" id="private">
+            <div id="" class="container">
+                <label class="radio">
+                    <input type="radio" name="common" id="" value="" />
+                    北京
+                </label>
+                <label class="radio">
+                    <input type="radio" name="common" id="" value=""/>
+                    上海
+                </label>
+                <label class="radio">
+                    <input type="radio" name="common" id="" value="" />
+                    广州
+                </label>
+            </div>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="public">
+            <label class="radio">
+                    <input type="radio" name="common" id="" value="" />
+                    深圳
+                </label>
+                <label class="radio">
+                    <input type="radio" name="common" id="" value=""/>
+                    重庆
+                </label>
+                <label class="radio">
+                    <input type="radio" name="common" id="" value="" />
+                    长沙
+                </label>
+        </div>
     </div>
 </div>
 {% endblock %}
 
 {% block footer %}
 <button type="button" class="btn btn-link js-close-modal" data-dismiss="modal" tabindex="6">取消</button>
-<button id="pick-btn" data-submiting-text="{{'form.btn.submit.submiting'|trans}}" type="submit" class="btn btn-primary js-pick-btn"
+<button id="pick-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary js-pick-btn"
   data-toggle="form-submit" tabindex="4">保存</button>
 
 
@@ -35,6 +63,19 @@
             e.relatedTarget // previous active tab
             console.log(e.target);
             console.log(e.relatedTarget);
+        })
+
+        // 点击提交
+        $("#pick-btn").on("click",function(event){
+            let $content = $('#task-create-content-iframe').contents();
+            $content.find('.js-cached-question').text({id:1,name:"自定义镜像01"});
+
+            let $target = $(event.currentTarget);
+            let name = $target.data('name');
+
+            let $modal = $('.js-select-container').parents('.modal');
+            $modal.modal('hide');
+            $('.js-close-modal').trigger('click');
         })
     })
   </script>

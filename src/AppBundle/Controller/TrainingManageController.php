@@ -14,4 +14,8 @@ class TrainingManageController extends BaseController
     {
         return $this->render('training/manage/images-modal.html.twig');
     }
+
+    public function imagesPickerdAction(Request $request, $id){
+        echo 18;die;
+    }
 }
