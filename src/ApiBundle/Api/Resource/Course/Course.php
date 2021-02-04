@@ -34,6 +34,7 @@ class Course extends AbstractResource
 
         if ($course['parentId'] > 0) {
             $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
+            empty($classroom) || $course['classroom'] = $classroom;
         }
 
         if (!empty($classroom) && empty($member)) {
