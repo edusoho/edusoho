@@ -24,7 +24,7 @@ class ActivityController extends BaseController
         }
 
         $activityConfigManage = $this->get('activity_config_manager');
-        if ($activityConfigManage->isLtcActivity($activity['mediaType'])) {
+        if ($activityConfigManage->isLtcActivity($activity['mediaType']) && $activity['mediaType'] !='training') {
             $container = $this->get('activity_runtime_container');
             $activity['preview'] = $preview;
             return $container->show($activity);

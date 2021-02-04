@@ -198,6 +198,18 @@ class ActivityExtension extends Extension implements ServiceProviderInterface
                     return true;
                 },
             ),
+            'training' => array(
+                'meta' => array(
+                    'name' => '实训',
+                    'icon' => 'es-icon es-icon-downloadfile',
+                ),
+                'typeClass' => '\Biz\Activity\Type\Training',
+                'controller' => 'AppBundle:Activity/Training',
+                'canFree' => false,
+                'visible' => function ($courseSet, $course) {
+                    return true;
+                },
+            ),
         );
     }
 }

@@ -2410,7 +2410,10 @@ testpaper_do_suspend:
   path: /testpaper/result/{resultId}/suspend
   defaults: { _controller: AppBundle:Testpaper/Testpaper:testSuspend }
   methods: [POST]
-
+### new training
+course_set_manage_training_picker:
+    path: /course_set/{id}/manage/training/show/picker
+    defaults: { _controller: AppBundle:TrainingManage:imagesPicker }
 #homework
 course_set_manage_homework_question_picker:
   path: /course_set/{id}/manage/homework/question/picker
