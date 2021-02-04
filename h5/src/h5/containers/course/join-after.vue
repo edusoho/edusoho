@@ -267,6 +267,11 @@ export default {
           message: `很抱歉，该课程已升级为${vipName}课程，请升到${vipName}进行学习。或退出后重新购买课程。`,
           confirmButtonText: '升级会员',
         },
+        // 会员等级无效
+        'vip.level_not_exist': {
+          message: `很抱歉，会员被删除，您的会员身份已被取消，请退出后重新购买课程。`,
+          showConfirmButton: false,
+        },
       };
 
       if (vipStatus[errorCode]) {
