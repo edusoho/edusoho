@@ -209,37 +209,37 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('information_collect_location_info', [$this, 'informationCollectLocationInfo']),
             new \Twig_SimpleFunction('information_collect_form_items', [$this, 'informationCollectFormItems']),
             new \Twig_SimpleFunction('cloud_mail_settings', [$this, 'mailSetting']),
-            new \Twig_SimpleFunction('filter_courses_vip_right', [$this, 'filterCoursesVipRight']),
+            new \Twig_SimpleFunction('filter_courseSets_vip_right', [$this, 'filterCourseSetsVipRight']),
             new \Twig_SimpleFunction('filter_classrooms_vip_right', [$this, 'filterClassroomsVipRight']),
         ];
     }
 
-    public function filterCoursesVipRight($supplierData)
+    public function filterCourseSetsVipRight($courseSets)
     {
         if($this->isPluginInstalled('Vip') && version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')){
             $vipRights = $this->getVipRightService()->searchVipRights(['supplierCode' => 'course'], [], 0, PHP_INT_MAX);
             $vipRights = empty($vipRights) ? [] : ArrayToolkit::index($vipRights, 'uniqueCode');
 
-            foreach ($supplierData as &$data){
-                $data['course']['vipLevelId'] = isset($vipRights[$data['course']['id']]['vipLevelId']) ? $vipRights[$data['course']['id']]['vipLevelId'] : 0;
+            foreach ($courseSets as &$courseSet){
+                $courseSet['course']['vipLevelId'] = isset($vipRights[$courseSet['course']['id']]['vipLevelId']) ? $vipRights[$courseSet['course']['id']]['vipLevelId'] : 0;
             }
         }
 
-        return $supplierData;
+        return $courseSets;
     }
 
-    public function filterClassroomsVipRight($supplierData)
+    public function filterClassroomsVipRight($classrooms)
     {
         if($this->isPluginInstalled('Vip') && version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')){
             $vipRights = $this->getVipRightService()->searchVipRights(['supplierCode' => 'classroom'], [], 0, PHP_INT_MAX);
             $vipRights = empty($vipRights) ? [] : ArrayToolkit::index($vipRights, 'uniqueCode');
 
-            foreach ($supplierData as &$data){
-                $data['vipLevelId'] = isset($vipRights[$data['id']]['vipLevelId']) ? $vipRights[$data['id']]['vipLevelId'] : 0;
+            foreach ($classrooms as &$classroom){
+                $classroom['vipLevelId'] = isset($vipRights[$classroom['id']]['vipLevelId']) ? $vipRights[$classroom['id']]['vipLevelId'] : 0;
             }
         }
 
-        return $supplierData;
+        return $classrooms;
     }
 
     protected function getVipRightService()
