@@ -6,11 +6,13 @@
         <div class="goods-detail__banner">
           <img :src="goods.images.large" />
         </div>
+
         <discount
           v-if="goods.discount"
           :currentSku="currentSku"
           :goods="goods"
         />
+
         <detail
           :goods="goods"
           :currentSku="currentSku"
@@ -22,11 +24,18 @@
           :currentSku="currentSku"
         />
 
-        <specs :goods="goods" :currentSku="currentSku" @changeSku="changeSku" />
+        <specs
+          v-if="goods.specs.length > 1 || currentSku.services.length"
+          :goods="goods"
+          :currentSku="currentSku"
+          @changeSku="changeSku"
+        />
+
         <certificate
           v-if="currentSku.hasCertificate"
           :selectedPlanId="currentSku.targetId"
         />
+
         <enter-learning
           v-if="
             componentsInfo.mpQrCode &&

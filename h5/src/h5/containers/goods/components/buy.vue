@@ -13,6 +13,7 @@
         @submitForm="freeJoin"
       ></info-collection>
     </van-action-sheet>
+
     <div class="info-buy__collection" @click="onFavorite">
       <template v-if="isFavorite">
         <i class="iconfont icon-aixin1" style="color: #FF7E56;"></i>
@@ -23,31 +24,32 @@
         <span>收藏</span>
       </template>
     </div>
-    <div @click="handleJoin" v-if="currentSku.isMember" class="info-buy__btn">
+
+    <div class="info-buy__btn" v-if="currentSku.isMember" @click="handleJoin">
       去学习
     </div>
+
+    <!-- 不免费课程 -->
     <div
-      @click="handleJoin"
+      class="info-buy__btn"
+      :class="classDisabled"
       v-else-if="currentSku.displayPrice != 0"
-      :class="!accessToJoin ? 'disabled' : ''"
-      class="info-buy__btn"
-    >
-      {{
-        currentSku.access.code
-          | filterGoodsBuyStatus(goods.type, vipAccessToJoin)
-      }}
-    </div>
-    <div
       @click="handleJoin"
-      v-else
-      :class="!accessToJoin ? 'disabled' : ''"
-      class="info-buy__btn"
     >
-      <span v-if="accessToJoin">免费加入</span
-      ><span v-else>{{
-        currentSku.access.code
-          | filterGoodsBuyStatus(goods.type, vipAccessToJoin)
-      }}</span>
+      {{ currentSku | filterGoodsBuyStatus(goods.type, vipAccessToJoin) }}
+    </div>
+
+    <!-- 免费课程 -->
+    <div
+      class="info-buy__btn"
+      :class="classDisabled"
+      v-else
+      @click="handleJoin"
+    >
+      <span v-if="accessToJoin">免费加入</span>
+      <span v-else>
+        {{ currentSku | filterGoodsBuyStatus(goods.type, vipAccessToJoin) }}
+      </span>
     </div>
   </div>
 </template>
@@ -65,13 +67,6 @@ export default {
     infoCollection,
   },
   mixins: [collectUserInfo],
-  data() {
-    return {
-      // isFavorite: false
-      redirect: '',
-      isShowForm: false,
-    };
-  },
   props: {
     isFavorite: {
       type: Boolean,
@@ -86,20 +81,114 @@ export default {
       default: () => {},
     },
   },
+  data() {
+    return {
+      // isFavorite: false
+      redirect: '',
+      isShowForm: false,
+    };
+  },
+  created() {
+    this.redirect = decodeURIComponent(this.$route.fullPath);
+  },
+  computed: {
+    ...mapState(['vipSwitch']),
+
+    // 会员是否有效
+    vipAccessToJoin() {
+      let vipAccess = false;
+      const { vipLevelInfo, vipUser } = this.currentSku;
+      if (!vipLevelInfo || !vipUser) {
+        return false;
+      }
+
+      if (vipLevelInfo.seq <= vipUser.level.seq) {
+        const vipExpired =
+          parseInt(vipUser.deadline) * 1000 < new Date().getTime();
+        vipAccess = !vipExpired;
+      }
+      return vipAccess;
+    },
+
+    accessToJoin() {
+      const code = this.currentSku.access.code;
+      return (
+        code === 'success' ||
+        code === 'user.not_login' ||
+        code === 'member.member_exist'
+      );
+    },
+
+    buyableModeHtml() {
+      const memberInfo = this.goods.member;
+      if (!memberInfo) {
+        switch (this.currentSku.usageMode) {
+          case 'forever':
+            return '长期有效';
+          case 'end_date':
+            return (
+              this.formatDate(this.currentSku.usageEndTime.slice(0, 10)) +
+              '&nbsp;之前可学习'
+            );
+          case 'days':
+            return this.currentSku.usageDays + '天内可学习';
+          case 'date':
+            return (
+              this.formatDate(this.currentSku.usageStartTime.slice(0, 10)) +
+              '&nbsp;~&nbsp;' +
+              this.formatDate(this.currentSku.usageEndTime.slice(0, 10))
+            );
+          default:
+            return '';
+        }
+      } else {
+        if (this.currentSku.usageMode === 'forever') {
+          return '长期有效';
+        }
+        return memberInfo.deadline != 0
+          ? memberInfo.deadline.slice(0, 10) + '之前可学习'
+          : '长期有效';
+      }
+    },
+
+    classDisabled() {
+      const code = this.currentSku.access.code;
+      return {
+        disabled: !this.accessToJoin && code != 'course.only_vip_join_way',
+      };
+    },
+  },
   methods: {
     ...mapActions('course', ['joinCourse']),
     ...mapMutations('classroom', {
       setCurrentJoinClass: types.SET_CURRENT_JOIN_CLASS,
     }),
     handleJoin() {
-      if (this.currentSku.access.code === 'member.member_exist') {
+      const type = this.goods.type;
+      const {
+        access: { code },
+        targetId,
+        vipLevelInfo,
+        buyable,
+        displayPrice,
+      } = this.currentSku;
+
+      if (code === 'member.member_exist') {
         this.$router.push({
-          path: `/${this.goods.type}/${this.currentSku.targetId}`,
+          path: `/${type}/${targetId}`,
         });
         return;
       }
       // 会员免费学
       const vipAccessToJoin = this.vipAccessToJoin;
+
+      // 不是会员跳转到会员页面
+      if (code === `${type}.only_vip_join_way` && !vipAccessToJoin) {
+        this.$router.push({
+          path: '/vip',
+          query: { id: vipLevelInfo.id },
+        });
+      }
 
       // 禁止加入
       if (!this.accessToJoin && !vipAccessToJoin) {
@@ -115,8 +204,8 @@ export default {
         });
         return;
       }
-      if (Number(this.currentSku.buyable) || vipAccessToJoin) {
-        if (+this.currentSku.displayPrice && !vipAccessToJoin) {
+      if (Number(buyable) || vipAccessToJoin) {
+        if (+displayPrice && !vipAccessToJoin) {
           this.getOrder();
         } else {
           this.collectUseInfoEvent();
@@ -240,66 +329,6 @@ export default {
         },
       });
     },
-  },
-  computed: {
-    vipAccessToJoin() {
-      let vipAccess = false;
-      if (!this.currentSku.vipLevelInfo || !this.currentSku.vipUser) {
-        return false;
-      }
-
-      if (
-        this.currentSku.vipLevelInfo.seq <= this.currentSku.vipUser.level.seq
-      ) {
-        const vipExpired =
-          parseInt(this.currentSku.vipUser.deadline) * 1000 <
-          new Date().getTime();
-        vipAccess = !vipExpired;
-      }
-      return vipAccess;
-    },
-    accessToJoin() {
-      return (
-        this.currentSku.access.code === 'success' ||
-        this.currentSku.access.code === 'user.not_login' ||
-        this.currentSku.access.code === 'member.member_exist'
-      );
-    },
-    ...mapState(['vipSwitch']),
-    buyableModeHtml() {
-      const memberInfo = this.goods.member;
-      if (!memberInfo) {
-        switch (this.currentSku.usageMode) {
-          case 'forever':
-            return '长期有效';
-          case 'end_date':
-            return (
-              this.formatDate(this.currentSku.usageEndTime.slice(0, 10)) +
-              '&nbsp;之前可学习'
-            );
-          case 'days':
-            return this.currentSku.usageDays + '天内可学习';
-          case 'date':
-            return (
-              this.formatDate(this.currentSku.usageStartTime.slice(0, 10)) +
-              '&nbsp;~&nbsp;' +
-              this.formatDate(this.currentSku.usageEndTime.slice(0, 10))
-            );
-          default:
-            return '';
-        }
-      } else {
-        if (this.currentSku.usageMode === 'forever') {
-          return '长期有效';
-        }
-        return memberInfo.deadline != 0
-          ? memberInfo.deadline.slice(0, 10) + '之前可学习'
-          : '长期有效';
-      }
-    },
-  },
-  created() {
-    this.redirect = decodeURIComponent(this.$route.fullPath);
   },
 };
 </script>
