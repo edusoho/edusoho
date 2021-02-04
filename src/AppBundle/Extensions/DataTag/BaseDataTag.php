@@ -13,6 +13,13 @@ abstract class BaseDataTag
         return ServiceKernel::instance();
     }
 
+    protected function getWebExtension()
+    {
+        global $kernel;
+
+        return $kernel->getContainer()->get('web.twig.extension');
+    }
+
     protected function fillOrgCode($conditions)
     {
         $magic = $this->setting('magic');

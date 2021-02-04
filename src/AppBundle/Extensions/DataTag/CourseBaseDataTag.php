@@ -12,13 +12,6 @@ use Biz\User\Service\UserService;
 
 abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
 {
-    protected function getWebExtension()
-    {
-        global $kernel;
-
-        return $kernel->getContainer()->get('web.twig.extension');
-    }
-
     /**
      * @return CourseService
      */
