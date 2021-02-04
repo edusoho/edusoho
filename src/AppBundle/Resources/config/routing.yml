@@ -509,9 +509,10 @@ raw_password_update:
     path: /raw/password/update
     defaults: { _controller: AppBundle:PasswordReset:changeRawPassword }
 
-password_reset_check_mobile:
-    path:  /password/reset/check/mobile
-    defaults: { _controller: AppBundle:PasswordReset:checkMobileExists }
+# 73172 漏洞修复-防止网校被爆破枚举用户手机号
+# password_reset_check_mobile:
+#     path:  /password/reset/check/mobile
+#     defaults: { _controller: AppBundle:PasswordReset:checkMobileExists }
 
 browser_upgrade:
     path:  /browser/upgrade
