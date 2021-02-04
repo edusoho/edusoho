@@ -142,7 +142,7 @@ class StudentManageController extends BaseController
     {
         $this->getCourseService()->tryManageCourse($courseId, $courseSetId);
 
-        $studentIds = $request->request->get('userIds', []);
+        $studentIds = $request->request->get('studentIds', []);
         if (empty($this->getUserService()->findUsersByIds($studentIds))) {
             return $this->createJsonResponse(['success' => false]);
         }
