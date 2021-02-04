@@ -175,7 +175,6 @@ export default {
         'course.expired',
         'classroom.expired',
       ];
-      console.log(status.includes(code));
       return {
         disabled: status.includes(code),
       };
