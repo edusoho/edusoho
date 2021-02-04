@@ -192,11 +192,13 @@ export default {
         vipLevelInfo,
       } = this.currentSku;
 
-      // 仅会员可加入时的文案
-      const onlyVipJoinWay = vipLevelInfo ? `${vipLevelInfo.name}免费` : '';
+      // 已加入, 去学习
+      if (isMember) {
+        return '去学习';
+      }
 
-      // 当前课程会员是否有效
-      const vipStatus = this.vipAccessToJoin;
+      // 不可加入 + 会员免费学 时的文案
+      const onlyVipJoinWay = vipLevelInfo ? `${vipLevelInfo.name}免费` : '';
 
       // currentSku.access.code 存在的状态
       const status = {
@@ -231,13 +233,8 @@ export default {
         'classroom.expired',
       ];
 
-      if (vipStatus && !notVipStatus.includes(code)) {
+      if (this.vipAccessToJoin && !notVipStatus.includes(code)) {
         return '会员免费兑换';
-      }
-
-      // 已加入, 去学习
-      if (isMember) {
-        return '去学习';
       }
 
       // 不免费
