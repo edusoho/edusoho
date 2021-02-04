@@ -51,7 +51,7 @@ abstract class BaseDataTag
         return ServiceKernel::instance()->getCurrentUser();
     }
 
-    protected function setting($name, $default = array())
+    protected function setting($name, $default = [])
     {
         return ServiceKernel::instance()->createService('System:SettingService')->get($name, $default);
     }
