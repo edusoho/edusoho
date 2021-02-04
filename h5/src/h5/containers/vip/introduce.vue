@@ -100,7 +100,9 @@ export default {
   },
   watch: {
     activeIndex(index) {
-      this.swiper.slideTo(index, 1000, false);
+      setTimeout(() => {
+        this.swiper.slideTo(index, 1000, false);
+      }, 100);
     },
   },
   methods: {
