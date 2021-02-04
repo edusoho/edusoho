@@ -209,7 +209,42 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('information_collect_location_info', [$this, 'informationCollectLocationInfo']),
             new \Twig_SimpleFunction('information_collect_form_items', [$this, 'informationCollectFormItems']),
             new \Twig_SimpleFunction('cloud_mail_settings', [$this, 'mailSetting']),
+            new \Twig_SimpleFunction('filter_courses_vip_right', [$this, 'filterCoursesVipRight']),
+            new \Twig_SimpleFunction('filter_classrooms_vip_right', [$this, 'filterClassroomsVipRight']),
         ];
+    }
+
+    public function filterCoursesVipRight($supplierData)
+    {
+        if($this->isPluginInstalled('Vip') && version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')){
+            $vipRights = $this->getVipRightService()->searchVipRights(['supplierCode' => 'course'], [], 0, PHP_INT_MAX);
+            $vipRights = empty($vipRights) ? [] : ArrayToolkit::index($vipRights, 'uniqueCode');
+
+            foreach ($supplierData as &$data){
+                $data['course']['vipLevelId'] = isset($vipRights[$data['course']['id']]['vipLevelId']) ? $vipRights[$data['course']['id']]['vipLevelId'] : 0;
+            }
+        }
+
+        return $supplierData;
+    }
+
+    public function filterClassroomsVipRight($supplierData)
+    {
+        if($this->isPluginInstalled('Vip') && version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')){
+            $vipRights = $this->getVipRightService()->searchVipRights(['supplierCode' => 'classroom'], [], 0, PHP_INT_MAX);
+            $vipRights = empty($vipRights) ? [] : ArrayToolkit::index($vipRights, 'uniqueCode');
+
+            foreach ($supplierData as &$data){
+                $data['vipLevelId'] = isset($vipRights[$data['id']]['vipLevelId']) ? $vipRights[$data['id']]['vipLevelId'] : 0;
+            }
+        }
+
+        return $supplierData;
+    }
+
+    protected function getVipRightService()
+    {
+        return $this->createService('VipPlugin:Marketing:VipRightService');
     }
 
     public function makeLocalMediaFileToken($file)

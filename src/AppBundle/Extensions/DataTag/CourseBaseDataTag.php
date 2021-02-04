@@ -12,6 +12,11 @@ use Biz\User\Service\UserService;
 
 abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
 {
+    protected function getWebExtension()
+    {
+        return $this->getServiceKernel()->getParameter('container')->get('web.twig.extension');
+    }
+
     /**
      * @return CourseService
      */
@@ -197,6 +202,7 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
 
         $courseSets = $this->fillCourseTryLookVideo($courseSets);
 
+        return $this->getWebExtension()->filterCoursesVipRight($courseSets);
         return $this->getCourseService()->filterCoursesVipRight($courseSets);
     }
 

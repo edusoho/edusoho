@@ -2548,25 +2548,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return !empty($this->getCertificateService()->count($conditions));
     }
 
-    public function filterClassroomsVipRight($supplierData)
-    {
-        if($this->isPluginInstalled('Vip') && version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')){
-            $vipRights = $this->getVipRightService()->searchVipRights(['supplierCode' => 'classroom'], [], 0, PHP_INT_MAX);
-            $vipRights = empty($vipRights) ? [] : ArrayToolkit::index($vipRights, 'uniqueCode');
-
-            foreach ($supplierData as &$data){
-                $data['vipLevelId'] = isset($vipRights[$data['id']]['vipLevelId']) ? $vipRights[$data['id']]['vipLevelId'] : 0;
-            }
-        }
-
-        return $supplierData;
-    }
-
-    protected function getVipRightService()
-    {
-        return $this->createService('VipPlugin:Marketing:VipRightService');
-    }
-
     /**
      * @return CertificateService
      */

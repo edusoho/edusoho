@@ -123,7 +123,7 @@ class ExploreController extends BaseController
         return $this->render(
             'course-set/explore.html.twig',
             [
-                'courseSets' => $this->getCourseService()->filterCoursesVipRight($courseSets),
+                'courseSets' => $this->getWebExtension()->filterCoursesVipRight($courseSets),
                 'category' => $category,
                 'filter' => $filter,
                 'paginator' => $paginator,
@@ -203,7 +203,7 @@ class ExploreController extends BaseController
 
         $vipLevelIds = $conditions['vipLevelIds'];
         if ($this->isPluginInstalled('Vip') && version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')) {
-            $vipRightCourses = $this->getVipRightService()->findByVipLevelIdsAndSupplierCode($vipLevelIds, 'course');
+            $vipRightCourses = $this->getVipRightService()->findVipRightsBySupplierCodeAndVipLevelIds('course', $vipLevelIds);
             $courses = $this->getCourseService()->findPublicCoursesByIds(ArrayToolkit::column($vipRightCourses, 'uniqueCode'));
         } else {
             $courses = $this->getCourseService()->searchCourses(
@@ -273,7 +273,7 @@ class ExploreController extends BaseController
         $conditions = $this->getConditionsByVip($conditions, $filter['currentLevelId']);
         if (!empty($conditions['vipLevelIds'])) {
             if ($this->isPluginInstalled('Vip') && version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')) {
-                $vipRightClassrooms = $this->getVipRightService()->findByVipLevelIdsAndSupplierCode($conditions['vipLevelIds'], 'classroom');
+                $vipRightClassrooms = $this->getVipRightService()->findVipRightsBySupplierCodeAndVipLevelIds('classroom', $conditions['vipLevelIds']);
                 $classroomIds = $this->getClassroomService()->findClassroomsByIds(ArrayToolkit::column($vipRightClassrooms, 'uniqueCode'));
                 $conditions['classroomIds'] = empty($classroomIds) ? [] : ArrayToolkit::column($classroomIds, 'id');
                 unset($conditions['vipLevelIds']);
@@ -300,7 +300,7 @@ class ExploreController extends BaseController
             'classroom/explore.html.twig',
             [
                 'paginator' => $paginator,
-                'classrooms' => $this->getClassroomService()->filterClassroomsVipRight($classrooms),
+                'classrooms' => $this->getWebExtension()->filterClassroomsVipRight($classrooms),
                 'category' => $category,
                 'categoryArray' => $categoryArray,
                 'categoryParent' => $categoryParent,
