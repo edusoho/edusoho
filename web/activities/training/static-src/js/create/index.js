@@ -97,12 +97,12 @@ load.then(function(){
         divShow($(this).val());
     })
 
-    $("#picker_images_items").on("click",function(){
+    // $("#picker_images_items").on("click",function(){
       // 编辑的时候传递选中id
-      $.get($btn.data('url'), {}, html => {
-        this.$imagesPickedModal.html(html);
-      });
-    })
+      // $.get($btn.data('url'), {}, html => {
+      //   this.$imagesPickedModal.html(html);
+      // });
+    // })
   }
 
   function divShow(id){
