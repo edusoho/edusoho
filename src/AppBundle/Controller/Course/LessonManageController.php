@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Course;
 
 use AppBundle\Controller\BaseController;
 use AppBundle\Util\UploaderToken;
+use Biz\Course\LessonException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\LessonService;
@@ -176,6 +177,19 @@ class LessonManageController extends BaseController
     public function deleteAction(Request $request, $courseId, $lessonId)
     {
         $this->getCourseLessonService()->deleteLesson($courseId, $lessonId);
+
+        return $this->createJsonResponse(['success' => true]);
+    }
+
+    public function batchDeleteAction(Request $request, $courseId)
+    {
+        $lessonIds = $request->request->get('lessonIds');
+
+        if (empty($lessonIds)) {
+            $this->createNewException(LessonException::PARAMETERS_MISSING());
+        }
+
+        $this->getCourseLessonService()->batchDeleteLessons($courseId, $lessonIds);
 
         return $this->createJsonResponse(['success' => true]);
     }

@@ -70,6 +70,19 @@ class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
         return $this->findByFields(['courseId' => $courseId, 'categoryId' => $categoryId]);
     }
 
+    public function findByCourseIdAndCategoryIds($courseId, $categoryIds)
+    {
+        if (empty($categoryIds)) {
+            return [];
+        }
+
+        $marks = str_repeat('?,', count($categoryIds) - 1).'?';
+
+        $sql = "SELECT * FROM {$this->table()} WHERE courseId= ? and id IN ({$marks})";
+
+        return $this->db()->fetchAll($sql, array_merge([$courseId], $categoryIds)) ?: [];
+    }
+
     public function getMaxSeqByCourseId($courseId)
     {
         $sql = "SELECT MAX(seq) FROM {$this->table()} WHERE courseId = ? ";

@@ -163,6 +163,27 @@ class LessonServiceImpl extends BaseService implements LessonService
         return true;
     }
 
+    public function batchDeleteLessons($courseId, $lessonIds)
+    {
+        $this->getCourseService()->tryManageCourse($courseId);
+        $lessons = $this->getCourseChapterDao()->findChaptersByCourseIdAndLessonIds($courseId, $lessonIds);
+
+        if (empty($lessons)) {
+            return;
+        }
+
+        $lessonIds = ArrayToolkit::column($lessons, 'id');
+
+        $this->getTaskService()->deleteTasksByCategoryIds($courseId, $lessonIds);
+        $this->getCourseChapterDao()->batchDelete(['courseId' => $courseId, 'ids' => $lessonIds]);
+
+        $this->dispatchEvent('course.lesson.delete', new Event($lessons[0]));
+
+        $this->updateLessonNumbers($courseId);
+
+        return true;
+    }
+
     public function isLessonCountEnough($courseId)
     {
         $lessonCount = $this->countLessons(['courseId' => $courseId]);
