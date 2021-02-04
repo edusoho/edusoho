@@ -13,6 +13,8 @@ class TrainingController extends BaseController implements ActivityActionInterfa
             'activity' => [1,2,3],
         ));
     }
+
+
     public function showAction(Request $request, $activity)
     {
         return $this->render('TrainingTaskPlugin:Activity:Home/show.html.twig', array(
@@ -37,8 +39,6 @@ class TrainingController extends BaseController implements ActivityActionInterfa
     {
         $activity = $this->getActivityService()->getActivity($id);
 
-        // code
-
         return $this->render('TrainingTaskPlugin:Activity/Training/modal.html.twig', array(
             'activity' => $activity,
             // other params
@@ -47,8 +47,6 @@ class TrainingController extends BaseController implements ActivityActionInterfa
 
     public function createAction(Request $request, $courseId)
     {
-        //code
-
         return $this->render('TrainingTaskPlugin:Activity/Training/modal.html.twig', array(
             'courseId' => $courseId,
             // other params
@@ -57,7 +55,6 @@ class TrainingController extends BaseController implements ActivityActionInterfa
 
     public function finishConditionAction(Request $request, $activity)
     {
-
         $media = $this->getActivityService()->getActivityConfig('training')->get($activity['mediaId']);
 
         return $this->render('TrainingTaskPlugin:Activity:Home/finish-condition.html.twig', array(

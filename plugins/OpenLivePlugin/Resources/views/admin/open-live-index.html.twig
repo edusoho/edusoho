@@ -1,0 +1,112 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_open_live_list' %}
+
+{% do load_script('openliveplugin/controller/open-live/open-live-list') %}
+
+{% block main %}
+  {{ web_macro.flash_messages() }}
+  <div class="alert cd-alert cd-alert-success">
+    {{ 'open_live.plugin.admin.live_list.notice'|trans({'%smsRemainUrl%': path("admin_v2_edu_cloud_sms_overview")})|raw }}
+  </div>
+  <form id="open-live-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+    <div class="mbm">
+      <div class="form-group">
+        <select id="keywordType" name="keywordType" class="form-control">
+          {{ select_options(dict('openLiveListSearchType'), app.request.query.get('keywordType') ? app.request.query.get('keywordType') : 'title') }}
+        </select>
+      </div>
+      <div class="form-group">
+        <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}"
+               placeholder="{{ 'admin.user.form.input_placeholder.keyword'|trans }}">
+      </div>
+      <div class="form-group ml3">
+        {{ 'open_live.plugin.live_status'|trans }}：
+        <select name="liveStatus" class="form-control">
+          {{ select_options(dict('openLiveStatus'), app.request.query.get('liveStatus'), '全部') }}
+        </select>
+      </div>
+
+      <div class="form-group ml3">
+        {{ 'open_live.plugin.live_publish_status'|trans }}：
+        <select name="publishStatus" class="form-control">
+          {{ select_options(dict('openLivePublishStatus'), app.request.query.get('publishStatus'), '全部') }}
+        </select>
+      </div>
+      <button class="btn btn-primary">{{ 'admin.user.form.btn.search_submit_btn'|trans }}</button>
+    </div>
+
+    <div class="mbm">
+      <div class="form-group ">
+        {{ 'open_live.plugin.live_plan_start_time'|trans }}：
+        <input class="form-control" type="text" id="planStartDateST" name="planStartDateST"
+               value="{{ app.request.query.get('planStartDateST') }}" placeholder="{{ 'admin.user.form.input_placeholder.startDate'|trans }}" autocomplete="off">
+        至
+        <input class="form-control" type="text" id="planStartDateED" name="planStartDateED"
+               value="{{ app.request.query.get('planStartDateED') }}" placeholder="{{ 'admin.user.form.input_placeholder.endDate'|trans }}" autocomplete="off">
+      </div>
+
+      <div class="form-group ml3">
+        {{ 'open_live.plugin.live_plan_end_time'|trans }}：
+        <input class="form-control" type="text" id="planEndDateST" name="planEndDateST"
+               value="{{ app.request.query.get('planEndDateST') }}" placeholder="{{ 'admin.user.form.input_placeholder.startDate'|trans }}" autocomplete="off">
+        至
+        <input class="form-control" type="text" id="planEndDateED" name="planEndDateED"
+               value="{{ app.request.query.get('planEndDateED') }}" placeholder="{{ 'admin.user.form.input_placeholder.endDate'|trans }}" autocomplete="off">
+      </div>
+    </div>
+
+    <div class="mbm">
+      <div class="form-group ">
+        {{ 'open_live.plugin.live_real_start_time'|trans }}：
+        <input class="form-control" type="text" id="realStartDateST" name="realStartDateST"
+               value="{{ app.request.query.get('realStartDateST') }}" placeholder="{{ 'admin.user.form.input_placeholder.startDate'|trans }}" autocomplete="off">
+        至
+        <input class="form-control" type="text" id="realStartDateED" name="realStartDateED"
+               value="{{ app.request.query.get('realStartDateED') }}" placeholder="{{ 'admin.user.form.input_placeholder.endDate'|trans }}" autocomplete="off">
+      </div>
+
+      <div class="form-group ml3">
+        {{ 'open_live.plugin.live_real_end_time'|trans }}：
+        <input class="form-control" type="text" id="realEndDateST" name="realEndDateST"
+               value="{{ app.request.query.get('realEndDateST') }}" placeholder="{{ 'admin.user.form.input_placeholder.startDate'|trans }}" autocomplete="off">
+        至
+        <input class="form-control" type="text" id="realEndDateED" name="realEndDateED"
+               value="{{ app.request.query.get('realEndDateED') }}" placeholder="{{ 'admin.user.form.input_placeholder.endDate'|trans }}" autocomplete="off">
+      </div>
+    </div>
+  </form>
+
+  {% if liveRooms %}
+    <table id="open-live-table" class="table table-striped table-hover" data-search-form="#user-search-form">
+      <thead>
+      <tr>
+        <th width="25%">{{ 'open_live.plugin.admin.live_list.course_info_label'|trans }}</th>
+        <th>{{ 'open_live.plugin.admin.live_list.speaker_label'|trans }}</th>
+        <th  width="12%">{{ 'open_live.plugin.admin.live_list.prepare_live_time_label'|trans }}</th>
+        <th  width="12%">{{ 'open_live.plugin.admin.live_list.real_live_time_label'|trans }}</th>
+        <th>{{ 'open_live.plugin.admin.live_list.user_enroll_num_label'|trans }}</th>
+        <th>{{ 'open_live.plugin.admin.live_list.user_sms_reached_num_label'|trans }}</th>
+        <th>{{ 'open_live.plugin.admin.live_list.user_watch_num_label'|trans }}</th>
+        <th>{{ 'open_live.plugin.admin.live_list.live_status_label'|trans }}</th>
+        <th>{{ 'open_live.plugin.admin.live_list.publish_status_label'|trans }}</th>
+        <th width="10%">{{ 'admin.user.fields.operation_label'|trans }}</th>
+      </tr>
+      </thead>
+      <tbody>
+        {% for liveRoom in liveRooms %}
+          {% include 'OpenLivePlugin::admin/open-live-table-tr.html.twig' with {liveRoom: liveRoom} %}
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="empty">{{ 'open_live.plugin.admin.live_list.data_empty'|trans }}</div>
+  {% endif %}
+
+  {{ admin_macro.paginator(paginator) }}
+<style>
+  .ml3 {
+    margin-left: 3px;
+  }
+</style>
+{% endblock %}

@@ -1,0 +1,4 @@
+# 我的教学列表
+- name: my.teaching.open_course.menu
+  class: OpenLivePlugin\Slot\MyTeachingNavSlot
+  priority: 250

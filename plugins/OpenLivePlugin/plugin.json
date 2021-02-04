@@ -1,0 +1,9 @@
+{
+    "code": "OpenLive",
+    "name": "OpenLive",
+    "description": "",
+    "author": "EduSoho官方",
+    "version": "1.3.0",
+    "protocol": "3",
+    "support_version": "20.4.7"
+}

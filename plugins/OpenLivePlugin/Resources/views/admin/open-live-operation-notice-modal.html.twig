@@ -1,0 +1,28 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}{{'提醒'|trans}}{% endblock %}
+
+{% block body %}
+  <div class="js-wechat-share-urcode" style="height: 80px">
+    {% if liveStatus != 'finished' %}
+      <div align="center" class="title mt30">该场大型公开课还<span style="color: red;">未结束</span>，请等待结束后查看！</div>
+    {% else %}
+      {% if liveChargeStatus == 'created' or liveChargeStatus == 'paying' %}
+        <div align="center" class="title mt30">该场大型公开课还<span style="color: red;">未扣款</span>，请等待扣款成功后查看！</div>
+      {% elseif liveChargeStatus == 'confirmed' %}
+        <div align="center" class="title mt30">该场大型公开课还<span style="color: red;">未结清</span>，请充值后查看！去<a href="{{ path('admin_v2_cloud_recharge') }}" target="_blank">充值</a>。</div>
+      {% endif %}
+    {% endif %}
+  </div>
+  <style>
+    .mt30 {
+      margin-top: 30px;
+    }
+  </style>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
+{% endblock %}

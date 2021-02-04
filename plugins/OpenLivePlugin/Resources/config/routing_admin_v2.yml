@@ -1,0 +1,137 @@
+admin_v2_open_live_list:
+    path:  /open_live/list
+    defaults: { _controller: OpenLivePlugin:Admin/OpenLive:list }
+
+admin_v2_open_live_generate:
+  path:  /open_live/generate
+  defaults: { _controller: OpenLivePlugin:Admin/OpenLive:createLive }
+
+admin_v2_open_live_cover_crop:
+  path:  /open_live/cover_crop
+  defaults: { _controller: OpenLivePlugin:Admin/OpenLive:coverCrop }
+
+admin_v2_open_live_detail:
+  path:  /open_live/{id}/detail
+  defaults: { _controller: OpenLivePlugin:Admin/OpenLive:detail }
+
+admin_v2_open_live_detail_alert_message:
+  path:  /open_live/{id}/detail/alert_message
+  defaults: { _controller: OpenLivePlugin:Admin/OpenLive:alertLiveDetailMessage }
+
+admin_v2_open_live_online_num_records_search:
+  path:  /open_live/{id}/search/online_num_records
+  defaults: { _controller: OpenLivePlugin:Admin/OpenLive:searchLiveOnlineNumRecords }
+
+admin_v2_open_live_visitor_reports_search:
+  path:  /open_live/{id}/search/visitor_reports
+  defaults: { _controller: OpenLivePlugin:Admin/OpenLive:searchLiveVisitorReports }
+
+admin_v2_open_live_edit:
+  path:  /open_live/{id}/edit
+  defaults: { _controller: OpenLivePlugin:Admin/OpenLive:edit }
+
+admin_v2_open_live_share:
+  path:  /open_live/{id}/share
+  defaults: { _controller: OpenLivePlugin:Admin/OpenLive:share }
+
+# 分享
+admin_v2_open_live_share_qrcode:
+  path:  /open_live/{id}/share/qrcode
+  defaults: { _controller: OpenLivePlugin:Admin/OpenLive:qrcode }
+
+admin_v2_open_live_wechat_share_img_upload:
+  path: /open_live/{id}/wechat_share_img/upload
+  defaults: { _controller: OpenLivePlugin:Admin/OpenLive:weChatShareImageUpload }
+  methods: [POST]
+
+admin_v2_open_live_wechat_share_save:
+  path: /open_live/{id}/wechat_share/save
+  defaults: { _controller: OpenLivePlugin:Admin/OpenLive:roomWeChatShareSave }
+  methods: [POST]
+
+admin_v2_open_live_teaching:
+  path:  /open_live/{id}/teaching
+  defaults: { _controller: OpenLivePlugin:Admin/OpenLive:teaching }
+
+admin_v2_open_live_publish:
+  path: /open_live/{id}/publish
+  defaults: { _controller: OpenLivePlugin:Admin/OpenLive:publish }
+  methods: [POST]
+
+admin_v2_open_live_unpublish:
+  path: /open_live/{id}/unpublish
+  defaults: { _controller: OpenLivePlugin:Admin/OpenLive:unpublish }
+  methods: [POST]
+
+admin_v2_open_live_close:
+  path: /open_live/{id}/close
+  defaults: { _controller: OpenLivePlugin:Admin/OpenLive:close }
+  methods: [POST]
+
+admin_v2_open_live_delete:
+  path: /open_live/{id}/delete
+  defaults: { _controller: OpenLivePlugin:Admin/OpenLive:delete }
+  methods: [POST]
+
+# 短信送达列表
+admin_v2_open_live_sms_reached_student_list:
+  path:  /open_live/{id}/sms_reached/student_list
+  defaults: { _controller: OpenLivePlugin:Admin/OpenLive:smsReachedStudentList }
+
+admin_v2_open_live_sms_reached_student_ajax_search:
+  path:  /open_live/{id}/sms_reached/student/ajax_search
+  defaults: { _controller: OpenLivePlugin:Admin/OpenLive:smsReachedStudentAjaxSearch }
+
+# 已经报名列表
+admin_v2_open_live_enrolled_student_list:
+  path:  /open_live/{id}/enrolled/student_list
+  defaults: { _controller: OpenLivePlugin:Admin/OpenLive:enrolledStudentList }
+
+admin_v2_open_live_enrolled_student_ajax_search:
+  path:  /open_live/{id}/enrolled/student/ajax_search
+  defaults: { _controller: OpenLivePlugin:Admin/OpenLive:enrolledStudentAjaxSearch }
+
+# 导出数据
+## 详情人员
+open_live_detail_visitor_try_export:
+  path: /open_live/{id}/visitor/try_export
+  defaults: { _controller: OpenLivePlugin:Admin/LiveVisitorExport:tryExport}
+
+open_live_detail_visitor_pre_export:
+  path: /open_live/{id}/visitor/pre_export/{fileName}
+  defaults: { _controller: OpenLivePlugin:Admin/LiveVisitorExport:preExport}
+
+open_live_detail_visitor_export:
+  path: /open_live/visitor/export/{name}
+  defaults: { _controller: OpenLivePlugin:Admin/LiveVisitorExport:export}
+
+## 短信触达列表
+open_live_sms_reached_student_try_export:
+  path: /open_live/{id}/sms_reached_student/try_export
+  defaults: { _controller: OpenLivePlugin:Admin/SmsReachedStudentExport:tryExport}
+
+open_live_sms_reached_student_pre_export:
+  path: /open_live/{id}/sms_reached_student/pre_export/{fileName}
+  defaults: { _controller: OpenLivePlugin:Admin/SmsReachedStudentExport:preExport}
+
+open_live_sms_reached_student_export:
+  path: /open_live/sms_reached_student/export/{name}
+  defaults: { _controller: OpenLivePlugin:Admin/SmsReachedStudentExport:export}
+
+## 报名列表
+open_live_enrolled_student_try_export:
+  path: /open_live/{id}/enrolled_student/try_export
+  defaults: { _controller: OpenLivePlugin:Admin/EnrolledStudentExport:tryExport}
+
+open_live_enrolled_student_pre_export:
+  path: /open_live/{id}/enrolled_student/pre_export/{fileName}
+  defaults: { _controller: OpenLivePlugin:Admin/EnrolledStudentExport:preExport}
+
+open_live_enrolled_student_export:
+  path: /open_live/enrolled_student/export/{name}
+  defaults: { _controller: OpenLivePlugin:Admin/EnrolledStudentExport:export}
+
+# 教师匹配
+open_live_speaker_match:
+  path: /open_live/speaker_match
+  defaults: { _controller: OpenLivePlugin:Admin/OpenLive:speakerMatch }

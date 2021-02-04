@@ -1,31 +1,36 @@
-<!DOCTYPE html>
-<html>
-  <head>
-      <meta charset="utf-8" />
-      <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <title>Picture and text task display page</title>
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <link href="/activities/text/static-dist/css/text.css" rel="stylesheet" />
-      <base target="_blank">
-  </head>
-  <style>
-    pre {
-      white-space: pre-wrap;
-      word-wrap: break-word;
-    }
-    .iframe-scroll {
-      -webkit-overflow-scrolling: touch;
-      overflow-y: scroll;
-      z-index: 1;
-    }
-    .text-iframe-wrap {
-      padding-top: 0;
-      padding-bottom: 0;
-      height: 100%;
-      overflow: scroll;
-    }
-  </style>
-  <body>
-    123321
-  </body>
-</html>
+{% extends 'layout.html.twig' %}
+{% do script(['trainingtaskplugin/js/index.js']) %}
+{% block body %}
+<div class="flex">
+    <div id="one">
+      123<br />
+      123<br />
+      123<br />
+      123<br />
+    </div>
+    <div id="two">
+      123<br />
+      123<br />
+      123<br />
+      123<br />
+    </div>
+</div>
+
+
+<style>
+  #one{
+    height:100%
+  }
+  #two{
+    height:100%
+  }
+  .flex {
+    display: flex;
+    flex-direction: row;
+}
+.gutter.gutter-horizontal {
+    cursor: ew-resize;
+    background-color: #eee;
+}
+</style>
+{% endblock %}

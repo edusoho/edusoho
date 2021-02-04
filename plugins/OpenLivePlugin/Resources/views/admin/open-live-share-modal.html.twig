@@ -1,0 +1,110 @@
+{% extends 'old-bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}{{'open_live.plugin.admin.live_list.share.wechat_share'|trans}}{% endblock %}
+
+{% block body %}
+  <div class="js-wechat-share-urcode" style="height: 200px">
+    <div class="col-md-4">
+      {% if shareUrl|default('') %}
+        <img width="160px" src="{{ path('admin_v2_open_live_share_qrcode', {id: liveRoomId, text:shareUrl}) }}" />
+      {% else %}
+        <div align="center" class="title">获取分享地址失败，请刷新重试！</div>
+      {% endif %}
+    </div>
+    <div class="col-md-8">
+      <div class="title">复制链接</div>
+      <div class="col mt15"><input id="shareUrl" type="text" class="form-control col-md-9 mr5" readonly value="{{ shareUrl }}"><a class="btn btn-primary js-copy-share-url" href="javascript:;">复制</a></div>
+      <div class="title mt15"><a class="mr20" {% if shareUrl|default('') %}download href="{{ path('admin_v2_open_live_share_qrcode', {id: liveRoomId, text:shareUrl}) }}"{% else %}href="javascript:;"{% endif %}>下载二维码</a><a class="wechat-share-url-setting-show" href="javascript:;" >微信内分享设置</a></div>
+    </div>
+  </div>
+
+  <div class="js-wechat-share-url-setting" style="display: none">
+    <div class="col-md-4">
+      <div class="title mb15 ml11"><h5>样式预览</h5></div>
+        <img width="160px" src="/bundles/openliveplugin/assets/img/weChatPreview.png" />
+    </div>
+    <div class="col-md-8">
+      <div class="title mb15 ml11"><h5>分享设置</h5></div>
+      <form id="share-form" class="form-horizontal" method="post" data-save-url="{{ path('admin_v2_open_live_wechat_share_save', {id: liveRoomId}) }}">
+        <div class="row form-group">
+          <div class="col-md-3 control-label">
+            <label for="shareTitle">{{'分享标题'|trans}}</label>
+          </div>
+          <div class="col-md-7 controls">
+            <input type="text" placeholder="请输入分享标题" id="shareTitle" name="shareTitle" class="form-control" value="{{ shareSetting.share_title|default('') }}" >
+          </div>
+        </div>
+
+        <div class="row form-group">
+          <div class="col-md-3 control-label">
+            <label for="shareContent">{{'分享描述'|trans}}</label>
+          </div>
+          <div class="col-md-7 controls">
+            <textarea type="text" placeholder="请输入分享描述" rows="4" id="shareContent" name="shareContent" class="form-control">{{ shareSetting.share_content|default('') }}</textarea>
+          </div>
+        </div>
+
+        <div class="row form-group">
+          <div class="col-md-3 control-label">
+            <label for="company">{{'分享图片'|trans}}</label>
+          </div>
+          <div class="col-md-3 controls mt10">
+            <div id="wechat-share-img-container">
+              <img style="max-height: 80px;max-width: 80px;" src="
+                {% if shareSetting.share_image|default('') %}
+                  {{ shareSetting.share_image }}
+                {% else %}
+                  /bundles/openliveplugin/assets/img/weChatDefaultShare.png
+                {% endif %}"
+              >
+            </div>
+          </div>
+          <div class="col-md-5 controls mt10">
+            <button class="btn btn-primary" style="height: 34px;" id="wechat-share-img-upload" type="button" data-url="{{ path('admin_v2_open_live_wechat_share_img_upload', {id: liveRoomId}) }}">{{ '选择文件'|trans }}</button>
+            <div class="text-muted mts">{{ '图片格式为：bmp，jpeg，jpg，gif，尺寸1:1，不可大于1M。'|trans|raw }}</div>
+            <input type="hidden" name="wechatShareImage" value="{{ shareSetting.share_image|default('') }}">
+          </div>
+        </div>
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      </form>
+    </div>
+  </div>
+
+<style>
+  .mr5 {
+    margin-right: 5px;
+  }
+  .mt10 {
+    margin-top: 10px;
+  }
+  .mr20 {
+    margin-right: 20px;
+  }
+  .mt15 {
+    margin-top: 15px;
+  }
+  .mb15 {
+    margin-bottom: 15px;
+  }
+  .form-group .control-label label {
+    color: #9c9c9c;
+  }
+  .ml11 {
+    margin-left: 11px;
+  }
+  .modal-body {
+    position: relative;
+    padding: 20px;
+    overflow: hidden;
+  }
+</style>
+{% endblock %}
+
+{% block footer %}
+  <button style="display: none" id="save-share-setting" data-submiting-text="{{'form.btn.submit.submiting'|trans}}" type="submit" class="js-wechat-share-url-setting btn btn-primary pull-right" data-toggle="form-submit" data-target="#user-edit-form">{{'form.btn.save'|trans}}</button>
+  <button style="display: none" type="button" class="js-wechat-share-url-setting btn btn-link pull-right" data-dismiss="modal">{{'form.btn.cancel'|trans}}</button>
+  <script>app.load('openliveplugin/controller/open-live/share-url-click-copy');</script>
+{% endblock %}

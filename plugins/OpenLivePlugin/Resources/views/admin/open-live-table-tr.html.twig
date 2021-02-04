@@ -1,0 +1,61 @@
+{% import 'admin-v2/macro.html.twig' as admin_macro %}
+<tr id="open-live-table-tr-{{ liveRoom.id }}">
+  <td>
+    <div class="float-left mr10">
+      <img width="100px" src="{% if liveRoom.room_cover|default('') %}{{ liveRoom.room_cover }}{% else %}{{ asset('assets/img/default/courseSet.png') }}{% endif %}">
+    </div>
+    <div>
+      <p style="margin-bottom: 2px;">{{ liveRoom.title }}</p>
+      <span style="color: #b0b0b0">{{ liveRoom.summary|plain_text(20) }}</span>
+    </div>
+  </td>
+  <td>
+    {{ liveRoom.speaker_name|default('') }}
+  </td>
+  <td>
+    {% if liveRoom.plan_live_time|default('') %}
+      {{ liveRoom.plan_live_time.startDay|default('') }}<br>{{ liveRoom.plan_live_time.endMinute|default('') }}
+    {% endif %}
+  </td>
+  <td>
+    {% if liveRoom.actual_live_time|default('') %}
+      {{ liveRoom.actual_live_time.startDay|default('') }}<br>{{ liveRoom.actual_live_time.endMinute|default('') }}
+    {% endif %}
+  </td>
+  <td>
+    <a {% if liveRoom.enrolled_num|default(0) <= 0 %}href="javascript:;"{% else %}data-url="{{ path('admin_v2_open_live_enrolled_student_list', {id: liveRoom.id}) }}" data-toggle="modal" data-target="#modal" href="#modal"{% endif %}>
+      {{ liveRoom.enrolled_num|default(0) }}
+    </a>
+  </td>
+  <td>
+    <a {% if liveRoom.sms_reached_num|default(0) <= 0 %}href="javascript:;"{% else %}data-url="{{ path('admin_v2_open_live_sms_reached_student_list', {id: liveRoom.id}) }}" data-toggle="modal" data-target="#modal" href="#modal"{% endif %}>
+      {{ liveRoom.sms_reached_num|default(0) }}
+    </a>
+  </td>
+  <td>
+    {{ liveRoom.visitor_total_num|default(0) }}
+  </td>
+  <td>
+    <span class="{% if 'finished' == liveRoom.live_status|default('unstart') %}color-danger{% endif %}">{{ dict_text('openLiveStatus', liveRoom.live_status|default('unstart')) }}</span>
+  </td>
+  <td>
+    <span class="{% if 'published' == liveRoom.publish_status|default('unpublish') %}color-success{% endif %}">{{ dict_text('openLivePublishStatus', liveRoom.publish_status|default('unpublish')) }}</span>
+  </td>
+  <td>
+    <div class="btn-group">
+      <a class="btn btn-default btn-sm" href="{{ path('admin_v2_open_live_detail', {id: liveRoom.id}) }}" target="_blank">
+        {{ 'open_live.plugin.admin.live_list.operation.detail_btn'|trans }}
+      </a>
+      {% include 'admin-v2/widget/group-button.html.twig' with {parentCode: 'admin_v2_open_live_list', group:'groupButton', liveRoom: liveRoom} %}
+    </div>
+  </td>
+</tr>
+<style>
+  .mr10 {
+    margin-right: 10px;
+  }
+  .float-left {
+    float: left;
+  }
+</style>
+

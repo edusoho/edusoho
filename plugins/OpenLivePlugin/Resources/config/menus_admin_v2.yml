@@ -1,0 +1,89 @@
+# 公开课管理
+admin_v2_operation_open_live:
+    parent: admin_v2_open_course_group
+    quick_entrance_icon: 'open_live'
+    name: admin_v2.operation.open_live_menu
+    router_name: admin_v2_open_live_list
+    class: js-new-corner-mark
+    children:
+        admin_v2_open_live_list:
+            name: admin_v2.operation.open_live_menu
+            router_name: admin_v2_open_live_list
+            children:
+              # 创建按钮
+                admin_v2_open_live_generate:
+                    name: admin_v2.operation.open_live_menu.generate_btn
+                    group: topBtn
+                    icon: 'glyphicon glyphicon-edit'
+                    visible: true
+                    blank: 1
+                # 操作按钮
+                admin_v2_open_live_share:
+                    name: open_live.plugin.admin.live_list.operation.share_btn
+                    router_name: admin_v2_open_live_share
+                    router_params:
+                      id: (liveRoom.id)
+                    group: groupButton
+                    class: js-open-live-share
+                    icon: 'glyphicon glyphicon-share-alt'
+                    mode: modal
+                admin_v2_open_live_teaching:
+                    name: open_live.plugin.admin.live_list.operation.teaching_btn
+                    router_name: admin_v2_open_live_teaching
+                    router_params:
+                      id: (liveRoom.id)
+                    group: groupButton
+                    class: js-open-live-teaching
+                    icon: 'glyphicon glyphicon-book'
+                    blank: 1
+                    visible: ( 'finished' != liveRoom.live_status )
+                admin_v2_open_live_edit:
+                    name: open_live.plugin.admin.live_list.operation.edit_btn
+                    router_name: admin_v2_open_live_edit
+                    router_params:
+                      id: (liveRoom.id)
+                    group: groupButton
+                    class: js-open-live-edit
+                    icon: 'glyphicon glyphicon-edit'
+                    mode: none
+                    visible: ( true != liveRoom.is_live_finished )
+                admin_v2_open_live_publish:
+                    name: open_live.plugin.admin.live_list.operation.publish_btn
+                    router_name: admin_v2_open_live_publish
+                    router_params:
+                      id: (liveRoom.id)
+                    group: groupButton
+                    class: js-open-live-publish
+                    visible: ( 'unpublish' == liveRoom.publish_status )
+                    icon: 'glyphicon glyphicon-ok-circle'
+                    mode: none
+                admin_v2_open_live_unpublish:
+                    name: open_live.plugin.admin.live_list.operation.unpublish_btn
+                    router_name: admin_v2_open_live_unpublish
+                    router_params:
+                      id: (liveRoom.id)
+                    group: groupButton
+                    class: js-open-live-unpublish
+                    visible: ( 'published' == liveRoom.publish_status )
+                    icon: 'glyphicon glyphicon-ban-circle'
+                    mode: none
+                admin_v2_open_live_close:
+                    name: open_live.plugin.admin.live_list.operation.close_btn
+                    router_name: admin_v2_open_live_close
+                    router_params:
+                      id: (liveRoom.id)
+                    group: groupButton
+                    class: js-open-live-close
+                    icon: 'glyphicon glyphicon-off'
+                    visible: ( 'finished' != liveRoom.live_status )
+                    mode: none
+                admin_v2_open_live_delete:
+                    name: open_live.plugin.admin.live_list.operation.delete_btn
+                    router_name: admin_v2_open_live_delete
+                    router_params:
+                      id: (liveRoom.id)
+                    group: groupButton
+                    class: js-open-live-delete
+                    visible: ( 'unpublish' == liveRoom.publish_status and 'unstart' == liveRoom.live_status )
+                    icon: 'glyphicon glyphicon-trash'
+                    mode: none

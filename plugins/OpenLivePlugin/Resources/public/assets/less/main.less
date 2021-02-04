@@ -1,0 +1,273 @@
+.keyframes (@name, @content) {
+  @keyframes @name {
+    @content();
+  }
+  @-o-keyframes @name {
+    @content();
+  }
+  @-moz-keyframes @name {
+    @content();
+  }
+  @-webkit-keyframes @name {
+    @content();
+  }
+}
+
+.keyframes(blueBall,{
+  from, to{
+    left: 10.1%;
+    bottom: -9%;
+  }
+  25% {
+    left: 12.1%;
+    bottom: -7%;
+  }
+  50% {
+    left: 14.1%;
+    bottom: -9%;
+  }
+  75% {
+    left: 12.1%;
+    bottom: -6%;
+  }
+});
+
+.keyframes(greenBall,{
+  from, to{
+    left: 35.5%;
+    bottom: 7.2%;
+  }
+  25% {
+    left: 37.5%;
+    bottom: 9.2%;
+  }
+  50% {
+    left: 39.5%;
+    bottom: 10.2%;
+  }
+  75% {
+    left: 37.5%;
+    bottom: 7.2%;
+  }
+});
+
+.keyframes(grayBall,{
+  from, to{
+    right: -5.3%;
+    bottom: -20.1%;
+  }
+  25% {
+    right: -10.3%;
+    bottom: -16.1%;
+  }
+  50% {
+    right: -4.3%;
+    bottom: -18.1%;
+  }
+  75% {
+    right: -0.3%;
+    bottom: -22.1%;
+  }
+});
+
+.transition(@all: all, @ease: ease, @time: .3s) {
+  transition: @all @ease @time;
+  -o-transition: @all @ease @time;
+  -ms-transition: @all @ease @time;
+  -moz-transition: @all @ease @time;
+  -webkit-transition: @all @ease @time;
+}
+
+@color-primary: #0C81F6;
+
+.border-radius(@radius: 4px) {
+  -webkit-border-radius: @radius;
+  -moz-border-radius: @radius;
+  -o-border-radius: @radius;
+  border-radius: @radius;
+}
+
+html {
+  height: 100%;
+  font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "\5FAE\8F6F\96C5\9ED1", Arial, sans-serif;
+}
+
+body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+.container {
+  text-align: center;
+}
+@media (max-width: 1366px) and (min-width: 1024px) {
+  .container {
+    font-size: 26px;
+  }
+}
+@media (min-width: 1367px) {
+  .container {
+    font-size: 32px;
+  }
+}
+
+.animation (@option) {
+  animation: @option;
+  -webkit-animation: @option;
+  -o-animation: @option;
+  -moz-animation: @option;
+}
+
+.B-launch_page {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  .front {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    .logo {
+      width: 100%;
+      .logo_img {
+        margin: 20px 0 0 30px;
+      }
+    }
+    .container {
+      .clearp{
+        margin: 0;
+      }
+      .title {
+        display: block;
+        padding-top: 3.175em;
+        font-size: 1.125em;
+        line-height: 36px;
+        letter-spacing: 1.6px;
+        color: #222831;
+        &:after {
+          content: '';
+          position: absolute;
+          left: 50%;
+          display: block;
+          width: 0;
+          height: 0;
+          margin: 0.475em;
+          margin-left: -0.62em;
+          border-left: 0.62em solid transparent;
+          border-right: 0.62em solid transparent;
+          border-top: 0.55em solid #ECF5FE;
+          animation: jump .5s infinite;
+        }
+        .download-link {
+          text-decoration: none;
+          color: #222831;
+          .transition;
+          &:hover {
+            color: @color-primary;
+            .transition;
+          }
+        }
+        .launch-link {
+          text-decoration: none;
+        }
+      }
+      .btnC {
+        display: block;
+        margin: 1.675em auto 0.7em;
+        width: 6.875em;
+        height: 1.56em;
+        line-height: 1.56em;
+        background: #0C81F6;
+        border-radius: 4px;
+        transition: background 500ms;
+        cursor: pointer;
+        .button {
+          display: block;
+          width: 100%;
+          height: 100%;
+          font-size: 16px;
+          text-decoration: none;
+          color: #FFFFFF;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          .transition;
+        }
+        &:hover {
+          background: #379BFF;
+          transition: background 500ms;
+        }
+      }
+      .download{
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin: 20px 30px;
+        color: #52a2f0;
+        cursor: pointer;
+        text-decoration: none;
+        .button.clear-button {
+          background: #fff;
+          color: @color-primary;
+          border: 1px solid @color-primary;
+          .border-radius(4px);
+          &:hover {
+            background: @color-primary;
+            color: #fff;
+          }
+        }
+      }
+      // }
+      .mac_pic {
+        // width: 24.8em;
+        height: 14.58em;
+      }
+    }
+  }
+  .back {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: white;
+    z-index: -1;
+    .moving_balls_group {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      .ball {
+        position: absolute;
+        border-radius: 50%;
+      }
+      .blue {
+        left: 10.1%;
+        bottom: -9%;
+        width: 27.4%;
+        .animation(blueBall 8s linear 0s infinite alternate)
+      }
+      .green {
+        left: 35.5%;
+        bottom: 7.2%;
+        width: 4.1%;
+        .animation(greenBall 6s linear 0s infinite alternate)
+      }
+      .gray {
+        right: -5.3%;
+        bottom: -20.1%;
+        width: 56.5%;
+        .animation(grayBall 8s linear 0s infinite alternate)
+      }
+    }
+  }
+}
+
+.color-primary {
+  color: @color-primary;
+}
+

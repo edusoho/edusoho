@@ -1,0 +1,165 @@
+{% extends 'admin-v2/layout.html.twig' %}
+{% import "macro.html.twig" as web_macro %}
+
+{% set menu = 'admin_v2_open_live_list' %}
+
+{% do load_script('openliveplugin/controller/open-live/open-live-detail') %}
+{% set page_title = '详情' %}
+
+{% block title %}{{ page_title }}{% endblock %}
+{% block page_title %}{{ page_title }}{% endblock %}
+{% block page_buttons %}{% endblock %}
+{% block main %}
+  <div class="row">
+    <div class="col-md-12 live-header">
+      <div class="col-md-4">
+        <img class="img-responsive" src="{% if liveRoom.room_cover|default('') %}{{ liveRoom.room_cover }}{% else %}{{ asset('assets/img/default/courseSet.png') }}{% endif %}" />
+      </div>
+      <div class="col-md-8">
+        <div class="title"><h2>{{ liveRoom.title|default('暂无') }}</h2></div>
+        <div class="title mt15">直播时间： {% if liveRoom.plan_live_time %}{{ liveRoom.plan_live_time.startDay|default('') }} {{ liveRoom.plan_live_time.endMinute|default('') }}{% else %}未知{% endif %}</div>
+        <div class="title mt15">简介： {{ liveRoom.summary|default('暂无')|plain_text(100) }}</div>
+      </div>
+    </div>
+    <div class="col-md-12 mt15">
+      <div class="border-left-line">
+        <h4>直播概况</h4>
+      </div>
+      <div class="col-md-4">
+        <div class="data-box"><h5>观看人数</h5><h2>{{ liveRoom.visitor_total_num|default(0) }}</h2></div>
+      </div>
+      <div class="col-md-4">
+        <div class="data-box">
+          <h5>
+            累计观看时长
+            {% include 'OpenLivePlugin:common:tooltip-widget.html.twig' with { icon: 'glyphicon-question-sign', content: 'open_live.plugin.admin.live_detail.statistic_student_listen_time_tips'|trans|raw, placement: 'top'} %}
+          </h5>
+          <h2>{{ liveRoom.actual_student_listen_time|default('00:00:00') }}</h2>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="data-box">
+          <h5>
+            实际直播时长
+            {% include 'OpenLivePlugin:common:tooltip-widget.html.twig' with { icon: 'glyphicon-question-sign', content: 'open_live.plugin.admin.live_detail.statistic_actual_living_time_tips'|trans|raw, placement: 'top'} %}
+          </h5>
+          <h2>{{ liveRoom.actual_living_time|default('00:00:00') }}</h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-12">
+      <div class="border-left-line">
+        <h4>引流转化分析</h4>
+      </div>
+      <div class="col-md-offset-1 col-md-10">
+        <div id="analysis-line-data" style="height: {% if liveMemberAnalysisData != '[]' %}360{% else %}1{% endif %}px;" data-line-data="{{ liveMemberAnalysisData }}">
+        </div>
+        {% if liveMemberAnalysisData == '[]' %}
+          <div class="empty">暂无数据</div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="col-md-12">
+      <div class="border-left-line">
+        <h4>直播在线人数</h4>
+      </div>
+      <div class="col-md-offset-2 col-md-10 hidden">
+        起始时间 <input class="self-form-control" type="text" id="startDate" name="startDate" readonly="readonly" placeholder="起始时间" value="">
+        <span class="ml15">截止时间</span> <input class="self-form-control" type="text" id="endDate" name="endDate" readonly="readonly" placeholder="截止时间" value="">
+        <button class="btn btn-primary ml15 js-online-num-search" data-submiting-text="{{ '查询中...'|trans }}" data-search-url="{{ path('admin_v2_open_live_online_num_records_search', {id: liveRoom.id}) }}" type="submit">查询</button>
+      </div>
+      <div class="col-md-offset-1 col-md-10">
+        <div id="line-data" style="height: 360px" data-line-data="{{ liveOnlineNumRecords }}">
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-12 mt15">
+      <div class="col-md-3">
+        <h4 class="border-left-line ">访问的用户列表</h4>
+      </div>
+      <div class="right-search-module mt15">
+        <input type="text" class="self-form-control" placeholder="输入昵称或手机号" id="visitorNickname" value="">
+        <button class="btn btn-primary ml15 js-visitor-report-search" type="button"  data-submiting-text="{{ '查询中...'|trans }}" data-search-url="{{ path('admin_v2_open_live_visitor_reports_search', {id: liveRoom.id}) }}">查询</button>
+        {% include 'OpenLivePlugin::admin/open-live-statistic-export-btn.html.twig' %}
+      </div>
+      <div class="col-md-12 js-visitor-reports">
+        {% include 'OpenLivePlugin::admin/open-live-statistic-visitor-reports.html.twig' with {liveVisitorReports: liveVisitorReports, paginator: paginator} %}
+    </div>
+  </div>
+<style>
+  .mt15 {
+    margin-top: 15px;
+  }
+  .ml15 {
+    margin-left: 15px;
+  }
+  .mt80 {
+    margin-top: 80px;
+  }
+  .border-left-line {
+    padding: 0px 10px;
+    margin: 20px 12px;
+    border-left: 1px solid #eee;
+    border-left-width: 3px;
+    border-left-color: #3276dd;
+  }
+  .data-box {
+    padding: 20px;
+    margin: 20px 0;
+    border: 1px solid #797979;
+    border-radius: 3px;
+  }
+  .ht200 {
+    height: 200px;
+  }
+  .self-form-control[disabled], .self-form-control[readonly], fieldset[disabled] .self-form-control {
+    cursor: not-allowed;
+    background-color: #eee;
+    opacity: 1;
+  }
+  .self-form-control {
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+  }
+  .btn {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+  }
+  .right-search-module {
+    float: right;
+    margin-right:8%;
+  }
+  .custom-style {
+    display: inline;
+  }
+</style>
+{% endblock %}

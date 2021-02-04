@@ -1,0 +1,23 @@
+{% import "common/data-dict-macro.html.twig" as dict_macro %}
+{% extends 'my/my-teaching.html.twig' %}
+
+{% block title %}{{ 'my.teaching.page_title'|trans }} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'my-teaching-open-courses' %}
+{% set filter = 'openLive' %}
+
+{% block main %}
+  <div role="my-teaching-course-sets">
+    {% include 'my/teaching/open-course-type-select.html.twig' with {isAddCourseShow: 0} %}
+
+    {% for liveRoom in liveRooms %}
+      {% include 'OpenLivePlugin::my-teaching/open-live-table-tr.html.twig' with {liveRoom: liveRoom} %}
+    {% else %}
+      <div class="empty">{{ 'open_live.plugin.admin.live_list.data_empty'|trans }}</div>
+    {% endfor %}
+
+    <nav class="text-center">
+      {{ web_macro.paginator(paginator) }}
+    </nav>
+  </div>
+{% endblock %}

@@ -5,3 +5,7 @@ services:
             - [setBiz, ['@biz']]
         tags:
             - { name: extension }
+    # activity_config_manager:
+    #     class: TrainingTaskPlugin\Component\Activity\ActivityConfigManager
+    #     arguments: ['%kernel.cache_dir%', '%edusoho.plugins_dir%', '%kernel.debug%']
+    #     public: true

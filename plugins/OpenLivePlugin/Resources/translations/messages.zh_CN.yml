@@ -1,0 +1,58 @@
+open_live.title: 大型公开课
+open_live.plugin.link_cloud.tips: 请先接入教育云，才能使用大型公开课
+open_live.plugin.live_service_disabled.tips: 您的账户已欠费，会导致：1、无法创建大型公开课；2、即将开始的大型公开课无法开课；3、无法查看公开课详情；<a target="_blank" href="%rechargeUrl%"> 充值 </a>后即可恢复相应权限。
+open_live.plugin.live_plan_start_time: 计划开始时间
+open_live.plugin.live_plan_end_time: 计划结束时间
+open_live.plugin.live_real_start_time: 实际开始时间
+open_live.plugin.live_real_end_time: 实际结束时间
+open_live.plugin.live_status: 直播状态
+open_live.plugin.live_settlement_status: 结算状态
+open_live.plugin.live_publish_status: 发布状态
+open_live.plugin.user_nickname: 用户昵称
+open_live.plugin.user_mobile: 手机号
+open_live.plugin.admin.list.data_empty: 暂无记录
+open_live.plugin.admin.list.data_error: 获取数据出错
+open_live.plugin.admin.list.data_search: 查询
+
+# 创建
+open_live.plugin.admin.create_live.arrearage_tips: 您的账户已欠费，请补缴后再创建，<a target="_blank" href="%rechargeUrl%">去补缴</a>
+
+# 详情
+open_live.plugin.admin.live_detail.arrearage_tips: 您的账户已欠费，请补缴后再查看，<a target="_blank" href="%rechargeUrl%">去补缴</a>
+open_live.plugin.admin.live_detail.not_finished_tips: 直播还未结束，无法生成统计数据！
+open_live.plugin.admin.live_detail.statistic_sync_tips: 正在统计数据，请稍后查看！从直播结束后计时，需要花费大约30分钟时间。
+open_live.plugin.admin.live_detail.statistic_student_listen_time_tips: 所有学生累积的观看时长
+open_live.plugin.admin.live_detail.statistic_actual_living_time_tips: 直播从开始到结束的时长
+
+# 后台直播列表
+open_live.plugin.admin.live_list.course_info_label: 课程信息
+open_live.plugin.admin.live_list.speaker_label: 讲师
+open_live.plugin.admin.live_list.prepare_live_time_label: 计划直播时间
+open_live.plugin.admin.live_list.real_live_time_label: 实际直播时间
+open_live.plugin.admin.live_list.peak_user_num_label: 最高并发人数
+open_live.plugin.admin.live_list.user_sms_reached_num_label: 短信已达人数
+open_live.plugin.admin.live_list.user_enroll_num_label: 报名人数
+open_live.plugin.admin.live_list.user_watch_num_label: 观看人数
+open_live.plugin.admin.live_list.pay_amount_label: 费用(元)
+open_live.plugin.admin.live_list.settlement_status_label: 结算状态
+open_live.plugin.admin.live_list.live_status_label: 直播状态
+open_live.plugin.admin.live_list.publish_status_label: 发布状态
+open_live.plugin.admin.live_list.data_empty: 暂无公开课记录
+open_live.plugin.admin.live_list.notice: >
+  温馨提示<br><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;会在下列情况下消耗网校的短信，请确保云短信已开通并有足够的短信余额（<a target="_blank" href="%smsRemainUrl%"> 查看短信余额 </a>）<br><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1、未绑定手机号的学员在报名或进入直播时需要绑定手机号，会消耗验证码短信；<br><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2、在创建公开课时，如果设置了开课前短信提醒，根据设置规则会消耗网校的短信；<br>
+open_live.plugin.admin.live_list.operation.detail_btn: 详情
+
+# 操作modal
+open_live.plugin.admin.live_list.teaching: 讲课
+open_live.plugin.admin.live_list.share.wechat_share: 微信内分享
+
+# 报名学员列表
+open_live.plugin.admin.enrolled_student.list: 已报名的用户列表
+open_live.plugin.admin.enrolled_student.enrolled_time: 报名时间
+
+# 短信提醒送达学员列表
+open_live.plugin.admin.sms_reached_student.list: 短信已达用户
+open_live.plugin.admin.sms_reached_student.input.mobile_require: 请输入手机号

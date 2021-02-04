@@ -1,0 +1,23 @@
+openLiveListSearchType:
+  title: 标题
+  speaker: 主讲人
+
+openLiveStatus:
+  unstart: 未开始
+  living: 直播中
+  finished: 已结束
+
+openLiveSettlementStatus:
+  created: 未开始
+  paying: 结算中
+  confirmed: 未结清
+  paid: 已扣费
+
+openLivePublishStatus:
+  unpublish: 未发布
+  published: 已发布
+
+openLiveEnrolledStudentSearchKeywordType:
+  student_nickname_like: 用户昵称
+  mobile: 手机号
+

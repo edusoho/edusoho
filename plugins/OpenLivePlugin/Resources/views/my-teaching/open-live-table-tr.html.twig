@@ -1,0 +1,78 @@
+<div class="courseset-manage-header clearfix" style="margin-bottom: 30px">
+  <div class="clearfix js-origin-header-content">
+    {# 课程封面 #}
+    {% block coursesetImg %}
+      <img class="courseset-manage-header__img" src="{% if liveRoom.room_cover|default('') %}{{ liveRoom.room_cover }}{% else %}{{ asset('assets/img/default/courseSet.png') }}{% endif %}" />
+    {% endblock %}
+
+    {# 课程状态 #}
+    {% if liveRoom.live_status == 'unstart' %}
+      <span class="course-publish-status course-publish-status--unpublished">{{ dict_text('openLiveStatus', 'unstart') }}</span>
+    {% elseif liveRoom.live_status=='living' %}
+      <span class="course-publish-status course-publish-status--published">{{ dict_text('openLiveStatus', 'living') }}</span>
+    {% elseif liveRoom.live_status=='finished' %}
+      <span class="course-publish-status course-publish-status--closed">{{ dict_text('openLiveStatus', 'finished') }}</span>
+    {% endif %}
+
+    <div class="courseset-manage-header-info col-md-3">
+      <div class="courseset-manage-header-info__title col-md-8" {% if liveRoom.title|length > 21 %}data-toggle="tooltip" title="{{ liveRoom.title }}" data-container="body" {% endif %}>
+        <span class="cd-dark-major">{{ liveRoom.title }}</span>
+
+        <div class="color-info" style="margin-top: 5px;line-height: 20px;">
+          <span style="color: #b4b4b4;font-size: 15px">{{ liveRoom.summary|plain_text(30) }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="courseset-manage-header-info col-md-2">
+      <div class="courseset-manage-header-info__title col-md-8" style="text-align: center">
+        <span class="cd-dark-major">计划时间</span>
+        <div class="color-info" style="margin-top: 12px;line-height: 20px;">
+          <span style="color: black;font-size: 13px">{{ liveRoom.plan_live_time|default('') }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="courseset-manage-header-info col-md-2">
+      <div class="courseset-manage-header-info__title col-md-8" style="text-align: center">
+        <span class="cd-dark-major">实际时间</span>
+        <div class="color-info" style="margin-top: 12px;line-height: 20px;">
+          <span style="color: black;font-size: 13px">{{ liveRoom.actual_live_time|default('') }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="courseset-manage-header-info col-md-1" style="padding: 0px;">
+      <div class="courseset-manage-header-info__title col-md-8" style="text-align: center">
+        <span class="cd-dark-major">报名人数</span>
+        <div class="color-info" style="margin-top: 25px;line-height: 20px;">
+          <span style="color: black;font-size: 18px">{{ liveRoom.enrolled_num|default(0) }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="courseset-manage-header-info col-md-1" style="padding: 0px;">
+      <div class="courseset-manage-header-info__title col-md-8" style="text-align: center">
+        <span class="cd-dark-major">观看人数</span>
+        <div class="color-info" style="margin-top: 25px;line-height: 20px;">
+          <span style="color: black;font-size: 18px">{{ liveRoom.visitor_total_num|default(0) }}</span>
+        </div>
+      </div>
+    </div>
+
+    {% if liveRoom.live_status != 'finished' %}
+      <div class="courseset-manage-header-info col-md-1">
+        <a class="cd-btn cd-btn-ghost-primary cd-mr16" style="margin-top: 25px;padding: 12px 24px;" target="_blank" href="{{ path('my_teaching_open_live_start', {id: liveRoom.id}) }}">{{ '开讲'|trans }}</a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+<style>
+  .courseset-manage-header-info__title {
+    margin: 8px 0;
+    font-size: 14px;
+    line-height: 1;
+    font-weight: 500;
+    max-width: 350px;
+    padding: 0px;
+  }
+</style>

@@ -1,0 +1,8 @@
+# 我的教学
+my_teaching_open_live_list:
+  path: /my/teaching/open_live
+  defaults: { _controller: OpenLivePlugin:MyTeaching\OpenLive:list }
+
+my_teaching_open_live_start:
+  path: /my/teaching/open_live/{id}/teaching
+  defaults: { _controller: OpenLivePlugin:MyTeaching\OpenLive:teaching }

@@ -1,0 +1,11 @@
+# 大型公开课菜单
+admin_v2.operation.open_live_menu: 大型公开课
+admin_v2.operation.open_live.list: 大型公开课列表
+admin_v2.operation.open_live_menu.generate_btn: 创建大型公开课
+open_live.plugin.admin.live_list.operation.share_btn: 分享
+open_live.plugin.admin.live_list.operation.teaching_btn: 讲课
+open_live.plugin.admin.live_list.operation.edit_btn: 修改
+open_live.plugin.admin.live_list.operation.publish_btn: 发布
+open_live.plugin.admin.live_list.operation.unpublish_btn: 取消发布
+open_live.plugin.admin.live_list.operation.close_btn: 结束
+open_live.plugin.admin.live_list.operation.delete_btn: 删除

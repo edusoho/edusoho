@@ -1,0 +1,75 @@
+<table id="user-table" class="table table-striped table-hover" data-search-form="#user-search-form">
+  <thead>
+  <tr>
+    <th width="15%">{{'open_live.plugin.user_nickname'|trans}}</th>
+    <th width="20%">{{'open_live.plugin.user_mobile'|trans}}</th>
+    <th width="20%">{{'open_live.plugin.admin.enrolled_student.enrolled_time'|trans}}</th>
+  </tr>
+  </thead>
+  <tbody>
+  {% for student in smsReachedStudents %}
+    <tr>
+      <td>
+        <div align="center">
+          <img class="avatar-md" src="{{ student.avatar|default(filepath('', 'avatar.png')) }}">
+          <p>{{ student.nickname|default('--') }}</p>
+        </div>
+      </td>
+      <td>
+        {{ student.mobile|default('--') }}
+      </td>
+      <td>
+        {% if student.enrolled_time|default('') %}{{ student.enrolled_time|date('Y-m-d H:i') }}{% else %}--{% endif %}
+      </td>
+    </tr>
+  {% else %}
+    <tr class="empty">
+      <td colspan="20">
+        {% if success %}
+          {{ 'open_live.plugin.admin.list.data_empty'|trans }}
+        {% else %}
+          <span class="color-danger">{{ 'open_live.plugin.admin.list.data_error'|trans }}</span>
+        {% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+{% if paginator.lastPage|default() > 1 %}
+  <nav class="admin-pagination {{ class|default('text-center') }}">
+    <ul class="pagination">
+      {% if paginator.currentPage != paginator.firstPage %}
+        <li data-url="{{ paginator.getPageUrl(paginator.firstPage) }}" data-page="{{paginator.firstPage}}"><span style="cursor:pointer;">{{ 'paginator.firstPage'|trans }}</span></li>
+        <li data-url="{{ paginator.getPageUrl(paginator.previousPage) }}" data-page="{{paginator.previousPage}}"><span style="cursor:pointer;"><i class="es-icon es-icon-chevronleft"></i></span></li>
+      {% endif %}
+      {% for page in paginator.pages %}
+        <li {% if page == paginator.currentPage %}class="active"{% endif %} data-url="{{ paginator.getPageUrl(page) }}" data-page="{{page}}"><span style="cursor:pointer;">{{ page }}</span></li>
+      {% endfor %}
+
+      {% if paginator.currentPage != paginator.lastPage %}
+        <li data-url="{{ paginator.getPageUrl(paginator.nextPage) }}" data-page="{{paginator.nextPage}}"><span style="cursor:pointer;"><i class="es-icon es-icon-chevronright"></i></span></li>
+        <li data-url="{{ paginator.getPageUrl(paginator.getLastPage) }}" data-page="{{paginator.getLastPage}}"><span style="cursor:pointer;">{{ 'paginator.endPage'|trans }}</span></li>
+      {% endif %}
+    </ul>
+    <span class="page-num">
+      {{ (paginator.currentPage - 1) * paginator.perPageCount + 1 }}
+      -
+      {% if paginator.currentPage == paginator.lastPage %}
+        {{ paginator.itemCount }}
+      {% else %}
+        {{ paginator.currentPage * paginator.perPageCount }}
+      {% endif %}
+      / {{ paginator.itemCount }}
+    </span>
+  </nav>
+{% endif %}
+<style>
+  .avatar-md {
+    width: 60px!important;
+    height: 60px!important;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+  }
+</style>

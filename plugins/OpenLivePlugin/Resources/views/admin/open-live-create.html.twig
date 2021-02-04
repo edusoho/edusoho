@@ -1,0 +1,212 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_open_live_list' %}
+
+{% do load_script('openliveplugin/controller/open-live/open-live-create') %}
+{% if liveRoom.id|default(0) > 0 %}
+  {% set page_action = 'edit' %}
+  {% set page_action_title = '修改' %}
+{% else %}
+  {% set page_action = 'create' %}
+  {% set page_action_title = '创建' %}
+{% endif %}
+
+{% block title %}{{ page_action_title }}大型公开课{% endblock %}
+{% block page_title %}{{ page_action_title }}大型公开课{% endblock %}
+{% block page_buttons %}{% endblock %}
+{% block main %}
+  {% set normalFieldsEditLimited = ((true == liveRoom.isLiveStarted|default(false)) or 'published' == liveRoom.publish_status|default('unpublish')) %}
+
+  <form class="form-horizontal" id="open-live-form" method="post"
+        data-save-url="{% if liveRoom.id|default(0) > 0 %} {{ path('admin_v2_open_live_edit', {id: liveRoom.id}) }} {% else %} {{ path('admin_v2_open_live_generate') }} {% endif %}" data-success-url="{{ path('admin_v2_open_live_list') }}">
+    <div id="data-sets" data-live-duration="86400" data-page-action="{{ page_action }}" data-page-action-title="{{ page_action_title }}"></div>
+
+    <fieldset>
+      <input type="hidden" name="liveRoomId" value="{{ liveRoom.id|default(0) }}">
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="title">标题</label>
+        </div>
+        <div class="col-md-8 controls">
+          <input {% if normalFieldsEditLimited|default(false) %}disabled{% endif %} type="text" id="title" name="title" class="form-control" placeholder="标题" value="{{ liveRoom.title|default('') }}">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="name">直播时间</label>
+        </div>
+        <div class="col-md-4 controls">
+          <input {% if normalFieldsEditLimited|default(false) %}disabled{% endif %} class="date-form-control" type="text" id="startDate" name="startDate" readonly="readonly"
+                 value="{{ liveRoom.startDate|default('') }}" placeholder="{{ 'admin.user.form.input_placeholder.startDate'|trans }}" autocomplete="off">
+          <div class="date-depart-line"> - </div>
+          <input {% if 'finished' == liveRoom.status|default('unstart') or isLiveEnded|default(false) %}disabled{% endif %}  class="date-form-control" type="text" id="endDate" name="endDate" readonly="readonly"
+                 value="{{ liveRoom.endDate|default('') }}" placeholder="{{ 'admin.user.form.input_placeholder.endDate'|trans }}" autocomplete="off">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-lg-offset-2 controls self-help-block">直播结束后30分钟，会自动关闭直播，从而无法直播</div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="openLiveCover">封面</label>
+        </div>
+        <div class="col-md-4 controls">
+          {% include 'OpenLivePlugin::common/upload-image.html.twig' with {
+            saveUrl: path('admin_v2_open_live_cover_crop'),
+            targetImg: 'course-cover',
+            cropWidth: '480',
+            cropHeight: '270',
+            uploadToken: 'tmp',
+            imageClass: 'course-manage-cover',
+            imageText: 'course.cover.change'|trans,
+            imageSrc: liveRoom.room_cover|default(filepath('', 'courseSet.png')),
+          }
+          %}
+          <div class="self-img-help-block">
+            {{ '建议上传尺寸16:9，JPG、PNG格式， 小于2M的图片。'|trans|raw }}
+          </div>
+          <input class="js-upload-image-hidden-input" type="hidden" name="openLiveCover" value="{{ liveRoom.room_cover|default('') }}" id="openLiveCover">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="speakers">讲师</label>
+        </div>
+        <div class="col-md-4 controls">
+          <input {% if normalFieldsEditLimited|default(false) %}disabled{% endif %} class="form-control" id="speaker" type="text" name="speaker" value="{% if 'edit' == page_action %}载入中...{% endif %}" data-speaker="{{ liveRoom.initSpeaker|default('') }}" data-url="{{ path('open_live_speaker_match') }}">
+          <div class="help-block">{{'输入昵称、手机号、邮箱地址搜索讲师'|trans}}</div>
+          <input class="form-control" id="realSpeaker" type="hidden" name="realSpeaker" value="{{ liveRoom.speaker|default('') }}">
+        </div>
+      </div>
+
+      <div class="form-group mb0">
+        <div class="col-md-2 control-label">
+          <label for="enrollWechat">通知</label>
+        </div>
+        <div class="col-md-1 controls mt8" style="width: auto">
+          微信通知提醒
+        </div>
+        <div class="float-left controls ml12">
+          <label class="form-switch setting-switch checked mt8">
+            <input {% if normalFieldsEditLimited|default(false) %}disabled{% endif %} type="checkbox" value="" data-toggle="enrollWechatSwitch">
+            <input type="hidden" name="enrollWechat" value="{{ liveRoom.enrollWechat|default(1) }}" id="enrollWechat">
+          </label>
+        </div>
+        <div class="col-md-8 controls mt8">
+          在用户报名的过程中引导关注公众号，在开播前会通过微信通知提醒用户参加直播
+        </div>
+      </div>
+      <div class="form-group mb0">
+        <div class="col-md-offset-2 col-md-1 controls mt8" style="width: auto">
+        短信通知提醒
+        </div>
+        <div class="float-left controls ml12">
+          <label class="form-switch setting-switch checked mt8">
+            <input {% if smsSettingWarningMsg != '' or normalFieldsEditLimited|default(false) %}disabled{% endif %} type="checkbox" value="" data-toggle="enrollSmsSwitch">
+            <input type="hidden" name="enrollSms" value="{{ liveRoom.enrollSms|default(0) }}" id="enrollSms">
+          </label>
+        </div>
+        <div class="col-md-8 controls mt8">
+          在开播前，会通过短信提醒已预约的用户参加直播，请确保有充足的短信余额，<a href="{{ path("admin_v2_edu_cloud_sms_overview") }}" target="_blank">查看短信余额</a>
+        </div>
+      </div>
+      <div class="form-group mb0">
+        <div class="col-md-offset-2 col-md-4 controls color-danger">{{ smsSettingWarningMsg|raw }}</div>
+      </div>
+      <div class="form-group mt8">
+        <div class="col-md-2 control-label">
+        </div>
+        <div class="col-md-8 controls">
+          {% set enrollNoticeTime = liveRoom.enrollNoticeTime|default(5) %}
+          直播前 <select {% if normalFieldsEditLimited|default(false) %}disabled{% endif %} name="enrollNoticeTime">
+            <option value="5" {% if 5 == enrollNoticeTime %}selected{% endif %}>5</option>
+            <option value="10" {% if 10 == enrollNoticeTime %}selected{% endif %}>10</option>
+            <option value="15" {% if 15 == enrollNoticeTime %}selected{% endif %}>15</option>
+            <option value="30" {% if 30 == enrollNoticeTime %}selected{% endif %}>30</option>
+            <option value="60" {% if 60 == enrollNoticeTime %}selected{% endif %}>60</option>
+            <option value="90" {% if 90 == enrollNoticeTime %}selected{% endif %}>90</option>
+            <option value="120" {% if 120 == enrollNoticeTime %}selected{% endif %}>120</option>
+          </select> 分钟通知
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-2 control-label">
+          <label for="name">简介</label>
+        </div>
+        <div class="col-md-8 controls">
+          <textarea {% if normalFieldsEditLimited|default(false) %}disabled{% endif %} class="form-control" id="liveAbout" rows="16" name="liveAbout" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{ liveRoom.summary|default('') }}</textarea>
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="row form-group">
+      <div class="controls col-md-offset-2 col-md-8">
+        <button type="submit" data-submiting-text="{{ 'form.btn.submit.submiting'|trans }}" class="btn btn-primary" id="save-open-live">{{ 'form.btn.submit'|trans }}</button>
+      </div>
+    </div>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+  </form>
+  <style>
+    .self-help-block {
+      display: block;
+      margin-top: -10px;
+      margin-bottom: 10px;
+      color: #737373;
+      padding-left: 12px;
+    }
+    .self-img-help-block {
+      display: block;
+      margin-bottom: 10px;
+      color: #737373;
+    }
+    .mt8 {
+      margin-top: 8px;
+    }
+    .float-left {
+      float: left;
+    }
+    .ml12 {
+      margin-left: 12px;
+    }
+    .date-form-control {
+      display: block;
+      float: left;
+      width: 46%;
+      height: 34px;
+      padding: 6px 12px;
+      font-size: 14px;
+      line-height: 1.42857143;
+      color: #555;
+      background-color: #fff;
+      background-image: none;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+      box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+      -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+      transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    }
+    .date-depart-line {
+      float: left;
+      margin: 5px 10px;
+    }
+    .color-mobile {
+      color: #828282;
+    }
+    .select2-highlighted .color-mobile {
+      color: white;
+    }
+    .ml8 {
+      margin-left: 8px;
+    }
+    .help-block {
+      float: left;
+    }
+  </style>
+{% endblock %}

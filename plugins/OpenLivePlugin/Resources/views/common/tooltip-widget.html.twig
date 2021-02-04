@@ -1,0 +1,9 @@
+<div class="js-tooltip-twig-widget mll mts custom-style">
+  <span class="glyphicon {{ icon|default('glyphicon-question-sign') }} text-muted js-twig-widget-tips" data-placement="{{ placement|default('bottom') }}" href="javascript:;">
+  </span>
+  <div class="js-twig-widget-html" style="display:none;">
+    {{ content|raw }}
+  </div>
+</div>
+
+{% do load_script('openliveplugin/controller/common/tooltip-widget') %}

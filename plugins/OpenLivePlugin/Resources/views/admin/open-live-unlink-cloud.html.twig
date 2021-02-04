@@ -1,0 +1,15 @@
+{% extends 'admin-v2/layout.html.twig' %}
+
+{% set menu = 'admin_v2_open_live_list' %}
+{% block page_buttons %}{% endblock %}
+
+{% block main %}
+    <div class="empty">
+      <div><h3>{{'open_live.plugin.link_cloud.tips'|trans}}</h3></div>
+      <div style="margin-top: 20px;">
+        <a href="http://open.edusoho.com/cloud/access" type="button" target="_blank" class="btn btn-primary">
+          {{'admin_v2.newcomer_task.cloud_applied.title'|trans}}
+        </a>
+      </div>
+    </div>
+{% endblock %}
