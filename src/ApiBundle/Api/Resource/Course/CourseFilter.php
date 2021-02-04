@@ -11,6 +11,9 @@ use ApiBundle\Api\Util\Converter;
 use ApiBundle\Api\Util\Money;
 use AppBundle\Common\ServiceToolkit;
 use Biz\Course\Util\CourseTitleUtils;
+use Topxia\Service\Common\ServiceKernel;
+use VipPlugin\Biz\Marketing\Service\VipRightService;
+use VipPlugin\Biz\Marketing\VipRightSupplier\CourseVipRightSupplier;
 
 class CourseFilter extends Filter
 {
@@ -53,6 +56,11 @@ class CourseFilter extends Filter
          */
         $data['publishedTaskNum'] = $data['compulsoryTaskNum'];
         $data['summary'] = $this->convertAbsoluteUrl($data['summary']);
+
+        if (version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')) {
+            $vipRights = $this->getVipRightService()->findVipRightsBySupplierCodeAndUniqueCode(CourseVipRightSupplier::CODE, $data['id']);
+            $data['vipLevelId'] = empty($vipRights) ? 0 : $vipRights[0]['vipLevelId'];
+        }
     }
 
     protected function simpleFields(&$data)
@@ -87,5 +95,13 @@ class CourseFilter extends Filter
 
         $data['price2'] = Money::convert($data['price']);
         $data['originPrice2'] = Money::convert($data['originPrice']);
+    }
+
+    /**
+     * @return VipRightService
+     */
+    private function getVipRightService()
+    {
+        return ServiceKernel::instance()->createService('VipPlugin:Marketing:VipRightService');
     }
 }
