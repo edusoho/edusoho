@@ -252,6 +252,7 @@ export default {
     handleJoin() {
       const type = this.goods.type;
       const {
+        isMember,
         access: { code },
         targetId,
         vipLevelInfo,
@@ -259,7 +260,7 @@ export default {
         displayPrice,
       } = this.currentSku;
 
-      if (code === 'member.member_exist') {
+      if (code === 'member.member_exist' || isMember) {
         this.$router.push({
           path: `/${type}/${targetId}`,
         });

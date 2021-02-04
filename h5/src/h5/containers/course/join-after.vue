@@ -248,17 +248,32 @@ export default {
           });
         };
         this.callConfirm(errorMessage, confirmCallback);
-      } else if (errorCode === 'vip.member_expired') {
-        errorMessage = '会员已到期，请及时续费会员';
-        confirmCallback = () => {
-          this.$router.push({
-            path: `/vip`,
-          });
-        };
-        this.callConfirm(errorMessage, confirmCallback);
-      } else {
-        Toast.fail(this.errorMsg);
+        return;
       }
+      const vipName = this.details.vipLevel.name;
+      const vipStatus = {
+        // 用户会员服务已过期
+        'vip.member_expired': {
+          message: `您的会员已到期，会员课程已无法学习，请续费会员，或退出后重新购买课程。`,
+          confirmButtonText: '续费会员',
+        },
+        // 当前用户并不是vip
+        'vip.not_member': {
+          message: `您已不是${vipName}，请购买${vipName}后兑换该课程学习。或退出后重新购买课程。`,
+          confirmButtonText: '购买会员',
+        },
+        // 用户会员等级过低
+        'vip.level_low': {
+          message: `很抱歉，该课程已升级为${vipName}课程，请升到${vipName}进行学习。或退出后重新购买课程。`,
+          confirmButtonText: '升级会员',
+        },
+      };
+
+      if (vipStatus[errorCode]) {
+        this.vipCallConfirm(vipStatus[errorCode]);
+        return;
+      }
+      Toast.fail(this.errorMsg);
     },
     getErrorMsg(code) {
       switch (code) {
@@ -303,6 +318,36 @@ export default {
           callback();
         })
         .catch(() => {});
+    },
+    vipCallConfirm(config) {
+      Dialog.confirm({
+        ...config,
+        title: '',
+        confirmButtonColor: '#1895E7',
+        cancelButtonText: '退出课程',
+        cancelButtonColor: '#FD4852',
+        messageAlign: 'left',
+        beforeClose: this.beforeClose,
+      });
+    },
+    beforeClose(action, done) {
+      if (action === 'confirm') {
+        this.$router.push({
+          path: `/vip`,
+          query: {
+            id: this.details.vipLevel.id,
+          },
+        });
+        done();
+      } else {
+        const params = { id: this.details.id };
+        Api.deleteCourse({ query: params }).then(res => {
+          if (res.success) {
+            this.gotoGoodsPage();
+            done();
+          }
+        });
+      }
     },
     handleScroll() {
       const SWIPER = document.getElementById('swiper-directory');
