@@ -271,8 +271,14 @@ export default {
       // 会员免费学
       const vipAccessToJoin = this.vipAccessToJoin;
 
+      // 班级和课程, 仅会员可加入, code都是 course.only_vip_join_way
+      const goToVipCode = [
+        'course.only_vip_join_way',
+        'classroom.only_vip_join_way',
+      ];
+
       // 不是会员跳转到会员页面
-      if (code === `${type}.only_vip_join_way` && !vipAccessToJoin) {
+      if (goToVipCode.includes(code) && !vipAccessToJoin) {
         this.$router.push({
           path: '/vip',
           query: { id: vipLevelInfo.id },
