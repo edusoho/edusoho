@@ -10,41 +10,14 @@
 <div class="training-add js-select-container">
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active"><a href="#private" aria-controls="private" role="tab" data-toggle="tab">个人镜像</a></li>
-        <li role="presentation"><a href="#public" aria-controls="public" role="tab" data-toggle="tab">公共镜像</a></li>
+        <li role="presentation" class="menu active" data-type="private"><a href="#" role="tab" data-toggle="tab">个人镜像</a></li>
+        <li role="presentation" class="menu" data-type="public"><a href="#" role="tab" data-toggle="tab">公共镜像</a></li>
     </ul>
 
     <!-- Tab panes -->
     <div class="tab-content" style="margin-left:30px;">
-        <div role="tabpanel" class="tab-pane active" id="private">
-            <div id="" class="container">
-                <label class="radio">
-                    <input type="radio" name="common" id="" value="" />
-                    北京
-                </label>
-                <label class="radio">
-                    <input type="radio" name="common" id="" value=""/>
-                    上海
-                </label>
-                <label class="radio">
-                    <input type="radio" name="common" id="" value="" />
-                    广州
-                </label>
-            </div>
-        </div>
-        <div role="tabpanel" class="tab-pane" id="public">
-            <label class="radio">
-                    <input type="radio" name="common" id="" value="" />
-                    深圳
-                </label>
-                <label class="radio">
-                    <input type="radio" name="common" id="" value=""/>
-                    重庆
-                </label>
-                <label class="radio">
-                    <input type="radio" name="common" id="" value="" />
-                    长沙
-                </label>
+        <div role="tabpanel" class="tab-pane active" id="common">
+        {{ include('training/manage/images-list.html.twig') }}
         </div>
     </div>
 </div>
@@ -58,17 +31,17 @@
 
   <script>
     $(function(){
+        let selectInfo = {id:{{currentId}}};
+        console.log(selectInfo);
         $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
             e.target // newly activated tab
             e.relatedTarget // previous active tab
-            console.log(e.target);
-            console.log(e.relatedTarget);
         })
 
         // 点击提交
         $("#pick-btn").on("click",function(event){
             let $content = $('#task-create-content-iframe').contents();
-            $content.find('.js-cached-question').text({id:1,name:"自定义镜像01"});
+            $content.find('.js-cached-question').text(JSON.stringify(selectInfo));
 
             let $target = $(event.currentTarget);
             let name = $target.data('name');
@@ -76,6 +49,22 @@
             let $modal = $('.js-select-container').parents('.modal');
             $modal.modal('hide');
             $('.js-close-modal').trigger('click');
+        })
+        // 单选点击事件 input[type='radio']
+        $("#common").on("click","input[type='radio']",function(){
+            selectInfo = {id:$(this).val(),name:$(this).next("label").text()}
+        })
+
+        // 点击切换菜单
+        $(".menu").on("click",function(){
+            let type = $(this).data("type")
+            var url = "{{ path('course_set_manage_training_picker_list',{courseId:id,taskId:0}) }}"
+            $.get(url,{
+                type:type,
+                currentId:selectInfo.id
+                },html=>{
+                $("#common").html(html);
+            })
         })
     })
   </script>

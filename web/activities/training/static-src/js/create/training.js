@@ -5,6 +5,7 @@ export default class Training {
     this.$element = $iframeContent;
     this.$step2_form = this.$element.find('#step2-form');
     this.$step3_form = this.$element.find('#step3-form');
+    this.currentImagesName = {"id":0,name:""}
     this.init();
   }
 
@@ -29,7 +30,9 @@ export default class Training {
     let $btn = $(event.currentTarget);
     this.$imagesPickedModal.modal().data('manager', this);
     // 需要传递一个选中参数过去，来判断之前是否选中
-    $.get($btn.data('url'), {}, html => {
+    $.get($btn.data('url'), {
+      currentId:this.currentImagesName.id
+    }, html => {
       this.$imagesPickedModal.html(html);
     });
   }
@@ -39,7 +42,9 @@ export default class Training {
     if ($cachedImages.text() === '') {
       return;
     }
-    alert($cachedImages.text())
+    
+    this.currentImagesName = JSON.parse($cachedImages.text());
+    $(".selectImages").html(this.currentImagesName.name);
     
   }
 }
