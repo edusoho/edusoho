@@ -136,20 +136,26 @@ class DefaultManage extends BaseManage {
       types.forEach(type => {
         this.$element
           .find(`.js-chapter-operation[data-type=${type}]`)
-          .toggleClass('checked')
           .trigger('click')
       })
       $target.toggleClass('active')
 
-      leftTypes.forEach(type => {
-        this.$element
-          .find(`.js-chapter-operation[data-type=${type}]`)
-          .removeClass('checked')
-          .trigger('click')
-      })
-
+      leftTypes.forEach(type => this.cancelChooseItemByType(type))
       this.$element.find(`.js-batch-choose[data-types="${leftTypes.join(',')}"]`).removeClass('active')
       this.updateBatchBtnStatus()
+    })
+  }
+
+  cancelChooseItemByType (type) {
+    const $items = this.$element.find(`.js-chapter-operation[data-type=${type}]`)
+
+    $items.each((index1, element) => {
+      const $element = $(element)
+      const { id } = $element.data() // type: chapter、lesson、unit
+      const index = this.batchOperate.chosenItems.findIndex(item => item.id === id)
+
+      index > -1 && this.batchOperate.chosenItems.splice(index, 1)
+      $element.removeClass('checked')
     })
   }
 
