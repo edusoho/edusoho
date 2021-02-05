@@ -1,17 +1,18 @@
 <div class="task-manage-batch-operate js-batch-operate-panel clearfix hidden">
   <div class="pull-left">
-    <a href="javascript:;" class="cd-mr24">章节</a>
-    <a href="javascript:;">课时</a>
+    <span class="text-14 gray-darker">全部选择：</span>
+    <span class="js-batch-choose batch-choose cd-ml8 cd-mr24" data-types="chapter,unit">章节</span>
+    <span class="js-batch-choose batch-choose" data-types="lesson">课时</span>
   </div>
   <div class="pull-right clearfix">
-    <span class="chosen-number">已选xxx条</span>
-    <button class="cd-btn cd-btn-primary cd-btn-sm cd-mr16">
+    <span class="chosen-number cd-mr24">已选<span class="js-chosen-number">0</span>条</span>
+    <button class="cd-btn cd-btn-primary cd-btn-sm cd-mr16 js-batch-publish" disabled>
       发布
     </button>
-    <button class="cd-btn cd-btn-default cd-btn-sm cd-mr16">
+    <button class="cd-btn cd-btn-default cd-btn-sm cd-mr16 js-batch-cancel-publish" disabled>
       取消发布
     </button>
-    <button class="cd-btn cd-btn-danger cd-btn-sm">
+    <button class="cd-btn cd-btn-danger cd-btn-sm js-batch-delete" disabled>
       删除
     </button>
   </div>

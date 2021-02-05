@@ -1,6 +1,7 @@
 import {hiddenUnpublishTask, addLesson} from './../header-util';
 import BaseManage from './../BaseManage';
 import { TaskListHeaderFixed } from 'app/js/course-manage/help';
+import { throttle } from 'lodash';
 
 class DefaultManage extends BaseManage {
   constructor($container) {
@@ -8,6 +9,7 @@ class DefaultManage extends BaseManage {
     this._defaultEvent();
     this.batchOperate = {
       status: 'none', // editing || none
+      permission: [],
       chosenItems: [],
     }
   }
@@ -16,6 +18,7 @@ class DefaultManage extends BaseManage {
     this._showLesson();
     this.calcOperatePanelPosition()
     this.toggleBatchOperate();
+    this.singleChooseItem();
     this.batchChooseItem();
   }
 
@@ -54,8 +57,7 @@ class DefaultManage extends BaseManage {
     const $batchOperateSlot = $(".js-batch-operate-panel__slot")
     const $window = $(window)
 
-    $window.on('resize', function () {})
-    $window.on('scroll', function () {
+    $window.on('resize scroll', throttle(function () {
       const pageYOffset = window.pageYOffset
       const windowHeight = document.documentElement.clientHeight
       const { height: boxHeight } = $box[0].getBoundingClientRect()
@@ -69,7 +71,7 @@ class DefaultManage extends BaseManage {
         $batchOperate.removeClass('fixed')
         $batchOperateSlot.addClass('hidden')
       }
-    })
+    }, 300))
   }
 
   toggleBatchOperate () {
@@ -99,61 +101,117 @@ class DefaultManage extends BaseManage {
     this.batchOperate.chosenItems = []
   }
 
-  // 选择
-  batchChooseItem (event) {
-    this.$element.on('click', '.js-chapter-operation', function (event) {
+  // 单选
+  singleChooseItem (event) {
+    this.$element.on('click', '.js-chapter-operation', (event) => {
+      event.stopPropagation()
       const $target = $(event.target)
-      const chosenItems = this.batchOperate.chosenItems
+
+      if (!$target.hasClass('js-chapter-operation')) return
+
+      $target.toggleClass('checked')
+
       const { id, type } = $target.data() // type: chapter、lesson、unit
       const isChecked = $target.hasClass('checked')
-      const index = chosenItems.findIndex(item => item.id === id)
+      const index = this.batchOperate.chosenItems.findIndex(item => item.id === id)
 
       if (index > -1 && !isChecked) {
-        chosenItems.splice(index, 1)
+        this.batchOperate.chosenItems.splice(index, 1)
       } else if (index === -1 && isChecked) {
-        chosenItems.push({ id, type })
+        this.batchOperate.chosenItems.push({ id, type })
       }
 
       this.updateBatchBtnStatus()
     })
   }
 
+  batchChooseItem (event) {
+    const allItemTypes = ['chapter', 'unit', 'lesson']
+
+    this.$element.on('click', '.js-batch-choose', (event) => {
+      const $target = $(event.target)
+      const types = $target.data('types').split(',')
+      const leftTypes = allItemTypes.filter(type => types.indexOf(type) === -1)
+
+      types.forEach(type => {
+        this.$element
+          .find(`.js-chapter-operation[data-type=${type}]`)
+          .toggleClass('checked')
+          .trigger('click')
+      })
+      $target.toggleClass('active')
+
+      leftTypes.forEach(type => {
+        this.$element
+          .find(`.js-chapter-operation[data-type=${type}]`)
+          .removeClass('checked')
+          .trigger('click')
+      })
+
+      this.$element.find(`.js-batch-choose[data-types="${leftTypes.join(',')}"]`).removeClass('active')
+      this.updateBatchBtnStatus()
+    })
+  }
+
   // 批量删除
   batchDelete () {
-    const { status } = this.batchOperate
+    const { status, permission } = this.batchOperate
 
-    if (status === 'none') return
+    if (status === 'none' || permission.indexOf('delete') === -1) return
   }
 
   // 批量发布
   batchPublish () {
-    const { status } = this.batchOperate
+    const { status, permission } = this.batchOperate
 
-    if (status === 'none') return
+    if (status === 'none' || permission.indexOf('publish') === -1) return
   }
 
   // 批量取消发布
   batchCancelPublish () {
-    const { status } = this.batchOperate
+    const { status, permission } = this.batchOperate
 
-    if (status === 'none') return
+    if (status === 'none' || permission.indexOf('calcelPublish') === -1) return
   }
 
   // 更新按钮状态
   updateBatchBtnStatus () {
     // type: chapter、lesson、unit
+    const $chosenNumber = this.$element.find('.js-chosen-number')
     const chosenItems = this.batchOperate.chosenItems
     const hasChapter = chosenItems.findIndex(({type}) => type === 'chapter') > -1
     const hasLesson = chosenItems.findIndex(({type}) => type === 'lesson') > -1
     const hasUnit = chosenItems.findIndex(({type}) => type === 'unit') > -1
+    const $batchPublishBtn = this.$element.find('.js-batch-publish')
+    const $batchCancelPublishBtn = this.$element.find('.js-batch-cancel-publish')
+    const $batchDeleteBtn = this.$element.find('.js-batch-delete')
+    const defaultDisabled = !(hasChapter || hasLesson || hasUnit)
 
+    $chosenNumber.text(chosenItems.length)
     // 删除 -- 章和课时、节和课时、章节和课时
     // 发布 -- 只有课时
     // 取消发布 -- 只有课时
+    $batchPublishBtn.attr('disabled', defaultDisabled)
+    $batchCancelPublishBtn.attr('disabled', defaultDisabled)
+    $batchDeleteBtn.attr('disabled', defaultDisabled)
+    this.batchOperate.permission = defaultDisabled ? [] : ['publish', 'cancelPublish', 'delete']
+
+    if (hasLesson && (hasChapter || hasUnit)) {
+      $batchPublishBtn.attr('disabled', true)
+      $batchCancelPublishBtn.attr('disabled', true)
+      $batchDeleteBtn.attr('disabled', true)
+      this.batchOperate.permission = []
+    }
+
+    if (!hasLesson && (hasChapter || hasUnit)) {
+      this.batchOperate.permission = ['delete']
+      $batchPublishBtn.attr('disabled', true)
+      $batchCancelPublishBtn.attr('disabled', true)
+    }
   }
 }
 
-new DefaultManage('#sortable-list');
+new DefaultManage('.js-lesson-manage');
 hiddenUnpublishTask();
 addLesson();
 TaskListHeaderFixed();
