@@ -208,9 +208,11 @@ class BatchOperate {
   // 批量删除
   batchDelete () {
     const deleteUrl = $('#course_manage_lesson_batch_delete').val()
+
     this.$element.on('click', '.js-batch-delete', () => {
       const { status, permission, chosenItems } = this.batchOperate
-  
+      const $target = $(event.target)
+
       if (status === 'none' || permission.indexOf('delete') === -1) return
 
       const isDeleteLesson = chosenItems.every(item => item.type === 'lesson')
@@ -228,10 +230,15 @@ class BatchOperate {
       }).on('ok', () => {
         const lessonIds = chosenItems.map(item => item.id)
         
+        $target.button('loading')
         $.post(deleteUrl, { lessonIds }).then(res => {
           if (res.success) {
             window.location.reload()
           }
+          $target.button('reset')
+        }).catch(function(data) {
+          $target.button('reset')
+          cd.message({ type: 'danger', message: data.responseJSON.error.message });
         })
       })
     })
@@ -239,19 +246,60 @@ class BatchOperate {
 
   // 批量发布
   batchPublish () {
-    this.$element.on('click', '.js-batch-publish', () => {
-      const { status, permission } = this.batchOperate
-  
+    const publishUrl = $('#course_manage_lesson_batch_publish').val()
+
+    this.$element.on('click', '.js-batch-publish', (event) => {
+      const { status, permission, chosenItems } = this.batchOperate
+      const $target = $(event.target)
+
       if (status === 'none' || permission.indexOf('publish') === -1) return
+
+      const lessonIds = chosenItems.map(item => item.id)
+      
+      $target.button('loading')
+      $.post(publishUrl, { lessonIds }).then(res => {
+        if (res.success) {
+          lessonIds.forEach(id => {
+            const $parentLi = $(`#chapter-${id}`)
+            $parentLi.find(".js-publish-item, .js-delete, .js-lesson-unpublish-status").addClass('hidden')
+            $parentLi.find(".js-unpublish-item").removeClass('hidden')
+          })
+          cd.message({ type: 'success', message: "发布成功" });
+        }
+        $target.button('reset')
+      }).catch(function(data) {
+        $target.button('reset')
+        cd.message({ type: 'danger', message: data.responseJSON.error.message });
+      })
     })
   }
 
   // 批量取消发布
   batchCancelPublish () {
+    const unPublishUrl = $('#course_manage_lesson_batch_unpublish').val()
+
     this.$element.on('click', '.js-batch-cancel-publish', () => {
-      const { status, permission } = this.batchOperate
+      const { status, permission, chosenItems } = this.batchOperate
   
-      if (status === 'none' || permission.indexOf('calcelPublish') === -1) return
+      if (status === 'none' || permission.indexOf('cancelPublish') === -1) return
+
+      const lessonIds = chosenItems.map(item => item.id)
+
+      const $target = $(event.target)
+      $.post(unPublishUrl, { lessonIds }).then(res => {
+        if (res.success) {
+          lessonIds.forEach(id => {
+            const $parentLi = $(`#chapter-${id}`)
+            $parentLi.find(".js-publish-item, .js-delete, .js-lesson-unpublish-status").removeClass('hidden')
+            $parentLi.find(".js-unpublish-item").addClass('hidden')
+          })
+          cd.message({ type: 'success', message: "取消发布成功" });
+        }
+        $target.button('reset')
+      }).catch(function(data) {
+        $target.button('reset')
+        cd.message({ type: 'danger', message: data.responseJSON.error.message });
+      })
     })
   }
 

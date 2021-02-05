@@ -1,4 +1,6 @@
 <input type="hidden" id="course_manage_lesson_batch_delete" value="{{path('course_manage_lesson_batch_delete', { courseId: courseId })}}">
+<input type="hidden" id="course_manage_lesson_batch_unpublish" value="{{path('course_manage_lesson_batch_unpublish', { courseId: courseId })}}">
+<input type="hidden" id="course_manage_lesson_batch_publish" value="{{path('course_manage_lesson_batch_publish', { courseId: courseId })}}">
 <div class="task-manage-batch-operate js-batch-operate-panel clearfix hidden">
   <div class="pull-left">
     <span class="text-14 gray-darker">全部选择：</span>
@@ -7,13 +9,19 @@
   </div>
   <div class="pull-right clearfix">
     <span class="chosen-number cd-mr24">已选<span class="js-chosen-number">0</span>条</span>
-    <button class="cd-btn cd-btn-primary cd-btn-sm cd-mr16 js-batch-publish" disabled>
+    <button class="cd-btn cd-btn-primary cd-btn-sm cd-mr16 js-batch-publish" 
+      data-loading-text="发布中..."
+      disabled>
       发布
     </button>
-    <button class="cd-btn cd-btn-default cd-btn-sm cd-mr16 js-batch-cancel-publish" disabled>
+    <button class="cd-btn cd-btn-default cd-btn-sm cd-mr16 js-batch-cancel-publish" 
+      data-loading-text="取消中..."
+      disabled>
       取消发布
     </button>
-    <button class="cd-btn cd-btn-danger cd-btn-sm js-batch-delete" disabled>
+    <button class="cd-btn cd-btn-danger cd-btn-sm js-batch-delete"
+      data-loading-text="删除中..."
+      disabled>
       删除
     </button>
   </div>
