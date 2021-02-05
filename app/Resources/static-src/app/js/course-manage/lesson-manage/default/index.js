@@ -232,9 +232,9 @@ class BatchOperate {
         
         $target.button('loading')
         $.post(deleteUrl, { lessonIds }).then(res => {
-          if (res.success) {
-            window.location.reload()
-          }
+          lessonIds.forEach(id => {
+            $(`#chapter-${id}`).remove()
+          })
           $target.button('reset')
         }).catch(function(data) {
           $target.button('reset')
