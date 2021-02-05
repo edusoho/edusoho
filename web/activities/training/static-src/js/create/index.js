@@ -119,6 +119,9 @@ load.then(function(){
         $('#link_url').rules("remove");
         $(".images_div,.dataset_div").show();
         break;
+      default:
+        $(".link_div").hide();
+        $(".images_div,.dataset_div").hide();
     }
   }
 

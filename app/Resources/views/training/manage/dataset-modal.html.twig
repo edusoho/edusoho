@@ -1,0 +1,83 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'training-modal-lg' %}
+
+{% block title %} 选择数据集 {% endblock %}
+
+
+
+{% block body %}
+<div class="training-add js-select-container" data-url=" {{ path('course_set_manage_training_dataset_info_picker',{id: id,taskId:10}) }} ">
+    <div style="padding-top:10px;min-height:300px;">
+        {{ include('training/manage/dataset-modal-list.html.twig') }}
+    </div>
+    </p>
+    <div slot="footer">
+        <div class="footer-container">
+            <div>
+                <span>已选：1/2/3</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+<button type="button" class="btn btn-link js-close-modal" data-dismiss="modal" tabindex="6">取消</button>
+<button id="pick-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary js-pick-btn"
+  data-toggle="form-submit" tabindex="4">保存</button>
+
+
+  <script>
+    $(function(){
+        $(".dataset_ul").on("click",".dataset_li",function(){
+            $(this).toggleClass("dataset_active")
+        })
+        $(".js-select-container").on("click",".pagination li",function(){
+            $page = $(".js-select-container").data("url")
+            alert($page);
+        })
+    })
+  </script>
+
+
+  <style>
+    .right-editor .ck-content {
+        min-height: 550px;
+    }
+</style>
+<style scoped lang="less">
+    .dataset_active{
+        position: relative;
+        border: solid 1px #298dff;
+    }
+    .dataset_active:last-child{
+        border: solid 1px #298dff;
+    }
+    .ivu-list-item{
+        padding:16px 8px;
+    }
+    .dataset_active:after {
+        content: "";
+        right: 0;
+        bottom: 0;
+        width: 24px;
+        height: 24px;
+        position: absolute;
+        background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/PjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+PHN2ZyB0PSIxNTc2NTcxOTI1NjMwIiBjbGFzcz0iaWNvbiIgdmlld0JveD0iMCAwIDEwMjQgMTAyNCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHAtaWQ9IjExNTQ5IiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgd2lkdGg9IjIwMCIgaGVpZ2h0PSIyMDAiPjxkZWZzPjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+PC9zdHlsZT48L2RlZnM+PHBhdGggZD0iTTEwMjQgMHYxMDI0SDB6IiBmaWxsPSIjMDA4MEZGIiBwLWlkPSIxMTU1MCI+PC9wYXRoPjxwYXRoIGQ9Ik02MjUuMjggODA2LjQ2NGEyMi4xNDQgMjIuMTQ0IDAgMCAxLTE1LjIzMi02LjE0NGwtMTE3Ljc2LTExMi43NjhhMjIuMDggMjIuMDggMCAxIDEgMzAuNTkyLTMxLjkzNmwxMDAuNDggOTYuMzIgMTgyLjQtMjIxLjYzMmEyMi4xNDQgMjIuMTQ0IDAgMCAxIDM0LjE3NiAyOC4xNmwtMTk3LjUwNCAyNDBhMjIuMTQ0IDIyLjE0NCAwIDAgMS0xNy4wODggOHoiIGZpbGw9IiNGRkZGRkYiIHAtaWQ9IjExNTUxIj48L3BhdGg+PC9zdmc+) 0/100% 100%;
+        background-size: 100%
+    }
+    .footer-container {
+        padding-left: 18px;
+        bottom: 0;
+        height: 40px;
+        width: 100%;
+        line-height: 40px;
+        font-size: 14px;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-align: center;
+        align-items: center;
+    }
+</style>    
+{% endblock %}

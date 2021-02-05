@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class TrainingManageController extends BaseController
 {
+    // 镜像弹窗
     public function imagesPickerAction(Request $request, $id)
     {
         $currentId = $request->query->get("currentId");
@@ -21,7 +22,7 @@ class TrainingManageController extends BaseController
         ]);
     }
 
-    // 获取列表数据
+    // 获取镜像列表数据
     public function imagesPickListAction(Request $request,$courseId,$taskId){
         $type = $request->query->get("type");
         $currentId = $request->query->get("currentId");
@@ -33,6 +34,7 @@ class TrainingManageController extends BaseController
         );
     }
 
+    // 获取镜像数据
     private function getData($type,$currentId){
         $lists = [];
         if($type =='public'){
@@ -53,7 +55,29 @@ class TrainingManageController extends BaseController
         return $lists;
     }
 
-    public function imagesPickerdAction(Request $request, $id){
-        echo 18;die;
+    // 数据集弹窗
+    public function datasetPickerAction(Request $request,$id){
+        $paginator = $this->getDataset($request);
+        return $this->render('training/manage/dataset-modal.html.twig',[
+            'id'=>$id,
+            'paginator'=>$paginator,
+        ]);
+    }
+
+    public function datasetInfoPickerAction(Request $request,$id){
+        $paginator = $this->getDataset($request);
+        return $this->render('training/manage/dataset-list-modal.html.twig',[
+            'id'=>$id,
+            'paginator'=>$paginator,
+        ]);
+    }
+
+    public function getDataset($request){
+        $paginator = new Paginator(
+            $request,
+            100,
+            10
+        );
+        return $paginator;
     }
 }

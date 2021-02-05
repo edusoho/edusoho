@@ -58,7 +58,7 @@
         // 点击切换菜单
         $(".menu").on("click",function(){
             let type = $(this).data("type")
-            var url = "{{ path('course_set_manage_training_picker_list',{courseId:id,taskId:0}) }}"
+            var url = "{{ path('course_set_manage_training_images_picker_list',{courseId:id,taskId:0}) }}"
             $.get(url,{
                 type:type,
                 currentId:selectInfo.id

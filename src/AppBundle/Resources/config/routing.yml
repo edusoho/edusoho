@@ -2411,15 +2411,27 @@ testpaper_do_suspend:
   defaults: { _controller: AppBundle:Testpaper/Testpaper:testSuspend }
   methods: [POST]
 ### new training
-course_set_manage_training_picker:
-    path: /course_set/{id}/manage/training/show/picker
+
+#### 镜像
+course_set_manage_training_images_picker:
+    path: /course_set/{id}/manage/training-images/show/picker
     defaults: { _controller: AppBundle:TrainingManage:imagesPicker }
-course_set_manage_training_picker_list:
-    path: /course_set/{courseId}/manage/task/{taskId}/training/show/pickerlist
+course_set_manage_training_images_picker_list:
+    path: /course_set/{courseId}/manage/task/{taskId}/training-images/show/pickerlist
     defaults: { _controller: AppBundle:TrainingManage:imagesPickList }
-course_set_manage_training_pickerd:
-    path: /course_set/{id}/manage/training/show/pickerd
-    defaults: { _controller: AppBundle:TrainingManage:imagesPickerd }   
+course_set_manage_training_images_pickerd:
+    path: /course_set/{id}/manage/training-images/show/pickerd
+    defaults: { _controller: AppBundle:TrainingManage:imagesPickerd }
+
+#### 数据集
+course_set_manage_training_dataset_picker:
+    path: /course_set/{id}/manage/training-dataset/show/picker
+    defaults: { _controller:AppBundle:TrainingManage:datasetPicker }
+course_set_manage_training_dataset_info_picker:
+    path: /course_set/{id}/manage/task/{taskId}/training-dataset-info/show/picker
+    defaults: { _controller:AppBundle:TrainingManage:datasetInfoPicker }   
+
+
 #homework
 course_set_manage_homework_question_picker:
   path: /course_set/{id}/manage/homework/question/picker

@@ -46,10 +46,11 @@
                   </label>
               </div>
               <div class="col-sm-8">
-                <a id="picker_images_items" data-url="{{ path('course_set_manage_training_picker',{id:activity.fromCourseSetId,targetType:'training'}) }}" data-pick-url="{{ path('course_set_manage_training_pickerd',{id:activity.fromCourseSetId}) }}" class="btn btn-info btn-sm js-pick-modal" data-role="pick-item"><i class="es-icon es-icon-anonymous-iconfont"></i>
+                <a id="picker_images_items" data-url="{{ path('course_set_manage_training_images_picker',{id:activity.fromCourseSetId}) }}" data-pick-url="{{ path('course_set_manage_training_images_pickerd',{id:activity.fromCourseSetId}) }}" class="btn btn-info btn-sm js-pick-modal" data-role="pick-item"><i class="es-icon es-icon-anonymous-iconfont"></i>
                   选择镜像
                 </a>
                 <span class="selectImages"></span>
+                <input id="images" class="form-control" type="hidden" name="images" value="5000" >
                 <div class="js-cached-question hidden"></div>
               </div>
           </div>
@@ -61,7 +62,7 @@
                   </label>
               </div>
               <div class="col-sm-8">
-                <a id="picker_homework_items" data-url="" class="btn btn-info btn-sm js-pick-modal" data-role="pick-item"><i class="es-icon es-icon-anonymous-iconfont"></i>
+                <a id="picker_dataset_items" data-url="{{ path('course_set_manage_training_dataset_picker',{id:activity.fromCourseSetId}) }}" class="btn btn-info btn-sm js-pick-modal" data-role="pick-item"><i class="es-icon es-icon-anonymous-iconfont"></i>
                   选择数据集
                 </a>
               </div>

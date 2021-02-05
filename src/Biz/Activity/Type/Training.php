@@ -4,7 +4,7 @@ namespace Biz\Activity\Type;
 
 use AppBundle\Common\ArrayToolkit;
 use Biz\Activity\Config\Activity;
-use Biz\Activity\Dao\TextActivityDao;
+use Biz\Activity\Dao\TrainingActivityDao;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseDraftService;
 
@@ -17,35 +17,38 @@ class Training extends Activity
 
     public function get($targetId)
     {
-        return $this->getTextActivityDao()->get($targetId);
+        return [];
+        // return $this->getTrainingActivityDao()->get($targetId);
     }
 
     public function find($ids, $showCloud = 1)
     {
-        return $this->getTextActivityDao()->findByIds($ids);
+        return [];
+        // return $this->getTrainingActivityDao()->findByIds($ids);
     }
 
     public function copy($activity, $config = array())
     {
-        $user = $this->getCurrentUser();
-        $text = $this->getTextActivityDao()->get($activity['mediaId']);
-        $newText = array(
-            'finishType' => $text['finishType'],
-            'finishDetail' => $text['finishDetail'],
-            'createdUserId' => $user['id'],
-        );
+        return true;
+        // $user = $this->getCurrentUser();
+        // $text = $this->getTrainingActivityDao()->get($activity['mediaId']);
+        // $newText = array(
+        //     'finishType' => $text['finishType'],
+        //     'finishDetail' => $text['finishDetail'],
+        //     'createdUserId' => $user['id'],
+        // );
 
-        return $this->getTextActivityDao()->create($newText);
+        // return $this->getTrainingActivityDao()->create($newText);
     }
 
     public function sync($sourceActivity, $activity)
     {
-        $sourceText = $this->getTextActivityDao()->get($sourceActivity['mediaId']);
-        $text = $this->getTextActivityDao()->get($activity['mediaId']);
+        $sourceText = $this->getTrainingActivityDao()->get($sourceActivity['mediaId']);
+        $text = $this->getTrainingActivityDao()->get($activity['mediaId']);
         $text['finishType'] = $sourceText['finishType'];
         $text['finishDetail'] = $sourceText['finishDetail'];
 
-        return $this->getTextActivityDao()->update($text['id'], $text);
+        return $this->getTrainingActivityDao()->update($text['id'], $text);
     }
 
     public function update($targetId, &$fields, $activity)
@@ -66,37 +69,32 @@ class Training extends Activity
             $user['id']
         );
 
-        return $this->getTextActivityDao()->update($targetId, $text);
+        return $this->getTrainingActivityDao()->update($targetId, $text);
     }
 
     public function delete($targetId)
     {
-        return $this->getTextActivityDao()->delete($targetId);
+        return true;
+        // return $this->getTrainingActivityDao()->delete($targetId);
     }
 
     public function create($fields)
     {
-        $text = ArrayToolkit::parts(
-            $fields,
-            array(
-                'finishType',
-                'finishDetail',
-            )
-        );
+        $text['link_url'] = $fields['link_url'];
         $user = $this->getCurrentUser();
         $text['createdUserId'] = $user['id'];
 
         $this->getCourseDraftService()->deleteCourseDrafts($fields['fromCourseId'], 0, $user['id']);
 
-        return $this->getTextActivityDao()->create($text);
+        return $this->getTrainingActivityDao()->create($text);
     }
 
     /**
      * @return TextActivityDao
      */
-    protected function getTextActivityDao()
+    protected function getTrainingActivityDao()
     {
-        return $this->getBiz()->dao('Activity:TextActivityDao');
+        return $this->getBiz()->dao('Activity:TrainingActivityDao');
     }
 
     /**

@@ -116,6 +116,15 @@ class TrainingController extends BaseActivityController implements ActivityActio
         ));
     }
 
+
+    ///////////////新增加
+    public function createEditorAction(Request $request,$activity){
+        // 增加后续逻辑
+        return $this->render('@activity/training/resources/views/create_or_update_body.html.twig',[
+            'activity' => $activity,
+        ]);
+    }
+
     /**
      * @return CourseDraftService
      */
