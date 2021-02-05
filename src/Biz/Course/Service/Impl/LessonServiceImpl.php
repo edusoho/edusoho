@@ -93,7 +93,7 @@ class LessonServiceImpl extends BaseService implements LessonService
         }
 
         $lesson = $this->getCourseChapterDao()->update($lessonId, ['status' => 'published']);
-        $this->publishTasks($lesson['id']);
+        $this->publishTasks([$lesson['id']]);
 
         $this->dispatchEvent('course.lesson.publish', new Event($lesson));
         $this->getLogService()->info('course', 'publish_lesson', '发布课时', $lesson);
@@ -103,6 +103,43 @@ class LessonServiceImpl extends BaseService implements LessonService
         }
 
         return $lesson;
+    }
+
+    public function batchUpdateLessons($courseId, $lessonIds, $updateType)
+    {
+        $this->getCourseService()->tryManageCourse($courseId);
+        $lessons = $this->getCourseChapterDao()->findChaptersByCourseIdAndLessonIds($courseId, $lessonIds);
+
+        if (empty($lessons)) {
+            return;
+        }
+
+        $lessonIds = ArrayToolkit::column($lessons, 'id');
+
+        $updateFields = [];
+        foreach ($lessonIds as $lessonId) {
+            $updateFields[] = ['status' => $updateType];
+        }
+
+        $this->getCourseChapterDao()->batchUpdate($lessonIds, $updateFields);
+
+        if ('published' === $updateType) {
+            $this->publishTasks($lessonIds);
+            foreach ($lessons as $lesson) {
+                $this->getLogService()->info('course', 'publish_lesson', '更新课时状态', $lesson);
+            }
+        } elseif ('unpublished' === $updateType) {
+            $this->unpublishTasks($lessonIds);
+            foreach ($lessons as $lesson) {
+                $this->getLogService()->info('course', 'unpublish_lesson', '更新课时状态', $lesson);
+            }
+        } else {
+            $this->createNewException(CommonException::ERROR_PARAMETER());
+        }
+
+        $this->updateLessonNumbers($courseId);
+
+        return $lessons;
     }
 
     public function publishLessonByCourseId($courseId)
@@ -130,7 +167,7 @@ class LessonServiceImpl extends BaseService implements LessonService
         }
 
         $lesson = $this->getCourseChapterDao()->update($lessonId, ['status' => 'unpublished']);
-        $this->unpublishTasks($lesson['id']);
+        $this->unpublishTasks([$lesson['id']]);
 
         $this->dispatchEvent('course.lesson.unpublish', new Event($lesson));
         $this->getLogService()->info('course', 'unpublish_lesson', '关闭课时', $lesson);
@@ -307,9 +344,9 @@ class LessonServiceImpl extends BaseService implements LessonService
         }
     }
 
-    protected function publishTasks($lessonId)
+    protected function publishTasks($lessonIds)
     {
-        $tasks = $this->getTaskService()->findTasksByChapterId($lessonId);
+        $tasks = $this->getTaskService()->findTasksByCategoryIds($lessonIds);
 
         if (empty($tasks)) {
             return;
@@ -325,9 +362,9 @@ class LessonServiceImpl extends BaseService implements LessonService
         return $this->getCourseChapterDao()->findLessonsByCourseId($courseId);
     }
 
-    protected function unpublishTasks($lessonId)
+    protected function unpublishTasks($lessonIds)
     {
-        $tasks = $this->getTaskService()->findTasksByChapterId($lessonId);
+        $tasks = $this->getTaskService()->findTasksByCategoryIds($lessonIds);
 
         if (empty($tasks)) {
             return;
