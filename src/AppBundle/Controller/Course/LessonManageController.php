@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Course;
 
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
 use AppBundle\Util\UploaderToken;
 use Biz\Course\LessonException;
@@ -182,9 +183,13 @@ class LessonManageController extends BaseController
             $this->createNewException(LessonException::PARAMETERS_MISSING());
         }
 
-        $this->getCourseLessonService()->batchUpdateLessons($courseId, $lessonIds, 'published');
+        $lessons = $this->getCourseLessonService()->batchUpdateLessonsStatus($courseId, $lessonIds, 'published');
 
-        return $this->createJsonResponse(['success' => true]);
+        if (empty($lessons)) {
+            return $this->createJsonResponse(['success' => true]);
+        }
+
+        return $this->createJsonResponse(ArrayToolkit::column($lessons, 'id'));
     }
 
     public function batchUnpublishAction(Request $request, $courseId)
@@ -195,9 +200,13 @@ class LessonManageController extends BaseController
             $this->createNewException(LessonException::PARAMETERS_MISSING());
         }
 
-        $this->getCourseLessonService()->batchUpdateLessons($courseId, $lessonIds, 'unpublished');
+        $lessons = $this->getCourseLessonService()->batchUpdateLessonsStatus($courseId, $lessonIds, 'unpublished');
 
-        return $this->createJsonResponse(['success' => true]);
+        if (empty($lessons)) {
+            return $this->createJsonResponse(['success' => true]);
+        }
+
+        return $this->createJsonResponse(ArrayToolkit::column($lessons, 'id'));
     }
 
     public function deleteAction(Request $request, $courseId, $lessonId)
@@ -215,9 +224,13 @@ class LessonManageController extends BaseController
             $this->createNewException(LessonException::PARAMETERS_MISSING());
         }
 
-        $this->getCourseLessonService()->batchDeleteLessons($courseId, $lessonIds);
+        $lessons = $this->getCourseLessonService()->batchDeleteLessons($courseId, $lessonIds);
 
-        return $this->createJsonResponse(['success' => true]);
+        if (empty($lessons)) {
+            return $this->createJsonResponse(['success' => true]);
+        }
+
+        return $this->createJsonResponse(ArrayToolkit::column($lessons, 'id'));
     }
 
     public function setOptionalAction(Request $request, $courseId, $lessonId)
