@@ -106,12 +106,16 @@ class BatchOperate {
     this.$element.find('.js-chapter-operation').removeClass('hidden')
     $('.js-batch-operate-panel').removeClass('hidden')
     this.batchOperate.chosenItems = []
+    $('.js-task-list-header').find('.js-lesson-create-btn,.js-batch-add,.js-add-chapter-unit').attr('disabled', true)
+    $('.js-task-list-header').find('.js-add-chapter-unit .caret').hide()
   }
 
   endBatchOperate () {
     this.$element.find('.js-chapter-operation').addClass('hidden').removeClass('checked')
     $('.js-batch-operate-panel').addClass('hidden')
     this.batchOperate.chosenItems = []
+    $('.js-task-list-header').find('.js-lesson-create-btn,.js-batch-add,.js-add-chapter-unit').attr('disabled', false)
+    $('.js-task-list-header').find('.js-add-chapter-unit .caret').show()
   }
 
   // 单选
@@ -235,6 +239,7 @@ class BatchOperate {
           lessonIds.forEach(id => {
             $(`#chapter-${id}`).remove()
           })
+          this.clearChosenItems()
           $target.button('reset')
         }).catch(function(data) {
           $target.button('reset')
@@ -337,6 +342,10 @@ class BatchOperate {
       $batchPublishBtn.attr('disabled', true)
       $batchCancelPublishBtn.attr('disabled', true)
     }
+  }
+
+  clearChosenItems () {
+    this.batchOperate.chosenItems = []
   }
 }
 
