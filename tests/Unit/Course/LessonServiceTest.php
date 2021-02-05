@@ -398,7 +398,7 @@ class LessonServiceTest extends BaseTestCase
     {
         $this->mockBiz('Task:TaskService', [
             [
-                'functionName' => 'findTasksByChapterId',
+                'functionName' => 'findTasksByCategoryIds',
                 'returnValue' => [['id' => 1]],
             ],
             [
@@ -416,7 +416,7 @@ class LessonServiceTest extends BaseTestCase
     {
         $this->mockBiz('Task:TaskService', [
             [
-                'functionName' => 'findTasksByChapterId',
+                'functionName' => 'findTasksByCategoryIds',
                 'returnValue' => [['id' => 1]],
             ],
             [
