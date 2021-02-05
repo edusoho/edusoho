@@ -24,6 +24,8 @@ interface LessonService
 
     public function publishLessonByCourseId($courseId);
 
+    public function batchUpdateLessons($courseId, $lessonIds, $updateType);
+
     public function unpublishLesson($courseId, $lessonId);
 
     /**

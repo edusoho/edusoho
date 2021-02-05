@@ -174,6 +174,32 @@ class LessonManageController extends BaseController
         return $this->createJsonResponse(['success' => true]);
     }
 
+    public function batchPublishAction(Request $request, $courseId)
+    {
+        $lessonIds = $request->request->get('lessonIds');
+
+        if (empty($lessonIds)) {
+            $this->createNewException(LessonException::PARAMETERS_MISSING());
+        }
+
+        $this->getCourseLessonService()->batchUpdateLessons($courseId, $lessonIds, 'published');
+
+        return $this->createJsonResponse(['success' => true]);
+    }
+
+    public function batchUnpublishAction(Request $request, $courseId)
+    {
+        $lessonIds = $request->request->get('lessonIds');
+
+        if (empty($lessonIds)) {
+            $this->createNewException(LessonException::PARAMETERS_MISSING());
+        }
+
+        $this->getCourseLessonService()->batchUpdateLessons($courseId, $lessonIds, 'unpublished');
+
+        return $this->createJsonResponse(['success' => true]);
+    }
+
     public function deleteAction(Request $request, $courseId, $lessonId)
     {
         $this->getCourseLessonService()->deleteLesson($courseId, $lessonId);
