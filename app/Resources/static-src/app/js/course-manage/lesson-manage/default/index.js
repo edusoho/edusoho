@@ -7,22 +7,10 @@ class DefaultManage extends BaseManage {
   constructor($container) {
     super($container);
     this._defaultEvent();
-    this.batchOperate = {
-      status: 'none', // editing || none
-      permission: [],
-      chosenItems: [],
-    }
   }
 
   _defaultEvent() {
     this._showLesson();
-    this.calcOperatePanelPosition()
-    this.toggleBatchOperate();
-    this.singleChooseItem();
-    this.batchChooseItem();
-    this.batchDelete();
-    this.batchCancelPublish();
-    this.batchPublish();
   }
 
   _sortRules($item, container) {
@@ -51,6 +39,28 @@ class DefaultManage extends BaseManage {
     $('[data-toggle="popover"]').popover({
       html: true
     });
+  }
+}
+
+class BatchOperate {
+  constructor(element) {
+    this.$element = $(element)
+    this.batchOperate = {
+      status: 'none', // editing || none
+      permission: [],
+      chosenItems: [],
+    }
+    this._defaultEvent();
+  }
+
+  _defaultEvent() {
+    this.calcOperatePanelPosition()
+    this.toggleBatchOperate();
+    this.singleChooseItem();
+    this.batchChooseItem();
+    this.batchDelete();
+    this.batchCancelPublish();
+    this.batchPublish();
   }
 
   calcOperatePanelPosition () {
@@ -197,10 +207,33 @@ class DefaultManage extends BaseManage {
 
   // 批量删除
   batchDelete () {
+    const deleteUrl = $('#course_manage_lesson_batch_delete').val()
     this.$element.on('click', '.js-batch-delete', () => {
-      const { status, permission } = this.batchOperate
+      const { status, permission, chosenItems } = this.batchOperate
   
       if (status === 'none' || permission.indexOf('delete') === -1) return
+
+      const isDeleteLesson = chosenItems.every(item => item.type === 'lesson')
+      const text = isDeleteLesson ?
+        `删除所选课时后，课时下对应任务将一并被删除。此次删除只删除未发布课时，已发布课时需取消发布后重新删除，此次删除${chosenItems.length}课时，确定继续。`
+        :
+        `删除所选章节后，章节下对应课时任务将一并被删除。此次删除${chosenItems.length}章节，确定继续。`;
+
+      cd.confirm({
+        title: Translator.trans('site.delete'),
+        content: text,
+        okText: Translator.trans('site.confirm'),
+        cancelText: Translator.trans('site.cancel'),
+        className: 'task-manage-batch-delete',
+      }).on('ok', () => {
+        const lessonIds = chosenItems.map(item => item.id)
+        
+        $.post(deleteUrl, { lessonIds }).then(res => {
+          if (res.success) {
+            window.location.reload()
+          }
+        })
+      })
     })
   }
 
@@ -259,7 +292,8 @@ class DefaultManage extends BaseManage {
   }
 }
 
-new DefaultManage('.js-lesson-manage');
+new DefaultManage('#sortable-list');
+new BatchOperate('.js-lesson-manage');
 hiddenUnpublishTask();
 addLesson();
 TaskListHeaderFixed();
