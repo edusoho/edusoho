@@ -20,6 +20,9 @@ class DefaultManage extends BaseManage {
     this.toggleBatchOperate();
     this.singleChooseItem();
     this.batchChooseItem();
+    this.batchDelete();
+    this.batchCancelPublish();
+    this.batchPublish();
   }
 
   _sortRules($item, container) {
@@ -63,7 +66,7 @@ class DefaultManage extends BaseManage {
       const { height: boxHeight } = $box[0].getBoundingClientRect()
       const boxOffsetTop = $box.offset().top
       const boxToWindowBottomDistance = windowHeight + pageYOffset - boxHeight - boxOffsetTop
-      console.log(boxToWindowBottomDistance)
+
       if (boxToWindowBottomDistance <= 0) {
         $batchOperate.addClass('fixed')
         $batchOperateSlot.removeClass('hidden')
@@ -133,20 +136,36 @@ class DefaultManage extends BaseManage {
       const types = $target.data('types').split(',')
       const leftTypes = allItemTypes.filter(type => types.indexOf(type) === -1)
 
-      types.forEach(type => {
-        this.$element
-          .find(`.js-chapter-operation[data-type=${type}]`)
-          .trigger('click')
-      })
+      this.toggleChooseAllItemByType(types)
       $target.toggleClass('active')
 
-      leftTypes.forEach(type => this.cancelChooseItemByType(type))
+      leftTypes.forEach(type => this.cancelChooseAllItemByType(type))
       this.$element.find(`.js-batch-choose[data-types="${leftTypes.join(',')}"]`).removeClass('active')
       this.updateBatchBtnStatus()
     })
   }
 
-  cancelChooseItemByType (type) {
+  toggleChooseAllItemByType (types) {
+    let isAll = true
+    const { chosenItems } = this.batchOperate
+
+    types.forEach(type => {
+      const $chosenItems = this.$element.find(`.js-chapter-operation.checked[data-type=${type}]`)
+      const $allItems = this.$element.find(`.js-chapter-operation[data-type=${type}]`)
+
+      if ($chosenItems.length !== $allItems.length) isAll = false
+    })
+
+    types.forEach(type => {
+      if (isAll) {
+        this.cancelChooseAllItemByType(type)
+      } else {
+        this.chooseAllItemByItem(type)
+      }
+    })
+  }
+
+  chooseAllItemByItem (type) {
     const $items = this.$element.find(`.js-chapter-operation[data-type=${type}]`)
 
     $items.each((index1, element) => {
@@ -154,30 +173,53 @@ class DefaultManage extends BaseManage {
       const { id } = $element.data() // type: chapter、lesson、unit
       const index = this.batchOperate.chosenItems.findIndex(item => item.id === id)
 
-      index > -1 && this.batchOperate.chosenItems.splice(index, 1)
-      $element.removeClass('checked')
+      if (index === -1) {
+        this.batchOperate.chosenItems.push({id, type})
+        $element.addClass('checked')
+      }
+    })
+  }
+
+  cancelChooseAllItemByType (type) {
+    const $items = this.$element.find(`.js-chapter-operation[data-type=${type}]`)
+
+    $items.each((index1, element) => {
+      const $element = $(element)
+      const { id } = $element.data() // type: chapter、lesson、unit
+      const index = this.batchOperate.chosenItems.findIndex(item => item.id === id)
+
+      if (index > -1) {
+        this.batchOperate.chosenItems.splice(index, 1)
+        $element.removeClass('checked')
+      }
     })
   }
 
   // 批量删除
   batchDelete () {
-    const { status, permission } = this.batchOperate
-
-    if (status === 'none' || permission.indexOf('delete') === -1) return
+    this.$element.on('click', '.js-batch-delete', () => {
+      const { status, permission } = this.batchOperate
+  
+      if (status === 'none' || permission.indexOf('delete') === -1) return
+    })
   }
 
   // 批量发布
   batchPublish () {
-    const { status, permission } = this.batchOperate
-
-    if (status === 'none' || permission.indexOf('publish') === -1) return
+    this.$element.on('click', '.js-batch-publish', () => {
+      const { status, permission } = this.batchOperate
+  
+      if (status === 'none' || permission.indexOf('publish') === -1) return
+    })
   }
 
   // 批量取消发布
   batchCancelPublish () {
-    const { status, permission } = this.batchOperate
-
-    if (status === 'none' || permission.indexOf('calcelPublish') === -1) return
+    this.$element.on('click', '.js-batch-cancel-publish', () => {
+      const { status, permission } = this.batchOperate
+  
+      if (status === 'none' || permission.indexOf('calcelPublish') === -1) return
+    })
   }
 
   // 更新按钮状态
