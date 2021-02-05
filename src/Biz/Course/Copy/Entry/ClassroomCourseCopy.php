@@ -78,7 +78,9 @@ class ClassroomCourseCopy extends CourseCopy
         );
 
         $newCourse = array_replace($newCourse, $expiryData);
-        $newCourse['vipLevelId'] = $classroom['vipLevelId'];
+        if (!empty($classroom['vipLevelId'])) {
+            $newCourse['vipLevelId'] = $classroom['vipLevelId'];
+        }
 
         return $newCourse;
     }
