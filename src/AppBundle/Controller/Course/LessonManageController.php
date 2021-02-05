@@ -183,7 +183,7 @@ class LessonManageController extends BaseController
             $this->createNewException(LessonException::PARAMETERS_MISSING());
         }
 
-        $lessons = $this->getCourseLessonService()->batchUpdateLessons($courseId, $lessonIds, 'published');
+        $lessons = $this->getCourseLessonService()->batchUpdateLessonsStatus($courseId, $lessonIds, 'published');
 
         if (empty($lessons)) {
             return $this->createJsonResponse(['success' => true]);
@@ -200,7 +200,7 @@ class LessonManageController extends BaseController
             $this->createNewException(LessonException::PARAMETERS_MISSING());
         }
 
-        $lessons = $this->getCourseLessonService()->batchUpdateLessons($courseId, $lessonIds, 'unpublished');
+        $lessons = $this->getCourseLessonService()->batchUpdateLessonsStatus($courseId, $lessonIds, 'unpublished');
 
         if (empty($lessons)) {
             return $this->createJsonResponse(['success' => true]);
