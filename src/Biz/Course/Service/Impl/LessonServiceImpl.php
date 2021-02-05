@@ -110,16 +110,22 @@ class LessonServiceImpl extends BaseService implements LessonService
         $this->getCourseService()->tryManageCourse($courseId);
         $lessons = $this->getCourseChapterDao()->findChaptersByCourseIdAndLessonIds($courseId, $lessonIds);
 
+        $updateFields = [];
+        foreach ($lessons as $key => $lesson) {
+            if ('published' === $updateType && 'published' === $lesson['status']) {
+                unset($lessons[$key]);
+            } elseif ('unpublished' === $updateType && in_array($lesson['status'], ['created', 'unpublished'])) {
+                unset($lessons[$key]);
+            } else {
+                $updateFields[] = ['status' => $updateType];
+            }
+        }
+
         if (empty($lessons)) {
             return;
         }
 
         $lessonIds = ArrayToolkit::column($lessons, 'id');
-
-        $updateFields = [];
-        foreach ($lessonIds as $lessonId) {
-            $updateFields[] = ['status' => $updateType];
-        }
 
         $this->getCourseChapterDao()->batchUpdate($lessonIds, $updateFields);
 
@@ -205,20 +211,29 @@ class LessonServiceImpl extends BaseService implements LessonService
         $this->getCourseService()->tryManageCourse($courseId);
         $lessons = $this->getCourseChapterDao()->findChaptersByCourseIdAndLessonIds($courseId, $lessonIds);
 
+        //已发布课时需要先取消发布才能删除
+        if (!empty($lessons)) {
+            foreach ($lessons as $key => $lesson) {
+                if ('published' === $lesson['status']) {
+                    unset($lessons[$key]);
+                }
+            }
+        }
+
         if (empty($lessons)) {
             return;
         }
 
         $lessonIds = ArrayToolkit::column($lessons, 'id');
 
-        $this->getTaskService()->deleteTasksByCategoryIds($courseId, $lessonIds);
-        $this->getCourseChapterDao()->batchDelete(['courseId' => $courseId, 'ids' => $lessonIds]);
+        $this->getCourseChapterDao()->batchDelete(['ids' => $lessonIds]);
+        $this->getTaskService()->deleteTasksByCategoryIds($lessonIds);
 
         $this->dispatchEvent('course.lesson.delete', new Event($lessons[0]));
 
         $this->updateLessonNumbers($courseId);
 
-        return true;
+        return $lessons;
     }
 
     public function isLessonCountEnough($courseId)
