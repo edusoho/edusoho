@@ -334,13 +334,12 @@ class MemberServiceTest extends BaseTestCase
 
         $member = [
             'id' => 1,
-            'levelId' => 2,
             'deadline' => 0,
         ];
 
         $result = $this->getMemberService()->isMemberNonExpired($course, $member);
 
-        $this->assertFalse($result);
+        $this->assertTrue($result);
     }
 
     /**
