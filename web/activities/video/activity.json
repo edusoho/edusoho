@@ -25,6 +25,11 @@
     {
       "type": "time",
       "value": 1
+    },
+    {
+      "type": "watchTime",
+      "value": 1,
+      "describe": "activity_manage.finish_select_tips_watch_time"
     }
   ]
 }

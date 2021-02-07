@@ -22,7 +22,7 @@
 /web/files
 /web/customize/*
 !/web/customize/.gitkeep
-# /plugins/*
+/plugins/*
 !/plugins/.gitkeep
 /node_modules/
 npm-debug.log
@@ -69,3 +69,4 @@ yarn-error.log
 /edusoho-h5
 /app/config/plumber.php
 .package-lock.json
+/js-sdk

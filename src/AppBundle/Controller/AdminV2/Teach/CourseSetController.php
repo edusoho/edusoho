@@ -481,13 +481,19 @@ class CourseSetController extends BaseController
         $tasks = ArrayToolkit::group($tasks, 'fromCourseSetId');
 
         foreach ($courseSets as &$courseSet) {
-            // TODO 完成人数目前只统计了默认教学计划
             $courseSetId = $courseSet['id'];
             $defaultCourseId = $courseSet['defaultCourseId'];
-            $courseCount = $this->getCourseService()->searchCourseCount(['courseSetId' => $courseSetId]);
-            $isLearnedNum = empty($defaultCourses[$defaultCourseId]) ? 0 : $this->getMemberService()->countMembers(
-                ['finishedTime_GT' => 0, 'courseId' => $courseSet['defaultCourseId'], 'learnedCompulsoryTaskNumGreaterThan' => $defaultCourses[$defaultCourseId]['compulsoryTaskNum']]
-            );
+            $courses = $this->getCourseService()->searchCourses(['courseSetId' => $courseSetId], [], 0, PHP_INT_MAX, ['id', 'compulsoryTaskNum']);
+
+            $isLearnedNum = 0;
+            foreach ($courses as $course) {
+                $isLearnedNum = $isLearnedNum + $this->getMemberService()->countMembers([
+                    'finishedTime_GT' => 0,
+                    'courseId' => $course['id'],
+                    'role' => 'student',
+                    'learnedCompulsoryTaskNumGreaterThan' => $course['compulsoryTaskNum'],
+                ]);
+            }
 
             if (!empty($courseSetIncomes[$courseSetId])) {
                 $courseSet['income'] = $courseSetIncomes[$courseSetId]['income'];
@@ -495,8 +501,14 @@ class CourseSetController extends BaseController
                 $courseSet['income'] = 0;
             }
             $courseSet['isLearnedNum'] = $isLearnedNum;
-            $courseSet['taskCount'] = empty($tasks[$courseSetId]) ? 0 : count($tasks[$courseSetId]);
-            $courseSet['courseCount'] = $courseCount;
+            $courseSet['taskCount'] = $courseSet['compulsorTaskCount'] = $courseSet['electiveTaskNum'] = 0;
+            if (!empty($tasks[$courseSetId])) {
+                $courseSet['taskCount'] = count($tasks[$courseSetId]);
+                $courseSetTasks = ArrayToolkit::group($tasks[$courseSetId], 'isOptional');
+                $courseSet['compulsorTaskCount'] = empty($courseSetTasks['0']) ? 0 : count($courseSetTasks['0']);
+                $courseSet['electiveTaskNum'] = $courseSet['taskCount'] - $courseSet['compulsorTaskCount'];
+            }
+            $courseSet['courseCount'] = count($courses);
             $courseSet['studentNum'] = $this->getMemberService()->countStudentMemberByCourseSetId($courseSetId);
         }
 
@@ -742,7 +754,6 @@ class CourseSetController extends BaseController
             $limit
         );
         $usersLearnedTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByCourseIdGroupByUserId($courseId, ArrayToolkit::column($students, 'userId'));
-        $usersPureLearnedTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumPureLearnedTimeByCourseIdGroupByUserId($courseId, ArrayToolkit::column($students, 'userId'));
 
         $exportMembers = [];
         foreach ($students as $key => $student) {
@@ -762,9 +773,6 @@ class CourseSetController extends BaseController
             $learnTime = empty($usersLearnedTime[$student['userId']]) ? 0 : $usersLearnedTime[$student['userId']]['learnedTime'];
             $exportMember['learnTime'] = $learnTime > 0 ? round($learnTime / 60, 1) : '--';
 
-            $pureLearnTime = empty($usersPureLearnedTime[$student['userId']]) ? 0 : $usersPureLearnedTime[$student['userId']]['learnedTime'];
-            $exportMember['pureLearnTime'] = $pureLearnTime > 0 ? round($pureLearnTime / 60, 1) : '--';
-
             $questionCount = $this->getThreadService()->countThreads(
                 ['courseId' => $courseId, 'type' => 'question', 'userId' => $user['id']]
             );
@@ -781,7 +789,6 @@ class CourseSetController extends BaseController
             $this->trans('admin.course_manage.statistics.data_detail.finished_time'),
             $this->trans('admin.course_manage.statistics.data_detail.study_days'),
             $this->trans('admin.course_manage.statistics.data_detail.study_time'),
-            $this->trans('admin.course_manage.statistics.data_detail.pure_study_time'),
             $this->trans('admin.course_manage.statistics.data_detail.question_number'),
             $this->trans('admin.course_manage.statistics.data_detail.note_number'),
         ];
@@ -807,12 +814,14 @@ class CourseSetController extends BaseController
     protected function filterCourseSetConditions($filter, $conditions)
     {
         if ('classroom' == $filter) {
-            $conditions['parentId_GT'] = 0;
+            $conditions['isClassroomRef'] = 1;
         } elseif ('vip' == $filter) {
             $conditions['isVip'] = 1;
             $conditions['parentId'] = 0;
+            $conditions['isClassroomRef'] = 0;
         } else {
             $conditions['parentId'] = 0;
+            $conditions['isClassroomRef'] = 0;
             $conditions = $this->filterCourseSetType($conditions);
         }
 
@@ -907,9 +916,14 @@ class CourseSetController extends BaseController
         foreach ($courseSets as $courseSet) {
             $tags = array_merge($tags, $courseSet['tags']);
         }
+
         $tags = $this->getTagService()->findTagsByIds($tags);
+        $allTagIds = ArrayToolkit::column($tags, 'id');
+
         foreach ($courseSets as &$courseSet) {
-            if (!empty($courseSet['tags']) && !empty($tags[$courseSet['tags'][0]])) {
+            $courseSet['tags'] = array_values(array_intersect($courseSet['tags'], $allTagIds));
+
+            if (!empty($courseSet['tags'])) {
                 $courseSet['displayTag'] = $tags[$courseSet['tags'][0]]['name'];
                 if (count($courseSet['tags']) > 1) {
                     $courseSet['displayTagNames'] = $this->buildTagsDisplayNames($courseSet['tags'], $tags);

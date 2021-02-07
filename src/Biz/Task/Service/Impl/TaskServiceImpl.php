@@ -79,6 +79,7 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
 
         $this->preCreateTaskCheck($fields);
+
         $this->beginTransaction();
         try {
             if (isset($fields['content'])) {

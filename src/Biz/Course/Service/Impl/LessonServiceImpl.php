@@ -63,6 +63,7 @@ class LessonServiceImpl extends BaseService implements LessonService
             $this->rollback();
             throw $exception;
         }
+
         return [$lesson, $task];
     }
 

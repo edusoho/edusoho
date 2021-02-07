@@ -8,6 +8,7 @@ use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
 use AppBundle\Common\ArrayToolkit;
 use Biz\Course\Service\CourseService;
+use Biz\Goods\Service\GoodsService;
 
 class PageCourse extends AbstractResource
 {
@@ -39,7 +40,8 @@ class PageCourse extends AbstractResource
             $course,
             $request->getHttpRequest()->isSecure(),
             $request->query->get('fetchSubtitlesUrls', 0),
-            $request->query->get('onlyPublished', 0)
+            $request->query->get('onlyPublished', 0),
+            $request->query->get('showOptionalNum', 1)
         );
 
         $course['allowAnonymousPreview'] = $this->getSettingService()->get('course.allowAnonymousPreview', 1);
@@ -49,6 +51,9 @@ class PageCourse extends AbstractResource
         $course['progress'] = $this->getLearningDataAnalysisService()->makeProgress($course['learnedCompulsoryTaskNum'], $course['compulsoryTaskNum']);
         $course['hasCertificate'] = $this->getCourseService()->hasCertificate($course['id']);
         $course = $this->getCourseService()->appendSpecInfo($course);
+
+        $goods = $this->getGoodsService()->getGoods($course['goodsId']);
+        $course['hitNum'] = empty($goods['hitNum']) ? 0 : $goods['hitNum'];
 
         if ($this->isPluginInstalled('vip') && $course['vipLevelId'] > 0) {
             $apiRequest = new ApiRequest('/api/plugins/vip/vip_levels/'.$course['vipLevelId'], 'GET', []);
@@ -115,6 +120,14 @@ class PageCourse extends AbstractResource
         ));
 
         return empty($result['data']) ? null : reset($result['data']);
+    }
+
+    /**
+     * @return GoodsService
+     */
+    private function getGoodsService()
+    {
+        return $this->service('Goods:GoodsService');
     }
 
     /**

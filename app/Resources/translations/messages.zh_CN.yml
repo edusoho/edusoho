@@ -645,6 +645,7 @@ pay_center.pay.coin_input_tips: 本次使用
 pay_center.pay.coin_input_placeholder: 请输入%coin_name%金额
 pay_center.pay.password_input_placeholder: 请输入支付密码
 pay_center.pay.submit_tips: 订单已提交，请在 48 小时内完成支付！逾期订单将被取消。
+pay_center.pay.unable_pay.tips: 您已成功购买该商品，请勿重复支付！该订单将在48小时内关闭。
 pay_center.pay.mode: 支付方式
 pay_center.pay.mode.tips: 选择合适的现金支付方式
 pay_center.pay.cash_card: 储蓄卡
@@ -1985,13 +1986,21 @@ course.manage.preview_lesson: 预览课时
 course.lesson_manage.set_optional: 设置选修
 course.lesson_manage.unset_optional: 设置必修
 course.lesson_manage.rename: 重命名
+course.lesson_manage.set_optional_tips: 课时任务数和学习进度将不会统计选修课时
 
 # activity-活动
 activity_manage.finish_tips:
   <p class="gray-darker mbs">满足以下条件:</p>
 activity_manage.finish_tips_time: >
-  至少学习%finishDetail%分钟。
-activity_manage.finish_select_tips_time: 学习时长
+  至少停留%finishDetail%分钟。
+activity_manage.finish_tips_watch_time: >
+  至少播放%finishDetail%分钟。
+activity_manage.time_last_tips: >
+  剩余<span class="color-danger js-finish-time">%time%分</span>完成
+activity_manage.finished_tips: >
+  <span class="color-primary">恭喜！你已完成该任务</span>
+activity_manage.finish_select_tips_time: 页面停留时长
+activity_manage.finish_select_tips_watch_time: 视频播放时长
 activity_manage.finish_select_tips_end: 学习到最后
 
 course.plan_task.activity_manage.finished_condition: 完成条件
@@ -2130,6 +2139,8 @@ course.plan_task.activity_manage.video.last: 学习到最后
 course.plan_task.activity_manage.video.learn_time: 学习时长
 course.plan_task.activity_manage.video.buy_tips: 立刻购买本课程，即可获得全部完整学习内容。
 course.plan_task.activity_manage.video.try_watch_tips: 您可以免费试看前%tryLookLength%分钟,购买后可完整观看。
+course.plan_task.activity_manage.video.time_at_least: 至少停留
+course.plan_task.activity_manage.video.watch_time_at_least: 至少播放
 course.plan_task.activity_manage.create_btn: 前往课程讨论区
 course.plan_task.activity_manage.exercise.questionNum: >
   <span class="color-gray text-sm">共<span role="questionNum" type="%questionType%" >%questionNum%</span>题
@@ -4762,6 +4773,7 @@ course.member.course.join_btn: 退出并重新加入
 course.member.operation.quit_deadline_reach: 达到有效期，退出课程
 course.member.operation.admin_remove_course_student: 老师手动移除学员
 course.member.operation.reason.join_classroom: 用户加入班级，自动加入班级课程
+course.member.course.expiry_start_date_tips: 学习时间未到，无法学习%taskName%，请在学习有效期内进行学习~
 
 # course/widgets
 course.widgets.belong_classroom.title: 所属%name%
@@ -5082,13 +5094,15 @@ admin.course_manage.statistics.teach_plan_count: 教学计划数量
 admin.course_manage.statistics.task_count: %taskName%数量
 admin.course_manage.statistics.student: 学员
 admin.course_manage.statistics.student_number: 学员总数
-admin.course_manage.statistics.finished_number: 完成课程人数
+admin.course_manage.statistics.finished_number: 完成人数
 admin.course_manage.statistics.study_time_minute: 课程学习时长(分)
-admin.course_manage.statistics.income_RMB: 课程收入(元)
+admin.course_manage.statistics.income_RMB: 收入(元)
 admin.course_manage.statistics.no_introduce: 未引入
 admin.course_manage.statistics.classroom.remove: 已从%classroomName%中移除
 admin.course_manage.statistics.watch_task: 查看%taskName%
 admin.course_manage.statistics.watch_course_data: 查看课时数据
+admin.course_manage.statistics.tips: 页面中各个数据以教学计划统计
+admin.course_manage.statistics.task_tips: 仅统计必修课时任务数，括号内数字为选修的课时任务数
 
 ## 任务统计数据
 admin.course_manage.statistics.modal_title: %title%课程的数据
@@ -5101,6 +5115,7 @@ admin.course_manage.statistics.data.video_length: 视频长度（分）
 admin.course_manage.statistics.data.task_sum_study_time: 任务被累加学习时长（分）
 admin.course_manage.statistics.data.average_score: 考试平均得分
 admin.course_manage.statistics.data.plan_study_time: 计划被累加学习时长（分）：%mins%
+admin.course_manage.statistics.optional_task: 选修
 
 ## 任务统计详细数据
 admin.course_manage.statistics.data_detail.name: 用户名
@@ -5115,9 +5130,8 @@ admin.course_manage.statistics.data_detail.plan_study_time: 计划被累加学�
 admin.course_manage.statistics.data_detail.tips: >
   <span style='font-size:14px'>
     1. 累加学习时长（分）为用户在课程-计划下产生的所有学习时长累加。<br />
-    2. 去重学习时长（分）为该用户在课程-计划下产生的学习时长去重后累加。<br />
-    3. 其中视频课时学习时长统计维度（播放活跃时长or页面活跃时长）以在系统-课程设置-视频课时学习配置为准。<br />
-    4. 数据统计为昨日及之前数据。
+    2. 其中视频课时学习时长统计维度（播放活跃时长or页面活跃时长）以在系统-课程设置-视频课时学习配置为准。<br />
+    3. 数据统计为昨日及之前数据。
   </span>
 
 ## 用户数据统计
@@ -5664,6 +5678,7 @@ admin.setting.site.website_status.open: 开放
 admin.setting.site.website_status.closed: 关闭
 admin.setting.site.closed_note: 网站关闭公告
 admin.setting.site.closed_note.help_block: 网站处于关闭状态时，用户访问网站将显示此公告，支持HTML代码
+admin.setting.site.recordUrl.help_block: 以"http://"开头，以备案号结尾，请填写完整的公安备案号链接。示例：http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=33010802004377
 admin.setting.theme.name: 名称
 admin.setting.theme.version: 主题版本
 admin.setting.theme.author: 作者
@@ -5722,7 +5737,14 @@ admin.setting.permit.picture: 证件图片
 admin.setting.permit.picture.help_block: 请上传jpg,gif,png格式的图片。图片大小建议不超过5MB。网校证件图片设置后将显示在首页底栏。
 admin.setting.permit.setting.add: 新增一栏
 admin.setting.permit.setting.remove: 删除整栏
-
+admin.setting.record.picture: 公安备案图标
+admin.setting.record.code: 公安备案号
+admin.setting.record.url: 公安备案号链接
+admin.setting.record.picture.help_block: >
+  图标尺寸建议不超过50×50px，图标尺寸建议不超过2MB。
+  <a href="http://www.qiqiuyu.com/faq/1239/detail" target="_blank">如何获取公安备案图标？</a>
+admin.setting.record.code.help_block: >
+    <a href="http://www.qiqiuyu.com/faq/1239/detail" target="_blank">如何添加公安备案号及链接？</a>
 admin.setting.mailer.is_trial.tips: >
   当前版本为试⽤版,不能进⾏邮件服务设置。如需购买授权版,请联系销售人员。
   电话：4008041114 或
@@ -7638,8 +7660,8 @@ admin.setting_course.effective_learning_time_rule: 在线视频课时有效学�
 admin.setting_course.learning_time_statistical_dimension: 学习时长统计维度
 admin.setting_course.effective_learning_time.playing.help_block: 以实际播放时长作为学习时长统计
 admin.setting_course.effective_learning_time.page.help_block: 以页面停留时长作为学习时长统计
-admin.setting_course.effective_learning_time.playing_time: 播放活跃时长
-admin.setting_course.effective_learning_time.page_time: 页面活跃时长
+admin.setting_course.effective_learning_time.playing_time: 视频播放时长
+admin.setting_course.effective_learning_time.page_time: 页面停留时长
 admin.setting_course.effective_learning_time.reweighted_merge: 各处学习时长去重后再合并
 admin.setting_course.effective_learning_time.accumulated_merge: 各处学习时长直接累加合并
 admin.setting_course.effective_learning_time.reweighted_merge.help_block: 同时在多处产生的学习时长自动去重合并
@@ -7755,6 +7777,8 @@ admin.magic_setting.watch_time_sec_tip: 秒为单位
 admin.magic_setting.site_trace_enable: piwik跟踪的开关
 admin.magic_setting.live_entry_time: 直播开始前可进入时间
 admin.magic_setting.live_entry_time_tip: 秒为单位
+admin.magic_setting.biz_answer_scene_report_threshold: 考试、作业人数*场次的试卷答案分数阈值
+admin.magic_setting.biz_answer_scene_report_threshold_tip: 默认值15000
 
 admin.magic_setting.one_for_open: 1为启用
 admin.magic_setting.one_for_close: 1为关闭
@@ -8471,6 +8495,13 @@ admin.app_upgrades.package_description_open: 展开
 admin.app_upgrades.package_description_close: 收起
 admin.app_upgrades.update_btn: 更新
 admin.app_upgrades.latest_version_tips: 当前已是最新版本!
+admin.app_upgrades.agreement.title: 升级服务协议
+admin.app_upgrades.agreement.content.21.1.2: >
+  <p class="agreement-content-title">Edusoho主系统V21.1.2版本中包含了旧版后台升级为新版后台。</p>
+  <p class="agreement-content-title cd-mt16">升级新版后台</p>
+  <p>&nbsp&nbsp&nbsp&nbsp此版本仅支持在新版后台使用。若同意升级，<b>代表您同意将后台升级为新版后台，且知悉升级后不支持再切换回旧版后台。</b></p>
+admin.app_upgrades.agreement.agree: 已阅读并同意升级服务协议
+admin.app_upgrades.agreement.btn: 升级
 admin.cloud_license.info: 授权信息
 admin.cloud_license.business_license: 商业授权
 admin.cloud_license.non_business_license: 非商业授权
@@ -10116,7 +10147,6 @@ user.learn.statistics.manage.describe_tips: >
     <h5 style='color:blue;margin:5px 0;'>用户数据说明</h5>
     <P style='margin:0;'>用户数据每日00:00-02:00间更新。</p>
     <P style='margin:0;'>累加学习时长（分）为筛选条件内该用户在网校产生的所有学习时长累加。</p>
-    <P style='margin:0;'>去重学习时长（分）为筛选条件内该用户在网校产生的所有学习时长去重后累加。</p>
     <P style='margin:0;'>其中视频课时学习时长统计维度（播放活跃时长or页面活跃时长）以在系统-课程设置-视频课时学习配置为准。</p>
   </div>
 
@@ -10552,6 +10582,7 @@ exception.reward_point.account.not_found_pay_password: 支付密码不存在
 exception.reward_point.account.error_pay_password_format: 新支付密码不可用，请尝试其它密码组合
 exception.question_marker.not_found: 弹题不存在
 exception.order_pay_check.instance_error: 不是ProductDealerService实例
+exception.order_pay_check.unable_pay: 您已成功购买该商品，请勿重复支付！该订单将在48小时内关闭。
 exception.live_replay.not_found: 直播回放不存在
 exception.cloud_file.not_found: 云文件不存在
 exception.cloud_file.not_found_player: 云播放器不存在
@@ -10762,19 +10793,20 @@ wechat.notification.template_name.buy_success: '购买成功通知'
 # 移动端使用：课时任务(task)完成条件文案
 mobile.task.finish_tips.audio.end: 听完音频
 mobile.task.finish_tips.discuss.join: 在本课程下发表或者回复一个话题
-mobile.task.finish_tips.doc.time: 至少学习 %finishData% 分钟
+mobile.task.finish_tips.doc.time: 至少停留 %finishData% 分钟
 mobile.task.finish_tips.download.download: 下载过资料
 mobile.task.finish_tips.exercise.submit: 提交过练习
-mobile.task.finish_tips.flash.time: 至少学习 %finishData% 分钟
+mobile.task.finish_tips.flash.time: 至少停留 %finishData% 分钟
 mobile.task.finish_tips.homework.submit: 提交作业
 mobile.task.finish_tips.live.join: 进入参加过直播
 mobile.task.finish_tips.ppt.end: 需要学习到最后一页
-mobile.task.finish_tips.ppt.time: 至少学习 %finishData% 分钟
+mobile.task.finish_tips.ppt.time: 至少停留 %finishData% 分钟
 mobile.task.finish_tips.testpapaer.submit: 提交试卷
 mobile.task.finish_tips.testpapaer.score: 考试分数通过 %finishData% 分
-mobile.task.finish_tips.text.time: 至少学习 %finishData% 分钟
+mobile.task.finish_tips.text.time: 至少停留 %finishData% 分钟
 mobile.task.finish_tips.video.end: 学习到最后
-mobile.task.finish_tips.video.time: 至少学习 %finishData% 分钟
+mobile.task.finish_tips.video.time: 至少停留 %finishData% 分钟
+mobile.task.finish_tips.video.watchTime: 至少播放 %finishData% 分钟
 
 classroom.joining_date.expired_tips: 班级已过有效期！
 
@@ -11428,11 +11460,7 @@ exception.goods.forbidden_manage: 无管理商品权限
 exception.s2b2c_product.adopt_failed: 采用失败，内容正在编辑中，请稍后再试
 goods.minimum_price.unit: %price%%unit%起
 goods.origin_price.unit: %price%%unit%
-goods.description: 商品介绍
-
-goods.minimum_price.unit: %price%%unit%起
-goods.origin_price.unit: %price%%unit%
-goods.description: 商品介绍
+goods.description: 简介
 
 admin_v2.information_collect.edit.title_info: 当前版本用户端仅支持新版微网校
 admin_v2.information_collect.edit.title: 采集名称
@@ -11485,3 +11513,10 @@ information_collect.title: 用户信息采集
 information_collect.form_items.confirm_submit: 确认提交
 information_collect.form_items.skip: 跳过
 information_collect.select_placeholeder: 请选择
+course.task.notify_message.join_and_buy: 请先加入课程或购买课程
+course.task.notify_message.join_limit: 该课程已限制加入，请联系客服
+exam_bank.analysis.data_large_loading: 数据量过大，正在刷新
+exam_bank.analysis.data_large_loading_finish: 数据已刷新完成
+exam_bank.analysis.data_large_info: 数据更新时间为：%date%，由于数据量过大，不建议频繁刷新
+exam_bank.analysis.data_large_loading_btn: 强制刷新
+activity_manage.video.finish_tips: 视频播放时长和页面停留时长完成条件以累加学习时长为准

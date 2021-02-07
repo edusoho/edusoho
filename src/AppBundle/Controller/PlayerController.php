@@ -42,13 +42,13 @@ class PlayerController extends BaseController
             $playerContext = array_merge($playerContext, $context);
         }
 
-
         $params = [
             'file' => $file,
-            'cloudSdk' => $file['type'],
+            'cloudSdk' => 'resource_player',
             'context' => $playerContext,
             'rememberLastPos' => $rememberLastPos,
         ];
+
         if ($isPart) {
             return $this->render('player/play.html.twig', $params);
         }

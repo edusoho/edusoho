@@ -24,12 +24,14 @@
   {% set route_params = app.request.attributes.get('_route_params') %}
 
   {{ render(controller(metas.header,{request:app.request, course: course, member: member|default(null)})) }}
+
   {{ slot('marketing.tool', {'type':'course','targetId':course.id}) }}
 
   <div class="container cd-container">
     <div class="row cd-row">
       <div class="col-lg-9 col-md-8 course-detail-content">
         {% include 'course/announcement/block.html.twig' with { courseId:course.id } %}
+
         {{ slot('course.show.content.section', {'course':course}) }}
 
         <section class="es-section">
@@ -63,6 +65,7 @@
       </div>
 
       <div class="col-lg-3 col-md-4 course-sidebar">
+
         {{ slot('course.show.sidebar', {'course':course}) }}
 
          {#有些widget只有班级计划才显示#}
@@ -96,5 +99,6 @@
     'link': app.request.uri,
     'imgUrl': fileurl(course_set.cover.large|default(),'course.png'),
     }%}
+
   {{ slot('course.bottom.extension', {'course': course}) }}
 {% endblock %}

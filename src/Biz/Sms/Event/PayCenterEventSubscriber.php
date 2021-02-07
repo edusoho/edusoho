@@ -4,6 +4,7 @@ namespace Biz\Sms\Event;
 
 use AppBundle\Common\StringToolkit;
 use Biz\Sms\Service\SmsService;
+use Biz\Sms\SmsType;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -15,9 +16,9 @@ class PayCenterEventSubscriber extends EventSubscriber implements EventSubscribe
      */
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             'order.pay.success' => 'onPaySuccess',
-        );
+        ];
     }
 
     public function onPaySuccess(Event $event)
@@ -28,19 +29,17 @@ class PayCenterEventSubscriber extends EventSubscriber implements EventSubscribe
 
         if ($this->getSmsService()->isOpen($smsType)) {
             $userId = $order['userId'];
-            $parameters = array();
+            $parameters = [];
             $parameters['order_title'] = $order['title'];
             $parameters['order_title'] = StringToolkit::cutter($parameters['order_title'], 20, 15, 4);
 
-            if ($targetType == 'coin') {
+            if ('coin' == $targetType) {
                 $parameters['totalPrice'] = $order['amount'].'元';
             } else {
                 $parameters['totalPrice'] = $order['totalPrice'].'元';
             }
 
-            $description = $parameters['order_title'].'成功回执';
-
-            $this->getSmsService()->smsSend($smsType, array($userId), $description, $parameters);
+            $this->getSmsService()->smsSend($smsType, [$userId], SmsType::BUY_NOTIFY, $parameters);
         }
     }
 

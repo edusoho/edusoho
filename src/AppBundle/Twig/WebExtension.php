@@ -21,6 +21,7 @@ use AppBundle\Util\CdnUrl;
 use AppBundle\Util\UploadToken;
 use Biz\Account\Service\AccountProxyService;
 use Biz\Classroom\Service\ClassroomService;
+use Biz\CloudPlatform\Service\ResourceFacadeService;
 use Biz\Common\JsonLogger;
 use Biz\Course\Service\CourseSetService;
 use Biz\InformationCollect\FormItem\FormItemFectory;
@@ -207,6 +208,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('make_local_media_file_token', [$this, 'makeLocalMediaFileToken']),
             new \Twig_SimpleFunction('information_collect_location_info', [$this, 'informationCollectLocationInfo']),
             new \Twig_SimpleFunction('information_collect_form_items', [$this, 'informationCollectFormItems']),
+            new \Twig_SimpleFunction('cloud_mail_settings', [$this, 'mailSetting']),
         ];
     }
 
@@ -2037,6 +2039,14 @@ class WebExtension extends \Twig_Extension
         return in_array($merchantSetting['coop_mode'], $this->allowedCoopMode) || !empty($merchantSetting['auth_node']['favicon']);
     }
 
+    public function mailSetting()
+    {
+        $cloudMailSwitch = $this->getSettingService()->get('cloud_email_crm', []);
+        $mailer = $this->getSettingService()->get('mailer', []);
+
+        return (isset($cloudMailSwitch['status']) && 'enable' === $cloudMailSwitch['status']) || (isset($mailer['enabled']) && $mailer['enabled']);
+    }
+
     protected function makeToken($type, $fileId, $context = [])
     {
         $fields = [
@@ -2198,6 +2208,9 @@ class WebExtension extends \Twig_Extension
         return $this->createService('ItemBank:Assessment:AssessmentService');
     }
 
+    /**
+     * @return ResourceFacadeService
+     */
     protected function getResourceFacadeService()
     {
         return $this->createService('CloudPlatform:ResourceFacadeService');

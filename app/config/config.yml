@@ -67,30 +67,17 @@ parameters:
     app.locales: en|zh_CN
 
     edusoho.activities_dir: "%kernel.root_dir%/../web/activities"
-    # 新增加的一个配置（插件的）
-    edusoho.plugins_dir: "%kernel.root_dir%/../plugins/"
     topxia.disk.local_directory: "%kernel.root_dir%/data/udisk"
     topxia.disk.upgrade_dir: "%kernel.root_dir%/data/upgrade"
     topxia.disk.update_dir: "%kernel.root_dir%/data/upgrade"
     topxia.disk.backup_dir: "%kernel.root_dir%/data/backup"
     topxia.upload.public_directory: "%kernel.root_dir%/../web/files"
-
-    # topxia.disk.local_directory: "/var/www/edusoho/data/udisk"
-    # topxia.disk.upgrade_dir: "/var/www/edusoho/data/upgrade"
-    # topxia.disk.update_dir: "/var/www/edusoho/data/upgrade"
-    # topxia.disk.backup_dir: "/var/www/edusoho/data/backup"
-    # topxia.upload.public_directory: "/var/www/edusoho/files"
-
     topxia.upload.public_url_path: "/files"
     topxia.web_themes_url_path: "/themes"
     topxia.web_assets_url_path: "/assets"
     topxia.web_bundles_url_path: "/bundles"
     front_end.web_static_dist_url_path: "/static-dist"
-
-    # topxia.upload.private_directory: "%kernel.root_dir%/data/private_files"
-    topxia.upload.private_directory: "/var/www/edusoho/data/private_files"
-
-
+    topxia.upload.private_directory: "%kernel.root_dir%/data/private_files"
     permission.path_regular_expression: ['/^\/admin/']
     router.options.matcher_dumper_class: AppBundle\SfExtend\PhpMatcherDumper
     security.authentication.provider.dao.class: AppBundle\Handler\AuthenticationProvider

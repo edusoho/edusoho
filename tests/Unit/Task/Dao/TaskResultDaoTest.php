@@ -7,6 +7,48 @@ use Tests\Unit\Base\BaseDaoTestCase;
 
 class TaskResultDaoTest extends BaseDaoTestCase
 {
+    public function testCountFinishedCompulsoryTaskNumGroupByUserId()
+    {
+        $this->mockTaskResult([
+            'userId' => 1,
+            'courseTaskId' => 1,
+            'status' => 'finish',
+        ]);
+
+        $this->mockTaskResult([
+            'userId' => 1,
+            'courseTaskId' => 2,
+            'status' => 'start',
+        ]);
+
+        $this->mockTaskResult([
+            'userId' => 2,
+            'courseTaskId' => 1,
+            'status' => 'finish',
+        ]);
+
+        $this->getTaskDao()->create([
+            'id' => 1,
+            'courseId' => 1,
+            'title' => 'task 1',
+            'type' => 'text',
+            'createdUserId' => 1,
+        ]);
+
+        $this->getTaskDao()->create([
+            'id' => 2,
+            'courseId' => 1,
+            'title' => 'task 2',
+            'type' => 'text',
+            'createdUserId' => 1,
+        ]);
+
+        $result = $this->getDao()->countFinishedCompulsoryTaskNumGroupByUserId(1);
+
+        $this->assertEquals(1, $result[0]['count']);
+        $this->assertEquals(1, $result[1]['count']);
+    }
+
     public function testFindTaskresultsByTaskId()
     {
         $expected = [];
@@ -28,6 +70,8 @@ class TaskResultDaoTest extends BaseDaoTestCase
 
     public function testAnalysisCompletedTaskDataByTime()
     {
+        $this->mockCourseTask(['id' => 3]);
+        $this->mockCourseTask(['id' => 4]);
         $expected = [];
         $expected[] = $this->mockDataObject(['activityId' => 3, 'courseTaskId' => 3, 'finishedTime' => 4000]);
         $expected[] = $this->mockDataObject(['activityId' => 4, 'courseTaskId' => 4, 'finishedTime' => 3000]);

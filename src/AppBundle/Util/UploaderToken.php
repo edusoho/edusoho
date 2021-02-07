@@ -2,11 +2,11 @@
 
 namespace AppBundle\Util;
 
+use AppBundle\Common\TimeMachine;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
 use Firebase\JWT\JWT;
 use Topxia\Service\Common\ServiceKernel;
-use AppBundle\Common\TimeMachine;
 
 /**
  * 素材库文件上传Token.
@@ -17,12 +17,12 @@ class UploaderToken
     {
         $user = $this->getCurrentUser();
         $metas = "{$user['uuid']}|{$targetType}|{$targetId}|{$bucket}";
-        $payload = array(
+        $payload = [
             'iss' => 'EduSoho',
             'aud' => 'EduSoho',
             'exp' => TimeMachine::time() + $ttl,
             'metas' => $metas,
-        );
+        ];
 
         return JWT::encode($payload, $this->getKey(), 'HS256');
     }
@@ -32,7 +32,7 @@ class UploaderToken
         if (empty($token)) {
             return null;
         }
-        $payload = JWT::decode($token, $this->getKey(), array('HS256'));
+        $payload = JWT::decode($token, $this->getKey(), ['HS256']);
         $metas = $payload->metas;
         list($uuid, $targetType, $targetId, $bucket) = explode('|', $metas);
 
@@ -41,12 +41,12 @@ class UploaderToken
             return null;
         }
 
-        return array(
+        return [
             'userId' => $user['id'],
             'targetType' => $targetType,
             'targetId' => $targetId,
             'bucket' => $bucket,
-        );
+        ];
     }
 
     private function base64Encode($data)
@@ -66,7 +66,7 @@ class UploaderToken
 
     private function getKey()
     {
-        $this->getSettingService()->get('storage', array());
+        $storage = $this->getSettingService()->get('storage', []);
         $accessKey = empty($storage['cloud_access_key']) ? '' : $storage['cloud_access_key'];
         $secretKey = empty($storage['cloud_secret_key']) ? '' : $storage['cloud_secret_key'];
 

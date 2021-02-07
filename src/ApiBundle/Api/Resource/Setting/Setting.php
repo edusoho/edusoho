@@ -19,6 +19,7 @@ class Setting extends AbstractResource
         'site', 'wap', 'register', 'payment', 'vip', 'magic', 'cdn', 'course', 'weixinConfig',
         'login', 'face', 'miniprogram', 'hasPluginInstalled', 'classroom', 'wechat', 'developer',
         'user', 'cloud', 'coin', 'coupon', 'mobile', 'appIm', 'cloudVideo', 'goods', 'backstage',
+        'mail', 'openCourse', 'article', 'group',
     ];
 
     /**
@@ -234,6 +235,7 @@ class Setting extends AbstractResource
 
         return [
             'name' => $siteSetting['name'],
+            'analytics' => $siteSetting['analytics'],
             'url' => $request->getHttpRequest()->getSchemeAndHttpHost(),
             'logo' => empty($siteSetting['logo']) ? '' : $siteSetting['url'].'/'.$siteSetting['logo'],
         ];
@@ -376,6 +378,8 @@ class Setting extends AbstractResource
             'show_review' => isset($courseSetting['show_review']) ? intval($courseSetting['show_review']) : 1,
             'show_question' => isset($courseSetting['show_question']) ? intval($courseSetting['show_question']) : 1,
             'show_discussion' => isset($courseSetting['show_discussion']) ? intval($courseSetting['show_discussion']) : 1,
+            'show_note' => isset($courseSetting['show_note']) ? intval($courseSetting['show_note']) : 1,
+            'allow_anonymous_preview' => isset($courseSetting['allowAnonymousPreview']) ? intval($courseSetting['allowAnonymousPreview']) : 1,
         ];
     }
 
@@ -442,6 +446,7 @@ class Setting extends AbstractResource
             'show_student_num_enabled' => isset($classroomSetting['show_student_num_enabled']) ? (bool) $classroomSetting['show_student_num_enabled'] : true,
             'show_review' => isset($classroomSetting['show_review']) ? (bool) $classroomSetting['show_review'] : true,
             'show_thread' => isset($classroomSetting['show_thread']) ? (bool) $classroomSetting['show_thread'] : true,
+            'show_note' => isset($classroomSetting['show_note']) ? (bool) $classroomSetting['show_note'] : true,
         ];
     }
 
@@ -468,6 +473,41 @@ class Setting extends AbstractResource
         $couponSetting = array_merge($default, $couponSetting);
 
         return $couponSetting;
+    }
+
+    public function getMail()
+    {
+        $cloudEmailCrm = $this->getSettingService()->get('cloud_email_crm', []);
+        $mailer = $this->getSettingService()->get('mailer', []);
+
+        return ['enabled' => (isset($cloudEmailCrm['status']) && 'enable' === $cloudEmailCrm['status']) || (isset($mailer['enabled']) && $mailer['enabled'])];
+    }
+
+    public function getOpenCourse()
+    {
+        $openCourseSetting = $this->getSettingService()->get('openCourse', []);
+
+        return [
+            'show_comment' => isset($openCourseSetting['show_comment']) ? intval($openCourseSetting['show_comment']) : 1,
+        ];
+    }
+
+    public function getArticle()
+    {
+        $articleSetting = $this->getSettingService()->get('article', []);
+
+        return [
+            'show_comment' => isset($articleSetting['show_comment']) ? intval($articleSetting['show_comment']) : 1,
+        ];
+    }
+
+    public function getGroup()
+    {
+        $groupSetting = $this->getSettingService()->get('group', []);
+
+        return [
+            'group_show' => isset($groupSetting['group_show']) ? intval($groupSetting['group_show']) : 1,
+        ];
     }
 
     private function getLoginConnect($clients)

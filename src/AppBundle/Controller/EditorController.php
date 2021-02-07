@@ -2,16 +2,16 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Common\Exception\FileToolkitException;
-use AppBundle\Util\UploadToken;
 use AppBundle\Common\CurlToolkit;
+use AppBundle\Common\Exception\FileToolkitException;
 use AppBundle\Common\FileToolkit;
+use AppBundle\Util\UploadToken;
 use Biz\Common\CommonException;
 use Biz\Content\FileException;
 use Biz\Content\Service\FileService;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\File\File;
 
 class EditorController extends BaseController
 {
@@ -57,13 +57,10 @@ class EditorController extends BaseController
             $record = $this->getFileService()->uploadFile($token['group'], $file);
 
             $parsed = $this->getFileService()->parseFileUri($record['uri']);
-            FileToolkit::reduceImgQuality($parsed['fullpath'], 7);
-
-            //$url    = $this->get('web.twig.extension')->getFilePath($record['uri']);
             $url = rtrim($this->container->getParameter('topxia.upload.public_url_path'), ' /').DIRECTORY_SEPARATOR.$parsed['path'];
 
             if ($isWebuploader) {
-                return $this->createJsonResponse(array('url' => $url));
+                return $this->createJsonResponse(['url' => $url]);
             } else {
                 $funcNum = $request->query->get('CKEditorFuncNum');
 
@@ -79,7 +76,7 @@ class EditorController extends BaseController
             $message = $this->trans($e->getMessage());
 
             if ($isWebuploader) {
-                return $this->createJsonResponse(array('message' => $message));
+                return $this->createJsonResponse(['message' => $message]);
             } else {
                 $funcNum = $request->query->get('CKEditorFuncNum');
                 $response = "<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction({$funcNum}, '', '{$message}');</script>";
@@ -118,18 +115,18 @@ class EditorController extends BaseController
 
             $url = rtrim($this->container->getParameter('topxia.upload.public_url_path'), ' /').DIRECTORY_SEPARATOR.$parsed['path'];
 
-            return $this->createJsonResponse(array(
+            return $this->createJsonResponse([
                 'uploaded' => 1,
                 'url' => $url,
                 'fileName' => '',
-            ));
+            ]);
         } catch (\Exception $e) {
-            return $this->createJsonResponse(array(
+            return $this->createJsonResponse([
                 'uploaded' => 0,
-                'error' => array(
+                'error' => [
                     'message' => $e->getMessage(),
-                ),
-            ));
+                ],
+            ]);
         }
     }
 
@@ -153,7 +150,7 @@ class EditorController extends BaseController
         $name = date('Ymdhis').'_formula.jpg';
         $path = $this->get('service_container')->getParameter('topxia.upload.public_directory').'/tmp/'.$name;
 
-        $imageData = CurlToolkit::request('POST', $url, array(), array('contentType' => 'plain'));
+        $imageData = CurlToolkit::request('POST', $url, [], ['contentType' => 'plain']);
 
         $tp = @fopen($path, 'a');
         fwrite($tp, $imageData);

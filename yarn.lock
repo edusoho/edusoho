@@ -3325,10 +3325,10 @@ es-ckeditor@4.7.2-patch13:
   version "4.7.2-patch13"
   resolved "https://registry.yarnpkg.com/es-ckeditor/-/es-ckeditor-4.7.2-patch13.tgz#a740df84a7d2e952f352fe727e1565409f1d0e1d"
 
-es-ckeditor@4.7.2-patch15:
-  version "4.7.2-patch15"
-  resolved "https://registry.yarnpkg.com/es-ckeditor/-/es-ckeditor-4.7.2-patch15.tgz#f21f2b6b02b987c5e325cb6f1c290f7c2d0d36a7"
-  integrity sha512-+qzyHIEc3sJIfHLObYPMJDn4IiZHwld1U4rUOOKNgyKqr17ltKeUOgz5pX2Rk9ou6tDG0ntQp0+8lxiPDa/LYA==
+es-ckeditor@4.7.2-patch16:
+  version "4.7.2-patch16"
+  resolved "https://registry.yarnpkg.com/es-ckeditor/-/es-ckeditor-4.7.2-patch16.tgz#1b100bce382478099452c241a7c709cacb3815e8"
+  integrity sha512-rfLVCWRYespVllrHGcts7D4urSUSMbXHWx2EWJGlkvZCvcfIVBDEJP5E6uIYE5dlzOtgD7ExrfJtfWgvfNGCWQ==
 
 es-commit-msg-validator@1.0.2:
   version "1.0.2"
@@ -8311,11 +8311,6 @@ split-string@^3.0.1, split-string@^3.0.2:
   resolved "https://registry.yarnpkg.com/split-string/-/split-string-3.1.0.tgz#7cb09dda3a86585705c64b39a6466038682e8fe2"
   dependencies:
     extend-shallow "^3.0.0"
-
-split.js@^1.6.2:
-  version "1.6.2"
-  resolved "https://registry.yarnpkg.com/split.js/-/split.js-1.6.2.tgz#b8c63aeef2b15d84a003ead09e7def6ad166bb40"
-  integrity sha512-72C7zcQePzlmWqPOKkB2Ro0sUmnWSx+qEWXjLJKk6Qp4jAkFRz1hJgJb+ay6ZQyz/Aw9r8N/PZiCEKbPVpFoDQ==
 
 split@0.3:
   version "0.3.3"

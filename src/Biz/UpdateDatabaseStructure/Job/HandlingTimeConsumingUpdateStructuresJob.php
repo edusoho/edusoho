@@ -15,7 +15,19 @@ class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
      */
     public function execute()
     {
+        /*
+         *  Table  activity_learn_daily
+         *  Column mediaType
+         */
+        $this->createField('activity_learn_daily', 'mediaType', "ALTER TABLE `activity_learn_daily` ADD COLUMN `mediaType` varchar(32) NOT NULL DEFAULT '' COMMENT '教学活动类型' AFTER `courseSetId`;");
+
         $this->addTableIndex();
+
+        /*
+         *  Table  course_member
+         *  Column learnedElectiveTaskNum
+         */
+        $this->createField('course_member', 'learnedElectiveTaskNum', "ALTER TABLE `course_member` ADD COLUMN `learnedElectiveTaskNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '已学习的选修任务数量' AFTER `learnedCompulsoryTaskNum`;");
     }
 
     protected function addTableIndex()
@@ -187,6 +199,13 @@ class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
          *  Column lessonId, type
          */
         $this->createIndex('course_material_v8', 'lessonId_type', 'lessonId, type');
+
+        /*
+         *  Table  course_task_result
+         *  Index  courseId_status
+         *  Column courseId, status
+         */
+        $this->createIndex('course_task_result', 'courseId_status', 'courseId, status');
     }
 
     protected function changeTableFiledType()
@@ -223,6 +242,25 @@ class HandlingTimeConsumingUpdateStructuresJob extends AbstractJob
         } catch (\Exception $e) {
             $this->getLogService()->error('job', 'create_index', '索引创建失败:'.$e->getMessage());
         }
+    }
+
+    protected function createField($table, $fieldName, $sql)
+    {
+        try {
+            if (!$this->isFieldExist($table, $fieldName)) {
+                $this->getConnection()->exec($sql);
+            }
+        } catch (\Exception $e) {
+            $this->getLogService()->error('job', 'create_field', '字段创建失败:'.$e->getMessage());
+        }
+    }
+
+    protected function isFieldExist($table, $fieldName)
+    {
+        $sql = "DESCRIBE `{$table}` `{$fieldName}`;";
+        $result = $this->getConnection()->fetchAssoc($sql);
+
+        return empty($result) ? false : true;
     }
 
     protected function createUniqueIndex($table, $index, $column)

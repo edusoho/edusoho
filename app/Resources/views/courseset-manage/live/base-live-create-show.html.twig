@@ -2,10 +2,10 @@
 
 {% if liveAccount.error is defined %}
   <div class="course-select disabled" data-toggle="tooltip" data-placement="top" title="{{'my.teaching.course_set.select_type.live_open_course.not_purchase_live'|trans}}" data-type="{{ type }}">
-{# {% elseif not setting('live-course.live_course_enabled') %}
+{% elseif not setting('live-course.live_course_enabled') %}
   <div class="course-select disabled" data-toggle="tooltip" data-placement="top" title="{{'my.teaching.course_set.select_type.live_open_course.available_after_open'|trans}}" data-type="{{ type }}">
 {% elseif liveAccount.isExpired %}
-  <div class="course-select disabled" data-toggle="tooltip" data-placement="top" title="{{'my.teaching.course_set.select_type.live_open_course.valid_service'|trans}}" data-type="{{ type }}"> #}
+  <div class="course-select disabled" data-toggle="tooltip" data-placement="top" title="{{'my.teaching.course_set.select_type.live_open_course.valid_service'|trans}}" data-type="{{ type }}">
 {% else %}
   <div class="course-select js-courseSetType {% if defaultType|default('normal') == type %}active{% endif %}" data-type="{{ type }}">
 {% endif %}

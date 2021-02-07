@@ -203,10 +203,10 @@ class ActivityServiceImpl extends BaseService implements ActivityService
         }
 
         $materials = $this->getMaterialsFromActivity($fields);
+
         $fields['fromUserId'] = $this->getCurrentUser()->getId();
         $fields = $this->filterFields($fields);
         $fields['createdTime'] = time();
-
 
         $activity = $this->getActivityDao()->create($fields);
 

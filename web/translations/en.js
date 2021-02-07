@@ -328,6 +328,7 @@ t.add("activity.video_manage.second_range_error_hint", "Seconds between 0-59", "
 t.add("activity.video_manage.media_error_hint", "Please upload or select a video file", "js", "en");
 t.add("activity.video.try_watch_finish_hint", "Free trial end, purchase and watch the complete video", "js", "en");
 t.add("activity.manage.choose_teacher_hint", "Please choose a teacher", "js", "en");
+t.add("activity.manage.finished_tips", "<span class=\"color-primary\">Congratulations! You have completed this task<\/span>\n", "js", "en");
 t.add("announcement.delete_hint", "Really want to delete the announcement?", "js", "en");
 t.add("auth.login_bind_choose.service_agreement_hint", "Check to agree to this service agreement before continue to register!", "js", "en");
 t.add("auth.login_bind_choose.login_success_hint", "Log in successfully, redirecting to the homepage!", "js", "en");
@@ -692,6 +693,7 @@ t.add("validate.user_terms.message", "Check to agree to this service agreement i
 t.add("validate.visible_character.message", "Not allowed to enter invisible characters, such as spaces", "js", "en");
 t.add("validate.tag_required_hint", "Please input tags", "js", "en");
 t.add("validate.tag_required_not_found_hint", "The tag is not found, please call the administrator to set it through [Management Background] - [Teaching] - [Classification Label] - [Label Management].", "js", "en");
+t.add("validate.tag_number_exceeds_limit", "You can only add %limit% items", "js", "en");
 t.add("validate.valid_score_input.message", "Please enter the correct decimals, leaving only ONE decimal places", "js", "en");
 t.add("validate.modify_date", "Please enter the date of modification", "js", "en");
 t.add("validate.modify_days", "Please enter the number of days modified", "js", "en");
@@ -1157,6 +1159,9 @@ t.add("admin.site.upload_favicon_success_hint", "Upload site favicon successfull
 t.add("admin.site.delete_favicon_success_hint", "Delete site favicon successfully!", "js", "en");
 t.add("admin.site.delete_favicon_fail_hint", "Delete site favicon failed!", "js", "en");
 t.add("admin.site.delete_hint", "Are you sure you want to delete?", "js", "en");
+t.add("admin.site.upload_record_picture_success_hint", "Uploaded the public security record icon successfully!", "js", "en");
+t.add("admin.site.delete_record_picture_success_hint", "Successfully deleted the public security record icon!", "js", "en");
+t.add("admin.site.delete_record_picture_fail_hint", "Failed to delete the public security record icon!", "js", "en");
 t.add("admin.setting.upload_license_picture_success_hint", "Successfully uploaded the electronic business license picture!", "js", "en");
 t.add("admin.setting.delete_license_picture_success_hint", "Successfully delete the electronic business license picture!", "js", "en");
 t.add("admin.setting.delete_license_picture_fail_hint", "Failed to delete electronic business license picture!", "js", "en");
@@ -1274,6 +1279,7 @@ t.add("admin.item_bank_exercise.exercise.cancel_recommend_success_hint", "The it
 t.add("admin.item_bank_exercise.exercise.publish_hint", "Are you sure you want to publish the current exercise?", "js", "en");
 t.add("admin.item_bank_exercise.exercise.publish_success_hint", "The item bank exercise recommendation has been published!", "js", "en");
 t.add("admin.item_bank_exercise.exercise.delete_hint", "Delete item bank exercises, delete module settings, trainees and other information. Do you really want to delete this exercise bank?", "js", "en");
+t.add("exercise.manage.student_delete_hint", "Are you sure you want to delete the student.", "js", "en");
 t.add("task_show.user_login_protect_tip", "User unLogin", "js", "en");
 t.add("admin.course_manage.manage.tags_select.placeholder", "Enter the keyword of the tag", "js", "en");
 t.add("exception.common_frequent_operation", "The operation is too frequent, please try again later", "js", "en");
@@ -1475,11 +1481,12 @@ t.add("admin_v2.information_collect.chooser.items.hint", "Please select form ite
 t.add("user.fields.gender_label", "Gender", "js", "en");
 t.add("information_collect.form.check_age_invalid", "Age Invalid", "js", "en");
 t.add("information_collect.form.check_format_invalid", "%display% Invalid", "js", "en");
-t.add("admin_v2.video_effective_time_setting.cancel.hint", "After the statistical dimension of video class learning time changes, the statistics of the whole station will be generated according to the new statistical rules, and the statistics of learning time generated before the change of rules will not be changed with the new rules.It is suggested that you do not change the statistical dimension of data frequently. <br\/>Do you confirm to change the statistical dimension of learning time this time?", "js", "en");
+t.add("admin_v2.video_effective_time_setting.cancel.hint", "After the statistical dimension is changed, data will be generated according to the new dimension. This may result in large changes in data, which is normal. If it is not necessary, it is not recommended that you change the configuration frequently. If necessary, it is recommended that you make changes at night, and it is expected that the update will be completed within 3 hours after the change.<br\/>Do you confirm to change the statistical dimension of learning time?", "js", "en");
 t.add("admin_v2.video_effective_time_setting.play_rule.auto_pause.help_block", "When the system detects that the user is not focusing on learning, the PC side will automatically suspend the current play", "js", "en");
 t.add("admin_v2.video_effective_time_setting.play_rule.no_action.help_block", "When the system detects that the user is not focusing on learning, the PC side will continue to maintain the current play", "js", "en");
 t.add("admin_v2.video_effective_time_setting.statistical_dimension.playing.help_block", "The actual playing time was taken as the learning time statistics", "js", "en");
 t.add("admin_v2.video_effective_time_setting.statistical_dimension.page.help_block", "The page stay time is taken as the learning time statistics", "js", "en");
+t.add("admin_v2.video_effective_time_setting.refreshing_hint", "Please do not change the configuration frequently while the data is being updated", "js", "en");
 t.add("course.marketing_setup", "Markets", "js", "en");
 t.add("site.currency.CNY", "CNY", "js", "en");
 t.add("s2b2c.product.cooperation_price", "Cooperation Price", "js", "en");
@@ -1494,6 +1501,7 @@ t.add("course.marketing_setup.rule.expiry_date", "Learn expiry date", "js", "en"
 t.add("course.marketing_setup.rule.expiry_date_tips", "Students can Learn before the date", "js", "en");
 t.add("course.marketing_setup.rule.expiry_date.publish_tips", "Students can Learn in several days since the enrollment.", "js", "en");
 t.add("course.plan_task.start_time", "Start date", "js", "en");
+t.add("course.plan_task.end_time", "End date", "js", "en");
 t.add("course.marketing_setup.rule.expiry_date.first_publish_tips", "Once the teaching plan is pubished, the validity period cannot be modified. You can only modify the date when the course or teaching plan is closed, and the new validity period is only valid for the students who have joined after the modification.", "js", "en");
 t.add("course.marketing_setup.approval", "Id verification", "js", "en");
 t.add("course.marketing_setup.approval_tips", "If this is chosen, student must verify their id before enrollment.", "js", "en");

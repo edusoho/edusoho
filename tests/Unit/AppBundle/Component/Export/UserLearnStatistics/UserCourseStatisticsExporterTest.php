@@ -20,7 +20,6 @@ class UserCourseStatisticsExporterTest extends BaseTestCase
             'course.name',
             'user.learn.statistics.course',
             'user.learn.statistics.sum_learn_time',
-            'user.learn.statistics.pure_learn_time',
             'user.learn.statistics.task_num',
             'user.learn.statistics.finish_task_num',
             'user.learn.statistics.finish_rate',
@@ -107,7 +106,7 @@ class UserCourseStatisticsExporterTest extends BaseTestCase
                 [
                     'functionName' => 'findCoursesByCourseSetIds',
                     'returnValue' => [
-                        ['id' => 1, 'title' => 'courseTitle', 'taskNum' => 5],
+                        ['id' => 1, 'title' => 'courseTitle', 'compulsoryTaskNum' => 5],
                     ],
                 ],
             ]
@@ -129,9 +128,9 @@ class UserCourseStatisticsExporterTest extends BaseTestCase
                 [
                     'functionName' => 'searchCoursePlanLearnDailyData',
                     'returnValue' => [
-                        ['userId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'sumTime' => 300, 'pureTime' => 120],
-                        ['userId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'sumTime' => 300, 'pureTime' => 120],
-                        ['userId' => 2, 'courseId' => 1, 'courseSetId' => 1, 'sumTime' => 300, 'pureTime' => 120],
+                        ['userId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'sumTime' => 300],
+                        ['userId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'sumTime' => 300],
+                        ['userId' => 2, 'courseId' => 1, 'courseSetId' => 1, 'sumTime' => 300],
                     ],
                 ],
             ]
@@ -140,8 +139,8 @@ class UserCourseStatisticsExporterTest extends BaseTestCase
         $exporter = new UserCourseStatisticsExporter(self::$appKernel->getContainer(), [
         ]);
         $courseMembers = [
-            ['userId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'learnedNum' => 3, 'classroomId' => 1],
-            ['userId' => 2, 'courseId' => 1, 'courseSetId' => 1, 'learnedNum' => 0, 'classroomId' => 0],
+            ['userId' => 1, 'courseId' => 1, 'courseSetId' => 1, 'learnedCompulsoryTaskNum' => 3, 'classroomId' => 1],
+            ['userId' => 2, 'courseId' => 1, 'courseSetId' => 1, 'learnedCompulsoryTaskNum' => 0, 'classroomId' => 0],
         ];
         $data = ReflectionUtils::invokeMethod($exporter, 'findCourseMemberData', [$courseMembers]);
 
@@ -163,7 +162,6 @@ class UserCourseStatisticsExporterTest extends BaseTestCase
                 'courseSetName' => 'test',
                 'courseName' => 'test',
                 'sumTime' => 120,
-                'pureTime' => 60,
                 'taskNum' => 5,
                 'finishTaskNum' => 2,
                 'finishRate' => 40,
@@ -171,7 +169,7 @@ class UserCourseStatisticsExporterTest extends BaseTestCase
         ];
         $data = ReflectionUtils::invokeMethod($exporter, 'handleStatistics', [$users, $courseMemberData]);
 
-        $this->assertArrayEquals(['test', '11123455678', 'test', 'test', 'test', 120, 60, 5, 2, '40%'], $data[0]);
+        $this->assertArrayEquals(['test', '11123455678', 'test', 'test', 'test', 120, 5, 2, '40%'], $data[0]);
     }
 
     public function testGetContent()

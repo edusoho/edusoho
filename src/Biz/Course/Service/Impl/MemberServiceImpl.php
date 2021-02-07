@@ -318,6 +318,11 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function updateMember($id, $fields)
     {
+        // learnedElectiveTaskNum是通过定时任务添加的所以需要做判断
+        if (!$this->getMemberDao()->isFieldExist('learnedElectiveTaskNum') && isset($fields['learnedElectiveTaskNum'])) {
+            unset($fields['learnedElectiveTaskNum']);
+        }
+
         return $this->getMemberDao()->update($id, $fields);
     }
 
@@ -342,7 +347,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             return $vipNonExpired;
         }
 
-        if ($member['deadline'] > time()) {
+        if ($member['deadline'] > time() && $course['expiryStartDate'] < time()) {
             return $vipNonExpired;
         } else {
             return false;
@@ -1332,6 +1337,43 @@ class MemberServiceImpl extends BaseService implements MemberService
         ];
 
         return $this->getMemberDao()->count($conditions);
+    }
+
+    public function recountLearningDataByCourseId($courseId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+        if (empty($course)) {
+            return;
+        }
+
+        $members = ArrayToolkit::index(
+            $this->searchMembers(['courseId' => $courseId, 'role' => 'student'], [], 0, PHP_INT_MAX, ['id', 'userId', 'lastLearnTime']),
+            'userId'
+        );
+        if (empty($members)) {
+            return;
+        }
+
+        $updateMembers = [];
+        $finishedTaskNums = $this->getTaskResultService()->countTaskNumGroupByUserId(['status' => 'finish', 'courseId' => $courseId]);
+        $finishedCompulsoryTaskNums = $this->getTaskResultService()->countFinishedCompulsoryTaskNumGroupByUserId($courseId);
+        foreach ($members as $member) {
+            $learnedNum = empty($finishedTaskNums[$member['userId']]) ? 0 : $finishedTaskNums[$member['userId']]['count'];
+            $learnedCompulsoryTaskNum = empty($finishedCompulsoryTaskNums[$member['userId']]) ? 0 : $finishedCompulsoryTaskNums[$member['userId']]['count'];
+            $updateMember = [
+                'id' => $member['id'],
+                'learnedNum' => $learnedNum,
+                'learnedCompulsoryTaskNum' => $learnedCompulsoryTaskNum,
+                'finishedTime' => $course['compulsoryTaskNum'] > 0 && $course['compulsoryTaskNum'] <= $learnedCompulsoryTaskNum ? $member['lastLearnTime'] : 0,
+            ];
+            // learnedElectiveTaskNum是通过定时任务添加的所以需要做判断
+            if ($this->getMemberDao()->isFieldExist('learnedElectiveTaskNum')) {
+                $updateMember['learnedElectiveTaskNum'] = $learnedNum - $learnedCompulsoryTaskNum;
+            }
+            $updateMembers[] = $updateMember;
+        }
+
+        $this->getMemberDao()->batchUpdate(ArrayToolkit::column($updateMembers, 'id'), $updateMembers);
     }
 
     protected function createOrder($goodsSpecsId, $userId, $data)

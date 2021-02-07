@@ -118,6 +118,7 @@ class TaskController extends BaseController
         }
 
         $learnControlSetting = $this->getLearnControlService()->getMultipleLearnSetting();
+
         return $this->render(
             'task/show.html.twig',
             [
@@ -456,10 +457,12 @@ class TaskController extends BaseController
             }
 
             $conditions = empty($installedActivity['finish_condition']) ? [] : ArrayToolkit::index($installedActivity['finish_condition'], 'type');
+            $taskResult = $this->getTaskResultService()->getTaskResultByTaskIdAndUserId($task['id'], $this->getCurrentUser()->getId());
 
             return $this->render('task/finish-tip.html.twig', [
                 'activity' => $activity,
                 'conditions' => $conditions,
+                'taskResult' => $taskResult,
             ]);
         }
 
@@ -564,6 +567,7 @@ class TaskController extends BaseController
         if ($task['courseId'] != $courseId) {
             $this->createNewException(TaskException::ACCESS_DENIED());
         }
+
         return $task;
     }
 
@@ -613,6 +617,17 @@ class TaskController extends BaseController
             || (
                 'end_date' === $course['expiryMode'] && $course['expiryEndDate'] < time()
             );
+    }
+
+    private function canManageCourse($courseId)
+    {
+        try {
+            $this->getCourseService()->tryManageCourse($courseId);
+
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
     /**

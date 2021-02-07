@@ -242,8 +242,9 @@ class CourseController extends BaseController
 
         $exportTasks = [];
         foreach ($originaTasks as $task) {
+            $taskTitle = '1' == $task['isOptional'] ? $task['title'].'【'.$this->trans('admin.course_manage.statistics.optional_task').'】' : $task['title'];
             $exportTask = [
-                $task['title'],
+                $taskTitle,
                 $this->trans('course.activity.'.$task['type']),
                 'video' == $task['type'] ? $task['length'] : '--',
                 empty($task['studentNum']) ? 0 : $task['studentNum'],

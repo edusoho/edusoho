@@ -3,10 +3,8 @@ parameters:
         debug: "%kernel.debug%"
         db.options: "%biz_db_options%"
         root_directory: "%kernel.root_dir%/../"
-
         cache_directory: "%kernel.cache_dir%"
         log_directory: "%kernel.logs_dir%"
-
         kernel.root_dir: "%kernel.root_dir%"
         plugin.directory: "%kernel.root_dir%/../plugins"
         theme.directory: "%kernel.root_dir%/../web/themes"

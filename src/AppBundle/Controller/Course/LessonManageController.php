@@ -8,6 +8,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\LessonService;
 use Biz\File\Service\UploadFileService;
+use Biz\System\Service\SettingService;
 use Symfony\Component\HttpFoundation\Request;
 
 class LessonManageController extends BaseController
@@ -20,12 +21,15 @@ class LessonManageController extends BaseController
 
         if ($request->isMethod('POST')) {
             $formData = $request->request->all();
+
             $formData['_base_url'] = $request->getSchemeAndHttpHost();
             $formData['fromUserId'] = $this->getUser()->getId();
             $formData['fromCourseSetId'] = $course['courseSetId'];
             $formData['redoInterval'] = empty($formData['redoInterval']) ? 0 : $formData['redoInterval'] * 60;
+
             $formData = array_merge($this->getDefaultFinishCondition($formData['mediaType']), $formData);
             list($lesson, $task) = $this->getCourseLessonService()->createLesson($formData);
+
             return $this->getTaskJsonView($course, $task);
         }
 
@@ -36,10 +40,19 @@ class LessonManageController extends BaseController
     {
         $activityConfigManager = $this->get('activity_config_manager');
         $activityConfig = $activityConfigManager->getInstalledActivity($mediaType);
+
         if (empty($activityConfig['finish_condition'])) {
             return [];
         }
-        $finishCondition = reset($activityConfig['finish_condition']);
+
+        if ('video' === $mediaType) {
+            $setting = $this->getSettingService()->get('videoEffectiveTimeStatistics');
+            $finishType = empty($setting) ? 'end' : ('playing' === $setting['statistical_dimension'] ? 'watchTime' : 'time');
+            $activityFinishConditions = array_column($activityConfig['finish_condition'], null, 'type');
+            $finishCondition = $activityFinishConditions[$finishType];
+        } else {
+            $finishCondition = reset($activityConfig['finish_condition']);
+        }
 
         return [
             'finishType' => $finishCondition['type'],
@@ -211,6 +224,7 @@ class LessonManageController extends BaseController
         if (empty($taskJsonData)) {
             return $this->createJsonResponse(false);
         }
+
         return $this->createJsonResponse($this->renderView(
             $taskJsonData['template'],
             $taskJsonData['data']
@@ -252,5 +266,13 @@ class LessonManageController extends BaseController
     protected function getUploadFileService()
     {
         return $this->createService('File:UploadFileService');
+    }
+
+    /**
+     * @return SettingService
+     */
+    protected function getSettingService()
+    {
+        return $this->createService('System:SettingService');
     }
 }

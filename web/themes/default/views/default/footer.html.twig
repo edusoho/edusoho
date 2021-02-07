@@ -13,12 +13,27 @@
       <a href="/">{{ setting('site.copyright') }}</a>{{ '所有'|trans }}
       {% endif %}&nbsp;
       {% if setting('site.icp') %}
-        <a href={{ setting('site.icpUrl')|default('http://www.beian.miit.gov.cn') }} target="_blank">{{ setting('site.icp') }}</a>
+        <a href={{ setting('site.icpUrl')|default('https://beian.miit.gov.cn') }} target="_blank">{{ setting('site.icp') }}</a>
       {% endif %}
     </div>
 
     <div class="pull-right mhs"><a href="{{ path('course_set_archive') }}">{{ '课程存档'|trans }}</a></div>
     <div class="text-gray" data-role="default-foot-bar" id="license-footer">
+      {% if setting('site.recordCode') |default('') %}
+        <div class="mlm">
+          <a class="license-picture">
+            <img src="{% if setting('site.recordPicture') %}{{ asset(setting('site.recordPicture')) }}
+                    {% else %}{{ filepath('','gongan.png' ) }}{% endif %}" style="width: 20px;height: 20px;">
+          </a>
+          <a class="mlm" {% if setting('site.recordUrl') |default('') %}
+            href="{{ setting('site.recordUrl') }}"
+          {% endif %}
+             target="_blank">
+            {{ setting('site.recordCode') }}
+          </a>
+        </div>
+      {% endif %}
+
       {% if setting('license.license_picture') and setting('license.license_name') %}
         {% if setting('license.license_url') %}
           <a id="license-picture" href={{ setting('license.license_url')| default('/') }} target="_blank">

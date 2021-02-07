@@ -2,24 +2,24 @@
 
 namespace Biz\Coupon\Event;
 
+use AppBundle\Common\MathToolkit;
+use Biz\Coupon\Service\CouponBatchService;
 use Biz\Coupon\Service\CouponService;
 use Biz\Sms\SmsType;
 use Biz\System\Service\SettingService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
-use Biz\Coupon\Service\CouponBatchService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use AppBundle\Common\MathToolkit;
 
 class CouponEventSubscriber extends EventSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             'coupon.use' => 'onCouponUse',
             'coupon.receive' => 'onCouponReceive',
             'coupon.append' => 'onCouponAppend',
-        );
+        ];
     }
 
     public function onCouponUse(Event $event)
@@ -31,13 +31,13 @@ class CouponEventSubscriber extends EventSubscriber implements EventSubscriberIn
         }
 
         $usedCount = $this->getCouponService()->searchCouponsCount(
-            array('status' => 'used', 'batchId' => $coupon['batchId'])
+            ['status' => 'used', 'batchId' => $coupon['batchId']]
         );
         $allDiscount = $this->getCouponBatchService()->sumDeductAmountByBatchId($coupon['batchId']);
 
         $this->getCouponBatchService()->updateBatch(
             $coupon['batchId'],
-            array('usedNum' => $usedCount, 'money' => MathToolkit::simple($allDiscount, 0.01))
+            ['usedNum' => $usedCount, 'money' => MathToolkit::simple($allDiscount, 0.01)]
         );
     }
 
@@ -45,7 +45,7 @@ class CouponEventSubscriber extends EventSubscriber implements EventSubscriberIn
     {
         $batch = $event->getSubject();
 
-        $inviteSetting = $this->getSettingService()->get('invite', array());
+        $inviteSetting = $this->getSettingService()->get('invite', []);
         if (empty($inviteSetting['remain_number']) || $batch['unreceivedNum'] < $inviteSetting['remain_number']) {
             return;
         }
@@ -67,12 +67,12 @@ class CouponEventSubscriber extends EventSubscriber implements EventSubscriberIn
         $batch = $event->getSubject();
         $batch = $this->getCouponBatchService()->getBatch($batch['id']);
 
-        $smsSetting = $this->getSettingService()->get('cloud_sms', array());
+        $smsSetting = $this->getSettingService()->get('cloud_sms', []);
         if (empty($smsSetting['sms_enabled'])) {
             return;
         }
 
-        $inviteSetting = $this->getSettingService()->get('invite', array());
+        $inviteSetting = $this->getSettingService()->get('invite', []);
         if (empty($inviteSetting['invite_code_setting']) || empty($inviteSetting['mobile'])) {
             return;
         }
@@ -104,22 +104,22 @@ class CouponEventSubscriber extends EventSubscriber implements EventSubscriberIn
 
     private function sendSms($type, $batch)
     {
-        $inviteSetting = $this->getSettingService()->get('invite', array());
+        $inviteSetting = $this->getSettingService()->get('invite', []);
 
-        $templateParams = array(
+        $templateParams = [
             'activity_name' => '邀请注册',
             'reward_name' => $batch['name'],
-        );
+        ];
 
         if (0 != $batch['unreceivedNum']) {
             $templateParams['remain'] = $batch['unreceivedNum'];
         }
 
-        $smsParams = array(
+        $smsParams = [
             'mobiles' => $inviteSetting['mobile'],
             'templateId' => $type,
             'templateParams' => $templateParams,
-        );
+        ];
 
         try {
             $this->getSDKSmsService()->sendToOne($smsParams);
@@ -156,6 +156,6 @@ class CouponEventSubscriber extends EventSubscriber implements EventSubscriberIn
     {
         $biz = $this->getBiz();
 
-        return $biz['qiQiuYunSdk.sms'];
+        return $biz['ESCloudSdk.sms'];
     }
 }

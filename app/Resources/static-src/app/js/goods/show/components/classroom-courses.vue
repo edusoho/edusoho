@@ -2,7 +2,7 @@
   <div class="classroom-task">
     <div class="classroom-task__item" v-for="course in courses" :key="course.id" @click="clickCourse(course)">
       <div class="task-banner">
-        <img :src="course.courseSet.cover.small" alt="">
+        <img :src="course.courseSet.cover.middle" alt="">
       </div>
       <div class="task-content">
         <p class="task-content__title text-overflow">{{ course.courseSet.title }}</p>
@@ -52,7 +52,7 @@
                 this.page += 1;
             },
             clickCourse: function(course) {
-                window.open('/my/course/'+course.id);
+                window.open('/course/'+course.id);
             }
         },
         filters: {

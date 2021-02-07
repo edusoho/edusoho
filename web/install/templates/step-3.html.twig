@@ -1,0 +1,146 @@
+{% extends "layout.html.twig" %}
+
+{% block main %}
+  {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+  {% endif %}
+
+  <form class="form-horizontal" id="init-form" method="post">
+
+    <div class="form-group">
+      <label for="sitename-field" class="col-sm-4 control-label">网站名称</label>
+      <div class="controls col-sm-5">
+        <input type="text" class="form-control" id="sitename-field" name="sitename" value="{{ request.sitename|default('') }}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="email-field" class="col-sm-4 control-label">管理员Email地址</label>
+      <div class="controls col-sm-5">
+        <input type="text" class="form-control" id="email-field" name="email" value="{{ request.email|default('') }}">
+        <p class="help-block">Email地址作为帐号，用于登录网站</p>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="nickname-field" class="col-sm-4 control-label">管理员用户名</label>
+      <div class="controls col-sm-5">
+        <input type="text" class="form-control" id="nickname-field" name="nickname" value="{{ request.nickname|default('') }}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="password-field" class="col-sm-4 control-label">管理员密码</label>
+      <div class="controls col-sm-5">
+        <input type="text" class="form-control" id="password-field" name="password" value="{{ request.password|default('') }}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="truename-field" class="col-sm-4 control-label">网站负责人姓名</label>
+      <div class="controls col-sm-5">
+        <input type="text" class="form-control" id="truename-field" name="truename" value="{{ request.truename|default('') }}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="mobile-field" class="col-sm-4 control-label">手机号码 </label>
+      <div class="controls col-sm-5">
+        <input type="text" class="form-control" id="mobile-field" name="mobile" value="{{ request.mobile|default('') }}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="qq-field" class="col-sm-4 control-label">QQ号码</label>
+      <div class="controls col-sm-5">
+        <input type="text" class="form-control" id="qq-field" name="qq" value="{{ request.qq|default('') }}">
+      </div>
+    </div>
+
+    <div class="actions">
+      <button type="submit" id="init-btn" class="btn btn-primary btn-lg">初始化系统</button>
+    </div>
+
+  </form>
+{% endblock %}
+
+{% block bottom_scripts %}
+<script>
+  seajs.use(['jquery', 'bootstrap.validator', 'common/validator-rules','bootstrap'], function($, Validator, Rules){
+    window.$ = $;
+    Rules.inject(Validator);
+    var $form = $("#init-form");
+
+    var validator = new Validator({
+        element: $form,
+        onFormValidated: function(error, results, $form){
+            if (error) {
+                return false;
+            }
+            $('#init-btn').button('submiting').addClass('disabled');
+        }
+    });
+
+    validator.addItem({
+        element: '#sitename-field',
+        required: true,
+        errormessageRequired:'请输入网站名称'
+    });
+
+    validator.addItem({
+        element: '#email-field',
+        required: true,
+        rule: 'email',
+        errormessageRequired:'请输入Email地址',
+        errormessageEmail:'Email地址格式不正确'
+    });
+
+    validator.addItem({
+        element: '#nickname-field',
+        required: true,
+        rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:18}',
+        errormessageRequired:'请输入管理员用户名',
+        errormessageChinese_alphanumeric:'用户名支持中文字、英文字母、数字及_ . ·',
+        errormessageByte_minlength:'用户名的长度必须大于等于4，一个中文字算2个字符',
+        errormessageByte_maxlength:'用户名的长度必须小于等于18，一个中文字算2个字符'
+    });
+
+    validator.addItem({
+        element: '#password-field',
+        required: true,
+        rule: 'minlength{min:5} maxlength{max:20}',
+        errormessageRequired:'请输入管理员密码',
+        errormessageByte_minlength:'用户名的长度必须大于等于5，一个中文字算2个字符',
+        errormessageByte_maxlength:'用户名的长度必须小于等于20，一个中文字算2个字符'
+    });
+
+    validator.addItem({
+        element: '#truename-field',
+        required: true,
+        rule:'chinese minlength{min:2} maxlength{max:12}',
+        errormessageRequired:'请输入网站负责人姓名',
+        errormessageChinese:'姓名必须是中文字',
+        errormessageByte_minlength:'姓名的长度必须大于等于2，一个中文字算2个字符',
+        errormessageByte_maxlength:'姓名的长度必须小于等于12，一个中文字算2个字符'
+    });
+
+    validator.addItem({
+        element: '#mobile-field',
+        required: true,
+        rule: 'mobile',
+        errormessageRequired:'请输入手机号码',
+        errormessageMobile:'请输入有效的手机号码（仅支持中国大陆手机号）'
+    });
+
+    validator.addItem({
+        element: '#qq-field',
+        required: true,
+        rule: 'qq',
+        errormessageRequired:'请输入QQ号码',
+        errormessageQq:'QQ号码格式不正确'
+    });
+
+
+  });
+</script>
+{% endblock %}

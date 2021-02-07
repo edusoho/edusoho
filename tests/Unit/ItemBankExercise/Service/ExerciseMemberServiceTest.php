@@ -60,7 +60,7 @@ class ExerciseMemberServiceTest extends BaseTestCase
             'role' => 'student',
         ]);
 
-        $this->assertEquals('1', count($res));
+        $this->assertEquals(1, $res);
     }
 
     public function testUpdate()
@@ -199,6 +199,16 @@ class ExerciseMemberServiceTest extends BaseTestCase
         $exercise = $this->createExercise();
         $member = $this->createExerciseMember(['exerciseId' => $exercise['id'], 'userId' => 10]);
         $this->getExerciseMemberService()->removeStudent($member['exerciseId'], $member['userId']);
+        $result = $this->getExerciseMemberService()->getByExerciseIdAndUserId($member['exerciseId'], $member['userId']);
+
+        $this->assertEmpty($result);
+    }
+
+    public function testRemoveStudents()
+    {
+        $exercise = $this->createExercise();
+        $member = $this->createExerciseMember(['exerciseId' => $exercise['id'], 'userId' => 10]);
+        $this->getExerciseMemberService()->removeStudents($member['exerciseId'], [$member['userId']]);
         $result = $this->getExerciseMemberService()->getByExerciseIdAndUserId($member['exerciseId'], $member['userId']);
 
         $this->assertEmpty($result);

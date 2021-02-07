@@ -2,7 +2,9 @@
 
 namespace Biz\Role\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\PluginVersionToolkit;
+use AppBundle\Common\Tree;
 use Biz\BaseService;
 use Biz\CloudPlatform\Service\AppService;
 use Biz\Common\CommonException;
@@ -10,8 +12,6 @@ use Biz\Role\Dao\RoleDao;
 use Biz\Role\RoleException;
 use Biz\Role\Service\RoleService;
 use Biz\Role\Util\PermissionBuilder;
-use AppBundle\Common\ArrayToolkit;
-use AppBundle\Common\Tree;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\User\Service\UserService;
@@ -35,9 +35,9 @@ class RoleServiceImpl extends BaseService implements RoleService
         $role['createdTime'] = time();
         $user = $this->getCurrentUser();
         $role['createdUserId'] = $user['id'];
-        $role = ArrayToolkit::parts($role, array('name', 'code', 'data', 'data_v2', 'createdTime', 'createdUserId'));
+        $role = ArrayToolkit::parts($role, ['name', 'code', 'data', 'data_v2', 'createdTime', 'createdUserId']);
 
-        if (!ArrayToolkit::requireds($role, array('name', 'code'))) {
+        if (!ArrayToolkit::requireds($role, ['name', 'code'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
 
@@ -51,7 +51,7 @@ class RoleServiceImpl extends BaseService implements RoleService
     public function updateRole($id, array $fields)
     {
         $this->checkChangeRole($id);
-        $fields = ArrayToolkit::parts($fields, array('name', 'code', 'data', 'data_v2'));
+        $fields = ArrayToolkit::parts($fields, ['name', 'code', 'data', 'data_v2']);
 
         if (isset($fields['code'])) {
             unset($fields['code']);
@@ -77,14 +77,14 @@ class RoleServiceImpl extends BaseService implements RoleService
 
         switch ($sort) {
             case 'created':
-                $sort = array('createdTime' => 'DESC');
+                $sort = ['createdTime' => 'DESC'];
                 break;
             case 'createdByAsc':
-                $sort = array('createdTime' => 'ASC');
+                $sort = ['createdTime' => 'ASC'];
                 break;
 
             default:
-                $sort = array('createdTime' => 'DESC');
+                $sort = ['createdTime' => 'DESC'];
                 break;
         }
 
@@ -101,7 +101,7 @@ class RoleServiceImpl extends BaseService implements RoleService
     public function findRolesByCodes(array $codes)
     {
         if (empty($codes)) {
-            return array();
+            return [];
         }
 
         return $this->getRoleDao()->findByCodes($codes);
@@ -146,13 +146,14 @@ class RoleServiceImpl extends BaseService implements RoleService
         $adminPermissionYml = $biz['role.get_permissions_yml'][$type];
 
         foreach ($tree as &$child) {
-            $child['name'] = $this->trans($child['name'], array(), 'menu');
+            $child['name'] = $this->trans($child['name'], [], 'menu');
             //插入老后台或新后台对应的权限配置permissions，用于前台设置角色权限附带上对应的另一个版本的权限
-            $child['permissions'] = empty($adminPermissionYml[$child['code']]) ? array() : $adminPermissionYml[$child['code']];
+            $child['permissions'] = empty($adminPermissionYml[$child['code']]) ? [] : $adminPermissionYml[$child['code']];
             if (isset($child['children'])) {
                 $child['children'] = $this->rolesTreeTrans($child['children'], $type);
             }
         }
+
         return $tree;
     }
 
@@ -185,7 +186,7 @@ class RoleServiceImpl extends BaseService implements RoleService
      */
     public function filterRoleTree($tree)
     {
-        $backstageSetting = $this->getSettingService()->get('backstage', array('is_v2' => 0));
+        $backstageSetting = $this->getSettingService()->get('backstage', ['is_v2' => 0]);
         $isV2 = empty($backstageSetting['is_v2']) ? 'admin' : 'admin_v2';
         foreach ($tree as $key => $child) {
             if ($isV2 != $child['code']) {
@@ -203,7 +204,7 @@ class RoleServiceImpl extends BaseService implements RoleService
      */
     public function getPermissionsYmlContent()
     {
-        $permissions = array();
+        $permissions = [];
 
         $permissions['admin'] = $this->loadPermissionsFromAllConfig();
 
@@ -220,13 +221,13 @@ class RoleServiceImpl extends BaseService implements RoleService
      *
      * 分割树结构各个节点形成array(array('code'=>xxx,'parent'=>xxx))二维数组
      */
-    public function splitRolesTreeNode($tree, &$permissions = array())
+    public function splitRolesTreeNode($tree, &$permissions = [])
     {
         foreach ($tree as &$child) {
-            $permissions[$child['code']] = array(
+            $permissions[$child['code']] = [
                 'code' => $child['code'],
                 'parent' => isset($child['parent']) ? $child['parent'] : null,
-            );
+            ];
             if (isset($child['children'])) {
                 $child['children'] = $this->splitRolesTreeNode($child['children'], $permissions);
             }
@@ -242,7 +243,7 @@ class RoleServiceImpl extends BaseService implements RoleService
      *
      * @return array 返回传入节点所有的父级节点code
      */
-    public function getParentRoleCodeArray($code, $nodes, &$parentCodes = array())
+    public function getParentRoleCodeArray($code, $nodes, &$parentCodes = [])
     {
         if (!empty($nodes[$code]) && !empty($nodes[$code]['parent'])) {
             $parentCodes[] = $nodes[$code]['parent'];
@@ -266,7 +267,7 @@ class RoleServiceImpl extends BaseService implements RoleService
             if (empty($userRole)) {
                 $this->initCreateRole($key, array_values($value), array_values($v2Roles[$key]));
             } else {
-                $this->getRoleDao()->update($userRole['id'], array('data' => array_values($value), 'data_v2' => array_values($v2Roles[$key])));
+                $this->getRoleDao()->update($userRole['id'], ['data' => array_values($value), 'data_v2' => array_values($v2Roles[$key])]);
             }
         }
     }
@@ -288,7 +289,7 @@ class RoleServiceImpl extends BaseService implements RoleService
             return 'web' === $tree->data['code'];
         });
         $webRoles = $getWebRoles->column('code');
-        $adminForbidParentRoles = array(
+        $adminForbidParentRoles = [
             'admin_user_avatar',
             'admin_user_change_password',
             'admin_my_cloud',
@@ -298,16 +299,16 @@ class RoleServiceImpl extends BaseService implements RoleService
             'admin_setting_cloud_attachment',
             'admin_setting_cloud',
             'admin_system',
-        );
+        ];
         $adminForbidRoles = $this->getAllForbidRoles($getAdminRoles, $adminForbidParentRoles);
         $superAdminRoles = array_merge($adminRoles, $webRoles);
 
-        return array(
-            'ROLE_USER' => array(),
+        return [
+            'ROLE_USER' => [],
             'ROLE_TEACHER' => $webRoles,
             'ROLE_ADMIN' => array_diff($superAdminRoles, $adminForbidRoles),
             'ROLE_SUPER_ADMIN' => $superAdminRoles,
-        );
+        ];
     }
 
     /**
@@ -329,7 +330,7 @@ class RoleServiceImpl extends BaseService implements RoleService
         });
         $webRoles = $getWebRoles->column('code');
 
-        $adminV2ForbidParentRoles = array(
+        $adminV2ForbidParentRoles = [
             'admin_v2_user_avatar',
             'admin_v2_user_change_password',
             'admin_v2_user_change_nickname',
@@ -340,17 +341,17 @@ class RoleServiceImpl extends BaseService implements RoleService
             'admin_v2_cloud_attachment_setting',
             'admin_v2_setting_cloud',
             'admin_v2_system',
-        );
+        ];
 
         $adminV2ForbidRoles = $this->getAllForbidRoles($getAdminV2Roles, $adminV2ForbidParentRoles);
         $superAdminV2Roles = array_merge($adminV2Roles, $webRoles);
 
-        return array(
-            'ROLE_USER' => array(),
+        return [
+            'ROLE_USER' => [],
             'ROLE_TEACHER' => $webRoles,
             'ROLE_ADMIN' => array_diff($superAdminV2Roles, $adminV2ForbidRoles),
             'ROLE_SUPER_ADMIN' => $superAdminV2Roles,
-        );
+        ];
     }
 
     /**
@@ -363,7 +364,7 @@ class RoleServiceImpl extends BaseService implements RoleService
      */
     protected function getAllForbidRoles($tree, $forbidRoles)
     {
-        $adminForbidRoles = array();
+        $adminForbidRoles = [];
         foreach ($forbidRoles as $forbidRole) {
             $adminRole = $tree->find(function ($tree) use ($forbidRole) {
                 return $tree->data['code'] === $forbidRole;
@@ -381,12 +382,12 @@ class RoleServiceImpl extends BaseService implements RoleService
 
     private function initCreateRole($code, $role, $v2Role)
     {
-        $userRoles = array(
-            'ROLE_SUPER_ADMIN' => array('name' => '超级管理员', 'code' => 'ROLE_SUPER_ADMIN'),
-            'ROLE_ADMIN' => array('name' => '管理员', 'code' => 'ROLE_ADMIN'),
-            'ROLE_TEACHER' => array('name' => '教师', 'code' => 'ROLE_TEACHER'),
-            'ROLE_USER' => array('name' => '学员', 'code' => 'ROLE_USER'),
-        );
+        $userRoles = [
+            'ROLE_SUPER_ADMIN' => ['name' => '超级管理员', 'code' => 'ROLE_SUPER_ADMIN'],
+            'ROLE_ADMIN' => ['name' => '管理员', 'code' => 'ROLE_ADMIN'],
+            'ROLE_TEACHER' => ['name' => '教师', 'code' => 'ROLE_TEACHER'],
+            'ROLE_USER' => ['name' => '学员', 'code' => 'ROLE_USER'],
+        ];
         $userRole = $userRoles[$code];
 
         $userRole['data'] = $role;
@@ -401,7 +402,7 @@ class RoleServiceImpl extends BaseService implements RoleService
     private function checkChangeRole($id)
     {
         $role = $this->getRoleDao()->get($id);
-        $notUpdateRoles = array('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_TEACHER', 'ROLE_USER');
+        $notUpdateRoles = ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_TEACHER', 'ROLE_USER'];
         if (in_array($role['code'], $notUpdateRoles)) {
             $this->createNewException(RoleException::FORBIDDEN_MODIFY());
         }
@@ -431,7 +432,7 @@ class RoleServiceImpl extends BaseService implements RoleService
      */
     public function upgradeRoleDataV2()
     {
-        $roles = $this->searchRoles(array('excludeCodes' => array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN')), array(), 0, PHP_INT_MAX);
+        $roles = $this->searchRoles(['excludeCodes' => ['ROLE_USER', 'ROLE_TEACHER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN']], [], 0, PHP_INT_MAX);
 
         foreach ($roles as &$role) {
             $role['data_v2'] = $this->getAdminV2Permissions($role['data']);
@@ -442,7 +443,7 @@ class RoleServiceImpl extends BaseService implements RoleService
     protected function loadPermissionsFromAllConfig($type = 'admin')
     {
         $configs = $this->getPermissionConfig($type);
-        $permissions = array();
+        $permissions = [];
         foreach ($configs as $config) {
             if (!file_exists($config)) {
                 continue;
@@ -460,17 +461,17 @@ class RoleServiceImpl extends BaseService implements RoleService
 
     protected function getPermissionConfig($type = 'admin')
     {
-        $configPaths = array();
+        $configPaths = [];
 
         $rootDir = ServiceKernel::instance()->getParameter('kernel.root_dir');
         if ('admin' == $type) {
-            $files = array(
+            $files = [
                 $rootDir.'/../permissions.yml',
-            );
+            ];
         } else {
-            $files = array(
+            $files = [
                 $rootDir.'/../permissions_v2.yml',
-            );
+            ];
         }
 
         foreach ($files as $filepath) {
@@ -516,7 +517,7 @@ class RoleServiceImpl extends BaseService implements RoleService
     {
         $biz = ServiceKernel::instance()->getBiz();
         $adminPermissions = $biz['role.get_permissions_yml']['admin'];
-        $roles = array();
+        $roles = [];
         foreach ($roleData as $menu) {
             if (!empty($adminPermissions[$menu]) && is_array($adminPermissions[$menu])) {
                 $roles = array_merge($roles, $adminPermissions[$menu]);

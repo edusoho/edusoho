@@ -8,6 +8,7 @@
   <a class="btn btn-success btn-sm" href="{{ path('course_set_manage_create',{default: 'live'}) }}" target="blank">{{ 'admin_v2.live_course.create_btn'|trans }}</a>
 {% endblock %}
 {% block main %}
+
 {% if setting("course.live_course_enabled") == 1 %}
   <form id="message-search-form" class="form-inline well well-sm mtl" action=" {{ path('admin_v2_live_course', {status:status}) }}" method="get" novalidate>
     {% include 'org/org-tree-select.html.twig' with {orgCode: app.request.get('orgCode'), modal: 'list'} %}

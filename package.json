@@ -44,8 +44,7 @@
     "easy-pie-chart": "2.1.7",
     "echarts": "3.1.10",
     "echo-js": "1.7.3",
-    "element-ui": "file:app/Resources/static-src/libs/element-ui",
-    "es-ckeditor": "4.7.2-patch15",
+    "es-ckeditor": "4.7.2-patch16",
     "es-fullcalendar": "3.7.0-patch5",
     "es-jcrop": "latest",
     "es-jquery-sortable": "0.9.13-patch2",
@@ -84,7 +83,6 @@
     "reset.css": "2.0.2",
     "respond.js": "1.4.2",
     "select2": "3.5.1",
-    "split.js": "^1.6.2",
     "store": "1.3.20",
     "subtitle": "0.1.5",
     "swiper": "2.7.6",
@@ -94,7 +92,8 @@
     "vue": "^2.6.11",
     "waypoints": "4.0.1",
     "websocket": "^1.0.25",
-    "weixin-js-sdk": "1.2.0"
+    "weixin-js-sdk": "1.2.0",
+    "element-ui": "file:app/Resources/static-src/libs/element-ui"
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon --trace-deprecation --max_old_space_size=4096 node_modules/es-webpack-engine/dist/webpack.dev.js --parameters webpack.config.js",
@@ -106,7 +105,6 @@
     "clean": "rm -rf node_modules",
     "test": "mocha --recursive --reporter mochawesome --require babel-core/register tests/Js/test && open mochawesome-report/mochawesome.html && npm run test:cover",
     "test:cover": "babel-node ./node_modules/.bin/babel-istanbul cover _mocha -- tests/Js/* -R spec --recursive && open coverage/lcov-report/index.html",
-    "test:simple": "mocha --recursive --require babel-core/register --reporter dot",
-    "commitmsg": "es-commit-msg-validator"
+    "test:simple": "mocha --recursive --require babel-core/register --reporter dot"
   }
 }

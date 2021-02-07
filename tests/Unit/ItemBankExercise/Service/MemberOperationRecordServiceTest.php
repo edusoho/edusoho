@@ -40,7 +40,7 @@ class MemberOperationRecordServiceTest extends BaseTestCase
             ]
         );
 
-        $this->assertEquals(1, count($res));
+        $this->assertEquals(1, $res);
     }
 
     public function testSearch()

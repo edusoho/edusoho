@@ -128,6 +128,11 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
         return $this->getJobFiredDao()->deleteUnacquiredBeforeCreatedTime($startTime);
     }
 
+    /**
+     * @param $jobId
+     * @return mixed
+     * 由于mysql8以下，重启mysql会重置自增ID，JobId会被重置，所以如果是判断任务进行中的判断不应该用jobId，而应该用jobName，jobName添加唯一标识
+     */
     public function findJobFiredsByJobId($jobId)
     {
         return $this->getJobFiredDao()->findByJobId($jobId);
@@ -136,6 +141,16 @@ class SchedulerServiceImpl extends BaseService implements SchedulerService
     public function findExecutingJobFiredByJobId($jobId)
     {
         return $this->getJobFiredDao()->findByJobIdAndStatus($jobId, static::EXECUTING);
+    }
+
+    /**
+     * @param $jobName
+     * @return mixed
+     * 由于mysql8以下，重启mysql会重置自增ID，jobId会被重置，所以如果是判断任务进行中的判断不应该用jobId，而应该用jobName，jobName添加唯一标识
+     */
+    public function findJobFiredByJobName($jobName)
+    {
+        return $this->getJobFiredDao()->findByJobName($jobName);
     }
 
     public function deleteJob($id)

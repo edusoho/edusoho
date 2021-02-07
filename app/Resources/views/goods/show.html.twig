@@ -12,6 +12,7 @@
        data-is-user-login="{{ app.user.isLogin()|default(0) }}"
        data-current-url="{{ url('goods_show', { id: app.request.get('id')}) }}"
        data-goods-setting="{{ setting('goods_setting', {})|json_encode }}"
+       data-drp-recruit-switch="{{ setting('drp.recruitSwitch')|default() }}"
   ></div>
   <div class="hidden js-hidden-i18n">
     {
@@ -38,4 +39,13 @@
   </div>
 
   <div class="hidden js-hidden-current-timestamp">{{ date().timestamp }}</div>
+
+  {% 
+    include 'common/weixin-share.html.twig' with {
+      'title': goods.title,
+      'desc': goods.summary|striptags|purify_and_trim_html,
+      'link': app.request.uri,
+      'imgUrl': fileurl(goods.images.large|default(),'course.png'),
+    }
+  %}
 {% endblock %}

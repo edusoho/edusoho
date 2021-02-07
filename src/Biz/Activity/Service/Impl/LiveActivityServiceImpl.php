@@ -63,6 +63,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
         ) {
             $this->createNewException(LiveActivityException::LIVE_TIME_INVALID());
         }
+
         //创建直播室
         if (empty($activity['startTime'])
             || $activity['startTime'] <= time()
@@ -78,6 +79,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             if (empty($live)) {
                 $this->createNewException(LiveActivityException::CREATE_LIVEROOM_FAILED());
             }
+
             if (isset($live['error'])) {
                 $error = '帐号已过期' == $live['error'] ? '直播服务已过期' : $live['error'];
                 throw $this->createServiceException($error);
@@ -300,7 +302,7 @@ class LiveActivityServiceImpl extends BaseService implements LiveActivityService
             'liveLogoUrl' => $liveLogoUrl,
             'roomType' => empty($activity['roomType']) ? EdusohoLiveClient::LIVE_ROOM_LARGE : $activity['roomType'],
         ]);
-        $live = ['id'=>18,'provider'=>3721];
+
         return $live;
     }
 
