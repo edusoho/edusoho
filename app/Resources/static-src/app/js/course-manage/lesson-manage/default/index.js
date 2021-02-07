@@ -236,9 +236,9 @@ class BatchOperate {
         
         $target.button('loading')
         $.post(deleteUrl, { lessonIds }).then(res => {
-          lessonIds.forEach(id => {
-            $(`#chapter-${id}`).remove()
-          })
+          if (Array.isArray(res)) {
+            res.forEach(id => $(`#chapter-${id}`).remove())
+          }
           this.clearChosenItems()
           $target.button('reset')
         }).catch(function(data) {
@@ -263,14 +263,14 @@ class BatchOperate {
       
       $target.button('loading')
       $.post(publishUrl, { lessonIds }).then(res => {
-        if (res.success) {
-          lessonIds.forEach(id => {
+        if (Array.isArray(res)) {
+          res.forEach(id => {
             const $parentLi = $(`#chapter-${id}`)
             $parentLi.find(".js-publish-item, .js-delete, .js-lesson-unpublish-status").addClass('hidden')
             $parentLi.find(".js-unpublish-item").removeClass('hidden')
           })
-          cd.message({ type: 'success', message: "发布成功" });
         }
+        cd.message({ type: 'success', message: "发布成功" });
         $target.button('reset')
       }).catch(function(data) {
         $target.button('reset')
@@ -292,14 +292,14 @@ class BatchOperate {
 
       const $target = $(event.target)
       $.post(unPublishUrl, { lessonIds }).then(res => {
-        if (res.success) {
-          lessonIds.forEach(id => {
+        if (Array.isArray(res)) {
+          res.forEach(id => {
             const $parentLi = $(`#chapter-${id}`)
             $parentLi.find(".js-publish-item, .js-delete, .js-lesson-unpublish-status").removeClass('hidden')
             $parentLi.find(".js-unpublish-item").addClass('hidden')
           })
-          cd.message({ type: 'success', message: "取消发布成功" });
         }
+        cd.message({ type: 'success', message: "取消发布成功" });
         $target.button('reset')
       }).catch(function(data) {
         $target.button('reset')
