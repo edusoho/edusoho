@@ -4058,6 +4058,8 @@ item_bank_exercise.member.expiry_tips: 'Your purchased course was expired. You c
 course.member.course.allow_buy.tips: 'Your purchased course was expired and you have no permission to learn courses and ask questions now. Please contact your teacher for help or click Rejoin.'
 item_bank_exercise.member.allow_buy.tips: 'Your purchased item bank exercise was expired and you cannot proceed with the chapter, test paper, etc. and ask questions now. Please contact your teacher.'
 course.member.course.join_btn: 'Exit and re-Enroll'
+course.member.classroom_member.exit_btn: 'Exit'
+course.member.classroom_member.classroom_exit_btn: 'Exit Classroom'
 course.member.operation.quit_deadline_reach: 'The user will quit until the deadline'
 course.member.operation.admin_remove_course_student: 'The admin removes it manually'
 course.member.operation.reason.remove_teachers: 'Exit the course when deleting the teacher role'
