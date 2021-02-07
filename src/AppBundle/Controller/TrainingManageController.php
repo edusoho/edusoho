@@ -15,7 +15,7 @@ class TrainingManageController extends BaseController
     {
         $currentId = $request->query->get("currentId");
         $lists = $this->getData("",$currentId);
-        return $this->render('training/manage/images-modal.html.twig',[
+        return $this->render('training/manage/images/images-modal.html.twig',[
             'id'=>$id,
             'currentId'=>$currentId,
             'lists'=>$lists,
@@ -29,7 +29,7 @@ class TrainingManageController extends BaseController
         $lists = $this->getData($type,$currentId);
         
         return $this->render(
-            'training/manage/images-list.html.twig',
+            'training/manage/images/images-list.html.twig',
             ['lists'=>$lists]
         );
     }
@@ -58,16 +58,55 @@ class TrainingManageController extends BaseController
     // 数据集弹窗
     public function datasetPickerAction(Request $request,$id){
         $paginator = $this->getDataset($request);
-        return $this->render('training/manage/dataset-modal.html.twig',[
+        //默认选中数据集，与第一页数据
+        $datasetLists = [
+            ['id'=>1,'name'=>"数据集-01","desc"=>"描述1","teacher"=>"李老师"],
+            ['id'=>2,'name'=>"数据集-02","desc"=>"描述1","teacher"=>"李老师"],
+            ['id'=>3,'name'=>"数据集-03","desc"=>"描述1","teacher"=>"李老师"],
+            ['id'=>4,'name'=>"数据集-04","desc"=>"描述1","teacher"=>"李老师"],
+            ['id'=>5,'name'=>"数据集-05","desc"=>"描述1","teacher"=>"李老师"],
+            ['id'=>6,'name'=>"数据集-06","desc"=>"描述1","teacher"=>"李老师"],
+        ];
+        $tags = [
+            ['id'=>1,'name'=>'数据集-01'],
+            ['id'=>3,'name'=>'数据集-03'],
+            ['id'=>4,'name'=>'数据集-04'],
+            ['id'=>12,'name'=>'数据集-12'],
+        ];
+
+
+
+        return $this->render('training/manage/dataset/dataset-modal.html.twig',[
             'id'=>$id,
+            'datasetLists'=>$datasetLists,
+            'tags'=>$tags,
             'paginator'=>$paginator,
         ]);
     }
 
     public function datasetInfoPickerAction(Request $request,$id){
         $paginator = $this->getDataset($request);
-        return $this->render('training/manage/dataset-list-modal.html.twig',[
+
+        $datasetLists = [
+            ['id'=>7,'name'=>"数据集-07","desc"=>"描述1","teacher"=>"李老师"],
+            ['id'=>8,'name'=>"数据集-08","desc"=>"描述1","teacher"=>"李老师"],
+            ['id'=>9,'name'=>"数据集-09","desc"=>"描述1","teacher"=>"李老师"],
+            ['id'=>10,'name'=>"数据集-10","desc"=>"描述1","teacher"=>"李老师"],
+            ['id'=>11,'name'=>"数据集-11","desc"=>"描述1","teacher"=>"李老师"],
+            ['id'=>12,'name'=>"数据集-12","desc"=>"描述1","teacher"=>"李老师"],
+        ];
+
+        $tags = [
+            ['id'=>1,'name'=>'数据集-01'],
+            ['id'=>3,'name'=>'数据集-03'],
+            ['id'=>4,'name'=>'数据集-04'],
+            ['id'=>12,'name'=>'数据集-12'],
+        ];
+
+        return $this->render('training/manage/dataset/dataset-modal-list.html.twig',[
             'id'=>$id,
+            'datasetLists'=>$datasetLists,
+            'tags'=>$tags,
             'paginator'=>$paginator,
         ]);
     }

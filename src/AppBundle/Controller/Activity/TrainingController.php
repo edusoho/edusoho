@@ -120,7 +120,14 @@ class TrainingController extends BaseActivityController implements ActivityActio
     ///////////////新增加
     public function createEditorAction(Request $request,$activity){
         // 增加后续逻辑
+        $tags = [
+            ['id'=>1,'name'=>'数据集-01'],
+            ['id'=>3,'name'=>'数据集-03'],
+            ['id'=>4,'name'=>'数据集-04'],
+            ['id'=>12,'name'=>'数据集-12'],
+        ];
         return $this->render('@activity/training/resources/views/create_or_update_body.html.twig',[
+            'tags'=>$tags,
             'activity' => $activity,
         ]);
     }
