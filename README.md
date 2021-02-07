@@ -15,8 +15,34 @@ cp ./devenv/servers/edusoho.conf /usr/local/etc/nginx/servers/
 
 mkdir -p /var/www
 
-brew services restart nginx php@7.4
+brew services restart php@7.4
+brew services restart nginx 
 
 ```
 
+## xdebug 504 error
+
+### set /usr/local/etc/nginx/nginx.conf
+```apacheconf
+http {
+    fastcgi_read_timeout 3600;
+}
+```
+
+
+### set this line in php.ini:
+```shell
+php -i |grep php.ini
+```
+
+```ini
+request_terminate_timeout = 3600s
+
+[xdebug]
+zend_extension="xdebug.so"
+xdebug.idekey="PHPSTORM"    #会话需要的key
+xdebug.mode=debug
+xdebug.client_host=127.0.0.1
+xdebug.file_link_format='phpstorm://open?file=%f&line=%l'
+```
 
