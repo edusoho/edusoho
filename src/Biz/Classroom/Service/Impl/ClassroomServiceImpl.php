@@ -36,6 +36,8 @@ use Biz\User\Service\UserService;
 use Biz\User\UserException;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Order\Service\OrderService;
+use VipPlugin\Biz\Marketing\Service\VipRightService;
+use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
 use VipPlugin\Biz\Vip\Service\VipService;
 
 class ClassroomServiceImpl extends BaseService implements ClassroomService
@@ -2347,7 +2349,13 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             return false;
         }
 
-        $status = $this->getVipService()->checkUserInMemberLevel($member['userId'], $classroom['vipLevelId']);
+        if (version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')) {
+            $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode(ClassroomVipRightSupplier::CODE, $classroom['id']);
+            $vipLevelId = empty($vipRight) ? 0 : $vipRight['vipLevelId'];
+            $status = $this->getVipService()->checkUserInMemberLevel($member['userId'], $vipLevelId);
+        } else {
+            $status = $this->getVipService()->checkUserInMemberLevel($member['userId'], $classroom['vipLevelId']);
+        }
 
         return 'ok' === $status;
     }
@@ -2438,6 +2446,14 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     protected function getVipService()
     {
         return $this->createService('VipPlugin:Vip:VipService');
+    }
+
+    /**
+     * @return VipRightService
+     */
+    protected function getVipRightService()
+    {
+        return $this->createService('VipPlugin:Marketing:VipRightService');
     }
 
     /**

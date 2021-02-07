@@ -89,4 +89,19 @@ abstract class BaseGoodsEntity
 
         return $pluginManager->isPluginInstalled($code);
     }
+
+    protected function getPluginVersion($pluginName)
+    {
+        global $kernel;
+
+        $plugins = $kernel->getPluginConfigurationManager()->getInstalledPlugins();
+
+        foreach ($plugins as $plugin) {
+            if (strtolower($plugin['code']) == strtolower($pluginName)) {
+                return $plugin['version'];
+            }
+        }
+
+        return null;
+    }
 }

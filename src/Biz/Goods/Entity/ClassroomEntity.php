@@ -102,9 +102,16 @@ class ClassroomEntity extends BaseGoodsEntity
             $vipUser['level'] = $this->getVipLevelService()->getLevel($vipUser['levelId']);
         }
 
-        $vipRight = $this->getVipRightService()->getVipRightsBySupplierCodeAndUniqueCode(ClassroomVipRightSupplier::CODE, $specs['targetId']);
-        if ($vipRight) {
-            return [$this->getVipLevelService()->getLevel($vipRight['vipLevelId']), $vipUser];
+        if (version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')) {
+            $vipRight = $this->getVipRightService()->getVipRightsBySupplierCodeAndUniqueCode(ClassroomVipRightSupplier::CODE, $specs['targetId']);
+            if ($vipRight) {
+                return [$this->getVipLevelService()->getLevel($vipRight['vipLevelId']), $vipUser];
+            }
+        } else {
+            $classroom = $this->getClassroomService()->getClassroom($specs['targetId']);
+            if ($classroom['vipLevelId']) {
+                return [$this->getVipLevelService()->getLevel($classroom['vipLevelId']), $vipUser];
+            }
         }
 
         return [null, $vipUser];
@@ -116,7 +123,14 @@ class ClassroomEntity extends BaseGoodsEntity
             return false;
         }
         $classroom = $this->getClassroomService()->getClassroom($specs['targetId']);
-        $status = $this->getVipService()->checkUserInMemberLevel($userId, $classroom['vipLevelId']);
+
+        if (version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')) {
+            $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode(ClassroomVipRightSupplier::CODE, $classroom['id']);
+            $vipLevelId = empty($vipRight) ? 0 : $vipRight['vipLevelId'];
+            $status = $this->getVipService()->checkUserInMemberLevel($userId, $vipLevelId);
+        } else {
+            $status = $this->getVipService()->checkUserInMemberLevel($userId, $classroom['vipLevelId']);
+        }
 
         return 'ok' === $status;
     }
