@@ -30,6 +30,8 @@ use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use VipPlugin\Biz\Marketing\Service\VipRightService;
+use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
 
 class ClassroomController extends BaseController
 {
@@ -78,7 +80,12 @@ class ClassroomController extends BaseController
         }
 
         if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
-            $classroomMemberLevel = $classroom['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($classroom['vipLevelId']) : null;
+            if (version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')) {
+                $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode(ClassroomVipRightSupplier::CODE, $classroom['id']);
+                $classroomMemberLevel = empty($vipRight) ? null : $this->getLevelService()->getLevel($vipRight['vipLevelId']);
+            } else {
+                $classroomMemberLevel = $classroom['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($classroom['vipLevelId']) : null;
+            }
 
             if ($user['id'] && $classroomMemberLevel) {
                 $checkMemberLevelResult = $this->getVipService()->checkUserInMemberLevel($user['id'], $classroomMemberLevel['id']);
@@ -112,7 +119,7 @@ class ClassroomController extends BaseController
 
         if ($member) {
             $isclassroomteacher = in_array('teacher', $member['role']) || in_array('headTeacher', $member['role']) ? true : false;
-            $vipChecked = $this->isPluginInstalled('Vip') && $this->setting('vip.enabled') && $member['levelId'] > 0 ? $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']) : 'ok';
+            $vipChecked = $classroomMemberLevel ? $this->getVipService()->checkUserInMemberLevel($user['id'], $classroomMemberLevel['id']) : 'ok';
 
             return $this->render('classroom/classroom-join-header.html.twig', [
                 'classroom' => $classroom,
@@ -823,6 +830,14 @@ class ClassroomController extends BaseController
     protected function getVipService()
     {
         return $this->createService('VipPlugin:Vip:VipService');
+    }
+
+    /**
+     * @return VipRightService
+     */
+    protected function getVipRightService()
+    {
+        return $this->createService('VipPlugin:Marketing:VipRightService');
     }
 
     /**
