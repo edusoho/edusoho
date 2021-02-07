@@ -7,8 +7,6 @@ use Biz\Course\CourseSetException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
-use VipPlugin\Biz\Marketing\Service\VipRightService;
-use VipPlugin\Biz\Marketing\VipRightSupplier\CourseVipRightSupplier;
 use VipPlugin\Biz\Vip\Service\LevelService;
 use VipPlugin\Biz\Vip\Service\VipService;
 
@@ -129,10 +127,9 @@ class CourseEntity extends BaseGoodsEntity
         if ($vipUser) {
             $vipUser['level'] = $this->getVipLevelService()->getLevel($vipUser['levelId']);
         }
-
-        $vipRight = $this->getVipRightService()->getVipRightsBySupplierCodeAndUniqueCode(CourseVipRightSupplier::CODE, $specs['targetId']);
-        if ($vipRight) {
-            return [$this->getVipLevelService()->getLevel($vipRight['vipLevelId']), $vipUser];
+        $course = $this->getCourseService()->getCourse($specs['targetId']);
+        if ($course['vipLevelId']) {
+            return [$this->getVipLevelService()->getLevel($course['vipLevelId']), $vipUser];
         }
 
         return [null, $vipUser];
@@ -200,13 +197,5 @@ class CourseEntity extends BaseGoodsEntity
     protected function getVipService()
     {
         return $this->biz->service('VipPlugin:Vip:VipService');
-    }
-
-    /**
-     * @return VipRightService
-     */
-    protected function getVipRightService()
-    {
-        return $this->biz->service('VipPlugin:Marketing:VipRightService');
     }
 }

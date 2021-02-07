@@ -1106,16 +1106,12 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'refundDeadline' => empty($refundSetting['maxRefundDays']) ? 0 : strtotime("+ {$refundSetting['maxRefundDays']}days"),
         ];
 
-        if (!empty($info['becomeUseMember'])) {
-            $fields['levelId'] = $userMember['levelId'];
-        }
-
         if (!empty($member)) {
             $member['orderId'] = $fields['orderId'];
             $member['refundDeadline'] = $fields['refundDeadline'];
             if ('auditor' != $member['role'][0]) {
                 $member['role'][] = 'student';
-                !empty($fields['levelId']) ? $member['levelId'] = $fields['levelId'] : null;
+                $member['levelId'] = $fields['levelId'];
                 $member['remark'] = $fields['remark'];
             } else {
                 $member['role'] = ['student'];
@@ -2223,21 +2219,19 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $userCourses = ArrayToolkit::index($userCourses, 'courseId');
 
         foreach ($courseIds as $key => $courseId) {
-            if (!empty($userCourses[$courseId])) {
+            $courseMember = $this->getCourseMemberService()->getCourseMember($courseId, $userId);
+            $courseMember = empty($userCourses[$courseId]) ? [] : $userCourses[$courseId];
+
+            if ($courseMember) {
                 continue;
             }
 
             $info = [
                 'orderId' => empty($params['orderId']) ? 0 : $params['orderId'],
                 'orderNote' => empty($params['note']) ? '' : $params['note'],
+                'levelId' => empty($classroomMember['levelId']) ? 0 : $classroomMember['levelId'],
                 'deadline' => $classroomMember['deadline'],
-                'joinedChannel' => $classroomMember['joinedChannel'],
             ];
-
-            if (!empty($classroomMember['levelId'])) {
-                $info['levelId'] = $classroomMember['levelId'];
-            }
-
             $this->getCourseMemberService()->createMemberByClassroomJoined($courseId, $userId, $classroomId, $info);
         }
     }
