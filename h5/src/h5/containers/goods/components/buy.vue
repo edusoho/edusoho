@@ -25,22 +25,26 @@
       </template>
     </div>
 
-    <div class="info-buy__btn" v-if="currentSku.isMember" @click="handleJoin">
-      去学习
+    <div class="info-buy__btn" :class="classDisabled" @click="handleJoin">
+      {{ buyStatus }}
     </div>
 
+    <!-- <div class="info-buy__btn" v-if="currentSku.isMember" @click="handleJoin">
+      去学习
+    </div> -->
+
     <!-- 不免费课程 -->
-    <div
+    <!-- <div
       class="info-buy__btn"
       :class="classDisabled"
       v-else-if="currentSku.displayPrice != 0"
       @click="handleJoin"
     >
       {{ currentSku | filterGoodsBuyStatus(goods.type, vipAccessToJoin) }}
-    </div>
+    </div> -->
 
     <!-- 免费课程 -->
-    <div
+    <!-- <div
       class="info-buy__btn"
       :class="classDisabled"
       v-else
@@ -50,7 +54,7 @@
       <span v-else>
         {{ currentSku | filterGoodsBuyStatus(goods.type, vipAccessToJoin) }}
       </span>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -102,6 +106,8 @@ export default {
         return false;
       }
 
+      if (!vipUser.level) return vipAccess;
+
       if (vipLevelInfo.seq <= vipUser.level.seq) {
         const vipExpired =
           parseInt(vipUser.deadline) * 1000 < new Date().getTime();
@@ -151,11 +157,93 @@ export default {
       }
     },
 
+    // 购买按钮样式展示
     classDisabled() {
       const code = this.currentSku.access.code;
+      const status = [
+        'user.locked',
+        'course.reach_max_student_num',
+        'classroom.reach_max_student_num',
+        'course.not_found',
+        'classroom.not_found',
+        'course.unpublished',
+        'classroom.unpublished',
+        'course.closed',
+        'classroom.closed',
+        'course.not_buyable',
+        'classroom.not_buyable',
+        'course.buy_expired',
+        'classroom.buy_expired',
+        'course.expired',
+        'classroom.expired',
+      ];
       return {
-        disabled: !this.accessToJoin && code != 'course.only_vip_join_way',
+        disabled: status.includes(code),
       };
+    },
+
+    /**
+     * 购买按钮状态
+     * currentSku // 当前计划信息
+     */
+    buyStatus() {
+      const {
+        isMember,
+        displayPrice,
+        access: { code },
+        vipLevelInfo,
+      } = this.currentSku;
+
+      // 已加入, 去学习
+      if (isMember) {
+        return '去学习';
+      }
+
+      // 不可加入 + 会员免费学 时的文案
+      const onlyVipJoinWay = vipLevelInfo ? `${vipLevelInfo.name}免费` : '';
+
+      // currentSku.access.code 存在的状态
+      const status = {
+        success: '立即购买',
+        'user.not_login': '立即购买',
+        'user.locked': '用户被锁定',
+        'member.member_exist': '课程学员已存在',
+        'course.reach_max_student_num': '学员达到上限',
+        'classroom.reach_max_student_num': '学员达到上限',
+        'course.not_found': '计划不存在',
+        'classroom.not_found': '计划不存在',
+        'course.unpublished': '课程未发布',
+        'classroom.unpublished': '班级未发布',
+        'course.closed': '课程已关闭',
+        'classroom.closed': '班级已关闭',
+        'course.not_buyable': '该课程无法学习，请联系学校老师',
+        'classroom.not_buyable': '该课程无法学习，请联系学校老师',
+        'course.buy_expired': '购买有效期已过',
+        'classroom.buy_expired': '购买有效期已过',
+        'course.expired': '学习有效期已过',
+        'classroom.expired': '学习有效期已过',
+        'course.only_vip_join_way': onlyVipJoinWay,
+        'classroom.only_vip_join_way': onlyVipJoinWay,
+      };
+
+      // 会员有效且不是以下状态时, 会员免费兑换
+      const notVipStatus = [
+        'member.member_exist',
+        'course.buy_expired',
+        'classroom.buy_expired',
+        'course.expired',
+        'classroom.expired',
+      ];
+
+      if (this.vipAccessToJoin && !notVipStatus.includes(code)) {
+        return '会员免费兑换';
+      }
+
+      if (displayPrice == 0 && this.accessToJoin) {
+        return '免费加入';
+      }
+
+      return status[code];
     },
   },
   methods: {
@@ -166,6 +254,7 @@ export default {
     handleJoin() {
       const type = this.goods.type;
       const {
+        isMember,
         access: { code },
         targetId,
         vipLevelInfo,
@@ -173,7 +262,7 @@ export default {
         displayPrice,
       } = this.currentSku;
 
-      if (code === 'member.member_exist') {
+      if (code === 'member.member_exist' || isMember) {
         this.$router.push({
           path: `/${type}/${targetId}`,
         });
@@ -182,8 +271,14 @@ export default {
       // 会员免费学
       const vipAccessToJoin = this.vipAccessToJoin;
 
+      // 班级和课程, 仅会员可加入, code都是 course.only_vip_join_way
+      const goToVipCode = [
+        'course.only_vip_join_way',
+        'classroom.only_vip_join_way',
+      ];
+
       // 不是会员跳转到会员页面
-      if (code === `${type}.only_vip_join_way` && !vipAccessToJoin) {
+      if (goToVipCode.includes(code) && !vipAccessToJoin) {
         this.$router.push({
           path: '/vip',
           query: { id: vipLevelInfo.id },
