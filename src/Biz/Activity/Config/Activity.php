@@ -61,11 +61,7 @@ class Activity
      *
      * @return mixed
      */
-<<<<<<< HEAD
-    public function copy($activity, $config = array())
-=======
     public function copy($activity, $config = [])
->>>>>>> 3cb8cbcd7bb55ffd28294506a7bcc2f79c90008f
     {
         return null;
     }
@@ -96,15 +92,12 @@ class Activity
             $result /= 60;
 
             return !empty($result) && $result >= $activity['finishData'];
-<<<<<<< HEAD
-=======
         } elseif ('watchTime' === $activity['finishType']) {
             $result = $this->getTaskResultService()->getWatchTimeByActivityIdAndUserId($activityId, $this->getCurrentUser()->getId());
 
             $result /= 60;
 
             return !empty($result) && $result >= $activity['finishData'];
->>>>>>> 3cb8cbcd7bb55ffd28294506a7bcc2f79c90008f
         } else {
             $log = $this->getActivityLearnLogService()->getMyRecentFinishLogByActivityId($activityId);
 
@@ -114,29 +107,17 @@ class Activity
 
     public function get($targetId)
     {
-<<<<<<< HEAD
-        return array();
-=======
         return [];
->>>>>>> 3cb8cbcd7bb55ffd28294506a7bcc2f79c90008f
     }
 
     public function find($targetIds, $showCloud = 1)
     {
-<<<<<<< HEAD
-        return array();
-=======
         return [];
->>>>>>> 3cb8cbcd7bb55ffd28294506a7bcc2f79c90008f
     }
 
     public function findWithoutCloudFiles($targetIds)
     {
-<<<<<<< HEAD
-        return array();
-=======
         return [];
->>>>>>> 3cb8cbcd7bb55ffd28294506a7bcc2f79c90008f
     }
 
     public function allowEventAutoTrigger()
@@ -154,11 +135,7 @@ class Activity
      */
     protected function registerListeners()
     {
-<<<<<<< HEAD
-        return array();
-=======
         return [];
->>>>>>> 3cb8cbcd7bb55ffd28294506a7bcc2f79c90008f
     }
 
     /**
@@ -173,11 +150,7 @@ class Activity
             return null;
         }
         $reflection = new \ReflectionClass($map[$eventName]);
-<<<<<<< HEAD
-        $listener = $reflection->newInstanceArgs(array($this->getBiz()));
-=======
         $listener = $reflection->newInstanceArgs([$this->getBiz()]);
->>>>>>> 3cb8cbcd7bb55ffd28294506a7bcc2f79c90008f
 
         if (!$listener instanceof Listener) {
             throw new UnexpectedValueException('listener class must be Listener Derived Class');
