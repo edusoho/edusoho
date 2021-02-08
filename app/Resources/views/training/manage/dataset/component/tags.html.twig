@@ -1,0 +1,32 @@
+{% for item in tags  %}
+    <div class="tag-info checktag-{{item.id}}">
+        <span class="label label-primary">{{item.name}}
+            <a id="bb" href="javascript:void(0)" class="panel-tool-close bb-icon-close"  data-id="{{item.id}}">X</a>
+        </span>
+    </div>
+{% endfor %}
+<style>
+    .tag-info{
+        float:left;
+        padding-left:5px;
+    }
+    .items-tag-info{
+        display:inline-block; *display:inline; *zoom:1;
+    }
+
+    .bb-icon-close {
+        color: black;
+        position: absolute;
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        line-height: 15px;
+        cursor: pointer;
+        text-decoration: underline;
+        vertical-align: top;
+        text-align: left;
+    }
+    .bb-icon-close a{
+        text-decoration:none;
+    }
+</style>

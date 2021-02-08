@@ -1,0 +1,71 @@
+{% extends 'bootstrap-modal-layout.html.twig' %}
+
+{% set modal_class = 'training-modal-lg' %}
+
+{% block title %} 选择镜像 {% endblock %}
+
+
+
+{% block body %}
+<div class="training-add js-select-container">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="menu active" data-type="private"><a href="#" role="tab" data-toggle="tab">个人镜像</a></li>
+        <li role="presentation" class="menu" data-type="public"><a href="#" role="tab" data-toggle="tab">公共镜像</a></li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content" style="margin-left:30px;">
+        <div role="tabpanel" class="tab-pane active" id="common">
+        {{ include('training/manage/images/images-list.html.twig') }}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+<button type="button" class="btn btn-link js-close-modal" data-dismiss="modal" tabindex="6">取消</button>
+<button id="pick-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary js-pick-btn"
+  data-toggle="form-submit" tabindex="4">保存</button>
+
+
+  <script>
+    $(function(){
+        let selectInfo = {id:{{currentId}}};
+        console.log(selectInfo);
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            e.target // newly activated tab
+            e.relatedTarget // previous active tab
+        })
+
+        // 点击提交
+        $("#pick-btn").on("click",function(event){
+            let $content = $('#task-create-content-iframe').contents();
+            $content.find('.js-cached-question').text(JSON.stringify(selectInfo));
+
+            let $target = $(event.currentTarget);
+            let name = $target.data('name');
+
+            let $modal = $('.js-select-container').parents('.modal');
+            $modal.modal('hide');
+            $('.js-close-modal').trigger('click');
+        })
+        // 单选点击事件 input[type='radio']
+        $("#common").on("click","input[type='radio']",function(){
+            selectInfo = {id:$(this).val(),name:$(this).next("label").text()}
+        })
+
+        // 点击切换菜单
+        $(".menu").on("click",function(){
+            let type = $(this).data("type")
+            var url = "{{ path('course_set_manage_training_images_picker_list',{courseId:id,taskId:0}) }}"
+            $.get(url,{
+                type:type,
+                currentId:selectInfo.id
+                },html=>{
+                $("#common").html(html);
+            })
+        })
+    })
+  </script>
+{% endblock %}
