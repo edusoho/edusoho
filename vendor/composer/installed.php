@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '2feb5cc19c7a6e32689dd3c41f93531aec433d57',
+    'reference' => 'a38976131ffcffcbbe6a519b27c81d8c3694ccd8',
     'name' => 'topxia/edusoho',
   ),
   'versions' => 
@@ -350,6 +350,15 @@
       array (
       ),
       'reference' => 'c038ee75ca13663ddc2d1f185fe6f7533c00832a',
+    ),
+    'firebase/php-jwt' => 
+    array (
+      'pretty_version' => 'v5.2.0',
+      'version' => '5.2.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'feb0e820b8436873675fd3aca04f3728eb2185cb',
     ),
     'flow/jsonpath' => 
     array (
@@ -1653,7 +1662,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '2feb5cc19c7a6e32689dd3c41f93531aec433d57',
+      'reference' => 'a38976131ffcffcbbe6a519b27c81d8c3694ccd8',
     ),
     'twig/twig' => 
     array (

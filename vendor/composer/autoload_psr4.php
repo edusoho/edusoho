@@ -65,6 +65,7 @@ return array(
     'GuzzleHttp\\' => array($vendorDir . '/guzzlehttp/guzzle/src'),
     'Gregwar\\' => array($vendorDir . '/gregwar/captcha/src/Gregwar'),
     'Flow\\JSONPath\\' => array($vendorDir . '/softcreatr/jsonpath/src'),
+    'Firebase\\JWT\\' => array($vendorDir . '/firebase/php-jwt/src'),
     'Fig\\Link\\' => array($vendorDir . '/fig/link-util/src'),
     'ExamParser\\' => array($vendorDir . '/codeages/exam-parser/src'),
     'Endroid\\QrCode\\' => array($vendorDir . '/endroid/qrcode/src'),

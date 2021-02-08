@@ -5,13 +5,13 @@ namespace Biz\Xapi\Event;
 use AppBundle\Common\MathToolkit;
 use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseService;
-use Biz\OrderFacade\Product\ClassroomProduct;
-use Biz\OrderFacade\Product\CourseProduct;
+//use Biz\OrderFacade\Product\ClassroomProduct;
+//use Biz\OrderFacade\Product\CourseProduct;
 use Biz\User\CurrentUser;
 use Biz\Xapi\Service\XapiService;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\PluginBundle\Event\EventSubscriber;
-use QiQiuYun\SDK\Constants\XAPIVerbs;
+use AppBundle\Common\XAPIVerbs;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class StatementEventSubscriber extends EventSubscriber implements EventSubscriberInterface
@@ -21,7 +21,7 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         return [
             'answer.submitted' => 'onAnswerSubmitted',
             'question_marker.finish' => 'onQuestionMarkerFinish',
-            'order.paid' => 'onOrderPaid',
+//            'order.paid' => 'onOrderPaid',
             'classReview.add' => 'onClassroomReviewAdd',
 
             'user.search' => 'onUserSearch',
@@ -81,19 +81,19 @@ class StatementEventSubscriber extends EventSubscriber implements EventSubscribe
         $this->createStatement($subject['userId'], XAPIVerbs::SEARCHED, 0, 'keyword', $subject);
     }
 
-    public function onOrderPaid(Event $event)
-    {
-        $order = $event->getSubject();
-        $orderItem = empty($order['items']) ? [] : $order['items'][0];
-        // TODO 如果改成一个订单多个商品的话，每一个 item 需要保存真实支付的现金
-        $isSuiteOrder = 'outside' != $order['source'] && $order['pay_amount'] > 0 && $orderItem && in_array($orderItem['target_type'], [CourseProduct::TYPE, ClassroomProduct::TYPE]);
-        if ($isSuiteOrder) {
-            $this->createStatement($order['user_id'], XAPIVerbs::PURCHASED, $orderItem['target_id'], $orderItem['target_type'], [
-                'pay_amount' => round(MathToolkit::simple($order['pay_amount'], 0.01), 2),
-                'title' => $orderItem['title'],
-            ]);
-        }
-    }
+//    public function onOrderPaid(Event $event)
+//    {
+//        $order = $event->getSubject();
+//        $orderItem = empty($order['items']) ? [] : $order['items'][0];
+//        // TODO 如果改成一个订单多个商品的话，每一个 item 需要保存真实支付的现金
+//        $isSuiteOrder = 'outside' != $order['source'] && $order['pay_amount'] > 0 && $orderItem && in_array($orderItem['target_type'], [CourseProduct::TYPE, ClassroomProduct::TYPE]);
+//        if ($isSuiteOrder) {
+//            $this->createStatement($order['user_id'], XAPIVerbs::PURCHASED, $orderItem['target_id'], $orderItem['target_type'], [
+//                'pay_amount' => round(MathToolkit::simple($order['pay_amount'], 0.01), 2),
+//                'title' => $orderItem['title'],
+//            ]);
+//        }
+//    }
 
     public function onUserDailyActive(Event $event)
     {

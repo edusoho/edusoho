@@ -132,6 +132,7 @@ class ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8
         'F' => 
         array (
             'Flow\\JSONPath\\' => 14,
+            'Firebase\\JWT\\' => 13,
             'Fig\\Link\\' => 9,
         ),
         'E' => 
@@ -409,6 +410,10 @@ class ComposerStaticInit714441f26da7aa8f359fb338baa9d1c8
         'Flow\\JSONPath\\' => 
         array (
             0 => __DIR__ . '/..' . '/softcreatr/jsonpath/src',
+        ),
+        'Firebase\\JWT\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/firebase/php-jwt/src',
         ),
         'Fig\\Link\\' => 
         array (

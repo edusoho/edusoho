@@ -55,6 +55,7 @@
     "ramsey/uuid": "^3.9",
     "codeages/exam-parser": "dev-master",
     "doctrine/cache": "1.6.2",
+    "firebase/php-jwt": "^5.1",
     "vlucas/valitron": "^1.4"
   },
   "require-dev": {
