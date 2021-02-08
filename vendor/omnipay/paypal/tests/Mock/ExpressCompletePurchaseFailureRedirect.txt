@@ -1,8 +1,0 @@
-HTTP/1.1 200 OK
-Date: Wed, 20 Feb 2013 13:55:50 GMT
-Server: Apache
-Content-Length: 214
-Connection: close
-Content-Type: text/plain; charset=utf-8
-
-TOKEN=ASDFASDFASDF&SUCCESSPAGEREDIRECTREQUESTED=false&TIMESTAMP=2016%2d09%2d12T14%3a06%3a12Z&CORRELATIONID=31e509fc8f6a8&ACK=Failure&VERSION=119%2e0&BUILD=25037053&L_ERRORCODE0=10486&L_SHORTMESSAGE0=This%20transaction%20couldn%27t%20be%20completed%2e&L_LONGMESSAGE0=This%20transaction%20couldn%27t%20be%20completed%2e%20Please%20redirect%20your%20customer%20to%20PayPal%2e&L_SEVERITYCODE0=Error

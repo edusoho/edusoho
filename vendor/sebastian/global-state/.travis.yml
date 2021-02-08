@@ -1,20 +1,19 @@
 language: php
 
+dist: bionic
+
 php:
-  - 5.3.3
-  - 5.3
-  - 5.4
-  - 5.5
-  - 5.6
-  - hhvm
+  - 7.3
+  - 7.4
 
-sudo: false
+install:
+  - travis_retry ./tools/composer update --no-interaction --no-ansi --no-progress --no-suggest
 
-before_script:
-  - composer self-update
-  - composer install --no-interaction --prefer-source --dev
+script:
+  - ./vendor/bin/phpunit --coverage-clover=coverage.xml
 
-script: ./vendor/bin/phpunit
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
 
 notifications:
   email: false

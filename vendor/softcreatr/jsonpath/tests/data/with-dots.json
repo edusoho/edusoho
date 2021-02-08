@@ -1,0 +1,15 @@
+{
+  "data": {
+    "tokens": [
+      {
+        "Employee.FirstName": "Jack"
+      },
+      {
+        "Employee.LastName": "Daniels"
+      },
+      {
+        "Employee.Email": "jd@example.com"
+      }
+    ]
+  }
+}

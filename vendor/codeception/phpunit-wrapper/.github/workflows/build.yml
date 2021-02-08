@@ -8,11 +8,10 @@ jobs:
 
     strategy:
       matrix:
-        php: [5.6, 7.0]
+        php: [7.3, 7.4, 8.0]
 
     env:
-      CODECEPTION_VERSION: '3.0.x-dev'
-      extensions: sqlite,zip
+      CODECEPTION_VERSION: '4.1.x-dev'
 
     steps:
       - name: Checkout code
@@ -26,22 +25,15 @@ jobs:
 
       - name: Prepare dependencies
         run: |
-          wget https://github.com/consolidation/Robo/releases/download/1.4.12/robo.phar
-          php robo.phar prepare
           composer update
+          php ./vendor/bin/robo prepare:dependencies
+          composer update
+          php ./vendor/bin/robo prepare:tests
+          php ./vendor/bin/robo prepare:test-autoloading
+          composer dump-autoload
 
       - name: Run test suite
         run: |
-          php robo.phar test cli
-          php robo.phar test "unit -g core"
-          php robo.phar test "tests/unit/Codeception/Constraints/"
-          php robo.phar test "tests/unit/Codeception/Module/AssertsTest.php"
-
-      - name: run tests with 2.5 branch
-        run: |
-          CODECEPTION_VERSION=2.5.x-dev php robo.phar prepare
-          composer update
-          php robo.phar test cli
-          php robo.phar test "unit -g core"
-          php robo.phar test "tests/unit/Codeception/Constraints/"
-          php robo.phar test "tests/unit/Codeception/Module/AssertsTest.php"
+          php ./codecept run -c vendor/codeception/module-asserts/
+          php ./codecept run unit -g core
+          php ./codecept run cli

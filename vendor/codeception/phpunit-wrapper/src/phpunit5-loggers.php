@@ -79,6 +79,8 @@ namespace PHPUnit\Util\Log {
      * file that was distributed with this source code.
      */
 
+    use Codeception\Test\Descriptor;
+
     /**
      * A TestListener that generates JSON messages.
      */
@@ -109,10 +111,10 @@ namespace PHPUnit\Util\Log {
              * An error occurred.
              *
              * @param \PHPUnit\Framework\Test $test
-             * @param Exception $e
+             * @param \Throwable $e
              * @param float $time
              */
-            public function addError(\PHPUnit\Framework\Test $test, \Exception $e, $time)
+            public function addError(\PHPUnit\Framework\Test $test, \Throwable $e, float $time): void
             {
                 $this->writeCase(
                     'error',
@@ -132,7 +134,7 @@ namespace PHPUnit\Util\Log {
              * @param \PHPUnit\Framework\Warning $e
              * @param float $time
              */
-            public function addWarning(\PHPUnit\Framework\Test $test, \PHPUnit\Framework\Warning $e, $time)
+            public function addWarning(\PHPUnit\Framework\Test $test, \PHPUnit\Framework\Warning $e, float $time): void
             {
                 $this->writeCase(
                     'warning',
@@ -152,8 +154,11 @@ namespace PHPUnit\Util\Log {
              * @param \PHPUnit\Framework\AssertionFailedError $e
              * @param float $time
              */
-            public function addFailure(\PHPUnit\Framework\Test $test, \PHPUnit\Framework\AssertionFailedError $e, $time)
-            {
+            public function addFailure(
+                \PHPUnit\Framework\Test $test,
+                \PHPUnit\Framework\AssertionFailedError $e,
+                float $time
+            ): void{
                 $this->writeCase(
                     'fail',
                     $time,
@@ -169,10 +174,10 @@ namespace PHPUnit\Util\Log {
              * Incomplete test.
              *
              * @param \PHPUnit\Framework\Test $test
-             * @param Exception $e
+             * @param Throwable $e
              * @param float $time
              */
-            public function addIncompleteTest(\PHPUnit\Framework\Test $test, \Exception $e, $time)
+            public function addIncompleteTest(\PHPUnit\Framework\Test $test, \Throwable $e, float $time): void
             {
                 $this->writeCase(
                     'error',
@@ -189,10 +194,10 @@ namespace PHPUnit\Util\Log {
              * Risky test.
              *
              * @param \PHPUnit\Framework\Test $test
-             * @param Exception $e
+             * @param Throwable $e
              * @param float $time
              */
-            public function addRiskyTest(\PHPUnit\Framework\Test $test, \Exception $e, $time)
+            public function addRiskyTest(\PHPUnit\Framework\Test $test, \Throwable $e, float $time): void
             {
                 $this->writeCase(
                     'error',
@@ -209,10 +214,10 @@ namespace PHPUnit\Util\Log {
              * Skipped test.
              *
              * @param \PHPUnit\Framework\Test $test
-             * @param Exception $e
+             * @param Throwable $e
              * @param float $time
              */
-            public function addSkippedTest(\PHPUnit\Framework\Test $test, \Exception $e, $time)
+            public function addSkippedTest(\PHPUnit\Framework\Test $test, \Throwable $e, float $time): void
             {
                 $this->writeCase(
                     'error',
@@ -230,10 +235,10 @@ namespace PHPUnit\Util\Log {
              *
              * @param \PHPUnit\Framework\TestSuite $suite
              */
-            public function startTestSuite(\PHPUnit\Framework\TestSuite $suite)
+            public function startTestSuite(\PHPUnit\Framework\TestSuite $suite): void
             {
                 $this->currentTestSuiteName = $suite->getName();
-                $this->currentTestName      = '';
+                $this->currentTestName = '';
 
                 $this->addLogEvent(
                     [
@@ -249,12 +254,12 @@ namespace PHPUnit\Util\Log {
              *
              * @param \PHPUnit\Framework\TestSuite $suite
              */
-            public function endTestSuite(\PHPUnit\Framework\TestSuite $suite)
+            public function endTestSuite(\PHPUnit\Framework\TestSuite $suite): void
             {
                 $this->currentTestSuiteName = '';
-                $this->currentTestName      = '';
+                $this->currentTestName = '';
 
-                $this->writeAll($this->logEvents);
+                $this->writeArray($this->logEvents);
             }
 
             /**
@@ -262,7 +267,7 @@ namespace PHPUnit\Util\Log {
              *
              * @param \PHPUnit\Framework\Test $test
              */
-            public function startTest(\PHPUnit\Framework\Test $test)
+            public function startTest(\PHPUnit\Framework\Test $test): void
             {
                 $this->currentTestName = \PHPUnit\Util\Test::describe($test);
                 $this->currentTestPass = true;
@@ -271,7 +276,7 @@ namespace PHPUnit\Util\Log {
                     [
                         'event' => 'testStart',
                         'suite' => $this->currentTestSuiteName,
-                        'test'  => $this->currentTestName
+                        'test' => $this->currentTestName
                     ]
                 );
             }
@@ -282,7 +287,7 @@ namespace PHPUnit\Util\Log {
              * @param \PHPUnit\Framework\Test $test
              * @param float $time
              */
-            public function endTest(\PHPUnit\Framework\Test $test, $time)
+            public function endTest(\PHPUnit\Framework\Test $test, float $time): void
             {
                 if ($this->currentTestPass) {
                     $this->writeCase('pass', $time, [], '', $test);
@@ -296,7 +301,7 @@ namespace PHPUnit\Util\Log {
              * @param string $message
              * @param \PHPUnit\Framework\TestCase|null $test
              */
-            protected function writeCase($status, $time, array $trace = [], $message = '', $test = null)
+            protected function writeCase($status, float $time, array $trace = [], $message = '', $test = null): void
             {
                 $output = '';
                 // take care of TestSuite producing error (e.g. by running into exception) as TestSuite doesn't have hasOutput
@@ -305,14 +310,14 @@ namespace PHPUnit\Util\Log {
                 }
                 $this->addLogEvent(
                     [
-                        'event'   => 'test',
-                        'suite'   => $this->currentTestSuiteName,
-                        'test'    => $this->currentTestName,
-                        'status'  => $status,
-                        'time'    => $time,
-                        'trace'   => $trace,
+                        'event' => 'test',
+                        'suite' => $this->currentTestSuiteName,
+                        'test' => $this->currentTestName,
+                        'status' => $status,
+                        'time' => $time,
+                        'trace' => $trace,
                         'message' => \PHPUnit_Util_String::convertToUtf8($message),
-                        'output'  => $output,
+                        'output' => $output,
                     ]
                 );
             }
@@ -320,7 +325,7 @@ namespace PHPUnit\Util\Log {
             /**
              * @param array $event_data
              */
-            protected function addLogEvent($event_data = [])
+            protected function addLogEvent($event_data = []): void
             {
                 if (count($event_data)) {
                     array_push($this->logEvents, $event_data);
@@ -330,17 +335,17 @@ namespace PHPUnit\Util\Log {
             /**
              * @param array $buffer
              */
-            public function writeAll($buffer)
+            public function writeArray($buffer)
             {
                 array_walk_recursive(
-                    $buffer, function (&$input) {
+                    $buffer, function (&$input){
                     if (is_string($input)) {
                         $input = \PHPUnit_Util_String::convertToUtf8($input);
                     }
                 }
                 );
 
-                parent::write(json_encode($buffer, JSON_PRETTY_PRINT));
+                $this->write(json_encode($buffer, JSON_PRETTY_PRINT));
             }
         }
     }
@@ -382,7 +387,7 @@ namespace PHPUnit\Util\Log {
              *
              * @param mixed $out
              *
-             * @throws \PHPUnit\Framework\Exception
+             * @throws \PHPUnit\Framework\Throwable
              */
             public function __construct($out = null)
             {
@@ -394,10 +399,10 @@ namespace PHPUnit\Util\Log {
              * An error occurred.
              *
              * @param \PHPUnit\Framework\Test $test
-             * @param Exception $e
+             * @param Throwable $e
              * @param float $time
              */
-            public function addError(\PHPUnit\Framework\Test $test, \Exception $e, $time)
+            public function addError(\PHPUnit\Framework\Test $test, \Throwable $e, float $time): void
             {
                 $this->writeNotOk($test, 'Error');
             }
@@ -409,7 +414,7 @@ namespace PHPUnit\Util\Log {
              * @param \PHPUnit\Framework\Warning $e
              * @param float $time
              */
-            public function addWarning(\PHPUnit\Framework\Test $test, \PHPUnit\Framework\Warning $e, $time)
+            public function addWarning(\PHPUnit\Framework\Test $test, \PHPUnit\Framework\Warning $e, float $time): void
             {
                 $this->writeNotOk($test, 'Warning');
             }
@@ -421,8 +426,11 @@ namespace PHPUnit\Util\Log {
              * @param \PHPUnit\Framework\AssertionFailedError $e
              * @param float $time
              */
-            public function addFailure(\PHPUnit\Framework\Test $test, \PHPUnit\Framework\AssertionFailedError $e, $time)
-            {
+            public function addFailure(
+                \PHPUnit\Framework\Test $test,
+                \PHPUnit\Framework\AssertionFailedError $e,
+                float $time
+            ): void{
                 $this->writeNotOk($test, 'Failure');
 
                 $message = explode(
@@ -431,16 +439,16 @@ namespace PHPUnit\Util\Log {
                 );
 
                 $diagnostic = [
-                    'message'  => $message[0],
+                    'message' => $message[0],
                     'severity' => 'fail'
                 ];
 
-                if ($e instanceof \PHPUnit\Framework\ExpectationFailedException) {
+                if ($e instanceof \PHPUnit\Framework\ExpectationFailedThrowable) {
                     $cf = $e->getComparisonFailure();
 
                     if ($cf !== null) {
                         $diagnostic['data'] = [
-                            'got'      => $cf->getActual(),
+                            'got' => $cf->getActual(),
                             'expected' => $cf->getExpected()
                         ];
                     }
@@ -460,10 +468,10 @@ namespace PHPUnit\Util\Log {
              * Incomplete test.
              *
              * @param \PHPUnit\Framework\Test $test
-             * @param \Exception $e
+             * @param \Throwable $e
              * @param float $time
              */
-            public function addIncompleteTest(\PHPUnit\Framework\Test $test, \Exception $e, $time)
+            public function addIncompleteTest(\PHPUnit\Framework\Test $test, \Throwable $e, float $time): void
             {
                 $this->writeNotOk($test, '', 'TODO Incomplete Test');
             }
@@ -472,10 +480,10 @@ namespace PHPUnit\Util\Log {
              * Risky test.
              *
              * @param \PHPUnit\Framework\Test $test
-             * @param Exception $e
+             * @param Throwable $e
              * @param float $time
              */
-            public function addRiskyTest(\PHPUnit\Framework\Test $test, \Exception $e, $time)
+            public function addRiskyTest(\PHPUnit\Framework\Test $test, \Throwable $e, float $time): void
             {
                 $this->write(
                     sprintf(
@@ -492,10 +500,10 @@ namespace PHPUnit\Util\Log {
              * Skipped test.
              *
              * @param \PHPUnit\Framework\Test $test
-             * @param Exception $e
+             * @param Throwable $e
              * @param float $time
              */
-            public function addSkippedTest(\PHPUnit\Framework\Test $test, \Exception $e, $time)
+            public function addSkippedTest(\PHPUnit\Framework\Test $test, \Throwable $e, float $time): void
             {
                 $this->write(
                     sprintf(
@@ -513,7 +521,7 @@ namespace PHPUnit\Util\Log {
              *
              * @param \PHPUnit\Framework\TestSuite $suite
              */
-            public function startTestSuite(\PHPUnit\Framework\TestSuite $suite)
+            public function startTestSuite(\PHPUnit\Framework\TestSuite $suite): void
             {
                 $this->testSuiteLevel++;
             }
@@ -523,7 +531,7 @@ namespace PHPUnit\Util\Log {
              *
              * @param \PHPUnit\Framework\TestSuite $suite
              */
-            public function endTestSuite(\PHPUnit\Framework\TestSuite $suite)
+            public function endTestSuite(\PHPUnit\Framework\TestSuite $suite): void
             {
                 $this->testSuiteLevel--;
 
@@ -537,7 +545,7 @@ namespace PHPUnit\Util\Log {
              *
              * @param \PHPUnit\Framework\Test $test
              */
-            public function startTest(\PHPUnit\Framework\Test $test)
+            public function startTest(\PHPUnit\Framework\Test $test): void
             {
                 $this->testNumber++;
                 $this->testSuccessful = true;
@@ -549,14 +557,14 @@ namespace PHPUnit\Util\Log {
              * @param \PHPUnit\Framework\Test $test
              * @param float $time
              */
-            public function endTest(\PHPUnit\Framework\Test $test, $time)
+            public function endTest(\PHPUnit\Framework\Test $test, float $time): void
             {
                 if ($this->testSuccessful === true) {
                     $this->write(
                         sprintf(
                             "ok %d - %s\n",
                             $this->testNumber,
-                            \PHPUnit\Util\Test::describe($test)
+                            Descriptor::getTestSignature($test)
                         )
                     );
                 }
@@ -576,7 +584,7 @@ namespace PHPUnit\Util\Log {
                         "not ok %d - %s%s%s\n",
                         $this->testNumber,
                         $prefix != '' ? $prefix . ': ' : '',
-                        \PHPUnit\Util\Test::describe($test),
+                        \PHPUnit\Util\Test::describeAsString($test),
                         $directive != '' ? ' # ' . $directive : ''
                     )
                 );

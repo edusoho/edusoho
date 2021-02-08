@@ -1,14 +1,16 @@
-<?php
+<?php declare(strict_types=1);
 /*
- * This file is part of the Comparator package.
+ * This file is part of sebastian/comparator.
  *
  * (c) Sebastian Bergmann <sebastian@phpunit.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace SebastianBergmann\Comparator;
+
+use function gettype;
+use function sprintf;
 
 /**
  * Compares values for type equality.
@@ -18,8 +20,9 @@ class TypeComparator extends Comparator
     /**
      * Returns whether the comparator can compare two values.
      *
-     * @param  mixed $expected The first value to compare
-     * @param  mixed $actual   The second value to compare
+     * @param mixed $expected The first value to compare
+     * @param mixed $actual   The second value to compare
+     *
      * @return bool
      */
     public function accepts($expected, $actual)
@@ -38,7 +41,7 @@ class TypeComparator extends Comparator
      *
      * @throws ComparisonFailure
      */
-    public function assertEquals($expected, $actual, $delta = 0.0, $canonicalize = false, $ignoreCase = false)
+    public function assertEquals($expected, $actual, $delta = 0.0, $canonicalize = false, $ignoreCase = false)/*: void*/
     {
         if (gettype($expected) != gettype($actual)) {
             throw new ComparisonFailure(

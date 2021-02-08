@@ -71,13 +71,13 @@ services:
         tags:
             - { name: extension, priority: 10  }
 
-    payment.extension:
-        class: AppBundle\Extension\PaymentExtension
-        public: true
-        calls:
-            - [setBiz, ['@biz']]
-        tags:
-            - { name: extension, priority: 10  }
+#    payment.extension:
+#        class: AppBundle\Extension\PaymentExtension
+#        public: true
+#        calls:
+#            - [setBiz, ['@biz']]
+#        tags:
+#            - { name: extension, priority: 10  }
 
     callback.extension:
         class: AppBundle\Extension\CallbackExtension
@@ -87,33 +87,33 @@ services:
         tags:
             - { name: extension }
 
-    wechat_template.extension:
-        class: AppBundle\Extension\WeChatTemplateExtension
-        public: true
-        calls:
-            - [setBiz, ['@biz']]
-        tags:
-            - { name: extension, priority: 10 }
+#    wechat_template.extension:
+#        class: AppBundle\Extension\WeChatTemplateExtension
+#        public: true
+#        calls:
+#            - [setBiz, ['@biz']]
+#        tags:
+#            - { name: extension, priority: 10 }
 
     biz.service_provider.collector:
         class: Biz\ServiceProviderCollector
         public: true
 
-    coupon_service_provider:
-        class: Biz\Coupon\CouponServiceProvider
-        public: true
-        calls:
-            - [setBiz, ['@biz']]
-        tags:
-            - { name: extension }
+#    coupon_service_provider:
+#        class: Biz\Coupon\CouponServiceProvider
+#        public: true
+#        calls:
+#            - [setBiz, ['@biz']]
+#        tags:
+#            - { name: extension }
 
-    mail_service_provider:
-        class: Biz\Mail\MailServiceProvider
-        public: true
-        calls:
-            - [setBiz, ['@biz']]
-        tags:
-            - { name: extension }
+#    mail_service_provider:
+#        class: Biz\Mail\MailServiceProvider
+#        public: true
+#        calls:
+#            - [setBiz, ['@biz']]
+#        tags:
+#            - { name: extension }
 
     web.twig.question_type_extension:
         class: AppBundle\Twig\QuestionTypeExtension
@@ -220,12 +220,12 @@ services:
         tags:
             - { name: twig.extension }
 
-    web.twig.order_extension:
-        class: AppBundle\Twig\OrderExtension
-        arguments:    ['@service_container', '@biz']
-        public: true
-        tags:
-            - { name: twig.extension }
+#    web.twig.order_extension:
+#        class: AppBundle\Twig\OrderExtension
+#        arguments:    ['@service_container', '@biz']
+#        public: true
+#        tags:
+#            - { name: twig.extension }
 
     web.twig.course_extension:
         class: AppBundle\Twig\CourseExtension
@@ -234,12 +234,12 @@ services:
         tags:
             - { name: twig.extension }
 
-    web.twig.item_bank_exercise_extension:
-      class: AppBundle\Twig\ItemBankExerciseExtension
-      arguments:    ['@service_container', '@biz']
-      public: true
-      tags:
-        - { name: twig.extension }
+#    web.twig.item_bank_exercise_extension:
+#      class: AppBundle\Twig\ItemBankExerciseExtension
+#      arguments:    ['@service_container', '@biz']
+#      public: true
+#      tags:
+#        - { name: twig.extension }
 
     web.twig.search_extension:
         class: AppBundle\Twig\SearchExtension

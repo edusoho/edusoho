@@ -1,0 +1,60 @@
+{
+  "name": "softcreatr/jsonpath",
+  "description": "JSONPath implementation for parsing, searching and flattening arrays",
+  "version": "0.7.2",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Stephen Frank",
+      "email": "stephen@flowsa.com",
+      "homepage": "https://prismaticbytes.com",
+      "role": "Developer"
+    },
+    {
+      "name": "Sascha Greuel",
+      "email": "hello@1-2.dev",
+      "homepage": "http://1-2.dev",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=7.1",
+    "ext-json": "*"
+  },
+  "replace": {
+    "flow/jsonpath": "*"
+  },
+  "conflict": {
+    "phpunit/phpunit": "<7.0 || >= 10.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": ">=7.0",
+    "roave/security-advisories": "dev-master",
+    "squizlabs/php_codesniffer": "^3.5"
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "preferred-install": "dist"
+  },
+  "autoload": {
+    "psr-4": {
+      "Flow\\JSONPath\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Flow\\JSONPath\\Test\\": "tests/"
+    }
+  },
+  "minimum-stability": "stable",
+  "scripts": {
+    "cs-check": "phpcs",
+    "cs-fix": "phpcbf",
+    "test": "phpunit"
+  },
+  "support": {
+    "email": "hello@1-2.dev",
+    "issues": "https://github.com/SoftCreatR/JSONPath/issues",
+    "source": "https://github.com/SoftCreatR/JSONPath"
+  }
+}

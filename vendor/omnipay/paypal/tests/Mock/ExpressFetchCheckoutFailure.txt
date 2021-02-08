@@ -1,7 +1,0 @@
-HTTP/1.1 200 OK
-Date: 05 Apr 2007 23:44:11 GMT
-Server: Apache
-Connection: close
-Content-Type: text/plain; charset=utf-8
-
-TIMESTAMP=2007%2d04%2d05T23%3a44%3a11Z&CORRELATIONID=6b174e9bac3b3&ACK=Failure&VERSION=85.0&BUILD=11235635&L_ERRORCODE0=10414&L_SHORTMESSAGE0=Transaction%20refused%20because%20of%20an%20invalid%20argument.%20See%20additional%20error%20messages%20for%20details.&L_LONGMESSAGE0=The%20amount%20exceeds%20the%20maximum%20amount%20for%20a%20single%20transaction.&L_SEVERITYCODE0=Error

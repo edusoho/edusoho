@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -7,138 +7,91 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace PHPUnit\Util;
 
 /**
- * Utility class that can print to STDOUT or write to a file.
+ * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-class PHPUnit_Util_Printer
+class Printer
 {
     /**
-     * If true, flush output after every write.
-     *
+     * @psalm-var closed-resource|resource
+     */
+    private $stream;
+
+    /**
      * @var bool
      */
-    protected $autoFlush = false;
+    private $isPhpStream;
 
     /**
-     * @var resource
-     */
-    protected $out;
-
-    /**
-     * @var string
-     */
-    protected $outTarget;
-
-    /**
-     * Constructor.
+     * @param null|resource|string $out
      *
-     * @param mixed $out
-     *
-     * @throws PHPUnit_Framework_Exception
+     * @throws Exception
      */
     public function __construct($out = null)
     {
-        if ($out !== null) {
-            if (is_string($out)) {
-                if (strpos($out, 'socket://') === 0) {
-                    $out = explode(':', str_replace('socket://', '', $out));
+        if (\is_resource($out)) {
+            $this->stream = $out;
 
-                    if (count($out) != 2) {
-                        throw new PHPUnit_Framework_Exception;
-                    }
+            return;
+        }
 
-                    $this->out = fsockopen($out[0], $out[1]);
-                } else {
-                    if (strpos($out, 'php://') === false &&
-                        !is_dir(dirname($out))) {
-                        mkdir(dirname($out), 0777, true);
-                    }
+        if (!\is_string($out)) {
+            return;
+        }
 
-                    $this->out = fopen($out, 'wt');
-                }
+        if (\strpos($out, 'socket://') === 0) {
+            $tmp = \explode(':', \str_replace('socket://', '', $out));
 
-                $this->outTarget = $out;
-            } else {
-                $this->out = $out;
+            if (\count($tmp) !== 2) {
+                throw new Exception(
+                    \sprintf(
+                        '"%s" does not match "socket://hostname:port" format',
+                        $out
+                    )
+                );
             }
+
+            $this->stream = \fsockopen($tmp[0], (int) $tmp[1]);
+
+            return;
         }
+
+        if (\strpos($out, 'php://') === false && !Filesystem::createDirectory(\dirname($out))) {
+            throw new Exception(
+                \sprintf(
+                    'Directory "%s" was not created',
+                    \dirname($out)
+                )
+            );
+        }
+
+        $this->stream      = \fopen($out, 'wb');
+        $this->isPhpStream = \strncmp($out, 'php://', 6) !== 0;
     }
 
-    /**
-     * Flush buffer and close output if it's not to a PHP stream
-     */
-    public function flush()
+    public function write(string $buffer): void
     {
-        if ($this->out && strncmp($this->outTarget, 'php://', 6) !== 0) {
-            fclose($this->out);
-        }
-    }
+        if ($this->stream) {
+            \assert(\is_resource($this->stream));
 
-    /**
-     * Performs a safe, incremental flush.
-     *
-     * Do not confuse this function with the flush() function of this class,
-     * since the flush() function may close the file being written to, rendering
-     * the current object no longer usable.
-     */
-    public function incrementalFlush()
-    {
-        if ($this->out) {
-            fflush($this->out);
+            \fwrite($this->stream, $buffer);
         } else {
-            flush();
-        }
-    }
-
-    /**
-     * @param string $buffer
-     */
-    public function write($buffer)
-    {
-        if ($this->out) {
-            fwrite($this->out, $buffer);
-
-            if ($this->autoFlush) {
-                $this->incrementalFlush();
-            }
-        } else {
-            if (PHP_SAPI != 'cli' && PHP_SAPI != 'phpdbg') {
-                $buffer = htmlspecialchars($buffer, ENT_SUBSTITUTE);
+            if (\PHP_SAPI !== 'cli' && \PHP_SAPI !== 'phpdbg') {
+                $buffer = \htmlspecialchars($buffer, \ENT_COMPAT | \ENT_SUBSTITUTE);
             }
 
             print $buffer;
-
-            if ($this->autoFlush) {
-                $this->incrementalFlush();
-            }
         }
     }
 
-    /**
-     * Check auto-flush mode.
-     *
-     * @return bool
-     */
-    public function getAutoFlush()
+    public function flush(): void
     {
-        return $this->autoFlush;
-    }
+        if ($this->stream && $this->isPhpStream) {
+            \assert(\is_resource($this->stream));
 
-    /**
-     * Set auto-flushing mode.
-     *
-     * If set, *incremental* flushes will be done after each write. This should
-     * not be confused with the different effects of this class' flush() method.
-     *
-     * @param bool $autoFlush
-     */
-    public function setAutoFlush($autoFlush)
-    {
-        if (is_bool($autoFlush)) {
-            $this->autoFlush = $autoFlush;
-        } else {
-            throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'boolean');
+            \fclose($this->stream);
         }
     }
 }

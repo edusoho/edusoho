@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -7,25 +7,32 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace PHPUnit\Framework\Constraint;
 
 /**
  * Constraint that checks if the directory(name) that it is evaluated for exists.
  *
  * The file path to check is passed as $other in evaluate().
  */
-class PHPUnit_Framework_Constraint_DirectoryExists extends PHPUnit_Framework_Constraint
+final class DirectoryExists extends Constraint
 {
+    /**
+     * Returns a string representation of the constraint.
+     */
+    public function toString(): string
+    {
+        return 'directory exists';
+    }
+
     /**
      * Evaluates the constraint for parameter $other. Returns true if the
      * constraint is met, false otherwise.
      *
-     * @param mixed $other Value or object to evaluate.
-     *
-     * @return bool
+     * @param mixed $other value or object to evaluate
      */
-    protected function matches($other)
+    protected function matches($other): bool
     {
-        return is_dir($other);
+        return \is_dir($other);
     }
 
     /**
@@ -34,25 +41,13 @@ class PHPUnit_Framework_Constraint_DirectoryExists extends PHPUnit_Framework_Con
      * The beginning of failure messages is "Failed asserting that" in most
      * cases. This method should return the second part of that sentence.
      *
-     * @param mixed $other Evaluated value or object.
-     *
-     * @return string
+     * @param mixed $other evaluated value or object
      */
-    protected function failureDescription($other)
+    protected function failureDescription($other): string
     {
-        return sprintf(
+        return \sprintf(
             'directory "%s" exists',
             $other
         );
-    }
-
-    /**
-     * Returns a string representation of the constraint.
-     *
-     * @return string
-     */
-    public function toString()
-    {
-        return 'directory exists';
     }
 }

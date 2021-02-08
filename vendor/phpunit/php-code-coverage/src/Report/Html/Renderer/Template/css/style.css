@@ -6,7 +6,7 @@ body {
  max-width: none;
 }
 
-.glyphicon {
+.octicon {
  margin-right:.25em;
 }
 
@@ -48,7 +48,7 @@ body {
  background-color: #f2dede;
 }
 
-.table tbody td.warning, li.warning, span.warning {
+.table tbody tr.warning, .table tbody td.warning, li.warning, span.warning {
  background-color: #fcf8e3;
 }
 
@@ -64,7 +64,7 @@ td.small {
 }
 
 td.codeLine {
- font-family: monospace;
+ font-family: "Source Code Pro", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
  white-space: pre;
 }
 

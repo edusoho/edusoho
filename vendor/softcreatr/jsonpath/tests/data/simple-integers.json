@@ -1,0 +1,16 @@
+{
+  "features": [
+    {
+      "name": "foo",
+      "value": 1
+    },
+    {
+      "name": "bar",
+      "value": 2
+    },
+    {
+      "name": "baz",
+      "value": 1
+    }
+  ]
+}

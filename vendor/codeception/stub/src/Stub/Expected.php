@@ -2,10 +2,8 @@
 
 namespace Codeception\Stub;
 
-require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'shim.php';
-
-use PHPUnit\Framework\MockObject\Matcher\InvokedAtLeastOnce;
-use PHPUnit\Framework\MockObject\Matcher\InvokedCount;
+use PHPUnit\Framework\MockObject\Rule\InvokedAtLeastOnce;
+use PHPUnit\Framework\MockObject\Rule\InvokedCount;
 
 class Expected
 {

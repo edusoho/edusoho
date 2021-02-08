@@ -2,7 +2,7 @@
 
 namespace Codeception\Stub;
 
-use PHPUnit\Framework\MockObject\Matcher\InvokedRecorder;
+use PHPUnit\Framework\MockObject\Rule\InvocationOrder;
 
 /**
  * Holds matcher and value of mocked method
@@ -13,7 +13,7 @@ class StubMarshaler
 
     private $methodValue;
 
-    public function __construct(InvokedRecorder $matcher, $value)
+    public function __construct(InvocationOrder $matcher, $value)
     {
         $this->methodMatcher = $matcher;
         $this->methodValue = $value;

@@ -2,7 +2,7 @@
     "name": "sebastian/comparator",
     "description": "Provides the functionality to compare PHP values for equality",
     "keywords": ["comparator","compare","equality"],
-    "homepage": "http://www.github.com/sebastianbergmann/comparator",
+    "homepage": "https://github.com/sebastianbergmann/comparator",
     "license": "BSD-3-Clause",
     "authors": [
         {
@@ -22,22 +22,35 @@
             "email": "bschussek@2bepublished.at"
         }
     ],
+    "prefer-stable": true,
     "require": {
-        "php": ">=5.3.3",
-        "sebastian/diff": "~1.2",
-        "sebastian/exporter": "~1.2 || ~2.0"
+        "php": ">=7.3",
+        "sebastian/diff": "^4.0",
+        "sebastian/exporter": "^4.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4.4"
+        "phpunit/phpunit": "^9.3"
+    },
+    "config": {
+        "platform": {
+            "php": "7.3.0"
+        },
+        "optimize-autoloader": true,
+        "sort-packages": true
     },
     "autoload": {
         "classmap": [
             "src/"
         ]
     },
+    "autoload-dev": {
+        "classmap": [
+            "tests/_fixture"
+        ]
+    },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.2.x-dev"
+            "dev-master": "4.0-dev"
         }
     }
 }

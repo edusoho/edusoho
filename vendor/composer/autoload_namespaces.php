@@ -17,8 +17,6 @@ return array(
     'OAuth2' => array($vendorDir . '/bshaffer/oauth2-server-php/src'),
     'Mockery' => array($vendorDir . '/mockery/mockery/library'),
     'HTMLPurifier' => array($vendorDir . '/ezyang/htmlpurifier/library'),
-    'Flow\\JSONPath\\Test' => array($vendorDir . '/flow/jsonpath/tests'),
-    'Flow\\JSONPath' => array($vendorDir . '/flow/jsonpath/src'),
     'Doctrine\\ORM\\' => array($vendorDir . '/doctrine/orm/lib'),
     'Doctrine\\DBAL\\' => array($vendorDir . '/doctrine/dbal/lib'),
     'Doctrine\\Common\\Annotations\\' => array($vendorDir . '/doctrine/annotations/lib'),

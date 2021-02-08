@@ -1,17 +1,19 @@
-<?php
+<?php declare(strict_types=1);
 /*
- * This file is part of the Comparator package.
+ * This file is part of sebastian/comparator.
  *
  * (c) Sebastian Bergmann <sebastian@phpunit.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace SebastianBergmann\Comparator;
 
+use function sprintf;
+use function strtolower;
 use DOMDocument;
 use DOMNode;
+use ValueError;
 
 /**
  * Compares DOMNode instances for equality.
@@ -21,8 +23,9 @@ class DOMNodeComparator extends ObjectComparator
     /**
      * Returns whether the comparator can compare two values.
      *
-     * @param  mixed $expected The first value to compare
-     * @param  mixed $actual   The second value to compare
+     * @param mixed $expected The first value to compare
+     * @param mixed $actual   The second value to compare
+     *
      * @return bool
      */
     public function accepts($expected, $actual)
@@ -42,17 +45,13 @@ class DOMNodeComparator extends ObjectComparator
      *
      * @throws ComparisonFailure
      */
-    public function assertEquals($expected, $actual, $delta = 0.0, $canonicalize = false, $ignoreCase = false, array &$processed = array())
+    public function assertEquals($expected, $actual, $delta = 0.0, $canonicalize = false, $ignoreCase = false, array &$processed = [])/*: void*/
     {
         $expectedAsString = $this->nodeToText($expected, true, $ignoreCase);
         $actualAsString   = $this->nodeToText($actual, true, $ignoreCase);
 
         if ($expectedAsString !== $actualAsString) {
-            if ($expected instanceof DOMDocument) {
-                $type = 'documents';
-            } else {
-                $type = 'nodes';
-            }
+            $type = $expected instanceof DOMDocument ? 'documents' : 'nodes';
 
             throw new ComparisonFailure(
                 $expected,
@@ -68,40 +67,27 @@ class DOMNodeComparator extends ObjectComparator
     /**
      * Returns the normalized, whitespace-cleaned, and indented textual
      * representation of a DOMNode.
-     *
-     * @param  DOMNode $node
-     * @param  bool    $canonicalize
-     * @param  bool    $ignoreCase
-     * @return string
      */
-    private function nodeToText(DOMNode $node, $canonicalize, $ignoreCase)
+    private function nodeToText(DOMNode $node, bool $canonicalize, bool $ignoreCase): string
     {
         if ($canonicalize) {
             $document = new DOMDocument;
-            $document->loadXML($node->C14N());
+
+            try {
+                @$document->loadXML($node->C14N());
+            } catch (ValueError $e) {
+            }
 
             $node = $document;
         }
 
-        if ($node instanceof DOMDocument) {
-            $document = $node;
-        } else {
-            $document = $node->ownerDocument;
-        }
+        $document = $node instanceof DOMDocument ? $node : $node->ownerDocument;
 
         $document->formatOutput = true;
         $document->normalizeDocument();
 
-        if ($node instanceof DOMDocument) {
-            $text = $node->saveXML();
-        } else {
-            $text = $document->saveXML($node);
-        }
+        $text = $node instanceof DOMDocument ? $node->saveXML() : $document->saveXML($node);
 
-        if ($ignoreCase) {
-            $text = strtolower($text);
-        }
-
-        return $text;
+        return $ignoreCase ? strtolower($text) : $text;
     }
 }

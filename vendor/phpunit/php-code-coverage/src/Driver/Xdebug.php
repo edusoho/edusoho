@@ -1,92 +1,90 @@
-<?php
+<?php declare(strict_types=1);
 /*
- * This file is part of the php-code-coverage package.
+ * This file is part of phpunit/php-code-coverage.
  *
  * (c) Sebastian Bergmann <sebastian@phpunit.de>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace SebastianBergmann\CodeCoverage\Driver;
 
+use SebastianBergmann\CodeCoverage\Filter;
 use SebastianBergmann\CodeCoverage\RuntimeException;
 
 /**
  * Driver for Xdebug's code coverage functionality.
- *
- * @codeCoverageIgnore
  */
-class Xdebug implements Driver
+final class Xdebug implements Driver
 {
     /**
-     * Cache the number of lines for each file
-     *
      * @var array
      */
     private $cacheNumLines = [];
 
     /**
-     * Constructor.
+     * @var Filter
      */
-    public function __construct()
+    private $filter;
+
+    /**
+     * @throws RuntimeException
+     */
+    public function __construct(Filter $filter = null)
     {
-        if (!extension_loaded('xdebug')) {
+        if (!\extension_loaded('xdebug')) {
             throw new RuntimeException('This driver requires Xdebug');
         }
 
-        if (version_compare(phpversion('xdebug'), '2.2.1', '>=') &&
-            !ini_get('xdebug.coverage_enable')) {
-            throw new RuntimeException(
-                'xdebug.coverage_enable=On has to be set in php.ini'
-            );
+        if (!\ini_get('xdebug.coverage_enable')) {
+            throw new RuntimeException('xdebug.coverage_enable=On has to be set in php.ini');
         }
+
+        if ($filter === null) {
+            $filter = new Filter;
+        }
+
+        $this->filter = $filter;
     }
 
     /**
      * Start collection of code coverage information.
-     *
-     * @param bool $determineUnusedAndDead
      */
-    public function start($determineUnusedAndDead = true)
+    public function start(bool $determineUnusedAndDead = true): void
     {
         if ($determineUnusedAndDead) {
-            xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);
+            \xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);
         } else {
-            xdebug_start_code_coverage();
+            \xdebug_start_code_coverage();
         }
     }
 
     /**
      * Stop collection of code coverage information.
-     *
-     * @return array
      */
-    public function stop()
+    public function stop(): array
     {
-        $data = xdebug_get_code_coverage();
-        xdebug_stop_code_coverage();
+        $data = \xdebug_get_code_coverage();
+
+        \xdebug_stop_code_coverage();
 
         return $this->cleanup($data);
     }
 
-    /**
-     * @param array $data
-     *
-     * @return array
-     */
-    private function cleanup(array $data)
+    private function cleanup(array $data): array
     {
-        foreach (array_keys($data) as $file) {
+        foreach (\array_keys($data) as $file) {
             unset($data[$file][0]);
 
-            if (strpos($file, 'xdebug://debug-eval') !== 0 && file_exists($file)) {
-                $numLines = $this->getNumberOfLinesInFile($file);
+            if (!$this->filter->isFile($file)) {
+                continue;
+            }
 
-                foreach (array_keys($data[$file]) as $line) {
-                    if ($line > $numLines) {
-                        unset($data[$file][$line]);
-                    }
+            $numLines = $this->getNumberOfLinesInFile($file);
+
+            foreach (\array_keys($data[$file]) as $line) {
+                if ($line > $numLines) {
+                    unset($data[$file][$line]);
                 }
             }
         }
@@ -94,24 +92,19 @@ class Xdebug implements Driver
         return $data;
     }
 
-    /**
-     * @param string $file
-     *
-     * @return int
-     */
-    private function getNumberOfLinesInFile($file)
+    private function getNumberOfLinesInFile(string $fileName): int
     {
-        if (!isset($this->cacheNumLines[$file])) {
-            $buffer = file_get_contents($file);
-            $lines  = substr_count($buffer, "\n");
+        if (!isset($this->cacheNumLines[$fileName])) {
+            $buffer = \file_get_contents($fileName);
+            $lines  = \substr_count($buffer, "\n");
 
-            if (substr($buffer, -1) !== "\n") {
+            if (\substr($buffer, -1) !== "\n") {
                 $lines++;
             }
 
-            $this->cacheNumLines[$file] = $lines;
+            $this->cacheNumLines[$fileName] = $lines;
         }
 
-        return $this->cacheNumLines[$file];
+        return $this->cacheNumLines[$fileName];
     }
 }

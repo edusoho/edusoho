@@ -7,7 +7,7 @@ use Codeception\Test\Test;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\TestSuite;
 
-class PhpUnit extends \PHPUnit\Util\Log\JUnit
+class PhpUnit extends \Codeception\PHPUnit\NonFinal\JUnit
 {
     const SUITE_LEVEL = 1;
     const FILE_LEVEL  = 2;
@@ -17,7 +17,7 @@ class PhpUnit extends \PHPUnit\Util\Log\JUnit
     private $currentFile;
     private $currentFileSuite;
 
-    public function startTest(\PHPUnit\Framework\Test $test)
+    public function startTest(\PHPUnit\Framework\Test $test):void
     {
         if (method_exists($test, 'getFileName') ) {
             $filename = $test->getFileName();
@@ -75,7 +75,7 @@ class PhpUnit extends \PHPUnit\Util\Log\JUnit
         }
     }
 
-    public function endTest(\PHPUnit\Framework\Test $test, $time)
+    public function endTest(\PHPUnit\Framework\Test $test, float $time):void
     {
         if ($this->currentTestCase !== null && $test instanceof Test) {
             $numAssertions = $test->getNumAssertions();
@@ -110,7 +110,7 @@ class PhpUnit extends \PHPUnit\Util\Log\JUnit
     /**
      * Cleans the mess caused by test suite manipulation in startTest
      */
-    public function endTestSuite(TestSuite $suite)
+    public function endTestSuite(TestSuite $suite): void
     {
         if ($suite->getName()) {
             if ($this->currentFile) {

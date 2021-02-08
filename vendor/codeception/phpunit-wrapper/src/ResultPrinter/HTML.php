@@ -8,6 +8,8 @@ use Codeception\Test\Descriptor;
 use Codeception\Test\Interfaces\ScenarioDriven;
 use Codeception\TestInterface;
 use Codeception\Util\PathResolver;
+use PHPUnit\Framework\TestResult;
+use SebastianBergmann\Template\Template;
 
 class HTML extends CodeceptionResultPrinter
 {
@@ -61,11 +63,11 @@ class HTML extends CodeceptionResultPrinter
      *
      * @param  string $name
      */
-    protected function startClass($name)
+    protected function startClass(string $name):void
     {
     }
 
-    public function endTest(\PHPUnit\Framework\Test $test, $time)
+    public function endTest(\PHPUnit\Framework\Test $test, float $time) : void
     {
         $steps = [];
         $success = ($this->testStatus == \PHPUnit\Runner\BaseTestRunner::STATUS_PASSED);
@@ -118,14 +120,14 @@ class HTML extends CodeceptionResultPrinter
             }
         }
 
-        $scenarioTemplate = new \Text_Template(
+        $scenarioTemplate = new Template(
             $this->templatePath . 'scenario.html'
         );
 
         $failures = '';
         $name = Descriptor::getTestSignatureUnique($test);
         if (isset($this->failures[$name])) {
-            $failTemplate = new \Text_Template(
+            $failTemplate = new Template(
                 $this->templatePath . 'fail.html'
             );
             foreach ($this->failures[$name] as $failure) {
@@ -171,9 +173,9 @@ class HTML extends CodeceptionResultPrinter
         $this->scenarios .= $scenarioTemplate->render();
     }
 
-    public function startTestSuite(\PHPUnit\Framework\TestSuite $suite)
+    public function startTestSuite(\PHPUnit\Framework\TestSuite $suite) : void
     {
-        $suiteTemplate = new \Text_Template(
+        $suiteTemplate = new Template(
             $this->templatePath . 'suite.html'
         );
         if (!$suite->getName()) {
@@ -188,9 +190,9 @@ class HTML extends CodeceptionResultPrinter
     /**
      * Handler for 'end run' event.
      */
-    protected function endRun()
+    protected function endRun():void
     {
-        $scenarioHeaderTemplate = new \Text_Template(
+        $scenarioHeaderTemplate = new Template(
             $this->templatePath . 'scenario_header.html'
         );
 
@@ -209,7 +211,7 @@ class HTML extends CodeceptionResultPrinter
 
         $header = $scenarioHeaderTemplate->render();
 
-        $scenariosTemplate = new \Text_Template(
+        $scenariosTemplate = new Template(
             $this->templatePath . 'scenarios.html'
         );
 
@@ -234,7 +236,7 @@ class HTML extends CodeceptionResultPrinter
      * @param \Exception $e
      * @param float $time
      */
-    public function addError(\PHPUnit\Framework\Test $test, \Exception $e, $time)
+    public function addError(\PHPUnit\Framework\Test $test, \Throwable $e, float $time) : void
     {
         $this->failures[Descriptor::getTestSignatureUnique($test)][] = $this->cleanMessage($e);
         parent::addError($test, $e, $time);
@@ -247,18 +249,18 @@ class HTML extends CodeceptionResultPrinter
      * @param \PHPUnit\Framework\AssertionFailedError $e
      * @param float                                  $time
      */
-    public function addFailure(\PHPUnit\Framework\Test $test, \PHPUnit\Framework\AssertionFailedError $e, $time)
+    public function addFailure(\PHPUnit\Framework\Test $test, \PHPUnit\Framework\AssertionFailedError $e, float $time) : void
     {
         $this->failures[Descriptor::getTestSignatureUnique($test)][] = $this->cleanMessage($e);
         parent::addFailure($test, $e, $time);
     }
 
     /**
-     * Starts test.
+     * Starts test
      *
      * @param \PHPUnit\Framework\Test $test
      */
-    public function startTest(\PHPUnit\Framework\Test $test)
+    public function startTest(\PHPUnit\Framework\Test $test):void
     {
         $name = Descriptor::getTestSignatureUnique($test);
         if (isset($this->failures[$name])) {
@@ -277,7 +279,7 @@ class HTML extends CodeceptionResultPrinter
      */
     protected function renderStep(Step $step)
     {
-        $stepTemplate = new \Text_Template($this->templatePath . 'step.html');
+        $stepTemplate = new Template($this->templatePath . 'step.html');
         $stepTemplate->setVar(['action' => $step->getHtml(), 'error' => $step->hasFailed() ? 'failedStep' : '']);
         return $stepTemplate->render();
     }
@@ -289,7 +291,7 @@ class HTML extends CodeceptionResultPrinter
      */
     protected function renderSubsteps(Meta $metaStep, $substepsBuffer)
     {
-        $metaTemplate = new \Text_Template($this->templatePath . 'substeps.html');
+        $metaTemplate = new Template($this->templatePath . 'substeps.html');
         $metaTemplate->setVar(['metaStep' => $metaStep->getHtml(), 'error' => $metaStep->hasFailed() ? 'failedStep' : '', 'steps' => $substepsBuffer, 'id' => uniqid()]);
         return $metaTemplate->render();
     }
@@ -297,7 +299,14 @@ class HTML extends CodeceptionResultPrinter
     private function cleanMessage($exception)
     {
         $msg = $exception->getMessage();
+        if ($exception instanceof \PHPUnit\Framework\ExpectationFailedException && $exception->getComparisonFailure()) {
+            $msg .= $exception->getComparisonFailure()->getDiff();
+        }
         $msg = str_replace(['<info>','</info>','<bold>','</bold>'], ['','','',''], $msg);
         return htmlentities($msg);
+    }
+
+    public function printResult(TestResult $result): void
+    {
     }
 }

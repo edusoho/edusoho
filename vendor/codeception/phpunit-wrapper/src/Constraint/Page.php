@@ -10,7 +10,6 @@ class Page extends \PHPUnit\Framework\Constraint\Constraint
 
     public function __construct($string, $uri = '')
     {
-        parent::__construct();
         $this->string = $this->normalizeText((string)$string);
         $this->uri = $uri;
     }
@@ -23,7 +22,7 @@ class Page extends \PHPUnit\Framework\Constraint\Constraint
      *
      * @return bool
      */
-    protected function matches($other)
+    protected function matches($other) : bool
     {
         $other = $this->normalizeText($other);
         return mb_stripos($other, $this->string, null, 'UTF-8') !== false;
@@ -44,7 +43,7 @@ class Page extends \PHPUnit\Framework\Constraint\Constraint
      *
      * @return string
      */
-    public function toString()
+    public function toString() : string
     {
         return sprintf(
             'contains "%s"',
@@ -52,7 +51,7 @@ class Page extends \PHPUnit\Framework\Constraint\Constraint
         );
     }
 
-    protected function failureDescription($pageContent)
+    protected function failureDescription($pageContent) : string
     {
         $message = $this->uriMessage('on page');
         $message->append("\n--> ");

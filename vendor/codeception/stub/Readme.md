@@ -68,7 +68,7 @@ $this->constructEmpty(UserRepositry::class);
 ## Mocks
 
 Mocks should be created by including [`Codeception\Test\Feature\Stub` trait](https://github.com/Codeception/Stub/blob/master/docs/StubTrait.md) into a test case.
-Execution expectation are set with [`Codescption\Stub\Expected`](https://github.com/Codeception/Stub/blob/master/docs/Expected.md):
+Execution expectation are set with [`Codeception\Stub\Expected`](https://github.com/Codeception/Stub/blob/master/docs/Expected.md):
 
 ```php
 <?php

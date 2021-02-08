@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPUnit.
  *
@@ -7,24 +7,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace PHPUnit\Runner;
 
 /**
  * An interface to define how a test suite should be loaded.
+ *
+ * @deprecated see https://github.com/sebastianbergmann/phpunit/issues/4039
  */
-interface PHPUnit_Runner_TestSuiteLoader
+interface TestSuiteLoader
 {
-    /**
-     * @param string $suiteClassName
-     * @param string $suiteClassFile
-     *
-     * @return ReflectionClass
-     */
-    public function load($suiteClassName, $suiteClassFile = '');
+    public function load(string $suiteClassFile): \ReflectionClass;
 
-    /**
-     * @param ReflectionClass $aClass
-     *
-     * @return ReflectionClass
-     */
-    public function reload(ReflectionClass $aClass);
+    public function reload(\ReflectionClass $aClass): \ReflectionClass;
 }

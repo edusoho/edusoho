@@ -1,3 +1,0 @@
-[submodule "py"]
-	path = py
-	url = https://github.com/docopt/docopt.git

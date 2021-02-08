@@ -1,7 +1,0 @@
-HTTP/1.1 204 OK
-Server: Apache-Coyote/1.1
-PROXY_SERVER_INFO: host=slcsbjava3.slc.paypal.com;threadId=3205
-Paypal-Debug-Id: 217a9ddefd384
-SERVER_INFO: identitysecuretokenserv:v1.oauth2.token&CalThreadId=91&TopLevelTxnStartTime=146fbfe679a&Host=slcsbidensectoken502.slc.paypal.com&pid=29059
-CORRELATION-ID: 217a9ddefd384
-Date: Thu, 03 Jul 2014 11:31:32 GMT

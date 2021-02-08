@@ -77,11 +77,11 @@ trait Stub
      * $this->make('User', ['save' => function () { return true; }]);
      * $this->make('User', ['save' => true]);
      * ```
-     *
-     * @param mixed $class - A class to be mocked
+     * @template RealInstanceType of object
+     * @param class-string<RealInstanceType>|RealInstanceType|callable(): class-string<RealInstanceType> $class - A class to be mocked
      * @param array $params - properties and methods to set
      *
-     * @return object - mock
+     * @return \PHPUnit\Framework\MockObject\MockObject&RealInstanceType - mock
      * @throws \RuntimeException when class does not exist
      * @throws \Exception
      */
@@ -118,14 +118,14 @@ trait Stub
      * $this->makeEmpty('User', ['save' => true));
      * ```
      *
-     * @param mixed $class
+     * @template RealInstanceType of object
+     * @param class-string<RealInstanceType>|RealInstanceType|callable(): class-string<RealInstanceType> $class - A class to be mocked
      * @param array $params
      * @param bool|\PHPUnit\Framework\TestCase $testCase
      *
-     * @return object
+     * @return \PHPUnit\Framework\MockObject\MockObject&RealInstanceType
      * @throws \Exception
      */
-
     public function makeEmpty($class, $params = [])
     {
         return $this->mocks[] = \Codeception\Stub::makeEmpty($class, $params, $this);
@@ -161,11 +161,12 @@ trait Stub
      * $this->makeEmptyExcept('User', 'save', ['isValid' => true]);
      * ```
      *
-     * @param mixed $class
+     * @template RealInstanceType of object
+     * @param class-string<RealInstanceType>|RealInstanceType|callable(): class-string<RealInstanceType> $class - A class to be mocked
      * @param string $method
      * @param array $params
      *
-     * @return object
+     * @return \PHPUnit\Framework\MockObject\MockObject&RealInstanceType
      * @throws \Exception
      */
     public function makeEmptyExcept($class, $method, $params = [])
@@ -204,12 +205,13 @@ trait Stub
      * ?>
      * ```
      *
-     * @param mixed $class
+     * @template RealInstanceType of object
+     * @param class-string<RealInstanceType>|RealInstanceType|callable(): class-string<RealInstanceType> $class - A class to be mocked
      * @param array $constructorParams
      * @param array $params
      * @param bool|\PHPUnit\Framework\TestCase $testCase
      *
-     * @return object
+     * @return \PHPUnit\Framework\MockObject\MockObject&RealInstanceType
      * @throws \Exception
      */
     public function construct($class, $constructorParams = [], $params = [])
@@ -254,13 +256,13 @@ trait Stub
      * ]);
      * ```
      *
-     * @param mixed $class
+     * @template RealInstanceType of object
+     * @param class-string<RealInstanceType>|RealInstanceType|callable(): class-string<RealInstanceType> $class - A class to be mocked
      * @param array $constructorParams
      * @param array $params
      *
-     * @return object
+     * @return \PHPUnit\Framework\MockObject\MockObject&RealInstanceType
      */
-
     public function constructEmpty($class, $constructorParams = [], $params = [])
     {
         return $this->mocks[] = \Codeception\Stub::constructEmpty($class, $constructorParams, $params, $this);
@@ -297,12 +299,13 @@ trait Stub
      * ?>
      * ```
      *
-     * @param mixed $class
+     * @template RealInstanceType of object
+     * @param class-string<RealInstanceType>|RealInstanceType|callable(): class-string<RealInstanceType> $class - A class to be mocked
      * @param string $method
      * @param array $constructorParams
      * @param array $params
      *
-     * @return object
+     * @return \PHPUnit\Framework\MockObject\MockObject&RealInstanceType
      */
     public function constructEmptyExcept($class, $method, $constructorParams = [], $params = [])
     {

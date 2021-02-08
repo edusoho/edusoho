@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of sebastian/diff.
  *
@@ -7,10 +7,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace SebastianBergmann\Diff;
 
-class Chunk
+final class Chunk
 {
     /**
      * @var int
@@ -33,71 +32,58 @@ class Chunk
     private $endRange;
 
     /**
-     * @var array
+     * @var Line[]
      */
     private $lines;
 
-    /**
-     * @param int   $start
-     * @param int   $startRange
-     * @param int   $end
-     * @param int   $endRange
-     * @param array $lines
-     */
-    public function __construct($start = 0, $startRange = 1, $end = 0, $endRange = 1, array $lines = array())
+    public function __construct(int $start = 0, int $startRange = 1, int $end = 0, int $endRange = 1, array $lines = [])
     {
-        $this->start      = (int) $start;
-        $this->startRange = (int) $startRange;
-        $this->end        = (int) $end;
-        $this->endRange   = (int) $endRange;
+        $this->start      = $start;
+        $this->startRange = $startRange;
+        $this->end        = $end;
+        $this->endRange   = $endRange;
         $this->lines      = $lines;
     }
 
-    /**
-     * @return int
-     */
-    public function getStart()
+    public function getStart(): int
     {
         return $this->start;
     }
 
-    /**
-     * @return int
-     */
-    public function getStartRange()
+    public function getStartRange(): int
     {
         return $this->startRange;
     }
 
-    /**
-     * @return int
-     */
-    public function getEnd()
+    public function getEnd(): int
     {
         return $this->end;
     }
 
-    /**
-     * @return int
-     */
-    public function getEndRange()
+    public function getEndRange(): int
     {
         return $this->endRange;
     }
 
     /**
-     * @return array
+     * @return Line[]
      */
-    public function getLines()
+    public function getLines(): array
     {
         return $this->lines;
     }
 
     /**
-     * @param array $lines
+     * @param Line[] $lines
      */
-    public function setLines(array $lines)
+    public function setLines(array $lines): void
     {
+        foreach ($lines as $line) {
+            if (!$line instanceof Line) {
+                throw new InvalidArgumentException;
+            }
+        }
+
         $this->lines = $lines;
     }
 }
