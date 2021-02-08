@@ -22,6 +22,11 @@
           {% if course %}
             {% include 'open-course/widget/my-open-course-grid.html.twig' %}
           {% endif %}
+        {% elseif courseFavorite.targetType == 'goods' %}
+          {% set goods = data('Goods',{id:courseFavorite.targetId})|default(null) %}
+          {% if goods %}
+            {% include 'my/learning/my-goods-grid.html.twig' %}
+          {% endif %}
         {% endif %}
       {% else %}
         <div class="cd-empty">{{'my.learning.course.favorite_empty'|trans}}</div>

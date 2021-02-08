@@ -245,6 +245,12 @@ class UserController extends BaseController
             'goodsType' => $request->query->get('goodsType', 'course'),
         ];
 
+        if ('course' === $conditions['goodsType']) {
+            $conditions['targetTypes'][] = $conditions['goodsType'];
+            unset($conditions['goodsType']);
+            $conditions['excludeGoodsTypes'] = ['classroom'];
+        }
+
         $paginator = new Paginator(
             $this->get('request'),
             $this->getFavoriteService()->countFavorites($conditions),
