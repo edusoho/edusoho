@@ -53,7 +53,11 @@ class Live {
         });
       }, 3000);
     }
-    this.triggerLiveEvent();
+    let role = $('#entry').data('role');
+    if (role === 'student') {
+      this.triggerLiveEvent();
+    }
+
   }
 
   entryRoom(roomUrl) {

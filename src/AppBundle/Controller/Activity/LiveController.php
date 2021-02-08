@@ -154,10 +154,19 @@ class LiveController extends BaseActivityController implements ActivityActionInt
      */
     public function liveReplayAction($courseId, $activityId)
     {
+        $user = $this->getUser();
         $this->getCourseService()->tryTakeCourse($courseId);
         $activity = $this->getActivityService()->getActivity($activityId);
         $live = $this->getActivityService()->getActivityConfig('live')->get($activity['mediaId']);
         $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
+
+        if ($this->getCourseMemberService()->isCourseTeacher($courseId, $user['id'])) {
+            $role = 'teacher';
+        } elseif ($this->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
+            $role = 'student';
+        } else {
+            return $this->createMessageResponse('info', 'message_response.not_student_cannot_join_live.message');
+        }
 
         return $this->render('activity/live/replay-player.html.twig', [
             'courseId' => $courseId,
@@ -165,6 +174,7 @@ class LiveController extends BaseActivityController implements ActivityActionInt
             'taskId' => $task['id'],
             'live' => $live,
             'mediaId' => $live['mediaId'],
+            'role' => $role,
         ]);
     }
 
@@ -231,13 +241,25 @@ class LiveController extends BaseActivityController implements ActivityActionInt
      */
     public function customReplayEntryAction(Request $request, $courseId, $activityId, $replayId)
     {
+        $user = $this->getUser();
         $task = $this->getTaskService()->getTaskByCourseIdAndActivityId($courseId, $activityId);
+        $isTeacher = false;
+        if ($this->getCourseMemberService()->isCourseTeacher($courseId, $this->getUser()->id)) {
+            $isTeacher = $this->getUser()->isTeacher();
+            $role = 'teacher';
+        } elseif ($this->getCourseMemberService()->isCourseStudent($courseId, $user['id'])) {
+            $role = 'student';
+        } else {
+            return $this->createMessageResponse('info', 'message_response.not_student_cannot_join_live.message');
+        }
 
         return $this->render('live-course/entry.html.twig', [
             'courseId' => $courseId,
             'replayId' => $replayId,
             'activityId' => $activityId,
             'task' => $task,
+            'isTeacher' => $isTeacher,
+            'role' => $role,
         ]);
     }
 
