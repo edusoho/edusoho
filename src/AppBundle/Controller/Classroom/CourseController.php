@@ -175,7 +175,7 @@ class CourseController extends BaseController
         $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode('classroom', $classroomId);
         $vipRightLevel = $this->getVipLevelService()->getLevel($vipRight['vipLevelId']);
         if ($access['code'] == 'vip.level_not_exist' && !empty($vipLevel) && empty($vipRightLevel)){
-            $access = [];
+            $access['code'] = 'vip.level_low';
         }
 
         return $access;
