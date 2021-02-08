@@ -47,6 +47,7 @@
             let name = $target.data('name');
 
             let $modal = $('.js-select-container').parents('.modal');
+            $modal.trigger("selectQuestion",{})
             $modal.modal('hide');
             $('.js-close-modal').trigger('click');
         })

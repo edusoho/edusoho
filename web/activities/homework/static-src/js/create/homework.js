@@ -111,8 +111,7 @@ export default class Homework {
     this.validator.form();
   }
 
-  selectQuestion(event, typeQuestions) {
-  }
+  selectQuestion(event, typeQuestions) {}
 
   inItStep2form() {
     this.validator = this.$step2_form.validate({
