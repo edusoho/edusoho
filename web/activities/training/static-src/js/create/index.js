@@ -1,7 +1,6 @@
 import BatchSelect from 'app/common/widget/batch-select';
 // import QuestionOperate from 'app/common/component/question-operate';
 import Create from './training';
-import notify from 'common/notify';
 
 let $from = $('#step2-form');
 new Create($('#iframe-content'));
@@ -107,6 +106,7 @@ load.then(function(){
   }
 
   function divShow(id){
+    $('#link_url').rules("remove");
     switch(id){
       case "1":
         $('#link_url').rules("add",{
@@ -117,7 +117,19 @@ load.then(function(){
         break;
       case "2":
         $(".link_div").hide();
-        $('#link_url').rules("remove");
+        $('#dataset_ids').rules("add",{
+          required:true,
+          messages:{
+            required:"请选择数据集"
+          }
+        });
+        $('#images_id').rules("add",{
+          required:true,
+          messages:{
+            required:"请选择镜像"
+          }
+        });
+
         $(".images_div,.dataset_div").show();
         break;
       default:

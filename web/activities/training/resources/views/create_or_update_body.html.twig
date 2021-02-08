@@ -41,7 +41,7 @@
           </div>
           <div class="form-group images_div" style="display:none;">
               <div class="col-sm-2 control-label">
-                  <label for="container" class="control-label-required">
+                  <label for="images_id" class="control-label-required">
                       镜像
                   </label>
               </div>
@@ -50,14 +50,14 @@
                     选择镜像
                 </a>
                 <span class="selectImages"></span>
-                <input id="images" class="form-control" type="hidden" name="images" value="5000" >
-                <div class="js-cached-question hidden"></div>
+                {# <input id="images" class="form-control" type="hidden" name="images" value="5000" > #}
+                <input type="hidden" class="images-cache" id="images_id" name="images_id" value="">
               </div>
           </div>
 
           <div class="form-group dataset_div" style="display:none;">
               <div class="col-sm-2 control-label">
-                  <label for="container" class="control-label-required">
+                  <label class="control-label-required">
                       数据集
                   </label>
               </div>
@@ -65,7 +65,7 @@
                 <a id="picker_dataset_items" data-url="{{ path('course_set_manage_training_dataset_picker',{id:activity.fromCourseSetId}) }}" class="btn btn-info btn-sm js-pick-modal" data-role="pick-item-dataset"><i class="es-icon es-icon-anonymous-iconfont"></i>
                   选择数据集
                 </a>
-                <div class="dataset-cache hidden"></div>
+                <input type="hidden" class="dataset-cache" id="dataset_ids" name="dataset_ids" value="">
               </div>
               <div class="col-sm-8">
               <br />

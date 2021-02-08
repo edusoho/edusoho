@@ -18,7 +18,7 @@ $(function(){
     $(".js-pick-btn").on("click",function(){
         let $modal = $(".js-select-container").parents('.modal')
         let $content = $('#task-create-content-iframe').contents();
-        $content.find(".dataset-cache").text(JSON.stringify(tags));
+        $content.find(".dataset-cache").attr("value",JSON.stringify(tags));
 
          $modal.modal('hide');
          $('.js-close-modal').trigger('click');
