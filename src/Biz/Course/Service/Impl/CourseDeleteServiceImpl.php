@@ -14,6 +14,7 @@ use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Dao\ThreadDao;
 use Biz\Course\Dao\ThreadPostDao;
 use Biz\Course\Service\CourseDeleteService;
+use Biz\Course\Service\MaterialService;
 use Biz\Favorite\Dao\FavoriteDao;
 use Biz\IM\Service\ConversationService;
 use Biz\Review\Dao\ReviewDao;
