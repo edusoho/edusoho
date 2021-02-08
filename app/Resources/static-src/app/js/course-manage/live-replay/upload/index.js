@@ -34,3 +34,5 @@ $form.validate({
     fileId: Translator.trans('course.manage.live_replay_upload_error_hint')
   }
 });
+
+$("[data-toggle='popover']").popover();
