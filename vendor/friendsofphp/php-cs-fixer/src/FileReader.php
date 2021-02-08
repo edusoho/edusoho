@@ -24,12 +24,12 @@ namespace PhpCsFixer;
 final class FileReader
 {
     /**
-     * @var self|null
+     * @var null|self
      */
     private static $instance;
 
     /**
-     * @var string|null
+     * @var null|string
      */
     private $stdinContent;
 
@@ -75,7 +75,11 @@ final class FileReader
         if (false === $content) {
             $error = error_get_last();
 
-            throw new \RuntimeException(sprintf('Failed to read content from "%s".%s', $realPath, $error ? ' '.$error['message'] : ''));
+            throw new \RuntimeException(sprintf(
+                'Failed to read content from "%s".%s',
+                $realPath,
+                $error ? ' '.$error['message'] : ''
+            ));
         }
 
         return $content;

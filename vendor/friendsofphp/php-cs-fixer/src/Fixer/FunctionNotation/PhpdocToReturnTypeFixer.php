@@ -34,7 +34,7 @@ final class PhpdocToReturnTypeFixer extends AbstractFixer implements Configurati
     /**
      * @var array<int, array<int, int|string>>
      */
-    private $blacklistFuncNames = [
+    private $excludeFuncNames = [
         [T_STRING, '__construct'],
         [T_STRING, '__destruct'],
         [T_STRING, '__clone'],
@@ -76,6 +76,11 @@ final class PhpdocToReturnTypeFixer extends AbstractFixer implements Configurati
     private $classRegex = '/^\\\\?[a-zA-Z_\\x7f-\\xff](?:\\\\?[a-zA-Z0-9_\\x7f-\\xff]+)*(?<array>\[\])*$/';
 
     /**
+     * @var array<string, bool>
+     */
+    private $returnTypeCache = [];
+
+    /**
      * {@inheritdoc}
      */
     public function getDefinition()
@@ -110,9 +115,19 @@ function my_foo()
 ',
                     new VersionSpecification(70200)
                 ),
+                new VersionSpecificCodeSample(
+                    '<?php
+/** @return Foo */
+function foo() {}
+/** @return string */
+function bar() {}
+',
+                    new VersionSpecification(70100),
+                    ['scalar_types' => false]
+                ),
             ],
             null,
-            '[1] This rule is EXPERIMENTAL and is not covered with backward compatibility promise. [2] `@return` annotation is mandatory for the fixer to make changes, signatures of methods without it (no docblock, inheritdocs) will not be fixed. [3] Manual actions are required if inherited signatures are not properly documented. [4] `@inheritdocs` support is under construction.'
+            'This rule is EXPERIMENTAL and [1] is not covered with backward compatibility promise. [2] `@return` annotation is mandatory for the fixer to make changes, signatures of methods without it (no docblock, inheritdocs) will not be fixed. [3] Manual actions are required if inherited signatures are not properly documented. [4] `@inheritdocs` support is under construction.'
         );
     }
 
@@ -174,7 +189,7 @@ function my_foo()
             }
 
             $funcName = $tokens->getNextMeaningfulToken($index);
-            if ($tokens[$funcName]->equalsAny($this->blacklistFuncNames, false)) {
+            if ($tokens[$funcName]->equalsAny($this->excludeFuncNames, false)) {
                 continue;
             }
 
@@ -248,6 +263,10 @@ function my_foo()
             $startIndex = $tokens->getNextTokenOfKind($index, ['{', ';']);
 
             if ($this->hasReturnTypeHint($tokens, $startIndex)) {
+                continue;
+            }
+
+            if (!$this->isValidType($returnType)) {
                 continue;
             }
 
@@ -336,5 +355,24 @@ function my_foo()
         $doc = new DocBlock($tokens[$index]->getContent());
 
         return $doc->getAnnotationsOfType('return');
+    }
+
+    /**
+     * @param string $returnType
+     *
+     * @return bool
+     */
+    private function isValidType($returnType)
+    {
+        if (!\array_key_exists($returnType, $this->returnTypeCache)) {
+            try {
+                Tokens::fromCode(sprintf('<?php function f():%s {}', $returnType));
+                $this->returnTypeCache[$returnType] = true;
+            } catch (\ParseError $e) {
+                $this->returnTypeCache[$returnType] = false;
+            }
+        }
+
+        return $this->returnTypeCache[$returnType];
     }
 }

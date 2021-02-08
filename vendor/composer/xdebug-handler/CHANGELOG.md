@@ -1,5 +1,17 @@
 ## [Unreleased]
 
+## [1.4.5] - 2020-11-13
+  * Fixed: support for stream_isatty and overall correct FD forwarding to the restarted process.
+
+## [1.4.4] - 2020-10-24
+  * Fix: exception if 'pcntl_signal' is disabled.
+
+## [1.4.3] - 2020-08-19
+  * Fixed: restore SIGINT to default handler in restarted process if no other handler exists.
+
+## [1.4.2] - 2020-06-04
+  * Fixed: ignore SIGINTs to let the restarted process handle them.
+
 ## [1.4.1] - 2020-03-01
   * Fixed: restart fails if an ini file is empty.
 
@@ -57,7 +69,11 @@
   * Break: the following class was renamed:
     - `Composer\XdebugHandler` -> `Composer\XdebugHandler\XdebugHandler`
 
-[Unreleased]: https://github.com/composer/xdebug-handler/compare/1.4.1...HEAD
+[Unreleased]: https://github.com/composer/xdebug-handler/compare/1.4.5...HEAD
+[1.4.5]: https://github.com/composer/xdebug-handler/compare/1.4.4...1.4.5
+[1.4.4]: https://github.com/composer/xdebug-handler/compare/1.4.3...1.4.4
+[1.4.3]: https://github.com/composer/xdebug-handler/compare/1.4.2...1.4.3
+[1.4.2]: https://github.com/composer/xdebug-handler/compare/1.4.1...1.4.2
 [1.4.1]: https://github.com/composer/xdebug-handler/compare/1.4.0...1.4.1
 [1.4.0]: https://github.com/composer/xdebug-handler/compare/1.3.3...1.4.0
 [1.3.3]: https://github.com/composer/xdebug-handler/compare/1.3.2...1.3.3

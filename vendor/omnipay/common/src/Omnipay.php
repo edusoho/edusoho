@@ -50,7 +50,7 @@ use Omnipay\Common\Http\ClientInterface;
  * @method static \Omnipay\Common\GatewayInterface create(string $class, ClientInterface $httpClient = null, \Symfony\Component\HttpFoundation\Request $httpRequest = null)
  * @codingStandardsIgnoreEnd
  *
- * @see Omnipay\Common\GatewayFactory
+ * @see \Omnipay\Common\GatewayFactory
  */
 class Omnipay
 {

@@ -153,7 +153,10 @@ class Config implements ConfigInterface
     public function registerCustomFixers($fixers)
     {
         if (false === \is_array($fixers) && false === $fixers instanceof \Traversable) {
-            throw new \InvalidArgumentException(sprintf('Argument must be an array or a Traversable, got "%s".', \is_object($fixers) ? \get_class($fixers) : \gettype($fixers)));
+            throw new \InvalidArgumentException(sprintf(
+                'Argument must be an array or a Traversable, got "%s".',
+                \is_object($fixers) ? \get_class($fixers) : \gettype($fixers)
+            ));
         }
 
         foreach ($fixers as $fixer) {
@@ -179,7 +182,10 @@ class Config implements ConfigInterface
     public function setFinder($finder)
     {
         if (false === \is_array($finder) && false === $finder instanceof \Traversable) {
-            throw new \InvalidArgumentException(sprintf('Argument must be an array or a Traversable, got "%s".', \is_object($finder) ? \get_class($finder) : \gettype($finder)));
+            throw new \InvalidArgumentException(sprintf(
+                'Argument must be an array or a Traversable, got "%s".',
+                \is_object($finder) ? \get_class($finder) : \gettype($finder)
+            ));
         }
 
         $this->finder = $finder;

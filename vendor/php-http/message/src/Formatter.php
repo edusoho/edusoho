@@ -15,16 +15,12 @@ interface Formatter
     /**
      * Formats a request.
      *
-     * @param RequestInterface $request
-     *
      * @return string
      */
     public function formatRequest(RequestInterface $request);
 
     /**
      * Formats a response.
-     *
-     * @param ResponseInterface $response
      *
      * @return string
      */

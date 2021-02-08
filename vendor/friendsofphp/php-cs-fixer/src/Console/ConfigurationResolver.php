@@ -58,17 +58,17 @@ final class ConfigurationResolver
     const PATH_MODE_INTERSECTION = 'intersection';
 
     /**
-     * @var bool|null
+     * @var null|bool
      */
     private $allowRisky;
 
     /**
-     * @var ConfigInterface|null
+     * @var null|ConfigInterface
      */
     private $config;
 
     /**
-     * @var string|null
+     * @var null|string
      */
     private $configFile;
 
@@ -83,27 +83,27 @@ final class ConfigurationResolver
     private $defaultConfig;
 
     /**
-     * @var ReporterInterface|null
+     * @var null|ReporterInterface
      */
     private $reporter;
 
     /**
-     * @var bool|null
+     * @var null|bool
      */
     private $isStdIn;
 
     /**
-     * @var bool|null
+     * @var null|bool
      */
     private $isDryRun;
 
     /**
-     * @var FixerInterface[]|null
+     * @var null|FixerInterface[]
      */
     private $fixers;
 
     /**
-     * @var bool|null
+     * @var null|bool
      */
     private $configFinderIsOverridden;
 
@@ -168,7 +168,7 @@ final class ConfigurationResolver
     }
 
     /**
-     * @return string|null
+     * @return null|string
      */
     public function getCacheFile()
     {
@@ -247,7 +247,7 @@ final class ConfigurationResolver
     }
 
     /**
-     * @return string|null
+     * @return null|string
      */
     public function getConfigFile()
     {
@@ -273,7 +273,11 @@ final class ConfigurationResolver
             if ($this->options['diff-format']) {
                 $option = $this->options['diff-format'];
                 if (!isset($mapper[$option])) {
-                    throw new InvalidConfigurationException(sprintf('"diff-format" must be any of "%s", got "%s".', implode('", "', array_keys($mapper)), $option));
+                    throw new InvalidConfigurationException(sprintf(
+                        '"diff-format" must be any of "%s", got "%s".',
+                        implode('", "', array_keys($mapper)),
+                        $option
+                    ));
                 }
             } else {
                 $default = 'sbd'; // @TODO: 3.0 change to udiff as default
@@ -375,13 +379,22 @@ final class ConfigurationResolver
                 $this->path = $this->options['path'];
             } else {
                 $this->path = array_map(
-                    static function ($path) use ($cwd, $filesystem) {
+                    static function ($rawPath) use ($cwd, $filesystem) {
+                        $path = trim($rawPath);
+
+                        if ('' === $path) {
+                            throw new InvalidConfigurationException("Invalid path: \"{$rawPath}\".");
+                        }
+
                         $absolutePath = $filesystem->isAbsolutePath($path)
                             ? $path
                             : $cwd.\DIRECTORY_SEPARATOR.$path;
 
                         if (!file_exists($absolutePath)) {
-                            throw new InvalidConfigurationException(sprintf('The path "%s" is not readable.', $path));
+                            throw new InvalidConfigurationException(sprintf(
+                                'The path "%s" is not readable.',
+                                $path
+                            ));
                         }
 
                         return $absolutePath;
@@ -415,7 +428,11 @@ final class ConfigurationResolver
 
                     $progressType = $this->getConfig()->getHideProgress() ? 'none' : $default;
                 } elseif (!\in_array($progressType, $progressTypes, true)) {
-                    throw new InvalidConfigurationException(sprintf('The progress type "%s" is not defined, supported are "%s".', $progressType, implode('", "', $progressTypes)));
+                    throw new InvalidConfigurationException(sprintf(
+                        'The progress type "%s" is not defined, supported are "%s".',
+                        $progressType,
+                        implode('", "', $progressTypes)
+                    ));
                 } elseif (\in_array($progressType, ['estimating', 'estimating-max', 'run-in'], true)) {
                     $message = 'Passing `estimating`, `estimating-max` or `run-in` is deprecated and will not be supported in 3.0, use `none` or `dots` instead.';
 
@@ -783,7 +800,11 @@ final class ConfigurationResolver
             $modes,
             true
         )) {
-            throw new InvalidConfigurationException(sprintf('The path-mode "%s" is not defined, supported are "%s".', $this->options['path-mode'], implode('", "', $modes)));
+            throw new InvalidConfigurationException(sprintf(
+                'The path-mode "%s" is not defined, supported are "%s".',
+                $this->options['path-mode'],
+                implode('", "', $modes)
+            ));
         }
 
         $isIntersectionPathMode = self::PATH_MODE_INTERSECTION === $this->options['path-mode'];
@@ -826,7 +847,9 @@ final class ConfigurationResolver
 
         if ($isIntersectionPathMode) {
             if (null === $nestedFinder) {
-                throw new InvalidConfigurationException('Cannot create intersection with not-fully defined Finder in configuration file.');
+                throw new InvalidConfigurationException(
+                    'Cannot create intersection with not-fully defined Finder in configuration file.'
+                );
             }
 
             return new \CallbackFilterIterator(

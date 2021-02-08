@@ -62,11 +62,21 @@ final class FileHandler implements FileHandlerInterface
 
         if (file_exists($this->file)) {
             if (is_dir($this->file)) {
-                throw new IOException(sprintf('Cannot write cache file "%s" as the location exists as directory.', realpath($this->file)), 0, null, $this->file);
+                throw new IOException(
+                    sprintf('Cannot write cache file "%s" as the location exists as directory.', realpath($this->file)),
+                    0,
+                    null,
+                    $this->file
+                );
             }
 
             if (!is_writable($this->file)) {
-                throw new IOException(sprintf('Cannot write to file "%s" as it is not writable.', realpath($this->file)), 0, null, $this->file);
+                throw new IOException(
+                    sprintf('Cannot write to file "%s" as it is not writable.', realpath($this->file)),
+                    0,
+                    null,
+                    $this->file
+                );
             }
         } else {
             @touch($this->file);
@@ -78,7 +88,12 @@ final class FileHandler implements FileHandlerInterface
         if (false === $bytesWritten) {
             $error = error_get_last();
 
-            throw new IOException(sprintf('Failed to write file "%s", "%s".', $this->file, isset($error['message']) ? $error['message'] : 'no reason available'), 0, null, $this->file);
+            throw new IOException(
+                sprintf('Failed to write file "%s", "%s".', $this->file, isset($error['message']) ? $error['message'] : 'no reason available'),
+                0,
+                null,
+                $this->file
+            );
         }
     }
 }

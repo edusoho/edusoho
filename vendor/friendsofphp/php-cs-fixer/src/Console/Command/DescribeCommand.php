@@ -115,7 +115,12 @@ final class DescribeCommand extends Command
 
             $this->describeList($output, $e->getType());
 
-            throw new \InvalidArgumentException(sprintf('%s "%s" not found.%s', ucfirst($e->getType()), $name, null === $alternative ? '' : ' Did you mean "'.$alternative.'"?'));
+            throw new \InvalidArgumentException(sprintf(
+                '%s "%s" not found.%s',
+                ucfirst($e->getType()),
+                $name,
+                null === $alternative ? '' : ' Did you mean "'.$alternative.'"?'
+            ));
         }
 
         return 0;
@@ -327,7 +332,11 @@ final class DescribeCommand extends Command
             $fixer = $fixers[$rule];
 
             if (!$fixer instanceof DefinedFixerInterface) {
-                throw new \RuntimeException(sprintf('Cannot describe rule %s, the fixer does not implement %s', $rule, DefinedFixerInterface::class));
+                throw new \RuntimeException(sprintf(
+                    'Cannot describe rule %s, the fixer does not implement %s',
+                    $rule,
+                    DefinedFixerInterface::class
+                ));
             }
 
             $definition = $fixer->getDefinition();

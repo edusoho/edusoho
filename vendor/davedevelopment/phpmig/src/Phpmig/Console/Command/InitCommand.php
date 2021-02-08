@@ -52,6 +52,8 @@ EOT
 
         $this->initMigrationsDir($migrations, $output);
         $this->initBootstrap($bootstrap, $relative, $output);
+
+        return 0;
     }
 
     /**

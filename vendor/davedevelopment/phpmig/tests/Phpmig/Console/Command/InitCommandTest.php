@@ -2,6 +2,7 @@
 
 namespace Phpmig\Console\Command;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -9,17 +10,17 @@ use Symfony\Component\Console\Tester\CommandTester;
 /**
  * @group unit
  */
-class InitCommandTest extends \PHPUnit_Framework_TestCase
+class InitCommandTest extends TestCase
 {
     /** @var string */
     private $tempDir;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->setTempDir($this->createTempDir());
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->cleanUpTempDir($this->getTempDir());
     }
@@ -52,7 +53,7 @@ class InitCommandTest extends \PHPUnit_Framework_TestCase
 
         $tester->execute(array('command' => $command->getName()));
 
-        $this->assertContains('migrations already exists', $tester->getDisplay());
+        $this->assertStringContainsStringIgnoringCase('migrations already exists', $tester->getDisplay());
     }
 
     public function testExecuteCreatesBootstrapFile()
@@ -80,7 +81,7 @@ class InitCommandTest extends \PHPUnit_Framework_TestCase
 
         $tester->execute(array('command' => $command->getName()));
 
-        $this->assertContains('phpmig.php already exists', $tester->getDisplay());
+        $this->assertStringContainsStringIgnoringCase('phpmig.php already exists', $tester->getDisplay());
     }
 
     /**

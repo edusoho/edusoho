@@ -1037,7 +1037,7 @@ class Foo
      * @param int  $index
      * @param bool $after
      *
-     * @return int|null
+     * @return null|int
      */
     private function getSiblingContinuousSingleLineComment(Tokens $tokens, $index, $after)
     {

@@ -60,9 +60,12 @@ EOT
             if (true === isset($this->container['phpmig.migrations_path'])) {
                 $path = $this->container['phpmig.migrations_path'];
             }
-            if (true === isset($this->container['phpmig.sets'][$set]['migrations_path'])) {
-                $path = $this->container['phpmig.sets'][$set]['migrations_path'];
-            }
+	    // do not deep link to nested keys without first testing the parent key
+	    if (true === isset($this->container['phpmig.sets'])){
+		    if (true === isset($this->container['phpmig.sets'][$set]['migrations_path'])) {
+			$path = $this->container['phpmig.sets'][$set]['migrations_path'];
+		    }
+	    }
         }
         $locator = new FileLocator(array());
         $path = $locator->locate($path, getcwd(), $first = true);
@@ -91,7 +94,7 @@ EOT
 
         $className = $this->migrationToClassName($migrationName);
 
-        if (isset($this->container['phpmig.migrations_template_path']) || isset($this->container['phpmig.sets'][$set]['migrations_template_path'])) {
+        if (isset($this->container['phpmig.migrations_template_path']) || (isset($this->container['phpmig.sets']) && isset($this->container['phpmig.sets'][$set]['migrations_template_path']))) {
             if (true === isset($this->container['phpmig.migrations_template_path'])) {
                 $migrationsTemplatePath = $this->container['phpmig.migrations_template_path'];
             } else {

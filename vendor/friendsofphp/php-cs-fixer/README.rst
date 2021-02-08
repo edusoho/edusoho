@@ -13,8 +13,8 @@ If you are already using a linter to identify coding standards problems in your
 code, you know that fixing them by hand is tedious, especially on large
 projects. This tool does not only detect them, but also fixes them for you.
 
-The PHP CS Fixer is maintained on GitHub at https://github.com/FriendsOfPHP/PHP-CS-Fixer
-bug reports and ideas about new features are welcome there.
+The PHP CS Fixer is maintained on GitHub at https://github.com/FriendsOfPHP/PHP-CS-Fixer.
+Bug reports and ideas about new features are welcome there.
 
 You can talk to us at https://gitter.im/PHP-CS-Fixer/Lobby about the project,
 configuration, possible improvements, ideas and questions, please visit us!
@@ -46,7 +46,7 @@ or with specified version:
 
 .. code-block:: bash
 
-    $ wget https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v2.16.3/php-cs-fixer.phar -O php-cs-fixer
+    $ wget https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v2.16.4/php-cs-fixer.phar -O php-cs-fixer
 
 or with curl:
 
@@ -193,14 +193,14 @@ apply (the rule names must be separated by a comma):
 
     $ php php-cs-fixer.phar fix /path/to/dir --rules=line_ending,full_opening_tag,indentation_type
 
-You can also blacklist the rules you don't want by placing a dash in front of the rule name, if this is more convenient,
+You can also exclude the rules you don't want by placing a dash in front of the rule name, if this is more convenient,
 using ``-name_of_fixer``:
 
 .. code-block:: bash
 
     $ php php-cs-fixer.phar fix /path/to/dir --rules=-full_opening_tag,-indentation_type
 
-When using combinations of exact and blacklist rules, applying exact rules along with above blacklisted results:
+When using combinations of exact and exclude rules, applying exact rules along with above excluded results:
 
 .. code-block:: bash
 
@@ -253,6 +253,21 @@ would be default in next MAJOR release (unified differ, estimating, full-width p
 .. code-block:: bash
 
     $ PHP_CS_FIXER_FUTURE_MODE=1 php php-cs-fixer.phar fix -v --diff
+
+Rules
+-----
+
+Use the following command to quickly understand what a rule will do to your code:
+
+.. code-block:: bash
+
+    $ php php-cs-fixer.phar describe align_multiline_comment
+
+To visualize all the rules that belong to a ruleset:
+
+.. code-block:: bash
+
+    $ php php-cs-fixer.phar describe @PSR2
 
 Choose from the list of available rules:
 
@@ -676,8 +691,8 @@ Choose from the list of available rules:
   Configuration options:
 
   - ``annotation-black-list`` (``array``): class level annotations tags that must be
-    omitted to fix the class, even if all of the white list ones are used
-    as well. (case insensitive); defaults to ``['@final', '@Entity',
+    omitted to fix the class, even if all of the excluded ones are used as
+    well. (case insensitive); defaults to ``['@final', '@Entity',
     '@ORM\\Entity', '@ORM\\Mapping\\Entity', '@Mapping\\Entity']``
   - ``annotation-white-list`` (``array``): class level annotations tags that must be
     set in order to fix the class. (case insensitive); defaults to
@@ -1664,7 +1679,7 @@ Choose from the list of available rules:
   EXPERIMENTAL: Takes ``@param`` annotations of non-mixed types and adjusts
   accordingly the function signature. Requires PHP >= 7.0.
 
-  *Risky rule: [1] This rule is EXPERIMENTAL and is not covered with backward compatibility promise. [2] ``@param`` annotation is mandatory for the fixer to make changes, signatures of methods without it (no docblock, inheritdocs) will not be fixed. [3] Manual actions are required if inherited signatures are not properly documented.*
+  *Risky rule: this rule is EXPERIMENTAL and [1] is not covered with backward compatibility promise. [2] ``@param`` annotation is mandatory for the fixer to make changes, signatures of methods without it (no docblock, inheritdocs) will not be fixed. [3] Manual actions are required if inherited signatures are not properly documented.*
 
   Configuration options:
 
@@ -1676,7 +1691,7 @@ Choose from the list of available rules:
   EXPERIMENTAL: Takes ``@return`` annotation of non-mixed types and adjusts
   accordingly the function signature. Requires PHP >= 7.0.
 
-  *Risky rule: [1] This rule is EXPERIMENTAL and is not covered with backward compatibility promise. [2] ``@return`` annotation is mandatory for the fixer to make changes, signatures of methods without it (no docblock, inheritdocs) will not be fixed. [3] Manual actions are required if inherited signatures are not properly documented. [4] ``@inheritdocs`` support is under construction.*
+  *Risky rule: this rule is EXPERIMENTAL and [1] is not covered with backward compatibility promise. [2] ``@return`` annotation is mandatory for the fixer to make changes, signatures of methods without it (no docblock, inheritdocs) will not be fixed. [3] Manual actions are required if inherited signatures are not properly documented. [4] ``@inheritdocs`` support is under construction.*
 
   Configuration options:
 
@@ -2011,7 +2026,7 @@ Config file
 
 Instead of using command line options to customize the rule, you can save the
 project configuration in a ``.php_cs.dist`` file in the root directory of your project.
-The file must return an instance of `PhpCsFixer\\ConfigInterface <https://github.com/FriendsOfPHP/PHP-CS-Fixer/blob/v2.16.3/src/ConfigInterface.php>`_
+The file must return an instance of `PhpCsFixer\\ConfigInterface <https://github.com/FriendsOfPHP/PHP-CS-Fixer/blob/v2.16.4/src/ConfigInterface.php>`_
 which lets you configure the rules, the files and directories that
 need to be analyzed. You may also create ``.php_cs`` file, which is
 the local configuration that will be used instead of the project configuration. It
@@ -2046,7 +2061,7 @@ Both ``exclude`` and ``notPath`` methods accept only relative paths to the ones 
 See `Symfony\\Finder <https://symfony.com/doc/current/components/finder.html>`_
 online documentation for other `Finder` methods.
 
-You may also use a blacklist for the rules instead of the above shown whitelist approach.
+You may also use an exclude list for the rules instead of the above shown include approach.
 The following example shows how to use all ``Symfony`` rules but the ``full_opening_tag`` rule.
 
 .. code-block:: php

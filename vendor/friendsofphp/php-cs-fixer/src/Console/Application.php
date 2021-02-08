@@ -35,7 +35,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 final class Application extends BaseApplication
 {
-    const VERSION = '2.16.3';
+    const VERSION = '2.16.4';
     const VERSION_CODENAME = 'Yellow Bird';
 
     /**
@@ -46,7 +46,7 @@ final class Application extends BaseApplication
     public function __construct()
     {
         if (!getenv('PHP_CS_FIXER_FUTURE_MODE')) {
-            error_reporting(-1);
+            error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
         }
 
         parent::__construct('PHP CS Fixer', self::VERSION);

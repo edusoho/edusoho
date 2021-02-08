@@ -1,3 +1,18 @@
+### 1.26.0 (2020-12-14)
+
+  * Added $dateFormat and $removeUsedContextFields arguments to PsrLogMessageProcessor (backport from 2.x)
+
+### 1.25.5 (2020-07-23)
+
+  * Fixed array access on null in RavenHandler
+  * Fixed unique_id in WebProcessor not being disableable
+
+### 1.25.4 (2020-05-22)
+
+  * Fixed GitProcessor type error when there is no git repo present
+  * Fixed normalization of SoapFault objects containing deeply nested objects as "detail"
+  * Fixed support for relative paths in RotatingFileHandler
+
 ### 1.25.3 (2019-12-20)
 
   * Fixed formatting of resources in JsonFormatter

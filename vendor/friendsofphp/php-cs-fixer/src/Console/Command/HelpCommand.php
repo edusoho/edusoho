@@ -94,12 +94,12 @@ apply (the rule names must be separated by a comma):
 
     <info>$ php %command.full_name% /path/to/dir --rules=line_ending,full_opening_tag,indentation_type</info>
 
-You can also blacklist the rules you don't want by placing a dash in front of the rule name, if this is more convenient,
+You can also exclude the rules you don't want by placing a dash in front of the rule name, if this is more convenient,
 using <comment>-name_of_fixer</comment>:
 
     <info>$ php %command.full_name% /path/to/dir --rules=-full_opening_tag,-indentation_type</info>
 
-When using combinations of exact and blacklist rules, applying exact rules along with above blacklisted results:
+When using combinations of exact and exclude rules, applying exact rules along with above excluded results:
 
     <info>$ php %command.full_name% /path/to/project --rules=@Symfony,-@PSR1,-blank_line_before_statement,strict_comparison</info>
 
@@ -142,6 +142,17 @@ Finally, if you don't need BC kept on CLI level, you might use `PHP_CS_FIXER_FUT
 would be default in next MAJOR release (unified differ, estimating, full-width progress indicator):
 
     <info>$ PHP_CS_FIXER_FUTURE_MODE=1 php %command.full_name% -v --diff</info>
+
+Rules
+-----
+
+Use the following command to quickly understand what a rule will do to your code:
+
+    <info>$ php php-cs-fixer.phar describe align_multiline_comment</info>
+
+To visualize all the rules that belong to a ruleset:
+
+    <info>$ php php-cs-fixer.phar describe @PSR2</info>
 
 Choose from the list of available rules:
 
@@ -192,7 +203,7 @@ Both ``exclude`` and ``notPath`` methods accept only relative paths to the ones 
 See `Symfony\Finder` (<url>https://symfony.com/doc/current/components/finder.html</url>)
 online documentation for other `Finder` methods.
 
-You may also use a blacklist for the rules instead of the above shown whitelist approach.
+You may also use an exclude list for the rules instead of the above shown include approach.
 The following example shows how to use all ``Symfony`` rules but the ``full_opening_tag`` rule.
 
     <?php
@@ -343,7 +354,7 @@ EOF
     /**
      * Returns the allowed values of the given option that can be converted to a string.
      *
-     * @return array|null
+     * @return null|array
      */
     public static function getDisplayableAllowedValues(FixerOptionInterface $option)
     {
@@ -401,7 +412,11 @@ EOF
         if (false === $changelog) {
             $error = error_get_last();
 
-            throw new \RuntimeException(sprintf('Failed to read content of the changelog file "%s".%s', $changelogFile, $error ? ' '.$error['message'] : ''));
+            throw new \RuntimeException(sprintf(
+                'Failed to read content of the changelog file "%s".%s',
+                $changelogFile,
+                $error ? ' '.$error['message'] : ''
+            ));
         }
 
         for ($i = Application::getMajorVersion(); $i > 0; --$i) {
@@ -428,7 +443,7 @@ EOF
     }
 
     /**
-     * @return string|null
+     * @return null|string
      */
     private static function getChangeLogFile()
     {

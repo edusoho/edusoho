@@ -26,7 +26,6 @@ use Symfony\Component\HttpFoundation\Request as HttpRequest;
  *   $gateway = Omnipay::create('ExpressGateway');
  * </code>
  *
- * @see Omnipay\Omnipay
  */
 class GatewayFactory
 {

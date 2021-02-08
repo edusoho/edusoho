@@ -454,32 +454,6 @@ class Configuration
         return $nonExistentValue;
     }
 
-    /**
-     * Returns all possible suite configurations according environment rules.
-     * Suite configurations will contain `current_environment` key which specifies what environment used.
-     *
-     * @param $suite
-     * @return array
-     * @throws ConfigurationException
-     */
-    public static function suiteEnvironments($suite)
-    {
-        $settings = self::suiteSettings($suite, self::config());
-
-        if (!isset($settings['env']) || !is_array($settings['env'])) {
-            return [];
-        }
-
-        $environments = [];
-
-        foreach ($settings['env'] as $env => $envConfig) {
-            $environments[$env] = $envConfig ? self::mergeConfigs($settings, $envConfig) : $settings;
-            $environments[$env]['current_environment'] = $env;
-        }
-
-        return $environments;
-    }
-
     public static function suites()
     {
         return self::$suites;
@@ -552,7 +526,7 @@ class Configuration
         }
 
         $dir = self::$outputDir . DIRECTORY_SEPARATOR;
-        if (strcmp(self::$outputDir[0], "/") !== 0) {
+        if (!codecept_is_path_absolute($dir)) {
             $dir = self::$dir . DIRECTORY_SEPARATOR . $dir;
         }
 

@@ -49,7 +49,7 @@ final class ProcessOutput implements ProcessOutputInterface
     private $output;
 
     /**
-     * @var int|null
+     * @var null|int
      */
     private $files;
 
@@ -59,15 +59,15 @@ final class ProcessOutput implements ProcessOutputInterface
     private $processedFiles = 0;
 
     /**
-     * @var int|null
+     * @var null|int
      */
     private $symbolsPerLine;
 
     /**
      * @TODO 3.0 make all parameters mandatory (`null` not allowed)
      *
-     * @param int|null $width
-     * @param int|null $nbFiles
+     * @param null|int $width
+     * @param null|int $nbFiles
      */
     public function __construct(OutputInterface $output, EventDispatcherInterface $dispatcher, $width, $nbFiles)
     {

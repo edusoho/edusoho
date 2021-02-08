@@ -98,21 +98,21 @@ class Annotation
     /**
      * The associated tag.
      *
-     * @var Tag|null
+     * @var null|Tag
      */
     private $tag;
 
     /**
      * Lazy loaded, cached types content.
      *
-     * @var string|null
+     * @var null|string
      */
     private $typesContent;
 
     /**
      * The cached types.
      *
-     * @var string[]|null
+     * @var null|string[]
      */
     private $types;
 
@@ -248,7 +248,23 @@ class Annotation
     public function remove()
     {
         foreach ($this->lines as $line) {
-            $line->remove();
+            if ($line->isTheStart() && $line->isTheEnd()) {
+                // Single line doc block, remove entirely
+                $line->remove();
+            } elseif ($line->isTheStart()) {
+                // Multi line doc block, but start is on the same line as the first annotation, keep only the start
+                $content = Preg::replace('#(\s*/\*\*).*#', '$1', $line->getContent());
+
+                $line->setContent($content);
+            } elseif ($line->isTheEnd()) {
+                // Multi line doc block, but end is on the same line as the last annotation, keep only the end
+                $content = Preg::replace('#(\s*)\S.*(\*/.*)#', '$1$2', $line->getContent());
+
+                $line->setContent($content);
+            } else {
+                // Multi line doc block, neither start nor end on this line, can be removed safely
+                $line->remove();
+            }
         }
 
         $this->clearCache();
@@ -286,7 +302,7 @@ class Annotation
             }
 
             $matchingResult = Preg::match(
-                '{^(?:\s*\*|/\*\*)\s*@'.$name.'\s+'.self::REGEX_TYPES.'(?:\h.*)?$}sx',
+                '{^(?:\s*\*|/\*\*)\s*@'.$name.'\s+'.self::REGEX_TYPES.'(?:[*\h\v].*)?$}sx',
                 $this->lines[0]->getContent(),
                 $matches
             );

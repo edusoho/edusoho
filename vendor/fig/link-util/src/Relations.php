@@ -41,6 +41,13 @@ interface Relations
     const REL_ALTERNATE = 'alternate';
 
     /**
+     * Used to reference alternative content that uses the AMP profile of the HTML format.
+     *
+     * @see https://amp.dev/documentation/guides-and-tutorials/learn/spec/amphtml/
+     */
+    const REL_AMPHTML = 'amphtml';
+
+    /**
      * Refers to an appendix.
      *
      * @see https://www.w3.org/TR/html401/
@@ -701,6 +708,14 @@ interface Relations
     const REL_PROFILE = 'profile';
 
     /**
+     * Links to a publication manifest. A manifest represents structured information about a publication, such as informative
+     * metadata, a list of resources, and a default reading order.
+     *
+     * @see https://www.w3.org/TR/pub-manifest/#link-relation-type-registration
+     */
+    const REL_PUBLICATION = 'publication';
+
+    /**
      * Identifies a related resource.
      *
      * @see https://tools.ietf.org/html/rfc4287
@@ -896,7 +911,7 @@ interface Relations
     const REL_VIA = 'via';
 
     /**
-     * Identifies a target URI that supports the Webmention protcol. This allows clients that mention a resource in some form
+     * Identifies a target URI that supports the Webmention protocol. This allows clients that mention a resource in some form
      * of publishing process to contact that endpoint and inform it that this resource has been mentioned.
      *
      * This is a similar "Linkback" mechanism to the ones of Refback, Trackback, and Pingback. It uses a different protocol,

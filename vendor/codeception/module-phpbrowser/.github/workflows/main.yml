@@ -1,0 +1,33 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php: [5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php }}
+        coverage: none
+
+    - name: Validate composer.json and composer.lock
+      run: composer validate
+
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress --no-interaction --no-suggest
+
+    - name: Run test suite
+      run: |
+        php -S 127.0.0.1:8000 -t tests/data/app >/dev/null 2>&1 &
+        php -S 127.0.0.1:8010 -t tests/data/rest >/dev/null 2>&1 &
+        php vendor/bin/codecept run

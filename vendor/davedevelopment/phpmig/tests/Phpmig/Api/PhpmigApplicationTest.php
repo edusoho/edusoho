@@ -2,16 +2,16 @@
 
 namespace Phpmig\Api;
 
-use Phpmig\Api\PhpmigApplication;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output;
 
 /**
  * @group unit
- * @coversDefaultClass Phpmig\Api\PhpmigApplication
+ * @coversDefaultClass PhpmigApplication
  *
  * @author      Cody Phillips
  */
-class PhpmigApplicationTest extends \PHPUnit_Framework_TestCase
+class PhpmigApplicationTest extends TestCase
 {
     private $prev_version = '20141104210000';
     private $current_version = '20141104220000';
@@ -19,15 +19,15 @@ class PhpmigApplicationTest extends \PHPUnit_Framework_TestCase
     private $output;
     private $temp_dir;
     
-    public function setup()
+    public function setUp(): void
     {
         $this->output = new Output\NullOutput();
         $this->setTempDir($this->makeTempDir());
     }
     
-    public function tearDown()
+    public function tearDown(): void
     {
-        $this->cleanTempDir($this->getTempDir());
+        $this->cleanTempDir();
     }
     
     /**
@@ -121,7 +121,6 @@ class PhpmigApplicationTest extends \PHPUnit_Framework_TestCase
      * @covers ::getMigrations
      * @covers ::loadMigrations
      * @covers ::migrationToClassName
-     * @expectedException \InvalidArgumentException
      * @dataProvider getMigrationsExceptionProvider
      */
     public function testGetMigrationsException($migrations, $class_names, $extends)
@@ -135,6 +134,7 @@ class PhpmigApplicationTest extends \PHPUnit_Framework_TestCase
         $container = $this->getContainer($adapter, $migrations, $this->getTempDir());
         
         $app = new PhpmigApplication($container, $this->output);
+        $this->expectException(\InvalidArgumentException::class);
         $app->getMigrations(0);
     }
     
@@ -208,7 +208,7 @@ class PhpmigApplicationTest extends \PHPUnit_Framework_TestCase
      */
     protected function getAdapter(array $versions = array())
     {
-        $adapter = $this->getMock('Phpmig\Adapter\AdapterInterface');
+        $adapter = $this->createMock('Phpmig\Adapter\AdapterInterface');
         $adapter->expects($this->any())
             ->method('fetchAll')
             ->will($this->returnValue($versions));
@@ -225,7 +225,7 @@ class PhpmigApplicationTest extends \PHPUnit_Framework_TestCase
      */
     protected function getMigrator($adapter, $container, $output, $times_up, $times_down)
     {
-        $migrator = $this->getMock("Phpmig\Migration\Migrator", array("up", "down"), array($adapter, $container, $output));
+        $migrator = $this->createMock("Phpmig\Migration\Migrator", array("up", "down"), array($adapter, $container, $output));
         if ($times_up > 0) {
             $migrator->expects($this->exactly($times_up))
                 ->method("up")

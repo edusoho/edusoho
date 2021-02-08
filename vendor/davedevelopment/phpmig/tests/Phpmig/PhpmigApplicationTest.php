@@ -2,10 +2,12 @@
 
 namespace Phpmig\Console;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * @group unit
  */
-class PhpmigApplicationTest extends \PHPUnit_Framework_TestCase
+class PhpmigApplicationTest extends TestCase
 {
     public function testAllCommandsRegistered()
     {

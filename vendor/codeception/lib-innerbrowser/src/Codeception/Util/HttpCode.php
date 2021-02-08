@@ -1,4 +1,5 @@
 <?php
+
 namespace Codeception\Util;
 
 /**
@@ -20,8 +21,10 @@ namespace Codeception\Util;
  */
 class HttpCode
 {
+    // const CONTINUE = 100;
     const SWITCHING_PROTOCOLS = 101;
     const PROCESSING = 102;            // RFC2518
+    const EARLY_HINTS = 103;           // RFC8297
     const OK = 200;
     const CREATED = 201;
     const ACCEPTED = 202;
@@ -60,6 +63,7 @@ class HttpCode
     const REQUESTED_RANGE_NOT_SATISFIABLE = 416;
     const EXPECTATION_FAILED = 417;
     const I_AM_A_TEAPOT = 418;                                               // RFC2324
+    const MISDIRECTED_REQUEST = 421;                                         // RFC7540
     const UNPROCESSABLE_ENTITY = 422;                                        // RFC4918
     const LOCKED = 423;                                                      // RFC4918
     const FAILED_DEPENDENCY = 424;                                           // RFC4918
@@ -68,6 +72,7 @@ class HttpCode
     const PRECONDITION_REQUIRED = 428;                                       // RFC6585
     const TOO_MANY_REQUESTS = 429;                                           // RFC6585
     const REQUEST_HEADER_FIELDS_TOO_LARGE = 431;                             // RFC6585
+    const UNAVAILABLE_FOR_LEGAL_REASONS = 451;
     const INTERNAL_SERVER_ERROR = 500;
     const NOT_IMPLEMENTED = 501;
     const BAD_GATEWAY = 502;
@@ -83,6 +88,7 @@ class HttpCode
     private static $codes = [
      100 => 'Continue',
      102 => 'Processing',
+     103 => 'Early Hints',
      200 => 'OK',
      201 => 'Created',
      202 => 'Accepted',
@@ -99,6 +105,7 @@ class HttpCode
      303 => 'See Other',
      304 => 'Not Modified',
      305 => 'Use Proxy',
+     306 => 'Reserved',
      307 => 'Temporary Redirect',
      308 => 'Permanent Redirect',
      400 => 'Bad Request',
@@ -119,14 +126,17 @@ class HttpCode
      415 => 'Unsupported Media Type',
      416 => 'Requested Range Not Satisfiable',
      417 => 'Expectation Failed',
+     418 => 'Unassigned',
      421 => 'Misdirected Request',
      422 => 'Unprocessable Entity',
      423 => 'Locked',
      424 => 'Failed Dependency',
+     425 => 'Too Early',
      426 => 'Upgrade Required',
      428 => 'Precondition Required',
      429 => 'Too Many Requests',
      431 => 'Request Header Fields Too Large',
+     451 => 'Unavailable For Legal Reasons',
      500 => 'Internal Server Error',
      501 => 'Not Implemented',
      502 => 'Bad Gateway',

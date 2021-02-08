@@ -75,6 +75,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *  --coverage-xml        Generate CodeCoverage XML report in file (default: "coverage.xml")
  *  --coverage-text       Generate CodeCoverage text report in file (default: "coverage.txt")
  *  --coverage-phpunit    Generate CodeCoverage PHPUnit report in file (default: "coverage-phpunit")
+ *  --coverage-cobertura  Generate CodeCoverage Cobertura report in file (default: "coverage-cobertura")
  *  --no-exit             Don't finish with exit code
  *  --group (-g)          Groups of tests to be executed (multiple values allowed)
  *  --skip (-s)           Skip selected suites (multiple values allowed)
@@ -115,7 +116,6 @@ class Run extends Command
      * @var OutputInterface
      */
     protected $output;
-
 
     /**
      * Sets Run arguments
@@ -175,6 +175,12 @@ class Run extends Command
                 '',
                 InputOption::VALUE_OPTIONAL,
                 'Generate CodeCoverage report in Crap4J XML format'
+            ),
+            new InputOption(
+                'coverage-cobertura',
+                '',
+                InputOption::VALUE_OPTIONAL,
+                'Generate CodeCoverage report in Cobertura XML format'
             ),
             new InputOption(
                 'coverage-phpunit',
@@ -264,9 +270,12 @@ class Run extends Command
             $this->output->writeln(
                 Codecept::versionString() . "\nPowered by " . \PHPUnit\Runner\Version::getVersionString()
             );
-            $this->output->writeln(
-                "Running with seed: " . $this->options['seed'] . "\n"
-            );
+
+            if ($this->options['seed']) {
+                $this->output->writeln(
+                    "Running with seed: <info>" . $this->options['seed'] . "</info>\n"
+                );
+            }
         }
         if ($this->options['debug']) {
             $this->output->setVerbosity(OutputInterface::VERBOSITY_VERY_VERBOSE);
@@ -286,6 +295,7 @@ class Run extends Command
                 'coverage-html' => 'coverage',
                 'coverage-text' => 'coverage.txt',
                 'coverage-crap4j' => 'crap4j.xml',
+                'coverage-cobertura' => 'cobertura.xml',
                 'coverage-phpunit' => 'coverage-phpunit'])
         );
         $userOptions['verbosity'] = $this->output->getVerbosity();
@@ -375,10 +385,10 @@ class Run extends Command
         }
 
         if ($test) {
-            $filter = $this->matchFilteredTestName($test);
-            $userOptions['filter'] = $filter;
+            $userOptions['filter'] = $this->matchFilteredTestName($test);
+        } elseif ($suite) {
+            $userOptions['filter'] = $this->matchFilteredTestName($suite);
         }
-
         if (!$this->options['silent'] && $config['settings']['shuffle']) {
             $this->output->writeln(
                 "[Seed] <info>" . $userOptions['seed'] . "</info>"
@@ -445,9 +455,29 @@ class Run extends Command
             }
         }
 
-        // Run single test without included tests
-        if (! Configuration::isEmpty() && strpos($suite, $config['paths']['tests']) === 0) {
-            return $this->matchTestFromFilename($suite, $config['paths']['tests']);
+        if (! Configuration::isEmpty()) {
+            // Run single test without included tests
+            if (strpos($suite, $config['paths']['tests']) === 0) {
+                return $this->matchTestFromFilename($suite, $config['paths']['tests']);
+            }
+
+            // Run single test from working directory
+            $realTestDir = realpath(Configuration::testsDir());
+            $cwd = getcwd();
+            if (strpos($realTestDir, $cwd) === 0) {
+                $file = $suite;
+                if (strpos($file, ':') !== false) {
+                    list($file) = explode(':', $suite, -1);
+                }
+                $realPath = $cwd . DIRECTORY_SEPARATOR . $file;
+                if (file_exists($realPath) && strpos($realPath, $realTestDir) === 0) {
+                    //only match test if file is in tests directory
+                    return $this->matchTestFromFilename(
+                        $cwd . DIRECTORY_SEPARATOR . $suite,
+                        $realTestDir
+                    );
+                }
+            }
         }
     }
 
@@ -475,7 +505,6 @@ class Run extends Command
             }
         }
     }
-
 
     protected function currentNamespace()
     {
@@ -509,15 +538,38 @@ class Run extends Command
 
     protected function matchTestFromFilename($filename, $testsPath)
     {
+        $filter = '';
+        if (strpos($filename, ':') !== false) {
+            if ((PHP_OS === 'Windows' || PHP_OS === 'WINNT') && $filename[1] === ':') {
+                // match C:\...
+                list($drive, $path, $filter) = explode(':', $filename, 3);
+                $filename = $drive . ':' . $path;
+            } else {
+                list($filename, $filter) = explode(':', $filename, 2);
+            }
+
+            if ($filter) {
+                $filter = ':' . $filter;
+            }
+        }
+
         $testsPath = str_replace(['//', '\/', '\\'], '/', $testsPath);
         $filename = str_replace(['//', '\/', '\\'], '/', $filename);
+
+        if (rtrim($filename, '/') === $testsPath) {
+            //codecept run tests
+            return ['', '', $filter];
+        }
         $res = preg_match("~^$testsPath/(.*?)(?>/(.*))?$~", $filename, $matches);
 
         if (!$res) {
             throw new \InvalidArgumentException("Test file can't be matched");
         }
         if (!isset($matches[2])) {
-            $matches[2] = null;
+            $matches[2] = '';
+        }
+        if ($filter) {
+            $matches[2] .= $filter;
         }
 
         return $matches;

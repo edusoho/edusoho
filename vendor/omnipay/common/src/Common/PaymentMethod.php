@@ -10,7 +10,6 @@ namespace Omnipay\Common;
  *
  * This class defines a payment method to be used in the Omnipay system.
  *
- * @see Issuer
  */
 class PaymentMethod
 {
@@ -18,8 +17,6 @@ class PaymentMethod
     /**
      * The ID of the payment method.  Used as the payment method ID in the
      * Issuer class.
-     *
-     * @see Issuer
      *
      * @var string
      */

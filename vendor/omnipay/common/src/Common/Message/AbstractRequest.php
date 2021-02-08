@@ -18,6 +18,7 @@ use Omnipay\Common\Helper;
 use Omnipay\Common\Http\Client;
 use Omnipay\Common\Http\ClientInterface;
 use Omnipay\Common\ItemBag;
+use Omnipay\Common\ParametersTrait;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
@@ -61,17 +62,12 @@ use Symfony\Component\HttpFoundation\Request as HttpRequest;
  *   // now do something with the $myResponse object, test for success, etc.
  * </code>
  *
- * @see RequestInterface
- * @see AbstractResponse
  */
 abstract class AbstractRequest implements RequestInterface
 {
-    /**
-     * The request parameters
-     *
-     * @var \Symfony\Component\HttpFoundation\ParameterBag
-     */
-    protected $parameters;
+    use ParametersTrait {
+        setParameter as traitSetParameter;
+    }
 
     /**
      * The request client.
@@ -146,27 +142,6 @@ abstract class AbstractRequest implements RequestInterface
     }
 
     /**
-     * Get all parameters as an associative array.
-     *
-     * @return array
-     */
-    public function getParameters()
-    {
-        return $this->parameters->all();
-    }
-
-    /**
-     * Get a single parameter.
-     *
-     * @param string $key The parameter key
-     * @return mixed
-     */
-    protected function getParameter($key)
-    {
-        return $this->parameters->get($key);
-    }
-
-    /**
      * Set a single parameter
      *
      * @param string $key The parameter key
@@ -180,9 +155,7 @@ abstract class AbstractRequest implements RequestInterface
             throw new RuntimeException('Request cannot be modified after it has been sent!');
         }
 
-        $this->parameters->set($key, $value);
-
-        return $this;
+        return $this->traitSetParameter($key, $value);
     }
 
     /**
@@ -204,25 +177,6 @@ abstract class AbstractRequest implements RequestInterface
     public function setTestMode($value)
     {
         return $this->setParameter('testMode', $value);
-    }
-
-    /**
-     * Validate the request.
-     *
-     * This method is called internally by gateways to avoid wasting time with an API call
-     * when the request is clearly invalid.
-     *
-     * @param string ... a variable length list of required parameters
-     * @throws InvalidRequestException
-     */
-    public function validate()
-    {
-        foreach (func_get_args() as $key) {
-            $value = $this->parameters->get($key);
-            if (! isset($value)) {
-                throw new InvalidRequestException("The $key parameter is required");
-            }
-        }
     }
 
     /**

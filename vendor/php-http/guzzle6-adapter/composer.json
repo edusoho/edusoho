@@ -15,17 +15,20 @@
         }
     ],
     "require": {
-        "php": ">=5.5.0",
-        "php-http/httplug": "^1.0",
+        "php": "^7.1",
+        "php-http/httplug": "^2.0",
+        "psr/http-client": "^1.0",
         "guzzlehttp/guzzle": "^6.0"
     },
     "require-dev": {
         "ext-curl": "*",
-        "php-http/adapter-integration-tests": "^0.4"
+        "phpunit/phpunit": "^7.4",
+        "php-http/client-integration-tests": "^2.0"
     },
     "provide": {
         "php-http/client-implementation": "1.0",
-        "php-http/async-client-implementation": "1.0"
+        "php-http/async-client-implementation": "1.0",
+        "psr/http-client-implementation": "1.0"
     },
     "autoload": {
         "psr-4": {
@@ -43,7 +46,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.2-dev"
+            "dev-master": "2.x-dev"
         }
     }
 }

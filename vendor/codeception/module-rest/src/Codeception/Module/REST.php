@@ -36,14 +36,22 @@ use JsonSchema\Constraints\Constraint as JsonContraint;
  *
  * This module requires PHPBrowser or any of Framework modules enabled.
  *
+ * In case you need to configure low-level HTTP fields, that's done on the PHPBrowser level.
+ * Check the example below for details.
+ *
  * ### Example
  *
  *     modules:
  *        enabled:
  *            - REST:
  *                depends: PhpBrowser
- *                url: 'http://serviceapp/api/v1/'
+ *                url: &url 'http://serviceapp/api/v1/' # you only need the &url anchor for further PhpBrowser configs
  *                shortDebugResponse: 300 # only the first 300 chars of the response
+ *        config:
+ *            PhpBrowser:
+ *                url: *url # repeats the URL from the REST module; not needed if you don't have further settings like below
+ *                headers:
+ *                    Content-Type: application/json
  *
  * ## Public Properties
  *
@@ -160,7 +168,7 @@ EOF;
     }
 
     /**
-     * Sets HTTP header valid for all next requests. Use `deleteHeader` to unset it
+     * Sets a HTTP header to be used for all subsequent requests. Use [`deleteHeader`](#deleteHeader) to unset it.
      *
      * ```php
      * <?php
@@ -180,17 +188,17 @@ EOF;
     }
 
     /**
-     * Deletes the header with the passed name.  Subsequent requests
-     * will not have the deleted header in its request.
+     * Deletes a HTTP header (that was originally added by [haveHttpHeader()](#haveHttpHeader)),
+     * so that subsequent requests will not send it anymore.
      *
      * Example:
      * ```php
      * <?php
      * $I->haveHttpHeader('X-Requested-With', 'Codeception');
-     * $I->sendGET('test-headers.php');
+     * $I->sendGet('test-headers.php');
      * // ...
      * $I->deleteHeader('X-Requested-With');
-     * $I->sendPOST('some-other-page.php');
+     * $I->sendPost('some-other-page.php');
      * ?>
      * ```
      *
@@ -350,11 +358,8 @@ EOF;
         if ($this->isFunctional) {
             throw new ModuleException(__METHOD__, 'Not supported by functional modules');
         }
-        if (!defined('\GuzzleHttp\Client::VERSION')) {
+        if (!defined('\GuzzleHttp\Client::MAJOR_VERSION') && !defined('\GuzzleHttp\Client::VERSION')) {
             throw new ModuleException(__METHOD__, 'Not supported if not using a Guzzle client');
-        }
-        if (version_compare(\GuzzleHttp\Client::VERSION, '6.2.1', 'lt')) {
-            throw new ModuleException(__METHOD__, 'Guzzle ' . \GuzzleHttp\Client::VERSION . ' found. Requires Guzzle >=6.3.0 for NTLM auth option');
         }
         $this->client->setAuth($username, $password, 'ntlm');
     }
@@ -412,11 +417,11 @@ EOF;
      * ```php
      * <?php
      * //simple POST call
-     * $I->sendPOST('/message', ['subject' => 'Read this!', 'to' => 'johndoe@example.com']);
+     * $I->sendPost('/message', ['subject' => 'Read this!', 'to' => 'johndoe@example.com']);
      * //simple upload method
-     * $I->sendPOST('/message/24', ['inline' => 0], ['attachmentFile' => codecept_data_dir('sample_file.pdf')]);
+     * $I->sendPost('/message/24', ['inline' => 0], ['attachmentFile' => codecept_data_dir('sample_file.pdf')]);
      * //uploading a file with a custom name and mime-type. This is also useful to simulate upload errors.
-     * $I->sendPOST('/message/24', ['inline' => 0], [
+     * $I->sendPost('/message/24', ['inline' => 0], [
      *     'attachmentFile' => [
      *          'name' => 'document.pdf',
      *          'type' => 'application/pdf',
@@ -425,6 +430,12 @@ EOF;
      *          'tmp_name' => codecept_data_dir('sample_file.pdf')
      *     ]
      * ]);
+     * // If your field names contain square brackets (e.g. `<input type="text" name="form[task]">`),
+     * // PHP parses them into an array. In this case you need to pass the fields like this:
+     * $I->sendPost('/add-task', ['form' => [
+     *     'task' => 'lorem ipsum',
+     *     'category' => 'miscellaneous',
+     * ]]);
      * ```
      *
      * @param $url
@@ -438,7 +449,7 @@ EOF;
      * @part json
      * @part xml
      */
-    public function sendPOST($url, $params = [], $files = [])
+    public function sendPost($url, $params = [], $files = [])
     {
         $this->execute('POST', $url, $params, $files);
     }
@@ -451,7 +462,7 @@ EOF;
      * @part json
      * @part xml
      */
-    public function sendHEAD($url, $params = [])
+    public function sendHead($url, $params = [])
     {
         $this->execute('HEAD', $url, $params);
     }
@@ -464,7 +475,7 @@ EOF;
      * @part json
      * @part xml
      */
-    public function sendOPTIONS($url, $params = [])
+    public function sendOptions($url, $params = [])
     {
         $this->execute('OPTIONS', $url, $params);
     }
@@ -477,7 +488,7 @@ EOF;
      * @part json
      * @part xml
      */
-    public function sendGET($url, $params = [])
+    public function sendGet($url, $params = [])
     {
         $this->execute('GET', $url, $params);
     }
@@ -491,7 +502,7 @@ EOF;
      * @part json
      * @part xml
      */
-    public function sendPUT($url, $params = [], $files = [])
+    public function sendPut($url, $params = [], $files = [])
     {
         $this->execute('PUT', $url, $params, $files);
     }
@@ -505,7 +516,7 @@ EOF;
      * @part json
      * @part xml
      */
-    public function sendPATCH($url, $params = [], $files = [])
+    public function sendPatch($url, $params = [], $files = [])
     {
         $this->execute('PATCH', $url, $params, $files);
     }
@@ -519,7 +530,7 @@ EOF;
      * @part json
      * @part xml
      */
-    public function sendDELETE($url, $params = [], $files = [])
+    public function sendDelete($url, $params = [], $files = [])
     {
         $this->execute('DELETE', $url, $params, $files);
     }
@@ -565,7 +576,7 @@ EOF;
      * @part json
      * @part xml
      */
-    public function sendLINK($url, array $linkEntries)
+    public function sendLink($url, array $linkEntries)
     {
         $this->setHeaderLink($linkEntries);
         $this->execute('LINK', $url);
@@ -581,7 +592,7 @@ EOF;
      * @part json
      * @part xml
      */
-    public function sendUNLINK($url, array $linkEntries)
+    public function sendUnlink($url, array $linkEntries)
     {
         $this->setHeaderLink($linkEntries);
         $this->execute('UNLINK', $url);
@@ -932,7 +943,7 @@ EOF;
      * ``` php
      * <?php
      * $user_id = $I->grabResponse();
-     * $I->sendPUT('/user', array('id' => $user_id, 'name' => 'davert'));
+     * $I->sendPut('/user', array('id' => $user_id, 'name' => 'davert'));
      * ?>
      * ```
      *
@@ -960,7 +971,7 @@ EOF;
      * <?php
      * // match the first `user.id` in json
      * $firstUserId = $I->grabDataFromResponseByJsonPath('$..users[0].id');
-     * $I->sendPUT('/user', array('id' => $firstUserId[0], 'name' => 'davert'));
+     * $I->sendPut('/user', array('id' => $firstUserId[0], 'name' => 'davert'));
      * ?>
      * ```
      *
@@ -1129,9 +1140,9 @@ EOF;
     }
 
     /**
-     * Checks that Json matches provided types.
+     * Checks that JSON matches provided types.
      * In case you don't know the actual values of JSON data returned you can match them by type.
-     * Starts check with a root element. If JSON data is array it will check the first element of an array.
+     * It starts the check with a root element. If JSON data is an array it will check all elements of it.
      * You can specify the path in the json which should be checked with JsonPath
      *
      * Basic example:
@@ -1151,7 +1162,7 @@ EOF;
      * ?>
      * ```
      *
-     * In this case you can match that record contains fields with data types you expected.
+     * You can check if the record contains fields with the data types you expect.
      * The list of possible data types:
      *
      * * string
@@ -1159,8 +1170,9 @@ EOF;
      * * float
      * * array (json object is array as well)
      * * boolean
+     * * null
      *
-     * You can also use nested data type structures:
+     * You can also use nested data type structures, and define multiple types for the same field:
      *
      * ```php
      * <?php
@@ -1172,7 +1184,8 @@ EOF;
      * ?>
      * ```
      *
-     * You can also apply filters to check values. Filter can be applied with `:` char after the type declaration.
+     * You can also apply filters to check values. Filter can be applied with a `:` char after the type declaration,
+     * or after another filter if you need more than one.
      *
      * Here is the list of possible filters:
      *
@@ -1196,16 +1209,17 @@ EOF;
      * // {'user_id': '1'}
      * $I->seeResponseMatchesJsonType([
      *      'user_id' => 'string:>0', // works with strings as well
-     * }
+     * ]);
      * ?>
      * ```
      *
-     * You can also add custom filters y accessing `JsonType::addCustomFilter` method.
+     * You can also add custom filters by using `{@link JsonType::addCustomFilter()}`.
      * See [JsonType reference](http://codeception.com/docs/reference/JsonType).
      *
      * @part json
      * @param array $jsonType
      * @param string $jsonPath
+     * @see JsonType
      * @version 2.1.3
      */
     public function seeResponseMatchesJsonType(array $jsonType, $jsonPath = null)
@@ -1591,11 +1605,11 @@ EOF;
     {
         $this->client->followRedirects(true);
     }
-    
+
     /**
      * Sets SERVER parameters valid for all next requests.
      * this will remove old ones.
-     * 
+     *
      * ```php
      * $I->setServerParameters([]);
      * ```
@@ -1604,10 +1618,10 @@ EOF;
     {
         $this->client->setServerParameters($params);
     }
-    
+
     /**
      * Sets SERVER parameter valid for all next requests.
-     * 
+     *
      * ```php
      * $I->haveServerParameter('name', 'value');
      * ```

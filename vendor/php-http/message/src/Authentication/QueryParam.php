@@ -20,9 +20,6 @@ final class QueryParam implements Authentication
      */
     private $params = [];
 
-    /**
-     * @param array $params
-     */
     public function __construct(array $params)
     {
         $this->params = $params;

@@ -17,12 +17,12 @@ class FullHttpMessageFormatter implements Formatter
     /**
      * The maximum length of the body.
      *
-     * @var int
+     * @var int|null
      */
     private $maxBodyLength;
 
     /**
-     * @param int $maxBodyLength
+     * @param int|null $maxBodyLength
      */
     public function __construct($maxBodyLength = 1000)
     {
@@ -70,22 +70,31 @@ class FullHttpMessageFormatter implements Formatter
     /**
      * Add the message body if the stream is seekable.
      *
-     * @param MessageInterface $request
-     * @param string           $message
+     * @param string $message
      *
      * @return string
      */
     private function addBody(MessageInterface $request, $message)
     {
+        $message .= "\n";
         $stream = $request->getBody();
         if (!$stream->isSeekable() || 0 === $this->maxBodyLength) {
             // Do not read the stream
-            $message .= "\n";
-        } else {
-            $message .= "\n".mb_substr($stream->__toString(), 0, $this->maxBodyLength);
-            $stream->rewind();
+            return $message;
         }
 
-        return $message;
+        $data = $stream->__toString();
+        $stream->rewind();
+
+        // all non-printable ASCII characters and <DEL> except for \t, \r, \n
+        if (preg_match('/([\x00-\x09\x0C\x0E-\x1F\x7F])/', $data)) {
+            return $message.'[binary stream omitted]';
+        }
+
+        if (null === $this->maxBodyLength) {
+            return $message.$data;
+        }
+
+        return $message.mb_substr($data, 0, $this->maxBodyLength);
     }
 }

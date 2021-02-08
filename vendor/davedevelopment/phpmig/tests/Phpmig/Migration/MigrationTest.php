@@ -3,11 +3,11 @@
 namespace Phpmig\Migration;
 
 use Mockery as m;
-use Phpmig\Migration\Migration;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Helper\DialogHelper;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class MigrationTest extends \PHPUnit_Framework_TestCase
+class MigrationTest extends TestCase
 {
     /**
      * @var OutputInterface|m\MockInterface
@@ -24,7 +24,7 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
      */
     private $migration;
 
-    public function setup()
+    public function setUp(): void
     {
         $this->migrationOutput = m::mock('Symfony\Component\Console\Output\OutputInterface')->shouldIgnoreMissing();
         $this->migrationDialogHelper = m::mock('Symfony\Component\Console\Helper\DialogHelper')->shouldIgnoreMissing();

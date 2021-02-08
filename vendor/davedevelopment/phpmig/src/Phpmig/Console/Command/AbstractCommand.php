@@ -173,7 +173,7 @@ abstract class AbstractCommand extends Command
         $container = $this->getContainer();
         $set = $input->getOption('set');
 
-        if (!isset($container['phpmig.migrations']) && !isset($container['phpmig.migrations_path']) && !isset($container['phpmig.sets'][$set]['migrations_path'])) {
+        if (!isset($container['phpmig.migrations']) && !isset($container['phpmig.migrations_path']) && (isset($container['phpmig.sets']) && !isset($container['phpmig.sets'][$set]['migrations_path']))) {
             throw new \RuntimeException($this->getBootstrap() . ' must return container with array at phpmig.migrations or migrations default path at phpmig.migrations_path or migrations default path at phpmig.sets');
         }
 

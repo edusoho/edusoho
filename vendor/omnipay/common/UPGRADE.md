@@ -1,7 +1,7 @@
 ## Upgrade apps from 2.x to 3.x
- - The `redirect()` method no calls `exit()` after sending the content. This is up to the developer now.
+ - The `redirect()` method no longer calls `exit()` after sending the content. This is up to the developer now.
  - It is now possible to use `setAmountInteger(integer $value)` and `setMoney(Money $money)`
- - HTTPPlug is used. Guzzle will be installed when using `omnipay/omnipay`, otherwise you need to required your own implementation (see http://docs.php-http.org/en/latest/clients.html)
+ - HTTPPlug is used. Guzzle will be installed when using `omnipay/omnipay`, otherwise you need to require your own implementation (see http://docs.php-http.org/en/latest/clients.html)
  - The package is renamed from `omnipay/omnipay` to `league/omnipay` and no longer installs all gateways by default.
 ## Upgrade Gateways from 2.x to 3.x
 
@@ -13,7 +13,7 @@ The primary difference is the HTTP Client. We are now using HTTPlug (http://http
 - No need to call `$request->send()`, requests are sent directly.
 - Instead of `$client->createRequest(..)` you can create+send the request directly with `$client->request(..)`.
 - When sending a JSON body, convert the body to a string with `json_encode()` and set the correct Content-Type.
-- The response is a PSR-7 Response object. You can call `$response->getBody()->getContents()` to get the body as string.
+- The response is a PSR-7 Response object. You can call `$response->getBody()->getContents()` to get the body as a string.
 - `$response->json()` and `$response->xml()` are gone, but you can implement the logic directly.
 - An HTTP Client is no longer added by default by `omnipay/common`, but `omnipay/omnipay` will add Guzzle. 
 Gateways should not rely on Guzzle or other clients directly.

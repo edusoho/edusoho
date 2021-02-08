@@ -10,6 +10,8 @@ Status](https://travis-ci.org/vlucas/valitron.png?branch=master)](https://travis
 [![Latest Stable Version](https://poser.pugx.org/vlucas/valitron/v/stable.png)](https://packagist.org/packages/vlucas/valitron)
 [![Total Downloads](https://poser.pugx.org/vlucas/valitron/downloads.png)](https://packagist.org/packages/vlucas/valitron)
 
+[Get supported vlucas/valitron with the Tidelift Subscription](https://tidelift.com/subscription/pkg/packagist-vlucas-valitron?utm_source=packagist-vlucas-valitron&utm_medium=referral&utm_campaign=readme) 
+
 ## Why Valitron?
 
 Valitron was created out of frustration with other validation libraries
@@ -122,6 +124,33 @@ use Valitron\Validator as V;
 
 V::langDir(__DIR__.'/validator_lang'); // always set langDir before lang.
 V::lang('ar');
+
+```
+
+Disabling the {field} name in the output of the error message. 
+
+```php
+use Valitron\Validator as V;
+
+$v = new Valitron\Validator(['name' => 'John']);
+$v->rule('required', ['name']);
+
+// Disable prepending the labels
+$v->setPrependLabels(false);
+
+// Error output for the "false" condition
+[
+    ["name"] => [
+        "is required"
+    ]
+]
+
+// Error output for the default (true) condition
+[
+    ["name"] => [
+        "name is required"
+    ]
+]
 
 ```
 
@@ -438,24 +467,19 @@ $v->rules([
 $v->validate();
 ```
 
-*Note* the optional boolean flag for strict mode will allow for integers to be supplied as negative values. So the following rule would evaluate to true:
+*Note* the optional boolean flag for strict mode makes sure integers are to be supplied in a strictly numeric form. So the following rule would evaluate to true:
 ```php
-$v = new Valitron\Validator(['age' => '-27']);
-$v->rules([
-    'integer' => [
-        ['age', true]
-    ]
-]);
+$v = new Valitron\Validator(['negative' => '-27', 'positive'=>'27']);
+$v->rule('integer', 'age', true);
+$v->rule('integer', 'height', true);
 $v->validate();
 ```
-Whereas the same for a positive (+) value would evaluate to false, as the + in this case is redundant:
+
+Whereas the following will evaluate to false, as the + for the positive number in this case is redundant:
 ```php
-$v = new Valitron\Validator(['age' => '+27']);
-$v->rules([
-    'integer' => [
-        ['age', true]
-    ]
-]);
+$v = new Valitron\Validator(['negative' => '-27', 'positive'=>'+27']);
+$v->rule('integer', 'age', true);
+$v->rule('integer', 'height', true);
 $v->validate();
 ```
 
@@ -1121,7 +1145,7 @@ $v = new Valitron\Validator([
         'city' => 'Doe D.C.'
     ]
 ]);
-$v->rule(['arrayHasKeys', 'address', ['name', 'street', 'city']);
+$v->rule('arrayHasKeys', 'address', ['name', 'street', 'city']);
 $v->validate();
 ```
 
@@ -1324,3 +1348,7 @@ before running the tests:
 6. Push to the branch (`git push origin my-new-feature`)
 7. Create new Pull Request
 8. Pat yourself on the back for being so awesome
+
+## Security Disclosures and Contact Information
+
+To report a security vulnerability, please use the [Tidelift security contact](https://tidelift.com/security). Tidelift will coordinate the fix and disclosure.

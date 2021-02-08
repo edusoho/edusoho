@@ -15,7 +15,6 @@ use GuzzleHttp\Psr7\Request as Psr7Request;
 use GuzzleHttp\Psr7\Response as Psr7Response;
 use GuzzleHttp\Psr7\Uri as Psr7Uri;
 use Symfony\Component\BrowserKit\AbstractBrowser as Client;
-use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\BrowserKit\Request as BrowserKitRequest;
 use Symfony\Component\BrowserKit\Response as BrowserKitResponse;
 
@@ -27,10 +26,10 @@ class Guzzle extends Client
     ];
     protected $refreshMaxInterval = 0;
 
-    protected $awsCredentials = null;
-    protected $awsSignature = null;
+    protected $awsCredentials;
+    protected $awsSignature;
 
-    /** @var \GuzzleHttp\Client */
+    /** @var GuzzleClient */
     protected $client;
 
     /**
@@ -49,7 +48,7 @@ class Guzzle extends Client
         $this->refreshMaxInterval = $seconds;
     }
 
-    public function setClient(GuzzleClient &$client)
+    public function setClient(GuzzleClient $client)
     {
         $this->client = $client;
     }
@@ -66,7 +65,7 @@ class Guzzle extends Client
      */
     public function setHeader($name, $value)
     {
-        if (strval($value) === '') {
+        if ((string)$value === '') {
             $this->deleteHeader($name);
         } else {
             $this->requestOptions['headers'][$name] = $value;
@@ -101,9 +100,9 @@ class Guzzle extends Client
     /**
      * Taken from Mink\BrowserKitDriver
      *
-     * @param Response $response
+     * @param Psr7Response $response
      *
-     * @return \Symfony\Component\BrowserKit\Response
+     * @return BrowserKitResponse
      */
     protected function createResponse(Psr7Response $response)
     {
@@ -120,7 +119,7 @@ class Guzzle extends Client
         }
 
         if (strpos($contentType, 'charset=') === false) {
-            if (preg_match('/\<meta[^\>]+charset *= *["\']?([a-zA-Z\-0-9]+)/i', $body, $matches)) {
+            if (preg_match('/<meta[^>]+charset *= *["\']?([a-zA-Z\-0-9]+)/i', $body, $matches)) {
                 $contentType .= ';charset=' . $matches[1];
             }
             $headers['Content-Type'] = [$contentType];
@@ -131,7 +130,7 @@ class Guzzle extends Client
             $matches = [];
 
             $matchesMeta = preg_match(
-                '/\<meta[^\>]+http-equiv="refresh" content="\s*(\d*)\s*;\s*url=(.*?)"/i',
+                '/<meta[^>]+http-equiv="refresh" content="\s*(\d*)\s*;\s*url=(.*?)"/i',
                 $body,
                 $matches
             );
@@ -149,7 +148,7 @@ class Guzzle extends Client
                 $uri = new Psr7Uri($this->getAbsoluteUri($matches[2]));
                 $currentUri = new Psr7Uri($this->getHistory()->current()->getUri());
 
-                if ($uri->withFragment('') != $currentUri->withFragment('')) {
+                if ($uri->withFragment('') !== $currentUri->withFragment('')) {
                     $status = 302;
                     $headers['Location'] = $matchesMeta ? htmlspecialchars_decode($uri) : (string)$uri;
                 }
@@ -196,7 +195,7 @@ class Guzzle extends Client
         }
 
         $formData = $this->extractFormData($request);
-        if (empty($multipartData) and $formData) {
+        if (empty($multipartData) && $formData) {
             $options['form_params'] = $formData;
         }
 
@@ -292,7 +291,7 @@ class Guzzle extends Client
             if (is_array($info)) {
                 if (isset($info['tmp_name'])) {
                     if ($info['tmp_name']) {
-                        $handle = fopen($info['tmp_name'], 'r');
+                        $handle = fopen($info['tmp_name'], 'rb');
                         $filename = isset($info['name']) ? $info['name'] : null;
                         $file = [
                             'name' => $name,
@@ -312,7 +311,7 @@ class Guzzle extends Client
             } else {
                 $files[] = [
                     'name' => $name,
-                    'contents' => fopen($info, 'r')
+                    'contents' => fopen($info, 'rb')
                 ];
             }
         }
@@ -325,7 +324,6 @@ class Guzzle extends Client
         $jar = [];
         $cookies = $this->getCookieJar()->all();
         foreach ($cookies as $cookie) {
-            /** @var $cookie Cookie  **/
             $setCookie = SetCookie::fromString((string)$cookie);
             if (!$setCookie->getDomain()) {
                 $setCookie->setDomain($host);

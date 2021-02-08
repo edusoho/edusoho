@@ -36,7 +36,7 @@ use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 abstract class AbstractFixer implements FixerInterface, DefinedFixerInterface
 {
     /**
-     * @var array<string, mixed>|null
+     * @var null|array<string, mixed>
      */
     protected $configuration;
 
@@ -46,7 +46,7 @@ abstract class AbstractFixer implements FixerInterface, DefinedFixerInterface
     protected $whitespacesConfig;
 
     /**
-     * @var FixerConfigurationResolverInterface|null
+     * @var null|FixerConfigurationResolverInterface
      */
     private $configurationDefinition;
 
@@ -155,11 +155,23 @@ abstract class AbstractFixer implements FixerInterface, DefinedFixerInterface
         try {
             $this->configuration = $this->getConfigurationDefinition()->resolve($configuration);
         } catch (MissingOptionsException $exception) {
-            throw new RequiredFixerConfigurationException($this->getName(), sprintf('Missing required configuration: %s', $exception->getMessage()), $exception);
+            throw new RequiredFixerConfigurationException(
+                $this->getName(),
+                sprintf('Missing required configuration: %s', $exception->getMessage()),
+                $exception
+            );
         } catch (InvalidOptionsForEnvException $exception) {
-            throw new InvalidForEnvFixerConfigurationException($this->getName(), sprintf('Invalid configuration for env: %s', $exception->getMessage()), $exception);
+            throw new InvalidForEnvFixerConfigurationException(
+                $this->getName(),
+                sprintf('Invalid configuration for env: %s', $exception->getMessage()),
+                $exception
+            );
         } catch (ExceptionInterface $exception) {
-            throw new InvalidFixerConfigurationException($this->getName(), sprintf('Invalid configuration: %s', $exception->getMessage()), $exception);
+            throw new InvalidFixerConfigurationException(
+                $this->getName(),
+                sprintf('Invalid configuration: %s', $exception->getMessage()),
+                $exception
+            );
         }
     }
 
