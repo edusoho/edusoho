@@ -2,7 +2,6 @@
 
 namespace AppBundle\Command;
 
-use Biz\CloudPlatform\Service\AppService;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -62,11 +61,4 @@ class ConvertPermissionsCommand extends BaseCommand
         file_put_contents($patch, Yaml::dump($data));
     }
 
-    /**
-     * @return AppService
-     */
-    protected function getAppService()
-    {
-        return $this->createService('CloudPlatform:AppService');
-    }
 }
