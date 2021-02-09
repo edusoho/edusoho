@@ -1,5 +1,5 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
-
+{% do script(['app/js/images/index.js']) %}
 {% set modal_class = 'training-modal-lg' %}
 
 {% block title %} 选择镜像 {% endblock %}
@@ -9,15 +9,15 @@
 {% block body %}
 <div class="training-add js-select-container">
     <!-- Nav tabs -->
-    <ul class="nav nav-tabs" role="tablist">
+    {# <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" class="menu active" data-type="private"><a href="#" role="tab" data-toggle="tab">个人镜像</a></li>
         <li role="presentation" class="menu" data-type="public"><a href="#" role="tab" data-toggle="tab">公共镜像</a></li>
-    </ul>
+    </ul> #}
 
     <!-- Tab panes -->
-    <div class="tab-content" style="margin-left:30px;">
-        <div role="tabpanel" class="tab-pane active" id="common">
-        {{ include('training/manage/images/images-list.html.twig') }}
+    <div class="tab-content" style="margin-left:30px;"  id="commonImages" data-url="{{ path('course_set_manage_training_images_picker_list',{courseId:id,taskId:0}) }}">
+        <div role="tabpanel" class="ul-context active">
+            {{ include('training/manage/images/images-list.html.twig') }}
         </div>
     </div>
 </div>
@@ -50,20 +50,8 @@
             $content.find(".images-cache").trigger("click");
         })
         // 单选点击事件 input[type='radio']
-        $("#common").on("click","input[type='radio']",function(){
+        $("#commonImages").on("click","input[type='radio']",function(){
             selectInfo = {id:$(this).val(),name:$(this).next("label").text()}
-        })
-
-        // 点击切换菜单
-        $(".menu").on("click",function(){
-            let type = $(this).data("type")
-            var url = "{{ path('course_set_manage_training_images_picker_list',{courseId:id,taskId:0}) }}"
-            $.get(url,{
-                type:type,
-                currentId:selectInfo.id
-                },html=>{
-                $("#common").html(html);
-            })
         })
     })
   </script>

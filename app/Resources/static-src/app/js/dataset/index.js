@@ -26,6 +26,7 @@ $(function(){
          $('.js-close-modal').trigger('click');
     });
 
+    // 分页
     $(".js-select-container").on("click",".pagination li",function(){
         let url = $(".js-select-container").data("url");
         let conditions = "page="+$(this).data("page");
