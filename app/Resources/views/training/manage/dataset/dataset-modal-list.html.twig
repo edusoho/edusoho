@@ -6,12 +6,12 @@
         <div class="ivu-list-item-meta"><!---->
             <div class="ivu-list-item-meta-content">
                 <div class="ivu-list-item-meta-title">{{item.name}}</div>
-                <div class="ivu-list-item-meta-description">{{item.desc}}</div>
+                <div class="ivu-list-item-meta-description">{{item.remark}}</div>
             </div>
         </div>
         <ul class="ivu-list-item-action">
             <li class="list-footer">
-                <span>{{item.teacher}}</span>
+                <span>{{item.create_user.name}}</span>
             </li>
         </ul>
         <div class="ivu-list-item-extra"></div>
@@ -26,4 +26,5 @@
     .list-footer{
         float:right;
     }
+    
 </style>

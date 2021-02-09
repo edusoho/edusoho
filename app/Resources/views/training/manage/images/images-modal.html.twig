@@ -41,12 +41,13 @@
         // 点击提交
         $("#pick-btn").on("click",function(event){
             let $content = $('#task-create-content-iframe').contents();
-            $content.find('.js-cached-question').text(JSON.stringify(selectInfo));
+            $content.find('.images-cache').attr("value",JSON.stringify(selectInfo));s
 
             let $target = $(event.currentTarget);
             let name = $target.data('name');
 
             let $modal = $('.js-select-container').parents('.modal');
+            $modal.trigger("selectQuestion",{})
             $modal.modal('hide');
             $('.js-close-modal').trigger('click');
         })

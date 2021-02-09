@@ -7,9 +7,16 @@ use AppBundle\Common\Paginator;
 use Biz\Common\CommonException;
 use Biz\Question\Service\CategoryService;
 use Symfony\Component\HttpFoundation\Request;
+use Biz\TrainingPlatform\Client\AbstractCloudAPI;
 
 class TrainingManageController extends BaseController
 {
+    public $client;
+    public $pageSize=20;
+    public function __construct(){
+        // 测试请求
+        $this->client = new AbstractCloudAPI();
+    }
     // 镜像弹窗
     public function imagesPickerAction(Request $request, $id)
     {
@@ -57,66 +64,48 @@ class TrainingManageController extends BaseController
 
     // 数据集弹窗
     public function datasetPickerAction(Request $request,$id){
-        $paginator = $this->getDataset($request);
         //默认选中数据集，与第一页数据
-        $datasetLists = [
-            ['id'=>1,'name'=>"数据集-01","desc"=>"描述1","teacher"=>"李老师"],
-            ['id'=>2,'name'=>"数据集-02","desc"=>"描述1","teacher"=>"李老师"],
-            ['id'=>3,'name'=>"数据集-03","desc"=>"描述1","teacher"=>"李老师"],
-            ['id'=>4,'name'=>"数据集-04","desc"=>"描述1","teacher"=>"李老师"],
-            ['id'=>5,'name'=>"数据集-05","desc"=>"描述1","teacher"=>"李老师"],
-            ['id'=>6,'name'=>"数据集-06","desc"=>"描述1","teacher"=>"李老师"],
-        ];
-        $tags = [
-            ['id'=>1,'name'=>'数据集-01'],
-            ['id'=>3,'name'=>'数据集-03'],
-            ['id'=>4,'name'=>'数据集-04'],
-            ['id'=>12,'name'=>'数据集-12'],
-        ];
-
-
-
+        $currents = $request->get("current");
+        $result = $this->getDataset($request);
+    
         return $this->render('training/manage/dataset/dataset-modal.html.twig',[
             'id'=>$id,
-            'datasetLists'=>$datasetLists,
-            'tags'=>$tags,
-            'paginator'=>$paginator,
+            'datasetLists'=>$result['body'],
+            'tags'=>$currents,
+            'paginator'=>$result['paginator'],
         ]);
     }
 
     public function datasetInfoPickerAction(Request $request,$id){
-        $paginator = $this->getDataset($request);
-
-        $datasetLists = [
-            ['id'=>7,'name'=>"数据集-07","desc"=>"描述1","teacher"=>"李老师"],
-            ['id'=>8,'name'=>"数据集-08","desc"=>"描述1","teacher"=>"李老师"],
-            ['id'=>9,'name'=>"数据集-09","desc"=>"描述1","teacher"=>"李老师"],
-            ['id'=>10,'name'=>"数据集-10","desc"=>"描述1","teacher"=>"李老师"],
-            ['id'=>11,'name'=>"数据集-11","desc"=>"描述1","teacher"=>"李老师"],
-            ['id'=>12,'name'=>"数据集-12","desc"=>"描述1","teacher"=>"李老师"],
-        ];
-
+        $result = $this->getDataset($request);
         $tags = [
             ['id'=>1,'name'=>'数据集-01'],
             ['id'=>3,'name'=>'数据集-03'],
-            ['id'=>4,'name'=>'数据集-04'],
             ['id'=>12,'name'=>'数据集-12'],
         ];
-
         return $this->render('training/manage/dataset/dataset-modal-list.html.twig',[
             'id'=>$id,
-            'datasetLists'=>$datasetLists,
+            'datasetLists'=>$result['body'],
             'tags'=>$tags,
-            'paginator'=>$paginator,
+            'paginator'=>$result['paginator'],
         ]);
     }
 
+    // 获取数据集
     public function getDataset($request){
-        $paginator = new Paginator(
-            $request,
-            100,
-            10
-        );
-        return $paginator;
+        $return = ['paginator'=>'','body'=>[]];
+        $page = $request->query->get("page",1);
+        $params = ['page_num'=>$page,'page_size'=>$this->pageSize];
+        $result = $this->client->get("api-competition/tm/ccompet/ds",$params);
+        if($result['status']['code'] == 2000000){
+            $pageNum = $result['page']['count'];
+            $return['paginator'] = new Paginator(
+                $request,
+                $pageNum,
+                $this->pageSize
+            );
+            $return['body'] = $result['body'];
+        }
+        return $return;
     }
 }

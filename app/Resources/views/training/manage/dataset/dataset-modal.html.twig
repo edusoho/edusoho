@@ -2,6 +2,8 @@
 
 {% set modal_class = 'training-modal-lg' %}
 
+{% do script(['app/js/dataset/index.js']) %}
+
 {% block title %} 选择数据集 {% endblock %}
 
 
@@ -13,10 +15,11 @@
     </div>
 </div>
 <div class="footer-tag" style="width:100%;">
-    <h1 class="tag-lists">
+    <h4 class="tag-lists">
         {{ include('training/manage/dataset/component/tags.html.twig') }}
-    </h1>
+    </h4>
 </div>
+<div class="hidden default_tags_value">{{ tags|json_encode|raw }}</div>
 {% endblock %}
 
 {% block footer %}
@@ -26,7 +29,7 @@
 
 
   <script>
-    $(function(){
+    {# $(function(){
         let tags = {{ tags|json_encode|raw }};
         let cuid = 0;
         init();
@@ -41,6 +44,15 @@
                 })
             });
         }
+
+        $(".js-pick-btn").click(function(){
+            $modal = $(".js-select-container").parents('.modal')
+            let $content = $('#task-create-content-iframe').contents();
+            $content.find(".dataset-cache").text(JSON.stringify(tags));
+
+             $modal.modal('hide');
+             $('.js-close-modal').trigger('click');
+        });
 
         $(".js-select-container").on("click",".pagination li",function(){
             let url = $(".js-select-container").data("url");
@@ -72,6 +84,9 @@
             })
 
             if (check == 0){
+                if(tags.length >3){
+                    notify('danger', "数据集最多只能选择3个！");
+                }
                 addTag({id:currentTagId,name:currentTagName});
             }
             $(this).toggleClass("dataset_active")
@@ -93,15 +108,17 @@
         }
         // 删除标签
         function removeTag(id){
+            newTags = [];
             tags.forEach((v,k)=>{
-                if(v.id == id){
-                    delete tags[k]
+                if(v.id != id){
+                    newTags.push(v);
                     return;
                 }
             })
+            tags = newTags;
             $(".checktag-"+id).remove();
         }
-    })
+    }) #}
   </script>
 
 
