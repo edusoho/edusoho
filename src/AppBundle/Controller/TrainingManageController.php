@@ -12,7 +12,7 @@ use Biz\TrainingPlatform\Client\AbstractCloudAPI;
 class TrainingManageController extends BaseController
 {
     public $client;
-    public $pageSize=20;
+    public $pageSize=5;
     public function __construct(){
         // 测试请求
         $this->client = new AbstractCloudAPI();
