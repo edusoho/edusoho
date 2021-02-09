@@ -56,7 +56,7 @@
   {% endif %}
 
   <div class="clearfix nav-header-section-step">
-    <li class="nav-header-section__item pull-right cd-mr32 {% if side_nav == 'question' %}active{% endif %}">
+    {# <li class="nav-header-section__item pull-right cd-mr32 {% if side_nav == 'question' %}active{% endif %}">
       {% if courseSet.locked %}
         <a href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'question'}) }}">
           <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.question_manage'|trans }}
@@ -79,7 +79,7 @@
           {{ 'course.testpaper_manage'|trans }}
         </a>
       {% endif %}
-    </li>
+    </li>#}
 
     <li id="step-1" class="nav-header-section__item pull-right cd-ml24 {% if side_nav == 'files' %}active{% endif %}"
         data-intro-group="odd">
@@ -90,7 +90,7 @@
       {% else %}
         <a href="{{ path('course_set_manage_files', {id: courseSet.id}) }}">{{ 'course.course_files'|trans }}</a>
       {% endif %}
-    </li>
+    </li> 
   </div>
 
   {{ slot('course_set.menu.extension', {'courseSet':courseSet,'sideNav':side_nav}) }}
