@@ -28,6 +28,9 @@ export default class TaskPipe {
     this.sign = '';
     this.record = {};
     this.pushing = false;
+    this.waitingEvent = {};
+    this.waitingEventData = {};
+
     this.absorbed = 0;
     this.lastTimestamp = 0;
 
@@ -76,6 +79,11 @@ export default class TaskPipe {
       channel: 'activity-events',
       topic: '#',
       callback: ({event, data}) => {
+        if (event == 'finish' && this.pushing) {
+          this.waitingEvent = {event: event, data: data};
+          this.waitingEventData[event] = data;
+          return;
+        }
         this.eventDatas[event] = data;
         console.log(event, data);
         this._flush(data);
@@ -261,6 +269,13 @@ export default class TaskPipe {
             listner(res);
           }
         }
+      }
+
+      if (this.waitingEvent.event) {
+        this.eventDatas = this.waitingEventData;
+        this._flush(this.waitingEvent.data);
+        this.waitingEvent = {};
+        this.waitingEventData = {};
       }
     }).catch(error => {
       this.pushing = false;
