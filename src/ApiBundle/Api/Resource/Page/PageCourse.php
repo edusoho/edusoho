@@ -58,13 +58,9 @@ class PageCourse extends AbstractResource
         $course['hitNum'] = empty($goods['hitNum']) ? 0 : $goods['hitNum'];
 
         if ($this->isPluginInstalled('vip')) {
-            if (version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')) {
-                $vipRight = $this->getVipRightService()->getVipRightsBySupplierCodeAndUniqueCode(CourseVipRightSupplier::CODE, $course['id']);
-                if (!empty($vipRight)) {
-                    $course['vipLevel'] = $this->getVipLevel($vipRight['vipLevelId']);
-                }
-            } else if ($course['vipLevelId'] > 0) {
-                $course['vipLevel'] = $this->getVipLevel($course['vipLevelId']);
+            $vipRight = $this->getVipRightService()->getVipRightsBySupplierCodeAndUniqueCode(CourseVipRightSupplier::CODE, $course['id']);
+            if (!empty($vipRight)) {
+                $course['vipLevel'] = $this->getVipLevel($vipRight['vipLevelId']);
             }
         }
 

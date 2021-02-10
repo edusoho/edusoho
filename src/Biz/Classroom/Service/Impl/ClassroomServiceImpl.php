@@ -1071,7 +1071,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $userMember = [];
 
         if (!empty($info['becomeUseMember'])) {
-            $levelChecked = $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']);
+            $levelChecked = $this->getVipService()->checkUserVipRight($user['id'], ClassroomVipRightSupplier::CODE, $classroom['id']);
 
             if ('ok' != $levelChecked) {
                 $this->createNewException(ClassroomException::MEMBER_LEVEL_LIMIT());
@@ -2349,13 +2349,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             return false;
         }
 
-        if (version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')) {
-            $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode(ClassroomVipRightSupplier::CODE, $classroom['id']);
-            $vipLevelId = empty($vipRight) ? 0 : $vipRight['vipLevelId'];
-            $status = $this->getVipService()->checkUserInMemberLevel($member['userId'], $vipLevelId);
-        } else {
-            $status = $this->getVipService()->checkUserInMemberLevel($member['userId'], $classroom['vipLevelId']);
-        }
+        $status = $this->getVipService()->checkUserVipRight($member['userId'], ClassroomVipRightSupplier::CODE, $classroom['id']);
 
         return 'ok' === $status;
     }

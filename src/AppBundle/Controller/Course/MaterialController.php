@@ -7,6 +7,9 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Course\MaterialException;
 use Biz\Course\MemberException;
 use Symfony\Component\HttpFoundation\Request;
+use VipPlugin\Biz\Marketing\Service\VipRightService;
+use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
+use VipPlugin\Biz\Marketing\VipRightSupplier\CourseVipRightSupplier;
 
 class MaterialController extends CourseBaseController
 {
@@ -60,19 +63,19 @@ class MaterialController extends CourseBaseController
             return $this->redirect($this->generateUrl('my_course_show', array('id' => $courseId, 'tab' => 'material')));
         }
 
-        if ($member && $member['levelId'] > 0) {
-            if (empty($course['vipLevelId'])) {
+        if ($member && 'vip_join' == $member['joinedChannel']) {
+            if (empty($this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode(CourseVipRightSupplier::CODE, $course['id']))) {
                 return $this->redirect($this->generateUrl('course_show', array('id' => $course['id'])));
             } elseif (empty($course['parentId'])
                 && $this->isVipPluginEnabled()
-                && $this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']) != 'ok'
+                && $this->getVipService()->checkUserVipRight($member['userId'], CourseVipRightSupplier::CODE, $course['id']) != 'ok'
             ) {
                 return $this->redirect($this->generateUrl('course_show', array('id' => $course['id'])));
             } elseif (!empty($course['parentId'])) {
                 $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
                 if (!empty($classroom)
                     && $this->isVipPluginEnabled()
-                    && $this->getVipService()->checkUserInMemberLevel($member['userId'], $classroom['vipLevelId']) != 'ok'
+                    && $this->getVipService()->checkUserVipRight($member['userId'], ClassroomVipRightSupplier::CODE, $classroom['id']) != 'ok'
                 ) {
                     return $this->redirect($this->generateUrl('course_show', array('id' => $course['id'])));
                 }
@@ -119,6 +122,14 @@ class MaterialController extends CourseBaseController
     protected function getVipService()
     {
         return $this->createService('VipPlugin:Vip:VipService');
+    }
+
+    /**
+     * @return VipRightService
+     */
+    private function getVipRightService()
+    {
+        return $this->createService('VipPlugin:Marketing:VipService');
     }
 
     protected function getClassroomService()

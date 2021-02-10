@@ -7,7 +7,7 @@
 {% endif %}
 
 {% if is_plugin_installed('Vip') %}
-  {% set vipStatus = data('VipStatus', {'userId': user.id, 'levelId': classroom.vipLevelId})%}
+  {% set vipStatus = data('VipStatus', {'userId': user.id, 'targetId': classroom.id, 'targetType': 'classroom'})%}
 {% endif %}
 
 {% block title %}

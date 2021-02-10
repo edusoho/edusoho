@@ -373,28 +373,11 @@ class MemberServiceImpl extends BaseService implements MemberService
             return false;
         }
 
-        if (version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')) {
-            if (!empty($member['classroomId']) && 'classroom' == $member['joinedType']) {
-                $classroom = $this->getClassroomService()->getClassroom($member['classroomId']);
-                $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode(ClassroomVipRightSupplier::CODE, $classroom['id']);
-                if (empty($vipRight)) {
-                    return false;
-                }
-                $status = $this->getVipService()->checkUserInMemberLevel($member['userId'], $vipRight['vipLevelId']);
-            } else {
-                $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode(CourseVipRightSupplier::CODE, $course['id']);
-                if (empty($vipRight)) {
-                    return false;
-                }
-                $status = $this->getVipService()->checkUserInMemberLevel($member['userId'], $vipRight['vipLevelId']);
-            }
+        if (!empty($member['classroomId']) && 'classroom' == $member['joinedType']) {
+            $classroom = $this->getClassroomService()->getClassroom($member['classroomId']);
+            $status = $this->getVipService()->checkUserVipRight($member['userId'], ClassroomVipRightSupplier::CODE, $classroom['id']);
         } else {
-            if (!empty($member['classroomId']) && 'classroom' == $member['joinedType']) {
-                $classroom = $this->getClassroomService()->getClassroom($member['classroomId']);
-                $status = $this->getVipService()->checkUserInMemberLevel($member['userId'], $classroom['vipLevelId']);
-            } else {
-                $status = $this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']);
-            }
+            $status = $this->getVipService()->checkUserVipRight($member['userId'], CourseVipRightSupplier::CODE, $course['id']);
         }
 
         return 'ok' === $status;

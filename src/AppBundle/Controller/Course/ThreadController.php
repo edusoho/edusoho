@@ -17,6 +17,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use VipPlugin\Biz\Marketing\Service\VipRightService;
+use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
+use VipPlugin\Biz\Marketing\VipRightSupplier\CourseVipRightSupplier;
 use VipPlugin\Biz\Vip\Service\VipService;
 
 class ThreadController extends CourseBaseController
@@ -190,19 +193,17 @@ class ThreadController extends CourseBaseController
             return $this->redirect($this->generateUrl('my_course_show', array('id' => $courseId, 'tab' => 'threads')));
         }
 
-        if ($member && $member['levelId'] > 0) {
-            if (empty($course['vipLevelId'])) {
+        if ($member && 'vip_join' == $member['joinedChannel'] && $this->isVipPluginEnabled()) {
+            if (empty($this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode(CourseVipRightSupplier::CODE, $course['id']))) {
                 return $this->redirect($this->generateUrl('course_show', array('id' => $course['id'])));
             } elseif (empty($course['parentId'])
-                && $this->isVipPluginEnabled()
-                && 'ok' != $this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId'])
+                && 'ok' != $this->getVipService()->checkUserVipRight($member['userId'], CourseVipRightSupplier::CODE, $course['id'])
             ) {
                 return $this->redirect($this->generateUrl('course_show', array('id' => $course['id'])));
             } elseif (!empty($course['parentId'])) {
                 $classroom = $this->getClassroomService()->getClassroomByCourseId($course['id']);
                 if (!empty($classroom)
-                    && $this->isVipPluginEnabled()
-                    && 'ok' != $this->getVipService()->checkUserInMemberLevel($member['userId'], $classroom['vipLevelId'])
+                    && 'ok' != $this->getVipService()->checkUserVipRight($member['userId'], ClassroomVipRightSupplier::CODE, $classroom['id'])
                 ) {
                     return $this->redirect($this->generateUrl('course_show', array('id' => $course['id'])));
                 }
@@ -735,6 +736,14 @@ class ThreadController extends CourseBaseController
     protected function getUserService()
     {
         return $this->getBiz()->service('User:UserService');
+    }
+
+    /**
+     * @return VipRightService
+     */
+    private function getVipRightService()
+    {
+        return $this->getBiz()->service('VipPlugin:Marketing:VipRightService');
     }
 
     protected function createPostForm($data = array())

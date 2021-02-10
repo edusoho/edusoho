@@ -102,16 +102,9 @@ class ClassroomEntity extends BaseGoodsEntity
             $vipUser['level'] = $this->getVipLevelService()->getLevel($vipUser['levelId']);
         }
 
-        if (version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')) {
-            $vipRight = $this->getVipRightService()->getVipRightsBySupplierCodeAndUniqueCode(ClassroomVipRightSupplier::CODE, $specs['targetId']);
-            if ($vipRight) {
-                return [$this->getVipLevelService()->getLevel($vipRight['vipLevelId']), $vipUser];
-            }
-        } else {
-            $classroom = $this->getClassroomService()->getClassroom($specs['targetId']);
-            if ($classroom['vipLevelId']) {
-                return [$this->getVipLevelService()->getLevel($classroom['vipLevelId']), $vipUser];
-            }
+        $vipRight = $this->getVipRightService()->getVipRightsBySupplierCodeAndUniqueCode(ClassroomVipRightSupplier::CODE, $specs['targetId']);
+        if ($vipRight) {
+            return [$this->getVipLevelService()->getLevel($vipRight['vipLevelId']), $vipUser];
         }
 
         return [null, $vipUser];
@@ -124,15 +117,7 @@ class ClassroomEntity extends BaseGoodsEntity
         }
         $classroom = $this->getClassroomService()->getClassroom($specs['targetId']);
 
-        if (version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')) {
-            $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode(ClassroomVipRightSupplier::CODE, $classroom['id']);
-            $vipLevelId = empty($vipRight) ? 0 : $vipRight['vipLevelId'];
-            $status = $this->getVipService()->checkUserInMemberLevel($userId, $vipLevelId);
-        } else {
-            $status = $this->getVipService()->checkUserInMemberLevel($userId, $classroom['vipLevelId']);
-        }
-
-        return 'ok' === $status;
+        return 'ok' === $this->getVipService()->checkUserVipRight($userId, ClassroomVipRightSupplier::CODE, $classroom['id']);
     }
 
     public function getSpecsTeacherIds($goods, $specs)

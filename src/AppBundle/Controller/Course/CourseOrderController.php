@@ -7,6 +7,7 @@ use Biz\Course\Service\CourseSetService;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\BaseController;
+use VipPlugin\Biz\Marketing\VipRightSupplier\CourseVipRightSupplier;
 
 class CourseOrderController extends BaseController
 {
@@ -31,7 +32,7 @@ class CourseOrderController extends BaseController
 
         $vipJoinEnabled = false;
         if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
-            $vipJoinEnabled = 'ok' === $this->getVipService()->checkUserInMemberLevel($user['id'], $course['vipLevelId']);
+            $vipJoinEnabled = 'ok' === $this->getVipService()->checkUserVipRight($user['id'], CourseVipRightSupplier::CODE, $course['id']);
         }
 
         $paymentSetting = $this->setting('payment');

@@ -11,13 +11,13 @@ class VipStatusDataTagTest extends BaseTestCase
     {
         $this->mockBiz('VipPlugin:Vip:VipService', array(
             array(
-                'functionName' => 'checkUserInMemberLevel',
-                'withParams' => array(1, 2),
+                'functionName' => 'checkUserVipRight',
+                'withParams' => array(1, 'course', 2),
                 'returnValue' => 'ok',
             ),
             array(
-                'functionName' => 'checkUserInMemberLevel',
-                'withParams' => array(2, 3),
+                'functionName' => 'checkUserVipRight',
+                'withParams' => array(2, 'course', 3),
                 'returnValue' => 'level_not_exist',
             ),
         ));

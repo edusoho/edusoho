@@ -80,15 +80,11 @@ class ClassroomController extends BaseController
         }
 
         if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
-            if (version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')) {
-                $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode(ClassroomVipRightSupplier::CODE, $classroom['id']);
-                $classroomMemberLevel = empty($vipRight) ? null : $this->getLevelService()->getLevel($vipRight['vipLevelId']);
-            } else {
-                $classroomMemberLevel = $classroom['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($classroom['vipLevelId']) : null;
-            }
+            $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode(ClassroomVipRightSupplier::CODE, $classroom['id']);
+            $classroomMemberLevel = empty($vipRight) ? null : $this->getLevelService()->getLevel($vipRight['vipLevelId']);
 
             if ($user['id'] && $classroomMemberLevel) {
-                $checkMemberLevelResult = $this->getVipService()->checkUserInMemberLevel($user['id'], $classroomMemberLevel['id']);
+                $checkMemberLevelResult = $this->getVipService()->checkUserVipRight($user['id'], ClassroomVipRightSupplier::CODE, $classroom['id']);
             }
         }
 
@@ -119,7 +115,7 @@ class ClassroomController extends BaseController
 
         if ($member) {
             $isclassroomteacher = in_array('teacher', $member['role']) || in_array('headTeacher', $member['role']) ? true : false;
-            $vipChecked = $classroomMemberLevel ? $this->getVipService()->checkUserInMemberLevel($user['id'], $classroomMemberLevel['id']) : 'ok';
+            $vipChecked = $classroomMemberLevel ? $this->getVipService()->checkUserVipRight($user['id'], ClassroomVipRightSupplier::CODE, $classroom['id']) : 'ok';
 
             return $this->render('classroom/classroom-join-header.html.twig', [
                 'classroom' => $classroom,
@@ -287,10 +283,11 @@ class ClassroomController extends BaseController
         $checkMemberLevelResult = $classroomMemberLevel = null;
 
         if ($this->setting('vip.enabled') && $user['id']) {
-            $classroomMemberLevel = $classroom['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($classroom['vipLevelId']) : null;
+            $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode(ClassroomVipRightSupplier::CODE, $classroom['id']);
+            $classroomMemberLevel = !empty($vipRight) ? $this->getLevelService()->getLevel($vipRight['vipLevelId']) : null;
 
             if ($classroomMemberLevel) {
-                $checkMemberLevelResult = $this->getVipService()->checkUserInMemberLevel($user['id'], $classroomMemberLevel['id']);
+                $checkMemberLevelResult = $this->getVipService()->checkUserVipRight($user['id'], ClassroomVipRightSupplier::CODE, $classroom['id']);
             }
         }
 
