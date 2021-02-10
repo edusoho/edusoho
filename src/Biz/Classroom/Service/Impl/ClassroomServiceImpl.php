@@ -1070,7 +1070,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $userMember = [];
 
-        if (!empty($info['becomeUseMember'])) {
+        if (!empty($info['becomeUseMember']) && $this->isPluginInstalled('Vip')) {
             $levelChecked = $this->getVipService()->checkUserVipRight($user['id'], ClassroomVipRightSupplier::CODE, $classroom['id']);
 
             if ('ok' != $levelChecked) {
@@ -1387,7 +1387,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                     'classroomId' => $classroomId,
                     'userId' => $userId,
                     'orderId' => 0,
-                    'levelId' => 0,
                     'role' => ['headTeacher'],
                     'remark' => '',
                     'createdTime' => time(),
@@ -1493,7 +1492,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'classroomId' => $classroomId,
             'userId' => $userId,
             'orderId' => 0,
-            'levelId' => 0,
             'role' => ['auditor'],
             'remark' => '',
             'createdTime' => time(),
@@ -1533,7 +1531,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'classroomId' => $classroomId,
             'userId' => $userId,
             'orderId' => 0,
-            'levelId' => 0,
             'role' => ['assistant'],
             'remark' => '',
             'createdTime' => time(),
