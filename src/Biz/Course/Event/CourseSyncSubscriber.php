@@ -129,7 +129,6 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
             'audiences',
             'isFree',
             'price',
-            // 'vipLevelId',
             'buyable',
             'tryLookable',
             'tryLookLength',

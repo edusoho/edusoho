@@ -209,7 +209,57 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('information_collect_location_info', [$this, 'informationCollectLocationInfo']),
             new \Twig_SimpleFunction('information_collect_form_items', [$this, 'informationCollectFormItems']),
             new \Twig_SimpleFunction('cloud_mail_settings', [$this, 'mailSetting']),
+            new \Twig_SimpleFunction('filter_courseSets_vip_right', [$this, 'filterCourseSetsVipRight']),
+            new \Twig_SimpleFunction('filter_courses_vip_right', [$this, 'filterCoursesVipRight']),
+            new \Twig_SimpleFunction('filter_classrooms_vip_right', [$this, 'filterClassroomsVipRight']),
         ];
+    }
+
+    public function filterCourseSetsVipRight($courseSets)
+    {
+        if ($this->isPluginInstalled('Vip') && version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')) {
+            $vipRights = $this->getVipRightService()->searchVipRights(['supplierCode' => 'course', 'uniqueCodes' => ArrayToolkit::column(ArrayToolkit::column($courseSets, 'course'), 'id')], [], 0, PHP_INT_MAX);
+            $vipRights = empty($vipRights) ? [] : ArrayToolkit::index($vipRights, 'uniqueCode');
+
+            foreach ($courseSets as &$courseSet) {
+                $courseSet['course']['vipLevelId'] = isset($vipRights[$courseSet['course']['id']]['vipLevelId']) ? $vipRights[$courseSet['course']['id']]['vipLevelId'] : 0;
+            }
+        }
+
+        return $courseSets;
+    }
+
+    public function filterCoursesVipRight($courses)
+    {
+        if ($this->isPluginInstalled('Vip') && version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')) {
+            $vipRights = $this->getVipRightService()->searchVipRights(['supplierCode' => 'course', 'uniqueCodes' => ArrayToolkit::column($courses, 'id')], [], 0, PHP_INT_MAX);
+            $vipRights = empty($vipRights) ? [] : ArrayToolkit::index($vipRights, 'uniqueCode');
+
+            foreach ($courses as &$course) {
+                $course['vipLevelId'] = isset($vipRights[$course['id']]['vipLevelId']) ? $vipRights[$course['id']]['vipLevelId'] : 0;
+            }
+        }
+
+        return $courses;
+    }
+
+    public function filterClassroomsVipRight($classrooms)
+    {
+        if ($this->isPluginInstalled('Vip') && version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')) {
+            $vipRights = $this->getVipRightService()->searchVipRights(['supplierCode' => 'classroom', 'uniqueCodes' => ArrayToolkit::column($classrooms, 'id')], [], 0, PHP_INT_MAX);
+            $vipRights = empty($vipRights) ? [] : ArrayToolkit::index($vipRights, 'uniqueCode');
+
+            foreach ($classrooms as &$classroom) {
+                $classroom['vipLevelId'] = isset($vipRights[$classroom['id']]['vipLevelId']) ? $vipRights[$classroom['id']]['vipLevelId'] : 0;
+            }
+        }
+
+        return $classrooms;
+    }
+
+    protected function getVipRightService()
+    {
+        return $this->createService('VipPlugin:Marketing:VipRightService');
     }
 
     public function makeLocalMediaFileToken($file)

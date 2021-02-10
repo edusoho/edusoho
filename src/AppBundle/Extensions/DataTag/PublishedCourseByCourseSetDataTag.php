@@ -22,6 +22,8 @@ class PublishedCourseByCourseSetDataTag extends CourseBaseDataTag implements Dat
             throw new \InvalidArgumentException($this->getServiceKernel()->trans('courseSetId参数缺失'));
         }
 
-        return $this->getCourseService()->getFirstPublishedCourseByCourseSetId($arguments['courseSetId']);
+        $courses = $this->getCourseService()->getFirstPublishedCourseByCourseSetId($arguments['courseSetId']);
+
+        return $this->getWebExtension()->filterCoursesVipRight($courses);
     }
 }
