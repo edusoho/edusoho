@@ -22,10 +22,10 @@ class VipStatusDataTagTest extends BaseTestCase
             ],
         ]);
         $datatag = new VipStatusDataTag();
-        $result = $datatag->getData(['userId' => 1, 'levelId' => 2]);
+        $result = $datatag->getData(['userId' => 1, 'targetId' => 2, 'targetType' => 'course']);
         $this->assertEquals(1, $result);
 
-        $result = $datatag->getData(['userId' => 2, 'levelId' => 3]);
+        $result = $datatag->getData(['userId' => 2, 'targetId' => 3, 'targetType' => 'course']);
         $this->assertEquals(0, $result);
     }
 }
