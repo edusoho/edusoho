@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d0d603d39ae3d2dc3ee97c208aa77eac",
+    "content-hash": "0fec777769a62a3d34a17a52887782b2",
     "packages": [
         {
             "name": "asm89/twig-cache-extension",
@@ -376,6 +376,58 @@
                 "source": "https://github.com/codeages/biz-framework/tree/v0.9.37"
             },
             "time": "2021-01-21T00:44:26+00:00"
+        },
+        {
+            "name": "codeages/biz-item-bank",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/codeages/biz-item-bank.git",
+                "reference": "99ecbc95225dbc8b01b8865c4de6d638fcbdc3c3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/codeages/biz-item-bank/zipball/99ecbc95225dbc8b01b8865c4de6d638fcbdc3c3",
+                "reference": "99ecbc95225dbc8b01b8865c4de6d638fcbdc3c3",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "cerdic/css-tidy": "1.7.1",
+                "codeages/biz-framework": ">=0.9.33",
+                "codeages/exam-parser": "dev-master",
+                "ext-json": "*",
+                "ezyang/htmlpurifier": "4.12.0",
+                "firebase/php-jwt": "^5.1",
+                "php": ">=5.5.0",
+                "vlucas/valitron": "^1.4"
+            },
+            "require-dev": {
+                "mockery/mockery": "^0.9.9",
+                "phpunit/phpunit": "^5|^6"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Codeages\\Biz\\ItemBank\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "item bank with biz-framework",
+            "support": {
+                "issues": "https://github.com/codeages/biz-item-bank/issues",
+                "source": "https://github.com/codeages/biz-item-bank/tree/master"
+            },
+            "time": "2021-02-05T10:30:07+00:00"
         },
         {
             "name": "codeages/exam-parser",
@@ -9765,7 +9817,8 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "codeages/plugin-bundle": 20,
-        "codeages/exam-parser": 20
+        "codeages/exam-parser": 20,
+        "codeages/biz-item-bank": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

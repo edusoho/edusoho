@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => 'a38976131ffcffcbbe6a519b27c81d8c3694ccd8',
+    'reference' => '8ead203152efb183c893e271492b9f7873598969',
     'name' => 'topxia/edusoho',
   ),
   'versions' => 
@@ -73,6 +73,16 @@
       array (
       ),
       'reference' => 'cd9c4e96e7c079771794b3da4837aad6182385ff',
+    ),
+    'codeages/biz-item-bank' => 
+    array (
+      'pretty_version' => 'dev-master',
+      'version' => 'dev-master',
+      'aliases' => 
+      array (
+        0 => '9999999-dev',
+      ),
+      'reference' => '99ecbc95225dbc8b01b8865c4de6d638fcbdc3c3',
     ),
     'codeages/exam-parser' => 
     array (
@@ -1662,7 +1672,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => 'a38976131ffcffcbbe6a519b27c81d8c3694ccd8',
+      'reference' => '8ead203152efb183c893e271492b9f7873598969',
     ),
     'twig/twig' => 
     array (

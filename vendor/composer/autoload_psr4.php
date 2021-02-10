@@ -88,6 +88,7 @@ return array(
     'Codeception\\' => array($vendorDir . '/codeception/codeception/src/Codeception', $vendorDir . '/codeception/stub/src'),
     'Codeages\\Weblib\\' => array($vendorDir . '/codeages/web-lib/src'),
     'Codeages\\PluginBundle\\' => array($vendorDir . '/codeages/plugin-bundle'),
+    'Codeages\\Biz\\ItemBank\\' => array($vendorDir . '/codeages/biz-item-bank/src'),
     'Codeages\\Biz\\Framework\\' => array($vendorDir . '/codeages/biz-framework/src'),
     'Bazinga\\Bundle\\JsTranslationBundle\\' => array($vendorDir . '/willdurand/js-translation-bundle'),
     '' => array($vendorDir . '/asm89/twig-cache-extension/lib'),

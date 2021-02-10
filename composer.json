@@ -56,6 +56,7 @@
     "codeages/exam-parser": "dev-master",
     "doctrine/cache": "1.6.2",
     "firebase/php-jwt": "^5.1",
+    "codeages/biz-item-bank": "dev-master",
     "vlucas/valitron": "^1.4"
   },
   "require-dev": {
