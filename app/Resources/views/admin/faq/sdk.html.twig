@@ -1,4 +1,4 @@
-{% if setting('copyright.thirdCopyright')|default(0) != 1 %}
+{# {% if setting('copyright.thirdCopyright')|default(0) != 1 %}
   <script aysnc="aysnc" src="{{ cloud_sdk_url('faq') }}"></script>
   <script aysnc="aysnc">
     {% set faqApiServer = setting("magic.faq_api_server", '') != '' ? setting("magic.faq_api_server") : app.request.getScheme() ~ '://www.qiqiuyu.com' %}
@@ -13,4 +13,4 @@
       console.log(err);
     }
   </script>
-{% endif %}
+{% endif %} #}

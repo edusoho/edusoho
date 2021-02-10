@@ -155,26 +155,26 @@ class MockController extends BaseController
 
     private function validate()
     {
-        $validHosts = array(
-            'local',
-            'dev',
-            'esdev.com',
-            'localhost',
-            'www.edusoho-test1.com',
-        );
-        $host = $_SERVER['HTTP_HOST'];
-        if (!in_array($host, $validHosts) && false === strpos($host, '.edusoho.cn')) {
-            throw new AccessDeniedException($host.'不允许使用此功能！！！');
-        }
-
-        $storage = $this->getSettingService()->get('storage', array());
-        if (empty($storage['cloud_access_key'])) {
-            $this->createNewException(SettingException::NOT_SET_CLOUD_ACCESS_KEY());
-        }
-
-        if (!$this->getCurrentUser()->isSuperAdmin()) {
-            $this->createNewException(UserException::PERMISSION_DENIED());
-        }
+//        $validHosts = array(
+//            'local',
+//            'dev',
+//            'esdev.com',
+//            'localhost',
+//            'www.edusoho-test1.com',
+//        );
+//        $host = $_SERVER['HTTP_HOST'];
+//        if (!in_array($host, $validHosts) && false === strpos($host, '.edusoho.cn')) {
+//            throw new AccessDeniedException($host.'不允许使用此功能！！！');
+//        }
+//
+//        $storage = $this->getSettingService()->get('storage', array());
+//        if (empty($storage['cloud_access_key'])) {
+//            $this->createNewException(SettingException::NOT_SET_CLOUD_ACCESS_KEY());
+//        }
+//
+//        if (!$this->getCurrentUser()->isSuperAdmin()) {
+//            $this->createNewException(UserException::PERMISSION_DENIED());
+//        }
     }
 
     private function generateToken($url, $body)
@@ -221,7 +221,7 @@ class MockController extends BaseController
             );
         }
 
-        $url = $_SERVER['HTTP_ORIGIN'].$apiUrl;
+        $url = $_SERVER['HTTP_ORIGIN'] . $apiUrl;
 
         $conditions['userAgent'] = isset($conditions['userAgent']) ? $conditions['userAgent'] : '';
         $conditions['connectTimeout'] = isset($conditions['connectTimeout']) ? $conditions['connectTimeout'] : 10;
@@ -239,10 +239,10 @@ class MockController extends BaseController
         $headers = array('Accept: application/vnd.edusoho.v2+json');
         if ('true' == $apiAuthorized) {
             $token = $this->generateToken($apiUrl, '');
-            $headers[] = 'Authorization: Signature '.$token;
+            $headers[] = 'Authorization: Signature ' . $token;
             $this->saveMockedToken($token);
         } elseif (!empty($token)) {
-            $headers[] = 'X-Auth-Token: '.$token;
+            $headers[] = 'X-Auth-Token: ' . $token;
             $headers[] = 'User-Agent: CERN-LineMode/2.15 libwww/2.17b3';
         }
 
@@ -262,7 +262,7 @@ class MockController extends BaseController
             $headers[] = 'Content-Type: application/json-patch+json';
         } else {
             if (!empty($params)) {
-                $url = $url.(strpos($url, '?') ? '&' : '?').http_build_query($params);
+                $url = $url . (strpos($url, '?') ? '&' : '?') . http_build_query($params);
             }
         }
 
@@ -296,7 +296,7 @@ class MockController extends BaseController
 
     private function post($url, $bodyStr, $token)
     {
-        $url = 'http://127.0.0.1'.$url;
+        $url = 'http://127.0.0.1' . $url;
 
         $curl = curl_init();
 
@@ -307,7 +307,7 @@ class MockController extends BaseController
         curl_setopt($curl, CURLOPT_POSTFIELDS, $bodyStr);
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-            'Authorization: Signature '.$token,
+            'Authorization: Signature ' . $token,
         ));
         $response = curl_exec($curl);
         curl_close($curl);
@@ -318,15 +318,15 @@ class MockController extends BaseController
     private function getTypeSamples()
     {
         $biz = $this->getBiz();
-        $dir = $biz['root_directory'].'app/Resources/views/admin-v2/developer/mock/sample-data/';
+        $dir = $biz['root_directory'] . 'app/Resources/views/admin-v2/developer/mock/sample-data/';
         $fileNames = scandir($dir);
         $typeSamples = array();
         foreach ($fileNames as $fileName) {
             if (strpos($fileName, '.md') && !strpos($fileName, '_doc')) {
                 $typeNamesSeg = explode('.md', $fileName);
                 $typeName = $typeNamesSeg[0];
-                $fileContent = file_get_contents($dir.$fileName);
-                $docContent = file_get_contents($dir.$typeName.'_doc.md');
+                $fileContent = file_get_contents($dir . $fileName);
+                $docContent = file_get_contents($dir . $typeName . '_doc.md');
                 $keyValue = array();
                 $keyValue['key'] = $typeName;
                 $keyValue['value'] = $fileContent;
@@ -342,7 +342,7 @@ class MockController extends BaseController
     private function getApiBaseComment()
     {
         $biz = $this->getBiz();
-        $file = $biz['root_directory'].'app/Resources/views/admin-v2/developer/mock/sample-data-comment/comment.md';
+        $file = $biz['root_directory'] . 'app/Resources/views/admin-v2/developer/mock/sample-data-comment/comment.md';
 
         return file_get_contents($file);
     }
@@ -364,14 +364,14 @@ class MockController extends BaseController
 
     private function saveMockedToken($token)
     {
-        $mockedTokenStr = 'Accept: application/vnd.edusoho.v2+json; Authorization: Signature '.$token;
-        file_put_contents($this->getMockedTokenPath(), '['.date('Y-m-d H:i:s').'] '.$mockedTokenStr);
+        $mockedTokenStr = 'Accept: application/vnd.edusoho.v2+json; Authorization: Signature ' . $token;
+        file_put_contents($this->getMockedTokenPath(), '[' . date('Y-m-d H:i:s') . '] ' . $mockedTokenStr);
     }
 
     private function getMockedTokenPath()
     {
         $biz = $this->getBiz();
 
-        return $biz['kernel.root_dir'].'/data/mockedToken';
+        return $biz['kernel.root_dir'] . '/data/mockedToken';
     }
 }
