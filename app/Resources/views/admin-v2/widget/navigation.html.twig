@@ -8,9 +8,9 @@
   {% endif %}
 
 <ul class="cd-tabs ct-layout-navbar_ul">
-  <li {% if adminV2Homepage|default(null) %}class="active"{% endif %} id="nav_admin_v2">
+  {# <li {% if adminV2Homepage|default(null) %}class="active"{% endif %} id="nav_admin_v2">
     <a title="{{ 'admin_v2.homepage.overview'|trans }}" href="{{ path('admin_v2') }}">{{ 'admin_v2.homepage.overview'|trans }}</a>
-  </li>
+  </li> #}
   {% for m in permissions if not m.visible is defined or eval_expression(m.visible) %}
     {% set tabMenu = first_child_permission(first_child_permission(first_child_permission(m, true, false), true, false), true, false) %}
     {% if tabMenu %}
