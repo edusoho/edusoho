@@ -8,6 +8,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 use Symfony\Component\HttpKernel\DataCollector\LateDataCollectorInterface;
 
+/**
+ * @method  reset()
+ */
 class CloudApiDataCollector extends DataCollector implements LateDataCollectorInterface
 {
     protected $biz;
@@ -42,5 +45,10 @@ class CloudApiDataCollector extends DataCollector implements LateDataCollectorIn
     public function getLogs()
     {
         return $this->data['logs'];
+    }
+
+    public function __call($name, $arguments)
+    {
+        // TODO: Implement @method  reset()
     }
 }

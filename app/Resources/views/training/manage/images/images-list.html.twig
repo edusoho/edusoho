@@ -1,8 +1,12 @@
+{% import 'macro.html.twig' as web_macro %}
 <div id="" class="container">
 {% for list in lists %}
     <label class="radio">
         <input type="radio" {{ list.checked }} name="common" id="radio_{{ list.id}}" value="{{ list.id}}" />
         <label for="radio_{{ list.id}}">{{list.name}}</label>
     </label>
-    {% endfor %}
+{% endfor %}
 </div>
+<nav class="text-center">
+    {{ web_macro.ajax_paginator(paginator) }}
+</nav>
