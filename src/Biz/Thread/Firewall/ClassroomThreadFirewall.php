@@ -22,7 +22,7 @@ class ClassroomThreadFirewall extends AbstractThreadFirewall
         if ($this->isVipPluginEnabled()
             && $this->getSettingService()->get('vip.enabled', 0)
             && 'vip_join' == $member['joinedChannel']
-            && $this->getVipService()->checkUserVipRight($user['id'], ClassroomVipRightSupplier::CODE, $classroom['id']) != 'ok') {
+            && 'ok' != $this->getVipService()->checkUserVipRight($user['id'], ClassroomVipRightSupplier::CODE, $classroom['id'])) {
             return false;
         }
 

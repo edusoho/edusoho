@@ -18,7 +18,7 @@ class VipStatusDataTag extends CourseBaseDataTag implements DataTag
     public function getData(array $arguments)
     {
         $result = $this->getVipService()->checkUserVipRight($arguments['userId'], $arguments['targetType'], $arguments['targetId']);
-        if ($result == 'ok') {
+        if ('ok' == $result) {
             return 1;
         }
 
