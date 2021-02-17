@@ -31,6 +31,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use VipPlugin\Biz\Marketing\Service\VipRightService;
+use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
 use VipPlugin\Biz\Vip\Service\LevelService;
 use VipPlugin\Biz\Vip\Service\VipService;
 
@@ -81,10 +82,11 @@ class ClassroomController extends BaseController
         }
 
         if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
-            $classroomMemberLevel = $classroom['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($classroom['vipLevelId']) : null;
+            $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode(ClassroomVipRightSupplier::CODE, $classroom['id']);
+            $classroomMemberLevel = empty($vipRight) ? null : $this->getLevelService()->getLevel($vipRight['vipLevelId']);
 
             if ($user['id'] && $classroomMemberLevel) {
-                $checkMemberLevelResult = $this->getVipService()->checkUserInMemberLevel($user['id'], $classroomMemberLevel['id']);
+                $checkMemberLevelResult = $this->getVipService()->checkUserVipRight($user['id'], ClassroomVipRightSupplier::CODE, $classroom['id']);
             }
         }
 
@@ -115,7 +117,7 @@ class ClassroomController extends BaseController
 
         if ($member) {
             $isclassroomteacher = in_array('teacher', $member['role']) || in_array('headTeacher', $member['role']) ? true : false;
-            $vipChecked = $this->isPluginInstalled('Vip') && $this->setting('vip.enabled') && $member['levelId'] > 0 ? $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']) : 'ok';
+            $vipChecked = $classroomMemberLevel ? $this->getVipService()->checkUserVipRight($user['id'], ClassroomVipRightSupplier::CODE, $classroom['id']) : 'ok';
 
             return $this->render('classroom/classroom-join-header.html.twig', [
                 'classroom' => $classroom,
@@ -283,10 +285,11 @@ class ClassroomController extends BaseController
         $checkMemberLevelResult = $classroomMemberLevel = null;
 
         if ($this->setting('vip.enabled') && $user['id']) {
-            $classroomMemberLevel = $classroom['vipLevelId'] > 0 ? $this->getLevelService()->getLevel($classroom['vipLevelId']) : null;
+            $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode(ClassroomVipRightSupplier::CODE, $classroom['id']);
+            $classroomMemberLevel = !empty($vipRight) ? $this->getLevelService()->getLevel($vipRight['vipLevelId']) : null;
 
             if ($classroomMemberLevel) {
-                $checkMemberLevelResult = $this->getVipService()->checkUserInMemberLevel($user['id'], $classroomMemberLevel['id']);
+                $checkMemberLevelResult = $this->getVipService()->checkUserVipRight($user['id'], ClassroomVipRightSupplier::CODE, $classroom['id']);
             }
         }
 
@@ -769,7 +772,7 @@ class ClassroomController extends BaseController
                 'code' => $memberAccessCode,
                 'vipLevel' => $vipLevel,
                 'vipRightLevel' => $vipRightLevel,
-                'classroomId' => $classroomId
+                'classroomId' => $classroomId,
             ]);
     }
 

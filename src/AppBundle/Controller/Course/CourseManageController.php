@@ -546,7 +546,7 @@ class CourseManageController extends BaseController
                 $this->getCourseService()->batchConvert($course['id']);
             }
 
-            if ($this->isPluginInstalled('Vip') && version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')) {
+            if ($this->isPluginInstalled('Vip')) {
                 $this->setVipRight($course, $data);
             }
 
@@ -580,10 +580,8 @@ class CourseManageController extends BaseController
 
         if ($this->isPluginInstalled('Vip')) {
             $vipLevels = $this->createService('VipPlugin:Vip:LevelService')->findEnabledLevels();
-            if (version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')) {
-                $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode('course', $course['id']);
-                $course['vipLevelId'] = empty($vipRight) ? '0' : $vipRight['vipLevelId'];
-            }
+            $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode('course', $course['id']);
+            $course['vipLevelId'] = empty($vipRight) ? '0' : $vipRight['vipLevelId'];
         }
 
         return $this->render(

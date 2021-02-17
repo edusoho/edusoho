@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\LessonProcessor;
+use VipPlugin\Biz\Marketing\VipRightSupplier\CourseVipRightSupplier;
 
 class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 {
@@ -134,8 +135,8 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
             return 'course_materials';
         }
 
-        if ($member && $member['levelId'] > 0) {
-            if ('ok' != $this->controller->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId'])) {
+        if ($member && 'vip_join' == $member['joinedChannel']) {
+            if ('ok' != $this->controller->getVipService()->checkUserVipRight($member['userId'], CourseVipRightSupplier::CODE, $course['id'])) {
                 return 'course_show';
             }
         }

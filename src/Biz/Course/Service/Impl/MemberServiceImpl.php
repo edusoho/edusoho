@@ -32,6 +32,9 @@ use Biz\User\UserException;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Order\Service\OrderRefundService;
 use Codeages\Biz\Order\Service\OrderService;
+use VipPlugin\Biz\Marketing\Service\VipRightService;
+use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
+use VipPlugin\Biz\Marketing\VipRightSupplier\CourseVipRightSupplier;
 use VipPlugin\Biz\Vip\Service\VipService;
 
 /**
@@ -338,7 +341,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
 
         $vipNonExpired = true;
-        if (!empty($member['levelId'])) {
+        if ('vip_join' == $member['joinedChannel']) {
             // 会员加入的情况下
             $vipNonExpired = $this->isVipMemberNonExpired($course, $member);
         }
@@ -372,9 +375,9 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         if (!empty($member['classroomId']) && 'classroom' == $member['joinedType']) {
             $classroom = $this->getClassroomService()->getClassroom($member['classroomId']);
-            $status = $this->getVipService()->checkUserInMemberLevel($member['userId'], $classroom['vipLevelId']);
+            $status = $this->getVipService()->checkUserVipRight($member['userId'], ClassroomVipRightSupplier::CODE, $classroom['id']);
         } else {
-            $status = $this->getVipService()->checkUserInMemberLevel($member['userId'], $course['vipLevelId']);
+            $status = $this->getVipService()->checkUserVipRight($member['userId'], CourseVipRightSupplier::CODE, $course['id']);
         }
 
         return 'ok' === $status;
@@ -818,7 +821,6 @@ class MemberServiceImpl extends BaseService implements MemberService
                 'userId' => $userId,
                 'courseSetId' => $course['courseSetId'],
                 'orderId' => 0,
-                'levelId' => 0,
                 'role' => 'student',
                 'learnedNum' => 0,
                 'noteNum' => 0,
@@ -830,6 +832,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             if ($classroomId > 0 && !empty($classroomMembers[$userId])) {
                 $member['classroomId'] = $classroomId;
                 $member['deadline'] = $classroomMembers[$userId]['deadline'];
+                $member['joinedChannel'] = $classroomMembers[$userId]['joinedChannel'];
             } else {
                 $member['deadline'] = $this->getMemberDeadline($course);
             }
@@ -1545,6 +1548,14 @@ class MemberServiceImpl extends BaseService implements MemberService
     protected function getVipService()
     {
         return $this->createService('VipPlugin:Vip:VipService');
+    }
+
+    /**
+     * @return VipRightService
+     */
+    protected function getVipRightService()
+    {
+        return $this->createService('VipPlugin:Marketing:VipRightService');
     }
 
     /**

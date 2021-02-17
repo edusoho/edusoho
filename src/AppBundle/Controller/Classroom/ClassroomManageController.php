@@ -45,10 +45,8 @@ class ClassroomManageController extends BaseController
 
         if ($this->isPluginInstalled('Vip')) {
             $vipLevels = $this->createService('VipPlugin:Vip:LevelService')->findEnabledLevels();
-            if (version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')) {
-                $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode('classroom', $classroom['id']);
-                $classroom['vipLevelId'] = empty($vipRight) ? '0' : $vipRight['vipLevelId'];
-            }
+            $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode('classroom', $classroom['id']);
+            $classroom['vipLevelId'] = empty($vipRight) ? '0' : $vipRight['vipLevelId'];
         }
 
         $coursePrice = 0;
@@ -644,7 +642,7 @@ class ClassroomManageController extends BaseController
 
         $this->getClassroomService()->updateClassroomInfo($id, $class);
 
-        if ($this->isPluginInstalled('Vip') && version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')) {
+        if ($this->isPluginInstalled('Vip')) {
             $this->setVipRight($id, $class);
         }
 

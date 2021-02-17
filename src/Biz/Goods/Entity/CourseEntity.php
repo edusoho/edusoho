@@ -8,6 +8,7 @@ use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use VipPlugin\Biz\Marketing\Service\VipRightService;
+use VipPlugin\Biz\Marketing\VipRightSupplier\CourseVipRightSupplier;
 use VipPlugin\Biz\Vip\Service\LevelService;
 use VipPlugin\Biz\Vip\Service\VipService;
 
@@ -129,7 +130,7 @@ class CourseEntity extends BaseGoodsEntity
             $vipUser['level'] = $this->getVipLevelService()->getLevel($vipUser['levelId']);
         }
 
-        $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode('course', $specs['targetId']);
+        $vipRight = $this->getVipRightService()->getVipRightsBySupplierCodeAndUniqueCode(CourseVipRightSupplier::CODE, $specs['targetId']);
         if ($vipRight) {
             return [$this->getVipLevelService()->getLevel($vipRight['vipLevelId']), $vipUser];
         }
@@ -144,9 +145,8 @@ class CourseEntity extends BaseGoodsEntity
         }
 
         $course = $this->getCourseService()->getCourse($specs['targetId']);
-        $status = $this->getVipService()->checkUserInMemberLevel($userId, $course['vipLevelId']);
 
-        return 'ok' === $status;
+        return 'ok' === $this->getVipService()->checkUserVipRight($userId, CourseVipRightSupplier::CODE, $course['id']);
     }
 
     public function getSpecsTeacherIds($goods, $specs)

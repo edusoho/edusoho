@@ -58,7 +58,7 @@ class CourseFilter extends Filter
         $data['publishedTaskNum'] = $data['compulsoryTaskNum'];
         $data['summary'] = $this->convertAbsoluteUrl($data['summary']);
 
-        if (version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')) {
+        if ($this->isPluginInstalled('Vip')) {
             $vipRight = $this->getVipRightService()->getVipRightsBySupplierCodeAndUniqueCode(CourseVipRightSupplier::CODE, $data['id']);
             $data['vipLevelId'] = empty($vipRight) ? 0 : $vipRight['vipLevelId'];
         }

@@ -4,6 +4,7 @@ namespace AppBundle\Controller\Classroom;
 
 use AppBundle\Controller\BuyFlowController;
 use Biz\Classroom\Service\ClassroomService;
+use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
 
 class ClassroomBuyController extends BuyFlowController
 {
@@ -16,7 +17,7 @@ class ClassroomBuyController extends BuyFlowController
         $vipJoinEnabled = false;
         if ($this->isPluginInstalled('Vip') && $this->setting('vip.enabled')) {
             $user = $this->getCurrentUser();
-            $vipJoinEnabled = 'ok' === $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']);
+            $vipJoinEnabled = 'ok' === $this->getVipService()->checkUserVipRight($user['id'], ClassroomVipRightSupplier::CODE, $classroom['id']);
         }
 
         return $classroom['price'] > 0 && !$payment['enabled'] && !$vipJoinEnabled;
@@ -42,8 +43,11 @@ class ClassroomBuyController extends BuyFlowController
     protected function needInformationCollectionBeforeJoin($targetId)
     {
         $classroom = $this->getClassroomService()->getClassroom($targetId);
-        if ((0 != $classroom['price']) && !$classroom['vipLevelId']) {
-            return [];
+        if ($this->isPluginInstalled('Vip')) {
+            $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode(ClassroomVipRightSupplier::CODE, $classroom['id']);
+            if ((0 != $classroom['price']) && empty($vipRight)) {
+                return [];
+            }
         }
 
         $event = $this->getInformationCollectEventService()->getEventByActionAndLocation('buy_before', ['targetType' => 'classroom', 'targetId' => $targetId]);

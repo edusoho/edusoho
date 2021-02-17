@@ -36,6 +36,8 @@ use Biz\User\Service\UserService;
 use Biz\User\UserException;
 use Codeages\Biz\Framework\Event\Event;
 use Codeages\Biz\Order\Service\OrderService;
+use VipPlugin\Biz\Marketing\Service\VipRightService;
+use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
 use VipPlugin\Biz\Vip\Service\VipService;
 
 class ClassroomServiceImpl extends BaseService implements ClassroomService
@@ -1068,8 +1070,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $userMember = [];
 
-        if (!empty($info['becomeUseMember'])) {
-            $levelChecked = $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']);
+        if (!empty($info['becomeUseMember']) && $this->isPluginInstalled('Vip')) {
+            $levelChecked = $this->getVipService()->checkUserVipRight($user['id'], ClassroomVipRightSupplier::CODE, $classroom['id']);
 
             if ('ok' != $levelChecked) {
                 $this->createNewException(ClassroomException::MEMBER_LEVEL_LIMIT());
@@ -1381,7 +1383,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                     'classroomId' => $classroomId,
                     'userId' => $userId,
                     'orderId' => 0,
-                    'levelId' => 0,
                     'role' => ['headTeacher'],
                     'remark' => '',
                     'createdTime' => time(),
@@ -1487,7 +1488,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'classroomId' => $classroomId,
             'userId' => $userId,
             'orderId' => 0,
-            'levelId' => 0,
             'role' => ['auditor'],
             'remark' => '',
             'createdTime' => time(),
@@ -1527,7 +1527,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'classroomId' => $classroomId,
             'userId' => $userId,
             'orderId' => 0,
-            'levelId' => 0,
             'role' => ['assistant'],
             'remark' => '',
             'createdTime' => time(),
@@ -2341,7 +2340,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             return false;
         }
 
-        $status = $this->getVipService()->checkUserInMemberLevel($member['userId'], $classroom['vipLevelId']);
+        $status = $this->getVipService()->checkUserVipRight($member['userId'], ClassroomVipRightSupplier::CODE, $classroom['id']);
 
         return 'ok' === $status;
     }
@@ -2432,6 +2431,14 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     protected function getVipService()
     {
         return $this->createService('VipPlugin:Vip:VipService');
+    }
+
+    /**
+     * @return VipRightService
+     */
+    protected function getVipRightService()
+    {
+        return $this->createService('VipPlugin:Marketing:VipRightService');
     }
 
     /**

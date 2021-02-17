@@ -6,6 +6,7 @@ use AppBundle\Common\ArrayToolkit;
 use Biz\Classroom\ClassroomException;
 use Biz\Classroom\Service\ClassroomService;
 use VipPlugin\Biz\Marketing\Service\VipRightService;
+use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
 use VipPlugin\Biz\Vip\Service\LevelService;
 use VipPlugin\Biz\Vip\Service\VipService;
 
@@ -101,7 +102,7 @@ class ClassroomEntity extends BaseGoodsEntity
             $vipUser['level'] = $this->getVipLevelService()->getLevel($vipUser['levelId']);
         }
 
-        $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode('classroom', $specs['targetId']);
+        $vipRight = $this->getVipRightService()->getVipRightsBySupplierCodeAndUniqueCode(ClassroomVipRightSupplier::CODE, $specs['targetId']);
         if ($vipRight) {
             return [$this->getVipLevelService()->getLevel($vipRight['vipLevelId']), $vipUser];
         }
@@ -115,9 +116,8 @@ class ClassroomEntity extends BaseGoodsEntity
             return false;
         }
         $classroom = $this->getClassroomService()->getClassroom($specs['targetId']);
-        $status = $this->getVipService()->checkUserInMemberLevel($userId, $classroom['vipLevelId']);
 
-        return 'ok' === $status;
+        return 'ok' === $this->getVipService()->checkUserVipRight($userId, ClassroomVipRightSupplier::CODE, $classroom['id']);
     }
 
     public function getSpecsTeacherIds($goods, $specs)

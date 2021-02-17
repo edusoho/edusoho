@@ -3,6 +3,7 @@
 namespace Biz\Thread\Firewall;
 
 use Topxia\Service\Common\ServiceKernel;
+use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
 
 class ClassroomThreadFirewall extends AbstractThreadFirewall
 {
@@ -18,15 +19,10 @@ class ClassroomThreadFirewall extends AbstractThreadFirewall
 
         $classroom = $this->getClassroomService()->getClassroom($thread['targetId']);
 
-        if (!empty($member['levelId'])
-            && empty($classroom['vipLevelId'])) {
-            return false;
-        }
-
         if ($this->isVipPluginEnabled()
             && $this->getSettingService()->get('vip.enabled', 0)
-            && !empty($member['levelId'])
-            && $this->getVipService()->checkUserInMemberLevel($user['id'], $classroom['vipLevelId']) != 'ok') {
+            && 'vip_join' == $member['joinedChannel']
+            && 'ok' != $this->getVipService()->checkUserVipRight($user['id'], ClassroomVipRightSupplier::CODE, $classroom['id'])) {
             return false;
         }
 
