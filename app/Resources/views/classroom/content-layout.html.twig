@@ -52,4 +52,12 @@
   }%}
 
   {% include 'common/consult-supplier.html.twig' %}
+
+  {% block member_expired %}
+    {% if is_plugin_installed('Vip') and version_compare(plugin_version('Vip'), '1.8.6', '>=') and member.access|default('') and member.access.code|default('') != 'success' and classroom.price > 0 %}
+      <div class="member-expire">
+        <a href="#modal" data-toggle="modal" data-url="{{ path('classroom_member_access', {classroomId:classroom.id, memberId:member.userId, code:member.access.code}) }}"></a>
+      </div>
+    {% endif %}
+  {% endblock %}
 {% endblock %}
