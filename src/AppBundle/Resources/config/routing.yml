@@ -2731,6 +2731,10 @@ classroom_canview:
 classroom_courses:
     path: /classroom/{classroomId}/courses
     defaults: { _controller: AppBundle:Classroom/Course:list }
+
+classroom_member_access:
+    path: /classroom/{classroomId}/member/{memberId}/access
+    defaults: { _controller: AppBundle:Classroom/Classroom:memberAccess }
 #
 # 讨论区
 #

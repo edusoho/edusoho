@@ -731,11 +731,6 @@ class MemberServiceImpl extends BaseService implements MemberService
             'createdTime' => time(),
             'refundDeadline' => $this->getRefundDeadline(),
         ];
-
-        if (!empty($info['levelId'])) {
-            $fields['levelId'] = $info['levelId'];
-        }
-
         $member = $this->addMember($fields, $reason);
 
         $this->refreshMemberNoteNumber($courseId, $userId);
@@ -1002,6 +997,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             'userId' => $userId,
             'orderId' => empty($info['orderId']) ? 0 : $info['orderId'],
             'deadline' => $deadline,
+            'levelId' => empty($info['levelId']) ? 0 : $info['levelId'],
             'role' => 'student',
             'remark' => empty($info['orderNote']) ? '' : $info['orderNote'],
             'createdTime' => time(),
@@ -1010,13 +1006,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             'learnedNum' => $learnedNum,
             'learnedCompulsoryTaskNum' => $learnedCompulsoryTaskNum,
             'lastLearnTime' => $lastLearnTime,
-            'joinedChannel' => empty($info['joinedChannel']) ? '' : $info['joinedChannel'],
         ];
-
-        if (!empty($info['levelId'])) {
-            $fields['levelId'] = $info['levelId'];
-        }
-
         $isMember = $this->getMemberDao()->getByCourseIdAndUserId($courseId, $userId);
 
         if ($isMember) {

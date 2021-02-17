@@ -32,6 +32,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use VipPlugin\Biz\Marketing\Service\VipRightService;
 use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
+use VipPlugin\Biz\Vip\Service\LevelService;
+use VipPlugin\Biz\Vip\Service\VipService;
 
 class ClassroomController extends BaseController
 {
@@ -757,6 +759,31 @@ class ClassroomController extends BaseController
         ]);
     }
 
+    public function memberAccessAction(Request $request, $classroomId, $memberId)
+    {
+        $memberAccessCode = $request->query->get('code');
+        $vip = $this->getVipService()->getMemberByUserId($memberId);
+        $vipLevel = $this->getLevelService()->getLevel($vip['levelId']);
+        $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode('classroom', $classroomId);
+        $vipRightLevel = $this->getLevelService()->getLevel($vipRight['vipLevelId']);
+
+        return $this->render('classroom/member-access-modal.html.twig',
+            [
+                'code' => $memberAccessCode,
+                'vipLevel' => $vipLevel,
+                'vipRightLevel' => $vipRightLevel,
+                'classroomId' => $classroomId
+            ]);
+    }
+
+    /**
+     * @return VipRightService
+     */
+    protected function getVipRightService()
+    {
+        return $this->createService('VipPlugin:Marketing:VipRightService');
+    }
+
     /**
      * @return RecordService
      */
@@ -827,14 +854,6 @@ class ClassroomController extends BaseController
     protected function getVipService()
     {
         return $this->createService('VipPlugin:Vip:VipService');
-    }
-
-    /**
-     * @return VipRightService
-     */
-    protected function getVipRightService()
-    {
-        return $this->createService('VipPlugin:Marketing:VipRightService');
     }
 
     /**

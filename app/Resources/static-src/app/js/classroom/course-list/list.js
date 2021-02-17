@@ -10,6 +10,13 @@ export default class CourseList {
   initEvent() {
     this.$element.on('click', '.es-icon-keyboardarrowdown', (event) => this.onExpandCourse(event));
     this.$element.on('click', '.es-icon-keyboardarrowup', (event) => this.onCollapseCourse(event));
+    this.triggerMemberExpired();
+  }
+
+  triggerMemberExpired() {
+    if ($('.member-expire').length) {
+      $('.member-expire a').trigger('click');
+    }
   }
 
   onExpandCourse(e) {
