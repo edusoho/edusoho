@@ -772,7 +772,7 @@ class ClassroomController extends BaseController
                 'code' => $memberAccessCode,
                 'vipLevel' => $vipLevel,
                 'vipRightLevel' => $vipRightLevel,
-                'classroomId' => $classroomId
+                'classroomId' => $classroomId,
             ]);
     }
 
