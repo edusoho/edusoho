@@ -17,7 +17,7 @@
                             <el-input ref="subtitle" v-model="form.subtitle" type="textarea" rows="3"></el-input>
                         </el-col>
                     </el-form-item>
-                    <el-form-item label="挂载目录选择">
+                    <el-form-item label="挂载目录列表">
                         <el-col>
                             <el-table
                                 :data="tableData"
@@ -37,9 +37,13 @@
                 </el-form>
             </el-col>
             <el-col :span="12">
-                <div class="tree">
-                    <v-tree ref='tree' :data='treeData1' :multiple="true" :tpl='tpl' :halfcheck='true' />
-                </div>
+                <el-form :model="form" :rules="formRule">
+                    <el-form-item label="挂载目录列表">
+                        <el-col>
+                            <v-tree ref='tree' :data='treeData' :multiple="false" :tpl="tpl" :selectAlone='true' :halfcheck='true' :topMustExpand="false"/>
+                        </el-col>
+                    </el-form-item>
+                </el-form>
             </el-col>
         </el-row>
     </div>
@@ -53,6 +57,19 @@
     export default {
         name: "base-info",
         methods: {
+            getTree(path){
+                let _this = this;
+                let data = {
+                    url:_this.mcp_domain_name,
+                }
+                if(path !==undefined && path !== ''){
+                    data.path = path;
+                }
+                return this.getTreeList({
+                    data:data,
+                    callback:res=>{}
+                })
+            },
             tpl (...args) {
                 let {0: node, 2: parent, 3: index} = args
                 let titleClass = node.selected ? 'node-title node-selected' : 'node-title'
@@ -65,12 +82,32 @@
                     </span>
             },
             async asyncLoad (node) {
-            this.$set(node, 'loading', true)
-            let pro = new Promise(resolve => {
-                setTimeout(resolve, 2000, ['async node1', 'async node2'])
-            })
-            this.$refs.tree1.addNodes(node, await pro)
-            this.$set(node, 'loading', false)
+                if(node.children !== undefined) return;
+                    this.$set(node, 'loading', true)
+                
+                if(!this.is_req){
+                    this.is_req = true;
+                    let pro = this.getTree(node.path);
+                    pro.then(res=>{
+                        if(res.data.status.code == 2000000){
+                            if(res.data.body.length == 0){
+                                this.$Message.error("无子目录");
+                            }else{
+                                // name 替换title
+                                res.data.body.forEach((v,k)=>{
+                                    v.title = v.name;
+                                })
+                                this.$refs.tree.addNodes(node, res.data.body);
+                            }
+                            node.isChildren = true;
+                        }
+                        this.$set(node, 'loading', false);
+                        this.is_req = false;
+                    }).catch(res=>{
+                        _this.$Message.error("获取目录失败");
+                        this.is_req = false;
+                    })
+                }
             },
             search () {
                 this.$refs.tree.searchNodes(this.searchword)
@@ -103,51 +140,28 @@
         },
         data() {
             return {
-                searchword: '',
-                initSelected: ['node-1'],
-                treeData1: [{
-                    title: 'node1',
-                    expanded: true,
-                    children: [{
-                    title: 'node 1-1',
-                    expanded: true,
-                    children: [{
-                        title: 'node 1-1-1'
-                    }, {
-                        title: 'node 1-1-2'
-                    }, {
-                        title: 'node 1-1-3'
-                    }]
-                    }, {
-                    title: 'node 1-2',
-                    children: [{
-                        title: "<span style='color: red'>node 1-2-1</span>"
-                    }, {
-                        title: "<span style='color: red'>node 1-2-2</span>"
-                    }]
-                    }]
-                }],
-                treeData2: [{
-                    title: 'node1',
-                    expanded: false,
-                    async: true
-                }],
-
-                treeData3: [{
-                    title: 'node1',
-                    expanded: true,
-                    children: [{
-                    title: 'node 1-1',
-                    expanded: true,
-                    children: [{
-                        title: 'node 1-1-1'
-                    }, {
-                        title: 'node 1-1-2'
-                    }, {
-                        title: 'node 1-1-3'
-                    }]
-                    }]
-                }],
+                treeData: [{
+        title: 'node1',
+        expanded: true,
+        children: [{
+          title: 'node 1-1',
+          expanded: true,
+          children: [{
+            title: 'node 1-1-1'
+          }, {
+            title: 'node 1-1-2'
+          }, {
+            title: 'node 1-1-3'
+          }]
+        }, {
+          title: 'node 1-2',
+          children: [{
+            title: "<span style='color: red'>node 1-2-1</span>"
+          }, {
+            title: "<span style='color: red'>node 1-2-2</span>"
+          }]
+        }]
+      }],
                 tableData: [{
                 name: '猫狗测试',
                 path: '/www/work',
