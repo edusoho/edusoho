@@ -603,21 +603,19 @@ class CourseManageController extends BaseController
     protected function setVipRight($course, $data)
     {
         $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode('course', $course['id']);
-        if ($vipRight) {
-            if (empty($data['vipLevelId'])) {
-                $this->getVipRightService()->deleteVipRight($vipRight['id']);
-            } else {
-                $this->getVipRightService()->updateVipLevelId($vipRight['id'], $data['vipLevelId']);
-            }
-        } else {
-            if (!empty($data['vipLevelId'])) {
-                $this->getVipRightService()->createVipRight([
-                    'vipLevelId' => $data['vipLevelId'],
-                    'supplierCode' => 'course',
-                    'uniqueCode' => $course['id'],
-                    'title' => empty($course['title']) ? $course['courseSetTitle'] : $course['courseSetTitle'].'-'.$course['title'],
-                ]);
-            }
+        if (!empty($vipRight) && !empty($data['vipLevelId']) && $vipRight['vipLevelId'] == $data['vipLevelId']) {
+            return;
+        }
+
+        isset($vipRight['id']) && $this->getVipRightService()->deleteVipRight($vipRight['id']);
+
+        if (!empty($data['vipLevelId'])) {
+            $this->getVipRightService()->createVipRight([
+                'vipLevelId' => $data['vipLevelId'],
+                'supplierCode' => 'course',
+                'uniqueCode' => $course['id'],
+                'title' => empty($course['title']) ? $course['courseSetTitle'] : $course['courseSetTitle'].'-'.$course['title'],
+            ]);
         }
     }
 

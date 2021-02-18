@@ -134,7 +134,7 @@ class CourseController extends BaseController
 
             return $this->redirect($this->generateUrl('goods_show', ['id' => $goods['id'], 'preview' => 'guest' == $request->query->get('previewAs', '') ? 1 : 0]));
         }
-        if ($this->isPluginInstalled('Vip') && version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')) {
+        if ($this->isPluginInstalled('Vip')) {
             $member['access'] = $this->getClassroomMemberAccess($classroomId, $member['userId']);
         }
 

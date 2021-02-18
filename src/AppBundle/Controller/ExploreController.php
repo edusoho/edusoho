@@ -235,16 +235,12 @@ class ExploreController extends BaseController
             return $conditions;
         }
 
-        if (version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')) {
-            $vipRights = $this->getVipRightService()->findVipRightsBySupplierCodeAndVipLevelIds($supplierCode, $vipLevelIds);
-            if ('course' == $supplierCode) {
-                $courses = $this->getCourseService()->findPublicCoursesByIds(ArrayToolkit::column($vipRights, 'uniqueCode'));
-            } else {
-                $classroomIds = $this->getClassroomService()->findClassroomsByIds(ArrayToolkit::column($vipRights, 'uniqueCode'));
-                $conditions['classroomIds'] = empty($classroomIds) ? [] : ArrayToolkit::column($classroomIds, 'id');
-            }
+        $vipRights = $this->getVipRightService()->findVipRightsBySupplierCodeAndVipLevelIds($supplierCode, $vipLevelIds);
+        if ('course' == $supplierCode) {
+            $courses = $this->getCourseService()->findPublicCoursesByIds(ArrayToolkit::column($vipRights, 'uniqueCode'));
         } else {
-            'course' == $supplierCode && $courses = $this->getCourseService()->searchCourses(['vipLevelIds' => $vipLevelIds], 'latest', 0, PHP_INT_MAX);
+            $classroomIds = $this->getClassroomService()->findClassroomsByIds(ArrayToolkit::column($vipRights, 'uniqueCode'));
+            $conditions['classroomIds'] = empty($classroomIds) ? [] : ArrayToolkit::column($classroomIds, 'id');
         }
 
         $conditions = 'course' == $supplierCode && !empty($courses) ? $this->mergeConditionsByCourses($conditions, $courses) : $conditions;

@@ -217,7 +217,7 @@ class WebExtension extends \Twig_Extension
 
     public function filterCourseSetsVipRight($courseSets)
     {
-        if ($this->isPluginInstalled('Vip') && version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')) {
+        if ($this->isPluginInstalled('Vip')) {
             $vipRights = $this->getVipRightService()->searchVipRights(['supplierCode' => 'course', 'uniqueCodes' => ArrayToolkit::column(ArrayToolkit::column($courseSets, 'course'), 'id')], [], 0, PHP_INT_MAX);
             $vipRights = empty($vipRights) ? [] : ArrayToolkit::index($vipRights, 'uniqueCode');
 
@@ -231,7 +231,7 @@ class WebExtension extends \Twig_Extension
 
     public function filterCoursesVipRight($courses)
     {
-        if ($this->isPluginInstalled('Vip') && version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')) {
+        if ($this->isPluginInstalled('Vip')) {
             $vipRights = $this->getVipRightService()->searchVipRights(['supplierCode' => 'course', 'uniqueCodes' => ArrayToolkit::column($courses, 'id')], [], 0, PHP_INT_MAX);
             $vipRights = empty($vipRights) ? [] : ArrayToolkit::index($vipRights, 'uniqueCode');
 
@@ -245,7 +245,7 @@ class WebExtension extends \Twig_Extension
 
     public function filterClassroomsVipRight($classrooms)
     {
-        if ($this->isPluginInstalled('Vip') && version_compare($this->getPluginVersion('Vip'), '1.8.6', '>=')) {
+        if ($this->isPluginInstalled('Vip')) {
             $vipRights = $this->getVipRightService()->searchVipRights(['supplierCode' => 'classroom', 'uniqueCodes' => ArrayToolkit::column($classrooms, 'id')], [], 0, PHP_INT_MAX);
             $vipRights = empty($vipRights) ? [] : ArrayToolkit::index($vipRights, 'uniqueCode');
 
