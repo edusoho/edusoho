@@ -652,21 +652,19 @@ class ClassroomManageController extends BaseController
     protected function setVipRight($id, $data)
     {
         $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode('classroom', $id);
-        if ($vipRight) {
-            if (empty($data['vipLevelId'])) {
-                $this->getVipRightService()->deleteVipRight($vipRight['id']);
-            } else {
-                $this->getVipRightService()->updateVipLevelId($vipRight['id'], $data['vipLevelId']);
-            }
-        } else {
-            if (!empty($data['vipLevelId'])) {
-                $this->getVipRightService()->createVipRight([
-                    'vipLevelId' => $data['vipLevelId'],
-                    'supplierCode' => 'classroom',
-                    'uniqueCode' => $id,
-                    'title' => $data['title'],
-                ]);
-            }
+        if (!empty($vipRight) && !empty($data['vipLevelId']) && $vipRight['vipLevelId'] == $data['vipLevelId']) {
+            return;
+        }
+
+        isset($vipRight['id']) && $this->getVipRightService()->deleteVipRight($vipRight['id']);
+
+        if (!empty($data['vipLevelId'])) {
+            $this->getVipRightService()->createVipRight([
+                'vipLevelId' => $data['vipLevelId'],
+                'supplierCode' => 'classroom',
+                'uniqueCode' => $id,
+                'title' => $data['title'],
+            ]);
         }
     }
 
