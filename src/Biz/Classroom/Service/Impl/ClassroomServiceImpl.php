@@ -2218,7 +2218,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $userCourses = ArrayToolkit::index($userCourses, 'courseId');
 
         foreach ($courseIds as $key => $courseId) {
-            $courseMember = $this->getCourseMemberService()->getCourseMember($courseId, $userId);
             $courseMember = empty($userCourses[$courseId]) ? [] : $userCourses[$courseId];
 
             if ($courseMember) {
@@ -2228,7 +2227,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $info = [
                 'orderId' => empty($params['orderId']) ? 0 : $params['orderId'],
                 'orderNote' => empty($params['note']) ? '' : $params['note'],
-                'levelId' => empty($classroomMember['levelId']) ? 0 : $classroomMember['levelId'],
+                'joinedChannel' => $classroomMember['joinedChannel'],
                 'deadline' => $classroomMember['deadline'],
             ];
             $this->getCourseMemberService()->createMemberByClassroomJoined($courseId, $userId, $classroomId, $info);

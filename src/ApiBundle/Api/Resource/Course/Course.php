@@ -78,7 +78,7 @@ class Course extends AbstractResource
         }
 
         $info = [
-            'levelId' => empty($classroomMember['levelId']) ? 0 : $classroomMember['levelId'],
+            'joinedChannel' => $classroomMember['joinedChannel'],
             'deadline' => $classroomMember['deadline'],
         ];
 

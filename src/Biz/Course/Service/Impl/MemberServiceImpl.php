@@ -997,7 +997,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             'userId' => $userId,
             'orderId' => empty($info['orderId']) ? 0 : $info['orderId'],
             'deadline' => $deadline,
-            'levelId' => empty($info['levelId']) ? 0 : $info['levelId'],
+            'joinedChannel' => empty($info['joinedChannel']) ? '' : $info['joinedChannel'],
             'role' => 'student',
             'remark' => empty($info['orderNote']) ? '' : $info['orderNote'],
             'createdTime' => time(),
@@ -1064,7 +1064,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             if (!$isCourseStudent && !empty($member) && array_intersect($member['role'],
                     ['student', 'teacher', 'headTeacher', 'assistant'])
             ) {
-                $info = ArrayToolkit::parts($member, ['levelId']);
+                $info = ArrayToolkit::parts($member, ['joinedChannel']);
                 $member = $this->createMemberByClassroomJoined($courseId, $userId, $member['classroomId'], $info);
 
                 return $member;
