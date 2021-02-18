@@ -20,7 +20,7 @@ class AbstractCloudAPI
 
     protected $timeout = 15;
 
-    protected $apiUrl = 'http://10.60.128.90:9200';
+    protected $apiUrl = 'http://10.60.128.95:9200';
 
     protected $debug = false;
 
@@ -121,7 +121,7 @@ class AbstractCloudAPI
         $requestId = substr(md5(uniqid('', true)), -16);
 
         $url = $this->apiUrl.'/'.$uri;
-        $params['query']['access_token'] = '91102292-f011-44bf-88fc-bf14276a87dd';
+        $params['query']['access_token'] = '7c6011f4-5175-4f1b-8c83-fae11b01f836';
 
         if ($this->isWithoutNetwork()) {
             if ($this->debug && $this->logger) {

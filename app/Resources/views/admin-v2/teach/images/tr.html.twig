@@ -1,0 +1,14 @@
+{% import "admin-v2/macro.html.twig" as admin_macro %}
+
+{% import "common/data-dict-macro.html.twig" as dict_macro %}
+{% set courseSetProduct = courseSet.platform|default('self') == 'self' ? null : data('S2b2cProduct', { id:courseSet.id, type:'course_set' }) %}
+
+<tr id="images-tr-{{ image.id }}">
+  <td>{{ image.id }}</td>
+  <td>{{image.name}}</td>
+  <td>{{image.status_name}}</td>
+  <td>
+    <a class="btn btn-default btn-sm" href="" target="_blank">管理</a>
+    <a class="btn btn-default btn-sm delete-course" href="javascript:;" data-url="{{ path('images_set_manage_delete',{id:image.id}) }}">删除</a>
+  </td>
+</tr>

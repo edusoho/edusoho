@@ -9,7 +9,7 @@
 
 
 {% block body %}
-<div class="training-add js-select-container" data-url="{{ path('course_set_manage_training_dataset_info_picker',{id: id,taskId:10}) }}">
+<div class="training-add js-select-container" data-url="{{ path('dataset_set_manage_info',{id: id,taskId:10}) }}">
     <div style="padding-top:10px;min-height:300px;" class="list-info">
         {{ include('training/manage/dataset/dataset-modal-list.html.twig') }}
     </div>
