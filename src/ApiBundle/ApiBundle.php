@@ -7,7 +7,7 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class ApiBundle extends Bundle
 {
-    const API_PREFIX = '/api';
+    const API_PREFIX = '/api_v2';
 
     public function boot()
     {

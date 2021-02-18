@@ -23,16 +23,16 @@
     <div class="alert alert-warning col-md-offset-2" role="alert">{{'admin.setting_course.classroom.setting_classroom_name.tips'|trans}}
     </div>
 
-    <div class="row form-group">
-      <div class="col-md-2 control-label">
-        <label >{{'admin.setting_course.classroom.course_discount'|trans}}</label>
-      </div>
-      <div class="controls col-md-7 radios">
-        {{ radios('discount_buy', {1:'admin.setting_course.yes'|trans, 0:'admin.setting_course.no'|trans}, setting('classroom').discount_buy|default(1)) }}
-        <div class="help-block"><p>{{ 'admin.setting_course.classroom.course_discount.help_block'|trans }}</p>
-        </div>
-      </div>
-    </div>
+{#    <div class="row form-group">#}
+{#      <div class="col-md-2 control-label">#}
+{#        <label >{{'admin.setting_course.classroom.course_discount'|trans}}</label>#}
+{#      </div>#}
+{#      <div class="controls col-md-7 radios">#}
+{#        {{ radios('discount_buy', {1:'admin.setting_course.yes'|trans, 0:'admin.setting_course.no'|trans}, setting('classroom').discount_buy|default(1)) }}#}
+{#        <div class="help-block"><p>{{ 'admin.setting_course.classroom.course_discount.help_block'|trans }}</p>#}
+{#        </div>#}
+{#      </div>#}
+{#    </div>#}
 
     <div class="row form-group">
       <div class="col-md-2 control-label">

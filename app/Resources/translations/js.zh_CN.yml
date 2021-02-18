@@ -823,7 +823,7 @@ notify.sms_send_success.message: 短信发送成功
 notify.password_reset_email_send_success.message: 重置密码邮件已发送
 notify.password_reset_success.message: 重置密码成功
 notify.message_send_success: 私信发送成功
-notify.danger_operation_message: 这是警告消息<a href="http://demo.edusoho.com" class="notify-action">操作</a>
+notify.danger_operation_message: 这是警告消息
 
 json_response.nickname_can_use.message: 该昵称可以使用
 json_response.verification_code_error.message: 验证码错误

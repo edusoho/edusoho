@@ -545,7 +545,7 @@ admin_v2.course.review.classroom_review_tab: 班级评价
 admin_v2.course.review.exercise_review_tab: 题库练习评价
 
 # 教学模块-资源管理
-admin_v2.cloud_resource.basic_group: 资源管理
+admin_v2.resource.basic_group: 资源管理
 
 # 教学模块-资源管理-云资源
 admin_v2.cloud_resource.basic_tab: 云资源
@@ -554,8 +554,10 @@ admin_v2.cloud.attachment.basic_tab: 云附件
 admin_v2.cloud.attachment_setting.basic_tab: 云附件设置
 
 # 教学模块-资源管理-ilab资源管理
-admin_v2.ilab.dockerimages: 镜像管理
-admin_v2.ilab.datasets: 数据管理
+admin_v2.ilab.dockerimages: 容器仓库
+admin_v2.ilab.dockerimages.basic_tab: 容器仓库
+admin_v2.ilab.datasets: 数据集管理
+admin_v2.ilab.datasets.basic_tab: 数据集管理
 admin_v2.ilab.req_quota: 配额管理
 
 # 教学模块-资源管理-题库管理
@@ -850,7 +852,7 @@ admin_v2.cloud.cloud_setting.basic_tab: 授权信息
 admin_v2.general.basic_group: 通用管理
 
 # 系统-通用管理-网校信息
-admin_v2.system.site_menu: 网校信息
+admin_v2.system.site_menu: 学校信息
 admin_v2.system.site.basic_tab: 基础信息设置
 admin_v2.system.site.license_tab: 工商证件设置
 

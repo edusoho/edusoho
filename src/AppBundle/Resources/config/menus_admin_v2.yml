@@ -437,90 +437,96 @@ admin_v2:
                                     router_name: admin_v2_item_bank_exercise_review
                                     disable: true
                 # 资源管理
-                admin_v2_cloud_resource_group:
-                    name: admin_v2.cloud_resource.basic_group
+                admin_v2_resource_group:
+                    name: admin_v2.resource.basic_group
                     is_group: true
                     children:
-                        # 云资源
-                        admin_v2_cloud_resource:
-                            quick_entrance_icon: 'cloud'
-                            name: admin_v2.cloud_resource.basic_tab
-                            router_name: admin_v2_cloud_file
-                            visible: (not (setting('copyright.thirdCopyright', false) == 1) and not is_without_network())
-                            children:
-                                admin_v2_cloud_file:
-                                    name: admin_v2.cloud.file.basic_tab
-                                    router_name: admin_v2_cloud_file
-                                admin_v2_cloud_attachment:
-                                    name: admin_v2.cloud.attachment.basic_tab
-                                admin_v2_cloud_attachment_setting:
-                                    name: admin_v2.cloud.attachment_setting.basic_tab
-#                        # 镜像管理资源
-#                        admin_v2_ilab_dockerimage:
-#                         name: admin_v2.ilab.dockerimages
-#                         router_name: admin_v2_cloud_file
-#                         visible: true
-#                         children:
-#                           admin_v2_cloud_file:
-#                             name: admin_v2.cloud.file.basic_tab
-#                             router_name: admin_v2_cloud_file
-#                           admin_v2_cloud_attachment:
-#                             name: admin_v2.cloud.attachment.basic_tab
-#                           admin_v2_cloud_attachment_setting:
-#                             name: admin_v2.cloud.attachment_setting.basic_tab
-                        # # 数据集管理资源
-                        # admin_v2_ilab_datasets:
-                        #   name: admin_v2.ilab.datasets
-                        #   router_name: admin_v2_cloud_file
-                        #   visible: true
-                        #   children:
-                        #     admin_v2_cloud_file:
-                        #       name: admin_v2.cloud.file.basic_tab
-                        #       router_name: admin_v2_cloud_file
-                        #     admin_v2_cloud_attachment:
-                        #       name: admin_v2.cloud.attachment.basic_tab
-                        #     admin_v2_cloud_attachment_setting:
-                        #       name: admin_v2.cloud.attachment_setting.basic_tab
-
-                        # # 配额管理资源
-                        # admin_v2_ilab_res_quota:
-                        #   name: admin_v2.ilab.req_quota
-                        #   router_name: admin_v2_cloud_file
-                        #   visible: true
-                        #   children:
-                        #     admin_v2_cloud_file:
-                        #       name: admin_v2.cloud.file.basic_tab
-                        #       router_name: admin_v2_cloud_file
-                        #     admin_v2_cloud_attachment:
-                        #       name: admin_v2.cloud.attachment.basic_tab
-                        #     admin_v2_cloud_attachment_setting:
-                        #       name: admin_v2.cloud.attachment_setting.basic_tab
-
-                        # 题库管理
-                        admin_v2_question_bank:
-                            name: admin_v2.question_bank.menu
+                      # 容器资源
+                      admin_v2_container_resource:
+                        name: admin_v2.ilab.dockerimages
+                        router_name: admin_v2_container_repository
+                        visible: true
+                        children:
+                          admin_v2_container_repository:
+                            name: admin_v2.ilab.dockerimages.basic_tab
+                            router_name: admin_v2_container_repository
+                      # 数据集管理
+                      admin_v2_dataset_resource:
+                        name: admin_v2.ilab.datasets
+                        router_name: admin_v2_datasets
+                        visible: true
+                        children:
+                          admin_v2_container_repository:
+                            name: admin_v2.ilab.datasets.basic_tab
+                            router_name: admin_v2_datasets
+                      # 题库管理
+                      admin_v2_question_bank:
+                        name: admin_v2.question_bank.menu
+                        router_name: admin_v2_question_bank
+                        children:
+                          admin_v2_question_bank_basic:
+                            name: admin_v2.question_bank.basic_tab
                             router_name: admin_v2_question_bank
+                            disable: true
                             children:
-                                admin_v2_question_bank_basic:
-                                    name: admin_v2.question_bank.basic_tab
-                                    router_name: admin_v2_question_bank
-                                    disable: true
-                                    children:
-                                        admin_v2_question_bank_add:
-                                            name: admin_v2.question_bank.basic_tab.create_btn
-                                            router_name: admin_v2_question_bank_manage_create
-                                            group: topBtn
-                                            mode: modal
-                                admin_v2_question_bank_category:
-                                    name: admin_v2.question_bank.category_tab
-                                    router_name: admin_v2_question_bank_category
-                                    disable: true
-                                    children:
-                                        admin_v2_question_bank_category_add:
-                                            name: admin_v2.question_bank.category_tab.create_btn
-                                            router_name: admin_v2_question_bank_category_manage_create
-                                            group: topBtn
-                                            mode: modal
+                              admin_v2_question_bank_add:
+                                name: admin_v2.question_bank.basic_tab.create_btn
+                                router_name: admin_v2_question_bank_manage_create
+                                group: topBtn
+                                mode: modal
+                          admin_v2_question_bank_category:
+                            name: admin_v2.question_bank.category_tab
+                            router_name: admin_v2_question_bank_category
+                            disable: true
+                            children:
+                              admin_v2_question_bank_category_add:
+                                name: admin_v2.question_bank.category_tab.create_btn
+                                router_name: admin_v2_question_bank_category_manage_create
+                                group: topBtn
+                                mode: modal
+
+#                      # 镜像管理资源
+#                      admin_v2_ilab_dockerimage:
+#                       name: admin_v2.ilab.dockerimages
+#                       router_name: admin_v2_cloud_file
+#                       visible: true
+#                       children:
+#                         admin_v2_cloud_file:
+#                           name: admin_v2.cloud.file.basic_tab
+#                           router_name: admin_v2_cloud_file
+#                         admin_v2_cloud_attachment:
+#                           name: admin_v2.cloud.attachment.basic_tab
+#                         admin_v2_cloud_attachment_setting:
+#                           name: admin_v2.cloud.attachment_setting.basic_tab
+#                      # 数据集管理资源
+#                      admin_v2_ilab_datasets:
+#                       name: admin_v2.ilab.datasets
+#                       router_name: admin_v2_cloud_file
+#                       visible: true
+#                       children:
+#                         admin_v2_cloud_file:
+#                           name: admin_v2.cloud.file.basic_tab
+#                           router_name: admin_v2_cloud_file
+#                         admin_v2_cloud_attachment:
+#                           name: admin_v2.cloud.attachment.basic_tab
+#                         admin_v2_cloud_attachment_setting:
+#                           name: admin_v2.cloud.attachment_setting.basic_tab
+#
+#                      # 配额管理资源
+#                      admin_v2_ilab_res_quota:
+#                       name: admin_v2.ilab.req_quota
+#                       router_name: admin_v2_cloud_file
+#                       visible: true
+#                       children:
+#                         admin_v2_cloud_file:
+#                           name: admin_v2.cloud.file.basic_tab
+#                           router_name: admin_v2_cloud_file
+#                         admin_v2_cloud_attachment:
+#                           name: admin_v2.cloud.attachment.basic_tab
+#                         admin_v2_cloud_attachment_setting:
+#                           name: admin_v2.cloud.attachment_setting.basic_tab
+
+
         # 营销管理模块
 #        admin_v2_marketing:
 #            quick_entrance_icon_class: 'icon-color-yellow'
@@ -1053,9 +1059,9 @@ admin_v2:
                                             router_params:
                                                 id: (user.id)
                                             disable: true
-                                admin_v2_fans:
-                                    name: admin_v2.user.basic.fans_tab
-                                    router_name: admin_v2_fans_list
+#                                admin_v2_fans:
+#                                    name: admin_v2.user.basic.fans_tab
+#                                    router_name: admin_v2_fans_list
                                 admin_v2_online:
                                     name: admin.user.basic.online
                                 admin_v2_learn_statistics:
@@ -1063,64 +1069,64 @@ admin_v2:
                                     router_name: admin_v2_user_learn_statistics
                                 admin_v2_login_record:
                                     name: admin.user.basic.login_record_tab
-                        admin_v2_approval_manage:
-                            quick_entrance_icon: 'approve'
-                            name: admin_v2.user.approval_menu
-                            router_name: admin_v2_approval_approvals
-                            router_params:
-                                approvalStatus: approving
-                            children:
-                                admin_v2_approval_approving:
-                                    name: admin_v2.user.approval.approving_menu
-                                    router_name: admin_v2_approval_approvals
-                                    router_params:
-                                        approvalStatus: approving
-                                    disable: true
-                                admin_v2_approval_approved:
-                                    name: admin_v2.user.approval.approved_menu
-                                    router_name: admin_v2_approval_approvals
-                                    router_params:
-                                        approvalStatus: approved
-                                    disable: ture
-                                    children:
-                                        admin_v2_approval_cancel:
-                                            name: admin_v2.user.approval.basic_tab.cancel_btn
-                                            router_params:
-                                                id: (user.id)
-                                            class: 'btn cancel-approval'
-                                            mode: none
-                                            group: groupButton
-                        admin_v2_teacher:
-                            quick_entrance_icon: 'teacher'
-                            router_name: admin_v2_teacher
-                            name: admin_v2.user.teacher_menu
-                            children:
-                                admin_v2_teacher_manage:
-                                    name: admin_v2.user.teacher.basic_tab
-                                    router_name: admin_v2_teacher
-                                    disable: true
-                                    children:
-                                        admin_v2_teacher_promote:
-                                            name: admin_v2.user.teacher.basic_tab.promote_btn
-                                            class: promote-teacher
-                                            mode: modal
-                                            icon: 'glyphicon glyphicon-hand-up'
-                                            group: groupButton
-                                            visible: (user.promoted == 0)
-                                            router_params:
-                                                id: (user.id)
-                                                type: teacherList
-                                        admin_v2_teacher_promote_cancel:
-                                            name: admin_v2.btn.recommend_cancel_btn
-                                            class: cancel-promote-teacher
-                                            mode: none
-                                            group: groupButton
-                                            visible: (user.promoted == 1)
-                                            router_params:
-                                                id: (user.id)
-                                admin_v2_teacher_promote_list:
-                                    name: admin_v2.user.teacher.promote_list_tab
-                                    disable: true
+#                        admin_v2_approval_manage:
+#                            quick_entrance_icon: 'approve'
+#                            name: admin_v2.user.approval_menu
+#                            router_name: admin_v2_approval_approvals
+#                            router_params:
+#                                approvalStatus: approving
+#                            children:
+#                                admin_v2_approval_approving:
+#                                    name: admin_v2.user.approval.approving_menu
+#                                    router_name: admin_v2_approval_approvals
+#                                    router_params:
+#                                        approvalStatus: approving
+#                                    disable: true
+#                                admin_v2_approval_approved:
+#                                    name: admin_v2.user.approval.approved_menu
+#                                    router_name: admin_v2_approval_approvals
+#                                    router_params:
+#                                        approvalStatus: approved
+#                                    disable: ture
+#                                    children:
+#                                        admin_v2_approval_cancel:
+#                                            name: admin_v2.user.approval.basic_tab.cancel_btn
+#                                            router_params:
+#                                                id: (user.id)
+#                                            class: 'btn cancel-approval'
+#                                            mode: none
+#                                            group: groupButton
+#                        admin_v2_teacher:
+#                            quick_entrance_icon: 'teacher'
+#                            router_name: admin_v2_teacher
+#                            name: admin_v2.user.teacher_menu
+#                            children:
+#                                admin_v2_teacher_manage:
+#                                    name: admin_v2.user.teacher.basic_tab
+#                                    router_name: admin_v2_teacher
+#                                    disable: true
+#                                    children:
+#                                        admin_v2_teacher_promote:
+#                                            name: admin_v2.user.teacher.basic_tab.promote_btn
+#                                            class: promote-teacher
+#                                            mode: modal
+#                                            icon: 'glyphicon glyphicon-hand-up'
+#                                            group: groupButton
+#                                            visible: (user.promoted == 0)
+#                                            router_params:
+#                                                id: (user.id)
+#                                                type: teacherList
+#                                        admin_v2_teacher_promote_cancel:
+#                                            name: admin_v2.btn.recommend_cancel_btn
+#                                            class: cancel-promote-teacher
+#                                            mode: none
+#                                            group: groupButton
+#                                            visible: (user.promoted == 1)
+#                                            router_params:
+#                                                id: (user.id)
+#                                admin_v2_teacher_promote_list:
+#                                    name: admin_v2.user.teacher.promote_list_tab
+#                                    disable: true
                         admin_v2_destroy_account:
                             router_name: admin_v2_destroy_account_record
                             name: admin_v2.user.destroy_account_manage_menu
@@ -1248,26 +1254,26 @@ admin_v2:
                                     name: admin_v2.system.site.basic_tab
                                     router_name: admin_v2_school_information
                                     disable: true
-                                admin_v2_certificate_setting:
-                                    name: admin_v2.system.site.license_tab
-                                    disable: true
+#                                admin_v2_certificate_setting:
+#                                    name: admin_v2.system.site.license_tab
+#                                    disable: true
                         # 用户设置
-                        admin_v2_setting_user:
-                            name: admin_v2.system.user_menu
-                            quick_entrance_icon: 'setting'
-                            router_name: admin_v2_setting_auth
-                            children:
-                                admin_v2_user_auth:
-                                    name: admin_v2.system.user.auth_tab
-                                    router_name: admin_v2_setting_auth
-                                admin_v2_setting_login_bind:
-                                    name: admin_v2.system.user.login_bind_tab
-                                admin_v2_setting_user_center:
-                                    name: admin_v2.system.user.user_center_tab
-                                admin_v2_setting_user_fields:
-                                    name: admin_v2.system.user.user_fields_tab
-                                admin_v2_setting_avatar:
-                                    name: admin_v2.system.user.avatar_tab
+#                        admin_v2_setting_user:
+#                            name: admin_v2.system.user_menu
+#                            quick_entrance_icon: 'setting'
+#                            router_name: admin_v2_setting_auth
+#                            children:
+#                                admin_v2_user_auth:
+#                                    name: admin_v2.system.user.auth_tab
+#                                    router_name: admin_v2_setting_auth
+#                                admin_v2_setting_login_bind:
+#                                    name: admin_v2.system.user.login_bind_tab
+#                                admin_v2_setting_user_center:
+#                                    name: admin_v2.system.user.user_center_tab
+#                                admin_v2_setting_user_fields:
+#                                    name: admin_v2.system.user.user_fields_tab
+#                                admin_v2_setting_avatar:
+#                                    name: admin_v2.system.user.avatar_tab
 #                        #微信授权信息
 #                        admin_v2_setting_wechat:
 #                            name: admin_v2.system.wechat_auth_menu
@@ -1285,10 +1291,10 @@ admin_v2:
                                     name: admin_v2.system.course.basic_tab
                                     disable: true
                                     router_name: admin_v2_setting_course_setting
-                                #                                admin_v2_setting_live_course:
-                                #                                   name: 直播
-                                #                                   disable: true
-                                #                                   router_name: admin_v2_setting_live_course_setting
+                                admin_v2_setting_live_course:
+                                   name: 直播
+                                   disable: true
+                                   router_name: admin_v2_setting_live_course_setting
                                 admin_v2_setting_questions_setting:
                                     name: admin_v2.system.course.questions_tab
                                     disable: true
@@ -1357,14 +1363,14 @@ admin_v2:
                     name: admin_v2.system.basic_group
                     is_group: true
                     children:
-                        # 系统优化
-                        admin_v2_optimize:
-                            name: admin_v2.system.optimize_menu
-                            children:
-                                admin_v2_optimize_settings:
-                                    name: admin_v2.system.optimize.basic_tab
-                                    disable: true
-                                    router_name: admin_v2_optimize
+#                        # 系统优化
+#                        admin_v2_optimize:
+#                            name: admin_v2.system.optimize_menu
+#                            children:
+#                                admin_v2_optimize_settings:
+#                                    name: admin_v2.system.optimize.basic_tab
+#                                    disable: true
+#                                    router_name: admin_v2_optimize
                         admin_v2_roles:
                             name: admin_v2.system.roles_menu
                             children:
@@ -1390,14 +1396,14 @@ admin_v2:
                                             mode: none
                                             router_params:
                                                 id: (role.id)
-                        # 系统自检
-                        admin_v2_report_status:
-                            name: admin_v2.system.report_status_menu
-                            children:
-                                admin_v2_report_status_list:
-                                    name: admin_v2.system.report_status.basic_tab
-                                    disable: true
-                                    router_name: admin_v2_report_status
+#                        # 系统自检
+#                        admin_v2_report_status:
+#                            name: admin_v2.system.report_status_menu
+#                            children:
+#                                admin_v2_report_status_list:
+#                                    name: admin_v2.system.report_status.basic_tab
+#                                    disable: true
+#                                    router_name: admin_v2_report_status
                         # 系统日志
                         admin_v2_logs:
                             name: admin_v2.system.logs_menu
@@ -1647,8 +1653,8 @@ admin_v2:
 
 #        admin_v2_developer_module:
 #            name: admin_v2.nav.developer_module
-#            visible: false
-#            disable: true
+#            visible: true
+#            disable: false
 #            children:
 #                admin_v2_developer_group:
 #                    name: admin_v2.nav.developer_module.basic_group

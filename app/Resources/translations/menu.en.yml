@@ -549,7 +549,7 @@ admin_v2.course.review.classroom_review_tab: Rate
 admin_v2.course.review.exercise_review_tab: Item Bank Exercise
 
 # 教学模块-资源管理
-admin_v2.cloud_resource.basic_group: Resources
+admin_v2.resource.basic_group: Resources
 
 # 教学模块-资源管理-云资源
 admin_v2.cloud_resource.basic_tab: Cloud Resources

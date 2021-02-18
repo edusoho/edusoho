@@ -175,7 +175,7 @@ class SystemInitializer
         $default = array(
             'name' => 'EDUSOHO测试站',
             'slogan' => '强大的在线教育解决方案',
-            'url' => 'http://demo.edusoho.com',
+            'url' => '',
             'logo' => '',
             'seo_keywords' => 'edusoho, 在线教育软件, 在线在线教育解决方案',
             'seo_description' => 'edusoho是强大的在线教育开源软件',
