@@ -486,13 +486,17 @@ admin_v2_item_bank_exercise_review_batch_delete:
 #     path: /cloud_attachment
 #     defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:attachmentList }
 
-admin_v2_container_repository:
-    path:  /container_repo
-    defaults: { _controller: AppBundle:AdminV2/Teach/Review:courseReviewList }
+admin_v2_container_repository_router:
+  path: /container_repo
+  defaults: { _controller: AppBundle:AdminV2/Teach/Review:courseReviewList }
 
-admin_v2_datasets:
-    path:  /datasets
-    defaults: { _controller: AppBundle:AdminV2/Teach/Review:courseReviewList }
+admin_v2_datasets_repository_router:
+  path: /datasets
+  defaults: { _controller: AppBundle:AdminV2/Teach/Review:courseReviewList }
+
+admin_v2_datasets_resource_quota_router:
+  path: /quota
+  defaults: { _controller: AppBundle:AdminV2/Teach/Review:courseReviewList }
 
 # admin_v2_cloud_file_manage:
 #     path:  /cloud_files/manage

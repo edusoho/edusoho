@@ -106,10 +106,13 @@ admin_v2_course_review_tab:
     - admin_course_review_tab
 admin_v2_classroom_review_tab:
     - admin_classroom_review_tab
+
 admin_v2_container_repository:
     - admin_v2_container_repository
 admin_v2_datasets:
     - admin_v2_datasets
+admin_v2_resource_quota:
+  - admin_v2_resource_quota
 # admin_v2_cloud_attachment:
 #     - admin_cloud_attachment_manage
 #     - admin_cloud_attachment

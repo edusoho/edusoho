@@ -558,7 +558,8 @@ admin_v2.ilab.dockerimages: 容器仓库
 admin_v2.ilab.dockerimages.basic_tab: 容器仓库
 admin_v2.ilab.datasets: 数据集管理
 admin_v2.ilab.datasets.basic_tab: 数据集管理
-admin_v2.ilab.req_quota: 配额管理
+admin_v2.ilab.resource_quota: 配额管理
+admin_v2.ilab.resource_quota.basic_tab: 配额管理
 
 # 教学模块-资源管理-题库管理
 admin_v2.question_bank.menu: 题库管理
