@@ -14,9 +14,9 @@
 {% set consultDisplay = true %}
 
 {% block full_content %}
-  {% if appDownload  %}
-    {{ render(controller('AppBundle:Default:appDownload')) }}
-  {% endif %}
+  {# {% if appDownload  %} #}
+  {# {{ render(controller('AppBundle:Default:appDownload')) }} #}
+  {# {% endif %} #}
   {% if latestLiveTask %}
     {% include 'default/current-live.html.twig' with {task:latestLiveTask} %}
   {% endif %}

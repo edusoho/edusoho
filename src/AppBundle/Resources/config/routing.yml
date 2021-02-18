@@ -13,27 +13,27 @@ crontab_web:
     methods: [POST]
 
 jstranslation_js:
-    path:  /anon/translations/{domain}.{_format}
-    defaults: { _controller: bazinga.jstranslation.controller:getTranslationsAction, domain: "messages", _format: "js" }
-    methods:  [ GET ]
-    options:
-        i18n: false
-        expose: true
-    requirements:
-        _format: js|json
-        domain: "[\\w]+"
+  path: /anon/translations/{domain}.{_format}
+  defaults: { _controller: bazinga.jstranslation.controller:getTranslationsAction, domain: "messages", _format: "js" }
+  methods: [ GET ]
+  options:
+    i18n: false
+    expose: true
+  requirements:
+    _format: js|json
+    domain: "[\\w]+"
 
-switch_language:
-    path: /switch/language
-    defaults: { _controller: AppBundle:Default:translate }
+#switch_language:
+#    path: /switch/language
+#    defaults: { _controller: AppBundle:Default:translate }
 
 homepage_category:
-    path: /course/search
-    defaults: { _controller: AppBundle:Default:coursesCategory }
+  path: /course/search
+  defaults: { _controller: AppBundle:Default:coursesCategory }
 
 live_jump:
-    path: /live/jump
-    defaults: { _controller: AppBundle:Default:jump }
+  path: /live/jump
+  defaults: { _controller: AppBundle:Default:jump }
 
 login:
     path:  /login

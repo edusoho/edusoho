@@ -1,19 +1,19 @@
 {% extends 'default/base-index.html.twig' %}
 {% do script(['app/js/index/index.js']) %}
 {% block content %}
-    {% cache 'jianmo/home/top/banner' 600 %}
-    {{ block_show('jianmo:home_top_banner') }}
-    {% endcache %}
-    {% for config in themeConfig.blocks.left|default([]) %}
-        {% set code = config.code %}
-        {% if config.sortName|default('') == 'recommended' and code == 'category-course' %}
-            {% set code = 'recommend-course' %}
-        {% endif %}
-        {% set isPlugin = config.isPlugin|default(0) %}
+  {# {% cache 'jianmo/home/top/banner' 600 %} #}
+  {# {{ block_show('jianmo:home_top_banner') }} #}
+  {# {% endcache %} #}
+  {% for config in themeConfig.blocks.left|default([]) %}
+    {% set code = config.code %}
+    {% if config.sortName|default('') == 'recommended' and code == 'category-course' %}
+      {% set code = 'recommend-course' %}
+    {% endif %}
+    {% set isPlugin = config.isPlugin|default(0) %}
 
-        {% set category = config.categoryId|default(0) ? data('Category', {categoryId: config.categoryId})  : null %}
+    {% set category = config.categoryId|default(0) ? data('Category', {categoryId: config.categoryId})  : null %}
 
-        {% if isPlugin and is_plugin_installed(config.pluginName) %}
+    {% if isPlugin and is_plugin_installed(config.pluginName) %}
           {% include config.show with {config:config, category: category} %}
         {% elseif not isPlugin %}
           {% if code == 'friend-link' %}

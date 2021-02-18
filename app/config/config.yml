@@ -44,12 +44,13 @@ twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
     paths:
-        "%kernel.root_dir%/../web/customize": customize
+      "%kernel.root_dir%/../web/customize": customize
         "%kernel.root_dir%/../src/Topxia/WebBundle/Resources/views": topxiaweb
         "%kernel.root_dir%/../web/themes": theme
         "%kernel.root_dir%/../plugins": plugins
         "%kernel.root_dir%/../" : root
         "%kernel.root_dir%/../web/activities": activity
+        "%kernel.root_dir%": app
 
 # Swiftmailer Configuration
 # swiftmailer:

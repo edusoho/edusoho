@@ -1,23 +1,43 @@
-{% set topNavNum = themeConfig.navigation.topNavNum|default(5) %}
+{# {% set topNavNum = themeConfig.navigation.topNavNum|default(5) %} #}
 
-{% for nav in navigations if nav.isOpen %}
-  {% set subNavs = nav.children|default([]) %}
-  {% if (loop.index == (topNavNum + 1)) and not isMobile|default(false) %}
-    <li class="nav-more nav-hover">
-      <a class="more">
-        <i class="es-icon es-icon-morehoriz"></i>
-      </a>
-      <ul class="dropdown-menu" role="menu">
-        {% for nav in navigations[topNavNum:]  if nav.isOpen %}
-          {% set subNavs = nav.children|default([]) %}
+{# {% for nav in navigations if nav.isOpen %} #}
+{# {% set subNavs = nav.children|default([]) %} #}
+{# {% if (loop.index == (topNavNum + 1)) and not isMobile|default(false) %} #}
+{# <li class="nav-more nav-hover"> #}
+{# <a class="more"> #}
+{# <i class="es-icon es-icon-morehoriz"></i> #}
+{# </a> #}
+{# <ul class="dropdown-menu" role="menu"> #}
+{# {% for nav in navigations[topNavNum:]  if nav.isOpen %} #}
+{# {% set subNavs = nav.children|default([]) %} #}
 
-          {% include 'default/navigation-li.html.twig' %}
-        {% endfor %}
-      </ul>
+{# {% include 'default/navigation-li.html.twig' %} #}
+{# {% endfor %} #}
+{# </ul> #}
+{# </li> #}
+{# {% endif %} #}
+
+{# {% if loop.index <= topNavNum or isMobile|default(false) %} #}
+{# {% include 'default/navigation-li.html.twig' %} #}
+{# {% endif %} #}
+{# {% endfor %} #}
+
+{# 添加admin_v2 #}
+{% if has_permission('admin') or has_permission('admin_v2') or 'ROLE_TEACHER' in app.user.roles %}
+  添加admin_v2
+  {% if has_permission('admin') or has_permission('admin_v2') %}
+    <li class="nav-more nav-hover"><a class="more"
+                                      href="{{ path('admin') }}">{{ 'homepage.header.admin_menu'|trans }}</a></li>
+  {% endif %}
+  {% if app.user.isTeacher() %}
+    <li class="nav-more nav-hover"><a class="more" href="{{ path('my') }}">{{ 'homepage.header.my_course'|trans }}</a>
     </li>
   {% endif %}
-
-  {% if loop.index <= topNavNum or isMobile|default(false) %}
-    {% include 'default/navigation-li.html.twig' %}
-  {% endif %}
-{% endfor %}
+  <li class="nav-more nav-hover"><a class="more"
+                                    href="{{ path('my_courses_learning') }}">{{ 'homepage.header.my_learning'|trans }}</a>
+  </li>
+{% else %}
+  <li class="nav-more nav-hover">
+    <a class="more" href="{{ path('my_courses_learning') }}">{{ 'homepage.header.my_learning'|trans }}</a>
+  </li>
+{% endif %}
