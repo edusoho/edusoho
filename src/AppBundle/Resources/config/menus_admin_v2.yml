@@ -118,20 +118,20 @@ admin_v2:
                                             mode: none
                                             visible: ( courseSet.status in ['closed', 'draft', 'published'] and courseSet.platform|default('self') == 'self')
                                         admin_v2_course_set_remove:
-                                            name: admin_v2.course.basic.basic_tab.remove_submit_btn
-                                            class: remove-course
-                                            router_name: admin_v2_course_set_delete
-                                            router_params:
-                                                id: (courseSet.id)
-                                                type: ''
-                                            group: groupButton
-                                            icon: 'glyphicon glyphicon-trash'
-                                            mode: none
-                                            visible: ( courseSet.status in ['closed', 'draft', 'published'] and courseSet.platform|default('supplier') == 'supplier')
-                                admin_v2_course_set_recommend_list:
-                                    name: admin_v2.course.basic.recommend_list_tab
+                                          name: admin_v2.course.basic.basic_tab.remove_submit_btn
+                                          class: remove-course
+                                          router_name: admin_v2_course_set_delete
+                                          router_params:
+                                            id: (courseSet.id)
+                                            type: ''
+                                          group: groupButton
+                                          icon: 'glyphicon glyphicon-trash'
+                                          mode: none
+                                          visible: ( courseSet.status in ['closed', 'draft', 'published'] and courseSet.platform|default('supplier') == 'supplier')
+                              #                                admin_v2_course_set_recommend_list:
+                              #                                    name: admin_v2.course.basic.recommend_list_tab
                                 admin_v2_course_set_data:
-                                    name: admin_v2.course.basic.analysis_tab
+                                  name: admin_v2.course.basic.analysis_tab
                         # 班级管理
                         admin_v2_classroom:
                             name: admin_v2.course.classroom_menu
@@ -642,7 +642,8 @@ admin_v2:
                                         tab: trend
                                         analysisDateType: register
                                     router_name: admin_v2_data_statistics_index
-        # 系统模块
+
+      # 系统模块
         admin_v2_system:
             quick_entrance_icon_class: 'icon-color-blue'
             name: admin_v2.nav.system
@@ -754,7 +755,6 @@ admin_v2:
                                   name: admin_v2.system.security_tab
                               admin_v2_post_num_rules_setting:
                                   name: admin_v2.system.post_num_tab
-
 
 #        admin_v2_developer_module:
 #            name: admin_v2.nav.developer_module
