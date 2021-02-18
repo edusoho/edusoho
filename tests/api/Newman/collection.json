@@ -17143,7 +17143,7 @@
 									"",
 									"",
 									"",
-									"tests[\"Status code is 500\"] = responseCode.code === 500;"
+									"tests[\"Status code is 400\"] = responseCode.code === 400;"
 								]
 							}
 						}
