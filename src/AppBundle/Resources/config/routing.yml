@@ -2422,19 +2422,6 @@ images_set_manage_picker_list:
 images_set_manage_pickerd:
     path: /images_set/{id}/manage/show/pickerd
     defaults: { _controller: AppBundle:ImagesManage:imagesPickerd }
-## 镜像删除    
-images_set_manage_delete:
-    path: /images_set/{id}/manage/delete
-    defaults: { _controller: AppBundle:ImagesManage:delete}
-## 镜像详情查看
-images_set_manage_info:
-    path: /images_set/{id}/manage/info
-    defaults: { _controller: AppBundle:ImagesManage:info}
-## 镜像版本删除
-images_set_manage_version_info:
-    path: /images_set/version/{id}/delete
-    defaults: { _controller: AppBundle:ImagesManage:versionDelete}
-        
 
 #### 数据集
 dataset_set_manage_picker:

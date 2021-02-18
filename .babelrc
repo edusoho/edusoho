@@ -4,6 +4,7 @@
     "@babel/preset-react"
   ],
   "plugins": [
+    "transform-vue-jsx",
     [
       "@babel/plugin-transform-runtime",
       {

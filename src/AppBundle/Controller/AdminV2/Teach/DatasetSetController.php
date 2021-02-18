@@ -7,32 +7,30 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 // 新增加
-use Biz\TrainingPlatform\Data\Images;
+use Biz\TrainingPlatform\Data\Dataset;
 
-class ImagesSetController extends BaseController
+class DatasetSetController extends BaseController
 {
     public function indexAction(Request $request)
     {
         
-        $lists = (new Images())->getImagesList($request);
+        $lists = (new Dataset())->getDatasetList($request);
         return $this->render(
-            'admin-v2/teach/images/index.html.twig',
+            'admin-v2/teach/dataset/index.html.twig',
             [
                 'lists' => $lists['body'],
                 'paginator'=>$lists['paginator']
             ]
         );
     }
-
-    // 镜像详情
-    public function infoAction(){
+    // 编辑数据集
+    public function editAction(){
         return $this->render(
-            'admin-v2/teach/images/info.html.twig'
+            'admin-v2/teach/dataset/edit.html.twig'
         );
     }
-
-    // 删除镜像
+    ## 删除数据集
     public function deleteAction(){
-        return $this->createJsonResponse(['code' => 0, 'message' => '删除镜像成功']);
+        return $this->createJsonResponse(['code' => 0, 'message' => '删除数据集成功']);
     }
 }

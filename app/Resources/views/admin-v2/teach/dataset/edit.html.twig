@@ -1,0 +1,8 @@
+{% extends 'layout.html.twig' %}
+{% do script(['libs/vue.js', 'app/js/dataset/manage/index.js', 'libs/element-ui.js']) %}
+{% block content %}
+<div class="panel panel-default panel-col">
+    <div id="app"></div>
+</div>
+<link href="/static-dist/libs/element-ui/dist/index.css" rel="stylesheet">
+{% endblock %}

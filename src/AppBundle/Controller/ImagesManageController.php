@@ -41,17 +41,4 @@ class ImagesManageController extends BaseController
         $return = (new Images())->getImagesList($request);
         return $return;
     }
-
-    // 删除镜像
-    public function deleteAction(){
-        return $this->createJsonResponse(['code' => 0, 'message' => '删除课程成功']);
-    }
-    // 镜像版本删除
-    public function versionDeleteAction(){
-
-    }
-    // 镜像详情查看
-    public function infoAction(){
-        
-    }
 }

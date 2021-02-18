@@ -8,8 +8,8 @@ admin_v2:
             name: admin_v2.nav.teach
             children:
                 # 镜像管理
-                amdin_v2_images_group:
-                    name: "镜像管理"
+                amdin_v2_training_group:
+                    name: "实训配置"
                     is_group: true
                     children:
                         # 镜像管理
@@ -21,6 +21,15 @@ admin_v2:
                                 admin_v2_images_manage:
                                     name: "镜像管理"
                                     router_name: admin_v2_images_set
+                                    disable: true
+                        admin_v2_dataset_show:
+                            quick_entrance_icon: 'dataset'
+                            name: "数据集管理"
+                            router_name: admin_v2_dataset_set
+                            children:
+                                admin_v2_dataset_manage:
+                                    name: "数据集管理"
+                                    router_name: admin_v2_dataset_set
                                     disable: true
                 # 课程管理（group）
                 admin_v2_course_group:

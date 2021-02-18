@@ -42,10 +42,35 @@ admin_v2_announcement_from_platform:
     path: /announcement_from_platform
     defaults: { _controller: AppBundle:AdminV2/Default:getAnnouncementFromPlatform }
 
-# 教学-镜像管理-镜像管理
+# 教学-镜像管理
 admin_v2_images_set:
     path: /images_set/index
     defaults: { _controller: AppBundle:AdminV2/Teach/ImagesSet:index }
+## 镜像删除    
+images_set_manage_delete:
+    path: /images_set/{id}/manage/delete
+    defaults: { _controller: AppBundle:AdminV2/Teach/ImagesSet:delete}
+## 镜像详情查看
+images_set_manage_info:
+    path: /images_set/{id}/manage/info
+    defaults: { _controller: AppBundle:AdminV2/Teach/ImagesSet:info}
+## 镜像版本删除
+images_set_manage_version_info:
+    path: /images_set/version/{id}/delete
+    defaults: { _controller: AppBundle:AdminV2/Teach/ImagesSet:versionDelete}
+## 教学-数据集管理
+admin_v2_dataset_set:
+    path: /dataset_set/index
+    defaults: { _controller: AppBundle:AdminV2/Teach/DatasetSet:index }
+## 数据集删除    
+admin_v2_dataset_delete:
+    path: /dataset_set/{id}/manage/delete
+    defaults: { _controller: AppBundle:AdminV2/Teach/DatasetSet:delete }
+## 数据集编辑    
+admin_v2_dataset_edit:
+    path: /dataset_set/{id}/manage/edit
+    defaults: { _controller: AppBundle:AdminV2/Teach/DatasetSet:edit }
+
 
 # 教学-课程管理-课程管理
 admin_v2_course_set:
