@@ -90,7 +90,7 @@ class SearchController extends BaseController
             'search/index.html.twig',
             array(
                 'type' => $type,
-                'classrooms' => $classrooms,
+                'classrooms' => $this->getWebExtension()->filterClassroomsVipRight($classrooms),
                 'filter' => $filter,
                 'count' => $count,
                 'paginator' => $paginator,

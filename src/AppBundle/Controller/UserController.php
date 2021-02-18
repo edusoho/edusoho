@@ -166,7 +166,7 @@ class UserController extends BaseController
 
         return $this->render('user/classroom-learning.html.twig', [
             'paginator' => $paginator,
-            'classrooms' => $classrooms,
+            'classrooms' => $this->getWebExtension()->filterClassroomsVipRight($classrooms),
             'user' => $user,
         ]);
     }
@@ -226,7 +226,7 @@ class UserController extends BaseController
 
         return $this->render('user/classroom-teaching.html.twig', [
             'paginator' => $paginator,
-            'classrooms' => $classrooms,
+            'classrooms' => $this->getWebExtension()->filterClassroomsVipRight($classrooms),
             'user' => $user,
         ]);
     }

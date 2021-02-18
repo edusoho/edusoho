@@ -23,7 +23,8 @@ class PublishedCourseByCourseSetDataTag extends CourseBaseDataTag implements Dat
         }
 
         $courses = $this->getCourseService()->getFirstPublishedCourseByCourseSetId($arguments['courseSetId']);
+        $courses = $this->getWebExtension()->filterCoursesVipRight([$courses]);
 
-        return $this->getWebExtension()->filterCoursesVipRight($courses);
+        return $courses[0] ? $courses[0] : [];
     }
 }
