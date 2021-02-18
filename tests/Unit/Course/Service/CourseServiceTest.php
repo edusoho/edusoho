@@ -534,7 +534,6 @@ class CourseServiceTest extends BaseTestCase
 
         $result['isFree'] = 0;
         $result['originPrice'] = 111;
-        $result['vipLevelId'] = 1;
         $result['buyable'] = 1;
         $result['tryLookable'] = 1;
         $result['tryLookLength'] = 2;
@@ -543,7 +542,6 @@ class CourseServiceTest extends BaseTestCase
         $updated = $this->getCourseService()->updateCourseMarketing($result['id'], $result);
 
         $this->assertEquals($result['originPrice'], $updated['price']);
-        $this->assertEquals($result['vipLevelId'], $updated['vipLevelId']);
         $this->assertEquals($result['buyable'], $updated['buyable']);
         $this->assertEquals($result['tryLookable'], $updated['tryLookable']);
         $this->assertEquals($result['tryLookLength'], $updated['tryLookLength']);
