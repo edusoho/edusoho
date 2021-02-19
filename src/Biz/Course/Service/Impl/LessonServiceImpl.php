@@ -214,7 +214,7 @@ class LessonServiceImpl extends BaseService implements LessonService
         //已发布课时需要先取消发布才能删除
         if (!empty($lessons)) {
             foreach ($lessons as $key => $lesson) {
-                if ('published' === $lesson['status']) {
+                if ('published' === $lesson['status'] && !in_array($lesson['type'], ['chapter', 'unit'])) {
                     unset($lessons[$key]);
                 }
             }
