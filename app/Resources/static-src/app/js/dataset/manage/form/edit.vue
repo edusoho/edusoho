@@ -4,17 +4,17 @@
             <div class="course-manage-subltitle cd-mb40 ml0">数据集</div>
             <el-col :span="12">
                 <el-form :model="form" :rules="formRule"
-                        ref="baseInfoForm"
+                        ref="datasetedit"
                         label-position="right"
                         label-width="150px">
-                    <el-form-item label="数据集标题">
+                    <el-form-item label="数据集标题" prop="title">
                         <el-col>
                             <el-input ref="title" v-model="form.title" auto-complete="off"></el-input>
                         </el-col>
                     </el-form-item>
-                    <el-form-item label="描述信息">
+                    <el-form-item label="描述信息" prop="remark">
                         <el-col>
-                            <el-input ref="subtitle" v-model="form.subtitle" type="textarea" rows="3"></el-input>
+                            <el-input ref="remark" v-model="form.remark" type="textarea" rows="3"></el-input>
                         </el-col>
                     </el-form-item>
                     <el-form-item label="挂载目录列表">
@@ -38,13 +38,12 @@
             </el-col>
             <el-col :span="12">
                 <el-form>
-                    {{ccc}}
-                    <el-form-item label="挂载树">
+                    <el-form-item :label="treeName">
                         <el-col>
                             <div class="tree" style="max-height:500px;overflow:auto;" >
                                 <el-tree
                                     ref="tree"
-                                    :props="props"
+                                    :props="defaultprop"
                                     :load="loadNode"
                                     node-key="path"
                                     lazy
@@ -73,13 +72,44 @@
             treeData:Array,
             dirGetPath:String,
         },
+        data() {
+            return {
+                treeName:"挂载树",
+                defaultprop: {
+                    label: 'name',
+                    children: 'zones',
+                    isLeaf: 'leaf'
+                },
+                tableData: [],
+                form: {
+                    title: "标题",
+                    remark: "副标题",
+                },
+                formRule: {
+                    title: [
+                        {
+                            required: true,
+                            message: "请输入标题",
+                            trigger: 'blur'
+                        },
+                    ],
+                    remark: [
+                        {
+                            required: true,
+                            message: "请输入描述信息",
+                            trigger: 'blur',
+                        },
+                    ]
+                },
+            };
+        },
         methods: {
             // 确认选择树 (有bug、先保留)
             confirmDirectory(){
                 let nodes = this.$refs.tree.getCheckedNodes();
                 nodes.forEach(node=>{
                     let p = true;
-                    this.paths.forEach(v=>{
+                    this.tableData.forEach(v=>{
                         if(v.path == node.path){
                             p = false;
                             return;
@@ -87,7 +117,6 @@
                     })
                     if(p){
                         this.tableData.push({name:node.name,path:node.path});
-                        this.paths.push({path:node.path});
                     }
                 })
             },
@@ -98,18 +127,12 @@
                     if(info.row.path == node.path){
                         this.$refs.tree.setChecked(node.path,false);
                         this.tableData.splice(info.$index, 1);
-                        this.paths.splice(info.$index,1);
                     }
                 })
                 this.tableData.splice(info.$index, 1);
-                this.paths.splice(info.$index,1);
             },
             loadNode(node, resolve) {
-                console.log(node.level);
-                // if (node.level === 0 && this.first===false) {
-                //     this.first = true;
-                //     return resolve(this.treeData.body);
-                // }
+                console.log("level:"+node.level);
                 if(node.level  >= 1){
                     // 加载子目录
                     let data = {}
@@ -118,64 +141,37 @@
                     }
                     this.$axios.get(this.dirGetPath, {params:data}, {emulateJSON: true}).then(res=>{
                         resolve(res.data.body);
+                        this.checkNode();
                     })
-                }else if(node.level === 0 && this.first===false){
-                    this.first = true;
-                    return resolve(this.treeData.body);
                 }else{
-                    return resolve(this.treeData.body);
+                    resolve(this.treeData.body);
                 }
+            },
+            // 遍历选中
+            checkNode(){
+                console.log("遍历选中");
+                this.tableData.forEach((v)=>{
+                    this.$refs.tree.setChecked(v.path,true);
+                })
+            },
+            submit(){
+                console.log("提交");
+                this.$refs.datasetedit.validate((valid, invalidFields) => {
+                    if (valid) {
+                        // 验证是否选择数据集
+
+                    }
+                });
             }
         },
-        data() {
-            return {
-                first:false,
-                props: {
-                    label: 'name',
-                    children: 'zones',
-                    isLeaf: 'leaf'
-                },
-                tableData: [],
-                paths:[],
-                form: {
-                    title: "标题",
-                    subtitle: "副标题",
-                },
-                formRule: {
-                    title: [
-                        {
-                            required: true,
-                            message: "请输入标题",
-                            trigger: 'blur'
-                        },
-                        {
-                            min: 2,
-                            message: Translator.trans('validate.length_min.message', {'length': 2}),
-                            trigger: 'blur',
-                        },
-                        {
-                            max: 30,
-                            message: Translator.trans('validate.length_max.message', {'length': 30}),
-                            trigger: 'blur',
-                        },
-                        {validator: validation.trim, trigger: 'blur'},
-                        {validator: validation.course_title, trigger: 'blur'}
-                    ],
-                    subtitle: [
-                        {
-                            max: 30,
-                            message: Translator.trans('validate.length_max.message', {'length': 30}),
-                            trigger: 'blur',
-                        },
-                    ]
-                },
-            };
-        },
         mounted() {
-            // 暂时先这样、没时间研究了
+            this.tableData = this.info.files;
+            this.form.title = this.info.name;
+            this.form.remark = this.info.remark;
             // setTimeout(() => {
-            //     this.confirmDirectory();
-            // },1000);
+            //     this.treeName = "呱呱";
+            // },500);
+            this.checkNode();
         }
     }
 </script>

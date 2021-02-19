@@ -121,7 +121,7 @@ class AbstractCloudAPI
         $requestId = substr(md5(uniqid('', true)), -16);
 
         $url = $this->apiUrl.'/'.$uri;
-        $params['query']['access_token'] = '7c6011f4-5175-4f1b-8c83-fae11b01f836';
+        $params['query']['access_token'] = '4cf182a0-b424-402d-9b5e-13cdfe47f66a';
 
         if ($this->isWithoutNetwork()) {
             if ($this->debug && $this->logger) {
