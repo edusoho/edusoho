@@ -63,7 +63,6 @@
 </template>
 
 <script>
-    import * as validation from 'common/element-validation';
 
     export default {
         name: "dataset-info",
@@ -71,6 +70,7 @@
             info:Array,
             treeData:Array,
             dirGetPath:String,
+            submitPath:String,
         },
         data() {
             return {
@@ -163,10 +163,22 @@
             },
             submit(){
                 console.log("提交");
+                let data = {
+                    title:this.form.title,
+                    remark:this.form.remark,
+                    paths:[]
+                }
+                this.form.tableData.forEach(v=>{
+                    data.paths.push(v.path);
+                })
+                console.log(data);
                 this.$refs.datasetedit.validate((valid, invalidFields) => {
                     if (valid) {
                         // 验证是否选择数据集
-
+                        console.log(this.submitPath);
+                        this.$axios.post(this.submitPath,data).then(res=>{
+                            cd.message({type: 'success', message: "提交成功"});
+                        })
                     }
                 });
             }

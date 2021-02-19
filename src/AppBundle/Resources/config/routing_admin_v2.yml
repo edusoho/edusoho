@@ -74,6 +74,9 @@ admin_v2_dataset_edit:
 admin_v2_dataset_path:
     path: /dataset_set/manage/dirlist
     defaults: { _controller: AppBundle:AdminV2/Teach/DatasetSet:dirList }
+admin_v2_dataset_submit_path:
+    path: /dataset_set/manage/submit
+    defaults: { _controller: AppBundle:AdminV2/Teach/DatasetSet:submit }
 
 
 # 教学-课程管理-课程管理

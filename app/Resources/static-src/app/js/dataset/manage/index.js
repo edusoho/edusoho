@@ -26,7 +26,8 @@ new Vue({
     props: {
       info:$app.data("info"),
       treeData:$app.data("treedata"),
-      dirGetPath:$app.data("dirgetpath")
+      dirGetPath:$app.data("dirgetpath"),
+      submitPath:$app.data("submitpath")
     }
   })
 });

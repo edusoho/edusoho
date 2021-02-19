@@ -46,6 +46,11 @@ class DatasetSetController extends BaseController
         );
     }
 
+    public function submitAction(Request $request){
+        $conditions = $request->getContent();
+        return $this->createJsonResponse(['code' => 0, 'message' => '删除数据集成功']);
+    }
+
     // 获取目录信息 ajax
     public function dirListAction(Request $request){
         $return = [

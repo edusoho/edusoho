@@ -4,6 +4,7 @@
             v-bind:info="info"
             v-bind:tree-data="treeData"
             v-bind:dir-get-path="dirGetPath"
+            v-bind:submit-path="submitPath"
         ></info>
     </div>
 </template>
@@ -18,7 +19,8 @@
         props: {
             info:Array,
             treeData:Array,
-            dirGetPath:String
+            dirGetPath:String,
+            submitPath:String,
         },
         methods: {
         },
