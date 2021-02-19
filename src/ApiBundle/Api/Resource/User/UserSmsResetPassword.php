@@ -17,8 +17,8 @@ class UserSmsResetPassword extends AbstractResource
      */
     public function add(ApiRequest $request, $mobile)
     {
-        if ($this->getUserService()->isMobileUnique($mobile)) {
-            throw UserException::NOTFOUND_USER();
+        if (!$this->getUserService()->getUserByVerifiedMobile($mobile)) {
+            throw UserException::MOBILE_NOT_FOUND();
         }
 
         $token = $request->request->get('dragCaptchaToken', '');

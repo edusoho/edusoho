@@ -17141,9 +17141,9 @@
 								"type": "text/javascript",
 								"exec": [
 									"",
+									"var jsonData = JSON.parse(responseBody);",
 									"",
-									"",
-									"tests[\"Status code is 500\"] = responseCode.code === 500;"
+									"tests[\"get ClientVersion is null\"] = jsonData.androidVersion === null;"
 								]
 							}
 						}

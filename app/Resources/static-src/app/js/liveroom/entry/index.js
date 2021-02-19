@@ -18,12 +18,15 @@ class Live {
   }
 
   init() {
-    this.triggerLiveEvent();
+    let role = $('#entry').data('role');
+    if (role === 'student') {
+      this.triggerLiveEvent();
+    }
   }
 
   triggerLiveEvent() {
     this._initInterval();
-    
+
     if (Browser.safari && !isMobileDevice()) {
       this.safariVisibilitychange();
     }
