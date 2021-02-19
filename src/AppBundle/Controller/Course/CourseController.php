@@ -789,6 +789,19 @@ class CourseController extends CourseBaseController
         return $this->redirect($this->generateUrl('course_show', ['id' => $id]));
     }
 
+    public function exitForNoReasonAction(Request $request, $id)
+    {
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
+        if (empty($member)) {
+            $this->createNewException(MemberException::NOTFOUND_MEMBER());
+        }
+
+        $user = $this->getCurrentUser();
+        $this->getMemberService()->removeStudent($course['id'], $user['id']);
+
+        return $this->redirect($this->generateUrl('course_show', ['id' => $id]));
+    }
+
     public function exitModalAction(Request $request)
     {
         $action = $request->query->get('action');

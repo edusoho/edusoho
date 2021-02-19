@@ -4761,6 +4761,7 @@ item_bank_exercise.member.expiry_tips: 您购买的题库练习已到期，无�
 course.member.course.allow_buy.tips: 您购买的课程已到期，无法学习%taskName%、提问等。如有疑问请联系老师，或退出并重新加入 。
 item_bank_exercise.member.allow_buy.tips: 您购买的题库练习已到期，无法进行章节、试卷等练习。如有疑问请联系老师。
 course.member.course.join_btn: 退出并重新加入
+course.member.course.exit_btn: 退出课程
 course.member.classroom_member.exit_btn: 退出
 course.member.classroom_member.classroom_exit_btn: 退出班级
 course.member.operation.quit_deadline_reach: 达到有效期，退出课程

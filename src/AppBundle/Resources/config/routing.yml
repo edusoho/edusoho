@@ -2167,6 +2167,10 @@ course_exit:
   defaults: {_controller: AppBundle:Course/Course:exit}
   methods: [POST]
 
+course_exit_no_reason:
+  path: /course/{id}/exit/not_reason
+  defaults: {_controller: AppBundle:Course/Course:exitForNoReason}
+
 course_exit_modal:
   path: /course/show_exit_modal
   defaults: {_controller: AppBundle:Course/Course:exitModal}
