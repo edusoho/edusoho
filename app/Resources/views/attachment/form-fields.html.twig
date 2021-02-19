@@ -18,11 +18,13 @@
     {% endif %}
       <div class="js-attachment-list {{list_class}}" style="line-height:60px">
         {% for attachment in attachments  if attachment.file %}
-          <div class="well well-sm">
+          <div class="well well-sm text-overflow" style="position: relative; padding-right: 110px;">
             <img class="mrm" src="{{ asset('assets/img/default/cloud_' ~ attachment.file.type ~ '.png') }}" height="60px" width="107px">
             {{ attachment.file.filename }}
-            <button class="btn btn-link js-attachment-delete pull-right" data-url="{{path('attachment_delete',{id:attachment.id})  }}" type="button" style="margin-top:13px" data-role="delte-item" data-loading-text="{{'form.btn.delete.submiting'|trans}}">{{ 'form.btn.delete'|trans }}</button> 
-            <a class="btn btn-link pull-right" href="javascript:;" style="margin-top:13px" data-url="{{ path('attachment_preview', {'id': attachment.id}) }}" data-toggle="modal" data-target="#modal">{{ 'group.thread.create.preview'|trans }}</a>
+            <div style="position: absolute; top: 50%; right: 0; transform: translateY(-50%);">
+              <button class="btn btn-link js-attachment-delete" data-url="{{path('attachment_delete',{id:attachment.id})  }}" type="button" data-role="delte-item" data-loading-text="{{'form.btn.delete.submiting'|trans}}">{{ 'form.btn.delete'|trans }}</button>
+              <a class="btn btn-link" href="javascript:;" data-url="{{ path('attachment_preview', {'id': attachment.id}) }}" data-toggle="modal" data-target="#modal">{{ 'group.thread.create.preview'|trans }}</a>
+            </div>
           </div>
         {% endfor %}
       </div>
