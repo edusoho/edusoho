@@ -1,8 +1,6 @@
 import Axios from 'axios';
 import ElementUI from 'element-ui';
 import ManageInfo from './index.vue';
-import 'vue-tree-halower/dist/halower-tree.min.css'
-import VTree from 'vue-tree-halower'
 
 import qs from 'qs';
 
@@ -18,7 +16,6 @@ const axios = Axios.create({
 Vue.prototype.$axios = axios;
 Vue.prototype.$qs = qs;
 
-Vue.use(VTree)
 Vue.use(ElementUI);
 Vue.filter('trans', function (value, params) {
   if (!value) return '';
@@ -26,7 +23,6 @@ Vue.filter('trans', function (value, params) {
 });
 
 let $app = $('#app');
-
 new Vue({
   el: '#app',
   render: createElement => createElement(ManageInfo, {

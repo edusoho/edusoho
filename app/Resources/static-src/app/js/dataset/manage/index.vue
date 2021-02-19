@@ -1,6 +1,10 @@
 <template>
     <div class="course-manage-info pbl">
-        <info></info>
+        <info
+            v-bind:info="info"
+            v-bind:tree-data="treeData"
+            v-bind:dir-get-path="dirGetPath"
+        ></info>
     </div>
 </template>
 
@@ -11,7 +15,11 @@
         components: {
             Info
         },
-        props: {},
+        props: {
+            info:Array,
+            treeData:Array,
+            dirGetPath:String
+        },
         methods: {
             // validForm() {
             //     let invalidField = '';

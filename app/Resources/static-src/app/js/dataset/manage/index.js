@@ -20,12 +20,14 @@ Vue.prototype.$qs = qs;
 Vue.use(ElementUI);
 Vue.use(VTree);
 let $app = $('#app');
-
-
 new Vue({
   el: '#app',
   render: createElement => createElement(Info, {
-    props: {}
+    props: {
+      info:$app.data("info"),
+      treeData:$app.data("treedata"),
+      dirGetPath:$app.data("dirgetpath")
+    }
   })
 });
 

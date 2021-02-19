@@ -2,7 +2,11 @@
 {% do script(['libs/vue.js', 'app/js/dataset/manage/index.js', 'libs/element-ui.js']) %}
 {% block content %}
 <div class="panel panel-default panel-col">
-    <div id="app"></div>
+    <div id="app"
+    data-info="{{info}}"
+    data-treedata="{{treeData}}"
+    data-dirgetpath="{{ path('admin_v2_dataset_path') }}"
+    ></div>
 </div>
 <link href="/static-dist/libs/element-ui/dist/index.css" rel="stylesheet">
 {% endblock %}
