@@ -177,6 +177,7 @@ class BatchOperate {
         this.chooseAllItemByItem(type)
       }
     })
+    this.updateBatchBtnStatus()
   }
 
   chooseAllItemByItem (type) {
@@ -214,16 +215,23 @@ class BatchOperate {
     const deleteUrl = $('#course_manage_lesson_batch_delete').val()
 
     this.$element.on('click', '.js-batch-delete', () => {
-      const { status, permission, chosenItems } = this.batchOperate
+      const { status, permission } = this.batchOperate
+      let { chosenItems } = this.batchOperate
       const $target = $(event.target)
 
       if (status === 'none' || permission.indexOf('delete') === -1) return
 
       const isDeleteLesson = chosenItems.every(item => item.type === 'lesson')
+      
+      if (isDeleteLesson) {
+        // 只能删除未发布的课时
+        chosenItems = chosenItems.filter(item => !this.getPublishStatusById(item.id))
+      }
+
       const text = isDeleteLesson ?
         `删除所选课时后，课时下对应任务将一并被删除。此次删除只删除未发布课时，已发布课时需取消发布后重新删除，此次删除${chosenItems.length}课时，确定继续。`
         :
-        `删除所选章节后，章节下对应课时任务将一并被删除。此次删除${chosenItems.length}章节，确定继续。`;
+        `已选中${chosenItems.length}个章节，是否确定删除？`;
 
       cd.confirm({
         title: Translator.trans('site.delete'),
@@ -241,6 +249,8 @@ class BatchOperate {
           }
           this.clearChosenItems()
           $target.button('reset')
+
+          setTimeout(() => this.updateBatchBtnStatus())
         }).catch(function(data) {
           $target.button('reset')
           cd.message({ type: 'danger', message: data.responseJSON.error.message });
@@ -255,11 +265,11 @@ class BatchOperate {
 
     this.$element.on('click', '.js-batch-publish', (event) => {
       const { status, permission, chosenItems } = this.batchOperate
-      const $target = $(event.target)
 
       if (status === 'none' || permission.indexOf('publish') === -1) return
 
       const lessonIds = chosenItems.map(item => item.id)
+      const $target = $(event.target)
       
       $target.button('loading')
       $.post(publishUrl, { lessonIds }).then(res => {
@@ -272,6 +282,8 @@ class BatchOperate {
         }
         cd.message({ type: 'success', message: "发布成功" });
         $target.button('reset')
+
+        setTimeout(() => this.updateBatchBtnStatus())
       }).catch(function(data) {
         $target.button('reset')
         cd.message({ type: 'danger', message: data.responseJSON.error.message });
@@ -289,8 +301,9 @@ class BatchOperate {
       if (status === 'none' || permission.indexOf('cancelPublish') === -1) return
 
       const lessonIds = chosenItems.map(item => item.id)
-
       const $target = $(event.target)
+
+      $target.button('loading')
       $.post(unPublishUrl, { lessonIds }).then(res => {
         if (Array.isArray(res)) {
           res.forEach(id => {
@@ -301,6 +314,8 @@ class BatchOperate {
         }
         cd.message({ type: 'success', message: "取消发布成功" });
         $target.button('reset')
+
+        setTimeout(() => this.updateBatchBtnStatus())
       }).catch(function(data) {
         $target.button('reset')
         cd.message({ type: 'danger', message: data.responseJSON.error.message });
@@ -337,15 +352,38 @@ class BatchOperate {
       this.batchOperate.permission = []
     }
 
+    // 没有课时，章和节二者有其一
     if (!hasLesson && (hasChapter || hasUnit)) {
       this.batchOperate.permission = ['delete']
       $batchPublishBtn.attr('disabled', true)
       $batchCancelPublishBtn.attr('disabled', true)
     }
+
+    // 只有课时
+    if (hasLesson && !hasChapter && !hasUnit) {
+      const isAllPublish = chosenItems.every(({ id }) => this.getPublishStatusById(id))
+      const isAllUnPublish = chosenItems.every(({ id }) => !this.getPublishStatusById(id))
+
+      if (isAllPublish) {
+        $batchDeleteBtn.attr('disabled', true)
+        $batchPublishBtn.attr('disabled', true)
+        this.batchOperate.permission = ['cancelPublish']
+      } else if (isAllUnPublish) {
+        $batchCancelPublishBtn.attr('disabled', true)
+        this.batchOperate.permission = ['publish', 'delete']
+      }
+    }
   }
 
   clearChosenItems () {
     this.batchOperate.chosenItems = []
+  }
+
+  // true -- 已发布；false -- 未发布
+  getPublishStatusById (id) {
+    const $unPublishStatus = $(`#chapter-${id}`).find('.js-lesson-unpublish-status.hidden') // 未发布隐藏了 === 已发布
+
+    return $unPublishStatus.length > 0
   }
 }
 
