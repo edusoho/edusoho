@@ -117,7 +117,7 @@ class ClassroomController extends BaseController
 
         if ($member) {
             $isclassroomteacher = in_array('teacher', $member['role']) || in_array('headTeacher', $member['role']) ? true : false;
-            $vipChecked = $classroomMemberLevel ? $this->getVipService()->checkUserVipRight($user['id'], ClassroomVipRightSupplier::CODE, $classroom['id']) : 'ok';
+            $vipChecked = $classroomMemberLevel && 'vip_join' == $member['joinedChannel'] ? $this->getVipService()->checkUserVipRight($user['id'], ClassroomVipRightSupplier::CODE, $classroom['id']) : 'ok';
 
             return $this->render('classroom/classroom-join-header.html.twig', [
                 'classroom' => $classroom,
