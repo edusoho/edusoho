@@ -3,12 +3,12 @@
 {% set enableCopy  = setting('course.copy_enabled') %}
 {% set doc = activity.ext|default(null) %}
 {% set file = doc.file|default(null)|s2b2c_file_convert %}
-{# 请求历时版本 qiQiuYunSdk.play #}
+{# 请求历史版本 qiQiuYunSdk.play #}
 {#{% set docPlayer = doc_player(doc, app.request.secure) %}#}
 {% set playerContext = resource_player_context(file) %}
 
 {% block body %}
-  {# 请求历时版本 qiQiuYunSdk.play #}
+  {# 请求历史版本 qiQiuYunSdk.play #}
   {#{% if not docPlayer.error is empty %}
     <div class="iframe-parent-content pv20 ph20">
       <div class="alert alert-danger"><i class="es-icon es-icon-info"></i>{{ docPlayer.error.message|raw }}</div>
