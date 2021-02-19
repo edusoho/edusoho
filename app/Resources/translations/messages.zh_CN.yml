@@ -10196,6 +10196,7 @@ exception.user.register_error: 用户数据异常，注册失败！
 exception.user.mobile_registered: 该手机号码已被注册！
 exception.user.register_limit: 注册次数已达最大限制!
 exception.user.not_match_auth: 用户不匹配
+exception.user.mobile_not_found: 用户手机号码不存在
 exception.sensitive.words: 您填写的内容中包含敏感词!
 exception.thread.frequent: 回复次数过多，请稍后尝试!
 exception.thread.not_found: 话题不存在
@@ -10293,6 +10294,8 @@ exception.user.password_failed: 登录密码不正确
 exception.user.login_limit: 登录限制！
 exception.user.lock_self_denied: 您不能封禁自己
 exception.user.datefield_invalid: 日期类型字段没有按日期格式填写
+exception.user.file_permission_denied: 无文件访问权限
+
 exception.parsed.failed.netease: 获取网易公开课视频信息失败
 exception.parsed.failed.letv: 获取乐视视频信息失败
 exception.parsed.failed.qq: 获取QQ视频信息失败

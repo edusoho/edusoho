@@ -49,7 +49,7 @@ class Reset {
     let $smsCode = $('.js-sms-send');
     let self = this;
     $smsCode.click(() => {
-      if(this.mobileValidator.element($('[name="dragCaptchaToken"]'))) {
+      if(this.mobileValidator.element($('[name="dragCaptchaToken"]')) && this.mobileValidator.element($('[name="mobile"]'))) {
         if($smsCode.hasClass('disabled')) {
           return ;
         }
@@ -138,16 +138,6 @@ class Reset {
         'mobile': {
           required: true,
           phone: true,
-          es_remote: {
-            type: 'get',
-            callback: (bool) => {
-              if (bool) {
-                $('.js-sms-send').removeClass('disabled');
-              } else {
-                $('.js-sms-send').addClass('disabled');
-              }
-            }
-          }
         },
         'sms_code': {
           required: true,

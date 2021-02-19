@@ -17,4 +17,6 @@ interface FileDao extends GeneralDaoInterface
     public function countByGroupId($groupId);
 
     public function deleteByUri($uri);
+
+    public function findByUris(array $uris);
 }

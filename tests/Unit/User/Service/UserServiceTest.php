@@ -1354,6 +1354,10 @@ class UserServiceTest extends BaseTestCase
                     ],
                 ],
             ],
+            [
+                'functionName' => 'findFilesByUris',
+                'returnValue' => [],
+            ],
         ]);
 
         $user = $this->createUser('user');
