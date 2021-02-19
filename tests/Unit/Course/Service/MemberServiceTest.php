@@ -328,6 +328,9 @@ class MemberServiceTest extends BaseTestCase
             ]
         );
 
+        $this->mockBiz('VipPlugin:Marketing:VipRightSupplier:ClassroomVipRightSupplier');
+        $this->mockBiz('VipPlugin:Marketing:VipRightSupplier:CourseVipRightSupplier');
+
         $course = [
             'id' => 1,
         ];
