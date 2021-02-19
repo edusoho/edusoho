@@ -9,6 +9,14 @@
   <div class="mbm">
     <img class="es-admin-avatar-sm" src="{{ filepath(user.largeAvatar, 'avatar.png') }}">
     <span class="mlm">{{ user.nickname }}</span>
+    <span data-toggle="popover" class="glyphicon glyphicon-question-sign color-gray text-sm mls js-user-data-popover-detail" data-original-title="" title=""></span>
+    <div class="popover-content hidden">
+      <div class="popover-item">
+        <div class="content">
+          {{ 'user.learn.statistics.manage.describe_detail.tips'|trans|raw }}
+        </div>
+      </div>
+    </div>
   </div>
 {% endblock %}
 {% block page_buttons %}
