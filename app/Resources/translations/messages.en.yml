@@ -1987,12 +1987,12 @@ file_chooser.upload_file.audio_quality.normal: Standard
 file_chooser.upload_file.audio_quality.high: 'High Quality'
 file_chooser.upload_file.convert: 'What''s transcode'
 file_chooser.upload_file.upload_tips: Tips
-file_chooser.upload_file.convert_tips: 'Upload will automatically transcoded to a better compatibility format for students to watch, it is recommended that you transcode is completed and then release the corresponding course'
-file_chooser.upload_file.suopprt_audio_tips: 'Support mp4, avi, flv, wmv, mov, m4v format video file upload, file size can not exceed 2GB. <br/>Support for HTTP (available only in Chrome, IE9 and above browsers that support HTML5).'
+file_chooser.upload_file.convert_tips: 'Upload will automatically transcoded to a better compatibility format for students to watch, it is recommended that you transcode is completed and then release the corresponding course.'
+file_chooser.upload_file.upload_video_tips: 'Support mp4, avi, flv, wmv, mov, m4v format video file upload, file size can not exceed 2GB. <br/>Support for HTTP (available only in Chrome, IE9 and above browsers that support HTML5).'
 file_chooser.upload_file.upload_audio_tips: 'Support mp3 format audio file upload, and the file size can not exceed 500M. <br/> Support for HTTP (only HTML5 browser support). <br/>The audio will be uploaded to the cloud server.'
-file_chooser.upload_file.upload_flash_tips: 'Support swf format file upload, and the file size can not exceed 100 MB. <br/>Flash will be uploaded to the cloud server'
-file_chooser.upload_file.upload_doc_tips: 'Support pdf, doc, docx, xls, xlsx format document upload, and the file size can not exceed 100 MB. <br/>The document will be uploaded to the cloud server'
-file_chooser.upload_file.upload_ppt_tips: 'Support ppt, pptx format PPT file upload, and the file size can not exceed 100 MB. <br/>The PPT will be uploaded to the cloud server'
+file_chooser.upload_file.upload_flash_tips: 'Support swf format file upload, and the file size can not exceed 100 MB. <br/>Flash will be uploaded to the cloud server.'
+file_chooser.upload_file.upload_doc_tips: 'Support pdf, doc, docx, xls, xlsx format document upload, and the file size can not exceed 100 MB. <br/>The document will be uploaded to the cloud server.'
+file_chooser.upload_file.upload_ppt_tips: 'Support ppt, pptx format PPT file upload, and the file size can not exceed 100 MB. <br/>The PPT will be uploaded to the cloud server.'
 testpaper.edit: Edit
 testpaper.edit.content_title: Edit
 testpaper.answer.count_donw_timer: 'Count Down'
