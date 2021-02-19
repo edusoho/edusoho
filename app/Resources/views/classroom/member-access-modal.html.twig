@@ -9,7 +9,7 @@
     {% elseif code == 'vip.member_expired' %}
       {{ code|trans({'%path%':path('vip_renew')})|raw }}
     {% elseif code == 'vip.level_not_exist' %}
-      {{ code|trans }}
+      {{ code|trans({'%classroomName%':classroom.title}) }}
     {% elseif code == 'vip.level_low' %}
       {{ code|trans({'%vipLevelName%':vipLevel.name, '%href%':path('vip')})|raw }}
     {% endif %}
@@ -17,7 +17,7 @@
 {% endblock %}
 
 {% block footer %}
-  <a id="member-access" href="#modal" data-toggle="modal" data-url="{{ path('course_exit_modal', {action:path('classroom_exit', {id:classroomId})}) }}" class="btn btn-primary">
+  <a id="member-access" href="#modal" data-toggle="modal" data-url="{{ path('course_exit_modal', {action:path('classroom_exit', {id:classroom.id})}) }}" class="btn btn-primary">
     {% if code == 'vip.level_not_exist' %}
       {{'course.member.classroom_member.classroom_exit_btn'|trans }}
     {% else %}
