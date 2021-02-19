@@ -12,7 +12,7 @@ site.save_success_hint: Saved successfully
 site.searching_hint: Search ...
 site.search_hint: Search
 site.choose_gender_hint: Please select gender
-site.captcha_code.required: Please enter the verification code
+site.captcha_code.required: Please drag the captcha code
 site.data.create: Add
 site.data.not_found: Not found ...
 site.data.delete_name_hint: Really want to delete the% name%?
@@ -241,7 +241,7 @@ Site.save_error_hint: Saved failed
 Site.searching_hint: Search ...
 Site.search_hint: Search
 Site.choose_gender_hint: Please select gender
-Site.captcha_code.required: Please enter the verification code
+Site.captcha_code.required: Please drag the captcha code
 Site.data.create: Add
 Site.data.not_found: Not found ...
 Site.data.delete_name_hint: Really want to delete the% name%?
