@@ -17,10 +17,10 @@
                             <el-input ref="remark" v-model="form.remark" type="textarea" rows="3"></el-input>
                         </el-col>
                     </el-form-item>
-                    <el-form-item label="挂载目录列表">
+                    <el-form-item label="挂载目录列表" prop="tableData">
                         <el-col>
                             <el-table
-                                :data="tableData"
+                                :data="form.tableData"
                                 stripe>
                                 <el-table-column prop="name" label="名称"></el-table-column>
                                 <el-table-column prop="path" label="路径"></el-table-column>
@@ -80,10 +80,10 @@
                     children: 'zones',
                     isLeaf: 'leaf'
                 },
-                tableData: [],
                 form: {
                     title: "标题",
                     remark: "副标题",
+                    tableData: [],
                 },
                 formRule: {
                     title: [
@@ -99,6 +99,13 @@
                             message: "请输入描述信息",
                             trigger: 'blur',
                         },
+                    ],
+                    tableData:[
+                       {
+                            required: true,
+                            message: "请选择目录",
+                            trigger: 'blur',
+                        },  
                     ]
                 },
             };
@@ -109,14 +116,14 @@
                 let nodes = this.$refs.tree.getCheckedNodes();
                 nodes.forEach(node=>{
                     let p = true;
-                    this.tableData.forEach(v=>{
+                    this.form.tableData.forEach(v=>{
                         if(v.path == node.path){
                             p = false;
                             return;
                         }
                     })
                     if(p){
-                        this.tableData.push({name:node.name,path:node.path});
+                        this.form.tableData.push({name:node.name,path:node.path});
                     }
                 })
             },
@@ -126,10 +133,10 @@
                 nodes.forEach(node=>{
                     if(info.row.path == node.path){
                         this.$refs.tree.setChecked(node.path,false);
-                        this.tableData.splice(info.$index, 1);
+                        this.form.tableData.splice(info.$index, 1);
                     }
                 })
-                this.tableData.splice(info.$index, 1);
+                this.form.tableData.splice(info.$index, 1);
             },
             loadNode(node, resolve) {
                 console.log("level:"+node.level);
@@ -150,7 +157,7 @@
             // 遍历选中
             checkNode(){
                 console.log("遍历选中");
-                this.tableData.forEach((v)=>{
+                this.form.tableData.forEach((v)=>{
                     this.$refs.tree.setChecked(v.path,true);
                 })
             },
@@ -165,7 +172,7 @@
             }
         },
         mounted() {
-            this.tableData = this.info.files;
+            this.form.tableData = this.info.files;
             this.form.title = this.info.name;
             this.form.remark = this.info.remark;
             // setTimeout(() => {
