@@ -15,9 +15,9 @@ const globalPlayer = () => {
     user: {
       id: $element.data('userId'),
       name: $element.data('userName')
-    }
+    },
+    playbackRates: $element.data('enablePlaybackRates') ? ['0.5', '1.0', '1.25', '1.5', '2.0'] : 0,
   });
-
   const messenger = new EsMessenger({
     name: 'parent',
     project: 'PlayerProject',
