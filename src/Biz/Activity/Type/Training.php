@@ -17,6 +17,7 @@ class Training extends Activity
 
     public function get($targetId)
     {
+        // 获取绑定关系信息
         return [];
         // return $this->getTrainingActivityDao()->get($targetId);
     }

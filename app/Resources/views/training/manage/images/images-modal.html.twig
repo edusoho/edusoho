@@ -31,7 +31,7 @@
 
   <script>
     $(function(){
-        let selectInfo = "{ id: {{ currentId }} }";
+        let selectInfo = { name: "{{ imagesName }}",version:"{{imagesVersion}}" };
         console.log(selectInfo);
         $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
             e.target // newly activated tab
@@ -51,7 +51,11 @@
         })
         // 单选点击事件 input[type='radio']
         $("#commonImages").on("click","input[type='radio']",function(){
-            selectInfo = {id:$(this).val(),name:$(this).next("label").text()}
+            selectInfo = {name:$(this).next("label").text(),version:$(this).next().next(".version_select").find("option:selected").val()}
+        })
+        // 下拉框change事件
+        $(".version_select").change(function(){
+            selectInfo.version = $(this).find("option:selected").val();
         })
     })
   </script>

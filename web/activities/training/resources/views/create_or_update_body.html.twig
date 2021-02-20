@@ -24,8 +24,8 @@
               <div class="col-sm-8">
                 <select class="form-control width-150" id="lab_type" name="lab_type">
                   <option value="">请选择</option>
-                  <option value="1">Link环境</option>
-                  <option value="2">Lab环境</option>
+                  <option value="1" {% if info.lab_type == 1 %} selected {% endif %} >Lab环境</option>
+                  <option value="2" {% if info.lab_type == 2 %} selected {% endif %} >Link环境</option>
                 </select>
               </div>
           </div>

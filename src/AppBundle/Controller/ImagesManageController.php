@@ -14,11 +14,13 @@ class ImagesManageController extends BaseController
     // 镜像弹窗
     public function imagesPickerAction(Request $request, $id)
     {
-        $currentId = $request->query->get("currentId");
-        $lists = $this->getImagesList($request);
+        $imagesName = $request->query->get("imagesName");
+        $imagesVersion = $request->query->get("imagesVersion");
+        $lists = $this->getImagesList($request,$imagesName,$imagesVersion);
         return $this->render('training/manage/images/images-modal.html.twig',[
             'id'=>$id,
-            'currentId'=>$currentId,
+            'imagesName'=>$imagesName,
+            'imagesVersion'=>$imagesVersion,
             'lists'=>$lists['body'],
             'paginator'=>$lists['paginator'],
         ]);
@@ -26,7 +28,10 @@ class ImagesManageController extends BaseController
 
     // 获取镜像列表数据
     public function imagesPickListAction(Request $request,$courseId,$taskId){
-        $lists = $this->getImagesList($request);
+        $imagesName = $request->query->get("imagesName");
+        $imagesVersion = $request->query->get("imagesVersion");
+
+        $lists = $this->getImagesList($request,$imagesName,$imagesVersion);
         return $this->render(
             'training/manage/images/images-list.html.twig',
             [
@@ -37,8 +42,27 @@ class ImagesManageController extends BaseController
     }
 
     // 获取镜像列表
-    private function getImagesList($request){
-        $return = (new Images())->getImagesList($request);
+    private function getImagesList($request,$imagesName="",$imagesVersion=""){
+        $return = ['body'=>[]];
+        $result = (new Images())->getImagesVersionAllList($request);
+        if($result['status']['code'] == 2000000){
+            // 设置选中
+            foreach($result['body'] as &$info){
+                $info['checked'] = "";
+                if($info['name'] == $imagesName){
+                    $info['checked'] = "checked";
+                }
+                if($info['tags']){
+                    foreach($info['tags'] as &$val){
+                        $val['checked'] = "";
+                        if($val['tag_name'] == $imagesVersion && $info['name'] == $imagesName){
+                            $val['checked'] = "selected";
+                        }
+                    }
+                }
+            }
+            $return = $result;
+        }
         return $return;
     }
 }
