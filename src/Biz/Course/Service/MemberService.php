@@ -98,7 +98,7 @@ interface MemberService
     /**
      * 退学.
      */
-    public function removeStudent($courseId, $userId, $info = []);
+    public function removeStudent($courseId, $userId, $info = [], $removeType = 'remove');
 
     /**
      * 封锁学员，封锁之后学员不能再查看该课程.

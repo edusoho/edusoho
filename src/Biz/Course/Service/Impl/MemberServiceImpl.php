@@ -870,7 +870,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $deadline;
     }
 
-    public function removeStudent($courseId, $userId, $reason = [])
+    public function removeStudent($courseId, $userId, $reason = [], $removeType = 'remove')
     {
         $course = $this->getCourseService()->getCourse($courseId);
 
@@ -904,12 +904,22 @@ class MemberServiceImpl extends BaseService implements MemberService
             'nickname' => $removeMember['nickname'],
         ];
 
-        $this->getLogService()->info(
-            'course',
-            'remove_student',
-            "教学计划《{$course['title']}》(#{$course['id']})，移除学员({$removeMember['nickname']})(#{$member['id']})",
-            $infoData
-        );
+        if ('exit' === $removeType) {
+            $this->getLogService()->info(
+                'course',
+                'exit_course',
+                "学员({$removeMember['nickname']})(#{$member['id']})退出了教学计划《{$course['title']}》(#{$course['id']})",
+                $infoData
+            );
+        } else {
+            $this->getLogService()->info(
+                'course',
+                'remove_student',
+                "教学计划《{$course['title']}》(#{$course['id']})，移除学员({$removeMember['nickname']})(#{$member['id']})",
+                $infoData
+            );
+        }
+
         $this->dispatchEvent(
             'course.quit',
             $course,

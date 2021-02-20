@@ -147,7 +147,15 @@ course:
                 type: url
                 path: course_show
                 param:
-                    id: id
+                  id: id
+    exit_course:
+        templateParam:
+            %url%:
+                type: url
+                path: course_show
+                param:
+                  id: courseId
+            %nickname%: nickname
 classroom:
     create:
         templateParam:

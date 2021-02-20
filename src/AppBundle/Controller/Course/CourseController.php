@@ -784,7 +784,7 @@ class CourseController extends CourseBaseController
         $this->getMemberService()->removeStudent($course['id'], $user['id'], [
             'reason' => $req['reason']['note'],
             'reason_type' => 'exit',
-        ]);
+        ], 'exit');
 
         return $this->redirect($this->generateUrl('course_show', ['id' => $id]));
     }

@@ -9337,6 +9337,7 @@ log.action.template.course.close: 关闭了<strong class="color-success">课程<
 log.action.template.course.delete: 删除了<strong class="color-success">课程</strong>《%title%》
 log.action.template.course.add_student: 在教学计划《<a href="%url%" target="_blank">%title%</a>》添加了<strong class="color-success">学员</strong>%nickname% 备注:%remark%
 log.action.template.course.remove_student: 在教学计划《<a href="%url%" target="_blank">%title%</a>》移除了<strong class="color-success">学员</strong>%nickname%
+log.action.template.course.exit_course: <strong class="color-success">学员</strong>%nickname%退出了教学计划《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.update_teacher: 更新了教学计划《<a href="%url%" target="_blank">%title%</a>》的教师信息
 log.action.template.course.create_thread: 新建了话题《%title%》
 log.action.template.course.update_thread: 更新了话题《%title%》
