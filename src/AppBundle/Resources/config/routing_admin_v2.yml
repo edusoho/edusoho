@@ -1,7 +1,6 @@
 admin_v2:
   path: /
-  defaults: { _controller: AppBundle:AdminV2/Teach/CourseSet:index }
-  permissions: [ admin_v2_course_manage ]
+  defaults: { _controller: AppBundle:AdminV2/Default:index }
 
 admin_v2_switch_old_version:
   path: /switch/old_version
@@ -47,17 +46,13 @@ admin_v2_announcement_from_platform:
 admin_v2_images_set:
   path: /images_set/index
   defaults: { _controller: AppBundle:AdminV2/Teach/ImagesSet:index }
-## 镜像删除    
-images_set_manage_delete:
-  path: /images_set/{id}/manage/delete
-  defaults: { _controller: AppBundle:AdminV2/Teach/ImagesSet:delete }
 ## 镜像详情查看
 images_set_manage_info:
   path: /images_set/{id}/manage/info
   defaults: { _controller: AppBundle:AdminV2/Teach/ImagesSet:info }
 ## 镜像版本删除
-images_set_manage_version_info:
-  path: /images_set/version/{id}/delete
+images_set_manage_version_delete:
+  path: /images_set/image/{name}/version/{vname}/delete
   defaults: { _controller: AppBundle:AdminV2/Teach/ImagesSet:versionDelete }
 ## 教学-数据集管理
 admin_v2_dataset_set:
@@ -515,83 +510,75 @@ admin_v2_item_bank_exercise_review_batch_delete:
   methods: [ POST ]
 
 #云资源
-# admin_v2_cloud_attachment_setting:
-#     path: /setting/edu_cloud/attachment
-#     defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:attachmentSetting }
+admin_v2_cloud_attachment_setting:
+  path: /setting/edu_cloud/attachment
+  defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:attachmentSetting }
 
-# admin_v2_cloud_attachment:
-#     path: /cloud_attachment
-#     defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:attachmentList }
+admin_v2_cloud_attachment:
+  path: /cloud_attachment
+  defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:attachmentList }
 
-admin_v2_container_repository_router:
-  path: /container_repo
-  defaults: { _controller: AppBundle:AdminV2/Teach/Review:courseReviewList }
+admin_v2_cloud_file:
+  path: /cloud_files
+  defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:index }
 
-admin_v2_datasets_repository_router:
-  path: /datasets
-  defaults: { _controller: AppBundle:AdminV2/Teach/Review:courseReviewList }
+admin_v2_cloud_file_manage:
+  path: /cloud_files/manage
+  defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:manage }
+  permissions: [ admin_v2_cloud_resource ]
 
-admin_v2_datasets_resource_quota_router:
-  path: /quota
-  defaults: { _controller: AppBundle:AdminV2/Teach/Review:courseReviewList }
+admin_v2_cloud_file_render_table:
+  path: /cloud_files/table/render
+  defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:render }
+  permissions: [ admin_v2_cloud_resource ]
 
-# admin_v2_cloud_file_manage:
-#     path:  /cloud_files/manage
-#     defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:manage }
-#     permissions: [admin_v2_container_resource]
+admin_v2_cloud_file_detail:
+  path: /cloud_file/{globalId}/detail
+  defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:detail }
+  permissions: [ admin_v2_cloud_resource ]
 
-# admin_v2_cloud_file_render_table:
-#     path:  /cloud_files/table/render
-#     defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:render }
-#     permissions: [admin_v2_container_resource]
+admin_v2_cloud_file_edit:
+  path: /cloud_file/{globalId}/edit
+  defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:edit, fields:'' }
+  methods: [ POST ]
+  permissions: [ admin_v2_cloud_resource ]
 
-# admin_v2_cloud_file_detail:
-#     path:  /cloud_file/{globalId}/detail
-#     defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:detail }
-#     permissions: [admin_v2_container_resource]
+admin_v2_cloud_file_preview:
+  path: /cloud_file/{globalId}/preview
+  defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:preview }
+  permissions: [ admin_v2_cloud_resource ]
 
-# admin_v2_cloud_file_edit:
-#     path:  /cloud_file/{globalId}/edit
-#     defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:edit, fields:'' }
-#     methods: [POST]
-#     permissions: [admin_v2_container_resource]
+admin_v2_cloud_file_reconvert:
+  path: /cloud_file/{globalId}/reconvert
+  defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:reconvert }
+  permissions: [ admin_v2_cloud_resource ]
 
-# admin_v2_cloud_file_preview:
-#     path:  /cloud_file/{globalId}/preview
-#     defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:preview }
-#     permissions: [admin_v2_container_resource]
+admin_v2_cloud_file_download:
+  path: /cloud_file/{globalId}/download
+  defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:download }
+  permissions: [ admin_v2_cloud_resource ]
 
-# admin_v2_cloud_file_reconvert:
-#     path: /cloud_file/{globalId}/reconvert
-#     defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:reconvert }
-#     permissions: [admin_v2_container_resource]
+admin_v2_cloud_file_delete:
+  path: /cloud_file/{globalId}/delete
+  defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:delete }
+  methods: [ POST ]
+  permissions: [ admin_v2_cloud_resource ]
 
-# admin_v2_cloud_file_download:
-#     path: /cloud_file/{globalId}/download
-#     defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:download }
-#     permissions: [admin_v2_container_resource]
+admin_v2_cloud_file_batch_delete:
+  path: /cloud_file/delete/batch
+  defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:batchDelete }
+  methods: [ POST ]
+  permissions: [ admin_v2_cloud_resource ]
 
-# admin_v2_cloud_file_delete:
-#     path: /cloud_file/{globalId}/delete
-#     defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:delete }
-#     methods:  [POST]
-#     permissions: [admin_v2_container_resource]
+admin_v2_cloud_file_delete_modal_show:
+  path: /cloud_file/delete/show
+  defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:deleteShow }
+  permissions: [ admin_v2_cloud_resource ]
 
-# admin_v2_cloud_file_batch_delete:
-#     path: /cloud_file/delete/batch
-#     defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:batchDelete }
-#     methods:  [POST]
-#     permissions: [admin_v2_container_resource]
-
-# admin_v2_cloud_file_delete_modal_show:
-#     path: /cloud_file/delete/show
-#     defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:deleteShow }
-#     permissions: [admin_v2_container_resource]
-
-# admin_v2_cloud_file_tag_show:
-#     path: /cloud_file/tag/show
-#     defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:batchTagShow }
-#     permissions: [admin_v2_container_resource]
+admin_v2_cloud_file_tag_show:
+  path: /cloud_file/tag/show
+  defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:batchTagShow }
+  permissions: [ admin_v2_cloud_resource ]
 
 #教学-资源管理-题库管理
 admin_v2_question_bank:
@@ -1358,7 +1345,7 @@ admin_v2_groupThread_batch_delete:
 admin_v2_group_thread_cancel_elite:
   path: /group/thread/{threadId}/removeElite
   defaults: { _controller: AppBundle:AdminV2/Operating/Group:removeElite }
-  permissions: [ admin_v2_operation_group_manage ]
+  permissions: [ admin_v2operation_group_manage ]
 
 admin_v2_group_thread_set_elite:
   path: /group/thread/{threadId}/setElite
@@ -1813,12 +1800,6 @@ admin_v2_setting_favicon_remove:
   methods: [ POST ]
   permissions: [ admin_v2_school_information ]
 
-admin_v2_setting_record_upload:
-  path: /setting/record/upload
-  defaults: { _controller: AppBundle:AdminV2/System/Setting:recordPictureUpload }
-  methods: [ POST ]
-  permissions: [ admin_v2_school_information ]
-
 #系统-通用管理-用户设置
 admin_v2_setting_auth:
   path: /setting/auth
@@ -1917,11 +1898,6 @@ admin_v2_task_multiple_open_setting:
 admin_v2_video_task_setting:
   path: /setting/video-task-setting
   defaults: { _controller: AppBundle:AdminV2/System/VideoTaskSetting:videoEffectiveLearningTimeSetting }
-  permissions: [ admin_v2_video_task_setting ]
-
-admin_v2_video_task_setting_job_check:
-  path: /setting/video_task_setting/job_check
-  defaults: { _controller: AppBundle:AdminV2/System/VideoTaskSetting:refreshJobCheck }
   permissions: [ admin_v2_video_task_setting ]
 
 # 系统-通用管理-运营设置
@@ -2578,11 +2554,6 @@ admin_v2_setting_cloud_key_copyright:
   defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:keyCopyright }
   methods: [ POST ]
   permissions: [ admin_v2_setting_my_cloud ]
-
-admin_v2_app_package_update_agreement:
-  path: /app/package_update/{id}/agreement
-  defaults: { _controller: AppBundle:AdminV2/CloudCenter/AppPackageUpdate:agreement }
-  permissions: [ admin_v2_app_center,admin_v2_app_installed,admin_v2_app_upgrades ]
 
 admin_v2_app_package_update_modal:
   path: /app/package_update/{id}/modal
