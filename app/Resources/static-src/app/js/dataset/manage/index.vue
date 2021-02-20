@@ -5,6 +5,7 @@
             v-bind:tree-data="treeData"
             v-bind:dir-get-path="dirGetPath"
             v-bind:submit-path="submitPath"
+            v-bind:reload-path="reloadPath"
         ></info>
     </div>
 </template>
@@ -21,6 +22,7 @@
             treeData:Array,
             dirGetPath:String,
             submitPath:String,
+            reloadPath:String,
         },
         methods: {
         },

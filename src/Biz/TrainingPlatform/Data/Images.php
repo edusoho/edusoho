@@ -19,7 +19,6 @@ class Images extends Base
         'version_delete' =>'tm/img/{img_repo}/tag' // 删除仓库下版本
     ];
     public function __construct(){
-        // 测试请求
         $this->client = new AbstractCloudAPI();
     }
 

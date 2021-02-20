@@ -57,7 +57,7 @@
                 </el-form>
             </el-col>
         </el-row>
-        <el-button size="mini" type="primary" round @click="submit()">提交</el-button>
+        <el-button size="mini" type="primary" :loading="buttonLoading" round @click="submit()">提交</el-button>
     </div>
 
 </template>
@@ -71,9 +71,11 @@
             treeData:Array,
             dirGetPath:String,
             submitPath:String,
+            reloadPath:String,
         },
         data() {
             return {
+                buttonLoading:false,
                 treeName:"挂载树",
                 defaultprop: {
                     label: 'name',
@@ -81,8 +83,9 @@
                     isLeaf: 'leaf'
                 },
                 form: {
-                    title: "标题",
-                    remark: "副标题",
+                    id:0,
+                    title: "",
+                    remark: "",
                     tableData: [],
                 },
                 formRule: {
@@ -116,12 +119,11 @@
                 let nodes = this.$refs.tree.getCheckedNodes();
                 nodes.forEach(node=>{
                     let p = true;
-                    this.form.tableData.forEach(v=>{
-                        if(v.path == node.path){
-                            p = false;
-                            return;
+                    for(let i=0;i<this.form.tableData.length;i++){
+                        if(this.form.tableData[i].path == node.path){
+                            p = false;return;
                         }
-                    })
+                    }
                     if(p){
                         this.form.tableData.push({name:node.name,path:node.path});
                     }
@@ -147,23 +149,24 @@
                         data.path = node.data.path;
                     }
                     this.$axios.get(this.dirGetPath, {params:data}, {emulateJSON: true}).then(res=>{
-                        resolve(res.data.body);
+                        resolve(res.data);
                         this.checkNode();
                     })
                 }else{
-                    resolve(this.treeData.body);
+                    resolve(this.treeData);
                 }
             },
             // 遍历选中
             checkNode(){
-                console.log("遍历选中");
-                this.form.tableData.forEach((v)=>{
-                    this.$refs.tree.setChecked(v.path,true);
-                })
+                for(let i=0;i<this.form.tableData.length;i++){
+                    this.$refs.tree.setChecked(this.form.tableData[i].path,true);
+                }
             },
             submit(){
                 console.log("提交");
+                this.buttonLoading = true;
                 let data = {
+                    id:this.form.id,
                     title:this.form.title,
                     remark:this.form.remark,
                     paths:[]
@@ -171,22 +174,31 @@
                 this.form.tableData.forEach(v=>{
                     data.paths.push(v.path);
                 })
-                console.log(data);
                 this.$refs.datasetedit.validate((valid, invalidFields) => {
                     if (valid) {
-                        // 验证是否选择数据集
-                        console.log(this.submitPath);
                         this.$axios.post(this.submitPath,data).then(res=>{
                             cd.message({type: 'success', message: "提交成功"});
+                            // 跳转
+                            if(res.data.body.hasOwnProperty("id")){
+                                window.location.href = this.reloadPath + "?id="+res.data.body.id;
+                            }
+                            this.buttonLoading = false;
+                        }).catch(err=>{
+                            this.buttonLoading = false;
                         })
+                    }else{
+                        this.buttonLoading = false;
                     }
                 });
             }
         },
         mounted() {
-            this.form.tableData = this.info.files;
-            this.form.title = this.info.name;
-            this.form.remark = this.info.remark;
+            if(this.info.hasOwnProperty("id")){
+                this.form.id = this.info.id;
+                this.form.tableData = this.info.files;
+                this.form.title = this.info.name;
+                this.form.remark = this.info.remark;
+            }
             // setTimeout(() => {
             //     this.treeName = "呱呱";
             // },500);

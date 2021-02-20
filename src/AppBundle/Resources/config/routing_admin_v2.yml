@@ -62,14 +62,15 @@ admin_v2_dataset_set:
 admin_v2_dataset_delete:
     path: /dataset_set/{id}/manage/delete
     defaults: { _controller: AppBundle:AdminV2/Teach/DatasetSet:delete }
-## 数据集编辑    
+## 数据集编辑&新建
 admin_v2_dataset_edit:
-    path: /dataset_set/{id}/manage/edit
+    path: /dataset_set/manage/edit
     defaults: { _controller: AppBundle:AdminV2/Teach/DatasetSet:edit }
 ## 数据集目录查询
 admin_v2_dataset_path:
     path: /dataset_set/manage/dirlist
     defaults: { _controller: AppBundle:AdminV2/Teach/DatasetSet:dirList }
+## 提交数据集
 admin_v2_dataset_submit_path:
     path: /dataset_set/manage/submit
     defaults: { _controller: AppBundle:AdminV2/Teach/DatasetSet:submit }
