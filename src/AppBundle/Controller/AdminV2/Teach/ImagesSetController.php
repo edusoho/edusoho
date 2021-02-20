@@ -11,10 +11,16 @@ use Biz\TrainingPlatform\Data\Images;
 
 class ImagesSetController extends BaseController
 {
+    public $imagesObj = null;
+    public function __construct(){
+        if(empty($this->imagesObj)){
+            $this->imagesObj = new Images();
+        }
+    }
     public function indexAction(Request $request)
     {
         
-        $lists = (new Images())->getImagesList($request);
+        $lists = $this->imagesObj->getImagesList($request);
         return $this->render(
             'admin-v2/teach/images/index.html.twig',
             [
@@ -25,14 +31,22 @@ class ImagesSetController extends BaseController
     }
 
     // 镜像详情
-    public function infoAction(){
+    public function infoAction(Request $request,$id){
+        $lists = $this->imagesObj->getImagesVersionList($request,$id);
+        // 获取镜像下面版本号
         return $this->render(
-            'admin-v2/teach/images/info.html.twig'
+            'admin-v2/teach/images/info.html.twig',
+            [
+                'lists' =>$lists['body'],
+                'image_name' =>$id,
+                'paginator'=>$lists['paginator'],
+            ]
         );
     }
 
-    // 删除镜像
-    public function deleteAction(){
-        return $this->createJsonResponse(['code' => 0, 'message' => '删除镜像成功']);
+    // 镜像删除
+    public function versionDeleteAction(Request $request,$name,$vname){
+        $result = $this->imagesObj->deleteVersion($name,$vname);
+        return $this->createJsonResponse($result);
     }
 }

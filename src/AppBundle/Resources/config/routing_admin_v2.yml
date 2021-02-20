@@ -46,17 +46,13 @@ admin_v2_announcement_from_platform:
 admin_v2_images_set:
     path: /images_set/index
     defaults: { _controller: AppBundle:AdminV2/Teach/ImagesSet:index }
-## 镜像删除    
-images_set_manage_delete:
-    path: /images_set/{id}/manage/delete
-    defaults: { _controller: AppBundle:AdminV2/Teach/ImagesSet:delete}
 ## 镜像详情查看
 images_set_manage_info:
     path: /images_set/{id}/manage/info
     defaults: { _controller: AppBundle:AdminV2/Teach/ImagesSet:info}
 ## 镜像版本删除
-images_set_manage_version_info:
-    path: /images_set/version/{id}/delete
+images_set_manage_version_delete:
+    path: /images_set/image/{name}/version/{vname}/delete
     defaults: { _controller: AppBundle:AdminV2/Teach/ImagesSet:versionDelete}
 ## 教学-数据集管理
 admin_v2_dataset_set:

@@ -3,12 +3,10 @@
 {% import "common/data-dict-macro.html.twig" as dict_macro %}
 {% set courseSetProduct = courseSet.platform|default('self') == 'self' ? null : data('S2b2cProduct', { id:courseSet.id, type:'course_set' }) %}
 
-<tr id="images-tr-{{ image.id }}">
-  <td>{{ image.id }}</td>
+<tr id="images-tr-{{ image.img_repo }}">
   <td>{{image.name}}</td>
-  <td>{{image.status_name}}</td>
+  <td>{{ image.img_type }}</td>
   <td>
-    <a class="btn btn-default btn-sm" href="{{ path('images_set_manage_info',{id:image.id}) }}" target="_blank">管理</a>
-    <a class="btn btn-default btn-sm delete-course" href="javascript:;" data-url="{{ path('images_set_manage_delete',{id:image.id}) }}">删除</a>
+    <a class="btn btn-default btn-sm" href="{{ path('images_set_manage_info',{id:image.img_repo}) }}" target="_blank">管理</a>
   </td>
 </tr>

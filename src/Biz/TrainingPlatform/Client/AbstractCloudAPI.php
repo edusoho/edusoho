@@ -20,7 +20,7 @@ class AbstractCloudAPI
 
     protected $timeout = 15;
 
-    protected $apiUrl = 'http://10.60.128.95:9200';
+    protected $apiUrl = 'https://mockapi.eolinker.com/3WtGzhnc4d14d4a6c5d8dc1dc7f9d292367d48477a2bf67';
 
     protected $debug = false;
 
@@ -121,7 +121,7 @@ class AbstractCloudAPI
         $requestId = substr(md5(uniqid('', true)), -16);
 
         $url = $this->apiUrl.'/'.$uri;
-        $params['query']['access_token'] = '4cf182a0-b424-402d-9b5e-13cdfe47f66a';
+        // $params['query']['access_token'] = '4cf182a0-b424-402d-9b5e-13cdfe47f66a';
 
         if ($this->isWithoutNetwork()) {
             if ($this->debug && $this->logger) {
@@ -133,7 +133,6 @@ class AbstractCloudAPI
 
         $headers[] = 'Content-type: application/json';
         $params['headers'] = $headers;
-
         $res = $this->client->request($method,$url,$params);
         
 
