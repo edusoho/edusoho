@@ -7,13 +7,11 @@ $(function () {
       return;
     var $tr = $this.parents('tr');
     $.post($this.data('url'), function (data) {
-      if (data.code > 0) {
-        notify('danger', data.message);
-      } else if (data.code == 0) {
-        $tr.remove();
-        notify('success', (data.message));
+      if (data.status.code != 2000000) {
+        notify('danger', data.status.message);
       } else {
-        $('#modal').modal('show').html(data);
+        $tr.remove();
+        notify('success', (data.status.message));
       }
     });
   });
