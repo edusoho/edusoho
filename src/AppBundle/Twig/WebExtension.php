@@ -212,7 +212,18 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('filter_courseSets_vip_right', [$this, 'filterCourseSetsVipRight']),
             new \Twig_SimpleFunction('filter_courses_vip_right', [$this, 'filterCoursesVipRight']),
             new \Twig_SimpleFunction('filter_classrooms_vip_right', [$this, 'filterClassroomsVipRight']),
+            new \Twig_SimpleFunction('filter_course_vip_right', [$this, 'filterCourseVipRight']),
         ];
+    }
+
+    public function filterCourseVipRight($course)
+    {
+        if ($this->isPluginInstalled('Vip')) {
+            $vipRights = $this->getVipRightService()->searchVipRights(['supplierCode' => 'course', 'uniqueCode' => $course['id']], [], 0, PHP_INT_MAX);
+            $course['vipLevelId'] = empty($vipRights) ? '0' : $vipRights[0]['vipLevelId'];
+        }
+
+        return $course;
     }
 
     public function filterCourseSetsVipRight($courseSets)
