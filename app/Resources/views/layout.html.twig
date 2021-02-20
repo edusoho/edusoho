@@ -26,7 +26,7 @@
     content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <title>
     {%- block title -%}
-      {{ setting('site.name', 'EduSoho') }}{% if setting('site.slogan') %} - {{ setting('site.slogan') }}
+      {{ setting('site.name', '') }}{% if setting('site.slogan') %} - {{ setting('site.slogan') }} {% endif %}
     {%- endblock -%}
   </title>
   {% block meta %}
