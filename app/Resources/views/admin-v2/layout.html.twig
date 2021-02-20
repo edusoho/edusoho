@@ -51,23 +51,23 @@
 </head>
 {% block body %}
   <body {% if bodyClass|default('') %}class="{{ bodyClass }}"{% endif %}>
-    <!--[if lt IE 9]>
+  <!--[if lt IE 9]>
       {% include 'default/ie8-alert.html.twig' %}
     <![endif]-->
-    <div class="ct-layout-container admin-layout-container">
-      <div class="cd-fixed-top">
-        <div class="ct-top-logo hidden-xs">
-          <a class="admin-navbar-brand" href="{{ url('admin_v2') }}">{% if not setting('copyright.owned') %}EduSoho{% endif %}{{'admin.navbar.header.console_btn'|trans}}</a>
-        </div>
-        <div class="navbar-header navbar-header--mobile visible-xs">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <i class="es-icon es-icon-menu"></i>
-          </button>
-          <a class="navbar-mobile-title" href="{{ url('admin_v2') }}">{{'admin.navbar.header.console_btn'|trans}}</a>
-        </div>
-        <div class="ct-layout-navbar navbar-collapse navbar-collapse--mobile collapse">
-          {% include 'admin-v2/widget/navigation.html.twig' %}
-        </div>
+  <div class="ct-layout-container admin-layout-container">
+    <div class="cd-fixed-top">
+      <div class="ct-top-logo hidden-xs">
+        <a class="admin-navbar-brand" href="{{ url('admin_v2') }}">{{ 'admin.navbar.header.console_btn'|trans }}</a>
+      </div>
+      <div class="navbar-header navbar-header--mobile visible-xs">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <i class="es-icon es-icon-menu"></i>
+        </button>
+        <a class="navbar-mobile-title" href="{{ url('admin_v2') }}">{{ 'admin.navbar.header.console_btn'|trans }}</a>
+      </div>
+      <div class="ct-layout-navbar navbar-collapse navbar-collapse--mobile collapse">
+        {% include 'admin-v2/widget/navigation.html.twig' %}
+      </div>
         <div class="ct-layout-person hidden-xs">
           <ul class="cd-clearfix ct-layout-person__ul mb0">
             <li class="ct-layout-person_center cd-dropdown" data-toggle="cd-dropdown">

@@ -15,7 +15,7 @@
   {{ categoryArray.description|default('')|striptags|trim|plain_text(100) }}
 {% endblock %}
 
-{% block title %}{{ categoryArray.name|default('category.all_category'|trans) }} - {{ setting('site.name') }}{% if setting('site.slogan') %}{{ ' - ' }}{{ setting('site.slogan') }}{% endif %}{% if not setting('copyright.owned') %} - Powered By EduSoho{% endif %}
+{% block title %}{{ categoryArray.name|default('category.all_category'|trans) }} - {{ setting('site.name') }}{% if setting('site.slogan') %}{{ ' - ' }}{{ setting('site.slogan') }}{% endif %}
 {% endblock %}
 
 {% block top_content %}

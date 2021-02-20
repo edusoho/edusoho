@@ -38,7 +38,7 @@ class InitCommand extends BaseCommand
         $initializer->initLockFile();
         $initializer->initRegisterSetting($user);
 
-        $this->updateAccessKeyAndSecretKey($input);
+        // $this->updateAccessKeyAndSecretKey($input);
         // $this->installPhpCsFixerHook($output);
 
         $output->writeln('<info>初始化系统完毕</info>');
@@ -58,9 +58,9 @@ class InitCommand extends BaseCommand
             ];
         } else {
             $adminUser = [
-                'email' => 'test@edusoho.com',
-                'nickname' => '测试管理员',
-                'password' => 'kaifazhe',
+                'email' => 'admin@local.local',
+                'nickname' => 'admin',
+                'password' => '123456',
             ];
         }
 
@@ -69,20 +69,20 @@ class InitCommand extends BaseCommand
         return $adminUser;
     }
 
-    protected function updateAccessKeyAndSecretKey(InputInterface $input)
-    {
-        $accessKey = $input->getArgument('accessKey');
-        $secretKey = $input->getArgument('secretKey');
-
-        if (!empty($accessKey) && !empty($secretKey)) {
-            $storage = $this->getSettingService()->get('storage');
-            $storage = array_merge($storage, [
-                'cloud_access_key' => $accessKey,
-                'cloud_secret_key' => $secretKey,
-            ]);
-            $this->getSettingService()->set('storage', $storage);
-        }
-    }
+//    protected function updateAccessKeyAndSecretKey(InputInterface $input)
+//    {
+//        $accessKey = $input->getArgument('accessKey');
+//        $secretKey = $input->getArgument('secretKey');
+//
+//        if (!empty($accessKey) && !empty($secretKey)) {
+//            $storage = $this->getSettingService()->get('storage');
+//            $storage = array_merge($storage, [
+//                'cloud_access_key' => $accessKey,
+//                'cloud_secret_key' => $secretKey,
+//            ]);
+//            $this->getSettingService()->set('storage', $storage);
+//        }
+//    }
 
     private function installAssets($output)
     {

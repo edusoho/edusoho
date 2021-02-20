@@ -173,14 +173,14 @@ class SystemInitializer
         $this->output->write('  初始化站点设置');
 
         $default = array(
-            'name' => 'EDUSOHO测试站',
-            'slogan' => '强大的在线教育解决方案',
+            'name' => '人工智能实训平台',
+            'slogan' => '',
             'url' => '',
             'logo' => '',
-            'seo_keywords' => 'edusoho, 在线教育软件, 在线在线教育解决方案',
-            'seo_description' => 'edusoho是强大的在线教育开源软件',
-            'master_email' => 'test@edusoho.com',
-            'icp' => ' 浙ICP备13006852号-1',
+            'seo_keywords' => '',
+            'seo_description' => '',
+            'master_email' => 'test@local.com',
+            'icp' => '',
             'analytics' => '',
             'status' => 'open',
             'closed_note' => '',
@@ -215,7 +215,7 @@ class SystemInitializer
 
         $defaultSetting = array();
         $defaultSetting['chapter_name'] = '章';
-        $defaultSetting['user_name'] = '学员';
+        $defaultSetting['user_name'] = '学生';
         $defaultSetting['part_name'] = '节';
 
         $default = $settingService->get('default', array());
@@ -245,7 +245,7 @@ class SystemInitializer
         $developer['cloud_api_failover'] = 1;
         $settingService->set('developer', $developer);
         $settingService->set('backstage', array('is_v2' => 1));
-        $settingService->set('app_discovery', ['version' => 1]);
+        $settingService->set('app_discovery', ['version' => 0]);
         $this->output->writeln(' ...<info>成功</info>');
     }
 
@@ -255,10 +255,10 @@ class SystemInitializer
 
         $default = array(
             'upload_mode' => 'local',
-            'cloud_api_server' => 'http://api.edusoho.net',
+            'cloud_api_server' => 'http://edusoho.local:8090/api',
             'cloud_access_key' => '',
             'cloud_secret_key' => '',
-            'video_h5_enable' => 1,
+            'video_h5_enable' => 0,
         );
 
         $this->getSettingService()->set('storage', $default);
@@ -271,7 +271,7 @@ class SystemInitializer
         $this->output->write('  初始化优惠码设置');
 
         $default = array(
-            'enabled' => 1,
+            'enabled' => 0,
         );
 
         $this->getSettingService()->set('coupon', $default);
