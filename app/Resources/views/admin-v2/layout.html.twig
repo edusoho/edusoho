@@ -138,7 +138,7 @@
     </div>
 
 
-    {% block footer %}
+    {# {% block footer %}
       <div class="site-analytics-section">
         {{ setting('site.analytics')|raw }}
       </div>
@@ -146,11 +146,11 @@
       {% if setting('siteTrace.enabled')|default(false) %}
         {{ setting('siteTrace.script')|raw }}
       {% endif %}
-    {% endblock %}
+    {% endblock %} #}
 
 
-    <div id="modal" class="modal" ></div>
-    <div id="attachment-modal" class="modal" ></div>
+  {# <div id="modal" class="modal" ></div> #}
+  {# <div id="attachment-modal" class="modal" ></div>
     {% if setting('copyright.thirdCopyright') != 1 %}
       <div class="fixed-bar">
         <a href="{{path('admin_v2_feedback')}}"  target='_blank' class="icon-question-text feedback">
@@ -158,17 +158,17 @@
           <span>{{ 'admin.fixed_bar.product_feedback'|trans|raw }}</span>
         </a>
       </div>
-    {% endif %}
+    {% endif %} #}
 
-    {% block scriptBoot %}
+  {% block scriptBoot %}
       {% include 'old-script_boot.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app-v2.js')} %}
       {% include 'admin-v2/default/script-webpack.html.twig' %}
       {% include 'admin-v2/script_boot.html.twig'  with {state :0} %}
     {% endblock %}
 
-    {% block faqSDK %}
+  {# {% block faqSDK %}
       {% include 'admin-v2/faq/sdk.html.twig' %}
-    {% endblock %}
+    {% endblock %} #}
   </body>
 {% endblock %}
 </html>
