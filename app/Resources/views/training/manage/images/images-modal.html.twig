@@ -7,7 +7,7 @@
 
 
 {% block body %}
-<div class="training-add js-select-container">
+  <div class="training-add js-select-container">
     <!-- Nav tabs -->
     {# <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" class="menu active" data-type="private"><a href="#" role="tab" data-toggle="tab">个人镜像</a></li>
@@ -15,12 +15,13 @@
     </ul> #}
 
     <!-- Tab panes -->
-    <div class="tab-content" style="margin-left:30px;"  id="commonImages" data-url="{{ path('course_set_manage_training_images_picker_list',{courseId:id,taskId:0}) }}">
-        <div role="tabpanel" class="ul-context active">
-            {{ include('training/manage/images/images-list.html.twig') }}
-        </div>
+    <div class="tab-content" style="margin-left:30px;" id="commonImages"
+         data-url="{{ path('images_set_manage_picker_list',{courseId:id,taskId:0}) }}">
+      <div role="tabpanel" class="ul-context active">
+        {{ include('training/manage/images/images-list.html.twig') }}
+      </div>
     </div>
-</div>
+  </div>
 {% endblock %}
 
 {% block footer %}

@@ -2409,27 +2409,27 @@ testpaper_finish:
 testpaper_do_suspend:
   path: /testpaper/result/{resultId}/suspend
   defaults: { _controller: AppBundle:Testpaper/Testpaper:testSuspend }
-  methods: [POST]
+  methods: [ POST ]
 ### new training
 
 #### 镜像
-course_set_manage_training_images_picker:
-    path: /course_set/{id}/manage/training-images/show/picker
-    defaults: { _controller: AppBundle:TrainingManage:imagesPicker }
-course_set_manage_training_images_picker_list:
-    path: /course_set/{courseId}/manage/task/{taskId}/training-images/show/pickerlist
-    defaults: { _controller: AppBundle:TrainingManage:imagesPickList }
-course_set_manage_training_images_pickerd:
-    path: /course_set/{id}/manage/training-images/show/pickerd
-    defaults: { _controller: AppBundle:TrainingManage:imagesPickerd }
+images_set_manage_picker:
+  path: /images_set/{id}/manage/show/picker
+  defaults: { _controller: AppBundle:ImagesManage:imagesPicker }
+images_set_manage_picker_list:
+  path: /images_set/{courseId}/manage/task/{taskId}/show/pickerlist
+  defaults: { _controller: AppBundle:ImagesManage:imagesPickList }
+images_set_manage_pickerd:
+  path: /images_set/{id}/manage/show/pickerd
+  defaults: { _controller: AppBundle:ImagesManage:imagesPickerd }
 
 #### 数据集
-course_set_manage_training_dataset_picker:
-    path: /course_set/{id}/manage/training-dataset/show/picker
-    defaults: { _controller:AppBundle:TrainingManage:datasetPicker }
-course_set_manage_training_dataset_info_picker:
-    path: /course_set/{id}/manage/task/{taskId}/training-dataset-info/show/picker
-    defaults: { _controller:AppBundle:TrainingManage:datasetInfoPicker }   
+dataset_set_manage_picker:
+  path: /dataset_set/{id}/manage/show/picker
+  defaults: { _controller:AppBundle:DatasetManage:datasetPicker }
+dataset_set_manage_info:
+  path: /dataset_set/{id}/manage/task/{taskId}/show/picker
+  defaults: { _controller:AppBundle:DatasetManage:datasetInfoPicker }
 
 
 #homework
@@ -2438,7 +2438,7 @@ course_set_manage_homework_question_picker:
   defaults: { _controller: AppBundle:HomeworkManage:questionPicker }
 
 course_set_manage_homework_question_picked:
-  path:  /course_set/{courseSetId}/manage/homework/question/picked
+  path: /course_set/{courseSetId}/manage/homework/question/picked
   defaults: { _controller: AppBundle:HomeworkManage:pickedQuestion }
 
 course_manage_homework_check_list:

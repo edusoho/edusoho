@@ -473,7 +473,7 @@ admin_v2:
                         children:
                           admin_v2_container_repository:
                             name: admin_v2.ilab.dockerimages.basic_tab
-                            router_name: admin_v2_container_repository_router
+                            router_name: admin_v2_images_set
                       # 数据集管理
                       admin_v2_datasets_resource:
                         name: admin_v2.ilab.datasets
@@ -481,7 +481,7 @@ admin_v2:
                         children:
                           admin_v2_datasets:
                             name: admin_v2.ilab.datasets.basic_tab
-                            router_name: admin_v2_datasets_repository_router
+                            router_name: admin_v2_dataset_set
                       # 配额管理
                       admin_v2.ilab.resource_quota:
                         name: admin_v2.ilab.resource_quota

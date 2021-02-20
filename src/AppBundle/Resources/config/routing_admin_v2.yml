@@ -32,26 +32,63 @@ admin_v2_homepage_school_info:
     defaults: { _controller: AppBundle:AdminV2/Default:info }
 
 admin_v2_homepage_changelog:
-    path: /changelog
-    defaults: { _controller: AppBundle:AdminV2/Default:changelog }
+  path: /changelog
+  defaults: { _controller: AppBundle:AdminV2/Default:changelog }
 
 admin_v2_homepage_qrcode:
-    path: /qr_code
-    defaults: { _controller: AppBundle:AdminV2/Default:qrCode }
+  path: /qr_code
+  defaults: { _controller: AppBundle:AdminV2/Default:qrCode }
 
 admin_v2_announcement_from_platform:
-    path: /announcement_from_platform
-    defaults: { _controller: AppBundle:AdminV2/Default:getAnnouncementFromPlatform }
+  path: /announcement_from_platform
+  defaults: { _controller: AppBundle:AdminV2/Default:getAnnouncementFromPlatform }
+
+# 教学-镜像管理
+admin_v2_images_set:
+  path: /images_set/index
+  defaults: { _controller: AppBundle:AdminV2/Teach/ImagesSet:index }
+## 镜像删除    
+images_set_manage_delete:
+  path: /images_set/{id}/manage/delete
+  defaults: { _controller: AppBundle:AdminV2/Teach/ImagesSet:delete }
+## 镜像详情查看
+images_set_manage_info:
+  path: /images_set/{id}/manage/info
+  defaults: { _controller: AppBundle:AdminV2/Teach/ImagesSet:info }
+## 镜像版本删除
+images_set_manage_version_info:
+  path: /images_set/version/{id}/delete
+  defaults: { _controller: AppBundle:AdminV2/Teach/ImagesSet:versionDelete }
+## 教学-数据集管理
+admin_v2_dataset_set:
+  path: /dataset_set/index
+  defaults: { _controller: AppBundle:AdminV2/Teach/DatasetSet:index }
+## 数据集删除    
+admin_v2_dataset_delete:
+  path: /dataset_set/{id}/manage/delete
+  defaults: { _controller: AppBundle:AdminV2/Teach/DatasetSet:delete }
+## 数据集编辑    
+admin_v2_dataset_edit:
+  path: /dataset_set/{id}/manage/edit
+  defaults: { _controller: AppBundle:AdminV2/Teach/DatasetSet:edit }
+## 数据集目录查询
+admin_v2_dataset_path:
+  path: /dataset_set/manage/dirlist
+  defaults: { _controller: AppBundle:AdminV2/Teach/DatasetSet:dirList }
+admin_v2_dataset_submit_path:
+  path: /dataset_set/manage/submit
+  defaults: { _controller: AppBundle:AdminV2/Teach/DatasetSet:submit }
+
 
 # 教学-课程管理-课程管理
 admin_v2_course_set:
-    path:  /course_set/index
-    defaults: { _controller: AppBundle:AdminV2/Teach/CourseSet:index }
-    permissions: [admin_v2_course_manage]
+  path: /course_set/index
+  defaults: { _controller: AppBundle:AdminV2/Teach/CourseSet:index }
+  permissions: [ admin_v2_course_manage ]
 
 admin_v2_course_list:
-    path:  /course_set/{id}/course/list
-    defaults: { _controller: AppBundle:AdminV2/Teach/CourseSet:courseList }
+  path: /course_set/{id}/course/list
+  defaults: { _controller: AppBundle:AdminV2/Teach/CourseSet:courseList }
     permissions: [admin_v2_course_manage]
 
 admin_v2_course_set_clone_by_web:

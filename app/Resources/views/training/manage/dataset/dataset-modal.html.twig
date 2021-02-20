@@ -9,17 +9,17 @@
 
 
 {% block body %}
-<div class="training-add js-select-container" data-url="{{ path('course_set_manage_training_dataset_info_picker',{id: id,taskId:10}) }}">
+  <div class="training-add js-select-container" data-url="{{ path('dataset_set_manage_info',{id: id,taskId:10}) }}">
     <div style="padding-top:10px;min-height:300px;" class="list-info">
-        {{ include('training/manage/dataset/dataset-modal-list.html.twig') }}
+      {{ include('training/manage/dataset/dataset-modal-list.html.twig') }}
     </div>
-</div>
-<div class="footer-tag" style="width:100%;">
+  </div>
+  <div class="footer-tag" style="width:100%;">
     <h4 class="tag-lists">
-        {{ include('training/manage/dataset/component/tags.html.twig') }}
+      {{ include('training/manage/dataset/component/tags.html.twig') }}
     </h4>
-</div>
-<div class="hidden default_tags_value">{{ tags|json_encode|raw }}</div>
+  </div>
+  <div class="hidden default_tags_value">{{ tags|json_encode|raw }}</div>
 {% endblock %}
 
 {% block footer %}
