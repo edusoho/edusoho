@@ -28,9 +28,9 @@
 		<thead>
 			<tr>
 				<th width="15%">{{'admin.operation_invite.nickname_th'|trans}}</th>
-				<th width="10%">{{'admin.operation_invite.coupon.recieved_at_th'|trans}}</th>
+				<th width="15%">{{'admin.operation_invite.coupon.recieved_at_th'|trans}}</th>
 				<th width="15%">{{'admin.operation_invite.coupon.rate_th'|trans}}</th>
-				<th width="20%">{{'admin.operation_invite.coupon.use_status_th'|trans}}</th>
+				<th width="15%">{{'admin.operation_invite.coupon.use_status_th'|trans}}</th>
 				<th width="15%">{{'admin.operation_invite.coupon.useTime_th'|trans}}</th>
 				<th width="25%">{{'admin.operation_invite.coupon.order_title_th'|trans}}</th>
 			</tr>
@@ -51,7 +51,13 @@
 			<tr>
 				<td>{% if user %}{{ web_macro.user_link(user) }}{% else %}-{% endif %}</td>
 				<td>{{ card.createdTime|date('Y-m-d H:i:s')}}</td>
-				<td>{{coupon.rate}}{{ 'site.currency.CNY'|trans }}</td>
+				<td>
+          {% if coupon.type == 'minus' %}
+            {{ coupon.rate }}{{ 'coupon.type.minus_rate_unit'|trans }}
+          {% elseif coupon.type == 'discount' %}
+            {{ coupon.rate }}{{ 'coupon.type.discount_rate_unit'|trans }}
+          {% endif %}
+        </td>
 				<td>
 					{% if card.status == 'unused' %}
 						{{'admin.operation_invite.coupon.use_status.unused'|trans}}
