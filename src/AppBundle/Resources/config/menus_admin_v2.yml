@@ -489,7 +489,7 @@ admin_v2:
               children:
                 admin_v2_resource_quota:
                   name: admin_v2.ilab.resource_quota.basic_tab
-                  router_name: admin_v2_datasets_resource_quota_router
+                  router_name: admin_v2_images_set
 
     # 用户管理模块
     admin_v2_user:
