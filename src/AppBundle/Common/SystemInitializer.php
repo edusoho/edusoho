@@ -40,8 +40,8 @@ class SystemInitializer
         $this->_initBlocks();
         $this->_initThemes();
 //        $this->_initCoin();
-        $this->_initJob();
-        $this->_initQueueJob();
+//        $this->_initJob();
+//        $this->_initQueueJob();
         $this->_initOrg();
         $this->_initRole();
 //        $this->_initUserBalance();
