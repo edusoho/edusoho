@@ -15,7 +15,7 @@
       <div class="panel-heading">
         <h2>{{ 'my.teaching.course_set.create_btn'|trans }}</h2>
       </div>
-      {% if not app.user.largeAvatar or not app.user.title or not userProfile.about %}
+      {% if false %}
         {% include 'settings/user-profile.html.twig' %}
       {% else %}
         <form id="courseset-create-form" class="form-horizontal" action="{{ path('course_set_manage_create') }}"
