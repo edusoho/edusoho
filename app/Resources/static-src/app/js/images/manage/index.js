@@ -1,5 +1,4 @@
 import notify from 'common/notify';
-
 $(function () {
   var $table = $('#images-table');
   $table.on('click', '.delete-course', function () {

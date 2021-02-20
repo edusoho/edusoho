@@ -471,7 +471,7 @@ admin_v2:
               name: admin_v2.ilab.dockerimages
               visible: true
               children:
-                admin_v2_container_repository:
+                admin_v2_images_manage:
                   name: admin_v2.ilab.dockerimages.basic_tab
                   router_name: admin_v2_images_set
             # 数据集管理
@@ -479,7 +479,7 @@ admin_v2:
               name: admin_v2.ilab.datasets
               visible: true
               children:
-                admin_v2_datasets:
+                admin_v2_dataset_manage:
                   name: admin_v2.ilab.datasets.basic_tab
                   router_name: admin_v2_dataset_set
             # 配额管理
