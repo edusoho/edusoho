@@ -41,10 +41,15 @@
   .buy-btn-group {
     position: fixed;
     right: 15px !important;
-    padding-left: 100px !important;
+    bottom: 7px !important;
     z-index: 998;
     .btn-lg {
       padding: 8px 10px;
+    }
+    @media (max-width: @screen-xs-min) {
+      &.buy-btn-group--padding {
+        bottom: 0 !important;
+      }
     }
     &.course-classroom-tip {
       @media (max-width: @screen-xs-min) {
