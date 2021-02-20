@@ -86,7 +86,12 @@ class DatasetSetController extends BaseController
     }
 
     ## 删除数据集
-    public function deleteAction(){
-        return $this->createJsonResponse(['code' => 0, 'message' => '删除数据集成功']);
+    public function deleteAction(Request $request,$id){
+        $return = ['body'=>[]];
+        $result = $this->datasetObj->delete($id);
+        if($result['status']['code'] == 2000000){
+            $return = $result;
+        }
+        return $this->createJsonResponse($return);
     }
 }

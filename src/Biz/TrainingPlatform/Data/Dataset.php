@@ -19,10 +19,12 @@ class Dataset extends Base
         'localDir'  =>  'tm/datasets/localdir',     //获取ftp目录树
         'update'    =>  'tm/dataset/{id}',          // 修改数据集
         'add'       =>  'tm/datasets',              // 修改数据集
+        'delete'    =>  'tm/dataset/{id}',          // 删除数据集       
     ];
     public function __construct(){
         $this->client = new AbstractCloudAPI();
     }
+
     // 获取数据集列表
     public function getDatasetList($request){
         $return = ['paginator'=>'','body'=>[]];
@@ -64,6 +66,7 @@ class Dataset extends Base
         }
         return $this->return;
     }
+
     // 修改数据集
     public function update($id,$data=[]){
         $result = $this->client->put(str_replace("{id}",$id,self::APILIST['update']),$data);
@@ -72,9 +75,18 @@ class Dataset extends Base
         }
         return $this->return;
     }
+
     // 新增数据集
     public function add($data=[]){
         $result = $this->client->post(self::APILIST['add'],$data);
+        if($result['status']['code'] == 2000000){
+            $this->return = $result;
+        }
+        return $this->return;
+    }
+    // 删除数据集
+    public function delete($id){
+        $result = $this->client->delete(str_replace("{id}",$id,self::APILIST['delete']));
         if($result['status']['code'] == 2000000){
             $this->return = $result;
         }
