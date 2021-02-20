@@ -183,9 +183,9 @@ activity.live.second: second
 activity.live.started_tip: The live has already started
 activity.live.started_or_ended_notice: The live has already started or finshished,unable to edit
 
-activity.audio_manage.length_required_error_hint: Please enter a non-negative integer
-activity.audio_manage.length_unsigned_integer_error_hint: Please enter a non-negative integer
-activity.audio_manage.second_range_error_hint: Seconds between 0-59
+activity.audio_manage.length_required_error_hint: Please enter a non negative integer, seconds can only be between 0-59
+activity.audio_manage.length_unsigned_integer_error_hint: Please enter a non negative integer, seconds can only be between 0-59
+activity.audio_manage.second_range_error_hint: Please enter a non negative integer, seconds can only be between 0-59
 activity.audio_manage.media_error_hint: Please upload or select an audio file
 
 activity.document_manage.media_error_hint: Please upload or select the document
@@ -278,9 +278,9 @@ Activity.live.entry_live_room: Enter the live classroom
 Activity.live.count_down_title: Countdown
 Activity.live.not_created_notice: Live classroom not yet created
 
-Activity.audio_manage.length_required_error_hint: Please enter a non-negative integer
-Activity.audio_manage.length_unsigned_integer_error_hint: Please enter a non-negative integer
-Activity.audio_manage.second_range_error_hint: Seconds between 0-59
+Activity.audio_manage.length_required_error_hint: Please enter a non negative integer, seconds can only be between 0-59
+Activity.audio_manage.length_unsigned_integer_error_hint: Please enter a non negative integer, seconds can only be between 0-59
+Activity.audio_manage.second_range_error_hint: Please enter a non negative integer, seconds can only be between 0-59
 Activity.audio_manage.media_error_hint: Please upload or select an audio file
 
 Activity.audio_manage.finish_detail_required_error_hint: Please enter the completion condition
@@ -367,9 +367,9 @@ activity.video_manage.true_address_input: Please enter the correct video URL
 activity.video_manage.video_validate_error_hint: Failed to read the video URL. Please check the URL address you entered and try again
 activity.video_manage.finish_detail: Learn till the last
 activity.video_manage.other_finish_detail: Learn till the last (do not support web video)
-activity.video_manage.length_required_error_hint: Please enter a non-negative integer
-activity.video_manage.length_unsigned_integer_error_hint: Please enter a non-negative integer
-activity.video_manage.second_range_error_hint: Seconds between 0-59
+activity.video_manage.length_required_error_hint: Please enter a non negative integer, seconds can only be between 0-59
+activity.video_manage.length_unsigned_integer_error_hint: Please enter a non negative integer, seconds can only be between 0-59
+activity.video_manage.second_range_error_hint: Please enter a non negative integer, seconds can only be between 0-59
 activity.video_manage.media_error_hint: Please upload or select a video file
 activity.video.try_watch_finish_hint: Free trial end, purchase and watch the complete video
 

@@ -216,9 +216,9 @@ activity.live.started_tip: 直播已经开始
 activity.live.started_or_ended_notice: 直播已经开始或者结束,无法编辑
 
 
-activity.audio_manage.length_required_error_hint: 请输入非负整数
-activity.audio_manage.length_unsigned_integer_error_hint: 请输入非负整数
-activity.audio_manage.second_range_error_hint: 秒只能在0-59之间
+activity.audio_manage.length_required_error_hint: 请输入非负整数，秒数只能在0-59之间
+activity.audio_manage.length_unsigned_integer_error_hint: 请输入非负整数，秒数只能在0-59之间
+activity.audio_manage.second_range_error_hint: 请输入非负整数，秒数只能在0-59之间
 activity.audio_manage.media_error_hint: 请上传或选择音频文件
 
 activity.document_manage.media_error_hint: 请上传或选择文档
@@ -314,9 +314,9 @@ activity.video_manage.true_address_input: 请输入正确的视频网址
 activity.video_manage.video_validate_error_hint: 读取视频页面信息失败，请检查您输入的页面地址后重试
 activity.video_manage.finish_detail: 学习到最后
 activity.video_manage.other_finish_detail: 学习到最后(不支持网络视频)
-activity.video_manage.length_required_error_hint: 请输入非负整数
-activity.video_manage.length_unsigned_integer_error_hint: 请输入非负整数
-activity.video_manage.second_range_error_hint: 秒数只能在0-59之间
+activity.video_manage.length_required_error_hint: 请输入非负整数，秒数只能在0-59之间
+activity.video_manage.length_unsigned_integer_error_hint: 请输入非负整数，秒数只能在0-59之间
+activity.video_manage.second_range_error_hint: 请输入非负整数，秒数只能在0-59之间
 activity.video_manage.media_error_hint: 请上传或选择视频文件
 activity.video.try_watch_finish_hint: 免费试看结束，购买后可完整观看
 
@@ -718,8 +718,8 @@ validate.trim.message: 请输入%display%
 validate.idcard_number_input.message: 请正确输入您的身份证号码
 validate.visible_character_input.message: 请输入可见性字符
 validate.positive_integer.message: 请输入正整数
-validate.unsigned_integer.message: 请输入非负整数
-validate.second_range.message: 秒只能填写0-59之间的数字
+validate.unsigned_integer.message: 请输入非负整数，秒数只能在0-59之间
+validate.second_range.message: 请输入非负整数，秒数只能在0-59之间
 validate.course_title.message: 不支持输入<、>字符
 validate.float_input.message: 请输入正确的小数,只保留到两位小数
 validate.open_live_course_title.message: 不支持输入<、>、\"、&、‘、’、”、“字符
