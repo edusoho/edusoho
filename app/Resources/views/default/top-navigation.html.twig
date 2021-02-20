@@ -23,13 +23,13 @@
 {# {% endfor %} #}
 
 {# 添加admin_v2 #}
-{% if has_permission('admin') or has_permission('admin_v2') or 'ROLE_TEACHER' in app.user.roles %}
+{% if has_permission('admin') or has_permission('admin_v2') or (app.user and 'ROLE_TEACHER' in app.user.roles) %}
   添加admin_v2
   {% if has_permission('admin') or has_permission('admin_v2') %}
     <li class="nav-more nav-hover"><a class="more"
                                       href="{{ path('admin') }}">{{ 'homepage.header.admin_menu'|trans }}</a></li>
   {% endif %}
-  {% if app.user.isTeacher() %}
+  {% if app.user and app.user.isTeacher() %}
     <li class="nav-more nav-hover"><a class="more" href="{{ path('my') }}">{{ 'homepage.header.my_course'|trans }}</a>
     </li>
   {% endif %}

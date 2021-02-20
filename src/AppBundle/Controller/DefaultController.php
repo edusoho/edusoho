@@ -28,6 +28,9 @@ class DefaultController extends BaseController
 
         if (!empty($user['id'])) {
             $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
+        } else {
+            # 用户如果没有登录， 直接跳转登录页面
+            return $this->redirectToRoute("login");
         }
 
         $custom = $this->isCustom();
