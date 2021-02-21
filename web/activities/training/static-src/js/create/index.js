@@ -96,6 +96,8 @@ load.then(function(){
     $("#lab_type").on("change",function(val){
         divShow($(this).val());
     })
+    // 回填完毕触发一次change事件
+    $("#lab_type").trigger("change");
 
     // $("#picker_images_items").on("click",function(){
       // 编辑的时候传递选中id
@@ -108,14 +110,14 @@ load.then(function(){
   function divShow(id){
     $('#link_url').rules("remove");
     switch(id){
-      case "1":
+      case "2":
         $('#link_url').rules("add",{
           required:true,
         });
         $(".link_div").show();
         $(".images_div,.dataset_div").hide();
         break;
-      case "2":
+      case "1":
         $(".link_div").hide();
         $('#dataset_ids').rules("add",{
           required:true,

@@ -108,15 +108,4 @@ export default class Training {
       this.$PickedModal.html(html);
     });
   }
-
-  // showPickedImages() {
-  //   let $cachedImages = $('.images-cache').val();
-  //   if ($cachedImages === '') {
-  //     return;
-  //   }
-    
-  //   this.currentImages = JSON.parse($cachedImages);
-  //   $(".selectImages").html(this.currentImages.name);
-    
-  // }
 }
