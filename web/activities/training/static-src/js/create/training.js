@@ -33,11 +33,11 @@ export default class Training {
     // 镜像保存回调
     $(".images-cache").on("click",function(){
       console.log("镜像回调")
-        let $cachedImages = $('.images-cache').val();
-        console.log($cachedImages);
-        if ($cachedImages === '') {
-          return;
-        }
+      let $cachedImages = $('.images-cache').val();
+      console.log($cachedImages);
+      if ($cachedImages === '') {
+        return;
+      }
 
       this.currentImages = JSON.parse($cachedImages);
       $(".selectImages").html(this.currentImages.name + ":" + this.currentImages.version);

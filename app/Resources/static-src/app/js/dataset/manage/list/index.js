@@ -1,5 +1,4 @@
 import notify from 'common/notify';
-
 $(function () {
   var $table = $('#dataset-table');
   $table.on('click', '.delete-dataset', function () {

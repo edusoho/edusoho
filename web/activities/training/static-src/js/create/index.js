@@ -85,7 +85,7 @@ load.then(function(){
         // 当status == ready的时候执行
         if (editor.status === 'ready') {
           editor.setData(result['content'], {
-            callback: function() {
+            callback: function () {
               console.log(editor.status);
             }
           });
@@ -128,7 +128,7 @@ load.then(function(){
         $('#images_id').rules("add", {
           required: true,
           messages: {
-            required:"请选择镜像"
+            required: "请选择镜像"
           }
         });
 

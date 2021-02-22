@@ -119,7 +119,7 @@ class TrainingController extends BaseActivityController implements ActivityActio
 
 
     ///////////////新增加
-    public function createEditorAction(Request $request,$activity)
+    public function createEditorAction(Request $request, $activity)
     {
         // 增加后续逻辑
         $tags = [
