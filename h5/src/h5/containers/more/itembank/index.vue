@@ -90,8 +90,8 @@ export default {
     window.scroll(0, 0);
     this.selectedData = this.transform(this.$route.query);
 
-    // 获取班级分类数据
-    Api.getCourseCategories().then(data => {
+    // 获取题库分类数据
+    Api.getItemBankCategoriesNew().then(data => {
       data.unshift({
         name: '全部',
         id: '0',

@@ -75,7 +75,7 @@ export default {
   created() {
     this.setTitle();
     this.selectedData = this.transform(this.$route.query);
-    this.getCourseCategories();
+    this.getItemBankCategories();
     this.setQuery();
   },
   methods: {
@@ -93,8 +93,8 @@ export default {
       this.getCourseList();
     },
     // 获取课程分类数据
-    getCourseCategories() {
-      Api.getCourseCategories()
+    getItemBankCategories() {
+      Api.getItemBankCategoriesNew()
         .then(data => {
           this.formateCategories(data);
         })
