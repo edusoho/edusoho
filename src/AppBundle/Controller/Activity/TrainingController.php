@@ -18,7 +18,7 @@ class TrainingController extends BaseActivityController implements ActivityActio
         }
 
         return $this->render('activity/training/show.html.twig', array(
-            'activity' => $activity,
+            'activity' => json_encode($activity),
         ));
     }
 

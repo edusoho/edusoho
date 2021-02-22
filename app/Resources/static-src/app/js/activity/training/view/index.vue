@@ -1,5 +1,5 @@
 <template>
-    <div style="height:1000px;">
+    <div style="height:800px;">
         <split-pane v-on:resize="resize" :min-percent='20' :default-percent='30' split="vertical">
         <template slot="paneL">
             <div slot="left" class="left-box">
@@ -24,7 +24,7 @@
                                 <div  class="step-content">
                                     <div class="body-box" ref="markdownDody" id="markdownDody">
                                         <div class="body-con document" v-show="tab=='document'">
-                                            内容
+                                            <p v-html="info.content"></p>
                                         </div>
                                         <div class="body-con dataSet" v-show="tab=='dataset'">
                                             数据集
@@ -72,6 +72,9 @@
         name:"view",
         components:{
             splitPane
+        },
+        props:{
+            info:Object
         },
         data(){
             return {
