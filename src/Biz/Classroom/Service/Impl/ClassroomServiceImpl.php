@@ -952,7 +952,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $this->createNewException(ClassroomException::FORBIDDEN_NOT_STUDENT());
         }
 
-        $this->removeStudentsFromClasroomCourses($classroomId, $userId);
+        $this->removeStudentsFromClasroomCourses($classroomId, $userId, $info);
 
         if (1 == count($member['role'])) {
             $this->getClassroomMemberDao()->delete($member['id']);
@@ -1873,15 +1873,15 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return array_intersect($member['role'], ['teacher', 'headTeacher', 'assistant']);
     }
 
-    private function removeStudentsFromClasroomCourses($classroomId, $userId)
+    private function removeStudentsFromClasroomCourses($classroomId, $userId, $info)
     {
         $classroomCourses = $this->getClassroomCourseDao()->findActiveCoursesByClassroomId($classroomId);
 
         $courseIds = ArrayToolkit::column($classroomCourses, 'courseId');
 
         $reason = [
-            'reason' => 'course.member.operation.reason.classroom_exit',
-            'reason_type' => 'classroom_exit',
+            'reason' => !empty($info['reason']) ? $info['reason'] : 'course.member.operation.reason.classroom_exit',
+            'reason_type' => !empty($info['reason_type']) ? $info['reason_type'] : 'classroom_exit',
         ];
         foreach ($courseIds as $key => $courseId) {
             $count = 0;

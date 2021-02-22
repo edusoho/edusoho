@@ -7915,6 +7915,7 @@ log.action.course.publish_course: Publish teaching plan
 log.action.course.close_course: Close teaching plan
 log.action.course.update_draft: Update draft
 log.action.course.join_course: Join teaching plan
+log.action.course.exit_course: Exit teaching plan
 log.action.user.exportCsv: 'Export'
 log.action.user.add: 'Add'
 log.action.user.edit: 'Edit'
@@ -8009,6 +8010,7 @@ log.action.classroom.publish: Publish classroom
 log.action.classroom.close: Close classroom
 log.action.classroom.update_head_teacher: Modify the head teacher of the classroom
 log.action.classroom.join_classroom: Join classroom
+log.action.classroom.exit_classroom: Exit classroom
 log.action.article.update_settings: 'Update settings'
 log.action.article.create: 'Create'
 log.action.article.update: 'Update'
@@ -8135,7 +8137,7 @@ log.action.template.course.close: Closed the<strong class="color-success"> cours
 log.action.template.course.delete: Deleted the<strong class="color-success"> course </strong>《%title%》
 log.action.template.course.add_student: Added a new<strong class="color-success"> student </strong>%nickname% to the teaching plan《<a href="%url%" target="_blank">%title%</a>》 remark:%remark%
 log.action.template.course.remove_student: Removed the<strong class="color-success"> student </strong>%nickname% from teaching plan《<a href="%url%" target="_blank">%title%</a>》
-log.action.template.course.exit_course: <strong class="color-success">student</strong>%nickname%Withdrew from the teaching plan《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.course.exit_course: <strong class="color-success">Student</strong> %nickname% exit from the teaching plan《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.update_teacher: Updated teacher information for the teaching plan 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.create_thread: Created a new topic《%title%》
 log.action.template.course.update_thread: Updated the topic《%title%》

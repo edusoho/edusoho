@@ -9114,6 +9114,7 @@ log.action.course.publish_course: 发布教学计划
 log.action.course.close_course: 关闭教学计划
 log.action.course.update_draft: 更新草稿
 log.action.course.join_course: 加入教学计划
+log.action.course.exit_course: 退出教学计划
 log.action.user.exportCsv: 导出
 log.action.user.add: 新增
 log.action.user.edit: 修改
@@ -9208,6 +9209,7 @@ log.action.classroom.publish: 发布班级
 log.action.classroom.close: 关闭班级
 log.action.classroom.update_head_teacher: 修改班主任
 log.action.classroom.join_classroom: 加入班级
+log.action.classroom.exit_classroom: 退出班级
 log.action.article.update_settings: 更新设置
 log.action.article.create: 新增
 log.action.article.update: 修改

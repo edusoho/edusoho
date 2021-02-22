@@ -904,7 +904,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             'nickname' => $removeMember['nickname'],
         ];
 
-        if (isset($reason['reason_type']) && 'exit' === $reason['reason_type']) {
+        if (isset($reason['reason_type']) && ('exit' === $reason['reason_type'] || 'classroom_exit' === $reason['reason_type'])) {
             $this->getLogService()->info(
                 'course',
                 'exit_course',
