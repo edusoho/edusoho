@@ -5338,7 +5338,7 @@ admin.operation_invite.coupon.recieved_at: 'Recieved Time:'
 admin.operation_invite.coupon.start_time.placeholer: 'Start Time'
 admin.operation_invite.coupon.finished_time.placeholer: 'Finished Time'
 admin.operation_invite.coupon.recieved_at_th: 'Recieved Time'
-admin.operation_invite.coupon.rate_th: 'Coupon Value'
+admin.operation_invite.coupon.rate_th: 'Coupon Value / Discount'
 admin.operation_invite.coupon.use_status_th: 'Useage Status'
 admin.operation_invite.coupon.use_status.unused: Unused
 admin.operation_invite.coupon.use_status.receive: Recieved
@@ -9594,6 +9594,7 @@ coupon.total_count: Sum
 coupon.expiry_date: Validity period
 coupon.amount: Preferential amount
 coupon.target_type: Type
+coupon.amonut: Amount
 
 coupon.type.minus: Price
 coupon.type.discount: Discount

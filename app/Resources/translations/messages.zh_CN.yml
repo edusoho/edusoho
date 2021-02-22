@@ -6310,7 +6310,7 @@ admin.operation_invite.coupon.recieved_at: 领取时间：
 admin.operation_invite.coupon.start_time.placeholer: 开始时间
 admin.operation_invite.coupon.finished_time.placeholer: 结束时间
 admin.operation_invite.coupon.recieved_at_th: 领取时间
-admin.operation_invite.coupon.rate_th: 面值
+admin.operation_invite.coupon.rate_th: 面值/折扣
 admin.operation_invite.coupon.use_status_th: 使用情况
 admin.operation_invite.coupon.use_status.unused: 未使用
 admin.operation_invite.coupon.use_status.receive: 已领取
@@ -10868,6 +10868,7 @@ coupon.total_count: 总数
 coupon.expiry_date: 有效期
 coupon.amount: 已优惠金额
 coupon.target_type: 类型
+coupon.amonut: 张
 
 coupon.type.minus: 抵价
 coupon.type.discount: 打折

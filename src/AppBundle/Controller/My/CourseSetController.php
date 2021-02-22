@@ -18,14 +18,19 @@ class CourseSetController extends CourseBaseController
     {
         $user = $this->getCurrentUser();
 
+        $conditions = [
+            'userId' => $user['id'],
+            'targetTypes' => ['course', 'openCourse', 'goods'],
+            'excludeGoodsTypes' => ['classroom'],
+        ];
         $paginator = new Paginator(
             $request,
-            $this->getFavoriteService()->countFavorites(['userId' => $user['id'], 'targetTypes' => ['course', 'openCourse']]),
+            $this->getFavoriteService()->countFavorites($conditions),
             12
         );
 
         $courseFavorites = $this->getFavoriteService()->searchFavorites(
-            ['userId' => $user['id'], 'targetTypes' => ['course', 'openCourse']],
+            $conditions,
             ['id' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
