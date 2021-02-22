@@ -19,12 +19,7 @@
 
   app.config = {{
     {
-      api:{
-        weibo:{key:setting('login_bind.weibo_key', '')},
-        qq:{key:setting('login_bind.qq_key', '')},
-        douban:{key:setting('login_bind.douban_key', '')},
-        renren:{key:setting('login_bind.renren_key', '')}
-      },
+      api:{},
       loading_img_path: asset('assets/img/default/loading.gif'),
     }|json_encode|raw
   }};
@@ -42,14 +37,6 @@
   app.uploadUrl = '{{path("file_upload")}}';
   app.imgCropUrl = '{{path("file_img_crop")}}';
   app.lessonCopyEnabled = '{{setting("course.copy_enabled","0")}}';
-  app.cloudSdkBaseUri = '{{ setting("developer.cloud_sdk_cdn", "") }}';
-  app.cloudDisableLogReport = {{ setting("developer.disable_log_report", 0) }};
-  app.cloudPlayerSdkUrl = '{{ cloud_sdk_url("player") }}';
-  app.cloudPlayServer = '{{ setting("developer.cloud_play_server", "play1.qiqiuyun.net") }}';
-  app.cloudVideoPlayerSdkUrl = '{{ cloud_sdk_url("resource_player") }}';
-  app.cloudUploaderSdkUrl = '{{ cloud_sdk_url("uploader") }}';
-  app.cloudOldUploaderSdkUrl = '{{ cloud_sdk_url("old_uploader") }}';
-  app.cloudOldDocumentSdkUrl = '{{ cloud_sdk_url("old_document") }}';
   app.mainScript = '{{ script_main }}';
   app.lang = '{{ app.request.locale }}';
 </script>

@@ -73,7 +73,7 @@ define(function(require, exports, module) {
     $('.js-update-modal').modal('show');
   }
 
-  $('.modal').on('hidden.bs.modal', function(){
+  $('.modal').on('hidden.bs.modal', function () {
     var $modal = $(this);
     if ($modal.find('.modal-dialog').data('clear')) {
       $modal.empty();
@@ -82,7 +82,7 @@ define(function(require, exports, module) {
 
   $.ajax('/online/sample');
 
-  $('.js-no-permission-btn').on('click',function () {
-      Notify.danger(Translator.trans('admin.switch_old_version.permission_error'));
-  })
+  $('.js-no-permission-btn').on('click', function () {
+    Notify.danger(Translator.trans('admin.switch_old_version.permission_error'));
+  });
 });
