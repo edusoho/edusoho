@@ -8177,6 +8177,7 @@ log.action.template.classroom.update_picture: Updated the cover of <strong class
 log.action.template.classroom.update_head_teacher: Updated the head teacher of the <strong class="color-success"> classroom </strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.add_student: Added a new<strong class="color-success"> student </strong>%nickname% to the<strong class="color-success"> classroom </strong>《<a href="%url%" target="_blank">%title%</a>》 remark:%remark%
 log.action.template.classroom.remove_student: Removed the <strong class="color-success"> student </strong>%nickname% from<strong class="color-success"> classroom </strong>《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.classroom.exit_classroom: <strong class="color-success">student</strong>%nickname%exited<strong class="color-success">classroom</strong>《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.delete_course: Removed the<strong class="color-success"> course </strong>%courseSetTitle% from<strong class="color-success"> classroom </strong>《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.add_course: Added a new <strong class="color-success"> course </strong>%courseSetTitle% to the<strong class="color-success"> classroom </strong>《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.category.create: Created a new<strong class="color-success"> category </strong> 《%title%》

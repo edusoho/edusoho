@@ -283,6 +283,7 @@ class Logger
                 'remove_student' => '移除学员',
                 'recommend' => '推荐班级',
                 'cancel_recommend' => '取消推荐',
+                'exit_classroom' => '退出班级',
             ],
             self::ARTICLE => [
                 'update_settings' => '更新设置',

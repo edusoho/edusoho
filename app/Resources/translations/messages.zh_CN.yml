@@ -9380,6 +9380,7 @@ log.action.template.classroom.update_picture: 修改了<strong class="color-succ
 log.action.template.classroom.update_head_teacher: 修改了<strong class="color-success">班级</strong> 《<a href="%url%" target="_blank">%title%</a>》的班主任
 log.action.template.classroom.add_student: 在<strong class="color-success">班级</strong>《<a href="%url%" target="_blank">%title%</a>》添加了<strong class="color-success">学员</strong>%nickname% 备注:%remark%
 log.action.template.classroom.remove_student: 在<strong class="color-success">班级</strong>《<a href="%url%" target="_blank">%title%</a>》移除了<strong class="color-success">学员</strong>%nickname%
+log.action.template.classroom.exit_classroom: <strong class="color-success">学员</strong>%nickname%退出了<strong class="color-success">班级</strong>《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.delete_course: 在<strong class="color-success">班级</strong>《<a href="%url%" target="_blank">%title%</a>》移除了<strong class="color-success">课程</strong>%courseSetTitle%
 log.action.template.classroom.add_course: 在<strong class="color-success">班级</strong>《<a href="%url%" target="_blank">%title%</a>》添加了<strong class="color-success">课程</strong>%courseSetTitle%
 log.action.template.classroom.join_classroom: 加入班级《<a href="%url%" target="_blank">%title%</a>》

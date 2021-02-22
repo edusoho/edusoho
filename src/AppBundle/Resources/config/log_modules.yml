@@ -189,6 +189,14 @@ classroom:
                 param:
                     id: classroomId
             %nickname%: nickname
+    exit_classroom:
+        templateParam:
+            %url%:
+                type: url
+                path: classroom_show
+                param:
+                    id: classroomId
+            %nickname%: nickname
     join_classroom:
         templateParam:
             %url%:

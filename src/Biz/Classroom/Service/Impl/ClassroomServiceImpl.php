@@ -938,7 +938,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->getClassroomMemberDao()->update($member['id'], $fields);
     }
 
-    public function removeStudent($classroomId, $userId, $info = [])
+    public function removeStudent($classroomId, $userId, $info = [], $removeType = 'remove')
     {
         $classroom = $this->getClassroom($classroomId);
 
@@ -988,12 +988,21 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'nickname' => $user['nickname'],
         ];
 
-        $this->getLogService()->info(
-            'classroom',
-            'remove_student',
-            "班级《{$classroom['title']}》(#{$classroom['id']})，移除学员{$user['nickname']}(#{$user['id']})",
-            $infoData
-        );
+        if ('exit' === $removeType) {
+            $this->getLogService()->info(
+                'classroom',
+                'exit_classroom',
+                "学员{$user['nickname']}(#{$user['id']})退出了班级《{$classroom['title']}》(#{$classroom['id']})",
+                $infoData
+            );
+        } else {
+            $this->getLogService()->info(
+                'classroom',
+                'remove_student',
+                "班级《{$classroom['title']}》(#{$classroom['id']})，移除学员{$user['nickname']}(#{$user['id']})",
+                $infoData
+            );
+        }
 
         $this->dispatchEvent(
             'classroom.quit',
