@@ -3,26 +3,26 @@
 <input type="hidden" id="course_manage_lesson_batch_publish" value="{{path('course_manage_lesson_batch_publish', { courseId: courseId })}}">
 <div class="task-manage-batch-operate js-batch-operate-panel clearfix hidden">
   <div class="pull-left">
-    <span class="text-14 gray-darker">全部选择：</span>
-    <span class="js-batch-choose batch-choose cd-ml8 cd-mr24" data-types="chapter,unit">章节</span>
-    <span class="js-batch-choose batch-choose" data-types="lesson">课时</span>
+    <span class="text-14 gray-darker">{{'course.plan_task.all_choices'|trans}}：</span>
+    <span class="js-batch-choose batch-choose cd-ml8 cd-mr24" data-types="chapter,unit">{{'course.plan_task.chapter'|trans}}</span>
+    <span class="js-batch-choose batch-choose" data-types="lesson">{{'course.plan_task.lesson'|trans}}</span>
   </div>
   <div class="pull-right clearfix">
-    <span class="chosen-number cd-mr24">已选<span class="js-chosen-number">0</span>条</span>
+    <span class="chosen-number cd-mr24">{{'course.plan_task.selected'|trans|raw}}</span>
     <button class="cd-btn cd-btn-primary cd-btn-sm cd-mr16 js-batch-publish" 
-      data-loading-text="发布中..."
+      data-loading-text="{{'course.plan_task.publishing_btn'|trans}}"
       disabled>
-      发布
+      {{'course.plan_task.publish_btn'|trans}}
     </button>
     <button class="cd-btn cd-btn-default cd-btn-sm cd-mr16 js-batch-cancel-publish" 
-      data-loading-text="取消中..."
+      data-loading-text="{{'course.plan_task.unpublishing_btn'|trans}}"
       disabled>
-      取消发布
+      {{'course.plan_task.unpublish_btn'|trans}}
     </button>
     <button class="cd-btn cd-btn-danger cd-btn-sm js-batch-delete"
-      data-loading-text="删除中..."
+      data-loading-text="{{'course.plan_task.deleting_btn'|trans}}"
       disabled>
-      删除
+      {{'course.plan_task.delete_btn'|trans}}
     </button>
   </div>
 </div>

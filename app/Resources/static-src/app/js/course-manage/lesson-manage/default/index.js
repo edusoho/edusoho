@@ -174,13 +174,13 @@ class BatchOperate {
       if (isAll) {
         this.cancelChooseAllItemByType(type)
       } else {
-        this.chooseAllItemByItem(type)
+        this.chooseAllItemByType(type)
       }
     })
     this.updateBatchBtnStatus()
   }
 
-  chooseAllItemByItem (type) {
+  chooseAllItemByType (type) {
     const $items = this.$element.find(`.js-chapter-operation[data-type=${type}]`)
 
     $items.each((index1, element) => {
@@ -228,14 +228,9 @@ class BatchOperate {
         chosenItems = chosenItems.filter(item => !this.getPublishStatusById(item.id))
       }
 
-      const text = isDeleteLesson ?
-        `删除所选课时后，课时下对应任务将一并被删除。此次删除只删除未发布课时，已发布课时需取消发布后重新删除，此次删除${chosenItems.length}课时，确定继续。`
-        :
-        `已选中${chosenItems.length}个章节，是否确定删除？`;
-
       cd.confirm({
         title: Translator.trans('site.delete'),
-        content: text,
+        content: this.getDeleteText(isDeleteLesson, chosenItems.length),
         okText: Translator.trans('site.confirm'),
         cancelText: Translator.trans('site.cancel'),
         className: 'task-manage-batch-delete',
@@ -249,14 +244,24 @@ class BatchOperate {
           }
           this.clearChosenItems()
           $target.button('reset')
-
+          cd.message({ type: 'success', message: Translator.trans('site.delete_success_hint') })
           setTimeout(() => this.updateBatchBtnStatus())
         }).catch(function(data) {
+          const failMessage = Translator.trans('site.delete_fail_hint: Delete failed') + ':'
+
           $target.button('reset')
-          cd.message({ type: 'danger', message: data.responseJSON.error.message });
+          cd.message({ type: 'danger', message: failMessage + ':' + data.responseJSON.error.message });
         })
       })
     })
+  }
+
+  getDeleteText(isDeleteLesson, length) {
+    if (isDeleteLesson) {
+      return Translator.trans('course.manage.task_batch_delete_hint', { length });
+    }
+    
+    return Translator.trans('course.manage.chapter_batch_delete_hint', { length });
   }
 
   // 批量发布
@@ -280,13 +285,18 @@ class BatchOperate {
             $parentLi.find(".js-unpublish-item").removeClass('hidden')
           })
         }
-        cd.message({ type: 'success', message: "发布成功" });
+        cd.message({ type: 'success', message: Translator.trans('course.manage.task_publish_success_hint') });
         $target.button('reset')
 
         setTimeout(() => this.updateBatchBtnStatus())
       }).catch(function(data) {
+        const failMessage = Translator.trans('course.manage.task_unpublish_fail_hint') + ':'
+
         $target.button('reset')
-        cd.message({ type: 'danger', message: data.responseJSON.error.message });
+        cd.message({ 
+          type: 'danger', 
+          message: failMessage + data.responseJSON.error.message 
+        });
       })
     })
   }
@@ -312,13 +322,15 @@ class BatchOperate {
             $parentLi.find(".js-unpublish-item").addClass('hidden')
           })
         }
-        cd.message({ type: 'success', message: "取消发布成功" });
+        cd.message({ type: 'success', message: Translator.trans('course.manage.task_unpublish_success_hint') });
         $target.button('reset')
 
         setTimeout(() => this.updateBatchBtnStatus())
       }).catch(function(data) {
+        const failMessage = Translator.trans('course.manage.task_unpublish_fail_hint') + ':'
+
         $target.button('reset')
-        cd.message({ type: 'danger', message: data.responseJSON.error.message });
+        cd.message({ type: 'danger', message: failMessage + data.responseJSON.error.message });
       })
     })
   }

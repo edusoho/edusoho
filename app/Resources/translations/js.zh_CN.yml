@@ -480,7 +480,9 @@ course.manage.copy_title: 复制计划
 course.manage.max_course_number_tip: 支持创建10个计划，若需新增，请对原有计划删除后添加。
 course.manage.delete_hint: 是否确定删除该教学计划？
 course.manage.task_delete_hint: 是否确定删除该%taskName%吗？
+course.manage.task_batch_delete_hint: 删除所选课时后，课时下对应任务将一并被删除。此次删除只删除未发布课时，已发布课时需取消发布后重新删除，此次删除%length%课时，确定继续。
 course.manage.chapter_delete_hint: 是否确定删除该%name%吗？
+course.manage.chapter_batch_delete_hint: 已选中%length%个章节，是否确定删除？
 course.manage.task_publish_success_hint: 发布成功
 course.manage.task_publish_fail_hint: 发布失败
 course.manage.task_unpublish_success_hint: 取消发布成功
