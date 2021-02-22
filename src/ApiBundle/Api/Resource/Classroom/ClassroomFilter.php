@@ -20,7 +20,7 @@ class ClassroomFilter extends Filter
     ];
 
     protected $publicFields = [
-        'status', 'price', 'vipLevelId', 'headTeacher', 'teachers', 'assistants',
+        'id', 'status', 'price', 'vipLevelId', 'headTeacher', 'teachers', 'assistants',
         'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'threadNum', 'noteNum', 'postNum', 'service', 'recommended',
         'recommendedSeq', 'rating', 'ratingNum', 'maxRate', 'showable', 'buyable', 'expiryMode', 'expiryValue',
         'createdTime', 'updatedTime', 'creator', 'access', 'productId', 'goodsId', 'hasCertificate', 'specsId', 'spec',
