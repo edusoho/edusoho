@@ -3,15 +3,63 @@
         <split-pane v-on:resize="resize" :min-percent='20' :default-percent='30' split="vertical">
         <template slot="paneL">
             <div slot="left" class="left-box">
-                    <div class="top-bar">
-                        <div  class="top-bar">
-                            <span class="course-name">标题名称</span>
+                <div class="top-bar">
+                    <div  class="top-bar">
+                        <span class="course-name">标题名称</span>
+                    </div>
+                </div>
+                <div  class="box-container relative">
+                    <div class="left-bar">
+                        <div  class="left-bar">
+                            <div class="menu-tabs">
+                                <div class="item font-16" :class=" tab == 'document'?'active':'' " @click="switchTab('document')">实验手册</div>
+                                <div class="item font-16" :class=" tab == 'dataset'?'active':''" @click="switchTab('dataset')">我的数据集</div>
+                            </div>
+                            <div class="menu-btns"></div>
                         </div>
                     </div>
+                    <div class="box-content relative full-width">
+                        <div  class="lab-document" >
+                            <div class="steps-document" width="648" style="height: 100%;">
+                                <div  class="step-content">
+                                    <div class="body-box" ref="markdownDody" id="markdownDody">
+                                        <div class="body-con document" v-show="tab=='document'">
+                                            内容
+                                        </div>
+                                        <div class="body-con dataSet" v-show="tab=='dataset'">
+                                            数据集
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>                
+
+                    </div>
+                </div>
             </div>
         </template>
         <template slot="paneR">
-            B
+            <div slot="right">
+                <div class="right-box">
+                    <div class="env" >
+                        <div>
+                            <div class="title">
+                                <p>请点击运行环境</p><br />
+                                <p style="font-size:20px;">个人空间： <span style="color:green;">/home/ilab</span></p>
+                            </div>
+                            <div  class="env-items">
+                                <div class="env-item">
+                                    <div class="icon">
+                                        <i class="el-icon-s-platform" style="font-size: 70px;"></i>
+                                    </div>
+                                    <div class="env-title">环境名称</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </template>
         </split-pane>
     </div>
@@ -24,6 +72,16 @@
         name:"view",
         components:{
             splitPane
+        },
+        data(){
+            return {
+                tab:"document"
+            }
+        },
+        methods:{
+            switchTab(tab){
+                this.tab = tab;
+            }
         },
         mounted() {
         }

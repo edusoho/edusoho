@@ -122,21 +122,21 @@ class Training extends Activity
 
     // 提交实训端参数梳理
     private function parseFields($fields=[]){
-        $images = json_decode($fields['images'],true);
         $params = [
             "fromCourseSetId"   => $fields["fromCourseId"],
             "lab_type"          => $fields["lab_type"],
-            "img_repo"          => $images["name"],
-            "img_tag"           => $images["version"],
             "create_user_id"    => $user['id'],
         ];
         if($fields["lab_type"] == 1){
             $datasets = json_decode($fields["datasets"],true);
+            $images = json_decode($fields['images'],true);
             $ids = [];
             foreach($datasets as $info){
                 $ids[] = $info['id'];
             }
             $params["dataset_ids"] = $ids;
+            $params['img_repo'] = $images["name"];
+            $params['img_tag'] = $images["version"];
         }elseif($fields["lab_type"] == 2){
             $params["link"] = $fields["link_url"];
         }
