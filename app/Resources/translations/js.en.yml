@@ -183,9 +183,7 @@ activity.live.second: second
 activity.live.started_tip: The live has already started
 activity.live.started_or_ended_notice: The live has already started or finshished,unable to edit
 
-activity.audio_manage.length_required_error_hint: Please enter the durations
-activity.audio_manage.length_unsigned_integer_error_hint: The duration must be greater than 0
-activity.audio_manage.second_range_error_hint: Seconds between 0-59
+activity.audio_manage.length_required_error_hint: Please enter a non negative integer, where seconds can only be between 0-59
 activity.audio_manage.media_error_hint: Please upload or select an audio file
 
 activity.document_manage.media_error_hint: Please upload or select the document
@@ -367,9 +365,7 @@ activity.video_manage.true_address_input: Please enter the correct video URL
 activity.video_manage.video_validate_error_hint: Failed to read the video URL. Please check the URL address you entered and try again
 activity.video_manage.finish_detail: Learn till the last
 activity.video_manage.other_finish_detail: Learn till the last (do not support web video)
-activity.video_manage.length_required_error_hint: Please enter the duration
-activity.video_manage.length_unsigned_integer_error_hint: Please enter the duration
-activity.video_manage.second_range_error_hint: Seconds between 0-59
+activity.video_manage.length_required_error_hint: Please enter a non negative integer, where seconds can only be between 0-59
 activity.video_manage.media_error_hint: Please upload or select a video file
 activity.video.try_watch_finish_hint: Free trial end, purchase and watch the complete video
 
@@ -775,8 +771,8 @@ validate.trim.message: Please input %display%
 validate.idcard_number_input.message: Please enter your ID number correctly
 validate.visible_character_input.message: Please input a visible character
 validate.positive_integer.message: Please enter a positive integer
-validate.unsigned_integer.message: Please enter a non-negative integer
-validate.second_range.message: Please enter a number between 0-59
+validate.unsigned_integer.message: Please enter a non negative integer, where seconds can only be between 0-59
+validate.second_range.message: Please enter a non negative integer, where seconds can only be between 0-59
 validate.course_title.message: Do not support typing <,> characters
 validate.float_input.message: Please enter the correct decimals, leaving only TWO decimal places.
 validate.open_live_course_title.message: Do not support typing <,>, \ ", &, ',',", "characters

@@ -25,7 +25,7 @@ services:
         public: false
         tags:
             - { name: twig.extension }
-
+  
     codeages_plugin.slot_twig_extension:
         class: Codeages\PluginBundle\Twig\SlotExtension
         public: false

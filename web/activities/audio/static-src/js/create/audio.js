@@ -68,12 +68,12 @@ export default class Audio {
       messages: {
         minute: {
           required: Translator.trans('activity.audio_manage.length_required_error_hint'),
-          unsigned_integer: Translator.trans('activity.audio_manage.length_unsigned_integer_error_hint')
+          unsigned_integer: Translator.trans('activity.audio_manage.length_required_error_hint')
         },
         second: {
           required: Translator.trans('activity.audio_manage.length_required_error_hint'),
-          second_range: Translator.trans('activity.audio_manage.second_range_error_hint'),
-          unsigned_integer: Translator.trans('activity.audio_manage.length_unsigned_integer_error_hint')
+          second_range: Translator.trans('activity.audio_manage.length_required_error_hint'),
+          unsigned_integer: Translator.trans('activity.audio_manage.length_required_error_hint')
         },
       }
     });
