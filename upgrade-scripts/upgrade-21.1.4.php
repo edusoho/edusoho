@@ -52,6 +52,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $definedFuncNames = array(
             'resetCourseTaskCopyId',
+            'alterCourseFileSize',
         );
 
         $funcNames = array();
@@ -103,6 +104,17 @@ class EduSohoUpgrade extends AbstractUpdater
 
         $this->logger('info', "重置课时任务的copyId结束");
         
+        return 1;
+    }
+
+    public function alterCourseFileSize()
+    {
+        $this->getConnection()->exec("
+            ALTER TABLE `course_material_v8` modify COLUMN `fileSize` BIGINT(16) unsigned NOT NULL DEFAULT '0' COMMENT '资料文件大小';
+        ");
+
+        $this->logger('info', "课时引用文件大小上限修改结束");
+
         return 1;
     }
 
