@@ -15,7 +15,8 @@ class CourseCorrelation extends Base
     public $pageSize=5;
     const APILIST = [
         "getBindResources"      =>  'tm/course/{course_id}/{subsection_id}/res',              // 获取课程绑定资源
-        "setBindResources"      =>  'tm/course/res'                                           // 新建修改课程绑定资源
+        "setBindResources"      =>  'tm/course/res',                                          // 新建修改课程绑定资源
+        "delBindResources"      =>  'tm/course/res',                                          // 删除课程绑定资源         
     ];
     public function __construct(){
         $this->client = new AbstractCloudAPI();
@@ -30,7 +31,7 @@ class CourseCorrelation extends Base
         return $this->return;
     }
 
-    //创建课程绑定资源
+    //  创建课程绑定资源
     public function create($params=[]){
         $result = $this->client->post(self::APILIST['setBindResources'],$params);
         if($result['status']['code'] == 2000000){
@@ -39,7 +40,7 @@ class CourseCorrelation extends Base
         return $this->return;
     }
 
-    //更新课程绑定资源
+    //  更新课程绑定资源
     public function update($params=[]){
         $result = $this->client->put(self::APILIST['setBindResources'],$params);
         if($result['status']['code'] == 2000000){
@@ -47,5 +48,17 @@ class CourseCorrelation extends Base
         }
         return $this->return;
     }
+
+    //  删除课程绑定资源
+    public function delete($course,$subsection_id){
+        $params['course_id'] = $course;
+        $params['subsection_id'] = $subsection_id;
+        $result = $this->client->delete(self::APILIST['delBindResources'],$params);
+        if($result['status']['code'] == 2000000){
+            $this->return = $result;
+        }
+        return $this->return;
+    }
+
     
 }

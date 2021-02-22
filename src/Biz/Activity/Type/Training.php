@@ -75,8 +75,8 @@ class Training extends Activity
         
         $ret = $this->getTrainingActivityDao()->update($targetId, $training);
         if($ret['id']){
-            $params['id'] = $ret['id'];
             $params = $this->parseFields($fields);
+            $params["subsection_id"] = $ret['id'];
             $result = $this->getCourseCorrelationObj()->update($params);
             if($result['status']['code'] == 2000000){
                 return $ret;
@@ -88,8 +88,13 @@ class Training extends Activity
 
     public function delete($targetId)
     {
-        return true;
-        // return $this->getTrainingActivityDao()->delete($targetId);
+        // 先查询出课程id
+        $result = $this->getActivityDao()->getByMediaIdAndMediaType(16,"training");
+        $ret = $this->getTrainingActivityDao()->delete($targetId);
+        if(!empty($result['formCourseId'])){
+            $this->getCourseCorrelationObj()->delete($result["fromCourseId"],$targetId);
+        }
+        return $ret;
     }
 
     public function create($fields)
@@ -104,6 +109,7 @@ class Training extends Activity
         // 设置关联关系
         if( $ret['id'] > 0 ){
             $params = $this->parseFields($fields);
+            $params["subsection_id"] = $ret['id'];
             $result = $this->getCourseCorrelationObj()->create($params);
             if($result['status']['code'] == 2000000){
                 return $ret;
@@ -118,8 +124,7 @@ class Training extends Activity
     private function parseFields($fields=[]){
         $images = json_decode($fields['images'],true);
         $params = [
-            "fromCourseSetId"   => $fields["fromCourseSetId"],
-            "subsection_id"     => $ret['id'],
+            "fromCourseSetId"   => $fields["fromCourseId"],
             "lab_type"          => $fields["lab_type"],
             "img_repo"          => $images["name"],
             "img_tag"           => $images["version"],
@@ -131,7 +136,7 @@ class Training extends Activity
             foreach($datasets as $info){
                 $ids[] = $info['id'];
             }
-            $params["dataset_id"] = $ids;
+            $params["dataset_ids"] = $ids;
         }elseif($fields["lab_type"] == 2){
             $params["link"] = $fields["link_url"];
         }
@@ -142,6 +147,10 @@ class Training extends Activity
     protected function getTrainingActivityDao()
     {
         return $this->getBiz()->dao('Activity:TrainingActivityDao');
+    }
+
+    protected function getActivityDao(){
+        return $this->getBiz()->dao("Activity:ActivityDao");
     }
 
     /**

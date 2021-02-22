@@ -13,7 +13,6 @@ class TrainingController extends BaseActivityController implements ActivityActio
 {
     public function showAction(Request $request, $activity)
     {
-        var_dump($activity);die;
         if (empty($activity)) {
             $this->createNewException(ActivityException::NOTFOUND_ACTIVITY());
         }
