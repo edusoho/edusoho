@@ -42,7 +42,7 @@ class QuestionController extends BaseController
 
         $items = $this->getItemService()->searchItems(
             $conditions,
-            ['created_time' => 'DESC'],
+            ['created_time' => 'DESC', 'id' => 'desc'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
