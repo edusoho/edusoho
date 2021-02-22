@@ -14,6 +14,7 @@ use AppBundle\Common\ServiceToolkit;
 use Biz\Course\Util\CourseTitleUtils;
 use Topxia\Service\Common\ServiceKernel;
 use VipPlugin\Biz\Marketing\Service\VipRightService;
+use VipPlugin\Biz\Marketing\VipRightSupplier\ClassroomVipRightSupplier;
 use VipPlugin\Biz\Marketing\VipRightSupplier\CourseVipRightSupplier;
 
 class CourseFilter extends Filter
@@ -67,6 +68,10 @@ class CourseFilter extends Filter
             $classroomFilter = new ClassroomFilter();
             $classroomFilter->setMode(Filter::SIMPLE_MODE);
             $classroomFilter->filter($data['classroom']);
+            if ($this->isPluginInstalled('Vip')) {
+                $vipRight = $this->getVipRightService()->getVipRightsBySupplierCodeAndUniqueCode(ClassroomVipRightSupplier::CODE, $data['classroom']['id']);
+                $data['vipLevelId'] = empty($vipRight) ? 0 : $vipRight['vipLevelId'];
+            }
         }
     }
 
