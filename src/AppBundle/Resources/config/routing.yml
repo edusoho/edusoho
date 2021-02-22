@@ -900,132 +900,105 @@ article_tag_show:
   defaults: { _controller: AppBundle:Article:tag }
 
 
-#mobile:
-#  path: /mobile/
-#  defaults: { _controller: AppBundle:Mobile:index }
-#
-#mobile_download_qrcode:
-#  path: /mobile/downloadQrcode
-#  defaults: { _controller: AppBundle:Mobile:downloadQrcode }
-#
-#mobile_download:
-#  path: /mobile/download
-#  defaults: { _controller: AppBundle:Mobile:download }
-#
-#mobile_userterms:
-#  path: /mobile/userterms
-#  defaults: { _controller: AppBundle:Mobile:userterms }
-#
-#mobile_privacy_Policy:
-#  path: /mobile/privacy_policy
-#  defaults: { _controller: AppBundle:Mobile:privacyPolicy }
+group:
+  path: /group
+  defaults: { _controller: AppBundle:Group:index }
+group_search_group:
+  path: /group/search_group
+  defaults: { _controller: AppBundle:Group:search }
+group_add:
+  path: /group/add
+  defaults: { _controller: AppBundle:Group:addGroup }
 
-#group:
-#  path: /group
-#  defaults: { _controller: AppBundle:Group:index }
-#group_search_group:
-#  path: /group/search_group
-#  defaults: { _controller: AppBundle:Group:search }
-#group_add:
-#  path: /group/add
-#  defaults: { _controller: AppBundle:Group:addGroup }
-#
-#group_show:
-#  path: /group/{id}
-#  defaults: { _controller: AppBundle:Group:groupIndex }
-#
-#group_join:
-#  path: /group/{id}/join
-#  defaults: { _controller: AppBundle:Group:groupJoin }
-#  methods: [ POST ]
-#
-#group_exit:
-#  path: /group/{id}/exit
-#  defaults: { _controller: AppBundle:Group:groupExit }
-#  methods: [ POST ]
-#
-#group_member:
-#  path: /group/member/{id}
-#  defaults: { _controller: AppBundle:Group:groupMember }
-#group_member_delete:
-#  path: /group/member/delete/{id}
-#  defaults: { _controller: AppBundle:Group:deleteMembers }
-#  methods: [ POST ]
-#group_set_admin:
-#  path: /group/set/admin/{id}
-#  defaults: { _controller: AppBundle:Group:setAdmin }
-#group_remove_admin:
-#  path: /group/remove/admin/{id}
-#  defaults: { _controller: AppBundle:Group:removeAdmin }
-#group_set:
-#  path: /group/{id}/setting/info
-#  defaults: { _controller: AppBundle:Group:groupSet }
-#group_setLogoCrop:
-#  path: /group/{id}/setting/logoCrop
-#  defaults: { _controller: AppBundle:Group:logoCrop }
-#group_logo_set:
-#  path: /group/{id}/setting/logo
-#  defaults: { _controller: AppBundle:Group:setGrouplogo }
-#group_edit:
-#  path: /group/info/edit/{id}
-#  defaults: { _controller: AppBundle:Group:groupEdit }
-#group_backgroundlogo_set:
-#  path: /group/set/backgroundlogo/{id}
-#  defaults: { _controller: AppBundle:Group:setGroupBackgroundLogo }
-#group_search:
-#  path: /group/{id}/serach
-#  defaults: { _controller: AppBundle:GroupThread:searchResult }
-#group_thread_post:
-#  path: /group/thread/{groupId}/{threadId}/post
-#  defaults: { _controller: AppBundle:GroupThread:postThread }
-#group_thread_add:
-#  path: /group/{id}/thread/create
-#  defaults: { _controller: AppBundle:GroupThread:addThread }
-#group_thread_update:
-#  path: /group/{id}/thread/{threadId}/update
-#  defaults: { _controller: AppBundle:GroupThread:updateThread }
-#group_thread_check_user:
-#  path: /mygroup/checkuser
-#  defaults: { _controller: AppBundle:GroupThread:checkUser }
-#group_thread_show:
-#  path: /group/{id}/thread/{threadId}
-#  defaults: { _controller: AppBundle:GroupThread:groupThreadIndex }
-#group_thread_setElite:
-#  path: /group/thread/{threadId}/setElite
-#  defaults: { _controller: AppBundle:GroupThread:setElite }
-#group_thread_removeElite:
-#  path: /group/thread/{threadId}/removeElite
-#  defaults: { _controller: AppBundle:GroupThread:removeElite }
-#group_thread_setStick:
-#  path: /group/thread/{threadId}/setStick
-#  defaults: { _controller: AppBundle:GroupThread:setStick }
-#group_thread_removeStick:
-#  path: /group/thread/{threadId}/removeStick
-#  defaults: { _controller: AppBundle:GroupThread:removeStick }
-#group_thread_closeThread:
-#  path: /group/thread/{threadId}/closeThread/{memberId}
-#  defaults: { _controller: AppBundle:GroupThread:closeThread }
-#group_thread_deletePost:
-#  path: /group/thread/deletePost/{postId}
-#  defaults: { _controller: AppBundle:GroupThread:deletePost }
-#  methods: [ POST ]
-#group_thread_post_reply:
-#  path: /group/post/{postId}/reply
-#  defaults: { _controller: AppBundle:GroupThread:postReply }
-#group_thread_adopt:
-#  path: /thread/{postId}/adopt
-#  defaults: { _controller: AppBundle:GroupThread:adopt }
-#group_upload:
-#  path: /group/thread/upload
-#  defaults: { _controller: AppBundle:GroupThread:upload }
-#
-#my_bill:
-#  path: /my/bill
-#  defaults: { _controller: AppBundle:My/Coin:cashBill }
-#
-#my_coin:
-#  path: /my/coin
-#  defaults: { _controller: AppBundle:My/Coin:index }
+group_show:
+  path: /group/{id}
+  defaults: { _controller: AppBundle:Group:groupIndex }
+
+group_join:
+  path: /group/{id}/join
+  defaults: { _controller: AppBundle:Group:groupJoin }
+  methods: [ POST ]
+
+group_exit:
+  path: /group/{id}/exit
+  defaults: { _controller: AppBundle:Group:groupExit }
+  methods: [ POST ]
+
+group_member:
+  path: /group/member/{id}
+  defaults: { _controller: AppBundle:Group:groupMember }
+group_member_delete:
+  path: /group/member/delete/{id}
+  defaults: { _controller: AppBundle:Group:deleteMembers }
+  methods: [ POST ]
+group_set_admin:
+  path: /group/set/admin/{id}
+  defaults: { _controller: AppBundle:Group:setAdmin }
+group_remove_admin:
+  path: /group/remove/admin/{id}
+  defaults: { _controller: AppBundle:Group:removeAdmin }
+group_set:
+  path: /group/{id}/setting/info
+  defaults: { _controller: AppBundle:Group:groupSet }
+group_setLogoCrop:
+  path: /group/{id}/setting/logoCrop
+  defaults: { _controller: AppBundle:Group:logoCrop }
+group_logo_set:
+  path: /group/{id}/setting/logo
+  defaults: { _controller: AppBundle:Group:setGrouplogo }
+group_edit:
+  path: /group/info/edit/{id}
+  defaults: { _controller: AppBundle:Group:groupEdit }
+group_backgroundlogo_set:
+  path: /group/set/backgroundlogo/{id}
+  defaults: { _controller: AppBundle:Group:setGroupBackgroundLogo }
+group_search:
+  path: /group/{id}/serach
+  defaults: { _controller: AppBundle:GroupThread:searchResult }
+group_thread_post:
+  path: /group/thread/{groupId}/{threadId}/post
+  defaults: { _controller: AppBundle:GroupThread:postThread }
+group_thread_add:
+  path: /group/{id}/thread/create
+  defaults: { _controller: AppBundle:GroupThread:addThread }
+group_thread_update:
+  path: /group/{id}/thread/{threadId}/update
+  defaults: { _controller: AppBundle:GroupThread:updateThread }
+group_thread_check_user:
+  path: /mygroup/checkuser
+  defaults: { _controller: AppBundle:GroupThread:checkUser }
+group_thread_show:
+  path: /group/{id}/thread/{threadId}
+  defaults: { _controller: AppBundle:GroupThread:groupThreadIndex }
+group_thread_setElite:
+  path: /group/thread/{threadId}/setElite
+  defaults: { _controller: AppBundle:GroupThread:setElite }
+group_thread_removeElite:
+  path: /group/thread/{threadId}/removeElite
+  defaults: { _controller: AppBundle:GroupThread:removeElite }
+group_thread_setStick:
+  path: /group/thread/{threadId}/setStick
+  defaults: { _controller: AppBundle:GroupThread:setStick }
+group_thread_removeStick:
+  path: /group/thread/{threadId}/removeStick
+  defaults: { _controller: AppBundle:GroupThread:removeStick }
+group_thread_closeThread:
+  path: /group/thread/{threadId}/closeThread/{memberId}
+  defaults: { _controller: AppBundle:GroupThread:closeThread }
+group_thread_deletePost:
+  path: /group/thread/deletePost/{postId}
+  defaults: { _controller: AppBundle:GroupThread:deletePost }
+  methods: [ POST ]
+group_thread_post_reply:
+  path: /group/post/{postId}/reply
+  defaults: { _controller: AppBundle:GroupThread:postReply }
+group_thread_adopt:
+  path: /thread/{postId}/adopt
+  defaults: { _controller: AppBundle:GroupThread:adopt }
+group_upload:
+  path: /group/thread/upload
+  defaults: { _controller: AppBundle:GroupThread:upload }
+
 #my_invite_code:
 #  path: /my/invitecode
 #  defaults: { _controller: AppBundle:My/Coin:inviteCode }
