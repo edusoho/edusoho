@@ -25,8 +25,9 @@ export default class Training {
 
       let html = "";
       for(let i=0;i<tagsJson.length;i++){
-        html += "<div class='tag-info checktag-"+tagsJson[i].id+"'><span class='label label-primary'>"+tagsJson[i].name+"+<a id='bb' href='javascript:void(0)' class='panel-tool-close bb-icon-close'  data-id='"+tagsJson[i].id+"'>X</a></span></div>";
+        html += "<div class='tag-info checktag-"+tagsJson[i].id+"'><span class='label label-primary'>"+tagsJson[i].name+"<a id='bb' href='javascript:void(0)' class='panel-tool-close bb-icon-close'  data-id='"+tagsJson[i].id+"'>X</a></span></div>";
       }
+      if(html == "") $(".dataset-cache").attr("value","");
       $(".tag-lists").html(html);
     });
 
