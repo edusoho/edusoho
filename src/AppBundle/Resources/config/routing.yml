@@ -3,15 +3,6 @@ homepage:
   defaults: { _controller: AppBundle:Explore:courseSets, category:'' }
   h5: true
 
-ltc:
-  path: /ltc/{endpoint}
-  defaults: { _controller: AppBundle:LTC/Runtime:entryPoint }
-
-crontab_web:
-  path: /anon/crontab
-  defaults: { _controller: AppBundle:Common:crontab }
-  methods: [ POST ]
-
 jstranslation_js:
   path: /anon/translations/{domain}.{_format}
   defaults: { _controller: bazinga.jstranslation.controller:getTranslationsAction, domain: "messages", _format: "js" }
@@ -22,14 +13,6 @@ jstranslation_js:
   requirements:
     _format: js|json
     domain: "[\\w]+"
-
-#switch_language:
-#    path: /switch/language
-#    defaults: { _controller: AppBundle:Default:translate }
-
-homepage_category:
-  path: /course/search
-  defaults: { _controller: AppBundle:Default:coursesCategory }
 
 live_jump:
   path: /live/jump
@@ -50,25 +33,25 @@ login_ajax:
   path: /login/ajax
   defaults: { _controller: AppBundle:Login:ajax }
 
-login_qrcode:
-  path: /login/qrcode
-  defaults: { _controller: AppBundle:Login:qrcode }
+#login_qrcode:
+#  path: /login/qrcode
+#  defaults: { _controller: AppBundle:Login:qrcode }
 
-login_face_token:
-  path: /login/face_token/{token}
-  defaults: { _controller: AppBundle:Login:faceToken }
-
-login_parse_face_token:
-  path: /login/face_token/parse/{token}
-  defaults: { _controller: AppBundle:Login:parseFaceToken }
-
-login_bind:
-  path: /login/bind/{type}
-  defaults: { _controller: AppBundle:LoginBind:index }
-
-login_bind_callback:
-  path: /login/bind/{type}/callback
-  defaults: { _controller: AppBundle:LoginBind:callback }
+#login_face_token:
+#  path: /login/face_token/{token}
+#  defaults: { _controller: AppBundle:Login:faceToken }
+#
+#login_parse_face_token:
+#  path: /login/face_token/parse/{token}
+#  defaults: { _controller: AppBundle:Login:parseFaceToken }
+#
+#login_bind:
+#  path: /login/bind/{type}
+#  defaults: { _controller: AppBundle:LoginBind:index }
+#
+#login_bind_callback:
+#  path: /login/bind/{type}/callback
+#  defaults: { _controller: AppBundle:LoginBind:callback }
 
 oauth2_login_index:
   path: /oauth2/login/main
@@ -107,9 +90,9 @@ common_qrcode:
   path: /common/qrcode
   defaults: { _controller: AppBundle:Common:qrcode }
 
-common_wechat_subscribe_wap:
-  path: /common/subscribe/wap
-  defaults: { _controller: AppBundle:Common:weChatOfficialSubscribe }
+#common_wechat_subscribe_wap:
+#  path: /common/subscribe/wap
+#  defaults: { _controller: AppBundle:Common:weChatOfficialSubscribe }
 
 user_terms:
   path: /userterms
@@ -622,10 +605,10 @@ my_homework_list:
   path: /my/homework/{status}/list
   defaults: { _controller: AppBundle:My/Homework:list, status: 'finished' }
 
-my_orders:
-  path: /my/orders
-  defaults: { _controller: AppBundle:My/Order:index }
-  h5: true
+#my_orders:
+#  path: /my/orders
+#  defaults: { _controller: AppBundle:My/Order:index }
+#  h5: true
 
 my_certificates:
   path: /my/certificates
@@ -636,38 +619,38 @@ my_unclaimed_certificates:
   path: /my/certificates/unclaimed
   defaults: { _controller: AppBundle:My/Certificate:unclaimed }
 
-my_order_refunds:
-  path: /my/order_refunds
-  defaults: { _controller: AppBundle:My/OrderRefund:index }
-
-my_order_refund_detail:
-  path: /my/order_refund/{id}/detail
-  defaults: { _controller: AppBundle:My/OrderRefund:detail }
-
-my_order_refund_apply:
-  path: /my/order_refund/{id}/apply
-  defaults: { _controller: AppBundle:My/OrderRefund:applyRefund }
-
-my_order_cancel:
-  path: /my/order/{id}/cancel
-  defaults: { _controller: AppBundle:My/Order:cancel }
-  methods: [ POST ]
-
-web_user_order_detail:
-  path: /my/order/{id}/detail
-  defaults: { _controller: AppBundle:My/Order:detail }
-
-my_refunds:
-  path: /my/refunds
-  defaults: { _controller: AppBundle:My/Order:refunds }
-
-income_records:
-  path: /my/income_records
-  defaults: { _controller: AppBundle:My/MoneyRecord:index }
-
-payout_records:
-  path: /my/payout_records
-  defaults: { _controller: AppBundle:My/MoneyRecord:payout }
+#my_order_refunds:
+#  path: /my/order_refunds
+#  defaults: { _controller: AppBundle:My/OrderRefund:index }
+#
+#my_order_refund_detail:
+#  path: /my/order_refund/{id}/detail
+#  defaults: { _controller: AppBundle:My/OrderRefund:detail }
+#
+#my_order_refund_apply:
+#  path: /my/order_refund/{id}/apply
+#  defaults: { _controller: AppBundle:My/OrderRefund:applyRefund }
+#
+#my_order_cancel:
+#  path: /my/order/{id}/cancel
+#  defaults: { _controller: AppBundle:My/Order:cancel }
+#  methods: [ POST ]
+#
+#web_user_order_detail:
+#  path: /my/order/{id}/detail
+#  defaults: { _controller: AppBundle:My/Order:detail }
+#
+#my_refunds:
+#  path: /my/refunds
+#  defaults: { _controller: AppBundle:My/Order:refunds }
+#
+#income_records:
+#  path: /my/income_records
+#  defaults: { _controller: AppBundle:My/MoneyRecord:index }
+#
+#payout_records:
+#  path: /my/payout_records
+#  defaults: { _controller: AppBundle:My/MoneyRecord:payout }
 
 user_show:
   path: /user/{id}
@@ -848,25 +831,25 @@ partner_phpwind_notify:
   path: /partner/phpwind/api/notify
   defaults: { _controller: AppBundle:PartnerPhpwind:notify }
 
-cloud_set_server:
-  path: /cloud/set-server
-  defaults: { _controller: AppBundle:Cloud:setServer }
-
-cloud_video_fingerprint:
-  path: /cloud/video_fingerprint
-  defaults: { _controller: AppBundle:Cloud:videoFingerprint }
-
-cloud_ppt_watermark:
-  path: /cloud/ppt_watermark
-  defaults: { _controller: AppBundle:Cloud:pptWatermark }
-
-cloud_doc_watermark:
-  path: /cloud/doc_watermark
-  defaults: { _controller: AppBundle:Cloud:docWatermark }
-
-cloud_testpaper_watermark:
-  path: /cloud/testpaper_watermark
-  defaults: { _controller: AppBundle:Cloud:testpaperWatermark }
+#cloud_set_server:
+#  path: /cloud/set-server
+#  defaults: { _controller: AppBundle:Cloud:setServer }
+#
+#cloud_video_fingerprint:
+#  path: /cloud/video_fingerprint
+#  defaults: { _controller: AppBundle:Cloud:videoFingerprint }
+#
+#cloud_ppt_watermark:
+#  path: /cloud/ppt_watermark
+#  defaults: { _controller: AppBundle:Cloud:pptWatermark }
+#
+#cloud_doc_watermark:
+#  path: /cloud/doc_watermark
+#  defaults: { _controller: AppBundle:Cloud:docWatermark }
+#
+#cloud_testpaper_watermark:
+#  path: /cloud/testpaper_watermark
+#  defaults: { _controller: AppBundle:Cloud:testpaperWatermark }
 
 systeminfo:
   path: /systeminfo
@@ -917,135 +900,135 @@ article_tag_show:
   defaults: { _controller: AppBundle:Article:tag }
 
 
-mobile:
-  path: /mobile/
-  defaults: { _controller: AppBundle:Mobile:index }
+#mobile:
+#  path: /mobile/
+#  defaults: { _controller: AppBundle:Mobile:index }
+#
+#mobile_download_qrcode:
+#  path: /mobile/downloadQrcode
+#  defaults: { _controller: AppBundle:Mobile:downloadQrcode }
+#
+#mobile_download:
+#  path: /mobile/download
+#  defaults: { _controller: AppBundle:Mobile:download }
+#
+#mobile_userterms:
+#  path: /mobile/userterms
+#  defaults: { _controller: AppBundle:Mobile:userterms }
+#
+#mobile_privacy_Policy:
+#  path: /mobile/privacy_policy
+#  defaults: { _controller: AppBundle:Mobile:privacyPolicy }
 
-mobile_download_qrcode:
-  path: /mobile/downloadQrcode
-  defaults: { _controller: AppBundle:Mobile:downloadQrcode }
-
-mobile_download:
-  path: /mobile/download
-  defaults: { _controller: AppBundle:Mobile:download }
-
-mobile_userterms:
-  path: /mobile/userterms
-  defaults: { _controller: AppBundle:Mobile:userterms }
-
-mobile_privacy_Policy:
-  path: /mobile/privacy_policy
-  defaults: { _controller: AppBundle:Mobile:privacyPolicy }
-
-group:
-  path: /group
-  defaults: { _controller: AppBundle:Group:index }
-group_search_group:
-  path: /group/search_group
-  defaults: { _controller: AppBundle:Group:search }
-group_add:
-  path: /group/add
-  defaults: { _controller: AppBundle:Group:addGroup }
-
-group_show:
-  path: /group/{id}
-  defaults: { _controller: AppBundle:Group:groupIndex }
-
-group_join:
-  path: /group/{id}/join
-  defaults: { _controller: AppBundle:Group:groupJoin }
-  methods: [ POST ]
-
-group_exit:
-  path: /group/{id}/exit
-  defaults: { _controller: AppBundle:Group:groupExit }
-  methods: [ POST ]
-
-group_member:
-  path: /group/member/{id}
-  defaults: { _controller: AppBundle:Group:groupMember }
-group_member_delete:
-  path: /group/member/delete/{id}
-  defaults: { _controller: AppBundle:Group:deleteMembers }
-  methods: [ POST ]
-group_set_admin:
-  path: /group/set/admin/{id}
-  defaults: { _controller: AppBundle:Group:setAdmin }
-group_remove_admin:
-  path: /group/remove/admin/{id}
-  defaults: { _controller: AppBundle:Group:removeAdmin }
-group_set:
-  path: /group/{id}/setting/info
-  defaults: { _controller: AppBundle:Group:groupSet }
-group_setLogoCrop:
-  path: /group/{id}/setting/logoCrop
-  defaults: { _controller: AppBundle:Group:logoCrop }
-group_logo_set:
-  path: /group/{id}/setting/logo
-  defaults: { _controller: AppBundle:Group:setGrouplogo }
-group_edit:
-  path: /group/info/edit/{id}
-  defaults: { _controller: AppBundle:Group:groupEdit }
-group_backgroundlogo_set:
-  path: /group/set/backgroundlogo/{id}
-  defaults: { _controller: AppBundle:Group:setGroupBackgroundLogo }
-group_search:
-  path: /group/{id}/serach
-  defaults: { _controller: AppBundle:GroupThread:searchResult }
-group_thread_post:
-  path: /group/thread/{groupId}/{threadId}/post
-  defaults: { _controller: AppBundle:GroupThread:postThread }
-group_thread_add:
-  path: /group/{id}/thread/create
-  defaults: { _controller: AppBundle:GroupThread:addThread }
-group_thread_update:
-  path: /group/{id}/thread/{threadId}/update
-  defaults: { _controller: AppBundle:GroupThread:updateThread }
-group_thread_check_user:
-  path: /mygroup/checkuser
-  defaults: { _controller: AppBundle:GroupThread:checkUser }
-group_thread_show:
-  path: /group/{id}/thread/{threadId}
-  defaults: { _controller: AppBundle:GroupThread:groupThreadIndex }
-group_thread_setElite:
-  path: /group/thread/{threadId}/setElite
-  defaults: { _controller: AppBundle:GroupThread:setElite }
-group_thread_removeElite:
-  path: /group/thread/{threadId}/removeElite
-  defaults: { _controller: AppBundle:GroupThread:removeElite }
-group_thread_setStick:
-  path: /group/thread/{threadId}/setStick
-  defaults: { _controller: AppBundle:GroupThread:setStick }
-group_thread_removeStick:
-  path: /group/thread/{threadId}/removeStick
-  defaults: { _controller: AppBundle:GroupThread:removeStick }
-group_thread_closeThread:
-  path: /group/thread/{threadId}/closeThread/{memberId}
-  defaults: { _controller: AppBundle:GroupThread:closeThread }
-group_thread_deletePost:
-  path: /group/thread/deletePost/{postId}
-  defaults: { _controller: AppBundle:GroupThread:deletePost }
-  methods: [ POST ]
-group_thread_post_reply:
-  path: /group/post/{postId}/reply
-  defaults: { _controller: AppBundle:GroupThread:postReply }
-group_thread_adopt:
-  path: /thread/{postId}/adopt
-  defaults: { _controller: AppBundle:GroupThread:adopt }
-group_upload:
-  path: /group/thread/upload
-  defaults: { _controller: AppBundle:GroupThread:upload }
-
-my_bill:
-  path: /my/bill
-  defaults: { _controller: AppBundle:My/Coin:cashBill }
-
-my_coin:
-  path: /my/coin
-  defaults: { _controller: AppBundle:My/Coin:index }
-my_invite_code:
-  path: /my/invitecode
-  defaults: { _controller: AppBundle:My/Coin:inviteCode }
+#group:
+#  path: /group
+#  defaults: { _controller: AppBundle:Group:index }
+#group_search_group:
+#  path: /group/search_group
+#  defaults: { _controller: AppBundle:Group:search }
+#group_add:
+#  path: /group/add
+#  defaults: { _controller: AppBundle:Group:addGroup }
+#
+#group_show:
+#  path: /group/{id}
+#  defaults: { _controller: AppBundle:Group:groupIndex }
+#
+#group_join:
+#  path: /group/{id}/join
+#  defaults: { _controller: AppBundle:Group:groupJoin }
+#  methods: [ POST ]
+#
+#group_exit:
+#  path: /group/{id}/exit
+#  defaults: { _controller: AppBundle:Group:groupExit }
+#  methods: [ POST ]
+#
+#group_member:
+#  path: /group/member/{id}
+#  defaults: { _controller: AppBundle:Group:groupMember }
+#group_member_delete:
+#  path: /group/member/delete/{id}
+#  defaults: { _controller: AppBundle:Group:deleteMembers }
+#  methods: [ POST ]
+#group_set_admin:
+#  path: /group/set/admin/{id}
+#  defaults: { _controller: AppBundle:Group:setAdmin }
+#group_remove_admin:
+#  path: /group/remove/admin/{id}
+#  defaults: { _controller: AppBundle:Group:removeAdmin }
+#group_set:
+#  path: /group/{id}/setting/info
+#  defaults: { _controller: AppBundle:Group:groupSet }
+#group_setLogoCrop:
+#  path: /group/{id}/setting/logoCrop
+#  defaults: { _controller: AppBundle:Group:logoCrop }
+#group_logo_set:
+#  path: /group/{id}/setting/logo
+#  defaults: { _controller: AppBundle:Group:setGrouplogo }
+#group_edit:
+#  path: /group/info/edit/{id}
+#  defaults: { _controller: AppBundle:Group:groupEdit }
+#group_backgroundlogo_set:
+#  path: /group/set/backgroundlogo/{id}
+#  defaults: { _controller: AppBundle:Group:setGroupBackgroundLogo }
+#group_search:
+#  path: /group/{id}/serach
+#  defaults: { _controller: AppBundle:GroupThread:searchResult }
+#group_thread_post:
+#  path: /group/thread/{groupId}/{threadId}/post
+#  defaults: { _controller: AppBundle:GroupThread:postThread }
+#group_thread_add:
+#  path: /group/{id}/thread/create
+#  defaults: { _controller: AppBundle:GroupThread:addThread }
+#group_thread_update:
+#  path: /group/{id}/thread/{threadId}/update
+#  defaults: { _controller: AppBundle:GroupThread:updateThread }
+#group_thread_check_user:
+#  path: /mygroup/checkuser
+#  defaults: { _controller: AppBundle:GroupThread:checkUser }
+#group_thread_show:
+#  path: /group/{id}/thread/{threadId}
+#  defaults: { _controller: AppBundle:GroupThread:groupThreadIndex }
+#group_thread_setElite:
+#  path: /group/thread/{threadId}/setElite
+#  defaults: { _controller: AppBundle:GroupThread:setElite }
+#group_thread_removeElite:
+#  path: /group/thread/{threadId}/removeElite
+#  defaults: { _controller: AppBundle:GroupThread:removeElite }
+#group_thread_setStick:
+#  path: /group/thread/{threadId}/setStick
+#  defaults: { _controller: AppBundle:GroupThread:setStick }
+#group_thread_removeStick:
+#  path: /group/thread/{threadId}/removeStick
+#  defaults: { _controller: AppBundle:GroupThread:removeStick }
+#group_thread_closeThread:
+#  path: /group/thread/{threadId}/closeThread/{memberId}
+#  defaults: { _controller: AppBundle:GroupThread:closeThread }
+#group_thread_deletePost:
+#  path: /group/thread/deletePost/{postId}
+#  defaults: { _controller: AppBundle:GroupThread:deletePost }
+#  methods: [ POST ]
+#group_thread_post_reply:
+#  path: /group/post/{postId}/reply
+#  defaults: { _controller: AppBundle:GroupThread:postReply }
+#group_thread_adopt:
+#  path: /thread/{postId}/adopt
+#  defaults: { _controller: AppBundle:GroupThread:adopt }
+#group_upload:
+#  path: /group/thread/upload
+#  defaults: { _controller: AppBundle:GroupThread:upload }
+#
+#my_bill:
+#  path: /my/bill
+#  defaults: { _controller: AppBundle:My/Coin:cashBill }
+#
+#my_coin:
+#  path: /my/coin
+#  defaults: { _controller: AppBundle:My/Coin:index }
+#my_invite_code:
+#  path: /my/invitecode
+#  defaults: { _controller: AppBundle:My/Coin:inviteCode }
 
 note_like:
   path: /note/{id}/like
@@ -1057,125 +1040,125 @@ note_cancel_like:
   defaults: { _controller: AppBundle:Note:cancelLike }
   methods: [ POST ]
 
-receive_coupon:
-  path: /my/invitecode/receivecoupon
-  defaults: { _controller: AppBundle:My/Coin:receiveCoupon }
-
-coin_show:
-  path: /my/coin/show
-  defaults: { _controller: AppBundle:My/Coin:show }
+#receive_coupon:
+#  path: /my/invitecode/receivecoupon
+#  defaults: { _controller: AppBundle:My/Coin:receiveCoupon }
+#
+#coin_show:
+#  path: /my/coin/show
+#  defaults: { _controller: AppBundle:My/Coin:show }
 
 user_password_check:
   path: /user/password/check
   defaults: { _controller: AppBundle:User:checkPassword }
 
-cashier_show:
-  path: /cashier/standard
-  defaults: { _controller: AppBundle:Cashier/Cashier:show }
-
-cashier_redirect:
-  path: /cashier/redirect
-  defaults: { _controller: AppBundle:Cashier/Cashier:redirect }
-
-cashier_wechat_js_pay:
-  path: /pay/center/wxpay
-  defaults: { _controller: AppBundle:Cashier/Wechat:wechatJsPay }
-
-cashier_wechat_js_pay_h5:
-  path: /pay/center/wxpay_h5
-  defaults: { _controller: AppBundle:Cashier/Wechat:wechatJsPayH5 }
-
-cashier_wechat_mweb_app_trade:
-  path: /pay/center/wxpay_mweb_app_trade
-  defaults: { _controller: AppBundle:Cashier/Wechat:wechatAppMwebTrade }
-
-cashier_password_check:
-  path: /cashier/password/check
-  defaults: { _controller: AppBundle:Cashier/Cashier:checkPayPassword }
-
-cashier_pay_price:
-  path: /cashier/{sn}/price
-  defaults: { _controller: AppBundle:Cashier/Cashier:price }
-  methods: [ POST ]
-
-cashier_pay_success:
-  path: /cashier/pay/success
-  defaults: { _controller: AppBundle:Cashier/Cashier:success }
-
-cashier_pay_notify:
-  path: /callback/{payment}/notify
-  defaults: { _controller: AppBundle:Cashier/Callback:notify }
-  methods: [ POST ]
-
-cashier_pay_return_for_app:
-  path: /callback/{payment}/return_for_app
-  defaults: { _controller: AppBundle:Cashier/Callback:returnForApp }
-
-cashier_redirect_for_h5:
-  path: /h5cashier/redirect
-  defaults: { _controller: AppBundle:Cashier/CashierH5:redirect }
-
-cashier_pay_success_for_h5:
-  path: /h5cashier/pay/success
-  defaults: { _controller: AppBundle:Cashier/CashierH5:success }
-
-cashier_pay_return_for_h5:
-  path: /callback/{payment}/return_for_h5
-  defaults: { _controller: AppBundle:Cashier/Callback:returnForH5 }
-
-cashier_pay_return:
-  path: /callback/{payment}/return
-  defaults: { _controller: AppBundle:Cashier/Callback:return }
-
-pay_center_auth_unbind:
-  path: /pay/center/auth_unbind
-  defaults: { _controller: AppBundle:PayCenter:unbindAuth }
-  methods: [ POST ]
-
-auth_unbind_mobile_show:
-  path: /pay/center/mobile_show
-  defaults: { _controller: AppBundle:PayCenter:showMobile }
-
-pay_return:
-  path: /pay/center/pay/{name}/return
-  defaults: { _controller: AppBundle:PayCenter:payReturn }
-
-pay_return_for_app:
-  path: /pay/center/pay/{name}/return_for_app
-  defaults: { _controller: AppBundle:PayCenter:payReturnForApp }
-
-pay_notify:
-  path: /pay/center/pay/{name}/notify
-  defaults: { _controller: AppBundle:PayCenter:payNotify }
-
-pay_success_show:
-  path: /pay/center/success/show
-  defaults: { _controller: AppBundle:PayCenter:showTarget }
-
-pay_password_check:
-  path: /pay/password/check
-  defaults: { _controller: AppBundle:PayCenter:payPasswordCheck }
-
-pay_error:
-  path: /pay/error
-  defaults: { _controller: AppBundle:PayCenter:payError }
-
-pay_result_notice:
-  path: /pay/result/notice
-  defaults: { _controller: AppBundle:PayCenter:resultNotice }
-
-wxpay_roll:
-  path: /pay/wxpay/roll
-  defaults: { _controller: AppBundle:PayCenter:wxpayRoll }
-
-order_show:
-  path: /order/show
-  defaults: { _controller: AppBundle:Order/Order:show }
-
-order_create:
-  path: /order/create
-  defaults: { _controller: AppBundle:Order/Order:create }
-  methods: [ POST ]
+#cashier_show:
+#  path: /cashier/standard
+#  defaults: { _controller: AppBundle:Cashier/Cashier:show }
+#
+#cashier_redirect:
+#  path: /cashier/redirect
+#  defaults: { _controller: AppBundle:Cashier/Cashier:redirect }
+#
+#cashier_wechat_js_pay:
+#  path: /pay/center/wxpay
+#  defaults: { _controller: AppBundle:Cashier/Wechat:wechatJsPay }
+#
+#cashier_wechat_js_pay_h5:
+#  path: /pay/center/wxpay_h5
+#  defaults: { _controller: AppBundle:Cashier/Wechat:wechatJsPayH5 }
+#
+#cashier_wechat_mweb_app_trade:
+#  path: /pay/center/wxpay_mweb_app_trade
+#  defaults: { _controller: AppBundle:Cashier/Wechat:wechatAppMwebTrade }
+#
+#cashier_password_check:
+#  path: /cashier/password/check
+#  defaults: { _controller: AppBundle:Cashier/Cashier:checkPayPassword }
+#
+#cashier_pay_price:
+#  path: /cashier/{sn}/price
+#  defaults: { _controller: AppBundle:Cashier/Cashier:price }
+#  methods: [ POST ]
+#
+#cashier_pay_success:
+#  path: /cashier/pay/success
+#  defaults: { _controller: AppBundle:Cashier/Cashier:success }
+#
+#cashier_pay_notify:
+#  path: /callback/{payment}/notify
+#  defaults: { _controller: AppBundle:Cashier/Callback:notify }
+#  methods: [ POST ]
+#
+#cashier_pay_return_for_app:
+#  path: /callback/{payment}/return_for_app
+#  defaults: { _controller: AppBundle:Cashier/Callback:returnForApp }
+#
+#cashier_redirect_for_h5:
+#  path: /h5cashier/redirect
+#  defaults: { _controller: AppBundle:Cashier/CashierH5:redirect }
+#
+#cashier_pay_success_for_h5:
+#  path: /h5cashier/pay/success
+#  defaults: { _controller: AppBundle:Cashier/CashierH5:success }
+#
+#cashier_pay_return_for_h5:
+#  path: /callback/{payment}/return_for_h5
+#  defaults: { _controller: AppBundle:Cashier/Callback:returnForH5 }
+#
+#cashier_pay_return:
+#  path: /callback/{payment}/return
+#  defaults: { _controller: AppBundle:Cashier/Callback:return }
+#
+#pay_center_auth_unbind:
+#  path: /pay/center/auth_unbind
+#  defaults: { _controller: AppBundle:PayCenter:unbindAuth }
+#  methods: [ POST ]
+#
+#auth_unbind_mobile_show:
+#  path: /pay/center/mobile_show
+#  defaults: { _controller: AppBundle:PayCenter:showMobile }
+#
+#pay_return:
+#  path: /pay/center/pay/{name}/return
+#  defaults: { _controller: AppBundle:PayCenter:payReturn }
+#
+#pay_return_for_app:
+#  path: /pay/center/pay/{name}/return_for_app
+#  defaults: { _controller: AppBundle:PayCenter:payReturnForApp }
+#
+#pay_notify:
+#  path: /pay/center/pay/{name}/notify
+#  defaults: { _controller: AppBundle:PayCenter:payNotify }
+#
+#pay_success_show:
+#  path: /pay/center/success/show
+#  defaults: { _controller: AppBundle:PayCenter:showTarget }
+#
+#pay_password_check:
+#  path: /pay/password/check
+#  defaults: { _controller: AppBundle:PayCenter:payPasswordCheck }
+#
+#pay_error:
+#  path: /pay/error
+#  defaults: { _controller: AppBundle:PayCenter:payError }
+#
+#pay_result_notice:
+#  path: /pay/result/notice
+#  defaults: { _controller: AppBundle:PayCenter:resultNotice }
+#
+#wxpay_roll:
+#  path: /pay/wxpay/roll
+#  defaults: { _controller: AppBundle:PayCenter:wxpayRoll }
+#
+#order_show:
+#  path: /order/show
+#  defaults: { _controller: AppBundle:Order/Order:show }
+#
+#order_create:
+#  path: /order/create
+#  defaults: { _controller: AppBundle:Order/Order:create }
+#  methods: [ POST ]
 
 thread_jump:
   path: /thread/{threadId}/jump
@@ -1247,48 +1230,48 @@ ajax_thread_member_show:
   methods: [ GET ]
 
 #占位
-vip:
-  path: /vip/
+#vip:
+#  path: /vip/
+#
+#vip_buy:
+#  path: /vip/buy
+#
+#vip_renew:
+#  path: /vip/renew
+#
+#vip_upgrade:
+#  path: /vip/upgrade
 
-vip_buy:
-  path: /vip/buy
-
-vip_renew:
-  path: /vip/renew
-
-vip_upgrade:
-  path: /vip/upgrade
-
-edu_cloud_sms_send:
-  path: /edu_cloud/sms_send
-  defaults: { _controller: AppBundle:EduCloud:smsSend }
-  methods: [ POST ]
-
-edu_cloud_sms_send_registration:
-  path: /edu_cloud/sms_send_registration
-  defaults: { _controller: AppBundle:EduCloud:smsSendRegistration }
-  methods: [ POST ]
-
-edu_cloud_sms_send_check_captcha:
-  path: /edu_cloud/sms_send_check_captcha
-  defaults: { _controller: AppBundle:EduCloud:smsSendCheckCaptcha }
-  methods: [ POST ]
-
-edu_cloud_sms_check:
-  path: /edu_cloud/sms_check/{type}
-  defaults: { _controller: AppBundle:EduCloud:smsCheck }
-
-edu_cloud_sms_send_callback:
-  path: /edu_cloud/sms/callback/{targetType}/{targetId}
-  defaults: { _controller: AppBundle:EduCloud:smsCallBack }
-
-edu_cloud_search_callback:
-  path: /edu_cloud/search/callback
-  defaults: { _controller: AppBundle:EduCloud:searchCallBack }
-
-settings_bind_mobile:
-  path: /settings/bind_mobile
-  defaults: { _controller: AppBundle:Settings:bindMobile }
+#edu_cloud_sms_send:
+#  path: /edu_cloud/sms_send
+#  defaults: { _controller: AppBundle:EduCloud:smsSend }
+#  methods: [ POST ]
+#
+#edu_cloud_sms_send_registration:
+#  path: /edu_cloud/sms_send_registration
+#  defaults: { _controller: AppBundle:EduCloud:smsSendRegistration }
+#  methods: [ POST ]
+#
+#edu_cloud_sms_send_check_captcha:
+#  path: /edu_cloud/sms_send_check_captcha
+#  defaults: { _controller: AppBundle:EduCloud:smsSendCheckCaptcha }
+#  methods: [ POST ]
+#
+#edu_cloud_sms_check:
+#  path: /edu_cloud/sms_check/{type}
+#  defaults: { _controller: AppBundle:EduCloud:smsCheck }
+#
+#edu_cloud_sms_send_callback:
+#  path: /edu_cloud/sms/callback/{targetType}/{targetId}
+#  defaults: { _controller: AppBundle:EduCloud:smsCallBack }
+#
+#edu_cloud_search_callback:
+#  path: /edu_cloud/search/callback
+#  defaults: { _controller: AppBundle:EduCloud:searchCallBack }
+#
+#settings_bind_mobile:
+#  path: /settings/bind_mobile
+#  defaults: { _controller: AppBundle:Settings:bindMobile }
 
 settings_check_login_password:
   path: /settings/check_login_password
@@ -1321,37 +1304,37 @@ common_parse_qrcode:
   path: /qrcode/parse/{token}
   defaults: { _controller: AppBundle:Common:parseQrcode }
 
-esbar_my_classroom:
-  path: /esbar/my/classroom
-  defaults: { _controller: AppBundle:EsBar/EsBar:classroom }
-
-esbar_my_course:
-  path: /esbar/my/course
-  defaults: { _controller: AppBundle:EsBar/EsBar:course }
-
-esbar_my_notify:
-  path: /esbar/my/notify
-  defaults: { _controller: AppBundle:EsBar/EsBar:notify }
-
-esbar_my_practice:
-  path: /esbar/my/practice/{status}
-  defaults: { _controller: AppBundle:EsBar/EsBar:practice }
-
-esbar_my_study_center:
-  path: /esbar/my/study_center
-  defaults: { _controller: AppBundle:EsBar/EsBar:studyCenter }
+#esbar_my_classroom:
+#  path: /esbar/my/classroom
+#  defaults: { _controller: AppBundle:EsBar/EsBar:classroom }
+#
+#esbar_my_course:
+#  path: /esbar/my/course
+#  defaults: { _controller: AppBundle:EsBar/EsBar:course }
+#
+#esbar_my_notify:
+#  path: /esbar/my/notify
+#  defaults: { _controller: AppBundle:EsBar/EsBar:notify }
+#
+#esbar_my_practice:
+#  path: /esbar/my/practice/{status}
+#  defaults: { _controller: AppBundle:EsBar/EsBar:practice }
+#
+#esbar_my_study_center:
+#  path: /esbar/my/study_center
+#  defaults: { _controller: AppBundle:EsBar/EsBar:studyCenter }
 
 my:
   path: /my
   defaults: { _controller: AppBundle:My/Course:index }
 
-my_cards:
-  path: /my/cards
-  defaults: { _controller: AppBundle:My/Card:index }
-
-card_info:
-  path: /card/info
-  defaults: { _controller: AppBundle:My/Card:cardInfo }
+#my_cards:
+#  path: /my/cards
+#  defaults: { _controller: AppBundle:My/Card:index }
+#
+#card_info:
+#  path: /card/info
+#  defaults: { _controller: AppBundle:My/Card:cardInfo }
 
 open_course_explore:
   path: /open/course/explore/{category}
@@ -2008,9 +1991,6 @@ course_set_manage_course_students_deadline_batch_day_check:
 course_set_manage_course_students_deadline_batch_deadline_check:
   path: /course_set/{courseSetId}/manage/course/{courseId}/student/deadline/check
   defaults: { _controller: AppBundle:Course/StudentManage:checkDeadline }
-
-
-
 
 course_set_manage_course_students_process:
   path: /course_set/{courseSetId}/manage/course/{courseId}/students/{userId}/process
@@ -3422,31 +3402,31 @@ item_attachment_download:
   defaults: { _controller: AppBundle:Item/Attachment:download }
 
 #采集头像
-facein_capture_index:
-  path: /my/facein/capture/{code}
-  defaults: { _controller: AppBundle:FaceInspection/Capture:index }
-
-facein_capture_upload:
-  path: /facein/capture/{code}/upload
-  defaults: { _controller: AppBundle:FaceInspection/Capture:upload,code:'face' }
-  methods: [ POST ]
-
-facein_capture_check:
-  path: /facein/user_face/check
-  defaults: { _controller: AppBundle:FaceInspection/Capture:check }
-
-facein_inspection_save:
-  path: /facein/inspection/{recordId}/save
-  defaults: { _controller: AppBundle:FaceInspection/Capture:save }
-  methods: [ POST ]
-
-facein_inspection_results:
-  path: /facein/inspection/{activityId}/results
-  defaults: { _controller: AppBundle:FaceInspection/InspectionResult:index }
-
-facein_inspection_results_detail:
-  path: /facein/{activityId}/inspection/{userId}/results
-  defaults: { _controller: AppBundle:FaceInspection/InspectionResult:detail }
+#facein_capture_index:
+#  path: /my/facein/capture/{code}
+#  defaults: { _controller: AppBundle:FaceInspection/Capture:index }
+#
+#facein_capture_upload:
+#  path: /facein/capture/{code}/upload
+#  defaults: { _controller: AppBundle:FaceInspection/Capture:upload,code:'face' }
+#  methods: [ POST ]
+#
+#facein_capture_check:
+#  path: /facein/user_face/check
+#  defaults: { _controller: AppBundle:FaceInspection/Capture:check }
+#
+#facein_inspection_save:
+#  path: /facein/inspection/{recordId}/save
+#  defaults: { _controller: AppBundle:FaceInspection/Capture:save }
+#  methods: [ POST ]
+#
+#facein_inspection_results:
+#  path: /facein/inspection/{activityId}/results
+#  defaults: { _controller: AppBundle:FaceInspection/InspectionResult:index }
+#
+#facein_inspection_results_detail:
+#  path: /facein/{activityId}/inspection/{userId}/results
+#  defaults: { _controller: AppBundle:FaceInspection/InspectionResult:detail }
 
 category_choices:
   path: /category/choices/{type}
