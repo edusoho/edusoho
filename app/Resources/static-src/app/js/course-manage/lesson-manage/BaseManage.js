@@ -38,19 +38,28 @@ export default class Manage {
     ];
     this.$element.on('click', '.js-toggle-show', (event) => {
       let $this = $(event.currentTarget);
-      $this.toggleClass('toogle-hide');
       let $chapter = $this.closest('.task-manage-item');
       let until = $chapter.hasClass('js-task-manage-chapter') ? '.js-task-manage-chapter' : '.js-task-manage-chapter,.js-task-manage-unit';
       let $hideElements = $chapter.nextUntil(until);
+      const lastStatusIsHidden = $this.hasClass('toogle-hide') // 上一个状态是否是隐藏
 
       if ($this.hasClass('js-toggle-unit')) {
-        $hideElements.toggleClass('unit-hide');
-      } else {
+        if (lastStatusIsHidden) {
+          $hideElements.removeClass('unit-hide');
+        } else {
+          $hideElements.addClass('unit-hide');
+        }
+      } else if ($this.hasClass('js-toggle-chapter')) {
         $hideElements = $hideElements.not('.unit-hide');
       }
+      
+      $hideElements = $hideElements.filter((index, dom) => {
+        const isHidden = $(dom).css('display') === 'none'
 
+        return lastStatusIsHidden === isHidden
+      })
       $hideElements.stop().animate({ height: 'toggle', opacity: 'toggle' }, 'fast');
-      $this.hasClass('toogle-hide') ? $this.html(collapseTexts[0]) : $this.html(collapseTexts[1]);
+      $this.toggleClass('toogle-hide').hasClass('toogle-hide') ? $this.html(collapseTexts[0]) : $this.html(collapseTexts[1]);
     });
   }
 
