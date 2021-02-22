@@ -870,7 +870,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         return $deadline;
     }
 
-    public function removeStudent($courseId, $userId, $reason = [], $removeType = 'remove')
+    public function removeStudent($courseId, $userId, $reason = [])
     {
         $course = $this->getCourseService()->getCourse($courseId);
 
@@ -904,7 +904,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             'nickname' => $removeMember['nickname'],
         ];
 
-        if ('exit' === $removeType) {
+        if (isset($reason['reason_type']) && 'exit' === $reason['reason_type']) {
             $this->getLogService()->info(
                 'course',
                 'exit_course',

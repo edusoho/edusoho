@@ -487,8 +487,7 @@ class ClassroomController extends BaseController
         $this->getClassroomService()->removeStudent(
             $id,
             $user['id'],
-            ['reason' => $reason['note'], 'reason_type' => 'exit'],
-            'exit'
+            ['reason' => $reason['note'], 'reason_type' => 'exit']
         );
 
         return $this->redirect($this->generateUrl('classroom_show', ['id' => $id]));

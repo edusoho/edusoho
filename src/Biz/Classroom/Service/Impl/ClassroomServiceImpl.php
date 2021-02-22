@@ -938,7 +938,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $this->getClassroomMemberDao()->update($member['id'], $fields);
     }
 
-    public function removeStudent($classroomId, $userId, $info = [], $removeType = 'remove')
+    public function removeStudent($classroomId, $userId, $info = [])
     {
         $classroom = $this->getClassroom($classroomId);
 
@@ -988,7 +988,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'nickname' => $user['nickname'],
         ];
 
-        if ('exit' === $removeType) {
+        if (isset($info['reason_type']) && 'exit' === $info['reason_type']) {
             $this->getLogService()->info(
                 'classroom',
                 'exit_classroom',

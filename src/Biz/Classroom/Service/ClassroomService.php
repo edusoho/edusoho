@@ -179,7 +179,7 @@ interface ClassroomService
 
     public function remarkStudent($classroomId, $userId, $remark);
 
-    public function removeStudent($classroomId, $userId, $info = [], $removeType = 'remove');
+    public function removeStudent($classroomId, $userId, $info = []);
 
     public function removeStudents($classroomId, $userIds, $info);
 
