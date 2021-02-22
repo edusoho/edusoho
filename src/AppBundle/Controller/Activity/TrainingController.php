@@ -13,6 +13,7 @@ class TrainingController extends BaseActivityController implements ActivityActio
 {
     public function showAction(Request $request, $activity)
     {
+        var_dump($activity);die;
         if (empty($activity)) {
             $this->createNewException(ActivityException::NOTFOUND_ACTIVITY());
         }
@@ -44,79 +45,85 @@ class TrainingController extends BaseActivityController implements ActivityActio
 
     public function editAction(Request $request, $id, $courseId)
     {
-        $user = $this->getCurrentUser();
-        $activity = $this->getActivityService()->getActivity($id);
-        $text = $this->getActivityService()->getActivityConfig('text')->get($activity['mediaId']);
-        $draft = $this->getCourseDraftService()->getCourseDraftByCourseIdAndActivityIdAndUserId($courseId, $activity['id'], $user->id);
+        // $user = $this->getCurrentUser();
+        // $activity = $this->getActivityService()->getActivity($id);
+        // $text = $this->getActivityService()->getActivityConfig('text')->get($activity['mediaId']);
+        // $draft = $this->getCourseDraftService()->getCourseDraftByCourseIdAndActivityIdAndUserId($courseId, $activity['id'], $user->id);
 
-        return $this->render('activity/text/modal.html.twig', array(
-            'activity' => $activity,
-            'text' => $text,
-            'courseId' => $courseId,
-            'draft' => $draft,
-        ));
+        // return $this->render('activity/text/modal.html.twig', array(
+        //     'activity' => $activity,
+        //     'text' => $text,
+        //     'courseId' => $courseId,
+        //     'draft' => $draft,
+        // ));
     }
 
-    public function autoSaveAction(Request $request, $courseId, $activityId = 0)
-    {
-        $user = $this->getCurrentUser();
-        if (!$user->isLogin()) {
-            $this->createNewException(UserException::UN_LOGIN());
-        }
+    // public function autoSaveAction(Request $request, $courseId, $activityId = 0)
+    // {
+    //     $user = $this->getCurrentUser();
+    //     if (!$user->isLogin()) {
+    //         $this->createNewException(UserException::UN_LOGIN());
+    //     }
 
-        $content = $request->request->get('content', '');
+    //     $content = $request->request->get('content', '');
 
-        if (empty($content)) {
-            return $this->createJsonResponse(true);
-        }
+    //     if (empty($content)) {
+    //         return $this->createJsonResponse(true);
+    //     }
 
-        $draft = $this->getCourseDraftService()->getCourseDraftByCourseIdAndActivityIdAndUserId($courseId, $activityId,
-            $user->getId());
+    //     $draft = $this->getCourseDraftService()->getCourseDraftByCourseIdAndActivityIdAndUserId($courseId, $activityId,
+    //         $user->getId());
 
-        if (empty($draft)) {
-            $draft = array(
-                'activityId' => $activityId,
-                'title' => '',
-                'content' => $content,
-                'courseId' => $courseId,
-            );
+    //     if (empty($draft)) {
+    //         $draft = array(
+    //             'activityId' => $activityId,
+    //             'title' => '',
+    //             'content' => $content,
+    //             'courseId' => $courseId,
+    //         );
 
-            $this->getCourseDraftService()->createCourseDraft($draft);
-        } else {
-            $draft['content'] = $content;
-            $this->getCourseDraftService()->updateCourseDraft($draft['id'], $draft);
-        }
+    //         $this->getCourseDraftService()->createCourseDraft($draft);
+    //     } else {
+    //         $draft['content'] = $content;
+    //         $this->getCourseDraftService()->updateCourseDraft($draft['id'], $draft);
+    //     }
 
-        return $this->createJsonResponse(true);
-    }
+    //     return $this->createJsonResponse(true);
+    // }
 
     public function createAction(Request $request, $courseId)
     {
-        $user = $this->getCurrentUser();
-        $draft = $this->getCourseDraftService()->getCourseDraftByCourseIdAndActivityIdAndUserId($courseId, 0, $user->id);
+        // $user = $this->getCurrentUser();
+        // $draft = $this->getCourseDraftService()->getCourseDraftByCourseIdAndActivityIdAndUserId($courseId, 0, $user->id);
 
-        return $this->render('activity/text/modal.html.twig', array(
-            'courseId' => $courseId,
-            'draft' => $draft,
-        ));
+        // return $this->render('activity/text/modal.html.twig', array(
+        //     'courseId' => $courseId,
+        //     'draft' => $draft,
+        // ));
     }
 
     public function finishConditionAction(Request $request, $activity)
     {
-        $media = $this->getActivityService()->getActivityConfig('text')->get($activity['mediaId']);
+        // $media = $this->getActivityService()->getActivityConfig('text')->get($activity['mediaId']);
 
-        return $this->render('activity/text/finish-condition.html.twig', array(
-            'media' => $media,
-        ));
+        // return $this->render('activity/text/finish-condition.html.twig', array(
+        //     'media' => $media,
+        // ));
     }
 
 
-    //创建或新增渲染
+    //跳转渲染
     public function createEditorAction(Request $request,$activity){
         $tags = [];
 
-        // 获取关联信息  
-        $result = (new CourseCorrelation())->getCourseBindResources($activity['fromCourseSetId'],$activity['mediaId']);
+        // 获取关联信息
+        if($activity['id'] >0){
+            $result = (new CourseCorrelation())->getCourseBindResources($activity['fromCourseSetId'],$activity['mediaId']);
+        }else{
+            $result['body'] = [
+                "lab_type" =>0
+            ];
+        }
         return $this->render('@activity/training/resources/views/create_or_update_body.html.twig',[
             'tags'=>$tags,
             'activity' => $activity,
