@@ -27,7 +27,8 @@ new Vue({
       info: $app.data("info"),
       treeData: $app.data("treedata"),
       dirGetPath: $app.data("dirgetpath"),
-      submitPath: $app.data("submitpath")
+      submitPath: $app.data("submitpath"),
+      reloadPath: $app.data("reloadpath")
     }
   })
 });

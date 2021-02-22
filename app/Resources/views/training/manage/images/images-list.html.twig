@@ -1,15 +1,15 @@
 {% import 'macro.html.twig' as web_macro %}
 <div class="container" style="width:100%">
 {% for list in lists %}
-    <label class="radio">
-        <input type="radio" {{ list.checked }} name="common" id="radio_{{ list.id}}" value="{{ list.id}}" />
-        <label for="radio_{{ list.id}}">{{list.name}}</label>
-      <select style="float:right;">
-        <option>v1.0.0</option>
-        <option>v1.0.1</option>
-        <option>v1.0.2</option>
-      </select>
-    </label>
+  <label class="radio">
+    <input type="radio" {{ list.checked }} name="common" id="radio_{{ list.name }}" value="{{ list.name }}"/>
+    <label for="radio_{{ list.name }}">{{ list.name }}</label>
+    <select style="float:right;" class="version_select">
+      {% for item in list.tags %}
+        <option value="{{ item.tag_name }}" {{ item.checked }}>{{ item.tag_name }}</option>
+      {% endfor %}
+    </select>
+  </label>
 {% endfor %}
 </div>
 <nav class="text-center">

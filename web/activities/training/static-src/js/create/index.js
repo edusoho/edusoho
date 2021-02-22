@@ -93,39 +93,41 @@ load.then(function(){
       });
     }
     ////////新增
-    $("#lab_type").on("change",function(val){
-        divShow($(this).val());
+    $("#lab_type").on("change", function (val) {
+      divShow($(this).val());
     })
+    // 回填完毕触发一次change事件
+    $("#lab_type").trigger("change");
 
     // $("#picker_images_items").on("click",function(){
-      // 编辑的时候传递选中id
-      // $.get($btn.data('url'), {}, html => {
-      //   this.$imagesPickedModal.html(html);
-      // });
+    // 编辑的时候传递选中id
+    // $.get($btn.data('url'), {}, html => {
+    //   this.$imagesPickedModal.html(html);
+    // });
     // })
   }
 
   function divShow(id){
     $('#link_url').rules("remove");
     switch(id){
-      case "1":
-        $('#link_url').rules("add",{
-          required:true,
+      case "2":
+        $('#link_url').rules("add", {
+          required: true,
         });
         $(".link_div").show();
         $(".images_div,.dataset_div").hide();
         break;
-      case "2":
+      case "1":
         $(".link_div").hide();
-        $('#dataset_ids').rules("add",{
-          required:true,
-          messages:{
-            required:"请选择数据集"
+        $('#dataset_ids').rules("add", {
+          required: true,
+          messages: {
+            required: "请选择数据集"
           }
         });
-        $('#images_id').rules("add",{
-          required:true,
-          messages:{
+        $('#images_id').rules("add", {
+          required: true,
+          messages: {
             required:"请选择镜像"
           }
         });

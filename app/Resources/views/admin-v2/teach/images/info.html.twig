@@ -1,5 +1,5 @@
 {% extends 'layout.html.twig' %}
-{% import "admin-v2/macro.html.twig" as admin_macro %}
+{# {% import "admin-v2/macro.html.twig" as admin_macro %} #}
 {% do script(['app/js/images/manage/index.js']) %}
 {% block content %}
   <div class="panel panel-default panel-col">
@@ -34,7 +34,7 @@
 
       </tbody>
     </table>
-    {{ admin_macro.paginator(paginator) }}
+    {# {{ admin_macro.paginator(paginator) }} #}
   </div>
   <style>
     .images-info-list {

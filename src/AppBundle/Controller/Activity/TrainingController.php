@@ -7,6 +7,7 @@ use Biz\Activity\Service\ActivityService;
 use Biz\Course\Service\CourseDraftService;
 use Biz\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
+use Biz\TrainingPlatform\Data\CourseCorrelation;
 
 class TrainingController extends BaseActivityController implements ActivityActionInterface
 {
@@ -118,7 +119,8 @@ class TrainingController extends BaseActivityController implements ActivityActio
 
 
     ///////////////新增加
-    public function createEditorAction(Request $request,$activity){
+    public function createEditorAction(Request $request,$activity)
+    {
         // 增加后续逻辑
         $tags = [
             // ['id'=>1,'name'=>'数据集-01'],
@@ -126,9 +128,14 @@ class TrainingController extends BaseActivityController implements ActivityActio
             // ['id'=>4,'name'=>'数据集-04'],
             // ['id'=>12,'name'=>'数据集-12'],
         ];
-        return $this->render('@activity/training/resources/views/create_or_update_body.html.twig',[
-            'tags'=>$tags,
+
+
+        // 获取关联信息
+        $result = (new CourseCorrelation())->getCourseBindResources($activity['fromCourseSetId'], $activity['id']);
+        return $this->render('@activity/training/resources/views/create_or_update_body.html.twig', [
+            'tags' => $tags,
             'activity' => $activity,
+            'info' => $result['body']
         ]);
     }
 

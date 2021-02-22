@@ -32,49 +32,74 @@ class DatasetSetController extends BaseController
             ]
         );
     }
-    // 编辑数据集
-    public function editAction(Request $request, $id)
+
+    // 编辑新增数据集
+    public function editAction(Request $request)
     {
-        // 获取数据集信息
-        // $info = $this->datasetObj->getInfo($id);
-        $info = '{"id":29,"name":"voice分类","files":[{"id":56,"name":"LFW","size":0,"path":"LFW"},{"id":55,"name":"大数据/动物图像","size":0,"path":"大数据/动物图像"},{"id":57,"name":"cat-dog","size":0,"path":"cat-dog"}],"remark":"","ctime":"2020-12-29 18:12:44","mtime":"2020-12-29 18:12:44","mount_path":"/ilab/datasets/local"}';
-        $treeData = '{"body":[{"name":"大数据","path":"大数据"},{"name":"人工智能","path":"人工智能"},{"name":"LFW","path":"LFW"},{"name":"MNIST","path":"MNIST"},{"name":"cat-dog","path":"cat-dog"}],"status":{"message":"请求成功","code":2000000}}';
+        $id = $request->query->get("id");
+        $info = ['body' => []];
+        if (!empty($id)) {
+            // 获取详情
+            $info = $this->datasetObj->getInfo($id);
+        }
+        // 获取ftp目录树
+        $localDir = $this->datasetObj->getLocaldir();
 
         // 获取ftp目录信息
         return $this->render(
             'admin-v2/teach/dataset/edit.html.twig',
             [
-                "info" => $info,
-                "treeData" => $treeData,
+                "info" => json_encode($info['body']),
+                "treeData" => json_encode($localDir['body']),
             ]
         );
     }
 
+    // 提交数据集
     public function submitAction(Request $request)
     {
-        $conditions = $request->getContent();
-        return $this->createJsonResponse(['code' => 0, 'message' => '删除数据集成功']);
+        $return = ['body' => [], 'status' => ['code' => 5000000]];
+        $params = $request->getContent();
+        $params = json_decode($params, true);
+        $user = $this->getCurrentUser();
+        $data = [
+            'name' => $params['title'],
+            'create_user_id' => $user->id,
+            'files' => $params['paths'],
+            'remark' => $params['remark']
+        ];
+        // 修改
+        if ($params['id'] > 0) {
+            $result = $this->datasetObj->update($params['id'], $data);
+        } else { // 新增
+            $result = $this->datasetObj->add($data);
+        }
+        if ($result['status']['code'] == 2000000) {
+            $return = $result;
+        }
+        return $this->createJsonResponse($return);
     }
 
     // 获取目录信息 ajax
     public function dirListAction(Request $request)
     {
-        $return = [
-            'body' => [
-                ['name' => "美国大选", "path" => "大数据/美国大选", "isLeaf" => false],
-                ['name' => "动物图像", "path" => "大数据/动物图像", "isLeaf" => false]
-            ],
-            "status" => [
-                "message" => "成功",
-                "code" => 2000000
-            ]
-        ];
-        return $this->createJsonResponse($return);
+        $return = ['body' => []];
+        $path = $request->query->get("path");
+        $localDir = $this->datasetObj->getLocaldir($path);
+        if ($localDir['status']['code'] == 2000000) {
+            $return = $localDir;
+        }
+        return $this->createJsonResponse($return['body']);
     }
 
     ## 删除数据集
-    public function deleteAction()
+    public function deleteAction(Request $request, $id)
     {
-        return $this->createJsonResponse(['code' => 0, 'message' => '删除数据集成功']);
+        $return = ['body' => []];
+        $result = $this->datasetObj->delete($id);
+        if ($result['status']['code'] == 2000000) {
+            $return = $result;
+        }
+        return $this->createJsonResponse($return);
     }
 }

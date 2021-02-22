@@ -34,12 +34,13 @@ export default class Training {
     $(".images-cache").on("click",function(){
       console.log("镜像回调")
         let $cachedImages = $('.images-cache').val();
+        console.log($cachedImages);
         if ($cachedImages === '') {
           return;
         }
-        
-        this.currentImages = JSON.parse($cachedImages);
-        $(".selectImages").html(this.currentImages.name);
+
+      this.currentImages = JSON.parse($cachedImages);
+      $(".selectImages").html(this.currentImages.name + ":" + this.currentImages.version);
     })
 
     // 标签点击删除
@@ -83,7 +84,8 @@ export default class Training {
       imagesJson = JSON.parse(imagesText);
     }
     $.get($btn.data('url'), {
-      currentId:imagesJson.id
+      imagesName: imagesJson.name,
+      imagesVersion: imagesJson.version,
     }, html => {
       this.$PickedModal.html(html);
     });
@@ -101,20 +103,9 @@ export default class Training {
       idsJson = JSON.parse(idsText);
     }
     $.post($btn.data('url'), {
-      currentId:idsJson,
+      current: idsJson,
     }, html => {
       this.$PickedModal.html(html);
     });
   }
-
-  // showPickedImages() {
-  //   let $cachedImages = $('.images-cache').val();
-  //   if ($cachedImages === '') {
-  //     return;
-  //   }
-    
-  //   this.currentImages = JSON.parse($cachedImages);
-  //   $(".selectImages").html(this.currentImages.name);
-    
-  // }
 }

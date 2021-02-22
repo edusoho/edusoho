@@ -2,20 +2,20 @@
 {% import 'macro.html.twig' as web_macro %}
 <ul class="dataset_ul">
 {% for item in datasetLists %}
-    <li class="ivu-list-item dataset_li dataset_li_{{item.id}}" data-id="{{item.id}}" data-name="{{item.name}}">
-        <div class="ivu-list-item-meta"><!---->
-            <div class="ivu-list-item-meta-content">
-                <div class="ivu-list-item-meta-title">{{item.name}}</div>
-                <div class="ivu-list-item-meta-description">{{item.remark}}</div>
-            </div>
-        </div>
-        <ul class="ivu-list-item-action">
-            <li class="list-footer">
-                <span>{{item.create_user.name}}</span>
-            </li>
-        </ul>
-        <div class="ivu-list-item-extra"></div>
-    </li>
+  <li class="ivu-list-item dataset_li dataset_li_{{ item.id }}" data-id="{{ item.id }}" data-name="{{ item.name }}">
+    <div class="ivu-list-item-meta"><!---->
+      <div class="ivu-list-item-meta-content">
+        <div class="ivu-list-item-meta-title">{{ item.name }}</div>
+        <div class="ivu-list-item-meta-description">{{ item.remark }}</div>
+      </div>
+    </div>
+    <ul class="ivu-list-item-action">
+      <li class="list-footer">
+        <span>{{ item.create_user_id }}</span>
+      </li>
+    </ul>
+    <div class="ivu-list-item-extra"></div>
+  </li>
 {% endfor %}
     
 </ul>
