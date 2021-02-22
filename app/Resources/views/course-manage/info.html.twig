@@ -45,9 +45,9 @@
          data-has-mul-courses="{{ hasMulCourses }}"
          data-lesson-watch-limit="{{ setting('magic.lesson_watch_limit') }}"
          data-has-role-admin="{{ is_granted('ROLE_ADMIN') }}"
-         data-wechat-setting="{{ wechatSetting|json_encode }}"
-         data-has-wechat-notification-manage-role="{{ has_permission('admin_operation_wechat_notification_manage') or has_permission('admin_v2_operation_wechat_notification_manage') }}"
-         data-wechat-manage-url="{{ setting('backstage.is_v2',0)  == 0 ? path('admin_wechat_notification_manage') : path('admin_v2_wechat_notification_manage') }}"
+      {# data-wechat-setting="{{ wechatSetting|json_encode }}" #}
+      {# data-has-wechat-notification-manage-role="{{ has_permission('admin_operation_wechat_notification_manage') or has_permission('admin_v2_operation_wechat_notification_manage') }}" #}
+      {# data-wechat-manage-url="{{ setting('backstage.is_v2',0)  == 0 ? path('admin_wechat_notification_manage') : path('admin_v2_wechat_notification_manage') }}" #}
          data-live-capacity-url="{{ path('course_set_live_capacity', {courseSetId: courseSet.id, courseId: course.id}) }}"
          data-content-course-rule-url="{{ path('content_course_rule') }}"
          data-free-tasks="{{ freeTasks|json_encode }}"
