@@ -18,19 +18,19 @@ swiftmailer:
     disable_delivery:  false
 
 monolog:
-    handlers:
-        main:
-            type:  stream
-            path:  "%kernel.logs_dir%/%kernel.environment%.log"
-            level: warning
-            formatter: json_formatter
-        firephp:
-            type:  firephp
-            level: info
+  handlers:
+    main:
+      type: stream
+      path: "%kernel.logs_dir%/%kernel.environment%.log"
+      level: warning
+      formatter: json_formatter
+    firephp:
+      type: firephp
+      level: info
 
-services:
-    app.cloud_api_collector:
-        class: AppBundle\DataCollector\CloudApiDataCollector
-        arguments: ['@Biz']
-        tags:
-            - { name: data_collector, template: 'webprofiler/cloud-api.html.twig', id: 'app.cloud_api_collector'}
+# services:
+#     app.cloud_api_collector:
+#         class: AppBundle\DataCollector\CloudApiDataCollector
+#         arguments: ['@Biz']
+#         tags:
+#             - { name: data_collector, template: 'webprofiler/cloud-api.html.twig', id: 'app.cloud_api_collector'}

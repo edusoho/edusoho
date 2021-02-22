@@ -2,46 +2,6 @@ admin_v2:
   path: /
   defaults: { _controller: AppBundle:AdminV2/Teach/CourseSet:index }
 
-admin_v2_switch_old_version:
-  path: /switch/old_version
-  defaults: { _controller: AppBundle:AdminV2/Default:switchOldVersion }
-
-admin_v2_homepage_daily_statistics:
-  path: /homepage/data_statistics/daily
-  defaults: { _controller: AppBundle:AdminV2/Default:statisticsDaily }
-
-admin_v2_homepage_newcomer_task:
-  path: /homepage/newcomer_task
-  defaults: { _controller: AppBundle:AdminV2/Default:newcomer }
-
-admin_v2_quick_entrance:
-  path: /quick_entrance
-  defaults: { _controller: AppBundle:AdminV2/Default:quickEntrance }
-
-admin_v2_homepage_application_intro:
-  path: /application_intro
-  defaults: { _controller: AppBundle:AdminV2/Default:applicationIntro }
-
-admin_v2_homepage_business_advice:
-  path: /business_advice
-  defaults: { _controller: AppBundle:AdminV2/Default:businessAdvice }
-
-admin_v2_homepage_school_info:
-  path: /school_info
-  defaults: { _controller: AppBundle:AdminV2/Default:info }
-
-admin_v2_homepage_changelog:
-  path: /changelog
-  defaults: { _controller: AppBundle:AdminV2/Default:changelog }
-
-admin_v2_homepage_qrcode:
-  path: /qr_code
-  defaults: { _controller: AppBundle:AdminV2/Default:qrCode }
-
-admin_v2_announcement_from_platform:
-  path: /announcement_from_platform
-  defaults: { _controller: AppBundle:AdminV2/Default:getAnnouncementFromPlatform }
-
 # 教学-镜像管理
 admin_v2_images_set:
   path: /images_set/index
@@ -120,17 +80,6 @@ admin_v2_course_set_close:
   defaults: { _controller: AppBundle:AdminV2/Teach/CourseSet:close }
   methods: [ POST ]
   permissions: [ admin_v2_course_set_close ]
-
-admin_v2_course_set_recommend:
-  path: /course_set/{id}/recommend
-  defaults: { _controller: AppBundle:AdminV2/Teach/CourseSet:recommend }
-  permissions: [ admin_v2_course_set_recommend_list, admin_v2_course_set_recommend ]
-
-admin_v2_course_set_cancel_recommend:
-  path: /course_set/{id}/recommend/cancel/{target}
-  defaults: { _controller: AppBundle:AdminV2/Teach/CourseSet:cancelRecommend }
-  methods: [ POST ]
-  permissions: [ admin_v2_course_set_recommend_list, admin_v2_course_set_cancel_recommend ]
 
 admin_v2_course_chooser:
   path: /course_set/chooser
@@ -510,77 +459,6 @@ admin_v2_item_bank_exercise_review_batch_delete:
   defaults: { _controller: AppBundle:AdminV2/Teach/Review:batchDeleteClassroomReview }
   methods: [ POST ]
 
-#云资源
-admin_v2_cloud_attachment_setting:
-  path: /setting/edu_cloud/attachment
-  defaults: { _controller: AppBundle:AdminV2/CloudCenter/EduCloud:attachmentSetting }
-
-admin_v2_cloud_attachment:
-  path: /cloud_attachment
-  defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:attachmentList }
-
-admin_v2_cloud_file:
-  path: /cloud_files
-  defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:index }
-
-admin_v2_cloud_file_manage:
-  path: /cloud_files/manage
-  defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:manage }
-  permissions: [ admin_v2_cloud_resource ]
-
-admin_v2_cloud_file_render_table:
-  path: /cloud_files/table/render
-  defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:render }
-  permissions: [ admin_v2_cloud_resource ]
-
-admin_v2_cloud_file_detail:
-  path: /cloud_file/{globalId}/detail
-  defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:detail }
-  permissions: [ admin_v2_cloud_resource ]
-
-admin_v2_cloud_file_edit:
-  path: /cloud_file/{globalId}/edit
-  defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:edit, fields:'' }
-  methods: [ POST ]
-  permissions: [ admin_v2_cloud_resource ]
-
-admin_v2_cloud_file_preview:
-  path: /cloud_file/{globalId}/preview
-  defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:preview }
-  permissions: [ admin_v2_cloud_resource ]
-
-admin_v2_cloud_file_reconvert:
-  path: /cloud_file/{globalId}/reconvert
-  defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:reconvert }
-  permissions: [ admin_v2_cloud_resource ]
-
-admin_v2_cloud_file_download:
-  path: /cloud_file/{globalId}/download
-  defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:download }
-  permissions: [ admin_v2_cloud_resource ]
-
-admin_v2_cloud_file_delete:
-  path: /cloud_file/{globalId}/delete
-  defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:delete }
-  methods: [ POST ]
-  permissions: [ admin_v2_cloud_resource ]
-
-admin_v2_cloud_file_batch_delete:
-  path: /cloud_file/delete/batch
-  defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:batchDelete }
-  methods: [ POST ]
-  permissions: [ admin_v2_cloud_resource ]
-
-admin_v2_cloud_file_delete_modal_show:
-  path: /cloud_file/delete/show
-  defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:deleteShow }
-  permissions: [ admin_v2_cloud_resource ]
-
-admin_v2_cloud_file_tag_show:
-  path: /cloud_file/tag/show
-  defaults: { _controller: AppBundle:AdminV2/Teach/CloudFile:batchTagShow }
-  permissions: [ admin_v2_cloud_resource ]
-
 #教学-资源管理-题库管理
 admin_v2_question_bank:
   path: /question_bank/index
@@ -753,32 +631,6 @@ admin_v2_login_record_details:
   defaults: { _controller: AppBundle:AdminV2/User/LoginRecord:showUserLoginRecord }
   permissions: [ admin_v2_login_record ]
 
-# 用户-用户管理-实名认证
-admin_v2_approval_approvals:
-  path: approvals/{approvalStatus}
-  defaults: { _controller: AppBundle:AdminV2/User/UserApproval:approvals }
-
-admin_v2_approval_info_view:
-  path: approvals/{id}/view
-  defaults: { _controller: AppBundle:AdminV2/User/UserApproval:viewApprovalInfo }
-  permissions: [ admin_v2_approval_manage ]
-
-admin_v2_approval_approve:
-  path: approvals/{id}/approve
-  defaults: { _controller: AppBundle:AdminV2/User/UserApproval:approve }
-  permissions: [ admin_v2_approval_manage ]
-
-admin_v2_approval_cancel:
-  path: approvals/{id}/cancel
-  defaults: { _controller: AppBundle:AdminV2/User/UserApproval:cancel }
-  methods: [ POST ]
-  permissions: [ admin_v2_approval_cancel ]
-
-admin_v2_show_idcard:
-  path: approvals/idcard/show/{userId}/{type}
-  defaults: { _controller: AppBundle:AdminV2/User/UserApproval:showIdcard }
-  permissions: [ admin_v2_approval_manage ]
-
 # 用户-用户管理-教师管理
 admin_v2_teacher:
   path: /teacher
@@ -938,15 +790,6 @@ admin_v2_setting_default_avatar_crop:
 admin_v2_setting_user_center:
   path: /setting/user-center
   defaults: { _controller: AppBundle:AdminV2/System/UserSetting:userCenter }
-
-# 设置-通用设置-微信授权信息
-admin_v2_setting_wechat_auth:
-  path: /wechat/auth/setting
-  defaults: { _controller: AppBundle:AdminV2/System/WeChatSetting:index }
-
-admin_v2_setting_wechat_pre_auth_url:
-  path: /wechat/pre_auth_url/{platformType}
-  defaults: { _controller: AppBundle:AdminV2/System/WeChatSetting:preAuthUrl }
 
 #系统-通用管理-课程设置
 admin_v2_setting_course_setting:

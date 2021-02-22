@@ -96,7 +96,6 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             new Endroid\QrCode\Bundle\EndroidQrCodeBundle(),
             new Topxia\WebBundle\TopxiaWebBundle(),
             new Topxia\AdminBundle\TopxiaAdminBundle(),
-            new Topxia\MobileBundleV2\TopxiaMobileBundleV2(),
             new Bazinga\Bundle\JsTranslationBundle\BazingaJsTranslationBundle(),
             new OAuth2\ServerBundle\OAuth2ServerBundle(),
             new Codeages\PluginBundle\CodeagesPluginBundle(),
@@ -215,11 +214,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             $biz->register($provider);
         }
 
-//        $biz->register(new Codeages\Biz\RateLimiter\RateLimiterServiceProvider());
         $this->registerCacheServiceProvider($biz);
-//        $biz->register(new Codeages\Biz\Order\OrderServiceProvider());
-//        $biz->register(new Codeages\Biz\Pay\PayServiceProvider());
-//        $biz->register(new Codeages\Biz\Invoice\InvoiceServiceProvider());
         $biz->register(new Codeages\Biz\ItemBank\ItemBankServiceProvider(), [
             'item_bank.html_helper.options' => [
                 'cacheDir' => $this->getCacheDir().'/htmlpurifier',
@@ -228,7 +223,6 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         ]);
 
         $biz->register(new \Biz\Accessor\AccessorServiceProvider());
-//        $biz->register(new \Biz\OrderFacade\OrderFacadeServiceProvider());
         $biz->register(new \Biz\Xapi\XapiServiceProvider());
         $this->registerSessionServiceProvider($biz);
         $biz->register(new \Codeages\Biz\Framework\Provider\QueueServiceProvider());
