@@ -96,6 +96,7 @@
     "ua-parser-js": "^0.7.17",
     "video.js": "4.10.2",
     "vue": "^2.6.11",
+    "vue-splitpane": "^1.0.6",
     "vue-tree-halower": "^1.8.3",
     "waypoints": "4.0.1",
     "websocket": "^1.0.25",

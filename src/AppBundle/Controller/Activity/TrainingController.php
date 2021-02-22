@@ -17,15 +17,8 @@ class TrainingController extends BaseActivityController implements ActivityActio
             $this->createNewException(ActivityException::NOTFOUND_ACTIVITY());
         }
 
-        $text = $this->getActivityService()->getActivityConfig('text')->get($activity['mediaId']);
-
-        if (empty($text)) {
-            $this->createNewException(ActivityException::NOTFOUND_ACTIVITY());
-        }
-
-        return $this->render('activity/text/show.html.twig', array(
+        return $this->render('activity/training/show.html.twig', array(
             'activity' => $activity,
-            'text' => $text,
         ));
     }
 

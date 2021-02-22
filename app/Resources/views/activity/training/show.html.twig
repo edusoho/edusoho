@@ -1,0 +1,9 @@
+{% extends 'activity/content-layout.html.twig' %}
+{% do script(['libs/vue.js', 'app/js/activity/training/view/index.js', 'libs/element-ui.js']) %}
+{% block body %}
+<div class="panel panel-default panel-col">
+    <div id="app"
+    ></div>
+</div>
+<link href="/static-dist/libs/element-ui/dist/index.css" rel="stylesheet">
+{% endblock %}
