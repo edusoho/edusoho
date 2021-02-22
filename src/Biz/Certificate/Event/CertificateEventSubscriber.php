@@ -35,6 +35,24 @@ class CertificateEventSubscriber extends EventSubscriber implements EventSubscri
         $this->processClassroomCertificate($course, $taskResult['userId']);
     }
 
+    public function onCourseTaskDelete(Event $event)
+    {
+        $task = $event->getSubject();
+        $course = $this->getCourseService()->getCourse($task['courseId']);
+        $certificates = $this->getCertificateService()->findByTargetIdAndTargetType($task['courseId'], 'course');
+        foreach ($certificates as $certificate) {
+            $this->getSchedulerService()->register([
+                'name' => 'issue_certificate_job'.$certificate['id'],
+                'pool' => 'dedicated',
+                'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
+                'expression' => (int)time(),
+                'misfire_policy' => 'executing',
+                'class' => 'Biz\Certificate\Job\IssueCertificateJob',
+                'args' => ['certificateId' => $certificate['id']],
+            ]);
+        }
+    }
+
     public function onCertificatePublish(Event $event)
     {
         $certificate = $event->getSubject();
