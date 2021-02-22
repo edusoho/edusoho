@@ -75,6 +75,7 @@ class FavoriteDaoImpl extends GeneralDaoImpl implements FavoriteDao
                 'targetId = :targetId',
                 'goodsType = :goodsType',
                 'createdTime >= :createdTime_GE',
+                'goodsType NOT IN ( :excludeGoodsTypes )',
             ],
         ];
     }
