@@ -22,7 +22,25 @@ class CertificateEventSubscriber extends EventSubscriber implements EventSubscri
         return [
             'course.task.finish' => 'onCourseTaskFinish',
             'certificate.publish' => 'onCertificatePublish',
+            'classroom.course.delete' => 'onClassroomCourseDelete',
         ];
+    }
+
+    public function onClassroomCourseDelete(Event $event)
+    {
+        $classroom = $event->getSubject();
+        $certificates = $this->getCertificateService()->findByTargetIdAndTargetType($classroom['id'], 'classroom');
+        foreach ($certificates as $certificate) {
+            $this->getSchedulerService()->register([
+                'name' => 'issue_certificate_job'.$certificate['id'],
+                'pool' => 'dedicated',
+                'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
+                'expression' => (int)time(),
+                'misfire_policy' => 'executing',
+                'class' => 'Biz\Certificate\Job\IssueCertificateJob',
+                'args' => ['certificateId' => $certificate['id']],
+            ]);
+        }
     }
 
     public function onCourseTaskFinish(Event $event)
@@ -39,7 +57,15 @@ class CertificateEventSubscriber extends EventSubscriber implements EventSubscri
     {
         $task = $event->getSubject();
         $course = $this->getCourseService()->getCourse($task['courseId']);
-        $certificates = $this->getCertificateService()->findByTargetIdAndTargetType($task['courseId'], 'course');
+        if(empty($course['parentId'])) {
+            $certificates = $this->getCertificateService()->findByTargetIdAndTargetType($task['courseId'], 'course');
+        } else {
+            $classroomIds = ArrayToolkit::column($this->getClassroomService()->findClassroomIdsByCourseId($course['id']), 'classroomId');
+            if (empty($classroomIds)) {
+                return true;
+            }
+            $certificates = $this->getCertificateService()->findByTargetIdAndTargetType($classroomIds[0], 'classroom');
+        }
         foreach ($certificates as $certificate) {
             $this->getSchedulerService()->register([
                 'name' => 'issue_certificate_job'.$certificate['id'],
