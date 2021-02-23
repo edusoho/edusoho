@@ -1,7 +1,7 @@
 import BatchSelect from 'app/common/widget/batch-select';
 new BatchSelect($('#student-table-container'));
 
-class Students {
+class StudentsManage {
   constructor() {
     this.initTooltips();
     this.initDeleteActions();
@@ -20,7 +20,7 @@ class Students {
 
   initDeleteActions() {
     $('body').on('click', '.js-remove-student', function(evt) {
-      if (!confirm(Translator.trans('course.manage.student_delete_hint'))) {
+      if (!confirm(Translator.trans('exercise.manage.student_delete_hint'))) {
         return;
       }
       $.post($(evt.target).data('url'), function (data) {
@@ -79,7 +79,7 @@ class Students {
       if (!confirm(Translator.trans('course.manage.students_delete_hint'))) {
         return;
       }
-      $.post($(this).data('url'), {studentIds: ids}, function (resp) {
+      $.post($(this).data('url'), {userIds: ids}, function (resp) {
         if (resp.success) {
           cd.message({ type: 'success', message: Translator.trans('member.delete_success_hint') });
           location.reload();
@@ -91,4 +91,4 @@ class Students {
   }
 }
 
-new Students();
+new StudentsManage();

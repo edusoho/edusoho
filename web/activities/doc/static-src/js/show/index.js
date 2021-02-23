@@ -18,7 +18,7 @@ onFullScreen();
 function initDocPlayer() {
   new QiQiuYun.Player({
     id: 'document-content',
-    playServer: app.cloudPlayServer,
+    // playServer: app.cloudPlayServer,
     sdkBaseUri: app.cloudSdkBaseUri,
     disableDataUpload: app.cloudDisableLogReport,
     disableSentry: app.cloudDisableLogReport,
