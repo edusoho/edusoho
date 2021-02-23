@@ -475,10 +475,9 @@ class UserServiceImpl extends BaseService implements UserService
         $oldAvatarFiles = $this->getFileService()->findFilesByUris(array_values($oldAvatars));
 
         foreach ($oldAvatarFiles as $oldAvatarFile) {
-            if (!$this->canManageAvatarFile($userId, $oldAvatarFile)) {
-                $this->createNewException(UserException::FILE_PERMISSION_DENIED());
+            if ($this->canManageAvatarFile($userId, $oldAvatarFile)) {
+                $this->getFileService()->deleteFileByUri($oldAvatarFile['uri']);
             }
-            $this->getFileService()->deleteFileByUri($oldAvatarFile['uri']);
         }
 
         $user = $this->getUserDao()->update($userId, $fields);
