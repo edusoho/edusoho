@@ -13,23 +13,23 @@ class DeleteCourseJob extends AbstractJob
         $courseId = $args['courseId'];
         $this->getCourseDeleteService()->deleteCourseChapter($courseId);
 
-        $this->deleteTaskResult($courseId);
+        $this->getCourseDeleteService()->deleteTaskResult($courseId);
 
-        $this->deleteCourseMember($courseId);
+        $this->getCourseDeleteService()->deleteCourseMember($courseId);
 
-        $this->deleteCourseNote($courseId);
+        $this->getCourseDeleteService()->deleteCourseNote($courseId);
 
-        $this->deleteCourseThread($courseId);
+        $this->getCourseDeleteService()->deleteCourseThread($courseId);
 
-        $this->deleteCourseReview($courseId);
+        $this->getCourseDeleteService()->deleteCourseReview($courseId);
 
-        $this->deleteCourseFavorite($courseId);
+        $this->getCourseDeleteService()->deleteCourseFavorite($courseId);
 
-        $this->deleteCourseAnnouncement($courseId);
+        $this->getCourseDeleteService()->deleteCourseAnnouncement($courseId);
 
-        $this->deleteCourseStatus($courseId);
+        $this->getCourseDeleteService()->deleteCourseStatus($courseId);
 
-        $this->deleteCourseCoversation($courseId);
+        $this->getCourseDeleteService()->deleteCourseCoversation($courseId);
     }
 
     /**
