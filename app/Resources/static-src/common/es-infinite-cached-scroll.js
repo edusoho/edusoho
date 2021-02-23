@@ -108,6 +108,17 @@ export default class ESInfiniteCachedScroll extends Emitter {
     });
   }
 
+  _destroy() {
+    this._options['data'] = [];
+
+    const $target = $('.js-sidebar-pane');
+    if (!$target.length) {
+      return;
+    }
+    const $targetDom = $target[0];
+    $targetDom.removeEventListener('scroll', 'debounce', false);
+  }
+
   chapterAnimate(
     delegateTarget = 'body',
     target = '.js-task-chapter',

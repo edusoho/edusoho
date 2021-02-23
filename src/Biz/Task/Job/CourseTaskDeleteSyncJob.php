@@ -5,6 +5,7 @@ namespace Biz\Task\Job;
 use AppBundle\Common\ArrayToolkit;
 use Biz\AppLoggerConstant;
 use Biz\Task\Strategy\CourseStrategy;
+use Codeages\Biz\Framework\Event\Event;
 
 class CourseTaskDeleteSyncJob extends AbstractSyncJob
 {
@@ -31,7 +32,10 @@ class CourseTaskDeleteSyncJob extends AbstractSyncJob
 
     private function deleteTask($taskId, $course)
     {
-        return  $this->createCourseStrategy($course)->deleteTask($this->getTaskDao()->get($taskId));
+        $task = $this->getTaskDao()->get($taskId);
+        $res = $this->createCourseStrategy($course)->deleteTask($task);
+        $this->dispatchEvent('course.task.delete', new Event($task, ['user' => $this->biz['user']]));
+        return $res;
     }
 
     private function getCourseMemberService()
