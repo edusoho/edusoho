@@ -94,69 +94,10 @@
 					</div>
 				</div>
 
-				<div class="cd-md-11">
-					<div class="form-group cd-form-group">
-						<label for="profile_title">{{'user.settings.basic_info.rank'|trans}}</label>
-						<input type="text" id="profile_title" name="profile[title]" class="form-control" value="{{ profile.title|default('') }}">
-					</div>
-				</div>
-				<div class="cd-md-11">
-					<div class="form-group cd-form-group">
-						<label for="profile_signature">{{'user.settings.basic_info.personal_signature'|trans}}</label>
-						<input type="text" id="profile_signature" name="profile[signature]" class="form-control" value="{{ profile.signature|default('') }}">
-					</div>
-				</div>
-
 				<div class="cd-md-24">
 					<div class="form-group cd-form-group">
 						<label for="profile_about">{{'user.settings.basic_info.self_introduction'|trans}}</label>
 						<textarea name="profile[about]" rows="10" id="profile_about" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('user')}) }}">{{ profile.about|default('') }}</textarea>
-					</div>
-				</div>
-
-				<div class="cd-md-11">
-					<div class="form-group cd-form-group">
-						<label for="profile_company">{{'user.fields.company_label'|trans}}</label>
-						<input type="text" id="profile_company" name="profile[company]" class="form-control" value="{{ profile.company|default('') }}">
-					</div>
-				</div>
-
-				<div class="cd-md-11">
-					<div class="form-group cd-form-group">
-						<label for="profile_job">{{'user.settings.basic_info.occupation'|trans}}</label>
-						<input type="text" id="profile_job" name="profile[job]" class="form-control" value="{{ profile.job|default('') }}">
-					</div>
-				</div>
-
-				<div class="cd-md-11">
-					<div class="form-group cd-form-group">
-						<label for="profile_site">{{'user.settings.basic_info.personal_space'|trans}}</label>
-						<input type="text" id="profile_site" name="profile[site]" class="form-control" value="{{ profile.site|default('') }}" placeholder="http://">
-					</div>
-				</div>
-
-				<div class="cd-md-11">
-					<div class="form-group cd-form-group">
-						<label for="weibo">{{'user.fileds.microblog'|trans}}</label>
-						<input type="text" id="weibo" name="profile[weibo]" class="form-control" value="{{ profile.weibo|default('') }}" placeholder="http://">
-						<input class="hidden" type="text" name="profile[isWeiboPublic]" value="1"/>
-						<div class="help-block">{{'user.settings.basic_info.public'|trans}}</div>
-					</div>
-				</div>
-
-				<div class="cd-md-11">
-					<div class="form-group cd-form-group">
-						<label for="profile_weixin">{{'user.fileds.wechat'|trans}}</label>
-						<input type="text" id="profile_weixin" name="profile[weixin]" class="form-control" value="{{ profile.weixin|default('') }}">
-						<input class="hidden" type="text" name="profile[isWeixinPublic]" value="1"/>
-					</div>
-				</div>
-
-				<div class="cd-md-11">
-					<div class="form-group cd-form-group">
-						<label for="profile_qq">{{'user.fileds.qq'|trans}}</label>
-						<input type="text" id="profile_qq" name="profile[qq]" class="form-control" value="{{ profile.qq|default('') }}">
-						<input class="hidden" type="text" name="profile[isQQPublic]" value="1"/>
 					</div>
 				</div>
 

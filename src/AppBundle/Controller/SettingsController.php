@@ -257,36 +257,36 @@ class SettingsController extends BaseController
     {
         $user = $this->getCurrentUser();
         $hasLoginPassword = strlen($user['password']) > 0;
-        $hasPayPassword = $this->getAccountService()->isPayPasswordSetted($user['id']);
-        $hasFindPayPasswordQuestion = $this->getAccountService()->isSecurityAnswersSetted($user['id']);
-        $hasVerifiedMobile = (isset($user['verifiedMobile']) && (strlen($user['verifiedMobile']) > 0));
-        $verifiedMobile = $hasVerifiedMobile ? $user['verifiedMobile'] : '';
-        $hasEmail = strlen($user['email']) > 0 && false === stripos($user['email'], '@edusoho.net');
+//        $hasPayPassword = $this->getAccountService()->isPayPasswordSetted($user['id']);
+//        $hasFindPayPasswordQuestion = $this->getAccountService()->isSecurityAnswersSetted($user['id']);
+//        $hasVerifiedMobile = (isset($user['verifiedMobile']) && (strlen($user['verifiedMobile']) > 0));
+//        $verifiedMobile = $hasVerifiedMobile ? $user['verifiedMobile'] : '';
+//        $hasEmail = strlen($user['email']) > 0 && false === stripos($user['email'], '@edusoho.net');
 
-        $email = $hasEmail ? $user['email'] : '';
-        $hasVerifiedEmail = $user['emailVerified'];
+//        $email = $hasEmail ? $user['email'] : '';
+//        $hasVerifiedEmail = $user['emailVerified'];
 
-        $cloudSmsSetting = $this->getSettingService()->get('cloud_sms');
-        $showBindMobile = (isset($cloudSmsSetting['sms_enabled'])) && ('1' == $cloudSmsSetting['sms_enabled'])
-            && (isset($cloudSmsSetting['sms_bind'])) && ('on' == $cloudSmsSetting['sms_bind']);
+//        $cloudSmsSetting = $this->getSettingService()->get('cloud_sms');
+//        $showBindMobile = (isset($cloudSmsSetting['sms_enabled'])) && ('1' == $cloudSmsSetting['sms_enabled'])
+//            && (isset($cloudSmsSetting['sms_bind'])) && ('on' == $cloudSmsSetting['sms_bind']);
 
-        $itemScore = floor(100.0 / (4.0 + ($showBindMobile ? 1.0 : 0)));
-        $progressScore = 1 + ($hasLoginPassword ? $itemScore : 0) + ($hasPayPassword ? $itemScore : 0) + ($hasFindPayPasswordQuestion ? $itemScore : 0) + ($showBindMobile && $hasVerifiedMobile ? $itemScore : 0) + ($hasVerifiedEmail ? $itemScore : 0);
+//        $itemScore = floor(100.0 / (4.0 + ($showBindMobile ? 1.0 : 0)));
+//        $progressScore = 1 + ($hasLoginPassword ? $itemScore : 0) + ($hasPayPassword ? $itemScore : 0) + ($hasFindPayPasswordQuestion ? $itemScore : 0) + ($showBindMobile && $hasVerifiedMobile ? $itemScore : 0) + ($hasVerifiedEmail ? $itemScore : 0);
 
-        if ($progressScore <= 1) {
-            $progressScore = 0;
-        }
+//        if ($progressScore <= 1) {
+//            $progressScore = 0;
+//        }
 
         return $this->render('settings/security.html.twig', [
-            'progressScore' => $progressScore,
+//            'progressScore' => $progressScore,
             'hasLoginPassword' => $hasLoginPassword,
-            'hasPayPassword' => $hasPayPassword,
-            'hasFindPayPasswordQuestion' => $hasFindPayPasswordQuestion,
-            'hasVerifiedMobile' => $hasVerifiedMobile,
-            'verifiedMobile' => $verifiedMobile,
-            'hasEmail' => $hasEmail,
-            'email' => $email,
-            'hasVerifiedEmail' => $hasVerifiedEmail,
+//            'hasPayPassword' => $hasPayPassword,
+//            'hasFindPayPasswordQuestion' => $hasFindPayPasswordQuestion,
+//            'hasVerifiedMobile' => $hasVerifiedMobile,
+//            'verifiedMobile' => $verifiedMobile,
+//            'hasEmail' => $hasEmail,
+//            'email' => $email,
+//            'hasVerifiedEmail' => $hasVerifiedEmail,
         ]);
     }
 
@@ -1080,27 +1080,27 @@ class SettingsController extends BaseController
         return $this->getBiz()->service('System:LogService');
     }
 
-    /**
-     * @return AccountService
-     */
-    protected function getAccountService()
-    {
-        return $this->getBiz()->service('Pay:AccountService');
-    }
-
-    /**
-     * @return WeChatService
-     */
-    protected function getWeChatService()
-    {
-        return $this->getBiz()->service('WeChat:WeChatService');
-    }
+//    /**
+//     * @return AccountService
+//     */
+//    protected function getAccountService()
+//    {
+//        return $this->getBiz()->service('Pay:AccountService');
+//    }
+//
+//    /**
+//     * @return WeChatService
+//     */
+//    protected function getWeChatService()
+//    {
+//        return $this->getBiz()->service('WeChat:WeChatService');
+//    }
 
     protected function downloadImg($url)
     {
         $currentUser = $this->getCurrentUser();
         //        $filename    = md5($url).'_'.time();
-        $filePath = $this->container->getParameter('topxia.upload.public_directory').'/tmp/'.$currentUser['id'].'_'.time().'.jpg';
+        $filePath = $this->container->getParameter('topxia.upload.public_directory') . '/tmp/' . $currentUser['id'] . '_' . time() . '.jpg';
 
         $fp = fopen($filePath, 'w');
         $img = fopen($url, 'r');

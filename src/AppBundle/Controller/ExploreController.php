@@ -24,7 +24,7 @@ class ExploreController extends BaseController
         $user = $this->getCurrentUser();
 
         # 如果当前用户没有登录，重定向到登录页
-        if (empty($user['id'])) {
+        if ($user['nickname'] === '游客') {
             return $this->redirectToRoute('login');
         }
 
