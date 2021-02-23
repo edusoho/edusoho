@@ -143,7 +143,7 @@ class LessonServiceImpl extends BaseService implements LessonService
             $this->createNewException(CommonException::ERROR_PARAMETER());
         }
 
-        $this->updateLessonNumbers($courseId);
+        $this->dispatchEvent('course.lessons.batch.update', new Event($courseId));
 
         return $lessons;
     }
@@ -229,9 +229,7 @@ class LessonServiceImpl extends BaseService implements LessonService
         $this->getCourseChapterDao()->batchDelete(['ids' => $lessonIds]);
         $this->getTaskService()->deleteTasksByCategoryIds($lessonIds);
 
-        $this->dispatchEvent('course.lesson.delete', new Event($lessons[0]));
-
-        $this->updateLessonNumbers($courseId);
+        $this->dispatchEvent('course.lessons.batch.delete', new Event($courseId));
 
         return $lessons;
     }
