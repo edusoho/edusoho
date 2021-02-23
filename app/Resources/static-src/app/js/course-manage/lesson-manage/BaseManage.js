@@ -174,20 +174,15 @@ export default class Manage {
         return self._sortRules($item, container);
       },
       onDragStart: function(item, container, _super) {
-        let offset = item.offset(),
-          pointer = container.rootGroup.pointer;
+        let offset = item.offset();
+        let pointer = container.rootGroup.pointer;
         
-          adjustment = {
+        adjustment = {
           left: pointer.left - offset.left,
           top: pointer.top - offset.top
         };
-
-        if (item.hasClass('js-task-manage-chapter')) {
-          $childrens = item.nextUntil('.js-task-manage-chapter');
-        } else if (item.hasClass('js-task-manage-unit')) {
-          $childrens = item.nextUntil('.js-task-manage-unit,.js-task-manage-chapter');
-        }
-
+        
+        $childrens = self.getChildrens(item)
         _super(item, container);
       },
       onDrag: function(item, position) {
@@ -204,19 +199,42 @@ export default class Manage {
       onDrop: function(item, container, _super) {
         _super(item, container);
 
-        const isHidden = item.find('.js-toggle-show.toogle-hide').length > 0
-
-        if (!isHidden || (!isChapter && !isUnit)) {
-          self.sortList();
-          return
+        let $next = item
+        while ($next.next().css('display') === 'none') {
+          $next = $next.next()
         }
 
+        $next.after(item)
         if ($childrens) {
           item.after($childrens)
+          $childrens = null
         }
+
         self.sortList();
       }
     });
+  }
+
+  getChildrens (item) {
+    const isHidden = item.find('.js-toggle-show.toogle-hide').length > 0
+
+    if (!isHidden) return null
+
+    let $childrens = null
+
+    if (item.hasClass('js-task-manage-chapter')) {
+      $childrens = item.nextUntil('.js-task-manage-chapter')
+    } else if (item.hasClass('js-task-manage-unit')) {
+      $childrens = item.nextUntil('.js-task-manage-unit,.js-task-manage-chapter');
+    }
+    
+    if ($childrens) {
+      $childrens = $childrens.filter(index => {
+        return $childrens.eq(index).css('display') === 'none'
+      })
+    }
+
+    return $childrens
   }
 
   _sortRules($item, container) {
