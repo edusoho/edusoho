@@ -20,6 +20,16 @@
             return {
                 lab_url:'',
             }
+        },
+        created(){
+            let _this = this;
+            // 获取到信息后加载
+            // this.$watch('cur_subsection_info',(val)=>{});
+            if(_this.lab_id == null || _this.lab_id == undefined || _this.lab_id == ''){
+                _this.getLabApply(100,200);
+            }else{
+                _this.getLabQuery(100,200);
+            }
         }
     }
 </script>
