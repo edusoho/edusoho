@@ -1,6 +1,6 @@
 homepage:
   path: /
-  defaults: { _controller: AppBundle:Explore:courseSets, category:'' }
+  defaults: { _controller: AppBundle:My\Course:learning }
   h5: true
 
 jstranslation_js:
@@ -33,9 +33,9 @@ login_ajax:
   path: /login/ajax
   defaults: { _controller: AppBundle:Login:ajax }
 
-#login_qrcode:
-#  path: /login/qrcode
-#  defaults: { _controller: AppBundle:Login:qrcode }
+login_qrcode:
+  path: /login/qrcode
+  defaults: { _controller: AppBundle:Login:qrcode }
 
 #login_face_token:
 #  path: /login/face_token/{token}
