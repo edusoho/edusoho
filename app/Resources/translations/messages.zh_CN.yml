@@ -1707,7 +1707,7 @@ course.question_manage.import.uploading: 上传中...
 course.question_manage.import.use_old_template: 仍然使用旧模板
 course.question_manage.impport.cancle: 取消
 course.question_manage.import.docx_support_hint2: 请上传DOCX格式的Word文档
-course.question_manage.import.doc_to_docx_hint2: DOC如何转换成DOCX可<a href="http://www.qiqiuyu.com/faq/880/detail" target="_blank">点击此处</a>进行查看
+course.question_manage.import.doc_to_docx_hint2: DOC如何转换成DOCX可<a href="" target="_blank">点击此处</a>进行查看
 course.question_manage.import.rule: 导入规则说明
 course.question_manage.export_hint: (当前题目导出仅支持新模板)
 course.question_manage.export_btn: 导出题目
@@ -2131,7 +2131,7 @@ course.plan_task.activity_manage.video.time: 视频时长
 course.plan_task.activity_manage.video.subtitle: 视频字幕
 course.plan_task.activity_manage.video.add_subtitle_tips: 请等待视频上传完之后再添加字幕
 course.plan_task.activity_manage.video.code_convert_tips: >
-  字幕文件暂时仅支持UTF-8编码的srt文件，点击<a href="http://www.qiqiuyu.com/faq/386/detail" target="__blank">查看</a>编码转换说明。
+  字幕文件暂时仅支持UTF-8编码的srt文件，点击<a href="" target="__blank">查看</a>编码转换说明。
 course.plan_task.activity_manage.video.last_finish_tips: >
   <p class="gray-darker mbs">满足以下条件:</p>学习到最后。
 course.plan_task.activity_manage.video.failed_tips: 您的视频观看时长已达限制，无法继续观看！
@@ -4156,7 +4156,7 @@ my.teaching.open_course.lesson.modal.lesson_content: 内容
 my.teaching.open_course.lesson.modal.lesson_content.tips: 您有一段自动保存内容，继续编辑请点击
 my.teaching.open_course.lesson.modal.media_dialog: 视频字幕
 my.teaching.open_course.lesson.modal.media_dialog.help_block: >
-  字幕文件暂时仅支持UTF-8编码的srt文件，点击<a href="http://www.qiqiuyu.com/faq/386/detail" target="__blank">查看</a>编码转换说明。
+  字幕文件暂时仅支持UTF-8编码的srt文件，点击<a href="" target="__blank">查看</a>编码转换说明。
 my.teaching.open_course.lesson.modal.upload.tips: 请等待视频上传完之后再添加字幕
 my.teaching.open_course.lesson.modal.video_length: 视频时长
 my.teaching.open_course.lesson.modal.audio_length: 音频时长
@@ -5742,9 +5742,9 @@ admin.setting.record.code: 公安备案号
 admin.setting.record.url: 公安备案号链接
 admin.setting.record.picture.help_block: >
   图标尺寸建议不超过50×50px，图标尺寸建议不超过2MB。
-  <a href="http://www.qiqiuyu.com/faq/1239/detail" target="_blank">如何获取公安备案图标？</a>
+  <a href="" target="_blank">如何获取公安备案图标？</a>
 admin.setting.record.code.help_block: >
-    <a href="http://www.qiqiuyu.com/faq/1239/detail" target="_blank">如何添加公安备案号及链接？</a>
+  <a href="" target="_blank">如何添加公安备案号及链接？</a>
 admin.setting.mailer.is_trial.tips: >
   当前版本为试⽤版,不能进⾏邮件服务设置。如需购买授权版,请联系销售人员。
   电话：4008041114 或
@@ -6005,7 +6005,7 @@ admin.custom_page_manage.custom_page_blank_template: 空白页
 # 移动端内容管理
 admin.mobile_manage.open_tips: >
   移动端未开启，请先在<a href="%openUrl%">系统-课程设置-移动端设置</a>中设置开启
-admin.mobile_manage.head_tips: 客户端显示的轮播图。最多5张，请上传jpg, png格式的图片。建议图片尺寸为 750×300px，建议图片大小不超过2MB。<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
+admin.mobile_manage.head_tips: 客户端显示的轮播图。最多5张，请上传jpg, png格式的图片。建议图片尺寸为 750×300px，建议图片大小不超过2MB。<a href="" target=_blank>如何制作合适的图片？</a>
 admin.mobile_manage.banner_label: 轮播图
 admin.mobile_manage.upload_btn: 上传
 admin.mobile_manage.delete_btn: 删除
@@ -6538,7 +6538,7 @@ admin.user.manage.user_edit.fields.heading_title: 编辑用户信息
 admin.user.manage.user_role.fields.heading_title: 设置用户组
 admin.user.manage.user_avatar.fields.heading_title: 设置用户头像
 admin.user.manage.user_avatar.fields.current_avatar: 当前头像
-admin.user.manage.user_avatar.upload_hint: 请上传jpg, gif, png格式的图片，建议图片尺寸为 270×270px，建议图片大小不超过<strong>2MB</strong>，<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
+admin.user.manage.user_avatar.upload_hint: 请上传jpg, gif, png格式的图片，建议图片尺寸为 270×270px，建议图片大小不超过<strong>2MB</strong>，<a href="" target=_blank>如何制作合适的图片？</a>
 admin.user.manage.user_avatar.upload_btn: 上传新头像
 admin.user.manage.user_avatar.fields.partner_avatar: 论坛头像
 admin.user.manage.user_avatar.using_current_avatar_btn: 使用该头像
@@ -6818,11 +6818,11 @@ admin.edu_cloud.edu_video.open_embed_watermark: 开启内嵌水印
 admin.edu_cloud.edu_video.open_embed_watermark_tips: >
   能够更好的保护视频版权；上传时将水印嵌入视频编码中，不可删改；未嵌入水印的视频在播放时将会显示播放器水印。
 admin.edu_cloud.edu_video.play_water_mark_picture: 播放器水印图片：
-admin.edu_cloud.edu_video.play_water_mark_picture_tips: 支持jpg、gif、png格式图片，建议使用透明背景的png图片，推荐尺寸为 150×50px。<br>建议图片大小不超过2MB。<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
+admin.edu_cloud.edu_video.play_water_mark_picture_tips: 支持jpg、gif、png格式图片，建议使用透明背景的png图片，推荐尺寸为 150×50px。<br>建议图片大小不超过2MB。<a href="" target=_blank>如何制作合适的图片？</a>
 admin.edu_cloud.edu_video.picture_upload_btn: 点击上传
 admin.edu_cloud.edu_video.picture_delete_btn: 删除
 admin.edu_cloud.edu_video.play_embed_watermark: 视频内嵌水印图片
-admin.edu_cloud.edu_video.play_embed_watermark_picture_tips: 支持jpg、gif、png格式图片，建议使用透明背景的png图片，推荐尺寸为 270×90px。<br>建议图片大小不超过2MB。<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
+admin.edu_cloud.edu_video.play_embed_watermark_picture_tips: 支持jpg、gif、png格式图片，建议使用透明背景的png图片，推荐尺寸为 270×90px。<br>建议图片大小不超过2MB。<a href="" target=_blank>如何制作合适的图片？</a>
 admin.edu_cloud.edu_video.finger_print_embed: 云视频指纹
 admin.edu_cloud.edu_video.finger_print_embed_tips: >
   开启后，将在视频播放中随机时间、随机位置显示当前网站域名及学生的用户名．
@@ -7530,7 +7530,7 @@ admin.user_fields.modal.date_fields.tips: 还可以添加%5-dateCount%个字段
 admin.user_avatar.customer_default_avatar: 自定义默认头像
 admin.user_avatar.customer_default_avatar.help_block: 请上传jpg, gif, png格式的图片
 admin.user_avatar.system_default_avatar: 系统默认头像
-admin.user_avatar.avatar.tips: 网校内未上传头像的用户，都会显示该默认头像。建议图片尺寸为 270×270px。<br>建议图片大小不超过2MB。<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
+admin.user_avatar.avatar.tips: 网校内未上传头像的用户，都会显示该默认头像。建议图片尺寸为 270×270px。<br>建议图片大小不超过2MB。<a href="" target=_blank>如何制作合适的图片？</a>
 admin.user_center.message_title_name: 私信发送设置
 admin.user_center.message_student_to_student: 允许学生给学生发送私信
 admin.user_center.message_student_to_teacher: 允许学生给教师发送私信
@@ -7616,7 +7616,7 @@ admin.setting_course.questions_setting.reviewed: 全部批阅完成后一起显�
 admin.setting_course.questions_setting.submitted: 交卷后显示答案和解析
 admin.setting_course.course_avatar.customer_default_avatar: 自定义默认课程图片
 admin.setting_course.course_avatar.system_default_avatar: 系统默认课程图片
-admin.setting_course.course_avatar.tips: 请上传jpg, gif, png格式的图片，建议图片尺寸为 480×270px。建议图片大小不超过2MB。<br><a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
+admin.setting_course.course_avatar.tips: 请上传jpg, gif, png格式的图片，建议图片尺寸为 480×270px。建议图片大小不超过2MB。<br><a href="" target=_blank>如何制作合适的图片？</a>
 admin.setting_course.classroom.setting_classroom_name: 班级称谓设置
 admin.setting_course.classroom.setting_classroom_name.help_block: 用户所能看到的是这里设置的称谓
 admin.setting_course.classroom.setting_classroom_name.tips: 请注意：以下设置涉及到班级的基本运作模式，请谨慎设置，且不要经常性变更！
@@ -8062,7 +8062,7 @@ admin.coin_setting.promotion_proposal_hint: >
   2、 网校可鼓励学生充值，可提升用户忠诚度；<br>
   3、 建议配合使用学习卡（商业应用），给予一定优惠；<br>
 admin.coin_setting.upload_hint: >
-  请上传jpg, gif, png格式，尺寸大于等于 50×50px 的<span class="text-danger">正方形</span>图片。<br>图片大小建议不超过2MB。<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
+  请上传jpg, gif, png格式，尺寸大于等于 50×50px 的<span class="text-danger">正方形</span>图片。<br>图片大小建议不超过2MB。<a href="" target=_blank>如何制作合适的图片？</a>
 admin.coin_setting.coin_description: 虚拟币说明
 admin.coin_setting.content_hint: 虚拟币说明可用于描述虚拟币特点，用途，获得的途径等虚拟币的相关内容
 admin.coin_setting.update_submit_btn: 提交更新
@@ -8132,7 +8132,7 @@ admin.article_setting.publish_time_tips: 内容条目默认按发布时间的倒
 admin.article_setting.image.content_title: 设置资讯图片
 admin.article_setting.image: 资讯图片
 admin.article_setting.image.tips: 提示：请选择图片裁剪区域。
-admin.article_setting.image.upload_tips: 请上传jpg, gif, png格式的图片，建议图片尺寸为 754×424px，建议图片大小不超过2MB。<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
+admin.article_setting.image.upload_tips: 请上传jpg, gif, png格式的图片，建议图片尺寸为 754×424px，建议图片大小不超过2MB。<a href="" target=_blank>如何制作合适的图片？</a>
 admin.article_setting.image.choose_btn: 选择上传的文件
 
 admin.group_settings.homepage_show_group: 首页显示小组信息
@@ -8170,7 +8170,7 @@ admin.wap_setting.function: >
   <li><i class="es-icon es-icon-dot h5-color-primary"></i>随心所欲打造您的个性微网校</li>
 admin.wap_setting.hint: >
   <p class="help-block">新版微网校可使用发现页设置功能。</p>
-  <p class="help-block">注意：首次开启新版微网校时，需要更新微信公众号支付配置。<a href="http://www.qiqiuyu.com/faq/793/detail" target="_blank">【查看教程】</a></p>
+  <p class="help-block">注意：首次开启新版微网校时，需要更新微信公众号支付配置。<a href="" target="_blank">【查看教程】</a></p>
   <p class="help-block">旧版微网校开启后，切换 APP 下载地址，需要重新保存微网校设置。</p>
 admin.wap_setting.version_select: 版本选择
 admin.wap_setting.new: 新版微网校
@@ -8183,7 +8183,7 @@ admin.wap_setting.open.tip: >
   <h4 class="mbl">首次开启微网校，请修改微信支付配置</h4>
   <p>1、首次开启微网校-启航主题，需要修改微信配置，否则用户无法在微网校中支付购课。</p>
   <p>2、首次切换为启航主题的网校客户，需要修改微信配置。</p>
-  <a href="http://www.qiqiuyu.com/faq/793/detail" target="_blank">【查看教程】</a>
+  <a href="" target="_blank">【查看教程】</a>
 admin.wap_setting.subject_name: 主题名称
 admin.wap_setting.subject_name.recommend: 推荐
 admin.wap_setting.subject_name.template_name.sail: 启航
@@ -8298,7 +8298,7 @@ admin.mobile_setting.mobile_operation_hint: >
   2.移动端轮播图、发现页模块等内容，点击<a target="_blank" href="%operationUrl%">这里</a>进行设置
 admin.mobile_setting.splash_pic_setting_hint: 请上传jpg, gif, png格式的图片。
 admin.mobile_setting.online_school_about_hint: 此简介将显示在移动客户端的"关于网校"
-admin.mobile_setting.online_school_logo_hint: 请上传jpg, gif, png格式的图片。logo 图片的高度建议不超过50px。图片大小建议不超过2MB。<br><a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
+admin.mobile_setting.online_school_logo_hint: 请上传jpg, gif, png格式的图片。logo 图片的高度建议不超过50px。图片大小建议不超过2MB。<br><a href="" target=_blank>如何制作合适的图片？</a>
 admin.mobile_setting.app_custom_setting_option: 定制APP设置项
 admin.mobile_setting.app_ios_bundle_id: '套装 ID'
 admin.mobile_setting.app_ios_bundle_id_hint: '套装ID必须和App Store Connect后台保持一致，否则会影响充值正常使用，请谨慎填写。'
@@ -10667,7 +10667,7 @@ exception.coupon.invalid: 优惠券已失效
 exception.coupon.received: 优惠券已领过
 exception.coupon.finished: 优惠券已领完
 exception.coupon.over_batch_limit: 超过批次总额限制
-exception.educloud.user_disabled_hint: 教育云已被封禁，缴清费用系统自动解禁，教程<a href="http://www.qiqiuyu.com/faq/438/detail" target="_blank">看这里</a>
+exception.educloud.user_disabled_hint: 教育云已被封禁，缴清费用系统自动解禁，教程<a href="" target="_blank">看这里</a>
 exception.coupon.target_type_error: 该批次不支持查看详情
 exception.coupon.setting_close: 优惠券全局开关未开启
 
@@ -10719,7 +10719,7 @@ wechat.notification.status.sending: 发送中
 wechat.notification.cloud.tips: 您还未开通教育云，无法正常使用微信服务号通知功能。
 wechat.notification.cloud_open: 前往开通
 wechat.notification.record_number_tips: 学生必须绑定微信并关注服务号以后才能收到通知，因此实际发送数量会比预期发送数量少。
-wechat.notification.template_open_error: 模板打开失败，可能是未启用服务号模板消息插件或未在微信后台IP白名单中添加网校IP，请前往<a href="http://www.qiqiuyu.com/faq/878/detail" target="_blank">查看教程</a>
+wechat.notification.template_open_error: 模板打开失败，可能是未启用服务号模板消息插件或未在微信后台IP白名单中添加网校IP，请前往<a href="" target="_blank">查看教程</a>
 wechat.notification.service_not_open: 未开启微信服务号通知
 wechat.notification.empty_token: 获取微信信息错误
 wechat.notification.template_not_exist: 模板不存在

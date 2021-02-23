@@ -42,11 +42,11 @@
           <a class="btn btn-default btn-sm img-mode-upload" id="img-{{ code }}-uploadId-{{ dataId }}" data-upload-token="{{ upload_token('system', 'image') }}">{{'admin.block_manage.visual_edit.poster_img_upload'|trans}}</a>
           <p class="text-success">
             {% if block.code == 'live_top_banner' %}
-              {{'admin.block_manage.visual_edit.poster_live_top_banner_tips'|trans|raw}}
-              <a href="http://www.qiqiuyu.com/course/373/tasks" target="_blank">{{ 'admin.block_manage.visual_edit_img_compress_url'|trans }}</a>
+              {{ 'admin.block_manage.visual_edit.poster_live_top_banner_tips'|trans|raw }}
+              <a href="" target="_blank">{{ 'admin.block_manage.visual_edit_img_compress_url'|trans }}</a>
             {% else %}
-              {{'admin.block_manage.visual_edit.poster_other_tips'|trans|raw}}
-              <a href="http://www.qiqiuyu.com/course/373/tasks" target="_blank">{{ 'admin.block_manage.visual_edit_img_compress_url'|trans }}</a>
+              {{ 'admin.block_manage.visual_edit.poster_other_tips'|trans|raw }}
+              <a href="" target="_blank">{{ 'admin.block_manage.visual_edit_img_compress_url'|trans }}</a>
             {% endif %}
           </p>
           <input class="form-control img-value" type="hidden" name="data[{{ code }}][{{ dataId }}][src]" id="data[{{ code }}][{{ dataId }}][src]" data-role="img-url" value="{{ data.src|default('') }}">

@@ -19,44 +19,53 @@
           <div class="setting-label">
             <label class="setting-title">{{'admin.setting_wechat_auth.web_scan_login'|trans}}</label>
             <label class="form-switch setting-switch {% if loginConnect.weixinweb_enabled %}checked{% endif %}">
-              <input type="checkbox" name="loginConnect[weixinweb_enabled]" value="{{loginConnect.weixinweb_enabled }}" id="weixinweb_enabled" data-toggle="switch">
-              <input type="hidden" name="loginConnect[weixinweb_enabled]" value="{{loginConnect.weixinweb_enabled }}">
+              <input type="checkbox" name="loginConnect[weixinweb_enabled]" value="{{ loginConnect.weixinweb_enabled }}"
+                     id="weixinweb_enabled" data-toggle="switch">
+              <input type="hidden" name="loginConnect[weixinweb_enabled]" value="{{ loginConnect.weixinweb_enabled }}">
             </label>
           </div>
           <div class="setting-content">
             <div class="setting-content-block">
-              <div class="block-scan-login">{{'admin.setting_wechat_auth.web_scan_login_hint'|trans|raw}}</div>
+              <div class="block-scan-login">{{ 'admin.setting_wechat_auth.web_scan_login_hint'|trans|raw }}</div>
             </div>
             <div class="setting-content-button">
-              <a href="http://www.qiqiuyu.com/faq/549/detail" type="button" class="btn btn-default btn-large" target="blank">{{'admin.setting_wechat_auth.tutorial_button'|trans}}</a>
+              <a href="" type="button" class="btn btn-default btn-large"
+                 target="blank">{{ 'admin.setting_wechat_auth.tutorial_button'|trans }}</a>
             </div>
           </div>
         </div>
 
         <div class="wechat-setting-field">
           <div class="setting-label">
-            <label class="setting-title">{{'admin.setting_wechat_auth.wechat_auth_login'|trans}}</label>
+            <label class="setting-title">{{ 'admin.setting_wechat_auth.wechat_auth_login'|trans }}</label>
             <label class="form-switch setting-switch {% if loginConnect.weixinmob_enabled %}checked{% endif %}">
-              <input type="checkbox" name="loginConnect[weixinmob_enabled]" value="{{ loginConnect.weixinmob_enabled }}" id="weixinmob_enabled" data-toggle="switch">
-              <input type="hidden" name="loginConnect[weixinmob_enabled]" value="{{loginConnect.weixinmob_enabled }}">
+              <input type="checkbox" name="loginConnect[weixinmob_enabled]" value="{{ loginConnect.weixinmob_enabled }}"
+                     id="weixinmob_enabled" data-toggle="switch">
+              <input type="hidden" name="loginConnect[weixinmob_enabled]" value="{{ loginConnect.weixinmob_enabled }}">
             </label>
           </div>
           <div class="setting-content">
             <div class="setting-content-block">
-              <div class="block-auth-login">{{'admin.setting_wechat_auth.wechat_auth_login_hint'|trans|raw}}</div>
+              <div class="block-auth-login">{{ 'admin.setting_wechat_auth.wechat_auth_login_hint'|trans|raw }}</div>
             </div>
             <div class="setting-content-button">
-              <a href="http://www.qiqiuyu.com/faq/549/detail" type="button" class="btn btn-default btn-large" target="blank">{{'admin.setting_wechat_auth.tutorial_button'|trans}}</a>
+              <a href="" type="button" class="btn btn-default btn-large"
+                 target="blank">{{ 'admin.setting_wechat_auth.tutorial_button'|trans }}</a>
             </div>
           </div>
         </div>
 
         <div class="wechat-setting-field">
           <div class="setting-label">
-            <label class="setting-title">{{'admin.setting_wechat_auth.wechat_notification'|trans}}</label>
-            <label class="form-switch setting-switch {% if wechatSetting.wechat_notification_enabled %}checked{% endif %}">
-              <input type="checkbox" name="wechatSetting[wechat_notification_enabled]" value="{{ wechatSetting.wechat_notification_enabled }}" id="wechat_notification_enabled" data-toggle="switch" {% if not isCloudOpen or (wechatAuth.isAuthorized|default(0) != 1 and not wechatSetting.wechat_notification_enabled) %}disabled{% endif %}>
-              <input type="hidden" name="wechatSetting[wechat_notification_enabled]" value="{{ wechatSetting.wechat_notification_enabled }}">
+            <label class="setting-title">{{ 'admin.setting_wechat_auth.wechat_notification'|trans }}</label>
+            <label
+              class="form-switch setting-switch {% if wechatSetting.wechat_notification_enabled %}checked{% endif %}">
+              <input type="checkbox" name="wechatSetting[wechat_notification_enabled]"
+                     value="{{ wechatSetting.wechat_notification_enabled }}" id="wechat_notification_enabled"
+                     data-toggle="switch"
+                     {% if not isCloudOpen or (wechatAuth.isAuthorized|default(0) != 1 and not wechatSetting.wechat_notification_enabled) %}disabled{% endif %}>
+              <input type="hidden" name="wechatSetting[wechat_notification_enabled]"
+                     value="{{ wechatSetting.wechat_notification_enabled }}">
             </label>
           </div>
           {% if wechatAuth.isAuthorized|default(0) != 1 or wechatAuth.wholeness|default(0) != 1 %}
@@ -73,34 +82,40 @@
                 </div>
               {% endif %}
               <div class="setting-comment-button">
-                <a data-url="{{ path('admin_v2_setting_wechat_pre_auth_url', {platformType: 'official_account'}) }}" type="button" class="btn btn-default btn-large btn-primary js-wechat-pre-auth-url" target="blank">{{'admin.wechat.notification.go_authorizer'|trans}}</a>
+                <a data-url="{{ path('admin_v2_setting_wechat_pre_auth_url', {platformType: 'official_account'}) }}"
+                   type="button" class="btn btn-default btn-large btn-primary js-wechat-pre-auth-url"
+                   target="blank">{{ 'admin.wechat.notification.go_authorizer'|trans }}</a>
               </div>
             </div>
           {% endif %}
           <div class="setting-content">
             <div class="setting-content-block">
-              <div class="block-account-notification">{{'admin.setting_wechat_auth.wechat_notification_hint'|trans|raw}}</div>
+              <div
+                class="block-account-notification">{{ 'admin.setting_wechat_auth.wechat_notification_hint'|trans|raw }}</div>
             </div>
             <div class="setting-content-button">
-              <a href="http://www.qiqiuyu.com/faq/875/detail" type="button" class="btn btn-default btn-large " target="blank">{{'admin.setting_wechat_auth.tutorial_button'|trans}}</a>
+              <a href="" type="button" class="btn btn-default btn-large "
+                 target="blank">{{ 'admin.setting_wechat_auth.tutorial_button'|trans }}</a>
             </div>
           </div>
         </div>
 
         <div class="wechat-setting-field wechat-setting-field-bottom">
           <div class="setting-label">
-            <label class="setting-title">{{'admin.setting_wechat_auth.wechat_pay'|trans}}</label>
+            <label class="setting-title">{{ 'admin.setting_wechat_auth.wechat_pay'|trans }}</label>
             <label class="form-switch setting-switch {% if payment.wxpay_enabled %}checked{% endif %}">
-              <input type="checkbox" name="payment[wxpay_enabled]" value="{{ payment.wxpay_enabled }}" id="wxpay_enabled" data-toggle="switch">
+              <input type="checkbox" name="payment[wxpay_enabled]" value="{{ payment.wxpay_enabled }}"
+                     id="wxpay_enabled" data-toggle="switch">
               <input type="hidden" name="payment[wxpay_enabled]" value="{{ payment.wxpay_enabled }}">
             </label>
           </div>
           <div class="setting-content">
             <div class="setting-content-block">
-              <div class="block-wechat-pay">{{'admin.setting_wechat_auth.wechat_pay_hint'|trans|raw}}</div>
+              <div class="block-wechat-pay">{{ 'admin.setting_wechat_auth.wechat_pay_hint'|trans|raw }}</div>
             </div>
             <div class="setting-content-button">
-              <a href="http://www.qiqiuyu.com/faq/259/detail" type="button" class="btn btn-default btn-large" target="blank">{{'admin.setting_wechat_auth.tutorial_button'|trans}}</a>
+              <a href="" type="button" class="btn btn-default btn-large"
+                 target="blank">{{ 'admin.setting_wechat_auth.tutorial_button'|trans }}</a>
             </div>
           </div>
         </div>
@@ -110,7 +125,7 @@
         <div data-sub="weixinweb" class="{% if not loginConnect.weixinweb_enabled %}hidden{% endif %}">
           <div class="form-group group-field">
             <div class="col-md-4 control-label">
-              <label for="weixinweb_key">{{'admin.setting_wechat_auth.web_appid'|trans}}</label>
+              <label for="weixinweb_key">{{ 'admin.setting_wechat_auth.web_appid'|trans }}</label>
             </div>
             <div class="controls col-md-7">
               <input id="weixinweb_key" name="loginConnect[weixinweb_key]" value="{{ loginConnect.weixinweb_key }}" class="form-control"></input>
@@ -174,12 +189,17 @@
               <span>
                 <img class="js-code-img account-code hidden" src="{{ wechatSetting.account_code }}" alt="">
               </span>
-              <a class="btn btn-default btn-sm js-code-view">{{'admin.setting_wechat_auth.account_code_view'|trans}}</a>
+              <a
+                class="btn btn-default btn-sm js-code-view">{{ 'admin.setting_wechat_auth.account_code_view'|trans }}</a>
             </span>
-              <span class="code-help-block {% if wechatSetting.account_code %}hidden{% endif %}">{{'admin.setting_wechat_auth.account_code_empty'|trans|raw}}</span>
-              <a class="btn btn-default btn-sm btn-primary" id="qrcode-upload" data-upload-token="{{ upload_token('system', 'image') }}" data-goto-url="{{ path('admin_v2_setting_logo_upload') }}">{{'form.btn.set'|trans}}</a>
-              <a href="http://www.qiqiuyu.com/faq/876/detail" target="blank">{{'admin.setting_wechat_auth.account_code_download'|trans}}</a>
-              <input type="hidden" id="account_code" name="wechatSetting[account_code]" value="{{ wechatSetting.account_code }}" class="form-control">
+              <span
+                class="code-help-block {% if wechatSetting.account_code %}hidden{% endif %}">{{ 'admin.setting_wechat_auth.account_code_empty'|trans|raw }}</span>
+              <a class="btn btn-default btn-sm btn-primary" id="qrcode-upload"
+                 data-upload-token="{{ upload_token('system', 'image') }}"
+                 data-goto-url="{{ path('admin_v2_setting_logo_upload') }}">{{ 'form.btn.set'|trans }}</a>
+              <a href="" target="blank">{{ 'admin.setting_wechat_auth.account_code_download'|trans }}</a>
+              <input type="hidden" id="account_code" name="wechatSetting[account_code]"
+                     value="{{ wechatSetting.account_code }}" class="form-control">
             </div>
           </div>
         </div>
@@ -187,7 +207,7 @@
         <div data-sub="wxpay" class="{% if not payment.wxpay_enabled %}hidden{% endif %}">
           <div class="form-group group-field">
             <div class="col-md-4 control-label">
-              <label for="wxpay_account">{{'admin.setting_wechat_auth.account_number'|trans}}</label>
+              <label for="wxpay_account">{{ 'admin.setting_wechat_auth.account_number'|trans }}</label>
             </div>
             <div class="controls col-md-7">
               <input id="wxpay_account" name="payment[wxpay_account]" value="{{ payment.wxpay_account }}" class="form-control">

@@ -10,7 +10,7 @@ $('.js-table-popover').popover({
   trigger: 'manual',
   html: true,
   animation: false,
-  title: `<div class="clearfix material-table-popover">${Translator.trans('material.common_table.transcoding_intro')}<a class="pull-right cd-text-sm" href="http://www.qiqiuyu.com/faq/868/detail" target="_blank">${Translator.trans('material.common_table.transcoding_more')}</a></div>`,
+  title: `<div class="clearfix material-table-popover">${Translator.trans('material.common_table.transcoding_intro')}<a class="pull-right cd-text-sm" href="" target="_blank">${Translator.trans('material.common_table.transcoding_more')}</a></div>`,
   content: `
   <div class="cd-text-sm">
     <p class="mb0"><strong>${Translator.trans('subtitle.status.error')}：</strong>${Translator.trans('material.common_table.fail_error_tip')}</p>

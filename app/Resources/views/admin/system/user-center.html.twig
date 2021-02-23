@@ -25,22 +25,24 @@
       <label><input type="radio" name="mode" value="phpwind" {% if setting.mode == 'phpwind' %}checked{% endif %}> Phpwind</label>
       {% endif %}
       <div class="help-block">
-        {{'admin.user_center.user_center.help_block'|trans}}
+        {{ 'admin.user_center.user_center.help_block'|trans }}
       </div>
     </div>
   </div>
   <div class="with-discuz" style="display:none;">
     <div class="row form-group">
-      <div class="col-md-3 control-label"><label>Ucenter{{'admin.user_center.Configration'|trans}}</label></div>
+      <div class="col-md-3 control-label"><label>Ucenter{{ 'admin.user_center.Configration'|trans }}</label></div>
       <div class="controls col-md-8">
-        <div class="help-block"><a href="http://www.qiqiuyu.com/course/125" target="_blank">{{'admin.user_center.Configration.help_block'|trans}}</a></div>
+        <div class="help-block"><a href="" target="_blank">{{ 'admin.user_center.Configration.help_block'|trans }}</a>
+        </div>
       </div>
     </div>
 
     <div class="row form-group">
       <div class="col-md-3 control-label"><label>UC_CONNECT</label></div>
       <div class="controls col-md-8">
-        <input class="form-control" type="text" value="{{ discuzConfig.uc_connect|default('') }}" placeholder="UC_CONNECT" name="discuzConfig[uc_connect]">
+        <input class="form-control" type="text" value="{{ discuzConfig.uc_connect|default('') }}"
+               placeholder="UC_CONNECT" name="discuzConfig[uc_connect]">
       </div>
     </div>
 

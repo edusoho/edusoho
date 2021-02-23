@@ -1477,7 +1477,7 @@ course.question_manage.import.uploading: Uploading...
 course.question_manage.import.use_old_template: Use Old Template
 course.question_manage.impport.cancle: Cancel
 course.question_manage.import.docx_support_hint2: Please upload .docx Word file
-course.question_manage.import.doc_to_docx_hint2: <a href="http://www.qiqiuyu.com/faq/880/detail" target="_blank">Click here</a>to see how doc convert to docx
+course.question_manage.import.doc_to_docx_hint2: <a href="" target="_blank">Click here</a>to see how doc convert to docx
 course.question_manage.import.rule: Import rule description
 course.question_manage.export_hint: (question export only support new template now)
 course.question_manage.export_btn: export question
@@ -1846,7 +1846,7 @@ course.plan_task.activity_manage.video: Video
 course.plan_task.activity_manage.video.time: 'Duration'
 course.plan_task.activity_manage.video.subtitle: 'Subtitles'
 course.plan_task.activity_manage.video.add_subtitle_tips: 'Please wait for the video to be added and add subtitles'
-course.plan_task.activity_manage.video.code_convert_tips: 'Subtitle file temporarily only supports UTF-8 encoded srt file, click<a href="http://www.qiqiuyu.com/article/883" target="__blank">view</a> code conversion instructions.'
+course.plan_task.activity_manage.video.code_convert_tips: 'Subtitle file temporarily only supports UTF-8 encoded srt file, click<a href="" target="__blank">view</a> code conversion instructions.'
 course.plan_task.activity_manage.video.time_finish_tips: "<p class=\"gray-darker mbs\">Meet below conditions:</p> Learn %finishDetail% minutes at least\n"
 course.plan_task.activity_manage.video.last_finish_tips: '<p class="gray-darker mbs">Meet the following conditions: </p> learn to the last'
 course.plan_task.activity_manage.video.failed_tips: 'Your video has been limited and can not watch!'
@@ -4755,10 +4755,10 @@ admin.setting.site.slogan: 'Site Subhead'
 admin.setting.site.url: 'Site Domain'
 admin.setting.site.url.help_block: 'Start with "%http%://"'
 admin.setting.site.logo: 'Site LOGO'
-admin.setting.site.logo.help_block: 'Please upload images with format of PNG,GIF,JPG. Image size for the LOGO should be smaller than 250×50px.Image size should not exceed 2MB<br><a href="http://www.qiqiuyu.com/faq/539/detail target=_blank">How to make the right picture?</a>'
+admin.setting.site.logo.help_block: 'Please upload images with format of PNG,GIF,JPG. Image size for the LOGO should be smaller than 250×50px.Image size should not exceed 2MB<br><a href="">How to make the right picture?</a>'
 admin.setting.site.logo.view_btn: 'Click To View'
 admin.setting.site.favicon: 'Browser Icon'
-admin.setting.site.favicon.help_block: 'Recommend uploading images with format of ICO, support ICO, JPG, GIF, PNG, etc. Recommended image size is 32×32px. Image size should not exceed 2MB<br><a href="http://www.qiqiuyu.com/faq/539/detail target=_blank">How to make the right picture?</a>'
+admin.setting.site.favicon.help_block: 'Recommend uploading images with format of ICO, support ICO, JPG, GIF, PNG, etc. Recommended image size is 32×32px. Image size should not exceed 2MB<br><a href="">How to make the right picture?</a>'
 admin.setting.site.seo_keywords: 'SEO Keyword'
 admin.setting.site.seo_keywords.help_block: 'Please use "," to separate multiple Keywords'
 admin.setting.site.seo_description: 'SEO Description'
@@ -4838,9 +4838,9 @@ admin.setting.record.code: Public Security Record Number
 admin.setting.record.url: Public security record number link
 admin.setting.record.picture.help_block: >
   The recommended icon size should not exceed 50×50 px, and the recommended icon size should not exceed 2 MB.
-  <a href="http://www.qiqiuyu.com/faq/1239/detail" target="_blank">How to obtain the public security filing icon?</a>
+  <a href="" target="_blank">How to obtain the public security filing icon?</a>
 admin.setting.record.code.help_block: >
-  <a href="http://www.qiqiuyu.com/faq/1239/detail" target="_blank">How to add the public security record number and link?</a>
+  <a href="" target="_blank">How to add the public security record number and link?</a>
 
 admin.setting.mailer.is_trial.tips: "You are running on the trail version which cannot set the Email service.If you want to buy the verified version ,please contact our sales agent Tel：4008041114 or\n"
 admin.setting.mailer.cloud_email_crm: 'Cloud Email'
@@ -5044,7 +5044,7 @@ admin.custom_page_manage.custom_page_default_template: 'Default Template'
 admin.custom_page_manage.custom_page_no_nav_template: 'No Navigation'
 admin.custom_page_manage.custom_page_blank_template: 'Blank'
 admin.mobile_manage.open_tips: "Mobile not enabled，please enable in <a href=\"%openUrl%\">System-Course Setting-Mobile Setting</a>\n"
-admin.mobile_manage.head_tips: 'Slider images for clients should be no more than 5 images and the recommended size is 750×300px in JPG or PNG format.Image size should not exceed 2MB.<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>How to make the right picture?</a>'
+admin.mobile_manage.head_tips: 'Slider images for clients should be no more than 5 images and the recommended size is 750×300px in JPG or PNG format.Image size should not exceed 2MB.<a href="" target=_blank>How to make the right picture?</a>'
 admin.mobile_manage.banner_label: 'Slider Image'
 admin.mobile_manage.upload_btn: Upload
 admin.mobile_manage.delete_btn: Delete
@@ -5529,7 +5529,7 @@ admin.user.manage.user_edit.fields.heading_title: 'Edit user info'
 admin.user.manage.user_role.fields.heading_title: 'Set user group'
 admin.user.manage.user_avatar.fields.heading_title: 'Set avatar'
 admin.user.manage.user_avatar.fields.current_avatar: 'Current Avatar'
-admin.user.manage.user_avatar.upload_hint: 'You can upload JPG, GIF or PNG format files, recommend size: 270×270px, the file size can not be exceeded <strong>2MB</strong>. <a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>How to make the fit picture？</a>'
+admin.user.manage.user_avatar.upload_hint: 'You can upload JPG, GIF or PNG format files, recommend size: 270×270px, the file size can not be exceeded <strong>2MB</strong>. <a href="" target=_blank>How to make the fit picture？</a>'
 admin.user.manage.user_avatar.upload_btn: 'Upload New Photo'
 admin.user.manage.user_avatar.fields.partner_avatar: 'Forum Avatar'
 admin.user.manage.user_avatar.using_current_avatar_btn: 'Use This Avatar'
@@ -5752,11 +5752,11 @@ admin.edu_cloud.edu_video.play_water_mark_tips: 'The watermark will be broadcast
 admin.edu_cloud.edu_video.open_embed_watermark: 'Open embedded watermark'
 admin.edu_cloud.edu_video.open_embed_watermark_tips: 'Can better protect the video copyright; upload the watermark embedded in the video encoding, can not be deleted; not embedded in the watermark video will play the player when the watermark.'
 admin.edu_cloud.edu_video.play_water_mark_picture: 'Player Watermark Image'
-admin.edu_cloud.edu_video.play_water_mark_picture_tips: 'Support png, gif, jpg format pictures, it is recommended to use translucent png picture, the recommended size 150×50px. <br>Image size should not exceed 2MB.<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>How to make the right picture?</a>'
+admin.edu_cloud.edu_video.play_water_mark_picture_tips: 'Support png, gif, jpg format pictures, it is recommended to use translucent png picture, the recommended size 150×50px. <br>Image size should not exceed 2MB.<a href="" target=_blank>How to make the right picture?</a>'
 admin.edu_cloud.edu_video.picture_upload_btn: 'Upload Picture'
 admin.edu_cloud.edu_video.picture_delete_btn: Delete
 admin.edu_cloud.edu_video.play_embed_watermark: 'Video embedded watermark image'
-admin.edu_cloud.edu_video.play_embed_watermark_picture_tips: 'Support png, gif, jpg format pictures, it is recommended to use translucent png picture, the recommended size 270×90px. <br>Image size should not exceed 2MB.<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>How to make the right picture?</a>'
+admin.edu_cloud.edu_video.play_embed_watermark_picture_tips: 'Support png, gif, jpg format pictures, it is recommended to use translucent png picture, the recommended size 270×90px. <br>Image size should not exceed 2MB.<a href="" target=_blank>How to make the right picture?</a>'
 admin.edu_cloud.edu_video.video_embed_watermark_picture: 'Video embedded watermark image'
 admin.edu_cloud.edu_video.video_embed_watermark_picture_tips: 'When turned on, the current website domain name and student username will be displayed randomly at random time in the video playback.'
 admin.edu_cloud.edu_video.finger_print_time_label: 'Cloud video fingerprint display duration'
@@ -6295,7 +6295,7 @@ admin.user_fields.modal.date_fields.tips: 'You can add %5-dateCount% field'
 admin.user_avatar.customer_default_avatar: 'Customize default avatar'
 admin.user_avatar.customer_default_avatar.help_block: 'You can upload JPG, GIF or PNG files'
 admin.user_avatar.system_default_avatar: 'System default avatar'
-admin.user_avatar.avatar.tips: 'User who does not upload avatar will display with the default avatar. Recommended size: 270×270px. Image size should not exceed 2MB. <a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>How to make the right picture?</a>'
+admin.user_avatar.avatar.tips: 'User who does not upload avatar will display with the default avatar. Recommended size: 270×270px. Image size should not exceed 2MB. <a href="" target=_blank>How to make the right picture?</a>'
 admin.user_center.message_title_name: Message setting
 admin.user_center.message_student_to_student: Allow student to student send message
 admin.user_center.message_student_to_teacher: Allow student to teacher send message
@@ -6375,7 +6375,7 @@ admin.setting_course.questions_setting.reviewed: 'Display all grading'
 admin.setting_course.questions_setting.submitted: 'Papers show the answer and resolve'
 admin.setting_course.course_avatar.customer_default_avatar: 'Customize the default course pictures'
 admin.setting_course.course_avatar.system_default_avatar: 'System default course pictures'
-admin.setting_course.course_avatar.tips: 'Support jpg、gif、png format, Suggested size: 480×270px. Image size should not exceed 2MB.<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>How to make the right picture?</a>'
+admin.setting_course.course_avatar.tips: 'Support jpg、gif、png format, Suggested size: 480×270px. Image size should not exceed 2MB.<a href="" target=_blank>How to make the right picture?</a>'
 admin.setting_course.classroom.setting_classroom_name: 'Class''s name'
 admin.setting_course.classroom.setting_classroom_name.help_block: 'Users will see is the class''s name'
 admin.setting_course.classroom.setting_classroom_name.tips: 'Please note: The following settings related to the basic mode of class operation, be care or your settings, and do not change it often!'
@@ -6731,7 +6731,7 @@ admin.coin_setting.description: Description
 admin.coin_setting.description_hint: 'Virtual coin can be usd as payment in the site'
 admin.coin_setting.promotion_proposal: 'Promotion recommendation'
 admin.coin_setting.promotion_proposal_hint: '1 Virtual coin can be used to price the courses; <br>2 Virtual coin recharge can enhance customer loyalty; <br>3 Virtual coin is recommended to use with recharge cards (business applications); <br>'
-admin.coin_setting.upload_hint: 'Please upload png, gif, jpg pictures that greater or equal to 50×50px. Or the picture will not be able to upload. <br>Image size should not exceed 2MB.<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>How to make the right picture?</a>'
+admin.coin_setting.upload_hint: 'Please upload png, gif, jpg pictures that greater or equal to 50×50px. Or the picture will not be able to upload. <br>Image size should not exceed 2MB.<a href="" target=_blank>How to make the right picture?</a>'
 admin.coin_setting.coin_description: 'Virtual coin Description'
 admin.coin_setting.content_hint: 'It can be used to describe virtual coin''s usage, access methods and other related content'
 admin.coin_setting.update_submit_btn: 'Submit updates'
@@ -6799,7 +6799,7 @@ admin.article_setting.publish_time_tips: 'Content show in chronological order'
 admin.article_setting.image.content_title: 'Set thumbnail'
 admin.article_setting.image: Thumbnail
 admin.article_setting.image.tips: 'Tip: Select the crop area.'
-admin.article_setting.image.upload_tips: 'You can upload JPG, GIF or PNG files,the recommended size is 754×424px, and the files size could not exceed 2MB. <a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>How to make the right picture?</a>'
+admin.article_setting.image.upload_tips: 'You can upload JPG, GIF or PNG files,the recommended size is 754×424px, and the files size could not exceed 2MB. <a href="" target=_blank>How to make the right picture?</a>'
 admin.article_setting.image.choose_btn: 'Select upload file'
 admin.group_settings.homepage_show_group: 'Display group'
 admin.group_settings.homepage_show_group_hint: 'This switch is only for the default theme, default theme B and Autumn theme.'
@@ -6833,7 +6833,7 @@ admin.wap_setting.function: >
   <li><i class="es-icon es-icon-dot h5-color-primary"></i>Create your own personality micro-network school as you like</li>
 admin.wap_setting.hint: >
   <p class="help-block">The new version of the micro-network school can use the discovery page setting function。</p>
-  <p class="help-block">Attention: When you open the new version of the micro-network school for the first time, you need to update the WeChat public account payment configuration.。<a href="http://www.qiqiuyu.com/faq/793/detail" target="_blank">【View tutorial】</a></p>
+  <p class="help-block">Attention: When you open the new version of the micro-network school for the first time, you need to update the WeChat public account payment configuration.。<a href="" target="_blank">【View tutorial】</a></p>
   <p class="help-block">You need to switch the APP download address and save the micro-network calibration settings again after the old micro-network school is turned on.</p>
 admin.wap_setting.version_select: 'version select'
 admin.wap_setting.new: New
@@ -6846,7 +6846,7 @@ admin.wap_setting.open.tip: >
   <h4 class="mbl">First time to start Micro-NetSchool, please modify the Wechat payment configuration.</h4>
   <p>1、If you open the topic of wechat school - departure for the first time, you need to modify the wechat configuration, otherwise you will not be able to pay for the course in the wechat school.</p>
   <p>2、For the first time, we need to modify the wechat configuration for the online school customers who switch to the topic of departure.</p>
-  <a href="http://www.qiqiuyu.com/faq/793/detail" target="_blank">【View Tutorial】</a>
+  <a href="" target="_blank">【View Tutorial】</a>
 admin.wap_setting.subject_name: Subject name
 admin.wap_setting.subject_name.recommend: recommend
 admin.wap_setting.subject_name.template_name.sail: Sailing
@@ -6940,7 +6940,7 @@ admin.mobile_setting.mobile_homepage_set_hint: '1. If turned on, you can add  <a
 admin.mobile_setting.mobile_operation_hint: '2. click <a target=, "_blank" HREF = "%operationUrl%" >here </a> to set the mobile banners and pages'
 admin.mobile_setting.splash_pic_setting_hint: 'Please upload pictures in png, gif, jpg format.'
 admin.mobile_setting.online_school_about_hint: 'This profile will be displayed in the app''s " About Us" part'
-admin.mobile_setting.online_school_logo_hint: 'Please upload pictures in png, gif, jpg format. Limit LOGO height to 50px.Image size should not exceed 2MB.<br><a href="http://www.qiqiuyu.com/faq/539/detail target=_blank">How to make the right picture?</a>'
+admin.mobile_setting.online_school_logo_hint: 'Please upload pictures in png, gif, jpg format. Limit LOGO height to 50px.Image size should not exceed 2MB.<br><a href="">How to make the right picture?</a>'
 admin.mobile_setting.app_custom_setting_option: 'Custom APP Set'
 admin.mobile_setting.app_ios_bundle_id: 'Bundle ID'
 admin.mobile_setting.app_ios_bundle_id_tutorials: 'Tutorials'
@@ -9335,7 +9335,7 @@ exception.discovery_column.not_found: Discovery column does not exist
 exception.question_bank.forbidden_delete_category: There is a question bank under the classification or sub-category and cannot be deleted
 exception.question_bank.not_found_bank: Bank does not exist
 exception.question_bank.forbidden_access_bank: Forbidden access this bank
-exception.educloud.user_disabled_hint: The education cloud has been banned, and the payment system is automatically lifted. Tutorial <a href="http://www.qiqiuyu.com/faq/438/detail" target="_blank">See here</a>
+exception.educloud.user_disabled_hint: The education cloud has been banned, and the payment system is automatically lifted. Tutorial <a href="" target="_blank">See here</a>
 exception.coupon.target_type_error: The batch does not support viewing details
 exception.coupon.setting_close: Coupon global switch is closed
 
@@ -9446,7 +9446,7 @@ wechat.notification.status.sending: Sending
 wechat.notification.cloud.tips: You have not yet opened an education cloud and cannot use the WeChat service number notification function
 wechat.notification.cloud_open: Go to the opening
 wechat.notification.record_number_tips: Students must be bound to WeChat and follow the service number to receive notifications, so the actual number sent will be less than expected.
-wechat.notification.template_open_error: The template failed to open. It may be that the service number template message plug-in is not enabled or the network school IP address is not added to the WeChat background IP whitelist. Please go to <a href="http://www.qiqiuyu.com/faq/878/detail" target ="_blank">View the tutorial</a>
+wechat.notification.template_open_error: The template failed to open. It may be that the service number template message plug-in is not enabled or the network school IP address is not added to the WeChat background IP whitelist. Please go to <a href="" target ="_blank">View the tutorial</a>
 wechat.notification.service_not_open: WeChat service number notification is not enabled
 wechat.notification.empty_token: Get WeChat information error
 wechat.notification.template_not_exist: Template does not exist
