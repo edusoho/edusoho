@@ -1887,7 +1887,9 @@ course.plan_task.expiry_days_learn_tips: >
 course.plan_task.start_time: 开始日期
 course.plan_task.end_time: 结束日期
 course.plan_task.manage_btn: 管理
+course.plan_task.cancel_manage_btn: 取消管理
 course.plan_task.publish_btn: 发布
+course.plan_task.publishing_btn: 发布中...
 course.plan_task.manage: 教学计划管理
 course.plan_task.content_title: 课时管理
 course.plan_task.locked.task_locked: %taskName%未解锁
@@ -1917,7 +1919,9 @@ course.plan_task.more_btn: 更多
 course.plan_task.lesson-marker_btn: 弹题管理
 course.plan_task.copy_btn: 复制为
 course.plan_task.unpublish_btn: 取消发布
+course.plan_task.unpublishing_btn: 取消发布中...
 course.plan_task.delete_btn: 删除
+course.plan_task.deleting_btn: 删除中...
 course.plan_task.preparation_tips: 学员可通过看视频、阅读资料等预习%taskName%，导入学习。
 course.plan_task.batch_create_tips: >
   批量创建课时需要开通云视频服务，点击<a target="__blank" href="http://open.edusoho.com/show/cloud/video">这里</a>了解详情
@@ -1979,6 +1983,13 @@ course.plan_task.activity_manage.setup_finish_condition:  >
 course.plan_task.activity_manage.create: 添加%taskName%
 course.plan_task.activity_manage.modify: 编辑%taskName%
 course.plan_task.activity_manage.preview: 预览%taskName%
+course.plan_task.all_choices: 全部选择
+course.plan_task.lesson: 课时
+course.plan_task.chapter: 章节
+course.plan_task.selected: >
+  已选
+  <span class="js-chosen-number">0</span>
+  条
 
 course.manage.create_lesson: 添加课时
 course.manage.edit_lesson: 编辑课时
@@ -5686,7 +5697,7 @@ admin.setting.site.analytics: 统计分析代码
 admin.setting.site.analytics.help_block: >
   <p class="help-block">统计代码是网站统计软件发布的一段代码，用以统计添加统计代码的网站的数据。</p>
   <p class="help-block">包括网站的访客来源，从哪个网页跳转到此网站，搜索什么关键词到网站，一共有多少人访问，每天多少人多少IP，平均访问时间是多少等等数据。</p>
-  <p class="help-block">统计分析工具可以分析网校访问趋势，以及根据数据做推广调整，优化网校资源，建议使用<a href="http://tongji.baidu.com" target="_blank">百度统计</a>、<a href="http://ta.qq.com/" target="_blank">腾讯分析</a>或者<a target="_blank" href="http://www.umeng.com/">CNZZ。</a></p>
+  <p class="help-block">统计分析工具可以分析网校访问趋势，以及根据数据做推广调整，优化网校资源，建议使用<a href="http://tongji.baidu.com" target="_blank">百度统计</a>、<a target="_blank" href="http://www.umeng.com/">CNZZ。</a></p>
 admin.setting.site.website_status: 站点状态
 admin.setting.site.website_status.open: 开放
 admin.setting.site.website_status.closed: 关闭
@@ -6310,7 +6321,7 @@ admin.operation_invite.coupon.recieved_at: 领取时间：
 admin.operation_invite.coupon.start_time.placeholer: 开始时间
 admin.operation_invite.coupon.finished_time.placeholer: 结束时间
 admin.operation_invite.coupon.recieved_at_th: 领取时间
-admin.operation_invite.coupon.rate_th: 面值
+admin.operation_invite.coupon.rate_th: 面值/折扣
 admin.operation_invite.coupon.use_status_th: 使用情况
 admin.operation_invite.coupon.use_status.unused: 未使用
 admin.operation_invite.coupon.use_status.receive: 已领取
@@ -9114,6 +9125,7 @@ log.action.course.publish_course: 发布教学计划
 log.action.course.close_course: 关闭教学计划
 log.action.course.update_draft: 更新草稿
 log.action.course.join_course: 加入教学计划
+log.action.course.exit_course: 退出教学计划
 log.action.user.exportCsv: 导出
 log.action.user.add: 新增
 log.action.user.edit: 修改
@@ -9208,6 +9220,7 @@ log.action.classroom.publish: 发布班级
 log.action.classroom.close: 关闭班级
 log.action.classroom.update_head_teacher: 修改班主任
 log.action.classroom.join_classroom: 加入班级
+log.action.classroom.exit_classroom: 退出班级
 log.action.article.update_settings: 更新设置
 log.action.article.create: 新增
 log.action.article.update: 修改
@@ -9337,6 +9350,7 @@ log.action.template.course.close: 关闭了<strong class="color-success">课程<
 log.action.template.course.delete: 删除了<strong class="color-success">课程</strong>《%title%》
 log.action.template.course.add_student: 在教学计划《<a href="%url%" target="_blank">%title%</a>》添加了<strong class="color-success">学员</strong>%nickname% 备注:%remark%
 log.action.template.course.remove_student: 在教学计划《<a href="%url%" target="_blank">%title%</a>》移除了<strong class="color-success">学员</strong>%nickname%
+log.action.template.course.exit_course: <strong class="color-success">学员</strong>%nickname%退出了教学计划《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.update_teacher: 更新了教学计划《<a href="%url%" target="_blank">%title%</a>》的教师信息
 log.action.template.course.create_thread: 新建了话题《%title%》
 log.action.template.course.update_thread: 更新了话题《%title%》
@@ -9379,6 +9393,7 @@ log.action.template.classroom.update_picture: 修改了<strong class="color-succ
 log.action.template.classroom.update_head_teacher: 修改了<strong class="color-success">班级</strong> 《<a href="%url%" target="_blank">%title%</a>》的班主任
 log.action.template.classroom.add_student: 在<strong class="color-success">班级</strong>《<a href="%url%" target="_blank">%title%</a>》添加了<strong class="color-success">学员</strong>%nickname% 备注:%remark%
 log.action.template.classroom.remove_student: 在<strong class="color-success">班级</strong>《<a href="%url%" target="_blank">%title%</a>》移除了<strong class="color-success">学员</strong>%nickname%
+log.action.template.classroom.exit_classroom: <strong class="color-success">学员</strong>%nickname%退出了<strong class="color-success">班级</strong>《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.delete_course: 在<strong class="color-success">班级</strong>《<a href="%url%" target="_blank">%title%</a>》移除了<strong class="color-success">课程</strong>%courseSetTitle%
 log.action.template.classroom.add_course: 在<strong class="color-success">班级</strong>《<a href="%url%" target="_blank">%title%</a>》添加了<strong class="color-success">课程</strong>%courseSetTitle%
 log.action.template.classroom.join_classroom: 加入班级《<a href="%url%" target="_blank">%title%</a>》
@@ -10325,6 +10340,7 @@ exception.batch_notification.published: 全站通知已发布
 
 lesson_count_no_more_than_300: 课时总数不能超过300个
 exception.lesson.not_found: 课时不存在
+exception.lesson.parameter_missing: 缺少课时编号
 lesson_tasks_no_more_than_5: 课时下的任务数量不能超过5个
 exception.task.not_found: 任务不存在
 exception.task.unpublished_task: 任务未发布
@@ -10866,6 +10882,7 @@ coupon.total_count: 总数
 coupon.expiry_date: 有效期
 coupon.amount: 已优惠金额
 coupon.target_type: 类型
+coupon.amonut: 张
 
 coupon.type.minus: 抵价
 coupon.type.discount: 打折

@@ -16,7 +16,7 @@
                 </a>
                 <div class="reviews-item__text reviews-text">
                     <div class="reviews-text__nickname">
-                        <a class="link-dark" href="javascript:;" target="_blank">{{ review.user.nickname }}</a>
+                        <a class="link-dark" :href="`/user/${review.user.id}`" target="_blank">{{ review.user.nickname }}</a>
                         <!--                    <span>{{ review.target.title }}</span>-->
                         {{ review.createdTime | createdTime }}
                     </div>
@@ -46,11 +46,11 @@
                             <li class="thread-post media" :class="'thread-subpost-'+post.id"
                                 v-for="post in review.posts" :key="post.id">
                                 <div class="media-left">
-                                    <a :href="`/user/${review.user.id}`" target="_blank">
+                                    <a :href="`/user/${post.user.id}`" target="_blank">
                                         <img class="avatar-sm js-user-card"
-                                             :src="review.user.avatar.large"
-                                             :data-user-id="review.user.id"
-                                             :data-card-url="`/user/${review.user.id}/card/show`"
+                                             :src="post.user.avatar.large"
+                                             :data-user-id="post.user.id"
+                                             :data-card-url="`/user/${post.user.id}/card/show`"
                                              alt=""
                                         >
                                     </a>
@@ -72,7 +72,7 @@
                                             </ul>
                                         </div>
 
-                                        <a class="link-dark" href="javascript:;" target="_blank">
+                                        <a class="link-dark" :href="`/user/${post.user.id}`" target="_blank">
                                             {{ post.user.nickname }}
                                         </a>
                                         <span class="bullet">•</span>
@@ -274,7 +274,7 @@
                         Translator.trans('site.delete') + '</a></li></ul></div>';
                 }
 
-                html = html + '      <a class="link-dark" href="javascript:;" target="_blank">\n' + post.user.nickname +
+                html = html + `      <a class="link-dark" href="/user/${post.user.id}" target="_blank">\n` + post.user.nickname +
                     '      </a>\n' +
                     '      <span class="bullet">•</span>\n' +
                     '      <span class="color-gray">' + Translator.trans('site.twig.extension.smarttime.hardly') + '</span>\n' +

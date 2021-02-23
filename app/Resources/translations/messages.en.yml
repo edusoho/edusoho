@@ -1640,8 +1640,10 @@ course.plan_task.deadline_learn_tips: 'You can learn before<input class="form-co
 course.plan_task.expiry_days_learn_tips: 'From the day of enrolled, you can learn within<input class="form-control mhs width-150 js-expiry-input" type="text" id="expiryDays" name="expiryDays">days'
 course.plan_task.start_time: 'Start date'
 course.plan_task.end_time: 'End date'
-course.plan_task.manage_btn: Config
+course.plan_task.manage_btn: Manage
+course.plan_task.cancel_manage_btn: Cancel Manage
 course.plan_task.publish_btn: Publish
+course.plan_task.publishing_btn: Publishing...
 course.plan_task.manage: 'Programs'
 course.plan_task.content_title: Lessons
 course.plan_task.locked.task_locked: '%taskName% locked'
@@ -1672,7 +1674,9 @@ course.plan_task.more_btn: 'More'
 course.plan_task.lesson-marker_btn: 'Popups'
 course.plan_task.copy_btn: 'Copy as'
 course.plan_task.unpublish_btn: Unpublish
+course.plan_task.unpublishing_btn: Unpublishing...
 course.plan_task.delete_btn: Delete
+course.plan_task.deleting_btn: Deleting...
 course.plan_task.preparation_tips: 'Students can learn to learn by looking at %taskName% such as video and reading materials.'
 course.plan_task.batch_create_tips: 'Batch creation classes need to open cloud video services, click<a target="__blank" href="http://open.edusoho.com/show/cloud/video">here</a> learn detail'
 course.plan_task.empty: 'It is empty, add a lesson now'
@@ -1722,6 +1726,11 @@ course.plan_task.activity_manage.setup_finish_condition: '<span class="number">3
 course.plan_task.activity_manage.create: 'Add%taskName%'
 course.plan_task.activity_manage.modify: 'Edit%taskName%'
 course.plan_task.activity_manage.preview: 'Preview%taskName%'
+course.plan_task.all_choices: 'all choices'
+course.plan_task.lesson: 'lesson'
+course.plan_task.chapter: 'chapter'
+course.plan_task.selected: >
+  <span class="js-chosen-number">0</span> selected
 
 course.manage.create_lesson: Add Lesson
 course.manage.edit_lesson: Edit the lesson
@@ -4784,7 +4793,7 @@ admin.setting.site.icp: ICP
 admin.setting.site.icp_url: ICP Link
 admin.setting.site.website_statistics_analysis: 'Website analytics code deployment'
 admin.setting.site.analytics: 'Analytics Code'
-admin.setting.site.analytics.help_block: "<p class=\"help-block\">Analytics code is used to import 3rd part analytics tool. You can get the code form 3rd part analytics provider and put it into your site.</p> <p class=\"help-block\">Analysis data include where visitors come from，which site users come from，use what keywords，total visitor numbers，visit number per day, visit IPs per day，visitor average duration in site, etc.</p> <p class=\"help-block\">Analytics tool can analyze PV trends to help improve market promotion and optimize the site resource. Suggest to use <a href=\"http://tongji.baidu.com\" target=\"_blank\">Baidu Analytics</a>、<a href=\"http://ta.qq.com/\" target=\"_blank\">Tencent Analytics</a> Or <a target=\"_blank\" href=\"http://www.umeng.com/\">CNZZ</a></p>\n"
+admin.setting.site.analytics.help_block: "<p class=\"help-block\">Analytics code is used to import 3rd part analytics tool. You can get the code form 3rd part analytics provider and put it into your site.</p> <p class=\"help-block\">Analysis data include where visitors come from，which site users come from，use what keywords，total visitor numbers，visit number per day, visit IPs per day，visitor average duration in site, etc.</p> <p class=\"help-block\">Analytics tool can analyze PV trends to help improve market promotion and optimize the site resource. Suggest to use <a href=\"http://tongji.baidu.com\" target=\"_blank\">Baidu Analytics</a>、<a target=\"_blank\" href=\"http://www.umeng.com/\">CNZZ</a></p>\n"
 admin.setting.site.website_status: 'Site Status'
 admin.setting.site.website_status.open: Enable
 admin.setting.site.website_status.closed: Disable
@@ -5338,7 +5347,7 @@ admin.operation_invite.coupon.recieved_at: 'Recieved Time:'
 admin.operation_invite.coupon.start_time.placeholer: 'Start Time'
 admin.operation_invite.coupon.finished_time.placeholer: 'Finished Time'
 admin.operation_invite.coupon.recieved_at_th: 'Recieved Time'
-admin.operation_invite.coupon.rate_th: 'Coupon Value'
+admin.operation_invite.coupon.rate_th: 'Coupon Value / Discount'
 admin.operation_invite.coupon.use_status_th: 'Useage Status'
 admin.operation_invite.coupon.use_status.unused: Unused
 admin.operation_invite.coupon.use_status.receive: Recieved
@@ -7915,6 +7924,7 @@ log.action.course.publish_course: Publish teaching plan
 log.action.course.close_course: Close teaching plan
 log.action.course.update_draft: Update draft
 log.action.course.join_course: Join teaching plan
+log.action.course.exit_course: Exit teaching plan
 log.action.user.exportCsv: 'Export'
 log.action.user.add: 'Add'
 log.action.user.edit: 'Edit'
@@ -8009,6 +8019,7 @@ log.action.classroom.publish: Publish classroom
 log.action.classroom.close: Close classroom
 log.action.classroom.update_head_teacher: Modify the head teacher of the classroom
 log.action.classroom.join_classroom: Join classroom
+log.action.classroom.exit_classroom: Exit classroom
 log.action.article.update_settings: 'Update settings'
 log.action.article.create: 'Create'
 log.action.article.update: 'Update'
@@ -8135,6 +8146,7 @@ log.action.template.course.close: Closed the<strong class="color-success"> cours
 log.action.template.course.delete: Deleted the<strong class="color-success"> course </strong>《%title%》
 log.action.template.course.add_student: Added a new<strong class="color-success"> student </strong>%nickname% to the teaching plan《<a href="%url%" target="_blank">%title%</a>》 remark:%remark%
 log.action.template.course.remove_student: Removed the<strong class="color-success"> student </strong>%nickname% from teaching plan《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.course.exit_course: <strong class="color-success">Student</strong> %nickname% exit from the teaching plan《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.update_teacher: Updated teacher information for the teaching plan 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.create_thread: Created a new topic《%title%》
 log.action.template.course.update_thread: Updated the topic《%title%》
@@ -8176,6 +8188,7 @@ log.action.template.classroom.update_picture: Updated the cover of <strong class
 log.action.template.classroom.update_head_teacher: Updated the head teacher of the <strong class="color-success"> classroom </strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.add_student: Added a new<strong class="color-success"> student </strong>%nickname% to the<strong class="color-success"> classroom </strong>《<a href="%url%" target="_blank">%title%</a>》 remark:%remark%
 log.action.template.classroom.remove_student: Removed the <strong class="color-success"> student </strong>%nickname% from<strong class="color-success"> classroom </strong>《<a href="%url%" target="_blank">%title%</a>》
+log.action.template.classroom.exit_classroom: <strong class="color-success">student</strong>%nickname%exited<strong class="color-success">classroom</strong>《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.delete_course: Removed the<strong class="color-success"> course </strong>%courseSetTitle% from<strong class="color-success"> classroom </strong>《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.add_course: Added a new <strong class="color-success"> course </strong>%courseSetTitle% to the<strong class="color-success"> classroom </strong>《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.category.create: Created a new<strong class="color-success"> category </strong> 《%title%》
@@ -9075,6 +9088,7 @@ exception.coupon.finished: Coupon finished
 exception.coupon.over_batch_limit: Exceeding the batch total limit
 
 exception.lesson.not_found: Lesson is not exist
+exception.lesson.parameter_missing: Missing class number
 lesson_count_no_more_than_300: Lesson count no more than three hundred.
 lesson_tasks_no_more_than_5: Lesson task no more than 5.
 exception.task.not_found: Task is not exist
@@ -9592,6 +9606,7 @@ coupon.total_count: Sum
 coupon.expiry_date: Validity period
 coupon.amount: Preferential amount
 coupon.target_type: Type
+coupon.amonut: Amount
 
 coupon.type.minus: Price
 coupon.type.discount: Discount

@@ -15,7 +15,7 @@ class TaskDaoTest extends BaseDaoTestCase
         $count = $this->getDao()->countByChpaterId(3);
         $this->assertEquals(2, $count);
 
-        $this->mockDataObject(array('categoryId' => 1));
+        $this->mockDataObject(['categoryId' => 1]);
         $count = $this->getDao()->countByChpaterId(3);
         $this->assertEquals(2, $count);
     }
@@ -41,205 +41,213 @@ class TaskDaoTest extends BaseDaoTestCase
 
     public function testFindByCourseId()
     {
-        $expected = array();
+        $expected = [];
         $expected[] = $this->mockDataObject();
-        $expected[] = $this->mockDataObject(array('seq' => 0));
+        $expected[] = $this->mockDataObject(['seq' => 0]);
         $result = $this->getDao()->findByCourseId(2);
         $this->assertArrayEquals($expected[1], $result[0], $this->getCompareKeys());
+    }
+
+    public function testFindByCategoryIds()
+    {
+        $this->mockDataObject();
+        $result = $this->getDao()->findByCategoryIds(['3']);
+
+        $this->assertCount(1, $result);
     }
 
     public function testFindByCourseIds()
     {
         $expected = $this->mockDataObject();
-        $result = $this->getDao()->findByCourseIds(array(2, 3));
+        $result = $this->getDao()->findByCourseIds([2, 3]);
         $this->assertArrayEquals($expected, $result[0], $this->getCompareKeys());
     }
 
     public function testFindByActivityIds()
     {
-        $expected = array();
+        $expected = [];
         $expected[] = $this->mockDataObject();
-        $expected[] = $this->mockDataObject(array('activityId' => 4));
-        $result = $this->getDao()->findByActivityIds(array(2, 3));
+        $expected[] = $this->mockDataObject(['activityId' => 4]);
+        $result = $this->getDao()->findByActivityIds([2, 3]);
         $this->assertArrayEquals($expected[0], $result[0], $this->getCompareKeys());
     }
 
     public function testFindByCourseSetId()
     {
-        $expected = array();
+        $expected = [];
         $expected[] = $this->mockDataObject();
-        $expected[] = $this->mockDataObject(array('fromCourseSetId' => 4));
+        $expected[] = $this->mockDataObject(['fromCourseSetId' => 4]);
         $result = $this->getDao()->findByCourseSetId(3);
         $this->assertArrayEquals($expected[0], $result[0], $this->getCompareKeys());
     }
 
     public function testFindByIds()
     {
-        $expected = array();
+        $expected = [];
         $expected[] = $this->mockDataObject();
-        $expected[] = $this->mockDataObject(array('fromCourseSetId' => 4));
-        $result = $this->getDao()->findByIds(array(1, 3));
+        $expected[] = $this->mockDataObject(['fromCourseSetId' => 4]);
+        $result = $this->getDao()->findByIds([1, 3]);
         $this->assertArrayEquals($expected[0], $result[0], $this->getCompareKeys());
     }
 
     public function testFindByCourseIdAndCategoryId()
     {
-        $expected = array();
+        $expected = [];
         $expected[] = $this->mockDataObject();
-        $expected[] = $this->mockDataObject(array('courseId' => 4));
+        $expected[] = $this->mockDataObject(['courseId' => 4]);
         $result = $this->getDao()->findByCourseIdAndCategoryId(2, 3);
         $this->assertArrayEquals($expected[0], $result[0], $this->getCompareKeys());
     }
 
     public function testGetMaxSeqByCourseId()
     {
-        $expected = array();
+        $expected = [];
         $expected[] = $this->mockDataObject();
-        $expected[] = $this->mockDataObject(array('seq' => 4));
+        $expected[] = $this->mockDataObject(['seq' => 4]);
         $result = $this->getDao()->getMaxSeqByCourseId(2);
         $this->assertEquals(4, $result);
     }
 
     public function testGetNumberSeqByCourseId()
     {
-        $expected = array();
+        $expected = [];
         $expected[] = $this->mockDataObject();
-        $expected[] = $this->mockDataObject(array('number' => 'number2'));
+        $expected[] = $this->mockDataObject(['number' => 'number2']);
         $result = $this->getDao()->getNumberSeqByCourseId(2);
         $this->assertEquals('number2', $result);
     }
 
     public function testGetMinSeqByCourseId()
     {
-        $expected = array();
+        $expected = [];
         $expected[] = $this->mockDataObject();
-        $expected[] = $this->mockDataObject(array('seq' => 4));
+        $expected[] = $this->mockDataObject(['seq' => 4]);
         $result = $this->getDao()->getMinSeqByCourseId(2);
         $this->assertEquals(1, $result);
     }
 
     public function testGetNextTaskByCourseIdAndSeq()
     {
-        $expected = array();
+        $expected = [];
         $expected[] = $this->mockDataObject();
-        $expected[] = $this->mockDataObject(array('seq' => 4));
+        $expected[] = $this->mockDataObject(['seq' => 4]);
         $result = $this->getDao()->getNextTaskByCourseIdAndSeq(2, 3);
         $this->assertArrayEquals($expected[1], $result, $this->getCompareKeys());
     }
 
     public function testGetPreTaskByCourseIdAndSeq()
     {
-        $expected = array();
+        $expected = [];
         $expected[] = $this->mockDataObject();
-        $expected[] = $this->mockDataObject(array('seq' => 4));
+        $expected[] = $this->mockDataObject(['seq' => 4]);
         $result = $this->getDao()->getPreTaskByCourseIdAndSeq(2, 3);
         $this->assertArrayEquals($expected[0], $result, $this->getCompareKeys());
     }
 
     public function testGetByCopyId()
     {
-        $expected = array();
+        $expected = [];
         $expected[] = $this->mockDataObject();
-        $expected[] = $this->mockDataObject(array('copyId' => 4));
+        $expected[] = $this->mockDataObject(['copyId' => 4]);
         $result = $this->getDao()->getByCopyId(3);
         $this->assertArrayEquals($expected[0], $result, $this->getCompareKeys());
     }
 
     public function testGetByCourseIdAndCopyId()
     {
-        $expected = array();
+        $expected = [];
         $expected[] = $this->mockDataObject();
-        $expected[] = $this->mockDataObject(array('copyId' => 4));
+        $expected[] = $this->mockDataObject(['copyId' => 4]);
         $result = $this->getDao()->getByCourseIdAndCopyId(2, 3);
         $this->assertArrayEquals($expected[0], $result, $this->getCompareKeys());
     }
 
     public function testFindByChapterId()
     {
-        $expected = array();
+        $expected = [];
         $expected[] = $this->mockDataObject();
-        $expected[] = $this->mockDataObject(array('seq' => 4));
+        $expected[] = $this->mockDataObject(['seq' => 4]);
         $result = $this->getDao()->findByChapterId(3);
         $this->assertArrayEquals($expected[1], $result[1], $this->getCompareKeys());
     }
 
     public function testGetByChapterIdAndMode()
     {
-        $expected = array();
+        $expected = [];
         $expected[] = $this->mockDataObject();
-        $expected[] = $this->mockDataObject(array('categoryId' => 4));
+        $expected[] = $this->mockDataObject(['categoryId' => 4]);
         $result = $this->getDao()->getByChapterIdAndMode(4, 'mode');
         $this->assertArrayEquals($expected[1], $result, $this->getCompareKeys());
     }
 
     public function testGetByCourseIdAndSeq()
     {
-        $expected = array();
+        $expected = [];
         $expected[] = $this->mockDataObject();
-        $expected[] = $this->mockDataObject(array('courseId' => 3));
+        $expected[] = $this->mockDataObject(['courseId' => 3]);
         $result = $this->getDao()->getByCourseIdAndSeq(3, 1);
         $this->assertArrayEquals($expected[1], $result, $this->getCompareKeys());
     }
 
     public function testFindPastLivedCourseSetIds()
     {
-        $expected = $this->mockDataObject(array('type' => 'live', 'status' => 'published', 'endTime' => time() - 5000));
+        $expected = $this->mockDataObject(['type' => 'live', 'status' => 'published', 'endTime' => time() - 5000]);
         $result = $this->getDao()->findPastLivedCourseSetIds();
         $this->assertEquals(3, $result[0]['fromCourseSetId']);
     }
 
     public function testGetTaskByCourseIdAndActivityId()
     {
-        $expected = array();
+        $expected = [];
         $expected[] = $this->mockDataObject();
-        $expected[] = $this->mockDataObject(array('courseId' => 3));
+        $expected[] = $this->mockDataObject(['courseId' => 3]);
         $result = $this->getDao()->getTaskByCourseIdAndActivityId(3, 2);
         $this->assertArrayEquals($expected[1], $result, $this->getCompareKeys());
     }
 
     public function testFindByCourseIdAndIsFree()
     {
-        $expected = array();
+        $expected = [];
         $expected[] = $this->mockDataObject();
-        $expected[] = $this->mockDataObject(array('courseId' => 3));
+        $expected[] = $this->mockDataObject(['courseId' => 3]);
         $result = $this->getDao()->findByCourseIdAndIsFree(3, 0);
         $this->assertArrayEquals($expected[1], $result[0], $this->getCompareKeys());
     }
 
     public function testFindByCopyIdAndLockedCourseIds()
     {
-        $expected = array();
+        $expected = [];
         $expected[] = $this->mockDataObject();
-        $expected[] = $this->mockDataObject(array('courseId' => 4));
-        $result = $this->getDao()->findByCopyIdAndLockedCourseIds(1, array());
-        $this->assertEquals(array(), $result);
+        $expected[] = $this->mockDataObject(['courseId' => 4]);
+        $result = $this->getDao()->findByCopyIdAndLockedCourseIds(1, []);
+        $this->assertEquals([], $result);
 
-        $result = $this->getDao()->findByCopyIdAndLockedCourseIds(3, array(3, 4));
+        $result = $this->getDao()->findByCopyIdAndLockedCourseIds(3, [3, 4]);
         $this->assertArrayEquals($expected[1], $result[0], $this->getCompareKeys());
     }
 
     public function testFindByCopyIdSAndLockedCourseIds()
     {
-        $expected = array();
+        $expected = [];
         $expected[] = $this->mockDataObject();
-        $expected[] = $this->mockDataObject(array('courseId' => 4));
-        $result = $this->getDao()->findByCopyIdSAndLockedCourseIds(array(), array());
-        $this->assertEquals(array(), $result);
+        $expected[] = $this->mockDataObject(['courseId' => 4]);
+        $result = $this->getDao()->findByCopyIdSAndLockedCourseIds([], []);
+        $this->assertEquals([], $result);
 
-        $result = $this->getDao()->findByCopyIdSAndLockedCourseIds(array(3), array(3, 4));
+        $result = $this->getDao()->findByCopyIdSAndLockedCourseIds([3], [3, 4]);
         $this->assertArrayEquals($expected[1], $result[0], $this->getCompareKeys());
     }
 
     public function testAnalysisTaskDataByTime()
     {
-        $expected = $this->mockDataObject(array('createdTime' => 7000));
+        $expected = $this->mockDataObject(['createdTime' => 7000]);
         $result = $this->getDao()->analysisTaskDataByTime(5000, 8000);
         $this->assertEquals(1, $result[0]['count']);
     }
 
     protected function getDefaultMockFields()
     {
-        return array(
+        return [
             'courseId' => 2,
             'seq' => 1,
             'categoryId' => 3,
@@ -259,7 +267,7 @@ class TaskDaoTest extends BaseDaoTestCase
             'length' => 10,
             'copyId' => 3,
             'createdUserId' => 2,
-        );
+        ];
     }
 
     protected function getCourseSetDao()

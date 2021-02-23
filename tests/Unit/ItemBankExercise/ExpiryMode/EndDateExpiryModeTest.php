@@ -11,10 +11,9 @@ class EndDateExpiryModeTest extends BaseTestCase
     public function testGetDeadline()
     {
         $exercise = $this->createExercise();
-        $except = strtotime('+1day');
         $res = ExpiryModeFactory::create($exercise['expiryMode'])->getDeadline($exercise);
 
-        $this->assertEquals($except, $res);
+        $this->assertEquals($exercise['expiryEndDate'], $res);
     }
 
     public function testValidateExpiryMode()
