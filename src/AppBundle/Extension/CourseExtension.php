@@ -118,12 +118,12 @@ class CourseExtension extends Extension implements ServiceProviderInterface
                 'uri' => 'AppBundle:Course/Course:teachers',
                 'renderType' => 'render',
             ],
-            //最新学员
+            //最新学生
             'newestStudents' => [
                 'uri' => 'AppBundle:Course/Course:newestStudents',
                 'renderType' => 'render',
             ],
-            //学员动态
+            //学生动态
             'studentActivity' => [
                 'uri' => 'course/widgets/student-activity.html.twig',
                 'renderType' => 'include',

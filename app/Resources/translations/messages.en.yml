@@ -10015,7 +10015,7 @@ merchant.content_resource.has_chosen: Choosed
 merchant.content_resource.editing: Editing
 merchant.content_resource.choose: Choose
 merchant.content_resource.no_supplier: No Supplier!
-merchant.content_resource.supplier.no_cooperation_hint: 与供应商%supplierName%之间商品合作关系已经取消，供应商的商品不能购买加入，但不影响已购学员学习，如需恢复，请联系供应商！
+merchant.content_resource.supplier.no_cooperation_hint: 与供应商%supplierName%之间商品合作关系已经取消，供应商的商品不能购买加入，但不影响已购学生学习，如需恢复，请联系供应商！
 purchase.course.replay_manage.tips: >
   Tip: for the lessons of ungenerated playback, you can click the button <i class="es-icon es-icon-videocam color-gray mh5"></i> to use the recorded video during the live stream
 merchant.content_resource.system: System
@@ -10248,7 +10248,7 @@ task.learn_data_detail.stay_total_time: 页面累加时长（分）
 task.learn_data_detail.stay_de_weight_time: 页面去重时长（分）
 task.learn_data_detail.video_total_time: 播放累加时长（分）
 task.learn_data_detail.video_de_weight_time: 播放去重时长（分）
-task.learn_data_detail.popover: 累加时长：任务下A学员产生的所有学习时长总和；<br/>去重时长：任务下A学员产生的学习时长在自然时间内去重后合并；<br/>如学员同时开启2个页面各学习该任务5分钟，则累加时长为10分钟，去重时长为5分钟。累加数据为实时数据。
+task.learn_data_detail.popover: 累加时长：任务下A学生产生的所有学习时长总和；<br/>去重时长：任务下A学生产生的学习时长在自然时间内去重后合并；<br/>如学生同时开启2个页面各学习该任务5分钟，则累加时长为10分钟，去重时长为5分钟。累加数据为实时数据。
 course.task.notify_message.join_and_buy: Please join or buy course
 course.task.notify_message.join_limit: Course buy limited
 

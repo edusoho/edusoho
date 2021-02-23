@@ -27,7 +27,7 @@ class C2CourseSet extends Migration
             `ratingNum` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '课程评论数',
             `rating` float UNSIGNED NOT NULL DEFAULT '0' COMMENT '课程评分',
             `noteNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '课程笔记数',
-            `studentNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '课程学员数',
+            `studentNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '课程学生数',
             `recommended` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否为推荐课程',
             `recommendedSeq` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '推荐序号',
             `recommendedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '推荐时间',

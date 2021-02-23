@@ -71,7 +71,7 @@
              value="{% if course.buyExpiryTime > 0 %}{{ course.buyExpiryTime|date_format('Y-m-d') }}{% endif %}">
     </div>
   </div>
-  {#缺少学员数限制#}
+  {# 缺少学生数限制 #}
   {% if setting('magic.buy_before_approval') %}
     <div class="form-group">
       <label class="col-sm-2 control-label">

@@ -20,18 +20,19 @@
         </li>
         {#基础设置#}
         <li class="cd-sidebar__item {% if course_side_nav == 'base' %}active{% endif %}">
-          <a href="{{ path('item_bank_exercise_manage_base', {exerciseId:exercise.id,questionBankId: exercise.questionBankId}) }}">
+          <a
+            href="{{ path('item_bank_exercise_manage_base', {exerciseId:exercise.id,questionBankId: exercise.questionBankId}) }}">
             {{ 'course.plan_base_info'|trans }}
           </a>
         </li>
-        {#营销设置#}
-        <li class="cd-sidebar__item {% if course_side_nav == 'business' %}active{% endif %}">
+        {# 营销设置 #}
+        {# <li class="cd-sidebar__item {% if course_side_nav == 'business' %}active{% endif %}">
             <a
               href="{{ path('item_bank_exercise_manage_marketing_info', {exerciseId:exercise.id}) }}">
               {{ 'course.marketing_setup'|trans }}
             </a>
-        </li>
-        {#学员管理#}
+        </li> #}
+        {# 学生管理 #}
         <li class="cd-sidebar__item {% if course_side_nav == 'students' %}active{% endif %}">
           <a
             href="{{ path('item_bank_exercise_manage_students', {exerciseId:exercise.id}) }}">

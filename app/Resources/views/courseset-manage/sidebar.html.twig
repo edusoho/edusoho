@@ -117,31 +117,31 @@
             {{ 'course.plan_overview'|trans }}
           </a>
         </li>
-        {% if courseSet.platform == 'self'  %}
-          <li class="cd-sidebar__item {% if course_side_nav == 'live-statistics' %}active{% endif %}">
-            {% if courseSet.locked %}
-              <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'live-statistics'}) }}">
-                <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.live_statistics'|trans }}
-              </a>
-            {% else %}
-              <a
-                href="{{ path('course_set_manage_live_statistics', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">{{ 'course.live_statistics'|trans }}</a>
-            {% endif %}
-          </li>
-        {% endif %}
-        {% if setting('storage.upload_mode', 'local') == 'cloud' %}
-          <li class="cd-sidebar__item {% if course_side_nav == 'question_marker' %}active{% endif %}">
-            <a href="{{ path('course_manage_question_marker',{courseSetId: courseSet.id, courseId: curCourse.id}) }}">
-              {{ 'course.question_marker_statistics'|trans }}</a>
-          </li>
-        {% endif %}
-        {% if app.user.isAdmin() or setting('course.teacher_search_order') == 1 %}
-          <li class="cd-sidebar__item {% if course_side_nav == 'orders' %}active{% endif %}">
-            <a
-              href="{{ path('course_set_manage_course_orders', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">{{ 'course.order'|trans }}
+{# {% if courseSet.platform == 'self'  %} #}
+        <li class="cd-sidebar__item {% if course_side_nav == 'live-statistics' %}active{% endif %}">
+          {% if courseSet.locked %}
+            <a class="pl10" href="{{ path('course_set_manage_sync', {id: courseSet.id, sideNav: 'live-statistics'}) }}">
+              <span class="es-icon es-icon-lock mr10" aria-hidden="true"></span>{{ 'course.live_statistics'|trans }}
             </a>
-          </li>
-        {% endif %}
+          {% else %}
+            <a
+              href="{{ path('course_set_manage_live_statistics', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">{{ 'course.live_statistics'|trans }}</a>
+          {% endif %}
+        </li>
+        {# {% endif %} #}
+        {# {% if setting('storage.upload_mode', 'local') == 'cloud' %} #}
+        {# <li class="cd-sidebar__item {% if course_side_nav == 'question_marker' %}active{% endif %}"> #}
+        {# <a href="{{ path('course_manage_question_marker',{courseSetId: courseSet.id, courseId: curCourse.id}) }}"> #}
+        {# {{ 'course.question_marker_statistics'|trans }}</a> #}
+        {# </li> #}
+        {# {% endif %} #}
+        {# {% if app.user.isAdmin() or setting('course.teacher_search_order') == 1 %} #}
+        {# <li class="cd-sidebar__item {% if course_side_nav == 'orders' %}active{% endif %}"> #}
+        {# <a #}
+        {# href="{{ path('course_set_manage_course_orders', {courseSetId: courseSet.id, courseId: curCourse.id}) }}">{{ 'course.order'|trans }} #}
+        {# </a> #}
+        {# </li> #}
+        {# {% endif %} #}
       </div>
     </ul>
   </div>

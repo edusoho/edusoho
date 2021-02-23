@@ -214,7 +214,7 @@ class SiteSettingController extends BaseController
             'courseShareContent' => '我正在学习{{course}}，收获巨大哦，一起来学习吧！',
             'groupShareContent' => '我在{{groupname}}小组,发表了{{threadname}},很不错哦,一起来看看吧!',
             'classroomShareContent' => '我正在学习{{classroom}}，收获巨大哦，一起来学习吧！',
-            'user_name' => '学员',
+            'user_name' => '学生',
             'chapter_name' => '章',
             'part_name' => '节',
         ];

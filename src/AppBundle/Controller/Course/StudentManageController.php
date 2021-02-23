@@ -249,7 +249,7 @@ class StudentManageController extends BaseController
             $isCourseStudent = $this->getCourseMemberService()->isCourseStudent($courseId, $user['id']);
 
             if ($isCourseStudent) {
-                $response = '该用户已是本课程的学员了';
+                $response = '该用户已是本课程的学生了';
             } else {
                 $isCourseTeacher = $this->getCourseMemberService()->isCourseTeacher($courseId, $user['id']);
 
@@ -277,14 +277,14 @@ class StudentManageController extends BaseController
     public function definedShowAction(Request $request, $courseId, $userId)
     {
         if (!$this->getCurrentUser()->isAdmin()) {
-            return $this->createMessageResponse('error', '您无权查看学员详细信息！');
+            return $this->createMessageResponse('error', '您无权查看学生详细信息！');
         }
 
         $this->getCourseService()->tryManageCourse($courseId);
         $member = $this->getCourseMemberService()->getCourseMember($courseId, $userId);
 
         if (empty($member)) {
-            return $this->createMessageResponse('error', sprintf('学员#%s不属于教学计划#%s的学员', $userId, $courseId));
+            return $this->createMessageResponse('error', sprintf('学生#%s不属于教学计划#%s的学生', $userId, $courseId));
         }
 
         return $this->forward('AppBundle:Student:definedShow', [

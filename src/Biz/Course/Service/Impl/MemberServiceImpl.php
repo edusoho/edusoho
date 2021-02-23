@@ -126,7 +126,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             $this->getLogService()->info(
                 'course',
                 'add_student',
-                "《{$courseSet['title']}》-{$course['title']}(#{$course['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$data['remark']}",
+                "《{$courseSet['title']}》-{$course['title']}(#{$course['id']})，添加学生{$user['nickname']}(#{$user['id']})，备注：{$data['remark']}",
                 $infoData
             );
             $this->commit();
@@ -138,7 +138,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
     }
 
-    // 管理员，老师手动移除学员
+    // 管理员，老师手动移除学生
     public function removeCourseStudent($courseId, $userId)
     {
         $this->getCourseService()->tryManageCourse($courseId);
@@ -174,7 +174,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $this->getLogService()->info(
             'course',
             'remove_student',
-            "教学计划《{$course['title']}》(#{$course['id']})，移除学员{$user['nickname']}(#{$user['id']})",
+            "教学计划《{$course['title']}》(#{$course['id']})，移除学生{$user['nickname']}(#{$user['id']})",
             $infoData
         );
 
@@ -360,7 +360,7 @@ class MemberServiceImpl extends BaseService implements MemberService
      * @param  $course
      * @param  $member
      *
-     * @return bool 会员加入的学员是否已到期
+     * @return bool 会员加入的学生是否已到期
      */
     protected function isVipMemberNonExpired($course, $member)
     {
@@ -512,7 +512,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
         // 删除老师
         $this->deleteMemberByCourseIdAndRole($courseId, 'teacher');
-        // 删除目前还是学员的成员
+        // 删除目前还是学生的成员
         $this->getMemberDao()->batchDelete([
             'courseId' => $courseId,
             'userIds' => $userIds,
@@ -662,7 +662,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $this->getLogService()->info(
             'course',
             'remove_student',
-            "教学计划《{$course['title']}》(#{$course['id']})，学员({$user['nickname']})因达到有效期退出教学计划(#{$member['id']})",
+            "教学计划《{$course['title']}》(#{$course['id']})，学生({$user['nickname']})因达到有效期退出教学计划(#{$member['id']})",
             $infoData
         );
     }
@@ -695,7 +695,7 @@ class MemberServiceImpl extends BaseService implements MemberService
             }
         }
 
-        //按照教学计划有效期模式计算学员有效期
+        //按照教学计划有效期模式计算学生有效期
         $deadline = 0;
         if ('days' == $course['expiryMode'] && $course['expiryDays'] > 0) {
             $endTime = strtotime(date('Y-m-d', time()).' 23:59:59'); //系统当前时间
@@ -858,7 +858,7 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     protected function getMemberDeadline($course)
     {
-        //按照教学计划有效期模式计算学员有效期
+        //按照教学计划有效期模式计算学生有效期
         $deadline = 0;
         if ('days' == $course['expiryMode'] && $course['expiryDays'] > 0) {
             $endTime = strtotime(date('Y-m-d', time())); //从第二天零点开始计算
@@ -907,7 +907,7 @@ class MemberServiceImpl extends BaseService implements MemberService
         $this->getLogService()->info(
             'course',
             'remove_student',
-            "教学计划《{$course['title']}》(#{$course['id']})，移除学员({$removeMember['nickname']})(#{$member['id']})",
+            "教学计划《{$course['title']}》(#{$course['id']})，移除学生({$removeMember['nickname']})(#{$member['id']})",
             $infoData
         );
         $this->dispatchEvent(

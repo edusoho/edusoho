@@ -207,7 +207,7 @@ videoStorageType:
     net: 网络视频
 
 userRole:
-    ROLE_USER: 学员
+  ROLE_USER: 学生
     ROLE_TEACHER: 教师
     ROLE_ADMIN: 管理员
     ROLE_SUPER_ADMIN: 超级管理员
@@ -494,9 +494,9 @@ questionOption:
     9: J
 
 weChatFansType:
-    all: 所有粉丝
-    user: 网校学员
-    notUser: 非网校学员
+  all: 所有粉丝
+  user: 网校学生
+  notUser: 非网校学生
 
 weChatFansKeywordType:
     nickname: 网校用户名

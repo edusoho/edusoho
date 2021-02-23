@@ -41,7 +41,7 @@ open_live.plugin.admin.live_list.data_empty: 暂无公开课记录
 open_live.plugin.admin.live_list.notice: >
   温馨提示<br><br>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;会在下列情况下消耗网校的短信，请确保云短信已开通并有足够的短信余额（<a target="_blank" href="%smsRemainUrl%"> 查看短信余额 </a>）<br><br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1、未绑定手机号的学员在报名或进入直播时需要绑定手机号，会消耗验证码短信；<br><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1、未绑定手机号的学生在报名或进入直播时需要绑定手机号，会消耗验证码短信；<br><br>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2、在创建公开课时，如果设置了开课前短信提醒，根据设置规则会消耗网校的短信；<br>
 open_live.plugin.admin.live_list.operation.detail_btn: 详情
 
@@ -49,10 +49,10 @@ open_live.plugin.admin.live_list.operation.detail_btn: 详情
 open_live.plugin.admin.live_list.teaching: 讲课
 open_live.plugin.admin.live_list.share.wechat_share: 微信内分享
 
-# 报名学员列表
+# 报名学生列表
 open_live.plugin.admin.enrolled_student.list: 已报名的用户列表
 open_live.plugin.admin.enrolled_student.enrolled_time: 报名时间
 
-# 短信提醒送达学员列表
+# 短信提醒送达学生列表
 open_live.plugin.admin.sms_reached_student.list: 短信已达用户
 open_live.plugin.admin.sms_reached_student.input.mobile_require: 请输入手机号

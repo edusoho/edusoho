@@ -1,7 +1,9 @@
 {% import "macro.html.twig" as web_macro %}
 <div class="panel panel-autumn panel-autumn-primary">
   <div class="panel-heading side-autumn-primary">
-    <h2 class="panel-title">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}{{'评价'|trans}} / <small>Student Evaluation</small></h2>
+    <h2
+      class="panel-title">{% if setting('default.user_name') %}{{ setting('default.user_name')|default('学生'|trans) }}{% else %}{{ '学生'|trans }}{% endif %}{{ '评价'|trans }}
+      / <small>Student Evaluation</small></h2>
   </div>
   <div class="panel-body">
     <ul class="media-list latest-review-list">

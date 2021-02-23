@@ -23,8 +23,8 @@ class Version20140401220029 extends AbstractMigration
             ALTER TABLE  `orders` CHANGE  `price`  `amount` FLOAT( 10, 2 ) UNSIGNED NOT NULL DEFAULT  '0' COMMENT  '订单实付金额';
             ALTER TABLE  `orders` ADD  `data` TEXT NULL DEFAULT NULL COMMENT  '订单业务数据' AFTER  `note`;
 
-            ALTER TABLE  `course_member` ADD  `levelId` INT NOT NULL COMMENT  '用户以会员的方式加入课程学员时的会员等级ID' AFTER  `deadline`;
-            ALTER TABLE  `course_member` CHANGE  `levelId`  `levelId` INT UNSIGNED NOT NULL DEFAULT  '0' COMMENT  '用户以会员的方式加入课程学员时的会员ID';
+            ALTER TABLE  `course_member` ADD  `levelId` INT NOT NULL COMMENT  '用户以会员的方式加入课程学生时的会员等级ID' AFTER  `deadline`;
+            ALTER TABLE  `course_member` CHANGE  `levelId`  `levelId` INT UNSIGNED NOT NULL DEFAULT  '0' COMMENT  '用户以会员的方式加入课程学生时的会员ID';
 
             TRUNCATE `orders`;
             TRUNCATE `order_log`;

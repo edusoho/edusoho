@@ -284,7 +284,7 @@ class Version20131216214116 extends AbstractMigration
 				  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
 				  `courseId` int(10) unsigned NOT NULL,
 				  `userId` int(10) unsigned NOT NULL,
-				  `orderId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学员购买课程时的订单ID',
+				  `orderId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学生购买课程时的订单ID',
 				  `learnedNum` int(10) unsigned NOT NULL DEFAULT '0',
 				  `noteNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '笔记数目',
 				  `noteLastUpdateTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最新的笔记更新时间',

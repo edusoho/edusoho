@@ -31,7 +31,7 @@ class Version20160323191830 extends AbstractMigration
                   `largePicture` varchar(255) NOT NULL DEFAULT '' COMMENT '大图',
                   `about` text COMMENT '简介',
                   `teacherIds` text COMMENT '显示的课程教师IDs',
-                  `studentNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学员数',
+                  `studentNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学生数',
                   `hitNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '查看次数',
                   `likeNum` int(10) NOT NULL DEFAULT '0' COMMENT '点赞数',
                   `postNum` int(10) NOT NULL DEFAULT '0' COMMENT '评论数',
@@ -76,7 +76,7 @@ class Version20160323191830 extends AbstractMigration
                   `length` int(11) unsigned DEFAULT NULL COMMENT '时长',
                   `materialNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上传的资料数量',
                   `quizNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '测验题目数量',
-                  `learnedNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '已学的学员数',
+                  `learnedNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '已学的学生数',
                   `viewedNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '查看数',
                   `startTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '直播课时开始时间',
                   `endTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '直播课时结束时间',
@@ -100,9 +100,9 @@ class Version20160323191830 extends AbstractMigration
         if (!$this->isTableExist('open_course_member')) {
             $this->addSql("
                 CREATE TABLE `open_course_member` (
-                  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '课程学员记录ID',
+                  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '课程学生记录ID',
                   `courseId` int(10) unsigned NOT NULL COMMENT '课程ID',
-                  `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学员ID',
+                  `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学生ID',
                   `mobile` varchar(32) NOT NULL DEFAULT  '' COMMENT '手机号码',
                   `learnedNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '已学课时数',
                   `learnTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学习时间',
@@ -112,7 +112,7 @@ class Version20160323191830 extends AbstractMigration
                   `ip` varchar(64) COMMENT 'IP地址',
                   `lastEnterTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上次进入时间',
                   `isNotified` int(10) NOT NULL DEFAULT '0' COMMENT '直播开始通知',
-                  `createdTime` int(10) unsigned NOT NULL COMMENT '学员加入课程时间',
+                  `createdTime` int(10) unsigned NOT NULL COMMENT '学生加入课程时间',
                   PRIMARY KEY (`id`)
                 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
             ");

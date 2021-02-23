@@ -197,10 +197,10 @@
                         code = '用户被锁定';
                         break;
                     case 'member.member_exist':
-                        code = '课程学员已存在';
+                        code = '课程学生已存在';
                         break;
                     case `${type}.reach_max_student_num`:
-                        code = '学员达到上限';
+                        code = '学生达到上限';
                         break;
                     case `${type}.not_found`:
                         code = '计划不存在';

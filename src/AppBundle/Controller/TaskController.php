@@ -512,20 +512,20 @@ class TaskController extends BaseController
     }
 
     /**
-     * 没有权限进行任务的时候的处理逻辑，目前只有学员动态跳转过来的时候跳转到教学计划营销页.
+     * 没有权限进行任务的时候的处理逻辑，目前只有学生动态跳转过来的时候跳转到教学计划营销页.
      *
      * @param  $taskId
      *
+     * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Exception
      *
-     * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function handleAccessDeniedException(\Exception $exception, Request $request, $taskId)
     {
         $task = $this->getTaskService()->getTask($taskId);
         $courseSet = $this->getCourseSetService()->getCourseSet($task['fromCourseSetId']);
 
-        $message = "您还不是课程《{$courseSet['title']}》的学员，请先购买或加入学习。";
+        $message = "您还不是课程《{$courseSet['title']}》的学生，请先购买或加入学习。";
         if ('the Task is Locked' == $exception->getMessage()) {
             $message = '先解锁上一任务才能继续学习';
         }

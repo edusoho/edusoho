@@ -13,7 +13,7 @@ class SpecialOrderServiceImpl extends BaseService implements SpecialOrderService
         $currentUser = new CurrentUser();
         $originalUserInfo = $this->getCurrentUser()->toArray();
 
-        // 只有新建订单的人 和 学员是同一人，才能退款
+        // 只有新建订单的人 和 学生是同一人，才能退款
         $originalUserInfo['id'] = $orderFields['user_id'];
         $this->biz['user'] = $currentUser->fromArray($originalUserInfo);
         $orderFields['expired_refund_days'] = $this->getOrderFacadeService()->getRefundDays();

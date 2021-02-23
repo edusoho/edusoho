@@ -349,13 +349,13 @@
       {# 课程排行榜 #}
       {% include 'default/course-set-rank.html.twig' %}
 
-      {# 学员动态 #}
+      {# 学生动态 #}
       {% set statuses = data('LatestStatuses', {mode:'simple', count: 5,private:0}) %}
       {% if statuses %}
         <div class="panel panel-autumn panel-autumn-default status-side">
           <div class="panel-heading side-autumn-default">
             <h2
-              class="panel-title">{% if setting('default.user_name') %}{{ setting('default.user_name')|default('学员'|trans) }}{% else %}{{ '学员'|trans }}{% endif %}{{ '动态'|trans }}
+              class="panel-title">{% if setting('default.user_name') %}{{ setting('default.user_name')|default('学生'|trans) }}{% else %}{{ '学生'|trans }}{% endif %}{{ '动态'|trans }}
               /
               <small>Students Dynamic</small>
             </h2>
@@ -378,7 +378,7 @@
         </div>
       {% endif %}
 
-      {# 学员评价 #}
+      {# 学生评价 #}
       {% if setting('goods_setting.show_review', '1') == 1 %}
         {{ render(controller('AppBundle:Default:latestReviewsBlock', {number:5})) }}
       {% endif %}

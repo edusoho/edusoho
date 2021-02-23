@@ -408,9 +408,9 @@ web.course.info.files_side_nav: 文件管理
 ###课程设置模块
 web.course.setting.price_side_nav: 价格设置
 web.course.setting.teachers_side_nav: 教师设置
-web.course.setting.students_side_nav: 学员设置
+web.course.setting.students_side_nav: 学生设置
 
-web.course.setting.students.create_btn: 添加学员
+web.course.setting.students.create_btn: 添加学生
 
 ###题库模块
 web.course.questions.question_side_nav: 题目设置
@@ -435,7 +435,7 @@ web.classroom.setting.assistants_side_nav: 助教设置
 
 ###班级管理模块
 web.classroom.content.courses_side_nav: 课程管理
-web.classroom.content.students_side_nav: 学员管理
+web.classroom.content.students_side_nav: 学生管理
 web.classroom.content.testpaper_check_side_nav: 试卷批阅
 
 #coupon

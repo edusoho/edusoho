@@ -55,7 +55,7 @@ site.message.error: 错误提示
 site.power_by: 好知网
 site.default.must: 必须
 site.default.and: 和
-site.default.student: 学员
+site.default.student: 学生
 site.default.classroom: 班级
 site.default.reviewing: 已批阅
 site.default.unreviewing: 未批阅
@@ -727,7 +727,7 @@ import.finish: 完成导入
 import.finish_loading: 正在完成导入, 请稍等...
 import.import_warning_tips: 正在导入, 请勿关闭当前窗口...
 import.user_import: 批量添加新用户
-import.user_import.content_title: 批量添加学员
+import.user_import.content_title: 批量添加学生
 import.user_import.choose_file: 选择文件
 import.user_import.browser_btn: 选择
 import.user_import.download_example_btn: 点击下载示例说明文件
@@ -916,7 +916,7 @@ course.create.introduction: 自我介绍
 course.id: 课程编号
 course.price_setting: 课程价格设置
 
-course.is_student_tips: 您已经是该教学计划的学员了！
+course.is_student_tips: 您已经是该教学计划的学生了！
 course.payments_disabled_tips: 尚未开启支付模块，无法购买课程。
 course.delete_from_classroom_tips: 课程已从%classroomName%中移除
 course.not_member_in_classroom_tips: >
@@ -927,7 +927,7 @@ buy.payments_disabled_tips: 由于网校未开通任一支付功能，当前商�
 course.buy_failed_tips: 真不巧，已经有人抢在你前面下单了，请继续关注
 course.no_avatar_tips: >
   您还没有头像，设置以后才能加入学习<br/>拥有一个独有的头像，老师和同学们能更容易关注到你哦～～
-course.remove_students_tips: 课程已关闭，在有效期内的学员仍可正常学习，若不希望学员继续学习，需在【学员管理】中移除学员。
+course.remove_students_tips: 课程已关闭，在有效期内的学生仍可正常学习，若不希望学生继续学习，需在【学生管理】中移除学生。
 course.name: 课程名称
 course.price: 价格
 course.price.RMB: %price%元
@@ -973,11 +973,11 @@ course.teaching_plan.create.create_tips: 教学计划创建后“学习模式”
 course.teaching_plan.create.name: 名称
 course.teaching_plan.create.mode: 学习模式
 course.teaching_plan.create.mode.free: >
-  <li class='mb10'><b>自由式学习：</b>学员自由安排学习过程</li>
+  <li class='mb10'><b>自由式学习：</b>学生自由安排学习过程</li>
 course.teaching_plan.create.mode.limit: >
-  <li><b>解锁式学习：</b>学员根据既定顺序逐个解锁学习</li>
+  <li><b>解锁式学习：</b>学生根据既定顺序逐个解锁学习</li>
 course.teaching_plan.create.task_numbers: %taskName%数
-course.teaching_plan.create.student: 学员
+course.teaching_plan.create.student: 学生
 course.teaching_plan.create.price: 价格（元）
 course.teaching_plan.create.status: 状态
 course.teaching_plan.create.operation: 操作
@@ -985,10 +985,10 @@ course.teaching_plan.edit.copy: 复制%title%为一个新的教学计划
 course.teaching_plan.expiry_date: 学习有效期
 course.teaching_plan.expiry_date.not_change_tips: 教学计划首次发布后“学习有效期”不能再更改模式。
 course.teaching_plan.expiry_date.anytime: >
-  <b>随到随学：</b>有效期从学员加入的当天开始算起，截至到期当天晚上的23:59
+  <b>随到随学：</b>有效期从学生加入的当天开始算起，截至到期当天晚上的23:59
 course.teaching_plan.expiry_date.real_time: >
   <b>固定周期：</b>有固定的学习开始日期和结束日期
-course.teaching_plan.expiry_date.overdue_tips: 过期后无法继续学习，系统会在到期前10天提醒学员。
+course.teaching_plan.expiry_date.overdue_tips: 过期后无法继续学习，系统会在到期前10天提醒学生。
 course.teaching_plan.expiry_date.forever_mode: 长期有效
 course.teaching_plan.expiry_date.anywhere_mode: 随到随学
 course.teaching_plan.expiry_date.date_mode: 固定周期
@@ -1028,11 +1028,11 @@ course.base_info: 基础信息
 course.base_plan_intro: 计划使用指南
 course.marketing_setup.reward: 积分
 course.marketing_setup: 营销设置
-course.student_manage: '学员管理'
+course.student_manage: '学生管理'
 course.marketing_setup.setup: 加入设置
 course.marketing_setup.setup.can_join: 可加入
 course.marketing_setup.setup.can_not_join: 不可加入
-course.marketing_setup.setup.can_join.tips: 关闭后，前台显示为“限制课程”，学员自己无法加入，需要由老师手动添加学员。常用于封闭型教学。
+course.marketing_setup.setup.can_join.tips: 关闭后，前台显示为“限制课程”，学生自己无法加入，需要由老师手动添加学生。常用于封闭型教学。
 course.marketing_setup.price.free: 免费
 course.marketing_setup.price.not_free: 收费
 course.marketing_setup.for_show_tips: 仅作展示用
@@ -1040,16 +1040,16 @@ course.marketing_setup.expiry_date: 加入截止日期
 course.marketing_setup.expiry_date.custom: 自定义
 course.marketing_setup.expiry_date.anytime: 不限时间
 course.marketing_setup.approval: 实名认证
-course.marketing_setup.approval_tips: 设置该值后，学员购买课程前，必须先去申请实名认证。
+course.marketing_setup.approval_tips: 设置该值后，学生购买课程前，必须先去申请实名认证。
 course.marketing_setup.rule: 学习规则
 course.marketing_setup.rule.expiry_date: 学习有效期
-course.marketing_setup.rule.expiry_date_tips: 在此日期前，学员可进行学习。
+course.marketing_setup.rule.expiry_date_tips: 在此日期前，学生可进行学习。
 course.marketing_setup.rule.expiry_date.publish_tips: 从加入当天起，在几天内可进行学习。
-course.marketing_setup.rule.expiry_date.first_publish_tips: 教学计划一旦发布，有效期类型不能修改；课程或教学计划关闭后，可以修改日期，新的学习有效期仅对修改后加入的学员生效。
+course.marketing_setup.rule.expiry_date.first_publish_tips: 教学计划一旦发布，有效期类型不能修改；课程或教学计划关闭后，可以修改日期，新的学习有效期仅对修改后加入的学生生效。
 course.marketing_setup.rule.watch_time_limit: 视频观看时长限制
 course.marketing_setup.rule.watch_time_limit.watch_limit: 倍总时长
 course.marketing_setup.rule.watch_time_limit.watch_limit_tips: >
-  例：课程视频总时长为100分钟，设置为5倍，则学员总共可观看500分钟，超出时长将提示不能学习。0表示无限制。<br/>
+  例：课程视频总时长为100分钟，设置为5倍，则学生总共可观看500分钟，超出时长将提示不能学习。0表示无限制。<br/>
   对于手动上传的回放视频，可限制其观看时长。但对于直接录制、跳转到第三方直播平台回放的视频，无法限制。
 course.marketing_setup.preview: 预览试看
 course.marketing_setup.preview.set_task: 设置免费学习%taskName%
@@ -1073,12 +1073,12 @@ course.teacher_setup: 教师管理
 course.teacher_setup.exist_teacher: 已添加教师
 course.teacher_setup.exist_teacher.add_tips: 只能添加有教师权限的用户
 
-course.members_manage: 学员管理
-course.members_manage.official_student: 正式学员
+course.members_manage: 学生管理
+course.members_manage.official_student: 当前学生
 course.members_manage.official_student.search: 搜索
 course.members_manage.official_student.batch_upload_deadline: 批量修改有效期
 course.members_manage.official_student.batch_remove: 批量移除
-course.members_manage.official_student.input_placeholder: 请输入用户名/邮箱/手机号
+course.members_manage.official_student.input_placeholder: 请输入用户名
 course.members_manage.official_student.progress: 学习进度
 course.members_manage.official_student.stutatus: 学习状态
 course.members_manage.official_student.operation: 操作
@@ -1094,7 +1094,7 @@ course.members_manage.official_student.update_expiry_day_btn: 修改有效期
 course.members_manage.official_student.remove_btn: 移除
 course.members_manage.official_student.join_time: 加入时间：%createdTime%
 course.members_manage.official_student.expiry_date: 有效期至：%deadline%
-course.members_manage.official_student.empty: 暂无学员记录
+course.members_manage.official_student.empty: 暂无学生记录
 course.members_manage.official_student.add: 添加
 course.members_manage.official_student.add_tips: 只能添加系统中已注册的用户
 course.members_manage.official_student.add.input_placeholder: 邮箱/手机/用户名
@@ -1126,8 +1126,8 @@ course.members_manage.official_student.send_message.receiver: 收件人
 course.members_manage.official_student.send_message.content: 内容
 course.members_manage.official_student.show.content_title: 个人详细信息
 course.members_manage.official_student.remark.tips: >
-  请填写学员的备注信息
-course.members_manage.official_student.modify_expiry_day: 修改学员有效期
+  请填写学生的备注信息
+course.members_manage.official_student.modify_expiry_day: 修改学生有效期
 course.members_manage.official_student.add_expiry_day.add: 增加
 course.members_manage.official_student.add_expiry_day.course_expiry_date: 课程有效期
 course.members_manage.official_student.add_expiry_day.title: 课程标题
@@ -1140,11 +1140,11 @@ course.members_manage.official_student.add_expiry_day.publish_tips: 有效期，
 course.members_manage.quit_records: 退出记录
 course.members_manage.quit_type: 退出类型
 course.members_manage.is_refunded: 是否退款
-course.members_manage.records.name: 学员名称
+course.members_manage.records.name: 学生名称
 course.members_manage.quit_records.reason: 退出原因
 course.members_manage.quit_records.status: 退款状态
 course.members_manage.quit_records.date: 退出日期
-course.members_manage.quit_records.empty: 无学员记录
+course.members_manage.quit_records.empty: 无学生记录
 course.members_manage.quit_records.join_time: 加入课程时间：
 course.members_manage.quit_records.success: 退款成功
 course.members_manage.is_paid: 是否付费
@@ -1186,7 +1186,7 @@ item_bank_exercise.members_manage.official_student.add.price_tips: 本题库练�
 item_bank_exercise.members_manage.official_student.add.failed_tips: 题库练习不能添加
 item_bank_exercise.members_manage.official_student.add.publish_tips: 请题库练习发布后再添加。
 item_bank_exercise.student_manage.can_not_add_teacher: 该用户是本题库练习的教师，不能添加
-item_bank_exercise.student_manage.student_exist: 该用户已是本题库练习的学员了
+item_bank_exercise.student_manage.student_exist: 该用户已是本题库练习的学生了
 item_bank_exercise.student_manage.student_not_exist: 该用户不存在
 item_bank_exercise.exercise_create.forbidden: 您不是该题库管理者，不能查看此页面！
 item_bank_exercise.assessment.total_score: 总分
@@ -1196,10 +1196,10 @@ item_bank_exercise.assessment_exercise.remove_assessment: 移除试卷
 item_bank_exercise.chapter_exercise.category_empty: 当前题库练习还未添加章节
 item_bank_exercise.chapter_exercise.empty: 什么都没有，快去开启章节练习吧
 item_bank_exercise.assessment_exercise.empty: 什么都没有，快去开启试卷练习吧
-item_bank_exercise.chapter_exercise.info: 章节练习依据“题目分类管理”的设置。按层级目录向学员提供刷题练习
+item_bank_exercise.chapter_exercise.info: 章节练习依据“题目分类管理”的设置。按层级目录向学生提供刷题练习
 item_bank_exercise.marketing_setup.no_permission_tips: 抱歉，您无权管理题库练习基础设置，如有需要请联系网站管理员！
-item_bank_exercise.marketing_setup.setup.can_join.tips: 关闭后，学员自己无法加入，需要由老师手动添加学员。
-item_bank_exercise.marketing_setup.rule.expiry_date.first_publish_tips: 变更学习有效期，仅对修改后新增的学员有效
+item_bank_exercise.marketing_setup.setup.can_join.tips: 关闭后，学生自己无法加入，需要由老师手动添加学生。
+item_bank_exercise.marketing_setup.rule.expiry_date.first_publish_tips: 变更学习有效期，仅对修改后新增的学生有效
 item_bank_exercise.assessment_exercise.add_module: 添加模块
 item_bank_exercise.assessment_exercise.edit_module: 修改模块
 item_bank_exercise.assessment_exercise.module.name: 模块名称
@@ -1226,7 +1226,7 @@ course.testpaper_check.number: 人次
 course.testpaper_check.get_score: 得 %questonScore% 分
 course.testpaper_check.get_score_range: 得 0 - %questonScore% 分
 course.testpaper_check.testpaper_analysis: 试题分析
-course.testpaper_check.student_score: 学员成绩
+course.testpaper_check.student_score: 学生成绩
 course.testpaper_check.testpaper_total_score: 试卷总分
 
 course.homepage.re_try_btn: 再次尝试
@@ -1289,10 +1289,10 @@ course.dashboard.study_detail.per_study_time: 平均学习时长(分)
 course.dashboard.study_detail.audio_time: 音视频时长(分)
 course.dashboard.study_detail.audio_time_tips: 音视频的实际时长，仅支持云视频和本地音视频
 course.dashboard.study_detail.per_audio_time: 音视频平均观看时长(分)
-course.dashboard.study_detail.per_audio_time_tips: 每个学员的实际观看时长的平均数
+course.dashboard.study_detail.per_audio_time_tips: 每个学生的实际观看时长的平均数
 course.dashboard.study_detail.per_score: 测试平均得分
-course.dashboard.study_detail.per_score_tips: 每个学员测试得分的平均数
-course.dashboard.study_detail.detail: 学员学习详情
+course.dashboard.study_detail.per_score_tips: 每个学生测试得分的平均数
+course.dashboard.study_detail.detail: 学生学习详情
 course.dashboard.study_detail.detail_btn: 查看
 course.dashboard.study_detail.tips: 注：网络视频的观看时长无法获取
 course.dashboard.study_detail.text: （图文）
@@ -1303,30 +1303,30 @@ course.dashboard.study_detail.ppt: （ppt）
 course.dashboard.study_detail.detail.username: 用户名
 course.dashboard.study_detail.detail.audio_learn_time: 音视频学习时长（分）
 course.dashboard.study_detail.detail.score: 最近考试得分
-course.dashboard.stunents_numbers: 计划学员数
+course.dashboard.stunents_numbers: 计划学生数
 course.dashboard.finished_numbers: 完成人数
 course.dashboard.finished_course_rate: 完课率
-course.dashboard.finished_course_rate_tips: 学完整个教学计划的人数 ÷ 该教学计划学员总数
+course.dashboard.finished_course_rate_tips: 学完整个教学计划的人数 ÷ 该教学计划学生总数
 course.dashboard.notes_numbers: 笔记数
 course.dashboard.questions_numbers: 提问数
 course.dashboard.discussions_numbers: 话题数
 course.dashboard.free_view_numbers: 免费试看数
 course.dashboard.free_view_numbers_tips: 观看免费%taskName%和试看视频的总次数
-course.dashboard.student_trend: 学员趋势
+course.dashboard.student_trend: 学生趋势
 course.dashboard.student_trend_seven_days: 7天
 course.dashboard.student_trend_thirty_days: 30天
-course.dashboard.student_detail: 学员详情
+course.dashboard.student_detail: 学生详情
 course.dashboard.task_detail: %taskName%详情
 course.dashboard.student_chart.time_select_all: 全部
 course.dashboard.student_chart.time_select_unFinished: 未完成
 course.dashboard.student_chart.time_select_seven_days: 7天未学
 course.dashboard.student_chart.name_or_mobile_placeholder: 用户名/手机号
 
-course.members_manage.add_btn: 添加学员
+course.members_manage.add_btn: 添加学生
 course.announcements_manage.add_btn: 添加公告
 course.members_manage.batch_import_btn: 批量导入
-course.members_manage.import_failed_tips: %type%未发布,不可导入学员
-course.members_manage.add_failed_tips: %type%未发布，不可添加学员
+course.members_manage.import_failed_tips: %type%未发布,不可导入学生
+course.members_manage.add_failed_tips: %type%未发布，不可添加学生
 course.order: 订单统计
 course.order.content_title: 课程订单查询
 course.order.create_time: 创建时间
@@ -1403,8 +1403,8 @@ course.status.serialized: 更新中
 course.status.finished: 已完结
 course.status.published: 已发布
 course.filter.all_plan: 全部计划
-course.student_member: 课程学员
-course.item_student_member: 题库学员
+course.student_member: 课程学生
+course.item_student_member: 题库学生
 course.assessment_number: 试卷数量
 course.item_number: 题目数量
 course.student.cell: 人
@@ -1478,8 +1478,8 @@ course.reward_point.course_award: 完成课程奖励
 course.teacher.content_title: 授课教师
 course.advanced.content_title: 上周学霸
 course.characteristic.content_title: 课程特色
-course.newest_students.content_title: 最新学员
-course.students_dynamic.content_title: 学员动态
+course.newest_students.content_title: 最新学生
+course.students_dynamic.content_title: 学生动态
 course.students_dynamic.empty: 还没有动态
 course.note.mission_delete_tips: · 该%taskName%已被删除
 course.note.empty: 暂无笔记
@@ -1564,9 +1564,9 @@ course.plan_info: >
   <p class="cd-dark-minor cd-mb24">教学计划使用方式介绍：</p>
   <p>为了更快捷的组织教学，计划管理可以让单个课程支持多种教学组织模式：</p>
   <p>1、支持不同时期开设相同内容的课程：三月班、四月班、五月班；</p>
-  <p>2、支持区分学员，开设多个教学班：数学一班、数学二班、数学三班；</p>
+  <p>2、支持区分学生，开设多个教学班：数学一班、数学二班、数学三班；</p>
   <p>3、支持相同课程内容，但提供不同服务等级的课程：视频班、直播班、答疑班；</p>
-  <p>4、支持根据学员的学习能力，开设多个教学班：快班、慢班；</p>
+  <p>4、支持根据学生的学习能力，开设多个教学班：快班、慢班；</p>
   <p class="cd-mt24">欢迎您使用教学计划管理，新的功能将更好的支持您开展教学工作，您的声音是我们前进的动力！</p>
 
 
@@ -1870,7 +1870,7 @@ course.course_files.reconvert_btn: 重新转换(调试模式)
 course.course_files.select_all_btn: 全选
 course.course_files.record: 文件记录
 course.course_files.re_try_convert_video_to_audio: 重新转码
-course.files_manage.tips: 提示：课程文件需要<strong class="color-warning">添加到%taskName%</strong>中才能被学员看到。
+course.files_manage.tips: 提示：课程文件需要<strong class="color-warning">添加到%taskName%</strong>中才能被学生看到。
 
 course.plan_overview: 数据概览
 
@@ -1879,7 +1879,7 @@ course.announcement_manage: 公告管理
 course.plan_task.deadline_learn_tips: >
   在
   <input class="form-control width-150 js-expiry-input" id="deadline" name="deadline" value="">
-  前，学员可进行学习。
+  前，学生可进行学习。
 course.plan_task.expiry_days_learn_tips: >
   从加入当天起，在
   <input class="form-control mhs width-150 js-expiry-input" type="text" id="expiryDays" name="expiryDays">
@@ -1897,10 +1897,10 @@ course.plan_task.practice_tips: 练习的设置包括做题在内的多种形式
 course.plan_task.homework: 作业
 course.plan_task.homework_tips: 作业的设置包括做题在内的多种形式。
 course.plan_task.extra_class: 课外
-course.plan_task.extra_class_tips: 学员可通过课外阅读、课外作业等，扩展学习。
+course.plan_task.extra_class_tips: 学生可通过课外阅读、课外作业等，扩展学习。
 course.plan_task.preparation: 预习
 course.plan_task.total_lessons: 课时总数
-course.plan_total_members: 学员总数
+course.plan_total_members: 学生总数
 course.plan_task.published_lessons: 已发布课时数：
 course.plan_task.unpublished_lessons: 未发布课时数：
 course.plan_task.everyday_finish_tasks: >
@@ -1918,7 +1918,7 @@ course.plan_task.lesson-marker_btn: 弹题管理
 course.plan_task.copy_btn: 复制为
 course.plan_task.unpublish_btn: 取消发布
 course.plan_task.delete_btn: 删除
-course.plan_task.preparation_tips: 学员可通过看视频、阅读资料等预习%taskName%，导入学习。
+course.plan_task.preparation_tips: 学生可通过看视频、阅读资料等预习%taskName%，导入学习。
 course.plan_task.batch_create_tips: >
   批量创建课时需要开通云视频服务，点击<a target="__blank" href="http://open.edusoho.com/show/cloud/video">这里</a>了解详情
 course.plan_task.empty: 什么都没有，快去添加一个课时
@@ -2079,7 +2079,7 @@ course.plan_task.activity_manage.live.start_time: 直播开始时间
 course.plan_task.activity_manage.live.create_tips: 请选择有效的开始时间以便创建直播教室。
 course.plan_task.activity_manage.live.live_time: 直播时长
 course.plan_task.activity_manage.live.info: 直播说明
-course.plan_task.activity_manage.live.expiry_tips: 提示：本计划的学习加入方式为“随到随学”，加入直播%taskName%可能会导致后来的学员无法参加，只能观看回放。
+course.plan_task.activity_manage.live.expiry_tips: 提示：本计划的学习加入方式为“随到随学”，加入直播%taskName%可能会导致后来的学生无法参加，只能观看回放。
 course.plan_task.activity_manage.live.join_tips: 进入参加过直播
 course.plan_task.activity_manage.ppt.learn_to_last_page_tips: 学习到最后一页
 course.plan_task.activity_manage.ppt.time: 学习时长
@@ -2107,14 +2107,14 @@ course.plan_task.activity_manage.testpaper.redo_interval_tips: 重考时间间�
 course.plan_task.activity_manage.testpaper.time_limit_tips: 0小时，表示无限制。
 course.plan_task.activity_manage.testpaper.time_length_tips: 0分钟，表示无限制
 course.plan_task.activity_manage.testpaper.time: 考试时间
-course.plan_task.activity_manage.testpaper.time_tips: 学员只能在时间范围内参加考试！
+course.plan_task.activity_manage.testpaper.time_tips: 学生只能在时间范围内参加考试！
 course.plan_task.activity_manage.testpaper.mode.always: 不限
 course.plan_task.activity_manage.testpaper.mode.realTime: 指定
 course.plan_task.activity_manage.testpaper.mode.require_credit: 限制学分
 course.plan_task.activity_manage.testpaper.mode.require_credit_tips: 参加此次考试所需的学分，０分则不限制。
 course.plan_task.activity_manage.testpaper.pass: 分数达标
 course.plan_task.activity_manage.testpaper.score_pass: 考试合格
-course.plan_task.activity_manage.testpaper.finish_tip: 提示：若任务完成条件选择了“考试合格”，则学员的考试分数必须达到上一步中设置的“合格分数”，才能完成此任务。
+course.plan_task.activity_manage.testpaper.finish_tip: 提示：若任务完成条件选择了“考试合格”，则学生的考试分数必须达到上一步中设置的“合格分数”，才能完成此任务。
 course.plan_task.activity_manage.testpaper.will_begin_tips: 考试未开始，请在%startTime%之后再来
 course.plan_task.activity_manage.testpaper.total_question: >
   本次考试共<span class="color-primary">%itemCount%题</span>，总分<span class="color-primary">%score%分</span>
@@ -2256,7 +2256,7 @@ file_chooser.upload_file.audio_quality.normal: 标准
 file_chooser.upload_file.audio_quality.high: 高品
 file_chooser.upload_file.convert: 什么是转码
 file_chooser.upload_file.upload_tips: 上传说明
-file_chooser.upload_file.convert_tips: 上传后将会自动转码成兼容性更好的格式，以便学员观看，建议您在转码完成后再发布相应的课时。
+file_chooser.upload_file.convert_tips: 上传后将会自动转码成兼容性更好的格式，以便学生观看，建议您在转码完成后再发布相应的课时。
 file_chooser.upload_file.suopprt_audio_tips: >
   支持mp4, avi, flv, wmv, mov, m4v格式的视频文件上传，文件大小不能超过2GB。<br/>支持断点续传（仅在Chrome、IE9及以上等支持HTML5的浏览器中可用）。
 file_chooser.upload_file.upload_audio_tips: >
@@ -2420,15 +2420,15 @@ classroom.teacher_about_empty: 暂无简介
 classroom.headmaster_title_not_set_tips: 还没有头衔
 classroom.not_set_headmaster_tips: 该%name%尚未设置班主任
 classroom.not_join_tips: >
-  您现在是 <span>旁听生</span>，只能有限参与，购买成为正式学员后即可完整学习
+  您现在是 <span>旁听生</span>，只能有限参与，购买成为当前学生后即可完整学习
 classroom.not_join_tips_for_free: >
-  您现在是 <span>旁听生</span>，只能有限参与，成为正式学员后即可完整学习
+  您现在是 <span>旁听生</span>，只能有限参与，成为当前学生后即可完整学习
 classroom.price_free: 免费
 classroom.member_level_study_tips: %memberLevel%，免费学
 classroom.buy_btn: 加入购买
 classroom.free_join_btn: 免费加入
-classroom.member_question: 学员问答
-classroom.member_discussion: 学员话题
+classroom.member_question: 学生问答
+classroom.member_discussion: 学生话题
 classroom.question: 问答帖
 classroom.question_label: 问
 classroom.nice_thread: 精华帖
@@ -2439,9 +2439,9 @@ classroom.thread_browse: 浏览
 classroom.last_post: 最后回复
 classroom.thread_post: 发表于%name%
 classroom.deleted_tips: %name%已删除
-classroom.member_question_post_empty_tips: 您的%name%中还没有学员提问过...
-classroom.member_discussion_post_empty_tips: 您的%name%中还没有学员话题...
-classroom.latest_join_member: 新加学员
+classroom.member_question_post_empty_tips: 您的%name%中还没有学生提问过...
+classroom.member_discussion_post_empty_tips: 您的%name%中还没有学生话题...
+classroom.latest_join_member: 新加学生
 classroom.description_empty_tips: 暂无介绍！
 classroom.description: 介绍
 classroom.teachers: 师资
@@ -2463,7 +2463,7 @@ classroom.classroom_manage.course_select.price: 价格
 classroom.classroom_manage.course_select.tips: 课程下包含多个教学计划，请选择其中某个教学计划。
 classroom.auditor_join_tips:
   您现在是<span class="color-warning">旁听生</span>，不能完整学习
-classroom.auditor_and_member_different_tips: 旁听生只能参与话题讨论，正式学员可以完整地学习所有内容，享受所有教学服务
+classroom.auditor_and_member_different_tips: 旁听生只能参与话题讨论，当前学生可以完整地学习所有内容，享受所有教学服务
 classroom.over_expiry_date_tips: 你的班级已过有效期，无法继续学习
 classroom.over_expiry_day_and_buyable_tips: 你的班级已过有效期，无法继续学习，请重新购买
 classroom.over_expiry_day_and_not_buyable_tips: 你的班级已过有效期，无法继续学习，请重新加入
@@ -2475,7 +2475,7 @@ announcement.view_btn: (请点击查看)
 announcement.modal.classroom_nojoin.title: 提示
 announcement.modal.classroom_nojoin.tips: 您尚未成为%classroomName%成员,请先成为%classroomName%成员
 announcement.modal.classroom_nojoin.become_auditor_btn: 加入旁听生
-announcement.modal.course_nojoin.tips: 您尚未成为%courseTitle%学员,请先成为%courseTitle%学员
+announcement.modal.course_nojoin.tips: 您尚未成为%courseTitle%学生,请先成为%courseTitle%学生
 announcement.modal.global.publish_time: 发表于%createdTime%
 announcement.modal.edit_btn: 编辑
 announcement.modal.delete_btn: 删除
@@ -2492,7 +2492,7 @@ announcement.modal_layout.announcement_manage.add_btn: 添加公告
 announcement.modal_layout.announcement_manage.history_btn: 历史公告
 announcement.modal.write.startTime: 发布时间
 announcement.modal.write.endTime: 结束时间
-announcement.modal.write.send_notify_to_user: 给学员发送系统通知
+announcement.modal.write.send_notify_to_user: 给学生发送系统通知
 announcement.modal.write.select_plan: 选择计划
 
 classroom.manage.setting: 设置
@@ -2502,14 +2502,14 @@ classroom.manage.picture: 图片
 classroom.manage.price: 价格
 classroom.manage.course: 课程
 classroom.manage.courses_count: 课程
-classroom.manage.student: 学员
-classroom.manage.student_number: 学员数
+classroom.manage.student: 学生
+classroom.manage.student_number: 学生数
 classroom.manage.auditor_num: 旁听生数
 classroom.manage.user_learn_status: %name%学习情况
 classroom.manage.Yesterday: 昨日
 classroom.manage.today: 今日
-classroom.manage.all_student_number: 全部学员数
-classroom.manage.full_student_number: 正式学员数
+classroom.manage.all_student_number: 全部学生数
+classroom.manage.full_student_number: 当前学生数
 classroom.manage.thread_count: 新增话题数
 classroom.manage.latest_reviews: 最新评价
 classroom.manage.reviews.empty: 该%name%尚无评价
@@ -2528,8 +2528,8 @@ classroom.manage.set_info.classroom_period: 班级有效期
 classroom.manage.set_info.classroom_period.end_date: 截止日期
 classroom.manage.set_info.classroom_period.days: 有效期天数
 classroom.manage.set_info.classroom_period.forever: 长期有效
-classroom.manage.set_info.date_help: 设置该值后，%user_name%只能在截止日期前进行课程的学习，系统默认会在截止时间前10天提醒学员。
-classroom.manage.set_info.days_help: 设置该值后，%user_name%只能在有效天数内进行课程的学习，系统默认会在有效期前10天提醒学员。
+classroom.manage.set_info.date_help: 设置该值后，%user_name%只能在截止日期前进行课程的学习，系统默认会在截止时间前10天提醒学生。
+classroom.manage.set_info.days_help: 设置该值后，%user_name%只能在有效天数内进行课程的学习，系统默认会在有效期前10天提醒学生。
 classroom.manage.set_info.view_period_rules: 查看有效期规则
 classroom.manage.teacher_info.empty: 教师不存在
 classroom.status.expired: 当前班级已过有效期
@@ -2600,10 +2600,10 @@ classroom.about: 简介
 classroom.small_picture: 图片
 classroom.course: 课程
 classroom.tash_num: %taskName%数
-classroom.student: 学员
-classroom.student_num: 学员数
-classroom.total_student_num: 全部学员数
-classroom.formal_student_num: 正式学员数
+classroom.student: 学生
+classroom.student_num: 学生数
+classroom.total_student_num: 全部学生数
+classroom.formal_student_num: 当前学生数
 classroom.task_finish_num: %taskName%完成学习数
 classroom.add_thread_num: 新增话题数
 classroom.latest_review: 最新评价
@@ -2621,7 +2621,7 @@ classroom.go_back_classroom_homepage: >
 classroom.preview: 预览
 classroom.as_guest: 作为未购买用户
 classroom.as_auditor: 作为旁听生
-classroom.as_member: 作为正式学员
+classroom.as_member: 作为当前学生
 classroom.publish: 发布
 classroom.publish_name: >
   发布%name%
@@ -2644,7 +2644,7 @@ classroom.set_manage: 教师管理
 classroom.set_assistant: 助教设置
 classroom.course_manage: 课程管理
 classroom.announcement_manage: 公告管理
-classroom.student_manage: 学员管理
+classroom.student_manage: 学生管理
 classroom.testpaper_check: 试卷批阅
 classroom.my_check: 我的批阅
 classroom.check_list: 批阅列表
@@ -2668,7 +2668,7 @@ classroom.buy_tips: >
   关闭后%name%将无法在线购买加入。
 classroom.expiry_mode: 有效期
 classroom.set_expiry_mode_tips: >
-  设置该值后，学员只能在截止日期前进行课程的学习，系统默认会在截止时间前10天提醒学员。
+  设置该值后，学生只能在截止日期前进行课程的学习，系统默认会在截止时间前10天提醒学生。
 classroom.expiry_mode_rule: 班级有效期规则
 classroom.expiry_mode_rule_tips: >
   ● 班级有效期设置
@@ -2684,18 +2684,18 @@ classroom.expiry_mode_rule_tips: >
   ● 有效期修改规则
   <br>
   1. 未发布状态：任意修改，且保存的有效期设置，将在发布后生效<br>
-  2. 发布状态：只能修改当前有效期方式下的具体数值，如果是修改有效天数，则只会影响后续加入班级的学员，不影响已加入班级的学员；如果修改有效日期，则只会影响后续加入班级的学员，不影响已加入班级的学员<br>
+  2. 发布状态：只能修改当前有效期方式下的具体数值，如果是修改有效天数，则只会影响后续加入班级的学生，不影响已加入班级的学生；如果修改有效日期，则只会影响后续加入班级的学生，不影响已加入班级的学生<br>
   3. 关闭状态：无法修改<br>
-  4. 在学员管理中，可以针对单个学员修改其有效期<br>
+  4. 在学生管理中，可以针对单个学生修改其有效期<br>
   <br>
   ● 有效期过期处理
   <br>
-  1. 班级过期后，如果是有效天数，则提示学员：当前班级已过有效期，请重新加入<br>
-  2. 班级过期后，如果是有效日期，则提示学员：当前班级已过有效期，无法继续学习<br>
+  1. 班级过期后，如果是有效天数，则提示学生：当前班级已过有效期，请重新加入<br>
+  2. 班级过期后，如果是有效日期，则提示学生：当前班级已过有效期，无法继续学习<br>
   3. 进入班级课程，提示和班级一致<br>
   4. 班级到期前10天会进行系统通知，提示班级已到期，班级内课程也会发送相应通知<br>
   5. 班级过期后，除评价以外，所有项只允许查看，不允许操作，操作都会提示：当前班级已过有效期<br>
-classroom.edit_expiry_mode: 修改学员有效期
+classroom.edit_expiry_mode: 修改学生有效期
 classroom.not_edit: 班级不能修改
 classroom.publish_tips: 有效期，请班级发布后再增加。
 classroom.title_label: 班级标题
@@ -2749,33 +2749,33 @@ classroom.student_placeholder: 请输入用户名/邮箱/手机号
 classroom.add_student_tips: 只能添加系统中已注册的用户
 classroom.buy_price_label: 购买价格
 classroom.username: 用户名
-classroom.student_name: 学员
+classroom.student_name: 学生
 classroom.student_study_status: 学习进度
 classroom.student_study_expiry_date: 学习有效期
 classroom.student_opertion: 操作
-classroom.student_empty: 无学员记录
+classroom.student_empty: 无学生记录
 classroom.student_exporting: 正在导出
 classroom.student_export_auditor: 导出旁听生
 classroom.student_export: 导出学生
-classroom.add_student_btn: 添加学员
-classroom.add_student.already_exists_tips: 该用户已是本班级的学员了
-classroom.add_student_title: 添加学员
+classroom.add_student_btn: 添加学生
+classroom.add_student.already_exists_tips: 该用户已是本班级的学生了
+classroom.add_student_title: 添加学生
 classroom.student_batch_update_expiry_date: 批量修改有效期
 classroom.student_batch_remove: 批量移除
 classroom.student_batch_import: 批量导入
-classroom.student_import_tips: 班级未发布,不可导入学员
-classroom.student_add_tips: 班级未发布,不可添加学员
-classroom.member: 正式学员
+classroom.student_import_tips: 班级未发布,不可导入学生
+classroom.student_add_tips: 班级未发布,不可添加学生
+classroom.member: 当前学生
 classroom.auditor: 旁听生
 classroom.exit_record: 退出记录
 classroom.auditor_manage: 旁听生管理
 classroom.auditor_buy_tips: >
   旁听生是%name%的潜在购买者,只能参加该%classroomName%下的话题互动。
-classroom.student_username: 学员名称
+classroom.student_username: 学生名称
 classroom.student_exit_reason: 退出原因
 classroom.student_exit_date: 退出日期
 classroom.refund_status: 退款状态
-classroom.refund_record_tips: 仅显示通过现金购买加入的学员退款记录
+classroom.refund_record_tips: 仅显示通过现金购买加入的学生退款记录
 classroom.join_time: 加入班级时间
 classroom.refund_success: 退款成功
 classroom.refund_fail: 退款失败
@@ -2783,12 +2783,12 @@ classroom.refund_cancel: 退款取消
 classroom.buy_price_tips: >
   本%classroomName%的价格为%price%
 classroom.remark: 备注
-classroom.student_remark: 学员备注
-classroom.student_remark_tips: 请填写学员的备注信息
+classroom.student_remark: 学生备注
+classroom.student_remark_tips: 请填写学生的备注信息
 classroom.remark_tips: 选填
 classroom.publish_add_student_tips: >
-  %status%%name%不能添加学员，请%classroomName%发布后再添加。
-classroom.batch_add_student: 批量添加学员
+  %status%%name%不能添加学生，请%classroomName%发布后再添加。
+classroom.batch_add_student: 批量添加学生
 classroom.select_import_file: 选择文件
 classroom.import_file_preview: 选择
 classroom.download_example_file: 点击下载示例说明文件
@@ -2801,7 +2801,7 @@ classroom.manage_btn: 管理
 classroom.remove: 移除
 classroom.create.congratulation_message: 恭喜！创建班级成功！
 classroom.create.title_not_unique: 班级名称已被使用，创建班级失败
-classroom.set_assistant_tip: 仅能添加本班级学员
+classroom.set_assistant_tip: 仅能添加本班级学生
 
 # 用户登录
 user.login.account_type_label: 邮箱/手机/用户名
@@ -3401,7 +3401,7 @@ user.homepage.following_fan.fan_empty: 无粉丝
 
 # 主页模块-头部
 homepage: 首页
-homepage.student_evaluate: 学员评价
+homepage.student_evaluate: 学生评价
 homepage.reviewer_comment_course: 说：
 homepage.switch_language.chinese: 中文
 homepage.switch_language.english: English
@@ -3446,11 +3446,11 @@ homepage.recommend_classroom.content_title: 推荐班级
 homepage.recommend_classroom.more: >
   更多%moreClassrooms%
 homepage.article.content_title: 最新%article_name%
-homepage.student_comment.content_title: 学员评价
+homepage.student_comment.content_title: 学生评价
 homepage.student_comment.from: >
   发布于 <a class="link-dark" href="%courseUrl%">《%courseTitle%》</a>
 homepage.student_comment.empty: 还没有评价
-homepage.student_dynamic.content_title: 学员动态
+homepage.student_dynamic.content_title: 学生动态
 homepage.recommend_teacher.more: 更多教师
 homepage.footer.archive: 课程存档
 homepage.footer.learning: 学习
@@ -3815,7 +3815,7 @@ thread.writer_other_thread: 作者其他话题
 thread.stick: 置顶帖
 thread.essence: 精华帖
 thread.reply: 回复
-thread.reply.student_allowed_tips: 只有学员才能回复！
+thread.reply.student_allowed_tips: 只有学生才能回复！
 thread.replying: 正在回复
 thread.reply.content: 回复内容
 thread.reply.all_reply: 所有回复
@@ -4001,8 +4001,8 @@ my.teaching.hints_block: (当前仅展示直播课程)
 my.teaching.today_courses: 今日课程数
 my.teaching.classroom_menu: 在教%classroom%
 my.teaching.open_course_menu: 公开课
-my.teaching.question_menu: 学员问答
-my.teaching.discussion_menu: 学员话题
+my.teaching.question_menu: 学生问答
+my.teaching.discussion_menu: 学生话题
 my.teaching.online_review_menu: 在线批阅
 my.teaching.question_bank_menu: 题库
 my.teaching.question_bank_title: 题库
@@ -4016,21 +4016,21 @@ my.teaching.course_set.reservation: 预约课程
 my.teaching.open_course.normal: 录播公开课
 my.teaching.open_course.live: 直播公开课
 my.teaching.open_course.live_remind: 直播提醒
-my.teaching.threads_discussion: 课程学员话题
-my.teaching.threads_question: 课程学员问答
-my.teaching.classroom.threads_discussion: %classroom%学员话题
+my.teaching.threads_discussion: 课程学生话题
+my.teaching.threads_question: 课程学生问答
+my.teaching.classroom.threads_discussion: %classroom%学生话题
 my.teaching.classroom.threads_discussion.nickname: 话题作者
 my.teaching.classroom.threads_event.nickname: 活动发起人
-my.teaching.classroom.threads_question: %classroom%学员问答
+my.teaching.classroom.threads_question: %classroom%学生问答
 my.teaching.classroom.threads_question.nickname: 话题作者
 my.teaching.classroom: 在教%classroom%
 my.teaching.classroom.preview: 预览班级
-my.teaching.classroom.studen_count: 班级学员
+my.teaching.classroom.studen_count: 班级学生
 my.teaching.classroom.course_count: 班级课程
 my.teaching.classroom.manage_btn: 管理%classroom%
 my.teaching.classroom.today_data_title: 今日新增
 my.teaching.course_set.title: 名称
-my.teaching.course_set.student_count: 学员数
+my.teaching.course_set.student_count: 学生数
 my.teaching.course_set.price: 价格(元)
 my.teaching.course_set.status: 状态
 my.teaching.course_set.actions: 操作
@@ -4042,9 +4042,9 @@ my.teaching.course_set.more_btn: 更多
 my.teaching.course_set.question: 问答
 my.teaching.course_set.threasd: 话题
 my.teaching.course_set.question_empty: >
-  您的课程中还没有学员提问过...
+  您的课程中还没有学生提问过...
 my.teaching.course_set.thread_empty: >
-  您的课程中还没有学员发表话题...
+  您的课程中还没有学生发表话题...
 
 my.teaching.testpaper.course_task: 计划
 my.teaching.testpaper.start_test_time: 开始考试时间
@@ -4088,7 +4088,7 @@ my.teaching.open_course.manage_btn: 管理
 my.teaching.open_course.view_btn: 查看
 my.teaching.open_course.lesson_manage_btn: 课时管理
 my.teaching.open_course.file_manage_btn: 文件管理
-my.teaching.open_course.student_manage_btn: 学员管理
+my.teaching.open_course.student_manage_btn: 学生管理
 my.teaching.open_course.empty_hint: 你还没有在教的公开课哦, 赶快去创建吧!
 my.teaching.page_title: 在教课程
 my.teaching.course_set.create: 创建课程
@@ -4263,8 +4263,8 @@ my.teaching.open_course.teachers_setting.allow_add_ADMIN_TEACHER: 只能添加�
 my.teaching.open_course.student_setting.manage_btn: 管理
 my.teaching.open_course.student_setting.login: 已登录
 my.teaching.open_course.student_setting.unLogin: 未登录
-my.teaching.open_course.student_setting.all_student: 全部学员
-my.teaching.open_course.student_setting.setting_remind_student: 设置提醒的学员
+my.teaching.open_course.student_setting.all_student: 全部学生
+my.teaching.open_course.student_setting.setting_remind_student: 设置提醒的学生
 my.teaching.open_course.student_setting.recent_login: 最近进入
 my.teaching.open_course.student_setting.phone_number: 手机号
 my.teaching.open_course.student_setting.whether_remind: 是否提醒
@@ -4771,7 +4771,7 @@ course.member.course.allow_buy.tips: 您购买的课程已到期，无法学习%
 item_bank_exercise.member.allow_buy.tips: 您购买的题库练习已到期，无法进行章节、试卷等练习。如有疑问请联系老师。
 course.member.course.join_btn: 退出并重新加入
 course.member.operation.quit_deadline_reach: 达到有效期，退出课程
-course.member.operation.admin_remove_course_student: 老师手动移除学员
+course.member.operation.admin_remove_course_student: 老师手动移除学生
 course.member.operation.reason.join_classroom: 用户加入班级，自动加入班级课程
 course.member.course.expiry_start_date_tips: 学习时间未到，无法学习%taskName%，请在学习有效期内进行学习~
 
@@ -4930,8 +4930,8 @@ courseset_manage.cover_img.again_select_picture_btn: 重新选择图片
 courseset_manage.unlock_confrim: 解除确认
 courseset_manage.unlock_confrim.tips: 解除后本课程将停止同步更新,本操作不可逆！
 
-# 学员
-role.student: 学员
+# 学生
+role.student: 学生
 # 教师
 role.teacher: 教师
 
@@ -4951,7 +4951,7 @@ admin.course_manage.operater: 操作
 ## 课程管理
 ## 普通课程
 admin.course_manage.manage.normal_course: 普通课程
-admin.course_manage.manage.student_number: 学员数
+admin.course_manage.manage.student_number: 学生数
 admin.course_manage.manage.income_RMB: 收入(元)
 
 ## 班级课程
@@ -5051,7 +5051,7 @@ admin.course_manage.chooser.course_status: 课程状态
 admin.course_manage.chooser.num: 编号
 admin.course_manage.chooser.name: 名称
 admin.course_manage.chooser.plan_name: 教学计划名称
-admin.course_manage.chooser.student_num: 学员数
+admin.course_manage.chooser.student_num: 学生数
 admin.course_manage.chooser.status: 状态
 admin.course_manage.chooser.creator: 创建者
 admin.course_manage.chooser.operation: 操作
@@ -5092,8 +5092,8 @@ admin.course_manage.statistics.name: 课程名
 admin.course_manage.statistics.classroom: 所在%classroom%
 admin.course_manage.statistics.teach_plan_count: 教学计划数量
 admin.course_manage.statistics.task_count: %taskName%数量
-admin.course_manage.statistics.student: 学员
-admin.course_manage.statistics.student_number: 学员总数
+admin.course_manage.statistics.student: 学生
+admin.course_manage.statistics.student_number: 学生总数
 admin.course_manage.statistics.finished_number: 完成人数
 admin.course_manage.statistics.study_time_minute: 课程学习时长(分)
 admin.course_manage.statistics.income_RMB: 收入(元)
@@ -5200,7 +5200,7 @@ admin.open_manage.empty: 暂无课程记录
 admin.open_manage.category: >
   分类：%categoryName%
 admin.open_manage.cancel_recommend_btn: 取消推荐
-admin.open_manage.student: 学员
+admin.open_manage.student: 学生
 admin.open_manage.chapter: 章
 admin.open_manage.section: 节
 admin.open_manage.delete.check_password: 核实用户密码
@@ -5366,7 +5366,7 @@ admin.classroom_manage.manage.unpublish_count: >
 admin.classroom_manage.manage.number_th: %title%编号
 admin.classroom_manage.manage.name_th: %name%名称
 admin.classroom_manage.manage.course_number_th: 课程数
-admin.classroom_manage.manage.student_number_th: 学员数
+admin.classroom_manage.manage.student_number_th: 学生数
 admin.classroom_manage.manage.price_th: 价格
 admin.classroom_manage.manage.status_th: 状态
 admin.classroom_manage.manage.operate_th: 操作
@@ -5416,7 +5416,7 @@ admin.classroom_manage.chooser.status: 班级状态
 admin.classroom_manage.chooser.title_placeholder: 标题
 admin.classroom_manage.chooser.num: 编号
 admin.classroom_manage.chooser.name: 名称
-admin.classroom_manage.chooser.student_num: 学员数
+admin.classroom_manage.chooser.student_num: 学生数
 admin.classroom_manage.chooser.price: 价格
 admin.classroom_manage.chooser.operation: 操作
 admin.classroom_manage.chooser.recommend: 荐
@@ -5577,12 +5577,12 @@ admin.homepage.todays_data.tooltips: >
       <div class="content">平台新增用户数，包括自主注册、第三方注册及导入</div>
     </div>
     <div class="popover-item">
-      <div class="title">课程新增学员人次</div>
-      <div class="content">今日加入课程和班级课程的总人次，一个学员加入2个课程，算2人次；一个学员加入一个班级，班级中有2个课程，算2人次</div>
+      <div class="title">课程新增学生人次</div>
+      <div class="content">今日加入课程和班级课程的总人次，一个学生加入2个课程，算2人次；一个学生加入一个班级，班级中有2个课程，算2人次</div>
     </div>
     <div class="popover-item">
-      <div class="title">班级新增学员人次</div>
-      <div class="content">今日加入班级的总人次，1个学员加入2个班级，算2人次</div>
+      <div class="title">班级新增学生人次</div>
+      <div class="content">今日加入班级的总人次，1个学生加入2个班级，算2人次</div>
     </div>
     <div class="popover-item">
       <div class="title">新增会员</div>
@@ -5601,9 +5601,9 @@ admin.homepage.todays_data.login_users: 登录用户
 admin.homepage.todays_data.login_users.online_total: 在线总数
 admin.homepage.todays_data.new_registration: 新增注册
 admin.homepage.todays_data.total: 总数
-admin.homepage.todays_data.new_students: 新增学员
-admin.homepage.todays_data.new_course_members: 课程新增学员
-admin.homepage.todays_data.new_classroom_members: 班级新增学员
+admin.homepage.todays_data.new_students: 新增学生
+admin.homepage.todays_data.new_course_members: 课程新增学生
+admin.homepage.todays_data.new_classroom_members: 班级新增学生
 admin.homepage.todays_data.total_number: 总人次
 admin.homepage.todays_data.new_vip_members: 新增会员
 admin.homepage.todays_data.thread_un_answer: 未回复回答
@@ -5647,7 +5647,7 @@ admin.homepage.contact.tips: >
   如需购买授权版，请联系销售人员。电话：4008041114 或
 admin.homepage.course_explore.empty_tips: 暂无课程
 admin.homepage.course_explore.course_name: 课程名
-admin.homepage.course_explore.add_student_num: 新增学员
+admin.homepage.course_explore.add_student_num: 新增学生
 
 # 站点设置
 admin.setting.site.name: 网站名称
@@ -5719,8 +5719,8 @@ admin.setting.theme.manage.modal.color_default: 默认
 admin.setting.theme.manage.modal.hot_group: 热门小组
 admin.setting.theme.manage.modal.latest_article: 最新%article_name%
 admin.setting.theme.manage.modal.default_article: 资讯
-admin.setting.theme.manage.modal.student_comment: 学员评价
-admin.setting.theme.manage.modal.student_dynamic: 学员动态
+admin.setting.theme.manage.modal.student_comment: 学生评价
+admin.setting.theme.manage.modal.student_dynamic: 学生动态
 admin.setting.theme.manage.modal.setting_custom_classroom_count: 班级数量设置
 admin.setting.theme.manage.modal.setting_custom_teacher_count: 教师数量设置
 
@@ -5759,7 +5759,7 @@ admin.setting.mailer.cloud_email_crm.help_block: >
     不限制每日邮件发送量，想发多少发多少。
   </p>
   <p class="help-block">
-    99%到达率，毫秒级响应，让你快速安全的与学员保持沟通。
+    99%到达率，毫秒级响应，让你快速安全的与学生保持沟通。
   </p>
   <p class="help-block">
     完善的数据分析能力，让您更从容地管理邮件。
@@ -6041,7 +6041,7 @@ admin.mobile_manage.discovery_column.empty: 暂无分类记录
 admin.mobile_manage.discovery_upgrade_madal.stup1_title: '移动端内容管理可升级'
 admin.mobile_manage.discovery_upgrade_madal.stup1_content: '移动端内容管理可升级至发现页自由配置功能，升级后可在 移动端-App设置-发现页配置功能 设置App首页内容。'
 admin.mobile_manage.discovery_upgrade_madal.stup2_title: '提示'
-admin.mobile_manage.discovery_upgrade_madal.stup2_content: '升级后，原有内容管理将迁移至 移动端-App设置-发现页配置功能，原有移动端内容管理功能将不再可用，升级后，学员App端将提示升级App才能继续使用是否继续？'
+admin.mobile_manage.discovery_upgrade_madal.stup2_content: '升级后，原有内容管理将迁移至 移动端-App设置-发现页配置功能，原有移动端内容管理功能将不再可用，升级后，学生App端将提示升级App才能继续使用是否继续？'
 admin.mobile_manage.discovery_upgrade_madal.btn_not_upgrade: '暂不升级'
 admin.mobile_manage.discovery_upgrade_madal.btn_next: '继续'
 admin.mobile_manage.discovery_upgrade_madal.btn_confirm: '升级'
@@ -6071,7 +6071,7 @@ admin.wechat_notification.template_show: 查看
 admin.wechat_notification.failure_reason: 失败原因
 admin.wechat_notification.failure_number: 失败人数
 admin.wechat_notification.failure_reason.empty: 暂无失败原因
-admin.wechat.notification.open_wechat_notify_tip: 微信通知，指的是通过微信服务号向学员发送消息，学员绑定微信并关注服务号即可收取微信通知，微信通知具有两大优势
+admin.wechat.notification.open_wechat_notify_tip: 微信通知，指的是通过微信服务号向学生发送消息，学生绑定微信并关注服务号即可收取微信通知，微信通知具有两大优势
 admin.wechat.notification.go_to_open: 前往开启
 admin.wechat.notification.un_authorized_before_open_tip: 开启微信通知前，请先进行扫码授权。
 admin.wechat.notification.un_authorized_after_open_tip: 为防止网校服务器IP或消息服务器IP变更造成的通知功能异常，建议您进行扫码授权。
@@ -6376,7 +6376,7 @@ admin.operation_certificate.template.certificate.title.default: 课程认证证�
 admin.operation_certificate.template.certificate.recipient: 被授予人信息
 admin.operation_certificate.template.certificate.recipient.default: $name$（$username$）同学：
 admin.operation_certificate.template.certificate.recipient_hint: 可选填，支持添加 姓名：$name$  用户名：$username$
-admin.operation_certificate.template.certificate.empty_recipient_hint: 注：如网校未将 [姓名] 设置为必填项，则学员未填写姓名时，被授予人信息为空
+admin.operation_certificate.template.certificate.empty_recipient_hint: 注：如网校未将 [姓名] 设置为必填项，则学生未填写姓名时，被授予人信息为空
 admin.operation_certificate.template.certificate.content: 证书正文
 admin.operation_certificate.template.certificate.content.default.course: 由于你【$courseName$】课程中表现优秀，最终完成课程并通过考核，特颁发此证书！
 admin.operation_certificate.template.certificate.content.default.classroom: 由于你在【$classroomName$】班级中表现优秀，最终完成课程并通过考核，特颁发此证书！
@@ -6825,7 +6825,7 @@ admin.edu_cloud.edu_video.play_embed_watermark: 视频内嵌水印图片
 admin.edu_cloud.edu_video.play_embed_watermark_picture_tips: 支持jpg、gif、png格式图片，建议使用透明背景的png图片，推荐尺寸为 270×90px。<br>建议图片大小不超过2MB。<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.edu_cloud.edu_video.finger_print_embed: 云视频指纹
 admin.edu_cloud.edu_video.finger_print_embed_tips: >
-  开启后，将在视频播放中随机时间、随机位置显示当前网站域名及学员的用户名．
+  开启后，将在视频播放中随机时间、随机位置显示当前网站域名及学生的用户名．
 admin.edu_cloud.edu_video.finger_print_time_label: 云视频指纹显示时长：
 admin.edu_cloud.edu_video.finger_print_time_tips: 建议时长在0.5 - 1.5秒之间
 admin.edu_cloud.edu_video.finger_print_time: 秒
@@ -7032,7 +7032,7 @@ admin.edu_cloud.edu_sms.manual_send: 手动群发
 admin.edu_cloud.edu_sms.auto_mass_send: 自动群发
 admin.edu_cloud.edu_sms.all_user: 所有用户
 admin.edu_cloud.edu_sms.course_user: 课程用户
-admin.edu_cloud.edu_sms.course_classroom_student: 课程及班级学员
+admin.edu_cloud.edu_sms.course_classroom_student: 课程及班级学生
 admin.edu_cloud.edu_sms.study_task_tips: 您的课程：《课程名称》－学习任务：《学习任务名称》已发布！链接地址
 admin.edu_cloud.edu_sms.study_task_notify_live: 学习任务发布通知（直播）
 admin.edu_cloud.edu_sms.study_task_notify_normal_course: 学习任务发布通知（普通课程）
@@ -7163,7 +7163,7 @@ admin.edu_cloud.edu_search.clause_content: >
     <p>（三）老师相关信息；</p>
     <p>（四）小组话题和班级话题相关信息；</p>
     <p>（五）网校资讯相关信息。</p>
-    <p>您的学员可以通过本服务在您的EduSoho网校内搜索上述四类信息。</p>
+    <p>您的学生可以通过本服务在您的EduSoho网校内搜索上述四类信息。</p>
     <h5>3.您的权利和义务</h5>
     <p>3.1您理解并同意，EduSoho开放云收集您网校内以下信息：</p>
     <p>（一）课程相关信息（包括：课程标题、课程副标题、课程简介、适合人群、课程目标、课时标题、课时摘要等信息）；</p>
@@ -7240,7 +7240,7 @@ admin.edu_cloud.edu_search.rebuild_index_tips: >
   <li>3.请勿频繁使用重建索引功能</li>
 admin.edu_cloud.edu_search.rebuild_search_data: 用于重新构建云搜索的索引数据。
 admin.edu_cloud.edu_search.search_type: 所需类型
-admin.edu_cloud.edu_search.search_type_tips: 勾选所需类型后，学员搜索时可以查看对应类型搜索结果，可以根据网校实际业务情况进行配置。
+admin.edu_cloud.edu_search.search_type_tips: 勾选所需类型后，学生搜索时可以查看对应类型搜索结果，可以根据网校实际业务情况进行配置。
 admin.edu_cloud.edu_search.basic_info: 基本信息
 admin.edu_cloud.edu_search.total_count: 累计搜索次数
 admin.edu_cloud.edu_search.today_count: 今日搜索次数
@@ -7490,13 +7490,13 @@ admin.user_fields.Personal_info_configiration: 个人资料设置
 admin.user_fields.Require_personal: 购买课程或班级时填写个人资料
 admin.user_fields.Personal_info_configiration.open: 开启
 admin.user_fields.Personal_info_configiration.closed: 关闭
-admin.user_fields.Personal_info_configiration.help_block: 开启后，学员购买课程时，需填写个人资料
+admin.user_fields.Personal_info_configiration.help_block: 开启后，学生购买课程时，需填写个人资料
 admin.user_fields.Formart_verifcation: 带格式校检
 admin.user_fields.Formart_mobile_verifcation: 带格式和短信校检，需要开启云短信
 admin.user_fields.Formart_verifcation.help_block: 可拖动调整次序。酌情勾选需要收集的字段，若需要新的字段，请在［自定义字段设置］中添加。
 admin.user_fields.Formart_verifcation.hide: 收起
 admin.user_fields.Require_personal_information: 登录后填写个人资料
-admin.user_fields.Require_personal_information.help_block: 开启后，学员登录后需填写个人资料
+admin.user_fields.Require_personal_information.help_block: 开启后，学生登录后需填写个人资料
 admin.user_fields.other_setting: 其它设置
 admin.user_fields.other_setting.avatar: 加入计划或班级要求设置头像
 admin.user_fields.other_setting.edit_user_name: 用户修改用户名
@@ -7532,9 +7532,9 @@ admin.user_avatar.customer_default_avatar.help_block: 请上传jpg, gif, png格�
 admin.user_avatar.system_default_avatar: 系统默认头像
 admin.user_avatar.avatar.tips: 网校内未上传头像的用户，都会显示该默认头像。建议图片尺寸为 270×270px。<br>建议图片大小不超过2MB。<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
 admin.user_center.message_title_name: 私信发送设置
-admin.user_center.message_student_to_student: 允许学员给学员发送私信
-admin.user_center.message_student_to_teacher: 允许学员给教师发送私信
-admin.user_center.message_teacher_to_student: 允许教师给学员发送私信
+admin.user_center.message_student_to_student: 允许学生给学生发送私信
+admin.user_center.message_student_to_teacher: 允许学生给教师发送私信
+admin.user_center.message_teacher_to_student: 允许教师给学生发送私信
 admin.user_center.message.setting_tip: 提示：支持取消上述角色间互发私信功能，其余角色不影响。设置后仅APP端不生效。
 
 
@@ -7561,14 +7561,14 @@ admin.role_manage.modal.add_btn: 添加
 
 # 课程设置
 admin.setting_course.course_rule: 课程规则
-admin.setting_course.send_welcome_messages: 给新学员发送欢迎私信
+admin.setting_course.send_welcome_messages: 给新学生发送欢迎私信
 admin.setting_course.open: 开启
 admin.setting_course.closed: 关闭
 admin.setting_course.yes: 是
 admin.setting_course.no: 否
 admin.setting_course.allow: 允许
 admin.setting_course.not_allow: 不允许
-admin.setting_course.course_rule.help_block: 开启后，新学员加入课程后，会收到教师的欢迎私信
+admin.setting_course.course_rule.help_block: 开启后，新学生加入课程后，会收到教师的欢迎私信
 admin.setting_course.welcome_messages_content: 欢迎私信内容
 admin.setting_course.welcome_messages_content.Variables: 变量说明：
 admin.setting_course.welcome_messages_content.as_recipient_user_name: 为接收方用户用户名
@@ -7579,9 +7579,9 @@ admin.setting_course.authority_and_copyright: 权限与版权
 admin.setting_course.allow_teacher_manage_course_marketing: 允许教师管理基础设置
 admin.setting_course.allow_teacher_search_course_order: 允许教师查询课程订单
 admin.setting_course.allow_teacher_add_or_remove: 允许教师添加/移除
-admin.setting_course.allow_teacher_export_material: 允许教师导出学员资料
-admin.setting_course.allow_user_download_audio: 允许学员下载任务的音视频
-admin.setting_course.allow_user_download_audio.help_block: 开启此项设置后，学员可在任务学习界面侧栏的"资料"面板中下载。
+admin.setting_course.allow_teacher_export_material: 允许教师导出学生资料
+admin.setting_course.allow_user_download_audio: 允许学生下载任务的音视频
+admin.setting_course.allow_user_download_audio.help_block: 开启此项设置后，学生可在任务学习界面侧栏的"资料"面板中下载。
 admin.setting_course.course_list_page_seq: 课程列表页默认排序
 admin.setting_course.course_list_page.help_block: 课程列表页
 admin.setting_course.course_list_page_seq.help_block: 地址：域名/course/explore,任何人都可在此页面查看网站所有已发布课程,如需设置网站首页课程排序，请到【站点设置】-【主题】-【管理】中设置，目前仅简墨和雅致简洁主题支持。
@@ -7816,7 +7816,7 @@ admin.file_manage.file: 文件
 admin.file_manage.search_btn: 检索
 admin.file_manage.delete_btn: 删除
 admin.file_manage.file_group_empty_tips: 文件组不存在
-admin.file_manage.student_empty_tips: 学员不存在
+admin.file_manage.student_empty_tips: 学生不存在
 
 # 系统
 # 系统优化
@@ -8059,7 +8059,7 @@ admin.coin_setting.description_hint: 虚拟币是可以在网校内进行支付�
 admin.coin_setting.promotion_proposal: 推广建议
 admin.coin_setting.promotion_proposal_hint: >
   1、 建议网校使用虚拟币对网校内课程进行标价；<br>
-  2、 网校可鼓励学员充值，可提升用户忠诚度；<br>
+  2、 网校可鼓励学生充值，可提升用户忠诚度；<br>
   3、 建议配合使用学习卡（商业应用），给予一定优惠；<br>
 admin.coin_setting.upload_hint: >
   请上传jpg, gif, png格式，尺寸大于等于 50×50px 的<span class="text-danger">正方形</span>图片。<br>图片大小建议不超过2MB。<a href="http://www.qiqiuyu.com/faq/539/detail" target=_blank>如何制作合适的图片？</a>
@@ -8176,7 +8176,7 @@ admin.wap_setting.version_select: 版本选择
 admin.wap_setting.new: 新版微网校
 admin.wap_setting.old: 旧版微网校
 admin.wap_setting.off: 关闭
-admin.wap_setting.tip: 微网校是通过浏览器打开应用，无需下载。网校可以链接发给学员，或在推送的短信中加入链接，学员点击链接后，即可立即进入微网校内进行学习、购买课程、课程分享等。微网校比较适用于通过营销活动促进学员分享、拉新、促活等目的。
+admin.wap_setting.tip: 微网校是通过浏览器打开应用，无需下载。网校可以链接发给学生，或在推送的短信中加入链接，学生点击链接后，即可立即进入微网校内进行学习、购买课程、课程分享等。微网校比较适用于通过营销活动促进学生分享、拉新、促活等目的。
 admin.wap_setting.edit.tip: 左侧为您的微网校首页预览效果，可点击【编辑微网校】进入编辑页面。您也可通过【主题模板】中，选择适合的主题应用。通过对组件的自由组合，搭建个性化微网校首页。
 admin.wap_setting.edit: 编辑微网校
 admin.wap_setting.open.tip: >
@@ -8279,7 +8279,7 @@ admin.payment_setting.submit_error.tips: 请按需开启网校的支付方式
 
 admin.finance_refund.max_refund_days: 退款期限
 admin.finance_refund.max_refund_days_hint: >
-  用户在退款期限的天数内，可以申请退款。退款期限为０，则不能申请退款。<br/><span style="color:red">系统不支持自动退款，请联系学员获得相关账户，手动处理退款相关事宜。
+  用户在退款期限的天数内，可以申请退款。退款期限为０，则不能申请退款。<br/><span style="color:red">系统不支持自动退款，请联系学生获得相关账户，手动处理退款相关事宜。
 admin.finance_refund.apply_notification: 退款申请通知
 admin.finance_refund.apply_notification_hint: 退款申请提交时，发送给用户的站内通知。
 admin.finance_refund.success_notification: 退款审核通过通知
@@ -8315,7 +8315,7 @@ admin.mobile_setting.splash: 启动图%splashNum%
 admin.mobile_setting.study_center_entrance: 学习中心入口控制
 admin.mobile_setting.study_center_entrance.has_live: 含直播课表入口
 admin.mobile_setting.study_center_entrance.has_no_live: 不含直播课表入口
-admin.mobile_setting.study_center_entrance.has_live.notice: 含直播课表入口，进入页面后展示以月为维度的课表，方便学员查看直播安排
+admin.mobile_setting.study_center_entrance.has_live.notice: 含直播课表入口，进入页面后展示以月为维度的课表，方便学生查看直播安排
 admin.mobile_setting.study_center_entrance.has_no_live.notice: 不含直播课表，当机构不以直播为教学手段，建议可以不用展示入口
 admin.coin_model.currency_tips: >
   1、暂无手动修改用户虚拟币余额的功能
@@ -8426,7 +8426,7 @@ admin.cloud_consult.open: 启用云问答
 admin.cloud_consult.login_url_btn: 管理问答库
 admin.cloud_consult.tips: >
   <br>
-  智能在线咨询服务，可以自动回答学员的常见问题
+  智能在线咨询服务，可以自动回答学生的常见问题
   <br>
   即问即答，无需等待
   <br>
@@ -8481,7 +8481,7 @@ admin.app_logs.need_roll_back_tips: 需要回滚
 admin.app_logs.update_failed_tips: 更新失败
 admin.app_logs.update_successed_tips: 更新成功
 admin.app_logs.recovered_tips: 已恢复
-admin.app_upgrades.tips: 您好，为了保证网站升级顺利进行，升级过程中会出现短暂（2分钟内）网站无法访问的情况，请在学员访问少的时候进行系统升级，给您带来了不便，还望理解
+admin.app_upgrades.tips: 您好，为了保证网站升级顺利进行，升级过程中会出现短暂（2分钟内）网站无法访问的情况，请在学生访问少的时候进行系统升级，给您带来了不便，还望理解
 admin.app_upgrades.count_tips: %appUpgradesCount%个可用更新
 admin.app_upgrades.accessKey_or_secretKey_error_tips: >
   AccessKey或者SecretKey设置不正确，会影响到系统正常的运行，<a href="%settingCloudUrl%">请修改设置。</a>
@@ -8550,7 +8550,7 @@ admin.account_center.dashboard.this_week_vip_income: 本周会员收入
 admin.cloud.app.upgrades.upgrade: 升级
 admin.cloud.app.upgrades.install: 安装
 admin.cloud.app.upgrades.app: 应用
-admin.cloud.app.upgrades.tips: 您好，为了保证网站升级顺利进行，升级过程中会出现短暂（2分钟内）网站无法访问的情况，请在学员访问少的时候进行系统升级，给您带来了不便，还望理解
+admin.cloud.app.upgrades.tips: 您好，为了保证网站升级顺利进行，升级过程中会出现短暂（2分钟内）网站无法访问的情况，请在学生访问少的时候进行系统升级，给您带来了不便，还望理解
 admin.cloud.app.upgrades_danger.tips: 警告，您当前正在使用测试通道升级此应用，强烈建议您放弃升当前操作，否则一旦出现站点崩溃等无法意料的后果，您需要自己承担后果。
 admin.cloud.app.upgrades.app_name: 应用名称
 admin.cloud.app.upgrades.app_version: 应用名称
@@ -8800,7 +8800,7 @@ message_response.illegal_params.message: 参数非法！
 message_response.live_class_not_exist.message: 直播教室不存在！
 message_response.live_not_start.message: 直播还没开始!
 message_response.live_over.message: 直播已结束!
-message_response.not_student_cannot_join_live.message: 您不是课程学员，不能参加直播！
+message_response.not_student_cannot_join_live.message: 您不是课程学生，不能参加直播！
 message_response.mass_title_and_text_cannot_empty: 群发标题或内容不能为空
 message_response.only_admin_can_create_class.message: 只允许管理员创建班级!
 message_response.upload_pic_format_error.message: 上传图片格式错误，请上传jpg, gif, png格式的文件。
@@ -8997,7 +8997,7 @@ task.learn_data_detail.stay_de_weight_time: 页面去重时长（分）
 task.learn_data_detail.video_total_time: 播放累加时长（分）
 task.learn_data_detail.video_de_weight_time: 播放去重时长（分）
 task.learn_data_detail.video_and_audio_learnTime: 音视频学习时长（分）
-task.learn_data_detail.popover: 累加时长：任务下A学员产生的所有学习时长总和；<br/>去重时长：任务下A学员产生的学习时长在自然时间内去重后合并；<br/>如学员同时开启2个页面各学习该任务5分钟，则累加时长为10分钟，去重时长为5分钟。累加数据为实时数据。
+task.learn_data_detail.popover: 累加时长：任务下A学生产生的所有学习时长总和；<br/>去重时长：任务下A学生产生的学习时长在自然时间内去重后合并；<br/>如学生同时开启2个页面各学习该任务5分钟，则累加时长为10分钟，去重时长为5分钟。累加数据为实时数据。
 task.learn_data_detail.finished_rate: 完成率
 task.learn_data_detail.contact_information: 联系方式
 task.learn_data_detail.task_title: 任务名称
@@ -9062,8 +9062,8 @@ log.action.course.create_lesson: 创建课时
 log.action.course.delete_lesson: 删除课时
 log.action.course.lesson_set_optional: 课时设置选修
 log.action.course.lesson_unset_optional: 课时设置必修
-log.action.course.add_student: 添加课程学员
-log.action.course.remove_student: 移除课程学员
+log.action.course.add_student: 添加课程学生
+log.action.course.remove_student: 移除课程学生
 log.action.course.update_teacher: 更新课程教师
 log.action.course.cancel_teachers_all: 取消用户的教师身份
 log.action.course.delete_taskLearn: 删除任务学习记录
@@ -9183,11 +9183,11 @@ log.action.classroom.create: 新增班级
 log.action.classroom.update: 修改班级
 log.action.classroom.delete: 删除班级
 log.action.classroom.add_course: 添加课程
-log.action.classroom.add_student: 添加学员
+log.action.classroom.add_student: 添加学生
 log.action.classroom.delete_course: 移除课程
 log.action.classroom.delete_review: 删除评价
 log.action.classroom.update_picture: 更新图片
-log.action.classroom.remove_student: 移除学员
+log.action.classroom.remove_student: 移除学生
 log.action.classroom.recommend: 推荐班级
 log.action.classroom.cancel_recommend: 取消推荐
 log.action.classroom.publish: 发布班级
@@ -9280,7 +9280,7 @@ log.action.open_course.update_picture: 更新公开课图片
 log.action.open_course.add_lesson: 添加公开课课时
 log.action.open_course.update_lesson: 更新公开课课时
 log.action.open_course.delete_lesson: 删除课时
-log.action.open_course.delete_member: 删除学员
+log.action.open_course.delete_member: 删除学生
 log.action.open_course.add_material: 新增资料
 log.action.open_course.delete_material: 移除资料
 log.action.open_course.update_teacher: 更新公开课教师
@@ -9304,8 +9304,8 @@ log.action.question_bank.update_category: 更新题库分类
 log.action.destroy_account_record.create: 申请注销帐号
 log.action.destroy_account_record.pass: 通过注销帐号申请
 log.action.destroy_account_record.reject: 拒绝注销帐号申请
-log.action.item_bank_exercise.add_student: 添加学员
-log.action.item_bank_exercise.remove_student: 移除学员
+log.action.item_bank_exercise.add_student: 添加学生
+log.action.item_bank_exercise.remove_student: 移除学生
 log.action.item_bank_exercise.delete_exercise: 删除题库练习
 log.action.item_bank_exercise.recommend_exercise: 推荐题库练习
 log.action.item_bank_exercise.cancel_recommend_exercise: 取消推荐题库练习
@@ -9321,8 +9321,8 @@ log.action.template.course.update_picture: 修改了<strong class="color-success
 log.action.template.course.publish: 发布了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.close: 关闭了<strong class="color-success">课程</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.delete: 删除了<strong class="color-success">课程</strong>《%title%》
-log.action.template.course.add_student: 在教学计划《<a href="%url%" target="_blank">%title%</a>》添加了<strong class="color-success">学员</strong>%nickname% 备注:%remark%
-log.action.template.course.remove_student: 在教学计划《<a href="%url%" target="_blank">%title%</a>》移除了<strong class="color-success">学员</strong>%nickname%
+log.action.template.course.add_student: 在教学计划《<a href="%url%" target="_blank">%title%</a>》添加了<strong class="color-success">学生</strong>%nickname% 备注:%remark%
+log.action.template.course.remove_student: 在教学计划《<a href="%url%" target="_blank">%title%</a>》移除了<strong class="color-success">学生</strong>%nickname%
 log.action.template.course.update_teacher: 更新了教学计划《<a href="%url%" target="_blank">%title%</a>》的教师信息
 log.action.template.course.create_thread: 新建了话题《%title%》
 log.action.template.course.update_thread: 更新了话题《%title%》
@@ -9363,8 +9363,8 @@ log.action.template.classroom.recommend: 推荐了<strong class="color-success">
 log.action.template.classroom.cancel_recommend: 取消推荐了<strong class="color-success">班级</strong> 《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.update_picture: 修改了<strong class="color-success">班级</strong> 《<a href="%url%" target="_blank">%title%</a>》的封面
 log.action.template.classroom.update_head_teacher: 修改了<strong class="color-success">班级</strong> 《<a href="%url%" target="_blank">%title%</a>》的班主任
-log.action.template.classroom.add_student: 在<strong class="color-success">班级</strong>《<a href="%url%" target="_blank">%title%</a>》添加了<strong class="color-success">学员</strong>%nickname% 备注:%remark%
-log.action.template.classroom.remove_student: 在<strong class="color-success">班级</strong>《<a href="%url%" target="_blank">%title%</a>》移除了<strong class="color-success">学员</strong>%nickname%
+log.action.template.classroom.add_student: 在<strong class="color-success">班级</strong>《<a href="%url%" target="_blank">%title%</a>》添加了<strong class="color-success">学生</strong>%nickname% 备注:%remark%
+log.action.template.classroom.remove_student: 在<strong class="color-success">班级</strong>《<a href="%url%" target="_blank">%title%</a>》移除了<strong class="color-success">学生</strong>%nickname%
 log.action.template.classroom.delete_course: 在<strong class="color-success">班级</strong>《<a href="%url%" target="_blank">%title%</a>》移除了<strong class="color-success">课程</strong>%courseSetTitle%
 log.action.template.classroom.add_course: 在<strong class="color-success">班级</strong>《<a href="%url%" target="_blank">%title%</a>》添加了<strong class="color-success">课程</strong>%courseSetTitle%
 log.action.template.classroom.join_classroom: 加入班级《<a href="%url%" target="_blank">%title%</a>》
@@ -9691,18 +9691,18 @@ log.attr.system.update_settings.course.buy_fill_userinfo: 购买课程或班级�
 log.attr.system.update_settings.course.buy_fill_userinfo.1: 开启
 log.attr.system.update_settings.course.buy_fill_userinfo.0: 关闭
 log.attr.system.update_settings.course.userinfoFields: 购买课程或班级时要填写的个人资料字段
-log.attr.system.update_settings.message.studentToStudent: 是否允许学员给学员发送私信
+log.attr.system.update_settings.message.studentToStudent: 是否允许学生给学生发送私信
 log.attr.system.update_settings.message.studentToStudent.1: 是
 log.attr.system.update_settings.message.studentToStudent.0: 否
-log.attr.system.update_settings.message.studentToTeacher: 是否允许学员给教师发送私信
+log.attr.system.update_settings.message.studentToTeacher: 是否允许学生给教师发送私信
 log.attr.system.update_settings.message.studentToTeacher.1: 是
 log.attr.system.update_settings.message.studentToTeacher.0: 否
-log.attr.system.update_settings.message.teacherToStudent: 是否教师给学员发送私信
+log.attr.system.update_settings.message.teacherToStudent: 是否教师给学生发送私信
 log.attr.system.update_settings.message.teacherToStudent.1: 是
 log.attr.system.update_settings.message.teacherToStudent.0: 否
 log.attr.system.update_settings.course.chapter_name: 设置"章"名称
 log.attr.system.update_settings.course.part_name: 设置"节"名称
-log.attr.system.update_settings.course.welcome_message_enabled: 给新学员发送欢迎私信
+log.attr.system.update_settings.course.welcome_message_enabled: 给新学生发送欢迎私信
 log.attr.system.update_settings.course.welcome_message_enabled.1: 开启
 log.attr.system.update_settings.course.welcome_message_enabled.0: 关闭
 log.attr.system.update_settings.course.welcome_message_body: 欢迎私信内容
@@ -9715,10 +9715,10 @@ log.attr.system.update_settings.course.teacher_manage_marketing.0: 关闭
 log.attr.system.update_settings.course.teacher_search_order: 允许教师查询课程订单
 log.attr.system.update_settings.course.teacher_search_order.1: 开启
 log.attr.system.update_settings.course.teacher_search_order.0: 关闭
-log.attr.system.update_settings.course.teacher_manage_student: 允许教师添加/移除学员
+log.attr.system.update_settings.course.teacher_manage_student: 允许教师添加/移除学生
 log.attr.system.update_settings.course.teacher_manage_student.1: 开启
 log.attr.system.update_settings.course.teacher_manage_student.0: 关闭
-log.attr.system.update_settings.course.teacher_export_student: 允许教师导出学员资料
+log.attr.system.update_settings.course.teacher_export_student: 允许教师导出学生资料
 log.attr.system.update_settings.course.teacher_export_student.1: 开启
 log.attr.system.update_settings.course.teacher_export_student.0: 关闭
 log.attr.system.update_settings.course.explore_default_orderBy: 课程列表页默认排序
@@ -9742,7 +9742,7 @@ log.attr.system.update_settings.course.live_course_enabled.1: 开启
 log.attr.system.update_settings.course.live_course_enabled.0: 关闭
 log.attr.system.update_settings.course_default.chapter_name: 设置"章"名称
 log.attr.system.update_settings.course_default.part_name: 设置"节"名称
-log.attr.system.update_settings.course_default.welcome_message_enabled: 给新学员发送欢迎私信
+log.attr.system.update_settings.course_default.welcome_message_enabled: 给新学生发送欢迎私信
 log.attr.system.update_settings.course_default.welcome_message_enabled.1: 开启
 log.attr.system.update_settings.course_default.welcome_message_enabled.0: 关闭
 log.attr.system.update_settings.course_default.welcome_message_body: 欢迎私信内容
@@ -9755,10 +9755,10 @@ log.attr.system.update_settings.course_default.teacher_manage_marketing.0: 关�
 log.attr.system.update_settings.course_default.teacher_search_order: 允许教师查询课程订单
 log.attr.system.update_settings.course_default.teacher_search_order.1: 开启
 log.attr.system.update_settings.course_default.teacher_search_order.0: 关闭
-log.attr.system.update_settings.course_default.teacher_manage_student: 允许教师添加/移除学员
+log.attr.system.update_settings.course_default.teacher_manage_student: 允许教师添加/移除学生
 log.attr.system.update_settings.course_default.teacher_manage_student.1: 开启
 log.attr.system.update_settings.course_default.teacher_manage_student.0: 关闭
-log.attr.system.update_settings.course_default.teacher_export_student: 允许教师导出学员资料
+log.attr.system.update_settings.course_default.teacher_export_student: 允许教师导出学生资料
 log.attr.system.update_settings.course_default.teacher_export_student.1: 开启
 log.attr.system.update_settings.course_default.teacher_export_student.0: 关闭
 log.attr.system.update_settings.course_default.explore_default_orderBy: 课程列表页默认排序
@@ -9779,7 +9779,7 @@ log.attr.system.update_settings.course_default.show_student_num_enabled.1: 开�
 log.attr.system.update_settings.course_default.show_student_num_enabled.0: 关闭
 log.attr.system.update_settings.default.chapter_name: 设置"章"名称
 log.attr.system.update_settings.default.part_name: 设置"节"名称
-log.attr.system.update_settings.default.welcome_message_enabled: 给新学员发送欢迎私信
+log.attr.system.update_settings.default.welcome_message_enabled: 给新学生发送欢迎私信
 log.attr.system.update_settings.default.welcome_message_enabled.1: 开启
 log.attr.system.update_settings.default.welcome_message_enabled.0: 关闭
 log.attr.system.update_settings.default.welcome_message_body: 欢迎私信内容
@@ -9792,10 +9792,10 @@ log.attr.system.update_settings.default.teacher_manage_marketing.0: 关闭
 log.attr.system.update_settings.default.teacher_search_order: 允许教师查询课程订单
 log.attr.system.update_settings.default.teacher_search_order.1: 开启
 log.attr.system.update_settings.default.teacher_search_order.0: 关闭
-log.attr.system.update_settings.default.teacher_manage_student: 允许教师添加/移除学员
+log.attr.system.update_settings.default.teacher_manage_student: 允许教师添加/移除学生
 log.attr.system.update_settings.default.teacher_manage_student.1: 开启
 log.attr.system.update_settings.default.teacher_manage_student.0: 关闭
-log.attr.system.update_settings.default.teacher_export_student: 允许教师导出学员资料
+log.attr.system.update_settings.default.teacher_export_student: 允许教师导出学生资料
 log.attr.system.update_settings.default.teacher_export_student.1: 开启
 log.attr.system.update_settings.default.teacher_export_student.0: 关闭
 log.attr.system.update_settings.default.explore_default_orderBy: 课程列表页默认排序
@@ -10072,7 +10072,7 @@ site_no: 否
 admin.cloud_live.manage.logo_set.modal_title: 直播LOGO剪裁
 
 course.to_be.biz.user.first: 需要先申请为商业用户!
-course.enable.video.convert.audio.benefit: 开启后，学员在学习时，可按需切换为音频听课，提高完成率。
+course.enable.video.convert.audio.benefit: 开启后，学生在学习时，可按需切换为音频听课，提高完成率。
 course.video.convert.audio.status: 当前转音频完成情况
 course.video.convert.audio.detail: 查看详情
 course.video.convert.client.listen: 听
@@ -10372,29 +10372,29 @@ exception.classroom.unjoin: 未加入班级
 exception.classroom.empty_title: 班级名称不能为空！
 exception.classroom.forbidden_update_expiry_date: 已发布的班级不允许修改班级原先的有效期模式
 exception.classroom.forbidden_delete_not_draft: 只有未发布班级可以删除，操作失败。
-exception.classroom.not_found_member: 学员不存在
+exception.classroom.not_found_member: 学生不存在
 exception.classroom.forbidden_become_auditor: 该用户不能成为该班级的旁听生！
-exception.classroom.forbidden_become_student: 该用户不能成为该班级学员！
+exception.classroom.forbidden_become_student: 该用户不能成为该班级学生！
 exception.classroom.expiry_earlier_than_current: 设置的有效期小于当前时间！
-exception.classroom.forbidden_not_student: 用户不是该班级的学员
+exception.classroom.forbidden_not_student: 用户不是该班级的学生
 exception.classroom.forbidden_wave: 存在不允许增减的字段
-exception.classroom.duplicate_join: 用户已经是学员，不能添加！
+exception.classroom.duplicate_join: 用户已经是学生，不能添加！
 exception.classroom.recommend_required_numeric: 推荐班级序号只能为数字！
 exception.classroom.member_level_limit: 用户不能以会员身份加入班级！
-exception.classroom.member_not_in_classroom: 学员未加入班级
+exception.classroom.member_not_in_classroom: 学生未加入班级
 exception.classroom.closed_classroom: 班级已关闭
 exception.classroom.unbuyable_classroom: 班级不可购买
 exception.classroom.expired_classroom: 班级已过期
 exception.classroom.forbidden_auditor_learn: 旁听生无权学习
-exception.classroom.expired_member: 学员已到有效期
+exception.classroom.expired_member: 学生已到有效期
 exception.classroom.forbidden_create_thread_event: 无权限创建活动
 exception.classroom.at_least_one_course: 发布班级需要至少包含一个课程
 exception.course.member.not_found: 课程中没有该成员
 exception.course.member.not_member: 不是课程成员
 exception.course.member.duplicate_member: 用户已加入教学计划
-exception.course.member.expired_member: 学员已过期
+exception.course.member.expired_member: 学生已过期
 exception.course.member.not_student: 成员不是学生
-exception.course.member.non_expired: 学员未过期
+exception.course.member.non_expired: 学生未过期
 exception.page.error_mode: 错误的参数'mode'
 exception.page.error_type: 错误的参数'type'
 exception.page.error_portal: 错误的参数'portal'
@@ -10614,10 +10614,10 @@ exception.item_bank_exercise.expirystartdate_required: 有效期开始日期不�
 exception.item_bank_exercise.expirydate_end_later_than_start: 有效期结束日期不能早于开始日期
 exception.item_bank_exercise.expirymode_invalid: 有效期类型错误
 exception.item_bank_exercise.assessment_exercise_exist: 试卷已存在该模块内，请勿重复添加
-exception.item_bank_exercise.member.can_not_become_member: 题库练习已过期，学员不能加入
+exception.item_bank_exercise.member.can_not_become_member: 题库练习已过期，学生不能加入
 exception.item_bank_exercise.module.not_empty_number: 请至少保留一个试卷模块
 exception.item_bank_exercise.forbidden_take_exercise: 不能访问题库练习
-exception.item_bank_exercise.member.non_expired: 学员未过期
+exception.item_bank_exercise.member.non_expired: 学生未过期
 exception.item_bank_exercise.member.member_not_student: 成员不是学生
 exception.item_bank_exercise.module.switch.danger: 题库练习发布时，章节练习或试卷练习至少需要启用一项
 exception.item_bank_exercise.exercise.is_exists: 题库练习已存在，请勿重复开启
@@ -10718,7 +10718,7 @@ wechat.notification.status.finish: 发送完成
 wechat.notification.status.sending: 发送中
 wechat.notification.cloud.tips: 您还未开通教育云，无法正常使用微信服务号通知功能。
 wechat.notification.cloud_open: 前往开通
-wechat.notification.record_number_tips: 学员必须绑定微信并关注服务号以后才能收到通知，因此实际发送数量会比预期发送数量少。
+wechat.notification.record_number_tips: 学生必须绑定微信并关注服务号以后才能收到通知，因此实际发送数量会比预期发送数量少。
 wechat.notification.template_open_error: 模板打开失败，可能是未启用服务号模板消息插件或未在微信后台IP白名单中添加网校IP，请前往<a href="http://www.qiqiuyu.com/faq/878/detail" target="_blank">查看教程</a>
 wechat.notification.service_not_open: 未开启微信服务号通知
 wechat.notification.empty_token: 获取微信信息错误
@@ -10744,7 +10744,7 @@ wechat.notification.fans_list.fans_list_empty: 暂无粉丝
 wechat.notification.fans_list.no_wechat_bind: 暂未绑定微信服务号
 wechat.notification.fans_list.placeholder: 请输入关键词
 wechat.notification.send_days: 发送日
-wechat.notification.course_remind_conditions: 针对至少有一个未完成且未退出教学计划的学员，按固定频率和固定时间发送一条通知提醒。
+wechat.notification.course_remind_conditions: 针对至少有一个未完成且未退出教学计划的学生，按固定频率和固定时间发送一条通知提醒。
 wechat.notification.tooltip_hint: 微信服务号通知不支持广告等营销类消息以及其它所有可能对用户造成骚扰的消息，如果通知发送失败，则可能是任务名称、课程名称等关键词中包含违规内容。
 wechat.notification.goto_authorization: 前往授权
 wechat.notification.template_opend: 已开启
@@ -10757,25 +10757,25 @@ wechat.notification.template.exam_result: '同学，您好，您的试卷已批�
 wechat.notification.template.lesson_add: '同学，您好，课程有新任务发布<br>课程名称：[课程名称]<br>课程类别：[课程类别]<br>课程老师：[教师用户名]<br>课程时间：[任务发布时间]或[直播开始时间]<br>请及时前往学习'
 wechat.notification.template.charge_success: '尊敬的客户，您已充值成功<br>充值类型：现金充值<br>充值订单号：[订单号]<br>充值金额：[实际支付价格]<br>充值时间：[支付时间]<br>快去看看课程吧~'
 wechat.notification.template.buy_success: '尊敬的客户，您已支付成功<br>订单详情：[商品名称]<br>订单价格：[订单价格]<br>订单时间：[支付时间]<br>会员到期日：无<br>请前往查看'
-wechat.notification.template.ask_question: '尊敬的老师，您的在教课程《课程名称》或在教班级《班级名称》中有学员发布了提问<br>申请人：[提问者]<br>问题内容：[问题标题]<br>时间：[问题提交时间]'
+wechat.notification.template.ask_question: '尊敬的老师，您的在教课程《课程名称》或在教班级《班级名称》中有学生发布了提问<br>申请人：[提问者]<br>问题内容：[问题标题]<br>时间：[问题提交时间]'
 wechat.notification.template.homework_or_testpaper_need_review: '尊敬的老师，您今日仍有作业/试卷未批改<br>时间：[当日日期，精确到天]<br>作业数目：[过去24小时内提交的且未批改的作业和试卷数量]<br>请及时批改。'
-wechat.notification.template.remind_course: '亲爱的学员，今日也要坚持学习哦<br>课程名称：[上一次学习的教学计划名称]<br>时间：[当天日期，精确到天]学习进度：[该教学计划的学习进度]<br>如果今日已完成学习计划，请忽略本通知。'
-wechat.notification.template.answer_question: '亲爱的学员，您在[课程名或班级名]中的发表的问题有了新的回答。<br>提问时间：[提问的时间]<br>回复内容：[回复内容]'
-wechat.notification.template.vip_expired: '亲爱的学员，您购买的会员即将到期<br>开通时间：[开通时间]<br>到期时间：[到期时间]<br>请及时续费，以免影响您的学习'
+wechat.notification.template.remind_course: '亲爱的学生，今日也要坚持学习哦<br>课程名称：[上一次学习的教学计划名称]<br>时间：[当天日期，精确到天]学习进度：[该教学计划的学习进度]<br>如果今日已完成学习计划，请忽略本通知。'
+wechat.notification.template.answer_question: '亲爱的学生，您在[课程名或班级名]中的发表的问题有了新的回答。<br>提问时间：[提问的时间]<br>回复内容：[回复内容]'
+wechat.notification.template.vip_expired: '亲爱的学生，您购买的会员即将到期<br>开通时间：[开通时间]<br>到期时间：[到期时间]<br>请及时续费，以免影响您的学习'
 
 #微信通知规则
 wechat.notification.template.ask_question.rule: '课程或班级中有人发布提问，会发送通知给教师。'
-wechat.notification.template.answer_question.rule: '当教师回答了学员的问题，会发送通知给提问者。'
-wechat.notification.template.homework_or_testpaper_need_review.rule: '针对至少有一个未完成且未退出教学计划的学员，按固定频率和固定时间发送一条通知提醒。'
-wechat.notification.template.live_start.rule: '直播课开始前，会在指定时间发送通知给课程学员。'
-wechat.notification.template.homework_result.rule: '当作业中含有主观题时，老师批阅完成后会将结果发送给学员。'
-wechat.notification.template.exam_result.rule: '当试卷中含有主观题时，老师批阅完成后会将结果发送给学员。'
-wechat.notification.template.lesson_add.rule: '当课程有新的任务发布时，会发一条通知给课程学员。'
-wechat.notification.template.charge_success.rule: '当学员成功充值虚拟币时，会发送一条通知。'
-wechat.notification.template.buy_success.rule: '当学员成功购买课程、班级或会员是，会发送一条通知。'
+wechat.notification.template.answer_question.rule: '当教师回答了学生的问题，会发送通知给提问者。'
+wechat.notification.template.homework_or_testpaper_need_review.rule: '针对至少有一个未完成且未退出教学计划的学生，按固定频率和固定时间发送一条通知提醒。'
+wechat.notification.template.live_start.rule: '直播课开始前，会在指定时间发送通知给课程学生。'
+wechat.notification.template.homework_result.rule: '当作业中含有主观题时，老师批阅完成后会将结果发送给学生。'
+wechat.notification.template.exam_result.rule: '当试卷中含有主观题时，老师批阅完成后会将结果发送给学生。'
+wechat.notification.template.lesson_add.rule: '当课程有新的任务发布时，会发一条通知给课程学生。'
+wechat.notification.template.charge_success.rule: '当学生成功充值虚拟币时，会发送一条通知。'
+wechat.notification.template.buy_success.rule: '当学生成功购买课程、班级或会员是，会发送一条通知。'
 wechat.notification.template.vip_expired.rule: '根据管理员设置的提醒日期，每晚8点来发送通知，点此<a href="%url%" target="_blank">前往设置</a>'
 wechat.notification.template.vip_is_not_install: '未安装会员插件，无法正常发送通知。'
-wechat.notification.template.remind_course.rule: '针对至少有一个未完成且未退出教学计划的学员，按固定频率和固定时间发送一条通知提醒。'
+wechat.notification.template.remind_course.rule: '针对至少有一个未完成且未退出教学计划的学生，按固定频率和固定时间发送一条通知提醒。'
 
 #微信通知名称
 wechat.notification.template_name.homework_or_testpaper_need_review: '作业/试卷批改提醒'
@@ -10937,7 +10937,7 @@ course.remind.fri: 周五
 course.remind.sat: 周六
 course.remind.sun: 周日
 course.setting.course_remind: 上课提醒
-course.setting.course_remind_tip: 当前设置，%D% %H%会向所有在读学员发送学习提醒通知。
+course.setting.course_remind_tip: 当前设置，%D% %H%会向所有在读学生发送学习提醒通知。
 course.setting.course_remind_change: 修改设置
 course.setting.course_remind_not_open: 未开启上课提醒
 course.setting.course_remind_go_to_open: 前往开启
@@ -11130,7 +11130,7 @@ user.user_had_destroyed: 帐号已注销
 admin_v2.operation.homepage_live_notify.enable: 直播开课提醒
 admin_v2.operation.homepage_live_notify.enable.open: 开启
 admin_v2.operation.homepage_live_notify.enable.close: 关闭
-admin_v2.operation.homepage_live_notify.enable.hint: 开启后，当有即将开始的直播时，对于已购买直播的学员，进入首页时会弹出浮动提示框，提示学员进入直播教室。
+admin_v2.operation.homepage_live_notify.enable.hint: 开启后，当有即将开始的直播时，对于已购买直播的学生，进入首页时会弹出浮动提示框，提示学生进入直播教室。
 admin_v2.operation.homepage_live_notify.pre_time: 提前提醒时间
 admin_v2.operation.homepage_live_notify.pre_time_hint: 设置在直播开课前第几分钟，弹出提醒。
 admin_v2.operation.homepage_live_notify.position: 提醒显示位置
@@ -11150,7 +11150,7 @@ course.live_statistics.live_time_long: 直播时长（分）
 course.live_statistics.max_participate_count: 最大参与人数
 course.live_statistics.live_status: 进行状态
 course.live_statistics.operation: 操作
-course.live_statistics.check_in_status: 点名数/学员总数
+course.live_statistics.check_in_status: 点名数/学生总数
 course.live_statistics.average_learn_time: 平均学习时长（分）
 course.live_statistics.task_name_placeholder: 任务名
 
@@ -11320,7 +11320,7 @@ merchant.content_resource.has_chosen: 已选择
 merchant.content_resource.editing: 编辑中
 merchant.content_resource.choose: 选择
 merchant.content_resource.no_supplier: 暂无合作供应商！
-merchant.content_resource.supplier.no_cooperation_hint: 与供应商%supplierName%之间商品合作关系已经取消，供应商的商品不能购买加入，但不影响已购学员学习，如需恢复，请联系供应商！
+merchant.content_resource.supplier.no_cooperation_hint: 与供应商%supplierName%之间商品合作关系已经取消，供应商的商品不能购买加入，但不影响已购学生学习，如需恢复，请联系供应商！
 
 admin_v2.plumber.status: 运行状态
 admin_v2.plumber.start: 启用
@@ -11449,7 +11449,7 @@ exception.favorite.forbidden_operate_favorite: 没有权限
 exception.product.not_exist: 商品不存在
 
 classroom.courses: 班级课程
-classroom.member_number: 班级学员
+classroom.member_number: 班级学生
 classroom.preview_btn: 预览班级
 classroom.publish_btn: 发布班级
 classroom.basic_setting: 基础设置

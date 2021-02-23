@@ -89,7 +89,7 @@ interface MemberService
     public function quitCourseByDeadlineReach($userId, $courseId);
 
     /**
-     * 成为学员，即加入课程的学习.
+     * 成为学生，即加入课程的学习.
      */
     public function becomeStudent($courseId, $userId, $info = []);
 
@@ -101,12 +101,12 @@ interface MemberService
     public function removeStudent($courseId, $userId, $info = []);
 
     /**
-     * 封锁学员，封锁之后学员不能再查看该课程.
+     * 封锁学生，封锁之后学生不能再查看该课程.
      */
     public function lockStudent($courseId, $userId);
 
     /**
-     * 解封学员.
+     * 解封学生.
      */
     public function unlockStudent($courseId, $userId);
 

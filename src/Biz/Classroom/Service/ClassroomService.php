@@ -57,7 +57,7 @@ interface ClassroomService
     public function addCoursesToClassroom($classroomId, $courseIds);
 
     /**
-     * 是否可参与班级的活动，只有正式学员、教师、网站管理员才能参与班级的活动，旁听生不能参与活动.
+     * 是否可参与班级的活动，只有当前学生、教师、网站管理员才能参与班级的活动，旁听生不能参与活动.
      */
     public function canTakeClassroom($id, $includeAuditor = false);
 

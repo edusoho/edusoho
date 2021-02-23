@@ -258,7 +258,7 @@ class CourseController extends CourseBaseController
     }
 
     /**
-     * 当用户是班级学员却不在课程学员中时，将学员添加到课程学员中.
+     * 当用户是班级学生却不在课程学生中时，将学生添加到课程学生中.
      *
      * @param $courseId
      * @param $classroomId

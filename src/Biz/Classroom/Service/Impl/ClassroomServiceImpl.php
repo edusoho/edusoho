@@ -991,7 +991,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $this->getLogService()->info(
             'classroom',
             'remove_student',
-            "班级《{$classroom['title']}》(#{$classroom['id']})，移除学员{$user['nickname']}(#{$user['id']})",
+            "班级《{$classroom['title']}》(#{$classroom['id']})，移除学生{$user['nickname']}(#{$user['id']})",
             $infoData
         );
 
@@ -1225,7 +1225,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $this->getLogService()->info(
                 'classroom',
                 'add_student',
-                "班级《{$classroom['title']}》(#{$classroom['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$params['remark']}",
+                "班级《{$classroom['title']}》(#{$classroom['id']})，添加学生{$user['nickname']}(#{$user['id']})，备注：{$params['remark']}",
                 $infoData
             );
             $this->commit();
@@ -2095,7 +2095,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
      * @return array|array[]
      *                       1. 获取班级内课程
      *                       2. 通过班级内课程找到对应的原课程
-     *                       3. 筛选出学员拥有的课程（学员member列表）
+     *                       3. 筛选出学生拥有的课程（学生member列表）
      *                       4. 查找对应的订单
      */
     public function findUserPaidCoursesInClassroom($userId, $classroomId)
@@ -2332,7 +2332,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
      * @param  $course
      * @param  $member
      *
-     * @return bool 会员加入的学员是否已到期
+     * @return bool 会员加入的学生是否已到期
      */
     protected function isVipMemberNonExpired($classroom, $member)
     {

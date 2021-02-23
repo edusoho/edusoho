@@ -2446,7 +2446,7 @@ class UserSerialize
             $user['roles'][0] = $temp;
         }
 
-        //交换学员角色跟roles数组第0个的位置;
+        //交换学生角色跟roles数组第0个的位置;
 
         return $user;
     }

@@ -373,12 +373,12 @@
           </div>
         {% endif %}
 
-        {# 学员动态 #}
+        {# 学生动态 #}
         {% set learns = data('LatestStatuses', {mode:'simple', count: 5,private:0}) %}
         {% if learns %}
           <div class="es-box status-side">
             <div class="es-box-heading">
-              <h2>{% if setting('default.user_name') %}{{ setting('default.user_name')|default('学员'|trans) }}{% else %}{{ '学员'|trans }}{% endif %}{{ '动态'|trans }}</h2>
+              <h2>{% if setting('default.user_name') %}{{ setting('default.user_name')|default('学生'|trans) }}{% else %}{{ '学生'|trans }}{% endif %}{{ '动态'|trans }}</h2>
             </div>
             <div class="es-box-body">
               <ul class="media-list">

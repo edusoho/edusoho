@@ -299,7 +299,7 @@ class PlatformSdk extends BaseService
             return $this->request('GET', $data, $this->defaultRequestConfig);
         } catch (\Throwable $e) {
             $this->getLogger()->error("searchEnrolledRoomStudent error:{$e->getMessage()} traceString:{$e->getTraceAsString()}", ['DATA' => $data]);
-            return ['error' => ['code' => 50020201029, 'message' => '获取已报名学员数据失败！']];
+            return ['error' => ['code' => 50020201029, 'message' => '获取已报名学生数据失败！']];
         }
     }
 
@@ -313,7 +313,7 @@ class PlatformSdk extends BaseService
             return $this->request('GET', $data, $this->defaultRequestConfig);
         } catch (\Throwable $e) {
             $this->getLogger()->error("searchSmsReachedRoomStudent error:{$e->getMessage()} traceString:{$e->getTraceAsString()}", ['DATA' => $data]);
-            return ['error' => ['code' => 50020201029, 'message' => '获取短信触达学员数据失败！']];
+            return ['error' => ['code' => 50020201029, 'message' => '获取短信触达学生数据失败！']];
         }
     }
 

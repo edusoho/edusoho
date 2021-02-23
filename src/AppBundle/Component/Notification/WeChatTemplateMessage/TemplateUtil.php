@@ -56,7 +56,7 @@ class TemplateUtil
                 'content' => 'wechat.notification.template.remind_course',
                 'rule' => 'wechat.notification.template.remind_course.rule',
                 'detail' => '{{first.DATA}}<br>课程名称：{{keyword1.DATA}}<br>时间：{{keyword2.DATA}}<br>{{remark.DATA}}',
-                'object' => '课程学员',
+                'object' => '课程学生',
                 'status' => 0,
             ),
             self::TEMPLATE_ASK_QUESTION => array(
@@ -85,7 +85,7 @@ class TemplateUtil
                 'content' => 'wechat.notification.template.live_start',
                 'rule' => 'wechat.notification.template.live_start.rule',
                 'detail' => '{{first.DATA}}<br>课程名称：{{keyword1.DATA}}<br>开课时间：{{keyword2.DATA}}<br>开课地点：{{keyword3.DATA}}<br>联系方式：{{keyword4.DATA}}<br>{{remark.DATA}}',
-                'object' => '课程学员',
+                'object' => '课程学生',
                 'status' => 0,
             ),
             self::TEMPLATE_HOMEWORK_RESULT => array(
@@ -94,7 +94,7 @@ class TemplateUtil
                 'content' => 'wechat.notification.template.homework_result',
                 'rule' => 'wechat.notification.template.homework_result.rule',
                 'detail' => '{{first.DATA}}<br>作业名称：{{keyword1.DATA}}<br>所属课程：{{keyword2.DATA}}<br>辅导老师：{{keyword3.DATA}}<br>{{remark.DATA}}',
-                'object' => '作业提交学员',
+                'object' => '作业提交学生',
                 'status' => 0,
             ),
             self::TEMPLATE_EXAM_RESULT => array(
@@ -103,7 +103,7 @@ class TemplateUtil
                 'content' => 'wechat.notification.template.exam_result',
                 'rule' => 'wechat.notification.template.exam_result.rule',
                 'detail' => '{{first.DATA}}<br>考试科目：{{keyword1.DATA}}<br>考试成绩：{{keyword2.DATA}}<br>{{remark.DATA}}',
-                'object' => '试卷提交学员',
+                'object' => '试卷提交学生',
                 'status' => 0,
             ),
             self::TEMPLATE_COURSE_UPDATE => array(
@@ -112,7 +112,7 @@ class TemplateUtil
                 'content' => 'wechat.notification.template.lesson_add',
                 'rule' => 'wechat.notification.template.lesson_add.rule',
                 'detail' => '{{first.DATA}}<br>课程名称：{{keyword1.DATA}}<br>课程类别：{{keyword2.DATA}}<br>课程老师：{{keyword3.DATA}}<br>课程时间：{{keyword4.DATA}}<br>{{remark.DATA}}',
-                'object' => '课程学员',
+                'object' => '课程学生',
                 'status' => 0,
             ),
             self::TEMPLATE_COIN_RECHARGE => array(

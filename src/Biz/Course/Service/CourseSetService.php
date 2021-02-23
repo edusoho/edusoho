@@ -177,7 +177,7 @@ interface CourseSetService
     /**
      * 更新课程统计属性.
      *
-     * 如: 学员数、笔记数、评价数量
+     * 如: 学生数、笔记数、评价数量
      *
      * @param  $id
      *

@@ -60,7 +60,7 @@ class UserSettingController extends BaseController
             $defaultSetting = $request->request->all();
 
             if (!isset($defaultSetting['user_name'])) {
-                $defaultSetting['user_name'] = '学员';
+                $defaultSetting['user_name'] = '学生';
             }
 
             $userDefaultSetting = ArrayToolkit::parts($defaultSetting, [
@@ -412,7 +412,7 @@ class UserSettingController extends BaseController
             'courseShareContent' => '我正在学习{{course}}，收获巨大哦，一起来学习吧！',
             'groupShareContent' => '我在{{groupname}}小组,发表了{{threadname}},很不错哦,一起来看看吧!',
             'classroomShareContent' => '我正在学习{{classroom}}，收获巨大哦，一起来学习吧！',
-            'user_name' => '学员',
+            'user_name' => '学生',
         ];
 
         return $default;

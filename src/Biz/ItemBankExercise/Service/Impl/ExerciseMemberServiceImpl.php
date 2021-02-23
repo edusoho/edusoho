@@ -173,7 +173,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
             $this->getLogService()->info(
                 'item_bank_exercise',
                 'remove_student',
-                "《{$exercise['title']}》(#{$exercise['id']})，移除学员{$user['nickname']}(#{$user['id']})}"
+                "《{$exercise['title']}》(#{$exercise['id']})，移除学生{$user['nickname']}(#{$user['id']})}"
             );
 
             $this->commit();
@@ -291,7 +291,7 @@ class ExerciseMemberServiceImpl extends BaseService implements ExerciseMemberSer
             $this->getLogService()->info(
                 'item_bank_exercise',
                 'remove_student',
-                "《{$exercise['title']}》(#{$exercise['id']})，学员({$user['nickname']})因达到有效期退出教学计划(#{$member['id']})"
+                "《{$exercise['title']}》(#{$exercise['id']})，学生({$user['nickname']})因达到有效期退出教学计划(#{$member['id']})"
             );
             $this->dispatchEvent('exercise.quit', $exercise, ['member' => $member]);
 

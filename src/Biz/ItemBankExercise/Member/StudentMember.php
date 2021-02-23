@@ -87,7 +87,7 @@ class StudentMember extends Member
         $this->getLogService()->info(
             'item_bank_exercise',
             'add_student',
-            "《{$exercise['title']}》(#{$exercise['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：{$info['remark']}",
+            "《{$exercise['title']}》(#{$exercise['id']})，添加学生{$user['nickname']}(#{$user['id']})，备注：{$info['remark']}",
             [
                 'exercise' => $exercise['id'],
                 'title' => $exercise['title'],

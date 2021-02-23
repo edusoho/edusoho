@@ -11,7 +11,7 @@ class CourseAddIsHideUnpublish extends Migration
     {
         $container = $this->getContainer();
         $db = $container['db'];
-        $db->exec("ALTER TABLE `course_v8` ADD `isHideUnpublish` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '学员端是否隐藏未发布课时';");
+        $db->exec("ALTER TABLE `course_v8` ADD `isHideUnpublish` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '学生端是否隐藏未发布课时';");
         $db->exec('ALTER TABLE `course_v8` DROP COLUMN `isShowUnpublish`;');
     }
 

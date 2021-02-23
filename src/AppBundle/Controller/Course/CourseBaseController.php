@@ -56,7 +56,7 @@ abstract class CourseBaseController extends BaseController
         } elseif (!$this->getCourseService()->canTakeCourse($course)) {
             $response = $this->createMessageResponse(
                 'info',
-                '您还不是课程《'.$courseSet['title'].'》的学员，请先购买或加入学习。',
+                '您还不是课程《' . $courseSet['title'] . '》的学生，请先购买或加入学习。',
                 null,
                 3000,
                 $this->generateUrl('course_show', array('id' => $courseId))

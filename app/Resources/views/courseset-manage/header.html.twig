@@ -46,22 +46,23 @@
           <span class="cd-tag cd-tag-orange">{{ 's2b2c.course_product.tag'|trans }}</span>
         {% endif %}
       {% endblock %}
-      <div class="courseset-manage-header-info__price color-danger">
-        {% if courseSet.minCoursePrice == courseSet.maxCoursePrice %}
-          {% include 'common/price.html.twig' with {'productPrice': courseSet.minCoursePrice} %}
-        {% else %}
-          {% include 'common/price.html.twig' with {'productPrice': courseSet.minCoursePrice} %}
-          <span class="cd-text-sm">～</span>
-          {% include 'common/price.html.twig' with {'productPrice': courseSet.maxCoursePrice} %}
-        {% endif %}
-      </div>
+      {# <div class="courseset-manage-header-info__price color-danger"> #}
+      {# {% if courseSet.minCoursePrice == courseSet.maxCoursePrice %} #}
+      {# {% include 'common/price.html.twig' with {'productPrice': courseSet.minCoursePrice} %} #}
+      {# {% else %} #}
+      {# {% include 'common/price.html.twig' with {'productPrice': courseSet.minCoursePrice} %} #}
+      {# <span class="cd-text-sm">～</span> #}
+      {# {% include 'common/price.html.twig' with {'productPrice': courseSet.maxCoursePrice} %} #}
+      {# {% endif %} #}
+      {# </div> #}
     </div>
 
     <div class="courseset-manage-header-btn">
       {% block btn %}
         {# 课程发布按钮 #}
         {% if courseSet.status == 'published' %}
-          <a class="cd-btn cd-btn-primary" target="_blank" href="{{ basepath }}">{{'my.learning.course.watch'|trans}}</a>
+          <a class="cd-btn cd-btn-primary" target="_blank"
+             href="{{ basepath }}">{{ 'my.learning.course.watch'|trans }}</a>
         {% endif %}
 
         {% if courseSet.status != 'published' %}

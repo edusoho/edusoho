@@ -386,7 +386,7 @@ class RoleServiceImpl extends BaseService implements RoleService
             'ROLE_SUPER_ADMIN' => ['name' => '超级管理员', 'code' => 'ROLE_SUPER_ADMIN'],
             'ROLE_ADMIN' => ['name' => '管理员', 'code' => 'ROLE_ADMIN'],
             'ROLE_TEACHER' => ['name' => '教师', 'code' => 'ROLE_TEACHER'],
-            'ROLE_USER' => ['name' => '学员', 'code' => 'ROLE_USER'],
+            'ROLE_USER' => ['name' => '学生', 'code' => 'ROLE_USER'],
         ];
         $userRole = $userRoles[$code];
 

@@ -111,7 +111,7 @@ abstract class MarketingBaseServiceImpl extends BaseService implements Marketing
     abstract protected function getMember($targetId, $userId);
 
     /**
-     * @return "发现学员已加入后补建的微营销订单信息";
+     * @return "发现学生已加入后补建的微营销订单信息";
      */
     abstract protected function createMarketingOrder($targetId, $userId, $data);
 

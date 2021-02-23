@@ -42,7 +42,7 @@ class GenerateCourseMemberCommand extends BaseCommand
             }
         }
 
-        $output->writeln('<info>添加学员数据完毕</info>');
+        $output->writeln('<info>添加学生数据完毕</info>');
     }
 
     protected function becomeStudent($member)
