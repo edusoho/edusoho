@@ -2,8 +2,8 @@
 
 namespace Biz\RewardPoint\Dao\Impl;
 
-use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 use Biz\RewardPoint\Dao\AccountDao;
+use Codeages\Biz\Framework\Dao\AdvancedDaoImpl;
 
 class AccountDaoImpl extends AdvancedDaoImpl implements AccountDao
 {
@@ -13,10 +13,10 @@ class AccountDaoImpl extends AdvancedDaoImpl implements AccountDao
     {
         $sql = "DELETE FROM {$this->table} WHERE userId = ?";
 
-        return $this->db()->executeUpdate($sql, array($userId));
+        return $this->db()->executeUpdate($sql, [$userId]);
     }
 
-    public function getByUserId($userId, $potions = array())
+    public function getByUserId($userId, $options = [])
     {
         $lock = isset($options['lock']) && true === $options['lock'];
 
@@ -25,32 +25,32 @@ class AccountDaoImpl extends AdvancedDaoImpl implements AccountDao
             $sql .= ' FOR UPDATE';
         }
 
-        return $this->db()->fetchAssoc($sql, array($userId));
+        return $this->db()->fetchAssoc($sql, [$userId]);
     }
 
     public function waveBalance($id, $value)
     {
         $sql = "UPDATE {$this->table} SET balance = balance + ? WHERE id = ? LIMIT 1";
 
-        return $this->db()->executeQuery($sql, array($value, $id));
+        return $this->db()->executeQuery($sql, [$value, $id]);
     }
 
     public function waveDownBalance($id, $value)
     {
         $sql = "UPDATE {$this->table} SET balance = balance - ? WHERE id = ? LIMIT 1";
 
-        return $this->db()->executeQuery($sql, array($value, $id));
+        return $this->db()->executeQuery($sql, [$value, $id]);
     }
 
     public function declares()
     {
-        return array(
-            'timestamps' => array('createdTime', 'updatedTime'),
-            'orderbys' => array('id', 'createdTime', 'balance', 'updatedTime'),
-            'conditions' => array(
+        return [
+            'timestamps' => ['createdTime', 'updatedTime'],
+            'orderbys' => ['id', 'createdTime', 'balance', 'updatedTime'],
+            'conditions' => [
                 'userId = :userId',
                 'userId IN ( :userIds)',
-            ),
-        );
+            ],
+        ];
     }
 }
