@@ -35,6 +35,7 @@ class CourseTaskDeleteSyncJob extends AbstractSyncJob
         $task = $this->getTaskDao()->get($taskId);
         $res = $this->createCourseStrategy($course)->deleteTask($task);
         $this->dispatchEvent('course.task.delete', new Event($task, ['user' => $this->biz['user']]));
+
         return $res;
     }
 
