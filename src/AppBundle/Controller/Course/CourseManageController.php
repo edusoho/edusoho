@@ -461,7 +461,7 @@ class CourseManageController extends BaseController
 
         $tasks = $this->getTaskService()->findTasksByCourseId($courseId);
         $tasksListJsonData = $this->createCourseStrategy($course)->getTasksListJsonData($courseId);
-        
+
         return $this->render(
             $tasksListJsonData['template'],
             array_merge(
