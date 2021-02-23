@@ -163,6 +163,7 @@ export default class Manage {
   _sort() {
     // 拖动，及拖动规则
     let self = this;
+    let $childrens = null
     let adjustment;
     sortList({
       element: self.$element,
@@ -175,10 +176,18 @@ export default class Manage {
       onDragStart: function(item, container, _super) {
         let offset = item.offset(),
           pointer = container.rootGroup.pointer;
-        adjustment = {
+        
+          adjustment = {
           left: pointer.left - offset.left,
           top: pointer.top - offset.top
         };
+
+        if (item.hasClass('js-task-manage-chapter')) {
+          $childrens = item.nextUntil('.js-task-manage-chapter');
+        } else if (item.hasClass('js-task-manage-unit')) {
+          $childrens = item.nextUntil('.js-task-manage-unit,.js-task-manage-chapter');
+        }
+
         _super(item, container);
       },
       onDrag: function(item, position) {
@@ -192,8 +201,21 @@ export default class Manage {
           top: position.top - adjustment.top
         });
       },
-    }, (data) => {
-      self.sortList();
+      onDrop: function(item, container, _super) {
+        _super(item, container);
+
+        const isHidden = item.find('.js-toggle-show.toogle-hide').length > 0
+
+        if (!isHidden || (!isChapter && !isUnit)) {
+          self.sortList();
+          return
+        }
+
+        if ($childrens) {
+          item.after($childrens)
+        }
+        self.sortList();
+      }
     });
   }
 
