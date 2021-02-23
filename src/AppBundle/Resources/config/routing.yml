@@ -1,6 +1,6 @@
 homepage:
   path: /
-  defaults: { _controller: AppBundle:My\Course:learning }
+  defaults: { _controller: AppBundle:My\Course:index }
   h5: true
 
 jstranslation_js:

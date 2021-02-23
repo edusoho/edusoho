@@ -21,13 +21,6 @@ class ExploreController extends BaseController
 
     public function courseSetsAction(Request $request, $category)
     {
-        $user = $this->getCurrentUser();
-
-        # 如果当前用户没有登录，重定向到登录页
-        if ($user['nickname'] === '游客') {
-            return $this->redirectToRoute('login');
-        }
-
         $conditions = $request->query->all();
 
         list($conditions, $filter) = $this->getFilter($conditions, 'course');

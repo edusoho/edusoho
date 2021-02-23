@@ -21,6 +21,11 @@ class CourseController extends CourseBaseController
 {
     public function indexAction()
     {
+        $user = $this->getCurrentUser();
+        if (!$user->isLogin()) {
+            return $this->redirectToRoute('login');
+        }
+
         if ($this->getCurrentUser()->isTeacher()) {
             return $this->redirect($this->generateUrl('my_teaching_course_sets'));
         } else {

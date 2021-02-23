@@ -141,14 +141,11 @@ class LoginController extends BaseController
             $error = $request->getSession()->get(Security::AUTHENTICATION_ERROR);
         }
 
-        if ($this->getWebExtension()->isWechatLoginBind()) {
-            return $this->redirect($this->generateUrl('login_bind', array('type' => 'weixinmob', '_target_path' => $this->getTargetPath($request))));
-        }
-
         return $this->render('login/index.html.twig', array(
             'last_username' => $request->getSession()->get(Security::LAST_USERNAME),
             'error' => $error,
             '_target_path' => $this->getTargetPath($request),
+//            '_target_path' => $this->generateUrl('/homepage'),
         ));
     }
 
@@ -205,9 +202,10 @@ class LoginController extends BaseController
             $targetPath = $this->filterRedirectUrl($request->query->get('goto'));
         } elseif ($request->getSession()->has('_target_path')) {
             $targetPath = $request->getSession()->get('_target_path');
-        } else {
-            $targetPath = $request->headers->get('Referer');
         }
+        /*else {
+            $targetPath = $request->headers->get('Referer');
+        }*/
 
         if ($targetPath == $this->generateUrl('login', array(), UrlGeneratorInterface::ABSOLUTE_URL)) {
             return $this->generateUrl('homepage');
