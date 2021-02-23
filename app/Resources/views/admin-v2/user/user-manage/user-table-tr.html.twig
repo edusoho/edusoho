@@ -12,7 +12,7 @@
       {% for role in user.roles %}
         {% set userRole = data('Role', {code: role}) %}
         {% if userRole|default(false) %}
-          {{userRole.name|default('')}}
+          {{ userRole.name|default('') }}
         {% else %}
           {{ dict_text('userRole', role) }}
         {% endif %}
@@ -20,16 +20,16 @@
       {% endfor %}
     </span>
   </td>
- {% include 'org/parts/table-body-td.html.twig' with {orgCode: user.orgCode}%}
-  <td>
-    {% if user.verifiedMobile %}
-      {{ user.verifiedMobile }}<span class="text-success">({{'user.fields.mobile_label.bind'|trans}})</span>
-    {% elseif profile.mobile %}
-      {{ profile.mobile }}<span class="text-danger">({{'user.fields.mobile_label.no_bind'|trans}})</span>
-    {% else %}
-       --
-    {% endif %}
-  </td>
+  {% include 'org/parts/table-body-td.html.twig' with {orgCode: user.orgCode} %}
+  {# <td> #}
+  {# {% if user.verifiedMobile %} #}
+  {# {{ user.verifiedMobile }}<span class="text-success">({{'user.fields.mobile_label.bind'|trans}})</span> #}
+  {# {% elseif profile.mobile %} #}
+  {# {{ profile.mobile }}<span class="text-danger">({{'user.fields.mobile_label.no_bind'|trans}})</span> #}
+  {# {% else %} #}
+  {# - -#}
+  {# {% endif %} #}
+  {# </td> #}
 
   <td>
     {% if not is_system_generated_email(user.email) %}
@@ -38,18 +38,19 @@
       --
     {% endif %}
 
-    <br>
-    {% if user.emailVerified %}
-      <label class="label label-success" title="{{'admin.user.manage.label.email_verified_hint'|trans}}">{{'admin.user.manage.fields.verified_label'|trans}}</label>
-    {% endif %}
+    {# <br> #}
+    {# {% if user.emailVerified %} #}
+    {# <label class="label label-success" title="{{'admin.user.manage.label.email_verified_hint'|trans}}">{{'admin.user.manage.fields.verified_label'|trans}}</label> #}
+    {# {% endif %} #}
   </td>
 
   <td>
     <span class="text-sm">{{ user.createdTime|date('Y-n-d H:i:s') }}</span>
     <br>
     <span class="text-muted text-sm">
-    <a class="text-muted text-sm" href="http://www.baidu.com/s?wd={{ user.createdIp }}" target="_blank">{{ user.createdIp }}</a>
-    {{convert_ip(user.createdIp)}}
+    <a class="text-muted text-sm" href="http://www.baidu.com/s?wd={{ user.createdIp }}"
+       target="_blank">{{ user.createdIp }}</a>
+    {{ convert_ip(user.createdIp) }}
   </span>
     <span></span>
   </td>
