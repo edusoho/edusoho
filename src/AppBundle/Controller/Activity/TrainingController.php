@@ -16,8 +16,11 @@ class TrainingController extends BaseActivityController implements ActivityActio
         if (empty($activity)) {
             $this->createNewException(ActivityException::NOTFOUND_ACTIVITY());
         }
-
+        // 获取课程绑定资源
+        $bindInfo = (new CourseCorrelation())->getCourseBindResources($activity["fromCourseId"],$activity["mediaId"]);
         return $this->render('activity/training/show.html.twig', array(
+            'activity' => json_encode($activity),
+            'bindInfo'  =>json_encode($bindInfo['body']),
         ));
     }
 

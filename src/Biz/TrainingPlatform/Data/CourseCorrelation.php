@@ -59,6 +59,4 @@ class CourseCorrelation extends Base
         }
         return $this->return;
     }
-
-    
 }

@@ -1,5 +1,5 @@
 <template>
-    <div style="height:800px;">
+    <div style="height:500px;">
         <split-pane v-on:resize="resize" :min-percent='20' :default-percent='30' split="vertical">
         <template slot="paneL">
             <div slot="left" class="left-box">
@@ -27,11 +27,17 @@
                                             <p v-html="info.content"></p>
                                         </div>
                                         <div class="body-con dataSet" v-show="tab=='dataset'">
-                                            数据集
+                                            <el-collapse v-model="activeNames">
+                                                <el-collapse-item :title="item.name" v-for="item in bindInfo['datasets']" :key="item.id">
+                                                    <ul>
+                                                        <li style="cursor:pointer" @click="copyPath(item.mount_path,file.name)"  v-for="file in item.files" :key="file.id">{{file.name}}</li>
+                                                    </ul>
+                                                </el-collapse-item>
+                                            </el-collapse>
+                                            <input type="hidden" class="selectPath" value="">
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         </div>                
 
@@ -43,13 +49,13 @@
             <div slot="right">
                 <div class="right-box">
                     <div class="env" >
-                        <div>
+                        <div v-show="isEnvShow">
                             <div class="title">
                                 <p>请点击运行环境</p><br />
                                 <p style="font-size:20px;">个人空间： <span style="color:green;">/home/ilab</span></p>
                             </div>
                             <div  class="env-items">
-                                <div class="env-item">
+                                <div class="env-item" @click="goEnv()">
                                     <div class="icon">
                                         <i class="el-icon-s-platform" style="font-size: 70px;"></i>
                                     </div>
@@ -57,6 +63,7 @@
                                 </div>
                             </div>
                         </div>
+                        <component :is="currentView" ></component>
                     </div>
                 </div>
             </div>
@@ -65,25 +72,45 @@
     </div>
 </template>
 <script>
-    // import Info from "./component/info.vue"
+    import Env from "./component/env.vue"
 
     import splitPane from 'vue-splitpane'
     export default{
         name:"view",
         components:{
-            splitPane
+            splitPane,
+            Env
         },
         props:{
-            info:Object
+            info:Object,
+            bindInfo:Object
         },
         data(){
             return {
-                tab:"document"
+                tab:"dataset",
+                isEnvShow:false,
+                currentView:'env',
             }
         },
         methods:{
+            goEnv(){
+                this.currentView = 'Env';
+                this.isEnvShow = false
+            },
+            // 切换tab
             switchTab(tab){
                 this.tab = tab;
+            },
+            // 复制路径
+            copyPath(mount_path,name){
+                let  path = mount_path + '/' + name;
+                $(".selectPath").val(path);
+                $(".selectPath").select();
+                document.execCommand("Copy");
+                Vue.prototype.$message({
+                    message: '复制成功',
+                    type: 'success'
+                });
             }
         },
         mounted() {

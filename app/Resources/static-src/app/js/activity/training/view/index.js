@@ -14,7 +14,8 @@ new Vue({
   el: '#app',
   render: createElement => createElement(Info, {
     props: {
-      info:$app.data("info")
+      info:$app.data("info"),
+      bindInfo:$app.data("bindinfo")
     }
   })
 });
