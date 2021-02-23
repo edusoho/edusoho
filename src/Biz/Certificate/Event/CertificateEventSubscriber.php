@@ -23,6 +23,7 @@ class CertificateEventSubscriber extends EventSubscriber implements EventSubscri
             'course.task.finish' => 'onCourseTaskFinish',
             'certificate.publish' => 'onCertificatePublish',
             'classroom.course.delete' => 'onClassroomCourseDelete',
+            'course.task.delete' => 'onCourseTaskDelete',
         ];
     }
 
