@@ -35,7 +35,7 @@ class CertificateEventSubscriber extends EventSubscriber implements EventSubscri
                 'name' => 'issue_certificate_job'.$certificate['id'],
                 'pool' => 'dedicated',
                 'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
-                'expression' => (int)time(),
+                'expression' => (int) time(),
                 'misfire_policy' => 'executing',
                 'class' => 'Biz\Certificate\Job\IssueCertificateJob',
                 'args' => ['certificateId' => $certificate['id']],
@@ -57,7 +57,7 @@ class CertificateEventSubscriber extends EventSubscriber implements EventSubscri
     {
         $task = $event->getSubject();
         $course = $this->getCourseService()->getCourse($task['courseId']);
-        if(empty($course['parentId'])) {
+        if (empty($course['parentId'])) {
             $certificates = $this->getCertificateService()->findByTargetIdAndTargetType($task['courseId'], 'course');
         } else {
             $classroomIds = ArrayToolkit::column($this->getClassroomService()->findClassroomIdsByCourseId($course['id']), 'classroomId');
@@ -71,7 +71,7 @@ class CertificateEventSubscriber extends EventSubscriber implements EventSubscri
                 'name' => 'issue_certificate_job'.$certificate['id'],
                 'pool' => 'dedicated',
                 'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
-                'expression' => (int)time(),
+                'expression' => (int) time(),
                 'misfire_policy' => 'executing',
                 'class' => 'Biz\Certificate\Job\IssueCertificateJob',
                 'args' => ['certificateId' => $certificate['id']],
