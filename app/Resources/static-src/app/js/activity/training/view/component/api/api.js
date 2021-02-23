@@ -10,7 +10,7 @@ export default{
     },
     //每10秒lab容器至少有一次心跳，否在服务会检测到容器在1分钟之内没有心跳，并将其销毁操作
     labHeartbeat(domain_name,param) {
-        return axios.create({baseURL:domain_name}).post(`/agentsvc/lab/heartbeat/`+param.lab_id, param)
+        return axios.create({baseURL:domain_name}).post(`lab/heartbeat/`+param.lab_id, param)
     },
     //容器执行销毁接口
     labDelete(domain_name,param) {

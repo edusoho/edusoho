@@ -63,7 +63,7 @@
                                 </div>
                             </div>
                         </div>
-                        <component :is="currentView" ></component>
+                        <component :is="currentView" v-on:hideView='hideView'></component>
                     </div>
                 </div>
             </div>
@@ -93,6 +93,10 @@
             }
         },
         methods:{
+            hideView(){
+                this.currentView = '';
+                this.isEnvShow = true;
+            },
             goEnv(){
                 this.currentView = 'Env';
                 this.isEnvShow = false

@@ -10,6 +10,7 @@
                 reqUrl:'https://mockapi.eolinker.com/3WtGzhnc4d14d4a6c5d8dc1dc7f9d292367d48477a2bf67',
                 text:"",
                 count:0,
+                del_lab_id:0,
                 percentage:0,
                 lab_id:""|sessionStorage.getItem("lab_id"),
             }
@@ -69,10 +70,10 @@
                                 _this.errorMsg = data.status.message;
                                 clearTimeout(timer)
                             } else if (data.status.code == 5000111) {
-                                if (_this.percent > 90) {
-                                    _this.percent = 95
+                                if (_this.percentage > 90) {
+                                    _this.percentage = 95
                                 } else {
-                                    _this.percent += Math.floor(Math.random() * 10) + 1
+                                    _this.percentage += Math.floor(Math.random() * 10) + 1
                                 }
                                 _this.text = '审核中';
                                 _this.getLabQuery()
@@ -122,16 +123,48 @@
             labDelete(labId) {
                 labApi.labDelete(this.reqUrl,{lab_id:labId});
             },
+            // 心跳
+            heartbeatInterval(lab_id){
+                let _this = this;
+                console.log("心跳~~~~");
+                console.log("del_lab_id_default"+_this.del_lab_id);
+                if(lab_id){
+                    let fixedTime = (new Date()).getTime();
+                    let timer = setInterval(function(){
+                        let nowTime = new Date();
+                        let t = (fixedTime + (_this.expiredIn * 1000)) - nowTime.getTime();
+                        if(_this.end_time && lab_id != _this.del_lab_id ){
+                            if (t > 0) {
+                                console.log("砰~");
+                                labApi.labHeartbeat(_this.reqUrl,{"lab_id": lab_id}).then(data => {
+                                    if(data.data.status.code != 2000000){
+                                        sessionStorage.removeItem('lab_id');
+                                        if(data.data.status.code != 5000108) {
+                                            _this.$alert(data.data.status.message,"请求错误",{
+                                                confirmButtonText:'确定',
+                                                callback:action=>{
+                                                    this.$emit('hideView');
+                                                }
+                                            });
+                                        }
+                                        clearInterval(timer);
+                                    }
+                                }).catch(function (error) {
+                                    // clearInterval(timer);
+                                });
+                            } else {
+                                sessionStorage.removeItem('lab_id');
+                                _this.envModal = true;
+                                clearInterval(timer);
+                            }
+                        }
+                    },10000)
+
+                }
+            },
         },
         mounted(){
-            // 模拟加载进度条
-            // setInterval(()=>{
-            //     if(this.percentage < 100){
-            //         this.percentage += 10;
-            //     }else{
-            //         clearTimeout();
-            //     }
-            // },2000);
+            let _this = this;
         }
     }
 </script>
