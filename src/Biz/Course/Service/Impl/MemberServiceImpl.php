@@ -43,7 +43,8 @@ class MemberServiceImpl extends BaseService implements MemberService
     public function becomeStudentAndCreateOrder($userId, $courseId, $data)
     {
         //        $data = ArrayToolkit::parts($data, array('price', 'amount', 'remark', 'isAdminAdded', 'source'));
-
+        # 补全定价信息，减少后续的修改
+        $data['price'] = 0.0;
         if (!ArrayToolkit::requireds($data, ['price', 'remark'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }

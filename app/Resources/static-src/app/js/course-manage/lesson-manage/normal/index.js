@@ -6,7 +6,7 @@ import {TaskListHeaderFixed} from 'app/js/course-manage/help';
 class NormalManage extends BaseManage {
   constructor($container) {
     super($container);
-    new LessonIntro();
+    // new LessonIntro();
   }
 
   _flushTaskNumber() {
