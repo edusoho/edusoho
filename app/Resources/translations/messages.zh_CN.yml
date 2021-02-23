@@ -9114,6 +9114,7 @@ log.action.course.publish_course: 发布教学计划
 log.action.course.close_course: 关闭教学计划
 log.action.course.update_draft: 更新草稿
 log.action.course.join_course: 加入教学计划
+log.action.course.exit_course: 退出教学计划
 log.action.user.exportCsv: 导出
 log.action.user.add: 新增
 log.action.user.edit: 修改
@@ -9208,6 +9209,7 @@ log.action.classroom.publish: 发布班级
 log.action.classroom.close: 关闭班级
 log.action.classroom.update_head_teacher: 修改班主任
 log.action.classroom.join_classroom: 加入班级
+log.action.classroom.exit_classroom: 退出班级
 log.action.article.update_settings: 更新设置
 log.action.article.create: 新增
 log.action.article.update: 修改
@@ -9337,6 +9339,7 @@ log.action.template.course.close: 关闭了<strong class="color-success">课程<
 log.action.template.course.delete: 删除了<strong class="color-success">课程</strong>《%title%》
 log.action.template.course.add_student: 在教学计划《<a href="%url%" target="_blank">%title%</a>》添加了<strong class="color-success">学员</strong>%nickname% 备注:%remark%
 log.action.template.course.remove_student: 在教学计划《<a href="%url%" target="_blank">%title%</a>》移除了<strong class="color-success">学员</strong>%nickname%
+log.action.template.course.exit_course: <strong class="color-success">学员</strong>%nickname%退出了教学计划《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.update_teacher: 更新了教学计划《<a href="%url%" target="_blank">%title%</a>》的教师信息
 log.action.template.course.create_thread: 新建了话题《%title%》
 log.action.template.course.update_thread: 更新了话题《%title%》
@@ -9379,6 +9382,7 @@ log.action.template.classroom.update_picture: 修改了<strong class="color-succ
 log.action.template.classroom.update_head_teacher: 修改了<strong class="color-success">班级</strong> 《<a href="%url%" target="_blank">%title%</a>》的班主任
 log.action.template.classroom.add_student: 在<strong class="color-success">班级</strong>《<a href="%url%" target="_blank">%title%</a>》添加了<strong class="color-success">学员</strong>%nickname% 备注:%remark%
 log.action.template.classroom.remove_student: 在<strong class="color-success">班级</strong>《<a href="%url%" target="_blank">%title%</a>》移除了<strong class="color-success">学员</strong>%nickname%
+log.action.template.classroom.exit_classroom: <strong class="color-success">学员</strong>%nickname%退出了<strong class="color-success">班级</strong>《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.delete_course: 在<strong class="color-success">班级</strong>《<a href="%url%" target="_blank">%title%</a>》移除了<strong class="color-success">课程</strong>%courseSetTitle%
 log.action.template.classroom.add_course: 在<strong class="color-success">班级</strong>《<a href="%url%" target="_blank">%title%</a>》添加了<strong class="color-success">课程</strong>%courseSetTitle%
 log.action.template.classroom.join_classroom: 加入班级《<a href="%url%" target="_blank">%title%</a>》
