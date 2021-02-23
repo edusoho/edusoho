@@ -10,6 +10,7 @@ use Biz\Course\Dao\CourseMaterialDao;
 use Biz\Course\Dao\CourseMemberDao;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\LessonService;
 use Biz\Sync\Service\AbstractSychronizer;
 use Biz\Sync\Service\SyncService;
 use Biz\System\Service\LogService;
@@ -40,6 +41,8 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
             'course.lesson.publish' => 'onCourseChapterUpdate',
             'course.lesson.unpublish' => 'onCourseChapterUpdate',
             'course.lesson.setOptional' => 'onCourseChapterUpdate',
+            'course.lessons.batch.delete' => 'onCourseLessonNumberUpdate',
+            'course.lessons.batch.update' => 'onCourseLessonNumberUpdate',
             //同步新建的任务时同步新增material记录即可，这里无需处理
             // 'course.material.create' => 'onCourseMaterialCreate',
             'course.material.update' => 'onCourseMaterialUpdate',
@@ -218,6 +221,12 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
         }
 
         $this->getSyncService()->sync('Course:CourseChapter.'.AbstractSychronizer::SYNC_WHEN_UPDATE, $chapter['id']);
+    }
+
+    public function onCourseLessonNumberUpdate(Event $event)
+    {
+        $courseId = $event->getSubject();
+        $this->getCourseLessonService()->updateLessonNumbers($courseId);
     }
 
     public function onCourseChapterDelete(Event $event)
@@ -401,5 +410,13 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
     protected function getSyncService()
     {
         return $this->getBiz()->service('Sync:SyncService');
+    }
+
+    /**
+     * @return LessonService
+     */
+    protected function getCourseLessonService()
+    {
+        return $this->getBiz()->service('Course:LessonService');
     }
 }

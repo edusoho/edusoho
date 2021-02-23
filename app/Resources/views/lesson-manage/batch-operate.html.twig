@@ -1,0 +1,30 @@
+<input type="hidden" id="course_manage_lesson_batch_delete" value="{{path('course_manage_lesson_batch_delete', { courseId: courseId })}}">
+<input type="hidden" id="course_manage_lesson_batch_unpublish" value="{{path('course_manage_lesson_batch_unpublish', { courseId: courseId })}}">
+<input type="hidden" id="course_manage_lesson_batch_publish" value="{{path('course_manage_lesson_batch_publish', { courseId: courseId })}}">
+<div class="task-manage-batch-operate js-batch-operate-panel clearfix hidden">
+  <div class="pull-left">
+    <span class="text-14 gray-darker">{{'course.plan_task.all_choices'|trans}}：</span>
+    <span class="js-batch-choose batch-choose cd-ml8 cd-mr24" data-types="chapter,unit">{{'course.plan_task.chapter'|trans}}</span>
+    <span class="js-batch-choose batch-choose" data-types="lesson">{{'course.plan_task.lesson'|trans}}</span>
+  </div>
+  <div class="pull-right clearfix">
+    <span class="chosen-number cd-mr24">{{'course.plan_task.selected'|trans|raw}}</span>
+    <button class="cd-btn cd-btn-primary cd-btn-sm cd-mr16 js-batch-publish" 
+      data-loading-text="{{'course.plan_task.publishing_btn'|trans}}"
+      disabled>
+      {{'course.plan_task.publish_btn'|trans}}
+    </button>
+    <button class="cd-btn cd-btn-default cd-btn-sm cd-mr16 js-batch-cancel-publish" 
+      data-loading-text="{{'course.plan_task.unpublishing_btn'|trans}}"
+      disabled>
+      {{'course.plan_task.unpublish_btn'|trans}}
+    </button>
+    <button class="cd-btn cd-btn-danger cd-btn-sm js-batch-delete"
+      data-loading-text="{{'course.plan_task.deleting_btn'|trans}}"
+      disabled>
+      {{'course.plan_task.delete_btn'|trans}}
+    </button>
+  </div>
+</div>
+
+<div class="task-manage-batch-operate-slot js-batch-operate-panel__slot hidden"></div>

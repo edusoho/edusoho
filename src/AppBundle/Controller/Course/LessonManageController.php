@@ -2,8 +2,10 @@
 
 namespace AppBundle\Controller\Course;
 
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Controller\BaseController;
 use AppBundle\Util\UploaderToken;
+use Biz\Course\LessonException;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\LessonService;
@@ -173,11 +175,62 @@ class LessonManageController extends BaseController
         return $this->createJsonResponse(['success' => true]);
     }
 
+    public function batchPublishAction(Request $request, $courseId)
+    {
+        $lessonIds = $request->request->get('lessonIds');
+
+        if (empty($lessonIds)) {
+            $this->createNewException(LessonException::PARAMETERS_MISSING());
+        }
+
+        $lessons = $this->getCourseLessonService()->batchUpdateLessonsStatus($courseId, $lessonIds, 'published');
+
+        if (empty($lessons)) {
+            return $this->createJsonResponse(['success' => true]);
+        }
+
+        return $this->createJsonResponse(ArrayToolkit::column($lessons, 'id'));
+    }
+
+    public function batchUnpublishAction(Request $request, $courseId)
+    {
+        $lessonIds = $request->request->get('lessonIds');
+
+        if (empty($lessonIds)) {
+            $this->createNewException(LessonException::PARAMETERS_MISSING());
+        }
+
+        $lessons = $this->getCourseLessonService()->batchUpdateLessonsStatus($courseId, $lessonIds, 'unpublished');
+
+        if (empty($lessons)) {
+            return $this->createJsonResponse(['success' => true]);
+        }
+
+        return $this->createJsonResponse(ArrayToolkit::column($lessons, 'id'));
+    }
+
     public function deleteAction(Request $request, $courseId, $lessonId)
     {
         $this->getCourseLessonService()->deleteLesson($courseId, $lessonId);
 
         return $this->createJsonResponse(['success' => true]);
+    }
+
+    public function batchDeleteAction(Request $request, $courseId)
+    {
+        $lessonIds = $request->request->get('lessonIds');
+
+        if (empty($lessonIds)) {
+            $this->createNewException(LessonException::PARAMETERS_MISSING());
+        }
+
+        $lessons = $this->getCourseLessonService()->batchDeleteLessons($courseId, $lessonIds);
+
+        if (empty($lessons)) {
+            return $this->createJsonResponse(['success' => true]);
+        }
+
+        return $this->createJsonResponse(ArrayToolkit::column($lessons, 'id'));
     }
 
     public function setOptionalAction(Request $request, $courseId, $lessonId)
