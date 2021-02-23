@@ -29,8 +29,8 @@
       </button>
     {% endif %}
 
-    <div class="cd-dropdown" data-toggle="cd-dropdown">
-      <button class="cd-btn cd-btn-default cd-btn-sm">
+    <div class="cd-dropdown cd-mr16" data-toggle="cd-dropdown">
+      <button class="cd-btn cd-btn-default cd-btn-sm js-add-chapter-unit">
         {{ 'form.field.create'|trans }}{{ course_chapter_alias('chapter')|trans }} / {{ course_chapter_alias('unit')|trans }}<span class="caret"></span>
       </button>
 
@@ -48,8 +48,16 @@
         </li>
       </ul>
     </div>
+
+    <button class="cd-btn cd-btn-default cd-btn-sm js-batch-operate-switch">
+      {{'course.plan_task.manage_btn'|trans}}
+    </button>
+    <button class="cd-btn cd-btn-default cd-btn-sm js-batch-operate-switch hidden">
+      {{'course.plan_task.cancel_manage_btn'|trans}}
+    </button>
   </div>
 </div>
+<div class="task-list-header js-task-list-header__slot hidden"></div>
 <div  id="js-intro" class="modal fade text-center" aria-hidden="true" data-backdrop="static"  tabindex="-1" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">

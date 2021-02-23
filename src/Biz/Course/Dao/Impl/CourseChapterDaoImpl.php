@@ -69,6 +69,15 @@ class CourseChapterDaoImpl extends AdvancedDaoImpl implements CourseChapterDao
         return $result;
     }
 
+    public function findChaptersByCourseIdAndLessonIds($courseId, $lessonIds)
+    {
+        $marks = str_repeat('?,', count($lessonIds) - 1).'?';
+
+        $sql = "SELECT * FROM {$this->table()} WHERE courseId= ? and id IN ({$marks})";
+
+        return $this->db()->fetchAll($sql, array_merge([$courseId], $lessonIds));
+    }
+
     public function findChaptersByCopyIdAndLockedCourseIds($copyId, $courseIds)
     {
         if (empty($courseIds)) {
@@ -106,6 +115,7 @@ class CourseChapterDaoImpl extends AdvancedDaoImpl implements CourseChapterDao
             'timestamps' => ['createdTime', 'updatedTime'],
             'conditions' => [
                 'id = :id',
+                'id in (:ids)',
                 'copyId = :copyId',
                 'courseId = :courseId',
                 'seq >= :seq_GTE',
