@@ -22,10 +22,21 @@ class CourseTaskDeleteSyncJobTest extends BaseTestCase
             [
                 [
                     'functionName' => 'findCoursesByParentIdAndLocked',
-                    'withParams' => [220, 1],
                     'returnValue' => [
                         ['id' => 3331, 'courseSetId' => 222, 'courseType' => 'normal'],
                         ['id' => 3332, 'courseType' => 'normal'],
+                    ],
+                ],
+                [
+                    'functionName' => 'get',
+                    'returnValue' => [
+                        'id' => 220,
+                    ],
+                ],
+                [
+                    'functionName' => 'update',
+                    'returnValue' => [
+                        'id' => 220,
                     ],
                 ],
             ]
@@ -47,10 +58,6 @@ class CourseTaskDeleteSyncJobTest extends BaseTestCase
             [
                 [
                     'functionName' => 'findByCopyIdAndLockedCourseIds',
-                    'withParams' => [
-                        110,
-                        [3331, 3332],
-                    ],
                     'returnValue' => [
                         ['id' => 231, 'courseId' => 3331],
                         ['id' => 232, 'courseId' => 3332],
@@ -65,6 +72,10 @@ class CourseTaskDeleteSyncJobTest extends BaseTestCase
                     ],
                 ],
                 [
+                    'functionName' => 'count',
+                    'returnValue' => 1,
+                ],
+                [
                     'functionName' => 'get',
                     'withParams' => [232],
                     'returnValue' => [
@@ -77,9 +88,8 @@ class CourseTaskDeleteSyncJobTest extends BaseTestCase
 
         $job->execute();
 
-        $this->getTaskDao()->shouldHaveReceived('findByCopyIdAndLockedCourseIds')->times(1);
-        $this->getTaskDao()->shouldHaveReceived('get')->times(1);
-        $this->getCourseDao()->shouldHaveReceived('findCoursesByParentIdAndLocked')->times(1);
+        $this->getTaskDao()->shouldHaveReceived('findByCopyIdAndLockedCourseIds')->times(3);
+        $this->getTaskDao()->shouldHaveReceived('get')->times(2);
 
         $strategy = $this->biz['course.normal_strategy'];
 
