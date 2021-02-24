@@ -192,7 +192,7 @@ class QuestionController extends BaseController
 
         $questions = $this->getItemService()->searchItems(
             $conditions,
-            ['created_time' => 'DESC'],
+            ['created_time' => 'DESC', 'id' => 'DESC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
