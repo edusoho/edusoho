@@ -10,6 +10,7 @@ use Biz\Goods\Service\GoodsService;
 use Biz\Product\Service\ProductService;
 use Biz\System\Service\SettingService;
 use Symfony\Component\Routing\Generator\UrlGenerator;
+use VipPlugin\Biz\Vip\Service\VipService;
 
 /**
  * Class Good Good并不合适,商品真实本体是Goods,单复数同形,类名为Good是为了满足接口的定义规范（带有s结尾的单词比较难处理）
@@ -100,7 +101,7 @@ class Good extends AbstractResource
                 list($vipLevelInfo, $vipUser) = $goodsEntity->getVipInfo($goods, $spec, $user['id']);
                 $spec['vipLevelInfo'] = $vipLevelInfo;
                 $spec['vipUser'] = $vipUser;
-                $spec['canVipJoin'] = $vipLevelInfo && $vipUser && $vipUser['deadline'] >= time() && $vipLevelInfo['seq'] <= $vipUser['level']['seq'];
+                $spec['canVipJoin'] = 'ok' == $this->getVipService()->checkUserVipRight($user['id'], $goods['type'], $spec['targetId']);
             }
             $spec['teacherIds'] = $goodsEntity->getSpecsTeacherIds($goods, $spec);
         }
@@ -123,6 +124,14 @@ class Good extends AbstractResource
     private function getGoodsService()
     {
         return $this->service('Goods:GoodsService');
+    }
+
+    /**
+     * @return VipService
+     */
+    private function getVipService()
+    {
+        return $this->service('VipPlugin:Vip:VipService');
     }
 
     /**
