@@ -52,8 +52,8 @@ class SailTemplate extends Template
                         'link' => ['target' => '', 'type' => '', 'url' => ''],
                     ],
                     [
-                        'title' => '网校运营',
-                        'image' => ['url' => $host.'/static-dist/app/img/admin/h5/operation@2x.png', 'uri' => ''],
+                        'title' => '学校运营',
+                        'image' => ['url' => $host . '/static-dist/app/img/admin/h5/operation@2x.png', 'uri' => ''],
                         'link' => ['target' => '', 'type' => '', 'url' => ''],
                     ],
                     [
@@ -68,7 +68,7 @@ class SailTemplate extends Template
                     ],
                 ],
                 'tips' => [
-                    '在导航栏中放上“免费专区”，更容易促进进入网校的用户试听课程哦。',
+                    '在导航栏中放上“免费专区”，更容易促进进入学校的用户试听课程哦。',
                 ],
             ],
             'courseList-3' => [
@@ -119,7 +119,7 @@ class SailTemplate extends Template
                     'link' => [],
                 ],
                 'tips' => [
-                    '广告图中增加网校名称、logo、slogan等内容，可有效提升用户对平台信任度，更好促进课程试看和转化。',
+                    '广告图中增加学校名称、logo、slogan等内容，可有效提升用户对平台信任度，更好促进课程试看和转化。',
                 ],
             ],
             'classroom_list-6' => [

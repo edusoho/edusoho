@@ -14,7 +14,7 @@ class AccountDestroyInfo extends AbstractResource
         $user = $this->getCurrentUser();
         $record = $this->getDestroyAccountRecordService()->getLastAuditDestroyAccountRecordByUserId($user['id']);
         $site = $this->getSettingService()->get('site');
-        $siteName = empty($site['name']) ? '本网校' : $site['name'];
+        $siteName = empty($site['name']) ? '本学校' : $site['name'];
 
         return array(
             'applied' => empty($record) ? false : true,

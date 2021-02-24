@@ -85,9 +85,9 @@ parameters:
           categoryId: 0
           code: course-grid-with-condition-index
           categoryCount: "4"
-          defaultTitle: "网校课程"
+          defaultTitle: "学校课程"
           subTitle: ""
-          defaultSubTitle: "精选网校课程，满足你的学习兴趣。"
+          defaultSubTitle: "精选学校课程，满足你的学习兴趣。"
           id: "latestCourse"
         - title: ""
           count: "12"

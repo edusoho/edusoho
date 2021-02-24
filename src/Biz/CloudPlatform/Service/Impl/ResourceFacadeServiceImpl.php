@@ -53,7 +53,7 @@ class ResourceFacadeServiceImpl extends BaseFacade implements ResourceFacadeServ
 
     protected function prepareVideoContext($file, $context)
     {
-        //微网校用于是否支持 mobile 端判断
+        //微学校用于是否支持 mobile 端判断
         $context['supportMobile'] = intval($this->getSettingService()->node('storage.support_mobile', 0));
         if ('cloud' == $file['storage']) {
             $context['jsPlayer'] = 'balloon-cloud-video-player';

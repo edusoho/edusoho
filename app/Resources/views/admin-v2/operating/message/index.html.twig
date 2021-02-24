@@ -51,17 +51,17 @@
           <tr class="message-tr" id="message-table-tr-{{ message.id }}">
             <td>
               <input value="{{ message.id }}" type="checkbox" data-role="batch-item">
-              {{ admin_macro.user_link(users[message.fromId]) }}
+              {{ users[message.fromId].nickname }}
             </td>
 
-            <td>{{ admin_macro.user_link(users[message.toId]) }} </td>
+            <td>{{ users[message.toId].nickname }} </td>
             <td>
               <div class="short-long-text">
                 <div class="short-text text-sm text-muted">{{ message.content|plain_text(60) }} <span
-                      class="trigger">{{ 'admin.user.message.fields.content_spread_label'|trans }}</span>
+                    class="trigger">{{ 'admin.user.message.fields.content_spread_label'|trans }}</span>
                 </div>
                 <div class="long-text">{{ message.content }} <span
-                      class="trigger">{{ 'admin.user.message.fields.content_retract_label'|trans }}</span></div>
+                    class="trigger">{{ 'admin.user.message.fields.content_retract_label'|trans }}</span></div>
               </div>
             </td>
             <td>{{ message.createdTime|date('Y-n-d H:i') }}</td>

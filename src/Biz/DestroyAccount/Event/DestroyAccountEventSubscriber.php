@@ -25,7 +25,7 @@ class DestroyAccountEventSubscriber extends EventSubscriber implements EventSubs
 
         if (!empty($user['verifiedMobile'])) {
             $site = $this->getSettingService()->get('site');
-            $siteName = empty($site['name']) ? '本网校' : $site['name'];
+            $siteName = empty($site['name']) ? '本学校' : $site['name'];
 
             $smsParams = [
                 'mobiles' => $user['verifiedMobile'],

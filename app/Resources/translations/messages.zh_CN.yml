@@ -3,9 +3,9 @@ Bad credentials.: 用户名或密码错误
 # 整站导航
 site.alipay: 支付宝
 site.trade.title: %name%订单
-site.online_school_name: 网校名称
-site.online_school_about: 网校简介
-site.online_school_logo: 网校LOGO
+site.online_school_name: 学校名称
+site.online_school_about: 学校简介
+site.online_school_logo: 学校LOGO
 site.register_link_url: 注册链接的地址
 site.not_support_cloud_video: >
   <br>&nbsp;&nbsp;&nbsp;&nbsp;该浏览器不支持云视频播放，请前往<a href="%mobileUrl%" target="parent">下载App</a>。
@@ -95,7 +95,7 @@ site.price: 价格
 site.org: 组织机构
 site.org.setup: 设置组织机构
 site.org.modify_tips: 你不能更改自己的所属组织机构，你的帐号已取消勾选
-site.tips.weixin_scan: 微信扫一扫 分享我的网校
+site.tips.weixin_scan: 微信扫一扫 分享我的学校
 site.btn.upgrade_info: 查看升级详情
 site.edu_cloud.link_error_tips: 网络问题，无法连接%EduSoho%开放云平台
 site.date_format: Y年n月d日 H:i:s
@@ -442,7 +442,7 @@ finance.total_expense: 总计支出
 finance.income_expense: 收支
 finance.coin: 虚拟币
 finance.balance: 账户余额
-finance.net_income: 网校净收入
+finance.net_income: 学校净收入
 finance.use_deduction: 用于抵扣
 finance.user_currency: 用于标价
 finance.RMB_price: 人民币价格
@@ -471,7 +471,7 @@ plugin.coupon.code: 优惠券码
 plugin.coupon.amount: 优惠抵扣
 
 #虚拟币通用
-coin.online_school_balance: 网校余额
+coin.online_school_balance: 学校余额
 coin.recharge: 充值
 coin.consume: 消费
 coin.sn: 流水号
@@ -552,7 +552,7 @@ order.paid_time: 付款时间
 order.bank_code: 银行编号
 order.payment_pattern: 支付方式
 order.payment_pattern.coin: %coin_name%支付
-order.payment_pattern.school: 网校支付
+order.payment_pattern.school: 学校支付
 order.payment_pattern.balance: 余额支付
 order.payment_pattern.alipay: 支付宝
 order.payment_pattern.wxpay: 微信支付
@@ -672,7 +672,7 @@ pay_center.fee: 收费
 pay_center.remind: 支付提醒
 pay_center.remind.content_title: 支付提醒
 pay_center.remind.pay_in_alipay_btn: 点击进入支付宝
-pay_center.remind.school_escow_tips: 由于网校使用的为“担保交易”，因此需要您去支付宝网站对本次购买做“确认收货”操作（系统已自动完成虚拟发货），确认后即支付成功，即可进入课程学习。
+pay_center.remind.school_escow_tips: 由于学校使用的为“担保交易”，因此需要您去支付宝网站对本次购买做“确认收货”操作（系统已自动完成虚拟发货），确认后即支付成功，即可进入课程学习。
 pay_center.remind.person_escow_tips: 由于您在支付时选择的交易方式是“担保交易”，因此需要您去支付宝网站对本次购买做“确认收货”操作（系统已自动完成虚拟发货），确认后即支付成功，即可进入课程学习。
 pay_center.remind.: 点击进入支付宝
 pay_center.order.title: 订单名称：%title%
@@ -822,8 +822,8 @@ material_lib.search.conditions.use_status.used: 已使用
 material_lib.tag_manage: 标签设置
 material_lib.tag_manage.tag: 标签
 material_lib.tag_manage.input_placeholder: 标签
-material_lib.tag_manage.tag_tips: 标签来自网校课程标签，由网校管理员统一管理。
-material_lib.tag_manage.tag_explain: 用于按标签搜索课程、相关课程的提取等，由网校管理员后台统一管理
+material_lib.tag_manage.tag_tips: 标签来自学校课程标签，由学校管理员统一管理。
+material_lib.tag_manage.tag_explain: 用于按标签搜索课程、相关课程的提取等，由学校管理员后台统一管理
 material_lib.preview.content_title: 资料预览
 material_lib.preview.not_support_tips: 该文件暂不支持预览
 material_lib.preview.local_file_not_support_tips: 本地文件暂不支持预览
@@ -833,7 +833,7 @@ material_lib.detail.cover_image: 封面
 material_lib.detail.converting_tips: 视频还没有转码完成，请等待转码完成......
 material_lib.detail.title: 标题
 material_lib.detail.tag: 标签
-material_lib.detail.tag_tips: 标签来自网校课程标签，由网校管理员统一管理。
+material_lib.detail.tag_tips: 标签来自学校课程标签，由学校管理员统一管理。
 material_lib.detail.description: 简介
 material_lib.detail.share: 分享
 material_lib.detail.share.share_to_public: 共享到公共资料
@@ -923,7 +923,7 @@ course.not_member_in_classroom_tips: >
   还不是%classroomName%成员,请先<a href="%classroomUrl%">加入%classroomName%</a>
 buy.approve_tips: 购买需要通过实名认证，您还没有完成实名认证，赶快去认证吧~
 buy.payments_disabled_title: 开通支付功能提醒
-buy.payments_disabled_tips: 由于网校未开通任一支付功能，当前商品不支持购买，请联系网校开通支付功能后再进行购买。
+buy.payments_disabled_tips: 由于学校未开通任一支付功能，当前商品不支持购买，请联系学校开通支付功能后再进行购买。
 course.buy_failed_tips: 真不巧，已经有人抢在你前面下单了，请继续关注
 course.no_avatar_tips: >
   您还没有头像，设置以后才能加入学习<br/>拥有一个独有的头像，老师和同学们能更容易关注到你哦～～
@@ -1601,7 +1601,7 @@ course.base.content_title: 课程信息
 course.base.title: 课程标题
 course.base.sub_title: 课程副标题
 course.base.tag: 标签
-course.base.tag_tips: 用于按标签搜索课程、相关课程的提取等，由网校管理员后台统一管理
+course.base.tag_tips: 用于按标签搜索课程、相关课程的提取等，由学校管理员后台统一管理
 course.base.category: 分类
 course.base.serialize_mode: 连载状态
 course.base.serialize_mode.none: 非连载课程
@@ -1962,7 +1962,7 @@ course.plan_task.activity_manage.activity_file_empty: 抱歉，%type%文件不�
 course.plan_task.activity_manage.preview_failed_tips: 当前%taskName%不支持预览，请加入教学计划进行学习。
 course.plan_task.activity_manage.title_name: 标题名称
 course.plan_task.activity_manage.help_block: 建议标题字数控制在15字以内，否则会影响手机端浏览
-course.plan_task.activity_ppt_animation_tip: 当前PC端已支持播放PPT中的动画及音视频（App、小程序和新版微网校暂不支持）。
+course.plan_task.activity_ppt_animation_tip: 当前PC端已支持播放PPT中的动画及音视频（App、小程序和新版微学校暂不支持）。
 course.plan_task.activity_ppt_animation_link: 动画支持情况
 course.plan_task.activity_ppt_animation_btn: 切换图片模式
 course.plan_task.activity_manage.setup_is_option: 设为选修
@@ -2023,7 +2023,7 @@ course.plan_task.activity_manage.download: 下载资料
 course.plan_task.activity_manage.download.choose_file: 选择资料
 course.plan_task.activity_manage.download.link_file: 网络链接资料
 course.plan_task.activity_manage.download.delete_btn: 删除
-course.plan_task.activity_manage.download.file_tips: 资料文件支持在PC和APP中下载使用，暂不支持在微网校和小程序中使用!
+course.plan_task.activity_manage.download.file_tips: 资料文件支持在PC和APP中下载使用，暂不支持在微学校和小程序中使用!
 course.plan_task.activity_manage.download.downloaded_tips: 下载过资料
 course.plan_task.activity_manage.download.edit: 编辑
 course.plan_task.activity_manage.download.converting_tips: >
@@ -2518,8 +2518,8 @@ classroom.manage.set_info.name: 名称
 classroom.manage.set_info.introduction: 简介
 classroom.manage.set_info.introduction.help_block: 为正常使用IFrame，请在【管理后台】-【系统】-【安全设置】-【白名单域名】中进行设置
 classroom.manage.set_info.tags: 标签
-classroom.manage.set_info.tags.explain: 用于按标签检索班级等，由网校管理员后台统一管理
-classroom.manage.set_info.tags.help_block: 用于按标签检索班级等，由网校管理员后台统一管理
+classroom.manage.set_info.tags.explain: 用于按标签检索班级等，由学校管理员后台统一管理
+classroom.manage.set_info.tags.help_block: 用于按标签检索班级等，由学校管理员后台统一管理
 classroom.manage.set_info.show_label: %name%展示
 classroom.manage.set_info.show_label.help_block: 关闭后，%name%将彻底隐藏，无法在前台查看到。
 classroom.manage.set_info.buy: 购买
@@ -2659,7 +2659,7 @@ classroom.today: 今天
 classroom.name_label: 名称
 classroom.about_tips: 为正常使用IFrame，请在【管理后台】-【系统】-【安全设置】-【白名单域名】中进行设置
 classroom.tag_label: 标签
-classroom.tag_tips: 用于按标签检索班级等，由网校管理员后台统一管理
+classroom.tag_tips: 用于按标签检索班级等，由学校管理员后台统一管理
 classroom.open_radio: 开启
 classroom.close_radio: 关闭
 classroom.show_tips: >
@@ -2901,9 +2901,9 @@ user.register.read_agree: 我已阅读并同意
 user.register.user_service_protocol: 用户服务协议
 user.register.reset_email: 重置邮箱
 user.register.reset_email.origin_email: '原邮箱地址:'
-user.register.reset_email.school_login_password: 网校密码：
-user.register.reset_email.input_placeholder: 请输入网校密码
-user.register.reset_email.display: 网校密码
+user.register.reset_email.school_login_password: 学校密码：
+user.register.reset_email.input_placeholder: 请输入学校密码
+user.register.reset_email.display: 学校密码
 user.register.reset_email.new_email: '新邮箱地址:'
 user.register.reset_email.new_email_tips: 请输入新的邮箱地址
 user.register.login_account: 登录帐号
@@ -2955,8 +2955,8 @@ user.oauth.bind_account.tip: 为获取更优质服务，请绑定您的%accountT
 user.oauth.validate_password: 验证密码
 user.oauth.bind_success: 帐号绑定成功
 user.oauth.bind_account_success: 绑定成功
-user.oauth.web_account_password: 网校帐号密码
-user.oauth.binding_web_user: 正在绑定网校用户
+user.oauth.web_account_password: 学校帐号密码
+user.oauth.binding_web_user: 正在绑定学校用户
 user.oauth.bind_account_and_go_continue: 绑定并继续
 user.oauth.bind_other_account: 绑定其他帐号？
 user.oauth.bind_existed_account: 绑定已有帐号？
@@ -3959,7 +3959,7 @@ mobile.app_download_btn: 下载APP
 mobile.app_download_tips: >
   <p class="main-slogan">更好的移动端学习</p>
   <p class="sub-slogan">好好学习，天天向上</p>
-mobile.app_login_btn: 登录网校
+mobile.app_login_btn: 登录学校
 mobile.app_login_tips: 扫一扫登录客户端
 mobile.step_one: >
   <span class="member">1</span>第一步:
@@ -3967,7 +3967,7 @@ mobile.step_one_tips: 扫描二维码，下载手机APP。
 mobile.Android_client: Android 客户端
 mobile.iPhone_client: iPhone客户端
 mobile.step_two: >
-  <span class="member">2</span>第二步: 打开阔知学堂APP，扫描网校二维码。
+  <span class="member">2</span>第二步: 打开阔知学堂APP，扫描学校二维码。
 mobile.vip_free_study: 会员免费买
 
 # 客服
@@ -4286,7 +4286,7 @@ my.teaching.open_course.liveTimeSet.recommend_setting: 推荐设置
 my.teaching.open_course.course_manage: 课程管理
 my.teaching.open_course.course_info: 课程信息
 my.teaching.open_course.live_manage: 录播管理
-my.teaching.open_course.show.edusoho_school: EduSoho网校
+my.teaching.open_course.show.edusoho_school: EduSoho学校
 my.teaching.open_course.show.tips: >
   二维码只用于微信扫一<br>扫预览，不可用于分享
 my.teaching.open_course.show.recommend_course: 推荐课程/班级
@@ -5449,7 +5449,7 @@ admin.question_bank.manage.model: >
   <p class="question-bank-model-text">在新版题库中创建的题目和试卷可以在所有课程中引用，全面提升了题目和试卷的复用性。</p>
 
   <p class="question-bank-model-title"><i class="es-icon es-icon-manage"></i>新增题目分类，题目管理更方便</p>
-  <p class="question-bank-model-text">每个题库中都可以创建一套题目分类，无需再从属于教学计划或者课时，方便网校管理题目。</p>
+  <p class="question-bank-model-text">每个题库中都可以创建一套题目分类，无需再从属于教学计划或者课时，方便学校管理题目。</p>
 
   <p class="question-bank-model-title"><i class="es-icon es-icon-efficiency"></i>试卷创建优化，创建效率大提升</p>
   <p class="question-bank-model-text">用户可以一次性添加多个题型的题目，并且新增了跨页连选功能，大大提升了创建试卷的效率。</p>
@@ -5545,7 +5545,7 @@ admin.homepage.admins_announcements_empty: 暂无公告
 admin.homepage.status_bar.content_title: 状态栏
 admin.homepage.status_bar.system_version_title: 系统版本
 admin.homepage.status_bar.system_version_status.have_update: 有更新
-admin.homepage.status_bar.school_app_title: 网校应用
+admin.homepage.status_bar.school_app_title: 学校应用
 admin.homepage.status_bar.school_app_status.updated: 已更新
 admin.homepage.status_bar.school_app_status.several_are_not_updated: 个未更新
 admin.homepage.status_bar.cloud_service_title: 教育云服务
@@ -5655,7 +5655,7 @@ admin.setting.site.slogan: 网站副标题
 admin.setting.site.url: 网站域名
 admin.setting.site.url.help_block: 以"%http%://"开头
 admin.setting.site.logo: 网站LOGO
-admin.setting.site.logo.help_block: 请上传jpg, gif, png格式的图片。logo 图片尺寸建议不超过250×50px。图片大小建议不超过2MB。<br>网校 logo 设置后将显示顶部导航左侧，
+admin.setting.site.logo.help_block: 请上传jpg, gif, png格式的图片。logo 图片尺寸建议不超过250×50px。图片大小建议不超过2MB。<br>学校 logo 设置后将显示顶部导航左侧，
 admin.setting.site.logo.view_btn: 点击查看
 admin.setting.site.favicon: 浏览器图标
 admin.setting.site.favicon.help_block: 建议上传ico格式的图标文件，支持 ico, jpg, gif, png等格式, 建议尺寸 32×32px。
@@ -5672,7 +5672,7 @@ admin.setting.site.analytics: 统计分析代码
 admin.setting.site.analytics.help_block: >
   <p class="help-block">统计代码是网站统计软件发布的一段代码，用以统计添加统计代码的网站的数据。</p>
   <p class="help-block">包括网站的访客来源，从哪个网页跳转到此网站，搜索什么关键词到网站，一共有多少人访问，每天多少人多少IP，平均访问时间是多少等等数据。</p>
-  <p class="help-block">统计分析工具可以分析网校访问趋势，以及根据数据做推广调整，优化网校资源，建议使用<a href="http://tongji.baidu.com" target="_blank">百度统计</a>、<a href="http://ta.qq.com/" target="_blank">腾讯分析</a>或者<a target="_blank" href="http://www.umeng.com/">CNZZ。</a></p>
+  <p class="help-block">统计分析工具可以分析学校访问趋势，以及根据数据做推广调整，优化学校资源，建议使用<a href="http://tongji.baidu.com" target="_blank">百度统计</a>、<a href="http://ta.qq.com/" target="_blank">腾讯分析</a>或者<a target="_blank" href="http://www.umeng.com/">CNZZ。</a></p>
 admin.setting.site.website_status: 站点状态
 admin.setting.site.website_status.open: 开放
 admin.setting.site.website_status.closed: 关闭
@@ -5728,13 +5728,13 @@ admin.setting.theme.manage.modal.setting_custom_teacher_count: 教师数量设�
 admin.setting.license.headline: 电子营业执照配置
 admin.setting.license.name: 电子营业执照名称
 admin.setting.license.picture: 电子营业执照图片
-admin.setting.license.picture.help_block: 请上传jpg,gif,png格式的图片。图片大小建议不超过5MB。网校电子营业图片设置后将显示在首页底栏。
+admin.setting.license.picture.help_block: 请上传jpg,gif,png格式的图片。图片大小建议不超过5MB。学校电子营业图片设置后将显示在首页底栏。
 admin.setting.license.url: 电子营业执照链接
 admin.setting.permit.headline: 经营许可配置
 admin.setting.permit.name: 经营许可证名称
 admin.setting.permit.record.number: 备案号
 admin.setting.permit.picture: 证件图片
-admin.setting.permit.picture.help_block: 请上传jpg,gif,png格式的图片。图片大小建议不超过5MB。网校证件图片设置后将显示在首页底栏。
+admin.setting.permit.picture.help_block: 请上传jpg,gif,png格式的图片。图片大小建议不超过5MB。学校证件图片设置后将显示在首页底栏。
 admin.setting.permit.setting.add: 新增一栏
 admin.setting.permit.setting.remove: 删除整栏
 admin.setting.record.picture: 公安备案图标
@@ -5863,11 +5863,11 @@ admin.setting.consult.work_email: 工作邮箱
 admin.setting.es_bar.esbar_function: 侧边栏功能
 admin.setting.es_bar.esbar_function.open: 开启
 admin.setting.es_bar.esbar_function.closed: 关闭
-admin.setting.es_bar.help_block: 网校开启侧边栏后，客服的悬浮框会失效
+admin.setting.es_bar.help_block: 学校开启侧边栏后，客服的悬浮框会失效
 admin.setting.share.article_share_content: 资讯分享内容
 admin.setting.share.Variables.tips: 变量说明：
 admin.setting.share.as_article_title.tips: 为资讯标题
-admin.setting.share.as_online_school_name.tips: 为网校名称
+admin.setting.share.as_online_school_name.tips: 为学校名称
 admin.setting.share.course_share_content: 课程分享内容
 admin.setting.share.as_course_name: 为课程名称
 admin.setting.share.group_share_content: 小组分享内容
@@ -5876,7 +5876,7 @@ admin.setting.share.as_thread_name: 为话题名称
 admin.setting.share.classroom_share_content: 班级分享内容
 admin.setting.share.as_classroom_name: 为班级名称
 admin.setting.security.IFrame_white_domain: IFrame白名单
-admin.setting.security.help_block: 当编辑区允许添加iframe、图片等涉及外链的代码，以引入第三方网站的组件时。为保障网校安全，只允许白名单域名范围内的外链网址。一行一个域名，请不要添加http://前缀。
+admin.setting.security.help_block: 当编辑区允许添加iframe、图片等涉及外链的代码，以引入第三方网站的组件时。为保障学校安全，只允许白名单域名范围内的外链网址。一行一个域名，请不要添加http://前缀。
 # 运营模块
 # 编辑区管理
 admin.block_manage.all: 所有
@@ -6074,7 +6074,7 @@ admin.wechat_notification.failure_reason.empty: 暂无失败原因
 admin.wechat.notification.open_wechat_notify_tip: 微信通知，指的是通过微信服务号向学生发送消息，学生绑定微信并关注服务号即可收取微信通知，微信通知具有两大优势
 admin.wechat.notification.go_to_open: 前往开启
 admin.wechat.notification.un_authorized_before_open_tip: 开启微信通知前，请先进行扫码授权。
-admin.wechat.notification.un_authorized_after_open_tip: 为防止网校服务器IP或消息服务器IP变更造成的通知功能异常，建议您进行扫码授权。
+admin.wechat.notification.un_authorized_after_open_tip: 为防止学校服务器IP或消息服务器IP变更造成的通知功能异常，建议您进行扫码授权。
 admin.wechat.notification.authorized_wholeless: 检测到您在扫码授权时，未将群发与通知权限”授予ES第三方平台，将无法启用“微信服务号通知”，请进行重新授权。
 admin.wechat.notification.go_authorizer: 立即授权
 
@@ -6376,7 +6376,7 @@ admin.operation_certificate.template.certificate.title.default: 课程认证证�
 admin.operation_certificate.template.certificate.recipient: 被授予人信息
 admin.operation_certificate.template.certificate.recipient.default: $name$（$username$）同学：
 admin.operation_certificate.template.certificate.recipient_hint: 可选填，支持添加 姓名：$name$  用户名：$username$
-admin.operation_certificate.template.certificate.empty_recipient_hint: 注：如网校未将 [姓名] 设置为必填项，则学生未填写姓名时，被授予人信息为空
+admin.operation_certificate.template.certificate.empty_recipient_hint: 注：如学校未将 [姓名] 设置为必填项，则学生未填写姓名时，被授予人信息为空
 admin.operation_certificate.template.certificate.content: 证书正文
 admin.operation_certificate.template.certificate.content.default.course: 由于你【$courseName$】课程中表现优秀，最终完成课程并通过考核，特颁发此证书！
 admin.operation_certificate.template.certificate.content.default.classroom: 由于你在【$classroomName$】班级中表现优秀，最终完成课程并通过考核，特颁发此证书！
@@ -6478,11 +6478,11 @@ admin.batch_notification.operation: 操作
 admin.batch_notification.edit_btn: 编辑
 admin.batch_notification.delete_btn: 删除
 admin.batch_notification.publish_btn: 发布
-admin.batch_notification.tips: 全站站内通知将以网校通知的形式发给所有用户
+admin.batch_notification.tips: 全站站内通知将以学校通知的形式发给所有用户
 admin.batch_notification.modal.title: 全站站内通知
 admin.batch_notification.modal.title_field: 通知标题
 admin.batch_notification.modal.body_field: 正文
-admin.batch_notification.empty_tips: 全站站内通知将以网校通知的形式发给所有用户
+admin.batch_notification.empty_tips: 全站站内通知将以学校通知的形式发给所有用户
 
 #后台用户模块
 ##用户模块通用字段
@@ -6872,15 +6872,15 @@ admin.edu_cloud.edu_video.enable_tips: >
   <p>4.优质视听体验——采用CDN（内容分发网络）技术，200多个国内外优质节点，保障高清流畅的视听体验。多种清晰度自由切换，不同的网络环境都能流畅观看。多终端全平台完美支持，随时随地观看精彩视频。</p>
   <p>5.单价￥0.8/GB，购买云视频包享受更多优惠，立即 <a href="%url%" target="_blank"> 了解详情</a>。</p>
 admin.edu_cloud.edu_video_setting.delete_modal_title: 是否删除普通视频
-admin.edu_cloud.edu_video_setting.delete_modal_content: 您选择了加密模式，删除普通格式视频能增强视频安全性，降低网校视频被下载的风险。不会影响加密视频正常播放。
+admin.edu_cloud.edu_video_setting.delete_modal_content: 您选择了加密模式，删除普通格式视频能增强视频安全性，降低学校视频被下载的风险。不会影响加密视频正常播放。
 admin.edu_cloud.edu_video_setting.change_normal_title: 转换为普通模式
-admin.edu_cloud.edu_video_setting.change_normal_content: 转换为普通模式能增强视频对手机浏览器的兼容性；但<span class="text-danger">可能降低网校视频的安全性</span>，是否继续？
+admin.edu_cloud.edu_video_setting.change_normal_content: 转换为普通模式能增强视频对手机浏览器的兼容性；但<span class="text-danger">可能降低学校视频的安全性</span>，是否继续？
 admin.edu_cloud.edu_video.delete_btn: 删除普通视频
 admin.edu_cloud.edu_video.delete_success: 恭喜
 admin.edu_cloud.edu_video.delete_ok_confirm: 恭喜，您的云视频全部为加密格式！安全性更高。
 admin.edu_cloud.edu_video.delete_ok_btn: 好
 admin.edu_cloud.edu_video.delete_confirm_title: 删除普通视频
-admin.edu_cloud.edu_video.delete_confirm_content: 删除普通格式视频能增强视频安全性，降低网校视频被下载的风险。不会影响加密视频正常播放。
+admin.edu_cloud.edu_video.delete_confirm_content: 删除普通格式视频能增强视频安全性，降低学校视频被下载的风险。不会影响加密视频正常播放。
 admin.edu_cloud.edu_video.h5_enable_label: H5播放：
 
 # 云直播
@@ -6933,7 +6933,7 @@ admin.edu_cloud.edu_sms.identity_check: 身份验证
 admin.edu_cloud.edu_sms.normal_course_publish: 新课时发布通知（普通课程）
 admin.edu_cloud.edu_sms.your_course_publish_tips: 您的课程：《课程名称》－课时：《课时名》已发布！%smsSchoolName%链接地址
 admin.edu_cloud.edu_sms.sms_content: 短信内容
-admin.edu_cloud.edu_sms.sms_school_notify: 网校通知
+admin.edu_cloud.edu_sms.sms_school_notify: 学校通知
 admin.edu_cloud.sms_school_name.input_placeholder: 签名3-8字，建议使用汉字
 admin.edu_cloud.edu_sms: 云短信
 admin.edu_cloud.edu_sms.apply_btn: 申请开通云短信
@@ -6956,11 +6956,11 @@ admin.edu_cloud.edu_sms.open_btn: >
   云短信，享受优质的短信发送服务
 admin.edu_cloud.edu_sms.apply.content_title: 申请云短信
 admin.edu_cloud.edu_sms.apply.remind: 提醒
-admin.edu_cloud.edu_sms.apply.first_open_tips: 初次开启，需填写网校名称，审核需1到3个工作日，开启成功后，短信最低￥0.055/条
+admin.edu_cloud.edu_sms.apply.first_open_tips: 初次开启，需填写学校名称，审核需1到3个工作日，开启成功后，短信最低￥0.055/条
 admin.edu_cloud.edu_sms.apply.verify_tips: 审核需1到3个工作日，期间短信验证功能仍可以正常使用
-admin.edu_cloud.edu_sms.apply.school_name: 网校名称
+admin.edu_cloud.edu_sms.apply.school_name: 学校名称
 admin.edu_cloud.edu_sms.apply.sms_content: >
-  <span style="color:blue;">短信内容:“</span><br>【<span id="js-school-name">网校通知</span>】您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效%sms_school_name%”
+  <span style="color:blue;">短信内容:“</span><br>【<span id="js-school-name">学校通知</span>】您的验证码是：123456(请勿泄露)，此验证码30分钟内输入有效%sms_school_name%”
 admin.edu_cloud.edu_sms.locked_tips: 您的教育云服务已被锁定，请联系客服人员：4008041114。
 admin.edu_cloud.edu_sms.service_suspend_tips: 您的云短信服务已被暂停，不能使用，请联系客服人员：4008041114。
 admin.edu_cloud.edu_sms.basic_info: 基本信息
@@ -7157,25 +7157,25 @@ admin.edu_cloud.edu_search.clause_content: >
     <p>1.1您确认：您在使用本服务之前，已经充分阅读、理解并接受本服务条款的全部内容（特别是以加粗及/或下划线标注的内容），一旦您选择“同意”并开通、使用本服务，即表示您同意遵循本服务条款之所有约定。</p>
     <p>1.2您同意：EduSoho开放云有权随时对本服务条款及相应的服务规则内容进行单方面的变更，并有权以消息推送、网页公告等方式予以公布，而无需另行单独通知您；若您在本服务条款内容公告变更后继续使用本服务的，表示您已充分阅读、理解并接受修改后的协议内容，也将遵循修改后的条款内容使用本服务；若您不同意修改后的服务条款，您应立即停止使用本服务。</p>
     <h5>2.服务内容</h5>
-    <p>2.1本服务为您的EduSoho网校提供以下内容的搜索功能：</p>
+    <p>2.1本服务为您的EduSoho学校提供以下内容的搜索功能：</p>
     <p>（一）课程相关信息；</p>
     <p>（二）班级相关信息；</p>
     <p>（三）老师相关信息；</p>
     <p>（四）小组话题和班级话题相关信息；</p>
-    <p>（五）网校资讯相关信息。</p>
-    <p>您的学生可以通过本服务在您的EduSoho网校内搜索上述四类信息。</p>
+    <p>（五）学校资讯相关信息。</p>
+    <p>您的学生可以通过本服务在您的EduSoho学校内搜索上述四类信息。</p>
     <h5>3.您的权利和义务</h5>
-    <p>3.1您理解并同意，EduSoho开放云收集您网校内以下信息：</p>
+    <p>3.1您理解并同意，EduSoho开放云收集您学校内以下信息：</p>
     <p>（一）课程相关信息（包括：课程标题、课程副标题、课程简介、适合人群、课程目标、课时标题、课时摘要等信息）；</p>
 
     <p>（二）班级相关信息（包括：班级标题、班级介绍、班级课程等信息）；</p>
 
     <p>（三）老师相关信息（包括：老师昵称、老师简介等信息）； </p>
     <p>（四）小组话题和班级话题相关信息（包括：话题标题、话题内容、话题发布时间等信息）；</p>
-    <p>（五）网校资讯相关信息（包括：资讯标题、资讯内容、资讯发布时间等信息）。</p>
-    <p>上述四类信息仅用于为您的EduSoho网校提供搜索服务。</p>
+    <p>（五）学校资讯相关信息（包括：资讯标题、资讯内容、资讯发布时间等信息）。</p>
+    <p>上述四类信息仅用于为您的EduSoho学校提供搜索服务。</p>
     <h5>4.EduSoho开放云的权利和义务</h5>
-    <p>4.1EduSoho开放云承诺对您网校的课程相关信息、老师相关信息、小组话题和班级话题相关、资讯相关信息采取对外保密措施，不向第三方披露这些信息，不授权第三方使用这些信息，除非：</p>
+    <p>4.1EduSoho开放云承诺对您学校的课程相关信息、老师相关信息、小组话题和班级话题相关、资讯相关信息采取对外保密措施，不向第三方披露这些信息，不授权第三方使用这些信息，除非：</p>
     <p>4.1.1依据本服务条款或者您与EduSoho开放云之间其他服务协议、合同、在线条款等规定可以提供；</p>
     <p>4.1.2依据法律法规的规定应当提供；</p>
     <p>4.1.3行政、司法等职权部门要求EduSoho开放云提供；</p>
@@ -7240,7 +7240,7 @@ admin.edu_cloud.edu_search.rebuild_index_tips: >
   <li>3.请勿频繁使用重建索引功能</li>
 admin.edu_cloud.edu_search.rebuild_search_data: 用于重新构建云搜索的索引数据。
 admin.edu_cloud.edu_search.search_type: 所需类型
-admin.edu_cloud.edu_search.search_type_tips: 勾选所需类型后，学生搜索时可以查看对应类型搜索结果，可以根据网校实际业务情况进行配置。
+admin.edu_cloud.edu_search.search_type_tips: 勾选所需类型后，学生搜索时可以查看对应类型搜索结果，可以根据学校实际业务情况进行配置。
 admin.edu_cloud.edu_search.basic_info: 基本信息
 admin.edu_cloud.edu_search.total_count: 累计搜索次数
 admin.edu_cloud.edu_search.today_count: 今日搜索次数
@@ -7297,7 +7297,7 @@ admin.edu_cloud.edu_im.im_describe_tips: >
   开启后，课程和班级会生成相应即时聊天讨论组和使用个人聊天功能；<br>
   利于老师发布课程、班级的相关信息并且及时、有效的通知到学生；<br>
   利于师生无障碍的针对课程、班级的内容进行沟通和交流；<br>
-  利于促进学生之间的交流，提高网校活跃度；<br>
+  利于促进学生之间的交流，提高学校活跃度；<br>
 
 # 云附件设置
 admin.edu_cloud.edu_attachment.attachment_tips: >
@@ -7396,7 +7396,7 @@ admin.user_auth.Setup_welcome_message.title: 欢迎信息标题
 admin.user_auth.Setup_welcome_message.content: 欢迎信息内容
 admin.user_auth.Setup_welcome_message.warning.help_block: 注意： 私信长度不能超过1000个字符
 admin.user_auth.Setup_welcome_message.as_recipient.help_block: 为接收方用户用户名
-admin.user_auth.protocol_settings: 网校协议设置
+admin.user_auth.protocol_settings: 学校协议设置
 admin.user_auth.Term_service_settings: 服务条款设置
 admin.user_auth.Term_service_settings.Enable: 是否开启服务条款
 admin.user_auth.Term_service_settings.open: 开启
@@ -7410,10 +7410,10 @@ admin.user_auth.privacy_policy_settings.closed: 关闭
 admin.user_auth.privacy_policy_settings.Enable.help_block: 开启后用户注册时必须同意隐私政策才能注册。
 admin.user_auth.privacy_policy_settings.details: 隐私政策内容
 admin.user_auth.privacy_policy_settings.tooltip: >
-  <h5>隐私政策配置仅对有独立APP的网校生效，使用阔知学堂APP的网校的隐私政策需阔知统一配置。</h5>
+  <h5>隐私政策配置仅对有独立APP的学校生效，使用阔知学堂APP的学校的隐私政策需阔知统一配置。</h5>
 admin.user_auth.Name_setting: 名称设置
 admin.user_auth.Name_setting.user_name: 用户名称
-admin.user_auth.Name_setting.help_block: 注：修改网校字段后，站内相关字段名称都会相应修改为已保存的名称
+admin.user_auth.Name_setting.help_block: 注：修改学校字段后，站内相关字段名称都会相应修改为已保存的名称
 admin.user_auth.mobile_bind_tips: >
   据国家《互联网跟帖评论服务管理规定》，<b>不得向未认证真实身份信息的用户提供跟帖评论服务</b>。这里的跟帖评论服务，是指互联网站、应用程序、互动传播平台以及其他具有新闻舆论属性和社会动员功能的传播平台，以<b>发帖、回复、留言、“弹幕”</b>等方式，为用户提供发表文字、符号、表情、图片、音视频等信息的服务。绑定手机号符合实名认证的规定，为规避法律风险，建议选用<b>“手机注册”</b>。切换成“手机注册”后，对于之前未绑定手机号的用户，会在每日首次登录成功后弹框提醒用户绑定手机号（用户可选择跳过此步骤）。
 admin.login_connect.User_login_restrictions: 用户登录限制
@@ -7530,7 +7530,7 @@ admin.user_fields.modal.date_fields.tips: 还可以添加%5-dateCount%个字段
 admin.user_avatar.customer_default_avatar: 自定义默认头像
 admin.user_avatar.customer_default_avatar.help_block: 请上传jpg, gif, png格式的图片
 admin.user_avatar.system_default_avatar: 系统默认头像
-admin.user_avatar.avatar.tips: 网校内未上传头像的用户，都会显示该默认头像。建议图片尺寸为 270×270px。<br>建议图片大小不超过2MB。<a href="" target=_blank>如何制作合适的图片？</a>
+admin.user_avatar.avatar.tips: 学校内未上传头像的用户，都会显示该默认头像。建议图片尺寸为 270×270px。<br>建议图片大小不超过2MB。<a href="" target=_blank>如何制作合适的图片？</a>
 admin.user_center.message_title_name: 私信发送设置
 admin.user_center.message_student_to_student: 允许学生给学生发送私信
 admin.user_center.message_student_to_teacher: 允许学生给教师发送私信
@@ -7648,7 +7648,7 @@ admin.setting_course.video_play_setting.kick_previous_play.tips: >
   <p>作业课时/考试课时/直播课时三类课时在学习时，后开的学习页面将无法踢掉这三类课时。</p>
   <p>注：需要终端升级至PC端V20.4.6，APP端V4.9.3</p>
 admin.setting_course.video_play_setting.reject_current_play: 拒绝本次进入学习页面
-admin.setting_course.video_play_setting.reject_current_play.tips: 当用户多开时，以先开的学习页面为主，后开学习页面不允许进入。微网校中仅对启航主题生效。
+admin.setting_course.video_play_setting.reject_current_play.tips: 当用户多开时，以先开的学习页面为主，后开学习页面不允许进入。微学校中仅对启航主题生效。
 admin.setting_course.video_play_setting.ineffective_learning: 无效学习时
 admin.setting_course.video_play_setting.play_rule: 非专注学习时播放规则
 admin.setting_course.video_play_setting.play_rule.tips: 当前视频课时的播放窗口不是屏幕活跃窗口（例如在PC端将窗口最小化，切换窗口等），或在PC端当前视频课时播放窗口在20分钟内未检测到用户动作行为。
@@ -8013,9 +8013,9 @@ admin.coin.type_option.default: 全部记录
 admin.coin.type_option.inflow: 充值记录
 admin.coin.type_option.outflow: 消费记录
 
-admin.coin.school_out_amount: 网校总发放
-admin.coin.school_in_amount: 网校总回收
-admin.coin.school_wait_in_amount: 网校待回收
+admin.coin.school_out_amount: 学校总发放
+admin.coin.school_in_amount: 学校总回收
+admin.coin.school_wait_in_amount: 学校待回收
 admin.coin.created_time_option.all: 全部记录
 admin.coin.created_time_option.oneWeek: 最近一周
 admin.coin.created_time_option.oneMonth: 最近一个月
@@ -8055,11 +8055,11 @@ admin.coin_give.nickname_check_hint: 只能选择系统中已注册的用户
 admin.coin_flow_detail.content_title: %nickname%的%coin_name%明细
 admin.coin.model: 使用方式
 admin.coin_setting.description: 说明
-admin.coin_setting.description_hint: 虚拟币是可以在网校内进行支付消费的虚拟货币
+admin.coin_setting.description_hint: 虚拟币是可以在学校内进行支付消费的虚拟货币
 admin.coin_setting.promotion_proposal: 推广建议
 admin.coin_setting.promotion_proposal_hint: >
-  1、 建议网校使用虚拟币对网校内课程进行标价；<br>
-  2、 网校可鼓励学生充值，可提升用户忠诚度；<br>
+  1、 建议学校使用虚拟币对学校内课程进行标价；<br>
+  2、 学校可鼓励学生充值，可提升用户忠诚度；<br>
   3、 建议配合使用学习卡（商业应用），给予一定优惠；<br>
 admin.coin_setting.upload_hint: >
   请上传jpg, gif, png格式，尺寸大于等于 50×50px 的<span class="text-danger">正方形</span>图片。<br>图片大小建议不超过2MB。<a href="" target=_blank>如何制作合适的图片？</a>
@@ -8092,7 +8092,7 @@ admin.coin_model.deduction_tips: >
   <br>
   5、如有参加促销活动的课程，修改价格都将有相应的折扣
   <br>
-  6、虚拟币用于抵扣：网校以人民币作为支付货币，并可以使用虚拟币进行按比例抵扣(虚拟币类似于淘金币）
+  6、虚拟币用于抵扣：学校以人民币作为支付货币，并可以使用虚拟币进行按比例抵扣(虚拟币类似于淘金币）
 
 #系统后台运营
 admin.article_setting.name: 频道名称
@@ -8154,56 +8154,56 @@ admin.invite_setting.send_remind_sms_to_admin: 时，向管理员发送短信提
 admin.invite_setting.rewards_count_required: 请输入 1-1000 的数字
 admin.invite_setting.mobile_required: 请输入手机号
 admin.invite_setting.mobile_for_receive: 接收提醒的手机号：
-admin.invite_setting.sms_enable_hint: 请注意，此功能在云短信开启时生效，且短信通知将扣除网校云短信的条数
+admin.invite_setting.sms_enable_hint: 请注意，此功能在云短信开启时生效，且短信通知将扣除学校云短信的条数
 
-admin.wap_setting: 手机微网校
+admin.wap_setting: 手机微学校
 admin.wap_setting.find: 发现页设置
-admin.wap_setting.mini_school: 微网校装修
+admin.wap_setting.mini_school: 微学校装修
 admin.wap_setting.theme: 主题模板
-admin.wap_setting.site: 微网校设置
+admin.wap_setting.site: 微学校设置
 admin.wap_setting.online: 功能正式上线
-admin.wap_setting.open: 免费开启微网校
+admin.wap_setting.open: 免费开启微学校
 
 admin.wap_setting.function: >
   <li><i class="es-icon es-icon-dot h5-color-primary"></i>自定义设置各模块</li>
   <li><i class="es-icon es-icon-dot h5-color-primary"></i>边设置边预览，实时查看展示效果</li>
-  <li><i class="es-icon es-icon-dot h5-color-primary"></i>随心所欲打造您的个性微网校</li>
+  <li><i class="es-icon es-icon-dot h5-color-primary"></i>随心所欲打造您的个性微学校</li>
 admin.wap_setting.hint: >
-  <p class="help-block">新版微网校可使用发现页设置功能。</p>
-  <p class="help-block">注意：首次开启新版微网校时，需要更新微信公众号支付配置。<a href="" target="_blank">【查看教程】</a></p>
-  <p class="help-block">旧版微网校开启后，切换 APP 下载地址，需要重新保存微网校设置。</p>
+  <p class="help-block">新版微学校可使用发现页设置功能。</p>
+  <p class="help-block">注意：首次开启新版微学校时，需要更新微信公众号支付配置。<a href="" target="_blank">【查看教程】</a></p>
+  <p class="help-block">旧版微学校开启后，切换 APP 下载地址，需要重新保存微学校设置。</p>
 admin.wap_setting.version_select: 版本选择
-admin.wap_setting.new: 新版微网校
-admin.wap_setting.old: 旧版微网校
+admin.wap_setting.new: 新版微学校
+admin.wap_setting.old: 旧版微学校
 admin.wap_setting.off: 关闭
-admin.wap_setting.tip: 微网校是通过浏览器打开应用，无需下载。网校可以链接发给学生，或在推送的短信中加入链接，学生点击链接后，即可立即进入微网校内进行学习、购买课程、课程分享等。微网校比较适用于通过营销活动促进学生分享、拉新、促活等目的。
-admin.wap_setting.edit.tip: 左侧为您的微网校首页预览效果，可点击【编辑微网校】进入编辑页面。您也可通过【主题模板】中，选择适合的主题应用。通过对组件的自由组合，搭建个性化微网校首页。
-admin.wap_setting.edit: 编辑微网校
+admin.wap_setting.tip: 微学校是通过浏览器打开应用，无需下载。学校可以链接发给学生，或在推送的短信中加入链接，学生点击链接后，即可立即进入微学校内进行学习、购买课程、课程分享等。微学校比较适用于通过营销活动促进学生分享、拉新、促活等目的。
+admin.wap_setting.edit.tip: 左侧为您的微学校首页预览效果，可点击【编辑微学校】进入编辑页面。您也可通过【主题模板】中，选择适合的主题应用。通过对组件的自由组合，搭建个性化微学校首页。
+admin.wap_setting.edit: 编辑微学校
 admin.wap_setting.open.tip: >
-  <h4 class="mbl">首次开启微网校，请修改微信支付配置</h4>
-  <p>1、首次开启微网校-启航主题，需要修改微信配置，否则用户无法在微网校中支付购课。</p>
-  <p>2、首次切换为启航主题的网校客户，需要修改微信配置。</p>
+  <h4 class="mbl">首次开启微学校，请修改微信支付配置</h4>
+  <p>1、首次开启微学校-启航主题，需要修改微信配置，否则用户无法在微学校中支付购课。</p>
+  <p>2、首次切换为启航主题的学校客户，需要修改微信配置。</p>
   <a href="" target="_blank">【查看教程】</a>
 admin.wap_setting.subject_name: 主题名称
 admin.wap_setting.subject_name.recommend: 推荐
 admin.wap_setting.subject_name.template_name.sail: 启航
 admin.wap_setting.subject_name.template.sail.feature: >
   <p>1、主题方案具备促进用户试学和低客单价课程转化特性。</p>
-  <p>2、支持自定义微网校首页风格。</p>
+  <p>2、支持自定义微学校首页风格。</p>
   <p>3、根据运营目标，可灵活调整首页主推课程。</p>
 admin.wap_setting.subject_name.template.feature: 主题特点
 admin.wap_setting.subject_name.template.use: 立即应用
 admin.wap_setting.subject_name.template_name.jane_mo: 简墨
 admin.wap_setting.subject_name.template.jane_mo.feature: >
-  <p>1、PC端网校装修应用到微网校，一键应用，省时省力。</p>
-  <p>2、不支持在微网校内自定义编辑首页风格。</p>
-  <p>3、不支持在微网校内调整首页主推课程。</p>
+  <p>1、PC端学校装修应用到微学校，一键应用，省时省力。</p>
+  <p>2、不支持在微学校内自定义编辑首页风格。</p>
+  <p>3、不支持在微学校内调整首页主推课程。</p>
 admin.wap_setting.subject_name.template.jane_mo_off.feature: >
-  <p>1、PC端网校装修应用到微网校，一键应用，省时省力。</p>
-  <p>2、不支持在微网校内自定义编辑首页风格。</p>
-  <p>3、不支持在微网校内调整首页主推课程。</p>
-admin.payment_setting.open_help.tips: 提示：请按需选择开启支付方式，未开启任意一种支付，将会导致网校内商品无法进行购买。
-admin.payment_setting.close_help.tips: 提示：关闭支付功能将导致网校用户无法购买商品。
+  <p>1、PC端学校装修应用到微学校，一键应用，省时省力。</p>
+  <p>2、不支持在微学校内自定义编辑首页风格。</p>
+  <p>3、不支持在微学校内调整首页主推课程。</p>
+admin.payment_setting.open_help.tips: 提示：请按需选择开启支付方式，未开启任意一种支付，将会导致学校内商品无法进行购买。
+admin.payment_setting.close_help.tips: 提示：关闭支付功能将导致学校用户无法购买商品。
 admin.payment_setting.alipay: 支付宝
 admin.payment_setting.pay_disabled_tips: 支付关闭时的提示信息
 admin.payment_setting.payment_hint: 开启后，网站收入将自动到达配置的支付宝、微信支付或网银帐号中。
@@ -8275,7 +8275,7 @@ admin.payment_setting.wxpay_account_hint: >
 admin.payment_setting.wxpay_key: 微信商户平台API密钥
 admin.payment_setting.wxpay_key_hint: >
   微信商户平台API密钥需要登录<a href="%wxpayUrl%" target="_blank">微信商户平台</a>，在【账户设置】-【API安全】中设置密匙。
-admin.payment_setting.submit_error.tips: 请按需开启网校的支付方式
+admin.payment_setting.submit_error.tips: 请按需开启学校的支付方式
 
 admin.finance_refund.max_refund_days: 退款期限
 admin.finance_refund.max_refund_days_hint: >
@@ -8297,7 +8297,7 @@ admin.mobile_setting.mobile_homepage_set_hint: >
 admin.mobile_setting.mobile_operation_hint: >
   2.移动端轮播图、发现页模块等内容，点击<a target="_blank" href="%operationUrl%">这里</a>进行设置
 admin.mobile_setting.splash_pic_setting_hint: 请上传jpg, gif, png格式的图片。
-admin.mobile_setting.online_school_about_hint: 此简介将显示在移动客户端的"关于网校"
+admin.mobile_setting.online_school_about_hint: 此简介将显示在移动客户端的"关于学校"
 admin.mobile_setting.online_school_logo_hint: 请上传jpg, gif, png格式的图片。logo 图片的高度建议不超过50px。图片大小建议不超过2MB。<br><a href="" target=_blank>如何制作合适的图片？</a>
 admin.mobile_setting.app_custom_setting_option: 定制APP设置项
 admin.mobile_setting.app_ios_bundle_id: '套装 ID'
@@ -8310,7 +8310,7 @@ admin.mobile_setting.app_custom_logo_hint: 请上传jpg, gif, png格式的图片
 admin.mobile_setting.app_custom_cover: APP封面
 admin.mobile_setting.app_custom_cover_hint: 请上传jpg, gif, png格式的图片。建议图片尺寸为 225×400px。
 admin.mobile_setting.splash_setting: 设置启动图
-admin.mobile_setting.splash_setting_hint: 请上传jpg, gif, png格式的图片。最多设置5张启动图，建议图片尺寸为 640×960px，建议图片大小不超过2MB。用户首次登录网校时会显示启动图。
+admin.mobile_setting.splash_setting_hint: 请上传jpg, gif, png格式的图片。最多设置5张启动图，建议图片尺寸为 640×960px，建议图片大小不超过2MB。用户首次登录学校时会显示启动图。
 admin.mobile_setting.splash: 启动图%splashNum%
 admin.mobile_setting.study_center_entrance: 学习中心入口控制
 admin.mobile_setting.study_center_entrance.has_live: 含直播课表入口
@@ -8328,7 +8328,7 @@ admin.coin_model.currency_tips: >
   <br>
   5、如有参加促销活动的课程，修改价格都将有相应的折扣
   <br>
-  6、虚拟币用于标价：网校以虚拟币作为支付货币，课程和会员以虚拟币标价和结算
+  6、虚拟币用于标价：学校以虚拟币作为支付货币，课程和会员以虚拟币标价和结算
 
 admin.coin_course_set.tips: >
   1元人民币兑换<strong class="text-info">%cashRate%</strong>%coinName%
@@ -8389,8 +8389,8 @@ admin.cloud_attachment.batch_manage_btn: 批量管理
 admin.cloud_attachment.delete_btn: 删除
 admin.cloud_attachment.select_all: 全选
 
-admin.cloud_file.material_tag_show_match_tips: 用于按标签搜索课程、相关课程的提取等，由网校管理员后台统一管理
-admin.cloud_file.material_tag_show_match_hint: 标签来自网校课程标签，由网校管理员统一管理。
+admin.cloud_file.material_tag_show_match_tips: 用于按标签搜索课程、相关课程的提取等，由学校管理员后台统一管理
+admin.cloud_file.material_tag_show_match_hint: 标签来自学校课程标签，由学校管理员统一管理。
 admin.cloud_file.keyword_placeholder: 请输入关键词
 admin.cloud_file.select_placeholeder: 请选择
 admin.cloud_file.keyword_type: 按来源
@@ -8600,12 +8600,12 @@ admin.org_manage.modal.org_description: 描述
 admin.org_manage.modal.org_description.help_block: 非必填
 admin.org_manage.modal.delete.tips: 会同时删除下辖组织机构
 
-admin.wechat_app.banner_title: 网校小程序，招生学习更便捷
-admin.wechat_app.banner_introduce: 网校小程序，无缝链接网校与公众号、微信群，让微信运营和网校运营一体化。
+admin.wechat_app.banner_title: 学校小程序，招生学习更便捷
+admin.wechat_app.banner_introduce: 学校小程序，无缝链接学校与公众号、微信群，让微信运营和学校运营一体化。
 admin.wechat_app.access_btn: 立即开通
 admin.wechat_app.install_btn: 立即安装
 admin.wechat_app.fast_access_introduction_title: 快速接入
-admin.wechat_app.fast_access_introduction_content: 只需一键授权，无需任何开发，即可拥有自己的网校小程序
+admin.wechat_app.fast_access_introduction_content: 只需一键授权，无需任何开发，即可拥有自己的学校小程序
 admin.wechat_app.data_sync_introduction_title: 数据同步
 admin.wechat_app.data_sync_introduction_content: 小程序的学习、订单记录直接和 EduSoho 主系统打通，无需额外运营成本，轻松管理
 admin.wechat_app.flow_entrance_introduction_title: 自带流量
@@ -9039,7 +9039,7 @@ log.module.live: 直播
 log.module.role: 角色
 log.module.thread: 话题
 log.module.mobile: 手机客户端
-log.module.wap: 微网校
+log.module.wap: 微学校
 log.module.push: 推送
 log.module.question_bank: 题库
 log.module.destroy_account_record: 帐号注销
@@ -10008,14 +10008,14 @@ log.attr.system.update_settings.xapi.enabled.: 关闭
 log.attr.system.update_settings.mobile.enabled: 是否开启客户端
 log.attr.system.update_settings.mobile.enabled.1: 开启
 log.attr.system.update_settings.mobile.enabled.0: 关闭
-log.attr.system.update_settings.mobile.about: 网校简介
-log.attr.system.update_settings.mobile.logo: 网校LOGO
+log.attr.system.update_settings.mobile.about: 学校简介
+log.attr.system.update_settings.mobile.logo: 学校LOGO
 log.attr.system.update_settings.wap.version: 站点页设置
-log.attr.system.update_settings.wap.version.2: 新版微网校
-log.attr.system.update_settings.wap.version.1: 旧版微网校
+log.attr.system.update_settings.wap.version.2: 新版微学校
+log.attr.system.update_settings.wap.version.1: 旧版微学校
 log.attr.system.update_settings.wap.version.0: 关闭
-log.attr.system.update_settings.wap.about: 网校简介
-log.attr.system.update_settings.wap.logo: 网校LOGO
+log.attr.system.update_settings.wap.about: 学校简介
+log.attr.system.update_settings.wap.logo: 学校LOGO
 log.attr.order.pay_amount: 价格（分）
 log.attr.destroy_account_record.reason: 注销理由
 log.attr.destroy_account_record.rejectedReason: 拒绝理由
@@ -10031,7 +10031,7 @@ cashflow.trade_sn: 交易号
 cashflow.created_time: 成交时间
 cashflow.amount: 金额
 cashflow.number: 数量
-cashflow.inflow: 网校收入
+cashflow.inflow: 学校收入
 cashflow.platform: 支付方式
 cashflow.platform_sn: 支付平台流水号
 cashflow.user_truename: 姓名
@@ -10146,7 +10146,7 @@ user.learn.statistics.manage.describe_tips: >
   <div style='width:250px;'>
     <h5 style='color:blue;margin:5px 0;'>用户数据说明</h5>
     <P style='margin:0;'>用户数据每日00:00-02:00间更新。</p>
-    <P style='margin:0;'>累加学习时长（分）为筛选条件内该用户在网校产生的所有学习时长累加。</p>
+    <P style='margin:0;'>累加学习时长（分）为筛选条件内该用户在学校产生的所有学习时长累加。</p>
     <P style='margin:0;'>其中视频课时学习时长统计维度（播放活跃时长or页面活跃时长）以在系统-课程设置-视频课时学习配置为准。</p>
   </div>
 
@@ -10719,7 +10719,7 @@ wechat.notification.status.sending: 发送中
 wechat.notification.cloud.tips: 您还未开通教育云，无法正常使用微信服务号通知功能。
 wechat.notification.cloud_open: 前往开通
 wechat.notification.record_number_tips: 学生必须绑定微信并关注服务号以后才能收到通知，因此实际发送数量会比预期发送数量少。
-wechat.notification.template_open_error: 模板打开失败，可能是未启用服务号模板消息插件或未在微信后台IP白名单中添加网校IP，请前往<a href="" target="_blank">查看教程</a>
+wechat.notification.template_open_error: 模板打开失败，可能是未启用服务号模板消息插件或未在微信后台IP白名单中添加学校IP，请前往<a href="" target="_blank">查看教程</a>
 wechat.notification.service_not_open: 未开启微信服务号通知
 wechat.notification.empty_token: 获取微信信息错误
 wechat.notification.template_not_exist: 模板不存在
@@ -10736,7 +10736,7 @@ wechat.notification.saving: 保存中
 wechat.notification.form.btn.search_submit_btn: 搜索
 wechat.notification.fans_list.profile_picture: 微信头像
 wechat.notification.fans_list.nickname: 微信昵称
-wechat.notification.fans_list.username: 网校用户名
+wechat.notification.fans_list.username: 学校用户名
 wechat.notification.fans_list.subscribe_time: 关注时间
 wechat.notification.fans_list.tips: 粉丝列表每30分钟刷新一次数据
 wechat.notification.fans_list.user_num: 用户数量：
@@ -10890,11 +10890,11 @@ coupon.channel_hint: 通过本功能控制优惠券可被领取的方式
 coupon.channel_type.link: 通过链接
 coupon.channel_type.code: 通过优惠券
 coupon.channel_type.page_detail: 通过商品详情页
-coupon.channel_type.h5_mps: 小程序/新版微网校
+coupon.channel_type.h5_mps: 小程序/新版微学校
 coupon.channel_type.page_detail_hint: 选中此项则系统将自动获取商品可用的优惠券显示在商品详情页
 coupon.channel_type.wait_hint: （敬请期待）
 coupon.channel.postfix: 发放
-coupon.channel_type.only_h5_mps: (当前只支持小程序/新版微网校)
+coupon.channel_type.only_h5_mps: (当前只支持小程序/新版微学校)
 
 coupon.generage.btn: 生成
 coupon.generate.loading_text: 正在生成...
@@ -10993,7 +10993,7 @@ admin_v2.homepage.today_new_paid_order: 今日付费订单
 admin_v2.homepage.today_new_order: 今日新增订单
 
 # 新后台首页通知
-admin_v2.domain_error_hint: 当前域名和设置域名不符，为避免影响云短信功能的正常使用，请到【系统】-【通用管理】-【网校信息】-【网站域名】
+admin_v2.domain_error_hint: 当前域名和设置域名不符，为避免影响云短信功能的正常使用，请到【系统】-【通用管理】-【学校信息】-【网站域名】
 admin_v2.homepage.setting_domain_btn: 立即设置
 admin_v2.homepage.renewal_btn: 立即续费
 admin_v2.homepage.cloud_notice.unknown_time: 未知时间
@@ -11058,7 +11058,7 @@ admin_v2.setting.navigation.foot.tips: >
 admin_v2.setting_course.course_list_page_seq.help_block: 地址：域名/course/explore,任何人都可在此页面查看网站所有已发布课程,如需设置网站首页课程排序，请到【运营】-【Web装修】-【已购主题】-【管理】中设置，目前仅简墨和雅致简洁主题支持。
 
 admin_v2.newcomer_task.helper: 任务助手
-admin_v2.newcomer_task.helper_tip: 六步完成网校基础建设
+admin_v2.newcomer_task.helper_tip: 六步完成学校基础建设
 admin_v2.newcomer_task.collapse: 收起
 admin_v2.newcomer_task.todo: 前去完成
 admin_v2.newcomer_task.done: 已完成
@@ -11068,13 +11068,13 @@ admin_v2.newcomer_task.cloud_applied.tip: 直播、点播等多种能力，低�
 admin_v2.newcomer_task.payment_applied.title: 申请支付
 admin_v2.newcomer_task.payment_applied.tip: 开通微信、支付宝等支付，轻松在线收款
 admin_v2.newcomer_task.auth_applied.title: 设置注册
-admin_v2.newcomer_task.auth_applied.tip: 开启注册，建立网校专属用户流量池
+admin_v2.newcomer_task.auth_applied.tip: 开启注册，建立学校专属用户流量池
 admin_v2.newcomer_task.plugin_applied.title: 安装常见插件
-admin_v2.newcomer_task.plugin_applied.tip: 为您推荐前10家优秀网校常用的插件
+admin_v2.newcomer_task.plugin_applied.tip: 为您推荐前10家优秀学校常用的插件
 admin_v2.newcomer_task.course_applied.title: 创建课程
-admin_v2.newcomer_task.course_applied.tip: 快速创建课程商品，获取网校收益
-admin_v2.newcomer_task.decoration_applied.title: 装修网校
-admin_v2.newcomer_task.decoration_applied.tip: 装修网校首页，获得更多用户好感
+admin_v2.newcomer_task.course_applied.tip: 快速创建课程商品，获取学校收益
+admin_v2.newcomer_task.decoration_applied.title: 装修学校
+admin_v2.newcomer_task.decoration_applied.tip: 装修学校首页，获得更多用户好感
 
 admin_v2.homepage.overview: 概况
 admin_v2.developer_setting.platform_news_api_server: 获取平台信息API
@@ -11185,7 +11185,7 @@ admin.article_setting.article_copy_manage: 资讯防复制
 task.show_optional_tips: 显示选修课时
 admin_v2.user.manage.change_nickname.heading_title: 修改用户名
 
-course.plan_task.activity_manage.discuss.tips: 讨论任务在PC和APP中使用，暂不支持在微网校和小程序中使用!
+course.plan_task.activity_manage.discuss.tips: 讨论任务在PC和APP中使用，暂不支持在微学校和小程序中使用!
 
 admin_v2.app_center.resource_settlement.supplier_name: 内容供应商
 admin_v2.app_center.resource_settlement.supplier_contact_name: 联系人
@@ -11433,7 +11433,7 @@ admin_v2.operating.review_show: 商品页显示评价
 
 admin_v2.operating.goods_leading_setting: 商品页引导
 admin_v2.operating.goods_leading.join_group: 商品页引导加群
-admin_v2.operating.goods_leading.join_group.tips: 引导访问商品页的用户可以加微信群、微信个人号或公众号，通过社群和公众号承接商品页可能流失的流量进行转化。该功能会在所有终端、网校所有的商品页面都显示同一个引导文案和二维码，建议提供网校的公众号和做流量运营转化的微信群。
+admin_v2.operating.goods_leading.join_group.tips: 引导访问商品页的用户可以加微信群、微信个人号或公众号，通过社群和公众号承接商品页可能流失的流量进行转化。该功能会在所有终端、学校所有的商品页面都显示同一个引导文案和二维码，建议提供学校的公众号和做流量运营转化的微信群。
 admin_v2.operating.goods_leading.join_group.btn: 查看教程
 admin_v2.operating.goods_leading.join_group_label: 引导标签设置
 admin_v2.operating.goods_leading.join_group_label.example_btn: 查看示例
@@ -11462,7 +11462,7 @@ goods.minimum_price.unit: %price%%unit%起
 goods.origin_price.unit: %price%%unit%
 goods.description: 简介
 
-admin_v2.information_collect.edit.title_info: 当前版本用户端仅支持新版微网校
+admin_v2.information_collect.edit.title_info: 当前版本用户端仅支持新版微学校
 admin_v2.information_collect.edit.title: 采集名称
 admin_v2.information_collect.edit.action: 采集位置
 admin_v2.information_collect.edit.action_before: 课程/班级商品支付前

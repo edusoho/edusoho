@@ -26,7 +26,7 @@ class SupplierProductNotifyServiceImpl extends BaseService implements SupplierPr
      * @param $params
      *
      * @return bool[]
-     *                业务逻辑： 当网校不合作的时候，需要关闭所有的课程
+     *                业务逻辑： 当学校不合作的时候，需要关闭所有的课程
      */
     public function refreshProductsStatus($params)
     {

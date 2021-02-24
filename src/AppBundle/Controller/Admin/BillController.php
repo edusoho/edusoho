@@ -60,7 +60,7 @@ class BillController extends BaseController
     private function getInflowAndOutflow($conditions)
     {
         if (!empty($conditions['platform']) && 'none' == $conditions['platform']) {
-            //platform 为none时，代表退款，去掉platform查询条件，网校收入支出受此查询条件影响
+            //platform 为none时，代表退款，去掉platform查询条件，学校收入支出受此查询条件影响
             unset($conditions['platform']);
         }
         $conditions['type'] = 'outflow';

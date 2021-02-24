@@ -86,7 +86,7 @@ const loadFirst = () => {
     });
   }
 
-  //网校信息块
+  //学校信息块
   const $infoDom = $('.js-admin-info');
   if ($infoDom.length && $infoDom.data('url')) {
     $.get($infoDom.data('url'), (html) => {

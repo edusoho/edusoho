@@ -28,7 +28,7 @@ class CreateCouponBatch extends Migration
               `description` text COMMENT '优惠说明',
               `createdTime` int(10) unsigned NOT NULL,
               `fullDiscountPrice` float(10,2) unsigned DEFAULT NULL,
-              `h5MpsEnable` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '通过商品详情页小程序/微网校渠道发放',
+              `h5MpsEnable` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '通过商品详情页小程序/微学校渠道发放',
               `linkEnable` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '通过链接渠道发放',
               `codeEnable` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '通过优惠码渠道发放',
               `unreceivedNum` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '未领取的数量',

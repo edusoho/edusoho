@@ -12,7 +12,7 @@ class FinanceSettingController extends BaseController
         $payment = $this->getSettingService()->get('payment', array());
         $default = array(
             'enabled' => 0,
-            'disabled_message' => '由于网校未开通任一支付功能，当前商品不支持购买，请联系网校开通支付功能后再进行购买。',
+            'disabled_message' => '由于学校未开通任一支付功能，当前商品不支持购买，请联系学校开通支付功能后再进行购买。',
             'bank_gateway' => 'none',
             'alipay_enabled' => 0,
             'alipay_key' => '',

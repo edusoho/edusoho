@@ -40,9 +40,9 @@ open_live.plugin.admin.live_list.publish_status_label: 发布状态
 open_live.plugin.admin.live_list.data_empty: 暂无公开课记录
 open_live.plugin.admin.live_list.notice: >
   温馨提示<br><br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;会在下列情况下消耗网校的短信，请确保云短信已开通并有足够的短信余额（<a target="_blank" href="%smsRemainUrl%"> 查看短信余额 </a>）<br><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;会在下列情况下消耗学校的短信，请确保云短信已开通并有足够的短信余额（<a target="_blank" href="%smsRemainUrl%"> 查看短信余额 </a>）<br><br>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1、未绑定手机号的学生在报名或进入直播时需要绑定手机号，会消耗验证码短信；<br><br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2、在创建公开课时，如果设置了开课前短信提醒，根据设置规则会消耗网校的短信；<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2、在创建公开课时，如果设置了开课前短信提醒，根据设置规则会消耗学校的短信；<br>
 open_live.plugin.admin.live_list.operation.detail_btn: 详情
 
 # 操作modal

@@ -50,7 +50,7 @@ class CashBillExporter extends Exporter
             $content = array();
             $trade = empty($trades[$cash['trade_sn']]) ? array('platform_sn' => '--', 'trade_sn' => '--') : $trades[$cash['trade_sn']];
             if ('outflow' == $cash['type'] && 'money' == $cash['amount_type']) {
-                //网校支出
+                //学校支出
                 $amountMark = '-';
                 $paymentText = $this->container->get('translator')->trans('order.payment_pattern.school');
             } elseif ('inflow' == $cash['type'] && 'coin' == $cash['amount_type']) {

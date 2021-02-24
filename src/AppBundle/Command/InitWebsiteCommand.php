@@ -80,20 +80,20 @@ class InitWebsiteCommand extends BaseCommand
         }
 
         $this->initSetting($setting);
-        $this->logger('网校设置授权成功', $output);
+        $this->logger('学校设置授权成功', $output);
 
         $username = $input->getArgument('username');
         $password = $input->getArgument('password');
         $email = $input->getArgument('email');
         $user = array('username' => $username, 'password' => $password, 'email' => $email);
         $user = $this->initUser($user);
-        $this->logger('网校设置用户成功', $output);
+        $this->logger('学校设置用户成功', $output);
 
         $initializer->initFolders();
         $initializer->initLockFile();
         SystemCrontabInitializer::init();
 
-        $this->logger('网校创建成功', $output);
+        $this->logger('学校创建成功', $output);
     }
 
     private function logger($message, $output)

@@ -508,6 +508,469 @@ admin_v2_question_bank_category_sort:
   methods: [ POST ]
   permissions: [ admin_v2_question_bank ]
 
+## 运营-学校装修-站点配置
+admin_v2_navigation:
+  path: /setting/navigation
+  defaults: { _controller: AppBundle:AdminV2/Operating/Navigation:index }
+  permissions: [ admin_v2_top_navigation,admin_v2_foot_navigation ]
+
+admin_v2_navigation_seqs_update:
+  path: /setting/navigation/seqs/update
+  defaults: { _controller: AppBundle:AdminV2/Operating/Navigation:updateSeqs }
+  permissions: [ admin_v2_top_navigation,admin_v2_foot_navigation ]
+
+admin_v2_navigation_create:
+  path: /setting/navigation/create
+  defaults: { _controller: AppBundle:AdminV2/Operating/Navigation:create }
+  permissions: [ admin_v2_top_navigation,admin_v2_foot_navigation ]
+
+admin_v2_navigation_update:
+  path: /setting/navigation/{id}/update
+  defaults: { _controller: AppBundle:AdminV2/Operating/Navigation:edit }
+  permissions: [ admin_v2_top_navigation,admin_v2_foot_navigation ]
+
+admin_v2_navigation_delete:
+  path: /setting/navigation/{id}/delete
+  defaults: { _controller: AppBundle:AdminV2/Operating/Navigation:delete }
+  methods: [ POST ]
+  permissions: [ admin_v2_top_navigation,admin_v2_foot_navigation ]
+
+admin_v2_setting_consult_setting:
+  path: /setting/consult-setting
+  defaults: { _controller: AppBundle:AdminV2/Operating/SiteSetting:consultSetting }
+
+admin_v2_setting_consult_upload:
+  path: /setting/consult-upload
+  defaults: { _controller: AppBundle:AdminV2/Operating/SiteSetting:consultUpload }
+  permissions: [ admin_v2_setting_consult_setting ]
+
+admin_v2_setting_consult_webchat_delete:
+  path: /setting/consult-webchat-delete
+  defaults: { _controller: AppBundle:AdminV2/Operating/SiteSetting:deleteWebchat }
+  methods: [ POST ]
+  permissions: [ admin_v2_setting_consult_setting ]
+
+admin_v2_setting_es_bar:
+  path: /setting/es-bar
+  defaults: { _controller: AppBundle:AdminV2/Operating/SiteSetting:esBarSetting }
+
+admin_v2_homepage_live_notify:
+  path: /setting/homepage-live-notify
+  defaults: { _controller: AppBundle:AdminV2/Operating/SiteSetting:homepageLiveNotifySetting }
+
+admin_v2_content:
+  path: /setting/content
+  defaults: { _controller: AppBundle:AdminV2/Operating/Content:index }
+
+admin_v2_content_create:
+  path: /content/create/{type}
+  defaults: { _controller: AppBundle:AdminV2/Operating/Content:create }
+  permissions: [ admin_v2_content ]
+
+admin_v2_content_edit:
+  path: /content/{id}/edit
+  defaults: { _controller: AppBundle:AdminV2/Operating/Content:edit }
+  permissions: [ admin_v2_content ]
+
+admin_v2_content_publish:
+  path: /content/{id}/publish
+  defaults: { _controller: AppBundle:AdminV2/Operating/Content:publish }
+  methods: [ POST ]
+  permissions: [ admin_v2_content ]
+
+admin_v2_content_trash:
+  path: /content/{id}/trash
+  defaults: { _controller: AppBundle:AdminV2/Operating/Content:trash }
+  methods: [ POST ]
+  permissions: [ admin_v2_content ]
+
+admin_v2_content_delete:
+  path: /content/{id}/delete
+  defaults: { _controller: AppBundle:AdminV2/Operating/Content:delete }
+  methods: [ POST ]
+  permissions: [ admin_v2_content ]
+
+admin_v2_content_alias_check:
+  path: /content/alias/check
+  defaults: { _controller: AppBundle:AdminV2/Operating/Content:aliasCheck }
+  permissions: [ admin_v2_content ]
+
+admin_v2_setting_share:
+  path: /setting/share
+  defaults: { _controller: AppBundle:AdminV2/Operating/SiteSetting:share }
+
+# 运营-内容运营-发证管理
+admin_v2_certificate_manage:
+  path: /certificate/manage
+  defaults: { _controller: AppBundle:AdminV2/Operating/Certificate:index }
+
+admin_v2_certificate_create:
+  path: /certificate/manage/create
+  defaults: { _controller: AppBundle:AdminV2/Operating/Certificate:create }
+
+admin_v2_certificate_create_detail:
+  path: /certificate/manage/create/detail
+  defaults: { _controller: AppBundle:AdminV2/Operating/Certificate:createDetail }
+
+admin_v2_certificate_target_select:
+  path: /certificate/manage/target/select
+  defaults: { _controller: AppBundle:AdminV2/Operating/Certificate:targetModal }
+
+admin_v2_certificate_target_search:
+  path: /certificate/manage/target/{type}/search
+  defaults: { _controller: AppBundle:AdminV2/Operating/Certificate:targetSearch }
+
+admin_v2_certificate_template_select:
+  path: /certificate/manage/template/select
+  defaults: { _controller: AppBundle:AdminV2/Operating/Certificate:templateModal }
+
+admin_v2_certificate_template_search:
+  path: /certificate/manage/template/{type}/search
+  defaults: { _controller: AppBundle:AdminV2/Operating/Certificate:templateSearch }
+
+admin_v2_certificate_code_check:
+  path: /certificate/manage/code/check
+  defaults: { _controller: AppBundle:AdminV2/Operating/Certificate:codeCheck }
+
+admin_v2_certificate_edit:
+  path: /certificate/{id}/edit
+  defaults: { _controller: AppBundle:AdminV2/Operating/Certificate:edit }
+
+admin_v2_certificate_close:
+  path: /certificate/{id}/close
+  defaults: { _controller: AppBundle:AdminV2/Operating/Certificate:close }
+
+admin_v2_certificate_publish:
+  path: /certificate/{id}/publish
+  defaults: { _controller: AppBundle:AdminV2/Operating/Certificate:publish }
+
+admin_v2_certificate_delete:
+  path: /certificate/{id}/delete
+  defaults: { _controller: AppBundle:AdminV2/Operating/Certificate:delete }
+
+admin_v2_certificate_record_list:
+  path: /certificate/{id}/record/list
+  defaults: { _controller: AppBundle:AdminV2/Operating/CertificateRecord:index }
+
+admin_v2_certificate_record_detail:
+  path: /certificate/record/{id}/detail
+  defaults: { _controller: AppBundle:AdminV2/Operating/CertificateRecord:detail }
+
+admin_v2_certificate_record_cancel:
+  path: /certificate/record/{id}/cancel
+  defaults: { _controller: AppBundle:AdminV2/Operating/CertificateRecord:cancel }
+  permissions: [ admin_v2_operation_certificate ]
+
+admin_v2_certificate_record_grant:
+  path: /certificate/record/{id}/grant
+  defaults: { _controller: AppBundle:AdminV2/Operating/CertificateRecord:grant }
+
+admin_v2_certificate_template_manage:
+  path: /certificate/template/manage
+  defaults: { _controller: AppBundle:AdminV2/Operating/CertificateTemplate:index }
+
+admin_v2_certificate_template_edit:
+  path: /certificate/template/{id}/edit
+  defaults: { _controller: AppBundle:AdminV2/Operating/CertificateTemplate:edit }
+
+admin_v2_certificate_template_delete:
+  path: /certificate/template/{id}/delete
+  defaults: { _controller: AppBundle:AdminV2/Operating/CertificateTemplate:delete }
+
+admin_v2_certificate_template_create:
+  path: /certificate/template/create
+  defaults: { _controller: AppBundle:AdminV2/Operating/CertificateTemplate:create }
+
+admin_v2_certificate_template_creat_step_two:
+  path: /certificate/template/{id}/create/step/two
+  defaults: { _controller: AppBundle:AdminV2/Operating/CertificateTemplate:stepTwo }
+
+admin_v2_certificate_template_creat_step_three:
+  path: /certificate/template/{id}/create/step/three
+  defaults: { _controller: AppBundle:AdminV2/Operating/CertificateTemplate:stepThree }
+
+admin_v2_certificate_template_creat_step_four:
+  path: /certificate/template/{id}/create/step/four
+  defaults: { _controller: AppBundle:AdminV2/Operating/CertificateTemplate:stepFour }
+
+admin_v2_certificate_template_basemap_modal:
+  path: /certificate/template/{id}/basemap
+  defaults: { _controller: AppBundle:AdminV2/Operating/CertificateTemplate:baseMapModal }
+
+admin_v2_certificate_template_stamp_modal:
+  path: /certificate/template/{id}/stamp
+  defaults: { _controller: AppBundle:AdminV2/Operating/CertificateTemplate:stampModal }
+
+admin_v2_certificate_template_preview:
+  path: /certificate/template/{id}/preview
+  defaults: { _controller: AppBundle:AdminV2/Operating/CertificateTemplate:preview }
+
+admin_v2_certificate_examine_manage:
+  path: /certificate/{id}/audit/manage
+  defaults: { _controller: AppBundle:AdminV2/Operating/CertificateAudit:index }
+
+admin_v2_certificate_examine_audit_detail:
+  path: /certificate/audit/{id}/detail
+  defaults: { _controller: AppBundle:AdminV2/Operating/CertificateAudit:detail }
+
+admin_v2_certificate_examine_audit:
+  path: /certificate/audit/{id}/submit
+  defaults: { _controller: AppBundle:AdminV2/Operating/CertificateAudit:submit }
+
+admin_v2_certificate_template_img_show:
+  path: /certificate/template/{id}/img
+  defaults: { _controller: AppBundle:AdminV2/Operating/CertificateTemplate:imgShow }
+
+# 运营-内容运营-网站公告管理
+admin_v2_announcement:
+  path: /announcement
+  defaults: { _controller: AppBundle:AdminV2/Operating/Announcement:index }
+
+admin_v2_announcement_create:
+  path: /announcement/create
+  defaults: { _controller: AppBundle:AdminV2/Operating/Announcement:create }
+
+admin_v2_announcement_delete:
+  path: /announcement/delete/{id}
+  defaults: { _controller: AppBundle:AdminV2/Operating/Announcement:delete }
+  methods: [ POST ]
+  permissions: [ admin_v2_operation_announcement ]
+
+admin_v2_announcement_edit:
+  path: /announcement/edit/{id}
+  defaults: { _controller: AppBundle:AdminV2/Operating/Announcement:edit }
+  permissions: [ admin_v2_operation_announcement ]
+
+# 运营-内容运营-全站站内通知
+admin_v2_batch_notification:
+  path: /batch_notification
+  defaults: { _controller: AppBundle:AdminV2/Operating/BatchNotification:index }
+
+admin_v2_batch_notification_create:
+  path: /batch_notification/create
+  defaults: { _controller: AppBundle:AdminV2/Operating/BatchNotification:create }
+
+admin_v2_batch_notification_edit:
+  path: /batch_notification/edit/{id}
+  defaults: { _controller: AppBundle:AdminV2/Operating/BatchNotification:edit }
+  permissions: [ admin_v2_batch_notification ]
+
+admin_v2_batch_notification_delete:
+  path: /batch_notification/delete/{id}
+  defaults: { _controller: AppBundle:AdminV2/Operating/BatchNotification:delete }
+  methods: [ POST ]
+  permissions: [ admin_v2_batch_notification ]
+
+admin_v2_batch_notification_send:
+  path: /batch_notification/send/{id}
+  defaults: { _controller: AppBundle:AdminV2/Operating/BatchNotification:send }
+  methods: [ POST ]
+  permissions: [ admin_v2_batch_notification ]
+
+# 运营-内容运营-资讯管理
+admin_v2_article:
+  path: /article
+  defaults: { _controller: AppBundle:AdminV2/Operating/Article:index }
+  permissions: [ admin_v2_operation_article_manage ]
+
+admin_v2_article_category:
+  path: /article/category
+  defaults: { _controller: AppBundle:AdminV2/Operating/ArticleCategory:index }
+  permissions: [ admin_v2_operation_article_category ]
+
+admin_v2_article_category_create:
+  path: /article/category/create
+  defaults: { _controller: AppBundle:AdminV2/Operating/ArticleCategory:create }
+  permissions: [ admin_v2_operation_article_category ]
+
+admin_v2_article_category_checkparentid:
+  path: /article/category/checkparentid
+  defaults: { _controller: AppBundle:AdminV2/Operating/ArticleCategory:checkParentId }
+  permissions: [ admin_v2_operation_article_category ]
+
+admin_v2_article_category_checkcode:
+  path: /article/category/checkcode
+  defaults: { _controller: AppBundle:AdminV2/Operating/ArticleCategory:checkCode }
+  permissions: [ admin_v2_operation_article_category ]
+
+admin_v2_article_category_edit:
+  path: /article/category/{id}/edit
+  defaults: { _controller: AppBundle:AdminV2/Operating/ArticleCategory:edit }
+  permissions: [ admin_v2_operation_article_category ]
+
+admin_v2_article_category_delete:
+  path: /article/category/{id}/delete
+  defaults: { _controller: AppBundle:AdminV2/Operating/ArticleCategory:delete }
+  methods: [ POST ]
+
+admin_v2_article_category_sort:
+  path: /article/category/sort
+  defaults: { _controller: AppBundle:AdminV2/Operating/ArticleCategory:sort }
+  methods: [ POST ]
+
+admin_v2_article_create:
+  path: /article/create
+  defaults: { _controller: AppBundle:AdminV2/Operating/Article:create }
+  permissions: [ admin_v2_operation_article_create ]
+
+admin_v2_article_picture_crop:
+  path: /article/picture/crop
+  defaults: { _controller: AppBundle:AdminV2/Operating/Article:pictureCrop }
+  permissions: [ admin_v2_operation_article_manage ]
+
+admin_v2_article_show_upload:
+  path: /article/show/upload
+  defaults: { _controller: AppBundle:AdminV2/Operating/Article:showUpload }
+  permissions: [ admin_v2_operation_article_manage ]
+
+admin_v2_article_set_property:
+  path: /article/set/property/{id}/{property}
+  defaults: { _controller: AppBundle:AdminV2/Operating/Article:setArticleProperty }
+  permissions: [ admin_v2_operation_article_manage ]
+
+admin_v2_article_cancel_property:
+  path: /article/cancel/property/{id}/{property}
+  defaults: { _controller: AppBundle:AdminV2/Operating/Article:cancelArticleProperty }
+  permissions: [ admin_v2_operation_article_manage ]
+
+admin_v2_article_edit:
+  path: /article/{id}/edit
+  defaults: { _controller: AppBundle:AdminV2/Operating/Article:edit }
+  permissions: [ admin_v2_operation_article_manage ]
+
+admin_v2_article_publish:
+  path: /article/{id}/publish
+  defaults: { _controller: AppBundle:AdminV2/Operating/Article:publish }
+  methods: [ POST ]
+  permissions: [ admin_v2_operation_article_manage ]
+
+admin_v2_article_unpublish:
+  path: /article/{id}/unpublish
+  defaults: { _controller: AppBundle:AdminV2/Operating/Article:unpublish }
+  methods: [ POST ]
+  permissions: [ admin_v2_operation_article_manage ]
+
+admin_v2_article_thumb_remove:
+  path: /article/thumb/{id}/remove
+  defaults: { _controller: AppBundle:AdminV2/Operating/Article:thumbRemove }
+  permissions: [ admin_v2_operation_article_manage ]
+
+admin_v2_article_trash:
+  path: /article/{id}/trash
+  defaults: { _controller: AppBundle:AdminV2/Operating/Article:trash }
+  methods: [ POST ]
+  permissions: [ admin_v2_operation_article_manage ]
+
+admin_v2_article_delete:
+  path: /article/delete
+  defaults: { _controller: AppBundle:AdminV2/Operating/Article:delete }
+  methods: [ POST ]
+  permissions: [ admin_v2_operation_article_manage ]
+
+#运营-内容运营-小组管理
+admin_v2_group:
+  path: /group
+  defaults: { _controller: AppBundle:AdminV2/Operating/Group:index }
+  permissions: [ admin_v2_operation_group_manage ]
+
+admin_v2_groupThread:
+  path: /group/thread
+  defaults: { _controller: AppBundle:AdminV2/Operating/Group:thread }
+  permissions: [ admin_v2_operation_group_thread ]
+
+admin_v2_groupThread_batch_delete:
+  path: /group/batchDeleteThread
+  defaults: { _controller: AppBundle:AdminV2/Operating/Group:batchDeleteThread }
+  permissions: [ admin_v2_operation_group_thread ]
+  methods: [ POST ]
+
+admin_v2_group_thread_cancel_elite:
+  path: /group/thread/{threadId}/removeElite
+  defaults: { _controller: AppBundle:AdminV2/Operating/Group:removeElite }
+  permissions: [ admin_v2operation_group_manage ]
+
+admin_v2_group_thread_set_elite:
+  path: /group/thread/{threadId}/setElite
+  defaults: { _controller: AppBundle:AdminV2/Operating/Group:setElite }
+  permissions: [ admin_v2_operation_group_manage ]
+
+admin_v2_group_thread_cancel_stick:
+  path: /group/thread/{threadId}/removeStick
+  defaults: { _controller: AppBundle:AdminV2/Operating/Group:removeStick }
+  permissions: [ admin_v2_operation_group_manage ]
+
+admin_v2_group_thread_set_stick:
+  path: /group/thread/{threadId}/setStick
+  defaults: { _controller: AppBundle:AdminV2/Operating/Group:setStick }
+  permissions: [ admin_v2_operation_group_manage ]
+
+admin_v2_group_thread_close:
+  path: /group/thread/{threadId}/closeThread
+  defaults: { _controller: AppBundle:AdminV2/Operating/Group:closeThread }
+  permissions: [ admin_v2_operation_group_manage ]
+
+admin_v2_group_thread_open:
+  path: /group/thread/{threadId}/openThread
+  defaults: { _controller: AppBundle:AdminV2/Operating/Group:openThread }
+  permissions: [ admin_v2_operation_group_manage ]
+
+admin_v2_group_thread_delete:
+  path: /group/thread/{threadId}/deleteThread
+  defaults: { _controller: AppBundle:AdminV2/Operating/Group:deleteThread }
+  permissions: [ admin_v2_operation_group_manage ]
+  methods: [ POST ]
+
+admin_v2_group_close:
+  path: /group/{id}/close
+  defaults: { _controller: AppBundle:AdminV2/Operating/Group:closeGroup }
+  permissions: [ admin_v2_operation_group_manage ]
+
+admin_v2_group_open:
+  path: /group/{id}/open
+  defaults: { _controller: AppBundle:AdminV2/Operating/Group:openGroup }
+  permissions: [ admin_v2_operation_group_manage ]
+
+admin_v2_group_transfer:
+  path: /group/transfer/{groupId}
+  defaults: { _controller: AppBundle:AdminV2/Operating/Group:transferGroup }
+  permissions: [ admin_v2_operation_group_manage ]
+
+#运营-内容运营-私信管理
+admin_v2_message:
+  path: /message
+  defaults: { _controller: AppBundle:AdminV2/Operating/Message:index }
+  permissions: [ admin_v2_message_manage ]
+
+admin_v2_message_delete_messages:
+  path: /delete/choosed/messages
+  defaults: { _controller: AppBundle:AdminV2/Operating/Message:deleteChoosedMessages }
+  methods: [ POST ]
+  permissions: [ admin_v2_message_manage ]
+
+# 运营-内容运营-敏感词设置
+admin_v2_keyword:
+  path: /keyword
+  defaults: { _controller: AppBundle:AdminV2/Operating/Sensitive:index }
+
+admin_v2_keyword_create:
+  path: /keyword/create
+  defaults: { _controller: AppBundle:AdminV2/Operating/Sensitive:create }
+
+admin_v2_keyword_delete:
+  path: /keyword/{id}/delete
+  defaults: { _controller: AppBundle:AdminV2/Operating/Sensitive:delete }
+  methods: [ POST ]
+  permissions: [ admin_v2_keyword ]
+
+admin_v2_keyword_change:
+  path: /keyword/{id}/change
+  defaults: { _controller: AppBundle:AdminV2/Operating/Sensitive:change }
+  permissions: [ admin_v2_keyword ]
+
+admin_v2_keyword_banlogs:
+  path: /keyword/banlogs
+  defaults: { _controller: AppBundle:AdminV2/Operating/Sensitive:banlogs }
+
 # 用户-用户管理-用户管理
 admin_v2_user:
   path: /user
@@ -707,7 +1170,7 @@ admin_v2_data_statistics_index:
   path: /data_statistics/tab/{tab}
   defaults: { _controller: AppBundle:AdminV2\DataStatistics\Statistics:index, tab: 'trend' }
 
-# 系统-通用管理-网校信息
+# 系统-通用管理-学校信息
 admin_v2_school_information:
   path: /setting/site
   defaults: { _controller: AppBundle:AdminV2/System/SchoolInformation:site }
@@ -908,3 +1371,216 @@ admin_v2_post_num_rules_setting:
   path: /setting/post_num_rules
   defaults: { _controller: AppBundle:AdminV2/System/Setting:postNumRules }
   permissions: [ admin_v2_security ]
+
+# 开发者模块相关路由，保留没有删除，目前看主要是edusoho调试所用
+##developer
+#admin_v2_setting_developer:
+#  path:  /setting/developer
+#  defaults: { _controller: AppBundle:AdminV2/Developer/DeveloperSetting:index }
+#  permissions: [admin_v2]
+#
+#admin_v2_setting_developer_version:
+#  path:  /setting/developer/version
+#  defaults: { _controller: AppBundle:AdminV2/Developer/DeveloperSetting:version }
+#
+#admin_v2_setting_developer_magic:
+#  path:  /setting/developer/magic
+#  defaults: { _controller: AppBundle:AdminV2/Developer/DeveloperSetting:magic }
+#
+#admin_v2_performance:
+#  path:  /setting/performance
+#  defaults: { _controller: AppBundle:AdminV2/Developer/PageSetting:performance }
+#
+## developer - org
+#admin_v2_org:
+#  path: /org
+#  defaults: { _controller: AppBundle:AdminV2/Developer/OrgManage:index }
+#
+#admin_v2_org_create:
+#  path: /org/create
+#  defaults: { _controller: AppBundle:AdminV2/Developer/OrgManage:create }
+#
+#admin_v2_org_update:
+#  path: /org/{id}/update
+#  defaults: { _controller: AppBundle:AdminV2/Developer/OrgManage:update }
+#
+#admin_v2_org_delete:
+#  path: /org/{id}/delete
+#  defaults: { _controller: AppBundle:AdminV2/Developer/OrgManage:delete }
+#  methods: [POST]
+#
+#admin_v2_org_check_code:
+#  path: /org/checkcode
+#  defaults: { _controller: AppBundle:AdminV2/Developer/OrgManage:checkCode }
+#
+#admin_v2_org_check_name:
+#  path: /org/checkname
+#  defaults: { _controller: AppBundle:AdminV2/Developer/OrgManage:checkName }
+#
+#admin_v2_org_sort:
+#  path:  /org/sort
+#  defaults: { _controller: AppBundle:AdminV2/Developer/OrgManage:sort }
+#  methods: [POST]
+#
+#admin_v2_jobs:
+#  path: /jobs
+#  defaults: { _controller: AppBundle:AdminV2/Developer/Job:index }
+#
+#admin_v2_job_logs:
+#  path: /job/logs
+#  defaults: { _controller: AppBundle:AdminV2/Developer/Job:logs }
+#
+#admin_v2_crontab:
+#  path: /crontab
+#  defaults: { _controller: AppBundle:AdminV2/Developer/Job:crontab }
+#
+#admin_v2_crontab_resotre:
+#  path: /crontab/restore
+#  defaults: { _controller: AppBundle:AdminV2/Developer/Job:crontabRestore }
+#  methods: [POST]
+#
+#admin_v2_job_fired_logs:
+#  path: /job/{id}/fire/{jobFiredId}/logs
+#  defaults: { _controller: AppBundle:AdminV2/Developer/Job:fireLogs }
+#
+#admin_v2_job_set_next_exec_time:
+#  path: /job/{id}/set_next_exec_time
+#  defaults: { _controller: AppBundle:AdminV2/Developer/Job:setNextExecTime }
+#
+#admin_v2_job_fires:
+#  path: /job/{id}/fires
+#  defaults: { _controller: AppBundle:AdminV2/Developer/Job:fires }
+#
+#admin_v2_job_enabled:
+#  path: /job/{id}/enabled
+#  defaults: { _controller: AppBundle:AdminV2/Developer/Job:enabled }
+#  methods: [POST]
+#
+#admin_v2_job_disabled:
+#  path: /job/{id}/disabled
+#  defaults: { _controller: AppBundle:AdminV2/Developer/Job:disabled }
+#  methods: [POST]
+#
+#admin_v2_setting_mobile_iap_product:
+#  path:  /iap_setting/mobile_iap_product
+#  defaults: { _controller: AppBundle:AdminV2/Developer/IAP:mobileIapProduct }
+#
+#admin_v2_setting_mobile_iap_product_delete:
+#  path:  /setting/mobile_iap_product_delete/{productId}
+#  defaults: { _controller: AppBundle:AdminV2/Developer/IAP:mobileIapProductDelete }
+#  methods: [POST]
+#
+#admin_v2_purchase_market:
+#  path: /app/content_resource/purchase_market/resource_type/{tab}
+#  defaults: { _controller: AppBundle:AdminV2/CloudCenter/ResourcePurchase:market, tab: 'courseSet' }
+#
+#admin_v2_purchase_market_products_list:
+#  path: /app/content_resource/purchase_market/{type}/goods_list
+#  defaults: { _controller: AppBundle:AdminV2/CloudCenter/ResourcePurchase:products, type: 'courseSet'}
+#
+#admin_v2_content_resource_products_version:
+#  path:  /app/content_resource/products/version
+#  defaults: { _controller: AppBundle:AdminV2/CloudCenter/ResourcePurchase:productsVersion }
+#
+#admin_v2_content_resource_product_version_detail:
+#  path:  /app/content_resource/product/{remoteSourceId}/version_detail
+#  defaults: { _controller: AppBundle:AdminV2/CloudCenter/ResourcePurchase:productVersionDetail }
+#
+#admin_v2_content_resource_update_product_version:
+#  path:  /app/resources/product/{productId}/update/version
+#  defaults: { _controller: AppBundle:AdminV2/CloudCenter/ResourcePurchase:updateProductToLatestVersion }
+#
+#admin_v2_content_resource_product_detail:
+#  path:  /app/resourses/type/{productType}/remote_resource/{s2b2cProductId}/course/{courseId}
+#  defaults: { _controller: AppBundle:AdminV2/CloudCenter/ResourcePurchase:productDetail, courseId: 0 }
+#
+#admin_v2_content_resource_choose_product:
+#  path:  /app/content_resource/type/{productType}/product_id/{productId}
+#  defaults: { _controller: AppBundle:AdminV2/CloudCenter/S2B2C/Product:pullSupplierProduct }
+#  methods: [POST]
+#
+#admin_v2_product_update_setting:
+#  path:  /app/resource_product/product/update/setting
+#  defaults: { _controller: AppBundle:AdminV2/CloudCenter/ResourcePurchase:productUpdateSetting }
+#
+#
+## Plumber队列（隐藏路由）
+#admin_v2_plumber:
+#  path: /plumber
+#  defaults: { _controller: AppBundle:AdminV2/Developer/Plumber:index }
+#
+#admin_v2_plumber_queue:
+#  path: /plumber/queue
+#  defaults: { _controller: AppBundle:AdminV2/Developer/Plumber:queue }
+#
+## 商品设置
+#admin_v2_goods_setting:
+#  path: /goods/setting
+#  defaults: { _controller: AppBundle:AdminV2/Operating/GoodsSetting:index }
+#
+## 数据可视化老板后台
+#admin_v2_data_visualization_activity_learn_flow:
+#  path: /data_visualization/activity_vide_watch_record
+#  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:activityLearnFlow }
+#
+#admin_v2_data_visualization_activity_learn_record:
+#  path: /data_visualization/activity_learn_record
+#  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:activityLearnRecord }
+#
+#admin_v2_data_visualization_activity_video_watch_record:
+#  path: /data_visualization/activity_video_watch_record
+#  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:activityVideoWatchRecord }
+#
+#admin_v2_data_visualization_activity_stay_daily:
+#  path: /data_visualization/action/activity_stay_daily
+#  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:activityStayDaily }
+#
+#admin_v2_data_visualization_activity_video_daily_statistics:
+#  path: /data_visualization/action/activity_video_daily_statistics
+#  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:activityVideoDailyStatistics }
+#
+#admin_v2_data_visualization_activity_stay_daily_statistics:
+#  path: /data_visualization/action/activity_stay_daily_statistics
+#  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:activityStayDailyStatistics }
+#
+#admin_v2_data_visualization_course_plan_video_daily_statistics:
+#  path: /data_visualization/action/course_plan_video_daily_statistics
+#  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:coursePlanVideoDailyStatistics }
+#
+#admin_v2_data_visualization_course_plan_stay_daily_statistics:
+#  path: /data_visualization/action/course_plan_stay_daily_statistics
+#  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:coursePlanStayDailyStatistics }
+#
+#admin_v2_data_visualization_user_video_daily_statistics:
+#  path: /data_visualization/action/user_video_daily_statistics
+#  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:userVideoDailyStatistics }
+#
+#admin_v2_data_visualization_user_stay_statistics:
+#  path: /data_visualization/action/user_stay_daily_statistics
+#  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:userStayDailyStatistics }
+#
+#admin_v2_data_visualization_user_learn_daily_statistics:
+#  path: /data_visualization/action/user_learn_daily_statistics
+#  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:userLearnDailyStatistics }
+#
+#admin_v2_data_visualization_activity_learn_daily_statistics:
+#  path: /data_visualization/action/activity_learn_daily_statistics
+#  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:activityLearnDailyStatistics }
+#
+#admin_v2_data_visualization_course_plan_learn_daily_statistics:
+#  path: /data_visualization/action/course_plan_learn_daily_statistics
+#  defaults: { _controller: AppBundle:AdminV2/Developer/Visualization:coursePlanLearnDailyStatistics }
+#
+## 队列
+#admin_v2_queue_failed_logs:
+#  path: /queue/failed_logs
+#  defaults: { _controller: AppBundle:AdminV2/Developer/Queue:failedJobs }
+#
+#admin_v2_queue_failed_log_modal:
+#  path: /queue/failed_log/{id}
+#  defaults: { _controller: AppBundle:AdminV2/Developer/Queue:failedJob }
+#
+## apple
+#admin_v2_setting_apple:
+#  path: /setting/apple
+#  defaults: { _controller: AppBundle:AdminV2/Developer/AppleSetting:index }

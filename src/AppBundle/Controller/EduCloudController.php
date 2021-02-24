@@ -255,7 +255,7 @@ class EduCloudController extends BaseController
         $to = $request->get('to');
         $this->checkSmsType($smsType, $user);
         if ('1' != $this->setting('cloud_sms.sms_enabled')) {
-            $errorMsg = '短信服务未开启，请联系网校管理员';
+            $errorMsg = '短信服务未开启，请联系学校管理员';
 
             return $errorMsg;
         }

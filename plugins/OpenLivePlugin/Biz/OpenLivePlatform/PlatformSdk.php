@@ -205,7 +205,7 @@ class PlatformSdk extends BaseService
             return $this->request('GET', $data, $this->defaultRequestConfig);
         } catch (\Throwable $e) {
             $this->getLogger()->error("getCashAccount error:{$e->getMessage()} traceString:{$e->getTraceAsString()}", ['DATA' => $data]);
-            return ['error' => ['code' => 50020201029, 'message' => '获取网校账户失败！']];
+            return ['error' => ['code' => 50020201029, 'message' => '获取学校账户失败！']];
         }
     }
 

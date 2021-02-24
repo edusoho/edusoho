@@ -70,7 +70,7 @@ class DrpInfoController extends BaseController
             return true;
         }
         $refreshTime = empty($drpSettings['refreshTime']) ? 0 : $drpSettings['refreshTime'];
-        // 定义3小时刷新一次网校权益最低比例
+        // 定义3小时刷新一次学校权益最低比例
         if (!empty($drpSettings['merchantId']) && (time() - $refreshTime < 60 * 60 * 3)) {
             return true;
         }

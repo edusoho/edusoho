@@ -209,7 +209,7 @@ class SiteSettingController extends BaseController
             'defaultCoursePicture' => 0,
             'defaultAvatarFileName' => 'avatar',
             'defaultCoursePictureFileName' => 'coursePicture',
-            'inviteShareContent' => '我正在{{sitename}}网校学习，邀请你也来体验下。',
+            'inviteShareContent' => '我正在{{sitename}}学校学习，邀请你也来体验下。',
             'articleShareContent' => '我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。',
             'courseShareContent' => '我正在学习{{course}}，收获巨大哦，一起来学习吧！',
             'groupShareContent' => '我在{{groupname}}小组,发表了{{threadname}},很不错哦,一起来看看吧!',

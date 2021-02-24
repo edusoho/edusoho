@@ -2020,7 +2020,7 @@ class PushMessageEventSubscriber extends EventSubscriber implements EventSubscri
             case 'global':
                 $schoolUtil = new MobileSchoolUtil();
                 $schoolApp = $schoolUtil->getAnnouncementApp();
-                $target['title'] = '网校公告';
+                $target['title'] = '学校公告';
                 $target['id'] = $schoolApp['id'];
                 $target['image'] = $this->getFileUrl($schoolApp['avatar']);
                 $setting = $this->getSettingService()->get('app_im', []);

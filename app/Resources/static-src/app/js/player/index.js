@@ -84,7 +84,7 @@ class Show {
         disablePlaybackButton: this.disablePlaybackButton,
         disableResolutionSwitcher: this.disableResolutionSwitcher
       },
-      //用户以及网校信息
+      //用户以及学校信息
       user: {
         accesskey: this.accesskey,
         globalId: this.fileGlobalId,

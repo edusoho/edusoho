@@ -44,7 +44,7 @@ class CourseTaskMediaFilter extends Filter
 
             case 'download':
 
-                // /api/courses/{courseId}/task_medias/{taskId}接口 为App/微网校提供 "获取教学任务" 的功能
+                // /api/courses/{courseId}/task_medias/{taskId}接口 为App/微学校提供 "获取教学任务" 的功能
                 // 由于 Android 端语言规范，需要12种类型返回出去的 media key 不一样(因为里面字段也不一样)
                 $data['downloadMedia'] = $data['media'];
                 unset($data['media']);

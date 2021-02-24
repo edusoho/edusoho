@@ -225,7 +225,7 @@ admin.operation.reward_point_mall.product_tab.create_btn: 添加商品
 
 #账务管理模块
 admin.finance.order_menu: 用户订单
-admin.finance.bills_menu: 网校账单
+admin.finance.bills_menu: 学校账单
 admin.finance.coin_menu: 虚拟币管理
 admin.finance.refunds_menu: 退款管理
 
@@ -338,7 +338,7 @@ admin.system.course.open_course_tab: 公开课
 admin.system.operation.article_tab: 资讯
 admin.system.operation.group_tab: 小组
 admin.system.operation.invite_tab: '邀请注册设置'
-admin.system.operation.wap_tab: 手机微网校
+admin.system.operation.wap_tab: 手机微学校
 admin.system.operation.reward_point: 积分
 admin.system.operation.message_tab: 私信
 
@@ -351,7 +351,7 @@ admin.system.finance.refund_tab: 退款
 admin.system.wechat_auth_menu: 微信授权信息
 
 ##移动端设置模块
-admin.system.mobile.h5: 微网校设置
+admin.system.mobile.h5: 微学校设置
 admin.system.mobile.basic_tab: APP 设置
 admin.system.mobile.discoveries_setting: 发现页设置
 
@@ -587,11 +587,11 @@ admin_v2.course.category.classroom_category_tab: 班级分类
 admin_v2.btn.create_category_btn: 添加分类
 
 
-# 运营-网校装修-微网校装修
-admin_v2.operation.mobile.h5: 微网校装修
-admin_v2.operation.wap_tab: 微网校装修
+# 运营-学校装修-微学校装修
+admin_v2.operation.mobile.h5: 微学校装修
+admin_v2.operation.wap_tab: 微学校装修
 
-# 运营-网校装修-APP装修
+# 运营-学校装修-APP装修
 admin_v2.operation.mobile_menu: App装修
 admin_v2.operation.mobile.basic_tab: App设置
 admin_v2.operation.mobile.banner_setting_tab: 轮播图
@@ -599,18 +599,18 @@ admin_v2.operation.mobile.discovery_column_tab: '发现页栏目'
 admin_v2.operation.mobile.discovery_column_tab.create_btn: '添加栏目'
 
 
-# 运营-网校装修-小程序装修
+# 运营-学校装修-小程序装修
 admin_v2.wechat_app.menu: 小程序装修
 
-# 运营-网校装修-Web装修
+# 运营-学校装修-Web装修
 admin_v2.operation.block_menu: Web装修
 admin_v2.operation.block.theme.basic_tab: 当前主题
 admin_v2.operation.block.all.basic_tab: 所有
 admin_v2.operation.block.system.basic_tab: 系统
 admin_v2.operation.site.theme_tab: 已购主题
 
-# 运营-网校装修-站点设置
-admin_v2.operation.site_decoration.basic_group: 网校装修
+# 运营-学校装修-站点设置
+admin_v2.operation.site_decoration.basic_group: 学校装修
 
 admin_v2.operation.site_menu: 站点配置
 admin_v2.operation.site.top_navigation_tab: 顶部导航
@@ -763,9 +763,9 @@ admin_v2.trade.goods_order.basic_tab: 商品订单
 admin_v2.trade.order_refunds_menu: 退款订单
 admin_v2.trade.order_refunds.basic_tab: 退款订单
 
-#交易-网校账单
+#交易-学校账单
 admin_v2.trade.asset_manage.basic_group: 资产管理
-admin_v2.trade.bills_menu: 网校账单
+admin_v2.trade.bills_menu: 学校账单
 admin_v2.trade.bills.cash_records_tab: 现金账单
 admin_v2.trade.bills.coin_records_tab: 虚拟币账单
 
@@ -852,7 +852,7 @@ admin_v2.cloud.cloud_setting.basic_tab: 授权信息
 # 系统-通用管理
 admin_v2.general.basic_group: 通用管理
 
-# 系统-通用管理-网校信息
+# 系统-通用管理-学校信息
 admin_v2.system.site_menu: 学校信息
 admin_v2.system.site.basic_tab: 基础信息设置
 admin_v2.system.site.license_tab: 工商证件设置
@@ -904,6 +904,9 @@ admin_v2.system.roles.basic.delete_submit_btn: 删除角色
 # 系统-系统管理
 admin_v2.system.basic_group: 系统管理
 admin_v2.system.user.auth_tab: 注册
+
+# 通知管理
+admin_v2_notification_group: 通知管理
 
 # 系统-系统管理-系统优化
 admin_v2.system.optimize_menu: 系统优化

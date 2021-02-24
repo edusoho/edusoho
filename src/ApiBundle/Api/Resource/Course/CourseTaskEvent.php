@@ -57,7 +57,7 @@ class CourseTaskEvent extends AbstractResource
         $task = $this->getTaskService()->getTask($taskId);
         $activity = $this->getActivityService()->getActivity($task['activityId']);
         /**
-         * 通过UA只能判断出iOS APP, Android APP, H5和新版旧版微网校会随着发布一起加上client字段，暂无法判断小程序，所以unknown的全部被认为是小程序
+         * 通过UA只能判断出iOS APP, Android APP, H5和新版旧版微学校会随着发布一起加上client字段，暂无法判断小程序，所以unknown的全部被认为是小程序
          */
         $client = $request->request->get('client', '');
         if (empty($client)) {
@@ -124,7 +124,7 @@ class CourseTaskEvent extends AbstractResource
         $task = $this->getTaskService()->getTask($taskId);
         $activity = $this->getActivityService()->getActivity($task['activityId']);
         /**
-         * 通过UA只能判断出iOS APP, Android APP, H5和新版旧版微网校会随着发布一起加上client字段，暂无法判断小程序，所以unknown的全部被认为是小程序
+         * 通过UA只能判断出iOS APP, Android APP, H5和新版旧版微学校会随着发布一起加上client字段，暂无法判断小程序，所以unknown的全部被认为是小程序
          */
         $client = $request->request->get('client', '');
         if (empty($client)) {

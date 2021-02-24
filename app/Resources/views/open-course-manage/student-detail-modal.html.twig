@@ -39,133 +39,133 @@
     <th>{{'student.profile.gender'|trans}}</th>
     <td>
       {% if profile.gender == 'mail' %}
-        {{'student.profile.gender.male'|trans}}
+        {{ 'student.profile.gender.male'|trans }}
       {% elseif profile.gender == 'femail' %}
-        {{'student.profile.gender.female'|trans}}
+        {{ 'student.profile.gender.female'|trans }}
       {% else %}
-        {{'student.profile.field.empty'|trans}}
+        {{ 'student.profile.field.empty'|trans }}
       {% endif %}
     </td>
   </tr>
 
-  <tr>
-    <th>{{'student.profile.company'|trans}}</th>
-    <td>
-      {% if profile.company %}
-        {{ profile.company }}
-      {% else %}
-        {{'student.profile.field.empty'|trans}}
-      {% endif %}
-    </td>
-  </tr>
+  {# <tr> #}
+  {# <th>{{'student.profile.company'|trans}}</th> #}
+  {# <td> #}
+  {# {% if profile.company %} #}
+  {# {{ profile.company }} #}
+  {# {% else %} #}
+  {# {{'student.profile.field.empty'|trans}} #}
+  {# {% endif %} #}
+  {# </td> #}
+  {# </tr> #}
 
-  <tr>
-    <th>{{'student.profile.job'|trans}}</th>
-    <td>
-      {% if profile.job %}
-        {{ profile.job }}
-      {% else %}
-        {{'student.profile.field.empty'|trans}}
-      {% endif %}
-    </td>
-  </tr>
+  {# <tr> #}
+  {# <th>{{'student.profile.job'|trans}}</th> #}
+  {# <td> #}
+  {# {% if profile.job %} #}
+  {# {{ profile.job }} #}
+  {# {% else %} #}
+  {# {{'student.profile.field.empty'|trans}} #}
+  {# {% endif %} #}
+  {# </td> #}
+  {# </tr> #}
 
-  <tr>
-    <th>{{'student.profile.title'|trans}}</th>
-    <td>
-    {% if profile.title %}
-        {{ profile.title }}
-      {% else %}
-        {{'student.profile.field.empty'|trans}}
-      {% endif %}
-    </td>
-  </tr>
+  {# <tr> #}
+  {# <th>{{'student.profile.title'|trans}}</th> #}
+  {# <td> #}
+  {# {% if profile.title %} #}
+  {# {{ profile.title }} #}
+  {# {% else %} #}
+  {# {{'student.profile.field.empty'|trans}} #}
+  {# {% endif %} #}
+  {# </td> #}
+  {# </tr> #}
 
-  <tr>
-    <th>{{'user.fields.phone_label'|trans}}</th>
-    <td>
-    {% if profile.mobile %}
-        {{ profile.mobile }}
-      {% else %}
-        {{'student.profile.field.empty'|trans}}
-      {% endif %}
-    </td>
-  </tr>
+  {# <tr> #}
+  {# <th>{{'user.fields.phone_label'|trans}}</th> #}
+  {# <td> #}
+  {# {% if profile.mobile %} #}
+  {# {{ profile.mobile }} #}
+  {# {% else %} #}
+  {# {{'student.profile.field.empty'|trans}} #}
+  {# {% endif %} #}
+  {# </td> #}
+  {# </tr> #}
 
-  <tr>
-    <th>{{'student.profile.signature'|trans}}</th>
-    <td>
-    {% if profile.signature %}
-        {{ profile.signature }}
-      {% else %}
-        {{'student.profile.field.empty'|trans}}
-      {% endif %}
-    </td>
-  </tr>
+  {# <tr> #}
+  {# <th>{{'student.profile.signature'|trans}}</th> #}
+  {# <td> #}
+  {# {% if profile.signature %} #}
+  {# {{ profile.signature }} #}
+  {# {% else %} #}
+  {# {{'student.profile.field.empty'|trans}} #}
+  {# {% endif %} #}
+  {# </td> #}
+  {# </tr> #}
 
-  <tr>
-    <th>{{'student.profile.about'|trans}}</th>
-    <td>
-    {% if profile.about %}
-        <div class="editor-text">
-        {{ profile.about|cdn|raw }}
-        </div>
-      {% else %}
-        {{'student.profile.field.empty'|trans}}
-      {% endif %}
-    </td>
-  </tr>
+  {# <tr> #}
+  {# <th>{{'student.profile.about'|trans}}</th> #}
+  {# <td> #}
+  {# {% if profile.about %} #}
+  {# <div class="editor-text"> #}
+  {# {{ profile.about|cdn|raw }} #}
+  {# </div> #}
+  {# {% else %} #}
+  {# {{'student.profile.field.empty'|trans}} #}
+  {# {% endif %} #}
+  {# </td> #}
+  {# </tr> #}
 
-  <tr>
-    <th>{{'student.profile.site'|trans}}</th>
-    <td>
-      {% if profile.site %}
-        {{ profile.site }}
-      {% else %}
-        {{'student.profile.field.empty'|trans}}
-      {% endif %}
-    </td>
-  </tr>
+  {# <tr> #}
+  {# <th>{{'student.profile.site'|trans}}</th> #}
+  {# <td> #}
+  {# {% if profile.site %} #}
+  {# {{ profile.site }} #}
+  {# {% else %} #}
+  {# {{'student.profile.field.empty'|trans}} #}
+  {# {% endif %} #}
+  {# </td> #}
+  {# </tr> #}
 
-  <tr>
-    <th>{{'student.profile.weibo'|trans}}</th>
-    <td>
-      {% if profile.weibo %}
-        {{ profile.weibo }}
-      {% else %}
-        {{'student.profile.field.empty'|trans}}
-      {% endif %}
-    </td>
-  </tr>
+  {# <tr> #}
+  {# <th>{{'student.profile.weibo'|trans}}</th> #}
+  {# <td> #}
+  {# {% if profile.weibo %} #}
+  {# {{ profile.weibo }} #}
+  {# {% else %} #}
+  {# {{'student.profile.field.empty'|trans}} #}
+  {# {% endif %} #}
+  {# </td> #}
+  {# </tr> #}
 
-  <tr>
-    <th>{{'student.profile.weixin'|trans}}</th>
-    <td>
-      {% if profile.weixin %}
-        {{ profile.weixin }}
-      {% else %}
-        {{'student.profile.field.empty'|trans}}
-      {% endif %}
-    </td>
-  </tr>
+  {# <tr> #}
+  {# <th>{{'student.profile.weixin'|trans}}</th> #}
+  {# <td> #}
+  {# {% if profile.weixin %} #}
+  {# {{ profile.weixin }} #}
+  {# {% else %} #}
+  {# {{'student.profile.field.empty'|trans}} #}
+  {# {% endif %} #}
+  {# </td> #}
+  {# </tr> #}
 
-  <tr>
-    <th>QQ</th>
-    <td>
-      {% if profile.qq %}
-        {{ profile.qq }}
-      {% else %}
-        {{'student.profile.field.empty'|trans}}
-      {% endif %}
-    </td>
-  </tr>
+  {# <tr> #}
+  {# <th>QQ</th> #}
+  {# <td> #}
+  {# {% if profile.qq %} #}
+  {# {{ profile.qq }} #}
+  {# {% else %} #}
+  {# {{'student.profile.field.empty'|trans}} #}
+  {# {% endif %} #}
+  {# </td> #}
+  {# </tr> #}
 
   {% for userField in userFields if userField %}
     <tr>
-      <th width="25%">{{userField.title}}</th>
+      <th width="25%">{{ userField.title }}</th>
       <td>
         {% if profile[userField.fieldName] %}
-          {% if userField.type=="date"%}
+          {% if userField.type=="date" %}
             {{ profile[userField.fieldName]|date("Y-m-d") }}
           {% else %}
             {{ profile[userField.fieldName] }}

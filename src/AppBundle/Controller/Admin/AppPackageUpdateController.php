@@ -41,7 +41,7 @@ class AppPackageUpdateController extends BaseController
         $settings = $this->getSettingService()->get('storage', []);
 
         $api = CloudAPIFactory::create('root');
-        // 当网校key不可用(被封禁)时，返回为{"error" => "xxx"}
+        // 当学校key不可用(被封禁)时，返回为{"error" => "xxx"}
         $info = $api->get('/me');
 
         if (empty($info['accessKey']) || empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
