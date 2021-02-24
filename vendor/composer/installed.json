@@ -854,12 +854,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/codeages/plugin-bundle.git",
-            "reference": "261c60d9316b5e9d8d4bb0cf13465144225f34b0"
+            "reference": "3c3b7f003d24f87571a941bc7dcc31b1c6012648"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/codeages/plugin-bundle/zipball/261c60d9316b5e9d8d4bb0cf13465144225f34b0",
-            "reference": "261c60d9316b5e9d8d4bb0cf13465144225f34b0",
+            "url": "https://api.github.com/repos/codeages/plugin-bundle/zipball/3c3b7f003d24f87571a941bc7dcc31b1c6012648",
+            "reference": "3c3b7f003d24f87571a941bc7dcc31b1c6012648",
             "shasum": "",
             "mirrors": [
                 {
@@ -880,7 +880,7 @@
             "symfony/browser-kit": "^2.8 || ^3.0",
             "symfony/phpunit-bridge": "~3.1.5 || ~4.4.4"
         },
-        "time": "2021-01-15T00:34:58+00:00",
+        "time": "2021-02-24T07:12:11+00:00",
         "type": "symfony-bundle",
         "installation-source": "source",
         "autoload": {
