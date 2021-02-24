@@ -48,6 +48,14 @@ class TaskDaoTest extends BaseDaoTestCase
         $this->assertArrayEquals($expected[1], $result[0], $this->getCompareKeys());
     }
 
+    public function testFindByCategoryIds()
+    {
+        $this->mockDataObject();
+        $result = $this->getDao()->findByCategoryIds(['3']);
+
+        $this->assertCount(1, $result);
+    }
+
     public function testFindByCourseIds()
     {
         $expected = $this->mockDataObject();
