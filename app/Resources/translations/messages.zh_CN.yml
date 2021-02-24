@@ -7703,52 +7703,6 @@ admin.setting_wechat_auth.re_authorization_btn: 重新授权
 admin.setting_wechat_auth.authorization_in_new_page_hint: 请在新窗口完成公众号授权
 admin.setting_wechat_auth.authorization_success: 已成功授权
 
-#开发者设置
-admin.developer_setting.cloud_notification_api: 通知服务API
-admin.developer_setting.cloud_wechat_api: 微信托管服务API
-admin.developer_setting.s2b2c_api: S2B2C服务API
-admin.developer_setting.s2b2c_supplier_api: S2B2C 内容供应商 API
-admin.developer_setting.content_title: 开发者设置
-admin.developer_setting.debug_label: 调试
-admin.developer_setting.app_center_api_address: 应用中心API地址
-admin.developer_xapi_address: XAPI 推送地址
-admin.developer_face_address: 人脸识别API地址
-admin.developer_push_address: 消息推送API地址
-admin.developer_setting.cloud_api_server_address: 云服务API地址
-admin.developer_setting.address: 地址
-admin.developer_setting.im_api_address: IMAPI地址
-admin.developer_setting.cloud_sdk_cdn_address: 气球云SDK的CDN地址
-admin.developer_setting.hls_encrypted: HLS加密视频
-admin.developer_setting.market_address: 微营销地址(https://wyx.marketing.com)
-admin.developer_setting.distributor_address: 分销地址(http://fx.marketing.com)
-admin.developer_setting.without_outer_network: 是否无外网
-admin.developer_setting.default_locale: 默认语言
-admin.developer_setting.default_locale.zh_CN: 中文
-admin.developer_setting.default_locale.en: English
-admin.developer_setting.default_locale.tips: >
-  <h5>默认分类与默认标签名为后台->课程->分类管理和标签管理。</h5>
-  <h5>首页多处内容需设置手动设置为相应的语言。</h5>
-    <li>顶部导航栏位于后台->系统->站点设置->基础信息和顶部导航。</li>
-    <li>轮播图位于后台->运营->编辑区管理。</li>
-    <li>中间模块位于后台->系统->站点设置->主题->相应的主题管理。</li>
-    <li>轮播图位于后台->运营->编辑区管理->首页底部。</li>
-admin.developer_setting.show_switch_locale: 是否开启首页切换语言
-admin.developer_setting.show_switch_locale.0: 关闭
-admin.developer_setting.show_switch_locale.1: 开启
-admin.developer_setting.tips: >
-  <h4>注意事项</h4>
-  <ul>
-    <li>此页设置，仅供调试使用，请勿随意修改参数，不然将造成系统不可预知的错误。</li>
-    <li>请保持：<br>
-      「调试」：关闭<br>
-      「应用中心API地址」：空<br>
-      「云服务API地址」：　http://api.edusoho.net 或 空<br>
-      「IMAPI地址」：　http://imapi.edusoho.net/v1/ 或 空<br>
-      「HLS加密视频」：　开启<br>
-      「通知服务API地址」：　http://notifition-service.qiqiuyun.net 或 空 <br>
-    </li>
-  </ul>
-admin.developer_setting.mp_service_url_label: 小程序服务平台地址
 admin.magic_setting.need_careful_tips: 注意事项
 admin.magic_setting.developer_use_tips: 此功能，为开发人员调试时使用，请不要使用随意使用，不然将造成不可预知的后果！
 admin.magic_setting.video_fingerprint: 视频指纹
@@ -8547,23 +8501,6 @@ admin.account_center.dashboard.this_week_course_income: 本周课程收入
 admin.account_center.dashboard.this_week_classroom_income: 本周班级收入
 admin.account_center.dashboard.this_week_vip_income: 本周会员收入
 
-admin.cloud.app.upgrades.upgrade: 升级
-admin.cloud.app.upgrades.install: 安装
-admin.cloud.app.upgrades.app: 应用
-admin.cloud.app.upgrades.tips: 您好，为了保证网站升级顺利进行，升级过程中会出现短暂（2分钟内）网站无法访问的情况，请在学生访问少的时候进行系统升级，给您带来了不便，还望理解
-admin.cloud.app.upgrades_danger.tips: 警告，您当前正在使用测试通道升级此应用，强烈建议您放弃升当前操作，否则一旦出现站点崩溃等无法意料的后果，您需要自己承担后果。
-admin.cloud.app.upgrades.app_name: 应用名称
-admin.cloud.app.upgrades.app_version: 应用名称
-admin.cloud.app.upgrades.backupDB: 备份数据库
-admin.cloud.app.upgrades.backupFile: 备份文件
-admin.cloud.app.upgrades.backupStatus.yes: 是
-admin.cloud.app.upgrades.backupStatus.no: 否
-admin.cloud.app.upgrades.startUpdate_btn: 开始
-admin.cloud.app.upgrades.updating.tips: 正在安装，请不要关闭当前窗口...
-admin.cloud.app.upgrades.finish_update.tips: 正在完成安装/升级, 请稍等...
-admin.cloud.app.upgrades.finish_update_btn: 完成安装/升级
-admin.cloud.app.layout.task_manage: 任务管理
-
 admin.plugin.upgrades.plugin: 应用
 admin.plugin.upgrades.theme: 主题
 admin.plugin.upgrades.upgrade_guide: 升级引导
@@ -8599,33 +8536,6 @@ admin.org_manage.modal.org_code.help_block: 必填，建议使用分类名称的
 admin.org_manage.modal.org_description: 描述
 admin.org_manage.modal.org_description.help_block: 非必填
 admin.org_manage.modal.delete.tips: 会同时删除下辖组织机构
-
-admin.wechat_app.banner_title: 学校小程序，招生学习更便捷
-admin.wechat_app.banner_introduce: 学校小程序，无缝链接学校与公众号、微信群，让微信运营和学校运营一体化。
-admin.wechat_app.access_btn: 立即开通
-admin.wechat_app.install_btn: 立即安装
-admin.wechat_app.fast_access_introduction_title: 快速接入
-admin.wechat_app.fast_access_introduction_content: 只需一键授权，无需任何开发，即可拥有自己的学校小程序
-admin.wechat_app.data_sync_introduction_title: 数据同步
-admin.wechat_app.data_sync_introduction_content: 小程序的学习、订单记录直接和 EduSoho 主系统打通，无需额外运营成本，轻松管理
-admin.wechat_app.flow_entrance_introduction_title: 自带流量
-admin.wechat_app.flow_entrance_introduction_content: 微信9亿月活跃用户，附近的小程序、微信搜索等功能，让你轻松获取流量，抓住客户
-admin.wechat_app.easy_promotion_introduction_title: 超轻推广
-admin.wechat_app.easy_promotion_introduction_content: 流畅体验，降低用户门槛，还能方便用户在微信里快速传播，宣传推广低成本高转化
-
-admin.xapi.title: 推送详情
-admin.xapi.id: 推送id
-admin.xapi.status: 推送状态
-admin.xapi.version: xAPI版本
-admin.xapi.body: 推送主体
-admin.xapi.verb: 推送行为
-admin.xapi.target_type: 推送类型
-admin.xapi.time: 推送时间
-admin.xapi.created_time: 创建时间
-admin.xapi.operation: 操作
-admin.xapi.enable_label: 开启xAPI
-admin.xapi.push_url_label: 设置xAPI地址
-admin.xapi.default_url: 默认地址是：https://lrs.qiqiuyun.net/v1/xapi/
 
 user.card_show_following: 关注
 user.card_show_followed: 已关注
@@ -11077,8 +10987,6 @@ admin_v2.newcomer_task.decoration_applied.title: 装修学校
 admin_v2.newcomer_task.decoration_applied.tip: 装修学校首页，获得更多用户好感
 
 admin_v2.homepage.overview: 概况
-admin_v2.developer_setting.platform_news_api_server: 获取平台信息API
-admin_v2.developer_setting.platform_news_api_server.info: '默认为 //platform-news-service.qiqiuyun.net'
 admin_v2.role_permission_manage.error: 错误
 admin_v2.default_page.changelog_title: 更新日志
 admin_v2.wechat_official_account.title: 公众号

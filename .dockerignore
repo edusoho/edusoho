@@ -1,6 +1,0 @@
-.git
-node_modules
-app/data
-app/cache/*
-app/logs/*
-web/files

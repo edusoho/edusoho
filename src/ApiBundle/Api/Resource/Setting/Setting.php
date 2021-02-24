@@ -150,19 +150,6 @@ class Setting extends AbstractResource
         ];
     }
 
-    public function getDeveloper($request)
-    {
-        $developer = $this->getSettingService()->get('developer', []);
-        $cloudSdkCdn = empty($developer['cloud_sdk_cdn']) ? 'service-cdn.qiqiuyun.net' : $developer['cloud_sdk_cdn'];
-        // \QiQiuYun\SDK\Service\PlayV2Service 将host设置为protect变量，拿不出来，只能自己定义
-        $cloudPlayServer = empty($developer['cloud_play_server']) ? 'play1.qiqiuyun.net' : $developer['cloud_play_server'];
-
-        return [
-            'cloudSdkCdn' => $cloudSdkCdn,
-            'cloudPlayServer' => $cloudPlayServer,
-        ];
-    }
-
     public function getUser($request = null)
     {
         $authSetting = $this->getSettingService()->get('auth');

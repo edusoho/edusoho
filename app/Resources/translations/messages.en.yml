@@ -7214,7 +7214,6 @@ admin.xapi.created_time: Created Time
 admin.xapi.operation: Operation
 admin.xapi.enable_label: Turn on xAPI
 admin.xapi.push_url_label: Set the xAPI address
-admin.xapi.default_url: Default address ：https://lrs.qiqiuyun.net/v1/xapi/
 site.data.num: ''
 site.date_format: 'Y-n-d H:i:s'
 site.date_format_H_i: 'Y-n-d H:i'
@@ -9802,7 +9801,6 @@ admin_v2.newcomer_task.decoration_applied.tip: Renovate the online school homepa
 
 admin_v2.homepage.overview: Overview
 admin_v2.developer_setting.platform_news_api_server: API to get information from platform
-admin_v2.developer_setting.platform_news_api_server.info: 'Default value is //platform-news-service.qiqiuyun.net'
 admin_v2.role_permission_manage.error: Error
 admin_v2.default_page.changelog_title: Changelog
 admin_v2.wechat_official_account.title: Official Account

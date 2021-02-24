@@ -267,12 +267,12 @@
         },
         mounted() {
             this.remainTime();
-            this.getDrpInfo();
+            // this.getDrpInfo();
         },
         watch: {
             currentSku(newVal, oldVal) {
                 this.remainTime();
-                this.getDrpInfo();
+                // this.getDrpInfo();
             }
         }
     }

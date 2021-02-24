@@ -8,18 +8,18 @@
       // 初始化sdk
       window.onESCloudSDKReady = function (SDK) {
         if (SDK.TYPE != 'Inspection') {
-          return ;
+          return;
         }
         window.esCaptureSdk = new SDK({
           id: "real-face-capture",
-          apiServer: "//inspection-service.qiqiuyun.net",
+          apiServer: "#",
         });
         window.esCaptureSdk.on('initialized', function () {
           console.log('云监考初始化成功.');
         });
       };
     </script>
-    <script id="escloud-inspection-sdk-script" src="https://service-cdn-ali.qiqiuyun.net/inspection-sdk/1.0.1/escloud-inspection-sdk.js" async></script>
+    <script id="escloud-inspection-sdk-script" src="" async></script>
     {% do script(['app/js/face-inspection/index.js']) %}
     <div class="container init-container" style="">
       <div class="row mb-4">

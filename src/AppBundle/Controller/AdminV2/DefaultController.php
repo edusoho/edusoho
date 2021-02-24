@@ -39,13 +39,6 @@ class DefaultController extends BaseController
         ]);
     }
 
-    public function newcomerAction(Request $request)
-    {
-        return $this->render('admin-v2/default/newcomer-task.html.twig', [
-            'newcomerTasks' => $this->getNewcomerTasksWithStatus(),
-        ]);
-    }
-
     public function changelogAction(Request $request)
     {
         $rootDir = $this->getParameter('kernel.root_dir');
@@ -85,17 +78,6 @@ class DefaultController extends BaseController
         ]);
     }
 
-    public function feedbackAction(Request $request)
-    {
-        $site = $this->getSettingService()->get('site');
-        $user = $this->getUser();
-        $token = CurlToolkit::request('POST', 'https://www.edusoho.com/question/get/token', []);
-        $site = ['name' => $site['name'], 'url' => $site['url'], 'token' => $token, 'username' => $user->nickname];
-        $site = urlencode(http_build_query($site));
-
-        return $this->redirect('https://www.edusoho.com/question?site='.$site.'');
-    }
-
     public function infoAction(Request $request)
     {
         $apps = $this->getAppService()->checkAppUpgrades();
@@ -112,30 +94,6 @@ class DefaultController extends BaseController
             'schoolLevel' => $this->getSchoolLevelKey(),
             'miniProgramCodeImg' => $this->getMiniProgramCodeImg(),
         ]);
-    }
-
-    public function switchOldVersionAction(Request $request)
-    {
-        $setting = $this->getSettingService()->get('backstage', ['is_v2' => 0]);
-
-        if (!empty($setting) && !$setting['is_v2']) {
-            $this->createNewException(CommonException::SWITCH_OLD_VERSION_ERROR());
-        }
-
-        $roles = $this->getCurrentUser()->getRoles();
-        if (0 == count(array_intersect($roles, ['ROLE_ADMIN', 'ROLE_SUPER_ADMIN'])) || empty($setting['allow_show_switch_btn'])) {
-            $this->createNewException(CommonException::SWITCH_OLD_VERSION_PERMISSION_ERROR());
-        }
-
-        if ('POST' == $request->getMethod()) {
-            $setting['is_v2'] = 0;
-            $this->getSettingService()->set('backstage', $setting);
-            $this->pushEventTracking('switchToAdmin');
-
-            return $this->createJsonResponse(['status' => 'success', 'url' => $this->generateUrl('admin')]);
-        }
-
-        return $this->render('admin-v2/default/switch-old-version-modal.html.twig', []);
     }
 
     public function validateUpgradeAction(Request $request)
