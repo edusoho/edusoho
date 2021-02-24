@@ -174,16 +174,16 @@ export default class BatchManage {
 
     this.$element.on('click', '.js-batch-delete', () => {
       const { status, permission } = this.batchOperate
-      let { chosenItems } = this.batchOperate
       const $target = $(event.target)
+      let chosenItems = this.batchOperate.chosenItems
 
       if (status === 'none' || permission.indexOf('delete') === -1) return
 
       const isDeleteLesson = chosenItems.every(item => item.type === 'lesson')
       
       if (isDeleteLesson) {
-        // 只能删除未发布的课时
-        chosenItems = chosenItems.filter(item => !this.getPublishStatusById(item.id))
+        chosenItems = this.clearDeletedLessons()
+        chosenItems = chosenItems.filter(item => !this.getPublishStatusById(item.id)) 
       }
 
       cd.confirm({
@@ -220,6 +220,19 @@ export default class BatchManage {
     }
     
     return Translator.trans('course.manage.chapter_batch_delete_hint', { length });
+  }
+
+  clearDeletedLessons () {
+    const { chosenItems } = this.batchOperate
+
+    const resultItems = chosenItems.filter(item => $(`#chapter-${item.id}`).length > 0)
+
+    if (resultItems.length !== chosenItems.length) {
+      this.batchOperate.chosenItems = resultItems
+      this.updateBatchBtnStatus()
+    }
+
+    return this.batchOperate.chosenItems
   }
 
   // 批量发布
