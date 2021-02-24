@@ -12,8 +12,11 @@ class LessonException extends AbstractException
 
     const NOTFOUND_LESSON = 4041302;
 
+    const PARAMETERS_MISSING = 5001303;
+
     public $messages = [
         4031301 => 'lesson_count_no_more_than_300',
         4041302 => 'exception.lesson.not_found',
+        5001303 => 'exception.lesson.parameter_missing',
     ];
 }

@@ -233,6 +233,7 @@ class Logger
                 'delete_testpaper' => '删除试卷',
                 //'add_question' => '新增题目',
                 'delete_question' => '删除题目',
+                'exit_course' => '退出课程',
                 self::ACTION_REFRESH_LEARNING_PROGRESS => '刷新学习进度',
                 self::ACTION_SYNC_WHEN_TASK_CREATE => '同步创建任务',
                 self::ACTION_SYNC_WHEN_TASK_UPDATE => '同步更新任务',
@@ -282,6 +283,7 @@ class Logger
                 'remove_student' => '移除学员',
                 'recommend' => '推荐班级',
                 'cancel_recommend' => '取消推荐',
+                'exit_classroom' => '退出班级',
             ],
             self::ARTICLE => [
                 'update_settings' => '更新设置',

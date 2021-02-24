@@ -136,9 +136,7 @@
       {% endif %}
     </div>
   </div>
-  {% if not mobile %}
-    <nav class="text-center">{{ web_macro.paginator(paginator) }}</nav>
-  {% endif %}
+  <nav class="text-center">{{ web_macro.paginator(paginator) }}</nav>
 {% endblock %}
 
 {% block bottom %}

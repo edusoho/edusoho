@@ -1,4 +1,10 @@
 <div class="item-content">
+  <label 
+    class="cd-checkbox chapter-operation js-chapter-operation hidden" 
+    data-id="{{lesson.id}}"
+    data-type="{{lesson.type}}">
+    <input type="checkbox" value="1" data-toggle="cd-checkbox">
+  </label>
   <span class="lesson-unpublish-status js-lesson-unpublish-status {% if lesson.status == 'published' %}hidden{% endif %}">
   {{'course.plan_task.task_unpublished'|trans}}</span>
 

@@ -1,7 +1,5 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
-
 {% set modal_class = 'modal-lg' %}
-
 {% set courseId = course.id %}
 
 {% do script([cloud_sdk_url('uploader'), 'libs/perfect-scrollbar.js', 'libs/jquery-validation.js','libs/select2.js', 'app/js/course-manage/live-replay/upload/index.js']) %}
@@ -11,11 +9,9 @@
 {% endblock %}
 
 {% block body %}
-
   {% set uploadUrl = path('course_manage_task_replay_upload', {courseId:course.id, taskId: task.id}) %}
 
-  <form id="replay-material-form" class="form-horizontal" action="{{ uploadUrl }}" enctype="multipart/form-data"
-    method="post">
+  <form id="replay-material-form" class="form-horizontal" action="{{ uploadUrl }}" enctype="multipart/form-data" method="post">
 
     <div class="form-group">
       <div class="col-md-10 col-md-offset-1 controls" id="material-file-chooser">

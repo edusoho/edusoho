@@ -1887,7 +1887,9 @@ course.plan_task.expiry_days_learn_tips: >
 course.plan_task.start_time: 开始日期
 course.plan_task.end_time: 结束日期
 course.plan_task.manage_btn: 管理
+course.plan_task.cancel_manage_btn: 取消管理
 course.plan_task.publish_btn: 发布
+course.plan_task.publishing_btn: 发布中...
 course.plan_task.manage: 教学计划管理
 course.plan_task.content_title: 课时管理
 course.plan_task.locked.task_locked: %taskName%未解锁
@@ -1917,7 +1919,9 @@ course.plan_task.more_btn: 更多
 course.plan_task.lesson-marker_btn: 弹题管理
 course.plan_task.copy_btn: 复制为
 course.plan_task.unpublish_btn: 取消发布
+course.plan_task.unpublishing_btn: 取消发布中...
 course.plan_task.delete_btn: 删除
+course.plan_task.deleting_btn: 删除中...
 course.plan_task.preparation_tips: 学员可通过看视频、阅读资料等预习%taskName%，导入学习。
 course.plan_task.batch_create_tips: >
   批量创建课时需要开通云视频服务，点击<a target="__blank" href="http://open.edusoho.com/show/cloud/video">这里</a>了解详情
@@ -1979,6 +1983,13 @@ course.plan_task.activity_manage.setup_finish_condition:  >
 course.plan_task.activity_manage.create: 添加%taskName%
 course.plan_task.activity_manage.modify: 编辑%taskName%
 course.plan_task.activity_manage.preview: 预览%taskName%
+course.plan_task.all_choices: 全部选择
+course.plan_task.lesson: 课时
+course.plan_task.chapter: 章节
+course.plan_task.selected: >
+  已选
+  <span class="js-chosen-number">0</span>
+  条
 
 course.manage.create_lesson: 添加课时
 course.manage.edit_lesson: 编辑课时
@@ -2257,16 +2268,15 @@ file_chooser.upload_file.audio_quality.high: 高品
 file_chooser.upload_file.convert: 什么是转码
 file_chooser.upload_file.upload_tips: 上传说明
 file_chooser.upload_file.convert_tips: 上传后将会自动转码成兼容性更好的格式，以便学员观看，建议您在转码完成后再发布相应的课时。
-file_chooser.upload_file.suopprt_audio_tips: >
-  支持mp4, avi, flv, wmv, mov, m4v格式的视频文件上传，文件大小不能超过2GB。<br/>支持断点续传（仅在Chrome、IE9及以上等支持HTML5的浏览器中可用）。
+file_chooser.upload_file.upload_video_tips: 支持mp4, avi, flv, wmv, mov, m4v格式的视频文件上传，文件大小不能超过2GB。支持断点续传（仅在Chrome、IE9及以上等支持HTML5的浏览器中可用）。
 file_chooser.upload_file.upload_audio_tips: >
-  支持mp3格式的音频文件上传，且文件大小不能超过 500M 。</br>支持断点续传（仅支持HTML5浏览器）。</br>音频将上传到云服务器
+  支持mp3格式的音频文件上传，且文件大小不能超过 500M 。<br/>支持断点续传（仅支持HTML5浏览器）。<br/>音频将上传到云服务器。
 file_chooser.upload_file.upload_flash_tips: >
-  支持swf格式的文件上传，且文件大小不能超过 100 MB。<br/>Flash将上传到云服务器
+  支持swf格式的文件上传，且文件大小不能超过 100 MB。<br/>Flash将上传到云服务器。
 file_chooser.upload_file.upload_doc_tips: >
-  支持pdf,doc,docx,xls,xlsx格式的文档上传，且文件大小不能超过 100 MB。<br/>文档将上传到云服务器
+  支持pdf,doc,docx,xls,xlsx格式的文档上传，且文件大小不能超过 100 MB。<br/>文档将上传到云服务器。
 file_chooser.upload_file.upload_ppt_tips: >
-  支持ppt, pptx格式的PPT文件上传，且文件大小不能超过100 MB。<br/>PPT将上传到云服务器
+  支持ppt, pptx格式的PPT文件上传，且文件大小不能超过100 MB。<br/>PPT将上传到云服务器。
 
 # 答卷
 testpaper.edit: 编辑试卷信息
@@ -5101,7 +5111,12 @@ admin.course_manage.statistics.no_introduce: 未引入
 admin.course_manage.statistics.classroom.remove: 已从%classroomName%中移除
 admin.course_manage.statistics.watch_task: 查看%taskName%
 admin.course_manage.statistics.watch_course_data: 查看课时数据
-admin.course_manage.statistics.tips: 页面中各个数据以教学计划统计
+admin.course_manage.statistics.tips: >
+  1.该页面为实时数据。<br/>
+  2.任务数量：多个计划下任务数量总和。<br/>
+  3.学员总数：多个计划下学员数总和。若一个学员加入多个计划，学员被计算多次。<br/>
+  4.完成人数：学员将多个计划全部完成才算完成。<br/>
+
 admin.course_manage.statistics.task_tips: 仅统计必修课时任务数，括号内数字为选修的课时任务数
 
 ## 任务统计数据
@@ -5129,9 +5144,19 @@ admin.course_manage.statistics.data_detail.note_number: 笔记数
 admin.course_manage.statistics.data_detail.plan_study_time: 计划被累加学习时长（分）：%mins%
 admin.course_manage.statistics.data_detail.tips: >
   <span style='font-size:14px'>
-    1. 累加学习时长（分）为用户在课程-计划下产生的所有学习时长累加。<br />
-    2. 其中视频课时学习时长统计维度（播放活跃时长or页面活跃时长）以在系统-课程设置-视频课时学习配置为准。<br />
-    3. 数据统计为昨日及之前数据。
+    1.该页面为实时数据。<br/>
+    2.计划被累加学习时长：所有用户学习计划下的课时，产生的学习时长累加。其中视频课时学习时长统计以系统-课程设置-视频课时学习配置规则为准。<br/>
+    3.学习天数：加入时间到完成时间，持续的自然天。<br/>
+    4.累加学习时长：某一用户学习计划下的课时，产生的学习时长累加。<br/>
+  </span>
+
+admin.course_manage.statistics.data_detail.task.tips: >
+  <span style='font-size:14px'>
+    1.该页面为实时数据。<br/>
+    2.计划被累加学习时长：所有用户学习计划下的课时，产生的学习时长累加。其中视频课时学习时长统计以系统-课程设置-视频课时学习配置规则为准。<br/>
+    3.视频长度（分）：视频文件的大小。<br/>
+    4.任务被累加学习时长：课时任务被学员学习，产生的学习时长累加。<br/>
+    5.人均学习时长：任务被累加学习时长/学习人数。<br/>
   </span>
 
 ## 用户数据统计
@@ -5672,7 +5697,7 @@ admin.setting.site.analytics: 统计分析代码
 admin.setting.site.analytics.help_block: >
   <p class="help-block">统计代码是网站统计软件发布的一段代码，用以统计添加统计代码的网站的数据。</p>
   <p class="help-block">包括网站的访客来源，从哪个网页跳转到此网站，搜索什么关键词到网站，一共有多少人访问，每天多少人多少IP，平均访问时间是多少等等数据。</p>
-  <p class="help-block">统计分析工具可以分析网校访问趋势，以及根据数据做推广调整，优化网校资源，建议使用<a href="http://tongji.baidu.com" target="_blank">百度统计</a>、<a href="http://ta.qq.com/" target="_blank">腾讯分析</a>或者<a target="_blank" href="http://www.umeng.com/">CNZZ。</a></p>
+  <p class="help-block">统计分析工具可以分析网校访问趋势，以及根据数据做推广调整，优化网校资源，建议使用<a href="http://tongji.baidu.com" target="_blank">百度统计</a>、<a target="_blank" href="http://www.umeng.com/">CNZZ。</a></p>
 admin.setting.site.website_status: 站点状态
 admin.setting.site.website_status.open: 开放
 admin.setting.site.website_status.closed: 关闭
@@ -6296,7 +6321,7 @@ admin.operation_invite.coupon.recieved_at: 领取时间：
 admin.operation_invite.coupon.start_time.placeholer: 开始时间
 admin.operation_invite.coupon.finished_time.placeholer: 结束时间
 admin.operation_invite.coupon.recieved_at_th: 领取时间
-admin.operation_invite.coupon.rate_th: 面值
+admin.operation_invite.coupon.rate_th: 面值/折扣
 admin.operation_invite.coupon.use_status_th: 使用情况
 admin.operation_invite.coupon.use_status.unused: 未使用
 admin.operation_invite.coupon.use_status.receive: 已领取
@@ -9100,6 +9125,7 @@ log.action.course.publish_course: 发布教学计划
 log.action.course.close_course: 关闭教学计划
 log.action.course.update_draft: 更新草稿
 log.action.course.join_course: 加入教学计划
+log.action.course.exit_course: 退出教学计划
 log.action.user.exportCsv: 导出
 log.action.user.add: 新增
 log.action.user.edit: 修改
@@ -9194,6 +9220,7 @@ log.action.classroom.publish: 发布班级
 log.action.classroom.close: 关闭班级
 log.action.classroom.update_head_teacher: 修改班主任
 log.action.classroom.join_classroom: 加入班级
+log.action.classroom.exit_classroom: 退出班级
 log.action.article.update_settings: 更新设置
 log.action.article.create: 新增
 log.action.article.update: 修改
@@ -9323,6 +9350,7 @@ log.action.template.course.close: 关闭了<strong class="color-success">课程<
 log.action.template.course.delete: 删除了<strong class="color-success">课程</strong>《%title%》
 log.action.template.course.add_student: 在教学计划《<a href="%url%" target="_blank">%title%</a>》添加了<strong class="color-success">学员</strong>%nickname% 备注:%remark%
 log.action.template.course.remove_student: 在教学计划《<a href="%url%" target="_blank">%title%</a>》移除了<strong class="color-success">学员</strong>%nickname%
+log.action.template.course.exit_course: <strong class="color-success">学员</strong>%nickname%退出了教学计划《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.course.update_teacher: 更新了教学计划《<a href="%url%" target="_blank">%title%</a>》的教师信息
 log.action.template.course.create_thread: 新建了话题《%title%》
 log.action.template.course.update_thread: 更新了话题《%title%》
@@ -9365,6 +9393,7 @@ log.action.template.classroom.update_picture: 修改了<strong class="color-succ
 log.action.template.classroom.update_head_teacher: 修改了<strong class="color-success">班级</strong> 《<a href="%url%" target="_blank">%title%</a>》的班主任
 log.action.template.classroom.add_student: 在<strong class="color-success">班级</strong>《<a href="%url%" target="_blank">%title%</a>》添加了<strong class="color-success">学员</strong>%nickname% 备注:%remark%
 log.action.template.classroom.remove_student: 在<strong class="color-success">班级</strong>《<a href="%url%" target="_blank">%title%</a>》移除了<strong class="color-success">学员</strong>%nickname%
+log.action.template.classroom.exit_classroom: <strong class="color-success">学员</strong>%nickname%退出了<strong class="color-success">班级</strong>《<a href="%url%" target="_blank">%title%</a>》
 log.action.template.classroom.delete_course: 在<strong class="color-success">班级</strong>《<a href="%url%" target="_blank">%title%</a>》移除了<strong class="color-success">课程</strong>%courseSetTitle%
 log.action.template.classroom.add_course: 在<strong class="color-success">班级</strong>《<a href="%url%" target="_blank">%title%</a>》添加了<strong class="color-success">课程</strong>%courseSetTitle%
 log.action.template.classroom.join_classroom: 加入班级《<a href="%url%" target="_blank">%title%</a>》
@@ -10145,11 +10174,13 @@ user.learn.statistics.init: 数据升级中，请稍候（用户量越大，升�
 user.learn.statistics.manage.describe_tips: >
   <div style='width:250px;'>
     <h5 style='color:blue;margin:5px 0;'>用户数据说明</h5>
-    <P style='margin:0;'>用户数据每日00:00-02:00间更新。</p>
-    <P style='margin:0;'>累加学习时长（分）为筛选条件内该用户在网校产生的所有学习时长累加。</p>
-    <P style='margin:0;'>其中视频课时学习时长统计维度（播放活跃时长or页面活跃时长）以在系统-课程设置-视频课时学习配置为准。</p>
+    <P style='margin:0;'>1.该页中“累加学习时长”字段为实时数据，其他字段数据将在每日00:00-02:00间更新。</p>
+    <P style='margin:0;'>2.导出表格《用户数据统计》中“累加学习时长”字段为实时数据，其他字段数据将在每日00:00-02:00间更新；《用户课程学习数据》《用户课时学习数据》都为实时数据。</p>
+    <P style='margin:0;'>3.累加学习时长：为筛选条件内用户在网校学习的课时，产生的学习时长累加。其中视频课时学习时长统计以系统-课程设置-视频课时学习配置规则为准。</p>
   </div>
 
+user.learn.statistics.manage.describe_detail.tips: >
+  <span style='font-size:14px;'>该详情页面为实时数据。</span>
 
 admin.datalab.setting.modal_title: 提示：
 admin.datalab.setting.modal_enable_body: 开启后，将在 24 小时内开始更新数据。关闭期内的学习数据无法更新到报表中。
@@ -10196,6 +10227,7 @@ exception.user.register_error: 用户数据异常，注册失败！
 exception.user.mobile_registered: 该手机号码已被注册！
 exception.user.register_limit: 注册次数已达最大限制!
 exception.user.not_match_auth: 用户不匹配
+exception.user.mobile_not_found: 用户手机号码不存在
 exception.sensitive.words: 您填写的内容中包含敏感词!
 exception.thread.frequent: 回复次数过多，请稍后尝试!
 exception.thread.not_found: 话题不存在
@@ -10293,6 +10325,8 @@ exception.user.password_failed: 登录密码不正确
 exception.user.login_limit: 登录限制！
 exception.user.lock_self_denied: 您不能封禁自己
 exception.user.datefield_invalid: 日期类型字段没有按日期格式填写
+exception.user.file_permission_denied: 无文件访问权限
+
 exception.parsed.failed.netease: 获取网易公开课视频信息失败
 exception.parsed.failed.letv: 获取乐视视频信息失败
 exception.parsed.failed.qq: 获取QQ视频信息失败
@@ -10306,6 +10340,7 @@ exception.batch_notification.published: 全站通知已发布
 
 lesson_count_no_more_than_300: 课时总数不能超过300个
 exception.lesson.not_found: 课时不存在
+exception.lesson.parameter_missing: 缺少课时编号
 lesson_tasks_no_more_than_5: 课时下的任务数量不能超过5个
 exception.task.not_found: 任务不存在
 exception.task.unpublished_task: 任务未发布
@@ -10847,6 +10882,7 @@ coupon.total_count: 总数
 coupon.expiry_date: 有效期
 coupon.amount: 已优惠金额
 coupon.target_type: 类型
+coupon.amonut: 张
 
 coupon.type.minus: 抵价
 coupon.type.discount: 打折

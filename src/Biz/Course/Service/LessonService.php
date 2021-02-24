@@ -24,6 +24,8 @@ interface LessonService
 
     public function publishLessonByCourseId($courseId);
 
+    public function batchUpdateLessonsStatus($courseId, $lessonIds, $updateStatus);
+
     public function unpublishLesson($courseId, $lessonId);
 
     /**
@@ -34,6 +36,8 @@ interface LessonService
      * @Log(module="course",action="delete_lesson",param="lessonId")
      */
     public function deleteLesson($courseId, $lessonId);
+
+    public function batchDeleteLessons($courseId, $lessonIds);
 
     public function isLessonCountEnough($courseId);
 

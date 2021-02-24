@@ -245,6 +245,13 @@ class UserController extends BaseController
             'goodsType' => $request->query->get('goodsType', 'course'),
         ];
 
+        if ('course' === $conditions['goodsType']) {
+            // 获取收藏商品为"课程"时, 查询条件调整为: targetType in ['goods', 'course'], 且goodsType not in [classroom]
+            $conditions['targetTypes'][] = $conditions['goodsType'];
+            unset($conditions['goodsType']);
+            $conditions['excludeGoodsTypes'] = ['classroom'];
+        }
+
         $paginator = new Paginator(
             $this->get('request'),
             $this->getFavoriteService()->countFavorites($conditions),
@@ -273,11 +280,17 @@ class UserController extends BaseController
         $userProfile['about'] = strip_tags($userProfile['about'], '');
         $userProfile['about'] = preg_replace('/ /', '', $userProfile['about']);
         $user = array_merge($user, $userProfile);
-        $admins = $this->getGroupService()->searchMembers(['userId' => $user['id'], 'role' => 'admin'],
-            ['createdTime' => 'DESC'], 0, 1000
+        $admins = $this->getGroupService()->searchMembers(
+            ['userId' => $user['id'], 'role' => 'admin'],
+            ['createdTime' => 'DESC'],
+            0,
+            1000
         );
-        $owners = $this->getGroupService()->searchMembers(['userId' => $user['id'], 'role' => 'owner'],
-            ['createdTime' => 'DESC'], 0, 1000
+        $owners = $this->getGroupService()->searchMembers(
+            ['userId' => $user['id'], 'role' => 'owner'],
+            ['createdTime' => 'DESC'],
+            0,
+            1000
         );
         $members = array_merge($admins, $owners);
         $groupIds = ArrayToolkit::column($members, 'groupId');
@@ -289,8 +302,12 @@ class UserController extends BaseController
             20
         );
 
-        $members = $this->getGroupService()->searchMembers(['userId' => $user['id'], 'role' => 'member'], ['createdTime' => 'DESC'], $paginator->getOffsetCount(),
-            $paginator->getPerPageCount());
+        $members = $this->getGroupService()->searchMembers(
+            ['userId' => $user['id'], 'role' => 'member'],
+            ['createdTime' => 'DESC'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
 
         $groupIds = ArrayToolkit::column($members, 'groupId');
         $groups = $this->getGroupService()->getGroupsByids($groupIds);

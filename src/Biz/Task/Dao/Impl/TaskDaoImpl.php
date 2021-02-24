@@ -55,6 +55,11 @@ class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
         ]);
     }
 
+    public function findByCategoryIds($categoryIds)
+    {
+        return $this->findInField('categoryId', $categoryIds);
+    }
+
     public function findByCourseSetIds($courseSetIds)
     {
         return $this->findInField('fromCourseSetId', $courseSetIds);
