@@ -110,40 +110,21 @@ class LessonServiceImpl extends BaseService implements LessonService
         $this->getCourseService()->tryManageCourse($courseId);
         $lessons = $this->getCourseChapterDao()->findChaptersByCourseIdAndLessonIds($courseId, $lessonIds);
 
-        $updateFields = [];
         foreach ($lessons as $key => $lesson) {
-            if ('published' === $updateStatus && 'published' === $lesson['status']) {
-                unset($lessons[$key]);
-            } elseif ('unpublished' === $updateStatus && in_array($lesson['status'], ['created', 'unpublished'])) {
-                unset($lessons[$key]);
-            } else {
-                $updateFields[] = ['status' => $updateStatus];
+            if ('published' === $updateStatus) {
+                if ('published' === $lesson['status']) {
+                    unset($lessons[$key]);
+                } else {
+                    $this->publishLesson($courseId, $lesson['id']);
+                }
+            } elseif ('unpublished' === $updateStatus) {
+                if (in_array($lesson['status'], ['created', 'unpublished'])) {
+                    unset($lessons[$key]);
+                } else {
+                    $this->unpublishLesson($courseId, $lesson['id']);
+                }
             }
         }
-
-        if (empty($lessons)) {
-            return;
-        }
-
-        $lessonIds = ArrayToolkit::column($lessons, 'id');
-
-        $this->getCourseChapterDao()->batchUpdate($lessonIds, $updateFields);
-
-        if ('published' === $updateStatus) {
-            $this->publishTasks($lessonIds);
-            foreach ($lessons as $lesson) {
-                $this->getLogService()->info('course', 'publish_lesson', '更新课时状态', $lesson);
-            }
-        } elseif ('unpublished' === $updateStatus) {
-            $this->unpublishTasks($lessonIds);
-            foreach ($lessons as $lesson) {
-                $this->getLogService()->info('course', 'unpublish_lesson', '更新课时状态', $lesson);
-            }
-        } else {
-            $this->createNewException(CommonException::ERROR_PARAMETER());
-        }
-
-        $this->dispatchEvent('course.lessons.batch.update', new Event($courseId));
 
         return $lessons;
     }
@@ -224,12 +205,9 @@ class LessonServiceImpl extends BaseService implements LessonService
             return;
         }
 
-        $lessonIds = ArrayToolkit::column($lessons, 'id');
-
-        $this->getCourseChapterDao()->batchDelete(['ids' => $lessonIds]);
-        $this->getTaskService()->deleteTasksByCategoryIds($lessonIds);
-
-        $this->dispatchEvent('course.lessons.batch.delete', new Event($courseId));
+        foreach ($lessons as $lesson) {
+            $this->deleteLesson($courseId, $lesson['id']);
+        }
 
         return $lessons;
     }

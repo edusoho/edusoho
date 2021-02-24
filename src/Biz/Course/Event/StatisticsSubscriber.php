@@ -28,7 +28,6 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
             'course.lesson.unpublish' => ['onPublishLessonNumberChange', -100],
             'course.lesson.create' => ['onLessonNumberChange', -100],
             'course.lesson.delete' => ['onLessonNumberChange', -100],
-            'course.lessons.batch.delete' => ['onLessonsNumberChange', -100],
             'course.lesson.setOptional' => ['onLessonOptionalChange', -100],
 
             'course.thread.create' => 'onCourseThreadChange',
@@ -111,14 +110,6 @@ class StatisticsSubscriber extends EventSubscriber implements EventSubscriberInt
     {
         $lesson = $event->getSubject();
         $this->getCourseService()->updateCourseStatistics($lesson['courseId'], [
-            'lessonNum', 'publishLessonNum',
-        ]);
-    }
-
-    public function onLessonsNumberChange(Event $event)
-    {
-        $courseId = $event->getSubject();
-        $this->getCourseService()->updateCourseStatistics($courseId, [
             'lessonNum', 'publishLessonNum',
         ]);
     }

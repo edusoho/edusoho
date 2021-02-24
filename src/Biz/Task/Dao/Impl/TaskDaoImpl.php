@@ -48,16 +48,16 @@ class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
         return $this->findInField('activityId', $activityIds);
     }
 
-    public function findByCategoryIds($categoryIds)
-    {
-        return $this->findInField('categoryId', $categoryIds);
-    }
-
     public function findByCourseSetId($courseSetId)
     {
         return $this->findByFields([
             'fromCourseSetId' => $courseSetId,
         ]);
+    }
+
+    public function findByCategoryIds($categoryIds)
+    {
+        return $this->findInField('categoryId', $categoryIds);
     }
 
     public function findByCourseSetIds($courseSetIds)
@@ -73,19 +73,6 @@ class TaskDaoImpl extends AdvancedDaoImpl implements TaskDao
     public function findByCourseIdAndCategoryId($courseId, $categoryId)
     {
         return $this->findByFields(['courseId' => $courseId, 'categoryId' => $categoryId]);
-    }
-
-    public function findByCourseIdAndCategoryIds($courseId, $categoryIds)
-    {
-        if (empty($categoryIds)) {
-            return [];
-        }
-
-        $marks = str_repeat('?,', count($categoryIds) - 1).'?';
-
-        $sql = "SELECT * FROM {$this->table()} WHERE courseId= ? and id IN ({$marks})";
-
-        return $this->db()->fetchAll($sql, array_merge([$courseId], $categoryIds)) ?: [];
     }
 
     public function getMaxSeqByCourseId($courseId)

@@ -211,7 +211,7 @@ class LessonServiceTest extends BaseTestCase
                 ],
             ],
             [
-                'functionName' => 'batchUpdate',
+                'functionName' => 'update',
                 'returnValue' => [],
             ],
             [
@@ -250,7 +250,7 @@ class LessonServiceTest extends BaseTestCase
                 ],
             ],
             [
-                'functionName' => 'batchDelete',
+                'functionName' => 'delete',
                 'returnValue' => [],
             ],
             [

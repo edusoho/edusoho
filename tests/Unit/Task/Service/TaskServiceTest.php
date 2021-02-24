@@ -91,18 +91,6 @@ class TaskServiceTest extends BaseTestCase
         $this->assertNull($savedTask);
     }
 
-    public function testDeleteTasksByCategoryIds()
-    {
-        $task = $this->mockTask();
-
-        $savedTask = $this->getTaskService()->createTask($task);
-
-        $this->getTaskService()->deleteTasksByCategoryIds(['1']);
-
-        $savedTask = $this->getTaskService()->getTask($savedTask['id']);
-        $this->assertNull($savedTask);
-    }
-
     public function testFindTasksByCategoryIds()
     {
         $task = $this->mockTask();

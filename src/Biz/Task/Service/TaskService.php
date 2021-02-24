@@ -59,13 +59,11 @@ interface TaskService
 
     public function deleteTasksByCategoryId($courseId, $categoryId);
 
-    public function deleteTasksByCategoryIds($categoryIds);
-
-    public function findTasksByCategoryIds($categoryIds);
-
     public function findTasksByCourseId($courseId);
 
     public function findTasksByCourseSetId($courseSetId);
+
+    public function findTasksByCategoryIds($categoryIds);
 
     public function findTasksByCourseIds($courseIds);
 

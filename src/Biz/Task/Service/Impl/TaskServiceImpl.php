@@ -340,24 +340,6 @@ class TaskServiceImpl extends BaseService implements TaskService
         }
     }
 
-    public function deleteTasksByCategoryIds($categoryIds)
-    {
-        if (empty($categoryIds)) {
-            return [];
-        }
-
-        return $this->getTaskDao()->batchDelete(['categoryIds' => $categoryIds]);
-    }
-
-    public function findTasksByCategoryIds($categoryIds)
-    {
-        if (empty($categoryIds)) {
-            return [];
-        }
-
-        return $this->getTaskDao()->findByCategoryIds($categoryIds);
-    }
-
     public function findTasksByCourseId($courseId)
     {
         return $this->getTaskDao()->findByCourseId($courseId);
@@ -371,6 +353,15 @@ class TaskServiceImpl extends BaseService implements TaskService
     public function findTasksByCourseSetIds($courseSetIds)
     {
         return $this->getTaskDao()->findByCourseSetIds($courseSetIds);
+    }
+
+    public function findTasksByCategoryIds($categoryIds)
+    {
+        if (empty($categoryIds)) {
+            return [];
+        }
+
+        return $this->getTaskDao()->findByCategoryIds($categoryIds);
     }
 
     public function findTasksByCourseIds($courseIds)
