@@ -54,7 +54,7 @@ class Live {
         });
       }, 3000);
     }
-    if (role === 'student') {
+    if (role === 'student' && this.taskId != 0) {
       this.triggerLiveEvent();
     }
 
