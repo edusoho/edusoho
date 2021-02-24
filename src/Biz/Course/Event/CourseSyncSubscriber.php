@@ -41,8 +41,6 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
             'course.lesson.publish' => 'onCourseChapterUpdate',
             'course.lesson.unpublish' => 'onCourseChapterUpdate',
             'course.lesson.setOptional' => 'onCourseChapterUpdate',
-            'course.lessons.batch.delete' => 'onCourseLessonNumberUpdate',
-            'course.lessons.batch.update' => 'onCourseLessonNumberUpdate',
             //同步新建的任务时同步新增material记录即可，这里无需处理
             // 'course.material.create' => 'onCourseMaterialCreate',
             'course.material.update' => 'onCourseMaterialUpdate',
@@ -221,12 +219,6 @@ class CourseSyncSubscriber extends EventSubscriber implements EventSubscriberInt
         }
 
         $this->getSyncService()->sync('Course:CourseChapter.'.AbstractSychronizer::SYNC_WHEN_UPDATE, $chapter['id']);
-    }
-
-    public function onCourseLessonNumberUpdate(Event $event)
-    {
-        $courseId = $event->getSubject();
-        $this->getCourseLessonService()->updateLessonNumbers($courseId);
     }
 
     public function onCourseChapterDelete(Event $event)
