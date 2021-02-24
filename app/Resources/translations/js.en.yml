@@ -1575,12 +1575,7 @@ course_manage.live_statistics.data_not_valid: The data is abnormal
 admin_v2.user.nickname_modify_success_hint: Nickname modified successfully
 admin_v2.user.nickname_modify_error_hint: operation failed
 
-admin_v2.developer.plumber_operate_hint: In operation, it may take a while, please wait ...
-admin_v2.developer.plumber_operate_error_hint: Success
-admin_v2.developer.plumber_operate_success_hint: Failed
-
 course_manage.positive_currency.message: Please enter a valid price greater than 0, up to two decimal places, no more than 8 bits!
-
 
 merchant.resource.product_version.update_success_hint: Update Success
 merchant.resource.product_version.update_failed_hint: Update Failed

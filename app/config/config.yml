@@ -1,62 +1,62 @@
 imports:
-    - { resource: biz.yml }
-    - { resource: parameters_default.yml }
-    - { resource: parameters_version.yml }
-    - { resource: 'parameters_service.yml', ignore_errors: true }
-    - { resource: parameters.yml }
-    - { resource: security.yml }
-    - { resource: services.xml }
-    - { resource: service_listener.yml }
-    - { resource: session_redis.yml, ignore_errors: true }
-    - { resource: sentry.yml, ignore_errors: true }
-    - { resource: theme_jianmo_parameters.yml }
-    - { resource: "@CustomBundle/Resources/config/services.yml" }
+  - { resource: biz.yml }
+  - { resource: parameters_default.yml }
+  - { resource: parameters_version.yml }
+  - { resource: 'parameters_service.yml', ignore_errors: true }
+  - { resource: parameters.yml }
+  - { resource: security.yml }
+  - { resource: services.xml }
+  - { resource: service_listener.yml }
+  - { resource: session_redis.yml, ignore_errors: true }
+  - { resource: sentry.yml, ignore_errors: true }
+  - { resource: theme_jianmo_parameters.yml }
+  - { resource: "@CustomBundle/Resources/config/services.yml" }
 
 framework:
-    # esi:             ~
-    translator:      { fallback: "%locale%", logging: false }
-    secret:          "%secret%"
-    router:
-        resource: "%kernel.root_dir%/config/routing.yml"
-        strict_requirements: ~
-    form:            ~
-    csrf_protection: ~
-    validation:      { enable_annotations: true }
-    templating:
-        engines: ['twig']
-    default_locale:  "%locale%"
-    trusted_proxies: ~
-    session:
-        handler_id:  "%session.service_id%"
-        cookie_domain: "%cookie_domain%"
-    fragments:       ~
-    http_method_override: true
-    assets:
-        version: '%app_version%'
-        version_format: '%%s?version=%%s'
+  # esi:             ~
+  translator: { fallback: "%locale%", logging: false }
+  secret: "%secret%"
+  router:
+    resource: "%kernel.root_dir%/config/routing.yml"
+    strict_requirements: ~
+  form: ~
+  csrf_protection: ~
+  validation: { enable_annotations: true }
+  templating:
+    engines: [ 'twig' ]
+  default_locale: "%locale%"
+  trusted_proxies: ~
+  session:
+    handler_id: "%session.service_id%"
+    cookie_domain: "%cookie_domain%"
+  fragments: ~
+  http_method_override: true
+  assets:
+    version: '%app_version%'
+    version_format: '%%s?version=%%s'
 
 bazinga_js_translation:
-    locale_fallback: "%locale%"
-    default_domain: "js"
+  locale_fallback: "%locale%"
+  default_domain: "js"
 
 # Twig Configuration
 twig:
-    debug:            "%kernel.debug%"
-    strict_variables: "%kernel.debug%"
-    paths:
-      "%kernel.root_dir%/../web/customize": customize
-      "%kernel.root_dir%/../src/Topxia/WebBundle/Resources/views": topxiaweb
-      "%kernel.root_dir%/../web/themes": theme
-      "%kernel.root_dir%/../plugins": plugins
-      "%kernel.root_dir%/../": root
-      "%kernel.root_dir%/../web/activities": activity
-# Swiftmailer Configuration
-# swiftmailer:
-#     transport: %mailer_transport%
-#     host:      %mailer_host%
-#     username:  %mailer_user%
-#     password:  %mailer_password%
-    #spool:     { type: memory }
+  debug: "%kernel.debug%"
+  strict_variables: "%kernel.debug%"
+  paths:
+    "%kernel.root_dir%/../web/customize": customize
+    "%kernel.root_dir%/../src/Topxia/WebBundle/Resources/views": topxiaweb
+    "%kernel.root_dir%/../web/themes": theme
+    "%kernel.root_dir%/../plugins": plugins
+    "%kernel.root_dir%/../": root
+    "%kernel.root_dir%/../web/activities": activity
+  # Swiftmailer Configuration
+  # swiftmailer:
+  #     transport: %mailer_transport%
+  #     host:      %mailer_host%
+  #     username:  %mailer_user%
+  #     password:  %mailer_password%
+  #spool:     { type: memory }
 
 #jms_security_extra:
 #    secure_controllers:  true
@@ -80,75 +80,75 @@ parameters:
   permission.path_regular_expression: [ '/^\/admin/' ]
   router.options.matcher_dumper_class: AppBundle\SfExtend\PhpMatcherDumper
   security.authentication.provider.dao.class: AppBundle\Handler\AuthenticationProvider
-    service_proxy_enabled: true
+  service_proxy_enabled: true
 
 services:
 
-    assets.path_package:
-        class: AppBundle\Twig\Asset\PathPackage
-        arguments: ["", "", "@assets.context"]
+  assets.path_package:
+    class: AppBundle\Twig\Asset\PathPackage
+    arguments: [ "", "", "@assets.context" ]
 
-    assets.static_version_strategy:
-        class: AppBundle\Twig\Asset\VersionStrategy\StaticVersionStrategy
-        arguments: ["", "", "@biz"]
+  assets.static_version_strategy:
+    class: AppBundle\Twig\Asset\VersionStrategy\StaticVersionStrategy
+    arguments: [ "", "", "@biz" ]
 
-    session.handler.pdo:
-        class:     Codeages\Biz\Framework\Session\Handler\BizSessionHandler
-        arguments:
-             - '@biz'
+  session.handler.pdo:
+    class: Codeages\Biz\Framework\Session\Handler\BizSessionHandler
+    arguments:
+      - '@biz'
 
-    session.handler.redis: '@session.handler.pdo'
+  session.handler.redis: '@session.handler.pdo'
 
-    topxia.twig.file_cache:
-        class: Doctrine\Common\Cache\FilesystemCache
-        arguments:    ['%kernel.cache_dir%/twig_cache']
+  topxia.twig.file_cache:
+    class: Doctrine\Common\Cache\FilesystemCache
+    arguments: [ '%kernel.cache_dir%/twig_cache' ]
 
-    topxia.twig.cache_provider:
-        class: Asm89\Twig\CacheExtension\CacheProvider\DoctrineCacheAdapter
-        arguments:    ['@topxia.twig.file_cache']
+  topxia.twig.cache_provider:
+    class: Asm89\Twig\CacheExtension\CacheProvider\DoctrineCacheAdapter
+    arguments: [ '@topxia.twig.file_cache' ]
 
-    topxia.twig.cache_strategy:
-        class: AppBundle\Twig\LifetimeCacheStrategy
-        arguments:    ['@biz', '@topxia.twig.cache_provider']
+  topxia.twig.cache_strategy:
+    class: AppBundle\Twig\LifetimeCacheStrategy
+    arguments: [ '@biz', '@topxia.twig.cache_provider' ]
 
-    topxia.twig.cache_extension:
-        class: Asm89\Twig\CacheExtension\Extension
-        arguments:    ['@topxia.twig.cache_strategy']
-        tags:
-            - { name: twig.extension }
+  topxia.twig.cache_extension:
+    class: Asm89\Twig\CacheExtension\Extension
+    arguments: [ '@topxia.twig.cache_strategy' ]
+    tags:
+      - { name: twig.extension }
 
-    ### permission
-    permission.admin_voter:
-        class: AppBundle\SfExtend\AdminVoter
-        tags:
-            - { name: security.voter }
-        public: false
+  ### permission
+  permission.admin_voter:
+    class: AppBundle\SfExtend\AdminVoter
+    tags:
+      - { name: security.voter }
+    public: false
 
-    permission.twig.permission_extension:
-        class: AppBundle\Twig\PermissionExtension
-        arguments:    ['@service_container']
-        tags:
-            - { name: twig.extension }
+  permission.twig.permission_extension:
+    class: AppBundle\Twig\PermissionExtension
+    arguments: [ '@service_container' ]
+    tags:
+      - { name: twig.extension }
 
-    routing.loader.yml:
-        class: AppBundle\SfExtend\YamlFileLoader
-        arguments: ['@file_locator']
-        tags:
-            - {name: routing.loader}
+  routing.loader.yml:
+    class: AppBundle\SfExtend\YamlFileLoader
+    arguments: [ '@file_locator' ]
+    tags:
+      - { name: routing.loader }
 
-    json_formatter:
-        class: Codeages\Biz\Framework\Util\ReadableJsonFormatter
+  json_formatter:
+    class: Codeages\Biz\Framework\Util\ReadableJsonFormatter
 
-    monolog.processor.trace_processor:
-        class: AppBundle\Processor\TraceProcessor
-        tags:
-            - { name: monolog.processor }
+  monolog.processor.trace_processor:
+    class: AppBundle\Processor\TraceProcessor
+    tags:
+      - { name: monolog.processor }
 
-    request:
-        class: Symfony\Component\HttpFoundation\RequestStack
-        factory:
-            - '@request_stack'
-            - 'getMasterRequest'
-        shared: true
-    
-    templating.helper.assets: '@assets.packages'
+  request:
+    class: Symfony\Component\HttpFoundation\RequestStack
+    factory:
+      - '@request_stack'
+      - 'getMasterRequest'
+    shared: true
+
+  templating.helper.assets: '@assets.packages'

@@ -30,7 +30,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => '6cdfafc15f452ad44abc34632a520599ca5cfd6d',
+    'reference' => 'aafa12e5c2c19cbaa6a95842ed4b28afb3691510',
     'name' => 'topxia/edusoho',
   ),
   'versions' => 
@@ -148,12 +148,12 @@ private static $installed = array (
     ),
     'codeception/codeception' => 
     array (
-      'pretty_version' => '4.1.17',
-      'version' => '4.1.17.0',
+      'pretty_version' => '4.1.18',
+      'version' => '4.1.18.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'c153b1ab289b3e3109e685379aa8847c54ac2b68',
+      'reference' => 'f47547bac347dfb5ea5351ff91148cbcc08e6818',
     ),
     'codeception/lib-asserts' => 
     array (
@@ -1696,7 +1696,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => '6cdfafc15f452ad44abc34632a520599ca5cfd6d',
+      'reference' => 'aafa12e5c2c19cbaa6a95842ed4b28afb3691510',
     ),
     'twig/twig' => 
     array (

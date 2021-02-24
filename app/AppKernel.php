@@ -206,7 +206,7 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
             ]
         );
 
-        $biz->register(new \Biz\Plumber\PlumberProvider());
+//        $biz->register(new \Biz\Plumber\PlumberProvider());
 
         $collector = $this->getContainer()->get('biz.service_provider.collector');
         foreach ($collector->all() as $provider) {

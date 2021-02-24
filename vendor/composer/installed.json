@@ -62,6 +62,10 @@
                 "extension",
                 "twig"
             ],
+            "support": {
+                "issues": "https://github.com/asm89/twig-cache-extension/issues",
+                "source": "https://github.com/asm89/twig-cache-extension/tree/1.4.0"
+            },
             "abandoned": "twig/cache-extension",
             "install-path": "../asm89/twig-cache-extension"
         },
@@ -194,6 +198,10 @@
                 "oauth2",
                 "security"
             ],
+            "support": {
+                "issues": "https://github.com/bshaffer/oauth2-server-bundle/issues",
+                "source": "https://github.com/bshaffer/oauth2-server-bundle/tree/develop"
+            },
             "install-path": "../bshaffer/oauth2-server-bundle/OAuth2/ServerBundle"
         },
         {
@@ -249,6 +257,10 @@
                 "oauth",
                 "oauth2"
             ],
+            "support": {
+                "issues": "https://github.com/bshaffer/oauth2-server-httpfoundation-bridge/issues",
+                "source": "https://github.com/bshaffer/oauth2-server-httpfoundation-bridge/tree/master"
+            },
             "install-path": "../bshaffer/oauth2-server-httpfoundation-bridge"
         },
         {
@@ -316,6 +328,10 @@
                 "oauth",
                 "oauth2"
             ],
+            "support": {
+                "issues": "https://github.com/bshaffer/oauth2-server-php/issues",
+                "source": "https://github.com/bshaffer/oauth2-server-php/tree/master"
+            },
             "install-path": "../bshaffer/oauth2-server-php"
         },
         {
@@ -370,6 +386,10 @@
                 }
             ],
             "description": "CSSTidy is a CSS minifier",
+            "support": {
+                "issues": "https://github.com/Cerdic/CSSTidy/issues",
+                "source": "https://github.com/Cerdic/CSSTidy/tree/master"
+            },
             "install-path": "../cerdic/css-tidy"
         },
         {
@@ -531,6 +551,7 @@
                 "phpunit/phpunit": "^4 || ^5 || ^6"
             },
             "time": "2020-03-26T01:40:58+00:00",
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -552,6 +573,10 @@
                 }
             ],
             "description": "Exam Parser",
+            "support": {
+                "issues": "https://github.com/codeages/exam-parser/issues",
+                "source": "https://github.com/codeages/exam-parser/tree/master"
+            },
             "install-path": "../codeages/exam-parser"
         },
         {
@@ -590,7 +615,7 @@
             "time": "2021-01-15T00:34:58+00:00",
             "default-branch": true,
             "type": "symfony-bundle",
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-4": {
                     "Codeages\\PluginBundle\\": ""
@@ -684,6 +709,9 @@
                 "redlock",
                 "semaphore"
             ],
+            "support": {
+                "source": "https://github.com/codeages/symfony-lock-lite/tree/master"
+            },
             "install-path": "../codeages/symfony-lock-lite"
         },
         {
@@ -735,21 +763,25 @@
                 }
             ],
             "description": "Web Lib",
+            "support": {
+                "issues": "https://github.com/codeages/web-lib/issues",
+                "source": "https://github.com/codeages/web-lib/tree/master"
+            },
             "install-path": "../codeages/web-lib"
         },
         {
             "name": "codeception/codeception",
-            "version": "4.1.17",
-            "version_normalized": "4.1.17.0",
+            "version": "4.1.18",
+            "version_normalized": "4.1.18.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/Codeception.git",
-                "reference": "c153b1ab289b3e3109e685379aa8847c54ac2b68"
+                "reference": "f47547bac347dfb5ea5351ff91148cbcc08e6818"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/c153b1ab289b3e3109e685379aa8847c54ac2b68",
-                "reference": "c153b1ab289b3e3109e685379aa8847c54ac2b68",
+                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/f47547bac347dfb5ea5351ff91148cbcc08e6818",
+                "reference": "f47547bac347dfb5ea5351ff91148cbcc08e6818",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -794,7 +826,7 @@
                 "stecman/symfony-console-completion": "For BASH autocompletion",
                 "symfony/phpunit-bridge": "For phpunit-bridge support"
             },
-            "time": "2021-02-01T07:30:47+00:00",
+            "time": "2021-02-23T17:11:42+00:00",
             "bin": [
                 "codecept"
             ],
@@ -831,7 +863,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Codeception/Codeception/issues",
-                "source": "https://github.com/Codeception/Codeception/tree/4.1.17"
+                "source": "https://github.com/Codeception/Codeception/tree/4.1.18"
             },
             "funding": [
                 {
@@ -1580,6 +1612,9 @@
                 "docblock",
                 "parser"
             ],
+            "support": {
+                "source": "https://github.com/doctrine/annotations/tree/master"
+            },
             "install-path": "../doctrine/annotations"
         },
         {
@@ -1659,6 +1694,10 @@
                 "cache",
                 "caching"
             ],
+            "support": {
+                "issues": "https://github.com/doctrine/cache/issues",
+                "source": "https://github.com/doctrine/cache/tree/1.6.x"
+            },
             "install-path": "../doctrine/cache"
         },
         {
@@ -1819,6 +1858,10 @@
                 "persistence",
                 "spl"
             ],
+            "support": {
+                "issues": "https://github.com/doctrine/common/issues",
+                "source": "https://github.com/doctrine/common/tree/2.6"
+            },
             "install-path": "../doctrine/common"
         },
         {
@@ -1899,6 +1942,10 @@
                 "persistence",
                 "queryobject"
             ],
+            "support": {
+                "issues": "https://github.com/doctrine/dbal/issues",
+                "source": "https://github.com/doctrine/dbal/tree/v2.5.13"
+            },
             "install-path": "../doctrine/dbal"
         },
         {
@@ -1993,6 +2040,10 @@
                 "orm",
                 "persistence"
             ],
+            "support": {
+                "issues": "https://github.com/doctrine/DoctrineBundle/issues",
+                "source": "https://github.com/doctrine/DoctrineBundle/tree/1.10.x"
+            },
             "install-path": "../doctrine/doctrine-bundle"
         },
         {
@@ -2455,6 +2506,10 @@
                 "database",
                 "orm"
             ],
+            "support": {
+                "issues": "https://github.com/doctrine/orm/issues",
+                "source": "https://github.com/doctrine/orm/tree/v2.5.14"
+            },
             "install-path": "../doctrine/orm"
         },
         {
@@ -2524,6 +2579,10 @@
                 "qrcode",
                 "symfony"
             ],
+            "support": {
+                "issues": "https://github.com/endroid/qr-code/issues",
+                "source": "https://github.com/endroid/qr-code/tree/1.9.3"
+            },
             "abandoned": "endroid/qr-code",
             "install-path": "../endroid/qrcode"
         },
@@ -2581,6 +2640,10 @@
             "keywords": [
                 "html"
             ],
+            "support": {
+                "issues": "https://github.com/ezyang/htmlpurifier/issues",
+                "source": "https://github.com/ezyang/htmlpurifier/tree/master"
+            },
             "install-path": "../ezyang/htmlpurifier"
         },
         {
@@ -2886,6 +2949,10 @@
                 "captcha",
                 "spam"
             ],
+            "support": {
+                "issues": "https://github.com/Gregwar/Captcha/issues",
+                "source": "https://github.com/Gregwar/Captcha/tree/master"
+            },
             "install-path": "../gregwar/captcha"
         },
         {
@@ -3199,6 +3266,10 @@
             "keywords": [
                 "test"
             ],
+            "support": {
+                "issues": "https://github.com/hamcrest/hamcrest-php/issues",
+                "source": "https://github.com/hamcrest/hamcrest-php/tree/master"
+            },
             "install-path": "../hamcrest/hamcrest-php"
         },
         {
@@ -3266,6 +3337,10 @@
                 "image manipulation",
                 "image processing"
             ],
+            "support": {
+                "issues": "https://github.com/avalanche123/Imagine/issues",
+                "source": "https://github.com/avalanche123/Imagine/tree/develop"
+            },
             "install-path": "../imagine/imagine"
         },
         {
@@ -3326,6 +3401,10 @@
             "keywords": [
                 "parameters management"
             ],
+            "support": {
+                "issues": "https://github.com/Incenteev/ParameterHandler/issues",
+                "source": "https://github.com/Incenteev/ParameterHandler/tree/v2.1.3"
+            },
             "install-path": "../incenteev/composer-parameter-handler"
         },
         {
@@ -3385,6 +3464,10 @@
                 "highlight",
                 "sql"
             ],
+            "support": {
+                "issues": "https://github.com/jdorn/sql-formatter/issues",
+                "source": "https://github.com/jdorn/sql-formatter/tree/master"
+            },
             "install-path": "../jdorn/sql-formatter"
         },
         {
@@ -3460,6 +3543,10 @@
                 "json",
                 "schema"
             ],
+            "support": {
+                "issues": "https://github.com/justinrainbow/json-schema/issues",
+                "source": "https://github.com/justinrainbow/json-schema/tree/5.2.10"
+            },
             "install-path": "../justinrainbow/json-schema"
         },
         {
@@ -3546,6 +3633,10 @@
                 "compression",
                 "minification"
             ],
+            "support": {
+                "issues": "https://github.com/kriswallsmith/assetic/issues",
+                "source": "https://github.com/kriswallsmith/assetic/tree/master"
+            },
             "install-path": "../kriswallsmith/assetic"
         },
         {
@@ -3620,6 +3711,10 @@
                 "test double",
                 "testing"
             ],
+            "support": {
+                "issues": "https://github.com/mockery/mockery/issues",
+                "source": "https://github.com/mockery/mockery/tree/0.9"
+            },
             "install-path": "../mockery/mockery"
         },
         {
@@ -3768,6 +3863,10 @@
                 "cron",
                 "schedule"
             ],
+            "support": {
+                "issues": "https://github.com/mtdowling/cron-expression/issues",
+                "source": "https://github.com/mtdowling/cron-expression/tree/v1.2.3"
+            },
             "abandoned": "dragonmantank/cron-expression",
             "install-path": "../mtdowling/cron-expression"
         },
@@ -4000,6 +4099,10 @@
                 "php",
                 "zip"
             ],
+            "support": {
+                "issues": "https://github.com/ivanlanin/pclzip/issues",
+                "source": "https://github.com/ivanlanin/pclzip/tree/master"
+            },
             "install-path": "../pclzip/pclzip"
         },
         {
@@ -4255,6 +4358,10 @@
                 "reflection",
                 "static analysis"
             ],
+            "support": {
+                "issues": "https://github.com/phpDocumentor/ReflectionCommon/issues",
+                "source": "https://github.com/phpDocumentor/ReflectionCommon/tree/master"
+            },
             "install-path": "../phpdocumentor/reflection-common"
         },
         {
@@ -4309,6 +4416,10 @@
                 }
             ],
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
+            "support": {
+                "issues": "https://github.com/phpDocumentor/ReflectionDocBlock/issues",
+                "source": "https://github.com/phpDocumentor/ReflectionDocBlock/tree/release/3.x"
+            },
             "install-path": "../phpdocumentor/reflection-docblock"
         },
         {
@@ -4365,6 +4476,10 @@
                     "email": "me@mikevanriel.com"
                 }
             ],
+            "support": {
+                "issues": "https://github.com/phpDocumentor/TypeResolver/issues",
+                "source": "https://github.com/phpDocumentor/TypeResolver/tree/master"
+            },
             "install-path": "../phpdocumentor/type-resolver"
         },
         {
@@ -4429,6 +4544,10 @@
                 "office",
                 "php"
             ],
+            "support": {
+                "issues": "https://github.com/PHPOffice/Common/issues",
+                "source": "https://github.com/PHPOffice/Common/tree/master"
+            },
             "install-path": "../phpoffice/common"
         },
         {
@@ -4500,6 +4619,10 @@
                 "xls",
                 "xlsx"
             ],
+            "support": {
+                "issues": "https://github.com/PHPOffice/PHPExcel/issues",
+                "source": "https://github.com/PHPOffice/PHPExcel/tree/master"
+            },
             "abandoned": "phpoffice/phpspreadsheet",
             "install-path": "../phpoffice/phpexcel"
         },
@@ -4619,6 +4742,10 @@
                 "word",
                 "writer"
             ],
+            "support": {
+                "issues": "https://github.com/PHPOffice/PHPWord/issues",
+                "source": "https://github.com/PHPOffice/PHPWord/tree/develop"
+            },
             "install-path": "../phpoffice/phpword"
         },
         {
@@ -4691,6 +4818,10 @@
                 "spy",
                 "stub"
             ],
+            "support": {
+                "issues": "https://github.com/phpspec/prophecy/issues",
+                "source": "https://github.com/phpspec/prophecy/tree/v1.10.3"
+            },
             "install-path": "../phpspec/prophecy"
         },
         {
@@ -5357,6 +5488,12 @@
                 "parser",
                 "useragent"
             ],
+            "support": {
+                "forum": "http://forum.matomo.org/",
+                "issues": "https://github.com/matomo-org/device-detector/issues",
+                "source": "https://github.com/matomo-org/piwik",
+                "wiki": "https://dev.matomo.org/"
+            },
             "abandoned": "matomo/device-detector",
             "install-path": "../piwik/device-detector"
         },
@@ -5413,6 +5550,9 @@
                 "psr",
                 "psr-6"
             ],
+            "support": {
+                "source": "https://github.com/php-fig/cache/tree/master"
+            },
             "install-path": "../psr/cache"
         },
         {
@@ -5471,6 +5611,10 @@
                 "container-interop",
                 "psr"
             ],
+            "support": {
+                "issues": "https://github.com/php-fig/container/issues",
+                "source": "https://github.com/php-fig/container/tree/master"
+            },
             "install-path": "../psr/container"
         },
         {
@@ -5591,6 +5735,9 @@
                 "request",
                 "response"
             ],
+            "support": {
+                "source": "https://github.com/php-fig/http-message/tree/master"
+            },
             "install-path": "../psr/http-message"
         },
         {
@@ -5649,6 +5796,9 @@
                 "psr-13",
                 "rest"
             ],
+            "support": {
+                "source": "https://github.com/php-fig/link/tree/master"
+            },
             "install-path": "../psr/link"
         },
         {
@@ -5765,6 +5915,9 @@
                 "psr-16",
                 "simple-cache"
             ],
+            "support": {
+                "source": "https://github.com/php-fig/simple-cache/tree/master"
+            },
             "install-path": "../psr/simple-cache"
         },
         {
@@ -5814,6 +5967,10 @@
                 }
             ],
             "description": "A polyfill for getallheaders.",
+            "support": {
+                "issues": "https://github.com/ralouphie/getallheaders/issues",
+                "source": "https://github.com/ralouphie/getallheaders/tree/develop"
+            },
             "install-path": "../ralouphie/getallheaders"
         },
         {
@@ -5910,6 +6067,12 @@
                 "identifier",
                 "uuid"
             ],
+            "support": {
+                "issues": "https://github.com/ramsey/uuid/issues",
+                "rss": "https://github.com/ramsey/uuid/releases.atom",
+                "source": "https://github.com/ramsey/uuid",
+                "wiki": "https://github.com/ramsey/uuid/wiki"
+            },
             "install-path": "../ramsey/uuid"
         },
         {
@@ -6876,6 +7039,10 @@
                 "configuration",
                 "distribution"
             ],
+            "support": {
+                "issues": "https://github.com/sensiolabs/SensioDistributionBundle/issues",
+                "source": "https://github.com/sensiolabs/SensioDistributionBundle/tree/master"
+            },
             "abandoned": true,
             "install-path": "../sensio/distribution-bundle"
         },
@@ -6957,6 +7124,10 @@
                 "annotations",
                 "controllers"
             ],
+            "support": {
+                "issues": "https://github.com/sensiolabs/SensioFrameworkExtraBundle/issues",
+                "source": "https://github.com/sensiolabs/SensioFrameworkExtraBundle/tree/master"
+            },
             "install-path": "../sensio/framework-extra-bundle"
         },
         {
@@ -7020,6 +7191,10 @@
                 }
             ],
             "description": "This bundle generates code for you",
+            "support": {
+                "issues": "https://github.com/sensiolabs/SensioGeneratorBundle/issues",
+                "source": "https://github.com/sensiolabs/SensioGeneratorBundle/tree/master"
+            },
             "abandoned": "symfony/maker-bundle",
             "install-path": "../sensio/generator-bundle"
         },
@@ -7156,6 +7331,10 @@
                 "log",
                 "logging"
             ],
+            "support": {
+                "issues": "https://github.com/getsentry/sentry-php/issues",
+                "source": "https://github.com/getsentry/sentry-php/tree/1.11.0"
+            },
             "install-path": "../sentry/sentry"
         },
         {
@@ -7224,6 +7403,10 @@
                 "sentry",
                 "symfony"
             ],
+            "support": {
+                "issues": "https://github.com/getsentry/sentry-symfony/issues",
+                "source": "https://github.com/getsentry/sentry-symfony/tree/0.8.8"
+            },
             "install-path": "../sentry/sentry-symfony"
         },
         {
@@ -7322,6 +7505,10 @@
             "keywords": [
                 "microframework"
             ],
+            "support": {
+                "issues": "https://github.com/silexphp/Silex/issues",
+                "source": "https://github.com/silexphp/Silex/tree/v2.2.4"
+            },
             "abandoned": "symfony/flex",
             "install-path": "../silex/silex"
         },
@@ -7462,6 +7649,10 @@
                 "mail",
                 "mailer"
             ],
+            "support": {
+                "issues": "https://github.com/swiftmailer/swiftmailer/issues",
+                "source": "https://github.com/swiftmailer/swiftmailer/tree/v5.4.12"
+            },
             "install-path": "../swiftmailer/swiftmailer"
         },
         {
@@ -7541,6 +7732,10 @@
                 "compression",
                 "minification"
             ],
+            "support": {
+                "issues": "https://github.com/symfony/assetic-bundle/issues",
+                "source": "https://github.com/symfony/assetic-bundle/tree/master"
+            },
             "abandoned": "symfony/webpack-encore-pack",
             "install-path": "../symfony/assetic-bundle"
         },
@@ -7962,6 +8157,10 @@
                 "log",
                 "logging"
             ],
+            "support": {
+                "issues": "https://github.com/symfony/monolog-bundle/issues",
+                "source": "https://github.com/symfony/monolog-bundle/tree/v3.2.0"
+            },
             "install-path": "../symfony/monolog-bundle"
         },
         {
@@ -9073,6 +9272,10 @@
             ],
             "description": "Symfony Security Component - ACL (Access Control List)",
             "homepage": "https://symfony.com",
+            "support": {
+                "issues": "https://github.com/symfony/security-acl/issues",
+                "source": "https://github.com/symfony/security-acl/tree/master"
+            },
             "install-path": "../symfony/security-acl"
         },
         {
@@ -9229,6 +9432,10 @@
             ],
             "description": "Symfony SwiftmailerBundle",
             "homepage": "http://symfony.com",
+            "support": {
+                "issues": "https://github.com/symfony/swiftmailer-bundle/issues",
+                "source": "https://github.com/symfony/swiftmailer-bundle/tree/2.6"
+            },
             "install-path": "../symfony/swiftmailer-bundle"
         },
         {
@@ -9394,6 +9601,24 @@
             "keywords": [
                 "framework"
             ],
+            "support": {
+                "issues": "https://github.com/symfony/symfony/issues",
+                "source": "https://github.com/symfony/symfony/tree/v3.4.38"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
             "install-path": "../symfony/symfony"
         },
         {
@@ -9505,6 +9730,10 @@
                 "crontab",
                 "scheduling"
             ],
+            "support": {
+                "issues": "https://github.com/TiBeN/CrontabManager/issues",
+                "source": "https://github.com/TiBeN/CrontabManager/tree/master"
+            },
             "install-path": "../tiben/crontab-manager"
         },
         {
@@ -9578,6 +9807,10 @@
             "keywords": [
                 "templating"
             ],
+            "support": {
+                "issues": "https://github.com/twigphp/Twig/issues",
+                "source": "https://github.com/twigphp/Twig/tree/1.x"
+            },
             "install-path": "../twig/twig"
         },
         {
@@ -9771,6 +10004,10 @@
             "keywords": [
                 "UUID RFC4122"
             ],
+            "support": {
+                "issues": "https://github.com/webpatser/uuid/issues",
+                "source": "https://github.com/webpatser/uuid"
+            },
             "install-path": "../webpatser/laravel-uuid"
         },
         {
@@ -9842,6 +10079,10 @@
                 "symfony",
                 "translation"
             ],
+            "support": {
+                "issues": "https://github.com/willdurand/BazingaJsTranslationBundle/issues",
+                "source": "https://github.com/willdurand/BazingaJsTranslationBundle/tree/master"
+            },
             "install-path": "../willdurand/js-translation-bundle"
         },
         {
@@ -9902,6 +10143,10 @@
                 "security",
                 "xxtea"
             ],
+            "support": {
+                "issues": "https://github.com/xxtea/xxtea-php/issues",
+                "source": "https://github.com/xxtea/xxtea-php/tree/master"
+            },
             "install-path": "../xxtea/xxtea"
         },
         {
@@ -9956,6 +10201,14 @@
                 "escaper",
                 "zf"
             ],
+            "support": {
+                "chat": "https://zendframework-slack.herokuapp.com",
+                "docs": "https://docs.zendframework.com/zend-escaper/",
+                "forum": "https://discourse.zendframework.com/c/questions/components",
+                "issues": "https://github.com/zendframework/zend-escaper/issues",
+                "rss": "https://github.com/zendframework/zend-escaper/releases.atom",
+                "source": "https://github.com/zendframework/zend-escaper"
+            },
             "abandoned": "laminas/laminas-escaper",
             "install-path": "../zendframework/zend-escaper"
         }
