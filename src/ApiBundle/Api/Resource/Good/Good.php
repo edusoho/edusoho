@@ -100,7 +100,7 @@ class Good extends AbstractResource
                 list($vipLevelInfo, $vipUser) = $goodsEntity->getVipInfo($goods, $spec, $user['id']);
                 $spec['vipLevelInfo'] = $vipLevelInfo;
                 $spec['vipUser'] = $vipUser;
-                $spec['canVipJoin'] = $vipLevelInfo && $vipUser && $vipLevelInfo['seq'] <= $vipUser['level']['seq'];
+                $spec['canVipJoin'] = $vipLevelInfo && $vipUser && $vipUser['deadline'] >= time() && $vipLevelInfo['seq'] <= $vipUser['level']['seq'];
             }
             $spec['teacherIds'] = $goodsEntity->getSpecsTeacherIds($goods, $spec);
         }
