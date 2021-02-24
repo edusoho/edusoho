@@ -224,9 +224,7 @@ class LessonManageController extends BaseController
             $this->createNewException(LessonException::PARAMETERS_MISSING());
         }
 
-        foreach ($lessonIds as $lessonId) {
-            $this->getCourseLessonService()->deleteLesson($courseId, $lessonId);
-        }
+        $lessons = $this->getCourseLessonService()->batchDeleteLessons($courseId, $lessonIds);
 
         if (empty($lessons)) {
             return $this->createJsonResponse(['success' => true]);
