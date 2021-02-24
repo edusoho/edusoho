@@ -1,7 +1,0 @@
-#!/usr/bin/env php
-<?php
-/**
- * Codeception CLI
- */
-
-require __DIR__ . '/app.php';

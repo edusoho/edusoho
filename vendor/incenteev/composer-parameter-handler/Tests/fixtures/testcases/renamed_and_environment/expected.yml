@@ -1,4 +1,0 @@
-# This file is auto-generated during the composer install
-parameters:
-    new: new_env_value
-    new2: old_value2

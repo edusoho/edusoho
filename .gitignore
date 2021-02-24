@@ -56,4 +56,4 @@ yarn-error.log
 /reports
 /reports_tmp
 .package-lock.json
-/vendor
+/vendor/

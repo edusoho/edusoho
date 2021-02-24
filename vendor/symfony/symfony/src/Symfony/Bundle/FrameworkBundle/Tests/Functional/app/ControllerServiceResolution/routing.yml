@@ -1,4 +1,0 @@
-sub_request_page:
-    path:   /subrequest
-    defaults:
-        _controller: 'TestBundle:SubRequestServiceResolution:index'

@@ -1,6 +1,0 @@
-services:
-    foo_service:
-        class:    FooClass
-        tags:
-          # tag name is not a string
-          - { name: [], foo: bar }

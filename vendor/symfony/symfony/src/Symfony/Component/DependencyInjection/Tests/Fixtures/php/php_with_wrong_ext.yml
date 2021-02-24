@@ -1,3 +1,0 @@
-<?php
-
-$container->setParameter('with_wrong_ext', 'from php');

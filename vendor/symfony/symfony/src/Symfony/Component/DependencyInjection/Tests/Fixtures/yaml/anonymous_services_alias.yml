@@ -1,7 +1,0 @@
-services:
-    Bar: ~
-
-    Foo:
-        arguments:
-            - !service
-                alias: Bar

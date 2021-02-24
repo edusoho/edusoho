@@ -1,7 +1,0 @@
-title: Files can be located in different folders than the dist and the folder is created
-
-config:
-    file: 'app/parameters.yml'
-    dist-file: 'dist/parameters.yml'
-
-dist-file: 'dist/parameters.yml'

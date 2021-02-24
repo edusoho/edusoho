@@ -1,8 +1,0 @@
-services:
-    parent_service:
-        class: stdClass
-
-    child_service:
-        class: stdClass
-        autoconfigure: true
-        parent: parent_service

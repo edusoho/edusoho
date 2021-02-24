@@ -1,3 +1,0 @@
-swiftmailer:
-    transport:  sendmail
-    local_domain: local.example.org

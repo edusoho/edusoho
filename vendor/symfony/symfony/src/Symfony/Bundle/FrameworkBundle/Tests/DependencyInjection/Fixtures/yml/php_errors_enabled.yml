@@ -1,4 +1,0 @@
-framework:
-    php_errors:
-        log: true
-        throw: true

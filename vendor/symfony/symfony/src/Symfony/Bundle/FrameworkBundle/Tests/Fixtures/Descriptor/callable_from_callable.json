@@ -1,5 +1,0 @@
-{
-    "type": "closure",
-    "name": "__invoke",
-    "class": "Symfony\\Bundle\\FrameworkBundle\\Tests\\Console\\Descriptor\\CallableClass"
-}

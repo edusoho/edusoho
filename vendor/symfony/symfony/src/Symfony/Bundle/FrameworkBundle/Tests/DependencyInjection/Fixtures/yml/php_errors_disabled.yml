@@ -1,3 +1,0 @@
-framework:
-    php_errors:
-        throw: false

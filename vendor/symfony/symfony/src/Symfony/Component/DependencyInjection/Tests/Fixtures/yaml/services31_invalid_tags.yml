@@ -1,6 +1,0 @@
-services:
-    _defaults:
-        tags: ['foo']
-
-    Foo\Bar:
-        tags: invalid

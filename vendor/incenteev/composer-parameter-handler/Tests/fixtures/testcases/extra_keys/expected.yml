@@ -1,6 +1,0 @@
-# This file is auto-generated during the composer install
-parameters:
-    foo: existing_foo
-    boolean: false
-extra_key: 'a new extra key'
-another_key: foo

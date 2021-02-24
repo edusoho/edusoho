@@ -1,6 +1,0 @@
-title: Files can be located in subfolders
-
-config:
-    file: 'app/parameters.yml'
-
-dist-file: 'app/parameters.yml.dist'

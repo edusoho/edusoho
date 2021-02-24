@@ -190,7 +190,6 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
         $biz->register(new \Codeages\Biz\Framework\Provider\TargetlogServiceProvider(), ['targetlog.interceptor_enable' => false]);
         $biz->register(new \Biz\System\LogServiceProvider());
         $biz->register(new \Biz\DefaultServiceProvider());
-//        $biz->register(new \Biz\DefaultSdkProvider());
         if ($this->getContainer()->hasParameter('school_mode')) {
             $schoolMode = $this->getContainer()->getParameter('school_mode');
         }
@@ -205,8 +204,6 @@ class AppKernel extends Kernel implements PluginableHttpKernelInterface
                 ],
             ]
         );
-
-//        $biz->register(new \Biz\Plumber\PlumberProvider());
 
         $collector = $this->getContainer()->get('biz.service_provider.collector');
         foreach ($collector->all() as $provider) {

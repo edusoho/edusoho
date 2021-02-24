@@ -1,3 +1,0 @@
-swiftmailer:
-    transport: mail
-    spool: ~

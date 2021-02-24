@@ -1,3 +1,0 @@
-{%- set k = "v'" ~ version -%}
-{%- cache k {time: 10} -%}Hello {{ value }}!{%- endcache -%}
-{%- cache 'bob'|capitalize {gcs: value} %}Hello {{ value }}!{%- endcache -%}

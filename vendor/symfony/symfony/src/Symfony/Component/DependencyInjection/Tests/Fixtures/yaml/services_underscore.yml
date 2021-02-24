@@ -1,3 +1,0 @@
-services:
-    _foo:
-        class: Foo

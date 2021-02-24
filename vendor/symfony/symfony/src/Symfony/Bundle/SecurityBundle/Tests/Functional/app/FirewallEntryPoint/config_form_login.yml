@@ -1,9 +1,0 @@
-imports:
-    - { resource: ./config.yml }
-
-security:
-    firewalls:
-        secure:
-            pattern: ^/
-            form_login:
-                check_path: /login_check

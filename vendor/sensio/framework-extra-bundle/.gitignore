@@ -1,8 +1,0 @@
-/vendor
-coverage
-/Tests/Fixtures/cache
-/Tests/Fixtures/logs
-phpunit.xml
-composer.lock
-/.phpunit
-/.php_cs.cache

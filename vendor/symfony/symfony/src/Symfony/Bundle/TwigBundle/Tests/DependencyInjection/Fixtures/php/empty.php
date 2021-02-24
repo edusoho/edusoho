@@ -1,3 +1,0 @@
-<?php
-
-$container->loadFromExtension('twig', []);
