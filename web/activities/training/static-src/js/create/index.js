@@ -119,13 +119,13 @@ load.then(function(){
         break;
       case "1":
         $(".link_div").hide();
-        $('#dataset_ids').rules("add", {
+        $('#datasets').rules("add", {
           required: true,
           messages: {
             required: "请选择数据集"
           }
         });
-        $('#images_id').rules("add", {
+        $('#images').rules("add", {
           required: true,
           messages: {
             required: "请选择镜像"

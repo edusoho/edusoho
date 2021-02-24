@@ -3,8 +3,6 @@ import ElementUI from 'element-ui';
 import Info from './index.vue';
 import qs from 'qs';
 import notify from 'common/notify';
-import 'vue-tree-halower/dist/halower-tree.min.css'
-import VTree from 'vue-tree-halower'
 
 const axios = Axios.create({
   headers: {
@@ -18,7 +16,6 @@ const axios = Axios.create({
 Vue.prototype.$axios = axios;
 Vue.prototype.$qs = qs;
 Vue.use(ElementUI);
-Vue.use(VTree);
 let $app = $('#app');
 new Vue({
   el: '#app',

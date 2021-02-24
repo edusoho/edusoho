@@ -37,12 +37,12 @@
             </div>
             <div class="col-sm-8">
               <input id="link_url" class="form-control" type="text" name="link_url"
-                     value="{% if info.link != '' %}{{ info.link }}{% endif %}">
+                     value="{% if info.link is defined %}{{ info.link }}{% endif %}">
             </div>
           </div>
           <div class="form-group images_div" style="display:none;">
             <div class="col-sm-2 control-label">
-              <label for="images_id" class="control-label-required">
+              <label for="images" class="control-label-required">
                 镜像
               </label>
             </div>
@@ -61,7 +61,7 @@
                 {% set imagesName = info.img_repo ~ ":"~info.img_tag %}
               {% endif %}
               <span class="selectImages">{{ imagesName }}</span>
-              <input type="hidden" class="images-cache" id="images_id" name="images_id"
+              <input type="hidden" class="images-cache" id="images" name="images"
                      value="{{ cacheName|json_encode|raw|escape }}">
             </div>
           </div>
@@ -79,11 +79,15 @@
                   class="es-icon es-icon-anonymous-iconfont"></i>
                 选择数据集
               </a>
-              <input type="hidden" class="dataset-cache" id="dataset_ids" name="dataset_ids" value="">
+              <input type="hidden" class="dataset-cache" id="datasets" name="datasets"
+                     value="{% if info.datasets is defined %}{{ info.datasets|json_encode|raw|escape }}{% endif %}">
             </div>
             <div class="col-sm-8">
               <br/>
               <h4 class="tag-lists">
+                {% if info.datasets is defined %}
+                  {% set tags = info.datasets %}
+                {% endif %}
                 {{ include('training/manage/dataset/component/tags.html.twig') }}
               </h4>
             </div>
