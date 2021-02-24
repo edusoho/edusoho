@@ -57,3 +57,5 @@ yarn-error.log
 /reports_tmp
 .package-lock.json
 /vendor/
+/web/static-dist/**
+/web/service-cdn/**
