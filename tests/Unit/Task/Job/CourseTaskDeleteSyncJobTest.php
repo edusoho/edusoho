@@ -78,7 +78,6 @@ class CourseTaskDeleteSyncJobTest extends BaseTestCase
         $job->execute();
 
         $this->getTaskDao()->shouldHaveReceived('findByCopyIdAndLockedCourseIds')->times(1);
-        $this->getTaskDao()->shouldHaveReceived('get')->times(1);
         $this->getCourseDao()->shouldHaveReceived('findCoursesByParentIdAndLocked')->times(1);
 
         $strategy = $this->biz['course.normal_strategy'];
