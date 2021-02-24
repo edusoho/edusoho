@@ -19,7 +19,7 @@ class Live {
 
   init() {
     let role = $('#entry').data('role');
-    if (role === 'student') {
+    if (role === 'student' && this.taskId != 0) {
       this.triggerLiveEvent();
     }
   }
