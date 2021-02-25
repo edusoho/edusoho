@@ -208,8 +208,10 @@ class LessonServiceImpl extends BaseService implements LessonService
         foreach ($lessons as $lesson) {
             if ('lesson' === $lesson['type']) {
                 $this->deleteLesson($courseId, $lesson['id']);
-            } else {
+            } elseif ('chapter' === $lesson['type'] || 'unit' === $lesson['type']) {
                 $this->getCourseService()->deleteChapter($courseId, $lesson['id']);
+            } else {
+                $this->createNewException(CommonException::ERROR_PARAMETER());
             }
         }
 
