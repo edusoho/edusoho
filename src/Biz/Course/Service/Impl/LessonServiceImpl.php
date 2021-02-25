@@ -206,7 +206,11 @@ class LessonServiceImpl extends BaseService implements LessonService
         }
 
         foreach ($lessons as $lesson) {
-            $this->deleteLesson($courseId, $lesson['id']);
+            if ('lesson' === $lesson['type']) {
+                $this->deleteLesson($courseId, $lesson['id']);
+            } else {
+                $this->getCourseService()->deleteChapter($courseId, $lesson['id']);
+            }
         }
 
         return $lessons;
