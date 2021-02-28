@@ -13,7 +13,10 @@ use Biz\Course\Dao\CourseNoteLikeDao;
 use Biz\Course\Dao\CourseSetDao;
 use Biz\Course\Dao\ThreadDao;
 use Biz\Course\Dao\ThreadPostDao;
+use Biz\Course\Job\DeleteCourseJob;
 use Biz\Course\Service\CourseDeleteService;
+use Biz\Course\Service\MaterialService;
+use Biz\Crontab\SystemCrontabInitializer;
 use Biz\Favorite\Dao\FavoriteDao;
 use Biz\IM\Service\ConversationService;
 use Biz\Review\Dao\ReviewDao;
@@ -87,32 +90,22 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         try {
             $this->deleteCourseMaterial($courseId);
 
-            $this->deleteCourseChapter($courseId);
-
             $this->deleteTask($courseId);
-            $this->deleteTaskResult($courseId);
-
-            $this->deleteCourseMember($courseId);
 
             $this->deleteCourseJob($courseId);
-
-            $this->deleteCourseNote($courseId);
-
-            $this->deleteCourseThread($courseId);
-
-            $this->deleteCourseReview($courseId);
-
-            $this->deleteCourseFavorite($courseId);
-
-            $this->deleteCourseAnnouncement($courseId);
-
-            $this->deleteCourseStatus($courseId);
-
-            $this->deleteCourseCoversation($courseId);
 
             $this->updateMobileSetting($courseId);
 
             $this->getCourseDao()->delete($courseId);
+
+            $this->getSchedulerService()->register([
+                'name' => 'delete_course_job'.$courseId,
+                'source' => SystemCrontabInitializer::SOURCE_SYSTEM,
+                'expression' => intval(time()),
+                'misfire_policy' => 'executing',
+                'class' => DeleteCourseJob::class,
+                'args' => ['courseId' => $courseId],
+            ]);
 
             $this->commit();
 
@@ -147,12 +140,12 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         $this->getSettingService()->set('mobile', $mobile);
     }
 
-    protected function deleteCourseMaterial($courseId)
+    public function deleteCourseMaterial($courseId)
     {
         $this->getMaterialService()->deleteMaterialsByCourseId($courseId, 'course');
     }
 
-    protected function deleteCourseChapter($courseId)
+    public function deleteCourseChapter($courseId)
     {
         $this->getChapterDao()->deleteChaptersByCourseId($courseId);
     }
@@ -170,12 +163,12 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         }
     }
 
-    protected function deleteTaskResult($courseId)
+    public function deleteTaskResult($courseId)
     {
         $this->getTaskResultDao()->deleteByCourseId($courseId);
     }
 
-    protected function deleteCourseMember($courseId)
+    public function deleteCourseMember($courseId)
     {
         $this->getMemberDao()->deleteByCourseId($courseId);
     }
@@ -197,7 +190,7 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         $this->getCourseJobDao()->deleteByTypeAndCourseId('refresh_learning_progress', $courseId);
     }
 
-    protected function deleteCourseNote($courseId)
+    public function deleteCourseNote($courseId)
     {
         $notes = $this->getNoteDao()->search(['courseId' => $courseId], [], 0, PHP_INT_MAX);
         if (empty($notes)) {
@@ -210,18 +203,18 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         $this->getNoteDao()->deleteByCourseId($courseId);
     }
 
-    protected function deleteCourseThread($courseId)
+    public function deleteCourseThread($courseId)
     {
         $this->getThreadPostDao()->deleteByCourseId($courseId);
         $this->getThreadDao()->deleteByCourseId($courseId);
     }
 
-    protected function deleteCourseReview($courseId)
+    public function deleteCourseReview($courseId)
     {
         $this->getReviewDao()->deleteByTargetTypeAndTargetId('course', $courseId);
     }
 
-    protected function deleteCourseFavorite($courseId)
+    public function deleteCourseFavorite($courseId)
     {
         $this->getFavoriteDao()->deleteByTargetTypeAndsTargetId('course', $courseId);
     }
@@ -238,12 +231,12 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         }
     }
 
-    protected function deleteCourseStatus($courseId)
+    public function deleteCourseStatus($courseId)
     {
         $this->getStatusService()->deleteStatusesByCourseId($courseId);
     }
 
-    protected function deleteCourseCoversation($courseId)
+    public function deleteCourseCoversation($courseId)
     {
         $this->getConversationService()->deleteConversationByTargetIdAndTargetType($courseId, 'course');
         $this->getConversationService()->deleteConversationByTargetIdAndTargetType($courseId, 'course-push');

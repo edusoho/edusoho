@@ -160,4 +160,6 @@ interface FileService
     public function getFilesByIds($ids);
 
     public function getImgFileMetaInfo($fileId, $scaledWidth, $scaledHeight);
+
+    public function findFilesByUris(array $uris);
 }

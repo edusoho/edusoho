@@ -19,4 +19,26 @@ interface CourseDeleteService
      * @return mixed
      */
     public function deleteCourse($courseId);
+
+    public function deleteCourseMaterial($courseId);
+
+    public function deleteCourseChapter($courseId);
+
+    public function deleteTaskResult($courseId);
+
+    public function deleteCourseMember($courseId);
+
+    public function deleteCourseNote($courseId);
+
+    public function deleteCourseThread($courseId);
+
+    public function deleteCourseReview($courseId);
+
+    public function deleteCourseFavorite($courseId);
+
+    public function deleteCourseAnnouncement($courseId);
+
+    public function deleteCourseStatus($courseId);
+
+    public function deleteCourseCoversation($courseId);
 }

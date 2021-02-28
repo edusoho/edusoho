@@ -53,8 +53,8 @@
         <div class="card-item">
           <div class="card-item-label">{{'user.account.my_invite_code.has_received_coupons'|trans}}</div>
           <div class="card-item-value">
-            <span>{{ couponRateSum|default(0) }}</span>
-            {{'site.currency.CNY'|trans}}
+            <span>{{ coupons|length|default(0) }}</span>
+            {{'coupon.amonut'|trans}}
           </div>
         </div>
       </div>
@@ -78,13 +78,21 @@
           <tr>
             <td>{{ web_macro.user_link(user) }}</td>
             <td>{{record.inviteTime|date('Y-m-d H:i:s')}}</td>
-            <td>{{coupon.rate|default('-')}}</td>
             <td>
-            {% if coupon.createdTime|default() %}
+              {% if coupon.type|default() == 'minus' %}
+                {{ coupon.rate }}{{ 'coupon.type.minus_rate_unit'|trans }}
+              {% elseif coupon.type|default() == 'discount' %}
+                {{ coupon.rate }}{{ 'coupon.type.discount_rate_unit'|trans }}
+              {% else %}
+                -
+              {% endif %}
+            </td>
+            <td>
+              {% if coupon.createdTime|default() %}
                 {{coupon.createdTime|date('Y-m-d H:i:s')}}
-            {% else %}
-              -
-            {% endif %}
+              {% else %}
+                -
+              {% endif %}
             </td>
           </tr>
         {% else %}
