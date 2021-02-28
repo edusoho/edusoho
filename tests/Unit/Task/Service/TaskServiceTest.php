@@ -91,6 +91,16 @@ class TaskServiceTest extends BaseTestCase
         $this->assertNull($savedTask);
     }
 
+    public function testFindTasksByCategoryIds()
+    {
+        $task = $this->mockTask();
+        $this->getTaskService()->createTask($task);
+
+        $result = $this->getTaskService()->findTasksByCategoryIds(['1']);
+
+        $this->assertCount(1, $result);
+    }
+
     public function testFindTasksByCourseId()
     {
         $task = $this->mockTask();

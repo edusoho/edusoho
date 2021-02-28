@@ -15,6 +15,7 @@
                courseItems: [],
                hasOptional: false,
                renderUrl: `/course/${this.sku.targetId}/task/list/render/default?showOptional=1`,
+               pagedCourseTask: null,
             };
         },
         props: {
@@ -35,7 +36,13 @@
             getTasksListInfo() {
                 this.renderUrl = `/course/${this.sku.targetId}/task/list/render/default?showOptional=1`;
                 $('.js-tasks-show').data('url', this.renderUrl);
-                new PagedCourseTask();
+                $('.js-tasks-show').html('');
+                try {
+                    this.pagedCourseTask._destroy();
+                } catch (e) {
+                    console.log('destroy undefined');
+                }
+                this.pagedCourseTask = new PagedCourseTask();
             },
             isChapter(data) {
                 return 'chapter' === data.itemType;

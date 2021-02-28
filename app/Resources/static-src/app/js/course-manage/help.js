@@ -98,6 +98,7 @@ export const TabChange = () => {
 
 export const TaskListHeaderFixed = () => {
   let $header = $('.js-task-list-header');
+  const $headerSlot = $('.js-task-list-header__slot')
   if(!$header.length){
     return;
   }
@@ -105,8 +106,10 @@ export const TaskListHeaderFixed = () => {
   $(window).scroll(function(event) {
     if ($(window).scrollTop() >= headerTop) {
       $header.addClass('fixed');
+      $headerSlot.removeClass('hidden')
     } else {
       $header.removeClass('fixed');
+      $headerSlot.addClass('hidden')
     }
   });
 };

@@ -24,5 +24,15 @@ define(function (require, exports, module) {
         return html;
       }
     });
+    $('.js-user-data-popover-detail').popover({
+      html: true,
+      trigger: 'hover',
+      placement: 'right',
+      template: '<div class="popover" role="tooltip"><div class="popover-content"></div></div>',
+      content: function() {
+        var html = $(this).siblings('.popover-content').html();
+        return html;
+      }
+    });
   }
 });

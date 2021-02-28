@@ -40,25 +40,22 @@ class Trade extends AbstractResource
     public function add(ApiRequest $request)
     {
         $params = $request->request->all();
-        if (empty($params['gateway']) || empty($params['type']) || empty($params['orderSn'])) {
+        if (empty($params['gateway']) || empty($params['type'])) {
             throw CommonException::ERROR_PARAMETER_MISSING();
         }
 
-        $order = $this->getOrderService()->getOrderBySn($params['orderSn']);
-        if (empty($order)) {
-            throw CommonException::ERROR_PARAMETER_MISSING();
-        }
-
-        try {
-            $product = $this->getProduct($order['id']);
-            $product->validate();
-        } catch (\Exception $e) {
-            throw OrderPayCheckException::UNABLE_PAY();
-        }
+        $order = empty($params['orderSn']) ? [] : $this->getOrderService()->getOrderBySn($params['orderSn']);
 
         try {
             $this->fillParams($params);
             if (!empty($params['orderSn']) && $order) {
+                try {
+                    $product = $this->getProduct($order['id']);
+                    $product->validate();
+                } catch (\Exception $e) {
+                    throw OrderPayCheckException::UNABLE_PAY();
+                }
+
                 if ($this->isOrderPaid($order)) {
                     return [
                         'tradeSn' => $order['trade_sn'],

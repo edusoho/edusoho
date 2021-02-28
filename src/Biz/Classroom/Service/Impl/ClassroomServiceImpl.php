@@ -952,7 +952,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             $this->createNewException(ClassroomException::FORBIDDEN_NOT_STUDENT());
         }
 
-        $this->removeStudentsFromClasroomCourses($classroomId, $userId);
+        $this->removeStudentsFromClasroomCourses($classroomId, $userId, $info);
 
         if (1 == count($member['role'])) {
             $this->getClassroomMemberDao()->delete($member['id']);
@@ -988,12 +988,21 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             'nickname' => $user['nickname'],
         ];
 
-        $this->getLogService()->info(
-            'classroom',
-            'remove_student',
-            "班级《{$classroom['title']}》(#{$classroom['id']})，移除学员{$user['nickname']}(#{$user['id']})",
-            $infoData
-        );
+        if (isset($info['reason_type']) && 'exit' === $info['reason_type']) {
+            $this->getLogService()->info(
+                'classroom',
+                'exit_classroom',
+                "学员{$user['nickname']}(#{$user['id']})退出了班级《{$classroom['title']}》(#{$classroom['id']})",
+                $infoData
+            );
+        } else {
+            $this->getLogService()->info(
+                'classroom',
+                'remove_student',
+                "班级《{$classroom['title']}》(#{$classroom['id']})，移除学员{$user['nickname']}(#{$user['id']})",
+                $infoData
+            );
+        }
 
         $this->dispatchEvent(
             'classroom.quit',
@@ -1864,15 +1873,15 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return array_intersect($member['role'], ['teacher', 'headTeacher', 'assistant']);
     }
 
-    private function removeStudentsFromClasroomCourses($classroomId, $userId)
+    private function removeStudentsFromClasroomCourses($classroomId, $userId, $info)
     {
         $classroomCourses = $this->getClassroomCourseDao()->findActiveCoursesByClassroomId($classroomId);
 
         $courseIds = ArrayToolkit::column($classroomCourses, 'courseId');
 
         $reason = [
-            'reason' => 'course.member.operation.reason.classroom_exit',
-            'reason_type' => 'classroom_exit',
+            'reason' => !empty($info['reason']) ? $info['reason'] : 'course.member.operation.reason.classroom_exit',
+            'reason_type' => !empty($info['reason_type']) ? $info['reason_type'] : 'classroom_exit',
         ];
         foreach ($courseIds as $key => $courseId) {
             $count = 0;

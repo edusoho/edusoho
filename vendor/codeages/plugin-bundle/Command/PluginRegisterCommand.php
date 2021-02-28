@@ -51,11 +51,6 @@ class PluginRegisterCommand extends ContainerAwareCommand
         $executed = $installer->executeScript($code);
         $output->writeln($executed ? '  <info>[Ok]</info>' : '  <info>[Ignore]</info>');
 
-        $output->write('  - Install assets.');
-        $content = $installer->installAssets($code);
-        $output->writeln('  <info>[Ok]</info>');
-        $output->writeln($content);
-
         $output->write('  - Install block.');
         BlockToolkit::init($installer->getPluginDirectory($code).'/block.json', $this->getContainer());
         $output->writeln('  <info>[Ok]</info>');
@@ -67,6 +62,11 @@ class PluginRegisterCommand extends ContainerAwareCommand
         $output->write('  - Refresh plugin cache.');
         $installer->refreshInstalledPluginConfiguration();
         $output->writeln($executed ? '  <info>[Ok]</info>' : '  <info>[Ignore]</info>');
+        
+        $output->write('  - Install assets.');
+        $content = $installer->installAssets($code);
+        $output->writeln('  <info>[Ok]</info>');
+        $output->writeln($content);
 
         $output->writeln("<info>Finished!</info>\n");
     }
