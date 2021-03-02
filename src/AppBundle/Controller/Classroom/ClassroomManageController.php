@@ -732,6 +732,18 @@ class ClassroomManageController extends BaseController
         );
     }
 
+    public function statisticsAction(Request $request, $id)
+    {
+        $this->getClassroomService()->tryManageClassroom($id);
+
+        return $this->render(
+            'classroom-manage/statistics.html.twig',
+            [
+
+            ]
+        );
+    }
+
     public function courseItemsSortAction(Request $request, $id)
     {
         $this->getClassroomService()->tryManageClassroom($id);
