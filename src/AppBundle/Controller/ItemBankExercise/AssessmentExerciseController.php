@@ -40,19 +40,25 @@ class AssessmentExerciseController extends BaseController
 
         $assessmentExercises = $this->getAssessmentExerciseService()->search(
             ['moduleId' => $moduleId],
-            ['createdTime' => 'desc'],
+            ['createdTime' => 'ASC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
         $assessments = $this->getAssessmentService()->findAssessmentsByIds(ArrayToolkit::column($assessmentExercises, 'assessmentId'));
 
+        //考试按添加时间正序展示
+        $assessmentsByTime = [];
+        foreach ($assessmentExercises as $key => $assessmentExercise) {
+            $assessmentsByTime[$key] = $assessments[$assessmentExercise['assessmentId']];
+        }
+
         return $this->render('item-bank-exercise-manage/assessment-exercise/index.html.twig', [
             'exercise' => $exercise,
             'questionBank' => $this->getQuestionBankService()->getQuestionBank($exercise['questionBankId']),
             'modules' => $modules,
             'moduleId' => $moduleId,
-            'assessments' => $assessments,
+            'assessments' => $assessmentsByTime,
             'paginator' => $paginator,
             'assessmentExercises' => ArrayToolkit::index($assessmentExercises, 'assessmentId'),
         ]);

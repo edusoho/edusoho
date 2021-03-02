@@ -311,11 +311,17 @@ class ExerciseController extends BaseController
         if ($exercise['assessmentEnable']) {
             $assessmentExercises = $this->getAssessmentExerciseService()->search(
                 ['moduleId' => $moduleId],
-                ['createdTime' => 'DESC'],
+                ['createdTime' => 'ASC'],
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );
             $assessments = $this->getAssessmentService()->findAssessmentsByIds(ArrayToolkit::column($assessmentExercises, 'assessmentId'));
+        }
+
+        //考试按添加时间正序展示
+        $assessmentsByTime = [];
+        foreach ($assessmentExercises as $key => $assessmentExercise) {
+            $assessmentsByTime[$key] = $assessments[$assessmentExercise['assessmentId']];
         }
 
         $records = [];
@@ -335,7 +341,7 @@ class ExerciseController extends BaseController
             'member' => $member,
             'records' => $records,
             'questionBank' => $this->getQuestionBankService()->getQuestionBank($exercise['questionBankId']),
-            'assessments' => $assessments,
+            'assessments' => $assessmentsByTime,
             'paginator' => $paginator,
             'assessmentExercises' => ArrayToolkit::index($assessmentExercises, 'assessmentId'),
             'previewAs' => $previewAs,
