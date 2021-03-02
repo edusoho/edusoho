@@ -29,6 +29,13 @@ class UserDaoImpl extends AdvancedDaoImpl implements UserDao
         return $this->getByFields(['nickname' => $nickname, 'destroyed' => 0]);
     }
 
+    public function getUnDestroyedUserByNicknameOrVerifiedMobile($value)
+    {
+        $sql = "SELECT * FROM `user` AS u WHERE nickname = '{$value}' AND destroyed = 0 OR verifiedMobile = '{$value}'";
+
+        return $this->db()->fetchAssoc($sql);
+    }
+
     public function getByUUID($uuid)
     {
         return $this->getByFields(['uuid' => $uuid]);
