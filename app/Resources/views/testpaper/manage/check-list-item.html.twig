@@ -21,7 +21,11 @@
         <div class="testpaper-mark-info__title text-overflow" title="{{ taskTitle }}">{{ taskTitle }}</div>
         <div class="testpaper-mark-info__name">
           <span class="text-overflow">
-            {% if testpaper %}{{'course.testpaper_manage.create.name'|trans}}： {{ testpaper.name }}{% else %}{{ 'course.testpaper_check.testpaper_delete'|trans }}{% endif %}
+              {% if 'testpaper' == type|default('') %}
+                {% if testpaper %}{{ 'course.testpaper_manage.create.name'|trans }}： {{ testpaper.name }}{% else %}{{ 'course.testpaper_check.testpaper_delete'|trans }}{% endif %}
+              {% elseif 'homework' == type|default('') %}
+                {% if testpaper %}{{ 'course.homework_check.create.name'|trans }}： {{ testpaper.name }}{% else %}{{ 'course.homework_check.homework_delete'|trans }}{% endif %}
+              {% endif %}
           </span>
           {% if courseSets[task.fromCourseSetId] is defined and courseSets[task.fromCourseSetId].parentId|default(0) %}
             <div class="mbm mtm color-gray">

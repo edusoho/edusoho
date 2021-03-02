@@ -1263,6 +1263,8 @@ course.homework_check.finish_check_submiting: 正在提交, 请稍等
 course.homework_check.teacher_say.input_placeholder: 请输入评语
 course.homework_check.need_check_item: >
   待批阅题目 <small class="color-gray">共%itemCount%题</small>
+course.homework_check.create.name: 作业名称
+course.homework_check.homework_delete:  该作业已删除
 
 course.question_marker_statistics: 弹题统计
 

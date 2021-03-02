@@ -96,6 +96,7 @@ class ManageController extends BaseController
             'resultStatusNum' => $resultStatusNum,
             'courses' => ArrayToolkit::index($courses, 'id'),
             'courseSets' => ArrayToolkit::index($courseSets, 'id'),
+            'type' => $type,
         ]);
     }
 
