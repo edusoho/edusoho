@@ -189,6 +189,16 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
         return $builder->execute()->fetchAll() ?: [];
     }
 
+    public function sumLearnedCompulsoryTaskNumGroupByFields($conditions, $groupBy)
+    {
+        $selectFields = is_array($groupBy) ? implode(',', $groupBy) : $groupBy;
+        $builder = $this->createQueryBuilder($conditions)
+            ->select('sum(learnedCompulsoryTaskNum) as learnedCompulsoryTaskNum, '.$selectFields)
+            ->addGroupBy($groupBy);
+
+        return $builder->execute()->fetchAll();
+    }
+
     public function findByUserIdAndRole($userId, $role)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE userId = ? AND role =  ?";
@@ -494,6 +504,7 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
                 'finishedTime > :finishedTime_GT',
                 'lastLearnTime <= :lastLearnTime_LE',
                 'deadlineNotified = :deadlineNotified',
+                'classroomId IN (:classroomIds)',
             ],
         ];
     }

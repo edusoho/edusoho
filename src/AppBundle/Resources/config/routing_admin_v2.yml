@@ -188,6 +188,10 @@ admin_v2_classroom_chooser:
     path: /classroom/chooser
     defaults: { _controller: AppBundle:AdminV2/Teach/Classroom:chooser }
 
+admin_v2_classroom_statistics:
+    path: /classroom/statistics
+    defaults: { _controller: AppBundle:AdminV2/Teach/Classroom:statistics }
+
 # 教学-课程管理-直播管理
 admin_v2_live_course:
     path: /livecourse/{status}

@@ -11556,3 +11556,20 @@ exam_bank.analysis.data_large_loading_finish: 数据已刷新完成
 exam_bank.analysis.data_large_info: 数据更新时间为：%date%，由于数据量过大，不建议频繁刷新
 exam_bank.analysis.data_large_loading_btn: 强制刷新
 activity_manage.video.finish_tips: 视频播放时长和页面停留时长完成条件以累加学习时长为准
+
+admin.classroom_manage.statistics.creator_placeholder: 创建者
+admin.classroom_manage.statistics.name_th: %name%名称
+admin.classroom_manage.statistics.course_number_th: 课程数
+admin.classroom_manage.statistics.task_number_th: 任务数
+admin.classroom_manage.statistics.student_number_th: 正式学员数
+admin.classroom_manage.statistics.finish_number_th: 完成人数
+admin.classroom_manage.statistics.income_th: 班级收入（元）
+admin.classroom_manage.statistics.operation_th: 操作
+admin.classroom_manage.statistics.student_operation_btn: 学员视角详情
+admin.classroom_manage.statistics.course_operation_btn: 教学内容详情
+admin.classroom_manage.statistics.task_num_tips: 仅统计必修课时任务数，括号内数字为选修的课时任务数
+admin.classroom_manage.statistics.finish_number_tips: 取班级中所有课时任务学习进度均为100%的人数。若班级中新增了课程或课时，则完成人数会随之变更。
+
+
+
+

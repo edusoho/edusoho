@@ -284,4 +284,10 @@ interface ClassroomService
     public function appendHasCertificate(array $classrooms);
 
     public function hasCertificate($classroomId);
+
+    public function countTaskNumByClassroomIds(array $classroomIds);
+
+    public function sumMemberLearnedCompulsoryTaskNumByClassroomIds(array $classroomIds);
+
+    public function sumMemberFinishedNumByClassroomIds(array $classroomIds);
 }

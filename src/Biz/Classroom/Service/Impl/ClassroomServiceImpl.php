@@ -1644,6 +1644,12 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             unset($conditions['categoryId']);
         }
 
+        if (isset($conditions['creatorLike'])) {
+            $users = $this->getUserService()->searchUsers(['nickname' => $conditions['creatorLike']], [], 0, PHP_INT_MAX);
+            $conditions['creators'] = empty($users) ? [-1] : array_column($users, 'id');
+            unset($conditions['creatorLike']);
+        }
+
         return $conditions;
     }
 
@@ -2558,6 +2564,46 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return !empty($this->getCertificateService()->count($conditions));
     }
 
+    public function countTaskNumByClassroomIds(array $classroomIds)
+    {
+        if (empty($classroomIds)) {
+            return [];
+        }
+
+        $taskNums = $this->getClassroomCourseDao()->countTaskNumByClassroomIds($classroomIds);
+
+        return array_column($taskNums, null, 'classroomId');
+    }
+
+    public function sumMemberLearnedCompulsoryTaskNumByClassroomIds(array $classroomIds)
+    {
+        return $this->getCourseMemberDao()->sumLearnedCompulsoryTaskNumGroupByFields(['classroomIds' => $classroomIds], ['classroomId', 'userId']);
+    }
+
+    public function sumMemberFinishedNumByClassroomIds(array $classroomIds)
+    {
+        $memberLearnedTaskNums = $this->sumMemberLearnedCompulsoryTaskNumByClassroomIds($classroomIds);
+        $taskNums = $this->countTaskNumByClassroomIds($classroomIds);
+
+        $result = [];
+        foreach ($memberLearnedTaskNums as $learnedTaskNum) {
+            $result[$learnedTaskNum['classroomId']] = isset($result[$learnedTaskNum['classroomId']]) ? $result[$learnedTaskNum['classroomId']] : [
+                'classroomId' => $learnedTaskNum['classroomId'],
+                'finishedMemberCount' => 0,
+            ];
+
+            if (empty($learnedTaskNum['learnedCompulsoryTaskNum']) || empty($taskNums[$learnedTaskNum['classroomId']])) {
+                continue;
+            }
+            if ($learnedTaskNum['learnedCompulsoryTaskNum'] < $taskNums[$learnedTaskNum['classroomId']]['compulsoryTaskNum']) {
+                continue;
+            }
+            ++$result[$learnedTaskNum['classroomId']]['finishedMemberCount'];
+        }
+
+        return $result;
+    }
+
     /**
      * @return CertificateService
      */
@@ -2574,5 +2620,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $biz = $this->biz;
 
         return $biz['goods.entity.factory'];
+    }
+
+    protected function getCourseMemberDao()
+    {
+        return $this->createDao('Course:CourseMemberDao');
     }
 }

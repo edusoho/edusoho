@@ -289,6 +289,32 @@ class ClassroomController extends BaseController
         ]);
     }
 
+    public function statisticsAction(Request $request)
+    {
+        $conditions = $request->query->all();
+
+        $conditions = $this->fillOrgCode($conditions);
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getClassroomService()->countClassrooms($conditions),
+            10
+        );
+
+        $classrooms = $this->getClassroomService()->searchClassrooms(
+            $conditions,
+            ['createdTime' => 'desc'],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        return $this->render('admin-v2/teach/classroom/classroom-statistics.html.twig', [
+            'classrooms' => $classrooms,
+            'classroomTaskNums' => $this->getClassroomService()->countTaskNumByClassroomIds(array_column($classrooms, 'id')),
+            'classroomMemberFinishedNums' => $this->getClassroomService()->sumMemberFinishedNumByClassroomIds(array_column($classrooms, 'id')),
+            'paginator' => $paginator,
+        ]);
+    }
+
     private function renderClassroomTr($id, $classroom)
     {
         $coinPrice = 0;

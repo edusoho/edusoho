@@ -182,6 +182,8 @@ class ClassroomDaoImpl extends AdvancedDaoImpl implements ClassroomDao
                 'headTeacherId = :headTeacherId',
                 'updatedTime >= :updatedTime_GE',
                 'ids NOT IN (:excludeIds)',
+                'creator = :creator',
+                'creator IN (:creators)',
             ],
         ];
     }
