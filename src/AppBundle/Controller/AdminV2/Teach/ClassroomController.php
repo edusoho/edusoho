@@ -292,8 +292,8 @@ class ClassroomController extends BaseController
     public function statisticsAction(Request $request)
     {
         $conditions = $request->query->all();
-
         $conditions = $this->fillOrgCode($conditions);
+
         $paginator = new Paginator(
             $this->get('request'),
             $this->getClassroomService()->countClassrooms($conditions),

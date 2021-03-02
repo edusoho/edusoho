@@ -10302,13 +10302,15 @@ exam_bank.analysis.data_large_loading_btn: Force refresh
 activity_manage.video.finish_tips: The completion conditions of video playback time and page stay time are subject to cumulative learning time
 
 admin.classroom_manage.statistics.creator_placeholder: Creator
-admin.classroom_manage.statistics.name_th: %name%
+admin.classroom_manage.statistics.name_th: Classroom
 admin.classroom_manage.statistics.course_number_th: Course Number
 admin.classroom_manage.statistics.task_number_th: Task Number
 admin.classroom_manage.statistics.student_number_th: Student Number
 admin.classroom_manage.statistics.finish_number_th: Finish Number
 admin.classroom_manage.statistics.income_th: Income
 admin.classroom_manage.statistics.operation_th: Operate
+admin.classroom_manage.statistics.create_time_th: Create Time
+admin.classroom_manage.statistics.creator_th: Creator
 admin.classroom_manage.statistics.student_operation_btn: Student Operation
 admin.classroom_manage.statistics.course_operation_btn: Course Operation
 admin.classroom_manage.statistics.task_num_tips: Only count the number of required class hours and tasks, the numbers in parentheses are the number of optional class hours and tasks
