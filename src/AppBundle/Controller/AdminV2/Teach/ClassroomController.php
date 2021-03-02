@@ -300,7 +300,7 @@ class ClassroomController extends BaseController
             10
         );
 
-        $classrooms = $this->getClassroomService()->searchClassrooms(
+        $classrooms = $this->getClassroomService()->searchClassroomsWithInfo(
             $conditions,
             ['createdTime' => 'desc'],
             $paginator->getOffsetCount(),
@@ -309,8 +309,6 @@ class ClassroomController extends BaseController
 
         return $this->render('admin-v2/teach/classroom/classroom-statistics.html.twig', [
             'classrooms' => $classrooms,
-            'classroomTaskNums' => $this->getClassroomService()->countTaskNumByClassroomIds(array_column($classrooms, 'id')),
-            'classroomMemberFinishedNums' => $this->getClassroomService()->sumMemberFinishedNumByClassroomIds(array_column($classrooms, 'id')),
             'paginator' => $paginator,
         ]);
     }

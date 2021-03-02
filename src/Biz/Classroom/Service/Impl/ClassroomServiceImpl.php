@@ -136,6 +136,16 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $classrooms;
     }
 
+    public function searchClassroomsWithInfo($conditions, $orderBy, $start, $limit, $columns = [])
+    {
+        $orderBy = $this->getOrderBys($orderBy);
+        $conditions = $this->_prepareClassroomConditions($conditions);
+
+        $classrooms = $this->getClassroomDao()->search($conditions, $orderBy, $start, $limit, $columns);
+
+        return $this->calClassroomsTaskNums($classrooms, true);
+    }
+
     public function appendSpecsInfo($classrooms)
     {
         $classrooms = $this->getGoodsEntityFactory()->create('classroom')->fetchSpecs($classrooms);
@@ -2564,44 +2574,43 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return !empty($this->getCertificateService()->count($conditions));
     }
 
-    public function countTaskNumByClassroomIds(array $classroomIds)
+    public function calClassroomsTaskNums(array $classrooms, $withMemberInfo = false)
     {
-        if (empty($classroomIds)) {
+        if (empty($classrooms)) {
             return [];
         }
 
+        $classroomIds = array_column($classrooms, 'id');
+        $classrooms = array_column($classrooms, null, 'id');
         $taskNums = $this->getClassroomCourseDao()->countTaskNumByClassroomIds($classroomIds);
-
-        return array_column($taskNums, null, 'classroomId');
-    }
-
-    public function sumMemberLearnedCompulsoryTaskNumByClassroomIds(array $classroomIds)
-    {
-        return $this->getCourseMemberDao()->sumLearnedCompulsoryTaskNumGroupByFields(['classroomIds' => $classroomIds], ['classroomId', 'userId']);
-    }
-
-    public function sumMemberFinishedNumByClassroomIds(array $classroomIds)
-    {
-        $memberLearnedTaskNums = $this->sumMemberLearnedCompulsoryTaskNumByClassroomIds($classroomIds);
-        $taskNums = $this->countTaskNumByClassroomIds($classroomIds);
-
-        $result = [];
-        foreach ($memberLearnedTaskNums as $learnedTaskNum) {
-            $result[$learnedTaskNum['classroomId']] = isset($result[$learnedTaskNum['classroomId']]) ? $result[$learnedTaskNum['classroomId']] : [
-                'classroomId' => $learnedTaskNum['classroomId'],
-                'finishedMemberCount' => 0,
-            ];
-
-            if (empty($learnedTaskNum['learnedCompulsoryTaskNum']) || empty($taskNums[$learnedTaskNum['classroomId']])) {
-                continue;
+        $taskNums = array_column($taskNums, null, 'classroomId');
+        foreach ($classrooms as &$classroom) {
+            $classroom = array_merge($classroom, [
+                'compulsoryTaskNum' => empty($taskNums[$classroom['id']]) ? 0 : $taskNums[$classroom['id']]['compulsoryTaskNum'],
+                'electiveTaskNum' => empty($taskNums[$classroom['id']]) ? 0 : $taskNums[$classroom['id']]['electiveTaskNum'],
+            ]);
+            if ($withMemberInfo) {
+                $classroom['finishedMemberCount'] = 0;
             }
-            if ($learnedTaskNum['learnedCompulsoryTaskNum'] < $taskNums[$learnedTaskNum['classroomId']]['compulsoryTaskNum']) {
-                continue;
-            }
-            ++$result[$learnedTaskNum['classroomId']]['finishedMemberCount'];
         }
 
-        return $result;
+        if (!$withMemberInfo) {
+            return $classrooms;
+        }
+
+        $memberLearnedTaskNums = $this->getCourseMemberDao()->sumLearnedCompulsoryTaskNumGroupByFields(['classroomIds' => $classroomIds], ['classroomId', 'userId']);
+        foreach ($memberLearnedTaskNums as $learnedTaskNum) {
+            if (empty($taskNums[$learnedTaskNum['classroomId']]) || empty($classrooms[$learnedTaskNum['classroomId']])) {
+                continue;
+            }
+
+            if ($learnedTaskNum['learnedCompulsoryTaskNum'] < $classrooms[$learnedTaskNum['classroomId']]['compulsoryTaskNum']) {
+                continue;
+            }
+            ++$classrooms[$learnedTaskNum['classroomId']]['finishedMemberCount'];
+        }
+
+        return $classrooms;
     }
 
     /**

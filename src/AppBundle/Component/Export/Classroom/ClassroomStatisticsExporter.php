@@ -25,15 +25,13 @@ class ClassroomStatisticsExporter extends Exporter
     //获得导出正文内容
     public function getContent($start, $limit)
     {
-        $classrooms = $this->getClassroomService()->searchClassrooms(
+        $classrooms = $this->getClassroomService()->searchClassroomsWithInfo(
             $this->conditions,
             ['createdTime' => 'desc'],
             $start,
             $limit
         );
 
-        $classroomTaskNums = $this->getClassroomService()->countTaskNumByClassroomIds(array_column($classrooms, 'id'));
-        $classroomMemberFinishedNums = $this->getClassroomService()->sumMemberFinishedNumByClassroomIds(array_column($classrooms, 'id'));
         $creators = $this->getUserService()->findUsersByIds(array_values(array_unique(array_column($classrooms, 'creator'))));
         $creators = array_column($creators, null, 'id');
 
@@ -42,9 +40,9 @@ class ClassroomStatisticsExporter extends Exporter
             $content[] = [
                 $classroom['title'],
                 $classroom['courseNum'],
-                empty($classroomTaskNums[$classroom['id']]) ? 0 : $classroomTaskNums[$classroom['id']]['compulsoryTaskNum'].'('.$classroomTaskNums[$classroom['id']]['electiveTaskNum'].')',
+                empty($classroom['electiveTaskNum']) ? $classroom['compulsoryTaskNum'] : $classroom['compulsoryTaskNum'].'('.$classroom['electiveTaskNum'].')',
                 $classroom['studentNum'],
-                empty($classroomMemberFinishedNums[$classroom['id']]) ? 0 : $classroomMemberFinishedNums[$classroom['id']]['finishedMemberCount'],
+                $classroom['finishedMemberCount'],
                 $classroom['income'],
                 (string) date('Y-m-d H:i:s', $classroom['createdTime']),
                 empty($creators[$classroom['creator']]) ? '' : $creators[$classroom['creator']]['nickname'],

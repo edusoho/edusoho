@@ -193,7 +193,7 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
     {
         $selectFields = is_array($groupBy) ? implode(',', $groupBy) : $groupBy;
         $builder = $this->createQueryBuilder($conditions)
-            ->select('sum(learnedCompulsoryTaskNum) as learnedCompulsoryTaskNum, '.$selectFields)
+            ->select('IF(SUM(learnedCompulsoryTaskNum), SUM(learnedCompulsoryTaskNum), 0) as learnedCompulsoryTaskNum, '.$selectFields)
             ->addGroupBy($groupBy);
 
         return $builder->execute()->fetchAll();

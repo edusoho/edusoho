@@ -51,16 +51,12 @@
 					</td>
 					<td>{{ classroom.courseNum|default(0) }}</td>
 					<td>
-						{% set taskNums = classroomTaskNums[classroom.id]|default([]) %}
-						{{ taskNums.compulsoryTaskNum|default(0) }}
-						{% if taskNums.electiveTaskNum|default(0) %}（{{ taskNums.electiveTaskNum }}）
+						{{ classroom.compulsoryTaskNum|default(0) }}
+						{% if classroom.electiveTaskNum|default(0) %}（{{ classroom.electiveTaskNum }}）
 						{% endif %}
 					</td>
 					<td>{{ classroom.studentNum|default(0) }}</td>
-					<td>
-						{% set classroomMemberFinishedNum = classroomMemberFinishedNums[classroom.id]|default([]) %}
-						{{ classroomMemberFinishedNum.finishedMemberCount|default(0) }}
-					</td>
+					<td>{{ classroom.finishedMemberCount|default(0) }}</td>
 					<td>{{ classroom.income|default(0) }}</td>
 
 					<td>

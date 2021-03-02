@@ -131,7 +131,7 @@ class ClassroomCourseDaoImpl extends GeneralDaoImpl implements ClassroomCourseDa
         }
 
         $builder = $this->createQueryBuilder(['classroomIds' => $classroomIds])
-            ->select("{$this->table}.classroomId, SUM(c.compulsoryTaskNum) AS compulsoryTaskNum, SUM(c.electiveTaskNum) AS electiveTaskNum")
+            ->select("{$this->table}.classroomId, IF(SUM(c.compulsoryTaskNum), SUM(c.compulsoryTaskNum), 0) AS compulsoryTaskNum, IF(SUM(c.electiveTaskNum), SUM(c.electiveTaskNum), 0) AS electiveTaskNum")
             ->innerJoin($this->table, 'course_v8', 'c', "{$this->table}.courseId = c.id")
             ->groupBy("{$this->table}.classroomId");
 

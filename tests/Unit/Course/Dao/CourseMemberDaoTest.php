@@ -274,8 +274,12 @@ class CourseMemberDaoTest extends BaseDaoTestCase
 
         $res = [];
         $res[] = $this->getDao()->searchMemberCountGroupByFields(['courseId' => 1], 'courseId', 0, 10);
-        $res[] = $this->getDao()->searchMemberCountGroupByFields(['courseId' => 1, 'userId' => 1], 'courseId', 0,
-            10);
+        $res[] = $this->getDao()->searchMemberCountGroupByFields(
+            ['courseId' => 1, 'userId' => 1],
+            'courseId',
+            0,
+            10
+        );
 
         $this->assertEquals([['courseId' => '1', 'count' => '2']], $res[0]);
         $this->assertEquals([['courseId' => '1', 'count' => '1']], $res[1]);
@@ -365,8 +369,10 @@ class CourseMemberDaoTest extends BaseDaoTestCase
 
         $res = $this->getDao()->searchMemberIds(['unique' => true], ['createdTime' => 'ASC'], 0, 10);
 
-        $this->assertEquals([['userId' => $expected[0]['userId']], ['userId' => $expected[1]['userId']]],
-            $res);
+        $this->assertEquals(
+            [['userId' => $expected[0]['userId']], ['userId' => $expected[1]['userId']]],
+            $res
+        );
     }
 
     public function testUpdateMembers()
@@ -563,6 +569,26 @@ class CourseMemberDaoTest extends BaseDaoTestCase
         $res = $this->getDao()->findMembersNotInClassroomByUserIdAndRoleAndType(1, 'student', 'normal', 0, 2, true);
 
         $this->assertEquals(2, count($res));
+    }
+
+    public function testSumLearnedCompulsoryTaskNumGroupByFields()
+    {
+        $this->mockDataObject(['userId' => 1, 'classroomId' => 1, 'role' => 'student', 'learnedCompulsoryTaskNum' => 1, 'courseId' => 1, 'isLearned' => 1]);
+        $this->mockDataObject(['userId' => 1, 'classroomId' => 1, 'role' => 'student', 'learnedCompulsoryTaskNum' => 2, 'courseId' => 2, 'isLearned' => 1]);
+        $this->mockDataObject(['userId' => 1, 'classroomId' => 2, 'role' => 'student', 'learnedCompulsoryTaskNum' => 2, 'courseId' => 3, 'isLearned' => 1]);
+
+        $result = $this->getDao()->sumLearnedCompulsoryTaskNumGroupByFields(['classroomIds' => 1], ['classroomId', 'userId']);
+        $this->assertEquals([[
+            'userId' => '1',
+            'classroomId' => 1,
+            'learnedCompulsoryTaskNum' => '3',
+        ]], $result);
+
+        $result = $this->getDao()->sumLearnedCompulsoryTaskNumGroupByFields(['userId' => 1], ['userId']);
+        $this->assertEquals([[
+            'userId' => '1',
+            'learnedCompulsoryTaskNum' => '5',
+        ]], $result);
     }
 
     protected function getDefaultMockFields()
