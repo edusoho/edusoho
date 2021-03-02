@@ -168,7 +168,7 @@ class ManageController extends BaseController
 
         $answerRecords = $this->getAnswerRecordService()->search(
             $conditions,
-            [],
+            ['end_time' => 'ASC'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
