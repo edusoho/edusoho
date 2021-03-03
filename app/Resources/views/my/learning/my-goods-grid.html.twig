@@ -5,7 +5,7 @@
 
 	<div class="my-course-item__info">
 		<div class="my-course-item__title text-overflow">
-			<a class="cd-link-major" href="{{ path('goods_show', {id: goods.id}) }}">{{ goods.title }}</a>
+			<a class="cd-link-major" href="{{ path('goods_show', {id: goods.id}) }}">{{ goods.title|raw }}</a>
 		</div>
 
 		<div class="my-course-item__status">

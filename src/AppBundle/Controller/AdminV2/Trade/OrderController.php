@@ -87,6 +87,11 @@ class OrderController extends BaseController
             $conditions['user_id'] = $user ? $user['id'] : -1;
         }
 
+        if (isset($conditions['mobile'])) {
+            $user = $this->getUserService()->getUserByVerifiedMobile($conditions['mobile']);
+            $conditions['user_id'] = $user ? $user['id'] : -1;
+        }
+
         if (!empty($conditions['displayStatus'])) {
             $conditions['statuses'] = $this->container->get('web.twig.order_extension')->getOrderStatusFromDisplayStatus($conditions['displayStatus'], 1);
         }
