@@ -26,10 +26,11 @@ class ItemFilter extends Filter
 
     protected function publicFields(&$item)
     {
-        $questionFilter = new QuestionFilter();
         !empty($item['material']) && $item['material'] = $this->convertAbsoluteUrl($item['material']);
         !empty($item['analysis']) && $item['analysis'] = $this->convertAbsoluteUrl($item['analysis']);
         empty($item['analysis']) && $item['analysis'] = '';
+
+        $questionFilter = new QuestionFilter();
         $questionFilter->filters($item['questions']);
     }
 }
