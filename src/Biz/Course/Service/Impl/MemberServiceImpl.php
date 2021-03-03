@@ -1386,6 +1386,16 @@ class MemberServiceImpl extends BaseService implements MemberService
         $this->getMemberDao()->batchUpdate(ArrayToolkit::column($updateMembers, 'id'), $updateMembers);
     }
 
+    public function refreshMemberFinishData($courseId, $userId)
+    {
+
+    }
+
+    public function refreshCourseMembersFinishData($courseId)
+    {
+
+    }
+
     protected function createOrder($goodsSpecsId, $userId, $data)
     {
         $courseProduct = $this->getOrderFacadeService()->getOrderProduct('course', ['targetId' => $goodsSpecsId]);
