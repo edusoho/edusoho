@@ -320,6 +320,7 @@ activity.manage.choose_teacher_hint: 请选择老师
 activity.manage.finished_tips: >
   <span class="color-primary">恭喜！你已完成该任务</span>
 
+announcement.create_datetime.error.hint: 公告发布时间不能晚于结束时间
 announcement.delete_hint: 真的要删除该公告吗?
 
 auth.login_bind_choose.service_agreement_hint: 勾选同意此服务协议，才能继续注册！
