@@ -318,11 +318,7 @@ class ExerciseController extends BaseController
             $assessments = $this->getAssessmentService()->findAssessmentsByIds(ArrayToolkit::column($assessmentExercises, 'assessmentId'));
         }
 
-        //考试按添加时间正序展示
-        $assessmentsByTime = [];
-        foreach ($assessmentExercises as $key => $assessmentExercise) {
-            $assessmentsByTime[$key] = $assessments[$assessmentExercise['assessmentId']];
-        }
+        array_multisort(ArrayToolkit::column($assessmentExercises, 'assessmentId'), SORT_ASC, $assessments);
 
         $records = [];
         if ($member) {
@@ -341,7 +337,7 @@ class ExerciseController extends BaseController
             'member' => $member,
             'records' => $records,
             'questionBank' => $this->getQuestionBankService()->getQuestionBank($exercise['questionBankId']),
-            'assessments' => $assessmentsByTime,
+            'assessments' => $assessments,
             'paginator' => $paginator,
             'assessmentExercises' => ArrayToolkit::index($assessmentExercises, 'assessmentId'),
             'previewAs' => $previewAs,

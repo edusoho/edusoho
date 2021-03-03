@@ -46,19 +46,14 @@ class AssessmentExerciseController extends BaseController
         );
 
         $assessments = $this->getAssessmentService()->findAssessmentsByIds(ArrayToolkit::column($assessmentExercises, 'assessmentId'));
-
-        //考试按添加时间正序展示
-        $assessmentsByTime = [];
-        foreach ($assessmentExercises as $key => $assessmentExercise) {
-            $assessmentsByTime[$key] = $assessments[$assessmentExercise['assessmentId']];
-        }
+        array_multisort(ArrayToolkit::column($assessmentExercises, 'assessmentId'), SORT_ASC, $assessments);
 
         return $this->render('item-bank-exercise-manage/assessment-exercise/index.html.twig', [
             'exercise' => $exercise,
             'questionBank' => $this->getQuestionBankService()->getQuestionBank($exercise['questionBankId']),
             'modules' => $modules,
             'moduleId' => $moduleId,
-            'assessments' => $assessmentsByTime,
+            'assessments' => $assessments,
             'paginator' => $paginator,
             'assessmentExercises' => ArrayToolkit::index($assessmentExercises, 'assessmentId'),
         ]);
