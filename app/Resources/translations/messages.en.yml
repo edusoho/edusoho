@@ -10300,3 +10300,12 @@ exam_bank.analysis.data_large_loading_finish: Data loading finish
 exam_bank.analysis.data_large_info: refresh date：%date%，do not fresh because of data to large
 exam_bank.analysis.data_large_loading_btn: Force refresh
 activity_manage.video.finish_tips: The completion conditions of video playback time and page stay time are subject to cumulative learning time
+
+
+classroom.manage.data_statictics: Data Statistics
+classroom.manage.data_statistics.overview.student_num: Student Number
+classroom.manage.data_statistics.overview.auditor_num: Auditor
+classroom.manage.data_statistics.overview.finished_num: Finished Num
+classroom.manage.data_statistics.overview.sumtime: Sum LearnTime (minute)
+classroom.manage.data_statistics.overview.average_time: Average LearnTime (minute)
+classroom.manage.data_statistics.overview.finished_num_tips: Take the number of people who have reached 100% of the learning progress of all class hours in the class. If new courses or class hours are added to the class, the number of people who have completed the tasks will change accordingly.

@@ -2562,8 +2562,8 @@ classroom_manage_students:
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:students }
 
 classroom_manage_aduitor:
-    path: /classroom/{id}/manage/aduitor
-    defaults: { _controller: AppBundle:Classroom/ClassroomManage:aduitor }
+    path: /classroom/{id}/manage/auditor
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:auditor }
 
 classroom_manage_record:
     path: /classroom/{id}/manage/record/{type}
