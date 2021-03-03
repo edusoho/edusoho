@@ -311,12 +311,14 @@ class ExerciseController extends BaseController
         if ($exercise['assessmentEnable']) {
             $assessmentExercises = $this->getAssessmentExerciseService()->search(
                 ['moduleId' => $moduleId],
-                ['createdTime' => 'DESC'],
+                ['createdTime' => 'ASC'],
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );
             $assessments = $this->getAssessmentService()->findAssessmentsByIds(ArrayToolkit::column($assessmentExercises, 'assessmentId'));
         }
+
+        array_multisort(ArrayToolkit::column($assessmentExercises, 'assessmentId'), SORT_ASC, $assessments);
 
         $records = [];
         if ($member) {

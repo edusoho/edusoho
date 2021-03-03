@@ -1,6 +1,6 @@
 <template>
     <div class="cd-container">
-        <div class="product-breadcrumb"><a href="/">首页</a> / {{goods.title}}</div>
+        <div class="product-breadcrumb"><a href="/">首页</a> / {{goods.title|removeHtml}}</div>
         <detail :drp-recruit-switch="drpRecruitSwitch" :goodsSetting="goodsSetting" :timestamp="timestamp" :goods="goods" :currentSku="currentSku" @changeSku="changeSku" :current-url="currentUrl" :is-user-login="isUserLogin">
         </detail>
 
@@ -254,6 +254,19 @@
                     this.flag = true;
                 }, 300);
             },
+        },
+        filters: {
+            removeHtml(input) {
+                return input && input.replace(/<(?:.|\n)*?>/gm, '')
+                    .replace(/(&rdquo;)/g, '\"')
+                    .replace(/&ldquo;/g, '\"')
+                    .replace(/&mdash;/g, '-')
+                    .replace(/&nbsp;/g, '')
+                    .replace(/&amp;/g, '&')
+                    .replace(/&gt;/g, '>')
+                    .replace(/&lt;/g, '<')
+                    .replace(/<[\w\s"':=\/]*/, '');
+            }
         },
         created() {
             window.addEventListener("scroll", this.handleScroll);
