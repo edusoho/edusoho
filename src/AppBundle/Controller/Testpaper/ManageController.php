@@ -167,9 +167,10 @@ class ManageController extends BaseController
             10
         );
 
+        $orderBy = in_array($status, ['reviewing', 'finished']) ? ['end_time' => 'ASC'] : ['updated_time' => 'DESC'];
         $answerRecords = $this->getAnswerRecordService()->search(
             $conditions,
-            [],
+            $orderBy,
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

@@ -288,9 +288,14 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $result;
     }
 
-    public function download($globalId)
+    public function download($globalId, $ssl = false)
     {
-        $download = $this->createApi('leaf')->get("/resources/{$globalId}/download");
+        $params = [];
+        if ($ssl) {
+            $params['protocol'] = 'https';
+        }
+
+        $download = $this->createApi('leaf')->get("/resources/{$globalId}/download", $params);
 
         return $download;
     }

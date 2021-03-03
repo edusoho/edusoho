@@ -373,6 +373,7 @@ activity.manage.choose_teacher_hint: Please choose a teacher
 activity.manage.finished_tips: >
   <span class="color-primary">Congratulations! You have completed this task</span>
 
+announcement.create_datetime.error.hint: The announcement start time cannot be later than the end time
 announcement.delete_hint: Really want to delete the announcement?
 
 auth.login_bind_choose.service_agreement_hint: Check to agree to this service agreement before continue to register!
