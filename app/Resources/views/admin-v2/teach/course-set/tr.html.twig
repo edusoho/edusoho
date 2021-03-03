@@ -9,7 +9,7 @@
   <td>{{ courseSet.id }}</td>
   <td>
     <a href="{{ path('course_set_show', {id: courseSet.id}) }}"
-       target="_blank"><strong>{{ courseSet.title }}</strong></a>
+       target="_blank"><strong>{{ courseSet.title|raw }}</strong></a>
     {% if filter == 'classroom' %}
       {% set classroom = classrooms[courseSet.id]|default(null) %}
       {% if not classroom or courseSet.parentId == 0 %}
