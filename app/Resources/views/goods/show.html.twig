@@ -2,7 +2,7 @@
 
 {% do script(['libs/vue.js', 'libs/jquery-countdown.js', 'app/js/goods/show/index.js', 'app/js/courseset/show/tasks/index.js']) %}
 
-{% block title %}{{ goods.title }} - {{ parent() }}{% endblock %}
+{% block title %}{{ goods.title|raw }} - {{ parent() }}{% endblock %}
 {% block full_content %}
   <div id="show-product-page" class="" style=""
        data-goods="{{ goods|json_encode }}"

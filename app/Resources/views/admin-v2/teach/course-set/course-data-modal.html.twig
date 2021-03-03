@@ -2,7 +2,7 @@
 {% extends 'old-bootstrap-modal-layout.html.twig' %}
 
 {% block title %}
-  {{ 'admin.course_manage.statistics.modal_title'|trans({'%title%': '《' ~ courseSet.title ~ '》'}) }}
+  {{ 'admin.course_manage.statistics.modal_title'|trans({'%title%': '《' ~ courseSet.title ~ '》'})|raw }}
   <div class="js-tooltip-twig-widget" style="display:inline-block;">
     <span class="glyphicon glyphicon-question-sign text-muted js-twig-widget-tips" data-placement="right" href="javascript:;"></span>
     <div class="js-twig-widget-html" style="display:none;">
