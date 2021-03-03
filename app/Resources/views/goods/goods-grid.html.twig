@@ -1,7 +1,11 @@
 <div class="course-item">
   <div class="course-img">
     <a href="{{ path('goods_show', {id: goods.id}) }}" target="_blank">
-      {{ lazy_img(filepath(goods.images.large|default(null), 'courseSet.png'), 'img-responsive', goods.title) }}
+      {% if goods.images.large|default(null) %}
+        {{ lazy_img(filepath(goods.images.large, 'courseSet.png'), 'img-responsive', goods.title) }}
+      {% else %}
+        {{ lazy_img(filepath(defaultSetting['course.png']|default(''), 'course.png'), 'img-responsive') }}
+      {% endif %}
     </a>
   </div>
   <div class="course-info">
