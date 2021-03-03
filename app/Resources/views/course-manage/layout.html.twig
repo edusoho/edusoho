@@ -32,7 +32,7 @@
     <li class="text-overflow"><a
         href="{{ path('my_teaching_course_sets') }}">{{ 'my.teaching.course_set_menu'|trans }}</a></li>
     <li class="text-overflow courseset-header-section__breadcrumb">
-      <a class="active" title="{{ courseSet.title }}">{{ courseSet.title }}</a>
+      <a class="active" title="{{ courseSet.title|raw }}">{{ courseSet.title|raw }}</a>
     </li>
   </ol>
 {% endblock %}
