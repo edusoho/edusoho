@@ -15,6 +15,7 @@ use Biz\Course\Service\MemberService;
 use Biz\Role\Util\PermissionBuilder;
 use Biz\System\Service\LogService;
 use Biz\User\CurrentUser;
+use Biz\User\Dao\UserDao;
 use Biz\User\Service\UserService;
 
 class ClassroomServiceTest extends BaseTestCase
@@ -350,8 +351,10 @@ class ClassroomServiceTest extends BaseTestCase
         $courseSet = $this->mockCourseSet();
         $courseSet = $this->getCourseSetService()->createCourseSet($courseSet);
 
-        $copyCourses = $this->getClassroomService()->addCoursesToClassroom($classroom['id'],
-            [$course1['id'], $course2['id']]);
+        $copyCourses = $this->getClassroomService()->addCoursesToClassroom(
+            $classroom['id'],
+            [$course1['id'], $course2['id']]
+        );
         $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
 
         $this->assertEquals(2, count($courses));
@@ -1281,8 +1284,10 @@ class ClassroomServiceTest extends BaseTestCase
 
         $classroom = $this->getClassroomService()->addClassroom($textClassroom);
         $course1 = $this->createCourse('Test Course 1');
-        $this->getCourseMemberService()->setCourseTeachers($course1['id'],
-            [['id' => $teacher1['id'], 'isVisible' => 1], ['id' => $teacher2['id'], 'isVisible' => 1]]);
+        $this->getCourseMemberService()->setCourseTeachers(
+            $course1['id'],
+            [['id' => $teacher1['id'], 'isVisible' => 1], ['id' => $teacher2['id'], 'isVisible' => 1]]
+        );
         $courseIds = [$course1['id']];
         $this->getClassroomService()->addCoursesToClassroom($classroom['id'], $courseIds);
 
@@ -2133,8 +2138,10 @@ class ClassroomServiceTest extends BaseTestCase
         ];
         $course1 = $this->createCourse('Test Course 1');
 
-        $this->getCourseMemberService()->setCourseTeachers($course1['id'],
-            [['id' => $teacher1['id'], 'isVisible' => 1], ['id' => $teacher2['id'], 'isVisible' => 1]]);
+        $this->getCourseMemberService()->setCourseTeachers(
+            $course1['id'],
+            [['id' => $teacher1['id'], 'isVisible' => 1], ['id' => $teacher2['id'], 'isVisible' => 1]]
+        );
 
         $courseIds = [$course1['id']];
 
@@ -2953,7 +2960,7 @@ class ClassroomServiceTest extends BaseTestCase
                 [
                     'functionName' => 'update',
                     'returnValue' => ['id' => 1, 'userId' => 1],
-//                    'withParams' => array(1, array('lastLearnTime' => time(), 'learnedNum' => 1)),
+                    //                    'withParams' => array(1, array('lastLearnTime' => time(), 'learnedNum' => 1)),
                 ],
             ]
         );
@@ -3039,32 +3046,56 @@ class ClassroomServiceTest extends BaseTestCase
 
     public function testTryFreeJoin()
     {
-        $this->mockBiz(
-            'Classroom:ClassroomDao',
+        $classroom = $this->getClassroomDao()->create(['title' => 'test classroom title', 'hotSeq' => 10, 'status' => 'published', 'income' => '100']);
+        $this->mockBiz('OrderFacade:OrderFacadeService', [
             [
-                [
-                    'functionName' => 'get',
-                    'returnValue' => [
-                        'id' => 1,
-                        'title' => 'title',
-                        'status' => 'published',
-                        'buyable' => 1,
-                        'expiryMode' => 'forever',
-                        'price' => 0,
-                        'expiryValue' => 0,
-                        'middlePicture' => 'middlePicture',
-                        'about' => 'test',
-                        'showable' => 1,
-                    ],
-                    'withParams' => [1],
-                ],
-                [
-                    'functionName' => 'update',
-                    'withParams' => [1, ['studentNum' => '1', 'auditorNum' => '0']],
-                ],
-            ]
-        );
-        $this->getClassroomService()->tryFreeJoin(1);
+                'functionName' => 'sumOrderItemPayAmount',
+                'returnValue' => $classroom['income'],
+            ],
+        ]);
+        $this->mockBiz('Product:ProductService', [
+            [
+                'functionName' => 'getProductByTargetIdAndType',
+                'returnValue' => ['id' => 1],
+            ],
+        ]);
+        $this->mockBiz('Goods:GoodsService', [
+            [
+                'functionName' => 'getGoodsSpecsByProductIdAndTargetId',
+                'returnValue' => ['id' => 2],
+            ],
+        ]);
+
+        $user = $this->getUserDao()->create([
+            'nickname' => 'testUser',
+            'email' => 'test@test.com',
+            'password' => 'test',
+            'salt' => 'test',
+            'type' => 'default',
+            'uuid' => 'test123',
+            'roles' => ['ROLE_USER'],
+            'locked' => 0,
+        ]);
+
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray([
+            'id' => $user['id'],
+            'nickname' => $user['nickname'],
+            'email' => $user['email'],
+            'password' => $user['password'],
+            'currentIp' => '127.0.0.1',
+            'roles' => ['ROLE_USER'],
+            'locked' => $user['locked'],
+        ]);
+
+        $currentUser->setPermissions(PermissionBuilder::instance()->getPermissionsByRoles($currentUser->getRoles()));
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+
+        $before = $this->getClassroomMemberDao()->getByClassroomIdAndUserId($classroom['id'], $user['id']);
+        $this->getClassroomService()->tryFreeJoin($classroom['id']);
+        $after = $this->getClassroomMemberDao()->getByClassroomIdAndUserId($classroom['id'], $user['id']);
+        $this->assertEmpty($before);
+        $this->assertNotEmpty($after);
     }
 
     public function testFindMembersByMemberIds()
@@ -3098,6 +3129,70 @@ class ClassroomServiceTest extends BaseTestCase
     {
         $result = ReflectionUtils::invokeMethod($this->getClassroomService(), 'getOrderBys', ['hitNum']);
         $this->assertEquals('DESC', $result['hitNum']);
+    }
+
+    public function testSearchClassroomsWithInfo()
+    {
+        $classroom = $this->getClassroomDao()->create(['title' => 'classroom title', 'hotSeq' => 10]);
+        $this->mockBiz('Classroom:ClassroomCourseDao', [
+            [
+                'functionName' => 'countTaskNumByClassroomIds',
+                'withParams' => [[$classroom['id']]],
+                'returnValue' => [['classroomId' => $classroom['id'], 'compulsoryTaskNum' => 3, 'electiveTaskNum' => 1]],
+            ],
+        ]);
+
+        $this->mockBiz('Course:CourseMemberDao', [
+            [
+                'functionName' => 'sumLearnedCompulsoryTaskNumGroupByFields',
+                'withParams' => [['classroomIds' => [$classroom['id']]], ['classroomId', 'userId']],
+                'returnValue' => [
+                    ['classroomId' => $classroom['id'], 'learnedCompulsoryTaskNum' => 3, 'userId' => 2],
+                    ['classroomId' => $classroom['id'], 'learnedCompulsoryTaskNum' => 2, 'userId' => 1],
+                ],
+            ],
+        ]);
+
+        $result = $this->getClassroomService()->searchClassroomsWithInfo([], [], 0, 1, []);
+        $expected = array_merge($classroom, [
+            'compulsoryTaskNum' => 3,
+            'electiveTaskNum' => 1,
+            'finishedMemberCount' => 1,
+        ]);
+
+        $this->assertEquals([$classroom['id'] => $expected], $result);
+    }
+
+    public function testCalClassroomsTaskNums()
+    {
+        $classroom = $this->getClassroomDao()->create(['title' => 'classroom title', 'hotSeq' => 10]);
+        $this->mockBiz('Classroom:ClassroomCourseDao', [
+            [
+                'functionName' => 'countTaskNumByClassroomIds',
+                'withParams' => [[$classroom['id']]],
+                'returnValue' => [['classroomId' => $classroom['id'], 'compulsoryTaskNum' => 3, 'electiveTaskNum' => 1]],
+            ],
+        ]);
+
+        $this->mockBiz('Course:CourseMemberDao', [
+            [
+                'functionName' => 'sumLearnedCompulsoryTaskNumGroupByFields',
+                'withParams' => [['classroomIds' => [$classroom['id']]], ['classroomId', 'userId']],
+                'returnValue' => [
+                    ['classroomId' => $classroom['id'], 'learnedCompulsoryTaskNum' => 3, 'userId' => 2],
+                    ['classroomId' => $classroom['id'], 'learnedCompulsoryTaskNum' => 2, 'userId' => 1],
+                ],
+            ],
+        ]);
+
+        $result = $this->getClassroomService()->calClassroomsTaskNums([$classroom], true);
+        $expected = [$classroom['id'] => array_merge($classroom, [
+            'compulsoryTaskNum' => 3,
+            'electiveTaskNum' => 1,
+            'finishedMemberCount' => 1,
+        ])];
+
+        $this->assertEquals($expected, $result);
     }
 
     protected function mockCourse($title = 'Test Course 1')
@@ -3228,5 +3323,13 @@ class ClassroomServiceTest extends BaseTestCase
     protected function getLogService()
     {
         return $this->createService('System:LogService');
+    }
+
+    /**
+     * @return UserDao
+     */
+    protected function getUserDao()
+    {
+        return $this->createDao('User:UserDao');
     }
 }
