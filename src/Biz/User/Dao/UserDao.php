@@ -14,8 +14,6 @@ interface UserDao extends GeneralDaoInterface
 
     public function getUnDestroyedUserByNickname($nickname);
 
-    public function getUnDestroyedUserByNicknameOrVerifiedMobile($value);
-
     public function getByUUID($uuid);
 
     public function countByMobileNotEmpty();
