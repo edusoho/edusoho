@@ -29,6 +29,7 @@ class ItemFilter extends Filter
         $questionFilter = new QuestionFilter();
         !empty($item['material']) && $item['material'] = $this->convertAbsoluteUrl($item['material']);
         !empty($item['analysis']) && $item['analysis'] = $this->convertAbsoluteUrl($item['analysis']);
+        empty($item['analysis']) && $item['analysis'] = '';
         $questionFilter->filters($item['questions']);
     }
 }
