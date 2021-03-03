@@ -456,6 +456,7 @@ order.buyer.username: Username
 order.buyer.true_name: True name
 order.buyer.email: Email
 order.buyer.contact: Contact
+order.buyer.mobile: Mobile
 order.id: 'Order'
 order.token_id: 'Order taken id'
 order.sn: 'SN'

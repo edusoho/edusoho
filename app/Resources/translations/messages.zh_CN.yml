@@ -542,6 +542,7 @@ order.buyer.username: 用户名
 order.buyer.true_name: 真实姓名
 order.buyer.email: 邮箱
 order.buyer.contact: 联系电话
+order.buyer.mobile: 手机号
 order.id: 订单号
 order.token_id: 商户订单号
 order.sn: 流水号
@@ -633,6 +634,7 @@ order.pay: 订单支付
 order.success: 订单完成
 order.refund.notify_admin: >
   用户%nickname%申请退款 <a href='%targetUrl%'>%title%</a>，请审核
+
 
 # 支付中心
 pay_center: 支付中心
