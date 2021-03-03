@@ -166,7 +166,7 @@ class CloudFileController extends BaseController
         ]);
     }
 
-    public function downloadAction($globalId)
+    public function downloadAction(Request $request, $globalId)
     {
         $ssl = $request->isSecure() ? true : false;
         $download = $this->getCloudFileService()->download($globalId, $ssl);
