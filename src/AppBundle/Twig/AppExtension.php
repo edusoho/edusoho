@@ -47,6 +47,7 @@ class AppExtension extends \Twig_Extension
             new \Twig_SimpleFunction('course_cover', array($this, 'courseCover')),
             new \Twig_SimpleFunction('open_course_cover', array($this, 'openCourseCover')),
             new \Twig_SimpleFunction('course_set_cover', array($this, 'courseSetCover')),
+            new \Twig_SimpleFunction('goods_cover', array($this, 'goodsCover')),
             //@deprecated 请勿使用，后续将删除  2017-03-30
             //@see WebExtension#avatarPath
             new \Twig_SimpleFunction('user_avatar', array($this, 'userAvatar')),
@@ -224,6 +225,25 @@ class AppExtension extends \Twig_Extension
 
         if (empty($coverPath)) {
             $settings = $this->getSettingService()->get('default');
+            $coverPath = !empty($settings['course.png']) && !empty($settings['defaultCoursePicture']) ? $settings['course.png'] : null;
+        }
+
+        return $coverPath;
+    }
+
+    public function goodsCover($goods, $type = 'middle')
+    {
+        $coverPath = null;
+        if (!empty($goods)) {
+            $cover = $goods['images'];
+            if (!empty($cover) && !empty($cover[$type])) {
+                $coverPath = $cover[$type];
+            }
+        }
+
+        if (empty($coverPath)) {
+            $settings = $this->getSettingService()->get('default');
+            // todo:暂时使用自定义默认课程图片
             $coverPath = !empty($settings['course.png']) && !empty($settings['defaultCoursePicture']) ? $settings['course.png'] : null;
         }
 
