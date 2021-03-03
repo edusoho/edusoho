@@ -3,7 +3,7 @@
   {% if subNavs %}
     <ul class="dropdown-menu" role="menu">
       {% for subNav in subNavs if subNav.isOpen %}
-        <li><a href="{{ subNav.url|navigation_url }}"  {% if subNav.isNewWin %}target="_blank"{% endif %}>{{ subNav.name }}</a></li>
+        <li><a href="z{{ subNav.url|navigation_url }}"  {% if subNav.isNewWin %}target="_blank"{% endif %}>{{ subNav.name }}</a></li>
       {% endfor %}
     </ul>
   {% endif %}
