@@ -34,6 +34,15 @@ class CoursePlanLearnDailyDaoImpl extends AdvancedDaoImpl implements CoursePlanL
         return $this->db()->fetchAssoc($sql, [$courseId])['learnedTime'];
     }
 
+    public function sumLearnedTimeGroupByUserId(array $conditions)
+    {
+        $builder = $this->createQueryBuilder($conditions)
+        ->select('userId, SUM(sumTime) AS learnedTime')
+        ->groupBy('userId');
+
+        return $builder->execute()->fetchAll();
+    }
+
     public function declares()
     {
         return [

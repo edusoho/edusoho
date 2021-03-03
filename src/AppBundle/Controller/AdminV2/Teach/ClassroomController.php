@@ -9,6 +9,7 @@ use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\Service\CourseService;
 use Biz\System\Service\SettingService;
 use Biz\Taxonomy\Service\CategoryService;
+use Biz\Visualization\Service\CoursePlanLearnDataDailyStatisticsService;
 use Symfony\Component\HttpFoundation\Request;
 
 class ClassroomController extends BaseController
@@ -297,7 +298,7 @@ class ClassroomController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $this->getClassroomService()->countClassrooms($conditions),
-            10
+            20
         );
 
         $classrooms = $this->getClassroomService()->searchClassroomsWithInfo(
@@ -309,6 +310,40 @@ class ClassroomController extends BaseController
 
         return $this->render('admin-v2/teach/classroom/classroom-statistics.html.twig', [
             'classrooms' => $classrooms,
+            'paginator' => $paginator,
+        ]);
+    }
+
+    public function memberStatisticsAction(Request $request, $id)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($id);
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getClassroomService()->getClassroomStudentCount($id),
+            20
+        );
+
+        $members = $this->getClassroomService()->findClassroomStudents($id, $paginator->getOffsetCount(), $paginator->getPerPageCount());
+        $users = $this->getUserService()->findUsersByIds(array_column($members, 'userId'));
+        $classroomCourses = $this->getClassroomService()->findCoursesByClassroomId($id);
+
+        $usersLearnedTime = [];
+        if (!empty($users) && !empty($classroomCourses)) {
+            $usersLearnedTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeGroupByUserId([
+                'userIds' => array_column($members, 'userId'), array_column($classroomCourses, null, 'courseId'),
+            ]);
+            $usersLearnedTime = array_column($usersLearnedTime, null, 'userId');
+        }
+
+        foreach ($members as &$member) {
+            $member['learnedTime'] = empty($usersLearnedTime[$member['userId']]) ? 0 : round($usersLearnedTime[$member['userId']]['learnedTime'] / 60, 1);
+        }
+
+        return $this->render('admin-v2/teach/classroom/classroom-member-statistics.html.twig', [
+            'classroom' => $classroom,
+            'members' => $members,
+            'totalLearnedTime' => round(array_sum(array_column($usersLearnedTime, 'learnedTime')) / 60, 1),
+            'users' => $users,
             'paginator' => $paginator,
         ]);
     }
@@ -379,5 +414,13 @@ class ClassroomController extends BaseController
     private function getCategoryService()
     {
         return $this->createService('Taxonomy:CategoryService');
+    }
+
+    /**
+     * @return CoursePlanLearnDataDailyStatisticsService
+     */
+    protected function getCoursePlanLearnDataDailyStatisticsService()
+    {
+        return $this->createService('Visualization:CoursePlanLearnDataDailyStatisticsService');
     }
 }

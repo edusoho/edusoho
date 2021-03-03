@@ -218,6 +218,8 @@ interface ClassroomService
 
     public function findCoursesByClassroomId($classroomId);
 
+    public function getClassroomStudentCount($classroomId);
+
     public function findClassroomStudents($classroomId, $start, $limit);
 
     public function findClassroomMembersByRole($classroomId, $role, $start, $limit);
@@ -288,4 +290,6 @@ interface ClassroomService
     public function searchClassroomsWithInfo($conditions, $orderBy, $start, $limit, $columns = []);
 
     public function calClassroomsTaskNums(array $classrooms, $withMemberInfo = false);
+
+    public function updateMemberFieldsByClassroomIdAndUserId($classroomId, $userId, array $fields);
 }
