@@ -171,4 +171,8 @@ interface MemberService
     public function countStudentMemberByCourseSetId($courseSetId);
 
     public function recountLearningDataByCourseId($courseId);
+
+    public function refreshMemberFinishData($courseId, $userId);
+
+    public function refreshCourseMembersFinishData($courseId);
 }

@@ -10329,3 +10329,18 @@ admin.classroom_manage.statistics.member.finish_time_th: Finish Time
 admin.classroom_manage.statistics.member.learn_time_th: Learned Time
 admin.classroom_manage.statistics.member.question_num_th: Question Number
 admin.classroom_manage.statistics.member.note_num_th: Note Number
+admin.classroom_manage.statistics.course.title: <%classroom%> Course Data
+admin.classroom_manage.statistics.course.title_tips: >
+  <span style='font-size:14px'>
+    1.The data of the accumulated learning time and per capita learning time of the task are statistics of yesterday and before.<br/>
+    2.Other statistical data items are real-time data.<br/>
+  </span>
+admin.classroom_manage.statistics.course.total_learn_time: 'The course is accumulated study time (minutes): %mins%'
+
+classroom.manage.data_statictics: Data Statistics
+classroom.manage.data_statistics.overview.student_num: Student Number
+classroom.manage.data_statistics.overview.auditor_num: Auditor
+classroom.manage.data_statistics.overview.finished_num: Finished Num
+classroom.manage.data_statistics.overview.sumtime: Sum LearnTime (minute)
+classroom.manage.data_statistics.overview.average_time: Average LearnTime (minute)
+classroom.manage.data_statistics.overview.finished_num_tips: Take the number of people who have reached 100% of the learning progress of all class hours in the class. If new courses or class hours are added to the class, the number of people who have completed the tasks will change accordingly.

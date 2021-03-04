@@ -11593,9 +11593,10 @@ admin.classroom_manage.statistics.course.title_tips: >
   </span>
 admin.classroom_manage.statistics.course.total_learn_time: 课程被累加学习时长（分）：%mins%
 
-
-
-
-
-
-
+classroom.manage.data_statictics: 数据概览
+classroom.manage.data_statistics.overview.student_num: 正式学员总数
+classroom.manage.data_statistics.overview.auditor_num: 旁听生
+classroom.manage.data_statistics.overview.finished_num: 完成人数
+classroom.manage.data_statistics.overview.sumtime: 累加学习时长(分)
+classroom.manage.data_statistics.overview.average_time: 人均学习时长(分)
+classroom.manage.data_statistics.overview.finished_num_tips: 取班级中所有课时任务学习进度均为100%的人数，若班级中新增了课程或课时，则完成人数会随之变更。
