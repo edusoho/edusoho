@@ -25,7 +25,7 @@ class ClassroomStatisticsExporter extends Exporter
     //获得导出正文内容
     public function getContent($start, $limit)
     {
-        $classrooms = $this->getClassroomService()->searchClassroomsWithInfo(
+        $classrooms = $this->getClassroomService()->searchClassroomsWithStatistics(
             $this->conditions,
             ['createdTime' => 'desc'],
             $start,

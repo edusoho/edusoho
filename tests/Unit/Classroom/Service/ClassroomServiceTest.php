@@ -3131,7 +3131,7 @@ class ClassroomServiceTest extends BaseTestCase
         $this->assertEquals('DESC', $result['hitNum']);
     }
 
-    public function testSearchClassroomsWithInfo()
+    public function testsearchClassroomsWithStatistics()
     {
         $classroom = $this->getClassroomDao()->create(['title' => 'classroom title', 'hotSeq' => 10]);
         $this->mockBiz('Classroom:ClassroomCourseDao', [
@@ -3142,18 +3142,14 @@ class ClassroomServiceTest extends BaseTestCase
             ],
         ]);
 
-        $this->mockBiz('Course:CourseMemberDao', [
+        $this->mockBiz('Classroom:ClassroomMemberDao', [
             [
-                'functionName' => 'sumLearnedCompulsoryTaskNumGroupByFields',
-                'withParams' => [['classroomIds' => [$classroom['id']]], ['classroomId', 'userId']],
-                'returnValue' => [
-                    ['classroomId' => $classroom['id'], 'learnedCompulsoryTaskNum' => 3, 'userId' => 2],
-                    ['classroomId' => $classroom['id'], 'learnedCompulsoryTaskNum' => 2, 'userId' => 1],
-                ],
+                'functionName' => 'count',
+                'returnValue' => 1,
             ],
         ]);
 
-        $result = $this->getClassroomService()->searchClassroomsWithInfo([], [], 0, 1, []);
+        $result = $this->getClassroomService()->searchClassroomsWithStatistics([], [], 0, 1, []);
         $expected = array_merge($classroom, [
             'compulsoryTaskNum' => 3,
             'electiveTaskNum' => 1,
@@ -3174,14 +3170,10 @@ class ClassroomServiceTest extends BaseTestCase
             ],
         ]);
 
-        $this->mockBiz('Course:CourseMemberDao', [
+        $this->mockBiz('Classroom:ClassroomMemberDao', [
             [
-                'functionName' => 'sumLearnedCompulsoryTaskNumGroupByFields',
-                'withParams' => [['classroomIds' => [$classroom['id']]], ['classroomId', 'userId']],
-                'returnValue' => [
-                    ['classroomId' => $classroom['id'], 'learnedCompulsoryTaskNum' => 3, 'userId' => 2],
-                    ['classroomId' => $classroom['id'], 'learnedCompulsoryTaskNum' => 2, 'userId' => 1],
-                ],
+                'functionName' => 'count',
+                'returnValue' => 1,
             ],
         ]);
 

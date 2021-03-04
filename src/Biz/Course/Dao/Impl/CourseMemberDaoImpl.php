@@ -189,16 +189,6 @@ class CourseMemberDaoImpl extends AdvancedDaoImpl implements CourseMemberDao
         return $builder->execute()->fetchAll() ?: [];
     }
 
-    public function sumLearnedCompulsoryTaskNumGroupByFields($conditions, $groupBy)
-    {
-        $selectFields = is_array($groupBy) ? implode(',', $groupBy) : $groupBy;
-        $builder = $this->createQueryBuilder($conditions)
-            ->select('IF(SUM(learnedCompulsoryTaskNum), SUM(learnedCompulsoryTaskNum), 0) as learnedCompulsoryTaskNum, '.$selectFields)
-            ->addGroupBy($groupBy);
-
-        return $builder->execute()->fetchAll();
-    }
-
     public function findByUserIdAndRole($userId, $role)
     {
         $sql = "SELECT * FROM {$this->table()} WHERE userId = ? AND role =  ?";

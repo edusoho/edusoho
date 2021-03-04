@@ -571,26 +571,6 @@ class CourseMemberDaoTest extends BaseDaoTestCase
         $this->assertEquals(2, count($res));
     }
 
-    public function testSumLearnedCompulsoryTaskNumGroupByFields()
-    {
-        $this->mockDataObject(['userId' => 1, 'classroomId' => 1, 'role' => 'student', 'learnedCompulsoryTaskNum' => 1, 'courseId' => 1, 'isLearned' => 1]);
-        $this->mockDataObject(['userId' => 1, 'classroomId' => 1, 'role' => 'student', 'learnedCompulsoryTaskNum' => 2, 'courseId' => 2, 'isLearned' => 1]);
-        $this->mockDataObject(['userId' => 1, 'classroomId' => 2, 'role' => 'student', 'learnedCompulsoryTaskNum' => 2, 'courseId' => 3, 'isLearned' => 1]);
-
-        $result = $this->getDao()->sumLearnedCompulsoryTaskNumGroupByFields(['classroomIds' => 1], ['classroomId', 'userId']);
-        $this->assertEquals([[
-            'userId' => '1',
-            'classroomId' => 1,
-            'learnedCompulsoryTaskNum' => '3',
-        ]], $result);
-
-        $result = $this->getDao()->sumLearnedCompulsoryTaskNumGroupByFields(['userId' => 1], ['userId']);
-        $this->assertEquals([[
-            'userId' => '1',
-            'learnedCompulsoryTaskNum' => '5',
-        ]], $result);
-    }
-
     protected function getDefaultMockFields()
     {
         return [

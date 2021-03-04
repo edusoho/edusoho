@@ -136,6 +136,4 @@ interface CourseMemberDao extends GeneralDaoInterface
     public function searchMemberCountsByConditionsGroupByCreatedTimeWithFormat($conditions, $format = '%Y-%m-%d');
 
     public function isFieldExist($filedName);
-
-    public function sumLearnedCompulsoryTaskNumGroupByFields($conditions, $groupBy);
 }

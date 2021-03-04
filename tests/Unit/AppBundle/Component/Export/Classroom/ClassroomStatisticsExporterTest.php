@@ -41,7 +41,7 @@ class ClassroomStatisticsExporterTest extends BaseTestCase
         ];
         $this->mockBiz('Classroom:ClassroomService', [
             [
-                'functionName' => 'searchClassroomsWithInfo',
+                'functionName' => 'searchClassroomsWithStatistics',
                 'withParams' => [[], ['createdTime' => 'desc'], 0, 1],
                 'returnValue' => [$classroom],
             ],

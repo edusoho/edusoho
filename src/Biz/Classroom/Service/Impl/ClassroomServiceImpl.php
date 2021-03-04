@@ -139,7 +139,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         return $classrooms;
     }
 
-    public function searchClassroomsWithInfo($conditions, $orderBy, $start, $limit, $columns = [])
+    public function searchClassroomsWithStatistics($conditions, $orderBy, $start, $limit, $columns = [])
     {
         $orderBy = $this->getOrderBys($orderBy);
         $conditions = $this->_prepareClassroomConditions($conditions);
@@ -2397,24 +2397,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
                 'electiveTaskNum' => empty($taskNums[$classroom['id']]) ? 0 : $taskNums[$classroom['id']]['electiveTaskNum'],
             ]);
             if ($withMemberInfo) {
-                $classroom['finishedMemberCount'] = 0;
+                $classroom['finishedMemberCount'] = $this->getClassroomMemberDao()->count(['classroomId' => $classroom['id'], 'isFinished' => 1]);
             }
-        }
-
-        if (!$withMemberInfo) {
-            return $classrooms;
-        }
-
-        $memberLearnedTaskNums = $this->getCourseMemberDao()->sumLearnedCompulsoryTaskNumGroupByFields(['classroomIds' => $classroomIds], ['classroomId', 'userId']);
-        foreach ($memberLearnedTaskNums as $learnedTaskNum) {
-            if (empty($taskNums[$learnedTaskNum['classroomId']]) || empty($classrooms[$learnedTaskNum['classroomId']])) {
-                continue;
-            }
-
-            if ($learnedTaskNum['learnedCompulsoryTaskNum'] < $classrooms[$learnedTaskNum['classroomId']]['compulsoryTaskNum']) {
-                continue;
-            }
-            ++$classrooms[$learnedTaskNum['classroomId']]['finishedMemberCount'];
         }
 
         return $classrooms;

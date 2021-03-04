@@ -306,7 +306,7 @@ class ClassroomController extends BaseController
             20
         );
 
-        $classrooms = $this->getClassroomService()->searchClassroomsWithInfo(
+        $classrooms = $this->getClassroomService()->searchClassroomsWithStatistics(
             $conditions,
             ['createdTime' => 'desc'],
             $paginator->getOffsetCount(),

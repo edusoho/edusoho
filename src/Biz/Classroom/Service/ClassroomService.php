@@ -287,7 +287,7 @@ interface ClassroomService
 
     public function hasCertificate($classroomId);
 
-    public function searchClassroomsWithInfo($conditions, $orderBy, $start, $limit, $columns = []);
+    public function searchClassroomsWithStatistics($conditions, $orderBy, $start, $limit, $columns = []);
 
     public function calClassroomsTaskNums(array $classrooms, $withMemberInfo = false);
 
