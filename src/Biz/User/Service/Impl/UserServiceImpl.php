@@ -244,6 +244,13 @@ class UserServiceImpl extends BaseService implements UserService
         return !$user ? null : UserSerialize::unserialize($user);
     }
 
+    public function getUnDstroyedUserByVerifiedMobile($verifiedMobile)
+    {
+        $user = $this->getUserDao()->getUnDstroyedUserByVerifiedMobile($verifiedMobile);
+
+        return !$user ? null : UserSerialize::unserialize($user);
+    }
+
     public function getUserByLoginField($keyword, $isFilterDestroyed = false)
     {
         if (SimpleValidator::email($keyword)) {
