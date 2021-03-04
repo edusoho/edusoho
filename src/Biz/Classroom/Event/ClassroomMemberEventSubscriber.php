@@ -13,7 +13,23 @@ class ClassroomMemberEventSubscriber extends EventSubscriber implements EventSub
     {
         return array(
             'course.task.finish' => 'onTaskFinish',
+            'course_member.finished' => 'onCourseMemberFinished',
+            'course.members.finish_data_refresh' => 'onCourseMembersFinishedRefresh',
         );
+    }
+
+    public function onCourseMembersFinishedRefresh(Event $event)
+    {
+        $course = $event->getSubject();
+        $updatedMembers = $event->getArgument('updatedMembers');
+    }
+
+    public function onCourseMemberFinished(Event $event)
+    {
+        $member = $event->getSubject();
+        $course = $event->getArgument('course');
+        if (empty($course['parentId'])) {
+        }
     }
 
     public function onTaskFinish(Event $event)

@@ -1351,11 +1351,35 @@ class MemberServiceImpl extends BaseService implements MemberService
 
     public function recountLearningDataByCourseId($courseId)
     {
+        $this->refreshCourseMembersFinishData($courseId);
+    }
+
+    public function refreshMemberFinishData($courseId, $userId)
+    {
+        $course = $this->getCourseService()->getCourse($courseId);
+        $member = $this->getCourseMember($course['id'], $userId);
+        if (empty($course['compulsoryTaskNum'])) {
+            $isFinished = false;
+        } else {
+            $isFinished = (int)($member['learnedCompulsoryTaskNum'] / $course['compulsoryTaskNum']) >= 1;
+        }
+        $finishTime = $isFinished ? time() : 0;
+        $member = $this->updateMembers(
+            ['courseId' => $course['id'], 'userId' => $userId],
+            ['lastLearnTime' => time(), 'finishedTime' => $finishTime, 'isLearned' => $isFinished ? 1 : 0]
+        );
+
+        if ($isFinished) {
+            $this->dispatchEvent('course_member.finished', new Event($member, ['course' => $course]));
+        }
+    }
+
+    public function refreshCourseMembersFinishData($courseId)
+    {
         $course = $this->getCourseService()->getCourse($courseId);
         if (empty($course)) {
             return;
         }
-
         $members = ArrayToolkit::index(
             $this->searchMembers(['courseId' => $courseId, 'role' => 'student'], [], 0, PHP_INT_MAX, ['id', 'userId', 'lastLearnTime']),
             'userId'
@@ -1384,16 +1408,8 @@ class MemberServiceImpl extends BaseService implements MemberService
         }
 
         $this->getMemberDao()->batchUpdate(ArrayToolkit::column($updateMembers, 'id'), $updateMembers);
-    }
 
-    public function refreshMemberFinishData($courseId, $userId)
-    {
-
-    }
-
-    public function refreshCourseMembersFinishData($courseId)
-    {
-
+        $this->dispatchEvent('course.members.finish_data_refresh', new Event($course, ['updatedMembers' => $updateMembers]));
     }
 
     protected function createOrder($goodsSpecsId, $userId, $data)
@@ -1629,7 +1645,7 @@ class MemberServiceImpl extends BaseService implements MemberService
     }
 
     /**
-     * @return TaskService
+     * @return TaskResultService
      */
     protected function getTaskResultService()
     {
