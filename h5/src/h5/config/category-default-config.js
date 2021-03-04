@@ -87,6 +87,11 @@ const CATEGORY_DEFAULT = {
       ],
     },
     {
+      type: 'vipLevelId',
+      value: '0',
+      options: [],
+    },
+    {
       type: 'sort',
       value: 'recommendedSeq',
       options: [
@@ -94,11 +99,6 @@ const CATEGORY_DEFAULT = {
         { text: '热门', value: '-studentNum' },
         { text: '最新', value: '-createdTime' },
       ],
-    },
-    {
-      type: 'vipLevelId',
-      value: '0',
-      options: [],
     },
   ],
 };

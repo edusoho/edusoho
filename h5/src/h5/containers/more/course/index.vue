@@ -109,7 +109,7 @@ export default {
         text: '全部',
         data: res,
       });
-      this.dataDefault[3].options = this.initOptions({
+      this.dataDefault[2].options = this.initOptions({
         text: '会员课程',
         data: this.vipLevels,
       });
