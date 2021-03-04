@@ -762,15 +762,12 @@ class ClassroomController extends BaseController
     public function memberAccessAction(Request $request, $classroomId, $memberId)
     {
         $memberAccessCode = $request->query->get('code');
-        $vip = $this->getVipService()->getMemberByUserId($memberId);
-        $vipLevel = $this->getLevelService()->getLevel($vip['levelId']);
         $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode('classroom', $classroomId);
         $vipRightLevel = $this->getLevelService()->getLevel($vipRight['vipLevelId']);
 
         return $this->render('classroom/member-access-modal.html.twig',
             [
                 'code' => $memberAccessCode,
-                'vipLevel' => $vipLevel,
                 'vipRightLevel' => $vipRightLevel,
                 'classroom' => $this->getClassroomService()->getClassroom($classroomId),
             ]);
