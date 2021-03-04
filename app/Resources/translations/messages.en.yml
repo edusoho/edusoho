@@ -7362,7 +7362,8 @@ course.homework_check.finish_check: 'Complete the approval'
 course.homework_check.finish_check_submiting: 'Submitting, Please wait'
 course.homework_check.teacher_say.input_placeholder: 'Please enter a comment'
 course.homework_check.need_check_item: "Waiting to check  <small class=\"color-gray\">Total %itemCount% questions</small>\n"
-
+course.homework_check.create.name: "Homework name"
+course.homework_check.homework_delete: "The homework has been deleted"
 
 course.question_marker_statistics: PopQuestion Statistics
 
