@@ -16,15 +16,15 @@
 		<div class="pull-left" style="line-height:32px;">{{ 'admin.classroom_manage.statistics.member.total_learn_time'|trans({'%mins%':totalLearnedTime|default(0)|number_format(1)}) }}</div>
 		{% include 'export/export-btn.html.twig' with { exportFileName: 'classroom-member-statistics', targetFormId: 'member-search-form', exportClass: 'cd-btn-success cd-btn-sm pull-right js-modal-export-btn', exportWebpack: true} %}
 	</div>
-	<table class="table table-bordered table-hover" id="classroom-table">
+	<table class="table table-bordered text-center" id="classroom-table">
 		<thead>
 			<tr class="active">
-				<th>{{ 'admin.classroom_manage.statistics.member.nickname_th'|trans }}</th>
-				<th>{{ 'admin.classroom_manage.statistics.member.create_time_th'|trans }}</th>
-				<th>{{ 'admin.classroom_manage.statistics.member.finish_time_th'|trans }}</th>
-				<th>{{ 'admin.classroom_manage.statistics.member.learn_time_th'|trans }}</th>
-				<th>{{ 'admin.classroom_manage.statistics.member.question_num_th'|trans }}</th>
-				<th>{{ 'admin.classroom_manage.statistics.member.note_num_th'|trans }}</th>
+				<td>{{ 'admin.classroom_manage.statistics.member.nickname_th'|trans }}</td>
+				<td>{{ 'admin.classroom_manage.statistics.member.create_time_th'|trans }}</td>
+				<td>{{ 'admin.classroom_manage.statistics.member.finish_time_th'|trans }}</td>
+				<td>{{ 'admin.classroom_manage.statistics.member.learn_time_th'|trans }}</td>
+				<td>{{ 'admin.classroom_manage.statistics.member.question_num_th'|trans }}</td>
+				<td>{{ 'admin.classroom_manage.statistics.member.note_num_th'|trans }}</td>
 			</tr>
 		</thead>
 		<tbody>

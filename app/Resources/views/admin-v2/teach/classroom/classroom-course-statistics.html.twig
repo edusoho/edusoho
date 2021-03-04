@@ -24,7 +24,7 @@
 		<div class="pull-left" style="line-height:32px;">{{ 'admin.classroom_manage.statistics.course.total_learn_time'|trans({'%mins%':totalLearnedTime|default(0)|number_format(1)}) }}</div>
 		{% include 'export/export-btn.html.twig' with { exportFileName: 'classroom-course-statistics', targetFormId: 'course-search-form', exportClass: 'cd-btn-success cd-btn-sm pull-right js-modal-export-btn', exportWebpack: true} %}
 	</div>
-	<table class="table table-bordered table-hover" id="classroom-table">
+	<table class="table table-bordered text-center" id="classroom-table">
 		<thead>
 			<tr class="active">
 				<td>{{'admin.course_manage.statistics.data.name'|trans}}</td>

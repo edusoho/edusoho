@@ -3187,6 +3187,61 @@ class ClassroomServiceTest extends BaseTestCase
         $this->assertEquals($expected, $result);
     }
 
+    public function testUpdateMemberFieldsByClassroomIdAndUserId()
+    {
+        $classroom = $this->getClassroomDao()->create(['title' => 'classroom title']);
+        $member = $this->getClassroomMemberDao()->create(['classroomId' => $classroom['id'], 'userId' => $this->getCurrentUser()->getId(), 'role' => ['student']]);
+
+        $this->mockBiz('Classroom:ClassroomCourseDao', [
+            [
+                'functionName' => 'findByClassroomId',
+                'withParams' => [$classroom['id']],
+                'returnValue' => [['classroomId' => $classroom['id'], 'courseId' => 1]],
+            ],
+        ]);
+
+        $this->mockBiz('Course:CourseNoteService', [
+            [
+                'functionName' => 'countCourseNotes',
+                'withParams' => [['courseIds' => [1], 'userId' => $member['userId']]],
+                'returnValue' => 1,
+            ],
+        ]);
+
+        $this->mockBiz('Course:ThreadService', [
+            [
+                'functionName' => 'countThreads',
+                'withParams' => [['courseIds' => [1], 'userId' => $member['userId'], 'type' => 'discussion']],
+                'returnValue' => 3,
+            ],
+            [
+                'functionName' => 'countThreads',
+                'withParams' => [['courseIds' => [1], 'userId' => $member['userId'], 'type' => 'question']],
+                'returnValue' => 2,
+            ],
+        ]);
+
+        $this->mockBiz('Thread:ThreadService', [
+            [
+                'functionName' => 'searchThreadCount',
+                'withParams' => [['targetType' => 'classroom', 'targetId' => $classroom['id'], 'userId' => $member['userId'], 'type' => 'discussion']],
+                'returnValue' => 3,
+            ],
+            [
+                'functionName' => 'searchThreadCount',
+                'withParams' => [['targetType' => 'classroom', 'targetId' => $classroom['id'], 'userId' => $member['userId'], 'type' => 'question']],
+                'returnValue' => 3,
+            ],
+        ]);
+
+        $this->getClassroomService()->updateMemberFieldsByClassroomIdAndUserId($classroom['id'], $this->getCurrentUser()->getId(), ['questionNum', 'noteNum', 'threadNum']);
+
+        $result = $this->getClassroomMemberDao()->get($member['id']);
+        $this->assertEquals('5', $result['questionNum']);
+        $this->assertEquals('6', $result['threadNum']);
+        $this->assertEquals('1', $result['noteNum']);
+    }
+
     protected function mockCourse($title = 'Test Course 1')
     {
         return [
