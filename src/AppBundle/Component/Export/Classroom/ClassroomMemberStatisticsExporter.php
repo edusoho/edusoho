@@ -33,7 +33,7 @@ class ClassroomMemberStatisticsExporter extends Exporter
         $usersLearnedTime = [];
         if (!empty($users) && !empty($classroomCourses)) {
             $usersLearnedTime = $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeGroupByUserId([
-                'userIds' => array_column($members, 'userId'), array_column($classroomCourses, null, 'courseId'),
+                'userIds' => array_column($members, 'userId'), 'courseIds' => array_column($classroomCourses, 'id'),
             ]);
             $usersLearnedTime = array_column($usersLearnedTime, null, 'userId');
         }
@@ -44,7 +44,7 @@ class ClassroomMemberStatisticsExporter extends Exporter
                 empty($users[$member['userId']]) ? '' : $users[$member['userId']]['nickname'],
                 date('Y-m-d H:i:s', $member['createdTime']),
                 empty($member['finishedTime']) ? '--' : date('Y-m-d H:i:s', $member['finishedTime']),
-                empty($usersLearnedTime[$member['userId']]) ? 0 : round($usersLearnedTime[$member['userId']]['learnedTime'] / 60, 1),
+                empty($usersLearnedTime[$member['userId']]) ? 0.0 : round($usersLearnedTime[$member['userId']]['learnedTime'] / 60, 1),
                 $member['questionNum'],
                 $member['noteNum'],
             ];

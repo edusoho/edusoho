@@ -27,16 +27,14 @@ class ClassroomCourseStatisticsExporter extends Exporter
     public function getContent($start, $limit)
     {
         $classroom = $this->getClassroomService()->getClassroom($this->conditions['classroomId']);
-        $classroomCourses = $this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
         $courseId = empty($this->conditions['courseId']) ? 0 : $this->conditions['courseId'];
-
         if (empty($courseId)) {
+            $classroomCourses = $this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
             $course = reset($classroomCourses);
             $courseId = $course['id'];
         }
 
         $tasks = empty($courseId) ? [] : $this->getTaskService()->searchTasksWithStatistics(['courseId' => $courseId], ['id' => 'ASC'], $start, $limit);
-
         $content = [];
         foreach ($tasks as $task) {
             $content[] = [

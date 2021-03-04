@@ -39,10 +39,11 @@ class ClassroomStatisticsExporterTest extends BaseTestCase
             'createdTime' => $time,
             'creator' => $this->getCurrentUser()->getId(),
         ];
+        $conditions = ['classroomId' => $classroom['id']];
         $this->mockBiz('Classroom:ClassroomService', [
             [
                 'functionName' => 'searchClassroomsWithStatistics',
-                'withParams' => [[], ['createdTime' => 'desc'], 0, 1],
+                'withParams' => [$conditions, ['createdTime' => 'desc'], 0, 1],
                 'returnValue' => [$classroom],
             ],
         ]);
@@ -59,7 +60,7 @@ class ClassroomStatisticsExporterTest extends BaseTestCase
         ]);
 
         $this->getContainer()->set('biz', $this->getBiz());
-        $exporter = new ClassroomStatisticsExporter($this->getContainer(), []);
+        $exporter = new ClassroomStatisticsExporter($this->getContainer(), $conditions);
         $expected = [[
             $classroom['title'],
             $classroom['courseNum'],
@@ -71,5 +72,78 @@ class ClassroomStatisticsExporterTest extends BaseTestCase
             $this->getCurrentUser()->getUsername(),
         ]];
         $this->assertEquals($expected, $exporter->getContent(0, 1));
+    }
+
+    public function testCanExport_returnTrue()
+    {
+        $exporter = new ClassroomStatisticsExporter($this->getContainer(), []);
+        $this->assertTrue($exporter->canExport());
+    }
+
+    public function testCanExport_returnFalse()
+    {
+        $biz = $this->getBiz();
+        $user = $biz['user'];
+        $user->setPermissions([]);
+
+        $exporter = new ClassroomStatisticsExporter($this->getContainer(), []);
+        $this->assertFalse($exporter->canExport());
+    }
+
+    public function testGetCount()
+    {
+        $conditions = ['classroomId' => 1];
+        $this->mockBiz('Classroom:ClassroomService', [
+            [
+                'functionName' => 'countClassrooms',
+                'withParams' => [$conditions],
+                'returnValue' => 200,
+            ],
+        ]);
+
+        $this->getContainer()->set('biz', $this->getBiz());
+        $exporter = new ClassroomStatisticsExporter($this->getContainer(), $conditions);
+        $this->assertEquals(200, $exporter->getCount());
+    }
+
+    public function testBuildConditions_withOrgUnabled()
+    {
+        $conditions = ['classroomId' => 1, 'orgCode' => '1.'];
+        $exporter = new ClassroomStatisticsExporter($this->getContainer(), $conditions);
+        $result = $exporter->buildCondition($conditions);
+        $this->assertEquals(['classroomId' => 1], $result);
+    }
+
+    public function testBuildConditions_withOrgEnabled()
+    {
+        $conditions = ['classroomId' => 1, 'orgCode' => '2.'];
+        $this->mockBiz('System:SettingService', [
+            [
+                'functionName' => 'node',
+                'withParams' => ['magic.enable_org'],
+                'returnValue' => true,
+            ],
+        ]);
+
+        $this->getContainer()->set('biz', $this->getBiz());
+        $exporter = new ClassroomStatisticsExporter($this->getContainer(), $conditions);
+        $result = $exporter->buildCondition($conditions);
+        $this->assertEquals(['classroomId' => 1, 'likeOrgCode' => '2.'], $result);
+    }
+
+    public function testBuildConditions_withOrgEnabledAndEmptyOrgCode()
+    {
+        $conditions = ['classroomId' => 1];
+        $this->mockBiz('System:SettingService', [
+            [
+                'functionName' => 'node',
+                'withParams' => ['magic.enable_org'],
+                'returnValue' => true,
+            ],
+        ]);
+
+        $exporter = new ClassroomStatisticsExporter($this->getContainer(), $conditions);
+        $result = $exporter->buildCondition($conditions);
+        $this->assertEquals(['classroomId' => 1, 'likeOrgCode' => $this->getCurrentUser()->getSelectOrgCode()], $result);
     }
 }
