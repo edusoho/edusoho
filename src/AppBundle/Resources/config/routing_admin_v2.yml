@@ -196,6 +196,10 @@ admin_v2_classroom_statistics_member:
     path: /classroom/{id}/statistics/member
     defaults: { _controller: AppBundle:AdminV2/Teach/Classroom:memberStatistics }
 
+admin_v2_classroom_statistics_course:
+    path: /classroom/{id}/statistics/course
+    defaults: { _controller: AppBundle:AdminV2/Teach/Classroom:courseStatistics }
+
 # 教学-课程管理-直播管理
 admin_v2_live_course:
     path: /livecourse/{status}

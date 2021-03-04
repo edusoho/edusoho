@@ -13,4 +13,6 @@ interface CoursePlanLearnDailyDao extends AdvancedDaoInterface
     public function sumLearnedTimeByCourseId($courseId);
 
     public function sumLearnedTimeGroupByUserId(array $conditions);
+
+    public function sumLearnedTimeByConditions(array $conditions);
 }

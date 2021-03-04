@@ -11585,6 +11585,15 @@ admin.classroom_manage.statistics.member.finish_time_th: 完成时间
 admin.classroom_manage.statistics.member.learn_time_th: 累加学习时长（分）
 admin.classroom_manage.statistics.member.question_num_th: 提问数
 admin.classroom_manage.statistics.member.note_num_th: 笔记数
+admin.classroom_manage.statistics.course.title: 《%classroom%》教学内容视角的班级数据
+admin.classroom_manage.statistics.course.title_tips: >
+  <span style='font-size:14px'>
+    1.任务被累加学习时长、人均学习时长的数据统计为昨日及之前数据。<br/>
+    2.其他统计数据项均为实时数据。<br/>
+  </span>
+admin.classroom_manage.statistics.course.total_learn_time: 课程被累加学习时长（分）：%mins%
+
+
 
 
 
