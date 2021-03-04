@@ -49,6 +49,8 @@ import {
   DatetimePicker,
   Picker,
   Icon,
+  DropdownMenu,
+  DropdownItem,
 } from 'vant';
 // 按需引入组件
 Vue.component('van-nav-bar', NavBar);
@@ -103,6 +105,8 @@ Vue.use(Tab)
   .use(Picker);
 Vue.use(VueClipboard);
 Vue.use(Icon);
+Vue.use(DropdownMenu);
+Vue.use(DropdownItem);
 Vue.use(wapSdk);
 Vue.config.productionTip = false;
 Api.getSettings({
