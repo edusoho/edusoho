@@ -101,6 +101,27 @@ const CATEGORY_DEFAULT = {
       ],
     },
   ],
+  new_classroom_list: [
+    {
+      type: 'categoryId',
+      value: '0',
+      options: [],
+    },
+    {
+      type: 'vipLevelId',
+      value: '0',
+      options: [],
+    },
+    {
+      type: 'sort',
+      value: 'recommendedSeq',
+      options: [
+        { text: '推荐', value: 'recommendedSeq' },
+        { text: '热门', value: '-studentNum' },
+        { text: '最新', value: '-createdTime' },
+      ],
+    },
+  ],
 };
 
 export default CATEGORY_DEFAULT;
