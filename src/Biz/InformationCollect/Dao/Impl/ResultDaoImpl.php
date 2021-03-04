@@ -39,6 +39,7 @@ class ResultDaoImpl extends AdvancedDaoImpl implements ResultDao
                 'id = :id',
                 'eventId IN (:eventIds)',
                 'userId = :userId',
+                'userId IN ( :userIds )',
                 'eventId = :eventId',
                 'createdTime >= :startDate',
                 'createdTime < :endDate',

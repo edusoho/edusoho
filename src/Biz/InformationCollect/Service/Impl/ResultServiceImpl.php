@@ -158,6 +158,10 @@ class ResultServiceImpl extends BaseService implements ResultService
     {
         $conditions = $this->_prepareConditions($conditions);
 
+        if (isset($conditions['userIds']) && empty($conditions['userIds'])) {
+            return [];
+        }
+
         return $this->getResultDao()->search($conditions, $orderBy, $start, $limit);
     }
 
@@ -172,6 +176,12 @@ class ResultServiceImpl extends BaseService implements ResultService
         }
         );
 
+        $keywordType = '';
+        if (isset($conditions['keywordType'])) {
+            $conditions[$conditions['keywordType']] = trim($conditions['keyword']);
+            $keywordType = $conditions['keywordType'];
+        }
+
         if (empty($conditions['eventId'])) {
             $this->createNewException(CommonException::ERROR_PARAMETER_MISSING());
         }
@@ -182,6 +192,28 @@ class ResultServiceImpl extends BaseService implements ResultService
 
         if (!empty($conditions['endDate'])) {
             $conditions['endDate'] = strtotime($conditions['endDate']);
+        }
+
+        if (isset($conditions[$keywordType]) && in_array($keywordType, ['mobile', 'truename', 'idcard'])) {
+            $userProfiles = $this->getUserService()->searchUserProfiles(
+                [$keywordType => $conditions[$keywordType]],
+                [],
+                0,
+                PHP_INT_MAX
+            );
+
+            $conditions['userIds'] = ArrayToolkit::column($userProfiles, 'id');
+        }
+
+        if (!empty($conditions['nickname'])) {
+            $users = $this->getUserService()->searchUsers(
+                ['nickname' => $conditions['nickname']],
+                [],
+                0,
+                PHP_INT_MAX
+            );
+
+            $conditions['userIds'] = ArrayToolkit::column($users, 'id');
         }
 
         return $conditions;

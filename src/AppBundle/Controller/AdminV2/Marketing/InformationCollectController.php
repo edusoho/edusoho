@@ -228,6 +228,7 @@ class InformationCollectController extends BaseController
             'labels' => $this->getEventService()->findItemsByEventId($id),
             'resultData' => $this->getResultService()->findResultDataByResultIds(ArrayToolkit::column($collectedData, 'id')),
             'paginator' => $paginator,
+            'request' => $request,
         ]);
     }
 
