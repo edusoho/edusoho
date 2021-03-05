@@ -2074,12 +2074,77 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         ];
         $userLearnCount = $this->getTaskResultService()->countTaskResults($conditions);
 
-        $fields['lastLearnTime'] = time();
-        $fields['learnedNum'] = $userLearnCount;
+        $fields = [
+            'lastLearnTime' => time(),
+            'learnedNum' => $userLearnCount,
+        ];
 
         $classroomMember = $this->getClassroomMember($classroomId, $userId);
 
         return $this->updateMember($classroomMember['id'], $fields);
+    }
+
+    public function updateClassroomMemberFinishedStatus($classroomId, $userId)
+    {
+        $classroom = $this->getClassroom($classroomId);
+        if (empty($classroom)) {
+            return;
+        }
+        $classroomMember = $this->getClassroomMember($classroomId, $userId);
+
+        if (empty($classroomMember)) {
+            return;
+        }
+
+        $courses = $this->findCoursesByClassroomId($classroomId);
+        $courseIds = ArrayToolkit::column($courses, 'id');
+        $coursesMembers = ArrayToolkit::index($this->getCourseMemberService()->findCoursesByStudentIdAndCourseIds($userId, $courseIds), 'courseId');
+        $finished = true;
+        foreach ($courses as $course) {
+            if (empty($coursesMembers[$course['id']])) {
+                $finished = false;
+                continue;
+            }
+            $finished = $coursesMembers[$course['id']]['isLearned'];
+        }
+
+        return $this->updateMember($classroomMember['id'], [
+            'isFinished' => $finished,
+            'finishedTime' => $finished ? max(ArrayToolkit::column($coursesMembers, 'finishedTime')) : 0,
+        ]);
+    }
+
+    public function updateClassroomMembersFinishedStatus($classroomId)
+    {
+        $classroom = $this->getClassroom($classroomId);
+        if (empty($classroom)) {
+            return;
+        }
+        $classroomMembersCount = $this->searchMemberCount(['classroomId' => $classroomId]);
+        if (empty($classroomMembersCount)) {
+            return;
+        }
+        $classroomMembers = $this->findClassroomStudents($classroomId, 0, $classroomMembersCount);
+
+        $courses = $this->findCoursesByClassroomId($classroomId);
+        $courseIds = ArrayToolkit::column($courses, 'courseId');
+
+        foreach ($classroomMembers as $classroomMember) {
+            $coursesMembers = ArrayToolkit::index($this->getCourseMemberService()->findCoursesByStudentIdAndCourseIds($classroomMember['userId'], $courseIds), 'courseId');
+            $finished = true;
+            foreach ($courses as $course) {
+                if (empty($coursesMembers[$course['id']])) {
+                    $finished = false;
+                    continue;
+                }
+                $finished = $coursesMembers[$course['id']]['isLearned'];
+            }
+
+            $this->updateMember($classroomMember['id'], [
+                'isFinished' => $finished,
+                'finishedTime' => $finished ? max(ArrayToolkit::column($coursesMembers, 'finishedTime')) : 0,
+            ]);
+        }
     }
 
     public function countCoursesByClassroomId($classroomId)

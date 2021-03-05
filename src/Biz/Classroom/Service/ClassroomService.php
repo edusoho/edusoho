@@ -284,4 +284,8 @@ interface ClassroomService
     public function appendHasCertificate(array $classrooms);
 
     public function hasCertificate($classroomId);
+
+    public function updateClassroomMembersFinishedStatus($classroomId);
+
+    public function updateClassroomMemberFinishedStatus($classroomId, $userId);
 }

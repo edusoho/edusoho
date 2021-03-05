@@ -24,7 +24,6 @@ use Biz\S2B2C\Service\CourseProductService;
 use Biz\System\Service\LogService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
-use Biz\Task\Service\TaskService;
 use Biz\Taxonomy\Service\CategoryService;
 use Biz\User\Service\NotificationService;
 use Biz\User\Service\UserService;
@@ -1361,14 +1360,13 @@ class MemberServiceImpl extends BaseService implements MemberService
         if (empty($course['compulsoryTaskNum'])) {
             $isFinished = false;
         } else {
-            $isFinished = (int)($member['learnedCompulsoryTaskNum'] / $course['compulsoryTaskNum']) >= 1;
+            $isFinished = (int) ($member['learnedCompulsoryTaskNum'] / $course['compulsoryTaskNum']) >= 1;
         }
         $finishTime = $isFinished ? time() : 0;
-        $member = $this->updateMembers(
+        $this->updateMembers(
             ['courseId' => $course['id'], 'userId' => $userId],
             ['lastLearnTime' => time(), 'finishedTime' => $finishTime, 'isLearned' => $isFinished ? 1 : 0]
         );
-
         if ($isFinished) {
             $this->dispatchEvent('course_member.finished', new Event($member, ['course' => $course]));
         }
