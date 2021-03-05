@@ -150,7 +150,7 @@
                         if (sku.vipUser && sku.vipLevelInfo.seq > sku.vipUser.level.seq){
                             this.needBuyVipText = Translator.trans('goods.show_page.vip_upgrade',{vipName:sku.vipLevelInfo.name});
                             this.needBuyVipUrl = "/vip/upgrade?targetId=" + sku.vipLevelInfo.id;
-                        }else if (!sku.vipUser){
+                        }else if (!sku.vipUser || parseInt(sku.vipUser.deadline) * 1000 < new Date().getTime()){
                             this.needBuyVipText = Translator.trans('goods.show_page.vip_buy',{vipName:sku.vipLevelInfo.name});
                             this.needBuyVipUrl = "/vip/buy?level=" + sku.vipLevelInfo.id;
                         }

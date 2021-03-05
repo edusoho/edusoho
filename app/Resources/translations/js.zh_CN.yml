@@ -1564,6 +1564,7 @@ site.open: 开启
 site.date.day: 天
 course.marketing_setup.services.provide_services: 承诺提供服务
 vip.level.free_learning: 会员免费学
+vip.level.free_learning_new: 会员免费兑换
 site.default.none: 无
 form.btn.save: 保存
 
