@@ -8,9 +8,6 @@
 {{ slot('marketing.tool', {'type':'classroom','targetId':classroom.id}) }}
 
 <div class="class-detail row" id="detail-content">
-  {{ dump(11111111111) }}
-  {{ dump(member.access) }}
-  {{ dump(classroom) }}
   <div class="col-lg-9 col-md-8 class-detail-main">
 
     {% include 'announcement/announcement-block.html.twig' with {targetId:classroom.id,targetType:'classroom'} %}
