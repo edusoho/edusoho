@@ -1,5 +1,4 @@
 {% extends 'bootstrap-modal-layout.html.twig' %}
-{% do script(['app/js/classroom/member-access/index.js'])%}
 
 {% block title %}{{ 'course.member.tips.title'|trans }}{% endblock %}
 {% block body %}
@@ -11,13 +10,13 @@
     {% elseif code == 'vip.level_not_exist' %}
       {{ code|trans({'%type%': '班级', '%typeName%': '班级'}) }}
     {% elseif code == 'vip.level_low' %}
-      {{ code|trans({'%vipName%':vipRightLevel.name|default(''),'%type%': '班级','%vipLevelName%':vipRightLevel.name|default('')}) }}
+      {{ code|trans({'%typeName%': '班级','%vipName%':vipRightLevel.name|default(''),'%type%': '班级','%vipLevelName%':vipRightLevel.name|default('')}) }}
     {% endif %}
   </div>
 {% endblock %}
 
 {% block footer %}
-  <a id="member-access" href="#modal" data-toggle="modal" data-url="{{ path('course_exit_modal', {action:path('classroom_exit', {id:classroom.id})}) }}" class="btn btn-default">
+  <a href="{{ path('classroom_exit_no_reason', {id:classroom.id}) }}" class="btn btn-default">
     {{'course.member.classroom_member.classroom_exit_btn'|trans }}
   </a>
   {% if code == 'vip.not_member' %}

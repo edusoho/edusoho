@@ -2728,6 +2728,10 @@ classroom_exit:
     path: /classroom/{id}/exit
     defaults: { _controller: AppBundle:Classroom/Classroom:exit }
 
+classroom_exit_no_reason:
+    path: /classroom/{id}/exit/no_reason
+    defaults: { _controller: AppBundle:Classroom/Classroom:exitForNoReason }
+
 classroom_canview:
     path: /classroom/{classroomId}/canview
     defaults: { _controller: AppBundle:Classroom/Classroom:canview }

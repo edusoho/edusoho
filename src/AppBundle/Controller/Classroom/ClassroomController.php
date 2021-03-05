@@ -499,6 +499,27 @@ class ClassroomController extends BaseController
         return $this->redirect($this->generateUrl('classroom_show', ['id' => $id]));
     }
 
+    public function exitForNoReasonAction(request $request, $id)
+    {
+        $user = $this->getCurrentUser();
+
+        $member = $this->getClassroomService()->getClassroomMember($id, $user['id']);
+
+        if (empty($member)) {
+            $this->createNewException(ClassroomException::NOTFOUND_MEMBER());
+        }
+
+        if (!$this->getClassroomService()->canTakeClassroom($id, true)) {
+            $this->createNewException(ClassroomException::FORBIDDEN_TAKE_CLASSROOM());
+        }
+
+        $this->getClassroomService()->removeStudent(
+            $id,
+            $user['id']);
+
+        return $this->redirect($this->generateUrl('classroom_show', ['id' => $id]));
+    }
+
     public function becomeAuditorAction($id)
     {
         $user = $this->getCurrentUser();
