@@ -170,7 +170,6 @@ class CourseController extends BaseController
     private function getClassroomMemberAccess($classroomId, $memberId)
     {
         $access = $this->getClassroomService()->canLearnClassroom($classroomId);
-        print_r($access);exit();
         $vip = $this->getVipService()->getMemberByUserId($memberId);
         $vipLevel = $this->getVipLevelService()->getLevel($vip['levelId']);
         $vipRight = $this->getVipRightService()->getVipRightBySupplierCodeAndUniqueCode('classroom', $classroomId);
