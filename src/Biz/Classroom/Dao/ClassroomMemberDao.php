@@ -35,4 +35,6 @@ interface ClassroomMemberDao extends AdvancedDaoInterface
     public function findMembersByUserId($userId);
 
     public function searchMemberCountGroupByFields($conditions, $groupBy, $start, $limit);
+
+    public function searchSignStatisticsByClassroomId($classroomId, array $conditions, array $orderBys, $start, $limit);
 }

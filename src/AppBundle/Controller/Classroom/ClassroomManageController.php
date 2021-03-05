@@ -18,6 +18,7 @@ use Biz\Content\Service\FileService;
 use Biz\Course\Service\CourseService;
 use Biz\Course\Service\CourseSetService;
 use Biz\Review\Service\ReviewService;
+use Biz\Sign\Service\SignService;
 use Biz\System\Service\SettingService;
 use Biz\Task\Service\TaskResultService;
 use Biz\Task\Service\TaskService;
@@ -1017,6 +1018,43 @@ class ClassroomManageController extends BaseController
         ]);
     }
 
+    public function signStatisticsAction(Request $request, $id)
+    {
+        $this->getClassroomService()->tryManageClassroom($id);
+        $classroom = $this->getClassroomService()->getClassroom($id);
+        $conditions = array_merge(['classroomId' => $id], $request->query->all());
+
+        $paginator = new Paginator(
+            $request,
+            $this->getClassroomService()->searchMemberCount($conditions),
+            20
+        );
+
+        $members = $this->getClassroomService()->searchMembersSignStatistics(
+            $id,
+            $conditions,
+            [$request->query->get('order', 'signDays') => $request->query->get('sort', 'DESC')],
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $users = empty($members) ? [] : $this->getUserService()->findUsersByIds(array_column($members, 'userId'));
+        foreach ($members as &$member) {
+            if (!empty($member['lastSignTime']) && $member['lastSignTime'] > strtotime(date('y-n-d 0:0:0'))) {
+                $member['todaySignTime'] = $member['lastSignTime'];
+            }
+        }
+
+        return $this->render('classroom-manage/sign/index.html.twig', [
+            'classroom' => $classroom,
+            'members' => $members,
+            'users' => $users,
+            'paginator' => $paginator,
+            'order' => $request->query->get('order', 'signDays'),
+            'sort' => $request->query->get('sort', 'DESC'),
+        ]);
+    }
+
     protected function getRedirectRoute($mode, $type)
     {
         $routes = [
@@ -1229,5 +1267,13 @@ class ClassroomManageController extends BaseController
     protected function getHomeworkActivityService()
     {
         return $this->getBiz()->service('Activity:HomeworkActivityService');
+    }
+
+    /**
+     * @return SignService
+     */
+    protected function getSignService()
+    {
+        return $this->createService('Sign:SignService');
     }
 }

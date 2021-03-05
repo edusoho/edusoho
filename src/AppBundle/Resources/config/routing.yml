@@ -2681,6 +2681,10 @@ classroom_manage_member_deadline_check_deadline:
     path: /classroom/{classroomId}/manage/member/deadline/check
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:checkDeadline }
 
+classroom_sign_statistics:
+    path:  /classroom/{id}/manage/sign/statistics
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:signStatistics }
+
 classroom_manage_member_deadline_check_day:
     path: /classroom/{classroomId}/manage/member/day/check
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:checkDay }
