@@ -1617,6 +1617,7 @@ site.open: Open
 site.date.day: Day
 course.marketing_setup.services.provide_services: Services
 vip.level.free_learning: Free for Vip
+vip.level.free_learning_new: Free for Vip
 site.default.none: None
 form.btn.save: Save
 
