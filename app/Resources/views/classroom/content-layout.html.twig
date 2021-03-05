@@ -55,7 +55,7 @@
 
   {% block member_expired %}
     <script>
-      alert(1);
+      alert(2);
     </script>
     {% if is_plugin_installed('Vip') and member.access|default('') and member.access.code|default('') != 'success' and not (classroom.price == 0 and classroom.buyable == 1) %}
       <script>
