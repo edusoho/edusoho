@@ -25,14 +25,14 @@ class CourseMember extends AbstractResource
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $members = $this->service('Course:MemberService')->searchMembers(
             $conditions,
-            array('createdTime' => 'DESC'),
+            ['createdTime' => 'DESC'],
             $offset,
             $limit
         );
 
         $total = $this->service('Course:MemberService')->countMembers($conditions);
 
-        $this->getOCUtil()->multiple($members, array('userId'));
+        $this->getOCUtil()->multiple($members, ['userId']);
 
         return $this->makePagingObject($members, $total, $offset, $limit);
     }
@@ -43,7 +43,7 @@ class CourseMember extends AbstractResource
     public function get(ApiRequest $request, $courseId, $userId)
     {
         $courseMember = $this->getMemberService()->getCourseMember($courseId, $userId);
-        $this->getOCUtil()->single($courseMember, array('userId'));
+        $this->getOCUtil()->single($courseMember, ['userId']);
 
         return $courseMember;
     }
@@ -63,7 +63,7 @@ class CourseMember extends AbstractResource
         }
 
         if ($member) {
-            $this->getOCUtil()->single($member, array('userId'));
+            $this->getOCUtil()->single($member, ['userId']);
 
             return $member;
         }
@@ -81,7 +81,7 @@ class CourseMember extends AbstractResource
 
         $member = $this->getMemberService()->getCourseMember($course['id'], $this->getCurrentUser()->getId());
         if (!empty($member)) {
-            $this->getLogService()->info('course', 'join_course', "加入 教学计划《{$course['title']}》", array('courseId' => $course['id'], 'title' => $course['title']));
+            $this->getLogService()->info('course', 'join_course', "加入 教学计划《{$course['title']}》", ['courseId' => $course['id'], 'title' => $course['title'] ? $course['title'] : $course['courseSetTitle']]);
         }
 
         return $member;
