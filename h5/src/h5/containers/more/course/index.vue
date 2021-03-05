@@ -1,11 +1,17 @@
 <template>
   <div :class="{ more__still: selecting }" class="more">
-    <treeSelect
-      :select-items="selectItems"
-      v-model="selectedData"
-      @selectedChange="setQuery"
-      @selectToggled="toggleHandler"
-    />
+    <van-dropdown-menu active-color="#1989fa">
+      <template v-for="(item, index) in dropdownData" @change="change">
+        <van-dropdown-item
+          v-if="item.type === 'vip' ? vipSwitch : true"
+          :key="index"
+          v-model="item.value"
+          :options="item.options"
+          @change="change"
+        />
+      </template>
+    </van-dropdown-menu>
+
     <lazyLoading
       :course-list="courseList"
       :is-all-data="isAllCourse"
@@ -27,7 +33,6 @@
 
 <script>
 import Api from '@/api';
-import treeSelect from '&/components/e-tree-select/e-tree-select.vue';
 import lazyLoading from '&/components/e-lazy-loading/e-lazy-loading.vue';
 import emptyCourse from '../../learning/emptyCourse/emptyCourse.vue';
 import { mapState, mapActions } from 'vuex';
@@ -35,13 +40,11 @@ import CATEGORY_DEFAULT from '@/config/category-default-config.js';
 
 export default {
   components: {
-    treeSelect,
     lazyLoading,
     emptyCourse,
   },
   data() {
     return {
-      selectItems: [],
       selectedData: {},
       courseItemType: 'price',
       isRequestCompile: false,
@@ -50,22 +53,17 @@ export default {
       courseList: [],
       offset: 0,
       limit: 10,
-      type: 'all',
-      categoryId: 0,
-      sort: 'recommendedSeq',
       selecting: false,
-      queryForm: {
-        courseType: 'type',
-        category: 'categoryId',
-        sort: 'sort',
-      },
-      dataDefault: CATEGORY_DEFAULT.course_list,
       showNumberData: '',
+      dataDefault: CATEGORY_DEFAULT.new_course_list,
+      dropdownData: [],
     };
   },
   computed: {
     ...mapState({
       searchCourseList: state => state.course.searchCourseList,
+      vipLevels: state => state.vip.vipLevels,
+      vipSwitch: state => state.vipSwitch,
     }),
   },
   watch: {
@@ -89,22 +87,78 @@ export default {
   },
   created() {
     window.scroll(0, 0);
-    this.selectedData = this.transform(this.$route.query);
-    // 合并参数
 
-    // 获取班级分类数据
-    Api.getCourseCategories().then(data => {
-      data.unshift({
-        name: '全部',
-        id: '0',
-      });
-      this.dataDefault[0].data = data;
-      this.selectItems = this.dataDefault;
-    });
+    // vuex 中会员等级列表为空
+    if (!this.vipLevels.length) {
+      this.getVipLevels();
+    }
+
+    // 初始化下拉筛选数据
+    this.initDropdownData();
+
     this.getGoodSettings();
   },
   methods: {
     ...mapActions('course', ['setCourseList']),
+    ...mapActions('vip', ['getVipLevels']),
+
+    async initDropdownData() {
+      // 获取班级分类数据
+      const res = await Api.getCourseCategories();
+      this.dataDefault[0].options = this.initOptions({
+        text: '全部',
+        data: res,
+      });
+      this.dataDefault[2].options = this.initOptions({
+        text: '会员课程',
+        data: this.vipLevels,
+      });
+
+      const query = this.$route.query;
+      this.dataDefault.forEach((item, index) => {
+        const value = query[item.type];
+        if (value) {
+          this.dataDefault[index].value = value;
+        }
+      });
+
+      this.dropdownData = this.dataDefault;
+      this.selectedData = this.transform(this.$route.query);
+    },
+
+    initOptions({ text, data }) {
+      const options = [{ text: text, value: '0' }];
+
+      data.forEach(item => {
+        options.push({
+          text: item.name,
+          value: item.id,
+        });
+      });
+      return options;
+    },
+
+    change() {
+      this.selectedData = this.getSelectedData();
+      this.setQuery(this.selectedData);
+    },
+
+    transform(obj = {}) {
+      return Object.assign(this.getSelectedData(), obj);
+    },
+
+    getSelectedData() {
+      const selectedData = {};
+      this.dropdownData.forEach(item => {
+        const { type, value } = item;
+        if (type === 'vip' && !this.vipSwitch) {
+          return;
+        }
+        selectedData[type] = value;
+      });
+      return selectedData;
+    },
+
     setQuery(value) {
       this.$router.replace({
         name: 'more_course',
@@ -163,16 +217,6 @@ export default {
       if (!this.isAllCourse) this.requestCourses(args);
     },
 
-    transform(obj = {}) {
-      return Object.assign(
-        {
-          categoryId: this.categoryId,
-          type: this.type,
-          sort: this.sort,
-        },
-        obj,
-      );
-    },
     toggleHandler(value) {
       this.selecting = value;
     },

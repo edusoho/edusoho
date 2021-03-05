@@ -7,6 +7,7 @@ import mutations from './mutations';
 import course from './modules/course';
 import classroom from './modules/classroom';
 import ItemBank from './modules/item-bank-exercise';
+import vip from './modules/vip';
 
 Vue.use(Vuex);
 
@@ -37,5 +38,6 @@ export default new Vuex.Store({
     course,
     classroom,
     ItemBank,
+    vip,
   },
 });
