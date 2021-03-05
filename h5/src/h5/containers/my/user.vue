@@ -6,51 +6,58 @@
       </router-link>
       <div :class="['user-middle', vipSwitch ? '' : 'single-middle']">
         <div class="user-name">{{ user.nickname }}</div>
-        <div v-if="vipSwitch">
-          <span v-if="user.vip" class="user-vip">
-            <router-link
-              :to="{ path: '/vip', query: { id: user.vip.levelId } }"
-            >
-              <img
-                :class="['vip-img', vipDated ? 'vip-expired' : '']"
-                :src="user.vip.icon"
-              />
-              <span v-if="!vipDated" class="color-primary">{{
-                user.vip.vipName
-              }}</span>
-              <span v-else class="grey text-overflow vip-name"
-                >{{ user.vip.vipName }}已过期，<span class="color-primary"
-                  >重新开通</span
-                ></span
-              >
-            </router-link>
-          </span>
-          <div v-else>
-            <router-link class="user-vip" to="/vip">
-              您还不是会员，<span class="color-primary">去开通</span>
-            </router-link>
-          </div>
-        </div>
       </div>
       <router-link to="/settings" class="user-setting">
         <img src="static/images/setting.png" />
       </router-link>
     </div>
+    <div class="user-member" v-if="vipSwitch">
+      <div class="user-member-style">
+        <div class="user-member-text">
+          <img src="static/images/vip_enter.png" />
+          <div v-if="user.vip" class="user-vip">
+            <router-link
+              :to="{ path: '/vip', query: { id: user.vip.levelId } }"
+              class="clearfix"
+            >
+              <span class="pull-left">
+                <p>{{ user.vip.vipName }}</p>
+                <p style="font-size: 12px; margin-top: 2px;">
+                  会员到期时间：{{ user.vip.deadline.slice(0, 10) }}
+                </p>
+              </span>
+              <span class="pull-right" style="margin-top: 10px;">
+                续费/升级
+                <van-icon name="arrow" />
+              </span>
+            </router-link>
+          </div>
+          <div v-else class="user-vip-open">
+            <router-link to="/vip" class="clearfix">
+              <span>您还不是会员，开通会员享特权</span>
+              <span class="pull-right">
+                去开通
+                <van-icon name="arrow" />
+              </span>
+            </router-link>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
-import Api from '@/api';
 import { mapState, mapActions } from 'vuex';
 
 export default {
   computed: {
     ...mapState(['user', 'vipSwitch']),
-    vipDated() {
-      if (!this.user.vip) return false;
-      const deadLineStamp = new Date(this.user.vip.deadline).getTime();
-      const nowStamp = new Date().getTime();
-      return nowStamp > deadLineStamp;
-    },
+    // vipDated() {
+    //   if (!this.user.vip) return false;
+    //   const deadLineStamp = new Date(this.user.vip.deadline).getTime();
+    //   const nowStamp = new Date().getTime();
+    //   return nowStamp > deadLineStamp;
+    // },
   },
   created() {
     this.getUserInfo();
