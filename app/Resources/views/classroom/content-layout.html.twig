@@ -8,6 +8,9 @@
 {{ slot('marketing.tool', {'type':'classroom','targetId':classroom.id}) }}
 
 <div class="class-detail row" id="detail-content">
+  {{ dump(11111111111) }}
+  {{ dump(member.access) }}
+  {{ dump(classroom) }}
   <div class="col-lg-9 col-md-8 class-detail-main">
 
     {% include 'announcement/announcement-block.html.twig' with {targetId:classroom.id,targetType:'classroom'} %}
@@ -54,13 +57,7 @@
   {% include 'common/consult-supplier.html.twig' %}
 
   {% block member_expired %}
-    <script>
-      alert(2);
-    </script>
     {% if is_plugin_installed('Vip') and member.access|default('') and member.access.code|default('') != 'success' and not (classroom.price == 0 and classroom.buyable == 1) %}
-      <script>
-        alert(1);
-      </script>
       <div class="member-expire">
         <a href="#modal" data-toggle="modal" data-url="{{ path('classroom_member_access', {classroomId:classroom.id, memberId:member.userId, code:member.access.code}) }}"></a>
       </div>
