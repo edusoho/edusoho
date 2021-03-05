@@ -171,6 +171,7 @@ class ClassroomDaoImpl extends AdvancedDaoImpl implements ClassroomDao
                 'categoryId IN (:categoryIds)',
                 'categoryId =:categoryId',
                 'id IN (:classroomIds)',
+                'id in (:ids)',
                 'recommended = :recommended',
                 'showable = :showable',
                 'buyable = :buyable',
@@ -178,7 +179,8 @@ class ClassroomDaoImpl extends AdvancedDaoImpl implements ClassroomDao
                 'orgCode PRE_LIKE :likeOrgCode',
                 'headTeacherId = :headTeacherId',
                 'updatedTime >= :updatedTime_GE',
-                'ids NOT IN (:excludeIds)',
+                'id NOT IN (:excludeIds)',
+                'creator = :userId',
             ],
         ];
     }
