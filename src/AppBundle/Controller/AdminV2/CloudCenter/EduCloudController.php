@@ -70,6 +70,10 @@ class EduCloudController extends BaseController
         } catch (\RuntimeException $e) {
             return $this->render('admin-v2/cloud-center/edu-cloud/cloud-error.html.twig', array());
         }
+
+        // 重置 cloud_status cache
+        $this->getCacheService()->set('cloud_status', json_encode($overview), time() + 3600);
+
         if (!isset($overview['error'])) {
             $paidService = array();
             $unPaidService = array();
@@ -1509,5 +1513,13 @@ class EduCloudController extends BaseController
     protected function getFileService()
     {
         return $this->createService('Content:FileService');
+    }
+
+    /**
+     * @return CacheService
+     */
+    protected function getCacheService()
+    {
+        return $this->createService('System:CacheService');
     }
 }
