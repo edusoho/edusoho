@@ -302,30 +302,12 @@ class Setting extends AbstractResource
     {
         $vipSetting = $this->getSettingService()->get('vip', []);
 
-        if (!empty($vipSetting['buyType'])) {
-            switch ($vipSetting['buyType']) {
-                case 10:
-                    $buyType = 'year_and_month';
-                    break;
-                case 20:
-                    $buyType = 'year';
-                    break;
-                case 30:
-                    $buyType = 'month';
-                    break;
-                default:
-                    $buyType = 'month';
-                    break;
-            }
-        }
-
         return [
             'enabled' => empty($vipSetting['enabled']) ? false : true,
-            'h5Enabled' => empty($vipSetting['h5Enabled']) ? false : true,
-            'buyType' => empty($buyType) ? 'month' : $buyType,
-            'upgradeMinDay' => empty($vipSetting['upgrade_min_day']) ? '30' : $vipSetting['upgrade_min_day'],
-            'defaultBuyYears' => empty($vipSetting['default_buy_years']) ? '1' : $vipSetting['default_buy_years'],
-            'defaultBuyMonths' => empty($vipSetting['default_buy_months']) ? '30' : $vipSetting['default_buy_months'],
+            'buyType' => 'year_and_month', //兼容会员营销重构2.0
+            'upgradeMinDay' => '30', //兼容会员营销重构2.0
+            'defaultBuyYears' => '1', //兼容会员营销重构2.0
+            'defaultBuyMonths' => '30', //兼容会员营销重构2.0
         ];
     }
 
@@ -493,7 +475,7 @@ class Setting extends AbstractResource
 
     public function getArticle()
     {
-        $articleSetting = $this->getSettingService()->get('article', array());
+        $articleSetting = $this->getSettingService()->get('article', []);
 
         return [
             'show_comment' => isset($articleSetting['show_comment']) ? intval($articleSetting['show_comment']) : 1,
@@ -502,7 +484,7 @@ class Setting extends AbstractResource
 
     public function getGroup()
     {
-        $groupSetting = $this->getSettingService()->get('group', array());
+        $groupSetting = $this->getSettingService()->get('group', []);
 
         return [
             'group_show' => isset($groupSetting['group_show']) ? intval($groupSetting['group_show']) : 1,
