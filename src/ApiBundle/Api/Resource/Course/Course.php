@@ -5,6 +5,7 @@ namespace ApiBundle\Api\Resource\Course;
 use ApiBundle\Api\Annotation\ApiConf;
 use ApiBundle\Api\ApiRequest;
 use ApiBundle\Api\Resource\AbstractResource;
+use AppBundle\Common\ArrayToolkit;
 use AppBundle\Common\TimeMachine;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Course\CourseException;
@@ -109,6 +110,12 @@ class Course extends AbstractResource
         list($offset, $limit) = $this->getOffsetAndLimit($request);
         $sort = $this->getSort($request);
 
+        if ($this->isPluginInstalled('Vip') && isset($conditions['vipLevelId'])) {
+            $vipCourseIds = $this->getVipCourseIdsByVipLevelId($conditions['vipLevelId']);
+            $conditions['ids'] = empty($vipCourseIds) ? [-1] : $vipCourseIds;
+            unset($conditions['vipLevelId']);
+        }
+
         $courses = $this->getCourseService()->searchBySort($conditions, $sort, $offset, $limit);
         $total = $this->getCourseService()->countWithJoinCourseSet($conditions);
 
@@ -119,6 +126,28 @@ class Course extends AbstractResource
         $courses = $this->getCourseService()->appendSpecsInfo($courses);
 
         return $this->makePagingObject($courses, $total, $offset, $limit);
+    }
+
+    protected function getVipCourseIdsByVipLevelId($vipLevelId)
+    {
+        if ('0' == $vipLevelId) {
+            $levels = $this->getLevelService()->findEnabledLevels();
+            $vipLevelIds = ArrayToolkit::column($levels, 'id');
+        } else {
+            if (empty($this->getLevelService()->getLevel($vipLevelId))) {
+                return [];
+            }
+            $levels = $this->getLevelService()->findPrevEnabledLevels($vipLevelId);
+            $vipLevelIds = array_merge(ArrayToolkit::column($levels, 'id'), [$vipLevelId]);
+        }
+
+        if (empty($vipLevelIds)) {
+            return [];
+        }
+
+        $vipRights = $this->getVipRightService()->findVipRightsBySupplierCodeAndVipLevelIds('course', $vipLevelIds);
+
+        return empty($vipRights) ? [] : ArrayToolkit::column($vipRights, 'uniqueCode');
     }
 
     /**
@@ -143,5 +172,15 @@ class Course extends AbstractResource
     protected function getMemberService()
     {
         return $this->service('Course:MemberService');
+    }
+
+    protected function getLevelService()
+    {
+        return $this->service('VipPlugin:Vip:LevelService');
+    }
+
+    protected function getVipRightService()
+    {
+        return $this->service('VipPlugin:Marketing:VipRightService');
     }
 }
