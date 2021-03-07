@@ -41,6 +41,7 @@ use Monolog\Logger;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Topxia\Service\Common\ServiceKernel;
+use VipPlugin\Biz\Vip\Service\LevelService;
 
 class WebExtension extends \Twig_Extension
 {
@@ -213,7 +214,23 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('filter_courses_vip_right', [$this, 'filterCoursesVipRight']),
             new \Twig_SimpleFunction('filter_classrooms_vip_right', [$this, 'filterClassroomsVipRight']),
             new \Twig_SimpleFunction('filter_course_vip_right', [$this, 'filterCourseVipRight']),
+            new \Twig_SimpleFunction('vip_level_list', [$this, 'vipLevelList']),
         ];
+    }
+
+    public function vipLevelList($config)
+    {
+        $levels = $this->getVipLevelService()->searchLevels(['enabled' => 1], ['seq' => $config['vipOrder']], 0, $config['count']);
+
+        return $levels;
+    }
+
+    /**
+     * @return LevelService
+     */
+    protected function getVipLevelService()
+    {
+        return $this->createService('VipPlugin:Vip:LevelService');
     }
 
     public function filterCourseVipRight($course)

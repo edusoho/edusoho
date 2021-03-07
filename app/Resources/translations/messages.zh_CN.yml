@@ -5706,6 +5706,13 @@ admin.setting.theme.manage.modal.setting_course_num: 课程数量设置
 admin.setting.theme.manage.modal.setting_count: 数量设置
 admin.setting.theme.manage.modal.setting_custom_category_count: 课程分类数量设置
 admin.setting.theme.manage.modal.setting_custom_orderby: 排序设置
+admin.setting.theme.manage.modal.setting_custom_vip_orderby: 排列顺序
+admin.setting.theme.manage.modal.orderby_low_to_high: 从低到高
+admin.setting.theme.manage.modal.orderby_high_to_low: 从高到低
+admin.setting.theme.manage.modal.setting_custom_vip_list: 最新会员列表
+admin.setting.theme.manage.modal.vip_list_show: 展示
+admin.setting.theme.manage.modal.vip_list_hidden: 不展示
+admin.setting.theme.manage.modal.vip_list_tip: 在会员中心页展示最新加入会员的用户列表
 admin.setting.theme.manage.modal.setting_ustom_background_color: 背景颜色设置
 admin.setting.theme.manage.modal.color_gray: 灰色
 admin.setting.theme.manage.modal.color_wihte: 白色

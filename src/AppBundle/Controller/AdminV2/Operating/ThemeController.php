@@ -8,6 +8,7 @@ use Biz\Theme\Service\ThemeService;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use VipPlugin\Biz\Vip\Service\LevelService;
 
 class ThemeController extends BaseController
 {
@@ -172,6 +173,8 @@ class ThemeController extends BaseController
             $template,
             array(
                 'config' => $config,
+                'code' => $code,
+                'vipLevel' => $code == 'vip-fitment' ? $this->getVipLevelService()->searchLevels(['enabled' => 1], ['seq' => $config['vipOrder']], 0, PHP_INT_MAX) : [],
             )
         );
     }
@@ -190,5 +193,13 @@ class ThemeController extends BaseController
     protected function getThemeService()
     {
         return $this->createService('Theme:ThemeService');
+    }
+
+    /**
+     * @return LevelService
+     */
+    protected function getVipLevelService()
+    {
+        return $this->createService('VipPlugin:Vip:LevelService');
     }
 }

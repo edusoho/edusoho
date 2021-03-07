@@ -17,5 +17,15 @@ define(function(require, exports, module) {
         $themeEditContent.trigger('save_part_config', config);
         $("#modal").modal('hide');
       });
+
+      var $table = $('#vipLevelTable');
+      $('[name="vipOrder"]').on('change', function () {
+        $.get($table.data('url'), {seq:$(this).val()}, function (res) {
+            $table.find('tr').remove();
+            for (let i = 0; i < res.length; i++) {
+              $table.append('<tr style="border-top: 1px solid #ddd;"><td style="padding: 10px 0 10px 5px">'+res[i].name+'</td></tr>');
+            }
+        })
+      });
     };
 });
