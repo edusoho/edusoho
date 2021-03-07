@@ -84,7 +84,8 @@
             <div class="col-sm-9 check-box radios pts">
               {% set radiosOptions = {'ASC' : 'admin.setting.theme.manage.modal.orderby_low_to_high'|trans, 'DESC': 'admin.setting.theme.manage.modal.orderby_high_to_low'|trans } %}
               {{ radios('vipOrder', radiosOptions, config.vipOrder|default("ASC")) }}
-              {% if vipLevel%}
+              {% set vipLevel = vip_level_list(config, 0) %}
+              {% if vipLevel %}
               <div style="background-color: #f5f5f5; width: 60%;padding: 2px 20px">
                 <table style="width: 100%" id="vipLevelTable" data-url="{{ path('admin_v2_vip_level_list') }}">
                   {% for level in vipLevel %}

@@ -218,9 +218,10 @@ class WebExtension extends \Twig_Extension
         ];
     }
 
-    public function vipLevelList($config)
+    public function vipLevelList($config, $slice = 1)
     {
-        $levels = $this->getVipLevelService()->searchLevels(['enabled' => 1], ['seq' => $config['vipOrder']], 0, $config['count']);
+        $count = $slice != 1 ? PHP_INT_MAX : $config['count'];
+        $levels = $this->getVipLevelService()->searchLevels(['enabled' => 1], ['seq' => $config['vipOrder']], 0, $count);
 
         return $levels;
     }

@@ -174,7 +174,6 @@ class ThemeController extends BaseController
             array(
                 'config' => $config,
                 'code' => $code,
-                'vipLevel' => $code == 'vip-fitment' ? $this->getVipLevelService()->searchLevels(['enabled' => 1], ['seq' => $config['vipOrder']], 0, PHP_INT_MAX) : [],
             )
         );
     }
