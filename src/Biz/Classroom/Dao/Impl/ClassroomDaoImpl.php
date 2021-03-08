@@ -184,6 +184,7 @@ class ClassroomDaoImpl extends AdvancedDaoImpl implements ClassroomDao
                 'ids NOT IN (:excludeIds)',
                 'creator = :creator',
                 'creator IN (:creators)',
+                'creator = :userId',
             ],
         ];
     }

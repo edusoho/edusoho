@@ -1657,12 +1657,6 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             unset($conditions['categoryId']);
         }
 
-        if (isset($conditions['creatorLike'])) {
-            $users = $this->getUserService()->searchUsers(['nickname' => $conditions['creatorLike']], [], 0, PHP_INT_MAX);
-            $conditions['creators'] = empty($users) ? [-1] : array_column($users, 'id');
-            unset($conditions['creatorLike']);
-        }
-
         return $conditions;
     }
 
