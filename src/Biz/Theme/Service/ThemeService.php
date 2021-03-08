@@ -23,4 +23,6 @@ interface ThemeService
     public function resetCurrentConfig();
 
     public function changeTheme($theme);
+
+    public function putAwayVipComponent();
 }

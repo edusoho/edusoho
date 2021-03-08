@@ -2,6 +2,7 @@
 
 namespace Biz\Theme\Service\Impl;
 
+use AppBundle\Common\ArrayToolkit;
 use Biz\BaseService;
 use Biz\Theme\Service\ThemeService;
 use Topxia\Service\Common\ServiceKernel;
@@ -70,6 +71,23 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         $config['updatedUserId'] = $this->getCurrentUser()->id;
 
         return $this->getThemeConfigDao()->updateThemeConfigByName($name, $config);
+    }
+
+    public function putAwayVipComponent()
+    {
+        $currentTheme = $this->getCurrentThemeConfig();
+        $confirmConfig = ArrayToolkit::index($currentTheme['confirmConfig']['blocks']['left'], 'id');
+
+        if (!isset($confirmConfig['VipComponent'])){
+            $defaultConfig = ArrayToolkit::index($this->defaultConfig['blocks']['left'], 'id');
+            $vipConfig = isset($defaultConfig['VipComponent']) ? $defaultConfig['VipComponent'] : [];
+            if ($vipConfig){
+                $currentTheme['config']['blocks']['left'] = array_merge($currentTheme['config']['blocks']['left'], [$vipConfig['id'] => $vipConfig]);
+                $currentTheme['confirmConfig']['blocks']['left'] = array_merge($currentTheme['confirmConfig']['blocks']['left'], [$vipConfig['id'] => $vipConfig]);
+                $this->editThemeConfig($currentTheme['name'], ['confirmConfig' => $currentTheme['confirmConfig']]);
+                $this->editThemeConfig($currentTheme['name'], ['config' => $currentTheme['config']]);
+            }
+        }
     }
 
     public function getThemeConfigByName($name)
