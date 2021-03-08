@@ -77,18 +77,4 @@ export default class UserInfoFieldsItemValidate extends ParentUserInfo {
     });
     this.getCustomFields();
   }
-
-  getFiledValidateConfigByType (type) {
-    switch (type) {
-      'varchar':  // 文本
-      'text': // 多行文本
-        return { maxlength: 1024 }
-      'int': // 整数
-        return { digits: true, max: 999999999 }
-      'float': // 小数
-        return { float: true, max: 9999999999.99 }
-      'date': //日期
-        return { date: true }
-    }
-  }
 }
