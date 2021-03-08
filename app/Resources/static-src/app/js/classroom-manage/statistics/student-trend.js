@@ -1,13 +1,13 @@
-import ClassroomStatisticsDateRangePicker from "./date-range-picker";
+import ClassroomStatisticsDateRangePicker from './date-range-picker';
 
 export default class ClassroomStudentTrend {
   constructor() {
     this.$container = $('#js-student-trendency');
-    this.courseId = this.$container.data('classroomId');
+    this.classroomId = this.$container.data('classroomId');
     this.dateArr = [];
     this.timestampArr = [];
-    this.studentIncreaseArr = [];
-    this.tryViewIncreaseArr = [];
+    this.studentsIncreaseArr = [];
+    this.tryViewsIncreaseArr = [];
 
     this.init();
   }
@@ -32,20 +32,20 @@ export default class ClassroomStudentTrend {
         request.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
       },
       data: {startDate: startDate, endDate: endDate},
-      url: '/api/course/' + this.courseId + '/report/student_trend',
+      url: '/api/classroom/' + this.classroomId + '/report/student_trend',
       success: function(resp) {
         let dateArr = [],
-          studentIncreaseArr = [],
-          tryViewIncreaseArr = [];
+          studentsIncreaseArr = [],
+          auditorsIncreaseArr = [];
         for (let value of resp) {
           dateArr.push(value.date);
-          studentIncreaseArr.push(value.studentIncrease);
-          tryViewIncreaseArr.push(value.tryViewIncrease);
+          studentsIncreaseArr.push(value.studentIncrease);
+          auditorsIncreaseArr.push(value.auditorIncrease);
         }
 
         self.dateArr = dateArr;
-        self.studentIncreaseArr = studentIncreaseArr;
-        self.tryViewIncreaseArr = tryViewIncreaseArr;
+        self.studentsIncreaseArr = studentsIncreaseArr;
+        self.auditorsIncreaseArr = auditorsIncreaseArr;
 
         self.show();
       }
@@ -79,8 +79,8 @@ export default class ClassroomStudentTrend {
       },
       legend: {
         data: [
-          {name:Translator.trans('course_manage.course_overview.student_increase_num'), icon: 'circle', textStyle: {color:'#9b9b9b'}},
-          {name:Translator.trans('course_manage.course_overview.try_view_increase_num'), icon: 'circle', textStyle: {color:'#9b9b9b'}}
+          {name:Translator.trans('classroom.manage.data_statistics.echarts.student_increase_num'), icon: 'circle', textStyle: {color:'#9b9b9b'}},
+          {name:Translator.trans('classroom.manage.data_statistics.echarts.auditor_increase_num'), icon: 'circle', textStyle: {color:'#9b9b9b'}}
         ],
         itemWidth: 8,
         itemHeight: 8,
@@ -145,7 +145,7 @@ export default class ClassroomStudentTrend {
       ],
       series: [
         {
-          name: Translator.trans('course_manage.course_overview.student_increase_num'),
+          name: Translator.trans('classroom.manage.data_statistics.echarts.student_increase_num'),
           type: 'line',
           showSymbol: false,
           smooth: true,
@@ -154,11 +154,11 @@ export default class ClassroomStudentTrend {
               color: '#FD7C82'
             }
           },
-          data: this.studentIncreaseArr
+          data: this.studentsIncreaseArr
         }
         ,
         {
-          name:Translator.trans('course_manage.course_overview.try_view_increase_num'),
+          name:Translator.trans('classroom.manage.data_statistics.echarts.auditor_increase_num'),
           type:'line',
           showSymbol: false,
           smooth: true,
@@ -167,7 +167,7 @@ export default class ClassroomStudentTrend {
               color: '#6A94FD'
             }
           },
-          data:this.tryViewIncreaseArr
+          data:this.auditorsIncreaseArr
         }
       ],
     };

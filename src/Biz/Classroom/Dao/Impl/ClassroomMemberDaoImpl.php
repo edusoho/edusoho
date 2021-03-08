@@ -180,6 +180,7 @@ class ClassroomMemberDaoImpl extends AdvancedDaoImpl implements ClassroomMemberD
                 'createdTime < :startTimeLessThan',
                 'updatedTime >= :updatedTime_GE',
                 'userId NOT IN ( :excludeUserIds )',
+                'isFinished = :isFinished',
             ],
         ];
     }

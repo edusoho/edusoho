@@ -28,6 +28,7 @@ use Biz\Thread\Service\ThreadService;
 use Biz\User\Service\NotificationService;
 use Biz\User\Service\UserFieldService;
 use Biz\User\UserException;
+use Biz\Visualization\Service\CoursePlanLearnDataDailyStatisticsService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerRecordService;
 use Codeages\Biz\ItemBank\Answer\Service\AnswerSceneService;
 use Codeages\Biz\Order\Service\OrderService;
@@ -737,15 +738,25 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->tryManageClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
         $overview['studentCount'] = $this->getClassroomService()->searchMemberCount([
+            'classroomId' => $classroom['id'],
             'role' => 'student',
         ]);
         $overview['auditorCount'] = $this->getClassroomService()->searchMemberCount([
+            'classroomId' => $classroom['id'],
             'role' => 'auditor',
         ]);
 
-        $overview['finishedStudentNum'] = 20;
-        $overview['sumLearnedTime'] = 1000;
-        $overview['averageLearnedTime'] = 100;
+        $overview['finishedStudentNum'] = $this->getClassroomService()->searchMemberCount([
+            'classroomId' => $classroom['id'],
+            'role' => 'student',
+            'isFinished' => 1,
+        ]);
+
+        $courses = $this->getClassroomService()->findCoursesByClassroomId($classroom['id']);
+        $courseIds = ArrayToolkit::column($courses, 'id');
+
+        $overview['sumLearnedTime'] = empty($overview['studentCount']) ? 0 : $this->getCoursePlanLearnDataDailyStatisticsService()->sumLearnedTimeByCourseIds($courseIds);
+        $overview['averageLearnedTime'] = empty($overview['studentCount']) ? 0 : empty($overview['studentCount']) / $overview['studentCount'];
 
         return $this->render(
             'classroom-manage/statistics.html.twig',
@@ -1253,5 +1264,13 @@ class ClassroomManageController extends BaseController
     protected function getHomeworkActivityService()
     {
         return $this->getBiz()->service('Activity:HomeworkActivityService');
+    }
+
+    /**
+     * @return CoursePlanLearnDataDailyStatisticsService
+     */
+    protected function getCoursePlanLearnDataDailyStatisticsService()
+    {
+        return $this->getBiz()->service('Visualization:CoursePlanLearnDataDailyStatisticsService');
     }
 }

@@ -40,8 +40,8 @@ class ReportServiceImpl extends BaseService implements ReportService
             $auditorIncreaseNum = isset($auditorsIncreaseData[$dateStr]) ? $auditorsIncreaseData[$dateStr]['count'] : 0;
             $results[] = [
                 'date' => $dateStr,
-                'studentsIncrease' => $studentIncreaseNum,
-                'auditorsIncrease' => $auditorIncreaseNum,
+                'studentIncrease' => $studentIncreaseNum,
+                'auditorIncrease' => $auditorIncreaseNum,
             ];
         }
 
