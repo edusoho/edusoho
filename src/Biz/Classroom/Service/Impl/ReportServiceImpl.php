@@ -8,6 +8,7 @@ use Biz\Classroom\DateTimeRange;
 use Biz\Classroom\Service\ClassroomService;
 use Biz\Classroom\Service\MemberService;
 use Biz\Classroom\Service\ReportService;
+use Biz\Common\CommonException;
 
 class ReportServiceImpl extends BaseService implements ReportService
 {
@@ -48,12 +49,63 @@ class ReportServiceImpl extends BaseService implements ReportService
         return $results;
     }
 
-    public function getCompletionRateTrend($classroomId, DateTimeRange $timeRange)
+    public function getStudentDetailList($classroomId, $filterConditions, $sort, $start, $limit)
     {
+        $this->getClassroomService()->tryManageClassroom($classroomId);
+        $conditions = $this->prepareStudentDetailFilterConditions($filterConditions);
+        $orderBy = $this->prepareStudentDetailSort($sort);
+        $this->getClassroomService()->searchMembers($conditions, $orderBy, $start, $limit);
     }
 
-    public function getStudentDetail($classroomId, DateTimeRange $timeRange)
+    /**
+     * @param $filterConditions array
+     * [
+     *      'filter' => 'all',//all: 全部，unFinished: 未完成,sevenDaysUnLearn: 七日未学
+     *      'nicknameLike' => 'abc',
+     * ]
+     *
+     * @return array
+     */
+    protected function prepareStudentDetailFilterConditions($filterConditions)
     {
+        if (empty($filterConditions['nicknameLike'])) {
+        }
+
+        if (!empty($filterConditions['filter'])) {
+        }
+
+        return [];
+    }
+
+    /**
+     * @param $sort String
+     * joinTimeDesc: 加入时间倒序，joinTimeAsc: 加入时间正序，learnedCompulsoryTaskNumDesc: 完成率倒序，learnedCompulsoryTaskNumAsc: 完成率正序
+     *
+     * @return array
+     *
+     * @throws \Exception
+     */
+    protected function prepareStudentDetailSort($sort)
+    {
+        $orderBy = [];
+        switch ($sort) {
+            case 'joinTimeDesc':
+                $orderBy = ['createdTime' => 'DESC'];
+                break;
+            case 'joinTimeAsc':
+                $orderBy = ['createdTime' => 'ASC'];
+                break;
+            case 'CompletionRateDesc':
+                $orderBy = ['learnedCompulsoryTaskNum' => 'DESC'];
+                break;
+            case 'CompletionRateAsc':
+                $orderBy = ['learnedCompulsoryTaskNum' => 'ASC'];
+                break;
+            default:
+                $this->createNewException(CommonException::ERROR_PARAMETER());
+        }
+
+        return $orderBy;
     }
 
     /**

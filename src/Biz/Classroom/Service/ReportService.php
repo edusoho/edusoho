@@ -8,7 +8,5 @@ interface ReportService
 {
     public function getStudentTrend($classroomId, DateTimeRange $timeRange);
 
-    public function getCompletionRateTrend($classroomId, DateTimeRange $timeRange);
-
-    public function getStudentDetail($classroomId, DateTimeRange $timeRange);
+    public function getStudentDetailList($classroomId, $filterConditions, $sort, $start, $limit);
 }
