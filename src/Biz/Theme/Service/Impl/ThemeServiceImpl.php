@@ -78,9 +78,9 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         $currentTheme = $this->getCurrentThemeConfig();
         $confirmConfig = ArrayToolkit::index($currentTheme['confirmConfig']['blocks']['left'], 'id');
 
-        if (!isset($confirmConfig['VipComponent'])){
+        if (!isset($confirmConfig['vip'])){
             $defaultConfig = ArrayToolkit::index($this->defaultConfig['blocks']['left'], 'id');
-            $vipConfig = isset($defaultConfig['VipComponent']) ? $defaultConfig['VipComponent'] : [];
+            $vipConfig = isset($defaultConfig['vip']) ? $defaultConfig['vip'] : [];
             if ($vipConfig){
                 $currentTheme['config']['blocks']['left'] = array_merge($currentTheme['config']['blocks']['left'], [$vipConfig['id'] => $vipConfig]);
                 $currentTheme['confirmConfig']['blocks']['left'] = array_merge($currentTheme['confirmConfig']['blocks']['left'], [$vipConfig['id'] => $vipConfig]);

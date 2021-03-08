@@ -77,36 +77,8 @@
         </div>
       {% endblock %}
 
-      {% if code == 'vip-fitment' %}
-        {% block custom_vip_sequence %}
-          <div class="form-group">
-            <label class="col-sm-3 control-label">{{'admin.setting.theme.manage.modal.setting_custom_vip_orderby'|trans}}</label>
-            <div class="col-sm-9 check-box radios pts">
-              {% set radiosOptions = {'ASC' : 'admin.setting.theme.manage.modal.orderby_low_to_high'|trans, 'DESC': 'admin.setting.theme.manage.modal.orderby_high_to_low'|trans } %}
-              {{ radios('vipOrder', radiosOptions, config.vipOrder|default("ASC")) }}
-              {% set vipLevel = vip_level_list(config, 0) %}
-              {% if vipLevel %}
-              <div style="background-color: #f5f5f5; width: 60%;padding: 2px 20px">
-                <table style="width: 100%" id="vipLevelTable" data-url="{{ path('admin_v2_vip_level_list') }}">
-                  {% for level in vipLevel %}
-                    <tr style="border-top: 1px solid #ddd;"><td style="padding: 10px 0 10px 5px">{{ level.name }}</td></tr>
-                  {% endfor %}
-                </table>
-              </div>
-              {% endif %}
-            </div>
-          </div>
-        {% endblock %}
-        {% block custom_vip_list %}
-          <div class="form-group">
-            <label class="col-sm-3 control-label">{{'admin.setting.theme.manage.modal.setting_custom_vip_list'|trans}}</label>
-            <div class="col-sm-9 check-box radios pts">
-              {% set radiosOptions = {'show' : 'admin.setting.theme.manage.modal.vip_list_show'|trans, 'hidden': 'admin.setting.theme.manage.modal.vip_list_hidden'|trans } %}
-              {{ radios('vipList', radiosOptions, config.vipList|default("show")) }}
-              <div class="help-block">{{ 'admin.setting.theme.manage.modal.vip_list_tip'|trans }}</div>
-            </div>
-          </div>
-        {% endblock %}
+      {% if code == 'vip' %}
+        {% include 'admin-v2/operating/theme/edit-modal-child.html.twig' %}
       {% endif %}
     {% endblock %}
     <input class="hide" value="{{ config.id|default() }}" name="id" >
