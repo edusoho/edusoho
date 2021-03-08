@@ -17,4 +17,8 @@ interface SignService
     public function getSignTargetStatistics($targetType, $targetId, $date);
 
     public function getTodayRank($userId, $targetType, $targetId);
+
+    public function searchSignUserLog(array $conditions, $orderBy, $start, $limit, array $columns = []);
+
+    public function countSignUserLog(array $conditions);
 }

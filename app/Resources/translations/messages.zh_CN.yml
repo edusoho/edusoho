@@ -11572,6 +11572,11 @@ classroom.manage.sign_statictics.role.teacher: 老师
 classroom.manage.sign_statictics.role.assistant: 助教
 classroom.manage.sign_statictics.role.student: 学员
 classroom.manage.sign_statictics.role.auditor: 旁听生
+classroom.manage.sign_statictics.modal_title: %nickname%签到详情
+classroom.manage.sign_statictics.sign_type: 行为记录
+classroom.manage.sign_statictics.sign_time: 签到时间
+
+
 
 
 

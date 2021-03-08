@@ -1055,6 +1055,32 @@ class ClassroomManageController extends BaseController
         ]);
     }
 
+    public function signDetailAction(Request $request, $id, $userId)
+    {
+        $this->getClassroomService()->tryManageClassroom($id);
+        $classroom = $this->getClassroomService()->getClassroom($id);
+        $user = $this->getUserService()->getUser($userId);
+        $conditions = ['targetType' => 'classroom_sign', 'targetId' => $classroom['id'], 'userId' => $userId];
+
+        $paginator = new Paginator(
+            $request,
+            $this->getSignService()->countSignUserLog($conditions),
+            20
+        );
+
+        return $this->render('classroom-manage/sign/log-modal.html.twig', [
+            'classroom' => $classroom,
+            'user' => $user,
+            'logs' => $this->getSignService()->searchSignUserLog(
+                $conditions,
+                ['createdTime' => 'DESC'],
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            ),
+            'paginator' => $paginator,
+        ]);
+    }
+
     protected function getRedirectRoute($mode, $type)
     {
         $routes = [
