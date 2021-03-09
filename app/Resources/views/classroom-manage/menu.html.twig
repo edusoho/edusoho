@@ -71,4 +71,29 @@
 			{% endif %}
 		</div>
 	</ul>
+        <li class="cd-sidebar__item {% if side_nav == 'testpaper-check' %}active{% endif %}">
+          <a href="{{ path('classroom_manage_testpaper', {id: classroom.id}) }}">
+            {{ 'classroom.testpaper_check'|trans }}
+          </a>
+        </li>
+        <li class="cd-sidebar__item {% if side_nav == 'homework-check' %}active{% endif %}">
+          <a href="{{ path('classroom_manage_homework', {id: classroom.id}) }}">
+            {{ 'classroom.homework_check'|trans }}
+          </a>
+        </li>
+      {% endif %}
+
+      {% if canManage %}
+        <li class="cd-sidebar__heading">
+          <hr class="mt0 mb0 mh10 bg-border-color">
+        </li>
+
+        <li class="cd-sidebar__item {% if side_nav == 'data-statistics' %}active{% endif %}">
+          <a href="{{ path('classroom_data_statistics', {id: classroom.id}) }}">
+            {{ 'classroom.manage.data_statictics'|trans }}
+          </a>
+        </li>
+      {% endif %}
+    </div>
+  </ul>
 </div>

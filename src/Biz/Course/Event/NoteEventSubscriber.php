@@ -2,12 +2,12 @@
 
 namespace Biz\Course\Event;
 
+use Biz\Classroom\Service\ClassroomService;
+use Biz\Course\Service\CourseNoteService;
 use Biz\Course\Service\CourseService;
+use Biz\Course\Service\CourseSetService;
 use Biz\Course\Service\MemberService;
 use Codeages\Biz\Framework\Event\Event;
-use Biz\Course\Service\CourseSetService;
-use Biz\Course\Service\CourseNoteService;
-use Biz\Classroom\Service\ClassroomService;
 use Codeages\PluginBundle\Event\EventSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -15,13 +15,13 @@ class NoteEventSubscriber extends EventSubscriber implements EventSubscriberInte
 {
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             'course.note.create' => 'onCourseNoteCreate',
             'course.note.update' => 'onCourseNoteUpdate',
             'course.note.delete' => 'onCourseNoteDelete',
             'course.note.liked' => 'onCourseNoteLike',
             'course.note.cancelLike' => 'onCourseNoteCancelLike',
-        );
+        ];
     }
 
     public function onCourseNoteCreate(Event $event)
@@ -30,20 +30,24 @@ class NoteEventSubscriber extends EventSubscriber implements EventSubscriberInte
 
         $classroom = $this->getClassroomService()->getClassroomByCourseId($note['courseId']);
 
-        if ($classroom && $note['status'] == CourseNoteService::PUBLIC_STATUS) {
+        if ($classroom && CourseNoteService::PUBLIC_STATUS == $note['status']) {
             $this->getClassroomService()->waveClassroom($classroom['id'], 'noteNum', +1);
         }
 
+        if ($classroom) {
+            $this->getClassroomService()->updateMemberFieldsByClassroomIdAndUserId($classroom['id'], $note['userId'], ['noteNum']);
+        }
+
         $this->getCourseMemberService()->refreshMemberNoteNumber($note['courseId'], $note['userId']);
-        $this->getCourseService()->updateCourseStatistics($note['courseId'], array('noteNum'));
-        $this->getCourseSetService()->updateCourseSetStatistics($note['courseSetId'], array('noteNum'));
+        $this->getCourseService()->updateCourseStatistics($note['courseId'], ['noteNum']);
+        $this->getCourseSetService()->updateCourseSetStatistics($note['courseSetId'], ['noteNum']);
     }
 
     public function onCourseNoteUpdate(Event $event)
     {
         $note = $event->getSubject();
-        $this->getCourseService()->updateCourseStatistics($note['courseId'], array('noteNum'));
-        $this->getCourseSetService()->updateCourseSetStatistics($note['courseSetId'], array('noteNum'));
+        $this->getCourseService()->updateCourseStatistics($note['courseId'], ['noteNum']);
+        $this->getCourseSetService()->updateCourseSetStatistics($note['courseSetId'], ['noteNum']);
         $this->getCourseMemberService()->refreshMemberNoteNumber($note['courseId'], $note['userId']);
 
         $classroom = $this->getClassroomService()->getClassroomByCourseId($note['courseId']);
@@ -54,11 +58,11 @@ class NoteEventSubscriber extends EventSubscriber implements EventSubscriberInte
 
         $preStatus = $event->getArgument('preStatus');
 
-        if ($note['status'] == CourseNoteService::PUBLIC_STATUS && $preStatus == CourseNoteService::PRIVATE_STATUS) {
+        if (CourseNoteService::PUBLIC_STATUS == $note['status'] && CourseNoteService::PRIVATE_STATUS == $preStatus) {
             $this->getClassroomService()->waveClassroom($classroom['id'], 'noteNum', +1);
         }
 
-        if ($note['status'] == CourseNoteService::PRIVATE_STATUS && $preStatus == CourseNoteService::PUBLIC_STATUS) {
+        if (CourseNoteService::PRIVATE_STATUS == $note['status'] && CourseNoteService::PUBLIC_STATUS == $preStatus) {
             $this->getClassroomService()->waveClassroom($classroom['id'], 'noteNum', -1);
         }
     }
@@ -71,10 +75,11 @@ class NoteEventSubscriber extends EventSubscriber implements EventSubscriberInte
 
         if (!empty($classroom)) {
             $this->getClassroomService()->waveClassroom($classroom['id'], 'noteNum', -1);
+            $this->getClassroomService()->updateMemberFieldsByClassroomIdAndUserId($classroom['id'], $note['userId'], ['noteNum']);
         }
 
-        $this->getCourseService()->updateCourseStatistics($note['courseId'], array('noteNum'));
-        $this->getCourseSetService()->updateCourseSetStatistics($note['courseSetId'], array('noteNum'));
+        $this->getCourseService()->updateCourseStatistics($note['courseId'], ['noteNum']);
+        $this->getCourseSetService()->updateCourseSetStatistics($note['courseSetId'], ['noteNum']);
         $this->getCourseMemberService()->refreshMemberNoteNumber($note['courseId'], $note['userId']);
     }
 

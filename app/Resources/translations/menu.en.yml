@@ -94,6 +94,7 @@ admin.course.basic.basic_tab.delete_submit_btn: Delete
 ##班级管理模块
 admin.course.classroom.basic_tab: Classes
 admin.course.classroom.recommend_tab: Recommended
+admin_v2.teach.classroom.statistics_tab: Statistics
 
 admin.course.classroom.basic_tab.create_btn: Add
 admin.course.classroom.basic_tab.manage_btn: Manage

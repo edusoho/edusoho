@@ -138,7 +138,7 @@ class ClassroomManageController extends BaseController
         }
     }
 
-    public function aduitorAction(Request $request, $id, $role = 'auditor')
+    public function auditorAction(Request $request, $id, $role = 'auditor')
     {
         $this->getClassroomService()->tryManageClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
@@ -729,6 +729,30 @@ class ClassroomManageController extends BaseController
                 'price' => $price,
                 'coinPrice' => $coinPrice,
                 'users' => $users,
+            ]
+        );
+    }
+
+    public function statisticsAction(Request $request, $id)
+    {
+        $this->getClassroomService()->tryManageClassroom($id);
+        $classroom = $this->getClassroomService()->getClassroom($id);
+        $overview['studentCount'] = $this->getClassroomService()->searchMemberCount([
+            'role' => 'student',
+        ]);
+        $overview['auditorCount'] = $this->getClassroomService()->searchMemberCount([
+            'role' => 'auditor',
+        ]);
+
+        $overview['finishedStudentNum'] = 20;
+        $overview['sumLearnedTime'] = 1000;
+        $overview['averageLearnedTime'] = 100;
+
+        return $this->render(
+            'classroom-manage/statistics.html.twig',
+            [
+                'classroom' => $classroom,
+                'overview' => $overview,
             ]
         );
     }

@@ -2562,8 +2562,8 @@ classroom_manage_students:
     defaults: { _controller: AppBundle:Classroom/ClassroomManage:students }
 
 classroom_manage_aduitor:
-    path: /classroom/{id}/manage/aduitor
-    defaults: { _controller: AppBundle:Classroom/ClassroomManage:aduitor }
+    path: /classroom/{id}/manage/auditor
+    defaults: { _controller: AppBundle:Classroom/ClassroomManage:auditor }
 
 classroom_manage_record:
     path: /classroom/{id}/manage/record/{type}
@@ -2664,6 +2664,10 @@ classroom_manage_homework:
 classroom_manage_homework_check:
   path: /classroom/{id}/manage/homework/{answerRecordId}/check
   defaults: { _controller: AppBundle:Classroom/ClassroomManage:homeworkCheck }
+
+classroom_data_statistics:
+  path:  /classroom/{id}/manage/data/statistics
+  defaults: { _controller: AppBundle:Classroom/ClassroomManage:statistics }
 
 classroom_manage_students_defined_show:
     path:  /classroom/{classroomId}/manage/students/{userId}/defined_show

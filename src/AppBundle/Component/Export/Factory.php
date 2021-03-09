@@ -3,6 +3,9 @@
 namespace AppBundle\Component\Export;
 
 use AppBundle\Common\Exception\UnexpectedValueException;
+use AppBundle\Component\Export\Classroom\ClassroomCourseStatisticsExporter;
+use AppBundle\Component\Export\Classroom\ClassroomMemberStatisticsExporter;
+use AppBundle\Component\Export\Classroom\ClassroomStatisticsExporter;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class Factory
@@ -48,6 +51,9 @@ class Factory
             'course-live-statistics-list' => 'AppBundle\Component\Export\Course\CourseLiveStatisticsExporter',
             'course-live-statistics-checkin-list' => 'AppBundle\Component\Export\Course\LiveStatisticsCheckinListExporter',
             'course-live-statistics-visitor-list' => 'AppBundle\Component\Export\Course\LiveStatisticsVisitorListExporter',
+            'classroom-statistics' => ClassroomStatisticsExporter::class,
+            'classroom-member-statistics' => ClassroomMemberStatisticsExporter::class,
+            'classroom-course-statistics' => ClassroomCourseStatisticsExporter::class,
         ];
 
         $names = explode(':', $name);
