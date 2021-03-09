@@ -176,10 +176,18 @@ export default class UserInfoFieldsItemValidate {
       $(`[name="intField${i}"]`).rules('add', {
         required: true,
         positive_integer: true,
+        max: 999999999,
+        messages: {
+          max: '最大值为9位整数'
+        }
       });
       $(`[name="floatField${i}"]`).rules('add', {
         required: true,
         float: true,
+        max: 9999999999.99,
+        messages: {
+          max: '最大值为10位，且小数点后最多保留到两位小数'
+        }
       });
       $(`[name="dateField${i}"]`).rules('add', {
         required: true,
@@ -189,9 +197,11 @@ export default class UserInfoFieldsItemValidate {
     for (i = 1; i <= 10; i++) {
       $(`[name="varcharField${i}"]`).rules('add', {
         required: true,
+        maxlength: 1024
       });
       $(`[name="textField${i}"]`).rules('add', {
         required: true,
+        maxlength: 1024
       });
     }
   }
